@@ -28,6 +28,8 @@ public partial class App : Application
 
     public static Microsoft.UI.Dispatching.DispatcherQueue DispatcherQueue { get; private set; } = null!;
 
+    private Microsoft.UI.Dispatching.DispatcherQueueTimer? _recoveryTimer;
+
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         IAppEnvironment env = Program.Environment;
@@ -47,10 +49,11 @@ public partial class App : Application
         CrashReporter.WriteRecovery = timeout => vm.WriteRecoveryNow(timeout);
 
         // 復旧用データの定期の書き出し (ENG-27 の仕様 1。既定 1 分ごと)。
-        var recoveryTimer = DispatcherQueue.CreateTimer();
-        recoveryTimer.Interval = RecoveryInterval;
-        recoveryTimer.Tick += async (_, _) => await vm.WriteRecoveryAsync(window.ShowRecoveryWriteError);
-        recoveryTimer.Start();
+        // タイマーはフィールドに持つ (ローカル変数だけだとガベージコレクションで回収され、書き出しが止まる)。
+        _recoveryTimer = DispatcherQueue.CreateTimer();
+        _recoveryTimer.Interval = RecoveryInterval;
+        _recoveryTimer.Tick += async (_, _) => await vm.WriteRecoveryAsync(window.ShowRecoveryWriteError);
+        _recoveryTimer.Start();
 
         // 既存のインスタンスに転送された起動 (2 つ目の起動で指定したファイル) を、このウィンドウのタブとして開く (UI-15)。
         SingleInstance.Redirected += commandLine =>
