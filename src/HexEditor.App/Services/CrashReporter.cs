@@ -19,6 +19,14 @@ public static partial class CrashReporter
     private static string _folder = Path.Combine(Path.GetTempPath(), "HexEditor", "crash");
     private static int _handling;
 
+    public const string MiniDumpKey = "diagnostics.writeMiniDump";
+
+    /// <summary>
+    /// クラッシュ情報と一緒にミニダンプを書くか (設定 diagnostics.writeMiniDump。既定 false。PKG-30 の仕様 4)。
+    /// メモリの内容を含まない MiniDumpNormal だけを書く (ファイルの内容を含めないため。UI-57 の仕様 4)。
+    /// </summary>
+    public static bool WriteMiniDump { get; set; }
+
     /// <summary>異常終了の直前に未保存の編集内容を書き出す処理 (App が設定する)。引数は打ち切るまでの時間。</summary>
     public static Action<TimeSpan>? WriteRecovery { get; set; }
 
@@ -69,6 +77,11 @@ public static partial class CrashReporter
             Directory.CreateDirectory(_folder);
             string path = Path.Combine(_folder, name);
             File.WriteAllText(path, text, Encoding.UTF8);
+            if (WriteMiniDump)
+            {
+                TryWriteMiniDump(Path.ChangeExtension(path, ".dmp"));
+            }
+
             Prune();
             return path;
         }
@@ -150,23 +163,50 @@ public static partial class CrashReporter
         }
     }
 
-    /// <summary>最新の 10 件を残し、古いものを消す (仕様 3)。</summary>
+    /// <summary>最新の 10 件を残し、古いものを消す (仕様 3)。ミニダンプも同じく 10 件まで。</summary>
     private static void Prune()
     {
-        foreach (string old in Directory.EnumerateFiles(_folder, "*.txt")
-            .Where(f => !Path.GetFileName(f).Equals(SeenFileName, StringComparison.OrdinalIgnoreCase))
-            .OrderByDescending(f => Path.GetFileName(f), StringComparer.Ordinal)
-            .Skip(KeepCount))
+        foreach (string pattern in new[] { "*.txt", "*.dmp" })
         {
-            try
+            foreach (string old in Directory.EnumerateFiles(_folder, pattern)
+                .Where(f => !Path.GetFileName(f).Equals(SeenFileName, StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(f => Path.GetFileName(f), StringComparer.Ordinal)
+                .Skip(KeepCount))
             {
-                File.Delete(old);
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
+                try
+                {
+                    File.Delete(old);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                }
             }
         }
     }
+
+    /// <summary>ミニダンプ (MiniDumpNormal: スレッドとスタック、読み込んだモジュールの一覧。ヒープの内容は含まない) を書く。</summary>
+    private static void TryWriteMiniDump(string path)
+    {
+        try
+        {
+            using var process = System.Diagnostics.Process.GetCurrentProcess();
+            using var file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
+            if (!MiniDumpWriteDump(process.Handle, (uint)process.Id, file.SafeFileHandle, MiniDumpNormal, 0, 0, 0))
+            {
+                AppLog.Warning($"MiniDumpWriteDump failed ({Marshal.GetLastWin32Error()}).");
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warning($"Mini dump not written: {ex.GetType().Name}");
+        }
+    }
+
+    private const uint MiniDumpNormal = 0;
+
+    [DllImport("dbghelp.dll", SetLastError = true)]
+    private static extern bool MiniDumpWriteDump(nint process, uint processId, Microsoft.Win32.SafeHandles.SafeFileHandle file,
+        uint dumpType, nint exceptionParam, nint userStreamParam, nint callbackParam);
 
     private static string Redact(string text) => AppLog.DebugEnabled ? text : PathPattern().Replace(text, "<path>");
 

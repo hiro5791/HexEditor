@@ -1,3 +1,4 @@
+using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Operations;
@@ -164,6 +165,12 @@ public sealed partial class MainWindow
 
             if (!_isActive && op.Elapsed >= TimeSpan.FromSeconds(10))
             {
+                // 別のアプリを使っている間に終わった長い処理は、トースト通知でも知らせる (UI-36 の仕様 8)。
+                if (ToastNotifier.IsEnabled(Program.Environment) && op.State != OperationState.Cancelled)
+                {
+                    ToastNotifier.Show(op.Name, Controls.OperationText.Result(op));
+                }
+
                 _taskbar?.Flash();
             }
         }

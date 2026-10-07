@@ -46,6 +46,34 @@ public sealed class CrashAndRecoveryTests
         Assert.Contains("Report a problem", text);
     });
 
+    /// <summary>PKG-30 の仕様 4: ミニダンプは既定では作らず、設定 diagnostics.writeMiniDump が true のときだけ crash\ に書く。</summary>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public Task Mini_dump_is_written_only_when_enabled(bool enabled) => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        if (enabled)
+        {
+            await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), "{\"$schemaVersion\": 1, \"diagnostics.writeMiniDump\": true}");
+        }
+
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await app.CommandAsync("TestMenu_ThrowUi");
+        Assert.NotEqual(0, await app.WaitForExitAsync(ExitTimeout));
+
+        Assert.Single(CrashReports(app.CrashFolder));
+        string[] dumps = Directory.Exists(app.CrashFolder) ? Directory.GetFiles(app.CrashFolder, "*.dmp") : [];
+        if (enabled)
+        {
+            Assert.True(new FileInfo(Assert.Single(dumps)).Length > 0, "the mini dump is empty");
+        }
+        else
+        {
+            Assert.Empty(dumps);
+        }
+    });
+
     [Fact]
     [Trait(UiTest.TC, "TC-PKG-30-03")]
     public Task Crash_report_does_not_contain_file_contents() => UiTestContext.RunAsync(async ctx =>

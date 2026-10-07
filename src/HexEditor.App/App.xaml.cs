@@ -51,6 +51,7 @@ public partial class App : Application
         Settings = new SettingsStore(env.Locations.Settings);
         SettingsLoadStatus settingsStatus = Settings.Load();
         AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
+        CrashReporter.WriteMiniDump = Settings.GetBool(CrashReporter.MiniDumpKey, false);
         AppLog.Initialize(env.Locations.Logs);
         Appearance.ApplyAccent(Settings);
         // 追加バッファの一時ファイルは復旧用データと同じフォルダに置き、異常終了後もそのまま参照できるようにする (ENG-27 の仕様 2)。
@@ -78,6 +79,7 @@ public partial class App : Application
         Settings.Changed += _ => DispatcherQueue.TryEnqueue(() =>
         {
             AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
+            CrashReporter.WriteMiniDump = Settings.GetBool(CrashReporter.MiniDumpKey, false);
             window.ApplyAppearance();
             window.ApplyEditorSettings();
         });
@@ -99,6 +101,9 @@ public partial class App : Application
         _memoryMonitor = new MemoryMonitor(vm.Memory);
         _memoryMonitor.OverLimit += (_, _) => DispatcherQueue.TryEnqueue(() => window.ShowMemoryOverLimit(vm.Memory.Limit));
         _memoryMonitor.LowMemory += (_, _) => AppLog.Warning("Low memory notification: cache trimmed.");
+
+        // トースト通知を押したら、ウィンドウを前に出す (UI-36 の仕様 8)。
+        ToastNotifier.Invoked += () => DispatcherQueue.TryEnqueue(window.Activate);
 
         // 異常終了の直前に未保存の編集内容を書き出す (PKG-30 の仕様 1 の 1)。
         CrashReporter.WriteRecovery = timeout => vm.WriteRecoveryNow(timeout);

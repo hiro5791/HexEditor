@@ -481,6 +481,8 @@ public sealed class TestHookException(string place) : Exception($"Unhandled exce
 /// <summary>製品版では何もしない (異常を再現する仕組みはテスト用のビルドだけ。テスト方針 7.2)。</summary>
 public static class TestHooks
 {
+    public static bool Active => false;
+
     public static bool SuppressActivation => false;
 
     public static TimeProvider? Time => null;
