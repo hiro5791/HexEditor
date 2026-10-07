@@ -214,6 +214,12 @@ public sealed partial class MainWindow
             "saveLog" => new JsonObject { ["path"] = SaveTestLog() },
             "writeRecovery" => await TestWriteRecoveryAsync(),
             "idle" => await TestIdleAsync((int)TestHookSettings.ReadLong(request["timeoutMs"], 10_000)),
+
+            // 性能のテストと結合テストの命令 (MainWindow.TestPerf.cs)。
+            "diagnostics" => TestDiagnostics(request),
+            "keyMeasured" => TestKeyMeasured(request),
+            "mark" => TestMark(),
+            "insertBytes" => TestInsertBytes(request),
             "exit" => Run(() =>
             {
                 _closingConfirmed = true;
