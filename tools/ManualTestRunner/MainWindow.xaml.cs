@@ -147,7 +147,7 @@ public sealed partial class MainWindow : Window
 
         PrepareStatus.Text = "準備しています...";
         _hexEditor = Preparer.Prepare(_current, out IReadOnlyList<string> missing);
-        PrepareStatus.Text = (_hexEditor is null ? "HexEditor を起動できませんでした (hexeditor.exe の登録を確認してください)。" : "HexEditor を起動しました。")
+        PrepareStatus.Text = (_hexEditor is null ? "HexEditor を起動できませんでした (HEXEDITOR_EXE を設定するか、HexEditor.App をビルドしてください)。" : "HexEditor を起動しました。")
             + (missing.Count > 0 ? $" 手で用意するテストデータ: {string.Join("、", missing)}" : string.Empty);
     }
 

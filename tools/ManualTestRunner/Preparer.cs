@@ -7,7 +7,7 @@ namespace ManualTestRunner;
 
 /// <summary>
 /// 手動テストの準備 (テスト方針 8.2): テストデータの生成、テスト用の設定フォルダの作成、HexEditor の起動。
-/// HexEditor は実行エイリアス (hexeditor.exe) で起動する。開発中のパッケージを登録しておくこと (winapp run)。
+/// 起動する HexEditor は、環境変数 HEXEDITOR_EXE、開発用のビルド (src/HexEditor.App/bin)、実行エイリアス (hexeditor.exe) の順に探す。
 /// </summary>
 public static class Preparer
 {
@@ -39,7 +39,8 @@ public static class Preparer
         }
 
         Directory.CreateDirectory(profile);
-        var start = new ProcessStartInfo("hexeditor.exe") { UseShellExecute = false };
+        var start = new ProcessStartInfo(FindHexEditor()) { UseShellExecute = false };
+        start.ArgumentList.Add("--new-instance");
         start.ArgumentList.Add("--test-profile");
         start.ArgumentList.Add(profile);
         foreach (string file in files.Take(1))
@@ -55,6 +56,33 @@ public static class Preparer
         {
             return null;
         }
+    }
+
+    private static string FindHexEditor()
+    {
+        if (Environment.GetEnvironmentVariable("HEXEDITOR_EXE") is { Length: > 0 } configured && File.Exists(configured))
+        {
+            return configured;
+        }
+
+        // このツールのビルド先 (tools/ManualTestRunner/bin/...) からリポジトリのルートを探し、開発用のビルドを使う。
+        for (DirectoryInfo? dir = new(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
+        {
+            string bin = Path.Combine(dir.FullName, "src", "HexEditor.App", "bin");
+            if (Directory.Exists(bin))
+            {
+                FileInfo? newest = new DirectoryInfo(bin).EnumerateFiles("HexEditor.App.exe", SearchOption.AllDirectories)
+                    .Where(f => !f.DirectoryName!.EndsWith("AppX", StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending(f => f.LastWriteTimeUtc)
+                    .FirstOrDefault();
+                if (newest is not null)
+                {
+                    return newest.FullName;
+                }
+            }
+        }
+
+        return "hexeditor.exe";
     }
 
     /// <summary>HexEditor のウィンドウを前面に出さずに撮る (不合格の記録に添付する)。</summary>

@@ -50,3 +50,6 @@ Desktop.ini
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# build/publish.ps1 output
+artifacts/

@@ -13,10 +13,15 @@ public sealed partial class MainViewModel : ObservableObject
 {
     private int _untitledCount;
 
-    public MainViewModel(OperationCenter operations, EngineMemory memory)
+    private readonly DocumentOptions _options;
+    private readonly string _journalDirectory;
+
+    public MainViewModel(OperationCenter operations, EngineMemory memory, DocumentOptions options, string journalDirectory)
     {
         Operations = operations;
         Memory = memory;
+        _options = options;
+        _journalDirectory = journalDirectory;
     }
 
     public OperationCenter Operations { get; }
@@ -32,7 +37,7 @@ public sealed partial class MainViewModel : ObservableObject
     public DocumentViewModel NewDocument()
     {
         string name = Loc.Format("Untitled_Name", ++_untitledCount);
-        var doc = new Document(MemoryByteSource.CreateEmpty(name));
+        var doc = new Document(MemoryByteSource.CreateEmpty(name), _options);
         return Add(doc, null, name);
     }
 
@@ -47,7 +52,7 @@ public sealed partial class MainViewModel : ObservableObject
             return existing;
         }
 
-        var doc = new Document(FileByteSource.Open(full));
+        var doc = new Document(FileByteSource.Open(full), _options);
         return Add(doc, full, Path.GetFileName(full));
     }
 
@@ -90,8 +95,8 @@ public sealed partial class MainViewModel : ObservableObject
         vm.SetSavedPath(saved.Path);
     }
 
-    /// <summary>その場保存のジャーナルの置き場所 (ENG-23。復旧用フォルダ)。</summary>
-    private static string JournalDirectory => Path.Combine(Path.GetTempPath(), "HexEditor", "recovery");
+    /// <summary>その場保存のジャーナルの置き場所 (ENG-23。復旧用フォルダ。PKG-13)。</summary>
+    private string JournalDirectory => _journalDirectory;
 
     public void Close(DocumentViewModel vm)
     {

@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using HexEditor.App.Controls;
+using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Engine;
@@ -21,7 +22,7 @@ public sealed partial class MainWindow : Window
         Vm = vm;
         InitializeComponent();
         // 右から左に書く言語では画面全体を左右反転する。Hex ビューは自分で左から右に固定している (VIEW-01 の仕様 9)。
-        Root.FlowDirection = App.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+        Root.FlowDirection = Localization.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         AppWindow.SetIcon("Assets/AppIcon.ico");
@@ -46,6 +47,33 @@ public sealed partial class MainWindow : Window
     private static extern uint GetDpiForWindow(IntPtr hWnd);
 
     private WindowId WindowId => AppWindow.Id;
+
+    /// <summary>コマンドラインで指定したファイルを開く (起動時、または転送された 2 つ目の起動)。</summary>
+    public void OpenFromCommandLine(CommandLine commandLine, bool activate)
+    {
+        foreach (string file in commandLine.Files)
+        {
+            try
+            {
+                Vm.Open(file);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                ShowNotice(Loc.Format("Error_Open", file, ex.Message), InfoBarSeverity.Error);
+            }
+        }
+
+        if (commandLine.Offset is { } offset && Editor is { } editor
+            && Core.Expressions.ExpressionEvaluator.TryEvaluate(offset, new Core.View.EditorExpressionContext(editor), out long target, out _))
+        {
+            editor.GoTo(target);
+        }
+
+        if (activate)
+        {
+            Activate();
+        }
+    }
 
     private void UpdateTitle()
     {

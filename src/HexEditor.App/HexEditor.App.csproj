@@ -16,6 +16,37 @@
     <DefaultLanguage>en</DefaultLanguage>
   </PropertyGroup>
 
+  <!--
+    配布形態の切り替え (PKG-10)。HexDistro = Msix / Installer / Portable。指定しなければ開発用 (非パッケージ)。
+    起動処理は Hosting/Program.cs に自分で書く (PKG-11)。
+  -->
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(HexDistro)' == 'Msix'">
+    <WindowsPackageType>MSIX</WindowsPackageType>
+    <DefineConstants>$(DefineConstants);HEX_DISTRO_MSIX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(HexDistro)' != 'Msix'">
+    <WindowsPackageType>None</WindowsPackageType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(HexDistro)' == 'Installer'">
+    <DefineConstants>$(DefineConstants);HEX_DISTRO_INSTALLER</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(HexDistro)' == 'Portable'">
+    <DefineConstants>$(DefineConstants);HEX_DISTRO_PORTABLE</DefineConstants>
+  </PropertyGroup>
+  <Target Name="CheckHexDistro" BeforeTargets="BeforeBuild"
+          Condition="'$(HexDistro)' != '' and '$(HexDistro)' != 'Msix' and '$(HexDistro)' != 'Installer' and '$(HexDistro)' != 'Portable'">
+    <Error Text="HexDistro には Msix / Installer / Portable のどれかを指定してください (指定値: $(HexDistro))。" />
+  </Target>
+  <ItemGroup Condition="'$(HexDistro)' == 'Installer'">
+    <PackageReference Include="Velopack" Version="1.2.161" />
+  </ItemGroup>
+
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />

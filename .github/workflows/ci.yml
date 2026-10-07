@@ -59,3 +59,36 @@ jobs:
         with:
           name: test-results
           path: TestResults/
+
+  # 配布物のビルド (PKG-10): 3 種類 × 2 アーキテクチャ。署名はしない。
+  publish:
+    if: github.event_name != 'pull_request'
+    runs-on: windows-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [Msix, Installer, Portable]
+        arch: [x64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Publish
+        shell: pwsh
+        run: ./build/publish.ps1 -Distro ${{ matrix.distro }} -Arch ${{ matrix.arch }}
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: HexEditor-${{ matrix.distro }}-${{ matrix.arch }}
+          path: |
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/**/*.zip
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/**/*.exe
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/**/*.nupkg
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/**/*.msix
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/RELEASES*
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/releases.*.json

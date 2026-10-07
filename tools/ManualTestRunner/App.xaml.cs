@@ -41,7 +41,7 @@ public partial class App : Application
         _window = new MainWindow();
 
         // 開発中の確認 (dev-no-activate) では、起動後に前のウィンドウへフォーカスを戻し、自分は後ろに回る。
-        bool noActivate = File.Exists(Path.Combine(Path.GetTempPath(), "HexEditor", "dev-no-activate"));
+        bool noActivate = File.Exists(System.IO.Path.Combine(System.IO.Path.GetTempPath(), "HexEditor", "dev-no-activate"));
         nint previous = noActivate ? GetForegroundWindow() : 0;
         _window.Activate();
         if (previous != 0)
