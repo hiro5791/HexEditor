@@ -122,6 +122,10 @@ public sealed partial class HexView
                     ["decoration"] = runAt[hex].TextDecorations.ToString(),
                     ["selected"] = highlighted[hex],
                     ["matched"] = matched[hex],
+
+                    // 読み込みの状態 (Unreadable のセルには斜線の模様を重ねて描く。VIEW-03 の仕様 5)。
+                    ["state"] = c < row.States.Length ? row.States[c].ToString() : null,
+                    ["hatched"] = c < row.States.Length && row.States[c] == Core.Engine.ByteState.Unreadable,
                 };
                 if (highlighted[hex])
                 {

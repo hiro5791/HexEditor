@@ -185,7 +185,8 @@ public sealed partial class MainWindow
             "text" => TestText(request),
             "invoke" => TestInvoke(request["id"]!.GetValue<string>()),
             "element" => TestElement(request["id"]!.GetValue<string>()),
-            "setSelectedIndex" => TestSetSelectedIndex(request["id"]!.GetValue<string>(), (int)TestHookSettings.ReadLong(request["index"], 0)),
+            "setSelectedIndex" => TestSetSelectedIndex(request["id"]!.GetValue<string>(), (int)TestHookSettings.ReadLong(request["index"], 0),
+                request["text"]?.GetValue<string>()),
             "open" => TestOpen(request),
             "openVirtual" => DocumentResult(TestHooks.OpenVirtual(Vm, TestHookSettings.ParseVirtual(request))),
             "new" => DocumentResult(Vm.NewDocument()),
@@ -504,11 +505,21 @@ public sealed partial class MainWindow
     /// <summary>
     /// コンボボックスなどの選択を変える (UI オートメーションで選ぶにはドロップダウンを開く必要があり、開くとフォーカスが動くため)。
     /// </summary>
-    private JsonObject TestSetSelectedIndex(string id, int index)
+    private JsonObject TestSetSelectedIndex(string id, int index, string? text)
     {
         if (FindElement(id) is not Microsoft.UI.Xaml.Controls.Primitives.Selector selector)
         {
             throw new ArgumentException($"Selector not found: {id}");
+        }
+
+        // text を指定したら、表示の文字列が一致する項目を選ぶ (項目の並びが変わってもテストが壊れないように)。
+        if (text is not null)
+        {
+            index = selector.Items.Select(i => i is ContentControl c ? c.Content?.ToString() : i?.ToString()).ToList().IndexOf(text);
+            if (index < 0)
+            {
+                throw new ArgumentException($"Item not found in {id}: {text}");
+            }
         }
 
         selector.SelectedIndex = index;

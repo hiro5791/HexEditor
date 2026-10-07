@@ -269,7 +269,9 @@ public sealed class NavigationTests
     internal static async Task AssertCursorAsync(AppSession app, long expected)
     {
         Assert.Equal(expected, (await app.DocumentAsync())["cursor"]!.GetValue<long>());
-        Assert.Equal($"Offset: 0x{expected:X}", await app.UiaNameAsync("Status_Offset"));
+        // 表示は 8 桁以上に 0 で埋める (VIEW-40)。
+        Assert.Matches($"^Offset: 0x0*{expected:X}$", await app.UiaNameAsync("Status_Offset"));
+        Assert.True((await app.UiaNameAsync("Status_Offset")).Length >= "Offset: 0x".Length + 8);
     }
 
     private static async Task<(long Cursor, int Row)> CaretAsync(AppSession app)

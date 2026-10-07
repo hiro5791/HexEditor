@@ -64,7 +64,7 @@ public sealed class GoToAndFindTests
         await NavigationTests.AssertCursorAsync(app, 0xFFFF0);
     });
 
-    [Fact(Skip = "VIEW-29 の仕様 (末尾を超える値は赤枠で移動ボタンを無効にする) が未実装: 末尾を超える値も有効として扱い、移動できてしまう")]
+    [Fact]
     [Trait(UiTest.TC, "TC-VIEW-29-05")]
     public Task Values_beyond_the_end_are_rejected() => UiTestContext.RunAsync(async ctx =>
     {
@@ -114,7 +114,7 @@ public sealed class GoToAndFindTests
         Assert.StartsWith("HexView", state["focused"]!.GetValue<string>(), StringComparison.Ordinal);
     });
 
-    [Fact(Skip = "FIND-04 の仕様 (説明文に誤りの位置 (何文字目か) を含める) が未実装: 奇数桁の説明文に位置がない")]
+    [Fact]
     [Trait(UiTest.TC, "TC-FIND-04-03")]
     public Task Invalid_hex_shows_error_and_disables_buttons() => UiTestContext.RunAsync(async ctx =>
     {
@@ -172,13 +172,13 @@ public sealed class GoToAndFindTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("TD-FIND-STRINGS.bin", FindStrings())] });
         await OpenFindAsync(app);
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 1 });
-        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["index"] = 0 });
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII" });
         await app.UiaSetValueAsync("Find_Query", "World");
         Assert.Equal("57 6F 72 6C 64", await app.UiaNameAsync("Find_Status"));
         await FindNextAsync(app);
         await AssertSelectionAsync(app, 0x20, 5);
 
-        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["index"] = 2 });
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "UTF-16 LE" });
         await app.UiaSetValueAsync("Find_Query", "ファイル");
         await app.KeyAsync("Home", ctrl: true);
         await FindNextAsync(app);
@@ -203,6 +203,9 @@ public sealed class GoToAndFindTests
         await AssertSelectionAsync(app, 0, 2);
         Assert.Contains("continued from the start", await app.UiaNameAsync("Find_Status"));
 
+        // 「折り返す」はオプションの行にある (FIND-04 の仕様 4)。
+        (await app.WaitForAsync("Find_Options")).Patterns.Toggle.Pattern.Toggle();
+        await app.IdleAsync();
         (await app.WaitForAsync("Find_Wrap")).Patterns.Toggle.Pattern.Toggle();
         await app.SendAsync("click", new JsonObject { ["offset"] = 0x30 });
         Assert.Equal("menu:Command_FindNext", (await app.KeyAsync("F3"))["handledBy"]!.GetValue<string>());
