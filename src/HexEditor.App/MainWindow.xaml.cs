@@ -194,6 +194,13 @@ public sealed partial class MainWindow : Window
     private async Task<bool> SaveAsync(DocumentViewModel doc, bool saveAs)
     {
         string? path = doc.FilePath;
+
+        // 変更のない文書を同じファイルに保存しても、ファイルには触れない (ENG-20。更新日時を変えない)。
+        if (!saveAs && path is not null && doc.Document.CanSave && !doc.Document.IsModified)
+        {
+            return true;
+        }
+
         if (saveAs || path is null || !doc.Document.CanSave)
         {
             // 初期フォルダは元のファイルのフォルダ、無題なら前回保存したフォルダ (ENG-21 の仕様 1)。
