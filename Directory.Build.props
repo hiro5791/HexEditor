@@ -50,6 +50,15 @@
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
+  <!--
+    異常を再現する仕組み・テスト用のメニュー・テスト用の命令の通り道 (テスト方針 7.2、8.4)。
+    Debug ビルドと、テスト用に作る Release ビルド (-p:HexTestHooks=true) だけに入れる。製品版には含めない。
+    Core と App の両方で同じ定数を使うため、ここで定める。
+  -->
+  <PropertyGroup Condition="'$(Configuration)' == '' or '$(Configuration)' == 'Debug' or '$(HexTestHooks)' == 'true'">
+    <DefineConstants>$(DefineConstants);HEX_TEST_HOOKS</DefineConstants>
+  </PropertyGroup>
+
   <!-- Core と非 UI のプロジェクトは警告をエラーにする (WinUI の生成コードの警告を避けるため App は除く) -->
   <PropertyGroup Condition="'$(MSBuildProjectName)' != 'HexEditor.App'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

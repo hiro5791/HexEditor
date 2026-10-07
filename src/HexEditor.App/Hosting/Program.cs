@@ -33,6 +33,7 @@ public static class Program
             step = "environment";
             CommandLine = CommandLine.Parse(args);
             AppEnvironment = AppEnvironment.DetectCurrent(typeof(Program).Assembly, CommandLine.TestProfile);
+            TestHooks.Initialize(args, CommandLine);
 
             // 3. 未処理例外の記録 (PKG-30)。
             step = "crash-reporter";
@@ -44,7 +45,7 @@ public static class Program
 
             // 5. 単一インスタンス化。既存のインスタンスがあれば起動を転送して終わる (UI-15)。
             step = "single-instance";
-            if (CommandLine.NewInstance is false && SingleInstance.TryRedirect(Environment.InstanceKey))
+            if (CommandLine.NewInstance is false && SingleInstance.TryRedirect(TestHooks.AdjustInstanceKey(Environment.InstanceKey)))
             {
                 return 0;
             }

@@ -1008,24 +1008,38 @@ public sealed partial class HexView
             return;
         }
 
-        bool shift = IsDown(VirtualKey.Shift);
-        bool ctrl = IsDown(VirtualKey.Control);
-        if (e.Key == VirtualKey.F6 && !ctrl)
+        if (HandleKey(e.Key, IsDown(VirtualKey.Shift), IsDown(VirtualKey.Control), IsDown(VirtualKey.Menu)))
+        {
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>
+    /// キー 1 つを処理する。処理したら true。実際のキー入力 (<see cref="OnPreviewKeyDown"/>) と、テスト用のビルドの
+    /// キー入力の注入 (テスト方針 7.2) の両方から呼ぶ。
+    /// </summary>
+    private bool HandleKey(VirtualKey key, bool shift, bool ctrl, bool alt)
+    {
+        if (_editor is null)
+        {
+            return false;
+        }
+
+        if (key == VirtualKey.F6 && !ctrl)
         {
             // Hex ビューから他の領域へ移る (VIEW-27 の仕様 4、UI-52)。Tab は列の切り替えに使うため、F6 が出口になる。
             MoveFocusToRegion(!shift);
-            e.Handled = true;
-            return;
+            return true;
         }
 
-        if (IsDown(VirtualKey.Menu))
+        if (alt)
         {
             // Alt を含むキーはアプリのコマンド (Alt+← / Alt+→ など) に渡す。
-            return;
+            return false;
         }
 
         bool handled = true;
-        EditorCommand? command = (e.Key, ctrl, shift) switch
+        EditorCommand? command = (key, ctrl, shift) switch
         {
             (VirtualKey.C, true, false) or (VirtualKey.Insert, true, false) => EditorCommand.Copy,
             (VirtualKey.X, true, false) or (VirtualKey.Delete, false, true) => EditorCommand.Cut,
@@ -1038,11 +1052,10 @@ public sealed partial class HexView
         {
             CommandRequested?.Invoke(this, c);
             RestartBlink();
-            e.Handled = true;
-            return;
+            return true;
         }
 
-        switch (e.Key)
+        switch (key)
         {
             case VirtualKey.Left:
                 _editor.MoveLeft(shift);
@@ -1104,8 +1117,9 @@ public sealed partial class HexView
         if (handled)
         {
             RestartBlink();
-            e.Handled = true;
         }
+
+        return handled;
     }
 
     /// <summary>削除して、削除したバイト数を読み上げる (EDIT-13 の仕様 6)。</summary>
@@ -1143,21 +1157,30 @@ public sealed partial class HexView
 
     private void OnCharacterReceived(UIElement sender, CharacterReceivedRoutedEventArgs e)
     {
-        if (_editor is null || IsDown(VirtualKey.Control) || char.IsControl(e.Character))
-        {
-            return;
-        }
-
         // TSF (HexView.TextInput.cs) で受け取った文字と同じなら二重に書かない。
-        if (ConsumeIfDeliveredByTextInput(e.Character))
+        if (_editor is not null && !char.IsControl(e.Character) && !IsDown(VirtualKey.Control) && ConsumeIfDeliveredByTextInput(e.Character))
         {
             e.Handled = true;
             return;
         }
 
-        RememberCharacterInput(e.Character);
-        TypeCharacters(e.Character.ToString());
-        e.Handled = true;
+        if (HandleCharacter(e.Character, IsDown(VirtualKey.Control)))
+        {
+            RememberCharacterInput(e.Character);
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>入力した文字 1 つを書き込む。処理したら true (テスト用のビルドの文字入力の注入からも呼ぶ)。</summary>
+    private bool HandleCharacter(char character, bool ctrl)
+    {
+        if (_editor is null || ctrl || char.IsControl(character))
+        {
+            return false;
+        }
+
+        TypeCharacters(character.ToString());
+        return true;
     }
 
     /// <summary>確定した文字を書き込む (EDIT-11、EDIT-12)。</summary>
