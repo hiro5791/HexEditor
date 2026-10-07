@@ -1,45 +1,83 @@
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using HexEditor.Core.Engine;
 using HexEditor.Core.View;
-using Microsoft.UI.Input;
-
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Automation.Peers;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Documents;
-using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
-using Windows.System;
-using Windows.UI.Core;
+using Microsoft.UI.Xaml.Shapes;
+using Windows.UI.ViewManagement;
+using Path = Microsoft.UI.Xaml.Shapes.Path;
 
 namespace HexEditor.App.Controls;
 
 /// <summary>
-/// Hex ビュー (VIEW-01〜VIEW-04)。見えている行の数だけ TextBlock を用意して使い回し、ファイルの大きさに関係なく
+/// Hex ビュー (VIEW-01〜VIEW-04)。見えている行の数だけ行の要素を用意して使い回し、ファイルの大きさに関係なく
 /// 同じ手間で描く。カーソル・選択・入力の規則は UI に依存しない <see cref="EditorState"/> が持ち、このコントロールは
 /// 描画と入力の振り分けだけを行う。
+/// <para>
+/// ファイルの分け方: 描画 (このファイル)、入力 (HexView.Input.cs)、文字入力 TSF (HexView.TextInput.cs)、
+/// アクセシビリティ (HexView.Accessibility.cs、HexViewAutomationPeer.cs)、診断 (HexViewDiagnostics.cs)。
+/// </para>
 /// </summary>
 public sealed partial class HexView : UserControl
 {
     /// <summary>既定のフォントの大きさ (10 pt = 13.33 epx。VIEW-01 の仕様 3)。</summary>
-    private const double DefaultFontSize = 13.333;
+    public const double DefaultFontSize = 13.333;
 
-    private static readonly FontFamily MonoFont = new("Cascadia Mono, Consolas");
+    /// <summary>既定のフォント (VIEW-01 の仕様 3)。</summary>
+    public const string DefaultFontFamily = "Cascadia Mono, Consolas";
 
-    /// <summary>描画面の左端の余白 (XAML の RowsHost の Margin と同じ値)。</summary>
+    /// <summary>描画面の左端の余白。</summary>
     private const double LeftPadding = 8;
+
+    /// <summary>読み込み中の仮表示を出すまでの猶予 (VIEW-03 の仕様 3)。</summary>
+    private static readonly TimeSpan LoadingGrace = TimeSpan.FromMilliseconds(100);
+
+    /// <summary>`00`〜`FF` の文字列 (VIEW-04 の仕様 3。毎回 ToString しない)。</summary>
+    private static readonly string[] HexStrings = [.. Enumerable.Range(0, 256).Select(i => i.ToString("X2"))];
 
     private readonly Microsoft.UI.Dispatching.DispatcherQueue _uiQueue;
     private readonly Microsoft.UI.Dispatching.DispatcherQueueTimer _blinkTimer;
-    private readonly List<TextBlock> _rows = [];
+    private readonly Microsoft.UI.Dispatching.DispatcherQueueTimer _graceTimer;
+    private readonly List<RowVisual> _rows = [];
+    private readonly UISettings _uiSettings = new();
+    private readonly AccessibilitySettings _accessibilitySettings = new();
+    private readonly HexViewDiagnostics _diagnostics;
+
+    private string _fontFamilyName = DefaultFontFamily;
+    private FontFamily _font = new(DefaultFontFamily);
+    private double _baseFontSize = DefaultFontSize;
+    private double _zoom = 1;
+    private double _fontSize = DefaultFontSize;
+    private int _characterSpacing;
     private double _cellWidth = 8;
     private double _rowHeight = 16;
+    private double _rasterizationScale = 1;
+    private int _digits = 8;
+    private int _bytesPerRow;
+
+    /// <summary>行内のずれ (VIEW-28 の仕様 2。0 以上 1 行の高さ未満のピクセル)。</summary>
+    private double _subRowOffset;
+
+    /// <summary>横スクロールの位置 (ピクセル)。</summary>
+    private double _horizontalOffset;
+
     private EditorState? _editor;
     private Palette? _palette;
-    private bool _dragging;
+    private int _paletteVersion;
     private bool _renderQueued;
     private bool _updatingScrollBar;
+    private bool _focused;
+    private long _loadingSince = -1;
+    private bool _unreadableReported;
+    private long _lastTopRow;
+    private long _lastCursor = -1;
+    private EditorSnapshot _lastState;
 
     public HexView()
     {
@@ -47,32 +85,30 @@ public sealed partial class HexView : UserControl
 
         // 読み込み完了の通知はスレッドプールから来るため、UI スレッドのキューをここで取っておく。
         _uiQueue = DispatcherQueue;
+        _diagnostics = new HexViewDiagnostics(DiagnosticsPanel, DiagnosticsText);
         _blinkTimer = _uiQueue.CreateTimer();
         _blinkTimer.Interval = TimeSpan.FromMilliseconds(Math.Max(200, CaretBlinkMilliseconds()));
+
+        // 点滅は Opacity だけを変える (VIEW-04 の仕様 5。行は描き直さない)。
         _blinkTimer.Tick += (_, _) => Caret.Opacity = Caret.Opacity > 0 ? 0 : 1;
-        GotFocus += (_, _) => RestartBlink();
-        LostFocus += (_, _) =>
+        _graceTimer = _uiQueue.CreateTimer();
+        _graceTimer.IsRepeating = false;
+        _graceTimer.Interval = LoadingGrace;
+        _graceTimer.Tick += (_, _) => QueueRender();
+
+        GotFocus += (_, _) => OnFocusChanged(true);
+        LostFocus += (_, _) => OnFocusChanged(false);
+        ActualThemeChanged += (_, _) => ReloadPalette();
+        foreach (UIElement probe in PaletteProbes.Children)
         {
-            _blinkTimer.Stop();
-            Caret.Opacity = 1;
-            Render();
-        };
-        PreviewKeyDown += OnPreviewKeyDown;
-        CharacterReceived += OnCharacterReceived;
-        ActualThemeChanged += (_, _) =>
-        {
-            _palette = Palette.Load();
-            Render();
-        };
-        Loaded += (_, _) =>
-        {
-            _palette = Palette.Load();
-            MeasureCell();
-            UpdateVisibleRows();
-            UpdateScrollBar();
-            Render();
-        };
-        Unloaded += (_, _) => _blinkTimer.Stop();
+            // ハイコントラストの切り替えでは ActualThemeChanged が来ない場合があるため、ブラシの変化も見る。
+            probe.RegisterPropertyChangedCallback(Shape.FillProperty, (_, _) => ReloadPalette());
+        }
+
+        Loaded += HexView_Loaded;
+        Unloaded += HexView_Unloaded;
+        InitializeInput();
+        InitializeTextInput();
     }
 
     /// <summary>テキスト列の入力に使う文字コード (VIEW-21 の実装までは Latin-1)。</summary>
@@ -81,8 +117,18 @@ public sealed partial class HexView : UserControl
     /// <summary>入力を拒否したときに呼ぶ (InfoBar を出すため)。</summary>
     public event EventHandler<EditResult>? EditRejected;
 
-    /// <summary>エディタの範囲のコマンド (クリップボードなど。00-overview 8.3) を要求した。</summary>
+    /// <summary>エディタの範囲のコマンド (クリップボードなど。00-overview 8.3) を要求した。右クリックメニューからも来る。</summary>
     public event EventHandler<EditorCommand>? CommandRequested;
+
+    /// <summary>
+    /// F6 / Shift+F6 で次 / 前の領域へフォーカスを移すよう求めた (VIEW-27 の仕様 4、UI-52 の仕様 1)。
+    /// ウィンドウが <see cref="HexViewFocusRegionEventArgs.Handled"/> を立てなければ、このコントロールが
+    /// 次 / 前のフォーカス可能な要素へフォーカスを移す (キーボードの罠を作らない)。
+    /// </summary>
+    public event EventHandler<HexViewFocusRegionEventArgs>? FocusRegionRequested;
+
+    /// <summary>ステータスバーに一時的な文を出すよう求めた (VIEW-03 の「読み取れない範囲があります」など)。</summary>
+    public event EventHandler<HexViewStatusMessageEventArgs>? StatusMessageRequested;
 
     /// <summary>表示するビューの状態。</summary>
     public EditorState? Editor
@@ -90,6 +136,11 @@ public sealed partial class HexView : UserControl
         get => _editor;
         set
         {
+            if (ReferenceEquals(_editor, value))
+            {
+                return;
+            }
+
             if (_editor is not null)
             {
                 _editor.Changed -= OnEditorChanged;
@@ -97,10 +148,17 @@ public sealed partial class HexView : UserControl
             }
 
             _editor = value;
+            _subRowOffset = 0;
+            _horizontalOffset = 0;
+            _unreadableReported = false;
+            _loadingSince = -1;
+            InvalidateRows();
             if (_editor is not null)
             {
                 _editor.Changed += OnEditorChanged;
                 _editor.Document.DataLoaded += OnDataLoaded;
+                _lastTopRow = _editor.TopRow;
+                _lastState = EditorSnapshot.Of(_editor);
                 UpdateVisibleRows();
             }
 
@@ -109,19 +167,178 @@ public sealed partial class HexView : UserControl
         }
     }
 
-    // ---- 描画 ----
+    /// <summary>フォント名 (VIEW-01 の仕様 3。設定から変える)。</summary>
+    public string HexFontFamily
+    {
+        get => _fontFamilyName;
+        set
+        {
+            _fontFamilyName = string.IsNullOrWhiteSpace(value) ? DefaultFontFamily : value;
+            _font = new FontFamily(_fontFamilyName);
+            RemeasureAndRender();
+        }
+    }
 
-    /// <summary>セル幅と行の高さを `0` の送り幅とフォントの高さから求める (VIEW-01 の仕様 4)。</summary>
+    /// <summary>フォントの大きさ (表示倍率 100%・文字サイズ 100% のときの epx。VIEW-01 の仕様 3)。</summary>
+    public double HexFontSize
+    {
+        get => _baseFontSize;
+        set
+        {
+            _baseFontSize = Math.Clamp(value, 4, 200);
+            RemeasureAndRender();
+        }
+    }
+
+    /// <summary>Hex ビューのズームの倍率 (VIEW-43。Windows の文字サイズとは掛け算)。</summary>
+    public double Zoom
+    {
+        get => _zoom;
+        set
+        {
+            _zoom = Math.Clamp(value, 0.25, 8);
+            RemeasureAndRender();
+        }
+    }
+
+    /// <summary>診断表示 (VIEW-04 の仕様 8)。設定の「診断」から有効にする。</summary>
+    public bool DiagnosticsEnabled
+    {
+        get => _diagnostics.Enabled;
+        set => _diagnostics.Enabled = value;
+    }
+
+    /// <summary>診断の記録を書き出すファイル (CSV)。null なら書き出さない。性能のテストが読む。</summary>
+    public string? DiagnosticsLogPath
+    {
+        get => _diagnostics.LogPath;
+        set => _diagnostics.LogPath = value;
+    }
+
+    /// <summary>実際に使っているフォントの大きさ (epx。文字サイズの設定とズームを掛けた値)。</summary>
+    internal double EffectiveFontSize => _fontSize;
+
+    internal double CellWidth => _cellWidth;
+
+    internal double RowHeight => _rowHeight;
+
+    private void HexView_Loaded(object sender, RoutedEventArgs e)
+    {
+        // デスクトップアプリでは購読できない環境がある。ハイコントラストの切り替えは配色の取り出し用の要素でも検出する。
+        TrySubscribe(() => _uiSettings.TextScaleFactorChanged += UiSettings_TextScaleFactorChanged);
+        if (XamlRoot is not null)
+        {
+            XamlRoot.Changed += XamlRoot_Changed;
+            _rasterizationScale = XamlRoot.RasterizationScale;
+        }
+
+        ReloadPalette();
+        MeasureCell();
+        UpdateVisibleRows();
+        UpdateScrollBar();
+        Render();
+    }
+
+    private void HexView_Unloaded(object sender, RoutedEventArgs e)
+    {
+        TrySubscribe(() => _uiSettings.TextScaleFactorChanged -= UiSettings_TextScaleFactorChanged);
+        if (XamlRoot is not null)
+        {
+            XamlRoot.Changed -= XamlRoot_Changed;
+        }
+
+        _blinkTimer.Stop();
+        _graceTimer.Stop();
+        StopPointerTimers();
+        _diagnostics.Stop();
+    }
+
+    // ---- 文字の大きさ・表示倍率 (VIEW-01 の仕様 4・11、VIEW-41 の仕様 4) ----
+
+    /// <summary>Windows の「文字サイズを大きくする」(スレッドプールから来る)。</summary>
+    private void UiSettings_TextScaleFactorChanged(UISettings sender, object args) => _uiQueue.TryEnqueue(RemeasureAndRender);
+
+    private static void TrySubscribe(Action subscribe)
+    {
+        try
+        {
+            subscribe();
+        }
+        catch (COMException ex)
+        {
+            Services.AppLog.Warning($"HexView: 設定の変更を購読できません ({ex.HResult:X8})");
+        }
+    }
+
+    private void XamlRoot_Changed(XamlRoot sender, XamlRootChangedEventArgs args)
+    {
+        if (sender.RasterizationScale != _rasterizationScale)
+        {
+            // 別の表示倍率のモニターへ移った。カーソルと一番上の行はそのまま (行の番号は倍率に依存しない)。
+            _rasterizationScale = sender.RasterizationScale;
+            RemeasureAndRender();
+        }
+    }
+
+    private void RemeasureAndRender()
+    {
+        MeasureCell();
+        UpdateVisibleRows();
+        UpdateScrollBar();
+        QueueRender();
+    }
+
+    /// <summary>
+    /// セル幅と行の高さを `0` の送り幅とフォントの高さから求め、物理ピクセルに切り上げる (VIEW-01 の仕様 4)。
+    /// 文字サイズの設定は TextBlock に任せず、ここで大きさに掛ける (セル幅の計算と描画を一致させるため)。
+    /// </summary>
     private void MeasureCell()
     {
-        var probe = new TextBlock { Text = new string('0', 64), FontFamily = MonoFont, FontSize = DefaultFontSize };
-        probe.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
-        _cellWidth = probe.DesiredSize.Width / 64;
-        _rowHeight = Math.Ceiling(probe.DesiredSize.Height * 1.2);
-        foreach (TextBlock row in _rows)
+        double scale = _rasterizationScale > 0 ? _rasterizationScale : 1;
+        _fontSize = _baseFontSize * _uiSettings.TextScaleFactor * _zoom;
+        var probe = new TextBlock
         {
-            row.LineHeight = _rowHeight;
+            Text = new string('0', 64),
+            FontFamily = _font,
+            FontSize = _fontSize,
+            IsTextScaleFactorEnabled = false,
+        };
+        probe.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+        double advance = probe.DesiredSize.Width / 64;
+        double cell = Math.Ceiling(advance * scale) / scale;
+
+        // 切り上げた分は字間で埋める (CharacterSpacing は 1/1000 em 単位)。
+        _characterSpacing = (int)Math.Round((cell - advance) / _fontSize * 1000);
+        _cellWidth = advance + _characterSpacing * _fontSize / 1000;
+        _rowHeight = Math.Ceiling(probe.DesiredSize.Height * 1.2 * scale) / scale;
+        CompositionText.FontFamily = _font;
+        CompositionText.FontSize = _fontSize;
+        CompositionText.CharacterSpacing = _characterSpacing;
+        foreach (RowVisual row in _rows)
+        {
+            row.ApplyFont(_font, _fontSize, _rowHeight, _characterSpacing);
         }
+
+        InvalidateRows();
+    }
+
+    // ---- 描画 ----
+
+    /// <summary>次の描画で全行を作り直す。</summary>
+    private void InvalidateRows()
+    {
+        foreach (RowVisual row in _rows)
+        {
+            row.Invalidate();
+        }
+    }
+
+    private void ReloadPalette()
+    {
+        _palette = Palette.Load(this);
+        _paletteVersion++;
+        InvalidateRows();
+        QueueRender();
     }
 
     private void QueueRender()
@@ -146,10 +363,25 @@ public sealed partial class HexView : UserControl
             return;
         }
 
+        long started = Stopwatch.GetTimestamp();
         HexLayout layout = _editor.Layout;
         int bytesPerRow = layout.BytesPerRow;
         int digits = layout.MaxCursor > uint.MaxValue ? 16 : 8;
-        int rows = (int)Math.Min(_editor.VisibleRows + 1, layout.TotalRows - _editor.TopRow);
+        if (digits != _digits || bytesPerRow != _bytesPerRow)
+        {
+            _digits = digits;
+            _bytesPerRow = bytesPerRow;
+            InvalidateRows();
+            UpdateColumnsLayout();
+        }
+
+        if (_editor.TopRow >= layout.MaxTopRow(_editor.VisibleRows))
+        {
+            _subRowOffset = 0;
+        }
+
+        // 上下 1 行ずつの余分 (VIEW-04 の仕様 1)。行内のずれがあると下にもう 1 行見える。
+        int rows = (int)Math.Max(1, Math.Min(_editor.VisibleRows + 2, layout.TotalRows - _editor.TopRow));
         EnsureRowCount(rows);
 
         long firstOffset = layout.RowStart(_editor.TopRow);
@@ -166,114 +398,163 @@ public sealed partial class HexView : UserControl
             modified.AsSpan((int)(offset - firstOffset), (int)length).Fill(true);
         }
 
-        var columns = new RowColumns(digits, bytesPerRow);
+        long now = Stopwatch.GetTimestamp();
+        bool anyLoading = states.AsSpan(0, available).Contains(ByteState.Loading);
+        if (anyLoading && _loadingSince < 0)
+        {
+            _loadingSince = now;
+        }
+        else if (!anyLoading)
+        {
+            _loadingSince = -1;
+            _graceTimer.Stop();
+        }
+
+        bool inGrace = anyLoading && Stopwatch.GetElapsedTime(_loadingSince, now) < LoadingGrace;
+        if (inGrace && !_graceTimer.IsRunning)
+        {
+            _graceTimer.Interval = LoadingGrace - Stopwatch.GetElapsedTime(_loadingSince, now) + TimeSpan.FromMilliseconds(5);
+            _graceTimer.Start();
+        }
+
+        var columns = new RowColumns(bytesPerRow);
         long selStart = _editor.SelectionStart;
         long selEnd = selStart + _editor.SelectionLength;
+        var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion);
+        int rebuilt = 0;
+        int loadingCells = 0;
+        bool anyUnreadable = false;
+        ReuseRowsByOffset(firstOffset, bytesPerRow, rows);
         for (int r = 0; r < rows; r++)
         {
             long rowStart = firstOffset + (long)r * bytesPerRow;
             int from = r * bytesPerRow;
             int count = Math.Max(0, Math.Min(bytesPerRow, available - from));
-            FillRow(_rows[r], rowStart, columns, bytes.AsSpan(from, bytesPerRow), states.AsSpan(from, bytesPerRow), modified.AsSpan(from, bytesPerRow), count);
-            Highlight(_rows[r], columns, rowStart, bytesPerRow, selStart, selEnd);
-            Microsoft.UI.Xaml.Controls.Canvas.SetTop(_rows[r], r * _rowHeight);
-            _rows[r].Visibility = Visibility.Visible;
+            ReadOnlySpan<ByteState> rowStates = states.AsSpan(from, bytesPerRow);
+            bool rowLoading = rowStates[..count].Contains(ByteState.Loading);
+            anyUnreadable |= rowStates[..count].Contains(ByteState.Unreadable);
+            RowVisual row = _rows[r];
+            if (row.OffsetRowStart != rowStart || row.OffsetDigits != digits)
+            {
+                row.SetOffset(rowStart, digits, _palette);
+            }
+
+            CellMode mode = !rowLoading ? CellMode.Normal : inGrace ? CellMode.Blank : CellMode.Placeholder;
+            if (rowLoading)
+            {
+                loadingCells += rowStates[..count].Count(ByteState.Loading);
+            }
+
+            // 猶予中で、同じ行の前の内容があればそのまま残す (VIEW-03 の仕様 3)。
+            bool keep = mode == CellMode.Blank && row.ContentRowStart == rowStart && row.HasContent;
+            if (!keep && row.Update(frame, rowStart, count, bytes.AsSpan(from, bytesPerRow), rowStates, modified.AsSpan(from, bytesPerRow),
+                mode, selStart, selEnd, _palette, _cellWidth, _rowHeight))
+            {
+                rebuilt++;
+            }
+
+            row.SetTop(r * _rowHeight - _subRowOffset);
+            row.Visible = true;
         }
 
         for (int r = rows; r < _rows.Count; r++)
         {
-            _rows[r].Visibility = Visibility.Collapsed;
+            _rows[r].Visible = false;
         }
 
         PlaceCaret(layout, columns);
+        UpdateMarkers();
+        if (anyUnreadable && !_unreadableReported)
+        {
+            // 最初に読み取れない範囲が見つかったときだけ知らせる (VIEW-03 のエラー)。InfoBar は出さない。
+            _unreadableReported = true;
+            StatusMessageRequested?.Invoke(this, new HexViewStatusMessageEventArgs(
+                Services.Loc.Get("HexView_Status_UnreadableFound"), TimeSpan.FromSeconds(5)));
+        }
+
+        _diagnostics.RecordRender(Stopwatch.GetElapsedTime(started), rows, rebuilt, loadingCells);
+        RaiseAccessibilityChanges();
+    }
+
+    /// <summary>
+    /// スクロールしたとき、同じ行 (先頭オフセット) を描いていた要素をその行に回す。内容が同じ行は作り直さずに位置だけ変わる
+    /// (VIEW-04 の仕様 3・5)。
+    /// </summary>
+    private void ReuseRowsByOffset(long firstOffset, int bytesPerRow, int rows)
+    {
+        var byStart = new Dictionary<long, RowVisual>(_rows.Count);
+        foreach (RowVisual row in _rows)
+        {
+            if (row.ContentRowStart >= 0)
+            {
+                byStart.TryAdd(row.ContentRowStart, row);
+            }
+        }
+
+        var ordered = new RowVisual?[_rows.Count];
+        var used = new HashSet<RowVisual>();
+        for (int r = 0; r < rows && r < ordered.Length; r++)
+        {
+            if (byStart.TryGetValue(firstOffset + (long)r * bytesPerRow, out RowVisual? match) && used.Add(match))
+            {
+                ordered[r] = match;
+            }
+        }
+
+        var free = new Queue<RowVisual>(_rows.Where(v => !used.Contains(v)));
+        for (int r = 0; r < ordered.Length; r++)
+        {
+            ordered[r] ??= free.Dequeue();
+        }
+
+        for (int r = 0; r < ordered.Length; r++)
+        {
+            _rows[r] = ordered[r]!;
+        }
     }
 
     private void EnsureRowCount(int count)
     {
         while (_rows.Count < count)
         {
-            var row = new TextBlock
-            {
-                FontFamily = MonoFont,
-                FontSize = DefaultFontSize,
-                LineHeight = _rowHeight,
-                LineStackingStrategy = LineStackingStrategy.BlockLineHeight,
-                TextWrapping = TextWrapping.NoWrap,
-                IsTextScaleFactorEnabled = false,
-            };
+            var row = new RowVisual(_font, _fontSize, _rowHeight, _characterSpacing);
             _rows.Add(row);
-            RowsHost.Children.Insert(0, row);
+            OffsetHost.Children.Add(row.Offset);
+            RowsLayer.Children.Add(row.Container);
         }
     }
 
-    /// <summary>1 行の文字列を、色の違う区間ごとの Run に分けて作る。</summary>
-    private void FillRow(TextBlock row, long rowStart, RowColumns columns, ReadOnlySpan<byte> bytes, ReadOnlySpan<ByteState> states,
-        ReadOnlySpan<bool> modified, int count)
+    /// <summary>オフセット列の幅が変わったときに、内容の領域の位置と横スクロールバーを決め直す。</summary>
+    private void UpdateColumnsLayout()
     {
-        Palette palette = _palette!;
-        row.Inlines.Clear();
-        var builder = new RunBuilder(row, palette);
-        builder.Append(rowStart.ToString("X" + columns.Digits), palette.OffsetText);
-        builder.Append("  ", palette.Text);
-
-        // Hex 列
-        for (int c = 0; c < columns.BytesPerRow; c++)
-        {
-            Kind kind = c >= count ? Kind.Empty : Classify(states[c], modified[c]);
-            string cell = kind switch
-            {
-                Kind.Empty => "  ",
-                Kind.Loading => "··",
-                Kind.Unreadable => "??",
-                _ => bytes[c].ToString("X2"),
-            };
-            builder.Append(cell, kind);
-            builder.Append(c == columns.BytesPerRow / 2 - 1 ? "  " : " ", palette.Text);
-        }
-
-        builder.Append(" ", palette.Text);
-
-        // テキスト列
-        for (int c = 0; c < count; c++)
-        {
-            Kind kind = Classify(states[c], modified[c]);
-            builder.Append(kind is Kind.Loading or Kind.Unreadable ? " " : ToChar(bytes[c]).ToString(), kind);
-        }
-
-        builder.Flush();
+        double contentLeft = ContentLeft;
+        ContentViewport.Margin = new Thickness(contentLeft, 0, 0, 0);
+        double width = Math.Max(0, Surface.ActualWidth - contentLeft);
+        double height = Math.Max(0, Surface.ActualHeight);
+        ContentClip.Rect = new Windows.Foundation.Rect(0, 0, width, height);
+        OffsetHost.Margin = new Thickness(LeftPadding, 0, 0, 0);
+        UpdateHorizontalBar();
     }
 
-    private void Highlight(TextBlock row, RowColumns columns, long rowStart, int bytesPerRow, long selStart, long selEnd)
-    {
-        row.TextHighlighters.Clear();
-        long from = Math.Max(selStart, rowStart);
-        long to = Math.Min(selEnd, rowStart + bytesPerRow);
-        if (from >= to)
-        {
-            return;
-        }
+    /// <summary>内容 (Hex 列・テキスト列) の左端 (Surface の座標)。オフセット列の後ろに 2 文字分の空白をあける。</summary>
+    internal double ContentLeft => LeftPadding + (_digits + 2) * _cellWidth;
 
-        int first = (int)(from - rowStart);
-        int last = (int)(to - rowStart - 1);
-        var highlighter = new TextHighlighter { Background = _palette!.Selection, Foreground = _palette.SelectionText };
-        int hexStart = columns.HexIndex(first);
-        highlighter.Ranges.Add(new TextRange { StartIndex = hexStart, Length = columns.HexIndex(last) + 2 - hexStart });
-        highlighter.Ranges.Add(new TextRange { StartIndex = columns.TextIndex(first), Length = last - first + 1 });
-        row.TextHighlighters.Add(highlighter);
-    }
+    /// <summary>内容の全体の幅。</summary>
+    private double ContentWidth => (new RowColumns(Math.Max(1, _bytesPerRow)).LineLength + 1) * _cellWidth;
 
     private void PlaceCaret(HexLayout layout, RowColumns columns)
     {
         long row = layout.RowOf(_editor!.Cursor) - _editor.TopRow;
-        bool visible = row >= 0 && row <= _editor.VisibleRows;
+        bool visible = row >= 0 && row <= _editor.VisibleRows + 1;
         Caret.Visibility = SecondaryCaret.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
         if (!visible)
         {
+            CompositionBox.Visibility = Visibility.Collapsed;
             return;
         }
 
         int column = layout.ColumnOf(_editor.Cursor);
-        double y = row * _rowHeight;
+        double y = row * _rowHeight - _subRowOffset;
         double hexX = columns.HexIndex(column) * _cellWidth;
         double textX = columns.TextIndex(column) * _cellWidth;
         bool hexActive = _editor.ActiveColumn == ActiveColumn.Hex;
@@ -282,9 +563,8 @@ public sealed partial class HexView : UserControl
         // もう一方の列の対応位置は枠で示す (VIEW-06)。
         SetRect(SecondaryCaret, hexActive ? textX : hexX, y, hexActive ? _cellWidth : _cellWidth * 2, _rowHeight);
 
-        // 上書きモードは枠、挿入モードは縦線 (EDIT-10 の仕様 3。色だけで区別しない)。フォーカスがなければ細い枠。
-        bool focused = FocusState != FocusState.Unfocused;
-        if (_editor.InsertMode && focused)
+        // 上書きモードは枠、挿入モードは縦線 (EDIT-10 の仕様 3。色だけで区別しない)。フォーカスがなければ細い枠 (VIEW-01 の仕様 13)。
+        if (_editor.InsertMode && _focused)
         {
             Caret.Fill = _palette!.Caret;
             Caret.Stroke = null;
@@ -294,91 +574,41 @@ public sealed partial class HexView : UserControl
         {
             Caret.Fill = null;
             Caret.Stroke = _palette!.Caret;
-            Caret.StrokeThickness = focused ? 2 : 1;
+            Caret.StrokeThickness = _focused ? 2 : 1;
             SetRect(Caret, activeX, y, _cellWidth, _rowHeight);
         }
+
+        PlaceComposition(activeX, y);
     }
 
     private static void SetRect(FrameworkElement element, double x, double y, double width, double height)
     {
-        Microsoft.UI.Xaml.Controls.Canvas.SetLeft(element, x);
-        Microsoft.UI.Xaml.Controls.Canvas.SetTop(element, y);
+        Canvas.SetLeft(element, x);
+        Canvas.SetTop(element, y);
         element.Width = width;
         element.Height = height;
     }
 
-    private static Kind Classify(ByteState state, bool modified) => state switch
+    private void OnFocusChanged(bool focused)
     {
-        ByteState.Loading => Kind.Loading,
-        ByteState.Unreadable => Kind.Unreadable,
-        _ => modified ? Kind.Modified : Kind.Normal,
-    };
+        // GotFocus / LostFocus は子要素からも上がってくるため、実際の状態で判断する。
+        bool now = focused && FocusState != FocusState.Unfocused;
 
-    private static char ToChar(byte b) => b is >= 0x20 and < 0x7F ? (char)b : '.';
-
-    /// <summary>セルの種類。種類ごとに色・飾りを変える。</summary>
-    private enum Kind
-    {
-        Normal,
-        Modified,
-        Loading,
-        Unreadable,
-        Empty,
-    }
-
-    /// <summary>1 行の文字列の中での各列の位置 (文字単位)。</summary>
-    private readonly record struct RowColumns(int Digits, int BytesPerRow)
-    {
-        /// <summary>c 番目のバイトの Hex 列の先頭の文字位置。中央に 1 文字分の区切りを入れる。</summary>
-        public int HexIndex(int c) => Digits + 2 + c * 3 + (c >= BytesPerRow / 2 ? 1 : 0);
-
-        public int TextIndex(int c) => Digits + 2 + BytesPerRow * 3 + 2 + c;
-    }
-
-    /// <summary>同じ見た目の文字をまとめて Run にする。</summary>
-    private sealed class RunBuilder(TextBlock row, Palette palette)
-    {
-        private readonly StringBuilder _text = new();
-        private Brush? _brush;
-        private Kind _kind;
-
-        public void Append(string text, Brush brush) => Append(text, Kind.Normal, brush);
-
-        public void Append(string text, Kind kind) => Append(text, kind, palette.For(kind));
-
-        public void Flush()
+        _focused = now;
+        FocusFrameOuter.Visibility = FocusFrameInner.Visibility = now ? Visibility.Visible : Visibility.Collapsed;
+        if (now)
         {
-            if (_text.Length == 0)
-            {
-                return;
-            }
-
-            var run = new Run { Text = _text.ToString(), Foreground = _brush };
-            if (_kind == Kind.Modified)
-            {
-                run.TextDecorations = Windows.UI.Text.TextDecorations.Underline;
-            }
-            else if (_kind == Kind.Unreadable)
-            {
-                // 読み取れない範囲は取り消し線でも示す (VIEW-03 の仕様 5。色だけに頼らない)。
-                run.TextDecorations = Windows.UI.Text.TextDecorations.Strikethrough;
-            }
-
-            row.Inlines.Add(run);
-            _text.Clear();
+            RestartBlink();
+            TextInputFocusEnter();
+        }
+        else
+        {
+            _blinkTimer.Stop();
+            Caret.Opacity = 1;
+            TextInputFocusLeave();
         }
 
-        private void Append(string text, Kind kind, Brush brush)
-        {
-            if (!ReferenceEquals(brush, _brush) || kind != _kind)
-            {
-                Flush();
-                _brush = brush;
-                _kind = kind;
-            }
-
-            _text.Append(text);
-        }
+        QueueRender();
     }
 
     // ---- スクロール (VIEW-02、VIEW-28) ----
@@ -419,282 +649,122 @@ public sealed partial class HexView : UserControl
         }
     }
 
-    private void VerticalBar_Scroll(object sender, ScrollEventArgs e)
+    private void UpdateHorizontalBar()
     {
-        if (_editor is null || _updatingScrollBar)
+        double viewport = Math.Max(0, Surface.ActualWidth - ContentLeft);
+        double max = Math.Max(0, ContentWidth - viewport);
+        _horizontalOffset = Math.Clamp(_horizontalOffset, 0, max);
+        ContentShift.X = -_horizontalOffset;
+
+        // 横スクロールバーは表示部分の幅が足りないときだけ出す (VIEW-28 の仕様 5)。
+        Visibility visibility = max > 0.5 ? Visibility.Visible : Visibility.Collapsed;
+        if (HorizontalBar.Visibility != visibility)
         {
-            return;
+            HorizontalBar.Visibility = visibility;
         }
 
-        long page = Math.Max(1, _editor.VisibleRows - 1);
-        switch (e.ScrollEventType)
+        _updatingScrollBar = true;
+        try
         {
-            // 矢印ボタンは縮尺に関係なく 1 行 (VIEW-02 の仕様 4)、トラックは 1 画面 (仕様 5)。
-            case ScrollEventType.SmallDecrement:
-                _editor.ScrollRows(-1);
-                break;
-            case ScrollEventType.SmallIncrement:
-                _editor.ScrollRows(1);
-                break;
-            case ScrollEventType.LargeDecrement:
-                _editor.ScrollRows(-page);
-                break;
-            case ScrollEventType.LargeIncrement:
-                _editor.ScrollRows(page);
-                break;
-            default:
-                long maxTop = _editor.Layout.MaxTopRow(_editor.VisibleRows);
-                long value = (long)Math.Round(e.NewValue);
-                long row = value >= ScrollMapping.Scale(maxTop) ? maxTop : ScrollMapping.ToRow(value, maxTop);
-                _editor.ScrollToRow(row);
-                break;
+            HorizontalBar.Minimum = 0;
+            HorizontalBar.Maximum = max;
+            HorizontalBar.ViewportSize = Math.Max(1, viewport);
+            HorizontalBar.SmallChange = _cellWidth * 3;
+            HorizontalBar.LargeChange = Math.Max(_cellWidth, viewport - _cellWidth * 3);
+            HorizontalBar.Value = _horizontalOffset;
+        }
+        finally
+        {
+            _updatingScrollBar = false;
         }
     }
 
-    private void Surface_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+    private void SetHorizontalOffset(double value)
     {
-        if (_editor is null)
+        double viewport = Math.Max(0, Surface.ActualWidth - ContentLeft);
+        double max = Math.Max(0, ContentWidth - viewport);
+        value = Math.Clamp(value, 0, max);
+        if (value != _horizontalOffset)
+        {
+            _horizontalOffset = value;
+            UpdateHorizontalBar();
+        }
+    }
+
+    /// <summary>カーソルのセルが横に見えていなければ、入る最小の横スクロールをする (VIEW-34 の仕様 4)。</summary>
+    private void EnsureCaretHorizontallyVisible()
+    {
+        if (_editor is null || HorizontalBar.Visibility != Visibility.Visible)
         {
             return;
         }
 
-        int delta = e.GetCurrentPoint(Surface).Properties.MouseWheelDelta;
-        _editor.ScrollRows(-delta / 120 * 3);
-        e.Handled = true;
+        var columns = new RowColumns(_editor.BytesPerRow);
+        int column = _editor.Layout.ColumnOf(_editor.Cursor);
+        double left = (_editor.ActiveColumn == ActiveColumn.Hex ? columns.HexIndex(column) : columns.TextIndex(column)) * _cellWidth;
+        double right = left + _cellWidth * (_editor.ActiveColumn == ActiveColumn.Hex ? 2 : 1);
+        double viewport = Math.Max(0, Surface.ActualWidth - ContentLeft);
+        if (left < _horizontalOffset)
+        {
+            SetHorizontalOffset(left);
+        }
+        else if (right > _horizontalOffset + viewport)
+        {
+            SetHorizontalOffset(right - viewport);
+        }
     }
 
     private void Surface_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         SurfaceClip.Rect = new Windows.Foundation.Rect(0, 0, e.NewSize.Width, e.NewSize.Height);
+        UpdateColumnsLayout();
         UpdateVisibleRows();
         UpdateScrollBar();
         QueueRender();
     }
 
-    // ---- マウス (VIEW-25 の仕様 6) ----
-
-    private void Surface_PointerPressed(object sender, PointerRoutedEventArgs e)
-    {
-        Focus(FocusState.Pointer);
-        if (_editor is null || !TryHitTest(e.GetCurrentPoint(Surface).Position, out long offset, out ActiveColumn column, out bool low))
-        {
-            return;
-        }
-
-        bool shift = (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0;
-        _editor.Click(offset, column, low, shift);
-        _dragging = true;
-        Surface.CapturePointer(e.Pointer);
-        e.Handled = true;
-    }
-
-    private void Surface_PointerMoved(object sender, PointerRoutedEventArgs e)
-    {
-        if (_dragging && _editor is not null && TryHitTest(e.GetCurrentPoint(Surface).Position, out long offset, out _, out _))
-        {
-            _editor.DragTo(offset);
-        }
-    }
-
-    private void Surface_PointerReleased(object sender, PointerRoutedEventArgs e)
-    {
-        _dragging = false;
-        Surface.ReleasePointerCapture(e.Pointer);
-    }
-
-    private bool TryHitTest(Windows.Foundation.Point point, out long offset, out ActiveColumn column, out bool lowNibble)
-    {
-        offset = 0;
-        column = ActiveColumn.Hex;
-        lowNibble = false;
-        if (_editor is null)
-        {
-            return false;
-        }
-
-        HexLayout layout = _editor.Layout;
-        var columns = new RowColumns(layout.MaxCursor > uint.MaxValue ? 16 : 8, layout.BytesPerRow);
-        long row = _editor.TopRow + (long)Math.Max(0, point.Y / _rowHeight);
-        if (row >= layout.TotalRows)
-        {
-            offset = layout.MaxCursor;
-            return true;
-        }
-
-        int ch = (int)((point.X - LeftPadding) / _cellWidth);
-        int b = layout.BytesPerRow;
-        if (ch >= columns.TextIndex(0))
-        {
-            column = ActiveColumn.Text;
-            offset = layout.RowStart(row) + Math.Clamp(ch - columns.TextIndex(0), 0, b - 1);
-        }
-        else if (ch >= columns.HexIndex(0) - 1)
-        {
-            int c = 0;
-            while (c < b - 1 && ch >= columns.HexIndex(c + 1) - 1)
-            {
-                c++;
-            }
-
-            lowNibble = ch - columns.HexIndex(c) >= 1;
-            offset = layout.RowStart(row) + c;
-        }
-        else
-        {
-            offset = layout.RowStart(row);
-        }
-
-        offset = Math.Min(offset, layout.MaxCursor);
-        return true;
-    }
-
-    // ---- キーボード (VIEW-25〜VIEW-27、EDIT-10〜EDIT-13) ----
-
-    private void OnPreviewKeyDown(object sender, KeyRoutedEventArgs e)
-    {
-        if (_editor is null)
-        {
-            return;
-        }
-
-        bool shift = IsDown(VirtualKey.Shift);
-        bool ctrl = IsDown(VirtualKey.Control);
-        if (IsDown(VirtualKey.Menu))
-        {
-            // Alt を含むキーはアプリのコマンド (Alt+← / Alt+→ など) に渡す。
-            return;
-        }
-
-        bool handled = true;
-        EditorCommand? command = (e.Key, ctrl, shift) switch
-        {
-            (VirtualKey.C, true, false) or (VirtualKey.Insert, true, false) => EditorCommand.Copy,
-            (VirtualKey.X, true, false) or (VirtualKey.Delete, false, true) => EditorCommand.Cut,
-            (VirtualKey.V, true, false) or (VirtualKey.Insert, false, true) => EditorCommand.Paste,
-            (VirtualKey.B, true, false) => EditorCommand.PasteOverwrite,
-            (VirtualKey.A, true, false) => EditorCommand.SelectAll,
-            _ => null,
-        };
-        if (command is { } c)
-        {
-            CommandRequested?.Invoke(this, c);
-            RestartBlink();
-            e.Handled = true;
-            return;
-        }
-
-        switch (e.Key)
-        {
-            case VirtualKey.Left:
-                _editor.MoveLeft(shift);
-                break;
-            case VirtualKey.Right:
-                _editor.MoveRight(shift);
-                break;
-            case VirtualKey.Up when ctrl:
-                _editor.ScrollRows(-1);
-                break;
-            case VirtualKey.Down when ctrl:
-                _editor.ScrollRows(1);
-                break;
-            case VirtualKey.Up:
-                _editor.MoveUp(shift);
-                break;
-            case VirtualKey.Down:
-                _editor.MoveDown(shift);
-                break;
-            case VirtualKey.Home when ctrl:
-                _editor.MoveToStart(shift);
-                break;
-            case VirtualKey.End when ctrl:
-                _editor.MoveToEnd(shift);
-                break;
-            case VirtualKey.Home:
-                _editor.MoveHome(shift);
-                break;
-            case VirtualKey.End:
-                _editor.MoveEnd(shift);
-                break;
-            case VirtualKey.PageUp when !ctrl:
-                _editor.PageUp(shift);
-                break;
-            case VirtualKey.PageDown when !ctrl:
-                _editor.PageDown(shift);
-                break;
-            case VirtualKey.Tab when !ctrl:
-                _editor.ToggleColumn();
-                break;
-            case VirtualKey.Insert when !ctrl && !shift:
-                Report(_editor.ToggleInsertMode());
-                break;
-            case VirtualKey.Delete when !shift:
-                Report(_editor.Delete());
-                break;
-            case VirtualKey.Back:
-                Report(_editor.Backspace());
-                break;
-            case VirtualKey.Escape:
-                _editor.ClearSelection();
-                break;
-            default:
-                handled = false;
-                break;
-        }
-
-        if (handled)
-        {
-            RestartBlink();
-            e.Handled = true;
-        }
-    }
-
-    private void OnCharacterReceived(UIElement sender, CharacterReceivedRoutedEventArgs e)
-    {
-        if (_editor is null || IsDown(VirtualKey.Control) || char.IsControl(e.Character))
-        {
-            return;
-        }
-
-        EditResult result = _editor.ActiveColumn == ActiveColumn.Hex
-            ? _editor.TypeHexDigit(e.Character)
-            : _editor.TypeText(e.Character.ToString(), TextEncoding);
-        Report(result);
-        RestartBlink();
-        e.Handled = true;
-    }
-
-    private void Report(EditResult result)
-    {
-        if (result is EditResult.FixedLength or EditResult.NotEditable or EditResult.NotEncodable)
-        {
-            EditRejected?.Invoke(this, result);
-        }
-    }
-
-    private static bool IsDown(VirtualKey key) =>
-        InputKeyboardSource.GetKeyStateForCurrentThread(key).HasFlag(CoreVirtualKeyStates.Down);
+    private void VerticalBar_SizeChanged(object sender, SizeChangedEventArgs e) => UpdateMarkers();
 
     // ---- 更新 ----
 
     private void OnEditorChanged(object? sender, EventArgs e)
     {
+        if (_editor is null)
+        {
+            return;
+        }
+
+        // 自分のスクロール (ホイール・タッチ) 以外で一番上の行が変わったら、行内のずれを捨てる。
+        if (!_scrollingByPixels && _editor.TopRow != _lastTopRow)
+        {
+            _subRowOffset = 0;
+        }
+
+        _lastTopRow = _editor.TopRow;
+        if (_editor.Cursor != _lastCursor)
+        {
+            _lastCursor = _editor.Cursor;
+            EnsureCaretHorizontallyVisible();
+        }
+
+        EditorSnapshot state = EditorSnapshot.Of(_editor);
+        OnEditorStateChanged(_lastState, state);
+        _lastState = state;
         UpdateScrollBar();
         QueueRender();
     }
 
-    /// <summary>データの読み込みが終わった (スレッドプールから)。UI スレッドで 1 回だけ描き直す。</summary>
+    /// <summary>データの読み込みが終わった (スレッドプールから)。UI スレッドで 1 回だけ描き直す (変わった行だけ作り直される)。</summary>
     private void OnDataLoaded(object? sender, EventArgs e) => _uiQueue.TryEnqueue(QueueRender);
 
     private void RestartBlink()
     {
         Caret.Opacity = 1;
         _blinkTimer.Stop();
-        if (CaretBlinkMilliseconds() > 0 && FocusState != FocusState.Unfocused)
+        if (CaretBlinkMilliseconds() > 0 && _focused)
         {
             _blinkTimer.Start();
         }
-
-        QueueRender();
     }
 
     /// <summary>カーソルの点滅間隔 (VIEW-01 の仕様 13。Windows の設定に従い、点滅しない設定なら 0)。</summary>
@@ -707,28 +777,449 @@ public sealed partial class HexView : UserControl
     [DllImport("user32.dll")]
     private static extern uint GetCaretBlinkTime();
 
-    /// <summary>
-    /// 配色 (VIEW-01 の仕様 10)。テーマのリソースから取るため、ライト / ダーク / ハイコントラストの切り替えに追従する。
-    /// </summary>
-    private sealed record Palette(Brush Text, Brush OffsetText, Brush Modified, Brush Dim, Brush Selection, Brush SelectionText, Brush Caret)
+    /// <summary>ビューの状態のうち、読み上げや UI オートメーションのイベントに使うもの。</summary>
+    private readonly record struct EditorSnapshot(long Cursor, bool LowNibble, ActiveColumn Column, long SelectionStart, long SelectionLength,
+        bool InsertMode, bool ReadOnly, long Length)
     {
-        public static Palette Load()
+        public static EditorSnapshot Of(EditorState e) =>
+            new(e.Cursor, e.LowNibble, e.ActiveColumn, e.SelectionStart, e.SelectionLength, e.InsertMode, e.ReadOnly, e.Document.Length);
+    }
+
+    // ---- 行の要素 ----
+
+    /// <summary>セルの描き方。</summary>
+    internal enum CellKind
+    {
+        Normal,
+        Modified,
+        Loading,
+        Unreadable,
+        Empty,
+    }
+
+    /// <summary>読み込み中のセルの描き方 (VIEW-03 の仕様 2・3)。</summary>
+    internal enum CellMode
+    {
+        Normal,
+
+        /// <summary>猶予中: セルを空白にする。</summary>
+        Blank,
+
+        /// <summary>猶予を過ぎた: `··` の仮表示。</summary>
+        Placeholder,
+    }
+
+    /// <summary>1 行の文字列の中での各列の位置 (内容の領域の左端からの文字数)。</summary>
+    internal readonly record struct RowColumns(int BytesPerRow)
+    {
+        /// <summary>c 番目のバイトの Hex 列の先頭の文字位置。中央に 1 文字分の区切りを入れる。</summary>
+        public int HexIndex(int c) => c * 3 + (c >= BytesPerRow / 2 && BytesPerRow > 1 ? 1 : 0);
+
+        /// <summary>テキスト列の c 番目の文字位置。Hex 列との間は 2 文字あける (VIEW-01 の仕様 1)。</summary>
+        public int TextIndex(int c) => BytesPerRow * 3 + (BytesPerRow > 1 ? 1 : 0) + 1 + c;
+
+        public int LineLength => TextIndex(BytesPerRow);
+    }
+
+    /// <summary>1 フレームの中で全行に共通の条件 (変われば全行を作り直す)。</summary>
+    internal readonly record struct RowFrame(RowColumns Columns, ActiveColumn Active, int PaletteVersion);
+
+    /// <summary>
+    /// 1 行分の要素。前回描いた内容を覚えておき、変わったときだけ Run を作り直す (VIEW-04 の仕様 3・5)。
+    /// </summary>
+    internal sealed class RowVisual
+    {
+        private byte[] _bytes = [];
+        private ByteState[] _states = [];
+        private bool[] _modified = [];
+        private int _count = -1;
+        private CellMode _mode;
+        private long _selFrom;
+        private long _selTo;
+        private RowFrame _frame;
+        private readonly List<Path> _hatches = [];
+
+        public RowVisual(FontFamily font, double fontSize, double rowHeight, int spacing)
         {
-            static Brush Get(string key) => (Brush)Application.Current.Resources[key];
-            return new Palette(
-                Get("TextFillColorPrimaryBrush"),
-                Get("TextFillColorSecondaryBrush"),
-                Get("SystemFillColorCriticalBrush"),
-                Get("TextFillColorDisabledBrush"),
-                Get("AccentFillColorDefaultBrush"),
-                Get("TextOnAccentFillColorPrimaryBrush"),
-                Get("AccentFillColorDefaultBrush"));
+            Offset = CreateText();
+            Content = CreateText();
+            Container = new Canvas();
+            Container.Children.Add(Content);
+            ApplyFont(font, fontSize, rowHeight, spacing);
         }
 
-        public Brush For(Kind kind) => kind switch
+        public TextBlock Offset { get; }
+
+        public TextBlock Content { get; }
+
+        /// <summary>内容の TextBlock と斜線の模様を入れる。</summary>
+        public Canvas Container { get; }
+
+        public long OffsetRowStart { get; private set; } = -1;
+
+        public int OffsetDigits { get; private set; }
+
+        public long ContentRowStart { get; private set; } = -1;
+
+        public bool HasContent => _count >= 0;
+
+        /// <summary>画面と同じ書式の行の文字列 (オフセット列を除く。UI オートメーションの Text パターンに渡す。VIEW-41 の仕様 6)。</summary>
+        public string ContentText { get; private set; } = string.Empty;
+
+        public string OffsetText => Offset.Text;
+
+        /// <summary>表示中のバイト数。</summary>
+        public int Count => Math.Max(0, _count);
+
+        public ReadOnlySpan<byte> Bytes => _bytes;
+
+        public ReadOnlySpan<ByteState> States => _states;
+
+        public ReadOnlySpan<bool> Modified => _modified;
+
+        public bool IsBlank => _mode == CellMode.Blank;
+
+        public double Top { get; private set; }
+
+        public bool Visible
         {
-            Kind.Modified => Modified,
-            Kind.Loading or Kind.Unreadable or Kind.Empty => Dim,
+            get => Offset.Visibility == Visibility.Visible;
+            set
+            {
+                Visibility v = value ? Visibility.Visible : Visibility.Collapsed;
+                if (Offset.Visibility != v)
+                {
+                    Offset.Visibility = v;
+                    Container.Visibility = v;
+                }
+            }
+        }
+
+        public void ApplyFont(FontFamily font, double fontSize, double rowHeight, int spacing)
+        {
+            foreach (TextBlock t in (TextBlock[])[Offset, Content])
+            {
+                t.FontFamily = font;
+                t.FontSize = fontSize;
+                t.LineHeight = rowHeight;
+                t.CharacterSpacing = spacing;
+            }
+        }
+
+        public void Invalidate()
+        {
+            _count = -1;
+            OffsetRowStart = -1;
+            ContentRowStart = -1;
+        }
+
+        public void SetTop(double y)
+        {
+            if (Top != y || Canvas.GetTop(Offset) != y)
+            {
+                Top = y;
+                Canvas.SetTop(Offset, y);
+                Canvas.SetTop(Container, y);
+            }
+        }
+
+        public void SetOffset(long rowStart, int digits, Palette palette)
+        {
+            OffsetRowStart = rowStart;
+            OffsetDigits = digits;
+            Offset.Text = rowStart.ToString(digits == 16 ? "X16" : "X8");
+            Offset.Foreground = palette.OffsetText;
+        }
+
+        /// <summary>内容を更新する。前回と同じなら何もしない。作り直したら true。</summary>
+        public bool Update(RowFrame frame, long rowStart, int count, ReadOnlySpan<byte> bytes, ReadOnlySpan<ByteState> states,
+            ReadOnlySpan<bool> modified, CellMode mode, long selStart, long selEnd, Palette palette, double cellWidth, double rowHeight)
+        {
+            long selFrom = Math.Max(selStart, rowStart) - rowStart;
+            long selTo = Math.Min(selEnd, rowStart + count) - rowStart;
+            if (selFrom >= selTo)
+            {
+                selFrom = selTo = 0;
+            }
+
+            if (_count == count && ContentRowStart == rowStart && _mode == mode && _frame == frame && _selFrom == selFrom && _selTo == selTo
+                && bytes[..count].SequenceEqual(_bytes.AsSpan(0, count)) && states[..count].SequenceEqual(_states.AsSpan(0, count))
+                && modified[..count].SequenceEqual(_modified.AsSpan(0, count)))
+            {
+                return false;
+            }
+
+            ContentRowStart = rowStart;
+            _count = count;
+            _mode = mode;
+            _frame = frame;
+            _selFrom = selFrom;
+            _selTo = selTo;
+            if (_bytes.Length < bytes.Length)
+            {
+                _bytes = new byte[bytes.Length];
+                _states = new ByteState[bytes.Length];
+                _modified = new bool[bytes.Length];
+            }
+
+            bytes[..count].CopyTo(_bytes);
+            states[..count].CopyTo(_states);
+            modified[..count].CopyTo(_modified);
+            Fill(frame.Columns, palette);
+            Highlight(frame, palette);
+            UpdateHatches(frame.Columns, palette, cellWidth, rowHeight);
+            return true;
+        }
+
+        public CellKind KindAt(int c)
+        {
+            if (c >= Count)
+            {
+                return CellKind.Empty;
+            }
+
+            return _states[c] switch
+            {
+                ByteState.Loading => CellKind.Loading,
+                ByteState.Unreadable => CellKind.Unreadable,
+                _ => _modified[c] ? CellKind.Modified : CellKind.Normal,
+            };
+        }
+
+        /// <summary>Hex 列のセルの表示 (VIEW-03 の仮表示を含む)。</summary>
+        public string HexCellText(int c) => KindAt(c) switch
+        {
+            CellKind.Empty => "  ",
+            CellKind.Loading => _mode == CellMode.Blank ? "  " : "··",
+            CellKind.Unreadable => "??",
+            _ => HexStrings[_bytes[c]],
+        };
+
+        /// <summary>テキスト列のセルの表示。</summary>
+        public string TextCellText(int c) => KindAt(c) switch
+        {
+            CellKind.Empty => string.Empty,
+            CellKind.Loading or CellKind.Unreadable => " ",
+            _ => ToChar(_bytes[c]).ToString(),
+        };
+
+        private static TextBlock CreateText()
+        {
+            var t = new TextBlock
+            {
+                LineStackingStrategy = LineStackingStrategy.BlockLineHeight,
+                TextWrapping = TextWrapping.NoWrap,
+
+                // 文字サイズの設定は MeasureCell で大きさに掛けてある (VIEW-41 の仕様 4)。二重に掛けない。
+                IsTextScaleFactorEnabled = false,
+                TextLineBounds = TextLineBounds.Full,
+            };
+
+            // 行の文字列はビューの UI オートメーション (Text・Grid パターン) で返すため、個々の TextBlock は木に出さない。
+            AutomationProperties.SetAccessibilityView(t, AccessibilityView.Raw);
+            return t;
+        }
+
+        /// <summary>1 行の文字列を、色の違う区間ごとの Run に分けて作る。</summary>
+        private void Fill(RowColumns columns, Palette palette)
+        {
+            Content.Inlines.Clear();
+            var builder = new RunBuilder(Content, palette);
+            int count = Count;
+
+            // Hex 列
+            for (int c = 0; c < columns.BytesPerRow; c++)
+            {
+                builder.Append(HexCellText(c), KindAt(c));
+                builder.Append(c == columns.BytesPerRow / 2 - 1 && columns.BytesPerRow > 1 ? "  " : " ", palette.Text);
+            }
+
+            builder.Append(" ", palette.Text);
+
+            // テキスト列
+            for (int c = 0; c < count; c++)
+            {
+                builder.Append(TextCellText(c), KindAt(c));
+            }
+
+            ContentText = builder.Flush();
+        }
+
+        private void Highlight(RowFrame frame, Palette palette)
+        {
+            Content.TextHighlighters.Clear();
+            if (_selFrom >= _selTo)
+            {
+                return;
+            }
+
+            RowColumns columns = frame.Columns;
+            int first = (int)_selFrom;
+            int last = (int)_selTo - 1;
+            bool hexActive = frame.Active == ActiveColumn.Hex;
+
+            // 操作中でない列の選択は薄い色で塗る (EDIT-01 の画面)。
+            var hex = new TextHighlighter
+            {
+                Background = hexActive ? palette.Selection : palette.SelectionInactive,
+                Foreground = hexActive ? palette.SelectionText : palette.SelectionInactiveText,
+            };
+            int hexStart = columns.HexIndex(first);
+            hex.Ranges.Add(new TextRange { StartIndex = hexStart, Length = columns.HexIndex(last) + 2 - hexStart });
+            var text = new TextHighlighter
+            {
+                Background = hexActive ? palette.SelectionInactive : palette.Selection,
+                Foreground = hexActive ? palette.SelectionInactiveText : palette.SelectionText,
+            };
+            text.Ranges.Add(new TextRange { StartIndex = columns.TextIndex(first), Length = last - first + 1 });
+            Content.TextHighlighters.Add(hex);
+            Content.TextHighlighters.Add(text);
+        }
+
+        /// <summary>
+        /// 読み取れない範囲の斜線の模様 (VIEW-03 の仕様 5)。色だけに頼らないため必ず描く。ほかの層の背景の上に描く (VIEW-17 の仕様 7)。
+        /// </summary>
+        private void UpdateHatches(RowColumns columns, Palette palette, double cellWidth, double rowHeight)
+        {
+            int used = 0;
+            int count = Count;
+            for (int c = 0; c < count; c++)
+            {
+                if (_states[c] != ByteState.Unreadable)
+                {
+                    continue;
+                }
+
+                int end = c;
+                while (end + 1 < count && _states[end + 1] == ByteState.Unreadable)
+                {
+                    end++;
+                }
+
+                double hexLeft = columns.HexIndex(c) * cellWidth;
+                double hexRight = (columns.HexIndex(end) + 2) * cellWidth;
+                PlaceHatch(used++, hexLeft, hexRight - hexLeft, rowHeight, palette);
+                PlaceHatch(used++, columns.TextIndex(c) * cellWidth, (end - c + 1) * cellWidth, rowHeight, palette);
+                c = end;
+            }
+
+            for (int i = used; i < _hatches.Count; i++)
+            {
+                _hatches[i].Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void PlaceHatch(int index, double x, double width, double height, Palette palette)
+        {
+            if (index >= _hatches.Count)
+            {
+                var path = new Path { StrokeThickness = 1, IsHitTestVisible = false };
+                AutomationProperties.SetAccessibilityView(path, AccessibilityView.Raw);
+                _hatches.Add(path);
+                Container.Children.Add(path);
+            }
+
+            Path p = _hatches[index];
+            p.Visibility = Visibility.Visible;
+            p.Stroke = palette.Hatch;
+            Canvas.SetLeft(p, x);
+            p.Width = width;
+            p.Height = height;
+            p.Clip = new RectangleGeometry { Rect = new Windows.Foundation.Rect(0, 0, width, height) };
+            var group = new GeometryGroup();
+            const double step = 5;
+            for (double i = -height; i < width; i += step)
+            {
+                group.Children.Add(new LineGeometry
+                {
+                    StartPoint = new Windows.Foundation.Point(i, height),
+                    EndPoint = new Windows.Foundation.Point(i + height, 0),
+                });
+            }
+
+            p.Data = group;
+        }
+    }
+
+    private static char ToChar(byte b) => b is >= 0x20 and < 0x7F ? (char)b : '.';
+
+    /// <summary>同じ見た目の文字をまとめて Run にする。</summary>
+    private sealed class RunBuilder(TextBlock row, Palette palette)
+    {
+        private readonly StringBuilder _line = new();
+        private readonly StringBuilder _text = new();
+        private Brush? _brush;
+        private CellKind _kind;
+
+        public void Append(string text, Brush brush) => Append(text, CellKind.Normal, brush);
+
+        public void Append(string text, CellKind kind) => Append(text, kind, palette.For(kind));
+
+        /// <summary>残りを書き出し、行全体の文字列を返す。</summary>
+        public string Flush()
+        {
+            FlushRun();
+            return _line.ToString();
+        }
+
+        private void FlushRun()
+        {
+            if (_text.Length == 0)
+            {
+                return;
+            }
+
+            var run = new Run { Text = _text.ToString(), Foreground = _brush };
+            if (_kind == CellKind.Modified)
+            {
+                run.TextDecorations = Windows.UI.Text.TextDecorations.Underline;
+            }
+
+            row.Inlines.Add(run);
+            _text.Clear();
+        }
+
+        private void Append(string text, CellKind kind, Brush brush)
+        {
+            if (!ReferenceEquals(brush, _brush) || kind != _kind)
+            {
+                FlushRun();
+                _brush = brush;
+                _kind = kind;
+            }
+
+            _text.Append(text);
+            _line.Append(text);
+        }
+    }
+
+    /// <summary>
+    /// 配色 (VIEW-01 の仕様 10)。XAML の ThemeDictionaries (Light / Dark / HighContrast) から取るため、
+    /// テーマとハイコントラストの切り替えに追従する。ハイコントラストではシステム色だけになる。
+    /// </summary>
+    internal sealed record Palette(Brush Text, Brush OffsetText, Brush Modified, Brush Dim, Brush Selection, Brush SelectionText,
+        Brush SelectionInactive, Brush SelectionInactiveText, Brush Caret, Brush Hatch, Brush Background, Brush CursorMarker,
+        Brush SearchMarker)
+    {
+        public static Palette Load(HexView view) => new(
+            view.ProbeText.Fill,
+            view.ProbeOffset.Fill,
+            view.ProbeModified.Fill,
+            view.ProbeDim.Fill,
+            view.ProbeSelection.Fill,
+            view.ProbeSelectionText.Fill,
+            view.ProbeSelectionInactive.Fill,
+            view.ProbeSelectionInactiveText.Fill,
+            view.ProbeCaret.Fill,
+            view.ProbeHatch.Fill,
+            view.ProbeBackground.Fill,
+            view.ProbeCursorMarker.Fill,
+            view.ProbeSearchMarker.Fill);
+
+        public Brush For(CellKind kind) => kind switch
+        {
+            CellKind.Modified => Modified,
+            CellKind.Loading or CellKind.Unreadable or CellKind.Empty => Dim,
             _ => Text,
         };
     }
@@ -742,4 +1233,23 @@ public enum EditorCommand
     Paste,
     PasteOverwrite,
     SelectAll,
+}
+
+/// <summary>F6 / Shift+F6 (UI-52 の仕様 1)。</summary>
+public sealed class HexViewFocusRegionEventArgs(bool forward) : EventArgs
+{
+    /// <summary>true なら次の領域 (F6)、false なら前の領域 (Shift+F6)。</summary>
+    public bool Forward { get; } = forward;
+
+    /// <summary>ウィンドウがフォーカスを移したら true にする。false のままならコントロールが次の要素へ移す。</summary>
+    public bool Handled { get; set; }
+}
+
+/// <summary>ステータスバーに一時的に出す文。</summary>
+public sealed class HexViewStatusMessageEventArgs(string message, TimeSpan duration) : EventArgs
+{
+    public string Message { get; } = message;
+
+    /// <summary>表示しておく時間。</summary>
+    public TimeSpan Duration { get; } = duration;
 }

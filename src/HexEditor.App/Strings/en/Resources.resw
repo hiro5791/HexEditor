@@ -126,4 +126,36 @@
   <data name="Crash_Report" xml:space="preserve"><value>Report a problem</value></data>
   <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor closed unexpectedly. Please paste the contents of the crash info file below. It does not include the contents of your files.</value></data>
   <data name="Notice_UrlCopied" xml:space="preserve"><value>Couldn't open the browser, so the link was copied to the clipboard.</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>hex editor</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Tab switches between the Hex and text columns. F6 moves to the next area.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Clear selection</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Some ranges cannot be read.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Cannot be read</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Cannot be read: device I/O error ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Cannot be read: access denied ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Cannot be read: the device was disconnected</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>Memory is not allocated</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Offset {0}, value {1}, character {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Offset {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Offset {0}, end of data</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Selection {0} bytes, {1} to {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Offset {0}, value {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Insert mode</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Overwrite mode</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Read-only</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Editable</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Hex column</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>text column</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>low nibble</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>modified</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>insert</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>selected</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>loading</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>cannot be read</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>space</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>non-printable character</value></data>
 </root>

@@ -4,18 +4,101 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives"
+    AutomationProperties.AutomationId="HexView"
+    ContextRequested="HexView_ContextRequested"
     FlowDirection="LeftToRight"
     IsTabStop="True"
-    UseSystemFocusVisuals="True">
+    UseSystemFocusVisuals="False">
+    <!--
+        フォーカスの枠は自前で描く (VIEW-41 の仕様 3。プログラムからフォーカスを置いた場合も外周に枠を出すため)。
+        配色はこのコントロール専用のキーにまとめ、ハイコントラストではシステム色だけにする (VIEW-01 の仕様 10、VIEW-41 の仕様 2)。
+    -->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <StaticResource x:Key="HexViewBackgroundBrush" ResourceKey="SolidBackgroundFillColorBaseBrush" />
+                    <StaticResource x:Key="HexViewTextBrush" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewOffsetBrush" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewModifiedBrush" ResourceKey="SystemFillColorCriticalBrush" />
+                    <StaticResource x:Key="HexViewDimBrush" ResourceKey="TextFillColorDisabledBrush" />
+                    <StaticResource x:Key="HexViewSelectionBrush" ResourceKey="AccentFillColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewSelectionTextBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+                    <SolidColorBrush x:Key="HexViewSelectionInactiveBrush" Color="{ThemeResource SystemAccentColorLight2}" />
+                    <StaticResource x:Key="HexViewSelectionInactiveTextBrush" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewCaretBrush" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewSecondaryCaretBrush" ResourceKey="TextFillColorTertiaryBrush" />
+                    <StaticResource x:Key="HexViewHatchBrush" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewCursorMarkerBrush" ResourceKey="AccentFillColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewSearchMarkerBrush" ResourceKey="SystemFillColorCautionBrush" />
+                    <StaticResource x:Key="HexViewFocusOuterBrush" ResourceKey="FocusStrokeColorOuterBrush" />
+                    <StaticResource x:Key="HexViewFocusInnerBrush" ResourceKey="FocusStrokeColorInnerBrush" />
+                    <StaticResource x:Key="HexViewPanelBrush" ResourceKey="SolidBackgroundFillColorTertiaryBrush" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <StaticResource x:Key="HexViewBackgroundBrush" ResourceKey="SolidBackgroundFillColorBaseBrush" />
+                    <StaticResource x:Key="HexViewTextBrush" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewOffsetBrush" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewModifiedBrush" ResourceKey="SystemFillColorCriticalBrush" />
+                    <StaticResource x:Key="HexViewDimBrush" ResourceKey="TextFillColorDisabledBrush" />
+                    <StaticResource x:Key="HexViewSelectionBrush" ResourceKey="AccentFillColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewSelectionTextBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+                    <SolidColorBrush x:Key="HexViewSelectionInactiveBrush" Color="{ThemeResource SystemAccentColorDark2}" />
+                    <StaticResource x:Key="HexViewSelectionInactiveTextBrush" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewCaretBrush" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewSecondaryCaretBrush" ResourceKey="TextFillColorTertiaryBrush" />
+                    <StaticResource x:Key="HexViewHatchBrush" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewCursorMarkerBrush" ResourceKey="AccentFillColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewSearchMarkerBrush" ResourceKey="SystemFillColorCautionBrush" />
+                    <StaticResource x:Key="HexViewFocusOuterBrush" ResourceKey="FocusStrokeColorOuterBrush" />
+                    <StaticResource x:Key="HexViewFocusInnerBrush" ResourceKey="FocusStrokeColorInnerBrush" />
+                    <StaticResource x:Key="HexViewPanelBrush" ResourceKey="SolidBackgroundFillColorTertiaryBrush" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="HighContrast">
+                    <SolidColorBrush x:Key="HexViewBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="HexViewTextBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="HexViewOffsetBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="HexViewModifiedBrush" Color="{ThemeResource SystemColorHotlightColor}" />
+                    <SolidColorBrush x:Key="HexViewDimBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+                    <SolidColorBrush x:Key="HexViewSelectionBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+                    <SolidColorBrush x:Key="HexViewSelectionTextBrush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+                    <SolidColorBrush x:Key="HexViewSelectionInactiveBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+                    <SolidColorBrush x:Key="HexViewSelectionInactiveTextBrush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+                    <SolidColorBrush x:Key="HexViewCaretBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="HexViewSecondaryCaretBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+                    <SolidColorBrush x:Key="HexViewHatchBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+                    <SolidColorBrush x:Key="HexViewCursorMarkerBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+                    <SolidColorBrush x:Key="HexViewSearchMarkerBrush" Color="{ThemeResource SystemColorHotlightColor}" />
+                    <SolidColorBrush x:Key="HexViewFocusOuterBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="HexViewFocusInnerBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="HexViewPanelBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            <!--  つまみの最小の長さ (VIEW-02 の仕様 7)  -->
+            <x:Double x:Key="ScrollBarVerticalThumbMinHeight">16</x:Double>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <!--  見えている行だけを描く面 (VIEW-01・VIEW-04)。行の TextBlock はコードで使い回す。  -->
+
+        <!--
+            見えている行だけを描く面 (VIEW-01・VIEW-04)。行の要素はコードで使い回す。
+            オフセット列は横スクロールしても左端に残す (VIEW-28 の仕様 5)。
+        -->
         <Grid
             x:Name="Surface"
-            Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+            Background="{ThemeResource HexViewBackgroundBrush}"
+            PointerCanceled="Surface_PointerCanceled"
+            PointerCaptureLost="Surface_PointerCaptureLost"
+            PointerExited="Surface_PointerExited"
             PointerMoved="Surface_PointerMoved"
             PointerPressed="Surface_PointerPressed"
             PointerReleased="Surface_PointerReleased"
@@ -24,18 +107,119 @@
             <Grid.Clip>
                 <RectangleGeometry x:Name="SurfaceClip" />
             </Grid.Clip>
-            <Canvas x:Name="RowsHost" Margin="8,0,0,0">
-                <Rectangle x:Name="SecondaryCaret" Stroke="{ThemeResource TextFillColorTertiaryBrush}" StrokeThickness="1" />
-                <Rectangle x:Name="Caret" />
+            <Canvas x:Name="OffsetHost" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Canvas x:Name="ContentViewport" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Canvas.Clip>
+                    <RectangleGeometry x:Name="ContentClip" />
+                </Canvas.Clip>
+                <Canvas x:Name="ContentHost">
+                    <Canvas.RenderTransform>
+                        <TranslateTransform x:Name="ContentShift" />
+                    </Canvas.RenderTransform>
+                    <Canvas x:Name="RowsLayer" />
+                    <Rectangle x:Name="SecondaryCaret" Stroke="{ThemeResource HexViewSecondaryCaretBrush}" StrokeThickness="1" />
+                    <Rectangle x:Name="Caret" />
+                    <!--  IME の変換中の文字列 (EDIT-12 の仕様 2)。確定するまでデータは変えない。  -->
+                    <Border
+                        x:Name="CompositionBox"
+                        Background="{ThemeResource HexViewBackgroundBrush}"
+                        BorderBrush="{ThemeResource HexViewCaretBrush}"
+                        BorderThickness="0,0,0,1"
+                        Visibility="Collapsed">
+                        <TextBlock
+                            x:Name="CompositionText"
+                            AutomationProperties.AccessibilityView="Raw"
+                            Foreground="{ThemeResource HexViewTextBrush}"
+                            IsTextScaleFactorEnabled="False"
+                            TextDecorations="Underline" />
+                    </Border>
+                </Canvas>
             </Canvas>
+            <!--  診断表示 (VIEW-04 の仕様 8。既定はオフ)  -->
+            <Border
+                x:Name="DiagnosticsPanel"
+                Margin="0,4,4,0"
+                Padding="6,3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="{ThemeResource HexViewPanelBrush}"
+                BorderBrush="{ThemeResource HexViewOffsetBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                IsHitTestVisible="False"
+                Opacity="0.9"
+                Visibility="Collapsed">
+                <TextBlock
+                    x:Name="DiagnosticsText"
+                    AutomationProperties.AutomationId="HexViewDiagnostics"
+                    FontFamily="Cascadia Mono, Consolas"
+                    FontSize="11"
+                    Foreground="{ThemeResource HexViewTextBrush}" />
+            </Border>
         </Grid>
+
+        <Grid Grid.Column="1">
+            <primitives:ScrollBar
+                x:Name="VerticalBar"
+                AutomationProperties.AutomationId="HexViewVerticalScrollBar"
+                IndicatorMode="MouseIndicator"
+                IsTabStop="False"
+                Orientation="Vertical"
+                Scroll="VerticalBar_Scroll"
+                SizeChanged="VerticalBar_SizeChanged" />
+            <!--  スクロールバーの上の印 (VIEW-02 の仕様 9。カーソル位置と検索結果)  -->
+            <Canvas
+                x:Name="MarkerLayer"
+                Width="4"
+                HorizontalAlignment="Right"
+                AutomationProperties.AccessibilityView="Raw"
+                IsHitTestVisible="False" />
+        </Grid>
+
         <primitives:ScrollBar
-            x:Name="VerticalBar"
-            Grid.Column="1"
-            AutomationProperties.AutomationId="HexViewVerticalScrollBar"
+            x:Name="HorizontalBar"
+            Grid.Row="1"
+            AutomationProperties.AutomationId="HexViewHorizontalScrollBar"
             IndicatorMode="MouseIndicator"
             IsTabStop="False"
-            Orientation="Vertical"
-            Scroll="VerticalBar_Scroll" />
+            Orientation="Horizontal"
+            Scroll="HorizontalBar_Scroll"
+            Visibility="Collapsed" />
+
+        <!--  フォーカスの枠 (VIEW-41 の仕様 3。システムのフォーカス表示と同じ 2 px + 1 px)  -->
+        <Rectangle
+            x:Name="FocusFrameOuter"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            IsHitTestVisible="False"
+            Stroke="{ThemeResource HexViewFocusOuterBrush}"
+            StrokeThickness="2"
+            Visibility="Collapsed" />
+        <Rectangle
+            x:Name="FocusFrameInner"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            Margin="2"
+            IsHitTestVisible="False"
+            Stroke="{ThemeResource HexViewFocusInnerBrush}"
+            StrokeThickness="1"
+            Visibility="Collapsed" />
+
+        <!--  配色の取り出し用 (テーマ・ハイコントラストの切り替えで ThemeResource が更新されるのを利用する)  -->
+        <Canvas x:Name="PaletteProbes" Visibility="Collapsed">
+            <Rectangle x:Name="ProbeText" Fill="{ThemeResource HexViewTextBrush}" />
+            <Rectangle x:Name="ProbeOffset" Fill="{ThemeResource HexViewOffsetBrush}" />
+            <Rectangle x:Name="ProbeModified" Fill="{ThemeResource HexViewModifiedBrush}" />
+            <Rectangle x:Name="ProbeDim" Fill="{ThemeResource HexViewDimBrush}" />
+            <Rectangle x:Name="ProbeSelection" Fill="{ThemeResource HexViewSelectionBrush}" />
+            <Rectangle x:Name="ProbeSelectionText" Fill="{ThemeResource HexViewSelectionTextBrush}" />
+            <Rectangle x:Name="ProbeSelectionInactive" Fill="{ThemeResource HexViewSelectionInactiveBrush}" />
+            <Rectangle x:Name="ProbeSelectionInactiveText" Fill="{ThemeResource HexViewSelectionInactiveTextBrush}" />
+            <Rectangle x:Name="ProbeCaret" Fill="{ThemeResource HexViewCaretBrush}" />
+            <Rectangle x:Name="ProbeHatch" Fill="{ThemeResource HexViewHatchBrush}" />
+            <Rectangle x:Name="ProbeBackground" Fill="{ThemeResource HexViewBackgroundBrush}" />
+            <Rectangle x:Name="ProbeCursorMarker" Fill="{ThemeResource HexViewCursorMarkerBrush}" />
+            <Rectangle x:Name="ProbeSearchMarker" Fill="{ThemeResource HexViewSearchMarkerBrush}" />
+        </Canvas>
     </Grid>
 </UserControl>
