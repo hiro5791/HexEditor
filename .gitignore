@@ -53,3 +53,6 @@ Desktop.ini
 
 # build/publish.ps1 output
 artifacts/
+
+# Claude Code worktrees
+.claude/worktrees/
