@@ -49,7 +49,20 @@ public static class Appearance
         string backdrop = settings.GetString(BackdropKey, BackdropDefault);
         window.SystemBackdrop = IsHighContrast || backdrop == "none" ? null
             : new MicaBackdrop { Kind = backdrop == "micaAlt" ? MicaKind.BaseAlt : MicaKind.Base };
+
+        // 設定した背景素材をログに残す (UI-27 の確認用。変わったときだけ)。
+        string applied = window.SystemBackdrop is MicaBackdrop mica ? "Mica" + (mica.Kind == MicaKind.BaseAlt ? "Alt" : string.Empty) : "None";
+        if (applied != _lastBackdrop)
+        {
+            _lastBackdrop = applied;
+            AppLog.Info($"Backdrop: {applied}");
+        }
     }
+
+    private static string? _lastBackdrop;
+
+    /// <summary>ウィンドウに設定した背景素材 ("Mica"、"MicaAlt"、"None")。</summary>
+    public static string? AppliedBackdrop => _lastBackdrop;
 
     /// <summary>
     /// アクセントカラーの指定 (UI-27 の仕様 1)。<c>SystemAccentColor</c> と派生色をアプリ内で上書きする。リソースの参照が

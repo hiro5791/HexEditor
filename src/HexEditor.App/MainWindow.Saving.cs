@@ -62,6 +62,27 @@ public sealed partial class MainWindow
                 };
             }
 
+            case SaveIssue.HardLinks when plan.LinkCount is { } links:
+            {
+                // 安全な保存ではハードリンクが切れる (ENG-22 の仕様 4)。長さが変わる場合のその場保存 (ENG-24) はフェーズ 2 のため、
+                // 「その場で保存」は長さが同じときだけ出す。
+                ContentDialog dialog = SaveDialog(Loc.Get("SaveLinks_Title"), Loc.Format("SaveLinks_Body", links));
+                dialog.PrimaryButtonText = Loc.Get("SaveLinks_Safe");
+                if (plan.CanKeepLinks)
+                {
+                    dialog.SecondaryButtonText = Loc.Get("SaveLinks_InPlace");
+                }
+
+                dialog.CloseButtonText = Loc.Get("Common_Cancel");
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                return await dialog.ShowAsync() switch
+                {
+                    ContentDialogResult.Primary => SavePlanner.BreakLinks(plan),
+                    ContentDialogResult.Secondary => SavePlanner.KeepLinks(plan),
+                    _ => null,
+                };
+            }
+
             case SaveIssue.ReadOnly:
                 ShowNotice(Loc.Get("Error_SaveReadOnly"), InfoBarSeverity.Error, doc);
                 return null;

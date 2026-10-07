@@ -95,7 +95,11 @@ public sealed partial class MainViewModel : ObservableObject
     public async Task<bool> SaveAsync(DocumentViewModel vm, string path, Func<SavePlan, Task<SavePlan?>>? confirm = null)
     {
         Document doc = vm.Document;
-        SavePlan? plan = SavePlanner.Plan(doc, path, new SaveSettings { JournalDirectory = JournalDirectory });
+        SavePlan? plan = SavePlanner.Plan(doc, path, new SaveSettings
+        {
+            JournalDirectory = JournalDirectory,
+            Volumes = TestHooks.Volumes ?? SystemVolumeInfoProvider.Instance,
+        });
         if (plan.Method == SaveMethod.NoChanges)
         {
             return true; // 変更がない: 書き込まない (ENG-20 の仕様 1)。
@@ -115,6 +119,7 @@ public sealed partial class MainViewModel : ObservableObject
                 SaveIssue.JournalTooLarge => new JournalLimitException(plan.Journal!.Required, plan.Journal.Limit),
                 SaveIssue.InsufficientSpace => new InsufficientSpaceException(plan.Space!.Drive, plan.Space.Required, plan.Space.Available),
                 SaveIssue.FileTooLarge => new FileSizeLimitException(plan.SizeLimit!.Drive, plan.SizeLimit.FileSystem, plan.SizeLimit.MaxFileSize, plan.SizeLimit.Length),
+                SaveIssue.HardLinks => new InvalidOperationException($"The file has {plan.LinkCount} hard links; confirm before saving."),
                 _ => new UnauthorizedAccessException(),
             };
         }

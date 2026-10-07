@@ -49,6 +49,13 @@ public enum SaveIssue
     /// 「キャンセル」を選ばせる (ENG-23 の仕様 3)。
     /// </summary>
     JournalTooLarge,
+
+    /// <summary>
+    /// 安全な保存で切れるハードリンクがある (<see cref="SavePlan.LinkCount"/>。ENG-22 の仕様 4)。UI は「安全に保存 (リンクを切る)」
+    /// (<see cref="SavePlanner.BreakLinks"/>)、「その場で保存 (リンクを保つ)」(<see cref="SavePlanner.KeepLinks"/>。
+    /// <see cref="SavePlan.CanKeepLinks"/> のときだけ)、「キャンセル」を選ばせる。
+    /// </summary>
+    HardLinks,
 }
 
 /// <summary>空き容量不足の内容 (ENG-25 の仕様 4 のダイアログの「必要」「空き」)。</summary>
@@ -96,6 +103,14 @@ public sealed record SavePlan
     public FileSizeLimit? SizeLimit { get; init; }
 
     public JournalShortage? Journal { get; init; }
+
+    /// <summary>保存先のファイルのハードリンクの数 (<see cref="SaveIssue.HardLinks"/> のとき)。</summary>
+    public int? LinkCount { get; init; }
+
+    /// <summary>
+    /// リンクを保つその場保存ができる (長さが同じ)。長さが変わる場合のずらしながらのその場保存 (ENG-24) はフェーズ 2。
+    /// </summary>
+    public bool CanKeepLinks { get; init; }
 
     public required SaveSettings Settings { get; init; }
 
@@ -147,8 +162,30 @@ public static class SavePlanner
             return CheckJournal(plan with { Method = SaveMethod.InPlace });
         }
 
+        // 置き換えでハードリンクが切れる場合は先に確かめる (ENG-22 の仕様 4)。
+        if (sameFile && FileStamp.LinkCount(target) is int links and > 1)
+        {
+            return plan with
+            {
+                Method = SaveMethod.Safe,
+                Issue = SaveIssue.HardLinks,
+                LinkCount = links,
+                CanKeepLinks = InPlaceSaver.CanSaveInPlace(snapshot, target),
+            };
+        }
+
         return CheckSafe(plan with { Method = SaveMethod.Safe });
     }
+
+    /// <summary>ハードリンクの確認で「安全に保存 (リンクを切る)」を選んだ。空き容量などの確認を続ける。</summary>
+    public static SavePlan BreakLinks(SavePlan plan) =>
+        CheckSafe(plan with { Method = SaveMethod.Safe, Issue = SaveIssue.None, LinkCount = null });
+
+    /// <summary>ハードリンクの確認で「その場で保存 (リンクを保つ)」を選んだ。ジャーナルの確認を続ける。</summary>
+    public static SavePlan KeepLinks(SavePlan plan) =>
+        plan.CanKeepLinks
+            ? CheckJournal(plan with { Method = SaveMethod.InPlace, Issue = SaveIssue.None, LinkCount = null })
+            : throw new InvalidOperationException("長さが変わる保存はその場で書けません (ENG-24 は未実装)。");
 
     /// <summary>ジャーナルの確認で「安全な保存を使う」を選んだ。安全な保存の確認 (空き容量など) をやり直す。</summary>
     public static SavePlan UseSafeSave(SavePlan plan) =>

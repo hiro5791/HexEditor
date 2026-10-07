@@ -88,12 +88,26 @@
                 Click="OptionsToggle_Click">
                 <FontIcon FontSize="12" Glyph="&#xE71C;" />
             </ToggleButton>
-            <ProgressRing
-                x:Name="Busy"
+            <!--  0.5 秒を超えた検索の進捗バーとキャンセルボタン (FIND-02 の仕様 1)。  -->
+            <StackPanel
+                x:Name="BusyPanel"
                 Grid.Column="7"
-                Width="16"
-                Height="16"
-                IsActive="False" />
+                VerticalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="8"
+                Visibility="Collapsed">
+                <ProgressBar
+                    x:Name="Progress"
+                    Width="80"
+                    VerticalAlignment="Center"
+                    AutomationProperties.AutomationId="Find_Progress"
+                    Maximum="1" />
+                <Button
+                    x:Name="CancelButton"
+                    x:Uid="Find_Cancel"
+                    AutomationProperties.AutomationId="Find_Cancel"
+                    Click="Cancel_Click" />
+            </StackPanel>
             <Button
                 x:Name="CloseButton"
                 Grid.Column="8"

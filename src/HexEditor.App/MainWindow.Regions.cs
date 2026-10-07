@@ -27,6 +27,8 @@ public sealed partial class MainWindow
         }
 
         Vm.Documents.CollectionChanged += (_, _) => UpdateStartPage();
+        Tabs.SizeChanged += (_, _) => PlaceStartPage();
+        Tabs.Loaded += (_, _) => PlaceStartPage();
         UpdateStartPage();
 
         // F6 / Shift+F6 はグローバル。検索バーや Hex ビューの中でも同じ動作をする。
@@ -47,12 +49,44 @@ public sealed partial class MainWindow
         Root.KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
     }
 
-    /// <summary>文書が 1 つもないときはスタートページを出す (UI-01 の仕様 2)。</summary>
+    /// <summary>
+    /// 文書が 1 つもないときはスタートページを出す (UI-01 の仕様 2)。タブ列 (仕様 1 の 3) は文書がなくても表示したままにし、
+    /// スタートページはタブ列の下 (エディタ領域) に重ねる。
+    /// </summary>
     private void UpdateStartPage()
     {
         bool empty = Vm.Documents.Count == 0;
         StartPage.Visibility = empty ? Visibility.Visible : Visibility.Collapsed;
-        Tabs.Visibility = empty ? Visibility.Collapsed : Visibility.Visible;
+        PlaceStartPage();
+    }
+
+    /// <summary>スタートページの上端をタブ列の下端に合わせる。</summary>
+    private void PlaceStartPage()
+    {
+        if (FindByName(Tabs, "TabContainerGrid") is FrameworkElement strip && strip.ActualHeight > 0)
+        {
+            StartPage.Margin = new Thickness(0, strip.ActualHeight, 0, 0);
+        }
+    }
+
+    private static FrameworkElement? FindByName(DependencyObject root, string name)
+    {
+        int count = VisualTreeHelper.GetChildrenCount(root);
+        for (int i = 0; i < count; i++)
+        {
+            DependencyObject child = VisualTreeHelper.GetChild(root, i);
+            if (child is FrameworkElement { Name: var n } fe && n == name)
+            {
+                return fe;
+            }
+
+            if (FindByName(child, name) is { } found)
+            {
+                return found;
+            }
+        }
+
+        return null;
     }
 
     private enum Region
