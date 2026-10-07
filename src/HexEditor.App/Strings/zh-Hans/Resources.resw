@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>你没有保存此文件的权限。请使用“另存为”选择其他位置。</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>写入时出错（{0}）。原始文件未被更改。</value></data>
   <data name="Close_Title" xml:space="preserve"><value>是否保存对 {0} 的更改？</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>如果不保存，你的更改将会丢失。</value></data>
   <data name="Close_Save" xml:space="preserve"><value>保存</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>不保存</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>取消</value></data>

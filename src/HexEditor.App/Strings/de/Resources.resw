@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>Sie haben keine Berechtigung zum Speichern dieser Datei. Verwenden Sie „Speichern unter“, um einen anderen Speicherort auszuwählen.</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>Beim Schreiben ist ein Fehler aufgetreten ({0}). Die ursprüngliche Datei wurde nicht geändert.</value></data>
   <data name="Close_Title" xml:space="preserve"><value>Änderungen an {0} speichern?</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>Wenn Sie die Änderungen nicht speichern, gehen sie verloren.</value></data>
   <data name="Close_Save" xml:space="preserve"><value>Speichern</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>Nicht speichern</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>Abbrechen</value></data>

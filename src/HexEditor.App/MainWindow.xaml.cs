@@ -46,6 +46,7 @@ public sealed partial class MainWindow : Window
             e.WindowActivationState == WindowActivationState.Deactivated ? "TextFillColorDisabledBrush" : "TextFillColorPrimaryBrush"];
 
         InitializeStatusBar();
+        InitializeDragDrop();
 
         // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
         var noticeTimer = DispatcherQueue.CreateTimer();
@@ -235,7 +236,7 @@ public sealed partial class MainWindow : Window
             path = result.Path;
             if (Vm.Documents.Any(d => d != doc && string.Equals(d.FilePath, path, StringComparison.OrdinalIgnoreCase)))
             {
-                ShowNotice(Loc.Get("Error_SaveOpenElsewhere"), InfoBarSeverity.Error, Vm.Selected);
+                ShowNotice(Loc.Get("Error_SaveOpenElsewhere"), InfoBarSeverity.Error, doc);
                 return false;
             }
         }
@@ -252,96 +253,22 @@ public sealed partial class MainWindow : Window
         }
         catch (InsufficientSpaceException ex)
         {
-            ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error, Vm.Selected);
+            ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error, doc);
         }
         catch (UnreadableDataException)
         {
-            ShowNotice(Loc.Get("Error_Unreadable"), InfoBarSeverity.Error, Vm.Selected);
+            ShowNotice(Loc.Get("Error_Unreadable"), InfoBarSeverity.Error, doc);
         }
         catch (UnauthorizedAccessException)
         {
-            ShowNotice(Loc.Get("Error_SaveDenied"), InfoBarSeverity.Error, Vm.Selected);
+            ShowNotice(Loc.Get("Error_SaveDenied"), InfoBarSeverity.Error, doc);
         }
         catch (IOException ex)
         {
-            ShowNotice(Loc.Format("Error_SaveIo", ex.Message), InfoBarSeverity.Error, Vm.Selected);
+            ShowNotice(Loc.Format("Error_SaveIo", ex.Message), InfoBarSeverity.Error, doc);
         }
 
         return false;
-    }
-
-    private async void Close_Click(object sender, RoutedEventArgs e)
-    {
-        if (Vm.Selected is { } doc)
-        {
-            await CloseAsync(doc);
-        }
-    }
-
-    private async void Tabs_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
-    {
-        if (args.Item is DocumentViewModel doc)
-        {
-            await CloseAsync(doc);
-        }
-    }
-
-    /// <summary>閉じる (ENG-17、UI-13)。変更があれば保存するかを確かめる。</summary>
-    private async Task<bool> CloseAsync(DocumentViewModel doc)
-    {
-        if (Vm.Operations.ActiveFor(doc.Document).Count > 0)
-        {
-            ShowNotice(Loc.Get("Notice_Busy"), InfoBarSeverity.Error, Vm.Selected);
-            return false;
-        }
-
-        if (doc.Document.IsModified)
-        {
-            var dialog = new ContentDialog
-            {
-                XamlRoot = Root.XamlRoot,
-                Title = Loc.Format("Close_Title", doc.DisplayName),
-                Content = Loc.Get("Close_Body"),
-                PrimaryButtonText = Loc.Get("Close_Save"),
-                SecondaryButtonText = Loc.Get("Close_DontSave"),
-                CloseButtonText = Loc.Get("Common_Cancel"),
-                DefaultButton = ContentDialogButton.Primary,
-            };
-            ContentDialogResult choice = await dialog.ShowAsync();
-            if (choice == ContentDialogResult.None || (choice == ContentDialogResult.Primary && !await SaveAsync(doc, saveAs: false)))
-            {
-                return false;
-            }
-        }
-
-        Vm.Close(doc);
-        UpdateTitle();
-        return true;
-    }
-
-    private void Exit_Click(object sender, RoutedEventArgs e) => Close();
-
-    private bool _closingConfirmed;
-
-    private async void MainWindow_Closed(object sender, WindowEventArgs args)
-    {
-        if (_closingConfirmed || !Vm.Documents.Any(d => d.Document.IsModified))
-        {
-            return;
-        }
-
-        args.Handled = true;
-        foreach (DocumentViewModel doc in Vm.Documents.ToList())
-        {
-            Vm.Selected = doc;
-            if (!await CloseAsync(doc))
-            {
-                return;
-            }
-        }
-
-        _closingConfirmed = true;
-        Close();
     }
 
     // ---- 編集・移動 ----

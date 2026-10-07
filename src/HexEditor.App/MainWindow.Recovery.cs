@@ -57,6 +57,7 @@ public sealed partial class MainWindow
             await ShowRecoveryDialogAsync(entries, journals);
         }
 
+        ShowAdminDropNoticeOnce();
         if (CrashReporter.FindUnseen() is { } crash)
         {
             CrashReporter.MarkSeen(crash);

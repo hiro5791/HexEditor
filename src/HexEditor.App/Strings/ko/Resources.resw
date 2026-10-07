@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>이 파일을 저장할 권한이 없습니다. [다른 이름으로 저장]을 사용하여 다른 위치를 선택하세요.</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>쓰는 중에 오류가 발생했습니다({0}). 원본 파일은 변경되지 않았습니다.</value></data>
   <data name="Close_Title" xml:space="preserve"><value>{0}의 변경 내용을 저장하시겠습니까?</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>저장하지 않으면 변경 내용이 손실됩니다.</value></data>
   <data name="Close_Save" xml:space="preserve"><value>저장</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>저장 안 함</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>취소</value></data>

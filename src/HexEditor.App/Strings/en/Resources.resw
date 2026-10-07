@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>You don't have permission to save this file. Use Save As to choose another location.</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>An error occurred while writing ({0}). The original file has not been changed.</value></data>
   <data name="Close_Title" xml:space="preserve"><value>Save changes to {0}?</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>Your changes will be lost if you don't save them.</value></data>
   <data name="Close_Save" xml:space="preserve"><value>Save</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>Don't save</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
@@ -228,4 +227,25 @@ Length: {2} ({3} bytes)</value></data>
   <data name="Operations_Completed" xml:space="preserve"><value>Completed</value></data>
   <data name="Operations_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
   <data name="Operations_Failed" xml:space="preserve"><value>Failed: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Open</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>Open {0} files?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Folders can't be opened ({0} skipped).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>While running as administrator, you can't open files by dragging them from File Explorer. Use File > Open instead.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>Copying {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Save all</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Close all</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Close</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Close other tabs</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Close tabs to the right</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Changes: {0} places, {1} bytes added or replaced. If you don't save, the changes will be lost.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>Save changes to {0} documents?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Select the documents to save. Documents that aren't selected are closed without saving.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Save selected and close</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Close without saving</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} is running.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Stop and close</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Close after saving</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>E</value></data>
 </root>

@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>Vous n'avez pas l'autorisation d'enregistrer ce fichier. Utilisez « Enregistrer sous » pour choisir un autre emplacement.</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>Une erreur s'est produite lors de l'écriture ({0}). Le fichier d'origine n'a pas été modifié.</value></data>
   <data name="Close_Title" xml:space="preserve"><value>Enregistrer les modifications apportées à {0} ?</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>Vos modifications seront perdues si vous ne les enregistrez pas.</value></data>
   <data name="Close_Save" xml:space="preserve"><value>Enregistrer</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>Ne pas enregistrer</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>Annuler</value></data>

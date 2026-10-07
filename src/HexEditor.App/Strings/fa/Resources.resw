@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>اجازهٔ ذخیرهٔ این فایل را ندارید. برای انتخاب مکانی دیگر از «ذخیره با نام» استفاده کنید.</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>هنگام نوشتن خطایی رخ داد ({0}). فایل اصلی تغییر نکرده است.</value></data>
   <data name="Close_Title" xml:space="preserve"><value>تغییرات {0} ذخیره شود؟</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>اگر تغییرات را ذخیره نکنید، از دست می‌روند.</value></data>
   <data name="Close_Save" xml:space="preserve"><value>ذخیره</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>ذخیره نشود</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>لغو</value></data>

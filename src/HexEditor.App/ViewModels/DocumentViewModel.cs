@@ -168,10 +168,24 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
     public string ModifiedText => Document.IsModified ? "● " + Loc.Get("Status_Modified") : string.Empty;
 
+    /// <summary>パスを持たない項目をコピーした一時ファイル (ENG-12 の仕様 2)。閉じるときに消す。</summary>
+    public string? TemporaryFile { get; set; }
+
     /// <summary>閉じる: ドキュメントを解放してから、復旧用データをフォルダごと消す (仕様 5)。</summary>
     public void Dispose()
     {
         Document.Dispose();
         Recovery?.Dispose();
+        if (TemporaryFile is not null)
+        {
+            try
+            {
+                File.Delete(TemporaryFile);
+                Directory.Delete(Path.GetDirectoryName(TemporaryFile)!);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+            }
+        }
     }
 }

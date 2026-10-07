@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>このファイルを保存する権限がありません。「名前を付けて保存」で別の場所を選んでください。</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>書き込み中にエラーが発生しました ({0})。元のファイルは変更されていません。</value></data>
   <data name="Close_Title" xml:space="preserve"><value>{0} の変更を保存しますか?</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>保存しないと変更は失われます。</value></data>
   <data name="Close_Save" xml:space="preserve"><value>保存する</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>保存しない</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>キャンセル</value></data>
@@ -228,4 +227,25 @@
   <data name="Operations_Completed" xml:space="preserve"><value>完了</value></data>
   <data name="Operations_Cancelled" xml:space="preserve"><value>キャンセル</value></data>
   <data name="Operations_Failed" xml:space="preserve"><value>失敗: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>開く</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>{0} 個のファイルを開きますか?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>フォルダは開けません ({0} 個をスキップしました)。</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>管理者として実行中は、エクスプローラーからのドラッグ &amp; ドロップで開けません。ファイル > 開く を使ってください。</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>{0} をコピー</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>すべて保存(L)</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>すべて閉じる(E)</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>他のタブを閉じる</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>右側のタブを閉じる</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>変更: {0} か所、追加・置き換えた {1} バイト。保存しないと変更は失われます。</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>{0} 個の文書の変更を保存しますか?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>保存する文書を選んでください。選ばなかった文書は保存せずに閉じます。</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>選択したものを保存して閉じる</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>保存せずに閉じる</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} を実行中です。</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>処理を中止して閉じる</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>保存が終わったら閉じる</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>E</value></data>
 </root>

@@ -46,7 +46,8 @@ public sealed partial class MainViewModel : ObservableObject
     }
 
     /// <summary>ファイルを開く (ENG-11)。同じファイルが開いていればそのタブを選ぶ。</summary>
-    public DocumentViewModel Open(string path)
+    /// <param name="insertAt">タブの挿入位置 (タブ列へのドロップ。UI-34)。null なら末尾。</param>
+    public DocumentViewModel Open(string path, int? insertAt = null)
     {
         string full = Path.GetFullPath(path);
         DocumentViewModel? existing = Documents.FirstOrDefault(d => string.Equals(d.FilePath, full, StringComparison.OrdinalIgnoreCase));
@@ -57,7 +58,19 @@ public sealed partial class MainViewModel : ObservableObject
         }
 
         var doc = new Document(FileByteSource.Open(full), _options);
-        return Add(doc, full, Path.GetFileName(full));
+        return Add(doc, full, Path.GetFileName(full), insertAt);
+    }
+
+    /// <summary>
+    /// パスを持たない項目 (ZIP の中のファイルなど) を、一時ファイルにコピーしたものから無題のドキュメントとして開く
+    /// (ENG-12 の仕様 2)。タブには元の名前を出し、保存は「名前を付けて保存」になる。一時ファイルは閉じるときに消す。
+    /// </summary>
+    public DocumentViewModel OpenTemporaryCopy(string tempPath, string displayName, int? insertAt = null)
+    {
+        var doc = new Document(FileByteSource.Open(tempPath), _options);
+        DocumentViewModel vm = Add(doc, null, displayName, insertAt);
+        vm.TemporaryFile = tempPath;
+        return vm;
     }
 
     /// <summary>
@@ -202,7 +215,7 @@ public sealed partial class MainViewModel : ObservableObject
         all.Wait(timeout);
     }
 
-    private DocumentViewModel Add(Document doc, string? path, string name)
+    private DocumentViewModel Add(Document doc, string? path, string name, int? insertAt = null)
     {
         DocumentRecovery? recovery = null;
         try
@@ -215,14 +228,22 @@ public sealed partial class MainViewModel : ObservableObject
             AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
         }
 
-        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recovery, Notifications = Notifications });
+        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recovery, Notifications = Notifications }, insertAt);
     }
 
-    private DocumentViewModel AddViewModel(DocumentViewModel vm)
+    private DocumentViewModel AddViewModel(DocumentViewModel vm, int? insertAt = null)
     {
         Document doc = vm.Document;
         Memory.Register(doc);
-        Documents.Add(vm);
+        if (insertAt is int index && index >= 0 && index <= Documents.Count)
+        {
+            Documents.Insert(index, vm);
+        }
+        else
+        {
+            Documents.Add(vm);
+        }
+
         Selected = vm;
         return vm;
     }

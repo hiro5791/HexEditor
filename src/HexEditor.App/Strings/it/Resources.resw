@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>Non hai l'autorizzazione per salvare questo file. Usa “Salva con nome” per scegliere un altro percorso.</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>Si è verificato un errore durante la scrittura ({0}). Il file originale non è stato modificato.</value></data>
   <data name="Close_Title" xml:space="preserve"><value>Salvare le modifiche a {0}?</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>Se non salvi le modifiche, andranno perse.</value></data>
   <data name="Close_Save" xml:space="preserve"><value>Salva</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>Non salvare</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>Annulla</value></data>

@@ -64,11 +64,15 @@
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
                         <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_File_SaveAll" AutomationProperties.AutomationId="Command_SaveAll" Click="SaveAll_Click" />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_File_Close" AutomationProperties.AutomationId="Command_Close" Click="Close_Click">
                             <MenuFlyoutItem.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="W" Modifiers="Control" />
+                                <KeyboardAccelerator Key="F4" Modifiers="Control" />
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="Menu_File_CloseAll" AutomationProperties.AutomationId="Command_CloseAll" Click="CloseAll_Click" />
                         <MenuFlyoutItem x:Uid="Menu_File_Exit" AutomationProperties.AutomationId="Command_Exit" Click="Exit_Click" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Edit">
@@ -196,6 +200,13 @@
             <TabView.TabItemTemplate>
                 <DataTemplate x:DataType="vm:DocumentViewModel">
                     <TabViewItem Header="{x:Bind Header, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}">
+                        <TabViewItem.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem x:Uid="Tab_Close" Click="TabClose_Click" />
+                                <MenuFlyoutItem x:Uid="Tab_CloseOthers" Click="TabCloseOthers_Click" />
+                                <MenuFlyoutItem x:Uid="Tab_CloseRight" Click="TabCloseRight_Click" />
+                            </MenuFlyout>
+                        </TabViewItem.ContextFlyout>
                         <TabViewItem.IconSource>
                             <SymbolIconSource Symbol="Document" />
                         </TabViewItem.IconSource>

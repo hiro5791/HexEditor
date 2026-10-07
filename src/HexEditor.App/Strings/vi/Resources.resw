@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>Bạn không có quyền lưu tệp này. Hãy dùng Lưu Như để chọn vị trí khác.</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>Đã xảy ra lỗi khi ghi ({0}). Tệp gốc không bị thay đổi.</value></data>
   <data name="Close_Title" xml:space="preserve"><value>Lưu các thay đổi đối với {0}?</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>Các thay đổi của bạn sẽ bị mất nếu bạn không lưu.</value></data>
   <data name="Close_Save" xml:space="preserve"><value>Lưu</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>Không lưu</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>Hủy</value></data>

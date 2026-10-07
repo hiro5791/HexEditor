@@ -36,7 +36,6 @@
   <data name="Error_SaveDenied" xml:space="preserve"><value>Δεν έχετε δικαίωμα αποθήκευσης αυτού του αρχείου. Χρησιμοποιήστε την επιλογή «Αποθήκευση ως» για να επιλέξετε άλλη θέση.</value></data>
   <data name="Error_SaveIo" xml:space="preserve"><value>Παρουσιάστηκε σφάλμα κατά την εγγραφή ({0}). Το αρχικό αρχείο δεν έχει αλλάξει.</value></data>
   <data name="Close_Title" xml:space="preserve"><value>Αποθήκευση των αλλαγών στο {0};</value></data>
-  <data name="Close_Body" xml:space="preserve"><value>Οι αλλαγές σας θα χαθούν αν δεν τις αποθηκεύσετε.</value></data>
   <data name="Close_Save" xml:space="preserve"><value>Αποθήκευση</value></data>
   <data name="Close_DontSave" xml:space="preserve"><value>Χωρίς αποθήκευση</value></data>
   <data name="Common_Cancel" xml:space="preserve"><value>Άκυρο</value></data>
