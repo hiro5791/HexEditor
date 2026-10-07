@@ -266,4 +266,7 @@ Length: {2} ({3} bytes)</value></data>
   <data name="Error_InUse" xml:space="preserve"><value>{0} can't be opened because another app is using it.</value></data>
   <data name="Error_InUseBy" xml:space="preserve"><value>{0} can't be opened because it's being used by {1}.</value></data>
   <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>This file is read-only, so it can't be saved over. Use Save As to save your changes.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>This document can't be edited while {0} is running.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>This document is read-only.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} failed: {1}</value></data>
 </root>

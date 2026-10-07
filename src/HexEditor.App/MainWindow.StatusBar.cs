@@ -20,6 +20,9 @@ public sealed partial class MainWindow
     private static readonly string[] CollapseOrder = ["column", "value", "size-short", "encoding", "size", "notifications"];
 
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _operationsTimer;
+    private TaskbarProgress? _taskbar;
+    private readonly HashSet<LongRunningOperation> _reportedOperations = [];
+    private bool _isActive = true;
     private bool _statusLayoutPending;
 
     private IEnumerable<Button> StatusButtons => StatusItems.Children.OfType<Button>();
@@ -46,6 +49,8 @@ public sealed partial class MainWindow
         };
 
         // 処理センターの表示 (UI-37 の仕様 1)。処理の数に関係なく、更新は 1 秒に 4 回まで。
+        _taskbar = new TaskbarProgress(Microsoft.UI.Win32Interop.GetWindowFromWindowId(AppWindow.Id));
+        Activated += (_, e) => _isActive = e.WindowActivationState != WindowActivationState.Deactivated;
         ProcessingCenter.Center = Vm.Operations;
         ProcessingCenter.TargetName = target => Vm.Documents.FirstOrDefault(d => ReferenceEquals(d.Document, target))?.DisplayName;
         _operationsTimer = DispatcherQueue.CreateTimer();
@@ -94,6 +99,22 @@ public sealed partial class MainWindow
             }
         }
 
+        // タスクバーの進捗は 10 秒以上続いた処理だけ。実行中は OS のスリープを抑止する (ENG-09 の仕様 8・9)。
+        var longRunning = running.Where(op => op.Elapsed >= TimeSpan.FromSeconds(10)).ToList();
+        if (longRunning.Count > 0)
+        {
+            var knownLong = longRunning.Where(op => op.TotalBytes is > 0).ToList();
+            _taskbar?.Show(knownLong.Count == 0 ? null
+                : knownLong.Sum(op => (double)op.ProcessedBytes) / knownLong.Sum(op => (double)op.TotalBytes!.Value));
+        }
+        else
+        {
+            _taskbar?.Clear();
+        }
+
+        _taskbar?.KeepAwake(Vm.Operations.Active.Count > 0);
+        ReportFinishedOperations();
+
         if ((StatusOperations.Visibility == Visibility.Visible) != (show && IsStatusItemVisible("operations")))
         {
             UpdateStatusBarLayout();
@@ -102,6 +123,32 @@ public sealed partial class MainWindow
         if (ProcessingCenterFlyout.IsOpen)
         {
             ProcessingCenter.Refresh();
+        }
+    }
+
+    /// <summary>
+    /// 終わった処理の後始末: 失敗は通知で知らせ (ENG-09 の仕様 11)、ウィンドウが非アクティブなら長い処理の完了で
+    /// タスクバーのボタンを点滅させる (仕様 8)。
+    /// </summary>
+    private void ReportFinishedOperations()
+    {
+        foreach (LongRunningOperation op in Vm.Operations.History)
+        {
+            if (!_reportedOperations.Add(op))
+            {
+                continue;
+            }
+
+            if (op.State == OperationState.Failed)
+            {
+                DocumentViewModel? doc = Vm.Documents.FirstOrDefault(d => ReferenceEquals(d.Document, op.Target));
+                ShowNotice(Loc.Format("Operations_FailedNotice", op.Name, op.Error?.Message ?? string.Empty), InfoBarSeverity.Error, doc);
+            }
+
+            if (!_isActive && op.Elapsed >= TimeSpan.FromSeconds(10))
+            {
+                _taskbar?.Flash();
+            }
         }
     }
 

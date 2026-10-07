@@ -417,13 +417,19 @@ public sealed partial class MainWindow : Window
 
     private void HexView_EditRejected(object? sender, EditResult result)
     {
-        string key = result switch
+        DocumentViewModel? doc = Vm.Selected;
+        IReadOnlyList<LongRunningOperation> busy = doc is null ? [] : Vm.Operations.ActiveFor(doc.Document);
+        string message = result switch
         {
-            EditResult.FixedLength => "Notice_FixedLength",
-            EditResult.NotEncodable => "Notice_NotEncodable",
-            _ => "Notice_Busy",
+            EditResult.FixedLength => Loc.Get("Notice_FixedLength"),
+            EditResult.NotEncodable => Loc.Get("Notice_NotEncodable"),
+
+            // 処理中は処理名を添える (ENG-09 の仕様 7)。
+            _ when busy.Count > 0 => Loc.Format("Notice_BusyWith", busy[0].Name),
+            _ when doc?.Editor.ReadOnly == true => Loc.Get("Notice_ReadOnly"),
+            _ => Loc.Get("Notice_Busy"),
         };
-        ShowNotice(Loc.Get(key), InfoBarSeverity.Error, Vm.Selected);
+        ShowNotice(message, InfoBarSeverity.Error, doc);
     }
 
     /// <summary>

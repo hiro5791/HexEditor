@@ -266,4 +266,7 @@
   <data name="Error_InUse" xml:space="preserve"><value>他のアプリが使用中のため、{0} を開けません。</value></data>
   <data name="Error_InUseBy" xml:space="preserve"><value>{1} が使用中のため、{0} を開けません。</value></data>
   <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>このファイルは読み取り専用のため、上書き保存できません。変更は「名前を付けて保存」で保存してください。</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>処理中のため編集できません ({0})。</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>この文書は読み取り専用です。</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} に失敗しました: {1}</value></data>
 </root>
