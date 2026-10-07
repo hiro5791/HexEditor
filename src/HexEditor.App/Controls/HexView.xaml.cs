@@ -417,6 +417,7 @@ public sealed partial class HexView : UserControl
             _graceTimer.Start();
         }
 
+        bool[] matched = ComputeMatched(snapshot, firstOffset, span);
         var columns = new RowColumns(bytesPerRow);
         long selStart = _editor.SelectionStart;
         long selEnd = selStart + _editor.SelectionLength;
@@ -448,7 +449,7 @@ public sealed partial class HexView : UserControl
             // 猶予中で、同じ行の前の内容があればそのまま残す (VIEW-03 の仕様 3)。
             bool keep = mode == CellMode.Blank && row.ContentRowStart == rowStart && row.HasContent;
             if (!keep && row.Update(frame, rowStart, count, bytes.AsSpan(from, bytesPerRow), rowStates, modified.AsSpan(from, bytesPerRow),
-                mode, selStart, selEnd, _palette, _cellWidth, _rowHeight))
+                mode, selStart, selEnd, _palette, _cellWidth, _rowHeight, matched.AsSpan(from, bytesPerRow)))
             {
                 rebuilt++;
             }
@@ -832,6 +833,52 @@ public sealed partial class HexView : UserControl
         private byte[] _bytes = [];
         private ByteState[] _states = [];
         private bool[] _modified = [];
+        private bool[] _matched = [];
+
+        /// <summary>検索の一致の範囲が前回と同じか (行を作り直すかの判定)。</summary>
+        private bool SameMatches(ReadOnlySpan<bool> matched, int count)
+        {
+            if (matched.IsEmpty)
+            {
+                return !_matched.AsSpan(0, Math.Min(count, _matched.Length)).Contains(true);
+            }
+
+            return matched[..count].SequenceEqual(_matched.AsSpan(0, count));
+        }
+
+        /// <summary>
+        /// 検索の一致の強調 (FIND-04 の仕様 9、FIND-12 の仕様 4)。選択範囲より下の層に塗り、選択範囲・変更の色と区別できる色にする。
+        /// </summary>
+        private void HighlightMatches(RowColumns columns, Palette palette)
+        {
+            int count = Count;
+            var hex = new TextHighlighter { Background = palette.Match, Foreground = palette.MatchText };
+            var text = new TextHighlighter { Background = palette.Match, Foreground = palette.MatchText };
+            for (int c = 0; c < count; c++)
+            {
+                if (!_matched[c])
+                {
+                    continue;
+                }
+
+                int end = c;
+                while (end + 1 < count && _matched[end + 1])
+                {
+                    end++;
+                }
+
+                int hexStart = columns.HexIndex(c);
+                hex.Ranges.Add(new TextRange { StartIndex = hexStart, Length = columns.HexIndex(end) + 2 - hexStart });
+                text.Ranges.Add(new TextRange { StartIndex = columns.TextIndex(c), Length = end - c + 1 });
+                c = end;
+            }
+
+            if (hex.Ranges.Count > 0)
+            {
+                Content.TextHighlighters.Add(hex);
+                Content.TextHighlighters.Add(text);
+            }
+        }
         private int _count = -1;
         private CellMode _mode;
         private long _selFrom;
@@ -933,7 +980,8 @@ public sealed partial class HexView : UserControl
 
         /// <summary>内容を更新する。前回と同じなら何もしない。作り直したら true。</summary>
         public bool Update(RowFrame frame, long rowStart, int count, ReadOnlySpan<byte> bytes, ReadOnlySpan<ByteState> states,
-            ReadOnlySpan<bool> modified, CellMode mode, long selStart, long selEnd, Palette palette, double cellWidth, double rowHeight)
+            ReadOnlySpan<bool> modified, CellMode mode, long selStart, long selEnd, Palette palette, double cellWidth, double rowHeight,
+            ReadOnlySpan<bool> matched = default)
         {
             long selFrom = Math.Max(selStart, rowStart) - rowStart;
             long selTo = Math.Min(selEnd, rowStart + count) - rowStart;
@@ -944,7 +992,8 @@ public sealed partial class HexView : UserControl
 
             if (_count == count && ContentRowStart == rowStart && _mode == mode && _frame == frame && _selFrom == selFrom && _selTo == selTo
                 && bytes[..count].SequenceEqual(_bytes.AsSpan(0, count)) && states[..count].SequenceEqual(_states.AsSpan(0, count))
-                && modified[..count].SequenceEqual(_modified.AsSpan(0, count)))
+                && modified[..count].SequenceEqual(_modified.AsSpan(0, count))
+                && SameMatches(matched, count))
             {
                 return false;
             }
@@ -960,11 +1009,18 @@ public sealed partial class HexView : UserControl
                 _bytes = new byte[bytes.Length];
                 _states = new ByteState[bytes.Length];
                 _modified = new bool[bytes.Length];
+                _matched = new bool[bytes.Length];
             }
 
             bytes[..count].CopyTo(_bytes);
             states[..count].CopyTo(_states);
             modified[..count].CopyTo(_modified);
+            _matched.AsSpan(0, count).Clear();
+            if (!matched.IsEmpty)
+            {
+                matched[..count].CopyTo(_matched);
+            }
+
             Fill(frame.Columns, palette);
             Highlight(frame, palette);
             UpdateHatches(frame.Columns, palette, cellWidth, rowHeight);
@@ -1048,6 +1104,7 @@ public sealed partial class HexView : UserControl
         private void Highlight(RowFrame frame, Palette palette)
         {
             Content.TextHighlighters.Clear();
+            HighlightMatches(frame.Columns, palette);
             if (_selFrom >= _selTo)
             {
                 return;
@@ -1199,7 +1256,7 @@ public sealed partial class HexView : UserControl
     /// </summary>
     internal sealed record Palette(Brush Text, Brush OffsetText, Brush Modified, Brush Dim, Brush Selection, Brush SelectionText,
         Brush SelectionInactive, Brush SelectionInactiveText, Brush Caret, Brush Hatch, Brush Background, Brush CursorMarker,
-        Brush SearchMarker)
+        Brush SearchMarker, Brush Match, Brush MatchText)
     {
         public static Palette Load(HexView view) => new(
             view.ProbeText.Fill,
@@ -1214,7 +1271,9 @@ public sealed partial class HexView : UserControl
             view.ProbeHatch.Fill,
             view.ProbeBackground.Fill,
             view.ProbeCursorMarker.Fill,
-            view.ProbeSearchMarker.Fill);
+            view.ProbeSearchMarker.Fill,
+            view.ProbeMatch.Fill,
+            view.ProbeMatchText.Fill);
 
         public Brush For(CellKind kind) => kind switch
         {

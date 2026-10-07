@@ -313,4 +313,23 @@
 
 詳細の記録:
 {1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>方向</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>前方</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>後方</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>検索範囲</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>大文字と小文字を区別する</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>エスケープを使う (\n、\xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>文字の境界に揃える</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>検索のオプション</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>件数を数える</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / 数えています...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / {1} 件以上</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} …(全 {1} バイト)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} ({1} 文字目)</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>「{0}」は正しいエスケープではありません。</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>{0} で見つかりました。</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>件数を数える</value></data>
 </root>

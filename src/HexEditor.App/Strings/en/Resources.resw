@@ -313,4 +313,23 @@ Length: {2} ({3} bytes)</value></data>
 
 Details were written to:
 {1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Direction</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>Forward</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Backward</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Search in</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Whole document</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Selection</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>Match case</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Use escapes (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Align to characters</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Search options</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Count matches</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / counting...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / over {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... ({1} bytes in total)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (character {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>“{0}” isn't a valid escape.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>Found at {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Counting matches</value></data>
 </root>

@@ -31,6 +31,8 @@
                     <StaticResource x:Key="HexViewHatchBrush" ResourceKey="TextFillColorDisabledBrush" />
                     <StaticResource x:Key="HexViewCursorMarkerBrush" ResourceKey="AccentFillColorDefaultBrush" />
                     <StaticResource x:Key="HexViewSearchMarkerBrush" ResourceKey="SystemFillColorCautionBrush" />
+                    <StaticResource x:Key="HexViewMatchBrush" ResourceKey="SystemFillColorCautionBackgroundBrush" />
+                    <StaticResource x:Key="HexViewMatchTextBrush" ResourceKey="TextFillColorPrimaryBrush" />
                     <StaticResource x:Key="HexViewFocusOuterBrush" ResourceKey="FocusStrokeColorOuterBrush" />
                     <StaticResource x:Key="HexViewFocusInnerBrush" ResourceKey="FocusStrokeColorInnerBrush" />
                     <StaticResource x:Key="HexViewPanelBrush" ResourceKey="SolidBackgroundFillColorTertiaryBrush" />
@@ -50,6 +52,8 @@
                     <StaticResource x:Key="HexViewHatchBrush" ResourceKey="TextFillColorDisabledBrush" />
                     <StaticResource x:Key="HexViewCursorMarkerBrush" ResourceKey="AccentFillColorDefaultBrush" />
                     <StaticResource x:Key="HexViewSearchMarkerBrush" ResourceKey="SystemFillColorCautionBrush" />
+                    <StaticResource x:Key="HexViewMatchBrush" ResourceKey="SystemFillColorCautionBackgroundBrush" />
+                    <StaticResource x:Key="HexViewMatchTextBrush" ResourceKey="TextFillColorPrimaryBrush" />
                     <StaticResource x:Key="HexViewFocusOuterBrush" ResourceKey="FocusStrokeColorOuterBrush" />
                     <StaticResource x:Key="HexViewFocusInnerBrush" ResourceKey="FocusStrokeColorInnerBrush" />
                     <StaticResource x:Key="HexViewPanelBrush" ResourceKey="SolidBackgroundFillColorTertiaryBrush" />
@@ -69,6 +73,8 @@
                     <SolidColorBrush x:Key="HexViewHatchBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
                     <SolidColorBrush x:Key="HexViewCursorMarkerBrush" Color="{ThemeResource SystemColorHighlightColor}" />
                     <SolidColorBrush x:Key="HexViewSearchMarkerBrush" Color="{ThemeResource SystemColorHotlightColor}" />
+                    <SolidColorBrush x:Key="HexViewMatchBrush" Color="{ThemeResource SystemColorHotlightColor}" />
+                    <SolidColorBrush x:Key="HexViewMatchTextBrush" Color="{ThemeResource SystemColorWindowColor}" />
                     <SolidColorBrush x:Key="HexViewFocusOuterBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
                     <SolidColorBrush x:Key="HexViewFocusInnerBrush" Color="{ThemeResource SystemColorWindowColor}" />
                     <SolidColorBrush x:Key="HexViewPanelBrush" Color="{ThemeResource SystemColorWindowColor}" />
@@ -220,6 +226,8 @@
             <Rectangle x:Name="ProbeBackground" Fill="{ThemeResource HexViewBackgroundBrush}" />
             <Rectangle x:Name="ProbeCursorMarker" Fill="{ThemeResource HexViewCursorMarkerBrush}" />
             <Rectangle x:Name="ProbeSearchMarker" Fill="{ThemeResource HexViewSearchMarkerBrush}" />
+            <Rectangle x:Name="ProbeMatch" Fill="{ThemeResource HexViewMatchBrush}" />
+            <Rectangle x:Name="ProbeMatchText" Fill="{ThemeResource HexViewMatchTextBrush}" />
         </Canvas>
     </Grid>
 </UserControl>

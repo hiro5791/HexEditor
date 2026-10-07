@@ -2,97 +2,148 @@
 <UserControl
     x:Class="HexEditor.App.Controls.FindBar"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!--  検索バー (FIND-04)。モーダルにせず、エディタの上に表示する。  -->
-    <Grid
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HexEditor.App.Controls">
+    <!--
+        検索バー (FIND-04)。モーダルにせず、エディタの上に表示する。
+        1 行目: 種類、検索欄、変換結果・状態、件数、前 / 次、オプションの開閉、閉じる。2 行目: オプション (幅が足りなければ折り返す)。
+    -->
+    <StackPanel
         Padding="12,6"
         Background="{ThemeResource LayerFillColorDefaultBrush}"
         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
         BorderThickness="0,0,0,1"
-        ColumnSpacing="8">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" MinWidth="120" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <ComboBox
-            x:Name="KindChoice"
-            AutomationProperties.AutomationId="Find_Kind"
-            SelectedIndex="0"
-            SelectionChanged="Option_Changed">
-            <ComboBoxItem x:Uid="Find_Kind_Hex" />
-            <ComboBoxItem x:Uid="Find_Kind_Text" />
-        </ComboBox>
-        <TextBox
-            x:Name="Query"
-            x:Uid="Find_Query"
-            Grid.Column="1"
-            Width="260"
-            AutomationProperties.AutomationId="Find_Query"
-            FlowDirection="LeftToRight"
-            FontFamily="Cascadia Mono, Consolas"
-            KeyDown="Query_KeyDown"
-            TextChanged="Query_TextChanged" />
-        <ComboBox
-            x:Name="EncodingChoice"
-            Grid.Column="2"
-            AutomationProperties.AutomationId="Find_Encoding"
-            SelectedIndex="0"
-            SelectionChanged="Option_Changed"
-            Visibility="Collapsed">
-            <ComboBoxItem Content="ASCII" />
-            <ComboBoxItem Content="UTF-8" />
-            <ComboBoxItem Content="UTF-16 LE" />
-            <ComboBoxItem Content="UTF-16 BE" />
-            <ComboBoxItem Content="Shift_JIS" />
-        </ComboBox>
-        <TextBlock
-            x:Name="Status"
-            Grid.Column="3"
-            VerticalAlignment="Center"
-            AutomationProperties.AutomationId="Find_Status"
-            AutomationProperties.LiveSetting="Polite"
-            TextTrimming="CharacterEllipsis" />
-        <CheckBox
-            x:Name="WrapChoice"
-            x:Uid="Find_Wrap"
-            Grid.Column="4"
-            MinWidth="0"
-            AutomationProperties.AutomationId="Find_Wrap"
-            IsChecked="True" />
-        <Button
-            x:Name="PreviousButton"
-            Grid.Column="5"
-            AutomationProperties.AutomationId="Find_Previous"
-            Click="Previous_Click">
-            <FontIcon FontSize="12" Glyph="&#xE70E;" />
-        </Button>
-        <Button
-            x:Name="NextButton"
-            Grid.Column="6"
-            AutomationProperties.AutomationId="Find_Next"
-            Click="Next_Click"
-            Style="{StaticResource AccentButtonStyle}">
-            <FontIcon FontSize="12" Glyph="&#xE70D;" />
-        </Button>
-        <ProgressRing
-            x:Name="Busy"
-            Grid.Column="7"
-            Width="16"
-            Height="16"
-            IsActive="False" />
-        <Button
-            x:Name="CloseButton"
-            Grid.Column="8"
-            AutomationProperties.AutomationId="Find_Close"
-            Click="Close_Click">
-            <FontIcon FontSize="12" Glyph="&#xE711;" />
-        </Button>
-    </Grid>
+        Spacing="6">
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="120" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox
+                x:Name="KindChoice"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Find_Kind"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="Find_Kind_Hex" />
+                <ComboBoxItem x:Uid="Find_Kind_Text" />
+            </ComboBox>
+            <TextBox
+                x:Name="Query"
+                x:Uid="Find_Query"
+                Grid.Column="1"
+                Width="260"
+                AutomationProperties.AutomationId="Find_Query"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                KeyDown="Query_KeyDown"
+                TextChanged="Query_TextChanged" />
+            <TextBlock
+                x:Name="Status"
+                Grid.Column="2"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Find_Status"
+                AutomationProperties.LiveSetting="Polite"
+                TextTrimming="CharacterEllipsis" />
+            <TextBlock
+                x:Name="CountText"
+                Grid.Column="3"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Find_Count"
+                AutomationProperties.LiveSetting="Polite"
+                FlowDirection="LeftToRight" />
+            <Button
+                x:Name="CountButton"
+                x:Uid="Find_CountButton"
+                Grid.Column="3"
+                AutomationProperties.AutomationId="Find_CountButton"
+                Click="Count_Click"
+                Visibility="Collapsed" />
+            <Button
+                x:Name="PreviousButton"
+                Grid.Column="4"
+                AutomationProperties.AutomationId="Find_Previous"
+                Click="Previous_Click">
+                <FontIcon FontSize="12" Glyph="&#xE70E;" />
+            </Button>
+            <Button
+                x:Name="NextButton"
+                Grid.Column="5"
+                AutomationProperties.AutomationId="Find_Next"
+                Click="Next_Click"
+                Style="{StaticResource AccentButtonStyle}">
+                <FontIcon FontSize="12" Glyph="&#xE70D;" />
+            </Button>
+            <ToggleButton
+                x:Name="OptionsToggle"
+                Grid.Column="6"
+                AutomationProperties.AutomationId="Find_Options"
+                Click="OptionsToggle_Click">
+                <FontIcon FontSize="12" Glyph="&#xE71C;" />
+            </ToggleButton>
+            <ProgressRing
+                x:Name="Busy"
+                Grid.Column="7"
+                Width="16"
+                Height="16"
+                IsActive="False" />
+            <Button
+                x:Name="CloseButton"
+                Grid.Column="8"
+                AutomationProperties.AutomationId="Find_Close"
+                Click="Close_Click">
+                <FontIcon FontSize="12" Glyph="&#xE711;" />
+            </Button>
+        </Grid>
+
+        <!--  オプション (FIND-04 の仕様 4)。種類に応じて表示を切り替える。  -->
+        <local:WrapPanel x:Name="OptionsPanel" Visibility="Collapsed">
+            <ComboBox
+                x:Name="DirectionChoice"
+                AutomationProperties.AutomationId="Find_Direction"
+                SelectedIndex="0">
+                <ComboBoxItem x:Uid="Find_Direction_Forward" />
+                <ComboBoxItem x:Uid="Find_Direction_Backward" />
+            </ComboBox>
+            <CheckBox
+                x:Name="WrapChoice"
+                x:Uid="Find_Wrap"
+                AutomationProperties.AutomationId="Find_Wrap"
+                IsChecked="True" />
+            <ComboBox
+                x:Name="ScopeChoice"
+                AutomationProperties.AutomationId="Find_Scope"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="Find_Scope_Document" />
+                <ComboBoxItem x:Name="ScopeSelectionItem" x:Uid="Find_Scope_Selection" />
+            </ComboBox>
+            <ComboBox
+                x:Name="EncodingChoice"
+                AutomationProperties.AutomationId="Find_Encoding"
+                SelectionChanged="Option_Changed" />
+            <CheckBox
+                x:Name="CaseChoice"
+                x:Uid="Find_CaseSensitive"
+                AutomationProperties.AutomationId="Find_CaseSensitive"
+                Click="Check_Changed" />
+            <CheckBox
+                x:Name="EscapeChoice"
+                x:Uid="Find_Escapes"
+                AutomationProperties.AutomationId="Find_Escapes"
+                Click="Check_Changed" />
+            <CheckBox
+                x:Name="AlignChoice"
+                x:Uid="Find_Align"
+                AutomationProperties.AutomationId="Find_Align"
+                Click="Check_Changed" />
+        </local:WrapPanel>
+    </StackPanel>
 </UserControl>

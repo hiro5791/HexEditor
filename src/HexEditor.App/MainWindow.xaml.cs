@@ -47,6 +47,7 @@ public sealed partial class MainWindow : Window
 
         InitializeStatusBar();
         InitializeDragDrop();
+        FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
         InitializeRegions();
 
         // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
@@ -151,6 +152,13 @@ public sealed partial class MainWindow : Window
         }
 
         _titleSource = Vm.Selected;
+
+        // 検索バーの状態はウィンドウごと。タブを切り替えたら、新しいタブを対象にする (FIND-04 の仕様 10)。
+        if (FindBar.IsOpen && Editor is { } editor)
+        {
+            FindBar.Editor = editor;
+            UpdateMatchHighlights();
+        }
         if (_titleSource is not null)
         {
             _titleSource.PropertyChanged += TitleSource_PropertyChanged;
@@ -372,8 +380,22 @@ public sealed partial class MainWindow : Window
 
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
         view.DocumentName = (view.DataContext as DocumentViewModel)?.DisplayName;
+        UpdateMatchHighlights(view);
 
         view.Focus(FocusState.Programmatic);
+    }
+
+    /// <summary>
+    /// 検索の一致の強調とスクロールバーの印 (FIND-04 の仕様 9、VIEW-02)。検索バーが開いている間、選択中のタブの Hex ビューに出す。
+    /// </summary>
+    private void UpdateMatchHighlights(HexView? only = null)
+    {
+        foreach (HexView view in only is null ? _views : [only])
+        {
+            bool active = FindBar.IsOpen && view.Editor == FindBar.Editor;
+            view.MatchProvider = active ? FindBar.MatchesInView : null;
+            view.SetSearchMarkers(active ? FindBar.MarkerOffsets() : null);
+        }
     }
 
     /// <summary>選択中のタブの Hex ビューにフォーカスを戻す。</summary>
