@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.GoToBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  移動バー (VIEW-29)。モーダルにせず、エディタの上に表示する。  -->
+    <Grid
+        Padding="12,6"
+        Background="{ThemeResource LayerFillColorDefaultBrush}"
+        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+        BorderThickness="0,0,0,1"
+        ColumnSpacing="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" MinWidth="120" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBox
+            x:Name="Input"
+            x:Uid="GoTo_Input"
+            Width="240"
+            AutomationProperties.AutomationId="GoTo_Input"
+            FontFamily="Cascadia Mono, Consolas"
+            KeyDown="Input_KeyDown"
+            TextChanged="Input_TextChanged" />
+        <TextBlock
+            x:Name="Interpretation"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            AutomationProperties.AutomationId="GoTo_Interpretation"
+            AutomationProperties.LiveSetting="Polite"
+            TextTrimming="CharacterEllipsis" />
+        <ComboBox
+            x:Name="BaseChoice"
+            Grid.Column="2"
+            AutomationProperties.AutomationId="GoTo_Base"
+            SelectedIndex="0"
+            SelectionChanged="Option_Changed">
+            <ComboBoxItem x:Uid="GoTo_Base_Auto" />
+            <ComboBoxItem x:Uid="GoTo_Base_Start" />
+            <ComboBoxItem x:Uid="GoTo_Base_Cursor" />
+            <ComboBoxItem x:Uid="GoTo_Base_End" />
+        </ComboBox>
+        <ComboBox
+            x:Name="UnitChoice"
+            Grid.Column="3"
+            AutomationProperties.AutomationId="GoTo_Unit"
+            SelectedIndex="0"
+            SelectionChanged="Option_Changed">
+            <ComboBoxItem x:Uid="GoTo_Unit_Bytes" />
+            <ComboBoxItem x:Uid="GoTo_Unit_Rows" />
+            <ComboBoxItem x:Uid="GoTo_Unit_Sectors" />
+        </ComboBox>
+        <CheckBox
+            x:Name="SelectChoice"
+            x:Uid="GoTo_Select"
+            Grid.Column="4"
+            MinWidth="0"
+            AutomationProperties.AutomationId="GoTo_Select" />
+        <Button
+            x:Name="GoButton"
+            x:Uid="GoTo_Go"
+            Grid.Column="5"
+            AutomationProperties.AutomationId="GoTo_Go"
+            Click="Go_Click"
+            Style="{StaticResource AccentButtonStyle}" />
+        <Button
+            x:Name="CloseButton"
+            Grid.Column="6"
+            AutomationProperties.AutomationId="GoTo_Close"
+            Click="Close_Click">
+            <FontIcon FontSize="12" Glyph="&#xE711;" />
+        </Button>
+    </Grid>
+</UserControl>

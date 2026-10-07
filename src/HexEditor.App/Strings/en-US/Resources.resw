@@ -45,4 +45,34 @@
   <data name="Notice_FixedLength" xml:space="preserve"><value>This data source can't change length, so only overwrite mode is available.</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>The character can't be represented in the current encoding.</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>The document is being processed and can't be edited right now.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Go to Offset...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Back</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>Forward</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Offset or expression (e.g. 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Go to</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Relative to</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Auto</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>From start</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>From cursor</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>From end</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Unit</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Bytes</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Rows</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Sectors</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Select while moving</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Go</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Close</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Enter an offset.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>The expression is not valid.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>A parenthesis is not closed.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Unknown name: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>There is no bookmark named “{0}”.</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Unknown function: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>Division by zero.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>The value is outside the 64-bit range.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>The number is not valid.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: the data at that position can't be read.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} is not available here.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>Before the start of the file.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>Beyond the end of the file ({0}).</value></data>
 </root>

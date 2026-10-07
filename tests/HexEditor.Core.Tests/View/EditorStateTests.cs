@@ -200,4 +200,51 @@ public sealed class EditorStateTests
             Assert.True(s.TopRow + s.VisibleRows > 100);
         }
     }
+
+    [Fact]
+    public void JumpHistoryGoesBackAndForward()
+    {
+        (Document doc, EditorState s) = Create(16 * 1000);
+        using (doc)
+        {
+            s.GoTo(0x100);
+            s.GoTo(0x2000);
+            Assert.True(s.CanGoBack);
+            s.GoBack();
+            Assert.Equal(0x100, s.Cursor);
+            s.GoBack();
+            Assert.Equal(0, s.Cursor);
+            Assert.False(s.CanGoBack);
+            s.GoForward();
+            Assert.Equal(0x100, s.Cursor);
+            s.GoTo(0x300);
+            Assert.False(s.CanGoForward);
+        }
+    }
+
+    [Fact]
+    public void JumpHistoryFollowsInsertions()
+    {
+        (Document doc, EditorState s) = Create(16 * 1000);
+        using (doc)
+        {
+            s.GoTo(0x200);
+            s.GoTo(0x1000);
+            doc.Insert(0, new byte[0x10]);
+            s.GoBack();
+            Assert.Equal(0x210, s.Cursor);
+        }
+    }
+
+    [Fact]
+    public void GoToWithSelection()
+    {
+        (Document doc, EditorState s) = Create(256);
+        using (doc)
+        {
+            s.Click(0x10, ActiveColumn.Hex, false, false);
+            s.GoTo(0x20, extendSelection: true);
+            Assert.Equal((0x10L, 0x10L), (s.SelectionStart, s.SelectionLength));
+        }
+    }
 }

@@ -245,7 +245,39 @@ public sealed partial class MainWindow : Window
 
     private void GoEnd_Click(object sender, RoutedEventArgs e) => Editor?.MoveToEnd();
 
-    private void HexView_Loaded(object sender, RoutedEventArgs e) => ((HexView)sender).Focus(FocusState.Programmatic);
+    private readonly List<HexView> _views = [];
+
+    private void HexView_Loaded(object sender, RoutedEventArgs e)
+    {
+        var view = (HexView)sender;
+        if (!_views.Contains(view))
+        {
+            _views.Add(view);
+            view.Unloaded += (_, _) => _views.Remove(view);
+        }
+
+        view.Focus(FocusState.Programmatic);
+    }
+
+    /// <summary>選択中のタブの Hex ビューにフォーカスを戻す。</summary>
+    private void FocusEditor() => _views.FirstOrDefault(v => v.Editor == Editor)?.Focus(FocusState.Programmatic);
+
+    private void GoTo_Click(object sender, RoutedEventArgs e)
+    {
+        if (Editor is null)
+        {
+            return;
+        }
+
+        GoToBar.Editor = Editor;
+        GoToBar.Open();
+    }
+
+    private void GoToBar_Closed(object? sender, EventArgs e) => FocusEditor();
+
+    private void GoBack_Click(object sender, RoutedEventArgs e) => Editor?.GoBack();
+
+    private void GoForward_Click(object sender, RoutedEventArgs e) => Editor?.GoForward();
 
     private void HexView_EditRejected(object? sender, EditResult result)
     {

@@ -45,4 +45,34 @@
   <data name="Notice_FixedLength" xml:space="preserve"><value>このデータソースは長さを変えられないため、上書きモードだけを使えます。</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>この文字は現在の文字コードで表せません。</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>処理中のため編集できません。</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>オフセットへ移動...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>戻る</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>進む</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>オフセットまたは式 (例: 0x1F00、end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>移動先</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>基準</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>自動</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>先頭から</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>カーソルから</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>末尾から</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>単位</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>バイト</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>行</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>セクタ</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>選択しながら移動</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>移動</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>閉じる</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>移動先を入力してください。</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>式が正しくありません。</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>括弧が閉じていません。</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>不明な名前です: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>「{0}」という名前のブックマークはありません。</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>不明な関数です: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>0 で割っています。</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>値が 64 bit の範囲を超えています。</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>数値が正しくありません。</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: その位置のデータを読めません。</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} はここでは使えません。</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>ファイルの先頭より前です。</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>ファイルの末尾 ({0}) を超えています。</value></data>
 </root>

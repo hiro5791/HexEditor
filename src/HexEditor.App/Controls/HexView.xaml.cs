@@ -556,6 +556,12 @@ public sealed partial class HexView : UserControl
 
         bool shift = IsDown(VirtualKey.Shift);
         bool ctrl = IsDown(VirtualKey.Control);
+        if (IsDown(VirtualKey.Menu))
+        {
+            // Alt を含むキーはアプリのコマンド (Alt+← / Alt+→ など) に渡す。
+            return;
+        }
+
         bool handled = true;
         switch (e.Key)
         {

@@ -15,6 +15,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -77,6 +78,22 @@
                 <MenuFlyoutItem x:Uid="Menu_Edit_ToggleInsert" AutomationProperties.AutomationId="Command_ToggleInsert" Click="ToggleInsert_Click" />
             </MenuBarItem>
             <MenuBarItem x:Uid="Menu_Go">
+                <MenuFlyoutItem x:Uid="Menu_Go_GoTo" AutomationProperties.AutomationId="Command_GoTo" Click="GoTo_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="G" Modifiers="Control" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="Menu_Go_Back" AutomationProperties.AutomationId="Command_GoBack" Click="GoBack_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Left" Modifiers="Menu" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="Menu_Go_Forward" AutomationProperties.AutomationId="Command_GoForward" Click="GoForward_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="Right" Modifiers="Menu" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
                 <MenuFlyoutItem x:Uid="Menu_Go_Start" AutomationProperties.AutomationId="Command_GoStart" Click="GoStart_Click" />
                 <MenuFlyoutItem x:Uid="Menu_Go_End" AutomationProperties.AutomationId="Command_GoEnd" Click="GoEnd_Click" />
             </MenuBarItem>
@@ -89,9 +106,16 @@
             IsOpen="False"
             Severity="Warning" />
 
+        <controls:GoToBar
+            x:Name="GoToBar"
+            Grid.Row="3"
+            AutomationProperties.AutomationId="GoToBar"
+            Closed="GoToBar_Closed"
+            Visibility="Collapsed" />
+
         <TabView
             x:Name="Tabs"
-            Grid.Row="3"
+            Grid.Row="4"
             AddTabButtonClick="Tabs_AddTabButtonClick"
             AutomationProperties.AutomationId="DocumentTabs"
             SelectedItem="{x:Bind Vm.Selected, Mode=TwoWay}"
@@ -111,7 +135,7 @@
         </TabView>
 
         <Grid
-            Grid.Row="4"
+            Grid.Row="5"
             Padding="12,4"
             AutomationProperties.AutomationId="StatusBar"
             Background="{ThemeResource LayerFillColorDefaultBrush}"
