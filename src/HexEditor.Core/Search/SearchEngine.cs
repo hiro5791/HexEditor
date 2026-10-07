@@ -351,32 +351,44 @@ public static class SearchEngine
         /// <summary>範囲のすべての一致を集める。上限で止めたら true。</summary>
         public bool CollectAll(SearchResults results)
         {
-            IReadOnlyList<SearchRange> ranges = _options.Scope.Resolve(_snapshot.Length);
-            var plan = new List<ChunkPlan>();
-            foreach (SearchRange r in ranges)
+            IEnumerable<ChunkPlan> Plan()
             {
-                for (long pos = r.Offset; pos < r.End; pos += _chunkSize)
+                foreach (SearchRange r in _options.Scope.Resolve(_snapshot.Length))
                 {
-                    long coreEnd = Math.Min(r.End, pos + _chunkSize);
-                    long readEnd = Math.Min(r.End, coreEnd + _overlap);
-                    plan.Add(new ChunkPlan(pos, coreEnd, readEnd));
+                    for (long pos = r.Offset; pos < r.End; pos += _chunkSize)
+                    {
+                        long coreEnd = Math.Min(r.End, pos + _chunkSize);
+                        yield return new ChunkPlan(pos, coreEnd, Math.Min(r.End, coreEnd + _overlap));
+                    }
                 }
             }
 
             int parallelism = Math.Max(1, _options.MaxDegreeOfParallelism);
             bool overlapping = _options.IncludeOverlapping;
             long maxMatches = _options.MaxMatches;
-            byte[][] buffers = new byte[Math.Min(parallelism, Math.Max(1, plan.Count))][];
-            var chunkResults = new ChunkResult[buffers.Length];
+            using IEnumerator<ChunkPlan> plan = Plan().GetEnumerator(); // 計画は少しずつ作る (チャンクの数に比例したメモリを使わない)
+            var batchPlans = new ChunkPlan[parallelism];
+            byte[][] buffers = new byte[parallelism][];
+            var chunkResults = new ChunkResult[parallelism];
             long carriedEnd = long.MinValue; // 重ならない一致: 直前に採った一致の末尾
             long count = 0;
-            for (int batch = 0; batch < plan.Count; batch += buffers.Length)
+            while (true)
             {
                 Check();
-                int n = Math.Min(buffers.Length, plan.Count - batch);
+                int n = 0;
+                while (n < parallelism && plan.MoveNext())
+                {
+                    batchPlans[n++] = plan.Current;
+                }
+
+                if (n == 0)
+                {
+                    break;
+                }
+
                 if (n == 1)
                 {
-                    chunkResults[0] = CollectChunk(plan[batch], ref buffers[0], plan[batch].Offset, overlapping);
+                    chunkResults[0] = CollectChunk(batchPlans[0], ref buffers[0], batchPlans[0].Offset, overlapping);
                 }
                 else
                 {
@@ -384,7 +396,7 @@ public static class SearchEngine
                     {
                         Parallel.For(0, n, new ParallelOptions { MaxDegreeOfParallelism = n }, k =>
                         {
-                            chunkResults[k] = CollectChunk(plan[batch + k], ref buffers[k], plan[batch + k].Offset, overlapping);
+                            chunkResults[k] = CollectChunk(batchPlans[k], ref buffers[k], batchPlans[k].Offset, overlapping);
                         });
                     }
                     catch (AggregateException ex)
@@ -397,7 +409,7 @@ public static class SearchEngine
                 // 結果は、それより前のチャンクの結果をすべて追加してから追加する (FIND-20 の仕様 2)。
                 for (int k = 0; k < n; k++)
                 {
-                    ChunkPlan p = plan[batch + k];
+                    ChunkPlan p = batchPlans[k];
                     ChunkResult cr = chunkResults[k];
                     if (!overlapping && cr.Matches.Count > 0 && cr.Matches[0].Offset < carriedEnd)
                     {

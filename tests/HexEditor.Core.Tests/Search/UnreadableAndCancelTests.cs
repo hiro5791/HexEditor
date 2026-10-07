@@ -108,7 +108,7 @@ public sealed class UnreadableAndCancelTests
     [Fact]
     public async Task CancelledFindAllKeepsTheMatchesFoundSoFar()
     {
-        // 1 回の読み込みに 2 ms かかるデータソースで、チャンクが 4 KiB (全体で約 1 秒)。
+        // 1 回の読み込みに 5 ms かかるデータソースで、チャンクが 4 KiB、並列数 2 (全体で 0.6 秒以上)。
         var source = new FakeByteSource(1024 * 1024, (o, s) =>
         {
             s.Clear();
