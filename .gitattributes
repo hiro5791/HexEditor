@@ -1,0 +1,13 @@
+# 改行コードを LF に固定する (Windows でも作業ツリーで CRLF に変換しない)
+* text=auto eol=lf
+
+# Windows でしか使わないファイルは CRLF
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# バイナリ
+*.png binary
+*.ico binary
+*.pfx binary
+*.vhdx binary

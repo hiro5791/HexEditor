@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Authors>Hiroyura</Authors>
+    <Company>Hiroyura</Company>
+    <Product>HexEditor</Product>
+    <Copyright>Copyright (c) 2026 Hiroyura</Copyright>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+  <!-- Core と非 UI のプロジェクトは警告をエラーにする (WinUI の生成コードの警告を避けるため App は除く) -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' != 'HexEditor.App'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+</Project>
