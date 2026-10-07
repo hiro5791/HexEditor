@@ -18,6 +18,8 @@
   -Version is the SemVer of the release (PKG-28). Without it the build is 0.0.0-local.
   -PreviousReleaseDir is a folder with the previous Velopack release (vpk download github),
   so that vpk pack can make a delta package (PKG-24 step 5).
+  -TestHooks makes a test build (-p:HexTestHooks=true: the test channel and the Test menu, test strategy 7.2)
+  for the distribution tests in build/tests/. Never release a test build.
 #>
 [CmdletBinding()]
 param(
@@ -26,7 +28,8 @@ param(
     [string]$Version = '0.0.0-local',
     [string]$Commit,
     [string]$Configuration = 'Release',
-    [string]$PreviousReleaseDir
+    [string]$PreviousReleaseDir,
+    [switch]$TestHooks
 )
 
 $ErrorActionPreference = 'Stop'
@@ -54,6 +57,7 @@ $common = @(
     "-p:Platform=$platform", "-p:HexDistro=$Distro", "-p:HexVersion=$Version", '-nologo'
 )
 if ($Commit) { $common += "-p:HexCommit=$Commit" }
+if ($TestHooks) { $common += '-p:HexTestHooks=true' }
 # Pseudo-locales (qps-ploc, qps-plocm) ship only in preview and local builds, not in stable releases (UI-46 spec 3).
 $isStable = $Version -notmatch '-'
 if ($isStable) { $common += '-p:HexPseudoLocales=false' }

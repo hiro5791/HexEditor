@@ -61,6 +61,10 @@ public partial class App : Application
         DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
         AppLog.Info($"Started {env.AppVersion} ({env.Distribution}, {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture})");
 
+        // タスクバーのまとまり (PKG-12 の仕様 4): プロセスに設定した AppUserModelID。MSIX 版はパッケージが決めるので設定しない。
+        // 配布のテスト (TC-PKG-12-03) が、スタートメニューのショートカットの値と比べる。
+        AppLog.Info($"AppUserModelID: {ProcessIdentity.TryGetAppUserModelId() ?? "(not set)"}");
+
         // 外部で編集された設定・コントラストテーマの切り替えを反映する (UI-23 の仕様 7、UI-26 の仕様 3)。
         Settings.Changed += _ => DispatcherQueue.TryEnqueue(() =>
         {
