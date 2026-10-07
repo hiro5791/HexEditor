@@ -251,4 +251,19 @@
   <data name="Start_Open.Content" xml:space="preserve"><value>開く...</value></data>
   <data name="Start_New.Content" xml:space="preserve"><value>新規作成</value></data>
   <data name="Start_DropHint.Text" xml:space="preserve"><value>ここにファイルをドロップしても開けます。</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>サイズを指定して新規作成(Z)...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>サイズを指定して新規作成</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>塗りつぶしの値 (Hex バイト列)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>作成</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>0 以上のサイズを入力してください。</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>00 や DE AD のように、1〜4,096 バイトを Hex で入力してください。</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} はファイルではなくデバイスです。ディスクを開く機能は今後の版で対応します。</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} はフォルダです。フォルダは開けません。</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>ファイルが見つかりません: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>{0} を開く権限がありません。</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>他のアプリが使用中のため、{0} を開けません。</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>{1} が使用中のため、{0} を開けません。</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>このファイルは読み取り専用のため、上書き保存できません。変更は「名前を付けて保存」で保存してください。</value></data>
 </root>

@@ -102,14 +102,7 @@ public sealed partial class MainWindow : Window
     {
         foreach (string file in commandLine.Files)
         {
-            try
-            {
-                Vm.Open(file);
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                ShowNotice(Loc.Format("Error_Open", file, ex.Message), InfoBarSeverity.Error);
-            }
+            TryOpen(file);
         }
 
         if (commandLine.Offset is { } offset && Editor is { } editor
@@ -181,26 +174,6 @@ public sealed partial class MainWindow : Window
 
     private void Tabs_AddTabButtonClick(TabView sender, object args) => Vm.NewDocument();
 
-    private async void Open_Click(object sender, RoutedEventArgs e)
-    {
-        var picker = new FileOpenPicker(WindowId);
-        picker.FileTypeFilter.Add("*");
-        PickFileResult? result = await picker.PickSingleFileAsync();
-        if (result is null)
-        {
-            return;
-        }
-
-        try
-        {
-            Vm.Open(result.Path);
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            ShowNotice(Loc.Format("Error_Open", result.Path, ex.Message), InfoBarSeverity.Error);
-        }
-    }
-
     private async void Save_Click(object sender, RoutedEventArgs e)
     {
         if (Vm.Selected is { } doc)
@@ -223,10 +196,16 @@ public sealed partial class MainWindow : Window
         string? path = doc.FilePath;
         if (saveAs || path is null || !doc.Document.CanSave)
         {
+            // 初期フォルダは元のファイルのフォルダ、無題なら前回保存したフォルダ (ENG-21 の仕様 1)。
             var picker = new FileSavePicker(WindowId)
             {
                 SuggestedFileName = doc.IsUntitled ? doc.DisplayName + ".bin" : doc.DisplayName,
+                SettingsIdentifier = "HexEditor.SaveAs",
             };
+            if (doc.FilePath is { } current && Path.GetDirectoryName(current) is { } folder)
+            {
+                picker.SuggestedFolder = folder;
+            }
             picker.FileTypeChoices.Add(Loc.Get("FileType_All"), [Path.GetExtension(picker.SuggestedFileName) is { Length: > 0 } ext ? ext : ".bin"]);
             PickFileResult? result = await picker.PickSaveFileAsync();
             if (result is null)

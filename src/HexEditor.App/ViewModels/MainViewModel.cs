@@ -38,10 +38,20 @@ public sealed partial class MainViewModel : ObservableObject
     public partial DocumentViewModel? Selected { get; set; }
 
     /// <summary>新規作成 (ENG-10)。長さ 0 の「無題 N」を開く。</summary>
-    public DocumentViewModel NewDocument()
+    public DocumentViewModel NewDocument() => NewDocument(0, [0]);
+
+    /// <summary>
+    /// サイズを指定して新規作成 (ENG-10 の仕様 2)。指定サイズの生成ピース 1 つで作るため、サイズに関係なく即座に開く。
+    /// </summary>
+    public DocumentViewModel NewDocument(long length, byte[] fill)
     {
         string name = Loc.Format("Untitled_Name", ++_untitledCount);
         var doc = new Document(MemoryByteSource.CreateEmpty(name), _options);
+        if (length > 0)
+        {
+            doc.InsertPattern(0, length, fill, Loc.Get("NewSize_Title"));
+        }
+
         return Add(doc, null, name);
     }
 

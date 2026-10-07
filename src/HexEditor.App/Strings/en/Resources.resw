@@ -251,4 +251,19 @@ Length: {2} ({3} bytes)</value></data>
   <data name="Start_Open.Content" xml:space="preserve"><value>Open...</value></data>
   <data name="Start_New.Content" xml:space="preserve"><value>New</value></data>
   <data name="Start_DropHint.Text" xml:space="preserve"><value>You can also drop files here to open them.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>New with size...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>New with size</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Size</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Fill value (hex bytes)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>Enter a size of 0 or more.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>Enter 1 to 4,096 bytes in hex, such as 00 or DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} is a device, not a file. Opening disks will be available in a later version.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} is a folder. Folders can't be opened.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>File not found: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>You don't have permission to open {0}.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>{0} can't be opened because another app is using it.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>{0} can't be opened because it's being used by {1}.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>This file is read-only, so it can't be saved over. Use Save As to save your changes.</value></data>
 </root>

@@ -47,6 +47,7 @@
                                 <KeyboardAccelerator Key="N" Modifiers="Control" />
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="Menu_File_NewWithSize" AutomationProperties.AutomationId="Command_NewWithSize" Click="NewWithSize_Click" />
                         <MenuFlyoutItem x:Uid="Menu_File_Open" AutomationProperties.AutomationId="Command_Open" Click="Open_Click">
                             <MenuFlyoutItem.KeyboardAccelerators>
                                 <KeyboardAccelerator Key="O" Modifiers="Control" />

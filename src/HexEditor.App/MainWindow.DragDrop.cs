@@ -140,8 +140,7 @@ public sealed partial class MainWindow
         {
             if (!string.IsNullOrEmpty(file.Path) && File.Exists(file.Path))
             {
-                Vm.Open(file.Path, insertAt);
-                return true;
+                return TryOpen(file.Path, insertAt) is not null;
             }
 
             // パスを持たない項目は一時ファイルにコピーしてから無題として開く (ENG-12 の仕様 2)。コピーは長時間処理。
