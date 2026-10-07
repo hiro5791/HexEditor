@@ -167,6 +167,11 @@ tools/
   - `Test-Artifacts.ps1`: 配布物の中身 (ビルドするだけで確かめられるもの)
   - `Test-Portable.ps1`: ポータブル版を展開して起動するもの
   - `Test-Installer.ps1`: インストーラ版をインストール・アンインストールするもの
+  - `Test-Distributions.ps1`: 3 種類の配布形態 (1 つのアーキテクチャ) を入れて起動するもの (`ci.yml` の distribution。x64 と ARM64 のランナー)
+  - `Test-Msix.ps1`: MSIX 版をテスト用の証明書で入れるもの (`ci.yml` の msix)
+  - `Test-SameResults.ps1`: 3 種類の配布形態で実行した UI テストの結果を突き合わせるもの (`ci.yml` の ui-distro・same-results)
+  - `Test-Release.ps1`: リリースのワークフローが作ったリリースを調べるもの (`release.yml` の publish)
+  - アプリを操作するテストは、テスト用のビルド (`build/publish.ps1 -TestHooks`) をテスト用の命令の通り道 (7.2) で操作する (`AppDriver.ps1`)。まだない機能に依存する手順は `Skip-TestCase` (理由を付けて「Skipped」) か `Add-TestNote` (「Not checked」の一覧) で示し、失敗にしない。環境変数 `HEX_TEST_CASES` にテストケース ID を並べると、そのテストケースだけを実行する。
 - CI はテストの結果とテストケース ID を突き合わせ、次を一覧にしたレポート (`test-coverage.md`) を作る。
   - 種別が「自動」なのに、対応する自動テストがないテストケース
   - どのテストケースにも対応しない受け入れ基準
