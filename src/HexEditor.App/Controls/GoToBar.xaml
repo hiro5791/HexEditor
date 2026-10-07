@@ -24,6 +24,7 @@
             x:Uid="GoTo_Input"
             Width="240"
             AutomationProperties.AutomationId="GoTo_Input"
+            FlowDirection="LeftToRight"
             FontFamily="Cascadia Mono, Consolas"
             KeyDown="Input_KeyDown"
             TextChanged="Input_TextChanged" />
@@ -33,6 +34,7 @@
             VerticalAlignment="Center"
             AutomationProperties.AutomationId="GoTo_Interpretation"
             AutomationProperties.LiveSetting="Polite"
+            FlowDirection="LeftToRight"
             TextTrimming="CharacterEllipsis" />
         <ComboBox
             x:Name="BaseChoice"

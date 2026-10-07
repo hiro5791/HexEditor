@@ -167,7 +167,12 @@ public sealed partial class MainWindow
         var boxes = new List<(DocumentViewModel Doc, CheckBox Box)>();
         foreach (DocumentViewModel doc in docs)
         {
-            var box = new CheckBox { Content = doc.FilePath ?? doc.DisplayName, IsChecked = true };
+            // ファイルのパスは左から右に固定する (UI-44 の仕様 2)。
+            var box = new CheckBox
+            {
+                Content = new TextBlock { Text = doc.FilePath ?? doc.DisplayName, FlowDirection = FlowDirection.LeftToRight },
+                IsChecked = true,
+            };
             AutomationProperties.SetAutomationId(box, "Close_Item");
             boxes.Add((doc, box));
             list.Children.Add(box);

@@ -35,6 +35,7 @@
             Grid.Column="1"
             Width="260"
             AutomationProperties.AutomationId="Find_Query"
+            FlowDirection="LeftToRight"
             FontFamily="Cascadia Mono, Consolas"
             KeyDown="Query_KeyDown"
             TextChanged="Query_TextChanged" />

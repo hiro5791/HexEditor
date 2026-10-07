@@ -174,7 +174,16 @@ public sealed partial class FindBar : UserControl
 
     private void Query_TextChanged(object sender, TextChangedEventArgs e) => Validate();
 
-    private void Option_Changed(object sender, SelectionChangedEventArgs e) => Validate();
+    private void Option_Changed(object sender, SelectionChangedEventArgs e)
+    {
+        // Hex バイト列の入力は左から右に固定する。テキストの検索は表示言語の向きに従う (UI-44 の仕様 2)。
+        if (Query is not null && KindChoice is not null)
+        {
+            Query.FlowDirection = KindChoice.SelectedIndex == 0 ? FlowDirection.LeftToRight : FlowDirection;
+        }
+
+        Validate();
+    }
 
     /// <summary>検索欄のキー (00-overview 8.4): Enter / Shift+Enter で次 / 前、Esc で検索の取り消し、なければ閉じる。</summary>
     private async void Query_KeyDown(object sender, KeyRoutedEventArgs e)

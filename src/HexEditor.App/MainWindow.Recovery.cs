@@ -195,6 +195,7 @@ public sealed partial class MainWindow
         text.Children.Add(new TextBlock
         {
             Text = location,
+            FlowDirection = FlowDirection.LeftToRight,
             TextTrimming = TextTrimming.CharacterEllipsis,
             Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"],
         });
