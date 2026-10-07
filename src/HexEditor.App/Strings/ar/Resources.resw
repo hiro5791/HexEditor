@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>ملف</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>جديد</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>فتح...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>حفظ</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>حفظ باسم...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>إغلاق</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>إنهاء</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>تحرير</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>تراجع</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>إعادة</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>تحديد الكل</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>تبديل الكتابة الفوقية / الإدراج</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>انتقال</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>بداية الملف</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>نهاية الملف</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>بلا عنوان {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>الإزاحة: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>التحديد: {0}–{1} ({2} بايت)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>الطول: {0} بايت</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>كتابة فوقية</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>إدراج</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>كتابة فوقية (طول ثابت)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>نص</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>معدَّل</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>حفظ: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>ملف ثنائي</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>تعذّر فتح {0}. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>هذا الملف مفتوح في علامة تبويب أخرى. أغلقه أولاً.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>لا توجد مساحة خالية كافية على {0}. المطلوب: {1} بايت، المتاح: {2} بايت.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>يحتوي المستند على بيانات تتعذّر قراءتها، لذا لا يمكن حفظه.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>ليس لديك إذن بحفظ هذا الملف. استخدم «حفظ باسم» لاختيار موقع آخر.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>حدث خطأ أثناء الكتابة ({0}). لم يتم تغيير الملف الأصلي.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>هل تريد حفظ التغييرات في {0}؟</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>ستفقد التغييرات إذا لم تحفظها.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>حفظ</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>عدم الحفظ</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>إلغاء</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>لا يمكن تغيير طول مصدر البيانات هذا، لذا يتوفر وضع الكتابة الفوقية فقط.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>لا يمكن تمثيل هذا الحرف في الترميز الحالي.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>تتم معالجة المستند ولا يمكن تحريره الآن.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>الانتقال إلى إزاحة...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>رجوع</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>للأمام</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>إزاحة أو تعبير (مثل 0x1F00 أو end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>الانتقال إلى</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>نسبةً إلى</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>تلقائي</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>من البداية</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>من المؤشر</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>من النهاية</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>الوحدة</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>بايت</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>صفوف</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>قطاعات</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>التحديد أثناء الانتقال</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>انتقال</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>إغلاق</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>أدخل إزاحة.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>التعبير غير صالح.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>يوجد قوس غير مغلق.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>اسم غير معروف: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>لا توجد إشارة مرجعية باسم «{0}».</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>دالة غير معروفة: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>قسمة على صفر.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>القيمة خارج نطاق 64 بت.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>الرقم غير صالح.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: تتعذّر قراءة البيانات في هذا الموضع.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} غير متاح هنا.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>قبل بداية الملف.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>بعد نهاية الملف ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>بحث</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>بحث...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>البحث عن التالي</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>البحث عن السابق</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>نص</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>نوع البحث</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>الترميز</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>البحث عن (مثل DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>التفاف</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>البحث عن السابق</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>البحث عن التالي</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>إغلاق</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>جارٍ البحث...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>لم يتم العثور عليه.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>لم يتم العثور عليه حتى النهاية.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>لم يتم العثور عليه حتى البداية.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>تم الوصول إلى النهاية؛ تمت المتابعة من البداية.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>تم الوصول إلى البداية؛ تمت المتابعة من النهاية.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>تم إلغاء البحث.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>أدخل قيمة للبحث عنها.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>عدد الأرقام الست عشرية فردي.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>«{0}» ليس رقماً ست عشرياً.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>يمكن أن تصل قيمة البحث إلى 1 MiB كحد أقصى.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>لا يمكن تمثيل «{0}» في هذا الترميز.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>بحث</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>قص</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>نسخ</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>لصق</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>لصق مع الكتابة الفوقية</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} بايت. لا يمكن لصقها إلا داخل HexEditor.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>التحديد أكبر من حد الحافظة، لذا لا يمكن لصقه إلا داخل HexEditor.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>نص الحافظة ليس تسلسل بايتات ست عشرية. انتقل إلى عمود النص للصقه كنص.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>لم يتم لصق البايتات التي تتجاوز نهاية هذا المستند ذي الطول الثابت.</value></data>
+</root>

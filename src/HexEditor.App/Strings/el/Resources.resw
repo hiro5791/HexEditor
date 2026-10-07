@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>Αρχείο</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>Δημιουργία</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Άνοιγμα...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Αποθήκευση ως...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Κλείσιμο</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Έξοδος</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Επεξεργασία</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Αναίρεση</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Ακύρωση αναίρεσης</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Επιλογή όλων</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Εναλλαγή αντικατάστασης / εισαγωγής</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Μετάβαση</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Αρχή αρχείου</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>Τέλος αρχείου</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Χωρίς τίτλο {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Μετατόπιση: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Επιλογή: {0}–{1} ({2} byte)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Μήκος: {0} byte</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Αντικατάσταση</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Εισαγωγή</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Αντικατάσταση (σταθερό μήκος)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Κείμενο</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Τροποποιημένο</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Αποθήκευση: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>Δυαδικό αρχείο</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>Δεν ήταν δυνατό το άνοιγμα του {0}. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>Το αρχείο είναι ανοιχτό σε άλλη καρτέλα. Κλείστε το πρώτα.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>Δεν υπάρχει αρκετός ελεύθερος χώρος στο {0}. Απαιτούνται: {1} byte, διαθέσιμα: {2} byte.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>Το έγγραφο περιέχει δεδομένα που δεν είναι δυνατό να διαβαστούν, επομένως δεν μπορεί να αποθηκευτεί.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>Δεν έχετε δικαίωμα αποθήκευσης αυτού του αρχείου. Χρησιμοποιήστε την επιλογή «Αποθήκευση ως» για να επιλέξετε άλλη θέση.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>Παρουσιάστηκε σφάλμα κατά την εγγραφή ({0}). Το αρχικό αρχείο δεν έχει αλλάξει.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>Αποθήκευση των αλλαγών στο {0};</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Οι αλλαγές σας θα χαθούν αν δεν τις αποθηκεύσετε.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>Χωρίς αποθήκευση</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Άκυρο</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>Το μήκος αυτής της προέλευσης δεδομένων δεν μπορεί να αλλάξει, επομένως είναι διαθέσιμη μόνο η λειτουργία αντικατάστασης.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>Ο χαρακτήρας δεν μπορεί να αναπαρασταθεί στην τρέχουσα κωδικοποίηση.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>Το έγγραφο υποβάλλεται σε επεξεργασία και δεν μπορεί να τροποποιηθεί αυτή τη στιγμή.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Μετάβαση σε μετατόπιση...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Πίσω</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>Εμπρός</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Μετατόπιση ή παράσταση (π.χ. 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Προορισμός</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Σημείο αναφοράς</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Αυτόματα</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>Από την αρχή</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>Από τον δρομέα</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>Από το τέλος</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Μονάδα</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Byte</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Γραμμές</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Τομείς</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Επιλογή κατά τη μετάβαση</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Μετάβαση</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Κλείσιμο</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Εισαγάγετε μια μετατόπιση.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>Η παράσταση δεν είναι έγκυρη.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>Μια παρένθεση δεν έχει κλείσει.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Άγνωστο όνομα: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>Δεν υπάρχει σελιδοδείκτης με το όνομα «{0}».</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Άγνωστη συνάρτηση: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>Διαίρεση με το μηδέν.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>Η τιμή είναι εκτός του εύρους των 64 bit.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>Ο αριθμός δεν είναι έγκυρος.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: δεν είναι δυνατή η ανάγνωση των δεδομένων σε αυτή τη θέση.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>Το {0} δεν είναι διαθέσιμο εδώ.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>Πριν από την αρχή του αρχείου.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>Πέρα από το τέλος του αρχείου ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>Αναζήτηση</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>Εύρεση...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>Εύρεση επόμενου</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>Εύρεση προηγούμενου</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>Κείμενο</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>Τύπος αναζήτησης</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>Κωδικοποίηση</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>Αναζήτηση για (π.χ. DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>Κυκλική αναζήτηση</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>Εύρεση προηγούμενου</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>Εύρεση επόμενου</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>Κλείσιμο</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>Αναζήτηση...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>Δεν βρέθηκε.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>Δεν βρέθηκε έως το τέλος.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>Δεν βρέθηκε έως την αρχή.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>Επιτεύχθηκε το τέλος· η αναζήτηση συνεχίστηκε από την αρχή.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>Επιτεύχθηκε η αρχή· η αναζήτηση συνεχίστηκε από το τέλος.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>Η αναζήτηση ακυρώθηκε.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>Εισαγάγετε μια τιμή για αναζήτηση.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>Το πλήθος των δεκαεξαδικών ψηφίων είναι περιττό.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>Το «{0}» δεν είναι δεκαεξαδικό ψηφίο.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>Η τιμή αναζήτησης μπορεί να είναι έως 1 MiB.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>Το «{0}» δεν μπορεί να αναπαρασταθεί σε αυτή την κωδικοποίηση.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>Αναζήτηση</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Αποκοπή</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Αντιγραφή</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Επικόλληση</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Επικόλληση με αντικατάσταση</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} byte. Μπορεί να επικολληθεί μόνο μέσα στο HexEditor.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Η επιλογή υπερβαίνει το όριο του Προχείρου, επομένως μπορεί να επικολληθεί μόνο μέσα στο HexEditor.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>Το κείμενο του Προχείρου δεν είναι ακολουθία byte σε δεκαεξαδική μορφή. Μεταβείτε στη στήλη κειμένου για να το επικολλήσετε ως κείμενο.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Τα byte πέρα από το τέλος αυτού του εγγράφου σταθερού μήκους δεν επικολλήθηκαν.</value></data>
+</root>

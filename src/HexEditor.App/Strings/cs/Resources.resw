@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>Soubor</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>Nový</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Otevřít...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Uložit</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Uložit jako...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Zavřít</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Konec</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Úpravy</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Zpět</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Znovu</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Vybrat vše</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Přepnout přepisování / vkládání</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Přejít</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Začátek souboru</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>Konec souboru</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Bez názvu {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Posun: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Výběr: {0}–{1} (bajty: {2})</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Délka (bajty): {0}</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Přepisování</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Vkládání</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Přepisování (pevná délka)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Text</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Změněno</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Ukládání: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>Binární soubor</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>{0} nelze otevřít. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>Tento soubor je otevřený na jiné kartě. Nejprve ho zavřete.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>Na {0} není dost volného místa. Potřeba (bajty): {1}, k dispozici (bajty): {2}.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>Dokument obsahuje data, která nelze přečíst, a proto ho nelze uložit.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>Nemáte oprávnění k uložení tohoto souboru. Pomocí příkazu Uložit jako zvolte jiné umístění.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>Při zápisu došlo k chybě ({0}). Původní soubor nebyl změněn.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>Uložit změny do {0}?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Pokud změny neuložíte, budou ztraceny.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Uložit</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>Neukládat</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Zrušit</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>Délku tohoto zdroje dat nelze změnit, proto je k dispozici jen režim přepisování.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>Tento znak nelze v aktuálním kódování vyjádřit.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>Dokument se zpracovává a nyní ho nelze upravovat.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Přejít na posun...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Zpět</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>Vpřed</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Posun nebo výraz (např. 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Přejít na</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Vzhledem k</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Automaticky</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>Od začátku</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>Od kurzoru</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>Od konce</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Jednotka</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Bajty</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Řádky</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Sektory</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Při přesunu vybírat</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Přejít</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Zavřít</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Zadejte posun.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>Výraz není platný.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>Závorka není uzavřená.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Neznámý název: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>Záložka s názvem „{0}“ neexistuje.</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Neznámá funkce: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>Dělení nulou.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>Hodnota je mimo 64bitový rozsah.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>Číslo není platné.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: data na této pozici nelze přečíst.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0}: zde není k dispozici.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>Před začátkem souboru.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>Za koncem souboru ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>Hledat</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>Najít...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>Najít další</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>Najít předchozí</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>Text</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>Typ hledání</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>Kódování</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>Hledat (např. DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>Hledat dokola</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>Najít předchozí</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>Najít další</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>Zavřít</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>Hledání...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>Nenalezeno.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>Do konce nenalezeno.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>Do začátku nenalezeno.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>Dosažen konec; pokračuje se od začátku.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>Dosažen začátek; pokračuje se od konce.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>Hledání bylo zrušeno.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>Zadejte hodnotu, kterou chcete hledat.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>Počet šestnáctkových číslic je lichý.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>„{0}“ není šestnáctková číslice.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>Hledaná hodnota může mít nejvýše 1 MiB.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>„{0}“ nelze v tomto kódování vyjádřit.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>Hledat</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Vyjmout</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Kopírovat</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Vložit</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Vložit s přepsáním</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} B. Lze vložit jen v aplikaci HexEditor.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Výběr přesahuje limit schránky, proto ho lze vložit jen v aplikaci HexEditor.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>Text ve schránce není posloupnost šestnáctkových bajtů. Chcete-li ho vložit jako text, přepněte do textového sloupce.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Bajty za koncem tohoto dokumentu s pevnou délkou nebyly vloženy.</value></data>
+</root>

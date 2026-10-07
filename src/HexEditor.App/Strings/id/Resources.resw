@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>File</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>Baru</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Buka...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Simpan</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Simpan Sebagai...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Tutup</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Keluar</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Edit</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Batalkan</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Ulangi</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Pilih Semua</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Alihkan Timpa / Sisipkan</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Navigasi</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Awal File</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>Akhir File</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Tanpa Judul {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Offset: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Pilihan: {0}–{1} ({2} byte)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Panjang: {0} byte</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Timpa</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Sisipkan</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Timpa (panjang tetap)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Teks</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Diubah</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Simpan: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>File biner</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>Tidak dapat membuka {0}. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>File tersebut terbuka di tab lain. Tutup terlebih dahulu.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>Ruang kosong di {0} tidak cukup. Diperlukan: {1} byte, tersedia: {2} byte.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>Dokumen berisi data yang tidak dapat dibaca, sehingga tidak dapat disimpan.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>Anda tidak memiliki izin untuk menyimpan file ini. Gunakan Simpan Sebagai untuk memilih lokasi lain.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>Terjadi kesalahan saat menulis ({0}). File asli tidak diubah.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>Simpan perubahan pada {0}?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Perubahan Anda akan hilang jika tidak disimpan.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Simpan</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>Jangan simpan</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Batal</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>Panjang sumber data ini tidak dapat diubah, sehingga hanya mode timpa yang tersedia.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>Karakter tidak dapat direpresentasikan dalam pengodean saat ini.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>Dokumen sedang diproses dan tidak dapat diedit saat ini.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Pergi ke Offset...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Kembali</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>Maju</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Offset atau ekspresi (mis. 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Pergi ke</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Relatif terhadap</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Otomatis</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>Dari awal</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>Dari kursor</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>Dari akhir</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Satuan</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Byte</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Baris</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Sektor</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Pilih saat berpindah</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Pergi</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Tutup</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Masukkan offset.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>Ekspresi tidak valid.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>Ada tanda kurung yang tidak ditutup.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Nama tidak dikenal: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>Tidak ada penanda bernama “{0}”.</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Fungsi tidak dikenal: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>Pembagian dengan nol.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>Nilai berada di luar rentang 64-bit.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>Angka tidak valid.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: data di posisi tersebut tidak dapat dibaca.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} tidak tersedia di sini.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>Sebelum awal file.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>Melewati akhir file ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>Cari</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>Temukan...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>Temukan Berikutnya</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>Temukan Sebelumnya</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>Teks</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>Jenis pencarian</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>Pengodean</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>Cari (mis. DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>Cari melingkar</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>Temukan sebelumnya</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>Temukan berikutnya</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>Tutup</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>Mencari...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>Tidak ditemukan.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>Tidak ditemukan hingga akhir.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>Tidak ditemukan hingga awal.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>Mencapai akhir; dilanjutkan dari awal.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>Mencapai awal; dilanjutkan dari akhir.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>Pencarian dibatalkan.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>Masukkan nilai yang akan dicari.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>Jumlah digit heksadesimal ganjil.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>“{0}” bukan digit heksadesimal.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>Nilai pencarian maksimal 1 MiB.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>“{0}” tidak dapat direpresentasikan dalam pengodean ini.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>Temukan</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Potong</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Salin</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Tempel</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Tempel Timpa</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} byte. Hanya dapat ditempel di dalam HexEditor.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Pilihan melebihi batas papan klip, sehingga hanya dapat ditempel di dalam HexEditor.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>Teks di papan klip bukan urutan byte heksadesimal. Beralihlah ke kolom teks untuk menempelkannya sebagai teks.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Byte yang melewati akhir dokumen berpanjang tetap ini tidak ditempel.</value></data>
+</root>

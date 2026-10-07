@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>Tệp</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>Mới</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Mở...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Lưu</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Lưu Như...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Đóng</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Thoát</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Sửa</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Hoàn tác</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Làm lại</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Chọn Tất cả</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Chuyển Ghi đè / Chèn</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Đi tới</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Đầu Tệp</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>Cuối Tệp</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Không có tiêu đề {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Độ lệch: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Vùng chọn: {0}–{1} ({2} byte)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Độ dài: {0} byte</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Ghi đè</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Chèn</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Ghi đè (độ dài cố định)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Văn bản</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Đã sửa đổi</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Lưu: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>Tệp nhị phân</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>Không thể mở {0}. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>Tệp đó đang mở trong một tab khác. Hãy đóng tệp đó trước.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>Không đủ dung lượng trống trên {0}. Cần: {1} byte, còn trống: {2} byte.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>Tài liệu chứa dữ liệu không thể đọc được nên không thể lưu.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>Bạn không có quyền lưu tệp này. Hãy dùng Lưu Như để chọn vị trí khác.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>Đã xảy ra lỗi khi ghi ({0}). Tệp gốc không bị thay đổi.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>Lưu các thay đổi đối với {0}?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Các thay đổi của bạn sẽ bị mất nếu bạn không lưu.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Lưu</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>Không lưu</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Hủy</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>Nguồn dữ liệu này không thể thay đổi độ dài nên chỉ có thể dùng chế độ ghi đè.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>Không thể biểu diễn ký tự này bằng bảng mã hiện tại.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>Tài liệu đang được xử lý và hiện không thể chỉnh sửa.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Đi tới Độ lệch...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Lùi</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>Tiến</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Độ lệch hoặc biểu thức (ví dụ: 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Đi tới</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Tương đối với</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Tự động</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>Từ đầu</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>Từ con trỏ</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>Từ cuối</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Đơn vị</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Byte</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Hàng</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Sector</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Chọn khi di chuyển</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Đi</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Đóng</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Hãy nhập độ lệch.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>Biểu thức không hợp lệ.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>Có dấu ngoặc chưa được đóng.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Tên không xác định: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>Không có dấu trang nào tên là “{0}”.</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Hàm không xác định: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>Chia cho không.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>Giá trị nằm ngoài phạm vi 64 bit.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>Số không hợp lệ.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: không thể đọc dữ liệu tại vị trí đó.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} không khả dụng ở đây.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>Trước đầu tệp.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>Vượt quá cuối tệp ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>Tìm kiếm</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>Tìm...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>Tìm Tiếp</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>Tìm Trước</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>Văn bản</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>Kiểu tìm kiếm</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>Bảng mã</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>Tìm (ví dụ: DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>Tìm vòng</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>Tìm trước</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>Tìm tiếp</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>Đóng</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>Đang tìm...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>Không tìm thấy.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>Không tìm thấy cho đến cuối.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>Không tìm thấy cho đến đầu.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>Đã đến cuối; tiếp tục từ đầu.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>Đã đến đầu; tiếp tục từ cuối.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>Đã hủy tìm kiếm.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>Hãy nhập giá trị cần tìm.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>Số chữ số thập lục phân là số lẻ.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>“{0}” không phải là chữ số thập lục phân.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>Giá trị tìm kiếm tối đa là 1 MiB.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>Không thể biểu diễn “{0}” bằng bảng mã này.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>Tìm</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Cắt</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Sao chép</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Dán</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Dán Ghi đè</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} byte. Chỉ có thể dán bên trong HexEditor.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Vùng chọn lớn hơn giới hạn của bảng tạm nên chỉ có thể dán bên trong HexEditor.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>Văn bản trong bảng tạm không phải là chuỗi byte thập lục phân. Hãy chuyển sang cột văn bản để dán dưới dạng văn bản.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Các byte vượt quá cuối tài liệu có độ dài cố định này đã không được dán.</value></data>
+</root>

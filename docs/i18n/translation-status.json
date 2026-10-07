@@ -1,0 +1,28 @@
+{
+  "$comment": "UI-49: machine = 機械翻訳のまま / reviewed = 人が確認済み / stale = 原文が変わったため再確認が必要",
+  "languages": {
+    "en": "reviewed",
+    "zh-Hans": "machine",
+    "zh-Hant": "machine",
+    "ja": "reviewed",
+    "ko": "machine",
+    "id": "machine",
+    "vi": "machine",
+    "th": "machine",
+    "de": "machine",
+    "fr": "machine",
+    "es": "machine",
+    "pt": "machine",
+    "it": "machine",
+    "ru": "machine",
+    "uk": "machine",
+    "pl": "machine",
+    "cs": "machine",
+    "hu": "machine",
+    "ro": "machine",
+    "el": "machine",
+    "ar": "machine",
+    "tr": "machine",
+    "fa": "machine"
+  }
+}

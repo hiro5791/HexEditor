@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>ไฟล์</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>ใหม่</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>เปิด...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>บันทึกเป็น...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>ปิด</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>ออก</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>แก้ไข</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>เลิกทำ</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>ทำซ้ำ</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>เลือกทั้งหมด</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>สลับเขียนทับ / แทรก</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>ไปที่</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>จุดเริ่มต้นของไฟล์</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>จุดสิ้นสุดของไฟล์</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>ไม่มีชื่อ {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>ออฟเซ็ต: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>ส่วนที่เลือก: {0}–{1} ({2} ไบต์)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>ความยาว: {0} ไบต์</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>เขียนทับ</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>แทรก</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>เขียนทับ (ความยาวคงที่)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>มีการแก้ไข</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>บันทึก: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>ไฟล์ไบนารี</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>ไม่สามารถเปิด {0} ได้ {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>ไฟล์นั้นเปิดอยู่ในแท็บอื่น โปรดปิดแท็บนั้นก่อน</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>พื้นที่ว่างบน {0} ไม่เพียงพอ ต้องการ: {1} ไบต์ มีอยู่: {2} ไบต์</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>เอกสารมีข้อมูลที่ไม่สามารถอ่านได้ จึงไม่สามารถบันทึกได้</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>คุณไม่มีสิทธิ์บันทึกไฟล์นี้ ใช้ "บันทึกเป็น" เพื่อเลือกตำแหน่งอื่น</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>เกิดข้อผิดพลาดขณะเขียน ({0}) ไฟล์ต้นฉบับไม่มีการเปลี่ยนแปลง</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>บันทึกการเปลี่ยนแปลงใน {0} หรือไม่</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>การเปลี่ยนแปลงของคุณจะสูญหายหากคุณไม่บันทึก</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>บันทึก</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>ไม่บันทึก</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>ยกเลิก</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>แหล่งข้อมูลนี้ไม่สามารถเปลี่ยนความยาวได้ จึงใช้ได้เฉพาะโหมดเขียนทับ</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>ไม่สามารถแสดงอักขระนี้ด้วยการเข้ารหัสปัจจุบัน</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>เอกสารกำลังถูกประมวลผลและไม่สามารถแก้ไขได้ในขณะนี้</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>ไปที่ออฟเซ็ต...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>ย้อนกลับ</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>ไปข้างหน้า</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>ออฟเซ็ตหรือนิพจน์ (เช่น 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>ไปที่</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>อ้างอิงจาก</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>อัตโนมัติ</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>จากจุดเริ่มต้น</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>จากเคอร์เซอร์</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>จากจุดสิ้นสุด</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>หน่วย</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>ไบต์</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>แถว</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>เซกเตอร์</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>เลือกขณะย้าย</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>ไป</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>ปิด</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>โปรดใส่ออฟเซ็ต</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>นิพจน์ไม่ถูกต้อง</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>มีวงเล็บที่ยังไม่ได้ปิด</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>ไม่รู้จักชื่อ: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>ไม่มีบุ๊กมาร์กชื่อ “{0}”</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>ไม่รู้จักฟังก์ชัน: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>หารด้วยศูนย์</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>ค่าอยู่นอกช่วง 64 บิต</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>ตัวเลขไม่ถูกต้อง</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: ไม่สามารถอ่านข้อมูลที่ตำแหน่งนั้นได้</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} ไม่พร้อมใช้งานที่นี่</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>อยู่ก่อนจุดเริ่มต้นของไฟล์</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>เกินจุดสิ้นสุดของไฟล์ ({0})</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>ค้นหา</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>ค้นหา...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>ค้นหาถัดไป</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>ค้นหาก่อนหน้า</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>ข้อความ</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>ชนิดการค้นหา</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>การเข้ารหัส</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>ค้นหา (เช่น DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>ค้นหาวนรอบ</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>ค้นหาก่อนหน้า</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>ค้นหาถัดไป</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>ปิด</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>กำลังค้นหา...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>ไม่พบ</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>ไม่พบจนถึงจุดสิ้นสุด</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>ไม่พบจนถึงจุดเริ่มต้น</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>ถึงจุดสิ้นสุดแล้ว ค้นหาต่อจากจุดเริ่มต้น</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>ถึงจุดเริ่มต้นแล้ว ค้นหาต่อจากจุดสิ้นสุด</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>ยกเลิกการค้นหาแล้ว</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>โปรดใส่ค่าที่จะค้นหา</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>จำนวนหลักเลขฐานสิบหกเป็นจำนวนคี่</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>“{0}” ไม่ใช่หลักเลขฐานสิบหก</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>ค่าที่ค้นหามีขนาดได้สูงสุด 1 MiB</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>ไม่สามารถแสดง “{0}” ด้วยการเข้ารหัสนี้</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>ค้นหา</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>ตัด</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>คัดลอก</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>วาง</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>วางทับ</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} ไบต์ วางได้เฉพาะภายใน HexEditor]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>ส่วนที่เลือกมีขนาดใหญ่กว่าขีดจำกัดของคลิปบอร์ด จึงวางได้เฉพาะภายใน HexEditor</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>ข้อความในคลิปบอร์ดไม่ใช่ลำดับไบต์เลขฐานสิบหก สลับไปที่คอลัมน์ข้อความเพื่อวางเป็นข้อความ</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>ไบต์ที่เกินจุดสิ้นสุดของเอกสารความยาวคงที่นี้ไม่ได้ถูกวาง</value></data>
+</root>

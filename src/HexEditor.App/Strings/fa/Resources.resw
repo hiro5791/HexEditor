@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>فایل</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>جدید</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>باز کردن...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>ذخیره</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>ذخیره با نام...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>بستن</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>خروج</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>ویرایش</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>واگرد</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>ازنو</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>انتخاب همه</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>تغییر حالت رونویسی / درج</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>رفتن</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>ابتدای فایل</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>انتهای فایل</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>بی‌نام {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>آفست: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>انتخاب: {0}–{1} ({2} بایت)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>طول: {0} بایت</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>رونویسی</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>درج</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>رونویسی (طول ثابت)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>متن</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>تغییریافته</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>ذخیره: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>فایل دودویی</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>باز کردن {0} ممکن نشد. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>این فایل در زبانه‌ای دیگر باز است. ابتدا آن را ببندید.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>فضای خالی کافی در {0} وجود ندارد. موردنیاز: {1} بایت، موجود: {2} بایت.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>سند حاوی داده‌هایی است که قابل خواندن نیستند، بنابراین ذخیره نمی‌شود.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>اجازهٔ ذخیرهٔ این فایل را ندارید. برای انتخاب مکانی دیگر از «ذخیره با نام» استفاده کنید.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>هنگام نوشتن خطایی رخ داد ({0}). فایل اصلی تغییر نکرده است.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>تغییرات {0} ذخیره شود؟</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>اگر تغییرات را ذخیره نکنید، از دست می‌روند.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>ذخیره</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>ذخیره نشود</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>لغو</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>طول این منبع داده قابل تغییر نیست، بنابراین فقط حالت رونویسی در دسترس است.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>این نویسه در رمزگذاری فعلی قابل نمایش نیست.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>سند در حال پردازش است و اکنون قابل ویرایش نیست.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>رفتن به آفست...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>عقب</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>جلو</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>آفست یا عبارت (مثلاً 0x1F00، end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>رفتن به</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>نسبت به</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>خودکار</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>از ابتدا</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>از مکان‌نما</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>از انتها</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>واحد</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>بایت</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>سطر</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>سکتور</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>انتخاب هنگام حرکت</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>برو</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>بستن</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>یک آفست وارد کنید.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>عبارت معتبر نیست.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>یک پرانتز بسته نشده است.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>نام ناشناخته: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>نشانکی با نام «{0}» وجود ندارد.</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>تابع ناشناخته: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>تقسیم بر صفر.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>مقدار خارج از محدودهٔ 64 بیتی است.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>عدد معتبر نیست.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: داده در این موقعیت قابل خواندن نیست.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} در اینجا در دسترس نیست.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>قبل از ابتدای فایل.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>پس از انتهای فایل ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>جستجو</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>یافتن...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>یافتن بعدی</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>یافتن قبلی</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>متن</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>نوع جستجو</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>رمزگذاری</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>مقدار جستجو (مثلاً DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>چرخشی</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>یافتن قبلی</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>یافتن بعدی</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>بستن</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>در حال جستجو...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>پیدا نشد.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>تا انتها پیدا نشد.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>تا ابتدا پیدا نشد.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>به انتها رسید؛ جستجو از ابتدا ادامه یافت.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>به ابتدا رسید؛ جستجو از انتها ادامه یافت.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>جستجو لغو شد.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>مقداری برای جستجو وارد کنید.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>تعداد ارقام هگزادسیمال فرد است.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>«{0}» رقم هگزادسیمال نیست.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>مقدار جستجو حداکثر می‌تواند 1 MiB باشد.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>«{0}» در این رمزگذاری قابل نمایش نیست.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>جستجو</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>برش</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>رونوشت</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>چسباندن</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>چسباندن با رونویسی</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} بایت. فقط درون HexEditor قابل چسباندن است.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>انتخاب از حد مجاز کلیپ‌بورد بزرگ‌تر است، بنابراین فقط درون HexEditor قابل چسباندن است.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>متن کلیپ‌بورد دنباله‌ای از بایت‌های هگزادسیمال نیست. برای چسباندن آن به‌صورت متن، به ستون متن بروید.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>بایت‌های فراتر از انتهای این سند با طول ثابت چسبانده نشدند.</value></data>
+</root>

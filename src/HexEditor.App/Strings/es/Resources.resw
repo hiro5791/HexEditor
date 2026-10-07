@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>Archivo</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>Nuevo</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Abrir...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Guardar</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Guardar como...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Cerrar</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Salir</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Editar</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Deshacer</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Rehacer</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Seleccionar todo</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Alternar sobrescritura / inserción</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Ir</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Inicio del archivo</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>Final del archivo</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Sin título {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Desplazamiento: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Selección: {0}–{1} ({2} bytes)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Longitud: {0} bytes</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Sobrescritura</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Inserción</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Sobrescritura (longitud fija)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Texto</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Modificado</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Guardar: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>Archivo binario</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>No se pudo abrir {0}. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>Ese archivo está abierto en otra pestaña. Ciérralo primero.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>No hay suficiente espacio libre en {0}. Necesario: {1} bytes; disponible: {2} bytes.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>El documento contiene datos que no se pueden leer, por lo que no se puede guardar.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>No tienes permiso para guardar este archivo. Usa “Guardar como” para elegir otra ubicación.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>Se produjo un error al escribir ({0}). El archivo original no se ha modificado.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>¿Guardar los cambios en {0}?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Si no guardas los cambios, se perderán.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Guardar</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>No guardar</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>Esta fuente de datos no puede cambiar de longitud, por lo que solo está disponible el modo de sobrescritura.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>El carácter no se puede representar en la codificación actual.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>El documento se está procesando y no se puede editar en este momento.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Ir al desplazamiento...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Atrás</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>Adelante</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Desplazamiento o expresión (p. ej., 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Destino</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Relativo a</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Automático</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>Desde el inicio</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>Desde el cursor</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>Desde el final</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Unidad</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Bytes</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Filas</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Sectores</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Seleccionar al desplazarse</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Ir</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Cerrar</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Escribe un desplazamiento.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>La expresión no es válida.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>Falta cerrar un paréntesis.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Nombre desconocido: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>No hay ningún marcador llamado “{0}”.</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Función desconocida: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>División por cero.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>El valor está fuera del intervalo de 64 bits.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>El número no es válido.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: no se pueden leer los datos de esa posición.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} no está disponible aquí.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>Antes del inicio del archivo.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>Más allá del final del archivo ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>Buscar</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>Buscar...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>Buscar siguiente</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>Buscar anterior</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>Texto</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>Tipo de búsqueda</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>Codificación</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>Buscar (p. ej., DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>Búsqueda circular</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>Buscar anterior</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>Buscar siguiente</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>Cerrar</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>Buscando...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>No se encontró.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>No se encontró hasta el final.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>No se encontró hasta el inicio.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>Se llegó al final; se continuó desde el inicio.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>Se llegó al inicio; se continuó desde el final.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>Búsqueda cancelada.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>Escribe un valor para buscar.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>El número de dígitos hexadecimales es impar.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>“{0}” no es un dígito hexadecimal.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>El valor de búsqueda puede tener como máximo 1 MiB.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>“{0}” no se puede representar en esta codificación.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>Búsqueda</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Cortar</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Copiar</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Pegar</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Pegar sobrescribiendo</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bytes. Solo se puede pegar dentro de HexEditor.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>La selección supera el límite del Portapapeles, por lo que solo se puede pegar dentro de HexEditor.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>El texto del Portapapeles no es una secuencia de bytes hex. Cambia a la columna de texto para pegarlo como texto.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>No se pegaron los bytes que superaban el final de este documento de longitud fija.</value></data>
+</root>

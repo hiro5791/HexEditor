@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>Fișier</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>Nou</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Deschidere...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Salvare</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Salvare ca...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Închidere</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Ieșire</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Editare</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Anulare</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Refacere</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Selectare totală</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Comutare suprascriere / inserare</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Salt</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Începutul fișierului</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>Sfârșitul fișierului</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Fără titlu {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Deplasament: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Selecție: {0}–{1} ({2} octeți)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Lungime: {0} octeți</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Suprascriere</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Inserare</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Suprascriere (lungime fixă)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Text</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Modificat</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Salvare: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>Fișier binar</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>Nu s-a putut deschide {0}. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>Fișierul este deschis în altă filă. Închideți-l mai întâi.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>Spațiu liber insuficient pe {0}. Necesar: {1} octeți, disponibil: {2} octeți.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>Documentul conține date care nu pot fi citite, așa că nu poate fi salvat.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>Nu aveți permisiunea de a salva acest fișier. Utilizați „Salvare ca” pentru a alege altă locație.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>A apărut o eroare la scriere ({0}). Fișierul original nu a fost modificat.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>Salvați modificările aduse fișierului {0}?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Modificările se vor pierde dacă nu le salvați.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Salvare</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>Nu salvați</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Anulare</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>Această sursă de date nu își poate modifica lungimea, așa că este disponibil doar modul de suprascriere.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>Caracterul nu poate fi reprezentat în codificarea curentă.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>Documentul este în curs de procesare și nu poate fi editat acum.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Salt la deplasament...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Înapoi</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>Înainte</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Deplasament sau expresie (de ex. 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Destinație</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Relativ la</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Automat</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>De la început</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>De la cursor</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>De la sfârșit</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Unitate</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Octeți</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Rânduri</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Sectoare</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Selectare la deplasare</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Salt</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Închidere</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Introduceți un deplasament.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>Expresia nu este validă.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>O paranteză nu este închisă.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Nume necunoscut: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>Nu există niciun marcaj numit „{0}”.</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Funcție necunoscută: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>Împărțire la zero.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>Valoarea se află în afara intervalului pe 64 de biți.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>Numărul nu este valid.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: datele de la acea poziție nu pot fi citite.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} nu este disponibil aici.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>Înainte de începutul fișierului.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>Dincolo de sfârșitul fișierului ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>Căutare</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>Găsire...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>Găsire următor</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>Găsire anterior</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>Text</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>Tip de căutare</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>Codificare</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>Căutați (de ex. DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>Căutare circulară</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>Găsire anterior</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>Găsire următor</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>Închidere</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>Se caută...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>Nu s-a găsit.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>Nu s-a găsit până la sfârșit.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>Nu s-a găsit până la început.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>S-a ajuns la sfârșit; căutarea a continuat de la început.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>S-a ajuns la început; căutarea a continuat de la sfârșit.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>Căutare anulată.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>Introduceți o valoare de căutat.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>Numărul de cifre hexazecimale este impar.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>„{0}” nu este o cifră hexazecimală.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>Valoarea căutată poate avea cel mult 1 MiB.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>„{0}” nu poate fi reprezentat în această codificare.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>Căutare</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Decupare</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Copiere</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Lipire</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Lipire cu suprascriere</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} octeți. Poate fi lipit doar în HexEditor.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Selecția depășește limita clipboardului, așa că poate fi lipită doar în HexEditor.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>Textul din clipboard nu este o secvență de octeți hexazecimali. Comutați la coloana text pentru a-l lipi ca text.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Octeții de după sfârșitul acestui document cu lungime fixă nu au fost lipiți.</value></data>
+</root>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>Файл</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>Создать</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Открыть...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Сохранить как...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Выход</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Правка</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Отменить</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Повторить</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Выделить все</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Переключить замену / вставку</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Переход</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Начало файла</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>Конец файла</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Без имени {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Смещение: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Выделение: {0}–{1} ({2} байт)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Длина: {0} байт</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Замена</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Вставка</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Замена (фиксированная длина)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Текст</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Изменен</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Сохранение: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>Двоичный файл</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>Не удалось открыть {0}. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>Этот файл открыт на другой вкладке. Сначала закройте его.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>Недостаточно свободного места на {0}. Требуется: {1} байт, доступно: {2} байт.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>Документ содержит данные, которые не удается прочитать, поэтому его нельзя сохранить.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>У вас нет разрешения на сохранение этого файла. Используйте команду «Сохранить как», чтобы выбрать другое расположение.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>Произошла ошибка при записи ({0}). Исходный файл не изменен.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>Сохранить изменения в файле {0}?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Если не сохранить изменения, они будут потеряны.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>Не сохранять</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Отмена</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>Длину этого источника данных изменить нельзя, поэтому доступен только режим замены.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>Этот символ нельзя представить в текущей кодировке.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>Документ обрабатывается, и сейчас его нельзя изменить.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Перейти к смещению...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Назад</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>Вперед</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Смещение или выражение (например, 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Перейти к</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Относительно</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Авто</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>От начала</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>От курсора</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>От конца</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Единица</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Байты</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Строки</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Секторы</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Выделять при переходе</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Перейти</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Введите смещение.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>Недопустимое выражение.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>Не закрыта скобка.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Неизвестное имя: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>Нет закладки с именем «{0}».</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Неизвестная функция: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>Деление на ноль.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>Значение выходит за пределы 64-битного диапазона.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>Недопустимое число.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: не удается прочитать данные в этой позиции.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0}: здесь недоступно.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>До начала файла.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>За концом файла ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>Поиск</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>Найти...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>Найти далее</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>Найти ранее</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>Текст</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>Тип поиска</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>Кодировка</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>Искать (например, DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>Циклический поиск</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>Найти предыдущее</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>Найти следующее</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>Поиск...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>Не найдено.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>Не найдено до конца.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>Не найдено до начала.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>Достигнут конец; поиск продолжен с начала.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>Достигнуто начало; поиск продолжен с конца.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>Поиск отменен.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>Введите значение для поиска.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>Нечетное количество шестнадцатеричных цифр.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>«{0}» не является шестнадцатеричной цифрой.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>Значение для поиска не может превышать 1 МиБ.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>«{0}» нельзя представить в этой кодировке.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>Поиск</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Вырезать</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Копировать</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Вставить</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Вставить с заменой</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} байт. Можно вставить только в HexEditor.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Выделение превышает ограничение буфера обмена, поэтому его можно вставить только в HexEditor.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>Текст в буфере обмена не является последовательностью шестнадцатеричных байтов. Чтобы вставить его как текст, переключитесь на текстовый столбец.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Байты за концом этого документа фиксированной длины не были вставлены.</value></data>
+</root>

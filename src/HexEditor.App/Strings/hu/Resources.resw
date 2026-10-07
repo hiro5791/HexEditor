@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>Fájl</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>Új</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Megnyitás...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Mentés</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Mentés másként...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Bezárás</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Kilépés</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Szerkesztés</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Visszavonás</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Mégis</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Összes kijelölése</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Felülírás / beszúrás váltása</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Ugrás</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Fájl eleje</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>Fájl vége</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Névtelen {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Eltolás: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Kijelölés: {0}–{1} ({2} bájt)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Hossz: {0} bájt</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Felülírás</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Beszúrás</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Felülírás (rögzített hossz)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Szöveg</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Módosítva</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Mentés: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>Bináris fájl</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>Nem sikerült megnyitni: {0}. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>Ez a fájl egy másik lapon meg van nyitva. Előbb zárja be.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>Nincs elég szabad hely itt: {0}. Szükséges: {1} bájt, rendelkezésre áll: {2} bájt.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>A dokumentum olvashatatlan adatokat tartalmaz, ezért nem menthető.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>Nincs engedélye a fájl mentéséhez. Másik hely kiválasztásához használja a Mentés másként parancsot.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>Hiba történt az írás közben ({0}). Az eredeti fájl nem módosult.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>Menti a(z) {0} fájl módosításait?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Ha nem menti a módosításokat, azok elvesznek.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Mentés</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>Nincs mentés</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Mégse</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>Ennek az adatforrásnak a hossza nem módosítható, ezért csak felülírási mód érhető el.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>A karakter nem ábrázolható az aktuális kódolásban.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>A dokumentum feldolgozás alatt áll, ezért most nem szerkeszthető.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Ugrás eltolásra...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Vissza</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>Előre</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Eltolás vagy kifejezés (pl. 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Ugrás ide</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Viszonyítási pont</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Automatikus</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>Az elejétől</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>A kurzortól</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>A végétől</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Egység</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Bájt</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Sor</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Szektor</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Kijelölés mozgatás közben</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Ugrás</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Bezárás</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Adjon meg egy eltolást.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>A kifejezés érvénytelen.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>Egy zárójel nincs lezárva.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Ismeretlen név: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>Nincs „{0}” nevű könyvjelző.</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Ismeretlen függvény: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>Osztás nullával.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>Az érték kívül esik a 64 bites tartományon.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>A szám érvénytelen.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: az adott pozíción lévő adat nem olvasható.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0}: itt nem érhető el.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>A fájl eleje előtt.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>A fájl végén túl ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>Keresés</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>Keresés...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>Következő keresése</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>Előző keresése</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>Szöveg</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>Keresés típusa</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>Kódolás</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>Keresett érték (pl. DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>Körbe</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>Előző keresése</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>Következő keresése</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>Bezárás</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>Keresés...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>Nem található.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>A végéig nem található.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>Az elejéig nem található.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>Elérte a végét; folytatás az elejétől.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>Elérte az elejét; folytatás a végétől.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>A keresés megszakítva.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>Adja meg a keresett értéket.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>A hexadecimális számjegyek száma páratlan.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>„{0}” nem hexadecimális számjegy.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>A keresett érték legfeljebb 1 MiB lehet.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>„{0}” nem ábrázolható ebben a kódolásban.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>Keresés</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Kivágás</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Másolás</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Beillesztés</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Beillesztés felülírással</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bájt. Csak a HexEditoron belül illeszthető be.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>A kijelölés nagyobb a vágólap korlátjánál, ezért csak a HexEditoron belül illeszthető be.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>A vágólapon lévő szöveg nem hexadecimális bájtsorozat. Szövegként való beillesztéshez váltson a szövegoszlopra.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>A rögzített hosszúságú dokumentum végén túli bájtok nem lettek beillesztve.</value></data>
+</root>

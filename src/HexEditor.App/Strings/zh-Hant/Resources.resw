@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>檔案</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>新增</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>開啟...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>儲存</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>另存新檔...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>關閉</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>結束</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>編輯</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>復原</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>取消復原</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>全選</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>切換覆寫/插入</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>移至</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>檔案開頭</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>檔案結尾</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>未命名 {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>位移：{0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>選取範圍：{0}–{1}（{2} 個位元組）</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>長度：{0} 個位元組</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>覆寫</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>插入</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>覆寫（固定長度）</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>文字</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>已修改</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>儲存：{0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>二進位檔案</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>無法開啟 {0}。{1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>該檔案已在另一個索引標籤中開啟。請先將其關閉。</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>{0} 的可用空間不足。需要：{1} 個位元組，可用：{2} 個位元組。</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>文件包含無法讀取的資料，因此無法儲存。</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>您沒有儲存此檔案的權限。請使用「另存新檔」選擇其他位置。</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>寫入時發生錯誤（{0}）。原始檔案並未變更。</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>要儲存對 {0} 的變更嗎？</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>如果不儲存，您的變更將會遺失。</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>儲存</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>不要儲存</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>此資料來源無法變更長度，因此只能使用覆寫模式。</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>目前的編碼無法表示此字元。</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>文件正在處理中，目前無法編輯。</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>移至位移...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>返回</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>前進</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>位移或運算式（例如 0x1F00、end-0x10）</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>移至</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>相對於</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>自動</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>從開頭</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>從游標</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>從結尾</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>單位</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>位元組</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>列</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>磁區</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>移動時選取</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>移至</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>關閉</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>請輸入位移。</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>運算式無效。</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>括號未閉合。</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>不明的名稱：{0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>沒有名為「{0}」的書籤。</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>不明的函式：{0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>除數為零。</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>值超出 64 位元範圍。</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>數字無效。</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}：無法讀取該位置的資料。</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} 在此處無法使用。</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>在檔案開頭之前。</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>超出檔案結尾（{0}）。</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>搜尋</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>尋找...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>找下一個</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>找上一個</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>文字</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>搜尋類型</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>編碼</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>搜尋內容（例如 DE AD ?? EF）</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>循環搜尋</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>找上一個</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>找下一個</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>關閉</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>正在搜尋...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>找不到。</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>搜尋到結尾仍找不到。</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>搜尋到開頭仍找不到。</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>已到達結尾，從開頭繼續。</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>已到達開頭，從結尾繼續。</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>已取消搜尋。</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>請輸入要搜尋的值。</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>十六進位位數為奇數。</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>「{0}」不是十六進位數字。</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>搜尋值最多為 1 MiB。</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>此編碼無法表示「{0}」。</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>尋找</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>剪下</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>複製</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>貼上</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>覆寫貼上</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor：{0} 個位元組。只能在 HexEditor 內貼上。]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>選取範圍超過剪貼簿的上限，因此只能在 HexEditor 內貼上。</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>剪貼簿文字不是十六進位位元組序列。若要以文字貼上，請切換到文字欄。</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>超出此固定長度文件結尾的位元組並未貼上。</value></data>
+</root>

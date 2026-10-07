@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>Dosya</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>Yeni</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Aç...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Farklı Kaydet...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Çıkış</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Düzen</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Geri Al</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Yinele</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Tümünü Seç</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Üzerine Yaz / Ekle Değiştir</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Git</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Dosya Başı</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>Dosya Sonu</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Adsız {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Ofset: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Seçim: {0}–{1} ({2} bayt)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Uzunluk: {0} bayt</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Üzerine Yaz</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Ekle</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Üzerine Yaz (sabit uzunluk)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Metin</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Değiştirildi</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Kaydet: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>İkili dosya</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>{0} açılamadı. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>Bu dosya başka bir sekmede açık. Önce onu kapatın.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>{0} üzerinde yeterli boş alan yok. Gereken: {1} bayt, kullanılabilir: {2} bayt.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>Belge okunamayan veriler içerdiğinden kaydedilemiyor.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>Bu dosyayı kaydetme izniniz yok. Başka bir konum seçmek için Farklı Kaydet'i kullanın.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>Yazma sırasında bir hata oluştu ({0}). Özgün dosya değiştirilmedi.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>{0} üzerindeki değişiklikler kaydedilsin mi?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Kaydetmezseniz değişiklikleriniz kaybolacak.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>Kaydetme</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>Bu veri kaynağının uzunluğu değiştirilemediğinden yalnızca üzerine yazma modu kullanılabilir.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>Bu karakter geçerli kodlamayla gösterilemiyor.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>Belge işleniyor ve şu anda düzenlenemiyor.</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Ofsete Git...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Geri</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>İleri</value></data>
+  <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>Ofset veya ifade (ör. 0x1F00, end-0x10)</value></data>
+  <data name="GoTo_Input_Name" xml:space="preserve"><value>Hedef</value></data>
+  <data name="GoTo_Base_Name" xml:space="preserve"><value>Başlangıç noktası</value></data>
+  <data name="GoTo_Base_Auto.Content" xml:space="preserve"><value>Otomatik</value></data>
+  <data name="GoTo_Base_Start.Content" xml:space="preserve"><value>Baştan</value></data>
+  <data name="GoTo_Base_Cursor.Content" xml:space="preserve"><value>İmleçten</value></data>
+  <data name="GoTo_Base_End.Content" xml:space="preserve"><value>Sondan</value></data>
+  <data name="GoTo_Unit_Name" xml:space="preserve"><value>Birim</value></data>
+  <data name="GoTo_Unit_Bytes.Content" xml:space="preserve"><value>Bayt</value></data>
+  <data name="GoTo_Unit_Rows.Content" xml:space="preserve"><value>Satır</value></data>
+  <data name="GoTo_Unit_Sectors.Content" xml:space="preserve"><value>Sektör</value></data>
+  <data name="GoTo_Select.Content" xml:space="preserve"><value>Giderken seç</value></data>
+  <data name="GoTo_Go.Content" xml:space="preserve"><value>Git</value></data>
+  <data name="GoTo_Close_Name" xml:space="preserve"><value>Kapat</value></data>
+  <data name="GoTo_Error_Empty" xml:space="preserve"><value>Bir ofset girin.</value></data>
+  <data name="GoTo_Error_Syntax" xml:space="preserve"><value>İfade geçerli değil.</value></data>
+  <data name="GoTo_Error_UnclosedParenthesis" xml:space="preserve"><value>Kapatılmamış bir parantez var.</value></data>
+  <data name="GoTo_Error_UnknownName" xml:space="preserve"><value>Bilinmeyen ad: {0}</value></data>
+  <data name="GoTo_Error_UnknownBookmark" xml:space="preserve"><value>“{0}” adlı bir yer işareti yok.</value></data>
+  <data name="GoTo_Error_UnknownFunction" xml:space="preserve"><value>Bilinmeyen işlev: {0}</value></data>
+  <data name="GoTo_Error_DivideByZero" xml:space="preserve"><value>Sıfıra bölme.</value></data>
+  <data name="GoTo_Error_Overflow" xml:space="preserve"><value>Değer 64 bit aralığının dışında.</value></data>
+  <data name="GoTo_Error_InvalidNumber" xml:space="preserve"><value>Sayı geçerli değil.</value></data>
+  <data name="GoTo_Error_Unreadable" xml:space="preserve"><value>{0}: bu konumdaki veriler okunamıyor.</value></data>
+  <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} burada kullanılamaz.</value></data>
+  <data name="GoTo_BeforeStart" xml:space="preserve"><value>Dosyanın başından önce.</value></data>
+  <data name="GoTo_BeyondEnd" xml:space="preserve"><value>Dosyanın sonunun ötesinde ({0}).</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>Ara</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>Bul...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>Sonrakini Bul</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>Öncekini Bul</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>Metin</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>Arama türü</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>Kodlama</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>Aranacak değer (ör. DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>Başa sar</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>Öncekini bul</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>Sonrakini bul</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>Aranıyor...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>Bulunamadı.</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>Sona kadar bulunamadı.</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>Başa kadar bulunamadı.</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>Sona ulaşıldı; baştan devam edildi.</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>Başa ulaşıldı; sondan devam edildi.</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>Arama iptal edildi.</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>Aranacak bir değer girin.</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>Onaltılık basamak sayısı tek.</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>“{0}” bir onaltılık basamak değil.</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>Arama değeri en fazla 1 MiB olabilir.</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>“{0}” bu kodlamayla gösterilemiyor.</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>Bul</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Kes</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Kopyala</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Yapıştır</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Üzerine Yazarak Yapıştır</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bayt. Yalnızca HexEditor içinde yapıştırılabilir.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Seçim pano sınırından büyük olduğundan yalnızca HexEditor içinde yapıştırılabilir.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>Panodaki metin onaltılık bir bayt dizisi değil. Metin olarak yapıştırmak için metin sütununa geçin.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Bu sabit uzunluklu belgenin sonunu aşan baytlar yapıştırılmadı.</value></data>
+</root>
