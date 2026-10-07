@@ -711,8 +711,14 @@ public sealed class ViewTests
     public Task Focus_frame_follows_the_focus() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
-        JsonObject render = await app.RenderAsync();
-        Assert.True(render["focused"]!.GetValue<bool>());
+
+        // フォーカスの枠はフォーカスが来た後の描画で付くため、描かれるまで待つ (負荷の高い CI のランナーで遅れる)。
+        JsonObject render = null!;
+        await app.WaitUntilAsync(async () =>
+        {
+            render = await app.RenderAsync();
+            return render["focused"]!.GetValue<bool>() && render["focusFrame"]!.GetValue<double>() > 0;
+        }, TimeSpan.FromSeconds(10), "the focus frame");
 
         // システムのフォーカス表示と同じ 2 px (FocusVisualPrimaryThickness の既定)。
         Assert.Equal(2, render["focusFrame"]!.GetValue<double>());
