@@ -27,10 +27,14 @@ public sealed class FileTests
         Assert.Equal(["Untitled 1", "Untitled 2", "Untitled 3"], await app.TabNamesAsync());
         Assert.Equal(0, (await app.DocumentAsync())["length"]!.GetValue<long>());
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 2; i >= 0; i--)
         {
+            // 閉じた後、タブの選択が移るのを待ってから次を閉じる。
+            await app.WaitUntilAsync(async () => (await app.StateAsync())["selectedIndex"]!.GetValue<int>() >= 0,
+                TimeSpan.FromSeconds(5), "a selected tab");
             await app.KeyAsync("W", ctrl: true);
-            await app.IdleAsync();
+            int expected = i;
+            await app.WaitUntilAsync(async () => (await app.TabNamesAsync()).Count == expected, TimeSpan.FromSeconds(5), "the tab to close");
         }
 
         Assert.Empty(await app.TabNamesAsync());

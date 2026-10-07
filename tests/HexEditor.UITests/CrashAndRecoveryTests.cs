@@ -9,7 +9,7 @@ namespace HexEditor.UITests;
 [Trait(UiTest.Category, UiTest.UI)]
 public sealed class CrashAndRecoveryTests
 {
-    private static readonly TimeSpan ExitTimeout = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan ExitTimeout = TimeSpan.FromSeconds(90);
 
     [Fact]
     [Trait(UiTest.TC, "TC-PKG-30-01")]

@@ -125,6 +125,11 @@ public sealed class UiTestContext : IAsyncDisposable
         string folder = Path.Combine(ArtifactsRoot, Name);
         try
         {
+            if (Directory.Exists(folder))
+            {
+                Directory.Delete(folder, recursive: true);
+            }
+
             Directory.CreateDirectory(folder);
             await File.WriteAllTextAsync(Path.Combine(folder, "error.txt"), error.ToString());
             for (int i = 0; i < _sessions.Count; i++)
