@@ -213,9 +213,10 @@ public sealed class DocumentSnapshot
 /// <summary>ドキュメントのスナップショットが共有する、データの置き場所。</summary>
 internal sealed class DocumentStorage(IByteSource source, AddBuffer addBuffer, BlockCache cache)
 {
-    public IByteSource Source { get; } = source;
+    /// <summary>元データ。その場保存の後は、保存前の内容を返す重ね合わせ (OverlayByteSource) に差し替える。</summary>
+    public IByteSource Source { get; set; } = source;
 
     public AddBuffer AddBuffer { get; } = addBuffer;
 
-    public BlockCache Cache { get; } = cache;
+    public BlockCache Cache { get; set; } = cache;
 }

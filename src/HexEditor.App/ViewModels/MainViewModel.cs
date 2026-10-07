@@ -52,7 +52,8 @@ public sealed partial class MainViewModel : ObservableObject
     }
 
     /// <summary>
-    /// 保存 (ENG-20〜ENG-22)。長時間処理として実行し、保存中は編集を受け付けない。完了後は UI スレッドで
+    /// 保存 (ENG-20〜ENG-23)。長さが変わらず元のファイルに保存する場合は変更箇所だけを書き込むその場保存、それ以外は
+    /// 一時ファイルと置き換える安全な保存を選ぶ。長時間処理として実行し、保存中は編集を受け付けない。完了後は UI スレッドで
     /// 保存したファイルを新しい元データにする。
     /// </summary>
     public async Task SaveAsync(DocumentViewModel vm, string path)
@@ -60,6 +61,24 @@ public sealed partial class MainViewModel : ObservableObject
         Document doc = vm.Document;
         DocumentSnapshot snapshot = doc.Current;
         string name = Loc.Format("Operation_Save", Path.GetFileName(path));
+        if (InPlaceSaver.CanSaveInPlace(snapshot, path))
+        {
+            try
+            {
+                InPlaceSaveResult result = await Operations.RunAsync(
+                    name, OperationKind.WritesExternal, doc, null,
+                    op => Task.FromResult(InPlaceSaver.Save(snapshot, JournalDirectory, InPlaceSaver.DefaultJournalLimit, op)),
+                    locked => doc.SetEditLock(locked));
+                doc.CompleteInPlaceSave(result);
+                vm.SetSavedPath(path);
+                return;
+            }
+            catch (JournalLimitException)
+            {
+                // 変更量がジャーナルの上限を超える場合は、安全な保存に切り替える (ENG-23 の仕様 3)。
+            }
+        }
+
         FileByteSource saved = await Operations.RunAsync(
             name,
             OperationKind.WritesExternal,
@@ -70,6 +89,9 @@ public sealed partial class MainViewModel : ObservableObject
         doc.CompleteSave(saved);
         vm.SetSavedPath(saved.Path);
     }
+
+    /// <summary>その場保存のジャーナルの置き場所 (ENG-23。復旧用フォルダ)。</summary>
+    private static string JournalDirectory => Path.Combine(Path.GetTempPath(), "HexEditor", "recovery");
 
     public void Close(DocumentViewModel vm)
     {

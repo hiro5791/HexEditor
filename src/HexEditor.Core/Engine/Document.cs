@@ -299,6 +299,36 @@ public sealed class Document : IDisposable
         Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true));
     }
 
+    /// <summary>
+    /// その場保存の完了 (ENG-23)。保存前の版が読む元データを「ファイル + 退避した旧内容」の重ね合わせに差し替え、
+    /// 現在の版はファイルをそのまま指す新しい元データにする。
+    /// </summary>
+    public void CompleteInPlaceSave(Saving.InPlaceSaveResult result)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        DocumentStorage before = _storage;
+        var overlay = new Saving.OverlayByteSource(result.Source, before.AddBuffer, result.Ranges);
+
+        // 前回のその場保存の重ね合わせは、今回の保存の直前の内容 (= 今回の重ね合わせ) を元にするよう付け替える。
+        if (_lastOverlay is { } previous)
+        {
+            previous.Inner = overlay;
+        }
+
+        _lastOverlay = overlay;
+        before.Source = overlay;
+        before.Cache.Dispose();
+        before.Cache = new BlockCache(overlay, _options.CacheCapacity, _options.MaxConcurrentReads);
+
+        _storage = CreateStorage(result.Source, before.AddBuffer);
+        PieceTree tree = result.Source.Length > 0 ? PieceTree.FromPiece(Piece.Original(0, result.Source.Length)) : PieceTree.Empty;
+        History.ReplaceCurrent(new DocumentSnapshot(_storage, tree));
+        History.MarkSaved();
+        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true));
+    }
+
+    private Saving.OverlayByteSource? _lastOverlay;
+
     /// <summary>長時間処理の間、編集を止める・再開する (ENG-09 の仕様 7)。</summary>
     public void SetEditLock(bool locked) => IsEditLocked = locked;
 
@@ -384,7 +414,11 @@ public sealed class Document : IDisposable
         foreach (DocumentStorage storage in _storages)
         {
             storage.Cache.Dispose();
-            storage.Source.Dispose();
+        }
+
+        foreach (IByteSource source in _storages.Select(s => s.Source).Distinct())
+        {
+            source.Dispose();
         }
 
         _storage.AddBuffer.Dispose();
