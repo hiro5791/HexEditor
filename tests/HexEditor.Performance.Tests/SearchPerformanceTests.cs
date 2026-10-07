@@ -30,6 +30,9 @@ public sealed class SearchPerformanceTests
     [Trait(TC, "TC-FIND-01-03")]
     public async Task SearchingHundredGigabytesKeepsMemoryBounded()
     {
+        // 同じプロセスで先に動いた性能テストが確保したままのメモリを OS に返してから計る (性能テストは 1 つずつ同じプロセスで動く)。
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, blocking: true, compacting: true);
+        GC.WaitForPendingFinalizers();
         using var doc = new Document(FileByteSource.Open(TestDataCatalog.Get("TD-SPARSE-100G")), Options());
         SearchPattern pattern = SearchPattern.FromHex("DE AD BE EF CA FE BA BE");
         using var process = Process.GetCurrentProcess();
