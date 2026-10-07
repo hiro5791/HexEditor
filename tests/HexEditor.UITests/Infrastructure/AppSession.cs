@@ -289,11 +289,14 @@ public sealed class AppSession : IAsyncDisposable
         (await WaitForAsync(automationId)).Patterns.Value.Pattern.SetValue(value);
 
     /// <summary>要素の名前 (TextBlock では表示している文字列)。</summary>
-    public async Task<string> UiaNameAsync(string automationId) => (await WaitForAsync(automationId)).Name;
+    public async Task<string> UiaNameAsync(string automationId) => NameOf(await WaitForAsync(automationId));
+
+    /// <summary>要素の名前。名前を持たない要素では空文字列。</summary>
+    public static string NameOf(AutomationElement element) => element.Properties.Name.ValueOrDefault ?? string.Empty;
 
     /// <summary>InfoBar・ダイアログの中の文字列をまとめて取る。</summary>
     public static string AllText(AutomationElement element) =>
-        string.Join("\n", new[] { element.Name }.Concat(element.FindAllDescendants().Select(e => e.Name)).Where(s => !string.IsNullOrEmpty(s)));
+        string.Join("\n", new[] { element }.Concat(element.FindAllDescendants()).Select(NameOf).Where(s => s.Length > 0));
 
     public static bool IsToggled(AutomationElement element) => element.Patterns.Toggle.Pattern.ToggleState.Value == ToggleState.On;
 
