@@ -104,6 +104,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Pegar sobrescribiendo</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bytes. Solo se puede pegar dentro de HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>La selección supera el límite del Portapapeles, por lo que solo se puede pegar dentro de HexEditor.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>La forma de texto de la selección supera el límite del Portapapeles, por lo que solo se copiaron los datos binarios.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>No se pegaron los bytes que superaban el final de este documento de longitud fija.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Recuperar cambios no guardados</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor no se cerró correctamente la última vez. Puedes recuperar los siguientes cambios no guardados.</value></data>

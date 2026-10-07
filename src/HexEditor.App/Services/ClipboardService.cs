@@ -29,10 +29,10 @@ public enum PasteOutcome
 public sealed class ClipboardService
 {
     /// <summary>システムのクリップボードに入れる最大サイズ (EDIT-22 の仕様 4 の既定値)。</summary>
-    public const long SystemLimit = 64L * 1024 * 1024;
+    public const long SystemLimit = ClipboardPlan.DefaultLimit;
 
-    private const string BinaryFormat = "HexEditor.Binary";
-    private const string MetaFormat = "HexEditor.Meta";
+    private const string BinaryFormat = ClipboardPlan.BinaryFormat;
+    private const string MetaFormat = ClipboardPlan.MetaFormat;
 
     private static readonly string InstanceId = Guid.NewGuid().ToString("N");
 
@@ -42,12 +42,16 @@ public sealed class ClipboardService
     /// <summary>
     /// 選択範囲をコピーする。Hex 列なら Hex 文字列、テキスト列なら文字列もテキストとして入れる。
     /// </summary>
-    /// <returns>システムのクリップボードに実データを入れられなかった (上限を超えた) 場合は false。</returns>
-    public async Task<bool> CopyAsync(EditorState editor)
+    /// <returns>
+    /// 入れた形式 (<see cref="ClipboardPlan"/>)。<see cref="ClipboardPlan.InAppOnly"/> (上限を超えた) と
+    /// <see cref="ClipboardPlan.TextOmitted"/> (テキスト形式だけが上限を超えた) は、呼び出し側が InfoBar で知らせる。
+    /// 選択範囲がなければ null。
+    /// </returns>
+    public async Task<ClipboardPlan?> CopyAsync(EditorState editor)
     {
         if (!editor.HasSelection)
         {
-            return true;
+            return null;
         }
 
         long offset = editor.SelectionStart;
@@ -58,18 +62,27 @@ public sealed class ClipboardService
         var package = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
         string meta = JsonSerializer.Serialize(new { instance = InstanceId, serial, offset, length, name = editor.Document.Source.DisplayName });
         package.SetData(MetaFormat, meta);
-        bool withinLimit = length <= SystemLimit;
-        if (withinLimit)
+        byte[]? bytes = null;
+        string? text = null;
+        ClipboardPlan plan = ClipboardPlan.For(length, () =>
         {
-            byte[] bytes = new byte[length];
-            await Task.Run(() => snapshot.Read(offset, bytes));
-            package.SetData(BinaryFormat, await ToStreamAsync(bytes));
-            string text = editor.FormatForClipboard(bytes);
-
-            // テキスト形式は生成後の文字数 × 2 バイトで上限と比べる (EDIT-22 の仕様 4・6)。
-            if ((long)text.Length * 2 <= SystemLimit)
+            // Hex 列の文字数はデータを読まずに分かる。テキスト列は文字コードで変換してから数える。
+            if (editor.ActiveColumn == ActiveColumn.Hex)
             {
-                package.SetText(text);
+                return ClipboardPlan.HexTextLength(length);
+            }
+
+            bytes = ReadSelection(snapshot, offset, length);
+            text = editor.FormatForClipboard(bytes);
+            return text.Length;
+        }, SystemLimit);
+        if (plan.Binary)
+        {
+            bytes ??= await Task.Run(() => ReadSelection(snapshot, offset, length));
+            package.SetData(BinaryFormat, await ToStreamAsync(bytes));
+            if (plan.Text == ClipboardTextKind.Data)
+            {
+                package.SetText(text ?? editor.FormatForClipboard(bytes));
             }
         }
         else
@@ -78,7 +91,14 @@ public sealed class ClipboardService
         }
 
         SetContentWithRetry(package);
-        return withinLimit;
+        return plan;
+    }
+
+    private static byte[] ReadSelection(DocumentSnapshot snapshot, long offset, long length)
+    {
+        byte[] bytes = new byte[length];
+        snapshot.Read(offset, bytes);
+        return bytes;
     }
 
     /// <summary>貼り付け (EDIT-23)。<paramref name="overwrite"/> は上書き貼り付け (Ctrl+B)。</summary>

@@ -104,6 +104,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Überschreibend einfügen</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} Bytes. Kann nur in HexEditor eingefügt werden.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Die Auswahl überschreitet das Limit der Zwischenablage und kann daher nur in HexEditor eingefügt werden.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>Die Textform der Auswahl überschreitet das Limit der Zwischenablage, daher wurden nur die Binärdaten kopiert.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Bytes jenseits des Endes dieses Dokuments mit fester Länge wurden nicht eingefügt.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Nicht gespeicherte Änderungen wiederherstellen</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor wurde beim letzten Mal nicht ordnungsgemäß beendet. Sie können die folgenden nicht gespeicherten Änderungen wiederherstellen.</value></data>

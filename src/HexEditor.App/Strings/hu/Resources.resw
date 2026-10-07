@@ -104,6 +104,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Beillesztés felülírással</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bájt. Csak a HexEditoron belül illeszthető be.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>A kijelölés nagyobb a vágólap korlátjánál, ezért csak a HexEditoron belül illeszthető be.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>A kijelölés szöveges formája nagyobb a vágólap korlátjánál, ezért csak a bináris adatok lettek másolva.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>A rögzített hosszúságú dokumentum végén túli bájtok nem lettek beillesztve.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Nem mentett módosítások helyreállítása</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>A HexEditor legutóbb nem megfelelően lett bezárva. Az alábbi nem mentett módosítások helyreállíthatók.</value></data>

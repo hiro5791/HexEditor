@@ -104,6 +104,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>覆盖粘贴(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor：{0} 字节。只能在 HexEditor 内粘贴。]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>选区超出剪贴板限制，因此只能在 HexEditor 内粘贴。</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>选区的文本形式超出剪贴板限制，因此仅复制了二进制数据。</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>超出此固定长度文档末尾的字节未被粘贴。</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>恢复未保存的更改</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor 上次未正常关闭。你可以恢复下面未保存的更改。</value></data>

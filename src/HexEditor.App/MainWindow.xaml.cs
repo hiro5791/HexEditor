@@ -3,6 +3,7 @@ using HexEditor.App.Controls;
 using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
+using HexEditor.Core.Clipboard;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Notifications;
 using HexEditor.Core.Operations;
@@ -348,9 +349,15 @@ public sealed partial class MainWindow : Window
                     return;
                 }
 
-                if (!await _clipboard.CopyAsync(editor))
+                ClipboardPlan? copied = await _clipboard.CopyAsync(editor);
+                if (copied?.InAppOnly == true)
                 {
                     ShowNotice(Loc.Get("Clipboard_InAppOnly"), InfoBarSeverity.Informational, Vm.Selected);
+                }
+                else if (copied?.TextOmitted == true)
+                {
+                    // テキスト形式だけが上限を超えた (EDIT-22 の仕様 6)。
+                    ShowNotice(Loc.Get("Clipboard_TextOmitted"), InfoBarSeverity.Informational, Vm.Selected);
                 }
 
                 if (command == EditorCommand.Cut)

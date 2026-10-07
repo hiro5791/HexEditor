@@ -104,6 +104,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Tempel Timpa</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} byte. Hanya dapat ditempel di dalam HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Pilihan melebihi batas papan klip, sehingga hanya dapat ditempel di dalam HexEditor.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>Bentuk teks dari pilihan melebihi batas papan klip, sehingga hanya data biner yang disalin.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Byte yang melewati akhir dokumen berpanjang tetap ini tidak ditempel.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Pulihkan perubahan yang belum disimpan</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor tidak ditutup secara normal terakhir kali. Anda dapat memulihkan perubahan yang belum disimpan di bawah ini.</value></data>
