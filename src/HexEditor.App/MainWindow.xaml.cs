@@ -47,6 +47,7 @@ public sealed partial class MainWindow : Window
 
         InitializeStatusBar();
         InitializeDragDrop();
+        InitializeRegions();
 
         // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
         var noticeTimer = DispatcherQueue.CreateTimer();

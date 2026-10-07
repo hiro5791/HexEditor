@@ -1,0 +1,146 @@
+using Microsoft.UI.Input;
+using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Windows.System;
+
+namespace HexEditor.App;
+
+/// <summary>
+/// ウィンドウの領域 (UI-01): 最小サイズ、文書がないときのスタートページ、F6 / Shift+F6 による領域の移動 (UI-52 の仕様 1)。
+/// </summary>
+public sealed partial class MainWindow
+{
+    /// <summary>ウィンドウの最小サイズ (表示倍率 100% 換算。UI-01 の仕様 4)。</summary>
+    public const int MinWidth = 640;
+    public const int MinHeight = 400;
+
+    private void InitializeRegions()
+    {
+        if (AppWindow.Presenter is OverlappedPresenter presenter)
+        {
+            double scale = GetDpiForWindow(Microsoft.UI.Win32Interop.GetWindowFromWindowId(AppWindow.Id)) / 96.0;
+            presenter.PreferredMinimumWidth = (int)(MinWidth * scale);
+            presenter.PreferredMinimumHeight = (int)(MinHeight * scale);
+        }
+
+        Vm.Documents.CollectionChanged += (_, _) => UpdateStartPage();
+        UpdateStartPage();
+
+        // F6 / Shift+F6 はグローバル。検索バーや Hex ビューの中でも同じ動作をする。
+        var next = new KeyboardAccelerator { Key = VirtualKey.F6 };
+        next.Invoked += (_, e) =>
+        {
+            e.Handled = true;
+            MoveToRegion(forward: true);
+        };
+        var previous = new KeyboardAccelerator { Key = VirtualKey.F6, Modifiers = VirtualKeyModifiers.Shift };
+        previous.Invoked += (_, e) =>
+        {
+            e.Handled = true;
+            MoveToRegion(forward: false);
+        };
+        Root.KeyboardAccelerators.Add(next);
+        Root.KeyboardAccelerators.Add(previous);
+        Root.KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
+    }
+
+    /// <summary>文書が 1 つもないときはスタートページを出す (UI-01 の仕様 2)。</summary>
+    private void UpdateStartPage()
+    {
+        bool empty = Vm.Documents.Count == 0;
+        StartPage.Visibility = empty ? Visibility.Visible : Visibility.Collapsed;
+        Tabs.Visibility = empty ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    private enum Region
+    {
+        Tabs,
+        Editor,
+        StatusBar,
+    }
+
+    /// <summary>タブ列 → エディタ → ステータスバー の順にフォーカスを移す (表示されている領域だけ。パネルはフェーズ 1 以降)。</summary>
+    private void MoveToRegion(bool forward)
+    {
+        var regions = new List<Region>();
+        if (Tabs.Visibility == Visibility.Visible && Vm.Documents.Count > 0)
+        {
+            regions.Add(Region.Tabs);
+        }
+
+        regions.Add(Region.Editor);
+        if (StatusBar.Visibility == Visibility.Visible)
+        {
+            regions.Add(Region.StatusBar);
+        }
+
+        Region? current = CurrentRegion();
+        int index = current is { } c ? regions.IndexOf(c) : -1;
+        int target = index < 0 ? (forward ? 0 : regions.Count - 1)
+            : (index + (forward ? 1 : regions.Count - 1)) % regions.Count;
+        Focus(regions[target]);
+    }
+
+    private Region? CurrentRegion()
+    {
+        if (Root.XamlRoot is null || FocusManager.GetFocusedElement(Root.XamlRoot) is not DependencyObject focused)
+        {
+            return null;
+        }
+
+        for (DependencyObject? node = focused; node is not null; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node == StatusBar)
+            {
+                return Region.StatusBar;
+            }
+
+            if (node is Controls.HexView || node == StartPage)
+            {
+                return Region.Editor;
+            }
+
+            if (node is TabViewItem)
+            {
+                return Region.Tabs;
+            }
+        }
+
+        return null;
+    }
+
+    private void Focus(Region region)
+    {
+        switch (region)
+        {
+            case Region.Tabs:
+                if (Tabs.ContainerFromItem(Vm.Selected) is TabViewItem item)
+                {
+                    item.Focus(FocusState.Keyboard);
+                }
+
+                break;
+            case Region.Editor:
+                if (Vm.Documents.Count == 0)
+                {
+                    // スタートページの最初のボタン (「開く」) にフォーカスを置く。
+                    if (FocusManager.FindFirstFocusableElement(StartPage) is Control first)
+                    {
+                        first.Focus(FocusState.Keyboard);
+                    }
+                }
+                else
+                {
+                    FocusEditor();
+                }
+
+                break;
+            case Region.StatusBar:
+                StatusButtons.FirstOrDefault(b => b.Visibility == Visibility.Visible)?.Focus(FocusState.Keyboard);
+                break;
+        }
+    }
+}

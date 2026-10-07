@@ -248,4 +248,7 @@ Length: {2} ({3} bytes)</value></data>
   <data name="Close_AfterSave" xml:space="preserve"><value>Close after saving</value></data>
   <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Open...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>New</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>You can also drop files here to open them.</value></data>
 </root>

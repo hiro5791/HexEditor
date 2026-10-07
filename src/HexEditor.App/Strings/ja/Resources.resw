@@ -248,4 +248,7 @@
   <data name="Close_AfterSave" xml:space="preserve"><value>保存が終わったら閉じる</value></data>
   <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>開く...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>新規作成</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>ここにファイルをドロップしても開けます。</value></data>
 </root>

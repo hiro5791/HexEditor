@@ -85,12 +85,8 @@ public partial class App : Application
         SingleInstance.Redirected += commandLine =>
             DispatcherQueue.TryEnqueue(() => window.OpenFromCommandLine(commandLine, activate: !DevOptions.NoActivate));
 
-        // コマンドラインで指定したファイルを開く (AUTO-37)。指定がなければ無題を 1 つ開く。
+        // コマンドラインで指定したファイルを開く (AUTO-37)。指定がなければスタートページを出す (UI-01 の仕様 2)。
         window.OpenFromCommandLine(Program.CommandLine, activate: false);
-        if (vm.Documents.Count == 0)
-        {
-            vm.NewDocument();
-        }
 
         // 開発中の確認用: 作業の邪魔にならないよう、起動したら前のウィンドウに戻し、自分は後ろに回る。
         nint previous = DevOptions.NoActivate ? DevOptions.ForegroundWindow() : 0;

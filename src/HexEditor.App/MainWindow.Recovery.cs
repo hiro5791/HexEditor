@@ -231,12 +231,6 @@ public sealed partial class MainWindow
             return;
         }
 
-        // 起動時に開いた、何も入力していない無題のドキュメントは閉じる。
-        if (Vm.Documents is [{ IsUntitled: true, Document: { IsModified: false, Length: 0 } } blank])
-        {
-            Vm.Close(blank);
-        }
-
         DocumentViewModel vm = Vm.AddRestored(restored);
         AppLog.Info("Recovered a document");
         if (restored.SourceChanged)
