@@ -39,7 +39,7 @@ public sealed class ResourceTests
     {
         var errors = ResourceChecker.UnusedKeys(
             Load("en").Keys,
-            AppFiles("*.cs").Select(File.ReadAllText),
+            AppFiles("*.cs").Concat(AppFiles("*.appxmanifest")).Select(File.ReadAllText),
             AppFiles("*.xaml").Select(File.ReadAllText)).ToList();
         Assert.True(errors.Count == 0, string.Join(Environment.NewLine, errors));
     }

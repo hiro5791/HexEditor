@@ -33,6 +33,10 @@ public static partial class ResourceChecker
     [GeneratedRegex(@"""([A-Za-z][A-Za-z0-9]*_[A-Za-z0-9_]*)""\s*\+")]
     private static partial Regex CodeKeyPrefix();
 
+    /// <summary>マニフェストからの参照: ms-resource:Key。</summary>
+    [GeneratedRegex(@"ms-resource:([A-Za-z][A-Za-z0-9_]*)")]
+    private static partial Regex ManifestKey();
+
     [GeneratedRegex(@"x:Uid=""([^""]+)""")]
     private static partial Regex XamlUid();
 
@@ -82,6 +86,7 @@ public static partial class ResourceChecker
         foreach (string code in codeFiles)
         {
             exact.UnionWith(CodeKey().Matches(code).Select(m => m.Groups[1].Value));
+            exact.UnionWith(ManifestKey().Matches(code).Select(m => m.Groups[1].Value));
             prefixes.AddRange(CodeKeyPrefix().Matches(code).Select(m => m.Groups[1].Value));
         }
 
