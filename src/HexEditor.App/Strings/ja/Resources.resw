@@ -345,4 +345,9 @@
   <data name="Error_SavePartial" xml:space="preserve"><value>保存に失敗し、ファイルの一部だけが書き換わっています。次回の起動時に復旧できます。</value></data>
   <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} バイト)</value></data>
   <data name="Size_Bytes" xml:space="preserve"><value>{0} バイト</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>Hex として解釈できないため、テキストとして貼り付けました。</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>元に戻す</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>末尾まで貼り付けますか?</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>この文書は長さを変えられません。貼り付けるデータのうち {0} バイトは末尾を越えるため貼り付けません。</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>末尾まで貼り付ける</value></data>
 </root>

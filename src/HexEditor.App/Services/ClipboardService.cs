@@ -82,7 +82,11 @@ public sealed class ClipboardService
     }
 
     /// <summary>貼り付け (EDIT-23)。<paramref name="overwrite"/> は上書き貼り付け (Ctrl+B)。</summary>
-    public async Task<PasteOutcome> PasteAsync(EditorState editor, bool overwrite)
+    /// <param name="confirmTruncate">
+    /// 固定長のドキュメントで末尾を越える場合に、越える N バイトを捨てて末尾まで貼るかを確かめる (ENG-07 の仕様 5)。
+    /// null なら確かめずに末尾まで貼る。
+    /// </param>
+    public async Task<PasteOutcome> PasteAsync(EditorState editor, bool overwrite, Func<long, Task<bool>>? confirmTruncate = null)
     {
         DataPackageView view = Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
 
@@ -93,7 +97,7 @@ public sealed class ClipboardService
             if (json.RootElement.GetProperty("instance").GetString() == InstanceId
                 && InApp.Match(json.RootElement.GetProperty("serial").GetInt64()) is { } clip)
             {
-                return Map(Truncate(editor, allow => editor.Paste(clip.Range, overwrite, allow)));
+                return Map(await TruncateAsync(editor, clip.Range.Length, confirmTruncate, allow => editor.Paste(clip.Range, overwrite, allow)));
             }
         }
         else
@@ -105,27 +109,38 @@ public sealed class ClipboardService
         if (view.Contains(BinaryFormat) && await view.GetDataAsync(BinaryFormat) is IRandomAccessStream stream)
         {
             byte[] data = await ReadAllAsync(stream);
-            return Map(Truncate(editor, allow => editor.Paste(data, overwrite, allow)));
+            return Map(await TruncateAsync(editor, data.Length, confirmTruncate, allow => editor.Paste(data, overwrite, allow)));
         }
 
         // (3) テキスト: テキスト列なら文字コードで変換、Hex 列なら Hex 文字列として読み、読めなければテキストとして貼る。
         if (view.Contains(StandardDataFormats.Text))
         {
             string text = await view.GetTextAsync();
-            return Map(Truncate(editor, allow => editor.PasteText(text, overwrite, allow)));
+            long length = HexText.TryParse(text)?.Length ?? (editor.TextEncoding.TryEncode(text, out byte[]? encoded) ? encoded!.Length : text.Length);
+            return Map(await TruncateAsync(editor, length, confirmTruncate, allow => editor.PasteText(text, overwrite, allow)));
         }
 
         return PasteOutcome.Nothing;
     }
 
     /// <summary>
-    /// 固定長ドキュメントで末尾を越える貼り付け。ENG-07 の仕様 5 の確認ダイアログ (EditorState.PasteOverflow の N バイト) は
-    /// UI で未実装のため、今は確認せずに末尾まで貼る (以前の動作)。
+    /// 固定長ドキュメントで末尾を越える貼り付け (ENG-07 の仕様 5)。越える分があれば確かめ、了承されたら末尾まで貼る。
     /// </summary>
-    private static EditResult Truncate(EditorState editor, Func<bool, EditResult> paste)
+    private static async Task<EditResult> TruncateAsync(EditorState editor, long length, Func<long, Task<bool>>? confirm,
+        Func<bool, EditResult> paste)
     {
         EditResult result = paste(false);
-        return result == EditResult.NeedsTruncateConfirmation ? paste(true) : result;
+        if (result != EditResult.NeedsTruncateConfirmation)
+        {
+            return result;
+        }
+
+        if (confirm is not null && !await confirm(editor.PasteOverflow(length)))
+        {
+            return EditResult.Ignored;
+        }
+
+        return paste(true);
     }
 
     private static PasteOutcome Map(EditResult result) => result switch

@@ -303,6 +303,24 @@ public sealed partial class MainWindow : Window
     private async void HexView_CommandRequested(object? sender, EditorCommand command) => await RunEditorCommandAsync(command);
 
     /// <summary>エディタの範囲のコマンドを実行する (EDIT-22・EDIT-23)。</summary>
+    /// <summary>「貼り付けるデータのうち N バイトは末尾を越えるため貼り付けません」(ENG-07 の仕様 5)。</summary>
+    private async Task<bool> ConfirmTruncateAsync(long overflow)
+    {
+        var dialog = new ContentDialog
+        {
+            XamlRoot = Root.XamlRoot,
+            RequestedTheme = Root.ActualTheme,
+            FlowDirection = Root.FlowDirection,
+            Title = Loc.Get("PasteTruncate_Title"),
+            Content = Loc.Format("PasteTruncate_Body", overflow.ToString("N0")),
+            PrimaryButtonText = Loc.Get("PasteTruncate_Paste"),
+            CloseButtonText = Loc.Get("Common_Cancel"),
+            DefaultButton = ContentDialogButton.Primary,
+        };
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(dialog, "PasteTruncateDialog");
+        return await dialog.ShowAsync() == ContentDialogResult.Primary;
+    }
+
     private async Task RunEditorCommandAsync(EditorCommand command)
     {
         if (Editor is not { } editor)
@@ -340,10 +358,17 @@ public sealed partial class MainWindow : Window
 
                 break;
             default:
-                PasteOutcome outcome = await _clipboard.PasteAsync(editor, command == EditorCommand.PasteOverwrite);
+                PasteOutcome outcome = await _clipboard.PasteAsync(editor, command == EditorCommand.PasteOverwrite, ConfirmTruncateAsync);
+                if (outcome == PasteOutcome.PastedAsText)
+                {
+                    // Hex として読めないテキストはテキストとして貼り、「元に戻す」を付けて知らせる (EDIT-23 の仕様 2)。
+                    ShowNotice(Loc.Get("Clipboard_PastedAsText"), InfoBarSeverity.Informational, Vm.Selected,
+                        undo: new NotificationAction(Loc.Get("Common_Undo"), () => editor.Undo()));
+                    break;
+                }
+
                 string? key = outcome switch
                 {
-                    PasteOutcome.NotHex => "Clipboard_NotHex",
                     PasteOutcome.NotEncodable => "Notice_NotEncodable",
                     PasteOutcome.Truncated => "Clipboard_Truncated",
                     PasteOutcome.FixedLength => "Notice_FixedLength",
