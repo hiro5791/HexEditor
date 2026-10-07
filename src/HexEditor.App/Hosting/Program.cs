@@ -27,6 +27,7 @@ public static class Program
         // 2. 実行環境の判定 (保存先・ログの場所が決まる)。
         CommandLine = CommandLine.Parse(args);
         Environment = AppEnvironment.Detect(CommandLine.TestProfile);
+        TestHooks.Initialize(args, CommandLine);
 
         // 3. 未処理例外の記録 (PKG-30)。
         CrashReporter.Initialize(Environment);
@@ -35,7 +36,7 @@ public static class Program
         WinRT.ComWrappersSupport.InitializeComWrappers();
 
         // 5. 単一インスタンス化。既存のインスタンスがあれば起動を転送して終わる (UI-15)。
-        if (CommandLine.NewInstance is false && SingleInstance.TryRedirect(Environment.InstanceKey))
+        if (CommandLine.NewInstance is false && SingleInstance.TryRedirect(TestHooks.AdjustInstanceKey(Environment.InstanceKey)))
         {
             return 0;
         }

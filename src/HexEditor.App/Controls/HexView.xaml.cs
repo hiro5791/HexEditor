@@ -552,21 +552,23 @@ public sealed partial class HexView : UserControl
 
     private void OnPreviewKeyDown(object sender, KeyRoutedEventArgs e)
     {
-        if (_editor is null)
+        if (HandleKey(e.Key, IsDown(VirtualKey.Shift), IsDown(VirtualKey.Control), IsDown(VirtualKey.Menu)))
         {
-            return;
+            e.Handled = true;
         }
+    }
 
-        bool shift = IsDown(VirtualKey.Shift);
-        bool ctrl = IsDown(VirtualKey.Control);
-        if (IsDown(VirtualKey.Menu))
+    /// <summary>キー 1 つを処理する。処理したら true (テスト用の命令の通り道からも呼ぶ)。</summary>
+    private bool HandleKey(VirtualKey key, bool shift, bool ctrl, bool alt)
+    {
+        if (_editor is null || alt)
         {
             // Alt を含むキーはアプリのコマンド (Alt+← / Alt+→ など) に渡す。
-            return;
+            return false;
         }
 
         bool handled = true;
-        EditorCommand? command = (e.Key, ctrl, shift) switch
+        EditorCommand? command = (key, ctrl, shift) switch
         {
             (VirtualKey.C, true, false) or (VirtualKey.Insert, true, false) => EditorCommand.Copy,
             (VirtualKey.X, true, false) or (VirtualKey.Delete, false, true) => EditorCommand.Cut,
@@ -579,11 +581,10 @@ public sealed partial class HexView : UserControl
         {
             CommandRequested?.Invoke(this, c);
             RestartBlink();
-            e.Handled = true;
-            return;
+            return true;
         }
 
-        switch (e.Key)
+        switch (key)
         {
             case VirtualKey.Left:
                 _editor.MoveLeft(shift);
@@ -644,23 +645,33 @@ public sealed partial class HexView : UserControl
         if (handled)
         {
             RestartBlink();
-            e.Handled = true;
         }
+
+        return handled;
     }
 
     private void OnCharacterReceived(UIElement sender, CharacterReceivedRoutedEventArgs e)
     {
-        if (_editor is null || IsDown(VirtualKey.Control) || char.IsControl(e.Character))
+        if (HandleCharacter(e.Character, IsDown(VirtualKey.Control)))
         {
-            return;
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>入力した文字 1 つを処理する。処理したら true (テスト用の命令の通り道からも呼ぶ)。</summary>
+    private bool HandleCharacter(char character, bool ctrl)
+    {
+        if (_editor is null || ctrl || char.IsControl(character))
+        {
+            return false;
         }
 
         EditResult result = _editor.ActiveColumn == ActiveColumn.Hex
-            ? _editor.TypeHexDigit(e.Character)
-            : _editor.TypeText(e.Character.ToString(), TextEncoding);
+            ? _editor.TypeHexDigit(character)
+            : _editor.TypeText(character.ToString(), TextEncoding);
         Report(result);
         RestartBlink();
-        e.Handled = true;
+        return true;
     }
 
     private void Report(EditResult result)

@@ -1,0 +1,412 @@
+using HexEditor.App.Hosting;
+using HexEditor.App.ViewModels;
+using Microsoft.UI.Xaml;
+
+namespace HexEditor.App.Services;
+
+#if HEX_TEST_HOOKS
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
+using HexEditor.Core.Engine;
+using HexEditor.Core.Operations;
+using HexEditor.Core.Recovery;
+using HexEditor.Core.Sources;
+
+/// <summary>
+/// 異常を再現する仕組み (テスト方針 7.2)。テスト用のビルド (HEX_TEST_HOOKS) だけに入り、
+/// コマンドラインの <c>--test-hooks &lt;設定ファイル&gt;</c> (8.3) とテスト用のメニュー (8.4) で有効にする。
+/// 設定ファイルの書式は <see cref="TestHookSettings"/>。
+/// </summary>
+public static class TestHooks
+{
+    private static readonly object Lock = new();
+    private static readonly HashSet<LongRunningOperation> Watched = new(ReferenceEqualityComparer.Instance);
+    private static int _startupThrown;
+
+    /// <summary>true なら --test-hooks で起動した (テスト用の命令の通り道を開き、ウィンドウを前面に出さない)。</summary>
+    public static bool Active { get; private set; }
+
+    public static TestHookSettings Settings { get; private set; } = new();
+
+    /// <summary>設定ファイルのパス (--test-hooks の値)。</summary>
+    public static string? SettingsPath { get; private set; }
+
+    /// <summary>--test-profile の値。</summary>
+    public static string? TestProfile { get; private set; }
+
+    /// <summary>true ならウィンドウをアクティブにしない (起動時・転送された起動のどちらも)。</summary>
+    public static bool SuppressActivation => Active && Settings.NoActivate;
+
+    /// <summary>時刻の固定 (7.2)。固定しないときは null (既定の時計)。</summary>
+    public static TimeProvider? Time => Settings.FrozenTime is { } t ? new FrozenTimeProvider(t) : null;
+
+    /// <summary>起動の最初 (Program.Main) に呼ぶ。設定ファイルを読む。</summary>
+    public static void Initialize(IReadOnlyList<string> args, Hosting.CommandLine commandLine)
+    {
+        TestProfile = commandLine.TestProfile;
+        for (int i = 0; i + 1 < args.Count; i++)
+        {
+            if (args[i] == "--test-hooks")
+            {
+                SettingsPath = Path.GetFullPath(args[i + 1]);
+            }
+        }
+
+        if (SettingsPath is null)
+        {
+            return;
+        }
+
+        Active = true;
+        try
+        {
+            Settings = TestHookSettings.Parse(File.ReadAllText(SettingsPath));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or FormatException or System.Text.Json.JsonException)
+        {
+            // 設定が読めなくてもテスト用の命令の通り道は開く (原因はログで分かる)。
+            AppLog.Error($"Test hooks: cannot read {SettingsPath}: {ex.Message}");
+        }
+
+        AppLog.Info("Test hooks enabled");
+    }
+
+    /// <summary>
+    /// 単一インスタンスのキー (UI-15)。--test-profile を指定したときは、設定フォルダごとに別のインスタンスにする
+    /// (同じ実行ファイルの普段使いのインスタンスや、並行して走るほかのテストに転送しないため)。
+    /// </summary>
+    public static string AdjustInstanceKey(string key)
+    {
+        if (TestProfile is null)
+        {
+            return key;
+        }
+
+        string full = Path.GetFullPath(TestProfile).TrimEnd(Path.DirectorySeparatorChar).ToUpperInvariant();
+        return key + "-Test-" + Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(full)))[..8];
+    }
+
+    /// <summary>App.OnLaunched の最初に呼ぶ。ウィンドウを作る前の設定 (復旧用データの保存間隔など)。</summary>
+    public static void BeforeLaunch()
+    {
+        if (Settings.RecoveryInterval is { } interval)
+        {
+            App.RecoveryInterval = interval;
+        }
+    }
+
+    /// <summary>
+    /// 起動時に開くファイルのうち、遅延・読み込みエラーを指定したものは包んで開き、仮想のデータソースを開く。
+    /// 残りのファイル (普通に開くもの) を返す。
+    /// </summary>
+    public static Hosting.CommandLine OpenStartupSources(MainViewModel vm, Hosting.CommandLine commandLine)
+    {
+        if (!Active)
+        {
+            return commandLine;
+        }
+
+        var rest = new List<string>();
+        foreach (string file in commandLine.Files)
+        {
+            if (Settings.FileSourceFor(file) is { } spec)
+            {
+                try
+                {
+                    OpenFile(vm, file, spec);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    AppLog.Error($"Test hooks: cannot open: {ex.Message}");
+                }
+            }
+            else
+            {
+                rest.Add(file);
+            }
+        }
+
+        foreach (VirtualSourceSpec spec in Settings.VirtualSources)
+        {
+            OpenVirtual(vm, spec);
+        }
+
+        return commandLine with { Files = rest };
+    }
+
+    /// <summary>
+    /// ウィンドウを前面に出さずに表示する。表示したら true (呼び出し側は Activate しない)。
+    /// WS_EX_NOACTIVATE を付けてから Activate する: Activate しないとタブの中身が読み込まれず、付けないと XAML の
+    /// フォーカスの移動 (Focus) でウィンドウがアクティブになり、作業中の利用者のキー入力を奪ってしまう。
+    /// </summary>
+    public static bool ShowWithoutActivation(Window window)
+    {
+        if (!SuppressActivation)
+        {
+            return false;
+        }
+
+        nint hwnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
+        SetWindowLongPtr(hwnd, GwlExStyle, GetWindowLongPtr(hwnd, GwlExStyle) | WsExNoActivate);
+        window.Activate();
+
+        // 作業中のウィンドウを覆わないよう、一番後ろに回す。
+        SetWindowPos(hwnd, HwndBottom, 0, 0, 0, 0, SwpNoSize | SwpNoMove | SwpNoActivate);
+        return true;
+    }
+
+    /// <summary>ウィンドウを表示した後に呼ぶ。テスト用のメニュー・命令の通り道・保存の異常の再現をつなぐ。</summary>
+    public static void OnLaunched(MainWindow window, MainViewModel vm)
+    {
+        window.AttachTestMenu();
+        if (!Active)
+        {
+            return;
+        }
+
+        vm.Operations.Changed += (_, _) => WatchOperations(vm.Operations);
+        TestSavePoints.AfterJournalWritten = () =>
+        {
+            if (Settings.KillAt == KillPoint.InPlaceAfterJournal)
+            {
+                Kill("in-place save after journal");
+            }
+        };
+
+        TestChannel.Start(window.HandleTestCommandAsync);
+
+        if (Settings.UnhandledException is { } place && Interlocked.Exchange(ref _startupThrown, 1) == 0
+            && place != ExceptionPlace.Save)
+        {
+            var timer = App.DispatcherQueue.CreateTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(Math.Max(1, Settings.UnhandledExceptionDelayMs));
+            timer.IsRepeating = false;
+            timer.Tick += (_, _) => Throw(place);
+            timer.Start();
+        }
+    }
+
+    // ---- データソース ----
+
+    /// <summary>ファイルを、遅延・読み込みエラーを加えたデータソースで開く (7.2「遅いデータソース」「読み込みエラー」)。</summary>
+    public static DocumentViewModel OpenFile(MainViewModel vm, string path, FileSourceSpec spec)
+    {
+        string full = Path.GetFullPath(path);
+        var source = new FaultyByteSource(FileByteSource.Open(full)) { Delay = TimeSpan.FromMilliseconds(spec.DelayMs) };
+        foreach ((long offset, long length) in spec.ReadErrors)
+        {
+            source.AddReadError(offset, length);
+        }
+
+        return AddDocument(vm, new Document(source, vm.DocumentOptions), full, Path.GetFileName(full));
+    }
+
+    /// <summary>仮想のデータソース (7.2) を新しいタブで開く。</summary>
+    public static DocumentViewModel OpenVirtual(MainViewModel vm, VirtualSourceSpec spec)
+    {
+        var inner = new VirtualByteSource(spec.Length, spec.Content, spec.Resizable, spec.Fill, spec.Seed, spec.Name);
+        IByteSource source = inner;
+        if (spec.DelayMs > 0 || spec.ReadErrors.Count > 0)
+        {
+            var faulty = new FaultyByteSource(inner) { Delay = TimeSpan.FromMilliseconds(spec.DelayMs) };
+            foreach ((long offset, long length) in spec.ReadErrors)
+            {
+                faulty.AddReadError(offset, length);
+            }
+
+            source = faulty;
+        }
+
+        return AddDocument(vm, new Document(source, vm.DocumentOptions), null, spec.Name);
+    }
+
+    /// <summary>MainViewModel の新規作成・開くと同じ手順でタブを加える (復旧用データの準備を含む)。</summary>
+    private static DocumentViewModel AddDocument(MainViewModel vm, Document doc, string? path, string name)
+    {
+        DocumentRecovery? recovery = null;
+        try
+        {
+            recovery = new DocumentRecovery(vm.RecoveryRoot, doc.Id);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
+        }
+
+        var document = new DocumentViewModel(doc, path, name) { Recovery = recovery };
+        vm.Memory.Register(doc);
+        vm.Documents.Add(document);
+        vm.Selected = document;
+        return document;
+    }
+
+    // ---- 保存の異常 (7.2「書き込みエラー・空き容量不足」「強制終了」) ----
+
+    private static void WatchOperations(OperationCenter center)
+    {
+        foreach (LongRunningOperation op in center.Active)
+        {
+            lock (Lock)
+            {
+                if (!Watched.Add(op))
+                {
+                    continue;
+                }
+            }
+
+            if (op.Kind == OperationKind.WritesExternal)
+            {
+                op.ProgressChanged += (_, _) => OnSaveProgress(op);
+            }
+        }
+
+        // 終わった保存: 置き換えの直後 (Document.CompleteSave の前) に止める。
+        foreach (LongRunningOperation op in center.History.Take(4))
+        {
+            bool first;
+            lock (Lock)
+            {
+                first = Watched.Remove(op);
+            }
+
+            if (first && op.Kind == OperationKind.WritesExternal && op.State == OperationState.Completed
+                && Settings.KillAt == KillPoint.SaveAfterReplace)
+            {
+                Kill("save after replace");
+            }
+        }
+    }
+
+    /// <summary>
+    /// 保存の進捗の通知 (別スレッド)。保存処理は 4 MiB ごとに進捗を報告するため、指定の位置はその粒度で判定する
+    /// (通知は 100 ms に 1 回までなので、指定の位置以降の最初の通知で起こす)。
+    /// </summary>
+    private static void OnSaveProgress(LongRunningOperation op)
+    {
+        long done = op.ProcessedBytes;
+        if (done <= 0 || op.State != OperationState.Running)
+        {
+            return;
+        }
+
+        if (Settings.KillAt == KillPoint.SaveWrite
+            || (Settings.KillAt == KillPoint.SaveBeforeReplace && op.TotalBytes is long total && done >= total))
+        {
+            Kill("save " + Settings.KillAt);
+        }
+
+        if (Settings.UnhandledException == ExceptionPlace.Save)
+        {
+            throw new TestHookException("save");
+        }
+
+        if (Settings.SaveFault is { } fault && done >= fault.AtByte)
+        {
+            if (fault.Once)
+            {
+                Settings = Settings with { SaveFault = null };
+            }
+
+            AppLog.Info($"Test hooks: save fault ({fault.Kind}) at {done}");
+            throw fault.Kind == SaveFaultKind.DiskFull
+                ? new IOException("There is not enough space on the disk. (test hook)", unchecked((int)0x80070070))
+                : new IOException("The request could not be performed because of an I/O device error. (test hook)", unchecked((int)0x8007045D));
+        }
+    }
+
+    /// <summary>プロセスをその場で終える (TerminateProcess。終了の処理は何も行わない)。</summary>
+    public static void Kill(string point)
+    {
+        AppLog.Info($"Test hooks: kill at {point}");
+        Process.GetCurrentProcess().Kill();
+    }
+
+    // ---- 未処理の例外 (7.2) ----
+
+    /// <summary>指定の場所で未処理の例外を起こす。</summary>
+    public static void Throw(ExceptionPlace place)
+    {
+        AppLog.Info($"Test hooks: throw ({place})");
+        switch (place)
+        {
+            case ExceptionPlace.UiThread:
+                App.DispatcherQueue.TryEnqueue(() => throw new TestHookException("UI thread"));
+                break;
+            case ExceptionPlace.Background:
+                new Thread(() => throw new TestHookException("background thread")) { IsBackground = true }.Start();
+                break;
+            case ExceptionPlace.UnobservedTask:
+                _ = Task.Run(() => throw new TestHookException("unobserved task"));
+                Task.Run(async () =>
+                {
+                    await Task.Delay(200);
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+                });
+                break;
+            case ExceptionPlace.Save:
+                Settings = Settings with { UnhandledException = ExceptionPlace.Save };
+                break;
+        }
+    }
+
+    /// <summary>実行中に設定を変える (テスト用のメニュー・命令の通り道から)。</summary>
+    public static void Update(Func<TestHookSettings, TestHookSettings> change) => Settings = change(Settings);
+
+    private const int GwlExStyle = -20;
+    private const nint WsExNoActivate = 0x08000000;
+    private const nint HwndBottom = 1;
+    private const uint SwpNoSize = 0x0001;
+    private const uint SwpNoMove = 0x0002;
+    private const uint SwpNoActivate = 0x0010;
+
+    [DllImport("user32.dll")]
+    private static extern nint GetWindowLongPtr(nint hWnd, int index);
+
+    [DllImport("user32.dll")]
+    private static extern nint SetWindowLongPtr(nint hWnd, int index, nint value);
+
+    [DllImport("user32.dll")]
+    private static extern bool SetWindowPos(nint hWnd, nint hWndInsertAfter, int x, int y, int cx, int cy, uint flags);
+
+    /// <summary>時刻を固定した時計。経過時間の計測 (GetTimestamp) は実際の時計のまま。</summary>
+    private sealed class FrozenTimeProvider(DateTimeOffset now) : TimeProvider
+    {
+        public override DateTimeOffset GetUtcNow() => now.ToUniversalTime();
+    }
+}
+
+/// <summary>テスト用に起こした例外。</summary>
+public sealed class TestHookException(string place) : Exception($"Unhandled exception raised by the test hooks ({place}).");
+
+#else
+
+/// <summary>製品版では何もしない (異常を再現する仕組みはテスト用のビルドだけ。テスト方針 7.2)。</summary>
+public static class TestHooks
+{
+    public static bool SuppressActivation => false;
+
+    public static TimeProvider? Time => null;
+
+    public static void Initialize(IReadOnlyList<string> args, Hosting.CommandLine commandLine)
+    {
+    }
+
+    public static string AdjustInstanceKey(string key) => key;
+
+    public static void BeforeLaunch()
+    {
+    }
+
+    public static Hosting.CommandLine OpenStartupSources(MainViewModel vm, Hosting.CommandLine commandLine) => commandLine;
+
+    public static bool ShowWithoutActivation(Window window) => false;
+
+    public static void OnLaunched(MainWindow window, MainViewModel vm)
+    {
+    }
+}
+#endif
