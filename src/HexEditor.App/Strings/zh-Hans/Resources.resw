@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>文件末尾</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>无标题 {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>偏移：{0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>选区：{0}–{1}（{2} 字节）</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>长度：{0} 字节</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>覆盖</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>插入</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>覆盖（固定长度）</value></data>

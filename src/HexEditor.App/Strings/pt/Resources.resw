@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Fim do arquivo</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Sem título {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Deslocamento: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Seleção: {0}–{1} ({2} bytes)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Comprimento: {0} bytes</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Substituição</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Inserção</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Substituição (comprimento fixo)</value></data>

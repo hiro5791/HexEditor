@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Cuối Tệp</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Không có tiêu đề {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Độ lệch: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Vùng chọn: {0}–{1} ({2} byte)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Độ dài: {0} byte</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Ghi đè</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Chèn</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Ghi đè (độ dài cố định)</value></data>

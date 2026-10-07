@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Dosya Sonu</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Adsız {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Ofset: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Seçim: {0}–{1} ({2} bayt)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Uzunluk: {0} bayt</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Üzerine Yaz</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Ekle</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Üzerine Yaz (sabit uzunluk)</value></data>

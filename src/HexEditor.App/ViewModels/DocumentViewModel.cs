@@ -3,6 +3,7 @@ using HexEditor.App.Services;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Recovery;
 using HexEditor.Core.View;
+using System.Globalization;
 
 namespace HexEditor.App.ViewModels;
 
@@ -18,9 +19,16 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         // ステータスバー・タブの見出しをまとめて更新する (空の名前は全プロパティの変更)。
         Document.Changed += (_, _) => OnPropertyChanged(string.Empty);
         Editor.Changed += (_, _) => OnPropertyChanged(string.Empty);
+
+        // カーソルの値は、読み込みが終わってから表示する (読み込みの通知はスレッドプールから来る)。
+        var queue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+        Document.DataLoaded += (_, _) => queue?.TryEnqueue(() => OnPropertyChanged(nameof(ValueText)));
     }
 
     public Document Document { get; }
+
+    /// <summary>通知 (文書の範囲の通知をタブの中に出すため。UI-36)。</summary>
+    public Core.Notifications.NotificationCenter? Notifications { get; init; }
 
     /// <summary>このドキュメントの復旧用データ (ENG-27)。作れなかった場合は null (編集は続けられる)。</summary>
     public DocumentRecovery? Recovery { get; init; }
@@ -91,23 +99,74 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(ToolTip));
     }
 
-    /// <summary>ステータスバーの値 (VIEW-40)。</summary>
-    public string CursorText => Loc.Format("Status_Offset", FormatOffset(Editor.Cursor));
+    // ---- ステータスバーの値 (VIEW-40) ----
 
+    private int _hexDigits = StatusFormat.MinHexDigits;
+
+    /// <summary>オフセットの 16 進の桁数。開いている間は増えるときだけ変える (幅が揺れないように。VIEW-19 の仕様 3)。</summary>
+    public int HexDigits
+    {
+        get
+        {
+            _hexDigits = Math.Max(_hexDigits, StatusFormat.HexDigits(Document.Length));
+            return _hexDigits;
+        }
+    }
+
+    private static CultureInfo Culture => CultureInfo.CurrentCulture;
+
+    public string CursorText => Loc.Format("Status_Offset", StatusFormat.Offset(Editor.Cursor, HexDigits));
+
+    /// <summary>カーソルの値: 「値: 4F (79)」。末尾 (データのない位置) と読み込み中は表示しない。</summary>
+    public string ValueText
+    {
+        get
+        {
+            if (Editor.Cursor >= Document.Length)
+            {
+                return string.Empty;
+            }
+
+            Span<byte> value = stackalloc byte[1];
+            Span<ByteState> state = stackalloc ByteState[1];
+            Document.Current.ReadForDisplay(Editor.Cursor, value, state);
+            if (state[0] != ByteState.Valid)
+            {
+                return string.Empty;
+            }
+
+            (string hex, string dec) = StatusFormat.ByteValue(value[0], Culture);
+            return Loc.Format("Status_Value", hex, dec);
+        }
+    }
+
+    /// <summary>選択範囲: 「選択: 0x1F00–0x1FFF (長さ 0x100 = 256)」。開始と最後のバイトの閉区間 (VIEW-40 の仕様 3)。</summary>
     public string SelectionText => Editor.HasSelection
-        ? Loc.Format("Status_Selection", FormatOffset(Editor.SelectionStart), FormatOffset(Editor.SelectionStart + Editor.SelectionLength - 1), Editor.SelectionLength.ToString("N0"))
+        ? Loc.Format("Status_SelectionRange", StatusFormat.Hex(Editor.SelectionStart), StatusFormat.Hex(Editor.SelectionStart + Editor.SelectionLength - 1),
+            StatusFormat.Hex(Editor.SelectionLength), StatusFormat.Number(Editor.SelectionLength, Culture))
         : string.Empty;
 
-    public string ModeText => !Document.CanResize ? Loc.Get("Status_OverwriteFixed")
+    public string SelectionToolTip => Editor.HasSelection
+        ? Loc.Format("Status_SelectionTip", StatusFormat.Offset(Editor.SelectionStart, HexDigits),
+            StatusFormat.Offset(Editor.SelectionStart + Editor.SelectionLength - 1, HexDigits),
+            StatusFormat.Hex(Editor.SelectionLength), StatusFormat.Number(Editor.SelectionLength, Culture))
+        : string.Empty;
+
+    public string ModeText => Editor.ReadOnly ? Loc.Get("Status_ReadOnly")
+        : !Document.CanResize ? Loc.Get("Status_OverwriteFixed")
         : Editor.InsertMode ? Loc.Get("Status_Insert") : Loc.Get("Status_Overwrite");
 
     public string ColumnText => Editor.ActiveColumn == ActiveColumn.Hex ? Loc.Get("Status_ColumnHex") : Loc.Get("Status_ColumnText");
 
-    public string LengthText => Loc.Format("Status_Length", Document.Length.ToString("N0"));
+    /// <summary>テキスト列の文字コード (フェーズ 0 は ASCII。VIEW-21)。</summary>
+    public string EncodingText => "ASCII";
 
-    public string ModifiedText => Document.IsModified ? Loc.Get("Status_Modified") : string.Empty;
+    /// <summary>ファイルサイズ: 「サイズ: 1.50 GB (1,610,612,736 バイト)」(VIEW-40 の仕様 2)。</summary>
+    public string SizeText => StatusFormat.ShortSize(Document.Length, Culture) is { } size
+        ? Loc.Format("Status_Size", size, StatusFormat.Number(Document.Length, Culture))
+        : Loc.Format("Status_SizeBytes", StatusFormat.Number(Document.Length, Culture));
 
-    public static string FormatOffset(long offset) => "0x" + offset.ToString("X");
+    public string ModifiedText => Document.IsModified ? "● " + Loc.Get("Status_Modified") : string.Empty;
 
     /// <summary>閉じる: ドキュメントを解放してから、復旧用データをフォルダごと消す (仕様 5)。</summary>
     public void Dispose()

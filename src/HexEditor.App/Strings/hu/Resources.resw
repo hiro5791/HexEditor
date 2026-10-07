@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Fájl vége</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Névtelen {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Eltolás: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Kijelölés: {0}–{1} ({2} bájt)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Hossz: {0} bájt</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Felülírás</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Beszúrás</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Felülírás (rögzített hossz)</value></data>

@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Dateiende</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Unbenannt {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Offset: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Auswahl: {0}–{1} ({2} Bytes)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Länge: {0} Bytes</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Überschreiben</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Einfügen</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Überschreiben (feste Länge)</value></data>

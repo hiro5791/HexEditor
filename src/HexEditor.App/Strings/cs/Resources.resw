@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Konec souboru</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Bez názvu {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Posun: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Výběr: {0}–{1} (bajty: {2})</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Délka (bajty): {0}</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Přepisování</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Vkládání</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Přepisování (pevná délka)</value></data>

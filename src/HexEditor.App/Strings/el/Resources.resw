@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Τέλος αρχείου</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Χωρίς τίτλο {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Μετατόπιση: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Επιλογή: {0}–{1} ({2} byte)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Μήκος: {0} byte</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Αντικατάσταση</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Εισαγωγή</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Αντικατάσταση (σταθερό μήκος)</value></data>

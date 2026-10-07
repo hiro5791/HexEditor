@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>จุดสิ้นสุดของไฟล์</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>ไม่มีชื่อ {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>ออฟเซ็ต: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>ส่วนที่เลือก: {0}–{1} ({2} ไบต์)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>ความยาว: {0} ไบต์</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>เขียนทับ</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>แทรก</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>เขียนทับ (ความยาวคงที่)</value></data>

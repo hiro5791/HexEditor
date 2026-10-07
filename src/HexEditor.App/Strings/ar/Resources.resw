@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>نهاية الملف</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>بلا عنوان {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>الإزاحة: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>التحديد: {0}–{1} ({2} بايت)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>الطول: {0} بايت</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>كتابة فوقية</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>إدراج</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>كتابة فوقية (طول ثابت)</value></data>

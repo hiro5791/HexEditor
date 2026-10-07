@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Akhir File</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Tanpa Judul {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Offset: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Pilihan: {0}–{1} ({2} byte)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Panjang: {0} byte</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Timpa</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Sisipkan</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Timpa (panjang tetap)</value></data>

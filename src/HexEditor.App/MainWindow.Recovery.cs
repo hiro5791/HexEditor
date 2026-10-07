@@ -1,6 +1,7 @@
 using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
+using HexEditor.Core.Notifications;
 using HexEditor.Core.Recovery;
 using HexEditor.Core.Saving;
 using Microsoft.UI.Xaml;
@@ -65,19 +66,11 @@ public sealed partial class MainWindow
 
     private void ShowCrashNotice(string crashFile)
     {
-        CrashNotice.Message = Loc.Get("Crash_Message");
-        var open = new HyperlinkButton { Content = Loc.Get("Crash_Open") };
-        AutomationProperties.SetAutomationId(open, "CrashNotice_Open");
-        open.Click += async (_, _) => await Windows.System.Launcher.LaunchUriAsync(new Uri(crashFile));
-        var report = new HyperlinkButton { Content = Loc.Get("Crash_Report") };
-        AutomationProperties.SetAutomationId(report, "CrashNotice_Report");
-        report.Click += async (_, _) => await OpenUriAsync(AboutInfo.IssueUrl(Program.Environment, Loc.Get("Crash_ReportNote")));
-        var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-        buttons.Children.Add(open);
-        buttons.Children.Add(report);
-        CrashNotice.ActionButton = null;
-        CrashNotice.Content = buttons;
-        CrashNotice.IsOpen = true;
+        ShowNotice(Loc.Get("Crash_Message"), InfoBarSeverity.Warning, actions:
+        [
+            new NotificationAction(Loc.Get("Crash_Open"), () => _ = Windows.System.Launcher.LaunchUriAsync(new Uri(crashFile))),
+            new NotificationAction(Loc.Get("Crash_Report"), () => _ = OpenUriAsync(AboutInfo.IssueUrl(Program.Environment, Loc.Get("Crash_ReportNote")))),
+        ]);
     }
 
     /// <summary>既定のブラウザで開く。開けなければ URL をクリップボードにコピーして知らせる (UI-40 の「エラー」)。</summary>
@@ -247,10 +240,9 @@ public sealed partial class MainWindow
         AppLog.Info("Recovered a document");
         if (restored.SourceChanged)
         {
-            ShowNotice(Loc.Get("Recovery_SourceChanged"), InfoBarSeverity.Warning);
+            ShowNotice(Loc.Get("Recovery_SourceChanged"), InfoBarSeverity.Warning, vm);
         }
 
         UpdateTitle();
-        _ = vm;
     }
 }

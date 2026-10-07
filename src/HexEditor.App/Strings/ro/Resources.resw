@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Sfârșitul fișierului</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Fără titlu {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Deplasament: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Selecție: {0}–{1} ({2} octeți)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Lungime: {0} octeți</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Suprascriere</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Inserare</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Suprascriere (lungime fixă)</value></data>

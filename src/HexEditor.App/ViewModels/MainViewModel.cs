@@ -29,6 +29,9 @@ public sealed partial class MainViewModel : ObservableObject
 
     public EngineMemory Memory { get; }
 
+    /// <summary>通知 (UI-36)。</summary>
+    public Core.Notifications.NotificationCenter Notifications { get; } = new();
+
     public ObservableCollection<DocumentViewModel> Documents { get; } = [];
 
     [ObservableProperty]
@@ -104,6 +107,7 @@ public sealed partial class MainViewModel : ObservableObject
     public void Close(DocumentViewModel vm)
     {
         Documents.Remove(vm);
+        Notifications.DismissOwnedBy(vm);
         Memory.Unregister(vm.Document);
         vm.Dispose();
         if (Selected == vm)
@@ -123,7 +127,7 @@ public sealed partial class MainViewModel : ObservableObject
     {
         RecoveryRecord record = restored.Record;
         string name = record.Path is null ? record.DisplayName : Path.GetFileName(record.Path);
-        var vm = new DocumentViewModel(restored.Document, record.Path, name) { Recovery = restored.Recovery };
+        var vm = new DocumentViewModel(restored.Document, record.Path, name) { Recovery = restored.Recovery, Notifications = Notifications };
         vm.Editor.ReadOnly = restored.SourceChanged;
         long length = restored.Document.Length;
         if (record.SelectionLength > 0 && record.SelectionStart + record.SelectionLength <= length)
@@ -211,7 +215,7 @@ public sealed partial class MainViewModel : ObservableObject
             AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
         }
 
-        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recovery });
+        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recovery, Notifications = Notifications });
     }
 
     private DocumentViewModel AddViewModel(DocumentViewModel vm)

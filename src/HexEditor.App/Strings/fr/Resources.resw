@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Fin du fichier</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Sans titre {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Décalage : {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Sélection : {0}–{1} ({2} octets)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Longueur : {0} octets</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Refrappe</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Insertion</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Refrappe (longueur fixe)</value></data>

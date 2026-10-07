@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>Кінець файлу</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>Без назви {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>Зміщення: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>Виділення: {0}–{1} ({2} байт)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>Довжина: {0} байт</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>Заміна</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>Вставлення</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>Заміна (фіксована довжина)</value></data>

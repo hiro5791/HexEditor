@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>檔案結尾</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>未命名 {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>位移：{0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>選取範圍：{0}–{1}（{2} 個位元組）</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>長度：{0} 個位元組</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>覆寫</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>插入</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>覆寫（固定長度）</value></data>

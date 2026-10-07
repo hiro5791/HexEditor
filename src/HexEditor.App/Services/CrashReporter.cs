@@ -171,6 +171,6 @@ public static partial class CrashReporter
     private static string Redact(string text) => AppLog.DebugEnabled ? text : PathPattern().Replace(text, "<path>");
 
     /// <summary>ドライブ文字または UNC で始まるパス。</summary>
-    [GeneratedRegex(@"(?:[A-Za-z]:\|\\)[^\s""'<>|*?\r\n]*")]
+    [GeneratedRegex(@"(?:[A-Za-z]:\\|\\\\)[^\s""'<>|*?\r\n]*")]
     private static partial Regex PathPattern();
 }

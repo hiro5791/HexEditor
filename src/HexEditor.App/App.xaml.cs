@@ -4,6 +4,7 @@ using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
+using HexEditor.Core.Settings;
 using Microsoft.UI.Xaml;
 
 namespace HexEditor.App;
@@ -18,10 +19,13 @@ public partial class App : Application
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
         // 未処理の例外は記録する (PKG-30。復旧用データの書き出しは ENG-27 で行う)。
-        UnhandledException += (_, e) => CrashReporter.Handle(e.Exception, exit: false);
+        UnhandledException += (_, e) => CrashReporter.Handle(e.Exception, exit: true);
     }
 
     public static Window Window { get; private set; } = null!;
+
+    /// <summary>設定 (UI-23)。</summary>
+    public static SettingsStore Settings { get; private set; } = null!;
 
     /// <summary>復旧用データの保存間隔 (ENG-27 の仕様 1。設定画面ができるまでは既定の 1 分)。</summary>
     public static TimeSpan RecoveryInterval { get; set; } = TimeSpan.FromMinutes(1);
@@ -31,6 +35,13 @@ public partial class App : Application
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         IAppEnvironment env = Program.Environment;
+
+        // 設定 (UI-23)。アクセントカラーはリソースが参照される前に上書きする (UI-27)。
+        Settings = new SettingsStore(env.Locations.Settings);
+        SettingsLoadStatus settingsStatus = Settings.Load();
+        AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
+        AppLog.Initialize(env.Locations.Logs);
+        Appearance.ApplyAccent(Settings);
         // 追加バッファの一時ファイルは復旧用データと同じフォルダに置き、異常終了後もそのまま参照できるようにする (ENG-27 の仕様 2)。
         var options = new DocumentOptions
         {
@@ -39,8 +50,27 @@ public partial class App : Application
         var vm = new MainViewModel(new OperationCenter(), new EngineMemory(), options, env.Locations.Recovery);
         var window = new MainWindow(vm);
         Window = window;
+        window.ApplyAppearance();
+        window.ShowSettingsStatus(settingsStatus);
         DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
         AppLog.Info($"Started {env.AppVersion} ({env.Distribution}, {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture})");
+
+        // 外部で編集された設定・コントラストテーマの切り替えを反映する (UI-23 の仕様 7、UI-26 の仕様 3)。
+        Settings.Changed += _ => DispatcherQueue.TryEnqueue(() =>
+        {
+            AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
+            window.ApplyAppearance();
+        });
+        Settings.ExternalEditFailed += reason => DispatcherQueue.TryEnqueue(() => window.ShowSettingsEditError(reason));
+        Appearance.SystemColorsChanged += () => DispatcherQueue.TryEnqueue(window.ApplyAppearance);
+        try
+        {
+            Settings.StartWatching();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
+        {
+            AppLog.Warning($"Settings watcher unavailable: {ex.GetType().Name}");
+        }
 
         // 異常終了の直前に未保存の編集内容を書き出す (PKG-30 の仕様 1 の 1)。
         CrashReporter.WriteRecovery = timeout => vm.WriteRecoveryNow(timeout);

@@ -21,8 +21,6 @@
   <data name="Menu_Go_End.Text" xml:space="preserve"><value>انتهای فایل</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>بی‌نام {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>آفست: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>انتخاب: {0}–{1} ({2} بایت)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>طول: {0} بایت</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>رونویسی</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>درج</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>رونویسی (طول ثابت)</value></data>

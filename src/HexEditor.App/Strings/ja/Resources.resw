@@ -4,25 +4,23 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="Menu_File.Title" xml:space="preserve"><value>ファイル</value></data>
-  <data name="Menu_File_New.Text" xml:space="preserve"><value>新規作成</value></data>
-  <data name="Menu_File_Open.Text" xml:space="preserve"><value>開く...</value></data>
-  <data name="Menu_File_Save.Text" xml:space="preserve"><value>保存</value></data>
-  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>名前を付けて保存...</value></data>
-  <data name="Menu_File_Close.Text" xml:space="preserve"><value>閉じる</value></data>
-  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>終了</value></data>
-  <data name="Menu_Edit.Title" xml:space="preserve"><value>編集</value></data>
-  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>元に戻す</value></data>
-  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>やり直し</value></data>
-  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>すべて選択</value></data>
-  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>上書き / 挿入の切り替え</value></data>
-  <data name="Menu_Go.Title" xml:space="preserve"><value>移動</value></data>
-  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>ファイルの先頭</value></data>
-  <data name="Menu_Go_End.Text" xml:space="preserve"><value>ファイルの末尾</value></data>
+  <data name="Menu_File.Title" xml:space="preserve"><value>ファイル(F)</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>新規作成(N)</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>開く(O)...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>保存(S)</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>名前を付けて保存(A)...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>閉じる(C)</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>終了(X)</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>編集(E)</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>元に戻す(U)</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>やり直し(R)</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>すべて選択(A)</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>上書き / 挿入の切り替え(I)</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>移動(G)</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>ファイルの先頭(S)</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>ファイルの末尾(E)</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>無題 {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>オフセット: {0}</value></data>
-  <data name="Status_Selection" xml:space="preserve"><value>選択: {0}–{1} ({2} バイト)</value></data>
-  <data name="Status_Length" xml:space="preserve"><value>長さ: {0} バイト</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>上書き</value></data>
   <data name="Status_Insert" xml:space="preserve"><value>挿入</value></data>
   <data name="Status_OverwriteFixed" xml:space="preserve"><value>上書き (固定長)</value></data>
@@ -45,9 +43,9 @@
   <data name="Notice_FixedLength" xml:space="preserve"><value>このデータソースは長さを変えられないため、上書きモードだけを使えます。</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>この文字は現在の文字コードで表せません。</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>処理中のため編集できません。</value></data>
-  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>オフセットへ移動...</value></data>
-  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>戻る</value></data>
-  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>進む</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>オフセットへ移動(G)...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>戻る(B)</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>進む(F)</value></data>
   <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>オフセットまたは式 (例: 0x1F00、end-0x10)</value></data>
   <data name="GoTo_Input_Name" xml:space="preserve"><value>移動先</value></data>
   <data name="GoTo_Base_Name" xml:space="preserve"><value>基準</value></data>
@@ -75,10 +73,10 @@
   <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} はここでは使えません。</value></data>
   <data name="GoTo_BeforeStart" xml:space="preserve"><value>ファイルの先頭より前です。</value></data>
   <data name="GoTo_BeyondEnd" xml:space="preserve"><value>ファイルの末尾 ({0}) を超えています。</value></data>
-  <data name="Menu_Search.Title" xml:space="preserve"><value>検索</value></data>
-  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>検索...</value></data>
-  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>次を検索</value></data>
-  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>前を検索</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>検索(S)</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>検索(F)...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>次を検索(N)</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>前を検索(V)</value></data>
   <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
   <data name="Find_Kind_Text.Content" xml:space="preserve"><value>テキスト</value></data>
   <data name="Find_Kind_Name" xml:space="preserve"><value>検索の種類</value></data>
@@ -101,10 +99,10 @@
   <data name="Find_Error_TooLong" xml:space="preserve"><value>検索語は 1 MiB までです。</value></data>
   <data name="Find_Error_NotEncodable" xml:space="preserve"><value>「{0}」はこの文字コードで表せません。</value></data>
   <data name="Operation_Find" xml:space="preserve"><value>検索</value></data>
-  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>切り取り</value></data>
-  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>コピー</value></data>
-  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>貼り付け</value></data>
-  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>上書き貼り付け</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>切り取り(T)</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>コピー(C)</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>貼り付け(P)</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>上書き貼り付け(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} バイトのデータ。HexEditor 内でのみ貼り付けできます]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>選択範囲がクリップボードの上限を超えているため、HexEditor の中でだけ貼り付けられます。</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>クリップボードのテキストは Hex のバイト列ではありません。テキストとして貼るにはテキスト列に切り替えてください。</value></data>
@@ -126,4 +124,108 @@
   <data name="Crash_Report" xml:space="preserve"><value>問題を報告</value></data>
   <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor が異常終了しました。クラッシュ情報のファイルの内容を下に貼り付けてください。開いていたファイルの内容は含まれていません。</value></data>
   <data name="Notice_UrlCopied" xml:space="preserve"><value>ブラウザを開けなかったため、リンクをクリップボードにコピーしました。</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>他に {0} 件</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>通知</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>通知の履歴</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>通知の履歴</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(管理者)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(セーフモード)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>設定ファイルを読み込めなかったため、既定の設定で起動しました。壊れたファイルは残してあります。</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>フォルダを開く</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>設定ファイルは新しい版の HexEditor で書かれているため、設定の変更は保存しません。</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>編集された設定ファイルに誤りがあります ({0})。直前の設定を使い続けます。</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>表示(V)</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>テーマ(T)</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Windows の設定に従う(S)</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>ライト(L)</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>ダーク(D)</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>ステータスバー(B)</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>ヘルプ(H)</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>ドキュメント(D)</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>問題を報告(R)...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>バージョン情報(A)</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="About_Version" xml:space="preserve"><value>バージョン</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>チャネル</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>配布形態</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>アーキテクチャ</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>管理者として実行</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>データフォルダを開く</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor はテレメトリを送信しません。利用状況・クラッシュ情報・設定・ファイルの情報をどこにも送りません。この版にはネットワークを使う機能はありません (ヘルプのリンクはブラウザで開きます)。</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor は MIT ライセンスのオープンソースソフトウェアです。</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>情報をコピー</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>サードパーティのライセンス</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>ライセンスのファイルが見つかりません。</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>値: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>選択: {0}–{1} (長さ {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>開始: {0}
+終了 (このバイトを含む): {1}
+長さ: {2} ({3} バイト)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>サイズ: {0} ({1} バイト)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>サイズ: {0} バイト</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>読み取り専用</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>正確なバイト数をクリップボードにコピーしました。</value></data>
+  <data name="Status_Hide" xml:space="preserve"><value>非表示</value></data>
+  <data name="Status_ItemsMenu" xml:space="preserve"><value>ステータスバーに表示</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>カーソル位置</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>カーソルの値</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>操作中の列</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>文字コード</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>入力モード</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>変更の有無</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>ファイルサイズ</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>処理センター</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>通知</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>処理センター</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>実行中の処理はありません。</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>完了した項目を消去</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>処理中 ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/秒</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>残り約 {0} 分</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>残り約 {0} 秒</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>経過 {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>キャンセルしています...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>完了</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>失敗: {0}</value></data>
 </root>

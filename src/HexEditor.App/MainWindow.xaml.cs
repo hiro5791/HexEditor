@@ -4,6 +4,7 @@ using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Engine;
+using HexEditor.Core.Notifications;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Saving;
 using HexEditor.Core.View;
@@ -35,11 +36,57 @@ public sealed partial class MainWindow : Window
         {
             if (e.PropertyName == nameof(MainViewModel.Selected))
             {
-                UpdateTitle();
+                WatchSelectedForTitle();
             }
         };
         Closed += MainWindow_Closed;
+
+        // 非アクティブのときはタイトルを薄い色にする (UI-02 の仕様 6)。
+        Activated += (_, e) => WindowTitle.Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources[
+            e.WindowActivationState == WindowActivationState.Deactivated ? "TextFillColorDisabledBrush" : "TextFillColorPrimaryBrush"];
+
+        InitializeStatusBar();
+
+        // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
+        var noticeTimer = DispatcherQueue.CreateTimer();
+        noticeTimer.Interval = TimeSpan.FromSeconds(1);
+        noticeTimer.Tick += (_, _) => Vm.Notifications.Tick();
+        noticeTimer.Start();
     }
+
+    /// <summary>テーマ・背景素材を反映する (UI-26、UI-27)。</summary>
+    public void ApplyAppearance()
+    {
+        Appearance.Apply(this, Root, App.Settings);
+        UpdateThemeMenu();
+    }
+
+    /// <summary>設定ファイルを読んだ結果を知らせる (UI-23 の「エラー」と仕様 6)。</summary>
+    public void ShowSettingsStatus(Core.Settings.SettingsLoadStatus status)
+    {
+        if (status == Core.Settings.SettingsLoadStatus.Broken)
+        {
+            ShowNotice(Loc.Get("Settings_Broken"), InfoBarSeverity.Warning, actions:
+            [
+                new NotificationAction(Loc.Get("Settings_OpenFolder"), () => _ = Windows.System.Launcher.LaunchFolderPathAsync(App.Settings.Folder)),
+            ]);
+        }
+        else if (status == Core.Settings.SettingsLoadStatus.TooNew)
+        {
+            ShowNotice(Loc.Get("Settings_TooNew"), InfoBarSeverity.Warning);
+        }
+    }
+
+    /// <summary>外部で編集された設定ファイルが読めない (直前の値を使い続ける)。</summary>
+    public void ShowSettingsEditError(string reason) =>
+        ShowNotice(Loc.Format("Settings_ExternalError", reason), InfoBarSeverity.Error);
+
+    /// <summary>通知の履歴の時刻の表示。</summary>
+    public static string FormatHistoryTime(DateTime utc) => utc.ToLocalTime().ToString("T");
+
+    /// <summary>「他に N 件」: 通知の履歴を開く (UI-36 の仕様 3)。</summary>
+    private void Notifications_OverflowClicked(object? sender, EventArgs e) =>
+        NotificationHistoryFlyout.ShowAt(NotificationHistoryButton);
 
     public MainViewModel Vm { get; }
 
@@ -75,11 +122,55 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// タイトル (UI-02 の仕様 3): 「● 文書名 - HexEditor」。未保存の変更があれば ●、管理者として実行中は「(管理者)」、
+    /// セーフモードでは「(セーフモード)」を付ける。プレビュー版は「HexEditor Preview」。
+    /// </summary>
     private void UpdateTitle()
     {
-        string title = Vm.Selected is { } d ? $"{d.DisplayName} - HexEditor" : "HexEditor";
+        IAppEnvironment env = Program.Environment;
+        string app = env.Channel == "Preview" ? "HexEditor Preview" : "HexEditor";
+        string title = Vm.Selected is { } d ? $"{(d.Document.IsModified ? "● " : string.Empty)}{d.DisplayName} - {app}" : app;
+        if (env.IsElevated)
+        {
+            title += " " + Loc.Get("Title_Administrator");
+        }
+
+        if (Program.CommandLine.SafeMode)
+        {
+            title += " " + Loc.Get("Title_SafeMode");
+        }
+
         Title = title;
-        AppTitleBar.Title = title;
+        WindowTitle.Text = title;
+    }
+
+    private DocumentViewModel? _titleSource;
+
+    /// <summary>選んでいる文書の変更 (編集・保存) でタイトルを更新する。</summary>
+    private void WatchSelectedForTitle()
+    {
+        if (_titleSource is not null)
+        {
+            _titleSource.PropertyChanged -= TitleSource_PropertyChanged;
+        }
+
+        _titleSource = Vm.Selected;
+        if (_titleSource is not null)
+        {
+            _titleSource.PropertyChanged += TitleSource_PropertyChanged;
+        }
+
+        UpdateTitle();
+        UpdateCommandStates();
+        QueueStatusBarLayout();
+    }
+
+    private void TitleSource_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        UpdateTitle();
+        UpdateCommandStates();
+        QueueStatusBarLayout();
     }
 
     // ---- ファイル ----
@@ -144,7 +235,7 @@ public sealed partial class MainWindow : Window
             path = result.Path;
             if (Vm.Documents.Any(d => d != doc && string.Equals(d.FilePath, path, StringComparison.OrdinalIgnoreCase)))
             {
-                ShowNotice(Loc.Get("Error_SaveOpenElsewhere"), InfoBarSeverity.Error);
+                ShowNotice(Loc.Get("Error_SaveOpenElsewhere"), InfoBarSeverity.Error, Vm.Selected);
                 return false;
             }
         }
@@ -161,19 +252,19 @@ public sealed partial class MainWindow : Window
         }
         catch (InsufficientSpaceException ex)
         {
-            ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error);
+            ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error, Vm.Selected);
         }
         catch (UnreadableDataException)
         {
-            ShowNotice(Loc.Get("Error_Unreadable"), InfoBarSeverity.Error);
+            ShowNotice(Loc.Get("Error_Unreadable"), InfoBarSeverity.Error, Vm.Selected);
         }
         catch (UnauthorizedAccessException)
         {
-            ShowNotice(Loc.Get("Error_SaveDenied"), InfoBarSeverity.Error);
+            ShowNotice(Loc.Get("Error_SaveDenied"), InfoBarSeverity.Error, Vm.Selected);
         }
         catch (IOException ex)
         {
-            ShowNotice(Loc.Format("Error_SaveIo", ex.Message), InfoBarSeverity.Error);
+            ShowNotice(Loc.Format("Error_SaveIo", ex.Message), InfoBarSeverity.Error, Vm.Selected);
         }
 
         return false;
@@ -200,7 +291,7 @@ public sealed partial class MainWindow : Window
     {
         if (Vm.Operations.ActiveFor(doc.Document).Count > 0)
         {
-            ShowNotice(Loc.Get("Notice_Busy"), InfoBarSeverity.Warning);
+            ShowNotice(Loc.Get("Notice_Busy"), InfoBarSeverity.Error, Vm.Selected);
             return false;
         }
 
@@ -298,13 +389,13 @@ public sealed partial class MainWindow : Window
 
                 if (command == EditorCommand.Cut && (!editor.Document.CanResize || editor.ReadOnly))
                 {
-                    ShowNotice(Loc.Get("Notice_FixedLength"), InfoBarSeverity.Informational);
+                    ShowNotice(Loc.Get("Notice_FixedLength"), InfoBarSeverity.Error, Vm.Selected);
                     return;
                 }
 
                 if (!await _clipboard.CopyAsync(editor, encoding))
                 {
-                    ShowNotice(Loc.Get("Clipboard_InAppOnly"), InfoBarSeverity.Informational);
+                    ShowNotice(Loc.Get("Clipboard_InAppOnly"), InfoBarSeverity.Informational, Vm.Selected);
                 }
 
                 if (command == EditorCommand.Cut)
@@ -326,7 +417,7 @@ public sealed partial class MainWindow : Window
                 };
                 if (key is not null)
                 {
-                    ShowNotice(Loc.Get(key), InfoBarSeverity.Informational);
+                    ShowNotice(Loc.Get(key), InfoBarSeverity.Error, Vm.Selected);
                 }
 
                 break;
@@ -337,7 +428,7 @@ public sealed partial class MainWindow : Window
     {
         if (Editor?.ToggleInsertMode() == EditResult.FixedLength)
         {
-            ShowNotice(Loc.Get("Notice_FixedLength"), InfoBarSeverity.Informational);
+            ShowNotice(Loc.Get("Notice_FixedLength"), InfoBarSeverity.Error, Vm.Selected);
         }
     }
 
@@ -425,13 +516,22 @@ public sealed partial class MainWindow : Window
             EditResult.NotEncodable => "Notice_NotEncodable",
             _ => "Notice_Busy",
         };
-        ShowNotice(Loc.Get(key), InfoBarSeverity.Informational);
+        ShowNotice(Loc.Get(key), InfoBarSeverity.Error, Vm.Selected);
     }
 
-    private void ShowNotice(string message, InfoBarSeverity severity)
+    /// <summary>
+    /// 通知を出す (UI-36)。<paramref name="document"/> を指定すると、その文書のタブの中に出す (文書の範囲)。
+    /// </summary>
+    private Notification ShowNotice(string message, InfoBarSeverity severity, DocumentViewModel? document = null,
+        NotificationAction? undo = null, IReadOnlyList<NotificationAction>? actions = null)
     {
-        Notice.Message = message;
-        Notice.Severity = severity;
-        Notice.IsOpen = true;
+        AppLog.Info($"Notice ({severity}): {message}");
+        return Vm.Notifications.Show(
+            document is null ? NotificationScope.Window : NotificationScope.Document,
+            (NotificationSeverity)(int)severity,
+            message,
+            document,
+            undo,
+            actions);
     }
 }
