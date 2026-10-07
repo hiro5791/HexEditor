@@ -84,44 +84,65 @@ public sealed partial class MainViewModel : ObservableObject
     }
 
     /// <summary>
-    /// 保存 (ENG-20〜ENG-23)。長さが変わらず元のファイルに保存する場合は変更箇所だけを書き込むその場保存、それ以外は
-    /// 一時ファイルと置き換える安全な保存を選ぶ。長時間処理として実行し、保存中は編集を受け付けない。完了後は UI スレッドで
-    /// 保存したファイルを新しい元データにする。
+    /// 保存 (ENG-20〜ENG-23)。方式の選択と事前の確認は Core の <see cref="SavePlanner"/> が行う。長時間処理として実行し、保存中は
+    /// 編集を受け付けない。完了後は UI スレッドで保存したファイルを新しい元データにする。
+    /// <paramref name="confirm"/> は確認の要る計画 (ジャーナルの上限超え・空き容量不足など。<see cref="SavePlan.Issue"/>) を UI で
+    /// 確かめ、続ける計画 (<see cref="SavePlanner.UseSafeSave"/> など) を返す。null を返すとキャンセル。<paramref name="confirm"/> を
+    /// 渡さない場合は、問題を例外 (<see cref="JournalLimitException"/>・<see cref="InsufficientSpaceException"/>・
+    /// <see cref="FileSizeLimitException"/>) で知らせる (方式を勝手に切り替えない)。
     /// </summary>
-    public async Task SaveAsync(DocumentViewModel vm, string path)
+    /// <returns>保存した (変更がなく何もしなかった場合を含む) か。キャンセルなら false。</returns>
+    public async Task<bool> SaveAsync(DocumentViewModel vm, string path, Func<SavePlan, Task<SavePlan?>>? confirm = null)
     {
         Document doc = vm.Document;
-        DocumentSnapshot snapshot = doc.Current;
-        string name = Loc.Format("Operation_Save", Path.GetFileName(path));
-        if (InPlaceSaver.CanSaveInPlace(snapshot, path))
+        SavePlan? plan = SavePlanner.Plan(doc, path, new SaveSettings { JournalDirectory = JournalDirectory });
+        if (plan.Method == SaveMethod.NoChanges)
         {
-            try
-            {
-                InPlaceSaveResult result = await Operations.RunAsync(
-                    name, OperationKind.WritesExternal, doc, null,
-                    op => Task.FromResult(InPlaceSaver.Save(snapshot, JournalDirectory, InPlaceSaver.DefaultJournalLimit, op)),
-                    locked => doc.SetEditLock(locked));
-                doc.CompleteInPlaceSave(result);
-                vm.SetSavedPath(path);
-                vm.OnSaved();
-                return;
-            }
-            catch (JournalLimitException)
-            {
-                // 変更量がジャーナルの上限を超える場合は、安全な保存に切り替える (ENG-23 の仕様 3)。
-            }
+            return true; // 変更がない: 書き込まない (ENG-20 の仕様 1)。
         }
 
-        FileByteSource saved = await Operations.RunAsync(
-            name,
-            OperationKind.WritesExternal,
-            doc,
-            snapshot.Length,
-            op => Task.FromResult(DocumentSaver.Save(snapshot, path, op)),
-            locked => doc.SetEditLock(locked));
-        doc.CompleteSave(saved);
-        vm.SetSavedPath(saved.Path);
+        while (plan is not null && !plan.CanExecute)
+        {
+            if (confirm is not null)
+            {
+                plan = await confirm(plan);
+                continue;
+            }
+
+            throw plan.Issue switch
+            {
+                SaveIssue.JournalTooLarge when plan.Journal!.Space is { } space => new InsufficientSpaceException(space.Drive, space.Required, space.Available),
+                SaveIssue.JournalTooLarge => new JournalLimitException(plan.Journal!.Required, plan.Journal.Limit),
+                SaveIssue.InsufficientSpace => new InsufficientSpaceException(plan.Space!.Drive, plan.Space.Required, plan.Space.Available),
+                SaveIssue.FileTooLarge => new FileSizeLimitException(plan.SizeLimit!.Drive, plan.SizeLimit.FileSystem, plan.SizeLimit.MaxFileSize, plan.SizeLimit.Length),
+                _ => new UnauthorizedAccessException(),
+            };
+        }
+
+        if (plan is null)
+        {
+            return false;
+        }
+
+        string name = Loc.Format("Operation_Save", Path.GetFileName(path));
+        SaveResult result;
+        try
+        {
+            result = await Operations.RunAsync(
+                name, OperationKind.WritesExternal, doc, plan.TotalBytes,
+                op => Task.FromResult(SavePlanner.Execute(plan, op)),
+                locked => doc.SetEditLock(locked));
+        }
+        catch
+        {
+            SavePlanner.Abort(plan);
+            throw;
+        }
+
+        SavePlanner.Complete(plan, result);
+        vm.SetSavedPath(plan.TargetPath!);
         vm.OnSaved();
+        return true;
     }
 
     /// <summary>その場保存のジャーナルの置き場所 (ENG-23。復旧用フォルダ。PKG-13)。</summary>
@@ -132,10 +153,38 @@ public sealed partial class MainViewModel : ObservableObject
         Documents.Remove(vm);
         Notifications.DismissOwnedBy(vm);
         Memory.Unregister(vm.Document);
+        _ = MaterializeReferencesAsync(vm.Document);
         vm.Dispose();
         if (Selected == vm)
         {
             Selected = Documents.LastOrDefault();
+        }
+    }
+
+    /// <summary>
+    /// 閉じるドキュメントの範囲を他のタブ・アプリ内クリップボードが参照していれば、一時ファイルに書き出す (EDIT-24 の仕様 3・5)。
+    /// 閉じる操作は待たない。書き出せなかった場合も参照はそのまま読める (参照元のデータの解放が遅れるだけ)。
+    /// </summary>
+    private async Task MaterializeReferencesAsync(Document doc)
+    {
+        long bytes = doc.PendingReferenceBytes;
+        if (bytes == 0)
+        {
+            return;
+        }
+
+        try
+        {
+            await Operations.RunAsync(Loc.Format("Operation_Save", doc.Source.DisplayName), OperationKind.WritesExternal, null, bytes,
+                op =>
+                {
+                    doc.MaterializeReferences(op);
+                    return Task.CompletedTask;
+                });
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
+        {
+            AppLog.Warning($"Materializing clipboard references failed: {ex.Message}");
         }
     }
 

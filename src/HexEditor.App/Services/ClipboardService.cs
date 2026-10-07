@@ -1,4 +1,3 @@
-using System.Text;
 using System.Text.Json;
 using HexEditor.Core.Clipboard;
 using HexEditor.Core.Engine;
@@ -14,6 +13,9 @@ public enum PasteOutcome
     Done,
     Nothing,
     NotHex,
+
+    /// <summary>Hex 列に Hex として解釈できないテキストをテキストとして貼った (EDIT-23 の仕様 2。InfoBar と「元に戻す」)。</summary>
+    PastedAsText,
     NotEncodable,
     Truncated,
     FixedLength,
@@ -33,14 +35,15 @@ public sealed class ClipboardService
     private const string MetaFormat = "HexEditor.Meta";
 
     private static readonly string InstanceId = Guid.NewGuid().ToString("N");
-    private long _serial;
-    private AppClip? _clip;
+
+    /// <summary>アプリ内クリップボード (EDIT-24)。範囲の参照だけを持つ。</summary>
+    public InAppClipboard InApp { get; } = new();
 
     /// <summary>
     /// 選択範囲をコピーする。Hex 列なら Hex 文字列、テキスト列なら文字列もテキストとして入れる。
     /// </summary>
     /// <returns>システムのクリップボードに実データを入れられなかった (上限を超えた) 場合は false。</returns>
-    public async Task<bool> CopyAsync(EditorState editor, Encoding textEncoding)
+    public async Task<bool> CopyAsync(EditorState editor)
     {
         if (!editor.HasSelection)
         {
@@ -50,8 +53,7 @@ public sealed class ClipboardService
         long offset = editor.SelectionStart;
         long length = editor.SelectionLength;
         DocumentSnapshot snapshot = editor.Document.Current;
-        long serial = Interlocked.Increment(ref _serial);
-        _clip = new AppClip(serial, snapshot, offset, length);
+        long serial = InApp.Copy(editor.Document, offset, length).Serial;
 
         var package = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
         string meta = JsonSerializer.Serialize(new { instance = InstanceId, serial, offset, length, name = editor.Document.Source.DisplayName });
@@ -62,7 +64,7 @@ public sealed class ClipboardService
             byte[] bytes = new byte[length];
             await Task.Run(() => snapshot.Read(offset, bytes));
             package.SetData(BinaryFormat, await ToStreamAsync(bytes));
-            string text = editor.ActiveColumn == ActiveColumn.Hex ? HexText.Format(bytes) : textEncoding.GetString(bytes);
+            string text = editor.FormatForClipboard(bytes);
 
             // テキスト形式は生成後の文字数 × 2 バイトで上限と比べる (EDIT-22 の仕様 4・6)。
             if ((long)text.Length * 2 <= SystemLimit)
@@ -80,53 +82,57 @@ public sealed class ClipboardService
     }
 
     /// <summary>貼り付け (EDIT-23)。<paramref name="overwrite"/> は上書き貼り付け (Ctrl+B)。</summary>
-    public async Task<PasteOutcome> PasteAsync(EditorState editor, Encoding textEncoding, bool overwrite)
+    public async Task<PasteOutcome> PasteAsync(EditorState editor, bool overwrite)
     {
         DataPackageView view = Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
 
-        // (1) アプリ内クリップボード: Meta が今のアプリの最後のコピーと一致すれば、ピースの参照で貼る。
-        if (view.Contains(MetaFormat) && _clip is { } clip && await view.GetDataAsync(MetaFormat) is string meta)
+        // (1) アプリ内クリップボード: Meta が今のアプリの最後のコピーと一致すれば、範囲の参照で貼る (一致しなければ破棄する)。
+        if (view.Contains(MetaFormat) && InApp.Current is not null && await view.GetDataAsync(MetaFormat) is string meta)
         {
             using JsonDocument json = JsonDocument.Parse(meta);
-            if (json.RootElement.GetProperty("instance").GetString() == InstanceId && json.RootElement.GetProperty("serial").GetInt64() == clip.Serial)
+            if (json.RootElement.GetProperty("instance").GetString() == InstanceId
+                && InApp.Match(json.RootElement.GetProperty("serial").GetInt64()) is { } clip)
             {
-                return Map(editor.Paste(clip.Snapshot, clip.Offset, clip.Length, overwrite));
+                return Map(Truncate(editor, allow => editor.Paste(clip.Range, overwrite, allow)));
             }
+        }
+        else
+        {
+            InApp.Clear();
         }
 
         // (2) バイナリ形式
         if (view.Contains(BinaryFormat) && await view.GetDataAsync(BinaryFormat) is IRandomAccessStream stream)
         {
-            return Map(editor.Paste(await ReadAllAsync(stream), overwrite));
+            byte[] data = await ReadAllAsync(stream);
+            return Map(Truncate(editor, allow => editor.Paste(data, overwrite, allow)));
         }
 
-        // (3) テキスト: テキスト列なら文字コードで変換、Hex 列なら Hex 文字列として読む。
+        // (3) テキスト: テキスト列なら文字コードで変換、Hex 列なら Hex 文字列として読み、読めなければテキストとして貼る。
         if (view.Contains(StandardDataFormats.Text))
         {
             string text = await view.GetTextAsync();
-            if (editor.ActiveColumn == ActiveColumn.Hex)
-            {
-                byte[]? bytes = HexText.TryParse(text);
-                return bytes is null ? PasteOutcome.NotHex : Map(editor.Paste(bytes, overwrite));
-            }
-
-            try
-            {
-                Encoding strict = Encoding.GetEncoding(textEncoding.CodePage, EncoderFallback.ExceptionFallback, DecoderFallback.ReplacementFallback);
-                return Map(editor.Paste(strict.GetBytes(text), overwrite));
-            }
-            catch (EncoderFallbackException)
-            {
-                return PasteOutcome.NotEncodable;
-            }
+            return Map(Truncate(editor, allow => editor.PasteText(text, overwrite, allow)));
         }
 
         return PasteOutcome.Nothing;
     }
 
+    /// <summary>
+    /// 固定長ドキュメントで末尾を越える貼り付け。ENG-07 の仕様 5 の確認ダイアログ (EditorState.PasteOverflow の N バイト) は
+    /// UI で未実装のため、今は確認せずに末尾まで貼る (以前の動作)。
+    /// </summary>
+    private static EditResult Truncate(EditorState editor, Func<bool, EditResult> paste)
+    {
+        EditResult result = paste(false);
+        return result == EditResult.NeedsTruncateConfirmation ? paste(true) : result;
+    }
+
     private static PasteOutcome Map(EditResult result) => result switch
     {
         EditResult.Done => PasteOutcome.Done,
+        EditResult.PastedAsText => PasteOutcome.PastedAsText,
+        EditResult.NotEncodable => PasteOutcome.NotEncodable,
         EditResult.Truncated => PasteOutcome.Truncated,
         EditResult.FixedLength => PasteOutcome.FixedLength,
         EditResult.NotEditable => PasteOutcome.NotEditable,
@@ -172,7 +178,4 @@ public sealed class ClipboardService
         reader.ReadBytes(bytes);
         return bytes;
     }
-
-    /// <summary>アプリ内クリップボード: コピーした時点のスナップショットの範囲の参照 (EDIT-24)。</summary>
-    private sealed record AppClip(long Serial, DocumentSnapshot Snapshot, long Offset, long Length);
 }

@@ -1182,7 +1182,7 @@ public sealed partial class HexView
         }
         else
         {
-            Report(_editor.TypeText(text, TextEncoding));
+            Report(_editor.TypeText(text));
         }
 
         RestartBlink();

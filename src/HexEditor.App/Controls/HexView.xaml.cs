@@ -111,8 +111,6 @@ public sealed partial class HexView : UserControl
         InitializeTextInput();
     }
 
-    /// <summary>テキスト列の入力に使う文字コード (VIEW-21 の実装までは Latin-1)。</summary>
-    public Encoding TextEncoding { get; set; } = Encoding.Latin1;
 
     /// <summary>入力を拒否したときに呼ぶ (InfoBar を出すため)。</summary>
     public event EventHandler<EditResult>? EditRejected;
@@ -421,7 +419,7 @@ public sealed partial class HexView : UserControl
         var columns = new RowColumns(bytesPerRow);
         long selStart = _editor.SelectionStart;
         long selEnd = selStart + _editor.SelectionLength;
-        var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion);
+        var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion, _editor.TextEncoding);
         int rebuilt = 0;
         int loadingCells = 0;
         bool anyUnreadable = false;
@@ -823,7 +821,8 @@ public sealed partial class HexView : UserControl
     }
 
     /// <summary>1 フレームの中で全行に共通の条件 (変われば全行を作り直す)。</summary>
-    internal readonly record struct RowFrame(RowColumns Columns, ActiveColumn Active, int PaletteVersion);
+    /// <summary>行の描き方を決める値。テキスト列の文字コード (VIEW-21) はドキュメントのものを使い、入力・コピーと揃える。</summary>
+    internal readonly record struct RowFrame(RowColumns Columns, ActiveColumn Active, int PaletteVersion, TextEncoding Encoding);
 
     /// <summary>
     /// 1 行分の要素。前回描いた内容を覚えておき、変わったときだけ Run を作り直す (VIEW-04 の仕様 3・5)。
@@ -1056,7 +1055,7 @@ public sealed partial class HexView : UserControl
         {
             CellKind.Empty => string.Empty,
             CellKind.Loading or CellKind.Unreadable => " ",
-            _ => ToChar(_bytes[c]).ToString(),
+            _ => _frame.Encoding.DisplayChar(_bytes[c]).ToString(),
         };
 
         private static TextBlock CreateText()
@@ -1198,7 +1197,6 @@ public sealed partial class HexView : UserControl
         }
     }
 
-    private static char ToChar(byte b) => b is >= 0x20 and < 0x7F ? (char)b : '.';
 
     /// <summary>同じ見た目の文字をまとめて Run にする。</summary>
     private sealed class RunBuilder(TextBlock row, Palette palette)

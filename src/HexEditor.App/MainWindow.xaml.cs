@@ -238,7 +238,11 @@ public sealed partial class MainWindow : Window
 
         try
         {
-            await Vm.SaveAsync(doc, path);
+            if (!await Vm.SaveAsync(doc, path))
+            {
+                return false;
+            }
+
             UpdateTitle();
             return true;
         }
@@ -296,7 +300,6 @@ public sealed partial class MainWindow : Window
             return;
         }
 
-        var encoding = System.Text.Encoding.Latin1;
         switch (command)
         {
             case EditorCommand.SelectAll:
@@ -315,7 +318,7 @@ public sealed partial class MainWindow : Window
                     return;
                 }
 
-                if (!await _clipboard.CopyAsync(editor, encoding))
+                if (!await _clipboard.CopyAsync(editor))
                 {
                     ShowNotice(Loc.Get("Clipboard_InAppOnly"), InfoBarSeverity.Informational, Vm.Selected);
                 }
@@ -327,7 +330,7 @@ public sealed partial class MainWindow : Window
 
                 break;
             default:
-                PasteOutcome outcome = await _clipboard.PasteAsync(editor, encoding, command == EditorCommand.PasteOverwrite);
+                PasteOutcome outcome = await _clipboard.PasteAsync(editor, command == EditorCommand.PasteOverwrite);
                 string? key = outcome switch
                 {
                     PasteOutcome.NotHex => "Clipboard_NotHex",
