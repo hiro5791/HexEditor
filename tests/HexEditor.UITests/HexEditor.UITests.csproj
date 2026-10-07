@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    UI テストと結合テスト (テスト方針 6.5)。ビルド済みの HexEditor.App を起動し、UI オートメーション (FlaUI) と
+    テスト用の命令の通り道 (名前付きパイプ) で操作する。フォーカス・マウス・システムのキーボードとクリップボードは使わない。
+    先に src/HexEditor.App をテスト用のビルド (Debug、または -p:HexTestHooks=true の Release) でビルドしておく。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FlaUI.UIA3" Version="5.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\tools\HexEditor.TestData\HexEditor.TestData.csproj" />
+  </ItemGroup>
+
+</Project>
