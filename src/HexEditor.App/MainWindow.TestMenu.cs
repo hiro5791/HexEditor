@@ -227,6 +227,12 @@ public sealed partial class MainWindow
             "resize" => TestResize(request),
             "clipboard" => await TestClipboardAsync(),
             "setClipboard" => await TestSetClipboardAsync(request),
+
+            // 性能のテストと結合テストの命令 (MainWindow.TestPerf.cs)。
+            "diagnostics" => TestDiagnostics(request),
+            "keyMeasured" => TestKeyMeasured(request),
+            "mark" => TestMark(),
+            "insertBytes" => TestInsertBytes(request),
             "exit" => Run(() =>
             {
                 _closingConfirmed = true;

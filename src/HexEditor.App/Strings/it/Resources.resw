@@ -107,6 +107,7 @@
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} byte. Può essere incollato solo in HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>La selezione supera il limite degli Appunti, quindi può essere incollata solo in HexEditor.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>{0} byte oltre la fine di questo documento a lunghezza fissa non sono stati incollati.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>La forma testuale della selezione supera il limite degli Appunti, quindi sono stati copiati solo i dati binari.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Recupera le modifiche non salvate</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>L'ultima volta HexEditor non è stato chiuso correttamente. Puoi recuperare le modifiche non salvate qui sotto.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Recupera</value></data>

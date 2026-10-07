@@ -267,7 +267,9 @@ public static class SavePlanner
             return plan with { Issue = SaveIssue.FileTooLarge, SizeLimit = new FileSizeLimit(volume.Name, volume.FileSystem!, max, length) };
         }
 
-        long required = length > long.MaxValue - DocumentSaver.FreeSpaceMargin ? long.MaxValue : length + DocumentSaver.FreeSpaceMargin;
+        // スパースの場合は 00 でないブロックの合計の見積もり (ENG-25 の仕様 1)。
+        long size = volume?.AvailableFreeSpace is null ? length : DocumentSaver.EstimateSize(plan.Snapshot);
+        long required = size > long.MaxValue - DocumentSaver.FreeSpaceMargin ? long.MaxValue : size + DocumentSaver.FreeSpaceMargin;
         if (volume?.AvailableFreeSpace is long available && available < required)
         {
             return plan with { Issue = SaveIssue.InsufficientSpace, Space = new SpaceShortage(volume.Name, required, available) };

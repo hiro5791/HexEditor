@@ -107,6 +107,7 @@
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bytes. Só pode ser colado no HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>A seleção excede o limite da área de transferência, por isso só pode ser colada no HexEditor.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Os {0} bytes além do fim deste documento de comprimento fixo não foram colados.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>A forma de texto da seleção excede o limite da área de transferência, por isso apenas os dados binários foram copiados.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Recuperar alterações não salvas</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>O HexEditor não foi fechado corretamente da última vez. Você pode recuperar as alterações não salvas abaixo.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Recuperar</value></data>

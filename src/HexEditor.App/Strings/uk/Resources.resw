@@ -107,6 +107,7 @@
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} байт. Можна вставити лише в HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Виділення перевищує обмеження буфера обміну, тому його можна вставити лише в HexEditor.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Не вставлено байтів за кінцем цього документа фіксованої довжини: {0}.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>Текстове подання виділення перевищує обмеження буфера обміну, тому скопійовано лише двійкові дані.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Відновлення незбережених змін</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>Минулого разу HexEditor завершив роботу неналежним чином. Ви можете відновити наведені нижче незбережені зміни.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Відновити</value></data>

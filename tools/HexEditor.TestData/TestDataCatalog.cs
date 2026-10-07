@@ -4,8 +4,11 @@ using Microsoft.Win32.SafeHandles;
 
 namespace HexEditor.TestData;
 
-/// <summary>テストデータ 1 件の定義 (docs/test/test-data.md)。</summary>
-public sealed record TestDataItem(string Id, long Length, string Description, Action<string> Generate);
+/// <summary>
+/// テストデータ 1 件の定義 (docs/test/test-data.md と各テストケースのファイルの末尾の表)。<paramref name="PathIn"/> は、
+/// ファイル名・置き場所が決まっているもの (長いパス・絵文字の名前など) の出力先のパスを返す。null なら <c>&lt;ID&gt;.bin</c>。
+/// </summary>
+public sealed record TestDataItem(string Id, long Length, string Description, Action<string> Generate, Func<string, string>? PathIn = null);
 
 /// <summary>
 /// テストデータを生成する (テスト方針 7.1)。同じ ID からは常に同じ内容を作る。生成したファイルはキャッシュし、
@@ -38,7 +41,46 @@ public static class TestDataCatalog
             path => WriteMarkers(path, 100 * GiB, MarkersEvery(100 * GiB, GiB).Concat(Around(1L << 31)).Concat(Around(1L << 32)))),
         new("TD-SPARSE-2T", 2 * TiB, "先頭・末尾・2^31・2^32・2^40 の前後の目印 (スパース)",
             path => WriteMarkers(path, 2 * TiB, new[] { 0L, 2 * TiB - MarkerLength }.Concat(Around(1L << 31)).Concat(Around(1L << 32)).Concat(Around(1L << 40)))),
+
+        // ---- cases/01-engine-and-sources.md の表 ----
+        new("TD-ENG-SPARSE-10G", 10 * GiB, "先頭・末尾・1 GiB ごと・2^31 と 2^32 の前後 (± 32) の目印 (スパース)",
+            path => WriteMarkers(path, 10 * GiB, MarkersEvery(10 * GiB, GiB).Concat([(1L << 31) - 32, (1L << 31) + 32, (1L << 32) - 32, (1L << 32) + 32]))),
+        new("TD-ENG-SPARSE-100G-1M", 100 * GiB, "[50 GiB, 50 GiB + 1 MiB) に種 0x100 の乱数。それ以外は未割り当て (スパース)",
+            path => WriteSparse(path, 100 * GiB, SparseRandomOffset, MiB, (o, s) => Random(SparseRandomSeed, o - SparseRandomOffset, s))),
+        new("TD-ENG-PATH-300", KiB, "TD-SEQ-1M の先頭 1 KiB。絶対パスがちょうど 300 文字になる位置に置く",
+            path => WriteGenerated(path, KiB, (o, s) => Sequence(o, s)), LongPathIn),
+        new("TD-ENG-EMOJI-NAME", KiB, "TD-BYTES-256 を 4 回繰り返したもの。ファイル名は テスト_😀_📦.bin",
+            path => WriteGenerated(path, KiB, (o, s) => Sequence(o, s)), dir => Path.Combine(dir, "テスト_😀_📦.bin")),
+        new("TD-ENG-ADS", KiB, "ads.bin: TD-SEQ-1M の先頭 1 KiB と、代替データストリーム secret・Zone.Identifier", WriteAds,
+            dir => Path.Combine(dir, "TD-ENG-ADS", "ads.bin")),
+
+        // ---- cases/04-search.md の表 ----
+        new("TD-FIND-RANDOM-10G", 10 * GiB, "種 4401 の乱数 (スパースにしない)。最後の 8 バイトが HEXEND!!", WriteFindRandom),
+
+        // ---- cases/09-ui-and-settings.md の表 ----
+        new("TD-UI-SECRET", 4 * KiB, "secret-content.bin: HEXEDITOR-SECRET-7F3A の繰り返し",
+            path => WriteGenerated(path, 4 * KiB, (o, s) => Repeat(SecretMarker, o, s)), dir => Path.Combine(dir, "TD-UI-SECRET", "secret-content.bin")),
     }.ToDictionary(i => i.Id);
+
+    /// <summary>TD-ENG-SPARSE-100G-1M の乱数の位置と種。</summary>
+    public const long SparseRandomOffset = 50 * GiB;
+
+    public const ulong SparseRandomSeed = 0x100;
+
+    /// <summary>TD-ENG-ADS の代替データストリームの名前と内容。</summary>
+    public static readonly IReadOnlyDictionary<string, byte[]> AdsStreams = new Dictionary<string, byte[]>
+    {
+        ["secret"] = Encoding.ASCII.GetBytes("TOP-SECRET-DATA!"),
+        ["Zone.Identifier"] = Encoding.ASCII.GetBytes("[ZoneTransfer]\r\nZoneId=3\r\nHostUrl=https://example.com/ads.bin\r\n"),
+    };
+
+    /// <summary>TD-UI-SECRET の目印の文字列。</summary>
+    public const string SecretMarker = "HEXEDITOR-SECRET-7F3A";
+
+    /// <summary>TD-FIND-RANDOM-10G の乱数の種と、末尾に置く並び (HEXEND!!)。</summary>
+    public const ulong FindRandomSeed = 4401;
+
+    public static readonly byte[] FindRandomTail = [0x48, 0x45, 0x58, 0x45, 0x4E, 0x44, 0x21, 0x21];
 
     /// <summary>TD-RANDOM-16M の乱数の種。</summary>
     public const ulong RandomSeed = 0x5EED_0000_0016_0001UL;
@@ -63,7 +105,8 @@ public static class TestDataCatalog
         }
 
         Directory.CreateDirectory(directory);
-        string path = Path.Combine(directory, id + ".bin");
+        string path = item.PathIn?.Invoke(directory) ?? Path.Combine(directory, id + ".bin");
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         lock (Items)
         {
             if (File.Exists(path) && new FileInfo(path).Length == item.Length)
@@ -90,6 +133,16 @@ public static class TestDataCatalog
             case "TD-RANDOM-16M":
                 Random(RandomSeed, offset, destination);
                 break;
+            case "TD-ENG-SPARSE-100G-1M":
+                destination.Clear();
+                long from = Math.Max(offset, SparseRandomOffset);
+                long to = Math.Min(offset + destination.Length, SparseRandomOffset + MiB);
+                if (from < to)
+                {
+                    Random(SparseRandomSeed, from - SparseRandomOffset, destination.Slice((int)(from - offset), (int)(to - from)));
+                }
+
+                break;
             default:
                 throw new NotSupportedException(id);
         }
@@ -110,13 +163,21 @@ public static class TestDataCatalog
     /// <summary>SplitMix64 のカウンタ方式の乱数 (エンジンの生成ピースと同じ方式)。</summary>
     public static void Random(ulong seed, long offset, Span<byte> destination)
     {
+        // 8 バイトごとに 1 つの 64 bit の値を作り、下位のバイトから順に使う (同じ 8 バイトの中では作り直さない)。
+        long word = -1;
+        ulong z = 0;
         for (int i = 0; i < destination.Length; i++)
         {
             long p = offset + i;
-            ulong z = unchecked(seed + (ulong)(p >> 3) * 0x9E3779B97F4A7C15UL + 0x9E3779B97F4A7C15UL);
-            z = unchecked((z ^ (z >> 30)) * 0xBF58476D1CE4E5B9UL);
-            z = unchecked((z ^ (z >> 27)) * 0x94D049BB133111EBUL);
-            z ^= z >> 31;
+            if (p >> 3 != word)
+            {
+                word = p >> 3;
+                z = unchecked(seed + (ulong)word * 0x9E3779B97F4A7C15UL + 0x9E3779B97F4A7C15UL);
+                z = unchecked((z ^ (z >> 30)) * 0xBF58476D1CE4E5B9UL);
+                z = unchecked((z ^ (z >> 27)) * 0x94D049BB133111EBUL);
+                z ^= z >> 31;
+            }
+
             destination[i] = (byte)(z >> (int)((p & 7) * 8));
         }
     }
@@ -135,6 +196,157 @@ public static class TestDataCatalog
     private static IEnumerable<long> Around(long p) => [p - MarkerLength, p];
 
     private static void WriteAll(string path, byte[] data) => File.WriteAllBytes(path, data);
+
+    /// <summary><paramref name="text"/> を先頭から繰り返した内容。</summary>
+    private static void Repeat(string text, long offset, Span<byte> destination)
+    {
+        byte[] bytes = Encoding.ASCII.GetBytes(text);
+        for (int i = 0; i < destination.Length; i++)
+        {
+            destination[i] = bytes[(offset + i) % bytes.Length];
+        }
+    }
+
+    /// <summary>
+    /// TD-ENG-PATH-300 の置き場所: 出力先の下に `d` と 49 個の `x` の名前のフォルダを重ね、絶対パスがちょうど 300 文字になるように
+    /// ファイル名 (`f` + `x` の繰り返し + `.bin`) の長さで調整する。
+    /// </summary>
+    public static string LongPathIn(string directory)
+    {
+        const int Total = 300;
+        const string ShortestName = "f.bin";
+        string folder = "d" + new string('x', 49);
+        string dir = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar);
+        while (dir.Length + 1 + folder.Length + 1 + ShortestName.Length <= Total)
+        {
+            dir = Path.Combine(dir, folder);
+        }
+
+        int nameLength = Total - dir.Length - 1;
+        if (nameLength < ShortestName.Length)
+        {
+            throw new PathTooLongException($"出力先のパスが長すぎます: {directory}");
+        }
+
+        return Path.Combine(dir, "f" + new string('x', nameLength - ShortestName.Length) + ".bin");
+    }
+
+    /// <summary>TD-ENG-ADS: メインのストリームと代替データストリーム (NTFS)。名前の変更 (生成後の移動) でストリームも移る。</summary>
+    private static void WriteAds(string path)
+    {
+        WriteGenerated(path, KiB, (o, s) => Sequence(o, s));
+        foreach ((string name, byte[] content) in AdsStreams)
+        {
+            File.WriteAllBytes(path + ":" + name, content);
+        }
+    }
+
+    /// <summary>
+    /// TD-FIND-RANDOM-10G: 種 4401 の乱数。最後の 8 バイトを HEXEND!! にし、それ以外で検索のテストに使う 4 つの並びと一致する箇所は、
+    /// 一致の 2 バイト目 (どの並びでも 45) を 00 に変えて取り除く (スパースにしない。実際に 10 GiB を書く)。
+    /// </summary>
+    private static void WriteFindRandom(string path) => WriteFindRandom(path, 10 * GiB);
+
+    /// <summary>TD-FIND-RANDOM-10G の作り方で、長さ <paramref name="length"/> のファイルを作る (生成の確認のテスト用に長さを変えられる)。</summary>
+    public static void WriteFindRandom(string path, long length, Action<long, Span<byte>>? plant = null)
+    {
+        using FileStream stream = File.Create(path);
+        stream.SetLength(length);
+        long tailAt = length - FindRandomTail.Length;
+        byte[] buffer = new byte[MiB + Lookahead];
+        var pending = new List<long>();
+        for (long offset = 0; offset < length; offset += MiB)
+        {
+            int n = (int)Math.Min(MiB, length - offset);
+            int withLookahead = (int)Math.Min(n + Lookahead, length - offset);
+            Span<byte> chunk = buffer.AsSpan(0, withLookahead);
+            Random(FindRandomSeed, offset, chunk);
+            plant?.Invoke(offset, chunk);
+            for (long p = Math.Max(offset, tailAt); p < offset + withLookahead; p++)
+            {
+                chunk[(int)(p - offset)] = FindRandomTail[p - tailAt];
+            }
+
+            // 前のチャンクの先読みの範囲で 00 にした位置は、作り直したこのチャンクにも反映する。
+            foreach (long p in pending)
+            {
+                chunk[(int)(p - offset)] = 0x00;
+            }
+
+            pending.Clear();
+            RemoveFindMatches(chunk, n, offset, tailAt, pending);
+            stream.Write(buffer, 0, n);
+        }
+    }
+
+    private const int Lookahead = 7;
+
+    /// <summary>TD-FIND-RANDOM-10G から取り除く並び。(値, マスク) でマスクが 0 のニブルは任意。</summary>
+    private static readonly (byte Value, byte Mask)[][] FindPatterns =
+    [
+        [(0x48, 0xFF), (0x45, 0xFF), (0x58, 0xFF), (0x45, 0xFF), (0x4E, 0xFF), (0x44, 0xFF), (0x21, 0xFF), (0x21, 0xFF)],
+        [(0x48, 0xFF), (0x45, 0xFF), (0x00, 0x00), (0x45, 0xFF), (0x4E, 0xFF), (0x44, 0xFF)],
+        [(0x40, 0xF0), (0x45, 0xFF), (0x58, 0xFF), (0x45, 0xFF), (0x4E, 0xFF), (0x40, 0xF0)],
+        [(0x00, 0x00), (0x45, 0xFF), (0x58, 0xFF), (0x00, 0x00), (0x4E, 0xFF), (0x44, 0xFF)],
+    ];
+
+    /// <summary>
+    /// チャンクの先頭 <paramref name="n"/> バイトから始まる一致を取り除く。どの並びも 2 バイト目は 45 なので、そこを 00 にすると、その位置から
+    /// 始まるすべての並びの一致が消える (先頭が ?? の並びがあるため、先頭のバイトを変えても消えない)。どの並びの固定のニブルも 0 でないため、
+    /// 00 にしたバイトが新しい一致を作ることはない。先読みの範囲 (次のチャンク) を 00 にした位置は <paramref name="pending"/> に入れる。
+    /// </summary>
+    private static void RemoveFindMatches(Span<byte> chunk, int n, long offset, long tailAt, List<long> pending)
+    {
+        for (int i = 0; i < n && offset + i < tailAt; i++)
+        {
+            if (i + 1 >= chunk.Length || chunk[i + 1] != 0x45 || offset + i + 1 >= tailAt)
+            {
+                continue;
+            }
+
+            foreach ((byte Value, byte Mask)[] pattern in FindPatterns)
+            {
+                if (i + pattern.Length <= chunk.Length && Matches(chunk[i..], pattern))
+                {
+                    chunk[i + 1] = 0x00;
+                    if (i + 1 >= n)
+                    {
+                        pending.Add(offset + i + 1);
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        static bool Matches(ReadOnlySpan<byte> data, (byte Value, byte Mask)[] pattern)
+        {
+            for (int k = 0; k < pattern.Length; k++)
+            {
+                if ((data[k] & pattern[k].Mask) != pattern[k].Value)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>スパースファイルを作り、[<paramref name="dataOffset"/>, + <paramref name="dataLength"/>) だけに内容を書く。</summary>
+    private static void WriteSparse(string path, long length, long dataOffset, long dataLength, Action<long, Span<byte>> fill)
+    {
+        using SafeFileHandle handle = File.OpenHandle(path, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+        MakeSparse(handle);
+        RandomAccess.SetLength(handle, length);
+        byte[] buffer = new byte[MiB];
+        for (long offset = dataOffset; offset < dataOffset + dataLength; offset += buffer.Length)
+        {
+            int n = (int)Math.Min(buffer.Length, dataOffset + dataLength - offset);
+            fill(offset, buffer.AsSpan(0, n));
+            RandomAccess.Write(handle, buffer.AsSpan(0, n), offset);
+        }
+    }
 
     private static void WriteGenerated(string path, long length, Action<long, Span<byte>> fill)
     {

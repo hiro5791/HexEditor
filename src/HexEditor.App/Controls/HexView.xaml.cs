@@ -372,7 +372,8 @@ public sealed partial class HexView : UserControl
 
     private void Render()
     {
-        if (_editor is null || _palette is null)
+        // 閉じたタブのドキュメントは解放済みで読めない (追加バッファを読むと例外になり、XAML の処理の中で落ちる)。
+        if (_editor is null || _palette is null || _editor.Document.IsDisposed)
         {
             return;
         }
@@ -1259,6 +1260,16 @@ public sealed partial class HexView : UserControl
 
         private void Append(string text, CellKind kind, Brush brush)
         {
+            // 空白は色が見えないので、下線のない区間にはそのまま続ける (仮表示の行などで、セルごとに Run が分かれて
+            // 描画が重くならないようにする。VIEW-03 の仕様 1・VIEW-04)。
+            bool blank = text.Length > 0 && text.AsSpan().TrimStart(' ').IsEmpty;
+            if (blank && _text.Length > 0 && _kind != CellKind.Modified)
+            {
+                _text.Append(text);
+                _line.Append(text);
+                return;
+            }
+
             if (!ReferenceEquals(brush, _brush) || kind != _kind)
             {
                 FlushRun();

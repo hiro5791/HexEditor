@@ -107,6 +107,7 @@
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} octeți. Poate fi lipit doar în HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Selecția depășește limita clipboardului, așa că poate fi lipită doar în HexEditor.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>{0} octeți de după sfârșitul acestui document cu lungime fixă nu au fost lipiți.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>Forma text a selecției depășește limita clipboardului, așa că au fost copiate doar datele binare.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Recuperare modificări nesalvate</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>Data trecută, HexEditor nu s-a închis normal. Puteți recupera modificările nesalvate de mai jos.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Recuperare</value></data>

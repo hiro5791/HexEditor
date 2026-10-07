@@ -107,6 +107,7 @@
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} بايت. لا يمكن لصقها إلا داخل HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>التحديد أكبر من حد الحافظة، لذا لا يمكن لصقه إلا داخل HexEditor.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>لم يتم لصق {0} بايت تتجاوز نهاية هذا المستند ذي الطول الثابت.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>الشكل النصي للتحديد أكبر من حد الحافظة، لذا تم نسخ البيانات الثنائية فقط.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>استرداد التغييرات غير المحفوظة</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>لم يتم إغلاق HexEditor بشكل طبيعي في المرة الأخيرة. يمكنك استرداد التغييرات غير المحفوظة أدناه.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>استرداد</value></data>

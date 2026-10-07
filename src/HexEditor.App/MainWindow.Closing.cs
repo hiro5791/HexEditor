@@ -97,7 +97,10 @@ public sealed partial class MainWindow
         _closingConfirmed = true;
         App.Settings.Flush();
         AppLog.Info("Exited");
-        Close();
+
+        // 確認のダイアログを出さずに CloseAsync が終わった場合、ここはまだ Closed の処理の中で、そのまま Close を呼んでも
+        // 無視される (ウィンドウが残り、プロセスが終わらない)。処理を抜けてから閉じる。
+        DispatcherQueue.TryEnqueue(Close);
     }
 
     /// <summary>

@@ -17,9 +17,10 @@ public sealed class FileByteSource : ByteSourceBase
     private SafeFileHandle? _denyHandle;
     private bool _disposed;
 
-    private FileByteSource(string path, SafeFileHandle handle, bool readOnlyAttribute)
+    private FileByteSource(string path, SafeFileHandle handle, bool readOnlyAttribute, bool sparse)
     {
         Path = path;
+        IsSparse = sparse;
         _handle = handle;
         _length = RandomAccess.GetLength(handle);
         Identity = "file:" + path.ToUpperInvariant();
@@ -39,6 +40,19 @@ public sealed class FileByteSource : ByteSourceBase
 
     public override SourceCapabilities Capabilities { get; }
 
+    /// <summary>スパースファイルか (開いた時点の属性)。安全な保存で一時ファイルもスパースにする (ENG-22 の仕様 5)。</summary>
+    public bool IsSparse { get; }
+
+    /// <summary>
+    /// [<paramref name="offset"/>, + <paramref name="length"/>) の中で領域が割り当てられている範囲。スパースでなければ範囲全体
+    /// (それ以外の範囲は 00 として読める。ENG-22 の仕様 5、ENG-25 の仕様 1 の見積もり)。
+    /// </summary>
+    public IReadOnlyList<(long Offset, long Length)> AllocatedRanges(long offset, long length)
+    {
+        length = Math.Min(length, Math.Max(0, _length - offset));
+        return !IsSparse ? (length > 0 ? [(offset, length)] : []) : SparseFiles.AllocatedRanges(_handle, offset, length);
+    }
+
     /// <summary>開いた時点の長さ・最終更新日時・ファイル ID (復旧用データで、元のファイルが変わっていないかを調べる。ENG-27)。</summary>
     public FileStamp Stamp { get; }
 
@@ -54,8 +68,8 @@ public sealed class FileByteSource : ByteSourceBase
             FileAccess.Read,
             FileShare.ReadWrite | FileShare.Delete,
             FileOptions.RandomAccess);
-        bool readOnly = File.GetAttributes(fullPath).HasFlag(FileAttributes.ReadOnly);
-        return new FileByteSource(fullPath, handle, readOnly);
+        FileAttributes attributes = File.GetAttributes(fullPath);
+        return new FileByteSource(fullPath, handle, attributes.HasFlag(FileAttributes.ReadOnly), attributes.HasFlag(FileAttributes.SparseFile));
     }
 
     /// <summary>他のアプリの書き込みを禁止するハンドルを開いているか (ENG-15 の仕様 2)。</summary>

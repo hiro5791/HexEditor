@@ -107,6 +107,7 @@
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor : {0} octets. Ne peut être collé que dans HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>La sélection dépasse la limite du Presse-papiers ; elle ne peut être collée que dans HexEditor.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>{0} octets au-delà de la fin de ce document de longueur fixe n'ont pas été collés.</value></data>
+  <data name="Clipboard_TextOmitted" xml:space="preserve"><value>La forme texte de la sélection dépasse la limite du Presse-papiers ; seules les données binaires ont été copiées.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Récupérer les modifications non enregistrées</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor ne s'est pas fermé correctement la dernière fois. Vous pouvez récupérer les modifications non enregistrées ci-dessous.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Récupérer</value></data>

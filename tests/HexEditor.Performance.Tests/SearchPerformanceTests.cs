@@ -30,6 +30,9 @@ public sealed class SearchPerformanceTests
     [Trait(TC, "TC-FIND-01-03")]
     public async Task SearchingHundredGigabytesKeepsMemoryBounded()
     {
+        // 同じプロセスで先に動いた性能テストが確保したままのメモリを OS に返してから計る (性能テストは 1 つずつ同じプロセスで動く)。
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, blocking: true, compacting: true);
+        GC.WaitForPendingFinalizers();
         using var doc = new Document(FileByteSource.Open(TestDataCatalog.Get("TD-SPARSE-100G")), Options());
         SearchPattern pattern = SearchPattern.FromHex("DE AD BE EF CA FE BA BE");
         using var process = Process.GetCurrentProcess();
@@ -62,6 +65,49 @@ public sealed class SearchPerformanceTests
         }
 
         Assert.True(max <= 300 * MiB, $"プライベートバイトの最大: {max / MiB} MiB");
+    }
+
+    /// <summary>
+    /// TC-FIND-01-04: 10 GiB のファイルの末尾にあるリテラルを、OS のキャッシュにない状態から検索する (検索バーの Enter と同じ「次を検索」)。
+    /// 検索の速度が、同じ条件で 4 MiB ずつ順に読む速度の 80% 以上で、10 秒以内に終わる。性能テスト用の計測機でだけ実行する。
+    /// </summary>
+    [PerfMachineFact]
+    [Trait(TC, "TC-FIND-01-04")]
+    public void FindingTheLiteralAtTheEndOfTenGigabytesKeepsUpWithTheDisk()
+    {
+        string path = TestDataCatalog.Get("TD-FIND-RANDOM-10G");
+        long length = new FileInfo(path).Length;
+        SearchPattern pattern = SearchPattern.FromHex("48 45 58 45 4E 44 21 21");
+        double slowest = double.MaxValue;
+        for (int i = 0; i < 3; i++)
+        {
+            // 手順 1〜3: キャッシュを空にして開き、次を検索する。
+            FileCache.Purge();
+            using var doc = new Document(FileByteSource.Open(path), Options());
+            var watch = Stopwatch.StartNew();
+            SearchHit? hit = SearchEngine.Find(doc.Current, pattern, 0, forward: true, wrap: false);
+            TimeSpan time = watch.Elapsed;
+            Assert.Equal(10_737_418_232, hit?.Offset);
+            Assert.Equal(8, hit?.Length);
+            Assert.True(time <= TimeSpan.FromSeconds(10), $"{i + 1} 回目: {time.TotalSeconds:F2} 秒");
+            slowest = Math.Min(slowest, length / (double)MiB / time.TotalSeconds);
+        }
+
+        // 手順 4: 同じ条件 (キャッシュを空にした状態) で、先頭から 4 MiB ずつ順に読む速度。
+        FileCache.Purge();
+        double read;
+        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 0, FileOptions.SequentialScan))
+        {
+            byte[] buffer = new byte[4 * MiB];
+            var watch = Stopwatch.StartNew();
+            while (stream.Read(buffer) > 0)
+            {
+            }
+
+            read = length / (double)MiB / watch.Elapsed.TotalSeconds;
+        }
+
+        Assert.True(slowest >= read * 0.8, $"検索 {slowest:F0} MiB/s、読み込み {read:F0} MiB/s");
     }
 
     /// <summary>
