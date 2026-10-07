@@ -85,6 +85,8 @@ jobs:
         run: dotnet build src/HexEditor.App -c Release -p:Platform=x64
       - name: Unit and integration tests
         if: github.event_name != 'schedule'
+        env:
+          HEXEDITOR_EXPECTED_ARCH: X64
         run: |
           dotnet test tests/HexEditor.Core.Tests -c Release --no-build --filter "Category!=Nightly" --logger "trx;LogFileName=core.trx" --logger "console;verbosity=normal" --results-directory TestResults
           dotnet test tests/HexEditor.Platform.Tests -c Release --no-build --logger "trx;LogFileName=platform.trx" --logger "console;verbosity=normal" --results-directory TestResults
@@ -125,6 +127,9 @@ jobs:
           Write-Host "OS architecture: $arch"
           if ("$arch" -ne 'Arm64') { throw "test-arm64 is not running on ARM64 ($arch)." }
       - name: Unit and integration tests
+        env:
+          # テストのプロセスが ARM64 で動いていることを TC-PKG-15-03 が確かめる。
+          HEXEDITOR_EXPECTED_ARCH: Arm64
         run: |
           dotnet test tests/HexEditor.Core.Tests -c Release --filter "Category!=Nightly" --logger "trx;LogFileName=core-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
           dotnet test tests/HexEditor.Platform.Tests -c Release --logger "trx;LogFileName=platform-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
