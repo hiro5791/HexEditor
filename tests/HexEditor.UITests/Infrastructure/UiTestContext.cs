@@ -69,6 +69,9 @@ public sealed class UiTestContext : IAsyncDisposable
         return target;
     }
 
+    /// <summary>テストデータの共有のパス (読むだけのテストで使う。保存しないこと)。</summary>
+    public string TestData(string id) => TestDataCatalog.Get(id);
+
     /// <summary>このテストの一時フォルダにファイルを作る。</summary>
     public string WriteFile(string fileName, byte[] content)
     {
