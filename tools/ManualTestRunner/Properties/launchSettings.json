@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ManualTestRunner (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "ManualTestRunner (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

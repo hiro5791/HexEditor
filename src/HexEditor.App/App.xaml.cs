@@ -11,6 +11,8 @@ public partial class App : Application
 {
     public App()
     {
+        // 表示言語は、リソースを読み込む前に決める (UI-43)。--ui-lang で指定された言語を、そのプロセスの間だけ使う。
+        ApplyUiLanguage(Environment.GetCommandLineArgs());
         InitializeComponent();
 
         // Shift_JIS・EBCDIC など、.NET が標準で持たないコードページを使えるようにする (VIEW-21)。
@@ -20,6 +22,34 @@ public partial class App : Application
         UnhandledException += (_, e) => CrashLog.Write(e.Exception);
         AppDomain.CurrentDomain.UnhandledException += (_, e) => CrashLog.Write(e.ExceptionObject as Exception);
         TaskScheduler.UnobservedTaskException += (_, e) => CrashLog.Write(e.Exception);
+    }
+
+    /// <summary>対応する 23 言語 (00-overview 5.1)。</summary>
+    public static readonly string[] SupportedLanguages =
+    [
+        "en", "zh-Hans", "zh-Hant", "ja", "ko", "id", "vi", "th", "de", "fr", "es", "pt",
+        "it", "ru", "uk", "pl", "cs", "hu", "ro", "el", "ar", "tr", "fa",
+    ];
+
+    /// <summary>表示言語が右から左に書く言語か (アラビア語・ペルシア語。00-overview 5.4)。</summary>
+    public static bool IsRightToLeft => System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+
+    private static void ApplyUiLanguage(string[] args)
+    {
+        int index = Array.IndexOf(args, "--ui-lang");
+        if (index < 0 || index + 1 >= args.Length)
+        {
+            return;
+        }
+
+        string language = args[index + 1];
+        if (!SupportedLanguages.Contains(language, StringComparer.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        Microsoft.Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = language;
+        System.Globalization.CultureInfo.CurrentUICulture = new System.Globalization.CultureInfo(language);
     }
 
     public static Window Window { get; private set; } = null!;
@@ -34,7 +64,21 @@ public partial class App : Application
         DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
 
         // コマンドラインで指定したファイルを開く (AUTO-37 の最小限)。指定がなければ無題を 1 つ開く。
-        string[] files = Environment.GetCommandLineArgs().Skip(1).Where(a => !a.StartsWith('-')).ToArray();
+        string[] all = Environment.GetCommandLineArgs().Skip(1).ToArray();
+        var files = new List<string>();
+        for (int i = 0; i < all.Length; i++)
+        {
+            // 値を取るオプション (AUTO-37) は、値をファイル名として扱わない。
+            if (all[i] is "--ui-lang" or "--test-profile" or "--test-hooks" or "--offset" or "-g" or "--select" or "--encoding" or "--template")
+            {
+                i++;
+            }
+            else if (!all[i].StartsWith('-'))
+            {
+                files.Add(all[i]);
+            }
+        }
+
         foreach (string file in files)
         {
             try

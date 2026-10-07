@@ -8,7 +8,11 @@
     <Project Path="tests/HexEditor.Performance.Tests/HexEditor.Performance.Tests.csproj" />
   </Folder>
   <Folder Name="/tools/">
+    <Project Path="tools/HexEditor.ManualTests/HexEditor.ManualTests.csproj" />
     <Project Path="tools/HexEditor.TestData/HexEditor.TestData.csproj" />
+    <Project Path="tools/ManualTestRunner/ManualTestRunner.csproj">
+      <Platform Project="x86" />
+    </Project>
     <Project Path="tools/TestDataGen/TestDataGen.csproj" />
   </Folder>
 </Solution>

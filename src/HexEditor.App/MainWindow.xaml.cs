@@ -20,6 +20,8 @@ public sealed partial class MainWindow : Window
     {
         Vm = vm;
         InitializeComponent();
+        // 右から左に書く言語では画面全体を左右反転する。Hex ビューは自分で左から右に固定している (VIEW-01 の仕様 9)。
+        Root.FlowDirection = App.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         AppWindow.SetIcon("Assets/AppIcon.ico");

@@ -1,0 +1,10 @@
+term_en,note,ja,zh-Hans,zh-Hant,ko,de,fr,es,pt,ru
+offset,position from the start of the data (bytes),オフセット,偏移,位移,오프셋,Offset,décalage,desplazamiento,deslocamento,смещение
+hex,hexadecimal display column,Hex,十六进制,十六進位,16진수,Hex,hex,hex,hex,Hex
+overwrite mode,typing replaces bytes,上書きモード,覆盖模式,覆寫模式,덮어쓰기 모드,Überschreibmodus,mode refrappe,modo de sobrescritura,modo de substituição,режим замены
+insert mode,typing inserts bytes,挿入モード,插入模式,插入模式,삽입 모드,Einfügemodus,mode insertion,modo de inserción,modo de inserção,режим вставки
+endianness,byte order,エンディアン,字节序,位元組順序,엔디언,Byte-Reihenfolge,boutisme,orden de bytes,ordem dos bytes,порядок байтов
+selection,selected byte range,選択範囲,选区,選取範圍,선택 영역,Auswahl,sélection,selección,seleção,выделение
+bookmark,named position,ブックマーク,书签,書籤,책갈피,Lesezeichen,signet,marcador,marcador,закладка
+encoding,character encoding / code page,文字コード,编码,編碼,인코딩,Codierung,encodage,codificación,codificação,кодировка
+fixed length,data source whose length cannot change,固定長,固定长度,固定長度,고정 길이,feste Länge,longueur fixe,longitud fija,comprimento fixo,фиксированная длина
