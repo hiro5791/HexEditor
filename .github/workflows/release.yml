@@ -1,0 +1,312 @@
+# リリースのビルド (PKG-24)。v<SemVer> のタグの push で、ビルド・検証・公開までを行う。
+#   1. タグの検証 (main 上のコミットか、v + SemVer か、CHANGELOG.md に節があるか、公開済みでないか)
+#   2. 3 種類 × 2 アーキテクチャのビルド (HexVersion にタグの版を渡す。Velopack は前の版から差分を作る)
+#   3. コード署名 (build/sign.ps1。既定では無効で「コード署名: 無効」と出すだけ。PKG-25)
+#   6. MSIX を .msixbundle にまとめ、Store 提出用にワークフローの成果物として残す (Releases には載せない)
+#   7. クリーンなランナーでの検証 (インストーラ・ポータブル・MSIX をテスト用の証明書で)
+#   8-10. SHA256SUMS.txt、リリースノート、GitHub Releases (安定版は下書き、プレビュー版は Pre-release)
+# どこかで失敗したら Releases には何も作らず、失敗した手順を Issue にする。
+# まだないもの: C# スクリプト コンポーネントの zip (AUTO-03)、補助プロセス (PKG-14) のハッシュの埋め込み、
+# winget の提出 (PKG-27、publish.yml)。それぞれの機能を作るときに加える。
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  HEX_SIGNING_ENABLED: ${{ vars.HEX_SIGNING_ENABLED }}
+
+jobs:
+  prepare:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
+      prerelease: ${{ steps.tag.outputs.prerelease }}
+      commit: ${{ steps.tag.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Validate the tag
+        id: tag
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ github.ref_name }}'
+          if ($tag -notmatch '^v(.+)$') { throw "The tag $tag does not start with v (PKG-28)." }
+          $version = $Matches[1]
+          if ($version -match '-local$') { throw 'A -local version cannot be released.' }
+          # Format and limits: the same check as the build (Directory.Build.targets, HexValidateVersion).
+          dotnet msbuild src/HexEditor.Platform/HexEditor.Platform.csproj -nologo -t:HexValidateVersion "-p:HexVersion=$version"
+          if ($LASTEXITCODE -ne 0) { throw "Invalid version in tag $tag (PKG-28)." }
+          # Only tags on commits of main (PKG-24 spec 3).
+          git fetch origin main
+          git merge-base --is-ancestor $env:GITHUB_SHA origin/main
+          if ($LASTEXITCODE -ne 0) { throw "The tag $tag is not on a commit of main." }
+          # CHANGELOG.md must have a section for the version (PKG-24 step 1).
+          ./build/release-notes.ps1 -Version $version -OutFile release-notes.md
+          if ($LASTEXITCODE -ne 0) { throw "CHANGELOG.md has no section for $version." }
+          # A published release cannot be built again; a draft is replaced (PKG-24 spec 4).
+          $existing = gh release view $tag --json isDraft 2>$null | ConvertFrom-Json
+          if ($existing -and -not $existing.isDraft) { throw "The release $tag is already published." }
+          $pre = if ($version -match '-') { 'true' } else { 'false' }
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "prerelease=$pre" >> $env:GITHUB_OUTPUT
+          "commit=$($env:GITHUB_SHA.Substring(0, 7))" >> $env:GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-notes
+          path: release-notes.md
+
+  build:
+    needs: prepare
+    runs-on: windows-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: true
+      matrix:
+        distro: [Msix, Installer, Portable]
+        arch: [x64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - name: Previous Velopack release (for the delta package)
+        if: matrix.distro == 'Installer'
+        shell: pwsh
+        run: |
+          dotnet tool restore
+          # The first release has nothing to download; that is not an error.
+          dotnet vpk download github --repoUrl "${{ github.server_url }}/${{ github.repository }}" --token "${{ github.token }}" --channel "win-${{ matrix.arch }}" --outputDir previous
+          if ($LASTEXITCODE -ne 0) { Write-Host 'No previous release; no delta package this time.' }
+          $global:LASTEXITCODE = 0
+      - name: Publish
+        shell: pwsh
+        run: ./build/publish.ps1 -Distro ${{ matrix.distro }} -Arch ${{ matrix.arch }} -Version ${{ needs.prepare.outputs.version }} -Commit ${{ needs.prepare.outputs.commit }} -PreviousReleaseDir previous
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HexEditor-${{ matrix.distro }}-${{ matrix.arch }}
+          path: artifacts/${{ matrix.distro }}/${{ matrix.arch }}/
+
+  bundle:
+    needs: [prepare, build]
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: HexEditor-Msix-*
+          path: downloaded
+      - name: Bundle
+        shell: pwsh
+        run: |
+          foreach ($d in Get-ChildItem downloaded -Directory) {
+            $arch = ($d.Name -split '-')[2]
+            New-Item -ItemType Directory -Force "artifacts/Msix/$arch" | Out-Null
+            Copy-Item "$($d.FullName)/*" "artifacts/Msix/$arch"
+          }
+          ./build/bundle-msix.ps1 -Version ${{ needs.prepare.outputs.version }}
+      # Store に提出するファイル。GitHub Releases には載せない (PKG-24 手順 6、PKG-25 の仕様 2)。
+      - uses: actions/upload-artifact@v4
+        with:
+          name: store-submission
+          path: |
+            artifacts/Msix/*.msixbundle
+            artifacts/Msix/*/*.msix
+
+  verify:
+    needs: [prepare, build]
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: HexEditor-*
+          path: downloaded
+      - name: Arrange artifacts
+        shell: pwsh
+        run: |
+          foreach ($d in Get-ChildItem downloaded -Directory) {
+            $null, $distro, $arch = $d.Name -split '-'
+            New-Item -ItemType Directory -Force "artifacts/$distro/$arch" | Out-Null
+            Copy-Item "$($d.FullName)/*" "artifacts/$distro/$arch" -Recurse
+          }
+      - name: Artifact tests
+        shell: pwsh
+        run: ./build/tests/Test-Artifacts.ps1 -ArtifactsDir artifacts -Version ${{ needs.prepare.outputs.version }} -SkipInvalidDistro -Stable:$('${{ needs.prepare.outputs.prerelease }}' -eq 'false')
+      - name: Installer (install, start, uninstall)
+        shell: pwsh
+        run: ./build/tests/Test-Installer.ps1 -Setup (Resolve-Path artifacts/Installer/x64/HexEditor-${{ needs.prepare.outputs.version }}-x64-Setup.exe)
+      - name: Portable (start, exit)
+        shell: pwsh
+        run: ./build/tests/Test-Portable.ps1 -Zip (Resolve-Path artifacts/Portable/x64/HexEditor-${{ needs.prepare.outputs.version }}-x64-portable.zip)
+      - name: MSIX (install with a throwaway certificate, start, remove)
+        shell: pwsh
+        run: |
+          # The certificate exists only on this runner and is never published (PKG-24 step 7).
+          $msix = Resolve-Path artifacts/Msix/x64/HexEditor-${{ needs.prepare.outputs.version }}-x64.msix
+          [xml]$m = & { Add-Type -AssemblyName System.IO.Compression.FileSystem; $z = [IO.Compression.ZipFile]::OpenRead($msix); try { (New-Object IO.StreamReader($z.GetEntry('AppxManifest.xml').Open())).ReadToEnd() } finally { $z.Dispose() } }
+          $publisher = $m.Package.Identity.Publisher
+          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject $publisher -CertStoreLocation Cert:\CurrentUser\My -NotAfter (Get-Date).AddDays(1)
+          $pfx = Join-Path $env:RUNNER_TEMP 'test.pfx'
+          $password = ConvertTo-SecureString -String ([guid]::NewGuid().ToString()) -Force -AsPlainText
+          Export-PfxCertificate -Cert $cert -FilePath $pfx -Password $password | Out-Null
+          Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\LocalMachine\TrustedPeople -Password $password | Out-Null
+          $signed = Join-Path $env:RUNNER_TEMP 'test.msix'
+          Copy-Item $msix $signed
+          $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin" -Recurse -Filter signtool.exe | Where-Object FullName -match '\\x64\\' | Select-Object -Last 1
+          & $signtool.FullName sign /fd SHA256 /sha1 $cert.Thumbprint $signed
+          if ($LASTEXITCODE -ne 0) { throw 'signing the test package failed' }
+          Add-AppxPackage -Path $signed
+          $pkg = Get-AppxPackage -Name HexEditor
+          if (-not $pkg) { throw 'the MSIX package was not installed' }
+          Start-Process "shell:AppsFolder\$($pkg.PackageFamilyName)!App"
+          Start-Sleep -Seconds 10
+          $p = Get-Process HexEditor -ErrorAction SilentlyContinue
+          if (-not $p) { throw 'the MSIX version did not start' }
+          $p | Stop-Process -Force
+          Remove-AppxPackage -Package $pkg.PackageFullName
+          Remove-Item $pfx, $signed -Force
+
+  size:
+    needs: [prepare, build]
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: HexEditor-*
+          path: artifacts
+      - name: Measure (PKG-16)
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Sizes of the previous release from its assets (the MSIX and the installed size are not in Releases).
+          $previous = @{ x64 = @{}; arm64 = @{} }
+          $tag = gh release list --exclude-drafts --limit 1 --json tagName --jq '.[0].tagName' 2>$null
+          if ($tag) {
+            foreach ($a in (gh release view $tag --json assets | ConvertFrom-Json).assets) {
+              foreach ($arch in 'x64', 'arm64') {
+                if ($a.name -like "*-$arch-portable.zip") { $previous[$arch]['portable zip'] = $a.size }
+                if ($a.name -like "*-$arch-Setup.exe") { $previous[$arch]['Setup.exe'] = $a.size }
+                if ($a.name -like "*win-$arch*-delta.nupkg") { $previous[$arch]['delta package'] = $a.size }
+              }
+            }
+          }
+          $previous | ConvertTo-Json -Depth 3 | Set-Content previous-sizes.json
+          $approved = '${{ vars.SIZE_INCREASE_APPROVED }}' -eq '${{ needs.prepare.outputs.version }}'
+          ./build/measure-size.ps1 -ArtifactsDir artifacts -PreviousJson previous-sizes.json -OutJson sizes.json -WarnOnly:$approved
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sizes
+          path: sizes.json
+
+  publish:
+    needs: [prepare, build, bundle, verify, size]
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: HexEditor-*
+          path: downloaded
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-notes
+      - name: Collect release files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force release | Out-Null
+          # MSIX is not published on GitHub Releases (PKG-26 spec 1).
+          Get-ChildItem downloaded -Recurse -File |
+            Where-Object { $_.Extension -notin '.msix', '.msixbundle', '.appx', '.appxbundle' } |
+            Where-Object { $_.Name -like 'HexEditor-*' -or $_.Name -like 'releases.*.json' -or $_.Name -like 'RELEASES*' -or $_.Name -like 'assets.*.json' } |
+            Copy-Item -Destination release
+          ./build/checksums.ps1 -Dir release
+      - name: Velopack upload
+        shell: pwsh
+        run: |
+          dotnet tool restore
+          $pre = '${{ needs.prepare.outputs.prerelease }}' -eq 'true'
+          foreach ($arch in 'x64', 'arm64') {
+            $vpkArgs = @('vpk', 'upload', 'github', '--repoUrl', '${{ github.server_url }}/${{ github.repository }}', '--token', '${{ github.token }}',
+              '--tag', '${{ github.ref_name }}', '--releaseName', 'HexEditor ${{ needs.prepare.outputs.version }}', '--merge',
+              '--channel', "win-$arch", '--outputDir', "downloaded/HexEditor-Installer-$arch")
+            if ($pre) { $vpkArgs += '--pre' }
+            dotnet @vpkArgs
+            if ($LASTEXITCODE -ne 0) { throw "vpk upload github failed ($arch)" }
+          }
+      - name: GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ github.ref_name }}'
+          $files = Get-ChildItem release -File | Where-Object { $_.Name -like '*-Setup.exe' -or $_.Name -like '*-portable.zip' -or $_.Name -eq 'SHA256SUMS.txt' }
+          gh release upload $tag @($files.FullName) --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'gh release upload failed' }
+          # Stable: a draft that the maintainer publishes. Preview: published as a pre-release (PKG-24 spec 2).
+          if ('${{ needs.prepare.outputs.prerelease }}' -eq 'true') {
+            gh release edit $tag --notes-file release-notes.md --prerelease --draft=false
+          } else {
+            gh release edit $tag --notes-file release-notes.md --draft=true
+          }
+          if ($LASTEXITCODE -ne 0) { throw 'gh release edit failed' }
+      - name: Remove the partial draft
+        if: failure()
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $r = gh release view '${{ github.ref_name }}' --json isDraft 2>$null | ConvertFrom-Json
+          if ($r -and $r.isDraft) { gh release delete '${{ github.ref_name }}' --yes }
+
+  report-failure:
+    needs: [prepare, build, bundle, verify, size, publish]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open an issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "${{ github.repository }}" \
+            --title "Release ${{ github.ref_name }} failed" \
+            --body "The release workflow failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}. Jobs: prepare=${{ needs.prepare.result }}, build=${{ needs.build.result }}, bundle=${{ needs.bundle.result }}, verify=${{ needs.verify.result }}, size=${{ needs.size.result }}, publish=${{ needs.publish.result }}."

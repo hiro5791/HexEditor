@@ -1,0 +1,22 @@
+# エディタの共通設定。CI の lint のジョブ (PKG-23) が editorconfig-checker で確かめる。
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+
+# Windows でしか使わないファイルは CRLF (.gitattributes と同じ)
+[*.{ps1,cmd,bat}]
+end_of_line = crlf
+
+[*.{cs,ps1}]
+indent_size = 4
+
+[*.{csproj,props,targets,xml,xaml,appxmanifest,manifest,json,yml,yaml,slnx,resw,pubxml}]
+indent_size = 2
+
+[*.md]
+# Markdown の行末の 2 つの空白は改行の意味を持つが、このリポジトリでは使わない。
+trim_trailing_whitespace = true

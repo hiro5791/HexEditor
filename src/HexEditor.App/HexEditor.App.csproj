@@ -4,6 +4,8 @@
     <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <RootNamespace>HexEditor.App</RootNamespace>
+    <!-- 実行ファイルは HexEditor.exe (PKG-05 の仕様 1、PKG-07)。名前空間は HexEditor.App のまま。 -->
+    <AssemblyName>HexEditor</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x64;ARM64</Platforms>
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture.ToString().ToLowerInvariant())</RuntimeIdentifier>
@@ -57,7 +59,31 @@
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\AppIcon.ico" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <!-- 第三者のライセンス表示はすべての配布形態に入れる (PKG-05 の仕様 1、UI-40)。 -->
+    <Content Include="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
+
+  <!-- ビルドの配布形態を実行時に読めるようにする (判定の結果との食い違いの警告。PKG-12 の仕様 2)。 -->
+  <ItemGroup>
+    <AssemblyMetadata Include="HexDistro" Value="$(HexDistro)" />
+    <Using Include="HexEditor.Platform" />
+  </ItemGroup>
+
+  <!--
+    MSIX のマニフェストの版は PKG-28 の対応表で SemVer から作る (PKG-03 の仕様 4)。手で書かない。
+    Package.appxmanifest をひな形として obj にコピーし、Identity の Version を書き換えたものを使う。
+  -->
+  <ItemGroup Condition="'$(WindowsPackageType)' == 'MSIX'">
+    <AppxManifest Include="$(BaseIntermediateOutputPath)manifest\$(Configuration)\$(Platform)\Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <Target Name="HexGenerateAppxManifest" BeforeTargets="PrepareForBuild;_ValidatePresenceOfAppxManifestItems"
+          Condition="'$(WindowsPackageType)' == 'MSIX'">
+    <Copy SourceFiles="Package.appxmanifest" DestinationFiles="@(AppxManifest)" SkipUnchangedFiles="false" />
+    <XmlPoke XmlInputPath="@(AppxManifest)" Query="/m:Package/m:Identity/@Version" Value="$(HexMsixVersion)"
+             Namespaces="&lt;Namespace Prefix='m' Uri='http://schemas.microsoft.com/appx/manifest/foundation/windows10' /&gt;" />
+  </Target>
 
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
@@ -88,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HexEditor.Core\HexEditor.Core.csproj" />
+    <ProjectReference Include="..\HexEditor.Platform\HexEditor.Platform.csproj" />
   </ItemGroup>
 
   <!--

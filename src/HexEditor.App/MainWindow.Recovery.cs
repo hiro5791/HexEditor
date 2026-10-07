@@ -57,6 +57,18 @@ public sealed partial class MainWindow
             await ShowRecoveryDialogAsync(entries, journals);
         }
 
+        // 起動処理 (XAML の前) で見つかったこと (応答しない既存のインスタンス、書き込めないデータフォルダなど)。
+        // 「設定をエクスポート」のボタン (Startup_ExportSettings) は設定のエクスポート (UI-25、フェーズ 1) ができてから付ける。
+        foreach (StartupNotice notice in StartupNotices.TakeAll())
+        {
+            ShowNotice(notice.Message, notice.Severity switch
+            {
+                StartupNoticeSeverity.Error => InfoBarSeverity.Error,
+                StartupNoticeSeverity.Warning => InfoBarSeverity.Warning,
+                _ => InfoBarSeverity.Informational,
+            });
+        }
+
         ShowAdminDropNoticeOnce();
         if (CrashReporter.FindUnseen() is { } crash)
         {

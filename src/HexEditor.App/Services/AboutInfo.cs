@@ -15,10 +15,10 @@ public static class AboutInfo
 
     public static IReadOnlyList<(string Label, string Value)> Items(IAppEnvironment env) =>
     [
-        ("Version", env.AppVersion),
-        ("Channel", env.Channel),
+        ("Version", env.InformationalVersion),
+        ("Channel", env.Channel.ToString()),
         ("Distribution", env.Distribution.ToString()),
-        ("Architecture", RuntimeInformation.ProcessArchitecture.ToString()),
+        ("Architecture", env.ProcessArchitecture.ToString()),
         (".NET", RuntimeInformation.FrameworkDescription),
         ("Windows App SDK", WindowsAppSdkVersion()),
         ("OS", $"{RuntimeInformation.OSDescription} ({Environment.OSVersion.Version})"),

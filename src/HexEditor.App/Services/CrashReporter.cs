@@ -96,7 +96,7 @@ public static partial class CrashReporter
         var text = new StringBuilder();
         text.AppendLine("HexEditor crash report");
         text.AppendLine($"Time: {DateTimeOffset.Now:O}");
-        text.AppendLine($"Version: {_environment?.AppVersion ?? "?"}");
+        text.AppendLine($"Version: {_environment?.InformationalVersion ?? "?"}");
         text.AppendLine($"Distribution: {_environment?.Distribution.ToString() ?? "?"}");
         text.AppendLine($"Architecture: {RuntimeInformation.ProcessArchitecture}");
         text.AppendLine($"OS: {RuntimeInformation.OSDescription} ({Environment.OSVersion.Version})");

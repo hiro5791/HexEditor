@@ -300,4 +300,17 @@ Length: {2} ({3} bytes)</value></data>
   <data name="HexView_Char_Space" xml:space="preserve"><value>space</value></data>
   <data name="HexView_Char_Unprintable" xml:space="preserve"><value>non-printable character</value></data>
   <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} bytes deleted</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>A fast hex editor for files and disks of any size</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>The existing window isn't responding, so this was opened in a new instance.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>Settings won't be saved because the data folder can't be written to.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Export settings</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>Deleted {0} recovery item(s) older than 30 days.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>HexEditor couldn't start.
+
+{0}
+
+Details were written to:
+{1}</value></data>
 </root>

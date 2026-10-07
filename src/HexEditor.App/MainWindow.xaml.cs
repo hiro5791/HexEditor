@@ -124,7 +124,7 @@ public sealed partial class MainWindow : Window
     private void UpdateTitle()
     {
         IAppEnvironment env = Program.Environment;
-        string app = env.Channel == "Preview" ? "HexEditor Preview" : "HexEditor";
+        string app = env.Channel == ReleaseChannel.Preview ? "HexEditor Preview" : "HexEditor";
         string title = Vm.Selected is { } d ? $"{(d.Document.IsModified ? "● " : string.Empty)}{d.DisplayName} - {app}" : app;
         if (env.IsElevated)
         {

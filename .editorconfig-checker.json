@@ -1,0 +1,7 @@
+{
+  "Exclude": ["\\.png$", "\\.ico$", "\\.pfx$", "\\.vhdx$", "\\.resw$", "^artifacts/", "/bin/", "/obj/"],
+  "Disable": {
+    "IndentSize": true,
+    "MaxLineLength": true
+  }
+}

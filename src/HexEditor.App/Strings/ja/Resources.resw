@@ -300,4 +300,17 @@
   <data name="HexView_Char_Space" xml:space="preserve"><value>空白</value></data>
   <data name="HexView_Char_Unprintable" xml:space="preserve"><value>表示できない文字</value></data>
   <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} バイトを削除しました</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>どんな大きさのファイルやディスクも扱える高速なバイナリエディタ</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>既存のウィンドウが応答しないため、新しいインスタンスで開きました。</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>データフォルダに書き込めないため、設定は保存されません。</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>設定をエクスポート</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>30 日以上前の復旧用データを {0} 件削除しました。</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>起動できませんでした。
+
+{0}
+
+詳細の記録:
+{1}</value></data>
 </root>
