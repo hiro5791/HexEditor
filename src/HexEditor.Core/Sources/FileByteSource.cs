@@ -1,0 +1,161 @@
+using Microsoft.Win32.SafeHandles;
+
+namespace HexEditor.Core.Sources;
+
+/// <summary>
+/// ファイルのデータソース。読み込みは <see cref="RandomAccess"/> を使い、スレッドセーフに位置を指定して読む
+/// (ENG-01 の仕様 5)。<c>MemoryMappedFile</c> は使わない。
+/// </summary>
+public sealed class FileByteSource : ByteSourceBase
+{
+    /// <summary>読み込みエラーのときに分けて読み直す単位 (ENG-06 の仕様 8)。</summary>
+    internal const int ErrorSplitSize = 4096;
+
+    private readonly SafeFileHandle _handle;
+    private readonly long _length;
+
+    private FileByteSource(string path, SafeFileHandle handle, bool readOnlyAttribute)
+    {
+        Path = path;
+        _handle = handle;
+        _length = RandomAccess.GetLength(handle);
+        Identity = "file:" + path.ToUpperInvariant();
+        Capabilities = SourceCapabilities.CanResize | SourceCapabilities.CanReplace
+            | (readOnlyAttribute ? SourceCapabilities.None : SourceCapabilities.CanWrite);
+    }
+
+    public string Path { get; }
+
+    public override string DisplayName => System.IO.Path.GetFileName(Path);
+
+    public override string Identity { get; }
+
+    /// <summary>開いた時点の長さ。外部変更は ENG-19 で検知して開き直す。</summary>
+    public override long Length => _length;
+
+    public override SourceCapabilities Capabilities { get; }
+
+    /// <summary>
+    /// ファイルを読み取りで開く。保存中の置き換え (ENG-22) と外部の編集を妨げないよう、共有は読み書き・削除を許す。
+    /// </summary>
+    public static FileByteSource Open(string path)
+    {
+        string fullPath = System.IO.Path.GetFullPath(path);
+        SafeFileHandle handle = File.OpenHandle(
+            fullPath,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.ReadWrite | FileShare.Delete,
+            FileOptions.RandomAccess);
+        bool readOnly = File.GetAttributes(fullPath).HasFlag(FileAttributes.ReadOnly);
+        return new FileByteSource(fullPath, handle, readOnly);
+    }
+
+    public override ReadResult Read(long offset, Span<byte> buffer)
+    {
+        int count = ClampToLength(offset, buffer.Length);
+        Span<byte> target = buffer[..count];
+        try
+        {
+            ReadFully(offset, target);
+            return new ReadResult(count);
+        }
+        catch (IOException)
+        {
+            return ReadWithErrorSplit(offset, target);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return ReadWithErrorSplit(offset, target);
+        }
+    }
+
+    public override async ValueTask<ReadResult> ReadAsync(long offset, Memory<byte> buffer, CancellationToken cancellationToken = default)
+    {
+        int count = ClampToLength(offset, buffer.Length);
+        Memory<byte> target = buffer[..count];
+        try
+        {
+            int done = 0;
+            while (done < count)
+            {
+                int n = await RandomAccess.ReadAsync(_handle, target[done..], offset + done, cancellationToken).ConfigureAwait(false);
+                if (n == 0)
+                {
+                    // 開いた後にファイルが短くなった。残りは読めない範囲として扱う。
+                    target.Span[done..].Clear();
+                    return new ReadResult(count, [new UnreadableRange(offset + done, count - done, UnreadableReason.IoError)]);
+                }
+
+                done += n;
+            }
+
+            return new ReadResult(count);
+        }
+        catch (IOException)
+        {
+            return ReadWithErrorSplit(offset, target.Span);
+        }
+    }
+
+    private void ReadFully(long offset, Span<byte> target)
+    {
+        int done = 0;
+        while (done < target.Length)
+        {
+            int n = RandomAccess.Read(_handle, target[done..], offset + done);
+            if (n == 0)
+            {
+                throw new EndOfStreamException();
+            }
+
+            done += n;
+        }
+    }
+
+    /// <summary>失敗した読み込みを小さな単位に分けて読み直し、失敗した部分だけを読めない範囲にする。</summary>
+    private ReadResult ReadWithErrorSplit(long offset, Span<byte> target)
+    {
+        var bad = new List<UnreadableRange>();
+        for (int pos = 0; pos < target.Length; pos += ErrorSplitSize)
+        {
+            int len = Math.Min(ErrorSplitSize, target.Length - pos);
+            Span<byte> part = target.Slice(pos, len);
+            try
+            {
+                ReadFully(offset + pos, part);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                part.Clear();
+                var reason = ex is UnauthorizedAccessException ? UnreadableReason.AccessDenied : UnreadableReason.IoError;
+                AddRange(bad, new UnreadableRange(offset + pos, len, reason, ex.HResult));
+            }
+        }
+
+        return new ReadResult(target.Length, bad);
+    }
+
+    private static void AddRange(List<UnreadableRange> ranges, UnreadableRange range)
+    {
+        if (ranges.Count > 0)
+        {
+            UnreadableRange last = ranges[^1];
+            if (last.End == range.Offset && last.Reason == range.Reason && last.ErrorCode == range.ErrorCode)
+            {
+                ranges[^1] = last with { Length = last.Length + range.Length };
+                return;
+            }
+        }
+
+        ranges.Add(range);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _handle.Dispose();
+        }
+    }
+}

@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\HexEditor.Core\HexEditor.Core.csproj" />
+    <ProjectReference Include="..\HexEditor.TestData\HexEditor.TestData.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
