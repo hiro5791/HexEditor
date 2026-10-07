@@ -1,0 +1,30 @@
+<Project>
+  <!-- 版の形式と上限の検査 (PKG-28 の「エラー」)。違えばビルドを失敗にする。 -->
+  <Target Name="HexValidateVersion" BeforeTargets="BeforeBuild;GetAssemblyAttributes">
+    <Error Condition="'$(HexVersionValid)' != 'True'"
+           Text="HexVersion '$(HexVersion)' は MAJOR.MINOR.PATCH または MAJOR.MINOR.PATCH-preview.N の形式にしてください (PKG-28)。" />
+    <Error Condition="'$(HexVersionValid)' == 'True' and $(HexVersionPatch) &gt; 64"
+           Text="HexVersion '$(HexVersion)': PATCH は 64 以下にしてください (MSIX の版の上限。PKG-28)。" />
+    <Error Condition="'$(HexVersionValid)' == 'True' and '$(HexVersionPreview)' != '' and ($(HexVersionPreview) &lt; 1 or $(HexVersionPreview) &gt; 998)"
+           Text="HexVersion '$(HexVersion)': プレビューの番号 N は 1〜998 にしてください (PKG-28)。" />
+    <Error Condition="'$(HexVersionValid)' == 'True' and ($(HexVersionMajor) &gt; 65535 or $(HexVersionMinor) &gt; 65535)"
+           Text="HexVersion '$(HexVersion)': MAJOR と MINOR は 65535 以下にしてください (PKG-28)。" />
+  </Target>
+
+  <!--
+    InformationalVersion に「+<コミットの短いハッシュ>」を付ける (PKG-28 の仕様 3)。
+    CI は -p:HexCommit=<短いハッシュ> で渡す。渡されなければ git から取る (git がなければ付けない)。
+  -->
+  <Target Name="HexAddCommitToInformationalVersion" BeforeTargets="GetAssemblyAttributes" DependsOnTargets="HexValidateVersion"
+          Condition="'$(GenerateAssemblyInfo)' != 'false'">
+    <Exec Condition="'$(HexCommit)' == ''" Command="git rev-parse --short=7 HEAD" ConsoleToMSBuild="true" IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true"
+          StandardOutputImportance="low" StandardErrorImportance="low" ContinueOnError="true" WorkingDirectory="$(MSBuildThisFileDirectory)">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_HexGitCommit" />
+      <Output TaskParameter="ExitCode" PropertyName="_HexGitExitCode" />
+    </Exec>
+    <PropertyGroup>
+      <HexCommit Condition="'$(HexCommit)' == '' and '$(_HexGitExitCode)' == '0'">$(_HexGitCommit.Trim())</HexCommit>
+      <InformationalVersion Condition="'$(HexCommit)' != '' and !$(InformationalVersion.Contains('+'))">$(InformationalVersion)+$(HexCommit)</InformationalVersion>
+    </PropertyGroup>
+  </Target>
+</Project>

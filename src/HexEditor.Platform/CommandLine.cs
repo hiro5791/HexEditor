@@ -1,4 +1,4 @@
-namespace HexEditor.App.Hosting;
+namespace HexEditor.Platform;
 
 /// <summary>
 /// GUI のコマンドライン (AUTO-37 のうち、今の版で扱うもの)。値を取るオプションの値はファイル名として扱わない。

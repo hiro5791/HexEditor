@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    配布形態と実行環境 (PKG-05〜PKG-13、PKG-28) のうち、WinUI に依存しない処理。
+    App から参照し、単体テスト (tests/HexEditor.Platform.Tests) から直接テストする。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="HexEditor.Platform.Tests" />
+  </ItemGroup>
+
+</Project>

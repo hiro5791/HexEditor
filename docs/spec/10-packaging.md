@@ -499,7 +499,7 @@
    }
    ```
 
-4. AppUserModelID は、MSIX 版はパッケージから決まるものを使う。非パッケージ版は起動処理で `SetCurrentProcessExplicitAppUserModelID` を呼んで設定する。インストーラ版は Velopack が作るショートカットの AppUserModelID と同じ値にする (タスクバーのまとまりとジャンプリストのため。具体的な値は Velopack の仕様を確認して決める。未決定)。ポータブル版は `HexEditor.Portable.<exe のフォルダのハッシュ 8 桁>`。
+4. AppUserModelID は、MSIX 版はパッケージから決まるものを使う。非パッケージ版は起動処理で `SetCurrentProcessExplicitAppUserModelID` を呼んで設定する。インストーラ版は Velopack が作るショートカットの AppUserModelID と同じ値にする (タスクバーのまとまりとジャンプリストのため)。Velopack 1.2 の既定の値 `velopack.HexEditor` (`velopack.<パッケージ ID>`) を使う (Velopack も起動時に同じ値を設定する)。ポータブル版は `HexEditor.Portable.<exe のフォルダのハッシュ 8 桁>`、開発中の実行は `HexEditor.Development`。
 5. 各実装 (`MsixEnvironment`、`InstallerEnvironment`、`PortableEnvironment`、`DevelopmentEnvironment`) は単体テストで差し替えられるようにする。
 
 **画面**: バージョン情報 (09 の UI-40) に判定結果を表示する。
@@ -542,7 +542,7 @@
 2. MSIX 版は `ApplicationData.Current.LocalFolder` と `LocalCacheFolder` の API でパスを取る。パスを文字列で組み立てない。
 3. 一時ファイルの場所は設定 `storage.tempDirectory` で変えられる (巨大ファイルの編集で容量の大きいドライブを使うため)。
 4. 一時フォルダの中身は起動時に、実行中の他のインスタンスが使っていないもの (ロックされていないもの) を消す。
-5. 復旧用データは、異常終了後の起動で利用者が「復旧する」「破棄する」を選んだ時点で消す。30 日以上前の復旧用データは起動時に消す (消す前に InfoBar で知らせる)。
+5. 復旧用データは、異常終了後の起動で利用者が「復旧する」「破棄する」を選んだ時点で消す。30 日以上前の復旧用データは起動時 (ウィンドウを作る前) に消し、消した件数をアプリ全体の InfoBar で知らせる (2026-10-07 変更: 起動処理は XAML より前に動くため、消す前ではなく消した後に知らせる)。
 6. どの保存先も、ファイルの内容をコピーしない (00-overview.md 11.3 のとおり、巨大な追加データは参照として記録する)。
 
 **画面**: 設定画面「詳細」に各フォルダの場所と「開く」ボタン。

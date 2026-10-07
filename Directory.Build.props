@@ -7,7 +7,47 @@
     <Company>Hiroyura</Company>
     <Product>HexEditor</Product>
     <Copyright>Copyright (c) 2026 Hiroyura</Copyright>
-    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+  <!--
+    版 (PKG-28)。唯一の情報源は Git のタグ v<版>。CI はタグから取り出して -p:HexVersion=<版> で渡す。
+    タグのないローカルのビルドは 0.0.0-local。ここで各所の版を計算する (HexEditor.Platform の SemanticVersion と同じ計算)。
+      InformationalVersion : SemVer + "+<コミットの短いハッシュ>" (Directory.Build.targets で付ける。CI は HexCommit で渡せる)
+      Velopack の版        : SemVer (= HexVersion)
+      MSIX / FileVersion   : MAJOR.MINOR.(PATCH*1000 + P).0。P はプレビューなら N、安定版なら 999、ローカルは 0
+      AssemblyVersion      : MAJOR.MINOR.0.0
+    形式と上限 (PATCH <= 64、N は 1-998) の検査は Directory.Build.targets の HexValidateVersion (ビルドのエラーにする)。
+  -->
+  <PropertyGroup>
+    <HexVersion Condition="'$(HexVersion)' == ''">0.0.0-local</HexVersion>
+    <_HexVersionPattern>^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-preview\.([0-9]+)|-local)?$</_HexVersionPattern>
+    <HexVersionValid>$([System.Text.RegularExpressions.Regex]::IsMatch('$(HexVersion)', '$(_HexVersionPattern)'))</HexVersionValid>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(HexVersionValid)' == 'True'">
+    <HexVersionMajor>$([System.Text.RegularExpressions.Regex]::Replace('$(HexVersion)', '$(_HexVersionPattern)', '$1'))</HexVersionMajor>
+    <HexVersionMinor>$([System.Text.RegularExpressions.Regex]::Replace('$(HexVersion)', '$(_HexVersionPattern)', '$2'))</HexVersionMinor>
+    <HexVersionPatch>$([System.Text.RegularExpressions.Regex]::Replace('$(HexVersion)', '$(_HexVersionPattern)', '$3'))</HexVersionPatch>
+    <HexVersionPreview>$([System.Text.RegularExpressions.Regex]::Replace('$(HexVersion)', '$(_HexVersionPattern)', '$5'))</HexVersionPreview>
+    <HexVersionIsLocal>$(HexVersion.EndsWith('-local'))</HexVersionIsLocal>
+    <_HexMsixP Condition="'$(HexVersionPreview)' != ''">$(HexVersionPreview)</_HexMsixP>
+    <_HexMsixP Condition="'$(HexVersionPreview)' == '' and '$(HexVersionIsLocal)' == 'True'">0</_HexMsixP>
+    <_HexMsixP Condition="'$(_HexMsixP)' == ''">999</_HexMsixP>
+    <HexMsixVersion>$(HexVersionMajor).$(HexVersionMinor).$([MSBuild]::Add($([MSBuild]::Multiply($(HexVersionPatch), 1000)), $(_HexMsixP))).0</HexMsixVersion>
+    <HexAssemblyVersion>$(HexVersionMajor).$(HexVersionMinor).0.0</HexAssemblyVersion>
+  </PropertyGroup>
+  <!-- 形式が違う場合も評価は続け、HexValidateVersion でエラーにする。 -->
+  <PropertyGroup Condition="'$(HexVersionValid)' != 'True'">
+    <HexMsixVersion>0.0.0.0</HexMsixVersion>
+    <HexAssemblyVersion>0.0.0.0</HexAssemblyVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Version>$(HexVersion)</Version>
+    <Version Condition="'$(HexVersionValid)' != 'True'">0.0.0</Version>
+    <AssemblyVersion>$(HexAssemblyVersion)</AssemblyVersion>
+    <FileVersion>$(HexMsixVersion)</FileVersion>
+    <InformationalVersion>$(HexVersion)</InformationalVersion>
+    <!-- SDK が付ける完全なコミットのハッシュの代わりに、短いハッシュを自分で付ける。 -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
   <!-- Core と非 UI のプロジェクトは警告をエラーにする (WinUI の生成コードの警告を避けるため App は除く) -->

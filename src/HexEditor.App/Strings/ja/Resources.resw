@@ -126,4 +126,17 @@
   <data name="Crash_Report" xml:space="preserve"><value>問題を報告</value></data>
   <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor が異常終了しました。クラッシュ情報のファイルの内容を下に貼り付けてください。開いていたファイルの内容は含まれていません。</value></data>
   <data name="Notice_UrlCopied" xml:space="preserve"><value>ブラウザを開けなかったため、リンクをクリップボードにコピーしました。</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>どんな大きさのファイルやディスクも扱える高速なバイナリエディタ</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>既存のウィンドウが応答しないため、新しいインスタンスで開きました。</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>データフォルダに書き込めないため、設定は保存されません。</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>設定をエクスポート</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>30 日以上前の復旧用データを {0} 件削除しました。</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>起動できませんでした。
+
+{0}
+
+詳細の記録:
+{1}</value></data>
 </root>

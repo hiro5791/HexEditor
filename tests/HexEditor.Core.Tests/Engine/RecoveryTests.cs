@@ -153,6 +153,29 @@ public sealed class RecoveryTests : IDisposable
     }
 
     [Fact]
+    public void DeletesRecoveryDataOlderThan30Days()
+    {
+        // 30 日以上前の復旧用データは起動時に消す。使用中のもの (他のインスタンス) は消さない (PKG-13 の仕様 5)。
+        var old = new Document(MemoryByteSource.CreateEmpty("Untitled 1"), Options());
+        var oldRecovery = new DocumentRecovery(Root, old.Id);
+        old.Insert(0, [0x01]);
+        oldRecovery.Write(DocumentRecovery.Capture(old, 0, 0, 0)!);
+        SimulateCrash(old, oldRecovery);
+
+        using var live = new Document(MemoryByteSource.CreateEmpty("Untitled 2"), Options());
+        using var liveRecovery = new DocumentRecovery(Root, live.Id);
+        live.Insert(0, [0x02]);
+        liveRecovery.Write(DocumentRecovery.Capture(live, 0, 0, 0)!);
+
+        Assert.Equal(0, RecoveryStore.DeleteExpired(Root, RecoveryStore.MaxAge, DateTime.UtcNow));
+        Assert.Single(RecoveryStore.Scan(Root));
+
+        Assert.Equal(1, RecoveryStore.DeleteExpired(Root, RecoveryStore.MaxAge, DateTime.UtcNow.AddDays(31)));
+        Assert.Empty(RecoveryStore.Scan(Root));
+        Assert.True(File.Exists(liveRecovery.StatePath));
+    }
+
+    [Fact]
     public void ScanRemovesLeftoverFoldersWithoutState()
     {
         string leftover = Path.Combine(Root, Guid.NewGuid().ToString("N"));

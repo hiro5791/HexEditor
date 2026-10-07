@@ -109,6 +109,31 @@ public static class RecoveryStore
         }
     }
 
+    /// <summary>古い復旧用データの保存期間 (PKG-13 の仕様 5)。</summary>
+    public static readonly TimeSpan MaxAge = TimeSpan.FromDays(30);
+
+    /// <summary>
+    /// <paramref name="maxAge"/> より前に保存された復旧用データを消す (PKG-13 の仕様 5。起動時に呼ぶ)。
+    /// 他のインスタンスが使用中のもの (ロックファイルが開かれている) は消さない。消した件数を返す。
+    /// </summary>
+    public static int DeleteExpired(string root, TimeSpan maxAge, DateTime nowUtc)
+    {
+        int deleted = 0;
+        foreach (RecoveryEntry entry in Scan(root))
+        {
+            if (nowUtc - entry.Record.SavedAtUtc > maxAge && !IsInUse(entry.Folder))
+            {
+                TryDeleteFolder(entry.Folder);
+                if (!Directory.Exists(entry.Folder))
+                {
+                    deleted++;
+                }
+            }
+        }
+
+        return deleted;
+    }
+
     /// <summary>復旧用データを消す (「破棄」)。</summary>
     public static void Discard(RecoveryEntry entry) => TryDeleteFolder(entry.Folder);
 

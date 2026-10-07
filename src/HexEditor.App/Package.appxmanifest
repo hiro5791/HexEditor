@@ -1,34 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  MSIX 版 (Microsoft Store 版) のマニフェスト (PKG-02、PKG-03)。
+  - Identity の Version はビルド時に HexVersion から作る (PKG-28。HexEditor.App.csproj の HexGenerateAppxManifest)。ここの値は使わない。
+  - TODO(PKG-02 の仕様 5): Publisher は Partner Center でアプリ名を予約した後に、Store が割り当てた値 (CN=...) に置き換える。
+    それまでは仮の値。
+  - 表示名と説明は言語ごとのリソース (Strings/<言語>/Resources.resw の AppDisplayName、AppDescription)。
+-->
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  xmlns:systemai="http://schemas.microsoft.com/appx/manifest/systemai/windows10"
-  IgnorableNamespaces="uap rescap systemai uap5"
-  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5">
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  IgnorableNamespaces="uap rescap uap5">
   <Identity
-    Name="Hiroyura.HexEditor"
+    Name="HexEditor"
     Publisher="CN=Hiroyura"
-    Version="0.1.0.0" />
-  <mp:PhoneIdentity PhoneProductId="2540C77E-9ACB-421E-A2E9-9C1DF5EFE765" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+    Version="0.0.0.0" />
   <Properties>
-    <DisplayName>HexEditor</DisplayName>
+    <DisplayName>ms-resource:AppDisplayName</DisplayName>
     <PublisherDisplayName>Hiroyura</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
     <TargetDeviceFamily
-      Name="Windows.Universal"
-      MinVersion="10.0.17763.0"
-      MaxVersionTested="10.0.26226.0" />
-    <TargetDeviceFamily
       Name="Windows.Desktop"
       MinVersion="10.0.17763.0"
       MaxVersionTested="10.0.26226.0" />
   </Dependencies>
+  <!-- 23 言語 (00-overview.md 5.1 のフォルダ名。PKG-03 の仕様 3)。 -->
   <Resources>
-    <Resource Language="x-generate" />
+    <Resource Language="en" />
+    <Resource Language="zh-Hans" />
+    <Resource Language="zh-Hant" />
+    <Resource Language="ja" />
+    <Resource Language="ko" />
+    <Resource Language="id" />
+    <Resource Language="vi" />
+    <Resource Language="th" />
+    <Resource Language="de" />
+    <Resource Language="fr" />
+    <Resource Language="es" />
+    <Resource Language="pt" />
+    <Resource Language="it" />
+    <Resource Language="ru" />
+    <Resource Language="uk" />
+    <Resource Language="pl" />
+    <Resource Language="cs" />
+    <Resource Language="hu" />
+    <Resource Language="ro" />
+    <Resource Language="el" />
+    <Resource Language="ar" />
+    <Resource Language="tr" />
+    <Resource Language="fa" />
   </Resources>
   <Applications>
     <Application
@@ -36,8 +59,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="HexEditor"
-        Description="HexEditor"
+        DisplayName="ms-resource:AppDisplayName"
+        Description="ms-resource:AppDescription"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">

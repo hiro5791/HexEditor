@@ -71,7 +71,7 @@ public static class Preparer
             string bin = Path.Combine(dir.FullName, "src", "HexEditor.App", "bin");
             if (Directory.Exists(bin))
             {
-                FileInfo? newest = new DirectoryInfo(bin).EnumerateFiles("HexEditor.App.exe", SearchOption.AllDirectories)
+                FileInfo? newest = new DirectoryInfo(bin).EnumerateFiles("HexEditor.exe", SearchOption.AllDirectories)
                     .Where(f => !f.DirectoryName!.EndsWith("AppX", StringComparison.OrdinalIgnoreCase))
                     .OrderByDescending(f => f.LastWriteTimeUtc)
                     .FirstOrDefault();
