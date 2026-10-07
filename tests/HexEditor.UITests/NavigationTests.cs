@@ -66,7 +66,7 @@ public sealed class NavigationTests
         Assert.Equal(0xFF, (await fixedApp.DocumentAsync())["cursor"]!.GetValue<long>());
     });
 
-    [Fact(Skip = "VIEW-02 の UI オートメーション対応が未実装: 縦スクロールバーの RangeValue を変えても Hex ビューがスクロールしない (ScrollBar.Scroll だけを処理している)")]
+    [Fact]
     [Trait(UiTest.TC, "TC-VIEW-02-03")]
     public Task Last_byte_of_a_2_pow_63_source() => UiTestContext.RunAsync(async ctx =>
     {
