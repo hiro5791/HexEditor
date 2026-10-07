@@ -348,14 +348,7 @@ public sealed class AppSession : IAsyncDisposable
         }
 
         Kill();
-        try
-        {
-            Channel.Dispose();
-        }
-        catch (Exception ex) when (ex is IOException or ObjectDisposedException)
-        {
-            // アプリが先に終わっていると、パイプはもう閉じている。
-        }
+        Channel.Dispose();
 
         Process.Dispose();
         _monitor.Dispose();

@@ -71,8 +71,16 @@ public sealed class TestChannelClient : IDisposable
 
     public void Dispose()
     {
+        // アプリが先に終わっていると、パイプはもう閉じている (書き残しの書き出しで例外になる)。
+        try
+        {
+            _writer.Dispose();
+        }
+        catch (Exception ex) when (ex is IOException or ObjectDisposedException)
+        {
+        }
+
         _reader.Dispose();
-        _writer.Dispose();
         _pipe.Dispose();
     }
 }
