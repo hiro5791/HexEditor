@@ -104,6 +104,261 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Vložit s přepsáním</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} B. Lze vložit jen v aplikaci HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Výběr přesahuje limit schránky, proto ho lze vložit jen v aplikaci HexEditor.</value></data>
-  <data name="Clipboard_NotHex" xml:space="preserve"><value>Text ve schránce není posloupnost šestnáctkových bajtů. Chcete-li ho vložit jako text, přepněte do textového sloupce.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Bajty za koncem tohoto dokumentu s pevnou délkou nebyly vloženy.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Obnovení neuložených změn</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>HexEditor se minule neukončil správně. Níže uvedené neuložené změny můžete obnovit.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Obnovit</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>Zahodit</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Později</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Uloženo {0} · změněno bajtů: {1}</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Zatím neuloženo do souboru</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>Původní soubor se od té doby změnil, takže obnovený obsah nemusí být správný. Byl otevřen jen pro čtení.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Obnovení se nezdařilo: {0} Data pro obnovení zůstala zachována.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Data pro obnovení nelze uložit ({0}). Pokud se HexEditor neočekávaně ukončí, neuložené změny budou ztraceny.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>Ukládání bylo přerušeno. Soubor můžete vrátit do stavu před uložením.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Vrátit</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>HexEditor se minule neočekávaně ukončil.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Otevřít informace o chybě</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Nahlásit problém</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor se neočekávaně ukončil. Vložte níže obsah souboru s informacemi o chybě. Neobsahuje obsah vašich souborů.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Prohlížeč se nepodařilo otevřít, proto byl odkaz zkopírován do schránky.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>Další: {0}</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>Oznámení</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>Historie oznámení</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>Historie oznámení</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(Správce)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(Nouzový režim)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>Soubor nastavení nelze přečíst, proto se HexEditor spustil s výchozím nastavením. Poškozený soubor byl zachován.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>Otevřít složku</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>Soubor nastavení byl zapsán novější verzí HexEditoru, proto se změny nastavení nebudou ukládat.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>Upravený soubor nastavení obsahuje chybu ({0}). Nadále se používá předchozí nastavení.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>Zobrazení</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>Motiv</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Použít nastavení systému</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>Světlý</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>Tmavý</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>Stavový řádek</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>Nápověda</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>Dokumentace</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>Nahlásit problém...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>O aplikaci HexEditor</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>Ú</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Verze</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>Kanál</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>Typ distribuce</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>Architektura</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>Spuštěno jako správce</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>Otevřít složku dat</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor neodesílá telemetrii. Nikam neodesílá údaje o používání, zprávy o chybách, nastavení ani informace o souborech. Žádná funkce v této verzi nepoužívá síť (odkazy nápovědy se otevírají v prohlížeči).</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor je open-source software s licencí MIT.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>Kopírovat informace</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Licence třetích stran</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>Soubor s licencí nebyl nalezen.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Zavřít</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>Hodnota: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>Výběr: {0}–{1} (délka {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>Začátek: {0}
+Konec (včetně tohoto bajtu): {1}
+Délka: {2} (bajty: {3})</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>Velikost: {0} (bajty: {1})</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>Velikost (bajty): {0}</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>Jen pro čtení</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>Přesná velikost byla zkopírována do schránky.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>Pozice kurzoru</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>Hodnota u kurzoru</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>Výběr</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>Aktivní sloupec</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>Kódování textu</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>Režim zadávání</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>Změněno</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>Velikost souboru</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>Centrum operací</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>Oznámení</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>Centrum operací</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>Nic neprobíhá.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>Vymazat dokončené</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>Zpracování ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/s</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>Zbývá asi {0} min</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>Zbývá asi {0} s</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>Uplynulo {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>Ruší se...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>Dokončeno</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>Zrušeno</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>Nezdařilo se: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Otevřít</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Otevřít</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>Otevřít soubory ({0})?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Složky nelze otevřít (přeskočeno: {0}).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>Při spuštění jako správce nelze otevírat soubory přetažením z Průzkumníka souborů. Použijte místo toho Soubor &gt; Otevřít.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>Kopírování: {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Uložit vše</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Zavřít vše</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Zavřít</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Zavřít ostatní karty</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Zavřít karty vpravo</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Změny: míst: {0}, přidaných nebo nahrazených bajtů: {1}. Pokud neuložíte, změny budou ztraceny.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>Uložit změny v dokumentech ({0})?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Vyberte dokumenty, které chcete uložit. Nevybrané dokumenty se zavřou bez uložení.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Uložit vybrané a zavřít</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Zavřít bez uložení</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>Probíhá: {0}.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Zastavit a zavřít</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Zavřít po uložení</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Otevřít...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>Nový</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>Soubory můžete otevřít také přetažením sem.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>Nový s velikostí...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>Nový s velikostí</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Velikost</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Hodnota výplně (bajty Hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Vytvořit</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>Zadejte velikost 0 nebo větší.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>Zadejte 1 až 4 096 bajtů v Hex, například 00 nebo DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} je zařízení, ne soubor. Otevírání disků bude k dispozici v některé z příštích verzí.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} je složka. Složky nelze otevřít.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Soubor nebyl nalezen: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>Nemáte oprávnění k otevření {0}.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>{0} nelze otevřít, protože ho používá jiná aplikace.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>{0} nelze otevřít, protože ho používá {1}.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>Tento soubor je jen pro čtení, proto ho nelze přepsat. Změny uložte pomocí příkazu Uložit jako.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>Tento dokument nelze upravovat, dokud probíhá: {0}.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>Tento dokument je jen pro čtení.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} se nezdařilo: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>šestnáctkový editor</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Klávesa Tab přepíná mezi sloupcem Hex a textovým sloupcem. Klávesa F6 přejde do další oblasti.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Odstranit</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Zrušit výběr</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Některé oblasti nelze přečíst.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Nelze přečíst</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Nelze přečíst: vstupně-výstupní chyba zařízení ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Nelze přečíst: přístup byl odepřen ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Nelze přečíst: zařízení bylo odpojeno</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>Paměť není přidělena</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Posun {0}, hodnota {1}, znak {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Posun {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Posun {0}, konec dat</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>,</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Výběr, bajty: {0}, od {1} do {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Posun {0}, hodnota {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Režim vkládání</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Režim přepisování</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Jen pro čtení</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Lze upravovat</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Sloupec Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>textový sloupec</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>dolní půlbajt</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>změněno</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>vkládání</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>vybráno</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>načítání</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>nelze přečíst</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>mezera</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>netisknutelný znak</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>Odstraněno bajtů: {0}</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Rychlý šestnáctkový editor pro soubory a disky libovolné velikosti</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>Stávající okno nereaguje, proto se soubor otevřel v nové instanci.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>Nastavení se nebude ukládat, protože do složky dat nelze zapisovat.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Exportovat nastavení</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>Odstraněno položek pro obnovení starších než 30 dní: {0}.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>HexEditor se nepodařilo spustit.
+
+{0}
+
+Podrobnosti byly zapsány do:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Směr</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>Dopředu</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Dozadu</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Hledat v</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Celý dokument</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Výběr</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>Rozlišovat velká a malá písmena</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Používat řídicí sekvence (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Zarovnat na znaky</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Možnosti hledání</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Spočítat shody</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / počítá se...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / více než {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... (celkem bajtů: {1})</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (znak {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>„{0}“ není platná řídicí sekvence.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>Nalezeno na {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Počítání shod</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>Soubor je pro systém souborů cíle ({0}, {1}) příliš velký. Maximální velikost souboru je {2}. Uložte ho na jinou jednotku.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>Nedostatek volného místa</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>Na cílové jednotce ({0}) není dost volného místa. Potřeba: {1}. K dispozici: {2}. Soubor nebyl změněn.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>Uložit jinam</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>Změny jsou příliš velké na to, aby je bylo možné chránit</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>Změny jsou příliš velké na zaznamenání původního obsahu ({0}, limit {1}). Pokud se ukládání v průběhu zastaví, soubor nebude možné vrátit do původního stavu.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>Použít bezpečné uložení</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>Zapsat bez ochrany</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>Tento dokument je jen pro čtení, proto ho nelze přepsat. Použijte Uložit jako.</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>Uložení se nezdařilo, proto byl soubor vrácen do stavu před uložením.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>Uložení se nezdařilo a přepsána byla jen část souboru. Obnovit ho můžete při příštím spuštění HexEditoru.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} (bajty: {1})</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>Bajty: {0}</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>Text není posloupnost šestnáctkových bajtů, proto byl vložen jako text.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>Zpět</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>Vložit až po konec?</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>Délku tohoto dokumentu nelze změnit. Bajty vkládaných dat za koncem ({0}) nebudou vloženy.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>Vložit až po konec</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>Do tohoto souboru může stále zapisovat jiná aplikace. Pokud se změní mimo HexEditor, neuložené změny se nemusí uložit správně.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>Úprav je tolik, že byl překročen limit paměti ({0}). Uložení sníží využití paměti.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>Uchovávání zkopírovaných dat z {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Uchovat zkopírovaná data?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>Aby zkopírovaná data ({0}) zůstala k dispozici i po zavření, HexEditor je zapíše do dočasného úložiště.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Zapsat a zavřít</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Vymazat schránku a zavřít</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>Zkopírovaná data nebylo možné uchovat, proto byla schránka vymazána.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Kódování textu</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (znaková stránka {0})</value></data>
 </root>

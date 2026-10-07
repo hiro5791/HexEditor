@@ -104,6 +104,261 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>چسباندن با رونویسی</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} بایت. فقط درون HexEditor قابل چسباندن است.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>انتخاب از حد مجاز کلیپ‌بورد بزرگ‌تر است، بنابراین فقط درون HexEditor قابل چسباندن است.</value></data>
-  <data name="Clipboard_NotHex" xml:space="preserve"><value>متن کلیپ‌بورد دنباله‌ای از بایت‌های هگزادسیمال نیست. برای چسباندن آن به‌صورت متن، به ستون متن بروید.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>بایت‌های فراتر از انتهای این سند با طول ثابت چسبانده نشدند.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>بازیابی تغییرات ذخیره‌نشده</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>HexEditor دفعهٔ قبل به‌طور عادی بسته نشد. می‌توانید تغییرات ذخیره‌نشدهٔ زیر را بازیابی کنید.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>بازیابی</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>دور انداختن</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>بعداً</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>ذخیره‌شده در {0} · بایت‌های تغییریافته: {1}</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>هنوز در فایلی ذخیره نشده است</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>فایل اصلی از آن زمان تغییر کرده است، بنابراین ممکن است محتوای بازیابی‌شده درست نباشد. فایل به‌صورت فقط خواندنی باز شد.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>بازیابی ممکن نشد: {0} داده‌های بازیابی حفظ شده‌اند.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>ذخیرهٔ داده‌های بازیابی ممکن نیست ({0}). اگر HexEditor به‌طور غیرمنتظره بسته شود، تغییرات ذخیره‌نشده از بین می‌روند.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>ذخیره‌سازی نیمه‌کاره متوقف شد. می‌توانید فایل را به حالت پیش از ذخیره برگردانید.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>برگرداندن</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>HexEditor دفعهٔ قبل به‌طور غیرمنتظره بسته شد.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>باز کردن اطلاعات خرابی</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>گزارش مشکل</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor به‌طور غیرمنتظره بسته شد. لطفاً محتوای فایل اطلاعات خرابی را در زیر بچسبانید. این فایل شامل محتوای فایل‌های شما نیست.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>باز کردن مرورگر ممکن نشد، بنابراین پیوند در کلیپ‌بورد رونوشت شد.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>{0} مورد دیگر</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>اعلان‌ها</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>سابقهٔ اعلان‌ها</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>سابقهٔ اعلان‌ها</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(سرپرست)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(حالت امن)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>خواندن فایل تنظیمات ممکن نشد، بنابراین HexEditor با تنظیمات پیش‌فرض آغاز شد. فایل خراب حفظ شده است.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>باز کردن پوشه</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>فایل تنظیمات با نسخهٔ جدیدتری از HexEditor نوشته شده است، بنابراین تغییرات تنظیمات ذخیره نمی‌شوند.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>فایل تنظیمات ویرایش‌شده خطا دارد ({0}). تنظیمات قبلی همچنان استفاده می‌شوند.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>نما</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>طرح زمینه</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>استفاده از تنظیمات سیستم</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>روشن</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>تیره</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>نوار وضعیت</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>راهنما</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>مستندات</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>گزارش مشکل...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>دربارهٔ HexEditor</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>ف</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>ج</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>ذ</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>خ</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>و</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>و</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>چ</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>ت</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>غ</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>ج</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>ی</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>ق</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>ع</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>ج</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>ط</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>ت</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>ه</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>م</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>گ</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>د</value></data>
+  <data name="About_Version" xml:space="preserve"><value>نسخه</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>کانال</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>نوع توزیع</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>معماری</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>در حال اجرا به‌عنوان سرپرست</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>باز کردن پوشهٔ داده</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor تله‌متری ارسال نمی‌کند. هرگز داده‌های استفاده، گزارش‌های خرابی، تنظیمات یا اطلاعات فایل‌ها را به جایی نمی‌فرستد. در این نسخه هیچ قابلیتی از شبکه استفاده نمی‌کند (پیوندهای راهنما در مرورگر شما باز می‌شوند).</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor نرم‌افزاری متن‌باز تحت مجوز MIT است.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>رونوشت اطلاعات</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>مجوزهای اشخاص ثالث</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>فایل مجوز پیدا نشد.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>بستن</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>مقدار: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>انتخاب: {0}–{1} (طول {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>آغاز: {0}
+پایان (شامل این بایت): {1}
+طول: {2} ({3} بایت)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>اندازه: {0} ({1} بایت)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>اندازه: {0} بایت</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>فقط خواندنی</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>اندازهٔ دقیق در کلیپ‌بورد رونوشت شد.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>موقعیت مکان‌نما</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>مقدار در مکان‌نما</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>انتخاب</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>ستون فعال</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>رمزگذاری متن</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>حالت ورودی</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>تغییریافته</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>اندازهٔ فایل</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>مرکز عملیات</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>اعلان‌ها</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>مرکز عملیات</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>هیچ عملیاتی در حال اجرا نیست.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>پاک کردن موارد تکمیل‌شده</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>در حال پردازش ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/ثانیه</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>حدود {0} دقیقه باقی مانده</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>حدود {0} ثانیه باقی مانده</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>سپری‌شده {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>در حال لغو...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>تکمیل شد</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>لغو شد</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>ناموفق: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>باز کردن</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>باز کردن</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>{0} فایل باز شود؟</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>پوشه‌ها قابل باز شدن نیستند ({0} مورد رد شد).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>هنگام اجرا به‌عنوان سرپرست، نمی‌توانید فایل‌ها را با کشیدن از File Explorer باز کنید. به‌جای آن از فایل &gt; باز کردن استفاده کنید.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>رونوشت {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>ذخیرهٔ همه</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>بستن همه</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>بستن</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>بستن زبانه‌های دیگر</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>بستن زبانه‌های سمت چپ</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>تغییرات: {0} مورد، {1} بایت افزوده یا جایگزین شده. اگر ذخیره نکنید، تغییرات از بین می‌روند.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>تغییرات {0} سند ذخیره شود؟</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>سندهایی را که می‌خواهید ذخیره شوند انتخاب کنید. سندهای انتخاب‌نشده بدون ذخیره بسته می‌شوند.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>ذخیرهٔ موارد انتخاب‌شده و بستن</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>بستن بدون ذخیره</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} در حال اجرا است.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>توقف و بستن</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>بستن پس از ذخیره</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>ه</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>م</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>باز کردن...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>جدید</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>می‌توانید فایل‌ها را اینجا رها کنید تا باز شوند.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>جدید با اندازهٔ مشخص...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>ز</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>جدید با اندازهٔ مشخص</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>اندازه</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>مقدار پرکردن (بایت‌های Hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>ایجاد</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>اندازه‌ای برابر 0 یا بیشتر وارد کنید.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>1 تا 4,096 بایت به‌صورت Hex وارد کنید، مانند 00 یا DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} یک دستگاه است، نه فایل. باز کردن دیسک‌ها در نسخه‌ای بعدی در دسترس خواهد بود.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} یک پوشه است. پوشه‌ها قابل باز شدن نیستند.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>فایل پیدا نشد: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>اجازهٔ باز کردن {0} را ندارید.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>{0} باز نمی‌شود، زیرا برنامهٔ دیگری از آن استفاده می‌کند.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>{0} باز نمی‌شود، زیرا {1} از آن استفاده می‌کند.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>این فایل فقط خواندنی است، بنابراین نمی‌توان روی آن ذخیره کرد. برای ذخیرهٔ تغییرات از «ذخیره با نام» استفاده کنید.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>تا وقتی {0} در حال اجرا است، این سند قابل ویرایش نیست.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>این سند فقط خواندنی است.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} ناموفق بود: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>ویرایشگر هگزادسیمال</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>کلید Tab بین ستون Hex و ستون متن جابه‌جا می‌کند. کلید F6 به ناحیهٔ بعدی می‌رود.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>پاک کردن انتخاب</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>برخی محدوده‌ها قابل خواندن نیستند.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>قابل خواندن نیست</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>قابل خواندن نیست: خطای ورودی/خروجی دستگاه ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>قابل خواندن نیست: دسترسی رد شد ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>قابل خواندن نیست: اتصال دستگاه قطع شد</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>حافظه تخصیص داده نشده است</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>آفست {0}، مقدار {1}، نویسه {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>آفست {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>آفست {0}، انتهای داده</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}، {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>،</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>انتخاب {0} بایت، از {1} تا {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>آفست {0}، مقدار {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>حالت درج</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>حالت رونویسی</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>فقط خواندنی</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>قابل ویرایش</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>ستون Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>ستون متن</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>نیم‌بایت پایین</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>تغییریافته</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>درج</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>انتخاب‌شده</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>در حال بارگیری</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>قابل خواندن نیست</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>فاصله</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>نویسهٔ غیرقابل چاپ</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} بایت حذف شد</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>ویرایشگر هگزادسیمال سریع برای فایل‌ها و دیسک‌ها در هر اندازه‌ای</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>پنجرهٔ موجود پاسخ نمی‌دهد، بنابراین در نمونهٔ جدیدی باز شد.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>تنظیمات ذخیره نمی‌شوند، زیرا نوشتن در پوشهٔ داده ممکن نیست.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>صادر کردن تنظیمات</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>{0} مورد بازیابی قدیمی‌تر از 30 روز حذف شد.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>HexEditor آغاز نشد.
+
+{0}
+
+جزئیات در اینجا نوشته شد:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>جهت</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>رو به جلو</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>رو به عقب</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>جستجو در</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>کل سند</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>انتخاب</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>تطبیق بزرگی و کوچکی حروف</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>استفاده از دنباله‌های گریز (\n، \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>تراز با مرز نویسه‌ها</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>گزینه‌های جستجو</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>شمارش موارد منطبق</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / در حال شمارش...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / بیش از {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... (در مجموع {1} بایت)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (نویسهٔ {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>«{0}» دنبالهٔ گریز معتبری نیست.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>در {0} پیدا شد.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>شمارش موارد منطبق</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>فایل برای سیستم فایل مقصد ({0}، {1}) بیش از حد بزرگ است. حداکثر اندازهٔ فایل {2} است. آن را در درایو دیگری ذخیره کنید.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>فضای خالی کافی نیست</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>فضای خالی کافی در درایو مقصد ({0}) وجود ندارد. موردنیاز: {1}. موجود: {2}. فایل تغییر نکرده است.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>ذخیره در مکانی دیگر</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>تغییرات برای محافظت بیش از حد بزرگ‌اند</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>تغییرات برای ثبت محتوای اصلی بیش از حد بزرگ‌اند ({0}، حد مجاز {1}). اگر ذخیره‌سازی نیمه‌کاره متوقف شود، فایل را نمی‌توان به حالت قبل برگرداند.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>استفاده از ذخیرهٔ امن</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>نوشتن بدون محافظت</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>این سند فقط خواندنی است، بنابراین نمی‌توان روی آن ذخیره کرد. از «ذخیره با نام» استفاده کنید.</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>ذخیره ناموفق بود، بنابراین فایل به حالت پیش از ذخیره برگردانده شد.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>ذخیره ناموفق بود و فقط بخشی از فایل بازنویسی شد. می‌توانید دفعهٔ بعد که HexEditor آغاز می‌شود آن را بازیابی کنید.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} بایت)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} بایت</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>متن دنباله‌ای از بایت‌های هگزادسیمال نیست، بنابراین به‌صورت متن چسبانده شد.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>واگرد</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>تا انتها چسبانده شود؟</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>طول این سند قابل تغییر نیست. {0} بایت از داده‌های چسبانده‌شده از انتها فراتر می‌رود و چسبانده نمی‌شود.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>چسباندن تا انتها</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>برنامهٔ دیگری همچنان می‌تواند در این فایل بنویسد. اگر بیرون از HexEditor تغییر کند، ممکن است تغییرات ذخیره‌نشدهٔ شما به‌درستی ذخیره نشوند.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>تعداد ویرایش‌ها آن‌قدر زیاد است که از حد حافظه ({0}) فراتر رفته است. ذخیره کردن مصرف حافظه را کاهش می‌دهد.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>نگه‌داشتن داده‌های رونوشت‌شده از {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>داده‌های رونوشت‌شده نگه داشته شوند؟</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>برای اینکه {0} دادهٔ رونوشت‌شده پس از بستن در دسترس بماند، HexEditor آن را در فضای ذخیره‌سازی موقت می‌نویسد.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>نوشتن و بستن</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>پاک کردن کلیپ‌بورد و بستن</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>نگه‌داشتن داده‌های رونوشت‌شده ممکن نشد، بنابراین کلیپ‌بورد پاک شد.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>رمزگذاری متن</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (صفحهٔ کد {0})</value></data>
 </root>

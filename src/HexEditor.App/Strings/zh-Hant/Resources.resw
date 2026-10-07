@@ -104,7 +104,6 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>覆寫貼上(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor：{0} 個位元組。只能在 HexEditor 內貼上。]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>選取範圍超過剪貼簿的上限，因此只能在 HexEditor 內貼上。</value></data>
-  <data name="Clipboard_NotHex" xml:space="preserve"><value>剪貼簿文字不是十六進位位元組序列。若要以文字貼上，請切換到文字欄。</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>超出此固定長度文件結尾的位元組並未貼上。</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>復原未儲存的變更</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor 上次未正常關閉。您可以復原下列未儲存的變更。</value></data>

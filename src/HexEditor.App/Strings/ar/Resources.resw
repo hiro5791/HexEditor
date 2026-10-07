@@ -104,6 +104,261 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>لصق مع الكتابة الفوقية</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} بايت. لا يمكن لصقها إلا داخل HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>التحديد أكبر من حد الحافظة، لذا لا يمكن لصقه إلا داخل HexEditor.</value></data>
-  <data name="Clipboard_NotHex" xml:space="preserve"><value>نص الحافظة ليس تسلسل بايتات ست عشرية. انتقل إلى عمود النص للصقه كنص.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>لم يتم لصق البايتات التي تتجاوز نهاية هذا المستند ذي الطول الثابت.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>استرداد التغييرات غير المحفوظة</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>لم يتم إغلاق HexEditor بشكل طبيعي في المرة الأخيرة. يمكنك استرداد التغييرات غير المحفوظة أدناه.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>استرداد</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>تجاهل</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>لاحقاً</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>تم الحفظ {0} · البايتات المتغيرة: {1}</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>لم يتم الحفظ في ملف بعد</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>تغيّر الملف الأصلي منذ ذلك الحين، لذا قد لا يكون المحتوى المسترد صحيحاً. تم فتحه للقراءة فقط.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>تعذّر الاسترداد: {0} تم الاحتفاظ ببيانات الاسترداد.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>يتعذّر حفظ بيانات الاسترداد ({0}). إذا أُغلق HexEditor بشكل غير متوقع، فستُفقد التغييرات غير المحفوظة.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>توقف الحفظ قبل اكتماله. يمكنك إرجاع الملف إلى ما كان عليه قبل الحفظ.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>استعادة</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>أُغلق HexEditor بشكل غير متوقع في المرة الأخيرة.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>فتح معلومات الأعطال</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>الإبلاغ عن مشكلة</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>أُغلق HexEditor بشكل غير متوقع. الرجاء لصق محتويات ملف معلومات الأعطال أدناه. لا يتضمن هذا الملف محتويات ملفاتك.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>تعذّر فتح المستعرض، لذا تم نسخ الارتباط إلى الحافظة.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>{0} أخرى</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>الإعلامات</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>سجل الإعلامات</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>سجل الإعلامات</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(المسؤول)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(الوضع الآمن)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>تعذّرت قراءة ملف الإعدادات، لذا بدأ HexEditor بالإعدادات الافتراضية. تم الاحتفاظ بالملف التالف.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>فتح المجلد</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>كُتب ملف الإعدادات بواسطة إصدار أحدث من HexEditor، لذا لن يتم حفظ التغييرات على الإعدادات.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>يحتوي ملف الإعدادات الذي تم تحريره على خطأ ({0}). لا تزال الإعدادات السابقة قيد الاستخدام.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>عرض</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>السمة</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>استخدام إعداد النظام</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>فاتح</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>داكن</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>شريط الحالة</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>تعليمات</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>الوثائق</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>الإبلاغ عن مشكلة...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>حول HexEditor</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>م</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>ج</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>ف</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>ظ</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>غ</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>ت</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>ت</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>ع</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>ق</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>ل</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>ك</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>ح</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>ت</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>ا</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>ز</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>ر</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>م</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>ع</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>س</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>ن</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>ف</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>د</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>ش</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>ل</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>و</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>ب</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>ح</value></data>
+  <data name="About_Version" xml:space="preserve"><value>الإصدار</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>القناة</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>نوع التوزيع</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>البنية</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>قيد التشغيل كمسؤول</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>فتح مجلد البيانات</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>لا يرسل HexEditor أي بيانات تتبع عن بُعد. ولا يرسل أبداً بيانات الاستخدام أو تقارير الأعطال أو الإعدادات أو معلومات الملفات إلى أي مكان. لا توجد ميزات تستخدم الشبكة في هذا الإصدار (تُفتح ارتباطات التعليمات في المستعرض).</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor برنامج مفتوح المصدر مرخّص بموجب ترخيص MIT.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>نسخ المعلومات</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>تراخيص الجهات الخارجية</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>لم يتم العثور على ملف الترخيص.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>إغلاق</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>القيمة: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>التحديد: {0}–{1} (الطول {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>البداية: {0}
+النهاية (يشمل هذا البايت): {1}
+الطول: {2} ({3} بايت)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>الحجم: {0} ({1} بايت)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>الحجم: {0} بايت</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>للقراءة فقط</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>تم نسخ الحجم الدقيق إلى الحافظة.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>موضع المؤشر</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>القيمة عند المؤشر</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>التحديد</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>العمود النشط</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>ترميز النص</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>وضع الإدخال</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>معدَّل</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>حجم الملف</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>مركز العمليات</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>الإعلامات</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>مركز العمليات</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>لا توجد عمليات قيد التشغيل.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>مسح المكتملة</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>قيد المعالجة ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/ث</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>يتبقى حوالي {0} دقيقة</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>يتبقى حوالي {0} ثانية</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>المنقضي {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>جارٍ الإلغاء...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>مكتملة</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>تم الإلغاء</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>فشل: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>فتح</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>فتح</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>هل تريد فتح {0} ملفات؟</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>لا يمكن فتح المجلدات (تم تخطي {0}).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>أثناء التشغيل كمسؤول، لا يمكنك فتح الملفات بسحبها من مستكشف الملفات. استخدم ملف &gt; فتح بدلاً من ذلك.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>نسخ {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>حفظ الكل</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>إغلاق الكل</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>إغلاق</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>إغلاق علامات التبويب الأخرى</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>إغلاق علامات التبويب إلى اليسار</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>التغييرات: {0} مواضع، {1} بايت تمت إضافتها أو استبدالها. إذا لم تقم بالحفظ، فستُفقد التغييرات.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>هل تريد حفظ التغييرات في {0} مستندات؟</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>حدد المستندات المراد حفظها. سيتم إغلاق المستندات غير المحددة دون حفظ.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>حفظ المحدد وإغلاق</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>إغلاق دون حفظ</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} قيد التشغيل.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>إيقاف وإغلاق</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>إغلاق بعد الحفظ</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>ك</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>ل</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>فتح...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>جديد</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>يمكنك أيضاً إفلات الملفات هنا لفتحها.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>جديد بحجم محدد...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>ح</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>جديد بحجم محدد</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>الحجم</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>قيمة التعبئة (بايتات Hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>إنشاء</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>أدخل حجماً يساوي 0 أو أكبر.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>أدخل من 1 إلى 4,096 بايت بتنسيق Hex، مثل 00 أو DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} جهاز وليس ملفاً. سيتوفر فتح الأقراص في إصدار لاحق.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} مجلد. لا يمكن فتح المجلدات.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>لم يتم العثور على الملف: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>ليس لديك إذن بفتح {0}.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>لا يمكن فتح {0} لأن تطبيقاً آخر يستخدمه.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>لا يمكن فتح {0} لأنه قيد الاستخدام بواسطة {1}.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>هذا الملف للقراءة فقط، لذا لا يمكن الحفظ فوقه. استخدم «حفظ باسم» لحفظ تغييراتك.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>لا يمكن تحرير هذا المستند أثناء تشغيل {0}.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>هذا المستند للقراءة فقط.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>فشل {0}: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>محرر ست عشري</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>يبدّل المفتاح Tab بين عمود Hex وعمود النص. وينتقل المفتاح F6 إلى المنطقة التالية.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>حذف</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>مسح التحديد</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>تتعذّر قراءة بعض النطاقات.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>تتعذّر القراءة</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>تتعذّر القراءة: خطأ في إدخال/إخراج الجهاز ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>تتعذّر القراءة: تم رفض الوصول ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>تتعذّر القراءة: تم فصل الجهاز</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>الذاكرة غير مخصصة</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>الإزاحة {0}، القيمة {1}، الحرف {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>الإزاحة {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>الإزاحة {0}، نهاية البيانات</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}، {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>،</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>التحديد {0} بايت، من {1} إلى {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>الإزاحة {0}، القيمة {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>وضع الإدراج</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>وضع الكتابة الفوقية</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>للقراءة فقط</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>قابل للتحرير</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>عمود Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>عمود النص</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>نصف البايت الأدنى</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>معدَّل</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>إدراج</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>محدد</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>جارٍ التحميل</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>تتعذّر القراءة</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>مسافة</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>حرف غير قابل للطباعة</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>تم حذف {0} بايت</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>محرر ست عشري سريع للملفات والأقراص بأي حجم</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>النافذة الحالية لا تستجيب، لذا تم الفتح في مثيل جديد.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>لن يتم حفظ الإعدادات لأنه تتعذّر الكتابة في مجلد البيانات.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>تصدير الإعدادات</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>تم حذف {0} من عناصر الاسترداد الأقدم من 30 يوماً.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>تعذّر بدء تشغيل HexEditor.
+
+{0}
+
+تمت كتابة التفاصيل في:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>الاتجاه</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>للأمام</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>للخلف</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>البحث في</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>المستند بأكمله</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>التحديد</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>مطابقة حالة الأحرف</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>استخدام تسلسلات الهروب (\n، \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>المحاذاة مع حدود الأحرف</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>خيارات البحث</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>عدّ التطابقات</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / جارٍ العد...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / أكثر من {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... (الإجمالي {1} بايت)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (الحرف {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>«{0}» ليس تسلسل هروب صالحاً.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>تم العثور عليه عند {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>عدّ التطابقات</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>الملف كبير جداً بالنسبة لنظام ملفات الوجهة ({0}، {1}). الحد الأقصى لحجم الملف هو {2}. احفظه على محرك أقراص آخر.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>لا توجد مساحة خالية كافية</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>لا توجد مساحة خالية كافية على محرك أقراص الوجهة ({0}). المطلوب: {1}. المتاح: {2}. لم يتم تغيير الملف.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>الحفظ في موقع آخر</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>التغييرات كبيرة جداً بحيث يتعذّر حمايتها</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>التغييرات كبيرة جداً بحيث يتعذّر تسجيل المحتوى الأصلي ({0}، الحد {1}). إذا توقف الحفظ قبل اكتماله، فلن يمكن إرجاع الملف إلى ما كان عليه.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>استخدام الحفظ الآمن</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>الكتابة دون حماية</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>هذا المستند للقراءة فقط، لذا لا يمكن الحفظ فوقه. استخدم «حفظ باسم».</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>فشل الحفظ، لذا تم إرجاع الملف إلى ما كان عليه قبل الحفظ.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>فشل الحفظ ولم تتم إعادة كتابة سوى جزء من الملف. يمكنك استعادته في المرة التالية التي يبدأ فيها HexEditor.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} بايت)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} بايت</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>النص ليس تسلسل بايتات ست عشرية، لذا تم لصقه كنص.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>تراجع</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>هل تريد اللصق حتى النهاية؟</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>لا يمكن تغيير طول هذا المستند. يتجاوز {0} بايت من البيانات الملصقة النهاية ولن يتم لصقها.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>اللصق حتى النهاية</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>لا يزال بإمكان تطبيق آخر الكتابة في هذا الملف. إذا تم تغييره خارج HexEditor، فقد لا يتم حفظ تغييراتك غير المحفوظة بشكل صحيح.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>عدد التعديلات كبير لدرجة تجاوز حد الذاكرة ({0}). يقلل الحفظ من استخدام الذاكرة.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>الاحتفاظ بالبيانات المنسوخة من {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>هل تريد الاحتفاظ بالبيانات المنسوخة؟</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>لإبقاء {0} من البيانات المنسوخة متاحة بعد الإغلاق، سيكتبها HexEditor في تخزين مؤقت.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>الكتابة والإغلاق</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>مسح الحافظة والإغلاق</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>تعذّر الاحتفاظ بالبيانات المنسوخة، لذا تم مسح الحافظة.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>ترميز النص</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>ت</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (صفحة الترميز {0})</value></data>
 </root>

@@ -104,6 +104,261 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Вставить с заменой</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} байт. Можно вставить только в HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Выделение превышает ограничение буфера обмена, поэтому его можно вставить только в HexEditor.</value></data>
-  <data name="Clipboard_NotHex" xml:space="preserve"><value>Текст в буфере обмена не является последовательностью шестнадцатеричных байтов. Чтобы вставить его как текст, переключитесь на текстовый столбец.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Байты за концом этого документа фиксированной длины не были вставлены.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Восстановление несохраненных изменений</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>Прошлый сеанс HexEditor завершился некорректно. Вы можете восстановить несохраненные изменения, указанные ниже.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Восстановить</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>Удалить</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Позже</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Сохранено {0} · изменено байт: {1}</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Еще не сохранено в файл</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>С тех пор исходный файл изменился, поэтому восстановленное содержимое может быть неверным. Он открыт только для чтения.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Не удалось восстановить: {0} Данные для восстановления сохранены.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Не удается сохранить данные для восстановления ({0}). Если HexEditor неожиданно закроется, несохраненные изменения будут потеряны.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>Сохранение было прервано. Вы можете вернуть файл в состояние до сохранения.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Вернуть</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>В прошлый раз HexEditor неожиданно закрылся.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Открыть сведения о сбое</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Сообщить о проблеме</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor неожиданно закрылся. Вставьте ниже содержимое файла со сведениями о сбое. Он не содержит содержимого ваших файлов.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Не удалось открыть браузер, поэтому ссылка скопирована в буфер обмена.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>Еще {0}</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>Уведомления</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>Журнал уведомлений</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>Журнал уведомлений</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(Администратор)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(Безопасный режим)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>Не удалось прочитать файл параметров, поэтому HexEditor запущен с параметрами по умолчанию. Поврежденный файл сохранен.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>Открыть папку</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>Файл параметров создан более новой версией HexEditor, поэтому изменения параметров не будут сохранены.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>В измененном файле параметров есть ошибка ({0}). По-прежнему используются предыдущие параметры.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>Вид</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>Тема</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Использовать системный параметр</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>Светлая</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>Темная</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>Строка состояния</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>Справка</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>Документация</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>Сообщить о проблеме...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>О программе HexEditor</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>Ф</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>Х</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>З</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>З</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>И</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>Н</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>П</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>Н</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>Ч</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>Т</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>И</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>Т</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>Д</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>С</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>О</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Версия</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>Канал</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>Тип распространения</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>Архитектура</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>Запущено от имени администратора</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>Открыть папку данных</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor не отправляет телеметрию. Он никуда не отправляет данные об использовании, отчеты о сбоях, параметры или сведения о файлах. В этой версии нет функций, использующих сеть (ссылки справки открываются в браузере).</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor — программное обеспечение с открытым исходным кодом, распространяемое по лицензии MIT.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>Копировать сведения</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Лицензии сторонних компонентов</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>Файл лицензии не найден.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>Значение: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>Выделение: {0}–{1} (длина {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>Начало: {0}
+Конец (включая этот байт): {1}
+Длина: {2} ({3} байт)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>Размер: {0} ({1} байт)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>Размер: {0} байт</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>Только чтение</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>Точный размер скопирован в буфер обмена.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>Положение курсора</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>Значение под курсором</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>Выделение</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>Активный столбец</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>Кодировка текста</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>Режим ввода</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>Изменен</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>Размер файла</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>Центр операций</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>Уведомления</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>Центр операций</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>Нет выполняемых операций.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>Очистить завершенные</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>Выполняется ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/с</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>Осталось около {0} мин</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>Осталось около {0} с</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>Прошло {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>Отмена...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>Завершено</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>Отменено</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>Ошибка: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Открыть</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Открыть</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>Открыть файлы ({0})?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Папки открыть нельзя (пропущено: {0}).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>При запуске от имени администратора нельзя открывать файлы перетаскиванием из проводника. Используйте команду «Файл» &gt; «Открыть».</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>Копирование: {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Сохранить все</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Закрыть все</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Закрыть другие вкладки</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Закрыть вкладки справа</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Изменения: мест — {0}, добавлено или заменено байт — {1}. Если не сохранить, изменения будут потеряны.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>Сохранить изменения в документах ({0})?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Выберите документы для сохранения. Невыбранные документы будут закрыты без сохранения.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Сохранить выбранные и закрыть</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Закрыть без сохранения</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>Выполняется: {0}.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Остановить и закрыть</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Закрыть после сохранения</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>В</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>Е</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Открыть...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>Создать</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>Файлы также можно открыть, перетащив их сюда.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>Создать с размером...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>Р</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>Создать с размером</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Размер</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Значение заполнения (байты Hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Создать</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>Введите размер 0 или больше.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>Введите от 1 до 4 096 байт в формате Hex, например 00 или DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} — это устройство, а не файл. Открытие дисков будет доступно в одной из следующих версий.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} — это папка. Папки открыть нельзя.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Файл не найден: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>У вас нет разрешения на открытие {0}.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>Не удается открыть {0}, так как он используется другим приложением.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>Не удается открыть {0}, так как он используется приложением {1}.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>Этот файл доступен только для чтения, поэтому его нельзя перезаписать. Сохраните изменения с помощью команды «Сохранить как».</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>Этот документ нельзя изменять, пока выполняется операция: {0}.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>Этот документ доступен только для чтения.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>Ошибка операции «{0}»: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>шестнадцатеричный редактор</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Клавиша Tab переключает между столбцами Hex и текста. Клавиша F6 переходит к следующей области.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Удалить</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Снять выделение</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Некоторые диапазоны не удается прочитать.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Не удается прочитать</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Не удается прочитать: ошибка ввода-вывода устройства ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Не удается прочитать: доступ запрещен ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Не удается прочитать: устройство отключено</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>Память не выделена</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Смещение {0}, значение {1}, символ {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Смещение {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Смещение {0}, конец данных</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>,</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Выделено байт: {0}, с {1} по {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Смещение {0}, значение {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Режим вставки</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Режим замены</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Только чтение</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Редактирование разрешено</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Столбец Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>текстовый столбец</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>младший полубайт</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>изменен</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>вставка</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>выделен</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>загрузка</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>не удается прочитать</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>пробел</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>непечатаемый символ</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>Удалено байт: {0}</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Быстрый шестнадцатеричный редактор для файлов и дисков любого размера</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>Существующее окно не отвечает, поэтому файл открыт в новом экземпляре.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>Параметры не будут сохранены, так как запись в папку данных невозможна.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Экспортировать параметры</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>Удалено элементов восстановления старше 30 дней: {0}.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>Не удалось запустить HexEditor.
+
+{0}
+
+Подробности записаны в файл:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Направление</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>Вперед</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Назад</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Область поиска</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Весь документ</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Выделение</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>С учетом регистра</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Escape-последовательности (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Выравнивать по символам</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Параметры поиска</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Подсчитать совпадения</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / подсчет...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / более {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... (всего байт: {1})</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (символ {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>«{0}» не является допустимой escape-последовательностью.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>Найдено в позиции {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Подсчет совпадений</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>Файл слишком велик для файловой системы назначения ({0}, {1}). Максимальный размер файла: {2}. Сохраните его на другой диск.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>Недостаточно свободного места</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>На диске назначения ({0}) недостаточно свободного места. Требуется: {1}. Доступно: {2}. Файл не изменен.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>Сохранить в другом месте</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>Изменения слишком велики для защиты</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>Изменения слишком велики, чтобы записать исходное содержимое ({0}, ограничение {1}). Если сохранение прервется, вернуть файл в прежнее состояние будет невозможно.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>Использовать безопасное сохранение</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>Записать без защиты</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>Этот документ доступен только для чтения, поэтому его нельзя перезаписать. Используйте команду «Сохранить как».</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>Не удалось сохранить, поэтому файл возвращен в состояние до сохранения.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>Не удалось сохранить, и файл был перезаписан только частично. Его можно будет восстановить при следующем запуске HexEditor.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} байт)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} байт</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>Текст не является последовательностью шестнадцатеричных байтов, поэтому он вставлен как текст.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>Отменить</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>Вставить до конца?</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>Длину этого документа изменить нельзя. Байты вставляемых данных, выходящие за конец ({0}), не будут вставлены.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>Вставить до конца</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>Другое приложение по-прежнему может записывать в этот файл. Если он будет изменен вне HexEditor, несохраненные изменения могут сохраниться неправильно.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>Изменений так много, что превышено ограничение памяти ({0}). Сохранение уменьшит использование памяти.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>Сохранение скопированных данных из {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Сохранить скопированные данные?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>Чтобы скопированные данные ({0}) оставались доступны после закрытия, HexEditor запишет их во временное хранилище.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Записать и закрыть</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Очистить буфер обмена и закрыть</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>Не удалось сохранить скопированные данные, поэтому буфер обмена очищен.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Кодировка текста</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>К</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (кодовая страница {0})</value></data>
 </root>

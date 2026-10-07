@@ -104,6 +104,261 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Beillesztés felülírással</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bájt. Csak a HexEditoron belül illeszthető be.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>A kijelölés nagyobb a vágólap korlátjánál, ezért csak a HexEditoron belül illeszthető be.</value></data>
-  <data name="Clipboard_NotHex" xml:space="preserve"><value>A vágólapon lévő szöveg nem hexadecimális bájtsorozat. Szövegként való beillesztéshez váltson a szövegoszlopra.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>A rögzített hosszúságú dokumentum végén túli bájtok nem lettek beillesztve.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Nem mentett módosítások helyreállítása</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>A HexEditor legutóbb nem megfelelően lett bezárva. Az alábbi nem mentett módosítások helyreállíthatók.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Helyreállítás</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>Elvetés</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Később</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Mentve: {0} · módosított bájtok: {1}</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Még nincs fájlba mentve</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>Az eredeti fájl azóta megváltozott, ezért a helyreállított tartalom nem feltétlenül helyes. A fájl írásvédett módban nyílt meg.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Nem sikerült a helyreállítás: {0} A helyreállítási adatok megmaradtak.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Nem menthetők a helyreállítási adatok ({0}). Ha a HexEditor váratlanul bezárul, a nem mentett módosítások elvesznek.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>A mentés megszakadt. A fájl visszaállítható a mentés előtti állapotába.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Visszaállítás</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>A HexEditor legutóbb váratlanul bezárult.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Összeomlási adatok megnyitása</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Probléma bejelentése</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>A HexEditor váratlanul bezárult. Illessze be alább az összeomlási adatokat tartalmazó fájl tartalmát. Ez nem tartalmazza a fájljai tartalmát.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Nem sikerült megnyitni a böngészőt, ezért a hivatkozás a vágólapra került.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>További {0}</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>Értesítések</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>Értesítési előzmények</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>Értesítési előzmények</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(Rendszergazda)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(Csökkentett mód)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>Nem sikerült beolvasni a beállításfájlt, ezért a HexEditor az alapértelmezett beállításokkal indult el. A sérült fájl megmaradt.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>Mappa megnyitása</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>A beállításfájlt a HexEditor egy újabb verziója írta, ezért a beállítások módosításai nem lesznek mentve.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>A szerkesztett beállításfájl hibát tartalmaz ({0}). Továbbra is az előző beállítások vannak érvényben.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>Nézet</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>Téma</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Rendszerbeállítás használata</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>Világos</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>Sötét</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>Állapotsor</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>Súgó</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>Dokumentáció</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>Probléma bejelentése...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>A HexEditor névjegye</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>Ú</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>Á</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Verzió</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>Csatorna</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>Terjesztési forma</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>Architektúra</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>Rendszergazdaként fut</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>Adatmappa megnyitása</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>A HexEditor nem küld telemetriai adatokat. Soha, sehová nem küld használati adatokat, összeomlási jelentéseket, beállításokat vagy fájladatokat. Ebben a verzióban egyik funkció sem használja a hálózatot (a súgóhivatkozások a böngészőben nyílnak meg).</value></data>
+  <data name="About_License" xml:space="preserve"><value>A HexEditor MIT-licenc alatt álló nyílt forráskódú szoftver.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>Adatok másolása</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Külső felek licencei</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>A licencfájl nem található.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Bezárás</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>Érték: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>Kijelölés: {0}–{1} (hossz: {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>Kezdet: {0}
+Vég (ezzel a bájttal együtt): {1}
+Hossz: {2} ({3} bájt)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>Méret: {0} ({1} bájt)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>Méret: {0} bájt</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>Írásvédett</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>A pontos méret a vágólapra került.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>Kurzor pozíciója</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>Érték a kurzornál</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>Kijelölés</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>Aktív oszlop</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>Szövegkódolás</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>Beviteli mód</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>Módosítva</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>Fájlméret</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>Műveletközpont</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>Értesítések</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>Műveletközpont</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>Nincs folyamatban lévő művelet.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>Befejezettek törlése</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>Feldolgozás ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/s</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>Körülbelül {0} perc van hátra</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>Körülbelül {0} másodperc van hátra</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>Eltelt idő: {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>Megszakítás...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>Befejeződött</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>Megszakítva</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>Sikertelen: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Megnyitás</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Megnyitás</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>Megnyit {0} fájlt?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Mappák nem nyithatók meg ({0} kihagyva).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>Rendszergazdaként futtatva nem nyithatók meg fájlok a Fájlkezelőből való húzással. Használja helyette a Fájl &gt; Megnyitás parancsot.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>Másolás: {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Összes mentése</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Összes bezárása</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Bezárás</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Többi lap bezárása</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Jobbra lévő lapok bezárása</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Módosítások: {0} helyen, {1} bájt hozzáadva vagy lecserélve. Ha nem menti, a módosítások elvesznek.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>Menti {0} dokumentum módosításait?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Jelölje ki a mentendő dokumentumokat. A ki nem jelölt dokumentumok mentés nélkül bezárulnak.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Kijelöltek mentése és bezárás</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Bezárás mentés nélkül</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>Folyamatban: {0}.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Leállítás és bezárás</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Bezárás mentés után</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Megnyitás...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>Új</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>Fájlokat úgy is megnyithat, hogy ide húzza őket.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>Új, megadott mérettel...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>Új, megadott mérettel</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Méret</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Kitöltési érték (Hex bájtok)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Létrehozás</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>Adjon meg 0 vagy nagyobb méretet.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>Adjon meg 1–4096 bájtot Hex formában, például 00 vagy DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>A(z) {0} eszköz, nem fájl. A lemezek megnyitása egy későbbi verzióban lesz elérhető.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>A(z) {0} mappa. Mappák nem nyithatók meg.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>A fájl nem található: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>Nincs engedélye a(z) {0} megnyitásához.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>A(z) {0} nem nyitható meg, mert egy másik alkalmazás használja.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>A(z) {0} nem nyitható meg, mert a(z) {1} használja.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>Ez a fájl írásvédett, ezért nem írható felül. A módosításokat a Mentés másként paranccsal mentheti.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>A dokumentum nem szerkeszthető, amíg ez a művelet fut: {0}.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>Ez a dokumentum írásvédett.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>Sikertelen művelet ({0}): {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>hexadecimális szerkesztő</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>A Tab billentyű vált a Hex és a szöveg oszlop között. Az F6 billentyű a következő területre lép.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Törlés</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Kijelölés megszüntetése</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Egyes tartományok nem olvashatók.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Nem olvasható</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Nem olvasható: eszköz I/O-hiba ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Nem olvasható: hozzáférés megtagadva ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Nem olvasható: az eszköz le lett választva</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>A memória nincs lefoglalva</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Eltolás: {0}, érték: {1}, karakter: {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Eltolás: {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Eltolás: {0}, az adatok vége</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>,</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Kijelölés: {0} bájt, {1} – {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Eltolás: {0}, érték: {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Beszúrási mód</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Felülírási mód</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Írásvédett</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Szerkeszthető</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Hex oszlop</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>szöveg oszlop</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>alsó félbájt</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>módosítva</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>beszúrás</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>kijelölve</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>betöltés</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>nem olvasható</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>szóköz</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>nem nyomtatható karakter</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} bájt törölve</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Gyors hexadecimális szerkesztő bármilyen méretű fájlokhoz és lemezekhez</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>A meglévő ablak nem válaszol, ezért egy új példányban nyílt meg.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>A beállítások nem lesznek mentve, mert az adatmappa nem írható.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Beállítások exportálása</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>{0} darab, 30 napnál régebbi helyreállítási elem törölve.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>A HexEditor nem tudott elindulni.
+
+{0}
+
+A részletek helye:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Irány</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>Előre</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Hátra</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Keresés helye</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Teljes dokumentum</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Kijelölés</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>Kis- és nagybetűk megkülönböztetése</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Escape-szekvenciák használata (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Igazítás karakterhatárokhoz</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Keresési beállítások</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Találatok megszámlálása</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / számlálás...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / több mint {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... (összesen {1} bájt)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} ({1}. karakter)</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>„{0}” nem érvényes escape-szekvencia.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>Találat itt: {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Találatok megszámlálása</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>A fájl túl nagy a cél fájlrendszeréhez ({0}, {1}). A fájlok maximális mérete {2}. Mentse egy másik meghajtóra.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>Nincs elég szabad hely</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>A célmeghajtón ({0}) nincs elég szabad hely. Szükséges: {1}. Rendelkezésre áll: {2}. A fájl nem módosult.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>Mentés másik helyre</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>A módosítások túl nagyok a védelemhez</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>A módosítások túl nagyok ahhoz, hogy az eredeti tartalom rögzíthető legyen ({0}, korlát: {1}). Ha a mentés félbeszakad, a fájl nem állítható vissza az eredeti állapotába.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>Biztonságos mentés használata</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>Írás védelem nélkül</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>Ez a dokumentum írásvédett, ezért nem írható felül. Használja a Mentés másként parancsot.</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>A mentés sikertelen volt, ezért a fájl vissza lett állítva a mentés előtti állapotába.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>A mentés sikertelen volt, és a fájlnak csak egy része lett újraírva. A HexEditor következő indításakor visszaállíthatja.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} bájt)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} bájt</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>A szöveg nem hexadecimális bájtsorozat, ezért szövegként lett beillesztve.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>Visszavonás</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>Beillesztés a végéig?</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>Ennek a dokumentumnak a hossza nem módosítható. A beillesztendő adatokból {0} bájt túlnyúlik a végén, ezért nem lesz beillesztve.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>Beillesztés a végéig</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>Egy másik alkalmazás továbbra is írhat ebbe a fájlba. Ha a HexEditoron kívül módosul, előfordulhat, hogy a nem mentett módosítások nem menthetők megfelelően.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>Annyi a szerkesztés, hogy túllépte a memóriakorlátot ({0}). A mentés csökkenti a memóriahasználatot.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>Másolt adatok megtartása innen: {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Megtartja a másolt adatokat?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>Hogy a másolt adatok ({0}) a bezárás után is elérhetők maradjanak, a HexEditor ideiglenes tárolóba írja őket.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Írás és bezárás</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Vágólap törlése és bezárás</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>A másolt adatokat nem sikerült megtartani, ezért a vágólap törölve lett.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Szövegkódolás</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI ({0} kódlap)</value></data>
 </root>
