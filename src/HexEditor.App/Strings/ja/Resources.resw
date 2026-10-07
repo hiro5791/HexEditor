@@ -332,4 +332,17 @@
   <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>「{0}」は正しいエスケープではありません。</value></data>
   <data name="Find_FoundAt" xml:space="preserve"><value>{0} で見つかりました。</value></data>
   <data name="Operation_Count" xml:space="preserve"><value>件数を数える</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>保存先 ({0}) のファイルシステム ({1}) には、この大きさのファイルを保存できません。上限は {2} です。別のドライブに保存してください。</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>空き容量が足りません</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>保存先のドライブ ({0}) の空き容量が足りません。必要: {1}、空き: {2}。ファイルは変更していません。</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>別の場所に保存</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>変更が大きいため、保存を保護できません</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>変更が大きいため、元の内容を記録できません (必要 {0}、上限 {1})。保存の途中で止まると、元に戻せません。</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>安全な保存を使う</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>保護なしで書き込む</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>この文書は読み取り専用のため上書き保存できません。名前を付けて保存してください。</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>保存に失敗したため、保存前の状態に戻しました。</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>保存に失敗し、ファイルの一部だけが書き換わっています。次回の起動時に復旧できます。</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} バイト)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} バイト</value></data>
 </root>

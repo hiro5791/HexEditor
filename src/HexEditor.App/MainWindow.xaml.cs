@@ -238,9 +238,11 @@ public sealed partial class MainWindow : Window
 
         try
         {
-            if (!await Vm.SaveAsync(doc, path))
+            _saveElsewhereRequested = false;
+            if (!await Vm.SaveAsync(doc, path, plan => ConfirmSavePlanAsync(plan, doc)))
             {
-                return false;
+                // 空き容量不足のダイアログの「別の場所に保存」: 名前を付けて保存のダイアログを開く (ENG-25 の仕様 4)。
+                return _saveElsewhereRequested && await SaveAsync(doc, saveAs: true);
             }
 
             UpdateTitle();
@@ -253,6 +255,14 @@ public sealed partial class MainWindow : Window
         catch (InsufficientSpaceException ex)
         {
             ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error, doc);
+        }
+        catch (InPlaceSaveRolledBackException)
+        {
+            ShowNotice(Loc.Get("Error_SaveRolledBack"), InfoBarSeverity.Error, doc);
+        }
+        catch (InPlaceSavePartiallyWrittenException)
+        {
+            ShowNotice(Loc.Get("Error_SavePartial"), InfoBarSeverity.Error, doc);
         }
         catch (UnreadableDataException)
         {
