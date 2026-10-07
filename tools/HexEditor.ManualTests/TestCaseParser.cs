@@ -22,7 +22,10 @@ public sealed record TestCase(
 
     public bool IsSmoke => Priority == "高";
 
-    public int Phase => int.TryParse(Fields.GetValueOrDefault("フェーズ"), out int p) ? p : -1;
+    /// <summary>フェーズ。「2 (展開画面はフェーズ 4…)」のように注記が続く場合も、先頭の数字を読む。読めなければ -1。</summary>
+    public int Phase => System.Text.RegularExpressions.Regex.Match(Fields.GetValueOrDefault("フェーズ", string.Empty), @"^\s*(\d+)") is { Success: true } m
+        ? int.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture)
+        : -1;
 
     /// <summary>所要時間の目安 (分)。手動・半自動のみ。</summary>
     public int Minutes

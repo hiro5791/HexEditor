@@ -223,6 +223,85 @@ public sealed class GoToAndFindTests
         Assert.Equal("Not found.", await app.UiaNameAsync("Find_Status"));
     });
 
+    [Fact]
+    [Trait(UiTest.TC, "TC-FIND-09-01")]
+    public Task Overlapping_matches_and_find_previous() => UiTestContext.RunAsync(async ctx =>
+    {
+        // TD-FIND-AAAA: 0x00〜0x03 は 41 41 41 41、0x20〜0x21 は 41 41。
+        byte[] data = new byte[64];
+        data.AsSpan(0, 4).Fill(0x41);
+        data.AsSpan(0x20, 2).Fill(0x41);
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("TD-FIND-AAAA.bin", data)] });
+
+        // 1. テキスト (ASCII) の AA を検索 (Enter と同じ: 次を検索)。重なる一致も順に見つかる (FIND-09 の仕様 3)。
+        await OpenFindAsync(app);
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 1 });
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII" });
+        await app.UiaSetValueAsync("Find_Query", "AA");
+        await FindNextAsync(app);
+        await AssertSelectionAsync(app, 0, 2);
+
+        // 2. 検索バーを閉じ (Esc と同じ)、F3 を 2 回。
+        await app.UiaInvokeAsync("Find_Close");
+        await app.IdleAsync();
+        foreach (long expected in new long[] { 1, 2 })
+        {
+            Assert.Equal("menu:Command_FindNext", (await app.KeyAsync("F3"))["handledBy"]!.GetValue<string>());
+            await app.WaitUntilAsync(async () => (await app.DocumentAsync())["selectionStart"]!.GetValue<long>() == expected,
+                TimeSpan.FromSeconds(10), $"the match at {expected}");
+            await AssertSelectionAsync(app, expected, 2);
+        }
+
+        // 3〜4. 0x30 をクリックして Shift+F3: カーソルより前で最も近い一致 (0x20)。
+        await app.SendAsync("click", new JsonObject { ["offset"] = 0x30 });
+        Assert.Equal("menu:Command_FindPrevious", (await app.KeyAsync("F3", shift: true))["handledBy"]!.GetValue<string>());
+        await app.WaitUntilAsync(async () => (await app.DocumentAsync())["selectionStart"]!.GetValue<long>() == 0x20,
+            TimeSpan.FromSeconds(10), "the match at 0x20");
+        await AssertSelectionAsync(app, 0x20, 2);
+
+        // 5. もう一度 Shift+F3: 2。
+        await app.KeyAsync("F3", shift: true);
+        await app.WaitUntilAsync(async () => (await app.DocumentAsync())["selectionStart"]!.GetValue<long>() == 2,
+            TimeSpan.FromSeconds(10), "the match at 2");
+        await AssertSelectionAsync(app, 2, 2);
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-FIND-11-01")]
+    public Task Search_in_selection_ignores_matches_outside() => UiTestContext.RunAsync(async ctx =>
+    {
+        // すべて検索の結果一覧 (FIND-20) と範囲を選択 (Ctrl+E。EDIT-04) はフェーズ 1 のため、手順 1 はテスト用の命令で選び、
+        // 手順 3・4 (すべて検索) は行わず、手順 5 (Enter で次を検索) で範囲の中だけを探すことを確かめる。
+        byte[] data = new byte[1024 * 1024];
+        for (int k = 0; k < 1000; k++)
+        {
+            new byte[] { 0x12, 0x34, 0x56, 0x78 }.CopyTo(data, k * 1024);
+        }
+
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("TD-FIND-HITS-1000.bin", data)] });
+
+        // 1. 開始 0x300、長さ 0x600 を選ぶ (0x400 と 0x800 の一致を含む)。
+        await app.SendAsync("select", new JsonObject { ["start"] = 0x300, ["length"] = 0x600 });
+
+        // 2. 検索バーで Hex の 12 34 56 78、範囲を「選択範囲」にする (開いたときの選択に固定される)。
+        await OpenFindAsync(app);
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 0 });
+        (await app.WaitForAsync("Find_Options")).Patterns.Toggle.Pattern.Toggle();
+        await app.IdleAsync();
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Scope", ["index"] = 1 });
+        await app.UiaSetValueAsync("Find_Query", "12 34 56 78");
+
+        // 4 の代わり: 範囲の外 (0x10) をクリックしても、範囲は開いたときの選択のまま。
+        await app.SendAsync("click", new JsonObject { ["offset"] = 0x10 });
+
+        // 5. 次を検索を 3 回: 0x400、0x800、0x400 (範囲の中で折り返す)。範囲の外の 0x0・0xC00 などは見つからない。
+        foreach (long expected in new long[] { 0x400, 0x800, 0x400 })
+        {
+            await FindNextAsync(app);
+            await AssertSelectionAsync(app, expected, 4);
+        }
+    });
+
     /// <summary>TD-FIND-STRINGS (64 バイト)。</summary>
     private static byte[] FindStrings()
     {

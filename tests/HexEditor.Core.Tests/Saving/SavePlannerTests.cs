@@ -111,6 +111,7 @@ public sealed class SavePlannerTests : IDisposable
     }
 
     [Fact]
+    [Trait(TC, "TC-ENG-20-05")]
     public void FileSizeLimitIsReportedInsteadOfFreeSpace()
     {
         // ENG-25 の仕様 5: ファイルサイズの上限を空き容量より先に確かめ、上限のエラーだけを出す (TC-ENG-20-05 の判定の部分)。

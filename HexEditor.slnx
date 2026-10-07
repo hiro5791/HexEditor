@@ -16,6 +16,7 @@
     <Project Path="tools/ManualTestRunner/ManualTestRunner.csproj">
       <Platform Project="x86" />
     </Project>
+    <Project Path="tools/TestCoverage/TestCoverage.csproj" />
     <Project Path="tools/TestDataGen/TestDataGen.csproj" />
   </Folder>
 </Solution>

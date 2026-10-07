@@ -176,6 +176,8 @@ tools/
   - 種別が「自動」なのに、対応する自動テストがないテストケース
   - どのテストケースにも対応しない受け入れ基準
   - 失敗したテストケース
+
+  一覧は `tools/TestCoverage` が機能仕様書・テストケース・自動テストのソース (xUnit の `Trait`、`build/tests` の `Invoke-TestCase`)・テストの結果 (`*.trx`) から作る (`dotnet run --project tools/TestCoverage`。出力は `docs/test/test-coverage.md`)。CI の `coverage` ジョブは `--enforce-phase <完了したフェーズ>` で実行し、そのフェーズまでに上の 3 つのどれかがあれば失敗にする。Core のテスト (`TestSpec/CoverageTests`) も、完了したフェーズ (`CompletedPhase`) について同じことを確かめる。フェーズが完了したら、この 2 か所の値を上げる。
 - 機能を実装するプルリクエストでは、その機能の「自動」のテストケースすべてに対応する自動テストを含める。含まない場合は CI を失敗させる (フェーズごとに有効にする)。
 
 ### 6.3 データエンジンのテスト

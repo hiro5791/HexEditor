@@ -280,6 +280,48 @@ jobs:
           name: ui-test-results
           path: TestResults/
 
+  # テストの網羅の一覧 (test-coverage.md。テスト方針 6.2、10 章の 4)。完了したフェーズ (0) に、テストケースのない受け入れ基準、
+  # 自動テストのない「自動」のテストケース、失敗したテストケースがあれば失敗にする。
+  coverage:
+    needs: [test-x64, ui-tests]
+    if: always()
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: test-results-x64
+          path: results/x64
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ui-test-results
+          path: results/ui
+
+      - name: Test coverage
+        shell: pwsh
+        run: |
+          dotnet run --project tools/TestCoverage -c Release -- --results results --output test-coverage.md --enforce-phase 0
+          $code = $LASTEXITCODE
+          Get-Content test-coverage.md -TotalCount 30 | Add-Content $env:GITHUB_STEP_SUMMARY
+          exit $code
+
+      - name: Upload test coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage
+          retention-days: 7
+          path: test-coverage.md
+
   # ---- 配布物を入れて起動する配布のテスト (テスト方針 6.2)。毎晩と手動の実行で行う ----
 
   # テスト用のビルド (publish.ps1 -TestHooks。テスト用の命令の通り道を含む): 3 種類 × 2 アーキテクチャ。配らない。
