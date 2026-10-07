@@ -203,8 +203,6 @@
   <data name="Status_SizeBytes" xml:space="preserve"><value>サイズ: {0} バイト</value></data>
   <data name="Status_ReadOnly" xml:space="preserve"><value>読み取り専用</value></data>
   <data name="Status_SizeCopied" xml:space="preserve"><value>正確なバイト数をクリップボードにコピーしました。</value></data>
-  <data name="Status_Hide" xml:space="preserve"><value>非表示</value></data>
-  <data name="Status_ItemsMenu" xml:space="preserve"><value>ステータスバーに表示</value></data>
   <data name="Status_Item_Cursor" xml:space="preserve"><value>カーソル位置</value></data>
   <data name="Status_Item_Value" xml:space="preserve"><value>カーソルの値</value></data>
   <data name="Status_Item_Selection" xml:space="preserve"><value>選択範囲</value></data>

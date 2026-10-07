@@ -203,8 +203,6 @@ Length: {2} ({3} bytes)</value></data>
   <data name="Status_SizeBytes" xml:space="preserve"><value>Size: {0} bytes</value></data>
   <data name="Status_ReadOnly" xml:space="preserve"><value>Read-only</value></data>
   <data name="Status_SizeCopied" xml:space="preserve"><value>Copied the exact size to the clipboard.</value></data>
-  <data name="Status_Hide" xml:space="preserve"><value>Hide</value></data>
-  <data name="Status_ItemsMenu" xml:space="preserve"><value>Show in status bar</value></data>
   <data name="Status_Item_Cursor" xml:space="preserve"><value>Cursor position</value></data>
   <data name="Status_Item_Value" xml:space="preserve"><value>Cursor value</value></data>
   <data name="Status_Item_Selection" xml:space="preserve"><value>Selection</value></data>

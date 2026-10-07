@@ -10,10 +10,24 @@ public static class Loc
 {
     private static readonly ResourceLoader Loader = new();
 
+    /// <summary>
+    /// 文字列を返す。翻訳がなければ英語 (MRT のフォールバック)。キー自体がない場合は <c>[キー名]</c> を返してログに記録する
+    /// (UI-42 の「エラー」)。開発版では例外にして、すぐに気付けるようにする。
+    /// </summary>
     public static string Get(string key)
     {
         string value = Loader.GetString(key);
-        return string.IsNullOrEmpty(value) ? key : value;
+        if (!string.IsNullOrEmpty(value))
+        {
+            return value;
+        }
+
+        AppLog.Warning($"Missing resource key: {key}");
+#if DEBUG
+        throw new KeyNotFoundException($"リソースのキー {key} がありません。");
+#else
+        return $"[{key}]";
+#endif
     }
 
     public static string Format(string key, params object[] args) =>
