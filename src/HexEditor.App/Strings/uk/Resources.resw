@@ -41,6 +41,8 @@
   <data name="Common_Cancel" xml:space="preserve"><value>Скасувати</value></data>
   <data name="Notice_FixedLength" xml:space="preserve"><value>Довжину цього джерела даних неможливо змінити, тому доступний лише режим заміни.</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>Цей символ неможливо представити в поточному кодуванні.</value></data>
+  <data name="Notice_NotEncodableChar" xml:space="preserve"><value>«{0}» неможливо представити в кодуванні {1}.</value></data>
+  <data name="Notice_FillWithZero" xml:space="preserve"><value>Заповнити 00</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>Документ обробляється, і зараз його неможливо редагувати.</value></data>
   <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Перейти до зміщення...</value></data>
   <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Назад</value></data>
@@ -104,7 +106,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Вставити із заміною</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} байт. Можна вставити лише в HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Виділення перевищує обмеження буфера обміну, тому його можна вставити лише в HexEditor.</value></data>
-  <data name="Clipboard_Truncated" xml:space="preserve"><value>Байти за кінцем цього документа фіксованої довжини не вставлено.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Не вставлено байтів за кінцем цього документа фіксованої довжини: {0}.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Відновлення незбережених змін</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>Минулого разу HexEditor завершив роботу неналежним чином. Ви можете відновити наведені нижче незбережені зміни.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Відновити</value></data>
@@ -361,4 +363,12 @@
   <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>К</value></data>
   <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
   <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (кодова сторінка {0})</value></data>
+  <data name="SaveLinks_Title" xml:space="preserve"><value>Цей файл має жорсткі посилання</value></data>
+  <data name="SaveLinks_Body" xml:space="preserve"><value>Кількість жорстких посилань на цей файл: {0}. Під час безпечного збереження посилання розриваються: інші імена зберігають старий вміст.</value></data>
+  <data name="SaveLinks_Safe" xml:space="preserve"><value>Зберегти безпечно (розірвати посилання)</value></data>
+  <data name="SaveLinks_InPlace" xml:space="preserve"><value>Зберегти на місці (зберегти посилання; якщо збереження перерветься, файл може бути пошкоджено)</value></data>
+  <data name="Status_More.AutomationProperties.Name" xml:space="preserve"><value>Інші елементи стану</value></data>
+  <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>Інші елементи стану</value></data>
+  <data name="Find_Cancel.Content" xml:space="preserve"><value>Скасувати</value></data>
+  <data name="Operations_Matches" xml:space="preserve"><value>Збігів: {0}</value></data>
 </root>

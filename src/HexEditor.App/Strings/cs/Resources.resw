@@ -41,6 +41,8 @@
   <data name="Common_Cancel" xml:space="preserve"><value>Zrušit</value></data>
   <data name="Notice_FixedLength" xml:space="preserve"><value>Délku tohoto zdroje dat nelze změnit, proto je k dispozici jen režim přepisování.</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>Tento znak nelze v aktuálním kódování vyjádřit.</value></data>
+  <data name="Notice_NotEncodableChar" xml:space="preserve"><value>„{0}“ nelze v kódování {1} vyjádřit.</value></data>
+  <data name="Notice_FillWithZero" xml:space="preserve"><value>Vyplnit hodnotou 00</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>Dokument se zpracovává a nyní ho nelze upravovat.</value></data>
   <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Přejít na posun...</value></data>
   <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Zpět</value></data>
@@ -104,7 +106,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Vložit s přepsáním</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} B. Lze vložit jen v aplikaci HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Výběr přesahuje limit schránky, proto ho lze vložit jen v aplikaci HexEditor.</value></data>
-  <data name="Clipboard_Truncated" xml:space="preserve"><value>Bajty za koncem tohoto dokumentu s pevnou délkou nebyly vloženy.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Nevložené bajty za koncem tohoto dokumentu s pevnou délkou: {0}.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Obnovení neuložených změn</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor se minule neukončil správně. Níže uvedené neuložené změny můžete obnovit.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Obnovit</value></data>
@@ -361,4 +363,12 @@ Podrobnosti byly zapsány do:
   <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>K</value></data>
   <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
   <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (znaková stránka {0})</value></data>
+  <data name="SaveLinks_Title" xml:space="preserve"><value>Tento soubor má pevné odkazy</value></data>
+  <data name="SaveLinks_Body" xml:space="preserve"><value>Počet pevných odkazů na tento soubor: {0}. Bezpečné uložení odkazy zruší: ostatní názvy si ponechají původní obsah.</value></data>
+  <data name="SaveLinks_Safe" xml:space="preserve"><value>Uložit bezpečně (zrušit odkazy)</value></data>
+  <data name="SaveLinks_InPlace" xml:space="preserve"><value>Uložit na místě (zachovat odkazy; pokud se ukládání přeruší, soubor se může poškodit)</value></data>
+  <data name="Status_More.AutomationProperties.Name" xml:space="preserve"><value>Další položky stavu</value></data>
+  <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>Další položky stavu</value></data>
+  <data name="Find_Cancel.Content" xml:space="preserve"><value>Zrušit</value></data>
+  <data name="Operations_Matches" xml:space="preserve"><value>Shody: {0}</value></data>
 </root>

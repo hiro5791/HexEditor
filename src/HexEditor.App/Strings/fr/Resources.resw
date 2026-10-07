@@ -41,6 +41,8 @@
   <data name="Common_Cancel" xml:space="preserve"><value>Annuler</value></data>
   <data name="Notice_FixedLength" xml:space="preserve"><value>La longueur de cette source de données ne peut pas changer ; seul le mode refrappe est disponible.</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>Le caractère ne peut pas être représenté dans l'encodage actuel.</value></data>
+  <data name="Notice_NotEncodableChar" xml:space="preserve"><value>« {0} » ne peut pas être représenté dans {1}.</value></data>
+  <data name="Notice_FillWithZero" xml:space="preserve"><value>Remplir avec 00</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>Le document est en cours de traitement et ne peut pas être modifié pour le moment.</value></data>
   <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Atteindre le décalage...</value></data>
   <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Précédent</value></data>
@@ -104,7 +106,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Coller en refrappe</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor : {0} octets. Ne peut être collé que dans HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>La sélection dépasse la limite du Presse-papiers ; elle ne peut être collée que dans HexEditor.</value></data>
-  <data name="Clipboard_Truncated" xml:space="preserve"><value>Les octets au-delà de la fin de ce document de longueur fixe n'ont pas été collés.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>{0} octets au-delà de la fin de ce document de longueur fixe n'ont pas été collés.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Récupérer les modifications non enregistrées</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor ne s'est pas fermé correctement la dernière fois. Vous pouvez récupérer les modifications non enregistrées ci-dessous.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Récupérer</value></data>
@@ -361,4 +363,12 @@ Les détails ont été écrits dans :
   <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
   <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (page de codes {0})</value></data>
+  <data name="SaveLinks_Title" xml:space="preserve"><value>Ce fichier a des liens physiques</value></data>
+  <data name="SaveLinks_Body" xml:space="preserve"><value>Ce fichier a {0} liens physiques. L'enregistrement sécurisé rompt les liens : les autres noms conservent l'ancien contenu.</value></data>
+  <data name="SaveLinks_Safe" xml:space="preserve"><value>Enregistrer de façon sécurisée (rompre les liens)</value></data>
+  <data name="SaveLinks_InPlace" xml:space="preserve"><value>Enregistrer sur place (conserver les liens ; le fichier peut être endommagé si l'enregistrement est interrompu)</value></data>
+  <data name="Status_More.AutomationProperties.Name" xml:space="preserve"><value>Autres éléments d'état</value></data>
+  <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>Autres éléments d'état</value></data>
+  <data name="Find_Cancel.Content" xml:space="preserve"><value>Annuler</value></data>
+  <data name="Operations_Matches" xml:space="preserve"><value>{0} résultats</value></data>
 </root>

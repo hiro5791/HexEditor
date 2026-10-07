@@ -41,6 +41,8 @@
   <data name="Common_Cancel" xml:space="preserve"><value>Batal</value></data>
   <data name="Notice_FixedLength" xml:space="preserve"><value>Panjang sumber data ini tidak dapat diubah, sehingga hanya mode timpa yang tersedia.</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>Karakter tidak dapat direpresentasikan dalam pengodean saat ini.</value></data>
+  <data name="Notice_NotEncodableChar" xml:space="preserve"><value>“{0}” tidak dapat direpresentasikan dalam {1}.</value></data>
+  <data name="Notice_FillWithZero" xml:space="preserve"><value>Isi dengan 00</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>Dokumen sedang diproses dan tidak dapat diedit saat ini.</value></data>
   <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Pergi ke Offset...</value></data>
   <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Kembali</value></data>
@@ -104,7 +106,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Tempel Timpa</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} byte. Hanya dapat ditempel di dalam HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Pilihan melebihi batas papan klip, sehingga hanya dapat ditempel di dalam HexEditor.</value></data>
-  <data name="Clipboard_Truncated" xml:space="preserve"><value>Byte yang melewati akhir dokumen berpanjang tetap ini tidak ditempel.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>{0} byte yang melewati akhir dokumen berpanjang tetap ini tidak ditempel.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Pulihkan perubahan yang belum disimpan</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor tidak ditutup secara normal terakhir kali. Anda dapat memulihkan perubahan yang belum disimpan di bawah ini.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Pulihkan</value></data>
@@ -361,4 +363,12 @@ Detail ditulis ke:
   <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
   <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (halaman kode {0})</value></data>
+  <data name="SaveLinks_Title" xml:space="preserve"><value>File ini memiliki tautan keras</value></data>
+  <data name="SaveLinks_Body" xml:space="preserve"><value>File ini memiliki {0} tautan keras. Penyimpanan aman akan memutus tautan: nama lainnya tetap berisi konten lama.</value></data>
+  <data name="SaveLinks_Safe" xml:space="preserve"><value>Simpan dengan aman (putus tautan)</value></data>
+  <data name="SaveLinks_InPlace" xml:space="preserve"><value>Simpan di tempat (pertahankan tautan; file dapat rusak jika penyimpanan terputus)</value></data>
+  <data name="Status_More.AutomationProperties.Name" xml:space="preserve"><value>Item status lainnya</value></data>
+  <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>Item status lainnya</value></data>
+  <data name="Find_Cancel.Content" xml:space="preserve"><value>Batal</value></data>
+  <data name="Operations_Matches" xml:space="preserve"><value>{0} kecocokan</value></data>
 </root>

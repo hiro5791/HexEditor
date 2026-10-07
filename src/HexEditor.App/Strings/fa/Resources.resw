@@ -41,6 +41,8 @@
   <data name="Common_Cancel" xml:space="preserve"><value>لغو</value></data>
   <data name="Notice_FixedLength" xml:space="preserve"><value>طول این منبع داده قابل تغییر نیست، بنابراین فقط حالت رونویسی در دسترس است.</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>این نویسه در رمزگذاری فعلی قابل نمایش نیست.</value></data>
+  <data name="Notice_NotEncodableChar" xml:space="preserve"><value>«{0}» در {1} قابل نمایش نیست.</value></data>
+  <data name="Notice_FillWithZero" xml:space="preserve"><value>پر کردن با 00</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>سند در حال پردازش است و اکنون قابل ویرایش نیست.</value></data>
   <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>رفتن به آفست...</value></data>
   <data name="Menu_Go_Back.Text" xml:space="preserve"><value>عقب</value></data>
@@ -104,7 +106,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>چسباندن با رونویسی</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} بایت. فقط درون HexEditor قابل چسباندن است.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>انتخاب از حد مجاز کلیپ‌بورد بزرگ‌تر است، بنابراین فقط درون HexEditor قابل چسباندن است.</value></data>
-  <data name="Clipboard_Truncated" xml:space="preserve"><value>بایت‌های فراتر از انتهای این سند با طول ثابت چسبانده نشدند.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>{0} بایت فراتر از انتهای این سند با طول ثابت چسبانده نشد.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>بازیابی تغییرات ذخیره‌نشده</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor دفعهٔ قبل به‌طور عادی بسته نشد. می‌توانید تغییرات ذخیره‌نشدهٔ زیر را بازیابی کنید.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>بازیابی</value></data>
@@ -361,4 +363,12 @@
   <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>ر</value></data>
   <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
   <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (صفحهٔ کد {0})</value></data>
+  <data name="SaveLinks_Title" xml:space="preserve"><value>این فایل پیوند سخت دارد</value></data>
+  <data name="SaveLinks_Body" xml:space="preserve"><value>این فایل {0} پیوند سخت دارد. ذخیرهٔ امن پیوندها را قطع می‌کند: نام‌های دیگر محتوای قبلی را نگه می‌دارند.</value></data>
+  <data name="SaveLinks_Safe" xml:space="preserve"><value>ذخیرهٔ امن (قطع پیوندها)</value></data>
+  <data name="SaveLinks_InPlace" xml:space="preserve"><value>ذخیره در همان جا (حفظ پیوندها؛ اگر ذخیره ناتمام بماند، فایل ممکن است آسیب ببیند)</value></data>
+  <data name="Status_More.AutomationProperties.Name" xml:space="preserve"><value>موارد وضعیت بیشتر</value></data>
+  <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>موارد وضعیت بیشتر</value></data>
+  <data name="Find_Cancel.Content" xml:space="preserve"><value>لغو</value></data>
+  <data name="Operations_Matches" xml:space="preserve"><value>{0} مورد منطبق</value></data>
 </root>

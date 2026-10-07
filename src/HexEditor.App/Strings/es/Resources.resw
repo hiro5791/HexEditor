@@ -41,6 +41,8 @@
   <data name="Common_Cancel" xml:space="preserve"><value>Cancelar</value></data>
   <data name="Notice_FixedLength" xml:space="preserve"><value>Esta fuente de datos no puede cambiar de longitud, por lo que solo está disponible el modo de sobrescritura.</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>El carácter no se puede representar en la codificación actual.</value></data>
+  <data name="Notice_NotEncodableChar" xml:space="preserve"><value>“{0}” no se puede representar en {1}.</value></data>
+  <data name="Notice_FillWithZero" xml:space="preserve"><value>Rellenar con 00</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>El documento se está procesando y no se puede editar en este momento.</value></data>
   <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Ir al desplazamiento...</value></data>
   <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Atrás</value></data>
@@ -104,7 +106,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Pegar sobrescribiendo</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bytes. Solo se puede pegar dentro de HexEditor.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>La selección supera el límite del Portapapeles, por lo que solo se puede pegar dentro de HexEditor.</value></data>
-  <data name="Clipboard_Truncated" xml:space="preserve"><value>No se pegaron los bytes que superaban el final de este documento de longitud fija.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>No se pegaron los {0} bytes que superaban el final de este documento de longitud fija.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Recuperar cambios no guardados</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>HexEditor no se cerró correctamente la última vez. Puedes recuperar los siguientes cambios no guardados.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Recuperar</value></data>
@@ -361,4 +363,12 @@ Los detalles se escribieron en:
   <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>C</value></data>
   <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
   <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (página de códigos {0})</value></data>
+  <data name="SaveLinks_Title" xml:space="preserve"><value>Este archivo tiene vínculos físicos</value></data>
+  <data name="SaveLinks_Body" xml:space="preserve"><value>Este archivo tiene {0} vínculos físicos. Al guardar de forma segura se rompen los vínculos: los demás nombres conservan el contenido anterior.</value></data>
+  <data name="SaveLinks_Safe" xml:space="preserve"><value>Guardar de forma segura (romper los vínculos)</value></data>
+  <data name="SaveLinks_InPlace" xml:space="preserve"><value>Guardar en el mismo lugar (conservar los vínculos; el archivo podría dañarse si se interrumpe el guardado)</value></data>
+  <data name="Status_More.AutomationProperties.Name" xml:space="preserve"><value>Más elementos de estado</value></data>
+  <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>Más elementos de estado</value></data>
+  <data name="Find_Cancel.Content" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Operations_Matches" xml:space="preserve"><value>{0} coincidencias</value></data>
 </root>

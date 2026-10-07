@@ -41,6 +41,8 @@
   <data name="Common_Cancel" xml:space="preserve"><value>Mégse</value></data>
   <data name="Notice_FixedLength" xml:space="preserve"><value>Ennek az adatforrásnak a hossza nem módosítható, ezért csak felülírási mód érhető el.</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>A karakter nem ábrázolható az aktuális kódolásban.</value></data>
+  <data name="Notice_NotEncodableChar" xml:space="preserve"><value>„{0}” nem ábrázolható a(z) {1} kódolásban.</value></data>
+  <data name="Notice_FillWithZero" xml:space="preserve"><value>Kitöltés 00-val</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>A dokumentum feldolgozás alatt áll, ezért most nem szerkeszthető.</value></data>
   <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>Ugrás eltolásra...</value></data>
   <data name="Menu_Go_Back.Text" xml:space="preserve"><value>Vissza</value></data>
@@ -104,7 +106,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Beillesztés felülírással</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bájt. Csak a HexEditoron belül illeszthető be.]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>A kijelölés nagyobb a vágólap korlátjánál, ezért csak a HexEditoron belül illeszthető be.</value></data>
-  <data name="Clipboard_Truncated" xml:space="preserve"><value>A rögzített hosszúságú dokumentum végén túli bájtok nem lettek beillesztve.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>A rögzített hosszúságú dokumentum végén túli {0} bájt nem lett beillesztve.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Nem mentett módosítások helyreállítása</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>A HexEditor legutóbb nem megfelelően lett bezárva. Az alábbi nem mentett módosítások helyreállíthatók.</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>Helyreállítás</value></data>
@@ -361,4 +363,12 @@ A részletek helye:
   <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>K</value></data>
   <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
   <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI ({0} kódlap)</value></data>
+  <data name="SaveLinks_Title" xml:space="preserve"><value>Ennek a fájlnak rögzített hivatkozásai vannak</value></data>
+  <data name="SaveLinks_Body" xml:space="preserve"><value>Ennek a fájlnak {0} rögzített hivatkozása van. A biztonságos mentés megszünteti a hivatkozásokat: a többi név a régi tartalmat őrzi meg.</value></data>
+  <data name="SaveLinks_Safe" xml:space="preserve"><value>Biztonságos mentés (hivatkozások megszüntetése)</value></data>
+  <data name="SaveLinks_InPlace" xml:space="preserve"><value>Mentés helyben (hivatkozások megtartása; ha a mentés megszakad, a fájl megsérülhet)</value></data>
+  <data name="Status_More.AutomationProperties.Name" xml:space="preserve"><value>További állapotelemek</value></data>
+  <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>További állapotelemek</value></data>
+  <data name="Find_Cancel.Content" xml:space="preserve"><value>Mégse</value></data>
+  <data name="Operations_Matches" xml:space="preserve"><value>{0} találat</value></data>
 </root>
