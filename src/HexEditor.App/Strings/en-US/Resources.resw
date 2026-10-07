@@ -101,4 +101,12 @@
   <data name="Find_Error_TooLong" xml:space="preserve"><value>The search value can be at most 1 MiB.</value></data>
   <data name="Find_Error_NotEncodable" xml:space="preserve"><value>“{0}” can't be represented in this encoding.</value></data>
   <data name="Operation_Find" xml:space="preserve"><value>Find</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>Cut</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>Copy</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Paste</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Paste Overwrite</value></data>
+  <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} bytes. Can only be pasted inside HexEditor.]</value></data>
+  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>The selection is larger than the clipboard limit, so it can only be pasted inside HexEditor.</value></data>
+  <data name="Clipboard_NotHex" xml:space="preserve"><value>The clipboard text is not a hex byte sequence. Switch to the text column to paste it as text.</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>Bytes beyond the end of this fixed-length document were not pasted.</value></data>
 </root>

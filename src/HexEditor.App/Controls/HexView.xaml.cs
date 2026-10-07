@@ -81,6 +81,9 @@ public sealed partial class HexView : UserControl
     /// <summary>入力を拒否したときに呼ぶ (InfoBar を出すため)。</summary>
     public event EventHandler<EditResult>? EditRejected;
 
+    /// <summary>エディタの範囲のコマンド (クリップボードなど。00-overview 8.3) を要求した。</summary>
+    public event EventHandler<EditorCommand>? CommandRequested;
+
     /// <summary>表示するビューの状態。</summary>
     public EditorState? Editor
     {
@@ -563,6 +566,23 @@ public sealed partial class HexView : UserControl
         }
 
         bool handled = true;
+        EditorCommand? command = (e.Key, ctrl, shift) switch
+        {
+            (VirtualKey.C, true, false) or (VirtualKey.Insert, true, false) => EditorCommand.Copy,
+            (VirtualKey.X, true, false) or (VirtualKey.Delete, false, true) => EditorCommand.Cut,
+            (VirtualKey.V, true, false) or (VirtualKey.Insert, false, true) => EditorCommand.Paste,
+            (VirtualKey.B, true, false) => EditorCommand.PasteOverwrite,
+            (VirtualKey.A, true, false) => EditorCommand.SelectAll,
+            _ => null,
+        };
+        if (command is { } c)
+        {
+            CommandRequested?.Invoke(this, c);
+            RestartBlink();
+            e.Handled = true;
+            return;
+        }
+
         switch (e.Key)
         {
             case VirtualKey.Left:
@@ -712,4 +732,14 @@ public sealed partial class HexView : UserControl
             _ => Text,
         };
     }
+}
+
+/// <summary>Hex ビューから要求するエディタの範囲のコマンド。</summary>
+public enum EditorCommand
+{
+    Copy,
+    Cut,
+    Paste,
+    PasteOverwrite,
+    SelectAll,
 }

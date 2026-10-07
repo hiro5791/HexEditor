@@ -24,6 +24,9 @@ public enum EditResult
 
     /// <summary>現在の文字コードで表せない文字が含まれる (EDIT-12 の仕様 4)。</summary>
     NotEncodable,
+
+    /// <summary>長さを変えられないドキュメントで、末尾を越える分を書かなかった (EDIT-23 の仕様 5)。</summary>
+    Truncated,
 }
 
 /// <summary>
@@ -612,6 +615,88 @@ public sealed class EditorState
         EnsureCursorVisible();
         RaiseChanged();
         return EditResult.Done;
+    }
+
+    // ---- 貼り付け (EDIT-23) ----
+
+    /// <summary>
+    /// 貼り付け。<paramref name="overwrite"/> は上書き貼り付け (Ctrl+B)。挿入モードでは選択範囲を置き換えるかカーソル位置に挿入し、
+    /// 上書きモードではカーソル (選択範囲があればその先頭) から上書きする。固定長ドキュメントでは常に上書きし、末尾を越える分は書かない。
+    /// 貼り付けた範囲を選択する (EDIT-23 の仕様 7)。
+    /// </summary>
+    public EditResult Paste(DocumentSnapshot source, long sourceOffset, long length, bool overwrite)
+    {
+        if (length <= 0)
+        {
+            return EditResult.Ignored;
+        }
+
+        if (!CanEdit())
+        {
+            return EditResult.NotEditable;
+        }
+
+        long at = HasSelection ? _selectionStart : _cursor;
+        bool insert = InsertMode && !overwrite && Document.CanResize;
+        EditResult result = EditResult.Done;
+        if (insert)
+        {
+            if (HasSelection)
+            {
+                Document.Delete(_selectionStart, _selectionLength, "削除");
+            }
+
+            Document.InsertFrom(at, source, sourceOffset, length);
+        }
+        else
+        {
+            long room = Document.Length - at;
+            if (!Document.CanResize && length > room)
+            {
+                length = room;
+                result = EditResult.Truncated;
+            }
+
+            Document.OverwriteFrom(at, source, sourceOffset, length);
+        }
+
+        _anchor = at;
+        SetSelection(at, length);
+        _cursor = Math.Min(at + length, Layout.MaxCursor);
+        LowNibble = false;
+        EnsureCursorVisible();
+        RaiseChanged();
+        return result;
+    }
+
+    /// <summary>バイト列の貼り付け (システムのクリップボードから)。</summary>
+    public EditResult Paste(byte[] data, bool overwrite)
+    {
+        var temp = new Document(new Sources.MemoryByteSource(data));
+        try
+        {
+            return Paste(temp.Current, 0, data.Length, overwrite);
+        }
+        finally
+        {
+            temp.Dispose();
+        }
+    }
+
+    /// <summary>切り取りの後半: 選択範囲を削除する (コピーは呼び出し側が先に済ませる。EDIT-22 の仕様 7)。</summary>
+    public EditResult DeleteSelectionForCut()
+    {
+        if (!CanEdit())
+        {
+            return EditResult.NotEditable;
+        }
+
+        if (!Document.CanResize)
+        {
+            return EditResult.FixedLength;
+        }
+
+        return HasSelection ? DeleteSelection() : EditResult.Ignored;
     }
 
     public void Undo()

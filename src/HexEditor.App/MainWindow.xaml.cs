@@ -233,6 +233,76 @@ public sealed partial class MainWindow : Window
 
     private void SelectAll_Click(object sender, RoutedEventArgs e) => Editor?.SelectAll();
 
+    private readonly ClipboardService _clipboard = new();
+
+    private async void Copy_Click(object sender, RoutedEventArgs e) => await RunEditorCommandAsync(EditorCommand.Copy);
+
+    private async void Cut_Click(object sender, RoutedEventArgs e) => await RunEditorCommandAsync(EditorCommand.Cut);
+
+    private async void Paste_Click(object sender, RoutedEventArgs e) => await RunEditorCommandAsync(EditorCommand.Paste);
+
+    private async void PasteOverwrite_Click(object sender, RoutedEventArgs e) => await RunEditorCommandAsync(EditorCommand.PasteOverwrite);
+
+    private async void HexView_CommandRequested(object? sender, EditorCommand command) => await RunEditorCommandAsync(command);
+
+    /// <summary>エディタの範囲のコマンドを実行する (EDIT-22・EDIT-23)。</summary>
+    private async Task RunEditorCommandAsync(EditorCommand command)
+    {
+        if (Editor is not { } editor)
+        {
+            return;
+        }
+
+        var encoding = System.Text.Encoding.Latin1;
+        switch (command)
+        {
+            case EditorCommand.SelectAll:
+                editor.SelectAll();
+                break;
+            case EditorCommand.Copy:
+            case EditorCommand.Cut:
+                if (!editor.HasSelection)
+                {
+                    return;
+                }
+
+                if (command == EditorCommand.Cut && (!editor.Document.CanResize || editor.ReadOnly))
+                {
+                    ShowNotice(Loc.Get("Notice_FixedLength"), InfoBarSeverity.Informational);
+                    return;
+                }
+
+                if (!await _clipboard.CopyAsync(editor, encoding))
+                {
+                    ShowNotice(Loc.Get("Clipboard_InAppOnly"), InfoBarSeverity.Informational);
+                }
+
+                if (command == EditorCommand.Cut)
+                {
+                    editor.DeleteSelectionForCut();
+                }
+
+                break;
+            default:
+                PasteOutcome outcome = await _clipboard.PasteAsync(editor, encoding, command == EditorCommand.PasteOverwrite);
+                string? key = outcome switch
+                {
+                    PasteOutcome.NotHex => "Clipboard_NotHex",
+                    PasteOutcome.NotEncodable => "Notice_NotEncodable",
+                    PasteOutcome.Truncated => "Clipboard_Truncated",
+                    PasteOutcome.FixedLength => "Notice_FixedLength",
+                    PasteOutcome.NotEditable => "Notice_Busy",
+                    _ => null,
+                };
+                if (key is not null)
+                {
+                    ShowNotice(Loc.Get(key), InfoBarSeverity.Informational);
+                }
+
+                break;
+        }
+    }
+
     private void ToggleInsert_Click(object sender, RoutedEventArgs e)
     {
         if (Editor?.ToggleInsertMode() == EditResult.FixedLength)

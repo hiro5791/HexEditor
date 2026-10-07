@@ -70,11 +70,12 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator />
-                <MenuFlyoutItem x:Uid="Menu_Edit_SelectAll" AutomationProperties.AutomationId="Command_SelectAll" Click="SelectAll_Click">
-                    <MenuFlyoutItem.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="A" Modifiers="Control" />
-                    </MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="Menu_Edit_Cut" AutomationProperties.AutomationId="Command_Cut" Click="Cut_Click" KeyboardAcceleratorTextOverride="Ctrl+X" />
+                <MenuFlyoutItem x:Uid="Menu_Edit_Copy" AutomationProperties.AutomationId="Command_Copy" Click="Copy_Click" KeyboardAcceleratorTextOverride="Ctrl+C" />
+                <MenuFlyoutItem x:Uid="Menu_Edit_Paste" AutomationProperties.AutomationId="Command_Paste" Click="Paste_Click" KeyboardAcceleratorTextOverride="Ctrl+V" />
+                <MenuFlyoutItem x:Uid="Menu_Edit_PasteOverwrite" AutomationProperties.AutomationId="Command_PasteOverwrite" Click="PasteOverwrite_Click" KeyboardAcceleratorTextOverride="Ctrl+B" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Uid="Menu_Edit_SelectAll" AutomationProperties.AutomationId="Command_SelectAll" Click="SelectAll_Click" KeyboardAcceleratorTextOverride="Ctrl+A" />
                 <MenuFlyoutItem x:Uid="Menu_Edit_ToggleInsert" AutomationProperties.AutomationId="Command_ToggleInsert" Click="ToggleInsert_Click" />
             </MenuBarItem>
             <MenuBarItem x:Uid="Menu_Search">
@@ -152,7 +153,7 @@
                         <TabViewItem.IconSource>
                             <SymbolIconSource Symbol="Document" />
                         </TabViewItem.IconSource>
-                        <controls:HexView Editor="{x:Bind Editor}" EditRejected="HexView_EditRejected" Loaded="HexView_Loaded" />
+                        <controls:HexView CommandRequested="HexView_CommandRequested" Editor="{x:Bind Editor}" EditRejected="HexView_EditRejected" Loaded="HexView_Loaded" />
                     </TabViewItem>
                 </DataTemplate>
             </TabView.TabItemTemplate>

@@ -149,6 +149,60 @@ public sealed class Document : IDisposable
         Apply(Current.Tree.Insert(destinationOffset, slice), destinationOffset, 0, length, description, null);
     }
 
+    /// <summary>
+    /// 別のスナップショット (同じドキュメントの過去の状態、または別のドキュメント) の範囲を <paramref name="offset"/> に挿入する。
+    /// 同じ元データを共有している場合はピースを参照するだけ (O(log n))、そうでなければデータを追加バッファに複製する
+    /// (ENG-02 の仕様 9)。
+    /// </summary>
+    public void InsertFrom(long offset, DocumentSnapshot source, long sourceOffset, long length, string description = "貼り付け")
+    {
+        if (length == 0)
+        {
+            return;
+        }
+
+        RequireResizable();
+        PieceTree content = ContentFrom(source, sourceOffset, length);
+        Apply(Current.Tree.Insert(offset, content), offset, 0, length, description, null);
+    }
+
+    /// <summary>別のスナップショットの範囲で上書きする。末尾を越える分の扱いは <see cref="Overwrite"/> と同じ。</summary>
+    public void OverwriteFrom(long offset, DocumentSnapshot source, long sourceOffset, long length, string description = "上書き貼り付け")
+    {
+        if (length == 0)
+        {
+            return;
+        }
+
+        long replaced = CheckOverwrite(offset, length);
+        PieceTree content = ContentFrom(source, sourceOffset, length);
+        Apply(Current.Tree.Replace(offset, replaced, content), offset, replaced, length, description, null);
+    }
+
+    /// <summary>挿入・上書きに使う内容。元データを共有していればピースの参照、違えば追加バッファへの複製。</summary>
+    private PieceTree ContentFrom(DocumentSnapshot source, long sourceOffset, long length)
+    {
+        RequireEditable();
+        // 同じ元データ (保存で切り替わる前のスナップショットは別の元データ) ならピースをそのまま共有できる。
+        if (ReferenceEquals(source.Storage, _storage))
+        {
+            return source.Tree.Slice(sourceOffset, length);
+        }
+
+        // 別のドキュメント: 1 MiB ずつ読んで追加バッファに追記する。追記は連続するため、ピースは 1 つにまとまる。
+        byte[] buffer = new byte[Math.Min(length, 1024 * 1024)];
+        PieceTree content = PieceTree.Empty;
+        for (long done = 0; done < length; done += buffer.Length)
+        {
+            int n = (int)Math.Min(buffer.Length, length - done);
+            source.Read(sourceOffset + done, buffer.AsSpan(0, n));
+            long at = _storage.AddBuffer.Append(buffer.AsSpan(0, n));
+            content = content.Concat(PieceTree.FromPiece(Piece.Added(at, n)));
+        }
+
+        return content;
+    }
+
     // ---- 上書き ----
 
     /// <summary>
