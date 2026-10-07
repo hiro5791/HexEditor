@@ -1,4 +1,3 @@
-using System.Text;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Sources;
 using HexEditor.Core.Tests.Support;
@@ -163,11 +162,12 @@ public sealed class EditorStateTests
         using (doc)
         {
             s.ToggleColumn();
-            Assert.Equal(EditResult.Done, s.TypeText("Hi", Encoding.ASCII));
+            Assert.Same(TextEncoding.Ascii, s.TextEncoding);
+            Assert.Equal(EditResult.Done, s.TypeText("Hi"));
             Assert.Equal("Hi"u8.ToArray(), Read(doc.Current, 0, 2));
-            Assert.Equal(EditResult.NotEncodable, s.TypeText("あ", Encoding.ASCII));
-            Assert.Equal(EditResult.Done, s.TypeText("あ", Encoding.UTF8));
-            Assert.Equal(new byte[] { 0xE3, 0x81, 0x82 }, Read(doc.Current, 2, 3));
+            Assert.Equal(EditResult.NotEncodable, s.TypeText("é"));
+            Assert.Equal(EditResult.NotEncodable, s.TypeText("あ"));
+            Assert.Equal(new byte[] { 2, 3 }, Read(doc.Current, 2, 2));
         }
     }
 
@@ -245,6 +245,152 @@ public sealed class EditorStateTests
             s.Click(0x10, ActiveColumn.Hex, false, false);
             s.GoTo(0x20, extendSelection: true);
             Assert.Equal((0x10L, 0x10L), (s.SelectionStart, s.SelectionLength));
+        }
+    }
+    [Fact]
+    [Trait(TC, "TC-EDIT-11-05")]
+    public void FullWidthHexDigitsAreAccepted()
+    {
+        (Document doc, EditorState s) = Create(16);
+        using (doc)
+        {
+            // 手順 1
+            Assert.Equal(EditResult.Done, s.TypeHexText("０１２３４５６７８９"));
+            Assert.Equal(new byte[] { 0x01, 0x23, 0x45, 0x67, 0x89 }, Read(doc.Current, 0, 5));
+
+            // 手順 2
+            Assert.Equal(EditResult.Done, s.TypeHexText("ＡＢＣＤＥＦａｂｃｄｅｆ"));
+            Assert.Equal(new byte[] { 0xAB, 0xCD, 0xEF, 0xAB, 0xCD, 0xEF }, Read(doc.Current, 5, 6));
+
+            // 手順 3: 16 進数字でない全角文字ではデータもカーソルも変わらない。
+            byte[] before = ReadAll(doc.Current);
+            long cursor = s.Cursor;
+            Assert.Equal(EditResult.Ignored, s.TypeHexText("Ｇｇ－"));
+            Assert.Equal(before, ReadAll(doc.Current));
+            Assert.Equal(cursor, s.Cursor);
+
+            // 手順 4: 変換中の文字列は確定するまで渡されない (確定前に取り消すと何も呼ばれない) ため、変わらない。
+            Assert.Equal(before, ReadAll(doc.Current));
+            Assert.Equal(11, s.Cursor);
+        }
+    }
+
+    [Fact]
+    public void CtrlHomeAndEndRecordJumpHistoryAndPlaceRows()
+    {
+        (Document doc, EditorState s) = Create(16 * 100);
+        using (doc)
+        {
+            s.GoTo(0x300);
+            s.Select(0x300, 4);
+            s.MoveToEnd();
+            Assert.False(s.HasSelection);
+            Assert.Equal(1600, s.Cursor);
+            Assert.Equal(s.Layout.MaxTopRow(s.VisibleRows), s.TopRow); // 最終行が一番下 (VIEW-30 の仕様 2)
+            s.MoveToStart();
+            Assert.Equal((0L, 0L), (s.Cursor, s.TopRow));
+
+            // Alt+← で Ctrl+Home・Ctrl+End の前の位置に戻る (VIEW-30 の仕様 3)。
+            s.GoBack();
+            Assert.Equal(1600, s.Cursor);
+            s.GoBack();
+            Assert.Equal(0x300 + 4, s.Cursor);
+        }
+    }
+
+    [Fact]
+    public void SelectAllPutsCursorAtEndWithoutScrolling()
+    {
+        (Document doc, EditorState s) = Create(16 * 100);
+        using (doc)
+        {
+            s.ScrollToRow(30);
+            s.SelectAll();
+            Assert.Equal((0L, 1600L), (s.SelectionStart, s.SelectionLength));
+            Assert.Equal(1600, s.Cursor);
+            Assert.Equal(30, s.TopRow);
+
+            // Shift+← はアンカー 0 から伸ばし直す。
+            s.MoveLeft(extend: true);
+            Assert.Equal((0L, 1599L), (s.SelectionStart, s.SelectionLength));
+        }
+
+        (doc, s) = Create(0);
+        using (doc)
+        {
+            s.SelectAll();
+            Assert.False(s.HasSelection);
+        }
+    }
+
+    [Fact]
+    public void ArrowsCollapseSelectionToItsEdges()
+    {
+        (Document doc, EditorState s) = Create(64);
+        using (doc)
+        {
+            s.Select(10, 5);
+            s.MoveLeft();
+            Assert.Equal(10, s.Cursor);
+            Assert.False(s.HasSelection);
+            s.Select(10, 5);
+            s.MoveRight();
+            Assert.Equal(15, s.Cursor);
+            Assert.False(s.HasSelection);
+        }
+    }
+
+    [Fact]
+    public void TextEncodingIsUsedForDisplayInputAndCopy()
+    {
+        (Document doc, EditorState s) = Create(8);
+        using (doc)
+        {
+            // ASCII: 20〜7E が文字、それ以外は「.」。コピーでは解釈できないバイトと NUL を U+FFFD にする。
+            Assert.Equal('A', s.TextEncoding.DisplayChar(0x41));
+            Assert.Equal('.', s.TextEncoding.DisplayChar(0xE9));
+            Assert.Equal('.', s.TextEncoding.DisplayChar(0x00));
+            s.ToggleColumn();
+            Assert.Equal("A��", s.FormatForClipboard([0x41, 0x00, 0xE9]));
+            Assert.Equal("é", s.TextEncoding.FirstUnencodable("abé"));
+
+            // ANSI (システムのコードページ): 1252 なら E9 は é。表示・入力・コピーで同じ文字コード。
+            s.TextEncoding = TextEncoding.Ansi;
+            if (TextEncoding.Ansi.CodePage == 1252)
+            {
+                Assert.Equal('é', s.TextEncoding.DisplayChar(0xE9));
+                Assert.Equal('.', s.TextEncoding.DisplayChar(0x81)); // 未定義
+                Assert.Equal(EditResult.Done, s.TypeText("é"));
+                Assert.Equal(0xE9, Read(doc.Current, 0, 1)[0]);
+                Assert.Equal("é", s.FormatForClipboard([0xE9]));
+            }
+
+            Assert.Equal(EditResult.NotEncodable, s.TypeText("\U0001F600"));
+        }
+    }
+
+    [Fact]
+    public void PasteTextIntoHexColumnFallsBackToText()
+    {
+        (Document doc, EditorState s) = Create(8);
+        using (doc)
+        {
+            s.ToggleInsertMode();
+
+            // Hex として読めるテキストはバイト列 (EDIT-23 の受け入れ基準 1)。
+            Assert.Equal(EditResult.Done, s.PasteText("0xDE, 0xAD", overwrite: false));
+            Assert.Equal(new byte[] { 0xDE, 0xAD }, Read(doc.Current, 0, 2));
+
+            // 読めなければテキストとして貼り、UI に知らせる (「元に戻す」で取り消せる)。
+            s.Click(0, ActiveColumn.Hex, false, false);
+            Assert.Equal(EditResult.PastedAsText, s.PasteText("Hello", overwrite: false));
+            Assert.Equal("Hello"u8.ToArray(), Read(doc.Current, 0, 5));
+            doc.Undo();
+            Assert.Equal(new byte[] { 0xDE, 0xAD }, Read(doc.Current, 0, 2));
+
+            // 文字コードで表せなければ何もしない。
+            Assert.Equal(EditResult.NotEncodable, s.PasteText("日本", overwrite: false));
+            Assert.Equal(10, doc.Length);
         }
     }
 }

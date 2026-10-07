@@ -8,8 +8,11 @@ public readonly record struct HexLayout(int BytesPerRow, long Length, bool CanRe
     /// <summary>カーソルを置ける最大のオフセット (VIEW-25 の仕様 1)。長さを変えられる場合は末尾の次の位置 L。</summary>
     public long MaxCursor => CanResize ? Length : Math.Max(0, Length - 1);
 
-    /// <summary>全行数。末尾の次の位置を含む行まで。長さ 0 でも 1 行。</summary>
-    public long TotalRows => MaxCursor / BytesPerRow + 1;
+    /// <summary>全行数。末尾の次の位置を含む行まで。長さ 0 でも 1 行。long に収まらない場合 (1 行 1 バイトで 2^63 行) は long の最大値。</summary>
+    public long TotalRows => LastRow == long.MaxValue ? long.MaxValue : LastRow + 1;
+
+    /// <summary>最後の行 (最大値のカーソルがある行) の番号。</summary>
+    public long LastRow => MaxCursor / BytesPerRow;
 
     public long RowOf(long offset) => offset / BytesPerRow;
 
@@ -18,7 +21,7 @@ public readonly record struct HexLayout(int BytesPerRow, long Length, bool CanRe
     public int ColumnOf(long offset) => (int)(offset % BytesPerRow);
 
     /// <summary>一番上に表示できる行の最大値 M (VIEW-02 の仕様 1)。</summary>
-    public long MaxTopRow(int visibleRows) => Math.Max(0, TotalRows - Math.Max(1, visibleRows));
+    public long MaxTopRow(int visibleRows) => Math.Max(0, LastRow - (Math.Max(1, visibleRows) - 1));
 }
 
 /// <summary>

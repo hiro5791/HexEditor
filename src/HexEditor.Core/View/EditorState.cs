@@ -1,4 +1,4 @@
-using System.Text;
+using HexEditor.Core.Clipboard;
 using HexEditor.Core.Engine;
 
 namespace HexEditor.Core.View;
@@ -27,6 +27,19 @@ public enum EditResult
 
     /// <summary>長さを変えられないドキュメントで、末尾を越える分を書かなかった (EDIT-23 の仕様 5)。</summary>
     Truncated,
+
+    /// <summary>
+    /// 長さを変えられないドキュメントで末尾を越える上書き貼り付け。何もしていない。UI は確認ダイアログで「貼り付けるデータのうち
+    /// N バイト (<see cref="EditorState.PasteOverflow"/>) は末尾を越えるため貼り付けません」と示し、「末尾まで貼り付ける」なら
+    /// allowTruncate を真にしてもう一度呼ぶ (ENG-07 の仕様 5)。
+    /// </summary>
+    NeedsTruncateConfirmation,
+
+    /// <summary>
+    /// Hex 列に Hex として解釈できないテキストを貼り付けたため、テキストとして文字コードで変換して貼った (EDIT-23 の仕様 2)。
+    /// UI は InfoBar で「Hex として解釈できないため、テキストとして貼り付けました」と「元に戻す」ボタンを示す。
+    /// </summary>
+    PastedAsText,
 }
 
 /// <summary>
@@ -36,7 +49,10 @@ public enum EditResult
 public sealed class EditorState
 {
     private const string TypingKey = "typing";
+
+    // Delete と Backspace は別の種類の入力としてまとめる (EDIT-19 の仕様 5)。
     private const string DeleteKey = "delete";
+    private const string BackspaceKey = "backspace";
 
     private long _cursor;
     private long _anchor = -1;
@@ -80,6 +96,25 @@ public sealed class EditorState
     /// <summary>読み取り専用か (EDIT-16 の簡易版。切り替えの規則は EDIT-16 で定める)。</summary>
     public bool ReadOnly { get; set; }
 
+    /// <summary>
+    /// テキスト列の文字コード (VIEW-21)。表示・入力・コピー・貼り付けのすべてでこれを使う。変えてもカーソルと選択範囲は変わらない
+    /// (仕様 9)。
+    /// </summary>
+    public TextEncoding TextEncoding
+    {
+        get => _textEncoding;
+        set
+        {
+            if (!ReferenceEquals(_textEncoding, value))
+            {
+                _textEncoding = value;
+                RaiseChanged();
+            }
+        }
+    }
+
+    private TextEncoding _textEncoding = TextEncoding.Ascii;
+
     public long SelectionStart => _selectionStart;
 
     public long SelectionLength => _selectionLength;
@@ -105,9 +140,13 @@ public sealed class EditorState
 
     // ---- 移動 (VIEW-25) ----
 
-    public void MoveLeft(bool extend = false) => MoveTo(_cursor - 1, extend);
+    /// <summary>←。選択範囲がある場合 (Shift なし) は選択範囲の先頭に移るだけ (EDIT-02 の仕様 3)。</summary>
+    public void MoveLeft(bool extend = false) =>
+        MoveTo(!extend && HasSelection ? _selectionStart : _cursor - 1, extend);
 
-    public void MoveRight(bool extend = false) => MoveTo(_cursor + 1, extend);
+    /// <summary>→。選択範囲がある場合 (Shift なし) は選択範囲の末尾 (最後のバイトの次) に移るだけ。</summary>
+    public void MoveRight(bool extend = false) =>
+        MoveTo(!extend && HasSelection ? _selectionStart + _selectionLength : SaturatingAdd(_cursor, 1), extend);
 
     public void MoveUp(bool extend = false)
     {
@@ -120,8 +159,10 @@ public sealed class EditorState
     public void MoveDown(bool extend = false)
     {
         HexLayout layout = Layout;
-        long target = _cursor + BytesPerRow;
-        if (target <= layout.MaxCursor)
+        // long を越える移動先は、最大値を越えたものとして扱う。
+        bool beyond = _cursor > long.MaxValue - BytesPerRow;
+        long target = beyond ? long.MaxValue : _cursor + BytesPerRow;
+        if (!beyond && target <= layout.MaxCursor)
         {
             MoveTo(target, extend, keepNibble: true);
         }
@@ -136,7 +177,7 @@ public sealed class EditorState
     public void MoveEnd(bool extend = false)
     {
         HexLayout layout = Layout;
-        long rowEnd = layout.RowStart(layout.RowOf(_cursor)) + BytesPerRow - 1;
+        long rowEnd = SaturatingAdd(layout.RowStart(layout.RowOf(_cursor)), BytesPerRow - 1);
         MoveTo(Math.Min(rowEnd, layout.MaxCursor), extend);
     }
 
@@ -158,9 +199,26 @@ public sealed class EditorState
         EnsureCursorVisible();
     }
 
-    public void MoveToStart(bool extend = false) => MoveTo(0, extend);
+    /// <summary>
+    /// ファイルの先頭へ (Ctrl+Home。VIEW-30)。移動前の位置をジャンプ履歴に記録し、一番上の行を行 0 にする。
+    /// <paramref name="extend"/> は Ctrl+Shift+Home (EDIT-02 の仕様 6)。
+    /// </summary>
+    public void MoveToStart(bool extend = false)
+    {
+        RecordJump();
+        MoveTo(0, extend, scroll: false);
+        SetTopRow(0);
+        RaiseChanged();
+    }
 
-    public void MoveToEnd(bool extend = false) => MoveTo(Layout.MaxCursor, extend);
+    /// <summary>ファイルの末尾へ (Ctrl+End)。移動前の位置を記録し、最終行が表示領域の一番下に来るようにする。</summary>
+    public void MoveToEnd(bool extend = false)
+    {
+        RecordJump();
+        MoveTo(Layout.MaxCursor, extend, scroll: false);
+        SetTopRow(Layout.MaxTopRow(_visibleRows));
+        RaiseChanged();
+    }
 
     public bool CanGoBack => _back.Count > 0;
 
@@ -382,11 +440,23 @@ public sealed class EditorState
         RaiseChanged();
     }
 
-    /// <summary>すべて選択 (EDIT-03)。</summary>
+    /// <summary>
+    /// すべて選択 (EDIT-03 の仕様 1・2)。0 から末尾までを選択し、アンカーを 0、カーソルを末尾位置に置く。スクロール位置は変えない。
+    /// 長さ 0 のドキュメントでは何もしない。
+    /// </summary>
     public void SelectAll()
     {
+        HexLayout layout = Layout;
+        if (layout.Length == 0)
+        {
+            return;
+        }
+
         _anchor = 0;
-        SetSelection(0, Layout.Length);
+        SetSelection(0, layout.Length);
+        _cursor = layout.MaxCursor;
+        LowNibble = false;
+        Document.History.BreakCoalescing();
         RaiseChanged();
     }
 
@@ -442,19 +512,16 @@ public sealed class EditorState
             return EditResult.NotEditable;
         }
 
-        EditResult prepared = PrepareTyping();
-        if (prepared != EditResult.Done)
-        {
-            return prepared;
-        }
-
-        HexLayout layout = Layout;
-        bool atEnd = _cursor >= layout.Length;
-        if (atEnd && !Document.CanResize)
+        long at = HasSelection ? _selectionStart : _cursor;
+        if (at >= Document.Length && !Document.CanResize)
         {
             return EditResult.FixedLength;
         }
 
+        using IDisposable? group = BeginTypingGroup();
+        PrepareTyping();
+        HexLayout layout = Layout;
+        bool atEnd = _cursor >= layout.Length;
         if (!LowNibble)
         {
             byte value = (byte)(digit << 4);
@@ -483,8 +550,31 @@ public sealed class EditorState
         return EditResult.Done;
     }
 
-    /// <summary>テキスト列での確定した文字列の入力 (EDIT-12)。<paramref name="encoding"/> で変換したバイト列を書き込む。</summary>
-    public EditResult TypeText(string text, Encoding encoding)
+    /// <summary>
+    /// Hex 列での確定した文字列の入力 (IME の確定など。EDIT-11 の仕様 5)。1 文字ずつ <see cref="TypeHexDigit"/> で処理し、16 進数字以外は
+    /// 無視する。1 桁でも書いたら <see cref="EditResult.Done"/>。
+    /// </summary>
+    public EditResult TypeHexText(string committed)
+    {
+        EditResult result = EditResult.Ignored;
+        foreach (char c in committed)
+        {
+            EditResult one = TypeHexDigit(c);
+            if (one == EditResult.Done)
+            {
+                result = EditResult.Done;
+            }
+            else if (one != EditResult.Ignored)
+            {
+                return one;
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>テキスト列での確定した文字列の入力 (EDIT-12)。<see cref="TextEncoding"/> で変換したバイト列を書き込む。</summary>
+    public EditResult TypeText(string text)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -496,36 +586,28 @@ public sealed class EditorState
             return EditResult.NotEditable;
         }
 
-        byte[] bytes;
-        try
-        {
-            Encoding strict = Encoding.GetEncoding(encoding.CodePage, EncoderFallback.ExceptionFallback, DecoderFallback.ReplacementFallback);
-            bytes = strict.GetBytes(text);
-        }
-        catch (EncoderFallbackException)
+        if (!TextEncoding.TryEncode(text, out byte[] bytes))
         {
             return EditResult.NotEncodable;
         }
 
-        EditResult prepared = PrepareTyping();
-        if (prepared != EditResult.Done)
+        long at = HasSelection ? _selectionStart : _cursor;
+        if (!Document.CanResize && bytes.Length > Document.Length - at)
         {
-            return prepared;
+            return EditResult.FixedLength;
         }
 
-        if (InsertMode)
+        using (BeginTypingGroup())
         {
-            Document.Insert(_cursor, bytes, "入力", TypingKey);
-        }
-        else
-        {
-            long room = Document.Length - _cursor;
-            if (!Document.CanResize && bytes.Length > room)
+            PrepareTyping();
+            if (InsertMode)
             {
-                return EditResult.FixedLength;
+                Document.Insert(_cursor, bytes, "入力", TypingKey);
             }
-
-            Document.Overwrite(_cursor, bytes, "入力", TypingKey);
+            else
+            {
+                Document.Overwrite(_cursor, bytes, "入力", TypingKey);
+            }
         }
 
         _cursor = Math.Min(_cursor + bytes.Length, Layout.MaxCursor);
@@ -562,6 +644,7 @@ public sealed class EditorState
 
         Document.Delete(_cursor, 1, "削除", DeleteKey);
         LowNibble = false;
+        EnsureCursorVisible();
         RaiseChanged();
         return EditResult.Done;
     }
@@ -599,12 +682,12 @@ public sealed class EditorState
         if (ActiveColumn == ActiveColumn.Hex && LowNibble)
         {
             // 上位ニブルだけ入力した直後のバイトを削除する。
-            Document.Delete(_cursor, 1, "削除", DeleteKey);
+            Document.Delete(_cursor, 1, "削除", BackspaceKey);
             LowNibble = false;
         }
         else if (_cursor > 0)
         {
-            Document.Delete(_cursor - 1, 1, "削除", DeleteKey);
+            Document.Delete(_cursor - 1, 1, "削除", BackspaceKey);
             _cursor--;
         }
         else
@@ -620,11 +703,101 @@ public sealed class EditorState
     // ---- 貼り付け (EDIT-23) ----
 
     /// <summary>
-    /// 貼り付け。<paramref name="overwrite"/> は上書き貼り付け (Ctrl+B)。挿入モードでは選択範囲を置き換えるかカーソル位置に挿入し、
-    /// 上書きモードではカーソル (選択範囲があればその先頭) から上書きする。固定長ドキュメントでは常に上書きし、末尾を越える分は書かない。
-    /// 貼り付けた範囲を選択する (EDIT-23 の仕様 7)。
+    /// 長さを変えられないドキュメントで <paramref name="length"/> バイトを上書き貼り付けしたとき、末尾を越えるため書かれない量
+    /// (ENG-07 の仕様 5 の確認ダイアログの N)。長さを変えられるドキュメントでは 0。
     /// </summary>
-    public EditResult Paste(DocumentSnapshot source, long sourceOffset, long length, bool overwrite)
+    public long PasteOverflow(long length)
+    {
+        if (Document.CanResize)
+        {
+            return 0;
+        }
+
+        long at = HasSelection ? _selectionStart : _cursor;
+        return Math.Max(0, length - Math.Max(0, Document.Length - at));
+    }
+
+    /// <summary>
+    /// 貼り付け。<paramref name="overwrite"/> は上書き貼り付け (Ctrl+B)。挿入モードでは選択範囲を置き換えるかカーソル位置に挿入し、
+    /// 上書きモードではカーソル (選択範囲があればその先頭) から上書きする。固定長ドキュメントでは常に上書きし、末尾を越える場合は
+    /// <paramref name="allowTruncate"/> が偽なら何もせず <see cref="EditResult.NeedsTruncateConfirmation"/> を返す。
+    /// 選択範囲の削除と貼り付けは 1 つの編集グループにする (EDIT-19 の仕様 6)。貼り付けた範囲を選択する (EDIT-23 の仕様 7)。
+    /// </summary>
+    public EditResult Paste(DocumentSnapshot source, long sourceOffset, long length, bool overwrite, bool allowTruncate = false) =>
+        PasteCore(length, overwrite, allowTruncate, (insert, at, n) =>
+        {
+            if (insert)
+            {
+                Document.InsertFrom(at, source, sourceOffset, n);
+            }
+            else
+            {
+                Document.OverwriteFrom(at, source, sourceOffset, n);
+            }
+        });
+
+    /// <summary>アプリ内クリップボードの範囲の参照からの貼り付け (EDIT-24)。データをコピーしない。</summary>
+    public EditResult Paste(SnapshotRange range, bool overwrite, bool allowTruncate = false) =>
+        PasteCore(range.Length, overwrite, allowTruncate, (insert, at, n) =>
+        {
+            if (insert)
+            {
+                Document.InsertFrom(at, range, 0, n);
+            }
+            else
+            {
+                Document.OverwriteFrom(at, range, 0, n);
+            }
+        });
+
+    /// <summary>バイト列の貼り付け (システムのクリップボードから)。</summary>
+    public EditResult Paste(byte[] data, bool overwrite, bool allowTruncate = false) =>
+        PasteCore(data.Length, overwrite, allowTruncate, (insert, at, n) =>
+        {
+            if (insert)
+            {
+                Document.Insert(at, data, "貼り付け");
+            }
+            else
+            {
+                Document.Overwrite(at, data.AsSpan(0, (int)n), "上書き貼り付け");
+            }
+        });
+
+    /// <summary>
+    /// テキストだけがクリップボードにある場合の貼り付け (EDIT-23 の仕様 2)。テキスト列では文字コードで変換して貼る。Hex 列では
+    /// Hex バイト列として解釈できればそのバイト列を貼り、できなければテキストとして文字コードで変換して貼って
+    /// <see cref="EditResult.PastedAsText"/> を返す (UI は「元に戻す」付きの InfoBar を出す)。表せない文字があれば何もしない。
+    /// </summary>
+    public EditResult PasteText(string text, bool overwrite, bool allowTruncate = false)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return EditResult.Ignored;
+        }
+
+        if (ActiveColumn == ActiveColumn.Hex && HexText.TryParse(text) is { } hex)
+        {
+            return Paste(hex, overwrite, allowTruncate);
+        }
+
+        if (!TextEncoding.TryEncode(text, out byte[] bytes))
+        {
+            return EditResult.NotEncodable;
+        }
+
+        EditResult result = Paste(bytes, overwrite, allowTruncate);
+        return ActiveColumn == ActiveColumn.Hex && result == EditResult.Done ? EditResult.PastedAsText : result;
+    }
+
+    /// <summary>
+    /// コピーするテキスト形式 (EDIT-22 の仕様 2): Hex 列なら `DE AD BE EF` の Hex 文字列、テキスト列なら現在の文字コードで
+    /// 解釈した文字列 (解釈できないバイトと NUL は U+FFFD)。
+    /// </summary>
+    public string FormatForClipboard(ReadOnlySpan<byte> bytes) =>
+        ActiveColumn == ActiveColumn.Hex ? HexText.Format(bytes) : TextEncoding.Decode(bytes);
+
+    private EditResult PasteCore(long length, bool overwrite, bool allowTruncate, Action<bool, long, long> write)
     {
         if (length <= 0)
         {
@@ -639,25 +812,33 @@ public sealed class EditorState
         long at = HasSelection ? _selectionStart : _cursor;
         bool insert = InsertMode && !overwrite && Document.CanResize;
         EditResult result = EditResult.Done;
-        if (insert)
+        if (!insert)
         {
-            if (HasSelection)
+            long overflow = PasteOverflow(length);
+            if (overflow > 0)
+            {
+                if (!allowTruncate)
+                {
+                    return EditResult.NeedsTruncateConfirmation;
+                }
+
+                length -= overflow;
+                result = EditResult.Truncated;
+                if (length <= 0)
+                {
+                    return result;
+                }
+            }
+        }
+
+        using (Document.BeginGroup(insert ? "貼り付け" : "上書き貼り付け"))
+        {
+            if (insert && HasSelection)
             {
                 Document.Delete(_selectionStart, _selectionLength, "削除");
             }
 
-            Document.InsertFrom(at, source, sourceOffset, length);
-        }
-        else
-        {
-            long room = Document.Length - at;
-            if (!Document.CanResize && length > room)
-            {
-                length = room;
-                result = EditResult.Truncated;
-            }
-
-            Document.OverwriteFrom(at, source, sourceOffset, length);
+            write(insert, at, length);
         }
 
         _anchor = at;
@@ -667,20 +848,6 @@ public sealed class EditorState
         EnsureCursorVisible();
         RaiseChanged();
         return result;
-    }
-
-    /// <summary>バイト列の貼り付け (システムのクリップボードから)。</summary>
-    public EditResult Paste(byte[] data, bool overwrite)
-    {
-        var temp = new Document(new Sources.MemoryByteSource(data));
-        try
-        {
-            return Paste(temp.Current, 0, data.Length, overwrite);
-        }
-        finally
-        {
-            temp.Dispose();
-        }
     }
 
     /// <summary>切り取りの後半: 選択範囲を削除する (コピーは呼び出し側が先に済ませる。EDIT-22 の仕様 7)。</summary>
@@ -728,12 +895,12 @@ public sealed class EditorState
         return EditResult.Done;
     }
 
-    /// <summary>選択範囲がある状態での入力の準備 (EDIT-11 の仕様 3)。</summary>
-    private EditResult PrepareTyping()
+    /// <summary>選択範囲がある状態での入力の準備 (EDIT-11 の仕様 3)。挿入モードでは選択範囲を削除する。</summary>
+    private void PrepareTyping()
     {
         if (!HasSelection)
         {
-            return EditResult.Done;
+            return;
         }
 
         if (InsertMode)
@@ -744,8 +911,14 @@ public sealed class EditorState
         _cursor = _selectionStart;
         LowNibble = false;
         ClearSelectionAnchor();
-        return EditResult.Done;
     }
+
+    /// <summary>
+    /// 挿入モードで選択範囲を置き換える入力は、削除と入力を 1 つの編集グループにし、続く入力もまとめる (EDIT-19 の仕様 6)。
+    /// 選択範囲がなければ null (通常の入力のまとめに任せる)。
+    /// </summary>
+    private IDisposable? BeginTypingGroup() =>
+        HasSelection && InsertMode ? Document.BeginGroup("入力", TypingKey) : null;
 
     private bool CanEdit() => !ReadOnly && !Document.IsEditLocked;
 
@@ -822,6 +995,13 @@ public sealed class EditorState
     private void OnDocumentChanged(DocumentChangedEventArgs e)
     {
         AdjustJumpHistory(e);
+        if (e.Selection is { } range)
+        {
+            // 元に戻す・やり直しの後は、その編集グループの範囲を選択して見える位置に出す (EDIT-19 の仕様 10)。
+            SelectEditedRange(range.Offset, range.Length);
+            return;
+        }
+
         HexLayout layout = Layout;
         if (_cursor > layout.MaxCursor)
         {
@@ -838,7 +1018,45 @@ public sealed class EditorState
         RaiseChanged();
     }
 
+    private void SelectEditedRange(long offset, long length)
+    {
+        HexLayout layout = Layout;
+        offset = Math.Clamp(offset, 0, layout.MaxCursor);
+        length = Math.Clamp(length, 0, layout.Length - offset);
+        if (length > 0)
+        {
+            _anchor = offset;
+            SetSelection(offset, length);
+        }
+        else
+        {
+            _cursor = offset;
+            ClearSelectionAnchor();
+        }
+
+        Document.History.BreakCoalescing();
+        _cursor = length > 0 ? Math.Min(offset + length, layout.MaxCursor) : offset;
+        LowNibble = false;
+        SetTopRow(_topRow);
+        long first = layout.RowOf(offset);
+        long last = layout.RowOf(Math.Max(offset, offset + length - 1));
+        if (first < _topRow)
+        {
+            SetTopRow(first);
+        }
+        else if (last >= _topRow + _visibleRows)
+        {
+            // 範囲が画面に収まれば最後の行が一番下に来るように、収まらなければ先頭の行を一番上に出す。
+            SetTopRow(last - first < _visibleRows ? last - _visibleRows + 1 : first);
+        }
+
+        RaiseChanged();
+    }
+
     private void RaiseChanged() => Changed?.Invoke(this, EventArgs.Empty);
+
+    /// <summary>long を越えない足し算 (2^63 − 1 の近くのカーソル移動)。</summary>
+    private static long SaturatingAdd(long a, long b) => a > long.MaxValue - b ? long.MaxValue : a + b;
 
     private static int HexDigit(char c) => c switch
     {

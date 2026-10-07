@@ -64,7 +64,14 @@ public sealed class PasteTests
         using (doc)
         {
             s.Click(6, ActiveColumn.Hex, false, false);
-            Assert.Equal(EditResult.Truncated, s.Paste([0xAA, 0xBB, 0xCC], overwrite: false));
+
+            // ENG-07 の仕様 5: 切り詰める前に確認する。確認するまでは何も変えない。
+            Assert.Equal(1, s.PasteOverflow(3));
+            Assert.Equal(EditResult.NeedsTruncateConfirmation, s.Paste([0xAA, 0xBB, 0xCC], overwrite: false));
+            Assert.False(doc.IsModified);
+
+            // 「末尾まで貼り付ける」
+            Assert.Equal(EditResult.Truncated, s.Paste([0xAA, 0xBB, 0xCC], overwrite: false, allowTruncate: true));
             Assert.Equal(new byte[] { 0, 1, 2, 3, 4, 5, 0xAA, 0xBB }, ReadAll(doc.Current));
         }
     }
@@ -86,17 +93,20 @@ public sealed class PasteTests
     }
 
     [Fact]
-    public void PasteFromAnotherDocumentCopiesData()
+    public void PasteFromAnotherDocumentReferencesData()
     {
         (Document a, EditorState sa) = Create(16);
         (Document b, EditorState sb) = Create(4);
-        using (a)
         using (b)
         {
             sb.ToggleInsertMode();
             sb.Paste(a.Current, 4, 4, overwrite: false);
             Assert.Equal(new byte[] { 4, 5, 6, 7, 0, 1, 2, 3 }, ReadAll(b.Current));
-            Assert.Equal(4, b.AddBuffer.Length);
+            Assert.Equal(0, b.AddBuffer.Length); // 複製しない (EDIT-24 の仕様 2)
+
+            // 参照元を閉じても、貼り付けた内容は読める。
+            a.Dispose();
+            Assert.Equal(new byte[] { 4, 5, 6, 7, 0, 1, 2, 3 }, ReadAll(b.Current));
         }
     }
 
