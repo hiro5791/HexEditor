@@ -74,6 +74,19 @@ public static class TestHooks
             AppLog.Error($"Test hooks: cannot read {SettingsPath}: {ex.Message}");
         }
 
+        if (Settings.AnsiCodePage is { } codePage)
+        {
+            Core.View.TextEncoding.UseAnsiCodePage(codePage);
+        }
+
+        if (Settings.Culture is { } culture)
+        {
+            // 地域設定だけを変える (表示言語は --ui-lang)。UI スレッドとほかのスレッドの両方に効かせる。
+            var info = System.Globalization.CultureInfo.GetCultureInfo(culture);
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = info;
+            System.Globalization.CultureInfo.CurrentCulture = info;
+        }
+
         AppLog.Info("Test hooks enabled");
     }
 
@@ -243,7 +256,7 @@ public static class TestHooks
             AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
         }
 
-        var document = new DocumentViewModel(doc, path, name) { Recovery = recovery };
+        var document = new DocumentViewModel(doc, path, name) { Recovery = recovery, Notifications = vm.Notifications };
         vm.Memory.Register(doc);
         vm.Documents.Add(document);
         vm.Selected = document;

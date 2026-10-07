@@ -19,6 +19,12 @@ public enum EditResult
     /// <summary>長さを変えられないドキュメントのため、長さを変える操作をしなかった (EDIT-10 の仕様 2、EDIT-13 の仕様 5)。</summary>
     FixedLength,
 
+    /// <summary>
+    /// 長さを変えられないドキュメントでの Delete / Backspace による削除をしなかった (EDIT-13 の仕様 5)。UI は InfoBar に
+    /// 「00 で塗りつぶす」ボタン (<see cref="EditorState.FillWithZero"/>) を付ける。
+    /// </summary>
+    FixedLengthDelete,
+
     /// <summary>読み取り専用・処理中などで編集できない。</summary>
     NotEditable,
 
@@ -40,6 +46,19 @@ public enum EditResult
     /// UI は InfoBar で「Hex として解釈できないため、テキストとして貼り付けました」と「元に戻す」ボタンを示す。
     /// </summary>
     PastedAsText,
+}
+
+/// <summary>ジャンプ先の表示位置 (VIEW-34 の仕様 2。設定 <c>view.jump.position</c>)。</summary>
+public enum JumpPlacement
+{
+    /// <summary>移動先の行を表示領域の上端に置く。</summary>
+    Top,
+
+    /// <summary>上から 1/3 の位置に置く (既定)。</summary>
+    Third,
+
+    /// <summary>中央に置く。</summary>
+    Center,
 }
 
 /// <summary>
@@ -135,18 +154,96 @@ public sealed class EditorState
         }
     }
 
+    /// <summary>
+    /// 設定「Hex 列で ← / → をニブル単位で動かす」(VIEW-26 の仕様 5。既定オフ)。オンのとき、Hex 列での ← / → (Shift なし・選択なし) は
+    /// ニブル単位で動く。
+    /// </summary>
+    public bool NibbleArrowKeys { get; set; }
+
+    /// <summary>設定「カーソルの上下に残す行数」(VIEW-34 の仕様 1。0〜10、既定 0)。</summary>
+    public int CursorMargin
+    {
+        get => _cursorMargin;
+        set => _cursorMargin = Math.Clamp(value, 0, 10);
+    }
+
+    private int _cursorMargin;
+
+    /// <summary>設定「ジャンプ先の表示位置」(VIEW-34 の仕様 2。既定は上から 1/3)。</summary>
+    public JumpPlacement JumpPlacement { get; set; } = JumpPlacement.Third;
+
     /// <summary>カーソル・選択範囲・スクロール位置・モードが変わった。</summary>
     public event EventHandler? Changed;
 
     // ---- 移動 (VIEW-25) ----
 
     /// <summary>←。選択範囲がある場合 (Shift なし) は選択範囲の先頭に移るだけ (EDIT-02 の仕様 3)。</summary>
-    public void MoveLeft(bool extend = false) =>
+    public void MoveLeft(bool extend = false)
+    {
+        if (UsesNibbleArrows(extend))
+        {
+            PreviousNibble();
+            return;
+        }
+
         MoveTo(!extend && HasSelection ? _selectionStart : _cursor - 1, extend);
+    }
 
     /// <summary>→。選択範囲がある場合 (Shift なし) は選択範囲の末尾 (最後のバイトの次) に移るだけ。</summary>
-    public void MoveRight(bool extend = false) =>
+    public void MoveRight(bool extend = false)
+    {
+        if (UsesNibbleArrows(extend))
+        {
+            NextNibble();
+            return;
+        }
+
         MoveTo(!extend && HasSelection ? _selectionStart + _selectionLength : SaturatingAdd(_cursor, 1), extend);
+    }
+
+    /// <summary>
+    /// 「次のニブルへ」(VIEW-26 の仕様 3): 上位なら同じバイトの下位へ、下位なら次のバイトの上位へ。最大値の位置では動かない
+    /// (末尾位置にはバイトがないため、下位ニブルを持たない)。
+    /// </summary>
+    public void NextNibble()
+    {
+        if (!LowNibble && _cursor < Layout.Length)
+        {
+            ClearSelectionAnchor();
+            LowNibble = true;
+            AfterNibbleMove();
+        }
+        else if (LowNibble && _cursor < Layout.MaxCursor)
+        {
+            MoveTo(_cursor + 1, extend: false);
+        }
+    }
+
+    /// <summary>「前のニブルへ」(VIEW-26 の仕様 4): 下位なら同じバイトの上位へ、上位なら前のバイトの下位へ。オフセット 0 の上位では動かない。</summary>
+    public void PreviousNibble()
+    {
+        if (LowNibble)
+        {
+            ClearSelectionAnchor();
+            LowNibble = false;
+            AfterNibbleMove();
+        }
+        else if (_cursor > 0)
+        {
+            MoveTo(_cursor - 1, extend: false);
+            LowNibble = _cursor < Layout.Length;
+            RaiseChanged();
+        }
+    }
+
+    private bool UsesNibbleArrows(bool extend) => NibbleArrowKeys && ActiveColumn == ActiveColumn.Hex && !extend && !HasSelection;
+
+    private void AfterNibbleMove()
+    {
+        Document.History.BreakCoalescing();
+        EnsureCursorVisible();
+        RaiseChanged();
+    }
 
     public void MoveUp(bool extend = false)
     {
@@ -300,7 +397,12 @@ public sealed class EditorState
         long row = Layout.RowOf(_cursor);
         if (row < _topRow || row >= _topRow + _visibleRows)
         {
-            SetTopRow(row - _visibleRows / 3);
+            SetTopRow(JumpPlacement switch
+            {
+                JumpPlacement.Top => row,
+                JumpPlacement.Center => row - _visibleRows / 2,
+                _ => row - _visibleRows / 3,
+            });
         }
     }
 
@@ -467,14 +569,17 @@ public sealed class EditorState
         RaiseChanged();
     }
 
-    /// <summary>範囲を選択する (Ctrl+E。EDIT-04)。<paramref name="length"/> は選択するバイト数。</summary>
-    public void Select(long start, long length)
+    /// <summary>
+    /// 範囲を選択する (Ctrl+E。EDIT-04)。<paramref name="length"/> は選択するバイト数。カーソルは範囲の末尾 (最後のバイトの次) に置く。
+    /// <paramref name="cursorAtStart"/> なら、カーソルを範囲の先頭に、アンカーを末尾に置く (オフセット列のクリック。VIEW-25 の仕様 6)。
+    /// </summary>
+    public void Select(long start, long length, bool cursorAtStart = false)
     {
         start = Math.Clamp(start, 0, Layout.Length);
         length = Math.Clamp(length, 0, Layout.Length - start);
-        _anchor = start;
+        _anchor = cursorAtStart ? start + length : start;
         SetSelection(start, length);
-        _cursor = Math.Min(start + length, Layout.MaxCursor);
+        _cursor = cursorAtStart ? Math.Min(start, Layout.MaxCursor) : Math.Min(start + length, Layout.MaxCursor);
         LowNibble = false;
         EnsureCursorVisible();
         RaiseChanged();
@@ -645,6 +750,28 @@ public sealed class EditorState
         Document.Delete(_cursor, 1, "削除", DeleteKey);
         LowNibble = false;
         EnsureCursorVisible();
+        RaiseChanged();
+        return EditResult.Done;
+    }
+
+    /// <summary>
+    /// 00 で塗りつぶす (EDIT-13 の仕様 5 の InfoBar のボタン)。選択範囲を、選択がなければカーソル位置の 1 バイトを 00 にする。長さは変えない。
+    /// </summary>
+    public EditResult FillWithZero()
+    {
+        if (!CanEdit())
+        {
+            return EditResult.NotEditable;
+        }
+
+        long start = HasSelection ? _selectionStart : _cursor;
+        long length = HasSelection ? _selectionLength : _cursor < Document.Length ? 1 : 0;
+        if (length == 0)
+        {
+            return EditResult.Ignored;
+        }
+
+        Document.OverwritePattern(start, length, [0], "00 で塗りつぶし");
         RaiseChanged();
         return EditResult.Done;
     }
@@ -963,17 +1090,21 @@ public sealed class EditorState
         RaiseChanged();
     }
 
-    /// <summary>カーソルの行が表示領域の外なら、入る最小のスクロールをする (VIEW-34 の仕様 1)。</summary>
+    /// <summary>
+    /// カーソルの行が表示領域の外なら、入る最小のスクロールをする (VIEW-34 の仕様 1)。「カーソルの上下に残す行数」の行を
+    /// カーソルの上下に残す (表示行数が足りない場合は、上下に同じだけ残せる行数まで減らす)。
+    /// </summary>
     private void EnsureCursorVisible()
     {
         long row = Layout.RowOf(_cursor);
-        if (row < _topRow)
+        int margin = Math.Min(_cursorMargin, (_visibleRows - 1) / 2);
+        if (row < _topRow + margin)
         {
-            SetTopRow(row);
+            SetTopRow(row - margin);
         }
-        else if (row >= _topRow + _visibleRows)
+        else if (row >= _topRow + _visibleRows - margin)
         {
-            SetTopRow(row - _visibleRows + 1);
+            SetTopRow(row - _visibleRows + 1 + margin);
         }
     }
 

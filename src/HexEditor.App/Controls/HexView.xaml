@@ -172,7 +172,8 @@
                 IsTabStop="False"
                 Orientation="Vertical"
                 Scroll="VerticalBar_Scroll"
-                SizeChanged="VerticalBar_SizeChanged" />
+                SizeChanged="VerticalBar_SizeChanged"
+                ValueChanged="VerticalBar_ValueChanged" />
             <!--  スクロールバーの上の印 (VIEW-02 の仕様 9。カーソル位置と検索結果)  -->
             <Canvas
                 x:Name="MarkerLayer"

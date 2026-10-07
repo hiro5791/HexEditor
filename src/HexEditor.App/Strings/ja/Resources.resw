@@ -41,6 +41,8 @@
   <data name="Common_Cancel" xml:space="preserve"><value>キャンセル</value></data>
   <data name="Notice_FixedLength" xml:space="preserve"><value>このデータソースは長さを変えられないため、上書きモードだけを使えます。</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>この文字は現在の文字コードで表せません。</value></data>
+  <data name="Notice_NotEncodableChar" xml:space="preserve"><value>「{0}」は {1} で表せません。</value></data>
+  <data name="Notice_FillWithZero" xml:space="preserve"><value>00 で塗りつぶす</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>処理中のため編集できません。</value></data>
   <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>オフセットへ移動(G)...</value></data>
   <data name="Menu_Go_Back.Text" xml:space="preserve"><value>戻る(B)</value></data>
@@ -104,7 +106,7 @@
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>上書き貼り付け(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} バイトのデータ。HexEditor 内でのみ貼り付けできます]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>選択範囲がクリップボードの上限を超えているため、HexEditor の中でだけ貼り付けられます。</value></data>
-  <data name="Clipboard_Truncated" xml:space="preserve"><value>長さを変えられないため、末尾を超える部分は貼り付けませんでした。</value></data>
+  <data name="Clipboard_Truncated" xml:space="preserve"><value>長さを変えられないため、末尾を超える {0} バイトは貼り付けませんでした。</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>未保存の編集内容の復旧</value></data>
   <data name="Recovery_Body" xml:space="preserve"><value>前回、HexEditor は正常に終了しませんでした。次の未保存の編集内容を復旧できます。</value></data>
   <data name="Recovery_Restore" xml:space="preserve"><value>復旧する</value></data>

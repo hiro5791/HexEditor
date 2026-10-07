@@ -66,6 +66,7 @@ public partial class App : Application
         {
             AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
             window.ApplyAppearance();
+            window.ApplyEditorSettings();
         });
         Settings.ExternalEditFailed += reason => DispatcherQueue.TryEnqueue(() => window.ShowSettingsEditError(reason));
         Appearance.SystemColorsChanged += () => DispatcherQueue.TryEnqueue(window.ApplyAppearance);

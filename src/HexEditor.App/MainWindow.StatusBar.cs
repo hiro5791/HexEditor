@@ -247,7 +247,7 @@ public sealed partial class MainWindow
 
         var package = new DataPackage();
         package.SetText(doc.Document.Length.ToString(System.Globalization.CultureInfo.InvariantCulture));
-        Clipboard.SetContent(package);
+        SystemClipboard.SetContent(package);
         ShowNotice(Loc.Get("Status_SizeCopied"), InfoBarSeverity.Success);
     }
 }

@@ -124,7 +124,16 @@ public sealed partial class GoToBar : UserControl
     private void Input_KeyDown(object sender, KeyRoutedEventArgs e)
     {
         bool shift = InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down);
-        switch (e.Key)
+        if (HandleInputKey(e.Key, shift))
+        {
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>入力欄のキー 1 つを処理する。処理したら true (テスト用のビルドのキー入力の注入からも呼ぶ)。</summary>
+    private bool HandleInputKey(VirtualKey key, bool shift)
+    {
+        switch (key)
         {
             // Enter は移動して閉じる。Shift+Enter は開いたまま (VIEW-29 の仕様 8)。
             case VirtualKey.Enter:
@@ -133,26 +142,29 @@ public sealed partial class GoToBar : UserControl
                     Close();
                 }
 
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Escape:
                 Close();
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Up when _history.Count > 0:
                 _historyIndex = Math.Min(_historyIndex + 1, _history.Count - 1);
                 Input.Text = _history[_historyIndex];
                 Input.SelectAll();
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Down when _historyIndex > 0:
                 _historyIndex--;
                 Input.Text = _history[_historyIndex];
                 Input.SelectAll();
-                e.Handled = true;
-                break;
+                return true;
+            default:
+                return false;
         }
     }
+
+#if HEX_TEST_HOOKS
+    /// <summary>入力欄でキーを押したのと同じ処理 (テスト方針 7.2。フォーカスや実際のキーボードを使わない)。</summary>
+    public bool InjectKey(VirtualKey key, bool shift) => HandleInputKey(key, shift);
+#endif
 
     private void Go_Click(object sender, RoutedEventArgs e)
     {

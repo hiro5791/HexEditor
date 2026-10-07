@@ -162,8 +162,12 @@ public sealed partial class HexView
     private void Announce(string text, string activityId)
     {
         LastAnnouncement = text;
+        OnAnnounced(text, activityId);
         Peer?.RaiseNotificationEvent(AutomationNotificationKind.ActionCompleted, AutomationNotificationProcessing.MostRecent, text, activityId);
     }
+
+    /// <summary>読み上げ文を送るたびに呼ぶ (テスト用のビルドで記録する)。</summary>
+    partial void OnAnnounced(string text, string activityId);
 
     /// <summary>
     /// カーソル位置の要約 (UI-51 の仕様 1 の full。UI-50 の Value にも使う)。例: 「オフセット 0x00001F00、値 4A、文字 J、Hex 列、変更あり」。
@@ -357,7 +361,7 @@ public sealed partial class HexView
             "fontFamily=" + _fontFamilyName,
             "cellWidth=" + _cellWidth.ToString("0.###", inv),
             "rowHeight=" + _rowHeight.ToString("0.###", inv),
-            "textScale=" + _uiSettings.TextScaleFactor.ToString("0.###", inv),
+            "textScale=" + TextScaleFactor.ToString("0.###", inv),
             "zoom=" + _zoom.ToString("0.###", inv),
             "caret=" + caret,
             "caretBlinking=" + (_focused && _blinkTimer.IsRunning ? "true" : "false"),

@@ -39,7 +39,20 @@ public sealed class TextEncoding
     public static TextEncoding Ascii { get; } = new("ASCII", 20127, isAscii: true);
 
     /// <summary>ANSI (システムの既定のコードページ)。</summary>
-    public static TextEncoding Ansi { get; } = CreateAnsi();
+    public static TextEncoding Ansi { get; private set; } = CreateAnsi();
+
+    /// <summary>
+    /// ANSI として使うコードページを変える (テスト用。システムの既定と違うコードページ (932 の Shift_JIS など) の動作を、どの PC でも
+    /// 同じように確かめるため)。ドキュメントを開く前に呼ぶ。
+    /// </summary>
+    public static void UseAnsiCodePage(int codePage)
+    {
+        // 静的なフィールドに触れて、コードページを使えるようにしてから作る (型の初期化はフィールドに触れるまで遅れることがある)。
+        if (ProviderRegistered)
+        {
+            Ansi = new TextEncoding("ANSI", codePage, isAscii: false);
+        }
+    }
 
     /// <summary>ステータスバーなどに出す名前 (`ASCII`、`932` など)。</summary>
     public string Name { get; }

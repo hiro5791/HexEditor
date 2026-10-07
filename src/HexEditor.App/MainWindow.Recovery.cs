@@ -93,7 +93,7 @@ public sealed partial class MainWindow
         {
             var package = new DataPackage();
             package.SetText(uri.ToString());
-            Clipboard.SetContent(package);
+            SystemClipboard.SetContent(package);
             ShowNotice(Loc.Get("Notice_UrlCopied"), InfoBarSeverity.Informational);
         }
     }

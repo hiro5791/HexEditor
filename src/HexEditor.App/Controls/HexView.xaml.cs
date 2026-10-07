@@ -293,7 +293,7 @@ public sealed partial class HexView : UserControl
     private void MeasureCell()
     {
         double scale = _rasterizationScale > 0 ? _rasterizationScale : 1;
-        _fontSize = _baseFontSize * _uiSettings.TextScaleFactor * _zoom;
+        _fontSize = _baseFontSize * TextScaleFactor * _zoom;
         var probe = new TextBlock
         {
             Text = new string('0', 64),
@@ -318,6 +318,22 @@ public sealed partial class HexView : UserControl
         }
 
         InvalidateRows();
+    }
+
+    /// <summary>Windows の「文字サイズを大きくする」の倍率 (VIEW-41 の仕様 4)。</summary>
+    private double TextScaleFactor
+    {
+        get
+        {
+#if HEX_TEST_HOOKS
+            // テストでは Windows の設定を変えずに倍率だけを差し替える (利用者の設定を変えないため)。
+            if (TestTextScaleFactor is { } test)
+            {
+                return test;
+            }
+#endif
+            return _uiSettings.TextScaleFactor;
+        }
     }
 
     // ---- 描画 ----
@@ -422,6 +438,7 @@ public sealed partial class HexView : UserControl
         var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion, _editor.TextEncoding);
         int rebuilt = 0;
         int loadingCells = 0;
+        int placeholderCells = 0;
         bool anyUnreadable = false;
         ReuseRowsByOffset(firstOffset, bytesPerRow, rows);
         for (int r = 0; r < rows; r++)
@@ -441,7 +458,9 @@ public sealed partial class HexView : UserControl
             CellMode mode = !rowLoading ? CellMode.Normal : inGrace ? CellMode.Blank : CellMode.Placeholder;
             if (rowLoading)
             {
-                loadingCells += rowStates[..count].Count(ByteState.Loading);
+                int loading = rowStates[..count].Count(ByteState.Loading);
+                loadingCells += loading;
+                placeholderCells += mode == CellMode.Placeholder ? loading : 0;
             }
 
             // 猶予中で、同じ行の前の内容があればそのまま残す (VIEW-03 の仕様 3)。
@@ -472,8 +491,12 @@ public sealed partial class HexView : UserControl
         }
 
         _diagnostics.RecordRender(Stopwatch.GetElapsedTime(started), rows, rebuilt, loadingCells);
+        OnRendered(placeholderCells);
         RaiseAccessibilityChanges();
     }
+
+    /// <summary>描画のたびに呼ぶ (テスト用のビルドで、仮表示 `··` を描いたフレームを数える)。</summary>
+    partial void OnRendered(int placeholderCells);
 
     /// <summary>
     /// スクロールしたとき、同じ行 (先頭オフセット) を描いていた要素をその行に回す。内容が同じ行は作り直さずに位置だけ変わる

@@ -151,7 +151,7 @@ public sealed partial class MainWindow
             args.Cancel = true;
             var package = new DataPackage();
             package.SetText(AboutInfo.Text(env));
-            Clipboard.SetContent(package);
+            SystemClipboard.SetContent(package);
         };
         ContentDialogResult result = await dialog.ShowAsync();
         if (result == ContentDialogResult.Secondary)

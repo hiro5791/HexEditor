@@ -3,8 +3,10 @@ using System.Text.Json.Nodes;
 using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
+using Windows.Foundation;
 using Windows.System;
 
 namespace HexEditor.App.Controls;
@@ -55,6 +57,7 @@ public sealed partial class HexView
         result["cellWidth"] = _cellWidth;
         result["rowHeight"] = _rowHeight;
         result["focused"] = FocusState != FocusState.Unfocused;
+        AddViewInfo(result);
 
         var rows = new JsonArray();
         foreach (RowVisual row in _rows)
@@ -176,6 +179,176 @@ public sealed partial class HexView
         UpdateVisibleRows();
         UpdateScrollBar();
         Render();
+    }
+
+    // ---- Windows の設定の差し替え (利用者の PC の設定を変えずに、設定に従う処理を確かめる) ----
+
+    /// <summary>ホイール 1 ノッチの行数 (SPI_GETWHEELSCROLLLINES の値。「1 画面ずつ」は uint.MaxValue)。null なら Windows の設定。</summary>
+    internal static uint? TestWheelScrollLines { get; set; }
+
+    /// <summary>Windows の文字サイズの倍率 (TextScaleFactor)。null なら Windows の設定。</summary>
+    internal static double? TestTextScaleFactor { get; set; }
+
+    /// <summary>文字サイズの設定の変更の通知と同じ処理 (セル幅と行の高さを測り直す)。</summary>
+    public void SimulateTextScaleChanged() => RemeasureAndRender();
+
+    /// <summary>表示倍率の異なるモニターへ移ったときの通知 (XamlRoot.Changed) と同じ処理。</summary>
+    public void SimulateRasterizationScale(double scale)
+    {
+        _rasterizationScale = scale;
+        RemeasureAndRender();
+    }
+
+    // ---- ポインタの注入 (実際のマウス・タッチを使わずに、ポインタのイベントと同じ処理に渡す。座標は描画面の座標) ----
+
+    /// <summary>ボタンを押す。右ボタンは、離した後のジェスチャで開く右クリックメニューも開く。</summary>
+    public void InjectPointerDown(Point position, string device, bool right, bool shift)
+    {
+        if (device == "touch")
+        {
+            TouchPressed(position);
+        }
+        else if (right)
+        {
+            RightButtonPressed(position);
+            ShowContextMenu(Surface.TransformToVisual(this).TransformPoint(position));
+        }
+        else
+        {
+            LeftButtonPressed(position, shift, pointerId: 1);
+        }
+    }
+
+    public void InjectPointerMove(Point position)
+    {
+        if (_touchActive)
+        {
+            TouchMoved(position);
+        }
+        else if (_pressed)
+        {
+            DragMoved(position);
+        }
+        else
+        {
+            UpdateHover(position);
+        }
+    }
+
+    public void InjectPointerUp(Point position)
+    {
+        if (_touchActive)
+        {
+            TouchReleased(position);
+        }
+
+        EndPointer();
+    }
+
+    /// <summary>ホイールの入力 (<paramref name="delta"/> は 1 ノッチ 120。下へ回すと負)。</summary>
+    public void InjectWheel(int delta, bool horizontal, bool shift) => Wheel(delta, horizontal, shift);
+
+    /// <summary>縦スクロールバーの Scroll イベント (つまみのドラッグ ThumbTrack・EndScroll など) と同じ処理。</summary>
+    public void InjectVerticalScroll(ScrollEventType type, double value) => VerticalScroll(type, value);
+
+    /// <summary>
+    /// 縦スクロールバーのテンプレートの部品 (矢印ボタン VerticalSmallDecrease / VerticalSmallIncrease など) を、UI オートメーションの
+    /// Invoke と同じ処理で押す (矢印ボタンは UI オートメーションの木に出ないため)。
+    /// </summary>
+    public void InvokeScrollBarPart(string name)
+    {
+        var pending = new Queue<DependencyObject>([VerticalBar]);
+        while (pending.Count > 0)
+        {
+            DependencyObject node = pending.Dequeue();
+            if (node is Microsoft.UI.Xaml.Controls.Primitives.ButtonBase button && button.Name == name)
+            {
+                var peer = (Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer
+                    .CreatePeerForElement(button).GetPattern(Microsoft.UI.Xaml.Automation.Peers.PatternInterface.Invoke);
+                peer.Invoke();
+                return;
+            }
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(node); i++)
+            {
+                pending.Enqueue(VisualTreeHelper.GetChild(node, i));
+            }
+        }
+
+        throw new ArgumentException($"Scroll bar part not found: {name}");
+    }
+
+    /// <summary>右クリックメニューを閉じる (Esc と同じ)。</summary>
+    public void HideContextMenu() => _contextMenu?.Hide();
+
+    // ---- 記録 ----
+
+    private readonly List<(long Ms, string Id, string Text)> _announcements = [];
+    private int _frames;
+    private int _placeholderFrames;
+
+    partial void OnAnnounced(string text, string activityId)
+    {
+        _announcements.Add((Environment.TickCount64, activityId, text));
+        if (_announcements.Count > 1000)
+        {
+            _announcements.RemoveAt(0);
+        }
+    }
+
+    partial void OnRendered(int placeholderCells)
+    {
+        _frames++;
+        if (placeholderCells > 0)
+        {
+            _placeholderFrames++;
+        }
+    }
+
+    /// <summary>送った読み上げ文 (時刻は Environment.TickCount64)。<paramref name="clear"/> なら読んだ後に消す。</summary>
+    public JsonArray ReadAnnouncements(bool clear)
+    {
+        var result = new JsonArray([.. _announcements.Select(a => (JsonNode?)new JsonObject
+        {
+            ["time"] = a.Ms,
+            ["id"] = a.Id,
+            ["text"] = a.Text,
+        })]);
+        if (clear)
+        {
+            _announcements.Clear();
+        }
+
+        return result;
+    }
+
+    /// <summary>描画の情報の追加分 (ReadRendered に加える)。</summary>
+    private void AddViewInfo(JsonObject result)
+    {
+        result["contentLeft"] = ContentLeft;
+        result["offsetLeft"] = LeftPadding;
+        result["subRowOffset"] = _subRowOffset;
+        result["horizontalOffset"] = _horizontalOffset;
+        result["surfaceWidth"] = Surface.ActualWidth;
+        result["surfaceHeight"] = Surface.ActualHeight;
+        result["fontSize"] = _fontSize;
+        result["rasterizationScale"] = _rasterizationScale;
+        result["flowDirection"] = FlowDirection.ToString();
+        result["horizontalBarVisible"] = HorizontalBar.Visibility == Visibility.Visible;
+        result["contextMenuOpen"] = _contextMenu?.IsOpen ?? false;
+        result["focusFrame"] = FocusFrameOuter.Visibility == Visibility.Visible ? FocusFrameOuter.StrokeThickness : 0;
+        result["caretBlinking"] = _focused && _blinkTimer.IsRunning;
+        result["frames"] = _frames;
+        result["placeholderFrames"] = _placeholderFrames;
+        result["highContrast"] = _accessibilitySettings.HighContrast;
+        if (_palette is not null)
+        {
+            result["background"] = ColorOf(_palette.Background);
+            result["textColor"] = ColorOf(_palette.Text);
+            result["offsetColor"] = ColorOf(_palette.OffsetText);
+            result["selectionColor"] = ColorOf(_palette.Selection);
+            result["modifiedColor"] = ColorOf(_palette.Modified);
+        }
     }
 }
 #endif

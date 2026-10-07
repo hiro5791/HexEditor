@@ -115,7 +115,23 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
     private static CultureInfo Culture => CultureInfo.CurrentCulture;
 
-    public string CursorText => Loc.Format("Status_Offset", StatusFormat.Offset(Editor.Cursor, HexDigits));
+    /// <summary>設定「ニブルの位置を表示」(VIEW-26 の仕様 8)。オンなら、下位ニブルにあるときカーソル位置の後ろに「(下位)」を付ける。</summary>
+    public bool ShowNibble
+    {
+        get => _showNibble;
+        set
+        {
+            if (SetProperty(ref _showNibble, value))
+            {
+                OnPropertyChanged(nameof(CursorText));
+            }
+        }
+    }
+
+    private bool _showNibble;
+
+    public string CursorText => Loc.Format("Status_Offset", StatusFormat.Offset(Editor.Cursor, HexDigits)
+        + (ShowNibble && Editor.ActiveColumn == ActiveColumn.Hex && Editor.LowNibble ? " (" + Loc.Get("HexView_State_LowNibble") + ")" : string.Empty));
 
     /// <summary>カーソルの値: 「値: 4F (79)」。末尾 (データのない位置) と読み込み中は表示しない。</summary>
     public string ValueText

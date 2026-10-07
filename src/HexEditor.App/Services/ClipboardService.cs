@@ -39,6 +39,9 @@ public sealed class ClipboardService
     /// <summary>アプリ内クリップボード (EDIT-24)。範囲の参照だけを持つ。</summary>
     public InAppClipboard InApp { get; } = new();
 
+    /// <summary>直前の貼り付けで、末尾を越えるため書かなかったバイト数 (EDIT-23 の仕様 5 の InfoBar の N)。</summary>
+    public long LastTruncatedBytes { get; private set; }
+
     /// <summary>
     /// 選択範囲をコピーする。Hex 列なら Hex 文字列、テキスト列なら文字列もテキストとして入れる。
     /// </summary>
@@ -88,7 +91,8 @@ public sealed class ClipboardService
     /// </param>
     public async Task<PasteOutcome> PasteAsync(EditorState editor, bool overwrite, Func<long, Task<bool>>? confirmTruncate = null)
     {
-        DataPackageView view = Windows.ApplicationModel.DataTransfer.Clipboard.GetContent();
+        LastTruncatedBytes = 0;
+        DataPackageView view = SystemClipboard.GetContent();
 
         // (1) アプリ内クリップボード: Meta が今のアプリの最後のコピーと一致すれば、範囲の参照で貼る (一致しなければ破棄する)。
         if (view.Contains(MetaFormat) && InApp.Current is not null && await view.GetDataAsync(MetaFormat) is string meta)
@@ -126,7 +130,7 @@ public sealed class ClipboardService
     /// <summary>
     /// 固定長ドキュメントで末尾を越える貼り付け (ENG-07 の仕様 5)。越える分があれば確かめ、了承されたら末尾まで貼る。
     /// </summary>
-    private static async Task<EditResult> TruncateAsync(EditorState editor, long length, Func<long, Task<bool>>? confirm,
+    private async Task<EditResult> TruncateAsync(EditorState editor, long length, Func<long, Task<bool>>? confirm,
         Func<bool, EditResult> paste)
     {
         EditResult result = paste(false);
@@ -135,11 +139,13 @@ public sealed class ClipboardService
             return result;
         }
 
-        if (confirm is not null && !await confirm(editor.PasteOverflow(length)))
+        long overflow = editor.PasteOverflow(length);
+        if (confirm is not null && !await confirm(overflow))
         {
             return EditResult.Ignored;
         }
 
+        LastTruncatedBytes = overflow;
         return paste(true);
     }
 
@@ -161,7 +167,7 @@ public sealed class ClipboardService
         {
             try
             {
-                Windows.ApplicationModel.DataTransfer.Clipboard.SetContent(package);
+                SystemClipboard.SetContent(package);
                 return;
             }
             catch (Exception) when (attempt < 9)

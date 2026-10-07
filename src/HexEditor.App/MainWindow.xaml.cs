@@ -165,10 +165,20 @@ public sealed partial class MainWindow : Window
             _titleSource.PropertyChanged += TitleSource_PropertyChanged;
         }
 
+        ApplyEditorSettings();
         UpdateTitle();
         UpdateCommandStates();
         UpdateEncodingMenu();
         QueueStatusBarLayout();
+    }
+
+    /// <summary>カーソル移動とスクロールの設定 (VIEW-26、VIEW-34) を全タブに反映する。</summary>
+    public void ApplyEditorSettings()
+    {
+        foreach (DocumentViewModel doc in Vm.Documents)
+        {
+            EditorSettings.Apply(App.Settings, doc);
+        }
     }
 
     private void TitleSource_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -379,7 +389,8 @@ public sealed partial class MainWindow : Window
                 };
                 if (key is not null)
                 {
-                    ShowNotice(Loc.Get(key), InfoBarSeverity.Error, Vm.Selected);
+                    // 末尾を越えて書かなかったバイト数を示す (EDIT-23 の仕様 5)。
+                    ShowNotice(Loc.Format(key, _clipboard.LastTruncatedBytes.ToString("N0")), InfoBarSeverity.Error, Vm.Selected);
                 }
 
                 break;
@@ -500,9 +511,22 @@ public sealed partial class MainWindow : Window
     {
         DocumentViewModel? doc = Vm.Selected;
         IReadOnlyList<LongRunningOperation> busy = doc is null ? [] : Vm.Operations.ActiveFor(doc.Document);
+        if (result == EditResult.FixedLengthDelete && doc is not null)
+        {
+            // 長さを変えられないドキュメントでの削除は、代わりに 00 で塗りつぶせるようにする (EDIT-13 の仕様 5)。
+            EditorState editor = doc.Editor;
+            ShowNotice(Loc.Get("Notice_FixedLength"), InfoBarSeverity.Error, doc,
+                actions: [new NotificationAction(Loc.Get("Notice_FillWithZero"), () => editor.FillWithZero())]);
+            return;
+        }
+
         string message = result switch
         {
-            EditResult.FixedLength => Loc.Get("Notice_FixedLength"),
+            EditResult.FixedLength or EditResult.FixedLengthDelete => Loc.Get("Notice_FixedLength"),
+
+            // 表せない文字と文字コードを示す (EDIT-12 の仕様 4)。
+            EditResult.NotEncodable when sender is HexView { LastRejectedText: { } text } && doc is not null =>
+                Loc.Format("Notice_NotEncodableChar", doc.Editor.TextEncoding.FirstUnencodable(text) ?? text, EncodingDisplayName(doc.Editor.TextEncoding)),
             EditResult.NotEncodable => Loc.Get("Notice_NotEncodable"),
 
             // 処理中は処理名を添える (ENG-09 の仕様 7)。
@@ -512,6 +536,10 @@ public sealed partial class MainWindow : Window
         };
         ShowNotice(message, InfoBarSeverity.Error, doc);
     }
+
+    /// <summary>文字コードの表示名 (ASCII、ANSI (コードページ 932) など)。</summary>
+    private static string EncodingDisplayName(TextEncoding encoding) =>
+        encoding.IsAscii ? encoding.Name : Loc.Format("Menu_View_EncodingAnsi", encoding.CodePage);
 
     /// <summary>
     /// 通知を出す (UI-36)。<paramref name="document"/> を指定すると、その文書のタブの中に出す (文書の範囲)。

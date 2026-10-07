@@ -99,6 +99,12 @@ public sealed record TestHookSettings
 
     public int UnhandledExceptionDelayMs { get; init; }
 
+    /// <summary>ANSI として使うコードページ (テキスト列の文字コード。null ならシステムの既定)。</summary>
+    public int? AnsiCodePage { get; init; }
+
+    /// <summary>地域設定 (数値・サイズの書式。null ならシステムの既定)。表示言語は --ui-lang で変える。</summary>
+    public string? Culture { get; init; }
+
     public FileSourceSpec? FileSourceFor(string path)
     {
         string full = Path.GetFullPath(path);
@@ -128,6 +134,8 @@ public sealed record TestHookSettings
             KillAt = ParseEnum(root["killAt"], KillPoint.None),
             UnhandledException = root["unhandledException"] is { } e ? ParseEnum(e, ExceptionPlace.UiThread) : null,
             UnhandledExceptionDelayMs = (int)ReadLong(root["unhandledExceptionDelayMs"], 0),
+            AnsiCodePage = root["ansiCodePage"] is { } cp ? (int)ReadLong(cp, 0) : null,
+            Culture = root["culture"]?.GetValue<string>(),
         };
         return settings;
     }

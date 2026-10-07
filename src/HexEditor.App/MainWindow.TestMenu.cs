@@ -214,6 +214,19 @@ public sealed partial class MainWindow
             "saveLog" => new JsonObject { ["path"] = SaveTestLog() },
             "writeRecovery" => await TestWriteRecoveryAsync(),
             "idle" => await TestIdleAsync((int)TestHookSettings.ReadLong(request["timeoutMs"], 10_000)),
+            "pointer" => TestPointer(request),
+            "wheel" => TestWheel(request),
+            "scrollBar" => TestScrollBar(request),
+            "hideContextMenu" => TestView(v => v.HideContextMenu()),
+            "announcements" => new JsonObject
+            {
+                ["items"] = (CurrentView() ?? throw new InvalidOperationException("No hex view.")).ReadAnnouncements(request["clear"]?.GetValue<bool>() ?? false),
+            },
+            "setSystem" => TestSetSystem(request),
+            "goToKey" => TestGoToKey(request),
+            "resize" => TestResize(request),
+            "clipboard" => await TestClipboardAsync(),
+            "setClipboard" => await TestSetClipboardAsync(request),
             "exit" => Run(() =>
             {
                 _closingConfirmed = true;
@@ -474,10 +487,22 @@ public sealed partial class MainWindow
             ["isLoaded"] = e.IsLoaded,
             ["name"] = AutomationProperties.GetName(e),
         };
+        result["flowDirection"] = e.FlowDirection.ToString();
+        result["bounds"] = BoundsInRoot(e);
+        result["toolTip"] = ToolTipService.GetToolTip(e) is { } tip ? (tip as ToolTip)?.Content?.ToString() ?? tip.ToString() : null;
         switch (e)
         {
             case TextBlock t:
                 result["text"] = t.Text;
+                result["isTextTrimmed"] = t.IsTextTrimmed;
+                break;
+            case ContentControl { Content: string content }:
+                result["content"] = content;
+                if (e is Control control)
+                {
+                    result["isEnabled"] = control.IsEnabled;
+                }
+
                 break;
             case TextBox t:
                 result["text"] = t.Text;

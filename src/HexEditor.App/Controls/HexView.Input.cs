@@ -182,34 +182,17 @@ public sealed partial class HexView
         PointerPoint point = e.GetCurrentPoint(Surface);
         if (e.Pointer.PointerDeviceType == PointerDeviceType.Touch)
         {
-            // タッチはスクロールに使う。動かさずに離したらタップ (クリック) とする。
-            _touchActive = true;
-            _touchMoved = false;
-            _touchStart = _touchLast = point.Position;
-            _touchLastTime = Stopwatch.GetTimestamp();
-            _velocity = default;
+            TouchPressed(point.Position);
             Surface.CapturePointer(e.Pointer);
             e.Handled = true;
-            return;
-        }
-
-        if (!TryHitTest(point.Position, out HitResult hit))
-        {
             return;
         }
 
         bool shift = (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0;
         if (point.Properties.IsRightButtonPressed)
         {
-            // 選択範囲の中なら選択を保つ。外ならその位置にカーソルを移して選択を解除する (EDIT-01 の仕様 10)。
-            bool inside = _editor.HasSelection && hit.Offset >= _editor.SelectionStart
-                && hit.Offset < _editor.SelectionStart + _editor.SelectionLength;
-            if (!inside)
-            {
-                _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false);
-            }
-
             // Handled にしない (右クリックのジェスチャから ContextRequested でメニューを開く)。
+            RightButtonPressed(point.Position);
             return;
         }
 
@@ -218,12 +201,53 @@ public sealed partial class HexView
             return;
         }
 
-        int count = NextClickCount(point.Position);
+        if (LeftButtonPressed(point.Position, shift, e.Pointer.PointerId))
+        {
+            Surface.CapturePointer(e.Pointer);
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>タッチの開始。タッチはスクロールに使い、動かさずに離したらタップ (クリック) とする。</summary>
+    private void TouchPressed(Point position)
+    {
+        _touchActive = true;
+        _touchMoved = false;
+        _touchStart = _touchLast = position;
+        _touchLastTime = Stopwatch.GetTimestamp();
+        _velocity = default;
+    }
+
+    /// <summary>右ボタンを押した。選択範囲の中なら選択を保ち、外ならその位置にカーソルを移して選択を解除する (EDIT-01 の仕様 10)。</summary>
+    private void RightButtonPressed(Point position)
+    {
+        if (_editor is null || !TryHitTest(position, out HitResult hit))
+        {
+            return;
+        }
+
+        bool inside = _editor.HasSelection && hit.Offset >= _editor.SelectionStart
+            && hit.Offset < _editor.SelectionStart + _editor.SelectionLength;
+        if (!inside)
+        {
+            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false);
+        }
+    }
+
+    /// <summary>左ボタンを押した (クリック・Shift+クリック・ダブルクリック・トリプルクリック)。ポインタを捕まえるなら true。</summary>
+    private bool LeftButtonPressed(Point position, bool shift, uint pointerId)
+    {
+        if (_editor is null || !TryHitTest(position, out HitResult hit))
+        {
+            return false;
+        }
+
+        int count = NextClickCount(position);
         _pressed = true;
         _dragging = false;
         _rowDrag = false;
-        _pressPoint = _lastPointer = point.Position;
-        _pressPointerId = e.Pointer.PointerId;
+        _pressPoint = _lastPointer = position;
+        _pressPointerId = pointerId;
         if (shift)
         {
             // アンカーを変えずにクリックした位置までを選ぶ (EDIT-01 の仕様 4)。
@@ -231,10 +255,10 @@ public sealed partial class HexView
         }
         else if (hit.Region == HitRegion.Offset)
         {
-            // オフセット列のクリックは行全体、ドラッグは行単位 (EDIT-01 の仕様 7)。
+            // オフセット列のクリックは行全体、ドラッグは行単位 (EDIT-01 の仕様 7)。カーソルは行の先頭に置く (VIEW-25 の仕様 6)。
             _rowDrag = true;
             _rowDragAnchor = hit.Row;
-            SelectRows(hit.Row, hit.Row);
+            SelectRows(hit.Row, hit.Row, cursorAtStart: true);
         }
         else if (count == 2)
         {
@@ -252,8 +276,7 @@ public sealed partial class HexView
             _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false);
         }
 
-        Surface.CapturePointer(e.Pointer);
-        e.Handled = true;
+        return true;
     }
 
     private void Surface_PointerMoved(object sender, PointerRoutedEventArgs e)
@@ -277,23 +300,32 @@ public sealed partial class HexView
             return;
         }
 
-        _lastPointer = point.Position;
+        if (DragMoved(point.Position))
+        {
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>左ボタンを押したままの移動。ドラッグとして処理したら true。</summary>
+    private bool DragMoved(Point position)
+    {
+        _lastPointer = position;
         if (!_dragging)
         {
-            double dx = point.Position.X - _pressPoint.X;
-            double dy = point.Position.Y - _pressPoint.Y;
+            double dx = position.X - _pressPoint.X;
+            double dy = position.Y - _pressPoint.Y;
             if (dx * dx + dy * dy < DragThreshold * DragThreshold)
             {
                 // 4 px 未満の動きはクリックのまま (EDIT-01 の仕様 3)。
-                return;
+                return false;
             }
 
             _dragging = true;
         }
 
-        DragToPointer(point.Position);
-        UpdateAutoScroll(point.Position);
-        e.Handled = true;
+        DragToPointer(position);
+        UpdateAutoScroll(position);
+        return true;
     }
 
     private void Surface_PointerReleased(object sender, PointerRoutedEventArgs e)
@@ -346,7 +378,7 @@ public sealed partial class HexView
     }
 
     /// <summary>行 first〜last の全体を選ぶ (両端を含む)。</summary>
-    private void SelectRows(long first, long last, ActiveColumn? column = null)
+    private void SelectRows(long first, long last, ActiveColumn? column = null, bool cursorAtStart = false)
     {
         if (_editor is null)
         {
@@ -363,7 +395,7 @@ public sealed partial class HexView
             _editor.Click(Math.Min(start, layout.MaxCursor), c, false, false);
         }
 
-        _editor.Select(start, Math.Max(0, end - start));
+        _editor.Select(start, Math.Max(0, end - start), cursorAtStart);
     }
 
     /// <summary>
@@ -557,9 +589,19 @@ public sealed partial class HexView
         }
 
         PointerPointProperties props = e.GetCurrentPoint(Surface).Properties;
-        int delta = props.MouseWheelDelta;
-        bool horizontal = props.IsHorizontalMouseWheel;
-        if (!horizontal && (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0)
+        Wheel(props.MouseWheelDelta, props.IsHorizontalMouseWheel, (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0);
+        e.Handled = true;
+    }
+
+    /// <summary>ホイールの入力 1 回 (<paramref name="delta"/> は 1 ノッチ 120 単位。下・左へ回すと負)。</summary>
+    private void Wheel(int delta, bool horizontal, bool shift)
+    {
+        if (_editor is null)
+        {
+            return;
+        }
+
+        if (!horizontal && shift)
         {
             // Shift+ホイールは横 (仕様 3)。手前に回すと右へ。
             horizontal = true;
@@ -578,8 +620,6 @@ public sealed partial class HexView
             double rowsPerNotch = lines == WheelPageScroll ? Math.Max(1, _editor.VisibleRows - 1) : lines;
             ScrollByPixels(-delta / 120.0 * rowsPerNotch * _rowHeight);
         }
-
-        e.Handled = true;
     }
 
     /// <summary>ピクセル単位で縦にスクロールする。一番上の行 (long) と行内のずれを分けて持つ (VIEW-28 の仕様 2)。</summary>
@@ -698,15 +738,54 @@ public sealed partial class HexView
 
     // ---- 縦スクロールバー (VIEW-02) ----
 
-    private void VerticalBar_Scroll(object sender, ScrollEventArgs e)
+    private void VerticalBar_Scroll(object sender, ScrollEventArgs e) => VerticalScroll(e.ScrollEventType, e.NewValue);
+
+    /// <summary>
+    /// スクロールバーの値の変化 (UI オートメーションの RangeValue など、Scroll イベントを伴わない変化。VIEW-02)。
+    /// Scroll イベントを伴う変化は <see cref="VerticalScroll"/> が処理するため、同じ処理の中で Scroll が来たら何もしない。
+    /// </summary>
+    private void VerticalBar_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
     {
         if (_editor is null || _updatingScrollBar)
         {
             return;
         }
 
+        _valueChangePending = true;
+        _uiQueue.TryEnqueue(() =>
+        {
+            if (!_valueChangePending || _editor is null)
+            {
+                return;
+            }
+
+            _valueChangePending = false;
+            ScrollToBarValue(VerticalBar.Value);
+        });
+    }
+
+    /// <summary>true なら、Scroll イベントを伴わないスクロールバーの値の変化を待っている。</summary>
+    private bool _valueChangePending;
+
+    private void ScrollToBarValue(double newValue)
+    {
+        long maxTop = _editor!.Layout.MaxTopRow(_editor.VisibleRows);
+        long value = (long)Math.Round(newValue);
+        long row = value >= ScrollMapping.Scale(maxTop) ? maxTop : ScrollMapping.ToRow(value, maxTop);
+        _editor.ScrollToRow(row);
+    }
+
+    /// <summary>縦スクロールバーの操作 (矢印ボタン・トラック・つまみ。VIEW-02 の仕様 4・5・8)。</summary>
+    private void VerticalScroll(ScrollEventType type, double newValue)
+    {
+        _valueChangePending = false;
+        if (_editor is null || _updatingScrollBar)
+        {
+            return;
+        }
+
         long page = Math.Max(1, _editor.VisibleRows - 1);
-        switch (e.ScrollEventType)
+        switch (type)
         {
             // 矢印ボタンは縮尺に関係なく 1 行 (VIEW-02 の仕様 4)、トラックは 1 画面 (仕様 5)。
             case ScrollEventType.SmallDecrement:
@@ -725,13 +804,10 @@ public sealed partial class HexView
                 HideScrollToolTip();
                 break;
             default:
-                long maxTop = _editor.Layout.MaxTopRow(_editor.VisibleRows);
-                long value = (long)Math.Round(e.NewValue);
-                long row = value >= ScrollMapping.Scale(maxTop) ? maxTop : ScrollMapping.ToRow(value, maxTop);
-                _editor.ScrollToRow(row);
-                if (e.ScrollEventType == ScrollEventType.ThumbTrack)
+                ScrollToBarValue(newValue);
+                if (type == ScrollEventType.ThumbTrack)
                 {
-                    ShowScrollToolTip(e.NewValue);
+                    ShowScrollToolTip(newValue);
                 }
 
                 break;
@@ -913,19 +989,24 @@ public sealed partial class HexView
             return;
         }
 
-        MenuFlyout menu = _contextMenu ??= CreateContextMenu();
-        UpdateContextMenu(menu);
-        Point position;
-        if (!args.TryGetPosition(this, out position))
+        ShowContextMenu(args.TryGetPosition(this, out Point position) ? position : null);
+        args.Handled = true;
+    }
+
+    /// <summary>右クリックメニューを開く。<paramref name="position"/> が null (キーボードから開いた) ならカーソルの位置に出す。</summary>
+    private void ShowContextMenu(Point? position)
+    {
+        if (_editor is null)
         {
-            // キーボードから開いたときはカーソルの位置に出す。
-            position = TryGetCellRect(_editor.Cursor, out Rect rect, _editor.ActiveColumn)
-                ? Surface.TransformToVisual(this).TransformPoint(new Point(rect.Left, rect.Bottom))
-                : new Point(ContentLeft, 0);
+            return;
         }
 
-        menu.ShowAt(this, new FlyoutShowOptions { Position = position, ShowMode = FlyoutShowMode.Standard });
-        args.Handled = true;
+        MenuFlyout menu = _contextMenu ??= CreateContextMenu();
+        UpdateContextMenu(menu);
+        Point at = position ?? (TryGetCellRect(_editor.Cursor, out Rect rect, _editor.ActiveColumn)
+            ? Surface.TransformToVisual(this).TransformPoint(new Point(rect.Left, rect.Bottom))
+            : new Point(ContentLeft, 0));
+        menu.ShowAt(this, new FlyoutShowOptions { Position = at, ShowMode = FlyoutShowMode.Standard });
     }
 
     private MenuFlyout CreateContextMenu()
@@ -1126,7 +1207,10 @@ public sealed partial class HexView
     private void DeleteWithAnnouncement(Func<EditResult> delete)
     {
         long before = _editor!.Document.Length;
-        Report(delete());
+        EditResult result = delete();
+
+        // 長さを変えられないドキュメントでの削除は、「00 で塗りつぶす」を付けて知らせる (EDIT-13 の仕様 5)。
+        Report(result == EditResult.FixedLength ? EditResult.FixedLengthDelete : result);
         long removed = before - _editor.Document.Length;
         if (removed > 0)
         {
@@ -1205,16 +1289,21 @@ public sealed partial class HexView
         }
         else
         {
+            LastRejectedText = text;
             Report(_editor.TypeText(text));
+            LastRejectedText = null;
         }
 
         RestartBlink();
         AnnounceTyped();
     }
 
+    /// <summary>入力を拒否したときの、入力した文字列 (<see cref="EditRejected"/> の処理の中だけで読める。表せない文字の InfoBar に使う)。</summary>
+    internal string? LastRejectedText { get; private set; }
+
     private void Report(EditResult result)
     {
-        if (result is EditResult.FixedLength or EditResult.NotEditable or EditResult.NotEncodable)
+        if (result is EditResult.FixedLength or EditResult.FixedLengthDelete or EditResult.NotEditable or EditResult.NotEncodable)
         {
             EditRejected?.Invoke(this, result);
         }
@@ -1233,6 +1322,13 @@ public sealed partial class HexView
     /// <summary>ホイール 1 ノッチの行数 (SPI_GETWHEELSCROLLLINES。既定 3。「1 画面ずつ」は uint.MaxValue)。</summary>
     private static uint WheelScrollLines()
     {
+#if HEX_TEST_HOOKS
+        // テストでは Windows の設定を変えずに、設定の値だけを差し替える (利用者の設定を変えないため)。
+        if (TestWheelScrollLines is { } testLines)
+        {
+            return testLines;
+        }
+#endif
         uint lines = 3;
         return SystemParametersInfo(SpiGetWheelScrollLines, 0, ref lines, 0) ? lines : 3;
     }
