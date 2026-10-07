@@ -8,7 +8,7 @@
     TC-PKG-12-01  About shows the distribution of each build (and Development for a dotnet build output, -DevExe)
     TC-UI-40-01   About shows the distribution and the architecture; "Copy info" copies the same values
     TC-PKG-13-01  settings, recovery data, crash info and logs of each distribution are in the place of PKG-13
-    TC-PKG-13-02  storage.tempDirectory (skipped until the setting exists)
+    TC-PKG-13-02  storage.tempDirectory moves the document folders
     TC-PKG-30-02  crash info and recovery data of each distribution are in the place of PKG-13
     TC-PKG-12-03  installer: the AppUserModelID of the process and window equals the Start menu shortcut's
     TC-PKG-15-01  -Arch arm64 on an ARM64 runner: every distribution runs as native ARM64, PE Machine of the exe
@@ -220,7 +220,27 @@ Invoke-TestCase 'TC-PKG-13-01' 'the data of each distribution is in the place of
 }
 
 Invoke-TestCase 'TC-PKG-13-02' 'storage.tempDirectory on drive D' {
-    Skip-TestCase 'the setting storage.tempDirectory (PKG-13 spec 3) does not exist yet; the add buffer files go to the recovery folder (ENG-27 spec 2).'
+    $t = $targets | Where-Object Name -eq 'Installer'
+    if (-not $t) { $t = $targets | Select-Object -First 1 }
+    $drive = if (Test-Path 'D:\') { 'D:\' } else { $env:TEMP }
+    $custom = Join-Path $drive ('HexTemp-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    try {
+        Reset-Data $t
+        New-Item -ItemType Directory -Force $t.Data | Out-Null
+        $json = '{ "$schemaVersion": 1, "storage.tempDirectory": "' + ($custom -replace '\\', '\\\\') + '" }'
+        [System.IO.File]::WriteAllText((Join-Path $t.Data 'settings.json'), $json, (New-Object System.Text.UTF8Encoding($false)))
+        $app = Start-WithEditedFile $t 'TD-SEQ-1M' '13-02'
+        Invoke-Crash $app
+        $states = Get-RecoveryStates (Join-Path $custom 'HexEditor\recovery')
+        Assert-True ($states.Count -ge 1) "$($t.Name): no recovery data (add buffer folder) under $custom"
+        $default = Get-RecoveryStates (Join-Path $t.Data 'recovery')
+        Assert-True ($default.Count -eq 0) "$($t.Name): recovery data was written to the default folder"
+    }
+    finally {
+        Reset-Data $t
+        Remove-Item $custom -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    Add-TestNote 'TC-PKG-13-02: uses D:\ when it exists, otherwise %TEMP%. The add buffer lives in <dir>\HexEditor\recovery\<id>\ (PKG-13 spec 3, ENG-27 spec 2).'
 }
 
 Invoke-TestCase 'TC-PKG-30-02' 'crash info and recovery data of each distribution' {

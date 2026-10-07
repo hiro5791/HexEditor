@@ -534,13 +534,14 @@
    | 復旧用データ (00-overview.md 11.3) | `...\LocalState\recovery\` | `%LocalAppData%\HexEditorData\recovery\` | `<D>\recovery\` |
    | クラッシュ情報 (PKG-30) | `...\LocalState\crash\` | `%LocalAppData%\HexEditorData\crash\` | `<D>\crash\` |
    | ログ | `...\LocalState\logs\` | `%LocalAppData%\HexEditorData\logs\` | `<D>\logs\` |
-   | 一時ファイル (追加データの退避) | `%LocalAppData%\Packages\<P>\LocalCache\temp\` | `%LocalAppData%\HexEditorData\temp\` | `%TEMP%\HexEditor-<H>\` (PKG-06) |
+   | 追加データの退避 (01 の ENG-04) | 上記の `recovery\<ドキュメント ID>\add.bin` | 上記の `recovery\<ドキュメント ID>\add.bin` | 上記の `recovery\<ドキュメント ID>\add.bin` |
+   | 一時ファイル (パスを持たない項目のコピーなど) | `%LocalAppData%\Packages\<P>\LocalCache\temp\` | `%LocalAppData%\HexEditorData\temp\` | `%TEMP%\HexEditor-<H>\` (PKG-06) |
    | 追加コンポーネント (08 の AUTO-03) | `%LocalAppData%\Packages\<P>\LocalCache\components\` | `%LocalAppData%\HexEditorData\components\` | `<D>\components\` |
 
    インストーラ版のデータはすべて `%LocalAppData%\HexEditorData\` 以下に置き、Velopack のインストール先 `%LocalAppData%\HexEditor\` には置かない (Velopack が更新・アンインストールでインストール先を置き換え・削除するため。PKG-07 の 7)。
 
 2. MSIX 版は `ApplicationData.Current.LocalFolder` と `LocalCacheFolder` の API でパスを取る。パスを文字列で組み立てない。
-3. 一時ファイルの場所は設定 `storage.tempDirectory` で変えられる (巨大ファイルの編集で容量の大きいドライブを使うため)。
+3. 追加データの退避は、異常終了の後に復旧用データからそのまま参照するため、復旧用データのドキュメントごとのフォルダ (`recovery\<ドキュメント ID>\`) に置く (01 の ENG-27 の仕様 2)。巨大ファイルの編集で容量の大きいドライブを使うため、設定 `storage.tempDirectory` を指定すると、ドキュメントごとのフォルダ (追加データの退避と復旧用データ) と一時ファイルを `<指定のフォルダ>\HexEditor\` の下に置く。起動時の復旧の確認 (ENG-27 の仕様 6) は、既定の `recovery\` と指定のフォルダの両方を調べる。ジャーナル (ENG-23) は既定の `recovery\` に置く。
 4. 一時フォルダの中身は起動時に、実行中の他のインスタンスが使っていないもの (ロックされていないもの) を消す。
 5. 復旧用データは、異常終了後の起動で利用者が「復旧する」「破棄する」を選んだ時点で消す。30 日以上前の復旧用データは起動時 (ウィンドウを作る前) に消し、消した件数をアプリ全体の InfoBar で知らせる (2026-10-07 変更: 起動処理は XAML より前に動くため、消す前ではなく消した後に知らせる)。
 6. どの保存先も、ファイルの内容をコピーしない (00-overview.md 11.3 のとおり、巨大な追加データは参照として記録する)。

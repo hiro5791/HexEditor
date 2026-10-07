@@ -1215,13 +1215,13 @@
 **手順**:
 
 1. メモリ上限を最小値にし、TD-RANDOM-16M の複製を開いて、全体をコピーしてオフセット 0 に挿入の貼り付けを 4 回行う。
-2. `D:\HexTemp\` と `%LocalAppData%\HexEditorData\temp\` の中を調べる。
+2. `D:\HexTemp\HexEditor\recovery\` と `%LocalAppData%\HexEditorData\recovery\` の中を調べる。
 
 **期待結果**:
 
-- 退避のファイルが `D:\HexTemp\` にあり、`%LocalAppData%\HexEditorData\temp\` にはない。
+- 退避のファイル (ドキュメントごとのフォルダ) が `D:\HexTemp\HexEditor\recovery\` にあり、`%LocalAppData%\HexEditorData\recovery\` にはない。
 
-**備考**: 設定 `storage.tempDirectory` (PKG-13 の仕様 3) ができるまで、テストのスクリプトは「Skipped」にする。
+**備考**: D ドライブがない環境では `%TEMP%` の下で確かめる。
 
 ### TC-PKG-13-03 異常終了後に「破棄する」で復旧用データが消える
 

@@ -50,8 +50,12 @@ public sealed partial class MainWindow
     private async Task ShowStartupNoticesAsync()
     {
         // 復旧の提案を先に出す (PKG-30 の仕様 2)。
-        IReadOnlyList<RecoveryEntry> entries = RecoveryStore.Scan(Vm.RecoveryRoot);
-        IReadOnlyList<string> journals = InPlaceSaver.FindJournals(Vm.RecoveryRoot);
+        // 既定の recovery\ と、storage.tempDirectory で指定したフォルダの両方を調べる (PKG-13 の仕様 3)。
+        string defaultRoot = Program.Environment.Locations.Recovery;
+        IReadOnlyList<RecoveryEntry> entries = [.. new[] { Vm.RecoveryRoot, defaultRoot }
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .SelectMany(RecoveryStore.Scan)];
+        IReadOnlyList<string> journals = InPlaceSaver.FindJournals(defaultRoot);
         if (entries.Count > 0 || journals.Count > 0)
         {
             await ShowRecoveryDialogAsync(entries, journals);

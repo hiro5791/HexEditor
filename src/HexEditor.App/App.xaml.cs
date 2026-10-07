@@ -24,6 +24,11 @@ public partial class App : Application
 
     public static Window Window { get; private set; } = null!;
 
+    public const string TempDirectoryKey = "storage.tempDirectory";
+
+    /// <summary>一時ファイル (パスを持たない項目のコピーなど) の置き場所 (PKG-13)。</summary>
+    public static string TempRoot { get; private set; } = Path.GetTempPath();
+
     /// <summary>設定 (UI-23)。</summary>
     public static SettingsStore Settings { get; private set; } = null!;
 
@@ -49,9 +54,13 @@ public partial class App : Application
         AppLog.Initialize(env.Locations.Logs);
         Appearance.ApplyAccent(Settings);
         // 追加バッファの一時ファイルは復旧用データと同じフォルダに置き、異常終了後もそのまま参照できるようにする (ENG-27 の仕様 2)。
+        // 設定 storage.tempDirectory があれば、ドキュメントごとのフォルダ (追加データの退避と復旧用データ) と一時ファイルを
+        // その下に置く (PKG-13 の仕様 3。容量の大きいドライブを使うため)。
+        string custom = Settings.GetString(TempDirectoryKey, string.Empty);
+        TempRoot = custom.Length > 0 ? Path.Combine(custom, "HexEditor", "temp") : env.Locations.Temp;
         var options = new DocumentOptions
         {
-            TempDirectory = env.Locations.Recovery,
+            TempDirectory = custom.Length > 0 ? Path.Combine(custom, "HexEditor", "recovery") : env.Locations.Recovery,
         };
         var vm = new MainViewModel(new OperationCenter(TestHooks.Time), new EngineMemory(), options, env.Locations.Recovery);
         var window = new MainWindow(vm);

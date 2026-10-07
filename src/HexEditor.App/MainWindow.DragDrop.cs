@@ -144,7 +144,7 @@ public sealed partial class MainWindow
             }
 
             // パスを持たない項目は一時ファイルにコピーしてから無題として開く (ENG-12 の仕様 2)。コピーは長時間処理。
-            string folder = Path.Combine(Program.Environment.Locations.Temp, "dropped", Guid.NewGuid().ToString("N"));
+            string folder = Path.Combine(App.TempRoot, "dropped", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(folder);
             string temp = Path.Combine(folder, string.Concat(file.Name.Split(Path.GetInvalidFileNameChars())));
             ulong size = (await file.GetBasicPropertiesAsync()).Size;
