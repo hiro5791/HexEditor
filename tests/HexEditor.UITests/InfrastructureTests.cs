@@ -32,4 +32,23 @@ public sealed class InfrastructureTests
         Assert.NotEqual(app.Pid, NativeMethods.ForegroundProcessId());
         _ = before;
     });
+
+    [Fact]
+    public Task Test_menu_and_low_memory_hook() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-RANDOM-16M")] });
+
+        // テスト用のメニュー (テスト方針 8.4) がメニューバーにある。
+        Assert.Equal("Test", AppSession.NameOf(await app.WaitForAsync("TestMenu")));
+
+        // メモリ不足の通知 (7.2): キャッシュが 16 MiB 以下に縮む。
+        for (long offset = 0; offset < 16L * 1024 * 1024; offset += 1024 * 1024)
+        {
+            await app.GoToAsync(offset);
+            await app.IdleAsync();
+        }
+
+        await app.CommandAsync("TestMenu_LowMemory");
+        Assert.True((await app.StateAsync())["cacheBytes"]!.GetValue<long>() <= 16L * 1024 * 1024);
+    });
 }
