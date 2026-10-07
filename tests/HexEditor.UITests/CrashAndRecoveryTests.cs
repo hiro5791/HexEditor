@@ -38,8 +38,12 @@ public sealed class CrashAndRecoveryTests
         await again.WaitUntilAsync(async () => (await again.StateAsync())["crashNotice"]!["open"]!.GetValue<bool>(),
             TimeSpan.FromSeconds(15), "the crash notice");
         Assert.Contains("closed unexpectedly", (await again.StateAsync())["crashNotice"]!["message"]!.GetValue<string>());
-        Assert.NotNull(await again.WaitForAsync("CrashNotice_Open"));
-        Assert.NotNull(await again.WaitForAsync("CrashNotice_Report"));
+        // 通知 (UI-36) の中に「クラッシュ情報を開く」「問題を報告」のボタンがある。
+        await again.WaitForAsync("Notification");
+        string text = again.NotificationsText();
+        Assert.Contains("closed unexpectedly", text);
+        Assert.Contains("Open crash info", text);
+        Assert.Contains("Report a problem", text);
     });
 
     [Fact]
@@ -106,7 +110,7 @@ public sealed class CrashAndRecoveryTests
         Assert.Equal(0x2000, doc["cursor"]!.GetValue<long>());
         Assert.Equal(0, doc["undoCount"]!.GetValue<int>());
         Assert.Equal(expected, await again.BytesAsync(0, expected.Length));
-        Assert.Equal("Modified", await again.UiaNameAsync("Status_Modified"));
+        Assert.Equal("● Modified", await again.UiaNameAsync("Status_Modified"));
 
         // 5. Ctrl+S で保存すると、そのドキュメントの復旧用データが消える。
         await again.KeyAsync("S", ctrl: true);
@@ -147,7 +151,8 @@ public sealed class CrashAndRecoveryTests
         JsonObject state = await again.StateAsync();
         Assert.Contains("original file has changed", state["notice"]!["message"]!.GetValue<string>());
         Assert.True(state["document"]!["readOnly"]!.GetValue<bool>());
-        Assert.Contains("original file has changed", AppSession.AllText(await again.WaitForAsync("Notice")));
+        await again.WaitForAsync("Notification");
+        Assert.Contains("original file has changed", again.NotificationsText());
     });
 
     [Fact]

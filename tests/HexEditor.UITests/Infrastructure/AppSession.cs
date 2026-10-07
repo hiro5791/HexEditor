@@ -296,6 +296,15 @@ public sealed class AppSession : IAsyncDisposable
     /// <summary>要素の名前 (TextBlock では表示している文字列)。</summary>
     public async Task<string> UiaNameAsync(string automationId) => NameOf(await WaitForAsync(automationId));
 
+    /// <summary>
+    /// 表示中の要素の名前を待たずに読む。要素がなければ (空のステータスバーの項目など、表示されないもの) 空文字列。
+    /// </summary>
+    public string TextOrEmpty(string automationId) => Find(automationId) is { } e ? NameOf(e) : string.Empty;
+
+    /// <summary>通知 (NotificationCenter の InfoBar。AutomationId "Notification") の文字列をまとめて取る。</summary>
+    public string NotificationsText() =>
+        string.Join('\n', Window.FindAllDescendants(cf => cf.ByAutomationId("Notification")).Select(AllText));
+
     /// <summary>要素の名前。名前を持たない要素では空文字列。</summary>
     public static string NameOf(AutomationElement element) => element.Properties.Name.ValueOrDefault ?? string.Empty;
 

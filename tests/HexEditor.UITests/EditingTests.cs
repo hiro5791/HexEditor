@@ -72,27 +72,28 @@ public sealed class EditingTests
     public Task Modified_indicator_is_shown_and_cleared_by_save() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.CopyTestData("TD-SEQ-1M")] });
-        Assert.Equal(string.Empty, await app.UiaNameAsync("Status_Modified"));
+        Assert.Equal(string.Empty, app.TextOrEmpty("Status_Modified"));
 
         await app.TypeAsync("FF");
-        Assert.Equal("Modified", await app.UiaNameAsync("Status_Modified"));
+        Assert.Equal("● Modified", await app.UiaNameAsync("Status_Modified"));
         Assert.StartsWith("● ", (await app.DocumentAsync())["header"]!.GetValue<string>(), StringComparison.Ordinal);
 
         await SaveAsync(app);
-        Assert.Equal(string.Empty, await app.UiaNameAsync("Status_Modified"));
+        Assert.Equal(string.Empty, app.TextOrEmpty("Status_Modified"));
         Assert.DoesNotContain("●", (await app.DocumentAsync())["header"]!.GetValue<string>(), StringComparison.Ordinal);
     });
 
-    [Fact(Skip = "UI-02 の仕様 (タイトルの「●」) が未実装: ウィンドウのタイトルは変更があっても「<ファイル名> - HexEditor」のまま")]
+    [Fact]
     [Trait(UiTest.TC, "TC-UI-02-01")]
     public Task Title_shows_unsaved_mark() => UiTestContext.RunAsync(async ctx =>
     {
         string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
         await app.TypeAsync("41");
-        Assert.Equal("● seq.bin - HexEditor", (await app.StateAsync())["title"]!.GetValue<string>());
+        // プレビュー版の版ではアプリ名の後に「Preview」が付く (PKG-28)。
+        Assert.Matches(@"^● seq\.bin - HexEditor( Preview)?$", (await app.StateAsync())["title"]!.GetValue<string>());
         await SaveAsync(app);
-        Assert.Equal("seq.bin - HexEditor", (await app.StateAsync())["title"]!.GetValue<string>());
+        Assert.Matches(@"^seq\.bin - HexEditor( Preview)?$", (await app.StateAsync())["title"]!.GetValue<string>());
     });
 
     [Fact]
@@ -268,7 +269,7 @@ public sealed class EditingTests
         Assert.Equal(old, (await app.BytesAsync(0x2F, 1))[0]);
     });
 
-    [Fact(Skip = "EDIT-19 の仕様 (2 秒以上の間で入力の操作を分ける) が未実装: 間を空けた入力も 1 回の Undo でまとめて戻る")]
+    [Fact]
     [Trait(UiTest.TC, "TC-EDIT-19-04")]
     public Task Continuous_typing_is_undone_at_once() => UiTestContext.RunAsync(async ctx =>
     {
@@ -309,7 +310,7 @@ public sealed class EditingTests
     {
         JsonObject doc = await app.DocumentAsync();
         bool header = doc["header"]!.GetValue<string>().StartsWith("● ", StringComparison.Ordinal);
-        bool status = await app.UiaNameAsync("Status_Modified") == "Modified";
+        bool status = app.TextOrEmpty("Status_Modified") == "● Modified";
         Assert.Equal(header, status);
         Assert.Equal(doc["modified"]!.GetValue<bool>(), status);
         return status;
@@ -319,6 +320,20 @@ public sealed class EditingTests
     {
         await app.SendAsync("selectTab", new JsonObject { ["index"] = index });
         await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the tab");
+
+        // 選択したタブの Hex ビューが読み込まれるまで待つ (描画内容を読めるようになる)。
+        await app.WaitUntilAsync(async () =>
+        {
+            try
+            {
+                await app.RenderAsync();
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+        }, TimeSpan.FromSeconds(10), "the hex view of the tab");
         await app.IdleAsync();
     }
 }

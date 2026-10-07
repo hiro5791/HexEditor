@@ -15,6 +15,10 @@ public sealed class InfrastructureTests
         // 命令の通り道とUI オートメーションの両方で、同じ画面を見ている。
         var state = await app.StateAsync();
         Assert.Equal(app.Pid, state["pid"]!.GetValue<int>());
+        // ドキュメントを開いていなければスタートページ (UI-01 の仕様 2)。Ctrl+N で無題を作る。
+        Assert.Empty(await app.TabNamesAsync());
+        await app.KeyAsync("N", ctrl: true);
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the hex view");
         Assert.StartsWith("Offset:", (await app.UiaNameAsync("Status_Offset")));
         Assert.Equal("Untitled 1", (await app.TabNamesAsync()).Single());
 

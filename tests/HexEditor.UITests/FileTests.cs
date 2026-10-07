@@ -13,11 +13,9 @@ public sealed class FileTests
     [Trait(UiTest.TC, "TC-ENG-10-01")]
     public Task Ctrl_n_creates_numbered_untitled_tabs() => UiTestContext.RunAsync(async ctx =>
     {
-        // 前提の「ドキュメントが 1 つも開いていない」状態は、ファイルを開いて起動し、閉じて作る
-        // (ファイルの指定なしで起動すると「無題 1」が開くため)。
-        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-BYTES-256")] });
-        await app.KeyAsync("W", ctrl: true);
-        await app.WaitUntilAsync(async () => (await app.TabNamesAsync()).Count == 0, TimeSpan.FromSeconds(5), "no tabs");
+        // 新しい設定フォルダで起動すると、ドキュメントは 1 つも開いていない (スタートページ。UI-01 の仕様 2)。
+        AppSession app = await ctx.StartAsync();
+        Assert.Empty(await app.TabNamesAsync());
 
         for (int i = 0; i < 3; i++)
         {
@@ -80,9 +78,52 @@ public sealed class FileTests
         Assert.Null(app.Window.FindFirstDescendant(cf => cf.ByClassName("ContentDialog")));
     });
 
-    [Fact(Skip = "ENG-17 の仕様 (変更のある全タブを 1 つのダイアログの一覧で確認する) が未実装: タブごとに確認ダイアログを順に出す")]
+    [Fact]
     [Trait(UiTest.TC, "TC-ENG-17-02")]
-    public Task Closing_window_with_three_modified_tabs() => Task.CompletedTask;
+    public Task Closing_window_with_three_modified_tabs() => UiTestContext.RunAsync(async ctx =>
+    {
+        string[] paths = ["a.bin", "b.bin", "c.bin"];
+        paths = [.. paths.Select(n => ctx.CopyTestData("TD-BYTES-256", n))];
+        string bHash = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(paths[1])));
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = paths });
+        for (int i = 0; i < 3; i++)
+        {
+            await EditingTests.SelectTabAsync(app, i);
+            await app.TypeAsync("AA");
+        }
+
+        // 1. ウィンドウを閉じる (ファイル > 終了 と同じ Close の処理。タイトルバーの閉じるボタンはマウスでしか押せない)。
+        await app.CommandAsync("Command_Exit");
+
+        // 2. ダイアログは 1 つで、3 件がすべてチェックされ、ボタンが 3 つ。
+        await app.WaitForAsync("Close_Item");
+        Assert.Single(app.Window.FindAllDescendants(cf => cf.ByAutomationId("CloseDialog")));
+        var items = app.Window.FindAllDescendants(cf => cf.ByAutomationId("Close_Item"));
+        Assert.Equal(3, items.Length);
+        Assert.All(items, i => Assert.True(AppSession.IsToggled(i)));
+        string text = AppSession.AllText(app.Window);
+        foreach (string p in paths)
+        {
+            Assert.Contains(p, text);
+        }
+
+        var buttons = app.Window.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.Button)).Select(AppSession.NameOf).ToList();
+        Assert.Contains("Save selected and close", buttons);
+        Assert.Contains("Close without saving", buttons);
+        Assert.Contains("Cancel", buttons);
+
+        // 3. b.bin のチェックを外して「選択したものを保存して閉じる」。
+        items.Single(i => AppSession.AllText(i).Contains("b.bin", StringComparison.Ordinal)).Patterns.Toggle.Pattern.Toggle();
+        app.Window.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.Button))
+            .Single(b => AppSession.NameOf(b) == "Save selected and close").Patterns.Invoke.Pattern.Invoke();
+
+        // 4. プロセスが終わり、a と c だけが保存されている。
+        await app.WaitForExitAsync(TimeSpan.FromSeconds(30));
+        Assert.Equal(0xAA, File.ReadAllBytes(paths[0])[0]);
+        Assert.Equal(0x00, File.ReadAllBytes(paths[1])[0]);
+        Assert.Equal(bHash, Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(paths[1]))));
+        Assert.Equal(0xAA, File.ReadAllBytes(paths[2])[0]);
+    });
 
     [Fact(Skip = "名前を付けて保存は Windows の標準の保存ダイアログを使い、フォーカスを奪うため自動テストで操作しない。最近使ったファイルも未実装")]
     [Trait(UiTest.TC, "TC-ENG-21-01")]
@@ -146,8 +187,11 @@ public sealed class FileTests
         await app.KeyAsync("Insert");
         await app.TypeAsync("00");
         await app.KeyAsync("S", ctrl: true);
-        await app.WaitUntilAsync(async () => (await app.StateAsync())["notice"]!["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(30), "the error");
-        Assert.Contains("original file has not been changed", (await app.StateAsync())["notice"]!["message"]!.GetValue<string>());
+        // 保存の失敗は文書の通知で知らせる (処理の失敗の通知と並ぶことがあるため、順序は問わない)。
+        await app.WaitUntilAsync(
+            async () => (await app.StateAsync())["notifications"]!.AsArray()
+                .Any(n => n!["message"]!.GetValue<string>().Contains("original file has not been changed", StringComparison.Ordinal)),
+            TimeSpan.FromSeconds(30), "the save error");
         Assert.Equal(original, File.ReadAllBytes(path));
         Assert.True((await app.DocumentAsync())["modified"]!.GetValue<bool>());
         Assert.Empty(Directory.GetFiles(ctx.Root, "*.tmp"));
