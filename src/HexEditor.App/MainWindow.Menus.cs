@@ -145,6 +145,10 @@ public sealed partial class MainWindow
         };
         AutomationProperties.SetAutomationId(dialog, "AboutDialog");
 
+        // ボタンは 3 つを同じ幅で並べるため、既定の幅 (最大 548 px) では長い訳 (疑似翻訳で確認) が切れる。幅を広げる (UI-46)。
+        dialog.Resources["ContentDialogMinWidth"] = 720.0;
+        dialog.Resources["ContentDialogMaxWidth"] = 800.0;
+
         // 「情報をコピー」は閉じずにコピーだけする。
         dialog.PrimaryButtonClick += (_, args) =>
         {

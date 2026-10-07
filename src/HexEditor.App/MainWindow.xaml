@@ -26,7 +26,12 @@
             タイトルバー (UI-02): アイコン、メニューバー (UI-03)、タイトルの順。TitleBar は Content の対話する要素を
             ドラッグ領域から除く。タイトルは自分で表示する (TitleBar の Title はメニューより前に出るため)。
         -->
-        <TitleBar x:Name="AppTitleBar" Height="48" AutomationProperties.AutomationId="TitleBar">
+        <!--  タイトルバー自体はフォーカスを受けない (枠の出ないフォーカスの止まり先を作らない。UI-52 の仕様 6)。  -->
+        <TitleBar
+            x:Name="AppTitleBar"
+            Height="48"
+            AutomationProperties.AutomationId="TitleBar"
+            IsTabStop="False">
             <TitleBar.LeftHeader>
                 <Grid Padding="12,0,0,0" ColumnSpacing="8">
                     <Grid.ColumnDefinitions>
