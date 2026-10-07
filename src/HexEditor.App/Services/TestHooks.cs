@@ -60,6 +60,10 @@ public static class TestHooks
         }
 
         Active = true;
+
+        // 異常終了のテストで Windows のエラー報告の画面 (WerFault) を出さない (前面に出て作業の邪魔になるため)。
+        SetErrorMode(SemFailCriticalErrors | SemNoGpFaultErrorBox);
+        _ = WerSetFlags(WerFaultReportingNoUi);
         try
         {
             Settings = TestHookSettings.Parse(File.ReadAllText(SettingsPath));
@@ -194,7 +198,11 @@ public static class TestHooks
     public static DocumentViewModel OpenFile(MainViewModel vm, string path, FileSourceSpec spec)
     {
         string full = Path.GetFullPath(path);
-        var source = new FaultyByteSource(FileByteSource.Open(full)) { Delay = TimeSpan.FromMilliseconds(spec.DelayMs) };
+        var source = new FaultyByteSource(FileByteSource.Open(full))
+        {
+            Delay = TimeSpan.FromMilliseconds(spec.DelayMs),
+            DelayFromOffset = spec.DelayFromOffset,
+        };
         foreach ((long offset, long length) in spec.ReadErrors)
         {
             source.AddReadError(offset, length);
@@ -332,7 +340,17 @@ public static class TestHooks
         switch (place)
         {
             case ExceptionPlace.UiThread:
-                App.DispatcherQueue.TryEnqueue(() => throw new TestHookException("UI thread"));
+                // XAML のタイマーで起こす (DispatcherQueue の処理の中の例外は Application.UnhandledException に来ないため)。
+                App.DispatcherQueue.TryEnqueue(() =>
+                {
+                    var timer = new Microsoft.UI.Xaml.DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1) };
+                    timer.Tick += (_, _) =>
+                    {
+                        timer.Stop();
+                        throw new TestHookException("UI thread");
+                    };
+                    timer.Start();
+                });
                 break;
             case ExceptionPlace.Background:
                 new Thread(() => throw new TestHookException("background thread")) { IsBackground = true }.Start();
@@ -355,6 +373,16 @@ public static class TestHooks
 
     /// <summary>実行中に設定を変える (テスト用のメニュー・命令の通り道から)。</summary>
     public static void Update(Func<TestHookSettings, TestHookSettings> change) => Settings = change(Settings);
+
+    private const uint SemFailCriticalErrors = 0x0001;
+    private const uint SemNoGpFaultErrorBox = 0x0002;
+    private const uint WerFaultReportingNoUi = 0x0020;
+
+    [DllImport("kernel32.dll")]
+    private static extern uint SetErrorMode(uint mode);
+
+    [DllImport("kernel32.dll")]
+    private static extern int WerSetFlags(uint flags);
 
     private const int GwlExStyle = -20;
     private const nint WsExNoActivate = 0x08000000;

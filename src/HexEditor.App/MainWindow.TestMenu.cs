@@ -192,8 +192,19 @@ public sealed partial class MainWindow
             "bytes" => TestBytes(request),
             "render" => TestRender(),
             "goto" => TestEditor(e => e.GoTo(TestHookSettings.ReadLong(request["offset"], 0), request["extend"]?.GetValue<bool>() ?? false)),
+            "click" => TestEditor(e => e.Click(
+                TestHookSettings.ReadLong(request["offset"], 0),
+                Enum.Parse<ActiveColumn>(request["column"]?.GetValue<string>() ?? "Hex", ignoreCase: true),
+                request["lowNibble"]?.GetValue<bool>() ?? false,
+                request["shift"]?.GetValue<bool>() ?? false)),
             "select" => TestEditor(e => e.Select(TestHookSettings.ReadLong(request["start"], 0), TestHookSettings.ReadLong(request["length"], 0))),
             "lowMemory" => Run(() => Vm.Memory.OnLowMemory()),
+            "gc" => Run(() =>
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+            }),
             "throw" => Run(() => TestHooks.Throw(Enum.Parse<ExceptionPlace>(request["place"]!.GetValue<string>(), ignoreCase: true))),
             "kill" => Run(() => TestHooks.Kill("command")),
             "setHooks" => TestSetHooks(request),
@@ -507,7 +518,7 @@ public sealed partial class MainWindow
         IReadOnlyList<(long, long)> errors = request["readErrors"]?.AsArray()
             .Select(r => (TestHookSettings.ReadLong(r!["offset"], 0), TestHookSettings.ReadLong(r["length"], 1))).ToList() ?? [];
         DocumentViewModel doc = delay > 0 || errors.Count > 0
-            ? TestHooks.OpenFile(Vm, path, new FileSourceSpec("*", delay, errors))
+            ? TestHooks.OpenFile(Vm, path, new FileSourceSpec("*", delay, errors, TestHookSettings.ReadLong(request["delayFromOffset"], 0)))
             : Vm.Open(path);
         return DocumentResult(doc);
     }

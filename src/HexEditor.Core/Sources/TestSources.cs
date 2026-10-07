@@ -122,6 +122,9 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
     /// <summary>読み込みのたびに入れる遅延。</summary>
     public TimeSpan Delay { get; set; }
 
+    /// <summary>この位置より前だけを読む要求には遅延を入れない (先頭の表示を待たずに済ませるため)。</summary>
+    public long DelayFromOffset { get; set; }
+
     public override string DisplayName => Inner.DisplayName;
 
     public override string Identity => Inner.Identity;
@@ -152,8 +155,8 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
 
     private long _readCount;
 
-    /// <summary>指定の範囲の読み込みを I/O エラーにする。</summary>
-    public void AddReadError(long offset, long length, UnreadableReason reason = UnreadableReason.IoError, int errorCode = 23)
+    /// <summary>指定の範囲の読み込みを I/O エラーにする (既定は ERROR_IO_DEVICE)。</summary>
+    public void AddReadError(long offset, long length, UnreadableReason reason = UnreadableReason.IoError, int errorCode = 0x45D)
     {
         lock (_lock)
         {
@@ -171,7 +174,7 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
 
     public override ReadResult Read(long offset, Span<byte> buffer)
     {
-        if (Delay > TimeSpan.Zero)
+        if (Delays(offset, buffer.Length))
         {
             Thread.Sleep(Delay);
         }
@@ -181,7 +184,7 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
 
     public override async ValueTask<ReadResult> ReadAsync(long offset, Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
-        if (Delay > TimeSpan.Zero)
+        if (Delays(offset, buffer.Length))
         {
             await Task.Delay(Delay, cancellationToken).ConfigureAwait(false);
         }
@@ -189,6 +192,8 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
         cancellationToken.ThrowIfCancellationRequested();
         return ReadCore(offset, buffer.Span);
     }
+
+    private bool Delays(long offset, int length) => Delay > TimeSpan.Zero && offset + length > DelayFromOffset;
 
     private ReadResult ReadCore(long offset, Span<byte> buffer)
     {

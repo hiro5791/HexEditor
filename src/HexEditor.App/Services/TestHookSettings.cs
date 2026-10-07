@@ -48,7 +48,7 @@ public enum SaveFaultKind
 public sealed record SaveFault(long AtByte, SaveFaultKind Kind, bool Once);
 
 /// <summary>開くファイルに加える遅延と読み込みエラー。<see cref="Match"/> はファイル名またはフルパスのワイルドカード。</summary>
-public sealed record FileSourceSpec(string Match, int DelayMs, IReadOnlyList<(long Offset, long Length)> ReadErrors);
+public sealed record FileSourceSpec(string Match, int DelayMs, IReadOnlyList<(long Offset, long Length)> ReadErrors, long DelayFromOffset = 0);
 
 /// <summary>起動時に開く仮想のデータソース。</summary>
 public sealed record VirtualSourceSpec(
@@ -68,7 +68,8 @@ public sealed record VirtualSourceSpec(
 ///   "noActivate": true,                         // ウィンドウを前面に出さない (既定 true)
 ///   "recoveryIntervalSeconds": 2,               // 復旧用データの保存間隔 (ENG-27。既定は 60 秒)
 ///   "frozenTime": "2026-01-02T03:04:05Z",       // 時刻の固定
-///   "fileSources": [ { "match": "*.bin", "delayMs": 500, "readErrors": [ { "offset": "0x1000", "length": 512 } ] } ],
+///   "fileSources": [ { "match": "*.bin", "delayMs": 500, "delayFromOffset": 65536,
+///                      "readErrors": [ { "offset": "0x1000", "length": 512 } ] } ],
 ///   "virtualSources": [ { "name": "virtual", "length": "0x7FFFFFFFFFFFFFFF", "content": "offset64",
 ///                         "resizable": false, "fill": 255, "seed": 1, "delayMs": 0, "readErrors": [] } ],
 ///   "saveFault": { "atByte": 0, "kind": "io" | "diskFull", "once": false },
@@ -118,7 +119,8 @@ public sealed record TestHookSettings
             FileSources = root["fileSources"]?.AsArray().Select(n => new FileSourceSpec(
                 n!["match"]?.GetValue<string>() ?? "*",
                 (int)ReadLong(n["delayMs"], 0),
-                ReadRanges(n["readErrors"]))).ToList() ?? [],
+                ReadRanges(n["readErrors"]),
+                ReadLong(n["delayFromOffset"], 0))).ToList() ?? [],
             VirtualSources = root["virtualSources"]?.AsArray().Select(n => ParseVirtual(n!.AsObject())).ToList() ?? [],
             SaveFault = root["saveFault"] is JsonObject f
                 ? new SaveFault(ReadLong(f["atByte"], 0), ParseEnum<SaveFaultKind>(f["kind"], SaveFaultKind.Io), f["once"]?.GetValue<bool>() ?? false)
