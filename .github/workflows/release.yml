@@ -260,7 +260,6 @@ jobs:
             Where-Object { $_.Extension -notin '.msix', '.msixbundle', '.appx', '.appxbundle' } |
             Where-Object { $_.Name -like 'HexEditor-*' -or $_.Name -like 'releases.*.json' -or $_.Name -like 'RELEASES*' -or $_.Name -like 'assets.*.json' } |
             Copy-Item -Destination release
-          ./build/checksums.ps1 -Dir release
       - name: Velopack upload
         shell: pwsh
         run: |
@@ -280,9 +279,24 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $tag = '${{ github.ref_name }}'
-          $files = Get-ChildItem release -File | Where-Object { $_.Name -like '*-Setup.exe' -or $_.Name -like '*-portable.zip' -or $_.Name -eq 'SHA256SUMS.txt' }
+          $files = Get-ChildItem release -File | Where-Object { $_.Name -like '*-Setup.exe' -or $_.Name -like '*-portable.zip' }
           gh release upload $tag @($files.FullName) --clobber
           if ($LASTEXITCODE -ne 0) { throw 'gh release upload failed' }
+          # SHA256SUMS.txt is made from the files that are actually in the release (Velopack and gh both upload),
+          # so the list always matches what users download (PKG-26 spec 2, TC-PKG-26-02).
+          $names = @((gh release view $tag --json assets | ConvertFrom-Json).assets.name | Where-Object { $_ -ne 'SHA256SUMS.txt' })
+          New-Item -ItemType Directory -Force sums | Out-Null
+          foreach ($name in $names) {
+            $local = Get-ChildItem release, downloaded -Recurse -File -Filter $name -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($local) { Copy-Item $local.FullName (Join-Path sums $name) }
+            else {
+              gh release download $tag --pattern $name --dir sums --clobber
+              if ($LASTEXITCODE -ne 0) { throw "gh release download failed ($name)" }
+            }
+          }
+          ./build/checksums.ps1 -Dir sums
+          gh release upload $tag sums/SHA256SUMS.txt --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'gh release upload (SHA256SUMS.txt) failed' }
           # Stable: a draft that the maintainer publishes. Preview: published as a pre-release (PKG-24 spec 2).
           if ('${{ needs.prepare.outputs.prerelease }}' -eq 'true') {
             gh release edit $tag --notes-file release-notes.md --prerelease --draft=false
