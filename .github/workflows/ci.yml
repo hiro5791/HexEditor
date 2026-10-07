@@ -1,6 +1,7 @@
 # ビルドとテスト (PKG-23、テスト方針 9 章)
-#   プッシュ・プルリクエスト: ビルド、単体・結合テスト (Nightly を除く)
-#   毎晩: 性能テストと全規模のテスト (Category=Nightly)
+#   プッシュ・プルリクエスト: build (3 種類 × 2 アーキテクチャ)、test-x64、test-arm64、i18n、lint、size、配布物の検査
+#   毎晩: 性能テストと全規模のテスト (Category=Nightly)、ポータブル版を起動する配布のテスト
+# フォークからの PR にも Secrets を使う手順はない (PKG-23 の仕様 5)。
 name: ci
 
 on:
@@ -14,57 +15,22 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
   # テストデータ (スパースファイル) の置き場所。ランナーの一時ドライブ (NTFS) を使う。
   HEXEDITOR_TESTDATA: ${{ github.workspace }}\..\testdata
 
 jobs:
-  build-and-test:
+  # 配布物のビルド (PKG-10、PKG-23): 3 種類 × 2 アーキテクチャ。署名はしない。成果物は 7 日間残す。
+  build:
     runs-on: windows-latest
-    timeout-minutes: 60
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "10.0.x"
-
-      - name: Build Core and tests
-        run: |
-          dotnet build src/HexEditor.Core -c Release
-          dotnet build tests/HexEditor.Core.Tests -c Release
-          dotnet build tests/HexEditor.Performance.Tests -c Release
-          dotnet build tools/TestDataGen -c Release
-
-      - name: Build app (x64)
-        run: dotnet build src/HexEditor.App -c Release -p:Platform=x64
-
-      - name: Unit and integration tests
-        if: github.event_name != 'schedule'
-        run: dotnet test tests/HexEditor.Core.Tests -c Release --no-build --filter "Category!=Nightly" --logger "trx;LogFileName=core.trx" --results-directory TestResults
-
-      - name: Nightly tests (full scale)
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        run: dotnet test tests/HexEditor.Core.Tests -c Release --no-build --logger "trx;LogFileName=core-full.trx" --results-directory TestResults
-
-      - name: Performance tests
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        run: dotnet test tests/HexEditor.Performance.Tests -c Release --no-build --logger "trx;LogFileName=performance.trx" --results-directory TestResults
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: TestResults/
-
-  # 配布物のビルド (PKG-10): 3 種類 × 2 アーキテクチャ。署名はしない。
-  publish:
-    if: github.event_name != 'pull_request'
-    runs-on: windows-latest
-    timeout-minutes: 60
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -72,23 +38,190 @@ jobs:
         arch: [x64, arm64]
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
-
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
       - name: Publish
         shell: pwsh
-        run: ./build/publish.ps1 -Distro ${{ matrix.distro }} -Arch ${{ matrix.arch }}
-
+        run: ./build/publish.ps1 -Distro ${{ matrix.distro }} -Arch ${{ matrix.arch }} -Commit "$("${{ github.sha }}".Substring(0, 7))"
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: HexEditor-${{ matrix.distro }}-${{ matrix.arch }}
+          retention-days: 7
           path: |
-            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/**/*.zip
-            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/**/*.exe
-            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/**/*.nupkg
-            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/**/*.msix
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/*.zip
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/*.exe
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/*.nupkg
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/*.msix
             artifacts/${{ matrix.distro }}/${{ matrix.arch }}/RELEASES*
             artifacts/${{ matrix.distro }}/${{ matrix.arch }}/releases.*.json
+
+  test-x64:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - name: Build
+        run: |
+          dotnet build tests/HexEditor.Core.Tests -c Release
+          dotnet build tests/HexEditor.Platform.Tests -c Release
+          dotnet build tests/HexEditor.Performance.Tests -c Release
+          dotnet build tools/TestDataGen -c Release
+      - name: Build app (x64)
+        run: dotnet build src/HexEditor.App -c Release -p:Platform=x64
+      - name: Unit and integration tests
+        if: github.event_name != 'schedule'
+        run: |
+          dotnet test tests/HexEditor.Core.Tests -c Release --no-build --filter "Category!=Nightly" --logger "trx;LogFileName=core.trx" --logger "console;verbosity=normal" --results-directory TestResults
+          dotnet test tests/HexEditor.Platform.Tests -c Release --no-build --logger "trx;LogFileName=platform.trx" --logger "console;verbosity=normal" --results-directory TestResults
+      - name: Nightly tests (full scale)
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          dotnet test tests/HexEditor.Core.Tests -c Release --no-build --logger "trx;LogFileName=core-full.trx" --results-directory TestResults
+          dotnet test tests/HexEditor.Platform.Tests -c Release --no-build --logger "trx;LogFileName=platform-full.trx" --results-directory TestResults
+      - name: Performance tests
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: dotnet test tests/HexEditor.Performance.Tests -c Release --no-build --logger "trx;LogFileName=performance.trx" --results-directory TestResults
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-x64
+          retention-days: 7
+          path: TestResults/
+
+  # ARM64 のランナーで同じテスト (PKG-15、TC-PKG-15-03)。テストのプロセスのアーキテクチャをログに出す。
+  test-arm64:
+    runs-on: windows-11-arm
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - name: Runner architecture
+        shell: pwsh
+        run: |
+          $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
+          Write-Host "OS architecture: $arch"
+          if ("$arch" -ne 'Arm64') { throw "test-arm64 is not running on ARM64 ($arch)." }
+      - name: Unit and integration tests
+        run: |
+          dotnet test tests/HexEditor.Core.Tests -c Release --filter "Category!=Nightly" --logger "trx;LogFileName=core-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
+          dotnet test tests/HexEditor.Platform.Tests -c Release --logger "trx;LogFileName=platform-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-arm64
+          retention-days: 7
+          path: TestResults/
+
+  # リソースの検査 (09 の UI-42 の仕様 6)。用語集の検査 (UI-48) は検査ができたらここに加える。
+  i18n:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - name: Resource tests
+        run: dotnet test tests/HexEditor.Core.Tests -c Release --filter "FullyQualifiedName~HexEditor.Core.Tests.I18n" --logger "console;verbosity=normal"
+
+  # Markdown (docs/) と .editorconfig の検査。
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v20
+      - name: EditorConfig
+        run: |
+          curl -sSL https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v3.3.0/ec-linux-amd64.tar.gz | tar xz
+          ./bin/ec-linux-amd64
+
+  # サイズの計測 (PKG-16)。PR と、ラベル size-increase-approved の付いた変更では警告だけにする。
+  size:
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: HexEditor-*
+          path: artifacts
+      - name: Measure
+        shell: pwsh
+        run: |
+          $warnOnly = '${{ github.event_name }}' -eq 'pull_request' -or '${{ contains(github.event.pull_request.labels.*.name, 'size-increase-approved') }}' -eq 'true'
+          ./build/measure-size.ps1 -ArtifactsDir artifacts -WarnOnly:$warnOnly
+
+  # 配布物の検査 (TC-PKG-10-01、TC-PKG-10-02、zip の構成、MSIX の版)。
+  artifacts:
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: HexEditor-*
+          path: downloaded
+      - name: Arrange artifacts
+        shell: pwsh
+        run: |
+          foreach ($d in Get-ChildItem downloaded -Directory) {
+            $null, $distro, $arch = $d.Name -split '-'
+            $target = "artifacts/$distro/$arch"
+            New-Item -ItemType Directory -Force $target | Out-Null
+            Copy-Item "$($d.FullName)/*" $target -Recurse
+          }
+      - name: Artifact tests
+        shell: pwsh
+        run: ./build/tests/Test-Artifacts.ps1 -ArtifactsDir artifacts
+
+  # ポータブル版を起動する配布のテスト (TC-PKG-05-02〜05、TC-PKG-06-04)。毎晩と手動の実行で行う。
+  portable:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: HexEditor-Portable-x64
+          path: portable
+      - name: Portable tests
+        shell: pwsh
+        run: ./build/tests/Test-Portable.ps1 -Zip (Get-ChildItem portable -Filter '*-portable.zip' | Select-Object -First 1).FullName

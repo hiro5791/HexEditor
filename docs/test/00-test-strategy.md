@@ -149,6 +149,7 @@
 ```text
 tests/
   HexEditor.Core.Tests/          単体テスト
+  HexEditor.Platform.Tests/      配布形態・実行環境・版・インストールのフック・ビルドのスクリプトの単体テスト (10 の PKG)
   HexEditor.Integration.Tests/   結合テスト (ファイル・ディスク・プロセス・コマンドライン)
   HexEditor.UI.Tests/            UI テスト (FlaUI)
   HexEditor.Performance.Tests/   性能テスト (BenchmarkDotNet と計測テスト)
@@ -161,7 +162,11 @@ tools/
 
 ### 6.2 テストケースとの対応付け
 
-- 自動テストのメソッドには、確認するテストケース ID を属性で付ける (例: `[TestCase("TC-ENG-01-01")]`)。
+- 自動テストのメソッドには、確認するテストケース ID を属性で付ける (例: `[TestCase("TC-ENG-01-01")]`。xUnit では `[Trait("TC", "TC-ENG-01-01")]`)。
+- 種別が「自動: 配布」で、ビルドした配布物を調べる・起動する・インストールするテストは、xUnit ではなく `build/tests/` の PowerShell のスクリプト (Pester は使わない) にする。各テストは `Invoke-TestCase '<テストケース ID>' '<名前>' { ... }` で書き、CI のジョブ (`ci.yml` の artifacts・portable、`release.yml` の verify) が実行して結果の表をジョブの概要に出す。開発者の PC で実行するとウィンドウが開く・インストールされるため、CI のランナーだけで実行する。
+  - `Test-Artifacts.ps1`: 配布物の中身 (ビルドするだけで確かめられるもの)
+  - `Test-Portable.ps1`: ポータブル版を展開して起動するもの
+  - `Test-Installer.ps1`: インストーラ版をインストール・アンインストールするもの
 - CI はテストの結果とテストケース ID を突き合わせ、次を一覧にしたレポート (`test-coverage.md`) を作る。
   - 種別が「自動」なのに、対応する自動テストがないテストケース
   - どのテストケースにも対応しない受け入れ基準

@@ -1092,7 +1092,7 @@
 **仕様**:
 
 1. 版は SemVer 2.0: `MAJOR.MINOR.PATCH`、プレビューは `MAJOR.MINOR.PATCH-preview.N` (N は 1〜998)。
-2. 唯一の情報源は Git のタグ `v<版>`。CI はタグから版を取り出し、MSBuild のプロパティ `HexVersion` で渡す。`Directory.Build.props` は `HexVersion` から下の表の各値を計算する。タグのないローカルのビルドは `0.0.0-local`。
+2. 唯一の情報源は Git のタグ `v<版>`。CI はタグから版を取り出し、MSBuild のプロパティ `HexVersion` で渡す。`Directory.Build.props` は `HexVersion` から下の表の各値を計算する。タグのないローカルのビルドは `0.0.0-local` (Velopack は 0.0.1 以上の版しか受け付けないため、インストーラ版のパッケージの版だけ `0.0.1-local` とする。MSIX の版は `0.0.0.0`)。
 3. 各所の版:
 
    | 用途 | 値 | 例 (`1.3.0-preview.2`) | 例 (`1.3.0`) |
