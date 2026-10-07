@@ -42,6 +42,44 @@ public sealed partial class MainWindow
         UpdateThemeMenu();
     }
 
+    /// <summary>テキスト列の文字コード (VIEW-21 のフェーズ 0: ASCII と ANSI)。入力・コピー・表示に使う。</summary>
+    private void Encoding_Click(object sender, RoutedEventArgs e)
+    {
+        if (Editor is { } editor && sender is RadioMenuFlyoutItem { Tag: string tag })
+        {
+            editor.TextEncoding = tag == "ansi" ? Core.View.TextEncoding.Ansi : Core.View.TextEncoding.Ascii;
+            UpdateEncodingMenu();
+        }
+    }
+
+    private void UpdateEncodingMenu()
+    {
+        EncodingAnsi.Text = Loc.Format("Menu_View_EncodingAnsi", Core.View.TextEncoding.Ansi.CodePage);
+        bool ansi = Editor?.TextEncoding == Core.View.TextEncoding.Ansi;
+        EncodingAscii.IsChecked = !ansi;
+        EncodingAnsi.IsChecked = ansi;
+    }
+
+    /// <summary>ステータスバーの文字コードの項目: 文字コードの選択メニューを開く (UI-06 の仕様 1)。</summary>
+    private void StatusEncoding_Click(object sender, RoutedEventArgs e)
+    {
+        UpdateEncodingMenu();
+        var menu = new MenuFlyout();
+        foreach ((string tag, string text) in new[]
+        {
+            ("ascii", "ASCII"),
+            ("ansi", Loc.Format("Menu_View_EncodingAnsi", Core.View.TextEncoding.Ansi.CodePage)),
+        })
+        {
+            var item = new RadioMenuFlyoutItem { Text = text, Tag = tag, GroupName = "StatusEncoding" };
+            item.IsChecked = (tag == "ansi") == (Editor?.TextEncoding == Core.View.TextEncoding.Ansi);
+            item.Click += Encoding_Click;
+            menu.Items.Add(item);
+        }
+
+        menu.ShowAt(StatusEncoding);
+    }
+
     // ---- ヘルプ (UI-40) ----
 
     private async void Documentation_Click(object sender, RoutedEventArgs e) => await OpenUriAsync(new Uri(AboutInfo.DocumentationUrl));
@@ -179,6 +217,8 @@ public sealed partial class MainWindow
             ["Command_GoForward"] = hasDoc && doc!.Editor.CanGoForward,
             ["Command_GoStart"] = hasDoc,
             ["Command_GoEnd"] = hasDoc,
+            ["Command_EncodingAscii"] = hasDoc,
+            ["Command_EncodingAnsi"] = hasDoc,
         };
         foreach (MenuBarItem menu in MainMenu.Items)
         {

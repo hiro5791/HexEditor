@@ -140,6 +140,10 @@
                             <RadioMenuFlyoutItem x:Name="ThemeLight" x:Uid="Menu_View_ThemeLight" AutomationProperties.AutomationId="Command_ThemeLight" Click="Theme_Click" GroupName="Theme" Tag="light" />
                             <RadioMenuFlyoutItem x:Name="ThemeDark" x:Uid="Menu_View_ThemeDark" AutomationProperties.AutomationId="Command_ThemeDark" Click="Theme_Click" GroupName="Theme" Tag="dark" />
                         </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_View_Encoding" AutomationProperties.AutomationId="Command_Encoding">
+                            <RadioMenuFlyoutItem x:Name="EncodingAscii" x:Uid="Menu_View_EncodingAscii" AutomationProperties.AutomationId="Command_EncodingAscii" Click="Encoding_Click" GroupName="Encoding" Tag="ascii" />
+                            <RadioMenuFlyoutItem x:Name="EncodingAnsi" AutomationProperties.AutomationId="Command_EncodingAnsi" Click="Encoding_Click" GroupName="Encoding" Tag="ansi" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <ToggleMenuFlyoutItem x:Name="StatusBarToggle" x:Uid="Menu_View_StatusBar" AutomationProperties.AutomationId="Command_StatusBar" Click="StatusBarToggle_Click" />
                     </MenuBarItem>
@@ -290,7 +294,7 @@
                 <Button x:Name="StatusValue" AutomationProperties.AutomationId="Status_Value" Content="{x:Bind Vm.Selected.ValueText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="value" />
                 <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Content="{x:Bind Vm.Selected.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.Selected.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
                 <Button x:Name="StatusColumn" AutomationProperties.AutomationId="Status_Column" Click="StatusColumn_Click" Content="{x:Bind Vm.Selected.ColumnText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="column" />
-                <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Content="{x:Bind Vm.Selected.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
+                <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Click="StatusEncoding_Click" Content="{x:Bind Vm.Selected.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.Selected.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.Selected.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <Button x:Name="StatusSize" AutomationProperties.AutomationId="Status_Size" Click="StatusSize_Click" Content="{x:Bind Vm.Selected.SizeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="size" />

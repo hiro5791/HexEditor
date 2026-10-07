@@ -48,6 +48,7 @@ public sealed partial class MainWindow : Window
         InitializeStatusBar();
         InitializeDragDrop();
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
+        Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
 
         // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
@@ -166,6 +167,7 @@ public sealed partial class MainWindow : Window
 
         UpdateTitle();
         UpdateCommandStates();
+        UpdateEncodingMenu();
         QueueStatusBarLayout();
     }
 

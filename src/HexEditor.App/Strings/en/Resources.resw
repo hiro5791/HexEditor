@@ -352,4 +352,14 @@ Details were written to:
   <data name="PasteTruncate_Paste" xml:space="preserve"><value>Paste up to the end</value></data>
   <data name="Notice_LockFailed" xml:space="preserve"><value>Another app can still write to this file. If it's changed outside HexEditor, your unsaved changes may not be saved correctly.</value></data>
   <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>There are so many edits that the memory limit ({0}) is exceeded. Saving reduces memory use.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>Keeping copied data from {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Keep the copied data?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>To keep {0} of copied data available after closing, HexEditor will write it to temporary storage.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Write and close</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Clear the clipboard and close</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>The copied data couldn't be kept, so the clipboard was cleared.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Text encoding</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (code page {0})</value></data>
 </root>

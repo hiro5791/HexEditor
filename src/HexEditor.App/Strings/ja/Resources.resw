@@ -352,4 +352,14 @@
   <data name="PasteTruncate_Paste" xml:space="preserve"><value>末尾まで貼り付ける</value></data>
   <data name="Notice_LockFailed" xml:space="preserve"><value>他のアプリがこのファイルに書き込める状態です。外部で変更されると、保存していない変更が正しく保存できなくなる可能性があります。</value></data>
   <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>編集の数が多く、メモリの上限 ({0}) を超えています。保存すると使用量が減ります。</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>{0} からコピーしたデータの書き出し</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>コピーしたデータを残しますか?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>閉じた後もクリップボードの {0} を使えるようにするため、一時領域に書き出します。</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>書き出して閉じる</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>クリップボードを消して閉じる</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>コピーしたデータを残せなかったため、クリップボードの内容を消去しました。</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>文字コード(E)</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (コードページ {0})</value></data>
 </root>

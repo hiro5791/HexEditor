@@ -158,8 +158,8 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
     public string ColumnText => Editor.ActiveColumn == ActiveColumn.Hex ? Loc.Get("Status_ColumnHex") : Loc.Get("Status_ColumnText");
 
-    /// <summary>テキスト列の文字コード (フェーズ 0 は ASCII。VIEW-21)。</summary>
-    public string EncodingText => "ASCII";
+    /// <summary>テキスト列の文字コード (フェーズ 0 は ASCII と ANSI。VIEW-21)。</summary>
+    public string EncodingText => Editor.TextEncoding.Name;
 
     /// <summary>ファイルサイズ: 「サイズ: 1.50 GB (1,610,612,736 バイト)」(VIEW-40 の仕様 2)。</summary>
     public string SizeText => StatusFormat.ShortSize(Document.Length, Culture) is { } size

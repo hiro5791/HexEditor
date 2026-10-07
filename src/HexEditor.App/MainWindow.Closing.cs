@@ -130,6 +130,13 @@ public sealed partial class MainWindow
             return false;
         }
 
+        // 3. コピーした範囲を保持するために書き出す量が 1 GB を超えるなら確かめる (EDIT-24 の仕様 6)。
+        long pending = docs.Where(Vm.Documents.Contains).Sum(d => d.Document.PendingReferenceBytes);
+        if (pending > MaterializeConfirmBytes && !await ConfirmMaterializeAsync(pending))
+        {
+            return false;
+        }
+
         foreach (DocumentViewModel doc in docs.Where(Vm.Documents.Contains).ToList())
         {
             Vm.Close(doc);
@@ -253,6 +260,36 @@ public sealed partial class MainWindow
 
         // 保存が終わったら閉じる: 保存に失敗して変更が残っていれば閉じない。
         return choice == ContentDialogResult.Primary || !doc.Document.IsModified;
+    }
+
+    /// <summary>実体化の確認を出す量 (1 GB。EDIT-24 の仕様 6)。</summary>
+    private const long MaterializeConfirmBytes = 1L << 30;
+
+    /// <summary>「クリップボードの 12 GB を保持するため、一時領域に書き出します」。</summary>
+    private async Task<bool> ConfirmMaterializeAsync(long bytes)
+    {
+        ContentDialog dialog = NewDialog(Loc.Get("Materialize_Title"), Loc.Format("Materialize_Body", Size(bytes)));
+        dialog.PrimaryButtonText = Loc.Get("Materialize_Write");
+        dialog.SecondaryButtonText = Loc.Get("Materialize_ClearClipboard");
+        dialog.CloseButtonText = Loc.Get("Common_Cancel");
+        dialog.DefaultButton = ContentDialogButton.Primary;
+        switch (await dialog.ShowAsync())
+        {
+            case ContentDialogResult.Primary:
+                return true;
+            case ContentDialogResult.Secondary:
+                _clipboard.InApp.Clear();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>実体化に失敗した: アプリ内クリップボードを破棄して知らせる (EDIT-24 の仕様 5)。</summary>
+    private void OnMaterializeFailed(object? sender, Exception error)
+    {
+        _clipboard.InApp.Clear();
+        ShowNotice(Loc.Get("Materialize_Failed"), InfoBarSeverity.Warning);
     }
 
     private ContentDialog NewDialog(string title, object content)

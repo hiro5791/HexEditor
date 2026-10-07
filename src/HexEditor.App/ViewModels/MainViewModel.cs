@@ -165,6 +165,9 @@ public sealed partial class MainViewModel : ObservableObject
     /// 閉じるドキュメントの範囲を他のタブ・アプリ内クリップボードが参照していれば、一時ファイルに書き出す (EDIT-24 の仕様 3・5)。
     /// 閉じる操作は待たない。書き出せなかった場合も参照はそのまま読める (参照元のデータの解放が遅れるだけ)。
     /// </summary>
+    /// <summary>閉じた文書のデータの実体化 (EDIT-24 の仕様 3) が失敗・キャンセルされた。</summary>
+    public event EventHandler<Exception>? MaterializeFailed;
+
     private async Task MaterializeReferencesAsync(Document doc)
     {
         long bytes = doc.PendingReferenceBytes;
@@ -175,7 +178,7 @@ public sealed partial class MainViewModel : ObservableObject
 
         try
         {
-            await Operations.RunAsync(Loc.Format("Operation_Save", doc.Source.DisplayName), OperationKind.WritesExternal, null, bytes,
+            await Operations.RunAsync(Loc.Format("Operation_Materialize", doc.Source.DisplayName), OperationKind.WritesExternal, null, bytes,
                 op =>
                 {
                     doc.MaterializeReferences(op);
@@ -184,7 +187,9 @@ public sealed partial class MainViewModel : ObservableObject
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
         {
-            AppLog.Warning($"Materializing clipboard references failed: {ex.Message}");
+            // キャンセル・一時領域の不足: アプリ内クリップボードを破棄して知らせる (EDIT-24 の仕様 5)。
+            AppLog.Warning($"Materializing clipboard references failed: {ex.GetType().Name}");
+            MaterializeFailed?.Invoke(this, ex);
         }
     }
 
