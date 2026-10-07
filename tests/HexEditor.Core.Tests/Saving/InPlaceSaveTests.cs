@@ -158,6 +158,8 @@ public sealed class InPlaceSaveTests : IDisposable
             InPlaceSaver.AfterJournalWritten = null;
         }
 
+        // プロセスが終わった後と同じく、ファイルのハンドルを閉じてから戻す。
+        doc.Dispose();
         string journal = Assert.Single(Directory.GetFiles(Journals));
         Assert.Equal(path, InPlaceSaver.Rollback(journal));
         Assert.Equal(original, File.ReadAllBytes(path));

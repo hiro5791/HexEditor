@@ -16,6 +16,22 @@ public sealed class InsufficientSpaceException(string drive, long required, long
     public long Available { get; } = available;
 }
 
+/// <summary>
+/// 保存先のファイルシステムの 1 ファイルの上限を超える (ENG-20 の「エラー」、ENG-25 の仕様 5)。UI は「このドライブのファイルシステム
+/// (FAT32) では 4 GiB 以上のファイルを保存できません」と示す。
+/// </summary>
+public sealed class FileSizeLimitException(string drive, string fileSystem, long maxFileSize, long length)
+    : IOException($"このドライブ ({drive}) のファイルシステム ({fileSystem}) では {maxFileSize:N0} バイトを超えるファイルを保存できません。サイズ: {length:N0} バイト")
+{
+    public string Drive { get; } = drive;
+
+    public string FileSystem { get; } = fileSystem;
+
+    public long MaxFileSize { get; } = maxFileSize;
+
+    public long Length { get; } = length;
+}
+
 /// <summary>読めない元データを含むため保存できない (ENG-20 の仕様 3)。</summary>
 public sealed class UnreadableDataException(IReadOnlyList<UnreadableRange> ranges)
     : IOException($"読めないデータが {ranges.Count} か所あるため保存できません。")
@@ -38,16 +54,22 @@ public static class DocumentSaver
     /// <paramref name="snapshot"/> を <paramref name="targetPath"/> に書き出す。成功したら保存したファイルを開いて返す
     /// (呼び出し側は UI スレッドで <see cref="Document.CompleteSave"/> を呼ぶ)。
     /// </summary>
-    public static FileByteSource Save(DocumentSnapshot snapshot, string targetPath, LongRunningOperation? operation = null)
+    public static FileByteSource Save(DocumentSnapshot snapshot, string targetPath, LongRunningOperation? operation = null,
+        IVolumeInfoProvider? volumes = null)
     {
         string target = ResolveTarget(Path.GetFullPath(targetPath));
         string folder = Path.GetDirectoryName(target)!;
-        CheckFreeSpace(folder, snapshot.Length);
+        VolumeInfo? volume = (volumes ?? SystemVolumeInfoProvider.Instance).GetVolume(folder);
+        CheckFileSizeLimit(volume, snapshot.Length);
+        CheckFreeSpace(volume, snapshot.Length);
 
         string temp = Path.Combine(folder, $".{Path.GetFileName(target)}.~hex{RandomNumberGenerator.GetHexString(8, lowercase: true)}.tmp");
         try
         {
             WriteTemp(snapshot, temp, operation);
+
+            // 手順 7: 自分の書き込み禁止のハンドル (ENG-15) を閉じる。保存の完了で元の方針に戻す。
+            snapshot.Storage.Owner.SuspendLock();
             if (File.Exists(target))
             {
                 File.Replace(temp, target, destinationBackupFileName: null, ignoreMetadataErrors: true);
@@ -66,20 +88,34 @@ public static class DocumentSaver
         return FileByteSource.Open(target);
     }
 
-    /// <summary>保存先のドライブの空き容量を確認する (ENG-25)。</summary>
-    public static void CheckFreeSpace(string folder, long length)
+    /// <summary>
+    /// 保存先のドライブの空き容量を確認する (ENG-25)。ネットワーク上の場所も確認し、空き容量を取得できない場合だけ省略する
+    /// (書き込み時のエラーで扱う)。
+    /// </summary>
+    public static void CheckFreeSpace(string folder, long length, IVolumeInfoProvider? volumes = null) =>
+        CheckFreeSpace((volumes ?? SystemVolumeInfoProvider.Instance).GetVolume(folder), length);
+
+    /// <summary>必要な容量 (書き出すサイズ + 16 MiB) が足りなければ <see cref="InsufficientSpaceException"/>。</summary>
+    public static void CheckFreeSpace(VolumeInfo? volume, long length)
     {
-        string? root = Path.GetPathRoot(folder);
-        if (string.IsNullOrEmpty(root) || root.StartsWith(@"\\", StringComparison.Ordinal))
+        if (volume?.AvailableFreeSpace is not long available)
         {
-            return; // ネットワーク上の場所は空き容量を正確に取れないため、書き込み時のエラーで扱う。
+            return;
         }
 
-        var drive = new DriveInfo(root);
-        long required = length + FreeSpaceMargin;
-        if (drive.AvailableFreeSpace < required)
+        long required = length > long.MaxValue - FreeSpaceMargin ? long.MaxValue : length + FreeSpaceMargin;
+        if (available < required)
         {
-            throw new InsufficientSpaceException(drive.Name, required, drive.AvailableFreeSpace);
+            throw new InsufficientSpaceException(volume.Name, required, available);
+        }
+    }
+
+    /// <summary>ファイルシステムのファイルサイズの上限を超えれば <see cref="FileSizeLimitException"/> (空き容量より先に確認する)。</summary>
+    public static void CheckFileSizeLimit(VolumeInfo? volume, long length)
+    {
+        if (volume?.MaxFileSize is long max && length > max)
+        {
+            throw new FileSizeLimitException(volume.Name, volume.FileSystem!, max, length);
         }
     }
 
