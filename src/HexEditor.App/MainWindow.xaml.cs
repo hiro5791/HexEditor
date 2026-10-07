@@ -413,7 +413,16 @@ public sealed partial class MainWindow : Window
         if (!_views.Contains(view))
         {
             _views.Add(view);
-            view.Unloaded += (_, _) => _views.Remove(view);
+
+            // タブを閉じた直後に開いたタブで同じ HexView が使い回されると、前の Unloaded が新しい Loaded の後に届くことがある。
+            // その時点で木に戻っていれば (IsLoaded) 一覧から外さない。
+            view.Unloaded += (_, _) =>
+            {
+                if (!view.IsLoaded)
+                {
+                    _views.Remove(view);
+                }
+            };
 
             // F6 / Shift+F6 で Hex ビューから他の領域へ (UI-52)。読み取れない範囲などの一時的な文は文書の通知で出す。
             view.FocusRegionRequested += (_, args) =>
