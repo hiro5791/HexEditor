@@ -159,13 +159,21 @@ public static class TestDataCatalog
     /// <summary>SplitMix64 のカウンタ方式の乱数 (エンジンの生成ピースと同じ方式)。</summary>
     public static void Random(ulong seed, long offset, Span<byte> destination)
     {
+        // 8 バイトごとに 1 つの 64 bit の値を作り、下位のバイトから順に使う (同じ 8 バイトの中では作り直さない)。
+        long word = -1;
+        ulong z = 0;
         for (int i = 0; i < destination.Length; i++)
         {
             long p = offset + i;
-            ulong z = unchecked(seed + (ulong)(p >> 3) * 0x9E3779B97F4A7C15UL + 0x9E3779B97F4A7C15UL);
-            z = unchecked((z ^ (z >> 30)) * 0xBF58476D1CE4E5B9UL);
-            z = unchecked((z ^ (z >> 27)) * 0x94D049BB133111EBUL);
-            z ^= z >> 31;
+            if (p >> 3 != word)
+            {
+                word = p >> 3;
+                z = unchecked(seed + (ulong)word * 0x9E3779B97F4A7C15UL + 0x9E3779B97F4A7C15UL);
+                z = unchecked((z ^ (z >> 30)) * 0xBF58476D1CE4E5B9UL);
+                z = unchecked((z ^ (z >> 27)) * 0x94D049BB133111EBUL);
+                z ^= z >> 31;
+            }
+
             destination[i] = (byte)(z >> (int)((p & 7) * 8));
         }
     }
@@ -231,48 +239,80 @@ public static class TestDataCatalog
 
     /// <summary>
     /// TD-FIND-RANDOM-10G: 種 4401 の乱数。最後の 8 バイトを HEXEND!! にし、それ以外で検索のテストに使う 4 つの並びと一致する箇所は、
-    /// 先頭のバイトを 00 に変えて取り除く (スパースにしない。実際に 10 GiB を書く)。
+    /// 一致の 2 バイト目 (どの並びでも 45) を 00 に変えて取り除く (スパースにしない。実際に 10 GiB を書く)。
     /// </summary>
-    private static void WriteFindRandom(string path)
+    private static void WriteFindRandom(string path) => WriteFindRandom(path, 10 * GiB);
+
+    /// <summary>TD-FIND-RANDOM-10G の作り方で、長さ <paramref name="length"/> のファイルを作る (生成の確認のテスト用に長さを変えられる)。</summary>
+    public static void WriteFindRandom(string path, long length, Action<long, Span<byte>>? plant = null)
     {
-        // (値, マスク): マスクが 0 のニブルは任意。00 にしたバイトは、どの並びの固定のニブルとも一致しないため新しい一致を作らない。
-        (byte Value, byte Mask)[][] patterns =
-        [
-            [(0x48, 0xFF), (0x45, 0xFF), (0x58, 0xFF), (0x45, 0xFF), (0x4E, 0xFF), (0x44, 0xFF), (0x21, 0xFF), (0x21, 0xFF)],
-            [(0x48, 0xFF), (0x45, 0xFF), (0x00, 0x00), (0x45, 0xFF), (0x4E, 0xFF), (0x44, 0xFF)],
-            [(0x40, 0xF0), (0x45, 0xFF), (0x58, 0xFF), (0x45, 0xFF), (0x4E, 0xFF), (0x40, 0xF0)],
-            [(0x00, 0x00), (0x45, 0xFF), (0x58, 0xFF), (0x00, 0x00), (0x4E, 0xFF), (0x44, 0xFF)],
-        ];
-        const int Lookahead = 7;
-        const long Length = 10 * GiB;
-        long tailAt = Length - FindRandomTail.Length;
         using FileStream stream = File.Create(path);
-        stream.SetLength(Length);
+        stream.SetLength(length);
+        long tailAt = length - FindRandomTail.Length;
         byte[] buffer = new byte[MiB + Lookahead];
-        for (long offset = 0; offset < Length; offset += MiB)
+        var pending = new List<long>();
+        for (long offset = 0; offset < length; offset += MiB)
         {
-            int n = (int)Math.Min(MiB, Length - offset);
-            int withLookahead = (int)Math.Min(n + Lookahead, Length - offset);
+            int n = (int)Math.Min(MiB, length - offset);
+            int withLookahead = (int)Math.Min(n + Lookahead, length - offset);
             Span<byte> chunk = buffer.AsSpan(0, withLookahead);
             Random(FindRandomSeed, offset, chunk);
+            plant?.Invoke(offset, chunk);
             for (long p = Math.Max(offset, tailAt); p < offset + withLookahead; p++)
             {
                 chunk[(int)(p - offset)] = FindRandomTail[p - tailAt];
             }
 
-            for (int i = 0; i < n && offset + i < tailAt; i++)
+            // 前のチャンクの先読みの範囲で 00 にした位置は、作り直したこのチャンクにも反映する。
+            foreach (long p in pending)
             {
-                foreach ((byte Value, byte Mask)[] pattern in patterns)
-                {
-                    if (i + pattern.Length <= withLookahead && Matches(chunk[i..], pattern))
-                    {
-                        chunk[i] = 0x00;
-                        break;
-                    }
-                }
+                chunk[(int)(p - offset)] = 0x00;
             }
 
+            pending.Clear();
+            RemoveFindMatches(chunk, n, offset, tailAt, pending);
             stream.Write(buffer, 0, n);
+        }
+    }
+
+    private const int Lookahead = 7;
+
+    /// <summary>TD-FIND-RANDOM-10G から取り除く並び。(値, マスク) でマスクが 0 のニブルは任意。</summary>
+    private static readonly (byte Value, byte Mask)[][] FindPatterns =
+    [
+        [(0x48, 0xFF), (0x45, 0xFF), (0x58, 0xFF), (0x45, 0xFF), (0x4E, 0xFF), (0x44, 0xFF), (0x21, 0xFF), (0x21, 0xFF)],
+        [(0x48, 0xFF), (0x45, 0xFF), (0x00, 0x00), (0x45, 0xFF), (0x4E, 0xFF), (0x44, 0xFF)],
+        [(0x40, 0xF0), (0x45, 0xFF), (0x58, 0xFF), (0x45, 0xFF), (0x4E, 0xFF), (0x40, 0xF0)],
+        [(0x00, 0x00), (0x45, 0xFF), (0x58, 0xFF), (0x00, 0x00), (0x4E, 0xFF), (0x44, 0xFF)],
+    ];
+
+    /// <summary>
+    /// チャンクの先頭 <paramref name="n"/> バイトから始まる一致を取り除く。どの並びも 2 バイト目は 45 なので、そこを 00 にすると、その位置から
+    /// 始まるすべての並びの一致が消える (先頭が ?? の並びがあるため、先頭のバイトを変えても消えない)。どの並びの固定のニブルも 0 でないため、
+    /// 00 にしたバイトが新しい一致を作ることはない。先読みの範囲 (次のチャンク) を 00 にした位置は <paramref name="pending"/> に入れる。
+    /// </summary>
+    private static void RemoveFindMatches(Span<byte> chunk, int n, long offset, long tailAt, List<long> pending)
+    {
+        for (int i = 0; i < n && offset + i < tailAt; i++)
+        {
+            if (i + 1 >= chunk.Length || chunk[i + 1] != 0x45 || offset + i + 1 >= tailAt)
+            {
+                continue;
+            }
+
+            foreach ((byte Value, byte Mask)[] pattern in FindPatterns)
+            {
+                if (i + pattern.Length <= chunk.Length && Matches(chunk[i..], pattern))
+                {
+                    chunk[i + 1] = 0x00;
+                    if (i + 1 >= n)
+                    {
+                        pending.Add(offset + i + 1);
+                    }
+
+                    break;
+                }
+            }
         }
 
         static bool Matches(ReadOnlySpan<byte> data, (byte Value, byte Mask)[] pattern)
