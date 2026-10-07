@@ -350,4 +350,6 @@ Details were written to:
   <data name="PasteTruncate_Title" xml:space="preserve"><value>Paste up to the end?</value></data>
   <data name="PasteTruncate_Body" xml:space="preserve"><value>This document's length can't change. {0} bytes of the pasted data go past the end and won't be pasted.</value></data>
   <data name="PasteTruncate_Paste" xml:space="preserve"><value>Paste up to the end</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>Another app can still write to this file. If it's changed outside HexEditor, your unsaved changes may not be saved correctly.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>There are so many edits that the memory limit ({0}) is exceeded. Saving reduces memory use.</value></data>
 </root>

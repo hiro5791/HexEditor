@@ -90,4 +90,12 @@ public sealed partial class MainWindow
         StatusFormat.ShortSize(bytes, CultureInfo.CurrentCulture) is { } shortSize
             ? Loc.Format("Size_WithBytes", shortSize, StatusFormat.Number(bytes, CultureInfo.CurrentCulture))
             : Loc.Format("Size_Bytes", StatusFormat.Number(bytes, CultureInfo.CurrentCulture));
+
+    /// <summary>「他のアプリがこのファイルに書き込める状態です…」(ENG-15 の仕様 2)。</summary>
+    public void ShowLockFailed(DocumentViewModel doc) =>
+        ShowNotice(Loc.Get("Notice_LockFailed"), InfoBarSeverity.Warning, doc);
+
+    /// <summary>「編集の数が多く、メモリの上限 (1 GiB) を超えています。保存すると使用量が減ります」(ENG-08 の仕様 2 の 3)。</summary>
+    public void ShowMemoryOverLimit(long limit) =>
+        ShowNotice(Loc.Format("Notice_MemoryOverLimit", Size(limit)), InfoBarSeverity.Warning);
 }

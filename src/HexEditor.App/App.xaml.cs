@@ -34,6 +34,9 @@ public partial class App : Application
 
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _recoveryTimer;
 
+    /// <summary>メモリの監視 (ENG-08)。アプリの終了まで保持する。</summary>
+    private MemoryMonitor? _memoryMonitor;
+
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         IAppEnvironment env = Program.Environment;
@@ -74,6 +77,14 @@ public partial class App : Application
         {
             AppLog.Warning($"Settings watcher unavailable: {ex.GetType().Name}");
         }
+
+        // 他のアプリの書き込みを禁止できなかったら、その文書の中で知らせる (ENG-15 の仕様 2)。
+        vm.LockFailed += (_, doc) => DispatcherQueue.TryEnqueue(() => window.ShowLockFailed(doc));
+
+        // メモリの上限の監視 (ENG-08)。1 秒ごとに集計し、上限を超えたら減らす。減らしきれなければ知らせる。
+        _memoryMonitor = new MemoryMonitor(vm.Memory);
+        _memoryMonitor.OverLimit += (_, _) => DispatcherQueue.TryEnqueue(() => window.ShowMemoryOverLimit(vm.Memory.Limit));
+        _memoryMonitor.LowMemory += (_, _) => AppLog.Warning("Low memory notification: cache trimmed.");
 
         // 異常終了の直前に未保存の編集内容を書き出す (PKG-30 の仕様 1 の 1)。
         CrashReporter.WriteRecovery = timeout => vm.WriteRecoveryNow(timeout);

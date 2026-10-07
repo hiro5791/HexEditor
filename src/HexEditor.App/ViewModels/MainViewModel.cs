@@ -290,9 +290,21 @@ public sealed partial class MainViewModel : ObservableObject
         return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recovery, Notifications = Notifications }, insertAt);
     }
 
+    /// <summary>
+    /// 編集を始めたのに、他のアプリの書き込みを禁止できなかった (他のアプリが書き込み用に開いている。ENG-15 の仕様 2)。
+    /// </summary>
+    public event EventHandler<DocumentViewModel>? LockFailed;
+
     private DocumentViewModel AddViewModel(DocumentViewModel vm, int? insertAt = null)
     {
         Document doc = vm.Document;
+        doc.LockStateChanged += (_, _) =>
+        {
+            if (doc.LockState == FileLockState.Failed)
+            {
+                LockFailed?.Invoke(this, vm);
+            }
+        };
         Memory.Register(doc);
         if (insertAt is int index && index >= 0 && index <= Documents.Count)
         {
