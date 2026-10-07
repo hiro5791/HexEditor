@@ -122,12 +122,24 @@ public sealed partial class MainWindow
         foreach (JsonNode? node in request["virtual"]?.AsArray() ?? [])
         {
             byte[] content = Convert.FromBase64String(node!["base64"]!.GetValue<string>());
-            items.Add(await StorageFile.CreateStreamedFileAsync(node["name"]!.GetValue<string>(), async stream =>
+            items.Add(await StorageFile.CreateStreamedFileAsync(node["name"]!.GetValue<string>(), async request =>
             {
-                using Stream output = stream.AsStreamForWrite();
-                await output.WriteAsync(content);
-                await output.FlushAsync();
-                stream.Dispose();
+                // 書き終えたら出力のストリームを閉じてから要求を終える (先に要求を終えると、ストリームを閉じるときに例外になる)。
+                try
+                {
+                    using (Stream output = request.AsStreamForWrite())
+                    {
+                        await output.WriteAsync(content);
+                        await output.FlushAsync();
+                    }
+
+                    request.Dispose();
+                }
+                catch (Exception ex) when (ex is IOException or ObjectDisposedException or System.Runtime.InteropServices.COMException)
+                {
+                    AppLog.Warning($"Test hooks: streamed file failed: {ex.Message}");
+                    request.FailAndClose(StreamedFileFailureMode.Failed);
+                }
             }, null));
         }
 
@@ -311,6 +323,8 @@ public sealed partial class MainWindow
             ["text"] = text.Text,
             ["where"] = Where(text),
             ["width"] = text.ActualWidth,
+            ["naturalWidth"] = NaturalSize(text, double.PositiveInfinity).Width,
+            ["slots"] = string.Join(" < ", SlotChain(text)),
             ["left"] = bounds.X,
             ["top"] = bounds.Y,
         };
@@ -332,8 +346,68 @@ public sealed partial class MainWindow
         return string.Join("/", path);
     }
 
-    /// <summary>文字列の本来の大きさ (同じ書式の新しい TextBlock で測る) が、表示している大きさに収まっているか。</summary>
+    /// <summary>
+    /// 文字列が表示しきれていないか: 本来の大きさ (同じ書式の新しい TextBlock で測る) が表示している大きさに収まらない、
+    /// または割り当てられた領域で切り取られている。
+    /// </summary>
     private static bool IsClipped(TextBlock text)
+    {
+        if (text.TextWrapping == TextWrapping.NoWrap)
+        {
+            if (NaturalSize(text, double.PositiveInfinity).Width > text.ActualWidth + 2)
+            {
+                return true;
+            }
+        }
+        else if (NaturalSize(text, text.ActualWidth + 1).Height > text.ActualHeight + 2)
+        {
+            return true;
+        }
+
+        // 割り当てられた領域 (レイアウトのスロット) より文字列が長いため切り取られた (幅を固定したボタンの中など)。
+        // 文字列から、それを含む最も近いコントロールまでの要素を調べる。折り返す文字列は高さで調べた。
+        if (text.TextWrapping != TextWrapping.NoWrap)
+        {
+            return false;
+        }
+
+        double natural = NaturalSize(text, double.PositiveInfinity).Width;
+        for (DependencyObject? node = text; node is not null; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is FrameworkElement element && LayoutInformation.GetLayoutSlot(element) is { Width: > 0 } slot
+                && natural > slot.Width - element.Margin.Left - element.Margin.Right + 2)
+            {
+                return true;
+            }
+
+            if (node is Control)
+            {
+                break;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>文字列から最も近いコントロールまでの要素の、レイアウトのスロットの幅 (切れの報告の手がかり)。</summary>
+    private static IEnumerable<string> SlotChain(TextBlock text)
+    {
+        for (DependencyObject? node = text; node is not null; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is FrameworkElement element)
+            {
+                yield return $"{element.GetType().Name}:{LayoutInformation.GetLayoutSlot(element).Width:F0}";
+            }
+
+            if (node is Control)
+            {
+                yield break;
+            }
+        }
+    }
+
+    /// <summary>同じ書式の新しい TextBlock で測った文字列の大きさ。</summary>
+    private static Size NaturalSize(TextBlock text, double width)
     {
         var probe = new TextBlock
         {
@@ -346,16 +420,13 @@ public sealed partial class MainWindow
             CharacterSpacing = text.CharacterSpacing,
             TextWrapping = text.TextWrapping,
             LineHeight = text.LineHeight,
+            LineStackingStrategy = text.LineStackingStrategy,
+            OpticalMarginAlignment = text.OpticalMarginAlignment,
+            TextLineBounds = text.TextLineBounds,
             Padding = text.Padding,
         };
-        if (text.TextWrapping == TextWrapping.NoWrap)
-        {
-            probe.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            return probe.DesiredSize.Width > text.ActualWidth + 1;
-        }
-
-        probe.Measure(new Size(text.ActualWidth, double.PositiveInfinity));
-        return probe.DesiredSize.Height > text.ActualHeight + 1;
+        probe.Measure(new Size(width, double.PositiveInfinity));
+        return probe.DesiredSize;
     }
 
     /// <summary>パネルの兄弟の要素 (グリッドでは別のセル) の表示範囲の重なり。</summary>
