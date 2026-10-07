@@ -229,7 +229,7 @@ jobs:
   # UI テスト・結合テスト (テスト方針 6.5): テスト用のビルド (Debug。HEX_TEST_HOOKS を含む) のアプリを起動して操作する。
   ui-tests:
     runs-on: windows-latest
-    timeout-minutes: 45
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
 
@@ -247,6 +247,14 @@ jobs:
         env:
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
         run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI" --logger "trx;LogFileName=ui.trx" --results-directory TestResults
+
+      # 言語ごとのスクリーンショット (UI-47、TC-UI-47-01)。毎晩と手動の実行で、25 言語の主要な画面を撮り、言語ごとのフォルダに
+      # PNG と一覧 (index.html) を置く (成果物 ui-test-results の screenshots)。切れた文字列が増えたらジョブの概要に警告を出す。
+      - name: Screenshots (UI-47)
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          HEXEDITOR_SCREENSHOTS: ${{ github.workspace }}\TestResults\screenshots
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=Screenshots" --logger "trx;LogFileName=screenshots.trx" --results-directory TestResults
 
       - name: Upload UI test results
         if: always()

@@ -51,6 +51,12 @@ public sealed class UiTestContext : IAsyncDisposable
         }
     }
 
+    /// <summary>
+    /// テストの本体の中で、別の一時フォルダ・アプリの組を作る (1 つのテストで何度も起動し直す撮影など)。失敗時の成果物の保存は
+    /// しないので、呼び出し側で記録する。使い終わったら破棄する。
+    /// </summary>
+    public static UiTestContext Create(string name) => new(name);
+
     /// <summary>新しい設定フォルダを作る。</summary>
     public string NewProfile()
     {
