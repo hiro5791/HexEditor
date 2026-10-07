@@ -359,7 +359,19 @@ public sealed partial class MainWindow : Window
         {
             _views.Add(view);
             view.Unloaded += (_, _) => _views.Remove(view);
+
+            // F6 / Shift+F6 で Hex ビューから他の領域へ (UI-52)。読み取れない範囲などの一時的な文は文書の通知で出す。
+            view.FocusRegionRequested += (_, args) =>
+            {
+                MoveToRegion(args.Forward);
+                args.Handled = true;
+            };
+            view.StatusMessageRequested += (_, args) =>
+                ShowNotice(args.Message, InfoBarSeverity.Informational, view.DataContext as DocumentViewModel);
         }
+
+        // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
+        view.DocumentName = (view.DataContext as DocumentViewModel)?.DisplayName;
 
         view.Focus(FocusState.Programmatic);
     }

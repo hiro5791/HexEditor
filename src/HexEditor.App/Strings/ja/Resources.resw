@@ -267,4 +267,37 @@
   <data name="Notice_BusyWith" xml:space="preserve"><value>処理中のため編集できません ({0})。</value></data>
   <data name="Notice_ReadOnly" xml:space="preserve"><value>この文書は読み取り専用です。</value></data>
   <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} に失敗しました: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>16 進エディタ</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Tab で Hex 列とテキスト列を切り替え。F6 で次の領域へ移動します。</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>選択の解除</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>読み取れない範囲があります</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>読み取れません</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>読み取れません: デバイスの I/O エラー ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>読み取れません: アクセスが拒否されました ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>読み取れません: デバイスが取り外されました</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>メモリが割り当てられていません</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>オフセット {0}、値 {1}、文字 {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>オフセット {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>オフセット {0}、データの末尾</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}、{1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>、</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>選択 {0} バイト、{1} から {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>オフセット {0}、値 {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>挿入モード</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>上書きモード</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>読み取り専用</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>編集可能</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Hex 列</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>テキスト列</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>下位</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>変更あり</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>挿入</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>選択中</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>読み込み中</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>読み取れません</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>ヌル</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>空白</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>表示できない文字</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} バイトを削除しました</value></data>
 </root>
