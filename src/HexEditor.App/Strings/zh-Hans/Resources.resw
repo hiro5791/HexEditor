@@ -4,21 +4,21 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="Menu_File.Title" xml:space="preserve"><value>文件</value></data>
-  <data name="Menu_File_New.Text" xml:space="preserve"><value>新建</value></data>
-  <data name="Menu_File_Open.Text" xml:space="preserve"><value>打开...</value></data>
-  <data name="Menu_File_Save.Text" xml:space="preserve"><value>保存</value></data>
-  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>另存为...</value></data>
-  <data name="Menu_File_Close.Text" xml:space="preserve"><value>关闭</value></data>
-  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>退出</value></data>
-  <data name="Menu_Edit.Title" xml:space="preserve"><value>编辑</value></data>
-  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>撤消</value></data>
-  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>重做</value></data>
-  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>全选</value></data>
-  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>切换覆盖/插入</value></data>
-  <data name="Menu_Go.Title" xml:space="preserve"><value>转到</value></data>
-  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>文件开头</value></data>
-  <data name="Menu_Go_End.Text" xml:space="preserve"><value>文件末尾</value></data>
+  <data name="Menu_File.Title" xml:space="preserve"><value>文件(F)</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>新建(N)</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>打开(O)...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>保存(S)</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>另存为(A)...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>关闭(C)</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>退出(X)</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>编辑(E)</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>撤消(U)</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>重做(R)</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>全选(A)</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>切换覆盖/插入(I)</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>转到(G)</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>文件开头(S)</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>文件末尾(E)</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>无标题 {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>偏移：{0}</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>覆盖</value></data>
@@ -42,9 +42,9 @@
   <data name="Notice_FixedLength" xml:space="preserve"><value>此数据源无法更改长度，因此只能使用覆盖模式。</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>该字符无法用当前编码表示。</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>文档正在处理中，暂时无法编辑。</value></data>
-  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>转到偏移...</value></data>
-  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>后退</value></data>
-  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>前进</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>转到偏移(G)...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>后退(B)</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>前进(F)</value></data>
   <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>偏移或表达式（例如 0x1F00、end-0x10）</value></data>
   <data name="GoTo_Input_Name" xml:space="preserve"><value>转到</value></data>
   <data name="GoTo_Base_Name" xml:space="preserve"><value>相对于</value></data>
@@ -72,10 +72,10 @@
   <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} 在此处不可用。</value></data>
   <data name="GoTo_BeforeStart" xml:space="preserve"><value>位于文件开头之前。</value></data>
   <data name="GoTo_BeyondEnd" xml:space="preserve"><value>超出文件末尾（{0}）。</value></data>
-  <data name="Menu_Search.Title" xml:space="preserve"><value>搜索</value></data>
-  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>查找...</value></data>
-  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>查找下一个</value></data>
-  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>查找上一个</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>搜索(S)</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>查找(F)...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>查找下一个(N)</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>查找上一个(V)</value></data>
   <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
   <data name="Find_Kind_Text.Content" xml:space="preserve"><value>文本</value></data>
   <data name="Find_Kind_Name" xml:space="preserve"><value>搜索类型</value></data>
@@ -98,12 +98,268 @@
   <data name="Find_Error_TooLong" xml:space="preserve"><value>搜索值最多为 1 MiB。</value></data>
   <data name="Find_Error_NotEncodable" xml:space="preserve"><value>“{0}”无法用此编码表示。</value></data>
   <data name="Operation_Find" xml:space="preserve"><value>查找</value></data>
-  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>剪切</value></data>
-  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>复制</value></data>
-  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>粘贴</value></data>
-  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>覆盖粘贴</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>剪切(T)</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>复制(C)</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>粘贴(P)</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>覆盖粘贴(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor：{0} 字节。只能在 HexEditor 内粘贴。]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>选区超出剪贴板限制，因此只能在 HexEditor 内粘贴。</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>剪贴板文本不是十六进制字节序列。若要作为文本粘贴，请切换到文本列。</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>超出此固定长度文档末尾的字节未被粘贴。</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>恢复未保存的更改</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>HexEditor 上次未正常关闭。你可以恢复下面未保存的更改。</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>恢复</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>放弃</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>稍后</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>保存于 {0} · 已更改 {1} 字节</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>尚未保存到文件</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>原始文件此后已被更改，因此恢复的内容可能不正确。已以只读方式打开。</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>无法恢复：{0} 恢复数据已保留。</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>无法保存恢复数据（{0}）。如果 HexEditor 意外关闭，未保存的更改将会丢失。</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>保存被中断。你可以将文件还原到保存前的状态。</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>还原</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>HexEditor 上次意外关闭。</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>打开崩溃信息</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>报告问题</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor 意外关闭。请将崩溃信息文件的内容粘贴到下方。其中不包含你的文件内容。</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>无法打开浏览器，因此已将链接复制到剪贴板。</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>还有 {0} 条</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>通知</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>通知历史记录</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>通知历史记录</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>（管理员）</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>（安全模式）</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>无法读取设置文件，因此 HexEditor 已使用默认设置启动。损坏的文件已保留。</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>打开文件夹</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>设置文件由较新版本的 HexEditor 写入，因此不会保存对设置的更改。</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>编辑后的设置文件有错误（{0}）。仍在使用之前的设置。</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>查看(V)</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>主题(T)</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>使用系统设置(S)</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>浅色(L)</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>深色(D)</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>状态栏(B)</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>帮助(H)</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>文档(D)</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>报告问题(R)...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>关于 HexEditor(A)</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="About_Version" xml:space="preserve"><value>版本</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>通道</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>分发方式</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>体系结构</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>以管理员身份运行</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>打开数据文件夹</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor 不发送遥测数据。它从不向任何地方发送使用情况数据、崩溃报告、设置或文件信息。此版本中没有使用网络的功能（帮助链接会在浏览器中打开）。</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor 是采用 MIT 许可证的开源软件。</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>复制信息</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>第三方许可证</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>找不到许可证文件。</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>关闭</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>值：{0}（{1}）</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>选区：{0}–{1}（长度 {2} = {3}）</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>开始：{0}
+结束（包含此字节）：{1}
+长度：{2}（{3} 字节）</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>大小：{0}（{1} 字节）</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>大小：{0} 字节</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>只读</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>已将精确大小复制到剪贴板。</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>光标位置</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>光标处的值</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>选区</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>当前列</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>文本编码</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>输入模式</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>修改状态</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>文件大小</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>处理中心</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>通知</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>处理中心</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>没有正在运行的操作。</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>清除已完成项</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>正在处理（{0}）</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/秒</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>大约还剩 {0} 分钟</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>大约还剩 {0} 秒</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>已用时间 {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>正在取消...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>已完成</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>已取消</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>失败：{0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>打开</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>打开</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>是否打开 {0} 个文件？</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>无法打开文件夹（已跳过 {0} 个）。</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>以管理员身份运行时，无法通过从文件资源管理器拖放来打开文件。请改用“文件 &gt; 打开”。</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>正在复制 {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>全部保存(L)</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>全部关闭(E)</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>关闭</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>关闭其他选项卡</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>关闭右侧的选项卡</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>更改：{0} 处，添加或替换了 {1} 字节。如果不保存，更改将会丢失。</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>是否保存对 {0} 个文档的更改？</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>请选择要保存的文档。未选择的文档将不保存而直接关闭。</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>保存所选项并关闭</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>关闭但不保存</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} 正在运行。</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>停止并关闭</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>保存后关闭</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>打开...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>新建</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>也可以将文件拖放到此处来打开。</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>指定大小新建(Z)...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>指定大小新建</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>大小</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>填充值（Hex 字节）</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>创建</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>请输入 0 或更大的大小。</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>请输入 1 到 4,096 个 Hex 字节，例如 00 或 DE AD。</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} 是设备，而不是文件。打开磁盘的功能将在以后的版本中提供。</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} 是文件夹。无法打开文件夹。</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>找不到文件：{0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>你没有打开 {0} 的权限。</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>另一个应用正在使用 {0}，因此无法打开。</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>{1} 正在使用 {0}，因此无法打开。</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>此文件为只读，因此无法覆盖保存。请使用“另存为”保存更改。</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>{0} 正在运行，无法编辑此文档。</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>此文档为只读。</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} 失败：{1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>十六进制编辑器</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>按 Tab 可在 Hex 列和文本列之间切换。按 F6 可移到下一个区域。</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>删除</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>取消选择</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>某些范围无法读取。</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>无法读取</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>无法读取：设备 I/O 错误（{0}）</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>无法读取：访问被拒绝（{0}）</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>无法读取：设备已断开连接</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>未分配内存</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>偏移 {0}，值 {1}，字符 {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>偏移 {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>偏移 {0}，数据末尾</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}，{1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>，</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>已选择 {0} 字节，从 {1} 到 {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>偏移 {0}，值 {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>插入模式</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>覆盖模式</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>只读</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>可编辑</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Hex 列</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>文本列</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>低半字节</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>已修改</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>插入</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>已选择</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>正在加载</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>无法读取</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>空字符</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>空格</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>不可打印字符</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>已删除 {0} 字节</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>适用于任意大小文件和磁盘的快速十六进制编辑器</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>现有窗口没有响应，因此已在新实例中打开。</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>无法写入数据文件夹，因此不会保存设置。</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>导出设置</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>已删除 {0} 个超过 30 天的恢复项。</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>HexEditor 无法启动。
+
+{0}
+
+详细信息已写入：
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>方向</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>向下</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>向上</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>搜索范围</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>整个文档</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>选区</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>区分大小写</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>使用转义序列（\n、\xHH）</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>按字符边界对齐</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>搜索选项</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>统计匹配项</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / 正在统计...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / 超过 {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ...（共 {1} 字节）</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0}（第 {1} 个字符）</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>“{0}”不是有效的转义序列。</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>在 {0} 处找到。</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>统计匹配项</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>文件太大，目标位置的文件系统（{0}，{1}）无法保存。最大文件大小为 {2}。请将其保存到其他驱动器。</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>可用空间不足</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>目标驱动器（{0}）上的可用空间不足。需要：{1}。可用：{2}。文件未被更改。</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>保存到其他位置</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>更改太大，无法保护</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>更改太大，无法记录原始内容（{0}，上限 {1}）。如果保存中途停止，将无法把文件还原到原来的状态。</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>使用安全保存</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>不加保护直接写入</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>此文档为只读，因此无法覆盖保存。请使用“另存为”。</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>保存失败，因此已将文件还原到保存前的状态。</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>保存失败，文件只有一部分被重写。下次启动 HexEditor 时可以将其还原。</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0}（{1} 字节）</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} 字节</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>该文本不是十六进制字节序列，因此已作为文本粘贴。</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>撤消</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>是否粘贴到末尾为止？</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>此文档的长度无法更改。粘贴的数据中有 {0} 字节超出末尾，将不会被粘贴。</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>粘贴到末尾为止</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>其他应用仍可写入此文件。如果在 HexEditor 之外更改了该文件，未保存的更改可能无法正确保存。</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>编辑过多，已超出内存上限（{0}）。保存可减少内存使用量。</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>正在保留从 {0} 复制的数据</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>是否保留复制的数据？</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>为了在关闭后仍可使用复制的 {0} 数据，HexEditor 会将其写入临时存储。</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>写入并关闭</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>清空剪贴板并关闭</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>无法保留复制的数据，因此已清空剪贴板。</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>文本编码(E)</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI（代码页 {0}）</value></data>
 </root>

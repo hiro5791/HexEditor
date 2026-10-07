@@ -106,4 +106,260 @@
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Selecția depășește limita clipboardului, așa că poate fi lipită doar în HexEditor.</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>Textul din clipboard nu este o secvență de octeți hexazecimali. Comutați la coloana text pentru a-l lipi ca text.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Octeții de după sfârșitul acestui document cu lungime fixă nu au fost lipiți.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Recuperare modificări nesalvate</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>Data trecută, HexEditor nu s-a închis normal. Puteți recupera modificările nesalvate de mai jos.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Recuperare</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>Renunțare</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Mai târziu</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Salvat {0} · {1} octeți modificați</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Încă nu a fost salvat într-un fișier</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>Fișierul original s-a modificat între timp, așa că este posibil ca conținutul recuperat să nu fie corect. A fost deschis doar în citire.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Nu s-a putut recupera: {0} Datele de recuperare au fost păstrate.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Nu se pot salva datele de recuperare ({0}). Dacă HexEditor se închide neașteptat, modificările nesalvate se vor pierde.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>Salvarea a fost întreruptă. Puteți readuce fișierul la starea de dinainte de salvare.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Restaurare</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>Data trecută, HexEditor s-a închis neașteptat.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Deschidere informații despre blocare</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Raportare problemă</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor s-a închis neașteptat. Lipiți mai jos conținutul fișierului cu informații despre blocare. Acesta nu include conținutul fișierelor dvs.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Browserul nu a putut fi deschis, așa că linkul a fost copiat în clipboard.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>Încă {0}</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>Notificări</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>Istoric notificări</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>Istoric notificări</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(Administrator)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(Mod sigur)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>Fișierul de setări nu a putut fi citit, așa că HexEditor a pornit cu setările implicite. Fișierul deteriorat a fost păstrat.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>Deschidere folder</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>Fișierul de setări a fost scris de o versiune mai nouă de HexEditor, așa că modificările setărilor nu vor fi salvate.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>Fișierul de setări editat conține o eroare ({0}). Se folosesc în continuare setările anterioare.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>Vizualizare</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>Temă</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Utilizare setare sistem</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>Luminos</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>Întunecat</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>Bară de stare</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>Ajutor</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>Documentație</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>Raportare problemă...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>Despre HexEditor</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Versiune</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>Canal</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>Distribuție</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>Arhitectură</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>Rulează ca administrator</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>Deschidere folder de date</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor nu trimite telemetrie. Nu trimite niciodată nicăieri date de utilizare, rapoarte de blocare, setări sau informații despre fișiere. În această versiune, nicio caracteristică nu utilizează rețeaua (linkurile de ajutor se deschid în browser).</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor este software open-source cu licență MIT.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>Copiere informații</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Licențe terțe</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>Fișierul de licență nu a fost găsit.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Închidere</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>Valoare: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>Selecție: {0}–{1} (lungime {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>Început: {0}
+Sfârșit (inclusiv acest octet): {1}
+Lungime: {2} ({3} octeți)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>Dimensiune: {0} ({1} octeți)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>Dimensiune: {0} octeți</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>Doar în citire</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>Dimensiunea exactă a fost copiată în clipboard.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>Poziția cursorului</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>Valoarea de la cursor</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>Selecție</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>Coloana activă</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>Codificare text</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>Mod de introducere</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>Modificat</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>Dimensiune fișier</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>Centru de procesare</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>Notificări</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>Centru de procesare</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>Nu rulează nimic.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>Golire finalizate</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>În procesare ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/s</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>Au mai rămas aproximativ {0} min</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>Au mai rămas aproximativ {0} s</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>Timp scurs: {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>Se anulează...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>Finalizat</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>Anulat</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>Eșuat: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Deschidere</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Deschidere</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>Deschideți {0} fișiere?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Folderele nu pot fi deschise ({0} omise).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>Când rulați ca administrator, nu puteți deschide fișiere glisându-le din Explorer. Utilizați în schimb Fișier &gt; Deschidere.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>Copiere {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Salvare totală</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Închidere totală</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Închidere</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Închidere celelalte file</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Închidere filele din dreapta</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Modificări: {0} locuri, {1} octeți adăugați sau înlocuiți. Dacă nu salvați, modificările se vor pierde.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>Salvați modificările aduse celor {0} documente?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Selectați documentele de salvat. Documentele neselectate se închid fără salvare.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Salvare selecție și închidere</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Închidere fără salvare</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} rulează.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Oprire și închidere</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Închidere după salvare</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Deschidere...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>Nou</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>De asemenea, puteți plasa fișiere aici pentru a le deschide.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>Nou cu dimensiune...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>Nou cu dimensiune</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Dimensiune</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Valoare de umplere (octeți hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Creare</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>Introduceți o dimensiune de 0 sau mai mare.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>Introduceți între 1 și 4.096 de octeți în hex, de exemplu 00 sau DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} este un dispozitiv, nu un fișier. Deschiderea discurilor va fi disponibilă într-o versiune ulterioară.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} este un folder. Folderele nu pot fi deschise.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Fișierul nu a fost găsit: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>Nu aveți permisiunea de a deschide {0}.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>{0} nu poate fi deschis, deoarece este utilizat de altă aplicație.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>{0} nu poate fi deschis, deoarece este utilizat de {1}.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>Acest fișier este doar în citire, așa că nu poate fi suprascris. Utilizați „Salvare ca” pentru a salva modificările.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>Acest document nu poate fi editat cât timp rulează {0}.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>Acest document este doar în citire.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} a eșuat: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>editor hexazecimal</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Tab comută între coloanele Hex și text. F6 trece la zona următoare.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Ștergere</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Anulare selecție</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Unele zone nu pot fi citite.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Nu poate fi citit</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Nu poate fi citit: eroare I/O a dispozitivului ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Nu poate fi citit: acces refuzat ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Nu poate fi citit: dispozitivul a fost deconectat</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>Memoria nu este alocată</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Deplasament {0}, valoare {1}, caracter {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Deplasament {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Deplasament {0}, sfârșitul datelor</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Selecție de {0} octeți, de la {1} la {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Deplasament {0}, valoare {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Mod inserare</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Mod suprascriere</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Doar în citire</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Editabil</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Coloana Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>coloana text</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>semioctet inferior</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>modificat</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>inserare</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>selectat</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>se încarcă</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>nu poate fi citit</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>nul</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>spațiu</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>caracter neimprimabil</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} octeți șterși</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Un editor hexazecimal rapid pentru fișiere și discuri de orice dimensiune</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>Fereastra existentă nu răspunde, așa că s-a deschis într-o instanță nouă.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>Setările nu vor fi salvate, deoarece nu se poate scrie în folderul de date.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Exportare setări</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>S-au șters {0} elemente de recuperare mai vechi de 30 de zile.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>HexEditor nu a putut porni.
+
+{0}
+
+Detaliile au fost scrise în:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Direcție</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>Înainte</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Înapoi</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Căutare în</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Tot documentul</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Selecție</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>Potrivire litere mari și mici</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Utilizare secvențe escape (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Aliniere la caractere</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Opțiuni de căutare</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Numărare potriviri</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / se numără...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / peste {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... ({1} octeți în total)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (caracterul {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>„{0}” nu este o secvență escape validă.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>Găsit la {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Numărare potriviri</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>Fișierul este prea mare pentru sistemul de fișiere al destinației ({0}, {1}). Dimensiunea maximă a fișierului este {2}. Salvați-l pe altă unitate.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>Spațiu liber insuficient</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>Pe unitatea de destinație ({0}) nu există suficient spațiu liber. Necesar: {1}. Disponibil: {2}. Fișierul nu a fost modificat.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>Salvare în altă locație</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>Modificările sunt prea mari pentru a fi protejate</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>Modificările sunt prea mari pentru a înregistra conținutul original ({0}, limită {1}). Dacă salvarea se oprește la jumătate, fișierul nu mai poate fi readus la starea inițială.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>Utilizare salvare sigură</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>Scriere fără protecție</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>Acest document este doar în citire, așa că nu poate fi suprascris. Utilizați „Salvare ca”.</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>Salvarea a eșuat, așa că fișierul a fost readus la starea de dinainte de salvare.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>Salvarea a eșuat și numai o parte a fișierului a fost rescrisă. Îl puteți restaura la următoarea pornire a HexEditor.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} octeți)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} octeți</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>Textul nu este o secvență de octeți hex, așa că a fost lipit ca text.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>Anulare</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>Lipiți până la sfârșit?</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>Lungimea acestui document nu se poate modifica. {0} octeți din datele lipite depășesc sfârșitul și nu vor fi lipiți.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>Lipire până la sfârșit</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>O altă aplicație poate scrie în continuare în acest fișier. Dacă este modificat în afara HexEditor, este posibil ca modificările nesalvate să nu fie salvate corect.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>Există atât de multe editări încât limita de memorie ({0}) este depășită. Salvarea reduce utilizarea memoriei.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>Păstrare date copiate din {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Păstrați datele copiate?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>Pentru ca datele copiate ({0}) să rămână disponibile după închidere, HexEditor le va scrie într-o stocare temporară.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Scriere și închidere</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Golire clipboard și închidere</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>Datele copiate nu au putut fi păstrate, așa că clipboardul a fost golit.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Codificare text</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (pagina de coduri {0})</value></data>
 </root>

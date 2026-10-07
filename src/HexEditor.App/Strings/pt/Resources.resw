@@ -106,4 +106,260 @@
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>A seleção excede o limite da área de transferência, por isso só pode ser colada no HexEditor.</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>O texto da área de transferência não é uma sequência de bytes hex. Alterne para a coluna de texto para colá-lo como texto.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Os bytes além do fim deste documento de comprimento fixo não foram colados.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Recuperar alterações não salvas</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>O HexEditor não foi fechado corretamente da última vez. Você pode recuperar as alterações não salvas abaixo.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Recuperar</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>Descartar</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Mais tarde</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Salvo {0} · {1} bytes alterados</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Ainda não salvo em um arquivo</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>O arquivo original foi alterado desde então, por isso o conteúdo recuperado pode não estar correto. Ele foi aberto como somente leitura.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Não foi possível recuperar: {0} Os dados de recuperação foram mantidos.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Não é possível salvar os dados de recuperação ({0}). Se o HexEditor fechar inesperadamente, as alterações não salvas serão perdidas.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>O salvamento foi interrompido. Você pode deixar o arquivo como estava antes de salvar.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Restaurar</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>O HexEditor foi fechado inesperadamente da última vez.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Abrir informações da falha</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Relatar um problema</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>O HexEditor foi fechado inesperadamente. Cole abaixo o conteúdo do arquivo de informações da falha. Ele não inclui o conteúdo dos seus arquivos.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Não foi possível abrir o navegador, por isso o link foi copiado para a área de transferência.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>Mais {0}</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>Notificações</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>Histórico de notificações</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>Histórico de notificações</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(Administrador)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(Modo de segurança)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>Não foi possível ler o arquivo de configurações, por isso o HexEditor foi iniciado com as configurações padrão. O arquivo danificado foi mantido.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>Abrir pasta</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>O arquivo de configurações foi gravado por uma versão mais recente do HexEditor, por isso as alterações nas configurações não serão salvas.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>O arquivo de configurações editado tem um erro ({0}). As configurações anteriores continuam em uso.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>Exibir</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>Tema</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Usar configuração do sistema</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>Claro</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>Escuro</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>Barra de status</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>Ajuda</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>Documentação</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>Relatar um problema...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>Sobre o HexEditor</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Versão</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>Canal</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>Distribuição</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>Arquitetura</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>Executando como administrador</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>Abrir a pasta de dados</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>O HexEditor não envia telemetria. Ele nunca envia dados de uso, relatórios de falhas, configurações ou informações de arquivos para lugar nenhum. Nenhum recurso usa a rede nesta versão (os links de ajuda são abertos no navegador).</value></data>
+  <data name="About_License" xml:space="preserve"><value>O HexEditor é um software de código aberto sob a Licença MIT.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>Copiar informações</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Licenças de terceiros</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>O arquivo de licença não foi encontrado.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Fechar</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>Valor: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>Seleção: {0}–{1} (comprimento {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>Início: {0}
+Fim (incluindo este byte): {1}
+Comprimento: {2} ({3} bytes)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>Tamanho: {0} ({1} bytes)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>Tamanho: {0} bytes</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>Somente leitura</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>O tamanho exato foi copiado para a área de transferência.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>Posição do cursor</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>Valor no cursor</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>Seleção</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>Coluna ativa</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>Codificação de texto</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>Modo de entrada</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>Modificado</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>Tamanho do arquivo</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>Central de processamento</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>Notificações</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>Central de processamento</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>Nada em execução.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>Limpar concluídos</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>Processando ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/s</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>Cerca de {0} min restantes</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>Cerca de {0} s restantes</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>Decorrido: {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>Cancelando...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>Concluído</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>Cancelado</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>Falha: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Abrir</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Abrir</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>Abrir {0} arquivos?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Não é possível abrir pastas ({0} ignoradas).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>Ao executar como administrador, não é possível abrir arquivos arrastando-os do Explorador de Arquivos. Use Arquivo &gt; Abrir.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>Copiando {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Salvar tudo</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Fechar tudo</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Fechar</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Fechar as outras guias</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Fechar as guias à direita</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Alterações: {0} locais, {1} bytes adicionados ou substituídos. Se você não salvar, as alterações serão perdidas.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>Salvar as alterações em {0} documentos?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Selecione os documentos que deseja salvar. Os documentos não selecionados serão fechados sem salvar.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Salvar selecionados e fechar</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Fechar sem salvar</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} está em execução.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Parar e fechar</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Fechar após salvar</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Abrir...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>Novo</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>Você também pode soltar arquivos aqui para abri-los.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>Novo com tamanho...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>Novo com tamanho</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Tamanho</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Valor de preenchimento (bytes hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Criar</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>Insira um tamanho igual ou maior que 0.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>Insira de 1 a 4.096 bytes em hex, como 00 ou DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} é um dispositivo, não um arquivo. A abertura de discos estará disponível em uma versão futura.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} é uma pasta. Não é possível abrir pastas.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Arquivo não encontrado: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>Você não tem permissão para abrir {0}.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>Não é possível abrir {0} porque outro aplicativo o está usando.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>Não é possível abrir {0} porque ele está sendo usado por {1}.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>Este arquivo é somente leitura, por isso não pode ser substituído. Use “Salvar como” para salvar suas alterações.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>Este documento não pode ser editado enquanto {0} estiver em execução.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>Este documento é somente leitura.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>Falha em {0}: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>editor hexadecimal</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Tab alterna entre as colunas Hex e de texto. F6 move para a próxima área.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Excluir</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Limpar seleção</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Alguns intervalos não podem ser lidos.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Não pode ser lido</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Não pode ser lido: erro de E/S do dispositivo ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Não pode ser lido: acesso negado ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Não pode ser lido: o dispositivo foi desconectado</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>A memória não está alocada</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Deslocamento {0}, valor {1}, caractere {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Deslocamento {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Deslocamento {0}, fim dos dados</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Seleção de {0} bytes, de {1} a {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Deslocamento {0}, valor {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Modo de inserção</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Modo de substituição</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Somente leitura</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Editável</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Coluna Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>coluna de texto</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>nibble inferior</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>modificado</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>inserção</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>selecionado</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>carregando</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>não pode ser lido</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>nulo</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>espaço</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>caractere não imprimível</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} bytes excluídos</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Um editor hexadecimal rápido para arquivos e discos de qualquer tamanho</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>A janela existente não está respondendo, por isso o conteúdo foi aberto em uma nova instância.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>As configurações não serão salvas porque não é possível gravar na pasta de dados.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Exportar configurações</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>{0} item(ns) de recuperação com mais de 30 dias foram excluídos.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>Não foi possível iniciar o HexEditor.
+
+{0}
+
+Os detalhes foram gravados em:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Direção</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>Para frente</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Para trás</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Pesquisar em</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Documento inteiro</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Seleção</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>Diferenciar maiúsculas e minúsculas</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Usar sequências de escape (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Alinhar aos caracteres</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Opções de pesquisa</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Contar ocorrências</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / contando...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / mais de {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... ({1} bytes no total)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (caractere {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>“{0}” não é uma sequência de escape válida.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>Encontrado em {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Contando ocorrências</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>O arquivo é grande demais para o sistema de arquivos do destino ({0}, {1}). O tamanho máximo de arquivo é {2}. Salve-o em outra unidade.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>Não há espaço livre suficiente</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>Não há espaço livre suficiente na unidade de destino ({0}). Necessário: {1}. Disponível: {2}. O arquivo não foi alterado.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>Salvar em outro local</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>As alterações são grandes demais para serem protegidas</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>As alterações são grandes demais para registrar o conteúdo original ({0}, limite {1}). Se o salvamento parar no meio, não será possível deixar o arquivo como estava.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>Usar salvamento seguro</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>Gravar sem proteção</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>Este documento é somente leitura, por isso não pode ser substituído. Use “Salvar como”.</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>Falha ao salvar, por isso o arquivo foi deixado como estava antes de salvar.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>Falha ao salvar, e apenas parte do arquivo foi regravada. Você pode restaurá-lo na próxima vez que o HexEditor for iniciado.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} bytes)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} bytes</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>O texto não é uma sequência de bytes hex, por isso foi colado como texto.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>Desfazer</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>Colar até o fim?</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>O comprimento deste documento não pode mudar. {0} bytes dos dados colados ultrapassam o fim e não serão colados.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>Colar até o fim</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>Outro aplicativo ainda pode gravar neste arquivo. Se ele for alterado fora do HexEditor, suas alterações não salvas podem não ser salvas corretamente.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>Há tantas edições que o limite de memória ({0}) foi excedido. Salvar reduz o uso de memória.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>Mantendo os dados copiados de {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Manter os dados copiados?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>Para manter {0} de dados copiados disponíveis depois de fechar, o HexEditor os gravará em um armazenamento temporário.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Gravar e fechar</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Limpar a área de transferência e fechar</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>Não foi possível manter os dados copiados, por isso a área de transferência foi limpa.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Codificação de texto</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (página de código {0})</value></data>
 </root>

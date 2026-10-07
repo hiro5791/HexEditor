@@ -4,21 +4,21 @@
   <resheader name="version"><value>2.0</value></resheader>
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
-  <data name="Menu_File.Title" xml:space="preserve"><value>ไฟล์</value></data>
-  <data name="Menu_File_New.Text" xml:space="preserve"><value>ใหม่</value></data>
-  <data name="Menu_File_Open.Text" xml:space="preserve"><value>เปิด...</value></data>
-  <data name="Menu_File_Save.Text" xml:space="preserve"><value>บันทึก</value></data>
-  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>บันทึกเป็น...</value></data>
-  <data name="Menu_File_Close.Text" xml:space="preserve"><value>ปิด</value></data>
-  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>ออก</value></data>
-  <data name="Menu_Edit.Title" xml:space="preserve"><value>แก้ไข</value></data>
-  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>เลิกทำ</value></data>
-  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>ทำซ้ำ</value></data>
-  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>เลือกทั้งหมด</value></data>
-  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>สลับเขียนทับ / แทรก</value></data>
-  <data name="Menu_Go.Title" xml:space="preserve"><value>ไปที่</value></data>
-  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>จุดเริ่มต้นของไฟล์</value></data>
-  <data name="Menu_Go_End.Text" xml:space="preserve"><value>จุดสิ้นสุดของไฟล์</value></data>
+  <data name="Menu_File.Title" xml:space="preserve"><value>ไฟล์(F)</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>ใหม่(N)</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>เปิด(O)...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>บันทึก(S)</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>บันทึกเป็น(A)...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>ปิด(C)</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>ออก(X)</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>แก้ไข(E)</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>เลิกทำ(U)</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>ทำซ้ำ(R)</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>เลือกทั้งหมด(A)</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>สลับเขียนทับ / แทรก(I)</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>ไปที่(G)</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>จุดเริ่มต้นของไฟล์(S)</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>จุดสิ้นสุดของไฟล์(E)</value></data>
   <data name="Untitled_Name" xml:space="preserve"><value>ไม่มีชื่อ {0}</value></data>
   <data name="Status_Offset" xml:space="preserve"><value>ออฟเซ็ต: {0}</value></data>
   <data name="Status_Overwrite" xml:space="preserve"><value>เขียนทับ</value></data>
@@ -42,9 +42,9 @@
   <data name="Notice_FixedLength" xml:space="preserve"><value>แหล่งข้อมูลนี้ไม่สามารถเปลี่ยนความยาวได้ จึงใช้ได้เฉพาะโหมดเขียนทับ</value></data>
   <data name="Notice_NotEncodable" xml:space="preserve"><value>ไม่สามารถแสดงอักขระนี้ด้วยการเข้ารหัสปัจจุบัน</value></data>
   <data name="Notice_Busy" xml:space="preserve"><value>เอกสารกำลังถูกประมวลผลและไม่สามารถแก้ไขได้ในขณะนี้</value></data>
-  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>ไปที่ออฟเซ็ต...</value></data>
-  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>ย้อนกลับ</value></data>
-  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>ไปข้างหน้า</value></data>
+  <data name="Menu_Go_GoTo.Text" xml:space="preserve"><value>ไปที่ออฟเซ็ต(G)...</value></data>
+  <data name="Menu_Go_Back.Text" xml:space="preserve"><value>ย้อนกลับ(B)</value></data>
+  <data name="Menu_Go_Forward.Text" xml:space="preserve"><value>ไปข้างหน้า(F)</value></data>
   <data name="GoTo_Input.PlaceholderText" xml:space="preserve"><value>ออฟเซ็ตหรือนิพจน์ (เช่น 0x1F00, end-0x10)</value></data>
   <data name="GoTo_Input_Name" xml:space="preserve"><value>ไปที่</value></data>
   <data name="GoTo_Base_Name" xml:space="preserve"><value>อ้างอิงจาก</value></data>
@@ -72,10 +72,10 @@
   <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} ไม่พร้อมใช้งานที่นี่</value></data>
   <data name="GoTo_BeforeStart" xml:space="preserve"><value>อยู่ก่อนจุดเริ่มต้นของไฟล์</value></data>
   <data name="GoTo_BeyondEnd" xml:space="preserve"><value>เกินจุดสิ้นสุดของไฟล์ ({0})</value></data>
-  <data name="Menu_Search.Title" xml:space="preserve"><value>ค้นหา</value></data>
-  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>ค้นหา...</value></data>
-  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>ค้นหาถัดไป</value></data>
-  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>ค้นหาก่อนหน้า</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>ค้นหา(S)</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>ค้นหา(F)...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>ค้นหาถัดไป(N)</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>ค้นหาก่อนหน้า(V)</value></data>
   <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
   <data name="Find_Kind_Text.Content" xml:space="preserve"><value>ข้อความ</value></data>
   <data name="Find_Kind_Name" xml:space="preserve"><value>ชนิดการค้นหา</value></data>
@@ -98,12 +98,268 @@
   <data name="Find_Error_TooLong" xml:space="preserve"><value>ค่าที่ค้นหามีขนาดได้สูงสุด 1 MiB</value></data>
   <data name="Find_Error_NotEncodable" xml:space="preserve"><value>ไม่สามารถแสดง “{0}” ด้วยการเข้ารหัสนี้</value></data>
   <data name="Operation_Find" xml:space="preserve"><value>ค้นหา</value></data>
-  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>ตัด</value></data>
-  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>คัดลอก</value></data>
-  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>วาง</value></data>
-  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>วางทับ</value></data>
+  <data name="Menu_Edit_Cut.Text" xml:space="preserve"><value>ตัด(T)</value></data>
+  <data name="Menu_Edit_Copy.Text" xml:space="preserve"><value>คัดลอก(C)</value></data>
+  <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>วาง(P)</value></data>
+  <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>วางทับ(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} ไบต์ วางได้เฉพาะภายใน HexEditor]</value></data>
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>ส่วนที่เลือกมีขนาดใหญ่กว่าขีดจำกัดของคลิปบอร์ด จึงวางได้เฉพาะภายใน HexEditor</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>ข้อความในคลิปบอร์ดไม่ใช่ลำดับไบต์เลขฐานสิบหก สลับไปที่คอลัมน์ข้อความเพื่อวางเป็นข้อความ</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>ไบต์ที่เกินจุดสิ้นสุดของเอกสารความยาวคงที่นี้ไม่ได้ถูกวาง</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>กู้คืนการเปลี่ยนแปลงที่ยังไม่ได้บันทึก</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>ครั้งที่แล้ว HexEditor ไม่ได้ปิดตามปกติ คุณสามารถกู้คืนการเปลี่ยนแปลงที่ยังไม่ได้บันทึกด้านล่างได้</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>กู้คืน</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>ละทิ้ง</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>ภายหลัง</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>บันทึกเมื่อ {0} · เปลี่ยนแปลง {1} ไบต์</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>ยังไม่ได้บันทึกเป็นไฟล์</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>ไฟล์ต้นฉบับมีการเปลี่ยนแปลงตั้งแต่ตอนนั้น เนื้อหาที่กู้คืนจึงอาจไม่ถูกต้อง ไฟล์ถูกเปิดแบบอ่านอย่างเดียว</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>ไม่สามารถกู้คืนได้: {0} ข้อมูลการกู้คืนยังคงถูกเก็บไว้</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>ไม่สามารถบันทึกข้อมูลการกู้คืนได้ ({0}) หาก HexEditor ปิดโดยไม่คาดคิด การเปลี่ยนแปลงที่ยังไม่ได้บันทึกจะสูญหาย</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>การบันทึกถูกขัดจังหวะ คุณสามารถคืนไฟล์กลับเป็นสถานะก่อนบันทึกได้</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>คืนค่า</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>ครั้งที่แล้ว HexEditor ปิดโดยไม่คาดคิด</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>เปิดข้อมูลการขัดข้อง</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>รายงานปัญหา</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor ปิดโดยไม่คาดคิด โปรดวางเนื้อหาของไฟล์ข้อมูลการขัดข้องด้านล่าง ไฟล์นี้ไม่มีเนื้อหาของไฟล์ของคุณ</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>ไม่สามารถเปิดเบราว์เซอร์ได้ จึงคัดลอกลิงก์ไปยังคลิปบอร์ดแล้ว</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>อีก {0} รายการ</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>การแจ้งเตือน</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>ประวัติการแจ้งเตือน</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>ประวัติการแจ้งเตือน</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(ผู้ดูแลระบบ)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(เซฟโหมด)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>ไม่สามารถอ่านไฟล์การตั้งค่าได้ HexEditor จึงเริ่มต้นด้วยการตั้งค่าเริ่มต้น ไฟล์ที่เสียหายยังคงถูกเก็บไว้</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>เปิดโฟลเดอร์</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>ไฟล์การตั้งค่าถูกเขียนโดย HexEditor เวอร์ชันที่ใหม่กว่า จึงจะไม่บันทึกการเปลี่ยนแปลงการตั้งค่า</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>ไฟล์การตั้งค่าที่แก้ไขมีข้อผิดพลาด ({0}) ยังคงใช้การตั้งค่าก่อนหน้าอยู่</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>มุมมอง(V)</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>ธีม(T)</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>ใช้การตั้งค่าระบบ(S)</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>สว่าง(L)</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>มืด(D)</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>แถบสถานะ(B)</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>วิธีใช้(H)</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>เอกสารประกอบ(D)</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>รายงานปัญหา(R)...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>เกี่ยวกับ HexEditor(A)</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="About_Version" xml:space="preserve"><value>เวอร์ชัน</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>ช่องทาง</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>รูปแบบการแจกจ่าย</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>สถาปัตยกรรม</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>กำลังทำงานในฐานะผู้ดูแลระบบ</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>เปิดโฟลเดอร์ข้อมูล</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor ไม่ส่งข้อมูลการวัดและส่งข้อมูลทางไกล และไม่ส่งข้อมูลการใช้งาน รายงานการขัดข้อง การตั้งค่า หรือข้อมูลไฟล์ไปที่ใดเลย เวอร์ชันนี้ไม่มีฟีเจอร์ที่ใช้เครือข่าย (ลิงก์วิธีใช้จะเปิดในเบราว์เซอร์ของคุณ)</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor เป็นซอฟต์แวร์โอเพนซอร์สภายใต้สิทธิ์การใช้งาน MIT</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>คัดลอกข้อมูล</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>สิทธิ์การใช้งานของบุคคลที่สาม</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>ไม่พบไฟล์สิทธิ์การใช้งาน</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>ปิด</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>ค่า: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>ส่วนที่เลือก: {0}–{1} (ความยาว {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>เริ่มต้น: {0}
+สิ้นสุด (รวมไบต์นี้): {1}
+ความยาว: {2} ({3} ไบต์)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>ขนาด: {0} ({1} ไบต์)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>ขนาด: {0} ไบต์</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>อ่านอย่างเดียว</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>คัดลอกขนาดที่แน่นอนไปยังคลิปบอร์ดแล้ว</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>ตำแหน่งเคอร์เซอร์</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>ค่าที่เคอร์เซอร์</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>ส่วนที่เลือก</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>คอลัมน์ที่ใช้งานอยู่</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>การเข้ารหัสข้อความ</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>โหมดการป้อนข้อมูล</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>สถานะการแก้ไข</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>ขนาดไฟล์</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>ศูนย์การประมวลผล</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>การแจ้งเตือน</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>ศูนย์การประมวลผล</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>ไม่มีงานที่กำลังทำงานอยู่</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>ล้างรายการที่เสร็จสมบูรณ์</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>กำลังประมวลผล ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/วินาที</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>เหลืออีกประมาณ {0} นาที</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>เหลืออีกประมาณ {0} วินาที</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>ผ่านไป {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>กำลังยกเลิก...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>เสร็จสมบูรณ์</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>ยกเลิกแล้ว</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>ล้มเหลว: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>เปิด</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>เปิด</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>เปิดไฟล์ {0} ไฟล์หรือไม่</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>ไม่สามารถเปิดโฟลเดอร์ได้ (ข้ามไป {0} รายการ)</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>ขณะทำงานในฐานะผู้ดูแลระบบ คุณไม่สามารถเปิดไฟล์ด้วยการลากจาก File Explorer ได้ โปรดใช้ ไฟล์ &gt; เปิด แทน</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>กำลังคัดลอก {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>บันทึกทั้งหมด(L)</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>ปิดทั้งหมด(E)</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>ปิด</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>ปิดแท็บอื่น</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>ปิดแท็บทางขวา</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>การเปลี่ยนแปลง: {0} ตำแหน่ง เพิ่มหรือแทนที่ {1} ไบต์ หากไม่บันทึก การเปลี่ยนแปลงจะสูญหาย</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>บันทึกการเปลี่ยนแปลงในเอกสาร {0} รายการหรือไม่</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>เลือกเอกสารที่จะบันทึก เอกสารที่ไม่ได้เลือกจะถูกปิดโดยไม่บันทึก</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>บันทึกรายการที่เลือกและปิด</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>ปิดโดยไม่บันทึก</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} กำลังทำงานอยู่</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>หยุดและปิด</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>ปิดหลังจากบันทึก</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>เปิด...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>ใหม่</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>คุณยังสามารถวางไฟล์ที่นี่เพื่อเปิดได้</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>ใหม่โดยระบุขนาด(Z)...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>ใหม่โดยระบุขนาด</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>ขนาด</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>ค่าที่ใช้เติม (ไบต์ Hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>สร้าง</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>ป้อนขนาดตั้งแต่ 0 ขึ้นไป</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>ป้อน 1 ถึง 4,096 ไบต์ในรูปแบบ Hex เช่น 00 หรือ DE AD</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} เป็นอุปกรณ์ ไม่ใช่ไฟล์ การเปิดดิสก์จะพร้อมใช้งานในเวอร์ชันถัดไป</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} เป็นโฟลเดอร์ ไม่สามารถเปิดโฟลเดอร์ได้</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>ไม่พบไฟล์: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>คุณไม่มีสิทธิ์เปิด {0}</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>ไม่สามารถเปิด {0} ได้ เนื่องจากแอปอื่นกำลังใช้งานอยู่</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>ไม่สามารถเปิด {0} ได้ เนื่องจาก {1} กำลังใช้งานอยู่</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>ไฟล์นี้เป็นแบบอ่านอย่างเดียว จึงไม่สามารถบันทึกทับได้ ใช้ "บันทึกเป็น" เพื่อบันทึกการเปลี่ยนแปลงของคุณ</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>ไม่สามารถแก้ไขเอกสารนี้ได้ขณะที่ {0} กำลังทำงานอยู่</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>เอกสารนี้เป็นแบบอ่านอย่างเดียว</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} ล้มเหลว: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>ตัวแก้ไขเลขฐานสิบหก</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Tab สลับระหว่างคอลัมน์ Hex และคอลัมน์ข้อความ F6 ย้ายไปยังพื้นที่ถัดไป</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>ลบ</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>ยกเลิกการเลือก</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>บางช่วงไม่สามารถอ่านได้</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>ไม่สามารถอ่านได้</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>ไม่สามารถอ่านได้: ข้อผิดพลาด I/O ของอุปกรณ์ ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>ไม่สามารถอ่านได้: การเข้าถึงถูกปฏิเสธ ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>ไม่สามารถอ่านได้: อุปกรณ์ถูกตัดการเชื่อมต่อ</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>ไม่ได้จัดสรรหน่วยความจำ</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>ออฟเซ็ต {0} ค่า {1} อักขระ {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>ออฟเซ็ต {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>ออฟเซ็ต {0} สิ้นสุดข้อมูล</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>,</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>เลือก {0} ไบต์ จาก {1} ถึง {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>ออฟเซ็ต {0} ค่า {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>โหมดแทรก</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>โหมดเขียนทับ</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>อ่านอย่างเดียว</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>แก้ไขได้</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>คอลัมน์ Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>คอลัมน์ข้อความ</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>นิบเบิลล่าง</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>มีการแก้ไข</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>แทรก</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>เลือกอยู่</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>กำลังโหลด</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>ไม่สามารถอ่านได้</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>ช่องว่าง</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>อักขระที่พิมพ์ไม่ได้</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>ลบ {0} ไบต์แล้ว</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>ตัวแก้ไขเลขฐานสิบหกที่รวดเร็วสำหรับไฟล์และดิสก์ทุกขนาด</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>หน้าต่างที่มีอยู่ไม่ตอบสนอง จึงเปิดในอินสแตนซ์ใหม่</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>จะไม่บันทึกการตั้งค่า เนื่องจากไม่สามารถเขียนลงในโฟลเดอร์ข้อมูลได้</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>ส่งออกการตั้งค่า</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>ลบรายการกู้คืนที่เก่ากว่า 30 วันแล้ว {0} รายการ</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>ไม่สามารถเริ่ม HexEditor ได้
+
+{0}
+
+รายละเอียดถูกเขียนไว้ที่:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>ทิศทาง</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>ไปข้างหน้า</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>ย้อนกลับ</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>ค้นหาใน</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>ทั้งเอกสาร</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>ส่วนที่เลือก</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>ตรงตามตัวพิมพ์ใหญ่-เล็ก</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>ใช้ลำดับหลีก (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>จัดแนวตามอักขระ</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>ตัวเลือกการค้นหา</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>นับรายการที่ตรงกัน</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / กำลังนับ...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / มากกว่า {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... (ทั้งหมด {1} ไบต์)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (อักขระที่ {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>"{0}" ไม่ใช่ลำดับหลีกที่ถูกต้อง</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>พบที่ {0}</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>กำลังนับรายการที่ตรงกัน</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>ไฟล์มีขนาดใหญ่เกินไปสำหรับระบบไฟล์ของปลายทาง ({0}, {1}) ขนาดไฟล์สูงสุดคือ {2} โปรดบันทึกลงในไดรฟ์อื่น</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>พื้นที่ว่างไม่เพียงพอ</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>พื้นที่ว่างบนไดรฟ์ปลายทาง ({0}) ไม่เพียงพอ ต้องการ: {1} มีอยู่: {2} ไฟล์ไม่มีการเปลี่ยนแปลง</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>บันทึกไปยังตำแหน่งอื่น</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>การเปลี่ยนแปลงมีขนาดใหญ่เกินกว่าจะป้องกันได้</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>การเปลี่ยนแปลงมีขนาดใหญ่เกินกว่าจะบันทึกเนื้อหาต้นฉบับได้ ({0}, ขีดจำกัด {1}) หากการบันทึกหยุดกลางคัน จะไม่สามารถคืนไฟล์กลับเป็นเหมือนเดิมได้</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>ใช้การบันทึกแบบปลอดภัย</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>เขียนโดยไม่มีการป้องกัน</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>เอกสารนี้เป็นแบบอ่านอย่างเดียว จึงไม่สามารถบันทึกทับได้ ใช้ "บันทึกเป็น"</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>การบันทึกล้มเหลว จึงคืนไฟล์กลับเป็นสถานะก่อนบันทึกแล้ว</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>การบันทึกล้มเหลวและไฟล์ถูกเขียนใหม่เพียงบางส่วน คุณสามารถคืนค่าได้เมื่อเริ่ม HexEditor ครั้งถัดไป</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} ไบต์)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} ไบต์</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>ข้อความไม่ใช่ลำดับไบต์ Hex จึงวางเป็นข้อความ</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>เลิกทำ</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>วางจนถึงจุดสิ้นสุดหรือไม่</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>ไม่สามารถเปลี่ยนความยาวของเอกสารนี้ได้ ข้อมูลที่วาง {0} ไบต์เกินจุดสิ้นสุดและจะไม่ถูกวาง</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>วางจนถึงจุดสิ้นสุด</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>แอปอื่นยังคงเขียนลงในไฟล์นี้ได้ หากไฟล์ถูกเปลี่ยนแปลงภายนอก HexEditor การเปลี่ยนแปลงที่ยังไม่ได้บันทึกของคุณอาจบันทึกไม่ถูกต้อง</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>มีการแก้ไขจำนวนมากจนเกินขีดจำกัดหน่วยความจำ ({0}) การบันทึกจะช่วยลดการใช้หน่วยความจำ</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>กำลังเก็บข้อมูลที่คัดลอกจาก {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>เก็บข้อมูลที่คัดลอกไว้หรือไม่</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>เพื่อให้ยังใช้ข้อมูลที่คัดลอกขนาด {0} ได้หลังจากปิด HexEditor จะเขียนข้อมูลลงในที่เก็บชั่วคราว</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>เขียนและปิด</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>ล้างคลิปบอร์ดและปิด</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>ไม่สามารถเก็บข้อมูลที่คัดลอกไว้ได้ จึงล้างคลิปบอร์ดแล้ว</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>การเข้ารหัสข้อความ(E)</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (โค้ดเพจ {0})</value></data>
 </root>

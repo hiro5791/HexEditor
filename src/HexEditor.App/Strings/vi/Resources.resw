@@ -106,4 +106,260 @@
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Vùng chọn lớn hơn giới hạn của bảng tạm nên chỉ có thể dán bên trong HexEditor.</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>Văn bản trong bảng tạm không phải là chuỗi byte thập lục phân. Hãy chuyển sang cột văn bản để dán dưới dạng văn bản.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Các byte vượt quá cuối tài liệu có độ dài cố định này đã không được dán.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Khôi phục các thay đổi chưa lưu</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>Lần trước HexEditor đã không đóng bình thường. Bạn có thể khôi phục các thay đổi chưa lưu bên dưới.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Khôi phục</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>Loại bỏ</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Để sau</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Đã lưu {0} · Đã thay đổi {1} byte</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Chưa được lưu vào tệp</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>Tệp gốc đã thay đổi kể từ đó nên nội dung được khôi phục có thể không chính xác. Tệp đã được mở ở chế độ chỉ đọc.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Không thể khôi phục: {0} Dữ liệu khôi phục vẫn được giữ lại.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Không thể lưu dữ liệu khôi phục ({0}). Nếu HexEditor đóng đột ngột, các thay đổi chưa lưu sẽ bị mất.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>Quá trình lưu đã bị gián đoạn. Bạn có thể đưa tệp về trạng thái trước khi lưu.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Khôi phục trạng thái trước</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>Lần trước HexEditor đã đóng đột ngột.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Mở thông tin sự cố</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Báo cáo sự cố</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor đã đóng đột ngột. Vui lòng dán nội dung của tệp thông tin sự cố bên dưới. Tệp này không chứa nội dung các tệp của bạn.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Không thể mở trình duyệt nên liên kết đã được sao chép vào bảng tạm.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>Thêm {0}</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>Thông báo</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>Lịch sử thông báo</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>Lịch sử thông báo</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(Quản trị viên)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(Chế độ An toàn)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>Không thể đọc tệp cài đặt nên HexEditor đã khởi động với cài đặt mặc định. Tệp bị hỏng vẫn được giữ lại.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>Mở thư mục</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>Tệp cài đặt được ghi bởi phiên bản HexEditor mới hơn nên các thay đổi cài đặt sẽ không được lưu.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>Tệp cài đặt đã chỉnh sửa có lỗi ({0}). Các cài đặt trước đó vẫn đang được sử dụng.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>Xem</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>Chủ đề</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Dùng cài đặt hệ thống</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>Sáng</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>Tối</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>Thanh trạng thái</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>Trợ giúp</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>Tài liệu</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>Báo cáo Sự cố...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>Giới thiệu về HexEditor</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Phiên bản</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>Kênh</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>Hình thức phân phối</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>Kiến trúc</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>Đang chạy với quyền quản trị viên</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>Mở thư mục dữ liệu</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor không gửi dữ liệu đo từ xa. Ứng dụng không bao giờ gửi dữ liệu sử dụng, báo cáo sự cố, cài đặt hoặc thông tin tệp đi bất cứ đâu. Phiên bản này không có tính năng nào sử dụng mạng (các liên kết trợ giúp mở trong trình duyệt của bạn).</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor là phần mềm nguồn mở theo Giấy phép MIT.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>Sao chép thông tin</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Giấy phép của bên thứ ba</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>Không tìm thấy tệp giấy phép.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Đóng</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>Giá trị: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>Vùng chọn: {0}–{1} (độ dài {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>Đầu: {0}
+Cuối (bao gồm byte này): {1}
+Độ dài: {2} ({3} byte)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>Kích thước: {0} ({1} byte)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>Kích thước: {0} byte</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>Chỉ đọc</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>Đã sao chép kích thước chính xác vào bảng tạm.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>Vị trí con trỏ</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>Giá trị tại con trỏ</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>Vùng chọn</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>Cột hiện hoạt</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>Bảng mã văn bản</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>Chế độ nhập</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>Trạng thái sửa đổi</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>Kích thước tệp</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>Trung tâm xử lý</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>Thông báo</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>Trung tâm xử lý</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>Không có tác vụ nào đang chạy.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>Xóa mục đã hoàn tất</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>Đang xử lý ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/giây</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>Còn khoảng {0} phút</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>Còn khoảng {0} giây</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>Đã trôi qua {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>Đang hủy...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>Đã hoàn tất</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>Đã hủy</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>Không thành công: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Mở</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Mở</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>Mở {0} tệp?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Không thể mở thư mục (đã bỏ qua {0}).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>Khi chạy với quyền quản trị viên, bạn không thể mở tệp bằng cách kéo từ File Explorer. Hãy dùng Tệp &gt; Mở.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>Đang sao chép {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Lưu Tất cả</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Đóng Tất cả</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Đóng</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Đóng các tab khác</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Đóng các tab bên phải</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Thay đổi: {0} vị trí, {1} byte được thêm hoặc thay thế. Nếu bạn không lưu, các thay đổi sẽ bị mất.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>Lưu các thay đổi đối với {0} tài liệu?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Chọn các tài liệu cần lưu. Các tài liệu không được chọn sẽ bị đóng mà không lưu.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Lưu mục đã chọn và đóng</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Đóng mà không lưu</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} đang chạy.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Dừng và đóng</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Đóng sau khi lưu</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Mở...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>Mới</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>Bạn cũng có thể thả tệp vào đây để mở.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>Mới theo Kích thước...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>Mới theo kích thước</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Kích thước</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Giá trị điền (byte hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Tạo</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>Nhập kích thước từ 0 trở lên.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>Nhập từ 1 đến 4.096 byte dạng hex, chẳng hạn như 00 hoặc DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} là thiết bị, không phải tệp. Tính năng mở ổ đĩa sẽ có trong phiên bản sau.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} là thư mục. Không thể mở thư mục.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Không tìm thấy tệp: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>Bạn không có quyền mở {0}.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>Không thể mở {0} vì một ứng dụng khác đang sử dụng tệp này.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>Không thể mở {0} vì {1} đang sử dụng tệp này.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>Tệp này là tệp chỉ đọc nên không thể lưu đè. Hãy dùng Lưu Như để lưu các thay đổi của bạn.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>Không thể chỉnh sửa tài liệu này trong khi {0} đang chạy.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>Tài liệu này ở chế độ chỉ đọc.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} không thành công: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>trình chỉnh sửa hex</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Tab chuyển giữa cột Hex và cột văn bản. F6 di chuyển đến khu vực tiếp theo.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Xóa</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Bỏ chọn</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Có một số phạm vi không thể đọc được.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Không thể đọc</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Không thể đọc: lỗi I/O của thiết bị ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Không thể đọc: truy cập bị từ chối ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Không thể đọc: thiết bị đã bị ngắt kết nối</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>Bộ nhớ chưa được cấp phát</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Độ lệch {0}, giá trị {1}, ký tự {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Độ lệch {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Độ lệch {0}, cuối dữ liệu</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>,</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Đã chọn {0} byte, từ {1} đến {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Độ lệch {0}, giá trị {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Chế độ chèn</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Chế độ ghi đè</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Chỉ đọc</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Có thể chỉnh sửa</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Cột Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>cột văn bản</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>nửa byte thấp</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>đã sửa đổi</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>chèn</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>đã chọn</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>đang tải</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>không thể đọc</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>dấu cách</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>ký tự không in được</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>Đã xóa {0} byte</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Trình chỉnh sửa hex nhanh cho tệp và ổ đĩa ở mọi kích thước</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>Cửa sổ hiện tại không phản hồi nên nội dung này đã được mở trong một phiên bản mới.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>Cài đặt sẽ không được lưu vì không thể ghi vào thư mục dữ liệu.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Xuất cài đặt</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>Đã xóa {0} mục khôi phục cũ hơn 30 ngày.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>Không thể khởi động HexEditor.
+
+{0}
+
+Chi tiết đã được ghi vào:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Hướng</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>Tiến</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Lùi</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Tìm trong</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Toàn bộ tài liệu</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Vùng chọn</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>Khớp chữ hoa/thường</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Dùng chuỗi thoát (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Căn theo ký tự</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Tùy chọn tìm kiếm</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Đếm kết quả khớp</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / đang đếm...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / hơn {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... (tổng cộng {1} byte)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (ký tự {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>“{0}” không phải là chuỗi thoát hợp lệ.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>Đã tìm thấy tại {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Đếm kết quả khớp</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>Tệp quá lớn đối với hệ thống tệp của nơi lưu ({0}, {1}). Kích thước tệp tối đa là {2}. Hãy lưu vào ổ đĩa khác.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>Không đủ dung lượng trống</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>Không đủ dung lượng trống trên ổ đĩa đích ({0}). Cần: {1}. Còn trống: {2}. Tệp chưa bị thay đổi.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>Lưu vào vị trí khác</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>Thay đổi quá lớn để bảo vệ</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>Thay đổi quá lớn để ghi lại nội dung gốc ({0}, giới hạn {1}). Nếu quá trình lưu dừng giữa chừng, tệp sẽ không thể trở lại như cũ.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>Dùng cách lưu an toàn</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>Ghi mà không bảo vệ</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>Tài liệu này ở chế độ chỉ đọc nên không thể lưu đè. Hãy dùng Lưu Như.</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>Lưu không thành công nên tệp đã được đưa về trạng thái trước khi lưu.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>Lưu không thành công và chỉ một phần của tệp đã được ghi lại. Bạn có thể khôi phục tệp vào lần khởi động HexEditor tiếp theo.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} byte)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} byte</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>Văn bản không phải là chuỗi byte hex nên đã được dán dưới dạng văn bản.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>Hoàn tác</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>Dán đến cuối?</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>Không thể thay đổi độ dài của tài liệu này. {0} byte của dữ liệu được dán vượt quá phần cuối và sẽ không được dán.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>Dán đến cuối</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>Một ứng dụng khác vẫn có thể ghi vào tệp này. Nếu tệp bị thay đổi bên ngoài HexEditor, các thay đổi chưa lưu của bạn có thể không được lưu đúng.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>Có quá nhiều chỉnh sửa nên đã vượt quá giới hạn bộ nhớ ({0}). Lưu sẽ giảm mức sử dụng bộ nhớ.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>Đang giữ dữ liệu đã sao chép từ {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Giữ dữ liệu đã sao chép?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>Để {0} dữ liệu đã sao chép vẫn dùng được sau khi đóng, HexEditor sẽ ghi dữ liệu đó vào bộ nhớ tạm.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Ghi và đóng</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Xóa bảng tạm và đóng</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>Không thể giữ dữ liệu đã sao chép nên bảng tạm đã được xóa.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Bảng mã Văn bản</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (trang mã {0})</value></data>
 </root>

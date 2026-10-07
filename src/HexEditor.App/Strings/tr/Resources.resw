@@ -106,4 +106,260 @@
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Seçim pano sınırından büyük olduğundan yalnızca HexEditor içinde yapıştırılabilir.</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>Panodaki metin onaltılık bir bayt dizisi değil. Metin olarak yapıştırmak için metin sütununa geçin.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Bu sabit uzunluklu belgenin sonunu aşan baytlar yapıştırılmadı.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Kaydedilmemiş değişiklikleri kurtar</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>HexEditor son seferde normal şekilde kapanmadı. Aşağıdaki kaydedilmemiş değişiklikleri kurtarabilirsiniz.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Kurtar</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>At</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Daha sonra</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Kaydedilme: {0} · {1} bayt değişti</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Henüz bir dosyaya kaydedilmedi</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>Özgün dosya o zamandan beri değiştiği için kurtarılan içerik doğru olmayabilir. Dosya salt okunur olarak açıldı.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Kurtarılamadı: {0} Kurtarma verileri saklandı.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Kurtarma verileri kaydedilemiyor ({0}). HexEditor beklenmedik şekilde kapanırsa kaydedilmemiş değişiklikler kaybolur.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>Kaydetme işlemi yarıda kesildi. Dosyayı kaydetmeden önceki haline geri döndürebilirsiniz.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Geri yükle</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>HexEditor son seferde beklenmedik şekilde kapandı.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Kilitlenme bilgilerini aç</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Sorun bildir</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor beklenmedik şekilde kapandı. Lütfen kilitlenme bilgileri dosyasının içeriğini aşağıya yapıştırın. Bu dosya, dosyalarınızın içeriğini içermez.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Tarayıcı açılamadığından bağlantı panoya kopyalandı.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>{0} tane daha</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>Bildirimler</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>Bildirim geçmişi</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>Bildirim geçmişi</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(Yönetici)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(Güvenli Mod)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>Ayarlar dosyası okunamadığından HexEditor varsayılan ayarlarla başlatıldı. Bozuk dosya saklandı.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>Klasörü aç</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>Ayarlar dosyası HexEditor'ın daha yeni bir sürümü tarafından yazıldığından ayarlarda yapılan değişiklikler kaydedilmeyecek.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>Düzenlenen ayarlar dosyasında bir hata var ({0}). Önceki ayarlar kullanılmaya devam ediyor.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>Görünüm</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>Tema</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Sistem ayarını kullan</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>Açık</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>Koyu</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>Durum çubuğu</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>Yardım</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>Belgeler</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>Sorun Bildir...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>HexEditor Hakkında</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>Ç</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>Ü</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>Ö</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Sürüm</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>Kanal</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>Dağıtım</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>Mimari</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>Yönetici olarak çalışıyor</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>Veri klasörünü aç</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor telemetri göndermez. Kullanım verilerini, kilitlenme raporlarını, ayarları veya dosya bilgilerini hiçbir yere göndermez. Bu sürümde ağı kullanan hiçbir özellik yoktur (yardım bağlantıları tarayıcınızda açılır).</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor, MIT Lisansı altında açık kaynaklı bir yazılımdır.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>Bilgileri kopyala</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Üçüncü taraf lisansları</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>Lisans dosyası bulunamadı.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>Değer: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>Seçim: {0}–{1} (uzunluk {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>Başlangıç: {0}
+Bitiş (bu bayt dahil): {1}
+Uzunluk: {2} ({3} bayt)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>Boyut: {0} ({1} bayt)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>Boyut: {0} bayt</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>Salt okunur</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>Tam boyut panoya kopyalandı.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>İmleç konumu</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>İmleçteki değer</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>Seçim</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>Etkin sütun</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>Metin kodlaması</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>Giriş modu</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>Değişiklik durumu</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>Dosya boyutu</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>İşlem merkezi</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>Bildirimler</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>İşlem merkezi</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>Çalışan bir işlem yok.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>Tamamlananları temizle</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>İşleniyor ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/sn</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>Yaklaşık {0} dk kaldı</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>Yaklaşık {0} sn kaldı</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>Geçen süre {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>İptal ediliyor...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>Tamamlandı</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>İptal edildi</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>Başarısız: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Aç</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Aç</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>{0} dosya açılsın mı?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Klasörler açılamaz ({0} tanesi atlandı).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>Yönetici olarak çalışırken dosyaları Dosya Gezgini'nden sürükleyerek açamazsınız. Bunun yerine Dosya &gt; Aç komutunu kullanın.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>{0} kopyalanıyor</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Tümünü Kaydet</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Tümünü Kapat</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Diğer sekmeleri kapat</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Sağdaki sekmeleri kapat</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Değişiklikler: {0} yer, {1} bayt eklendi veya değiştirildi. Kaydetmezseniz değişiklikler kaybolur.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>{0} belgedeki değişiklikler kaydedilsin mi?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Kaydedilecek belgeleri seçin. Seçilmeyen belgeler kaydedilmeden kapatılır.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Seçilenleri kaydet ve kapat</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Kaydetmeden kapat</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} çalışıyor.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Durdur ve kapat</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Kaydettikten sonra kapat</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Aç...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>Yeni</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>Dosyaları açmak için buraya da bırakabilirsiniz.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>Boyut Belirterek Yeni...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>Boyut belirterek yeni</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Boyut</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Doldurma değeri (hex bayt)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Oluştur</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>0 veya daha büyük bir boyut girin.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>00 veya DE AD gibi, hex olarak 1 ile 4.096 bayt arasında bir değer girin.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} bir dosya değil, bir aygıttır. Diskleri açma özelliği sonraki bir sürümde sunulacak.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} bir klasördür. Klasörler açılamaz.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Dosya bulunamadı: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>{0} öğesini açma izniniz yok.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>{0} başka bir uygulama tarafından kullanıldığından açılamıyor.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>{0}, {1} tarafından kullanıldığından açılamıyor.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>Bu dosya salt okunur olduğundan üzerine kaydedilemez. Değişikliklerinizi kaydetmek için Farklı Kaydet'i kullanın.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>{0} çalışırken bu belge düzenlenemez.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>Bu belge salt okunur.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} başarısız oldu: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>hex düzenleyici</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Tab, Hex ve metin sütunları arasında geçiş yapar. F6 sonraki alana geçer.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Sil</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Seçimi kaldır</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Bazı aralıklar okunamıyor.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Okunamıyor</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Okunamıyor: aygıt G/Ç hatası ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Okunamıyor: erişim reddedildi ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Okunamıyor: aygıtın bağlantısı kesildi</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>Bellek ayrılmamış</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Ofset {0}, değer {1}, karakter {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Ofset {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Ofset {0}, veri sonu</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>,</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Seçim {0} bayt, {1} ile {2} arası</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Ofset {0}, değer {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Ekleme modu</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Üzerine yazma modu</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Salt okunur</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Düzenlenebilir</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Hex sütunu</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>metin sütunu</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>alt yarım bayt</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>değiştirildi</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>ekleme</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>seçili</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>yükleniyor</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>okunamıyor</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>boşluk</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>yazdırılamayan karakter</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} bayt silindi</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Her boyutta dosya ve disk için hızlı bir hex düzenleyici</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>Mevcut pencere yanıt vermediğinden bu, yeni bir örnekte açıldı.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>Veri klasörüne yazılamadığından ayarlar kaydedilmeyecek.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Ayarları dışarı aktar</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>30 günden eski {0} kurtarma öğesi silindi.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>HexEditor başlatılamadı.
+
+{0}
+
+Ayrıntılar şuraya yazıldı:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Yön</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>İleri</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Geri</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Arama yeri</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Tüm belge</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Seçim</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>Büyük/küçük harf eşleştir</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Kaçış dizilerini kullan (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Karakterlere hizala</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Arama seçenekleri</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Eşleşmeleri say</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / sayılıyor...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / {1} üzeri</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... (toplam {1} bayt)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} ({1}. karakter)</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>“{0}” geçerli bir kaçış dizisi değil.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>{0} konumunda bulundu.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Eşleşmeler sayılıyor</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>Dosya, hedefin dosya sistemi ({0}, {1}) için çok büyük. En büyük dosya boyutu {2}. Başka bir sürücüye kaydedin.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>Yeterli boş alan yok</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>Hedef sürücüde ({0}) yeterli boş alan yok. Gereken: {1}. Kullanılabilir: {2}. Dosya değiştirilmedi.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>Başka bir konuma kaydet</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>Değişiklikler korunamayacak kadar büyük</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>Değişiklikler, özgün içeriğin kaydedilemeyeceği kadar büyük ({0}, sınır {1}). Kaydetme yarıda kalırsa dosya eski haline döndürülemez.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>Güvenli kaydetmeyi kullan</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>Koruma olmadan yaz</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>Bu belge salt okunur olduğundan üzerine kaydedilemez. Farklı Kaydet'i kullanın.</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>Kaydetme başarısız olduğundan dosya kaydetmeden önceki haline döndürüldü.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>Kaydetme başarısız oldu ve dosyanın yalnızca bir kısmı yeniden yazıldı. HexEditor bir sonraki başlatılışında dosyayı geri yükleyebilirsiniz.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} bayt)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} bayt</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>Metin bir hex bayt dizisi olmadığından metin olarak yapıştırıldı.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>Geri al</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>Sona kadar yapıştırılsın mı?</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>Bu belgenin uzunluğu değiştirilemez. Yapıştırılan verilerin {0} baytı sonu aştığından yapıştırılmayacak.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>Sona kadar yapıştır</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>Başka bir uygulama bu dosyaya hâlâ yazabiliyor. Dosya HexEditor dışında değiştirilirse kaydedilmemiş değişiklikleriniz doğru şekilde kaydedilmeyebilir.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>Düzenleme sayısı çok fazla olduğundan bellek sınırı ({0}) aşıldı. Kaydetmek bellek kullanımını azaltır.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>{0} kaynağından kopyalanan veriler saklanıyor</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Kopyalanan veriler saklansın mı?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>Kopyalanan {0} verinin kapattıktan sonra da kullanılabilmesi için HexEditor bunu geçici depolama alanına yazacak.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Yaz ve kapat</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Panoyu temizle ve kapat</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>Kopyalanan veriler saklanamadığından pano temizlendi.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Metin Kodlaması</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (kod sayfası {0})</value></data>
 </root>

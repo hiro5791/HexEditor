@@ -106,4 +106,260 @@
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Η επιλογή υπερβαίνει το όριο του Προχείρου, επομένως μπορεί να επικολληθεί μόνο μέσα στο HexEditor.</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>Το κείμενο του Προχείρου δεν είναι ακολουθία byte σε δεκαεξαδική μορφή. Μεταβείτε στη στήλη κειμένου για να το επικολλήσετε ως κείμενο.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Τα byte πέρα από το τέλος αυτού του εγγράφου σταθερού μήκους δεν επικολλήθηκαν.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Ανάκτηση μη αποθηκευμένων αλλαγών</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>Την προηγούμενη φορά το HexEditor δεν τερματίστηκε κανονικά. Μπορείτε να ανακτήσετε τις παρακάτω μη αποθηκευμένες αλλαγές.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Ανάκτηση</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>Απόρριψη</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Αργότερα</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Αποθηκεύτηκε {0} · {1} byte άλλαξαν</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Δεν έχει αποθηκευτεί ακόμα σε αρχείο</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>Το αρχικό αρχείο έχει αλλάξει από τότε, επομένως το περιεχόμενο που ανακτήθηκε ενδέχεται να μην είναι σωστό. Άνοιξε μόνο για ανάγνωση.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Δεν ήταν δυνατή η ανάκτηση: {0} Τα δεδομένα ανάκτησης διατηρήθηκαν.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Δεν είναι δυνατή η αποθήκευση των δεδομένων ανάκτησης ({0}). Αν το HexEditor κλείσει απροσδόκητα, οι μη αποθηκευμένες αλλαγές θα χαθούν.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>Η αποθήκευση διακόπηκε. Μπορείτε να επαναφέρετε το αρχείο στην κατάσταση που ήταν πριν από την αποθήκευση.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Επαναφορά</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>Την προηγούμενη φορά το HexEditor έκλεισε απροσδόκητα.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Άνοιγμα πληροφοριών σφάλματος</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Αναφορά προβλήματος</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>Το HexEditor έκλεισε απροσδόκητα. Επικολλήστε παρακάτω το περιεχόμενο του αρχείου πληροφοριών σφάλματος. Δεν περιλαμβάνει το περιεχόμενο των αρχείων σας.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Δεν ήταν δυνατό το άνοιγμα του προγράμματος περιήγησης, επομένως η σύνδεση αντιγράφηκε στο Πρόχειρο.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>{0} ακόμα</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>Ειδοποιήσεις</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>Ιστορικό ειδοποιήσεων</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>Ιστορικό ειδοποιήσεων</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(Διαχειριστής)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(Ασφαλής λειτουργία)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>Δεν ήταν δυνατή η ανάγνωση του αρχείου ρυθμίσεων, επομένως το HexEditor ξεκίνησε με τις προεπιλεγμένες ρυθμίσεις. Το κατεστραμμένο αρχείο διατηρήθηκε.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>Άνοιγμα φακέλου</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>Το αρχείο ρυθμίσεων γράφτηκε από νεότερη έκδοση του HexEditor, επομένως οι αλλαγές στις ρυθμίσεις δεν θα αποθηκευτούν.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>Το επεξεργασμένο αρχείο ρυθμίσεων περιέχει σφάλμα ({0}). Εξακολουθούν να χρησιμοποιούνται οι προηγούμενες ρυθμίσεις.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>Προβολή</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>Θέμα</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Χρήση ρύθμισης συστήματος</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>Ανοιχτό</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>Σκούρο</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>Γραμμή κατάστασης</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>Βοήθεια</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>Τεκμηρίωση</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>Αναφορά προβλήματος...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>Πληροφορίες για το HexEditor</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>Δ</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>Ν</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>Ω</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>Κ</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>Ξ</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>Κ</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>Γ</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>Μ</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>Λ</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>Ν</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>Ζ</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>Ρ</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>Μ</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>Μ</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>Τ</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>Θ</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>Χ</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>Γ</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>Β</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>Τ</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Έκδοση</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>Κανάλι</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>Διανομή</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>Αρχιτεκτονική</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>Εκτελείται ως διαχειριστής</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>Άνοιγμα του φακέλου δεδομένων</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>Το HexEditor δεν στέλνει τηλεμετρία. Δεν στέλνει ποτέ πουθενά δεδομένα χρήσης, αναφορές σφαλμάτων, ρυθμίσεις ή πληροφορίες αρχείων. Σε αυτή την έκδοση καμία λειτουργία δεν χρησιμοποιεί το δίκτυο (οι σύνδεσμοι βοήθειας ανοίγουν στο πρόγραμμα περιήγησης).</value></data>
+  <data name="About_License" xml:space="preserve"><value>Το HexEditor είναι λογισμικό ανοιχτού κώδικα με την άδεια MIT.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>Αντιγραφή πληροφοριών</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Άδειες τρίτων</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>Το αρχείο άδειας δεν βρέθηκε.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Κλείσιμο</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>Τιμή: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>Επιλογή: {0}–{1} (μήκος {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>Αρχή: {0}
+Τέλος (συμπεριλαμβάνεται αυτό το byte): {1}
+Μήκος: {2} ({3} byte)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>Μέγεθος: {0} ({1} byte)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>Μέγεθος: {0} byte</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>Μόνο για ανάγνωση</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>Το ακριβές μέγεθος αντιγράφηκε στο Πρόχειρο.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>Θέση δρομέα</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>Τιμή στον δρομέα</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>Επιλογή</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>Ενεργή στήλη</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>Κωδικοποίηση κειμένου</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>Λειτουργία εισαγωγής δεδομένων</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>Τροποποιημένο</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>Μέγεθος αρχείου</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>Κέντρο εργασιών</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>Ειδοποιήσεις</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>Κέντρο εργασιών</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>Δεν εκτελείται καμία εργασία.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>Απαλοιφή ολοκληρωμένων</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>Σε εξέλιξη ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/s</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>Απομένουν περίπου {0} λεπτά</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>Απομένουν περίπου {0} δευτ.</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>Πέρασαν {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>Ακύρωση...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>Ολοκληρώθηκε</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>Ακυρώθηκε</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>Απέτυχε: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Άνοιγμα</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Άνοιγμα</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>Άνοιγμα {0} αρχείων;</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Δεν είναι δυνατό το άνοιγμα φακέλων (παραλείφθηκαν {0}).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>Κατά την εκτέλεση ως διαχειριστής, δεν μπορείτε να ανοίξετε αρχεία σύροντάς τα από την Εξερεύνηση αρχείων. Χρησιμοποιήστε την επιλογή Αρχείο &gt; Άνοιγμα.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>Αντιγραφή {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Αποθήκευση όλων</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Κλείσιμο όλων</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Κλείσιμο</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Κλείσιμο των άλλων καρτελών</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Κλείσιμο των καρτελών στα δεξιά</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Αλλαγές: {0} σημεία, {1} byte προστέθηκαν ή αντικαταστάθηκαν. Αν δεν αποθηκεύσετε, οι αλλαγές θα χαθούν.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>Αποθήκευση των αλλαγών σε {0} έγγραφα;</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Επιλέξτε τα έγγραφα που θέλετε να αποθηκεύσετε. Τα έγγραφα που δεν επιλέγονται κλείνουν χωρίς αποθήκευση.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Αποθήκευση επιλεγμένων και κλείσιμο</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Κλείσιμο χωρίς αποθήκευση</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>Εκτελείται: {0}.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Διακοπή και κλείσιμο</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Κλείσιμο μετά την αποθήκευση</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>Λ</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Άνοιγμα...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>Δημιουργία</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>Μπορείτε επίσης να αποθέσετε αρχεία εδώ για να τα ανοίξετε.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>Δημιουργία με μέγεθος...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>Γ</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>Δημιουργία με μέγεθος</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Μέγεθος</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Τιμή συμπλήρωσης (byte σε Hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Δημιουργία</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>Εισαγάγετε μέγεθος 0 ή μεγαλύτερο.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>Εισαγάγετε 1 έως 4.096 byte σε Hex, όπως 00 ή DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>Το {0} είναι συσκευή, όχι αρχείο. Το άνοιγμα δίσκων θα είναι διαθέσιμο σε μελλοντική έκδοση.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>Το {0} είναι φάκελος. Δεν είναι δυνατό το άνοιγμα φακέλων.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>Το αρχείο δεν βρέθηκε: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>Δεν έχετε δικαίωμα να ανοίξετε το {0}.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>Δεν είναι δυνατό το άνοιγμα του {0}, επειδή το χρησιμοποιεί άλλη εφαρμογή.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>Δεν είναι δυνατό το άνοιγμα του {0}, επειδή το χρησιμοποιεί η εφαρμογή {1}.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>Αυτό το αρχείο είναι μόνο για ανάγνωση, επομένως δεν μπορεί να αντικατασταθεί. Χρησιμοποιήστε την επιλογή «Αποθήκευση ως» για να αποθηκεύσετε τις αλλαγές σας.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>Δεν είναι δυνατή η επεξεργασία αυτού του εγγράφου όσο εκτελείται: {0}.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>Αυτό το έγγραφο είναι μόνο για ανάγνωση.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>Αποτυχία ({0}): {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>δεκαεξαδικός επεξεργαστής</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Το Tab κάνει εναλλαγή μεταξύ της στήλης Hex και της στήλης κειμένου. Το F6 μετακινεί στην επόμενη περιοχή.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Διαγραφή</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Απαλοιφή επιλογής</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Ορισμένες περιοχές δεν είναι δυνατό να διαβαστούν.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση: σφάλμα I/O συσκευής ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση: δεν επιτρέπεται η πρόσβαση ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση: η συσκευή αποσυνδέθηκε</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>Η μνήμη δεν έχει εκχωρηθεί</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Μετατόπιση {0}, τιμή {1}, χαρακτήρας {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Μετατόπιση {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Μετατόπιση {0}, τέλος δεδομένων</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Επιλογή {0} byte, από {1} έως {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Μετατόπιση {0}, τιμή {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Λειτουργία εισαγωγής</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Λειτουργία αντικατάστασης</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Μόνο για ανάγνωση</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Επεξεργάσιμο</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Στήλη Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>στήλη κειμένου</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>χαμηλό nibble</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>τροποποιημένο</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>εισαγωγή</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>επιλεγμένο</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>φόρτωση</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>δεν είναι δυνατή η ανάγνωση</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>κενό</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>μη εκτυπώσιμος χαρακτήρας</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>Διαγράφηκαν {0} byte</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Ένας γρήγορος δεκαεξαδικός επεξεργαστής για αρχεία και δίσκους οποιουδήποτε μεγέθους</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>Το υπάρχον παράθυρο δεν αποκρίνεται, επομένως το άνοιγμα έγινε σε νέα παρουσία.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>Οι ρυθμίσεις δεν θα αποθηκευτούν, επειδή δεν είναι δυνατή η εγγραφή στον φάκελο δεδομένων.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Εξαγωγή ρυθμίσεων</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>Διαγράφηκαν {0} στοιχεία ανάκτησης παλαιότερα των 30 ημερών.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>Δεν ήταν δυνατή η εκκίνηση του HexEditor.
+
+{0}
+
+Οι λεπτομέρειες καταγράφηκαν στο:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Κατεύθυνση</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>Προς τα εμπρός</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Προς τα πίσω</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Αναζήτηση σε</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Ολόκληρο το έγγραφο</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Επιλογή</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>Συμφωνία πεζών-κεφαλαίων</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Χρήση ακολουθιών διαφυγής (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Στοίχιση σε χαρακτήρες</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Επιλογές αναζήτησης</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Καταμέτρηση αποτελεσμάτων</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / καταμέτρηση...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / πάνω από {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... ({1} byte συνολικά)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (χαρακτήρας {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>Το «{0}» δεν είναι έγκυρη ακολουθία διαφυγής.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>Βρέθηκε στη θέση {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Καταμέτρηση αποτελεσμάτων</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>Το αρχείο είναι πολύ μεγάλο για το σύστημα αρχείων του προορισμού ({0}, {1}). Το μέγιστο μέγεθος αρχείου είναι {2}. Αποθηκεύστε το σε άλλη μονάδα δίσκου.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>Δεν υπάρχει αρκετός ελεύθερος χώρος</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>Δεν υπάρχει αρκετός ελεύθερος χώρος στη μονάδα δίσκου προορισμού ({0}). Απαιτούνται: {1}. Διαθέσιμα: {2}. Το αρχείο δεν έχει αλλάξει.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>Αποθήκευση σε άλλη θέση</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>Οι αλλαγές είναι πολύ μεγάλες για να προστατευτούν</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>Οι αλλαγές είναι πολύ μεγάλες για να καταγραφεί το αρχικό περιεχόμενο ({0}, όριο {1}). Αν η αποθήκευση διακοπεί στη μέση, το αρχείο δεν θα μπορεί να επανέλθει στην προηγούμενη κατάσταση.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>Χρήση ασφαλούς αποθήκευσης</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>Εγγραφή χωρίς προστασία</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>Αυτό το έγγραφο είναι μόνο για ανάγνωση, επομένως δεν μπορεί να αντικατασταθεί. Χρησιμοποιήστε την επιλογή «Αποθήκευση ως».</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>Η αποθήκευση απέτυχε, επομένως το αρχείο επανήλθε στην κατάσταση που ήταν πριν από την αποθήκευση.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>Η αποθήκευση απέτυχε και μόνο ένα μέρος του αρχείου εγγράφηκε ξανά. Μπορείτε να το επαναφέρετε την επόμενη φορά που θα ξεκινήσει το HexEditor.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} byte)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} byte</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>Το κείμενο δεν είναι ακολουθία byte σε δεκαεξαδική μορφή, επομένως επικολλήθηκε ως κείμενο.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>Αναίρεση</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>Επικόλληση έως το τέλος;</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>Το μήκος αυτού του εγγράφου δεν μπορεί να αλλάξει. {0} byte των δεδομένων που επικολλώνται υπερβαίνουν το τέλος και δεν θα επικολληθούν.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>Επικόλληση έως το τέλος</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>Μια άλλη εφαρμογή μπορεί ακόμα να γράψει σε αυτό το αρχείο. Αν αλλάξει εκτός του HexEditor, οι μη αποθηκευμένες αλλαγές σας ενδέχεται να μην αποθηκευτούν σωστά.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>Οι επεξεργασίες είναι τόσες πολλές ώστε έχει ξεπεραστεί το όριο μνήμης ({0}). Η αποθήκευση μειώνει τη χρήση μνήμης.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>Διατήρηση δεδομένων που αντιγράφηκαν από {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Διατήρηση των δεδομένων που αντιγράφηκαν;</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>Για να παραμείνουν διαθέσιμα τα δεδομένα που αντιγράφηκαν ({0}) μετά το κλείσιμο, το HexEditor θα τα γράψει σε προσωρινό χώρο αποθήκευσης.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Εγγραφή και κλείσιμο</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Απαλοιφή Προχείρου και κλείσιμο</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>Δεν ήταν δυνατή η διατήρηση των δεδομένων που αντιγράφηκαν, επομένως έγινε απαλοιφή του Προχείρου.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Κωδικοποίηση κειμένου</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>Κ</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (κωδικοσελίδα {0})</value></data>
 </root>

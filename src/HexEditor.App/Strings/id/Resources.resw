@@ -106,4 +106,260 @@
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Pilihan melebihi batas papan klip, sehingga hanya dapat ditempel di dalam HexEditor.</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>Teks di papan klip bukan urutan byte heksadesimal. Beralihlah ke kolom teks untuk menempelkannya sebagai teks.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Byte yang melewati akhir dokumen berpanjang tetap ini tidak ditempel.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Pulihkan perubahan yang belum disimpan</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>HexEditor tidak ditutup secara normal terakhir kali. Anda dapat memulihkan perubahan yang belum disimpan di bawah ini.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Pulihkan</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>Buang</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Nanti</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Disimpan {0} · {1} byte diubah</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Belum disimpan ke file</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>File asli telah berubah sejak saat itu, sehingga konten yang dipulihkan mungkin tidak benar. File dibuka sebagai baca-saja.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Tidak dapat memulihkan: {0} Data pemulihan tetap disimpan.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Tidak dapat menyimpan data pemulihan ({0}). Jika HexEditor tertutup secara tidak terduga, perubahan yang belum disimpan akan hilang.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>Penyimpanan terhenti. Anda dapat mengembalikan file ke kondisi sebelum disimpan.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Kembalikan</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>HexEditor tertutup secara tidak terduga terakhir kali.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Buka info kerusakan</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Laporkan masalah</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor tertutup secara tidak terduga. Tempelkan isi file info kerusakan di bawah ini. File tersebut tidak berisi konten file Anda.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Browser tidak dapat dibuka, sehingga tautan disalin ke papan klip.</value></data>
+  <data name="Notifications_More" xml:space="preserve"><value>{0} lainnya</value></data>
+  <data name="Notifications_HistoryTitle.Text" xml:space="preserve"><value>Pemberitahuan</value></data>
+  <data name="Status_Notifications.ToolTipService.ToolTip" xml:space="preserve"><value>Riwayat pemberitahuan</value></data>
+  <data name="Status_Notifications.AutomationProperties.Name" xml:space="preserve"><value>Riwayat pemberitahuan</value></data>
+  <data name="Title_Administrator" xml:space="preserve"><value>(Administrator)</value></data>
+  <data name="Title_SafeMode" xml:space="preserve"><value>(Mode Aman)</value></data>
+  <data name="Settings_Broken" xml:space="preserve"><value>File pengaturan tidak dapat dibaca, sehingga HexEditor dimulai dengan pengaturan default. File yang rusak tetap disimpan.</value></data>
+  <data name="Settings_OpenFolder" xml:space="preserve"><value>Buka folder</value></data>
+  <data name="Settings_TooNew" xml:space="preserve"><value>File pengaturan ditulis oleh versi HexEditor yang lebih baru, sehingga perubahan pengaturan tidak akan disimpan.</value></data>
+  <data name="Settings_ExternalError" xml:space="preserve"><value>File pengaturan yang diedit memiliki kesalahan ({0}). Pengaturan sebelumnya masih digunakan.</value></data>
+  <data name="Menu_View.Title" xml:space="preserve"><value>Tampilan</value></data>
+  <data name="Menu_View_Theme.Text" xml:space="preserve"><value>Tema</value></data>
+  <data name="Menu_View_ThemeSystem.Text" xml:space="preserve"><value>Gunakan pengaturan sistem</value></data>
+  <data name="Menu_View_ThemeLight.Text" xml:space="preserve"><value>Terang</value></data>
+  <data name="Menu_View_ThemeDark.Text" xml:space="preserve"><value>Gelap</value></data>
+  <data name="Menu_View_StatusBar.Text" xml:space="preserve"><value>Bilah status</value></data>
+  <data name="Menu_Help.Title" xml:space="preserve"><value>Bantuan</value></data>
+  <data name="Menu_Help_Documentation.Text" xml:space="preserve"><value>Dokumentasi</value></data>
+  <data name="Menu_Help_Report.Text" xml:space="preserve"><value>Laporkan Masalah...</value></data>
+  <data name="Menu_Help_About.Text" xml:space="preserve"><value>Tentang HexEditor</value></data>
+  <data name="Menu_File.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_New.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_File_Open.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_File_Save.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_SaveAs.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_File_Close.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_Exit.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Edit_Undo.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Edit_Redo.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Edit_Cut.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Edit_Copy.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Edit_Paste.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Edit_PasteOverwrite.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Edit_SelectAll.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Edit_ToggleInsert.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Search.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Search_Find.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Search_Next.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Search_Previous.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Go.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_GoTo.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_Back.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Go_Forward.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Go_Start.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Go_End.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_Theme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ThemeSystem.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_ThemeLight.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ThemeDark.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_StatusBar.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Help.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Help_Documentation.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Help_Report.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Help_About.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Versi</value></data>
+  <data name="About_Channel" xml:space="preserve"><value>Saluran</value></data>
+  <data name="About_Distribution" xml:space="preserve"><value>Distribusi</value></data>
+  <data name="About_Architecture" xml:space="preserve"><value>Arsitektur</value></data>
+  <data name="About_NET" xml:space="preserve"><value>.NET</value></data>
+  <data name="About_WindowsAppSDK" xml:space="preserve"><value>Windows App SDK</value></data>
+  <data name="About_OS" xml:space="preserve"><value>OS</value></data>
+  <data name="About_Administrator" xml:space="preserve"><value>Berjalan sebagai administrator</value></data>
+  <data name="About_OpenDataFolder" xml:space="preserve"><value>Buka folder data</value></data>
+  <data name="About_NoTelemetry" xml:space="preserve"><value>HexEditor tidak mengirim telemetri. HexEditor tidak pernah mengirim data penggunaan, laporan kerusakan, pengaturan, atau informasi file ke mana pun. Tidak ada fitur yang menggunakan jaringan di versi ini (tautan bantuan dibuka di browser Anda).</value></data>
+  <data name="About_License" xml:space="preserve"><value>HexEditor adalah perangkat lunak sumber terbuka dengan Lisensi MIT.</value></data>
+  <data name="About_CopyInfo" xml:space="preserve"><value>Salin info</value></data>
+  <data name="About_ThirdParty" xml:space="preserve"><value>Lisensi pihak ketiga</value></data>
+  <data name="About_ThirdPartyMissing" xml:space="preserve"><value>File lisensi tidak ditemukan.</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Tutup</value></data>
+  <data name="Status_Value" xml:space="preserve"><value>Nilai: {0} ({1})</value></data>
+  <data name="Status_SelectionRange" xml:space="preserve"><value>Pilihan: {0}–{1} (panjang {2} = {3})</value></data>
+  <data name="Status_SelectionTip" xml:space="preserve"><value>Awal: {0}
+Akhir (termasuk byte ini): {1}
+Panjang: {2} ({3} byte)</value></data>
+  <data name="Status_Size" xml:space="preserve"><value>Ukuran: {0} ({1} byte)</value></data>
+  <data name="Status_SizeBytes" xml:space="preserve"><value>Ukuran: {0} byte</value></data>
+  <data name="Status_ReadOnly" xml:space="preserve"><value>Baca-saja</value></data>
+  <data name="Status_SizeCopied" xml:space="preserve"><value>Ukuran yang tepat disalin ke papan klip.</value></data>
+  <data name="Status_Item_Cursor" xml:space="preserve"><value>Posisi kursor</value></data>
+  <data name="Status_Item_Value" xml:space="preserve"><value>Nilai di kursor</value></data>
+  <data name="Status_Item_Selection" xml:space="preserve"><value>Pilihan</value></data>
+  <data name="Status_Item_Column" xml:space="preserve"><value>Kolom aktif</value></data>
+  <data name="Status_Item_Encoding" xml:space="preserve"><value>Pengodean teks</value></data>
+  <data name="Status_Item_Mode" xml:space="preserve"><value>Mode input</value></data>
+  <data name="Status_Item_Modified" xml:space="preserve"><value>Status perubahan</value></data>
+  <data name="Status_Item_Size" xml:space="preserve"><value>Ukuran file</value></data>
+  <data name="Status_Item_Operations" xml:space="preserve"><value>Pusat pemrosesan</value></data>
+  <data name="Status_Item_Notifications" xml:space="preserve"><value>Pemberitahuan</value></data>
+  <data name="Operations_Title" xml:space="preserve"><value>Pusat pemrosesan</value></data>
+  <data name="Operations_None" xml:space="preserve"><value>Tidak ada yang sedang berjalan.</value></data>
+  <data name="Operations_Clear" xml:space="preserve"><value>Hapus yang selesai</value></data>
+  <data name="Operations_Count" xml:space="preserve"><value>Memproses ({0})</value></data>
+  <data name="Operations_Speed" xml:space="preserve"><value>{0}/dtk</value></data>
+  <data name="Operations_RemainingMinutes" xml:space="preserve"><value>Sekitar {0} mnt lagi</value></data>
+  <data name="Operations_RemainingSeconds" xml:space="preserve"><value>Sekitar {0} dtk lagi</value></data>
+  <data name="Operations_Elapsed" xml:space="preserve"><value>Berlalu {0}</value></data>
+  <data name="Operations_Cancelling" xml:space="preserve"><value>Membatalkan...</value></data>
+  <data name="Operations_Completed" xml:space="preserve"><value>Selesai</value></data>
+  <data name="Operations_Cancelled" xml:space="preserve"><value>Dibatalkan</value></data>
+  <data name="Operations_Failed" xml:space="preserve"><value>Gagal: {0}</value></data>
+  <data name="Drop_Open" xml:space="preserve"><value>Buka</value></data>
+  <data name="Drop_OpenButton" xml:space="preserve"><value>Buka</value></data>
+  <data name="Drop_ConfirmMany" xml:space="preserve"><value>Buka {0} file?</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Folder tidak dapat dibuka ({0} dilewati).</value></data>
+  <data name="Drop_AdminLimited" xml:space="preserve"><value>Saat berjalan sebagai administrator, Anda tidak dapat membuka file dengan menyeretnya dari File Explorer. Gunakan File &gt; Buka sebagai gantinya.</value></data>
+  <data name="Operation_Copy" xml:space="preserve"><value>Menyalin {0}</value></data>
+  <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Simpan Semua</value></data>
+  <data name="Menu_File_CloseAll.Text" xml:space="preserve"><value>Tutup Semua</value></data>
+  <data name="Tab_Close.Text" xml:space="preserve"><value>Tutup</value></data>
+  <data name="Tab_CloseOthers.Text" xml:space="preserve"><value>Tutup tab lain</value></data>
+  <data name="Tab_CloseRight.Text" xml:space="preserve"><value>Tutup tab di sebelah kanan</value></data>
+  <data name="Close_BodyChanges" xml:space="preserve"><value>Perubahan: {0} tempat, {1} byte ditambahkan atau diganti. Jika tidak disimpan, perubahan akan hilang.</value></data>
+  <data name="Close_ManyTitle" xml:space="preserve"><value>Simpan perubahan pada {0} dokumen?</value></data>
+  <data name="Close_ManyBody" xml:space="preserve"><value>Pilih dokumen yang akan disimpan. Dokumen yang tidak dipilih akan ditutup tanpa disimpan.</value></data>
+  <data name="Close_SaveSelected" xml:space="preserve"><value>Simpan yang dipilih dan tutup</value></data>
+  <data name="Close_DontSaveAll" xml:space="preserve"><value>Tutup tanpa menyimpan</value></data>
+  <data name="Close_Busy" xml:space="preserve"><value>{0} sedang berjalan.</value></data>
+  <data name="Close_CancelOperation" xml:space="preserve"><value>Hentikan dan tutup</value></data>
+  <data name="Close_AfterSave" xml:space="preserve"><value>Tutup setelah menyimpan</value></data>
+  <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Start_Open.Content" xml:space="preserve"><value>Buka...</value></data>
+  <data name="Start_New.Content" xml:space="preserve"><value>Baru</value></data>
+  <data name="Start_DropHint.Text" xml:space="preserve"><value>Anda juga dapat meletakkan file di sini untuk membukanya.</value></data>
+  <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>Baru dengan Ukuran...</value></data>
+  <data name="Menu_File_NewWithSize.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="NewSize_Title" xml:space="preserve"><value>Baru dengan ukuran</value></data>
+  <data name="NewSize_Size" xml:space="preserve"><value>Ukuran</value></data>
+  <data name="NewSize_Fill" xml:space="preserve"><value>Nilai isian (byte hex)</value></data>
+  <data name="NewSize_Create" xml:space="preserve"><value>Buat</value></data>
+  <data name="NewSize_InvalidSize" xml:space="preserve"><value>Masukkan ukuran 0 atau lebih.</value></data>
+  <data name="NewSize_InvalidFill" xml:space="preserve"><value>Masukkan 1 hingga 4.096 byte dalam hex, misalnya 00 atau DE AD.</value></data>
+  <data name="Error_DevicePath" xml:space="preserve"><value>{0} adalah perangkat, bukan file. Membuka disk akan tersedia di versi mendatang.</value></data>
+  <data name="Error_IsFolder" xml:space="preserve"><value>{0} adalah folder. Folder tidak dapat dibuka.</value></data>
+  <data name="Error_NotFound" xml:space="preserve"><value>File tidak ditemukan: {0}</value></data>
+  <data name="Error_AccessDenied" xml:space="preserve"><value>Anda tidak memiliki izin untuk membuka {0}.</value></data>
+  <data name="Error_InUse" xml:space="preserve"><value>{0} tidak dapat dibuka karena sedang digunakan oleh aplikasi lain.</value></data>
+  <data name="Error_InUseBy" xml:space="preserve"><value>{0} tidak dapat dibuka karena sedang digunakan oleh {1}.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>File ini baca-saja, sehingga tidak dapat ditimpa. Gunakan Simpan Sebagai untuk menyimpan perubahan Anda.</value></data>
+  <data name="Notice_BusyWith" xml:space="preserve"><value>Dokumen ini tidak dapat diedit saat {0} sedang berjalan.</value></data>
+  <data name="Notice_ReadOnly" xml:space="preserve"><value>Dokumen ini baca-saja.</value></data>
+  <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} gagal: {1}</value></data>
+  <data name="HexView_ControlType" xml:space="preserve"><value>editor hex</value></data>
+  <data name="HexView_HelpText" xml:space="preserve"><value>Tab beralih antara kolom Hex dan kolom teks. F6 berpindah ke area berikutnya.</value></data>
+  <data name="HexView_Menu_Delete" xml:space="preserve"><value>Hapus</value></data>
+  <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Hapus pilihan</value></data>
+  <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Beberapa rentang tidak dapat dibaca.</value></data>
+  <data name="HexView_Unreadable" xml:space="preserve"><value>Tidak dapat dibaca</value></data>
+  <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Tidak dapat dibaca: kesalahan I/O perangkat ({0})</value></data>
+  <data name="HexView_Unreadable_AccessDenied" xml:space="preserve"><value>Tidak dapat dibaca: akses ditolak ({0})</value></data>
+  <data name="HexView_Unreadable_Disconnected" xml:space="preserve"><value>Tidak dapat dibaca: perangkat terputus</value></data>
+  <data name="HexView_Unreadable_Unallocated" xml:space="preserve"><value>Memori tidak dialokasikan</value></data>
+  <data name="HexView_Announce_Position" xml:space="preserve"><value>Offset {0}, nilai {1}, karakter {2}</value></data>
+  <data name="HexView_Announce_Offset" xml:space="preserve"><value>Offset {0}</value></data>
+  <data name="HexView_Announce_End" xml:space="preserve"><value>Offset {0}, akhir data</value></data>
+  <data name="HexView_Announce_WithStates" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="HexView_Announce_ListSeparator" xml:space="preserve"><value>,</value></data>
+  <data name="HexView_Announce_Selection" xml:space="preserve"><value>Pilihan {0} byte, {1} hingga {2}</value></data>
+  <data name="HexView_Announce_Typed" xml:space="preserve"><value>Offset {0}, nilai {1}</value></data>
+  <data name="HexView_Announce_InsertMode" xml:space="preserve"><value>Mode sisipkan</value></data>
+  <data name="HexView_Announce_OverwriteMode" xml:space="preserve"><value>Mode timpa</value></data>
+  <data name="HexView_Announce_ReadOnlyOn" xml:space="preserve"><value>Baca-saja</value></data>
+  <data name="HexView_Announce_ReadOnlyOff" xml:space="preserve"><value>Dapat diedit</value></data>
+  <data name="HexView_State_HexColumn" xml:space="preserve"><value>Kolom Hex</value></data>
+  <data name="HexView_State_TextColumn" xml:space="preserve"><value>kolom teks</value></data>
+  <data name="HexView_State_LowNibble" xml:space="preserve"><value>nibble bawah</value></data>
+  <data name="HexView_State_Modified" xml:space="preserve"><value>diubah</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>sisipkan</value></data>
+  <data name="HexView_State_Selected" xml:space="preserve"><value>dipilih</value></data>
+  <data name="HexView_State_Loading" xml:space="preserve"><value>memuat</value></data>
+  <data name="HexView_State_Unreadable" xml:space="preserve"><value>tidak dapat dibaca</value></data>
+  <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
+  <data name="HexView_Char_Space" xml:space="preserve"><value>spasi</value></data>
+  <data name="HexView_Char_Unprintable" xml:space="preserve"><value>karakter yang tidak dapat dicetak</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} byte dihapus</value></data>
+  <data name="AppDisplayName" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="AppDescription" xml:space="preserve"><value>Editor hex cepat untuk file dan disk dengan ukuran berapa pun</value></data>
+  <data name="Startup_RedirectTimedOut" xml:space="preserve"><value>Jendela yang ada tidak merespons, sehingga ini dibuka di instans baru.</value></data>
+  <data name="Startup_DataFolderReadOnly" xml:space="preserve"><value>Pengaturan tidak akan disimpan karena folder data tidak dapat ditulisi.</value></data>
+  <data name="Startup_ExportSettings" xml:space="preserve"><value>Ekspor pengaturan</value></data>
+  <data name="Startup_OldRecoveryDeleted" xml:space="preserve"><value>{0} item pemulihan yang lebih lama dari 30 hari telah dihapus.</value></data>
+  <data name="StartupError_Title" xml:space="preserve"><value>HexEditor</value></data>
+  <data name="StartupError_Message" xml:space="preserve"><value>HexEditor tidak dapat dimulai.
+
+{0}
+
+Detail ditulis ke:
+{1}</value></data>
+  <data name="Find_Direction_Name" xml:space="preserve"><value>Arah</value></data>
+  <data name="Find_Direction_Forward.Content" xml:space="preserve"><value>Maju</value></data>
+  <data name="Find_Direction_Backward.Content" xml:space="preserve"><value>Mundur</value></data>
+  <data name="Find_Scope_Name" xml:space="preserve"><value>Cari di</value></data>
+  <data name="Find_Scope_Document.Content" xml:space="preserve"><value>Seluruh dokumen</value></data>
+  <data name="Find_Scope_Selection.Content" xml:space="preserve"><value>Pilihan</value></data>
+  <data name="Find_CaseSensitive.Content" xml:space="preserve"><value>Cocokkan huruf besar/kecil</value></data>
+  <data name="Find_Escapes.Content" xml:space="preserve"><value>Gunakan escape (\n, \xHH)</value></data>
+  <data name="Find_Align.Content" xml:space="preserve"><value>Sejajarkan dengan karakter</value></data>
+  <data name="Find_Options_Name" xml:space="preserve"><value>Opsi pencarian</value></data>
+  <data name="Find_CountButton.Content" xml:space="preserve"><value>Hitung kecocokan</value></data>
+  <data name="Find_Counting" xml:space="preserve"><value>{0} / menghitung...</value></data>
+  <data name="Find_CountResult" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Find_CountOverLimit" xml:space="preserve"><value>{0} / lebih dari {1}</value></data>
+  <data name="Find_PreviewMore" xml:space="preserve"><value>{0} ... (total {1} byte)</value></data>
+  <data name="Find_ErrorAt" xml:space="preserve"><value>{0} (karakter {1})</value></data>
+  <data name="Find_Error_InvalidEscape" xml:space="preserve"><value>“{0}” bukan escape yang valid.</value></data>
+  <data name="Find_FoundAt" xml:space="preserve"><value>Ditemukan di {0}.</value></data>
+  <data name="Operation_Count" xml:space="preserve"><value>Menghitung kecocokan</value></data>
+  <data name="Error_FileTooLarge" xml:space="preserve"><value>File terlalu besar untuk sistem file tujuan ({0}, {1}). Ukuran file maksimum adalah {2}. Simpan ke drive lain.</value></data>
+  <data name="SaveSpace_Title" xml:space="preserve"><value>Ruang kosong tidak cukup</value></data>
+  <data name="SaveSpace_Body" xml:space="preserve"><value>Ruang kosong di drive tujuan ({0}) tidak cukup. Diperlukan: {1}. Tersedia: {2}. File tidak diubah.</value></data>
+  <data name="SaveSpace_SaveElsewhere" xml:space="preserve"><value>Simpan ke lokasi lain</value></data>
+  <data name="SaveJournal_Title" xml:space="preserve"><value>Perubahan terlalu besar untuk dilindungi</value></data>
+  <data name="SaveJournal_Body" xml:space="preserve"><value>Perubahan terlalu besar untuk mencatat konten asli ({0}, batas {1}). Jika penyimpanan terhenti di tengah jalan, file tidak dapat dikembalikan seperti semula.</value></data>
+  <data name="SaveJournal_UseSafe" xml:space="preserve"><value>Gunakan penyimpanan aman</value></data>
+  <data name="SaveJournal_Unprotected" xml:space="preserve"><value>Tulis tanpa perlindungan</value></data>
+  <data name="Error_SaveReadOnly" xml:space="preserve"><value>Dokumen ini baca-saja, sehingga tidak dapat ditimpa. Gunakan Simpan Sebagai.</value></data>
+  <data name="Error_SaveRolledBack" xml:space="preserve"><value>Penyimpanan gagal, sehingga file dikembalikan ke kondisi sebelum disimpan.</value></data>
+  <data name="Error_SavePartial" xml:space="preserve"><value>Penyimpanan gagal dan hanya sebagian file yang ditulis ulang. Anda dapat memulihkannya saat HexEditor dimulai lagi.</value></data>
+  <data name="Size_WithBytes" xml:space="preserve"><value>{0} ({1} byte)</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0} byte</value></data>
+  <data name="Clipboard_PastedAsText" xml:space="preserve"><value>Teks bukan urutan byte hex, sehingga ditempel sebagai teks.</value></data>
+  <data name="Common_Undo" xml:space="preserve"><value>Batalkan</value></data>
+  <data name="PasteTruncate_Title" xml:space="preserve"><value>Tempel hingga akhir?</value></data>
+  <data name="PasteTruncate_Body" xml:space="preserve"><value>Panjang dokumen ini tidak dapat diubah. {0} byte dari data yang ditempel melewati akhir dan tidak akan ditempel.</value></data>
+  <data name="PasteTruncate_Paste" xml:space="preserve"><value>Tempel hingga akhir</value></data>
+  <data name="Notice_LockFailed" xml:space="preserve"><value>Aplikasi lain masih dapat menulis ke file ini. Jika file diubah di luar HexEditor, perubahan yang belum disimpan mungkin tidak tersimpan dengan benar.</value></data>
+  <data name="Notice_MemoryOverLimit" xml:space="preserve"><value>Ada begitu banyak pengeditan sehingga batas memori ({0}) terlampaui. Menyimpan akan mengurangi penggunaan memori.</value></data>
+  <data name="Operation_Materialize" xml:space="preserve"><value>Menyimpan data yang disalin dari {0}</value></data>
+  <data name="Materialize_Title" xml:space="preserve"><value>Simpan data yang disalin?</value></data>
+  <data name="Materialize_Body" xml:space="preserve"><value>Agar {0} data yang disalin tetap tersedia setelah ditutup, HexEditor akan menulisnya ke penyimpanan sementara.</value></data>
+  <data name="Materialize_Write" xml:space="preserve"><value>Tulis dan tutup</value></data>
+  <data name="Materialize_ClearClipboard" xml:space="preserve"><value>Kosongkan papan klip dan tutup</value></data>
+  <data name="Materialize_Failed" xml:space="preserve"><value>Data yang disalin tidak dapat disimpan, sehingga papan klip dikosongkan.</value></data>
+  <data name="Menu_View_Encoding.Text" xml:space="preserve"><value>Pengodean Teks</value></data>
+  <data name="Menu_View_Encoding.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_EncodingAscii.Text" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Menu_View_EncodingAnsi" xml:space="preserve"><value>ANSI (halaman kode {0})</value></data>
 </root>
