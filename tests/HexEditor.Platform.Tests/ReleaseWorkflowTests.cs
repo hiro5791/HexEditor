@@ -159,10 +159,14 @@ public sealed partial class ReleaseWorkflowTests
         string publish = Job(Release, "publish");
         Assert.Contains("$_.Extension -notin '.msix', '.msixbundle', '.appx', '.appxbundle'", publish, StringComparison.Ordinal);
 
-        // GitHub Releases に上げるのは Setup.exe・portable.zip・SHA256SUMS.txt と、Velopack の更新用のファイルだけ。
-        Assert.Contains("$_.Name -like '*-Setup.exe' -or $_.Name -like '*-portable.zip' -or $_.Name -eq 'SHA256SUMS.txt'", publish,
-            StringComparison.Ordinal);
-        Assert.DoesNotContain("store-submission", publish, StringComparison.Ordinal);
+        // GitHub Releases に上げるのは Setup.exe・portable.zip と、Velopack の更新用のファイルと、それらの SHA256SUMS.txt だけ。
+        Assert.Contains("$_.Name -like '*-Setup.exe' -or $_.Name -like '*-portable.zip'", publish, StringComparison.Ordinal);
+        Assert.Contains("gh release upload $tag sums/SHA256SUMS.txt", publish, StringComparison.Ordinal);
+        // Store 提出用の成果物は、リリースの確認 (Test-Release.ps1) のためにダウンロードするだけで、アップロードはしない。
+        foreach (string line in publish.Split('\n').Where(l => l.Contains("release upload", StringComparison.Ordinal)))
+        {
+            Assert.DoesNotContain("store-submission", line, StringComparison.Ordinal);
+        }
     }
 
     [Fact]
@@ -170,7 +174,9 @@ public sealed partial class ReleaseWorkflowTests
     public void ReleaseFilesAreTheDocumentedSet()
     {
         string publish = Job(Release, "publish");
-        Assert.Contains("./build/checksums.ps1 -Dir release", publish, StringComparison.Ordinal);
+        // SHA256SUMS.txt はアップロードの後に、リリースに実際に載ったファイルから作る (PKG-26 の仕様 2)。
+        Assert.Contains("gh release view $tag --json assets", publish, StringComparison.Ordinal);
+        Assert.Contains("./build/checksums.ps1 -Dir sums", publish, StringComparison.Ordinal);
         Assert.Contains("vpk', 'upload', 'github'", publish, StringComparison.Ordinal);
         Assert.Contains("--notes-file release-notes.md", publish, StringComparison.Ordinal);
         Assert.Contains("foreach ($arch in 'x64', 'arm64')", publish, StringComparison.Ordinal);
