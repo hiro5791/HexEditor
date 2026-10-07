@@ -75,6 +75,67 @@ public static class TestHooks
         }
 
         AppLog.Info("Test hooks enabled");
+
+        // 地域設定の上書き (7.2)。OS の設定は変えず、このプロセスの数値・日付の書式だけを変える。
+        if (Settings.Culture is { Length: > 0 } culture)
+        {
+            var info = new System.Globalization.CultureInfo(culture);
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = info;
+            System.Globalization.CultureInfo.CurrentCulture = info;
+            AppLog.Info($"Test hooks: culture {culture}");
+        }
+    }
+
+    // ---- ダイアログ・外部の起動の差し替え (前面に出るものをテストで出さない) ----
+
+    /// <summary>「開く」のダイアログの代わりに返すファイル。null なら本物のダイアログを出す。</summary>
+    public static IReadOnlyList<string>? OpenPickerResult(string settingsIdentifier)
+    {
+        if (!Active || Settings.OpenPicker is not { } paths)
+        {
+            return null;
+        }
+
+        AppLog.Info($"Test hooks: open picker ({settingsIdentifier}) -> {paths.Count} file(s)");
+        return paths;
+    }
+
+    /// <summary>
+    /// 「名前を付けて保存」のダイアログの代わりの結果。差し替えるなら true で、<paramref name="path"/> は選んだパス (キャンセルは null)。
+    /// </summary>
+    public static bool TrySavePicker(string suggestedName, out string? path)
+    {
+        path = null;
+        if (!Active || Settings.SavePicker is not { } chosen)
+        {
+            return false;
+        }
+
+        AppLog.Info($"Test hooks: save picker ({suggestedName}) -> {(chosen.Length == 0 ? "cancel" : chosen)}");
+        path = chosen.Length == 0 ? null : chosen;
+        return true;
+    }
+
+    /// <summary>ブラウザなどの起動の代わりにログに書く (テスト中に他のアプリを前面に出さない)。差し替えたら true。</summary>
+    public static bool InterceptLaunch(Uri uri)
+    {
+        if (!Active)
+        {
+            return false;
+        }
+
+        AppLog.Info($"Test hooks: launch {uri.AbsoluteUri}");
+        return true;
+    }
+
+    /// <summary>空き容量を上書きしたボリュームの情報 (ENG-25)。上書きしないときは null。</summary>
+    public static Core.Saving.IVolumeInfoProvider? Volumes =>
+        Active && Settings.FreeSpace is { } free ? new FixedFreeSpaceVolumes(free) : null;
+
+    private sealed class FixedFreeSpaceVolumes(long free) : Core.Saving.IVolumeInfoProvider
+    {
+        public Core.Saving.VolumeInfo? GetVolume(string folder) =>
+            Core.Saving.SystemVolumeInfoProvider.Instance.GetVolume(folder) is { } volume ? volume with { AvailableFreeSpace = free } : null;
     }
 
     /// <summary>
@@ -436,5 +497,17 @@ public static class TestHooks
     public static void OnLaunched(MainWindow window, MainViewModel vm)
     {
     }
+
+    public static IReadOnlyList<string>? OpenPickerResult(string settingsIdentifier) => null;
+
+    public static bool TrySavePicker(string suggestedName, out string? path)
+    {
+        path = null;
+        return false;
+    }
+
+    public static bool InterceptLaunch(Uri uri) => false;
+
+    public static Core.Saving.IVolumeInfoProvider? Volumes => null;
 }
 #endif

@@ -214,23 +214,31 @@ public sealed partial class MainWindow : Window
         if (saveAs || path is null || !doc.Document.CanSave)
         {
             // 初期フォルダは元のファイルのフォルダ、無題なら前回保存したフォルダ (ENG-21 の仕様 1)。
-            var picker = new FileSavePicker(WindowId)
+            string suggestedName = doc.IsUntitled ? doc.DisplayName + ".bin" : doc.DisplayName;
+            if (TestHooks.TrySavePicker(suggestedName, out string? chosen))
             {
-                SuggestedFileName = doc.IsUntitled ? doc.DisplayName + ".bin" : doc.DisplayName,
-                SettingsIdentifier = "HexEditor.SaveAs",
-            };
-            if (doc.FilePath is { } current && Path.GetDirectoryName(current) is { } folder)
-            {
-                picker.SuggestedFolder = folder;
+                path = chosen;
             }
-            picker.FileTypeChoices.Add(Loc.Get("FileType_All"), [Path.GetExtension(picker.SuggestedFileName) is { Length: > 0 } ext ? ext : ".bin"]);
-            PickFileResult? result = await picker.PickSaveFileAsync();
-            if (result is null)
+            else
+            {
+                var picker = new FileSavePicker(WindowId)
+                {
+                    SuggestedFileName = suggestedName,
+                    SettingsIdentifier = "HexEditor.SaveAs",
+                };
+                if (doc.FilePath is { } current && Path.GetDirectoryName(current) is { } folder)
+                {
+                    picker.SuggestedFolder = folder;
+                }
+                picker.FileTypeChoices.Add(Loc.Get("FileType_All"), [Path.GetExtension(picker.SuggestedFileName) is { Length: > 0 } ext ? ext : ".bin"]);
+                path = (await picker.PickSaveFileAsync())?.Path;
+            }
+
+            if (path is null)
             {
                 return false;
             }
 
-            path = result.Path;
             if (Vm.Documents.Any(d => d != doc && string.Equals(d.FilePath, path, StringComparison.OrdinalIgnoreCase)))
             {
                 ShowNotice(Loc.Get("Error_SaveOpenElsewhere"), InfoBarSeverity.Error, doc);

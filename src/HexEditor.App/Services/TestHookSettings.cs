@@ -75,7 +75,11 @@ public sealed record VirtualSourceSpec(
 ///   "saveFault": { "atByte": 0, "kind": "io" | "diskFull", "once": false },
 ///   "killAt": "saveWrite" | "saveBeforeReplace" | "saveAfterReplace" | "inPlaceAfterJournal",
 ///   "unhandledException": "uiThread" | "background" | "unobservedTask" | "save",
-///   "unhandledExceptionDelayMs": 0
+///   "unhandledExceptionDelayMs": 0,
+///   "culture": "de-DE",                         // 地域設定の上書き (OS の設定を変えずに CultureInfo.CurrentCulture を変える)
+///   "openPicker": [ "C:\a.bin" ],               // 「開く」のダイアログの代わりに返すファイル ([] はキャンセル)
+///   "savePicker": "C:\b.bin",                   // 「名前を付けて保存」のダイアログの代わりに返すパス ("" はキャンセル)
+///   "freeSpace": 1048576                        // 保存先・ジャーナルの置き場所の空き容量の上書き (ENG-25)
 /// }
 /// </code>
 /// </summary>
@@ -98,6 +102,18 @@ public sealed record TestHookSettings
     public ExceptionPlace? UnhandledException { get; init; }
 
     public int UnhandledExceptionDelayMs { get; init; }
+
+    /// <summary>地域設定の上書き (7.2「地域設定・タイムゾーンの上書き」)。null なら OS の設定のまま。</summary>
+    public string? Culture { get; init; }
+
+    /// <summary>「開く」のダイアログの代わりに返すファイル。null なら本物のダイアログを出す。</summary>
+    public IReadOnlyList<string>? OpenPicker { get; init; }
+
+    /// <summary>「名前を付けて保存」のダイアログの代わりに返すパス (空文字列はキャンセル)。null なら本物のダイアログを出す。</summary>
+    public string? SavePicker { get; init; }
+
+    /// <summary>ボリュームの空き容量の上書き (バイト数)。null なら OS の値。</summary>
+    public long? FreeSpace { get; init; }
 
     public FileSourceSpec? FileSourceFor(string path)
     {
@@ -128,6 +144,10 @@ public sealed record TestHookSettings
             KillAt = ParseEnum(root["killAt"], KillPoint.None),
             UnhandledException = root["unhandledException"] is { } e ? ParseEnum(e, ExceptionPlace.UiThread) : null,
             UnhandledExceptionDelayMs = (int)ReadLong(root["unhandledExceptionDelayMs"], 0),
+            Culture = root["culture"]?.GetValue<string>(),
+            OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
+            SavePicker = root["savePicker"]?.GetValue<string>(),
+            FreeSpace = root["freeSpace"] is { } free ? ReadLong(free, 0) : null,
         };
         return settings;
     }

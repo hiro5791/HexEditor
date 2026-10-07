@@ -55,6 +55,15 @@ public sealed partial class HexView
         result["cellWidth"] = _cellWidth;
         result["rowHeight"] = _rowHeight;
         result["focused"] = FocusState != FocusState.Unfocused;
+        result["flowDirection"] = FlowDirection.ToString();
+
+        // 列の位置 (Hex ビューの左端からの距離。Hex ビューは常に左から右なので、表示上の左右と一致する。UI-44)。
+        if (_rows.FirstOrDefault(r => r.Visible) is { } first)
+        {
+            result["offsetLeft"] = first.Offset.TransformToVisual(this).TransformBounds(new Windows.Foundation.Rect(0, 0, first.Offset.ActualWidth, 1)).X;
+            result["contentLeft"] = first.Content.TransformToVisual(this).TransformBounds(new Windows.Foundation.Rect(0, 0, first.Content.ActualWidth, 1)).X;
+            result["contentWidth"] = first.Content.ActualWidth;
+        }
 
         var rows = new JsonArray();
         foreach (RowVisual row in _rows)

@@ -17,12 +17,18 @@ public sealed partial class MainWindow
     /// <summary>「開く」: 標準のダイアログで複数のファイルを選べる。前回のフォルダを初期表示する (ENG-11 の仕様 1)。</summary>
     private async void Open_Click(object sender, RoutedEventArgs e)
     {
-        var picker = new FileOpenPicker(WindowId) { SettingsIdentifier = "HexEditor.Open" };
-        picker.FileTypeFilter.Add("*");
-        IReadOnlyList<PickFileResult> results = await picker.PickMultipleFilesAsync();
-        foreach (PickFileResult result in results)
+        const string settingsIdentifier = "HexEditor.Open";
+        IReadOnlyList<string>? paths = TestHooks.OpenPickerResult(settingsIdentifier);
+        if (paths is null)
         {
-            TryOpen(result.Path);
+            var picker = new FileOpenPicker(WindowId) { SettingsIdentifier = settingsIdentifier };
+            picker.FileTypeFilter.Add("*");
+            paths = [.. (await picker.PickMultipleFilesAsync()).Select(r => r.Path)];
+        }
+
+        foreach (string path in paths)
+        {
+            TryOpen(path);
         }
 
         UpdateTitle();
