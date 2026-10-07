@@ -150,12 +150,14 @@ public sealed partial class MainViewModel : ObservableObject
 
     public void Close(DocumentViewModel vm)
     {
+        // 取り除くと TabView の双方向の結び付けで Selected が null になるため、先に選択中かを調べておく。
+        bool wasSelected = Selected == vm;
         Documents.Remove(vm);
         Notifications.DismissOwnedBy(vm);
         Memory.Unregister(vm.Document);
         _ = MaterializeReferencesAsync(vm.Document);
         vm.Dispose();
-        if (Selected == vm)
+        if (wasSelected || Selected == vm || Selected is null)
         {
             Selected = Documents.LastOrDefault();
         }
