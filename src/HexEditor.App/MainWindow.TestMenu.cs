@@ -232,7 +232,7 @@ public sealed partial class MainWindow
                 _closingConfirmed = true;
                 Close();
             }),
-            _ => throw new ArgumentException($"Unknown command: {cmd}"),
+            _ => await HandleMoreTestCommandsAsync(cmd, request) ?? throw new ArgumentException($"Unknown command: {cmd}"),
         };
         result["ok"] ??= true;
         return result;
@@ -298,6 +298,7 @@ public sealed partial class MainWindow
             ["recoveryRoot"] = Vm.RecoveryRoot,
             ["dataRoot"] = Program.Environment.Locations.Root,
         };
+        AddTestStateExtras(state);
 
         if (Vm.Selected is { } doc)
         {
@@ -402,7 +403,8 @@ public sealed partial class MainWindow
             yield break;
         }
 
-        var pending = new Stack<MenuFlyoutItemBase>(menuBar.Items.SelectMany(m => m.Items).Reverse());
+        // ステータスバーの右クリックメニュー (UI-06 の仕様 2) の項目も、メニューを開かずに押せるようにする。
+        var pending = new Stack<MenuFlyoutItemBase>(menuBar.Items.SelectMany(m => m.Items).Concat(StatusItemsMenu.Items).Reverse());
         while (pending.Count > 0)
         {
             MenuFlyoutItemBase item = pending.Pop();
@@ -490,6 +492,7 @@ public sealed partial class MainWindow
         result["flowDirection"] = e.FlowDirection.ToString();
         result["bounds"] = BoundsInRoot(e);
         result["toolTip"] = ToolTipService.GetToolTip(e) is { } tip ? (tip as ToolTip)?.Content?.ToString() ?? tip.ToString() : null;
+        AddElementExtras(e, result);
         switch (e)
         {
             case TextBlock t:
@@ -552,7 +555,7 @@ public sealed partial class MainWindow
     }
 
     /// <summary>ウィンドウの中と、開いているポップアップ (ダイアログ) の中から AutomationId で探す。</summary>
-    private FrameworkElement? FindElement(string id)
+    internal FrameworkElement? FindElement(string id)
     {
         var roots = new List<DependencyObject> { Root };
         if (Root.XamlRoot is { } xamlRoot)

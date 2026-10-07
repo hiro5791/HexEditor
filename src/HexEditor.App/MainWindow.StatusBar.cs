@@ -25,13 +25,26 @@ public sealed partial class MainWindow
     private bool _isActive = true;
     private bool _statusLayoutPending;
 
-    private IEnumerable<Button> StatusButtons => StatusItems.Children.OfType<Button>();
+    private IEnumerable<Button> StatusButtons => StatusItems.Children.OfType<Button>().Where(b => b != StatusMore);
+
+    /// <summary>幅が足りないために「…」に入れた項目 (UI-06 の仕様 5)。</summary>
+    private readonly List<Button> _statusOverflow = [];
+
+    /// <summary>「…」に入れた項目の ID (テスト用の状態の表示に使う)。</summary>
+    internal IReadOnlyList<string> StatusOverflowIds => [.. _statusOverflow.Select(b => (string)b.Tag)];
 
     private void InitializeStatusBar()
     {
         foreach (string id in StatusItemIds)
         {
-            var item = new ToggleMenuFlyoutItem { Text = Loc.Get("Status_Item_" + char.ToUpperInvariant(id[0]) + id[1..]), Tag = id };
+            // チェックは開くたびに設定から付け直すが、開く前 (UI オートメーションで押す場合) にも正しい状態にしておく。
+            var item = new ToggleMenuFlyoutItem
+            {
+                Text = Loc.Get("Status_Item_" + char.ToUpperInvariant(id[0]) + id[1..]),
+                Tag = id,
+                IsChecked = IsStatusItemVisible(id),
+            };
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(item, "StatusMenu_" + id);
             item.Click += (_, _) =>
             {
                 SetStatusItemVisible(id, item.IsChecked);
@@ -87,7 +100,7 @@ public sealed partial class MainWindow
         bool show = running.Count > 0;
         if (show)
         {
-            StatusOperationsText.Text = running.Count == 1 ? running[0].Name : Loc.Format("Operations_Count", running.Count);
+            UpdateOperationsText(running);
 
             // 全体の進捗: 各処理の残りバイト数の合計で計算する。分からない処理だけなら不確定の表示。
             var known = running.Where(op => op.TotalBytes is > 0).ToList();
@@ -125,6 +138,10 @@ public sealed partial class MainWindow
             ProcessingCenter.Refresh();
         }
     }
+
+    /// <summary>処理名 (1 件) または「処理中 (3)」(ENG-09 の仕様 2)。</summary>
+    private void UpdateOperationsText(IReadOnlyList<LongRunningOperation> running) =>
+        StatusOperationsText.Text = running.Count == 1 ? running[0].Name : Loc.Format("Operations_Count", running.Count);
 
     /// <summary>
     /// 終わった処理の後始末: 失敗は通知で知らせ (ENG-09 の仕様 11)、ウィンドウが非アクティブなら長い処理の完了で
@@ -176,7 +193,13 @@ public sealed partial class MainWindow
     private void UpdateStatusBarLayout()
     {
         DocumentViewModel? doc = Vm.Selected;
-        bool operations = Vm.Operations.Active.Any(op => op.ShouldShow);
+        var shownOperations = Vm.Operations.Active.Where(op => op.ShouldShow).ToList();
+        bool operations = shownOperations.Count > 0;
+        if (operations)
+        {
+            // 進捗表示を出すときは、処理名も同時に出す (タイマーの更新を待たない)。
+            UpdateOperationsText(shownOperations);
+        }
         var wanted = new Dictionary<string, bool>
         {
             ["cursor"] = doc is not null,
@@ -197,6 +220,8 @@ public sealed partial class MainWindow
         }
 
         StatusSize.Content = doc?.SizeText ?? string.Empty;
+        _statusOverflow.Clear();
+        StatusMore.Visibility = Visibility.Collapsed;
         double available = StatusBar.ActualWidth - StatusBar.Padding.Left - StatusBar.Padding.Right;
         if (available <= 0)
         {
@@ -219,11 +244,42 @@ public sealed partial class MainWindow
             }
 
             Button target = StatusButtons.First(b => (string)b.Tag == step);
-            target.Visibility = Visibility.Collapsed;
+            if (target.Visibility == Visibility.Visible)
+            {
+                target.Visibility = Visibility.Collapsed;
+                _statusOverflow.Add(target);
+                StatusMore.Visibility = Visibility.Visible;
+            }
         }
     }
 
     // ---- 項目のクリック (UI-06 の仕様 1) ----
+
+    /// <summary>「…」: 隠した項目をメニューで出す。選ぶと項目のクリックと同じ動作をする。</summary>
+    private void StatusMore_Click(object sender, RoutedEventArgs e)
+    {
+        var menu = new MenuFlyout();
+        foreach (Button button in _statusOverflow)
+        {
+            string id = (string)button.Tag;
+            var item = new MenuFlyoutItem
+            {
+                Text = button.Content as string is { Length: > 0 } text ? text : Loc.Get("Status_Item_" + char.ToUpperInvariant(id[0]) + id[1..]),
+            };
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(item, "StatusMore_" + id);
+            item.Click += (_, _) =>
+            {
+                if (new Microsoft.UI.Xaml.Automation.Peers.ButtonAutomationPeer(button).GetPattern(
+                    Microsoft.UI.Xaml.Automation.Peers.PatternInterface.Invoke) is Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider invoke)
+                {
+                    invoke.Invoke();
+                }
+            };
+            menu.Items.Add(item);
+        }
+
+        menu.ShowAt(StatusMore);
+    }
 
     private void StatusCursor_Click(object sender, RoutedEventArgs e) => GoTo_Click(sender, e);
 

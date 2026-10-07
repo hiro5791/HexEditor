@@ -26,7 +26,12 @@
             タイトルバー (UI-02): アイコン、メニューバー (UI-03)、タイトルの順。TitleBar は Content の対話する要素を
             ドラッグ領域から除く。タイトルは自分で表示する (TitleBar の Title はメニューより前に出るため)。
         -->
-        <TitleBar x:Name="AppTitleBar" Height="48">
+        <!--  タイトルバー自体はフォーカスを受けない (枠の出ないフォーカスの止まり先を作らない。UI-52 の仕様 6)。  -->
+        <TitleBar
+            x:Name="AppTitleBar"
+            Height="48"
+            AutomationProperties.AutomationId="TitleBar"
+            IsTabStop="False">
             <TitleBar.LeftHeader>
                 <Grid Padding="12,0,0,0" ColumnSpacing="8">
                     <Grid.ColumnDefinitions>
@@ -39,6 +44,7 @@
                         Height="16"
                         VerticalAlignment="Center"
                         AutomationProperties.AccessibilityView="Raw"
+                        AutomationProperties.AutomationId="TitleBar_Icon"
                         Source="Assets/Square44x44Logo.targetsize-24_altform-unplated.png" />
                 <MenuBar x:Name="MainMenu" Grid.Column="1" VerticalAlignment="Center" AutomationProperties.AutomationId="MainMenu">
                     <MenuBarItem x:Uid="Menu_File">
@@ -197,6 +203,7 @@
         <ScrollViewer
             x:Name="StartPage"
             Grid.Row="4"
+            Canvas.ZIndex="1"
             AutomationProperties.AutomationId="StartPage"
             Visibility="Collapsed">
             <StackPanel
@@ -337,6 +344,17 @@
                             </StackPanel>
                         </Flyout>
                     </Button.Flyout>
+                </Button>
+                <!--  幅が足りないときに隠した項目 (UI-06 の仕様 5)。  -->
+                <Button
+                    x:Name="StatusMore"
+                    x:Uid="Status_More"
+                    AutomationProperties.AutomationId="Status_More"
+                    Click="StatusMore_Click"
+                    Style="{StaticResource StatusItemStyle}"
+                    Tag="more"
+                    Visibility="Collapsed">
+                    <FontIcon FontSize="14" Glyph="&#xE712;" />
                 </Button>
             </StackPanel>
         </Grid>

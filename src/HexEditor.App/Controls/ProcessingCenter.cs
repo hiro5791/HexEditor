@@ -99,7 +99,9 @@ public sealed partial class ProcessingCenter : UserControl
             }
 
             text.Children.Add(bar);
-            text.Children.Add(Caption(OperationText.Details(op)));
+            TextBlock details = Caption(OperationText.Details(op));
+            AutomationProperties.SetAutomationId(details, "Operations_Details");
+            text.Children.Add(details);
             var cancel = new Button { Content = Loc.Get("Common_Cancel"), VerticalAlignment = VerticalAlignment.Center };
             AutomationProperties.SetAutomationId(cancel, "Operations_Cancel");
             AutomationProperties.SetName(cancel, $"{Loc.Get("Common_Cancel")}: {op.Name}");
@@ -110,7 +112,9 @@ public sealed partial class ProcessingCenter : UserControl
         }
         else
         {
-            text.Children.Add(Caption(OperationText.Result(op)));
+            TextBlock result = Caption(OperationText.Result(op));
+            AutomationProperties.SetAutomationId(result, "Operations_Result");
+            text.Children.Add(result);
         }
 
         row.Children.Add(text);
@@ -151,7 +155,13 @@ public static class OperationText
                 : Loc.Format("Operations_RemainingSeconds", Math.Max(1, Math.Ceiling(remaining.TotalSeconds))));
         }
 
-        parts.Add(Loc.Format("Operations_Elapsed", op.Elapsed.ToString(op.Elapsed.TotalHours >= 1 ? @"h\:mm\:ss" : @"m\:ss")));
+        // 検索の処理では、これまでに見つかった一致の数 (FIND-02 の仕様 2)。
+        if (op.Matches is long matches)
+        {
+            parts.Add(Loc.Format("Operations_Matches", matches.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)));
+        }
+
+        parts.Add(Loc.Format("Operations_Elapsed",op.Elapsed.ToString(op.Elapsed.TotalHours >= 1 ? @"h\:mm\:ss" : @"m\:ss")));
         if (op.State == OperationState.Cancelling)
         {
             parts.Add(Loc.Get("Operations_Cancelling"));

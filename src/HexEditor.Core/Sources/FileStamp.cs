@@ -34,6 +34,25 @@ public sealed record FileStamp(long Length, DateTime LastWriteTimeUtc, string Fi
         }
     }
 
+    /// <summary>ファイルのハードリンクの数 (ENG-22 の仕様 4)。取れなければ null。</summary>
+    public static int? LinkCount(string path)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return null;
+        }
+
+        try
+        {
+            using SafeFileHandle handle = File.OpenHandle(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+            return GetFileInformationByHandle(handle, out ByHandleFileInformation info) ? (int)info.NumberOfLinks : null;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return null;
+        }
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     private struct ByHandleFileInformation
     {

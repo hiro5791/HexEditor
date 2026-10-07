@@ -93,6 +93,15 @@ public sealed partial class MainWindow
             deferral.Complete();
         }
 
+        await DropItemsAsync(items, insertAt);
+    }
+
+    /// <summary>
+    /// ドロップされた項目を開く。<paramref name="insertAt"/> はタブを挿入する位置 (null なら末尾)。テスト用の命令の通り道からも
+    /// 同じ処理を呼ぶ (Explorer からの実際のドラッグはマウスを使うため)。
+    /// </summary>
+    internal async Task DropItemsAsync(IReadOnlyList<IStorageItem> items, int? insertAt)
+    {
         var files = items.OfType<StorageFile>().ToList();
         int folders = items.Count - files.Count;
         if (folders > 0)
@@ -130,6 +139,7 @@ public sealed partial class MainWindow
             CloseButtonText = Loc.Get("Common_Cancel"),
             DefaultButton = ContentDialogButton.Primary,
         };
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(dialog, "DropConfirmDialog");
         return await dialog.ShowAsync() == ContentDialogResult.Primary;
     }
 

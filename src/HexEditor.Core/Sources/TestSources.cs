@@ -154,6 +154,10 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
     public long ReadCount => Interlocked.Read(ref _readCount);
 
     private long _readCount;
+    private long _lastReadStarted;
+
+    /// <summary>最後の読み込みを始めた時刻 (<see cref="System.Diagnostics.Stopwatch.GetTimestamp"/>。読み込みの記録。FIND-02 の確認用)。0 は未読み込み。</summary>
+    public long LastReadStartedTimestamp => Interlocked.Read(ref _lastReadStarted);
 
     /// <summary>指定の範囲の読み込みを I/O エラーにする (既定は ERROR_IO_DEVICE)。</summary>
     public void AddReadError(long offset, long length, UnreadableReason reason = UnreadableReason.IoError, int errorCode = 0x45D)
@@ -174,6 +178,7 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
 
     public override ReadResult Read(long offset, Span<byte> buffer)
     {
+        Interlocked.Exchange(ref _lastReadStarted, System.Diagnostics.Stopwatch.GetTimestamp());
         if (Delays(offset, buffer.Length))
         {
             Thread.Sleep(Delay);
@@ -184,6 +189,7 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
 
     public override async ValueTask<ReadResult> ReadAsync(long offset, Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
+        Interlocked.Exchange(ref _lastReadStarted, System.Diagnostics.Stopwatch.GetTimestamp());
         if (Delays(offset, buffer.Length))
         {
             await Task.Delay(Delay, cancellationToken).ConfigureAwait(false);

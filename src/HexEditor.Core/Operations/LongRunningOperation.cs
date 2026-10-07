@@ -44,6 +44,7 @@ public sealed class LongRunningOperation
     private readonly object _lock = new();
     private long _processed;
     private long _lastNotifyTicks = long.MinValue;
+    private long _matches = -1;
 
     internal LongRunningOperation(string name, OperationKind kind, object? target, long? totalBytes, TimeProvider time)
     {
@@ -147,6 +148,12 @@ public sealed class LongRunningOperation
     }
 
     public void SetTotal(long? totalBytes) => TotalBytes = totalBytes;
+
+    /// <summary>検索の処理で、これまでに見つかった一致の数 (FIND-02 の仕様 2)。一致を数えない処理では null。</summary>
+    public long? Matches => Interlocked.Read(ref _matches) is var m && m >= 0 ? m : null;
+
+    /// <summary>これまでに見つかった一致の数を報告する (検索の処理だけが呼ぶ)。</summary>
+    public void ReportMatches(long count) => Interlocked.Exchange(ref _matches, Math.Max(0, count));
 
     /// <summary>キャンセルを要求する。処理は 200 ms 以内に止まる (ENG-09 の仕様 5)。</summary>
     public void Cancel()

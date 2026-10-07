@@ -30,6 +30,10 @@ public static class TestDataCatalog
         new("TD-FF-1M", MiB, "すべて FF", path => WriteGenerated(path, MiB, (_, s) => s.Fill(0xFF))),
         new("TD-RANDOM-16M", 16 * MiB, "固定の種の乱数", path => WriteGenerated(path, 16 * MiB, (o, s) => Random(RandomSeed, o, s))),
         new("TD-MARKERS-1G", GiB, "先頭・末尾・2^20 ごとの目印 (スパース)", path => WriteMarkers(path, GiB, MarkersEvery(GiB, MiB))),
+
+        // 04-search.md・09-ui-and-settings.md で定義したもの。
+        new("TD-FIND-SPARSE-2G", 2 * GiB, "TD-MARKERS-1G と同じ規則の目印 2,049 個 (スパース)", path => WriteMarkers(path, 2 * GiB, MarkersEvery(2 * GiB, MiB))),
+        new("TD-UI-SPARSE-1536M", 1536 * MiB, "先頭と末尾の目印 (スパース)", path => WriteMarkers(path, 1536 * MiB, [0, 1536 * MiB - MarkerLength])),
         new("TD-SPARSE-100G", 100 * GiB, "先頭・末尾・2^31・2^32 の前後・1 GiB ごとの目印 (スパース)",
             path => WriteMarkers(path, 100 * GiB, MarkersEvery(100 * GiB, GiB).Concat(Around(1L << 31)).Concat(Around(1L << 32)))),
         new("TD-SPARSE-2T", 2 * TiB, "先頭・末尾・2^31・2^32・2^40 の前後の目印 (スパース)",

@@ -32,6 +32,10 @@ public sealed partial class FindBar : UserControl
     private SearchResults? _count;
     private bool _kindChosen;
 
+    /// <summary>実行中の検索・数え上げの長時間処理 (進捗バーの表示に使う)。</summary>
+    private volatile LongRunningOperation? _activeOperation;
+    private Microsoft.UI.Dispatching.DispatcherQueueTimer? _progressTimer;
+
     public FindBar()
     {
         InitializeComponent();
@@ -54,6 +58,48 @@ public sealed partial class FindBar : UserControl
         ToolTipService.SetToolTip(OptionsToggle, Loc.Get("Find_Options_Name"));
         ToolTipService.SetToolTip(CloseButton, Loc.Get("Find_Close_Name"));
     }
+
+    // ---- 進捗とキャンセル (FIND-02) ----
+
+    /// <summary>検索・数え上げの実行中は、0.5 秒を過ぎたら進捗バーとキャンセルボタンを出す (FIND-02 の仕様 1)。</summary>
+    private void StartProgress()
+    {
+        if (_progressTimer is null)
+        {
+            _progressTimer = DispatcherQueue.CreateTimer();
+            _progressTimer.Interval = TimeSpan.FromMilliseconds(100);
+            _progressTimer.Tick += (_, _) => UpdateProgress();
+        }
+
+        _progressTimer.Start();
+    }
+
+    private void UpdateProgress()
+    {
+        bool running = _running is not null || _counting is not null;
+        LongRunningOperation? op = _activeOperation;
+        bool show = running && op is not null && op.Elapsed > LongRunningOperation.ShowDelay;
+        BusyPanel.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+        if (show)
+        {
+            Progress.IsIndeterminate = op!.Fraction is null;
+            Progress.Value = op.Fraction ?? 0;
+        }
+
+        if (!running)
+        {
+            _progressTimer?.Stop();
+        }
+    }
+
+    /// <summary>実行中の検索と数え上げを取り消す (キャンセルボタン、検索欄の Esc。FIND-02 の仕様 3)。</summary>
+    private void CancelRunning()
+    {
+        _running?.Cancel();
+        _counting?.Cancel();
+    }
+
+    private void Cancel_Click(object sender, RoutedEventArgs e) => CancelRunning();
 
     private EditorState? _editor;
 
@@ -78,6 +124,9 @@ public sealed partial class FindBar : UserControl
     public bool HasPattern => _pattern is not null;
 
     public bool IsOpen => Visibility == Visibility.Visible;
+
+    /// <summary>進捗バーとキャンセルボタンを表示している (FIND-02 の仕様 1)。</summary>
+    public bool IsProgressVisible => IsOpen && BusyPanel.Visibility == Visibility.Visible;
 
     public event EventHandler? Closed;
 
@@ -160,8 +209,7 @@ public sealed partial class FindBar : UserControl
 
     public void Close()
     {
-        _running?.Cancel();
-        _counting?.Cancel();
+        CancelRunning();
         Visibility = Visibility.Collapsed;
         MatchesChanged?.Invoke(this, EventArgs.Empty);
         Closed?.Invoke(this, EventArgs.Empty);
@@ -187,8 +235,8 @@ public sealed partial class FindBar : UserControl
         long cursor = editor.Cursor;
         long selStart = editor.SelectionStart;
         long selLength = editor.SelectionLength;
-        Busy.IsActive = true;
         Status.Text = Loc.Get("Find_Searching");
+        StartProgress();
         try
         {
             SearchHit? hit = Operations is null
@@ -201,6 +249,8 @@ public sealed partial class FindBar : UserControl
                     op =>
                     {
                         cts.Token.Register(op.Cancel);
+                        op.ReportMatches(0);
+                        _activeOperation = op;
                         return Task.FromResult(_navigator.FindNext(snapshot, pattern, forward, wrap, cursor, selStart, selLength, options, op, op.CancellationToken));
                     });
             if (cts.IsCancellationRequested)
@@ -231,8 +281,8 @@ public sealed partial class FindBar : UserControl
         {
             if (_running == cts)
             {
-                Busy.IsActive = false;
                 _running = null;
+                UpdateProgress();
             }
         }
     }
@@ -284,6 +334,7 @@ public sealed partial class FindBar : UserControl
         UpdateCountText();
         DocumentSnapshot snapshot = editor.Document.Current;
         var options = new SearchOptions { Scope = CurrentScope };
+        StartProgress();
         try
         {
             SearchResults results = Operations is null
@@ -296,7 +347,22 @@ public sealed partial class FindBar : UserControl
                     op =>
                     {
                         cts.Token.Register(op.Cancel);
-                        return Task.FromResult(SearchEngine.Count(snapshot, pattern, options, op, op.CancellationToken));
+                        _activeOperation = op;
+
+                        // 数え上げ (SearchEngine.Count と同じ条件) の途中の件数を処理センターに出す (FIND-02 の仕様 2)。
+                        var counted = new SearchResults(snapshot, pattern, options with { IncludeOverlapping = true, MaxMatches = SearchEngine.CountLimit });
+                        op.ReportMatches(0);
+                        counted.MatchesAdded += (_, _) => op.ReportMatches(counted.Count);
+                        try
+                        {
+                            SearchEngine.FindAll(counted, op, op.CancellationToken);
+                        }
+                        finally
+                        {
+                            op.ReportMatches(counted.Count);
+                        }
+
+                        return Task.FromResult(counted);
                     });
             if (_counting == cts)
             {
@@ -314,6 +380,7 @@ public sealed partial class FindBar : UserControl
             {
                 _counting = null;
                 UpdateCountText();
+                UpdateProgress();
             }
         }
     }
@@ -491,20 +558,27 @@ public sealed partial class FindBar : UserControl
     private async void Query_KeyDown(object sender, KeyRoutedEventArgs e)
     {
         bool shift = InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down);
-        switch (e.Key)
+        if (e.Key is VirtualKey.Enter or VirtualKey.Escape)
+        {
+            e.Handled = true;
+            await HandleQueryKeyAsync(e.Key, shift);
+        }
+    }
+
+    /// <summary>検索欄の Enter / Shift+Enter / Esc の処理 (テスト用の命令の通り道からも呼ぶ)。</summary>
+    internal async Task HandleQueryKeyAsync(VirtualKey key, bool shift)
+    {
+        switch (key)
         {
             case VirtualKey.Enter:
-                e.Handled = true;
                 bool forward = DirectionChoice.SelectedIndex == 0;
                 await FindAsync(shift ? !forward : forward);
                 StartCountIfAutomatic();
                 break;
             case VirtualKey.Escape:
-                e.Handled = true;
                 if (_running is not null || _counting is not null)
                 {
-                    _running?.Cancel();
-                    _counting?.Cancel();
+                    CancelRunning();
                 }
                 else
                 {

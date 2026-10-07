@@ -93,6 +93,11 @@ public sealed partial class MainWindow
     /// <summary>既定のブラウザで開く。開けなければ URL をクリップボードにコピーして知らせる (UI-40 の「エラー」)。</summary>
     private async Task OpenUriAsync(Uri uri)
     {
+        if (TestHooks.InterceptLaunch(uri))
+        {
+            return;
+        }
+
         if (!await Windows.System.Launcher.LaunchUriAsync(uri))
         {
             var package = new DataPackage();
