@@ -158,4 +158,5 @@
   <data name="HexView_Char_Null" xml:space="preserve"><value>null</value></data>
   <data name="HexView_Char_Space" xml:space="preserve"><value>space</value></data>
   <data name="HexView_Char_Unprintable" xml:space="preserve"><value>non-printable character</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} bytes deleted</value></data>
 </root>

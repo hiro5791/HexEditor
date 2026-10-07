@@ -1127,7 +1127,7 @@ public sealed partial class HexView : UserControl
             p.Height = height;
             p.Clip = new RectangleGeometry { Rect = new Windows.Foundation.Rect(0, 0, width, height) };
             var group = new GeometryGroup();
-            const double step = 5;
+            const double step = 6;
             for (double i = -height; i < width; i += step)
             {
                 group.Children.Add(new LineGeometry
@@ -1219,7 +1219,7 @@ public sealed partial class HexView : UserControl
         public Brush For(CellKind kind) => kind switch
         {
             CellKind.Modified => Modified,
-            CellKind.Loading or CellKind.Unreadable or CellKind.Empty => Dim,
+            CellKind.Loading or CellKind.Empty => Dim,
             _ => Text,
         };
     }

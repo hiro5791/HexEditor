@@ -28,7 +28,7 @@
                     <StaticResource x:Key="HexViewSelectionInactiveTextBrush" ResourceKey="TextFillColorPrimaryBrush" />
                     <StaticResource x:Key="HexViewCaretBrush" ResourceKey="TextFillColorPrimaryBrush" />
                     <StaticResource x:Key="HexViewSecondaryCaretBrush" ResourceKey="TextFillColorTertiaryBrush" />
-                    <StaticResource x:Key="HexViewHatchBrush" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewHatchBrush" ResourceKey="TextFillColorDisabledBrush" />
                     <StaticResource x:Key="HexViewCursorMarkerBrush" ResourceKey="AccentFillColorDefaultBrush" />
                     <StaticResource x:Key="HexViewSearchMarkerBrush" ResourceKey="SystemFillColorCautionBrush" />
                     <StaticResource x:Key="HexViewFocusOuterBrush" ResourceKey="FocusStrokeColorOuterBrush" />
@@ -47,7 +47,7 @@
                     <StaticResource x:Key="HexViewSelectionInactiveTextBrush" ResourceKey="TextFillColorPrimaryBrush" />
                     <StaticResource x:Key="HexViewCaretBrush" ResourceKey="TextFillColorPrimaryBrush" />
                     <StaticResource x:Key="HexViewSecondaryCaretBrush" ResourceKey="TextFillColorTertiaryBrush" />
-                    <StaticResource x:Key="HexViewHatchBrush" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewHatchBrush" ResourceKey="TextFillColorDisabledBrush" />
                     <StaticResource x:Key="HexViewCursorMarkerBrush" ResourceKey="AccentFillColorDefaultBrush" />
                     <StaticResource x:Key="HexViewSearchMarkerBrush" ResourceKey="SystemFillColorCautionBrush" />
                     <StaticResource x:Key="HexViewFocusOuterBrush" ResourceKey="FocusStrokeColorOuterBrush" />

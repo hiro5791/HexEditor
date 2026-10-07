@@ -158,4 +158,5 @@
   <data name="HexView_Char_Null" xml:space="preserve"><value>ヌル</value></data>
   <data name="HexView_Char_Space" xml:space="preserve"><value>空白</value></data>
   <data name="HexView_Char_Unprintable" xml:space="preserve"><value>表示できない文字</value></data>
+  <data name="HexView_Announce_Deleted" xml:space="preserve"><value>{0} バイトを削除しました</value></data>
 </root>

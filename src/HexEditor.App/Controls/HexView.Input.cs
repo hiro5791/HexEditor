@@ -209,7 +209,7 @@ public sealed partial class HexView
                 _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false);
             }
 
-            e.Handled = true;
+            // Handled にしない (右クリックのジェスチャから ContextRequested でメニューを開く)。
             return;
         }
 
@@ -941,8 +941,7 @@ public sealed partial class HexView
         {
             if (_editor is not null)
             {
-                EditResult result = _editor.Delete();
-                Report(result);
+                DeleteWithAnnouncement(_editor.Delete);
             }
         }));
         menu.Items.Add(new MenuFlyoutSeparator());
@@ -1089,10 +1088,10 @@ public sealed partial class HexView
                 Report(_editor.ToggleInsertMode());
                 break;
             case VirtualKey.Delete when !shift:
-                Report(_editor.Delete());
+                DeleteWithAnnouncement(_editor.Delete);
                 break;
             case VirtualKey.Back:
-                Report(_editor.Backspace());
+                DeleteWithAnnouncement(_editor.Backspace);
                 break;
             case VirtualKey.Escape:
                 _editor.ClearSelection();
@@ -1109,6 +1108,18 @@ public sealed partial class HexView
         }
     }
 
+    /// <summary>削除して、削除したバイト数を読み上げる (EDIT-13 の仕様 6)。</summary>
+    private void DeleteWithAnnouncement(Func<EditResult> delete)
+    {
+        long before = _editor!.Document.Length;
+        Report(delete());
+        long removed = before - _editor.Document.Length;
+        if (removed > 0)
+        {
+            Announce(Loc.Format("HexView_Announce_Deleted", removed.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)), "HexViewDeleted");
+        }
+    }
+
     /// <summary>F6 / Shift+F6。ウィンドウが処理しなければ、次 / 前のフォーカス可能な要素へ移す。</summary>
     private void MoveFocusToRegion(bool forward)
     {
@@ -1119,10 +1130,14 @@ public sealed partial class HexView
             return;
         }
 
-        var options = new FindNextElementOptions { SearchRoot = XamlRoot?.Content };
-        if (!FocusManager.TryMoveFocus(forward ? FocusNavigationDirection.Next : FocusNavigationDirection.Previous, options))
+        try
         {
-            FocusManager.TryMoveFocus(forward ? FocusNavigationDirection.Next : FocusNavigationDirection.Previous);
+            var options = new FindNextElementOptions { SearchRoot = XamlRoot?.Content };
+            FocusManager.TryMoveFocus(forward ? FocusNavigationDirection.Next : FocusNavigationDirection.Previous, options);
+        }
+        catch (ArgumentException ex)
+        {
+            AppLog.Warning($"HexView: フォーカスを移せません ({ex.HResult:X8})");
         }
     }
 
