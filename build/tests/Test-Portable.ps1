@@ -12,16 +12,28 @@
   The parts that need the settings screen (changing the theme and reading settings.json) are checked
   when the settings UI exists (UI-23); until then the data folder and the absence of other folders are checked.
 
+  With -TestZip (a test build of the portable zip: build/publish.ps1 -TestHooks) and -TestDataDir, the cases that
+  edit and save are driven through the test channel (AppDriver.ps1):
+    TC-PKG-06-01  start, edit, save and exit add no HexEditor values under HKCU\Software (Process Monitor on CI;
+                  the before/after export of HKCU\Software everywhere)
+    TC-PKG-06-02  start from a read-only volume (a VHDX attached read-only), InfoBar, edit, save elsewhere (CI only:
+                  attaching a VHDX needs administrator rights)
+    TC-PKG-13-03  after a forced termination, "Discard" removes the recovery data in Data\recovery
+
   This starts windows, so do not run it on a desktop that someone is using.
 #>
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)][string]$Zip,
-    [string]$WorkDir = (Join-Path $env:RUNNER_TEMP 'portable-tests')
+    [string]$WorkDir = (Join-Path $env:RUNNER_TEMP 'portable-tests'),
+    [string]$TestZip,
+    [string]$TestDataDir
 )
 
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/TestCase.ps1"
+. "$PSScriptRoot/AppDriver.ps1"
+. "$PSScriptRoot/ProcessMonitor.ps1"
 if (-not $env:RUNNER_TEMP -and -not $PSBoundParameters.ContainsKey('WorkDir')) { throw 'Set -WorkDir (this script is meant for CI runners).' }
 
 function Expand-Portable([string]$Target) {
@@ -146,6 +158,175 @@ Invoke-TestCase 'TC-UI-15-05' 'an unresponsive instance: the second start runs o
     } finally {
         [void][HexTests.Native]::NtResumeProcess($first.Handle)
         Stop-Gracefully $first
+    }
+}
+
+# ---- Cases that need a test build (-TestZip) ----
+
+function Expand-TestBuild([string]$Target) {
+    if (Test-Path $Target) { Remove-Item $Target -Recurse -Force }
+    New-Item -ItemType Directory -Force $Target | Out-Null
+    Expand-Archive -Path $TestZip -DestinationPath $Target
+    Join-Path $Target 'HexEditor'
+}
+
+# Opens a file in a new instance of the test build and waits for its hex view.
+function Start-WithFile([string]$Exe, [string]$File, [hashtable]$Hooks = @{}) {
+    $app = Start-TestApp -Exe $Exe -Arguments @($File) -Hooks $Hooks
+    try {
+        Wait-Until { $s = Get-TestState $app; $null -ne $s.document -and $s.hexViews -gt 0 } 30 "the tab of $File"
+    } catch { Stop-TestAppForcibly $app; throw }
+    $app
+}
+
+# Registry keys that Windows itself writes for any app (PKG-06 spec 3): Explorer's history of dialogs, recent
+# documents and app usage, the shell's caches, compatibility data, input and graphics settings.
+$script:WindowsRecordedKeys = @(
+    '\Software\Microsoft\Windows\CurrentVersion\Explorer\',
+    '\Software\Microsoft\Windows\CurrentVersion\Search\',
+    '\Software\Microsoft\Windows\CurrentVersion\UFH\',
+    '\Software\Microsoft\Windows\Shell\',
+    '\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\',
+    '\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\',
+    '\Software\Microsoft\Direct3D\',
+    '\Software\Microsoft\DirectX\',
+    '\Software\Microsoft\CTF\',
+    '\Software\Microsoft\Input\',
+    '\Software\Microsoft\InputPersonalization\'
+)
+
+function Test-WindowsRecorded([string]$Key) {
+    foreach ($k in $script:WindowsRecordedKeys) { if ($Key.IndexOf($k, [System.StringComparison]::OrdinalIgnoreCase) -ge 0) { return $true } }
+    $false
+}
+
+# HKCU\Software exported with reg.exe (read only) as a set of "<key>|<line>".
+function Export-UserSoftware([string]$File) {
+    & reg.exe export 'HKCU\Software' $File /y | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw 'reg export failed' }
+    $set = New-Object 'System.Collections.Generic.HashSet[string]'
+    $key = ''
+    foreach ($line in [System.IO.File]::ReadLines($File)) {
+        if ($line.StartsWith('[')) { $key = $line.Trim('[', ']') } elseif ($line) { [void]$set.Add("$key|$line") }
+    }
+    , $set
+}
+
+if ($TestZip) {
+    if (-not $TestDataDir) { throw '-TestZip needs -TestDataDir (tools/TestDataGen output with TD-SEQ-1M).' }
+
+    Invoke-TestCase 'TC-PKG-06-01' 'no HexEditor values in HKCU\Software' {
+        $app = Expand-TestBuild (Join-Path $WorkDir 'reg')
+        $file = Copy-TestData $TestDataDir 'TD-SEQ-1M' (Join-Path $WorkDir 'reg\seq.bin')
+        $before = Export-UserSoftware (Join-Path $WorkDir 'reg\before.reg')
+        $procmon = $null
+        $backing = Join-Path $WorkDir 'reg\events.pml'
+        if ($env:GITHUB_ACTIONS) {
+            $procmon = Get-ProcessMonitor (Join-Path $WorkDir 'procmon')
+            Start-ProcessMonitor $procmon $backing
+        } else {
+            Add-TestNote 'TC-PKG-06-01: Process Monitor runs only on CI runners; here only the export of HKCU\Software before and after was compared.'
+        }
+        $recorded = $null
+        try {
+            $a = Start-WithFile (Join-Path $app 'HexEditor.exe') $file
+            try {
+                Edit-Bytes $a 0 'FF'
+                $r = Send-TestCommand $a 'key' @{ key = 'S'; ctrl = $true }
+                Assert-True ($r.handledBy -eq 'menu:Command_Save') "Ctrl+S was handled by $($r.handledBy)"
+                [void](Send-TestCommand $a 'idle')
+                Wait-Until { -not (Get-TestState $a).document.modified } 30 'the save'
+            } finally { Stop-TestApp $a }
+        } finally {
+            if ($procmon) { $recorded = Stop-ProcessMonitor $procmon $backing '(?i)^HexEditor\.exe$' }
+        }
+        Assert-True ([System.IO.File]::ReadAllBytes($file)[0] -eq 0xFF) 'the file was not saved'
+
+        if ($procmon) {
+            Assert-True ($recorded.Processes.Count -gt 0) 'Process Monitor recorded no registry events of HexEditor.exe'
+            $writes = @($recorded.Writes |
+                    Where-Object { $_.Path -like 'HKCU\Software\*' -and -not (Test-WindowsRecorded ('\' + $_.Path.Substring(5) + '\')) })
+            Write-Host "Registry writes of HexEditor.exe under HKCU\Software (not by Windows): $($writes.Count)"
+            Assert-True ($writes.Count -eq 0) ("HexEditor wrote to HKCU\Software: " + (($writes | Select-Object -First 20 | ForEach-Object { "$($_.Operation) $($_.Path)" }) -join '; '))
+        }
+        $after = Export-UserSoftware (Join-Path $WorkDir 'reg\after.reg')
+        $added = @($after | Where-Object { -not $before.Contains($_) -and $_ -match 'hexeditor' } |
+                Where-Object { -not (Test-WindowsRecorded ('\' + ($_ -split '\|', 2)[0].Substring('HKEY_CURRENT_USER\'.Length) + '\')) })
+        Assert-True ($added.Count -eq 0) ("new values with HexEditor in HKCU\Software: " + (($added | Select-Object -First 20) -join '; '))
+    }
+
+    Invoke-TestCase 'TC-PKG-06-02' 'start from read-only media' {
+        if (-not $env:GITHUB_ACTIONS) { Skip-TestCase 'attaching a VHDX needs administrator rights; CI runners only.' }
+        $vhd = Join-Path $WorkDir 'readonly.vhdx'
+        if (Test-Path $vhd) { Remove-Item $vhd -Force }
+        $diskpartScript = Join-Path $WorkDir 'diskpart.txt'
+        Set-Content -Path $diskpartScript -Value "create vdisk file=`"$vhd`" maximum=64 type=expandable" -Encoding ascii
+        & diskpart.exe /s $diskpartScript | Out-Host
+        if ($LASTEXITCODE -ne 0) { throw 'diskpart could not create the VHDX' }
+        # Write the portable version and TD-SEQ-1M (E:\HexEditor, E:\data\seq.bin of the test case) on it.
+        $disk = Mount-DiskImage -ImagePath $vhd -PassThru | Get-Disk
+        $volume = $disk | Initialize-Disk -PartitionStyle MBR -PassThru | New-Partition -AssignDriveLetter -UseMaximumSize |
+            Format-Volume -FileSystem NTFS -NewFileSystemLabel 'HEXRO' -Confirm:$false
+        $root = "$($volume.DriveLetter):\"
+        $app = Expand-TestBuild (Join-Path $WorkDir 'ro-source')
+        Copy-Item $app (Join-Path $root 'HexEditor') -Recurse
+        [void](Copy-TestData $TestDataDir 'TD-SEQ-1M' (Join-Path $root 'data\seq.bin'))
+        Dismount-DiskImage -ImagePath $vhd | Out-Null
+        $letter = (Mount-DiskImage -ImagePath $vhd -Access ReadOnly -PassThru | Get-Disk | Get-Partition | Where-Object DriveLetter | Select-Object -First 1).DriveLetter
+        try {
+            $root = "${letter}:\"
+            $out = Join-Path $WorkDir 'out\seq-edited.bin'
+            New-Item -ItemType Directory -Force (Split-Path -Parent $out) | Out-Null
+            if (Test-Path $out) { Remove-Item $out -Force }
+            # 1. Start from the read-only volume.
+            $a = Start-WithFile (Join-Path $root 'HexEditor\HexEditor.exe') (Join-Path $root 'data\seq.bin')
+            try {
+                # 2. The app-wide InfoBar: settings are not saved.
+                Wait-Until { @((Get-TestState $a).notifications | Where-Object { $_.message -match "Settings won't be saved" }).Count -gt 0 } 15 'the InfoBar about the data folder'
+                Add-TestNote 'TC-PKG-06-02: the "Export settings" button is not checked (settings export, UI-25, is phase 1).'
+                # 3. Overwrite offset 0 with FF. 4. Save As C:\out\seq-edited.bin (the system Save dialog).
+                Edit-Bytes $a 0 'FF'
+                [void](Send-TestCommand $a 'invoke' @{ id = 'Command_SaveAs' })
+                Complete-SaveDialog $a.Id $out
+                Wait-Until { (Test-Path $out) -and -not (Get-TestState $a).document.modified } 30 'the save as'
+            } finally { Stop-TestApp $a }
+            # 5. The saved file has FF at offset 0.
+            Assert-True ([System.IO.File]::ReadAllBytes($out)[0] -eq 0xFF) 'offset 0 of the saved file is not FF'
+        } finally {
+            Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $_.Path -like "${letter}:\*" } | Stop-Process -Force
+            Dismount-DiskImage -ImagePath $vhd | Out-Null
+            Remove-Item $vhd -Force -ErrorAction SilentlyContinue
+        }
+    }
+
+    Invoke-TestCase 'TC-PKG-13-03' '"Discard" after a forced termination removes the recovery data' {
+        $app = Expand-TestBuild (Join-Path $WorkDir 'recovery')
+        $exe = Join-Path $app 'HexEditor.exe'
+        $recovery = Join-Path $app 'Data\recovery'
+        $file = Copy-TestData $TestDataDir 'TD-SEQ-1M' (Join-Path $WorkDir 'recovery\seq.bin')
+        # The recovery interval is 2 s instead of 1 minute (the same timer; only the wait is shorter).
+        $hooks = @{ recoveryIntervalSeconds = 2 }
+        $a = Start-WithFile $exe $file $hooks
+        try {
+            Edit-Bytes $a 0 'FF'
+            Wait-Until { @(Get-ChildItem $recovery -Recurse -Filter 'state.json' -ErrorAction SilentlyContinue).Count -gt 0 } 30 'the recovery data'
+        } finally {
+            # 1. Forced termination.
+            Stop-TestAppForcibly $a
+        }
+        # 2. The recovery data is there.
+        $states = @(Get-ChildItem $recovery -Recurse -Filter 'state.json')
+        Assert-True ($states.Count -eq 1) "$($states.Count) recovery entries after the forced termination"
+        $entry = $states[0].Directory.FullName
+        # 3. Start again and choose "Discard".
+        $b = Start-TestApp -Exe $exe -Hooks $hooks
+        try {
+            Wait-Until { (Send-TestCommand $b 'element' @{ id = 'Recovery_Discard' }).found } 20 'the recovery dialog'
+            [void](Send-TestCommand $b 'invoke' @{ id = 'Recovery_Discard' })
+            # 4. The recovery data is gone.
+            Wait-Until { -not (Test-Path (Join-Path $entry 'state.json')) } 15 'the recovery data to be removed'
+        } finally { Stop-TestApp $b }
+        Assert-True (@(Get-ChildItem $recovery -Recurse -Filter 'state.json' -ErrorAction SilentlyContinue).Count -eq 0) 'recovery data remains'
     }
 }
 

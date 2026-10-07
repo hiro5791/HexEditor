@@ -10,6 +10,8 @@ function Invoke-TestCase {
         [Parameter(Mandatory)][string]$Title,
         [Parameter(Mandatory)][scriptblock]$Body
     )
+    # HEX_TEST_CASES=<ID>,<ID>... runs only those cases (to try one case against a local build).
+    if ($env:HEX_TEST_CASES -and ($env:HEX_TEST_CASES -split ',' | ForEach-Object { $_.Trim() }) -notcontains $Id) { return }
     Write-Host "=== $Id $Title"
     $start = Get-Date
     try {
@@ -17,9 +19,29 @@ function Invoke-TestCase {
         $script:TestResults.Add([pscustomobject]@{ Id = $Id; Title = $Title; Result = 'Passed'; Message = ''; Seconds = ((Get-Date) - $start).TotalSeconds })
         Write-Host "PASS $Id"
     } catch {
+        if ("$_" -like 'SKIPPED: *') {
+            # Skip-TestCase: the feature the case needs does not exist yet. The reason goes to the summary.
+            $reason = "$_".Substring(9)
+            $script:TestResults.Add([pscustomobject]@{ Id = $Id; Title = $Title; Result = 'Skipped'; Message = $reason; Seconds = ((Get-Date) - $start).TotalSeconds })
+            Write-Host "::notice::SKIP $Id $Title : $reason"
+            return
+        }
         $script:TestResults.Add([pscustomobject]@{ Id = $Id; Title = $Title; Result = 'Failed'; Message = "$_"; Seconds = ((Get-Date) - $start).TotalSeconds })
         Write-Host "::error::FAIL $Id $Title : $_"
     }
+}
+
+# Ends the current test case as Skipped (not Failed). Use only when the feature that the case needs
+# does not exist yet or the environment cannot provide it, and give the reason.
+function Skip-TestCase([Parameter(Mandatory)][string]$Reason) {
+    throw "SKIPPED: $Reason"
+}
+
+# A part of the current test case that is not checked, with the reason. Shown in the log and in the summary.
+$script:TestNotes = New-Object System.Collections.Generic.List[string]
+function Add-TestNote([Parameter(Mandatory)][string]$Note) {
+    Write-Host "::notice::$Note"
+    $script:TestNotes.Add($Note)
 }
 
 function Assert-True([bool]$Condition, [string]$Message) {
@@ -31,6 +53,7 @@ function Complete-TestRun([string]$Name) {
     $lines = @("## $Name", '', '| Test case | Result | Seconds | Message |', '| --- | --- | --- | --- |')
     foreach ($r in $script:TestResults) { $lines += "| $($r.Id) $($r.Title) | $($r.Result) | $('{0:N1}' -f $r.Seconds) | $($r.Message -replace '\|', '/') |" }
     $text = $lines -join "`n"
+    if ($script:TestNotes.Count -gt 0) { $text += "`n`nNot checked:`n`n" + (($script:TestNotes | ForEach-Object { "- $_" }) -join "`n") }
     if ($env:GITHUB_STEP_SUMMARY) { Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value $text -Encoding utf8 } else { Write-Host $text }
     if ($failed.Count -gt 0) { exit 1 }
     exit 0
