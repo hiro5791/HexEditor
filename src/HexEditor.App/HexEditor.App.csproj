@@ -106,4 +106,7 @@
     <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">False</PublishTrimmed>
   </PropertyGroup>
+
+  <!-- 疑似翻訳 (UI-46)。安定版のビルドでは HexPseudoLocales=false にする。 -->
+  <Import Project="..\..\build\PseudoLocalize.targets" />
 </Project>

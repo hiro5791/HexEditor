@@ -10,7 +10,8 @@ public sealed record CommandLine(
     string? Offset,
     bool NewWindow,
     bool NewInstance,
-    bool SafeMode)
+    bool SafeMode,
+    string? PseudoLocale = null)
 {
     private static readonly HashSet<string> OptionsWithValue =
     [
@@ -50,7 +51,8 @@ public sealed record CommandLine(
             values.GetValueOrDefault("--offset") ?? values.GetValueOrDefault("-g"),
             flags.Contains("--new-window"),
             flags.Contains("--new-instance"),
-            flags.Contains("--safe-mode"));
+            flags.Contains("--safe-mode"),
+            values.GetValueOrDefault("--pseudo-locale"));
     }
 
     /// <summary>

@@ -1,0 +1,85 @@
+<!--
+  疑似翻訳 (UI-46)。ビルド時に Strings/en/Resources.resw から qps-ploc と qps-plocm を作る。
+  qps-ploc: アクセント付きの文字に置き換え、長さを約 1.5 倍に伸ばし、[ ] で囲む。プレースホルダー ({0} など) は変えない。
+  qps-plocm: qps-ploc と同じ文字列で、右から左に表示する言語として使う。
+  安定版のビルドでは HexPseudoLocales=false にして作らない (仕様 3)。
+-->
+<Project>
+  <UsingTask TaskName="PseudoLocalizeResw" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Source ParameterType="System.String" Required="true" />
+      <Destinations ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Using Namespace="System.Xml.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        const string Plain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string Accented = "àƀçđéƒĝĥíĵķĺɱñöƥɋŕšţüʋŵẋýžÀßÇĐÉƑĜĤÍĴĶĹṀÑÖƤɊŔŠŢÜṼŴẊÝŽ";
+        var placeholder = new Regex(@"\{[^{}]*\}");
+        XDocument doc = XDocument.Load(Source);
+        foreach (XElement value in doc.Root.Elements("data").Select(d => d.Element("value")).Where(v => v != null))
+        {
+            string text = value.Value;
+            if (value.Parent.Attribute("name").Value.EndsWith(".AccessKey", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            var result = new StringBuilder("[");
+            int last = 0;
+            foreach (Match m in placeholder.Matches(text))
+            {
+                foreach (char c in text.Substring(last, m.Index - last))
+                {
+                    int i = Plain.IndexOf(c);
+                    result.Append(i >= 0 ? Accented[i] : c);
+                }
+
+                result.Append(m.Value);
+                last = m.Index + m.Length;
+            }
+
+            foreach (char c in text.Substring(last))
+            {
+                int i = Plain.IndexOf(c);
+                result.Append(i >= 0 ? Accented[i] : c);
+            }
+
+            int padding = Math.Max(1, (int)Math.Ceiling(text.Length * 0.5));
+            result.Append(' ').Append('!', padding).Append(']');
+            value.Value = result.ToString();
+        }
+
+        foreach (string destination in Destinations.Split(';'))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(destination));
+            doc.Save(destination);
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <Target
+    Name="HexPseudoLocalize"
+    BeforeTargets="PrepareForBuild;PrepareResources"
+    Condition="'$(HexPseudoLocales)' != 'false'"
+    Inputs="$(MSBuildProjectDirectory)\Strings\en\Resources.resw"
+    Outputs="$(MSBuildProjectDirectory)\Strings\qps-ploc\Resources.resw;$(MSBuildProjectDirectory)\Strings\qps-plocm\Resources.resw">
+    <PseudoLocalizeResw
+      Source="$(MSBuildProjectDirectory)\Strings\en\Resources.resw"
+      Destinations="$(MSBuildProjectDirectory)\Strings\qps-ploc\Resources.resw;$(MSBuildProjectDirectory)\Strings\qps-plocm\Resources.resw" />
+    <ItemGroup>
+      <PRIResource Include="Strings\qps-ploc\Resources.resw;Strings\qps-plocm\Resources.resw" Exclude="@(PRIResource)" />
+    </ItemGroup>
+  </Target>
+
+  <!-- 安定版では作らない。以前のビルドで作ったものが残っていればリソースから外す。 -->
+  <ItemGroup Condition="'$(HexPseudoLocales)' == 'false'">
+    <PRIResource Remove="Strings\qps-ploc\**;Strings\qps-plocm\**" />
+  </ItemGroup>
+</Project>

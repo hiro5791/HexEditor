@@ -41,7 +41,7 @@ public static class Program
         }
 
         // 6. 表示言語 (最初のウィンドウを作る前。UI-43)。
-        Localization.ApplyLanguageOverride(CommandLine.UiLanguage);
+        Localization.ApplyLanguageOverride(CommandLine.PseudoLocale ?? CommandLine.UiLanguage);
 
         // 7. XAML の起動。
         Application.Start(callback =>
