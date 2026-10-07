@@ -51,7 +51,49 @@ public sealed class Document : IDisposable
         History = new EditHistory(new DocumentSnapshot(_storage, tree));
     }
 
+    /// <summary>
+    /// 復旧用データからドキュメントを作り直す (ENG-27 の仕様 6)。<paramref name="addBuffer"/> は復旧用データの一時ファイルを
+    /// 開き直したもので、<paramref name="pieces"/> はその時点の内容。Undo 履歴は復元せず、「変更あり」の状態で始まる。
+    /// </summary>
+    public static Document Restore(Guid id, IByteSource source, AddBuffer addBuffer, IEnumerable<Piece> pieces, DocumentOptions? options = null)
+    {
+        var list = pieces.ToList();
+        foreach (Piece piece in list)
+        {
+            bool valid = piece.Kind switch
+            {
+                PieceKind.Original => piece.Offset >= 0 && piece.Offset + piece.Length <= source.Length,
+                PieceKind.Added => piece.Offset >= 0 && piece.Offset + piece.Length <= addBuffer.Length,
+                PieceKind.Pattern => piece.Offset >= 0 && piece.Offset + piece.PatternLength <= addBuffer.Length,
+                PieceKind.Random => piece.Offset >= 0,
+                _ => false,
+            };
+            if (!valid)
+            {
+                throw new InvalidDataException("復旧用データのピースが元データまたは追加バッファの範囲外です。");
+            }
+        }
+
+        var document = new Document(id, source, addBuffer, PieceTree.FromPieces(list), options ?? new DocumentOptions());
+        document.History.MarkUnsaved();
+        return document;
+    }
+
+    private Document(Guid id, IByteSource source, AddBuffer addBuffer, PieceTree tree, DocumentOptions options)
+    {
+        _options = options;
+        Id = id;
+        _storage = CreateStorage(source, addBuffer);
+        History = new EditHistory(new DocumentSnapshot(_storage, tree));
+    }
+
     public Guid Id { get; }
+
+    /// <summary>
+    /// 現在の内容が今の元データと追加バッファだけで表せるか。保存より前の版に Undo した直後は、置き換え前の
+    /// 元データを指すため偽 (復旧用データは参照で記録できない)。
+    /// </summary>
+    public bool CurrentUsesLatestSource => ReferenceEquals(Current.Storage, _storage);
 
     /// <summary>現在の元データ。保存 (ENG-20) の後は保存したファイルに変わる。</summary>
     public IByteSource Source => _storage.Source;

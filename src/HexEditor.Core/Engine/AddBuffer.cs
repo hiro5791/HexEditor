@@ -18,6 +18,7 @@ public sealed class AddBuffer : IDisposable
     private readonly string _spillPath;
     private SafeFileHandle? _spillFile;
     private long _length;
+    private long _persistedLength;
     private long _useClock;
     private bool _disposed;
 
@@ -61,6 +62,72 @@ public sealed class AddBuffer : IDisposable
     }
 
     public string SpillPath => _spillPath;
+
+    /// <summary>
+    /// 既存の一時ファイルを追加バッファとして開き直す (復旧。ENG-27 の仕様 6)。内容はすべて一時ファイルにあるものとして扱い、
+    /// 続きの追記もできる。
+    /// </summary>
+    public static AddBuffer OpenExisting(string spillPath, long length, long memoryLimit)
+    {
+        var buffer = new AddBuffer(spillPath, memoryLimit);
+        SafeFileHandle file = File.OpenHandle(spillPath, FileMode.Open, FileAccess.ReadWrite, FileShare.Read, FileOptions.RandomAccess);
+        if (RandomAccess.GetLength(file) < length)
+        {
+            file.Dispose();
+            throw new InvalidDataException("追加バッファの一時ファイルが記録より短いため、復旧できません。");
+        }
+
+        buffer._spillFile = file;
+        int chunks = (int)((length + ChunkSize - 1) / ChunkSize);
+        for (int i = 0; i < chunks; i++)
+        {
+            buffer._chunks.Add(new Chunk { Data = null });
+        }
+
+        buffer._length = length;
+        buffer._persistedLength = length;
+        return buffer;
+    }
+
+    /// <summary>
+    /// メモリ上にしかない追記分を一時ファイルに書き、ディスクに反映する (復旧用データ。ENG-27 の仕様 2)。
+    /// 書くのは前回からの追記分だけで、メモリ上のチャンクはそのまま残す。書いた後の長さを返す。
+    /// </summary>
+    public long Persist()
+    {
+        lock (_lock)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            long end = _length;
+            if (_persistedLength < end)
+            {
+                SafeFileHandle file = EnsureSpillFile();
+                long pos = _persistedLength;
+                while (pos < end)
+                {
+                    int index = (int)(pos / ChunkSize);
+                    int inChunk = (int)(pos % ChunkSize);
+                    int n = (int)Math.Min(ChunkSize - inChunk, end - pos);
+                    if (_chunks[index].Data is { } data)
+                    {
+                        RandomAccess.Write(file, data.AsSpan(inChunk, n), pos);
+                    }
+
+                    pos += n;
+                }
+
+                _persistedLength = end;
+            }
+
+            if (_spillFile is not null)
+            {
+                RandomAccess.FlushToDisk(_spillFile);
+            }
+
+            return end;
+        }
+    }
+
 
     /// <summary>
     /// データを追記し、追記した位置を返す。失敗した場合 (一時ファイルへの書き込みの失敗など) は例外を投げ、
@@ -270,6 +337,18 @@ public sealed class AddBuffer : IDisposable
             }
 
             done += n;
+        }
+    }
+
+    /// <summary>バッファを解放するが、一時ファイルは残す (復旧に失敗したとき、復旧用データを消さないため)。</summary>
+    public void DisposeKeepingFile()
+    {
+        lock (_lock)
+        {
+            _disposed = true;
+            _chunks.Clear();
+            _spillFile?.Dispose();
+            _spillFile = null;
         }
     }
 

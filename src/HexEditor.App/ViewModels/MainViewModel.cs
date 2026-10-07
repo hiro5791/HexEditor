@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using HexEditor.App.Services;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
+using HexEditor.Core.Recovery;
 using HexEditor.Core.Saving;
 using HexEditor.Core.Sources;
 
@@ -76,6 +77,7 @@ public sealed partial class MainViewModel : ObservableObject
                     locked => doc.SetEditLock(locked));
                 doc.CompleteInPlaceSave(result);
                 vm.SetSavedPath(path);
+                vm.OnSaved();
                 return;
             }
             catch (JournalLimitException)
@@ -93,6 +95,7 @@ public sealed partial class MainViewModel : ObservableObject
             locked => doc.SetEditLock(locked));
         doc.CompleteSave(saved);
         vm.SetSavedPath(saved.Path);
+        vm.OnSaved();
     }
 
     /// <summary>その場保存のジャーナルの置き場所 (ENG-23。復旧用フォルダ。PKG-13)。</summary>
@@ -109,9 +112,111 @@ public sealed partial class MainViewModel : ObservableObject
         }
     }
 
+    /// <summary>ドキュメントを作るときの設定。</summary>
+    public DocumentOptions DocumentOptions => _options;
+
+    /// <summary>復旧用データのフォルダ (ドキュメントの一時ファイルと同じ。ENG-27 の仕様 2)。</summary>
+    public string RecoveryRoot => _options.TempDirectory;
+
+    /// <summary>復旧用データから開く (ENG-27 の仕様 6)。元のファイルが変わっていた場合は読み取り専用にする。</summary>
+    public DocumentViewModel AddRestored(RestoredDocument restored)
+    {
+        RecoveryRecord record = restored.Record;
+        string name = record.Path is null ? record.DisplayName : Path.GetFileName(record.Path);
+        var vm = new DocumentViewModel(restored.Document, record.Path, name) { Recovery = restored.Recovery };
+        vm.Editor.ReadOnly = restored.SourceChanged;
+        long length = restored.Document.Length;
+        if (record.SelectionLength > 0 && record.SelectionStart + record.SelectionLength <= length)
+        {
+            vm.Editor.Select(record.SelectionStart, record.SelectionLength);
+        }
+        else
+        {
+            vm.Editor.GoTo(Math.Clamp(record.Cursor, 0, length));
+        }
+
+        return AddViewModel(vm);
+    }
+
+    /// <summary>
+    /// 復旧用データの定期の書き出し (ENG-27 の仕様 1、3)。内容を UI スレッドで取り、書き込みはバックグラウンドで行う。
+    /// 失敗したドキュメントがあれば <paramref name="onError"/> を呼ぶ。
+    /// </summary>
+    public async Task WriteRecoveryAsync(Action<Exception> onError)
+    {
+        var work = Documents.Select(vm => (vm, capture: vm.CaptureRecoveryIfChanged()))
+            .Where(w => w.capture is not null)
+            .ToList();
+        foreach ((DocumentViewModel vm, RecoveryCapture? capture) in work)
+        {
+            try
+            {
+                await Task.Run(() => vm.Recovery!.Write(capture!));
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ObjectDisposedException)
+            {
+                vm.ForgetRecorded();
+                onError(ex);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 異常終了の直前に、全ドキュメントの復旧用データを書き出す (PKG-30 の仕様 1 の 1)。<paramref name="timeout"/> で打ち切る。
+    /// </summary>
+    public void WriteRecoveryNow(TimeSpan timeout)
+    {
+        var captures = new List<(DocumentViewModel Vm, RecoveryCapture Capture)>();
+        foreach (DocumentViewModel vm in Documents.ToList())
+        {
+            try
+            {
+                if (vm.CaptureRecoveryIfChanged() is { } capture)
+                {
+                    captures.Add((vm, capture));
+                }
+            }
+            catch (Exception)
+            {
+                // 異常終了の途中なので、書けるものだけ書く。
+            }
+        }
+
+        Task all = Task.Run(() =>
+        {
+            foreach ((DocumentViewModel vm, RecoveryCapture capture) in captures)
+            {
+                try
+                {
+                    vm.Recovery!.Write(capture);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        });
+        all.Wait(timeout);
+    }
+
     private DocumentViewModel Add(Document doc, string? path, string name)
     {
-        var vm = new DocumentViewModel(doc, path, name);
+        DocumentRecovery? recovery = null;
+        try
+        {
+            recovery = new DocumentRecovery(RecoveryRoot, doc.Id);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // 復旧用データを作れなくても編集はできる。書き出しのときに通知する。
+            AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
+        }
+
+        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recovery });
+    }
+
+    private DocumentViewModel AddViewModel(DocumentViewModel vm)
+    {
+        Document doc = vm.Document;
         Memory.Register(doc);
         Documents.Add(vm);
         Selected = vm;

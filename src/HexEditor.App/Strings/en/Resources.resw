@@ -109,4 +109,21 @@
   <data name="Clipboard_InAppOnly" xml:space="preserve"><value>The selection is larger than the clipboard limit, so it can only be pasted inside HexEditor.</value></data>
   <data name="Clipboard_NotHex" xml:space="preserve"><value>The clipboard text is not a hex byte sequence. Switch to the text column to paste it as text.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Bytes beyond the end of this fixed-length document were not pasted.</value></data>
+  <data name="Recovery_Title" xml:space="preserve"><value>Recover unsaved changes</value></data>
+  <data name="Recovery_Body" xml:space="preserve"><value>HexEditor didn't close normally last time. You can recover the unsaved changes below.</value></data>
+  <data name="Recovery_Restore" xml:space="preserve"><value>Recover</value></data>
+  <data name="Recovery_Discard" xml:space="preserve"><value>Discard</value></data>
+  <data name="Recovery_Later" xml:space="preserve"><value>Later</value></data>
+  <data name="Recovery_Details" xml:space="preserve"><value>Saved {0} · {1} bytes changed</value></data>
+  <data name="Recovery_Untitled" xml:space="preserve"><value>Not saved to a file yet</value></data>
+  <data name="Recovery_SourceChanged" xml:space="preserve"><value>The original file has changed since then, so the recovered content may not be correct. It was opened as read-only.</value></data>
+  <data name="Recovery_Failed" xml:space="preserve"><value>Couldn't recover: {0} The recovery data has been kept.</value></data>
+  <data name="Recovery_WriteFailed" xml:space="preserve"><value>Can't save recovery data ({0}). If HexEditor closes unexpectedly, unsaved changes will be lost.</value></data>
+  <data name="Recovery_JournalDetails" xml:space="preserve"><value>Saving was interrupted. You can put the file back the way it was before saving.</value></data>
+  <data name="Recovery_JournalRestore" xml:space="preserve"><value>Restore</value></data>
+  <data name="Crash_Message" xml:space="preserve"><value>HexEditor closed unexpectedly last time.</value></data>
+  <data name="Crash_Open" xml:space="preserve"><value>Open crash info</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Report a problem</value></data>
+  <data name="Crash_ReportNote" xml:space="preserve"><value>HexEditor closed unexpectedly. Please paste the contents of the crash info file below. It does not include the contents of your files.</value></data>
+  <data name="Notice_UrlCopied" xml:space="preserve"><value>Couldn't open the browser, so the link was copied to the clipboard.</value></data>
 </root>

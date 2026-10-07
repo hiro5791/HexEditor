@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using HexEditor.App.Services;
 using HexEditor.Core.Engine;
+using HexEditor.Core.Recovery;
 using HexEditor.Core.View;
 
 namespace HexEditor.App.ViewModels;
@@ -20,6 +21,53 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     }
 
     public Document Document { get; }
+
+    /// <summary>このドキュメントの復旧用データ (ENG-27)。作れなかった場合は null (編集は続けられる)。</summary>
+    public DocumentRecovery? Recovery { get; init; }
+
+    private DocumentSnapshot? _lastRecorded;
+
+    /// <summary>
+    /// 前回の書き出しから内容が変わっていれば、書き出す内容を取る (UI スレッドで呼ぶ)。変更がなくなっていれば
+    /// 復旧用データを消す (仕様 5)。
+    /// </summary>
+    public RecoveryCapture? CaptureRecoveryIfChanged()
+    {
+        if (Recovery is null)
+        {
+            return null;
+        }
+
+        if (!Document.IsModified)
+        {
+            if (_lastRecorded is not null)
+            {
+                Recovery.Clear();
+                _lastRecorded = null;
+            }
+
+            return null;
+        }
+
+        if (ReferenceEquals(Document.Current, _lastRecorded))
+        {
+            return null;
+        }
+
+        RecoveryCapture? capture = DocumentRecovery.Capture(Document, Editor.Cursor, Editor.SelectionStart, Editor.SelectionLength);
+        _lastRecorded = capture?.Snapshot ?? _lastRecorded;
+        return capture;
+    }
+
+    /// <summary>書き出しに失敗したら、次の機会にもう一度書く。</summary>
+    public void ForgetRecorded() => _lastRecorded = null;
+
+    /// <summary>保存した: 復旧用データを消す (仕様 5)。</summary>
+    public void OnSaved()
+    {
+        Recovery?.Clear();
+        _lastRecorded = null;
+    }
 
     public EditorState Editor { get; }
 
@@ -61,5 +109,10 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
     public static string FormatOffset(long offset) => "0x" + offset.ToString("X");
 
-    public void Dispose() => Document.Dispose();
+    /// <summary>閉じる: ドキュメントを解放してから、復旧用データをフォルダごと消す (仕様 5)。</summary>
+    public void Dispose()
+    {
+        Document.Dispose();
+        Recovery?.Dispose();
+    }
 }

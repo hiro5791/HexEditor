@@ -29,7 +29,7 @@ public static class Program
         Environment = AppEnvironment.Detect(CommandLine.TestProfile);
 
         // 3. 未処理例外の記録 (PKG-30)。
-        CrashLog.Initialize(Environment.Locations.Crash);
+        CrashReporter.Initialize(Environment);
 
         // 4. COM の準備。
         WinRT.ComWrappersSupport.InitializeComWrappers();

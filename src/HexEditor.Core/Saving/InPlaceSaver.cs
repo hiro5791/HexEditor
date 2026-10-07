@@ -177,12 +177,19 @@ public static class InPlaceSaver
         stream.Write(json);
     }
 
-    /// <summary>
-    /// 残ったジャーナルで保存前の状態に戻す (ENG-23 の仕様 4)。対象のファイルのパスを返す。
-    /// </summary>
-    public static string Rollback(string journalPath)
+    /// <summary>復旧用フォルダに残ったジャーナル (保存が途中で止まったもの。ENG-27 の仕様 7)。</summary>
+    public static IReadOnlyList<string> FindJournals(string journalDirectory) =>
+        Directory.Exists(journalDirectory) ? Directory.GetFiles(journalDirectory, "journal-*.bin") : [];
+
+    /// <summary>ジャーナルの対象のファイルのパスを読む。</summary>
+    public static string ReadJournalTarget(string journalPath)
     {
         using var stream = new FileStream(journalPath, FileMode.Open, FileAccess.Read);
+        return ReadHeader(stream);
+    }
+
+    private static string ReadHeader(Stream stream)
+    {
         Span<byte> magic = stackalloc byte[8];
         stream.ReadExactly(magic);
         if (!magic.SequenceEqual(Magic))
@@ -194,7 +201,16 @@ public static class InPlaceSaver
         stream.ReadExactly(sizeBytes);
         byte[] json = new byte[BinaryPrimitives.ReadInt32LittleEndian(sizeBytes)];
         stream.ReadExactly(json);
-        string path = JsonDocument.Parse(json).RootElement.GetProperty("path").GetString()!;
+        return JsonDocument.Parse(json).RootElement.GetProperty("path").GetString()!;
+    }
+
+    /// <summary>
+    /// 残ったジャーナルで保存前の状態に戻す (ENG-23 の仕様 4)。対象のファイルのパスを返す。
+    /// </summary>
+    public static string Rollback(string journalPath)
+    {
+        using var stream = new FileStream(journalPath, FileMode.Open, FileAccess.Read);
+        string path = ReadHeader(stream);
 
         using SafeFileHandle handle = File.OpenHandle(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
         Span<byte> record = stackalloc byte[16];

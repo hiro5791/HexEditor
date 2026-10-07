@@ -18,24 +18,38 @@ public partial class App : Application
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
         // 未処理の例外は記録する (PKG-30。復旧用データの書き出しは ENG-27 で行う)。
-        UnhandledException += (_, e) => CrashLog.Write(e.Exception);
+        UnhandledException += (_, e) => CrashReporter.Handle(e.Exception, exit: false);
     }
 
     public static Window Window { get; private set; } = null!;
+
+    /// <summary>復旧用データの保存間隔 (ENG-27 の仕様 1。設定画面ができるまでは既定の 1 分)。</summary>
+    public static TimeSpan RecoveryInterval { get; set; } = TimeSpan.FromMinutes(1);
 
     public static Microsoft.UI.Dispatching.DispatcherQueue DispatcherQueue { get; private set; } = null!;
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         IAppEnvironment env = Program.Environment;
+        // 追加バッファの一時ファイルは復旧用データと同じフォルダに置き、異常終了後もそのまま参照できるようにする (ENG-27 の仕様 2)。
         var options = new DocumentOptions
         {
-            TempDirectory = Path.Combine(env.Locations.Temp, "documents"),
+            TempDirectory = env.Locations.Recovery,
         };
         var vm = new MainViewModel(new OperationCenter(), new EngineMemory(), options, env.Locations.Recovery);
         var window = new MainWindow(vm);
         Window = window;
         DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+        AppLog.Info($"Started {env.AppVersion} ({env.Distribution}, {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture})");
+
+        // 異常終了の直前に未保存の編集内容を書き出す (PKG-30 の仕様 1 の 1)。
+        CrashReporter.WriteRecovery = timeout => vm.WriteRecoveryNow(timeout);
+
+        // 復旧用データの定期の書き出し (ENG-27 の仕様 1。既定 1 分ごと)。
+        var recoveryTimer = DispatcherQueue.CreateTimer();
+        recoveryTimer.Interval = RecoveryInterval;
+        recoveryTimer.Tick += async (_, _) => await vm.WriteRecoveryAsync(window.ShowRecoveryWriteError);
+        recoveryTimer.Start();
 
         // 既存のインスタンスに転送された起動 (2 つ目の起動で指定したファイル) を、このウィンドウのタブとして開く (UI-15)。
         SingleInstance.Redirected += commandLine =>
@@ -55,5 +69,8 @@ public partial class App : Application
         {
             DevOptions.SendToBack(window, previous);
         }
+
+        // 前回の異常終了の後始末: 復旧の提案と、クラッシュ情報の通知 (ENG-27 の仕様 6、PKG-30 の仕様 2)。
+        window.ShowStartupNoticesWhenLoaded();
     }
 }

@@ -20,6 +20,7 @@ public sealed class FileByteSource : ByteSourceBase
         _handle = handle;
         _length = RandomAccess.GetLength(handle);
         Identity = "file:" + path.ToUpperInvariant();
+        Stamp = FileStamp.FromHandle(handle);
         Capabilities = SourceCapabilities.CanResize | SourceCapabilities.CanReplace
             | (readOnlyAttribute ? SourceCapabilities.None : SourceCapabilities.CanWrite);
     }
@@ -34,6 +35,9 @@ public sealed class FileByteSource : ByteSourceBase
     public override long Length => _length;
 
     public override SourceCapabilities Capabilities { get; }
+
+    /// <summary>開いた時点の長さ・最終更新日時・ファイル ID (復旧用データで、元のファイルが変わっていないかを調べる。ENG-27)。</summary>
+    public FileStamp Stamp { get; }
 
     /// <summary>
     /// ファイルを読み取りで開く。保存中の置き換え (ENG-22) と外部の編集を妨げないよう、共有は読み書き・削除を許す。

@@ -40,6 +40,9 @@ public interface IAppEnvironment
 
     string AppVersion { get; }
 
+    /// <summary>チャネル (安定版 / プレビュー版。PKG-28: 版にプレリリースの部分があればプレビュー版)。</summary>
+    string Channel { get; }
+
     DataLocations Locations { get; }
 
     /// <summary>単一インスタンスのキー (PKG-11 の仕様 2)。</summary>
@@ -67,7 +70,19 @@ public sealed class AppEnvironment : IAppEnvironment
 
     public bool IsElevated { get; } = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
-    public string AppVersion { get; } = typeof(AppEnvironment).Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
+    /// <summary>SemVer の版 (PKG-28)。InformationalVersion の「+コミット」の部分は除く。</summary>
+    public string AppVersion { get; } = ReadVersion();
+
+    private static string ReadVersion()
+    {
+        string? informational = typeof(AppEnvironment).Assembly
+            .GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute), false)
+            .OfType<System.Reflection.AssemblyInformationalVersionAttribute>()
+            .FirstOrDefault()?.InformationalVersion;
+        return informational?.Split('+')[0] ?? "0.0.0";
+    }
+
+    public string Channel => AppVersion.Contains('-') ? "Preview" : "Stable";
 
     public DataLocations Locations { get; }
 

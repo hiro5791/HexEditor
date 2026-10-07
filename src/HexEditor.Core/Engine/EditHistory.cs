@@ -99,4 +99,7 @@ public sealed class EditHistory
 
     /// <summary>現在の状態を「保存した時点」にする。</summary>
     internal void MarkSaved() => _savedIndex = _current;
+
+    /// <summary>保存した時点を履歴の外にする (復旧したドキュメントは最初から「変更あり」。ENG-27 の仕様 6)。</summary>
+    internal void MarkUnsaved() => _savedIndex = -1;
 }

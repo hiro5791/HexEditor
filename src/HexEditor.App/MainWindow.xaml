@@ -117,12 +117,18 @@
             </MenuBarItem>
         </MenuBar>
 
-        <InfoBar
-            x:Name="Notice"
-            Grid.Row="2"
-            AutomationProperties.AutomationId="Notice"
-            IsOpen="False"
-            Severity="Warning" />
+        <StackPanel Grid.Row="2">
+            <InfoBar
+                x:Name="CrashNotice"
+                AutomationProperties.AutomationId="CrashNotice"
+                IsOpen="False"
+                Severity="Warning" />
+            <InfoBar
+                x:Name="Notice"
+                AutomationProperties.AutomationId="Notice"
+                IsOpen="False"
+                Severity="Warning" />
+        </StackPanel>
 
         <controls:FindBar
             x:Name="FindBar"
