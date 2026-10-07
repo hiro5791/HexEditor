@@ -10,8 +10,10 @@
     TC-PKG-11-02  the Velopack hook arguments exit within 5 s without a window
     TC-PKG-09-01  data is kept by a default uninstall
     TC-PKG-09-02  uninstall.removeUserData = true removes the data folder
-  The UAC part of TC-PKG-07-01 (consent.exe) and TC-PKG-08-04 (Process Monitor) need a dedicated
-  runner account and are not checked here.
+    TC-PKG-08-04  no writes to HKLM by Setup.exe, Update.exe and HexEditor.exe during all of the above
+                  (Process Monitor records from the first install to the last uninstall)
+  The UAC part of TC-PKG-07-01 (consent.exe) needs a dedicated runner account and is not checked here.
+  The update step of TC-PKG-08-04 waits for the updater (PKG-18, phase 1).
 #>
 [CmdletBinding()]
 param(
@@ -20,7 +22,20 @@ param(
 
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/TestCase.ps1"
+. "$PSScriptRoot/ProcessMonitor.ps1"
 if (-not $env:GITHUB_ACTIONS) { throw 'This script installs HexEditor; run it only on CI runners.' }
+
+# TC-PKG-08-04: record every registry access from the first installation to the last uninstallation.
+$procmon = $null
+$procmonError = $null
+$backing = Join-Path $env:RUNNER_TEMP 'installer-events.pml'
+try {
+    $procmon = Get-ProcessMonitor (Join-Path $env:RUNNER_TEMP 'procmon')
+    Start-ProcessMonitor $procmon $backing
+} catch {
+    $procmon = $null
+    $procmonError = "$_"
+}
 
 $installRoot = Join-Path $env:LOCALAPPDATA 'HexEditor'
 $exe = Join-Path $installRoot 'current/HexEditor.exe'
@@ -114,6 +129,16 @@ Invoke-TestCase 'TC-PKG-09-02' 'uninstall.removeUserData' {
     Set-Content -Path (Join-Path $dataRoot 'settings.json') -Value '{ "$schemaVersion": 1, "uninstall.removeUserData": true }' -Encoding utf8
     Uninstall-HexEditor
     Assert-True (-not (Test-Path $dataRoot)) "$dataRoot remains"
+}
+
+Invoke-TestCase 'TC-PKG-08-04' 'no writes to HKLM' {
+    Assert-True ($null -ne $procmon) "Process Monitor did not start: $procmonError"
+    # Setup.exe (HexEditor-<ver>-<arch>-Setup.exe), Update.exe and HexEditor.exe (child processes have these names too).
+    $recorded = Stop-ProcessMonitor $procmon $backing '(?i)^(HexEditor.*Setup\.exe|Setup\.exe|Update\.exe|HexEditor\.exe)$'
+    Assert-True ($recorded.Processes.Count -gt 0) 'no registry events of the installer processes were recorded'
+    $writes = @($recorded.Writes | Where-Object { $_.Path -like 'HKLM\*' })
+    Assert-True ($writes.Count -eq 0) ("writes to HKLM: " + (($writes | Select-Object -First 20 | ForEach-Object { "$($_.Process) $($_.Operation) $($_.Path) $($_.Result)" }) -join '; '))
+    Add-TestNote 'TC-PKG-08-04: the update step is not run (the updater, PKG-18, is phase 1).'
 }
 
 Complete-TestRun 'Installer tests'

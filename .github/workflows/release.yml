@@ -5,6 +5,7 @@
 #   6. MSIX を .msixbundle にまとめ、Store 提出用にワークフローの成果物として残す (Releases には載せない)
 #   7. クリーンなランナーでの検証 (インストーラ・ポータブル・MSIX をテスト用の証明書で)
 #   8-10. SHA256SUMS.txt、リリースノート、GitHub Releases (安定版は下書き、プレビュー版は Pre-release)
+#   11. できたリリースの確認 (build/tests/Test-Release.ps1)
 # どこかで失敗したら Releases には何も作らず、失敗した手順を Issue にする。
 # まだないもの: C# スクリプト コンポーネントの zip (AUTO-03)、補助プロセス (PKG-14) のハッシュの埋め込み、
 # winget の提出 (PKG-27、publish.yml)。それぞれの機能を作るときに加える。
@@ -289,6 +290,16 @@ jobs:
             gh release edit $tag --notes-file release-notes.md --draft=true
           }
           if ($LASTEXITCODE -ne 0) { throw 'gh release edit failed' }
+      # できたリリースの確認 (TC-PKG-01-01、TC-PKG-24-01/02/04、TC-PKG-25-01、TC-PKG-25-04、TC-PKG-26-01/02)。
+      - uses: actions/download-artifact@v4
+        with:
+          name: store-submission
+          path: store-submission
+      - name: Release tests
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: ./build/tests/Test-Release.ps1 -Tag '${{ github.ref_name }}' -StoreDir store-submission -WorkDir "$env:RUNNER_TEMP/release-tests"
       - name: Remove the partial draft
         if: failure()
         shell: pwsh

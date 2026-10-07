@@ -90,6 +90,37 @@ public static class ProcessIdentity
         }
     }
 
+    /// <summary>
+    /// このプロセスに明示的に設定した AppUserModelID (<c>GetCurrentProcessExplicitAppUserModelID</c>)。設定していなければ null。
+    /// 配布のテスト (TC-PKG-12-03) で、スタートメニューのショートカットの値と比べるために使う。
+    /// </summary>
+    public static string? TryGetAppUserModelId()
+    {
+        try
+        {
+            if (GetCurrentProcessExplicitAppUserModelID(out nint value) < 0 || value == 0)
+            {
+                return null;
+            }
+
+            try
+            {
+                return Marshal.PtrToStringUni(value);
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(value);
+            }
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
     private static extern int SetCurrentProcessExplicitAppUserModelID(string appId);
+
+    [DllImport("shell32.dll")]
+    private static extern int GetCurrentProcessExplicitAppUserModelID(out nint appId);
 }

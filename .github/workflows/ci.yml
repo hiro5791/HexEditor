@@ -118,7 +118,7 @@ jobs:
           path: ${{ env.NUGET_PACKAGES }}
           key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
           restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
-      - name: Runner architecture
+      - name: Runner architecture (TC-PKG-15-03)
         shell: pwsh
         run: |
           $arch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture
@@ -211,20 +211,32 @@ jobs:
         run: ./build/tests/Test-Artifacts.ps1 -ArtifactsDir artifacts
 
   # ポータブル版を起動する配布のテスト (TC-PKG-05-02〜05、TC-PKG-06-04)。毎晩と手動の実行で行う。
+  # テスト用のビルド (build-test) で、編集・保存を伴うもの (TC-PKG-06-01、TC-PKG-06-02、TC-PKG-13-03) も行う。
   portable:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-    needs: build
+    needs: [build, build-test]
     runs-on: windows-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
       - uses: actions/download-artifact@v4
         with:
           name: HexEditor-Portable-x64
           path: portable
+      - uses: actions/download-artifact@v4
+        with:
+          name: HexEditorTest-Portable-x64
+          path: portable-test
+      - name: Test data
+        run: dotnet run --project tools/TestDataGen -c Release -- TD-SEQ-1M testdata
       - name: Portable tests
         shell: pwsh
-        run: ./build/tests/Test-Portable.ps1 -Zip (Get-ChildItem portable -Filter '*-portable.zip' | Select-Object -First 1).FullName
+        run: |
+          ./build/tests/Test-Portable.ps1 -Zip (Get-ChildItem portable -Filter '*-portable.zip' | Select-Object -First 1).FullName `
+            -TestZip (Get-ChildItem portable-test -Filter '*-portable.zip' | Select-Object -First 1).FullName -TestDataDir (Resolve-Path testdata).Path
 
   # UI テスト・結合テスト (テスト方針 6.5): テスト用のビルド (Debug。HEX_TEST_HOOKS を含む) のアプリを起動して操作する。
   ui-tests:
@@ -254,3 +266,176 @@ jobs:
         with:
           name: ui-test-results
           path: TestResults/
+
+  # ---- 配布物を入れて起動する配布のテスト (テスト方針 6.2)。毎晩と手動の実行で行う ----
+
+  # テスト用のビルド (publish.ps1 -TestHooks。テスト用の命令の通り道を含む): 3 種類 × 2 アーキテクチャ。配らない。
+  build-test:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [Msix, Installer, Portable]
+        arch: [x64, arm64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - name: Publish (test build)
+        shell: pwsh
+        run: ./build/publish.ps1 -Distro ${{ matrix.distro }} -Arch ${{ matrix.arch }} -TestHooks -Commit "$("${{ github.sha }}".Substring(0, 7))"
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: HexEditorTest-${{ matrix.distro }}-${{ matrix.arch }}
+          retention-days: 3
+          path: |
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/*.zip
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/HexEditor-0.0.0-local-*-Setup.exe
+            artifacts/${{ matrix.distro }}/${{ matrix.arch }}/*.msix
+
+  # 3 種類の配布形態を入れて起動する (TC-PKG-12-01、TC-UI-40-01、TC-PKG-13-01、TC-PKG-30-02、TC-PKG-12-03、
+  # ARM64 では TC-PKG-15-01)。x64 は windows-latest、ARM64 は windows-11-arm のランナー。
+  distribution:
+    needs: build-test
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            runner: windows-latest
+          - arch: arm64
+            runner: windows-11-arm
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: HexEditorTest-*-${{ matrix.arch }}
+          path: testbuilds
+      - name: Test data
+        run: |
+          dotnet run --project tools/TestDataGen -c Release -- TD-SEQ-1M testdata
+          dotnet run --project tools/TestDataGen -c Release --no-build -- TD-RANDOM-16M testdata
+      # 開発中のビルド (dotnet build の出力) の配布形態の表示 (TC-PKG-12-01) は x64 で確かめる。
+      - name: Build app (development, test build)
+        if: matrix.arch == 'x64'
+        run: dotnet build src/HexEditor.App -c Debug -p:Platform=x64
+      - name: Distribution tests
+        # Appx と International のモジュールを使うため Windows PowerShell で動かす。
+        shell: powershell
+        run: |
+          $arch = '${{ matrix.arch }}'
+          $dev = Get-ChildItem src/HexEditor.App/bin -Recurse -Filter HexEditor.exe -ErrorAction SilentlyContinue | Where-Object FullName -like '*\Debug\*' | Select-Object -First 1
+          $params = @{
+            Arch        = $arch
+            PortableZip = (Get-ChildItem "testbuilds/HexEditorTest-Portable-$arch" -Filter '*-portable.zip').FullName
+            Setup       = (Get-ChildItem "testbuilds/HexEditorTest-Installer-$arch" -Filter "HexEditor-0.0.0-local-$arch-Setup.exe").FullName
+            Msix        = (Get-ChildItem "testbuilds/HexEditorTest-Msix-$arch" -Filter '*.msix').FullName
+            TestDataDir = (Resolve-Path testdata).Path
+          }
+          if ($dev) { $params.DevExe = $dev.FullName }
+          ./build/tests/Test-Distributions.ps1 @params
+          exit $LASTEXITCODE
+
+  # MSIX 版 (テスト用の証明書): 実行エイリアス (TC-PKG-03-02)、ドイツ語の説明 (TC-PKG-03-04)、
+  # プレビュー版から安定版への更新 (TC-PKG-28-02。版 1.3.0-preview.2 と 1.3.0 でビルドする)。
+  msix:
+    needs: build-test
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
+      - uses: actions/download-artifact@v4
+        with:
+          name: HexEditorTest-Msix-x64
+          path: msix-test
+      - name: Build 1.3.0-preview.2 and 1.3.0
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force msix-versions | Out-Null
+          foreach ($v in '1.3.0-preview.2', '1.3.0') {
+            ./build/publish.ps1 -Distro Msix -Arch x64 -Version $v
+            Copy-Item "artifacts/Msix/x64/HexEditor-$v-x64.msix" msix-versions/
+          }
+      - name: Test data
+        run: dotnet run --project tools/TestDataGen -c Release -- TD-SEQ-1M testdata
+      - name: MSIX tests
+        shell: powershell
+        run: |
+          ./build/tests/Test-Msix.ps1 -TestMsix (Get-ChildItem msix-test -Filter '*.msix').FullName `
+            -PreviewMsix (Resolve-Path msix-versions/HexEditor-1.3.0-preview.2-x64.msix).Path `
+            -StableMsix (Resolve-Path msix-versions/HexEditor-1.3.0-x64.msix).Path -TestDataDir (Resolve-Path testdata).Path
+          exit $LASTEXITCODE
+
+  # 配布形態に依存しない UI テストを、3 種類の配布形態のテスト用のビルドで実行する (TC-PKG-01-02)。
+  ui-distro:
+    needs: build-test
+    runs-on: windows-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [Msix, Installer, Portable]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/download-artifact@v4
+        with:
+          name: HexEditorTest-${{ matrix.distro }}-x64
+          path: testbuild
+      - name: Install
+        shell: powershell
+        run: |
+          $file = Get-ChildItem testbuild | Where-Object { $_.Name -like '*-portable.zip' -or $_.Name -like 'HexEditor-0.0.0-local-*-Setup.exe' -or $_.Name -like '*.msix' } | Select-Object -First 1
+          ./build/tests/Install-TestBuild.ps1 -Distro ${{ matrix.distro }} -Path $file.FullName
+      - name: Build UI tests
+        run: dotnet build tests/HexEditor.UITests -c Release
+      - name: UI tests
+        # 失敗したテストがあっても、結果の突き合わせ (same-results) に進む。
+        continue-on-error: true
+        env:
+          HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI" --logger "trx;LogFileName=ui-${{ matrix.distro }}.trx" --results-directory TestResults
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-distro-${{ matrix.distro }}
+          retention-days: 7
+          path: TestResults/
+
+  same-results:
+    needs: ui-distro
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ui-distro-*
+          path: ui-results
+      - name: Compare (TC-PKG-01-02)
+        shell: pwsh
+        run: ./build/tests/Test-SameResults.ps1 -Trx (Get-ChildItem ui-results -Recurse -Filter 'ui-*.trx').FullName
