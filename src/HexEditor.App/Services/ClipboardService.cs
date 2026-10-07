@@ -62,23 +62,22 @@ public sealed class ClipboardService
         var package = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
         string meta = JsonSerializer.Serialize(new { instance = InstanceId, serial, offset, length, name = editor.Document.Source.DisplayName });
         package.SetData(MetaFormat, meta);
-        byte[]? bytes = null;
+        // 上限以内なら実データを読む (読み込みを待つことがあるため UI スレッドでは読まない)。
+        byte[]? bytes = length <= SystemLimit ? await Task.Run(() => ReadSelection(snapshot, offset, length)) : null;
         string? text = null;
         ClipboardPlan plan = ClipboardPlan.For(length, () =>
         {
-            // Hex 列の文字数はデータを読まずに分かる。テキスト列は文字コードで変換してから数える。
+            // Hex 列の文字数は変換せずに分かる (上限を超える Hex 文字列を作らない)。テキスト列は文字コードで変換してから数える。
             if (editor.ActiveColumn == ActiveColumn.Hex)
             {
                 return ClipboardPlan.HexTextLength(length);
             }
 
-            bytes = ReadSelection(snapshot, offset, length);
-            text = editor.FormatForClipboard(bytes);
+            text = editor.FormatForClipboard(bytes!);
             return text.Length;
         }, SystemLimit);
-        if (plan.Binary)
+        if (plan.Binary && bytes is not null)
         {
-            bytes ??= await Task.Run(() => ReadSelection(snapshot, offset, length));
             package.SetData(BinaryFormat, await ToStreamAsync(bytes));
             if (plan.Text == ClipboardTextKind.Data)
             {
