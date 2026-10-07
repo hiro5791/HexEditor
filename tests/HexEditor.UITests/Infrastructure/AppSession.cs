@@ -285,8 +285,13 @@ public sealed class AppSession : IAsyncDisposable
     public async Task UiaInvokeAsync(string automationId) => (await WaitForAsync(automationId)).Patterns.Invoke.Pattern.Invoke();
 
     /// <summary>ValuePattern で入力欄に値を入れる (キーボードを使わない)。</summary>
-    public async Task UiaSetValueAsync(string automationId, string value) =>
+    public async Task UiaSetValueAsync(string automationId, string value)
+    {
         (await WaitForAsync(automationId)).Patterns.Value.Pattern.SetValue(value);
+
+        // TextChanged は後から届くため、UI スレッドの待ちがなくなるまで待つ。
+        await IdleAsync();
+    }
 
     /// <summary>要素の名前 (TextBlock では表示している文字列)。</summary>
     public async Task<string> UiaNameAsync(string automationId) => NameOf(await WaitForAsync(automationId));

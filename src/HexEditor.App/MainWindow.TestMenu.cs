@@ -185,6 +185,7 @@ public sealed partial class MainWindow
             "text" => TestText(request),
             "invoke" => TestInvoke(request["id"]!.GetValue<string>()),
             "element" => TestElement(request["id"]!.GetValue<string>()),
+            "setSelectedIndex" => TestSetSelectedIndex(request["id"]!.GetValue<string>(), (int)TestHookSettings.ReadLong(request["index"], 0)),
             "open" => TestOpen(request),
             "openVirtual" => DocumentResult(TestHooks.OpenVirtual(Vm, TestHookSettings.ParseVirtual(request))),
             "new" => DocumentResult(Vm.NewDocument()),
@@ -473,6 +474,17 @@ public sealed partial class MainWindow
                 break;
             case TextBox t:
                 result["text"] = t.Text;
+                result["selectedText"] = t.SelectedText;
+                result["isEnabled"] = t.IsEnabled;
+                result["focusState"] = t.FocusState.ToString();
+                result["borderBrush"] = (t.BorderBrush as SolidColorBrush)?.Color.ToString();
+                result["errorBorder"] = t.BorderBrush is SolidColorBrush border
+                    && Application.Current.Resources["SystemFillColorCriticalBrush"] is SolidColorBrush critical
+                    && border.Color == critical.Color;
+                break;
+            case Microsoft.UI.Xaml.Controls.Primitives.Selector selector:
+                result["selectedIndex"] = selector.SelectedIndex;
+                result["isEnabled"] = selector.IsEnabled;
                 break;
             case Control c:
                 result["isEnabled"] = c.IsEnabled;
@@ -481,6 +493,20 @@ public sealed partial class MainWindow
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// コンボボックスなどの選択を変える (UI オートメーションで選ぶにはドロップダウンを開く必要があり、開くとフォーカスが動くため)。
+    /// </summary>
+    private JsonObject TestSetSelectedIndex(string id, int index)
+    {
+        if (FindElement(id) is not Microsoft.UI.Xaml.Controls.Primitives.Selector selector)
+        {
+            throw new ArgumentException($"Selector not found: {id}");
+        }
+
+        selector.SelectedIndex = index;
+        return new JsonObject();
     }
 
     /// <summary>ウィンドウの中と、開いているポップアップ (ダイアログ) の中から AutomationId で探す。</summary>
