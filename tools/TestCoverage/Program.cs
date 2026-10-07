@@ -32,7 +32,8 @@ for (int i = 0; i < args.Length; i++)
 string root = FindRepositoryRoot();
 Coverage coverage = Coverage.Load(root, results);
 output ??= Path.Combine(root, "docs", "test", "test-coverage.md");
-File.WriteAllText(output, coverage.ToMarkdown("作り方: `dotnet run --project tools/TestCoverage` (CI はテストの結果を `--results` で渡す)。"),
+File.WriteAllText(output, coverage.ToMarkdown("作り方: `dotnet run --project tools/TestCoverage` (CI はテストの結果を `--results` で渡す)。").ReplaceLineEndings("
+"),
     new System.Text.UTF8Encoding(false));
 Console.WriteLine($"書きました: {output}");
 
