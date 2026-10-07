@@ -93,7 +93,7 @@ public sealed class LocalizationTests
         // 2. Hex ビューは左から順にオフセット列・Hex 列・テキスト列 (Hex ビューの中の位置)。
         JsonObject render = await app.RenderAsync();
         Assert.Equal("LeftToRight", render["flowDirection"]!.GetValue<string>());
-        Assert.True(render["offsetLeft"]!.GetValue<double>() < render["contentLeft"]!.GetValue<double>(), "the offset column is not on the left");
+        Assert.True(render["offsetVisualLeft"]!.GetValue<double>() < render["contentVisualLeft"]!.GetValue<double>(), "the offset column is not on the left");
         string line = render["rows"]![0]!["line"]!.GetValue<string>();
         Assert.Matches("^0+  00 01 02 03", line);
     });
