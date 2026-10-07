@@ -53,6 +53,10 @@ public sealed class DocumentSnapshot
             {
                 ReadOriginalForDisplay(piece.Offset, dst, st);
             }
+            else if (piece.Kind == PieceKind.External)
+            {
+                ReadExternalForDisplay(piece, dst, st);
+            }
             else
             {
                 ReadGenerated(piece, dst);
@@ -76,6 +80,14 @@ public sealed class DocumentSnapshot
             if (piece.Kind == PieceKind.Original)
             {
                 ReadResult r = _storage.Cache.ReadDirect(piece.Offset, dst);
+                foreach (UnreadableRange u in r.Unreadable)
+                {
+                    (bad ??= []).Add(u with { Offset = u.Offset - piece.Offset + docOffset });
+                }
+            }
+            else if (piece.Kind == PieceKind.External)
+            {
+                ReadResult r = _storage.Externals[piece.ExternalIndex].Read(piece.Offset, dst);
                 foreach (UnreadableRange u in r.Unreadable)
                 {
                     (bad ??= []).Add(u with { Offset = u.Offset - piece.Offset + docOffset });
@@ -189,6 +201,27 @@ public sealed class DocumentSnapshot
         }
     }
 
+    private void ReadExternalForDisplay(Piece piece, Span<byte> destination, Span<ByteState> states)
+    {
+        IByteSource source = _storage.Externals[piece.ExternalIndex];
+        if (source is SnapshotRange range)
+        {
+            range.ReadForDisplay(piece.Offset, destination, states);
+            return;
+        }
+
+        // 復旧用データの一時ファイルなど: ローカルのファイルなのでそのまま読む。
+        ReadResult r = source.Read(piece.Offset, destination);
+        states.Fill(ByteState.Valid);
+        foreach (UnreadableRange u in r.Unreadable)
+        {
+            states.Slice((int)(u.Offset - piece.Offset), (int)u.Length).Fill(ByteState.Unreadable);
+        }
+    }
+
+    /// <summary>外部参照のピースが指すデータ (復旧用データの書き出しで使う)。</summary>
+    internal IByteSource ExternalSource(int index) => _storage.Externals[index];
+
     private void ReadGenerated(Piece piece, Span<byte> destination)
     {
         switch (piece.Kind)
@@ -211,8 +244,14 @@ public sealed class DocumentSnapshot
 }
 
 /// <summary>ドキュメントのスナップショットが共有する、データの置き場所。</summary>
-internal sealed class DocumentStorage(IByteSource source, AddBuffer addBuffer, BlockCache cache)
+internal sealed class DocumentStorage(Document owner, IByteSource source, AddBuffer addBuffer, BlockCache cache)
 {
+    /// <summary>このデータの持ち主のドキュメント。</summary>
+    public Document Owner { get; } = owner;
+
+    /// <summary>外部参照のピース (<see cref="PieceKind.External"/>) が指すデータの表。追記だけで、番号は変えない。</summary>
+    public List<IByteSource> Externals { get; } = [];
+
     /// <summary>元データ。その場保存の後は、保存前の内容を返す重ね合わせ (OverlayByteSource) に差し替える。</summary>
     public IByteSource Source { get; set; } = source;
 

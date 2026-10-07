@@ -83,6 +83,7 @@ public static class RecoveryStore
 
         AddBuffer? addBuffer = null;
         DocumentRecovery? recovery = null;
+        var externals = new List<IByteSource>();
         try
         {
             // ロックを先に取り、他のインスタンスが同時に同じデータを復旧しないようにする。
@@ -97,12 +98,27 @@ public static class RecoveryStore
                 throw new InvalidDataException("元のファイルが短くなっているため、復旧できません。");
             }
 
-            Document document = Document.Restore(record.DocumentId, source, addBuffer, pieces, options);
+            foreach (RecoveryExternal external in record.Externals)
+            {
+                if (external.FileName.IndexOfAny(['/', '\\']) >= 0)
+                {
+                    throw new InvalidDataException("復旧用データの外部参照のファイル名が正しくありません。");
+                }
+
+                externals.Add(FileByteSource.Open(Path.Combine(entry.Folder, external.FileName)));
+            }
+
+            Document document = Document.Restore(record.DocumentId, source, addBuffer, pieces, options, externals);
             return new RestoredDocument(document, recovery, record, sourceChanged);
         }
         catch
         {
             addBuffer?.DisposeKeepingFile();
+            foreach (IByteSource external in externals)
+            {
+                external.Dispose();
+            }
+
             recovery?.Release();
             source.Dispose();
             throw;

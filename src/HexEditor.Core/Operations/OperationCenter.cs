@@ -131,6 +131,70 @@ public sealed class OperationCenter
         }
     }
 
+    /// <summary>
+    /// 対象のドキュメントで実行中・待機中の処理をすべてキャンセルし、止まるまで待つ (ENG-09 の仕様 12 の「処理をキャンセルして閉じる」、
+    /// ENG-17 の仕様 5)。<paramref name="exceptSaves"/> が真なら保存 (外部に書き出す処理) はキャンセルせずに完了を待つ
+    /// (「保存の完了を待って閉じる」)。
+    /// </summary>
+    public async Task CancelAndWaitAsync(object target, bool exceptSaves = false, CancellationToken cancellationToken = default)
+    {
+        foreach (LongRunningOperation op in ActiveFor(target))
+        {
+            if (!exceptSaves || op.Kind != OperationKind.WritesExternal)
+            {
+                op.Cancel();
+            }
+        }
+
+        await WhenIdleAsync(target, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>対象のドキュメントの処理がすべて終わるまで待つ。</summary>
+    public async Task WhenIdleAsync(object target, CancellationToken cancellationToken = default)
+    {
+        while (true)
+        {
+            var idle = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+            void OnChanged(object? sender, EventArgs e)
+            {
+                if (ActiveFor(target).Count == 0)
+                {
+                    idle.TrySetResult();
+                }
+            }
+
+            Changed += OnChanged;
+            try
+            {
+                if (ActiveFor(target).Count == 0)
+                {
+                    return;
+                }
+
+                await idle.Task.WaitAsync(TimeSpan.FromMilliseconds(250), cancellationToken).ConfigureAwait(false);
+                return;
+            }
+            catch (TimeoutException)
+            {
+                // Changed を取りこぼした場合に備えて、定期的に確かめ直す。
+            }
+            finally
+            {
+                Changed -= OnChanged;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 閉じるときの確認ダイアログに出す、対象のドキュメントで実行中の処理の一覧と、保存中かどうか (ENG-09 の仕様 12)。
+    /// 保存中なら「保存の完了を待って閉じる」も選べる。
+    /// </summary>
+    public (IReadOnlyList<LongRunningOperation> Operations, bool IncludesSave) DescribeActive(object target)
+    {
+        IReadOnlyList<LongRunningOperation> active = ActiveFor(target);
+        return (active, active.Any(o => o.Kind == OperationKind.WritesExternal));
+    }
+
     private SemaphoreSlim GateFor(object target)
     {
         lock (_lock)

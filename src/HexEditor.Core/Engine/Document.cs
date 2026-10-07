@@ -1,3 +1,4 @@
+using HexEditor.Core.Operations;
 using HexEditor.Core.Sources;
 
 namespace HexEditor.Core.Engine;
@@ -13,12 +14,70 @@ public sealed record DocumentOptions
     public long CacheCapacity { get; init; } = 256L * 1024 * 1024;
 
     public int MaxConcurrentReads { get; init; } = 4;
+
+    /// <summary>連続した入力をまとめる最大の間隔 (EDIT-19 の仕様 5。0 はまとめない)。</summary>
+    public TimeSpan CoalesceInterval { get; init; } = EditHistory.DefaultCoalesceInterval;
+
+    /// <summary>ファイルのロックの方針 (ENG-15 の仕様 3)。</summary>
+    public FileLockPolicy LockPolicy { get; init; } = FileLockPolicy.WhileModified;
+
+    /// <summary>入力のまとめの時間を測る時計 (テストで差し替える)。</summary>
+    public TimeProvider TimeProvider { get; init; } = TimeProvider.System;
 }
 
-/// <summary>内容の変更の通知。範囲はドキュメント上の位置。Undo・Redo では全体が変わったものとして通知する。</summary>
-public sealed class DocumentChangedEventArgs(long offset, long removedLength, long insertedLength, bool isWholeDocument)
+/// <summary>ファイルのロックの方針 (ENG-15 の仕様 3)。</summary>
+public enum FileLockPolicy
+{
+    /// <summary>編集中 (未保存の変更があるとき) だけ他のアプリの書き込みを禁止する (既定)。</summary>
+    WhileModified,
+
+    /// <summary>開いている間、常に他のアプリの書き込みを禁止する。</summary>
+    Always,
+
+    /// <summary>ロックしない。</summary>
+    None,
+}
+
+/// <summary>書き込み禁止のハンドルの状態 (ENG-15。ドキュメントのプロパティに表示する)。</summary>
+public enum FileLockState
+{
+    /// <summary>ファイルでない、または方針によりロックしていない。</summary>
+    Unlocked,
+
+    /// <summary>他のアプリの書き込みを禁止している。</summary>
+    Locked,
+
+    /// <summary>
+    /// 禁止しようとしたが、他のアプリが書き込み用に開いているため禁止できなかった。UI は InfoBar で
+    /// 「他のアプリがこのファイルに書き込める状態です…」と示す (ENG-15 の仕様 2)。
+    /// </summary>
+    Failed,
+}
+
+/// <summary>内容の変更のきっかけ。</summary>
+public enum DocumentChangeKind
+{
+    Edit,
+    Undo,
+    Redo,
+
+    /// <summary>保存による元データの切り替え (内容は変わらない)。</summary>
+    Saved,
+}
+
+/// <summary>
+/// 内容の変更の通知。範囲はドキュメント上の位置。Undo・Redo では全体が変わったものとして通知し、
+/// <see cref="Selection"/> に選択する範囲 (EDIT-19 の仕様 10) を入れる。
+/// </summary>
+public sealed class DocumentChangedEventArgs(long offset, long removedLength, long insertedLength, bool isWholeDocument,
+    DocumentChangeKind kind = DocumentChangeKind.Edit, (long Offset, long Length)? selection = null)
     : EventArgs
 {
+    public DocumentChangeKind Kind { get; } = kind;
+
+    /// <summary>Undo・Redo の後に選択する範囲 (長さ 0 ならカーソルだけを置く)。編集では null。</summary>
+    public (long Offset, long Length)? Selection { get; } = selection;
+
     public long Offset { get; } = offset;
 
     public long RemovedLength { get; } = removedLength;
@@ -34,30 +93,44 @@ public sealed class DocumentChangedEventArgs(long offset, long removedLength, lo
 /// </summary>
 public sealed class Document : IDisposable
 {
+    private readonly object _lifetimeLock = new();
     private readonly List<DocumentStorage> _storages = [];
     private readonly DocumentOptions _options;
+    private readonly List<SnapshotRange> _exported = [];
+    private readonly HashSet<SnapshotRange> _imported = [];
+    private readonly List<IByteSource> _ownedExternals = [];
     private DocumentStorage _storage;
+    private FileByteSource? _lockedFile;
+    private bool _lockSuspended;
     private bool _disposed;
+    private bool _resourcesReleased;
 
     public Document(IByteSource source, DocumentOptions? options = null)
     {
         _options = options ?? new DocumentOptions();
         Id = Guid.NewGuid();
+        LockPolicy = _options.LockPolicy;
         string spillPath = Path.Combine(_options.TempDirectory, Id.ToString("N"), "add.bin");
         _storage = CreateStorage(source, new AddBuffer(spillPath, _options.AddBufferMemoryLimit));
 
         // 開いた直後は元データ全体を指すピース 1 つ (長さ 0 ならピースなし)。ENG-02 の仕様 8。
         PieceTree tree = source.Length > 0 ? PieceTree.FromPiece(Piece.Original(0, source.Length)) : PieceTree.Empty;
-        History = new EditHistory(new DocumentSnapshot(_storage, tree));
+        History = new EditHistory(new DocumentSnapshot(_storage, tree), _options.TimeProvider, _options.CoalesceInterval);
+        _initialized = true;
+        UpdateLock();
     }
 
     /// <summary>
     /// 復旧用データからドキュメントを作り直す (ENG-27 の仕様 6)。<paramref name="addBuffer"/> は復旧用データの一時ファイルを
-    /// 開き直したもので、<paramref name="pieces"/> はその時点の内容。Undo 履歴は復元せず、「変更あり」の状態で始まる。
+    /// 開き直したもので、<paramref name="pieces"/> はその時点の内容。<paramref name="externals"/> は外部参照のピース
+    /// (<see cref="PieceKind.External"/>) が指すデータ (復旧用データに書き出したもの。ドキュメントが閉じるときに閉じる)。
+    /// Undo 履歴は復元せず、「変更あり」の状態で始まる。
     /// </summary>
-    public static Document Restore(Guid id, IByteSource source, AddBuffer addBuffer, IEnumerable<Piece> pieces, DocumentOptions? options = null)
+    public static Document Restore(Guid id, IByteSource source, AddBuffer addBuffer, IEnumerable<Piece> pieces, DocumentOptions? options = null,
+        IReadOnlyList<IByteSource>? externals = null)
     {
         var list = pieces.ToList();
+        externals ??= [];
         foreach (Piece piece in list)
         {
             bool valid = piece.Kind switch
@@ -66,6 +139,8 @@ public sealed class Document : IDisposable
                 PieceKind.Added => piece.Offset >= 0 && piece.Offset + piece.Length <= addBuffer.Length,
                 PieceKind.Pattern => piece.Offset >= 0 && piece.Offset + piece.PatternLength <= addBuffer.Length,
                 PieceKind.Random => piece.Offset >= 0,
+                PieceKind.External => piece.ExternalIndex >= 0 && piece.ExternalIndex < externals.Count
+                    && piece.Offset >= 0 && piece.Offset + piece.Length <= externals[piece.ExternalIndex].Length,
                 _ => false,
             };
             if (!valid)
@@ -74,20 +149,28 @@ public sealed class Document : IDisposable
             }
         }
 
-        var document = new Document(id, source, addBuffer, PieceTree.FromPieces(list), options ?? new DocumentOptions());
+        var document = new Document(id, source, addBuffer, PieceTree.FromPieces(list), options ?? new DocumentOptions(), externals);
         document.History.MarkUnsaved();
+        document.UpdateLock();
         return document;
     }
 
-    private Document(Guid id, IByteSource source, AddBuffer addBuffer, PieceTree tree, DocumentOptions options)
+    private Document(Guid id, IByteSource source, AddBuffer addBuffer, PieceTree tree, DocumentOptions options, IReadOnlyList<IByteSource> externals)
     {
         _options = options;
         Id = id;
+        LockPolicy = options.LockPolicy;
         _storage = CreateStorage(source, addBuffer);
-        History = new EditHistory(new DocumentSnapshot(_storage, tree));
+        _storage.Externals.AddRange(externals);
+        _ownedExternals.AddRange(externals);
+        History = new EditHistory(new DocumentSnapshot(_storage, tree), options.TimeProvider, options.CoalesceInterval);
+        _initialized = true;
     }
 
     public Guid Id { get; }
+
+    /// <summary>ドキュメントを作ったときの設定。</summary>
+    public DocumentOptions Options => _options;
 
     /// <summary>
     /// 現在の内容が今の元データと追加バッファだけで表せるか。保存より前の版に Undo した直後は、置き換え前の
@@ -119,6 +202,8 @@ public sealed class Document : IDisposable
 
     public bool IsModified => History.IsModified;
 
+    public bool IsDisposed => _disposed;
+
     public AddBuffer AddBuffer => _storage.AddBuffer;
 
     public BlockCache Cache => _storage.Cache;
@@ -134,6 +219,138 @@ public sealed class Document : IDisposable
 
     /// <summary>表示中のデータの読み込みが終わった (再描画のきっかけ)。スレッドプールから呼ばれる。</summary>
     public event EventHandler? DataLoaded;
+
+    // ---- ファイルのロック (ENG-15) ----
+
+    /// <summary>ファイルのロックの方針。「詳細を指定して開く」の「他のアプリの書き込みを禁止する」は <see cref="FileLockPolicy.Always"/> (仕様 4)。</summary>
+    public FileLockPolicy LockPolicy
+    {
+        get => _lockPolicy;
+        set
+        {
+            _lockPolicy = value;
+            if (_initialized)
+            {
+                UpdateLock();
+            }
+        }
+    }
+
+    private FileLockPolicy _lockPolicy;
+    private bool _initialized;
+
+    /// <summary>書き込み禁止のハンドルの状態。</summary>
+    public FileLockState LockState { get; private set; }
+
+    /// <summary><see cref="LockState"/> が変わった。<see cref="FileLockState.Failed"/> になったら UI は InfoBar で知らせる。</summary>
+    public event EventHandler? LockStateChanged;
+
+    /// <summary>
+    /// 方針と変更の有無に合わせて、書き込み禁止のハンドルを開く・閉じる (ENG-15 の仕様 2)。編集・Undo・Redo・保存の後に呼ばれる。
+    /// </summary>
+    private void UpdateLock()
+    {
+        bool changed;
+        lock (_lifetimeLock)
+        {
+            var file = _lockSuspended || _disposed ? null : _storage.Source as FileByteSource;
+            bool want = file is not null && _lockPolicy switch
+            {
+                FileLockPolicy.Always => true,
+                FileLockPolicy.WhileModified => History.IsModified,
+                _ => false,
+            };
+
+            if (_lockedFile is not null && (!want || !ReferenceEquals(_lockedFile, file) || !_lockedFile.IsWriteDenied))
+            {
+                _lockedFile.AllowWrites();
+                _lockedFile = null;
+            }
+
+            FileLockState state;
+            if (!want)
+            {
+                state = FileLockState.Unlocked;
+            }
+            else if (_lockedFile is not null)
+            {
+                state = FileLockState.Locked;
+            }
+            else if (LockState == FileLockState.Failed)
+            {
+                // 禁止できなかった状態では、変更がなくなる (または保存する) まで開き直さない (InfoBar を何度も出さない)。
+                state = FileLockState.Failed;
+            }
+            else if (file!.DenyWrites())
+            {
+                _lockedFile = file;
+                state = FileLockState.Locked;
+            }
+            else
+            {
+                state = FileLockState.Failed;
+            }
+
+            changed = state != LockState;
+            LockState = state;
+        }
+
+        if (changed)
+        {
+            LockStateChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    /// <summary>保存の前に書き込み禁止のハンドルを閉じる (ENG-15 の仕様 5)。保存の後は <see cref="ResumeLock"/> で元の方針に戻す。</summary>
+    internal void SuspendLock()
+    {
+        lock (_lifetimeLock)
+        {
+            _lockSuspended = true;
+            _lockedFile?.AllowWrites();
+            _lockedFile = null;
+        }
+    }
+
+    internal void ResumeLock()
+    {
+        lock (_lifetimeLock)
+        {
+            _lockSuspended = false;
+            if (LockState == FileLockState.Failed)
+            {
+                LockState = FileLockState.Unlocked;
+            }
+        }
+
+        UpdateLock();
+    }
+
+    // ---- 編集グループ (EDIT-19 の仕様 6) ----
+
+    /// <summary>
+    /// 1 つのコマンドの中の複数の編集を 1 つの Undo 単位にまとめる。戻り値を Dispose するまでの編集が 1 つのグループになる。
+    /// 入れ子にした場合は一番外側でまとめる。<paramref name="coalesceKey"/> を指定すると、続く同じ種類の入力もこのグループにまとめる。
+    /// </summary>
+    public IDisposable BeginGroup(string description, string? coalesceKey = null)
+    {
+        History.BeginGroup(description, coalesceKey);
+        return new GroupScope(History);
+    }
+
+    private sealed class GroupScope(EditHistory history) : IDisposable
+    {
+        private bool _done;
+
+        public void Dispose()
+        {
+            if (!_done)
+            {
+                _done = true;
+                history.EndGroup();
+            }
+        }
+    }
 
     // ---- 挿入 ----
 
@@ -193,8 +410,8 @@ public sealed class Document : IDisposable
 
     /// <summary>
     /// 別のスナップショット (同じドキュメントの過去の状態、または別のドキュメント) の範囲を <paramref name="offset"/> に挿入する。
-    /// 同じ元データを共有している場合はピースを参照するだけ (O(log n))、そうでなければデータを追加バッファに複製する
-    /// (ENG-02 の仕様 9)。
+    /// 同じ元データを共有している場合はピースを共有し、そうでなければ範囲の参照 (<see cref="SnapshotRange"/>) を
+    /// 1 つのピースとして挿入する。どちらもデータをコピーしない (ENG-02 の仕様 9、EDIT-24 の仕様 2)。
     /// </summary>
     public void InsertFrom(long offset, DocumentSnapshot source, long sourceOffset, long length, string description = "貼り付け")
     {
@@ -205,6 +422,19 @@ public sealed class Document : IDisposable
 
         RequireResizable();
         PieceTree content = ContentFrom(source, sourceOffset, length);
+        Apply(Current.Tree.Insert(offset, content), offset, 0, length, description, null);
+    }
+
+    /// <summary>範囲の参照 (アプリ内クリップボード) の [rangeOffset, rangeOffset + length) を挿入する (EDIT-24)。</summary>
+    public void InsertFrom(long offset, SnapshotRange range, long rangeOffset, long length, string description = "貼り付け")
+    {
+        if (length == 0)
+        {
+            return;
+        }
+
+        RequireResizable();
+        PieceTree content = ContentFrom(range, rangeOffset, length);
         Apply(Current.Tree.Insert(offset, content), offset, 0, length, description, null);
     }
 
@@ -221,7 +451,93 @@ public sealed class Document : IDisposable
         Apply(Current.Tree.Replace(offset, replaced, content), offset, replaced, length, description, null);
     }
 
-    /// <summary>挿入・上書きに使う内容。元データを共有していればピースの参照、違えば追加バッファへの複製。</summary>
+    /// <summary>範囲の参照で上書きする。</summary>
+    public void OverwriteFrom(long offset, SnapshotRange range, long rangeOffset, long length, string description = "上書き貼り付け")
+    {
+        if (length == 0)
+        {
+            return;
+        }
+
+        long replaced = CheckOverwrite(offset, length);
+        PieceTree content = ContentFrom(range, rangeOffset, length);
+        Apply(Current.Tree.Replace(offset, replaced, content), offset, replaced, length, description, null);
+    }
+
+    /// <summary>
+    /// このドキュメントのスナップショットの範囲の参照を作る (アプリ内クリップボード、別のドキュメントへの貼り付け。EDIT-24 の仕様 1)。
+    /// 参照する側は <see cref="SnapshotRange.AddReference"/> で参照を記録し、不要になったら手放す。
+    /// </summary>
+    public SnapshotRange CreateRange(DocumentSnapshot snapshot, long offset, long length)
+    {
+        lock (_lifetimeLock)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (!_storages.Contains(snapshot.Storage))
+            {
+                throw new ArgumentException("このドキュメントのスナップショットではありません。", nameof(snapshot));
+            }
+
+            var range = new SnapshotRange(this, snapshot, offset, length);
+            _exported.Add(range);
+            return range;
+        }
+    }
+
+    /// <summary>
+    /// 他のドキュメント・アプリ内クリップボードが参照している、このドキュメントの範囲のうち、まだ実体化していないもの
+    /// (EDIT-24 の仕様 3)。閉じる前にこれらを <see cref="MaterializeReferences"/> で一時ファイルに書き出す。
+    /// </summary>
+    public IReadOnlyList<SnapshotRange> PendingReferences
+    {
+        get
+        {
+            lock (_lifetimeLock)
+            {
+                // このドキュメント自身からの参照 (保存前の版からの貼り付け) は、閉じるときに一緒に手放すため数えない。
+                return _exported.Where(r => !r.IsMaterialized && r.ReferenceCount - (_imported.Contains(r) ? 1 : 0) > 0).ToList();
+            }
+        }
+    }
+
+    /// <summary>実体化が必要な量の合計 (1 GB を超える場合は閉じる前に確認する。EDIT-24 の仕様 6)。</summary>
+    public long PendingReferenceBytes => PendingReferences.Sum(r => r.Length);
+
+    /// <summary>
+    /// 参照されている範囲をすべて一時ファイルに書き出す (EDIT-24 の仕様 3・5。長時間処理として呼ぶ)。キャンセルされた場合は
+    /// 書き出しの済んでいない範囲は参照のまま残る (参照する側がすべて手放すまで、このドキュメントのデータは解放されない)。
+    /// </summary>
+    public void MaterializeReferences(LongRunningOperation? operation = null)
+    {
+        IReadOnlyList<SnapshotRange> pending = PendingReferences;
+        long total = pending.Sum(r => r.Length);
+        operation?.SetTotal(total);
+        long done = 0;
+        foreach (SnapshotRange range in pending)
+        {
+            range.Materialize(_options.TempDirectory, operation, done);
+            done += range.Length;
+        }
+    }
+
+    /// <summary>範囲が実体化された、またはすべての参照が手放された。閉じた後なら、残りがなくなった時点でデータを解放する。</summary>
+    internal void OnRangeDetached(SnapshotRange range)
+    {
+        bool release;
+        lock (_lifetimeLock)
+        {
+            _exported.Remove(range);
+            release = _disposed && !_resourcesReleased && _exported.Count == 0;
+            _resourcesReleased |= release;
+        }
+
+        if (release)
+        {
+            ReleaseResources();
+        }
+    }
+
+    /// <summary>挿入・上書きに使う内容。元データを共有していればピースの共有、違えば範囲の参照。</summary>
     private PieceTree ContentFrom(DocumentSnapshot source, long sourceOffset, long length)
     {
         RequireEditable();
@@ -231,19 +547,49 @@ public sealed class Document : IDisposable
             return source.Tree.Slice(sourceOffset, length);
         }
 
-        // 別のドキュメント: 1 MiB ずつ読んで追加バッファに追記する。追記は連続するため、ピースは 1 つにまとまる。
-        byte[] buffer = new byte[Math.Min(length, 1024 * 1024)];
-        PieceTree content = PieceTree.Empty;
-        for (long done = 0; done < length; done += buffer.Length)
+        SnapshotRange range = source.Storage.Owner.CreateRange(source, sourceOffset, length);
+        range.AddReference();
+        try
         {
-            int n = (int)Math.Min(buffer.Length, length - done);
-            source.Read(sourceOffset + done, buffer.AsSpan(0, n));
-            long at = _storage.AddBuffer.Append(buffer.AsSpan(0, n));
-            content = content.Concat(PieceTree.FromPiece(Piece.Added(at, n)));
+            return ContentFrom(range, 0, length);
+        }
+        finally
+        {
+            // 参照はこのドキュメントが記録した分だけ残す (記録されなければ、ここで手放されて解放される)。
+            range.ReleaseReference();
+        }
+    }
+
+    private PieceTree ContentFrom(SnapshotRange range, long rangeOffset, long length)
+    {
+        RequireEditable();
+        if (rangeOffset < 0 || length < 0 || rangeOffset + length > range.Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(rangeOffset));
         }
 
-        return content;
+        if (range.Origin is { } origin && ReferenceEquals(origin.Snapshot.Storage, _storage))
+        {
+            return origin.Snapshot.Tree.Slice(origin.Offset + rangeOffset, length);
+        }
+
+        int index = _storage.Externals.IndexOf(range);
+        if (index < 0)
+        {
+            if (_imported.Add(range))
+            {
+                range.AddReference();
+                range.DataLoaded += OnExternalDataLoaded;
+            }
+
+            _storage.Externals.Add(range);
+            index = _storage.Externals.Count - 1;
+        }
+
+        return PieceTree.FromPiece(Piece.External(index, rangeOffset, length));
     }
+
+    private void OnExternalDataLoaded(object? sender, EventArgs e) => DataLoaded?.Invoke(this, EventArgs.Empty);
 
     // ---- 上書き ----
 
@@ -305,22 +651,36 @@ public sealed class Document : IDisposable
 
     // ---- Undo / Redo ----
 
+    /// <summary>元に戻す。取り消した編集グループの、編集前の範囲を選択するよう通知する (EDIT-19 の仕様 10)。</summary>
     public void Undo()
     {
         RequireEditable();
-        History.Undo();
-        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true));
+        HistoryEntry undone = History.Undo();
+        (long, long)? selection = undone.Range is { } r ? (r.Offset, r.BeforeLength) : null;
+        AfterHistoryMove(DocumentChangeKind.Undo, selection);
     }
 
+    /// <summary>やり直す。やり直した編集グループの、編集後の範囲を選択するよう通知する。</summary>
     public void Redo()
     {
         RequireEditable();
-        History.Redo();
-        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true));
+        HistoryEntry redone = History.Redo();
+        (long, long)? selection = redone.Range is { } r ? (r.Offset, r.AfterLength) : null;
+        AfterHistoryMove(DocumentChangeKind.Redo, selection);
+    }
+
+    private void AfterHistoryMove(DocumentChangeKind kind, (long, long)? selection)
+    {
+        UpdateLock();
+        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true, kind, selection));
     }
 
     /// <summary>現在の状態を「保存した時点」にする (保存処理から呼ぶ)。</summary>
-    public void MarkSaved() => History.MarkSaved();
+    public void MarkSaved()
+    {
+        History.MarkSaved();
+        UpdateLock();
+    }
 
     /// <summary>
     /// 保存の完了 (ENG-20 の仕様 4): 保存したファイルを新しい元データにし、現在の状態を元データ全体を指す
@@ -338,7 +698,8 @@ public sealed class Document : IDisposable
         PieceTree tree = savedSource.Length > 0 ? PieceTree.FromPiece(Piece.Original(0, savedSource.Length)) : PieceTree.Empty;
         History.ReplaceCurrent(new DocumentSnapshot(_storage, tree));
         History.MarkSaved();
-        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true));
+        ResumeLock();
+        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true, DocumentChangeKind.Saved));
     }
 
     /// <summary>
@@ -360,13 +721,14 @@ public sealed class Document : IDisposable
         _lastOverlay = overlay;
         before.Source = overlay;
         before.Cache.Dispose();
-        before.Cache = new BlockCache(overlay, _options.CacheCapacity, _options.MaxConcurrentReads);
+        before.Cache = NewCache(overlay);
 
         _storage = CreateStorage(result.Source, before.AddBuffer);
         PieceTree tree = result.Source.Length > 0 ? PieceTree.FromPiece(Piece.Original(0, result.Source.Length)) : PieceTree.Empty;
         History.ReplaceCurrent(new DocumentSnapshot(_storage, tree));
         History.MarkSaved();
-        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true));
+        ResumeLock();
+        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true, DocumentChangeKind.Saved));
     }
 
     private Saving.OverlayByteSource? _lastOverlay;
@@ -376,16 +738,23 @@ public sealed class Document : IDisposable
 
     private DocumentStorage CreateStorage(IByteSource source, AddBuffer addBuffer)
     {
-        var cache = new BlockCache(source, _options.CacheCapacity, _options.MaxConcurrentReads);
-        cache.BlockLoaded += (offset, length) => DataLoaded?.Invoke(this, EventArgs.Empty);
-        var storage = new DocumentStorage(source, addBuffer, cache);
+        var storage = new DocumentStorage(this, source, addBuffer, NewCache(source));
         _storages.Add(storage);
         return storage;
     }
 
+    private BlockCache NewCache(IByteSource source)
+    {
+        long capacity = _storage is null ? _options.CacheCapacity : _storage.Cache.CapacityBytes;
+        var cache = new BlockCache(source, capacity, _options.MaxConcurrentReads);
+        cache.BlockLoaded += (offset, length) => DataLoaded?.Invoke(this, EventArgs.Empty);
+        return cache;
+    }
+
     private void Apply(PieceTree tree, long offset, long removed, long inserted, string description, string? coalesceKey)
     {
-        History.Push(new DocumentSnapshot(_storage, tree), description, coalesceKey);
+        History.Push(new DocumentSnapshot(_storage, tree), description, coalesceKey, offset, removed, inserted);
+        UpdateLock();
         Changed?.Invoke(this, new DocumentChangedEventArgs(offset, removed, inserted, isWholeDocument: false));
     }
 
@@ -445,20 +814,56 @@ public sealed class Document : IDisposable
         }
     }
 
+    /// <summary>
+    /// 閉じる。このドキュメントが参照していた他のドキュメントの範囲を手放す。他のドキュメントやアプリ内クリップボードが
+    /// このドキュメントの範囲を参照している間は、元データ・追加バッファ・一時ファイルの解放をそれらが実体化されるか
+    /// 手放されるまで遅らせる (EDIT-24 の仕様 3・5)。
+    /// </summary>
     public void Dispose()
     {
-        if (_disposed)
+        lock (_lifetimeLock)
         {
-            return;
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+            _lockedFile?.AllowWrites();
+            _lockedFile = null;
         }
 
-        _disposed = true;
+        foreach (SnapshotRange range in _imported)
+        {
+            range.DataLoaded -= OnExternalDataLoaded;
+            range.ReleaseReference();
+        }
+
+        _imported.Clear();
+
+        bool release;
+        lock (_lifetimeLock)
+        {
+            // 参照されていない (または実体化済みの) 範囲は捨てる。
+            _exported.RemoveAll(r => r.IsMaterialized || r.ReferenceCount == 0);
+            release = _exported.Count == 0 && !_resourcesReleased;
+            _resourcesReleased |= release;
+        }
+
+        if (release)
+        {
+            ReleaseResources();
+        }
+    }
+
+    private void ReleaseResources()
+    {
         foreach (DocumentStorage storage in _storages)
         {
             storage.Cache.Dispose();
         }
 
-        foreach (IByteSource source in _storages.Select(s => s.Source).Distinct())
+        foreach (IByteSource source in _storages.Select(s => s.Source).Concat(_ownedExternals).Distinct())
         {
             source.Dispose();
         }

@@ -13,6 +13,9 @@ public sealed class FileByteSource : ByteSourceBase
 
     private readonly SafeFileHandle _handle;
     private readonly long _length;
+    private readonly object _denyLock = new();
+    private SafeFileHandle? _denyHandle;
+    private bool _disposed;
 
     private FileByteSource(string path, SafeFileHandle handle, bool readOnlyAttribute)
     {
@@ -53,6 +56,58 @@ public sealed class FileByteSource : ByteSourceBase
             FileOptions.RandomAccess);
         bool readOnly = File.GetAttributes(fullPath).HasFlag(FileAttributes.ReadOnly);
         return new FileByteSource(fullPath, handle, readOnly);
+    }
+
+    /// <summary>他のアプリの書き込みを禁止するハンドルを開いているか (ENG-15 の仕様 2)。</summary>
+    public bool IsWriteDenied
+    {
+        get
+        {
+            lock (_denyLock)
+            {
+                return _denyHandle is not null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 同じファイルに 2 つ目のハンドルを、共有モード「読み取り・削除だけ許可」で開き、他のアプリがこの後書き込み用に開けないようにする
+    /// (ENG-15 の仕様 2)。他のアプリがすでに書き込み用に開いている場合などで開けなければ false。
+    /// </summary>
+    public bool DenyWrites()
+    {
+        lock (_denyLock)
+        {
+            if (_disposed)
+            {
+                return false;
+            }
+
+            if (_denyHandle is not null)
+            {
+                return true;
+            }
+
+            try
+            {
+                _denyHandle = File.OpenHandle(Path, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete);
+                return true;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                return false;
+            }
+        }
+    }
+
+    /// <summary>書き込み禁止のハンドルを閉じる (変更をすべて取り消したとき、保存の前後。ENG-15 の仕様 2・5)。</summary>
+    public void AllowWrites()
+    {
+        lock (_denyLock)
+        {
+            _denyHandle?.Dispose();
+            _denyHandle = null;
+        }
     }
 
     public override ReadResult Read(long offset, Span<byte> buffer)
@@ -159,6 +214,13 @@ public sealed class FileByteSource : ByteSourceBase
     {
         if (disposing)
         {
+            lock (_denyLock)
+            {
+                _disposed = true;
+                _denyHandle?.Dispose();
+                _denyHandle = null;
+            }
+
             _handle.Dispose();
         }
     }

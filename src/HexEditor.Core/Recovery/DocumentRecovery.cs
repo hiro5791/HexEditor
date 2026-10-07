@@ -16,9 +16,16 @@ public sealed record RecoveryPiece(PieceKind Kind, long Length, long Offset, lon
         PieceKind.Added => Piece.Added(Offset, Length),
         PieceKind.Pattern => Piece.Pattern(Offset, PatternLength, Length, Phase),
         PieceKind.Random => Piece.Random(Seed, Offset, Length),
+        PieceKind.External => Piece.External((int)Seed, Offset, Length),
         _ => throw new InvalidDataException($"不明なピースの種類です: {Kind}"),
     };
 }
+
+/// <summary>
+/// 外部参照のピース (別のドキュメントからの貼り付け。EDIT-24) が指すデータを書き出したファイル。参照元のドキュメントは
+/// 異常終了の後には残っていないため、内容を復旧用フォルダにコピーしておく。
+/// </summary>
+public sealed record RecoveryExternal(string FileName, long Length);
 
 /// <summary>復旧用データの内容 (<c>recovery/&lt;ドキュメント ID&gt;/state.json</c>)。</summary>
 public sealed record RecoveryRecord
@@ -40,6 +47,9 @@ public sealed record RecoveryRecord
     public long AddBufferLength { get; init; }
 
     public IReadOnlyList<RecoveryPiece> Pieces { get; init; } = [];
+
+    /// <summary>外部参照のピースの <see cref="RecoveryPiece.Seed"/> が指す、書き出したデータの一覧。</summary>
+    public IReadOnlyList<RecoveryExternal> Externals { get; init; } = [];
 
     public long Length { get; init; }
 
@@ -67,6 +77,7 @@ public sealed class DocumentRecovery : IDisposable
     internal static readonly JsonSerializerOptions Json = new() { WriteIndented = false };
 
     private readonly object _writeLock = new();
+    private readonly Dictionary<IByteSource, RecoveryExternal> _externals = new(ReferenceEqualityComparer.Instance);
     private SafeFileHandle? _lock;
 
     /// <param name="root">復旧用データのフォルダ。ドキュメントの <see cref="DocumentOptions.TempDirectory"/> と同じにする。</param>
@@ -112,10 +123,25 @@ public sealed class DocumentRecovery : IDisposable
         {
             capture.Document.AddBuffer.Persist();
             var pieces = new List<RecoveryPiece>();
+            var externals = new List<RecoveryExternal>();
+            var externalIndex = new Dictionary<int, int>();
             long changed = 0;
             foreach ((long _, Piece piece) in capture.Snapshot.Tree.EnumerateAll())
             {
-                pieces.Add(RecoveryPiece.From(piece));
+                RecoveryPiece recorded = RecoveryPiece.From(piece);
+                if (piece.Kind == PieceKind.External)
+                {
+                    if (!externalIndex.TryGetValue(piece.ExternalIndex, out int index))
+                    {
+                        externals.Add(PersistExternal(capture.Snapshot.ExternalSource(piece.ExternalIndex)));
+                        index = externals.Count - 1;
+                        externalIndex[piece.ExternalIndex] = index;
+                    }
+
+                    recorded = recorded with { Seed = (ulong)index };
+                }
+
+                pieces.Add(recorded);
                 if (piece.Kind != PieceKind.Original)
                 {
                     changed += piece.Length;
@@ -130,6 +156,7 @@ public sealed class DocumentRecovery : IDisposable
                 SourceStamp = capture.Stamp,
                 AddBufferLength = capture.AddBufferLength,
                 Pieces = pieces,
+                Externals = externals,
                 Length = capture.Snapshot.Length,
                 Cursor = capture.Cursor,
                 SelectionStart = capture.SelectionStart,
@@ -147,6 +174,46 @@ public sealed class DocumentRecovery : IDisposable
 
             File.Move(temp, StatePath, overwrite: true);
         }
+    }
+
+    /// <summary>
+    /// 外部参照のデータを復旧用フォルダのファイルにコピーする (同じデータは 1 回だけ)。復旧したドキュメントの外部参照は、
+    /// このフォルダのファイルをそのまま使う。
+    /// </summary>
+    private RecoveryExternal PersistExternal(IByteSource source)
+    {
+        if (_externals.TryGetValue(source, out RecoveryExternal? known))
+        {
+            return known;
+        }
+
+        if (source is FileByteSource file && string.Equals(Path.GetDirectoryName(file.Path), Folder, StringComparison.OrdinalIgnoreCase))
+        {
+            known = new RecoveryExternal(Path.GetFileName(file.Path), file.Length);
+            _externals[source] = known;
+            return known;
+        }
+
+        string name = $"ext-{_externals.Count + 1}-{Guid.NewGuid():N}.bin";
+        string path = Path.Combine(Folder, name);
+        string temp = path + ".tmp";
+        using (var stream = new FileStream(temp, FileMode.Create, FileAccess.Write, FileShare.None))
+        {
+            byte[] buffer = new byte[(int)Math.Min(Math.Max(source.Length, 1), 4 * 1024 * 1024)];
+            for (long done = 0; done < source.Length; done += buffer.Length)
+            {
+                int n = (int)Math.Min(buffer.Length, source.Length - done);
+                source.Read(done, buffer.AsSpan(0, n));
+                stream.Write(buffer, 0, n);
+            }
+
+            stream.Flush(flushToDisk: true);
+        }
+
+        File.Move(temp, path);
+        known = new RecoveryExternal(name, source.Length);
+        _externals[source] = known;
+        return known;
     }
 
     /// <summary>復旧用データを消す (保存した、または変更がなくなった。仕様 5)。追加バッファの一時ファイルは残す。</summary>

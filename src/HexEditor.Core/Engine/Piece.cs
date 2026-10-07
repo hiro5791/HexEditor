@@ -14,6 +14,12 @@ public enum PieceKind : byte
 
     /// <summary>カウンタ方式の乱数。<see cref="Piece.Offset"/> は乱数列上の位置。</summary>
     Random,
+
+    /// <summary>
+    /// 別のドキュメント (または保存前の版) の範囲の参照 (EDIT-24)。<see cref="Piece.Seed"/> は元データの外部参照の表の番号、
+    /// <see cref="Piece.Offset"/> はその参照の中の位置。
+    /// </summary>
+    External,
 }
 
 /// <summary>
@@ -64,6 +70,12 @@ public readonly record struct Piece
     public static Piece Random(ulong seed, long streamPosition, long length) =>
         new(PieceKind.Random, Positive(length), streamPosition, 0, 0, seed);
 
+    public static Piece External(int index, long offset, long length) =>
+        new(PieceKind.External, Positive(length), offset, 0, 0, (ulong)index);
+
+    /// <summary>外部参照の表の番号 (<see cref="PieceKind.External"/> のとき)。</summary>
+    public int ExternalIndex => (int)Seed;
+
     /// <summary>先頭から <paramref name="at"/> バイトの位置で 2 つに分ける。内容は分割前と変わらない。</summary>
     public (Piece Left, Piece Right) Split(long at)
     {
@@ -104,7 +116,7 @@ public readonly record struct Piece
             PieceKind.Original or PieceKind.Added => Offset + Length == next.Offset,
             PieceKind.Pattern => next.Offset == Offset && next.PatternLength == PatternLength
                 && (Phase + Length) % PatternLength == next.Phase,
-            PieceKind.Random => next.Seed == Seed && Offset + Length == next.Offset,
+            PieceKind.Random or PieceKind.External => next.Seed == Seed && Offset + Length == next.Offset,
             _ => false,
         };
         if (!contiguous)
