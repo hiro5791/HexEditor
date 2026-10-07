@@ -356,7 +356,8 @@ public sealed partial class HexView : UserControl
 
     private void Render()
     {
-        if (_editor is null || _palette is null)
+        // 閉じたタブのドキュメントは解放済みで読めない (追加バッファを読むと例外になり、XAML の処理の中で落ちる)。
+        if (_editor is null || _palette is null || _editor.Document.IsDisposed)
         {
             return;
         }

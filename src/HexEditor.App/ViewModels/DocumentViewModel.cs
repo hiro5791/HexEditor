@@ -122,7 +122,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     {
         get
         {
-            if (Editor.Cursor >= Document.Length)
+            if (Document.IsDisposed || Editor.Cursor >= Document.Length)
             {
                 return string.Empty;
             }
