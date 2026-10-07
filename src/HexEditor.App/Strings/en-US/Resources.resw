@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>File</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>New</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>Open...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>Save</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>Save As...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>Close</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>Exit</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>Edit</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>Undo</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>Redo</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>Select All</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>Toggle Overwrite / Insert</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>Go</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>Start of File</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>End of File</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>Untitled {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>Offset: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>Selection: {0}–{1} ({2} bytes)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>Length: {0} bytes</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>Overwrite</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>Insert</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>Overwrite (fixed length)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>Text</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>Modified</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>Save: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>Binary file</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>Could not open {0}. {1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>That file is open in another tab. Close it first.</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>Not enough free space on {0}. Required: {1} bytes, available: {2} bytes.</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>The document contains data that cannot be read, so it cannot be saved.</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>You don't have permission to save this file. Use Save As to choose another location.</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>An error occurred while writing ({0}). The original file has not been changed.</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>Save changes to {0}?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>Your changes will be lost if you don't save them.</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>Don't save</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>This data source can't change length, so only overwrite mode is available.</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>The character can't be represented in the current encoding.</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>The document is being processed and can't be edited right now.</value></data>
+</root>

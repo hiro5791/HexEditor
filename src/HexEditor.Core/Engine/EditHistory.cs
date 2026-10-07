@@ -93,6 +93,10 @@ public sealed class EditHistory
         return Current;
     }
 
+    /// <summary>現在の項目のスナップショットを、内容が同じ別のスナップショットに差し替える (保存後の元データの切り替え)。</summary>
+    internal void ReplaceCurrent(DocumentSnapshot snapshot) =>
+        _entries[_current] = _entries[_current] with { Snapshot = snapshot, CoalesceKey = null };
+
     /// <summary>現在の状態を「保存した時点」にする。</summary>
     internal void MarkSaved() => _savedIndex = _current;
 }

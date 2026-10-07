@@ -127,6 +127,20 @@ public sealed class DocumentSnapshot
         }
     }
 
+    /// <summary>[offset, offset + length) の中の変更された範囲 (表示の強調用。範囲外のピースは見ない)。</summary>
+    public IEnumerable<(long Offset, long Length)> EnumerateModifiedRanges(long offset, long length)
+    {
+        length = Math.Min(length, Math.Max(0, Length - offset));
+        foreach ((long docOffset, Piece piece) in Tree.Enumerate(offset, length))
+        {
+            // 切り詰めたピースでも、元データ上の位置とドキュメント上の位置の差は変わらない。
+            if (piece.Kind != PieceKind.Original || piece.Offset != docOffset)
+            {
+                yield return (docOffset, piece.Length);
+            }
+        }
+    }
+
     private int CountWithinLength(long offset, int requested)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(offset);

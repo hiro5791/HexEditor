@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
@@ -9,15 +9,15 @@
   IgnorableNamespaces="uap rescap systemai">
 
   <Identity
-    Name="2540C77E-9ACB-421E-A2E9-9C1DF5EFE765"
-    Publisher="CN=AppPublisher"
-    Version="1.0.0.0" />
+    Name="Hiroyura.HexEditor"
+    Publisher="CN=Hiroyura"
+    Version="0.1.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="2540C77E-9ACB-421E-A2E9-9C1DF5EFE765" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>HexEditor.App</DisplayName>
-    <PublisherDisplayName>AppPublisher</PublisherDisplayName>
+    <DisplayName>HexEditor</DisplayName>
+    <PublisherDisplayName>Hiroyura</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -35,8 +35,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="HexEditor.App"
-        Description="HexEditor.App"
+        DisplayName="HexEditor"
+        Description="HexEditor"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">
@@ -48,6 +48,5 @@
 
   <Capabilities>
     <rescap:Capability Name="runFullTrust" />
-    <systemai:Capability Name="systemAIModels"/>
   </Capabilities>
 </Package>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="Menu_File.Title" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Menu_File_New.Text" xml:space="preserve"><value>新規作成</value></data>
+  <data name="Menu_File_Open.Text" xml:space="preserve"><value>開く...</value></data>
+  <data name="Menu_File_Save.Text" xml:space="preserve"><value>保存</value></data>
+  <data name="Menu_File_SaveAs.Text" xml:space="preserve"><value>名前を付けて保存...</value></data>
+  <data name="Menu_File_Close.Text" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Menu_File_Exit.Text" xml:space="preserve"><value>終了</value></data>
+  <data name="Menu_Edit.Title" xml:space="preserve"><value>編集</value></data>
+  <data name="Menu_Edit_Undo.Text" xml:space="preserve"><value>元に戻す</value></data>
+  <data name="Menu_Edit_Redo.Text" xml:space="preserve"><value>やり直し</value></data>
+  <data name="Menu_Edit_SelectAll.Text" xml:space="preserve"><value>すべて選択</value></data>
+  <data name="Menu_Edit_ToggleInsert.Text" xml:space="preserve"><value>上書き / 挿入の切り替え</value></data>
+  <data name="Menu_Go.Title" xml:space="preserve"><value>移動</value></data>
+  <data name="Menu_Go_Start.Text" xml:space="preserve"><value>ファイルの先頭</value></data>
+  <data name="Menu_Go_End.Text" xml:space="preserve"><value>ファイルの末尾</value></data>
+  <data name="Untitled_Name" xml:space="preserve"><value>無題 {0}</value></data>
+  <data name="Status_Offset" xml:space="preserve"><value>オフセット: {0}</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>選択: {0}–{1} ({2} バイト)</value></data>
+  <data name="Status_Length" xml:space="preserve"><value>長さ: {0} バイト</value></data>
+  <data name="Status_Overwrite" xml:space="preserve"><value>上書き</value></data>
+  <data name="Status_Insert" xml:space="preserve"><value>挿入</value></data>
+  <data name="Status_OverwriteFixed" xml:space="preserve"><value>上書き (固定長)</value></data>
+  <data name="Status_ColumnHex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Status_ColumnText" xml:space="preserve"><value>テキスト</value></data>
+  <data name="Status_Modified" xml:space="preserve"><value>変更あり</value></data>
+  <data name="Operation_Save" xml:space="preserve"><value>保存: {0}</value></data>
+  <data name="FileType_All" xml:space="preserve"><value>バイナリファイル</value></data>
+  <data name="Error_Open" xml:space="preserve"><value>{0} を開けませんでした。{1}</value></data>
+  <data name="Error_SaveOpenElsewhere" xml:space="preserve"><value>そのファイルは別のタブで開いています。先に閉じてください。</value></data>
+  <data name="Error_NoSpace" xml:space="preserve"><value>{0} の空き容量が足りません。必要: {1} バイト、空き: {2} バイト。</value></data>
+  <data name="Error_Unreadable" xml:space="preserve"><value>読めないデータを含むため保存できません。</value></data>
+  <data name="Error_SaveDenied" xml:space="preserve"><value>このファイルを保存する権限がありません。「名前を付けて保存」で別の場所を選んでください。</value></data>
+  <data name="Error_SaveIo" xml:space="preserve"><value>書き込み中にエラーが発生しました ({0})。元のファイルは変更されていません。</value></data>
+  <data name="Close_Title" xml:space="preserve"><value>{0} の変更を保存しますか?</value></data>
+  <data name="Close_Body" xml:space="preserve"><value>保存しないと変更は失われます。</value></data>
+  <data name="Close_Save" xml:space="preserve"><value>保存する</value></data>
+  <data name="Close_DontSave" xml:space="preserve"><value>保存しない</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Notice_FixedLength" xml:space="preserve"><value>このデータソースは長さを変えられないため、上書きモードだけを使えます。</value></data>
+  <data name="Notice_NotEncodable" xml:space="preserve"><value>この文字は現在の文字コードで表せません。</value></data>
+  <data name="Notice_Busy" xml:space="preserve"><value>処理中のため編集できません。</value></data>
+</root>

@@ -1,57 +1,63 @@
+using System.Text;
+using HexEditor.App.Services;
+using HexEditor.App.ViewModels;
+using HexEditor.Core.Engine;
+using HexEditor.Core.Operations;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace HexEditor.App;
 
-/// <summary>
-/// Provides application-specific behavior to supplement the default Application class.
-/// </summary>
 public partial class App : Application
 {
-    /// <summary>
-    /// The main application window. Use <c>App.Window</c> from any class that needs
-    /// the window reference (for dialogs, pickers, interop, etc.).
-    /// </summary>
-    public static Window Window { get; private set; } = null!;
-
-    /// <summary>
-    /// The UI thread dispatcher. Use <c>App.DispatcherQueue</c> to marshal calls
-    /// to the UI thread. Fully qualified to avoid CS0104 ambiguity with
-    /// <see cref="Windows.System.DispatcherQueue"/>.
-    /// </summary>
-    public static Microsoft.UI.Dispatching.DispatcherQueue DispatcherQueue { get; private set; } = null!;
-
-    /// <summary>
-    /// The native window handle (HWND). Use for file pickers,
-    /// <c>DataTransferManager</c>, and any WinRT interop that requires
-    /// <c>InitializeWithWindow</c>.
-    /// </summary>
-    public static nint WindowHandle =>
-        WinRT.Interop.WindowNative.GetWindowHandle(Window);
-
-    /// <summary>
-    /// Initializes the singleton application object.
-    /// </summary>
     public App()
     {
         InitializeComponent();
+
+        // Shift_JIS・EBCDIC など、.NET が標準で持たないコードページを使えるようにする (VIEW-21)。
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+        // 未処理の例外は記録する (復旧用データの書き出しは ENG-27 で行う)。
+        UnhandledException += (_, e) => CrashLog.Write(e.Exception);
+        AppDomain.CurrentDomain.UnhandledException += (_, e) => CrashLog.Write(e.ExceptionObject as Exception);
+        TaskScheduler.UnobservedTaskException += (_, e) => CrashLog.Write(e.Exception);
     }
 
-    /// <summary>
-    /// Invoked when the application is launched.
-    /// </summary>
-    /// <param name="args">Details about the launch request and process.</param>
-    protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    public static Window Window { get; private set; } = null!;
+
+    public static Microsoft.UI.Dispatching.DispatcherQueue DispatcherQueue { get; private set; } = null!;
+
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        Window = new MainWindow();
+        var vm = new MainViewModel(new OperationCenter(), new EngineMemory());
+        var window = new MainWindow(vm);
+        Window = window;
         DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
-        Window.Activate();
+
+        // コマンドラインで指定したファイルを開く (AUTO-37 の最小限)。指定がなければ無題を 1 つ開く。
+        string[] files = Environment.GetCommandLineArgs().Skip(1).Where(a => !a.StartsWith('-')).ToArray();
+        foreach (string file in files)
+        {
+            try
+            {
+                vm.Open(file);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                // 開けなかったファイルは無視して起動を続ける (エラー表示は ENG-11 の実装で整える)。
+            }
+        }
+
+        if (vm.Documents.Count == 0)
+        {
+            vm.NewDocument();
+        }
+
+        // 開発中の確認用: 作業の邪魔にならないよう、起動したら前のウィンドウに戻し、自分は後ろに回る。
+        nint previous = DevOptions.NoActivate ? DevOptions.ForegroundWindow() : 0;
+        window.Activate();
+        if (previous != 0)
+        {
+            DevOptions.SendToBack(window, previous);
+        }
     }
 }

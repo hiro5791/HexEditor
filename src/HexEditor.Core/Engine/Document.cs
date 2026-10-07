@@ -34,18 +34,17 @@ public sealed class DocumentChangedEventArgs(long offset, long removedLength, lo
 /// </summary>
 public sealed class Document : IDisposable
 {
-    private readonly DocumentStorage _storage;
+    private readonly List<DocumentStorage> _storages = [];
+    private readonly DocumentOptions _options;
+    private DocumentStorage _storage;
     private bool _disposed;
 
     public Document(IByteSource source, DocumentOptions? options = null)
     {
-        options ??= new DocumentOptions();
-        Source = source;
+        _options = options ?? new DocumentOptions();
         Id = Guid.NewGuid();
-        string spillPath = Path.Combine(options.TempDirectory, Id.ToString("N"), "add.bin");
-        var cache = new BlockCache(source, options.CacheCapacity, options.MaxConcurrentReads);
-        _storage = new DocumentStorage(source, new AddBuffer(spillPath, options.AddBufferMemoryLimit), cache);
-        cache.BlockLoaded += (offset, length) => DataLoaded?.Invoke(this, EventArgs.Empty);
+        string spillPath = Path.Combine(_options.TempDirectory, Id.ToString("N"), "add.bin");
+        _storage = CreateStorage(source, new AddBuffer(spillPath, _options.AddBufferMemoryLimit));
 
         // 開いた直後は元データ全体を指すピース 1 つ (長さ 0 ならピースなし)。ENG-02 の仕様 8。
         PieceTree tree = source.Length > 0 ? PieceTree.FromPiece(Piece.Original(0, source.Length)) : PieceTree.Empty;
@@ -54,7 +53,8 @@ public sealed class Document : IDisposable
 
     public Guid Id { get; }
 
-    public IByteSource Source { get; }
+    /// <summary>現在の元データ。保存 (ENG-20) の後は保存したファイルに変わる。</summary>
+    public IByteSource Source => _storage.Source;
 
     public EditHistory History { get; }
 
@@ -226,6 +226,37 @@ public sealed class Document : IDisposable
     /// <summary>現在の状態を「保存した時点」にする (保存処理から呼ぶ)。</summary>
     public void MarkSaved() => History.MarkSaved();
 
+    /// <summary>
+    /// 保存の完了 (ENG-20 の仕様 4): 保存したファイルを新しい元データにし、現在の状態を元データ全体を指す
+    /// ピース 1 つに置き換えて「保存した時点」にする。保存前の履歴は以前の元データを読み続ける (ENG-05 の仕様 5)。
+    /// </summary>
+    public void CompleteSave(IByteSource savedSource)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (savedSource.Length != Length)
+        {
+            throw new InvalidOperationException("保存したファイルの長さがドキュメントと違います。");
+        }
+
+        _storage = CreateStorage(savedSource, _storage.AddBuffer);
+        PieceTree tree = savedSource.Length > 0 ? PieceTree.FromPiece(Piece.Original(0, savedSource.Length)) : PieceTree.Empty;
+        History.ReplaceCurrent(new DocumentSnapshot(_storage, tree));
+        History.MarkSaved();
+        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true));
+    }
+
+    /// <summary>長時間処理の間、編集を止める・再開する (ENG-09 の仕様 7)。</summary>
+    public void SetEditLock(bool locked) => IsEditLocked = locked;
+
+    private DocumentStorage CreateStorage(IByteSource source, AddBuffer addBuffer)
+    {
+        var cache = new BlockCache(source, _options.CacheCapacity, _options.MaxConcurrentReads);
+        cache.BlockLoaded += (offset, length) => DataLoaded?.Invoke(this, EventArgs.Empty);
+        var storage = new DocumentStorage(source, addBuffer, cache);
+        _storages.Add(storage);
+        return storage;
+    }
+
     private void Apply(PieceTree tree, long offset, long removed, long inserted, string description, string? coalesceKey)
     {
         History.Push(new DocumentSnapshot(_storage, tree), description, coalesceKey);
@@ -296,9 +327,13 @@ public sealed class Document : IDisposable
         }
 
         _disposed = true;
-        _storage.Cache.Dispose();
+        foreach (DocumentStorage storage in _storages)
+        {
+            storage.Cache.Dispose();
+            storage.Source.Dispose();
+        }
+
         _storage.AddBuffer.Dispose();
-        Source.Dispose();
     }
 }
 

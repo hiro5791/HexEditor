@@ -1,0 +1,621 @@
+using System.Text;
+using HexEditor.Core.Engine;
+
+namespace HexEditor.Core.View;
+
+/// <summary>キー入力を受け付ける列 (VIEW-27)。</summary>
+public enum ActiveColumn
+{
+    Hex,
+    Text,
+}
+
+/// <summary>入力の結果。UI はこれを見て InfoBar などを出す。</summary>
+public enum EditResult
+{
+    Done,
+    Ignored,
+
+    /// <summary>長さを変えられないドキュメントのため、長さを変える操作をしなかった (EDIT-10 の仕様 2、EDIT-13 の仕様 5)。</summary>
+    FixedLength,
+
+    /// <summary>読み取り専用・処理中などで編集できない。</summary>
+    NotEditable,
+
+    /// <summary>現在の文字コードで表せない文字が含まれる (EDIT-12 の仕様 4)。</summary>
+    NotEncodable,
+}
+
+/// <summary>
+/// 1 つのビューの、カーソル・選択範囲・スクロール位置・入力モード (VIEW-25〜VIEW-27、VIEW-34、EDIT-02、EDIT-10〜EDIT-13)。
+/// UI に依存しない。表示側は <see cref="VisibleRows"/> を設定し、<see cref="Changed"/> で再描画する。
+/// </summary>
+public sealed class EditorState
+{
+    private const string TypingKey = "typing";
+    private const string DeleteKey = "delete";
+
+    private long _cursor;
+    private long _anchor = -1;
+    private long _selectionStart;
+    private long _selectionLength;
+    private long _topRow;
+    private int _visibleRows = 1;
+
+    public EditorState(Document document, int bytesPerRow = 16)
+    {
+        Document = document;
+        BytesPerRow = bytesPerRow;
+        Document.Changed += (_, e) => OnDocumentChanged(e);
+    }
+
+    public Document Document { get; }
+
+    public int BytesPerRow { get; private set; }
+
+    public HexLayout Layout => new(BytesPerRow, Document.Length, Document.CanResize);
+
+    /// <summary>カーソルのオフセット。</summary>
+    public long Cursor => _cursor;
+
+    /// <summary>Hex 列でカーソルが下位ニブルにあるか。</summary>
+    public bool LowNibble { get; private set; }
+
+    public ActiveColumn ActiveColumn { get; private set; } = ActiveColumn.Hex;
+
+    /// <summary>挿入モードか (EDIT-10)。長さを変えられないドキュメントでは常に偽。</summary>
+    public bool InsertMode { get; private set; }
+
+    /// <summary>読み取り専用か (EDIT-16 の簡易版。切り替えの規則は EDIT-16 で定める)。</summary>
+    public bool ReadOnly { get; set; }
+
+    public long SelectionStart => _selectionStart;
+
+    public long SelectionLength => _selectionLength;
+
+    public bool HasSelection => _selectionLength > 0;
+
+    /// <summary>一番上に表示している行。</summary>
+    public long TopRow => _topRow;
+
+    /// <summary>画面に完全に収まる行数 V。表示側が設定する。</summary>
+    public int VisibleRows
+    {
+        get => _visibleRows;
+        set
+        {
+            _visibleRows = Math.Max(1, value);
+            SetTopRow(_topRow);
+        }
+    }
+
+    /// <summary>カーソル・選択範囲・スクロール位置・モードが変わった。</summary>
+    public event EventHandler? Changed;
+
+    // ---- 移動 (VIEW-25) ----
+
+    public void MoveLeft(bool extend = false) => MoveTo(_cursor - 1, extend);
+
+    public void MoveRight(bool extend = false) => MoveTo(_cursor + 1, extend);
+
+    public void MoveUp(bool extend = false)
+    {
+        if (Layout.RowOf(_cursor) > 0)
+        {
+            MoveTo(_cursor - BytesPerRow, extend, keepNibble: true);
+        }
+    }
+
+    public void MoveDown(bool extend = false)
+    {
+        HexLayout layout = Layout;
+        long target = _cursor + BytesPerRow;
+        if (target <= layout.MaxCursor)
+        {
+            MoveTo(target, extend, keepNibble: true);
+        }
+        else if (layout.RowOf(_cursor) < layout.RowOf(layout.MaxCursor))
+        {
+            MoveTo(layout.MaxCursor, extend, keepNibble: true);
+        }
+    }
+
+    public void MoveHome(bool extend = false) => MoveTo(Layout.RowStart(Layout.RowOf(_cursor)), extend);
+
+    public void MoveEnd(bool extend = false)
+    {
+        HexLayout layout = Layout;
+        long rowEnd = layout.RowStart(layout.RowOf(_cursor)) + BytesPerRow - 1;
+        MoveTo(Math.Min(rowEnd, layout.MaxCursor), extend);
+    }
+
+    public void PageUp(bool extend = false)
+    {
+        long page = Math.Max(1, _visibleRows - 1);
+        long rows = Math.Min(page, Layout.RowOf(_cursor));
+        SetTopRow(_topRow - page);
+        MoveTo(_cursor - rows * BytesPerRow, extend, keepNibble: true, scroll: false);
+        EnsureCursorVisible();
+    }
+
+    public void PageDown(bool extend = false)
+    {
+        long page = Math.Max(1, _visibleRows - 1);
+        long target = _cursor > long.MaxValue - page * BytesPerRow ? Layout.MaxCursor : _cursor + page * BytesPerRow;
+        SetTopRow(_topRow + page);
+        MoveTo(Math.Min(target, Layout.MaxCursor), extend, keepNibble: true, scroll: false);
+        EnsureCursorVisible();
+    }
+
+    public void MoveToStart(bool extend = false) => MoveTo(0, extend);
+
+    public void MoveToEnd(bool extend = false) => MoveTo(Layout.MaxCursor, extend);
+
+    /// <summary>オフセットへのジャンプ (VIEW-29)。移動先が表示外なら上から 1/3 の位置に置く (VIEW-34 の仕様 2)。</summary>
+    public void GoTo(long offset)
+    {
+        ClearSelectionAnchor();
+        MoveTo(offset, extend: false, scroll: false);
+        long row = Layout.RowOf(_cursor);
+        if (row < _topRow || row >= _topRow + _visibleRows)
+        {
+            SetTopRow(row - _visibleRows / 3);
+        }
+
+        RaiseChanged();
+    }
+
+    /// <summary>カーソルを動かさずに表示だけを動かす (Ctrl+↑ / Ctrl+↓、ホイール)。</summary>
+    public void ScrollRows(long rows)
+    {
+        SetTopRow(_topRow + rows);
+        RaiseChanged();
+    }
+
+    /// <summary>スクロールバーなどから一番上の行を直接決める。</summary>
+    public void ScrollToRow(long row)
+    {
+        SetTopRow(row);
+        RaiseChanged();
+    }
+
+    /// <summary>マウスのクリック (VIEW-25 の仕様 6)。<paramref name="extend"/> は Shift+クリック (EDIT-01 の仕様 4: 両端を含む)。</summary>
+    public void Click(long offset, ActiveColumn column, bool lowNibble, bool extend)
+    {
+        offset = Math.Clamp(offset, 0, Layout.MaxCursor);
+        ActiveColumn = column;
+        if (extend)
+        {
+            long anchor = _anchor >= 0 ? _anchor : _cursor;
+            _anchor = anchor;
+            long start = Math.Min(anchor, offset);
+            long end = Math.Min(Math.Max(anchor, offset) + 1, Layout.Length);
+            SetSelection(start, Math.Max(0, end - start));
+            _cursor = offset;
+            LowNibble = false;
+        }
+        else
+        {
+            ClearSelectionAnchor();
+            _cursor = offset;
+            LowNibble = column == ActiveColumn.Hex && lowNibble && offset < Layout.Length;
+        }
+
+        EnsureCursorVisible();
+        Document.History.BreakCoalescing();
+        RaiseChanged();
+    }
+
+    /// <summary>マウスのドラッグで選択範囲を伸ばす (両端を含む)。</summary>
+    public void DragTo(long offset)
+    {
+        offset = Math.Clamp(offset, 0, Layout.MaxCursor);
+        if (_anchor < 0)
+        {
+            _anchor = _cursor;
+        }
+
+        long start = Math.Min(_anchor, offset);
+        long end = Math.Min(Math.Max(_anchor, offset) + 1, Layout.Length);
+        SetSelection(start, Math.Max(0, end - start));
+        _cursor = offset;
+        LowNibble = false;
+        EnsureCursorVisible();
+        RaiseChanged();
+    }
+
+    /// <summary>Tab / Shift+Tab で列を切り替える (VIEW-27)。</summary>
+    public void ToggleColumn()
+    {
+        ActiveColumn = ActiveColumn == ActiveColumn.Hex ? ActiveColumn.Text : ActiveColumn.Hex;
+        LowNibble = false;
+        Document.History.BreakCoalescing();
+        RaiseChanged();
+    }
+
+    /// <summary>すべて選択 (EDIT-03)。</summary>
+    public void SelectAll()
+    {
+        _anchor = 0;
+        SetSelection(0, Layout.Length);
+        RaiseChanged();
+    }
+
+    /// <summary>選択を解除する (Esc)。</summary>
+    public void ClearSelection()
+    {
+        ClearSelectionAnchor();
+        RaiseChanged();
+    }
+
+    /// <summary>範囲を選択する (Ctrl+E。EDIT-04)。<paramref name="length"/> は選択するバイト数。</summary>
+    public void Select(long start, long length)
+    {
+        start = Math.Clamp(start, 0, Layout.Length);
+        length = Math.Clamp(length, 0, Layout.Length - start);
+        _anchor = start;
+        SetSelection(start, length);
+        _cursor = Math.Min(start + length, Layout.MaxCursor);
+        LowNibble = false;
+        EnsureCursorVisible();
+        RaiseChanged();
+    }
+
+    // ---- モード (EDIT-10) ----
+
+    /// <summary>上書き / 挿入を切り替える。長さを変えられないドキュメントでは切り替えない。</summary>
+    public EditResult ToggleInsertMode()
+    {
+        if (!Document.CanResize)
+        {
+            return EditResult.FixedLength;
+        }
+
+        InsertMode = !InsertMode;
+        Document.History.BreakCoalescing();
+        RaiseChanged();
+        return EditResult.Done;
+    }
+
+    // ---- 入力 (EDIT-11、EDIT-12) ----
+
+    /// <summary>Hex 列での 1 桁の入力。16 進数字以外は無視する。全角の数字・英字も受け付ける。</summary>
+    public EditResult TypeHexDigit(char c)
+    {
+        int digit = HexDigit(c);
+        if (digit < 0)
+        {
+            return EditResult.Ignored;
+        }
+
+        if (!CanEdit())
+        {
+            return EditResult.NotEditable;
+        }
+
+        EditResult prepared = PrepareTyping();
+        if (prepared != EditResult.Done)
+        {
+            return prepared;
+        }
+
+        HexLayout layout = Layout;
+        bool atEnd = _cursor >= layout.Length;
+        if (atEnd && !Document.CanResize)
+        {
+            return EditResult.FixedLength;
+        }
+
+        if (!LowNibble)
+        {
+            byte value = (byte)(digit << 4);
+            if (InsertMode || atEnd)
+            {
+                Document.Insert(_cursor, [value], "入力", TypingKey);
+            }
+            else
+            {
+                byte current = ReadByte(_cursor);
+                Document.Overwrite(_cursor, [(byte)((current & 0x0F) | value)], "入力", TypingKey);
+            }
+
+            LowNibble = true;
+        }
+        else
+        {
+            byte current = ReadByte(_cursor);
+            Document.Overwrite(_cursor, [(byte)((current & 0xF0) | digit)], "入力", TypingKey);
+            LowNibble = false;
+            _cursor = Math.Min(_cursor + 1, Layout.MaxCursor);
+        }
+
+        EnsureCursorVisible();
+        RaiseChanged();
+        return EditResult.Done;
+    }
+
+    /// <summary>テキスト列での確定した文字列の入力 (EDIT-12)。<paramref name="encoding"/> で変換したバイト列を書き込む。</summary>
+    public EditResult TypeText(string text, Encoding encoding)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return EditResult.Ignored;
+        }
+
+        if (!CanEdit())
+        {
+            return EditResult.NotEditable;
+        }
+
+        byte[] bytes;
+        try
+        {
+            Encoding strict = Encoding.GetEncoding(encoding.CodePage, EncoderFallback.ExceptionFallback, DecoderFallback.ReplacementFallback);
+            bytes = strict.GetBytes(text);
+        }
+        catch (EncoderFallbackException)
+        {
+            return EditResult.NotEncodable;
+        }
+
+        EditResult prepared = PrepareTyping();
+        if (prepared != EditResult.Done)
+        {
+            return prepared;
+        }
+
+        if (InsertMode)
+        {
+            Document.Insert(_cursor, bytes, "入力", TypingKey);
+        }
+        else
+        {
+            long room = Document.Length - _cursor;
+            if (!Document.CanResize && bytes.Length > room)
+            {
+                return EditResult.FixedLength;
+            }
+
+            Document.Overwrite(_cursor, bytes, "入力", TypingKey);
+        }
+
+        _cursor = Math.Min(_cursor + bytes.Length, Layout.MaxCursor);
+        LowNibble = false;
+        EnsureCursorVisible();
+        RaiseChanged();
+        return EditResult.Done;
+    }
+
+    // ---- 削除 (EDIT-13) ----
+
+    /// <summary>Delete キー。選択範囲、またはカーソル位置の 1 バイトを削除する。</summary>
+    public EditResult Delete()
+    {
+        if (!CanEdit())
+        {
+            return EditResult.NotEditable;
+        }
+
+        if (!Document.CanResize)
+        {
+            return EditResult.FixedLength;
+        }
+
+        if (HasSelection)
+        {
+            return DeleteSelection();
+        }
+
+        if (_cursor >= Document.Length)
+        {
+            return EditResult.Ignored;
+        }
+
+        Document.Delete(_cursor, 1, "削除", DeleteKey);
+        LowNibble = false;
+        RaiseChanged();
+        return EditResult.Done;
+    }
+
+    /// <summary>Backspace キー。挿入モードでは直前の 1 バイトを削除し、上書きモードではカーソルを戻すだけ。</summary>
+    public EditResult Backspace()
+    {
+        if (!CanEdit())
+        {
+            return EditResult.NotEditable;
+        }
+
+        if (HasSelection)
+        {
+            return Document.CanResize ? DeleteSelection() : EditResult.FixedLength;
+        }
+
+        if (!InsertMode)
+        {
+            if (ActiveColumn == ActiveColumn.Hex && LowNibble)
+            {
+                LowNibble = false;
+            }
+            else if (_cursor > 0)
+            {
+                _cursor--;
+                LowNibble = ActiveColumn == ActiveColumn.Hex;
+            }
+
+            EnsureCursorVisible();
+            RaiseChanged();
+            return EditResult.Done;
+        }
+
+        if (ActiveColumn == ActiveColumn.Hex && LowNibble)
+        {
+            // 上位ニブルだけ入力した直後のバイトを削除する。
+            Document.Delete(_cursor, 1, "削除", DeleteKey);
+            LowNibble = false;
+        }
+        else if (_cursor > 0)
+        {
+            Document.Delete(_cursor - 1, 1, "削除", DeleteKey);
+            _cursor--;
+        }
+        else
+        {
+            return EditResult.Ignored;
+        }
+
+        EnsureCursorVisible();
+        RaiseChanged();
+        return EditResult.Done;
+    }
+
+    public void Undo()
+    {
+        if (Document.History.CanUndo && !Document.IsEditLocked)
+        {
+            Document.Undo();
+        }
+    }
+
+    public void Redo()
+    {
+        if (Document.History.CanRedo && !Document.IsEditLocked)
+        {
+            Document.Redo();
+        }
+    }
+
+    // ---- 内部 ----
+
+    private EditResult DeleteSelection()
+    {
+        Document.Delete(_selectionStart, _selectionLength, "削除");
+        _cursor = _selectionStart;
+        ClearSelectionAnchor();
+        LowNibble = false;
+        EnsureCursorVisible();
+        RaiseChanged();
+        return EditResult.Done;
+    }
+
+    /// <summary>選択範囲がある状態での入力の準備 (EDIT-11 の仕様 3)。</summary>
+    private EditResult PrepareTyping()
+    {
+        if (!HasSelection)
+        {
+            return EditResult.Done;
+        }
+
+        if (InsertMode)
+        {
+            Document.Delete(_selectionStart, _selectionLength, "削除");
+        }
+
+        _cursor = _selectionStart;
+        LowNibble = false;
+        ClearSelectionAnchor();
+        return EditResult.Done;
+    }
+
+    private bool CanEdit() => !ReadOnly && !Document.IsEditLocked;
+
+    private byte ReadByte(long offset)
+    {
+        Span<byte> one = stackalloc byte[1];
+        Document.Current.Read(offset, one);
+        return one[0];
+    }
+
+    private void MoveTo(long target, bool extend, bool keepNibble = false, bool scroll = true)
+    {
+        HexLayout layout = Layout;
+        target = Math.Clamp(target, 0, layout.MaxCursor);
+        if (extend)
+        {
+            if (_anchor < 0)
+            {
+                _anchor = HasSelection ? _selectionStart : _cursor;
+            }
+
+            // キーボードの選択は、アンカーとカーソルの間 (カーソル位置は含まない)。
+            SetSelection(Math.Min(_anchor, target), Math.Abs(target - _anchor));
+        }
+        else
+        {
+            ClearSelectionAnchor();
+        }
+
+        if (!keepNibble || target >= layout.Length)
+        {
+            LowNibble = false;
+        }
+
+        _cursor = target;
+        Document.History.BreakCoalescing();
+        if (scroll)
+        {
+            EnsureCursorVisible();
+        }
+
+        RaiseChanged();
+    }
+
+    /// <summary>カーソルの行が表示領域の外なら、入る最小のスクロールをする (VIEW-34 の仕様 1)。</summary>
+    private void EnsureCursorVisible()
+    {
+        long row = Layout.RowOf(_cursor);
+        if (row < _topRow)
+        {
+            SetTopRow(row);
+        }
+        else if (row >= _topRow + _visibleRows)
+        {
+            SetTopRow(row - _visibleRows + 1);
+        }
+    }
+
+    private void SetTopRow(long row) => _topRow = Math.Clamp(row, 0, Layout.MaxTopRow(_visibleRows));
+
+    private void SetSelection(long start, long length)
+    {
+        _selectionStart = start;
+        _selectionLength = length;
+    }
+
+    private void ClearSelectionAnchor()
+    {
+        _anchor = -1;
+        _selectionLength = 0;
+        _selectionStart = _cursor;
+    }
+
+    private void OnDocumentChanged(DocumentChangedEventArgs e)
+    {
+        HexLayout layout = Layout;
+        if (_cursor > layout.MaxCursor)
+        {
+            _cursor = layout.MaxCursor;
+            LowNibble = false;
+        }
+
+        if (_selectionStart + _selectionLength > layout.Length)
+        {
+            ClearSelectionAnchor();
+        }
+
+        SetTopRow(_topRow);
+        RaiseChanged();
+    }
+
+    private void RaiseChanged() => Changed?.Invoke(this, EventArgs.Empty);
+
+    private static int HexDigit(char c) => c switch
+    {
+        >= '0' and <= '9' => c - '0',
+        >= 'a' and <= 'f' => c - 'a' + 10,
+        >= 'A' and <= 'F' => c - 'A' + 10,
+        >= '０' and <= '９' => c - '０',
+        >= 'ａ' and <= 'ｆ' => c - 'ａ' + 10,
+        >= 'Ａ' and <= 'Ｆ' => c - 'Ａ' + 10,
+        _ => -1,
+    };
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.HexView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives"
+    FlowDirection="LeftToRight"
+    IsTabStop="True"
+    UseSystemFocusVisuals="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <!--  見えている行だけを描く面 (VIEW-01・VIEW-04)。行の TextBlock はコードで使い回す。  -->
+        <Grid
+            x:Name="Surface"
+            Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+            PointerMoved="Surface_PointerMoved"
+            PointerPressed="Surface_PointerPressed"
+            PointerReleased="Surface_PointerReleased"
+            PointerWheelChanged="Surface_PointerWheelChanged"
+            SizeChanged="Surface_SizeChanged">
+            <Grid.Clip>
+                <RectangleGeometry x:Name="SurfaceClip" />
+            </Grid.Clip>
+            <Canvas x:Name="RowsHost" Margin="8,0,0,0">
+                <Rectangle x:Name="SecondaryCaret" Stroke="{ThemeResource TextFillColorTertiaryBrush}" StrokeThickness="1" />
+                <Rectangle x:Name="Caret" />
+            </Canvas>
+        </Grid>
+        <primitives:ScrollBar
+            x:Name="VerticalBar"
+            Grid.Column="1"
+            AutomationProperties.AutomationId="HexViewVerticalScrollBar"
+            IndicatorMode="MouseIndicator"
+            IsTabStop="False"
+            Orientation="Vertical"
+            Scroll="VerticalBar_Scroll" />
+    </Grid>
+</UserControl>
