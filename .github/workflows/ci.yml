@@ -77,9 +77,9 @@ jobs:
           restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
       - name: Build
         run: |
-          dotnet build tests/HexEditor.Core.Tests -c Release
+          dotnet build tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true
           dotnet build tests/HexEditor.Platform.Tests -c Release
-          dotnet build tests/HexEditor.Performance.Tests -c Release
+          dotnet build tests/HexEditor.Performance.Tests -c Release -p:HexTestHooks=true
           dotnet build tools/TestDataGen -c Release
       - name: Build app (x64)
         run: dotnet build src/HexEditor.App -c Release -p:Platform=x64
@@ -131,7 +131,7 @@ jobs:
           # テストのプロセスが ARM64 で動いていることを TC-PKG-15-03 が確かめる。
           HEXEDITOR_EXPECTED_ARCH: Arm64
         run: |
-          dotnet test tests/HexEditor.Core.Tests -c Release --filter "Category!=Nightly" --logger "trx;LogFileName=core-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
+          dotnet test tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true --filter "Category!=Nightly" --logger "trx;LogFileName=core-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
           dotnet test tests/HexEditor.Platform.Tests -c Release --logger "trx;LogFileName=platform-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
       - name: Upload test results
         if: always()
@@ -156,7 +156,7 @@ jobs:
           key: nuget-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.csproj', 'Directory.Build.props', 'dotnet-tools.json') }}
           restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
       - name: Resource tests
-        run: dotnet test tests/HexEditor.Core.Tests -c Release --filter "FullyQualifiedName~HexEditor.Core.Tests.I18n" --logger "console;verbosity=normal"
+        run: dotnet test tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true --filter "FullyQualifiedName~HexEditor.Core.Tests.I18n" --logger "console;verbosity=normal"
 
   # Markdown (docs/) と .editorconfig の検査。
   lint:

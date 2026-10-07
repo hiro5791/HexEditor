@@ -57,7 +57,7 @@ Invoke-TestCase 'TC-PKG-10-01' '6 builds and Velopack DLL' {
         Assert-True (-not ($entries | Where-Object { $_ -match '/Velopack[^/]*\.dll$' })) "Velopack DLL in $zip"
         $full = Get-ChildItem (Join-Path $ArtifactsDir "Installer/$arch") -Filter '*-full.nupkg' | Select-Object -First 1
         Assert-True ($null -ne $full) "no full package for $arch"
-        Assert-True ((Get-ZipEntries $full.FullName) -match 'Velopack\.dll$') "Velopack.dll not in $($full.Name)"
+        Assert-True (@((Get-ZipEntries $full.FullName) -match 'Velopack\.dll$').Count -gt 0) "Velopack.dll not in $($full.Name)"
     }
 }
 

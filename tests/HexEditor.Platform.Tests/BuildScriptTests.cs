@@ -32,6 +32,9 @@ public sealed class BuildScriptTests : IDisposable
             start.ArgumentList.Add(a);
         }
 
+        // PowerShell 7 (CI の既定のシェル) から起動されると、その PSModulePath を引き継いで Windows PowerShell の標準のモジュール
+        // (Get-FileHash など) が読み込めなくなる。既定の場所を使わせる。
+        start.Environment.Remove("PSModulePath");
         start.Environment.Remove("GITHUB_STEP_SUMMARY");
         start.Environment.Remove("HEX_SIGNING_ENABLED");
         foreach ((string key, string? value) in environment ?? new Dictionary<string, string?>())

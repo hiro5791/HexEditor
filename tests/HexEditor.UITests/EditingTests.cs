@@ -91,7 +91,7 @@ public sealed class EditingTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
         await app.TypeAsync("41");
         // プレビュー版の版ではアプリ名の後に「Preview」が付く (PKG-28)。
-        Assert.Matches(@"^● seq\.bin - HexEditor( Preview)?$", (await app.StateAsync())["title"]!.GetValue<string>());
+        Assert.Matches(@"^● seq\.bin - HexEditor( Preview)?( \(Administrator\))?$", (await app.StateAsync())["title"]!.GetValue<string>());
         await SaveAsync(app);
         Assert.Matches(@"^seq\.bin - HexEditor( Preview)?$", (await app.StateAsync())["title"]!.GetValue<string>());
     });

@@ -1,4 +1,5 @@
 // Markdown の lint (PKG-23 の lint のジョブ)。文書は日本語で長い行・表・HTML を使うため、その規則は外す。
+// MD037・MD038 (強調・コードの中の空白) も外す: テストケースは、空白に意味のある入力値・コードをそのまま示すため。
 {
   "config": {
     "default": true,
@@ -6,6 +7,8 @@
     "MD024": { "siblings_only": true },
     "MD033": false,
     "MD036": false,
+    "MD037": false,
+    "MD038": false,
     "MD041": false,
     "MD060": false
   },

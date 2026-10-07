@@ -39,7 +39,8 @@ public sealed partial class MainWindow
     /// </summary>
     private void ShowAdminDropNoticeOnce()
     {
-        if (Program.Environment.IsElevated && !_adminDropNoticeShown)
+        // テスト用の仕組みが有効なとき (CI のランナーは管理者として動く) は出さない。ほかの通知を確かめるテストの邪魔になるため。
+        if (Program.Environment.IsElevated && !_adminDropNoticeShown && !TestHooks.Active)
         {
             _adminDropNoticeShown = true;
             ShowNotice(Loc.Get("Drop_AdminLimited"), InfoBarSeverity.Informational);

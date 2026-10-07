@@ -41,6 +41,9 @@ public sealed partial class DistributionScriptTests : IDisposable
         }
 
         // CI の上で動かしても、インストールする部分が動かないようにする。
+        // PowerShell 7 (CI の既定のシェル) から起動されると、その PSModulePath を引き継いで Windows PowerShell の標準のモジュール
+        // (Get-FileHash など) が読み込めなくなる。既定の場所を使わせる。
+        start.Environment.Remove("PSModulePath");
         start.Environment.Remove("GITHUB_ACTIONS");
         start.Environment.Remove("GITHUB_STEP_SUMMARY");
         start.Environment.Remove("HEX_SIGNING_ENABLED");
