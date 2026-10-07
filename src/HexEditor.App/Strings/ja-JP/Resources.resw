@@ -75,4 +75,30 @@
   <data name="GoTo_Error_NotAvailable" xml:space="preserve"><value>{0} はここでは使えません。</value></data>
   <data name="GoTo_BeforeStart" xml:space="preserve"><value>ファイルの先頭より前です。</value></data>
   <data name="GoTo_BeyondEnd" xml:space="preserve"><value>ファイルの末尾 ({0}) を超えています。</value></data>
+  <data name="Menu_Search.Title" xml:space="preserve"><value>検索</value></data>
+  <data name="Menu_Search_Find.Text" xml:space="preserve"><value>検索...</value></data>
+  <data name="Menu_Search_Next.Text" xml:space="preserve"><value>次を検索</value></data>
+  <data name="Menu_Search_Previous.Text" xml:space="preserve"><value>前を検索</value></data>
+  <data name="Find_Kind_Hex.Content" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_Kind_Text.Content" xml:space="preserve"><value>テキスト</value></data>
+  <data name="Find_Kind_Name" xml:space="preserve"><value>検索の種類</value></data>
+  <data name="Find_Encoding_Name" xml:space="preserve"><value>文字コード</value></data>
+  <data name="Find_Query.PlaceholderText" xml:space="preserve"><value>検索する値 (例: DE AD ?? EF)</value></data>
+  <data name="Find_Wrap.Content" xml:space="preserve"><value>折り返す</value></data>
+  <data name="Find_Previous_Name" xml:space="preserve"><value>前を検索</value></data>
+  <data name="Find_Next_Name" xml:space="preserve"><value>次を検索</value></data>
+  <data name="Find_Close_Name" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Find_Searching" xml:space="preserve"><value>検索しています...</value></data>
+  <data name="Find_NotFound" xml:space="preserve"><value>見つかりませんでした。</value></data>
+  <data name="Find_NotFoundToEnd" xml:space="preserve"><value>末尾まで見つかりませんでした。</value></data>
+  <data name="Find_NotFoundToStart" xml:space="preserve"><value>先頭まで見つかりませんでした。</value></data>
+  <data name="Find_WrappedToStart" xml:space="preserve"><value>末尾まで検索したので、先頭から続けました。</value></data>
+  <data name="Find_WrappedToEnd" xml:space="preserve"><value>先頭まで検索したので、末尾から続けました。</value></data>
+  <data name="Find_Cancelled" xml:space="preserve"><value>検索を取り消しました。</value></data>
+  <data name="Find_Error_Empty" xml:space="preserve"><value>検索する値を入力してください。</value></data>
+  <data name="Find_Error_OddDigits" xml:space="preserve"><value>Hex の桁数が奇数です。</value></data>
+  <data name="Find_Error_InvalidCharacter" xml:space="preserve"><value>「{0}」は 16 進の数字ではありません。</value></data>
+  <data name="Find_Error_TooLong" xml:space="preserve"><value>検索語は 1 MiB までです。</value></data>
+  <data name="Find_Error_NotEncodable" xml:space="preserve"><value>「{0}」はこの文字コードで表せません。</value></data>
+  <data name="Operation_Find" xml:space="preserve"><value>検索</value></data>
 </root>

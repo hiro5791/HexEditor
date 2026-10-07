@@ -269,11 +269,49 @@ public sealed partial class MainWindow : Window
             return;
         }
 
+        // 移動バーは検索バーと同じ場所に出す (VIEW-29 の仕様 1)。
+        FindBar.Visibility = Visibility.Collapsed;
         GoToBar.Editor = Editor;
         GoToBar.Open();
     }
 
-    private void GoToBar_Closed(object? sender, EventArgs e) => FocusEditor();
+    private void Bar_Closed(object? sender, EventArgs e) => FocusEditor();
+
+    private void Find_Click(object sender, RoutedEventArgs e)
+    {
+        if (Editor is null)
+        {
+            return;
+        }
+
+        GoToBar.Visibility = Visibility.Collapsed;
+        FindBar.Editor = Editor;
+        FindBar.Operations = Vm.Operations;
+        FindBar.Open();
+    }
+
+    private async void FindNext_Click(object sender, RoutedEventArgs e) => await FindAgainAsync(forward: true);
+
+    private async void FindPrevious_Click(object sender, RoutedEventArgs e) => await FindAgainAsync(forward: false);
+
+    /// <summary>F3 / Shift+F3。一度も検索していなければ検索バーを開く (FIND-09 の仕様 7)。</summary>
+    private async Task FindAgainAsync(bool forward)
+    {
+        if (Editor is null)
+        {
+            return;
+        }
+
+        if (!FindBar.HasPattern)
+        {
+            Find_Click(this, new RoutedEventArgs());
+            return;
+        }
+
+        FindBar.Editor = Editor;
+        FindBar.Operations = Vm.Operations;
+        await FindBar.FindAsync(forward);
+    }
 
     private void GoBack_Click(object sender, RoutedEventArgs e) => Editor?.GoBack();
 

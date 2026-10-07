@@ -215,6 +215,25 @@ public sealed class EditorState
         RaiseChanged();
     }
 
+    /// <summary>
+    /// 検索の一致を選択する (FIND-04 の仕様 8)。移動前の位置をジャンプ履歴に記録し、一致が画面の中央付近に来るようにする。
+    /// </summary>
+    public void SelectMatch(long offset, long length)
+    {
+        RecordJump();
+        _anchor = offset;
+        SetSelection(offset, length);
+        _cursor = Math.Min(offset, Layout.MaxCursor);
+        LowNibble = false;
+        long row = Layout.RowOf(_cursor);
+        if (row < _topRow || row >= _topRow + _visibleRows)
+        {
+            SetTopRow(row - _visibleRows / 2);
+        }
+
+        RaiseChanged();
+    }
+
     private void ScrollToJumpTarget()
     {
         long row = Layout.RowOf(_cursor);
