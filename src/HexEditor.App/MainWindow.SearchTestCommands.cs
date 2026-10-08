@@ -57,6 +57,19 @@ public sealed partial class MainWindow
             case "searchResultsToBookmarks":
                 SearchResults.ToBookmarks();
                 return new JsonObject();
+            case "searchResultsOrder":
+                if (request["sort"]?.GetValue<string>() is { } key)
+                {
+                    SearchResults.SortBy(Enum.Parse<SearchResultSortKey>(key, ignoreCase: true));
+                }
+
+                if (request["filter"]?.GetValue<string>() is { } filter)
+                {
+                    SearchResults.SetFilter(filter, immediately: true);
+                }
+
+                await SearchResults.WhenViewReadyAsync();
+                return TestSearchResults(new JsonObject { ["from"] = 0L, ["count"] = request["count"]?.GetValue<long>() ?? 0L });
             case "searchResultsCopy":
                 SearchResults.CopyRows(request["hex"]?.GetValue<bool>() ?? true);
                 return new JsonObject();
@@ -92,7 +105,7 @@ public sealed partial class MainWindow
         long total = SearchResults.Count;
         long from = request["from"]?.GetValue<long>() ?? SearchResults.TopIndex;
         // 行の内容はドキュメントを読むため、指定したときだけ作る (状態だけを何度も読むテストで UI のスレッドを止めない)。
-        long count = Math.Min(request["count"]?.GetValue<long>() ?? 0, Math.Max(0, total - from));
+        long count = Math.Min(request["count"]?.GetValue<long>() ?? 0, Math.Max(0, SearchResults.ViewCount - from));
         var rows = new JsonArray();
         if (request["offsetsOnly"]?.GetValue<bool>() == true)
         {
@@ -111,6 +124,7 @@ public sealed partial class MainWindow
                     rows.Add(new JsonObject
                     {
                         ["number"] = i + 1,
+                        ["resultNumber"] = SearchResults.ResultNumberAt(i),
                         ["document"] = document,
                         ["offset"] = row.Offset,
                         ["offsetText"] = StatusFormat.Hex(row.Offset),
@@ -133,6 +147,7 @@ public sealed partial class MainWindow
             ["state"] = SearchResults.StateText,
             ["running"] = SearchResults.IsRunning,
             ["count"] = total,
+            ["viewCount"] = SearchResults.ViewCount,
             ["canContinue"] = SearchResults.CanContinue,
             ["selected"] = SearchResults.SelectedIndex,
             ["top"] = SearchResults.TopIndex,

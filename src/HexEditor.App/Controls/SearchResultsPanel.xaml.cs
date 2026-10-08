@@ -38,20 +38,31 @@ public sealed partial class SearchResultsPanel : UserControl
     /// <summary>状態の列の位置 (アイコンのフォントを使う)。</summary>
     private const string StatusColumn = "SearchResults_Column_Status";
 
-    /// <summary>列 (見出しのキー、幅、等幅フォント、出す条件)。</summary>
-    private static readonly (string Key, double Width, bool Mono, ColumnKind Kind)[] Columns =
+    /// <summary>列 (見出しのキー、幅、等幅フォント、出す条件、並べ替えの鍵。並べ替えられない列は null)。</summary>
+    private static readonly (string Key, double Width, bool Mono, ColumnKind Kind, SearchResultSortKey? Sort)[] Columns =
     [
-        ("SearchResults_Column_Number", 64, false, ColumnKind.Always),
-        ("SearchResults_Column_Document", 160, false, ColumnKind.Documents),
-        ("SearchResults_Column_Offset", 120, true, ColumnKind.Always),
-        ("SearchResults_Column_Length", 64, false, ColumnKind.Always),
-        ("SearchResults_Column_Hex", 300, true, ColumnKind.Always),
-        ("SearchResults_Column_Text", 200, true, ColumnKind.Always),
-        ("SearchResults_Column_Context", 300, true, ColumnKind.Always),
-        (StatusColumn, 120, false, ColumnKind.Always),
-        ("SearchResults_Column_Endian", 64, false, ColumnKind.Numeric),
-        ("SearchResults_Column_Value", 180, true, ColumnKind.Numeric),
+        ("SearchResults_Column_Number", 64, false, ColumnKind.Always, SearchResultSortKey.Number),
+        ("SearchResults_Column_Document", 160, false, ColumnKind.Documents, null),
+        ("SearchResults_Column_Offset", 120, true, ColumnKind.Always, SearchResultSortKey.Offset),
+        ("SearchResults_Column_Length", 64, false, ColumnKind.Always, SearchResultSortKey.Length),
+        ("SearchResults_Column_Hex", 300, true, ColumnKind.Always, SearchResultSortKey.Hex),
+        ("SearchResults_Column_Text", 200, true, ColumnKind.Always, SearchResultSortKey.Text),
+        ("SearchResults_Column_Context", 300, true, ColumnKind.Always, null),
+        (StatusColumn, 120, false, ColumnKind.Always, SearchResultSortKey.Status),
+        ("SearchResults_Column_Endian", 64, false, ColumnKind.Numeric, null),
+        ("SearchResults_Column_Value", 180, true, ColumnKind.Numeric, null),
     ];
+
+    // ---- 並べ替えと絞り込み (00-overview 9 章の「結果一覧」、FIND-20 の仕様 9) ----
+
+    /// <summary>一覧の行の番号 → 結果の番号 (見つかった順)。並べ替え・絞り込みをしていなければ null (同じ番号)。</summary>
+    private long[]? _view;
+    private SearchResultSortKey _sortKey = SearchResultSortKey.Number;
+    private bool _sortDescending;
+    private string _filter = string.Empty;
+    private CancellationTokenSource? _viewCts;
+    private Microsoft.UI.Dispatching.DispatcherQueueTimer? _viewTimer;
+    private Task _viewTask = Task.CompletedTask;
 
     private readonly Dictionary<long, SearchResultRow> _cache = [];
     private readonly HashSet<long> _fetching = [];
@@ -73,6 +84,7 @@ public sealed partial class SearchResultsPanel : UserControl
     {
         InitializeComponent();
         AutomationProperties.SetName(ListHost, Loc.Get("SearchResults_List_Name"));
+        AutomationProperties.SetName(FilterBox, Loc.Get("SearchResults_Filter_Name"));
         ActualThemeChanged += (_, _) => Render();
         BuildHeaders();
     }
@@ -99,7 +111,7 @@ public sealed partial class SearchResultsPanel : UserControl
     public bool IsOpen => Visibility == Visibility.Visible;
 
     /// <summary>F3 / Shift+F3 で一覧の次 / 前の結果に移動するか (一覧に結果があるとき。FIND-20 の仕様 11)。</summary>
-    public bool HasResults => IsOpen && TotalCount > 0;
+    public bool HasResults => IsOpen && RowCount > 0;
 
     /// <summary>すべて検索が実行中か。</summary>
     public bool IsRunning => _running is not null;
@@ -150,7 +162,7 @@ public sealed partial class SearchResultsPanel : UserControl
     /// <summary>F3 / Shift+F3: 一覧の次 / 前の結果に移動する (FIND-20 の仕様 11)。移動したら true。</summary>
     public bool MoveNext(bool forward, EditorState? current)
     {
-        long count = TotalCount;
+        long count = RowCount;
         if (count == 0)
         {
             return false;
@@ -160,6 +172,11 @@ public sealed partial class SearchResultsPanel : UserControl
         if (_selected >= 0)
         {
             index = Math.Clamp(_selected + (forward ? 1 : -1), 0, count - 1);
+        }
+        else if (_view is not null)
+        {
+            // 並べ替え・絞り込みをしているときは、一覧の先頭 (末尾) から。
+            index = forward ? 0 : count - 1;
         }
         else
         {
@@ -237,7 +254,8 @@ public sealed partial class SearchResultsPanel : UserControl
 
         bool multi = _groups.Count > 1;
         var groups = _groups.Select(g => (multi ? g.Name : null, new SearchResultRowFactory(g.Results, g.Editor.Document.Current, _encoding))).ToList();
-        IReadOnlyList<long>? indices = SelectionCount > 1 ? SelectedIndices() : null;
+        // 選んだ行が 2 行以上ならその行、そうでなければ一覧のすべての行 (並べ替え・絞り込みをしていればその順と行)。
+        IReadOnlyList<long>? indices = SelectionCount > 1 ? [.. SelectedIndices().Select(Map)] : _view;
         ExportLabels labels = Labels();
         string temp = path + ".tmp";
         try
@@ -282,6 +300,12 @@ public sealed partial class SearchResultsPanel : UserControl
     /// <summary>すべての結果の件数。</summary>
     private long TotalCount => _groups.Sum(g => g.Results.LongCount);
 
+    /// <summary>一覧の行の数 (絞り込みをしていれば、残った行の数)。</summary>
+    private long RowCount => _view?.LongLength ?? TotalCount;
+
+    /// <summary>一覧の行の番号から結果の番号 (見つかった順) を求める。</summary>
+    private long Map(long index) => _view is null ? index : index >= 0 && index < _view.LongLength ? _view[index] : -1;
+
     /// <summary>まとまりの最初の行の番号。</summary>
     private long StartOf(Group group)
     {
@@ -300,7 +324,10 @@ public sealed partial class SearchResultsPanel : UserControl
     }
 
     /// <summary>一覧の行の番号から、まとまりとその中の番号を求める。範囲外なら null。</summary>
-    private (Group Group, long Local)? Locate(long index)
+    private (Group Group, long Local)? Locate(long index) => LocateResult(Map(index));
+
+    /// <summary>結果の番号 (見つかった順) から、まとまりとその中の番号を求める。範囲外なら null。</summary>
+    private (Group Group, long Local)? LocateResult(long index)
     {
         if (index < 0)
         {
@@ -338,6 +365,12 @@ public sealed partial class SearchResultsPanel : UserControl
         _encoding = encoding;
         _selected = _anchor = -1;
         _top = 0;
+        _view = null;
+        if (IsOrdered)
+        {
+            ScheduleView(immediately: true);
+        }
+
         ToBookmarksItem.IsEnabled = BookmarksRequested is not null && _groups.Count == 1;
         BuildHeaders();
         Visibility = Visibility.Visible;
@@ -498,6 +531,12 @@ public sealed partial class SearchResultsPanel : UserControl
         }
 
         _dirty = false;
+        if (IsOrdered)
+        {
+            // 結果が増えたら、並べ替え・絞り込みをし直す (新しい結果は並び順の正しい位置に入る。FIND-20 の仕様 9)。
+            ScheduleView(immediately: false);
+        }
+
         Render();
         HighlightsChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -531,6 +570,130 @@ public sealed partial class SearchResultsPanel : UserControl
 
     private bool ShowsDocuments => _groups.Count > 1;
 
+    /// <summary>
+    /// 列で並べ替える (同じ列をもう一度選ぶと逆順)。テスト用の命令の通り道からも呼ぶ。並べ替えはバックグラウンドで行い、
+    /// 終わったら一覧を作り直す。
+    /// </summary>
+    internal void SortBy(SearchResultSortKey key)
+    {
+        _sortDescending = key == _sortKey && !_sortDescending;
+        _sortKey = key;
+        BuildHeaders();
+        ScheduleView(immediately: true);
+    }
+
+    /// <summary>絞り込みの語 (Hex は空白を無視、テキストは大文字・小文字を区別しない)。</summary>
+    internal void SetFilter(string text, bool immediately = false)
+    {
+        _filter = text.Trim();
+        if (FilterBox.Text != text)
+        {
+            FilterBox.Text = text;
+        }
+
+        ScheduleView(immediately);
+    }
+
+    /// <summary>並べ替え・絞り込みをしているか。</summary>
+    private bool IsOrdered => _sortKey != SearchResultSortKey.Number || _sortDescending || _filter.Length > 0;
+
+    /// <summary>並べ替え・絞り込みの終わりを待つ (テスト用)。</summary>
+    internal Task WhenViewReadyAsync() => _viewTask;
+
+    private void FilterBox_TextChanged(object sender, TextChangedEventArgs e) => SetFilter(FilterBox.Text);
+
+    /// <summary>一覧の並びを作り直す。<paramref name="immediately"/> でなければ 300 ms 待ってまとめる (入力中・結果が増えている間)。</summary>
+    private void ScheduleView(bool immediately)
+    {
+        if (_viewTimer is null)
+        {
+            _viewTimer = DispatcherQueue.CreateTimer();
+            _viewTimer.Interval = TimeSpan.FromMilliseconds(300);
+            _viewTimer.IsRepeating = false;
+            _viewTimer.Tick += (_, _) => RebuildView();
+        }
+
+        _viewTimer.Stop();
+        if (immediately)
+        {
+            RebuildView();
+        }
+        else
+        {
+            _viewTimer.Start();
+        }
+    }
+
+    private void RebuildView()
+    {
+        _viewCts?.Cancel();
+        if (_groups.Count == 0 || !IsOrdered)
+        {
+            SetView(null);
+            _viewTask = Task.CompletedTask;
+            return;
+        }
+
+        var cts = new CancellationTokenSource();
+        _viewCts = cts;
+        List<SearchResultRowFactory> factories = [.. _groups.Select(Factory)];
+        (SearchResultSortKey key, bool descending, string filter) = (_sortKey, _sortDescending, _filter);
+        var done = new TaskCompletionSource();
+        _viewTask = done.Task;
+        _ = Task.Run(() =>
+        {
+            long[]? order = null;
+            bool tooMany = false;
+            try
+            {
+                order = SearchResultsOrdering.Build(factories, key, descending, filter, cts.Token);
+                tooMany = order is null;
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception ex) when (ex is IOException or ObjectDisposedException or ArgumentOutOfRangeException)
+            {
+                AppLog.Warning($"Search results: cannot sort ({ex.GetType().Name}: {ex.Message})");
+            }
+
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                if (_viewCts == cts && !cts.IsCancellationRequested)
+                {
+                    if (tooMany)
+                    {
+                        NoticeRequested?.Invoke(this, (Loc.Format("SearchResults_TooManyToSort",
+                            SearchResultsOrdering.MaxResults.ToString("N0", CultureInfo.CurrentCulture)), InfoBarSeverity.Warning));
+                    }
+                    else if (order is not null)
+                    {
+                        SetView(order);
+                    }
+                }
+
+                done.TrySetResult();
+            });
+        });
+    }
+
+    /// <summary>一覧の並びを付け替える (選択は先頭に戻し、行のキャッシュを捨てる)。</summary>
+    private void SetView(long[]? order)
+    {
+        if (ReferenceEquals(order, _view))
+        {
+            return;
+        }
+
+        _view = order;
+        _generation++;
+        _cache.Clear();
+        _fetching.Clear();
+        _selected = _anchor = -1;
+        _top = 0;
+        Render();
+    }
+
     private IEnumerable<(string Key, double Width, bool Mono)> VisibleColumns() =>
         Columns.Where(c => c.Kind == ColumnKind.Always || (c.Kind == ColumnKind.Numeric && IsNumeric) || (c.Kind == ColumnKind.Documents && ShowsDocuments))
             .Select(c => (c.Key, c.Width, c.Mono));
@@ -543,13 +706,40 @@ public sealed partial class SearchResultsPanel : UserControl
         foreach ((string key, double width, bool _) in VisibleColumns())
         {
             ColumnHeaders.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(width) });
-            var header = new TextBlock
+            string text = Loc.Get(key);
+            FrameworkElement header;
+            if (Columns.First(c => c.Key == key).Sort is { } sort)
             {
-                Text = Loc.Get(key),
-                Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"],
-                Foreground = (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"],
-                TextTrimming = TextTrimming.CharacterEllipsis,
-            };
+                // 押すとその列で並べ替える。もう一度押すと逆順 (00-overview 9 章の「結果一覧」)。
+                string arrow = sort == _sortKey && IsOrdered ? (_sortDescending ? " \u25BC" : " \u25B2") : string.Empty;
+                var button = new HyperlinkButton
+                {
+                    Content = new TextBlock
+                    {
+                        Text = text + arrow,
+                        Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"],
+                        TextTrimming = TextTrimming.CharacterEllipsis,
+                    },
+                    Padding = new Thickness(0),
+                    Tag = sort,
+                };
+                AutomationProperties.SetAutomationId(button, "SearchResults_Sort" + sort);
+                AutomationProperties.SetName(button, Loc.Format("SearchResults_SortBy", text));
+                button.Click += (_, _) => SortBy(sort);
+                header = button;
+            }
+            else
+            {
+                header = new TextBlock
+                {
+                    Text = text,
+                    Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"],
+                    Foreground = (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"],
+                    TextTrimming = TextTrimming.CharacterEllipsis,
+                    VerticalAlignment = VerticalAlignment.Center,
+                };
+            }
+
             Grid.SetColumn(header, col++);
             ColumnHeaders.Children.Add(header);
         }
@@ -602,7 +792,7 @@ public sealed partial class SearchResultsPanel : UserControl
         }
 
         EnsureRows();
-        long count = TotalCount;
+        long count = RowCount;
         int visible = _rows.Count;
         long maxTop = Math.Max(0, count - visible);
         _top = Math.Clamp(_top, 0, maxTop);
@@ -642,13 +832,14 @@ public sealed partial class SearchResultsPanel : UserControl
                 Remember(index, quick);
             }
 
+            // 番号の列は結果の番号 (見つかった順) を出す (並べ替えても一致と番号の対応は変わらない)。
             if (data is not null)
             {
-                row.Set(Cells(index, g, data));
+                row.Set(Cells(Map(index), g, data));
             }
             else
             {
-                row.Set([(index + 1).ToString("N0", CultureInfo.CurrentCulture), "…"]);
+                row.Set([(Map(index) + 1).ToString("N0", CultureInfo.CurrentCulture), "…"]);
                 missing.Add(index);
             }
         }
@@ -811,7 +1002,7 @@ public sealed partial class SearchResultsPanel : UserControl
         if (_selected >= 0 && _cache.TryGetValue(_selected, out SearchResultRow? row))
         {
             AutomationProperties.SetName(ListHost, Loc.Format("SearchResults_List_Selected",
-                (_selected + 1).ToString("N0", CultureInfo.CurrentCulture), TotalCount.ToString("N0", CultureInfo.CurrentCulture),
+                (_selected + 1).ToString("N0", CultureInfo.CurrentCulture), RowCount.ToString("N0", CultureInfo.CurrentCulture),
                 StatusFormat.Hex(row.Offset), row.Hex));
         }
         else
@@ -843,7 +1034,7 @@ public sealed partial class SearchResultsPanel : UserControl
     /// <summary>行を選ぶ。<paramref name="extend"/> なら起点から範囲を選ぶ (Shift)。見えるようにスクロールする。</summary>
     internal void Select(long index, bool extend)
     {
-        long count = TotalCount;
+        long count = RowCount;
         if (count == 0)
         {
             return;
@@ -912,7 +1103,7 @@ public sealed partial class SearchResultsPanel : UserControl
     /// <summary>一覧のキー (↑ / ↓ / PageUp / PageDown / Home / End、Shift で範囲、Enter で移動)。テスト用の命令からも呼ぶ。</summary>
     internal bool HandleKey(VirtualKey key, bool shift, bool ctrl)
     {
-        long count = TotalCount;
+        long count = RowCount;
         if (count == 0)
         {
             return false;
@@ -966,7 +1157,7 @@ public sealed partial class SearchResultsPanel : UserControl
     private void Row_PointerPressed(int visualIndex, PointerRoutedEventArgs e)
     {
         long index = _top + visualIndex;
-        if (index >= TotalCount)
+        if (index >= RowCount)
         {
             return;
         }
@@ -1021,6 +1212,12 @@ public sealed partial class SearchResultsPanel : UserControl
     /// <summary>テスト用: すべての結果の件数。</summary>
     internal long Count => TotalCount;
 
+    /// <summary>テスト用: 一覧の行の数 (絞り込みの後)。</summary>
+    internal long ViewCount => RowCount;
+
+    /// <summary>テスト用: 一覧の行の、結果の番号 (1 から。見つかった順)。</summary>
+    internal long ResultNumberAt(long index) => Map(index) + 1;
+
     /// <summary>テスト用: 行の内容とドキュメントの名前 (今の状態で作り直す)。</summary>
     internal (SearchResultRow Row, string Document)? RowAt(long index) =>
         Locate(index) is (Group g, long local)
@@ -1034,7 +1231,8 @@ public sealed partial class SearchResultsPanel : UserControl
         long index = from;
         while (result.Count < count && Locate(index) is (Group g, long local))
         {
-            int n = (int)Math.Min(count - result.Count, g.Results.LongCount - local);
+            // 並べ替え・絞り込みをしていれば 1 行ずつ、していなければ続く行をまとめて読む。
+            int n = _view is not null ? 1 : (int)Math.Min(count - result.Count, g.Results.LongCount - local);
             result.AddRange(g.Results.GetRange(local, n).Select(m => m.Offset));
             index += n;
         }
@@ -1074,7 +1272,7 @@ public sealed partial class SearchResultsPanel : UserControl
 
     private void ListHost_GotFocus(object sender, RoutedEventArgs e)
     {
-        if (_selected < 0 && TotalCount > 0)
+        if (_selected < 0 && RowCount > 0)
         {
             Select(0, extend: false);
         }
@@ -1134,7 +1332,8 @@ public sealed partial class SearchResultsPanel : UserControl
 
         Group g = _groups[0];
         SearchResultRowFactory factory = Factory(g);
-        IReadOnlyList<long> indices = SelectionCount > 1 ? SelectedIndices() : [.. Enumerable.Range(0, (int)Math.Min(g.Results.LongCount, int.MaxValue)).Select(i => (long)i)];
+        IReadOnlyList<long> indices = SelectionCount > 1 ? [.. SelectedIndices().Select(Map)]
+            : _view ?? [.. Enumerable.Range(0, (int)Math.Min(g.Results.LongCount, int.MaxValue)).Select(i => (long)i)];
         string prefix = Loc.Get("SearchResults_BookmarkPrefix");
         var items = indices.Select(i =>
         {

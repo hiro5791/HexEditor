@@ -21,6 +21,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock
                 x:Name="Summary"
@@ -29,24 +30,32 @@
                 AutomationProperties.LiveSetting="Polite"
                 Style="{ThemeResource BodyStrongTextBlockStyle}"
                 TextTrimming="CharacterEllipsis" />
+            <!--  絞り込み (00-overview 9 章の「結果一覧」): Hex (空白を無視) とテキストの列に含まれる語。  -->
+            <TextBox
+                x:Name="FilterBox"
+                x:Uid="SearchResults_Filter"
+                Grid.Column="1"
+                Width="200"
+                AutomationProperties.AutomationId="SearchResults_Filter"
+                TextChanged="FilterBox_TextChanged" />
             <Button
                 x:Name="ContinueButton"
                 x:Uid="SearchResults_Continue"
-                Grid.Column="1"
+                Grid.Column="2"
                 AutomationProperties.AutomationId="SearchResults_Continue"
                 Click="Continue_Click"
                 Visibility="Collapsed" />
             <Button
                 x:Name="CancelButton"
                 x:Uid="SearchResults_Cancel"
-                Grid.Column="2"
+                Grid.Column="3"
                 AutomationProperties.AutomationId="SearchResults_Cancel"
                 Click="Cancel_Click"
                 Visibility="Collapsed" />
             <DropDownButton
                 x:Name="ConvertButton"
                 x:Uid="SearchResults_Convert"
-                Grid.Column="3"
+                Grid.Column="4"
                 AutomationProperties.AutomationId="SearchResults_Convert">
                 <DropDownButton.Flyout>
                     <MenuFlyout Placement="BottomEdgeAlignedRight">
