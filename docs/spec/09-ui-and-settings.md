@@ -728,6 +728,7 @@
    | `hxd` | やり直し: Ctrl+Shift+Z を外す (Ctrl+Y だけ) | 暫定。HxD の公式のキー一覧は公開されておらず、照合できたのは変更履歴 (mh-nexus.de/en/hxd/changelog.php) の Shift+Insert / Ctrl+Insert / Shift+Delete、F3 / Shift+F3、Ctrl+← / → だけ (いずれも `default` と同じか、Hex ビューが処理するキー) |
    | `010editor` | 置換: Ctrl+R (再読み込みの Ctrl+R を外す)。すべて閉じる: Ctrl+Alt+W。範囲を選択: Ctrl+Shift+A (エディタ)。ブックマークの編集: Ctrl+B (上書き貼り付けのエディタの Ctrl+B を外す)。ファイルを挿入: Ctrl+I。ハッシュの計算: Ctrl+K | 010 Editor の公式マニュアル (sweetscape.com/010editor/manual/)。やり直し (Ctrl+Y / Ctrl+Shift+Z)、閉じる (Ctrl+W)、設定 (Ctrl+,)、開く・保存・名前を付けて保存・検索・オフセットへ移動、ブックマークの設定 / 解除 (Ctrl+F2)・次 / 前 (F2 / Shift+F2)、拡大 / 縮小、Windows 従来のコピー・貼り付けのキーは `default` と同じ |
    | `vscode` | すべて保存: Ctrl+K S。すべて閉じる: Ctrl+K Ctrl+W。キーボードショートカット (設定): Ctrl+K Ctrl+S。ショートカット一覧: Ctrl+K Ctrl+R | VS Code の既定のキー割り当て (code.visualstudio.com)。閉じたタブを開き直す (Ctrl+Shift+T)、新しいウィンドウ (Ctrl+Shift+N)、置換 (Ctrl+H)、コマンドパレット (Ctrl+Shift+P / F1)、設定 (Ctrl+,)、全画面表示 (F11)、やり直し (Ctrl+Y)、閉じる (Ctrl+W) は `default` と同じ |
+
 3. 対応する機能がないキーはプリセットに含めない。各割り当ては 00-overview.md 8.1 の有効範囲 (UI-18 の 5) を持つ。プリセット内で、同じ有効範囲の重複を作らないことを CI で確認する。
 4. プリセットを切り替えても、利用者が個別に変更した割り当て (UI-18) は保つ。切り替え時に、利用者の割り当てがプリセットと重複する場合は一覧を表示し、「利用者の割り当てを優先」「プリセットを優先」を選ばせる。
 5. プリセットの選択は `keybindings.json` の `preset` に保存する。
