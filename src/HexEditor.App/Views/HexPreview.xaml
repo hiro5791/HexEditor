@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Views.HexPreview"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        設定画面の Hex 表示のプレビュー (UI-28 の仕様 3、UI-29 の仕様 8)。フォント・大きさ・行間・配色の変更を即座に映す。
+        配色に値のない要素は Hex 表示 (HexView) と同じテーマのリソースの色を使う。ハイコントラストでは配色を使わない (UI-28 の仕様 6)。
+    -->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <StaticResource x:Key="PreviewBackgroundBrush" ResourceKey="SolidBackgroundFillColorBaseBrush" />
+                    <StaticResource x:Key="PreviewTextBrush" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="PreviewOffsetBrush" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="PreviewDimBrush" ResourceKey="TextFillColorDisabledBrush" />
+                    <StaticResource x:Key="PreviewModifiedBrush" ResourceKey="SystemFillColorCriticalBrush" />
+                    <StaticResource x:Key="PreviewInsertedBrush" ResourceKey="SystemFillColorSuccessBrush" />
+                    <StaticResource x:Key="PreviewSelectionBrush" ResourceKey="AccentFillColorDefaultBrush" />
+                    <StaticResource x:Key="PreviewSelectionTextBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+                    <StaticResource x:Key="PreviewCaretBrush" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="PreviewMatchBrush" ResourceKey="SystemFillColorCautionBackgroundBrush" />
+                    <StaticResource x:Key="PreviewAlternateBrush" ResourceKey="SolidBackgroundFillColorSecondaryBrush" />
+                    <StaticResource x:Key="PreviewCurrentRowBrush" ResourceKey="SubtleFillColorSecondaryBrush" />
+                    <StaticResource x:Key="PreviewSeparatorBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="HighContrast">
+                    <SolidColorBrush x:Key="PreviewBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="PreviewTextBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="PreviewOffsetBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="PreviewDimBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+                    <SolidColorBrush x:Key="PreviewModifiedBrush" Color="{ThemeResource SystemColorHotlightColor}" />
+                    <SolidColorBrush x:Key="PreviewInsertedBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="PreviewSelectionBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+                    <SolidColorBrush x:Key="PreviewSelectionTextBrush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+                    <SolidColorBrush x:Key="PreviewCaretBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="PreviewMatchBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="PreviewAlternateBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="PreviewCurrentRowBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="PreviewSeparatorBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <!--  テーマの色を読むための見えない図形 (HexView と同じ方法。テーマの切り替えに追従する)  -->
+        <StackPanel Visibility="Collapsed">
+            <Rectangle x:Name="ProbeBackground" Fill="{ThemeResource PreviewBackgroundBrush}" />
+            <Rectangle x:Name="ProbeText" Fill="{ThemeResource PreviewTextBrush}" />
+            <Rectangle x:Name="ProbeOffset" Fill="{ThemeResource PreviewOffsetBrush}" />
+            <Rectangle x:Name="ProbeDim" Fill="{ThemeResource PreviewDimBrush}" />
+            <Rectangle x:Name="ProbeModified" Fill="{ThemeResource PreviewModifiedBrush}" />
+            <Rectangle x:Name="ProbeInserted" Fill="{ThemeResource PreviewInsertedBrush}" />
+            <Rectangle x:Name="ProbeSelection" Fill="{ThemeResource PreviewSelectionBrush}" />
+            <Rectangle x:Name="ProbeSelectionText" Fill="{ThemeResource PreviewSelectionTextBrush}" />
+            <Rectangle x:Name="ProbeCaret" Fill="{ThemeResource PreviewCaretBrush}" />
+            <Rectangle x:Name="ProbeMatch" Fill="{ThemeResource PreviewMatchBrush}" />
+            <Rectangle x:Name="ProbeAlternate" Fill="{ThemeResource PreviewAlternateBrush}" />
+            <Rectangle x:Name="ProbeCurrentRow" Fill="{ThemeResource PreviewCurrentRowBrush}" />
+            <Rectangle x:Name="ProbeSeparator" Fill="{ThemeResource PreviewSeparatorBrush}" />
+        </StackPanel>
+        <Border
+            x:Name="Frame"
+            Padding="8"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="{ThemeResource ControlCornerRadius}">
+            <ScrollViewer
+                HorizontalScrollBarVisibility="Auto"
+                HorizontalScrollMode="Auto"
+                VerticalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="Rows" FlowDirection="LeftToRight" />
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>

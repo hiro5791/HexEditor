@@ -4,6 +4,7 @@ using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 
 namespace HexEditor.App.Views;
 
@@ -41,7 +42,10 @@ public static class ViewSections
             fonts.Items.Add(new ComboBoxItem { Content = Loc.Get("Settings_FontDefault"), Tag = string.Empty });
             foreach (string name in FontCatalog.ListForSettings(all.IsChecked == true))
             {
-                fonts.Items.Add(new ComboBoxItem { Content = name, Tag = name });
+                // フォント名はそのフォントで表示する (UI-29 の「画面」)。
+                var item = new ComboBoxItem { Content = name, Tag = name, FontFamily = new FontFamily(name) };
+                AutomationProperties.SetName(item, name);
+                fonts.Items.Add(item);
             }
 
             string selected = App.Settings.GetString(ViewOptions.FontFamilyKey, string.Empty);
@@ -69,29 +73,43 @@ public static class ViewSections
         panel.Children.Add(all);
         panel.Children.Add(missing);
 
-        // 配色
-        var schemes = new ComboBox { Header = Loc.Get("Set_view_colorScheme"), MinWidth = 280 };
-        AutomationProperties.SetAutomationId(schemes, "SettingControl_view.colorScheme");
-        AutomationProperties.SetName(schemes, Loc.Get("Set_view_colorScheme"));
-        string scheme = App.Settings.GetString(ViewOptions.ColorSchemeKey, ColorScheme.DefaultName);
-        foreach (ColorScheme s in new ColorSchemeStore(App.Settings.Folder).All())
+        // プレビュー (UI-29 の仕様 8、UI-28 の仕様 3): フォント・大きさ・行間・配色の変更を即座に映す。
+        var previewHeader = new TextBlock { Text = Loc.Get("Settings_HexPreview") };
+        var preview = new HexPreview { HorizontalAlignment = HorizontalAlignment.Stretch };
+        AutomationProperties.SetAutomationId(preview, "Settings_HexPreview");
+        AutomationProperties.SetName(preview, Loc.Get("Settings_HexPreview"));
+        panel.Children.Add(previewHeader);
+        panel.Children.Add(preview);
+        void ApplyFont()
         {
-            var item = new ComboBoxItem { Content = s.BuiltIn ? Loc.Get("Scheme_" + s.Name) : s.Name, Tag = s.Name };
-            schemes.Items.Add(item);
-            if (string.Equals(s.Name, scheme, StringComparison.OrdinalIgnoreCase))
-            {
-                schemes.SelectedItem = item;
-            }
+            string family = FontCatalog.Resolve(App.Settings.GetString(ViewOptions.FontFamilyKey, string.Empty) is { Length: > 0 } f ? f : null, out _);
+            double points = Math.Clamp(Math.Round(Number(ViewOptions.FontSizeKey, ViewOptions.DefaultFontPoints) * 2) / 2, 6, 72);
+            preview.SetFont(family, points, Math.Clamp(Number(ViewOptions.LineHeightKey, 1.2), 1.0, 2.0));
         }
 
-        schemes.SelectionChanged += (_, _) =>
+        ApplyFont();
+
+        // 配色 (UI-28)。
+        ColorSchemeSection.Build(window, preview, panel);
+
+        // フォントの設定は設定画面の別の項目 (大きさ・行間) や設定ファイルの編集でも変わるので、変わったらプレビューを描き直す。
+        // 設定はアプリ全体で 1 つなので、設定画面から外れたら購読をやめる。
+        Action<IReadOnlyCollection<string>> changed = keys =>
         {
-            if (schemes.SelectedItem is ComboBoxItem { Tag: string name })
+            if (keys.Any(k => k.StartsWith("view.font.", StringComparison.Ordinal)))
             {
-                _ = window.Commands.ExecuteAsync("view.colorScheme", name);
+                panel.DispatcherQueue.TryEnqueue(ApplyFont);
             }
         };
-        panel.Children.Add(schemes);
+        panel.Loaded += (_, _) =>
+        {
+            App.Settings.Changed -= changed;
+            App.Settings.Changed += changed;
+        };
+        panel.Unloaded += (_, _) => App.Settings.Changed -= changed;
         return panel;
     }
+
+    private static double Number(string key, double defaultValue) =>
+        App.Settings.GetNode(key) is System.Text.Json.Nodes.JsonValue v && v.TryGetValue(out double d) ? d : defaultValue;
 }

@@ -100,9 +100,11 @@ public sealed partial class MainWindow
     /// 最近使ったファイルを開く。見つからなければ「&lt;パス&gt; が見つかりません」と「一覧から削除」を示す (UI-32 の仕様 6)。
     /// ネットワークのパスは確かめずに開く。
     /// </summary>
-    private void OpenRecent(RecentItem item)
+    private async void OpenRecent(RecentItem item)
     {
-        if (!item.IsNetworkPath && !File.Exists(item.Path))
+        // ドライブの種類と存在の確認は、応答しないドライブで UI を止めないようにバックグラウンドで行う。
+        bool missing = !RecentFileList.IsNetworkPathSyntax(item.Path) && await Task.Run(() => !item.IsNetworkPath && !File.Exists(item.Path));
+        if (missing)
         {
             ShowNotice(Loc.Format("Recent_Missing", item.Path), InfoBarSeverity.Warning, actions:
             [

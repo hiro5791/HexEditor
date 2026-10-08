@@ -50,4 +50,29 @@ public static class WindowPlacement
             && saved.Y >= a.Y - slack && saved.Y + titleBar <= a.Bottom;
         return workAreas.Any(Reachable) ? saved : Centered(primaryWorkArea, scale);
     }
+
+    /// <summary>
+    /// モニターの記録も使って戻す (UI-31 の仕様 1): 保存したときのモニター <paramref name="savedMonitor"/> (モニターの名前) が今は
+    /// ない場合 (外したモニター) は、位置が他のモニターにかかっていても主モニターの中央の既定の位置にする。モニターがある場合と、
+    /// 記録がない・名前が分からない場合は、<see cref="Restore(PixelRect, IReadOnlyList{PixelRect}, PixelRect, double)"/> と同じ。
+    /// </summary>
+    public static PixelRect Restore(
+        PixelRect saved, IReadOnlyList<(string? Name, PixelRect WorkArea)> monitors, string? savedMonitor, PixelRect primaryWorkArea, double scale)
+    {
+        bool known = monitors.Any(m => m.Name is not null);
+        if (savedMonitor is { Length: > 0 } && known
+            && !monitors.Any(m => string.Equals(m.Name, savedMonitor, StringComparison.OrdinalIgnoreCase)))
+        {
+            return Centered(primaryWorkArea, scale);
+        }
+
+        return Restore(saved, [.. monitors.Select(m => m.WorkArea)], primaryWorkArea, scale);
+    }
+
+    /// <summary>
+    /// セッションに書く「元の大きさ」(UI-31 の仕様 1): 通常の表示なら今の位置と大きさ。最大化・全画面・最小化の間は、その前の通常の表示の
+    /// 位置と大きさ <paramref name="normal"/> (記録がなければ今の値)。最大化・全画面のまま書くと、戻したときに通常の大きさが失われるため。
+    /// </summary>
+    public static PixelRect NormalBounds(PixelRect current, PixelRect? normal, bool isNormalState) =>
+        isNormalState || normal is not { Width: > 0, Height: > 0 } n ? current : n;
 }

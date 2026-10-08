@@ -122,5 +122,24 @@ public sealed class SessionTests : IDisposable
         var again = new AppStateStore(reloaded);
         Assert.False(again.IsFirstRun);
         Assert.True(again.WelcomeDismissed);
+        Assert.False(again.ShowWelcome);
+    }
+
+    [Fact]
+    public void WelcomeIsShownOnlyOnTheFirstRunEvenIfStateIsWrittenEarly()
+    {
+        // UI-38 の仕様 2: 判定は state.json を読んだ時点。読んだ後に他の機能が state.json を書いても初回起動のまま。
+        using var store = new HexEditor.Core.Settings.StateStore(_dir);
+        store.Load();
+        store.Set("commandPalette.recent", new System.Text.Json.Nodes.JsonArray("file.open"));
+        store.Flush();
+        var state = new AppStateStore(store);
+        Assert.True(state.IsFirstRun);
+        Assert.True(state.ShowWelcome);
+
+        // 閉じずに終了しても、2 回目の起動 (state.json がある) では出さない。
+        using var second = new HexEditor.Core.Settings.StateStore(_dir);
+        second.Load();
+        Assert.False(new AppStateStore(second).ShowWelcome);
     }
 }

@@ -194,9 +194,64 @@ public sealed class SessionAndRecentTests
     [Trait(UiTest.TC, "TC-UI-32-04")]
     public Task Portable_version_opens_recent_files_after_the_drive_letter_changes() => Task.CompletedTask;
 
-    [Fact(Skip = "ジャンプリスト (UI-35) は配布の担当が作る。recent.maxItems = 0 で一覧 (ピン留めを含む) を消す処理は Core の RecentFilesTests.ZeroMaxItemsClearsEverythingAndStopsRecording で確認している")]
+    [Fact]
     [Trait(UiTest.TC, "TC-UI-32-05")]
-    public Task Zero_max_items_clears_the_jump_list() => Task.CompletedTask;
+    public Task Zero_max_items_clears_the_jump_list() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 前提: file01〜file03 を開いて閉じ、file01 をピン留めする。テスト用のビルドは Windows のジャンプリストを変えず、作った内容を
+        // 記録する (jumpList の命令で読む)。
+        string[] files = Files(ctx, 3);
+        AppSession app = await ctx.StartAsync();
+        foreach (string file in files)
+        {
+            await OpenAndCloseAsync(app, file);
+        }
+
+        await app.SendAsync("recentPin", new JsonObject { ["path"] = files[0] });
+        await app.WaitUntilAsync(async () => (await JumpListAsync(app)).Any(i => i.Category == "Pinned"), TimeSpan.FromSeconds(10), "the pinned item");
+        Assert.Equal(2, (await JumpListAsync(app)).Count(i => i.Category == "Recent"));
+
+        // 1. 設定画面で recent.maxItems を 0 にする (設定画面と同じ処理)。
+        Assert.True((await app.SendAsync("settingSet", new JsonObject { ["key"] = "recent.maxItems", ["value"] = 0 }))["valid"]!.GetValue<bool>());
+
+        // 2. 1 秒待ってジャンプリストを読むと、「固定済み」と「最近使ったもの」がなく、「タスク」は残っている。
+        await Task.Delay(1000);
+        IReadOnlyList<(string Category, string Arguments)> items = await JumpListAsync(app);
+        Assert.DoesNotContain(items, i => i.Category is "Pinned" or "Recent");
+        Assert.Contains(items, i => i.Category == "Tasks" && i.Arguments == "--new-window");
+        Assert.Contains(items, i => i.Category == "Tasks" && i.Arguments == "--new-document");
+    });
+
+    private static async Task<IReadOnlyList<(string Category, string Arguments)>> JumpListAsync(AppSession app) =>
+        [.. (await app.SendAsync("jumpList"))["items"]!.AsArray().Select(i => (i!["category"]!.GetValue<string>(), i["arguments"]!.GetValue<string>()))];
+
+    [Fact]
+    public Task Start_page_recent_rows_have_the_same_context_menu() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-32 の仕様 4: スタートページの行の右クリック (Shift+F10) で「すべて表示…」と同じメニューが出る。
+        string[] files = Files(ctx, 2);
+        AppSession app = await ctx.StartAsync();
+        foreach (string file in files)
+        {
+            await OpenAndCloseAsync(app, file);
+        }
+
+        JsonObject menu = await app.SendAsync("startRecentMenu", new JsonObject { ["index"] = 1 });
+        Assert.Equal(["Recent_Pin", "Recent_RemoveItem", "Recent_CopyPath", "Recent_ShowInExplorer"],
+            menu["items"]!.AsArray().Select(i => i!.GetValue<string>()));
+
+        // 「ピン留め」で file01 が先頭に移り、ピン留めした行のメニューは「ピン留めを外す」になる。
+        await app.SendAsync("startRecentMenu", new JsonObject { ["index"] = 1, ["invoke"] = "Recent_Pin" });
+        await app.WaitUntilAsync(async () => (await RecentAsync(app))[0] == ("file01.bin", true), TimeSpan.FromSeconds(5), "the pinned row");
+        await app.WaitUntilAsync(async () => (await FilesStateAsync(app))["startRecent"]![0]!["name"]!.GetValue<string>() == "file01.bin",
+            TimeSpan.FromSeconds(5), "the start page to refresh");
+        menu = await app.SendAsync("startRecentMenu", new JsonObject { ["index"] = 0 });
+        Assert.Equal("Recent_Unpin", menu["items"]![0]!.GetValue<string>());
+
+        // 「一覧から削除」で行が消える。
+        await app.SendAsync("startRecentMenu", new JsonObject { ["index"] = 1, ["invoke"] = "Recent_RemoveItem" });
+        await app.WaitUntilAsync(async () => (await RecentAsync(app)).Count == 1, TimeSpan.FromSeconds(5), "the removed row");
+    });
 
     // ---- UI-12 閉じたタブを開き直す ----
 
@@ -433,6 +488,147 @@ public sealed class SessionAndRecentTests
     });
 
     [Fact]
+    public Task Full_screen_window_is_restored_with_its_normal_bounds() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-31 の仕様 1: 全画面のまま終了すると、全画面で戻り、全画面を終えると前の位置と大きさに戻る。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SendAsync("moveWindow", new JsonObject { ["x"] = 120, ["y"] = 90, ["width"] = 1000, ["height"] = 700 });
+        JsonObject normal = await app.SendAsync("shellState");
+        await app.SendAsync("execute", new JsonObject { ["id"] = "view.fullScreen" });
+        await app.WaitUntilAsync(async () => (await app.SendAsync("shellState"))["presenter"]!.GetValue<string>() == "FullScreen", TimeSpan.FromSeconds(5), "full screen");
+        await app.SendAsync("saveSession");
+        JsonObject saved = (JsonObject)JsonNode.Parse(await File.ReadAllTextAsync(Path.Combine(app.Profile, "session.json")))!["windows"]![0]!;
+        Assert.True(saved["fullScreen"]!.GetValue<bool>());
+        Assert.Equal(normal["width"]!.GetValue<int>(), saved["width"]!.GetValue<int>());
+        Assert.Equal(normal["x"]!.GetValue<int>(), saved["x"]!.GetValue<int>());
+        await ExitAsync(app);
+
+        AppSession again = await ctx.StartAsync();
+        await again.WaitForTabsAsync(1);
+        await again.WaitUntilAsync(async () => (await again.SendAsync("shellState"))["presenter"]!.GetValue<string>() == "FullScreen", TimeSpan.FromSeconds(10), "full screen after restart");
+        await again.SendAsync("execute", new JsonObject { ["id"] = "view.fullScreen" });
+        await again.WaitUntilAsync(async () => (await again.SendAsync("shellState"))["presenter"]!.GetValue<string>() == "Overlapped", TimeSpan.FromSeconds(5), "back from full screen");
+        JsonObject after = await again.SendAsync("shellState");
+        foreach (string key in new[] { "x", "y", "width", "height" })
+        {
+            Assert.Equal(normal[key]!.GetValue<int>(), after[key]!.GetValue<int>());
+        }
+    });
+
+    [Fact]
+    public Task Maximized_window_keeps_its_normal_bounds_in_the_session() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-31 の仕様 1: 最大化したウィンドウは、通常の表示の位置と大きさと「最大化」を記録する。テストではウィンドウを実際には
+        // 最大化しない (アクティブになるため) が、最大化として記録し直すことと、通常の大きさが失われないことを確かめる。
+        string profile = ctx.NewProfile();
+        string seq = ctx.TestData("TD-SEQ-1M").Replace(@"\", @"\\", StringComparison.Ordinal);
+        await File.WriteAllTextAsync(Path.Combine(profile, "session.json"),
+            "{\"windows\": [{\"x\": 150, \"y\": 110, \"width\": 1040, \"height\": 720, \"maximized\": true, \"activeTab\": 0, \"tabs\": ["
+            + "{\"kind\": \"file\", \"path\": \"" + seq + "\", \"displayName\": \"TD-SEQ-1M\"}]}], \"closedTabs\": [], \"lastActiveWindow\": 0}");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await app.WaitForTabsAsync(1);
+        await app.SendAsync("saveSession");
+        await ExitAsync(app);
+        JsonObject saved = (JsonObject)JsonNode.Parse(await File.ReadAllTextAsync(Path.Combine(profile, "session.json")))!["windows"]![0]!;
+        Assert.True(saved["maximized"]!.GetValue<bool>());
+        Assert.Equal([150, 110, 1040, 720], new[] { "x", "y", "width", "height" }.Select(k => saved[k]!.GetValue<int>()));
+    });
+
+    [Fact]
+    public Task Last_active_window_is_restored_even_if_an_earlier_window_is_skipped() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-31 の仕様 1 (アプリ: 最後にアクティブだったウィンドウ)。ウィンドウ 2 (番号 1) は復元するタブがないので作らない。
+        // 最後にアクティブだったのはウィンドウ 3 (番号 2、file02 のウィンドウ) で、戻した後もそのウィンドウが操作の対象になる。
+        string[] files = Files(ctx, 3);
+        string profile = ctx.NewProfile();
+        string Window(int x, string? file) =>
+            "{\"x\": " + x + ", \"y\": 100, \"width\": 900, \"height\": 650, \"activeTab\": " + (file is null ? -1 : 0) + ", \"tabs\": ["
+            + (file is null ? string.Empty : "{\"kind\": \"file\", \"path\": \"" + file.Replace(@"\", @"\\", StringComparison.Ordinal) + "\", \"displayName\": \"" + Path.GetFileName(file) + "\"}")
+            + "]}";
+        await File.WriteAllTextAsync(Path.Combine(profile, "session.json"),
+            "{\"windows\": [" + string.Join(", ", Window(40, files[0]), Window(80, null), Window(120, files[1]), Window(160, files[2]))
+            + "], \"closedTabs\": [], \"lastActiveWindow\": 2}");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await WindowManagementTests.WaitForWindowsAsync(app, 3);
+        await app.IdleAsync();
+        JsonObject windows = await app.SendAsync("windows");
+        int current = windows["current"]!.GetValue<int>();
+        Assert.Equal(["file02.bin"], windows["windows"]![current]!["tabs"]!.AsArray().Select(t => t!.GetValue<string>()));
+    });
+
+    [Fact]
+    public Task Changed_file_shows_a_notice_when_the_session_is_restored() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-31 の仕様 7: 前回の終了後にサイズが変わったファイルは、カーソルをファイルの長さの範囲に収めて開き、タブ内の InfoBar で知らせる。
+        string[] files = Files(ctx, 1);
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = files });
+        await app.GoToAsync(0xF00);
+        await ExitAsync(app);
+        using (var stream = new FileStream(files[0], FileMode.Open, FileAccess.Write))
+        {
+            stream.SetLength(0x100);
+        }
+
+        AppSession again = await ctx.StartAsync();
+        await again.WaitForTabsAsync(1);
+        await again.WaitForNotificationAsync(m => m.Contains("has changed since HexEditor last closed", StringComparison.Ordinal), "the changed notice");
+        Assert.True(await CursorAsync(again) <= 0x100);
+    });
+
+    [Fact]
+    public Task Broken_session_file_starts_empty_and_is_kept() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-31 の「エラー」: session.json が壊れていたら空のセッションで起動し、session.json.broken-<日時> として残す。
+        string profile = ctx.NewProfile();
+        await File.WriteAllTextAsync(Path.Combine(profile, "session.json"), "{\"windows\": [ {\"x\": 1,");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await app.WaitForAsync("Start_Open");
+        Assert.Empty(await app.TabNamesAsync());
+        Assert.True((await FilesStateAsync(app))["startPageVisible"]!.GetValue<bool>());
+        Assert.Single(Directory.GetFiles(profile, "session.json.broken-*"));
+    });
+
+    [Fact]
+    public Task Session_is_restored_after_the_recovery_prompt_without_duplicates() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-30 の仕様 3: 異常終了の後は、復旧の提案を先に出し、その後にセッションを戻す。復旧した文書のタブはセッションのタブと重ねない。
+        string[] files = Files(ctx, 2);
+        var hooks = new JsonObject { ["recoveryIntervalSeconds"] = 2 };
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = files, Hooks = hooks });
+        await app.WaitForTabsAsync(2);
+        await EditingTests.SelectTabAsync(app, 0);
+        await app.TypeAsync("AB");
+        await app.SendAsync("saveSession");
+        await app.WaitUntilAsync(() => Task.FromResult(Directory.Exists(app.RecoveryFolder)
+            && Directory.EnumerateFiles(app.RecoveryFolder, "state.json", SearchOption.AllDirectories).Any()), TimeSpan.FromSeconds(20), "the recovery data");
+        app.Kill();
+
+        // 復旧の画面が出ている間は、セッションのタブはまだ戻らない。
+        AppSession again = await ctx.StartAsync(new AppOptions { Hooks = hooks });
+        await again.WaitForAsync("Recovery_Restore", TimeSpan.FromSeconds(20));
+        Assert.Empty(await again.TabNamesAsync());
+
+        // 「復旧する」の後にセッションが戻り、file01 は 1 つだけ (復旧した文書)。アクティブなのは復旧した文書。
+        (await again.WaitForAsync("Recovery_Restore")).Patterns.Invoke.Pattern.Invoke();
+        await again.WaitForTabsAsync(2);
+        await again.IdleAsync();
+        IReadOnlyList<string> tabs = await again.TabNamesAsync();
+        Assert.Equal(1, tabs.Count(t => t == "file01.bin"));
+        Assert.Contains("file02.bin", tabs);
+        Assert.Equal("file01.bin", await ActiveNameAsync(again));
+        Assert.True((await again.DocumentAsync())["modified"]!.GetValue<bool>());
+    });
+
+    [Fact]
+    public Task Safe_mode_adds_the_title_suffix() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-30 の仕様 4 のうちフェーズ 1 の部分: --safe-mode で起動すると、タイトルに「(セーフモード)」が付く (UI-02)。
+        AppSession app = await ctx.StartAsync(new AppOptions { ExtraArgs = ["--safe-mode"] });
+        JsonObject windows = await app.SendAsync("windows");
+        Assert.EndsWith(" (Safe Mode)", windows["windows"]![0]!["title"]!.GetValue<string>());
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-UI-31-03")]
     public Task Deleted_file_keeps_its_tab_with_a_message() => UiTestContext.RunAsync(async ctx =>
     {
@@ -489,6 +685,15 @@ public sealed class SessionAndRecentTests
         }
 
         Assert.Contains("internet", (await app.ElementAsync("Start_NetworkInfo"))["text"]!.GetValue<string>());
+
+        // 表示言語の一覧は設定画面 (UI-43) と同じ: 「Windows の設定に従う (現在: …)」と、自称・今の表示言語での名前・確認済みの割合。
+        JsonObject files = await FilesStateAsync(app);
+        IReadOnlyList<string> languages = [.. files["startLanguages"]!.AsArray().Select(l => l!.GetValue<string>())];
+        Assert.StartsWith("Use Windows setting (current: ", languages[0]);
+        Assert.Contains(languages, l => l.StartsWith("日本語", StringComparison.Ordinal) && l.Contains("Japanese", StringComparison.Ordinal));
+
+        // 「開く」「新規作成」に今のキー割り当てが添えてある (UI-38 の仕様 1)。
+        Assert.Equal(["Ctrl+O", "Ctrl+N"], files["startShortcuts"]!.AsArray().Select(s => s!.GetValue<string>()));
 
         // 2. 「閉じる」で消える。
         await app.UiaInvokeAsync("Start_WelcomeClose");

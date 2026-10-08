@@ -490,7 +490,6 @@
   <data name="Start_WelcomeTitle.Text" xml:space="preserve"><value>はじめに</value></data>
   <data name="Start_WelcomeClose.Content" xml:space="preserve"><value>閉じる</value></data>
   <data name="Start_Language.Header" xml:space="preserve"><value>表示言語</value></data>
-  <data name="Start_LanguageSystem" xml:space="preserve"><value>Windows と同じ</value></data>
   <data name="Start_LanguageRestart.Text" xml:space="preserve"><value>新しい表示言語は、次に HexEditor を起動したときに使われます。</value></data>
   <data name="Start_Theme.Header" xml:space="preserve"><value>テーマ</value></data>
   <data name="Start_ThemeSystem" xml:space="preserve"><value>システムの設定</value></data>
@@ -2496,4 +2495,41 @@
   <data name="CmdArg_view_encoding_select" xml:space="preserve"><value>文字コードを選んでください (入力で絞り込み。例: utf-16)。</value></data>
   <data name="CmdArg_view_bytesPerRowCustom" xml:space="preserve"><value>1 行のバイト数を入力して Enter を押してください (例: 24)。</value></data>
   <data name="Close_Waiting" xml:space="preserve"><value>{0} が終わるのを待っています…</value></data>
+  <data name="Settings_HexPreview" xml:space="preserve"><value>プレビュー</value></data>
+  <data name="SchemeUi_Duplicate" xml:space="preserve"><value>複製...</value></data>
+  <data name="SchemeUi_Export" xml:space="preserve"><value>エクスポート...</value></data>
+  <data name="SchemeUi_Import" xml:space="preserve"><value>インポート...</value></data>
+  <data name="SchemeUi_NewName" xml:space="preserve"><value>新しい配色の名前</value></data>
+  <data name="SchemeUi_CopyName" xml:space="preserve"><value>{0} のコピー</value></data>
+  <data name="SchemeUi_NameInvalid" xml:space="preserve"><value>他の配色と重ならない名前を入力してください。</value></data>
+  <data name="SchemeUi_Edit" xml:space="preserve"><value>配色の編集: {0}</value></data>
+  <data name="SchemeUi_Variant" xml:space="preserve"><value>編集する色</value></data>
+  <data name="SchemeUi_Light" xml:space="preserve"><value>ライト用</value></data>
+  <data name="SchemeUi_Dark" xml:space="preserve"><value>ダーク用</value></data>
+  <data name="SchemeUi_PickColor" xml:space="preserve"><value>{0} の色を選ぶ</value></data>
+  <data name="SchemeUi_ThemeColor" xml:space="preserve"><value>テーマの色</value></data>
+  <data name="SchemeUi_Reset" xml:space="preserve"><value>テーマの色に戻す</value></data>
+  <data name="SchemeUi_Save" xml:space="preserve"><value>配色を保存</value></data>
+  <data name="SchemeUi_SaveFailed" xml:space="preserve"><value>配色を保存できませんでした: {0}</value></data>
+  <data name="SchemeUi_ContrastTitle" xml:space="preserve"><value>コントラストが低い組み合わせ</value></data>
+  <data name="SchemeUi_ContrastItem" xml:space="preserve"><value>{1} の上の {0} ({2}): {3}:1。文字が読みにくいことがあります (4.5:1 以上をおすすめします)。</value></data>
+  <data name="SchemeUi_LoadWarnings" xml:space="preserve"><value>この配色ファイルの次の色が不正なため、その色には既定の色を使っています: {0}</value></data>
+  <data name="SchemeUi_ImportFailed" xml:space="preserve"><value>配色をインポートできませんでした: {0}</value></data>
+  <data name="SchemeUi_Exported" xml:space="preserve"><value>配色を {0} にエクスポートしました。</value></data>
+  <data name="SchemeUi_FileType" xml:space="preserve"><value>配色</value></data>
+  <data name="SchemeElement_Background" xml:space="preserve"><value>背景</value></data>
+  <data name="SchemeElement_AlternateBackground" xml:space="preserve"><value>交互の行の背景</value></data>
+  <data name="SchemeElement_CurrentRowBackground" xml:space="preserve"><value>カーソル行の背景</value></data>
+  <data name="SchemeElement_OffsetText" xml:space="preserve"><value>オフセット列の文字</value></data>
+  <data name="SchemeElement_HexText" xml:space="preserve"><value>Hex 列の文字</value></data>
+  <data name="SchemeElement_TextText" xml:space="preserve"><value>テキスト列の文字</value></data>
+  <data name="SchemeElement_Zero" xml:space="preserve"><value>00 のバイト</value></data>
+  <data name="SchemeElement_NonPrintable" xml:space="preserve"><value>表示できない文字 (.)</value></data>
+  <data name="SchemeElement_Modified" xml:space="preserve"><value>変更されたバイト</value></data>
+  <data name="SchemeElement_Inserted" xml:space="preserve"><value>挿入されたバイト</value></data>
+  <data name="SchemeElement_SelectionBackground" xml:space="preserve"><value>選択範囲の背景</value></data>
+  <data name="SchemeElement_SelectionText" xml:space="preserve"><value>選択範囲の文字</value></data>
+  <data name="SchemeElement_Caret" xml:space="preserve"><value>カーソル</value></data>
+  <data name="SchemeElement_Match" xml:space="preserve"><value>検索の一致</value></data>
+  <data name="SchemeElement_Separator" xml:space="preserve"><value>区切り線</value></data>
 </root>

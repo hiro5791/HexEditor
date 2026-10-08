@@ -288,7 +288,7 @@ public sealed partial class SettingsPage : UserControl
             case SettingKind.Int or SettingKind.Number:
             {
                 double number = SettingDefinition.TryGetNumber(value, out double d) ? d : 0;
-                var box = new NumberBox { Value = number, MinWidth = 120, SpinButtonPlacementMode = NumberBoxSpinButtonPlacementMode.Compact, Minimum = def.Min ?? double.MinValue, Maximum = def.Max ?? double.MaxValue, ValidationMode = NumberBoxValidationMode.Disabled };
+                var box = new NumberBox { Value = number, MinWidth = 120, SpinButtonPlacementMode = NumberBoxSpinButtonPlacementMode.Compact, Minimum = def.Min ?? double.MinValue, Maximum = def.Max ?? double.MaxValue, ValidationMode = NumberBoxValidationMode.Disabled, SmallChange = def.Step ?? 1 };
 
                 // 入力が確定した時点 (Enter またはフォーカスが外れたとき) に反映する (UI-22 の仕様 5)。
                 box.ValueChanged += (_, e) =>

@@ -36,6 +36,31 @@ public sealed class WindowPlacementTests
     }
 
     [Fact]
+    public void Missing_monitor_centers_on_the_primary_even_if_the_position_overlaps_another()
+    {
+        // UI-31 の仕様 1: 記録したモニター (DISPLAY2) が今はない。位置は主モニターにかかっているが、主モニターの中央に出す。
+        (string?, PixelRect)[] monitors = [(@"\\.\DISPLAY1", Primary)];
+        var saved = new PixelRect(1500, 100, 1280, 800);
+        Assert.Equal(new PixelRect(320, 120, 1280, 800), WindowPlacement.Restore(saved, monitors, @"\\.\DISPLAY2", Primary, 1.0));
+
+        // モニターがある・記録がない・名前が取れない場合は、位置の規則だけで決める。
+        Assert.Equal(saved, WindowPlacement.Restore(saved, monitors, @"\\.\display1", Primary, 1.0));
+        Assert.Equal(saved, WindowPlacement.Restore(saved, monitors, null, Primary, 1.0));
+        Assert.Equal(saved, WindowPlacement.Restore(saved, [(null, Primary)], @"\\.\DISPLAY2", Primary, 1.0));
+    }
+
+    [Fact]
+    public void Maximized_or_full_screen_window_records_its_normal_bounds()
+    {
+        // UI-31 の仕様 1: 最大化・全画面の間は、その前の通常の表示の位置と大きさを書く。
+        var maximized = new PixelRect(-8, -8, 1936, 1056);
+        var normal = new PixelRect(200, 100, 1000, 700);
+        Assert.Equal(normal, WindowPlacement.NormalBounds(maximized, normal, isNormalState: false));
+        Assert.Equal(maximized, WindowPlacement.NormalBounds(maximized, null, isNormalState: false));
+        Assert.Equal(normal, WindowPlacement.NormalBounds(normal, new PixelRect(0, 0, 10, 10), isNormalState: true));
+    }
+
+    [Fact]
     public void Small_work_area_uses_ninety_percent()
     {
         var small = new PixelRect(0, 0, 1366, 728);
