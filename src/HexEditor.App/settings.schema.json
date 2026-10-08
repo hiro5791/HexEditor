@@ -26,13 +26,79 @@
       "type": "boolean",
       "default": true
     },
+    "clipboard.hex.bytesPerLine": {
+      "description": "Bytes per line in copied hex",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1024,
+      "default": 0
+    },
+    "clipboard.hex.separator": {
+      "description": "Separator in copied hex",
+      "type": "string",
+      "default": " "
+    },
+    "clipboard.hex.upperCase": {
+      "description": "Uppercase in copied hex",
+      "type": "boolean",
+      "default": true
+    },
+    "clipboard.maxSizeMiB": {
+      "description": "Maximum clipboard size (MiB)",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2048,
+      "default": 64
+    },
     "diagnostics.writeMiniDump": {
       "description": "Save a memory dump on crash",
       "type": "boolean",
       "default": false
     },
+    "edit.backspaceInOverwrite": {
+      "description": "Backspace in overwrite mode",
+      "type": "string",
+      "enum": [
+        "moveCursor",
+        "zeroAndMove"
+      ],
+      "default": "moveCursor"
+    },
+    "edit.defaultInputMode": {
+      "description": "Input mode for newly opened files",
+      "type": "string",
+      "enum": [
+        "overwrite",
+        "insert"
+      ],
+      "default": "overwrite"
+    },
+    "edit.deleteKeepsLengthInOverwrite": {
+      "description": "Delete keeps the length in overwrite mode",
+      "type": "boolean",
+      "default": false
+    },
+    "edit.overwriteSelectionTyping": {
+      "description": "Typing over a selection in overwrite mode",
+      "type": "string",
+      "enum": [
+        "overwriteFromStart",
+        "zeroFirst"
+      ],
+      "default": "overwriteFromStart"
+    },
     "edit.paste.detectWithoutConfirmation": {
       "description": "Paste detected formats without asking",
+      "type": "boolean",
+      "default": false
+    },
+    "edit.paste.selectPasted": {
+      "description": "Select the pasted data",
+      "type": "boolean",
+      "default": true
+    },
+    "edit.pasteOverwrite.fitSelection": {
+      "description": "Fit overwrite paste to the selection",
       "type": "boolean",
       "default": false
     },
@@ -40,6 +106,29 @@
       "description": "Prefer the last paste format",
       "type": "boolean",
       "default": true
+    },
+    "edit.text.enterKey": {
+      "description": "Enter in the text column",
+      "type": "string",
+      "enum": [
+        "none",
+        "crlf",
+        "lf",
+        "cr"
+      ],
+      "default": "none"
+    },
+    "edit.undo.clearOnSave": {
+      "description": "Clear the undo history when saving",
+      "type": "boolean",
+      "default": false
+    },
+    "edit.undo.coalesceSeconds": {
+      "description": "Group typing for undo (seconds)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10,
+      "default": 2
     },
     "files.autoReloadUnmodified": {
       "description": "Reload unmodified files automatically",
@@ -198,12 +287,24 @@
       "maximum": 60,
       "default": 1
     },
+    "search.chunkSize": {
+      "description": "Search chunk size (KiB)",
+      "type": "integer",
+      "minimum": 256,
+      "maximum": 65536,
+      "default": 4096
+    },
     "search.findAll.limit": {
       "description": "Find all: result limit",
       "type": "integer",
       "minimum": 1000,
       "maximum": 100000000,
       "default": 1000000
+    },
+    "search.highlightMatches": {
+      "description": "Highlight matches",
+      "type": "boolean",
+      "default": true
     },
     "search.history.doNotSave": {
       "description": "Do not save search history",
@@ -224,8 +325,23 @@
       "maximum": 1048576,
       "default": 4096
     },
+    "search.readErrors": {
+      "description": "When data can\u0027t be read while searching",
+      "type": "string",
+      "enum": [
+        "ask",
+        "skip",
+        "abort"
+      ],
+      "default": "ask"
+    },
     "search.results.f3Repeats": {
       "description": "F3 searches again",
+      "type": "boolean",
+      "default": false
+    },
+    "search.results.newTab": {
+      "description": "Show each Find all in a new tab",
       "type": "boolean",
       "default": false
     },

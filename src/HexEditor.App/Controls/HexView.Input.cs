@@ -1252,6 +1252,11 @@ public sealed partial class HexView
             case VirtualKey.Back:
                 DeleteWithAnnouncement(_editor.Backspace);
                 break;
+            case VirtualKey.Enter when !ctrl && !shift && _editor.ActiveColumn == ActiveColumn.Text
+                && _editor.Options.TextEnter != TextEnterAction.None:
+                // テキスト列での Enter: 設定の改行を書き込む (EDIT-12 の仕様 7)。既定 (何もしない) では処理しない。
+                Report(_editor.TypeEnter());
+                break;
             case VirtualKey.Escape:
                 _editor.ClearSelection();
                 break;

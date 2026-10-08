@@ -110,6 +110,9 @@ public sealed partial class EditorState
     /// <summary>挿入モードか (EDIT-10)。長さを変えられないドキュメントでは常に偽。</summary>
     public bool InsertMode { get; private set; }
 
+    /// <summary>編集の設定 (Backspace・Delete・貼り付けなどの動作。アプリが設定から渡す)。</summary>
+    public EditingOptions Options { get; set; } = EditingOptions.Default;
+
     /// <summary>
     /// 読み取り専用か (EDIT-16)。ドキュメントの状態 (<see cref="Document.ReadOnlyReason"/>) をそのまま表す。真にすると利用者の切り替え
     /// (<see cref="ReadOnlyReason.User"/>) として読み取り専用にし、偽にすると理由に関係なく解除する (解除できるかの確認は呼び出し側で行う)。
@@ -705,14 +708,34 @@ public sealed partial class EditorState
         return EditResult.Done;
     }
 
+    /// <summary>
+    /// テキスト列での Enter (EDIT-12 の仕様 7)。設定「テキスト列での Enter」が CR LF / LF / CR なら、それを今の文字コードで書き込む。
+    /// 「何もしない」(既定) なら <see cref="EditResult.Ignored"/>。
+    /// </summary>
+    public EditResult TypeEnter() => Options.TextEnter switch
+    {
+        TextEnterAction.CrLf => TypeText("\r\n"),
+        TextEnterAction.Lf => TypeText("\n"),
+        TextEnterAction.Cr => TypeText("\r"),
+        _ => EditResult.Ignored,
+    };
+
     // ---- 削除 (EDIT-13) ----
 
-    /// <summary>Delete キー。選択範囲、またはカーソル位置の 1 バイトを削除する。</summary>
+    /// <summary>
+    /// Delete キー。選択範囲、またはカーソル位置の 1 バイトを削除する。設定「上書きモードでは Delete で長さを変えない」がオンで上書きモードなら、
+    /// 削除せずに 00 で塗りつぶす (EDIT-13 の仕様 4)。
+    /// </summary>
     public EditResult Delete()
     {
         if (!CanEdit())
         {
             return EditResult.NotEditable;
+        }
+
+        if (!InsertMode && Options.DeleteKeepsLengthInOverwrite)
+        {
+            return ZeroForDelete();
         }
 
         if (!Document.CanResize)
@@ -731,6 +754,32 @@ public sealed partial class EditorState
         }
 
         Document.Delete(_cursor, 1, "削除", DeleteKey);
+        LowNibble = false;
+        EnsureCursorVisible();
+        RaiseChanged();
+        return EditResult.Done;
+    }
+
+    /// <summary>上書きモードの Delete で 00 にする (EDIT-13 の仕様 4)。選択範囲は先頭にカーソルを置き、1 バイトなら次のバイトへ進む。</summary>
+    private EditResult ZeroForDelete()
+    {
+        if (HasSelection)
+        {
+            long start = _selectionStart;
+            Document.OverwritePattern(start, _selectionLength, [0], "削除");
+            _cursor = start;
+            ClearSelectionAnchor();
+        }
+        else if (_cursor < Document.Length)
+        {
+            Document.Overwrite(_cursor, [0], "削除", DeleteKey);
+            _cursor = Math.Min(_cursor + 1, Layout.MaxCursor);
+        }
+        else
+        {
+            return EditResult.Ignored;
+        }
+
         LowNibble = false;
         EnsureCursorVisible();
         RaiseChanged();
@@ -774,7 +823,20 @@ public sealed partial class EditorState
 
         if (!InsertMode)
         {
-            if (ActiveColumn == ActiveColumn.Hex && LowNibble)
+            if (Options.BackspaceZeroesInOverwrite)
+            {
+                // 設定「直前のバイトを 00 にして戻る」(EDIT-13 の仕様 3)。Hex 列の下位ニブルなら、入力中のそのバイトを 00 にする。
+                long target = ActiveColumn == ActiveColumn.Hex && LowNibble ? _cursor : _cursor - 1;
+                if (target < 0 || target >= Document.Length)
+                {
+                    return EditResult.Ignored;
+                }
+
+                Document.Overwrite(target, [0], "削除", BackspaceKey);
+                _cursor = target;
+                LowNibble = false;
+            }
+            else if (ActiveColumn == ActiveColumn.Hex && LowNibble)
             {
                 LowNibble = false;
             }
@@ -905,7 +967,7 @@ public sealed partial class EditorState
     /// 解釈した文字列 (解釈できないバイトと NUL は U+FFFD)。
     /// </summary>
     public string FormatForClipboard(ReadOnlySpan<byte> bytes) =>
-        ActiveColumn == ActiveColumn.Hex ? HexText.Format(bytes) : TextEncoding.Decode(bytes);
+        ActiveColumn == ActiveColumn.Hex ? Options.HexCopy.Format(bytes) : TextEncoding.Decode(bytes);
 
     private EditResult PasteCore(long length, bool overwrite, bool allowTruncate, Action<bool, long, long> write)
     {
@@ -922,6 +984,12 @@ public sealed partial class EditorState
         long at = HasSelection ? _selectionStart : _cursor;
         bool insert = InsertMode && !overwrite && Document.CanResize;
         EditResult result = EditResult.Done;
+        if (overwrite && HasSelection && Options.FitOverwritePasteToSelection)
+        {
+            // 設定「上書き貼り付けで選択範囲の長さに合わせる」(EDIT-23 の仕様 6)。内容の方が短ければ内容の長さだけ書く。
+            length = Math.Min(length, _selectionLength);
+        }
+
         if (!insert)
         {
             long overflow = PasteOverflow(length);
@@ -951,8 +1019,17 @@ public sealed partial class EditorState
             write(insert, at, length);
         }
 
-        _anchor = at;
-        SetSelection(at, length);
+        // 貼り付けた範囲を選択する。設定でオフなら、カーソルを貼り付けた範囲の直後に置く (EDIT-23 の仕様 7)。
+        if (Options.SelectPasted)
+        {
+            _anchor = at;
+            SetSelection(at, length);
+        }
+        else
+        {
+            ClearSelectionAnchor();
+        }
+
         _cursor = Math.Min(at + length, Layout.MaxCursor);
         LowNibble = false;
         EnsureCursorVisible();
@@ -1018,6 +1095,11 @@ public sealed partial class EditorState
         {
             Document.Delete(_selectionStart, _selectionLength, "削除");
         }
+        else if (Options.ZeroSelectionBeforeTyping)
+        {
+            // 設定「選択範囲を 00 にしてから上書き」(EDIT-11 の仕様 3)。
+            Document.OverwritePattern(_selectionStart, _selectionLength, [0], "入力");
+        }
 
         _cursor = _selectionStart;
         LowNibble = false;
@@ -1029,7 +1111,7 @@ public sealed partial class EditorState
     /// 選択範囲がなければ null (通常の入力のまとめに任せる)。
     /// </summary>
     private IDisposable? BeginTypingGroup() =>
-        HasSelection && InsertMode ? Document.BeginGroup("入力", TypingKey) : null;
+        HasSelection && (InsertMode || Options.ZeroSelectionBeforeTyping) ? Document.BeginGroup("入力", TypingKey) : null;
 
     private bool CanEdit() => !Document.IsReadOnly && !Document.IsEditLocked;
 

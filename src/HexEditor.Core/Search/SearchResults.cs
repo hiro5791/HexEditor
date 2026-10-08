@@ -76,6 +76,12 @@ public sealed class SearchResults : IDisposable
 
     public SearchOptions Options { get; }
 
+    /// <summary>
+    /// 結果が古いか (FIND-03 の「エラー」): 外部変更の検知 (ENG-19) などで元データが読み直され、<paramref name="current"/> が
+    /// 検索したスナップショットと別の元データを指している。古い結果の行は「古い結果」と表示し、再検索ボタンを出す。
+    /// </summary>
+    public bool IsStale(DocumentSnapshot current) => !ReferenceEquals(Snapshot.Storage, current.Storage);
+
     /// <summary>検索範囲の合計のバイト数。</summary>
     public long TotalBytes { get; }
 

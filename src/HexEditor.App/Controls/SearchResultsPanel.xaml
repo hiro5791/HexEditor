@@ -11,13 +11,33 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  見出し: 条件の要約・件数・状態、続ける、キャンセル、変換 (エクスポートを含む)。  -->
-        <Grid Padding="12,4" ColumnSpacing="8">
+        <!--  結果のタブ (FIND-20 の仕様 3)。2 つ以上あるときだけ出す。タブの部品はコードで作る。  -->
+        <ScrollViewer
+            x:Name="TabStripHost"
+            HorizontalScrollBarVisibility="Auto"
+            HorizontalScrollMode="Auto"
+            VerticalScrollBarVisibility="Disabled"
+            VerticalScrollMode="Disabled"
+            Visibility="Collapsed">
+            <StackPanel
+                x:Name="TabStrip"
+                Padding="12,4,12,0"
+                AutomationProperties.AutomationId="SearchResults_Tabs"
+                Orientation="Horizontal"
+                Spacing="4" />
+        </ScrollViewer>
+
+        <!--  見出し: 条件の要約・件数・状態、絞り込み、再検索、読めなかった範囲、続ける、キャンセル、固定、変換 (エクスポートを含む)。  -->
+        <Grid Grid.Row="1" Padding="12,4" ColumnSpacing="8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -38,27 +58,67 @@
                 Width="200"
                 AutomationProperties.AutomationId="SearchResults_Filter"
                 TextChanged="FilterBox_TextChanged" />
+            <!--  古い結果 (元ファイルを読み直した) の再検索 (FIND-03 の「エラー」)。  -->
+            <Button
+                x:Name="ResearchButton"
+                x:Uid="SearchResults_Research"
+                Grid.Column="2"
+                AutomationProperties.AutomationId="SearchResults_Research"
+                Click="Research_Click"
+                Visibility="Collapsed" />
+            <!--  読み込めなかった範囲 (FIND-01 の「エラー」)。項目はコードで作る。  -->
+            <DropDownButton
+                x:Name="SkippedButton"
+                Grid.Column="3"
+                AutomationProperties.AutomationId="SearchResults_Skipped"
+                Visibility="Collapsed">
+                <DropDownButton.Flyout>
+                    <MenuFlyout x:Name="SkippedMenu" Placement="BottomEdgeAlignedRight" />
+                </DropDownButton.Flyout>
+            </DropDownButton>
             <Button
                 x:Name="ContinueButton"
                 x:Uid="SearchResults_Continue"
-                Grid.Column="2"
+                Grid.Column="4"
                 AutomationProperties.AutomationId="SearchResults_Continue"
                 Click="Continue_Click"
                 Visibility="Collapsed" />
             <Button
                 x:Name="CancelButton"
                 x:Uid="SearchResults_Cancel"
-                Grid.Column="3"
+                Grid.Column="5"
                 AutomationProperties.AutomationId="SearchResults_Cancel"
                 Click="Cancel_Click"
                 Visibility="Collapsed" />
+            <!--  固定: 次のすべて検索で置き換えない (FIND-20 の仕様 3)。  -->
+            <ToggleButton
+                x:Name="PinButton"
+                Grid.Column="6"
+                AutomationProperties.AutomationId="SearchResults_Pin"
+                Click="Pin_Click">
+                <FontIcon FontSize="14" Glyph="&#xE718;" />
+            </ToggleButton>
             <DropDownButton
                 x:Name="ConvertButton"
                 x:Uid="SearchResults_Convert"
-                Grid.Column="4"
+                Grid.Column="7"
                 AutomationProperties.AutomationId="SearchResults_Convert">
                 <DropDownButton.Flyout>
-                    <MenuFlyout Placement="BottomEdgeAlignedRight">
+                    <MenuFlyout x:Name="ConvertMenu" Opening="ConvertMenu_Opening" Placement="BottomEdgeAlignedRight">
+                        <!--  変換・エクスポートの対象 (FIND-21 の仕様 1)。  -->
+                        <RadioMenuFlyoutItem
+                            x:Name="TargetSelectedItem"
+                            x:Uid="SearchResults_TargetSelected"
+                            AutomationProperties.AutomationId="SearchResults_TargetSelected"
+                            Click="Target_Click"
+                            GroupName="ConvertTarget" />
+                        <RadioMenuFlyoutItem
+                            x:Name="TargetAllItem"
+                            x:Uid="SearchResults_TargetAll"
+                            AutomationProperties.AutomationId="SearchResults_TargetAll"
+                            Click="Target_Click"
+                            GroupName="ConvertTarget" />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem
                             x:Name="ToBookmarksItem"
                             x:Uid="SearchResults_ToBookmarks"
@@ -90,13 +150,13 @@
         <!--  列の見出し。列の幅はコードの Columns と同じ。  -->
         <Grid
             x:Name="ColumnHeaders"
-            Grid.Row="1"
+            Grid.Row="2"
             Padding="12,2"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="0,1,0,1" />
 
         <!--  行の一覧とスクロールバー。キーボードの操作は ListHost で受ける。  -->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />

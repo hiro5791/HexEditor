@@ -172,7 +172,7 @@ public sealed class GoToAndFindTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("TD-FIND-STRINGS.bin", FindStrings())] });
         await OpenFindAsync(app);
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 1 });
-        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII" });
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII (7 bit)" });
         await app.UiaSetValueAsync("Find_Query", "World");
         Assert.Equal("57 6F 72 6C 64", await app.UiaNameAsync("Find_Status"));
         await FindNextAsync(app);
@@ -236,7 +236,7 @@ public sealed class GoToAndFindTests
         // 1. テキスト (ASCII) の AA を検索 (Enter と同じ: 次を検索)。重なる一致も順に見つかる (FIND-09 の仕様 3)。
         await OpenFindAsync(app);
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 1 });
-        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII" });
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII (7 bit)" });
         await app.UiaSetValueAsync("Find_Query", "AA");
         await FindNextAsync(app);
         await AssertSelectionAsync(app, 0, 2);

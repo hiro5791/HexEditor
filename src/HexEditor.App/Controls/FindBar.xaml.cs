@@ -41,6 +41,13 @@ public sealed partial class FindBar : UserControl
     private SearchScope? _rangeScope;
     private SearchResults? _count;
     private bool _kindChosen;
+    private bool _endianChosen;
+    private bool _settingEndian;
+
+    /// <summary>
+    /// ドキュメントのエンディアン (VIEW-11。ビッグなら true)。数値の検索のエンディアンの既定に使う (FIND-13 の仕様 4)。null ならリトル。
+    /// </summary>
+    public Func<EditorState, bool>? DocumentBigEndian { get; set; }
 
     /// <summary>実行中の検索・数え上げの長時間処理 (進捗バーの表示に使う)。</summary>
     private volatile LongRunningOperation? _activeOperation;
@@ -49,9 +56,11 @@ public sealed partial class FindBar : UserControl
     public FindBar()
     {
         InitializeComponent();
-        foreach (TextEncodingId id in TextEncodings.All)
+        // 文字コード: 「表示中の文字コードに合わせる」(既定) と、表示の文字コードの一覧 (VIEW-21) のうち選べるもの (FIND-07 の仕様 1)。
+        EncodingChoice.Items.Add(new ComboBoxItem { Content = Loc.Get("Find_Encoding_Display"), Tag = TextEncodings.DisplayEncodingId });
+        foreach (EncodingEntry entry in EncodingCatalog.All.Where(e => e.Selectable))
         {
-            EncodingChoice.Items.Add(new ComboBoxItem { Content = EncodingName(id), Tag = id });
+            EncodingChoice.Items.Add(new ComboBoxItem { Content = MainWindow.EncodingDisplayText(entry), Tag = entry.Id });
         }
 
         foreach (int bits in NumericSearch.IntegerSizes)
@@ -236,6 +245,14 @@ public sealed partial class FindBar : UserControl
                 KindChoice.SelectedIndex = editor.ActiveColumn == ActiveColumn.Text ? 1 : 0;
             }
 
+            // 数値の検索のエンディアンの既定は、ドキュメントのエンディアン (FIND-13 の仕様 4)。利用者が選んだらそれを保つ。
+            if (!_endianChosen && DocumentBigEndian is { } bigEndian)
+            {
+                _settingEndian = true;
+                EndianChoice.SelectedIndex = bigEndian(editor) ? (int)SearchEndian.Big : (int)SearchEndian.Little;
+                _settingEndian = false;
+            }
+
             if (editor.HasSelection && editor.SelectionLength <= 256 && Kind is SearchKind.Hex or SearchKind.Text)
             {
                 byte[] bytes = new byte[editor.SelectionLength];
@@ -315,7 +332,7 @@ public sealed partial class FindBar : UserControl
         _running = cts;
         DocumentSnapshot snapshot = editor.Document.Current;
         bool wrap = WrapChoice.IsChecked == true;
-        var options = new SearchOptions { Scope = CurrentScope };
+        SearchOptions options = NewOptions(editor, CurrentScope, cts.Token);
         long cursor = editor.Cursor;
         long selStart = editor.SelectionStart;
         long selLength = editor.SelectionLength;
@@ -349,17 +366,23 @@ public sealed partial class FindBar : UserControl
                 MarkQuery(QueryState.Normal);
                 UpdateCountText();
                 Announce(h.Wrapped ? Status.Text : Loc.Format("Find_FoundAt", StatusFormat.Hex(h.Offset)));
+                ReportResult(h.Wrapped ? Status.Text : Loc.Format("Find_FoundAt", StatusFormat.Hex(h.Offset)), h.Wrapped);
             }
             else
             {
                 Status.Text = wrap ? Loc.Get("Find_NotFound") : Loc.Get(forward ? "Find_NotFoundToEnd" : "Find_NotFoundToStart");
                 MarkQuery(QueryState.NotFound);
                 Announce(Status.Text);
+                ReportResult(Status.Text, important: false);
             }
         }
         catch (OperationCanceledException)
         {
             Status.Text = Loc.Get("Find_Cancelled");
+        }
+        catch (SearchAbortedException ex)
+        {
+            ShowAborted(ex);
         }
         finally
         {
@@ -389,9 +412,8 @@ public sealed partial class FindBar : UserControl
         var cts = new CancellationTokenSource();
         _findingAll = cts;
         int limit = Math.Clamp(App.Settings?.GetInt(FindAllLimitKey, 1_000_000) ?? 1_000_000, 1_000, 100_000_000);
-        IReadOnlyList<SearchTarget> targets = FindAllTargets(editor, pattern, new SearchOptions
+        IReadOnlyList<SearchTarget> targets = FindAllTargets(editor, pattern, NewOptions(editor, CurrentScope, cts.Token) with
         {
-            Scope = CurrentScope,
             IncludeOverlapping = OverlapChoice.IsChecked == true,
             MaxMatches = limit,
         });
@@ -408,6 +430,7 @@ public sealed partial class FindBar : UserControl
             Status.Text = cts.IsCancellationRequested ? Loc.Get("Find_Cancelled") : message;
             MarkQuery(total == 0 && !cts.IsCancellationRequested ? QueryState.NotFound : QueryState.Normal);
             Announce(Status.Text);
+            ReportResult(Status.Text, important: false);
         }
         finally
         {
@@ -421,7 +444,7 @@ public sealed partial class FindBar : UserControl
 
     /// <summary>結果一覧のテキストの列の文字コード: テキストの検索では検索の文字コード、それ以外は表示中の文字コード。</summary>
     private Encoding ResultsEncoding(EditorState editor) => Kind == SearchKind.Text
-        ? TextEncodings.Get(SelectedEncoding)
+        ? SearchEncoding
         : Encoding.GetEncoding(editor.TextEncoding.CodePage);
 
     /// <summary>種類の表示名 (結果一覧の見出しの「Hex: AB CD」の「Hex」)。</summary>
@@ -481,7 +504,7 @@ public sealed partial class FindBar : UserControl
         CountText.Visibility = Visibility.Visible;
         UpdateCountText();
         DocumentSnapshot snapshot = editor.Document.Current;
-        var options = new SearchOptions { Scope = CurrentScope };
+        SearchOptions options = NewOptions(editor, CurrentScope, cts.Token, interactive: false);
         StartProgress();
         try
         {
@@ -524,7 +547,7 @@ public sealed partial class FindBar : UserControl
                 results.Dispose();
             }
         }
-        catch (OperationCanceledException)
+        catch (Exception ex) when (ex is OperationCanceledException or SearchAbortedException)
         {
         }
         finally
@@ -593,7 +616,8 @@ public sealed partial class FindBar : UserControl
         bool integer = kind == SearchKind.Integer;
         bool floating = kind == SearchKind.Float;
         EncodingChoice.Visibility = CaseChoice.Visibility = WordChoice.Visibility = EscapeChoice.Visibility = Show(text);
-        AlignChoice.Visibility = Show(text && TextEncodings.SupportsAlignment(SelectedEncoding));
+        AlignChoice.Visibility = Show(text && TextEncodings.SupportsAlignment(EffectiveEncodingId));
+        UpdateDisplayEncodingItem();
         IntBitsChoice.Visibility = SignChoice.Visibility = Show(integer);
         FloatChoice.Visibility = ToleranceChoice.Visibility = Show(floating);
         ToleranceValue.Visibility = Show(floating && ToleranceChoice.SelectedIndex > 0);
@@ -604,7 +628,7 @@ public sealed partial class FindBar : UserControl
         ValidateRange();
 
         // 検索語・条件・対象のビューが変わったときだけ、直前の一致と件数を忘れる (同じ条件で開き直しても置換を続けられる)。
-        string key = string.Join('|', _editor?.GetHashCode(), kind, Query.Text, SelectedEncoding, CaseChoice.IsChecked, WordChoice.IsChecked,
+        string key = string.Join('|', _editor?.GetHashCode(), kind, Query.Text, EffectiveEncodingId, CaseChoice.IsChecked, WordChoice.IsChecked,
             EscapeChoice.IsChecked, AlignChoice.IsChecked, SelectedBits, SignChoice.SelectedIndex, EndianChoice.SelectedIndex,
             FloatChoice.SelectedIndex, ToleranceChoice.SelectedIndex, ToleranceValue.Text, ScopeChoice.SelectedIndex, RangeStart.Text, RangeEnd.Text);
         if (key != _patternKey)
@@ -646,7 +670,7 @@ public sealed partial class FindBar : UserControl
     /// <summary>今の種類と条件で検索語のパターンを作る。誤りは <see cref="PatternException"/>。</summary>
     private SearchPattern BuildPattern(SearchKind kind) => kind switch
     {
-        SearchKind.Text => SearchPattern.FromText(Query.Text, TextEncodings.Get(SelectedEncoding), new TextSearchOptions
+        SearchKind.Text => SearchPattern.FromText(Query.Text, SearchEncoding, new TextSearchOptions
         {
             CaseSensitive = CaseChoice.IsChecked == true,
             UseEscapes = EscapeChoice.IsChecked == true,
@@ -807,14 +831,41 @@ public sealed partial class FindBar : UserControl
         }
     }
 
-    private TextEncodingId SelectedEncoding =>
-        EncodingChoice.SelectedItem is ComboBoxItem { Tag: TextEncodingId id } ? id : TextEncodingId.Ascii;
+    /// <summary>選んでいる文字コード (一覧の名前、または「表示中の文字コードに合わせる」)。</summary>
+    private string SelectedEncoding =>
+        EncodingChoice.SelectedItem is ComboBoxItem { Tag: string id } ? id : TextEncodings.DisplayEncodingId;
+
+    /// <summary>検索に使う文字コードの名前 (「表示中の文字コードに合わせる」なら、対象のタブの表示の文字コード)。</summary>
+    private string EffectiveEncodingId => SelectedEncoding == TextEncodings.DisplayEncodingId
+        ? Editor?.TextEncoding.Id ?? "ascii"
+        : SelectedEncoding;
+
+    /// <summary>テキストの検索・置換に使う文字コード (BOM なし)。</summary>
+    private Encoding SearchEncoding => TextEncodings.FromCatalogId(EffectiveEncodingId) ?? Encoding.ASCII;
+
+    /// <summary>「表示中の文字コードに合わせる」の項目に、今の表示の文字コードの名前を添える。</summary>
+    private void UpdateDisplayEncodingItem()
+    {
+        if (EncodingChoice.Items.Count > 0 && EncodingChoice.Items[0] is ComboBoxItem item)
+        {
+            string text = Editor is { } editor
+                ? Loc.Format("Find_Encoding_DisplayWith", editor.TextEncoding.Name)
+                : Loc.Get("Find_Encoding_Display");
+            if (!Equals(item.Content, text))
+            {
+                item.Content = text;
+            }
+        }
+    }
+
+    /// <summary>テスト用: 文字コードの一覧の項目の名前 (先頭は「表示中の文字コードに合わせる」)。</summary>
+    internal IReadOnlyList<string> EncodingIds => [.. EncodingChoice.Items.OfType<ComboBoxItem>().Select(i => (string)i.Tag)];
 
     private bool TryDecode(byte[] bytes, out string text)
     {
         try
         {
-            Encoding strict = Encoding.GetEncoding(TextEncodings.Get(SelectedEncoding).CodePage, EncoderFallback.ExceptionFallback, DecoderFallback.ExceptionFallback);
+            Encoding strict = Encoding.GetEncoding(SearchEncoding.CodePage, EncoderFallback.ExceptionFallback, DecoderFallback.ExceptionFallback);
             text = strict.GetString(bytes);
             return !text.Any(c => char.IsControl(c) && c is not ('\t' or '\r' or '\n'));
         }
@@ -826,25 +877,6 @@ public sealed partial class FindBar : UserControl
     }
 
     private static string ToHex(byte[] bytes) => string.Join(' ', bytes.Select(b => b.ToString("X2")));
-
-    private static string EncodingName(TextEncodingId id) => id switch
-    {
-        TextEncodingId.Ascii => "ASCII",
-        TextEncodingId.Ansi => $"ANSI ({TextEncodings.CodePage(id)})",
-        TextEncodingId.Oem => $"OEM ({TextEncodings.CodePage(id)})",
-        TextEncodingId.Ebcdic => "EBCDIC (37)",
-        TextEncodingId.Utf8 => "UTF-8",
-        TextEncodingId.Utf16LE => "UTF-16 LE",
-        TextEncodingId.Utf16BE => "UTF-16 BE",
-        TextEncodingId.Utf32LE => "UTF-32 LE",
-        TextEncodingId.Utf32BE => "UTF-32 BE",
-        TextEncodingId.ShiftJis => "Shift_JIS",
-        TextEncodingId.EucJp => "EUC-JP",
-        TextEncodingId.Gb18030 => "GB18030",
-        TextEncodingId.Big5 => "Big5",
-        TextEncodingId.EucKr => "EUC-KR",
-        _ => id.ToString(),
-    };
 
     // ---- イベント ----
 
@@ -869,6 +901,11 @@ public sealed partial class FindBar : UserControl
         if (ReferenceEquals(sender, KindChoice) && IsLoaded)
         {
             _kindChosen = true;
+        }
+
+        if (ReferenceEquals(sender, EndianChoice) && IsLoaded && !_settingEndian)
+        {
+            _endianChosen = true;
         }
 
         // Hex・数値の入力は左から右に固定する。テキストの検索は表示言語の向きに従う (UI-44 の仕様 2)。

@@ -86,7 +86,7 @@ public sealed class SearchResultsTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = Slow(path, 20) });
 
         // 1. テキスト (ASCII) で `@00000` をすべて検索する。
-        await OpenFindAsync(app, 1, "@00000", encoding: "ASCII");
+        await OpenFindAsync(app, 1, "@00000", encoding: "ASCII (7 bit)");
         await FindAllAsync(app);
 
         // 2. 2 件以上出て、まだ検索中の間に 2 行目をクリックする。
@@ -172,7 +172,7 @@ public sealed class SearchResultsTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = Slow(path, 100) });
 
         // 1. テキスト (ASCII) `@000000` で Alt+Enter。
-        await OpenFindAsync(app, 1, "@000000", encoding: "ASCII");
+        await OpenFindAsync(app, 1, "@000000", encoding: "ASCII (7 bit)");
         await FindAllAsync(app);
 
         // 2. 100 件以上になったら検索バーのキャンセルボタンを押す。

@@ -25,6 +25,9 @@ public sealed partial class MainWindow
 
     private const string InsertCountKey = "edit.insert.count";
 
+    /// <summary>範囲を選択の各欄の入力履歴 (EDIT-04 の仕様 10。state.json)。</summary>
+    private const string SelectRangeHistoryKey = "edit.selectRange.history.";
+
     private static CultureInfo Culture => CultureInfo.CurrentCulture;
 
     /// <summary>編集のダイアログを閉じた回数 (テストで、閉じた後の処理を待つため)。</summary>
@@ -63,9 +66,10 @@ public sealed partial class MainWindow
         CheckBox scroll = DialogParts.Check("SelectRange_ScrollToStart", Loc.Get("SelectRange_ScrollToStart"), true);
 
         var body = new StackPanel { Spacing = 8, MinWidth = 380 };
-        foreach ((TextBox box, TextBlock result) in fields.Values)
+        foreach ((RangeField field, (TextBox box, TextBlock result)) in fields)
         {
-            body.Children.Add(box);
+            // 各欄は直近 20 件の入力を候補として出す (仕様 10)。
+            body.Children.Add(DialogParts.WithHistory(box, SelectRangeHistoryKey + field.ToString().ToLowerInvariant()));
             body.Children.Add(result);
         }
 
@@ -130,6 +134,12 @@ public sealed partial class MainWindow
         if (await ShowEditDialogAsync(dialog) != ContentDialogResult.Primary || !model.CanConfirm)
         {
             return;
+        }
+
+        // 履歴には入力した欄だけを残す (計算で求めた欄は入力ではない)。
+        foreach ((RangeField field, (TextBox box, _)) in fields.Where(f => f.Key != model.Computed))
+        {
+            DialogParts.SaveHistory(box, SelectRangeHistoryKey + field.ToString().ToLowerInvariant());
         }
 
         model.Mode = modeExtend.IsChecked == true ? RangeSelectionMode.Extend : RangeSelectionMode.New;

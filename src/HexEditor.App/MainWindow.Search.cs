@@ -91,6 +91,9 @@ public sealed partial class MainWindow
         FindBar.Confirm = ConfirmAsync;
         FindBar.ReplaceAllCompleted += FindBar_ReplaceAllCompleted;
         FindBar.ReplaceFailed += (_, message) => ShowNotice(message, InfoBarSeverity.Error, Vm.Selected);
+        FindBar.AskUnreadable = AskUnreadableAsync;
+        FindBar.ResultReported += (_, message) => ShowStatusMessage(message, SearchResultMessageDuration);
+        InitializeSearchExtras();
         AutomationProperties.SetAutomationId(SearchResults, "SearchResults");
         SearchResults.Visibility = Visibility.Collapsed;
         SearchResults.WindowId = AppWindow.Id;
@@ -102,7 +105,8 @@ public sealed partial class MainWindow
             HidePanel(SearchResultsPanelId);
             FocusEditor();
         };
-        SearchResults.BookmarksRequested += (_, e) => AddSearchResultBookmarks(e.Items, e.Group);
+        SearchResults.BookmarksRequested += (_, e) => AddSearchResultBookmarks(e.Editor, e.Items, e.Group);
+        SearchResults.Confirm = ConfirmAsync;
         SearchResultsPanel.Now = () => (TestHooks.Time ?? TimeProvider.System).GetUtcNow();
         SearchResults.NoticeRequested += (_, n) => ShowNotice(n.Message, n.Severity);
         SearchResults.ActivateRequested += (_, editor) => ActivateEditor(editor);
@@ -152,6 +156,7 @@ public sealed partial class MainWindow
             }
         }, NeedsDocument);
         Commands.Register("search.clearHistory", () => FindBar.ClearHistory());
+        RegisterSearchExtraCommands();
     }
 
     /// <summary>
@@ -172,9 +177,9 @@ public sealed partial class MainWindow
     }
 
     /// <summary>結果一覧の「変換 &gt; ブックマークに」(FIND-21 の仕様 3): 結果のドキュメントのブックマークに、同じグループで加える。</summary>
-    private void AddSearchResultBookmarks(IReadOnlyList<(long Offset, long Length, string Name)> items, string group)
+    private void AddSearchResultBookmarks(Core.View.EditorState editor, IReadOnlyList<(long Offset, long Length, string Name)> items, string group)
     {
-        if (Vm.Documents.FirstOrDefault(d => d.Editor == SearchResults.Editor) is not { } doc)
+        if (Vm.Documents.FirstOrDefault(d => d.Editor == editor) is not { } doc)
         {
             return;
         }

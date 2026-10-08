@@ -5,6 +5,7 @@ using HexEditor.Core.Editing;
 using HexEditor.Core.Expressions;
 using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 
 namespace HexEditor.App.Controls;
@@ -22,7 +23,7 @@ internal sealed class FillContentPanel : StackPanel
     private readonly string _settingsKey;
     private readonly ComboBox _kind;
     private readonly TextBox _value, _pattern, _text, _min, _max, _seed, _start, _step, _filePath, _fileOffset, _fileLength;
-    private readonly ComboBox _size, _overflow, _origin;
+    private readonly ComboBox _size, _overflow, _origin, _textEncoding;
     private readonly CheckBox _bigEndian, _signed, _repeat;
     private readonly TextBlock _error;
     private readonly Dictionary<FillKind, StackPanel> _sections = [];
@@ -47,7 +48,19 @@ internal sealed class FillContentPanel : StackPanel
         Section(FillKind.HexPattern, _pattern);
 
         _text = DialogParts.Field("Fill_Text", Loc.Format("Fill_Text", editor.TextEncoding.Name), string.Empty, monospace: false);
-        Section(FillKind.Text, _text);
+
+        // テキストの文字コード: 既定は表示中の文字コード。表示の文字コードの一覧から選べる (仕様 2 の表)。
+        _textEncoding = new ComboBox { Header = Loc.Get("Fill_TextEncoding"), MinWidth = 220 };
+        AutomationProperties.SetAutomationId(_textEncoding, "Fill_TextEncoding");
+        AutomationProperties.SetName(_textEncoding, Loc.Get("Fill_TextEncoding"));
+        _textEncoding.Items.Add(new ComboBoxItem { Content = Loc.Format("Fill_TextEncodingDisplay", editor.TextEncoding.Name), Tag = DisplayEncoding });
+        foreach (EncodingEntry entry in EncodingCatalog.All.Where(e => e.Selectable))
+        {
+            _textEncoding.Items.Add(new ComboBoxItem { Content = MainWindow.EncodingDisplayText(entry), Tag = entry.Id });
+        }
+
+        _textEncoding.SelectedIndex = 0;
+        Section(FillKind.Text, _text, _textEncoding);
 
         _min = DialogParts.Field("Fill_RandomMin", Loc.Get("Fill_RandomMin"), "00");
         _max = DialogParts.Field("Fill_RandomMax", Loc.Get("Fill_RandomMax"), "FF");
@@ -93,7 +106,7 @@ internal sealed class FillContentPanel : StackPanel
             box.TextChanged += (_, _) => OnChanged();
         }
 
-        foreach (ComboBox combo in new[] { _kind, _size, _overflow, _origin })
+        foreach (ComboBox combo in new[] { _kind, _size, _overflow, _origin, _textEncoding })
         {
             combo.SelectionChanged += (_, _) => OnChanged();
         }
@@ -178,14 +191,15 @@ internal sealed class FillContentPanel : StackPanel
                 break;
             case FillKind.Text:
                 string text = FillText.Unescape(_text.Text);
+                TextEncoding encoding = SelectedTextEncoding;
                 if (text.Length == 0)
                 {
                     error ??= Loc.Get("Fill_Error_EmptyPattern");
                     DialogParts.MarkInvalid(_text, true);
                 }
-                else if (!_editor.TextEncoding.TryEncode(text, out byte[] encoded))
+                else if (!encoding.TryEncode(text, out byte[] encoded))
                 {
-                    error ??= Loc.Format("Notice_NotEncodableChar", _editor.TextEncoding.FirstUnencodable(text) ?? text, _editor.TextEncoding.Name);
+                    error ??= Loc.Format("Notice_NotEncodableChar", encoding.FirstUnencodable(text) ?? text, encoding.Name);
                     DialogParts.MarkInvalid(_text, true);
                 }
                 else if (encoded.Length > FillSpec.MaxPatternLength)
@@ -262,6 +276,7 @@ internal sealed class FillContentPanel : StackPanel
             ["overflow"] = _overflow.SelectedIndex.ToString(System.Globalization.CultureInfo.InvariantCulture),
             ["repeat"] = (_repeat.IsChecked == true).ToString(),
             ["origin"] = _origin.SelectedIndex.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            ["textEncoding"] = SelectedTextEncodingId,
         };
         AppState.SetString(_settingsKey, JsonSerializer.Serialize(state));
     }
@@ -294,6 +309,9 @@ internal sealed class FillContentPanel : StackPanel
             _overflow.SelectedIndex = Math.Clamp(Index("overflow"), 0, 1);
             _repeat.IsChecked = Get("repeat", "True") == "True";
             _origin.SelectedIndex = Math.Clamp(Index("origin"), 0, 1);
+            string encodingId = Get("textEncoding", DisplayEncoding);
+            _textEncoding.SelectedItem = _textEncoding.Items.OfType<ComboBoxItem>()
+                .FirstOrDefault(i => string.Equals((string)i.Tag, encodingId, StringComparison.OrdinalIgnoreCase)) ?? _textEncoding.Items[0];
         }
         catch (JsonException)
         {
@@ -316,8 +334,19 @@ internal sealed class FillContentPanel : StackPanel
         Children.Add(panel);
     }
 
+    /// <summary>テキストの文字コードの「表示中の文字コード」。</summary>
+    private const string DisplayEncoding = "display";
+
+    /// <summary>選んでいるテキストの文字コードの名前 (表示中の文字コードなら <c>display</c>)。</summary>
+    private string SelectedTextEncodingId => _textEncoding.SelectedItem is ComboBoxItem { Tag: string id } ? id : DisplayEncoding;
+
+    /// <summary>テキストの内容を符号化する文字コード。</summary>
+    private TextEncoding SelectedTextEncoding =>
+        SelectedTextEncodingId == DisplayEncoding ? _editor.TextEncoding : TextEncoding.FromId(SelectedTextEncodingId);
+
     private void UpdateSections()
     {
+        _text.Header = Loc.Format("Fill_Text", SelectedTextEncoding.Name);
         foreach ((FillKind kind, StackPanel panel) in _sections)
         {
             panel.Visibility = kind == Kind ? Visibility.Visible : Visibility.Collapsed;

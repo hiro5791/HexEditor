@@ -188,10 +188,13 @@ public sealed partial class HexView
         }
     }
 
-    /// <summary>入力ごとの読み上げ (EDIT-11 の仕様 8)。入力した位置 (カーソルの直前のバイト) と値。</summary>
+    /// <summary>
+    /// 入力ごとの読み上げ (EDIT-11 の仕様 8)。入力した位置 (カーソルの直前のバイト) と値。設定「読み上げの詳しさ」が「読み上げない」なら
+    /// 読み上げない (仕様 8 の「設定でオフにできる」)。
+    /// </summary>
     private void AnnounceTyped()
     {
-        if (_editor is null)
+        if (_editor is null || AnnouncementVerbosity == AnnounceVerbosity.None)
         {
             return;
         }

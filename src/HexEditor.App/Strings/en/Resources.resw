@@ -2407,4 +2407,165 @@ Details were written to:
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>base address row shift</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>View: Continuation marks in multibyte characters</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>utf-8 multibyte</value></data>
+  <data name="Find_Encoding_Display" xml:space="preserve"><value>Match the displayed encoding</value></data>
+  <data name="Find_Encoding_DisplayWith" xml:space="preserve"><value>Match the displayed encoding ({0})</value></data>
+  <data name="Find_AbortedUnreadable" xml:space="preserve"><value>Search stopped: the data at {0} can't be read.</value></data>
+  <data name="Find_Unreadable_Ask" xml:space="preserve"><value>Can't read {1} bytes at {0} ({2}). Skip the unreadable data and continue searching?</value></data>
+  <data name="Find_Unreadable_Skip" xml:space="preserve"><value>Skip and continue</value></data>
+  <data name="Find_Unreadable_Abort" xml:space="preserve"><value>Stop searching</value></data>
+  <data name="Find_Unreadable_Reason_Unallocated" xml:space="preserve"><value>unallocated</value></data>
+  <data name="Find_Unreadable_Reason_AccessDenied" xml:space="preserve"><value>access denied</value></data>
+  <data name="Find_Unreadable_Reason_IoError" xml:space="preserve"><value>I/O error</value></data>
+  <data name="Find_Unreadable_Reason_Disconnected" xml:space="preserve"><value>device disconnected</value></data>
+  <data name="Set_search_chunkSize" xml:space="preserve"><value>Search chunk size (KiB)</value></data>
+  <data name="SetDesc_search_chunkSize" xml:space="preserve"><value>Size of the blocks read at a time while searching (256 KiB to 64 MiB). Results don't change.</value></data>
+  <data name="Set_search_readErrors" xml:space="preserve"><value>When data can't be read while searching</value></data>
+  <data name="SetDesc_search_readErrors" xml:space="preserve"><value>What to do with unreadable data such as bad sectors. Skipped ranges are listed with the results.</value></data>
+  <data name="SetOpt_search_readErrors_ask" xml:space="preserve"><value>Ask</value></data>
+  <data name="SetOpt_search_readErrors_skip" xml:space="preserve"><value>Skip</value></data>
+  <data name="SetOpt_search_readErrors_abort" xml:space="preserve"><value>Stop searching</value></data>
+  <data name="Set_search_highlightMatches" xml:space="preserve"><value>Highlight matches</value></data>
+  <data name="SetDesc_search_highlightMatches" xml:space="preserve"><value>Highlight the visible matches of the find bar and the search results in the editor.</value></data>
+  <data name="Set_search_results_newTab" xml:space="preserve"><value>Show each Find all in a new tab</value></data>
+  <data name="SetDesc_search_results_newTab" xml:space="preserve"><value>When off, a new search replaces the results that aren't pinned.</value></data>
+  <data name="SearchResults_Research.Content" xml:space="preserve"><value>Search again</value></data>
+  <data name="SearchResults_State_Stale" xml:space="preserve"><value>outdated</value></data>
+  <data name="SearchResults_TargetSelected.Text" xml:space="preserve"><value>Selected rows</value></data>
+  <data name="SearchResults_TargetAll.Text" xml:space="preserve"><value>All rows</value></data>
+  <data name="SearchResults_TargetSelectedCount" xml:space="preserve"><value>Selected rows ({0})</value></data>
+  <data name="SearchResults_TargetAllCount" xml:space="preserve"><value>All rows ({0})</value></data>
+  <data name="SearchResults_Pin_Name" xml:space="preserve"><value>Pin these results</value></data>
+  <data name="SearchResults_TabPinned" xml:space="preserve"><value>{0} (pinned)</value></data>
+  <data name="SearchResults_TabClose" xml:space="preserve"><value>Close {0}</value></data>
+  <data name="SearchResults_TabTitle" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="SearchResults_BookmarksConfirm_Title" xml:space="preserve"><value>Convert to bookmarks</value></data>
+  <data name="SearchResults_BookmarksConfirm_Body" xml:space="preserve"><value>{0} results will become bookmarks. The bookmark list may become slow.</value></data>
+  <data name="SearchResults_BookmarksConfirm_Convert" xml:space="preserve"><value>Convert to bookmarks</value></data>
+  <data name="SearchResults_BookmarksConfirm_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="SearchResults_Menu_GoTo" xml:space="preserve"><value>Go to the match</value></data>
+  <data name="SearchResults_Skipped" xml:space="preserve"><value>Unreadable ranges ({0})</value></data>
+  <data name="SearchResults_SkippedItem" xml:space="preserve"><value>{0}: {1} bytes ({2})</value></data>
+  <data name="Command_NoSearchResults" xml:space="preserve"><value>There are no search results.</value></data>
+  <data name="Cmd_search_replaceAll" xml:space="preserve"><value>Replace all</value></data>
+  <data name="CmdAlias_search_replaceAll" xml:space="preserve"><value>substitute everything</value></data>
+  <data name="Cmd_search_results_toBookmarks" xml:space="preserve"><value>Convert search results to bookmarks</value></data>
+  <data name="CmdAlias_search_results_toBookmarks" xml:space="preserve"><value>results bookmark</value></data>
+  <data name="Cmd_search_results_export" xml:space="preserve"><value>Export search results</value></data>
+  <data name="CmdAlias_search_results_export" xml:space="preserve"><value>results csv json save</value></data>
+  <data name="Cmd_edit_copyAs_hexSpaced" xml:space="preserve"><value>Copy as: Hex string (Space separated)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexSpaced" xml:space="preserve"><value>copy as hex string space separated</value></data>
+  <data name="Cmd_edit_copyAs_hexPlain" xml:space="preserve"><value>Copy as: Hex string (No separator)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexPlain" xml:space="preserve"><value>copy as hex string no separator</value></data>
+  <data name="Cmd_edit_copyAs_hexCommaPrefixed" xml:space="preserve"><value>Copy as: Hex string (0x, comma separated)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexCommaPrefixed" xml:space="preserve"><value>copy as hex string 0x, comma separated</value></data>
+  <data name="Cmd_edit_copyAs_hexEscaped" xml:space="preserve"><value>Copy as: Hex string (\x escapes)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexEscaped" xml:space="preserve"><value>copy as hex string \x escapes</value></data>
+  <data name="Cmd_edit_copyAs_hexUrl" xml:space="preserve"><value>Copy as: Hex string (URL encoding (all bytes))</value></data>
+  <data name="CmdAlias_edit_copyAs_hexUrl" xml:space="preserve"><value>copy as hex string url encoding (all bytes)</value></data>
+  <data name="Cmd_edit_copyAs_hexCustom" xml:space="preserve"><value>Copy as: Hex string (Custom separator)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexCustom" xml:space="preserve"><value>copy as hex string custom separator</value></data>
+  <data name="Cmd_edit_copyAs_decimal" xml:space="preserve"><value>Copy as: Numbers (Decimal)</value></data>
+  <data name="CmdAlias_edit_copyAs_decimal" xml:space="preserve"><value>copy as numbers decimal</value></data>
+  <data name="Cmd_edit_copyAs_octal" xml:space="preserve"><value>Copy as: Numbers (Octal)</value></data>
+  <data name="CmdAlias_edit_copyAs_octal" xml:space="preserve"><value>copy as numbers octal</value></data>
+  <data name="Cmd_edit_copyAs_binary" xml:space="preserve"><value>Copy as: Numbers (Binary)</value></data>
+  <data name="CmdAlias_edit_copyAs_binary" xml:space="preserve"><value>copy as numbers binary</value></data>
+  <data name="Cmd_edit_copyAs_arrayC" xml:space="preserve"><value>Copy as: Array (C)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayC" xml:space="preserve"><value>copy as array c</value></data>
+  <data name="Cmd_edit_copyAs_arrayCpp" xml:space="preserve"><value>Copy as: Array (C++)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayCpp" xml:space="preserve"><value>copy as array c++</value></data>
+  <data name="Cmd_edit_copyAs_arrayCSharp" xml:space="preserve"><value>Copy as: Array (C#)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayCSharp" xml:space="preserve"><value>copy as array c#</value></data>
+  <data name="Cmd_edit_copyAs_arrayJava" xml:space="preserve"><value>Copy as: Array (Java)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayJava" xml:space="preserve"><value>copy as array java</value></data>
+  <data name="Cmd_edit_copyAs_arrayJavaScript" xml:space="preserve"><value>Copy as: Array (JavaScript / TypeScript)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayJavaScript" xml:space="preserve"><value>copy as array javascript / typescript</value></data>
+  <data name="Cmd_edit_copyAs_arrayPython" xml:space="preserve"><value>Copy as: Array (Python)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayPython" xml:space="preserve"><value>copy as array python</value></data>
+  <data name="Cmd_edit_copyAs_arrayRust" xml:space="preserve"><value>Copy as: Array (Rust)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayRust" xml:space="preserve"><value>copy as array rust</value></data>
+  <data name="Cmd_edit_copyAs_arrayGo" xml:space="preserve"><value>Copy as: Array (Go)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayGo" xml:space="preserve"><value>copy as array go</value></data>
+  <data name="Cmd_edit_copyAs_arrayPascal" xml:space="preserve"><value>Copy as: Array (Pascal / Delphi)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayPascal" xml:space="preserve"><value>copy as array pascal / delphi</value></data>
+  <data name="Cmd_edit_copyAs_arrayVisualBasic" xml:space="preserve"><value>Copy as: Array (VB.NET)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayVisualBasic" xml:space="preserve"><value>copy as array vb.net</value></data>
+  <data name="Cmd_edit_copyAs_arrayPureBasic" xml:space="preserve"><value>Copy as: Array (PureBasic)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayPureBasic" xml:space="preserve"><value>copy as array purebasic</value></data>
+  <data name="Cmd_edit_copyAs_arrayAssembly" xml:space="preserve"><value>Copy as: Array (Assembly)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayAssembly" xml:space="preserve"><value>copy as array assembly</value></data>
+  <data name="Cmd_edit_copyAs_base64" xml:space="preserve"><value>Copy as: Base64</value></data>
+  <data name="CmdAlias_edit_copyAs_base64" xml:space="preserve"><value>copy as encoding base64</value></data>
+  <data name="Cmd_edit_copyAs_base32" xml:space="preserve"><value>Copy as: Base32</value></data>
+  <data name="CmdAlias_edit_copyAs_base32" xml:space="preserve"><value>copy as encoding base32</value></data>
+  <data name="Cmd_edit_copyAs_ascii85" xml:space="preserve"><value>Copy as: Ascii85</value></data>
+  <data name="CmdAlias_edit_copyAs_ascii85" xml:space="preserve"><value>copy as encoding ascii85</value></data>
+  <data name="Cmd_edit_copyAs_uUEncode" xml:space="preserve"><value>Copy as: UUEncode</value></data>
+  <data name="CmdAlias_edit_copyAs_uUEncode" xml:space="preserve"><value>copy as encoding uuencode</value></data>
+  <data name="Cmd_edit_copyAs_xXEncode" xml:space="preserve"><value>Copy as: XXEncode</value></data>
+  <data name="CmdAlias_edit_copyAs_xXEncode" xml:space="preserve"><value>copy as encoding xxencode</value></data>
+  <data name="Cmd_edit_copyAs_quotedPrintable" xml:space="preserve"><value>Copy as: Quoted-Printable</value></data>
+  <data name="CmdAlias_edit_copyAs_quotedPrintable" xml:space="preserve"><value>copy as encoding quoted-printable</value></data>
+  <data name="Cmd_edit_copyAs_html" xml:space="preserve"><value>Copy as: HTML</value></data>
+  <data name="CmdAlias_edit_copyAs_html" xml:space="preserve"><value>copy as document html</value></data>
+  <data name="Cmd_edit_copyAs_rtf" xml:space="preserve"><value>Copy as: RTF</value></data>
+  <data name="CmdAlias_edit_copyAs_rtf" xml:space="preserve"><value>copy as document rtf</value></data>
+  <data name="Cmd_edit_copyAs_markdown" xml:space="preserve"><value>Copy as: Markdown</value></data>
+  <data name="CmdAlias_edit_copyAs_markdown" xml:space="preserve"><value>copy as document markdown</value></data>
+  <data name="Cmd_edit_copyAs_tex" xml:space="preserve"><value>Copy as: TeX</value></data>
+  <data name="CmdAlias_edit_copyAs_tex" xml:space="preserve"><value>copy as document tex</value></data>
+  <data name="Cmd_edit_copyAs_screenDump" xml:space="preserve"><value>Copy as: As shown on screen</value></data>
+  <data name="CmdAlias_edit_copyAs_screenDump" xml:space="preserve"><value>copy as screen as shown on screen</value></data>
+  <data name="Cmd_edit_copyAs_text" xml:space="preserve"><value>Copy as: Text (decoded)</value></data>
+  <data name="CmdAlias_edit_copyAs_text" xml:space="preserve"><value>copy as screen text (decoded)</value></data>
+  <data name="Cmd_edit_copyAs_intelHex" xml:space="preserve"><value>Copy as: Intel HEX</value></data>
+  <data name="CmdAlias_edit_copyAs_intelHex" xml:space="preserve"><value>copy as text format intel hex</value></data>
+  <data name="Cmd_edit_copyAs_sRecord" xml:space="preserve"><value>Copy as: Motorola S-record</value></data>
+  <data name="CmdAlias_edit_copyAs_sRecord" xml:space="preserve"><value>copy as text format motorola s-record</value></data>
+  <data name="Cmd_edit_copyAs_json" xml:space="preserve"><value>Copy as: JSON</value></data>
+  <data name="CmdAlias_edit_copyAs_json" xml:space="preserve"><value>copy as text format json</value></data>
+  <data name="Cmd_edit_copyAs_position" xml:space="preserve"><value>Copy as: Offset</value></data>
+  <data name="CmdAlias_edit_copyAs_position" xml:space="preserve"><value>copy as position offset</value></data>
+  <data name="HexView_Menu_CopyAs" xml:space="preserve"><value>Copy As</value></data>
+  <data name="HexView_Menu_CopyAsChoose" xml:space="preserve"><value>Choose a format...</value></data>
+  <data name="HexView_Menu_CopyAsFormat" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fill_TextEncoding" xml:space="preserve"><value>Encoding</value></data>
+  <data name="Fill_TextEncodingDisplay" xml:space="preserve"><value>Displayed encoding ({0})</value></data>
+  <data name="Dialog_History" xml:space="preserve"><value>Recent entries: {0}</value></data>
+  <data name="Set_edit_defaultInputMode" xml:space="preserve"><value>Input mode for newly opened files</value></data>
+  <data name="SetDesc_edit_defaultInputMode" xml:space="preserve"><value>Files that can't change length always use overwrite mode.</value></data>
+  <data name="SetOpt_edit_defaultInputMode_overwrite" xml:space="preserve"><value>Overwrite</value></data>
+  <data name="SetOpt_edit_defaultInputMode_insert" xml:space="preserve"><value>Insert</value></data>
+  <data name="Set_edit_overwriteSelectionTyping" xml:space="preserve"><value>Typing over a selection in overwrite mode</value></data>
+  <data name="SetDesc_edit_overwriteSelectionTyping" xml:space="preserve"><value>What happens to the selection when you type in overwrite mode.</value></data>
+  <data name="SetOpt_edit_overwriteSelectionTyping_overwriteFromStart" xml:space="preserve"><value>Overwrite from the start</value></data>
+  <data name="SetOpt_edit_overwriteSelectionTyping_zeroFirst" xml:space="preserve"><value>Fill the selection with 00, then overwrite</value></data>
+  <data name="Set_edit_text_enterKey" xml:space="preserve"><value>Enter in the text column</value></data>
+  <data name="SetDesc_edit_text_enterKey" xml:space="preserve"><value>The line break written in the current encoding when you press Enter in the text column.</value></data>
+  <data name="SetOpt_edit_text_enterKey_none" xml:space="preserve"><value>Do nothing</value></data>
+  <data name="SetOpt_edit_text_enterKey_crlf" xml:space="preserve"><value>Write CR LF</value></data>
+  <data name="SetOpt_edit_text_enterKey_lf" xml:space="preserve"><value>Write LF</value></data>
+  <data name="SetOpt_edit_text_enterKey_cr" xml:space="preserve"><value>Write CR</value></data>
+  <data name="Set_edit_backspaceInOverwrite" xml:space="preserve"><value>Backspace in overwrite mode</value></data>
+  <data name="SetDesc_edit_backspaceInOverwrite" xml:space="preserve"><value>In insert mode, Backspace always deletes the previous byte.</value></data>
+  <data name="SetOpt_edit_backspaceInOverwrite_moveCursor" xml:space="preserve"><value>Move the cursor back</value></data>
+  <data name="SetOpt_edit_backspaceInOverwrite_zeroAndMove" xml:space="preserve"><value>Set the previous byte to 00 and move back</value></data>
+  <data name="Set_edit_deleteKeepsLengthInOverwrite" xml:space="preserve"><value>Delete keeps the length in overwrite mode</value></data>
+  <data name="SetDesc_edit_deleteKeepsLengthInOverwrite" xml:space="preserve"><value>Fills the selection or the byte at the cursor with 00 instead of removing it.</value></data>
+  <data name="Set_edit_undo_coalesceSeconds" xml:space="preserve"><value>Group typing for undo (seconds)</value></data>
+  <data name="SetDesc_edit_undo_coalesceSeconds" xml:space="preserve"><value>Typing within this time is undone at once. 0 doesn't group typing.</value></data>
+  <data name="Set_edit_undo_clearOnSave" xml:space="preserve"><value>Clear the undo history when saving</value></data>
+  <data name="SetDesc_edit_undo_clearOnSave" xml:space="preserve"><value>After saving, you can't undo the changes made before the save.</value></data>
+  <data name="Set_edit_paste_selectPasted" xml:space="preserve"><value>Select the pasted data</value></data>
+  <data name="SetDesc_edit_paste_selectPasted" xml:space="preserve"><value>When off, the cursor is placed after the pasted data.</value></data>
+  <data name="Set_edit_pasteOverwrite_fitSelection" xml:space="preserve"><value>Fit overwrite paste to the selection</value></data>
+  <data name="SetDesc_edit_pasteOverwrite_fitSelection" xml:space="preserve"><value>With a selection, Ctrl+B writes no more than the selected length.</value></data>
+  <data name="Set_clipboard_maxSizeMiB" xml:space="preserve"><value>Maximum clipboard size (MiB)</value></data>
+  <data name="SetDesc_clipboard_maxSizeMiB" xml:space="preserve"><value>Larger selections can be pasted only inside HexEditor (1 to 2048 MiB).</value></data>
+  <data name="Set_clipboard_hex_separator" xml:space="preserve"><value>Separator in copied hex</value></data>
+  <data name="SetDesc_clipboard_hex_separator" xml:space="preserve"><value>Text between bytes when you copy from the hex column, for example a space or a comma.</value></data>
+  <data name="Set_clipboard_hex_upperCase" xml:space="preserve"><value>Uppercase in copied hex</value></data>
+  <data name="SetDesc_clipboard_hex_upperCase" xml:space="preserve"><value>Copies DE AD instead of de ad.</value></data>
+  <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Bytes per line in copied hex</value></data>
+  <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Inserts a line break after this many bytes. 0 doesn't add line breaks.</value></data>
 </root>

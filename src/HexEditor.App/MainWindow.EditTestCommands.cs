@@ -31,6 +31,12 @@ public sealed partial class MainWindow
         // 開いている ContentDialog のボタン (PrimaryButton・SecondaryButton・CloseButton) を、アプリの中で同期して押す。
         "dialogButton" => TestDialogButton(request["name"]!.GetValue<string>()),
 
+        // 入力欄に付けた入力履歴の候補 (EDIT-04 の仕様 10)。
+        "fieldHistory" => new JsonObject
+        {
+            ["items"] = new JsonArray([.. Controls.DialogParts.HistoryOf(request["id"]!.GetValue<string>()).Select(t => (JsonNode?)t)]),
+        },
+
         // 開いている ContentDialog の数 (閉じる動きが終わるまでは数える)。
         "openDialogs" => new JsonObject
         {

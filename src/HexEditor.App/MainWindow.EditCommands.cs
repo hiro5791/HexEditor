@@ -33,6 +33,7 @@ public sealed partial class MainWindow
         Commands.Register("edit.copyAs", () => CopyAs_Click(this, e), NeedsDocument);
         Commands.Register("edit.copyAsLast", () => CopyAsLast_Click(this, e),
             () => NeedsDocument(_ => AppState.GetString(CopyAsLastKey, string.Empty).Length > 0 ? null : Loc.Get("Command_NoPreviousFormat")));
+        RegisterCopyAsFormatCommands();
         Commands.Register("edit.pasteSpecial", () => PasteSpecial_Click(this, e), () => NeedsEditable());
         Commands.Register("edit.selectRange", () => SelectRange_Click(this, e),
             () => NeedsDocument(d => d.Document.Length > 0 ? null : Loc.Get("Command_EmptyDocument")));
@@ -56,9 +57,10 @@ public sealed partial class MainWindow
     /// </summary>
     private void ExtendHexViewEditMenu(MenuFlyout menu)
     {
+        // 形式を選択してコピーは、よく使う形式のサブメニュー付き (EDIT-25 の「呼び出し」)。
+        ExtendHexViewCopyAsMenu(menu);
         foreach ((string after, string id, string textKey) in new[]
         {
-            ("HexViewMenu_Copy", "edit.copyAs", "Cmd_edit_copyAs"),
             ("HexViewMenu_PasteOverwrite", "edit.pasteSpecial", "Cmd_edit_pasteSpecial"),
             ("HexViewMenu_Delete", "edit.insertBytes", "Cmd_edit_insertBytes"),
             ("HexViewMenu_Delete", "edit.fill", "Cmd_edit_fill"),

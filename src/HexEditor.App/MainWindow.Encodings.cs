@@ -81,7 +81,7 @@ public sealed partial class MainWindow
             .Where(id => EncodingCatalog.Find(id) is { Selectable: true }).Take(EncodingCatalog.RecentLimit)];
 
     /// <summary>一覧の表示名 (例: <c>932 Japanese (Shift-JIS)</c>。ANSI・OEM は実際のコードページ番号を入れる)。</summary>
-    private static string EncodingDisplayText(EncodingEntry entry)
+    internal static string EncodingDisplayText(EncodingEntry entry)
     {
         string name = EncodingName(entry);
         return entry.Group is EncodingGroup.Basic or EncodingGroup.Unicode && !entry.Stateful ? name : entry.Label + " " + name;

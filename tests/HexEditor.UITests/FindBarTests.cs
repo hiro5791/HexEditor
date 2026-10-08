@@ -37,7 +37,7 @@ public sealed class FindBarTests
 
         // 5. 種類を「テキスト」(ASCII) にしてから 0x41 から 4 バイト: ABCD。
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 1 });
-        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII" });
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII (7 bit)" });
         await app.UiaInvokeAsync("Find_Close");
         await SelectAndOpenAsync(app, 0x41, 4);
         Assert.Equal("ABCD", await QueryAsync(app));
@@ -202,7 +202,7 @@ public sealed class FindBarTests
         await app.KeyAsync("F", ctrl: true);
         await app.IdleAsync();
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 1 });
-        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII" });
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII (7 bit)" });
         await app.UiaSetValueAsync("Find_Query", text);
     }
 

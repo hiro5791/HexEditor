@@ -157,7 +157,7 @@
 7. 確定すると、指定範囲を選択し、アンカーを開始、カーソルを終了の次に置く。
 8. 長さ 0 は許可しない (確定ボタンを無効にする)。
 9. 入力欄の横に解釈結果 (10 進と 16 進) を表示する (00-overview.md 9 章)。
-10. 入力履歴: 各欄は直近 20 件の入力を候補として出す。
+10. 入力履歴: 各欄は直近 20 件の入力を候補として出す。候補は欄の右の「履歴」ボタンか Alt+↓ で開き、選ぶと欄に入れる。確定したときに入力した欄 (計算で求めた欄を除く) の文字列を履歴に加え、アプリの状態 (09 の UI-23 の `state.json`) に保存する。
 
 **画面**: 小さなダイアログ (ContentDialog)。3 つの入力欄、選択モードのラジオボタン、チェックボックス、「選択」ボタンと「キャンセル」ボタン。
 
@@ -408,7 +408,7 @@
    | 多バイトの数値 (int16 / float など) | セルでの直接入力はできない。Enter でそのセルの値を編集するポップアップを開く (データインスペクタ (05) と同じ入力規則) |
 
 7. 入力したバイトは「変更されたバイト」として強調表示する (02)。
-8. 入力ごとに、スクリーンリーダーへ「オフセット 0x…、値 0x…」を通知する (設定でオフにできる)。
+8. 入力ごとに、スクリーンリーダーへ「オフセット 0x…、値 0x…」を通知する (設定でオフにできる。09 の UI-51 の「読み上げの詳しさ」を「読み上げない」にする)。
 
 **画面**: カーソルは現在のニブルの 1 文字を反転表示する。
 
@@ -1762,3 +1762,26 @@
 - [ ] PNG ファイルの IDAT チャンクの zlib データを派生ドキュメントで開き、1 バイト変えて書き戻すと、元のファイルの該当範囲が再圧縮されたデータに置き換わる。
 - [ ] 書き戻しを元のドキュメントで Ctrl+Z 1 回で取り消せる。
 - [ ] 元のドキュメントを閉じると、派生ドキュメントの「元に書き戻す」ボタンが無効になる。
+
+## 11. この文書で使う設定の一覧
+
+この文書で定めた設定のキーと既定値。設定画面 (09 の UI-22) の「編集」の区画に出す。設定ファイルの形式は 09 の UI-23。
+
+| キー | 既定値 | 定める機能 |
+| --- | --- | --- |
+| `edit.defaultInputMode` | `overwrite` (`insert` も選べる) | EDIT-10 の仕様 1 |
+| `edit.overwriteSelectionTyping` | `overwriteFromStart` (`zeroFirst` も選べる) | EDIT-11 の仕様 3 |
+| `edit.text.enterKey` | `none` (`crlf` / `lf` / `cr`) | EDIT-12 の仕様 7 |
+| `edit.backspaceInOverwrite` | `moveCursor` (`zeroAndMove` も選べる) | EDIT-13 の仕様 3 |
+| `edit.deleteKeepsLengthInOverwrite` | `false` | EDIT-13 の仕様 4 |
+| `edit.undo.coalesceSeconds` | `2` (0〜10) | EDIT-19 の仕様 5 |
+| `edit.undo.clearOnSave` | `false` | EDIT-19 の仕様 9 |
+| `clipboard.maxSizeMiB` | `64` (1〜2048) | EDIT-22 の仕様 4 |
+| `clipboard.hex.separator` / `clipboard.hex.upperCase` / `clipboard.hex.bytesPerLine` | 空白 1 つ / `true` / `0` (改行なし) | EDIT-22 の仕様 2 (コピーする Hex 文字列の書式) |
+| `edit.paste.detectWithoutConfirmation` | `false` | EDIT-23 の仕様 2 |
+| `edit.pasteOverwrite.fitSelection` | `false` | EDIT-23 の仕様 6 |
+| `edit.paste.selectPasted` | `true` | EDIT-23 の仕様 7 |
+| `edit.pasteSpecial.preferLast` | `true` | EDIT-26 の仕様 6 |
+| `clipboard.compatFormats` | `true` | EDIT-27 |
+
+入力ごとの読み上げ (EDIT-11 の仕様 8) は、09 の UI-51 の設定「読み上げの詳しさ」(`a11y.announce.verbosity`) を「読み上げない」にするとオフになる。

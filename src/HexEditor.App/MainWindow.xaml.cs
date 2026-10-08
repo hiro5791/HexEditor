@@ -53,6 +53,7 @@ public sealed partial class MainWindow : Window
         InitializeTabs();
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
         InitializeSearch();
+        InitializeEditingSettings();
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
         InitializeExternalChanges();
@@ -570,7 +571,8 @@ public sealed partial class MainWindow : Window
             // 検索バーが開いていれば検索バーの一致、閉じていても結果一覧が開いていれば一覧の一致 (FIND-20 の仕様 10)。
             bool active = FindBar.IsOpen && view.Editor == FindBar.Editor;
             bool results = !active && SearchResults.IsOpen && SearchResults.Shows(view.Editor);
-            view.MatchProvider = active ? FindBar.MatchesInView : results ? SearchResults.MatchesInView : null;
+            // 一致の強調は設定で無効にできる (FIND-04 の仕様 9)。
+            view.MatchProvider = !MatchHighlightEnabled ? null : active ? FindBar.MatchesInView : results ? SearchResults.MatchesInView : null;
             view.SetSearchMarkers(active ? FindBar.MarkerOffsets() : null);
         }
     }

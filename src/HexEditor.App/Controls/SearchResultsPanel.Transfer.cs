@@ -41,18 +41,34 @@ public sealed partial class SearchResultsPanel
             _movedRuns[running] = target;
         }
 
-        Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
-        HighlightsChanged?.Invoke(this, EventArgs.Empty);
-        Closed?.Invoke(this, EventArgs.Empty);
+        string kindName = _kindName, query = _query;
+        System.Text.Encoding encoding = _encoding;
 
-        target.Receive(groups, running, _kindName, _query, _encoding);
+        // 移したタブを閉じる。他のタブ (FIND-20 の仕様 3) が残っていれば、それを表示する。
+        if (_activeTab >= 0 && _tabs.Count > 1)
+        {
+            _tabs.RemoveAt(_activeTab);
+            _activeTab = -1;
+            LoadTab(_tabs.Count - 1);
+        }
+        else
+        {
+            _tabs.Clear();
+            _activeTab = -1;
+            UpdateTabStrip();
+            Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            HighlightsChanged?.Invoke(this, EventArgs.Empty);
+            Closed?.Invoke(this, EventArgs.Empty);
+        }
+
+        target.Receive(groups, running, kindName, query, encoding);
         return true;
     }
 
     private void Receive(List<Group> groups, CancellationTokenSource? running, string kindName, string query, System.Text.Encoding encoding)
     {
-        _running?.Cancel();
-        Detach();
+        // 移した先では新しいタブに出す (移した先の結果は置き換えない)。
+        OpenNewTab();
         foreach (Group g in groups)
         {
             g.Factory = null;
@@ -68,8 +84,9 @@ public sealed partial class SearchResultsPanel
         _encoding = encoding;
         _selected = _anchor = -1;
         _top = 0;
-        ToBookmarksItem.IsEnabled = BookmarksRequested is not null && _groups.Count == 1;
+        ToBookmarksItem.IsEnabled = BookmarksRequested is not null;
         BuildHeaders();
+        UpdateTabStrip();
         Visibility = Microsoft.UI.Xaml.Visibility.Visible;
         Shown?.Invoke(this, EventArgs.Empty);
         UpdateHeader();

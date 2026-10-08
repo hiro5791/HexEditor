@@ -57,7 +57,7 @@ public sealed partial class FindBar
             (int Doc, SearchHit Hit)? Work(LongRunningOperation? op)
             {
                 CancellationToken token = op?.CancellationToken ?? cts.Token;
-                var options = new SearchOptions();
+                SearchOptions options = NewOptions(editor, SearchScope.WholeDocument, cts.Token);
                 if (SearchEngine.Find(snapshots[current], pattern, start, forward, wrap: false, options, op, token) is { } here)
                 {
                     return (current, here);
@@ -108,17 +108,23 @@ public sealed partial class FindBar
                 MarkQuery(QueryState.Normal);
                 UpdateCountText();
                 Announce(hit.Wrapped ? Status.Text : Loc.Format("Find_FoundAt", StatusFormat.Hex(hit.Offset)));
+                ReportResult(hit.Wrapped ? Status.Text : Loc.Format("Find_FoundAt", StatusFormat.Hex(hit.Offset)), hit.Wrapped);
             }
             else
             {
                 Status.Text = wrap ? Loc.Get("Find_NotFound") : Loc.Get(forward ? "Find_NotFoundToEnd" : "Find_NotFoundToStart");
                 MarkQuery(QueryState.NotFound);
                 Announce(Status.Text);
+                ReportResult(Status.Text, important: false);
             }
         }
         catch (OperationCanceledException)
         {
             Status.Text = Loc.Get("Find_Cancelled");
+        }
+        catch (SearchAbortedException ex)
+        {
+            ShowAborted(ex);
         }
         finally
         {

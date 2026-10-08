@@ -151,7 +151,13 @@ public sealed partial class MainWindow
     }
 
     /// <summary>前回の形式でコピー (ダイアログを開かない。EDIT-25 の仕様 2)。</summary>
-    private async void CopyAsLast_Click(object sender, RoutedEventArgs e)
+    private async void CopyAsLast_Click(object sender, RoutedEventArgs e) => await CopyInFormatAsync(null);
+
+    /// <summary>
+    /// ダイアログを開かずにコピーする (<paramref name="format"/> が null なら前回の形式。指定したらその形式を前回の形式として記憶する)。
+    /// 形式ごとの設定は前回の設定を使う (EDIT-25 の仕様 2、「呼び出し」の「形式を選択してコピー: &lt;形式名&gt;」)。
+    /// </summary>
+    private async Task CopyInFormatAsync(CopyFormat? format)
     {
         if (Vm.Selected is not { } doc)
         {
@@ -159,6 +165,12 @@ public sealed partial class MainWindow
         }
 
         CopyAsState state = LoadCopyAsState();
+        if (format is { } chosen && chosen != state.Format)
+        {
+            state = state with { Format = chosen };
+            AppState.SetString(CopyAsLastKey, JsonSerializer.Serialize(state));
+        }
+
         CopyOptions options = OptionsOf(state, doc);
         long start = doc.Editor.HasSelection ? doc.Editor.SelectionStart : doc.Editor.Cursor;
         long length = doc.Editor.SelectionLength;
