@@ -78,6 +78,9 @@ function Start-TestApp {
         foreach ($p in $candidates) {
             $channel = Connect-TestChannel $p.Id
             if ($channel) {
+                # Open the process handle now: Get-Process objects can read ExitCode after the exit only when the handle was
+                # opened while the process was running (otherwise a crash is reported without its exit code).
+                try { [void]$p.Handle } catch { }
                 $app = [pscustomobject]@{ Process = $p; Id = $p.Id; Pipe = $channel.Pipe; Reader = $channel.Reader; Writer = $channel.Writer; Hooks = $hooksPath }
                 [void](Send-TestCommand $app 'ping')
                 return $app
@@ -103,15 +106,32 @@ function Send-TestCommand {
     $task = $App.Reader.ReadLineAsync()
     if (-not $task.Wait($TimeoutSeconds * 1000)) { throw "Test command '$Command' timed out." }
     if ($null -eq $task.Result) {
-        $detail = ''
-        try {
-            if ($App.Process -and $App.Process.WaitForExit(5000)) { $detail = ' The process exited with code 0x{0:X8}.' -f $App.Process.ExitCode }
-        } catch { }
-        throw "The app closed the test channel (command '$Command').$detail"
+        throw "The app closed the test channel (command '$Command').$(Get-ExitReport $App)"
     }
     $response = $task.Result | ConvertFrom-Json
     if (-not $response.ok) { throw "Test command '$Command' failed: $($response.error)" }
     $response
+}
+
+# The exit code of an app that closed the test channel, and the crash events that Windows recorded for HexEditor.exe in
+# the last 5 minutes (a native crash, such as a XAML fail-fast, writes no crash report of the app).
+function Get-ExitReport($App) {
+    $detail = ''
+    try {
+        if ($App.Process -and $App.Process.WaitForExit(5000)) {
+            $code = $App.Process.ExitCode
+            $detail = if ($null -ne $code) { ' The process exited with code 0x{0:X8}.' -f $code } else { ' The process exited (exit code unknown).' }
+        } else {
+            $detail = ' The process is still running.'
+        }
+    } catch { }
+    try {
+        $events = @(Get-WinEvent -FilterHashtable @{ LogName = 'Application'; StartTime = (Get-Date).AddMinutes(-5) } -ErrorAction SilentlyContinue |
+                Where-Object { $_.ProviderName -in 'Application Error', '.NET Runtime', 'Windows Error Reporting' -and $_.Message -match 'HexEditor' } |
+                Select-Object -First 3)
+        foreach ($e in $events) { $detail += "`n--- $($e.ProviderName) $($e.TimeCreated):`n$($e.Message)" }
+    } catch { }
+    $detail
 }
 
 function Get-TestState($App) { Send-TestCommand $App 'state' }
@@ -239,11 +259,22 @@ function Complete-SaveDialog([int]$ProcessId, [string]$Path) {
     $condition = New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::AutomationIdProperty, '1001')
     $name = $dialog.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $condition)
     if (-not $name) { throw 'The file name box of the Save dialog was not found.' }
-    $name.GetCurrentPattern([System.Windows.Automation.ValuePattern]::Pattern).SetValue($Path)
+    $value = $name.GetCurrentPattern([System.Windows.Automation.ValuePattern]::Pattern)
+    $value.SetValue($Path)
+    if ($value.Current.Value -ne $Path) { throw "The file name box of the Save dialog has '$($value.Current.Value)', not '$Path'." }
     $save = $dialog.FindFirst([System.Windows.Automation.TreeScope]::Children,
         (New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::AutomationIdProperty, '1')))
     if (-not $save) { throw 'The Save button of the Save dialog was not found.' }
     Invoke-UiaElement $save
+    # The dialog closes, unless Windows asks something (a message box of the dialog: the text goes to the error).
+    $deadline = (Get-Date).AddSeconds(15)
+    $dialogCondition = New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::ClassNameProperty, '#32770')
+    while ((Get-Date) -lt $deadline) {
+        $open = @(Get-UiaWindows $ProcessId | ForEach-Object { $_.FindFirst([System.Windows.Automation.TreeScope]::Subtree, $dialogCondition) } | Where-Object { $_ })
+        if ($open.Count -eq 0) { return }
+        Start-Sleep -Milliseconds 250
+    }
+    throw "The Save dialog did not close: $((@($open | ForEach-Object { Get-UiaText $_ })) -join ' | ')"
 }
 
 # ---- Native information about processes, files and shortcuts ----

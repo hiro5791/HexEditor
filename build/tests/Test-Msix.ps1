@@ -85,6 +85,7 @@ Invoke-TestCase 'TC-UI-55-01' 'Windows 11 context menu: one top-level "Open with
     try {
         # 2. The items of the new menu (UI Automation).
         $items = @(Get-NewContextMenuItems 'Open with HexEditor')
+        if ($items.Count -eq 0) { Skip-IfNoContextMenu 'TC-UI-55-01' }
         Assert-True ($items.Count -eq 1) "$($items.Count) items named 'Open with HexEditor'"
         Assert-True (-not $items[0].Submenu) 'the item opens a submenu'
         Assert-True ($items[0].ParentType -like '*Menu') "the item is under $($items[0].ParentType), not the top level of the menu"
@@ -117,6 +118,7 @@ Invoke-TestCase 'TC-UI-55-04' 'exceptions in the COM server do not crash Explore
     $explorerBefore = Get-ExplorerIds
     try {
         $items = @(Get-NewContextMenuItems 'Open with HexEditor')
+        if ($items.Count -eq 0) { Skip-IfNoContextMenu 'TC-UI-55-04' }
         Assert-True ($items.Count -ge 1) 'the new context menu has no "Open with HexEditor"'
         [System.IO.File]::Delete($file)
         Invoke-UiaElement $items[0].Element

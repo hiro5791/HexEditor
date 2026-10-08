@@ -302,7 +302,15 @@ if ($TestZip) {
                 Edit-Bytes $a 0 'FF'
                 [void](Send-TestCommand $a 'invoke' @{ id = 'Command_SaveAs' })
                 Complete-SaveDialog $a.Id $out
-                Wait-Until { (Test-Path $out) -and -not (Get-TestState $a).document.modified } 30 'the save as'
+                try { Wait-Until { (Test-Path $out) -and -not (Get-TestState $a).document.modified } 30 'the save as' }
+                catch {
+                    # What the app said (an InfoBar or a dialog about the save) and the end of its log.
+                    $state = Get-TestState $a
+                    Write-Host "File exists: $(Test-Path $out); document: $($state.document | ConvertTo-Json -Compress -Depth 3)"
+                    Write-Host "Notifications: $(@($state.notifications | ForEach-Object { $_.message }) -join ' | ')"
+                    Write-Host "Log: $((Get-AppLog $a | Select-Object -Last 20) -join "`n")"
+                    throw
+                }
             } finally { Stop-TestApp $a }
             # 5. The saved file has FF at offset 0.
             Assert-True ([System.IO.File]::ReadAllBytes($out)[0] -eq 0xFF) 'offset 0 of the saved file is not FF'

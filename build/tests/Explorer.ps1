@@ -185,8 +185,10 @@ function Close-ExplorerWindow($Window) {
 }
 
 # Opens the new context menu of the selected file with the Application key and returns the menu items whose
-# name is $Name, each with its parent menu and whether it opens a submenu.
+# name is $Name, each with its parent menu and whether it opens a submenu. $script:ContextMenuItemCount is the number
+# of menu items of any name that explorer.exe showed (0: no menu opened at all).
 function Get-NewContextMenuItems([string]$Name, [int]$Seconds = 15) {
+    $script:ContextMenuItemCount = 0
     [HexTest.ExplorerNative]::PressApplicationKey()
     $e = [System.Windows.Automation.AutomationElement]
     $condition = New-Object System.Windows.Automation.AndCondition(
@@ -222,6 +224,15 @@ function Get-NewContextMenuItems([string]$Name, [int]$Seconds = 15) {
             foreach ($item in $w.FindAll([System.Windows.Automation.TreeScope]::Descendants, $anyItem)) { "$($w.Current.ClassName): $($item.Current.Name)" }
         }
     }
+    $script:ContextMenuItemCount = @($names).Count
     Write-Host "Menu items of explorer.exe: $(@($names) -join '; ')"
     @()
+}
+
+# The GitHub Windows Server runner never shows a context menu for the Application key (no menu item of any name appears,
+# although File Explorer is in the foreground): the menu cannot be checked there. A menu without the item still fails.
+function Skip-IfNoContextMenu([string]$Case) {
+    if ($script:ContextMenuItemCount -eq 0 -and $env:GITHUB_ACTIONS) {
+        Skip-TestCase "$($Case): File Explorer showed no context menu at all on this runner (keyboard input does not open menus on the GitHub Windows Server runner). The packaged COM class was checked directly (ProbeExplorerCommand); run this case on Windows 11 by hand."
+    }
 }

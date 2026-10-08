@@ -166,7 +166,10 @@ Invoke-TestCase 'TC-PKG-12-01' 'About shows the distribution' {
     $list = New-Object System.Collections.Generic.List[object]
     foreach ($t in $targets) { $list.Add($t) }
     if ($DevExe) {
-        $list.Add([pscustomobject]@{ Name = 'Development'; Expected = 'Development'; Exe = (Resolve-Path $DevExe).Path })
+        $list.Add([pscustomobject]@{
+                Name = 'Development'; Expected = 'Development'; Exe = (Resolve-Path $DevExe).Path
+                Data = Join-Path $env:LOCALAPPDATA 'HexEditorData-dev'
+            })
     } else {
         Add-TestNote 'TC-PKG-12-01: no -DevExe, so the development build (dotnet build output) was not checked.'
     }
@@ -185,7 +188,8 @@ Invoke-TestCase 'TC-UI-40-01' 'About shows the distribution and the architecture
     foreach ($t in $targets) {
         $app = Start-App $t
         try {
-            $about = Get-AboutValues $app
+            try { $about = Get-AboutValues $app }
+            catch { Show-CrashReports $t; throw }
             Write-Host "$($t.Name): Distribution = $($about['Distribution']), Architecture = $($about['Architecture'])"
             Assert-True ($about['Distribution'] -eq $t.Expected) "$($t.Name): About shows the distribution '$($about['Distribution'])'"
             Assert-True ($about['Architecture'] -eq $expectedArch) "$($t.Name): About shows the architecture '$($about['Architecture'])', expected $expectedArch"
