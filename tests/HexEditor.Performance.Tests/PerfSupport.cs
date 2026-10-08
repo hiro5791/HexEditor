@@ -26,6 +26,19 @@ internal static class PerfSupport
         TempDirectory = Path.Combine(Path.GetTempPath(), "HexEditorTests", "recovery"),
     };
 
+    /// <summary>
+    /// このテストのプロセスが読み込まれた直後のプライベートバイト (テストの実行環境だけの分)。同じプロセスで先に動いたテストが
+    /// 残したメモリ (OS に返されないネイティブの領域など) を、メモリ使用量の計測から除くのに使う。
+    /// </summary>
+    public static long StartupPrivateBytes { get; private set; }
+
+    [System.Runtime.CompilerServices.ModuleInitializer]
+    internal static void RecordStartupMemory()
+    {
+        using var process = Process.GetCurrentProcess();
+        StartupPrivateBytes = process.PrivateMemorySize64;
+    }
+
     public static Document Open(string id) => new(FileByteSource.Open(TestDataCatalog.Get(id)), Options());
 
     public static EditorState Editor(Document doc) => new(doc) { VisibleRows = VisibleRows };

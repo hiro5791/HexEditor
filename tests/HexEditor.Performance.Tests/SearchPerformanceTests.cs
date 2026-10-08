@@ -4,6 +4,7 @@ using HexEditor.Core.Engine;
 using HexEditor.Core.Search;
 using HexEditor.Core.Sources;
 using HexEditor.TestData;
+using Xunit.Abstractions;
 
 namespace HexEditor.Performance.Tests;
 
@@ -11,7 +12,7 @@ namespace HexEditor.Performance.Tests;
 /// 検索の性能テスト (FIND-01 の「巨大ファイル・長時間処理」)。検索エンジンを直接呼び、検索バーの UI は通さない。
 /// </summary>
 [Trait("Category", "Performance")]
-public sealed class SearchPerformanceTests
+public sealed class SearchPerformanceTests(ITestOutputHelper output)
 {
     private const string TC = "TC";
     private const long MiB = TestDataCatalog.MiB;
@@ -36,6 +37,9 @@ public sealed class SearchPerformanceTests
         using var doc = new Document(FileByteSource.Open(TestDataCatalog.Get("TD-SPARSE-100G")), Options());
         SearchPattern pattern = SearchPattern.FromHex("DE AD BE EF CA FE BA BE");
         using var process = Process.GetCurrentProcess();
+        long baseline = process.PrivateMemorySize64;
+        long allocatedBefore = GC.GetTotalAllocatedBytes();
+        int gen0Before = GC.CollectionCount(0);
         long max = 0;
         using var stop = new CancellationTokenSource();
         Task sampler = Task.Run(async () =>
@@ -64,7 +68,12 @@ public sealed class SearchPerformanceTests
             await sampler;
         }
 
-        Assert.True(max <= 300 * MiB, $"プライベートバイトの最大: {max / MiB} MiB");
+        // 先に動いた性能テストが残したメモリ (GC の後も OS に返らない分) は、アプリのプロセスでは起きないため除く。
+        long leftover = Math.Max(0, baseline - PerfSupport.StartupPrivateBytes);
+        output.Report($"100 GiB の検索中のプライベートバイトの最大: {max / MiB} MiB (検索の前: {baseline / MiB} MiB、" +
+            $"先に動いたテストの残り: {leftover / MiB} MiB)、割り当て {(GC.GetTotalAllocatedBytes() - allocatedBefore) / MiB} MiB、" +
+            $"GC (第 0 世代) {GC.CollectionCount(0) - gen0Before} 回");
+        Assert.True(max - leftover <= 300 * MiB, $"プライベートバイトの最大: {max / MiB} MiB (先に動いたテストの残り {leftover / MiB} MiB を除いて {(max - leftover) / MiB} MiB)");
     }
 
     /// <summary>
@@ -284,6 +293,7 @@ public sealed class SearchPerformanceTests
         TimeSpan time = watch.Elapsed;
         process.Refresh();
         long growth = process.PrivateMemorySize64 - before;
+        output.Report($"100 GiB の長さを変えるすべて置換 ({found.Count} 件) の適用: {time.TotalMilliseconds:F0} ms、メモリの増加 {growth / MiB} MiB");
         Assert.True(time <= TimeSpan.FromSeconds(1), $"適用の時間: {time.TotalMilliseconds:F0} ms");
         Assert.True(growth <= 50 * MiB, $"メモリ使用量の増加: {growth / MiB} MiB");
         Assert.Equal((100 * GiB) + found.Count, doc.Length);
