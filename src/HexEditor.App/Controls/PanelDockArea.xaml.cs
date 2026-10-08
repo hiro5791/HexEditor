@@ -14,6 +14,9 @@ public sealed record PanelTab(string Id, string Title);
 /// <summary>パネルの移動の要求 (見出しのメニュー・ドラッグ。UI-05 の仕様 3、4)。</summary>
 public sealed record PanelMoveRequest(string PanelId, PanelDock Target);
 
+/// <summary>見出しをどの領域にも落とさずにドラッグを終えた (UI-05 の仕様 3。<paramref name="ScreenPoint"/> は終えた位置、物理ピクセル)。</summary>
+public sealed record PanelDropOutside(string PanelId, Windows.Graphics.PointInt32 ScreenPoint);
+
 /// <summary>
 /// 左・右・下の 1 か所のパネルの領域 (UI-05)、または浮動パネルの中身。見出しのタブ、「…」(移動・閉じる)、「×」と、
 /// 選んでいるパネルの中身を表示する。配置の判断はしない (要求を出し、ウィンドウの <c>MainWindow.Panels</c> が配置を変える)。
@@ -22,6 +25,11 @@ public sealed partial class PanelDockArea : UserControl
 {
     /// <summary>ドラッグ中のパネル (ドロップ先の判定に使う)。</summary>
     public static string? DraggingPanel { get; private set; }
+
+    /// <summary>
+    /// ドラッグ中のパネルを持つウィンドウ (<see cref="Owner"/>)。パネルはウィンドウごとに持つので、別のウィンドウの領域には落とせない。
+    /// </summary>
+    public static object? DraggingOwner { get; private set; }
 
     /// <summary>ドラッグの開始・終了 (ウィンドウがドロップ先の枠を出す)。</summary>
     public static event Action<string?>? DraggingChanged;
@@ -47,22 +55,36 @@ public sealed partial class PanelDockArea : UserControl
         };
         DragOver += (_, e) =>
         {
-            if (DraggingPanel is not null)
+            // 別のウィンドウのパネルは受け付けない (ドロップできないカーソルになる)。
+            if (AcceptsDraggedPanel)
             {
                 e.AcceptedOperation = DataPackageOperation.Move;
                 DropHighlight.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                e.AcceptedOperation = DataPackageOperation.None;
             }
         };
         DragLeave += (_, _) => DropHighlight.Visibility = Visibility.Collapsed;
         Drop += (_, _) =>
         {
             DropHighlight.Visibility = Visibility.Collapsed;
-            if (DraggingPanel is { } id)
+            if (AcceptsDraggedPanel && DraggingPanel is { } id)
             {
                 MoveRequested?.Invoke(this, new PanelMoveRequest(id, Dock));
             }
         };
     }
+
+    /// <summary>この領域を持つウィンドウ (浮動パネルでは、そのパネルを持つメインウィンドウ)。</summary>
+    public object? Owner { get; set; }
+
+    /// <summary>ドラッグ中のパネルをこの領域に落とせるか (同じウィンドウのパネルだけ)。</summary>
+    public bool AcceptsDraggedPanel => DraggingPanel is not null && ReferenceEquals(DraggingOwner, Owner);
+
+    /// <summary>見出しをどの領域にも落とさずにドラッグを終えた (ウィンドウが浮動パネルにするかを決める。UI-05 の仕様 3)。</summary>
+    public event EventHandler<PanelDropOutside>? DroppedOutside;
 
     /// <summary>この領域の場所。浮動パネルでは <see cref="PanelDock.Floating"/>。</summary>
     public PanelDock Dock { get; set; }
@@ -185,17 +207,48 @@ public sealed partial class PanelDockArea : UserControl
         {
             e.Data.SetText("hexeditor-panel:" + tab.Id);
             e.Data.RequestedOperation = DataPackageOperation.Move;
-            SetDragging(tab.Id);
+            SetDragging(tab.Id, Owner);
         };
-        button.DropCompleted += (_, _) => SetDragging(null);
+        button.DropCompleted += (_, e) => EndDrag(tab.Id, e.DropResult, CursorPosition());
         return button;
     }
 
-    internal static void SetDragging(string? id)
+    /// <summary>
+    /// ドラッグの終わり。どの領域にも落とさなかった (結果が <see cref="DataPackageOperation.None"/>) ときは、終えた位置を
+    /// <see cref="DroppedOutside"/> で知らせる (テスト用の命令からも呼ぶ)。
+    /// </summary>
+    public void EndDrag(string panelId, DataPackageOperation result, Windows.Graphics.PointInt32 screenPoint)
+    {
+        SetDragging(null, null);
+        if (result == DataPackageOperation.None)
+        {
+            DroppedOutside?.Invoke(this, new PanelDropOutside(panelId, screenPoint));
+        }
+    }
+
+    /// <summary>ドラッグを始めた (テスト用の命令からも呼ぶ)。</summary>
+    public void BeginDrag(string panelId) => SetDragging(panelId, Owner);
+
+    private static void SetDragging(string? id, object? owner)
     {
         DraggingPanel = id;
+        DraggingOwner = id is null ? null : owner;
         DraggingChanged?.Invoke(id);
     }
+
+    private static Windows.Graphics.PointInt32 CursorPosition() =>
+        GetCursorPos(out NativePoint p) ? new Windows.Graphics.PointInt32(p.X, p.Y) : default;
+
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    private struct NativePoint
+    {
+        public int X;
+        public int Y;
+    }
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+    private static extern bool GetCursorPos(out NativePoint point);
 
     /// <summary>見出しのメニュー: 移動 &gt; 左 / 右 / 下 / 浮動、閉じる。</summary>
     public MenuFlyout CreateMenu(string panelId)
