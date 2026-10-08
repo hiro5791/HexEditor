@@ -44,6 +44,9 @@ public sealed partial class MainWindow
             case "searchResultsClick":
                 SearchResults.Click(request["index"]!.GetValue<long>(), request["shift"]?.GetValue<bool>() ?? false);
                 return new JsonObject();
+            case "searchResultsScroll":
+                SearchResults.ScrollToFraction(request["fraction"]?.GetValue<double>() ?? 0);
+                return new JsonObject();
             case "searchResultsContinue":
                 _ = SearchResults.ContinueAsync();
                 return new JsonObject();

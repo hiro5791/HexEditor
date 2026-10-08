@@ -544,7 +544,14 @@ public sealed partial class SearchResultsPanel : UserControl
 
             bool selected = index >= lo && index <= hi && _selected >= 0;
             row.SetColors(selected ? selectedBack : transparent, selected ? selectedFore : normalFore);
-            if (_cache.TryGetValue(index, out SearchResultRow? data))
+            if (!_cache.TryGetValue(index, out SearchResultRow? data) && _factory?.TryRowForDisplay(index, results[index]) is { } quick)
+            {
+                // キャッシュに載っているデータなら、その場で作る (表示を 2 回に分けない)。
+                data = quick;
+                Remember(index, quick);
+            }
+
+            if (data is not null)
             {
                 row.Set(Cells(data));
             }
@@ -595,6 +602,17 @@ public sealed partial class SearchResultsPanel : UserControl
         _ => string.Empty,
     };
 
+    /// <summary>行の内容をキャッシュに入れる (上限を超えたら捨てて作り直す)。</summary>
+    private void Remember(long index, SearchResultRow row)
+    {
+        if (_cache.Count >= CacheLimit)
+        {
+            _cache.Clear();
+        }
+
+        _cache[index] = row;
+    }
+
     /// <summary>見えていない行の内容をバックグラウンドで読み、読み終えたら表示し直す。</summary>
     private void Fetch(List<long> indices)
     {
@@ -632,17 +650,12 @@ public sealed partial class SearchResultsPanel : UserControl
                     return;
                 }
 
-                if (_cache.Count + rows.Count > CacheLimit)
-                {
-                    _cache.Clear();
-                }
-
                 foreach ((long index, SearchResultRow? row) in rows)
                 {
                     _fetching.Remove(index);
                     if (row is not null)
                     {
-                        _cache[index] = row;
+                        Remember(index, row);
                     }
                 }
 
@@ -797,7 +810,7 @@ public sealed partial class SearchResultsPanel : UserControl
         if (target is long t)
         {
             Select(t, shift);
-            if (App.Settings?.GetBool(PreviewKey, true) != false)
+            if (key is VirtualKey.Up or VirtualKey.Down && App.Settings?.GetBool(PreviewKey, true) != false)
             {
                 Preview(_selected);
             }
@@ -868,6 +881,12 @@ public sealed partial class SearchResultsPanel : UserControl
 
         _top = (long)Math.Round(e.NewValue);
         Render();
+    }
+
+    /// <summary>テスト用: スクロールバーのつまみの位置 (0〜1) に表示位置を合わせる (つまみのドラッグと同じ)。</summary>
+    internal void ScrollToFraction(double fraction)
+    {
+        Scroll.Value = Math.Clamp(fraction, 0, 1) * Scroll.Maximum;
     }
 
     /// <summary>テスト用: 先頭に表示している行。</summary>
@@ -1040,25 +1059,43 @@ public sealed partial class SearchResultsPanel : UserControl
 
         public Grid Root { get; }
 
+        private Brush? _background;
+        private Brush? _foreground;
+
         public void Set(IReadOnlyList<string> values)
         {
             for (int i = 0; i < _cells.Length; i++)
             {
-                _cells[i].Text = i < values.Count ? values[i] : string.Empty;
+                string text = i < values.Count ? values[i] : string.Empty;
+                if (_cells[i].Text != text)
+                {
+                    _cells[i].Text = text;
+                }
             }
         }
 
+        /// <summary>背景と文字の色 (変わったときだけ設定する。描画の手間を減らす)。</summary>
         public void SetColors(Brush background, Brush foreground)
         {
-            Root.Background = background;
-            foreach (TextBlock cell in _cells)
+            if (!ReferenceEquals(_background, background))
             {
-                cell.Foreground = foreground;
+                _background = background;
+                Root.Background = background;
+            }
+
+            if (!ReferenceEquals(_foreground, foreground))
+            {
+                _foreground = foreground;
+                foreach (TextBlock cell in _cells)
+                {
+                    cell.Foreground = foreground;
+                }
             }
         }
 
         public void Clear()
         {
+            _background = null;
             Root.Background = null;
             Set([]);
         }

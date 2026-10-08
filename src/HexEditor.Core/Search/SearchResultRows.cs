@@ -62,21 +62,38 @@ public sealed class SearchResultRowFactory
     /// <summary><paramref name="index"/> 番目 (0 から) の行。</summary>
     public SearchResultRow Row(long index) => Row(index, _results[index]);
 
-    public SearchResultRow Row(long index, SearchMatch match)
+    public SearchResultRow Row(long index, SearchMatch match) => Build(index, match, nonBlocking: false)!;
+
+    /// <summary>
+    /// 表示用の読み込み (ブロックしない) で行を作る。まだ読み込み中のバイトがあれば null (バックグラウンドで <see cref="Row(long, SearchMatch)"/> を呼ぶ)。
+    /// </summary>
+    public SearchResultRow? TryRowForDisplay(long index, SearchMatch match) => Build(index, match, nonBlocking: true);
+
+    private SearchResultRow? Build(long index, SearchMatch match, bool nonBlocking)
     {
         TrackedMatch t = _tracker.Track(match);
         long length = t.Length;
         long dataLength = Math.Min(DataBytes, length);
-        byte[] data = Read(t.Offset, dataLength);
         long beforeStart = Math.Max(0, t.Offset - ContextBytes);
-        byte[] before = Read(beforeStart, t.Offset - beforeStart);
-        byte[] after = Read(t.Offset + length, ContextBytes);
+        byte[]? data = Read(t.Offset, dataLength, nonBlocking);
+        byte[]? before = Read(beforeStart, t.Offset - beforeStart, nonBlocking);
+        byte[]? after = Read(t.Offset + length, ContextBytes, nonBlocking);
+        if (data is null || before is null || after is null)
+        {
+            return null;
+        }
+
         SearchPattern pattern = _results.Pattern;
         string? variant = pattern.Variants.Count > 1 && match.Variant < pattern.Variants.Count ? pattern.Variants[match.Variant] : null;
         string? value = null;
         if (pattern.Numeric is { } numeric && t.Status != MatchStatus.Deleted)
         {
-            byte[] valueBytes = data.Length >= numeric.ByteLength ? data : Read(t.Offset, numeric.ByteLength);
+            byte[]? valueBytes = data.Length >= numeric.ByteLength ? data : Read(t.Offset, numeric.ByteLength, nonBlocking);
+            if (valueBytes is null)
+            {
+                return null;
+            }
+
             value = numeric.FormatValue(valueBytes, match.Variant);
             variant ??= pattern.Variants.Count == 1 ? pattern.Variants[0] : null;
         }
@@ -95,7 +112,8 @@ public sealed class SearchResultRowFactory
             value);
     }
 
-    private byte[] Read(long offset, long length)
+    /// <summary>今の状態の範囲を読む。<paramref name="nonBlocking"/> なら表示用の読み込みで、読み込み中のバイトがあれば null。</summary>
+    private byte[]? Read(long offset, long length, bool nonBlocking)
     {
         length = Math.Clamp(Math.Min(length, _current.Length - offset), 0, int.MaxValue);
         if (length == 0 || offset < 0)
@@ -104,6 +122,13 @@ public sealed class SearchResultRowFactory
         }
 
         byte[] buffer = new byte[length];
+        if (nonBlocking)
+        {
+            var states = new ByteState[length];
+            int n = _current.ReadForDisplay(offset, buffer, states);
+            return states.AsSpan(0, n).Contains(ByteState.Loading) ? null : buffer[..n];
+        }
+
         ReadResult r = _current.Read(offset, buffer);
         return r.BytesReturned == buffer.Length ? buffer : buffer[..r.BytesReturned];
     }

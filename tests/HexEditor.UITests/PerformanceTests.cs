@@ -466,6 +466,46 @@ public sealed class PerformanceTests(ITestOutputHelper output)
         Assert.All(times, t => Assert.True(t <= 2000, Latencies("起動から操作可能まで", times)));
     });
 
+    [PerfEnvironmentFact]
+    [Trait(UiTest.TC, "TC-FIND-20-04")]
+    public Task Scrolling_a_million_results_keeps_sixty_fps() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 前提: TD-FIND-HITS-1500K を開き、`AB CD` のすべて検索が上限 (1,000,000 件) で止まった状態。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("TD-FIND-HITS-1500K.bin", SearchResultsTests.Hits1500K())] });
+        await SearchResultsTests.OpenFindAsync(app, 0, "AB CD");
+        await SearchResultsTests.FindAllAsync(app);
+        await SearchResultsTests.WaitForResultsAsync(app, r => r["state"]?.GetValue<string>() == "LimitReached", "the limit", 120);
+        string path = await EnableDiagnosticsAsync(ctx, app);
+
+        // 手順 1: 結果一覧で PageDown を 30 ms 間隔で 300 回。
+        for (int i = 0; i < 300; i++)
+        {
+            await app.SendAsync("searchResultsKey", new JsonObject { ["key"] = "PageDown" });
+            await Task.Delay(30);
+        }
+
+        // 手順 2: スクロールバーのつまみを先頭から末尾まで 5 秒かけて動かす (つまみのドラッグと同じ、表示位置の連続した変更)。
+        var watch = Stopwatch.StartNew();
+        while (watch.ElapsedMilliseconds < 5000)
+        {
+            await app.SendAsync("searchResultsScroll", new JsonObject { ["fraction"] = watch.ElapsedMilliseconds / 5000.0 });
+            await Task.Delay(16);
+        }
+
+        FrameLog log = await StopDiagnosticsAsync(app, path);
+        AssertSixtyFps(log, "100 万件の結果のスクロール");
+
+        // 手順 3: Ctrl+End で最後の行 (1,000,000 行目) が 100 ms 以内に表示される。
+        await app.SendAsync("searchResultsScroll", new JsonObject { ["fraction"] = 0 });
+        watch.Restart();
+        await app.SendAsync("searchResultsKey", new JsonObject { ["key"] = "End", ["ctrl"] = true });
+        JsonObject state = await app.SendAsync("searchResults");
+        double elapsed = watch.Elapsed.TotalMilliseconds;
+        Assert.Equal(999_999, state["selected"]!.GetValue<long>());
+        Assert.True(state["top"]!.GetValue<long>() + state["visibleRows"]!.GetValue<long>() >= 1_000_000);
+        Assert.True(elapsed <= 100, $"Ctrl+End: {elapsed:F0} ms");
+    });
+
     /// <summary>プロセスがファイル・デバイスから読んだバイト数 (GetProcessIoCounters の ReadTransferCount)。</summary>
     private static long ReadBytes(Process process)
     {
