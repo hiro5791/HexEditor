@@ -34,6 +34,9 @@ public sealed partial class MainWindow
         // 他のアプリの書き込みを禁止できなかったら、その文書の中で知らせる (ENG-15 の仕様 2)。
         Vm.LockFailed += (_, doc) => DispatcherQueue.TryEnqueue(() => ShowLockFailed(doc));
 
+        // タブ列の項目 (文書とページのタブ) と選択 (MainWindow.TabItems.cs)。
+        InitializeTabItems();
+
         // 幅は 100〜240 px (TabView の既定の最小・最大幅)。入りきらなければ横にスクロールする (UI-09 の仕様 5)。
         Tabs.TabWidthMode = TabViewWidthMode.SizeToContent;
         Tabs.TabStripFooter = CreateAllTabsButton();

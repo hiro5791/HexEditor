@@ -26,12 +26,30 @@ public sealed class SettingsUiTests
         Assert.Equal(["settings"], state["pages"]!.AsArray().Select(p => p!.GetValue<string>()));
         Assert.Equal("settings", state["active"]!.GetValue<string>());
 
+        // 2. 設定画面はタブ列のタブとして開いている (モーダルダイアログではない)。
+        JsonObject tabs = await TabTests.TabsAsync(app);
+        Assert.Equal(["settings"], tabs["toolTabs"]!.AsArray().Select(p => p!.GetValue<string>()));
+        Assert.Equal("tool:settings", tabs["stripSelected"]!.GetValue<string>());
+
         // 3. 文書のタブに切り替え、もう一度 Ctrl+,。
         Assert.Null((await app.SendAsync("showDocument"))["active"]?.GetValue<string>());
+        Assert.Equal("TD-SEQ-1M.bin", (await TabTests.TabsAsync(app))["stripSelected"]!.GetValue<string>());
         await app.KeyAsync("188", ctrl: true);
         state = await app.SendAsync("settingsPage");
         Assert.Equal(["settings"], state["pages"]!.AsArray().Select(p => p!.GetValue<string>()));
         Assert.Equal("settings", state["active"]!.GetValue<string>());
+
+        // 4. 設定のタブは 1 つだけで、アクティブ。
+        tabs = await TabTests.TabsAsync(app);
+        Assert.Equal(["settings"], tabs["toolTabs"]!.AsArray().Select(p => p!.GetValue<string>()));
+        Assert.Equal("tool:settings", tabs["stripSelected"]!.GetValue<string>());
+
+        // 別のウィンドウで Ctrl+, を押しても、2 つ目は開かない (アプリ全体で 1 つ)。
+        await app.KeyAsync("N", ctrl: true, shift: true);
+        await WindowManagementTests.WaitForWindowsAsync(app, 2);
+        await app.SendAsync("key", new JsonObject { ["window"] = 1, ["key"] = "188", ["ctrl"] = true });
+        Assert.Empty((await TabTests.TabsAsync(app, 1))["toolTabs"]!.AsArray());
+        Assert.Equal(["settings"], (await TabTests.TabsAsync(app, 0))["toolTabs"]!.AsArray().Select(p => p!.GetValue<string>()));
     });
 
     [Fact]

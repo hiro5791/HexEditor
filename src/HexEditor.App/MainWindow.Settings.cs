@@ -16,8 +16,8 @@ using Microsoft.Windows.Storage.Pickers;
 namespace HexEditor.App;
 
 /// <summary>
-/// 設定 (UI-22〜UI-25) とキー割り当てのインポート / エクスポート (UI-21) の操作。設定画面・ショートカット一覧はエディタ領域に重ねて
-/// 開くページ (<see cref="ToolPageHost"/>。タブ UI-09 ができたらタブにする)。
+/// 設定 (UI-22〜UI-25) とキー割り当てのインポート / エクスポート (UI-21) の操作。設定画面・ショートカット一覧はタブ列のタブ
+/// (MainWindow.TabItems.cs) で、内容はエディタ領域に重ねて出す (<see cref="ToolPageHost"/>)。
 /// </summary>
 public sealed partial class MainWindow
 {
@@ -68,6 +68,15 @@ public sealed partial class MainWindow
     /// </summary>
     public void OpenSettingsPage(string? category = null, string? settingKey = null)
     {
+        // 設定画面はアプリ全体で 1 つ。別のウィンドウで開いていれば、そのタブを前に出す (UI-22 の仕様 1)。
+        if (SettingsOpenElsewhere() is { } other)
+        {
+            WindowManager.MarkActive(other);
+            WindowManager.BringToFront(other);
+            other.OpenSettingsPage(category, settingKey);
+            return;
+        }
+
         _settingsPage ??= new SettingsPage(this);
         ShowToolPage("settings", _settingsPage);
         if (settingKey is not null)
@@ -90,7 +99,7 @@ public sealed partial class MainWindow
 
     private void RefreshShortcutsPage() => _shortcutsPage?.Refresh();
 
-    /// <summary>ページを開いて前に出す。見出しの帯 (ページの切り替えと「閉じる」) を作り直す。</summary>
+    /// <summary>ページを開いて前に出す。ページはタブ列のタブにする (UI-22 の仕様 1。MainWindow.TabItems.cs)。</summary>
     private void ShowToolPage(string id, FrameworkElement page)
     {
         if (_toolPages.All(p => p.Id != id))
@@ -98,8 +107,16 @@ public sealed partial class MainWindow
             _toolPages.Add((id, page));
         }
 
+        AddToolTab(id);
+        ShowToolPageTab(id);
+    }
+
+    /// <summary>開いているページを出す (ページのタブを選んだ)。</summary>
+    private void ShowToolPageTab(string id)
+    {
         _activeToolPage = id;
         UpdateToolPages();
+        SyncTabSelection();
     }
 
     public void CloseToolPage(string id)
@@ -114,8 +131,10 @@ public sealed partial class MainWindow
             _shortcutsPage = null;
         }
 
+        RemoveToolTab(id);
         _activeToolPage = _activeToolPage == id ? _toolPages.LastOrDefault().Id : _activeToolPage;
         UpdateToolPages();
+        SyncTabSelection();
         if (_activeToolPage is null)
         {
             FocusEditor();
@@ -129,6 +148,7 @@ public sealed partial class MainWindow
         {
             _activeToolPage = null;
             UpdateToolPages();
+            SyncTabSelection();
         }
     }
 
@@ -147,38 +167,13 @@ public sealed partial class MainWindow
         }
 
         ToolPageHost.RowDefinitions.Clear();
-        ToolPageHost.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         ToolPageHost.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-
-        // ページの見出しの帯 (タブ相当): ページ名のボタンと「閉じる」。
-        var strip = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4, Padding = new Thickness(8, 4, 8, 0) };
-        AutomationProperties.SetAutomationId(strip, "ToolPageTabs");
-        foreach ((string id, FrameworkElement _) in _toolPages)
-        {
-            string title = Loc.Get(id == "settings" ? "ToolPage_Settings" : "ToolPage_Shortcuts");
-            var select = new ToggleButton { Content = title, IsChecked = id == _activeToolPage };
-            AutomationProperties.SetAutomationId(select, "ToolPageTab_" + id);
-            select.Click += (_, _) =>
-            {
-                _activeToolPage = id;
-                UpdateToolPages();
-            };
-            var close = new Button { Content = new FontIcon { Glyph = "", FontSize = 10 }, Padding = new Thickness(6) };
-            AutomationProperties.SetAutomationId(close, "ToolPageClose_" + id);
-            AutomationProperties.SetName(close, Loc.Format("ToolPage_Close", title));
-            ToolTipService.SetToolTip(close, Loc.Format("ToolPage_Close", title));
-            close.Click += (_, _) => CloseToolPage(id);
-            strip.Children.Add(select);
-            strip.Children.Add(close);
-        }
-
-        ToolPageHost.Children.Add(strip);
         if (page.Parent is Panel old)
         {
             old.Children.Remove(page);
         }
 
-        Grid.SetRow(page, 1);
+        Grid.SetRow(page, 0);
         ToolPageHost.Children.Add(page);
         ToolPageHost.Visibility = Visibility.Visible;
         PlaceToolPageHost();
@@ -189,19 +184,8 @@ public sealed partial class MainWindow
 
     private void InitializeToolPages()
     {
+        // ページのタブの選択と文書のタブへの切り替えは MainWindow.TabItems.cs でつなぐ。
         Tabs.SizeChanged += (_, _) => PlaceToolPageHost();
-        Tabs.SelectionChanged += (_, _) => HideToolPages();
-        Tabs.Tapped += (_, e) =>
-        {
-            for (var node = e.OriginalSource as DependencyObject; node is not null; node = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(node))
-            {
-                if (node is TabViewItem)
-                {
-                    HideToolPages();
-                    return;
-                }
-            }
-        };
     }
 
     // ---- 設定の変更とリセット (UI-22、UI-24) ----

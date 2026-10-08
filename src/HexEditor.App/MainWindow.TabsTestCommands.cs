@@ -91,6 +91,14 @@ public sealed partial class MainWindow
             ["tabs"] = tabs,
             ["selectedIndex"] = Vm.Selected is { } s ? Vm.Documents.IndexOf(s) : -1,
             ["switcherOpen"] = _switcher?.IsOpen == true,
+            ["toolTabs"] = new JsonArray([.. ToolTabIds.Select(t => (JsonNode?)t)]),
+            ["activeToolTab"] = ActiveToolPage,
+            ["stripSelected"] = Tabs.SelectedItem switch
+            {
+                DocumentViewModel doc => doc.DisplayName,
+                ToolPageTab tool => "tool:" + tool.Id,
+                _ => null,
+            },
             ["mru"] = new JsonArray([.. _mru.Order.Select(d => (JsonNode?)d.DisplayName)]),
         };
     }

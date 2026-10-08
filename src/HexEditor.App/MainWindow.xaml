@@ -309,12 +309,14 @@
                     x:Name="Tabs"
                     AddTabButtonClick="Tabs_AddTabButtonClick"
                     AutomationProperties.AutomationId="DocumentTabs"
-                    SelectedItem="{x:Bind Vm.Selected, Mode=TwoWay}"
                     TabCloseRequested="Tabs_TabCloseRequested"
-                    TabItemsSource="{x:Bind Vm.Documents}"
                     VerticalAlignment="Stretch">
-                    <TabView.TabItemTemplate>
-                        <DataTemplate x:DataType="vm:DocumentViewModel">
+                    <!--
+                        タブの項目と選択はコードで文書の一覧とつなぐ (MainWindow.TabItems.cs)。文書のタブの後ろに、設定画面などのページのタブ
+                        (UI-22) を置く。
+                    -->
+                    <TabView.Resources>
+                        <DataTemplate x:Key="DocumentTabTemplate" x:DataType="vm:DocumentViewModel">
                             <!--  タブ (UI-09): 見出しは種類のアイコンと状態の印と表示名。右クリックメニューはコードで作る (MainWindow.Tabs.cs)。  -->
                             <TabViewItem
                                 AutomationProperties.Name="{x:Bind Header, Mode=OneWay}"
@@ -363,7 +365,23 @@
                                 </Grid>
                             </TabViewItem>
                         </DataTemplate>
-                    </TabView.TabItemTemplate>
+
+                        <!--  設定画面・ショートカット一覧のタブ (UI-22、UI-39)。内容はエディタ領域に重ねて出す (ToolPageHost)。  -->
+                        <DataTemplate x:Key="ToolPageTabTemplate" x:DataType="local:ToolPageTab">
+                            <TabViewItem
+                                AutomationProperties.AutomationId="{x:Bind AutomationId}"
+                                AutomationProperties.Name="{x:Bind Title}"
+                                Header="{x:Bind Title}"
+                                ToolTipService.ToolTip="{x:Bind Title}">
+                                <TabViewItem.ContextFlyout>
+                                    <MenuFlyout Opening="ToolTabMenu_Opening" />
+                                </TabViewItem.ContextFlyout>
+                                <TabViewItem.IconSource>
+                                    <FontIconSource Glyph="{x:Bind Glyph}" />
+                                </TabViewItem.IconSource>
+                            </TabViewItem>
+                        </DataTemplate>
+                    </TabView.Resources>
                 </TabView>
 
                 <!--  設定画面・ショートカット一覧 (UI-22、UI-39)。タブの見出しの帯の下 (エディタ領域) に重ねて開く。  -->
