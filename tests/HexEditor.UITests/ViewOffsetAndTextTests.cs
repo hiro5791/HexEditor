@@ -106,6 +106,24 @@ public sealed class ViewOffsetAndTextTests
         Assert.Equal(4000, (await ViewSettingsAsync(app))["view"]!["sectorSize"]!.GetValue<int>());
     });
 
+    /// <summary>表示メニューの切り替え: 中央区切り (VIEW-09 の仕様 3)、16 進の「:」(VIEW-19 の仕様 5)、行の先頭のそろえ (VIEW-20 の仕様 5)。</summary>
+    [Fact]
+    public Task View_menu_toggles_change_the_view_settings() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await MenuAsync(app, "Command_ViewHexDigitSeparator");
+        Assert.Equal("0000:0000", (await app.RenderAsync())["rows"]![0]!["offsetText"]!.GetValue<string>());
+
+        Assert.True((await MenuItemAsync(app, "Command_ViewMiddleSeparator"))["checked"]!.GetValue<bool>());
+        await MenuAsync(app, "Command_ViewMiddleSeparator");
+        Assert.False((await ViewSettingsAsync(app))["view"]!["middleSeparator"]!.GetValue<bool>());
+
+        await SetBaseAddressAsync(app, "0x401004");
+        Assert.Equal(4, (await app.RenderAsync())["rowShift"]!.GetValue<int>());
+        await MenuAsync(app, "Command_ViewAlignRows");
+        Assert.Equal(0, (await app.RenderAsync())["rowShift"]!.GetValue<int>());
+    });
+
     /// <summary>VIEW-20 の仕様 4: ベースアドレスを設定しているとき、移動バーは「アドレスで指定」(既定) と「オフセットで指定」を選べる。</summary>
     [Fact]
     public Task Go_to_bar_accepts_addresses_when_a_base_address_is_set() => UiTestContext.RunAsync(async ctx =>

@@ -2245,4 +2245,34 @@ Details were written to:
   <data name="Bookmarks_ResetColumns" xml:space="preserve"><value>Reset columns</value></data>
   <data name="Bookmarks_AllDocumentsName" xml:space="preserve"><value>All documents</value></data>
   <data name="Bookmarks_SortBy" xml:space="preserve"><value>Sort by {0}</value></data>
+  <data name="Menu_View_AlternateText.Text" xml:space="preserve"><value>Alternate colors in the text column</value></data>
+  <data name="Menu_View_AlternateText.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_View_MiddleSeparator.Text" xml:space="preserve"><value>Extra space every 8 bytes</value></data>
+  <data name="Menu_View_MiddleSeparator.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_AutoPowerOfTwo.Text" xml:space="preserve"><value>Auto: round to a power of 2</value></data>
+  <data name="Menu_View_AutoPowerOfTwo.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_HexDigitSeparator.Text" xml:space="preserve"><value>Separate every 4 hex digits with :</value></data>
+  <data name="Menu_View_HexDigitSeparator.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_AlignRows.Text" xml:space="preserve"><value>Align rows to the address</value></data>
+  <data name="Menu_View_AlignRows.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>Show continuation marks in multibyte characters</value></data>
+  <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Cmd_go_nextNibble" xml:space="preserve"><value>Go: Next nibble</value></data>
+  <data name="CmdAlias_go_nextNibble" xml:space="preserve"><value>nibble cursor</value></data>
+  <data name="Cmd_go_previousNibble" xml:space="preserve"><value>Go: Previous nibble</value></data>
+  <data name="CmdAlias_go_previousNibble" xml:space="preserve"><value>nibble cursor</value></data>
+  <data name="Cmd_go_toggleColumn" xml:space="preserve"><value>Go: Switch between Hex and text columns</value></data>
+  <data name="CmdAlias_go_toggleColumn" xml:space="preserve"><value>tab column text hex</value></data>
+  <data name="Cmd_view_middleSeparator" xml:space="preserve"><value>View: Extra space every 8 bytes</value></data>
+  <data name="CmdAlias_view_middleSeparator" xml:space="preserve"><value>separator group</value></data>
+  <data name="Cmd_view_alternateText" xml:space="preserve"><value>View: Alternate colors in the text column</value></data>
+  <data name="CmdAlias_view_alternateText" xml:space="preserve"><value>alternate color stripes</value></data>
+  <data name="Cmd_view_autoPowerOfTwo" xml:space="preserve"><value>View: Round automatic bytes per row to a power of 2</value></data>
+  <data name="CmdAlias_view_autoPowerOfTwo" xml:space="preserve"><value>bytes per row auto</value></data>
+  <data name="Cmd_view_hexDigitSeparator" xml:space="preserve"><value>View: Separate offset digits with :</value></data>
+  <data name="CmdAlias_view_hexDigitSeparator" xml:space="preserve"><value>offset colon</value></data>
+  <data name="Cmd_view_alignRows" xml:space="preserve"><value>View: Align rows to the address</value></data>
+  <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>base address row shift</value></data>
+  <data name="Cmd_view_continuation" xml:space="preserve"><value>View: Continuation marks in multibyte characters</value></data>
+  <data name="CmdAlias_view_continuation" xml:space="preserve"><value>utf-8 multibyte</value></data>
 </root>

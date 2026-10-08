@@ -2245,4 +2245,34 @@
   <data name="Bookmarks_ResetColumns" xml:space="preserve"><value>列を既定に戻す</value></data>
   <data name="Bookmarks_AllDocumentsName" xml:space="preserve"><value>すべてのドキュメント</value></data>
   <data name="Bookmarks_SortBy" xml:space="preserve"><value>{0} で並べ替え</value></data>
+  <data name="Menu_View_AlternateText.Text" xml:space="preserve"><value>テキスト列にも交互色(X)</value></data>
+  <data name="Menu_View_AlternateText.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_View_MiddleSeparator.Text" xml:space="preserve"><value>8 バイトごとに区切る(S)</value></data>
+  <data name="Menu_View_MiddleSeparator.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_AutoPowerOfTwo.Text" xml:space="preserve"><value>自動のとき 2 のべき乗にそろえる(P)</value></data>
+  <data name="Menu_View_AutoPowerOfTwo.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_HexDigitSeparator.Text" xml:space="preserve"><value>16 進を 4 桁ごとに「:」で区切る(G)</value></data>
+  <data name="Menu_View_HexDigitSeparator.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_AlignRows.Text" xml:space="preserve"><value>行の先頭をアドレスの区切りにそろえる(L)</value></data>
+  <data name="Menu_View_AlignRows.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>マルチバイト文字の続きに記号を表示(N)</value></data>
+  <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Cmd_go_nextNibble" xml:space="preserve"><value>移動: 次のニブルへ</value></data>
+  <data name="CmdAlias_go_nextNibble" xml:space="preserve"><value>にぶる かーそる</value></data>
+  <data name="Cmd_go_previousNibble" xml:space="preserve"><value>移動: 前のニブルへ</value></data>
+  <data name="CmdAlias_go_previousNibble" xml:space="preserve"><value>にぶる かーそる</value></data>
+  <data name="Cmd_go_toggleColumn" xml:space="preserve"><value>移動: Hex 列とテキスト列の切り替え</value></data>
+  <data name="CmdAlias_go_toggleColumn" xml:space="preserve"><value>れつ きりかえ</value></data>
+  <data name="Cmd_view_middleSeparator" xml:space="preserve"><value>表示: 8 バイトごとの区切り</value></data>
+  <data name="CmdAlias_view_middleSeparator" xml:space="preserve"><value>くぎり</value></data>
+  <data name="Cmd_view_alternateText" xml:space="preserve"><value>表示: テキスト列の交互色</value></data>
+  <data name="CmdAlias_view_alternateText" xml:space="preserve"><value>こうごしょく</value></data>
+  <data name="Cmd_view_autoPowerOfTwo" xml:space="preserve"><value>表示: 自動の 1 行のバイト数を 2 のべき乗にそろえる</value></data>
+  <data name="CmdAlias_view_autoPowerOfTwo" xml:space="preserve"><value>いちぎょうのばいとすう</value></data>
+  <data name="Cmd_view_hexDigitSeparator" xml:space="preserve"><value>表示: オフセットを 4 桁ごとに区切る</value></data>
+  <data name="CmdAlias_view_hexDigitSeparator" xml:space="preserve"><value>おふせっと くぎり</value></data>
+  <data name="Cmd_view_alignRows" xml:space="preserve"><value>表示: 行の先頭をアドレスの区切りにそろえる</value></data>
+  <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>ぎょうのせんとう</value></data>
+  <data name="Cmd_view_continuation" xml:space="preserve"><value>表示: マルチバイト文字の続きの記号</value></data>
+  <data name="CmdAlias_view_continuation" xml:space="preserve"><value>つづきのきごう</value></data>
 </root>

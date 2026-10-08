@@ -106,6 +106,9 @@ public static class BuiltInCommands
 
         // ---- 移動 ----
         new("go.goTo", "go") { Icon = IconGoTo, DefaultBindings = [K("Ctrl+G")], Condition = "documentOpen" },
+        new("go.nextNibble", "go") { Condition = "documentOpen" },
+        new("go.previousNibble", "go") { Condition = "documentOpen" },
+        new("go.toggleColumn", "go") { Condition = "documentOpen" },
         new("go.back", "go") { Icon = IconBack, DefaultBindings = [K("Alt+Left")], Condition = "documentOpen && canGoBack" },
         new("go.forward", "go") { Icon = IconForward, DefaultBindings = [K("Alt+Right")], Condition = "documentOpen && canGoForward" },
         new("go.start", "go") { Condition = "documentOpen" },
@@ -153,6 +156,12 @@ public static class BuiltInCommands
         new("view.radixOctal", "view") { Condition = "documentOpen" },
         new("view.radixSector", "view") { Condition = "documentOpen" },
         new("view.baseAddress", "view") { Condition = "documentOpen" },
+        new("view.middleSeparator", "view") { Condition = "documentOpen" },
+        new("view.alternateText", "view") { Condition = "documentOpen" },
+        new("view.autoPowerOfTwo", "view") { Condition = "documentOpen" },
+        new("view.hexDigitSeparator", "view") { Condition = "documentOpen" },
+        new("view.alignRows", "view") { Condition = "documentOpen" },
+        new("view.continuation", "view") { Condition = "documentOpen" },
         new("view.sectorSize512", "view") { Condition = "documentOpen" },
         new("view.sectorSize1024", "view") { Condition = "documentOpen" },
         new("view.sectorSize2048", "view") { Condition = "documentOpen" },

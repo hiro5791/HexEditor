@@ -147,6 +147,10 @@ public sealed partial class MainWindow
         Commands.Register("search.findPrevious", () => FindPrevious_Click(this, e), NeedsDocument);
         RegisterSearchCommands();
         Commands.Register("go.goTo", () => GoTo_Click(this, e), NeedsDocument);
+        // ニブル単位の移動 (VIEW-26) と列の切り替え (VIEW-27) のコマンドパレットの項目 (ショートカットは既定なし。キーは Hex ビューが処理する)。
+        Commands.Register("go.nextNibble", () => Editor?.NextNibble(), NeedsDocument);
+        Commands.Register("go.previousNibble", () => Editor?.PreviousNibble(), NeedsDocument);
+        Commands.Register("go.toggleColumn", () => Editor?.ToggleColumn(), NeedsDocument);
         Commands.Register("go.back", () => GoBack_Click(this, e),
             () => NeedsDocument(d => d.Editor.CanGoBack ? null : Loc.Get("Command_NoHistory")));
         Commands.Register("go.forward", () => GoForward_Click(this, e),

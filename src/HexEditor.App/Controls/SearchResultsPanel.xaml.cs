@@ -677,7 +677,7 @@ public sealed partial class SearchResultsPanel : UserControl
         });
     }
 
-    /// <summary>一覧の並びを付け替える (選択は先頭に戻し、行のキャッシュを捨てる)。</summary>
+    /// <summary>一覧の並びを付け替える (選んでいた結果は新しい並びでも選んだままにし、行のキャッシュを捨てる)。</summary>
     private void SetView(long[]? order)
     {
         if (ReferenceEquals(order, _view))
@@ -685,13 +685,23 @@ public sealed partial class SearchResultsPanel : UserControl
             return;
         }
 
+        long selectedResult = _selected >= 0 ? Map(_selected) : -1;
         _view = order;
         _generation++;
         _cache.Clear();
         _fetching.Clear();
-        _selected = _anchor = -1;
-        _top = 0;
-        Render();
+        _anchor = -1;
+        _selected = selectedResult < 0 ? -1 : order is null ? selectedResult : Array.IndexOf(order, selectedResult);
+        if (_selected < 0)
+        {
+            _top = 0;
+            Render();
+        }
+        else
+        {
+            // 選んでいる行が見えるようにする。
+            Select(_selected, extend: false);
+        }
     }
 
     private IEnumerable<(string Key, double Width, bool Mono)> VisibleColumns() =>
