@@ -93,8 +93,9 @@ public sealed partial class HexView
             }
 
             bool dark = view.ActualTheme == ElementTheme.Dark;
+            // 配色の色は利用者が設定した値 (配色ファイル) で、コードに直書きした色ではない。
             Brush Pick(SchemeElement element, Brush fallback) =>
-                scheme.Get(element, dark) is { } c ? new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B)) : fallback;
+                scheme.Get(element, dark) is { } c ? new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(c.A, c.R, c.G, c.B)) : fallback;
 
             Brush hexText = Pick(SchemeElement.HexText, p.HexText);
             return p with

@@ -23,6 +23,7 @@ public sealed partial class HexView
     private double _lineSpacing = 1.2;
     private bool _followTextScaling = true;
     private bool _forcedHighContrast;
+    private (long Cursor, long TopRow, double Y)? _keyZoomAnchor;
 
     private void InitializeOptions()
     {
@@ -171,6 +172,12 @@ public sealed partial class HexView
         {
             anchorRow = _editor.Layout.RowOf(_editor.Cursor);
             anchorY = (anchorRow - _editor.TopRow + 0.5) * _rowHeight - _subRowOffset;
+
+            // 続けてズームしたときは、最初のズームの前の高さを基準にする (端数の切り捨てで少しずつずれないように)。
+            if (_keyZoomAnchor is { } kept && kept.Cursor == _editor.Cursor && kept.TopRow == _editor.TopRow)
+            {
+                anchorY = kept.Y;
+            }
         }
 
         long anchorOffset = Math.Max(0, _editor.Layout.RowStart(anchorRow));
@@ -181,9 +188,12 @@ public sealed partial class HexView
         // 自動の 1 行のバイト数はすぐに決め直す (ズームで 1 行のバイト数も変わる。仕様 5)。
         AutoFit();
         long row = _editor.Layout.RowOf(Math.Min(anchorOffset, _editor.Layout.MaxCursor));
-        long top = row - (long)Math.Floor(anchorY / _rowHeight);
+
+        // ポインタの位置はその行の中に、カーソルの行は中心が元の高さに最も近くなるように置く。
+        long top = pointerY is null ? row - (long)Math.Round(anchorY / _rowHeight - 0.5) : row - (long)Math.Floor(anchorY / _rowHeight);
         _subRowOffset = 0;
         _editor.ScrollToRow(top);
+        _keyZoomAnchor = pointerY is null ? (_editor.Cursor, _editor.TopRow, anchorY) : null;
         UpdateScrollBar();
         QueueRender();
     }

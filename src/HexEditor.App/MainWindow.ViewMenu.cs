@@ -57,8 +57,8 @@ public sealed partial class MainWindow
                 () => SetBytesPerRow(n), accessKey: n.ToString(CultureInfo.InvariantCulture)[..1]));
         }
 
-        bytesPerRow.Items.Add(Radio("Command_ViewBytesPerRowAuto", Loc.Get("Menu_View_BytesPerRowAuto/Text"), "BytesPerRow",
-            () => ChangeView(v => v with { AutoBytesPerRow = true }), Loc.Get("Menu_View_BytesPerRowAuto/AccessKey")));
+        bytesPerRow.Items.Add(Radio("Command_ViewBytesPerRowAuto", Loc.Get("Menu_View_BytesPerRowAuto" + "/Text"), "BytesPerRow",
+            () => ChangeView(v => v with { AutoBytesPerRow = true }), Loc.Get("Menu_View_BytesPerRowAuto" + "/AccessKey")));
         bytesPerRow.Items.Add(Item("Command_ViewBytesPerRowCustom", "Menu_View_BytesPerRowCustom", ShowBytesPerRowInput));
 
         // グループ化 (VIEW-09)

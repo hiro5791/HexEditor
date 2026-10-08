@@ -1080,7 +1080,7 @@
 
 1. UI のフォントは変更できない。Windows の標準 UI フォント (Segoe UI Variable と各言語の代替フォント) を使い、大きさは Windows の「文字の大きさ」に従う (00-overview.md 5.4)。
 2. Hex 表示のフォント `view.font.family`: 既定は `Cascadia Mono`、ない場合は `Consolas`。一覧には等幅フォントだけを表示し、「すべてのフォントを表示」をオンにすると全フォントを出す。等幅でないフォントを選んだ場合は、文字ごとに同じ幅のセルに中央揃えで描画する。
-3. Hex 表示の大きさ `view.font.size`: 6〜72 pt、既定 11 pt。0.5 pt 刻み。ズーム (UI-08) はこの大きさに掛ける。
+3. Hex 表示の大きさ `view.font.size`: 6〜72 pt、既定 10 pt (VIEW-01 の仕様 3 と同じ)。0.5 pt 刻み。ズーム (UI-08) はこの大きさに掛ける。
 4. 行間 `view.font.lineHeight`: 1.0〜2.0 倍、既定 1.2 倍。
 5. テキスト列の代替フォント `view.font.fallback`: 既定は空 (Windows のフォントリンクに任せる)。表示できない文字の扱いは 00-overview.md 5.4 に従う。
 6. 合字 (リガチャ) は常に無効にする。

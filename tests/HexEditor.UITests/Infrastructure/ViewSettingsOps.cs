@@ -45,6 +45,21 @@ public static class ViewSettingsOps
         Assert.False(state["open"]!.GetValue<bool>(), $"base address {value}: {state}");
     }
 
+    /// <summary>アプリを終了する (設定と付随データの書き出しを待つ)。同じ設定フォルダで起動し直すときに使う。</summary>
+    public static async Task ExitAsync(AppSession app)
+    {
+        await Task.Delay(1000);
+        try
+        {
+            await app.SendAsync("exit");
+        }
+        catch (IOException)
+        {
+        }
+
+        await app.WaitForExitAsync(TimeSpan.FromSeconds(20));
+    }
+
     /// <summary>表示設定 (ViewSettings の JSON) とビューの状態。</summary>
     public static Task<JsonObject> ViewSettingsAsync(AppSession app) => app.SendAsync("viewSettings");
 

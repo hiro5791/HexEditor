@@ -119,6 +119,7 @@ public sealed record ViewSettings
         : Math.Clamp(RowShift, 0, bytesPerRow - 1);
 
     /// <summary>1 行のバイト数がそろうべき単位 (グループ化とセル形式の単位の最小公倍数。VIEW-08 の仕様 3・5)。</summary>
+    [System.Text.Json.Serialization.JsonIgnore]
     public int RowUnit => Math.Max(1, GroupSize);
 
     /// <summary>
