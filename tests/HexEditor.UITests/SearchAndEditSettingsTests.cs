@@ -300,7 +300,8 @@ public sealed class SearchAndEditSettingsTests
         Assert.Equal(["0x200", "0x100"], (await app.SendAsync("fieldHistory", new JsonObject { ["id"] = "SelectRange_Start" }))["items"]!.AsArray().Select(n => n!.GetValue<string>()));
         Assert.Equal(["8", "0x20"], (await app.SendAsync("fieldHistory", new JsonObject { ["id"] = "SelectRange_Length" }))["items"]!.AsArray().Select(n => n!.GetValue<string>()));
         Assert.Empty((await app.SendAsync("fieldHistory", new JsonObject { ["id"] = "SelectRange_End" }))["items"]!.AsArray());
-        Assert.True((await app.ElementAsync("SelectRange_Start_History"))["found"]!.GetValue<bool>());
+        await app.WaitUntilAsync(async () => (await app.ElementAsync("SelectRange_Start_History"))["found"]!.GetValue<bool>(), TimeSpan.FromSeconds(5),
+            "the history button");
         await app.SendAsync("dialogButton", new JsonObject { ["name"] = "CloseButton" });
     });
 

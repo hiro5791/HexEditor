@@ -154,7 +154,9 @@ public sealed class ClipboardTests
         // 2. Ctrl+V: 末尾を越える 5 バイトを示す確認ダイアログ (ENG-07 の仕様 5) で「末尾まで貼り付ける」を選ぶ。
         await app.KeyAsync("V", ctrl: true);
         await app.WaitForAsync("PasteTruncateDialog");
-        Assert.Contains("5 bytes", AppSession.AllText(app.Find("PasteTruncateDialog")!));
+        // ダイアログの本文は表示の後に入ることがあるので、入るまで待つ。
+        await app.WaitUntilAsync(() => Task.FromResult(app.Find("PasteTruncateDialog") is { } d && AppSession.AllText(d).Contains("5 bytes", StringComparison.Ordinal)),
+            TimeSpan.FromSeconds(5), "the dialog text with 5 bytes");
         (await app.WaitForAsync("PrimaryButton")).Patterns.Invoke.Pattern.Invoke();
         await app.IdleAsync();
         await app.WaitUntilAsync(async () => (await app.BytesAsync(length - 3, 1))[0] == 0x11, TimeSpan.FromSeconds(5), "the paste");
