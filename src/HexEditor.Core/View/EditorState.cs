@@ -427,13 +427,39 @@ public sealed partial class EditorState
         SetSelection(offset, length);
         _cursor = Math.Min(offset, Layout.MaxCursor);
         LowNibble = false;
-        long row = Layout.RowOf(_cursor);
-        if (row < _topRow || row >= _topRow + _visibleRows)
+        ScrollToJumpRange(_cursor, length, JumpPlacement.Center);
+        RaiseChanged();
+    }
+
+    /// <summary>
+    /// 範囲へのジャンプの表示位置 (VIEW-34 の仕様 3): 範囲全体が表示領域に入っていればスクロールしない。入っていなければ、範囲全体が
+    /// 入るならそうする (先頭の行を <paramref name="placement"/> の位置に置き、末尾がはみ出すなら末尾が一番下に来るまで戻す)。
+    /// 入らない場合は範囲の先頭を <paramref name="placement"/> の規則で置く。
+    /// </summary>
+    private void ScrollToJumpRange(long start, long length, JumpPlacement placement)
+    {
+        HexLayout layout = Layout;
+        long first = layout.RowOf(start);
+        long last = length > 0 ? layout.RowOf(Math.Min(start + length - 1, Math.Max(0, layout.Length - 1))) : first;
+        last = Math.Max(first, last);
+        long visible = Math.Max(1, _visibleRows);
+        if (first >= _topRow && last < _topRow + visible)
         {
-            SetTopRow(row - _visibleRows / 2);
+            return;
         }
 
-        RaiseChanged();
+        long top = placement switch
+        {
+            JumpPlacement.Top => first,
+            JumpPlacement.Center => first - visible / 2,
+            _ => first - visible / 3,
+        };
+        if (last - first + 1 <= visible && last >= top + visible)
+        {
+            top = last - visible + 1;
+        }
+
+        SetTopRow(Math.Min(top, first));
     }
 
     private void ScrollToJumpTarget()

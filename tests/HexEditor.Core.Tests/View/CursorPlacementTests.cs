@@ -180,4 +180,30 @@ public sealed class CursorPlacementTests
         e.GoTo(rows.Offset);
         Assert.Equal(0x80, e.Cursor);
     }
+
+    [Fact]
+    public void Jump_to_a_range_shows_the_whole_range_when_it_fits()
+    {
+        // VIEW-34 の仕様 3: 範囲全体が入るならそうする。入らない場合は範囲の先頭を規則どおりに置く。
+        EditorState e = Seq1M();
+
+        // 表示外の 20 行の範囲: 先頭を中央に置くと末尾がはみ出すので、末尾が一番下に来るまで戻す。
+        e.SelectMatch(0x10000, 20 * 16);
+        long first = 0x10000 / 16;
+        Assert.True(e.TopRow <= first && first + 19 < e.TopRow + Visible, $"top {e.TopRow}");
+        Assert.Equal(first + 19 - Visible + 1, e.TopRow);
+
+        // 表示内の範囲ではスクロールしない。
+        long top = e.TopRow;
+        e.SelectMatch(0x10000 + 16, 16);
+        Assert.Equal(top, e.TopRow);
+
+        // 小さい範囲は中央に置く (FIND-04 の仕様 8)。
+        e.SelectMatch(0x40000, 4);
+        Assert.Equal(0x40000 / 16 - Visible / 2, e.TopRow);
+
+        // 表示領域より長い範囲は、先頭を規則どおりに置く。
+        e.SelectMatch(0x80000, 100 * 16);
+        Assert.Equal(0x80000 / 16 - Visible / 2, e.TopRow);
+    }
 }
