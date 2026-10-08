@@ -241,7 +241,7 @@ public sealed partial class MainWindow
             dialog.PrimaryButtonText = Loc.Get("Discard_Confirm");
             dialog.CloseButtonText = Loc.Get("Common_Cancel");
             dialog.DefaultButton = ContentDialogButton.Close;
-            if (await dialog.ShowAsync() != ContentDialogResult.Primary || !EnsureNotBusy(doc))
+            if (await dialog.ShowQueuedAsync() != ContentDialogResult.Primary || !EnsureNotBusy(doc))
             {
                 return false;
             }
@@ -305,7 +305,7 @@ public sealed partial class MainWindow
             dialog.PrimaryButtonText = Loc.Get("External_Merge");
             dialog.CloseButtonText = Loc.Get("Common_Cancel");
             dialog.DefaultButton = ContentDialogButton.Close;
-            if (await dialog.ShowAsync() != ContentDialogResult.Primary || !EnsureNotBusy(doc) || doc.Document.IsReadOnly)
+            if (await dialog.ShowQueuedAsync() != ContentDialogResult.Primary || !EnsureNotBusy(doc) || doc.Document.IsReadOnly)
             {
                 source.Dispose();
                 return false;
@@ -423,6 +423,6 @@ public sealed partial class MainWindow
         dialog.PrimaryButtonText = Loc.Get("Close_Save");
         dialog.CloseButtonText = Loc.Get("Common_Cancel");
         dialog.DefaultButton = ContentDialogButton.Primary;
-        return await dialog.ShowAsync() == ContentDialogResult.Primary;
+        return await dialog.ShowQueuedAsync() == ContentDialogResult.Primary;
     }
 }

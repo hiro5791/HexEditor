@@ -85,11 +85,22 @@ public static class UiHelpers
     public static async Task<JsonObject> WaitForNotificationAsync(this AppSession app, Func<string, bool> match, string what)
     {
         JsonObject? found = null;
-        await app.WaitUntilAsync(async () =>
+        IReadOnlyList<JsonObject> shown = [];
+        try
         {
-            found = (await app.NotificationsAsync()).FirstOrDefault(n => match(n["message"]!.GetValue<string>()));
-            return found is not null;
-        }, TimeSpan.FromSeconds(20), what);
+            await app.WaitUntilAsync(async () =>
+            {
+                found = (shown = await app.NotificationsAsync()).FirstOrDefault(n => match(n["message"]!.GetValue<string>()));
+                return found is not null;
+            }, TimeSpan.FromSeconds(20), what);
+        }
+        catch (TimeoutException ex)
+        {
+            // 出ている通知とアプリのログの末尾を失敗の文に入れる (CI のログだけで原因を調べるため)。
+            throw new TimeoutException($"{ex.Message} Shown: [{string.Join(" | ", shown.Select(n => n["message"]?.GetValue<string>()))}]. Log:\n"
+                + string.Join("\n", (await app.LogAsync()).TakeLast(15)), ex);
+        }
+
         return found!;
     }
 
@@ -107,7 +118,7 @@ public static class UiHelpers
 
     /// <summary>
     /// ダイアログ (ContentDialog) のボタンを、表示名で押す (UI オートメーションの Invoke)。<paramref name="idle"/> が false なら
-    /// 押した後の処理の完了を待たない (アプリが終わるボタン。待つとアプリが先に終わり、命令の通り道が閉じる)。
+    /// 押した後の処理の完了を待たない (アプリが終わるボタンや、続く処理の途中の状態を確かめるとき)。
     /// </summary>
     public static async Task InvokeDialogButtonAsync(this AppSession app, string name, bool idle = true)
     {

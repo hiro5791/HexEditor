@@ -142,7 +142,7 @@ public sealed partial class MainWindow
             package.SetText(AboutInfo.Text(env));
             SystemClipboard.SetContent(package);
         };
-        ContentDialogResult result = await dialog.ShowAsync();
+        ContentDialogResult result = await dialog.ShowQueuedAsync();
         if (result == ContentDialogResult.Secondary)
         {
             await ShowThirdPartyNoticesAsync();
@@ -174,7 +174,7 @@ public sealed partial class MainWindow
             CloseButtonText = Loc.Get("Common_Close"),
             DefaultButton = ContentDialogButton.Close,
         };
-        await dialog.ShowAsync();
+        await dialog.ShowQueuedAsync();
     }
 
     // ---- メニュー項目の有効・無効 (UI-03 の仕様 3) ----

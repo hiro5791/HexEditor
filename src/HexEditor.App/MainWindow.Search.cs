@@ -239,7 +239,7 @@ public sealed partial class MainWindow
         dialog.DefaultButton = ContentDialogButton.Close;
         try
         {
-            return await dialog.ShowAsync() switch
+            return await dialog.ShowQueuedAsync() switch
             {
                 ContentDialogResult.Primary => ConfirmChoice.Primary,
                 ContentDialogResult.Secondary => ConfirmChoice.Secondary,

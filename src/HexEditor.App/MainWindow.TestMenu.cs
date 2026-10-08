@@ -127,7 +127,7 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(dialog, "TestDialog");
         try
         {
-            await dialog.ShowAsync();
+            await dialog.ShowQueuedAsync();
         }
         catch (Exception ex) when (ex is InvalidOperationException or System.Runtime.InteropServices.COMException)
         {

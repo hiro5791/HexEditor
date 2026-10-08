@@ -499,7 +499,7 @@ public sealed partial class MainWindow
         dialog.CloseButtonText = Loc.Get("Common_Cancel");
         dialog.DefaultButton = ContentDialogButton.Close;
         AppLog.Info("Open URL dialog shown (offline mode)");
-        ContentDialogResult result = await dialog.ShowAsync();
+        ContentDialogResult result = await dialog.ShowQueuedAsync();
         if (result == ContentDialogResult.Secondary)
         {
             var package = new DataPackage();
@@ -569,7 +569,7 @@ public sealed partial class MainWindow
         dialog.IsPrimaryButtonEnabled = false;
         dialog.DefaultButton = ContentDialogButton.Primary;
         list.SelectionChanged += (_, _) => dialog.IsPrimaryButtonEnabled = list.SelectedItem is ListViewItem;
-        ContentDialogResult result = await dialog.ShowAsync();
+        ContentDialogResult result = await dialog.ShowQueuedAsync();
         if (result == ContentDialogResult.None)
         {
             return;

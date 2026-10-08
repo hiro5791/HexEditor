@@ -385,7 +385,7 @@ public sealed partial class KeyboardSettingsSection : UserControl, IKeyCaptureHo
         var dialog = Dialog(Loc.Get("Keys_ResetAllTitle"), new TextBlock { Text = Loc.Get("Keys_ResetAllBody"), TextWrapping = TextWrapping.Wrap });
         dialog.PrimaryButtonText = Loc.Get("Settings_ResetConfirm");
         AutomationProperties.SetAutomationId(dialog, "KeysResetAllDialog");
-        if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+        if (await dialog.ShowQueuedAsync() == ContentDialogResult.Primary)
         {
             CommandService.Keys.ResetAll();
         }
@@ -413,7 +413,7 @@ public sealed partial class KeyboardSettingsSection : UserControl, IKeyCaptureHo
             dialog.PrimaryButtonText = Loc.Get("Keys_PreferUser");
             dialog.SecondaryButtonText = Loc.Get("Keys_PreferPreset");
             AutomationProperties.SetAutomationId(dialog, "KeysPresetConflictDialog");
-            ContentDialogResult result = await dialog.ShowAsync();
+            ContentDialogResult result = await dialog.ShowQueuedAsync();
             if (result == ContentDialogResult.None)
             {
                 Fill();
@@ -525,7 +525,7 @@ public sealed partial class KeyboardSettingsSection : UserControl, IKeyCaptureHo
             dialog.PrimaryButtonText = Loc.Get("Keys_AddKey");
             message.Text = string.Empty;
         };
-        await dialog.ShowAsync();
+        await dialog.ShowQueuedAsync();
     }
 
     private ContentDialog Dialog(string title, UIElement body) => new()

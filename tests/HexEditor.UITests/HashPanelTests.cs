@@ -146,6 +146,9 @@ public sealed class HashPanelTests
         await app.WaitUntilAsync(async () => (await HashAsync(app))["computing"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the calculation");
 
         // 2. 計算中に PageDown を 20 回、オフセット 0x100 で A B を入力する。キーから画面の更新までを診断の記録で計る。
+        // 計る前に 1 回押しておく (初めての PageDown の処理の準備 (JIT など) は、計算中かどうかに関係しない)。
+        await app.SendAsync("keyMeasured", new JsonObject { ["key"] = "PageDown" });
+        await app.IdleAsync();
         string log = Path.Combine(ctx.Root, $"diagnostics-{Guid.NewGuid():N}.csv");
         await app.SendAsync("diagnostics", new JsonObject { ["enabled"] = true, ["logPath"] = log });
         await Task.Delay(300);

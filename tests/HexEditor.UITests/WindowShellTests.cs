@@ -197,11 +197,20 @@ public sealed class WindowShellTests
         // メインウィンドウの横に置き直される。PanelLayout.EnsureOnScreen)。
         JsonObject screen = await app.SendAsync("shellState");
         int monitorRight = screen["monitorX"]!.GetValue<int>() + screen["monitorWidth"]!.GetValue<int>();
-        await app.SendAsync("moveWindow", new JsonObject { ["x"] = 0, ["y"] = 0, ["width"] = Math.Min(1100, monitorRight - 300), ["height"] = 800 });
+        int monitorHeight = screen["monitorHeight"]!.GetValue<int>();
+        await app.SendAsync("moveWindow", new JsonObject
+        {
+            ["x"] = 0, ["y"] = 0, ["width"] = Math.Min(1100, monitorRight - 300), ["height"] = Math.Min(800, monitorHeight - 100),
+        });
         JsonObject placed = await app.SendAsync("shellState");
         int windowRight = placed["x"]!.GetValue<int>() + placed["width"]!.GetValue<int>();
-        int dropX = Math.Min(windowRight + 200, monitorRight - 50);
-        Assert.True(dropX > windowRight, $"no screen right of the window (window right {windowRight}, screen right {monitorRight})");
+
+        // 画面に余白があればそこで離す。なければ画面の外で離し、浮動パネルはメインウィンドウの右端の内側に置き直される
+        // (画面にかからない浮動パネルの置き方。PanelLayout.EnsureOnScreen: 右端から幅と 16 px)。
+        int dropX = windowRight + 200 <= monitorRight - 50 ? windowRight + 200
+            : monitorRight - 50 > windowRight ? monitorRight - 50
+            : monitorRight + 200;
+        bool dropOnScreen = dropX < monitorRight;
         await app.SendAsync("panelShow", new JsonObject { ["id"] = "inspector" });
         Assert.Equal("right", (await app.SendAsync("panels"))["panels"]!["inspector"]!["location"]!.GetValue<string>());
 
@@ -213,7 +222,15 @@ public sealed class WindowShellTests
         JsonObject outside = await app.SendAsync("panelDragOutside", new JsonObject { ["id"] = "inspector", ["x"] = dropX, ["y"] = 200 });
         Assert.Equal("floating", outside["panels"]!["inspector"]!["location"]!.GetValue<string>());
         JsonObject floating = (await app.SendAsync("floatingPanels"))["panels"]![0]!.AsObject();
-        Assert.InRange(floating["x"]!.GetValue<int>(), windowRight - 100, dropX);
+        if (dropOnScreen)
+        {
+            Assert.InRange(floating["x"]!.GetValue<int>(), windowRight - 100, dropX);
+        }
+        else
+        {
+            double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+            Assert.Equal(windowRight - (int)(320 * scale) - 16, floating["x"]!.GetValue<int>());
+        }
 
         // 元に戻して、別のウィンドウの下の場所には落とせない (同じウィンドウの下には落とせる)。
         await app.SendAsync("panelMove", new JsonObject { ["id"] = "inspector", ["dock"] = "right" });
@@ -385,7 +402,7 @@ public sealed class WindowShellTests
         await app.WaitUntilAsync(async () => (await app.StateAsync())["activeOperations"]!.GetValue<int>() > 0, Wait, "the save");
         await app.KeyAsync("W", ctrl: true);
         await app.WaitForAsync("CloseDialog");
-        await app.InvokeDialogButtonAsync("Close after saving");
+        await app.InvokeDialogButtonAsync("Close after saving", idle: false);
 
         // 保存の進捗のダイアログが出て、保存が終わると自動で閉じ、タブも閉じる。
         await app.WaitUntilAsync(async () => (await app.SendAsync("closeWait"))["open"]!.GetValue<bool>(), Wait, "the waiting dialog");

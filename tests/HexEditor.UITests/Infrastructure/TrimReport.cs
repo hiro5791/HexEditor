@@ -28,7 +28,12 @@ public static class TrimReport
         {
             if (!Cache.TryGetValue(language, out IReadOnlyList<(string, Regex)>? keys))
             {
-                keys = [.. Load(Folder(language)).Select(kv => (kv.Key, ToPattern(kv.Value)))];
+                // 疑似翻訳の .resw はアプリのビルドで作る (build/PseudoLocalize.targets)。アプリをビルドしない実行 (CI の ui-distro は
+                // 配布形態のビルドを入れて UI テストだけをビルドする) では、英語から同じ規則でここで作る。
+                Dictionary<string, string> values = language.StartsWith("qps-", StringComparison.Ordinal) && Folder(language) != language
+                    ? Load("en").Where(kv => !kv.Key.EndsWith(".AccessKey", StringComparison.Ordinal)).ToDictionary(kv => kv.Key, kv => Pseudo(kv.Value))
+                    : Load(Folder(language));
+                keys = [.. values.Select(kv => (kv.Key, ToPattern(kv.Value)))];
                 Cache[language] = keys;
             }
 
@@ -84,6 +89,39 @@ public static class TrimReport
         return File.Exists(path)
             ? System.Xml.Linq.XDocument.Load(path).Root!.Elements("data").ToDictionary(d => d.Attribute("name")!.Value, d => d.Element("value")!.Value)
             : [];
+    }
+
+    /// <summary>疑似翻訳 (build/PseudoLocalize.targets と同じ規則): アクセント付きの文字に置き換え、約 1.5 倍に伸ばして [ ] で囲む。</summary>
+    private static string Pseudo(string text)
+    {
+        const string Plain = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string Accented = "àƀçđéƒĝĥíĵķĺɱñöƥɋŕšţüʋŵẋýžÀßÇĐÉƑĜĤÍĴĶĹṀÑÖƤɊŔŠŢÜṼŴẊÝŽ";
+        int padding = Math.Max(1, (int)Math.Ceiling(text.Length * 0.5));
+        if (text.Contains(", plural,", StringComparison.Ordinal))
+        {
+            return "[" + text + " " + new string('!', padding) + "]";
+        }
+
+        var result = new System.Text.StringBuilder("[");
+        int last = 0;
+        void Append(string part)
+        {
+            foreach (char c in part)
+            {
+                int i = Plain.IndexOf(c, StringComparison.Ordinal);
+                result.Append(i >= 0 ? Accented[i] : c);
+            }
+        }
+
+        foreach (Match m in Regex.Matches(text, @"\{[^{}]*\}"))
+        {
+            Append(text[last..m.Index]);
+            result.Append(m.Value);
+            last = m.Index + m.Length;
+        }
+
+        Append(text[last..]);
+        return result.Append(' ').Append('!', padding).Append(']').ToString();
     }
 
     /// <summary>.resw の値を、プレースホルダー ({0} など) を任意の文字列とみなす照合にする。</summary>

@@ -37,7 +37,7 @@ public sealed partial class MainWindow
                 dialog.PrimaryButtonText = Loc.Get("SaveSpace_SaveElsewhere");
                 dialog.CloseButtonText = Loc.Get("Common_Cancel");
                 dialog.DefaultButton = ContentDialogButton.Primary;
-                if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+                if (await dialog.ShowQueuedAsync() == ContentDialogResult.Primary)
                 {
                     _saveElsewhereRequested = true;
                 }
@@ -54,7 +54,7 @@ public sealed partial class MainWindow
                 dialog.SecondaryButtonText = Loc.Get("SaveJournal_Unprotected");
                 dialog.CloseButtonText = Loc.Get("Common_Cancel");
                 dialog.DefaultButton = ContentDialogButton.Primary;
-                return await dialog.ShowAsync() switch
+                return await dialog.ShowQueuedAsync() switch
                 {
                     ContentDialogResult.Primary => SavePlanner.UseSafeSave(plan),
                     ContentDialogResult.Secondary => SavePlanner.WriteWithoutJournal(plan),
@@ -75,7 +75,7 @@ public sealed partial class MainWindow
 
                 dialog.CloseButtonText = Loc.Get("Common_Cancel");
                 dialog.DefaultButton = ContentDialogButton.Primary;
-                return await dialog.ShowAsync() switch
+                return await dialog.ShowQueuedAsync() switch
                 {
                     ContentDialogResult.Primary => SavePlanner.BreakLinks(plan),
                     ContentDialogResult.Secondary => SavePlanner.KeepLinks(plan),
@@ -91,7 +91,7 @@ public sealed partial class MainWindow
                 dialog.SecondaryButtonText = Loc.Get("Backup_SaveWithout");
                 dialog.CloseButtonText = Loc.Get("Common_Cancel");
                 dialog.DefaultButton = ContentDialogButton.Primary;
-                return await dialog.ShowAsync() switch
+                return await dialog.ShowQueuedAsync() switch
                 {
                     ContentDialogResult.Primary => SavePlanner.CopyBackup(plan),
                     ContentDialogResult.Secondary => SavePlanner.WithoutBackup(plan),

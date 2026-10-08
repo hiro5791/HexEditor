@@ -77,6 +77,10 @@ public sealed partial class MainWindow
         state["windowSize"] = $"{AppWindow.Size.Width}x{AppWindow.Size.Height}";
         state["distribution"] = Hosting.Program.Environment.Distribution.ToString();
         state["newDocumentCreatedAt"] = NewDocumentCreatedAt;
+
+        // GC の停止時間 (UI スレッドが止まった原因を調べるため)。
+        state["gcPauseMs"] = GC.GetTotalPauseDuration().TotalMilliseconds;
+        state["gen2Collections"] = GC.CollectionCount(2);
         state["scale"] = Root.XamlRoot?.RasterizationScale ?? 1;
 
         // タイトルバーのウィンドウ操作ボタンの場所 (左右の余白。物理ピクセル。UI-02 の仕様 2、UI-44)。

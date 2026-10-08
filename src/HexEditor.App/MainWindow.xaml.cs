@@ -307,7 +307,8 @@ public sealed partial class MainWindow : Window
                     SuggestedFileName = suggestedName,
                     SettingsIdentifier = "HexEditor.SaveAs",
                 };
-                if (doc.FilePath is { } current && Path.GetDirectoryName(current) is { } folder)
+                // 読み取り専用のボリューム (読み取り専用のメディアなど) のフォルダは初期フォルダにしない (ENG-21 の仕様 1。保存ダイアログが別のパスの入力も断るため)。
+                if (doc.FilePath is { } current && Path.GetDirectoryName(current) is { } folder && IsWritableFolder(folder))
                 {
                     picker.SuggestedFolder = folder;
                 }
@@ -433,7 +434,7 @@ public sealed partial class MainWindow : Window
             DefaultButton = ContentDialogButton.Primary,
         };
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(dialog, "PasteTruncateDialog");
-        return await dialog.ShowAsync() == ContentDialogResult.Primary;
+        return await dialog.ShowQueuedAsync() == ContentDialogResult.Primary;
     }
 
     private async Task RunEditorCommandAsync(EditorCommand command)
@@ -714,4 +715,32 @@ public sealed partial class MainWindow : Window
             undo,
             actions);
     }
+
+    /// <summary>
+    /// フォルダのボリュームに書き込めるか (読み取り専用のボリューム: 読み取り専用で接続した VHD、CD/DVD など)。ファイルは作らない。
+    /// 調べられなければ書き込めるとみなす。
+    /// </summary>
+    private static bool IsWritableFolder(string folder)
+    {
+        const uint FileReadOnlyVolume = 0x00080000;
+        string? root = Path.GetPathRoot(Path.GetFullPath(folder));
+        if (string.IsNullOrEmpty(root))
+        {
+            return true;
+        }
+
+        if (!root.EndsWith('\\'))
+        {
+            root += "\\";
+        }
+
+        return !GetVolumeInformation(root, null, 0, out _, out _, out uint flags, null, 0) || (flags & FileReadOnlyVolume) == 0;
+    }
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode, SetLastError = true,
+        EntryPoint = "GetVolumeInformationW")]
+    [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+    private static extern bool GetVolumeInformation(string rootPathName, System.Text.StringBuilder? volumeNameBuffer, int volumeNameSize,
+        out uint volumeSerialNumber, out uint maximumComponentLength, out uint fileSystemFlags, System.Text.StringBuilder? fileSystemNameBuffer,
+        int fileSystemNameSize);
 }

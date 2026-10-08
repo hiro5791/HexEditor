@@ -21,9 +21,19 @@ public sealed partial class MainWindow
         return cmd switch
         {
             "shellState" => ShellState(),
-            "moveWindow" => Run(() => AppWindow.MoveAndResize(new RectInt32(
-                (int)TestHookSettings.ReadLong(request["x"], 100), (int)TestHookSettings.ReadLong(request["y"], 100),
-                (int)TestHookSettings.ReadLong(request["width"], 1200), (int)TestHookSettings.ReadLong(request["height"], 800)))),
+            "moveWindow" => Run(() =>
+            {
+                // 最大化 (画面の小さい CI のランナーでは、既定の大きさが画面いっぱいになり最大化と同じ扱いになることがある) のままでは
+                // 位置と大きさを変えられないので、元の大きさに戻してから動かす。
+                if (AppWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter { State: Microsoft.UI.Windowing.OverlappedPresenterState.Maximized } presenter)
+                {
+                    presenter.Restore();
+                }
+
+                AppWindow.MoveAndResize(new RectInt32(
+                    (int)TestHookSettings.ReadLong(request["x"], 100), (int)TestHookSettings.ReadLong(request["y"], 100),
+                    (int)TestHookSettings.ReadLong(request["width"], 1200), (int)TestHookSettings.ReadLong(request["height"], 800)));
+            }),
             // 処理センターの一覧に出る処理 (UI-37)。ステータスバーの項目が隠れていても読める。
             "processingCenter" => new JsonObject
             {

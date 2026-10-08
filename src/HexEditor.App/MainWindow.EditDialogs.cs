@@ -37,7 +37,7 @@ public sealed partial class MainWindow
     {
         try
         {
-            return await dialog.ShowAsync();
+            return await dialog.ShowQueuedAsync();
         }
         finally
         {

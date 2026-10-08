@@ -150,7 +150,7 @@ public sealed partial class MainWindow
             DefaultButton = ContentDialogButton.Primary,
         };
         Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(dialog, "DropConfirmDialog");
-        return await dialog.ShowAsync() == ContentDialogResult.Primary;
+        return await dialog.ShowQueuedAsync() == ContentDialogResult.Primary;
     }
 
     /// <summary>1 つのファイルを開く。開けなければそのファイルだけエラーを出し、他のファイルは続ける。</summary>

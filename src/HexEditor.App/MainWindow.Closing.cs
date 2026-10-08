@@ -134,7 +134,7 @@ public sealed partial class MainWindow
         dialog.SecondaryButtonText = Loc.Get("Close_DontSave");
         dialog.CloseButtonText = Loc.Get("Common_Cancel");
         dialog.DefaultButton = ContentDialogButton.Primary;
-        ContentDialogResult choice = await dialog.ShowAsync();
+        ContentDialogResult choice = await dialog.ShowQueuedAsync();
         return choice switch
         {
             ContentDialogResult.Primary => await SaveAsync(doc, saveAs: false),
@@ -169,7 +169,7 @@ public sealed partial class MainWindow
         dialog.SecondaryButtonText = Loc.Get("Close_DontSaveAll");
         dialog.CloseButtonText = Loc.Get("Common_Cancel");
         dialog.DefaultButton = ContentDialogButton.Primary;
-        ContentDialogResult choice = await dialog.ShowAsync();
+        ContentDialogResult choice = await dialog.ShowQueuedAsync();
         if (choice == ContentDialogResult.None)
         {
             return false;
@@ -216,7 +216,7 @@ public sealed partial class MainWindow
 
         dialog.CloseButtonText = Loc.Get("Common_Cancel");
         dialog.DefaultButton = ContentDialogButton.Close;
-        ContentDialogResult choice = await dialog.ShowAsync();
+        ContentDialogResult choice = await dialog.ShowQueuedAsync();
         if (choice == ContentDialogResult.None)
         {
             return false;
@@ -296,7 +296,7 @@ public sealed partial class MainWindow
         _operationWaitDialog = dialog;
         try
         {
-            await dialog.ShowAsync();
+            await dialog.ShowQueuedAsync();
         }
         finally
         {
@@ -318,7 +318,7 @@ public sealed partial class MainWindow
         dialog.SecondaryButtonText = Loc.Get("Materialize_ClearClipboard");
         dialog.CloseButtonText = Loc.Get("Common_Cancel");
         dialog.DefaultButton = ContentDialogButton.Primary;
-        switch (await dialog.ShowAsync())
+        switch (await dialog.ShowQueuedAsync())
         {
             case ContentDialogResult.Primary:
                 return true;

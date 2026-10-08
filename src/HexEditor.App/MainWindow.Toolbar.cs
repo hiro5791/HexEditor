@@ -211,7 +211,7 @@ public sealed partial class MainWindow
             DefaultButton = ContentDialogButton.Close,
         };
         AutomationProperties.SetAutomationId(dialog, "ToolbarCustomizeDialog");
-        await dialog.ShowAsync();
+        await dialog.ShowQueuedAsync();
     }
 
     /// <summary>ボタンを末尾に足す (カスタマイズの「追加」と同じ。テスト用の命令からも使う)。</summary>

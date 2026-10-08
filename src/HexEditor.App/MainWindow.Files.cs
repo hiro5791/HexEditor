@@ -165,7 +165,7 @@ public sealed partial class MainWindow
         size.TextChanged += (_, _) => Validate();
         fill.TextChanged += (_, _) => Validate();
         Validate();
-        if (await dialog.ShowAsync() != ContentDialogResult.Primary)
+        if (await dialog.ShowQueuedAsync() != ContentDialogResult.Primary)
         {
             return;
         }

@@ -662,7 +662,7 @@ public sealed partial class MainWindow
             DefaultButton = ContentDialogButton.Primary,
         };
         AutomationProperties.SetAutomationId(dialog, "KeysImportDialog");
-        if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+        if (await dialog.ShowQueuedAsync() == ContentDialogResult.Primary)
         {
             ApplyKeybindingsImport(mode.SelectedIndex == 1 ? replace : merge);
         }
@@ -959,7 +959,7 @@ public sealed partial class MainWindow
             DefaultButton = ContentDialogButton.Close,
         };
         AutomationProperties.SetAutomationId(dialog, automationId);
-        return await dialog.ShowAsync() == ContentDialogResult.Primary;
+        return await dialog.ShowQueuedAsync() == ContentDialogResult.Primary;
     }
 
     /// <summary>

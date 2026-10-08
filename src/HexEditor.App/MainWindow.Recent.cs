@@ -241,7 +241,7 @@ public sealed partial class MainWindow
         _recentDialog = (dialog, list, Fill);
         try
         {
-            await dialog.ShowAsync();
+            await dialog.ShowQueuedAsync();
         }
         finally
         {

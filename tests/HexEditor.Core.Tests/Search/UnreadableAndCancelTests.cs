@@ -109,8 +109,16 @@ public sealed class UnreadableAndCancelTests
     public async Task CancelledFindAllKeepsTheMatchesFoundSoFar()
     {
         // 1 回の読み込みに 5 ms かかるデータソースで、チャンクが 4 KiB、並列数 2 (全体で 0.6 秒以上)。
+        // 混んだランナーでは最初の一致の通知の処理が遅れ、キャンセルの前に検索が終わることがあるので、キャンセルするまでは
+        // 64 KiB より後ろを読ませない (時間に頼らずに「途中まで見つけた」状態を作る)。
+        using var hold = new ManualResetEventSlim(false);
         var source = new FakeByteSource(1024 * 1024, (o, s) =>
         {
+            if (o >= 64 * 1024)
+            {
+                hold.Wait(TimeSpan.FromSeconds(10));
+            }
+
             s.Clear();
             for (long p = (o + 1023) / 1024 * 1024; p < o + s.Length; p += 1024)
             {
@@ -131,8 +139,16 @@ public sealed class UnreadableAndCancelTests
             return Task.CompletedTask;
         });
 
-        await firstBatch.Task.WaitAsync(TimeSpan.FromSeconds(10));
-        running!.Cancel();
+        try
+        {
+            await firstBatch.Task.WaitAsync(TimeSpan.FromSeconds(10));
+            running!.Cancel();
+        }
+        finally
+        {
+            hold.Set();
+        }
+
         DateTime cancelledAt = DateTime.UtcNow;
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => task);
         Assert.True(DateTime.UtcNow - cancelledAt < TimeSpan.FromMilliseconds(500), "キャンセルの後すぐに止まる");

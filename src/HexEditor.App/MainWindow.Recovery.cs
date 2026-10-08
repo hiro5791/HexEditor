@@ -253,7 +253,7 @@ public sealed partial class MainWindow
         body.Children.Add(new TextBlock { Text = Loc.Get("Recovery_Body"), TextWrapping = TextWrapping.Wrap });
         body.Children.Add(new ScrollViewer { Content = list, MaxHeight = 360 });
         dialog.Content = body;
-        await dialog.ShowAsync();
+        await dialog.ShowQueuedAsync();
     }
 
     private static FrameworkElement RecoveryRow(string name, string location, string details, string? restoreText, Action? restore, Action discard,
