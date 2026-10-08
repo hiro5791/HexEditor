@@ -138,8 +138,25 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
     private bool _showNibble;
 
-    public string CursorText => Loc.Format("Status_Offset", StatusFormat.Offset(Editor.Cursor, HexDigits)
-        + (ShowNibble && Editor.ActiveColumn == ActiveColumn.Hex && Editor.LowNibble ? " (" + Loc.Get("HexView_State_LowNibble") + ")" : string.Empty));
+    /// <summary>
+    /// カーソル位置 (VIEW-40 の仕様 1): 基数と桁数は VIEW-19、ベースアドレスを使うときは <c>@00401F00</c>、基準点があるときは
+    /// 「相対 +00000020」(VIEW-20)。16 進の大文字・小文字は VIEW-12。
+    /// </summary>
+    public string CursorText
+    {
+        get
+        {
+            OffsetFormat format = Editor.OffsetFormat;
+            string value = format.Status(Editor.Cursor, Culture);
+            if (Editor.ReferencePoint is not null)
+            {
+                value = Loc.Format("Status_Relative", value);
+            }
+
+            return Loc.Format("Status_Offset", value
+                + (ShowNibble && Editor.ActiveColumn == ActiveColumn.Hex && Editor.LowNibble ? " (" + Loc.Get("HexView_State_LowNibble") + ")" : string.Empty));
+        }
+    }
 
     /// <summary>カーソルの値: 「値: 4F (79)」。末尾 (データのない位置) と読み込み中は表示しない。</summary>
     public string ValueText
@@ -160,20 +177,21 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
             }
 
             (string hex, string dec) = StatusFormat.ByteValue(value[0], Culture);
-            return Loc.Format("Status_Value", hex, dec);
+            return Loc.Format("Status_Value", Editor.View.LowercaseHex ? hex.ToLowerInvariant() : hex, dec);
         }
     }
 
     /// <summary>選択範囲: 「選択: 0x1F00–0x1FFF (長さ 0x100 = 256)」。開始と最後のバイトの閉区間 (VIEW-40 の仕様 3)。</summary>
     public string SelectionText => Editor.HasSelection
-        ? Loc.Format("Status_SelectionRange", StatusFormat.Hex(Editor.SelectionStart), StatusFormat.Hex(Editor.SelectionStart + Editor.SelectionLength - 1),
-            StatusFormat.Hex(Editor.SelectionLength), StatusFormat.Number(Editor.SelectionLength, Culture))
+        ? Loc.Format("Status_SelectionRange", Editor.OffsetFormat.Value(Editor.SelectionStart, Culture),
+            Editor.OffsetFormat.Value(Editor.SelectionStart + Editor.SelectionLength - 1, Culture),
+            OffsetFormat.Hex(Editor.SelectionLength, Editor.View.LowercaseHex), StatusFormat.Number(Editor.SelectionLength, Culture))
         : string.Empty;
 
     public string SelectionToolTip => Editor.HasSelection
-        ? Loc.Format("Status_SelectionTip", StatusFormat.Offset(Editor.SelectionStart, HexDigits),
-            StatusFormat.Offset(Editor.SelectionStart + Editor.SelectionLength - 1, HexDigits),
-            StatusFormat.Hex(Editor.SelectionLength), StatusFormat.Number(Editor.SelectionLength, Culture))
+        ? Loc.Format("Status_SelectionTip", Editor.OffsetFormat.Status(Editor.SelectionStart, Culture),
+            Editor.OffsetFormat.Status(Editor.SelectionStart + Editor.SelectionLength - 1, Culture),
+            OffsetFormat.Hex(Editor.SelectionLength, Editor.View.LowercaseHex), StatusFormat.Number(Editor.SelectionLength, Culture))
         : string.Empty;
 
     public string ModeText => Editor.ReadOnly ? LockGlyph + " " + Loc.Get("Status_ReadOnly")

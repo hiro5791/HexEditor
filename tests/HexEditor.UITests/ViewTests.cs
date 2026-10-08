@@ -45,15 +45,15 @@ public sealed class ViewTests
         render = await WaitForContentAsync(app, lastRow);
         AssertRowIsMarker(render, lastRow, Sparse100G - TestDataCatalog.MarkerLength, (int)(lastRow - (Sparse100G - TestDataCatalog.MarkerLength)));
         JsonObject blank = render["rows"]!.AsArray()[^1]!.AsObject();
-        Assert.Equal(Sparse100G.ToString("X16"), blank["offsetText"]!.GetValue<string>());
+        Assert.Equal(Sparse100G.ToString("X10"), blank["offsetText"]!.GetValue<string>());
         Assert.Equal("  ", blank["cells"]![0]!["hex"]!.GetValue<string>());
 
         static void AssertRowIsMarker(JsonObject render, long rowStart, long marker, int skip)
         {
             JsonObject row = Row(render, rowStart) ?? throw new Xunit.Sdk.XunitException($"Row {rowStart:X} is not shown.");
 
-            // オフセット列は VIEW-19 の書式 (100 GiB では 16 桁の 16 進)。
-            Assert.Equal(rowStart.ToString("X16"), row["offsetText"]!.GetValue<string>());
+            // オフセット列は VIEW-19 の書式 (表示しうる最大のアドレスを表せる桁数。100 GiB では 10 桁の 16 進)。
+            Assert.Equal(rowStart.ToString("X10"), row["offsetText"]!.GetValue<string>());
             byte[] expected = TestDataCatalog.Marker(marker).Skip(skip).Take(16).ToArray();
             Assert.Equal(Convert.ToHexString(expected), RowHex(row).Replace(" ", string.Empty));
         }
@@ -188,7 +188,7 @@ public sealed class ViewTests
         Assert.Equal(m, await TopRowAsync(app));
         JsonObject render = await app.RenderAsync();
         JsonArray rows = render["rows"]!.AsArray();
-        Assert.Equal(((1L << 40) - 16).ToString("X16"), rows[v - 1]!["offsetText"]!.GetValue<string>());
+        Assert.Equal(((1L << 40) - 16).ToString("X10"), rows[v - 1]!["offsetText"]!.GetValue<string>());
         Assert.Equal(v, rows.Count);
     });
 

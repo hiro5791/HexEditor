@@ -35,11 +35,21 @@ public static class BuiltInSettings
         new("ui.theme", SettingCategories.Appearance, SettingKind.Choice, "system") { Options = ["system", "light", "dark"], Order = 10 },
         new("ui.backdrop", SettingCategories.Appearance, SettingKind.Choice, "mica") { Options = ["mica", "micaAlt", "none"], Order = 20 },
 
+        // Hex 表示のフォントと配色 (UI-28、UI-29)。フォントと配色は一覧から選ぶ専用の区画 (App の ViewSections) で変える。
+        new("view.font.family", SettingCategories.Appearance, SettingKind.String, string.Empty) { Order = 30, ShowInPage = false },
+        new("view.font.size", SettingCategories.Appearance, SettingKind.Number, 10.0) { Min = 6, Max = 72, Order = 31 },
+        new("view.font.lineHeight", SettingCategories.Appearance, SettingKind.Number, 1.2) { Min = 1.0, Max = 2.0, Order = 32 },
+        new("view.font.fallback", SettingCategories.Appearance, SettingKind.String, string.Empty) { Order = 33 },
+        new("view.font.followTextScaling", SettingCategories.Appearance, SettingKind.Bool, true) { Order = 34 },
+        new("view.colorScheme", SettingCategories.Appearance, SettingKind.String, "default") { Order = 35, ShowInPage = false },
+
         // ---- 表示 ----
         new("view.cursor.nibbleArrowKeys", SettingCategories.View, SettingKind.Bool, false) { Order = 10 },
         new("view.statusBar.showNibble", SettingCategories.View, SettingKind.Bool, false) { Order = 20 },
         new("view.scroll.cursorMargin", SettingCategories.View, SettingKind.Int, 0) { Min = 0, Max = 10, Order = 30 },
         new("view.jump.position", SettingCategories.View, SettingKind.Choice, "third") { Options = ["top", "third", "center"], Order = 40 },
+        new("view.tooltips", SettingCategories.View, SettingKind.Bool, true) { Order = 50 },
+        new("view.modified.keepAfterSave", SettingCategories.View, SettingKind.Bool, false) { Order = 60 },
 
         // データインスペクタ (INSP-01〜INSP-19)。行の構成とプリセットはパネルの「行の設定」で変える。
         new("inspector.integerBase", SettingCategories.View, SettingKind.Choice, "decimal") { Options = ["decimal", "hex", "octal"], Order = 100 },
@@ -101,6 +111,9 @@ public static class BuiltInSettings
         // ---- Explorer 連携 (UI-35、UI-54、UI-56) ----
         new("shell.jumpList.enabled", SettingCategories.Explorer, SettingKind.Bool, true) { Order = 10 },
         new("shell.openWith.extensions", SettingCategories.Explorer, SettingKind.String, string.Empty) { Order = 20 },
+
+        // ---- アクセシビリティ (UI-51) ----
+        new("a11y.announce.verbosity", SettingCategories.Accessibility, SettingKind.Choice, "full") { Options = ["full", "brief", "offsetOnly", "none"], Order = 10 },
 
         // ---- 詳細 ----
         new("log.level", SettingCategories.Advanced, SettingKind.Choice, "info") { Options = ["info", "debug"], Order = 10 },

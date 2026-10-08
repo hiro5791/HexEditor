@@ -94,7 +94,8 @@ public static partial class ResourceChecker
         foreach (string key in keys)
         {
             string uid = key.Split('.')[0];
-            bool used = exact.Contains(key) || uids.Contains(uid) || prefixes.Any(p => key.StartsWith(p, StringComparison.Ordinal));
+            // コードで作るメニューの項目は、プロパティを除いた名前 (Menu_View_X) を渡して "Menu_View_X/Text" を引く。
+            bool used = exact.Contains(key) || exact.Contains(uid) || uids.Contains(uid) || prefixes.Any(p => key.StartsWith(p, StringComparison.Ordinal));
             if (!used)
             {
                 yield return $"キー {key} はどこからも参照されていません。";

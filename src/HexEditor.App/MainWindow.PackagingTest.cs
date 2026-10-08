@@ -145,18 +145,45 @@ public sealed partial class MainWindow
         throw new InvalidOperationException($"No notification has the button '{label}'.");
     }
 
+    /// <summary>メニューの項目 (サブメニューを含む) の状態: 有効・チェック・文字列・理由・ショートカットの表示・ツールチップ。</summary>
     private JsonObject TestMenuItem(string id)
     {
-        MenuFlyoutItem item = FindMenuItem(id) ?? throw new ArgumentException($"No menu item {id}.");
-        return new JsonObject
+        var pending = new Stack<MenuFlyoutItemBase>(MainMenu.Items.SelectMany(m => m.Items));
+        while (pending.Count > 0)
         {
-            ["text"] = item.Text,
-            ["enabled"] = item.IsEnabled,
-            ["checked"] = item is ToggleMenuFlyoutItem toggle ? toggle.IsChecked : null,
-            ["reason"] = AutomationProperties.GetHelpText(item),
-            ["acceleratorText"] = item.KeyboardAcceleratorTextOverride,
-            ["toolTip"] = ToolTipService.GetToolTip(item)?.ToString(),
-        };
+            MenuFlyoutItemBase item = pending.Pop();
+            if (AutomationProperties.GetAutomationId(item) == id)
+            {
+                return new JsonObject
+                {
+                    ["found"] = true,
+                    ["enabled"] = item.IsEnabled,
+                    ["checked"] = item switch
+                    {
+                        ToggleMenuFlyoutItem t => t.IsChecked,
+                        RadioMenuFlyoutItem r => r.IsChecked,
+                        _ => null,
+                    },
+                    ["text"] = (item as MenuFlyoutItem)?.Text ?? (item as MenuFlyoutSubItem)?.Text,
+                    ["reason"] = AutomationProperties.GetHelpText(item),
+                    ["acceleratorText"] = (item as MenuFlyoutItem)?.KeyboardAcceleratorTextOverride,
+                    ["toolTip"] = ToolTipService.GetToolTip(item)?.ToString(),
+                    ["items"] = item is MenuFlyoutSubItem sub
+                        ? new JsonArray([.. sub.Items.OfType<MenuFlyoutItem>().Select(i => (JsonNode?)i.Text)])
+                        : null,
+                };
+            }
+
+            if (item is MenuFlyoutSubItem children)
+            {
+                foreach (MenuFlyoutItemBase child in children.Items)
+                {
+                    pending.Push(child);
+                }
+            }
+        }
+
+        return new JsonObject { ["found"] = false };
     }
 
     private static JsonObject TestShell(string action)

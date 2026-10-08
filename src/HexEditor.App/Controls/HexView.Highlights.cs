@@ -49,11 +49,7 @@ public sealed partial class HexView
     private readonly record struct PlacedHighlight(HexHighlightLayer Layer, string Tag, string Column, long First, long Last, Brush? Background,
         Brush? Border, IReadOnlyList<double>? Dash);
 
-    /// <summary>ハイコントラストのテーマか (テスト用のビルドでは差し替えられる)。</summary>
-    public bool IsHighContrast => TestHighContrast ?? _accessibilitySettings.HighContrast;
-
-    /// <summary>ハイコントラストの判定の差し替え (OS の設定を変えずに、ハイコントラストの描き方を確かめる)。null なら OS の設定。</summary>
-    internal static bool? TestHighContrast { get; set; }
+    // ハイコントラストの判定は IsHighContrast (HexView.Options.cs。テスト用の模擬 ForcedHighContrast を含む) を使う。
 
     /// <summary>
     /// 範囲の強調の提供元を登録する (null で外す)。関数は [start, end) と重なる項目を返す。表示のたびに呼ぶため、ブロックしないこと。
@@ -104,9 +100,6 @@ public sealed partial class HexView
             opening(_contextMenu);
         }
     }
-
-    /// <summary>スクリーンリーダーに読み上げさせる (カーソルがブックマークの範囲に入ったときなど。INSP-23 の仕様 9)。</summary>
-    public void AnnounceText(string text, string activityId) => Announce(text, activityId);
 
     /// <summary>描画の最後に、表示中の範囲の強調と目印を置く (Render から呼ぶ)。</summary>
     private void RenderHighlights(long firstOffset, int rows, RowColumns columns)

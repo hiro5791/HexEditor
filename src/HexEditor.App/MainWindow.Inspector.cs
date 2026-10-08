@@ -44,7 +44,6 @@ public sealed partial class MainWindow
     private Microsoft.UI.Dispatching.DispatcherQueueTimer _annotationSaveTimer = null!;
     private DocumentViewModel? _annotatedDocument;
     private bool _inspectorRefreshQueued;
-    private Bookmark? _announcedBookmark;
     private Flyout? _bookmarkFlyout;
     private BookmarkEditor? _bookmarkEditor;
 
@@ -261,7 +260,6 @@ public sealed partial class MainWindow
             if (doc == Vm.Selected)
             {
                 QueueInspectorRefresh();
-                AnnounceBookmarkAtCursor(annotations);
             }
         };
 
@@ -297,7 +295,6 @@ public sealed partial class MainWindow
         DocumentAnnotations? annotations = doc is null ? null : AnnotationsFor(doc);
         _inspectorVm.Attach(doc, annotations);
         _bookmarksVm.Attach(annotations);
-        _announcedBookmark = null;
         foreach (HexView view in _views)
         {
             AttachAnnotations(view);
@@ -364,6 +361,11 @@ public sealed partial class MainWindow
         view.SetHighlightSource("inspector", (start, end) => InspectorHighlights(view, start, end));
         view.SetHighlightSource("bookmarks", (start, end) => BookmarkHighlights(view, start, end));
         view.SetOffsetMarkerSource("bookmarks", (start, end) => BookmarkMarks(view, start, end));
+
+        // ブックマークの名前はツールチップ (VIEW-07) と位置の読み上げ (「ブックマーク 名前」。INSP-23 の仕様 9、UI-51) に出す。
+        view.AnnotationNames = at => DocumentOf(view) is { } d && _annotations.TryGetValue(d, out DocumentAnnotations? a)
+            ? [.. a.Bookmarks.Overlapping(at, at + 1).Select(b => b.Name)]
+            : [];
         view.SetContextMenuExtension(menu =>
         {
             ExtendHexViewEditMenu(menu);
@@ -420,21 +422,6 @@ public sealed partial class MainWindow
     }
 
     private DocumentViewModel? DocumentOf(HexView view) => Vm.Documents.FirstOrDefault(d => d.Editor == view.Editor);
-
-    /// <summary>カーソルがブックマークの範囲に入ったら読み上げる (INSP-23 の仕様 9)。</summary>
-    private void AnnounceBookmarkAtCursor(DocumentAnnotations annotations)
-    {
-        long cursor = annotations.Document.Editor.Cursor;
-        Bookmark? inside = annotations.Bookmarks.Overlapping(cursor, cursor + 1).FirstOrDefault();
-        if (inside != _announcedBookmark)
-        {
-            _announcedBookmark = inside;
-            if (inside is not null)
-            {
-                CurrentView()?.AnnounceText(Loc.Format("Bookmarks_Announce", inside.Name), "HexViewBookmark");
-            }
-        }
-    }
 
     // ---- Hex ビューの右クリックメニュー (INSP-23、INSP-24) ----
 

@@ -31,7 +31,8 @@ public sealed class DataSourceHookTests
         {
             Assert.Equal("··", cell!["hex"]!.GetValue<string>());
             Assert.Equal(" ", cell["text"]!.GetValue<string>());
-            Assert.NotEqual(normal[0]!["foreground"]!.GetValue<string>(), cell["foreground"]!.GetValue<string>());
+            // オフセット 0 の 00 は薄い色 (VIEW-13) なので、通常の文字色はオフセット 1 のセルで比べる。
+            Assert.NotEqual(normal[1]!["foreground"]!.GetValue<string>(), cell["foreground"]!.GetValue<string>());
         }
 
         // 3. 読み込み完了の 500 ms 後: 本当の値に置き換わる。

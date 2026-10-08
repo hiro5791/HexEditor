@@ -198,6 +198,37 @@ public sealed class PieceTree
         }
     }
 
+    /// <summary><paramref name="offset"/> を含むピース (切り詰めない) とその開始位置。範囲外なら null。</summary>
+    public (long Start, Piece Piece)? PieceAt(long offset)
+    {
+        if (offset < 0 || offset >= Length)
+        {
+            return null;
+        }
+
+        Node? node = _root;
+        long nodeStart = 0;
+        while (node is not null)
+        {
+            long pieceStart = nodeStart + Len(node.Left);
+            if (offset < pieceStart)
+            {
+                node = node.Left;
+            }
+            else if (offset >= pieceStart + node.Piece.Length)
+            {
+                nodeStart = pieceStart + node.Piece.Length;
+                node = node.Right;
+            }
+            else
+            {
+                return (pieceStart, node.Piece);
+            }
+        }
+
+        return null;
+    }
+
     /// <summary>すべてのピースを先頭から列挙する。</summary>
     public IEnumerable<(long DocumentOffset, Piece Piece)> EnumerateAll() => Enumerate(0, Length);
 

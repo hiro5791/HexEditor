@@ -153,6 +153,110 @@ public sealed class DocumentSnapshot
         }
     }
 
+    /// <summary>上書き・挿入の区別のために前後をたどるピースの数の上限 (超えたら上書きとして扱う)。</summary>
+    private const int ChangeWalkLimit = 4096;
+
+    /// <summary>
+    /// [offset, offset + length) の中の、元データ以外のピースに含まれるバイト (変更されたバイト。VIEW-15 の仕様 2) を、上書きか挿入かの
+    /// 区別を付けて列挙する (VIEW-15 の仕様 4)。前後の元データのピースの間で、元データ上で飛ばした長さ (置き換えられたバイト数) までを
+    /// 上書き、それを超える分を挿入とみなす。前後のピースが遠すぎて分からない場合は上書きとして扱う。
+    /// </summary>
+    public IEnumerable<(long Offset, long Length, bool Inserted)> EnumerateChanges(long offset, long length)
+    {
+        length = Math.Min(length, Math.Max(0, Length - offset));
+        if (length <= 0 || offset < 0)
+        {
+            yield break;
+        }
+
+        long end = offset + length;
+        long at = offset;
+        while (at < end)
+        {
+            if (Tree.PieceAt(at) is not { } found)
+            {
+                yield break;
+            }
+
+            (long start, Piece piece) = found;
+            if (piece.Kind == PieceKind.Original)
+            {
+                at = start + piece.Length;
+                continue;
+            }
+
+            (long runStart, long runEnd, long overwritten) = ChangeRun(start, start + piece.Length);
+            long split = runStart + overwritten;
+            long from = Math.Max(at, runStart);
+            long to = Math.Min(end, runEnd);
+            if (from < Math.Min(split, to))
+            {
+                yield return (from, Math.Min(split, to) - from, false);
+            }
+
+            if (Math.Max(from, split) < to)
+            {
+                yield return (Math.Max(from, split), to - Math.Max(from, split), true);
+            }
+
+            at = runEnd;
+        }
+    }
+
+    /// <summary>元データ以外のピースが続く範囲と、そのうち上書きとみなすバイト数。</summary>
+    private (long Start, long End, long Overwritten) ChangeRun(long pieceStart, long pieceEnd)
+    {
+        long runStart = pieceStart;
+        long previousSourceEnd = 0;
+        bool known = true;
+        int steps = 0;
+        while (true)
+        {
+            if (runStart == 0)
+            {
+                break;
+            }
+
+            if (++steps > ChangeWalkLimit || Tree.PieceAt(runStart - 1) is not { } p)
+            {
+                known = false;
+                break;
+            }
+
+            if (p.Piece.Kind == PieceKind.Original)
+            {
+                previousSourceEnd = p.Piece.Offset + p.Piece.Length;
+                break;
+            }
+
+            runStart = p.Start;
+        }
+
+        long runEnd = pieceEnd;
+        long nextSourceStart = _storage.Source.Length;
+        steps = 0;
+        while (runEnd < Length)
+        {
+            if (++steps > ChangeWalkLimit || Tree.PieceAt(runEnd) is not { } p)
+            {
+                known = false;
+                break;
+            }
+
+            if (p.Piece.Kind == PieceKind.Original)
+            {
+                nextSourceStart = p.Piece.Offset;
+                break;
+            }
+
+            runEnd = p.Start + p.Piece.Length;
+        }
+
+        long run = runEnd - runStart;
+        long gap = Math.Max(0, nextSourceStart - previousSourceEnd);
+        return (runStart, runEnd, known ? Math.Min(gap, run) : run);
+    }
+
     private int CountWithinLength(long offset, int requested)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(offset);

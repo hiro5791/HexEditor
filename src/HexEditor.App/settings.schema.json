@@ -10,6 +10,17 @@
       "type": "integer",
       "const": 1
     },
+    "a11y.announce.verbosity": {
+      "description": "Screen reader detail",
+      "type": "string",
+      "enum": [
+        "full",
+        "brief",
+        "offsetOnly",
+        "none"
+      ],
+      "default": "full"
+    },
     "clipboard.compatFormats": {
       "description": "Copy in formats other hex editors read",
       "type": "boolean",
@@ -359,10 +370,44 @@
       "type": "string",
       "default": ""
     },
+    "view.colorScheme": {
+      "description": "Color scheme",
+      "type": "string",
+      "default": "default"
+    },
     "view.cursor.nibbleArrowKeys": {
       "description": "Move by nibble with arrow keys",
       "type": "boolean",
       "default": false
+    },
+    "view.font.fallback": {
+      "description": "Fallback font for the text column",
+      "type": "string",
+      "default": ""
+    },
+    "view.font.family": {
+      "description": "Font",
+      "type": "string",
+      "default": ""
+    },
+    "view.font.followTextScaling": {
+      "description": "Follow the Windows text size",
+      "type": "boolean",
+      "default": true
+    },
+    "view.font.lineHeight": {
+      "description": "Line height",
+      "type": "number",
+      "minimum": 1,
+      "maximum": 2,
+      "default": 1.2
+    },
+    "view.font.size": {
+      "description": "Font size (pt)",
+      "type": "number",
+      "minimum": 6,
+      "maximum": 72,
+      "default": 10
     },
     "view.jump.position": {
       "description": "Position after a jump",
@@ -373,6 +418,11 @@
         "center"
       ],
       "default": "third"
+    },
+    "view.modified.keepAfterSave": {
+      "description": "Keep change marks after saving",
+      "type": "boolean",
+      "default": false
     },
     "view.scroll.cursorMargin": {
       "description": "Rows kept above and below the cursor",
@@ -385,6 +435,11 @@
       "description": "Show nibble position",
       "type": "boolean",
       "default": false
+    },
+    "view.tooltips": {
+      "description": "Show tooltips",
+      "type": "boolean",
+      "default": true
     }
   },
   "required": [

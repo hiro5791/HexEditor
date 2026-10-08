@@ -216,6 +216,10 @@ public sealed class SettingsStore : IDisposable
     /// </summary>
     public static Action<SettingsWritePoint>? WriteHook { get; set; }
 
+    /// <summary>オブジェクト・配列の値を変える。null または空のオブジェクトならファイルから消す (表示設定の既定値など)。</summary>
+    public void SetNode(string key, JsonNode? value) =>
+        Set(key, value is null || value is JsonObject { Count: 0 } ? null : value.DeepClone());
+
     /// <summary>値を変える。既定値と同じなら、ファイルから消す (仕様 4)。</summary>
     public void SetString(string key, string value, string defaultValue) =>
         Set(key, value == defaultValue ? null : JsonValue.Create(value));

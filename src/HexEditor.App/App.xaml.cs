@@ -121,6 +121,7 @@ public partial class App : Application
             RestorePosition = () => FileSettings.RestorePosition(Settings),
         };
         vm.InitializeFiles(files, FileSettings.RecentMaxItems(Settings));
+        ViewOptions.Documents = files.Documents;
         vm.BackupSettings = FileSettings.Backup(Settings);
 
         // コマンドパレットの「ファイル」モードの候補 (UI-17 の仕様 2、UI-32)。

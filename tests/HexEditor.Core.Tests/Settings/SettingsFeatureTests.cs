@@ -234,9 +234,8 @@ public sealed class SettingsFeatureTests : IDisposable
     [Trait(TC, "TC-UI-25-03")]
     public void Invalid_values_are_skipped_and_listed()
     {
-        // TD-UI-SETEXP-BADVALUE。フォント (UI-29) とズーム (UI-08) の項目はそれぞれの機能が登録する。ここでは同じ定義を足して確かめる。
+        // TD-UI-SETEXP-BADVALUE。フォントの大きさ (UI-29) は組み込みの定義 (6〜72)。ズーム (UI-08) の項目はまだないので、同じ定義を足して確かめる。
         var catalog = SettingsCatalog.CreateBuiltIn();
-        catalog.Register(new SettingDefinition("view.font.size", SettingCategories.Appearance, SettingKind.Int, 11) { Min = 6, Max = 72 });
         catalog.Register(new SettingDefinition("view.zoom.hex", SettingCategories.View, SettingKind.Int, 100) { Min = 50, Max = 400 });
         SettingsBundle bundle = SettingsBundle.Parse("""{"$schemaVersion": 1, "app": "HexEditor", "version": "1.0.0", "settings": {"view.font.size": 200, "ui.theme": "purple", "view.zoom.hex": 150}}""");
         SettingsImportPlan plan = bundle.PlanSettings([], catalog, ImportMode.Merge);

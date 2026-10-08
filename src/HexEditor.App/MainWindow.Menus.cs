@@ -48,7 +48,7 @@ public sealed partial class MainWindow
     {
         if (Editor is { } editor && sender is RadioMenuFlyoutItem { Tag: string tag })
         {
-            editor.TextEncoding = tag == "ansi" ? Core.View.TextEncoding.Ansi : Core.View.TextEncoding.Ascii;
+            editor.TextEncoding = Core.View.TextEncoding.FromId(tag);
             UpdateEncodingMenu();
         }
     }
@@ -56,9 +56,16 @@ public sealed partial class MainWindow
     private void UpdateEncodingMenu()
     {
         EncodingAnsi.Text = Loc.Format("Menu_View_EncodingAnsi", Core.View.TextEncoding.Ansi.CodePage);
-        bool ansi = Editor?.TextEncoding == Core.View.TextEncoding.Ansi;
-        EncodingAscii.IsChecked = !ansi;
-        EncodingAnsi.IsChecked = ansi;
+        string id = Editor?.TextEncoding.Id ?? "ascii";
+        EncodingAscii.IsChecked = id == "ascii";
+        EncodingAnsi.IsChecked = id == "ansi";
+        foreach (string other in Core.View.TextEncoding.SelectableIds)
+        {
+            if (_viewItems.TryGetValue("Command_Encoding_" + other, out MenuFlyoutItemBase? item) && item is RadioMenuFlyoutItem radio)
+            {
+                radio.IsChecked = id == other;
+            }
+        }
     }
 
     /// <summary>ステータスバーの文字コードの項目: 文字コードの選択メニューを開く (UI-06 の仕様 1)。</summary>
@@ -66,14 +73,11 @@ public sealed partial class MainWindow
     {
         UpdateEncodingMenu();
         var menu = new MenuFlyout();
-        foreach ((string tag, string text) in new[]
+        foreach (string tag in Core.View.TextEncoding.SelectableIds)
         {
-            ("ascii", "ASCII"),
-            ("ansi", Loc.Format("Menu_View_EncodingAnsi", Core.View.TextEncoding.Ansi.CodePage)),
-        })
-        {
+            string text = tag == "ansi" ? Loc.Format("Menu_View_EncodingAnsi", Core.View.TextEncoding.Ansi.CodePage) : Core.View.TextEncoding.FromId(tag).Name;
             var item = new RadioMenuFlyoutItem { Text = text, Tag = tag, GroupName = "StatusEncoding" };
-            item.IsChecked = (tag == "ansi") == (Editor?.TextEncoding == Core.View.TextEncoding.Ansi);
+            item.IsChecked = tag == (Editor?.TextEncoding.Id ?? "ascii");
             item.Click += Encoding_Click;
             menu.Items.Add(item);
         }

@@ -34,6 +34,7 @@ public static class BuiltInSections
             SearchKeys = ["SetSearch_Data"],
         });
         PackagingSections.Register();
+        ViewSections.Register();
     }
 
     private static Button CommandButton(MainWindow window, string id)

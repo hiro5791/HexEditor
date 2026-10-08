@@ -60,6 +60,9 @@ public sealed partial class MainWindow : Window
         // データインスペクタ・ブックマーク (INSP-01〜INSP-26)。パネルとコマンドより先に作る。
         InitializeAnnotations();
 
+        // 表示メニューの項目 (VIEW-*)。コマンドとメニューをつなぐ前に作る。
+        InitializeViewMenu();
+
         // コマンド・ツールバー・パネル・設定画面・コマンドパレット (UI-04、UI-05、UI-16〜UI-22)。
         InitializeCommands();
         InitializePanels();
@@ -67,12 +70,16 @@ public sealed partial class MainWindow : Window
         InitializePalette();
         RefreshToolbar();
 
-        // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
-        var noticeTimer = DispatcherQueue.CreateTimer();
-        noticeTimer.Interval = TimeSpan.FromSeconds(1);
-        noticeTimer.Tick += (_, _) => Vm.Notifications.Tick();
-        noticeTimer.Start();
+        // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。タイマーはフィールドに持つ (ローカル変数だけだとガベージコレクションで
+        // 回収され、通知が閉じなくなる)。
+        _noticeTimer = DispatcherQueue.CreateTimer();
+        _noticeTimer.Interval = TimeSpan.FromSeconds(1);
+        _noticeTimer.Tick += (_, _) => Vm.Notifications.Tick();
+        _noticeTimer.Start();
     }
+
+    /// <summary>自動で閉じる通知のタイマー (UI-36 の仕様 4)。</summary>
+    private Microsoft.UI.Dispatching.DispatcherQueueTimer _noticeTimer = null!;
 
     /// <summary>テーマ・背景素材を反映する (UI-26、UI-27)。</summary>
     public void ApplyAppearance()
@@ -213,6 +220,8 @@ public sealed partial class MainWindow : Window
         {
             EditorSettings.Apply(App.Settings, doc);
         }
+
+        ApplyViewOptions();
     }
 
     private void TitleSource_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -535,6 +544,7 @@ public sealed partial class MainWindow : Window
 
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
         view.DocumentName = (view.DataContext as DocumentViewModel)?.DisplayName;
+        ConfigureHexView(view);
         UpdateMatchHighlights(view);
         AttachAnnotations(view);
 
@@ -648,7 +658,7 @@ public sealed partial class MainWindow : Window
 
     /// <summary>文字コードの表示名 (ASCII、ANSI (コードページ 932) など)。</summary>
     private static string EncodingDisplayName(TextEncoding encoding) =>
-        encoding.IsAscii ? encoding.Name : Loc.Format("Menu_View_EncodingAnsi", encoding.CodePage);
+        encoding.IsAscii || encoding.Id != "ansi" ? encoding.Name : Loc.Format("Menu_View_EncodingAnsi", encoding.CodePage);
 
     /// <summary>
     /// 通知を出す (UI-36)。<paramref name="document"/> を指定すると、その文書のタブの中に出す (文書の範囲)。

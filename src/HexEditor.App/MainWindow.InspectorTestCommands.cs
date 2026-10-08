@@ -328,9 +328,10 @@ public sealed partial class MainWindow
 
     private JsonObject TestSetHighContrast(JsonObject request)
     {
-        HexView.TestHighContrast = request["value"]?.GetValue<bool>();
+        // 表示のハイコントラストの模擬 (forceHighContrast と同じ)。
         foreach (HexView view in _views)
         {
+            view.ForcedHighContrast = request["value"]?.GetValue<bool>() ?? false;
             view.RefreshHighlights();
             view.RenderNow();
         }

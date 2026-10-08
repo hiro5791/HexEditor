@@ -136,6 +136,7 @@ public sealed partial class MainWindow
         (long start, long length) = model.Result(editor.HasSelection ? (editor.SelectionStart, editor.SelectionLength) : null);
 
         // 確定: アンカーを開始、カーソルを終了の次に置く (仕様 7)。選択後に開始位置へ移動 (仕様 6)。
+        editor.RecordJump();
         editor.Select(start, length);
         if (scroll.IsChecked == true)
         {

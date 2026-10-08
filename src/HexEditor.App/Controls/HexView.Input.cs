@@ -112,7 +112,7 @@ public sealed partial class HexView
         }
 
         HexLayout layout = _editor.Layout;
-        var columns = new RowColumns(layout.BytesPerRow);
+        RowColumns columns = Columns;
         long row = _editor.TopRow + (long)Math.Floor((point.Y + _subRowOffset) / _rowHeight);
         row = Math.Max(0, row);
         if (row >= layout.TotalRows)
@@ -123,9 +123,12 @@ public sealed partial class HexView
 
         int b = layout.BytesPerRow;
         long rowStart = layout.RowStart(row);
-        if (point.X < ContentLeft - _cellWidth)
+
+        // 行の先頭のずれ (VIEW-20) で最初の行の先頭の空白のセルは、オフセット 0 として扱う。
+        long firstInRow = Math.Max(0, rowStart);
+        if (_showOffset && point.X < ContentLeft - _cellWidth)
         {
-            hit = new HitResult(Math.Min(rowStart, layout.MaxCursor), ActiveColumn.Hex, false, HitRegion.Offset, row);
+            hit = new HitResult(Math.Min(firstInRow, layout.MaxCursor), ActiveColumn.Hex, false, HitRegion.Offset, row);
             return true;
         }
 
@@ -133,11 +136,11 @@ public sealed partial class HexView
         long offset;
         ActiveColumn column = ActiveColumn.Hex;
         bool low = false;
-        if (ch >= columns.TextIndex(0) - 1)
+        if (!columns.ShowHex || (columns.ShowText && ch >= columns.TextIndex(0) - 1))
         {
             column = ActiveColumn.Text;
             int rel = ch - columns.TextIndex(0);
-            offset = rowStart + Math.Clamp(rel, 0, b - 1);
+            offset = Math.Max(firstInRow, rowStart + Math.Clamp(rel, 0, b - 1));
 
             // 最終行の最後のバイトの右側は末尾位置 (EDIT-01 の仕様 11)。
             if (rowStart + Math.Max(0, rel) >= layout.Length)
@@ -155,6 +158,11 @@ public sealed partial class HexView
 
             low = ch - columns.HexIndex(c) >= 1;
             offset = rowStart + c;
+            if (offset < firstInRow)
+            {
+                offset = firstInRow;
+                low = false;
+            }
         }
 
         offset = Math.Min(offset, layout.MaxCursor);
@@ -189,6 +197,14 @@ public sealed partial class HexView
         }
 
         bool shift = (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0;
+        if (point.Properties.IsXButton1Pressed || point.Properties.IsXButton2Pressed)
+        {
+            // マウスの「戻る」「進む」ボタン (VIEW-31)。
+            MouseHistoryButton(point.Properties.IsXButton1Pressed);
+            e.Handled = true;
+            return;
+        }
+
         if (point.Properties.IsRightButtonPressed)
         {
             // Handled にしない (右クリックのジェスチャから ContextRequested でメニューを開く)。
@@ -584,7 +600,14 @@ public sealed partial class HexView
 
         if ((e.KeyModifiers & VirtualKeyModifiers.Control) != 0)
         {
-            // Ctrl+ホイールはズーム (VIEW-43)。ウィンドウに任せる。
+            // Ctrl+ホイールはズーム (VIEW-43、UI-08)。倍率の段階はウィンドウ (UI-08) が決め、ポインタの下の行を基準に ZoomAt を呼ぶ。
+            if (ZoomWheel is not null)
+            {
+                PointerPoint at = e.GetCurrentPoint(Surface);
+                ZoomWheel.Invoke(this, new HexViewZoomWheelEventArgs(at.Properties.MouseWheelDelta, at.Position.Y));
+                e.Handled = true;
+            }
+
             return;
         }
 
@@ -847,33 +870,39 @@ public sealed partial class HexView
         }
     }
 
-    /// <summary>オフセットの書式 (VIEW-19 の既定: `0x` + 16 進 8 桁。8 桁を超える長さでは 16 桁)。</summary>
-    internal string FormatOffset(long offset) => "0x" + offset.ToString(_digits == 16 ? "X16" : "X8");
+    /// <summary>オフセットの書式 (VIEW-19・VIEW-20。ステータスバーと同じ: `0x00001F00`、`@00401F00`、10 進は桁区切り付き)。</summary>
+    internal string FormatOffset(long offset) =>
+        _editor?.OffsetFormat.Status(offset, System.Globalization.CultureInfo.CurrentCulture) ?? "0x" + offset.ToString("X8");
 
-    // ---- 読み取れないセルのツールチップ (VIEW-03 の仕様 6) ----
+    // ---- マウスを合わせたときのツールチップ (VIEW-07、VIEW-03 の仕様 6) ----
 
     private void UpdateHover(Point position)
     {
         long offset = -1;
-        if (_editor is not null && TryHitTest(position, out HitResult hit) && hit.Region is HitRegion.Hex or HitRegion.Text
-            && IsUnreadableShown(hit.Offset))
+        HitRegion region = HitRegion.Hex;
+        if (_editor is not null && TryHitTest(position, out HitResult hit) && hit.Region is HitRegion.Hex or HitRegion.Text or HitRegion.Offset
+            && (ShowToolTips || IsUnreadableShown(hit.Offset)) && (hit.Region == HitRegion.Offset || hit.Offset < _editor.Layout.Length))
         {
-            offset = hit.Offset;
+            offset = hit.Region == HitRegion.Offset ? -2 - hit.Row : hit.Offset;
+            region = hit.Region;
         }
 
-        if (offset == _hoverOffset)
+        if (offset == _hoverOffset && region == _hoverRegion)
         {
             return;
         }
 
         _hoverOffset = offset;
+        _hoverRegion = region;
         HideCellToolTip();
         _hoverTimer.Stop();
-        if (offset >= 0)
+        if (offset != -1)
         {
             _hoverTimer.Start();
         }
     }
+
+    private HitRegion _hoverRegion;
 
     private bool IsUnreadableShown(long offset)
     {
@@ -894,12 +923,28 @@ public sealed partial class HexView
 
     private void ShowCellToolTip()
     {
-        if (_editor is null || _hoverOffset < 0)
+        if (_editor is null || _hoverOffset == -1)
         {
             return;
         }
 
-        long offset = _hoverOffset;
+        long hover = _hoverOffset;
+        if (hover <= -2)
+        {
+            // オフセット列: 行の先頭と末尾のアドレスと行番号 (VIEW-07 の仕様 4)。
+            long row = -2 - hover;
+            OpenCellToolTip(hover, RowToolTipText(row), null);
+            return;
+        }
+
+        long offset = hover;
+        ActiveColumn column = _hoverRegion == HitRegion.Text ? ActiveColumn.Text : ActiveColumn.Hex;
+        if (!IsUnreadableShown(offset))
+        {
+            OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, null) : string.Empty, (offset, column));
+            return;
+        }
+
         DocumentSnapshot snapshot = _editor.Document.Current;
         _ = Task.Run(() =>
         {
@@ -907,30 +952,46 @@ public sealed partial class HexView
             byte[] one = new byte[1];
             ReadResult result = snapshot.Read(offset, one);
             UnreadableRange? range = result.Unreadable.Count > 0 ? result.Unreadable[0] : null;
-            string text = UnreadableReasonText(range);
+            string reason = UnreadableReasonText(range);
             _uiQueue.TryEnqueue(() =>
             {
-                if (_hoverOffset != offset)
+                if (_hoverOffset == hover)
                 {
-                    return;
+                    OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, reason) : reason, (offset, column));
                 }
-
-                _cellToolTip ??= new ToolTip();
-                AutomationProperties.SetAutomationId(_cellToolTip, "HexViewCellToolTip");
-                _cellToolTip.Content = text;
-                ToolTipService.SetToolTip(Surface, _cellToolTip);
-                if (TryGetCellRect(offset, out Rect rect))
-                {
-                    _cellToolTip.PlacementRect = rect;
-                }
-
-                _cellToolTip.IsOpen = true;
             });
         });
     }
 
+    private void OpenCellToolTip(long hover, string text, (long Offset, ActiveColumn Column)? cell)
+    {
+        if (_hoverOffset != hover || string.IsNullOrEmpty(text))
+        {
+            return;
+        }
+
+        _cellToolTip ??= new ToolTip();
+        AutomationProperties.SetAutomationId(_cellToolTip, "HexViewCellToolTip");
+        _cellToolTip.Content = text;
+        ToolTipService.SetToolTip(Surface, _cellToolTip);
+        if (cell is { } c && TryGetCellRect(c.Offset, out Rect rect, c.Column))
+        {
+            _cellToolTip.PlacementRect = rect;
+        }
+
+        _cellToolTip.IsOpen = true;
+        LastToolTip = text;
+    }
+
+    /// <summary>最後に出したツールチップの文字列 (テスト用)。閉じたら null。</summary>
+    internal string? LastToolTip { get; private set; }
+
+    /// <summary>ツールチップが開いているか。</summary>
+    internal bool CellToolTipOpen => _cellToolTip?.IsOpen ?? false;
+
     private void HideCellToolTip()
     {
+        LastToolTip = null;
         if (_cellToolTip is not null)
         {
             _cellToolTip.IsOpen = false;
@@ -971,9 +1032,9 @@ public sealed partial class HexView
             return false;
         }
 
-        var columns = new RowColumns(layout.BytesPerRow);
+        RowColumns columns = Columns;
         int c = layout.ColumnOf(offset);
-        double x = column == ActiveColumn.Hex ? columns.HexIndex(c) : columns.TextIndex(c);
+        double x = column == ActiveColumn.Hex && columns.ShowHex ? columns.HexIndex(c) : columns.TextIndex(c);
         double width = column == ActiveColumn.Hex ? 2 : 1;
         rect = new Rect(ContentLeft + x * _cellWidth - _horizontalOffset, r * _rowHeight - _subRowOffset, width * _cellWidth, _rowHeight);
         return true;
@@ -1105,6 +1166,10 @@ public sealed partial class HexView
         {
             return false;
         }
+
+        // キーボード操作を始めたらツールチップを消す (VIEW-07 の仕様 1)。
+        _hoverTimer.Stop();
+        HideCellToolTip();
 
         if (key == VirtualKey.F6 && !ctrl)
         {

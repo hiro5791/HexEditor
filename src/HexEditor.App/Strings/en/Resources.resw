@@ -1127,7 +1127,6 @@ Details were written to:
   <data name="Bookmarks_WrappedToStart" xml:space="preserve"><value>Wrapped around to the first bookmark.</value></data>
   <data name="Bookmarks_WrappedToEnd" xml:space="preserve"><value>Wrapped around to the last bookmark.</value></data>
   <data name="Bookmarks_NumberNotSet" xml:space="preserve"><value>Numbered bookmark {0} isn't set.</value></data>
-  <data name="Bookmarks_Announce" xml:space="preserve"><value>Bookmark {0}</value></data>
   <data name="Bookmarks_FileChanged" xml:space="preserve"><value>The file has changed since its {0} bookmarks were saved, so their positions may not match.</value></data>
   <data name="Bookmarks_ApplyAnyway" xml:space="preserve"><value>Restore bookmarks</value></data>
   <data name="Bookmarks_Discard" xml:space="preserve"><value>Discard</value></data>
@@ -1825,4 +1824,227 @@ Details were written to:
   <data name="SetDesc_search_history_limit" xml:space="preserve"><value>Number of entries kept for the search and replace boxes (0 keeps none).</value></data>
   <data name="Set_search_history_doNotSave" xml:space="preserve"><value>Do not save search history</value></data>
   <data name="SetDesc_search_history_doNotSave" xml:space="preserve"><value>Keep the search history only until the app closes.</value></data>
+  <data name="Menu_View_Columns.Text" xml:space="preserve"><value>Columns</value></data>
+  <data name="Menu_View_Columns.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_OffsetColumn.Text" xml:space="preserve"><value>Offset column</value></data>
+  <data name="Menu_View_OffsetColumn.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_HexColumn.Text" xml:space="preserve"><value>Hex column</value></data>
+  <data name="Menu_View_HexColumn.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_TextColumn.Text" xml:space="preserve"><value>Text column</value></data>
+  <data name="Menu_View_TextColumn.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_HexOnly.Text" xml:space="preserve"><value>Show hex column only</value></data>
+  <data name="Menu_View_HexOnly.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_TextOnly.Text" xml:space="preserve"><value>Show text column only</value></data>
+  <data name="Menu_View_TextOnly.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_View_AllColumns.Text" xml:space="preserve"><value>Show all columns</value></data>
+  <data name="Menu_View_AllColumns.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_Ruler.Text" xml:space="preserve"><value>Column header</value></data>
+  <data name="Menu_View_Ruler.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_CurrentRow.Text" xml:space="preserve"><value>Highlight current row</value></data>
+  <data name="Menu_View_CurrentRow.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_Lowercase.Text" xml:space="preserve"><value>Show hex in lowercase</value></data>
+  <data name="Menu_View_Lowercase.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_DimZeros.Text" xml:space="preserve"><value>Dim 00 bytes</value></data>
+  <data name="Menu_View_DimZeros.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_Alternate.Text" xml:space="preserve"><value>Alternate background per group</value></data>
+  <data name="Menu_View_Alternate.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_Modified.Text" xml:space="preserve"><value>Highlight modified bytes</value></data>
+  <data name="Menu_View_Modified.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_BytesPerRow.Text" xml:space="preserve"><value>Bytes per row</value></data>
+  <data name="Menu_View_BytesPerRow.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_View_BytesPerRowAuto.Text" xml:space="preserve"><value>Auto</value></data>
+  <data name="Menu_View_BytesPerRowAuto.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_BytesPerRowCustom.Text" xml:space="preserve"><value>Custom...</value></data>
+  <data name="Menu_View_BytesPerRowCustom.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_Group.Text" xml:space="preserve"><value>Grouping</value></data>
+  <data name="Menu_View_Group.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_Radix.Text" xml:space="preserve"><value>Offset radix</value></data>
+  <data name="Menu_View_Radix.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_RadixHex.Text" xml:space="preserve"><value>Hexadecimal</value></data>
+  <data name="Menu_View_RadixHex.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_RadixDecimal.Text" xml:space="preserve"><value>Decimal</value></data>
+  <data name="Menu_View_RadixDecimal.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_View_RadixOctal.Text" xml:space="preserve"><value>Octal</value></data>
+  <data name="Menu_View_RadixOctal.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_RadixSector.Text" xml:space="preserve"><value>Sector</value></data>
+  <data name="Menu_View_RadixSector.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_BaseAddress.Text" xml:space="preserve"><value>Set base address...</value></data>
+  <data name="Menu_View_BaseAddress.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_RowShift.Text" xml:space="preserve"><value>Shift row start...</value></data>
+  <data name="Menu_View_RowShift.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_SetReference.Text" xml:space="preserve"><value>Set cursor as reference point</value></data>
+  <data name="Menu_View_SetReference.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_ClearReference.Text" xml:space="preserve"><value>Clear reference point</value></data>
+  <data name="Menu_View_ClearReference.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_ColorScheme.Text" xml:space="preserve"><value>Color scheme</value></data>
+  <data name="Menu_View_ColorScheme.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_ViewSettings.Text" xml:space="preserve"><value>View settings</value></data>
+  <data name="Menu_View_ViewSettings.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_SaveDefault.Text" xml:space="preserve"><value>Save as default</value></data>
+  <data name="Menu_View_SaveDefault.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_ResetDefault.Text" xml:space="preserve"><value>Reset to default</value></data>
+  <data name="Menu_View_ResetDefault.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_AnnouncePosition.Text" xml:space="preserve"><value>Read current position</value></data>
+  <data name="Menu_View_AnnouncePosition.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_EncodingUtf8.Text" xml:space="preserve"><value>UTF-8</value></data>
+  <data name="Menu_View_EncodingUtf8.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_EncodingUtf16LE.Text" xml:space="preserve"><value>UTF-16 LE</value></data>
+  <data name="Menu_View_EncodingUtf16LE.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_EncodingUtf16BE.Text" xml:space="preserve"><value>UTF-16 BE</value></data>
+  <data name="Menu_View_EncodingUtf16BE.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_EncodingUtf32LE.Text" xml:space="preserve"><value>UTF-32 LE</value></data>
+  <data name="Menu_View_EncodingUtf32LE.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_EncodingUtf32BE.Text" xml:space="preserve"><value>UTF-32 BE</value></data>
+  <data name="Menu_View_EncodingUtf32BE.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_EncodingShiftJis.Text" xml:space="preserve"><value>Shift_JIS (932)</value></data>
+  <data name="Menu_View_EncodingShiftJis.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_Utf16Odd.Text" xml:space="preserve"><value>Decode UTF-16 from odd offsets</value></data>
+  <data name="Menu_View_Utf16Odd.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Go_History.Text" xml:space="preserve"><value>History</value></data>
+  <data name="Menu_Go_History.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_GroupBytes" xml:space="preserve"><value>{0} bytes</value></data>
+  <data name="Scheme_default" xml:space="preserve"><value>Default</value></data>
+  <data name="Scheme_solarized" xml:space="preserve"><value>Solarized</value></data>
+  <data name="Scheme_contrast" xml:space="preserve"><value>High contrast style</value></data>
+  <data name="HexView_Ruler_OffsetHex" xml:space="preserve"><value>Offset (h)</value></data>
+  <data name="HexView_Ruler_OffsetDecimal" xml:space="preserve"><value>Offset (d)</value></data>
+  <data name="HexView_Ruler_OffsetOctal" xml:space="preserve"><value>Offset (o)</value></data>
+  <data name="HexView_Ruler_OffsetSector" xml:space="preserve"><value>LBA</value></data>
+  <data name="HexView_Ruler_OffsetHelp" xml:space="preserve"><value>Choose the offset radix</value></data>
+  <data name="HexView_Tip_Offset" xml:space="preserve"><value>Offset: {0} ({1})</value></data>
+  <data name="HexView_Tip_Address" xml:space="preserve"><value>Address: {0}</value></data>
+  <data name="HexView_Tip_Value" xml:space="preserve"><value>Value: hex {0}, decimal {1} (signed {2}), octal {3}, binary {4}</value></data>
+  <data name="HexView_Tip_ValueLoading" xml:space="preserve"><value>Value: loading</value></data>
+  <data name="HexView_Tip_Char" xml:space="preserve"><value>Character: {0}</value></data>
+  <data name="HexView_Tip_State" xml:space="preserve"><value>State: {0}</value></data>
+  <data name="HexView_Tip_More" xml:space="preserve"><value>{0} more</value></data>
+  <data name="HexView_Tip_Selection" xml:space="preserve"><value>Selection: start {0}, end (inclusive) {1}, length {2} ({3})</value></data>
+  <data name="HexView_Tip_Row" xml:space="preserve"><value>Row {0}: {1}–{2}</value></data>
+  <data name="HexView_State_Inserted" xml:space="preserve"><value>inserted</value></data>
+  <data name="HexView_State_Bookmark" xml:space="preserve"><value>bookmark {0}</value></data>
+  <data name="HexView_Announce_Size" xml:space="preserve"><value>file size {0} bytes</value></data>
+  <data name="Status_Relative" xml:space="preserve"><value>relative {0}</value></data>
+  <data name="Notice_BytesPerRowRounded" xml:space="preserve"><value>Bytes per row was changed to {0}.</value></data>
+  <data name="ViewInput_BytesPerRow" xml:space="preserve"><value>Bytes per row</value></data>
+  <data name="ViewInput_BaseAddress" xml:space="preserve"><value>Base address</value></data>
+  <data name="ViewInput_RowShift" xml:space="preserve"><value>Row start shift</value></data>
+  <data name="ViewInput_Invalid" xml:space="preserve"><value>The value cannot be interpreted.</value></data>
+  <data name="ViewInput_BytesPerRowRange" xml:space="preserve"><value>Specify a value from 1 to 4,096.</value></data>
+  <data name="ViewInput_BytesPerRowGroup" xml:space="preserve"><value>Grouping is {0} bytes, so specify a multiple of {0}.</value></data>
+  <data name="ViewInput_BaseAddressRange" xml:space="preserve"><value>The address of the position after the end would exceed 0xFFFFFFFFFFFFFFFF.</value></data>
+  <data name="ViewInput_RowShiftRange" xml:space="preserve"><value>Specify a value from 0 to {0}.</value></data>
+  <data name="Common_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Cmd_view_offsetColumn" xml:space="preserve"><value>Show offset column</value></data>
+  <data name="CmdAlias_view_offsetColumn" xml:space="preserve"><value>address column</value></data>
+  <data name="Cmd_view_hexColumn" xml:space="preserve"><value>Show hex column</value></data>
+  <data name="CmdAlias_view_hexColumn" xml:space="preserve"><value>bytes column</value></data>
+  <data name="Cmd_view_textColumn" xml:space="preserve"><value>Show text column</value></data>
+  <data name="CmdAlias_view_textColumn" xml:space="preserve"><value>ascii characters column</value></data>
+  <data name="Cmd_view_hexOnly" xml:space="preserve"><value>Show hex column only</value></data>
+  <data name="CmdAlias_view_hexOnly" xml:space="preserve"><value>columns</value></data>
+  <data name="Cmd_view_textOnly" xml:space="preserve"><value>Show text column only</value></data>
+  <data name="CmdAlias_view_textOnly" xml:space="preserve"><value>columns</value></data>
+  <data name="Cmd_view_allColumns" xml:space="preserve"><value>Show all columns</value></data>
+  <data name="CmdAlias_view_allColumns" xml:space="preserve"><value>columns</value></data>
+  <data name="Cmd_view_ruler" xml:space="preserve"><value>Column header</value></data>
+  <data name="CmdAlias_view_ruler" xml:space="preserve"><value>ruler</value></data>
+  <data name="Cmd_view_currentRow" xml:space="preserve"><value>Highlight current row</value></data>
+  <data name="CmdAlias_view_currentRow" xml:space="preserve"><value>line</value></data>
+  <data name="Cmd_view_lowercase" xml:space="preserve"><value>Show hex in lowercase</value></data>
+  <data name="CmdAlias_view_lowercase" xml:space="preserve"><value>case</value></data>
+  <data name="Cmd_view_dimZeros" xml:space="preserve"><value>Dim 00 bytes</value></data>
+  <data name="CmdAlias_view_dimZeros" xml:space="preserve"><value>zero</value></data>
+  <data name="Cmd_view_alternate" xml:space="preserve"><value>Alternate background per group</value></data>
+  <data name="CmdAlias_view_alternate" xml:space="preserve"><value>stripes</value></data>
+  <data name="Cmd_view_modified" xml:space="preserve"><value>Highlight modified bytes</value></data>
+  <data name="CmdAlias_view_modified" xml:space="preserve"><value>changes</value></data>
+  <data name="Cmd_view_bytesPerRow8" xml:space="preserve"><value>Bytes per row: 8</value></data>
+  <data name="CmdAlias_view_bytesPerRow8" xml:space="preserve"><value>width</value></data>
+  <data name="Cmd_view_bytesPerRow16" xml:space="preserve"><value>Bytes per row: 16</value></data>
+  <data name="CmdAlias_view_bytesPerRow16" xml:space="preserve"><value>width</value></data>
+  <data name="Cmd_view_bytesPerRow32" xml:space="preserve"><value>Bytes per row: 32</value></data>
+  <data name="CmdAlias_view_bytesPerRow32" xml:space="preserve"><value>width</value></data>
+  <data name="Cmd_view_bytesPerRow64" xml:space="preserve"><value>Bytes per row: 64</value></data>
+  <data name="CmdAlias_view_bytesPerRow64" xml:space="preserve"><value>width</value></data>
+  <data name="Cmd_view_bytesPerRowAuto" xml:space="preserve"><value>Bytes per row: auto</value></data>
+  <data name="CmdAlias_view_bytesPerRowAuto" xml:space="preserve"><value>width fit</value></data>
+  <data name="Cmd_view_bytesPerRowCustom" xml:space="preserve"><value>Bytes per row: custom...</value></data>
+  <data name="CmdAlias_view_bytesPerRowCustom" xml:space="preserve"><value>width</value></data>
+  <data name="Cmd_view_group1" xml:space="preserve"><value>Group by 1 byte</value></data>
+  <data name="CmdAlias_view_group1" xml:space="preserve"><value>grouping</value></data>
+  <data name="Cmd_view_group2" xml:space="preserve"><value>Group by 2 bytes</value></data>
+  <data name="CmdAlias_view_group2" xml:space="preserve"><value>grouping word</value></data>
+  <data name="Cmd_view_group4" xml:space="preserve"><value>Group by 4 bytes</value></data>
+  <data name="CmdAlias_view_group4" xml:space="preserve"><value>grouping dword</value></data>
+  <data name="Cmd_view_group8" xml:space="preserve"><value>Group by 8 bytes</value></data>
+  <data name="CmdAlias_view_group8" xml:space="preserve"><value>grouping qword</value></data>
+  <data name="Cmd_view_group16" xml:space="preserve"><value>Group by 16 bytes</value></data>
+  <data name="CmdAlias_view_group16" xml:space="preserve"><value>grouping</value></data>
+  <data name="Cmd_view_radixHex" xml:space="preserve"><value>Offsets: hexadecimal</value></data>
+  <data name="CmdAlias_view_radixHex" xml:space="preserve"><value>radix base address</value></data>
+  <data name="Cmd_view_radixDecimal" xml:space="preserve"><value>Offsets: decimal</value></data>
+  <data name="CmdAlias_view_radixDecimal" xml:space="preserve"><value>radix base address</value></data>
+  <data name="Cmd_view_radixOctal" xml:space="preserve"><value>Offsets: octal</value></data>
+  <data name="CmdAlias_view_radixOctal" xml:space="preserve"><value>radix base address</value></data>
+  <data name="Cmd_view_radixSector" xml:space="preserve"><value>Offsets: sector</value></data>
+  <data name="CmdAlias_view_radixSector" xml:space="preserve"><value>radix sector address</value></data>
+  <data name="Cmd_view_baseAddress" xml:space="preserve"><value>Set base address...</value></data>
+  <data name="CmdAlias_view_baseAddress" xml:space="preserve"><value>offset origin</value></data>
+  <data name="Cmd_view_rowShift" xml:space="preserve"><value>Shift row start...</value></data>
+  <data name="CmdAlias_view_rowShift" xml:space="preserve"><value>align offset</value></data>
+  <data name="Cmd_view_setReference" xml:space="preserve"><value>Set cursor as reference point</value></data>
+  <data name="CmdAlias_view_setReference" xml:space="preserve"><value>relative offset</value></data>
+  <data name="Cmd_view_clearReference" xml:space="preserve"><value>Clear reference point</value></data>
+  <data name="CmdAlias_view_clearReference" xml:space="preserve"><value>relative offset</value></data>
+  <data name="Cmd_view_saveDefault" xml:space="preserve"><value>Save view settings as default</value></data>
+  <data name="CmdAlias_view_saveDefault" xml:space="preserve"><value>defaults</value></data>
+  <data name="Cmd_view_resetDefault" xml:space="preserve"><value>Reset view settings to default</value></data>
+  <data name="CmdAlias_view_resetDefault" xml:space="preserve"><value>defaults</value></data>
+  <data name="Cmd_view_announcePosition" xml:space="preserve"><value>Read current position</value></data>
+  <data name="CmdAlias_view_announcePosition" xml:space="preserve"><value>screen reader speak</value></data>
+  <data name="Cmd_view_utf16Odd" xml:space="preserve"><value>Decode UTF-16 from odd offsets</value></data>
+  <data name="CmdAlias_view_utf16Odd" xml:space="preserve"><value>encoding phase</value></data>
+  <data name="Cmd_view_encoding_utf8" xml:space="preserve"><value>Text encoding: UTF-8</value></data>
+  <data name="CmdAlias_view_encoding_utf8" xml:space="preserve"><value>charset unicode</value></data>
+  <data name="Cmd_view_encoding_utf16le" xml:space="preserve"><value>Text encoding: UTF-16 LE</value></data>
+  <data name="CmdAlias_view_encoding_utf16le" xml:space="preserve"><value>charset unicode</value></data>
+  <data name="Cmd_view_encoding_utf16be" xml:space="preserve"><value>Text encoding: UTF-16 BE</value></data>
+  <data name="CmdAlias_view_encoding_utf16be" xml:space="preserve"><value>charset unicode</value></data>
+  <data name="Cmd_view_encoding_utf32le" xml:space="preserve"><value>Text encoding: UTF-32 LE</value></data>
+  <data name="CmdAlias_view_encoding_utf32le" xml:space="preserve"><value>charset unicode</value></data>
+  <data name="Cmd_view_encoding_utf32be" xml:space="preserve"><value>Text encoding: UTF-32 BE</value></data>
+  <data name="CmdAlias_view_encoding_utf32be" xml:space="preserve"><value>charset unicode</value></data>
+  <data name="Cmd_view_encoding_shiftJis" xml:space="preserve"><value>Text encoding: Shift_JIS</value></data>
+  <data name="CmdAlias_view_encoding_shiftJis" xml:space="preserve"><value>charset japanese sjis cp932</value></data>
+  <data name="Cmd_view_colorScheme" xml:space="preserve"><value>Color scheme</value></data>
+  <data name="CmdAlias_view_colorScheme" xml:space="preserve"><value>theme colors</value></data>
+  <data name="Command_LastColumn" xml:space="preserve"><value>The hex column or the text column must stay visible</value></data>
+  <data name="Command_NoReferencePoint" xml:space="preserve"><value>No reference point is set</value></data>
+  <data name="Set_view_font_family" xml:space="preserve"><value>Font</value></data>
+  <data name="SetDesc_view_font_family" xml:space="preserve"><value>Font of the Hex view. Empty uses Cascadia Mono (Consolas if it is not installed).</value></data>
+  <data name="Set_view_font_size" xml:space="preserve"><value>Font size (pt)</value></data>
+  <data name="SetDesc_view_font_size" xml:space="preserve"><value>Size of the Hex view text, 6 to 72 points in 0.5 steps.</value></data>
+  <data name="Set_view_font_lineHeight" xml:space="preserve"><value>Line height</value></data>
+  <data name="SetDesc_view_font_lineHeight" xml:space="preserve"><value>Line spacing of the Hex view, 1.0 to 2.0 times the font size.</value></data>
+  <data name="Set_view_font_fallback" xml:space="preserve"><value>Fallback font for the text column</value></data>
+  <data name="SetDesc_view_font_fallback" xml:space="preserve"><value>Font used for characters the main font does not have.</value></data>
+  <data name="Set_view_font_followTextScaling" xml:space="preserve"><value>Follow the Windows text size</value></data>
+  <data name="SetDesc_view_font_followTextScaling" xml:space="preserve"><value>Scale the Hex view with the Windows text size setting.</value></data>
+  <data name="Set_view_colorScheme" xml:space="preserve"><value>Color scheme</value></data>
+  <data name="SetDesc_view_colorScheme" xml:space="preserve"><value>Colors of the Hex view.</value></data>
+  <data name="Set_view_tooltips" xml:space="preserve"><value>Show tooltips</value></data>
+  <data name="SetDesc_view_tooltips" xml:space="preserve"><value>Show the offset and values of the byte under the mouse pointer.</value></data>
+  <data name="Set_view_modified_keepAfterSave" xml:space="preserve"><value>Keep change marks after saving</value></data>
+  <data name="SetDesc_view_modified_keepAfterSave" xml:space="preserve"><value>Keep highlighting changed bytes after saving until the tab is closed.</value></data>
+  <data name="Set_a11y_announce_verbosity" xml:space="preserve"><value>Screen reader detail</value></data>
+  <data name="SetDesc_a11y_announce_verbosity" xml:space="preserve"><value>How much the screen reader reads when the cursor moves.</value></data>
+  <data name="SetOpt_a11y_announce_verbosity_full" xml:space="preserve"><value>Full</value></data>
+  <data name="SetOpt_a11y_announce_verbosity_brief" xml:space="preserve"><value>Brief</value></data>
+  <data name="SetOpt_a11y_announce_verbosity_offsetOnly" xml:space="preserve"><value>Offset only</value></data>
+  <data name="SetOpt_a11y_announce_verbosity_none" xml:space="preserve"><value>None</value></data>
+  <data name="SetSection_HexFont" xml:space="preserve"><value>Hex view font and colors</value></data>
+  <data name="SetSearch_HexFont" xml:space="preserve"><value>font typeface color scheme theme</value></data>
+  <data name="Settings_FontDefault" xml:space="preserve"><value>Default (Cascadia Mono)</value></data>
+  <data name="Settings_FontMissing" xml:space="preserve"><value>{0} was not found. The default font is used.</value></data>
+  <data name="Settings_ShowAllFonts" xml:space="preserve"><value>Show all fonts</value></data>
 </root>

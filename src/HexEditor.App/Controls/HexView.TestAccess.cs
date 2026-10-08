@@ -49,16 +49,20 @@ public sealed partial class HexView
 
         HexLayout layout = _editor.Layout;
         int bytesPerRow = layout.BytesPerRow;
-        var columns = new RowColumns(bytesPerRow);
+        RowColumns columns = Columns;
         result["topRow"] = _editor.TopRow;
         result["visibleRows"] = _editor.VisibleRows;
         result["bytesPerRow"] = bytesPerRow;
-        result["offsetDigits"] = _rows.FirstOrDefault(r => r.Visible)?.OffsetDigits ?? 8;
+        result["rowShift"] = layout.RowShift;
+        result["offsetDigits"] = _rows.FirstOrDefault(r => r.Visible)?.OffsetDigits ?? _digits;
         result["cellWidth"] = _cellWidth;
         result["rowHeight"] = _rowHeight;
         result["focused"] = FocusState != FocusState.Unfocused;
         AddViewInfo(result);
         result["flowDirection"] = FlowDirection.ToString();
+        result["columns"] = new JsonArray([.. new (string, bool)[] { ("offset", _showOffset), ("hex", columns.ShowHex), ("text", columns.ShowText) }
+            .Where(c => c.Item2).Select(c => (JsonNode?)c.Item1)]);
+        result["textStart"] = columns.Format.TextStart;
 
         // 列の位置 (Hex ビューの左端からの距離。Hex ビューは常に左から右なので、表示上の左右と一致する。UI-44)。
         if (_rows.FirstOrDefault(r => r.Visible) is { } first)
@@ -76,88 +80,79 @@ public sealed partial class HexView
                 continue;
             }
 
-            // 行の文字列 (Hex 列とテキスト列) と、文字ごとの Run (色・線) を作る。
-            var text = new System.Text.StringBuilder();
-            var runAt = new List<Run>();
-            foreach (Inline inline in row.Content.Inlines)
-            {
-                if (inline is Run run)
-                {
-                    text.Append(run.Text);
-                    for (int i = 0; i < run.Text.Length; i++)
-                    {
-                        runAt.Add(run);
-                    }
-                }
-            }
-
-            string line = text.ToString();
-
-            // 選択範囲の層 (検索の一致の強調は除く)。
-            var highlighted = new bool[line.Length];
-            var matched = new bool[line.Length];
-            string? highlightBackground = null;
-            string? highlightForeground = null;
-            foreach (TextHighlighter h in row.Content.TextHighlighters)
-            {
-                bool isMatch = _palette is not null && ReferenceEquals(h.Background, _palette.Match);
-                if (!isMatch)
-                {
-                    highlightBackground = ColorOf(h.Background);
-                    highlightForeground = ColorOf(h.Foreground);
-                }
-
-                foreach (TextRange r in h.Ranges)
-                {
-                    for (int i = r.StartIndex; i < r.StartIndex + r.Length && i < line.Length; i++)
-                    {
-                        (isMatch ? matched : highlighted)[i] = true;
-                    }
-                }
-            }
-
+            string line = row.ContentText;
             var cells = new JsonArray();
             for (int c = 0; c < bytesPerRow; c++)
             {
-                int hex = columns.HexIndex(c);
-                int textIndex = columns.TextIndex(c);
-                if (hex + 2 > line.Length)
+                CellPaint hexPaint = c < row.HexPaint.Length ? row.HexPaint[c] : default;
+                CellPaint textPaint = c < row.TextPaint.Length ? row.TextPaint[c] : default;
+                int hex = columns.ShowHex ? columns.HexIndex(c) : -1;
+                int textIndex = columns.ShowText ? columns.TextIndex(c) : -1;
+                if (columns.ShowHex && hex + 2 > line.Length)
                 {
                     break;
                 }
 
+                bool selected = hexPaint.Layer == "selection";
+                string underline = row.UnderlineAt(c);
                 var cell = new JsonObject
                 {
-                    ["hex"] = line.Substring(hex, 2),
-                    ["text"] = textIndex < line.Length ? line[textIndex].ToString() : string.Empty,
-                    ["foreground"] = ColorOf(runAt[hex].Foreground),
-                    ["decoration"] = runAt[hex].TextDecorations.ToString(),
-                    ["selected"] = highlighted[hex],
-                    ["matched"] = matched[hex],
+                    ["hex"] = columns.ShowHex ? line.Substring(hex, 2) : null,
+                    ["text"] = textIndex >= 0 && textIndex < line.Length ? line[textIndex].ToString() : string.Empty,
+                    ["foreground"] = hexPaint.Foreground is { } hf ? ColorOf(hf) : null,
+                    ["textForeground"] = textPaint.Foreground is { } tf ? ColorOf(tf) : null,
+                    ["hexBackground"] = hexPaint.Background is { } hb ? ColorOf(hb) : ColorOf(_palette!.Background),
+                    ["textBackground"] = textPaint.Background is { } tb ? ColorOf(tb) : ColorOf(_palette!.Background),
+                    ["hexLayer"] = hexPaint.Layer ?? "normal",
+                    ["textLayer"] = textPaint.Layer ?? "normal",
+                    ["decoration"] = underline == "none" ? "None" : "Underline",
+                    ["underline"] = underline,
+                    ["selected"] = selected,
+                    ["matched"] = hexPaint.Layer == "match" || textPaint.Layer == "match",
+                    ["hexLeft"] = hex >= 0 ? hex * _cellWidth : null,
+                    ["textLeft"] = textIndex >= 0 ? textIndex * _cellWidth : null,
 
                     // 読み込みの状態 (Unreadable のセルには斜線の模様を重ねて描く。VIEW-03 の仕様 5)。
-                    ["state"] = c < row.States.Length ? row.States[c].ToString() : null,
-                    ["hatched"] = c < row.States.Length && row.States[c] == Core.Engine.ByteState.Unreadable,
+                    ["state"] = c >= row.Lead && c < row.Count ? row.States[c].ToString() : null,
+                    ["hatched"] = c >= row.Lead && c < row.Count && row.States[c] == Core.Engine.ByteState.Unreadable,
                 };
-                if (highlighted[hex])
+                if (selected)
                 {
-                    cell["background"] = highlightBackground;
-                    cell["selectedForeground"] = highlightForeground;
+                    cell["background"] = cell["hexBackground"]!.GetValue<string>();
+                    cell["selectedForeground"] = cell["foreground"]?.GetValue<string>();
                 }
 
+                // テキスト列の文字 (VIEW-22): 描いた字形・範囲・横方向の縮小率と、解読の種類。
+                if (c < row.Glyphs.Length && row.Glyphs[c] is { } glyph)
+                {
+                    cell["glyph"] = glyph.Glyph;
+                    cell["glyphLeft"] = glyph.Left;
+                    cell["glyphWidth"] = glyph.Width;
+                    cell["glyphScaleX"] = glyph.ScaleX;
+                }
+
+                cell["textKind"] = row.TextAt(c).Kind.ToString();
                 cells.Add(cell);
             }
 
             rows.Add(new JsonObject
             {
-                ["index"] = (int)Math.Round(row.Top / _rowHeight),
+                ["index"] = (int)Math.Round((row.Top + _subRowOffset) / _rowHeight),
+                ["rowStart"] = row.ContentRowStart,
                 ["offsetText"] = row.OffsetText,
-                ["line"] = row.OffsetText + "  " + line,
+                ["line"] = RowLineOf(row),
                 ["cells"] = cells,
+                ["currentRow"] = row.IsCurrentRow,
+                ["lines"] = new JsonArray([.. row.Lines.Select(l => (JsonNode?)new JsonObject
+                {
+                    ["kind"] = l.Kind, ["x1"] = l.X1, ["y1"] = l.Y1, ["x2"] = l.X2, ["y2"] = l.Y2,
+                })]),
             });
         }
 
         result["rows"] = rows;
+        result["ruler"] = RulerModel();
+        result["toolTip"] = new JsonObject { ["open"] = CellToolTipOpen, ["text"] = LastToolTip };
         result["caret"] = new JsonObject
         {
             ["visible"] = Caret.Visibility == Visibility.Visible,
@@ -166,10 +161,11 @@ public sealed partial class HexView
             ["width"] = Caret.Width,
             ["height"] = Caret.Height,
 
-            // 縦線 (挿入モード) は塗りつぶし、枠 (上書きモード) は線で描く。
-            ["shape"] = Caret.Fill is not null ? "bar" : "box",
-            ["strokeThickness"] = Caret.StrokeThickness,
-            ["row"] = (int)Math.Round(Microsoft.UI.Xaml.Controls.Canvas.GetTop(Caret) / _rowHeight),
+            // 縦棒 (挿入モード) は幅 2 の塗りつぶし、帯 (上書きモード) はセルの幅の塗りつぶし、フォーカスのないときは枠線。
+            ["shape"] = Caret.Fill is not null && Caret.Width <= 3 ? "bar" : "box",
+            ["filled"] = Caret.Fill is not null,
+            ["strokeThickness"] = Caret.Fill is not null ? 0 : Caret.StrokeThickness,
+            ["row"] = (int)Math.Round((Microsoft.UI.Xaml.Controls.Canvas.GetTop(Caret) + _subRowOffset) / _rowHeight),
         };
         result["secondaryCaret"] = new JsonObject
         {
@@ -177,8 +173,44 @@ public sealed partial class HexView
             ["left"] = Microsoft.UI.Xaml.Controls.Canvas.GetLeft(SecondaryCaret),
             ["top"] = Microsoft.UI.Xaml.Controls.Canvas.GetTop(SecondaryCaret),
             ["width"] = SecondaryCaret.Width,
+            ["strokeThickness"] = SecondaryCaret.StrokeThickness,
         };
         return result;
+    }
+
+    private string RowLineOf(RowVisual row) => _showOffset ? row.OffsetText.PadRight(_digits) + "  " + row.ContentText : row.ContentText;
+
+    /// <summary>列見出しの描画モデル (VIEW-05、VIEW-06 の仕様 2)。x 座標は内容の領域の左端から (セルの hexLeft と同じ基準)。</summary>
+    private JsonObject RulerModel()
+    {
+        var labels = new JsonArray();
+        foreach ((string text, int index, bool hex) in _rulerLabels)
+        {
+            bool highlighted = _rulerHighlight.Any(h => h.Start == index);
+            labels.Add(new JsonObject
+            {
+                ["text"] = text,
+                ["column"] = hex ? "hex" : "text",
+                ["left"] = index * _cellWidth,
+                ["right"] = (index + text.Length) * _cellWidth,
+                ["highlighted"] = highlighted,
+            });
+        }
+
+        double top = RulerBar.Visibility == Visibility.Visible
+            ? RulerText.TransformToVisual(this).TransformPoint(new Windows.Foundation.Point(0, 0)).Y
+            : double.NaN;
+        return new JsonObject
+        {
+            ["visible"] = RulerBar.Visibility == Visibility.Visible,
+            ["offsetHeader"] = OffsetHeaderText.Text,
+            ["labels"] = labels,
+            ["top"] = double.IsNaN(top) ? null : top,
+            ["shift"] = RulerShift.X,
+            ["fontSize"] = RulerText.FontSize,
+            ["height"] = RulerBar.ActualHeight,
+            ["radixMenuOpen"] = RadixMenuOpen,
+        };
     }
 
     /// <summary>待っている描画をすぐに行う。</summary>
@@ -287,6 +319,9 @@ public sealed partial class HexView
         throw new ArgumentException($"Scroll bar part not found: {name}");
     }
 
+    /// <summary>マウスの「戻る」「進む」ボタン (VIEW-31) と同じ処理。</summary>
+    public void InjectHistoryButton(bool back) => MouseHistoryButton(back);
+
     /// <summary>右クリックメニューを閉じる (Esc と同じ)。</summary>
     public void HideContextMenu() => _contextMenu?.Hide();
 
@@ -349,7 +384,11 @@ public sealed partial class HexView
         result["caretBlinking"] = _focused && _blinkTimer.IsRunning;
         result["frames"] = _frames;
         result["placeholderFrames"] = _placeholderFrames;
-        result["highContrast"] = _accessibilitySettings.HighContrast;
+        result["highContrast"] = IsHighContrast;
+        result["zoom"] = _zoom;
+        result["screenZoom"] = _screenZoom;
+        result["fontFamily"] = _fontFamilyName;
+        result["encoding"] = _editor?.TextEncoding.Name;
         if (_palette is not null)
         {
             result["background"] = ColorOf(_palette.Background);
@@ -357,6 +396,14 @@ public sealed partial class HexView
             result["offsetColor"] = ColorOf(_palette.OffsetText);
             result["selectionColor"] = ColorOf(_palette.Selection);
             result["modifiedColor"] = ColorOf(_palette.Modified);
+            result["insertedColor"] = ColorOf(_palette.Inserted);
+            result["savedChangeColor"] = ColorOf(_palette.SavedChange);
+            result["dimColor"] = ColorOf(_palette.Zero);
+            result["invalidColor"] = ColorOf(_palette.Invalid);
+            result["alternateColor"] = ColorOf(_palette.Alternate);
+            result["currentRowColor"] = ColorOf(_palette.CurrentRow);
+            result["hexTextColor"] = ColorOf(_palette.HexText);
+            result["rulerHighlightColor"] = ColorOf(_palette.RulerHighlight);
         }
     }
 }

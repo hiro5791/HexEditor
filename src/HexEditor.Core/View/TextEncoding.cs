@@ -22,18 +22,104 @@ public sealed class TextEncoding
     // 静的な初期化は書いた順に行われるため、ASCII・ANSI を作る前にコードページを使えるようにしておく。
     private static readonly bool ProviderRegistered = RegisterProvider();
 
-    private TextEncoding(string name, int codePage, bool isAscii)
+    private TextEncoding(string name, int codePage, bool isAscii, string? id = null)
     {
         Name = name;
         CodePage = codePage;
         IsAscii = isAscii;
+        Id = id ?? (isAscii ? "ascii" : "cp" + codePage.ToString(CultureInfo.InvariantCulture));
         _strict = Encoding.GetEncoding(codePage, EncoderFallback.ExceptionFallback, new DecoderReplacementFallback(Replacement.ToString()));
         _decoder = _strict;
+        Kind = codePage switch
+        {
+            65001 => TextEncodingKind.Utf8,
+            1200 or 1201 => TextEncodingKind.Utf16,
+            12000 or 12001 => TextEncodingKind.Utf32,
+            54936 => TextEncodingKind.Gb18030,
+            _ when isAscii || _strict.IsSingleByte => TextEncodingKind.SingleByte,
+            _ => TextEncodingKind.DoubleByte,
+        };
+        BigEndian = codePage is 1201 or 12001;
         for (int b = 0; b < 256; b++)
         {
             _display[b] = ToDisplay((byte)b);
         }
     }
+
+    /// <summary>
+    /// テキスト列で選べる文字コードの名前 (VIEW-21 のうち、VIEW-22 の表示規則を使うもの)。<see cref="FromId"/> に渡す。
+    /// </summary>
+    public static IReadOnlyList<string> SelectableIds { get; } =
+        ["ascii", "ansi", "utf-8", "utf-16le", "utf-16be", "utf-32le", "utf-32be", "cp932"];
+
+    private static readonly Dictionary<string, TextEncoding> ById = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// 名前から文字コードを得る (<c>ascii</c>、<c>ansi</c>、<c>utf-8</c>、<c>utf-16le</c>、<c>utf-16be</c>、<c>utf-32le</c>、
+    /// <c>utf-32be</c>、<c>cp&lt;番号&gt;</c>)。知らない名前・OS が提供しないコードページは ASCII。
+    /// </summary>
+    public static TextEncoding FromId(string? id)
+    {
+        if (string.IsNullOrWhiteSpace(id) || id.Equals("ascii", StringComparison.OrdinalIgnoreCase))
+        {
+            return Ascii;
+        }
+
+        if (id.Equals("ansi", StringComparison.OrdinalIgnoreCase))
+        {
+            return Ansi;
+        }
+
+        lock (ById)
+        {
+            if (ById.TryGetValue(id, out TextEncoding? cached))
+            {
+                return cached;
+            }
+
+            TextEncoding? created = null;
+            try
+            {
+                created = id.ToLowerInvariant() switch
+                {
+                    "utf-8" => new TextEncoding("UTF-8", 65001, false, "utf-8"),
+                    "utf-16le" => new TextEncoding("UTF-16 LE", 1200, false, "utf-16le"),
+                    "utf-16be" => new TextEncoding("UTF-16 BE", 1201, false, "utf-16be"),
+                    "utf-32le" => new TextEncoding("UTF-32 LE", 12000, false, "utf-32le"),
+                    "utf-32be" => new TextEncoding("UTF-32 BE", 12001, false, "utf-32be"),
+                    _ when id.StartsWith("cp", StringComparison.OrdinalIgnoreCase)
+                        && int.TryParse(id.AsSpan(2), NumberStyles.None, CultureInfo.InvariantCulture, out int cp) && ProviderRegistered
+                        => new TextEncoding(cp.ToString(CultureInfo.InvariantCulture), cp, false),
+                    _ => null,
+                };
+            }
+            catch (Exception ex) when (ex is NotSupportedException or ArgumentException)
+            {
+            }
+
+            if (created is null)
+            {
+                return Ascii;
+            }
+
+            ById[id] = created;
+            return created;
+        }
+    }
+
+    /// <summary>設定に保存する名前。</summary>
+    public string Id { get; }
+
+    /// <summary>テキスト列での解読の方法 (VIEW-22)。</summary>
+    public TextEncodingKind Kind { get; }
+
+    /// <summary>UTF-16 / UTF-32 のビッグエンディアン。</summary>
+    public bool BigEndian { get; }
+
+    /// <summary>厳密な (不正なバイト列で例外にする) 解読器。テキスト列の解読 (VIEW-22) で使う。</summary>
+    internal Encoding StrictDecoder => _strictDecoder ??= Encoding.GetEncoding(CodePage, EncoderFallback.ExceptionFallback, DecoderFallback.ExceptionFallback);
+
+    private Encoding? _strictDecoder;
 
     /// <summary>ASCII (7 bit)。`20`〜`7E` を文字、それ以外を `.` で表示する (VIEW-21 の仕様 1 の既定)。</summary>
     public static TextEncoding Ascii { get; } = new("ASCII", 20127, isAscii: true);
@@ -50,7 +136,7 @@ public sealed class TextEncoding
         // 静的なフィールドに触れて、コードページを使えるようにしてから作る (型の初期化はフィールドに触れるまで遅れることがある)。
         if (ProviderRegistered)
         {
-            Ansi = new TextEncoding("ANSI", codePage, isAscii: false);
+            Ansi = new TextEncoding("ANSI", codePage, isAscii: false, id: "ansi");
         }
     }
 
@@ -142,11 +228,11 @@ public sealed class TextEncoding
 
         try
         {
-            return new TextEncoding("ANSI", codePage, isAscii: false);
+            return new TextEncoding("ANSI", codePage, isAscii: false, id: "ansi");
         }
         catch (Exception ex) when (ex is NotSupportedException or ArgumentException)
         {
-            return new TextEncoding("ANSI", 1252, isAscii: false);
+            return new TextEncoding("ANSI", 1252, isAscii: false, id: "ansi");
         }
     }
 
@@ -158,4 +244,20 @@ public sealed class TextEncoding
 
     [DllImport("kernel32.dll")]
     private static extern uint GetACP();
+}
+
+/// <summary>テキスト列での解読の方法 (VIEW-22 の仕様 4)。</summary>
+public enum TextEncodingKind
+{
+    /// <summary>1 バイト = 1 文字 (VIEW-21 の仕様 5)。</summary>
+    SingleByte,
+    Utf8,
+    Utf16,
+    Utf32,
+
+    /// <summary>2 バイトの CJK 文字コード (Shift_JIS、GBK、Big5 など)。</summary>
+    DoubleByte,
+
+    /// <summary>GB18030 (2 バイトと 4 バイトの文字)。</summary>
+    Gb18030,
 }
