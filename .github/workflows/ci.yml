@@ -90,14 +90,19 @@ jobs:
         if: github.event_name != 'schedule'
         env:
           HEXEDITOR_EXPECTED_ARCH: X64
+        # pwsh の run は最後のコマンドの終了コードしか見ないため、両方を実行してからどちらかの失敗で止める。
         run: |
           dotnet test tests/HexEditor.Core.Tests -c Release --no-build --filter "Category!=Nightly" --logger "trx;LogFileName=core.trx" --logger "console;verbosity=normal" --results-directory TestResults
+          $core = $LASTEXITCODE
           dotnet test tests/HexEditor.Platform.Tests -c Release --no-build --logger "trx;LogFileName=platform.trx" --logger "console;verbosity=normal" --results-directory TestResults
+          if ($core -ne 0 -or $LASTEXITCODE -ne 0) { exit 1 }
       - name: Nightly tests (full scale)
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
           dotnet test tests/HexEditor.Core.Tests -c Release --no-build --logger "trx;LogFileName=core-full.trx" --results-directory TestResults
+          $core = $LASTEXITCODE
           dotnet test tests/HexEditor.Platform.Tests -c Release --no-build --logger "trx;LogFileName=platform-full.trx" --results-directory TestResults
+          if ($core -ne 0 -or $LASTEXITCODE -ne 0) { exit 1 }
       - name: Performance tests
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: dotnet test tests/HexEditor.Performance.Tests -c Release --no-build --logger "trx;LogFileName=performance.trx" --results-directory TestResults
@@ -135,7 +140,9 @@ jobs:
           HEXEDITOR_EXPECTED_ARCH: Arm64
         run: |
           dotnet test tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true --filter "Category!=Nightly" --logger "trx;LogFileName=core-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
+          $core = $LASTEXITCODE
           dotnet test tests/HexEditor.Platform.Tests -c Release --logger "trx;LogFileName=platform-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
+          if ($core -ne 0 -or $LASTEXITCODE -ne 0) { exit 1 }
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
