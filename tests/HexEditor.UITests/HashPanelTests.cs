@@ -136,6 +136,10 @@ public sealed class HashPanelTests
         await app.SendAsync("openVirtual", new JsonObject
         {
             ["name"] = "rand-10G", ["length"] = 10 * GiB, ["content"] = "random", ["seed"] = 0xA10,
+
+            // 速い PC では 10 GiB の計算が数秒で終わり、キーを押している間に終わってしまう。先頭の 64 MiB (Hex 表示が読む範囲) より
+            // 後ろの読み込みにだけ遅延を入れて、計算を長くする。
+            ["delayMs"] = 20, ["delayFromOffset"] = 64L << 20,
         });
         await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the hex view");
 

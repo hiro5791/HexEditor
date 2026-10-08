@@ -68,7 +68,8 @@ public sealed record VirtualSourceSpec(
     byte Fill,
     ulong Seed,
     int DelayMs,
-    IReadOnlyList<(long Offset, long Length)> ReadErrors);
+    IReadOnlyList<(long Offset, long Length)> ReadErrors,
+    long DelayFromOffset = 0);
 
 /// <summary>
 /// --test-hooks の設定ファイル (JSON)。すべて省略できる。数値は 10 進の数か、"0x" で始まる 16 進の文字列で書ける。
@@ -203,7 +204,8 @@ public sealed record TestHookSettings
         (byte)ReadLong(n["fill"], 0),
         (ulong)ReadLong(n["seed"], 0),
         (int)ReadLong(n["delayMs"], 0),
-        ReadRanges(n["readErrors"]));
+        ReadRanges(n["readErrors"]),
+        ReadLong(n["delayFromOffset"], 0));
 
     private static IReadOnlyList<(long Offset, long Length)> ReadRanges(JsonNode? node) =>
         node?.AsArray().Select(r => (ReadLong(r!["offset"], 0), ReadLong(r["length"], 1))).ToList() ?? [];

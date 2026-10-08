@@ -77,7 +77,7 @@ public static class FontCatalog
         if (!IsReady || Families().Count == 0)
         {
             // 列挙できない環境では、XAML のフォントの代替 (カンマ区切り) に任せる。
-            return string.IsNullOrWhiteSpace(configured) ? PreferredFont + ", " + FallbackFont : configured + ", " + FallbackFont;
+            return Provisional(configured);
         }
 
         if (!string.IsNullOrWhiteSpace(configured))
@@ -92,6 +92,10 @@ public static class FontCatalog
 
         return IsInstalled(PreferredFont) ? PreferredFont : FallbackFont;
     }
+
+    /// <summary>一覧を作り終える前に使うフォントの指定 (XAML のフォントの代替に任せるカンマ区切り)。</summary>
+    public static string Provisional(string? configured) =>
+        string.IsNullOrWhiteSpace(configured) ? PreferredFont + ", " + FallbackFont : configured + ", " + FallbackFont;
 
     // ---- 文字を表示できるか (INSP-09 の仕様 3) ----
 

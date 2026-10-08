@@ -73,8 +73,20 @@ public sealed class AppearanceSettingsTests
         await EditorAsync(app, new JsonObject { ["action"] = "save" });
         string saved = await File.ReadAllTextAsync(Path.Combine(app.Profile, "themes", "mine.json"));
         Assert.Contains("#949494", saved);
-        await app.WaitUntilAsync(async () => (await app.RenderAsync())["background"]?.GetValue<string>() == "#FFFFFFFF",
-            TimeSpan.FromSeconds(10), "the saved scheme in the hex view");
+
+        // 設定画面のタブを閉じて文書のタブに戻ってから、Hex 表示を読む (設定画面が前にある間は、読む対象の Hex 表示がない)。
+        await app.SendAsync("closeToolPage", new JsonObject { ["id"] = "settings" });
+        await app.WaitUntilAsync(async () =>
+        {
+            try
+            {
+                return (await app.RenderAsync())["background"]?.GetValue<string>() == "#FFFFFFFF";
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+        }, TimeSpan.FromSeconds(10), "the saved scheme in the hex view");
     });
 
     [Fact]

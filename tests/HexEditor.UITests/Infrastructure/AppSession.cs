@@ -264,6 +264,28 @@ public sealed class AppSession : IAsyncDisposable
         {
         }
 
+        // ネイティブのクラッシュ (0xC000027B など。アプリのクラッシュ情報は書かれない) は、Windows のイベントログの記録を示す。
+        try
+        {
+            var query = new System.Diagnostics.Eventing.Reader.EventLogQuery("Application", System.Diagnostics.Eventing.Reader.PathType.LogName,
+                "*[System[(Provider[@Name='Application Error'] or Provider[@Name='.NET Runtime']) and TimeCreated[timediff(@SystemTime) <= 120000]]]");
+            using var reader = new System.Diagnostics.Eventing.Reader.EventLogReader(query);
+            for (System.Diagnostics.Eventing.Reader.EventRecord? record = reader.ReadEvent(); record is not null; record = reader.ReadEvent())
+            {
+                using (record)
+                {
+                    string message = record.FormatDescription() ?? string.Empty;
+                    if (message.Contains($"{Pid}", StringComparison.Ordinal) || message.Contains($"0x{Pid:x}", StringComparison.OrdinalIgnoreCase))
+                    {
+                        text.AppendLine().AppendLine($"--- {record.ProviderName} {record.TimeCreated:O}").Append(message);
+                    }
+                }
+            }
+        }
+        catch (Exception ex) when (ex is System.Diagnostics.Eventing.Reader.EventLogException or UnauthorizedAccessException or PlatformNotSupportedException)
+        {
+        }
+
         return text.ToString();
     }
 
@@ -309,6 +331,7 @@ public sealed class AppSession : IAsyncDisposable
     /// <summary>条件が成り立つまで待つ。</summary>
     public async Task WaitUntilAsync(Func<Task<bool>> condition, TimeSpan timeout, string what)
     {
+        timeout = UiTest.Scaled(timeout);
         var watch = Stopwatch.StartNew();
         while (true)
         {

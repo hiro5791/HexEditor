@@ -52,7 +52,7 @@ public sealed class TestChannelClient : IDisposable
         await _lock.WaitAsync();
         try
         {
-            using var cts = new CancellationTokenSource(timeout ?? TimeSpan.FromSeconds(30));
+            using var cts = new CancellationTokenSource(UiTest.Scaled(timeout ?? TimeSpan.FromSeconds(30)));
             await _writer.WriteLineAsync(request.ToJsonString().AsMemory(), cts.Token);
             string? line = await _reader.ReadLineAsync(cts.Token) ?? throw new IOException("The app closed the test channel.");
             JsonObject response = JsonNode.Parse(line)!.AsObject();

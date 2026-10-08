@@ -13,4 +13,15 @@ public static class UiTest
     public const string Category = "Category";
 
     public const string UI = "UI";
+
+    /// <summary>
+    /// 待つ時間の倍率 (環境変数 HEXEDITOR_UITEST_TIMEOUT_SCALE。既定 1)。混んだ CI のランナーでは状態が変わるまでに時間がかかるので、
+    /// 待つ上限 (WaitUntilAsync、命令の答え) だけを延ばす。性能の判定の時間は変えない。
+    /// </summary>
+    public static double TimeoutScale { get; } =
+        double.TryParse(Environment.GetEnvironmentVariable("HEXEDITOR_UITEST_TIMEOUT_SCALE"), System.Globalization.NumberStyles.Float,
+            System.Globalization.CultureInfo.InvariantCulture, out double scale) && scale >= 1 ? scale : 1;
+
+    /// <summary>待つ上限に <see cref="TimeoutScale"/> を掛ける。</summary>
+    public static TimeSpan Scaled(TimeSpan timeout) => timeout * TimeoutScale;
 }

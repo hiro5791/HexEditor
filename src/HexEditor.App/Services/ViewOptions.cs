@@ -60,10 +60,17 @@ public static class ViewOptions
     /// <summary>Hex ビューに設定を反映する。</summary>
     public static void ApplyTo(HexView view, SettingsStore settings)
     {
-        string family = FontCatalog.Resolve(settings.GetString(FontFamilyKey, string.Empty) is { Length: > 0 } f ? f : null, out string? missing);
+        string? configured = settings.GetString(FontFamilyKey, string.Empty) is { Length: > 0 } f ? f : null;
+        string family = FontCatalog.Resolve(configured, out string? missing);
         string fallback = settings.GetString(FallbackFontKey, string.Empty);
         string familyList = string.IsNullOrWhiteSpace(fallback) ? family : family + ", " + fallback;
-        if (view.HexFontFamily != familyList)
+
+        // フォントの一覧ができる前の仮の指定 (XAML の代替) で、すでに同じフォントで描いているなら替えない。替えると全部の文字の幅を
+        // 測り直して描き直すため、遅い PC では起動の数秒後に UI スレッドが数百 ms 止まっていた (ENG-06、VIEW-03)。
+        // (仮の指定の先頭のフォントが入っていて、決めたフォントと同じとき。先頭がなければ XAML は次の候補で描いているので替える)。
+        bool sameFont = string.IsNullOrWhiteSpace(fallback) && view.HexFontFamily == FontCatalog.Provisional(configured)
+            && FontCatalog.IsReady && view.HexFontFamily.Split(',')[0].Trim() == family && FontCatalog.IsInstalled(family);
+        if (view.HexFontFamily != familyList && !sameFont)
         {
             view.HexFontFamily = familyList;
             if (FontCatalog.IsReady)

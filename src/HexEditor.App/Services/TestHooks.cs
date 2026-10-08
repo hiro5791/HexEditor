@@ -352,7 +352,7 @@ public static class TestHooks
         IByteSource source = inner;
         if (spec.DelayMs > 0 || spec.ReadErrors.Count > 0)
         {
-            var faulty = new FaultyByteSource(inner) { Delay = TimeSpan.FromMilliseconds(spec.DelayMs) };
+            var faulty = new FaultyByteSource(inner) { Delay = TimeSpan.FromMilliseconds(spec.DelayMs), DelayFromOffset = spec.DelayFromOffset };
             foreach ((long offset, long length) in spec.ReadErrors)
             {
                 faulty.AddReadError(offset, length);

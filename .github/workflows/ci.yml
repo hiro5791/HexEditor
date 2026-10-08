@@ -284,6 +284,8 @@ jobs:
       - name: UI tests
         env:
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
+          # 混んだランナーでは状態が変わるまでの待ちを長くする (性能の判定の時間は変えない)。
+          HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
         run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI&Category!=Nightly" --logger "trx;LogFileName=ui.trx" --results-directory TestResults
 
       # 長い UI テスト (オフラインモードでの 1 時間の操作。TC-UI-58-02) は毎晩と手動の実行だけ。
@@ -291,6 +293,8 @@ jobs:
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         env:
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
+          # 混んだランナーでは状態が変わるまでの待ちを長くする (性能の判定の時間は変えない)。
+          HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
         run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=Nightly" --logger "trx;LogFileName=ui-nightly.trx" --results-directory TestResults
 
       - name: Upload UI test results
@@ -587,6 +591,8 @@ jobs:
         continue-on-error: true
         env:
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
+          # 混んだランナーでは状態が変わるまでの待ちを長くする (性能の判定の時間は変えない)。
+          HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
         run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI&Category!=Nightly" --logger "trx;LogFileName=ui-${{ matrix.distro }}.trx" --results-directory TestResults
       - uses: actions/upload-artifact@v4
         if: always()

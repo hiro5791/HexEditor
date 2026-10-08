@@ -263,7 +263,9 @@ public sealed class ReplaceAndHistoryTests
     public Task Each_input_cancels_the_previous_search() => UiTestContext.RunAsync(async ctx =>
     {
         string path = ctx.TestData("TD-SPARSE-100G");
-        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = Slow(path, 8) });
+        // 遅延は 1 回の検索が入力の間隔より十分長くなるようにする (混んだ CI のランナーでは、UI オートメーションでの入力の間隔が
+        // 200 ms ではなく 1 秒を超えることがあり、短い遅延では次の入力の前に検索が終わってキャンセルにならない)。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = Slow(path, 40) });
         await app.KeyAsync("F", ctrl: true);
         await app.IdleAsync();
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 0 });

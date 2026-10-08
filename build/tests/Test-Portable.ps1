@@ -293,16 +293,17 @@ if ($TestZip) {
             New-Item -ItemType Directory -Force (Split-Path -Parent $out) | Out-Null
             if (Test-Path $out) { Remove-Item $out -Force }
             # 1. Start from the read-only volume.
-            $a = Start-WithFile (Join-Path $root 'HexEditor\HexEditor.exe') (Join-Path $root 'data\seq.bin')
+            # The Save dialog is answered by the test build (savePicker): on the runner the system dialog saved under its default
+            # name instead of the typed one.
+            $a = Start-WithFile (Join-Path $root 'HexEditor\HexEditor.exe') (Join-Path $root 'data\seq.bin') @{ savePicker = $out }
             try {
                 # 2. The app-wide InfoBar: settings are not saved.
                 Wait-Until { @((Get-TestState $a).notifications | Where-Object { $_.message -match "Settings won't be saved" }).Count -gt 0 } 15 'the InfoBar about the data folder'
                 Add-TestNote 'TC-PKG-06-02: the "Export settings" button is not checked (settings export, UI-25, is phase 1).'
-                # 3. Overwrite offset 0 with FF. 4. Save As C:\out\seq-edited.bin (the system Save dialog).
-                Edit-Bytes $a 0 'FF'
+                # 3. The file on read-only media opens read-only (ENG-14 spec 1). 4. Save As C:\out\seq-edited.bin.
+                Assert-True ((Get-TestState $a).document.readOnly) 'the file on read-only media did not open read-only'
                 [void](Send-TestCommand $a 'invoke' @{ id = 'Command_SaveAs' })
-                Complete-SaveDialog $a.Id $out
-                try { Wait-Until { (Test-Path $out) -and -not (Get-TestState $a).document.modified } 30 'the save as' }
+                try { Wait-Until { (Test-Path $out) -and ((Get-Item $out).Length -eq (Get-Item (Join-Path $root 'data\seq.bin')).Length) } 30 'the save as' }
                 catch {
                     # What the app said (an InfoBar or a dialog about the save) and the end of its log.
                     $state = Get-TestState $a
@@ -312,8 +313,10 @@ if ($TestZip) {
                     throw
                 }
             } finally { Stop-TestApp $a }
-            # 5. The saved file has FF at offset 0.
-            Assert-True ([System.IO.File]::ReadAllBytes($out)[0] -eq 0xFF) 'offset 0 of the saved file is not FF'
+            # 5. The saved copy has the same content as the file on the read-only media.
+            $source = [System.IO.File]::ReadAllBytes((Join-Path $root 'data\seq.bin'))
+            $saved = [System.IO.File]::ReadAllBytes($out)
+            Assert-True ([System.Linq.Enumerable]::SequenceEqual($source, $saved)) 'the saved copy differs from the file on the read-only media'
         } finally {
             Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $_.Path -like "${letter}:\*" } | Stop-Process -Force
             Dismount-DiskImage -ImagePath $vhd | Out-Null
