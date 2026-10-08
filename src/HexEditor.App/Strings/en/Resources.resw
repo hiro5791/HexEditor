@@ -2407,4 +2407,12 @@ Details were written to:
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>base address row shift</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>View: Continuation marks in multibyte characters</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>utf-8 multibyte</value></data>
+  <data name="Notice_OpenedReadOnly_AccessDenied" xml:space="preserve"><value>You don't have permission to write to this file, so it opened as read-only. Choose Allow editing to try again.</value></data>
+  <data name="Notice_OpenedReadOnly_SharingViolation" xml:space="preserve"><value>Another app has this file open for writing, so it opened as read-only. Choose Allow editing when the other app is done.</value></data>
+  <data name="Notice_OpenedReadOnly_ReadOnlyMedia" xml:space="preserve"><value>This file is on read-only media, so it opened as read-only.</value></data>
+  <data name="ReadOnly_ReleaseFailed_AccessDenied" xml:space="preserve"><value>You don't have permission to write to {0}, so it stays read-only.</value></data>
+  <data name="ReadOnly_ReleaseFailed_SharingViolation" xml:space="preserve"><value>Another app has {0} open for writing, so it stays read-only.</value></data>
+  <data name="Recovery_TempDetails" xml:space="preserve"><value>A temporary file was left behind by a save that didn't finish. The file itself was not changed.</value></data>
+  <data name="Recovery_TempDelete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Recovery_DeleteFailed" xml:space="preserve"><value>Couldn't delete it: {0}</value></data>
 </root>

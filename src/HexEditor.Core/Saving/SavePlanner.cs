@@ -188,7 +188,8 @@ public static class SavePlanner
             return plan with { Method = SaveMethod.NoChanges };
         }
 
-        if (sameFile && !document.CanSave)
+        // 読み取り専用のドキュメント (EDIT-16) は元の場所に保存できない (ENG-14 の仕様 4)。別の場所への「名前を付けて保存」はできる。
+        if (sameFile && (!document.CanSave || document.IsReadOnly))
         {
             return plan with { Method = SaveMethod.SaveAs, Issue = SaveIssue.ReadOnly };
         }
@@ -256,18 +257,18 @@ public static class SavePlanner
         if (plan.Method == SaveMethod.Safe)
         {
             FileByteSource saved = DocumentSaver.Save(plan.Snapshot, plan.TargetPath!, operation, plan.Settings.Volumes, plan.Backup,
-                out BackupOutcome? backup);
+                plan.Settings.JournalDirectory, out BackupOutcome? backup);
             return new SaveResult(saved, null) { BackupTime = backup?.Time, BackupPath = backup?.Path };
         }
 
-        // その場保存では、書き込む前にファイル全体をコピーしてバックアップにする (ENG-26 の仕様 5)。
+        // その場保存では、書き込む前にファイル全体をコピーしてバックアップにする (ENG-26 の仕様 5)。作れるか (権限・空き容量) を先に
+        // 確かめ、コピーが終わってから世代をずらす (コピーに失敗・キャンセルしても前のバックアップは残る)。
         string? backupPath = null;
         TimeSpan? backupTime = null;
         if (plan.Backup is { } settings && File.Exists(plan.TargetPath))
         {
-            string first = Backup.Rotate(plan.TargetPath!, settings);
-            backupTime = Backup.Measure(() => Backup.Copy(plan.TargetPath!, first, operation));
-            backupPath = first;
+            Backup.Prepare(plan.TargetPath!, settings, plan.Settings.Volumes, new FileInfo(plan.TargetPath!).Length);
+            backupTime = Backup.Measure(() => backupPath = Backup.CreateByCopy(plan.TargetPath!, settings, operation));
         }
 
         InPlaceSaveResult inPlace = InPlaceSaver.Save(plan.Snapshot, plan.Settings.JournalDirectory, plan.Settings.JournalLimit, operation,

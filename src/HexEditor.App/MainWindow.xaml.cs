@@ -270,7 +270,9 @@ public sealed partial class MainWindow : Window
             return true;
         }
 
-        if (saveAs || path is null || !doc.Document.CanSave)
+        // 読み取り専用のドキュメントは元の場所に保存しない (ENG-14 の仕様 4、EDIT-16 の仕様 5)。「すべて保存」・閉じるときの「保存」でも
+        // 「名前を付けて保存」になる (元のファイルが変わっていたため読み取り専用で復旧したドキュメントで、元のファイルを上書きしない)。
+        if (saveAs || path is null || !doc.Document.CanSave || doc.Document.IsReadOnly)
         {
             // 初期フォルダは元のファイルのフォルダ、無題なら前回保存したフォルダ (ENG-21 の仕様 1)。
             string suggestedName = doc.IsUntitled ? doc.DisplayName + ".bin" : doc.DisplayName;
@@ -352,7 +354,11 @@ public sealed partial class MainWindow : Window
         catch (BackupFailedException ex)
         {
             // バックアップを作れないため保存を始めなかった。「バックアップなしで保存」で続けられる (ENG-26 の「エラー」)。
-            ShowNotice(Loc.Format("Backup_Failed", ex.Reason), InfoBarSeverity.Error, doc, actions:
+            // 置き場所の空き容量不足 (コピーで作る場合) は、理由を表示言語で示す。
+            string reason = ex.InnerException is InsufficientSpaceException space
+                ? Loc.Format("Error_NoSpace", space.Drive, space.Required.ToString("N0"), space.Available.ToString("N0")).TrimEnd('.', '。')
+                : ex.Reason;
+            ShowNotice(Loc.Format("Backup_Failed", reason), InfoBarSeverity.Error, doc, actions:
             [
                 new NotificationAction(Loc.Get("Backup_SaveWithout"), () =>
                 {

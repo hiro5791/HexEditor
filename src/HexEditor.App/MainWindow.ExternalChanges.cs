@@ -74,6 +74,13 @@ public sealed partial class MainWindow
 
         AppLog.Info($"External change: {kind} ({(doc.Document.IsModified ? "modified" : "unmodified")})");
 
+        // ドキュメントを変える長時間処理の実行中 (ENG-09 の仕様 7) は、再読み込みもマージもできない。処理が終わってから扱う。
+        if (doc.Document.IsEditLocked)
+        {
+            DeferExternalChange(doc);
+            return;
+        }
+
         // そのファイルのブロックキャッシュを捨てる (仕様 10)。
         doc.Document.Cache.Invalidate();
         ExternalChangePrompt prompt = ExternalChangeRules.Decide(kind, doc.Document.IsModified, FileSettings.AutoReload(App.Settings),
@@ -112,7 +119,7 @@ public sealed partial class MainWindow
             ExternalChangePrompt.Deleted => Loc.Format("External_Deleted", doc.DisplayName),
             _ => Loc.Format("External_Changed", doc.DisplayName),
         };
-        ExternalChangeActions actions = ExternalChangeRules.ActionsFor(prompt, doc.Document.IsModified);
+        ExternalChangeActions actions = ExternalChangeRules.ActionsFor(prompt, doc.Document.IsModified, doc.Document.IsReadOnly);
         var buttons = new List<NotificationAction>();
         void Add(ExternalChangeActions action, string key, Func<Task> run)
         {
@@ -180,7 +187,7 @@ public sealed partial class MainWindow
     /// </summary>
     private bool ReloadFromDisk(DocumentViewModel doc)
     {
-        if (doc.FilePath is not { } path)
+        if (doc.FilePath is not { } path || !EnsureNotBusy(doc))
         {
             return false;
         }
@@ -216,6 +223,11 @@ public sealed partial class MainWindow
     /// </summary>
     private async Task<bool> ReloadWithConfirmAsync(DocumentViewModel doc)
     {
+        if (!EnsureNotBusy(doc))
+        {
+            return false;
+        }
+
         bool deleted = doc.SourceDeleted || (doc.FilePath is { } current && doc.Watch is not null && !File.Exists(current));
         bool changedOnDisk = !deleted && (SourceChangedOnDisk(doc) || doc.ExternalChange != ExternalChangeKind.None || doc.OverwritesExternalChange);
         if (doc.Document.IsModified)
@@ -229,7 +241,7 @@ public sealed partial class MainWindow
             dialog.PrimaryButtonText = Loc.Get("Discard_Confirm");
             dialog.CloseButtonText = Loc.Get("Common_Cancel");
             dialog.DefaultButton = ContentDialogButton.Close;
-            if (await dialog.ShowAsync() != ContentDialogResult.Primary)
+            if (await dialog.ShowAsync() != ContentDialogResult.Primary || !EnsureNotBusy(doc))
             {
                 return false;
             }
@@ -242,6 +254,11 @@ public sealed partial class MainWindow
             {
                 return false;
             }
+        }
+        else if (!doc.Document.IsModified)
+        {
+            // 変更がなく外部でも変わっていない: 破棄するものがないため、Undo 単位を積まずに表示を読み直すだけにする。
+            doc.Document.RefreshFromSource();
         }
         else
         {
@@ -256,8 +273,15 @@ public sealed partial class MainWindow
     /// <summary>「マージ」(ENG-19 の仕様 5)。長さが変わっている場合は、オフセットがずれる可能性を確かめる。</summary>
     private async Task<bool> MergeAsync(DocumentViewModel doc)
     {
-        if (doc.FilePath is not { } path)
+        if (doc.FilePath is not { } path || !EnsureNotBusy(doc))
         {
+            return false;
+        }
+
+        // マージは自分の変更を適用し直す編集のため、読み取り専用では行わない (EDIT-16 の仕様 2)。
+        if (doc.Document.IsReadOnly)
+        {
+            ShowReadOnlyNotice(doc);
             return false;
         }
 
@@ -281,7 +305,7 @@ public sealed partial class MainWindow
             dialog.PrimaryButtonText = Loc.Get("External_Merge");
             dialog.CloseButtonText = Loc.Get("Common_Cancel");
             dialog.DefaultButton = ContentDialogButton.Close;
-            if (await dialog.ShowAsync() != ContentDialogResult.Primary)
+            if (await dialog.ShowAsync() != ContentDialogResult.Primary || !EnsureNotBusy(doc) || doc.Document.IsReadOnly)
             {
                 source.Dispose();
                 return false;
@@ -302,9 +326,10 @@ public sealed partial class MainWindow
         }
 
         // ファイルが外部で変更されていれば、その扱い (ENG-19) になる。変わっていなければ表示を読み直すだけ (変更は残す)。
+        // すでに知らせた変更 (InfoBar を閉じた後など) も、もう一度知らせて扱いを選べるようにする (ENG-18 の仕様 1)。
         if (doc.Watch is { } watch && Vm.ExternalChanges is { } monitor)
         {
-            ExternalChangeKind kind = await Task.Run(() => monitor.CheckNow(watch));
+            ExternalChangeKind kind = await Task.Run(() => monitor.CheckNow(watch, reportAgain: true));
             if (kind != ExternalChangeKind.None)
             {
                 return;
@@ -320,6 +345,63 @@ public sealed partial class MainWindow
         {
             await ReloadWithConfirmAsync(doc);
         }
+    }
+
+    /// <summary>
+    /// 「変更を破棄して再読み込み」の使えない理由: ファイルでない、処理中 (ENG-09 の仕様 7)。読み取り専用でも使える (EDIT-16 の仕様 2)。
+    /// </summary>
+    private static string? NeedsDiscardableFile(DocumentViewModel doc) =>
+        NeedsFile(doc) ?? (doc.Document.IsEditLocked ? Loc.Get("Notice_Busy") : null);
+
+    /// <summary>処理中 (ENG-09 の仕様 7) なら「処理中のため…」を示して false。読み取り専用かどうかは問わない (再読み込みはできる)。</summary>
+    private bool EnsureNotBusy(DocumentViewModel doc)
+    {
+        if (!doc.Document.IsEditLocked)
+        {
+            return true;
+        }
+
+        IReadOnlyList<Core.Operations.LongRunningOperation> busy = Vm.Operations.ActiveFor(doc.Document);
+        ShowNotice(busy.Count > 0 ? Loc.Format("Notice_BusyWith", busy[0].Name) : Loc.Get("Notice_Busy"), InfoBarSeverity.Error, doc);
+        return false;
+    }
+
+    /// <summary>処理中に検知した外部変更を待たせているドキュメント。</summary>
+    private readonly HashSet<DocumentViewModel> _deferredExternalChanges = [];
+
+    /// <summary>
+    /// 処理中に検知した外部変更を、処理が終わってから扱う。監視には知らせた変更を忘れさせ、処理が終わったら確かめ直す (ファイルがその後も
+    /// 変わっていれば、そのときの種類で知らせる)。タブを閉じた・別のウィンドウに移した場合はやめる (移した先のウィンドウの確認で知らせる)。
+    /// </summary>
+    private void DeferExternalChange(DocumentViewModel doc)
+    {
+        if (doc.Watch is { } watch)
+        {
+            Vm.ExternalChanges?.Forget(watch);
+        }
+
+        if (!_deferredExternalChanges.Add(doc))
+        {
+            return;
+        }
+
+        Microsoft.UI.Dispatching.DispatcherQueueTimer timer = DispatcherQueue.CreateTimer();
+        timer.Interval = TimeSpan.FromMilliseconds(500);
+        timer.Tick += (_, _) =>
+        {
+            if (Vm.Documents.Contains(doc) && doc.Watch is not null && doc.Document.IsEditLocked && !doc.Document.IsDisposed)
+            {
+                return;
+            }
+
+            timer.Stop();
+            _deferredExternalChanges.Remove(doc);
+            if (Vm.Documents.Contains(doc) && doc.Watch is { } target && Vm.ExternalChanges is { } monitor)
+            {
+                _ = Task.Run(() => monitor.CheckNow(target));
+            }
+        };
+        timer.Start();
     }
 
     /// <summary>

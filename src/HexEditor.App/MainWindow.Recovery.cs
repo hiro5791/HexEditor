@@ -56,9 +56,12 @@ public sealed partial class MainWindow
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .SelectMany(RecoveryStore.Scan)];
         IReadOnlyList<string> journals = InPlaceSaver.FindJournals(defaultRoot);
-        if (entries.Count > 0 || journals.Count > 0)
+
+        // 異常終了で残った安全な保存の一時ファイル (ENG-22 の仕様 7)。記録は保存のジャーナルと同じフォルダにある。
+        IReadOnlyList<LeftoverTempFile> leftovers = SaveTempMarker.Find(defaultRoot);
+        if (entries.Count > 0 || journals.Count > 0 || leftovers.Count > 0)
         {
-            await ShowRecoveryDialogAsync(entries, journals);
+            await ShowRecoveryDialogAsync(entries, journals, leftovers);
         }
 
         // 復旧の提案の後にセッションを復元する (UI-30 の仕様 3)。
@@ -119,9 +122,11 @@ public sealed partial class MainWindow
     }
 
     /// <summary>
-    /// 復旧の画面。項目ごとに「復旧する」「破棄」を選べ、閉じる (「あとで」) と残りは次回の起動でもう一度出す。
+    /// 復旧の画面。項目ごとに「復旧する」「破棄」を選べ、閉じる (「あとで」) と残りは次回の起動でもう一度出す。保存の途中で残った
+    /// 一時ファイル (ENG-22 の仕様 7) は「削除」だけを出す (ENG-27 の仕様 7)。
     /// </summary>
-    private async Task ShowRecoveryDialogAsync(IReadOnlyList<RecoveryEntry> entries, IReadOnlyList<string> journals)
+    private async Task ShowRecoveryDialogAsync(IReadOnlyList<RecoveryEntry> entries, IReadOnlyList<string> journals,
+        IReadOnlyList<LeftoverTempFile> leftovers)
     {
         var list = new StackPanel { Spacing = 12 };
         var dialog = new ContentDialog
@@ -133,7 +138,7 @@ public sealed partial class MainWindow
             FlowDirection = Root.FlowDirection,
         };
         AutomationProperties.SetAutomationId(dialog, "RecoveryDialog");
-        int remaining = entries.Count + journals.Count;
+        int remaining = entries.Count + journals.Count + leftovers.Count;
 
         void Done(FrameworkElement row)
         {
@@ -199,9 +204,43 @@ public sealed partial class MainWindow
                 },
                 () =>
                 {
-                    File.Delete(journal);
-                    Done(row!);
+                    try
+                    {
+                        File.Delete(journal);
+                        Done(row!);
+                    }
+                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                    {
+                        ShowNotice(Loc.Format("Recovery_DeleteFailed", ex.Message), InfoBarSeverity.Error);
+                    }
                 });
+            list.Children.Add(row);
+        }
+
+        foreach (LeftoverTempFile leftover in leftovers)
+        {
+            FrameworkElement? row = null;
+            row = RecoveryRow(
+                Path.GetFileName(leftover.TargetPath),
+                leftover.TempPath,
+                Loc.Get("Recovery_TempDetails"),
+                restoreText: null,
+                restore: null,
+                () =>
+                {
+                    try
+                    {
+                        SaveTempMarker.Delete(leftover);
+                        AppLog.Info("Deleted a leftover save temp file");
+                        Done(row!);
+                    }
+                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                    {
+                        ShowNotice(Loc.Format("Recovery_DeleteFailed", ex.Message), InfoBarSeverity.Error);
+                    }
+                },
+                discardText: Loc.Get("Recovery_TempDelete"),
+                discardId: "Recovery_DeleteTemp");
             list.Children.Add(row);
         }
 
@@ -217,7 +256,8 @@ public sealed partial class MainWindow
         await dialog.ShowAsync();
     }
 
-    private static FrameworkElement RecoveryRow(string name, string location, string details, string restoreText, Action restore, Action discard)
+    private static FrameworkElement RecoveryRow(string name, string location, string details, string? restoreText, Action? restore, Action discard,
+        string? discardText = null, string discardId = "Recovery_Discard")
     {
         var row = new Grid { ColumnSpacing = 12 };
         row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -235,15 +275,20 @@ public sealed partial class MainWindow
         row.Children.Add(text);
 
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, VerticalAlignment = VerticalAlignment.Center };
-        var restoreButton = new Button { Content = restoreText, Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
-        AutomationProperties.SetAutomationId(restoreButton, "Recovery_Restore");
-        AutomationProperties.SetName(restoreButton, $"{restoreText}: {name}");
-        restoreButton.Click += (_, _) => restore();
-        var discardButton = new Button { Content = Loc.Get("Recovery_Discard") };
-        AutomationProperties.SetAutomationId(discardButton, "Recovery_Discard");
-        AutomationProperties.SetName(discardButton, $"{Loc.Get("Recovery_Discard")}: {name}");
+        if (restoreText is not null && restore is not null)
+        {
+            var restoreButton = new Button { Content = restoreText, Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
+            AutomationProperties.SetAutomationId(restoreButton, "Recovery_Restore");
+            AutomationProperties.SetName(restoreButton, $"{restoreText}: {name}");
+            restoreButton.Click += (_, _) => restore();
+            buttons.Children.Add(restoreButton);
+        }
+
+        string discardLabel = discardText ?? Loc.Get("Recovery_Discard");
+        var discardButton = new Button { Content = discardLabel };
+        AutomationProperties.SetAutomationId(discardButton, discardId);
+        AutomationProperties.SetName(discardButton, $"{discardLabel}: {name}");
         discardButton.Click += (_, _) => discard();
-        buttons.Children.Add(restoreButton);
         buttons.Children.Add(discardButton);
         Grid.SetColumn(buttons, 1);
         row.Children.Add(buttons);
@@ -257,9 +302,9 @@ public sealed partial class MainWindow
         {
             restored = RecoveryStore.Restore(entry, Vm.DocumentOptions);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidDataException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidDataException or ArgumentException)
         {
-            // 失敗したら理由を示し、復旧用データは残す (「破棄」で消せる)。
+            // 失敗したら理由を示し、復旧用データは残す (「破棄」で消せる)。記録のピースが壊れている (ArgumentException) 場合も同じ。
             ShowNotice(Loc.Format("Recovery_Failed", ex.Message), InfoBarSeverity.Error);
             return;
         }

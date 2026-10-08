@@ -12,6 +12,9 @@ public sealed record VolumeInfo(string Name, string? FileSystem, long? Available
     /// <summary>FAT32 の 1 ファイルの最大サイズ (4 GiB − 1 バイト)。</summary>
     public const long Fat32MaxFileSize = 4L * 1024 * 1024 * 1024 - 1;
 
+    /// <summary>読み取り専用のメディア・ボリューム (<c>FILE_READ_ONLY_VOLUME</c>)。そこにあるファイルは読み取り専用で開く (ENG-14 の仕様 1)。</summary>
+    public bool IsReadOnly { get; init; }
+
     /// <summary>ファイルシステムの 1 ファイルの最大サイズ (ENG-25 の仕様 5)。上限がない (または分からない) 場合は null。</summary>
     public long? MaxFileSize => FileSystem?.ToUpperInvariant() switch
     {
@@ -52,9 +55,12 @@ public sealed class SystemVolumeInfoProvider : IVolumeInfoProvider
 
         long? available = GetDiskFreeSpaceEx(volume, out ulong freeForCaller, out _, out _) ? (long)Math.Min(freeForCaller, long.MaxValue) : null;
         var fsName = new StringBuilder(64);
-        string? fileSystem = GetVolumeInformation(volume, null, 0, out _, out _, out _, fsName, fsName.Capacity) ? fsName.ToString() : null;
-        return new VolumeInfo(volume.TrimEnd('\\'), fileSystem, available);
+        bool known = GetVolumeInformation(volume, null, 0, out _, out _, out uint flags, fsName, fsName.Capacity);
+        string? fileSystem = known ? fsName.ToString() : null;
+        return new VolumeInfo(volume.TrimEnd('\\'), fileSystem, available) { IsReadOnly = known && (flags & FileReadOnlyVolume) != 0 };
     }
+
+    private const uint FileReadOnlyVolume = 0x00080000;
 
     private static VolumeInfo? FromDriveInfo(string folder)
     {

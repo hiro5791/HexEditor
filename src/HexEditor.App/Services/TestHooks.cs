@@ -140,6 +140,29 @@ public static class TestHooks
     public static Core.Saving.IVolumeInfoProvider? Volumes =>
         Active && Settings.FreeSpace is { } free ? new FixedFreeSpaceVolumes(free) : null;
 
+    /// <summary>
+    /// 開くときの書き込みの確認 (ENG-14 の仕様 1) の差し替え: 設定 writeErrors に合うファイルでは、権限がない・共有違反・書き込み禁止の
+    /// メディアのエラーを起こす。合わなければ null (本物の確認)。
+    /// </summary>
+    public static Func<string, Microsoft.Win32.SafeHandles.SafeFileHandle>? OpenForWrite =>
+        Active && Settings.WriteErrors.Count > 0 ? OpenForWriteWithErrors : null;
+
+    private static Microsoft.Win32.SafeHandles.SafeFileHandle OpenForWriteWithErrors(string path)
+    {
+        if (Settings.WriteErrorFor(path) is { } spec)
+        {
+            AppLog.Info($"Test hooks: write probe {spec.Error} ({Path.GetFileName(path)})");
+            throw spec.Error.ToUpperInvariant() switch
+            {
+                "SHARINGVIOLATION" => new IOException("Sharing violation (test hooks).", unchecked((int)0x80070020)),
+                "WRITEPROTECT" => new IOException("The media is write protected (test hooks).", unchecked((int)0x80070013)),
+                _ => new UnauthorizedAccessException("Access denied (test hooks)."),
+            };
+        }
+
+        return File.OpenHandle(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
+    }
+
     private sealed class FixedFreeSpaceVolumes(long free) : Core.Saving.IVolumeInfoProvider
     {
         public Core.Saving.VolumeInfo? GetVolume(string folder) =>
@@ -567,6 +590,8 @@ public static class TestHooks
     public static bool InterceptLaunch(Uri uri) => false;
 
     public static Core.Saving.IVolumeInfoProvider? Volumes => null;
+
+    public static Func<string, Microsoft.Win32.SafeHandles.SafeFileHandle>? OpenForWrite => null;
 
     public static Core.Sources.IByteSource OpenContentSource(string path) => Core.Sources.FileByteSource.Open(path);
 }
