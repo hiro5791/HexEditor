@@ -40,7 +40,7 @@ public sealed partial class MainWindow
         "sourceStats" => TestSourceStats(),
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
-        _ => null,
+        _ => HandleEditTestCommand(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>
@@ -93,6 +93,8 @@ public sealed partial class MainWindow
                 result["isTextTrimmed"] = t.IsTextTrimmed;
                 break;
             case TextBox t:
+                result["fontStyle"] = t.FontStyle.ToString();
+                result["itemStatus"] = AutomationProperties.GetItemStatus(t);
                 result["cautionBorder"] = t.BorderBrush is SolidColorBrush border
                     && Application.Current.Resources["SystemFillColorCautionBrush"] is SolidColorBrush caution
                     && border.Color == caution.Color;

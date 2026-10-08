@@ -1,6 +1,7 @@
 using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
+using HexEditor.Core.Editing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
@@ -202,7 +203,7 @@ public sealed partial class MainWindow
         bool editable = hasDoc && !doc!.Editor.ReadOnly;
         var states = new Dictionary<string, bool>
         {
-            ["Command_Save"] = hasDoc,
+            ["Command_Save"] = hasDoc && !doc!.Editor.ReadOnly,
             ["Command_SaveAs"] = hasDoc,
             ["Command_Close"] = hasDoc,
             ["Command_Undo"] = editable && doc!.Document.History.CanUndo,
@@ -211,6 +212,16 @@ public sealed partial class MainWindow
             ["Command_Copy"] = hasDoc && doc!.Editor.HasSelection,
             ["Command_Paste"] = editable,
             ["Command_PasteOverwrite"] = editable,
+            ["Command_PasteSpecial"] = editable,
+            ["Command_CopyAs"] = hasDoc,
+            ["Command_CopyAsLast"] = hasDoc && App.Settings.GetString(CopyAsLastKey, string.Empty).Length > 0,
+            ["Command_SelectRange"] = hasDoc && doc!.Document.Length > 0,
+            ["Command_InsertBytes"] = editable && doc!.Document.CanResize,
+            ["Command_InsertFile"] = editable,
+            ["Command_Fill"] = editable && (doc!.Editor.HasSelection || doc.Document.Length > 0),
+            ["Command_Resize"] = editable && doc!.Document.CanResize,
+            ["Command_TruncateAtCursor"] = editable && EditCommands.CanTruncateAtCursor(doc!.Editor),
+            ["Command_ReadOnly"] = hasDoc,
             ["Command_SelectAll"] = hasDoc && doc!.Document.Length > 0,
             ["Command_ToggleInsert"] = editable && doc!.Document.CanResize,
             ["Command_Find"] = hasDoc,
@@ -228,6 +239,8 @@ public sealed partial class MainWindow
         {
             SetStates(menu.Items, states);
         }
+
+        ReadOnlyToggle.IsChecked = doc?.Editor.ReadOnly == true;
     }
 
     private static void SetStates(IList<MenuFlyoutItemBase> items, Dictionary<string, bool> states)

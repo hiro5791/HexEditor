@@ -1,6 +1,7 @@
 using System.Text.Json;
 using HexEditor.Core.Clipboard;
 using HexEditor.Core.Engine;
+using HexEditor.Core.Sources;
 using HexEditor.Core.View;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage.Streams;
@@ -20,7 +21,22 @@ public enum PasteOutcome
     Truncated,
     FixedLength,
     NotEditable,
+
+    /// <summary>
+    /// Hex 列に Hex として読めないテキストを貼ろうとしたが、他の形式 (Base64 など) に当てはまる (EDIT-23 の仕様 2)。何もしていない。
+    /// 呼び出し側は「形式を選択して貼り付け」のダイアログを、<see cref="ClipboardService.LastSpecialText"/> で開く。
+    /// </summary>
+    NeedsSpecialPaste,
+
+    /// <summary>エクスプローラーでコピーしたファイルがある (EDIT-23 の仕様 1 の 4)。<see cref="ClipboardService.LastFiles"/> の内容を挿入する。</summary>
+    Files,
 }
+
+/// <summary>「形式を選択して貼り付け」で使うクリップボードの内容 (EDIT-26)。</summary>
+/// <param name="Text">テキスト形式。</param>
+/// <param name="Binary">バイナリ形式 (`HexEditor.Binary`、アプリ内クリップボード、他のエディタの形式)。</param>
+/// <param name="Files">エクスプローラーでコピーしたファイルのパス。</param>
+public sealed record SpecialClipboard(string? Text, byte[]? Binary, IReadOnlyList<string> Files);
 
 /// <summary>
 /// システムのクリップボードとアプリ内クリップボード (EDIT-22〜EDIT-24)。システムのクリップボードには上限 (既定 64 MiB) までの
@@ -41,6 +57,18 @@ public sealed class ClipboardService
 
     /// <summary>直前の貼り付けで、末尾を越えるため書かなかったバイト数 (EDIT-23 の仕様 5 の InfoBar の N)。</summary>
     public long LastTruncatedBytes { get; private set; }
+
+    /// <summary><see cref="PasteOutcome.NeedsSpecialPaste"/> のときのテキスト。</summary>
+    public string? LastSpecialText { get; private set; }
+
+    /// <summary><see cref="PasteOutcome.Files"/> のときのファイル。</summary>
+    public IReadOnlyList<string> LastFiles { get; private set; } = [];
+
+    /// <summary>設定「他のエディタ互換の形式でもコピーする」(EDIT-27 の仕様 4。既定オン)。</summary>
+    public bool CompatFormatsEnabled { get; set; } = true;
+
+    /// <summary>設定「Hex 列で自動判別したときに確認しない」(EDIT-23 の仕様 2。既定オフ)。</summary>
+    public bool PasteDetectedWithoutConfirmation { get; set; }
 
     /// <summary>
     /// 選択範囲をコピーする。Hex 列なら Hex 文字列、テキスト列なら文字列もテキストとして入れる。
@@ -82,6 +110,7 @@ public sealed class ClipboardService
         if (plan.Binary && bytes is not null)
         {
             package.SetData(BinaryFormat, await ToStreamAsync(bytes));
+            await AddCompatFormatsAsync(package, bytes);
             if (plan.Text == ClipboardTextKind.Data)
             {
                 package.SetText(text ?? editor.FormatForClipboard(bytes));
@@ -135,6 +164,37 @@ public sealed class ClipboardService
             return Map(await TruncateAsync(editor, data.Length, confirmTruncate, allow => editor.Paste(data, overwrite, allow)));
         }
 
+        // (3) 他のエディタ互換の形式 (EDIT-27 の仕様 3)。
+        if (await ReadCompatAsync(view) is { } compat)
+        {
+            return Map(await TruncateAsync(editor, compat.Length, confirmTruncate, allow => editor.Paste(compat, overwrite, allow)));
+        }
+
+        // (4) エクスプローラーでコピーしたファイル: ファイルの内容の挿入 (EDIT-30) にする。
+        if (await ReadFilesAsync(view) is { Count: > 0 } files)
+        {
+            LastFiles = files;
+            return PasteOutcome.Files;
+        }
+
+        // Hex 列で Hex として読めないテキストは、他の形式に当てはまれば確認のダイアログを出す (EDIT-23 の仕様 2・EDIT-26)。
+        if (view.Contains(StandardDataFormats.Text) && editor.ActiveColumn == ActiveColumn.Hex)
+        {
+            string candidate = await view.GetTextAsync();
+            if (HexText.TryParse(candidate) is null && candidate.Length <= PasteDetector.MaxTextChars
+                && PasteDetector.Best(PasteDetector.Detect(candidate)) is { Format: not PasteFormat.Text } best)
+            {
+                if (!PasteDetectedWithoutConfirmation)
+                {
+                    LastSpecialText = candidate;
+                    return PasteOutcome.NeedsSpecialPaste;
+                }
+
+                byte[] detected = best.Format is PasteFormat.Text ? best.Bytes! : PasteDetector.Parse(best.Format, candidate).Bytes ?? best.Bytes!;
+                return Map(await TruncateAsync(editor, detected.Length, confirmTruncate, allow => editor.Paste(detected, overwrite, allow)));
+            }
+        }
+
         // (3) テキスト: テキスト列なら文字コードで変換、Hex 列なら Hex 文字列として読み、読めなければテキストとして貼る。
         if (view.Contains(StandardDataFormats.Text))
         {
@@ -144,6 +204,132 @@ public sealed class ClipboardService
         }
 
         return PasteOutcome.Nothing;
+    }
+
+    /// <summary>
+    /// 「形式を選択して貼り付け」(EDIT-26) で使う内容を読む。バイナリ形式は、アプリ内クリップボード (上限以内)、`HexEditor.Binary`、
+    /// 他のエディタの形式の順に探す。
+    /// </summary>
+    public async Task<SpecialClipboard> ReadSpecialAsync()
+    {
+        DataPackageView view = SystemClipboard.GetContent();
+        string? text = view.Contains(StandardDataFormats.Text) ? await view.GetTextAsync() : null;
+        byte[]? binary = null;
+        if (view.Contains(BinaryFormat) && await view.GetDataAsync(BinaryFormat) is IRandomAccessStream stream)
+        {
+            binary = await ReadAllAsync(stream);
+        }
+
+        binary ??= await ReadCompatAsync(view);
+        return new SpecialClipboard(text, binary, await ReadFilesAsync(view));
+    }
+
+    /// <summary>
+    /// 塗りつぶし (EDIT-29) の「クリップボードの内容」: EDIT-23 の優先順位で読む。アプリ内クリップボードは参照のまま返す
+    /// (大きな範囲もデータをコピーしない)。どちらでもなければ、テキストを <paramref name="editor"/> の列と文字コードで読む。
+    /// </summary>
+    public async Task<(byte[]? Bytes, IByteSource? Source)> ReadForFillAsync(EditorState editor)
+    {
+        DataPackageView view = SystemClipboard.GetContent();
+        if (view.Contains(MetaFormat) && InApp.Current is { } clip && await view.GetDataAsync(MetaFormat) is string meta)
+        {
+            using JsonDocument json = JsonDocument.Parse(meta);
+            if (json.RootElement.GetProperty("instance").GetString() == InstanceId && json.RootElement.GetProperty("serial").GetInt64() == clip.Serial)
+            {
+                return (null, clip.Range);
+            }
+        }
+
+        if (view.Contains(BinaryFormat) && await view.GetDataAsync(BinaryFormat) is IRandomAccessStream stream)
+        {
+            return (await ReadAllAsync(stream), null);
+        }
+
+        if (await ReadCompatAsync(view) is { } compat)
+        {
+            return (compat, null);
+        }
+
+        if (view.Contains(StandardDataFormats.Text))
+        {
+            string text = await view.GetTextAsync();
+            if (editor.ActiveColumn == ActiveColumn.Hex && HexText.TryParse(text) is { } hex)
+            {
+                return (hex, null);
+            }
+
+            return (editor.TextEncoding.TryEncode(text, out byte[] bytes) ? bytes : null, null);
+        }
+
+        return (null, null);
+    }
+
+    /// <summary>
+    /// 「形式を選択してコピー」(EDIT-25) の出力を入れる。HTML は HTML 形式 (CF_HTML) とテキスト、RTF は RTF とテキストの両方で入れる。
+    /// </summary>
+    public void CopyFormatted(string text, string? htmlFragment = null, string? rtf = null)
+    {
+        var package = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
+        package.SetText(text);
+        if (htmlFragment is not null)
+        {
+            package.SetHtmlFormat(HtmlClipboard.Wrap(htmlFragment));
+        }
+
+        if (rtf is not null)
+        {
+            package.SetRtf(rtf);
+        }
+
+        InApp.Clear();
+        SetContentWithRetry(package);
+    }
+
+    /// <summary>他のエディタ互換の形式を入れる (設定がオンのとき。EDIT-27 の仕様 4)。</summary>
+    private async Task AddCompatFormatsAsync(DataPackage package, byte[] bytes)
+    {
+        if (!CompatFormatsEnabled)
+        {
+            return;
+        }
+
+        foreach ((string name, byte[] data) in CompatClipboardFormats.Encode(bytes))
+        {
+            package.SetData(name, await ToStreamAsync(data));
+        }
+    }
+
+    /// <summary>他のエディタの形式を表の順に探す。壊れた形式は飛ばす (EDIT-27 の「エラー」)。</summary>
+    private static async Task<byte[]?> ReadCompatAsync(DataPackageView view)
+    {
+        var raw = new Dictionary<string, byte[]>();
+        foreach (CompatClipboardFormat format in CompatClipboardFormats.Formats)
+        {
+            if (view.Contains(format.FormatName) && await view.GetDataAsync(format.FormatName) is IRandomAccessStream s)
+            {
+                raw[format.FormatName] = await ReadAllAsync(s);
+            }
+        }
+
+        return CompatClipboardFormats.FindForPaste(name => raw.GetValueOrDefault(name))?.Data;
+    }
+
+    private static async Task<IReadOnlyList<string>> ReadFilesAsync(DataPackageView view)
+    {
+        if (!view.Contains(StandardDataFormats.StorageItems))
+        {
+            return [];
+        }
+
+        try
+        {
+            IReadOnlyList<Windows.Storage.IStorageItem> items = await view.GetStorageItemsAsync();
+            return [.. items.OfType<Windows.Storage.StorageFile>().Select(f => f.Path).Where(p => !string.IsNullOrEmpty(p))];
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Runtime.InteropServices.COMException)
+        {
+            return [];
+        }
     }
 
     /// <summary>
@@ -176,6 +362,7 @@ public sealed class ClipboardService
         EditResult.Truncated => PasteOutcome.Truncated,
         EditResult.FixedLength => PasteOutcome.FixedLength,
         EditResult.NotEditable => PasteOutcome.NotEditable,
+        EditResult.NeedsTruncateConfirmation => PasteOutcome.Nothing,
         _ => PasteOutcome.Nothing,
     };
 

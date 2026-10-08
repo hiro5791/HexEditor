@@ -277,6 +277,30 @@ public static class TestHooks
         return AddDocument(vm, new Document(source, vm.DocumentOptions), full, Path.GetFileName(full));
     }
 
+    /// <summary>
+    /// 挿入・塗りつぶしの内容として読むファイル (EDIT-30)。設定の fileSources に当てはまれば、遅延・読み込みエラーを加えたデータソースで開く
+    /// (TC-EDIT-30-03 の遅いデータソース)。
+    /// </summary>
+    public static IByteSource OpenContentSource(string path)
+    {
+        if (!Active || Settings.FileSourceFor(path) is not { } spec)
+        {
+            return FileByteSource.Open(path);
+        }
+
+        var source = new FaultyByteSource(FileByteSource.Open(path))
+        {
+            Delay = TimeSpan.FromMilliseconds(spec.DelayMs),
+            DelayFromOffset = spec.DelayFromOffset,
+        };
+        foreach ((long offset, long length) in spec.ReadErrors)
+        {
+            source.AddReadError(offset, length);
+        }
+
+        return source;
+    }
+
     /// <summary>仮想のデータソース (7.2) を新しいタブで開く。</summary>
     public static DocumentViewModel OpenVirtual(MainViewModel vm, VirtualSourceSpec spec)
     {
@@ -516,5 +540,7 @@ public static class TestHooks
     public static bool InterceptLaunch(Uri uri) => false;
 
     public static Core.Saving.IVolumeInfoProvider? Volumes => null;
+
+    public static Core.Sources.IByteSource OpenContentSource(string path) => Core.Sources.FileByteSource.Open(path);
 }
 #endif

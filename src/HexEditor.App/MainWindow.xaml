@@ -97,11 +97,35 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_Cut" AutomationProperties.AutomationId="Command_Cut" Click="Cut_Click" KeyboardAcceleratorTextOverride="Ctrl+X" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_Copy" AutomationProperties.AutomationId="Command_Copy" Click="Copy_Click" KeyboardAcceleratorTextOverride="Ctrl+C" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_CopyAs" AutomationProperties.AutomationId="Command_CopyAs" Click="CopyAs_Click">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="C" Modifiers="Control,Shift" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="Menu_Edit_CopyAsLast" AutomationProperties.AutomationId="Command_CopyAsLast" Click="CopyAsLast_Click" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_Paste" AutomationProperties.AutomationId="Command_Paste" Click="Paste_Click" KeyboardAcceleratorTextOverride="Ctrl+V" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_PasteOverwrite" AutomationProperties.AutomationId="Command_PasteOverwrite" Click="PasteOverwrite_Click" KeyboardAcceleratorTextOverride="Ctrl+B" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_PasteSpecial" AutomationProperties.AutomationId="Command_PasteSpecial" Click="PasteSpecial_Click">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="V" Modifiers="Control,Shift" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_SelectAll" AutomationProperties.AutomationId="Command_SelectAll" Click="SelectAll_Click" KeyboardAcceleratorTextOverride="Ctrl+A" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_SelectRange" AutomationProperties.AutomationId="Command_SelectRange" Click="SelectRange_Click">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="E" Modifiers="Control" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_InsertBytes" AutomationProperties.AutomationId="Command_InsertBytes" Click="InsertBytes_Click" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_InsertFile" AutomationProperties.AutomationId="Command_InsertFile" Click="InsertFile_Click" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_Fill" AutomationProperties.AutomationId="Command_Fill" Click="Fill_Click" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_Resize" AutomationProperties.AutomationId="Command_Resize" Click="Resize_Click" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_Truncate" AutomationProperties.AutomationId="Command_TruncateAtCursor" Click="Truncate_Click" />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_ToggleInsert" AutomationProperties.AutomationId="Command_ToggleInsert" Click="ToggleInsert_Click" />
+                        <ToggleMenuFlyoutItem x:Name="ReadOnlyToggle" x:Uid="Menu_Edit_ReadOnly" AutomationProperties.AutomationId="Command_ReadOnly" Click="ReadOnly_Click" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Search">
                         <MenuFlyoutItem x:Uid="Menu_Search_Find" AutomationProperties.AutomationId="Command_Find" Click="Find_Click">
@@ -299,7 +323,7 @@
                 XYFocusKeyboardNavigation="Enabled">
                 <Button x:Name="StatusCursor" AutomationProperties.AutomationId="Status_Offset" Click="StatusCursor_Click" Content="{x:Bind Vm.Selected.CursorText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="cursor" />
                 <Button x:Name="StatusValue" AutomationProperties.AutomationId="Status_Value" Content="{x:Bind Vm.Selected.ValueText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="value" />
-                <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Content="{x:Bind Vm.Selected.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.Selected.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
+                <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Click="StatusSelection_Click" Content="{x:Bind Vm.Selected.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.Selected.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
                 <Button x:Name="StatusColumn" AutomationProperties.AutomationId="Status_Column" Click="StatusColumn_Click" Content="{x:Bind Vm.Selected.ColumnText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="column" />
                 <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Click="StatusEncoding_Click" Content="{x:Bind Vm.Selected.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.Selected.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />

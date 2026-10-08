@@ -372,4 +372,280 @@
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>その他の項目</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>一致 {0} 件</value></data>
+  <data name="Menu_Edit_CopyAs.Text" xml:space="preserve"><value>形式を選択してコピー(Y)...</value></data>
+  <data name="Menu_Edit_CopyAs.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Edit_CopyAsLast.Text" xml:space="preserve"><value>前回の形式でコピー(M)</value></data>
+  <data name="Menu_Edit_CopyAsLast.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Edit_PasteSpecial.Text" xml:space="preserve"><value>形式を選択して貼り付け(S)...</value></data>
+  <data name="Menu_Edit_PasteSpecial.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Edit_SelectRange.Text" xml:space="preserve"><value>範囲を選択(G)...</value></data>
+  <data name="Menu_Edit_SelectRange.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Edit_InsertBytes.Text" xml:space="preserve"><value>バイトの挿入(B)...</value></data>
+  <data name="Menu_Edit_InsertBytes.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Edit_InsertFile.Text" xml:space="preserve"><value>ファイルの内容を挿入(F)...</value></data>
+  <data name="Menu_Edit_InsertFile.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Edit_Fill.Text" xml:space="preserve"><value>塗りつぶし(L)...</value></data>
+  <data name="Menu_Edit_Fill.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Edit_Resize.Text" xml:space="preserve"><value>ファイルサイズの変更(Z)...</value></data>
+  <data name="Menu_Edit_Resize.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Edit_Truncate.Text" xml:space="preserve"><value>カーソル位置で切り詰める(N)</value></data>
+  <data name="Menu_Edit_Truncate.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Edit_ReadOnly.Text" xml:space="preserve"><value>読み取り専用(D)</value></data>
+  <data name="Menu_Edit_ReadOnly.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Dialog_ErrorAt" xml:space="preserve"><value>({0} 文字目)</value></data>
+  <data name="Dialog_Preview" xml:space="preserve"><value>プレビュー: {0}</value></data>
+  <data name="ReadOnly_AllowEdit" xml:space="preserve"><value>編集を許可する</value></data>
+  <data name="ReadOnly_Confirm_Title" xml:space="preserve"><value>編集を許可しますか?</value></data>
+  <data name="ReadOnly_Confirm_OpenedReadOnly" xml:space="preserve"><value>このドキュメントは読み取り専用で開きました。編集を許可しますか? ファイルに書き込むのは保存するときだけです。</value></data>
+  <data name="ReadOnly_Confirm_FileAttribute" xml:space="preserve"><value>このファイルには読み取り専用属性があります。編集を許可すると、保存するときに属性を外します。</value></data>
+  <data name="ReadOnly_Confirm_AccessDenied" xml:space="preserve"><value>このファイルに書き込む権限がない可能性があります。編集の許可を試しますか?</value></data>
+  <data name="ReadOnly_Confirm_SharingViolation" xml:space="preserve"><value>他のアプリがこのファイルを書き込みのために開いています。編集を許可しますか? 他のアプリの変更と競合することがあります。</value></data>
+  <data name="ReadOnly_Confirm_Device" xml:space="preserve"><value>このデバイスに書き込めるようにします。保存するまで実際には書き込みません。</value></data>
+  <data name="ReadOnly_CannotRelease_NoWriteTarget" xml:space="preserve"><value>データソースが書き込みに対応していないため、読み取り専用のままです。</value></data>
+  <data name="ReadOnly_CannotRelease_WriteProtectionMode" xml:space="preserve"><value>書き込み保護モードが有効なため、読み取り専用のままです。</value></data>
+  <data name="ReadOnly_CannotRelease_ReadOnlyMedia" xml:space="preserve"><value>読み取り専用のメディアにあるため、読み取り専用のままです。</value></data>
+  <data name="Operation_InsertBytes" xml:space="preserve"><value>バイトの挿入</value></data>
+  <data name="Operation_Fill" xml:space="preserve"><value>塗りつぶし</value></data>
+  <data name="Operation_Resize" xml:space="preserve"><value>ファイルサイズの変更</value></data>
+  <data name="Operation_InsertFile" xml:space="preserve"><value>{0} の挿入</value></data>
+  <data name="Operation_CopyAs" xml:space="preserve"><value>形式を選択してコピー</value></data>
+  <data name="Operation_Export" xml:space="preserve"><value>{0} の保存</value></data>
+  <data name="Operation_PasteConvert" xml:space="preserve"><value>クリップボードのテキストの変換</value></data>
+  <data name="Fill_Kind" xml:space="preserve"><value>内容</value></data>
+  <data name="Fill_Kind_Byte" xml:space="preserve"><value>バイト値</value></data>
+  <data name="Fill_Kind_HexPattern" xml:space="preserve"><value>Hex パターン</value></data>
+  <data name="Fill_Kind_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="Fill_Kind_Random" xml:space="preserve"><value>乱数</value></data>
+  <data name="Fill_Kind_CryptoRandom" xml:space="preserve"><value>暗号論的乱数</value></data>
+  <data name="Fill_Kind_Counter" xml:space="preserve"><value>カウンタ</value></data>
+  <data name="Fill_Kind_File" xml:space="preserve"><value>ファイルの内容</value></data>
+  <data name="Fill_Kind_Clipboard" xml:space="preserve"><value>クリップボードの内容</value></data>
+  <data name="Fill_Value" xml:space="preserve"><value>値</value></data>
+  <data name="Fill_Pattern" xml:space="preserve"><value>Hex のバイト列</value></data>
+  <data name="Fill_Text" xml:space="preserve"><value>テキスト ({0}。改行・タブは \r \n \t)</value></data>
+  <data name="Fill_RandomMin" xml:space="preserve"><value>最小値</value></data>
+  <data name="Fill_RandomMax" xml:space="preserve"><value>最大値</value></data>
+  <data name="Fill_Seed" xml:space="preserve"><value>シード (10 進)</value></data>
+  <data name="Fill_SeedPlaceholder" xml:space="preserve"><value>空欄なら毎回変わる</value></data>
+  <data name="Fill_CryptoNote" xml:space="preserve"><value>システムの暗号論的乱数生成器で作ります。</value></data>
+  <data name="Fill_CounterStart" xml:space="preserve"><value>開始値</value></data>
+  <data name="Fill_CounterStep" xml:space="preserve"><value>増分 (負も可)</value></data>
+  <data name="Fill_CounterSize" xml:space="preserve"><value>要素の大きさ (バイト)</value></data>
+  <data name="Fill_CounterBigEndian" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Fill_CounterSigned" xml:space="preserve"><value>符号あり</value></data>
+  <data name="Fill_CounterOverflow" xml:space="preserve"><value>あふれたとき</value></data>
+  <data name="Fill_CounterWrap" xml:space="preserve"><value>ラップ</value></data>
+  <data name="Fill_CounterSaturate" xml:space="preserve"><value>飽和</value></data>
+  <data name="Fill_FilePath" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Fill_FileOffset" xml:space="preserve"><value>ファイル内の開始位置</value></data>
+  <data name="Fill_FileLength" xml:space="preserve"><value>長さ</value></data>
+  <data name="Fill_FileLengthPlaceholder" xml:space="preserve"><value>ファイルの末尾まで</value></data>
+  <data name="Fill_ClipboardNote" xml:space="preserve"><value>実行するときにクリップボードを読みます。</value></data>
+  <data name="Fill_Repeat" xml:space="preserve"><value>範囲より短い場合は繰り返す</value></data>
+  <data name="Fill_Origin" xml:space="preserve"><value>パターンの起点</value></data>
+  <data name="Fill_OriginRange" xml:space="preserve"><value>範囲の先頭から</value></data>
+  <data name="Fill_OriginZero" xml:space="preserve"><value>オフセット 0 から数える</value></data>
+  <data name="Fill_Error_Range" xml:space="preserve"><value>{0}〜{1} の値を入力してください。</value></data>
+  <data name="Fill_Error_EmptyPattern" xml:space="preserve"><value>内容を入力してください。</value></data>
+  <data name="Fill_Error_HexPattern" xml:space="preserve"><value>偶数桁の Hex のバイト列を入力してください。</value></data>
+  <data name="Fill_Error_PatternTooLong" xml:space="preserve"><value>内容は 1 MiB までです。</value></data>
+  <data name="Fill_Error_MinMax" xml:space="preserve"><value>最小値が最大値より大きくなっています。</value></data>
+  <data name="Fill_Error_NoFile" xml:space="preserve"><value>ファイルを指定してください。</value></data>
+  <data name="Fill_Error_TempSpace" xml:space="preserve"><value>一時領域が {0} GB 必要ですが、空きは {1} GB です。</value></data>
+  <data name="Fill_Error_File" xml:space="preserve"><value>ファイルを開けません: {0}</value></data>
+  <data name="Fill_Error_EmptyClipboard" xml:space="preserve"><value>クリップボードに塗りつぶしに使える内容がありません。</value></data>
+  <data name="Fill_Error_EmptyRange" xml:space="preserve"><value>長さは 1 以上にしてください。</value></data>
+  <data name="Fill_Error_BeyondEndFixed" xml:space="preserve"><value>範囲が末尾を超えています。このドキュメントは長さを変えられません。</value></data>
+  <data name="Fill_Title" xml:space="preserve"><value>塗りつぶし</value></data>
+  <data name="Fill_Fill" xml:space="preserve"><value>塗りつぶし</value></data>
+  <data name="Fill_TargetSelection" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Fill_TargetRange" xml:space="preserve"><value>範囲を指定</value></data>
+  <data name="Fill_RangeStart" xml:space="preserve"><value>開始</value></data>
+  <data name="Fill_RangeLength" xml:space="preserve"><value>長さ</value></data>
+  <data name="Fill_RangeInfo" xml:space="preserve"><value>{0} から {1} バイト</value></data>
+  <data name="Fill_PreviewBefore" xml:space="preserve"><value>変更前: {0}</value></data>
+  <data name="Fill_PreviewAfter" xml:space="preserve"><value>変更後: {0}</value></data>
+  <data name="RangeEdit_Error_CountTooSmall" xml:space="preserve"><value>1 バイト以上を入力してください。</value></data>
+  <data name="RangeEdit_Error_CountTooLarge" xml:space="preserve"><value>挿入できるのは {0} バイトまでです。</value></data>
+  <data name="RangeEdit_Error_PositionOutOfRange" xml:space="preserve"><value>位置がドキュメントの範囲外です。</value></data>
+  <data name="RangeEdit_Error_FixedLength" xml:space="preserve"><value>このドキュメントは長さを変えられません。</value></data>
+  <data name="RangeEdit_Error_NegativeLength" xml:space="preserve"><value>長さを負にはできません。</value></data>
+  <data name="RangeEdit_Error_ReadOnly" xml:space="preserve"><value>この文書は読み取り専用です。</value></data>
+  <data name="InsertBytes_Title" xml:space="preserve"><value>バイトの挿入</value></data>
+  <data name="InsertBytes_Position" xml:space="preserve"><value>挿入する位置</value></data>
+  <data name="InsertBytes_Count" xml:space="preserve"><value>バイト数</value></data>
+  <data name="InsertBytes_SelectInserted" xml:space="preserve"><value>挿入後に挿入した範囲を選択する</value></data>
+  <data name="InsertBytes_Insert" xml:space="preserve"><value>挿入</value></data>
+  <data name="Resize_Title" xml:space="preserve"><value>ファイルサイズの変更</value></data>
+  <data name="Resize_Length" xml:space="preserve"><value>新しい長さ</value></data>
+  <data name="Resize_Current" xml:space="preserve"><value>現在の長さ: {0} バイト</value></data>
+  <data name="Resize_ExtensionHeader" xml:space="preserve"><value>長くする場合に追加する内容</value></data>
+  <data name="Resize_Change" xml:space="preserve"><value>変更</value></data>
+  <data name="Resize_Grow" xml:space="preserve"><value>{0} バイト ({1})</value></data>
+  <data name="Resize_Shrink" xml:space="preserve"><value>末尾の {0} バイトを切り捨てます</value></data>
+  <data name="Resize_Same" xml:space="preserve"><value>長さは変わりません。</value></data>
+  <data name="Resize_Truncated" xml:space="preserve"><value>{0} バイトを切り捨てました。</value></data>
+  <data name="InsertFile_Title" xml:space="preserve"><value>ファイルの内容の挿入</value></data>
+  <data name="InsertFile_Size" xml:space="preserve"><value>{0}: {1} バイト</value></data>
+  <data name="InsertFile_Offset" xml:space="preserve"><value>ファイル内の開始位置</value></data>
+  <data name="InsertFile_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="InsertFile_Insert" xml:space="preserve"><value>挿入</value></data>
+  <data name="InsertFile_Overwrite" xml:space="preserve"><value>上書き</value></data>
+  <data name="InsertFile_Run" xml:space="preserve"><value>実行</value></data>
+  <data name="InsertFile_Error_Offset" xml:space="preserve"><value>開始位置がファイルの末尾を超えています。</value></data>
+  <data name="InsertFile_Range" xml:space="preserve"><value>{0} から {1} バイト</value></data>
+  <data name="SelectRange_Title" xml:space="preserve"><value>範囲を選択</value></data>
+  <data name="SelectRange_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="SelectRange_End" xml:space="preserve"><value>終了 (このバイトを含む)</value></data>
+  <data name="SelectRange_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="SelectRange_ClampEnd" xml:space="preserve"><value>末尾までにする</value></data>
+  <data name="SelectRange_ModeNew" xml:space="preserve"><value>新しい選択</value></data>
+  <data name="SelectRange_ModeExtend" xml:space="preserve"><value>現在の選択を広げる</value></data>
+  <data name="SelectRange_ScrollToStart" xml:space="preserve"><value>選択後に開始位置へ移動</value></data>
+  <data name="SelectRange_Select" xml:space="preserve"><value>選択</value></data>
+  <data name="SelectRange_Computed" xml:space="preserve"><value>計算した値</value></data>
+  <data name="SelectRange_Error_StartBeyondEnd" xml:space="preserve"><value>開始がファイルの末尾を超えています (長さ {0})。</value></data>
+  <data name="SelectRange_Error_EndBeyondEnd" xml:space="preserve"><value>終了がファイルの末尾を超えています (長さ {0})。</value></data>
+  <data name="SelectRange_Error_EndBeforeStart" xml:space="preserve"><value>終了が開始より前です。</value></data>
+  <data name="CopyAs_Title" xml:space="preserve"><value>形式を選択してコピー</value></data>
+  <data name="CopyAs_Copy" xml:space="preserve"><value>コピー</value></data>
+  <data name="CopyAs_SaveToFile" xml:space="preserve"><value>ファイルに保存...</value></data>
+  <data name="CopyAs_Search" xml:space="preserve"><value>形式を検索</value></data>
+  <data name="CopyAs_FormatsName" xml:space="preserve"><value>形式</value></data>
+  <data name="CopyAs_PreviewName" xml:space="preserve"><value>プレビュー</value></data>
+  <data name="CopyAs_Format_HexSpaced" xml:space="preserve"><value>空白区切り</value></data>
+  <data name="CopyAs_Format_HexPlain" xml:space="preserve"><value>区切りなし</value></data>
+  <data name="CopyAs_Format_HexCommaPrefixed" xml:space="preserve"><value>0x 付きカンマ区切り</value></data>
+  <data name="CopyAs_Format_HexEscaped" xml:space="preserve"><value>\x エスケープ</value></data>
+  <data name="CopyAs_Format_HexUrl" xml:space="preserve"><value>URL エンコード (全バイト)</value></data>
+  <data name="CopyAs_Format_HexCustom" xml:space="preserve"><value>区切り文字を指定</value></data>
+  <data name="CopyAs_Format_Decimal" xml:space="preserve"><value>10 進</value></data>
+  <data name="CopyAs_Format_Octal" xml:space="preserve"><value>8 進</value></data>
+  <data name="CopyAs_Format_Binary" xml:space="preserve"><value>2 進</value></data>
+  <data name="CopyAs_Format_ArrayC" xml:space="preserve"><value>C</value></data>
+  <data name="CopyAs_Format_ArrayCpp" xml:space="preserve"><value>C++</value></data>
+  <data name="CopyAs_Format_ArrayCSharp" xml:space="preserve"><value>C#</value></data>
+  <data name="CopyAs_Format_ArrayJava" xml:space="preserve"><value>Java</value></data>
+  <data name="CopyAs_Format_ArrayJavaScript" xml:space="preserve"><value>JavaScript / TypeScript</value></data>
+  <data name="CopyAs_Format_ArrayPython" xml:space="preserve"><value>Python</value></data>
+  <data name="CopyAs_Format_ArrayRust" xml:space="preserve"><value>Rust</value></data>
+  <data name="CopyAs_Format_ArrayGo" xml:space="preserve"><value>Go</value></data>
+  <data name="CopyAs_Format_ArrayPascal" xml:space="preserve"><value>Pascal / Delphi</value></data>
+  <data name="CopyAs_Format_ArrayVisualBasic" xml:space="preserve"><value>VB.NET</value></data>
+  <data name="CopyAs_Format_ArrayPureBasic" xml:space="preserve"><value>PureBasic</value></data>
+  <data name="CopyAs_Format_ArrayAssembly" xml:space="preserve"><value>アセンブリ</value></data>
+  <data name="CopyAs_Format_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="CopyAs_Format_Base32" xml:space="preserve"><value>Base32</value></data>
+  <data name="CopyAs_Format_Ascii85" xml:space="preserve"><value>Ascii85</value></data>
+  <data name="CopyAs_Format_UUEncode" xml:space="preserve"><value>UUEncode</value></data>
+  <data name="CopyAs_Format_XXEncode" xml:space="preserve"><value>XXEncode</value></data>
+  <data name="CopyAs_Format_QuotedPrintable" xml:space="preserve"><value>Quoted-Printable</value></data>
+  <data name="CopyAs_Format_Html" xml:space="preserve"><value>HTML</value></data>
+  <data name="CopyAs_Format_Rtf" xml:space="preserve"><value>RTF</value></data>
+  <data name="CopyAs_Format_Markdown" xml:space="preserve"><value>Markdown</value></data>
+  <data name="CopyAs_Format_Tex" xml:space="preserve"><value>TeX</value></data>
+  <data name="CopyAs_Format_ScreenDump" xml:space="preserve"><value>画面表示どおり</value></data>
+  <data name="CopyAs_Format_Text" xml:space="preserve"><value>テキスト (文字コードで解釈)</value></data>
+  <data name="CopyAs_Format_IntelHex" xml:space="preserve"><value>Intel HEX</value></data>
+  <data name="CopyAs_Format_SRecord" xml:space="preserve"><value>Motorola S-record</value></data>
+  <data name="CopyAs_Format_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="CopyAs_Format_Position" xml:space="preserve"><value>オフセット</value></data>
+  <data name="CopyAs_Category_HexString" xml:space="preserve"><value>Hex 文字列</value></data>
+  <data name="CopyAs_Category_Numbers" xml:space="preserve"><value>数値列</value></data>
+  <data name="CopyAs_Category_Array" xml:space="preserve"><value>配列</value></data>
+  <data name="CopyAs_Category_Encoding" xml:space="preserve"><value>エンコード</value></data>
+  <data name="CopyAs_Category_Document" xml:space="preserve"><value>文書</value></data>
+  <data name="CopyAs_Category_Screen" xml:space="preserve"><value>画面表示</value></data>
+  <data name="CopyAs_Category_TextFormat" xml:space="preserve"><value>テキスト形式</value></data>
+  <data name="CopyAs_Category_Position" xml:space="preserve"><value>位置</value></data>
+  <data name="CopyAs_BytesPerLine" xml:space="preserve"><value>1 行のバイト数</value></data>
+  <data name="CopyAs_UpperCase" xml:space="preserve"><value>16 進を大文字にする</value></data>
+  <data name="CopyAs_NewLine" xml:space="preserve"><value>改行</value></data>
+  <data name="CopyAs_Indent" xml:space="preserve"><value>インデント</value></data>
+  <data name="CopyAs_Indent4" xml:space="preserve"><value>空白 4 個</value></data>
+  <data name="CopyAs_Indent2" xml:space="preserve"><value>空白 2 個</value></data>
+  <data name="CopyAs_IndentTab" xml:space="preserve"><value>タブ</value></data>
+  <data name="CopyAs_Variable" xml:space="preserve"><value>変数名</value></data>
+  <data name="CopyAs_ElementSize" xml:space="preserve"><value>要素の大きさ (バイト)</value></data>
+  <data name="CopyAs_BigEndian" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="CopyAs_Assembly" xml:space="preserve"><value>アセンブラ</value></data>
+  <data name="CopyAs_Wrap" xml:space="preserve"><value>76 文字で改行する</value></data>
+  <data name="CopyAs_Delimiters" xml:space="preserve"><value>&lt;~ ~&gt; で囲む</value></data>
+  <data name="CopyAs_FileName" xml:space="preserve"><value>ファイル名</value></data>
+  <data name="CopyAs_Layout" xml:space="preserve"><value>形</value></data>
+  <data name="CopyAs_LayoutDump" xml:space="preserve"><value>ダンプ</value></data>
+  <data name="CopyAs_LayoutTable" xml:space="preserve"><value>表</value></data>
+  <data name="CopyAs_Colors" xml:space="preserve"><value>色付けを含める</value></data>
+  <data name="CopyAs_RecordBytes" xml:space="preserve"><value>1 レコードのバイト数</value></data>
+  <data name="CopyAs_BaseAddress" xml:space="preserve"><value>ベースアドレス</value></data>
+  <data name="CopyAs_Header" xml:space="preserve"><value>ヘッダ (S0)</value></data>
+  <data name="CopyAs_JsonData" xml:space="preserve"><value>data の形</value></data>
+  <data name="CopyAs_JsonNumbers" xml:space="preserve"><value>数値の配列</value></data>
+  <data name="CopyAs_DecimalPosition" xml:space="preserve"><value>10 進で表す</value></data>
+  <data name="CopyAs_Separator" xml:space="preserve"><value>区切り</value></data>
+  <data name="CopyAs_Prefix" xml:space="preserve"><value>接頭辞</value></data>
+  <data name="CopyAs_Suffix" xml:space="preserve"><value>接尾辞</value></data>
+  <data name="CopyAs_Variant_CSharp" xml:space="preserve"><value>ReadOnlySpan&lt;byte&gt; のプロパティにする</value></data>
+  <data name="CopyAs_Variant_Python" xml:space="preserve"><value>bytes リテラル (b"\x..") にする</value></data>
+  <data name="CopyAs_Variant_Base64" xml:space="preserve"><value>URL 安全 (RFC 4648)</value></data>
+  <data name="CopyAs_Variant_Base32" xml:space="preserve"><value>Base32hex</value></data>
+  <data name="CopyAs_Variant_Ascii85" xml:space="preserve"><value>Z85</value></data>
+  <data name="CopyAs_Error_InvalidVariableName" xml:space="preserve"><value>変数名がこの言語の識別子として正しくありません。</value></data>
+  <data name="CopyAs_Error_Z85Length" xml:space="preserve"><value>Z85 は長さが 4 の倍数のときだけ使えます。</value></data>
+  <data name="CopyAs_Error_AddressTooLarge" xml:space="preserve"><value>アドレスが 32 ビットに収まりません。</value></data>
+  <data name="CopyAs_Error_InvalidLineLength" xml:space="preserve"><value>1 行のバイト数は 1〜1024、1 レコードのバイト数は 1〜255 です。</value></data>
+  <data name="CopyAs_Error_Options" xml:space="preserve"><value>前回の形式はこの選択範囲に使えません。形式を選択してコピーで設定を変えてください。</value></data>
+  <data name="CopyAs_Estimate" xml:space="preserve"><value>推定サイズ: {0} ({1} バイト)</value></data>
+  <data name="CopyAs_Note_Padded" xml:space="preserve"><value>最後の要素は 0 で補いました。</value></data>
+  <data name="CopyAs_TooLargeNote" xml:space="preserve"><value>出力がクリップボードの上限 ({0}) を超えます。ファイルに保存してください。</value></data>
+  <data name="CopyAs_TooLarge" xml:space="preserve"><value>出力がクリップボードの上限を超えます。形式を選択してコピーからファイルに保存してください。</value></data>
+  <data name="CopyAs_Saved" xml:space="preserve"><value>{0} を保存しました。</value></data>
+  <data name="CopyAs_SaveError" xml:space="preserve"><value>ファイルを保存できませんでした ({0})。</value></data>
+  <data name="CopyAs_PositionLength" xml:space="preserve"><value>({0} バイト)</value></data>
+  <data name="PasteSpecial_Title" xml:space="preserve"><value>形式を選択して貼り付け</value></data>
+  <data name="PasteSpecial_Paste" xml:space="preserve"><value>貼り付け</value></data>
+  <data name="PasteSpecial_FormatsName" xml:space="preserve"><value>解釈の候補</value></data>
+  <data name="PasteSpecial_NewLines" xml:space="preserve"><value>改行</value></data>
+  <data name="PasteSpecial_NewLinesKeep" xml:space="preserve"><value>そのまま</value></data>
+  <data name="PasteSpecial_AppendNul" xml:space="preserve"><value>末尾に NUL を付ける</value></data>
+  <data name="PasteSpecial_AtCursor" xml:space="preserve"><value>カーソル位置に貼る</value></data>
+  <data name="PasteSpecial_AtAddress" xml:space="preserve"><value>レコードのアドレスに書く</value></data>
+  <data name="PasteSpecial_GapFill" xml:space="preserve"><value>隙間を埋める値</value></data>
+  <data name="PasteSpecial_Insert" xml:space="preserve"><value>挿入</value></data>
+  <data name="PasteSpecial_Overwrite" xml:space="preserve"><value>上書き</value></data>
+  <data name="PasteSpecial_SourceText" xml:space="preserve"><value>テキスト: {0}</value></data>
+  <data name="PasteSpecial_Format_Binary" xml:space="preserve"><value>バイナリ</value></data>
+  <data name="PasteSpecial_Format_FileContent" xml:space="preserve"><value>ファイルの内容</value></data>
+  <data name="PasteSpecial_Format_IntelHex" xml:space="preserve"><value>Intel HEX</value></data>
+  <data name="PasteSpecial_Format_SRecord" xml:space="preserve"><value>Motorola S-record</value></data>
+  <data name="PasteSpecial_Format_UUEncode" xml:space="preserve"><value>UUEncode</value></data>
+  <data name="PasteSpecial_Format_XXEncode" xml:space="preserve"><value>XXEncode</value></data>
+  <data name="PasteSpecial_Format_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="PasteSpecial_Format_ScreenDump" xml:space="preserve"><value>画面表示どおり</value></data>
+  <data name="PasteSpecial_Format_Array" xml:space="preserve"><value>配列表記</value></data>
+  <data name="PasteSpecial_Format_Escape" xml:space="preserve"><value>エスケープ文字列</value></data>
+  <data name="PasteSpecial_Format_BinaryNumbers" xml:space="preserve"><value>2 進の数値列</value></data>
+  <data name="PasteSpecial_Format_HexString" xml:space="preserve"><value>Hex 文字列</value></data>
+  <data name="PasteSpecial_Format_Base32" xml:space="preserve"><value>Base32</value></data>
+  <data name="PasteSpecial_Format_Base32Hex" xml:space="preserve"><value>Base32hex</value></data>
+  <data name="PasteSpecial_Format_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="PasteSpecial_Format_Ascii85" xml:space="preserve"><value>Ascii85</value></data>
+  <data name="PasteSpecial_Format_Z85" xml:space="preserve"><value>Z85</value></data>
+  <data name="PasteSpecial_Format_QuotedPrintable" xml:space="preserve"><value>Quoted-Printable</value></data>
+  <data name="PasteSpecial_Format_UrlEncoded" xml:space="preserve"><value>URL エンコード</value></data>
+  <data name="PasteSpecial_Format_Decimal" xml:space="preserve"><value>10 進の数値列</value></data>
+  <data name="PasteSpecial_Format_Octal" xml:space="preserve"><value>8 進の数値列</value></data>
+  <data name="PasteSpecial_Format_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="PasteSpecial_Candidate" xml:space="preserve"><value>{0} — {1} バイト</value></data>
+  <data name="PasteSpecial_CandidateError" xml:space="preserve"><value>{0} — エラー: {1} 行目 {2} 文字目</value></data>
+  <data name="PasteSpecial_FileContent" xml:space="preserve"><value>ファイルの内容: {0}</value></data>
+  <data name="PasteSpecial_Records" xml:space="preserve"><value>{0} 個の範囲、{1} バイト</value></data>
+  <data name="PasteSpecial_LengthText" xml:space="preserve"><value>長さ: {0} バイト ({1})</value></data>
+  <data name="PasteSpecial_TooLarge" xml:space="preserve"><value>クリップボードのテキストが 512 MiB を超えるため解釈できません。</value></data>
+  <data name="PasteSpecial_Empty" xml:space="preserve"><value>クリップボードに貼り付けられる内容がありません。</value></data>
+  <data name="PasteSpecial_ConvertError" xml:space="preserve"><value>変換できませんでした: {0} 行目 {1} 文字目。</value></data>
+  <data name="PasteSpecial_ChecksumTitle" xml:space="preserve"><value>チェックサムの不一致</value></data>
+  <data name="PasteSpecial_ChecksumBody" xml:space="preserve"><value>チェックサムが一致しない行が {0} 行あります。</value></data>
+  <data name="PasteSpecial_IgnoreChecksum" xml:space="preserve"><value>無視して貼り付ける</value></data>
+  <data name="PasteSpecial_AddressOutOfRange" xml:space="preserve"><value>レコードのアドレスがドキュメントの範囲外です。</value></data>
 </root>

@@ -292,11 +292,16 @@ public sealed partial class MainWindow
 
     private void StatusColumn_Click(object sender, RoutedEventArgs e) => Editor?.ToggleColumn();
 
-    private void StatusMode_Click(object sender, RoutedEventArgs e)
+    private async void StatusMode_Click(object sender, RoutedEventArgs e)
     {
         if (Editor is { ReadOnly: false })
         {
             ToggleInsert_Click(sender, e);
+        }
+        else if (Vm.Selected is { } doc)
+        {
+            // 鍵の表示のクリック: 読み取り専用の解除 (EDIT-16 の「呼び出し」)。
+            await AllowEditAsync(doc);
         }
     }
 
