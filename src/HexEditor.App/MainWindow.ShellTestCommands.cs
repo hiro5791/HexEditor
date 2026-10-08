@@ -44,7 +44,9 @@ public sealed partial class MainWindow
                     splitter.Nudge(key is "Right" or "Down");
                 }
             }),
-            _ => null,
+
+            // ウィンドウ・タブ・パネル・ポップアップのズームの命令 (MainWindow.WindowsTestCommands.cs)。
+            _ => await HandleWindowsTestCommandsAsync(cmd, request),
         };
     }
 
@@ -87,6 +89,18 @@ public sealed partial class MainWindow
         {
             Rect r = view.TransformToVisual(null).TransformBounds(new Rect(0, 0, view.ActualWidth, view.ActualHeight));
             result["editorTop"] = r.Y;
+        }
+
+        // 全画面で重ねて出すタイトルバー (メニュー)・ツールバーの位置 (UI-07 の仕様 2)。
+        result["toolbarVisible"] = Toolbar.Visibility == Visibility.Visible;
+        foreach ((string name, FrameworkElement bar) in new (string, FrameworkElement)[] { ("titleBar", AppTitleBar), ("toolbar", Toolbar), ("menu", MainMenu) })
+        {
+            if (bar is { Visibility: Visibility.Visible, ActualHeight: > 0 } && bar.XamlRoot is not null)
+            {
+                Rect r = bar.TransformToVisual(null).TransformBounds(new Rect(0, 0, bar.ActualWidth, bar.ActualHeight));
+                result[name + "Top"] = r.Y;
+                result[name + "Bottom"] = r.Y + r.Height;
+            }
         }
 
         return result;

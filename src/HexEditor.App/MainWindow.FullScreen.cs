@@ -11,7 +11,8 @@ using Windows.System;
 namespace HexEditor.App;
 
 /// <summary>
-/// 全画面表示 (UI-07): タイトルバー・ツールバー・タブ列を隠してエディタを最大にする。画面の上端にマウスを置くとタブ列を重ねて出す。
+/// 全画面表示 (UI-07): タイトルバー・ツールバー・タブ列を隠してエディタを最大にする。画面の上端にマウスを置くと、隠したバー
+/// (メニューを含むタイトルバー、ツールバー、タブ列) をエディタの上に重ねて出す。
 /// </summary>
 public sealed partial class MainWindow
 {
@@ -121,11 +122,46 @@ public sealed partial class MainWindow
     /// <summary>全画面ではタイトルバー・ツールバー・タブ列を隠す。ステータスバーは設定 ui.fullScreen.showStatusBar (仕様 2)。</summary>
     private void ApplyFullScreenLayout()
     {
-        AppTitleBar.Visibility = _fullScreen ? Visibility.Collapsed : Visibility.Visible;
-        RefreshToolbar();
         UpdateThemeMenu();
         _tabsRevealed = false;
         PlaceTabStrip();
+    }
+
+    /// <summary>全画面でタイトルバー (メニューを含む)・ツールバーを表示しているか (通常の表示、または上端で重ねて出している)。</summary>
+    private bool AreTopBarsShown => !_fullScreen || _tabsRevealed;
+
+    /// <summary>
+    /// タイトルバー (メニューを含む) とツールバーの表示: 通常は表示。全画面では隠し、上端にマウスを置いたときはエディタの上に重ねて出す
+    /// (下の領域の位置は動かさない。高さの分だけ下の余白を負にし、前面に置く)。戻り値は重ねて出した高さ (epx)。
+    /// </summary>
+    private double PlaceTopBars()
+    {
+        AppTitleBar.Visibility = AreTopBarsShown ? Visibility.Visible : Visibility.Collapsed;
+        Toolbar.Visibility = AreTopBarsShown && IsToolbarWanted ? Visibility.Visible : Visibility.Collapsed;
+        bool overlay = _fullScreen && _tabsRevealed;
+        double top = 0;
+        foreach (FrameworkElement bar in new FrameworkElement[] { AppTitleBar, Toolbar })
+        {
+            if (!overlay || bar.Visibility != Visibility.Visible)
+            {
+                bar.Margin = new Thickness(0);
+                bar.RenderTransform = null;
+                Canvas.SetZIndex(bar, 0);
+                continue;
+            }
+
+            bar.Margin = new Thickness(0);
+            bar.Measure(new Windows.Foundation.Size(Root.ActualWidth, double.PositiveInfinity));
+            double height = bar.DesiredSize.Height;
+
+            // 行の高さを 0 にして (下の余白を負にする)、前に並べたバーの下に重ねる。
+            bar.Margin = new Thickness(0, 0, 0, -height);
+            bar.RenderTransform = new TranslateTransform { Y = top };
+            Canvas.SetZIndex(bar, 2);
+            top += height;
+        }
+
+        return top;
     }
 
     /// <summary>全画面ではステータスバーを隠すか。</summary>
@@ -139,6 +175,8 @@ public sealed partial class MainWindow
     /// </summary>
     private void PlaceTabStrip()
     {
+        double bars = PlaceTopBars();
+        _revealBottom = bars;
         if (TabStrip is not { } strip)
         {
             return;
@@ -159,13 +197,17 @@ public sealed partial class MainWindow
         }
         else
         {
-            // 帯の高さの分だけタブ全体を上にずらし (エディタの位置はそのまま)、帯だけを下に戻して重ねる。
+            // 帯の高さの分だけタブ全体を上にずらし (エディタの位置はそのまま)、帯だけを下に戻して重ねる。重ねて出したタイトルバーと
+            // ツールバーがあれば、その下に置く。
             strip.Visibility = Visibility.Visible;
             strip.Measure(new Windows.Foundation.Size(Tabs.ActualWidth, double.PositiveInfinity));
             double height = strip.DesiredSize.Height;
+            double editorTop = EditorArea.TransformToVisual(Root).TransformPoint(default).Y;
+            double below = Math.Max(0, bars - editorTop);
             Tabs.Margin = new Thickness(0, -height, 0, 0);
-            strip.RenderTransform = new TranslateTransform { Y = height };
+            strip.RenderTransform = new TranslateTransform { Y = height + below };
             Canvas.SetZIndex(strip, 1);
+            _revealBottom = editorTop + below + height;
         }
 
         PlaceStartPage();
@@ -190,12 +232,17 @@ public sealed partial class MainWindow
         }
 
         _revealTimer?.Stop();
-        double stripBottom = TabStrip is { } strip && _tabsRevealed ? strip.ActualHeight : 0;
-        if (_tabsRevealed && y > stripBottom + RevealEdge)
+
+        // メニューなどのポップアップを開いている間は隠さない (メニューの項目の上にポインタがあるとき)。
+        if (_tabsRevealed && y > _revealBottom + RevealEdge
+            && (Root.XamlRoot is null || VisualTreeHelper.GetOpenPopupsForXamlRoot(Root.XamlRoot).Count == 0))
         {
             RevealTabs(false);
         }
     }
+
+    /// <summary>上端で重ねて出したバー (タイトルバー・ツールバー・タブ列) の下端 (Root の座標)。</summary>
+    private double _revealBottom;
 
     private void RevealTabs(bool reveal)
     {
