@@ -35,6 +35,13 @@ public static class FileWriteProbe
             return ReadOnlyReason.FileAttribute;
         }
 
+        // クラウドのみのファイル (OneDrive のプレースホルダなど) は、書き込み用に開くとダウンロードが始まることがあるため確かめない
+        // (開くときに全体を読まない。ENG-11 の仕様 8)。書けなければ保存のときのエラーで知らせる。
+        if (openForWrite is null && IsCloudPlaceholder(full))
+        {
+            return ReadOnlyReason.None;
+        }
+
         try
         {
             using SafeFileHandle handle = (openForWrite ?? OpenForWrite)(full);
@@ -65,6 +72,21 @@ public static class FileWriteProbe
     /// </summary>
     private static SafeFileHandle OpenForWrite(string path) =>
         File.OpenHandle(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite | FileShare.Delete);
+
+    private const FileAttributes RecallOnOpen = (FileAttributes)0x00040000;
+    private const FileAttributes RecallOnDataAccess = (FileAttributes)0x00400000;
+
+    private static bool IsCloudPlaceholder(string path)
+    {
+        try
+        {
+            return (File.GetAttributes(path) & (FileAttributes.Offline | RecallOnOpen | RecallOnDataAccess)) != 0;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
 
     private static bool IsOnReadOnlyVolume(string path, IVolumeInfoProvider volumes)
     {

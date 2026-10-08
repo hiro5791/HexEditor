@@ -24,7 +24,13 @@ public static class MainScreens
         await SettleAsync(app);
         yield return "start";
 
-        await app.OpenAsync(ctx.TestData("TD-SEQ-1M"));
+        // セッションごとに複製を開く。前のセッションのアプリが同じファイルを編集中 (書き込み禁止のハンドル。ENG-15) だと、他のアプリが
+        // 書き込み中として読み取り専用で開く (ENG-14 の仕様 1) ため、最後の画面の編集ができない。
+        string folder = Path.Combine(ctx.Root, "screens-" + Guid.NewGuid().ToString("N")[..8]);
+        Directory.CreateDirectory(folder);
+        string file = Path.Combine(folder, "TD-SEQ-1M.bin");
+        File.Copy(ctx.TestData("TD-SEQ-1M"), file);
+        await app.OpenAsync(file);
         await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the hex view");
         await app.SelectAsync(0x10, 0x10);
         await SettleAsync(app);
