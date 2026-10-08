@@ -853,6 +853,20 @@ public sealed partial class Document : IDisposable
 
     private Saving.OverlayByteSource? _lastOverlay;
 
+    /// <summary>
+    /// 元に戻す・やり直しの履歴を消し、今の状態だけを残す (EDIT-19 の仕様 9 の設定「保存時に履歴を消す」。保存の直後に呼ぶ)。
+    /// 今の状態が保存した時点なら、消した後も「変更なし」のまま。
+    /// </summary>
+    public void ClearHistory()
+    {
+        bool modified = History.IsModified;
+        History.Reset(Current);
+        if (modified)
+        {
+            History.MarkUnsaved();
+        }
+    }
+
     /// <summary>長時間処理の間、編集を止める・再開する (ENG-09 の仕様 7)。</summary>
     public void SetEditLock(bool locked) => IsEditLocked = locked;
 

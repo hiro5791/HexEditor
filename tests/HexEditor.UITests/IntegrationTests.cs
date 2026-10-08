@@ -96,7 +96,7 @@ public sealed class IntegrationTests
         Assert.Equal("menu:Command_Find", (await app.KeyAsync("F", ctrl: true))["handledBy"]!.GetValue<string>());
         await app.IdleAsync();
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 1 });
-        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII" });
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII (7 bit)" });
         await app.UiaSetValueAsync("Find_Query", "SECRET-7F3A");
         await app.UiaInvokeAsync("Find_Next");
         await app.IdleAsync();

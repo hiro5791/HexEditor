@@ -44,8 +44,10 @@ public sealed record SpecialClipboard(string? Text, byte[]? Binary, IReadOnlyLis
 /// </summary>
 public sealed class ClipboardService
 {
-    /// <summary>システムのクリップボードに入れる最大サイズ (EDIT-22 の仕様 4 の既定値)。</summary>
-    public const long SystemLimit = ClipboardPlan.DefaultLimit;
+    /// <summary>システムのクリップボードに入れる最大サイズ (EDIT-22 の仕様 4。設定「クリップボードに入れる最大サイズ」、既定 64 MiB)。</summary>
+    public static long SystemLimit => App.Settings is { } settings
+        ? EditingSettings.ClipboardLimitBytes(settings.GetInt(EditingSettings.ClipboardMaxSizeKey, EditingSettings.DefaultClipboardMaxMiB))
+        : ClipboardPlan.DefaultLimit;
 
     private const string BinaryFormat = ClipboardPlan.BinaryFormat;
     private const string MetaFormat = ClipboardPlan.MetaFormat;
@@ -101,7 +103,7 @@ public sealed class ClipboardService
             // Hex 列の文字数は変換せずに分かる (上限を超える Hex 文字列を作らない)。テキスト列は文字コードで変換してから数える。
             if (editor.ActiveColumn == ActiveColumn.Hex)
             {
-                return ClipboardPlan.HexTextLength(length);
+                return editor.Options.HexCopy.TextLength(length);
             }
 
             text = editor.FormatForClipboard(bytes!);

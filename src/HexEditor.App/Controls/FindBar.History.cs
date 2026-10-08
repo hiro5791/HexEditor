@@ -49,7 +49,7 @@ public sealed partial class FindBar
         KindChoice.SelectedIndex = (int)c.Kind;
         foreach (object item in EncodingChoice.Items)
         {
-            if (item is ComboBoxItem { Tag: TextEncodingId id } && id == c.Encoding)
+            if (item is ComboBoxItem { Tag: string id } && string.Equals(id, c.Encoding, StringComparison.OrdinalIgnoreCase))
             {
                 EncodingChoice.SelectedItem = item;
             }

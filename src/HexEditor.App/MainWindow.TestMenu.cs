@@ -299,6 +299,7 @@ public sealed partial class MainWindow
             ["crashNotice"] = NotificationState(Vm.Notifications.Open.FirstOrDefault(n => n.Message == Loc.Get("Crash_Message"))),
             ["notifications"] = new JsonArray([.. Vm.Notifications.Open.Select(n => (JsonNode?)NotificationState(n))]),
             ["findBarVisible"] = FindBar.Visibility == Visibility.Visible,
+            ["statusMessage"] = StatusMessageText,
             ["goToBarVisible"] = GoToBar.Visibility == Visibility.Visible,
             ["activeOperations"] = Vm.Operations.Active.Count,
             ["focused"] = focused is FrameworkElement fe

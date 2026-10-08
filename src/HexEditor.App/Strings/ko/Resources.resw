@@ -105,7 +105,6 @@
   <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>붙여넣기(P)</value></data>
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>덮어쓰기 붙여넣기(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0}바이트. HexEditor 안에서만 붙여넣을 수 있습니다.]</value></data>
-  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>선택 영역이 클립보드 한도보다 커서 HexEditor 안에서만 붙여넣을 수 있습니다.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>이 고정 길이 문서의 끝을 넘는 {0}바이트는 붙여넣지 않았습니다.</value></data>
   <data name="Clipboard_TextOmitted" xml:space="preserve"><value>선택 영역의 텍스트 형식이 클립보드 한도보다 커서 이진 데이터만 복사했습니다.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>저장되지 않은 변경 내용 복구</value></data>

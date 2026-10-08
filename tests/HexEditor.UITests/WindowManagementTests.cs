@@ -192,7 +192,7 @@ public sealed class WindowManagementTests
         await app.SendAsync("activateWindow", new JsonObject { ["window"] = 0 });
 
         // 1. テキストの @00000000 をすべて検索する。
-        await SearchResultsTests.OpenFindAsync(app, 1, "@00000000", encoding: "ASCII");
+        await SearchResultsTests.OpenFindAsync(app, 1, "@00000000", encoding: "ASCII (7 bit)");
         await SearchResultsTests.FindAllAsync(app);
         await SearchResultsTests.WaitForResultsAsync(app, r => r["running"]!.GetValue<bool>(), "the search to start");
 

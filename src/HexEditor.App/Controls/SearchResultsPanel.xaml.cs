@@ -86,6 +86,9 @@ public sealed partial class SearchResultsPanel : UserControl
         AutomationProperties.SetName(ListHost, Loc.Get("SearchResults_List_Name"));
         AutomationProperties.SetName(FilterBox, Loc.Get("SearchResults_Filter_Name"));
         ActualThemeChanged += (_, _) => Render();
+        AutomationProperties.SetName(PinButton, Loc.Get("SearchResults_Pin_Name"));
+        ToolTipService.SetToolTip(PinButton, Loc.Get("SearchResults_Pin_Name"));
+        InitializeListMenu();
         BuildHeaders();
     }
 
@@ -138,7 +141,7 @@ public sealed partial class SearchResultsPanel : UserControl
     /// ブックマークへの変換 (FIND-21 の仕様 3)。購読がなければ「ブックマークに」は無効。引数は各一致の範囲と名前、グループ名。
     /// メインウィンドウがこれを購読してブックマークを作る (INSP-23)。
     /// </summary>
-    public event EventHandler<(IReadOnlyList<(long Offset, long Length, string Name)> Items, string Group)>? BookmarksRequested;
+    public event EventHandler<(EditorState Editor, IReadOnlyList<(long Offset, long Length, string Name)> Items, string Group)>? BookmarksRequested;
 
     /// <summary>
     /// すべて検索を始めて一覧に出す (FIND-20)。前の結果は置き換える (結果のタブの固定は UI-05 のパネルの仕組みの後)。
@@ -206,11 +209,12 @@ public sealed partial class SearchResultsPanel : UserControl
             .Select(m => (m.Offset, m.Length)).ToList();
     }
 
-    /// <summary>一覧を閉じる (実行中のすべて検索も止める)。</summary>
+    /// <summary>一覧を閉じる (すべてのタブを閉じ、実行中のすべて検索も止める)。</summary>
     public void Close()
     {
         _running?.Cancel();
         Detach();
+        DiscardOtherTabs();
         Visibility = Visibility.Collapsed;
         HighlightsChanged?.Invoke(this, EventArgs.Empty);
         Closed?.Invoke(this, EventArgs.Empty);
@@ -254,8 +258,8 @@ public sealed partial class SearchResultsPanel : UserControl
 
         bool multi = _groups.Count > 1;
         var groups = _groups.Select(g => (multi ? g.Name : null, new SearchResultRowFactory(g.Results, g.Editor.Document.Current, _encoding))).ToList();
-        // 選んだ行が 2 行以上ならその行、そうでなければ一覧のすべての行 (並べ替え・絞り込みをしていればその順と行)。
-        IReadOnlyList<long>? indices = SelectionCount > 1 ? [.. SelectedIndices().Select(Map)] : _view;
+        // 対象は選んだ行か、一覧のすべての行 (並べ替え・絞り込みをしていればその順と行。FIND-21 の仕様 1)。
+        IReadOnlyList<long>? indices = TargetIndices();
         ExportLabels labels = Labels();
         string temp = path + ".tmp";
         try
@@ -350,7 +354,8 @@ public sealed partial class SearchResultsPanel : UserControl
 
     private void Attach(IReadOnlyList<SearchTarget> targets, string kindName, string query, Encoding encoding)
     {
-        Detach();
+        // 前の結果を置き換えるか、新しいタブに出す (FIND-20 の仕様 3)。
+        PrepareTabForNewResults();
         foreach (SearchTarget t in targets)
         {
             var group = new Group(t.Editor, t.Name, t.Results);
@@ -371,10 +376,11 @@ public sealed partial class SearchResultsPanel : UserControl
             ScheduleView(immediately: true);
         }
 
-        ToBookmarksItem.IsEnabled = BookmarksRequested is not null && _groups.Count == 1;
+        ToBookmarksItem.IsEnabled = BookmarksRequested is not null;
         BuildHeaders();
         Visibility = Visibility.Visible;
         Shown?.Invoke(this, EventArgs.Empty);
+        UpdateTabStrip();
         Render();
         HighlightsChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -477,6 +483,8 @@ public sealed partial class SearchResultsPanel : UserControl
                 owner._running = null;
             }
 
+            owner.ForgetRun(cts);
+
             // キャンセルされた場合、まだ探していないドキュメントの結果は「中断」にする。
             foreach (Group g in groups.Where(g => g.Results.State == SearchResultsState.Running))
             {
@@ -488,6 +496,12 @@ public sealed partial class SearchResultsPanel : UserControl
             {
                 owner._dirty = true;
                 owner.Refresh();
+                owner.UpdateTabStrip();
+            }
+            else if (owner.HoldsInOtherTab(groups))
+            {
+                // 裏のタブの結果: 表示はそのタブに切り替えたときに作り直す。
+                owner.UpdateTabStrip();
             }
             else
             {
@@ -558,13 +572,26 @@ public sealed partial class SearchResultsPanel : UserControl
     }
 
     /// <summary>ドキュメントが変わったら、位置の補正と状態の印を作り直す (FIND-03 の仕様 3・4)。</summary>
-    private void Document_Changed(object? sender, DocumentChangedEventArgs e) => DispatcherQueue.TryEnqueue(() =>
+    private void Document_Changed(object? sender, DocumentChangedEventArgs e)
     {
-        if (_groups.Count > 0)
+        // 再読み込み (ENG-18、ENG-19) の後の結果は古い結果 (FIND-03 の「エラー」)。
+        bool reloaded = e.Kind == DocumentChangeKind.Reloaded;
+        DispatcherQueue.TryEnqueue(() =>
         {
-            Render();
-        }
-    });
+            if (reloaded)
+            {
+                foreach (Group g in _groups.Where(g => ReferenceEquals(g.Editor.Document, sender)))
+                {
+                    g.Reloaded = true;
+                }
+            }
+
+            if (_groups.Count > 0)
+            {
+                Render();
+            }
+        });
+    }
 
     // ---- 表示 ----
 
@@ -602,7 +629,13 @@ public sealed partial class SearchResultsPanel : UserControl
     /// <summary>並べ替え・絞り込みの終わりを待つ (テスト用)。</summary>
     internal Task WhenViewReadyAsync() => _viewTask;
 
-    private void FilterBox_TextChanged(object sender, TextChangedEventArgs e) => SetFilter(FilterBox.Text);
+    private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (!_loadingTab)
+        {
+            SetFilter(FilterBox.Text);
+        }
+    }
 
     /// <summary>一覧の並びを作り直す。<paramref name="immediately"/> でなければ 300 ms 待ってまとめる (入力中・結果が増えている間)。</summary>
     private void ScheduleView(bool immediately)
@@ -970,16 +1003,22 @@ public sealed partial class SearchResultsPanel : UserControl
         if (_groups.Count == 0)
         {
             Summary.Text = string.Empty;
-            ContinueButton.Visibility = CancelButton.Visibility = Visibility.Collapsed;
+            ContinueButton.Visibility = CancelButton.Visibility = ResearchButton.Visibility = SkippedButton.Visibility = Visibility.Collapsed;
             return;
         }
 
         bool running = _running is not null;
+        bool stale = !running && _groups.Any(g => g.Reloaded || (!g.Editor.Document.IsDisposed && g.Results.IsStale(g.Editor.Document.Current)));
         SearchResults? limited = _groups.Select(g => g.Results).FirstOrDefault(r => r.State == SearchResultsState.LimitReached);
         string state;
         if (running)
         {
             state = Loc.Get("SearchResults_State_Running");
+        }
+        else if (stale)
+        {
+            // 元ファイルを読み直した後の結果は「古い結果」(FIND-03 の「エラー」)。
+            state = Loc.Get("SearchResults_State_Stale");
         }
         else if (_groups.Any(g => g.Results.State == SearchResultsState.Cancelled))
         {
@@ -1007,6 +1046,9 @@ public sealed partial class SearchResultsPanel : UserControl
         Summary.Text = Loc.Format("SearchResults_Summary", _kindName, _query, TotalCount, state);
         ContinueButton.Visibility = !running && _groups.Count == 1 && limited is { SpillFailed: false } ? Visibility.Visible : Visibility.Collapsed;
         CancelButton.Visibility = running ? Visibility.Visible : Visibility.Collapsed;
+        ResearchButton.Visibility = stale ? Visibility.Visible : Visibility.Collapsed;
+        PinButton.IsChecked = IsPinned;
+        UpdateSkipped();
     }
 
     private void UpdateAccessibleName()
@@ -1176,6 +1218,18 @@ public sealed partial class SearchResultsPanel : UserControl
 
         bool shift = e.KeyModifiers.HasFlag(VirtualKeyModifiers.Shift);
         ListHost.Focus(FocusState.Pointer);
+        if (e.GetCurrentPoint(ListHost).Properties.IsRightButtonPressed)
+        {
+            // 右クリック: 選んだ行の中ならそのまま、外ならその行を選ぶ (移動はしない)。メニューは ContextFlyout が開く。
+            (long lo, long hi) = SelectionRange;
+            if (_selected < 0 || index < lo || index > hi)
+            {
+                Select(index, extend: false);
+            }
+
+            return;
+        }
+
         Click(index, shift);
         e.Handled = true;
     }
@@ -1329,31 +1383,11 @@ public sealed partial class SearchResultsPanel : UserControl
         SystemClipboard.SetContent(package);
     }
 
-    /// <summary>ブックマークに変換 (FIND-21 の仕様 3)。対象は選んだ行が 2 行以上ならその行、そうでなければすべての行。</summary>
-    private void ToBookmarks_Click(object sender, RoutedEventArgs e) => ToBookmarks();
+    /// <summary>ブックマークに変換 (FIND-21 の仕様 3)。</summary>
+    private async void ToBookmarks_Click(object sender, RoutedEventArgs e) => await ToBookmarksAsync();
 
     /// <summary>今の時刻 (グループの名前に使う。テストでは固定した時刻)。</summary>
     public static Func<DateTimeOffset> Now { get; set; } = () => DateTimeOffset.Now;
-
-    internal void ToBookmarks()
-    {
-        if (_groups.Count != 1 || BookmarksRequested is null)
-        {
-            return;
-        }
-
-        Group g = _groups[0];
-        SearchResultRowFactory factory = Factory(g);
-        IReadOnlyList<long> indices = SelectionCount > 1 ? [.. SelectedIndices().Select(Map)]
-            : _view ?? [.. Enumerable.Range(0, (int)Math.Min(g.Results.LongCount, int.MaxValue)).Select(i => (long)i)];
-        string prefix = Loc.Get("SearchResults_BookmarkPrefix");
-        var items = indices.Select(i =>
-        {
-            TrackedMatch t = factory.Track(g.Results[i]);
-            return (t.Offset, t.Length, SearchResultsConversion.BookmarkName(prefix, _query, i + 1));
-        }).ToList();
-        BookmarksRequested.Invoke(this, (items, SearchResultsConversion.BookmarkGroup(Loc.Get("SearchResults_BookmarkGroup"), Now())));
-    }
 
     private static ExportLabels Labels() => new()
     {
@@ -1399,6 +1433,9 @@ public sealed partial class SearchResultsPanel : UserControl
         public SearchResults Results { get; } = results;
 
         public SearchResultRowFactory? Factory { get; set; }
+
+        /// <summary>検索の後に元データを読み直した (古い結果)。</summary>
+        public bool Reloaded { get; set; }
     }
 
     /// <summary>一覧の 1 行の部品 (列ごとの TextBlock)。</summary>

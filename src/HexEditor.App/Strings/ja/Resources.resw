@@ -105,7 +105,6 @@
   <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>貼り付け(P)</value></data>
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>上書き貼り付け(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} バイトのデータ。HexEditor 内でのみ貼り付けできます]</value></data>
-  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>選択範囲がクリップボードの上限を超えているため、HexEditor の中でだけ貼り付けられます。</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>長さを変えられないため、末尾を超える {0} バイトは貼り付けませんでした。</value></data>
   <data name="Clipboard_TextOmitted" xml:space="preserve"><value>選択範囲のテキスト形式がクリップボードの上限を超えているため、バイナリのデータだけをコピーしました。</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>未保存の編集内容の復旧</value></data>
@@ -2604,4 +2603,166 @@
   <data name="Set_view_scroll_fixedOffsetColumn" xml:space="preserve"><value>オフセット列を固定</value></data>
   <data name="SetDesc_view_scroll_fixedOffsetColumn" xml:space="preserve"><value>横にスクロールしても、オフセット列を左端に残します。オフにすると、Hex 列・テキスト列と一緒にスクロールします。</value></data>
   <data name="HexView_Menu_SetReference" xml:space="preserve"><value>ここを基準点にする</value></data>
+  <data name="Find_Encoding_Display" xml:space="preserve"><value>表示中の文字コードに合わせる</value></data>
+  <data name="Find_Encoding_DisplayWith" xml:space="preserve"><value>表示中の文字コードに合わせる ({0})</value></data>
+  <data name="Find_AbortedUnreadable" xml:space="preserve"><value>{0} のデータを読み込めないため、検索を中止しました。</value></data>
+  <data name="Find_Unreadable_Ask" xml:space="preserve"><value>{0} から {1} バイトを読み込めません ({2})。読み込めない部分を飛ばして検索を続けますか?</value></data>
+  <data name="Find_Unreadable_Skip" xml:space="preserve"><value>飛ばして続ける</value></data>
+  <data name="Find_Unreadable_Abort" xml:space="preserve"><value>検索を中止する</value></data>
+  <data name="Find_Unreadable_Reason_Unallocated" xml:space="preserve"><value>未割り当て</value></data>
+  <data name="Find_Unreadable_Reason_AccessDenied" xml:space="preserve"><value>アクセス拒否</value></data>
+  <data name="Find_Unreadable_Reason_IoError" xml:space="preserve"><value>I/O エラー</value></data>
+  <data name="Find_Unreadable_Reason_Disconnected" xml:space="preserve"><value>デバイスの取り外し</value></data>
+  <data name="Set_search_chunkSize" xml:space="preserve"><value>検索のチャンクの大きさ (KiB)</value></data>
+  <data name="SetDesc_search_chunkSize" xml:space="preserve"><value>検索で一度に読み込む大きさ (256 KiB〜64 MiB)。結果は変わりません。</value></data>
+  <data name="Set_search_readErrors" xml:space="preserve"><value>検索中に読み込めないデータがあったとき</value></data>
+  <data name="SetDesc_search_readErrors" xml:space="preserve"><value>不良セクタなど読み込めないデータの扱い。飛ばした範囲は結果一覧に記録されます。</value></data>
+  <data name="SetOpt_search_readErrors_ask" xml:space="preserve"><value>確認する</value></data>
+  <data name="SetOpt_search_readErrors_skip" xml:space="preserve"><value>飛ばす</value></data>
+  <data name="SetOpt_search_readErrors_abort" xml:space="preserve"><value>中止する</value></data>
+  <data name="Set_search_highlightMatches" xml:space="preserve"><value>一致を強調表示する</value></data>
+  <data name="SetDesc_search_highlightMatches" xml:space="preserve"><value>検索バーと検索結果の一致のうち、表示中のものをエディタで強調表示します。</value></data>
+  <data name="Set_search_results_newTab" xml:space="preserve"><value>すべて検索の結果を新しいタブに出す</value></data>
+  <data name="SetDesc_search_results_newTab" xml:space="preserve"><value>オフのときは、固定していない結果を新しい検索の結果で置き換えます。</value></data>
+  <data name="SearchResults_Research.Content" xml:space="preserve"><value>再検索</value></data>
+  <data name="SearchResults_State_Stale" xml:space="preserve"><value>古い結果</value></data>
+  <data name="SearchResults_TargetSelected.Text" xml:space="preserve"><value>選択した行</value></data>
+  <data name="SearchResults_TargetAll.Text" xml:space="preserve"><value>すべての行</value></data>
+  <data name="SearchResults_TargetSelectedCount" xml:space="preserve"><value>選択した行 ({0})</value></data>
+  <data name="SearchResults_TargetAllCount" xml:space="preserve"><value>すべての行 ({0})</value></data>
+  <data name="SearchResults_Pin_Name" xml:space="preserve"><value>この結果を固定する</value></data>
+  <data name="SearchResults_TabPinned" xml:space="preserve"><value>{0} (固定)</value></data>
+  <data name="SearchResults_TabClose" xml:space="preserve"><value>{0} を閉じる</value></data>
+  <data name="SearchResults_TabTitle" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="SearchResults_BookmarksConfirm_Title" xml:space="preserve"><value>ブックマークに変換</value></data>
+  <data name="SearchResults_BookmarksConfirm_Body" xml:space="preserve"><value>{0} 件の結果をブックマークにします。ブックマーク一覧が重くなる可能性があります。</value></data>
+  <data name="SearchResults_BookmarksConfirm_Convert" xml:space="preserve"><value>ブックマークにする</value></data>
+  <data name="SearchResults_BookmarksConfirm_Cancel" xml:space="preserve"><value>やめる</value></data>
+  <data name="SearchResults_Menu_GoTo" xml:space="preserve"><value>一致に移動</value></data>
+  <data name="SearchResults_Skipped" xml:space="preserve"><value>読み込めなかった範囲 ({0})</value></data>
+  <data name="SearchResults_SkippedItem" xml:space="preserve"><value>{0}: {1} バイト ({2})</value></data>
+  <data name="Command_NoSearchResults" xml:space="preserve"><value>検索結果がありません。</value></data>
+  <data name="Cmd_search_replaceAll" xml:space="preserve"><value>すべて置換</value></data>
+  <data name="CmdAlias_search_replaceAll" xml:space="preserve"><value>すべてちかん</value></data>
+  <data name="Cmd_search_results_toBookmarks" xml:space="preserve"><value>検索結果をブックマークに変換</value></data>
+  <data name="CmdAlias_search_results_toBookmarks" xml:space="preserve"><value>けんさくけっかをぶっくまーくにへんかん</value></data>
+  <data name="Cmd_search_results_export" xml:space="preserve"><value>検索結果をエクスポート</value></data>
+  <data name="CmdAlias_search_results_export" xml:space="preserve"><value>けんさくけっかをえくすぽーと csv json</value></data>
+  <data name="Cmd_edit_copyAs_hexSpaced" xml:space="preserve"><value>形式を選択してコピー: Hex 文字列 (空白区切り)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexSpaced" xml:space="preserve"><value>けいしきをせんたくしてこぴー hex 文字列 空白区切り</value></data>
+  <data name="Cmd_edit_copyAs_hexPlain" xml:space="preserve"><value>形式を選択してコピー: Hex 文字列 (区切りなし)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexPlain" xml:space="preserve"><value>けいしきをせんたくしてこぴー hex 文字列 区切りなし</value></data>
+  <data name="Cmd_edit_copyAs_hexCommaPrefixed" xml:space="preserve"><value>形式を選択してコピー: Hex 文字列 (0x 付きカンマ区切り)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexCommaPrefixed" xml:space="preserve"><value>けいしきをせんたくしてこぴー hex 文字列 0x 付きカンマ区切り</value></data>
+  <data name="Cmd_edit_copyAs_hexEscaped" xml:space="preserve"><value>形式を選択してコピー: Hex 文字列 (\x エスケープ)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexEscaped" xml:space="preserve"><value>けいしきをせんたくしてこぴー hex 文字列 \x エスケープ</value></data>
+  <data name="Cmd_edit_copyAs_hexUrl" xml:space="preserve"><value>形式を選択してコピー: Hex 文字列 (URL エンコード (全バイト))</value></data>
+  <data name="CmdAlias_edit_copyAs_hexUrl" xml:space="preserve"><value>けいしきをせんたくしてこぴー hex 文字列 url エンコード (全バイト)</value></data>
+  <data name="Cmd_edit_copyAs_hexCustom" xml:space="preserve"><value>形式を選択してコピー: Hex 文字列 (区切り文字を指定)</value></data>
+  <data name="CmdAlias_edit_copyAs_hexCustom" xml:space="preserve"><value>けいしきをせんたくしてこぴー hex 文字列 区切り文字を指定</value></data>
+  <data name="Cmd_edit_copyAs_decimal" xml:space="preserve"><value>形式を選択してコピー: 数値列 (10 進)</value></data>
+  <data name="CmdAlias_edit_copyAs_decimal" xml:space="preserve"><value>けいしきをせんたくしてこぴー 数値列 10 進</value></data>
+  <data name="Cmd_edit_copyAs_octal" xml:space="preserve"><value>形式を選択してコピー: 数値列 (8 進)</value></data>
+  <data name="CmdAlias_edit_copyAs_octal" xml:space="preserve"><value>けいしきをせんたくしてこぴー 数値列 8 進</value></data>
+  <data name="Cmd_edit_copyAs_binary" xml:space="preserve"><value>形式を選択してコピー: 数値列 (2 進)</value></data>
+  <data name="CmdAlias_edit_copyAs_binary" xml:space="preserve"><value>けいしきをせんたくしてこぴー 数値列 2 進</value></data>
+  <data name="Cmd_edit_copyAs_arrayC" xml:space="preserve"><value>形式を選択してコピー: 配列 (C)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayC" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 c</value></data>
+  <data name="Cmd_edit_copyAs_arrayCpp" xml:space="preserve"><value>形式を選択してコピー: 配列 (C++)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayCpp" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 c++</value></data>
+  <data name="Cmd_edit_copyAs_arrayCSharp" xml:space="preserve"><value>形式を選択してコピー: 配列 (C#)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayCSharp" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 c#</value></data>
+  <data name="Cmd_edit_copyAs_arrayJava" xml:space="preserve"><value>形式を選択してコピー: 配列 (Java)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayJava" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 java</value></data>
+  <data name="Cmd_edit_copyAs_arrayJavaScript" xml:space="preserve"><value>形式を選択してコピー: 配列 (JavaScript / TypeScript)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayJavaScript" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 javascript / typescript</value></data>
+  <data name="Cmd_edit_copyAs_arrayPython" xml:space="preserve"><value>形式を選択してコピー: 配列 (Python)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayPython" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 python</value></data>
+  <data name="Cmd_edit_copyAs_arrayRust" xml:space="preserve"><value>形式を選択してコピー: 配列 (Rust)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayRust" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 rust</value></data>
+  <data name="Cmd_edit_copyAs_arrayGo" xml:space="preserve"><value>形式を選択してコピー: 配列 (Go)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayGo" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 go</value></data>
+  <data name="Cmd_edit_copyAs_arrayPascal" xml:space="preserve"><value>形式を選択してコピー: 配列 (Pascal / Delphi)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayPascal" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 pascal / delphi</value></data>
+  <data name="Cmd_edit_copyAs_arrayVisualBasic" xml:space="preserve"><value>形式を選択してコピー: 配列 (VB.NET)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayVisualBasic" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 vb.net</value></data>
+  <data name="Cmd_edit_copyAs_arrayPureBasic" xml:space="preserve"><value>形式を選択してコピー: 配列 (PureBasic)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayPureBasic" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 purebasic</value></data>
+  <data name="Cmd_edit_copyAs_arrayAssembly" xml:space="preserve"><value>形式を選択してコピー: 配列 (アセンブリ)</value></data>
+  <data name="CmdAlias_edit_copyAs_arrayAssembly" xml:space="preserve"><value>けいしきをせんたくしてこぴー 配列 アセンブリ</value></data>
+  <data name="Cmd_edit_copyAs_base64" xml:space="preserve"><value>形式を選択してコピー: Base64</value></data>
+  <data name="CmdAlias_edit_copyAs_base64" xml:space="preserve"><value>けいしきをせんたくしてこぴー エンコード base64</value></data>
+  <data name="Cmd_edit_copyAs_base32" xml:space="preserve"><value>形式を選択してコピー: Base32</value></data>
+  <data name="CmdAlias_edit_copyAs_base32" xml:space="preserve"><value>けいしきをせんたくしてこぴー エンコード base32</value></data>
+  <data name="Cmd_edit_copyAs_ascii85" xml:space="preserve"><value>形式を選択してコピー: Ascii85</value></data>
+  <data name="CmdAlias_edit_copyAs_ascii85" xml:space="preserve"><value>けいしきをせんたくしてこぴー エンコード ascii85</value></data>
+  <data name="Cmd_edit_copyAs_uUEncode" xml:space="preserve"><value>形式を選択してコピー: UUEncode</value></data>
+  <data name="CmdAlias_edit_copyAs_uUEncode" xml:space="preserve"><value>けいしきをせんたくしてこぴー エンコード uuencode</value></data>
+  <data name="Cmd_edit_copyAs_xXEncode" xml:space="preserve"><value>形式を選択してコピー: XXEncode</value></data>
+  <data name="CmdAlias_edit_copyAs_xXEncode" xml:space="preserve"><value>けいしきをせんたくしてこぴー エンコード xxencode</value></data>
+  <data name="Cmd_edit_copyAs_quotedPrintable" xml:space="preserve"><value>形式を選択してコピー: Quoted-Printable</value></data>
+  <data name="CmdAlias_edit_copyAs_quotedPrintable" xml:space="preserve"><value>けいしきをせんたくしてこぴー エンコード quoted-printable</value></data>
+  <data name="Cmd_edit_copyAs_html" xml:space="preserve"><value>形式を選択してコピー: HTML</value></data>
+  <data name="CmdAlias_edit_copyAs_html" xml:space="preserve"><value>けいしきをせんたくしてこぴー 文書 html</value></data>
+  <data name="Cmd_edit_copyAs_rtf" xml:space="preserve"><value>形式を選択してコピー: RTF</value></data>
+  <data name="CmdAlias_edit_copyAs_rtf" xml:space="preserve"><value>けいしきをせんたくしてこぴー 文書 rtf</value></data>
+  <data name="Cmd_edit_copyAs_markdown" xml:space="preserve"><value>形式を選択してコピー: Markdown</value></data>
+  <data name="CmdAlias_edit_copyAs_markdown" xml:space="preserve"><value>けいしきをせんたくしてこぴー 文書 markdown</value></data>
+  <data name="Cmd_edit_copyAs_tex" xml:space="preserve"><value>形式を選択してコピー: TeX</value></data>
+  <data name="CmdAlias_edit_copyAs_tex" xml:space="preserve"><value>けいしきをせんたくしてこぴー 文書 tex</value></data>
+  <data name="Cmd_edit_copyAs_screenDump" xml:space="preserve"><value>形式を選択してコピー: 画面表示どおり</value></data>
+  <data name="CmdAlias_edit_copyAs_screenDump" xml:space="preserve"><value>けいしきをせんたくしてこぴー 画面表示 画面表示どおり</value></data>
+  <data name="Cmd_edit_copyAs_text" xml:space="preserve"><value>形式を選択してコピー: テキスト (文字コードで解釈)</value></data>
+  <data name="CmdAlias_edit_copyAs_text" xml:space="preserve"><value>けいしきをせんたくしてこぴー 画面表示 テキスト (文字コードで解釈)</value></data>
+  <data name="Cmd_edit_copyAs_intelHex" xml:space="preserve"><value>形式を選択してコピー: Intel HEX</value></data>
+  <data name="CmdAlias_edit_copyAs_intelHex" xml:space="preserve"><value>けいしきをせんたくしてこぴー テキスト形式 intel hex</value></data>
+  <data name="Cmd_edit_copyAs_sRecord" xml:space="preserve"><value>形式を選択してコピー: Motorola S-record</value></data>
+  <data name="CmdAlias_edit_copyAs_sRecord" xml:space="preserve"><value>けいしきをせんたくしてこぴー テキスト形式 motorola s-record</value></data>
+  <data name="Cmd_edit_copyAs_json" xml:space="preserve"><value>形式を選択してコピー: JSON</value></data>
+  <data name="CmdAlias_edit_copyAs_json" xml:space="preserve"><value>けいしきをせんたくしてこぴー テキスト形式 json</value></data>
+  <data name="Cmd_edit_copyAs_position" xml:space="preserve"><value>形式を選択してコピー: オフセット</value></data>
+  <data name="CmdAlias_edit_copyAs_position" xml:space="preserve"><value>けいしきをせんたくしてこぴー 位置 オフセット</value></data>
+  <data name="HexView_Menu_CopyAs" xml:space="preserve"><value>形式を選択してコピー</value></data>
+  <data name="HexView_Menu_CopyAsChoose" xml:space="preserve"><value>形式を選ぶ...</value></data>
+  <data name="HexView_Menu_CopyAsFormat" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Fill_TextEncoding" xml:space="preserve"><value>文字コード</value></data>
+  <data name="Fill_TextEncodingDisplay" xml:space="preserve"><value>表示中の文字コード ({0})</value></data>
+  <data name="Dialog_History" xml:space="preserve"><value>入力履歴: {0}</value></data>
+  <data name="Set_edit_defaultInputMode" xml:space="preserve"><value>新しく開いたファイルの入力モード</value></data>
+  <data name="SetDesc_edit_defaultInputMode" xml:space="preserve"><value>長さを変えられないドキュメントは常に上書きモードです。</value></data>
+  <data name="SetOpt_edit_defaultInputMode_overwrite" xml:space="preserve"><value>上書き</value></data>
+  <data name="SetOpt_edit_defaultInputMode_insert" xml:space="preserve"><value>挿入</value></data>
+  <data name="Set_edit_overwriteSelectionTyping" xml:space="preserve"><value>上書きモードで選択範囲に入力したとき</value></data>
+  <data name="SetDesc_edit_overwriteSelectionTyping" xml:space="preserve"><value>上書きモードで選択範囲がある状態で入力したときの動作。</value></data>
+  <data name="SetOpt_edit_overwriteSelectionTyping_overwriteFromStart" xml:space="preserve"><value>先頭から上書き</value></data>
+  <data name="SetOpt_edit_overwriteSelectionTyping_zeroFirst" xml:space="preserve"><value>選択範囲を 00 にしてから上書き</value></data>
+  <data name="Set_edit_text_enterKey" xml:space="preserve"><value>テキスト列での Enter</value></data>
+  <data name="SetDesc_edit_text_enterKey" xml:space="preserve"><value>テキスト列で Enter を押したときに、今の文字コードで書き込む改行。</value></data>
+  <data name="SetOpt_edit_text_enterKey_none" xml:space="preserve"><value>何もしない</value></data>
+  <data name="SetOpt_edit_text_enterKey_crlf" xml:space="preserve"><value>CR LF を書き込む</value></data>
+  <data name="SetOpt_edit_text_enterKey_lf" xml:space="preserve"><value>LF を書き込む</value></data>
+  <data name="SetOpt_edit_text_enterKey_cr" xml:space="preserve"><value>CR を書き込む</value></data>
+  <data name="Set_edit_backspaceInOverwrite" xml:space="preserve"><value>上書きモードの Backspace</value></data>
+  <data name="SetDesc_edit_backspaceInOverwrite" xml:space="preserve"><value>挿入モードの Backspace は常に直前のバイトを削除します。</value></data>
+  <data name="SetOpt_edit_backspaceInOverwrite_moveCursor" xml:space="preserve"><value>カーソルを戻す</value></data>
+  <data name="SetOpt_edit_backspaceInOverwrite_zeroAndMove" xml:space="preserve"><value>直前のバイトを 00 にして戻る</value></data>
+  <data name="Set_edit_deleteKeepsLengthInOverwrite" xml:space="preserve"><value>上書きモードでは Delete で長さを変えない</value></data>
+  <data name="SetDesc_edit_deleteKeepsLengthInOverwrite" xml:space="preserve"><value>削除せずに、選択範囲 (またはカーソル位置のバイト) を 00 で塗りつぶします。</value></data>
+  <data name="Set_edit_undo_coalesceSeconds" xml:space="preserve"><value>入力をまとめる間隔 (秒)</value></data>
+  <data name="SetDesc_edit_undo_coalesceSeconds" xml:space="preserve"><value>この時間内に続けた入力は、1 回の元に戻すでまとめて戻ります。0 はまとめません。</value></data>
+  <data name="Set_edit_undo_clearOnSave" xml:space="preserve"><value>保存時に履歴を消す</value></data>
+  <data name="SetDesc_edit_undo_clearOnSave" xml:space="preserve"><value>保存した後は、保存より前の変更を元に戻せなくなります。</value></data>
+  <data name="Set_edit_paste_selectPasted" xml:space="preserve"><value>貼り付け後に貼り付けた範囲を選択する</value></data>
+  <data name="SetDesc_edit_paste_selectPasted" xml:space="preserve"><value>オフのときは、貼り付けた範囲の直後にカーソルを置きます。</value></data>
+  <data name="Set_edit_pasteOverwrite_fitSelection" xml:space="preserve"><value>上書き貼り付けで選択範囲の長さに合わせる</value></data>
+  <data name="SetDesc_edit_pasteOverwrite_fitSelection" xml:space="preserve"><value>選択範囲があるとき、上書き貼り付けは選択範囲の長さまでだけ書きます。</value></data>
+  <data name="Set_clipboard_maxSizeMiB" xml:space="preserve"><value>クリップボードに入れる最大サイズ (MiB)</value></data>
+  <data name="SetDesc_clipboard_maxSizeMiB" xml:space="preserve"><value>これより大きい選択範囲は HexEditor の中でだけ貼り付けられます (1〜2048 MiB)。</value></data>
+  <data name="Set_clipboard_hex_separator" xml:space="preserve"><value>コピーする Hex 文字列の区切り</value></data>
+  <data name="SetDesc_clipboard_hex_separator" xml:space="preserve"><value>Hex 列からコピーするときにバイトの間に入れる文字 (空白、カンマなど)。</value></data>
+  <data name="Set_clipboard_hex_upperCase" xml:space="preserve"><value>コピーする Hex 文字列を大文字にする</value></data>
+  <data name="SetDesc_clipboard_hex_upperCase" xml:space="preserve"><value>de ad ではなく DE AD の形でコピーします。</value></data>
+  <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>コピーする Hex 文字列の 1 行のバイト数</value></data>
+  <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>このバイト数ごとに改行を入れます。0 は改行を入れません。</value></data>
+  <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>選択範囲 ({0}) は大きすぎるため、他のアプリには渡せません。HexEditor 内では貼り付けられます。</value></data>
 </root>

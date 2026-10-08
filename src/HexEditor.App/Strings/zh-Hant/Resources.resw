@@ -105,7 +105,6 @@
   <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>貼上(P)</value></data>
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>覆寫貼上(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor：{0} 個位元組。只能在 HexEditor 內貼上。]</value></data>
-  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>選取範圍超過剪貼簿的上限，因此只能在 HexEditor 內貼上。</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>超出此固定長度文件結尾的 {0} 個位元組並未貼上。</value></data>
   <data name="Clipboard_TextOmitted" xml:space="preserve"><value>選取範圍的文字形式超過剪貼簿的上限，因此只複製了二進位資料。</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>復原未儲存的變更</value></data>

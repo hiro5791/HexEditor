@@ -18,7 +18,11 @@ public sealed record SearchConditions
 {
     public SearchKind Kind { get; init; } = SearchKind.Hex;
 
-    public TextEncodingId Encoding { get; init; } = TextEncodingId.Ascii;
+    /// <summary>
+    /// テキストの検索の文字コード。表示の文字コードの一覧の名前 (<c>utf-8</c>、<c>cp932</c> など) か、「表示中の文字コードに合わせる」
+    /// (<see cref="TextEncodings.DisplayEncodingId"/>。FIND-07 の仕様 1)。
+    /// </summary>
+    public string Encoding { get; init; } = TextEncodings.DisplayEncodingId;
 
     public bool CaseSensitive { get; init; }
 
@@ -44,7 +48,7 @@ public sealed record SearchConditions
     internal JsonObject ToJson() => new()
     {
         ["kind"] = Kind.ToString(),
-        ["encoding"] = Encoding.ToString(),
+        ["encoding"] = Encoding,
         ["caseSensitive"] = CaseSensitive,
         ["escapes"] = UseEscapes,
         ["align"] = AlignToCharacters,
@@ -60,7 +64,7 @@ public sealed record SearchConditions
     internal static SearchConditions FromJson(JsonObject o) => new()
     {
         Kind = Enum<SearchKind>(o["kind"], SearchKind.Hex),
-        Encoding = Enum<TextEncodingId>(o["encoding"], TextEncodingId.Ascii),
+        Encoding = EncodingOf(o["encoding"]),
         CaseSensitive = Bool(o["caseSensitive"]),
         UseEscapes = Bool(o["escapes"]),
         AlignToCharacters = Bool(o["align"]),
@@ -72,6 +76,17 @@ public sealed record SearchConditions
         Tolerance = Enum<ToleranceKind>(o["tolerance"], ToleranceKind.None),
         ToleranceText = o["toleranceText"] is JsonValue t && t.TryGetValue(out string? s) ? s : string.Empty,
     };
+
+    /// <summary>文字コードの名前。以前の形式 (<see cref="TextEncodingId"/> の名前) は一覧の名前に直す。</summary>
+    private static string EncodingOf(JsonNode? node)
+    {
+        if (node is not JsonValue v || !v.TryGetValue(out string? s) || string.IsNullOrWhiteSpace(s))
+        {
+            return TextEncodings.DisplayEncodingId;
+        }
+
+        return System.Enum.TryParse(s, out TextEncodingId legacy) && !char.IsLower(s[0]) ? TextEncodings.CatalogId(legacy) : s;
+    }
 
     private static bool Bool(JsonNode? node) => node is JsonValue v && v.TryGetValue(out bool b) && b;
 

@@ -115,7 +115,7 @@ public sealed partial class FindBar
     private byte[]? CurrentFiller() => FillerChoice.SelectedIndex switch
     {
         1 => [0xFF],
-        2 => Kind == SearchKind.Text ? SearchPattern.EncodeText(" ", TextEncodings.Get(SelectedEncoding), false) : [0x20],
+        2 => Kind == SearchKind.Text ? SearchPattern.EncodeText(" ", SearchEncoding, false) : [0x20],
         3 => ParseFiller(),
         _ => [0x00],
     };
@@ -158,7 +158,7 @@ public sealed partial class FindBar
             {
                 _template = Kind switch
                 {
-                    SearchKind.Text => ReplacementTemplate.FromText(ReplaceQuery.Text, TextEncodings.Get(SelectedEncoding), EscapeChoice.IsChecked == true),
+                    SearchKind.Text => ReplacementTemplate.FromText(ReplaceQuery.Text, SearchEncoding, EscapeChoice.IsChecked == true),
                     SearchKind.Integer or SearchKind.Float when _pattern?.Numeric is { } numeric =>
                         ReplacementTemplate.FromNumeric(ReplaceQuery.Text, numeric, Editor is { } e ? new EditorExpressionContext(e) : null),
                     SearchKind.Integer or SearchKind.Float => null,
@@ -418,7 +418,7 @@ public sealed partial class FindBar
 
                 // 1. 一致を探す (編集を止めたあとの状態に対して)。
                 DocumentSnapshot snapshot = doc.Current;
-                using SearchResults found = Replacer.FindForReplaceAll(snapshot, pattern, new SearchOptions { Scope = scope }, op, token);
+                using SearchResults found = Replacer.FindForReplaceAll(snapshot, pattern, NewOptions(editor, scope, token), op, token);
                 op?.ReportMatches(found.LongCount);
                 if (found.LongCount == 0)
                 {

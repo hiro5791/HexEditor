@@ -73,6 +73,7 @@ public sealed partial class FindBar
         DocumentSnapshot snapshot = editor.Document.Current;
         long origin = Math.Clamp(_origin, 0, snapshot.Length);
         SearchScope window = CurrentScope.Clip(origin, SearchScope.IncrementalWindow, snapshot.Length, out bool truncated);
+        SearchOptions options = NewOptions(editor, window, cts.Token, interactive: false);
         Task<SearchHit?> search = Task.Run(() =>
         {
             // 実行中の検索の数を記録する (テストで「同時に 1 つだけ」を確かめる。仕様 2)。
@@ -80,7 +81,7 @@ public sealed partial class FindBar
             AppLog.Info($"Incremental search: start #{id} (running {running})");
             try
             {
-                return SearchEngine.Find(snapshot, pattern, origin, forward: true, wrap: false, new SearchOptions { Scope = window }, null, cts.Token);
+                return SearchEngine.Find(snapshot, pattern, origin, forward: true, wrap: false, options, null, cts.Token);
             }
             catch (OperationCanceledException)
             {
@@ -99,7 +100,7 @@ public sealed partial class FindBar
         {
             hit = await search;
         }
-        catch (OperationCanceledException)
+        catch (Exception ex) when (ex is OperationCanceledException or SearchAbortedException)
         {
             return;
         }
@@ -135,6 +136,9 @@ public sealed partial class FindBar
                 editor.GoTo(origin);
             }
         }
+
+        // 入力が止まったら件数を数える (FIND-12 の仕様 1)。
+        StartCountIfAutomatic();
     }
 
     /// <summary>入力を待っているインクリメンタルサーチと実行中のものを止める (Enter などの通常の検索が優先する)。</summary>

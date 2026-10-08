@@ -89,6 +89,26 @@ public static class BuiltInSettings
         new("edit.pasteSpecial.preferLast", SettingCategories.Editing, SettingKind.Bool, true) { Order = 20 },
         new("edit.paste.detectWithoutConfirmation", SettingCategories.Editing, SettingKind.Bool, false) { Order = 30 },
 
+        // 入力・削除・Undo・貼り付け・コピーの設定 (EDIT-10〜EDIT-13、EDIT-19、EDIT-22、EDIT-23)。キーと解釈は View.EditingSettings。
+        new(View.EditingSettings.DefaultInputModeKey, SettingCategories.Editing, SettingKind.Choice, "overwrite") { Options = ["overwrite", "insert"], Order = 1 },
+        new(View.EditingSettings.OverwriteSelectionTypingKey, SettingCategories.Editing, SettingKind.Choice, "overwriteFromStart") { Options = ["overwriteFromStart", "zeroFirst"], Order = 2 },
+        new(View.EditingSettings.TextEnterKey, SettingCategories.Editing, SettingKind.Choice, "none") { Options = ["none", "crlf", "lf", "cr"], Order = 3 },
+        new(View.EditingSettings.BackspaceInOverwriteKey, SettingCategories.Editing, SettingKind.Choice, "moveCursor") { Options = ["moveCursor", "zeroAndMove"], Order = 4 },
+        new(View.EditingSettings.DeleteKeepsLengthKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 5 },
+        new(View.EditingSettings.UndoCoalesceSecondsKey, SettingCategories.Editing, SettingKind.Int, 2) { Min = 0, Max = 10, Order = 6 },
+        new(View.EditingSettings.ClearHistoryOnSaveKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 7 },
+        new(View.EditingSettings.SelectPastedKey, SettingCategories.Editing, SettingKind.Bool, true) { Order = 31 },
+        new(View.EditingSettings.FitOverwritePasteKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 32 },
+        new(View.EditingSettings.ClipboardMaxSizeKey, SettingCategories.Editing, SettingKind.Int, View.EditingSettings.DefaultClipboardMaxMiB)
+        {
+            Min = 1,
+            Max = View.EditingSettings.MaxClipboardMaxMiB,
+            Order = 40,
+        },
+        new(View.EditingSettings.HexSeparatorKey, SettingCategories.Editing, SettingKind.String, " ") { Order = 41 },
+        new(View.EditingSettings.HexUpperCaseKey, SettingCategories.Editing, SettingKind.Bool, true) { Order = 42 },
+        new(View.EditingSettings.HexBytesPerLineKey, SettingCategories.Editing, SettingKind.Int, 0) { Min = 0, Max = 1024, Order = 43 },
+
         // ---- 検索 (FIND-02、FIND-20、FIND-28) ----
         new("search.maxMatchLength", SettingCategories.Search, SettingKind.Int, Search.SearchPattern.DefaultMaxMatchLength) { Min = 1, Max = Search.SearchPattern.MaxMaxMatchLength, Order = 10 },
         new("search.findAll.limit", SettingCategories.Search, SettingKind.Int, 1_000_000) { Min = 1_000, Max = 100_000_000, Order = 20 },
@@ -96,6 +116,18 @@ public static class BuiltInSettings
         new("search.results.f3Repeats", SettingCategories.Search, SettingKind.Bool, false) { Order = 40 },
         new("search.history.limit", SettingCategories.Search, SettingKind.Int, Search.SearchHistory.DefaultLimit) { Min = 0, Max = Search.SearchHistory.MaxLimit, Order = 50 },
         new("search.history.doNotSave", SettingCategories.Search, SettingKind.Bool, false) { Order = 60 },
+
+        // チャンクの大きさ (KiB。FIND-01 の仕様 2)、読み込みエラーの既定の動作 (FIND-01 の「エラー」)、一致の強調 (FIND-04 の仕様 9)、
+        // すべて検索の結果を新しいタブに出すか (FIND-20 の仕様 3)。
+        new(Search.SearchSettings.ChunkSizeKey, SettingCategories.Search, SettingKind.Int, Search.SearchSettings.DefaultChunkSizeKiB)
+        {
+            Min = Search.SearchSettings.MinChunkSizeKiB,
+            Max = Search.SearchSettings.MaxChunkSizeKiB,
+            Order = 70,
+        },
+        new(Search.SearchSettings.ReadErrorsKey, SettingCategories.Search, SettingKind.Choice, "ask") { Options = ["ask", "skip", "abort"], Order = 80 },
+        new(Search.SearchSettings.HighlightKey, SettingCategories.Search, SettingKind.Bool, true) { Order = 90 },
+        new(Search.SearchSettings.NewTabKey, SettingCategories.Search, SettingKind.Bool, false) { Order = 100 },
 
         // ---- ファイルと保存 ----
         new("recent.maxItems", SettingCategories.Files, SettingKind.Int, RecentFileList.DefaultMaxItems) { Min = 0, Max = RecentFileList.MaxItemsLimit, Order = 1 },

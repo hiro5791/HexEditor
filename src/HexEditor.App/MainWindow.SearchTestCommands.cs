@@ -55,7 +55,39 @@ public sealed partial class MainWindow
                     request["path"]!.GetValue<string>());
                 return new JsonObject();
             case "searchResultsToBookmarks":
-                SearchResults.ToBookmarks();
+                if (request["target"]?.GetValue<string>() is { } target)
+                {
+                    SearchResults.SetTarget(target == "selected");
+                }
+
+                // 確認ダイアログを出す場合は、答えを待たずに返す (ダイアログはテストが dialogButton で押す)。
+                Task converting = SearchResults.ToBookmarksAsync();
+                if (request["noWait"]?.GetValue<bool>() != true)
+                {
+                    await converting;
+                }
+
+                SearchResults.SetTarget(null);
+                return new JsonObject();
+            case "searchResultsTab":
+                if (request["pin"]?.GetValue<bool>() == true)
+                {
+                    SearchResults.TogglePin();
+                }
+
+                if (request["select"] is { } select)
+                {
+                    SearchResults.SelectTab((int)select.GetValue<long>());
+                }
+
+                if (request["close"] is { } close)
+                {
+                    SearchResults.CloseTab((int)close.GetValue<long>());
+                }
+
+                return TestSearchResults(new JsonObject());
+            case "searchResultsResearch":
+                _ = SearchResults.ResearchAsync();
                 return new JsonObject();
             case "searchResultsOrder":
                 if (request["sort"]?.GetValue<string>() is { } key)
@@ -87,6 +119,9 @@ public sealed partial class MainWindow
         ["policyIndex"] = FindBar.PolicyIndex,
         ["policyChangeEnabled"] = FindBar.PolicyChangeEnabled,
         ["incrementalTruncated"] = FindBar.IncrementalTruncated,
+        ["statusMessage"] = StatusMessageText,
+        ["encodings"] = new JsonArray([.. FindBar.EncodingIds.Select(id => (JsonNode?)id)]),
+        ["scopeOutline"] = new JsonArray([.. FindBar.OutlinedScope.Select(r => (JsonNode?)new JsonObject { ["offset"] = r.Offset, ["length"] = r.Length })]),
         ["history"] = new JsonArray([.. FindBar.HistoryTexts(HistoryList.Find).Select(t => (JsonNode?)t)]),
         ["replaceHistory"] = new JsonArray([.. FindBar.HistoryTexts(HistoryList.Replace).Select(t => (JsonNode?)t)]),
         ["conditions"] = FindBar.CurrentConditions() is { } c ? new JsonObject
@@ -152,6 +187,12 @@ public sealed partial class MainWindow
             ["selected"] = SearchResults.SelectedIndex,
             ["top"] = SearchResults.TopIndex,
             ["visibleRows"] = SearchResults.VisibleRowCount,
+            ["tabs"] = new JsonArray([.. SearchResults.TabTitles.Select(t => (JsonNode?)t)]),
+            ["activeTab"] = SearchResults.ActiveTabIndex,
+            ["pinned"] = SearchResults.IsPinned,
+            ["stale"] = SearchResults.ResearchVisible,
+            ["skipped"] = new JsonArray([.. SearchResults.SkippedRanges.Select(r => (JsonNode?)new JsonObject { ["offset"] = r.Offset, ["length"] = r.Length })]),
+            ["statusMessage"] = StatusMessageText,
             ["rows"] = rows,
         };
     }

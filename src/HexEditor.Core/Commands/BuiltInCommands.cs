@@ -73,6 +73,9 @@ public static class BuiltInCommands
         },
         new("edit.copyAs", "edit") { DefaultBindings = [K("Ctrl+Shift+C", KeyScope.Editor)], Condition = "documentOpen" },
         new("edit.copyAsLast", "edit") { Condition = "documentOpen" },
+
+        // 形式ごとの「形式を選択してコピー: <形式名>」(EDIT-25 の「呼び出し」。ダイアログを開かずに、前回の設定でその形式でコピーする)。
+        .. CopyAsFormatCommands(),
         new("edit.pasteSpecial", "edit") { DefaultBindings = [K("Ctrl+Shift+V", KeyScope.Editor)], Condition = "documentOpen && !readOnly" },
         new("edit.selectAll", "edit")
         {
@@ -104,6 +107,11 @@ public static class BuiltInCommands
         // 検索バーでは検索バー自身が Alt+Enter を処理する (FIND-20)。
         new("search.findAll", "search") { DefaultBindings = [K("Alt+Enter", KeyScope.FindBar)], NativeScopes = [KeyScope.FindBar], Condition = "documentOpen" },
         new("search.clearHistory", "search"),
+
+        // すべて置換 (FIND-23)、結果一覧の変換・エクスポート (FIND-21)。ショートカットは既定なし。
+        new("search.replaceAll", "search") { Condition = "documentOpen && !readOnly" },
+        new("search.results.toBookmarks", "search") { Condition = "searchResults" },
+        new("search.results.export", "search") { Condition = "searchResults" },
 
         // ---- 移動 ----
         new("go.goTo", "go") { Icon = IconGoTo, DefaultBindings = [K("Ctrl+G")], Condition = "documentOpen" },
@@ -295,4 +303,17 @@ public static class BuiltInCommands
     ];
 
     private static KeyBinding K(string chord, KeyScope scope = KeyScope.Global) => KeyBinding.Parse(chord, scope);
+
+    /// <summary>形式ごとのコピーのコマンドの ID の接頭辞 (<c>edit.copyAs.hexSpaced</c> など)。</summary>
+    public const string CopyAsFormatPrefix = "edit.copyAs.";
+
+    /// <summary>形式ごとのコピーのコマンドの ID。</summary>
+    public static string CopyAsFormatId(Clipboard.CopyFormat format)
+    {
+        string name = format.ToString();
+        return CopyAsFormatPrefix + char.ToLowerInvariant(name[0]) + name[1..];
+    }
+
+    private static IEnumerable<CommandDefinition> CopyAsFormatCommands() =>
+        Enum.GetValues<Clipboard.CopyFormat>().Select(f => new CommandDefinition(CopyAsFormatId(f), "edit") { Condition = "documentOpen" });
 }

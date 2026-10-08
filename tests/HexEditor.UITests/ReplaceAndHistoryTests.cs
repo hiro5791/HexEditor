@@ -331,7 +331,7 @@ public sealed class ReplaceAndHistoryTests
         await app.IdleAsync();
         JsonObject c = (await FindBarAsync(app))["conditions"]!.AsObject();
         Assert.Equal("ab", (await app.ElementAsync("Find_Query"))["text"]!.GetValue<string>());
-        Assert.Equal(("Text", "Utf16LE", true), (c["kind"]!.GetValue<string>(), c["encoding"]!.GetValue<string>(), c["caseSensitive"]!.GetValue<bool>()));
+        Assert.Equal(("Text", "utf-16le", true), (c["kind"]!.GetValue<string>(), c["encoding"]!.GetValue<string>(), c["caseSensitive"]!.GetValue<bool>()));
 
         // 6. ↓ を 1 回: `0x1234`、整数、16 bit。
         await app.SendAsync("findKey", new JsonObject { ["key"] = "Down" });

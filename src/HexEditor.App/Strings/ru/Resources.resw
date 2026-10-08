@@ -105,7 +105,6 @@
   <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>Вставить</value></data>
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>Вставить с заменой</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} байт. Можно вставить только в HexEditor.]</value></data>
-  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>Выделение превышает ограничение буфера обмена, поэтому его можно вставить только в HexEditor.</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>Не вставлено байт за концом этого документа фиксированной длины: {0}.</value></data>
   <data name="Clipboard_TextOmitted" xml:space="preserve"><value>Текстовое представление выделения превышает ограничение буфера обмена, поэтому скопированы только двоичные данные.</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>Восстановление несохраненных изменений</value></data>

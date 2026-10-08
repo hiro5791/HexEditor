@@ -132,7 +132,7 @@ public sealed class ExportAndHistoryTests
     {
         var history = new SearchHistory();
         var hex = new SearchConditions { Kind = SearchKind.Hex };
-        var text = new SearchConditions { Kind = SearchKind.Text, Encoding = TextEncodingId.Utf16LE, CaseSensitive = true };
+        var text = new SearchConditions { Kind = SearchKind.Text, Encoding = "utf-16le", CaseSensitive = true };
         var integer = new SearchConditions { Kind = SearchKind.Integer, IntegerBits = 16 };
         history.Add(HistoryList.Find, new SearchHistoryEntry("10 11", hex));
         history.Add(HistoryList.Find, new SearchHistoryEntry("ab", text));
