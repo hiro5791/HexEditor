@@ -2407,4 +2407,12 @@
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>ぎょうのせんとう</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>表示: マルチバイト文字の続きの記号</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>つづきのきごう</value></data>
+  <data name="Notice_OpenedReadOnly_AccessDenied" xml:space="preserve"><value>このファイルに書き込む権限がないため、読み取り専用で開きました。もう一度試すには「編集を許可する」を選んでください。</value></data>
+  <data name="Notice_OpenedReadOnly_SharingViolation" xml:space="preserve"><value>他のアプリがこのファイルを書き込みのために開いているため、読み取り専用で開きました。他のアプリが終わったら「編集を許可する」を選んでください。</value></data>
+  <data name="Notice_OpenedReadOnly_ReadOnlyMedia" xml:space="preserve"><value>このファイルは読み取り専用のメディアにあるため、読み取り専用で開きました。</value></data>
+  <data name="ReadOnly_ReleaseFailed_AccessDenied" xml:space="preserve"><value>{0} に書き込む権限がないため、読み取り専用のままです。</value></data>
+  <data name="ReadOnly_ReleaseFailed_SharingViolation" xml:space="preserve"><value>他のアプリが {0} を書き込みのために開いているため、読み取り専用のままです。</value></data>
+  <data name="Recovery_TempDetails" xml:space="preserve"><value>終わらなかった保存の一時ファイルが残っています。ファイル自体は変更されていません。</value></data>
+  <data name="Recovery_TempDelete" xml:space="preserve"><value>削除</value></data>
+  <data name="Recovery_DeleteFailed" xml:space="preserve"><value>削除できませんでした: {0}</value></data>
 </root>

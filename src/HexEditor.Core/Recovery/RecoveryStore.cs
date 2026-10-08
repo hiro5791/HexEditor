@@ -93,9 +93,11 @@ public static class RecoveryStore
                 ? AddBuffer.OpenExisting(spill, record.AddBufferLength, options.AddBufferMemoryLimit)
                 : new AddBuffer(spill, options.AddBufferMemoryLimit);
             IEnumerable<Piece> pieces = record.Pieces.Select(p => p.ToPiece());
-            if (sourceChanged && record.Pieces.Any(p => p.Kind == PieceKind.Original && p.Offset + p.Length > source.Length))
+            if (sourceChanged)
             {
-                throw new InvalidDataException("元のファイルが短くなっているため、復旧できません。");
+                // 元のファイルが記録より短くなっていたら、範囲外になった元データのピースを新しい長さで切り詰める (なくなった部分は除く)。
+                // 警告付きの読み取り専用で開くため (ENG-27 の仕様 6)、復旧できる部分だけを復旧する。
+                pieces = ClampToSource(pieces, source.Length);
             }
 
             foreach (RecoveryExternal external in record.Externals)
@@ -122,6 +124,22 @@ public static class RecoveryStore
             recovery?.Release();
             source.Dispose();
             throw;
+        }
+    }
+
+    /// <summary>元データのピースを <paramref name="sourceLength"/> の範囲に収める。範囲外の部分は除く。他の種類のピースはそのまま。</summary>
+    internal static IEnumerable<Piece> ClampToSource(IEnumerable<Piece> pieces, long sourceLength)
+    {
+        foreach (Piece piece in pieces)
+        {
+            if (piece.Kind != PieceKind.Original || piece.Offset + piece.Length <= sourceLength)
+            {
+                yield return piece;
+            }
+            else if (piece.Offset < sourceLength)
+            {
+                yield return Piece.Original(piece.Offset, sourceLength - piece.Offset);
+            }
         }
     }
 

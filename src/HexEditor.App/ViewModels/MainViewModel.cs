@@ -99,12 +99,25 @@ public sealed partial class MainViewModel : ObservableObject
             return existing.IsPending && Selected is { } opened ? opened : existing;
         }
 
-        var doc = new Document(FileByteSource.Open(full), _options);
+        FileByteSource source = FileByteSource.Open(full);
+
+        // 読み取り専用で開く理由 (ENG-14 の仕様 1): 指定された、または書き込めない (読み取り専用のメディア、読み取り専用属性、書き込み権限が
+        // ない、他のアプリが書き込みのために開いている)。書き込み禁止のハンドル (ENG-15) を開く前に確かめる。
+        ReadOnlyReason reason;
+        try
+        {
+            reason = readOnly ? ReadOnlyReason.OpenedReadOnly
+                : FileWriteProbe.Probe(full, source.HasReadOnlyAttribute, TestHooks.Volumes ?? SystemVolumeInfoProvider.Instance, TestHooks.OpenForWrite);
+        }
+        catch
+        {
+            source.Dispose();
+            throw;
+        }
+
+        var doc = new Document(source, _options);
         DocumentViewModel vm = Add(doc, full, Path.GetFileName(full), insertAt);
-        // 読み取り専用で開く理由 (ENG-14 の仕様 1): 指定された、またはファイルに読み取り専用属性がある。
-        doc.SetReadOnly(readOnly ? ReadOnlyReason.OpenedReadOnly
-            : doc.Source is FileByteSource { HasReadOnlyAttribute: true } ? ReadOnlyReason.FileAttribute
-            : ReadOnlyReason.None);
+        doc.SetReadOnly(reason);
         AfterOpened(vm, restorePosition);
         return vm;
     }

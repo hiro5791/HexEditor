@@ -101,6 +101,46 @@ public sealed class RecoveryTests : IDisposable
     }
 
     [Fact]
+    public void ShortenedSourceIsRecoveredUpToItsNewLength()
+    {
+        // ENG-27 の仕様 6・受け入れ基準 4: 元のファイルが記録より短くなっていても、拒否せずに範囲内の部分を復旧する (読み取り専用で開く)。
+        string path = TestDataCatalog.Generate("TD-SEQ-1M", _dir);
+        var doc = new Document(FileByteSource.Open(path), Options());
+        var recovery = new DocumentRecovery(Root, doc.Id);
+        doc.Insert(0x10, [0xDE, 0xAD]);
+        doc.Overwrite(0x2000, [0x77]);
+        recovery.Write(DocumentRecovery.Capture(doc, 0, 0, 0)!);
+        SimulateCrash(doc, recovery);
+
+        // 起動する前に、元のファイルが 0x1000 バイトに切り詰められた。
+        byte[] original = File.ReadAllBytes(path);
+        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Write))
+        {
+            stream.SetLength(0x1000);
+        }
+
+        RestoredDocument restored = RecoveryStore.Restore(Assert.Single(RecoveryStore.Scan(Root)), Options());
+        using (Document again = restored.Document)
+        {
+            Assert.True(restored.SourceChanged);
+            // 範囲外になった元データは除き、挿入・上書きしたデータは残す (0x2000 の 77 は切り詰めた元データの後ろに来る)。
+            byte[] expected = [.. original[..0x10], 0xDE, 0xAD, .. original[0x10..0x1000], 0x77];
+            Assert.Equal(expected, Read(again.Current, 0, (int)again.Length));
+            Assert.True(again.IsModified);
+        }
+
+        restored.Recovery.Dispose();
+    }
+
+    [Fact]
+    public void ClampingDropsPiecesBeyondTheSource()
+    {
+        Piece[] pieces = [Piece.Original(0, 10), Piece.Added(0, 4), Piece.Original(10, 10), Piece.Original(30, 5)];
+        Piece[] clamped = [.. RecoveryStore.ClampToSource(pieces, 15)];
+        Assert.Equal([Piece.Original(0, 10), Piece.Added(0, 4), Piece.Original(10, 5)], clamped);
+    }
+
+    [Fact]
     public void RestoresUntitledDocumentAndLargeSpilledInput()
     {
         // 無題のドキュメントは元データなしで復元する。メモリの上限を超えて一時ファイルに退避した入力も戻る。

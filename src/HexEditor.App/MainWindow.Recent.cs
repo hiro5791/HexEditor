@@ -27,7 +27,7 @@ public sealed partial class MainWindow
         var e = new RoutedEventArgs();
         Commands.Register("file.openReadOnly", () => OpenReadOnly_Click(this, e));
         Commands.Register("file.reload", () => Reload_Click(this, e), () => NeedsDocument(NeedsFile));
-        Commands.Register("file.discardReload", () => DiscardReload_Click(this, e), () => NeedsDocument(NeedsFile));
+        Commands.Register("file.discardReload", () => DiscardReload_Click(this, e), () => NeedsDocument(NeedsDiscardableFile));
         Commands.Register("file.reopenClosed", ReopenClosedTab,
             () => Vm.ClosedTabs.Count > 0 ? CommandState.Available : CommandState.Unavailable(Loc.Get("Command_NoClosedTabs")));
         Commands.Register("file.recent.clear", () => ClearRecent_Click(this, e),

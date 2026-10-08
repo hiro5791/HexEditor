@@ -20,7 +20,7 @@ public enum ExternalChangeKind
 /// <summary>外部変更を知らせる InfoBar の種類とボタン (ENG-19 の仕様 4〜8)。</summary>
 public enum ExternalChangePrompt
 {
-    /// <summary>未編集で、自動で再読み込みする設定: 再読み込みして「外部で変更されたため再読み込みしました」(5 秒で消える)。</summary>
+    /// <summary>未編集で、自動で再読み込みする設定: 再読み込みして「外部で変更されたため再読み込みしました」(8 秒で消える。UI-36 の仕様 4)。</summary>
     AutoReload,
 
     /// <summary>「data.bin は外部で変更されました」: 再読み込み・マージ・比較・無視 (仕様 5)。未編集で自動再読み込みがオフのときもこれ。</summary>
@@ -97,15 +97,18 @@ public static class ExternalChangeRules
             _ => ExternalChangePrompt.Changed,
         };
 
-    /// <summary>InfoBar のボタン。</summary>
-    public static ExternalChangeActions ActionsFor(ExternalChangePrompt prompt, bool modified) => prompt switch
+    /// <summary>
+    /// InfoBar のボタン。<paramref name="readOnly"/> は読み取り専用のドキュメント (EDIT-16): マージは自分の変更を適用し直す編集のため
+    /// 選べない。再読み込みはデータソースを変えないため選べる (EDIT-16 の仕様 2)。
+    /// </summary>
+    public static ExternalChangeActions ActionsFor(ExternalChangePrompt prompt, bool modified, bool readOnly = false) => prompt switch
     {
         ExternalChangePrompt.AutoReload => ExternalChangeActions.None,
         ExternalChangePrompt.Mixed => ExternalChangeActions.Reload | ExternalChangeActions.SaveAs | ExternalChangeActions.Compare,
         ExternalChangePrompt.Deleted => ExternalChangeActions.SaveAs | ExternalChangeActions.Close,
 
         // 未編集なら自分の変更がないため、マージは選べない (再読み込みと同じになる)。
-        _ => modified
+        _ => modified && !readOnly
             ? ExternalChangeActions.Reload | ExternalChangeActions.Merge | ExternalChangeActions.Compare | ExternalChangeActions.Ignore
             : ExternalChangeActions.Reload | ExternalChangeActions.Compare | ExternalChangeActions.Ignore,
     };
@@ -134,13 +137,16 @@ public sealed class FileSystemChangeWatcher : IFileChangeWatcher
 
     public event Action<string>? Changed;
 
+    /// <summary>ネットワーク上のパス (UNC、ネットワークドライブの割り当て) か。テストで差し替える。既定は <see cref="RecentFileList.IsNetworkPath"/>。</summary>
+    public Func<string, bool> IsNetworkPath { get; init; } = RecentFileList.IsNetworkPath;
+
     public bool Watch(string path)
     {
         string full = Path.GetFullPath(path);
         string? folder = Path.GetDirectoryName(full);
-        if (folder is null || RecentFileList.IsNetworkPathSyntax(full))
+        if (folder is null || IsNetworkPath(full))
         {
-            // UNC のパスでは通知が届かないことがあるため、定期の確認に任せる。
+            // ネットワーク上の場所 (UNC、割り当てたネットワークドライブ) では通知が届かないことがあるため、定期の確認に任せる (仕様 1)。
             return false;
         }
 
@@ -396,9 +402,29 @@ public sealed class ExternalChangeMonitor : IDisposable
         }
     }
 
-    /// <summary>すぐに確かめる (ウィンドウのアクティブ化・タブの切り替え・定期の確認。仕様 1)。変化があれば <see cref="Detected"/>。</summary>
-    public ExternalChangeKind CheckNow(WatchedFile file)
+    /// <summary>
+    /// 知らせた変更を忘れる (処理中で扱えなかったなど。次の確認でもう一度知らせる)。基準の値は変えない。
+    /// </summary>
+    public void Forget(WatchedFile file)
     {
+        lock (_lock)
+        {
+            file.Reported = ExternalChangeKind.None;
+        }
+    }
+
+    /// <summary>
+    /// すぐに確かめる (ウィンドウのアクティブ化・タブの切り替え・定期の確認。仕様 1)。変化があれば <see cref="Detected"/>。
+    /// <paramref name="reportAgain"/> なら、すでに知らせた変更ももう一度知らせる (再読み込み (Ctrl+R) で、閉じた InfoBar をもう一度出す。
+    /// ENG-18 の仕様 1)。
+    /// </summary>
+    public ExternalChangeKind CheckNow(WatchedFile file, bool reportAgain = false)
+    {
+        if (reportAgain)
+        {
+            Forget(file);
+        }
+
         lock (_lock)
         {
             if (!_files.Contains(file) || file.IsSuspended)

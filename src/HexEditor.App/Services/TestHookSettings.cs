@@ -94,6 +94,9 @@ public sealed record VirtualSourceSpec(
 /// }
 /// </code>
 /// </summary>
+/// <summary>開くときの書き込みの確認で起こすエラー (<see cref="TestHookSettings.WriteErrors"/>)。</summary>
+public sealed record WriteErrorSpec(string Match, string Error);
+
 public sealed record TestHookSettings
 {
     public bool NoActivate { get; init; } = true;
@@ -135,6 +138,20 @@ public sealed record TestHookSettings
     /// <summary>ボリュームの空き容量の上書き (バイト数)。null なら OS の値。</summary>
     public long? FreeSpace { get; init; }
 
+    /// <summary>
+    /// 開くときの書き込みの確認 (ENG-14 の仕様 1) で起こすエラー。ファイル名 (またはパス) のパターンと、"accessDenied"・"sharingViolation"・
+    /// "writeProtect" (読み取り専用のメディア) のどれか。
+    /// </summary>
+    public IReadOnlyList<WriteErrorSpec> WriteErrors { get; init; } = [];
+
+    public WriteErrorSpec? WriteErrorFor(string path)
+    {
+        string full = Path.GetFullPath(path);
+        return WriteErrors.FirstOrDefault(s =>
+            FileSystemName.MatchesSimpleExpression(s.Match, Path.GetFileName(full))
+            || FileSystemName.MatchesSimpleExpression(s.Match, full));
+    }
+
     public FileSourceSpec? FileSourceFor(string path)
     {
         string full = Path.GetFullPath(path);
@@ -171,6 +188,9 @@ public sealed record TestHookSettings
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),
             FreeSpace = root["freeSpace"] is { } free ? ReadLong(free, 0) : null,
+            WriteErrors = root["writeErrors"]?.AsArray().Select(n => new WriteErrorSpec(
+                n!["match"]?.GetValue<string>() ?? "*",
+                n["error"]?.GetValue<string>() ?? "accessDenied")).ToList() ?? [],
         };
         return settings;
     }

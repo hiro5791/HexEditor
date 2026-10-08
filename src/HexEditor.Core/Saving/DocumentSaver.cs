@@ -61,14 +61,16 @@ public static class DocumentSaver
     /// (呼び出し側は UI スレッドで <see cref="Document.CompleteSave"/> を呼ぶ)。
     /// </summary>
     public static FileByteSource Save(DocumentSnapshot snapshot, string targetPath, LongRunningOperation? operation = null,
-        IVolumeInfoProvider? volumes = null) => Save(snapshot, targetPath, operation, volumes, null, out _);
+        IVolumeInfoProvider? volumes = null) => Save(snapshot, targetPath, operation, volumes, null, null, out _);
 
     /// <summary>
     /// 書き出す。<paramref name="backup"/> を指定すると、置き換え前のファイルの名前を変えてバックアップにする (ENG-26 の仕様 4。
     /// コピーしないため、ファイルサイズに関係なく即座に終わる)。置き場所が別のボリュームの場合はコピーする。
+    /// <paramref name="markerDirectory"/> を指定すると、一時ファイルの名前と保存先をそこに記録し (ENG-22 の仕様 7)、異常終了で残った一時ファイルを
+    /// 次回起動時に片付けられるようにする。
     /// </summary>
     public static FileByteSource Save(DocumentSnapshot snapshot, string targetPath, LongRunningOperation? operation,
-        IVolumeInfoProvider? volumes, BackupSettings? backup, out BackupOutcome? backupOutcome)
+        IVolumeInfoProvider? volumes, BackupSettings? backup, string? markerDirectory, out BackupOutcome? backupOutcome)
     {
         backupOutcome = null;
         string target = ResolveTarget(Path.GetFullPath(targetPath));
@@ -78,9 +80,18 @@ public static class DocumentSaver
         IReadOnlyList<(long Offset, long Length)>? sparse = SparseDataRanges(snapshot);
         CheckFreeSpace(volume, sparse?.Sum(r => r.Length) ?? snapshot.Length);
 
-        // バックアップの置き場所を先に空ける。作れなければ書き始めない (ENG-26 の「エラー」)。
-        string? backupPath = backup is not null && File.Exists(target) ? Backup.Rotate(target, backup) : null;
+        // バックアップを作れるかを先に確かめる。作れなければ書き始めない (ENG-26 の「エラー」)。別のボリュームに置く場合はコピーになるため、
+        // 置き場所の空き容量も確かめる。既存のバックアップの世代をずらすのは、一時ファイルを書き終えて置き換える直前 (書き出しに失敗・
+        // キャンセルしても、前のバックアップは残る)。
+        string? backupPath = null;
+        if (backup is not null && File.Exists(target))
+        {
+            string first = Backup.PathFor(target, backup);
+            backupPath = Backup.Prepare(target, backup, volumes, Backup.SameVolume(target, first) ? 0 : new FileInfo(target).Length);
+        }
+
         string temp = Path.Combine(folder, $".{Path.GetFileName(target)}.~hex{RandomNumberGenerator.GetHexString(8, lowercase: true)}.tmp");
+        SaveTempMarker marker = SaveTempMarker.Record(markerDirectory, temp, target);
         try
         {
             WriteTemp(snapshot, temp, sparse, operation);
@@ -93,7 +104,11 @@ public static class DocumentSaver
                 {
                     // 置き換え前のファイルの名前を変えてバックアップにする。Undo 用に開いているハンドルはバックアップを指す。
                     string renamedTo = backupPath;
-                    TimeSpan time = Backup.Measure(() => File.Replace(temp, target, renamedTo, ignoreMetadataErrors: true));
+                    TimeSpan time = Backup.Measure(() =>
+                    {
+                        Backup.Rotate(target, backup!);
+                        File.Replace(temp, target, renamedTo, ignoreMetadataErrors: true);
+                    });
                     backupOutcome = new BackupOutcome(renamedTo, time);
                 }
                 else
@@ -101,7 +116,7 @@ public static class DocumentSaver
                     if (backupPath is not null)
                     {
                         string copyTo = backupPath;
-                        TimeSpan time = Backup.Measure(() => Backup.Copy(target, copyTo, operation));
+                        TimeSpan time = Backup.Measure(() => Backup.CreateByCopy(target, backup!, operation));
                         backupOutcome = new BackupOutcome(copyTo, time);
                     }
 
@@ -115,10 +130,20 @@ public static class DocumentSaver
         }
         catch
         {
-            TryDelete(temp);
+            // 一時ファイルを消せなければ記録を残す (次回起動時に削除を提案する)。
+            if (TryDelete(temp))
+            {
+                marker.Dispose();
+            }
+            else
+            {
+                marker.Keep();
+            }
+
             throw;
         }
 
+        marker.Dispose();
         return FileByteSource.Open(target);
     }
 
@@ -329,18 +354,17 @@ public static class DocumentSaver
         return path;
     }
 
-    private static void TryDelete(string path)
+    /// <summary>消す。消せなければ false (残った一時ファイルは次回起動時の復旧の画面で片付ける。ENG-27 の仕様 7)。</summary>
+    private static bool TryDelete(string path)
     {
         try
         {
             File.Delete(path);
+            return !File.Exists(path);
         }
-        catch (IOException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // 残った一時ファイルは次回起動時の復旧処理 (ENG-27) で片付ける。
-        }
-        catch (UnauthorizedAccessException)
-        {
+            return false;
         }
     }
 }

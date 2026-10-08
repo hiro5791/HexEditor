@@ -38,11 +38,12 @@ public sealed partial class Document
 
     /// <summary>
     /// 変更を破棄して再読み込み (データソースが外部で変更されていない場合。ENG-18 の仕様 3): 今の元データ全体を指す状態を
-    /// 1 つの Undo 単位として積み、その状態を「保存した時点」にする。Ctrl+Z で破棄の前に戻せる。
+    /// 1 つの Undo 単位として積み、その状態を「保存した時点」にする。Ctrl+Z で破棄の前に戻せる。データソースを変えないため、読み取り専用の
+    /// ドキュメントでもできる (EDIT-16 の仕様 2)。処理中 (ENG-09 の仕様 7) は <see cref="DocumentLockedException"/>。
     /// </summary>
     public void DiscardChanges(string description = DiscardDescription)
     {
-        RequireEditable();
+        RequireNotLocked();
         long length = Source.Length;
         PieceTree tree = length > 0 ? PieceTree.FromPiece(Piece.Original(0, length)) : PieceTree.Empty;
         long before = Length;
@@ -60,11 +61,12 @@ public sealed partial class Document
     /// <summary>
     /// 外部で変更されたデータソースに差し替えて読み直す (ENG-18 の仕様 3 の後半、ENG-19 の「再読み込み」・未編集の自動の再読み込み)。
     /// すべての変更を捨て、Undo 履歴を消去する (元に戻せない)。以前の元データは、参照している範囲 (他のタブ・クリップボード) が
-    /// 手放されるか閉じるまで開いたままにする。
+    /// 手放されるか閉じるまで開いたままにする。読み取り専用のドキュメントでもできる (他のアプリが書き換えたファイルを読み直す。EDIT-16 の
+    /// 仕様 2、ENG-14 の受け入れ基準 4)。処理中 (ENG-09 の仕様 7) は <see cref="DocumentLockedException"/> (呼び出し側は処理の後に回す)。
     /// </summary>
     public void ReplaceSource(IByteSource source)
     {
-        RequireEditable();
+        RequireNotLocked();
         _storage = CreateStorage(source, _storage.AddBuffer);
         PieceTree tree = source.Length > 0 ? PieceTree.FromPiece(Piece.Original(0, source.Length)) : PieceTree.Empty;
         History.Reset(new DocumentSnapshot(_storage, tree));
@@ -81,7 +83,8 @@ public sealed partial class Document
     /// マージ (ENG-19 の仕様 5): 新しいデータソースを元データとし、自分の変更を同じオフセットに適用し直す。変更していない部分 (元データの
     /// ピース) は新しいデータソースの同じ位置を指すようにし、挿入・上書きしたデータはそのまま残す。新しいデータソースが長い場合は、
     /// 伸びた分を末尾に加える。短い場合は、範囲外になった部分を除く。1 つの Undo 単位として記録する (Ctrl+Z でマージの前に戻る)。
-    /// 処理は編集の数 (ピースの数) に比例し、ファイルサイズには依存しない。
+    /// 処理は編集の数 (ピースの数) に比例し、ファイルサイズには依存しない。自分の変更を適用し直す編集のため、読み取り専用・処理中は
+    /// できない (<see cref="DocumentReadOnlyException"/>・<see cref="DocumentLockedException"/>)。
     /// </summary>
     public MergeResult MergeOnto(IByteSource source, string description = MergeDescription)
     {
@@ -125,6 +128,16 @@ public sealed partial class Document
         UpdateLock();
         Changed?.Invoke(this, new DocumentChangedEventArgs(0, before, tree.Length, isWholeDocument: true, DocumentChangeKind.Reloaded));
         return new MergeResult(oldLength, newLength);
+    }
+
+    /// <summary>閉じた後・処理中 (ENG-09 の仕様 7) なら例外。読み取り専用かどうかは問わない (再読み込み・変更の破棄)。</summary>
+    private void RequireNotLocked()
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (IsEditLocked)
+        {
+            throw new DocumentLockedException();
+        }
     }
 
     /// <summary>外部参照のピースの番号を保つため、表を写す (番号は変えない)。</summary>

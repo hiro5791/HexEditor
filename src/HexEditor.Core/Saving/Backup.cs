@@ -53,6 +53,44 @@ public static class Backup
         Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(Path.GetFullPath(path).ToUpperInvariant())), 0, 4).ToLowerInvariant();
 
     /// <summary>
+    /// 保存を始める前に、バックアップを作れるかを確かめる (「エラー」: 作れない場合は保存を始めない)。置き場所のフォルダを作り
+    /// (なければ)、書き込めるかを小さなファイルを作って確かめ、コピーで作る場合 (<paramref name="copyBytes"/> &gt; 0。その場保存・別の
+    /// ボリュームの置き場所) は置き場所の空き容量を確かめる (ENG-25 の余裕 16 MiB を含む)。既存のバックアップには触れない (世代をずらすのは
+    /// 書き出しの後の <see cref="Rotate"/>)。作れなければ <see cref="BackupFailedException"/>。1 世代目のパスを返す。
+    /// </summary>
+    public static string Prepare(string target, BackupSettings settings, IVolumeInfoProvider? volumes = null, long copyBytes = 0)
+    {
+        string first = PathFor(target, settings);
+        string folder = Path.GetDirectoryName(first)!;
+        try
+        {
+            Directory.CreateDirectory(folder);
+            string probe = Path.Combine(folder, $".~hexbak{RandomNumberGenerator.GetHexString(8, lowercase: true)}.tmp");
+            using (new FileStream(probe, FileMode.CreateNew, FileAccess.Write, FileShare.None, 1, FileOptions.DeleteOnClose))
+            {
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            throw new BackupFailedException(ex.Message, ex);
+        }
+
+        if (copyBytes > 0)
+        {
+            try
+            {
+                DocumentSaver.CheckFreeSpace(folder, copyBytes, volumes);
+            }
+            catch (InsufficientSpaceException ex)
+            {
+                throw new BackupFailedException(ex.Message, ex);
+            }
+        }
+
+        return first;
+    }
+
+    /// <summary>
     /// 世代を 1 つずらして、1 世代目の名前を空ける (仕様 3: 古いものから削除する)。<c>.bak</c> → <c>.bak2</c> → … とし、世代数を超える
     /// ものは消す。置き場所のフォルダがなければ作る。できなければ <see cref="BackupFailedException"/> (保存を始めない)。
     /// </summary>
@@ -78,6 +116,28 @@ public static class Backup
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             throw new BackupFailedException(ex.Message, ex);
+        }
+    }
+
+    /// <summary>
+    /// ファイル全体をコピーしてバックアップにする (その場保存・別のボリュームの置き場所。仕様 5)。まず置き場所の一時ファイルにコピーし、
+    /// コピーが終わってから世代をずらして 1 世代目の名前にする (コピーに失敗・キャンセルしても既存のバックアップは残る)。1 世代目のパスを返す。
+    /// </summary>
+    public static string CreateByCopy(string target, BackupSettings settings, LongRunningOperation? operation = null)
+    {
+        string first = PathFor(target, settings);
+        string staging = $"{first}.~hex{RandomNumberGenerator.GetHexString(8, lowercase: true)}.tmp";
+        Copy(target, staging, operation);
+        try
+        {
+            Rotate(target, settings);
+            File.Move(staging, first, overwrite: true);
+            return first;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            TryDelete(staging);
+            throw ex as BackupFailedException ?? new BackupFailedException(ex.Message, ex);
         }
     }
 
@@ -140,6 +200,17 @@ public static class Backup
         long start = Stopwatch.GetTimestamp();
         action();
         return Stopwatch.GetElapsedTime(start);
+    }
+
+    private static void TryDelete(string path)
+    {
+        try
+        {
+            File.Delete(path);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+        }
     }
 
     private static void DeleteIfExists(string path)

@@ -71,11 +71,13 @@ public sealed partial class MainWindow
         {
             DocumentViewModel doc = Vm.Open(path, insertAt, readOnly, restorePosition);
             AppLog.Debug($"Opened {path}");
-            if (doc.Document.ReadOnlyReason == Core.Engine.ReadOnlyReason.FileAttribute)
+            if (OpenedReadOnlyNoticeKey(doc.Document.ReadOnlyReason) is { } key)
             {
-                // 読み取り専用属性: 理由と「編集を許可する」を出す (ENG-14 の仕様 1、EDIT-16 の仕様 3)。
-                ShowNotice(Loc.Get("Notice_OpenedReadOnlyAttribute"), InfoBarSeverity.Informational, doc,
-                    actions: [new Core.Notifications.NotificationAction(Loc.Get("ReadOnly_AllowEdit"), () => _ = AllowEditAsync(doc))]);
+                // 書き込めないため読み取り専用で開いた: 理由と、解除できる場合は「編集を許可する」を出す (ENG-14 の仕様 1、ENG-11 の「エラー」、
+                // EDIT-16 の仕様 3)。読み取り専用のメディアは解除できない。
+                ShowNotice(Loc.Get(key), InfoBarSeverity.Informational, doc,
+                    actions: doc.Document.ReadOnlyRelease == Core.Engine.ReadOnlyRelease.NotAllowed ? null
+                        : [new Core.Notifications.NotificationAction(Loc.Get("ReadOnly_AllowEdit"), () => _ = AllowEditAsync(doc))]);
             }
 
             return doc;
@@ -102,6 +104,16 @@ public sealed partial class MainWindow
 
         return null;
     }
+
+    /// <summary>書き込めないため読み取り専用で開いたときの InfoBar の文言のキー。理由を示す必要がなければ null。</summary>
+    private static string? OpenedReadOnlyNoticeKey(Core.Engine.ReadOnlyReason reason) => reason switch
+    {
+        Core.Engine.ReadOnlyReason.FileAttribute => "Notice_OpenedReadOnlyAttribute",
+        Core.Engine.ReadOnlyReason.AccessDenied => "Notice_OpenedReadOnly_AccessDenied",
+        Core.Engine.ReadOnlyReason.SharingViolation => "Notice_OpenedReadOnly_SharingViolation",
+        Core.Engine.ReadOnlyReason.ReadOnlyMedia => "Notice_OpenedReadOnly_ReadOnlyMedia",
+        _ => null,
+    };
 
     /// <summary>
     /// 「サイズを指定して新規作成」(ENG-10 の仕様 2): サイズ (入力式) と塗りつぶしの値 (Hex バイト列) を入力する。
@@ -206,27 +218,30 @@ public sealed partial class MainWindow
             return Task.FromResult(true);
         }
 
-        if (doc.Document.ReadOnlyReason == Core.Engine.ReadOnlyReason.FileAttribute)
+        // 読み取り専用属性があるファイルは、理由 (「読み取り専用で開く」で開いた場合も) に関係なく、承認したら保存時に属性を外す。
+        // 属性があると書き込み用には開けないため、開けるかは確かめない。
+        if (file.HasReadOnlyAttribute)
         {
             file.ApproveWriting();
             return Task.FromResult(true);
         }
 
-        try
+        // 書き込み用に開けるか (開くときと同じ確認。ENG-14 の仕様 1)。開けなければ理由を示して読み取り専用のままにする (EDIT-16 の仕様 4)。
+        Core.Engine.ReadOnlyReason blocker = Core.Sources.FileWriteProbe.Probe(file.Path, hasReadOnlyAttribute: false,
+            TestHooks.Volumes ?? Core.Saving.SystemVolumeInfoProvider.Instance, TestHooks.OpenForWrite);
+        string? message = blocker switch
         {
-            using Microsoft.Win32.SafeHandles.SafeFileHandle handle =
-                File.OpenHandle(file.Path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite | FileShare.Delete);
+            Core.Engine.ReadOnlyReason.None => null,
+            Core.Engine.ReadOnlyReason.SharingViolation => Loc.Format("ReadOnly_ReleaseFailed_SharingViolation", doc.DisplayName),
+            Core.Engine.ReadOnlyReason.ReadOnlyMedia => Loc.Get("ReadOnly_CannotRelease_ReadOnlyMedia"),
+            _ => Loc.Format("ReadOnly_ReleaseFailed_AccessDenied", doc.DisplayName),
+        };
+        if (message is null)
+        {
             return Task.FromResult(true);
         }
-        catch (UnauthorizedAccessException)
-        {
-            ShowNotice(Loc.Format("Error_AccessDenied", doc.DisplayName), InfoBarSeverity.Error, doc);
-        }
-        catch (IOException ex)
-        {
-            ShowNotice(Loc.Format("Error_Open", doc.DisplayName, ex.Message), InfoBarSeverity.Error, doc);
-        }
 
+        ShowNotice(message, InfoBarSeverity.Error, doc);
         return Task.FromResult(false);
     }
 }
