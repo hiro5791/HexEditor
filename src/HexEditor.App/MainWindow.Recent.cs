@@ -1,3 +1,4 @@
+using HexEditor.App.Commands;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Files;
@@ -5,9 +6,7 @@ using HexEditor.Core.Notifications;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Input;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.System;
 
 namespace HexEditor.App;
 
@@ -19,17 +18,28 @@ public sealed partial class MainWindow
 {
     private readonly List<MenuFlyoutItemBase> _recentMenuItems = [];
 
-    /// <summary>Ctrl+Shift+T をウィンドウ全体のキーにする (サブメニューの中の項目のキーはサブメニューを開くまで働かないため)。</summary>
-    private void InitializeRecentKeys()
+    /// <summary>
+    /// ファイルの記録のコマンド (UI-16): 読み取り専用で開く、再読み込み (ENG-18)、閉じたタブを開き直す (UI-12)、最近使ったファイル (UI-32)、
+    /// 前回のセッションの復元 (UI-30)。キー (Ctrl+R、Ctrl+Shift+T) は KeyDispatcher が振り分ける。
+    /// </summary>
+    private void RegisterFilesCommands()
     {
-        var reopen = new KeyboardAccelerator { Key = VirtualKey.T, Modifiers = VirtualKeyModifiers.Control | VirtualKeyModifiers.Shift };
-        reopen.Invoked += (_, e) =>
-        {
-            e.Handled = true;
-            ReopenClosedTab();
-        };
-        Root.KeyboardAccelerators.Add(reopen);
+        var e = new RoutedEventArgs();
+        Commands.Register("file.openReadOnly", () => OpenReadOnly_Click(this, e));
+        Commands.Register("file.reload", () => Reload_Click(this, e), () => NeedsDocument(NeedsFile));
+        Commands.Register("file.discardReload", () => DiscardReload_Click(this, e), () => NeedsDocument(NeedsFile));
+        Commands.Register("file.reopenClosed", ReopenClosedTab,
+            () => Vm.ClosedTabs.Count > 0 ? CommandState.Available : CommandState.Unavailable(Loc.Get("Command_NoClosedTabs")));
+        Commands.Register("file.recent.clear", () => ClearRecent_Click(this, e),
+            () => Vm.Recent.Items.Any(i => !i.Pinned) ? CommandState.Available : CommandState.Unavailable(Loc.Get("Command_NoRecentFiles")));
+        Commands.Register("file.recent.showAll", () => ShowAllRecent_Click(this, e));
+        Commands.Register("window.restoreSession", RestorePreviousSession,
+            () => _startupSession.HasRestorableTabs ? CommandState.Available : CommandState.Unavailable(Loc.Get("Command_NoSession")));
     }
+
+    /// <summary>ファイルから開いた文書だけが対象のコマンドの、使えない理由。</summary>
+    private static string? NeedsFile(DocumentViewModel doc) =>
+        doc.FilePath is null || doc.IsMissing ? Loc.Get("Command_NoFile") : null;
 
     /// <summary>サブメニュー: ピン留めした項目と最近の 10 件 (UI-32 の仕様 3)。各項目はファイル名と短縮したパス、ツールチップに完全なパス。</summary>
     private void RebuildRecentMenu()
@@ -124,8 +134,6 @@ public sealed partial class MainWindow
 
         UpdateTitle();
     }
-
-    private void ReopenClosedTab_Click(object sender, RoutedEventArgs e) => ReopenClosedTab();
 
     /// <summary>閉じたタブを開き直す (UI-12)。見つからないファイルは「&lt;名前&gt; は見つかりませんでした」と示して次を開く。</summary>
     public void ReopenClosedTab()

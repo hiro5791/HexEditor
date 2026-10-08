@@ -74,8 +74,22 @@ public partial class App : Application
         TestHooks.BeforeLaunch();
 
         // 設定 (UI-23)。アクセントカラーはリソースが参照される前に上書きする (UI-27)。
-        Settings = new SettingsStore(env.Locations.Settings);
+        // $schema は同梱の settings.schema.json を指す (UI-23 の仕様 3、8。アプリの場所が変わっても書くたびに今の場所にする)。
+        Settings = new SettingsStore(env.Locations.Settings, new Uri(Path.Combine(AppContext.BaseDirectory, SettingsSchema.FileName)).AbsoluteUri);
         SettingsLoadStatus settingsStatus = Settings.Load();
+
+        // 初回起動では $schema と $schemaVersion だけの settings.json を作る (UI-23 の受け入れ基準 1)。
+        if (settingsStatus == SettingsLoadStatus.Ok && !File.Exists(Settings.PathName))
+        {
+            try
+            {
+                Settings.SaveNow();
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warning($"settings.json not created: {ex.Message}");
+            }
+        }
         AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
         CrashReporter.WriteMiniDump = Settings.GetBool(CrashReporter.MiniDumpKey, false);
         AppLog.Initialize(env.Locations.Logs);
@@ -89,6 +103,8 @@ public partial class App : Application
         {
             TempDirectory = custom.Length > 0 ? Path.Combine(custom, "HexEditor", "recovery") : env.Locations.Recovery,
         };
+        // コマンド・キー割り当て・状態 (UI-16〜UI-21、UI-23 の state.json)。
+        Commands.CommandService.Initialize(env.Locations.Settings);
         var vm = new MainViewModel(new OperationCenter(TestHooks.Time), new EngineMemory(), options, env.Locations.Recovery);
 
         // 最近使ったファイル・前回の位置・セッション・初回起動の状態 (ENG-16、UI-31、UI-38)。ポータブル版では exe と同じドライブの
@@ -100,17 +116,23 @@ public partial class App : Application
                 env.Distribution == Distribution.Portable ? new Core.Files.RecentPathMapper(exeFolder) : null),
             Documents = new Core.Files.DocumentDataStore(env.Locations.Documents),
             Session = new Core.Files.SessionStore(env.Locations.Settings),
-            State = new Core.Files.AppStateStore(env.Locations.Settings),
+            State = new Core.Files.AppStateStore(Commands.CommandService.State),
             Watcher = new Core.Files.FileSystemChangeWatcher(),
             RestorePosition = () => FileSettings.RestorePosition(Settings),
         };
-        files.State.Load();
         vm.InitializeFiles(files, FileSettings.RecentMaxItems(Settings));
         vm.BackupSettings = FileSettings.Backup(Settings);
+
+        // コマンドパレットの「ファイル」モードの候補 (UI-17 の仕様 2、UI-32)。
+        MainWindow.PaletteRecentFiles = () => vm.Recent.Items.Select(i => new PaletteRecentFile(i.DisplayName, i.Path));
+
+        // パネル (UI-05) の登録。ウィンドウを作る前に行う。
+        MainWindow.RegisterHashPanel();
         var window = new MainWindow(vm);
         Window = window;
         window.ApplyAppearance();
         window.ShowSettingsStatus(settingsStatus);
+        window.ShowKeybindingsStatus();
         DispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
         AppLog.Info($"Started {env.AppVersion} ({env.Distribution}, {System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture})");
 

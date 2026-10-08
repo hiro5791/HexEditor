@@ -1,3 +1,4 @@
+using HexEditor.App.Commands;
 using HexEditor.App.Controls;
 using HexEditor.App.Hosting;
 using HexEditor.App.Services;
@@ -103,6 +104,12 @@ public sealed partial class MainWindow
             return;
         }
 
+        // パネルの配置を戻す (UI-31 の仕様 1。記録がなければ最後に閉じたウィンドウの配置のまま。UI-05 の仕様 7)。
+        if (window.Panels is { ValueKind: System.Text.Json.JsonValueKind.Object } panels)
+        {
+            RestorePanelLayout(System.Text.Json.Nodes.JsonNode.Parse(panels.GetRawText()));
+        }
+
         SessionWindow tabs = StartupPlanner.WithoutRecovered(window, exclude);
         Vm.RestoreTabs(
             tabs,
@@ -135,6 +142,9 @@ public sealed partial class MainWindow
             Maximized = maximized,
             FullScreen = AppWindow.Presenter.Kind == AppWindowPresenterKind.FullScreen,
             Monitor = DisplayArea.GetFromWindowId(AppWindow.Id, DisplayAreaFallback.Nearest)?.DisplayId.Value.ToString(System.Globalization.CultureInfo.InvariantCulture),
+
+            // パネルの配置と大きさ (UI-05、UI-31 の仕様 1)。
+            Panels = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(PanelLayoutJson.ToJsonString()),
         };
     }
 
@@ -201,7 +211,7 @@ public sealed partial class MainWindow
         StartPage.SetChoices(
             App.Settings.GetString(LanguageKey, "system"),
             App.Settings.GetString(Appearance.ThemeKey, Appearance.ThemeDefault),
-            ShortcutPreset.Get(Program.Environment.Locations.Settings));
+            CommandService.Keys.Preset);
 
         // 何も選ばずにファイルを開いても「はじめに」は消える (仕様 3)。
         Vm.Documents.CollectionChanged += (_, e) =>
@@ -221,10 +231,7 @@ public sealed partial class MainWindow
     private void DismissWelcome()
     {
         StartPage.ViewModel.ShowWelcome = false;
-        if (Vm.Files?.State.DismissWelcome() is { } error)
-        {
-            AppLog.Warning($"state.json was not written: {error}");
-        }
+        Vm.Files?.State.DismissWelcome();
     }
 
     /// <summary>「はじめに」の選択を設定に書く (表示言語は再起動で反映。テーマはすぐに反映)。</summary>
@@ -241,9 +248,10 @@ public sealed partial class MainWindow
                 ApplyAppearance();
                 break;
             case "preset":
-                if (ShortcutPreset.Set(Program.Environment.Locations.Settings, value) is { } error)
+                // キー割り当て (UI-18、UI-19) の仕組みで切り替える。利用者が個別に変えた割り当ては保つ。keybindings.json は自動で書かれる。
+                if (value != CommandService.Keys.Preset)
                 {
-                    AppLog.Warning($"keybindings.json was not written: {error}");
+                    CommandService.Keys.SwitchPreset(value, preferUser: true);
                 }
 
                 break;
@@ -255,6 +263,7 @@ public sealed partial class MainWindow
     {
         StartPage.ViewModel.SetRecent(Vm.Recent.MenuEntries(), action => DispatcherQueue.TryEnqueue(() => action()));
         RebuildRecentMenu();
+        RefreshCommandUi();
     }
 
     // ---- 見つからないファイルのタブ (UI-31 の「エラー」) ----

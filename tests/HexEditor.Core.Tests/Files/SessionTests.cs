@@ -110,14 +110,16 @@ public sealed class SessionTests : IDisposable
     [Fact]
     public void WelcomeIsShownUntilDismissed()
     {
-        var state = new AppStateStore(_dir);
-        state.Load();
+        using var store = new HexEditor.Core.Settings.StateStore(_dir);
+        store.Load();
+        var state = new AppStateStore(store);
         Assert.True(state.IsFirstRun);
         Assert.False(state.WelcomeDismissed);
-        Assert.Null(state.DismissWelcome());
+        state.DismissWelcome();
 
-        var again = new AppStateStore(_dir);
-        again.Load();
+        using var reloaded = new HexEditor.Core.Settings.StateStore(_dir);
+        reloaded.Load();
+        var again = new AppStateStore(reloaded);
         Assert.False(again.IsFirstRun);
         Assert.True(again.WelcomeDismissed);
     }

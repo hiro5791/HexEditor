@@ -64,6 +64,24 @@ public sealed class HashPanelTests
     });
 
     [Fact]
+    public Task Hash_panel_opens_in_the_right_panel_and_toggles_from_the_view_menu() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ANA-CHECK9")] });
+
+        // 解析 > ハッシュ: パネルの枠 (UI-05) の右の領域に開く (ANA-18 の「画面」: 既定は右)。
+        await app.CommandAsync("Command_Hash");
+        await app.WaitUntilAsync(async () => (await HashAsync(app))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the hash panel");
+        Assert.Equal("right", (await HashAsync(app))["location"]?.GetValue<string>());
+        await app.WaitForAsync("HashPanel");
+
+        // 表示 > パネルの表示切り替え > ハッシュ (view.panel.hash) で閉じ、もう一度で開く。
+        await app.SendAsync("execute", new JsonObject { ["id"] = "view.panel.hash" });
+        await app.WaitUntilAsync(async () => !(await HashAsync(app))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the hash panel to close");
+        await app.SendAsync("execute", new JsonObject { ["id"] = "view.panel.hash" });
+        await app.WaitUntilAsync(async () => (await HashAsync(app))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the hash panel to reopen");
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-ANA-18-05")]
     public Task Selections_over_64_MB_are_not_recalculated_automatically() => UiTestContext.RunAsync(async ctx =>
     {

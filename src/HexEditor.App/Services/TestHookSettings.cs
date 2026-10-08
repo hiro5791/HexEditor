@@ -22,6 +22,15 @@ public enum KillPoint
 
     /// <summary>その場保存 (ENG-23) で、ジャーナルを書いた後、ファイルに書き込む前。</summary>
     InPlaceAfterJournal,
+
+    /// <summary>設定ファイルの書き込み (UI-23 の仕様 5) で、一時ファイルに半分まで書いた時点 (TD-UI-HOOK-KILL-SETTINGS-TEMP)。</summary>
+    SettingsTemp,
+
+    /// <summary>設定ファイルの書き込みで、一時ファイルを書き終えて置き換える直前。</summary>
+    SettingsBeforeReplace,
+
+    /// <summary>設定ファイルの書き込みで、置き換えた直後。</summary>
+    SettingsAfterReplace,
 }
 
 /// <summary>未処理の例外を起こす場所 (テスト方針 7.2「未処理の例外」)。</summary>

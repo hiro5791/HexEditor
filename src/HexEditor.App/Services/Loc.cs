@@ -30,6 +30,39 @@ public static class Loc
 #endif
     }
 
+    /// <summary>キーがなければ null (実行時に登録されたコマンドの別名など、ないことがある文字列)。</summary>
+    public static string? TryGet(string key)
+    {
+        string value = Loader.GetString(key);
+        return string.IsNullOrEmpty(value) ? null : value;
+    }
+
+    private static Dictionary<string, string>? _english;
+
+    /// <summary>
+    /// 英語の文字列 (コマンドの英語名での検索など。UI-16、UI-17 の仕様 4)。なければ null。表示言語を固定した後の MRT は
+    /// 別の言語の値を返さないため、英語の .resw をアセンブリに埋め込んで読む。キーの形は Loc.Get と同じ (<c>名前/属性</c>)。
+    /// </summary>
+    public static string? English(string key)
+    {
+        if (_english is null)
+        {
+            var english = new Dictionary<string, string>(StringComparer.Ordinal);
+            using Stream? stream = typeof(Loc).Assembly.GetManifestResourceStream("HexEditor.Strings.en.resw");
+            if (stream is not null)
+            {
+                foreach (System.Xml.Linq.XElement data in System.Xml.Linq.XDocument.Load(stream).Root!.Elements("data"))
+                {
+                    english[data.Attribute("name")!.Value.Replace('.', '/')] = data.Element("value")?.Value ?? string.Empty;
+                }
+            }
+
+            _english = english;
+        }
+
+        return _english.GetValueOrDefault(key.Replace('.', '/'));
+    }
+
     public static string Format(string key, params object[] args) =>
         string.Format(System.Globalization.CultureInfo.CurrentCulture, Get(key), args);
 }

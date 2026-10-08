@@ -88,7 +88,7 @@ public sealed partial class MainWindow
             ["windowBounds"] = $"{AppWindow.Position.X},{AppWindow.Position.Y},{AppWindow.Size.Width},{AppWindow.Size.Height}",
             ["theme"] = App.Settings.GetString(Appearance.ThemeKey, Appearance.ThemeDefault),
             ["language"] = App.Settings.GetString(LanguageKey, "system"),
-            ["preset"] = ShortcutPreset.Get(Hosting.Program.Environment.Locations.Settings),
+            ["preset"] = HexEditor.App.Commands.CommandService.Keys.Preset,
         };
     }
 

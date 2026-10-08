@@ -18,9 +18,7 @@ public sealed partial class HashPanel : UserControl
     {
         ViewModel = viewModel;
         InitializeComponent();
-        AutomationProperties.SetName(this, Loc.Get("Hash_Title/Text"));
-        AutomationProperties.SetName(CloseButton, Loc.Get("Hash_Close_Name"));
-        ToolTipService.SetToolTip(CloseButton, Loc.Get("Hash_Close_Name"));
+        AutomationProperties.SetName(this, Loc.Get("Panel_Hash_Title"));
         TargetChoice.SelectedIndex = (int)viewModel.TargetKind;
         ViewModel.PropertyChanged += (_, e) =>
         {
@@ -37,9 +35,6 @@ public sealed partial class HashPanel : UserControl
     }
 
     public HashPanelViewModel ViewModel { get; }
-
-    /// <summary>パネルを閉じた (エディタにフォーカスを戻すため)。</summary>
-    public event EventHandler? Closed;
 
     /// <summary>「計算」ボタンを強調表示しているか (テスト用の状態の表示にも使う)。</summary>
     public bool IsComputeHighlighted => ViewModel.ComputeHighlighted;
@@ -74,8 +69,6 @@ public sealed partial class HashPanel : UserControl
 
     private void UpdateComputeStyle() =>
         ComputeButton.Style = ViewModel.ComputeHighlighted ? (Style)Application.Current.Resources["AccentButtonStyle"] : null;
-
-    private void Close_Click(object sender, RoutedEventArgs e) => Closed?.Invoke(this, EventArgs.Empty);
 
     private void TargetChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {

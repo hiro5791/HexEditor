@@ -1,0 +1,226 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HexEditor settings.json",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "$schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "diagnostics.writeMiniDump": {
+      "description": "Save a memory dump on crash",
+      "type": "boolean",
+      "default": false
+    },
+    "files.autoReloadUnmodified": {
+      "description": "Reload unmodified files automatically",
+      "type": "boolean",
+      "default": true
+    },
+    "hash.algorithms": {
+      "description": "Hash algorithms",
+      "type": "string",
+      "default": ""
+    },
+    "hash.autoRecompute": {
+      "description": "Recalculate hashes automatically",
+      "type": "boolean",
+      "default": true
+    },
+    "hash.sets": {
+      "description": "Hash algorithm sets",
+      "type": "string",
+      "default": ""
+    },
+    "log.level": {
+      "description": "Log level",
+      "type": "string",
+      "enum": [
+        "info",
+        "debug"
+      ],
+      "default": "info"
+    },
+    "recent.maxItems": {
+      "description": "Number of recent files",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 25
+    },
+    "recent.restorePosition": {
+      "description": "Restore the last position",
+      "type": "boolean",
+      "default": true
+    },
+    "save.backup.enabled": {
+      "description": "Make a backup when saving",
+      "type": "boolean",
+      "default": false
+    },
+    "save.backup.folder": {
+      "description": "Backup folder",
+      "type": "string",
+      "default": ""
+    },
+    "save.backup.generations": {
+      "description": "Backups to keep",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 1
+    },
+    "save.backup.location": {
+      "description": "Backup location",
+      "type": "string",
+      "enum": [
+        "sameFolder",
+        "folder"
+      ],
+      "default": "sameFolder"
+    },
+    "save.recoveryIntervalMinutes": {
+      "description": "Recovery data interval (minutes)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60,
+      "default": 1
+    },
+    "session.restoreOnStartup": {
+      "description": "On startup",
+      "type": "string",
+      "enum": [
+        "always",
+        "ask",
+        "never"
+      ],
+      "default": "always"
+    },
+    "storage.tempDirectory": {
+      "description": "Folder for temporary data",
+      "type": "string",
+      "default": ""
+    },
+    "ui.backdrop": {
+      "description": "Window background",
+      "type": "string",
+      "enum": [
+        "mica",
+        "micaAlt",
+        "none"
+      ],
+      "default": "mica"
+    },
+    "ui.language": {
+      "description": "Display language",
+      "type": "string",
+      "enum": [
+        "system",
+        "en",
+        "zh-Hans",
+        "zh-Hant",
+        "ja",
+        "ko",
+        "id",
+        "vi",
+        "th",
+        "de",
+        "fr",
+        "es",
+        "pt",
+        "it",
+        "ru",
+        "uk",
+        "pl",
+        "cs",
+        "hu",
+        "ro",
+        "el",
+        "ar",
+        "tr",
+        "fa"
+      ],
+      "default": "system"
+    },
+    "ui.statusBar.items": {
+      "description": "Status bar items",
+      "type": "string",
+      "default": ""
+    },
+    "ui.statusBar.visible": {
+      "description": "Show status bar",
+      "type": "boolean",
+      "default": true
+    },
+    "ui.theme": {
+      "description": "Theme",
+      "type": "string",
+      "enum": [
+        "system",
+        "light",
+        "dark"
+      ],
+      "default": "system"
+    },
+    "ui.toolbar.items": {
+      "description": "Toolbar buttons",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "file.new",
+        "file.open",
+        "file.save",
+        "edit.undo",
+        "edit.redo",
+        "edit.cut",
+        "edit.copy",
+        "edit.paste",
+        "search.find",
+        "go.goTo",
+        "edit.toggleInsert",
+        "view.panel.inspector"
+      ]
+    },
+    "ui.toolbar.visible": {
+      "description": "Show toolbar",
+      "type": "boolean",
+      "default": false
+    },
+    "view.cursor.nibbleArrowKeys": {
+      "description": "Move by nibble with arrow keys",
+      "type": "boolean",
+      "default": false
+    },
+    "view.jump.position": {
+      "description": "Position after a jump",
+      "type": "string",
+      "enum": [
+        "top",
+        "third",
+        "center"
+      ],
+      "default": "third"
+    },
+    "view.scroll.cursorMargin": {
+      "description": "Rows kept above and below the cursor",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10,
+      "default": 0
+    },
+    "view.statusBar.showNibble": {
+      "description": "Show nibble position",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "$schemaVersion"
+  ],
+  "additionalProperties": true
+}

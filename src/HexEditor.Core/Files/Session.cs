@@ -286,48 +286,34 @@ public static class StartupPlanner
 }
 
 /// <summary>
-/// state.json (UI-23 の仕様 1): ダイアログの「次回から表示しない」などのアプリの状態。ここでは初回起動の「はじめに」(UI-38) を閉じたか。
-/// 知らない項目は捨てずに残す。
+/// 初回起動の状態 (UI-38): 「はじめに」を閉じたか。state.json (UI-23 の仕様 1) の読み書きは <see cref="Settings.StateStore"/> に任せる
+/// (最近使ったコマンド・パネルの配置と同じファイルなので、書き手を 1 つにする)。
 /// </summary>
-public sealed class AppStateStore(string folder)
+public sealed class AppStateStore
 {
-    public const string FileName = "state.json";
+    /// <summary>state.json のキー。</summary>
+    public const string WelcomeDismissedKey = "startPage.welcomeDismissed";
 
-    private System.Text.Json.Nodes.JsonObject _values = [];
+    private readonly Settings.StateStore _store;
 
-    public string PathName => Path.Combine(folder, FileName);
-
-    /// <summary>state.json がなかった (初回起動。UI-38 の仕様 2)。</summary>
-    public bool IsFirstRun { get; private set; }
-
-    /// <summary>「はじめに」を閉じた (または何も選ばずにファイルを開いた)。</summary>
-    public bool WelcomeDismissed => _values["welcomeDismissed"]?.GetValue<bool>() ?? false;
-
-    public void Load()
+    /// <param name="store">読み込み済みの state.json。</param>
+    public AppStateStore(Settings.StateStore store)
     {
-        try
-        {
-            IsFirstRun = !File.Exists(PathName);
-            _values = IsFirstRun ? [] : System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(PathName)) as System.Text.Json.Nodes.JsonObject ?? [];
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
-        {
-            _values = [];
-        }
+        _store = store;
+        IsFirstRun = !File.Exists(store.PathName);
     }
 
-    /// <summary>「はじめに」を二度と出さない (UI-38 の仕様 3)。書けなければ理由を返す。</summary>
-    public string? DismissWelcome()
+    /// <summary>起動時に state.json がなかった (初回起動。UI-38 の仕様 2)。</summary>
+    public bool IsFirstRun { get; }
+
+    /// <summary>「はじめに」を閉じた (または何も選ばずにファイルを開いた)。</summary>
+    public bool WelcomeDismissed =>
+        _store.Get(WelcomeDismissedKey) is System.Text.Json.Nodes.JsonValue v && v.TryGetValue(out bool dismissed) && dismissed;
+
+    /// <summary>「はじめに」を二度と出さない (UI-38 の仕様 3)。すぐに書く。</summary>
+    public void DismissWelcome()
     {
-        _values["welcomeDismissed"] = true;
-        try
-        {
-            JsonFile.WriteText(PathName, _values.ToJsonString(JsonFile.Options));
-            return null;
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            return ex.Message;
-        }
+        _store.Set(WelcomeDismissedKey, true);
+        _store.Flush();
     }
 }

@@ -194,54 +194,9 @@ public sealed partial class MainWindow
 
     // ---- メニュー項目の有効・無効 (UI-03 の仕様 3) ----
 
-    /// <summary>使えないコマンドは無効表示にする (非表示にはしない)。文書・選択・編集の状態が変わるたびに呼ぶ。</summary>
-    private void UpdateCommandStates()
-    {
-        DocumentViewModel? doc = Vm.Selected;
-        bool hasDoc = doc is not null;
-        bool editable = hasDoc && !doc!.Editor.ReadOnly;
-        var states = new Dictionary<string, bool>
-        {
-            ["Command_Save"] = hasDoc,
-            ["Command_SaveAs"] = hasDoc,
-            ["Command_Close"] = hasDoc,
-            ["Command_Undo"] = editable && doc!.Document.History.CanUndo,
-            ["Command_Redo"] = editable && doc!.Document.History.CanRedo,
-            ["Command_Cut"] = editable && doc!.Editor.HasSelection && doc.Document.CanResize,
-            ["Command_Copy"] = hasDoc && doc!.Editor.HasSelection,
-            ["Command_Paste"] = editable,
-            ["Command_PasteOverwrite"] = editable,
-            ["Command_SelectAll"] = hasDoc && doc!.Document.Length > 0,
-            ["Command_ToggleInsert"] = editable && doc!.Document.CanResize,
-            ["Command_Find"] = hasDoc,
-            ["Command_FindNext"] = hasDoc,
-            ["Command_FindPrevious"] = hasDoc,
-            ["Command_GoTo"] = hasDoc,
-            ["Command_GoBack"] = hasDoc && doc!.Editor.CanGoBack,
-            ["Command_GoForward"] = hasDoc && doc!.Editor.CanGoForward,
-            ["Command_GoStart"] = hasDoc,
-            ["Command_GoEnd"] = hasDoc,
-            ["Command_EncodingAscii"] = hasDoc,
-            ["Command_EncodingAnsi"] = hasDoc,
-        };
-        foreach (MenuBarItem menu in MainMenu.Items)
-        {
-            SetStates(menu.Items, states);
-        }
-    }
-
-    private static void SetStates(IList<MenuFlyoutItemBase> items, Dictionary<string, bool> states)
-    {
-        foreach (MenuFlyoutItemBase item in items)
-        {
-            if (item is MenuFlyoutSubItem sub)
-            {
-                SetStates(sub.Items, states);
-            }
-            else if (states.TryGetValue(AutomationProperties.GetAutomationId(item), out bool enabled))
-            {
-                item.IsEnabled = enabled;
-            }
-        }
-    }
+    /// <summary>
+    /// 使えないコマンドは無効表示にする (非表示にはしない)。文書・選択・編集の状態が変わるたびに呼ぶ。有効条件は
+    /// コマンドの処理 (MainWindow.Commands.cs) が決める (UI-16)。
+    /// </summary>
+    private void UpdateCommandStates() => RefreshCommandUi();
 }

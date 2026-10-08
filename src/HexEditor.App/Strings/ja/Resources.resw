@@ -377,8 +377,6 @@
   <data name="Menu_Analysis_Hash.Text" xml:space="preserve"><value>ハッシュ(H)...</value></data>
   <data name="Menu_Analysis_Hash.AccessKey" xml:space="preserve"><value>H</value></data>
   <data name="Operation_Hash" xml:space="preserve"><value>ハッシュの計算</value></data>
-  <data name="Hash_Title.Text" xml:space="preserve"><value>ハッシュ</value></data>
-  <data name="Hash_Close_Name" xml:space="preserve"><value>ハッシュパネルを閉じる</value></data>
   <data name="Hash_Target.Header" xml:space="preserve"><value>対象範囲</value></data>
   <data name="Hash_Target_Selection.Content" xml:space="preserve"><value>選択範囲</value></data>
   <data name="Hash_Target_Whole.Content" xml:space="preserve"><value>ドキュメント全体</value></data>
@@ -499,10 +497,6 @@
   <data name="Start_ThemeLight" xml:space="preserve"><value>ライト</value></data>
   <data name="Start_ThemeDark" xml:space="preserve"><value>ダーク</value></data>
   <data name="Start_Preset.Header" xml:space="preserve"><value>ショートカットのプリセット</value></data>
-  <data name="Start_PresetDefault" xml:space="preserve"><value>既定</value></data>
-  <data name="Start_PresetHxd" xml:space="preserve"><value>HxD 風</value></data>
-  <data name="Start_Preset010" xml:space="preserve"><value>010 Editor 風</value></data>
-  <data name="Start_PresetVsCode" xml:space="preserve"><value>VS Code 風</value></data>
   <data name="Start_NetworkInfo.Text" xml:space="preserve"><value>HexEditor がインターネットを使うのは、更新の確認、操作したときのテンプレート・プラグイン・コンポーネントのダウンロード、ヘルプと報告のページをブラウザで開くときだけです。設定 &gt; プライバシー で無効にできます。</value></data>
   <data name="Start_RestoreSession.Content" xml:space="preserve"><value>前回のセッションを復元</value></data>
   <data name="Start_RecentTitle.Text" xml:space="preserve"><value>最近使ったファイル</value></data>
@@ -539,4 +533,438 @@
   <data name="BackupCopy_Title" xml:space="preserve"><value>バックアップのためにファイル全体をコピーしますか?</value></data>
   <data name="BackupCopy_Body" xml:space="preserve"><value>バックアップのためにファイル全体 ({0}) をコピーしてから保存します。</value></data>
   <data name="BackupCopy_Copy" xml:space="preserve"><value>コピーして保存</value></data>
+  <data name="Cmd_file_new" xml:space="preserve"><value>新規作成</value></data>
+  <data name="CmdAlias_file_new" xml:space="preserve"><value>しんきさくせい あたらしい</value></data>
+  <data name="Cmd_file_newWithSize" xml:space="preserve"><value>サイズを指定して新規作成</value></data>
+  <data name="CmdAlias_file_newWithSize" xml:space="preserve"><value>さいずをしていしてしんきさくせい</value></data>
+  <data name="Cmd_file_open" xml:space="preserve"><value>開く</value></data>
+  <data name="CmdAlias_file_open" xml:space="preserve"><value>ひらく ふぁいる</value></data>
+  <data name="Cmd_file_save" xml:space="preserve"><value>保存</value></data>
+  <data name="CmdAlias_file_save" xml:space="preserve"><value>ほぞん</value></data>
+  <data name="Cmd_file_saveAs" xml:space="preserve"><value>名前を付けて保存</value></data>
+  <data name="CmdAlias_file_saveAs" xml:space="preserve"><value>なまえをつけてほぞん</value></data>
+  <data name="Cmd_file_saveAll" xml:space="preserve"><value>すべて保存</value></data>
+  <data name="CmdAlias_file_saveAll" xml:space="preserve"><value>すべてほぞん</value></data>
+  <data name="Cmd_file_close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="CmdAlias_file_close" xml:space="preserve"><value>とじる たぶ</value></data>
+  <data name="Cmd_file_closeAll" xml:space="preserve"><value>すべて閉じる</value></data>
+  <data name="CmdAlias_file_closeAll" xml:space="preserve"><value>すべてとじる</value></data>
+  <data name="Cmd_file_closeOthers" xml:space="preserve"><value>他のタブを閉じる</value></data>
+  <data name="CmdAlias_file_closeOthers" xml:space="preserve"><value>ほかのたぶをとじる</value></data>
+  <data name="Cmd_file_closeToRight" xml:space="preserve"><value>右側のタブを閉じる</value></data>
+  <data name="CmdAlias_file_closeToRight" xml:space="preserve"><value>みぎがわのたぶをとじる</value></data>
+  <data name="Cmd_file_exit" xml:space="preserve"><value>終了</value></data>
+  <data name="CmdAlias_file_exit" xml:space="preserve"><value>しゅうりょう</value></data>
+  <data name="Cmd_edit_undo" xml:space="preserve"><value>元に戻す</value></data>
+  <data name="CmdAlias_edit_undo" xml:space="preserve"><value>もとにもどす</value></data>
+  <data name="Cmd_edit_redo" xml:space="preserve"><value>やり直し</value></data>
+  <data name="CmdAlias_edit_redo" xml:space="preserve"><value>やりなおし</value></data>
+  <data name="Cmd_edit_cut" xml:space="preserve"><value>切り取り</value></data>
+  <data name="CmdAlias_edit_cut" xml:space="preserve"><value>きりとり</value></data>
+  <data name="Cmd_edit_copy" xml:space="preserve"><value>コピー</value></data>
+  <data name="CmdAlias_edit_copy" xml:space="preserve"><value>こぴー</value></data>
+  <data name="Cmd_edit_paste" xml:space="preserve"><value>貼り付け</value></data>
+  <data name="CmdAlias_edit_paste" xml:space="preserve"><value>はりつけ</value></data>
+  <data name="Cmd_edit_pasteOverwrite" xml:space="preserve"><value>上書き貼り付け</value></data>
+  <data name="CmdAlias_edit_pasteOverwrite" xml:space="preserve"><value>うわがきはりつけ</value></data>
+  <data name="Cmd_edit_selectAll" xml:space="preserve"><value>すべて選択</value></data>
+  <data name="CmdAlias_edit_selectAll" xml:space="preserve"><value>すべてせんたく</value></data>
+  <data name="Cmd_edit_toggleInsert" xml:space="preserve"><value>上書き / 挿入の切り替え</value></data>
+  <data name="CmdAlias_edit_toggleInsert" xml:space="preserve"><value>うわがき そうにゅう きりかえ</value></data>
+  <data name="Cmd_search_find" xml:space="preserve"><value>検索</value></data>
+  <data name="CmdAlias_search_find" xml:space="preserve"><value>けんさく</value></data>
+  <data name="Cmd_search_findNext" xml:space="preserve"><value>次を検索</value></data>
+  <data name="CmdAlias_search_findNext" xml:space="preserve"><value>つぎをけんさく</value></data>
+  <data name="Cmd_search_findPrevious" xml:space="preserve"><value>前を検索</value></data>
+  <data name="CmdAlias_search_findPrevious" xml:space="preserve"><value>まえをけんさく</value></data>
+  <data name="Cmd_go_goTo" xml:space="preserve"><value>オフセットへ移動</value></data>
+  <data name="CmdAlias_go_goTo" xml:space="preserve"><value>おふせっとへいどう じゃんぷ</value></data>
+  <data name="Cmd_go_back" xml:space="preserve"><value>戻る</value></data>
+  <data name="CmdAlias_go_back" xml:space="preserve"><value>もどる</value></data>
+  <data name="Cmd_go_forward" xml:space="preserve"><value>進む</value></data>
+  <data name="CmdAlias_go_forward" xml:space="preserve"><value>すすむ</value></data>
+  <data name="Cmd_go_start" xml:space="preserve"><value>ファイルの先頭</value></data>
+  <data name="CmdAlias_go_start" xml:space="preserve"><value>ふぁいるのせんとう</value></data>
+  <data name="Cmd_go_end" xml:space="preserve"><value>ファイルの末尾</value></data>
+  <data name="CmdAlias_go_end" xml:space="preserve"><value>ふぁいるのまつび</value></data>
+  <data name="Cmd_view_encoding_ascii" xml:space="preserve"><value>文字コード: ASCII</value></data>
+  <data name="CmdAlias_view_encoding_ascii" xml:space="preserve"><value>もじこーど</value></data>
+  <data name="Cmd_view_encoding_ansi" xml:space="preserve"><value>文字コード: ANSI</value></data>
+  <data name="CmdAlias_view_encoding_ansi" xml:space="preserve"><value>もじこーど</value></data>
+  <data name="Cmd_view_toolbar" xml:space="preserve"><value>ツールバーの表示切り替え</value></data>
+  <data name="CmdAlias_view_toolbar" xml:space="preserve"><value>つーるばーのひょうじきりかえ</value></data>
+  <data name="Cmd_view_statusBar" xml:space="preserve"><value>ステータスバーの表示切り替え</value></data>
+  <data name="CmdAlias_view_statusBar" xml:space="preserve"><value>すてーたすばーのひょうじきりかえ</value></data>
+  <data name="Cmd_view_leftPanel" xml:space="preserve"><value>左パネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_leftPanel" xml:space="preserve"><value>ひだりぱねるのひょうじきりかえ</value></data>
+  <data name="Cmd_view_rightPanel" xml:space="preserve"><value>右パネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_rightPanel" xml:space="preserve"><value>みぎぱねるのひょうじきりかえ</value></data>
+  <data name="Cmd_view_bottomPanel" xml:space="preserve"><value>下パネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_bottomPanel" xml:space="preserve"><value>したぱねるのひょうじきりかえ</value></data>
+  <data name="Cmd_view_resetPanelLayout" xml:space="preserve"><value>パネルの配置を元に戻す</value></data>
+  <data name="CmdAlias_view_resetPanelLayout" xml:space="preserve"><value>ぱねるのはいちをもとにもどす</value></data>
+  <data name="Cmd_view_customizeToolbar" xml:space="preserve"><value>ツールバーのカスタマイズ</value></data>
+  <data name="CmdAlias_view_customizeToolbar" xml:space="preserve"><value>つーるばーのかすたまいず</value></data>
+  <data name="Cmd_view_panel_inspector" xml:space="preserve"><value>データインスペクタの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_inspector" xml:space="preserve"><value>でーたいんすぺくたのひょうじきりかえ</value></data>
+  <data name="Cmd_view_nextRegion" xml:space="preserve"><value>次の領域へフォーカスを移す</value></data>
+  <data name="CmdAlias_view_nextRegion" xml:space="preserve"><value>つぎのりょういきへふぉーかすをうつす</value></data>
+  <data name="Cmd_view_previousRegion" xml:space="preserve"><value>前の領域へフォーカスを移す</value></data>
+  <data name="CmdAlias_view_previousRegion" xml:space="preserve"><value>まえのりょういきへふぉーかすをうつす</value></data>
+  <data name="Cmd_view_theme_system" xml:space="preserve"><value>テーマ: Windows の設定に従う</value></data>
+  <data name="CmdAlias_view_theme_system" xml:space="preserve"><value>てーま</value></data>
+  <data name="Cmd_view_theme_light" xml:space="preserve"><value>テーマ: ライト</value></data>
+  <data name="CmdAlias_view_theme_light" xml:space="preserve"><value>てーま らいと</value></data>
+  <data name="Cmd_view_theme_dark" xml:space="preserve"><value>テーマ: ダーク</value></data>
+  <data name="CmdAlias_view_theme_dark" xml:space="preserve"><value>てーま だーく</value></data>
+  <data name="Cmd_settings_open" xml:space="preserve"><value>設定を開く</value></data>
+  <data name="CmdAlias_settings_open" xml:space="preserve"><value>せっていをひらく</value></data>
+  <data name="Cmd_settings_keyboard" xml:space="preserve"><value>キーボードショートカット</value></data>
+  <data name="CmdAlias_settings_keyboard" xml:space="preserve"><value>きーぼーどしょーとかっと</value></data>
+  <data name="Cmd_settings_selectPreset" xml:space="preserve"><value>ショートカットのプリセットを選択</value></data>
+  <data name="CmdAlias_settings_selectPreset" xml:space="preserve"><value>しょーとかっとのぷりせっとをせんたく</value></data>
+  <data name="Cmd_settings_exportKeybindings" xml:space="preserve"><value>ショートカットをエクスポート</value></data>
+  <data name="CmdAlias_settings_exportKeybindings" xml:space="preserve"><value>しょーとかっとをえくすぽーと</value></data>
+  <data name="Cmd_settings_importKeybindings" xml:space="preserve"><value>ショートカットをインポート</value></data>
+  <data name="CmdAlias_settings_importKeybindings" xml:space="preserve"><value>しょーとかっとをいんぽーと</value></data>
+  <data name="Cmd_settings_export" xml:space="preserve"><value>設定をエクスポート</value></data>
+  <data name="CmdAlias_settings_export" xml:space="preserve"><value>せっていをえくすぽーと</value></data>
+  <data name="Cmd_settings_import" xml:space="preserve"><value>設定をインポート</value></data>
+  <data name="CmdAlias_settings_import" xml:space="preserve"><value>せっていをいんぽーと</value></data>
+  <data name="Cmd_settings_resetAll" xml:space="preserve"><value>すべての設定を既定に戻す</value></data>
+  <data name="CmdAlias_settings_resetAll" xml:space="preserve"><value>すべてのせっていをきていにもどす</value></data>
+  <data name="Cmd_settings_openFile" xml:space="preserve"><value>設定ファイルを開く</value></data>
+  <data name="CmdAlias_settings_openFile" xml:space="preserve"><value>せっていふぁいるをひらく</value></data>
+  <data name="Cmd_settings_openDataFolder" xml:space="preserve"><value>データフォルダを開く</value></data>
+  <data name="CmdAlias_settings_openDataFolder" xml:space="preserve"><value>でーたふぉるだをひらく</value></data>
+  <data name="Cmd_help_commandPalette" xml:space="preserve"><value>コマンドパレット</value></data>
+  <data name="CmdAlias_help_commandPalette" xml:space="preserve"><value>こまんどぱれっと</value></data>
+  <data name="Cmd_help_shortcuts" xml:space="preserve"><value>ショートカット一覧</value></data>
+  <data name="CmdAlias_help_shortcuts" xml:space="preserve"><value>しょーとかっといちらん</value></data>
+  <data name="Cmd_help_documentation" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="CmdAlias_help_documentation" xml:space="preserve"><value>どきゅめんと</value></data>
+  <data name="Cmd_help_reportProblem" xml:space="preserve"><value>問題を報告</value></data>
+  <data name="CmdAlias_help_reportProblem" xml:space="preserve"><value>もんだいをほうこく</value></data>
+  <data name="Cmd_help_about" xml:space="preserve"><value>バージョン情報</value></data>
+  <data name="CmdAlias_help_about" xml:space="preserve"><value>ばーじょんじょうほう</value></data>
+  <data name="CmdCategory_file" xml:space="preserve"><value>ファイル</value></data>
+  <data name="CmdCategory_edit" xml:space="preserve"><value>編集</value></data>
+  <data name="CmdCategory_search" xml:space="preserve"><value>検索</value></data>
+  <data name="CmdCategory_go" xml:space="preserve"><value>移動</value></data>
+  <data name="CmdCategory_view" xml:space="preserve"><value>表示</value></data>
+  <data name="CmdCategory_settings" xml:space="preserve"><value>設定</value></data>
+  <data name="CmdCategory_help" xml:space="preserve"><value>ヘルプ</value></data>
+  <data name="Command_Title" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Command_Unavailable" xml:space="preserve"><value>{0} は今は使えません: {1}</value></data>
+  <data name="Command_NotAvailableHere" xml:space="preserve"><value>このウィンドウでは使えません</value></data>
+  <data name="Command_NoDocument" xml:space="preserve"><value>文書が開かれていません</value></data>
+  <data name="Command_ReadOnly" xml:space="preserve"><value>文書は読み取り専用です</value></data>
+  <data name="Command_NoSelection" xml:space="preserve"><value>選択範囲がありません</value></data>
+  <data name="Command_NothingToUndo" xml:space="preserve"><value>元に戻す操作がありません</value></data>
+  <data name="Command_NothingToRedo" xml:space="preserve"><value>やり直す操作がありません</value></data>
+  <data name="Command_EmptyDocument" xml:space="preserve"><value>文書が空です</value></data>
+  <data name="Command_NoHistory" xml:space="preserve"><value>移動の履歴がありません</value></data>
+  <data name="Command_NoPanels" xml:space="preserve"><value>ここに置いたパネルがありません</value></data>
+  <data name="Command_PanelMissing" xml:space="preserve"><value>このパネルはまだありません</value></data>
+  <data name="KeyScope_global" xml:space="preserve"><value>グローバル</value></data>
+  <data name="KeyScope_editor" xml:space="preserve"><value>エディタ</value></data>
+  <data name="KeyScope_findBar" xml:space="preserve"><value>検索バー</value></data>
+  <data name="KeyScope_codeEditor" xml:space="preserve"><value>コードエディタ</value></data>
+  <data name="KeyScope_panel" xml:space="preserve"><value>パネル</value></data>
+  <data name="Menu_View_Panels.Text" xml:space="preserve"><value>パネルの表示切り替え(P)</value></data>
+  <data name="Menu_View_Panels.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_Toolbar.Text" xml:space="preserve"><value>ツールバー(T)</value></data>
+  <data name="Menu_View_Toolbar.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_LeftPanel.Text" xml:space="preserve"><value>左パネル(L)</value></data>
+  <data name="Menu_View_LeftPanel.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_RightPanel.Text" xml:space="preserve"><value>右パネル(R)</value></data>
+  <data name="Menu_View_RightPanel.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_BottomPanel.Text" xml:space="preserve"><value>下パネル(O)</value></data>
+  <data name="Menu_View_BottomPanel.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_Inspector.Text" xml:space="preserve"><value>データインスペクタ(I)</value></data>
+  <data name="Menu_View_Inspector.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_ResetPanels.Text" xml:space="preserve"><value>パネルの配置を元に戻す(S)</value></data>
+  <data name="Menu_View_ResetPanels.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools.Title" xml:space="preserve"><value>ツール(T)</value></data>
+  <data name="Menu_Tools.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Tools_Settings.Text" xml:space="preserve"><value>設定(S)</value></data>
+  <data name="Menu_Tools_Settings.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Help_CommandPalette.Text" xml:space="preserve"><value>コマンドパレット(P)</value></data>
+  <data name="Menu_Help_CommandPalette.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Help_Shortcuts.Text" xml:space="preserve"><value>ショートカット一覧(K)</value></data>
+  <data name="Menu_Help_Shortcuts.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Toolbar_Customize.Text" xml:space="preserve"><value>ツールバーのカスタマイズ...</value></data>
+  <data name="Toolbar_ToolTip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Toolbar_Missing" xml:space="preserve"><value>見つからないコマンド: {0} 件</value></data>
+  <data name="ToolbarCustomize_Title" xml:space="preserve"><value>ツールバーのカスタマイズ</value></data>
+  <data name="ToolbarCustomize_Items" xml:space="preserve"><value>ツールバーのボタン</value></data>
+  <data name="ToolbarCustomize_Pick" xml:space="preserve"><value>追加するコマンド</value></data>
+  <data name="ToolbarCustomize_Missing" xml:space="preserve"><value>{0} (見つかりません)</value></data>
+  <data name="ToolbarCustomize_Up" xml:space="preserve"><value>上へ</value></data>
+  <data name="ToolbarCustomize_Down" xml:space="preserve"><value>下へ</value></data>
+  <data name="ToolbarCustomize_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="ToolbarCustomize_Reset" xml:space="preserve"><value>既定に戻す</value></data>
+  <data name="ToolbarCustomize_Add" xml:space="preserve"><value>追加</value></data>
+  <data name="Panel_Splitter" xml:space="preserve"><value>パネルの大きさを変える</value></data>
+  <data name="Panel_More.AutomationProperties.Name" xml:space="preserve"><value>パネルのオプション</value></data>
+  <data name="Panel_More.ToolTipService.ToolTip" xml:space="preserve"><value>パネルのオプション</value></data>
+  <data name="Panel_Close.AutomationProperties.Name" xml:space="preserve"><value>パネルを閉じる</value></data>
+  <data name="Panel_Close.ToolTipService.ToolTip" xml:space="preserve"><value>パネルを閉じる</value></data>
+  <data name="Panel_NoDocument.Text" xml:space="preserve"><value>文書が開かれていません。</value></data>
+  <data name="Panel_Selected" xml:space="preserve"><value>選択中</value></data>
+  <data name="Panel_Move" xml:space="preserve"><value>移動</value></data>
+  <data name="Panel_MoveLeft" xml:space="preserve"><value>左</value></data>
+  <data name="Panel_MoveRight" xml:space="preserve"><value>右</value></data>
+  <data name="Panel_MoveBottom" xml:space="preserve"><value>下</value></data>
+  <data name="Panel_MoveFloating" xml:space="preserve"><value>浮動</value></data>
+  <data name="Panel_CloseMenu" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Palette_Input.PlaceholderText" xml:space="preserve"><value>コマンドを入力 (&gt; コマンド、: オフセット、? ヘルプ)</value></data>
+  <data name="Palette_Input.AutomationProperties.Name" xml:space="preserve"><value>コマンドパレット</value></data>
+  <data name="Palette_Recent" xml:space="preserve"><value>最近使ったもの</value></data>
+  <data name="Palette_AllCommands" xml:space="preserve"><value>すべてのコマンド</value></data>
+  <data name="Palette_NoMatch" xml:space="preserve"><value>一致する項目がありません</value></data>
+  <data name="Palette_RunWith" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Palette_OffsetHint" xml:space="preserve"><value>オフセットまたは式を入力 (例: 0x1F00、end-0x10)</value></data>
+  <data name="Palette_GoTo" xml:space="preserve"><value>{0} ({1}) へ移動</value></data>
+  <data name="Palette_Tab" xml:space="preserve"><value>タブ: {0}</value></data>
+  <data name="Palette_FilesHint" xml:space="preserve"><value>開いているタブか最近使ったファイルの名前を入力</value></data>
+  <data name="Palette_NoBookmarks" xml:space="preserve"><value>ブックマークはありません</value></data>
+  <data name="Palette_HelpCommands" xml:space="preserve"><value>&gt; コマンド</value></data>
+  <data name="Palette_HelpFiles" xml:space="preserve"><value>開いているタブと最近使ったファイル (接頭辞なし)</value></data>
+  <data name="Palette_HelpOffset" xml:space="preserve"><value>: オフセットへ移動</value></data>
+  <data name="Palette_HelpBookmarks" xml:space="preserve"><value>@ ブックマーク</value></data>
+  <data name="Palette_HelpSettings" xml:space="preserve"><value># 設定</value></data>
+  <data name="Settings_Title.Text" xml:space="preserve"><value>設定</value></data>
+  <data name="Settings_Search.PlaceholderText" xml:space="preserve"><value>設定を検索</value></data>
+  <data name="Settings_Search.AutomationProperties.Name" xml:space="preserve"><value>設定を検索</value></data>
+  <data name="Settings_RestartBar.Title" xml:space="preserve"><value>再起動が必要です</value></data>
+  <data name="Settings_RestartBar.Message" xml:space="preserve"><value>一部の変更は HexEditor の再起動後に反映されます。</value></data>
+  <data name="Settings_RestartNow.Content" xml:space="preserve"><value>今すぐ再起動</value></data>
+  <data name="Settings_CategoryMore" xml:space="preserve"><value>その他の操作</value></data>
+  <data name="Settings_ResetCategory" xml:space="preserve"><value>このカテゴリを既定に戻す</value></data>
+  <data name="Settings_EmptyCategory" xml:space="preserve"><value>このカテゴリにはまだ設定項目がありません。</value></data>
+  <data name="Settings_NoResults" xml:space="preserve"><value>一致する設定はありません。</value></data>
+  <data name="Settings_SectionLink" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Settings_Modified" xml:space="preserve"><value>既定値から変更されています</value></data>
+  <data name="Settings_RestartNote" xml:space="preserve"><value>再起動後に反映されます。</value></data>
+  <data name="Settings_ResetItem" xml:space="preserve"><value>既定に戻す</value></data>
+  <data name="Settings_On" xml:space="preserve"><value>オン</value></data>
+  <data name="Settings_Off" xml:space="preserve"><value>オフ</value></data>
+  <data name="Settings_InvalidNumber" xml:space="preserve"><value>数値を入力してください。</value></data>
+  <data name="Settings_OutOfRange" xml:space="preserve"><value>{0}〜{1} の値を入力してください。</value></data>
+  <data name="Settings_InvalidValue" xml:space="preserve"><value>この値は使えません。</value></data>
+  <data name="Settings_ResetDone" xml:space="preserve"><value>「{0}」を既定に戻しました。</value></data>
+  <data name="Settings_NothingToReset" xml:space="preserve"><value>このカテゴリの設定はすべて既定値です。</value></data>
+  <data name="Settings_ResetCategoryTitle" xml:space="preserve"><value>カテゴリを既定に戻す</value></data>
+  <data name="Settings_ResetCategoryBody" xml:space="preserve"><value>「{1}」の {0} 個の設定を既定に戻します。</value></data>
+  <data name="Settings_ResetConfirm" xml:space="preserve"><value>既定に戻す</value></data>
+  <data name="Settings_ResetAllTitle" xml:space="preserve"><value>すべての設定を既定に戻す</value></data>
+  <data name="Settings_ResetAllBody" xml:space="preserve"><value>既定に戻す対象を選んでください。今のファイルは先にバックアップのフォルダにコピーします。</value></data>
+  <data name="Settings_BackupFailed" xml:space="preserve"><value>バックアップを作れなかったため、何も変更していません: {0}</value></data>
+  <data name="Settings_ResetPartial" xml:space="preserve"><value>一部のファイルを消せませんでした: {0}</value></data>
+  <data name="Settings_ResetAllDone" xml:space="preserve"><value>設定を既定に戻しました。</value></data>
+  <data name="SettingsPart_Settings" xml:space="preserve"><value>設定</value></data>
+  <data name="SettingsPart_KeyBindings" xml:space="preserve"><value>キー割り当て</value></data>
+  <data name="SettingsPart_Themes" xml:space="preserve"><value>独自の配色</value></data>
+  <data name="SettingsPart_RecentAndState" xml:space="preserve"><value>最近使ったファイルと状態</value></data>
+  <data name="SettingsPart_Recent" xml:space="preserve"><value>最近使ったファイル (ファイルのパスを含む)</value></data>
+  <data name="SettingsPart_Documents" xml:space="preserve"><value>ドキュメントに付随するデータ (ブックマークなど)</value></data>
+  <data name="Settings_ExportTitle" xml:space="preserve"><value>設定をエクスポート</value></data>
+  <data name="Settings_ExportConfirm" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="Settings_Exported" xml:space="preserve"><value>{0} を保存しました。</value></data>
+  <data name="Settings_ExportFailed" xml:space="preserve"><value>ファイルを保存できませんでした: {0}</value></data>
+  <data name="Settings_ImportPart" xml:space="preserve"><value>{0} ({1} 件の変更)</value></data>
+  <data name="ImportMode_Replace" xml:space="preserve"><value>置き換える</value></data>
+  <data name="ImportMode_Merge" xml:space="preserve"><value>マージ</value></data>
+  <data name="ImportMode_Skip" xml:space="preserve"><value>読み込まない</value></data>
+  <data name="Settings_ImportTitle" xml:space="preserve"><value>設定をインポート</value></data>
+  <data name="Settings_ImportConfirm" xml:space="preserve"><value>インポート</value></data>
+  <data name="Settings_ImportTooLarge" xml:space="preserve"><value>ファイルが大きすぎます。</value></data>
+  <data name="Settings_ImportTooNew" xml:space="preserve"><value>新しい版の HexEditor で作られたファイルのため読み込めません: {0}</value></data>
+  <data name="Settings_ImportInvalid" xml:space="preserve"><value>ファイルを読み込めません: {0}</value></data>
+  <data name="Settings_ImportSkipped" xml:space="preserve"><value>不正な値の項目を飛ばしました: {0}</value></data>
+  <data name="Settings_Imported" xml:space="preserve"><value>読み込みました。</value></data>
+  <data name="FileType_Json" xml:space="preserve"><value>JSON ファイル</value></data>
+  <data name="Keys_ImportTitle" xml:space="preserve"><value>ショートカットをインポート</value></data>
+  <data name="Keys_ImportSummary" xml:space="preserve"><value>追加: {0}、変更するコマンド: {1}、削除: {2}</value></data>
+  <data name="Keys_ImportConflict" xml:space="preserve"><value>{0} が「{1}」と「{2}」に重複しています ({3})。読み込む側を使います。</value></data>
+  <data name="Keys_ImportUnknown" xml:space="preserve"><value>不明なコマンド: {0} 件</value></data>
+  <data name="Keys_ImportTooLarge" xml:space="preserve"><value>ファイルが大きすぎます (1 MB まで)。</value></data>
+  <data name="Keys_FileError" xml:space="preserve"><value>キーボードショートカットの設定に誤りがあります ({0} 行目)。</value></data>
+  <data name="Keys_FileErrorNoLine" xml:space="preserve"><value>キーボードショートカットの設定に誤りがあります: {0}</value></data>
+  <data name="Keys_OpenFile" xml:space="preserve"><value>ファイルを開く</value></data>
+  <data name="Keys_Preset" xml:space="preserve"><value>プリセット</value></data>
+  <data name="KeyPreset_default" xml:space="preserve"><value>既定</value></data>
+  <data name="KeyPreset_hxd" xml:space="preserve"><value>HxD 風</value></data>
+  <data name="KeyPreset_010editor" xml:space="preserve"><value>010 Editor 風</value></data>
+  <data name="KeyPreset_vscode" xml:space="preserve"><value>VS Code 風</value></data>
+  <data name="Keys_SearchPlaceholder" xml:space="preserve"><value>名前・コマンド ID・キー (例: ctrl+g) で検索</value></data>
+  <data name="Keys_SearchByKey" xml:space="preserve"><value>キーで検索</value></data>
+  <data name="Keys_Import" xml:space="preserve"><value>インポート...</value></data>
+  <data name="Keys_Export" xml:space="preserve"><value>エクスポート...</value></data>
+  <data name="Keys_ResetAll" xml:space="preserve"><value>すべて既定に戻す</value></data>
+  <data name="Keys_ColCategory" xml:space="preserve"><value>カテゴリ</value></data>
+  <data name="Keys_ColCommand" xml:space="preserve"><value>コマンド</value></data>
+  <data name="Keys_ColKeys" xml:space="preserve"><value>キー</value></data>
+  <data name="Keys_ColScope" xml:space="preserve"><value>有効範囲</value></data>
+  <data name="Keys_ColOrigin" xml:space="preserve"><value>由来</value></data>
+  <data name="KeyOrigin_Default" xml:space="preserve"><value>既定</value></data>
+  <data name="KeyOrigin_Preset" xml:space="preserve"><value>プリセット</value></data>
+  <data name="KeyOrigin_User" xml:space="preserve"><value>利用者</value></data>
+  <data name="Keys_Edit" xml:space="preserve"><value>編集</value></data>
+  <data name="Keys_EditFor" xml:space="preserve"><value>{0} のショートカットを編集</value></data>
+  <data name="Keys_ResetRow" xml:space="preserve"><value>既定に戻す</value></data>
+  <data name="Keys_ResetRowFor" xml:space="preserve"><value>{0} のショートカットを既定に戻す</value></data>
+  <data name="Keys_ResetAllTitle" xml:space="preserve"><value>すべてのショートカットを既定に戻す</value></data>
+  <data name="Keys_ResetAllBody" xml:space="preserve"><value>変更したショートカットをすべてプリセットの割り当てに戻します。</value></data>
+  <data name="Keys_PresetConflictTitle" xml:space="preserve"><value>ショートカットの重複</value></data>
+  <data name="Keys_PresetConflictBody" xml:space="preserve"><value>利用者の割り当てがプリセットと重複しています。</value></data>
+  <data name="Keys_PresetConflict" xml:space="preserve"><value>{0}: 「{1}」(利用者) と「{2}」(プリセット)</value></data>
+  <data name="Keys_PreferUser" xml:space="preserve"><value>利用者の割り当てを優先</value></data>
+  <data name="Keys_PreferPreset" xml:space="preserve"><value>プリセットを優先</value></data>
+  <data name="Keys_PresetError" xml:space="preserve"><value>プリセットを読み込めなかったため、既定を使います: {0}</value></data>
+  <data name="Keys_RemoveKey" xml:space="preserve"><value>削除</value></data>
+  <data name="Keys_AddKey" xml:space="preserve"><value>追加</value></data>
+  <data name="Keys_EditTitle" xml:space="preserve"><value>ショートカット: {0}</value></data>
+  <data name="Keys_PressKeys" xml:space="preserve"><value>キーを押してください (2 打鍵まで)。Enter で確定、Esc で取り消し。</value></data>
+  <data name="Keys_CaptureHeader" xml:space="preserve"><value>新しいショートカット</value></data>
+  <data name="Keys_ConflictIntro" xml:space="preserve"><value>このキーは同じ有効範囲で割り当て済みです:</value></data>
+  <data name="Keys_ConflictLine" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Keys_Replace" xml:space="preserve"><value>置き換える</value></data>
+  <data name="Keys_Added" xml:space="preserve"><value>追加しました。</value></data>
+  <data name="Keys_ShadowWarning" xml:space="preserve"><value>{0} では「{1}」の代わりにこのコマンドが動きます。</value></data>
+  <data name="Keys_UnavailableOnLayout" xml:space="preserve"><value>この配列では押せません。</value></data>
+  <data name="Keys_AltGrOverlap" xml:space="preserve"><value>AltGr の文字入力と重なります。</value></data>
+  <data name="KeyReject_ModifierOnly" xml:space="preserve"><value>修飾キーだけは割り当てられません。</value></data>
+  <data name="KeyReject_AltF4" xml:space="preserve"><value>Alt+F4 はウィンドウを閉じるのに使われます。</value></data>
+  <data name="KeyReject_WindowsKey" xml:space="preserve"><value>Windows キーとの組み合わせは Windows が使います。</value></data>
+  <data name="KeyReject_CtrlAltDelete" xml:space="preserve"><value>Ctrl+Alt+Delete は割り当てられません。</value></data>
+  <data name="KeyReject_TypingKey" xml:space="preserve"><value>Ctrl や Alt のない文字キー・数字キーは入力に使うため割り当てられません。</value></data>
+  <data name="KeyReject_Already" xml:space="preserve"><value>このキーは既にこのコマンドに割り当てられています。</value></data>
+  <data name="KeyReject_Unknown" xml:space="preserve"><value>ショートカットを追加できませんでした。</value></data>
+  <data name="Shortcuts_Title" xml:space="preserve"><value>ショートカット一覧</value></data>
+  <data name="Shortcuts_AllScopes" xml:space="preserve"><value>すべての有効範囲</value></data>
+  <data name="Shortcuts_ShowUnassigned" xml:space="preserve"><value>割り当てのないコマンドも表示</value></data>
+  <data name="Shortcuts_SaveHtml" xml:space="preserve"><value>HTML として保存...</value></data>
+  <data name="Shortcuts_Print" xml:space="preserve"><value>印刷...</value></data>
+  <data name="Shortcuts_Change" xml:space="preserve"><value>変更</value></data>
+  <data name="ToolPage_Settings" xml:space="preserve"><value>設定</value></data>
+  <data name="ToolPage_Shortcuts" xml:space="preserve"><value>ショートカット一覧</value></data>
+  <data name="ToolPage_Close" xml:space="preserve"><value>{0} を閉じる</value></data>
+  <data name="SetSection_Keyboard" xml:space="preserve"><value>キーボードショートカット</value></data>
+  <data name="SetSection_Toolbar" xml:space="preserve"><value>ツールバー</value></data>
+  <data name="SetSection_Data" xml:space="preserve"><value>データフォルダと設定ファイル</value></data>
+  <data name="SetSearch_Keyboard" xml:space="preserve"><value>キー割り当て プリセット ショートカット</value></data>
+  <data name="SetSearch_Toolbar" xml:space="preserve"><value>ツールバー ボタン カスタマイズ</value></data>
+  <data name="SetSearch_Data" xml:space="preserve"><value>リセット エクスポート インポート バックアップ</value></data>
+  <data name="SetCategory_general" xml:space="preserve"><value>全般</value></data>
+  <data name="SetCategory_appearance" xml:space="preserve"><value>外観</value></data>
+  <data name="SetCategory_view" xml:space="preserve"><value>表示</value></data>
+  <data name="SetCategory_editing" xml:space="preserve"><value>編集</value></data>
+  <data name="SetCategory_search" xml:space="preserve"><value>検索</value></data>
+  <data name="SetCategory_files" xml:space="preserve"><value>ファイルと保存</value></data>
+  <data name="SetCategory_keyboard" xml:space="preserve"><value>キーボード</value></data>
+  <data name="SetCategory_language" xml:space="preserve"><value>言語</value></data>
+  <data name="SetCategory_accessibility" xml:space="preserve"><value>アクセシビリティ</value></data>
+  <data name="SetCategory_automation" xml:space="preserve"><value>自動化</value></data>
+  <data name="SetCategory_update" xml:space="preserve"><value>更新</value></data>
+  <data name="SetCategory_privacy" xml:space="preserve"><value>プライバシー</value></data>
+  <data name="SetCategory_explorer" xml:space="preserve"><value>Explorer 連携</value></data>
+  <data name="SetCategory_advanced" xml:space="preserve"><value>詳細</value></data>
+  <data name="Set_ui_toolbar_visible" xml:space="preserve"><value>ツールバーを表示</value></data>
+  <data name="SetDesc_ui_toolbar_visible" xml:space="preserve"><value>よく使うコマンドのボタンをタイトルバーの下に表示します。</value></data>
+  <data name="Set_ui_toolbar_items" xml:space="preserve"><value>ツールバーのボタン</value></data>
+  <data name="SetDesc_ui_toolbar_items" xml:space="preserve"><value>ツールバーに表示するコマンドです。</value></data>
+  <data name="Set_ui_statusBar_visible" xml:space="preserve"><value>ステータスバーを表示</value></data>
+  <data name="SetDesc_ui_statusBar_visible" xml:space="preserve"><value>ウィンドウの下端にカーソル位置・選択範囲・モードを表示します。</value></data>
+  <data name="Set_ui_statusBar_items" xml:space="preserve"><value>ステータスバーの項目</value></data>
+  <data name="SetDesc_ui_statusBar_items" xml:space="preserve"><value>ステータスバーに表示する項目です。</value></data>
+  <data name="Set_ui_theme" xml:space="preserve"><value>テーマ</value></data>
+  <data name="SetDesc_ui_theme" xml:space="preserve"><value>ライト・ダーク、または Windows のアプリモードに従います。</value></data>
+  <data name="SetOpt_ui_theme_system" xml:space="preserve"><value>Windows の設定に従う</value></data>
+  <data name="SetOpt_ui_theme_light" xml:space="preserve"><value>ライト</value></data>
+  <data name="SetOpt_ui_theme_dark" xml:space="preserve"><value>ダーク</value></data>
+  <data name="Set_ui_backdrop" xml:space="preserve"><value>ウィンドウの背景素材</value></data>
+  <data name="SetDesc_ui_backdrop" xml:space="preserve"><value>ウィンドウの背景に使う素材です。</value></data>
+  <data name="SetOpt_ui_backdrop_mica" xml:space="preserve"><value>Mica</value></data>
+  <data name="SetOpt_ui_backdrop_micaAlt" xml:space="preserve"><value>Mica Alt</value></data>
+  <data name="SetOpt_ui_backdrop_none" xml:space="preserve"><value>なし</value></data>
+  <data name="Set_view_cursor_nibbleArrowKeys" xml:space="preserve"><value>← / → をニブル単位で動かす</value></data>
+  <data name="SetDesc_view_cursor_nibbleArrowKeys" xml:space="preserve"><value>Hex 列で ← / → を半バイトずつ動かします。</value></data>
+  <data name="Set_view_statusBar_showNibble" xml:space="preserve"><value>ニブルの位置を表示</value></data>
+  <data name="SetDesc_view_statusBar_showNibble" xml:space="preserve"><value>カーソルがバイトのどちらの半分にあるかをステータスバーに表示します。</value></data>
+  <data name="Set_view_scroll_cursorMargin" xml:space="preserve"><value>カーソルの上下に残す行数</value></data>
+  <data name="SetDesc_view_scroll_cursorMargin" xml:space="preserve"><value>スクロールするとき、カーソルの上下に見えたまま残す行数です。</value></data>
+  <data name="Set_view_jump_position" xml:space="preserve"><value>ジャンプ先の表示位置</value></data>
+  <data name="SetDesc_view_jump_position" xml:space="preserve"><value>オフセットへ移動したとき、移動先の行を表示する位置です。</value></data>
+  <data name="SetOpt_view_jump_position_top" xml:space="preserve"><value>上端</value></data>
+  <data name="SetOpt_view_jump_position_third" xml:space="preserve"><value>上から 3 分の 1</value></data>
+  <data name="SetOpt_view_jump_position_center" xml:space="preserve"><value>中央</value></data>
+  <data name="Set_storage_tempDirectory" xml:space="preserve"><value>一時データのフォルダ</value></data>
+  <data name="SetDesc_storage_tempDirectory" xml:space="preserve"><value>一時ファイルと復旧用データを置く、空き容量の大きいフォルダです。空なら既定の場所を使います。</value></data>
+  <data name="Set_ui_language" xml:space="preserve"><value>表示言語</value></data>
+  <data name="SetDesc_ui_language" xml:space="preserve"><value>メニューとメッセージの言語です。</value></data>
+  <data name="SetOpt_ui_language_system" xml:space="preserve"><value>Windows の設定に従う</value></data>
+  <data name="Set_log_level" xml:space="preserve"><value>ログの詳しさ</value></data>
+  <data name="SetDesc_log_level" xml:space="preserve"><value>デバッグにするとログに詳しく書きます。</value></data>
+  <data name="SetOpt_log_level_info" xml:space="preserve"><value>通常</value></data>
+  <data name="SetOpt_log_level_debug" xml:space="preserve"><value>デバッグ</value></data>
+  <data name="Set_diagnostics_writeMiniDump" xml:space="preserve"><value>異常終了時にメモリダンプを保存</value></data>
+  <data name="SetDesc_diagnostics_writeMiniDump" xml:space="preserve"><value>異常終了したとき、原因を調べるための小さなメモリダンプを保存します。</value></data>
+  <data name="Cmd_file_openReadOnly" xml:space="preserve"><value>読み取り専用で開く</value></data>
+  <data name="CmdAlias_file_openReadOnly" xml:space="preserve"><value>よみとりせんようでひらく</value></data>
+  <data name="Cmd_file_reload" xml:space="preserve"><value>再読み込み</value></data>
+  <data name="CmdAlias_file_reload" xml:space="preserve"><value>さいよみこみ よみなおす</value></data>
+  <data name="Cmd_file_discardReload" xml:space="preserve"><value>変更を破棄して再読み込み</value></data>
+  <data name="CmdAlias_file_discardReload" xml:space="preserve"><value>へんこうをはきしてさいよみこみ</value></data>
+  <data name="Cmd_file_reopenClosed" xml:space="preserve"><value>閉じたタブを開き直す</value></data>
+  <data name="CmdAlias_file_reopenClosed" xml:space="preserve"><value>とじたたぶをひらきなおす</value></data>
+  <data name="Cmd_file_recent_clear" xml:space="preserve"><value>最近使ったファイルの一覧を消去</value></data>
+  <data name="CmdAlias_file_recent_clear" xml:space="preserve"><value>さいきんつかったふぁいるのいちらんをしょうきょ</value></data>
+  <data name="Cmd_file_recent_showAll" xml:space="preserve"><value>最近使ったファイルをすべて表示</value></data>
+  <data name="CmdAlias_file_recent_showAll" xml:space="preserve"><value>さいきんつかったふぁいるをすべてひょうじ</value></data>
+  <data name="Cmd_view_panel_hash" xml:space="preserve"><value>ハッシュパネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_hash" xml:space="preserve"><value>はっしゅぱねるのひょうじきりかえ</value></data>
+  <data name="Cmd_analysis_hash" xml:space="preserve"><value>ハッシュを計算</value></data>
+  <data name="CmdAlias_analysis_hash" xml:space="preserve"><value>はっしゅをけいさん ちぇっくさむ</value></data>
+  <data name="Cmd_window_restoreSession" xml:space="preserve"><value>前回のセッションを復元</value></data>
+  <data name="CmdAlias_window_restoreSession" xml:space="preserve"><value>ぜんかいのせっしょんをふくげん</value></data>
+  <data name="CmdCategory_analysis" xml:space="preserve"><value>解析</value></data>
+  <data name="CmdCategory_window" xml:space="preserve"><value>ウィンドウ</value></data>
+  <data name="Command_NoFile" xml:space="preserve"><value>ファイルの文書ではありません</value></data>
+  <data name="Command_NoClosedTabs" xml:space="preserve"><value>閉じたタブがありません</value></data>
+  <data name="Command_NoRecentFiles" xml:space="preserve"><value>最近使ったファイルがありません</value></data>
+  <data name="Command_NoSession" xml:space="preserve"><value>前回のセッションがありません</value></data>
+  <data name="Menu_View_Hash.Text" xml:space="preserve"><value>ハッシュ(H)</value></data>
+  <data name="Menu_View_Hash.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Panel_Hash_Title" xml:space="preserve"><value>ハッシュ</value></data>
+  <data name="Set_session_restoreOnStartup" xml:space="preserve"><value>起動時の動作</value></data>
+  <data name="SetDesc_session_restoreOnStartup" xml:space="preserve"><value>起動したときに、前回のセッションのタブを開き直すかどうかです。</value></data>
+  <data name="SetOpt_session_restoreOnStartup_always" xml:space="preserve"><value>前回のセッションを復元する</value></data>
+  <data name="SetOpt_session_restoreOnStartup_ask" xml:space="preserve"><value>スタートページで復元を提案する</value></data>
+  <data name="SetOpt_session_restoreOnStartup_never" xml:space="preserve"><value>ファイルを開かずに起動する</value></data>
+  <data name="Set_recent_maxItems" xml:space="preserve"><value>最近使ったファイルの件数</value></data>
+  <data name="SetDesc_recent_maxItems" xml:space="preserve"><value>最近使ったファイルの一覧に残す件数です。0 にすると一覧を使いません。</value></data>
+  <data name="Set_recent_restorePosition" xml:space="preserve"><value>前回の位置を復元する</value></data>
+  <data name="SetDesc_recent_restorePosition" xml:space="preserve"><value>ファイルを開き直したとき、前回のカーソル位置と選択範囲に戻します。</value></data>
+  <data name="Set_files_autoReloadUnmodified" xml:space="preserve"><value>編集していないファイルを自動で再読み込みする</value></data>
+  <data name="SetDesc_files_autoReloadUnmodified" xml:space="preserve"><value>編集していないファイルが他のアプリで変更されたら、確認せずに読み直します。</value></data>
+  <data name="Set_save_backup_enabled" xml:space="preserve"><value>保存時にバックアップを作る</value></data>
+  <data name="SetDesc_save_backup_enabled" xml:space="preserve"><value>上書きする前に、元のファイルのコピーを残します。</value></data>
+  <data name="Set_save_backup_location" xml:space="preserve"><value>バックアップの場所</value></data>
+  <data name="SetDesc_save_backup_location" xml:space="preserve"><value>バックアップのコピーを置く場所です。</value></data>
+  <data name="SetOpt_save_backup_location_sameFolder" xml:space="preserve"><value>ファイルと同じフォルダ</value></data>
+  <data name="SetOpt_save_backup_location_folder" xml:space="preserve"><value>指定したフォルダ</value></data>
+  <data name="Set_save_backup_folder" xml:space="preserve"><value>バックアップのフォルダ</value></data>
+  <data name="SetDesc_save_backup_folder" xml:space="preserve"><value>場所を「指定したフォルダ」にしたときのフォルダです。環境変数を使えます。</value></data>
+  <data name="Set_save_backup_generations" xml:space="preserve"><value>バックアップの世代数</value></data>
+  <data name="SetDesc_save_backup_generations" xml:space="preserve"><value>ファイルごとに残す古いコピーの数です。</value></data>
+  <data name="Set_save_recoveryIntervalMinutes" xml:space="preserve"><value>復旧用データの保存間隔 (分)</value></data>
+  <data name="SetDesc_save_recoveryIntervalMinutes" xml:space="preserve"><value>異常終了に備えて未保存の変更を書き出す間隔です。0 にすると書き出しません。</value></data>
+  <data name="Set_hash_autoRecompute" xml:space="preserve"><value>ハッシュを自動で再計算する</value></data>
+  <data name="SetDesc_hash_autoRecompute" xml:space="preserve"><value>対象範囲が変わったら、ハッシュパネルの値を計算し直します。</value></data>
+  <data name="Set_hash_algorithms" xml:space="preserve"><value>ハッシュのアルゴリズム</value></data>
+  <data name="SetDesc_hash_algorithms" xml:space="preserve"><value>ハッシュパネルで選んだアルゴリズムです。</value></data>
+  <data name="Set_hash_sets" xml:space="preserve"><value>ハッシュのアルゴリズムのセット</value></data>
+  <data name="SetDesc_hash_sets" xml:space="preserve"><value>ハッシュパネルで保存したアルゴリズムのセットです。</value></data>
 </root>

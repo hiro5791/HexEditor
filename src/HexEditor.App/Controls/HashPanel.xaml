@@ -9,35 +9,9 @@
         ハッシュパネル (ANA-18)。上から: 対象範囲の選択欄、アルゴリズムの選択 (セットと、検索付きのチェックボックス一覧)、
         「計算」ボタンと進捗、結果の表、照合欄 (ANA-21)。値は等幅フォントで表示し、長い値は折り返す。
     -->
-    <Grid
-        Background="{ThemeResource LayerFillColorDefaultBrush}"
-        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-        BorderThickness="1,0,0,0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <Grid Padding="12,8,8,8" ColumnSpacing="8">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <TextBlock
-                x:Uid="Hash_Title"
-                VerticalAlignment="Center"
-                AutomationProperties.HeadingLevel="Level2"
-                Style="{ThemeResource BodyStrongTextBlockStyle}" />
-            <Button
-                x:Name="CloseButton"
-                Grid.Column="1"
-                AutomationProperties.AutomationId="Hash_Close"
-                Click="Close_Click">
-                <FontIcon FontSize="12" Glyph="&#xE711;" />
-            </Button>
-        </Grid>
-
-        <ScrollViewer Grid.Row="1" Padding="12,0,12,12" HorizontalScrollMode="Disabled">
+    <!--  見出しと閉じるボタンはパネルの枠 (PanelDockArea、UI-05) が持つ。  -->
+    <Grid>
+        <ScrollViewer Padding="12,8,12,12" HorizontalScrollMode="Disabled">
             <StackPanel Spacing="12">
                 <!--  対象範囲 (06 の 0.1)  -->
                 <StackPanel Spacing="4">

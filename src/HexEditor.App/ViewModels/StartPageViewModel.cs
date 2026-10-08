@@ -134,13 +134,9 @@ public sealed partial class StartPageViewModel : ObservableObject
         new("dark", Loc.Get("Start_ThemeDark")),
     ];
 
+    /// <summary>ショートカットのプリセット (UI-19。表示名は設定画面のキーボードと同じ)。</summary>
     public IReadOnlyList<StartChoice> Presets { get; } =
-    [
-        new("default", Loc.Get("Start_PresetDefault")),
-        new("hxd", Loc.Get("Start_PresetHxd")),
-        new("010editor", Loc.Get("Start_Preset010")),
-        new("vscode", Loc.Get("Start_PresetVsCode")),
-    ];
+        [.. Core.Commands.KeyPresets.Ids.Select(id => new StartChoice(id, Loc.Get("KeyPreset_" + id)))];
 
     /// <summary>最近使ったファイルを並べ直す (ピン留め + 最近の 10 件。UI-32 の仕様 3、UI-38 の仕様 1)。</summary>
     public void SetRecent(IReadOnlyList<RecentItem> items, Action<Action> dispatch)

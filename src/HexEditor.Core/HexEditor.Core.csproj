@@ -10,4 +10,9 @@
     <InternalsVisibleTo Include="HexEditor.Core.Tests" />
   </ItemGroup>
 
+  <!-- ショートカットのプリセット (UI-19 の仕様 2)。アプリに同梱する。 -->
+  <ItemGroup>
+    <EmbeddedResource Include="Commands\Presets\*.json" LogicalName="HexEditor.Presets.%(Filename).json" />
+  </ItemGroup>
+
 </Project>

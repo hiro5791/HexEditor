@@ -1,90 +1,87 @@
 using HexEditor.App.Controls;
+using HexEditor.App.Panels;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
+using HexEditor.Core.Panels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
-using Microsoft.UI.Xaml.Controls;
 using Microsoft.Windows.Storage.Pickers;
 using Windows.ApplicationModel.DataTransfer;
 
 namespace HexEditor.App;
 
 /// <summary>
-/// ハッシュパネル (ANA-18) の組み込み。パネルの置き場所 (パネルの枠) ができるまでは、文書の領域の右に仮に置く。
+/// ハッシュパネル (ANA-18) の組み込み。パネルの枠 (UI-05) に「hash」として登録する (既定は右)。状態 (<see cref="HashPanelViewModel"/>) は
+/// ウィンドウごとに 1 つで、パネルの中身 (浮動パネルとの間を移るたびに作り直す) はそれを共有する。
 /// </summary>
 public sealed partial class MainWindow
 {
-    /// <summary>仮のパネルの幅 (epx)。</summary>
-    private const double HashPanelWidth = 380;
+    /// <summary>ハッシュパネルのパネル ID (表示切り替えのコマンドは <c>view.panel.hash</c>)。</summary>
+    public const string HashPanelId = "hash";
 
     private HashPanelViewModel? _hashVm;
     private HashPanel? _hashPanel;
 
     /// <summary>ハッシュパネルを表示しているか。</summary>
-    public bool IsHashPanelOpen => _hashPanel?.Visibility == Visibility.Visible;
+    public bool IsHashPanelOpen => IsPanelShown(HashPanelId);
 
-    /// <summary>ハッシュパネルの組み込み (コンストラクタから呼ぶ)。</summary>
-    private void InitializeHash()
+    /// <summary>パネルの一覧に登録する (アプリの起動時、ウィンドウを作る前に 1 度呼ぶ)。</summary>
+    public static void RegisterHashPanel()
     {
-        Vm.PropertyChanged += (_, e) =>
+        if (PanelRegistry.Find(HashPanelId) is null)
         {
-            if (e.PropertyName == nameof(MainViewModel.Selected) && _hashVm is not null && IsHashPanelOpen)
-            {
-                _hashVm.Target = Vm.Selected;
-            }
-        };
+            PanelRegistry.Register(new PanelRegistration(HashPanelId, "Panel_Hash_Title", PanelDock.Right,
+                ctx => ((MainWindow)ctx.Window).CreateHashPanel()));
+        }
     }
 
-    /// <summary>解析 > ハッシュ。</summary>
-    private void Hash_Click(object sender, RoutedEventArgs e) => ShowHashPanel();
+    private void RegisterHashCommands() => Commands.Register("analysis.hash", ShowHashPanel, NeedsDocument);
 
-    /// <summary>ハッシュパネルを表示する (解析 > ハッシュ、選択範囲の右クリックメニュー「ハッシュを計算」)。</summary>
+    private HashPanelViewModel HashVm => _hashVm ??= new HashPanelViewModel(Vm.Operations, App.Settings)
+    {
+        SetClipboardText = text =>
+        {
+            var package = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
+            package.SetText(text);
+            SystemClipboard.SetContent(package);
+        },
+        PickSavePath = PickHashSavePathAsync,
+        PickChecksumFile = PickChecksumFileAsync,
+    };
+
+    /// <summary>パネルの中身を作る (パネルの枠が必要なときに呼ぶ。何度呼ばれてもよい)。</summary>
+    private HashPanel CreateHashPanel()
+    {
+        var panel = new HashPanel(HashVm);
+        AutomationProperties.SetAutomationId(panel, "HashPanel");
+        _hashPanel = panel;
+        return panel;
+    }
+
+    /// <summary>ハッシュパネルを表示する (解析 > ハッシュ、選択範囲の右クリックメニュー「ハッシュを計算」)。計算ボタンにフォーカスを移す。</summary>
     public void ShowHashPanel()
     {
-        if (_hashPanel is null)
-        {
-            _hashVm = new HashPanelViewModel(Vm.Operations, App.Settings)
-            {
-                SetClipboardText = text =>
-                {
-                    var package = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
-                    package.SetText(text);
-                    SystemClipboard.SetContent(package);
-                },
-                PickSavePath = PickHashSavePathAsync,
-                PickChecksumFile = PickChecksumFileAsync,
-            };
-            _hashPanel = new HashPanel(_hashVm)
-            {
-                Width = HashPanelWidth,
-                HorizontalAlignment = HorizontalAlignment.Right,
-            };
-            AutomationProperties.SetAutomationId(_hashPanel, "HashPanel");
-            AutomationProperties.SetLandmarkType(_hashPanel, Microsoft.UI.Xaml.Automation.Peers.AutomationLandmarkType.Custom);
-            _hashPanel.Closed += (_, _) => HideHashPanel();
-            Grid.SetRow(_hashPanel, 4);
-            Root.Children.Add(_hashPanel);
-        }
-
-        _hashVm!.Target = Vm.Selected;
-        _hashPanel.Visibility = Visibility.Visible;
-        Tabs.Margin = new Thickness(0, 0, HashPanelWidth, 0);
-        _hashPanel.FocusFirst();
+        ShowPanel(HashPanelId);
+        SyncHashTarget();
+        DispatcherQueue.TryEnqueue(() => _hashPanel?.FocusFirst());
     }
 
     private void HideHashPanel()
     {
-        if (_hashPanel is null)
+        HidePanel(HashPanelId);
+        FocusEditor();
+    }
+
+    /// <summary>
+    /// パネルの対象を作業中の文書にする (パネルの配置・作業中の文書が変わるたびに呼ぶ)。閉じている間は対象範囲の変化を追わない
+    /// (自動で計算しない。結果の履歴はパネルを閉じるまで。ANA-18 の仕様 9)。
+    /// </summary>
+    private void SyncHashTarget()
+    {
+        if (_hashVm is not null)
         {
-            return;
+            _hashVm.Target = IsHashPanelOpen ? Vm.Selected : null;
         }
-
-        _hashPanel.Visibility = Visibility.Collapsed;
-
-        // 閉じている間は対象範囲の変化を追わない (自動で計算しない)。
-        _hashVm!.Target = null;
-        Tabs.Margin = new Thickness(0);
-        CurrentView()?.Focus(FocusState.Programmatic);
     }
 
     private async Task<string?> PickHashSavePathAsync(string suggestedName)
@@ -118,7 +115,7 @@ public sealed partial class MainWindow
 
 #if HEX_TEST_HOOKS
     /// <summary>
-    /// テスト用の命令 "hash": {action: show / state / setParameters / expected / select}。state はパネルの状態 (行、範囲、強調表示など)。
+    /// テスト用の命令 "hash": {action: show / hide / state / algorithms / setParameters / compute}。state はパネルの状態 (行、範囲、強調表示など)。
     /// </summary>
     private async Task<System.Text.Json.Nodes.JsonObject> TestHashAsync(System.Text.Json.Nodes.JsonObject request)
     {
@@ -127,7 +124,7 @@ public sealed partial class MainWindow
         {
             case "show":
                 ShowHashPanel();
-                _hashPanel!.UpdateLayout();
+                _hashPanel?.UpdateLayout();
                 break;
             case "hide":
                 HideHashPanel();
@@ -135,26 +132,27 @@ public sealed partial class MainWindow
             case "algorithms":
                 // {ids: [...]} の組み合わせだけを選ぶ。
                 string[] ids = [.. request["ids"]!.AsArray().Select(n => n!.GetValue<string>())];
-                foreach (HashAlgorithmItem item in _hashVm!.Algorithms)
+                foreach (HashAlgorithmItem item in HashVm.Algorithms)
                 {
                     item.IsChecked = ids.Contains(item.Id);
                 }
 
                 break;
             case "setParameters":
-                _hashVm!.SetParameters(request["id"]!.GetValue<string>(), _hashVm.ParametersOf(request["id"]!.GetValue<string>()) with
+                HashVm.SetParameters(request["id"]!.GetValue<string>(), HashVm.ParametersOf(request["id"]!.GetValue<string>()) with
                 {
                     Seed = (ulong)TestHookSettings.ReadLong(request["seed"], 0),
                 });
                 break;
             case "compute":
-                await _hashVm!.ComputeAsync();
+                await HashVm.ComputeAsync();
                 break;
         }
 
         var state = new System.Text.Json.Nodes.JsonObject
         {
             ["open"] = IsHashPanelOpen,
+            ["location"] = PanelLocation(HashPanelId),
         };
         if (_hashVm is { } vm)
         {

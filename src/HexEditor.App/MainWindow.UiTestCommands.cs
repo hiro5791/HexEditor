@@ -42,8 +42,8 @@ public sealed partial class MainWindow
         "nonClientRegions" => TestNonClientRegions(),
         "hash" => await TestHashAsync(request),
 
-        // ファイル・セッションの命令 (MainWindow.FilesTestCommands.cs)。
-        _ => await HandleFilesTestCommandAsync(cmd, request),
+        // ファイル・セッションの命令 (MainWindow.FilesTestCommands.cs)、コマンド・パネル・設定の命令 (MainWindow.FrameworkTestCommands.cs)。
+        _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>

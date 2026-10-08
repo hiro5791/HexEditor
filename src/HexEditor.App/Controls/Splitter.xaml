@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.Splitter"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    IsTabStop="True"
+    UseSystemFocusVisuals="True">
+    <!--  領域の境界の分割バー (UI-01 の仕様 5)。幅 4 px。ドラッグと矢印キー (8 px ずつ) で大きさを変える。  -->
+    <Border x:Name="Bar" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+</UserControl>

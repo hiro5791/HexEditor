@@ -31,21 +31,7 @@ public sealed partial class MainWindow
         Tabs.Loaded += (_, _) => PlaceStartPage();
         UpdateStartPage();
 
-        // F6 / Shift+F6 はグローバル。検索バーや Hex ビューの中でも同じ動作をする。
-        var next = new KeyboardAccelerator { Key = VirtualKey.F6 };
-        next.Invoked += (_, e) =>
-        {
-            e.Handled = true;
-            MoveToRegion(forward: true);
-        };
-        var previous = new KeyboardAccelerator { Key = VirtualKey.F6, Modifiers = VirtualKeyModifiers.Shift };
-        previous.Invoked += (_, e) =>
-        {
-            e.Handled = true;
-            MoveToRegion(forward: false);
-        };
-        Root.KeyboardAccelerators.Add(next);
-        Root.KeyboardAccelerators.Add(previous);
+        // F6 / Shift+F6 はグローバルのコマンド (view.nextRegion / view.previousRegion)。キーの振り分けは KeyDispatcher。
         Root.KeyboardAcceleratorPlacementMode = KeyboardAcceleratorPlacementMode.Hidden;
     }
 
@@ -92,11 +78,14 @@ public sealed partial class MainWindow
     private enum Region
     {
         Tabs,
+        LeftPanel,
         Editor,
+        RightPanel,
+        BottomPanel,
         StatusBar,
     }
 
-    /// <summary>タブ列 → エディタ → ステータスバー の順にフォーカスを移す (表示されている領域だけ。パネルはフェーズ 1 以降)。</summary>
+    /// <summary>タブ列 → 左パネル → エディタ → 右パネル → 下パネル → ステータスバー の順にフォーカスを移す (表示されている領域だけ)。</summary>
     private void MoveToRegion(bool forward)
     {
         var regions = new List<Region>();
@@ -105,7 +94,22 @@ public sealed partial class MainWindow
             regions.Add(Region.Tabs);
         }
 
+        if (LeftPanel.Visibility == Visibility.Visible)
+        {
+            regions.Add(Region.LeftPanel);
+        }
+
         regions.Add(Region.Editor);
+        if (RightPanel.Visibility == Visibility.Visible)
+        {
+            regions.Add(Region.RightPanel);
+        }
+
+        if (BottomPanel.Visibility == Visibility.Visible)
+        {
+            regions.Add(Region.BottomPanel);
+        }
+
         if (StatusBar.Visibility == Visibility.Visible)
         {
             regions.Add(Region.StatusBar);
@@ -130,6 +134,21 @@ public sealed partial class MainWindow
             if (node == StatusBar)
             {
                 return Region.StatusBar;
+            }
+
+            if (node == LeftPanel)
+            {
+                return Region.LeftPanel;
+            }
+
+            if (node == RightPanel)
+            {
+                return Region.RightPanel;
+            }
+
+            if (node == BottomPanel)
+            {
+                return Region.BottomPanel;
             }
 
             if (node is Controls.HexView || node == StartPage)
@@ -168,6 +187,15 @@ public sealed partial class MainWindow
                     FocusEditor();
                 }
 
+                break;
+            case Region.LeftPanel:
+                LeftPanel.FocusHeader();
+                break;
+            case Region.RightPanel:
+                RightPanel.FocusHeader();
+                break;
+            case Region.BottomPanel:
+                BottomPanel.FocusHeader();
                 break;
             case Region.StatusBar:
                 StatusButtons.FirstOrDefault(b => b.Visibility == Visibility.Visible)?.Focus(FocusState.Keyboard);

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.CommandPalette"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HexEditor.App.Controls"
+    IsTabStop="False">
+    <!--
+        コマンドパレット (UI-17)。入力欄と候補の一覧 (仮想化した ListView)。接頭辞でモードを切り替える (>: コマンド、なし: ファイル、
+        :: オフセットへ移動、@: ブックマーク、#: 設定、?: ヘルプ)。モーダルにせず、Esc かフォーカスが外れると閉じる。
+    -->
+    <Border
+        x:Name="Frame"
+        Width="600"
+        Padding="8"
+        Background="{ThemeResource SolidBackgroundFillColorTertiaryBrush}"
+        BorderBrush="{ThemeResource SurfaceStrokeColorFlyoutBrush}"
+        BorderThickness="1"
+        CornerRadius="8">
+        <StackPanel Spacing="6">
+            <TextBox
+                x:Name="Input"
+                x:Uid="Palette_Input"
+                AutomationProperties.AutomationId="Palette_Input"
+                IsSpellCheckEnabled="False" />
+            <TextBlock
+                x:Name="Message"
+                AutomationProperties.AutomationId="Palette_Message"
+                AutomationProperties.LiveSetting="Polite"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{ThemeResource CaptionTextBlockStyle}"
+                TextWrapping="Wrap"
+                Visibility="Collapsed" />
+            <ListView
+                x:Name="Results"
+                MaxHeight="420"
+                AutomationProperties.AutomationId="Palette_Results"
+                ContainerContentChanging="Results_ContainerContentChanging"
+                IsItemClickEnabled="True"
+                ItemClick="Results_ItemClick"
+                SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:PaletteEntry">
+                        <Grid Padding="0,4" ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock x:Name="TitleText" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock
+                                        x:Name="SecondaryText"
+                                        VerticalAlignment="Center"
+                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                        Style="{ThemeResource CaptionTextBlockStyle}" />
+                                </StackPanel>
+                                <TextBlock
+                                    Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                    Style="{ThemeResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind Reason}"
+                                    Visibility="{x:Bind ReasonVisibility}" />
+                            </StackPanel>
+                            <TextBlock
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                FlowDirection="LeftToRight"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{x:Bind Shortcut}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+    </Border>
+</UserControl>
