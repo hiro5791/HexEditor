@@ -6,7 +6,9 @@
     xmlns:local="using:HexEditor.App.Controls">
     <!--
         検索バー (FIND-04)。モーダルにせず、エディタの上に表示する。
-        1 行目: 種類、検索欄、変換結果・状態、件数、前 / 次、オプションの開閉、閉じる。2 行目: オプション (幅が足りなければ折り返す)。
+        1 行目: 種類、検索欄 (履歴のドロップダウン付き)、変換結果・状態、件数、前 / 次、すべて検索、オプションの開閉、閉じる。
+        2 行目 (置換のとき): 置換欄、変換結果、置換・スキップ・すべて置換、長さが違う場合の扱い (FIND-22〜24)。
+        3 行目: オプション (幅が足りなければ折り返す)。
     -->
     <StackPanel
         Padding="12,6"
@@ -25,6 +27,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <ComboBox
                 x:Name="KindChoice"
@@ -34,17 +37,40 @@
                 SelectionChanged="Option_Changed">
                 <ComboBoxItem x:Uid="Find_Kind_Hex" />
                 <ComboBoxItem x:Uid="Find_Kind_Text" />
+                <ComboBoxItem x:Uid="Find_Kind_Integer" />
+                <ComboBoxItem x:Uid="Find_Kind_Float" />
             </ComboBox>
-            <TextBox
-                x:Name="Query"
-                x:Uid="Find_Query"
+            <StackPanel
                 Grid.Column="1"
-                Width="260"
-                AutomationProperties.AutomationId="Find_Query"
-                FlowDirection="LeftToRight"
-                FontFamily="Cascadia Mono, Consolas"
-                KeyDown="Query_KeyDown"
-                TextChanged="Query_TextChanged" />
+                Orientation="Horizontal"
+                Spacing="2">
+                <TextBox
+                    x:Name="Query"
+                    x:Uid="Find_Query"
+                    Width="260"
+                    AutomationProperties.AutomationId="Find_Query"
+                    FlowDirection="LeftToRight"
+                    FontFamily="Cascadia Mono, Consolas"
+                    KeyDown="Query_KeyDown"
+                    TextChanged="Query_TextChanged"
+                    TextCompositionEnded="Query_CompositionEnded"
+                    TextCompositionStarted="Query_CompositionStarted" />
+                <!--  検索履歴の一覧 (FIND-28 の仕様 4)。  -->
+                <Button
+                    x:Name="HistoryButton"
+                    Padding="6,4"
+                    AutomationProperties.AutomationId="Find_History">
+                    <FontIcon FontSize="12" Glyph="&#xE70D;" />
+                    <Button.Flyout>
+                        <Flyout x:Name="HistoryFlyout" Opening="HistoryFlyout_Opening" Placement="BottomEdgeAlignedLeft">
+                            <StackPanel Width="360" Spacing="4">
+                                <TextBlock x:Name="HistoryEmpty" x:Uid="Find_HistoryEmpty" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <StackPanel x:Name="HistoryItems" AutomationProperties.AutomationId="Find_HistoryList" Spacing="2" />
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+            </StackPanel>
             <TextBlock
                 x:Name="Status"
                 Grid.Column="2"
@@ -81,9 +107,16 @@
                 Style="{StaticResource AccentButtonStyle}">
                 <FontIcon FontSize="12" Glyph="&#xE70D;" />
             </Button>
+            <!--  すべて検索 (FIND-20。Alt+Enter)。  -->
+            <Button
+                x:Name="FindAllButton"
+                x:Uid="Find_FindAll"
+                Grid.Column="6"
+                AutomationProperties.AutomationId="Find_FindAll"
+                Click="FindAll_Click" />
             <ToggleButton
                 x:Name="OptionsToggle"
-                Grid.Column="6"
+                Grid.Column="7"
                 AutomationProperties.AutomationId="Find_Options"
                 Click="OptionsToggle_Click">
                 <FontIcon FontSize="12" Glyph="&#xE71C;" />
@@ -91,7 +124,7 @@
             <!--  0.5 秒を超えた検索の進捗バーとキャンセルボタン (FIND-02 の仕様 1)。  -->
             <StackPanel
                 x:Name="BusyPanel"
-                Grid.Column="7"
+                Grid.Column="8"
                 VerticalAlignment="Center"
                 Orientation="Horizontal"
                 Spacing="8"
@@ -110,12 +143,82 @@
             </StackPanel>
             <Button
                 x:Name="CloseButton"
-                Grid.Column="8"
+                Grid.Column="9"
                 AutomationProperties.AutomationId="Find_Close"
                 Click="Close_Click">
                 <FontIcon FontSize="12" Glyph="&#xE711;" />
             </Button>
         </Grid>
+
+        <!--  置換欄の行 (FIND-22〜24)。Ctrl+H で開いたときだけ出す。  -->
+        <local:WrapPanel x:Name="ReplaceRow" Visibility="Collapsed">
+            <TextBox
+                x:Name="ReplaceQuery"
+                x:Uid="Find_Replace"
+                Width="260"
+                AutomationProperties.AutomationId="Find_Replace"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                KeyDown="ReplaceQuery_KeyDown"
+                TextChanged="ReplaceQuery_TextChanged" />
+            <TextBlock
+                x:Name="ReplacePreview"
+                MaxWidth="320"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Find_ReplacePreview"
+                AutomationProperties.LiveSetting="Polite"
+                FlowDirection="LeftToRight"
+                TextTrimming="CharacterEllipsis" />
+            <Button
+                x:Name="ReplaceButton"
+                x:Uid="Find_ReplaceOne"
+                AutomationProperties.AutomationId="Find_ReplaceOne"
+                Click="Replace_Click" />
+            <Button
+                x:Name="SkipButton"
+                x:Uid="Find_Skip"
+                AutomationProperties.AutomationId="Find_Skip"
+                Click="Skip_Click" />
+            <Button
+                x:Name="ReplaceAllButton"
+                x:Uid="Find_ReplaceAll"
+                AutomationProperties.AutomationId="Find_ReplaceAll"
+                Click="ReplaceAll_Click" />
+            <ComboBox
+                x:Name="LengthPolicyChoice"
+                AutomationProperties.AutomationId="Find_LengthPolicy"
+                SelectionChanged="ReplaceOption_Changed">
+                <ComboBoxItem x:Name="PolicyChangeItem" x:Uid="Find_Policy_Change" />
+                <ComboBoxItem x:Uid="Find_Policy_Pad" />
+                <ComboBoxItem x:Uid="Find_Policy_Overwrite" />
+            </ComboBox>
+            <ComboBox
+                x:Name="FillerChoice"
+                AutomationProperties.AutomationId="Find_Filler"
+                SelectedIndex="0"
+                SelectionChanged="ReplaceOption_Changed">
+                <ComboBoxItem x:Uid="Find_Filler_Zero" />
+                <ComboBoxItem x:Uid="Find_Filler_FF" />
+                <ComboBoxItem x:Uid="Find_Filler_Space" />
+                <ComboBoxItem x:Uid="Find_Filler_Custom" />
+            </ComboBox>
+            <TextBox
+                x:Name="FillerCustom"
+                x:Uid="Find_FillerCustom"
+                Width="120"
+                AutomationProperties.AutomationId="Find_FillerCustom"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                TextChanged="ReplaceQuery_TextChanged"
+                Visibility="Collapsed" />
+            <TextBlock
+                x:Name="ReplaceReason"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Find_ReplaceReason"
+                AutomationProperties.LiveSetting="Polite"
+                Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                TextWrapping="Wrap" />
+        </local:WrapPanel>
 
         <!--  オプション (FIND-04 の仕様 4)。種類に応じて表示を切り替える。  -->
         <local:WrapPanel x:Name="OptionsPanel" Visibility="Collapsed">
@@ -138,7 +241,34 @@
                 SelectionChanged="Option_Changed">
                 <ComboBoxItem x:Uid="Find_Scope_Document" />
                 <ComboBoxItem x:Name="ScopeSelectionItem" x:Uid="Find_Scope_Selection" />
+                <ComboBoxItem x:Uid="Find_Scope_Range" />
             </ComboBox>
+            <!--  オフセット範囲 (FIND-11 の仕様 1)。入力式で開始と終了 (このバイトを含む) を書く。  -->
+            <TextBox
+                x:Name="RangeStart"
+                x:Uid="Find_RangeStart"
+                Width="140"
+                AutomationProperties.AutomationId="Find_RangeStart"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                TextChanged="Range_TextChanged"
+                Visibility="Collapsed" />
+            <TextBox
+                x:Name="RangeEnd"
+                x:Uid="Find_RangeEnd"
+                Width="140"
+                AutomationProperties.AutomationId="Find_RangeEnd"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                TextChanged="Range_TextChanged"
+                Visibility="Collapsed" />
+            <TextBlock
+                x:Name="RangeInfo"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Find_RangeInfo"
+                AutomationProperties.LiveSetting="Polite"
+                FlowDirection="LeftToRight"
+                Visibility="Collapsed" />
             <ComboBox
                 x:Name="EncodingChoice"
                 AutomationProperties.AutomationId="Find_Encoding"
@@ -147,6 +277,11 @@
                 x:Name="CaseChoice"
                 x:Uid="Find_CaseSensitive"
                 AutomationProperties.AutomationId="Find_CaseSensitive"
+                Click="Check_Changed" />
+            <CheckBox
+                x:Name="WordChoice"
+                x:Uid="Find_WholeWord"
+                AutomationProperties.AutomationId="Find_WholeWord"
                 Click="Check_Changed" />
             <CheckBox
                 x:Name="EscapeChoice"
@@ -158,6 +293,70 @@
                 x:Uid="Find_Align"
                 AutomationProperties.AutomationId="Find_Align"
                 Click="Check_Changed" />
+            <!--  整数 (FIND-13): サイズ、符号、エンディアン。  -->
+            <ComboBox
+                x:Name="IntBitsChoice"
+                AutomationProperties.AutomationId="Find_IntBits"
+                SelectionChanged="Option_Changed" />
+            <ComboBox
+                x:Name="SignChoice"
+                AutomationProperties.AutomationId="Find_Sign"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="Find_Sign_Either" />
+                <ComboBoxItem x:Uid="Find_Sign_Signed" />
+                <ComboBoxItem x:Uid="Find_Sign_Unsigned" />
+            </ComboBox>
+            <!--  浮動小数点 (FIND-14): 形式、許容誤差。  -->
+            <ComboBox
+                x:Name="FloatChoice"
+                AutomationProperties.AutomationId="Find_FloatFormat"
+                SelectedIndex="1"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="Find_Float_Half" />
+                <ComboBoxItem x:Uid="Find_Float_Single" />
+                <ComboBoxItem x:Uid="Find_Float_Double" />
+            </ComboBox>
+            <ComboBox
+                x:Name="EndianChoice"
+                AutomationProperties.AutomationId="Find_Endian"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="Find_Endian_Little" />
+                <ComboBoxItem x:Uid="Find_Endian_Big" />
+                <ComboBoxItem x:Uid="Find_Endian_Both" />
+            </ComboBox>
+            <ComboBox
+                x:Name="ToleranceChoice"
+                AutomationProperties.AutomationId="Find_Tolerance"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="Find_Tolerance_None" />
+                <ComboBoxItem x:Uid="Find_Tolerance_Absolute" />
+                <ComboBoxItem x:Uid="Find_Tolerance_Relative" />
+                <ComboBoxItem x:Uid="Find_Tolerance_Ulp" />
+            </ComboBox>
+            <TextBox
+                x:Name="ToleranceValue"
+                x:Uid="Find_ToleranceValue"
+                Width="120"
+                AutomationProperties.AutomationId="Find_ToleranceValue"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                TextChanged="Range_TextChanged" />
+            <CheckBox
+                x:Name="OverlapChoice"
+                x:Uid="Find_Overlapping"
+                AutomationProperties.AutomationId="Find_Overlapping" />
+            <CheckBox
+                x:Name="IncrementalChoice"
+                x:Uid="Find_Incremental"
+                AutomationProperties.AutomationId="Find_Incremental"
+                IsChecked="True" />
+            <CheckBox
+                x:Name="EscReturnChoice"
+                x:Uid="Find_EscReturns"
+                AutomationProperties.AutomationId="Find_EscReturns" />
         </local:WrapPanel>
     </StackPanel>
 </UserControl>

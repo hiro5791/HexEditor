@@ -216,6 +216,7 @@ public sealed partial class MainWindow
             ["Command_Find"] = hasDoc,
             ["Command_FindNext"] = hasDoc,
             ["Command_FindPrevious"] = hasDoc,
+            ["Command_Replace"] = hasDoc,
             ["Command_GoTo"] = hasDoc,
             ["Command_GoBack"] = hasDoc && doc!.Editor.CanGoBack,
             ["Command_GoForward"] = hasDoc && doc!.Editor.CanGoForward,

@@ -372,4 +372,138 @@ Details were written to:
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>More status items</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>{0} matches</value></data>
+  <data name="Menu_Search_Replace.Text" xml:space="preserve"><value>Replace...</value></data>
+  <data name="Menu_Search_Replace.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Search_ClearHistory.Text" xml:space="preserve"><value>Clear Search History</value></data>
+  <data name="Menu_Search_ClearHistory.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Find_Kind_Integer.Content" xml:space="preserve"><value>Integer</value></data>
+  <data name="Find_Kind_Float.Content" xml:space="preserve"><value>Floating point</value></data>
+  <data name="Find_KindName_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_KindName_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="Find_KindName_Integer" xml:space="preserve"><value>Integer</value></data>
+  <data name="Find_KindName_Float" xml:space="preserve"><value>Floating point</value></data>
+  <data name="Find_HistoryEmpty.Text" xml:space="preserve"><value>No search history.</value></data>
+  <data name="Find_History_Name" xml:space="preserve"><value>Search history</value></data>
+  <data name="Find_HistoryDelete_Name" xml:space="preserve"><value>Remove “{0}” from the history</value></data>
+  <data name="Find_HistoryDelete_Tip" xml:space="preserve"><value>Remove from the history</value></data>
+  <data name="Find_FindAll.Content" xml:space="preserve"><value>Find all</value></data>
+  <data name="Find_FindAll_Name" xml:space="preserve"><value>Find all</value></data>
+  <data name="Find_FoundCount" xml:space="preserve"><value>{0} matches found.</value></data>
+  <data name="Find_Scope_Range.Content" xml:space="preserve"><value>Offset range</value></data>
+  <data name="Find_RangeStart.PlaceholderText" xml:space="preserve"><value>Start (e.g. 0x100)</value></data>
+  <data name="Find_RangeEnd.PlaceholderText" xml:space="preserve"><value>End, inclusive (e.g. end-0x10)</value></data>
+  <data name="Find_RangeInfo" xml:space="preserve"><value>{0} ({1}) to {2} ({3})</value></data>
+  <data name="Find_RangeInvalid" xml:space="preserve"><value>The range is invalid: the start must not be after the end, and both must be inside the document.</value></data>
+  <data name="Find_WholeWord.Content" xml:space="preserve"><value>Whole words only</value></data>
+  <data name="Find_IntBits_Item" xml:space="preserve"><value>{0} bit</value></data>
+  <data name="Find_IntBits_Name" xml:space="preserve"><value>Integer size</value></data>
+  <data name="Find_Sign_Name" xml:space="preserve"><value>Sign</value></data>
+  <data name="Find_Sign_Either.Content" xml:space="preserve"><value>Signed or unsigned</value></data>
+  <data name="Find_Sign_Signed.Content" xml:space="preserve"><value>Signed</value></data>
+  <data name="Find_Sign_Unsigned.Content" xml:space="preserve"><value>Unsigned</value></data>
+  <data name="Find_FloatFormat_Name" xml:space="preserve"><value>Floating-point format</value></data>
+  <data name="Find_Float_Half.Content" xml:space="preserve"><value>half (16 bit)</value></data>
+  <data name="Find_Float_Single.Content" xml:space="preserve"><value>float (32 bit)</value></data>
+  <data name="Find_Float_Double.Content" xml:space="preserve"><value>double (64 bit)</value></data>
+  <data name="Find_Endian_Name" xml:space="preserve"><value>Byte order</value></data>
+  <data name="Find_Endian_Little.Content" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Find_Endian_Big.Content" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Find_Endian_Both.Content" xml:space="preserve"><value>Both</value></data>
+  <data name="Find_Tolerance_Name" xml:space="preserve"><value>Tolerance</value></data>
+  <data name="Find_Tolerance_None.Content" xml:space="preserve"><value>Exact</value></data>
+  <data name="Find_Tolerance_Absolute.Content" xml:space="preserve"><value>Absolute tolerance</value></data>
+  <data name="Find_Tolerance_Relative.Content" xml:space="preserve"><value>Relative tolerance</value></data>
+  <data name="Find_Tolerance_Ulp.Content" xml:space="preserve"><value>ULP</value></data>
+  <data name="Find_ToleranceValue.PlaceholderText" xml:space="preserve"><value>Tolerance (e.g. 0.001)</value></data>
+  <data name="Find_FloatStored" xml:space="preserve"><value>Stored as {0}: {1} = {2}</value></data>
+  <data name="Find_Warning_EdgeWildcards" xml:space="preserve"><value>{0} (leading and trailing wildcards are ignored)</value></data>
+  <data name="Find_Overlapping.Content" xml:space="preserve"><value>Include overlapping matches</value></data>
+  <data name="Find_Incremental.Content" xml:space="preserve"><value>Search as you type</value></data>
+  <data name="Find_EscReturns.Content" xml:space="preserve"><value>Esc returns to the start position</value></data>
+  <data name="Find_ContinueWithEnter" xml:space="preserve"><value>Not found within 256 MB. Press Enter to continue searching.</value></data>
+  <data name="Find_Error_WildcardsOnly" xml:space="preserve"><value>The search value can't consist of wildcards only.</value></data>
+  <data name="Find_Error_InvalidWildcardRange" xml:space="preserve"><value>The range of * must be within 0 to {0} bytes.</value></data>
+  <data name="Find_Error_IntegerOutOfRange" xml:space="preserve"><value>The value is outside the {0}-bit integer range (signed {1} to {2}, unsigned {3} to {4}).</value></data>
+  <data name="Find_Error_SignedOutOfRange" xml:space="preserve"><value>The value is outside the {0}-bit signed integer range ({1} to {2}).</value></data>
+  <data name="Find_Error_UnsignedOutOfRange" xml:space="preserve"><value>The value is outside the {0}-bit unsigned integer range ({1} to {2}).</value></data>
+  <data name="Find_Error_InvalidNumber" xml:space="preserve"><value>“{0}” isn't a valid number. Use “.” as the decimal point.</value></data>
+  <data name="Find_Error_FloatOverflow" xml:space="preserve"><value>The value is too large for {0} and would become infinity.</value></data>
+  <data name="Find_Error_InvalidTolerance" xml:space="preserve"><value>The tolerance “{0}” is invalid. Enter a value of 0 or more (ULP: a whole number up to 1,000,000).</value></data>
+  <data name="Find_Error_InvalidReplacementWildcard" xml:space="preserve"><value>“{0}” can't be used in a replacement. Use ?? to keep the original byte.</value></data>
+  <data name="Find_Replace.PlaceholderText" xml:space="preserve"><value>Replace with</value></data>
+  <data name="Find_ReplaceOne.Content" xml:space="preserve"><value>Replace</value></data>
+  <data name="Find_Skip.Content" xml:space="preserve"><value>Skip</value></data>
+  <data name="Find_ReplaceAll.Content" xml:space="preserve"><value>Replace all</value></data>
+  <data name="Find_LengthPolicy_Name" xml:space="preserve"><value>If the lengths differ</value></data>
+  <data name="Find_Policy_Change.Content" xml:space="preserve"><value>Change the length</value></data>
+  <data name="Find_Policy_Pad.Content" xml:space="preserve"><value>Pad and keep the length</value></data>
+  <data name="Find_Policy_Overwrite.Content" xml:space="preserve"><value>Overwrite following bytes</value></data>
+  <data name="Find_Filler_Name" xml:space="preserve"><value>Padding</value></data>
+  <data name="Find_Filler_Zero.Content" xml:space="preserve"><value>Pad with 00</value></data>
+  <data name="Find_Filler_FF.Content" xml:space="preserve"><value>Pad with FF</value></data>
+  <data name="Find_Filler_Space.Content" xml:space="preserve"><value>Pad with spaces</value></data>
+  <data name="Find_Filler_Custom.Content" xml:space="preserve"><value>Pad with bytes...</value></data>
+  <data name="Find_FillerCustom.PlaceholderText" xml:space="preserve"><value>Hex (1 to 16 bytes)</value></data>
+  <data name="Find_FillerInvalid" xml:space="preserve"><value>Enter the padding as 1 to 16 bytes in hex.</value></data>
+  <data name="Find_ReplaceReadOnly" xml:space="preserve"><value>This document is read-only, so it can't be replaced.</value></data>
+  <data name="Find_ReplaceDeletes" xml:space="preserve"><value>(deletes the match)</value></data>
+  <data name="Find_ReplaceTooLong" xml:space="preserve"><value>The replacement ({0} bytes) is longer than the match ({1} bytes), so the length can't be kept.</value></data>
+  <data name="Find_ReplaceCannotResize" xml:space="preserve"><value>The length of this document can't be changed. Choose “Pad and keep the length”.</value></data>
+  <data name="Find_Replacing" xml:space="preserve"><value>Replacing...</value></data>
+  <data name="Find_ReplacedCount" xml:space="preserve"><value>Replaced {0} matches.</value></data>
+  <data name="Find_ReplaceAllCancelled" xml:space="preserve"><value>Nothing was replaced.</value></data>
+  <data name="Find_ReplaceAllFailed" xml:space="preserve"><value>Couldn't replace: {0}</value></data>
+  <data name="Find_ReplaceAllConfirm_Title" xml:space="preserve"><value>Replace all matches?</value></data>
+  <data name="Find_ReplaceAllConfirm_Body" xml:space="preserve"><value>{0} matches will be replaced. Keeping the information needed to undo this uses memory or temporary-file space.</value></data>
+  <data name="Find_ReplaceAllConfirm_Replace" xml:space="preserve"><value>Replace</value></data>
+  <data name="Find_ReplaceAllConfirm_Cancel" xml:space="preserve"><value>Don't replace</value></data>
+  <data name="Find_Overflow_Title" xml:space="preserve"><value>The replacement goes past the end</value></data>
+  <data name="Find_Overflow_Body" xml:space="preserve"><value>The replacement goes past the end of the document. Do you want to drop the bytes past the end, or append them?</value></data>
+  <data name="Find_Overflow_BodyFixed" xml:space="preserve"><value>The replacement goes past the end of the document. The bytes past the end won't be written because the length of this document can't be changed.</value></data>
+  <data name="Find_Overflow_Truncate" xml:space="preserve"><value>Don't write past the end</value></data>
+  <data name="Find_Overflow_Append" xml:space="preserve"><value>Append to the end</value></data>
+  <data name="History_Replace" xml:space="preserve"><value>Replace</value></data>
+  <data name="History_ReplaceAll" xml:space="preserve"><value>Replace all</value></data>
+  <data name="Operation_ReplaceAll" xml:space="preserve"><value>Replacing</value></data>
+  <data name="Operation_FindAll" xml:space="preserve"><value>Find all</value></data>
+  <data name="Operation_ExportResults" xml:space="preserve"><value>Exporting search results</value></data>
+  <data name="SearchResults_Continue.Content" xml:space="preserve"><value>Continue</value></data>
+  <data name="SearchResults_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
+  <data name="SearchResults_Convert.Content" xml:space="preserve"><value>Convert</value></data>
+  <data name="SearchResults_ToBookmarks.Text" xml:space="preserve"><value>To bookmarks</value></data>
+  <data name="SearchResults_CopyHex.Text" xml:space="preserve"><value>Copy data as hex</value></data>
+  <data name="SearchResults_CopyText.Text" xml:space="preserve"><value>Copy data as text</value></data>
+  <data name="SearchResults_ExportCsv.Text" xml:space="preserve"><value>Export as CSV...</value></data>
+  <data name="SearchResults_ExportJson.Text" xml:space="preserve"><value>Export as JSON...</value></data>
+  <data name="SearchResults_Close_Name" xml:space="preserve"><value>Close search results</value></data>
+  <data name="SearchResults_List_Name" xml:space="preserve"><value>Search results</value></data>
+  <data name="SearchResults_List_Selected" xml:space="preserve"><value>Search results, {0} of {1}: {2}, {3}</value></data>
+  <data name="SearchResults_Summary" xml:space="preserve"><value>{0}: {1} — {2} matches ({3})</value></data>
+  <data name="SearchResults_State_Running" xml:space="preserve"><value>searching</value></data>
+  <data name="SearchResults_State_Completed" xml:space="preserve"><value>completed</value></data>
+  <data name="SearchResults_State_Cancelled" xml:space="preserve"><value>interrupted</value></data>
+  <data name="SearchResults_State_Limit" xml:space="preserve"><value>stopped at the limit of {0} matches</value></data>
+  <data name="SearchResults_State_SpillFailed" xml:space="preserve"><value>stopped: couldn't store more results ({0})</value></data>
+  <data name="SearchResults_State_Failed" xml:space="preserve"><value>failed</value></data>
+  <data name="SearchResults_Column_Number" xml:space="preserve"><value>No.</value></data>
+  <data name="SearchResults_Column_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="SearchResults_Column_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="SearchResults_Column_Hex" xml:space="preserve"><value>Data (hex)</value></data>
+  <data name="SearchResults_Column_Text" xml:space="preserve"><value>Data (text)</value></data>
+  <data name="SearchResults_Column_Context" xml:space="preserve"><value>Before | after</value></data>
+  <data name="SearchResults_Column_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="SearchResults_Column_Endian" xml:space="preserve"><value>Endian</value></data>
+  <data name="SearchResults_Column_Value" xml:space="preserve"><value>Value</value></data>
+  <data name="SearchResults_Status_Modified" xml:space="preserve"><value>Modified</value></data>
+  <data name="SearchResults_Status_Deleted" xml:space="preserve"><value>Deleted</value></data>
+  <data name="SearchResults_Status_Stale" xml:space="preserve"><value>Outdated</value></data>
+  <data name="SearchResults_Export_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="SearchResults_Export_OffsetHex" xml:space="preserve"><value>Offset (hex)</value></data>
+  <data name="SearchResults_Export_Before" xml:space="preserve"><value>Before</value></data>
+  <data name="SearchResults_Export_After" xml:space="preserve"><value>After</value></data>
+  <data name="SearchResults_FileType_Csv" xml:space="preserve"><value>CSV (comma-separated)</value></data>
+  <data name="SearchResults_FileType_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="SearchResults_ExportFailed" xml:space="preserve"><value>Couldn't export the search results: {0}</value></data>
+  <data name="SearchResults_BookmarkPrefix" xml:space="preserve"><value>Search</value></data>
+  <data name="SearchResults_BookmarkGroup" xml:space="preserve"><value>Search results</value></data>
 </root>

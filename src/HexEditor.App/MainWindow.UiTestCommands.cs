@@ -40,7 +40,7 @@ public sealed partial class MainWindow
         "sourceStats" => TestSourceStats(),
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
-        _ => null,
+        _ => await HandleSearchTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>
@@ -508,7 +508,7 @@ public sealed partial class MainWindow
     private JsonObject TestFindKey(JsonObject request)
     {
         var key = Enum.Parse<VirtualKey>(request["key"]!.GetValue<string>(), ignoreCase: true);
-        _ = FindBar.HandleQueryKeyAsync(key, request["shift"]?.GetValue<bool>() ?? false);
+        _ = FindBar.HandleQueryKeyAsync(key, request["shift"]?.GetValue<bool>() ?? false, request["alt"]?.GetValue<bool>() ?? false);
         return new JsonObject();
     }
 

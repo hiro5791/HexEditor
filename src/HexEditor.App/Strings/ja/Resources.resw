@@ -372,4 +372,138 @@
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>その他の項目</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>一致 {0} 件</value></data>
+  <data name="Menu_Search_Replace.Text" xml:space="preserve"><value>置換(H)...</value></data>
+  <data name="Menu_Search_Replace.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Search_ClearHistory.Text" xml:space="preserve"><value>検索履歴を消去(C)</value></data>
+  <data name="Menu_Search_ClearHistory.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Find_Kind_Integer.Content" xml:space="preserve"><value>整数</value></data>
+  <data name="Find_Kind_Float.Content" xml:space="preserve"><value>浮動小数点</value></data>
+  <data name="Find_KindName_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="Find_KindName_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="Find_KindName_Integer" xml:space="preserve"><value>整数</value></data>
+  <data name="Find_KindName_Float" xml:space="preserve"><value>浮動小数点</value></data>
+  <data name="Find_HistoryEmpty.Text" xml:space="preserve"><value>検索履歴はありません。</value></data>
+  <data name="Find_History_Name" xml:space="preserve"><value>検索履歴</value></data>
+  <data name="Find_HistoryDelete_Name" xml:space="preserve"><value>「{0}」を履歴から削除</value></data>
+  <data name="Find_HistoryDelete_Tip" xml:space="preserve"><value>履歴から削除</value></data>
+  <data name="Find_FindAll.Content" xml:space="preserve"><value>すべて検索</value></data>
+  <data name="Find_FindAll_Name" xml:space="preserve"><value>すべて検索</value></data>
+  <data name="Find_FoundCount" xml:space="preserve"><value>{0} 件見つかりました。</value></data>
+  <data name="Find_Scope_Range.Content" xml:space="preserve"><value>オフセット範囲</value></data>
+  <data name="Find_RangeStart.PlaceholderText" xml:space="preserve"><value>開始 (例: 0x100)</value></data>
+  <data name="Find_RangeEnd.PlaceholderText" xml:space="preserve"><value>終了 (このバイトを含む。例: end-0x10)</value></data>
+  <data name="Find_RangeInfo" xml:space="preserve"><value>{0} ({1}) 〜 {2} ({3})</value></data>
+  <data name="Find_RangeInvalid" xml:space="preserve"><value>範囲が正しくありません。開始は終了より後にできず、どちらもドキュメントの中にある必要があります。</value></data>
+  <data name="Find_WholeWord.Content" xml:space="preserve"><value>単語単位で探す</value></data>
+  <data name="Find_IntBits_Item" xml:space="preserve"><value>{0} bit</value></data>
+  <data name="Find_IntBits_Name" xml:space="preserve"><value>整数のサイズ</value></data>
+  <data name="Find_Sign_Name" xml:space="preserve"><value>符号</value></data>
+  <data name="Find_Sign_Either.Content" xml:space="preserve"><value>どちらでも</value></data>
+  <data name="Find_Sign_Signed.Content" xml:space="preserve"><value>符号あり</value></data>
+  <data name="Find_Sign_Unsigned.Content" xml:space="preserve"><value>符号なし</value></data>
+  <data name="Find_FloatFormat_Name" xml:space="preserve"><value>浮動小数点の形式</value></data>
+  <data name="Find_Float_Half.Content" xml:space="preserve"><value>half (16 bit)</value></data>
+  <data name="Find_Float_Single.Content" xml:space="preserve"><value>float (32 bit)</value></data>
+  <data name="Find_Float_Double.Content" xml:space="preserve"><value>double (64 bit)</value></data>
+  <data name="Find_Endian_Name" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="Find_Endian_Little.Content" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="Find_Endian_Big.Content" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Find_Endian_Both.Content" xml:space="preserve"><value>両方</value></data>
+  <data name="Find_Tolerance_Name" xml:space="preserve"><value>許容誤差</value></data>
+  <data name="Find_Tolerance_None.Content" xml:space="preserve"><value>誤差なし</value></data>
+  <data name="Find_Tolerance_Absolute.Content" xml:space="preserve"><value>絶対誤差</value></data>
+  <data name="Find_Tolerance_Relative.Content" xml:space="preserve"><value>相対誤差</value></data>
+  <data name="Find_Tolerance_Ulp.Content" xml:space="preserve"><value>ULP</value></data>
+  <data name="Find_ToleranceValue.PlaceholderText" xml:space="preserve"><value>誤差 (例: 0.001)</value></data>
+  <data name="Find_FloatStored" xml:space="preserve"><value>{0} として格納される値: {1} = {2}</value></data>
+  <data name="Find_Warning_EdgeWildcards" xml:space="preserve"><value>{0} (先頭と末尾のワイルドカードは無視されます)</value></data>
+  <data name="Find_Overlapping.Content" xml:space="preserve"><value>重なる一致を含める</value></data>
+  <data name="Find_Incremental.Content" xml:space="preserve"><value>入力しながら検索</value></data>
+  <data name="Find_EscReturns.Content" xml:space="preserve"><value>Esc で元の位置に戻る</value></data>
+  <data name="Find_ContinueWithEnter" xml:space="preserve"><value>256 MB の範囲で見つかりませんでした。Enter で続きを検索します。</value></data>
+  <data name="Find_Error_WildcardsOnly" xml:space="preserve"><value>ワイルドカードだけの検索語は使えません。</value></data>
+  <data name="Find_Error_InvalidWildcardRange" xml:space="preserve"><value>* の範囲は 0〜{0} バイトで指定してください。</value></data>
+  <data name="Find_Error_IntegerOutOfRange" xml:space="preserve"><value>{0} bit の整数の範囲 (符号あり {1}〜{2}、符号なし {3}〜{4}) を超えています。</value></data>
+  <data name="Find_Error_SignedOutOfRange" xml:space="preserve"><value>{0} bit の符号あり整数の範囲 ({1}〜{2}) を超えています。</value></data>
+  <data name="Find_Error_UnsignedOutOfRange" xml:space="preserve"><value>{0} bit の符号なし整数の範囲 ({1}〜{2}) を超えています。</value></data>
+  <data name="Find_Error_InvalidNumber" xml:space="preserve"><value>「{0}」は数値として解釈できません。小数点は「.」を使ってください。</value></data>
+  <data name="Find_Error_FloatOverflow" xml:space="preserve"><value>値が {0} の範囲を超え、無限大になります。</value></data>
+  <data name="Find_Error_InvalidTolerance" xml:space="preserve"><value>許容誤差「{0}」は使えません。0 以上の値を入力してください (ULP は 1,000,000 までの整数)。</value></data>
+  <data name="Find_Error_InvalidReplacementWildcard" xml:space="preserve"><value>置換語には「{0}」は使えません。元のバイトを残すには ?? を使ってください。</value></data>
+  <data name="Find_Replace.PlaceholderText" xml:space="preserve"><value>置換後の値</value></data>
+  <data name="Find_ReplaceOne.Content" xml:space="preserve"><value>置換</value></data>
+  <data name="Find_Skip.Content" xml:space="preserve"><value>スキップ</value></data>
+  <data name="Find_ReplaceAll.Content" xml:space="preserve"><value>すべて置換</value></data>
+  <data name="Find_LengthPolicy_Name" xml:space="preserve"><value>長さが違う場合</value></data>
+  <data name="Find_Policy_Change.Content" xml:space="preserve"><value>長さを変える</value></data>
+  <data name="Find_Policy_Pad.Content" xml:space="preserve"><value>埋めて長さを保つ</value></data>
+  <data name="Find_Policy_Overwrite.Content" xml:space="preserve"><value>後ろを上書きする</value></data>
+  <data name="Find_Filler_Name" xml:space="preserve"><value>埋め草</value></data>
+  <data name="Find_Filler_Zero.Content" xml:space="preserve"><value>00 で埋める</value></data>
+  <data name="Find_Filler_FF.Content" xml:space="preserve"><value>FF で埋める</value></data>
+  <data name="Find_Filler_Space.Content" xml:space="preserve"><value>空白で埋める</value></data>
+  <data name="Find_Filler_Custom.Content" xml:space="preserve"><value>指定バイトで埋める</value></data>
+  <data name="Find_FillerCustom.PlaceholderText" xml:space="preserve"><value>Hex (1〜16 バイト)</value></data>
+  <data name="Find_FillerInvalid" xml:space="preserve"><value>埋め草は Hex で 1〜16 バイトを入力してください。</value></data>
+  <data name="Find_ReplaceReadOnly" xml:space="preserve"><value>このドキュメントは読み取り専用のため置換できません。</value></data>
+  <data name="Find_ReplaceDeletes" xml:space="preserve"><value>(一致を削除します)</value></data>
+  <data name="Find_ReplaceTooLong" xml:space="preserve"><value>置換語 ({0} バイト) が一致 ({1} バイト) より長いため、長さを保てません。</value></data>
+  <data name="Find_ReplaceCannotResize" xml:space="preserve"><value>このドキュメントは長さを変えられません。「埋めて長さを保つ」を選んでください。</value></data>
+  <data name="Find_Replacing" xml:space="preserve"><value>置換しています...</value></data>
+  <data name="Find_ReplacedCount" xml:space="preserve"><value>{0} 件置換しました。</value></data>
+  <data name="Find_ReplaceAllCancelled" xml:space="preserve"><value>置換しませんでした。</value></data>
+  <data name="Find_ReplaceAllFailed" xml:space="preserve"><value>置換できませんでした: {0}</value></data>
+  <data name="Find_ReplaceAllConfirm_Title" xml:space="preserve"><value>すべて置換しますか?</value></data>
+  <data name="Find_ReplaceAllConfirm_Body" xml:space="preserve"><value>{0} 件を置換します。元に戻すための情報に、メモリまたは一時ファイルの容量が必要になります。</value></data>
+  <data name="Find_ReplaceAllConfirm_Replace" xml:space="preserve"><value>置換する</value></data>
+  <data name="Find_ReplaceAllConfirm_Cancel" xml:space="preserve"><value>やめる</value></data>
+  <data name="Find_Overflow_Title" xml:space="preserve"><value>置換語が末尾を超えます</value></data>
+  <data name="Find_Overflow_Body" xml:space="preserve"><value>置換語がドキュメントの末尾を超えます。超える分を書かないか、末尾に追加するかを選んでください。</value></data>
+  <data name="Find_Overflow_BodyFixed" xml:space="preserve"><value>置換語がドキュメントの末尾を超えます。このドキュメントは長さを変えられないため、超える分は書きません。</value></data>
+  <data name="Find_Overflow_Truncate" xml:space="preserve"><value>超える分を書かない</value></data>
+  <data name="Find_Overflow_Append" xml:space="preserve"><value>末尾に追加する</value></data>
+  <data name="History_Replace" xml:space="preserve"><value>置換</value></data>
+  <data name="History_ReplaceAll" xml:space="preserve"><value>すべて置換</value></data>
+  <data name="Operation_ReplaceAll" xml:space="preserve"><value>置換を適用しています</value></data>
+  <data name="Operation_FindAll" xml:space="preserve"><value>すべて検索</value></data>
+  <data name="Operation_ExportResults" xml:space="preserve"><value>検索結果のエクスポート</value></data>
+  <data name="SearchResults_Continue.Content" xml:space="preserve"><value>続ける</value></data>
+  <data name="SearchResults_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="SearchResults_Convert.Content" xml:space="preserve"><value>変換</value></data>
+  <data name="SearchResults_ToBookmarks.Text" xml:space="preserve"><value>ブックマークに</value></data>
+  <data name="SearchResults_CopyHex.Text" xml:space="preserve"><value>一致したデータを Hex でコピー</value></data>
+  <data name="SearchResults_CopyText.Text" xml:space="preserve"><value>一致したデータをテキストでコピー</value></data>
+  <data name="SearchResults_ExportCsv.Text" xml:space="preserve"><value>CSV でエクスポート...</value></data>
+  <data name="SearchResults_ExportJson.Text" xml:space="preserve"><value>JSON でエクスポート...</value></data>
+  <data name="SearchResults_Close_Name" xml:space="preserve"><value>検索結果を閉じる</value></data>
+  <data name="SearchResults_List_Name" xml:space="preserve"><value>検索結果</value></data>
+  <data name="SearchResults_List_Selected" xml:space="preserve"><value>検索結果 {1} 件中 {0} 件目: {2}、{3}</value></data>
+  <data name="SearchResults_Summary" xml:space="preserve"><value>{0}: {1} — {2} 件 ({3})</value></data>
+  <data name="SearchResults_State_Running" xml:space="preserve"><value>検索中</value></data>
+  <data name="SearchResults_State_Completed" xml:space="preserve"><value>完了</value></data>
+  <data name="SearchResults_State_Cancelled" xml:space="preserve"><value>中断</value></data>
+  <data name="SearchResults_State_Limit" xml:space="preserve"><value>上限 ({0} 件) に達したため停止しました</value></data>
+  <data name="SearchResults_State_SpillFailed" xml:space="preserve"><value>これ以上の結果を保存できないため停止しました ({0})</value></data>
+  <data name="SearchResults_State_Failed" xml:space="preserve"><value>失敗</value></data>
+  <data name="SearchResults_Column_Number" xml:space="preserve"><value>番号</value></data>
+  <data name="SearchResults_Column_Offset" xml:space="preserve"><value>オフセット</value></data>
+  <data name="SearchResults_Column_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="SearchResults_Column_Hex" xml:space="preserve"><value>一致したデータ (Hex)</value></data>
+  <data name="SearchResults_Column_Text" xml:space="preserve"><value>一致したデータ (テキスト)</value></data>
+  <data name="SearchResults_Column_Context" xml:space="preserve"><value>前後のデータ</value></data>
+  <data name="SearchResults_Column_Status" xml:space="preserve"><value>状態</value></data>
+  <data name="SearchResults_Column_Endian" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="SearchResults_Column_Value" xml:space="preserve"><value>値</value></data>
+  <data name="SearchResults_Status_Modified" xml:space="preserve"><value>変更あり</value></data>
+  <data name="SearchResults_Status_Deleted" xml:space="preserve"><value>削除済み</value></data>
+  <data name="SearchResults_Status_Stale" xml:space="preserve"><value>古い結果</value></data>
+  <data name="SearchResults_Export_Offset" xml:space="preserve"><value>オフセット</value></data>
+  <data name="SearchResults_Export_OffsetHex" xml:space="preserve"><value>オフセット (16 進)</value></data>
+  <data name="SearchResults_Export_Before" xml:space="preserve"><value>前のデータ</value></data>
+  <data name="SearchResults_Export_After" xml:space="preserve"><value>後のデータ</value></data>
+  <data name="SearchResults_FileType_Csv" xml:space="preserve"><value>CSV (カンマ区切り)</value></data>
+  <data name="SearchResults_FileType_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="SearchResults_ExportFailed" xml:space="preserve"><value>検索結果をエクスポートできませんでした: {0}</value></data>
+  <data name="SearchResults_BookmarkPrefix" xml:space="preserve"><value>検索</value></data>
+  <data name="SearchResults_BookmarkGroup" xml:space="preserve"><value>検索結果</value></data>
 </root>

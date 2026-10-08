@@ -49,6 +49,7 @@ public sealed partial class MainWindow : Window
         InitializeStatusBar();
         InitializeDragDrop();
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
+        InitializeSearch();
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
 
@@ -467,8 +468,10 @@ public sealed partial class MainWindow : Window
     {
         foreach (HexView view in only is null ? _views : [only])
         {
+            // 検索バーが開いていれば検索バーの一致、閉じていても結果一覧が開いていれば一覧の一致 (FIND-20 の仕様 10)。
             bool active = FindBar.IsOpen && view.Editor == FindBar.Editor;
-            view.MatchProvider = active ? FindBar.MatchesInView : null;
+            bool results = !active && SearchResults.IsOpen && view.Editor == SearchResults.Editor;
+            view.MatchProvider = active ? FindBar.MatchesInView : results ? SearchResults.MatchesInView : null;
             view.SetSearchMarkers(active ? FindBar.MarkerOffsets() : null);
         }
     }
@@ -491,18 +494,7 @@ public sealed partial class MainWindow : Window
 
     private void Bar_Closed(object? sender, EventArgs e) => FocusEditor();
 
-    private void Find_Click(object sender, RoutedEventArgs e)
-    {
-        if (Editor is null)
-        {
-            return;
-        }
-
-        GoToBar.Visibility = Visibility.Collapsed;
-        FindBar.Editor = Editor;
-        FindBar.Operations = Vm.Operations;
-        FindBar.Open();
-    }
+    private void Find_Click(object sender, RoutedEventArgs e) => OpenFindBar(replace: false);
 
     private async void FindNext_Click(object sender, RoutedEventArgs e) => await FindAgainAsync(forward: true);
 
@@ -512,6 +504,12 @@ public sealed partial class MainWindow : Window
     private async Task FindAgainAsync(bool forward)
     {
         if (Editor is null)
+        {
+            return;
+        }
+
+        // 結果一覧に結果があれば、一覧の次 / 前の結果に移る (FIND-20 の仕様 11)。
+        if (TryMoveInResults(forward))
         {
             return;
         }

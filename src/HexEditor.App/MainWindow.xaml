@@ -119,6 +119,13 @@
                                 <KeyboardAccelerator Key="F3" Modifiers="Shift" />
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="Menu_Search_Replace" AutomationProperties.AutomationId="Command_Replace" Click="Replace_Click">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="H" Modifiers="Control" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Search_ClearHistory" AutomationProperties.AutomationId="Command_ClearSearchHistory" Click="ClearSearchHistory_Click" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Go">
                         <MenuFlyoutItem x:Uid="Menu_Go_GoTo" AutomationProperties.AutomationId="Command_GoTo" Click="GoTo_Click">
@@ -185,19 +192,25 @@
             OverflowClicked="Notifications_OverflowClicked"
             Scope="Window" />
 
-        <controls:FindBar
-            x:Name="FindBar"
-            Grid.Row="3"
-            AutomationProperties.AutomationId="FindBar"
-            Closed="Bar_Closed"
-            Visibility="Collapsed" />
+        <!--  検索バー・移動バーと、すべて検索の結果一覧 (FIND-20。UI-05 の下のパネルができるまでは検索バーの下に置く)。  -->
+        <StackPanel Grid.Row="3">
+            <controls:FindBar
+                x:Name="FindBar"
+                AutomationProperties.AutomationId="FindBar"
+                Closed="Bar_Closed"
+                Visibility="Collapsed" />
 
-        <controls:GoToBar
-            x:Name="GoToBar"
-            Grid.Row="3"
-            AutomationProperties.AutomationId="GoToBar"
-            Closed="Bar_Closed"
-            Visibility="Collapsed" />
+            <controls:GoToBar
+                x:Name="GoToBar"
+                AutomationProperties.AutomationId="GoToBar"
+                Closed="Bar_Closed"
+                Visibility="Collapsed" />
+
+            <controls:SearchResultsPanel
+                x:Name="SearchResults"
+                AutomationProperties.AutomationId="SearchResults"
+                Visibility="Collapsed" />
+        </StackPanel>
 
         <!--  スタートページ (UI-01 の仕様 2。文書が 1 つもないとき)。最近使ったファイル・初回の「はじめに」は UI-38 (フェーズ 1)。  -->
         <ScrollViewer

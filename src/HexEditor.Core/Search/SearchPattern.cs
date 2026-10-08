@@ -1058,7 +1058,8 @@ public sealed class SearchPattern
                     int close = text.IndexOf('}', i);
                     if (close < 0)
                     {
-                        throw new PatternException(PatternError.InvalidWildcardRange, text[(i - 1)..], starPosition);
+                        throw new PatternException(PatternError.InvalidWildcardRange, text[(i - 1)..], starPosition,
+                            [maxGap.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)]);
                     }
 
                     string range = text[(i + 1)..close];
