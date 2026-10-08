@@ -145,6 +145,18 @@
                         <MenuFlyoutItem x:Uid="Menu_Go_Back" cmd:CommandUi.Id="go.back" AutomationProperties.AutomationId="Command_GoBack" />
                         <MenuFlyoutItem x:Uid="Menu_Go_Forward" cmd:CommandUi.Id="go.forward" AutomationProperties.AutomationId="Command_GoForward" />
                         <MenuFlyoutSeparator />
+                        <!--  ブックマーク (INSP-23〜INSP-26)。番号付きの項目はコードビハインドで作る (go.bookmark.set1〜9、go.bookmark.goto1〜9)。  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_Go_Bookmarks" AutomationProperties.AutomationId="Command_Bookmarks">
+                            <MenuFlyoutItem x:Uid="Menu_Go_ToggleBookmark" cmd:CommandUi.Id="go.bookmark.toggle" AutomationProperties.AutomationId="Command_ToggleBookmark" />
+                            <MenuFlyoutItem x:Uid="Menu_Go_NextBookmark" cmd:CommandUi.Id="go.bookmark.next" AutomationProperties.AutomationId="Command_NextBookmark" />
+                            <MenuFlyoutItem x:Uid="Menu_Go_PreviousBookmark" cmd:CommandUi.Id="go.bookmark.previous" AutomationProperties.AutomationId="Command_PreviousBookmark" />
+                            <MenuFlyoutItem x:Uid="Menu_Go_EditBookmark" cmd:CommandUi.Id="go.bookmark.edit" AutomationProperties.AutomationId="Command_EditBookmark" />
+                            <MenuFlyoutItem x:Uid="Menu_Go_BookmarkList" cmd:CommandUi.Id="go.bookmark.list" AutomationProperties.AutomationId="Command_BookmarkList" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutSubItem x:Name="NumberedSetMenu" x:Uid="Menu_Go_NumberedSet" AutomationProperties.AutomationId="Command_NumberedSet" />
+                            <MenuFlyoutSubItem x:Name="NumberedGoMenu" x:Uid="Menu_Go_NumberedGo" AutomationProperties.AutomationId="Command_NumberedGo" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Go_Start" cmd:CommandUi.Id="go.start" AutomationProperties.AutomationId="Command_GoStart" />
                         <MenuFlyoutItem x:Uid="Menu_Go_End" cmd:CommandUi.Id="go.end" AutomationProperties.AutomationId="Command_GoEnd" />
                     </MenuBarItem>
@@ -167,7 +179,8 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_LeftPanel" cmd:CommandUi.Id="view.leftPanel" AutomationProperties.AutomationId="Command_LeftPanel" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_RightPanel" cmd:CommandUi.Id="view.rightPanel" AutomationProperties.AutomationId="Command_RightPanel" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_BottomPanel" cmd:CommandUi.Id="view.bottomPanel" AutomationProperties.AutomationId="Command_BottomPanel" />
-                            <ToggleMenuFlyoutItem x:Uid="Menu_View_Inspector" cmd:CommandUi.Id="view.panel.inspector" AutomationProperties.AutomationId="Command_PanelInspector" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_Inspector" cmd:CommandUi.Id="view.panel.inspector" AutomationProperties.AutomationId="Command_ToggleInspector" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_BookmarksPanel" cmd:CommandUi.Id="view.panel.bookmarks" AutomationProperties.AutomationId="Command_ToggleBookmarks" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Hash" cmd:CommandUi.Id="view.panel.hash" AutomationProperties.AutomationId="Command_PanelHash" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />

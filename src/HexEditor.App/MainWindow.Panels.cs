@@ -292,6 +292,7 @@ public sealed partial class MainWindow
 
         ApplyFloatingPanels();
         SyncHashTarget();
+        SyncAnnotationPanels();
         SavePanelLayout();
         RefreshCommandUi();
     }
@@ -429,6 +430,11 @@ public sealed partial class MainWindow
             ApplyPanelLayout();
         }
     }
+
+    /// <summary>表示中のパネルの中身 (浮動パネルならそちら)。表示されていなければ null。</summary>
+    private FrameworkElement? ShownPanelContent(string id) =>
+        !IsPanelShown(id) ? null
+        : _panelContents.GetValueOrDefault(_floatingPanels.ContainsKey(id) ? id + "|floating" : id);
 
     /// <summary>パネルのある場所 (テスト用の命令と F6 の領域の移動に使う)。</summary>
     public string? PanelLocation(string id) =>

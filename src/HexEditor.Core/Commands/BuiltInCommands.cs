@@ -96,6 +96,15 @@ public static class BuiltInCommands
         new("go.start", "go") { Condition = "documentOpen" },
         new("go.end", "go") { Condition = "documentOpen" },
 
+        // ブックマーク (INSP-23〜INSP-26)。番号付きは数字キーの段 (テンキーも KeyDispatcher が同じに扱う。00-overview.md 8.7)。
+        new("go.bookmark.toggle", "go") { DefaultBindings = [K("Ctrl+F2")], Condition = "documentOpen" },
+        new("go.bookmark.next", "go") { DefaultBindings = [K("F2")], Condition = "documentOpen" },
+        new("go.bookmark.previous", "go") { DefaultBindings = [K("Shift+F2")], Condition = "documentOpen" },
+        new("go.bookmark.edit", "go") { Condition = "documentOpen" },
+        new("go.bookmark.list", "go") { Condition = "documentOpen" },
+        .. Enumerable.Range(1, 9).Select(n => new CommandDefinition($"go.bookmark.set{n}", "go") { DefaultBindings = [K($"Ctrl+Shift+{n}")], Condition = "documentOpen" }),
+        .. Enumerable.Range(1, 9).Select(n => new CommandDefinition($"go.bookmark.goto{n}", "go") { DefaultBindings = [K($"Ctrl+{n}")], Condition = "documentOpen" }),
+
         // ---- 表示 ----
         new("view.encoding.ascii", "view") { Condition = "documentOpen" },
         new("view.encoding.ansi", "view") { Condition = "documentOpen" },
@@ -108,6 +117,7 @@ public static class BuiltInCommands
         new("view.customizeToolbar", "view"),
         new("view.panel.inspector", "view") { Icon = IconInspector, DefaultBindings = [K("Ctrl+Shift+I")] },
         new("view.panel.hash", "view"),
+        new("view.panel.bookmarks", "view"),
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
         new("view.theme.system", "view"),

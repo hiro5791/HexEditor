@@ -23,9 +23,6 @@ public sealed partial class PanelDockArea : UserControl
     /// <summary>ドラッグ中のパネル (ドロップ先の判定に使う)。</summary>
     public static string? DraggingPanel { get; private set; }
 
-    /// <summary>見出しのメニューの項目の処理 (テスト用の命令が、メニューを開かずに項目を押すのに使う)。</summary>
-    public static readonly System.Runtime.CompilerServices.ConditionalWeakTable<MenuFlyoutItem, Action> MenuActions = [];
-
     /// <summary>ドラッグの開始・終了 (ウィンドウがドロップ先の枠を出す)。</summary>
     public static event Action<string?>? DraggingChanged;
 
@@ -116,6 +113,41 @@ public sealed partial class PanelDockArea : UserControl
         }
     }
 
+    /// <summary>中身 (文書がないときの案内を除く) があるか。</summary>
+    public bool HasBody => Body.Content is UIElement { Visibility: Visibility.Visible };
+
+    /// <summary><paramref name="node"/> が中身の中の要素か (見出しではなく)。</summary>
+    public bool BodyContains(DependencyObject node) => Body.Content is DependencyObject content && IsWithin(node, content);
+
+    /// <summary>
+    /// 中身にフォーカスを移す (F6 の領域の移動で、見出しの次。UI-52)。中身が <see cref="Panels.IPanelContent"/> なら、その決めた要素
+    /// (一覧など) に移す。そうでなければ最初にフォーカスできる要素に移す。
+    /// </summary>
+    public bool FocusBody()
+    {
+        if (Body.Content is Panels.IPanelContent panel)
+        {
+            return panel.FocusContent();
+        }
+
+        return Body.Content is DependencyObject content
+            && Microsoft.UI.Xaml.Input.FocusManager.FindFirstFocusableElement(content) is Control control
+            && control.Focus(FocusState.Keyboard);
+    }
+
+    private static bool IsWithin(DependencyObject node, DependencyObject root)
+    {
+        for (DependencyObject? n = node; n is not null; n = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(n))
+        {
+            if (ReferenceEquals(n, root))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /// <summary>見出しのタブにフォーカスを移す (F6 の領域の移動。UI-52)。</summary>
     public bool FocusHeader()
     {
@@ -180,9 +212,7 @@ public sealed partial class PanelDockArea : UserControl
         {
             var item = new MenuFlyoutItem { Text = Loc.Get(key), IsEnabled = dock != Dock };
             AutomationProperties.SetAutomationId(item, $"PanelMove_{panelId}_{PanelLayout.DockName(dock)}");
-            Action moveTo = () => MoveRequested?.Invoke(this, new PanelMoveRequest(panelId, dock));
-            MenuActions.AddOrUpdate(item, moveTo);
-            item.Click += (_, _) => moveTo();
+            item.Click += (_, _) => RequestMove(panelId, dock);
             move.Items.Add(item);
         }
 
@@ -193,6 +223,12 @@ public sealed partial class PanelDockArea : UserControl
         menu.Items.Add(close);
         return menu;
     }
+
+    /// <summary>
+    /// 「移動 &gt; …」の項目と同じ処理 (テスト用の命令からも呼ぶ。メニューの項目に処理を結び付けた表は、項目の
+    /// ラッパーがガベージコレクションで作り直されると引けなくなるため使わない)。
+    /// </summary>
+    public void RequestMove(string panelId, PanelDock dock) => MoveRequested?.Invoke(this, new PanelMoveRequest(panelId, dock));
 
     /// <summary>見出しのタブの右クリックメニュー (テスト用の命令と、キーボードでの操作の確認に使う)。</summary>
     public MenuFlyout? MenuOf(string panelId) =>

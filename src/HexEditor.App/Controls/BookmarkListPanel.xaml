@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.BookmarkListPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:HexEditor.App.ViewModels"
+    AutomationProperties.AutomationId="BookmarksPanel"
+    AutomationProperties.LandmarkType="Custom">
+    <!--
+        ブックマーク一覧 (INSP-26)。上部にツールバー (追加・編集・削除・元に戻す) と絞り込み欄、その下に仮想化した一覧。
+        一覧の中のキー: Enter で移動、Delete で削除、Shift+F10 / アプリケーションキーで右クリックメニュー (00-overview 8.6)。
+    -->
+    <Grid RowSpacing="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Padding="8,6,8,0" Orientation="Horizontal" Spacing="4">
+            <Button x:Name="AddButton" AutomationProperties.AutomationId="Bookmarks_Add" Click="Add_Click">
+                <FontIcon FontSize="14" Glyph="&#xE710;" />
+            </Button>
+            <Button x:Name="EditButton" AutomationProperties.AutomationId="Bookmarks_Edit" Click="Edit_Click">
+                <FontIcon FontSize="14" Glyph="&#xE70F;" />
+            </Button>
+            <Button x:Name="DeleteButton" AutomationProperties.AutomationId="Bookmarks_Delete" Click="Delete_Click">
+                <FontIcon FontSize="14" Glyph="&#xE74D;" />
+            </Button>
+            <Button x:Name="UndoButton" AutomationProperties.AutomationId="Bookmarks_Undo" Click="Undo_Click">
+                <FontIcon FontSize="14" Glyph="&#xE7A7;" />
+            </Button>
+            <TextBlock
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Bookmarks_Count"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind Vm.CountText, Mode=OneWay}" />
+        </StackPanel>
+        <TextBox
+            x:Name="FilterBox"
+            x:Uid="Bookmarks_Filter"
+            Grid.Row="1"
+            Margin="8,0"
+            AutomationProperties.AutomationId="Bookmarks_Filter"
+            Text="{x:Bind Vm.Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <!--  列の見出し: 押すとその列で並べ替える (INSP-26 の仕様 2)  -->
+        <Grid
+            x:Name="Header"
+            Grid.Row="2"
+            Padding="12,0,8,0"
+            ColumnSpacing="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="28" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="96" />
+                <ColumnDefinition Width="56" />
+            </Grid.ColumnDefinitions>
+            <HyperlinkButton x:Uid="Bookmarks_ColumnNumber" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortNumber" Click="Sort_Click" Tag="Number" />
+            <HyperlinkButton x:Uid="Bookmarks_ColumnColor" Grid.Column="1" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortColor" Click="Sort_Click" Tag="Color" />
+            <HyperlinkButton x:Uid="Bookmarks_ColumnName" Grid.Column="2" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortName" Click="Sort_Click" Tag="Name" />
+            <HyperlinkButton x:Uid="Bookmarks_ColumnStart" Grid.Column="3" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortStart" Click="Sort_Click" Tag="Start" />
+            <HyperlinkButton x:Uid="Bookmarks_ColumnLength" Grid.Column="4" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortLength" Click="Sort_Click" Tag="Length" />
+        </Grid>
+        <ListView
+            x:Name="List"
+            Grid.Row="3"
+            AutomationProperties.AutomationId="Bookmarks_List"
+            ContainerContentChanging="List_ContainerContentChanging"
+            ContextRequested="List_ContextRequested"
+            IsItemClickEnabled="True"
+            ItemClick="List_ItemClick"
+            ItemsSource="{x:Bind Vm.Rows}"
+            KeyDown="List_KeyDown"
+            SelectionChanged="List_SelectionChanged"
+            SelectionMode="Extended">
+            <ListView.ItemContainerStyle>
+                <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem">
+                    <Setter Property="MinHeight" Value="32" />
+                    <Setter Property="Padding" Value="8,0" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:BookmarkRowViewModel">
+                    <Grid AutomationProperties.AccessibilityView="Raw" ColumnSpacing="4" ToolTipService.ToolTip="{x:Bind CommentLine, Mode=OneWay}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="28" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="96" />
+                            <ColumnDefinition Width="56" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock VerticalAlignment="Center" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind NumberText, Mode=OneWay}" />
+                        <Border
+                            Grid.Column="1"
+                            Width="12"
+                            Height="12"
+                            VerticalAlignment="Center"
+                            Background="{x:Bind Swatch, Mode=OneWay}"
+                            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="2" />
+                        <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind Name, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Grid.Column="3"
+                            VerticalAlignment="Center"
+                            FlowDirection="LeftToRight"
+                            FontFamily="Cascadia Mono, Consolas"
+                            Text="{x:Bind StartText, Mode=OneWay}" />
+                        <TextBlock
+                            Grid.Column="4"
+                            VerticalAlignment="Center"
+                            FlowDirection="LeftToRight"
+                            FontFamily="Cascadia Mono, Consolas"
+                            Text="{x:Bind LengthText, Mode=OneWay}"
+                            TextAlignment="Right" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Grid.ColumnSpan="3"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{x:Bind CommentLine, Mode=OneWay}"
+                            TextTrimming="CharacterEllipsis"
+                            Visibility="{x:Bind HasComment, Mode=OneWay}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Grid.ColumnSpan="3"
+                            Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{x:Bind DeletedText, Mode=OneWay}"
+                            Visibility="{x:Bind RangeDeleted, Mode=OneWay}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ContextFlyout>
+                <MenuFlyout x:Name="RowMenu" Opening="RowMenu_Opening">
+                    <MenuFlyoutItem x:Uid="Bookmarks_MenuGo" AutomationProperties.AutomationId="Bookmarks_MenuGo" Click="MenuGo_Click" />
+                    <MenuFlyoutItem x:Uid="Bookmarks_MenuRename" AutomationProperties.AutomationId="Bookmarks_MenuRename" Click="MenuRename_Click" />
+                    <MenuFlyoutItem x:Uid="Bookmarks_MenuEdit" AutomationProperties.AutomationId="Bookmarks_MenuEdit" Click="Edit_Click" />
+                    <MenuFlyoutSubItem x:Name="ColorMenu" x:Uid="Bookmarks_MenuColor" AutomationProperties.AutomationId="Bookmarks_MenuColor" />
+                    <MenuFlyoutSeparator />
+                    <MenuFlyoutItem x:Uid="Bookmarks_MenuDelete" AutomationProperties.AutomationId="Bookmarks_MenuDelete" Click="Delete_Click" />
+                </MenuFlyout>
+            </ListView.ContextFlyout>
+        </ListView>
+    </Grid>
+</UserControl>

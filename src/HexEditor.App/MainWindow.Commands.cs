@@ -149,6 +149,7 @@ public sealed partial class MainWindow
             () => NeedsDocument(d => d.Editor.CanGoForward ? null : Loc.Get("Command_NoHistory")));
         Commands.Register("go.start", () => GoStart_Click(this, e), NeedsDocument);
         Commands.Register("go.end", () => GoEnd_Click(this, e), NeedsDocument);
+        RegisterBookmarkCommands();
 
         // ---- 表示 ----
         foreach (string theme in new[] { "system", "light", "dark" })

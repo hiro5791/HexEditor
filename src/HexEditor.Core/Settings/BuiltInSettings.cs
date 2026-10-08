@@ -41,6 +41,17 @@ public static class BuiltInSettings
         new("view.scroll.cursorMargin", SettingCategories.View, SettingKind.Int, 0) { Min = 0, Max = 10, Order = 30 },
         new("view.jump.position", SettingCategories.View, SettingKind.Choice, "third") { Options = ["top", "third", "center"], Order = 40 },
 
+        // データインスペクタ (INSP-01〜INSP-19)。行の構成とプリセットはパネルの「行の設定」で変える。
+        new("inspector.integerBase", SettingCategories.View, SettingKind.Choice, "decimal") { Options = ["decimal", "hex", "octal"], Order = 100 },
+        new("inspector.floatFormat", SettingCategories.View, SettingKind.Choice, "shortest") { Options = ["shortest", "exponent", "hex"], Order = 101 },
+        new("inspector.timeZone", SettingCategories.View, SettingKind.Choice, "local") { Options = ["local", "utc"], Order = 102 },
+        new("inspector.dateFormat", SettingCategories.View, SettingKind.Choice, "regional") { Options = ["regional", "iso"], Order = 103 },
+        new("inspector.digitGrouping", SettingCategories.View, SettingKind.Bool, true) { Order = 104 },
+        new("inspector.highlightTarget", SettingCategories.View, SettingKind.Bool, true) { Order = 105 },
+        new("inspector.useCursorWithSelection", SettingCategories.View, SettingKind.Bool, false) { Order = 106 },
+        new("inspector.rows", SettingCategories.View, SettingKind.String, string.Empty) { Order = 107, ShowInPage = false },
+        new("inspector.rowPresets", SettingCategories.View, SettingKind.String, "{}") { Order = 108, ShowInPage = false },
+
         // ---- ファイルと保存 ----
         new("recent.maxItems", SettingCategories.Files, SettingKind.Int, RecentFileList.DefaultMaxItems) { Min = 0, Max = RecentFileList.MaxItemsLimit, Order = 1 },
         new("recent.restorePosition", SettingCategories.Files, SettingKind.Bool, true) { Order = 2 },

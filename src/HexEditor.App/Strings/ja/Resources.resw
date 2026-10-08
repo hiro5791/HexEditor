@@ -967,4 +967,285 @@
   <data name="SetDesc_hash_algorithms" xml:space="preserve"><value>ハッシュパネルで選んだアルゴリズムです。</value></data>
   <data name="Set_hash_sets" xml:space="preserve"><value>ハッシュのアルゴリズムのセット</value></data>
   <data name="SetDesc_hash_sets" xml:space="preserve"><value>ハッシュパネルで保存したアルゴリズムのセットです。</value></data>
+  <data name="Inspector_PanelName" xml:space="preserve"><value>データインスペクタ</value></data>
+  <data name="Inspector_Endian_Name" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="Inspector_Base_Name" xml:space="preserve"><value>整数の表示形式</value></data>
+  <data name="Inspector_FloatFormat_Name" xml:space="preserve"><value>浮動小数点の表示形式</value></data>
+  <data name="Inspector_RowsText.Text" xml:space="preserve"><value>行の設定</value></data>
+  <data name="Inspector_Utc_Name" xml:space="preserve"><value>日時を UTC で表示</value></data>
+  <data name="Inspector_ZoneUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Inspector_ZoneLocal" xml:space="preserve"><value>ローカル時刻</value></data>
+  <data name="Inspector_EndianDocument.Text" xml:space="preserve"><value>ドキュメントに従う</value></data>
+  <data name="Inspector_EndianLittle.Text" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="Inspector_EndianBig.Text" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Inspector_BaseDecimal.Content" xml:space="preserve"><value>10 進</value></data>
+  <data name="Inspector_BaseHex.Content" xml:space="preserve"><value>16 進</value></data>
+  <data name="Inspector_BaseOctal.Content" xml:space="preserve"><value>8 進</value></data>
+  <data name="Inspector_FloatShortest.Content" xml:space="preserve"><value>最短で正確</value></data>
+  <data name="Inspector_FloatExponent.Content" xml:space="preserve"><value>指数表記</value></data>
+  <data name="Inspector_FloatHex.Content" xml:space="preserve"><value>16 進浮動小数点</value></data>
+  <data name="Inspector_MenuCopy.Text" xml:space="preserve"><value>値をコピー</value></data>
+  <data name="Inspector_MenuCopyAll.Text" xml:space="preserve"><value>すべての行をコピー</value></data>
+  <data name="Inspector_MenuEdit.Text" xml:space="preserve"><value>値を編集</value></data>
+  <data name="Inspector_MenuHide.Text" xml:space="preserve"><value>この行を非表示</value></data>
+  <data name="Inspector_Origin" xml:space="preserve"><value>0x{0} から</value></data>
+  <data name="Inspector_EndianFixed" xml:space="preserve"><value>{0} (インスペクタのみ)</value></data>
+  <data name="Inspector_RowOpposite" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Inspector_RowFixed" xml:space="preserve"><value>{0} (固定)</value></data>
+  <data name="Inspector_Group_Integer" xml:space="preserve"><value>整数</value></data>
+  <data name="Inspector_Group_Float" xml:space="preserve"><value>浮動小数点</value></data>
+  <data name="Inspector_Group_VarInt" xml:space="preserve"><value>可変長整数</value></data>
+  <data name="Inspector_Group_Text" xml:space="preserve"><value>文字・文字列</value></data>
+  <data name="Inspector_Group_DateTime" xml:space="preserve"><value>日時</value></data>
+  <data name="Inspector_Group_Other" xml:space="preserve"><value>その他</value></data>
+  <data name="Inspector_Group_User" xml:space="preserve"><value>ユーザー定義</value></data>
+  <data name="Inspector_Row_int8" xml:space="preserve"><value>int8</value></data>
+  <data name="Inspector_Row_uint8" xml:space="preserve"><value>uint8</value></data>
+  <data name="Inspector_Row_int16" xml:space="preserve"><value>int16</value></data>
+  <data name="Inspector_Row_uint16" xml:space="preserve"><value>uint16</value></data>
+  <data name="Inspector_Row_int32" xml:space="preserve"><value>int32</value></data>
+  <data name="Inspector_Row_uint32" xml:space="preserve"><value>uint32</value></data>
+  <data name="Inspector_Row_int64" xml:space="preserve"><value>int64</value></data>
+  <data name="Inspector_Row_uint64" xml:space="preserve"><value>uint64</value></data>
+  <data name="Inspector_Row_float" xml:space="preserve"><value>float</value></data>
+  <data name="Inspector_Row_double" xml:space="preserve"><value>double</value></data>
+  <data name="Inspector_Row_ansi" xml:space="preserve"><value>ANSI</value></data>
+  <data name="Inspector_Row_utf8" xml:space="preserve"><value>UTF-8</value></data>
+  <data name="Inspector_Row_utf16" xml:space="preserve"><value>UTF-16</value></data>
+  <data name="Inspector_Row_unix32" xml:space="preserve"><value>Unix 時刻 (32 bit)</value></data>
+  <data name="Inspector_Row_unix32u" xml:space="preserve"><value>Unix 時刻 (32 bit 符号なし)</value></data>
+  <data name="Inspector_Row_unix64" xml:space="preserve"><value>Unix 時刻 (64 bit)</value></data>
+  <data name="Inspector_Row_filetime" xml:space="preserve"><value>FILETIME</value></data>
+  <data name="Inspector_Row_dosdate" xml:space="preserve"><value>DOS 日付</value></data>
+  <data name="Inspector_Row_dostime" xml:space="preserve"><value>DOS 時刻</value></data>
+  <data name="Inspector_Row_dosdatetime" xml:space="preserve"><value>DOS 日時</value></data>
+  <data name="Inspector_Row_binary8" xml:space="preserve"><value>2 進 (8 bit)</value></data>
+  <data name="Inspector_Row_binary16" xml:space="preserve"><value>2 進 (16 bit)</value></data>
+  <data name="Inspector_Row_binary32" xml:space="preserve"><value>2 進 (32 bit)</value></data>
+  <data name="Inspector_Row_binary64" xml:space="preserve"><value>2 進 (64 bit)</value></data>
+  <data name="Inspector_Row_guid" xml:space="preserve"><value>GUID (Windows)</value></data>
+  <data name="Inspector_Row_uuid" xml:space="preserve"><value>UUID (RFC 9562)</value></data>
+  <data name="Inspector_ReadOnlyTip" xml:space="preserve"><value>読み取り専用です</value></data>
+  <data name="Inspector_BitToolTip" xml:space="preserve"><value>ビット {0}</value></data>
+  <data name="Inspector_StoredValue" xml:space="preserve"><value>格納される値: {0}</value></data>
+  <data name="Inspector_UndoDescription" xml:space="preserve"><value>インスペクタでの書き換え</value></data>
+  <data name="Inspector_Edit_Name" xml:space="preserve"><value>新しい値</value></data>
+  <data name="Inspector_NotEnough" xml:space="preserve"><value>データが足りません ({0} バイト必要、残り {1} バイト)</value></data>
+  <data name="Inspector_Unreadable" xml:space="preserve"><value>読み込めません</value></data>
+  <data name="Inspector_Invalid" xml:space="preserve"><value>不正 ({0})</value></data>
+  <data name="Inspector_ReasonContinuation" xml:space="preserve"><value>継続バイト</value></data>
+  <data name="Inspector_ReasonIncomplete" xml:space="preserve"><value>途中で終わる並び</value></data>
+  <data name="Inspector_ReasonOverlong" xml:space="preserve"><value>冗長な符号化</value></data>
+  <data name="Inspector_ReasonSurrogate" xml:space="preserve"><value>サロゲートのコードポイント</value></data>
+  <data name="Inspector_ReasonTooLarge" xml:space="preserve"><value>U+10FFFF を超える</value></data>
+  <data name="Inspector_ReasonBadLead" xml:space="preserve"><value>不正な先頭バイト</value></data>
+  <data name="Inspector_ReasonMissingContinuation" xml:space="preserve"><value>継続バイトがない</value></data>
+  <data name="Inspector_ReasonUnpairedHigh" xml:space="preserve"><value>ペアになっていない上位サロゲート</value></data>
+  <data name="Inspector_ReasonUnpairedLow" xml:space="preserve"><value>ペアになっていない下位サロゲート</value></data>
+  <data name="Inspector_ReasonUndefined" xml:space="preserve"><value>コードページに定義がない</value></data>
+  <data name="Inspector_OneByte" xml:space="preserve"><value>(1 バイト)</value></data>
+  <data name="Inspector_Bytes" xml:space="preserve"><value>({0} バイト)</value></data>
+  <data name="Inspector_Denormal" xml:space="preserve"><value>{0} (非正規化数)</value></data>
+  <data name="Inspector_OutOfRange" xml:space="preserve"><value>範囲外 ({0})</value></data>
+  <data name="Inspector_FieldMonth" xml:space="preserve"><value>月 = {0}</value></data>
+  <data name="Inspector_FieldDay" xml:space="preserve"><value>日 = {0}</value></data>
+  <data name="Inspector_FieldHour" xml:space="preserve"><value>時 = {0}</value></data>
+  <data name="Inspector_FieldMinute" xml:space="preserve"><value>分 = {0}</value></data>
+  <data name="Inspector_FieldSecond" xml:space="preserve"><value>秒 = {0}</value></data>
+  <data name="Inspector_NoTimeZone" xml:space="preserve"><value>(タイムゾーンなし)</value></data>
+  <data name="Inspector_Utc" xml:space="preserve"><value>(UTC)</value></data>
+  <data name="Inspector_UtcOffset" xml:space="preserve"><value>(UTC{0})</value></data>
+  <data name="Inspector_ComponentVersion" xml:space="preserve"><value>バージョン</value></data>
+  <data name="Inspector_ComponentVariant" xml:space="preserve"><value>バリアント</value></data>
+  <data name="Inspector_ComponentTimestamp" xml:space="preserve"><value>タイムスタンプ</value></data>
+  <data name="Inspector_ComponentClockSequence" xml:space="preserve"><value>クロックシーケンス</value></data>
+  <data name="Inspector_ComponentNode" xml:space="preserve"><value>ノード</value></data>
+  <data name="Inspector_ComponentUnixTime" xml:space="preserve"><value>Unix 時刻 (ミリ秒)</value></data>
+  <data name="Inspector_RandomNode" xml:space="preserve"><value>{0} (乱数のノード)</value></data>
+  <data name="Inspector_VersionUnknown" xml:space="preserve"><value>不明</value></data>
+  <data name="Inspector_VariantReserved" xml:space="preserve"><value>予約</value></data>
+  <data name="Inspector_ErrorIntegerRange" xml:space="preserve"><value>{0} の範囲 ({1}〜{2}) を超えています</value></data>
+  <data name="Inspector_ErrorInteger" xml:space="preserve"><value>整数か、0x100*4 のような式を入力してください</value></data>
+  <data name="Inspector_ErrorFloat" xml:space="preserve"><value>1.5、1e-3、inf、nan、0x1.8p+1 のような数を入力してください</value></data>
+  <data name="Inspector_ErrorFloatOverflow" xml:space="preserve"><value>{0} の範囲を超えるため無限大になります</value></data>
+  <data name="Inspector_ErrorDate" xml:space="preserve"><value>日時は 2026-10-07 12:34:56 の形式で入力してください</value></data>
+  <data name="Inspector_ErrorDateRange" xml:space="preserve"><value>{0} の範囲 ({1}〜{2}) の外です</value></data>
+  <data name="Inspector_ErrorGuid" xml:space="preserve"><value>16 進数字を 32 桁入力してください</value></data>
+  <data name="Inspector_ErrorBinary" xml:space="preserve"><value>2 進の数字 (0 か 1) を {0} 桁まで入力してください</value></data>
+  <data name="Inspector_ErrorChar" xml:space="preserve"><value>1 文字を入力してください</value></data>
+  <data name="Inspector_ErrorNotEncodable" xml:space="preserve"><value>この文字は {0} で書き込めません</value></data>
+  <data name="Inspector_ErrorPastEnd" xml:space="preserve"><value>ドキュメントの末尾を超えます ({0} バイト必要、残り {1} バイト)</value></data>
+  <data name="Inspector_SettingsList_Name" xml:space="preserve"><value>表示する行</value></data>
+  <data name="Inspector_MoveUp.Content" xml:space="preserve"><value>上へ</value></data>
+  <data name="Inspector_MoveDown.Content" xml:space="preserve"><value>下へ</value></data>
+  <data name="Inspector_Opposite.Content" xml:space="preserve"><value>反対のエンディアンでも表示</value></data>
+  <data name="Inspector_DateFormatLabel.Text" xml:space="preserve"><value>日時の書式</value></data>
+  <data name="Inspector_DateRegional.Content" xml:space="preserve"><value>地域設定に従う</value></data>
+  <data name="Inspector_DateIso.Content" xml:space="preserve"><value>ISO 8601</value></data>
+  <data name="Inspector_PresetLabel.Text" xml:space="preserve"><value>プリセット</value></data>
+  <data name="Inspector_PresetBasic.Content" xml:space="preserve"><value>基本</value></data>
+  <data name="Inspector_PresetAll.Content" xml:space="preserve"><value>すべて</value></data>
+  <data name="Inspector_PresetDateTime.Content" xml:space="preserve"><value>日時</value></data>
+  <data name="Inspector_PresetEmbedded.Content" xml:space="preserve"><value>組み込み向け</value></data>
+  <data name="Inspector_ResetRows.Content" xml:space="preserve"><value>既定に戻す</value></data>
+  <data name="Inspector_PresetName.PlaceholderText" xml:space="preserve"><value>プリセットの名前</value></data>
+  <data name="Inspector_PresetName.AutomationProperties.Name" xml:space="preserve"><value>プリセットの名前</value></data>
+  <data name="Inspector_SavePreset.Content" xml:space="preserve"><value>プリセットとして保存</value></data>
+  <data name="Bookmarks_PanelName" xml:space="preserve"><value>ブックマーク</value></data>
+  <data name="Bookmarks_AddName" xml:space="preserve"><value>ブックマークを追加</value></data>
+  <data name="Bookmarks_EditName" xml:space="preserve"><value>ブックマークを編集</value></data>
+  <data name="Bookmarks_DeleteName" xml:space="preserve"><value>ブックマークを削除</value></data>
+  <data name="Bookmarks_UndoName" xml:space="preserve"><value>削除を元に戻す</value></data>
+  <data name="Bookmarks_Filter.PlaceholderText" xml:space="preserve"><value>名前・コメントで絞り込み</value></data>
+  <data name="Bookmarks_Filter.AutomationProperties.Name" xml:space="preserve"><value>ブックマークの絞り込み</value></data>
+  <data name="Bookmarks_ColumnNumber.Content" xml:space="preserve"><value>番号</value></data>
+  <data name="Bookmarks_ColumnNumber.ToolTipService.ToolTip" xml:space="preserve"><value>番号で並べ替え</value></data>
+  <data name="Bookmarks_ColumnColor.Content" xml:space="preserve"><value>●</value></data>
+  <data name="Bookmarks_ColumnColor.ToolTipService.ToolTip" xml:space="preserve"><value>色で並べ替え</value></data>
+  <data name="Bookmarks_ColumnColor.AutomationProperties.Name" xml:space="preserve"><value>色で並べ替え</value></data>
+  <data name="Bookmarks_ColumnName.Content" xml:space="preserve"><value>名前</value></data>
+  <data name="Bookmarks_ColumnName.ToolTipService.ToolTip" xml:space="preserve"><value>名前で並べ替え</value></data>
+  <data name="Bookmarks_ColumnStart.Content" xml:space="preserve"><value>開始</value></data>
+  <data name="Bookmarks_ColumnStart.ToolTipService.ToolTip" xml:space="preserve"><value>開始オフセットで並べ替え</value></data>
+  <data name="Bookmarks_ColumnLength.Content" xml:space="preserve"><value>長さ</value></data>
+  <data name="Bookmarks_ColumnLength.ToolTipService.ToolTip" xml:space="preserve"><value>長さで並べ替え</value></data>
+  <data name="Bookmarks_ColorNumber" xml:space="preserve"><value>色 {0}</value></data>
+  <data name="Bookmarks_RowName" xml:space="preserve"><value>{0}、{1}、長さ {2}</value></data>
+  <data name="Bookmarks_NumberName" xml:space="preserve"><value>番号 {0}</value></data>
+  <data name="Bookmarks_RangeDeleted" xml:space="preserve"><value>範囲が削除されました</value></data>
+  <data name="Bookmarks_Count" xml:space="preserve"><value>{0} 件</value></data>
+  <data name="Bookmarks_MenuGo.Text" xml:space="preserve"><value>移動</value></data>
+  <data name="Bookmarks_MenuRename.Text" xml:space="preserve"><value>名前を変更</value></data>
+  <data name="Bookmarks_MenuEdit.Text" xml:space="preserve"><value>編集...</value></data>
+  <data name="Bookmarks_MenuColor.Text" xml:space="preserve"><value>色</value></data>
+  <data name="Bookmarks_MenuDelete.Text" xml:space="preserve"><value>削除</value></data>
+  <data name="Bookmarks_DefaultName" xml:space="preserve"><value>ブックマーク {0}</value></data>
+  <data name="Bookmarks_Limit" xml:space="preserve"><value>ブックマークの上限 ({0} 件) に達しました</value></data>
+  <data name="Bookmarks_Deleted" xml:space="preserve"><value>ブックマーク "{0}" を削除しました</value></data>
+  <data name="Bookmarks_DeletedMany" xml:space="preserve"><value>{0} 件のブックマークを削除しました</value></data>
+  <data name="Bookmarks_None" xml:space="preserve"><value>ブックマークがありません</value></data>
+  <data name="Bookmarks_WrappedToStart" xml:space="preserve"><value>先頭に戻りました</value></data>
+  <data name="Bookmarks_WrappedToEnd" xml:space="preserve"><value>末尾に戻りました</value></data>
+  <data name="Bookmarks_NumberNotSet" xml:space="preserve"><value>番号付きブックマーク {0} は設定されていません</value></data>
+  <data name="Bookmarks_Announce" xml:space="preserve"><value>ブックマーク {0}</value></data>
+  <data name="Bookmarks_FileChanged" xml:space="preserve"><value>ブックマーク ({0} 件) を記録した後でファイルが変わっているため、位置が合わない可能性があります</value></data>
+  <data name="Bookmarks_ApplyAnyway" xml:space="preserve"><value>ブックマークを復元</value></data>
+  <data name="Bookmarks_Discard" xml:space="preserve"><value>破棄</value></data>
+  <data name="HexView_Menu_SetBookmark" xml:space="preserve"><value>ブックマークを設定</value></data>
+  <data name="HexView_Menu_RemoveBookmark" xml:space="preserve"><value>ブックマークを解除</value></data>
+  <data name="HexView_Menu_EditBookmark" xml:space="preserve"><value>ブックマークを編集...</value></data>
+  <data name="Menu_Go_Bookmarks.Text" xml:space="preserve"><value>ブックマーク(R)</value></data>
+  <data name="Menu_Go_Bookmarks.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Go_ToggleBookmark.Text" xml:space="preserve"><value>ブックマークの設定 / 解除(T)</value></data>
+  <data name="Menu_Go_ToggleBookmark.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Go_NextBookmark.Text" xml:space="preserve"><value>次のブックマーク(N)</value></data>
+  <data name="Menu_Go_NextBookmark.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_PreviousBookmark.Text" xml:space="preserve"><value>前のブックマーク(P)</value></data>
+  <data name="Menu_Go_PreviousBookmark.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_EditBookmark.Text" xml:space="preserve"><value>ブックマークを編集(E)...</value></data>
+  <data name="Menu_Go_EditBookmark.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Go_BookmarkList.Text" xml:space="preserve"><value>ブックマーク一覧(L)</value></data>
+  <data name="Menu_Go_BookmarkList.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Go_NumberedSet.Text" xml:space="preserve"><value>番号付きブックマークを設定(S)</value></data>
+  <data name="Menu_Go_NumberedSet.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Go_NumberedGo.Text" xml:space="preserve"><value>番号付きブックマークへ移動(G)</value></data>
+  <data name="Menu_Go_NumberedGo.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Go_SetNumbered" xml:space="preserve"><value>ブックマーク {0}</value></data>
+  <data name="Menu_Go_GoNumbered" xml:space="preserve"><value>ブックマーク {0}</value></data>
+  <data name="Menu_View_BookmarksPanel.Text" xml:space="preserve"><value>ブックマーク(K)</value></data>
+  <data name="Menu_View_BookmarksPanel.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Bookmark_Name.Header" xml:space="preserve"><value>名前</value></data>
+  <data name="Bookmark_NameNotUsable" xml:space="preserve"><value>入力式では使えない名前です (bm.名前 に使えるのは、英字・数字・_ からなり英字か _ で始まる名前です)</value></data>
+  <data name="Bookmark_Start.Header" xml:space="preserve"><value>開始オフセット</value></data>
+  <data name="Bookmark_Length.Header" xml:space="preserve"><value>長さ</value></data>
+  <data name="Bookmark_RangeInfo" xml:space="preserve"><value>{0}〜{1} (このバイトを含む)、{2} バイト</value></data>
+  <data name="Bookmark_RangeError" xml:space="preserve"><value>範囲がドキュメントの外です (長さ {0})</value></data>
+  <data name="Bookmark_ColorLabel.Text" xml:space="preserve"><value>色</value></data>
+  <data name="Bookmark_CustomColor.Content" xml:space="preserve"><value>任意の色</value></data>
+  <data name="Bookmark_Number.Header" xml:space="preserve"><value>番号</value></data>
+  <data name="Bookmark_NumberNone" xml:space="preserve"><value>なし</value></data>
+  <data name="Bookmark_CommentLabel.Text" xml:space="preserve"><value>コメント (Markdown)</value></data>
+  <data name="Bookmark_PreviewToggle.Content" xml:space="preserve"><value>プレビュー</value></data>
+  <data name="Bookmark_CommentRemaining" xml:space="preserve"><value>残り {0} 文字</value></data>
+  <data name="Bookmark_RangeByLength.Content" xml:space="preserve"><value>長さで指定</value></data>
+  <data name="Bookmark_RangeByEnd.Content" xml:space="preserve"><value>終了 (このバイトを含む) で指定</value></data>
+  <data name="Bookmark_RangeMode.AutomationProperties.Name" xml:space="preserve"><value>範囲の指定のしかた</value></data>
+  <data name="Bookmark_EndHeader" xml:space="preserve"><value>終了 (このバイトを含む)</value></data>
+  <data name="Cmd_go_bookmark_toggle" xml:space="preserve"><value>ブックマークの設定 / 解除</value></data>
+  <data name="CmdAlias_go_bookmark_toggle" xml:space="preserve"><value>ぶっくまーくのせってい かいじょ</value></data>
+  <data name="Cmd_go_bookmark_next" xml:space="preserve"><value>次のブックマーク</value></data>
+  <data name="CmdAlias_go_bookmark_next" xml:space="preserve"><value>つぎのぶっくまーく</value></data>
+  <data name="Cmd_go_bookmark_previous" xml:space="preserve"><value>前のブックマーク</value></data>
+  <data name="CmdAlias_go_bookmark_previous" xml:space="preserve"><value>まえのぶっくまーく</value></data>
+  <data name="Cmd_go_bookmark_edit" xml:space="preserve"><value>ブックマークを編集</value></data>
+  <data name="CmdAlias_go_bookmark_edit" xml:space="preserve"><value>ぶっくまーくをへんしゅう</value></data>
+  <data name="Cmd_go_bookmark_list" xml:space="preserve"><value>ブックマーク一覧</value></data>
+  <data name="CmdAlias_go_bookmark_list" xml:space="preserve"><value>ぶっくまーくいちらん</value></data>
+  <data name="Cmd_view_panel_bookmarks" xml:space="preserve"><value>ブックマーク一覧の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_bookmarks" xml:space="preserve"><value>ぶっくまーくいちらんのひょうじきりかえ</value></data>
+  <data name="Command_NoBookmarkAtCursor" xml:space="preserve"><value>カーソル位置にブックマークがありません</value></data>
+  <data name="Set_inspector_integerBase" xml:space="preserve"><value>インスペクタ: 整数の基数</value></data>
+  <data name="SetDesc_inspector_integerBase" xml:space="preserve"><value>データインスペクタで整数の値を表示する基数。</value></data>
+  <data name="SetOpt_inspector_integerBase_decimal" xml:space="preserve"><value>10 進</value></data>
+  <data name="SetOpt_inspector_integerBase_hex" xml:space="preserve"><value>16 進</value></data>
+  <data name="SetOpt_inspector_integerBase_octal" xml:space="preserve"><value>8 進</value></data>
+  <data name="Set_inspector_floatFormat" xml:space="preserve"><value>インスペクタ: 浮動小数点数の形式</value></data>
+  <data name="SetDesc_inspector_floatFormat" xml:space="preserve"><value>データインスペクタで float と double の値を表示する形式。</value></data>
+  <data name="SetOpt_inspector_floatFormat_shortest" xml:space="preserve"><value>最短</value></data>
+  <data name="SetOpt_inspector_floatFormat_exponent" xml:space="preserve"><value>指数</value></data>
+  <data name="SetOpt_inspector_floatFormat_hex" xml:space="preserve"><value>16 進浮動小数点</value></data>
+  <data name="Set_inspector_timeZone" xml:space="preserve"><value>インスペクタ: タイムゾーン</value></data>
+  <data name="SetDesc_inspector_timeZone" xml:space="preserve"><value>データインスペクタの日時の値に使うタイムゾーン。</value></data>
+  <data name="SetOpt_inspector_timeZone_local" xml:space="preserve"><value>ローカル時刻</value></data>
+  <data name="SetOpt_inspector_timeZone_utc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Set_inspector_dateFormat" xml:space="preserve"><value>インスペクタ: 日時の書式</value></data>
+  <data name="SetDesc_inspector_dateFormat" xml:space="preserve"><value>データインスペクタの日時の値の書式。</value></data>
+  <data name="SetOpt_inspector_dateFormat_regional" xml:space="preserve"><value>地域の書式</value></data>
+  <data name="SetOpt_inspector_dateFormat_iso" xml:space="preserve"><value>ISO 8601</value></data>
+  <data name="Set_inspector_digitGrouping" xml:space="preserve"><value>インスペクタ: 桁区切り</value></data>
+  <data name="SetDesc_inspector_digitGrouping" xml:space="preserve"><value>10 進の値を桁区切りで表示する (例: 12,345)。</value></data>
+  <data name="Set_inspector_highlightTarget" xml:space="preserve"><value>インスペクタの対象を強調する</value></data>
+  <data name="SetDesc_inspector_highlightTarget" xml:space="preserve"><value>選んだインスペクタの行のバイトを Hex ビューで強調する。</value></data>
+  <data name="Set_inspector_useCursorWithSelection" xml:space="preserve"><value>インスペクタ: 選択範囲があってもカーソル位置を使う</value></data>
+  <data name="SetDesc_inspector_useCursorWithSelection" xml:space="preserve"><value>選択範囲の先頭ではなく、カーソル位置のバイトを解釈する。</value></data>
+  <data name="Set_inspector_rows" xml:space="preserve"><value>インスペクタの行</value></data>
+  <data name="SetDesc_inspector_rows" xml:space="preserve"><value>データインスペクタに表示する行と順序。</value></data>
+  <data name="Set_inspector_rowPresets" xml:space="preserve"><value>インスペクタの行のプリセット</value></data>
+  <data name="SetDesc_inspector_rowPresets" xml:space="preserve"><value>名前を付けたインスペクタの行の組み合わせ。</value></data>
+  <data name="Cmd_go_bookmark_set1" xml:space="preserve"><value>番号付きブックマーク 1 を設定</value></data>
+  <data name="CmdAlias_go_bookmark_set1" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
+  <data name="Cmd_go_bookmark_goto1" xml:space="preserve"><value>番号付きブックマーク 1 へ移動</value></data>
+  <data name="CmdAlias_go_bookmark_goto1" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
+  <data name="Cmd_go_bookmark_set2" xml:space="preserve"><value>番号付きブックマーク 2 を設定</value></data>
+  <data name="CmdAlias_go_bookmark_set2" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
+  <data name="Cmd_go_bookmark_goto2" xml:space="preserve"><value>番号付きブックマーク 2 へ移動</value></data>
+  <data name="CmdAlias_go_bookmark_goto2" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
+  <data name="Cmd_go_bookmark_set3" xml:space="preserve"><value>番号付きブックマーク 3 を設定</value></data>
+  <data name="CmdAlias_go_bookmark_set3" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
+  <data name="Cmd_go_bookmark_goto3" xml:space="preserve"><value>番号付きブックマーク 3 へ移動</value></data>
+  <data name="CmdAlias_go_bookmark_goto3" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
+  <data name="Cmd_go_bookmark_set4" xml:space="preserve"><value>番号付きブックマーク 4 を設定</value></data>
+  <data name="CmdAlias_go_bookmark_set4" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
+  <data name="Cmd_go_bookmark_goto4" xml:space="preserve"><value>番号付きブックマーク 4 へ移動</value></data>
+  <data name="CmdAlias_go_bookmark_goto4" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
+  <data name="Cmd_go_bookmark_set5" xml:space="preserve"><value>番号付きブックマーク 5 を設定</value></data>
+  <data name="CmdAlias_go_bookmark_set5" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
+  <data name="Cmd_go_bookmark_goto5" xml:space="preserve"><value>番号付きブックマーク 5 へ移動</value></data>
+  <data name="CmdAlias_go_bookmark_goto5" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
+  <data name="Cmd_go_bookmark_set6" xml:space="preserve"><value>番号付きブックマーク 6 を設定</value></data>
+  <data name="CmdAlias_go_bookmark_set6" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
+  <data name="Cmd_go_bookmark_goto6" xml:space="preserve"><value>番号付きブックマーク 6 へ移動</value></data>
+  <data name="CmdAlias_go_bookmark_goto6" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
+  <data name="Cmd_go_bookmark_set7" xml:space="preserve"><value>番号付きブックマーク 7 を設定</value></data>
+  <data name="CmdAlias_go_bookmark_set7" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
+  <data name="Cmd_go_bookmark_goto7" xml:space="preserve"><value>番号付きブックマーク 7 へ移動</value></data>
+  <data name="CmdAlias_go_bookmark_goto7" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
+  <data name="Cmd_go_bookmark_set8" xml:space="preserve"><value>番号付きブックマーク 8 を設定</value></data>
+  <data name="CmdAlias_go_bookmark_set8" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
+  <data name="Cmd_go_bookmark_goto8" xml:space="preserve"><value>番号付きブックマーク 8 へ移動</value></data>
+  <data name="CmdAlias_go_bookmark_goto8" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
+  <data name="Cmd_go_bookmark_set9" xml:space="preserve"><value>番号付きブックマーク 9 を設定</value></data>
+  <data name="CmdAlias_go_bookmark_set9" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
+  <data name="Cmd_go_bookmark_goto9" xml:space="preserve"><value>番号付きブックマーク 9 へ移動</value></data>
+  <data name="CmdAlias_go_bookmark_goto9" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
 </root>

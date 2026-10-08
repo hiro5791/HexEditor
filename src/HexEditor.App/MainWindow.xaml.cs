@@ -53,6 +53,9 @@ public sealed partial class MainWindow : Window
         InitializeRegions();
         InitializeExternalChanges();
 
+        // データインスペクタ・ブックマーク (INSP-01〜INSP-26)。パネルとコマンドより先に作る。
+        InitializeAnnotations();
+
         // コマンド・ツールバー・パネル・設定画面・コマンドパレット (UI-04、UI-05、UI-16〜UI-22)。
         InitializeCommands();
         InitializePanels();
@@ -494,6 +497,7 @@ public sealed partial class MainWindow : Window
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
         view.DocumentName = (view.DataContext as DocumentViewModel)?.DisplayName;
         UpdateMatchHighlights(view);
+        AttachAnnotations(view);
 
         view.Focus(FocusState.Programmatic);
     }

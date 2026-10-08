@@ -293,7 +293,6 @@ public sealed class SettingsUiTests
         string profile = CommandTests.Profile(ctx);
         string seq = ctx.TestData("TD-SEQ-1M");
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [seq] });
-        await app.SendAsync("registerTestPanels");
         await app.KeyAsync("I", ctrl: true, shift: true);
         Assert.Equal("right", await LocationAsync(app, "inspector"));
 
@@ -306,7 +305,6 @@ public sealed class SettingsUiTests
 
         // 3〜4. 起動し直す。
         AppSession again = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [seq] });
-        await again.SendAsync("registerTestPanels");
         Assert.Equal("bottom", await LocationAsync(again, "inspector"));
     });
 
@@ -315,7 +313,6 @@ public sealed class SettingsUiTests
     public Task Keyboard_only_float_and_redock() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
-        await app.SendAsync("registerTestPanels");
         await app.KeyAsync("I", ctrl: true, shift: true);
         await app.IdleAsync();
 
@@ -351,7 +348,6 @@ public sealed class SettingsUiTests
     public Task Panels_in_one_place_share_tabs_and_layout_resets() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
-        await app.SendAsync("registerTestPanels");
         await app.SendAsync("panelShow", new JsonObject { ["id"] = "inspector" });
         await app.SendAsync("panelShow", new JsonObject { ["id"] = "bookmarks" });
         Assert.Equal("left", await LocationAsync(app, "bookmarks"));

@@ -150,9 +150,6 @@ public sealed partial class MainWindow
             case "toolbarAdd":
                 AddToolbarItem(Str(request, "id"));
                 return new JsonObject();
-            case "registerTestPanels":
-                RegisterTestPanels();
-                return new JsonObject();
             case "panels":
                 return PanelState();
             case "panelShow":
@@ -182,8 +179,7 @@ public sealed partial class MainWindow
                         throw new InvalidOperationException($"Menu item for {dock} is disabled.");
                     }
 
-                    PanelDockArea.MenuActions.TryGetValue(item, out Action? action);
-                    action!.Invoke();
+                    area.RequestMove(id, Enum.Parse<PanelDock>(dock, ignoreCase: true));
                     return PanelState();
                 }
 
@@ -293,24 +289,6 @@ public sealed partial class MainWindow
             ["header"] = e.IsHeader,
         })]),
     };
-
-    /// <summary>テスト用のパネル (データインスペクタ・ブックマークの代わり)。本物が登録済みならそれを使う。</summary>
-    private static void RegisterTestPanels()
-    {
-        foreach ((string id, string title, PanelDock dock) in new[] { ("inspector", "Data inspector", PanelDock.Right), ("bookmarks", "Bookmarks", PanelDock.Left) })
-        {
-            if (PanelRegistry.Find(id) is null)
-            {
-                PanelRegistry.Register(new PanelRegistration(id, "Panel_Move", dock, _ =>
-                {
-                    var content = new TextBlock { Text = title + " (test)", Margin = new Thickness(12) };
-                    AutomationProperties.SetAutomationId(content, "TestPanelContent_" + id);
-                    return content;
-                })
-                { Title = title });
-            }
-        }
-    }
 
     private JsonObject PanelState()
     {

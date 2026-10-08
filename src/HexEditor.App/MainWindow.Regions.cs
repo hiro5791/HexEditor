@@ -79,13 +79,19 @@ public sealed partial class MainWindow
     {
         Tabs,
         LeftPanel,
+        LeftPanelBody,
         Editor,
         RightPanel,
+        RightPanelBody,
         BottomPanel,
+        BottomPanelBody,
         StatusBar,
     }
 
-    /// <summary>タブ列 → 左パネル → エディタ → 右パネル → 下パネル → ステータスバー の順にフォーカスを移す (表示されている領域だけ)。</summary>
+    /// <summary>
+    /// タブ列 → 左パネル → エディタ → 右パネル → 下パネル → ステータスバー の順にフォーカスを移す (表示されている領域だけ)。
+    /// パネルは見出し (移動・閉じるのメニュー。UI-05) → 中身 (一覧など。INSP-01、INSP-26) の順に止まる。
+    /// </summary>
     private void MoveToRegion(bool forward)
     {
         var regions = new List<Region>();
@@ -97,17 +103,29 @@ public sealed partial class MainWindow
         if (LeftPanel.Visibility == Visibility.Visible)
         {
             regions.Add(Region.LeftPanel);
+            if (LeftPanel.HasBody)
+            {
+                regions.Add(Region.LeftPanelBody);
+            }
         }
 
         regions.Add(Region.Editor);
         if (RightPanel.Visibility == Visibility.Visible)
         {
             regions.Add(Region.RightPanel);
+            if (RightPanel.HasBody)
+            {
+                regions.Add(Region.RightPanelBody);
+            }
         }
 
         if (BottomPanel.Visibility == Visibility.Visible)
         {
             regions.Add(Region.BottomPanel);
+            if (BottomPanel.HasBody)
+            {
+                regions.Add(Region.BottomPanelBody);
+            }
         }
 
         if (StatusBar.Visibility == Visibility.Visible)
@@ -138,17 +156,17 @@ public sealed partial class MainWindow
 
             if (node == LeftPanel)
             {
-                return Region.LeftPanel;
+                return LeftPanel.BodyContains(focused) ? Region.LeftPanelBody : Region.LeftPanel;
             }
 
             if (node == RightPanel)
             {
-                return Region.RightPanel;
+                return RightPanel.BodyContains(focused) ? Region.RightPanelBody : Region.RightPanel;
             }
 
             if (node == BottomPanel)
             {
-                return Region.BottomPanel;
+                return BottomPanel.BodyContains(focused) ? Region.BottomPanelBody : Region.BottomPanel;
             }
 
             if (node is Controls.HexView || node == StartPage)
@@ -191,11 +209,20 @@ public sealed partial class MainWindow
             case Region.LeftPanel:
                 LeftPanel.FocusHeader();
                 break;
+            case Region.LeftPanelBody:
+                LeftPanel.FocusBody();
+                break;
             case Region.RightPanel:
                 RightPanel.FocusHeader();
                 break;
+            case Region.RightPanelBody:
+                RightPanel.FocusBody();
+                break;
             case Region.BottomPanel:
                 BottomPanel.FocusHeader();
+                break;
+            case Region.BottomPanelBody:
+                BottomPanel.FocusBody();
                 break;
             case Region.StatusBar:
                 StatusButtons.FirstOrDefault(b => b.Visibility == Visibility.Visible)?.Focus(FocusState.Keyboard);

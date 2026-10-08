@@ -482,6 +482,7 @@ public sealed partial class HexView : UserControl
         }
 
         PlaceCaret(layout, columns);
+        RenderHighlights(firstOffset, rows, columns);
         UpdateMarkers();
         if (anyUnreadable && !_unreadableReported)
         {

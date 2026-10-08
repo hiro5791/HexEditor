@@ -30,6 +30,15 @@ public sealed class PanelContext
 }
 
 /// <summary>
+/// パネルの中身が F6 の領域の移動 (UI-52) でフォーカスを受ける要素を決める (一覧のあるパネルは一覧に移す)。実装しなければ、
+/// 最初にフォーカスできる要素に移す。
+/// </summary>
+public interface IPanelContent
+{
+    bool FocusContent();
+}
+
+/// <summary>
 /// パネルの登録 (UI-05)。<paramref name="TitleKey"/> は見出しのリソースのキー、<paramref name="Factory"/> はウィンドウごとに 1 度だけ
 /// 呼んで中身を作る。<see cref="ToggleCommand"/> (既定 <c>view.panel.&lt;ID&gt;</c>) が登録済みのコマンドなら、
 /// その処理 (表示の切り替え) を自動でつなぐ。<see cref="RequiresDocument"/> なら、文書がないとき「文書が開かれていません」を出す。

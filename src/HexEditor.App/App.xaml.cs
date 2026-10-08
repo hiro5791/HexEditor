@@ -128,6 +128,7 @@ public partial class App : Application
 
         // パネル (UI-05) の登録。ウィンドウを作る前に行う。
         MainWindow.RegisterHashPanel();
+        MainWindow.RegisterAnnotationPanels();
         var window = new MainWindow(vm);
         Window = window;
         window.ApplyAppearance();

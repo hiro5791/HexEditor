@@ -43,7 +43,8 @@ public sealed partial class MainWindow
         "hash" => await TestHashAsync(request),
 
         // ファイル・セッションの命令 (MainWindow.FilesTestCommands.cs)、コマンド・パネル・設定の命令 (MainWindow.FrameworkTestCommands.cs)。
-        _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request),
+        _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request)
+            ?? HandleInspectorTestCommand(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>

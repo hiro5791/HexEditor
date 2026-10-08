@@ -83,7 +83,8 @@ public sealed class EditorExpressionContext(EditorState editor) : IExpressionCon
 
     public long? RecordLength => null;
 
-    public long? Bookmark(string name) => null;
+    /// <summary>名前付きブックマーク (<c>bm.名前</c>。INSP-24 の仕様 2) の開始位置。</summary>
+    public long? Bookmark(string name) => Bookmarks.BookmarkCollection.For(editor.Document)?.FindByName(name)?.Start;
 
     public bool TryRead(long offset, Span<byte> destination)
     {

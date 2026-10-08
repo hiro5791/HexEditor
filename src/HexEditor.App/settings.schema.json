@@ -35,6 +35,69 @@
       "type": "string",
       "default": ""
     },
+    "inspector.dateFormat": {
+      "description": "Inspector: date format",
+      "type": "string",
+      "enum": [
+        "regional",
+        "iso"
+      ],
+      "default": "regional"
+    },
+    "inspector.digitGrouping": {
+      "description": "Inspector: digit grouping",
+      "type": "boolean",
+      "default": true
+    },
+    "inspector.floatFormat": {
+      "description": "Inspector: floating-point format",
+      "type": "string",
+      "enum": [
+        "shortest",
+        "exponent",
+        "hex"
+      ],
+      "default": "shortest"
+    },
+    "inspector.highlightTarget": {
+      "description": "Highlight the inspector target",
+      "type": "boolean",
+      "default": true
+    },
+    "inspector.integerBase": {
+      "description": "Inspector: integer base",
+      "type": "string",
+      "enum": [
+        "decimal",
+        "hex",
+        "octal"
+      ],
+      "default": "decimal"
+    },
+    "inspector.rowPresets": {
+      "description": "Inspector row presets",
+      "type": "string",
+      "default": "{}"
+    },
+    "inspector.rows": {
+      "description": "Inspector rows",
+      "type": "string",
+      "default": ""
+    },
+    "inspector.timeZone": {
+      "description": "Inspector: time zone",
+      "type": "string",
+      "enum": [
+        "local",
+        "utc"
+      ],
+      "default": "local"
+    },
+    "inspector.useCursorWithSelection": {
+      "description": "Inspector: use the cursor when there is a selection",
+      "type": "boolean",
+      "default": false
+    },
     "log.level": {
       "description": "Log level",
       "type": "string",

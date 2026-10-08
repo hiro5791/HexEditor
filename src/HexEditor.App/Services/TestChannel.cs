@@ -72,6 +72,8 @@ public static class TestChannel
                     }
                     catch (Exception ex)
                     {
+                        // 失敗の原因を追えるよう、スタックトレースをログに残す。
+                        AppLog.Warning($"Test command failed: {ex}");
                         response = new JsonObject { ["ok"] = false, ["error"] = $"{ex.GetType().Name}: {ex.Message}" };
                     }
 

@@ -25,7 +25,7 @@ public readonly record struct DispatchResult(bool Handled, string? Command = nul
 /// </remarks>
 public sealed class KeyDispatcher(CommandHost host)
 {
-    private const int ProcessKey = 229;
+    private const int ProcessKey = 229, Digit0 = 0x30, NumPad0 = 0x60, NumPad1 = 0x61, NumPad9 = 0x69;
     private readonly List<KeyStroke> _pending = [];
 
     /// <summary>連続キーの 1 打鍵目を待っているか。</summary>
@@ -68,6 +68,13 @@ public sealed class KeyDispatcher(CommandHost host)
                 _ = host.ExecuteAsync(binding.Command);
                 return new DispatchResult(true, binding.Command);
             default:
+                if (_pending.Count == 0 && key is >= NumPad1 and <= NumPad9 && modifiers != 0)
+                {
+                    // テンキーの数字は、割り当てがなければ数字キーの段と同じに扱う (番号付きブックマーク。00-overview.md 8.7)。
+                    // 修飾キーなしのテンキーは数字の入力なので、置き換えない。
+                    return Dispatch(Digit0 + (key - NumPad0), modifiers, context);
+                }
+
                 if (_pending.Count > 0)
                 {
                     // 連続キーの 2 打鍵目が割り当てにない: 捨てる。
