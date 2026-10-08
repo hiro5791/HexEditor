@@ -1098,17 +1098,6 @@
   <data name="Bookmarks_UndoName" xml:space="preserve"><value>削除を元に戻す</value></data>
   <data name="Bookmarks_Filter.PlaceholderText" xml:space="preserve"><value>名前・コメントで絞り込み</value></data>
   <data name="Bookmarks_Filter.AutomationProperties.Name" xml:space="preserve"><value>ブックマークの絞り込み</value></data>
-  <data name="Bookmarks_ColumnNumber.Content" xml:space="preserve"><value>番号</value></data>
-  <data name="Bookmarks_ColumnNumber.ToolTipService.ToolTip" xml:space="preserve"><value>番号で並べ替え</value></data>
-  <data name="Bookmarks_ColumnColor.Content" xml:space="preserve"><value>●</value></data>
-  <data name="Bookmarks_ColumnColor.ToolTipService.ToolTip" xml:space="preserve"><value>色で並べ替え</value></data>
-  <data name="Bookmarks_ColumnColor.AutomationProperties.Name" xml:space="preserve"><value>色で並べ替え</value></data>
-  <data name="Bookmarks_ColumnName.Content" xml:space="preserve"><value>名前</value></data>
-  <data name="Bookmarks_ColumnName.ToolTipService.ToolTip" xml:space="preserve"><value>名前で並べ替え</value></data>
-  <data name="Bookmarks_ColumnStart.Content" xml:space="preserve"><value>開始</value></data>
-  <data name="Bookmarks_ColumnStart.ToolTipService.ToolTip" xml:space="preserve"><value>開始オフセットで並べ替え</value></data>
-  <data name="Bookmarks_ColumnLength.Content" xml:space="preserve"><value>長さ</value></data>
-  <data name="Bookmarks_ColumnLength.ToolTipService.ToolTip" xml:space="preserve"><value>長さで並べ替え</value></data>
   <data name="Bookmarks_ColorNumber" xml:space="preserve"><value>色 {0}</value></data>
   <data name="Bookmarks_RowName" xml:space="preserve"><value>{0}、{1}、長さ {2}</value></data>
   <data name="Bookmarks_NumberName" xml:space="preserve"><value>番号 {0}</value></data>
@@ -2216,4 +2205,44 @@
   <data name="SetOpt_view_text_nonPrintable_dot" xml:space="preserve"><value>ピリオド (.)</value></data>
   <data name="SetOpt_view_text_nonPrintable_space" xml:space="preserve"><value>空白</value></data>
   <data name="SetOpt_view_text_nonPrintable_controlPictures" xml:space="preserve"><value>制御文字の図記号 (␀)</value></data>
+  <data name="Set_view_modified_showDeletions" xml:space="preserve"><value>削除位置を表示</value></data>
+  <data name="SetDesc_view_modified_showDeletions" xml:space="preserve"><value>保存していない削除で詰まった位置に縦の線を表示する。</value></data>
+  <data name="GoTo_Address_Name" xml:space="preserve"><value>アドレスかオフセットか</value></data>
+  <data name="GoTo_Address_Address.Content" xml:space="preserve"><value>アドレスで指定</value></data>
+  <data name="GoTo_Address_Offset.Content" xml:space="preserve"><value>オフセットで指定</value></data>
+  <data name="Menu_View_SectorSize.Text" xml:space="preserve"><value>セクタサイズ(Z)</value></data>
+  <data name="Menu_View_SectorSize.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_SectorSizeBytes" xml:space="preserve"><value>{0} バイト</value></data>
+  <data name="Menu_View_SectorSizeCustom.Text" xml:space="preserve"><value>指定(C)...</value></data>
+  <data name="Menu_View_SectorSizeCustom.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="ViewInput_SectorSize" xml:space="preserve"><value>セクタサイズ (バイト)</value></data>
+  <data name="ViewInput_SectorSizeRange" xml:space="preserve"><value>1〜{0} の値を指定してください。</value></data>
+  <data name="Cmd_view_sectorSize512" xml:space="preserve"><value>セクタサイズ: 512 バイト</value></data>
+  <data name="CmdAlias_view_sectorSize512" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="Cmd_view_sectorSize1024" xml:space="preserve"><value>セクタサイズ: 1,024 バイト</value></data>
+  <data name="CmdAlias_view_sectorSize1024" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="Cmd_view_sectorSize2048" xml:space="preserve"><value>セクタサイズ: 2,048 バイト</value></data>
+  <data name="CmdAlias_view_sectorSize2048" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="Cmd_view_sectorSize4096" xml:space="preserve"><value>セクタサイズ: 4,096 バイト</value></data>
+  <data name="CmdAlias_view_sectorSize4096" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="Cmd_view_sectorSizeCustom" xml:space="preserve"><value>セクタサイズ: 指定...</value></data>
+  <data name="CmdAlias_view_sectorSizeCustom" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="HexView_Menu_ComputeHash" xml:space="preserve"><value>ハッシュを計算</value></data>
+  <data name="SearchResults_Filter.PlaceholderText" xml:space="preserve"><value>絞り込み</value></data>
+  <data name="SearchResults_Filter_Name" xml:space="preserve"><value>結果をデータで絞り込み</value></data>
+  <data name="SearchResults_SortBy" xml:space="preserve"><value>{0} で並べ替え</value></data>
+  <data name="SearchResults_TooManyToSort" xml:space="preserve"><value>{0} 件を超える結果は並べ替え・絞り込みができません。</value></data>
+  <data name="Bookmarks_ColumnNumber" xml:space="preserve"><value>番号</value></data>
+  <data name="Bookmarks_ColumnColor" xml:space="preserve"><value>色</value></data>
+  <data name="Bookmarks_ColumnName" xml:space="preserve"><value>名前</value></data>
+  <data name="Bookmarks_ColumnStart" xml:space="preserve"><value>開始</value></data>
+  <data name="Bookmarks_ColumnLength" xml:space="preserve"><value>長さ</value></data>
+  <data name="Bookmarks_ColumnGroup" xml:space="preserve"><value>グループ</value></data>
+  <data name="Bookmarks_ColumnComment" xml:space="preserve"><value>コメント</value></data>
+  <data name="Bookmarks_ColumnDocument" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Bookmarks_MoveColumnLeft" xml:space="preserve"><value>列を左へ移動</value></data>
+  <data name="Bookmarks_MoveColumnRight" xml:space="preserve"><value>列を右へ移動</value></data>
+  <data name="Bookmarks_ResetColumns" xml:space="preserve"><value>列を既定に戻す</value></data>
+  <data name="Bookmarks_AllDocumentsName" xml:space="preserve"><value>すべてのドキュメント</value></data>
+  <data name="Bookmarks_SortBy" xml:space="preserve"><value>{0} で並べ替え</value></data>
 </root>

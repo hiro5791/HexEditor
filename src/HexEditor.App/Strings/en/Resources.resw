@@ -1098,17 +1098,6 @@ Details were written to:
   <data name="Bookmarks_UndoName" xml:space="preserve"><value>Undo delete</value></data>
   <data name="Bookmarks_Filter.PlaceholderText" xml:space="preserve"><value>Filter by name or comment</value></data>
   <data name="Bookmarks_Filter.AutomationProperties.Name" xml:space="preserve"><value>Filter bookmarks</value></data>
-  <data name="Bookmarks_ColumnNumber.Content" xml:space="preserve"><value>No.</value></data>
-  <data name="Bookmarks_ColumnNumber.ToolTipService.ToolTip" xml:space="preserve"><value>Sort by number</value></data>
-  <data name="Bookmarks_ColumnColor.Content" xml:space="preserve"><value>●</value></data>
-  <data name="Bookmarks_ColumnColor.ToolTipService.ToolTip" xml:space="preserve"><value>Sort by color</value></data>
-  <data name="Bookmarks_ColumnColor.AutomationProperties.Name" xml:space="preserve"><value>Sort by color</value></data>
-  <data name="Bookmarks_ColumnName.Content" xml:space="preserve"><value>Name</value></data>
-  <data name="Bookmarks_ColumnName.ToolTipService.ToolTip" xml:space="preserve"><value>Sort by name</value></data>
-  <data name="Bookmarks_ColumnStart.Content" xml:space="preserve"><value>Start</value></data>
-  <data name="Bookmarks_ColumnStart.ToolTipService.ToolTip" xml:space="preserve"><value>Sort by start offset</value></data>
-  <data name="Bookmarks_ColumnLength.Content" xml:space="preserve"><value>Length</value></data>
-  <data name="Bookmarks_ColumnLength.ToolTipService.ToolTip" xml:space="preserve"><value>Sort by length</value></data>
   <data name="Bookmarks_ColorNumber" xml:space="preserve"><value>Color {0}</value></data>
   <data name="Bookmarks_RowName" xml:space="preserve"><value>{0}, {1}, length {2}</value></data>
   <data name="Bookmarks_NumberName" xml:space="preserve"><value>number {0}</value></data>
@@ -2216,4 +2205,44 @@ Details were written to:
   <data name="SetOpt_view_text_nonPrintable_dot" xml:space="preserve"><value>Dot (.)</value></data>
   <data name="SetOpt_view_text_nonPrintable_space" xml:space="preserve"><value>Space</value></data>
   <data name="SetOpt_view_text_nonPrintable_controlPictures" xml:space="preserve"><value>Control pictures (␀)</value></data>
+  <data name="Set_view_modified_showDeletions" xml:space="preserve"><value>Show deleted positions</value></data>
+  <data name="SetDesc_view_modified_showDeletions" xml:space="preserve"><value>Draw a vertical line where unsaved deletions closed up the data.</value></data>
+  <data name="GoTo_Address_Name" xml:space="preserve"><value>Address or offset</value></data>
+  <data name="GoTo_Address_Address.Content" xml:space="preserve"><value>By address</value></data>
+  <data name="GoTo_Address_Offset.Content" xml:space="preserve"><value>By offset</value></data>
+  <data name="Menu_View_SectorSize.Text" xml:space="preserve"><value>Sector size</value></data>
+  <data name="Menu_View_SectorSize.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_SectorSizeBytes" xml:space="preserve"><value>{0} bytes</value></data>
+  <data name="Menu_View_SectorSizeCustom.Text" xml:space="preserve"><value>Custom...</value></data>
+  <data name="Menu_View_SectorSizeCustom.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="ViewInput_SectorSize" xml:space="preserve"><value>Sector size (bytes)</value></data>
+  <data name="ViewInput_SectorSizeRange" xml:space="preserve"><value>Enter a value from 1 to {0}.</value></data>
+  <data name="Cmd_view_sectorSize512" xml:space="preserve"><value>Sector size: 512 bytes</value></data>
+  <data name="CmdAlias_view_sectorSize512" xml:space="preserve"><value>sector size lba</value></data>
+  <data name="Cmd_view_sectorSize1024" xml:space="preserve"><value>Sector size: 1,024 bytes</value></data>
+  <data name="CmdAlias_view_sectorSize1024" xml:space="preserve"><value>sector size lba</value></data>
+  <data name="Cmd_view_sectorSize2048" xml:space="preserve"><value>Sector size: 2,048 bytes</value></data>
+  <data name="CmdAlias_view_sectorSize2048" xml:space="preserve"><value>sector size lba</value></data>
+  <data name="Cmd_view_sectorSize4096" xml:space="preserve"><value>Sector size: 4,096 bytes</value></data>
+  <data name="CmdAlias_view_sectorSize4096" xml:space="preserve"><value>sector size lba</value></data>
+  <data name="Cmd_view_sectorSizeCustom" xml:space="preserve"><value>Sector size: custom...</value></data>
+  <data name="CmdAlias_view_sectorSizeCustom" xml:space="preserve"><value>sector size lba</value></data>
+  <data name="HexView_Menu_ComputeHash" xml:space="preserve"><value>Compute hash</value></data>
+  <data name="SearchResults_Filter.PlaceholderText" xml:space="preserve"><value>Filter</value></data>
+  <data name="SearchResults_Filter_Name" xml:space="preserve"><value>Filter results by data</value></data>
+  <data name="SearchResults_SortBy" xml:space="preserve"><value>Sort by {0}</value></data>
+  <data name="SearchResults_TooManyToSort" xml:space="preserve"><value>More than {0} results cannot be sorted or filtered.</value></data>
+  <data name="Bookmarks_ColumnNumber" xml:space="preserve"><value>No.</value></data>
+  <data name="Bookmarks_ColumnColor" xml:space="preserve"><value>Color</value></data>
+  <data name="Bookmarks_ColumnName" xml:space="preserve"><value>Name</value></data>
+  <data name="Bookmarks_ColumnStart" xml:space="preserve"><value>Start</value></data>
+  <data name="Bookmarks_ColumnLength" xml:space="preserve"><value>Length</value></data>
+  <data name="Bookmarks_ColumnGroup" xml:space="preserve"><value>Group</value></data>
+  <data name="Bookmarks_ColumnComment" xml:space="preserve"><value>Comment</value></data>
+  <data name="Bookmarks_ColumnDocument" xml:space="preserve"><value>Document</value></data>
+  <data name="Bookmarks_MoveColumnLeft" xml:space="preserve"><value>Move column left</value></data>
+  <data name="Bookmarks_MoveColumnRight" xml:space="preserve"><value>Move column right</value></data>
+  <data name="Bookmarks_ResetColumns" xml:space="preserve"><value>Reset columns</value></data>
+  <data name="Bookmarks_AllDocumentsName" xml:space="preserve"><value>All documents</value></data>
+  <data name="Bookmarks_SortBy" xml:space="preserve"><value>Sort by {0}</value></data>
 </root>

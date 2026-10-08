@@ -348,6 +348,53 @@ public sealed partial class HexView : UserControl
 
     // ---- 描画 ----
 
+    private readonly FrameBuffers _work = new();
+
+    /// <summary>1 フレームの描画の作業用の配列 (使い回す。必要な長さより長いことがある)。</summary>
+    private sealed class FrameBuffers
+    {
+        public byte[] Bytes { get; private set; } = [];
+
+        public ByteState[] States { get; private set; } = [];
+
+        public ChangeMark[] Marks { get; private set; } = [];
+
+        public bool[] Matched { get; private set; } = [];
+
+        public bool[] Focus { get; private set; } = [];
+
+        public bool[] Deleted { get; private set; } = [];
+
+        public TextCell[] Text { get; private set; } = [];
+
+        public byte[] DecodeBytes { get; private set; } = [];
+
+        public ByteState[] DecodeStates { get; private set; } = [];
+
+        public void Ensure(int span)
+        {
+            if (Bytes.Length < span)
+            {
+                Bytes = new byte[span];
+                States = new ByteState[span];
+                Marks = new ChangeMark[span];
+                Matched = new bool[span];
+                Focus = new bool[span];
+                Deleted = new bool[span];
+                Text = new TextCell[span];
+            }
+        }
+
+        public void EnsureDecode(int length)
+        {
+            if (DecodeBytes.Length < length)
+            {
+                DecodeBytes = new byte[length];
+                DecodeStates = new ByteState[length];
+            }
+        }
+    }
+
     /// <summary>次の描画で全行を作り直す。</summary>
     private void InvalidateRows()
     {
@@ -420,23 +467,30 @@ public sealed partial class HexView : UserControl
         int lead = (int)Math.Max(0, -firstOffset);
         long readStart = firstOffset + lead;
         int span = rows * bytesPerRow;
-        byte[] bytes = new byte[span];
-        var states = new ByteState[span];
+
+        // 1 フレームの作業用の配列は使い回す (1 行 4,096 バイトでは 1 フレームで数 MB になり、毎回作ると大きなオブジェクトの GC で
+        // フレームが遅れる。VIEW-04 の仕様 3・4)。行は内容を写して持つので、次のフレームで上書きしてよい。
+        _work.Ensure(span);
+        byte[] bytes = _work.Bytes;
+        ByteState[] states = _work.States;
+        Array.Clear(bytes, 0, span);
+        Array.Clear(states, 0, span);
         DocumentSnapshot snapshot = _editor.Document.Current;
-        int available = lead + snapshot.ReadForDisplay(readStart, bytes.AsSpan(lead), states.AsSpan(lead));
+        int available = lead + snapshot.ReadForDisplay(readStart, bytes.AsSpan(lead, span - lead), states.AsSpan(lead, span - lead));
 
         // 変更されたバイト (VIEW-15)。上書き・挿入・保存済みの変更を区別して、色に加えて下線の形でも示す。
-        var marks = new ChangeMark[span];
+        ChangeMark[] marks = _work.Marks;
+        Array.Clear(marks, 0, span);
         if (view.HighlightModified)
         {
             foreach ((long offset, long length) in _editor.SavedChangesIn(readStart, available - lead))
             {
-                FillMarks(marks, offset, length, firstOffset, ChangeMark.Saved);
+                FillMarks(marks.AsSpan(0, span), offset, length, firstOffset, ChangeMark.Saved);
             }
 
             foreach ((long offset, long length, bool inserted) in snapshot.EnumerateChanges(readStart, available - lead))
             {
-                FillMarks(marks, offset, length, firstOffset, inserted ? ChangeMark.Inserted : ChangeMark.Overwritten);
+                FillMarks(marks.AsSpan(0, span), offset, length, firstOffset, inserted ? ChangeMark.Inserted : ChangeMark.Overwritten);
             }
         }
 
@@ -459,9 +513,27 @@ public sealed partial class HexView : UserControl
             _graceTimer.Start();
         }
 
-        bool[] matched = Shifted(ComputeMatched(snapshot, readStart, span - lead), lead, span);
+        bool[] matched = _work.Matched;
+        Array.Clear(matched, 0, span);
+        ComputeMatched(snapshot, readStart, span - lead, matched.AsSpan(lead, span - lead));
         // 注目している範囲 (層 3) は範囲の強調の共通の仕組みで描く (HexView.Highlights.cs)。行の中では塗らない。
-        bool[] focus = new bool[span];
+        bool[] focus = _work.Focus;
+        Array.Clear(focus, 0, span);
+
+        // 削除された位置 (VIEW-15 の仕様 5。設定「削除位置を表示」)。境界 p の左側のバイト p − 1 に印を付ける。
+        bool[] deleted = _work.Deleted;
+        Array.Clear(deleted, 0, span);
+        if (ShowDeletions && view.HighlightModified)
+        {
+            foreach (long boundary in snapshot.EnumerateDeletions(readStart, available - lead))
+            {
+                long index = boundary - 1 - firstOffset;
+                if (index >= 0 && index < span)
+                {
+                    deleted[index] = true;
+                }
+            }
+        }
         TextCell[] text = DecodeText(snapshot, view, readStart, lead, span, available);
         var columns = new RowColumns(format);
         long selStart = _editor.SelectionStart;
@@ -502,7 +574,8 @@ public sealed partial class HexView : UserControl
             // 猶予中で、同じ行の前の内容があればそのまま残す (VIEW-03 の仕様 3)。
             bool keep = mode == CellMode.Blank && row.ContentRowStart == rowStart && row.HasContent;
             if (!keep && row.Update(frame, rowStart, rowLead, count, bytes.AsSpan(from, bytesPerRow), rowStates, marks.AsSpan(from, bytesPerRow),
-                matched.AsSpan(from, bytesPerRow), focus.AsSpan(from, bytesPerRow), text.AsSpan(from, bytesPerRow), mode, selStart, selEnd,
+                matched.AsSpan(from, bytesPerRow), focus.AsSpan(from, bytesPerRow), deleted.AsSpan(from, bytesPerRow), text.AsSpan(from, bytesPerRow),
+                mode, selStart, selEnd,
                 _editor.TopRow + r == cursorRow, _palette, _cellWidth, _rowHeight, MeasureGlyph))
             {
                 rebuilt++;
@@ -534,27 +607,14 @@ public sealed partial class HexView : UserControl
         RaiseAccessibilityChanges();
     }
 
-    private static void FillMarks(ChangeMark[] marks, long offset, long length, long firstOffset, ChangeMark mark)
+    private static void FillMarks(Span<ChangeMark> marks, long offset, long length, long firstOffset, ChangeMark mark)
     {
         long from = Math.Max(0, offset - firstOffset);
         long to = Math.Min(marks.Length, offset + length - firstOffset);
         if (from < to)
         {
-            marks.AsSpan((int)from, (int)(to - from)).Fill(mark);
+            marks.Slice((int)from, (int)(to - from)).Fill(mark);
         }
-    }
-
-    /// <summary>[readStart, …) の配列を、行の先頭のずれの分だけ後ろにずらして span 個にする。</summary>
-    private static bool[] Shifted(bool[] values, int lead, int span)
-    {
-        if (lead == 0 && values.Length == span)
-        {
-            return values;
-        }
-
-        var result = new bool[span];
-        values.AsSpan(0, Math.Min(values.Length, span - lead)).CopyTo(result.AsSpan(lead));
-        return result;
     }
 
     /// <summary>
@@ -562,7 +622,8 @@ public sealed partial class HexView : UserControl
     /// </summary>
     private TextCell[] DecodeText(DocumentSnapshot snapshot, ViewSettings view, long readStart, int lead, int span, int available)
     {
-        var cells = new TextCell[span];
+        TextCell[] cells = _work.Text;
+        Array.Clear(cells, 0, span);
         if (!view.ShowTextColumn || available <= lead)
         {
             return cells;
@@ -574,9 +635,10 @@ public sealed partial class HexView : UserControl
         int ahead = encoding.Kind == TextEncodingKind.SingleByte ? 0 : TextCellDecoder.Lookahead;
         long dataStart = readStart - back;
         int length = back + windowLength + ahead;
-        byte[] data = new byte[length];
-        var dataStates = new ByteState[length];
-        int read = snapshot.ReadForDisplay(dataStart, data, dataStates);
+        _work.EnsureDecode(length);
+        byte[] data = _work.DecodeBytes;
+        ByteState[] dataStates = _work.DecodeStates;
+        int read = snapshot.ReadForDisplay(dataStart, data.AsSpan(0, length), dataStates.AsSpan(0, length));
         TextCellDecoder.Decode(encoding, data.AsSpan(0, read), dataStart, readStart, cells.AsSpan(lead, windowLength),
             dataStates.AsSpan(0, read), view.Utf16Phase, view.Utf32Phase, NonPrintableStyle);
         return cells;

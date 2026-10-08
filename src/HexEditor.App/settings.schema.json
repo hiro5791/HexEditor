@@ -424,6 +424,11 @@
       "type": "boolean",
       "default": false
     },
+    "view.modified.showDeletions": {
+      "description": "Show deleted positions",
+      "type": "boolean",
+      "default": false
+    },
     "view.scroll.cursorMargin": {
       "description": "Rows kept above and below the cursor",
       "type": "integer",

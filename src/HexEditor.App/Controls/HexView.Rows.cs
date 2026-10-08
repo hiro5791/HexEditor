@@ -90,6 +90,9 @@ public sealed partial class HexView
         private ChangeMark[] _marks = [];
         private bool[] _matched = [];
         private bool[] _focus = [];
+
+        // そのバイトの後ろ (右) に削除によって詰まった境界がある (VIEW-15 の仕様 5)。
+        private bool[] _deleted = [];
         private TextCell[] _text = [];
         private int _count = -1;
         private int _lead;
@@ -102,6 +105,11 @@ public sealed partial class HexView
         private readonly List<Rectangle> _bars = [];
         private readonly List<Line> _lines = [];
         private readonly List<TextBlock> _glyphs = [];
+
+        // 行の TextBlock の Run (Content.Inlines と同じ並び)。作り直さずに文字と色を書き換えて使い回す (Run を毎回作ると、XAML の
+        // オブジェクトの追跡のために GC が増え、1 行のバイト数が多いとフレームが遅れる。VIEW-04 の仕様 3)。
+        private readonly List<RunSlot> _runs = [];
+        private RunBuilder? _builder;
         private readonly Rectangle _rowBack;
         private int _barsUsed;
         private int _linesUsed;
@@ -249,7 +257,8 @@ public sealed partial class HexView
 
         /// <summary>内容を更新する。前回と同じなら何もしない。作り直したら true。</summary>
         public bool Update(in RowFrame frame, long rowStart, int lead, int count, ReadOnlySpan<byte> bytes, ReadOnlySpan<ByteState> states,
-            ReadOnlySpan<ChangeMark> marks, ReadOnlySpan<bool> matched, ReadOnlySpan<bool> focus, ReadOnlySpan<TextCell> text, CellMode mode,
+            ReadOnlySpan<ChangeMark> marks, ReadOnlySpan<bool> matched, ReadOnlySpan<bool> focus, ReadOnlySpan<bool> deleted, ReadOnlySpan<TextCell> text,
+            CellMode mode,
             long selStart, long selEnd, bool currentRow, Palette palette, double cellWidth, double rowHeight, Func<string, double> measure)
         {
             long selFrom = Math.Max(selStart, rowStart + lead) - rowStart;
@@ -263,7 +272,8 @@ public sealed partial class HexView
                 && _selTo == selTo && _currentRow == currentRow
                 && bytes[..count].SequenceEqual(_bytes.AsSpan(0, count)) && states[..count].SequenceEqual(_states.AsSpan(0, count))
                 && marks[..count].SequenceEqual(_marks.AsSpan(0, count)) && matched[..count].SequenceEqual(_matched.AsSpan(0, count))
-                && focus[..count].SequenceEqual(_focus.AsSpan(0, count)) && SameText(text, count))
+                && focus[..count].SequenceEqual(_focus.AsSpan(0, count)) && deleted[..count].SequenceEqual(_deleted.AsSpan(0, count))
+                && SameText(text, count))
             {
                 return false;
             }
@@ -284,6 +294,7 @@ public sealed partial class HexView
                 _marks = new ChangeMark[b];
                 _matched = new bool[b];
                 _focus = new bool[b];
+                _deleted = new bool[b];
                 _text = new TextCell[b];
             }
 
@@ -292,6 +303,7 @@ public sealed partial class HexView
             marks[..count].CopyTo(_marks);
             matched[..count].CopyTo(_matched);
             focus[..count].CopyTo(_focus);
+            deleted[..count].CopyTo(_deleted);
             _text.AsSpan().Fill(TextCell.None);
             text[..Math.Min(count, text.Length)].CopyTo(_text);
 
@@ -303,6 +315,7 @@ public sealed partial class HexView
             Highlight(frame, palette);
             DrawRowBackground(frame, palette, cellWidth, rowHeight);
             DrawUnderlines(frame, palette, cellWidth, rowHeight);
+            DrawDeletions(frame, palette, cellWidth, rowHeight);
             DrawAlternateLines(frame, palette, cellWidth, rowHeight);
             UpdateHatches(frame.Columns, palette, cellWidth, rowHeight);
             HideUnused();
@@ -451,14 +464,28 @@ public sealed partial class HexView
         /// <summary>1 行の文字列を、色の違う区間ごとの Run に分けて作る。全角・結合文字などは別の TextBlock に描く。</summary>
         private void Fill(in RowFrame frame, Palette palette, double cellWidth, double rowHeight, Func<string, double> measure)
         {
-            Content.Inlines.Clear();
-            var builder = new RunBuilder(Content);
+            RunBuilder builder = _builder ??= new RunBuilder(Content, _runs);
+            builder.Reset();
             RowColumns columns = frame.Columns;
             int b = columns.BytesPerRow;
             int count = Count;
-            var hexPaint = new CellPaint[b];
-            var textPaint = new CellPaint[b];
-            var glyphs = new (string, double, double, double)?[b];
+            // 配列は 1 行のバイト数が変わるまで使い回す (1 行 4,096 バイトでは大きなオブジェクトになり、毎回作ると GC でフレームが遅れる)。
+            if (HexPaint.Length != b)
+            {
+                HexPaint = new CellPaint[b];
+                TextPaint = new CellPaint[b];
+                Glyphs = new (string, double, double, double)?[b];
+            }
+            else
+            {
+                Array.Clear(HexPaint);
+                Array.Clear(TextPaint);
+                Array.Clear(Glyphs);
+            }
+
+            CellPaint[] hexPaint = HexPaint;
+            CellPaint[] textPaint = TextPaint;
+            (string, double, double, double)?[] glyphs = Glyphs;
 
             // Hex 列
             if (columns.ShowHex)
@@ -472,7 +499,7 @@ public sealed partial class HexView
                     int gap = c + 1 < b ? columns.HexIndex(c + 1) - columns.HexIndex(c) - RowFormat.HexCellChars : 0;
                     if (gap > 0)
                     {
-                        builder.Append(new string(' ', gap), palette.Text);
+                        builder.Append(Spaces(gap), palette.Text);
                     }
                 }
             }
@@ -482,7 +509,7 @@ public sealed partial class HexView
             {
                 if (columns.ShowHex)
                 {
-                    builder.Append(new string(' ', RowFormat.ColumnGap), palette.Text);
+                    builder.Append(Spaces(RowFormat.ColumnGap), palette.Text);
                 }
 
                 for (int c = 0; c < count; c++)
@@ -513,11 +540,13 @@ public sealed partial class HexView
                 }
             }
 
-            HexPaint = hexPaint;
-            TextPaint = textPaint;
-            Glyphs = glyphs;
             ContentText = builder.Flush();
         }
+
+        private static readonly string[] SpaceStrings = [.. Enumerable.Range(0, 17).Select(n => new string(' ', n))];
+
+        /// <summary>空白の文字列 (セルの間の空白。毎回作らない)。</summary>
+        private static string Spaces(int n) => n < SpaceStrings.Length ? SpaceStrings[n] : new string(' ', n);
 
         private ChangeMark MarkAt(int c) => KindAt(c) is CellKind.Modified ? _marks[c] : ChangeMark.None;
 
@@ -777,6 +806,37 @@ public sealed partial class HexView
             }
         }
 
+        /// <summary>
+        /// 削除された位置 (VIEW-15 の仕様 5): 詰まった境界の左側のセルの右端に縦の線 (幅 2 px) を引く。色は「変更」の色 (ハイコントラストでは
+        /// 文字の色)。Hex 列とテキスト列の両方に引く。
+        /// </summary>
+        private void DrawDeletions(in RowFrame frame, Palette palette, double cellWidth, double rowHeight)
+        {
+            RowColumns columns = frame.Columns;
+            Brush brush = palette.HighContrast ? palette.Text : palette.Modified;
+            for (int c = _lead; c < Count; c++)
+            {
+                if (!_deleted[c])
+                {
+                    continue;
+                }
+
+                if (columns.ShowHex)
+                {
+                    double x = (columns.HexIndex(c) + RowFormat.HexCellChars) * cellWidth - 1;
+                    PlaceBar(x, 0, 2, rowHeight, brush);
+                    Lines.Add(("deletion", x, 0, x, rowHeight));
+                }
+
+                if (columns.ShowText)
+                {
+                    double x = (columns.TextIndex(c) + 1) * cellWidth - 1;
+                    PlaceBar(x, 0, 2, rowHeight, brush);
+                    Lines.Add(("deletionText", x, 0, x, rowHeight));
+                }
+            }
+        }
+
         private void Underline(ChangeMark mark, double left, double right, double rowHeight, Brush brush)
         {
             switch (mark)
@@ -966,17 +1026,43 @@ public sealed partial class HexView
         }
     }
 
-    /// <summary>同じ色の文字をまとめて Run にする。</summary>
-    private sealed class RunBuilder(TextBlock row)
+    /// <summary>行の Run と、最後に設定した文字と色。</summary>
+    private sealed class RunSlot
+    {
+        public required Run Run { get; init; }
+
+        public required string Text { get; set; }
+
+        public Brush? Brush { get; set; }
+    }
+
+    /// <summary>同じ色の文字をまとめて Run にする。前回の Run (<paramref name="runs"/>) を順に使い回し、余った Run は外す。</summary>
+    private sealed class RunBuilder(TextBlock row, List<RunSlot> runs)
     {
         private readonly StringBuilder _line = new();
         private readonly StringBuilder _text = new();
         private Brush? _brush;
+        private int _used;
+
+        /// <summary>行を作り直す前に呼ぶ (文字列の領域は使い回す)。</summary>
+        public void Reset()
+        {
+            _line.Clear();
+            _text.Clear();
+            _brush = null;
+            _used = 0;
+        }
 
         /// <summary>残りを書き出し、行全体の文字列を返す。</summary>
         public string Flush()
         {
             FlushRun();
+            for (int i = runs.Count - 1; i >= _used; i--)
+            {
+                row.Inlines.RemoveAt(i);
+                runs.RemoveAt(i);
+            }
+
             return _line.ToString();
         }
 
@@ -987,7 +1073,31 @@ public sealed partial class HexView
                 return;
             }
 
-            row.Inlines.Add(new Run { Text = _text.ToString(), Foreground = _brush });
+            string text = _text.ToString();
+            // 書き換えは、覚えている文字と色 (managed の値) と比べて変わったときだけ行う (Run の値を読むと文字列の写しを作るため)。
+            if (_used < runs.Count)
+            {
+                RunSlot slot = runs[_used];
+                if (!string.Equals(slot.Text, text, StringComparison.Ordinal))
+                {
+                    slot.Run.Text = text;
+                    slot.Text = text;
+                }
+
+                if (!ReferenceEquals(slot.Brush, _brush))
+                {
+                    slot.Run.Foreground = _brush;
+                    slot.Brush = _brush;
+                }
+            }
+            else
+            {
+                var run = new Run { Text = text, Foreground = _brush };
+                runs.Add(new RunSlot { Run = run, Text = text, Brush = _brush });
+                row.Inlines.Add(run);
+            }
+
+            _used++;
             _text.Clear();
         }
 

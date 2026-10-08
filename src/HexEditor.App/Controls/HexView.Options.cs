@@ -96,6 +96,22 @@ public sealed partial class HexView
     /// <summary>設定「ツールチップを表示する」(VIEW-07。既定オン)。</summary>
     public bool ShowToolTips { get; set; } = true;
 
+    /// <summary>削除位置を表示 (VIEW-15 の仕様 5。設定 view.modified.showDeletions、既定オフ)。</summary>
+    public bool ShowDeletions
+    {
+        get => _showDeletions;
+        set
+        {
+            if (_showDeletions != value)
+            {
+                _showDeletions = value;
+                QueueRender();
+            }
+        }
+    }
+
+    private bool _showDeletions;
+
     /// <summary>表示しない文字の記号 (VIEW-21 の仕様 7。設定 view.text.nonPrintable)。</summary>
     public NonPrintableStyle NonPrintableStyle
     {

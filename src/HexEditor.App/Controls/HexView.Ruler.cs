@@ -17,6 +17,11 @@ public sealed partial class HexView
     private string _rulerLine = string.Empty;
     private (int Start, int Length)[] _rulerHighlight = [];
     private readonly List<(string Text, int Index, bool Hex)> _rulerLabels = [];
+
+    // 見出しの文字列を作った条件。変わらなければ作り直さない (1 行 4,096 バイトでは 8,000 個の文字列になり、毎フレーム作ると
+    // 描画が遅れる。VIEW-04 の仕様 3)。
+    private (RowFormat Format, long BaseValue, OffsetRadix Radix, bool Lowercase)? _rulerKey;
+    private string _rulerText = string.Empty;
     private MenuFlyout? _radixMenu;
 
     /// <summary>オフセットの基数を変えるよう求めた (列見出しのメニュー)。ウィンドウはメニューの表示を更新する。</summary>
@@ -61,15 +66,19 @@ public sealed partial class HexView
             return;
         }
 
-        OffsetHeaderText.Text = Loc.Get(view.Radix switch
+        string header = Loc.Get(view.Radix switch
         {
             OffsetRadix.Decimal => "HexView_Ruler_OffsetDecimal",
             OffsetRadix.Octal => "HexView_Ruler_OffsetOctal",
             OffsetRadix.Sector => "HexView_Ruler_OffsetSector",
             _ => "HexView_Ruler_OffsetHex",
         });
-        AutomationProperties.SetName(OffsetHeader, OffsetHeaderText.Text);
-        AutomationProperties.SetHelpText(OffsetHeader, Loc.Get("HexView_Ruler_OffsetHelp"));
+        if (OffsetHeaderText.Text != header)
+        {
+            OffsetHeaderText.Text = header;
+            AutomationProperties.SetName(OffsetHeader, header);
+            AutomationProperties.SetHelpText(OffsetHeader, Loc.Get("HexView_Ruler_OffsetHelp"));
+        }
 
         // 行の先頭のアドレスの下位の桁 (VIEW-05 の仕様 4)。行の先頭のずれがあると、行が …08 などから始まる。
         RowFormat row = _format;
@@ -77,23 +86,30 @@ public sealed partial class HexView
         ulong first = format.AddressOf(layout.RowStart(0));
         long baseValue = (long)(first % (ulong)b);
         OffsetRadix radix = view.Radix == OffsetRadix.Sector ? OffsetRadix.Hex : view.Radix;
-        var line = new StringBuilder(new string(' ', row.LineLength));
-        _rulerLabels.Clear();
-        for (int c = 0; c < b; c++)
+        (RowFormat, long, OffsetRadix, bool) key = (row, baseValue, radix, view.LowercaseHex);
+        if (_rulerKey != key)
         {
-            if (row.ShowHex && row.IsGroupStart(c))
+            _rulerKey = key;
+            var line = new StringBuilder(new string(' ', row.LineLength));
+            _rulerLabels.Clear();
+            for (int c = 0; c < b; c++)
             {
-                string label = OffsetFormat.RulerLabel(baseValue + c, radix, view.LowercaseHex, RowFormat.HexCellChars);
-                Put(line, row.HexIndex(c), label);
-                _rulerLabels.Add((label, row.HexIndex(c), true));
+                if (row.ShowHex && row.IsGroupStart(c))
+                {
+                    string label = OffsetFormat.RulerLabel(baseValue + c, radix, view.LowercaseHex, RowFormat.HexCellChars);
+                    Put(line, row.HexIndex(c), label);
+                    _rulerLabels.Add((label, row.HexIndex(c), true));
+                }
+
+                if (row.ShowText)
+                {
+                    string digit = OffsetFormat.RulerLabel(baseValue + c, radix, view.LowercaseHex, 1);
+                    Put(line, row.TextIndex(c), digit);
+                    _rulerLabels.Add((digit, row.TextIndex(c), false));
+                }
             }
 
-            if (row.ShowText)
-            {
-                string digit = OffsetFormat.RulerLabel(baseValue + c, radix, view.LowercaseHex, 1);
-                Put(line, row.TextIndex(c), digit);
-                _rulerLabels.Add((digit, row.TextIndex(c), false));
-            }
+            _rulerText = line.ToString();
         }
 
         // カーソルのある位置の見出しを強調する (VIEW-06 の仕様 2)。グループ化しているときはグループの見出し。
@@ -113,7 +129,7 @@ public sealed partial class HexView
             }
         }
 
-        string text = line.ToString();
+        string text = _rulerText;
         (int, int)[] marks = [.. highlight];
         if (text == _rulerLine && marks.SequenceEqual(_rulerHighlight))
         {

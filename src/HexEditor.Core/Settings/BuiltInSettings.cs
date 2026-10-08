@@ -51,6 +51,7 @@ public static class BuiltInSettings
         new("view.tooltips", SettingCategories.View, SettingKind.Bool, true) { Order = 50 },
         new("view.text.nonPrintable", SettingCategories.View, SettingKind.Choice, "dot") { Options = ["dot", "space", "controlPictures"], Order = 55 },
         new("view.modified.keepAfterSave", SettingCategories.View, SettingKind.Bool, false) { Order = 60 },
+        new("view.modified.showDeletions", SettingCategories.View, SettingKind.Bool, false) { Order = 61 },
 
         // データインスペクタ (INSP-01〜INSP-19)。行の構成とプリセットはパネルの「行の設定」で変える。
         new("inspector.integerBase", SettingCategories.View, SettingKind.Choice, "decimal") { Options = ["decimal", "hex", "octal"], Order = 100 },

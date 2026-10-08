@@ -38,6 +38,9 @@ public static class ViewOptions
     /// <summary>「保存後も閉じるまで強調を残す」(VIEW-15 の仕様 8。既定 false)。</summary>
     public const string KeepChangesKey = "view.modified.keepAfterSave";
 
+    /// <summary>「削除位置を表示」(VIEW-15 の仕様 5。既定 false)。</summary>
+    public const string ShowDeletionsKey = "view.modified.showDeletions";
+
     /// <summary>表示しない文字の記号 (VIEW-21 の仕様 7。dot / space / controlPictures、既定 dot)。</summary>
     public const string NonPrintableKey = "view.text.nonPrintable";
 
@@ -94,6 +97,7 @@ public static class ViewOptions
         }
 
         view.ShowToolTips = settings.GetBool(ToolTipsKey, true);
+        view.ShowDeletions = settings.GetBool(ShowDeletionsKey, false);
         view.NonPrintableStyle = settings.GetString(NonPrintableKey, "dot") switch
         {
             "space" => NonPrintableStyle.Space,
