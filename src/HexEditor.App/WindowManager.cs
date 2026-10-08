@@ -220,20 +220,23 @@ public static partial class WindowManager
 
     // ---- 終了 (UI-13、UI-14 の仕様 4) ----
 
+    /// <summary>終了の確認のダイアログを出している (2 つ目の終了の要求を受け付けない)。</summary>
+    private static bool s_confirmingExit;
+
     /// <summary>
     /// アプリを終了する (ファイル > 終了、最後のウィンドウを閉じる)。全ウィンドウの文書をまとめて確かめ (UI-13 の仕様 2)、セッションを
     /// 保存してからすべてのウィンドウを閉じる。キャンセルされたら false。
     /// </summary>
     public static async Task<bool> ExitAsync(MainWindow from)
     {
-        if (IsExiting)
+        if (IsExiting || s_confirmingExit)
         {
             return false;
         }
 
         // 閉じる前のタブをセッションに残す (閉じた後は文書がなくなるため。UI-31 の仕様 2)。
         SessionState session = CaptureSession();
-        IsExiting = true;
+        s_confirmingExit = true;
         try
         {
             if (!await from.ConfirmExitAsync())
@@ -243,7 +246,7 @@ public static partial class WindowManager
         }
         finally
         {
-            IsExiting = false;
+            s_confirmingExit = false;
         }
 
         IsExiting = true;

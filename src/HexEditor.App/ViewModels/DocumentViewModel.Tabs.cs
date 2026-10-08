@@ -82,6 +82,15 @@ public sealed partial class DocumentViewModel
 
     public bool IsPending => PendingRecord is not null;
 
+    /// <summary>長時間処理を実行中 (タブの見出しに進捗リングを出す。UI-09 の仕様 2)。</summary>
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set => SetProperty(ref _isBusy, value);
+    }
+
+    private bool _isBusy;
+
     /// <summary>種類のアイコン (Segoe Fluent Icons。UI-09 の仕様 2)。ピン留めはピンのアイコン (UI-10)。</summary>
     public string IconGlyph => IsPinned ? "" : IsUntitled && !IsMissing && PendingRecord is null ? "" : "";
 }

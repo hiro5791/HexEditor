@@ -53,6 +53,21 @@ public sealed class TabMru<T>
         }
     }
 
+    /// <summary>タブを別のものに置き換える (復元したタブを開いた。UI-31 の仕様 6)。並びと切り替えの候補の位置は変えない。</summary>
+    public void Replace(T old, T replacement)
+    {
+        int index = _order.IndexOf(old);
+        if (index >= 0)
+        {
+            _order[index] = replacement;
+        }
+
+        if (_cycle?.IndexOf(old) is int at and >= 0)
+        {
+            _cycle[at] = replacement;
+        }
+    }
+
     /// <summary>
     /// Ctrl+Tab (<paramref name="forward"/>) / Ctrl+Shift+Tab: 切り替えの次の候補を返す。最初の押下では直前に使っていたタブ。
     /// <paramref name="open"/> は今開いているタブ (記録にないタブは末尾に足す)。候補がなければ null。

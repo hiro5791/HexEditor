@@ -295,7 +295,9 @@ public sealed partial class MainWindow : Window
                 return false;
             }
 
-            if (Vm.Documents.Any(d => d != doc && string.Equals(d.FilePath, path, StringComparison.OrdinalIgnoreCase)))
+            // 別のウィンドウで開いているファイルにも保存しない (UI-14)。
+            if (Vm.Documents.Any(d => d != doc && string.Equals(d.FilePath, path, StringComparison.OrdinalIgnoreCase))
+                || WindowManager.FindOpenElsewhere(this, path) is not null)
             {
                 ShowNotice(Loc.Get("Error_SaveOpenElsewhere"), InfoBarSeverity.Error, doc);
                 return false;

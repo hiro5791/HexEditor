@@ -76,6 +76,7 @@ public sealed partial class MainWindow
 
         _closingConfirmed = true;
         SavePanelLayout();
+        StopWindowTimers();
         WindowManager.Unregister(this);
         AppLog.Info($"Window closed ({WindowManager.Windows.Count} window(s))");
 
@@ -141,6 +142,15 @@ public sealed partial class MainWindow
     internal void CloseForExit()
     {
         _closingConfirmed = true;
+        StopWindowTimers();
         DispatcherQueue.TryEnqueue(Close);
+    }
+
+    /// <summary>閉じたウィンドウのタイマーを止める (他のウィンドウが残っている間も動き続けないように)。</summary>
+    private void StopWindowTimers()
+    {
+        _noticeTimer.Stop();
+        _pollTimer?.Stop();
+        _mruTimer?.Stop();
     }
 }

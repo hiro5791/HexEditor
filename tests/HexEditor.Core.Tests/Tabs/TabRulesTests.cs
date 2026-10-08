@@ -1,3 +1,4 @@
+using HexEditor.Core.Commands;
 using HexEditor.Core.Tabs;
 
 namespace HexEditor.Core.Tests.Tabs;
@@ -80,9 +81,35 @@ public sealed class TabRulesTests
         mru.Commit();
         Assert.Null(new TabMru<string>().Step(["only"], forward: true));
 
+        // 切り替えの途中で候補のタブが開いた文書に置き換わっても、選んでいる位置は変わらない (復元したタブ。UI-31 の仕様 6)。
+        var lazy = new TabMru<string>();
+        lazy.Touch("a");
+        lazy.Touch("pending");
+        lazy.Touch("c");
+        Assert.Equal("pending", lazy.Step(["a", "pending", "c"], forward: true));
+        lazy.Replace("pending", "opened");
+        Assert.Equal("opened", lazy.Commit());
+        Assert.Equal(["opened", "c", "a"], lazy.Order);
+
         // 並び順の切り替え (Ctrl+PageDown) は末尾から先頭に戻る。
         Assert.Equal(0, TabStripRules.Cycle(3, 2, forward: true));
         Assert.Equal(2, TabStripRules.Cycle(3, 0, forward: false));
+    }
+
+    [Fact]
+    public void Palette_finds_tab_commands_by_the_displayed_title()
+    {
+        // TC-UI-10-03 はパレットに表示どおり「タブ: 右へ移動」と入力する (カテゴリ名と表示名の全体で探す)。
+        var items = new List<CommandSearchItem>
+        {
+            new("tab.moveLeft", "タブ", "左へ移動", "Move left", "ひだりへいどう"),
+            new("tab.moveRight", "タブ", "右へ移動", "Move right", "みぎへいどう"),
+            new("file.close", "ファイル", "閉じる", "Close", "とじる"),
+        };
+        List<CommandSearchResult> results = CommandSearch.Filter(items, "タブ: 右へ移動", StringComparer.Ordinal);
+        Assert.Equal("tab.moveRight", results[0].Item.Id);
+        Assert.Equal(CommandMatchField.Title, results[0].Field);
+        Assert.Equal("tab.moveLeft", CommandSearch.Filter(items, "タブ: 左へ", StringComparer.Ordinal)[0].Item.Id);
     }
 
     [Fact]

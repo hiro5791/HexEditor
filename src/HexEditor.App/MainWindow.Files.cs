@@ -62,7 +62,9 @@ public sealed partial class MainWindow
             elsewhere.Window.Vm.Selected = elsewhere.Document;
             WindowManager.MarkActive(elsewhere.Window);
             WindowManager.BringToFront(elsewhere.Window);
-            return elsewhere.Document;
+
+            // まだ開いていない復元したタブは、選ぶと開いた文書に置き換わる (UI-31 の仕様 6)。
+            return elsewhere.Document.IsPending ? elsewhere.Window.Vm.Selected ?? elsewhere.Document : elsewhere.Document;
         }
 
         try

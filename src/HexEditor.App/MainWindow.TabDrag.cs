@@ -218,6 +218,7 @@ public sealed partial class MainWindow
 
         _closingConfirmed = true;
         SavePanelLayout();
+        StopWindowTimers();
         WindowManager.Unregister(this);
         DispatcherQueue.TryEnqueue(Close);
     }

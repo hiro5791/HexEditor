@@ -44,6 +44,26 @@ public sealed partial class MainWindow
         Vm.PropertyChanged += Vm_SelectedChanged;
         Vm.Documents.CollectionChanged += TabDocuments_CollectionChanged;
         InitializeTabDrag();
+
+        // 長時間処理の実行中のタブに進捗リングを出す (UI-09 の仕様 2)。処理の一覧はアプリ全体で 1 つなので、閉じたら購読をやめる。
+        EventHandler operationsChanged = (_, _) => DispatcherQueue.TryEnqueue(UpdateBusyTabs);
+        Vm.Operations.Changed += operationsChanged;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                Vm.Operations.Changed -= operationsChanged;
+                _mruTimer?.Stop();
+            }
+        };
+    }
+
+    private void UpdateBusyTabs()
+    {
+        foreach (DocumentViewModel doc in Vm.Documents)
+        {
+            doc.IsBusy = Vm.Operations.ActiveFor(doc.Document).Count > 0;
+        }
     }
 
     private void Vm_SelectedChanged(object? sender, PropertyChangedEventArgs e)
@@ -68,7 +88,9 @@ public sealed partial class MainWindow
         foreach (DocumentViewModel removed in e.OldItems?.OfType<DocumentViewModel>() ?? [])
         {
             removed.PropertyChanged -= Document_NameChanged;
-            if (!Vm.Documents.Contains(removed))
+
+            // 復元したタブを開いて置き換えるときは、最近使った順の位置を引き継ぐ (MaterializePending)。
+            if (!Vm.Documents.Contains(removed) && !_materializing)
             {
                 _mru.Remove(removed);
             }
@@ -117,6 +139,7 @@ public sealed partial class MainWindow
                 vm => ShowNotice(Loc.Get("Session_FileChanged"), InfoBarSeverity.Informational, vm),
                 index);
             opened ??= Vm.AddMissing(tab, index);
+            _mru.Replace(pending, opened);
             Vm.Selected = opened;
             _mru.Touch(opened);
         }
