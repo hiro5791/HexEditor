@@ -180,9 +180,49 @@ public sealed partial class MainWindow
         }
     }
 
+    /// <summary>
+    /// 表示中の更新の帯の内容 (アプリ全体で 1 つ。PKG-22 の仕様 1)。後から開いたウィンドウにも出す。8 秒で閉じる「最新の版です」は残さない。
+    /// </summary>
+    private static UpdateMessage? s_updateMessage;
+
+    /// <summary>
+    /// ウィンドウごとの更新の帯の準備: 利用者が閉じたら全ウィンドウで閉じる (帯はこのウィンドウの部品なので、購読はウィンドウと一緒に消える)。
+    /// </summary>
+    private void InitializeUpdateBar()
+    {
+        UpdateBar.Closed += (_, _) =>
+        {
+            if (s_updateMessage is not null)
+            {
+                HideUpdateMessage();
+            }
+        };
+    }
+
+    /// <summary>2 つ目以降のウィンドウを開いたとき: 表示中の更新の帯があれば、このウィンドウにも出す。</summary>
+    private void ShowPendingUpdateMessage()
+    {
+        if (s_updateMessage is { } message)
+        {
+            UpdateBar.Show(message, OnUpdateButton);
+            RefreshRestartButton();
+        }
+    }
+
+    /// <summary>更新の帯をすべてのウィンドウで閉じる。</summary>
+    private static void HideUpdateMessage()
+    {
+        s_updateMessage = null;
+        foreach (MainWindow w in WindowManager.Windows)
+        {
+            w.UpdateBar.Hide();
+        }
+    }
+
     /// <summary>ヘルプの「更新の確認」「翻訳の誤りを報告」(コマンド。UI-16)。オフラインモードでは更新の確認を使えない (UI-58 の仕様 3)。</summary>
     private void RegisterPackagingCommands()
     {
+        InitializeUpdateBar();
         Commands.Register("help.checkForUpdates", () => CheckForUpdatesAsync(manual: true),
             () => AppUpdates.Policy.Offline ? CommandState.Unavailable(Loc.Get("Network_OfflineReason")) : CommandState.Available);
         Commands.Register("help.reportTranslation", ReportTranslationAsync);
@@ -249,11 +289,22 @@ public sealed partial class MainWindow
         }
     }
 
+    /// <summary>更新の帯を出す。アプリ全体の帯なので、すべてのウィンドウに出す (PKG-22 の仕様 1)。</summary>
     internal void ShowUpdateMessage(UpdateMessage message)
     {
         AppLog.Info($"Update notice: {message.MessageKey} {string.Join(",", message.Buttons)}");
-        UpdateBar.Show(message, OnUpdateButton);
-        RefreshRestartButton();
+        s_updateMessage = message.AutoClose ? null : message;
+        if (!WindowManager.Windows.Contains(this))
+        {
+            UpdateBar.Show(message, OnUpdateButton);
+        }
+
+        foreach (MainWindow w in WindowManager.Windows)
+        {
+            w.UpdateBar.Show(message, w.OnUpdateButton);
+        }
+
+        RefreshRestartButtons();
     }
 
     private async void OnUpdateButton(UpdateButton button)
@@ -263,7 +314,7 @@ public sealed partial class MainWindow
         switch (button)
         {
             case UpdateButton.Download:
-                UpdateBar.Hide();
+                HideUpdateMessage();
                 await DownloadUpdateAsync(manual: true);
                 break;
             case UpdateButton.OpenStore or UpdateButton.OpenDownloadPage when offer?.DownloadPage is { } page:
@@ -274,11 +325,11 @@ public sealed partial class MainWindow
                 break;
             case UpdateButton.Skip:
                 service.Skip();
-                UpdateBar.Hide();
+                HideUpdateMessage();
                 break;
             case UpdateButton.Later:
                 service.ApplyOnExit();
-                UpdateBar.Hide();
+                HideUpdateMessage();
                 break;
             case UpdateButton.RestartToUpdate:
                 await RestartToUpdateAsync();
