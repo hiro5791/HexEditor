@@ -39,6 +39,9 @@ public sealed class UnreadableDataException(IReadOnlyList<UnreadableRange> range
     public IReadOnlyList<UnreadableRange> Ranges { get; } = ranges;
 }
 
+/// <summary>作ったバックアップ (ENG-26)。</summary>
+public sealed record BackupOutcome(string Path, TimeSpan Time);
+
 /// <summary>
 /// 安全な保存 (ENG-22): 保存先と同じフォルダの一時ファイルに書き出してから置き換える。途中で失敗・キャンセルしても
 /// 保存先のファイルは保存前のまま残る。
@@ -58,8 +61,16 @@ public static class DocumentSaver
     /// (呼び出し側は UI スレッドで <see cref="Document.CompleteSave"/> を呼ぶ)。
     /// </summary>
     public static FileByteSource Save(DocumentSnapshot snapshot, string targetPath, LongRunningOperation? operation = null,
-        IVolumeInfoProvider? volumes = null)
+        IVolumeInfoProvider? volumes = null) => Save(snapshot, targetPath, operation, volumes, null, out _);
+
+    /// <summary>
+    /// 書き出す。<paramref name="backup"/> を指定すると、置き換え前のファイルの名前を変えてバックアップにする (ENG-26 の仕様 4。
+    /// コピーしないため、ファイルサイズに関係なく即座に終わる)。置き場所が別のボリュームの場合はコピーする。
+    /// </summary>
+    public static FileByteSource Save(DocumentSnapshot snapshot, string targetPath, LongRunningOperation? operation,
+        IVolumeInfoProvider? volumes, BackupSettings? backup, out BackupOutcome? backupOutcome)
     {
+        backupOutcome = null;
         string target = ResolveTarget(Path.GetFullPath(targetPath));
         string folder = Path.GetDirectoryName(target)!;
         VolumeInfo? volume = (volumes ?? SystemVolumeInfoProvider.Instance).GetVolume(folder);
@@ -67,6 +78,8 @@ public static class DocumentSaver
         IReadOnlyList<(long Offset, long Length)>? sparse = SparseDataRanges(snapshot);
         CheckFreeSpace(volume, sparse?.Sum(r => r.Length) ?? snapshot.Length);
 
+        // バックアップの置き場所を先に空ける。作れなければ書き始めない (ENG-26 の「エラー」)。
+        string? backupPath = backup is not null && File.Exists(target) ? Backup.Rotate(target, backup) : null;
         string temp = Path.Combine(folder, $".{Path.GetFileName(target)}.~hex{RandomNumberGenerator.GetHexString(8, lowercase: true)}.tmp");
         try
         {
@@ -76,7 +89,24 @@ public static class DocumentSaver
             snapshot.Storage.Owner.SuspendLock();
             if (File.Exists(target))
             {
-                File.Replace(temp, target, destinationBackupFileName: null, ignoreMetadataErrors: true);
+                if (backupPath is not null && Backup.SameVolume(target, backupPath))
+                {
+                    // 置き換え前のファイルの名前を変えてバックアップにする。Undo 用に開いているハンドルはバックアップを指す。
+                    string renamedTo = backupPath;
+                    TimeSpan time = Backup.Measure(() => File.Replace(temp, target, renamedTo, ignoreMetadataErrors: true));
+                    backupOutcome = new BackupOutcome(renamedTo, time);
+                }
+                else
+                {
+                    if (backupPath is not null)
+                    {
+                        string copyTo = backupPath;
+                        TimeSpan time = Backup.Measure(() => Backup.Copy(target, copyTo, operation));
+                        backupOutcome = new BackupOutcome(copyTo, time);
+                    }
+
+                    File.Replace(temp, target, destinationBackupFileName: null, ignoreMetadataErrors: true);
+                }
             }
             else
             {

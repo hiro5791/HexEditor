@@ -56,6 +56,13 @@ public enum SaveIssue
     /// <see cref="SavePlan.CanKeepLinks"/> のときだけ)、「キャンセル」を選ばせる。
     /// </summary>
     HardLinks,
+
+    /// <summary>
+    /// その場保存のバックアップのためにファイル全体 (<see cref="SavePlan.BackupCopyBytes"/>。1 GiB 超) をコピーする (ENG-26 の仕様 5)。UI は
+    /// 「コピーして保存」(<see cref="SavePlanner.CopyBackup"/>)「バックアップなしで保存」(<see cref="SavePlanner.WithoutBackup"/>)
+    /// 「キャンセル」を選ばせる。
+    /// </summary>
+    BackupCopy,
 }
 
 /// <summary>空き容量不足の内容 (ENG-25 の仕様 4 のダイアログの「必要」「空き」)。</summary>
@@ -81,6 +88,9 @@ public sealed record SaveSettings
 
     /// <summary>ボリュームの情報 (テストで差し替える)。</summary>
     public IVolumeInfoProvider Volumes { get; init; } = SystemVolumeInfoProvider.Instance;
+
+    /// <summary>「バックアップを作る」(ENG-26)。null なら作らない (既定)。</summary>
+    public BackupSettings? Backup { get; init; }
 }
 
 /// <summary>保存の計画: どの方式で、どこに、何を書くか。<see cref="SavePlanner.Plan"/> で作り、UI スレッドで確認してから実行する。</summary>
@@ -114,6 +124,15 @@ public sealed record SavePlan
 
     public required SaveSettings Settings { get; init; }
 
+    /// <summary>この保存で作るバックアップ (ENG-26)。null なら作らない。</summary>
+    public BackupSettings? Backup { get; init; }
+
+    /// <summary>その場保存のバックアップでコピーする量 (<see cref="SaveIssue.BackupCopy"/> のとき)。</summary>
+    public long? BackupCopyBytes { get; init; }
+
+    /// <summary>1 GiB を超えるコピーを承認した (「コピーして保存」)。</summary>
+    public bool BackupCopyConfirmed { get; init; }
+
     /// <summary>書き込みを行う計画で、確認の要る問題がない (<see cref="SavePlanner.Execute"/> できる)。</summary>
     public bool CanExecute => Issue == SaveIssue.None && Method is SaveMethod.InPlace or SaveMethod.InPlaceUnprotected or SaveMethod.Safe;
 
@@ -122,7 +141,14 @@ public sealed record SavePlan
 }
 
 /// <summary>保存の結果。UI スレッドで <see cref="SavePlanner.Complete"/> に渡す。</summary>
-public sealed record SaveResult(FileByteSource? SavedFile, InPlaceSaveResult? InPlace);
+public sealed record SaveResult(FileByteSource? SavedFile, InPlaceSaveResult? InPlace)
+{
+    /// <summary>バックアップの作成にかかった時間 (作らなければ null。TC-ENG-26-02 のログ)。</summary>
+    public TimeSpan? BackupTime { get; init; }
+
+    /// <summary>作ったバックアップのパス。</summary>
+    public string? BackupPath { get; init; }
+}
 
 /// <summary>
 /// 保存方式の選択と実行 (ENG-20)。UI は次の順に呼ぶ。
@@ -140,7 +166,17 @@ public static class SavePlanner
         DocumentSnapshot snapshot = document.Current;
         string? own = (document.Source as FileByteSource)?.Path;
         string? target = targetPath is null ? own : Path.GetFullPath(targetPath);
-        var plan = new SavePlan { Document = document, Snapshot = snapshot, TargetPath = target, Method = SaveMethod.SaveAs, Settings = settings };
+        var plan = new SavePlan
+        {
+            Document = document,
+            Snapshot = snapshot,
+            TargetPath = target,
+            Method = SaveMethod.SaveAs,
+            Settings = settings,
+
+            // ディスク・ボリューム・プロセスメモリの保存ではバックアップを作らない (ENG-26 の仕様 6)。ファイルに保存するときだけ。
+            Backup = settings.Backup,
+        };
         if (target is null)
         {
             return plan;
@@ -157,9 +193,10 @@ public static class SavePlanner
             return plan with { Method = SaveMethod.SaveAs, Issue = SaveIssue.ReadOnly };
         }
 
-        if (sameFile && !settings.AlwaysSafeSave && InPlaceSaver.CanSaveInPlace(snapshot, target))
+        // 元のファイルが削除・移動されていたら、元の場所に作り直す (ENG-19 の仕様 8)。その場では書けない。
+        if (sameFile && !settings.AlwaysSafeSave && File.Exists(target) && InPlaceSaver.CanSaveInPlace(snapshot, target))
         {
-            return CheckJournal(plan with { Method = SaveMethod.InPlace });
+            return CheckInPlace(plan with { Method = SaveMethod.InPlace });
         }
 
         // 置き換えでハードリンクが切れる場合は先に確かめる (ENG-22 の仕様 4)。
@@ -184,7 +221,7 @@ public static class SavePlanner
     /// <summary>ハードリンクの確認で「その場で保存 (リンクを保つ)」を選んだ。ジャーナルの確認を続ける。</summary>
     public static SavePlan KeepLinks(SavePlan plan) =>
         plan.CanKeepLinks
-            ? CheckJournal(plan with { Method = SaveMethod.InPlace, Issue = SaveIssue.None, LinkCount = null })
+            ? CheckInPlace(plan with { Method = SaveMethod.InPlace, Issue = SaveIssue.None, LinkCount = null })
             : throw new InvalidOperationException("長さが変わる保存はその場で書けません (ENG-24 は未実装)。");
 
     /// <summary>ジャーナルの確認で「安全な保存を使う」を選んだ。安全な保存の確認 (空き容量など) をやり直す。</summary>
@@ -197,6 +234,14 @@ public static class SavePlanner
             ? plan with { Method = SaveMethod.InPlaceUnprotected, Issue = SaveIssue.None, Journal = null }
             : throw new InvalidOperationException("その場保存の計画ではありません。");
 
+    /// <summary>バックアップのコピーの確認で「コピーして保存」を選んだ。</summary>
+    public static SavePlan CopyBackup(SavePlan plan) =>
+        plan with { Issue = SaveIssue.None, BackupCopyConfirmed = true };
+
+    /// <summary>バックアップの確認・失敗で「バックアップなしで保存」を選んだ。</summary>
+    public static SavePlan WithoutBackup(SavePlan plan) =>
+        plan with { Issue = plan.Issue == SaveIssue.BackupCopy ? SaveIssue.None : plan.Issue, Backup = null, BackupCopyBytes = null };
+
     /// <summary>
     /// 計画どおりに書き出す (バックグラウンドで呼ぶ)。書き込み禁止のハンドル (ENG-15) を閉じてから書く。
     /// 確認の要る問題がある計画では例外になる。
@@ -208,12 +253,26 @@ public static class SavePlanner
             throw new InvalidOperationException($"この計画は実行できません ({plan.Method}, {plan.Issue})。");
         }
 
-        return plan.Method switch
+        if (plan.Method == SaveMethod.Safe)
         {
-            SaveMethod.Safe => new SaveResult(DocumentSaver.Save(plan.Snapshot, plan.TargetPath!, operation, plan.Settings.Volumes), null),
-            _ => new SaveResult(null, InPlaceSaver.Save(plan.Snapshot, plan.Settings.JournalDirectory, plan.Settings.JournalLimit, operation,
-                plan.Document.Id, protect: plan.Method == SaveMethod.InPlace, plan.Settings.Volumes)),
-        };
+            FileByteSource saved = DocumentSaver.Save(plan.Snapshot, plan.TargetPath!, operation, plan.Settings.Volumes, plan.Backup,
+                out BackupOutcome? backup);
+            return new SaveResult(saved, null) { BackupTime = backup?.Time, BackupPath = backup?.Path };
+        }
+
+        // その場保存では、書き込む前にファイル全体をコピーしてバックアップにする (ENG-26 の仕様 5)。
+        string? backupPath = null;
+        TimeSpan? backupTime = null;
+        if (plan.Backup is { } settings && File.Exists(plan.TargetPath))
+        {
+            string first = Backup.Rotate(plan.TargetPath!, settings);
+            backupTime = Backup.Measure(() => Backup.Copy(plan.TargetPath!, first, operation));
+            backupPath = first;
+        }
+
+        InPlaceSaveResult inPlace = InPlaceSaver.Save(plan.Snapshot, plan.Settings.JournalDirectory, plan.Settings.JournalLimit, operation,
+            plan.Document.Id, protect: plan.Method == SaveMethod.InPlace, plan.Settings.Volumes);
+        return new SaveResult(null, inPlace) { BackupTime = backupTime, BackupPath = backupPath };
     }
 
     /// <summary>保存の完了を反映する (UI スレッド。ENG-20 の仕様 4)。</summary>
@@ -236,6 +295,21 @@ public static class SavePlanner
         {
             plan.Document.ResumeLock();
         }
+    }
+
+    /// <summary>その場保存の確認: ジャーナル (ENG-23) と、バックアップのコピーの大きさ (ENG-26 の仕様 5)。</summary>
+    private static SavePlan CheckInPlace(SavePlan plan)
+    {
+        SavePlan checkedPlan = CheckJournal(plan);
+        if (checkedPlan.Issue != SaveIssue.None || checkedPlan.Backup is null || checkedPlan.BackupCopyConfirmed)
+        {
+            return checkedPlan;
+        }
+
+        long length = checkedPlan.Snapshot.Storage.Source.Length;
+        return length > BackupSettings.CopyConfirmBytes
+            ? checkedPlan with { Issue = SaveIssue.BackupCopy, BackupCopyBytes = length }
+            : checkedPlan;
     }
 
     private static SavePlan CheckJournal(SavePlan plan)
