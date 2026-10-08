@@ -93,6 +93,7 @@ public sealed class EditorState
         Document = document;
         BytesPerRow = bytesPerRow;
         Document.Changed += (_, e) => OnDocumentChanged(e);
+        Document.ReadOnlyChanged += (_, _) => RaiseChanged();
     }
 
     public Document Document { get; }
@@ -112,8 +113,15 @@ public sealed class EditorState
     /// <summary>挿入モードか (EDIT-10)。長さを変えられないドキュメントでは常に偽。</summary>
     public bool InsertMode { get; private set; }
 
-    /// <summary>読み取り専用か (EDIT-16 の簡易版。切り替えの規則は EDIT-16 で定める)。</summary>
-    public bool ReadOnly { get; set; }
+    /// <summary>
+    /// 読み取り専用か (EDIT-16)。ドキュメントの状態 (<see cref="Document.ReadOnlyReason"/>) をそのまま表す。真にすると利用者の切り替え
+    /// (<see cref="ReadOnlyReason.User"/>) として読み取り専用にし、偽にすると理由に関係なく解除する (解除できるかの確認は呼び出し側で行う)。
+    /// </summary>
+    public bool ReadOnly
+    {
+        get => Document.IsReadOnly;
+        set => Document.SetReadOnly(!value ? ReadOnlyReason.None : Document.IsReadOnly ? Document.ReadOnlyReason : ReadOnlyReason.User);
+    }
 
     /// <summary>
     /// テキスト列の文字コード (VIEW-21)。表示・入力・コピー・貼り付けのすべてでこれを使う。変えてもカーソルと選択範囲は変わらない
@@ -993,9 +1001,10 @@ public sealed class EditorState
         return HasSelection ? DeleteSelection() : EditResult.Ignored;
     }
 
+    /// <summary>元に戻す。読み取り専用・処理中は何もしない (EDIT-16 の仕様 2)。</summary>
     public void Undo()
     {
-        if (Document.History.CanUndo && !Document.IsEditLocked)
+        if (Document.History.CanUndo && CanEdit())
         {
             Document.Undo();
         }
@@ -1003,7 +1012,7 @@ public sealed class EditorState
 
     public void Redo()
     {
-        if (Document.History.CanRedo && !Document.IsEditLocked)
+        if (Document.History.CanRedo && CanEdit())
         {
             Document.Redo();
         }
@@ -1047,7 +1056,7 @@ public sealed class EditorState
     private IDisposable? BeginTypingGroup() =>
         HasSelection && InsertMode ? Document.BeginGroup("入力", TypingKey) : null;
 
-    private bool CanEdit() => !ReadOnly && !Document.IsEditLocked;
+    private bool CanEdit() => !Document.IsReadOnly && !Document.IsEditLocked;
 
     private byte ReadByte(long offset)
     {

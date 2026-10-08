@@ -1,3 +1,4 @@
+using HexEditor.Core.Engine;
 using HexEditor.Core.Files;
 using HexEditor.Core.Sources;
 using HexEditor.Core.View;
@@ -86,7 +87,7 @@ public sealed partial class DocumentViewModel
             Kind = FilePath is null ? SessionTabKind.Untitled : SessionTabKind.File,
             Path = FilePath,
             DisplayName = DisplayName,
-            ReadOnly = Editor.ReadOnly,
+            ReadOnly = Document.ReadOnlyReason is ReadOnlyReason.User or ReadOnlyReason.OpenedReadOnly,
             Cursor = Editor.Cursor,
             SelectionStart = Editor.SelectionStart,
             SelectionLength = Editor.SelectionLength,

@@ -1,6 +1,7 @@
 using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
+using HexEditor.Core.Editing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;

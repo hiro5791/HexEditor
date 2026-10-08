@@ -53,6 +53,9 @@ public sealed partial class MainWindow : Window
         InitializeRegions();
         InitializeExternalChanges();
 
+        // 読み取り専用の解除 (EDIT-16) で書き込めるようにする処理 (ENG-14 の仕様 3)。
+        ReopenForWriting = ReopenForWritingAsync;
+
         // データインスペクタ・ブックマーク (INSP-01〜INSP-26)。パネルとコマンドより先に作る。
         InitializeAnnotations();
 
@@ -408,12 +411,20 @@ public sealed partial class MainWindow : Window
                     return;
                 }
 
-                if (command == EditorCommand.Cut && (!editor.Document.CanResize || editor.ReadOnly))
+                if (command == EditorCommand.Cut && editor.ReadOnly && Vm.Selected is { } readOnlyDoc)
+                {
+                    // 読み取り専用では切り取らない (コピーもしない。EDIT-16 の仕様 3)。
+                    ShowReadOnlyNotice(readOnlyDoc);
+                    return;
+                }
+
+                if (command == EditorCommand.Cut && !editor.Document.CanResize)
                 {
                     ShowNotice(Loc.Get("Notice_FixedLength"), InfoBarSeverity.Error, Vm.Selected);
                     return;
                 }
 
+                _clipboard.CompatFormatsEnabled = App.Settings.GetBool(CompatClipboardFormats.SettingKey, true);
                 ClipboardPlan? copied = await _clipboard.CopyAsync(editor);
                 if (copied?.InAppOnly == true)
                 {
@@ -432,7 +443,28 @@ public sealed partial class MainWindow : Window
 
                 break;
             default:
+                if (editor.ReadOnly && Vm.Selected is { } readOnly)
+                {
+                    ShowReadOnlyNotice(readOnly);
+                    return;
+                }
+
+                _clipboard.PasteDetectedWithoutConfirmation = App.Settings.GetBool(PasteWithoutConfirmationKey, false);
                 PasteOutcome outcome = await _clipboard.PasteAsync(editor, command == EditorCommand.PasteOverwrite, ConfirmTruncateAsync);
+                if (outcome == PasteOutcome.NeedsSpecialPaste && Vm.Selected is { } special)
+                {
+                    // Hex 列で Hex として読めず、他の形式に当てはまる: 形式を選択して貼り付けを開く (EDIT-23 の仕様 2、EDIT-26)。
+                    await PasteSpecialAsync(special, new SpecialClipboard(_clipboard.LastSpecialText, null, []));
+                    break;
+                }
+
+                if (outcome == PasteOutcome.Files && Vm.Selected is { } target && _clipboard.LastFiles.Count > 0)
+                {
+                    // エクスプローラーでコピーしたファイル: ファイルの内容の挿入 (EDIT-23 の仕様 1 の 4、EDIT-30)。
+                    await InsertFileAsync(target, _clipboard.LastFiles[0]);
+                    break;
+                }
+
                 if (outcome == PasteOutcome.PastedAsText)
                 {
                     // Hex として読めないテキストはテキストとして貼り、「元に戻す」を付けて知らせる (EDIT-23 の仕様 2)。
@@ -583,6 +615,13 @@ public sealed partial class MainWindow : Window
     {
         DocumentViewModel? doc = Vm.Selected;
         IReadOnlyList<LongRunningOperation> busy = doc is null ? [] : Vm.Operations.ActiveFor(doc.Document);
+        if (result == EditResult.NotEditable && doc is { Editor.ReadOnly: true } && busy.Count == 0)
+        {
+            // 読み取り専用: データを変えずに「編集を許可する」付きの InfoBar を出す (EDIT-16 の仕様 3)。
+            ShowReadOnlyNotice(doc);
+            return;
+        }
+
         if (result == EditResult.FixedLengthDelete && doc is not null)
         {
             // 長さを変えられないドキュメントでの削除は、代わりに 00 で塗りつぶせるようにする (EDIT-13 の仕様 5)。

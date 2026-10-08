@@ -26,9 +26,43 @@ public sealed class ExternalChangeTests
     private static IReadOnlyList<string> NoticeButtons(AppSession app) =>
         [.. app.Window.FindAllDescendants(cf => cf.ByAutomationId("Notification_Action")).Select(AppSession.NameOf)];
 
-    [Fact(Skip = "EDIT-16 (読み取り専用の解除「編集を許可する」と、属性を外す承認) は編集の担当が作る。読み取り専用属性のファイルを開いたときの読み取り専用と InfoBar は phase 0 の TC-ENG-11 で確認している")]
+    [Fact]
     [Trait(UiTest.TC, "TC-ENG-14-01")]
-    public Task Read_only_attribute_can_be_removed_and_saved() => Task.CompletedTask;
+    public Task Read_only_attribute_can_be_removed_and_saved() => UiTestContext.RunAsync(async ctx =>
+    {
+        // TD-READONLY: TD-SEQ-1M の先頭 1 KiB に読み取り専用属性を付けたもの。
+        byte[] data = new byte[1024];
+        HexEditor.TestData.TestDataCatalog.Expected("TD-SEQ-1M", 0, data);
+        string path = ctx.WriteFile("TD-READONLY.bin", data);
+        File.SetAttributes(path, FileAttributes.ReadOnly);
+        try
+        {
+            // 1. 開くと読み取り専用で、InfoBar の理由が読み取り専用属性。
+            AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+            Assert.True((await app.DocumentAsync())["readOnly"]!.GetValue<bool>());
+            await ExternalNoticeAsync(app, "read-only attribute");
+
+            // 2. 「編集を許可する」で解除し、属性を外すことを承認する。
+            await PressNoticeButtonAsync(app, "Allow editing");
+            await app.WaitForAsync("ReadOnlyConfirmDialog");
+            await EditCommandTests.PressAsync(app);
+            Assert.False((await app.DocumentAsync())["readOnly"]!.GetValue<bool>());
+
+            // 3. オフセット 0 を FF に上書きして保存する。
+            await app.GoToAsync(0);
+            await app.TypeAsync("FF");
+            await app.KeyAsync("S", ctrl: true);
+            await app.WaitUntilAsync(async () => !(await app.DocumentAsync())["modified"]!.GetValue<bool>(), TimeSpan.FromSeconds(15), "the save");
+
+            // 4. 属性が外れ、オフセット 0 が FF。
+            Assert.False(File.GetAttributes(path).HasFlag(FileAttributes.ReadOnly));
+            Assert.Equal(0xFF, File.ReadAllBytes(path)[0]);
+        }
+        finally
+        {
+            File.SetAttributes(path, FileAttributes.Normal);
+        }
+    });
 
     /// <summary>ENG-14 の仕様 1: ファイル > 読み取り専用で開く… で開くと、編集を受け付けない。</summary>
     [Fact]

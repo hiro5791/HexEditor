@@ -10,10 +10,25 @@
       "type": "integer",
       "const": 1
     },
+    "clipboard.compatFormats": {
+      "description": "Copy in formats other hex editors read",
+      "type": "boolean",
+      "default": true
+    },
     "diagnostics.writeMiniDump": {
       "description": "Save a memory dump on crash",
       "type": "boolean",
       "default": false
+    },
+    "edit.paste.detectWithoutConfirmation": {
+      "description": "Paste detected formats without asking",
+      "type": "boolean",
+      "default": false
+    },
+    "edit.pasteSpecial.preferLast": {
+      "description": "Prefer the last paste format",
+      "type": "boolean",
+      "default": true
     },
     "files.autoReloadUnmodified": {
       "description": "Reload unmodified files automatically",

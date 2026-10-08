@@ -152,6 +152,7 @@ public sealed partial class MainWindow
         {
             ["text"] = item.Text,
             ["enabled"] = item.IsEnabled,
+            ["checked"] = item is ToggleMenuFlyoutItem toggle ? toggle.IsChecked : null,
             ["reason"] = AutomationProperties.GetHelpText(item),
             ["acceleratorText"] = item.KeyboardAcceleratorTextOverride,
             ["toolTip"] = ToolTipService.GetToolTip(item)?.ToString(),

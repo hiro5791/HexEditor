@@ -19,6 +19,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         // ステータスバー・タブの見出しをまとめて更新する (空の名前は全プロパティの変更)。
         Document.Changed += (_, _) => OnPropertyChanged(string.Empty);
         Editor.Changed += (_, _) => OnPropertyChanged(string.Empty);
+        Document.ReadOnlyChanged += (_, _) => OnPropertyChanged(string.Empty);
 
         // カーソルの値は、読み込みが終わってから表示する (読み込みの通知はスレッドプールから来る)。
         var queue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
@@ -84,10 +85,15 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
     public string DisplayName { get; private set; }
 
+    /// <summary>鍵の記号 (読み取り専用の表示。EDIT-16 の仕様 6)。</summary>
+    public const string LockGlyph = "🔒";
+
     /// <summary>
-    /// タブの見出し。変更があれば先頭に ● を付ける (色だけに頼らない)。外部で変更された (ENG-19) なら ⚠ を付ける (形で区別する)。
+    /// タブの見出し。読み取り専用なら鍵の記号 (EDIT-16 の仕様 6)、変更があれば ● (色だけに頼らない)、外部で変更された (ENG-19) なら ⚠
+    /// (形で区別する) を先頭に付ける。
     /// </summary>
-    public string Header => (Document.IsModified ? "● " : string.Empty) + (HasExternalChange ? "⚠ " : string.Empty) + DisplayName;
+    public string Header => (Document.IsReadOnly ? LockGlyph + " " : string.Empty) + (Document.IsModified ? "● " : string.Empty)
+        + (HasExternalChange ? "⚠ " : string.Empty) + DisplayName;
 
     public string ToolTip => FilePath ?? DisplayName;
 
@@ -170,7 +176,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
             StatusFormat.Hex(Editor.SelectionLength), StatusFormat.Number(Editor.SelectionLength, Culture))
         : string.Empty;
 
-    public string ModeText => Editor.ReadOnly ? Loc.Get("Status_ReadOnly")
+    public string ModeText => Editor.ReadOnly ? LockGlyph + " " + Loc.Get("Status_ReadOnly")
         : !Document.CanResize ? Loc.Get("Status_OverwriteFixed")
         : Editor.InsertMode ? Loc.Get("Status_Insert") : Loc.Get("Status_Overwrite");
 

@@ -71,7 +71,10 @@ public sealed partial class MainViewModel : ObservableObject
 
         var doc = new Document(FileByteSource.Open(full), _options);
         DocumentViewModel vm = Add(doc, full, Path.GetFileName(full), insertAt);
-        vm.Editor.ReadOnly = readOnly;
+        // 読み取り専用で開く理由 (ENG-14 の仕様 1): 指定された、またはファイルに読み取り専用属性がある。
+        doc.SetReadOnly(readOnly ? ReadOnlyReason.OpenedReadOnly
+            : doc.Source is FileByteSource { HasReadOnlyAttribute: true } ? ReadOnlyReason.FileAttribute
+            : ReadOnlyReason.None);
         AfterOpened(vm, restorePosition);
         return vm;
     }
@@ -142,6 +145,17 @@ public sealed partial class MainViewModel : ObservableObject
         string name = Loc.Format("Operation_Save", Path.GetFileName(path));
         SaveResult result;
 
+        // 読み取り専用属性のあるファイルへの書き込みを承認していた: 属性を外して保存する (ENG-22 の仕様 5、ENG-14 の仕様 3)。
+        // 置き換え (ReplaceFile) は元のファイルの属性を引き継ぐため、書く前に外す。保存に失敗したら戻す。
+        FileAttributes? restoreAttributes = null;
+        if (doc.Source is FileByteSource { WriteApproved: true } approved
+            && string.Equals(approved.Path, Path.GetFullPath(path), StringComparison.OrdinalIgnoreCase)
+            && File.Exists(path) && File.GetAttributes(path) is var attributes && attributes.HasFlag(FileAttributes.ReadOnly))
+        {
+            File.SetAttributes(path, attributes & ~FileAttributes.ReadOnly);
+            restoreAttributes = attributes;
+        }
+
         // 自分の保存による変化は外部変更として扱わない (ENG-19 の仕様 3)。
         if (vm.Watch is { } watch)
         {
@@ -158,6 +172,18 @@ public sealed partial class MainViewModel : ObservableObject
         catch
         {
             SavePlanner.Abort(plan);
+            if (restoreAttributes is { } original)
+            {
+                try
+                {
+                    File.SetAttributes(path, original);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    AppLog.Warning($"Read-only attribute not restored: {ex.Message}");
+                }
+            }
+
             if (vm.Watch is { } failed)
             {
                 ExternalChanges?.Rebase(failed, failed.Baseline);

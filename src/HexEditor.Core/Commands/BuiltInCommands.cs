@@ -24,7 +24,7 @@ public static class BuiltInCommands
         new("file.newWithSize", "file"),
         new("file.open", "file") { Icon = IconOpen, DefaultBindings = [K("Ctrl+O")] },
         new("file.openReadOnly", "file"),
-        new("file.save", "file") { Icon = IconSave, DefaultBindings = [K("Ctrl+S")], Condition = "documentOpen" },
+        new("file.save", "file") { Icon = IconSave, DefaultBindings = [K("Ctrl+S")], Condition = "documentOpen && !readOnly" },
         new("file.saveAs", "file") { Icon = IconSaveAs, DefaultBindings = [K("Ctrl+Shift+S")], Condition = "documentOpen" },
         new("file.saveAll", "file") { Condition = "documentOpen" },
         new("file.reload", "file") { DefaultBindings = [K("Ctrl+R")], Condition = "documentOpen" },
@@ -70,12 +70,21 @@ public static class BuiltInCommands
             NativeScopes = [KeyScope.Editor],
             Condition = "documentOpen && !readOnly",
         },
+        new("edit.copyAs", "edit") { DefaultBindings = [K("Ctrl+Shift+C", KeyScope.Editor)], Condition = "documentOpen" },
+        new("edit.copyAsLast", "edit") { Condition = "documentOpen" },
+        new("edit.pasteSpecial", "edit") { DefaultBindings = [K("Ctrl+Shift+V", KeyScope.Editor)], Condition = "documentOpen && !readOnly" },
         new("edit.selectAll", "edit")
         {
             DefaultBindings = [K("Ctrl+A", KeyScope.Editor)],
             NativeScopes = [KeyScope.Editor],
             Condition = "documentOpen",
         },
+        new("edit.selectRange", "edit") { DefaultBindings = [K("Ctrl+E", KeyScope.Editor)], Condition = "documentOpen" },
+        new("edit.insertBytes", "edit") { Condition = "documentOpen && !readOnly && canResize" },
+        new("edit.insertFile", "edit") { Condition = "documentOpen && !readOnly" },
+        new("edit.fill", "edit") { Condition = "documentOpen && !readOnly" },
+        new("edit.resize", "edit") { Condition = "documentOpen && !readOnly && canResize" },
+        new("edit.truncate", "edit") { Condition = "documentOpen && !readOnly && canResize" },
         new("edit.toggleInsert", "edit")
         {
             Icon = IconInsert,
@@ -83,6 +92,7 @@ public static class BuiltInCommands
             NativeScopes = [KeyScope.Editor],
             Condition = "documentOpen && !readOnly && canResize",
         },
+        new("edit.readOnly", "edit") { Condition = "documentOpen" },
 
         // ---- 検索 ----
         new("search.find", "search") { Icon = IconFind, DefaultBindings = [K("Ctrl+F")], Condition = "documentOpen" },

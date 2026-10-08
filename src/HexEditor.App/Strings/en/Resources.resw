@@ -265,7 +265,7 @@ Length: {2} ({3} bytes)</value></data>
   <data name="Error_AccessDenied" xml:space="preserve"><value>You don't have permission to open {0}.</value></data>
   <data name="Error_InUse" xml:space="preserve"><value>{0} can't be opened because another app is using it.</value></data>
   <data name="Error_InUseBy" xml:space="preserve"><value>{0} can't be opened because it's being used by {1}.</value></data>
-  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>This file is read-only, so it can't be saved over. Use Save As to save your changes.</value></data>
+  <data name="Notice_OpenedReadOnlyAttribute" xml:space="preserve"><value>This file has the read-only attribute, so it opened as read-only. Choose Allow editing to edit it; the attribute is removed when you save.</value></data>
   <data name="Notice_BusyWith" xml:space="preserve"><value>This document can't be edited while {0} is running.</value></data>
   <data name="Notice_ReadOnly" xml:space="preserve"><value>This document is read-only.</value></data>
   <data name="Operations_FailedNotice" xml:space="preserve"><value>{0} failed: {1}</value></data>
@@ -1357,4 +1357,308 @@ Details were written to:
   <data name="Network_Destination_BrowserPages" xml:space="preserve"><value>GitHub, opened in your browser</value></data>
   <data name="Network_FeatureDetail" xml:space="preserve"><value>{0}. Setting: {1}</value></data>
   <data name="Network_UserDestinations" xml:space="preserve"><value>Remote data sources and script network access connect only to the destinations you specify, and only when you allow it. Offline mode does not apply to them.</value></data>
+  <data name="Menu_Edit_CopyAs.Text" xml:space="preserve"><value>Copy As...</value></data>
+  <data name="Menu_Edit_CopyAs.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Edit_CopyAsLast.Text" xml:space="preserve"><value>Copy As Last Format</value></data>
+  <data name="Menu_Edit_CopyAsLast.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Edit_PasteSpecial.Text" xml:space="preserve"><value>Paste Special...</value></data>
+  <data name="Menu_Edit_PasteSpecial.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Edit_SelectRange.Text" xml:space="preserve"><value>Select Range...</value></data>
+  <data name="Menu_Edit_SelectRange.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Edit_InsertBytes.Text" xml:space="preserve"><value>Insert Bytes...</value></data>
+  <data name="Menu_Edit_InsertBytes.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Edit_InsertFile.Text" xml:space="preserve"><value>Insert File Contents...</value></data>
+  <data name="Menu_Edit_InsertFile.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Edit_Fill.Text" xml:space="preserve"><value>Fill...</value></data>
+  <data name="Menu_Edit_Fill.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Edit_Resize.Text" xml:space="preserve"><value>Change File Size...</value></data>
+  <data name="Menu_Edit_Resize.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Edit_Truncate.Text" xml:space="preserve"><value>Truncate at Cursor</value></data>
+  <data name="Menu_Edit_Truncate.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Edit_ReadOnly.Text" xml:space="preserve"><value>Read-only</value></data>
+  <data name="Menu_Edit_ReadOnly.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Dialog_ErrorAt" xml:space="preserve"><value>(at character {0})</value></data>
+  <data name="Dialog_Preview" xml:space="preserve"><value>Preview: {0}</value></data>
+  <data name="ReadOnly_AllowEdit" xml:space="preserve"><value>Allow editing</value></data>
+  <data name="ReadOnly_Confirm_Title" xml:space="preserve"><value>Allow editing?</value></data>
+  <data name="ReadOnly_Confirm_OpenedReadOnly" xml:space="preserve"><value>This document was opened read-only. Allow editing? The file is opened for writing only when you save.</value></data>
+  <data name="ReadOnly_Confirm_FileAttribute" xml:space="preserve"><value>This file has the read-only attribute. If you allow editing, the attribute is removed when you save.</value></data>
+  <data name="ReadOnly_Confirm_AccessDenied" xml:space="preserve"><value>You may not have permission to write to this file. Try to allow editing anyway?</value></data>
+  <data name="ReadOnly_Confirm_SharingViolation" xml:space="preserve"><value>Another app has this file open for writing. Allow editing? Changes made by the other app may conflict.</value></data>
+  <data name="ReadOnly_Confirm_Device" xml:space="preserve"><value>This allows writing to the device. Nothing is written until you save.</value></data>
+  <data name="ReadOnly_CannotRelease_NoWriteTarget" xml:space="preserve"><value>This data source can't be written to, so it stays read-only.</value></data>
+  <data name="ReadOnly_CannotRelease_WriteProtectionMode" xml:space="preserve"><value>Write protection mode is on, so documents stay read-only.</value></data>
+  <data name="ReadOnly_CannotRelease_ReadOnlyMedia" xml:space="preserve"><value>The file is on read-only media, so it stays read-only.</value></data>
+  <data name="Operation_InsertBytes" xml:space="preserve"><value>Inserting bytes</value></data>
+  <data name="Operation_Fill" xml:space="preserve"><value>Filling</value></data>
+  <data name="Operation_Resize" xml:space="preserve"><value>Changing the file size</value></data>
+  <data name="Operation_InsertFile" xml:space="preserve"><value>Inserting {0}</value></data>
+  <data name="Operation_CopyAs" xml:space="preserve"><value>Copying in a format</value></data>
+  <data name="Operation_Export" xml:space="preserve"><value>Saving {0}</value></data>
+  <data name="Operation_PasteConvert" xml:space="preserve"><value>Converting the clipboard text</value></data>
+  <data name="Fill_Kind" xml:space="preserve"><value>Content</value></data>
+  <data name="Fill_Kind_Byte" xml:space="preserve"><value>Byte value</value></data>
+  <data name="Fill_Kind_HexPattern" xml:space="preserve"><value>Hex pattern</value></data>
+  <data name="Fill_Kind_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="Fill_Kind_Random" xml:space="preserve"><value>Random numbers</value></data>
+  <data name="Fill_Kind_CryptoRandom" xml:space="preserve"><value>Cryptographic random numbers</value></data>
+  <data name="Fill_Kind_Counter" xml:space="preserve"><value>Counter</value></data>
+  <data name="Fill_Kind_File" xml:space="preserve"><value>File contents</value></data>
+  <data name="Fill_Kind_Clipboard" xml:space="preserve"><value>Clipboard contents</value></data>
+  <data name="Fill_Value" xml:space="preserve"><value>Value</value></data>
+  <data name="Fill_Pattern" xml:space="preserve"><value>Hex bytes</value></data>
+  <data name="Fill_Text" xml:space="preserve"><value>Text ({0}; \r \n \t for line breaks and tabs)</value></data>
+  <data name="Fill_RandomMin" xml:space="preserve"><value>Minimum</value></data>
+  <data name="Fill_RandomMax" xml:space="preserve"><value>Maximum</value></data>
+  <data name="Fill_Seed" xml:space="preserve"><value>Seed (decimal)</value></data>
+  <data name="Fill_SeedPlaceholder" xml:space="preserve"><value>Empty: different every time</value></data>
+  <data name="Fill_CryptoNote" xml:space="preserve"><value>Generated with the system's cryptographic random number generator.</value></data>
+  <data name="Fill_CounterStart" xml:space="preserve"><value>Start value</value></data>
+  <data name="Fill_CounterStep" xml:space="preserve"><value>Increment (can be negative)</value></data>
+  <data name="Fill_CounterSize" xml:space="preserve"><value>Element size (bytes)</value></data>
+  <data name="Fill_CounterBigEndian" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="Fill_CounterSigned" xml:space="preserve"><value>Signed</value></data>
+  <data name="Fill_CounterOverflow" xml:space="preserve"><value>On overflow</value></data>
+  <data name="Fill_CounterWrap" xml:space="preserve"><value>Wrap around</value></data>
+  <data name="Fill_CounterSaturate" xml:space="preserve"><value>Saturate</value></data>
+  <data name="Fill_FilePath" xml:space="preserve"><value>File</value></data>
+  <data name="Fill_FileOffset" xml:space="preserve"><value>Start in the file</value></data>
+  <data name="Fill_FileLength" xml:space="preserve"><value>Length</value></data>
+  <data name="Fill_FileLengthPlaceholder" xml:space="preserve"><value>To the end of the file</value></data>
+  <data name="Fill_ClipboardNote" xml:space="preserve"><value>The clipboard is read when you run the command.</value></data>
+  <data name="Fill_Repeat" xml:space="preserve"><value>Repeat the content to fill the range</value></data>
+  <data name="Fill_Origin" xml:space="preserve"><value>Pattern starts at</value></data>
+  <data name="Fill_OriginRange" xml:space="preserve"><value>The start of the range</value></data>
+  <data name="Fill_OriginZero" xml:space="preserve"><value>Offset 0</value></data>
+  <data name="Fill_Error_Range" xml:space="preserve"><value>Enter a value from {0} to {1}.</value></data>
+  <data name="Fill_Error_EmptyPattern" xml:space="preserve"><value>Enter the content.</value></data>
+  <data name="Fill_Error_HexPattern" xml:space="preserve"><value>Enter hex bytes with an even number of digits.</value></data>
+  <data name="Fill_Error_PatternTooLong" xml:space="preserve"><value>The content can be at most 1 MiB.</value></data>
+  <data name="Fill_Error_MinMax" xml:space="preserve"><value>The minimum is greater than the maximum.</value></data>
+  <data name="Fill_Error_NoFile" xml:space="preserve"><value>Choose a file.</value></data>
+  <data name="Fill_Error_TempSpace" xml:space="preserve"><value>This needs {0} GB of temporary space, but only {1} GB is free.</value></data>
+  <data name="Fill_Error_File" xml:space="preserve"><value>Can't read the file: {0}</value></data>
+  <data name="Fill_Error_EmptyClipboard" xml:space="preserve"><value>The clipboard has nothing to fill with.</value></data>
+  <data name="Fill_Error_EmptyRange" xml:space="preserve"><value>The length must be 1 or more.</value></data>
+  <data name="Fill_Error_BeyondEndFixed" xml:space="preserve"><value>The range goes past the end. The length of this document can't change.</value></data>
+  <data name="Fill_Title" xml:space="preserve"><value>Fill</value></data>
+  <data name="Fill_Fill" xml:space="preserve"><value>Fill</value></data>
+  <data name="Fill_TargetSelection" xml:space="preserve"><value>Selection</value></data>
+  <data name="Fill_TargetRange" xml:space="preserve"><value>Specify the range</value></data>
+  <data name="Fill_RangeStart" xml:space="preserve"><value>Start</value></data>
+  <data name="Fill_RangeLength" xml:space="preserve"><value>Length</value></data>
+  <data name="Fill_RangeInfo" xml:space="preserve"><value>From {0}, {1} bytes</value></data>
+  <data name="Fill_PreviewBefore" xml:space="preserve"><value>Before: {0}</value></data>
+  <data name="Fill_PreviewAfter" xml:space="preserve"><value>After: {0}</value></data>
+  <data name="RangeEdit_Error_CountTooSmall" xml:space="preserve"><value>Enter 1 or more bytes.</value></data>
+  <data name="RangeEdit_Error_CountTooLarge" xml:space="preserve"><value>You can insert at most {0} bytes.</value></data>
+  <data name="RangeEdit_Error_PositionOutOfRange" xml:space="preserve"><value>The position is outside the document.</value></data>
+  <data name="RangeEdit_Error_FixedLength" xml:space="preserve"><value>The length of this document can't change.</value></data>
+  <data name="RangeEdit_Error_NegativeLength" xml:space="preserve"><value>The length can't be negative.</value></data>
+  <data name="RangeEdit_Error_ReadOnly" xml:space="preserve"><value>This document is read-only.</value></data>
+  <data name="InsertBytes_Title" xml:space="preserve"><value>Insert Bytes</value></data>
+  <data name="InsertBytes_Position" xml:space="preserve"><value>Position</value></data>
+  <data name="InsertBytes_Count" xml:space="preserve"><value>Number of bytes</value></data>
+  <data name="InsertBytes_SelectInserted" xml:space="preserve"><value>Select the inserted range</value></data>
+  <data name="InsertBytes_Insert" xml:space="preserve"><value>Insert</value></data>
+  <data name="Resize_Title" xml:space="preserve"><value>Change File Size</value></data>
+  <data name="Resize_Length" xml:space="preserve"><value>New length</value></data>
+  <data name="Resize_Current" xml:space="preserve"><value>Current length: {0} bytes</value></data>
+  <data name="Resize_ExtensionHeader" xml:space="preserve"><value>Content added when the file gets longer</value></data>
+  <data name="Resize_Change" xml:space="preserve"><value>Change</value></data>
+  <data name="Resize_Grow" xml:space="preserve"><value>{0} bytes ({1})</value></data>
+  <data name="Resize_Shrink" xml:space="preserve"><value>{0} bytes will be cut off the end</value></data>
+  <data name="Resize_Same" xml:space="preserve"><value>The length doesn't change.</value></data>
+  <data name="Resize_Truncated" xml:space="preserve"><value>Cut off {0} bytes.</value></data>
+  <data name="InsertFile_Title" xml:space="preserve"><value>Insert File Contents</value></data>
+  <data name="InsertFile_Size" xml:space="preserve"><value>{0}: {1} bytes</value></data>
+  <data name="InsertFile_Offset" xml:space="preserve"><value>Start in the file</value></data>
+  <data name="InsertFile_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="InsertFile_Insert" xml:space="preserve"><value>Insert</value></data>
+  <data name="InsertFile_Overwrite" xml:space="preserve"><value>Overwrite</value></data>
+  <data name="InsertFile_Run" xml:space="preserve"><value>Run</value></data>
+  <data name="InsertFile_Error_Offset" xml:space="preserve"><value>The start is past the end of the file.</value></data>
+  <data name="InsertFile_Range" xml:space="preserve"><value>From {0}, {1} bytes</value></data>
+  <data name="SelectRange_Title" xml:space="preserve"><value>Select Range</value></data>
+  <data name="SelectRange_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="SelectRange_End" xml:space="preserve"><value>End (this byte included)</value></data>
+  <data name="SelectRange_Length" xml:space="preserve"><value>Length</value></data>
+  <data name="SelectRange_ClampEnd" xml:space="preserve"><value>Up to the end</value></data>
+  <data name="SelectRange_ModeNew" xml:space="preserve"><value>New selection</value></data>
+  <data name="SelectRange_ModeExtend" xml:space="preserve"><value>Extend the current selection</value></data>
+  <data name="SelectRange_ScrollToStart" xml:space="preserve"><value>Go to the start after selecting</value></data>
+  <data name="SelectRange_Select" xml:space="preserve"><value>Select</value></data>
+  <data name="SelectRange_Computed" xml:space="preserve"><value>Calculated</value></data>
+  <data name="SelectRange_Error_StartBeyondEnd" xml:space="preserve"><value>The start is past the end of the file (length {0}).</value></data>
+  <data name="SelectRange_Error_EndBeyondEnd" xml:space="preserve"><value>The end is past the end of the file (length {0}).</value></data>
+  <data name="SelectRange_Error_EndBeforeStart" xml:space="preserve"><value>The end is before the start.</value></data>
+  <data name="CopyAs_Title" xml:space="preserve"><value>Copy As</value></data>
+  <data name="CopyAs_Copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="CopyAs_SaveToFile" xml:space="preserve"><value>Save to File...</value></data>
+  <data name="CopyAs_Search" xml:space="preserve"><value>Search formats</value></data>
+  <data name="CopyAs_FormatsName" xml:space="preserve"><value>Formats</value></data>
+  <data name="CopyAs_PreviewName" xml:space="preserve"><value>Preview</value></data>
+  <data name="CopyAs_Format_HexSpaced" xml:space="preserve"><value>Space separated</value></data>
+  <data name="CopyAs_Format_HexPlain" xml:space="preserve"><value>No separator</value></data>
+  <data name="CopyAs_Format_HexCommaPrefixed" xml:space="preserve"><value>0x, comma separated</value></data>
+  <data name="CopyAs_Format_HexEscaped" xml:space="preserve"><value>\x escapes</value></data>
+  <data name="CopyAs_Format_HexUrl" xml:space="preserve"><value>URL encoding (all bytes)</value></data>
+  <data name="CopyAs_Format_HexCustom" xml:space="preserve"><value>Custom separator</value></data>
+  <data name="CopyAs_Format_Decimal" xml:space="preserve"><value>Decimal</value></data>
+  <data name="CopyAs_Format_Octal" xml:space="preserve"><value>Octal</value></data>
+  <data name="CopyAs_Format_Binary" xml:space="preserve"><value>Binary</value></data>
+  <data name="CopyAs_Format_ArrayC" xml:space="preserve"><value>C</value></data>
+  <data name="CopyAs_Format_ArrayCpp" xml:space="preserve"><value>C++</value></data>
+  <data name="CopyAs_Format_ArrayCSharp" xml:space="preserve"><value>C#</value></data>
+  <data name="CopyAs_Format_ArrayJava" xml:space="preserve"><value>Java</value></data>
+  <data name="CopyAs_Format_ArrayJavaScript" xml:space="preserve"><value>JavaScript / TypeScript</value></data>
+  <data name="CopyAs_Format_ArrayPython" xml:space="preserve"><value>Python</value></data>
+  <data name="CopyAs_Format_ArrayRust" xml:space="preserve"><value>Rust</value></data>
+  <data name="CopyAs_Format_ArrayGo" xml:space="preserve"><value>Go</value></data>
+  <data name="CopyAs_Format_ArrayPascal" xml:space="preserve"><value>Pascal / Delphi</value></data>
+  <data name="CopyAs_Format_ArrayVisualBasic" xml:space="preserve"><value>VB.NET</value></data>
+  <data name="CopyAs_Format_ArrayPureBasic" xml:space="preserve"><value>PureBasic</value></data>
+  <data name="CopyAs_Format_ArrayAssembly" xml:space="preserve"><value>Assembly</value></data>
+  <data name="CopyAs_Format_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="CopyAs_Format_Base32" xml:space="preserve"><value>Base32</value></data>
+  <data name="CopyAs_Format_Ascii85" xml:space="preserve"><value>Ascii85</value></data>
+  <data name="CopyAs_Format_UUEncode" xml:space="preserve"><value>UUEncode</value></data>
+  <data name="CopyAs_Format_XXEncode" xml:space="preserve"><value>XXEncode</value></data>
+  <data name="CopyAs_Format_QuotedPrintable" xml:space="preserve"><value>Quoted-Printable</value></data>
+  <data name="CopyAs_Format_Html" xml:space="preserve"><value>HTML</value></data>
+  <data name="CopyAs_Format_Rtf" xml:space="preserve"><value>RTF</value></data>
+  <data name="CopyAs_Format_Markdown" xml:space="preserve"><value>Markdown</value></data>
+  <data name="CopyAs_Format_Tex" xml:space="preserve"><value>TeX</value></data>
+  <data name="CopyAs_Format_ScreenDump" xml:space="preserve"><value>As shown on screen</value></data>
+  <data name="CopyAs_Format_Text" xml:space="preserve"><value>Text (decoded)</value></data>
+  <data name="CopyAs_Format_IntelHex" xml:space="preserve"><value>Intel HEX</value></data>
+  <data name="CopyAs_Format_SRecord" xml:space="preserve"><value>Motorola S-record</value></data>
+  <data name="CopyAs_Format_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="CopyAs_Format_Position" xml:space="preserve"><value>Offset</value></data>
+  <data name="CopyAs_Category_HexString" xml:space="preserve"><value>Hex string</value></data>
+  <data name="CopyAs_Category_Numbers" xml:space="preserve"><value>Numbers</value></data>
+  <data name="CopyAs_Category_Array" xml:space="preserve"><value>Array</value></data>
+  <data name="CopyAs_Category_Encoding" xml:space="preserve"><value>Encoding</value></data>
+  <data name="CopyAs_Category_Document" xml:space="preserve"><value>Document</value></data>
+  <data name="CopyAs_Category_Screen" xml:space="preserve"><value>Screen</value></data>
+  <data name="CopyAs_Category_TextFormat" xml:space="preserve"><value>Text format</value></data>
+  <data name="CopyAs_Category_Position" xml:space="preserve"><value>Position</value></data>
+  <data name="CopyAs_BytesPerLine" xml:space="preserve"><value>Bytes per line</value></data>
+  <data name="CopyAs_UpperCase" xml:space="preserve"><value>Uppercase hex</value></data>
+  <data name="CopyAs_NewLine" xml:space="preserve"><value>Line breaks</value></data>
+  <data name="CopyAs_Indent" xml:space="preserve"><value>Indent</value></data>
+  <data name="CopyAs_Indent4" xml:space="preserve"><value>4 spaces</value></data>
+  <data name="CopyAs_Indent2" xml:space="preserve"><value>2 spaces</value></data>
+  <data name="CopyAs_IndentTab" xml:space="preserve"><value>Tab</value></data>
+  <data name="CopyAs_Variable" xml:space="preserve"><value>Variable name</value></data>
+  <data name="CopyAs_ElementSize" xml:space="preserve"><value>Element size (bytes)</value></data>
+  <data name="CopyAs_BigEndian" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="CopyAs_Assembly" xml:space="preserve"><value>Assembler</value></data>
+  <data name="CopyAs_Wrap" xml:space="preserve"><value>Break lines at 76 characters</value></data>
+  <data name="CopyAs_Delimiters" xml:space="preserve"><value>Enclose in &lt;~ ~&gt;</value></data>
+  <data name="CopyAs_FileName" xml:space="preserve"><value>File name</value></data>
+  <data name="CopyAs_Layout" xml:space="preserve"><value>Layout</value></data>
+  <data name="CopyAs_LayoutDump" xml:space="preserve"><value>Dump</value></data>
+  <data name="CopyAs_LayoutTable" xml:space="preserve"><value>Table</value></data>
+  <data name="CopyAs_Colors" xml:space="preserve"><value>Include colors</value></data>
+  <data name="CopyAs_RecordBytes" xml:space="preserve"><value>Bytes per record</value></data>
+  <data name="CopyAs_BaseAddress" xml:space="preserve"><value>Base address</value></data>
+  <data name="CopyAs_Header" xml:space="preserve"><value>Header (S0)</value></data>
+  <data name="CopyAs_JsonData" xml:space="preserve"><value>data as</value></data>
+  <data name="CopyAs_JsonNumbers" xml:space="preserve"><value>Array of numbers</value></data>
+  <data name="CopyAs_DecimalPosition" xml:space="preserve"><value>Decimal</value></data>
+  <data name="CopyAs_Separator" xml:space="preserve"><value>Separator</value></data>
+  <data name="CopyAs_Prefix" xml:space="preserve"><value>Prefix</value></data>
+  <data name="CopyAs_Suffix" xml:space="preserve"><value>Suffix</value></data>
+  <data name="CopyAs_Variant_CSharp" xml:space="preserve"><value>ReadOnlySpan&lt;byte&gt; property</value></data>
+  <data name="CopyAs_Variant_Python" xml:space="preserve"><value>bytes literal (b"\x..")</value></data>
+  <data name="CopyAs_Variant_Base64" xml:space="preserve"><value>URL-safe (RFC 4648)</value></data>
+  <data name="CopyAs_Variant_Base32" xml:space="preserve"><value>Base32hex</value></data>
+  <data name="CopyAs_Variant_Ascii85" xml:space="preserve"><value>Z85</value></data>
+  <data name="CopyAs_Error_InvalidVariableName" xml:space="preserve"><value>The variable name isn't a valid identifier in this language.</value></data>
+  <data name="CopyAs_Error_Z85Length" xml:space="preserve"><value>Z85 needs a length that is a multiple of 4.</value></data>
+  <data name="CopyAs_Error_AddressTooLarge" xml:space="preserve"><value>The addresses don't fit in 32 bits.</value></data>
+  <data name="CopyAs_Error_InvalidLineLength" xml:space="preserve"><value>Bytes per line is 1 to 1024, and bytes per record is 1 to 255.</value></data>
+  <data name="CopyAs_Error_Options" xml:space="preserve"><value>The last format can't be used for this selection. Open Copy As to change the settings.</value></data>
+  <data name="CopyAs_Estimate" xml:space="preserve"><value>Estimated size: {0} ({1} bytes)</value></data>
+  <data name="CopyAs_Note_Padded" xml:space="preserve"><value>The last element was padded with zeros.</value></data>
+  <data name="CopyAs_TooLargeNote" xml:space="preserve"><value>The output is larger than the clipboard limit ({0}). Save it to a file instead.</value></data>
+  <data name="CopyAs_TooLarge" xml:space="preserve"><value>The output is larger than the clipboard limit. Use Copy As to save it to a file.</value></data>
+  <data name="CopyAs_Saved" xml:space="preserve"><value>Saved {0}.</value></data>
+  <data name="CopyAs_SaveError" xml:space="preserve"><value>Couldn't save the file ({0}).</value></data>
+  <data name="CopyAs_PositionLength" xml:space="preserve"><value>({0} bytes)</value></data>
+  <data name="PasteSpecial_Title" xml:space="preserve"><value>Paste Special</value></data>
+  <data name="PasteSpecial_Paste" xml:space="preserve"><value>Paste</value></data>
+  <data name="PasteSpecial_FormatsName" xml:space="preserve"><value>Interpretations</value></data>
+  <data name="PasteSpecial_NewLines" xml:space="preserve"><value>Line breaks</value></data>
+  <data name="PasteSpecial_NewLinesKeep" xml:space="preserve"><value>Keep</value></data>
+  <data name="PasteSpecial_AppendNul" xml:space="preserve"><value>Add a NUL at the end</value></data>
+  <data name="PasteSpecial_AtCursor" xml:space="preserve"><value>Paste at the cursor</value></data>
+  <data name="PasteSpecial_AtAddress" xml:space="preserve"><value>Write at the record addresses</value></data>
+  <data name="PasteSpecial_GapFill" xml:space="preserve"><value>Fill gaps with</value></data>
+  <data name="PasteSpecial_Insert" xml:space="preserve"><value>Insert</value></data>
+  <data name="PasteSpecial_Overwrite" xml:space="preserve"><value>Overwrite</value></data>
+  <data name="PasteSpecial_SourceText" xml:space="preserve"><value>Text: {0}</value></data>
+  <data name="PasteSpecial_Format_Binary" xml:space="preserve"><value>Binary data</value></data>
+  <data name="PasteSpecial_Format_FileContent" xml:space="preserve"><value>File contents</value></data>
+  <data name="PasteSpecial_Format_IntelHex" xml:space="preserve"><value>Intel HEX</value></data>
+  <data name="PasteSpecial_Format_SRecord" xml:space="preserve"><value>Motorola S-record</value></data>
+  <data name="PasteSpecial_Format_UUEncode" xml:space="preserve"><value>UUEncode</value></data>
+  <data name="PasteSpecial_Format_XXEncode" xml:space="preserve"><value>XXEncode</value></data>
+  <data name="PasteSpecial_Format_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="PasteSpecial_Format_ScreenDump" xml:space="preserve"><value>Dump (as shown on screen)</value></data>
+  <data name="PasteSpecial_Format_Array" xml:space="preserve"><value>Array notation</value></data>
+  <data name="PasteSpecial_Format_Escape" xml:space="preserve"><value>Escaped string</value></data>
+  <data name="PasteSpecial_Format_BinaryNumbers" xml:space="preserve"><value>Binary numbers</value></data>
+  <data name="PasteSpecial_Format_HexString" xml:space="preserve"><value>Hex string</value></data>
+  <data name="PasteSpecial_Format_Base32" xml:space="preserve"><value>Base32</value></data>
+  <data name="PasteSpecial_Format_Base32Hex" xml:space="preserve"><value>Base32hex</value></data>
+  <data name="PasteSpecial_Format_Base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="PasteSpecial_Format_Ascii85" xml:space="preserve"><value>Ascii85</value></data>
+  <data name="PasteSpecial_Format_Z85" xml:space="preserve"><value>Z85</value></data>
+  <data name="PasteSpecial_Format_QuotedPrintable" xml:space="preserve"><value>Quoted-Printable</value></data>
+  <data name="PasteSpecial_Format_UrlEncoded" xml:space="preserve"><value>URL encoding</value></data>
+  <data name="PasteSpecial_Format_Decimal" xml:space="preserve"><value>Decimal numbers</value></data>
+  <data name="PasteSpecial_Format_Octal" xml:space="preserve"><value>Octal numbers</value></data>
+  <data name="PasteSpecial_Format_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="PasteSpecial_Candidate" xml:space="preserve"><value>{0} — {1} bytes</value></data>
+  <data name="PasteSpecial_CandidateError" xml:space="preserve"><value>{0} — Error: line {1}, character {2}</value></data>
+  <data name="PasteSpecial_FileContent" xml:space="preserve"><value>File contents: {0}</value></data>
+  <data name="PasteSpecial_Records" xml:space="preserve"><value>{0} ranges, {1} bytes</value></data>
+  <data name="PasteSpecial_LengthText" xml:space="preserve"><value>Length: {0} bytes ({1})</value></data>
+  <data name="PasteSpecial_TooLarge" xml:space="preserve"><value>The clipboard text is larger than 512 MiB and can't be interpreted.</value></data>
+  <data name="PasteSpecial_Empty" xml:space="preserve"><value>The clipboard has nothing to paste.</value></data>
+  <data name="PasteSpecial_ConvertError" xml:space="preserve"><value>Couldn't convert the text: line {0}, character {1}.</value></data>
+  <data name="PasteSpecial_ChecksumTitle" xml:space="preserve"><value>Checksum mismatch</value></data>
+  <data name="PasteSpecial_ChecksumBody" xml:space="preserve"><value>{0} lines have a checksum that doesn't match.</value></data>
+  <data name="PasteSpecial_IgnoreChecksum" xml:space="preserve"><value>Ignore and paste</value></data>
+  <data name="PasteSpecial_AddressOutOfRange" xml:space="preserve"><value>A record address is outside the document.</value></data>
+  <data name="Cmd_edit_copyAs" xml:space="preserve"><value>Copy as...</value></data>
+  <data name="CmdAlias_edit_copyAs" xml:space="preserve"><value>copy format c array base64 hex dump</value></data>
+  <data name="Cmd_edit_copyAsLast" xml:space="preserve"><value>Copy in the last format</value></data>
+  <data name="CmdAlias_edit_copyAsLast" xml:space="preserve"><value>copy format repeat</value></data>
+  <data name="Cmd_edit_pasteSpecial" xml:space="preserve"><value>Paste special...</value></data>
+  <data name="CmdAlias_edit_pasteSpecial" xml:space="preserve"><value>paste format</value></data>
+  <data name="Cmd_edit_selectRange" xml:space="preserve"><value>Select range...</value></data>
+  <data name="CmdAlias_edit_selectRange" xml:space="preserve"><value>selection start end length</value></data>
+  <data name="Cmd_edit_insertBytes" xml:space="preserve"><value>Insert bytes...</value></data>
+  <data name="CmdAlias_edit_insertBytes" xml:space="preserve"><value>add insert</value></data>
+  <data name="Cmd_edit_insertFile" xml:space="preserve"><value>Insert file contents...</value></data>
+  <data name="CmdAlias_edit_insertFile" xml:space="preserve"><value>import file</value></data>
+  <data name="Cmd_edit_fill" xml:space="preserve"><value>Fill...</value></data>
+  <data name="CmdAlias_edit_fill" xml:space="preserve"><value>pattern random zero</value></data>
+  <data name="Cmd_edit_resize" xml:space="preserve"><value>Change file size...</value></data>
+  <data name="CmdAlias_edit_resize" xml:space="preserve"><value>length extend truncate size</value></data>
+  <data name="Cmd_edit_truncate" xml:space="preserve"><value>Truncate at cursor</value></data>
+  <data name="CmdAlias_edit_truncate" xml:space="preserve"><value>cut end length</value></data>
+  <data name="Cmd_edit_readOnly" xml:space="preserve"><value>Read-only</value></data>
+  <data name="CmdAlias_edit_readOnly" xml:space="preserve"><value>lock protect</value></data>
+  <data name="Command_NoPreviousFormat" xml:space="preserve"><value>No format has been used yet</value></data>
+  <data name="Command_NothingToTruncate" xml:space="preserve"><value>There is nothing after the cursor</value></data>
+  <data name="Set_clipboard_compatFormats" xml:space="preserve"><value>Copy in formats other hex editors read</value></data>
+  <data name="SetDesc_clipboard_compatFormats" xml:space="preserve"><value>Also put the copied bytes on the clipboard in formats that other hex editors paste as binary.</value></data>
+  <data name="Set_edit_pasteSpecial_preferLast" xml:space="preserve"><value>Prefer the last paste format</value></data>
+  <data name="SetDesc_edit_pasteSpecial_preferLast" xml:space="preserve"><value>In Paste special, select the format used last time when it fits the clipboard.</value></data>
+  <data name="Set_edit_paste_detectWithoutConfirmation" xml:space="preserve"><value>Paste detected formats without asking</value></data>
+  <data name="SetDesc_edit_paste_detectWithoutConfirmation" xml:space="preserve"><value>When Ctrl+V in the Hex column detects a format, paste it without opening Paste special.</value></data>
 </root>

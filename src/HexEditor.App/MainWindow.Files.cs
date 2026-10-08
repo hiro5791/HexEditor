@@ -60,9 +60,11 @@ public sealed partial class MainWindow
         {
             DocumentViewModel doc = Vm.Open(path, insertAt, readOnly, restorePosition);
             AppLog.Debug($"Opened {path}");
-            if (!doc.Document.CanSave)
+            if (doc.Document.ReadOnlyReason == Core.Engine.ReadOnlyReason.FileAttribute)
             {
-                ShowNotice(Loc.Get("Notice_OpenedReadOnlyAttribute"), InfoBarSeverity.Informational, doc);
+                // 読み取り専用属性: 理由と「編集を許可する」を出す (ENG-14 の仕様 1、EDIT-16 の仕様 3)。
+                ShowNotice(Loc.Get("Notice_OpenedReadOnlyAttribute"), InfoBarSeverity.Informational, doc,
+                    actions: [new Core.Notifications.NotificationAction(Loc.Get("ReadOnly_AllowEdit"), () => _ = AllowEditAsync(doc))]);
             }
 
             return doc;
@@ -180,5 +182,40 @@ public sealed partial class MainWindow
         public long? Bookmark(string name) => null;
 
         public bool TryRead(long offset, Span<byte> destination) => false;
+    }
+
+    /// <summary>
+    /// 読み取り専用の解除で、書き込めるようにする (ENG-14 の仕様 3。EDIT-16 の確認の後に呼ぶ)。読み取り専用属性は保存のときに外す
+    /// (ENG-22 の仕様 5)。「読み取り専用で開く」・権限・共有違反は、書き込み用に開けるかを確かめ、開けなければ理由を示して false。
+    /// </summary>
+    private Task<bool> ReopenForWritingAsync(DocumentViewModel doc)
+    {
+        if (doc.Document.Source is not Core.Sources.FileByteSource file)
+        {
+            return Task.FromResult(true);
+        }
+
+        if (doc.Document.ReadOnlyReason == Core.Engine.ReadOnlyReason.FileAttribute)
+        {
+            file.ApproveWriting();
+            return Task.FromResult(true);
+        }
+
+        try
+        {
+            using Microsoft.Win32.SafeHandles.SafeFileHandle handle =
+                File.OpenHandle(file.Path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite | FileShare.Delete);
+            return Task.FromResult(true);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            ShowNotice(Loc.Format("Error_AccessDenied", doc.DisplayName), InfoBarSeverity.Error, doc);
+        }
+        catch (IOException ex)
+        {
+            ShowNotice(Loc.Format("Error_Open", doc.DisplayName, ex.Message), InfoBarSeverity.Error, doc);
+        }
+
+        return Task.FromResult(false);
     }
 }

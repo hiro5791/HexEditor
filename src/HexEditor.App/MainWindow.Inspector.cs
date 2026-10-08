@@ -364,7 +364,11 @@ public sealed partial class MainWindow
         view.SetHighlightSource("inspector", (start, end) => InspectorHighlights(view, start, end));
         view.SetHighlightSource("bookmarks", (start, end) => BookmarkHighlights(view, start, end));
         view.SetOffsetMarkerSource("bookmarks", (start, end) => BookmarkMarks(view, start, end));
-        view.SetContextMenuExtension(menu => ExtendHexViewMenu(view, menu));
+        view.SetContextMenuExtension(menu =>
+        {
+            ExtendHexViewEditMenu(menu);
+            ExtendHexViewMenu(view, menu);
+        });
     }
 
     private IEnumerable<HexHighlight> InspectorHighlights(HexView view, long start, long end)

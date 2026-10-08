@@ -25,9 +25,20 @@ public sealed class FileByteSource : ByteSourceBase
         _length = RandomAccess.GetLength(handle);
         Identity = "file:" + path.ToUpperInvariant();
         Stamp = FileStamp.FromHandle(handle);
-        Capabilities = SourceCapabilities.CanResize | SourceCapabilities.CanReplace
-            | (readOnlyAttribute ? SourceCapabilities.None : SourceCapabilities.CanWrite);
+        HasReadOnlyAttribute = readOnlyAttribute;
     }
+
+    /// <summary>開いた時点で読み取り専用属性があったか (ENG-14 の仕様 1)。</summary>
+    public bool HasReadOnlyAttribute { get; }
+
+    /// <summary>
+    /// 読み取り専用属性があるファイルへの書き込みを利用者が承認した (EDIT-16 の「編集を許可する」。ENG-14 の仕様 3)。承認すると保存でき、
+    /// 保存では属性を外す (ENG-22 の仕様 5)。
+    /// </summary>
+    public bool WriteApproved { get; private set; }
+
+    /// <summary>読み取り専用属性があっても保存できるようにする (属性は保存のときに外す)。</summary>
+    public void ApproveWriting() => WriteApproved = true;
 
     public string Path { get; }
 
@@ -38,7 +49,9 @@ public sealed class FileByteSource : ByteSourceBase
     /// <summary>開いた時点の長さ。外部変更は ENG-19 で検知して開き直す。</summary>
     public override long Length => _length;
 
-    public override SourceCapabilities Capabilities { get; }
+    public override SourceCapabilities Capabilities =>
+        SourceCapabilities.CanResize | SourceCapabilities.CanReplace
+        | (HasReadOnlyAttribute && !WriteApproved ? SourceCapabilities.None : SourceCapabilities.CanWrite);
 
     /// <summary>スパースファイルか (開いた時点の属性)。安全な保存で一時ファイルもスパースにする (ENG-22 の仕様 5)。</summary>
     public bool IsSparse { get; }

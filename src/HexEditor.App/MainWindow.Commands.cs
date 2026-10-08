@@ -102,7 +102,8 @@ public sealed partial class MainWindow
         Commands.Register("file.new", () => New_Click(this, e));
         Commands.Register("file.newWithSize", () => NewWithSize_Click(this, e));
         Commands.Register("file.open", () => Open_Click(this, e));
-        Commands.Register("file.save", () => Save_Click(this, e), NeedsDocument);
+        Commands.Register("file.save", () => Save_Click(this, e),
+            () => NeedsDocument(d => d.Document.IsReadOnly ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAs", () => SaveAs_Click(this, e), NeedsDocument);
         Commands.Register("file.saveAll", () => SaveAll_Click(this, e), NeedsDocument);
         Commands.Register("file.close", () => Close_Click(this, e), NeedsDocument);
@@ -138,6 +139,7 @@ public sealed partial class MainWindow
             () => NeedsDocument(d => d.Document.Length > 0 ? null : Loc.Get("Command_EmptyDocument")));
         Commands.Register("edit.toggleInsert", () => ToggleInsert_Click(this, e),
             () => NeedsEditable(d => d.Document.CanResize ? null : Loc.Get("Notice_FixedLength")));
+        RegisterEditCommands();
 
         // ---- 検索・移動 ----
         Commands.Register("search.find", () => Find_Click(this, e), NeedsDocument);

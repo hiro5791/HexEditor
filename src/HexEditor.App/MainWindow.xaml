@@ -129,11 +129,23 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_Cut" cmd:CommandUi.Id="edit.cut" AutomationProperties.AutomationId="Command_Cut" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_Copy" cmd:CommandUi.Id="edit.copy" AutomationProperties.AutomationId="Command_Copy" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_CopyAs" cmd:CommandUi.Id="edit.copyAs" AutomationProperties.AutomationId="Command_CopyAs" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_CopyAsLast" cmd:CommandUi.Id="edit.copyAsLast" AutomationProperties.AutomationId="Command_CopyAsLast" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_Paste" cmd:CommandUi.Id="edit.paste" AutomationProperties.AutomationId="Command_Paste" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_PasteOverwrite" cmd:CommandUi.Id="edit.pasteOverwrite" AutomationProperties.AutomationId="Command_PasteOverwrite" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_PasteSpecial" cmd:CommandUi.Id="edit.pasteSpecial" AutomationProperties.AutomationId="Command_PasteSpecial" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_SelectAll" cmd:CommandUi.Id="edit.selectAll" AutomationProperties.AutomationId="Command_SelectAll" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_SelectRange" cmd:CommandUi.Id="edit.selectRange" AutomationProperties.AutomationId="Command_SelectRange" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_InsertBytes" cmd:CommandUi.Id="edit.insertBytes" AutomationProperties.AutomationId="Command_InsertBytes" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_InsertFile" cmd:CommandUi.Id="edit.insertFile" AutomationProperties.AutomationId="Command_InsertFile" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_Fill" cmd:CommandUi.Id="edit.fill" AutomationProperties.AutomationId="Command_Fill" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_Resize" cmd:CommandUi.Id="edit.resize" AutomationProperties.AutomationId="Command_Resize" />
+                        <MenuFlyoutItem x:Uid="Menu_Edit_Truncate" cmd:CommandUi.Id="edit.truncate" AutomationProperties.AutomationId="Command_TruncateAtCursor" />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_ToggleInsert" cmd:CommandUi.Id="edit.toggleInsert" AutomationProperties.AutomationId="Command_ToggleInsert" />
+                        <ToggleMenuFlyoutItem x:Name="ReadOnlyToggle" x:Uid="Menu_Edit_ReadOnly" cmd:CommandUi.Id="edit.readOnly" AutomationProperties.AutomationId="Command_ReadOnly" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Search">
                         <MenuFlyoutItem x:Uid="Menu_Search_Find" cmd:CommandUi.Id="search.find" AutomationProperties.AutomationId="Command_Find" />
@@ -407,7 +419,7 @@
                 XYFocusKeyboardNavigation="Enabled">
                 <Button x:Name="StatusCursor" AutomationProperties.AutomationId="Status_Offset" Click="StatusCursor_Click" Content="{x:Bind Vm.Selected.CursorText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="cursor" />
                 <Button x:Name="StatusValue" AutomationProperties.AutomationId="Status_Value" Content="{x:Bind Vm.Selected.ValueText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="value" />
-                <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Content="{x:Bind Vm.Selected.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.Selected.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
+                <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Click="StatusSelection_Click" Content="{x:Bind Vm.Selected.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.Selected.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
                 <Button x:Name="StatusColumn" AutomationProperties.AutomationId="Status_Column" Click="StatusColumn_Click" Content="{x:Bind Vm.Selected.ColumnText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="column" />
                 <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Click="StatusEncoding_Click" Content="{x:Bind Vm.Selected.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.Selected.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />

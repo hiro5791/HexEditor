@@ -52,6 +52,11 @@ public static class BuiltInSettings
         new("inspector.rows", SettingCategories.View, SettingKind.String, string.Empty) { Order = 107, ShowInPage = false },
         new("inspector.rowPresets", SettingCategories.View, SettingKind.String, "{}") { Order = 108, ShowInPage = false },
 
+        // ---- 編集 (EDIT-23、EDIT-26、EDIT-27) ----
+        new("clipboard.compatFormats", SettingCategories.Editing, SettingKind.Bool, true) { Order = 10 },
+        new("edit.pasteSpecial.preferLast", SettingCategories.Editing, SettingKind.Bool, true) { Order = 20 },
+        new("edit.paste.detectWithoutConfirmation", SettingCategories.Editing, SettingKind.Bool, false) { Order = 30 },
+
         // ---- ファイルと保存 ----
         new("recent.maxItems", SettingCategories.Files, SettingKind.Int, RecentFileList.DefaultMaxItems) { Min = 0, Max = RecentFileList.MaxItemsLimit, Order = 1 },
         new("recent.restorePosition", SettingCategories.Files, SettingKind.Bool, true) { Order = 2 },

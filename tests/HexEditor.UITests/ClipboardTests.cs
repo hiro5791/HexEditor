@@ -107,7 +107,7 @@ public sealed class ClipboardTests
     [Trait(UiTest.TC, "TC-EDIT-23-01")]
     public Task Hex_text_from_another_app_is_pasted_as_bytes() => UiTestContext.RunAsync(async ctx =>
     {
-        // 手順 3〜4 (Base64 として判別されて「形式を選択して貼り付け」のダイアログが開く) は EDIT-26 (フェーズ 1) のため確かめない。
+        // 手順 3〜4 (Base64 として判別されて「形式を選択して貼り付け」のダイアログが開く) は EditCommandTests で確かめる。
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
         await app.KeyAsync("Insert");
         await app.GoToAsync(0x10);
