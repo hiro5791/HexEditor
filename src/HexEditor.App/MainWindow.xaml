@@ -153,6 +153,9 @@
                         <MenuFlyoutSeparator />
                         <ToggleMenuFlyoutItem x:Name="StatusBarToggle" x:Uid="Menu_View_StatusBar" AutomationProperties.AutomationId="Command_StatusBar" Click="StatusBarToggle_Click" />
                     </MenuBarItem>
+                    <MenuBarItem x:Uid="Menu_Analysis">
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_Hash" AutomationProperties.AutomationId="Command_Hash" Click="Hash_Click" />
+                    </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Help">
                         <MenuFlyoutItem x:Uid="Menu_Help_Documentation" AutomationProperties.AutomationId="Command_Documentation" Click="Documentation_Click">
                             <MenuFlyoutItem.KeyboardAccelerators>

@@ -2059,7 +2059,7 @@
 
 1. ハッシュパネルで CRC-32、MD5、SHA-1、SHA-256 を選び、ドキュメント全体を対象に計算する。
 2. データソースが読んだバイト数を取得する。
-3. 同じ 4 つの値を、.NET の `System.IO.Hashing.Crc32` と `System.Security.Cryptography` でテストコードが計算した値と比べる。
+3. 同じ 4 つの値を、テストコードが計算した値 (CRC-32 は CRC カタログの定義どおりのビット単位の基準の実装、他は .NET の `System.Security.Cryptography`) と比べる。
 
 **期待結果**:
 

@@ -372,4 +372,93 @@
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>その他の項目</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>一致 {0} 件</value></data>
+  <data name="Menu_Analysis.Title" xml:space="preserve"><value>解析(A)</value></data>
+  <data name="Menu_Analysis.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Analysis_Hash.Text" xml:space="preserve"><value>ハッシュ(H)...</value></data>
+  <data name="Menu_Analysis_Hash.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Operation_Hash" xml:space="preserve"><value>ハッシュの計算</value></data>
+  <data name="Hash_Title.Text" xml:space="preserve"><value>ハッシュ</value></data>
+  <data name="Hash_Close_Name" xml:space="preserve"><value>ハッシュパネルを閉じる</value></data>
+  <data name="Hash_Target.Header" xml:space="preserve"><value>対象範囲</value></data>
+  <data name="Hash_Target_Selection.Content" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Hash_Target_Whole.Content" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="Hash_Target_Custom.Content" xml:space="preserve"><value>範囲を指定</value></data>
+  <data name="Hash_CustomStart.Header" xml:space="preserve"><value>開始</value></data>
+  <data name="Hash_CustomLength.Header" xml:space="preserve"><value>長さ (空欄は末尾まで)</value></data>
+  <data name="Hash_Range" xml:space="preserve"><value>{0}〜{1} ({2} バイト)</value></data>
+  <data name="Hash_RangeEmpty" xml:space="preserve"><value>{0} (0 バイト)</value></data>
+  <data name="Hash_RangeInvalid" xml:space="preserve"><value>範囲がドキュメントの外にあります。</value></data>
+  <data name="Hash_Set.Header" xml:space="preserve"><value>セット</value></data>
+  <data name="Hash_Set_common" xml:space="preserve"><value>よく使う</value></data>
+  <data name="Hash_Set_cryptographic" xml:space="preserve"><value>暗号学的ハッシュ</value></data>
+  <data name="Hash_Set_checksums" xml:space="preserve"><value>チェックサム</value></data>
+  <data name="Hash_SaveSet.Content" xml:space="preserve"><value>セットを保存</value></data>
+  <data name="Hash_SetName.Header" xml:space="preserve"><value>セットの名前</value></data>
+  <data name="Hash_SaveSetConfirm.Content" xml:space="preserve"><value>保存</value></data>
+  <data name="Hash_Filter.PlaceholderText" xml:space="preserve"><value>アルゴリズムを絞り込む</value></data>
+  <data name="Hash_Filter.AutomationProperties.Name" xml:space="preserve"><value>アルゴリズムを絞り込む</value></data>
+  <data name="Hash_Group_Checksum" xml:space="preserve"><value>チェックサム</value></data>
+  <data name="Hash_Group_Crc" xml:space="preserve"><value>CRC</value></data>
+  <data name="Hash_Group_NonCryptographic" xml:space="preserve"><value>非暗号学的ハッシュ</value></data>
+  <data name="Hash_Group_Cryptographic" xml:space="preserve"><value>暗号学的ハッシュ</value></data>
+  <data name="Hash_Alg_sum8" xml:space="preserve"><value>加算 8 bit</value></data>
+  <data name="Hash_Alg_sum16" xml:space="preserve"><value>加算 16 bit</value></data>
+  <data name="Hash_Alg_sum32" xml:space="preserve"><value>加算 32 bit</value></data>
+  <data name="Hash_Alg_xor8" xml:space="preserve"><value>XOR 8 bit</value></data>
+  <data name="Hash_Unavailable" xml:space="preserve"><value>この環境では利用できません</value></data>
+  <data name="Hash_Insecure" xml:space="preserve"><value>安全ではありません (改ざんの検出には使わないでください)。</value></data>
+  <data name="Hash_Compute.Content" xml:space="preserve"><value>計算</value></data>
+  <data name="Hash_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Hash_Auto.Content" xml:space="preserve"><value>自動で再計算</value></data>
+  <data name="Hash_Speed" xml:space="preserve"><value>{0} MB/s</value></data>
+  <data name="Hash_NoAlgorithm" xml:space="preserve"><value>アルゴリズムを 1 つ以上選んでください。</value></data>
+  <data name="Hash_Cancelled" xml:space="preserve"><value>計算をキャンセルしました。</value></data>
+  <data name="Hash_ReadError" xml:space="preserve"><value>オフセット {0} を読み込めないため計算できません。</value></data>
+  <data name="Hash_Stale.Message" xml:space="preserve"><value>結果は編集前の内容のものです。</value></data>
+  <data name="Hash_Recompute.Content" xml:space="preserve"><value>再計算</value></data>
+  <data name="Hash_Format.Header" xml:space="preserve"><value>表示形式</value></data>
+  <data name="Hash_Format_HexUpper.Content" xml:space="preserve"><value>Hex 大文字</value></data>
+  <data name="Hash_Format_HexLower.Content" xml:space="preserve"><value>Hex 小文字</value></data>
+  <data name="Hash_Format_Base64.Content" xml:space="preserve"><value>Base64</value></data>
+  <data name="Hash_Format_Decimal.Content" xml:space="preserve"><value>10 進 (64 bit 以下)</value></data>
+  <data name="Hash_ByteOrder.Header" xml:space="preserve"><value>バイト順 (64 bit 以下)</value></data>
+  <data name="Hash_ByteOrder_Big.Content" xml:space="preserve"><value>ビッグエンディアン (数値)</value></data>
+  <data name="Hash_ByteOrder_Little.Content" xml:space="preserve"><value>リトルエンディアンのバイト列</value></data>
+  <data name="Hash_Results.Text" xml:space="preserve"><value>結果</value></data>
+  <data name="Hash_Bits" xml:space="preserve"><value>{0} bit</value></data>
+  <data name="Hash_RowName" xml:space="preserve"><value>{0}、{1}</value></data>
+  <data name="Hash_Changed.Text" xml:space="preserve"><value>変更</value></data>
+  <data name="Hash_CopyAll.Content" xml:space="preserve"><value>すべてコピー</value></data>
+  <data name="Hash_CopyAllNameValue.Text" xml:space="preserve"><value>すべてを「名前: 値」でコピー</value></data>
+  <data name="Hash_CopyAllChecksum.Text" xml:space="preserve"><value>すべてをチェックサムファイル形式でコピー</value></data>
+  <data name="Hash_CopyAllJson.Text" xml:space="preserve"><value>すべてを JSON でコピー</value></data>
+  <data name="Hash_CopyAllCsv.Text" xml:space="preserve"><value>すべてを CSV でコピー</value></data>
+  <data name="Hash_CopyValue.Text" xml:space="preserve"><value>値をコピー</value></data>
+  <data name="Hash_CopyNameValue.Text" xml:space="preserve"><value>「名前: 値」でコピー</value></data>
+  <data name="Hash_CopyChecksum.Text" xml:space="preserve"><value>チェックサムファイル形式でコピー</value></data>
+  <data name="Hash_SaveChecksum.Text" xml:space="preserve"><value>チェックサムファイルとして保存...</value></data>
+  <data name="Hash_CopyRow_Name" xml:space="preserve"><value>{0} の値をコピー</value></data>
+  <data name="Hash_Settings_Name" xml:space="preserve"><value>{0} の設定</value></data>
+  <data name="Hash_Seed" xml:space="preserve"><value>シード</value></data>
+  <data name="Hash_SeedInvalid" xml:space="preserve"><value>10 進数、または 0x で始まる 16 進数を入力してください。</value></data>
+  <data name="Hash_Complement" xml:space="preserve"><value>結果の補数</value></data>
+  <data name="Hash_Complement_None" xml:space="preserve"><value>なし</value></data>
+  <data name="Hash_Complement_Ones" xml:space="preserve"><value>1 の補数</value></data>
+  <data name="Hash_Complement_Twos" xml:space="preserve"><value>2 の補数</value></data>
+  <data name="Hash_ApplySettings" xml:space="preserve"><value>適用</value></data>
+  <data name="Hash_Saved" xml:space="preserve"><value>{0} を保存しました。</value></data>
+  <data name="Hash_SaveFailed" xml:space="preserve"><value>ファイルにアクセスできません: {0}</value></data>
+  <data name="Hash_VerifyTitle.Text" xml:space="preserve"><value>照合</value></data>
+  <data name="Hash_Expected.Header" xml:space="preserve"><value>期待値</value></data>
+  <data name="Hash_Expected.PlaceholderText" xml:space="preserve"><value>16 進または Base64 の値を貼り付け</value></data>
+  <data name="Hash_ExpectedError.Text" xml:space="preserve"><value>16 進または Base64 の値を入力してください。</value></data>
+  <data name="Hash_Match" xml:space="preserve"><value>一致</value></data>
+  <data name="Hash_MatchReversed" xml:space="preserve"><value>一致 (バイト順が逆)</value></data>
+  <data name="Hash_NoMatch" xml:space="preserve"><value>不一致</value></data>
+  <data name="Hash_VerifyFile.Content" xml:space="preserve"><value>チェックサムファイルで検証...</value></data>
+  <data name="Hash_VerifyLines.AutomationProperties.Name" xml:space="preserve"><value>チェックサムファイルの行</value></data>
+  <data name="Hash_VerifyLineNotFound" xml:space="preserve"><value>このファイルの行が見つかりません。一覧から行を選んでください。</value></data>
+  <data name="Hash_VerifyUnknownAlgorithm" xml:space="preserve"><value>この行のアルゴリズムが分かりません。</value></data>
+  <data name="Hash_VerifyResult" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Hash_ResultList.AutomationProperties.Name" xml:space="preserve"><value>結果</value></data>
 </root>

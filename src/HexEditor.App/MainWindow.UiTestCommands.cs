@@ -40,6 +40,7 @@ public sealed partial class MainWindow
         "sourceStats" => TestSourceStats(),
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
+        "hash" => await TestHashAsync(request),
         _ => null,
     };
 

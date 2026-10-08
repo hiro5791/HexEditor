@@ -330,9 +330,46 @@ public sealed class PerformanceTests(ITestOutputHelper output)
     [Trait(UiTest.TC, "TC-EDIT-01-05")]
     public Task Drag_auto_scroll_through_a_hundred_gigabyte_file() => Task.CompletedTask;
 
-    [Fact(Skip = "ハッシュの計算 (ANA-18 など、フェーズ 1) が未実装")]
+    /// <summary>
+    /// 60 fps の判定は共有の環境 (作業中の PC、Debug ビルド) では安定しない (p99 が 20 ms 前後になる) ため、他のフレームの間隔の
+    /// テストと同じく性能テスト用の固定の環境で実行する。
+    /// </summary>
+    [PerfEnvironmentFact]
     [Trait(UiTest.TC, "TC-ENG-09-02")]
-    public Task Scrolling_stays_smooth_while_hashing_ten_gigabytes() => Task.CompletedTask;
+    public Task Scrolling_stays_smooth_while_hashing_ten_gigabytes() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ENG-SPARSE-10G")] });
+
+        // 手順 1: ハッシュパネルで SHA-256 だけを選び、全体の計算を始める。
+        await app.SendAsync("hash", new JsonObject { ["action"] = "show" });
+        await app.SendAsync("hash", new JsonObject { ["action"] = "algorithms", ["ids"] = new JsonArray("sha256") });
+        await app.CommandAsync("Hash_Compute");
+        await app.WaitUntilAsync(async () => (await app.SendAsync("hash"))["computing"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the calculation");
+        string path = await EnableDiagnosticsAsync(ctx, app);
+
+        // 手順 2: 計算の間、↓ を 16 ms 間隔で 600 回、続けてホイールのスクロールを 600 回。
+        for (int i = 0; i < 600; i++)
+        {
+            await KeyAsync(app, "Down");
+            await Task.Delay(16);
+        }
+
+        for (int i = 0; i < 600; i++)
+        {
+            await ViewOps.WheelAsync(app, -120);
+            await Task.Delay(16);
+        }
+
+        bool stillComputing = (await app.SendAsync("hash"))["computing"]!.GetValue<bool>();
+        FrameLog log = await StopDiagnosticsAsync(app, path);
+        output.WriteLine(stillComputing ? "計算は続いていた" : "計算は手順 2 の途中で終わった");
+
+        // 手順 3: 60 fps を保ち、キー入力から画面の反映までの最大が 50 ms 以下。
+        AssertSixtyFps(log, "ハッシュの計算中の操作");
+        IReadOnlyList<double> latencies = log.KeyToFrame();
+        output.WriteLine(Latencies("ハッシュの計算中のキー入力から画面まで", latencies));
+        Assert.All(latencies, l => Assert.True(l <= InputLatency, Latencies("ハッシュの計算中のキー入力から画面まで", latencies)));
+    });
 
     /// <summary>
     /// TC-ENG-11-01 のアプリの部分: 起動済みのアプリで、コマンドラインの引数 (2 つ目の起動からの転送) と「開く」(選んだ後の処理。
