@@ -54,15 +54,22 @@ public sealed partial class RecentEntryViewModel : ObservableObject
     /// </summary>
     public void CheckExistsInBackground(Action<Action> dispatch)
     {
-        if (Item.Kind != RecentItemKind.File || Item.IsNetworkPath)
+        // 書き方で分かるネットワークのパスはここで除く。ドライブの種類 (ネットワークドライブか) の判定も応答しないことがあるので、
+        // UI スレッドでは行わない。
+        if (Item.Kind != RecentItemKind.File || RecentFileList.IsNetworkPathSyntax(Item.Path))
         {
             return;
         }
 
-        string path = Item.Path;
+        RecentItem item = Item;
         _ = Task.Run(() =>
         {
-            var info = new FileInfo(path);
+            if (item.IsNetworkPath)
+            {
+                return;
+            }
+
+            var info = new FileInfo(item.Path);
             bool exists = info.Exists;
             string size = exists ? Core.View.StatusFormat.ShortSize(info.Length, System.Globalization.CultureInfo.CurrentCulture)
                 ?? Loc.Format("Size_Bytes", Core.View.StatusFormat.Number(info.Length, System.Globalization.CultureInfo.CurrentCulture)) : string.Empty;
@@ -121,11 +128,11 @@ public sealed partial class StartPageViewModel : ObservableObject
     [ObservableProperty]
     public partial bool LanguageRestartNeeded { get; set; }
 
+    /// <summary>
+    /// 表示言語 (UI-43 の一覧と同じ: 「Windows の設定に従う (現在: 言語名)」、各言語の自称、今の表示言語での名前、確認済みの割合)。
+    /// </summary>
     public IReadOnlyList<StartChoice> Languages { get; } =
-    [
-        new("system", Loc.Get("Start_LanguageSystem")),
-        .. Hosting.Localization.SupportedLanguages.Select(code => new StartChoice(code, NativeName(code))),
-    ];
+        [.. MainWindow.DisplayLanguageItems().Select(i => new StartChoice(i.Tag, i.Text))];
 
     public IReadOnlyList<StartChoice> Themes { get; } =
     [
@@ -150,18 +157,5 @@ public sealed partial class StartPageViewModel : ObservableObject
         }
 
         RecentCount = RecentItems.Count;
-    }
-
-    private static string NativeName(string code)
-    {
-        try
-        {
-            var culture = new System.Globalization.CultureInfo(code);
-            return $"{culture.NativeName} ({code})";
-        }
-        catch (System.Globalization.CultureNotFoundException)
-        {
-            return code;
-        }
     }
 }

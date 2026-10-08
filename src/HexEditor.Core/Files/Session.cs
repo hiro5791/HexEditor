@@ -39,7 +39,10 @@ public sealed record SessionTab
 
     public DateTime LastWriteTimeUtc { get; init; }
 
-    /// <summary>文書ごとの表示設定 (表示の担当が決める形。持たなければ null)。</summary>
+    /// <summary>
+    /// 使わない (以前の版の session.json を読めるように残している)。文書ごとの表示設定 (UI-31 の仕様 1) は、ファイルのパスごとに付随
+    /// データ (00-overview.md 10 章の documents/。02 の VIEW-42) に保存し、ファイルを開くときに適用するので、セッションには書かない。
+    /// </summary>
     public JsonElement? View { get; init; }
 
     /// <summary>タブごとの Hex 表示の倍率 (百分率。UI-08 の仕様 2 の 4。適用範囲が「今のタブだけ」のときだけ。それ以外は null)。</summary>
@@ -303,11 +306,16 @@ public sealed class AppStateStore
     public AppStateStore(Settings.StateStore store)
     {
         _store = store;
-        IsFirstRun = !File.Exists(store.PathName);
+
+        // state.json を読んだ時点で判定する (読んだ後、ここまでの間に他の機能が state.json を書いても初回起動のまま)。
+        IsFirstRun = !store.ExistedAtFirstLoad;
     }
 
     /// <summary>起動時に state.json がなかった (初回起動。UI-38 の仕様 2)。</summary>
     public bool IsFirstRun { get; }
+
+    /// <summary>「はじめに」を出すか: 初回起動で、まだ閉じていない (UI-38 の仕様 2・3)。</summary>
+    public bool ShowWelcome => IsFirstRun && !WelcomeDismissed;
 
     /// <summary>「はじめに」を閉じた (または何も選ばずにファイルを開いた)。</summary>
     public bool WelcomeDismissed =>

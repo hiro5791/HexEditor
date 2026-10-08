@@ -30,11 +30,25 @@ public sealed class StateStore : IDisposable
 
     public string PathName => Path.Combine(Folder, FileName);
 
+    /// <summary>
+    /// 最初に <see cref="Load"/> したときに state.json があったか (初回起動の判定。09 の UI-38 の仕様 2)。読んだ後に他の機能が書いても
+    /// 変わらない。
+    /// </summary>
+    public bool ExistedAtFirstLoad { get; private set; }
+
+    private bool _loadedOnce;
+
     /// <summary>読む。読めなければ空で始める (状態は失っても困らない)。</summary>
     public void Load()
     {
         lock (_lock)
         {
+            if (!_loadedOnce)
+            {
+                _loadedOnce = true;
+                ExistedAtFirstLoad = File.Exists(PathName);
+            }
+
             try
             {
                 _values = File.Exists(PathName) && JsonNode.Parse(File.ReadAllText(PathName)) is JsonObject o ? o : [];

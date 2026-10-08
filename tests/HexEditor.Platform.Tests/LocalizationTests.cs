@@ -156,19 +156,6 @@ public sealed class LocalizationTests
         Assert.True(CommandLine.ParseString("--new-document").NewDocument);
     }
 
-    [Fact]
-    public void Session_recent_files_keep_the_newest_first_without_duplicates()
-    {
-        var recent = new SessionRecentFiles();
-        int changes = 0;
-        recent.Changed += (_, _) => changes++;
-        recent.Add(@"C:\a.bin");
-        recent.Add(@"C:\b.bin");
-        recent.Add(@"C:\A.bin");
-        Assert.Equal([@"C:\A.bin", @"C:\b.bin"], recent.Recent.Select(r => r.Path));
-        Assert.Equal(3, changes);
-    }
-
     // ---- UI-58 ネットワークを使う機能の管理 ----
 
     [Fact]

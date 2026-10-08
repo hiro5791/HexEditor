@@ -26,6 +26,9 @@ public sealed partial class MainWindow
             "openRecentMenuAt" => Run(() => OpenRecent(Vm.Recent.MenuEntries()[(int)TestHookSettings.ReadLong(request["index"], 0)])),
             "saveSession" => Run(() => SaveSession()),
 
+            // スタートページの最近使ったファイルの行のメニュー (Shift+F10 と同じ)。invoke があれば、その AutomationId の項目を押す。
+            "startRecentMenu" => TestStartRecentMenu((int)TestHookSettings.ReadLong(request["index"], 0), request["invoke"]?.GetValue<string>()),
+
             // ウィンドウがアクティブになったときと同じ確認 (ウィンドウを前面に出さずに再現する。ENG-19 の仕様 1)。
             "activated" => Run(CheckSelectedForExternalChange),
 
@@ -83,6 +86,8 @@ public sealed partial class MainWindow
             ["startPageVisible"] = StartPage.Visibility == Visibility.Visible,
             ["startRecent"] = start,
             ["welcome"] = StartPage.ViewModel.ShowWelcome,
+            ["startShortcuts"] = new JsonArray(StartPage.ShortcutTexts.Open, StartPage.ShortcutTexts.New),
+            ["startLanguages"] = new JsonArray([.. StartPage.ViewModel.Languages.Select(l => (JsonNode?)l.Label)]),
             ["canRestoreSession"] = StartPage.ViewModel.CanRestoreSession,
             ["tabs"] = tabs,
             ["windowBounds"] = $"{AppWindow.Position.X},{AppWindow.Position.Y},{AppWindow.Size.Width},{AppWindow.Size.Height}",
@@ -90,6 +95,27 @@ public sealed partial class MainWindow
             ["language"] = App.Settings.GetString(LanguageKey, "system"),
             ["preset"] = HexEditor.App.Commands.CommandService.Keys.Preset,
         };
+    }
+
+    private JsonObject TestStartRecentMenu(int index, string? invoke)
+    {
+        _startRecentMenu = null;
+        StartPage.RequestRecentMenuAt(index);
+        if (_startRecentMenu is not { } menu)
+        {
+            return new JsonObject { ["open"] = false };
+        }
+
+        var items = new JsonArray([.. menu.Items.OfType<MenuFlyoutItem>().Select(i => (JsonNode?)Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(i))]);
+        if (invoke is not null)
+        {
+            MenuFlyoutItem item = menu.Items.OfType<MenuFlyoutItem>().First(i => Microsoft.UI.Xaml.Automation.AutomationProperties.GetAutomationId(i) == invoke);
+            ((Microsoft.UI.Xaml.Automation.Provider.IInvokeProvider)Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer.CreatePeerForElement(item)).Invoke();
+        }
+
+        menu.Hide();
+
+        return new JsonObject { ["open"] = true, ["items"] = items };
     }
 
     private static JsonObject TestExternalWrite(JsonObject request)

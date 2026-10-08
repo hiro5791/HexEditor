@@ -89,7 +89,11 @@
                     AutomationProperties.AutomationId="Start_Open"
                     Click="Open_Click"
                     Style="{ThemeResource AccentButtonStyle}" />
-                <Button x:Uid="Start_New" AutomationProperties.AutomationId="Start_New" Click="New_Click" />
+                <Button
+                    x:Name="NewButton"
+                    x:Uid="Start_New"
+                    AutomationProperties.AutomationId="Start_New"
+                    Click="New_Click" />
                 <Button
                     x:Uid="Start_RestoreSession"
                     AutomationProperties.AutomationId="Start_RestoreSession"
@@ -115,6 +119,7 @@
                     x:Name="RecentList"
                     x:Uid="Start_RecentList"
                     AutomationProperties.AutomationId="Start_Recent"
+                    ContextRequested="RecentList_ContextRequested"
                     IsItemClickEnabled="True"
                     ItemClick="RecentList_ItemClick"
                     ItemsSource="{x:Bind ViewModel.RecentItems}"

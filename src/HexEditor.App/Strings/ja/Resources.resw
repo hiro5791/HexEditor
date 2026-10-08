@@ -490,7 +490,6 @@
   <data name="Start_WelcomeTitle.Text" xml:space="preserve"><value>はじめに</value></data>
   <data name="Start_WelcomeClose.Content" xml:space="preserve"><value>閉じる</value></data>
   <data name="Start_Language.Header" xml:space="preserve"><value>表示言語</value></data>
-  <data name="Start_LanguageSystem" xml:space="preserve"><value>Windows と同じ</value></data>
   <data name="Start_LanguageRestart.Text" xml:space="preserve"><value>新しい表示言語は、次に HexEditor を起動したときに使われます。</value></data>
   <data name="Start_Theme.Header" xml:space="preserve"><value>テーマ</value></data>
   <data name="Start_ThemeSystem" xml:space="preserve"><value>システムの設定</value></data>

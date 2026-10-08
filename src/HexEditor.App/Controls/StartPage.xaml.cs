@@ -49,6 +49,47 @@ public sealed partial class StartPage : UserControl
         }
     }
 
+    private string? _openLabel;
+    private string? _newLabel;
+
+    /// <summary>
+    /// 「開く」「新規作成」のボタンに今のキー割り当てを添える (UI-38 の仕様 1。キー割り当てを変えたら呼び直す)。割り当てがなければ名前だけ。
+    /// </summary>
+    public void SetShortcuts(string open, string @new)
+    {
+        _openLabel ??= OpenButton.Content as string ?? string.Empty;
+        _newLabel ??= NewButton.Content as string ?? string.Empty;
+        Apply(OpenButton, _openLabel, open);
+        Apply(NewButton, _newLabel, @new);
+
+        static void Apply(Button button, string label, string keys)
+        {
+            var content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+            content.Children.Add(new TextBlock { Text = label });
+            if (keys.Length > 0)
+            {
+                // 補助の文字の色 (テーマのリソース)。アクセントのボタンの上では文字と同じ色にする。
+                var key = new TextBlock { Text = keys, Opacity = 0.8 };
+                if (button.Style != (Style)Application.Current.Resources["AccentButtonStyle"])
+                {
+                    key.Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
+                    key.Opacity = 1;
+                }
+
+                content.Children.Add(key);
+            }
+
+            button.Content = content;
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(button, label);
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetAcceleratorKey(button, keys);
+        }
+    }
+
+    /// <summary>ボタンに添えたキーの表記 (テスト用)。</summary>
+    public (string Open, string New) ShortcutTexts => (
+        Microsoft.UI.Xaml.Automation.AutomationProperties.GetAcceleratorKey(OpenButton),
+        Microsoft.UI.Xaml.Automation.AutomationProperties.GetAcceleratorKey(NewButton));
+
     /// <summary>ページの末尾に要素を加える (テスト用の命令が、文字列の切れの確認用のボタンを置く)。</summary>
     public void AddExtra(UIElement element) => Body.Children.Add(element);
 
@@ -74,6 +115,56 @@ public sealed partial class StartPage : UserControl
         if (e.ClickedItem is RecentEntryViewModel entry)
         {
             RecentRequested?.Invoke(this, entry);
+        }
+    }
+
+    /// <summary>
+    /// 行の右クリック・アプリケーションキー・Shift+F10 (UI-32 の仕様 4): 「すべて表示…」と同じメニューを出す。メニューの中身は画面の外
+    /// (MainWindow) が作り、<see cref="ShowRecentMenu"/> で出す。
+    /// </summary>
+    public event EventHandler<RecentEntryViewModel>? RecentContextRequested;
+
+    private (FrameworkElement Target, Windows.Foundation.Point? Position)? _contextTarget;
+
+    private void RecentList_ContextRequested(UIElement sender, Microsoft.UI.Xaml.Input.ContextRequestedEventArgs args)
+    {
+        var source = args.OriginalSource as FrameworkElement;
+        object? item = source is ListViewItem container ? RecentList.ItemFromContainer(container) : source?.DataContext;
+        if (item is not RecentEntryViewModel entry || source is null)
+        {
+            return;
+        }
+
+        args.Handled = true;
+        _contextTarget = (source, args.TryGetPosition(RecentList, out Windows.Foundation.Point point) ? point : null);
+        RecentContextRequested?.Invoke(this, entry);
+    }
+
+    /// <summary>テスト・キーボードの操作: 一覧の <paramref name="index"/> 番目の行でメニューを開く (Shift+F10 と同じ)。</summary>
+    public void RequestRecentMenuAt(int index)
+    {
+        if (index >= 0 && index < ViewModel.RecentItems.Count)
+        {
+            _contextTarget = (RecentList.ContainerFromIndex(index) as FrameworkElement ?? RecentList, null);
+            RecentContextRequested?.Invoke(this, ViewModel.RecentItems[index]);
+        }
+    }
+
+    /// <summary>右クリックされた行の位置 (キーボードなら行) にメニューを出す。</summary>
+    public void ShowRecentMenu(Microsoft.UI.Xaml.Controls.Primitives.FlyoutBase menu)
+    {
+        if (_contextTarget is not { } target)
+        {
+            return;
+        }
+
+        if (target.Position is { } point)
+        {
+            menu.ShowAt(RecentList, new Microsoft.UI.Xaml.Controls.Primitives.FlyoutShowOptions { Position = point });
+        }
+        else
+        {
+            menu.ShowAt(target.Target);
         }
     }
 
