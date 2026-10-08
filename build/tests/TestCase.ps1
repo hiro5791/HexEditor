@@ -28,6 +28,8 @@ function Invoke-TestCase {
         }
         $script:TestResults.Add([pscustomobject]@{ Id = $Id; Title = $Title; Result = 'Failed'; Message = "$_"; Seconds = ((Get-Date) - $start).TotalSeconds })
         Write-Host "::error::FAIL $Id $Title : $_"
+        # Where it failed (a script error such as a method call on $null does not say it by itself).
+        if ($_.ScriptStackTrace) { Write-Host (($_.ScriptStackTrace -split "`r?`n" | Select-Object -First 4 | ForEach-Object { "    $_" }) -join "`n") }
     }
 }
 

@@ -58,7 +58,13 @@ Invoke-TestCase 'TC-PKG-03-01' 'file type associations of the MSIX version' {
     } finally { Get-Process HexEditor -ErrorAction SilentlyContinue | Stop-Process -Force }
     Add-TestNote 'TC-PKG-03-01: opening the project (the seq.bin tab) is the project file feature (UI-33); only the association is checked.'
     # 2. The default app of .iso is unchanged and HexEditor is an "Open with" handler.
+    # Without a default app, AssocQueryString answers '' while the type has no handler and OpenWith.exe (the "How do
+    # you want to open" dialog) once a handler such as HexEditor exists: both mean "no default app" (Windows Server runners).
     $isoDefault = [HexTest.ExplorerNative]::DefaultApp('.iso')
+    if ($isoDefault -like '*\OpenWith.exe' -and -not ($isoDefaultBefore -like '*\OpenWith.exe')) {
+        Assert-True ($isoDefaultBefore -eq '') "the default app of .iso changed: '$isoDefaultBefore' -> '$isoDefault'"
+        $isoDefault = ''
+    }
     Assert-True ($isoDefault -eq $isoDefaultBefore) "the default app of .iso changed: '$isoDefaultBefore' -> '$isoDefault'"
     $handlers = @([HexTest.ExplorerNative]::OpenWithHandlers('.iso'))
     Write-Host "Open with .iso: $($handlers -join '; ')"
@@ -147,9 +153,11 @@ Invoke-TestCase 'TC-PKG-03-04' 'Start menu description in German' {
     if ($LASTEXITCODE -ne 0) { throw 'makepri dump failed' }
     [xml]$pri = Get-Content $dump -Raw -Encoding UTF8
     $descriptions = @{}
+    # The detailed dump: <Candidate><QualifierSet><Qualifier name="Language" value="DE" .../></QualifierSet><Value>...</Value></Candidate>
     foreach ($candidate in $pri.SelectNodes("//NamedResource[@name='AppDescription']/Candidate")) {
-        $language = ($candidate.qualifiers -split ',' | Where-Object { $_ -like 'Language-*' } | Select-Object -First 1) -replace '^Language-', ''
-        if ($language) { $descriptions[$language.ToLowerInvariant()] = $candidate.Value.'#text' }
+        $qualifier = $candidate.SelectSingleNode("QualifierSet/Qualifier[@name='Language']")
+        $value = $candidate.SelectSingleNode('Value')
+        if ($qualifier -and $value) { $descriptions[$qualifier.GetAttribute('value').ToLowerInvariant()] = $value.InnerText }
     }
     Write-Host "AppDescription languages: $(($descriptions.Keys | Sort-Object) -join ', ')"
     Assert-True ($descriptions.Count -ge 23) "resources.pri has AppDescription in $($descriptions.Count) languages, expected 23"

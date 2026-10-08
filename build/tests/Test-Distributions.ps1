@@ -104,6 +104,15 @@ function Get-CrashReports([string]$Folder) {
     @(Get-ChildItem $Folder -Filter '*.txt' | Where-Object { $_.Name -ne 'seen.txt' })
 }
 
+# Writes the crash reports of a distribution to the log (when the app ended during a test case).
+function Show-CrashReports($Target) {
+    if (-not $Target.Data) { return }
+    foreach ($report in Get-CrashReports (Join-Path $Target.Data 'crash')) {
+        Write-Host "--- $($Target.Name): $($report.FullName)"
+        Get-Content $report.FullName -TotalCount 60 | Out-Host
+    }
+}
+
 function Get-RecoveryStates([string]$Folder) {
     if (-not (Test-Path $Folder)) { return @() }
     @(Get-ChildItem $Folder -Recurse -Filter 'state.json')
@@ -163,7 +172,9 @@ Invoke-TestCase 'TC-PKG-12-01' 'About shows the distribution' {
     }
     foreach ($t in $list) {
         $app = Start-App $t
-        try { $about = Get-AboutValues $app } finally { Stop-TestApp $app }
+        try { $about = Get-AboutValues $app }
+        catch { Show-CrashReports $t; throw }
+        finally { Stop-TestApp $app }
         Write-Host "$($t.Name): Distribution = $($about['Distribution'])"
         Assert-True ($about['Distribution'] -eq $t.Expected) "$($t.Name): About shows the distribution '$($about['Distribution'])'"
     }
@@ -178,20 +189,16 @@ Invoke-TestCase 'TC-UI-40-01' 'About shows the distribution and the architecture
             Write-Host "$($t.Name): Distribution = $($about['Distribution']), Architecture = $($about['Architecture'])"
             Assert-True ($about['Distribution'] -eq $t.Expected) "$($t.Name): About shows the distribution '$($about['Distribution'])'"
             Assert-True ($about['Architecture'] -eq $expectedArch) "$($t.Name): About shows the architecture '$($about['Architecture'])', expected $expectedArch"
-            if ($ci) {
-                # "Copy info" is the primary button of the dialog (ContentDialog: PrimaryButton).
-                Set-Clipboard -Value 'empty'
-                try { $copy = Find-UiaElement -ProcessId $app.Id -AutomationId 'PrimaryButton' -Seconds 5 }
-                catch { $copy = Find-UiaElement -ProcessId $app.Id -Name 'Copy info' }
-                Invoke-UiaElement $copy
-                Wait-Until { (Get-Clipboard -Raw) -match 'Distribution: ' } 10 'the copied information'
-                $text = Get-Clipboard -Raw
-                Assert-True ($text -match "(?m)^Distribution: $($t.Expected)\s*$") "$($t.Name): the copied text has no 'Distribution: $($t.Expected)'"
-                Assert-True ($text -match "(?m)^Architecture: $expectedArch\s*$") "$($t.Name): the copied text has no 'Architecture: $expectedArch'"
-            }
+            # "Copy info" is the primary button of the dialog (ContentDialog: PrimaryButton). A test build started with
+            # --test-hooks copies into its in-app stand-in of the clipboard (test strategy 7.2), read with the test command.
+            [void](Send-TestCommand $app 'dialogButton' @{ name = 'PrimaryButton' })
+            $script:CopiedText = $null
+            Wait-Until { $script:CopiedText = (Send-TestCommand $app 'clipboard').text; "$script:CopiedText" -match 'Distribution: ' } 10 'the copied information'
+            $text = $script:CopiedText
+            Assert-True ($text -match "(?m)^Distribution: $($t.Expected)\s*$") "$($t.Name): the copied text has no 'Distribution: $($t.Expected)'"
+            Assert-True ($text -match "(?m)^Architecture: $expectedArch\s*$") "$($t.Name): the copied text has no 'Architecture: $expectedArch'"
         } finally { Stop-TestApp $app }
     }
-    if (-not $ci) { Add-TestNote 'TC-UI-40-01: "Copy info" (the clipboard) is checked only on CI runners.' }
 }
 
 Invoke-TestCase 'TC-PKG-13-01' 'the data of each distribution is in the place of PKG-13' {
@@ -354,11 +361,9 @@ Invoke-TestCase 'TC-UI-43-05' 'installer: display language switch and restart' {
     Reset-Data $installer
     $crash = Join-Path $installer.Data 'crash'
     foreach ($language in @('en', 'zh-Hans', 'zh-Hant', 'ja', 'ko', 'id', 'vi', 'th', 'de', 'fr', 'es', 'pt', 'it', 'ru', 'uk', 'pl', 'cs', 'hu', 'ro', 'el', 'ar', 'tr', 'fa', 'system')) {
-        $a = Start-App $installer
+        $a = Start-App $installer -Arguments @('--ui-lang', (Get-OtherUiLanguage $language))
         $oldPid = $a.Id
-        [void](Send-TestCommand $a 'setDisplayLanguage' @{ language = $language })
-        $label = @((Get-TestState $a).notifications | Where-Object { @($_.actions).Count -gt 0 })[0].actions[0]
-        [void](Send-TestCommand $a 'noticeAction' @{ label = $label })
+        Invoke-LanguageRestart $a $language
         Close-TestChannel $a
         Assert-True ($a.Process.WaitForExit(30000)) "the app did not restart ($language)"
         # Wait-Until runs the block in a child scope, so the process is looked up again afterwards.

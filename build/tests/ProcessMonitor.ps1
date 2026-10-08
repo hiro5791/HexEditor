@@ -59,14 +59,22 @@ function Read-RegistryWrites([Parameter(Mandatory)][string]$Csv, [Parameter(Mand
     $rows = New-Object System.Collections.Generic.List[object]
     $processes = New-Object 'System.Collections.Generic.HashSet[string]'
     foreach ($line in [System.IO.File]::ReadLines($Csv)) {
-        $fields = $line.TrimStart([char]0xFEFF).Trim().Trim('"') -split '","'
+        # Remove only the outer quotes (Trim('"') would also eat the quotes of an empty last field).
+        $text = $line.TrimStart([char]0xFEFF).Trim()
+        if ($text.Length -ge 2 -and $text.StartsWith('"') -and $text.EndsWith('"')) { $text = $text.Substring(1, $text.Length - 2) }
+        $fields = $text -split '","'
         if (-not $columns) {
             $columns = @{}
             for ($i = 0; $i -lt $fields.Count; $i++) { $columns[$fields[$i]] = $i }
+            foreach ($name in 'Process Name', 'Operation', 'Path', 'Result', 'Detail') {
+                if (-not $columns.ContainsKey($name)) { throw "The Process Monitor CSV has no column '$name': $line" }
+            }
             continue
         }
+        # Blank lines, and the continuation of a value with a line break (in Detail), have fewer fields.
+        if ($fields.Count -lt $columns.Count) { continue }
         $operation = $fields[$columns['Operation']]
-        if (-not $operation.StartsWith('Reg')) { continue }
+        if (-not $operation -or -not $operation.StartsWith('Reg')) { continue }
         $process = $fields[$columns['Process Name']]
         if ($process -notmatch $ProcessPattern) { continue }
         [void]$processes.Add($process)

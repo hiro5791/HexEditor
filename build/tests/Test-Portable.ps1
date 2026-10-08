@@ -272,7 +272,9 @@ if ($TestZip) {
         $vhd = Join-Path $WorkDir 'readonly.vhdx'
         if (Test-Path $vhd) { Remove-Item $vhd -Force }
         $diskpartScript = Join-Path $WorkDir 'diskpart.txt'
-        Set-Content -Path $diskpartScript -Value "create vdisk file=`"$vhd`" maximum=64 type=expandable" -Encoding ascii
+        # The portable version is about 300 MB unpacked (self-contained .NET and Windows App SDK); the expandable image
+        # only takes the space that is written.
+        Set-Content -Path $diskpartScript -Value "create vdisk file=`"$vhd`" maximum=1024 type=expandable" -Encoding ascii
         & diskpart.exe /s $diskpartScript | Out-Host
         if ($LASTEXITCODE -ne 0) { throw 'diskpart could not create the VHDX' }
         # Write the portable version and TD-SEQ-1M (E:\HexEditor, E:\data\seq.bin of the test case) on it.
@@ -471,11 +473,9 @@ if ($TestZip) {
         $exe = Join-Path $app 'HexEditor.exe'
         $crash = Join-Path $app 'Data\crash'
         foreach ($language in @('en', 'zh-Hans', 'zh-Hant', 'ja', 'ko', 'id', 'vi', 'th', 'de', 'fr', 'es', 'pt', 'it', 'ru', 'uk', 'pl', 'cs', 'hu', 'ro', 'el', 'ar', 'tr', 'fa', 'system')) {
-            $a = Start-TestApp -Exe $exe
+            $a = Start-TestApp -Exe $exe -Arguments @('--ui-lang', (Get-OtherUiLanguage $language))
             $oldPid = $a.Id
-            [void](Send-TestCommand $a 'setDisplayLanguage' @{ language = $language })
-            $label = @((Get-TestState $a).notifications | Where-Object { @($_.actions).Count -gt 0 })[0].actions[0]
-            [void](Send-TestCommand $a 'noticeAction' @{ label = $label })
+            Invoke-LanguageRestart $a $language
             Close-TestChannel $a
             Assert-True ($a.Process.WaitForExit(30000)) "the app did not restart ($language)"
             # Wait-Until runs the block in a child scope, so the process is looked up again afterwards.
@@ -507,6 +507,9 @@ if ($TestZip) {
             $offer = Send-TestCommand $a 'importFromOtherDistribution'
             Assert-True (@($offer.buttons | Where-Object { $_.id -eq 'Start_ImportFrom_Installer' }).Count -eq 1) 'no import button on the start page'
             [void](Send-TestCommand $a 'invoke' @{ id = 'Start_ImportFrom_Installer' })
+            # The dialog of PKG-31 spec 2: settings and key bindings are on by default; "Import".
+            Wait-Until { (Send-TestCommand $a 'openDialogs').count -gt 0 } 10 'the import dialog'
+            [void](Send-TestCommand $a 'dialogButton' @{ name = 'PrimaryButton' })
             Wait-Until { (Get-TestState $a).actualTheme -eq 'Dark' } 10 'the dark theme'
         } finally { Stop-TestApp $a }
         Assert-True ((Get-Content (Join-Path $app 'Data\keybindings.json') -Raw) -match 'Ctrl\+K Ctrl\+F') 'the key binding was not imported'

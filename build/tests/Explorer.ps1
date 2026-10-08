@@ -56,6 +56,24 @@ namespace HexTest
         [DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr window);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
+        // A process that is not in the foreground may not move the foreground (the foreground lock), and the keys of
+        // PressApplicationKey then go to another window. A key press of Alt before SetForegroundWindow lifts the lock.
+        public static bool BringToForeground(IntPtr window)
+        {
+            for (int attempt = 0; attempt < 5; attempt++)
+            {
+                keybd_event(0x12, 0, 0, UIntPtr.Zero);
+                keybd_event(0x12, 0, 2, UIntPtr.Zero);
+                SetForegroundWindow(window);
+                if (GetForegroundWindow() == window) { return true; }
+                System.Threading.Thread.Sleep(200);
+            }
+            return false;
+        }
+
         // "Open with" handlers of an extension (ASSOC_FILTER_NONE): "<name>|<UI name>".
         public static string[] OpenWithHandlers(string extension)
         {
@@ -151,7 +169,9 @@ function Open-ExplorerSelection([string]$Path) {
     while ((Get-Date) -lt $deadline) {
         $window = @($e::RootElement.FindAll([System.Windows.Automation.TreeScope]::Children, $condition) | Where-Object { $_.Current.Name -like "*$folder*" }) | Select-Object -First 1
         if ($window) {
-            [void][HexTest.ExplorerNative]::SetForegroundWindow([IntPtr]$window.Current.NativeWindowHandle)
+            if (-not [HexTest.ExplorerNative]::BringToForeground([IntPtr]$window.Current.NativeWindowHandle)) {
+                Write-Host "The File Explorer window of $folder is not in the foreground."
+            }
             Start-Sleep -Seconds 2
             return $window
         }
@@ -194,5 +214,14 @@ function Get-NewContextMenuItems([string]$Name, [int]$Seconds = 15) {
         if ($found.Count -gt 0) { return $found }
         Start-Sleep -Milliseconds 250
     }
+    # Not found: show what the menu has (the item may be named differently or the menu did not open).
+    $anyItem = New-Object System.Windows.Automation.PropertyCondition($e::ControlTypeProperty, [System.Windows.Automation.ControlType]::MenuItem)
+    $names = foreach ($id in (Get-ExplorerIds)) {
+        foreach ($w in $e::RootElement.FindAll([System.Windows.Automation.TreeScope]::Children,
+                (New-Object System.Windows.Automation.PropertyCondition($e::ProcessIdProperty, $id)))) {
+            foreach ($item in $w.FindAll([System.Windows.Automation.TreeScope]::Descendants, $anyItem)) { "$($w.Current.ClassName): $($item.Current.Name)" }
+        }
+    }
+    Write-Host "Menu items of explorer.exe: $(@($names) -join '; ')"
     @()
 }

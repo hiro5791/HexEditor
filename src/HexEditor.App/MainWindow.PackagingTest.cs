@@ -245,12 +245,10 @@ public sealed partial class MainWindow
         string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         IReadOnlyList<OtherDistributionData> others = SettingsMigration.Find(env.Distribution, env.Locations.Settings, localAppData);
         var buttons = new JsonArray();
-        if (StartPage.Content is StackPanel page)
+        // 取り込みのボタンはスタートページの「はじめに」の欄にある (PKG-31 の仕様 1)。
+        foreach (Button b in StartPage.WelcomeExtras.OfType<Button>().Where(b => AutomationProperties.GetAutomationId(b).StartsWith("Start_ImportFrom_", StringComparison.Ordinal)))
         {
-            foreach (Button b in page.Children.OfType<Button>().Where(b => AutomationProperties.GetAutomationId(b).StartsWith("Start_ImportFrom_", StringComparison.Ordinal)))
-            {
-                buttons.Add(new JsonObject { ["id"] = AutomationProperties.GetAutomationId(b), ["text"] = b.Content?.ToString() });
-            }
+            buttons.Add(new JsonObject { ["id"] = AutomationProperties.GetAutomationId(b), ["text"] = b.Content?.ToString() });
         }
 
         return new JsonObject

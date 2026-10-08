@@ -96,6 +96,9 @@ public sealed partial class StartPage : UserControl
     /// <summary>「はじめに」の欄に項目を足す (他の配布形態の設定の取り込み。PKG-31 の仕様 1)。</summary>
     public void AddWelcomeExtra(UIElement element) => WelcomeItems.Children.Add(element);
 
+    /// <summary>「はじめに」の欄に足した項目 (<see cref="AddWelcomeExtra"/>)。</summary>
+    public IEnumerable<UIElement> WelcomeExtras => WelcomeItems.Children;
+
     /// <summary>「開く」にフォーカスを置く (F6 でエディタ領域に移ったとき。UI-52)。</summary>
     public bool FocusOpen(FocusState state) => OpenButton.Focus(state);
 

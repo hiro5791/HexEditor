@@ -102,7 +102,13 @@ function Send-TestCommand {
     $App.Writer.WriteLine(($request | ConvertTo-Json -Depth 10 -Compress))
     $task = $App.Reader.ReadLineAsync()
     if (-not $task.Wait($TimeoutSeconds * 1000)) { throw "Test command '$Command' timed out." }
-    if ($null -eq $task.Result) { throw "The app closed the test channel (command '$Command')." }
+    if ($null -eq $task.Result) {
+        $detail = ''
+        try {
+            if ($App.Process -and $App.Process.WaitForExit(5000)) { $detail = ' The process exited with code 0x{0:X8}.' -f $App.Process.ExitCode }
+        } catch { }
+        throw "The app closed the test channel (command '$Command').$detail"
+    }
     $response = $task.Result | ConvertFrom-Json
     if (-not $response.ok) { throw "Test command '$Command' failed: $($response.error)" }
     $response
@@ -148,6 +154,28 @@ function Edit-Bytes($App, [long]$Offset, [string]$Hex) {
     [void](Send-TestCommand $App 'click' @{ offset = $Offset; column = 'Hex' })
     [void](Send-TestCommand $App 'text' @{ text = $Hex })
     [void](Send-TestCommand $App 'idle')
+}
+
+# TC-UI-43-05: the language to start the app in before switching to -Language. The restart notice (UI-43 spec 5)
+# appears only when the display language changes, so the app must not already run in the target language.
+function Get-OtherUiLanguage([string]$Language) {
+    # "system" follows the Windows language list (not always the UI culture of this PowerShell): start in the pseudo
+    # language, which "system" never resolves to.
+    if ($Language -eq 'system') { return 'qps-ploc' }
+    if ($Language -eq 'en') { 'ja' } else { 'en' }
+}
+
+# Sets the display language (the test command does what the settings page does) and presses "Restart now" of the
+# notice that appears (it is shown asynchronously after the setting changed).
+function Invoke-LanguageRestart($App, [string]$Language) {
+    [void](Send-TestCommand $App 'setDisplayLanguage' @{ language = $Language })
+    $script:RestartLabel = $null
+    Wait-Until {
+        $notice = @((Get-TestState $App).notifications | Where-Object { @($_.actions).Count -gt 0 }) | Select-Object -First 1
+        if ($notice) { $script:RestartLabel = @($notice.actions)[0] }
+        $null -ne $script:RestartLabel
+    } 15 "the restart notice ($Language)"
+    [void](Send-TestCommand $App 'noticeAction' @{ label = $script:RestartLabel })
 }
 
 # Shows Help > About and returns the values of the About dialog (UI-40 spec 2) by their AutomationId (About_<label>).
