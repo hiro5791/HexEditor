@@ -92,7 +92,7 @@ public sealed partial class MainWindow
             InspectorViewModel.TestableTime = time;
         }
 #endif
-        _inspectorVm.HighlightChanged += (_, _) => CurrentView()?.RefreshHighlights();
+        _inspectorVm.HighlightChanged += (_, _) => SelectedView()?.RefreshHighlights();
 
         // 付随データの保存は、変更から 1 秒待ってまとめて書く。
         _annotationSaveTimer = DispatcherQueue.CreateTimer();
@@ -112,7 +112,7 @@ public sealed partial class MainWindow
         {
             _inspectorVm.ReloadSettings();
             InspectorView?.SyncOptions();
-            CurrentView()?.RefreshHighlights();
+            SelectedView()?.RefreshHighlights();
         });
         BuildNumberedBookmarkMenus();
         Closed += (_, _) =>
@@ -136,7 +136,7 @@ public sealed partial class MainWindow
         return list;
     }
 
-    private bool IsHighContrast => CurrentView()?.IsHighContrast ?? new Windows.UI.ViewManagement.AccessibilitySettings().HighContrast;
+    private bool IsHighContrast => SelectedView()?.IsHighContrast ?? new Windows.UI.ViewManagement.AccessibilitySettings().HighContrast;
 
     /// <summary>
     /// パネルの表示の変化をインスペクタ・一覧の状態に反映する (配置を反映するたびに呼ぶ)。表示していない間は更新しない
@@ -154,7 +154,7 @@ public sealed partial class MainWindow
         {
             _inspectorVm.IsActive = inspector;
             _inspectorVm.Refresh();
-            CurrentView()?.RefreshHighlights();
+            SelectedView()?.RefreshHighlights();
         }
 
         bool bookmarks = BookmarksVisible && Vm.Selected is not null;
@@ -174,7 +174,7 @@ public sealed partial class MainWindow
         Commands.Register("go.bookmark.previous", () => JumpToBookmark(forward: false), NeedsEditor);
         Commands.Register("go.bookmark.edit", () =>
         {
-            if (BookmarkAtCursor() is { } b && CurrentView() is { } view)
+            if (BookmarkAtCursor() is { } b && SelectedView() is { } view)
             {
                 EditBookmark(b, view, rename: false);
             }
@@ -311,7 +311,7 @@ public sealed partial class MainWindow
 
         if (annotations.Document == Vm.Selected)
         {
-            CurrentView()?.RefreshHighlights();
+            SelectedView()?.RefreshHighlights();
         }
     }
 

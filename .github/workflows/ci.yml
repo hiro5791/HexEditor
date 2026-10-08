@@ -28,6 +28,9 @@ env:
 
 jobs:
   # 配布物のビルド (PKG-10、PKG-23): 3 種類 × 2 アーキテクチャ。署名はしない。成果物は 7 日間残す。
+  # MSIX 版は Windows 11 の右クリックメニューの DLL (src/HexEditor.ShellExtension) を NativeAOT で発行するため、Visual C++ の
+  # ビルドツール (x64 と ARM64) が要る。windows-latest のランナーにはあり、publish.ps1 は GitHub Actions では無いと失敗にする。
+  # テスト用のビルド・テストのジョブは dotnet build だけなので、ビルドツールは要らない。
   build:
     runs-on: windows-latest
     timeout-minutes: 20

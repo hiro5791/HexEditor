@@ -18,6 +18,9 @@
   -Version is the SemVer of the release (PKG-28). Without it the build is 0.0.0-local.
   -PreviousReleaseDir is a folder with the previous Velopack release (vpk download github),
   so that vpk pack can make a delta package (PKG-24 step 5).
+  -RequireShellExtension makes the Msix build fail when the Windows 11 context menu DLL (HexEditor.ShellExtension,
+  NativeAOT) cannot be built because the Visual C++ build tools are missing. It is on by default in GitHub Actions
+  (the windows runners have the tools). Elsewhere the DLL is left out with a warning.
   -TestHooks makes a test build (-p:HexTestHooks=true: the test channel and the Test menu, test strategy 7.2)
   for the distribution tests in build/tests/. Never release a test build.
 #>
@@ -29,7 +32,8 @@ param(
     [string]$Commit,
     [string]$Configuration = 'Release',
     [string]$PreviousReleaseDir,
-    [switch]$TestHooks
+    [switch]$TestHooks,
+    [switch]$RequireShellExtension
 )
 
 $ErrorActionPreference = 'Stop'
@@ -137,13 +141,27 @@ switch ($Distro) {
     'Msix' {
         # The COM server of the Windows 11 context menu "Open with HexEditor" (UI-55, PKG-03 spec 1): a NativeAOT DLL
         # (needs the C++ build tools of Visual Studio). HexEditor.App.csproj puts it into the package.
-        $shellExtension = Join-Path $staging 'ShellExtension'
-        Invoke-Checked 'dotnet' @('publish', (Join-Path $root 'src/HexEditor.ShellExtension/HexEditor.ShellExtension.csproj'),
-            '-c', $Configuration, '-r', $rid, "-p:HexVersion=$Version", '-nologo', '-o', $shellExtension)
-        if (-not (Test-Path (Join-Path $shellExtension 'HexEditor.ShellExtension.dll'))) { throw 'HexEditor.ShellExtension.dll was not produced (UI-55).' }
+        # Without the Visual C++ tools for the target architecture the DLL is left out (local builds only).
+        $vcComponent = if ($Arch -eq 'x64') { 'Microsoft.VisualStudio.Component.VC.Tools.x86.x64' } else { 'Microsoft.VisualStudio.Component.VC.Tools.ARM64' }
+        $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+        $hasVc = (Test-Path $vswhere) -and [bool](& $vswhere -products * -requires $vcComponent -property installationPath)
+        $requireShell = $RequireShellExtension -or $env:GITHUB_ACTIONS -eq 'true'
+        $shellExtension = $null
+        if ($hasVc) {
+            $shellExtension = Join-Path $staging 'ShellExtension'
+            Invoke-Checked 'dotnet' @('publish', (Join-Path $root 'src/HexEditor.ShellExtension/HexEditor.ShellExtension.csproj'),
+                '-c', $Configuration, '-r', $rid, "-p:HexVersion=$Version", '-nologo', '-o', $shellExtension)
+            if (-not (Test-Path (Join-Path $shellExtension 'HexEditor.ShellExtension.dll'))) { throw 'HexEditor.ShellExtension.dll was not produced (UI-55).' }
+        }
+        elseif ($requireShell) {
+            throw "The Visual C++ build tools ($vcComponent) are required to build HexEditor.ShellExtension (UI-55)."
+        }
+        else {
+            Write-Warning "The Visual C++ build tools ($vcComponent) are not installed: the package has no Windows 11 context menu (UI-55)."
+        }
         # Store-only and unsigned: the Store signs it on submission (PKG-02, PKG-04).
-        Invoke-Checked 'dotnet' (@('publish') + $common + @(
-            "-p:HexShellExtensionDir=$shellExtension",
+        $msixExtra = if ($shellExtension) { @("-p:HexShellExtensionDir=$shellExtension") } else { @() }
+        Invoke-Checked 'dotnet' (@('publish') + $common + $msixExtra + @(
             '-p:GenerateAppxPackageOnBuild=true',
             '-p:AppxPackageSigningEnabled=false',
             '-p:AppxBundle=Never',
