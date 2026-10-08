@@ -119,7 +119,10 @@ public sealed class ZoomTests
     [Trait(UiTest.TC, "TC-UI-08-04")]
     public Task Screen_zoom_150_scales_menus_panels_and_dialogs() => UiTestContext.RunAsync(async ctx =>
     {
+        // 150% でも左右のパネルを折りたたまない幅 (中身の幅 1024 px 以上。UI-01 の仕様 4) にする。
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+        await app.ResizeAsync((int)(1700 * scale), (int)(1000 * scale));
         await app.KeyAsync("I", ctrl: true, shift: true);
         await app.WaitUntilAsync(() => app.IsShownAsync("PanelTab_inspector"), TimeSpan.FromSeconds(10), "the inspector");
 
