@@ -107,9 +107,12 @@
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
-  <!-- 翻訳者向けのツールチップ (UI-41 の仕様 5): 実行時に x:Uid を読めないため、MainWindow.xaml を埋め込んで AutomationId との対応を読む。 -->
+  <!--
+    翻訳者向けのツールチップ (UI-41 の仕様 5): 実行時に x:Uid を読めないため、XAML (メインウィンドウ・設定画面・コントロール) を埋め込んで
+    AutomationId / x:Name と x:Uid の対応を読む (Services/StringKeyTips.cs)。
+  -->
   <ItemGroup>
-    <EmbeddedResource Include="MainWindow.xaml" LogicalName="HexEditor.App.MainWindow.xaml" />
+    <EmbeddedResource Include="MainWindow.xaml;Views\*.xaml;Controls\*.xaml" LogicalName="HexEditor.App.Xaml.%(Filename).xaml" />
   </ItemGroup>
 
   <!--

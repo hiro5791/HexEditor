@@ -131,8 +131,19 @@ public sealed partial class SettingsPage : UserControl
         Items.Children.Add(header);
 
         var settings = CommandService.Settings.InCategory(_category).Where(CommandService.Settings.IsShown).ToList();
+        string? group = null;
         foreach (SettingDefinition s in settings)
         {
+            // 欄の見出し (例: 「言語」の「翻訳者向け」。UI-41 の仕様 5)。
+            if (s.Group is { } g && g != group)
+            {
+                var heading = new TextBlock { Text = Loc.Get("SetGroup_" + g), Style = (Style)Resources["SectionHeaderStyle"] };
+                AutomationProperties.SetAutomationId(heading, "SettingsGroup_" + g);
+                AutomationProperties.SetHeadingLevel(heading, Microsoft.UI.Xaml.Automation.Peers.AutomationHeadingLevel.Level2);
+                Items.Children.Add(heading);
+            }
+
+            group = s.Group;
             Items.Children.Add(BuildCard(s, []));
         }
 

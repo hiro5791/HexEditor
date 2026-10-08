@@ -26,10 +26,30 @@ public sealed partial class HexView
     private bool _valueChangedPending;
     private string _lastValue = string.Empty;
 
+    private string? _documentName;
+
     /// <summary>
     /// 文書名 (UI-50 の仕様 2 の Name)。<see cref="AutomationProperties.NameProperty"/> が設定されていればそちらを使う。
+    /// 変わったら (名前を付けて保存など) Name の変更を UI オートメーションに知らせる。
     /// </summary>
-    public string? DocumentName { get; set; }
+    public string? DocumentName
+    {
+        get => _documentName;
+        set
+        {
+            if (_documentName == value)
+            {
+                return;
+            }
+
+            string? old = _documentName;
+            _documentName = value;
+            if (Peer is { } peer && string.IsNullOrEmpty(AutomationProperties.GetName(this)))
+            {
+                peer.RaisePropertyChangedEvent(AutomationElementIdentifiers.NameProperty, old ?? string.Empty, value ?? string.Empty);
+            }
+        }
+    }
 
     /// <summary>最後に送った読み上げ文 (UI テスト・診断用)。</summary>
     internal string? LastAnnouncement { get; private set; }
@@ -55,6 +75,17 @@ public sealed partial class HexView
         if (before.ReadOnly != after.ReadOnly)
         {
             Announce(Loc.Get(after.ReadOnly ? "HexView_Announce_ReadOnlyOn" : "HexView_Announce_ReadOnlyOff"), "HexViewMode");
+
+            // ControlType (読み取り専用の文書は Document) と Value パターンの IsReadOnly が変わった (UI-50 の仕様 2・3・5)。
+            Peer?.RaiseReadOnlyChanged(before.ReadOnly, after.ReadOnly);
+        }
+
+        bool moved = before.Cursor != after.Cursor || before.LowNibble != after.LowNibble;
+        if (before.Column != after.Column && !moved)
+        {
+            // Hex 列 / テキスト列の切り替え (UI-51 の仕様 5)。カーソルが動いていなければ列の名前だけを読む。
+            _cursorAnnounceTimer?.Stop();
+            Announce(Loc.Get(after.Column == ActiveColumn.Hex ? "HexView_Announce_HexColumn" : "HexView_Announce_TextColumn"), "HexViewColumn");
         }
 
         if (before.SelectionStart != after.SelectionStart || before.SelectionLength != after.SelectionLength)
@@ -68,7 +99,7 @@ public sealed partial class HexView
             }
         }
 
-        if (before.Cursor != after.Cursor || before.LowNibble != after.LowNibble || before.Column != after.Column)
+        if (moved)
         {
             _selectionChangedPending = true;
             _cursorAnnounceTimer ??= CreateOneShot(CursorAnnounceDelay, AnnounceCursor);
@@ -138,7 +169,7 @@ public sealed partial class HexView
             return;
         }
 
-        var parts = new List<string> { CursorSummary() };
+        var parts = new List<string> { CursorSummary(spell: true) };
         if (_editor.HasSelection)
         {
             long last = _editor.SelectionStart + _editor.SelectionLength - 1;
@@ -175,7 +206,7 @@ public sealed partial class HexView
             }
         }
 
-        return CursorSummary();
+        return CursorSummary(spell: true);
     }
 
     private void AnnounceSelection()
@@ -224,10 +255,13 @@ public sealed partial class HexView
 
     /// <summary>
     /// カーソル位置の要約 (UI-51 の仕様 1 の full。UI-50 の Value にも使う)。例: 「オフセット 0x00001F00、値 4A、文字 J、Hex 列、変更あり」。
-    /// 状態 (VIEW-41 の仕様 5) は該当するものだけを付ける。
+    /// 状態 (VIEW-41 の仕様 5) は該当するものだけを付ける。<paramref name="spell"/> なら、読み上げ用にオフセットと値の 16 進の桁の間に
+    /// 区切りを入れる (UI-51 の仕様 2。Value には入れない)。
     /// </summary>
-    internal string CursorSummary()
+    internal string CursorSummary(bool spell = false)
     {
+        string Hex(string text) => spell ? Spell(text) : text;
+
         if (_editor is null)
         {
             return string.Empty;
@@ -251,7 +285,7 @@ public sealed partial class HexView
         string main;
         if (offset >= _editor.Document.Length)
         {
-            main = Loc.Format("HexView_Announce_End", FormatOffset(offset));
+            main = Loc.Format("HexView_Announce_End", Hex(FormatOffset(offset)));
         }
         else
         {
@@ -261,17 +295,17 @@ public sealed partial class HexView
             snapshot.ReadForDisplay(offset, one, state);
             if (state[0] == ByteState.Loading)
             {
-                main = Loc.Format("HexView_Announce_Offset", FormatOffset(offset));
+                main = Loc.Format("HexView_Announce_Offset", Hex(FormatOffset(offset)));
                 states.Add(Loc.Get("HexView_State_Loading"));
             }
             else if (state[0] == ByteState.Unreadable)
             {
-                main = Loc.Format("HexView_Announce_Offset", FormatOffset(offset));
+                main = Loc.Format("HexView_Announce_Offset", Hex(FormatOffset(offset)));
                 states.Add(Loc.Get("HexView_State_Unreadable"));
             }
             else
             {
-                main = Loc.Format("HexView_Announce_Position", FormatOffset(offset), HexStrings[one[0]], CharacterName(offset, one[0]));
+                main = Loc.Format("HexView_Announce_Position", Hex(FormatOffset(offset)), Hex(HexStrings[one[0]]), CharacterName(offset, one[0]));
                 foreach ((_, _, bool inserted) in snapshot.EnumerateChanges(offset, 1))
                 {
                     states.Add(Loc.Get(inserted ? "HexView_State_Inserted" : "HexView_State_Modified"));
@@ -370,11 +404,47 @@ public sealed partial class HexView
 
     internal RowVisual? RowAt(int index) => index >= 0 && index < _rows.Count && _rows[index].Visible ? _rows[index] : null;
 
-    /// <summary>画面と同じ書式の行の文字列 (オフセット列 + 2 文字の空白 + 内容。オフセット列を表示しないときは内容だけ)。</summary>
+    /// <summary>
+    /// 画面と同じ書式の行の文字列 (オフセット列 + 2 文字の空白 + 内容。オフセット列を表示しないときは内容だけ)。
+    /// 読み込み中のバイトは、画面の仮表示 (`··` や空白) の代わりに Hex 列は `??`、テキスト列は `?` にする (UI-50 の「エラー」)。
+    /// </summary>
     internal string RowLine(int index)
     {
         RowVisual? row = RowAt(index);
-        return row is null ? string.Empty : _showOffset ? row.OffsetText.PadRight(_digits) + "  " + row.ContentText : row.ContentText;
+        if (row is null)
+        {
+            return string.Empty;
+        }
+
+        string content = row.ContentText;
+        RowColumns columns = Columns;
+        char[]? chars = null;
+        for (int c = 0; c < BytesPerRowShown; c++)
+        {
+            if (row.KindAt(c) != CellKind.Loading)
+            {
+                continue;
+            }
+
+            chars ??= content.ToCharArray();
+            if (columns.ShowHex && columns.HexIndex(c) + 1 < chars.Length)
+            {
+                chars[columns.HexIndex(c)] = '?';
+                chars[columns.HexIndex(c) + 1] = '?';
+            }
+
+            if (columns.ShowText && columns.TextIndex(c) < chars.Length)
+            {
+                chars[columns.TextIndex(c)] = '?';
+            }
+        }
+
+        if (chars is not null)
+        {
+            content = new string(chars);
+        }
+
+        return _showOffset ? row.OffsetText.PadRight(_digits) + "  " + content : content;
     }
 
     /// <summary>表示中の行の先頭オフセット。</summary>

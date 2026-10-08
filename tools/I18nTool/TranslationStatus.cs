@@ -134,13 +134,18 @@ public sealed class TranslationStatus
     }
 
     /// <summary>
-    /// 状態ファイルと .resw の食い違い (CI を失敗にする。UI-49 の「エラー」): 状態があるのに訳がない、英語にないキーの状態がある。
+    /// 状態ファイルと .resw の食い違い (CI を失敗にする。UI-49 の「エラー」): 状態があるのに訳がない、英語にないキーの状態がある、
+    /// 訳があるのに状態がない (状態ファイルにない文字列は未翻訳の扱いなので、訳と食い違う)。日本語は開発者が書くので、訳のある
+    /// 文字列がすべて「確認済み」で、原文のハッシュが今の英語と同じであること (違えば <c>I18nTool sync-ja</c> で直す)。
     /// </summary>
     public IEnumerable<string> Mismatches(IReadOnlyDictionary<string, string> english, Func<string, IReadOnlyDictionary<string, string>> translations)
     {
-        foreach ((string language, Dictionary<string, TranslationEntry> entries) in Languages.OrderBy(l => l.Key, StringComparer.Ordinal))
+        IEnumerable<string> languages = Languages.Keys.Union(global::HexEditor.I18nTool.Languages.All.Select(l => l.Tag).Where(t => t != "en"))
+            .Order(StringComparer.Ordinal);
+        foreach (string language in languages)
         {
             IReadOnlyDictionary<string, string> values = translations(language);
+            Dictionary<string, TranslationEntry> entries = Languages.GetValueOrDefault(language) ?? [];
             foreach (string key in entries.Keys.Order(StringComparer.Ordinal))
             {
                 if (!english.ContainsKey(key))
@@ -150,6 +155,21 @@ public sealed class TranslationStatus
                 else if (!values.ContainsKey(key))
                 {
                     yield return $"{language}: {key} has a state but no translation in Resources.resw.";
+                }
+            }
+
+            foreach (string key in values.Keys.Where(english.ContainsKey).Order(StringComparer.Ordinal))
+            {
+                TranslationEntry? entry = entries.GetValueOrDefault(key);
+                if (entry is null)
+                {
+                    yield return language == "ja"
+                        ? $"ja: {key} has no state in translation-status.json (run: dotnet run --project tools/I18nTool -- sync-ja)."
+                        : $"{language}: {key} has a translation in Resources.resw but no state in translation-status.json.";
+                }
+                else if (language == "ja" && (entry.State != TranslationState.Reviewed || entry.SourceHash != Hash(english[key])))
+                {
+                    yield return $"ja: {key} must be reviewed with the hash of the current English text (run: dotnet run --project tools/I18nTool -- sync-ja).";
                 }
             }
         }

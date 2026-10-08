@@ -526,10 +526,19 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(list, "TranslationReport_List");
         AutomationProperties.SetName(list, Loc.Get("TranslationReport_ListName"));
 
+        // 一覧に出すのは最初の 500 件まで。それより多いときは、検索で絞り込むよう案内する。
+        const int MaxShown = 500;
+        var truncated = new TextBlock { TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed, Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"] };
+        AutomationProperties.SetAutomationId(truncated, "TranslationReport_Truncated");
+        AutomationProperties.SetLiveSetting(truncated, Microsoft.UI.Xaml.Automation.Peers.AutomationLiveSetting.Polite);
+
         void Fill()
         {
             list.Items.Clear();
-            foreach (ResourceString s in TranslationReport.Filter(strings, search.Text, s => s.Key, s => s.English, s => s.Current).Take(500))
+            List<ResourceString> matches = [.. TranslationReport.Filter(strings, search.Text, s => s.Key, s => s.English, s => s.Current)];
+            truncated.Text = matches.Count > MaxShown ? Loc.Format("TranslationReport_Truncated", MaxShown.ToString("N0"), matches.Count.ToString("N0")) : string.Empty;
+            truncated.Visibility = matches.Count > MaxShown ? Visibility.Visible : Visibility.Collapsed;
+            foreach (ResourceString s in matches.Take(MaxShown))
             {
                 var row = new StackPanel { Spacing = 2, Padding = new Thickness(0, 4, 0, 4) };
                 row.Children.Add(new TextBlock { Text = s.Key, Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"], FlowDirection = FlowDirection.LeftToRight });
@@ -551,6 +560,7 @@ public sealed partial class MainWindow
         body.Children.Add(new TextBlock { Text = Loc.Get("TranslationReport_Body"), TextWrapping = TextWrapping.Wrap });
         body.Children.Add(search);
         body.Children.Add(list);
+        body.Children.Add(truncated);
         ContentDialog dialog = NewDialog(Loc.Get("TranslationReport_Title"), body);
         AutomationProperties.SetAutomationId(dialog, "TranslationReportDialog");
         dialog.PrimaryButtonText = Loc.Get("TranslationReport_Report");

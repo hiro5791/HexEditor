@@ -294,7 +294,7 @@ Length: {2} ({3} bytes)</value></data>
   <data name="HexView_State_TextColumn" xml:space="preserve"><value>text column</value></data>
   <data name="HexView_State_LowNibble" xml:space="preserve"><value>low nibble</value></data>
   <data name="HexView_State_Modified" xml:space="preserve"><value>modified</value></data>
-  <data name="HexView_State_Insert" xml:space="preserve"><value>insert</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>insert mode</value></data>
   <data name="HexView_State_Selected" xml:space="preserve"><value>selected</value></data>
   <data name="HexView_State_Loading" xml:space="preserve"><value>loading</value></data>
   <data name="HexView_State_Unreadable" xml:space="preserve"><value>cannot be read</value></data>
@@ -2387,7 +2387,7 @@ Details were written to:
   <data name="Menu_View_AlignRows.Text" xml:space="preserve"><value>Align rows to the address</value></data>
   <data name="Menu_View_AlignRows.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>Show continuation marks in multibyte characters</value></data>
-  <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>C</value></data>
   <data name="Cmd_go_nextNibble" xml:space="preserve"><value>Go: Next nibble</value></data>
   <data name="CmdAlias_go_nextNibble" xml:space="preserve"><value>nibble cursor</value></data>
   <data name="Cmd_go_previousNibble" xml:space="preserve"><value>Go: Previous nibble</value></data>
@@ -2532,4 +2532,11 @@ Details were written to:
   <data name="SchemeElement_Caret" xml:space="preserve"><value>Cursor</value></data>
   <data name="SchemeElement_Match" xml:space="preserve"><value>Search matches</value></data>
   <data name="SchemeElement_Separator" xml:space="preserve"><value>Separator lines</value></data>
+  <data name="HexView_Announce_HexColumn" xml:space="preserve"><value>Hex column</value></data>
+  <data name="HexView_Announce_TextColumn" xml:space="preserve"><value>Text column</value></data>
+  <data name="A11y_OperationCompleted" xml:space="preserve"><value>{0} completed</value></data>
+  <data name="A11y_OperationCancelled" xml:space="preserve"><value>{0} cancelled</value></data>
+  <data name="CmdCategory_accessibility" xml:space="preserve"><value>Accessibility</value></data>
+  <data name="TranslationReport_Truncated" xml:space="preserve"><value>Showing the first {0} of {1} strings. Search to narrow the list.</value></data>
+  <data name="SetGroup_translators" xml:space="preserve"><value>For translators</value></data>
 </root>

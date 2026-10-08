@@ -13,7 +13,9 @@ public interface IMachineTranslator
 
 /// <summary>
 /// DeepL API (<c>POST /v2/translate</c>) の実装。訳さない用語とプレースホルダー (<c>{0}</c> など) は XML のタグで囲んで訳させない。
-/// 用語集の訳語は、訳さない用語の保護だけを行い、訳語の強制はしない (DeepL の用語集は言語の組み合わせに制限があるため。未決定)。
+/// 用語集 (UI-48 の仕様 4) の訳語は、言語ごとに DeepL の用語集 (<c>POST /v2/glossaries</c>) を作って <c>glossary_id</c> で渡し、
+/// 訳し終えたら消す。DeepL が用語集に対応していない言語の組み合わせ (<c>GET /v2/glossary-language-pairs</c> にない言語) と、
+/// 用語集を付けた要求を DeepL が受け付けない場合 (400) は、用語集なしで訳す (訳さない用語の保護は続ける)。
 /// API キーは環境変数 (GitHub の Secrets) で渡す。
 /// </summary>
 public sealed partial class DeepLTranslator(HttpClient http, Uri endpoint, string apiKey) : IMachineTranslator
@@ -24,6 +26,12 @@ public sealed partial class DeepLTranslator(HttpClient http, Uri endpoint, strin
     [GeneratedRegex(@"</?x>")]
     private static partial Regex KeepTag();
 
+    /// <summary>用語集に対応している訳先の言語 (DeepL の用語集の言語コード)。最初に使うときに 1 回だけ問い合わせる。</summary>
+    private HashSet<string>? _glossaryTargets;
+
+    /// <summary>用語集を使わなかった言語と理由 (ログ用)。</summary>
+    public List<string> Notes { get; } = [];
+
     /// <summary>リソースのフォルダ名を DeepL の言語コードに直す。</summary>
     public static string TargetCode(string language) => language switch
     {
@@ -33,29 +41,164 @@ public sealed partial class DeepLTranslator(HttpClient http, Uri endpoint, strin
         _ => language.ToUpperInvariant(),
     };
 
-    public async Task<IReadOnlyList<string>> TranslateAsync(string language, IReadOnlyList<string> texts, Glossary glossary, CancellationToken cancellationToken)
+    /// <summary>リソースのフォルダ名を DeepL の用語集の言語コード (小文字、地域なし) に直す。</summary>
+    public static string GlossaryCode(string language) => language switch
     {
-        var results = new List<string>();
-        foreach (string[] batch in texts.Chunk(50))
+        "zh-Hans" or "zh-Hant" => "zh",
+        _ => language.ToLowerInvariant(),
+    };
+
+    /// <summary>
+    /// 用語集の項目 (英語 → 訳語)。訳さない用語は &lt;x&gt; で保護するので入れない。訳語のない用語、タブ・改行を含む用語は除く。
+    /// 小文字で始まる用語は、文頭の形 (先頭を大文字にした英語 → 先頭を大文字にした訳語) も入れる。
+    /// </summary>
+    public static IReadOnlyList<(string Source, string Target)> GlossaryEntries(Glossary glossary, string language)
+    {
+        var entries = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (GlossaryTerm term in glossary.Terms.Where(t => !t.DoNotTranslate))
         {
-            var form = new List<KeyValuePair<string, string>>
+            if (!term.Translations.TryGetValue(language, out string? target) || target.Length == 0 || term.Term.Length == 0
+                || $"{term.Term}{target}".AsSpan().IndexOfAny("\t\r\n") >= 0)
             {
-                new("source_lang", "EN"),
-                new("target_lang", TargetCode(language)),
-                new("tag_handling", "xml"),
-                new("ignore_tags", "x"),
-            };
-            form.AddRange(batch.Select(t => new KeyValuePair<string, string>("text", Protect(t, glossary))));
-            using var request = new HttpRequestMessage(HttpMethod.Post, new Uri(endpoint, "v2/translate")) { Content = new FormUrlEncodedContent(form) };
-            request.Headers.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", apiKey);
-            using HttpResponseMessage response = await http.SendAsync(request, cancellationToken);
-            response.EnsureSuccessStatusCode();
-            JsonArray translations = JsonNode.Parse(await response.Content.ReadAsStringAsync(cancellationToken))?["translations"] as JsonArray
-                ?? throw new FormatException("The translation API returned no translations.");
-            results.AddRange(translations.Select(t => KeepTag().Replace(t?["text"]?.GetValue<string>() ?? string.Empty, string.Empty)));
+                continue;
+            }
+
+            entries.TryAdd(term.Term, target);
+            if (char.IsLower(term.Term[0]))
+            {
+                entries.TryAdd(char.ToUpperInvariant(term.Term[0]) + term.Term[1..], char.ToUpperInvariant(target[0]) + target[1..]);
+            }
         }
 
-        return results;
+        return [.. entries.Select(e => (e.Key, e.Value))];
+    }
+
+    public async Task<IReadOnlyList<string>> TranslateAsync(string language, IReadOnlyList<string> texts, Glossary glossary, CancellationToken cancellationToken)
+    {
+        string? glossaryId = await CreateGlossaryAsync(language, glossary, cancellationToken);
+        try
+        {
+            var results = new List<string>();
+            foreach (string[] batch in texts.Chunk(50))
+            {
+                using HttpResponseMessage response = await SendTranslateAsync(language, batch, glossary, glossaryId, cancellationToken);
+                if (glossaryId is not null && response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    // 用語集を付けた要求を受け付けない (訳先の言語の変種など): 用語集なしで訳し直す。
+                    Notes.Add($"{language}: the glossary was rejected by the translation API; translated without it.");
+                    await DeleteGlossaryAsync(glossaryId, cancellationToken);
+                    glossaryId = null;
+                    using HttpResponseMessage retry = await SendTranslateAsync(language, batch, glossary, null, cancellationToken);
+                    results.AddRange(await ReadTranslationsAsync(retry, cancellationToken));
+                    continue;
+                }
+
+                results.AddRange(await ReadTranslationsAsync(response, cancellationToken));
+            }
+
+            return results;
+        }
+        finally
+        {
+            if (glossaryId is not null)
+            {
+                await DeleteGlossaryAsync(glossaryId, CancellationToken.None);
+            }
+        }
+    }
+
+    private async Task<HttpResponseMessage> SendTranslateAsync(string language, string[] batch, Glossary glossary, string? glossaryId, CancellationToken cancellationToken)
+    {
+        var form = new List<KeyValuePair<string, string>>
+        {
+            new("source_lang", "EN"),
+            new("target_lang", TargetCode(language)),
+            new("tag_handling", "xml"),
+            new("ignore_tags", "x"),
+        };
+        if (glossaryId is not null)
+        {
+            form.Add(new("glossary_id", glossaryId));
+        }
+
+        form.AddRange(batch.Select(t => new KeyValuePair<string, string>("text", Protect(t, glossary))));
+        return await SendAsync(HttpMethod.Post, "v2/translate", new FormUrlEncodedContent(form), cancellationToken);
+    }
+
+    private static async Task<IEnumerable<string>> ReadTranslationsAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+    {
+        response.EnsureSuccessStatusCode();
+        JsonArray translations = JsonNode.Parse(await response.Content.ReadAsStringAsync(cancellationToken))?["translations"] as JsonArray
+            ?? throw new FormatException("The translation API returned no translations.");
+        return [.. translations.Select(t => KeepTag().Replace(t?["text"]?.GetValue<string>() ?? string.Empty, string.Empty))];
+    }
+
+    private async Task<HttpResponseMessage> SendAsync(HttpMethod method, string path, HttpContent? content, CancellationToken cancellationToken)
+    {
+        using var request = new HttpRequestMessage(method, new Uri(endpoint, path)) { Content = content };
+        request.Headers.Authorization = new AuthenticationHeaderValue("DeepL-Auth-Key", apiKey);
+        return await http.SendAsync(request, cancellationToken);
+    }
+
+    /// <summary>
+    /// この言語の用語集を DeepL に作り、ID を返す。項目がない、または DeepL がこの言語の用語集に対応していなければ null。
+    /// 作れなかった (通信の失敗・API の誤り) 場合は例外 (その言語は未翻訳のまま次回に再試行する)。
+    /// </summary>
+    private async Task<string?> CreateGlossaryAsync(string language, Glossary glossary, CancellationToken cancellationToken)
+    {
+        IReadOnlyList<(string Source, string Target)> entries = GlossaryEntries(glossary, language);
+        if (entries.Count == 0)
+        {
+            return null;
+        }
+
+        if (_glossaryTargets is null)
+        {
+            using HttpResponseMessage pairs = await SendAsync(HttpMethod.Get, "v2/glossary-language-pairs", null, cancellationToken);
+            pairs.EnsureSuccessStatusCode();
+            JsonArray list = JsonNode.Parse(await pairs.Content.ReadAsStringAsync(cancellationToken))?["supported_languages"] as JsonArray
+                ?? throw new FormatException("The translation API returned no glossary language pairs.");
+            _glossaryTargets = [.. list
+                .Where(p => string.Equals(p?["source_lang"]?.GetValue<string>(), "en", StringComparison.OrdinalIgnoreCase))
+                .Select(p => p?["target_lang"]?.GetValue<string>()?.ToLowerInvariant() ?? string.Empty)];
+        }
+
+        string code = GlossaryCode(language);
+        if (!_glossaryTargets.Contains(code))
+        {
+            Notes.Add($"{language}: the translation API has no glossaries for en → {code}; translated without the glossary.");
+            return null;
+        }
+
+        var form = new List<KeyValuePair<string, string>>
+        {
+            new("name", $"HexEditor {language}"),
+            new("source_lang", "en"),
+            new("target_lang", code),
+            new("entries", string.Join("\n", entries.Select(e => e.Source + "\t" + e.Target))),
+            new("entries_format", "tsv"),
+        };
+        using HttpResponseMessage response = await SendAsync(HttpMethod.Post, "v2/glossaries", new FormUrlEncodedContent(form), cancellationToken);
+        response.EnsureSuccessStatusCode();
+        return JsonNode.Parse(await response.Content.ReadAsStringAsync(cancellationToken))?["glossary_id"]?.GetValue<string>()
+            ?? throw new FormatException("The translation API returned no glossary_id.");
+    }
+
+    /// <summary>訳し終えた用語集を消す (失敗しても訳の結果には影響しないので無視する)。</summary>
+    private async Task DeleteGlossaryAsync(string glossaryId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            using HttpResponseMessage response = await SendAsync(HttpMethod.Delete, "v2/glossaries/" + Uri.EscapeDataString(glossaryId), null, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                Notes.Add($"glossary {glossaryId} could not be deleted ({(int)response.StatusCode}).");
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Notes.Add($"glossary {glossaryId} could not be deleted ({ex.Message}).");
+        }
     }
 
     /// <summary>XML の特別な文字を置き換え、訳さない部分を &lt;x&gt; で囲む。</summary>
@@ -102,13 +245,7 @@ public static class MachineTranslation
         var warnings = new List<string>();
 
         // 日本語: 訳がある文字列を「確認済み」にする。
-        Dictionary<string, string> japanese = Resw.LoadMap(Resw.PathFor(stringsFolder, "ja"));
-        Dictionary<string, TranslationEntry> ja = status.For("ja");
-        ja.Clear();
-        foreach ((string key, string source) in english.Where(e => japanese.ContainsKey(e.Key)))
-        {
-            ja[key] = new TranslationEntry(TranslationState.Reviewed, TranslationStatus.Hash(source));
-        }
+        SyncJapanese(status, english, Resw.LoadMap(Resw.PathFor(stringsFolder, "ja")));
 
         foreach (string language in onlyLanguages ?? Languages.MachineTranslated)
         {
@@ -186,6 +323,37 @@ public static class MachineTranslation
 
         status.Save(statusPath);
         return new TranslationRunResult(translated, stale, warnings);
+    }
+
+    /// <summary>
+    /// 日本語の状態を .resw に合わせる (UI-49 の仕様 2 の 1。日本語は開発者が書くので「確認済み」)。機械翻訳の API キーがなくても
+    /// 実行できる (I18nTool の sync-ja)。状態が変わったら true。
+    /// </summary>
+    public static bool SyncJapanese(string stringsFolder, string statusPath)
+    {
+        TranslationStatus status = TranslationStatus.Load(statusPath);
+        bool changed = SyncJapanese(status, Resw.LoadMap(Resw.PathFor(stringsFolder, "en")), Resw.LoadMap(Resw.PathFor(stringsFolder, "ja")));
+        if (changed)
+        {
+            status.Save(statusPath);
+        }
+
+        return changed;
+    }
+
+    private static bool SyncJapanese(TranslationStatus status, IReadOnlyDictionary<string, string> english, IReadOnlyDictionary<string, string> japanese)
+    {
+        Dictionary<string, TranslationEntry> ja = status.For("ja");
+        var wanted = english.Where(e => japanese.ContainsKey(e.Key))
+            .ToDictionary(e => e.Key, e => new TranslationEntry(TranslationState.Reviewed, TranslationStatus.Hash(e.Value)), StringComparer.Ordinal);
+        bool changed = wanted.Count != ja.Count || wanted.Any(w => !ja.TryGetValue(w.Key, out TranslationEntry? e) || e != w.Value);
+        ja.Clear();
+        foreach ((string key, TranslationEntry entry) in wanted)
+        {
+            ja[key] = entry;
+        }
+
+        return changed;
     }
 }
 

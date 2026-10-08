@@ -530,14 +530,45 @@ public sealed class ViewMiscTests
     public Task Every_interactive_element_has_a_name() => UiTestContext.RunAsync(async ctx =>
     {
         // Axe.Windows は同梱していないため、その規則のうち「名前のない操作可能な要素がない」を UI オートメーションの木で確かめる。
-        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        // スタートページ (文書がない状態)、文書とデータインスペクタ・ブックマークのパネルを開いた状態、設定画面の各カテゴリ (手順 2)。
+        AppSession app = await ctx.StartAsync(new AppOptions { WaitForEditor = false });
         await app.IdleAsync();
         var missing = new List<string>();
+        missing.AddRange(UnnamedInteractiveElements(app, "start page"));
+
+        await app.OpenAsync(ctx.TestData("TD-SEQ-1M"));
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the hex view");
+        foreach (string panel in new[] { "inspector", "bookmarks" })
+        {
+            await app.SendAsync("panelShow", new JsonObject { ["id"] = panel });
+        }
+
+        await app.IdleAsync();
+        missing.AddRange(UnnamedInteractiveElements(app, "document"));
+
+        foreach (string category in SettingsCategories)
+        {
+            await app.SendAsync("settingsPage", new JsonObject { ["category"] = category });
+            await app.IdleAsync();
+            missing.AddRange(UnnamedInteractiveElements(app, "settings/" + category));
+        }
+
+        Assert.True(missing.Count == 0, "unnamed interactive elements:\n" + string.Join("\n", missing));
+    });
+
+    /// <summary>設定画面のカテゴリ (Core の SettingCategories.All と同じ順)。</summary>
+    private static readonly string[] SettingsCategories =
+        ["general", "appearance", "view", "editing", "search", "files", "keyboard", "language", "accessibility", "automation", "update", "privacy", "explorer", "advanced"];
+
+    /// <summary>表示中の操作できる要素のうち、名前 (AutomationProperties.Name) のないもの。</summary>
+    private static IEnumerable<string> UnnamedInteractiveElements(AppSession app, string where)
+    {
         ControlType[] interactive =
         [
             ControlType.Button, ControlType.Edit, ControlType.ComboBox, ControlType.CheckBox, ControlType.RadioButton, ControlType.MenuItem,
             ControlType.TabItem, ControlType.Hyperlink, ControlType.Slider, ControlType.SplitButton, ControlType.ScrollBar, ControlType.Document,
         ];
+        var missing = new List<string>();
         foreach (AutomationElement element in app.Window.FindAllDescendants())
         {
             ControlType type = element.Properties.ControlType.ValueOrDefault;
@@ -548,12 +579,12 @@ public sealed class ViewMiscTests
 
             if (string.IsNullOrWhiteSpace(element.Properties.Name.ValueOrDefault))
             {
-                missing.Add($"{type} {element.Properties.AutomationId.ValueOrDefault}");
+                missing.Add($"{where}: {type} {element.Properties.AutomationId.ValueOrDefault}");
             }
         }
 
-        Assert.True(missing.Count == 0, "unnamed interactive elements:\n" + string.Join("\n", missing));
-    });
+        return missing;
+    }
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-50-02")]

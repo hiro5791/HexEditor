@@ -48,7 +48,7 @@ public sealed partial class MainWindow
             ?? HandleInspectorTestCommand(cmd, request) ?? await HandlePackagingTestCommandsAsync(cmd, request)
             ?? HandleEditTestCommand(cmd, request) ?? await HandleSearchTestCommandsAsync(cmd, request)
             ?? await HandleViewTestCommandsAsync(cmd, request) ?? await HandleTabsTestCommandsAsync(cmd, request)
-            ?? await HandleShellTestCommandsAsync(cmd, request),
+            ?? await HandleShellTestCommandsAsync(cmd, request) ?? HandleAccessibilityTestCommand(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>
@@ -175,6 +175,7 @@ public sealed partial class MainWindow
     /// <summary>ウィンドウの大きさ (物理ピクセル) を変える。前面には出さない。</summary>
     private JsonObject TestResizePhysical(JsonObject request)
     {
+        AllowWindowLargerThanScreen();
         AppWindow.Resize(new SizeInt32((int)TestHookSettings.ReadLong(request["width"], 1280), (int)TestHookSettings.ReadLong(request["height"], 800)));
         return new JsonObject { ["size"] = $"{AppWindow.Size.Width}x{AppWindow.Size.Height}" };
     }
@@ -248,7 +249,7 @@ public sealed partial class MainWindow
             switch (item)
             {
                 case MenuFlyoutSubItem sub:
-                    items.Add(new JsonObject { ["path"] = path + "/" + sub.Text, ["id"] = AutomationProperties.GetAutomationId(sub), ["text"] = sub.Text, ["accessKey"] = sub.AccessKey });
+                    items.Add(new JsonObject { ["path"] = path + "/" + sub.Text, ["parent"] = path, ["id"] = AutomationProperties.GetAutomationId(sub), ["text"] = sub.Text, ["accessKey"] = sub.AccessKey });
                     foreach (MenuFlyoutItemBase child in sub.Items)
                     {
                         Add(child, path + "/" + sub.Text);
@@ -258,7 +259,7 @@ public sealed partial class MainWindow
                 case MenuFlyoutItem flyoutItem:
                     items.Add(new JsonObject
                     {
-                        ["path"] = path + "/" + flyoutItem.Text,
+                        ["path"] = path + "/" + flyoutItem.Text, ["parent"] = path,
                         ["id"] = AutomationProperties.GetAutomationId(flyoutItem),
                         ["text"] = flyoutItem.Text,
                         ["accessKey"] = flyoutItem.AccessKey,
