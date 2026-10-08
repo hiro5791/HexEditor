@@ -1555,6 +1555,8 @@
 
 - 更新の確認の接続先 (TD-PKG-UPDATE-FEED のリポジトリ、GitHub の API) への接続と DNS の問い合わせが 0 件。
 
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
+
 ### TC-PKG-17-02 最新のときの手動の確認
 
 | 項目 | 内容 |
@@ -1576,6 +1578,8 @@
 **期待結果**:
 
 - 「最新の版です (版 0.9.1)」の意味の InfoBar が表示され、ボタンがなく、8 秒後に閉じている。
+
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
 
 ### TC-PKG-17-03 起動直後 30 秒間は確認しない
 
@@ -1600,6 +1604,8 @@
 - 開始から 30 秒未満の、更新の確認の接続先への接続と DNS の問い合わせが 0 件。
 - 開始から 30〜60 秒の間に、更新の確認の接続が 1 回ある。
 
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
+
 ### TC-PKG-17-04 ネットワークがないときの手動の確認
 
 | 項目 | 内容 |
@@ -1621,6 +1627,8 @@
 **期待結果**:
 
 - (a)・(b) とも、15 秒以内に「確認できませんでした」の意味の InfoBar が表示され、理由 (接続できない) が書かれている。
+
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
 
 ### TC-PKG-17-05 preview のチャネルでの C# スクリプト コンポーネントの追加
 
@@ -1693,6 +1701,8 @@
 
 - ダウンロードしたのは `HexEditor-0.9.1-delta.nupkg` (Velopack の命名) とリリース情報ファイルだけで、`-full.nupkg` はダウンロードしていない。
 
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
+
 ### TC-PKG-18-02 「再起動して更新」
 
 | 項目 | 内容 |
@@ -1717,6 +1727,8 @@
 - 版が 0.9.1。
 - TD-SEQ-1M と TD-BYTES-256 のタブがある。
 - 「版 0.9.1 に更新しました」の意味の InfoBar と「リリースノート」ボタンがある。
+
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
 
 ### TC-PKG-18-03 「後で」を選んで終了する
 
@@ -1743,6 +1755,8 @@
 - 手順 2 の版は 0.9.0 (すぐには再起動しない)。
 - 手順 4 の版は 0.9.1。
 
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
+
 ### TC-PKG-18-04 保存中は「再起動して更新」を押せない
 
 | 項目 | 内容 |
@@ -1766,6 +1780,8 @@
 
 - 手順 2 でボタンが無効で、保存中である理由が表示されている。
 - 手順 3 でボタンが有効に戻っている。
+
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
 
 ## PKG-19 MSIX 版の更新
 
@@ -1821,6 +1837,8 @@
 - アプリのプロセスから外部への接続が 0 件で、`StoreContext` の更新の確認が呼ばれていない。
 - 設定画面に「Microsoft Store による自動更新は Store の設定に従います」の意味の文言がある。
 
+**備考**: 自動テストは、Store への問い合わせ (StoreContext) を偽物にして、自動の確認が無効のときに問い合わせも通信の記録もないことを確かめる (`UpdateTests`)。設定画面の「Microsoft Store による自動更新は Store の設定に従います」は設定画面 (UI-22) ができてから確かめる。
+
 ## PKG-20 ポータブル版の更新
 
 ### TC-PKG-20-01 新しい版の通知とダウンロードページ
@@ -1847,6 +1865,8 @@
 - 手順 2 で「版 0.9.1 があります」の意味の文言と、「ダウンロードページを開く」「リリースノート」「この版をスキップ」ボタンがある。
 - 手順 3 の URL が、TD-PKG-UPDATE-FEED のリポジトリの 0.9.1 のリリースのページ。
 
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
+
 ### TC-PKG-20-02 「この版をスキップ」
 
 | 項目 | 内容 |
@@ -1872,6 +1892,8 @@
 - 手順 2 で、更新の InfoBar が出ていない。`Data\settings.json` の `update.skippedVersion` が `0.9.1`。
 - 手順 4 で、「版 0.9.2 があります」の意味の InfoBar が出ている。
 
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
+
 ## PKG-21 リリースチャネル
 
 ### TC-PKG-21-01 preview のチャネルでプレビュー版が見つかる
@@ -1896,6 +1918,8 @@
 
 - 「版 0.9.2-preview.1 があります」の意味の InfoBar が出る。
 
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
+
 ### TC-PKG-21-02 preview のチャネルで新しい安定版を受け取る
 
 | 項目 | 内容 |
@@ -1917,6 +1941,8 @@
 **期待結果**:
 
 - 「版 0.9.2 の準備ができました」の意味の InfoBar が出て、更新後の版が 0.9.2 (安定版)。
+
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
 
 ### TC-PKG-21-03 stable に戻したときに古い安定版に戻らない
 
@@ -1942,6 +1968,8 @@
 - 手順 2 で、0.9.1 への更新の InfoBar が出ない (現在の版より新しい安定版がない旨の表示になる)。
 - 手順 3 の版は 0.9.2-preview.1 のまま。
 
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
+
 ## PKG-22 更新の UI
 
 ### TC-PKG-22-01 インストーラ版とポータブル版の InfoBar の文言
@@ -1966,6 +1994,8 @@
 
 - 同じ表示言語では、2 つの配布形態の InfoBar の文言 (「版 0.9.1 があります」) が同じ。
 - ボタンは、インストーラ版が「ダウンロード」「リリースノート」「この版をスキップ」、ポータブル版が「ダウンロードページを開く」「リリースノート」「この版をスキップ」。
+
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
 
 ### TC-PKG-22-02 Store 版の InfoBar の文言
 
@@ -2015,6 +2045,8 @@
 **期待結果**:
 
 - プロセス ID が最初と同じで、版は 0.9.0 のまま (再起動していない)。
+
+**備考**: 配布物での確認は `build/tests/Test-Update.ps1` (ci.yml の update。TD-PKG-UPDATE-FEED のリポジトリを変数 `HEX_UPDATE_FEED_REPO` で渡す。なければ Skipped) が行う。判断の部分 (時刻、チャネル、スキップ、表示とボタン、再起動しないこと) は、偽の配布元で `tests/HexEditor.Platform.Tests` の `UpdateTests` が確かめる。通信の記録は、ETW の代わりにアプリの通信の入口の記録 (テスト用の命令) を使う。
 
 ## PKG-23 プルリクエストのビルドとテスト
 

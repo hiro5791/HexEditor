@@ -16,14 +16,14 @@ namespace HexEditor.UITests;
 [Trait(UiTest.Category, UiTest.UI)]
 public sealed class PackagingTests
 {
-    private static async Task<string> ProfileWithSettings(UiTestContext ctx, string json)
+    internal static async Task<string> ProfileWithSettings(UiTestContext ctx, string json)
     {
         string profile = ctx.NewProfile();
         await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), json);
         return profile;
     }
 
-    private static async Task<JsonObject> MenuItemAsync(AppSession app, string id) =>
+    internal static async Task<JsonObject> MenuItemAsync(AppSession app, string id) =>
         await app.SendAsync("menuItem", new JsonObject { ["id"] = id });
 
     private static async Task<string> LaunchedUrlAsync(AppSession app) =>
@@ -65,59 +65,6 @@ public sealed class PackagingTests
         await app.InvokeDialogButtonAsync("Cancel");
         await Task.Delay(500);
         Assert.DoesNotContain(await app.LogAsync(), l => l.Contains("Test hooks: launch ", StringComparison.Ordinal));
-    });
-
-    /// <summary>
-    /// TC-UI-58-02: オフラインモードで台本を繰り返しても、外部への通信がない。台本の長さは HEXEDITOR_OFFLINE_SCRIPT_MINUTES (既定 60 分)。
-    /// 通信の確認は、アプリの通信の記録 (すべての通信の入口) と、プロセスの TCP の接続の一覧 (GetExtendedTcpTable、1 秒ごと) で行う。
-    /// DNS の問い合わせは Windows の DNS クライアントのサービスが行うため、ETW を使える毎晩の CI の計測機でだけ確かめる (この試験では確かめない)。
-    /// </summary>
-    [Fact]
-    [Trait(UiTest.TC, "TC-UI-58-02")]
-    [Trait(UiTest.Category, "Nightly")]
-    public Task An_hour_of_work_in_offline_mode_makes_no_external_connection() => UiTestContext.RunAsync(async ctx =>
-    {
-        double minutes = double.TryParse(Environment.GetEnvironmentVariable("HEXEDITOR_OFFLINE_SCRIPT_MINUTES"), out double m) ? m : 60;
-        AppSession app = await ctx.StartAsync(new AppOptions { Profile = await ProfileWithSettings(ctx, "{\"$schemaVersion\": 1, \"network.offline\": true}") });
-        var external = new List<string>();
-        using var stop = new CancellationTokenSource();
-        Task monitor = Task.Run(async () =>
-        {
-            while (!stop.IsCancellationRequested)
-            {
-                external.AddRange(TcpConnections.Remote(app.Pid).Where(a => !IPAddress.IsLoopback(a)).Select(a => a.ToString()));
-                await Task.Delay(1000);
-            }
-        });
-
-        var clock = Stopwatch.StartNew();
-        int round = 0;
-        while (clock.Elapsed < TimeSpan.FromMinutes(minutes))
-        {
-            round++;
-            string copy = ctx.CopyTestData(round % 2 == 0 ? "TD-SEQ-1M" : "TD-RANDOM-16M", $"work-{round}.bin");
-            await app.OpenAsync(copy);
-            await app.IdleAsync();
-            await app.SendAsync("click", new JsonObject { ["offset"] = 16, ["column"] = "Hex" });
-            await app.TypeAsync("AB");
-            await app.KeyAsync("S", ctrl: true);
-            await app.IdleAsync();
-
-            // ヘルプ > 更新の確認 は無効表示 (押しても通信しない)。ドキュメントは URL を表示して「キャンセル」。
-            Assert.False((await MenuItemAsync(app, "Command_CheckForUpdates"))["enabled"]!.GetValue<bool>());
-            await app.CommandAsync("Command_Documentation");
-            await app.WaitForDialogAsync("OpenUrlDialog");
-            await app.InvokeDialogButtonAsync("Cancel");
-            await app.SendAsync("advanceUpdateClock", new JsonObject { ["hours"] = 24.02 });
-            await app.CommandAsync("Command_Close");
-            await app.IdleAsync();
-            await Task.Delay(TimeSpan.FromSeconds(5));
-        }
-
-        stop.Cancel();
-        await monitor;
-        Assert.Empty((await app.SendAsync("networkLog"))["requests"]!.AsArray());
-        Assert.True(external.Count == 0, "external connections: " + string.Join(", ", external.Distinct()));
     });
 
     // ---- 更新の確認と InfoBar (PKG-17、PKG-20、PKG-22) ----
@@ -377,7 +324,7 @@ public sealed class PackagingTests
     }
 
     /// <summary>プロセスの TCP の接続の相手 (IPv4・IPv6)。GetExtendedTcpTable (TCP_TABLE_OWNER_PID_ALL)。</summary>
-    private static class TcpConnections
+    internal static class TcpConnections
     {
         public static IEnumerable<IPAddress> Remote(int pid) => Table(2, pid).Concat(Table(23, pid));
 
@@ -425,4 +372,61 @@ public sealed class PackagingTests
         [DllImport("iphlpapi.dll")]
         private static extern int GetExtendedTcpTable(nint table, ref int size, bool order, int family, int tableClass, int reserved);
     }
+}
+
+/// <summary>毎晩だけ実行する長いテスト (UI テストの通常の実行 Category=UI には入れない)。</summary>
+[Trait(UiTest.Category, "Nightly")]
+public sealed class PackagingNightlyTests
+{
+    /// <summary>
+    /// TC-UI-58-02: オフラインモードで台本を繰り返しても、外部への通信がない。台本の長さは HEXEDITOR_OFFLINE_SCRIPT_MINUTES (既定 60 分)。
+    /// 通信の確認は、アプリの通信の記録 (すべての通信の入口) と、プロセスの TCP の接続の一覧 (GetExtendedTcpTable、1 秒ごと) で行う。
+    /// DNS の問い合わせは Windows の DNS クライアントのサービスが行うため、ETW を使える毎晩の CI の計測機でだけ確かめる (この試験では確かめない)。
+    /// </summary>
+    [Fact]
+    [Trait(UiTest.TC, "TC-UI-58-02")]
+    public Task An_hour_of_work_in_offline_mode_makes_no_external_connection() => UiTestContext.RunAsync(async ctx =>
+    {
+        double minutes = double.TryParse(Environment.GetEnvironmentVariable("HEXEDITOR_OFFLINE_SCRIPT_MINUTES"), out double m) ? m : 60;
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = await PackagingTests.ProfileWithSettings(ctx, "{\"$schemaVersion\": 1, \"network.offline\": true}") });
+        var external = new List<string>();
+        using var stop = new CancellationTokenSource();
+        Task monitor = Task.Run(async () =>
+        {
+            while (!stop.IsCancellationRequested)
+            {
+                external.AddRange(PackagingTests.TcpConnections.Remote(app.Pid).Where(a => !IPAddress.IsLoopback(a)).Select(a => a.ToString()));
+                await Task.Delay(1000);
+            }
+        });
+
+        var clock = Stopwatch.StartNew();
+        int round = 0;
+        while (clock.Elapsed < TimeSpan.FromMinutes(minutes))
+        {
+            round++;
+            string copy = ctx.CopyTestData(round % 2 == 0 ? "TD-SEQ-1M" : "TD-RANDOM-16M", $"work-{round}.bin");
+            await app.OpenAsync(copy);
+            await app.IdleAsync();
+            await app.SendAsync("click", new JsonObject { ["offset"] = 16, ["column"] = "Hex" });
+            await app.TypeAsync("AB");
+            await app.KeyAsync("S", ctrl: true);
+            await app.IdleAsync();
+
+            // ヘルプ > 更新の確認 は無効表示 (押しても通信しない)。ドキュメントは URL を表示して「キャンセル」。
+            Assert.False((await PackagingTests.MenuItemAsync(app, "Command_CheckForUpdates"))["enabled"]!.GetValue<bool>());
+            await app.CommandAsync("Command_Documentation");
+            await app.WaitForDialogAsync("OpenUrlDialog");
+            await app.InvokeDialogButtonAsync("Cancel");
+            await app.SendAsync("advanceUpdateClock", new JsonObject { ["hours"] = 24.02 });
+            await app.CommandAsync("Command_Close");
+            await app.IdleAsync();
+            await Task.Delay(TimeSpan.FromSeconds(5));
+        }
+
+        stop.Cancel();
+        await monitor;
+        Assert.Empty((await app.SendAsync("networkLog"))["requests"]!.AsArray());
+        Assert.True(external.Count == 0, "external connections: " + string.Join(", ", external.Distinct()));
+    });
 }
