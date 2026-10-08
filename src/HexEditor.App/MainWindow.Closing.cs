@@ -89,12 +89,17 @@ public sealed partial class MainWindow
         }
 
         args.Handled = true;
+
+        // 閉じる前のタブをセッションに残す (閉じた後は文書がなくなるため。UI-31 の仕様 2)。
+        Core.Files.SessionState session = Vm.CaptureSession(CurrentBounds());
         if (!await CloseAsync(Vm.Documents.ToList()))
         {
             return;
         }
 
         _closingConfirmed = true;
+        _sessionTimer?.Stop();
+        SaveSession(session);
         App.Settings.Flush();
         AppLog.Info("Exited");
 

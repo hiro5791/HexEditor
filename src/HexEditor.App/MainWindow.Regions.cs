@@ -160,11 +160,8 @@ public sealed partial class MainWindow
             case Region.Editor:
                 if (Vm.Documents.Count == 0)
                 {
-                    // スタートページの最初のボタン (「開く」) にフォーカスを置く。
-                    if (FocusManager.FindFirstFocusableElement(StartPage) is Control first)
-                    {
-                        first.Focus(FocusState.Keyboard);
-                    }
+                    // スタートページの「開く」にフォーカスを置く (初回起動の「はじめに」の欄より先)。
+                    StartPage.FocusOpen(FocusState.Keyboard);
                 }
                 else
                 {

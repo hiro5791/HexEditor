@@ -372,4 +372,5 @@ A részletek helye:
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>További állapotelemek</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>Mégse</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>{0} találat</value></data>
+  <data name="Menu_File_DiscardReload.AccessKey" xml:space="preserve"><value>I</value></data>
 </root>

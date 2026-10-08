@@ -98,7 +98,8 @@ public sealed class NotificationCenter
 {
     public const int MaxVisiblePerScope = 3;
     public const int HistoryCapacity = 100;
-    public const int MaxActions = 2;
+    /// <summary>操作ボタンの最大数 (UI-36 の仕様 5。外部変更の通知の「再読み込み」「マージ」「比較」「無視」が 4 つ。ENG-19 の仕様 5)。</summary>
+    public const int MaxActions = 4;
 
     public static readonly TimeSpan AutoCloseAfter = TimeSpan.FromSeconds(8);
 

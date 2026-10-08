@@ -18,6 +18,9 @@ public sealed partial class Document
     /// <summary>「マージ」の Undo の説明。</summary>
     public const string MergeDescription = "外部の変更とのマージ";
 
+    /// <summary>現在の内容が指す元データの長さ (マージの前に、外部の変更で長さが変わったかを調べる)。</summary>
+    public long CurrentSourceLength => Current.Storage.Source.Length;
+
     /// <summary>
     /// 再読み込み (変更を残す。ENG-18 の仕様 1): ブロックキャッシュと読めなかった範囲の記録を捨てて読み直す。変更していないバイトは
     /// データソースの今の内容で表示し、変更したバイトはそのまま残す。

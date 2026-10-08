@@ -51,6 +51,8 @@ public sealed partial class MainWindow : Window
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
+        InitializeRecentKeys();
+        InitializeExternalChanges();
 
         // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
         var noticeTimer = DispatcherQueue.CreateTimer();
@@ -257,6 +259,12 @@ public sealed partial class MainWindow : Window
             }
         }
 
+        // 外部で変更されたファイルを上書きする・削除されたファイルを作り直すときは確かめる (ENG-19 の仕様 5・8)。
+        if (string.Equals(path, doc.FilePath, StringComparison.OrdinalIgnoreCase) && !await ConfirmExternalSaveAsync(doc))
+        {
+            return false;
+        }
+
         try
         {
             _saveElsewhereRequested = false;
@@ -292,6 +300,18 @@ public sealed partial class MainWindow : Window
         catch (UnauthorizedAccessException)
         {
             ShowNotice(Loc.Get("Error_SaveDenied"), InfoBarSeverity.Error, doc);
+        }
+        catch (BackupFailedException ex)
+        {
+            // バックアップを作れないため保存を始めなかった。「バックアップなしで保存」で続けられる (ENG-26 の「エラー」)。
+            ShowNotice(Loc.Format("Backup_Failed", ex.Reason), InfoBarSeverity.Error, doc, actions:
+            [
+                new NotificationAction(Loc.Get("Backup_SaveWithout"), () =>
+                {
+                    Vm.SkipBackupOnce = true;
+                    _ = SaveAsync(doc, saveAs: false);
+                }),
+            ]);
         }
         catch (IOException ex)
         {

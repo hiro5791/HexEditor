@@ -372,4 +372,82 @@ Details were written to:
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>More status items</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>{0} matches</value></data>
+  <data name="Menu_File_OpenReadOnly.Text" xml:space="preserve"><value>Open read-only...</value></data>
+  <data name="Menu_File_OpenReadOnly.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_File_Reload.Text" xml:space="preserve"><value>Reload</value></data>
+  <data name="Menu_File_Reload.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_File_DiscardReload.Text" xml:space="preserve"><value>Discard changes and reload...</value></data>
+  <data name="Menu_File_DiscardReload.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_File_Recent.Text" xml:space="preserve"><value>Recent files</value></data>
+  <data name="Menu_File_Recent.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_ReopenClosed.Text" xml:space="preserve"><value>Reopen closed tab</value></data>
+  <data name="Menu_File_ReopenClosed.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_ClearRecent.Text" xml:space="preserve"><value>Clear list</value></data>
+  <data name="Menu_File_ClearRecent.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_ShowAllRecent.Text" xml:space="preserve"><value>Show all...</value></data>
+  <data name="Menu_File_ShowAllRecent.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Recent_MenuItem" xml:space="preserve"><value>{0}  ({1})</value></data>
+  <data name="Recent_MenuItemMissing" xml:space="preserve"><value>{0}  ({1}) - not found</value></data>
+  <data name="Recent_NotFound" xml:space="preserve"><value>Not found</value></data>
+  <data name="Recent_Pinned" xml:space="preserve"><value>Pinned</value></data>
+  <data name="Recent_Missing" xml:space="preserve"><value>{0} was not found.</value></data>
+  <data name="Recent_Remove" xml:space="preserve"><value>Remove from list</value></data>
+  <data name="Recent_Cleared" xml:space="preserve"><value>The recent files list was cleared. Pinned files were kept.</value></data>
+  <data name="Recent_Search" xml:space="preserve"><value>Search recent files</value></data>
+  <data name="Recent_AllTitle" xml:space="preserve"><value>Recent files</value></data>
+  <data name="Recent_Pin" xml:space="preserve"><value>Pin</value></data>
+  <data name="Recent_Unpin" xml:space="preserve"><value>Unpin</value></data>
+  <data name="Recent_CopyPath" xml:space="preserve"><value>Copy path</value></data>
+  <data name="Recent_ShowInExplorer" xml:space="preserve"><value>Show in File Explorer</value></data>
+  <data name="Reopen_NotFound" xml:space="preserve"><value>{0} was not found. The next closed tab was opened instead.</value></data>
+  <data name="Start_WelcomeTitle.Text" xml:space="preserve"><value>Get started</value></data>
+  <data name="Start_WelcomeClose.Content" xml:space="preserve"><value>Close</value></data>
+  <data name="Start_Language.Header" xml:space="preserve"><value>Display language</value></data>
+  <data name="Start_LanguageSystem" xml:space="preserve"><value>Same as Windows</value></data>
+  <data name="Start_LanguageRestart.Text" xml:space="preserve"><value>The new display language is used the next time HexEditor starts.</value></data>
+  <data name="Start_Theme.Header" xml:space="preserve"><value>Theme</value></data>
+  <data name="Start_ThemeSystem" xml:space="preserve"><value>Use system setting</value></data>
+  <data name="Start_ThemeLight" xml:space="preserve"><value>Light</value></data>
+  <data name="Start_ThemeDark" xml:space="preserve"><value>Dark</value></data>
+  <data name="Start_Preset.Header" xml:space="preserve"><value>Keyboard shortcuts</value></data>
+  <data name="Start_PresetDefault" xml:space="preserve"><value>Default</value></data>
+  <data name="Start_PresetHxd" xml:space="preserve"><value>HxD style</value></data>
+  <data name="Start_Preset010" xml:space="preserve"><value>010 Editor style</value></data>
+  <data name="Start_PresetVsCode" xml:space="preserve"><value>VS Code style</value></data>
+  <data name="Start_NetworkInfo.Text" xml:space="preserve"><value>HexEditor uses the internet only for checking for updates, downloading templates, plug-ins and components when you ask, and opening help and report pages in your browser. You can turn these off in Settings &gt; Privacy.</value></data>
+  <data name="Start_RestoreSession.Content" xml:space="preserve"><value>Restore previous session</value></data>
+  <data name="Start_RecentTitle.Text" xml:space="preserve"><value>Recent files</value></data>
+  <data name="Start_ShowAll.Content" xml:space="preserve"><value>Show all...</value></data>
+  <data name="Start_RecentList.AutomationProperties.Name" xml:space="preserve"><value>Recent files</value></data>
+  <data name="Start_PaletteHint.Text" xml:space="preserve"><value>To find any command by name, open the command palette (Ctrl+Shift+P).</value></data>
+  <data name="Session_Missing" xml:space="preserve"><value>File not found: {0}</value></data>
+  <data name="Session_Close.Content" xml:space="preserve"><value>Close</value></data>
+  <data name="Session_Locate.Content" xml:space="preserve"><value>Locate...</value></data>
+  <data name="Session_FileChanged" xml:space="preserve"><value>The file has changed since HexEditor last closed.</value></data>
+  <data name="External_Reloaded" xml:space="preserve"><value>The file was changed by another app, so it was reloaded.</value></data>
+  <data name="External_Changed" xml:space="preserve"><value>{0} was changed by another app.</value></data>
+  <data name="External_Mixed" xml:space="preserve"><value>{0} was changed by another app. Your unsaved changes and the other app's changes are now mixed.</value></data>
+  <data name="External_Deleted" xml:space="preserve"><value>{0} was deleted or moved. You can keep editing; saving creates the file again.</value></data>
+  <data name="External_Reload" xml:space="preserve"><value>Reload</value></data>
+  <data name="External_Merge" xml:space="preserve"><value>Merge</value></data>
+  <data name="External_Compare" xml:space="preserve"><value>Compare</value></data>
+  <data name="External_Ignore" xml:space="preserve"><value>Ignore</value></data>
+  <data name="External_SaveAs" xml:space="preserve"><value>Save as...</value></data>
+  <data name="External_Close" xml:space="preserve"><value>Close</value></data>
+  <data name="External_OverwriteBody" xml:space="preserve"><value>{0} was changed by another app. Saving overwrites those changes.</value></data>
+  <data name="External_RecreateBody" xml:space="preserve"><value>{0} was deleted or moved. Saving creates the file again in its original location.</value></data>
+  <data name="Discard_Title" xml:space="preserve"><value>Discard changes to {0}?</value></data>
+  <data name="Discard_Body" xml:space="preserve"><value>{0} places, {1} bytes of changes will be discarded and the file will be read again.</value></data>
+  <data name="Discard_Undoable" xml:space="preserve"><value>You can bring the changes back with Ctrl+Z.</value></data>
+  <data name="Discard_NotUndoable" xml:space="preserve"><value>The file was changed by another app, so this can't be undone.</value></data>
+  <data name="Discard_Confirm" xml:space="preserve"><value>Discard and reload</value></data>
+  <data name="Discard_UndoName" xml:space="preserve"><value>Discard changes</value></data>
+  <data name="Merge_Title" xml:space="preserve"><value>Merge with the changed file?</value></data>
+  <data name="Merge_LengthChanged" xml:space="preserve"><value>The other app changed the file size from {0} to {1} bytes. Your changes are applied at the same offsets, so they may end up in the wrong place. You can undo the merge with Ctrl+Z.</value></data>
+  <data name="Merge_UndoName" xml:space="preserve"><value>Merge with external changes</value></data>
+  <data name="Backup_Failed" xml:space="preserve"><value>Saving was stopped because a backup couldn't be created ({0}).</value></data>
+  <data name="Backup_SaveWithout" xml:space="preserve"><value>Save without backup</value></data>
+  <data name="BackupCopy_Title" xml:space="preserve"><value>Copy the whole file for the backup?</value></data>
+  <data name="BackupCopy_Body" xml:space="preserve"><value>To keep a backup, the whole file ({0}) is copied before saving.</value></data>
+  <data name="BackupCopy_Copy" xml:space="preserve"><value>Copy and save</value></data>
 </root>

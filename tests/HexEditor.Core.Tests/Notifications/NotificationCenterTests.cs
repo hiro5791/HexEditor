@@ -92,11 +92,13 @@ public sealed class NotificationCenterTests
     }
 
     [Fact]
-    public void AtMostTwoActions()
+    public void AtMostFourActions()
     {
+        // 外部変更の通知の「再読み込み」「マージ」「比較」「無視」(ENG-19 の仕様 5) が最大 (UI-36 の仕様 5)。
         NotificationCenter center = Create();
         NotificationAction a = new("A", () => { });
+        center.Show(NotificationScope.Window, NotificationSeverity.Warning, "four", actions: [a, a, a, a]);
         Assert.Throws<ArgumentException>(() =>
-            center.Show(NotificationScope.Window, NotificationSeverity.Error, "x", actions: [a, a, a]));
+            center.Show(NotificationScope.Window, NotificationSeverity.Error, "x", actions: [a, a, a, a, a]));
     }
 }
