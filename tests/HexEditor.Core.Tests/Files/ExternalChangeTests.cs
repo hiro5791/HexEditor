@@ -163,6 +163,57 @@ public sealed class ExternalChangeTests : IDisposable
     }
 
     [Fact]
+    public void ReloadReportsAnAlreadyReportedChangeAgain()
+    {
+        // ENG-18 の仕様 1: 知らせた変更の InfoBar を閉じた後の再読み込み (Ctrl+R) で、もう一度知らせる。
+        var watcher = new FakeWatcher();
+        FileStamp current = Base with { Length = 200 };
+        using var monitor = new ExternalChangeMonitor(watcher, new FakeTimerProvider(), _ => current);
+        int reports = 0;
+        monitor.Detected += (_, _) => reports++;
+        WatchedFile file = monitor.Track(this, Path.Combine(_dir, "a.bin"), Base, () => current);
+
+        Assert.Equal(ExternalChangeKind.ContentChanged, monitor.CheckNow(file));
+        Assert.Equal(ExternalChangeKind.ContentChanged, monitor.CheckNow(file));
+        Assert.Equal(1, reports);
+
+        Assert.Equal(ExternalChangeKind.ContentChanged, monitor.CheckNow(file, reportAgain: true));
+        Assert.Equal(2, reports);
+    }
+
+    [Fact]
+    public void ForgottenChangeIsReportedOnTheNextCheck()
+    {
+        // 処理中で扱えなかった変更は、忘れさせると次の確認で知らせる (ENG-19 の仕様 11)。
+        var watcher = new FakeWatcher();
+        FileStamp current = Base with { Length = 200 };
+        using var monitor = new ExternalChangeMonitor(watcher, new FakeTimerProvider(), _ => current);
+        int reports = 0;
+        monitor.Detected += (_, _) => reports++;
+        WatchedFile file = monitor.Track(this, Path.Combine(_dir, "a.bin"), Base, () => current);
+        monitor.CheckNow(file);
+        monitor.Forget(file);
+        Assert.Equal(ExternalChangeKind.None, file.Reported);
+        Assert.Equal(Base, file.Baseline);
+        monitor.CheckNow(file);
+        Assert.Equal(2, reports);
+    }
+
+    [Fact]
+    public void NetworkDrivesArePolled()
+    {
+        // ENG-19 の仕様 1: 割り当てたネットワークドライブ (UNC の書き方でないもの) も、変更通知を使わず定期的に確認する。
+        string path = Path.Combine(_dir, "a.bin");
+        File.WriteAllBytes(path, [1]);
+        using var network = new FileSystemChangeWatcher { IsNetworkPath = _ => true };
+        Assert.False(network.Watch(path));
+        using var local = new FileSystemChangeWatcher { IsNetworkPath = _ => false };
+        Assert.True(local.Watch(path));
+        using var unc = new FileSystemChangeWatcher();
+        Assert.False(unc.Watch(@"\\server\share\a.bin"));
+    }
+
+    [Fact]
     public async Task RealWatcherSeesWritesReplacementsAndDeletions()
     {
         string path = Path.Combine(_dir, "a.bin");

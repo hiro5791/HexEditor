@@ -6,7 +6,8 @@ using static HexEditor.Core.Tests.Support.DocumentAssert;
 
 namespace HexEditor.Core.Tests.Saving;
 
-/// <summary>ENG-26 バックアップファイルの作成。</summary>
+/// <summary>ENG-26 バックアップファイルの作成。その場保存の異常の再現 (静的な差し替え) と同時に走らないよう、同じコレクションにする。</summary>
+[Collection("InPlaceSaver")]
 public sealed class BackupTests : IDisposable
 {
     private readonly string _dir = Directory.CreateTempSubdirectory("hexeditor-backup").FullName;
@@ -138,6 +139,90 @@ public sealed class BackupTests : IDisposable
         Assert.True(without.CanExecute);
         Assert.Null(without.Backup);
         Assert.True(SavePlanner.CopyBackup(plan).CanExecute);
+    }
+
+    /// <summary>計画を作り、取り消した長時間処理として実行する (書き出しの途中のキャンセル)。</summary>
+    private static void SaveCancelled(Document doc, SaveSettings settings)
+    {
+        SavePlan plan = SavePlanner.Plan(doc, null, settings);
+        Assert.True(plan.CanExecute, $"{plan.Method} {plan.Issue}");
+        var center = new Core.Operations.OperationCenter();
+        Assert.ThrowsAny<OperationCanceledException>(() =>
+            center.RunAsync("save", Core.Operations.OperationKind.WritesExternal, doc, doc.Length, op =>
+            {
+                op.Cancel();
+                SavePlanner.Execute(plan, op);
+                return Task.CompletedTask;
+            }).GetAwaiter().GetResult());
+        SavePlanner.Abort(plan);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void CancelledSaveKeepsThePreviousBackup(bool safeSave)
+    {
+        // 世代数 1 でも、書き出し (安全な保存) やバックアップのコピー (その場保存) を取り消したら、前のバックアップは残る (ENG-26 の仕様 3)。
+        string path = Path.Combine(_dir, safeSave ? "safe.bin" : "inplace.bin");
+        File.WriteAllBytes(path, new byte[64]);
+        using var doc = new Document(FileByteSource.Open(path), Options());
+        doc.Overwrite(0, [0x01]);
+        Save(doc, Settings(new BackupSettings()));
+        byte[] previousBackup = File.ReadAllBytes(path + ".bak");
+        byte[] saved = File.ReadAllBytes(path);
+
+        if (safeSave)
+        {
+            doc.Insert(0, [0x02]);
+        }
+        else
+        {
+            doc.Overwrite(1, [0x02]);
+        }
+
+        SaveCancelled(doc, Settings(new BackupSettings()));
+        Assert.Equal(previousBackup, File.ReadAllBytes(path + ".bak"));
+        Assert.Equal(saved, File.ReadAllBytes(path));
+        Assert.Empty(Directory.GetFiles(_dir, "*.tmp", new EnumerationOptions { AttributesToSkip = 0 }));
+    }
+
+    private sealed class FakeVolumes(long available) : IVolumeInfoProvider
+    {
+        public VolumeInfo? GetVolume(string folder) => new("X:", "NTFS", available);
+    }
+
+    [Fact]
+    public void InPlaceBackupWithoutSpaceStopsTheSaveBeforeWriting()
+    {
+        // バックアップのコピーの置き場所の空き容量が足りなければ、保存を始めない (ENG-26 の「エラー」)。
+        string path = Path.Combine(_dir, "space.bin");
+        File.WriteAllBytes(path, new byte[64]);
+        using var doc = new Document(FileByteSource.Open(path), Options());
+        doc.Overwrite(0, [0x01]);
+        SaveSettings settings = Settings(new BackupSettings()) with { Volumes = new FakeVolumes(DocumentSaver.FreeSpaceMargin + 10) };
+        SavePlan plan = SavePlanner.Plan(doc, null, settings);
+        Assert.Equal(SaveMethod.InPlace, plan.Method);
+        BackupFailedException error = Assert.Throws<BackupFailedException>(() => SavePlanner.Execute(plan));
+        Assert.IsType<InsufficientSpaceException>(error.InnerException);
+        SavePlanner.Abort(plan);
+        Assert.Equal(new byte[64], File.ReadAllBytes(path));
+        Assert.False(File.Exists(path + ".bak"));
+    }
+
+    [Fact]
+    public void CopiedBackupChecksTheBackupFolderSpace()
+    {
+        // コピーで作る場合 (別のボリュームの置き場所・その場保存) は、置き場所の空き容量を書き出しの前に確かめる。既存のバックアップには触れない。
+        string path = Path.Combine(_dir, "cross.bin");
+        File.WriteAllBytes(path, new byte[64]);
+        string target = Path.GetFullPath(path);
+        string folder = Path.Combine(_dir, "bak");
+        var local = new BackupSettings { Folder = folder };
+        BackupFailedException error = Assert.Throws<BackupFailedException>(() =>
+            Backup.Prepare(target, local, new FakeVolumes(DocumentSaver.FreeSpaceMargin), copyBytes: 64));
+        Assert.IsType<InsufficientSpaceException>(error.InnerException);
+        Assert.Equal(Backup.PathFor(target, local), Backup.Prepare(target, local, new FakeVolumes(long.MaxValue), copyBytes: 64));
+        Assert.Empty(Directory.GetFiles(folder, "*", new EnumerationOptions { AttributesToSkip = 0 }));
     }
 
     [Fact]
