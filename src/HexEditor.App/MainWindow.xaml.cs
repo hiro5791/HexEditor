@@ -470,7 +470,7 @@ public sealed partial class MainWindow : Window
         {
             // 検索バーが開いていれば検索バーの一致、閉じていても結果一覧が開いていれば一覧の一致 (FIND-20 の仕様 10)。
             bool active = FindBar.IsOpen && view.Editor == FindBar.Editor;
-            bool results = !active && SearchResults.IsOpen && view.Editor == SearchResults.Editor;
+            bool results = !active && SearchResults.IsOpen && SearchResults.Shows(view.Editor);
             view.MatchProvider = active ? FindBar.MatchesInView : results ? SearchResults.MatchesInView : null;
             view.SetSearchMarkers(active ? FindBar.MarkerOffsets() : null);
         }

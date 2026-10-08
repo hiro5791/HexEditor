@@ -23,6 +23,14 @@ public enum ConfirmChoice
     Secondary,
 }
 
+/// <summary>すべて置換の結果: 置換した件数と、置換したビュー (「元に戻す」はそれぞれを 1 回戻す)。</summary>
+public sealed class ReplaceAllCompletedEventArgs(long count, IReadOnlyList<EditorState> editors) : EventArgs
+{
+    public long Count { get; } = count;
+
+    public IReadOnlyList<EditorState> Editors { get; } = editors;
+}
+
 /// <summary>確認ダイアログの内容 (すべて置換の件数の確認、末尾を超える上書きの確認)。</summary>
 public sealed record ConfirmRequest(string AutomationId, string Title, string Body, string Primary, string? Secondary, string Close);
 
@@ -42,8 +50,10 @@ public sealed partial class FindBar
     /// <summary>確認ダイアログを出す (メインウィンドウが ContentDialog で出す)。null なら確認せずに既定の動作 (やめる) にする。</summary>
     public Func<ConfirmRequest, Task<ConfirmChoice>>? Confirm { get; set; }
 
-    /// <summary>すべて置換が終わった (件数)。メインウィンドウが「1,234 件置換しました」の InfoBar と「元に戻す」を出す (FIND-23 の仕様 4)。</summary>
-    public event EventHandler<long>? ReplaceAllCompleted;
+    /// <summary>
+    /// すべて置換が終わった (件数と置換したビュー)。メインウィンドウが「1,234 件置換しました」の InfoBar と「元に戻す」を出す (FIND-23 の仕様 4)。
+    /// </summary>
+    public event EventHandler<ReplaceAllCompletedEventArgs>? ReplaceAllCompleted;
 
     /// <summary>置換できなかった理由を InfoBar で知らせる。</summary>
     public event EventHandler<string>? ReplaceFailed;
@@ -310,7 +320,6 @@ public sealed partial class FindBar
 
         AddReplacementToHistory();
         StopIncremental();
-        Document doc = editor.Document;
         _replacing?.Cancel();
         var cts = new CancellationTokenSource();
         _replacing = cts;
@@ -319,8 +328,84 @@ public sealed partial class FindBar
         Status.Text = Loc.Get("Find_Replacing");
         StartProgress();
         AppLog.Info("Replace all: start");
+
+        // 「開いているすべてのドキュメント」ではドキュメントごとに置換し、ドキュメントごとに 1 回の Undo にする (FIND-23 の仕様 7)。
+        List<EditorState> targets = SearchesAllDocuments
+            ? [.. OpenDocuments!().Select(d => d.Editor).Where(e => !e.ReadOnly && e.Document.CanSave)]
+            : [editor];
         long count = -1;
+        var replaced = new List<EditorState>();
         try
+        {
+            foreach (EditorState target in targets)
+            {
+                long n = await ReplaceAllInAsync(target, pattern, template, scope, options, cts);
+                if (n < 0)
+                {
+                    count = count <= 0 ? -1 : count;
+                    break;
+                }
+
+                count = Math.Max(0, count) + n;
+                if (n > 0)
+                {
+                    replaced.Add(target);
+                }
+            }
+
+            AppLog.Info($"Replace all: end ({count})");
+            if (count > 0)
+            {
+                _navigator.Reset();
+                Status.Text = Loc.Format("Find_ReplacedCount", count.ToString("N0", CultureInfo.CurrentCulture));
+                Announce(Status.Text);
+                ReplaceAllCompleted?.Invoke(this, new ReplaceAllCompletedEventArgs(count, replaced));
+            }
+            else if (count == 0)
+            {
+                Status.Text = Loc.Get("Find_NotFound");
+                MarkQuery(QueryState.NotFound);
+                Announce(Status.Text);
+            }
+            else
+            {
+                Status.Text = Loc.Get("Find_ReplaceAllCancelled");
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            AppLog.Info("Replace all: cancelled");
+            Status.Text = Loc.Get("Find_ReplaceAllCancelled");
+        }
+        catch (ReplaceException ex)
+        {
+            ReplaceFailed?.Invoke(this, IssueText(ex.Issue, template, pattern));
+        }
+        catch (Exception ex) when (ex is IOException or InvalidOperationException)
+        {
+            AppLog.Info($"Replace all: failed ({ex.Message})");
+            ReplaceFailed?.Invoke(this, Loc.Format("Find_ReplaceAllFailed", ex.Message));
+        }
+        finally
+        {
+            if (_replacing == cts)
+            {
+                _replacing = null;
+                UpdateProgress();
+            }
+
+            ValidateReplacement();
+        }
+    }
+
+    /// <summary>
+    /// 1 つのドキュメントのすべて置換。置換した件数を返す。利用者が確認ダイアログでやめた場合は −1。キャンセルは
+    /// <see cref="OperationCanceledException"/>、置換できない一致は <see cref="ReplaceException"/>。
+    /// </summary>
+    private async Task<long> ReplaceAllInAsync(EditorState editor, SearchPattern pattern, ReplacementTemplate template, SearchScope scope,
+        ReplaceOptions options, CancellationTokenSource cts)
+    {
+        Document doc = editor.Document;
         {
             async Task<long> Work(LongRunningOperation? op)
             {
@@ -388,52 +473,10 @@ public sealed partial class FindBar
                 return prepared.Count;
             }
 
-            count = Operations is null
+            return Operations is null
                 ? await Work(null)
-                : await Operations.RunAsync(Loc.Get("Operation_ReplaceAll"), OperationKind.ModifiesDocument, doc, CurrentScope.TotalLength(doc.Length),
+                : await Operations.RunAsync(Loc.Get("Operation_ReplaceAll"), OperationKind.ModifiesDocument, doc, scope.TotalLength(doc.Length),
                     op => Work(op), locked => doc.SetEditLock(locked));
-            AppLog.Info($"Replace all: end ({count})");
-            if (count > 0)
-            {
-                _navigator.Reset();
-                Status.Text = Loc.Format("Find_ReplacedCount", count.ToString("N0", CultureInfo.CurrentCulture));
-                Announce(Status.Text);
-                ReplaceAllCompleted?.Invoke(this, count);
-            }
-            else if (count == 0)
-            {
-                Status.Text = Loc.Get("Find_NotFound");
-                MarkQuery(QueryState.NotFound);
-                Announce(Status.Text);
-            }
-            else
-            {
-                Status.Text = Loc.Get("Find_ReplaceAllCancelled");
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            AppLog.Info("Replace all: cancelled");
-            Status.Text = Loc.Get("Find_ReplaceAllCancelled");
-        }
-        catch (ReplaceException ex)
-        {
-            ReplaceFailed?.Invoke(this, IssueText(ex.Issue, template, pattern));
-        }
-        catch (Exception ex) when (ex is IOException or InvalidOperationException)
-        {
-            AppLog.Info($"Replace all: failed ({ex.Message})");
-            ReplaceFailed?.Invoke(this, Loc.Format("Find_ReplaceAllFailed", ex.Message));
-        }
-        finally
-        {
-            if (_replacing == cts)
-            {
-                _replacing = null;
-                UpdateProgress();
-            }
-
-            ValidateReplacement();
         }
     }
 

@@ -76,6 +76,20 @@ public sealed partial class MainWindow
         SearchResults.HighlightsChanged += (_, _) => UpdateMatchHighlights();
         SearchResults.Closed += (_, _) => FocusEditor();
         SearchResults.NoticeRequested += (_, n) => ShowNotice(n.Message, n.Severity);
+        SearchResults.ActivateRequested += (_, editor) => ActivateEditor(editor);
+
+        // 「開いているすべてのドキュメント」(FIND-11 の仕様 1): タブの順に探し、一致のあるタブに切り替える。
+        FindBar.OpenDocuments = () => [.. Vm.Documents.Select(d => (d.Editor, d.DisplayName))];
+        FindBar.ActivateDocument = ActivateEditor;
+    }
+
+    /// <summary>そのビューのタブに切り替える。</summary>
+    private void ActivateEditor(Core.View.EditorState editor)
+    {
+        if (Vm.Documents.FirstOrDefault(d => d.Editor == editor) is { } doc && Vm.Selected != doc)
+        {
+            Vm.Selected = doc;
+        }
     }
 
     /// <summary>検索バーを開く (検索 > 検索、検索 > 置換)。</summary>
@@ -103,18 +117,18 @@ public sealed partial class MainWindow
     /// 設定「F3 は検索をやり直す」(<c>search.results.f3Repeats</c>) がオンなら一覧を使わない。
     /// </summary>
     private bool TryMoveInResults(bool forward) =>
-        SearchResults.HasResults && SearchResults.Editor == Editor && !App.Settings.GetBool("search.results.f3Repeats", false)
-        && SearchResults.MoveNext(forward);
+        SearchResults.HasResults && SearchResults.Shows(Editor) && !App.Settings.GetBool("search.results.f3Repeats", false)
+        && SearchResults.MoveNext(forward, Editor);
 
     /// <summary>すべて置換の完了: 「1,234 件置換しました」と「元に戻す」(FIND-23 の仕様 4)。</summary>
-    private void FindBar_ReplaceAllCompleted(object? sender, long count)
+    private void FindBar_ReplaceAllCompleted(object? sender, ReplaceAllCompletedEventArgs e)
     {
-        DocumentViewModel? doc = Vm.Selected;
-        Core.View.EditorState? editor = FindBar.Editor;
-        ShowNotice(Loc.Format("Find_ReplacedCount", count.ToString("N0", CultureInfo.CurrentCulture)), InfoBarSeverity.Success, doc,
-            undo: editor is null ? null : new NotificationAction(Loc.Get("Common_Undo"), () =>
+        IReadOnlyList<Core.View.EditorState> editors = e.Editors;
+        DocumentViewModel? doc = editors.Count == 1 ? Vm.Documents.FirstOrDefault(d => d.Editor == editors[0]) : null;
+        ShowNotice(Loc.Format("Find_ReplacedCount", e.Count.ToString("N0", CultureInfo.CurrentCulture)), InfoBarSeverity.Success, doc,
+            undo: new NotificationAction(Loc.Get("Common_Undo"), () =>
             {
-                if (!editor.Document.IsEditLocked)
+                foreach (Core.View.EditorState editor in editors.Where(x => !x.Document.IsEditLocked && !x.Document.IsDisposed))
                 {
                     editor.Undo();
                 }

@@ -243,6 +243,7 @@
                 <ComboBoxItem x:Uid="Find_Scope_Document" />
                 <ComboBoxItem x:Name="ScopeSelectionItem" x:Uid="Find_Scope_Selection" />
                 <ComboBoxItem x:Uid="Find_Scope_Range" />
+                <ComboBoxItem x:Uid="Find_Scope_AllDocuments" />
             </ComboBox>
             <!--  オフセット範囲 (FIND-11 の仕様 1)。入力式で開始と終了 (このバイトを含む) を書く。  -->
             <TextBox

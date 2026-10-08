@@ -86,29 +86,29 @@ public sealed partial class MainWindow
     /// <summary>結果一覧の状態と行 (from から count 行。既定は見えている行)。</summary>
     private JsonObject TestSearchResults(JsonObject request)
     {
-        SearchResults? results = SearchResults.Results;
-        long total = results?.LongCount ?? 0;
+        long total = SearchResults.Count;
         long from = request["from"]?.GetValue<long>() ?? SearchResults.TopIndex;
         // 行の内容はドキュメントを読むため、指定したときだけ作る (状態だけを何度も読むテストで UI のスレッドを止めない)。
         long count = Math.Min(request["count"]?.GetValue<long>() ?? 0, Math.Max(0, total - from));
         var rows = new JsonArray();
-        if (request["offsetsOnly"]?.GetValue<bool>() == true && results is not null)
+        if (request["offsetsOnly"]?.GetValue<bool>() == true)
         {
             // 件数が多い場合はオフセットだけを返す (行の内容は作らない)。
-            foreach (SearchMatch m in results.GetRange(from, (int)count))
+            foreach (long offset in SearchResults.OffsetsAt(from, (int)count))
             {
-                rows.Add(m.Offset);
+                rows.Add(offset);
             }
         }
         else
         {
             for (long i = from; i < from + count; i++)
             {
-                if (SearchResults.RowAt(i) is { } row)
+                if (SearchResults.RowAt(i) is ({ } row, string document))
                 {
                     rows.Add(new JsonObject
                     {
-                        ["number"] = row.Number,
+                        ["number"] = i + 1,
+                        ["document"] = document,
                         ["offset"] = row.Offset,
                         ["offsetText"] = StatusFormat.Hex(row.Offset),
                         ["length"] = row.Length,
@@ -127,7 +127,7 @@ public sealed partial class MainWindow
         {
             ["visible"] = SearchResults.Visibility == Visibility.Visible,
             ["summary"] = SearchResults.SummaryText,
-            ["state"] = results?.State.ToString(),
+            ["state"] = SearchResults.StateText,
             ["running"] = SearchResults.IsRunning,
             ["count"] = total,
             ["canContinue"] = SearchResults.CanContinue,

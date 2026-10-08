@@ -506,4 +506,6 @@
   <data name="SearchResults_ExportFailed" xml:space="preserve"><value>検索結果をエクスポートできませんでした: {0}</value></data>
   <data name="SearchResults_BookmarkPrefix" xml:space="preserve"><value>検索</value></data>
   <data name="SearchResults_BookmarkGroup" xml:space="preserve"><value>検索結果</value></data>
+  <data name="Find_Scope_AllDocuments.Content" xml:space="preserve"><value>開いているすべてのドキュメント</value></data>
+  <data name="SearchResults_Column_Document" xml:space="preserve"><value>ドキュメント</value></data>
 </root>

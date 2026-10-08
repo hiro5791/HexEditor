@@ -299,6 +299,39 @@ public sealed class SearchResultsTests
         Assert.False((await app.WaitForAsync("Find_Next")).IsEnabled);
     });
 
+    [Fact]
+    [Trait(UiTest.TC, "TC-FIND-11-03")]
+    public Task Searching_all_open_documents() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 前提: TD-ZERO-1M、TD-FIND-MARK-1M、TD-FF-1M をこの順にタブで開き、TD-ZERO-1M のタブがアクティブ。カーソルは 0。
+        string mark = ctx.WriteFile("TD-FIND-MARK-1M.bin", Mark1M());
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ZERO-1M"), mark, ctx.TestData("TD-FF-1M")] });
+        await app.WaitForTabsAsync(3);
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
+        await app.IdleAsync();
+        await app.GoToAsync(0);
+
+        // 1. Hex `CA FE BA BE`、範囲「開いているすべてのドキュメント」。
+        await OpenFindAsync(app, 0, "CA FE BA BE");
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Scope", ["index"] = 3 });
+
+        // 2〜3. Enter: TD-FIND-MARK-1M のタブに切り替わり、選択は 0x80000〜0x80003。
+        await app.SendAsync("findKey", new JsonObject { ["key"] = "Enter" });
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["selectedIndex"]!.GetValue<int>() == 1, TimeSpan.FromSeconds(10), "the second tab");
+        await app.IdleAsync();
+        JsonObject doc = await app.DocumentAsync();
+        Assert.Equal("TD-FIND-MARK-1M.bin", doc["name"]!.GetValue<string>());
+        Assert.Equal((0x80000L, 4L), (doc["selectionStart"]!.GetValue<long>(), doc["selectionLength"]!.GetValue<long>()));
+
+        // 4. Alt+Enter: TD-FIND-MARK-1M のまとまりに 1 件。ドキュメント列にファイル名がある。
+        await FindAllAsync(app);
+        JsonObject results = await WaitForResultsAsync(app, r => r["state"]?.GetValue<string>() == "Completed" && !r["running"]!.GetValue<bool>(), "the results");
+        Assert.Equal(1, results["count"]!.GetValue<long>());
+        JsonObject row = (await ResultsAsync(app, 0, 1))["rows"]![0]!.AsObject();
+        Assert.Equal("TD-FIND-MARK-1M.bin", row["document"]!.GetValue<string>());
+        Assert.Equal(0x80000, row["offset"]!.GetValue<long>());
+    });
+
     [Fact(Skip = "ブックマーク (INSP-23) は別の作業で実装中のため、この版にはブックマーク一覧がない。結果一覧の「変換 > ブックマークに」は "
         + "SearchResultsPanel.BookmarksRequested を出す (名前「検索: <検索語> #番号」、グループ「検索結果 <日時>」) ので、ブックマークの部品をつないだ後に有効にする")]
     [Trait(UiTest.TC, "TC-FIND-21-02")]

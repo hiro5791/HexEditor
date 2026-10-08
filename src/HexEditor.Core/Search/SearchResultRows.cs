@@ -167,6 +167,8 @@ public sealed record ExportLabels
 {
     public string Number { get; init; } = "No.";
 
+    public string Document { get; init; } = "Document";
+
     public string Offset { get; init; } = "Offset";
 
     public string OffsetHex { get; init; } = "Offset (hex)";
@@ -192,7 +194,8 @@ public sealed record ExportLabels
 
 /// <summary>
 /// 結果一覧のエクスポート (FIND-21 の仕様 4)。CSV (UTF-8、BOM 付き、カンマ区切り) と JSON。列は一覧の表示列で、オフセットは
-/// 10 進と 16 進の両方を出す。行は少しずつ作って書くため、件数に比例したメモリを使わない。長時間処理として進捗とキャンセルを扱う。
+/// 10 進と 16 進の両方を出す。「開いているすべてのドキュメント」の結果はドキュメントの列を加える。行は少しずつ作って書くため、
+/// 件数に比例したメモリを使わない。長時間処理として進捗とキャンセルを扱う。
 /// </summary>
 public static class SearchResultsExporter
 {
@@ -200,54 +203,106 @@ public static class SearchResultsExporter
     /// <paramref name="rows"/> の行 (結果の番号 0 から) を書き出す。<paramref name="indices"/> が null ならすべての行。
     /// </summary>
     public static void Export(SearchResultRowFactory rows, Stream stream, ExportFormat format, ExportLabels? labels = null,
-        IReadOnlyList<long>? indices = null, LongRunningOperation? operation = null, CancellationToken cancellationToken = default)
+        IReadOnlyList<long>? indices = null, LongRunningOperation? operation = null, CancellationToken cancellationToken = default) =>
+        Export([(null, rows)], stream, format, labels, indices, operation, cancellationToken);
+
+    /// <summary>
+    /// ドキュメントごとの結果を続けて書き出す。行の番号は一覧と同じ通し番号 (0 から)。<paramref name="indices"/> が null ならすべての行。
+    /// ドキュメントの名前 (Document) がどれかにあれば「ドキュメント」の列を出す。
+    /// </summary>
+    public static void Export(IReadOnlyList<(string? Document, SearchResultRowFactory Rows)> groups, Stream stream, ExportFormat format,
+        ExportLabels? labels = null, IReadOnlyList<long>? indices = null, LongRunningOperation? operation = null,
+        CancellationToken cancellationToken = default)
     {
         labels ??= new ExportLabels();
-        bool numeric = rows.Results.Pattern.Numeric is not null || rows.Results.Pattern.Variants.Count > 1;
-        long total = indices?.Count ?? rows.Results.LongCount;
+        SearchPattern pattern = groups[0].Rows.Results.Pattern;
+        bool numeric = pattern.Numeric is not null || pattern.Variants.Count > 1;
+        bool documents = groups.Any(g => g.Document is not null);
+        long total = indices?.Count ?? groups.Sum(g => g.Rows.Results.LongCount);
         operation?.SetTotal(total);
-        IEnumerable<SearchResultRow> Enumerate()
+
+        (string? Document, SearchResultRowFactory Rows, long Local)? Locate(long index)
+        {
+            foreach ((string? document, SearchResultRowFactory rows) in groups)
+            {
+                long count = rows.Results.LongCount;
+                if (index < count)
+                {
+                    return (document, rows, index);
+                }
+
+                index -= count;
+            }
+
+            return null;
+        }
+
+        IEnumerable<(string? Document, SearchResultRow Row)> Enumerate()
         {
             const int Batch = 4096;
-            for (long start = 0; start < total; start += Batch)
+            long written = 0;
+            if (indices is null)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                operation?.CancellationToken.ThrowIfCancellationRequested();
-                int n = (int)Math.Min(Batch, total - start);
-                if (indices is null)
+                long number = 0;
+                foreach ((string? document, SearchResultRowFactory rows) in groups)
                 {
-                    IReadOnlyList<SearchMatch> matches = rows.Results.GetRange(start, n);
-                    for (int k = 0; k < matches.Count; k++)
+                    long count = rows.Results.LongCount;
+                    for (long start = 0; start < count; start += Batch)
                     {
-                        yield return rows.Row(start + k, matches[k]);
-                    }
-                }
-                else
-                {
-                    for (int k = 0; k < n; k++)
-                    {
-                        yield return rows.Row(indices[(int)(start + k)]);
+                        cancellationToken.ThrowIfCancellationRequested();
+                        operation?.CancellationToken.ThrowIfCancellationRequested();
+                        IReadOnlyList<SearchMatch> matches = rows.Results.GetRange(start, (int)Math.Min(Batch, count - start));
+                        for (int k = 0; k < matches.Count; k++)
+                        {
+                            yield return (document, rows.Row(start + k, matches[k]) with { Number = ++number });
+                        }
+
+                        written += matches.Count;
+                        operation?.Report(written);
                     }
                 }
 
-                operation?.Report(start + n);
+                yield break;
+            }
+
+            foreach (long index in indices)
+            {
+                if ((written & (Batch - 1)) == 0)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    operation?.CancellationToken.ThrowIfCancellationRequested();
+                    operation?.Report(written);
+                }
+
+                if (Locate(index) is { } found)
+                {
+                    yield return (found.Document, found.Rows.Row(found.Local) with { Number = index + 1 });
+                }
+
+                written++;
             }
         }
 
         if (format == ExportFormat.Csv)
         {
-            WriteCsv(stream, Enumerate(), labels, numeric);
+            WriteCsv(stream, Enumerate(), labels, numeric, documents);
         }
         else
         {
-            WriteJson(stream, Enumerate(), labels, numeric);
+            WriteJson(stream, Enumerate(), numeric, documents);
         }
     }
 
-    private static void WriteCsv(Stream stream, IEnumerable<SearchResultRow> rows, ExportLabels labels, bool numeric)
+    private static void WriteCsv(Stream stream, IEnumerable<(string? Document, SearchResultRow Row)> rows, ExportLabels labels, bool numeric, bool documents)
     {
         using var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true), 65536, leaveOpen: true);
-        var header = new List<string> { labels.Number, labels.Offset, labels.OffsetHex, labels.Length, labels.Hex, labels.Text, labels.Before, labels.After, labels.Status };
+        var header = new List<string> { labels.Number };
+        if (documents)
+        {
+            header.Add(labels.Document);
+        }
+
+        header.AddRange([labels.Offset, labels.OffsetHex, labels.Length, labels.Hex, labels.Text, labels.Before, labels.After, labels.Status]);
         if (numeric)
         {
             header.Add(labels.Endian);
@@ -256,11 +311,16 @@ public static class SearchResultsExporter
 
         writer.Write(string.Join(',', header.Select(Csv)));
         writer.Write("\r\n");
-        foreach (SearchResultRow r in rows)
+        foreach ((string? document, SearchResultRow r) in rows)
         {
-            var fields = new List<string>
+            var fields = new List<string> { r.Number.ToString(CultureInfo.InvariantCulture) };
+            if (documents)
             {
-                r.Number.ToString(CultureInfo.InvariantCulture),
+                fields.Add(document ?? string.Empty);
+            }
+
+            fields.AddRange(
+            [
                 r.Offset.ToString(CultureInfo.InvariantCulture),
                 "0x" + r.Offset.ToString("X", CultureInfo.InvariantCulture),
                 r.Length.ToString(CultureInfo.InvariantCulture),
@@ -269,7 +329,7 @@ public static class SearchResultsExporter
                 r.Before,
                 r.After,
                 labels.StatusText(r.Status),
-            };
+            ]);
             if (numeric)
             {
                 fields.Add(r.Variant ?? string.Empty);
@@ -281,15 +341,20 @@ public static class SearchResultsExporter
         }
     }
 
-    private static void WriteJson(Stream stream, IEnumerable<SearchResultRow> rows, ExportLabels labels, bool numeric)
+    private static void WriteJson(Stream stream, IEnumerable<(string? Document, SearchResultRow Row)> rows, bool numeric, bool documents)
     {
         using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
         writer.WriteStartObject();
         writer.WriteStartArray("results");
-        foreach (SearchResultRow r in rows)
+        foreach ((string? document, SearchResultRow r) in rows)
         {
             writer.WriteStartObject();
             writer.WriteNumber("number", r.Number);
+            if (documents)
+            {
+                writer.WriteString("document", document ?? string.Empty);
+            }
+
             writer.WriteNumber("offset", r.Offset);
             writer.WriteString("offsetHex", "0x" + r.Offset.ToString("X", CultureInfo.InvariantCulture));
             writer.WriteNumber("length", r.Length);

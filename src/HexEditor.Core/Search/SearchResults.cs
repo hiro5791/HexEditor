@@ -334,6 +334,18 @@ public sealed class SearchResults : IDisposable
         }
     }
 
+    /// <summary>
+    /// 探さないまま終わった結果を「中断」にする (「開いているすべてのドキュメント」のすべて検索を途中でキャンセルし、まだ探していない
+    /// ドキュメントがあるとき)。探し終えた結果は変えない。
+    /// </summary>
+    public void SetCancelled()
+    {
+        if (State == SearchResultsState.Running)
+        {
+            SetState(SearchResultsState.Cancelled);
+        }
+    }
+
     internal void SetState(SearchResultsState state)
     {
         lock (_lock)

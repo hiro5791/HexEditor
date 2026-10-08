@@ -286,6 +286,12 @@ public sealed partial class FindBar : UserControl
             return;
         }
 
+        if (SearchesAllDocuments)
+        {
+            await FindInAllDocumentsAsync(forward);
+            return;
+        }
+
         AddToHistory();
         StopIncremental();
         _running?.Cancel();
@@ -367,7 +373,7 @@ public sealed partial class FindBar : UserControl
         var cts = new CancellationTokenSource();
         _running = cts;
         int limit = Math.Clamp(App.Settings?.GetInt(FindAllLimitKey, 1_000_000) ?? 1_000_000, 1_000, 100_000_000);
-        var results = new SearchResults(editor.Document.Current, pattern, new SearchOptions
+        IReadOnlyList<SearchTarget> targets = FindAllTargets(editor, pattern, new SearchOptions
         {
             Scope = CurrentScope,
             IncludeOverlapping = OverlapChoice.IsChecked == true,
@@ -378,12 +384,13 @@ public sealed partial class FindBar : UserControl
         StartProgress();
         try
         {
-            await panel.RunAsync(editor, results, KindName(Kind), Query.Text, ResultsEncoding(editor), cts, op => _activeOperation = op);
-            string message = results.LongCount == 0
+            await panel.RunAsync(targets, KindName(Kind), Query.Text, ResultsEncoding(editor), cts, op => _activeOperation = op);
+            long total = targets.Sum(t => t.Results.LongCount);
+            string message = total == 0
                 ? Loc.Get("Find_NotFound")
-                : Loc.Format("Find_FoundCount", results.LongCount.ToString("N0", CultureInfo.CurrentCulture));
+                : Loc.Format("Find_FoundCount", total.ToString("N0", CultureInfo.CurrentCulture));
             Status.Text = cts.IsCancellationRequested ? Loc.Get("Find_Cancelled") : message;
-            MarkQuery(results.LongCount == 0 && !cts.IsCancellationRequested ? QueryState.NotFound : QueryState.Normal);
+            MarkQuery(total == 0 && !cts.IsCancellationRequested ? QueryState.NotFound : QueryState.Normal);
             Announce(Status.Text);
         }
         finally
@@ -546,7 +553,7 @@ public sealed partial class FindBar : UserControl
     /// <summary>直前に検証した検索語と条件 (変わったかどうかの判定)。</summary>
     private string? _patternKey;
 
-    /// <summary>今の検索範囲 (FIND-11)。</summary>
+    /// <summary>今の検索範囲 (FIND-11)。「開いているすべてのドキュメント」では各ドキュメントの全体。</summary>
     private SearchScope CurrentScope => ScopeChoice.SelectedIndex switch
     {
         1 => _scope,
