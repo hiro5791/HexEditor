@@ -508,4 +508,9 @@
   <data name="SearchResults_BookmarkGroup" xml:space="preserve"><value>検索結果</value></data>
   <data name="Find_Scope_AllDocuments.Content" xml:space="preserve"><value>開いているすべてのドキュメント</value></data>
   <data name="SearchResults_Column_Document" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Find_Replace_Name" xml:space="preserve"><value>置換後の値</value></data>
+  <data name="Find_RangeStart_Name" xml:space="preserve"><value>範囲の開始</value></data>
+  <data name="Find_RangeEnd_Name" xml:space="preserve"><value>範囲の終了 (このバイトを含む)</value></data>
+  <data name="Find_ToleranceValue_Name" xml:space="preserve"><value>許容誤差の値</value></data>
+  <data name="Find_FillerCustom_Name" xml:space="preserve"><value>埋め草のバイト</value></data>
 </root>

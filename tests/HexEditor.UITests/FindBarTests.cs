@@ -98,7 +98,7 @@ public sealed class FindBarTests
         Assert.DoesNotContain(app.Window.FindAllDescendants(cf => cf.ByControlType(ControlType.Window)), w => AppSession.AllText(w).Contains("Not found", StringComparison.Ordinal));
     });
 
-    [Fact(Skip = "IME の変換中の文字列は、日本語 IME へのシステムのキー入力 (n・i・h・o・n・Space) でしか作れない。作業中の PC のキーボードを使わないため自動では実行しない (CI の専用の環境が必要)。検索バーには「入力しながら検索」(FIND-04 の仕様 5) がまだなく、確定前に検索が始まる経路もない")]
+    [Fact(Skip = "IME の変換中の文字列は、日本語 IME へのシステムのキー入力 (n・i・h・o・n・Space) でしか作れない。作業中の PC のキーボードを使わないため自動では実行しない (CI の専用の環境が必要)。「入力しながら検索」(FIND-27) は TextBox の TextCompositionStarted〜Ended の間は検索を始めない (FindBar.Incremental.cs)")]
     [Trait(UiTest.TC, "TC-FIND-04-07")]
     public Task Ime_composition_does_not_start_a_search() => Task.CompletedTask;
 

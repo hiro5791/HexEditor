@@ -508,4 +508,9 @@ Details were written to:
   <data name="SearchResults_BookmarkGroup" xml:space="preserve"><value>Search results</value></data>
   <data name="Find_Scope_AllDocuments.Content" xml:space="preserve"><value>All open documents</value></data>
   <data name="SearchResults_Column_Document" xml:space="preserve"><value>Document</value></data>
+  <data name="Find_Replace_Name" xml:space="preserve"><value>Replace with</value></data>
+  <data name="Find_RangeStart_Name" xml:space="preserve"><value>Range start</value></data>
+  <data name="Find_RangeEnd_Name" xml:space="preserve"><value>Range end (inclusive)</value></data>
+  <data name="Find_ToleranceValue_Name" xml:space="preserve"><value>Tolerance value</value></data>
+  <data name="Find_FillerCustom_Name" xml:space="preserve"><value>Padding bytes</value></data>
 </root>

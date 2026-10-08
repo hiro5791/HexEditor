@@ -77,6 +77,11 @@ public sealed partial class FindBar : UserControl
         AutomationProperties.SetName(OptionsToggle, Loc.Get("Find_Options_Name"));
         AutomationProperties.SetName(CloseButton, Loc.Get("Find_Close_Name"));
         AutomationProperties.SetName(HistoryButton, Loc.Get("Find_History_Name"));
+        AutomationProperties.SetName(ReplaceQuery, Loc.Get("Find_Replace_Name"));
+        AutomationProperties.SetName(RangeStart, Loc.Get("Find_RangeStart_Name"));
+        AutomationProperties.SetName(RangeEnd, Loc.Get("Find_RangeEnd_Name"));
+        AutomationProperties.SetName(ToleranceValue, Loc.Get("Find_ToleranceValue_Name"));
+        AutomationProperties.SetName(FillerCustom, Loc.Get("Find_FillerCustom_Name"));
         ToolTipService.SetToolTip(PreviousButton, Loc.Get("Find_Previous_Name") + " (Shift+F3)");
         ToolTipService.SetToolTip(NextButton, Loc.Get("Find_Next_Name") + " (F3)");
         ToolTipService.SetToolTip(FindAllButton, Loc.Get("Find_FindAll_Name") + " (Alt+Enter)");
