@@ -432,6 +432,10 @@ public sealed partial class MainWindow
     /// <summary>入力欄を開いてから、確定または閉じるまでの間。</summary>
     private bool _inputOpen;
 
+    /// <summary>入力欄を開いた回数と、実際に表示された (Opened) 回。古い Closed を見分ける。</summary>
+    private int _inputSession;
+    private int _inputOpenedSession;
+
     /// <summary>「1 行のバイト数 > 指定…」(VIEW-08 の仕様 1・5)。</summary>
     private void ShowBytesPerRowInput()
     {
@@ -572,8 +576,15 @@ public sealed partial class MainWindow
             panel.Children.Add(_inputError);
             panel.Children.Add(_inputOk);
             _inputFlyout = new Flyout { Content = panel };
+            _inputFlyout.Opened += (_, _) => _inputOpenedSession = _inputSession;
             _inputFlyout.Closed += (_, _) =>
             {
+                // 確定して閉じた直後に開き直すと、前の Hide の Closed が後から届く。開き直した入力欄は開いたままとして扱う。
+                if (_inputOpenedSession != _inputSession)
+                {
+                    return;
+                }
+
                 _inputOpen = false;
                 FocusEditor();
             };
@@ -585,6 +596,7 @@ public sealed partial class MainWindow
         _inputCommit = commit;
         _inputBox!.Text = initial;
         _inputOpen = true;
+        _inputSession++;
         ValidateInput();
         _inputFlyout.ShowAt(view, new FlyoutShowOptions { Placement = FlyoutPlacementMode.TopEdgeAlignedLeft, Position = new Windows.Foundation.Point(view.ContentLeft, 0) });
         _inputBox.SelectAll();
