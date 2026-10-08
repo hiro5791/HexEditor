@@ -31,10 +31,11 @@ public sealed class InstallHooksTests : IDisposable
     public void EveryEntryIsUnderHkcuSoftware()
     {
         // 登録先はすべて HKCU (IUserRegistry は HKCU だけを扱う)。HKLM の場所を書いた項目がないことも確かめる (PKG-08 の仕様 3)。
-        Assert.All(ShellRegistration.Entries, e =>
+        Hooks().AfterInstall("1.0.0");
+        Assert.All(_registry.Keys, key =>
         {
-            Assert.StartsWith(@"Software\", e.Key);
-            Assert.DoesNotContain("HKEY_LOCAL_MACHINE", e.Key, StringComparison.OrdinalIgnoreCase);
+            Assert.StartsWith(@"Software\", key);
+            Assert.DoesNotContain("HKEY_LOCAL_MACHINE", key, StringComparison.OrdinalIgnoreCase);
         });
         Assert.Equal(ShellRegistration.AppPathsId, ShellRegistration.Entries[0].Id);
     }
@@ -43,9 +44,10 @@ public sealed class InstallHooksTests : IDisposable
     public void AfterUpdateIsIdempotent()
     {
         Hooks().AfterInstall("1.0.0");
+        IReadOnlyDictionary<string, string> installed = _registry.Snapshot();
         Hooks().AfterUpdate("1.1.0");
         Hooks().AfterUpdate("1.1.0");
-        Assert.Single(_registry.Keys);
+        Assert.Equal(installed.OrderBy(p => p.Key), _registry.Snapshot().OrderBy(p => p.Key));
         Assert.Equal(Exe, _registry.GetValue(ShellRegistration.AppPathsKey, null));
     }
 
@@ -123,42 +125,5 @@ public sealed class InstallHooksTests : IDisposable
         Hooks().AfterUpdate("1.0.1");
         Hooks().BeforeUninstall("1.0.1");
         Assert.True(clock.Elapsed < InstallHooks.Budget);
-    }
-
-    private sealed class FakeRegistry : IUserRegistry
-    {
-        private readonly Dictionary<string, Dictionary<string, string>> _keys = new(StringComparer.OrdinalIgnoreCase);
-
-        public bool FailWrites { get; set; }
-
-        public IReadOnlyCollection<string> Keys => _keys.Keys;
-
-        public void SetValue(string key, string? name, string value)
-        {
-            if (FailWrites)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            if (!_keys.TryGetValue(key, out Dictionary<string, string>? values))
-            {
-                _keys[key] = values = new(StringComparer.OrdinalIgnoreCase);
-            }
-
-            values[name ?? string.Empty] = value;
-        }
-
-        public string? GetValue(string key, string? name) =>
-            _keys.TryGetValue(key, out Dictionary<string, string>? values) && values.TryGetValue(name ?? string.Empty, out string? v) ? v : null;
-
-        public bool KeyExists(string key) => _keys.ContainsKey(key);
-
-        public void DeleteKeyTree(string key)
-        {
-            foreach (string k in _keys.Keys.Where(k => k.Equals(key, StringComparison.OrdinalIgnoreCase) || k.StartsWith(key + "\\", StringComparison.OrdinalIgnoreCase)).ToList())
-            {
-                _keys.Remove(k);
-            }
-        }
     }
 }

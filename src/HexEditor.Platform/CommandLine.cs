@@ -11,7 +11,8 @@ public sealed record CommandLine(
     bool NewWindow,
     bool NewInstance,
     bool SafeMode,
-    string? PseudoLocale = null)
+    string? PseudoLocale = null,
+    bool NewDocument = false)
 {
     private static readonly HashSet<string> OptionsWithValue =
     [
@@ -52,7 +53,8 @@ public sealed record CommandLine(
             flags.Contains("--new-window"),
             flags.Contains("--new-instance"),
             flags.Contains("--safe-mode"),
-            values.GetValueOrDefault("--pseudo-locale"));
+            values.GetValueOrDefault("--pseudo-locale"),
+            flags.Contains("--new-document"));
     }
 
     /// <summary>

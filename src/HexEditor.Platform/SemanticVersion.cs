@@ -16,6 +16,7 @@ public enum ReleaseChannel
 /// 対応表の計算は Directory.Build.props にも同じものがある (ビルド時に使う)。両方を同時に直すこと。
 /// </summary>
 public sealed partial record SemanticVersion(int Major, int Minor, int Patch, int? Preview, bool IsLocal, string? Commit)
+    : IComparable<SemanticVersion>
 {
     /// <summary>PATCH の上限 (MSIX の第 3 の数 PATCH×1000+999 が 65535 を超えないため)。</summary>
     public const int MaxPatch = 64;
@@ -47,6 +48,60 @@ public sealed partial record SemanticVersion(int Major, int Minor, int Patch, in
     public Version AssemblyVersion => new(Major, Minor, 0, 0);
 
     public override string ToString() => Informational;
+
+    /// <summary>
+    /// 版の順序 (更新の判定。PKG-17、PKG-21): MAJOR、MINOR、PATCH の順に比べ、同じなら ローカル &lt; プレビュー (N の順) &lt; 安定版。
+    /// コミット (<c>+</c> の後) は比べない (SemVer 2.0 のビルドのメタデータ)。MSIX の版の順序 (<see cref="MsixVersion"/>) と同じ。
+    /// </summary>
+    public int CompareTo(SemanticVersion? other)
+    {
+        if (other is null)
+        {
+            return 1;
+        }
+
+        int c = Major.CompareTo(other.Major);
+        if (c == 0)
+        {
+            c = Minor.CompareTo(other.Minor);
+        }
+
+        if (c == 0)
+        {
+            c = Patch.CompareTo(other.Patch);
+        }
+
+        return c != 0 ? c : Rank(this).CompareTo(Rank(other));
+
+        static int Rank(SemanticVersion v) => v.Preview ?? (v.IsLocal ? 0 : int.MaxValue);
+    }
+
+    /// <summary>SemVer の部分 (コミットを除く) が同じか。</summary>
+    public bool SameVersion(SemanticVersion other) => CompareTo(other) == 0;
+
+    public static bool operator <(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) < 0;
+
+    public static bool operator >(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) > 0;
+
+    public static bool operator <=(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) <= 0;
+
+    public static bool operator >=(SemanticVersion a, SemanticVersion b) => a.CompareTo(b) >= 0;
+
+    /// <summary>
+    /// MSIX の版 (<see cref="MsixVersion"/> の形) から SemVer に戻す (Microsoft Store が返す新しい版の表示。PKG-19)。
+    /// 第 3 の数の下 3 桁が 999 なら安定版、1〜998 ならプレビュー版、0 ならローカルのビルド。
+    /// </summary>
+    public static SemanticVersion FromMsixVersion(Version msix)
+    {
+        int patch = Math.Max(0, msix.Build) / 1000;
+        int p = Math.Max(0, msix.Build) % 1000;
+        return p switch
+        {
+            999 => new SemanticVersion(msix.Major, msix.Minor, patch, null, false, null),
+            0 => new SemanticVersion(msix.Major, msix.Minor, patch, null, true, null),
+            _ => new SemanticVersion(msix.Major, msix.Minor, patch, p, false, null),
+        };
+    }
 
     /// <summary>
     /// 版の文字列 (タグの <c>v</c> は除いたもの。<c>+コミット</c> は付いていてもよい) を読む。

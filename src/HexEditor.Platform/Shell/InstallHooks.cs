@@ -26,13 +26,17 @@ public sealed class InstallHooks
     private readonly Action _notifyAssociationsChanged;
     private readonly Stopwatch _clock = new();
     private readonly TimeSpan _budget;
+    private readonly ShellLabels _labels;
     private bool _dataDeleted;
 
     /// <param name="dataRoot">データフォルダ (%LocalAppData%\HexEditorData)。</param>
     /// <param name="exePath">登録する exe (<c>current\HexEditor.exe</c>)。</param>
     /// <param name="notifyAssociationsChanged">SHChangeNotify(SHCNE_ASSOCCHANGED) の呼び出し (テストでは差し替える)。</param>
-    public InstallHooks(IUserRegistry registry, string dataRoot, string exePath, Action? notifyAssociationsChanged = null, TimeSpan? budget = null)
+    /// <param name="labels">Explorer に出す文字列 (登録時の表示言語。09 の UI-54 の仕様 1)。null なら英語。</param>
+    public InstallHooks(IUserRegistry registry, string dataRoot, string exePath, Action? notifyAssociationsChanged = null, TimeSpan? budget = null,
+        ShellLabels? labels = null)
     {
+        _labels = labels ?? ShellLabels.English;
         _registry = registry;
         _dataRoot = dataRoot;
         _exePath = exePath;
@@ -102,9 +106,29 @@ public sealed class InstallHooks
         return new HashSet<string>();
     }
 
+    /// <summary>設定の「プログラムから開く」の候補の拡張子 (09 の UI-56 の仕様 2)。読めなければ既定の一覧。</summary>
+    public IReadOnlyList<string> ReadOpenWithExtensions()
+    {
+        try
+        {
+            string path = Path.Combine(_dataRoot, "settings.json");
+            if (File.Exists(path) && JsonNode.Parse(File.ReadAllText(path))?[ShellRegistration.OpenWithExtensionsKey] is JsonValue value
+                && value.TryGetValue(out string? text))
+            {
+                return ShellRegistration.ParseExtensions(text);
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException or InvalidOperationException)
+        {
+        }
+
+        return ShellRegistration.DefaultOpenWithExtensions;
+    }
+
     private void RegisterAll()
     {
-        IReadOnlyList<string> failures = ShellRegistration.Register(_registry, _exePath, ReadDisabled(), TimeUp);
+        var context = new ShellRegistrationContext(_exePath, _labels, ReadOpenWithExtensions());
+        IReadOnlyList<string> failures = ShellRegistration.Register(_registry, context, ReadDisabled(), null, TimeUp);
         Log(failures.Count == 0 ? "Registered all entries." : "Register failed: " + string.Join(", ", failures));
         _notifyAssociationsChanged();
     }
