@@ -11,11 +11,12 @@ public sealed class OffsetFormat
 {
     private int _digits;
 
-    public OffsetFormat(ViewSettings settings, long maxCursor, int sectorSize, long? referencePoint = null)
+    public OffsetFormat(ViewSettings settings, long maxCursor, int sectorSize, long? referencePoint = null, int minDigits = 0)
     {
         Settings = settings;
         SectorSize = sectorSize > 0 ? sectorSize : 512;
         ReferencePoint = referencePoint;
+        _digits = Math.Max(0, minDigits);
         Grow(maxCursor);
     }
 

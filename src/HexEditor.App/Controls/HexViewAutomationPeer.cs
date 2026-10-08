@@ -87,7 +87,7 @@ public sealed partial class HexViewAutomationPeer(HexView owner) : FrameworkElem
 
     private List<AutomationPeer> Children()
     {
-        if (_children is not null && _children.Count == RowCount * ColumnCount + 2)
+        if (_children is not null && _children.Count >= RowCount * ColumnCount)
         {
             return _children;
         }
@@ -101,8 +101,8 @@ public sealed partial class HexViewAutomationPeer(HexView owner) : FrameworkElem
             }
         }
 
-        // スクロールバーも子として残す (UI テストが AutomationId で探す)。
-        foreach (UIElement bar in owner.ScrollBars)
+        // スクロールバーと列見出しのオフセット列の見出し (VIEW-05 の仕様 7) も子として残す (UI テストが AutomationId で探す)。
+        foreach (UIElement bar in owner.ScrollBars.Concat(owner.HeaderElements))
         {
             if (bar.Visibility == Visibility.Visible && CreatePeerForElement(bar) is { } peer)
             {
@@ -167,7 +167,7 @@ public sealed partial class HexViewAutomationPeer(HexView owner) : FrameworkElem
         int digits = owner.OffsetDigits;
         double top = owner.RowTop(row);
         double cw = owner.CellWidth;
-        var columns = new HexView.RowColumns(b);
+        HexView.RowColumns columns = owner.Columns;
         if (column == 0)
         {
             return new Rect(owner.CharacterLeft(0), top, digits * cw, owner.RowHeight);
@@ -175,10 +175,10 @@ public sealed partial class HexViewAutomationPeer(HexView owner) : FrameworkElem
 
         if (column <= b)
         {
-            return new Rect(owner.CharacterLeft(digits + 2 + columns.HexIndex(column - 1)), top, 2 * cw, owner.RowHeight);
+            return new Rect(owner.CharacterLeft(owner.OffsetChars + columns.HexIndex(column - 1)), top, 2 * cw, owner.RowHeight);
         }
 
-        return new Rect(owner.CharacterLeft(digits + 2 + columns.TextIndex(column - b - 1)), top, cw, owner.RowHeight);
+        return new Rect(owner.CharacterLeft(owner.OffsetChars + columns.TextIndex(column - b - 1)), top, cw, owner.RowHeight);
     }
 
     // ---- Value パターン ----
@@ -227,10 +227,10 @@ public sealed partial class HexViewAutomationPeer(HexView owner) : FrameworkElem
         {
             int b = owner.BytesPerRowShown;
             int digits = owner.OffsetDigits;
-            var columns = new HexView.RowColumns(b);
+            HexView.RowColumns columns = owner.Columns;
             (int col, int length) = cell.Column == 0 ? (0, digits)
-                : cell.Column <= b ? (digits + 2 + columns.HexIndex(cell.Column - 1), 2)
-                : (digits + 2 + columns.TextIndex(cell.Column - b - 1), 1);
+                : cell.Column <= b ? (owner.OffsetChars + columns.HexIndex(cell.Column - 1), 2)
+                : (owner.OffsetChars + columns.TextIndex(cell.Column - b - 1), 1);
             int start = Math.Min(text.LineStart(cell.Row) + col, text.LineEnd(cell.Row));
             int end = Math.Min(start + length, text.LineEnd(cell.Row));
             return new HexTextRange(this, text, start, end);
@@ -248,7 +248,7 @@ public sealed partial class HexViewAutomationPeer(HexView owner) : FrameworkElem
         double cw = Math.Max(1, owner.CellWidth);
         int col = local.X < owner.ContentLeft
             ? (int)Math.Floor((local.X - owner.CharacterLeft(0)) / cw)
-            : digits + 2 + (int)Math.Floor((local.X - owner.CharacterLeft(digits + 2)) / cw);
+            : owner.OffsetChars + (int)Math.Floor((local.X - owner.CharacterLeft(owner.OffsetChars)) / cw);
         int pos = text.LineCount == 0 ? 0 : Math.Clamp(text.LineStart(line) + Math.Max(0, col), text.LineStart(line), text.LineEnd(line));
         return new HexTextRange(this, text, pos, pos);
     }
@@ -481,7 +481,7 @@ internal sealed partial class HexTextRange(HexViewAutomationPeer peer, HexTextSn
             double top = view.RowTop(line);
 
             // オフセット列と内容の境目で矩形を分ける (内容は横スクロールするため)。
-            foreach ((int a, int z) in (ReadOnlySpan<(int, int)>)[(from, Math.Min(to, digits + 2)), (Math.Max(from, digits + 2), to)])
+            foreach ((int a, int z) in (ReadOnlySpan<(int, int)>)[(from, Math.Min(to, view.OffsetChars)), (Math.Max(from, view.OffsetChars), to)])
             {
                 if (z < a || (z == a && _start != _end))
                 {

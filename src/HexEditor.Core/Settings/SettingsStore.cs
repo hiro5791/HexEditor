@@ -139,6 +139,19 @@ public sealed class SettingsStore : IDisposable
         }
     }
 
+    /// <summary>オブジェクト・配列の値 (表示設定の既定値など)。なければ null。返すのは複製。</summary>
+    public JsonNode? GetNode(string key)
+    {
+        lock (_lock)
+        {
+            return _values[key]?.DeepClone();
+        }
+    }
+
+    /// <summary>オブジェクト・配列の値を変える。null または空のオブジェクトならファイルから消す。</summary>
+    public void SetNode(string key, JsonNode? value) =>
+        Set(key, value is null || value is JsonObject { Count: 0 } ? null : value.DeepClone());
+
     /// <summary>値を変える。既定値と同じなら、ファイルから消す (仕様 4)。</summary>
     public void SetString(string key, string value, string defaultValue) =>
         Set(key, value == defaultValue ? null : JsonValue.Create(value));

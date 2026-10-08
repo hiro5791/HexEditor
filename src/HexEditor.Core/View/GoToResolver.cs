@@ -77,7 +77,7 @@ public sealed class EditorExpressionContext(EditorState editor) : IExpressionCon
     public long SelectionLength => editor.SelectionLength;
 
     /// <summary>ディスクは論理セクタサイズ、ファイルは表示設定の値 (既定 512)。</summary>
-    public int SectorSize => editor.Document.Source.LogicalSectorSize > 1 ? editor.Document.Source.LogicalSectorSize : 512;
+    public int SectorSize => editor.SectorSize;
 
     public long? ClusterSize => null;
 

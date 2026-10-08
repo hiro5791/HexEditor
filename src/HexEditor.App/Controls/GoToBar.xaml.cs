@@ -51,8 +51,10 @@ public sealed partial class GoToBar : UserControl
         Closed?.Invoke(this, EventArgs.Empty);
     }
 
+    /// <summary>接頭辞のない数値は、オフセットの基数が 10 進なら 10 進、それ以外は 16 進として解釈する (00-overview 6.1、VIEW-19 の仕様 8)。</summary>
     private GoToResult? Resolve() =>
-        Editor is null ? null : GoToResolver.Resolve(Input.Text, (GoToBase)BaseChoice.SelectedIndex, (GoToUnit)UnitChoice.SelectedIndex, Editor);
+        Editor is null ? null : GoToResolver.Resolve(Input.Text, (GoToBase)BaseChoice.SelectedIndex, (GoToUnit)UnitChoice.SelectedIndex, Editor,
+            Editor.View.Radix == OffsetRadix.Decimal ? Core.Expressions.DefaultRadix.Decimal : Core.Expressions.DefaultRadix.Hexadecimal);
 
     /// <summary>解釈結果を常に表示する (VIEW-29 の仕様 6・7)。</summary>
     private void Update()
@@ -85,7 +87,8 @@ public sealed partial class GoToBar : UserControl
         }
         else
         {
-            Interpretation.Text = $"= 0x{r.Offset:X} ({r.Offset:N0})";
+            // 16 進の表記は大文字・小文字の設定に従う (VIEW-12 の仕様 2)。0x の x は常に小文字。
+            Interpretation.Text = $"= {OffsetFormat.Hex(r.Offset, Editor!.View.LowercaseHex)} ({r.Offset:N0})";
         }
 
         // 不正な入力は赤枠でも示す。

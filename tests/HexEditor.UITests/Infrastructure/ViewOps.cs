@@ -23,11 +23,35 @@ public static class ViewOps
     public static string RowHex(JsonObject row) =>
         string.Join(' ', row["cells"]!.AsArray().Select(c => c!["hex"]!.GetValue<string>()));
 
-    /// <summary>1 行の中の Hex 列の c 番目のバイトの文字位置 (中央に 1 文字分の区切り。HexView.RowColumns と同じ)。</summary>
-    public static int HexIndex(int bytesPerRow, int c) => c * 3 + (c >= bytesPerRow / 2 && bytesPerRow > 1 ? 1 : 0);
+    /// <summary>
+    /// 1 行の中の Hex 列の c 番目のバイトの文字位置 (グループ化 1。1 行 16 バイト以上では 8 バイトごとに 1 文字分の区切り。VIEW-09)。
+    /// </summary>
+    public static int HexIndex(int bytesPerRow, int c) => c * 3 + (bytesPerRow >= 16 ? c / 8 : 0);
 
-    /// <summary>1 行の中のテキスト列の c 番目の文字位置。</summary>
-    public static int TextIndex(int bytesPerRow, int c) => bytesPerRow * 3 + (bytesPerRow > 1 ? 1 : 0) + 1 + c;
+    /// <summary>1 行の中のテキスト列の c 番目の文字位置 (Hex 列の後ろに 2 文字の空白)。</summary>
+    public static int TextIndex(int bytesPerRow, int c) => HexIndex(bytesPerRow, bytesPerRow - 1) + 2 + 2 + c;
+
+    /// <summary>描画モデルの、オフセットのバイトを含む行 (行の先頭のずれ VIEW-20 を考える)。表示されていなければ null。</summary>
+    public static JsonObject? RowOf(JsonObject render, long offset)
+    {
+        int b = render["bytesPerRow"]!.GetValue<int>();
+        int shift = render["rowShift"]?.GetValue<int>() ?? 0;
+        long rowStart = (offset + shift) / b * b - shift;
+        return render["rows"]!.AsArray().FirstOrDefault(r => r!["rowStart"]?.GetValue<long>() == rowStart)?.AsObject();
+    }
+
+    /// <summary>描画モデルの、オフセットのバイトのセル。表示されていなければ null。</summary>
+    public static JsonObject? CellOf(JsonObject render, long offset)
+    {
+        if (RowOf(render, offset) is not { } row)
+        {
+            return null;
+        }
+
+        int c = (int)(offset - row["rowStart"]!.GetValue<long>());
+        JsonArray cells = row["cells"]!.AsArray();
+        return c >= 0 && c < cells.Count ? cells[c]!.AsObject() : null;
+    }
 
     /// <summary>
     /// オフセットのセルの文字の中央の座標。<paramref name="text"/> が false なら Hex 列の <paramref name="charIndex"/> 文字目
@@ -36,13 +60,16 @@ public static class ViewOps
     public static (double X, double Y) CellPoint(JsonObject render, long offset, bool text = false, int charIndex = 0)
     {
         int b = render["bytesPerRow"]!.GetValue<int>();
+        int shift = render["rowShift"]?.GetValue<int>() ?? 0;
         long topRow = render["topRow"]!.GetValue<long>();
         double cell = render["cellWidth"]!.GetValue<double>();
         double height = render["rowHeight"]!.GetValue<double>();
-        int c = (int)(offset % b);
-        int index = text ? TextIndex(b, c) : HexIndex(b, c) + charIndex;
-        double x = render["contentLeft"]!.GetValue<double>() + (index + 0.5) * cell - render["horizontalOffset"]!.GetValue<double>();
-        double y = ((offset / b) - topRow + 0.5) * height - render["subRowOffset"]!.GetValue<double>();
+        int c = (int)((offset + shift) % b);
+        double left = CellOf(render, offset) is { } found && (text ? found["textLeft"] : found["hexLeft"]) is { } l
+            ? l.GetValue<double>() + charIndex * cell
+            : (text ? TextIndex(b, c) : HexIndex(b, c) + charIndex) * cell;
+        double x = render["contentLeft"]!.GetValue<double>() + left + 0.5 * cell - render["horizontalOffset"]!.GetValue<double>();
+        double y = (((offset + shift) / b) - topRow + 0.5) * height - render["subRowOffset"]!.GetValue<double>();
         return (x, y);
     }
 

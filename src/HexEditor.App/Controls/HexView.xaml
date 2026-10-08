@@ -36,6 +36,18 @@
                     <StaticResource x:Key="HexViewFocusOuterBrush" ResourceKey="FocusStrokeColorOuterBrush" />
                     <StaticResource x:Key="HexViewFocusInnerBrush" ResourceKey="FocusStrokeColorInnerBrush" />
                     <StaticResource x:Key="HexViewPanelBrush" ResourceKey="SolidBackgroundFillColorTertiaryBrush" />
+                    <StaticResource x:Key="HexViewInsertedBrush" ResourceKey="SystemFillColorSuccessBrush" />
+                    <StaticResource x:Key="HexViewSavedChangeBrush" ResourceKey="AccentTextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewInvalidBrush" ResourceKey="SystemFillColorCautionBrush" />
+                    <StaticResource x:Key="HexViewAlternateBrush" ResourceKey="SolidBackgroundFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewCurrentRowBrush" ResourceKey="SubtleFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewCurrentRowLineBrush" ResourceKey="AccentFillColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewRulerBackgroundBrush" ResourceKey="SolidBackgroundFillColorTertiaryBrush" />
+                    <StaticResource x:Key="HexViewRulerTextBrush" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewRulerHighlightBrush" ResourceKey="AccentFillColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewRulerHighlightTextBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewFocusRangeBrush" ResourceKey="SystemFillColorAttentionBackgroundBrush" />
+                    <StaticResource x:Key="HexViewSeparatorBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <StaticResource x:Key="HexViewBackgroundBrush" ResourceKey="SolidBackgroundFillColorBaseBrush" />
@@ -57,6 +69,18 @@
                     <StaticResource x:Key="HexViewFocusOuterBrush" ResourceKey="FocusStrokeColorOuterBrush" />
                     <StaticResource x:Key="HexViewFocusInnerBrush" ResourceKey="FocusStrokeColorInnerBrush" />
                     <StaticResource x:Key="HexViewPanelBrush" ResourceKey="SolidBackgroundFillColorTertiaryBrush" />
+                    <StaticResource x:Key="HexViewInsertedBrush" ResourceKey="SystemFillColorSuccessBrush" />
+                    <StaticResource x:Key="HexViewSavedChangeBrush" ResourceKey="AccentTextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewInvalidBrush" ResourceKey="SystemFillColorCautionBrush" />
+                    <StaticResource x:Key="HexViewAlternateBrush" ResourceKey="SolidBackgroundFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewCurrentRowBrush" ResourceKey="SubtleFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewCurrentRowLineBrush" ResourceKey="AccentFillColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewRulerBackgroundBrush" ResourceKey="SolidBackgroundFillColorTertiaryBrush" />
+                    <StaticResource x:Key="HexViewRulerTextBrush" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="HexViewRulerHighlightBrush" ResourceKey="AccentFillColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewRulerHighlightTextBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
+                    <StaticResource x:Key="HexViewFocusRangeBrush" ResourceKey="SystemFillColorAttentionBackgroundBrush" />
+                    <StaticResource x:Key="HexViewSeparatorBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="HighContrast">
                     <SolidColorBrush x:Key="HexViewBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
@@ -78,6 +102,18 @@
                     <SolidColorBrush x:Key="HexViewFocusOuterBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
                     <SolidColorBrush x:Key="HexViewFocusInnerBrush" Color="{ThemeResource SystemColorWindowColor}" />
                     <SolidColorBrush x:Key="HexViewPanelBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="HexViewInsertedBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="HexViewSavedChangeBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="HexViewInvalidBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+                    <SolidColorBrush x:Key="HexViewAlternateBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="HexViewCurrentRowBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="HexViewCurrentRowLineBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+                    <SolidColorBrush x:Key="HexViewRulerBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="HexViewRulerTextBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="HexViewRulerHighlightBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+                    <SolidColorBrush x:Key="HexViewRulerHighlightTextBrush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+                    <SolidColorBrush x:Key="HexViewFocusRangeBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="HexViewSeparatorBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <!--  つまみの最小の長さ (VIEW-02 の仕様 7)  -->
@@ -87,6 +123,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -96,11 +133,57 @@
         </Grid.ColumnDefinitions>
 
         <!--
+            列見出し (VIEW-05)。縦スクロールしても動かず、横スクロールには追従する。オフセット列の見出しを押すと基数を選ぶメニューを出す (仕様 7)。
+        -->
+        <Grid
+            x:Name="RulerBar"
+            AutomationProperties.AutomationId="HexView_Ruler"
+            Background="{ThemeResource HexViewRulerBackgroundBrush}">
+            <Button
+                x:Name="OffsetHeader"
+                Padding="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Center"
+                AutomationProperties.AutomationId="HexView_OffsetHeader"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="OffsetHeader_Click"
+                IsTabStop="False">
+                <TextBlock
+                    x:Name="OffsetHeaderText"
+                    Foreground="{ThemeResource HexViewRulerTextBrush}"
+                    IsTextScaleFactorEnabled="False"
+                    TextLineBounds="Full"
+                    TextWrapping="NoWrap" />
+            </Button>
+            <Canvas x:Name="RulerViewport" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Canvas.Clip>
+                    <RectangleGeometry x:Name="RulerViewportClip" />
+                </Canvas.Clip>
+                <TextBlock
+                    x:Name="RulerText"
+                    AutomationProperties.AccessibilityView="Raw"
+                    Foreground="{ThemeResource HexViewRulerTextBrush}"
+                    IsTextScaleFactorEnabled="False"
+                    LineStackingStrategy="BlockLineHeight"
+                    TextLineBounds="Full"
+                    TextWrapping="NoWrap">
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform x:Name="RulerShift" />
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Canvas>
+        </Grid>
+
+        <!--
             見えている行だけを描く面 (VIEW-01・VIEW-04)。行の要素はコードで使い回す。
             オフセット列は横スクロールしても左端に残す (VIEW-28 の仕様 5)。
         -->
         <Grid
             x:Name="Surface"
+            Grid.Row="1"
             Background="{ThemeResource HexViewBackgroundBrush}"
             PointerCanceled="Surface_PointerCanceled"
             PointerCaptureLost="Surface_PointerCaptureLost"
@@ -164,7 +247,7 @@
             </Border>
         </Grid>
 
-        <Grid Grid.Column="1">
+        <Grid Grid.Row="1" Grid.Column="1">
             <primitives:ScrollBar
                 x:Name="VerticalBar"
                 AutomationProperties.AutomationId="HexViewVerticalScrollBar"
@@ -185,7 +268,7 @@
 
         <primitives:ScrollBar
             x:Name="HorizontalBar"
-            Grid.Row="1"
+            Grid.Row="2"
             AutomationProperties.AutomationId="HexViewHorizontalScrollBar"
             IndicatorMode="MouseIndicator"
             IsTabStop="False"
@@ -196,7 +279,7 @@
         <!--  フォーカスの枠 (VIEW-41 の仕様 3。システムのフォーカス表示と同じ 2 px + 1 px)  -->
         <Rectangle
             x:Name="FocusFrameOuter"
-            Grid.RowSpan="2"
+            Grid.RowSpan="3"
             Grid.ColumnSpan="2"
             IsHitTestVisible="False"
             Stroke="{ThemeResource HexViewFocusOuterBrush}"
@@ -204,7 +287,7 @@
             Visibility="Collapsed" />
         <Rectangle
             x:Name="FocusFrameInner"
-            Grid.RowSpan="2"
+            Grid.RowSpan="3"
             Grid.ColumnSpan="2"
             Margin="2"
             IsHitTestVisible="False"
@@ -213,7 +296,7 @@
             Visibility="Collapsed" />
 
         <!--  配色の取り出し用 (テーマ・ハイコントラストの切り替えで ThemeResource が更新されるのを利用する)  -->
-        <Canvas x:Name="PaletteProbes" Visibility="Collapsed">
+        <Canvas x:Name="PaletteProbes" Grid.Row="1" Visibility="Collapsed">
             <Rectangle x:Name="ProbeText" Fill="{ThemeResource HexViewTextBrush}" />
             <Rectangle x:Name="ProbeOffset" Fill="{ThemeResource HexViewOffsetBrush}" />
             <Rectangle x:Name="ProbeModified" Fill="{ThemeResource HexViewModifiedBrush}" />
@@ -229,6 +312,18 @@
             <Rectangle x:Name="ProbeSearchMarker" Fill="{ThemeResource HexViewSearchMarkerBrush}" />
             <Rectangle x:Name="ProbeMatch" Fill="{ThemeResource HexViewMatchBrush}" />
             <Rectangle x:Name="ProbeMatchText" Fill="{ThemeResource HexViewMatchTextBrush}" />
+            <Rectangle x:Name="ProbeInserted" Fill="{ThemeResource HexViewInsertedBrush}" />
+            <Rectangle x:Name="ProbeSavedChange" Fill="{ThemeResource HexViewSavedChangeBrush}" />
+            <Rectangle x:Name="ProbeInvalid" Fill="{ThemeResource HexViewInvalidBrush}" />
+            <Rectangle x:Name="ProbeAlternate" Fill="{ThemeResource HexViewAlternateBrush}" />
+            <Rectangle x:Name="ProbeCurrentRow" Fill="{ThemeResource HexViewCurrentRowBrush}" />
+            <Rectangle x:Name="ProbeCurrentRowLine" Fill="{ThemeResource HexViewCurrentRowLineBrush}" />
+            <Rectangle x:Name="ProbeRulerText" Fill="{ThemeResource HexViewRulerTextBrush}" />
+            <Rectangle x:Name="ProbeRulerHighlight" Fill="{ThemeResource HexViewRulerHighlightBrush}" />
+            <Rectangle x:Name="ProbeRulerHighlightText" Fill="{ThemeResource HexViewRulerHighlightTextBrush}" />
+            <Rectangle x:Name="ProbeFocusRange" Fill="{ThemeResource HexViewFocusRangeBrush}" />
+            <Rectangle x:Name="ProbeSeparator" Fill="{ThemeResource HexViewSeparatorBrush}" />
+            <Rectangle x:Name="ProbeSecondaryCaret" Fill="{ThemeResource HexViewSecondaryCaretBrush}" />
         </Canvas>
     </Grid>
 </UserControl>

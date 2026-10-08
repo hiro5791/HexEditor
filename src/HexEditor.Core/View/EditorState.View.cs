@@ -93,6 +93,38 @@ public sealed partial class EditorState
         _ => column,
     };
 
+    private OffsetFormat? _offsetFormat;
+
+    /// <summary>ファイルのセクタサイズ (VIEW-19 の仕様 6)。ディスク・ボリュームではデータソースの値、ファイルでは表示設定の値。</summary>
+    public int SectorSize => Document.Source.LogicalSectorSize > 1 ? Document.Source.LogicalSectorSize : _view.SectorSize;
+
+    /// <summary>
+    /// オフセットの書式 (VIEW-19、VIEW-20)。オフセット列・列見出し・ステータスバーで共通に使う。桁数は、開いている間は増えるときだけ変わる
+    /// (VIEW-19 の仕様 3)。
+    /// </summary>
+    public OffsetFormat OffsetFormat
+    {
+        get
+        {
+            OffsetFormat? current = _offsetFormat;
+            if (current is null || !ReferenceEquals(current.Settings, _view) || current.ReferencePoint != _referencePoint
+                || current.SectorSize != SectorSize)
+            {
+                // 基数・基準点が同じなら、それまでの桁数を保つ。
+                int keep = current is not null && current.Radix == _view.Radix && (current.ReferencePoint is null) == (_referencePoint is null)
+                    && current.BaseAddress == _view.BaseAddress ? current.Digits : 0;
+                current = new OffsetFormat(_view, Layout.MaxCursor, SectorSize, _referencePoint, keep);
+                _offsetFormat = current;
+            }
+            else
+            {
+                current.Grow(Layout.MaxCursor);
+            }
+
+            return current;
+        }
+    }
+
     // ---- 基準点 (VIEW-20 の仕様 6・7) ----
 
     /// <summary>基準点 p。あればオフセット列とステータスバーに相対オフセットを出す。</summary>

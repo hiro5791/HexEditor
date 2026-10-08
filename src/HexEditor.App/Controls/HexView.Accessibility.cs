@@ -119,10 +119,63 @@ public sealed partial class HexView
 
     private void AnnounceCursor()
     {
-        if (_focused)
+        if (_focused && AnnouncementVerbosity != AnnounceVerbosity.None)
         {
-            Announce(CursorSummary(), "HexViewCursor");
+            Announce(CursorAnnouncement(AnnouncementVerbosity), "HexViewCursor");
         }
+    }
+
+    /// <summary>読み上げの詳しさ (UI-51 の仕様 2。設定 <c>a11y.announce.verbosity</c>。既定 full)。</summary>
+    public AnnounceVerbosity AnnouncementVerbosity { get; set; } = AnnounceVerbosity.Full;
+
+    /// <summary>
+    /// 「アクセシビリティ: 現在位置を読み上げ」(UI-51 の仕様 6)。full の形で、現在の選択範囲とファイルサイズも読み上げる。
+    /// </summary>
+    public void AnnounceCurrentPosition()
+    {
+        if (_editor is null)
+        {
+            return;
+        }
+
+        var parts = new List<string> { CursorSummary() };
+        if (_editor.HasSelection)
+        {
+            long last = _editor.SelectionStart + _editor.SelectionLength - 1;
+            parts.Add(Loc.Format("HexView_Announce_Selection", _editor.SelectionLength.ToString("N0", CultureInfo.CurrentCulture),
+                Spell(FormatOffset(_editor.SelectionStart)), Spell(FormatOffset(last))));
+        }
+
+        parts.Add(Loc.Format("HexView_Announce_Size", _editor.Document.Length.ToString("N0", CultureInfo.CurrentCulture)));
+        Announce(string.Join(Loc.Get("HexView_Announce_ListSeparator"), parts), "HexViewPosition");
+    }
+
+    /// <summary>カーソル移動の読み上げ文 (UI-51 の仕様 2 の詳しさ)。</summary>
+    private string CursorAnnouncement(AnnounceVerbosity verbosity)
+    {
+        if (_editor is null)
+        {
+            return string.Empty;
+        }
+
+        long offset = _editor.Cursor;
+        if (verbosity == AnnounceVerbosity.OffsetOnly)
+        {
+            return Spell(FormatOffset(offset));
+        }
+
+        if (verbosity == AnnounceVerbosity.Brief && offset < _editor.Document.Length)
+        {
+            byte[] one = new byte[1];
+            var state = new ByteState[1];
+            _editor.Document.Current.ReadForDisplay(offset, one, state);
+            if (state[0] == ByteState.Valid)
+            {
+                return Spell(HexStrings[one[0]]) + " " + CharacterName(offset, one[0]);
+            }
+        }
+
+        return CursorSummary();
     }
 
     private void AnnounceSelection()
@@ -218,10 +271,10 @@ public sealed partial class HexView
             }
             else
             {
-                main = Loc.Format("HexView_Announce_Position", FormatOffset(offset), HexStrings[one[0]], CharacterName(one[0]));
-                if (snapshot.EnumerateModifiedRanges(offset, 1).Any())
+                main = Loc.Format("HexView_Announce_Position", FormatOffset(offset), HexStrings[one[0]], CharacterName(offset, one[0]));
+                foreach ((_, _, bool inserted) in snapshot.EnumerateChanges(offset, 1))
                 {
-                    states.Add(Loc.Get("HexView_State_Modified"));
+                    states.Add(Loc.Get(inserted ? "HexView_State_Inserted" : "HexView_State_Modified"));
                 }
             }
 
@@ -229,19 +282,45 @@ public sealed partial class HexView
             {
                 states.Add(Loc.Get("HexView_State_Selected"));
             }
+
+            // そのバイトを含むブックマークの名前 (VIEW-41 の仕様 5、UI-51 の仕様 1)。
+            if (AnnotationNames?.Invoke(offset) is { Count: > 0 } names)
+            {
+                states.AddRange(names.Select(n => Loc.Format("HexView_State_Bookmark", n)));
+            }
         }
 
         return Loc.Format("HexView_Announce_WithStates", main, string.Join(Loc.Get("HexView_Announce_ListSeparator"), states));
     }
 
-    /// <summary>テキスト列の文字の読み方 (UI-51 の仕様 7)。</summary>
-    private static string CharacterName(byte b) => b switch
+    /// <summary>テキスト列の文字の読み方 (UI-51 の仕様 7)。テキスト列の文字コードで解読した文字を読む。</summary>
+    private string CharacterName(long offset, byte b)
     {
-        0 => Loc.Get("HexView_Char_Null"),
-        0x20 => Loc.Get("HexView_Char_Space"),
-        _ when IsPrintable(b) => ((char)b).ToString(),
-        _ => Loc.Get("HexView_Char_Unprintable"),
-    };
+        if (b == 0)
+        {
+            return Loc.Get("HexView_Char_Null");
+        }
+
+        if (b == 0x20)
+        {
+            return Loc.Get("HexView_Char_Space");
+        }
+
+        if (_editor is { } e && e.TextEncoding.Kind != TextEncodingKind.SingleByte)
+        {
+            HexLayout layout = e.Layout;
+            long r = layout.RowOf(offset) - e.TopRow;
+            if (r >= 0 && r < _rows.Count && _rows[(int)r].Visible && _rows[(int)r].TextAt(layout.ColumnOf(offset)) is { Kind: TextCellKind.Char } cell)
+            {
+                return cell.Text;
+            }
+
+            return Loc.Get("HexView_Char_Unprintable");
+        }
+
+        char c = _editor?.TextEncoding.DisplayChar(b) ?? '.';
+        return c != TextEncoding.NonPrintable || b == (byte)'.' ? c.ToString() : Loc.Get("HexView_Char_Unprintable");
+    }
 
     /// <summary>16 進の数字を 1 文字ずつ読ませるため、桁の間に空白を入れる (UI-51 の仕様 2。表示はしない)。</summary>
     private static string Spell(string hex)
@@ -282,17 +361,20 @@ public sealed partial class HexView
 
     internal IEnumerable<UIElement> ScrollBars => [VerticalBar, HorizontalBar];
 
+    /// <summary>列見出しの操作できる要素 (オフセット列の見出し。VIEW-05 の仕様 7)。</summary>
+    internal IEnumerable<UIElement> HeaderElements => RulerBar.Visibility == Visibility.Visible ? [OffsetHeader] : [];
+
     internal int BytesPerRowShown => Math.Max(1, _bytesPerRow);
 
     internal int OffsetDigits => _digits;
 
     internal RowVisual? RowAt(int index) => index >= 0 && index < _rows.Count && _rows[index].Visible ? _rows[index] : null;
 
-    /// <summary>画面と同じ書式の行の文字列 (オフセット列 + 2 文字の空白 + 内容)。</summary>
+    /// <summary>画面と同じ書式の行の文字列 (オフセット列 + 2 文字の空白 + 内容。オフセット列を表示しないときは内容だけ)。</summary>
     internal string RowLine(int index)
     {
         RowVisual? row = RowAt(index);
-        return row is null ? string.Empty : row.OffsetText + "  " + row.ContentText;
+        return row is null ? string.Empty : _showOffset ? row.OffsetText.PadRight(_digits) + "  " + row.ContentText : row.ContentText;
     }
 
     /// <summary>表示中の行の先頭オフセット。</summary>
@@ -304,7 +386,7 @@ public sealed partial class HexView
     /// <summary>行の中の文字位置の左端 (Surface の座標)。オフセット列は固定、内容は横スクロールする。</summary>
     internal double CharacterLeft(int column)
     {
-        int offsetChars = _digits + 2;
+        int offsetChars = OffsetChars;
         return column < offsetChars
             ? LeftPadding + column * _cellWidth
             : ContentLeft + (column - offsetChars) * _cellWidth - _horizontalOffset;
@@ -313,10 +395,10 @@ public sealed partial class HexView
     /// <summary>行の中のオフセットのバイトの文字位置 (行の文字列の中で。RowLine と同じ数え方)。</summary>
     internal int CharacterIndexOf(long offset, ActiveColumn column, bool lowNibble)
     {
-        var columns = new RowColumns(BytesPerRowShown);
-        int c = (int)(offset % BytesPerRowShown);
-        int inContent = column == ActiveColumn.Hex ? columns.HexIndex(c) + (lowNibble ? 1 : 0) : columns.TextIndex(c);
-        return _digits + 2 + inContent;
+        RowColumns columns = Columns;
+        int c = _editor?.Layout.ColumnOf(offset) ?? (int)(offset % BytesPerRowShown);
+        int inContent = column == ActiveColumn.Hex && columns.ShowHex ? columns.HexIndex(c) + (lowNibble ? 1 : 0) : columns.TextIndex(c);
+        return OffsetChars + inContent;
     }
 
     /// <summary>表示中の行の中の文字位置から、バイトのオフセットと列を求める。</summary>
@@ -328,16 +410,17 @@ public sealed partial class HexView
             return (0, ActiveColumn.Hex);
         }
 
-        var columns = new RowColumns(BytesPerRowShown);
-        int ch = column - (_digits + 2);
+        RowColumns columns = Columns;
+        int ch = column - OffsetChars;
+        rowStart = Math.Max(0, rowStart);
         if (ch < 0)
         {
-            return (rowStart, ActiveColumn.Hex);
+            return (rowStart, columns.ShowHex ? ActiveColumn.Hex : ActiveColumn.Text);
         }
 
-        if (ch >= columns.TextIndex(0))
+        if (!columns.ShowHex || (columns.ShowText && ch >= columns.TextIndex(0)))
         {
-            return (Math.Min(rowStart + Math.Min(ch - columns.TextIndex(0), BytesPerRowShown - 1), _editor.Layout.MaxCursor), ActiveColumn.Text);
+            return (Math.Min(rowStart + Math.Clamp(ch - columns.TextIndex(0), 0, BytesPerRowShown - 1), _editor.Layout.MaxCursor), ActiveColumn.Text);
         }
 
         int c = 0;
@@ -382,7 +465,7 @@ public sealed partial class HexView
             return string.Empty;
         }
 
-        long offset = row.OffsetRowStart + byteIndex;
+        long offset = row.ContentRowStart + byteIndex;
         CellKind kind = row.KindAt(byteIndex);
         bool selected = _editor.HasSelection && offset >= _editor.SelectionStart && offset < _editor.SelectionStart + _editor.SelectionLength
             && kind != CellKind.Empty;
@@ -396,15 +479,15 @@ public sealed partial class HexView
 
         var parts = new List<string>
         {
-            "offset=" + FormatOffset(offset),
+            "offset=" + "0x" + offset.ToString(_editor.Layout.MaxCursor > uint.MaxValue ? "X16" : "X8"),
             "text=" + text,
             "kind=" + kind.ToString().ToLowerInvariant(),
             "foreground=" + ColorOf(selected ? (activeColumn ? _palette.SelectionText : _palette.SelectionInactiveText) : _palette.For(kind)),
             "background=" + ColorOf(selected ? (activeColumn ? _palette.Selection : _palette.SelectionInactive) : _palette.Background),
         };
-        if (kind == CellKind.Modified)
+        if (kind == CellKind.Modified && row.UnderlineAt(byteIndex) is string underline and not "none")
         {
-            parts.Add("underline=solid");
+            parts.Add("underline=" + underline);
         }
 
         if (kind == CellKind.Unreadable)
@@ -456,4 +539,20 @@ public sealed partial class HexView
 
         _editor.Document.Overwrite(at, data, "上書き");
     }
+}
+
+/// <summary>読み上げの詳しさ (UI-51 の仕様 2。設定 <c>a11y.announce.verbosity</c>)。</summary>
+public enum AnnounceVerbosity
+{
+    /// <summary>オフセット・値・文字・状態 (既定)。</summary>
+    Full,
+
+    /// <summary>値と文字だけ。</summary>
+    Brief,
+
+    /// <summary>オフセットだけ。</summary>
+    OffsetOnly,
+
+    /// <summary>読み上げない。</summary>
+    None,
 }

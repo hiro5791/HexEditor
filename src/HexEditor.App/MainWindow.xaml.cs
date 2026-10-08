@@ -51,6 +51,7 @@ public sealed partial class MainWindow : Window
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
+        InitializeViewMenu();
 
         // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
         var noticeTimer = DispatcherQueue.CreateTimer();
@@ -180,6 +181,8 @@ public sealed partial class MainWindow : Window
         {
             EditorSettings.Apply(App.Settings, doc);
         }
+
+        ApplyViewOptions();
     }
 
     private void TitleSource_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -455,6 +458,7 @@ public sealed partial class MainWindow : Window
 
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
         view.DocumentName = (view.DataContext as DocumentViewModel)?.DisplayName;
+        ConfigureHexView(view);
         UpdateMatchHighlights(view);
 
         view.Focus(FocusState.Programmatic);
@@ -563,7 +567,7 @@ public sealed partial class MainWindow : Window
 
     /// <summary>文字コードの表示名 (ASCII、ANSI (コードページ 932) など)。</summary>
     private static string EncodingDisplayName(TextEncoding encoding) =>
-        encoding.IsAscii ? encoding.Name : Loc.Format("Menu_View_EncodingAnsi", encoding.CodePage);
+        encoding.IsAscii || encoding.Id != "ansi" ? encoding.Name : Loc.Format("Menu_View_EncodingAnsi", encoding.CodePage);
 
     /// <summary>
     /// 通知を出す (UI-36)。<paramref name="document"/> を指定すると、その文書のタブの中に出す (文書の範囲)。
