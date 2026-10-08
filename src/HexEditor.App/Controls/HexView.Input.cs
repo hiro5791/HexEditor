@@ -126,7 +126,7 @@ public sealed partial class HexView
 
         // 行の先頭のずれ (VIEW-20) で最初の行の先頭の空白のセルは、オフセット 0 として扱う。
         long firstInRow = Math.Max(0, rowStart);
-        if (_showOffset && point.X < ContentLeft - _cellWidth)
+        if (_showOffset && point.X < ContentLeft - _cellWidth - OffsetColumnShift)
         {
             hit = new HitResult(Math.Min(firstInRow, layout.MaxCursor), ActiveColumn.Hex, false, HitRegion.Offset, row);
             return true;

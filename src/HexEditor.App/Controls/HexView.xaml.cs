@@ -952,8 +952,7 @@ public sealed partial class HexView : UserControl
         double viewport = Math.Max(0, Surface.ActualWidth - ContentLeft);
         double max = Math.Max(0, ContentWidth - viewport);
         _horizontalOffset = Math.Clamp(_horizontalOffset, 0, max);
-        ContentShift.X = -_horizontalOffset;
-        RulerShift.X = -_horizontalOffset;
+        ApplyHorizontalShift();
 
         // 横スクロールバーは表示部分の幅が足りないときだけ出す (VIEW-28 の仕様 5)。
         Visibility visibility = max > 0.5 ? Visibility.Visible : Visibility.Collapsed;
@@ -975,6 +974,66 @@ public sealed partial class HexView : UserControl
         finally
         {
             _updatingScrollBar = false;
+        }
+    }
+
+    /// <summary>
+    /// 設定「オフセット列を固定」(VIEW-28 の仕様 5。view.scroll.fixedOffsetColumn、既定オン)。オフにすると、横スクロールで
+    /// オフセット列も左へ流れ、空いた所まで内容を表示する。
+    /// </summary>
+    public bool KeepOffsetColumnFixed
+    {
+        get => _keepOffsetColumnFixed;
+        set
+        {
+            if (_keepOffsetColumnFixed != value)
+            {
+                _keepOffsetColumnFixed = value;
+                ApplyHorizontalShift();
+            }
+        }
+    }
+
+    private bool _keepOffsetColumnFixed = true;
+    private readonly TranslateTransform _offsetShift = new();
+    private readonly TranslateTransform _offsetHeaderShift = new();
+
+    /// <summary>オフセット列が横スクロールで流れた幅 (固定のときは 0)。</summary>
+    internal double OffsetColumnShift => _keepOffsetColumnFixed ? 0 : Math.Min(_horizontalOffset, ContentLeft);
+
+    /// <summary>
+    /// 横スクロールの位置を内容・見出し・オフセット列に反映する。内容の絶対位置は固定・非固定で同じ (ContentLeft − 横の位置) なので、
+    /// 当たり判定などの座標の計算は変わらない。非固定のときは、内容を表示する領域の左端をオフセット列が流れた分だけ広げる。
+    /// </summary>
+    private void ApplyHorizontalShift()
+    {
+        double shift = OffsetColumnShift;
+        double contentLeft = ContentLeft;
+        ContentShift.X = -(_horizontalOffset - shift);
+        RulerShift.X = -(_horizontalOffset - shift);
+        double left = contentLeft - shift;
+        if (ContentViewport.Margin.Left != left)
+        {
+            ContentViewport.Margin = new Thickness(left, 0, 0, 0);
+            RulerViewport.Margin = new Thickness(left, 0, 0, 0);
+            ContentClip.Rect = new Windows.Foundation.Rect(0, 0, Math.Max(0, Surface.ActualWidth - left), Math.Max(0, Surface.ActualHeight));
+            RulerViewportClip.Rect = new Windows.Foundation.Rect(0, 0, Math.Max(0, Surface.ActualWidth - left), Math.Max(_rowHeight, 1));
+        }
+
+        if (OffsetHost.RenderTransform != _offsetShift)
+        {
+            OffsetHost.RenderTransform = _offsetShift;
+            OffsetHeader.RenderTransform = _offsetHeaderShift;
+        }
+
+        if (_offsetShift.X != -shift)
+        {
+            _offsetShift.X = -shift;
+            _offsetHeaderShift.X = -shift;
+
+            // 流れて左にはみ出した部分は描かない。
+            OffsetHost.Clip = shift > 0 ? new RectangleGeometry { Rect = new Windows.Foundation.Rect(shift, -10000, 100000, 20000) } : null;
+            OffsetHeader.Clip = shift > 0 ? new RectangleGeometry { Rect = new Windows.Foundation.Rect(shift, 0, 100000, 1000) } : null;
         }
     }
 

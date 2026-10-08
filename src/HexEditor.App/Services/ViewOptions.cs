@@ -107,6 +107,9 @@ public static class ViewOptions
             "controlPictures" => NonPrintableStyle.ControlPictures,
             _ => NonPrintableStyle.Dot,
         };
+        // オフセット列を固定 (VIEW-28 の仕様 5。既定オン)。
+        view.KeepOffsetColumnFixed = settings.GetBool("view.scroll.fixedOffsetColumn", true);
+
         // 描画性能の診断表示 (VIEW-04 の仕様 8。設定の「詳細」の診断の項目。既定オフ)。
         view.DiagnosticsSetting = settings.GetBool("diagnostics.hexView.overlay", false);
 

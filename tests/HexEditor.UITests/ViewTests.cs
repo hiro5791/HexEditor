@@ -440,6 +440,33 @@ public sealed class ViewTests
     });
 
     [Fact]
+    public Task Offset_column_scrolls_when_not_fixed() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-28 の仕様 5: 設定「オフセット列を固定」(既定オン) をオフにすると、オフセット列も横にスクロールする。
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.scroll.fixedOffsetColumn"] = false });
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SendAsync("resize", new JsonObject { ["width"] = 640, ["height"] = 600 });
+        await app.SendAsync("setSystem", new JsonObject { ["textScaleFactor"] = 2.5 });
+        JsonObject render = null!;
+        await app.WaitUntilAsync(async () =>
+        {
+            await app.IdleAsync();
+            render = await app.RenderAsync();
+            return render["horizontalBarVisible"]!.GetValue<bool>();
+        }, TimeSpan.FromSeconds(10), "the horizontal scroll bar");
+        double cell = render["cellWidth"]!.GetValue<double>();
+        double offsetX = render["offsetLeft"]!.GetValue<double>();
+        double hexX = CellPoint(render, 0).X;
+        double contentLeft = render["contentLeft"]!.GetValue<double>();
+
+        await WheelAsync(app, -120, count: 10, shift: true);
+        render = await app.RenderAsync();
+        Assert.Equal(hexX - 30 * cell, CellPoint(render, 0).X, 3);
+        Assert.Equal(offsetX - Math.Min(30 * cell, contentLeft), render["offsetLeft"]!.GetValue<double>(), 3);
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-VIEW-28-04")]
     public Task Touch_scrolls_smoothly_with_inertia() => UiTestContext.RunAsync(async ctx =>
     {

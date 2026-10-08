@@ -382,7 +382,7 @@ public sealed partial class HexView
     private void AddViewInfo(JsonObject result)
     {
         result["contentLeft"] = ContentLeft;
-        result["offsetLeft"] = LeftPadding;
+        result["offsetLeft"] = LeftPadding - OffsetColumnShift;
         result["subRowOffset"] = _subRowOffset;
         result["horizontalOffset"] = _horizontalOffset;
         result["surfaceWidth"] = Surface.ActualWidth;

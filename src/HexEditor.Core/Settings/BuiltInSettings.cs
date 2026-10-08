@@ -52,6 +52,7 @@ public static class BuiltInSettings
         // ---- 表示 ----
         new("view.cursor.nibbleArrowKeys", SettingCategories.View, SettingKind.Bool, false) { Order = 10 },
         new("view.statusBar.showNibble", SettingCategories.View, SettingKind.Bool, false) { Order = 20 },
+        new("view.scroll.fixedOffsetColumn", SettingCategories.View, SettingKind.Bool, true) { Order = 31 },
         new("view.scroll.cursorMargin", SettingCategories.View, SettingKind.Int, 0) { Min = 0, Max = 10, Order = 30 },
         new("view.jump.position", SettingCategories.View, SettingKind.Choice, "third") { Options = ["top", "third", "center"], Order = 40 },
         new("view.tooltips", SettingCategories.View, SettingKind.Bool, true) { Order = 50 },
