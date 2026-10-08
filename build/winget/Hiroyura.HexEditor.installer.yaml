@@ -1,0 +1,24 @@
+# winget のインストーラのマニフェスト (10 の PKG-27 の仕様 1): インストーラ版 (Velopack の Setup.exe)、x64 と arm64、
+# 種類 exe、サイレントインストールは Velopack の --silent、スコープは user (管理者権限なし)。
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.9.0.schema.json
+PackageIdentifier: Hiroyura.HexEditor
+PackageVersion: {{VERSION}}
+InstallerType: exe
+Scope: user
+InstallModes:
+  - silent
+  - silentWithProgress
+InstallerSwitches:
+  Silent: --silent
+  SilentWithProgress: --silent
+UpgradeBehavior: install
+ReleaseDate: {{RELEASE_DATE}}
+Installers:
+  - Architecture: x64
+    InstallerUrl: {{X64_URL}}
+    InstallerSha256: {{X64_SHA256}}
+  - Architecture: arm64
+    InstallerUrl: {{ARM64_URL}}
+    InstallerSha256: {{ARM64_SHA256}}
+ManifestType: installer
+ManifestVersion: 1.9.0

@@ -1,0 +1,7 @@
+# winget のマニフェストのひな形 (10 の PKG-27)。build/winget-manifests.ps1 が {{...}} を埋める。
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.9.0.schema.json
+PackageIdentifier: Hiroyura.HexEditor
+PackageVersion: {{VERSION}}
+DefaultLocale: en-US
+ManifestType: version
+ManifestVersion: 1.9.0

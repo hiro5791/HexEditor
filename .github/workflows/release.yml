@@ -7,8 +7,8 @@
 #   8-10. SHA256SUMS.txt、リリースノート、GitHub Releases (安定版は下書き、プレビュー版は Pre-release)
 #   11. できたリリースの確認 (build/tests/Test-Release.ps1)
 # どこかで失敗したら Releases には何も作らず、失敗した手順を Issue にする。
-# まだないもの: C# スクリプト コンポーネントの zip (AUTO-03)、補助プロセス (PKG-14) のハッシュの埋め込み、
-# winget の提出 (PKG-27、publish.yml)。それぞれの機能を作るときに加える。
+# まだないもの: C# スクリプト コンポーネントの zip (AUTO-03)、補助プロセス (PKG-14) のハッシュの埋め込み。
+# それぞれの機能を作るときに加える。winget の提出 (PKG-27) は、リリースの公開のときに .github/workflows/winget.yml が行う。
 name: release
 
 on:
@@ -115,7 +115,10 @@ jobs:
         run: |
           dotnet tool restore
           # The first release has nothing to download; that is not an error.
-          dotnet vpk download github --repoUrl "${{ github.server_url }}/${{ github.repository }}" --token "${{ github.token }}" --channel "win-${{ matrix.arch }}" --outputDir previous
+          # Channels (PKG-21 spec 3): win-<arch>-stable for stable versions, win-<arch>-preview for -preview.N versions.
+          $channel = "win-${{ matrix.arch }}-" + $(if ('${{ needs.prepare.outputs.prerelease }}' -eq 'true') { 'preview' } else { 'stable' })
+          $preArgs = @(); if ('${{ needs.prepare.outputs.prerelease }}' -eq 'true') { $preArgs = @('--pre') }
+          dotnet vpk download github --repoUrl "${{ github.server_url }}/${{ github.repository }}" --token "${{ github.token }}" --channel $channel @preArgs --outputDir previous
           if ($LASTEXITCODE -ne 0) { Write-Host 'No previous release; no delta package this time.' }
           $global:LASTEXITCODE = 0
       - name: Publish
@@ -276,16 +279,28 @@ jobs:
             Copy-Item -Destination release
       - name: Velopack upload
         shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           dotnet tool restore
           $pre = '${{ needs.prepare.outputs.prerelease }}' -eq 'true'
           foreach ($arch in 'x64', 'arm64') {
+            # PKG-21 spec 3: the channel of this version (build/publish.ps1 packs with the same name).
+            $channel = "win-$arch-" + $(if ($pre) { 'preview' } else { 'stable' })
             $vpkArgs = @('vpk', 'upload', 'github', '--repoUrl', '${{ github.server_url }}/${{ github.repository }}', '--token', '${{ github.token }}',
               '--tag', '${{ github.ref_name }}', '--releaseName', 'HexEditor ${{ needs.prepare.outputs.version }}', '--merge',
-              '--channel', "win-$arch", '--outputDir', "downloaded/HexEditor-Installer-$arch")
+              '--channel', $channel, '--outputDir', "downloaded/HexEditor-Installer-$arch")
             if ($pre) { $vpkArgs += '--pre' }
             dotnet @vpkArgs
             if ($LASTEXITCODE -ne 0) { throw "vpk upload github failed ($arch)" }
+            # A stable version is published to the preview channel too (PKG-21 spec 2-3): the preview feed of this release
+            # lists the same packages, so users of the preview channel receive the new stable version.
+            if (-not $pre) {
+              $feedDir = "downloaded/HexEditor-Installer-$arch"
+              Copy-Item "$feedDir/releases.win-$arch-stable.json" "$feedDir/releases.win-$arch-preview.json"
+              gh release upload '${{ github.ref_name }}' "$feedDir/releases.win-$arch-preview.json" --clobber
+              if ($LASTEXITCODE -ne 0) { throw "uploading the preview feed failed ($arch)" }
+            }
           }
       - name: GitHub release
         shell: pwsh

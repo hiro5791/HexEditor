@@ -1,0 +1,71 @@
+# winget への提出 (10 の PKG-27)。安定版のリリースを公開したら、microsoft/winget-pkgs にマニフェストの更新の PR を作る。
+# 最初の版は build/winget-manifests.ps1 が作るマニフェストで手動で提出する (成果物の winget-manifests)。2 回目以降は
+# wingetcreate update --submit で提出する。トークンは Secrets の WINGET_TOKEN。プレビュー版は提出しない (仕様 4)。
+# 提出の失敗はリリースの公開を取り消さず、Issue を作る (「エラー」)。
+name: winget
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (v1.2.0)"
+        required: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  submit:
+    if: github.event_name == 'workflow_dispatch' || github.event.release.prerelease == false
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Manifests
+        id: manifests
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = if ('${{ github.event_name }}' -eq 'workflow_dispatch') { '${{ inputs.tag }}' } else { '${{ github.event.release.tag_name }}' }
+          $version = $tag.TrimStart('v')
+          if ($version -match '-') { Write-Host "Preview versions are not submitted to winget ($version)."; "skip=true" >> $env:GITHUB_OUTPUT; exit 0 }
+          gh release download $tag --pattern SHA256SUMS.txt --dir release --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'SHA256SUMS.txt could not be downloaded' }
+          ./build/winget-manifests.ps1 -Version $version -Sha256Sums release/SHA256SUMS.txt -OutDir winget-manifests
+          if ($LASTEXITCODE -ne 0) { throw 'making the manifests failed' }
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "skip=false" >> $env:GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v4
+        if: steps.manifests.outputs.skip == 'false'
+        with:
+          name: winget-manifests
+          path: winget-manifests/
+      - name: Submit (wingetcreate update)
+        if: steps.manifests.outputs.skip == 'false'
+        shell: pwsh
+        env:
+          WINGET_TOKEN: ${{ secrets.WINGET_TOKEN }}
+        run: |
+          if (-not $env:WINGET_TOKEN) { throw 'WINGET_TOKEN is not set (submit the first version by hand with the winget-manifests artifact).' }
+          $v = '${{ steps.manifests.outputs.version }}'
+          $base = '${{ github.server_url }}/${{ github.repository }}/releases/download/v' + $v
+          Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+          ./wingetcreate.exe update Hiroyura.HexEditor --version $v --urls "$base/HexEditor-$v-x64-Setup.exe|x64" "$base/HexEditor-$v-arm64-Setup.exe|arm64" --submit --token $env:WINGET_TOKEN
+          if ($LASTEXITCODE -ne 0) { throw "wingetcreate update failed ($LASTEXITCODE)" }
+
+  report-failure:
+    needs: submit
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open an issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "${{ github.repository }}" \
+            --title "winget submission failed (${{ github.event.release.tag_name || inputs.tag }})" \
+            --body "Submitting the release to winget failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}. The release itself is published. Submit by hand with the winget-manifests artifact (PKG-27)."

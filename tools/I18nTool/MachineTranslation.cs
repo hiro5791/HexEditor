@@ -228,7 +228,7 @@ public static class Coverage
             languages[language] = new JsonObject { ["translated"] = t, ["reviewed"] = r };
         }
 
-        return new JsonObject { ["languages"] = languages }.ToJsonString(new System.Text.Json.JsonSerializerOptions { WriteIndented = true }) + "\n";
+        return new JsonObject { ["languages"] = languages }.ToJsonString(new System.Text.Json.JsonSerializerOptions { WriteIndented = true, NewLine = "\n" }) + "\n";
     }
 
     public static Dictionary<string, (int Translated, int Reviewed)> FromJson(string json)

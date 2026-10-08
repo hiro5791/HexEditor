@@ -119,7 +119,9 @@ Invoke-TestCase 'TC-PKG-25-04' 'no MSIX in the release' {
 
 Invoke-TestCase 'TC-PKG-26-01' 'the files of the release' {
     foreach ($arch in $archs) {
-        foreach ($name in "HexEditor-$Version-$arch-Setup.exe", "HexEditor-$Version-$arch-portable.zip", "releases.win-$arch.json") {
+        # Velopack feeds (PKG-21 spec 3): a preview version is in win-<arch>-preview, a stable version in both channels.
+        $feeds = if ($Version -match '-') { @("releases.win-$arch-preview.json") } else { @("releases.win-$arch-stable.json", "releases.win-$arch-preview.json") }
+        foreach ($name in @("HexEditor-$Version-$arch-Setup.exe", "HexEditor-$Version-$arch-portable.zip") + $feeds) {
             Assert-True ($assets -contains $name) "$name is not in the release"
         }
         Assert-True (@($assets | Where-Object { $_ -like "*$Version*win-$arch*-full.nupkg" }).Count -ge 1) "no full package for win-$arch"

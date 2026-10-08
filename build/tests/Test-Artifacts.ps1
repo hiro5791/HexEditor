@@ -6,6 +6,7 @@
   Run after build/publish.ps1 has built the distributions into -ArtifactsDir.
     TC-PKG-10-01  6 builds exist; Velopack only in the installer
     TC-PKG-10-02  an invalid HexDistro fails the build
+    TC-PKG-04-01  the Store package declares runFullTrust, not allowElevation, and has no elevated helper process
     TC-UI-46-03   a stable build contains no pseudo-locale resources (only with -Stable)
   Also checks the portable zip layout (PKG-05 spec 1) and the generated MSIX version (PKG-03 spec 4).
 #>
@@ -81,6 +82,25 @@ Invoke-TestCase 'PKG-03-4' 'MSIX version generated from HexVersion' {
         } finally { $zip.Dispose() }
         Assert-True ($manifest.Package.Identity.Version -eq $expected) "$arch msix version $($manifest.Package.Identity.Version), expected $expected"
         Assert-True ($manifest.Package.Identity.Name -eq 'HexEditor') "Identity Name is $($manifest.Package.Identity.Name)"
+    }
+}
+
+Invoke-TestCase 'TC-PKG-04-01' 'Store package: runFullTrust, no allowElevation, no elevated helper' {
+    foreach ($arch in 'x64', 'arm64') {
+        $path = Join-Path $ArtifactsDir "Msix/$arch/HexEditor-$Version-$arch.msix"
+        $zip = [System.IO.Compression.ZipFile]::OpenRead($path)
+        try {
+            $s = $zip.GetEntry('AppxManifest.xml').Open(); $r = New-Object System.IO.StreamReader($s)
+            try { $text = $r.ReadToEnd() } finally { $r.Dispose() }
+            $names = @($zip.Entries | ForEach-Object { $_.FullName })
+        } finally { $zip.Dispose() }
+        [xml]$manifest = $text
+        $capabilities = @($manifest.Package.Capabilities.ChildNodes | ForEach-Object { $_.GetAttribute('Name') })
+        Assert-True ($capabilities -contains 'runFullTrust') "$arch msix has no runFullTrust ($($capabilities -join ', '))"
+        Assert-True ($capabilities -notcontains 'allowElevation') "$arch msix declares allowElevation"
+        Assert-True ($text -notmatch 'allowElevation') "$arch AppxManifest.xml mentions allowElevation"
+        # The Store version does not include the elevated helper process (PKG-04 spec 1, PKG-14).
+        Assert-True (-not ($names | Where-Object { $_ -match '(^|/)HexEditor\.Elevated\.exe$' })) "$arch msix contains HexEditor.Elevated.exe"
     }
 }
 

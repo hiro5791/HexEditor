@@ -61,6 +61,8 @@ if ($TestHooks) { $common += '-p:HexTestHooks=true' }
 # Pseudo-locales (qps-ploc, qps-plocm) ship only in preview and local builds, not in stable releases (UI-46 spec 3).
 $isStable = $Version -notmatch '-'
 if ($isStable) { $common += '-p:HexPseudoLocales=false' }
+# Velopack channel (PKG-21 spec 3). The app checks the same name (VelopackChannels in HexEditor.Platform).
+$channel = "win-$Arch-" + $(if ($isStable) { 'stable' } else { 'preview' })
 
 # Code signing (PKG-25): a no-op unless HEX_SIGNING_ENABLED is true.
 $sign = Join-Path $PSScriptRoot 'sign.ps1'
@@ -114,7 +116,8 @@ switch ($Distro) {
                 '--shortcuts', 'StartMenuRoot',
                 '--noPortable',
                 '--runtime', $rid,
-                '--channel', $rid,
+                # Channels (PKG-21 spec 3): win-<arch>-stable for stable versions, win-<arch>-preview otherwise.
+                '--channel', $channel,
                 '--outputDir', $out)
             if ($PreviousReleaseDir -and (Test-Path $PreviousReleaseDir)) {
                 # vpk pack makes a delta package against the newest full package in the output folder.
@@ -129,7 +132,7 @@ switch ($Distro) {
         finally { Pop-Location }
         # File name required by PKG-07 and PKG-26: HexEditor-<ver>-<arch>-Setup.exe. The Velopack name stays
         # as well, because vpk upload reads it from the release files.
-        Copy-Item (Join-Path $out "HexEditor-$rid-Setup.exe") (Join-Path $out "HexEditor-$Version-$Arch-Setup.exe")
+        Copy-Item (Join-Path $out "HexEditor-$channel-Setup.exe") (Join-Path $out "HexEditor-$Version-$Arch-Setup.exe")
     }
     'Msix' {
         # Store-only and unsigned: the Store signs it on submission (PKG-02, PKG-04).
