@@ -1319,6 +1319,8 @@ Details were written to:
   <data name="SetDesc_update_checkAutomatically" xml:space="preserve"><value>Check for a new version 30 seconds after startup and then every 24 hours.</value></data>
   <data name="Set_update_downloadAutomatically" xml:space="preserve"><value>Download updates automatically</value></data>
   <data name="SetDesc_update_downloadAutomatically" xml:space="preserve"><value>Download a new version in the background when one is found (installer version).</value></data>
+  <data name="Set_shell_commandLine_enabled" xml:space="preserve"><value>Make available from the command line</value></data>
+  <data name="SetDesc_shell_commandLine_enabled" xml:space="preserve"><value>Add the app folder to your PATH so that hexed can be run from a terminal (installer version).</value></data>
   <data name="Set_update_channel" xml:space="preserve"><value>Update channel</value></data>
   <data name="SetDesc_update_channel" xml:space="preserve"><value>Which releases to receive.</value></data>
   <data name="SetOpt_update_channel_stable" xml:space="preserve"><value>Stable</value></data>

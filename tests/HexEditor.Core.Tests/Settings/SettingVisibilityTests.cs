@@ -24,4 +24,20 @@ public sealed class SettingVisibilityTests
         // 配布形態に関係のない項目はどの配布形態でも出す。
         Assert.True(catalog.IsShown(catalog.Find("update.checkAutomatically")!));
     }
+
+    /// <summary>「コマンドラインから使えるようにする」はインストーラ版だけ (10 の PKG-08 の仕様 6)。PC ごとの状態なのでエクスポートしない。</summary>
+    [Theory]
+    [InlineData(SettingDistributions.Installer, true)]
+    [InlineData(SettingDistributions.Portable, false)]
+    [InlineData(SettingDistributions.Msix, false)]
+    public void Command_line_availability_is_shown_only_for_the_installer(string distribution, bool shown)
+    {
+        SettingsCatalog catalog = SettingsCatalog.CreateBuiltIn();
+        catalog.Distribution = distribution;
+        SettingDefinition commandLine = catalog.Find("shell.commandLine.enabled")!;
+
+        Assert.Equal(shown, catalog.IsShown(commandLine));
+        Assert.True((bool)commandLine.Default!);
+        Assert.False(commandLine.Exportable);
+    }
 }

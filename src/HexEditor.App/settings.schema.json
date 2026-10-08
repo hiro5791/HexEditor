@@ -244,6 +244,11 @@
       ],
       "default": "always"
     },
+    "shell.commandLine.enabled": {
+      "description": "Make available from the command line",
+      "type": "boolean",
+      "default": true
+    },
     "shell.jumpList.enabled": {
       "description": "Show the jump list",
       "type": "boolean",

@@ -68,7 +68,51 @@ public sealed partial class MainWindow
             }
         };
         CheckExplorerRegistration();
+        StartCommandLineSetting();
         OfferSettingsImport(env);
+    }
+
+    /// <summary>設定 shell.commandLine.enabled (PKG-08 の仕様 6。インストーラ版だけ)。</summary>
+    public const string CommandLineSettingKey = "shell.commandLine.enabled";
+
+    /// <summary>
+    /// 「コマンドラインから使えるようにする」: 設定の値をユーザーの PATH に反映する (インストーラ版だけ)。起動時は今の PATH の状態を設定に
+    /// 写す (インストール・更新のフックが PATH を変えるため)。
+    /// </summary>
+    private static void StartCommandLineSetting()
+    {
+        ShellIntegration shell = ExplorerIntegration.Shell;
+        if (!shell.CommandLineSupported)
+        {
+            return;
+        }
+
+        bool applied = shell.CommandLineEnabled;
+        App.Settings.SetBool(CommandLineSettingKey, applied, true);
+        App.Settings.Changed += keys =>
+        {
+            if (!keys.Contains(CommandLineSettingKey))
+            {
+                return;
+            }
+
+            App.DispatcherQueue.TryEnqueue(() =>
+            {
+                bool wanted = App.Settings.GetBool(CommandLineSettingKey, true);
+                if (wanted == applied)
+                {
+                    return;
+                }
+
+                IReadOnlyList<string> failures = shell.SetCommandLineEnabled(wanted);
+                applied = shell.CommandLineEnabled;
+                AppLog.Info($"Command line availability: {applied}");
+                if (failures.Count > 0 && WindowManager.Windows.Count > 0)
+                {
+                    WindowManager.Current.ReportShellFailures(failures);
+                }
+            });
+        };
     }
 
     /// <summary>設定の変更をこのウィンドウのコマンドの表示に反映する。ウィンドウを閉じたら購読をやめる。</summary>

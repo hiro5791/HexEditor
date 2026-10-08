@@ -1319,6 +1319,8 @@
   <data name="SetDesc_update_checkAutomatically" xml:space="preserve"><value>起動から 30 秒後と、その後 24 時間ごとに新しい版を確認する。</value></data>
   <data name="Set_update_downloadAutomatically" xml:space="preserve"><value>更新を自動でダウンロードする</value></data>
   <data name="SetDesc_update_downloadAutomatically" xml:space="preserve"><value>新しい版が見つかったら裏でダウンロードする (インストーラ版)。</value></data>
+  <data name="Set_shell_commandLine_enabled" xml:space="preserve"><value>コマンドラインから使えるようにする</value></data>
+  <data name="SetDesc_shell_commandLine_enabled" xml:space="preserve"><value>アプリのフォルダをユーザーの PATH に追加し、ターミナルから hexed を実行できるようにする (インストーラ版)。</value></data>
   <data name="Set_update_channel" xml:space="preserve"><value>更新のチャネル</value></data>
   <data name="SetDesc_update_channel" xml:space="preserve"><value>受け取るリリースの種類。</value></data>
   <data name="SetOpt_update_channel_stable" xml:space="preserve"><value>安定版</value></data>

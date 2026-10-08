@@ -129,6 +129,10 @@ public static class BuiltInSettings
         // ---- 詳細 ----
         new("log.level", SettingCategories.Advanced, SettingKind.Choice, "info") { Options = ["info", "debug"], Order = 10 },
         new("diagnostics.writeMiniDump", SettingCategories.Advanced, SettingKind.Bool, false) { Order = 20 },
+
+        // 「コマンドラインから使えるようにする」(10 の PKG-08 の仕様 6)。インストーラ版だけ。値はユーザーの PATH に反映し、他の PC に
+        // 持ち出さない (PATH の状態は PC ごと)。
+        new("shell.commandLine.enabled", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 30, Distributions = [SettingDistributions.Installer], Exportable = false },
     ];
 
     public static JsonNode? DefaultOf(string key) => All.FirstOrDefault(s => s.Key == key)?.Default?.DeepClone();
