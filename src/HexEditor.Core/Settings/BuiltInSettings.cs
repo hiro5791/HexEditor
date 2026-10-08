@@ -43,8 +43,8 @@ public static class BuiltInSettings
 
         // Hex 表示のフォントと配色 (UI-28、UI-29)。フォントと配色は一覧から選ぶ専用の区画 (App の ViewSections) で変える。
         new("view.font.family", SettingCategories.Appearance, SettingKind.String, string.Empty) { Order = 30, ShowInPage = false },
-        new("view.font.size", SettingCategories.Appearance, SettingKind.Number, 10.0) { Min = 6, Max = 72, Order = 31 },
-        new("view.font.lineHeight", SettingCategories.Appearance, SettingKind.Number, 1.2) { Min = 1.0, Max = 2.0, Order = 32 },
+        new("view.font.size", SettingCategories.Appearance, SettingKind.Number, 10.0) { Min = 6, Max = 72, Step = 0.5, Order = 31 },
+        new("view.font.lineHeight", SettingCategories.Appearance, SettingKind.Number, 1.2) { Min = 1.0, Max = 2.0, Step = 0.1, Order = 32 },
         new("view.font.fallback", SettingCategories.Appearance, SettingKind.String, string.Empty) { Order = 33 },
         new("view.font.followTextScaling", SettingCategories.Appearance, SettingKind.Bool, true) { Order = 34 },
         new("view.colorScheme", SettingCategories.Appearance, SettingKind.String, "default") { Order = 35, ShowInPage = false },

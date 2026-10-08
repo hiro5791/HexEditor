@@ -31,6 +31,9 @@ public sealed record SettingDefinition(string Key, string Category, SettingKind 
 
     public double? Max { get; init; }
 
+    /// <summary>数値の刻み (設定画面の上下ボタン・矢印キーで変わる量。例: フォントの大きさは 0.5 pt。UI-29 の仕様 3)。null は 1。</summary>
+    public double? Step { get; init; }
+
     /// <summary>再起動後に反映する項目 (表示言語など。UI-22 の仕様 6)。</summary>
     public bool RequiresRestart { get; init; }
 

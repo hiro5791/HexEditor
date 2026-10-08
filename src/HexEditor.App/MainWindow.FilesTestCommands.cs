@@ -29,6 +29,9 @@ public sealed partial class MainWindow
             // スタートページの最近使ったファイルの行のメニュー (Shift+F10 と同じ)。invoke があれば、その AutomationId の項目を押す。
             "startRecentMenu" => TestStartRecentMenu((int)TestHookSettings.ReadLong(request["index"], 0), request["invoke"]?.GetValue<string>()),
 
+            // 設定画面の配色とフォントの区画 (UI-28、UI-29)。設定画面を開いた後に使う。
+            "schemeEditor" => TestSchemeEditor(request),
+
             // ウィンドウがアクティブになったときと同じ確認 (ウィンドウを前面に出さずに再現する。ENG-19 の仕様 1)。
             "activated" => Run(CheckSelectedForExternalChange),
 
@@ -116,6 +119,49 @@ public sealed partial class MainWindow
         menu.Hide();
 
         return new JsonObject { ["open"] = true, ["items"] = items };
+    }
+
+    /// <summary>配色の区画: action = state / duplicate {name} / set {element, color?, dark} / save / import {path}。区画の状態を返す。</summary>
+    private static JsonObject TestSchemeEditor(JsonObject request)
+    {
+        Views.ColorSchemeSection section = Views.ColorSchemeSection.Current ?? throw new InvalidOperationException("The settings page is not open.");
+        var result = new JsonObject();
+        switch (request["action"]?.GetValue<string>() ?? "state")
+        {
+            case "duplicate":
+                result["created"] = section.Duplicate(request["name"]!.GetValue<string>())?.Name;
+                break;
+            case "set":
+                {
+                    var element = Enum.Parse<Core.View.SchemeElement>(request["element"]!.GetValue<string>(), ignoreCase: true);
+                    Core.View.SchemeColor? color = Core.View.SchemeColor.TryParse(request["color"]?.GetValue<string>(), out Core.View.SchemeColor c) ? c : null;
+                    section.SetColorForTest(element, request["dark"]?.GetValue<bool>() ?? false, color);
+                    break;
+                }
+
+            case "save":
+                section.SaveEditing();
+                break;
+            case "import":
+                result["imported"] = section.Import(request["path"]!.GetValue<string>())?.Name;
+                break;
+        }
+
+        (IReadOnlyList<string> names, string? selected, bool editorVisible) = section.ListState;
+        (string? background, string family, double points, double lineHeight) = section.Preview.StateForTest;
+        result["schemes"] = new JsonArray([.. names.Select(n => (JsonNode?)n)]);
+        result["selected"] = selected;
+        result["editing"] = section.Editing?.Name;
+        result["editorVisible"] = editorVisible;
+        result["contrastOpen"] = section.ContrastState.Open;
+        result["contrastMessage"] = section.ContrastState.Message;
+        result["loadWarningsOpen"] = section.LoadWarningState.Open;
+        result["loadWarnings"] = section.LoadWarningState.Message;
+        result["previewBackground"] = background;
+        result["previewFont"] = family;
+        result["previewPoints"] = points;
+        result["previewLineHeight"] = lineHeight;
+        return result;
     }
 
     private static JsonObject TestExternalWrite(JsonObject request)

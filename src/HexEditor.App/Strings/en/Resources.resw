@@ -2406,4 +2406,41 @@ Details were written to:
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>base address row shift</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>View: Continuation marks in multibyte characters</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>utf-8 multibyte</value></data>
+  <data name="Settings_HexPreview" xml:space="preserve"><value>Preview</value></data>
+  <data name="SchemeUi_Duplicate" xml:space="preserve"><value>Duplicate...</value></data>
+  <data name="SchemeUi_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="SchemeUi_Import" xml:space="preserve"><value>Import...</value></data>
+  <data name="SchemeUi_NewName" xml:space="preserve"><value>Name of the new color scheme</value></data>
+  <data name="SchemeUi_CopyName" xml:space="preserve"><value>{0} copy</value></data>
+  <data name="SchemeUi_NameInvalid" xml:space="preserve"><value>Enter a name that no other color scheme uses.</value></data>
+  <data name="SchemeUi_Edit" xml:space="preserve"><value>Edit color scheme: {0}</value></data>
+  <data name="SchemeUi_Variant" xml:space="preserve"><value>Colors to edit</value></data>
+  <data name="SchemeUi_Light" xml:space="preserve"><value>Light theme</value></data>
+  <data name="SchemeUi_Dark" xml:space="preserve"><value>Dark theme</value></data>
+  <data name="SchemeUi_PickColor" xml:space="preserve"><value>Pick a color for {0}</value></data>
+  <data name="SchemeUi_ThemeColor" xml:space="preserve"><value>Theme color</value></data>
+  <data name="SchemeUi_Reset" xml:space="preserve"><value>Use the theme color</value></data>
+  <data name="SchemeUi_Save" xml:space="preserve"><value>Save color scheme</value></data>
+  <data name="SchemeUi_SaveFailed" xml:space="preserve"><value>The color scheme could not be saved: {0}</value></data>
+  <data name="SchemeUi_ContrastTitle" xml:space="preserve"><value>Low contrast</value></data>
+  <data name="SchemeUi_ContrastItem" xml:space="preserve"><value>{0} on {1} ({2}): {3}:1. Text may be hard to read (4.5:1 or more is recommended).</value></data>
+  <data name="SchemeUi_LoadWarnings" xml:space="preserve"><value>Some colors in this color scheme file are invalid, so the default colors are used for them: {0}</value></data>
+  <data name="SchemeUi_ImportFailed" xml:space="preserve"><value>The color scheme could not be imported: {0}</value></data>
+  <data name="SchemeUi_Exported" xml:space="preserve"><value>Exported the color scheme to {0}.</value></data>
+  <data name="SchemeUi_FileType" xml:space="preserve"><value>Color scheme</value></data>
+  <data name="SchemeElement_Background" xml:space="preserve"><value>Background</value></data>
+  <data name="SchemeElement_AlternateBackground" xml:space="preserve"><value>Alternate row background</value></data>
+  <data name="SchemeElement_CurrentRowBackground" xml:space="preserve"><value>Cursor row background</value></data>
+  <data name="SchemeElement_OffsetText" xml:space="preserve"><value>Offset text</value></data>
+  <data name="SchemeElement_HexText" xml:space="preserve"><value>Hex text</value></data>
+  <data name="SchemeElement_TextText" xml:space="preserve"><value>Text column text</value></data>
+  <data name="SchemeElement_Zero" xml:space="preserve"><value>00 bytes</value></data>
+  <data name="SchemeElement_NonPrintable" xml:space="preserve"><value>Non-printable characters (.)</value></data>
+  <data name="SchemeElement_Modified" xml:space="preserve"><value>Modified bytes</value></data>
+  <data name="SchemeElement_Inserted" xml:space="preserve"><value>Inserted bytes</value></data>
+  <data name="SchemeElement_SelectionBackground" xml:space="preserve"><value>Selection background</value></data>
+  <data name="SchemeElement_SelectionText" xml:space="preserve"><value>Selection text</value></data>
+  <data name="SchemeElement_Caret" xml:space="preserve"><value>Cursor</value></data>
+  <data name="SchemeElement_Match" xml:space="preserve"><value>Search matches</value></data>
+  <data name="SchemeElement_Separator" xml:space="preserve"><value>Separator lines</value></data>
 </root>
