@@ -2407,4 +2407,12 @@
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>ぎょうのせんとう</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>表示: マルチバイト文字の続きの記号</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>つづきのきごう</value></data>
+  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>移動: 前のグループへ</value></data>
+  <data name="CmdAlias_go_previousGroup" xml:space="preserve"><value>まえの ぐるーぷ いどう</value></data>
+  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>移動: 次のグループへ</value></data>
+  <data name="CmdAlias_go_nextGroup" xml:space="preserve"><value>つぎの ぐるーぷ いどう</value></data>
+  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>表示: 1 行上にスクロール</value></data>
+  <data name="CmdAlias_view_scrollLineUp" xml:space="preserve"><value>うえに すくろーる いちぎょう</value></data>
+  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>表示: 1 行下にスクロール</value></data>
+  <data name="CmdAlias_view_scrollLineDown" xml:space="preserve"><value>したに すくろーる いちぎょう</value></data>
 </root>

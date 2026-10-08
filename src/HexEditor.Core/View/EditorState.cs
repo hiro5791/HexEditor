@@ -276,6 +276,39 @@ public sealed partial class EditorState
         }
     }
 
+    /// <summary>
+    /// 「移動: 前のグループへ」(Ctrl+←。VIEW-25 の仕様 8): グループの先頭にいなければそのグループの先頭へ、先頭にいれば前のグループの
+    /// 先頭へ。グループ化が 1 のときは ← と同じ。
+    /// </summary>
+    public void MovePreviousGroup(bool extend = false)
+    {
+        int group = Math.Max(1, View.GroupSize);
+        if (group == 1)
+        {
+            MoveLeft(extend);
+            return;
+        }
+
+        int within = (int)(Layout.ColumnOf(_cursor) % group);
+        long target = _cursor - (within == 0 ? group : within);
+        MoveTo(Math.Max(0, target), extend);
+    }
+
+    /// <summary>「移動: 次のグループへ」(Ctrl+→。VIEW-25 の仕様 8): 次のグループの先頭へ。最大値を超える場合は最大値へ。</summary>
+    public void MoveNextGroup(bool extend = false)
+    {
+        int group = Math.Max(1, View.GroupSize);
+        if (group == 1)
+        {
+            MoveRight(extend);
+            return;
+        }
+
+        int within = (int)(Layout.ColumnOf(_cursor) % group);
+        long target = SaturatingAdd(_cursor, group - within);
+        MoveTo(Math.Min(target, Layout.MaxCursor), extend);
+    }
+
     public void MoveHome(bool extend = false) => MoveTo(Layout.RowStart(Layout.RowOf(_cursor)), extend);
 
     public void MoveEnd(bool extend = false)

@@ -2407,4 +2407,12 @@ Details were written to:
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>base address row shift</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>View: Continuation marks in multibyte characters</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>utf-8 multibyte</value></data>
+  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>Go: Previous group</value></data>
+  <data name="CmdAlias_go_previousGroup" xml:space="preserve"><value>group left word move back</value></data>
+  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>Go: Next group</value></data>
+  <data name="CmdAlias_go_nextGroup" xml:space="preserve"><value>group right word move forward</value></data>
+  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>View: Scroll up one row</value></data>
+  <data name="CmdAlias_view_scrollLineUp" xml:space="preserve"><value>scroll line row up</value></data>
+  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>View: Scroll down one row</value></data>
+  <data name="CmdAlias_view_scrollLineDown" xml:space="preserve"><value>scroll line row down</value></data>
 </root>

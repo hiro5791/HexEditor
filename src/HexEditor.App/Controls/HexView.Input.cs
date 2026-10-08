@@ -1203,6 +1203,13 @@ public sealed partial class HexView
 
         switch (key)
         {
+            case VirtualKey.Left when ctrl:
+                // 前 / 次のグループへ (VIEW-25 の仕様 8。コマンド go.previousGroup / go.nextGroup の既定のキー)。
+                _editor.MovePreviousGroup(shift);
+                break;
+            case VirtualKey.Right when ctrl:
+                _editor.MoveNextGroup(shift);
+                break;
             case VirtualKey.Left:
                 _editor.MoveLeft(shift);
                 break;
