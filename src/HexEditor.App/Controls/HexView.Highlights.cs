@@ -91,8 +91,8 @@ public sealed partial class HexView
     public void RefreshHighlights() => QueueRender();
 
     /// <summary>
-    /// 右クリックメニューを開く直前に呼ぶ処理 (他の機能が項目を加え、状態を更新する)。項目の <c>Tag</c> に文字列以外を入れておくと、
-    /// Hex ビューの有効・無効の更新の対象にならない。
+    /// 右クリックメニューを開く直前に呼ぶ処理 (他の機能が項目を加え、状態を更新する)。加える項目の <c>Tag</c> には文字列を入れる
+    /// (Hex ビューは知らない Tag の項目を有効にし、その後でこの処理を呼ぶ)。
     /// </summary>
     public void SetContextMenuExtension(Action<MenuFlyout>? opening)
     {

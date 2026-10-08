@@ -17,8 +17,10 @@
             <StackPanel
                 Padding="0,6,0,2"
                 AutomationProperties.AccessibilityView="Raw"
+                Background="Transparent"
                 Orientation="Horizontal"
-                Spacing="6">
+                Spacing="6"
+                Tapped="Group_Tapped">
                 <FontIcon
                     AutomationProperties.AccessibilityView="Raw"
                     FontSize="10"
@@ -50,6 +52,7 @@
                         AutomationProperties.AccessibilityView="Raw"
                         FontSize="10"
                         Glyph="{x:Bind Chevron, Mode=OneWay}"
+                        Tapped="Expand_Tapped"
                         Visibility="{x:Bind CanExpand, Mode=OneWay}" />
                     <TextBlock Text="{x:Bind Name, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
                 </StackPanel>

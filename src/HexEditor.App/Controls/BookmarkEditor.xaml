@@ -43,6 +43,16 @@
                 FontFamily="Cascadia Mono, Consolas"
                 TextChanged="Range_TextChanged" />
         </Grid>
+        <!--  2 つ目の欄を「長さ」と「終了 (このバイトを含む)」のどちらで入力するか (INSP-24 の仕様 1)  -->
+        <ComboBox
+            x:Name="RangeMode"
+            x:Uid="Bookmark_RangeMode"
+            AutomationProperties.AutomationId="Bookmark_RangeMode"
+            SelectedIndex="0"
+            SelectionChanged="RangeMode_SelectionChanged">
+            <ComboBoxItem x:Uid="Bookmark_RangeByLength" />
+            <ComboBoxItem x:Uid="Bookmark_RangeByEnd" />
+        </ComboBox>
         <TextBlock
             x:Name="RangeInfo"
             AutomationProperties.AutomationId="Bookmark_RangeInfo"

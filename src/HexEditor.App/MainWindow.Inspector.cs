@@ -334,8 +334,10 @@ public sealed partial class MainWindow
 
     private void QueueAnnotationSave()
     {
-        _annotationSaveTimer.Stop();
-        _annotationSaveTimer.Start();
+        if (!_annotationSaveTimer.IsRunning)
+        {
+            _annotationSaveTimer.Start();
+        }
     }
 
     private void SaveAnnotations(bool force = false)
@@ -453,10 +455,10 @@ public sealed partial class MainWindow
         if (!menu.Items.Any(i => AutomationProperties.GetAutomationId(i) == ToggleId))
         {
             menu.Items.Add(new MenuFlyoutSeparator());
-            var toggle = new MenuFlyoutItem { KeyboardAcceleratorTextOverride = "Ctrl+F2", Tag = 0 };
+            var toggle = new MenuFlyoutItem { KeyboardAcceleratorTextOverride = "Ctrl+F2", Tag = "Bookmark" };
             AutomationProperties.SetAutomationId(toggle, ToggleId);
             toggle.Click += (_, _) => ToggleBookmark();
-            var edit = new MenuFlyoutItem { Text = Loc.Get("HexView_Menu_EditBookmark"), Tag = 0 };
+            var edit = new MenuFlyoutItem { Text = Loc.Get("HexView_Menu_EditBookmark"), Tag = "EditBookmark" };
             AutomationProperties.SetAutomationId(edit, EditId);
             edit.Click += (_, _) =>
             {
@@ -665,14 +667,11 @@ public sealed partial class MainWindow
             return;
         }
 
-        if (_bookmarkEditor is null)
-        {
-            _bookmarkEditor = new BookmarkEditor();
-            _bookmarkEditor.LinkClicked += (_, url) => OpenCommentLink(url);
-            _bookmarkFlyout = new Flyout { Content = _bookmarkEditor, Placement = FlyoutPlacementMode.Bottom };
-            AutomationProperties.SetAutomationId(_bookmarkFlyout, "BookmarkEditorFlyout");
-        }
-
+        // 開くたびに作る (閉じかけのフライアウトを開き直すと表示されないことがあるため)。
+        _bookmarkFlyout?.Hide();
+        _bookmarkEditor = new BookmarkEditor();
+        _bookmarkEditor.LinkClicked += (_, url) => OpenCommentLink(url);
+        _bookmarkFlyout = new Flyout { Content = _bookmarkEditor, Placement = FlyoutPlacementMode.Bottom };
         _bookmarkEditor.HighContrast = IsHighContrast;
         _bookmarkEditor.Load(a.Bookmarks, bookmark, editor);
         _bookmarkFlyout!.ShowAt(anchor);

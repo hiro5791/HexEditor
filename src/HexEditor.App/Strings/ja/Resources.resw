@@ -577,4 +577,8 @@
   <data name="Bookmark_CommentLabel.Text" xml:space="preserve"><value>コメント (Markdown)</value></data>
   <data name="Bookmark_PreviewToggle.Content" xml:space="preserve"><value>プレビュー</value></data>
   <data name="Bookmark_CommentRemaining" xml:space="preserve"><value>残り {0} 文字</value></data>
+  <data name="Bookmark_RangeByLength.Content" xml:space="preserve"><value>長さで指定</value></data>
+  <data name="Bookmark_RangeByEnd.Content" xml:space="preserve"><value>終了 (このバイトを含む) で指定</value></data>
+  <data name="Bookmark_RangeMode.AutomationProperties.Name" xml:space="preserve"><value>範囲の指定のしかた</value></data>
+  <data name="Bookmark_EndHeader" xml:space="preserve"><value>終了 (このバイトを含む)</value></data>
 </root>

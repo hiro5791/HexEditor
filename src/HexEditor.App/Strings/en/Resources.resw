@@ -577,4 +577,8 @@ Details were written to:
   <data name="Bookmark_CommentLabel.Text" xml:space="preserve"><value>Comment (Markdown)</value></data>
   <data name="Bookmark_PreviewToggle.Content" xml:space="preserve"><value>Preview</value></data>
   <data name="Bookmark_CommentRemaining" xml:space="preserve"><value>{0} characters left</value></data>
+  <data name="Bookmark_RangeByLength.Content" xml:space="preserve"><value>Length</value></data>
+  <data name="Bookmark_RangeByEnd.Content" xml:space="preserve"><value>End (inclusive)</value></data>
+  <data name="Bookmark_RangeMode.AutomationProperties.Name" xml:space="preserve"><value>How to enter the range</value></data>
+  <data name="Bookmark_EndHeader" xml:space="preserve"><value>End offset (this byte included)</value></data>
 </root>

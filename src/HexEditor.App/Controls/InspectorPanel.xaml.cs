@@ -291,6 +291,26 @@ public sealed partial class InspectorPanel : UserControl
         }
     }
 
+    /// <summary>見出しを押すと折りたたむ・開く (INSP-01 の仕様 5)。</summary>
+    private void Group_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { DataContext: InspectorItemViewModel item })
+        {
+            Vm.ToggleGroup(item);
+            e.Handled = true;
+        }
+    }
+
+    /// <summary>GUID の行の印を押すと構成要素を展開する・閉じる (INSP-11 の仕様 3)。</summary>
+    private void Expand_Tapped(object sender, TappedRoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { DataContext: InspectorItemViewModel item })
+        {
+            Vm.ToggleExpand(item);
+            e.Handled = true;
+        }
+    }
+
     private void Row_PointerEntered(object sender, PointerRoutedEventArgs e)
     {
         if (sender is FrameworkElement { DataContext: InspectorItemViewModel item })

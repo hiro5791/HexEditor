@@ -27,6 +27,7 @@ public sealed partial class MainWindow
 {
     private JsonObject? HandleInspectorTestCommand(string cmd, JsonObject request) => cmd switch
     {
+        "inspectorKeyLatency" => TestInspectorKeyLatency(request),
         "inspector" => TestInspectorState(),
         "panelKey" => TestPanelKey(request),
         "inspectorSelect" => TestInspectorSelect(request),
@@ -39,8 +40,45 @@ public sealed partial class MainWindow
         "bookmarkLink" => new JsonObject { ["clicked"] = _bookmarkEditor?.ClickLink(request["text"]!.GetValue<string>()) ?? false },
         "bookmarksSelect" => TestBookmarksSelect(request),
         "setHighContrast" => TestSetHighContrast(request),
+        "inspectorLatencyResult" => _latencyResult ?? new JsonObject { ["pending"] = true },
+        "bookmarksSummary" => TestBookmarksSummary(),
         _ => null,
     };
+
+    /// <summary>
+    /// キー 1 つを Hex ビューに渡し、インスペクタのすべての行が新しい起点の値になるまでの時間 (ms) を測る (TC-INSP-01-02)。
+    /// 結果の値が、同じバイト列を解釈部品で直接解釈した値と一致するかも返す。更新は UI スレッドの次の処理で行うため、
+    /// 同期で待たずに、次の命令 (<c>inspectorLatencyResult</c>) で読む。
+    /// </summary>
+    private JsonObject TestInspectorKeyLatency(JsonObject request)
+    {
+        HexView view = CurrentView() ?? throw new InvalidOperationException("No hex view.");
+        var key = Enum.Parse<VirtualKey>(request["key"]?.GetValue<string>() ?? "Right", ignoreCase: true);
+        long started = System.Diagnostics.Stopwatch.GetTimestamp();
+        _latencyResult = null;
+        void OnRefreshed(object? sender, EventArgs e)
+        {
+            _inspectorVm.Refreshed -= OnRefreshed;
+            double ms = System.Diagnostics.Stopwatch.GetElapsedTime(started).TotalMilliseconds;
+            DocumentViewModel doc = Vm.Selected!;
+            var direct = Core.Inspector.DataInspector.Evaluate(doc.Document.Current, _inspectorVm.Origin, _inspectorVm.Layout, _inspectorVm.Endian,
+                _inspectorVm.Options).SelectMany(g => g.Rows).Select(r => r.Value.Text).ToList();
+            var shown = _inspectorVm.Items.Where(i => i.Kind == InspectorItemKind.Row).Select(i => i.Value).ToList();
+            _latencyResult = new JsonObject
+            {
+                ["ms"] = ms,
+                ["origin"] = _inspectorVm.Origin,
+                ["matches"] = direct.SequenceEqual(shown),
+                ["loading"] = shown.Contains(Core.Inspector.InspectorText.English.Loading),
+            };
+        }
+
+        _inspectorVm.Refreshed += OnRefreshed;
+        view.InjectKey(key, false, false, false);
+        return new JsonObject();
+    }
+
+    private JsonObject? _latencyResult;
 
     private JsonObject TestInspectorState()
     {
@@ -185,6 +223,19 @@ public sealed partial class MainWindow
         };
     }
 
+    /// <summary>一覧の行数と先頭・末尾の行 (100 万件の性能のテスト用。全部の行は返さない)。</summary>
+    private JsonObject TestBookmarksSummary()
+    {
+        IReadOnlyList<Bookmark> rows = _bookmarksVm.Rows.Bookmarks;
+        return new JsonObject
+        {
+            ["count"] = rows.Count,
+            ["first"] = rows.Count > 0 ? BookmarkJson(rows[0]) : null,
+            ["last"] = rows.Count > 0 ? BookmarkJson(rows[^1]) : null,
+            ["names"] = rows.Count <= 100 ? new JsonArray([.. rows.Select(b => (JsonNode?)b.Name)]) : null,
+        };
+    }
+
     private static JsonObject BookmarkJson(Bookmark b) => new()
     {
         ["name"] = b.Name,
@@ -206,11 +257,7 @@ public sealed partial class MainWindow
         string prefix = request["name"]?.GetValue<string>() ?? "bm";
         for (long k = 0; k < count; k++)
         {
-            Bookmark b = a.Bookmarks.Add(k * step, length, prefix + k);
-            if (request["color"] is null)
-            {
-                a.Bookmarks.SetColor(b, BookmarkColor.Palette((int)(k % 8) + 1));
-            }
+            a.Bookmarks.Add(k * step, length, prefix + k, BookmarkColor.Palette((int)(k % 8) + 1));
         }
 
         return new JsonObject { ["count"] = a.Bookmarks.Count };

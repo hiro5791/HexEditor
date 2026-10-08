@@ -31,9 +31,6 @@ public sealed partial class InspectorBitViewModel(InspectorItemViewModel row, in
     public string ToolTip => Loc.Format("Inspector_BitToolTip", Index);
 
     public string AutomationId => $"Inspector_Bit_{Row.TypeId}_{Index}";
-
-    /// <summary>4 bit ごとの区切りの前の余白。</summary>
-    public Microsoft.UI.Xaml.Thickness Margin => new(Index % 4 == 3 && Index != Row.BitCount - 1 ? 6 : 0, 0, 0, 0);
 }
 
 /// <summary>インスペクタの一覧の 1 項目。</summary>
@@ -200,6 +197,9 @@ public sealed partial class InspectorViewModel : ObservableObject
 
     /// <summary>行の構成が変わった (行の設定の画面を作り直す)。</summary>
     public event EventHandler? LayoutChanged;
+
+    /// <summary>すべての行を新しい起点の値にした (性能のテストで更新までの時間を測る)。</summary>
+    public event EventHandler? Refreshed;
 
     public InspectorLayout Layout { get; private set; }
 
@@ -452,6 +452,7 @@ public sealed partial class InspectorViewModel : ObservableObject
 
         Sync(wanted);
         HighlightChanged?.Invoke(this, EventArgs.Empty);
+        Refreshed?.Invoke(this, EventArgs.Empty);
     }
 
     private InspectorItemViewModel Item(InspectorItemViewModel candidate)

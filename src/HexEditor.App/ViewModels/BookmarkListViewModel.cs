@@ -158,7 +158,9 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
 /// </summary>
 public sealed partial class BookmarkListViewModel : ObservableObject
 {
+    private readonly Microsoft.UI.Dispatching.DispatcherQueue? _queue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
     private DocumentAnnotations? _annotations;
+    private bool _rebuildQueued;
 
     public BookmarkRowList Rows { get; } = new();
 
@@ -218,7 +220,20 @@ public sealed partial class BookmarkListViewModel : ObservableObject
             return;
         }
 
-        Rebuild();
+        // 続けて起きた変更 (まとめての追加など) は 1 回の作り直しにまとめる。
+        if (_queue is null)
+        {
+            Rebuild();
+        }
+        else if (!_rebuildQueued)
+        {
+            _rebuildQueued = true;
+            _queue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+            {
+                _rebuildQueued = false;
+                Rebuild();
+            });
+        }
     }
 
     /// <summary>並べ替える。同じ列をもう一度選ぶと逆順にする。</summary>
@@ -239,7 +254,7 @@ public sealed partial class BookmarkListViewModel : ObservableObject
             return;
         }
 
-        IEnumerable<Bookmark> all = bookmarks.All;
+        IEnumerable<Bookmark> all = bookmarks.Ordered;
         string filter = Filter.Trim();
         if (filter.Length > 0)
         {
@@ -248,22 +263,56 @@ public sealed partial class BookmarkListViewModel : ObservableObject
 
         Bookmark[] items = [.. all];
         // 文字列は序数比較 (大文字・小文字を区別しない。00-overview 5.4)。100 万件でも 1 秒以内に並べる (INSP-26 の受け入れ基準 5)。
-        Comparison<Bookmark>? compare = SortColumn switch
+        // 並べ替えの鍵は先に作り、同じ値どうしは開始位置の順にする (安定な並べ替え)。
+        if (SortColumn is BookmarkSortColumn.Name or BookmarkSortColumn.Comment or BookmarkSortColumn.Color)
         {
-            BookmarkSortColumn.Number => (a, b) => (a.Number == 0 ? 10 : a.Number).CompareTo(b.Number == 0 ? 10 : b.Number),
-            BookmarkSortColumn.Name => (a, b) => StringComparer.OrdinalIgnoreCase.Compare(a.Name, b.Name),
-            BookmarkSortColumn.Length => (a, b) => a.Length.CompareTo(b.Length),
-            BookmarkSortColumn.Color => (a, b) => string.CompareOrdinal(a.Color.ToString(), b.Color.ToString()),
-            BookmarkSortColumn.Comment => (a, b) => StringComparer.OrdinalIgnoreCase.Compare(a.Comment, b.Comment),
-            _ => null,
-        };
-        if (compare is not null)
-        {
-            // 同じ値どうしは開始位置の順 (安定な並べ替え)。
-            int[] index = [.. Enumerable.Range(0, items.Length)];
+            string[] keys = new string[items.Length];
+            int[] order = new int[items.Length];
+            for (int i = 0; i < items.Length; i++)
+            {
+                Bookmark b = items[i];
+                keys[i] = SortColumn switch
+                {
+                    BookmarkSortColumn.Name => b.Name,
+                    BookmarkSortColumn.Comment => b.Comment,
+                    _ => b.Color.ToString(),
+                };
+                order[i] = i;
+            }
+
+            Array.Sort(keys, order, StringComparer.OrdinalIgnoreCase);
+
+            // 同じ値の並びの中は開始位置の順に直す。
+            for (int i = 0; i < keys.Length;)
+            {
+                int j = i + 1;
+                while (j < keys.Length && StringComparer.OrdinalIgnoreCase.Equals(keys[i], keys[j]))
+                {
+                    j++;
+                }
+
+                if (j - i > 1)
+                {
+                    Array.Sort(order, i, j - i);
+                }
+
+                i = j;
+            }
+
             Bookmark[] source = items;
-            Array.Sort(index, (x, y) => compare(source[x], source[y]) is int c and not 0 ? c : x.CompareTo(y));
-            items = [.. index.Select(i => source[i])];
+            items = [.. order.Select(k => source[k])];
+        }
+        else if (SortColumn is BookmarkSortColumn.Number or BookmarkSortColumn.Length)
+        {
+            var keys = new (long Key, int Index)[items.Length];
+            for (int i = 0; i < items.Length; i++)
+            {
+                keys[i] = (SortColumn == BookmarkSortColumn.Length ? items[i].Length : items[i].Number == 0 ? 10 : items[i].Number, i);
+            }
+
+            Array.Sort(keys);
+            Bookmark[] source = items;
+            items = [.. keys.Select(k => source[k.Index])];
         }
 
         if (SortDescending)

@@ -40,7 +40,7 @@ public sealed partial class BookmarkEditor : UserControl
             AutomationProperties.SetAutomationId(radio, "Bookmark_Color" + i);
             AutomationProperties.SetName(radio, Loc.Format("Bookmarks_ColorNumber", i));
             ToolTipService.SetToolTip(radio, Loc.Format("Bookmarks_ColorNumber", i));
-            radio.Click += Color_Click;
+            radio.Checked += Color_Checked;
             _colors.Add(radio);
             ColorChoices.Children.Add(radio);
         }
@@ -65,6 +65,8 @@ public sealed partial class BookmarkEditor : UserControl
         _editor = editor;
         NameBox.Text = bookmark.Name;
         StartBox.Text = "0x" + bookmark.Start.ToString("X", CultureInfo.InvariantCulture);
+        RangeMode.SelectedIndex = 0;
+        LengthBox.Header = Loc.Get("Bookmark_Length/Header");
         LengthBox.Text = bookmark.Length.ToString(CultureInfo.InvariantCulture);
         CommentBox.Text = bookmark.Comment;
         NumberChoice.SelectedIndex = bookmark.Number;
@@ -93,6 +95,8 @@ public sealed partial class BookmarkEditor : UserControl
 
     private void UpdateSwatches()
     {
+        bool loading = _loading;
+        _loading = true;
         foreach (RadioButton radio in _colors)
         {
             var color = BookmarkColor.Palette((int)radio.Tag);
@@ -101,6 +105,8 @@ public sealed partial class BookmarkEditor : UserControl
             swatch.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
             radio.IsChecked = _bookmark?.Color == color;
         }
+
+        _loading = loading;
     }
 
     private void NameBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -145,7 +151,14 @@ public sealed partial class BookmarkEditor : UserControl
 
         var context = new EditorExpressionContext(_editor);
         bool startOk = ExpressionEvaluator.TryEvaluate(StartBox.Text, context, out long start, out _);
-        bool lengthOk = ExpressionEvaluator.TryEvaluate(LengthBox.Text, context, out long length, out _, DefaultRadix.Decimal);
+        bool byEnd = RangeMode.SelectedIndex == 1;
+        bool lengthOk = ExpressionEvaluator.TryEvaluate(LengthBox.Text, context, out long length, out _, byEnd ? DefaultRadix.Hexadecimal : DefaultRadix.Decimal);
+        if (byEnd && lengthOk && startOk)
+        {
+            // 終了は最後のバイトの位置 (含む)。
+            length = length - start + 1;
+        }
+
         long docLength = _editor.Document.Length;
         bool valid = startOk && lengthOk && start >= 0 && length >= 0 && start <= docLength && length <= docLength - start;
         SetError(StartBox, !startOk || start < 0 || start > docLength);
@@ -161,6 +174,25 @@ public sealed partial class BookmarkEditor : UserControl
         }
     }
 
+    /// <summary>「長さ」と「終了 (このバイトを含む)」を切り替える。今の範囲をその形で入れ直す。</summary>
+    private void RangeMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_bookmark is null || LengthBox is null)
+        {
+            return;
+        }
+
+        bool byEnd = RangeMode.SelectedIndex == 1;
+        bool loading = _loading;
+        _loading = true;
+        LengthBox.Header = byEnd ? Loc.Get("Bookmark_EndHeader") : Loc.Get("Bookmark_Length/Header");
+        LengthBox.Text = byEnd
+            ? "0x" + (_bookmark.Start + Math.Max(1, _bookmark.Length) - 1).ToString("X", CultureInfo.InvariantCulture)
+            : _bookmark.Length.ToString(CultureInfo.InvariantCulture);
+        _loading = loading;
+        UpdateRange(apply: false);
+    }
+
     private static void SetError(TextBox box, bool error)
     {
         if (error)
@@ -173,9 +205,9 @@ public sealed partial class BookmarkEditor : UserControl
         }
     }
 
-    private void Color_Click(object sender, RoutedEventArgs e)
+    private void Color_Checked(object sender, RoutedEventArgs e)
     {
-        if (sender is RadioButton { Tag: int index } && _bookmark is not null && _bookmarks is not null)
+        if (!_loading && sender is RadioButton { Tag: int index } && _bookmark is not null && _bookmarks is not null)
         {
             _bookmarks.SetColor(_bookmark, BookmarkColor.Palette(index));
             CustomToggle.IsChecked = false;

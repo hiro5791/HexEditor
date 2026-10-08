@@ -734,7 +734,16 @@ public sealed class BookmarkCollection
         return [.. positions.Select(p => (p.Key, p.Value)).OrderBy(p => p.Value.Start).ThenBy(p => p.Key.Id)];
     }
 
-    private void RaiseChanged(BookmarkChangeKind kind, IReadOnlyList<Bookmark> items) => Changed?.Invoke(this, new BookmarksChangedEventArgs(kind, items));
+    private void RaiseChanged(BookmarkChangeKind kind, IReadOnlyList<Bookmark> items)
+    {
+        _ordered = null;
+        Changed?.Invoke(this, new BookmarksChangedEventArgs(kind, items));
+    }
+
+    private Bookmark[]? _ordered;
+
+    /// <summary>開始位置の順のすべて (配列。変更があるまで使い回す。一覧の絞り込み・並べ替えに使う)。</summary>
+    public IReadOnlyList<Bookmark> Ordered => _ordered ??= [.. All];
 
     private static string Truncate(string text, int max) => text.Length <= max ? text : text[..max];
 }
