@@ -61,8 +61,22 @@ jobs:
           git fetch origin main
           git merge-base --is-ancestor $env:GITHUB_SHA origin/main
           if ($LASTEXITCODE -ne 0) { throw "The tag $tag is not on a commit of main." }
+          # Translation progress table (PKG-29 spec 3): the coverage of this commit and of the previous release tag.
+          dotnet run --project tools/I18nTool -- coverage --out translation-coverage.json
+          $previousTag = git tag --list 'v*' --sort=-v:refname | Where-Object { $_ -ne $tag } | Select-Object -First 1
+          $previousArgs = @()
+          if ($previousTag) {
+            git archive $previousTag src/HexEditor.App/Strings docs/i18n -o previous-i18n.zip
+            if ($LASTEXITCODE -eq 0) {
+              Expand-Archive previous-i18n.zip previous-i18n
+              dotnet run --project tools/I18nTool -- coverage --strings previous-i18n/src/HexEditor.App/Strings --status previous-i18n/docs/i18n/translation-status.json --out previous-coverage.json
+              if ($LASTEXITCODE -eq 0) { $previousArgs = @('--previous', 'previous-coverage.json') }
+            }
+            $global:LASTEXITCODE = 0
+          }
+          dotnet run --project tools/I18nTool -- release-table --coverage translation-coverage.json @previousArgs --out translation-table.md
           # CHANGELOG.md must have a section for the version (PKG-24 step 1).
-          ./build/release-notes.ps1 -Version $version -OutFile release-notes.md
+          ./build/release-notes.ps1 -Version $version -OutFile release-notes.md -TranslationTable translation-table.md
           if ($LASTEXITCODE -ne 0) { throw "CHANGELOG.md has no section for $version." }
           # A published release cannot be built again; a draft is replaced (PKG-24 spec 4).
           $existing = gh release view $tag --json isDraft 2>$null | ConvertFrom-Json

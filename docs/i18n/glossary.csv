@@ -1,10 +1,42 @@
-term_en,note,ja,zh-Hans,zh-Hant,ko,de,fr,es,pt,ru
-offset,position from the start of the data (bytes),オフセット,偏移,位移,오프셋,Offset,décalage,desplazamiento,deslocamento,смещение
-hex,hexadecimal display column,Hex,十六进制,十六進位,16진수,Hex,hex,hex,hex,Hex
-overwrite mode,typing replaces bytes,上書きモード,覆盖模式,覆寫模式,덮어쓰기 모드,Überschreibmodus,mode refrappe,modo de sobrescritura,modo de substituição,режим замены
-insert mode,typing inserts bytes,挿入モード,插入模式,插入模式,삽입 모드,Einfügemodus,mode insertion,modo de inserción,modo de inserção,режим вставки
-endianness,byte order,エンディアン,字节序,位元組順序,엔디언,Byte-Reihenfolge,boutisme,orden de bytes,ordem dos bytes,порядок байтов
-selection,selected byte range,選択範囲,选区,選取範圍,선택 영역,Auswahl,sélection,selección,seleção,выделение
-bookmark,named position,ブックマーク,书签,書籤,책갈피,Lesezeichen,signet,marcador,marcador,закладка
-encoding,character encoding / code page,文字コード,编码,編碼,인코딩,Codierung,encodage,codificación,codificação,кодировка
-fixed length,data source whose length cannot change,固定長,固定长度,固定長度,고정 길이,feste Länge,longueur fixe,longitud fija,comprimento fixo,фиксированная длина
+term,description,part_of_speech,do_not_translate,ja,zh-Hans,zh-Hant,ko,id,vi,th,de,fr,es,pt,it,ru,uk,pl,cs,hu,ro,el,ar,tr,fa
+document,one open item that is edited (a file / disk / process memory),noun,false,ドキュメント,文档,文件,문서,dokumen,tài liệu,เอกสาร,Dokument,document,documento,documento,documento,документ,документ,dokument,dokument,dokumentum,document,έγγραφο,مستند,belge,سند
+data source,where the data of a document comes from,noun,false,データソース,数据源,資料來源,데이터 원본,sumber data,nguồn dữ liệu,แหล่งข้อมูล,Datenquelle,source de données,origen de datos,fonte de dados,origine dati,источник данных,джерело даних,źródło danych,zdroj dat,adatforrás,sursă de date,πηγή δεδομένων,مصدر البيانات,veri kaynağı,منبع داده
+offset,byte position from the start of the document,noun,false,オフセット,偏移量,位移,오프셋,offset,độ lệch,ออฟเซ็ต,Offset,décalage,desplazamiento,deslocamento,offset,смещение,зміщення,przesunięcie,posun,eltolás,deplasament,μετατόπιση,الإزاحة,ofset,آفست
+address,displayed position (offset plus base address),noun,false,アドレス,地址,位址,주소,alamat,địa chỉ,ที่อยู่,Adresse,adresse,dirección,endereço,indirizzo,адрес,адреса,adres,adresa,cím,adresă,διεύθυνση,العنوان,adres,آدرس
+cursor,input position in the hex view,noun,false,カーソル,光标,游標,커서,kursor,con trỏ,เคอร์เซอร์,Cursor,curseur,cursor,cursor,cursore,курсор,курсор,kursor,kurzor,kurzor,cursor,δρομέας,المؤشر,imleç,مکان‌نما
+selection,selected range of bytes (start and length),noun,false,選択範囲,选定内容,選取範圍,선택 영역,pilihan,vùng chọn,ส่วนที่เลือก,Auswahl,sélection,selección,seleção,selezione,выделение,виділення,zaznaczenie,výběr,kijelölés,selecție,επιλογή,التحديد,seçim,انتخاب
+hex column,part of the view that shows byte values in hexadecimal,noun,false,Hex 列,Hex 列,Hex 欄,Hex 열,kolom Hex,cột Hex,คอลัมน์ Hex,Hex-Spalte,colonne Hex,columna Hex,coluna Hex,colonna Hex,столбец Hex,стовпець Hex,kolumna Hex,sloupec Hex,Hex oszlop,coloana Hex,στήλη Hex,عمود Hex,Hex sütunu,ستون Hex
+text column,part of the view that shows bytes as characters,noun,false,テキスト列,文本列,文字欄,텍스트 열,kolom teks,cột văn bản,คอลัมน์ข้อความ,Textspalte,colonne texte,columna de texto,coluna de texto,colonna testo,текстовый столбец,текстовий стовпець,kolumna tekstu,textový sloupec,szövegoszlop,coloana text,στήλη κειμένου,عمود النص,metin sütunu,ستون متن
+overwrite mode,typing replaces the existing bytes,noun,false,上書きモード,改写模式,覆寫模式,덮어쓰기 모드,mode timpa,chế độ ghi đè,โหมดเขียนทับ,Überschreibmodus,mode refrappe,modo de sobrescritura,modo de substituição,modalità sovrascrittura,режим замены,режим заміни,tryb zastępowania,režim přepisování,felülírás mód,mod suprascriere,λειτουργία αντικατάστασης,وضع الكتابة الفوقية,üzerine yazma modu,حالت بازنویسی
+insert mode,typing inserts new bytes,noun,false,挿入モード,插入模式,插入模式,삽입 모드,mode sisip,chế độ chèn,โหมดแทรก,Einfügemodus,mode insertion,modo de inserción,modo de inserção,modalità inserimento,режим вставки,режим вставлення,tryb wstawiania,režim vkládání,beszúrás mód,mod inserare,λειτουργία εισαγωγής,وضع الإدراج,ekleme modu,حالت درج
+long-running operation,work that may take 0.5 s or more and runs in the background,noun,false,長時間処理,长时间操作,長時間作業,장기 실행 작업,operasi yang berjalan lama,thao tác dài,การดำเนินการที่ใช้เวลานาน,lang laufender Vorgang,opération longue,operación de larga duración,operação demorada,operazione di lunga durata,длительная операция,тривала операція,długotrwała operacja,dlouhá operace,hosszú művelet,operație de lungă durată,χρονοβόρα λειτουργία,عملية طويلة,uzun süren işlem,عملیات طولانی
+File,menu name,noun,false,ファイル,文件,檔案,파일,File,Tệp,ไฟล์,Datei,Fichier,Archivo,Arquivo,File,Файл,Файл,Plik,Soubor,Fájl,Fișier,Αρχείο,ملف,Dosya,فایل
+Edit,menu name,noun,false,編集,编辑,編輯,편집,Edit,Chỉnh sửa,แก้ไข,Bearbeiten,Modifier,Editar,Editar,Modifica,Правка,Редагування,Edycja,Úpravy,Szerkesztés,Editare,Επεξεργασία,تحرير,Düzen,ویرایش
+Search,menu name,noun,false,検索,搜索,搜尋,검색,Cari,Tìm kiếm,ค้นหา,Suchen,Rechercher,Buscar,Pesquisar,Cerca,Поиск,Пошук,Szukaj,Hledat,Keresés,Căutare,Αναζήτηση,بحث,Ara,جستجو
+Go,menu name (move to a position),noun,false,移動,转到,移至,이동,Buka,Đi tới,ไปที่,Gehe zu,Atteindre,Ir,Ir,Vai,Переход,Перехід,Przejdź,Přejít,Ugrás,Salt,Μετάβαση,انتقال,Git,رفتن
+View,menu name,noun,false,表示,视图,檢視,보기,Tampilan,Xem,มุมมอง,Ansicht,Affichage,Ver,Exibir,Visualizza,Вид,Вигляд,Widok,Zobrazení,Nézet,Vizualizare,Προβολή,عرض,Görünüm,نما
+Data,menu name,noun,false,データ,数据,資料,데이터,Data,Dữ liệu,ข้อมูล,Daten,Données,Datos,Dados,Dati,Данные,Дані,Dane,Data,Adatok,Date,Δεδομένα,البيانات,Veri,داده
+Analysis,menu name,noun,false,解析,分析,分析,분석,Analisis,Phân tích,วิเคราะห์,Analyse,Analyse,Análisis,Análise,Analisi,Анализ,Аналіз,Analiza,Analýza,Elemzés,Analiză,Ανάλυση,تحليل,Analiz,تحلیل
+Tools,menu name,noun,false,ツール,工具,工具,도구,Alat,Công cụ,เครื่องมือ,Extras,Outils,Herramientas,Ferramentas,Strumenti,Сервис,Інструменти,Narzędzia,Nástroje,Eszközök,Instrumente,Εργαλεία,أدوات,Araçlar,ابزارها
+Forensics,menu name,noun,false,フォレンジック,取证,鑑識,포렌식,Forensik,Pháp y số,นิติวิทยาศาสตร์ดิจิทัล,Forensik,Investigation numérique,Análisis forense,Perícia forense,Analisi forense,Криминалистика,Криміналістика,Informatyka śledcza,Forenzní analýza,Kriminalisztika,Criminalistică,Εγκληματολογία,التحليل الجنائي,Adli bilişim,جرم‌شناسی دیجیتال
+Help,menu name,noun,false,ヘルプ,帮助,說明,도움말,Bantuan,Trợ giúp,วิธีใช้,Hilfe,Aide,Ayuda,Ajuda,Guida,Справка,Довідка,Pomoc,Nápověda,Súgó,Ajutor,Βοήθεια,تعليمات,Yardım,راهنما
+byte,unit of 8 bits,noun,false,バイト,字节,位元組,바이트,byte,byte,ไบต์,Byte,octet,byte,byte,byte,байт,байт,bajt,bajt,bájt,octet,byte,بايت,bayt,بایت
+nibble,half of a byte (4 bits; one hex digit),noun,false,ニブル,半字节,半位元組,니블,nibble,nibble,นิบเบิล,Nibble,quartet,nibble,nibble,nibble,полубайт,напівбайт,półbajt,nibble,félbájt,nibble,nibble,نصف بايت,yarım bayt,نیم‌بایت
+endianness,order of bytes in a multi-byte value,noun,false,エンディアン,字节序,位元組順序,엔디언,urutan byte,thứ tự byte,ลำดับไบต์,Bytereihenfolge,boutisme,orden de bytes,ordem dos bytes,ordine dei byte,порядок байтов,порядок байтів,kolejność bajtów,pořadí bajtů,bájtsorrend,ordinea octeților,σειρά byte,ترتيب البايتات,bayt sırası,ترتیب بایت
+little-endian,least significant byte first,adjective,false,リトルエンディアン,小端序,小端序,리틀 엔디언,little-endian,little-endian,little-endian,Little-Endian,petit-boutiste,little-endian,little-endian,little-endian,little-endian,little-endian,little-endian,little-endian,little-endian,little-endian,little-endian,little-endian,little-endian,little-endian
+big-endian,most significant byte first,adjective,false,ビッグエンディアン,大端序,大端序,빅 엔디언,big-endian,big-endian,big-endian,Big-Endian,gros-boutiste,big-endian,big-endian,big-endian,big-endian,big-endian,big-endian,big-endian,big-endian,big-endian,big-endian,big-endian,big-endian,big-endian
+bookmark,named position in a document,noun,false,ブックマーク,书签,書籤,책갈피,penanda,dấu trang,บุ๊กมาร์ก,Lesezeichen,signet,marcador,marcador,segnalibro,закладка,закладка,zakładka,záložka,könyvjelző,marcaj,σελιδοδείκτης,إشارة مرجعية,yer işareti,نشانک
+template,structure definition applied to the data,noun,false,テンプレート,模板,範本,템플릿,templat,mẫu,เทมเพลต,Vorlage,modèle,plantilla,modelo,modello,шаблон,шаблон,szablon,šablona,sablon,șablon,πρότυπο,قالب,şablon,الگو
+inspector,panel that shows the value at the cursor as numbers and dates,noun,false,インスペクタ,检查器,檢查器,검사기,inspektur,trình kiểm tra,ตัวตรวจสอบ,Inspektor,inspecteur,inspector,inspetor,ispettore,инспектор,інспектор,inspektor,inspektor,vizsgáló,inspector,επιθεωρητής,المفتش,denetçi,بازرس
+panel,dockable area next to the editor,noun,false,パネル,面板,面板,패널,panel,bảng,แผง,Bereich,volet,panel,painel,pannello,панель,панель,panel,panel,panel,panou,πλαίσιο,لوحة,panel,پنل
+tab,one document in the tab strip,noun,false,タブ,选项卡,索引標籤,탭,tab,tab,แท็บ,Registerkarte,onglet,pestaña,guia,scheda,вкладка,вкладка,karta,karta,lap,filă,καρτέλα,علامة تبويب,sekme,زبانه
+command palette,searchable list of all commands (Ctrl+Shift+P),noun,false,コマンドパレット,命令面板,命令選擇區,명령 팔레트,palet perintah,bảng lệnh,ชุดคำสั่ง,Befehlspalette,palette de commandes,paleta de comandos,paleta de comandos,tavolozza dei comandi,палитра команд,палітра команд,paleta poleceń,paleta příkazů,parancspaletta,paleta de comenzi,παλέτα εντολών,لوحة الأوامر,komut paleti,پالت فرمان
+Hex,hexadecimal display (keep as is),noun,true,,,,,,,,,,,,,,,,,,,,,,
+ASCII,character encoding name,proper noun,true,,,,,,,,,,,,,,,,,,,,,,
+UTF-8,character encoding name,proper noun,true,,,,,,,,,,,,,,,,,,,,,,
+UTF-16,character encoding name,proper noun,true,,,,,,,,,,,,,,,,,,,,,,
+UTF-32,character encoding name,proper noun,true,,,,,,,,,,,,,,,,,,,,,,
+Shift_JIS,character encoding name,proper noun,true,,,,,,,,,,,,,,,,,,,,,,
+EBCDIC,character encoding name,proper noun,true,,,,,,,,,,,,,,,,,,,,,,
+YARA,pattern matching tool name,proper noun,true,,,,,,,,,,,,,,,,,,,,,,
+Velopack,installer framework name,proper noun,true,,,,,,,,,,,,,,,,,,,,,,

@@ -13,6 +13,7 @@
   <Folder Name="/tools/">
     <Project Path="tools/HexEditor.ManualTests/HexEditor.ManualTests.csproj" />
     <Project Path="tools/HexEditor.TestData/HexEditor.TestData.csproj" />
+    <Project Path="tools/I18nTool/I18nTool.csproj" />
     <Project Path="tools/ManualTestRunner/ManualTestRunner.csproj">
       <Platform Project="x86" />
     </Project>

@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\src\HexEditor.Core\HexEditor.Core.csproj" />
     <ProjectReference Include="..\..\tools\HexEditor.TestData\HexEditor.TestData.csproj" />
     <ProjectReference Include="..\..\tools\HexEditor.ManualTests\HexEditor.ManualTests.csproj" />
+    <ProjectReference Include="..\..\tools\I18nTool\I18nTool.csproj" />
   </ItemGroup>
 
 </Project>

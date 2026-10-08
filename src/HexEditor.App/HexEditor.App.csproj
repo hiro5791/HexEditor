@@ -136,4 +136,7 @@
 
   <!-- 疑似翻訳 (UI-46)。安定版のビルドでは HexPseudoLocales=false にする。 -->
   <Import Project="..\..\build\PseudoLocalize.targets" />
+
+  <!-- 翻訳の割合 translation-coverage.json (UI-49 の仕様 4)。表示言語の一覧 (UI-43) とリリースノート (PKG-29) に使う。 -->
+  <Import Project="..\..\build\TranslationCoverage.targets" />
 </Project>

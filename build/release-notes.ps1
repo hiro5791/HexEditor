@@ -7,7 +7,8 @@
   build/release/release-notes-template.md: the "which file" table first, then the changes,
   known issues, the SmartScreen / Microsoft Store notes and how to check SHA256SUMS.txt.
   Fails (exit 1) if CHANGELOG.md has no section for the version (PKG-24 step 1, PKG-29 "errors").
-  The translation progress table (PKG-29 spec 3, F1-26) is not added yet.
+  -TranslationTable is the Markdown table of the translation progress (PKG-29 spec 3, F1-26) made by
+  tools/I18nTool release-table. Without it (or if the file does not exist) the table is left out with a warning.
 #>
 [CmdletBinding()]
 param(
@@ -15,6 +16,7 @@ param(
     [string]$Changelog,
     [string]$Template,
     [string]$StoreUrl = 'https://apps.microsoft.com/search?query=HexEditor',
+    [string]$TranslationTable,
     [string]$OutFile
 )
 
@@ -40,7 +42,15 @@ if ($k.Success) {
 }
 
 $notes = [System.IO.File]::ReadAllText($Template)
-$notes = $notes.Replace('{{VERSION}}', $Version).Replace('{{STORE_URL}}', $StoreUrl).Replace('{{CHANGELOG}}', $body).Replace('{{KNOWN_ISSUES}}', $known)
+$translations = ''
+if ($TranslationTable -and (Test-Path $TranslationTable)) {
+    $translations = [System.IO.File]::ReadAllText($TranslationTable).Trim()
+} else {
+    # PKG-29 errors: without translation-coverage.json the table is left out with a warning.
+    Write-Host '::warning::No translation progress table; it is left out of the release notes.'
+}
+
+$notes = $notes.Replace('{{VERSION}}', $Version).Replace('{{STORE_URL}}', $StoreUrl).Replace('{{CHANGELOG}}', $body).Replace('{{TRANSLATIONS}}', $translations).Replace('{{KNOWN_ISSUES}}', $known)
 
 if ($OutFile) {
     [System.IO.File]::WriteAllText($OutFile, $notes, (New-Object System.Text.UTF8Encoding($false)))

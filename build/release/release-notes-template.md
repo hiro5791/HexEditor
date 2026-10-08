@@ -12,6 +12,8 @@ Choose `arm64` instead of `x64` on an ARM PC (for example Snapdragon). To check 
 
 {{CHANGELOG}}
 
+{{TRANSLATIONS}}
+
 {{KNOWN_ISSUES}}
 
 ## Notes for each version
