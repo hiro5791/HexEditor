@@ -10,7 +10,10 @@ public enum ReadPriority
     Background = 2,
 }
 
-/// <summary>キャッシュした 1 ブロック。内容は変更しない。</summary>
+/// <summary>
+/// キャッシュした 1 ブロック。内容は変更しない。追い出したブロックの領域は次の読み込みに使い回すので、<see cref="Data"/> は
+/// キャッシュの外に渡さない (読むのは <see cref="BlockCache.TryCopy"/> でロックの中で写す)。
+/// </summary>
 public sealed class CachedBlock(long index, byte[] data, int length, IReadOnlyList<UnreadableRange> unreadable)
 {
     public long Index { get; } = index;
@@ -53,6 +56,9 @@ public sealed class BlockCache : IDisposable
     private readonly PriorityQueue<long, (int Priority, long Sequence)> _pending = new();
     private readonly Dictionary<long, int> _pendingPriority = [];
     private readonly HashSet<long> _inFlight = [];
+
+    // 追い出したブロックの領域 (次の読み込みに使い回す。スクロール中に 64 KiB の配列を作り続けて GC が増えないように)。
+    private readonly Stack<byte[]> _free = new();
     private long _capacityBytes;
     private long _sequence;
     private int _running;
@@ -108,8 +114,15 @@ public sealed class BlockCache : IDisposable
 
     public long BlockIndexOf(long sourceOffset) => sourceOffset / BlockSize;
 
-    /// <summary>キャッシュにあれば返す (ブロックしない)。</summary>
-    public bool TryGetBlock(long index, out CachedBlock block)
+    /// <summary>使い回しに取っておく、追い出したブロックの領域の数の上限。</summary>
+    public const int MaxFreeBlocks = 16;
+
+    /// <summary>
+    /// キャッシュにあれば、ブロックの <paramref name="offsetInBlock"/> からを <paramref name="destination"/> に写す (ブロックしない)。
+    /// 写すのはロックの中で行う (追い出したブロックの領域は次の読み込みに使い回すため)。写すのは有効なバイト
+    /// (<paramref name="blockLength"/> まで) だけ。
+    /// </summary>
+    public bool TryCopy(long index, int offsetInBlock, Span<byte> destination, out int blockLength, out IReadOnlyList<UnreadableRange> unreadable)
     {
         lock (_lock)
         {
@@ -117,13 +130,30 @@ public sealed class BlockCache : IDisposable
             {
                 _lru.Remove(node);
                 _lru.AddFirst(node);
-                block = node.Value;
+                CachedBlock block = node.Value;
+                int valid = Math.Clamp(block.Length - offsetInBlock, 0, destination.Length);
+                block.Data.AsSpan(offsetInBlock, valid).CopyTo(destination);
+                blockLength = block.Length;
+                unreadable = block.Unreadable;
                 return true;
             }
         }
 
-        block = null!;
+        blockLength = 0;
+        unreadable = [];
         return false;
+    }
+
+    /// <summary>使い回しに取ってある領域の数 (テストと診断用)。</summary>
+    public int FreeBlockCount
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _free.Count;
+            }
+        }
     }
 
     /// <summary>ブロックの読み込みを要求する。読み込み済み・読み込み中なら何もしない。</summary>
@@ -172,11 +202,10 @@ public sealed class BlockCache : IDisposable
             long pos = sourceOffset + done;
             long index = pos / BlockSize;
             int inBlock = (int)(pos % BlockSize);
-            if (TryGetBlock(index, out CachedBlock cached))
+            if (TryCopy(index, inBlock, destination[done..count], out int cachedLength, out IReadOnlyList<UnreadableRange> cachedBad))
             {
-                int n = Math.Min(cached.Length - inBlock, count - done);
-                cached.Data.AsSpan(inBlock, n).CopyTo(destination[done..]);
-                Clip(cached.Unreadable, pos, n, bad);
+                int n = Math.Min(cachedLength - inBlock, count - done);
+                Clip(cachedBad, pos, n, bad);
                 done += n;
                 continue;
             }
@@ -202,6 +231,11 @@ public sealed class BlockCache : IDisposable
         lock (_lock)
         {
             _generation++;
+            foreach (CachedBlock block in _lru)
+            {
+                Recycle(block);
+            }
+
             _map.Clear();
             _lru.Clear();
         }
@@ -248,6 +282,11 @@ public sealed class BlockCache : IDisposable
                         _map[index] = _lru.AddFirst(block);
                         EvictIfNeeded();
                     }
+                    else if (block is not null)
+                    {
+                        // キャッシュに入れなかった (捨てた後・閉じた後): 領域を使い回しに戻す (知らせるのは範囲だけで、内容は読まない)。
+                        Recycle(block);
+                    }
                 }
             }
 
@@ -276,7 +315,7 @@ public sealed class BlockCache : IDisposable
     {
         long offset = index * BlockSize;
         int length = (int)Math.Min(BlockSize, _source.Length - offset);
-        byte[] data = new byte[BlockSize];
+        byte[] data = RentBlock();
         ReadResult result = await _source.ReadAsync(offset, data.AsMemory(0, length)).ConfigureAwait(false);
         if (!result.IsComplete)
         {
@@ -284,6 +323,29 @@ public sealed class BlockCache : IDisposable
         }
 
         return new CachedBlock(index, data, result.BytesReturned, result.Unreadable);
+    }
+
+    /// <summary>ブロックの領域を取る (使い回しの領域があればそれを使う。前の内容は有効な長さの外に残るが、読まれない)。</summary>
+    private byte[] RentBlock()
+    {
+        lock (_lock)
+        {
+            if (_free.TryPop(out byte[]? data))
+            {
+                return data;
+            }
+        }
+
+        return new byte[BlockSize];
+    }
+
+    /// <summary>追い出したブロックの領域を使い回しに戻す (ロックの中で呼ぶ)。</summary>
+    private void Recycle(CachedBlock block)
+    {
+        if (block.Data.Length == BlockSize && _free.Count < MaxFreeBlocks)
+        {
+            _free.Push(block.Data);
+        }
     }
 
     private ReadResult ReadWithRetry(long offset, Span<byte> destination)
@@ -346,6 +408,9 @@ public sealed class BlockCache : IDisposable
                 _map.Remove(last.Value.Index);
                 _lru.RemoveLast();
             }
+
+            // メモリ不足: 使い回しの領域も手放す。
+            _free.Clear();
         }
     }
 
@@ -355,6 +420,7 @@ public sealed class BlockCache : IDisposable
         {
             _map.Remove(last.Value.Index);
             _lru.RemoveLast();
+            Recycle(last.Value);
         }
     }
 
@@ -381,6 +447,7 @@ public sealed class BlockCache : IDisposable
             _pendingPriority.Clear();
             _map.Clear();
             _lru.Clear();
+            _free.Clear();
         }
     }
 }

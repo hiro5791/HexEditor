@@ -346,10 +346,9 @@ public sealed class DocumentSnapshot
             long index = cache.BlockIndexOf(pos);
             int inBlock = (int)(pos - index * cache.BlockSize);
             int n = Math.Min(cache.BlockSize - inBlock, destination.Length - done);
-            if (cache.TryGetBlock(index, out CachedBlock block))
+            if (cache.TryCopy(index, inBlock, destination.Slice(done, n), out int blockLength, out IReadOnlyList<UnreadableRange> unreadable))
             {
-                int valid = Math.Max(0, Math.Min(n, block.Length - inBlock));
-                block.Data.AsSpan(inBlock, valid).CopyTo(destination[done..]);
+                int valid = Math.Max(0, Math.Min(n, blockLength - inBlock));
                 states.Slice(done, valid).Fill(ByteState.Valid);
                 if (valid < n)
                 {
@@ -357,7 +356,7 @@ public sealed class DocumentSnapshot
                     states.Slice(done + valid, n - valid).Fill(ByteState.Unreadable);
                 }
 
-                foreach (UnreadableRange r in block.Unreadable)
+                foreach (UnreadableRange r in unreadable)
                 {
                     long from = Math.Max(r.Offset, pos);
                     long to = Math.Min(r.End, pos + n);

@@ -108,6 +108,33 @@ public sealed class BlockCacheTests
         }
     }
 
+    /// <summary>
+    /// 追い出したブロックの領域は次の読み込みに使い回す (スクロール中の GC を減らす)。使い回しても、どのブロックも正しい内容で、
+    /// 使い回しに取っておく数は上限まで。
+    /// </summary>
+    [Fact]
+    public void EvictedBlocksAreReusedWithCorrectContents()
+    {
+        var file = new FakeByteSource(TestDataCatalog.MiB, (o, s) => TestDataCatalog.Sequence(o, s), SourceCapabilities.CanResize);
+        using var doc = new Document(file, Options(cacheCapacity: 2 * BlockCache.DefaultBlockSize));
+        int blocks = (int)(TestDataCatalog.MiB / BlockCache.DefaultBlockSize);
+        for (int pass = 0; pass < 2; pass++)
+        {
+            for (int i = 0; i < blocks; i++)
+            {
+                long offset = (long)i * BlockCache.DefaultBlockSize + 0x100;
+                (byte[] bytes, ByteState[] states) = ReadForDisplayWhenLoaded(doc.Current, offset, 0x1000);
+                byte[] expected = new byte[0x1000];
+                TestDataCatalog.Sequence(offset, expected);
+                Assert.All(states, s => Assert.Equal(ByteState.Valid, s));
+                Assert.Equal(expected, bytes);
+            }
+        }
+
+        Assert.True(doc.Cache.MemoryBytes <= 2 * BlockCache.DefaultBlockSize);
+        Assert.InRange(doc.Cache.FreeBlockCount, 1, BlockCache.MaxFreeBlocks);
+    }
+
     [Fact]
     [Trait(TC, "TC-ENG-08-03")]
     public void LowMemoryNotificationShrinksCaches()
