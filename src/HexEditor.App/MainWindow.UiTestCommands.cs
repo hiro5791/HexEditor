@@ -12,6 +12,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Graphics;
 using Windows.Storage;
@@ -151,9 +152,21 @@ public sealed partial class MainWindow
             }, null));
         }
 
+        // {ctrlOffset}: Ctrl を押しながら Hex ビューのそのバイトの上にドロップした (UI-34 の仕様 1)。ドラッグ中の表示も返す。
+        if (request["ctrlOffset"] is { } ctrlOffset)
+        {
+            (DataPackageOperation operation, string? caption) = DropFeedback(insert: true);
+            if (operation != DataPackageOperation.None)
+            {
+                _ = InsertDroppedFileAsync(items, TestHookSettings.ReadLong(ctrlOffset, 0));
+            }
+
+            return new JsonObject { ["items"] = items.Count, ["caption"] = caption, ["accepted"] = operation != DataPackageOperation.None };
+        }
+
         int? insertAt = request["insertAt"] is { } at ? at.GetValue<int>() : null;
         _ = DropItemsAsync(items, insertAt);
-        return new JsonObject { ["items"] = items.Count };
+        return new JsonObject { ["items"] = items.Count, ["caption"] = DropFeedback(insert: false).Caption };
     }
 
     // ---- ウィンドウ・フォーカス ----

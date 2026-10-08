@@ -2115,4 +2115,7 @@
   <data name="EditOp_WriteRecordAddress" xml:space="preserve"><value>レコードのアドレスに書く</value></data>
   <data name="EditOp_Discard" xml:space="preserve"><value>変更の破棄</value></data>
   <data name="EditOp_Merge" xml:space="preserve"><value>外部の変更とのマージ</value></data>
+  <data name="Drop_Insert" xml:space="preserve"><value>挿入</value></data>
+  <data name="Menu_View_EncodingAscii.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_EncodingAnsiAccessKey" xml:space="preserve"><value>N</value></data>
 </root>

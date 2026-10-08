@@ -56,6 +56,7 @@ public sealed partial class MainWindow
     private void UpdateEncodingMenu()
     {
         EncodingAnsi.Text = Loc.Format("Menu_View_EncodingAnsi", Core.View.TextEncoding.Ansi.CodePage);
+        EncodingAnsi.AccessKey = Loc.Get("Menu_View_EncodingAnsiAccessKey");
         string id = Editor?.TextEncoding.Id ?? "ascii";
         EncodingAscii.IsChecked = id == "ascii";
         EncodingAnsi.IsChecked = id == "ansi";

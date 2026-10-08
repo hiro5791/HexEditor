@@ -51,9 +51,11 @@ public sealed partial class MainWindow
     {
         if (e.DataView.Contains(StandardDataFormats.StorageItems))
         {
-            e.AcceptedOperation = DataPackageOperation.Copy;
-            e.DragUIOverride.Caption = Loc.Get("Drop_Open");
-            e.DragUIOverride.IsCaptionVisible = true;
+            // Ctrl を押しながら Hex ビューの上では「挿入」(MainWindow.DropInsert.cs)。
+            (DataPackageOperation operation, string? caption) = DropFeedback(sender != Tabs && InsertDropOffset(e) is not null);
+            e.AcceptedOperation = operation;
+            e.DragUIOverride.Caption = caption ?? string.Empty;
+            e.DragUIOverride.IsCaptionVisible = caption is not null;
             e.Handled = true;
         }
     }
@@ -83,6 +85,7 @@ public sealed partial class MainWindow
             return;
         }
 
+        long? insertOffset = insertAt is null ? InsertDropOffset(e) : null;
         DragOperationDeferral deferral = e.GetDeferral();
         IReadOnlyList<IStorageItem> items;
         try
@@ -92,6 +95,12 @@ public sealed partial class MainWindow
         finally
         {
             deferral.Complete();
+        }
+
+        if (insertOffset is { } offset)
+        {
+            await InsertDroppedFileAsync(items, offset);
+            return;
         }
 
         await DropItemsAsync(items, insertAt);

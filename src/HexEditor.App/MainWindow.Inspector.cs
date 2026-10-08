@@ -573,10 +573,12 @@ public sealed partial class MainWindow
     {
         for (int n = 1; n <= 9; n++)
         {
-            var set = new MenuFlyoutItem { Text = Loc.Format("Menu_Go_SetNumbered", n) };
+            // アクセスキーは番号 (キーボードだけで選べるように。UI-52 の受け入れ基準 1)。
+            string digit = n.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            var set = new MenuFlyoutItem { Text = Loc.Format("Menu_Go_SetNumbered", n), AccessKey = digit };
             AutomationProperties.SetAutomationId(set, $"Command_SetNumberedBookmark{n}");
             CommandUi.SetId(set, $"go.bookmark.set{n}");
-            var go = new MenuFlyoutItem { Text = Loc.Format("Menu_Go_GoNumbered", n) };
+            var go = new MenuFlyoutItem { Text = Loc.Format("Menu_Go_GoNumbered", n), AccessKey = digit };
             AutomationProperties.SetAutomationId(go, $"Command_GoNumberedBookmark{n}");
             CommandUi.SetId(go, $"go.bookmark.goto{n}");
             NumberedSetMenu.Items.Add(set);

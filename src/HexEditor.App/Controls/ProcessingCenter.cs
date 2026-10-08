@@ -58,11 +58,7 @@ public sealed partial class ProcessingCenter : UserControl
             return;
         }
 
-        var running = Center.Active.Where(op => op.ShouldShow).ToList();
-        var completed = Center.History
-            .Where(op => !_cleared.Contains(op) && (op.Elapsed > LongRunningOperation.ShowDelay || op.State == OperationState.Failed))
-            .Take(MaxCompleted)
-            .ToList();
+        (List<LongRunningOperation> running, List<LongRunningOperation> completed) = Shown();
         foreach (LongRunningOperation op in running.Concat(completed))
         {
             _list.Children.Add(Row(op));
@@ -119,6 +115,24 @@ public sealed partial class ProcessingCenter : UserControl
 
         row.Children.Add(text);
         return row;
+    }
+
+    /// <summary>
+    /// 一覧に出す処理: 実行中で 0.5 秒を過ぎたもの (UI-37 の受け入れ基準 4) と、0.5 秒より長くかかった・失敗した完了済みのもの。
+    /// </summary>
+    internal (List<LongRunningOperation> Running, List<LongRunningOperation> Completed) Shown()
+    {
+        if (Center is null)
+        {
+            return ([], []);
+        }
+
+        var running = Center.Active.Where(op => op.ShouldShow).ToList();
+        var completed = Center.History
+            .Where(op => !_cleared.Contains(op) && (op.Elapsed > LongRunningOperation.ShowDelay || op.State == OperationState.Failed))
+            .Take(MaxCompleted)
+            .ToList();
+        return (running, completed);
     }
 
     private static TextBlock Caption(string text) => new()

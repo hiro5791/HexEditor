@@ -24,6 +24,14 @@ public sealed partial class MainWindow
             "moveWindow" => Run(() => AppWindow.MoveAndResize(new RectInt32(
                 (int)TestHookSettings.ReadLong(request["x"], 100), (int)TestHookSettings.ReadLong(request["y"], 100),
                 (int)TestHookSettings.ReadLong(request["width"], 1200), (int)TestHookSettings.ReadLong(request["height"], 800)))),
+            // 処理センターの一覧に出る処理 (UI-37)。ステータスバーの項目が隠れていても読める。
+            "processingCenter" => new JsonObject
+            {
+                ["running"] = new JsonArray([.. ProcessingCenter.Shown().Running.Select(op => (JsonNode?)op.Name)]),
+                ["completed"] = new JsonArray([.. ProcessingCenter.Shown().Completed.Select(op => (JsonNode?)op.Name)]),
+            },
+            // ウィンドウがアクティブでない (別のアプリを使っている) 扱いにする (UI-36 の仕様 8)。前面のウィンドウは変えない。
+            "setActive" => Run(() => _isActive = request["active"]?.GetValue<bool>() ?? true),
             "fullScreenPointer" => Run(() => OnFullScreenPointer(request["y"]?.GetValue<double>() ?? 0)),
 
             // 分割バーで矢印キーを押す (キーの処理は Splitter.OnKeyDown と同じ Nudge。UI-01 の仕様 5)。

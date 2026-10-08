@@ -2115,4 +2115,7 @@ Details were written to:
   <data name="EditOp_WriteRecordAddress" xml:space="preserve"><value>Write record address</value></data>
   <data name="EditOp_Discard" xml:space="preserve"><value>Discard changes</value></data>
   <data name="EditOp_Merge" xml:space="preserve"><value>Merge external changes</value></data>
+  <data name="Drop_Insert" xml:space="preserve"><value>Insert</value></data>
+  <data name="Menu_View_EncodingAscii.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_EncodingAnsiAccessKey" xml:space="preserve"><value>N</value></data>
 </root>

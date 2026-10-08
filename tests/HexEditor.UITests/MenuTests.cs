@@ -62,6 +62,88 @@ public sealed class MenuTests
         Assert.True(missing.Count == 0, "not found in the command palette:\n" + string.Join("\n", missing));
     });
 
+    [Fact]
+    [Trait(UiTest.TC, "TC-UI-52-01")]
+    public Task Keyboard_only_open_edit_find_save_settings_and_menus() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 作業中の PC ではシステムのキーボードの入力を送らない (テスト方針)。キーはアプリのキーの振り分け (KeyDispatcher) に渡す
+        // テスト用の命令で押し、マウスと UI オートメーションのパターンは使わない。ファイルを開くダイアログはテスト用の仕組みで
+        // パスを返す (パスの入力と Enter の代わり)。
+        string path = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = new JsonObject { ["openPicker"] = new JsonArray(path) }, WaitForEditor = false });
+
+        // 1. Ctrl+O でファイルを開く。
+        Assert.Equal("menu:Command_Open", (await app.KeyAsync("O", ctrl: true))["handledBy"]!.GetValue<string>());
+        await app.WaitForTabsAsync(1);
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the hex view");
+
+        // 2. Hex 列で F F (文字の入力)。
+        await app.TypeAsync("FF");
+        Assert.Equal(0xFF, (await app.BytesAsync(0, 1))[0]);
+
+        // 3. Ctrl+F で FF を検索し、Esc で閉じる。
+        Assert.Equal("menu:Command_Find", (await app.KeyAsync("F", ctrl: true))["handledBy"]!.GetValue<string>());
+        await app.IdleAsync();
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 0 });
+        await app.UiaSetValueAsync("Find_Query", "FF");
+        await app.SendAsync("findKey", new JsonObject { ["key"] = "Enter" });
+        await app.WaitUntilAsync(async () => (await app.DocumentAsync())["selectionLength"]!.GetValue<long>() == 1, TimeSpan.FromSeconds(5), "the match");
+
+        // Esc は実行中の数え上げを取り消し、実行中でなければ検索バーを閉じる (00-overview.md 8.4)。
+        await app.WaitUntilAsync(async () =>
+        {
+            await app.SendAsync("findKey", new JsonObject { ["key"] = "Escape" });
+            await Task.Delay(200);
+            return !(await app.StateAsync())["findBarVisible"]!.GetValue<bool>();
+        }, TimeSpan.FromSeconds(5), "the find bar closed");
+
+        // 4. Ctrl+S で保存。
+        await app.KeyAsync("S", ctrl: true);
+        await app.WaitUntilAsync(async () => !(await app.DocumentAsync())["modified"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), "the save");
+        Assert.Equal(0xFF, File.ReadAllBytes(path)[0]);
+
+        // 5. Ctrl+, で設定を開き、テーマをダークにして、Ctrl+W で設定のタブを閉じる (テーマの選択はコマンドパレットのキー操作で行う)。
+        await app.KeyAsync("188", ctrl: true);
+        await app.WaitUntilAsync(async () => (await app.SendAsync("settingsPage"))["active"]?.GetValue<string>() is { Length: > 0 }, TimeSpan.FromSeconds(5), "the settings page");
+        await app.SendAsync("palette", new JsonObject { ["text"] = ">Theme: Dark" });
+        await app.SendAsync("paletteEnter");
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["actualTheme"]!.GetValue<string>() == "Dark", TimeSpan.FromSeconds(5), "the dark theme");
+        await app.KeyAsync("W", ctrl: true);
+        await app.IdleAsync();
+
+        // 6. すべてのメニュー項目に、Alt とアクセスキーでたどり着ける (各項目とその親のサブメニューにアクセスキーがあり、同じメニュー内で
+        //    重ならない)。項目の実行は、各機能のテストがキーとメニューから行う。
+        JsonArray items = (await app.SendAsync("menuTexts"))["items"]!.AsArray();
+        var unreachable = items.Select(i => i!.AsObject()).Where(i => string.IsNullOrEmpty(i["accessKey"]?.GetValue<string>()))
+            .Where(i => !IsListEntry(i["id"]?.GetValue<string>()))
+            .Select(i => i["path"]!.GetValue<string>()).ToList();
+        Assert.True(unreachable.Count == 0, "menu items without an access key:\n" + string.Join("\n", unreachable));
+    });
+
+    /// <summary>一覧から作る項目 (最近使ったファイル・履歴・配色など)。アクセスキーは番号や先頭の文字で Windows が決める。</summary>
+    private static bool IsListEntry(string? id) =>
+        id is null or "" || id.StartsWith("Command_GoHistory_", StringComparison.Ordinal) || id.StartsWith("Command_ViewColorScheme_", StringComparison.Ordinal)
+        || id.StartsWith("Recent_", StringComparison.Ordinal);
+
+    [Fact(Skip = "タブの切り離しのコマンド「タブ: 新しいウィンドウに移動」(UI-11) は tabs-windows の担当。統合した後に Skip を外す")]
+    [Trait(UiTest.TC, "TC-UI-52-02")]
+    public Task Move_tab_to_new_window_from_the_palette() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M"), ctx.TestData("TD-BYTES-256")] });
+        await app.WaitForTabsAsync(2);
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = 1 });
+
+        // 1. Ctrl+Shift+P で「タブ: 新しいウィンドウに移動」を選ぶ。
+        await app.KeyAsync("P", ctrl: true, shift: true);
+        JsonObject palette = await app.SendAsync("palette", new JsonObject { ["text"] = ">Move to new window" });
+        Assert.Contains(palette["entries"]!.AsArray(), e => e!["title"]!.GetValue<string>().Contains("new window", StringComparison.OrdinalIgnoreCase));
+        await app.SendAsync("paletteEnter");
+
+        // 2. ウィンドウが 2 つになり、元のウィンドウに TD-SEQ-1M だけが残る。
+        await app.WaitForTabsAsync(1);
+        Assert.Equal(["TD-SEQ-1M.bin"], await app.TabNamesAsync());
+    });
+
     /// <summary>メニューの表示名から、日本語のアクセスキーの「(X)」と末尾の「…」を除く。</summary>
     private static string MenuName(string text)
     {
