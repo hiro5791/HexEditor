@@ -424,6 +424,70 @@ public sealed class ViewMiscTests
         Assert.Equal(await SystemColorAsync(app, "SystemColorWindowTextColor"), CellOf(render, 0x10)!["foreground"]!.GetValue<string>());
     });
 
+    // ---- VIEW-41 ----
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-41-01")]
+    public Task High_contrast_distinguishes_by_shape() => UiTestContext.RunAsync(async ctx =>
+    {
+        // OS のハイコントラストは切り替えず、同じ描き方をテスト用の模擬 (ForcedHighContrast) で行う。
+        string file = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [file] });
+        await ForceHighContrastAsync(app);
+
+        // 1. 0x20 を上書き、0x40〜0x47 にブックマーク、0x60〜0x64 を選択してカーソルを 0x65 (選択範囲の直後) に置く。
+        await app.GoToAsync(0x20);
+        await app.TypeAsync("AA");
+        await app.SelectAsync(0x40, 8);
+        await app.KeyAsync("F2", ctrl: true);
+        await app.SelectAsync(0x60, 5);
+        await app.IdleAsync();
+        Assert.Equal(0x65, await CursorAsync(app));
+
+        JsonObject render = await app.RenderAsync();
+        JsonObject highlights = await app.SendAsync("highlights");
+        Assert.True(render["highContrast"]!.GetValue<bool>());
+
+        string Shape(long offset)
+        {
+            JsonObject cell = CellOf(render, offset)!;
+            bool framed = highlights["segments"]!.AsArray().Any(s => s!["column"]!.GetValue<string>() == "hex"
+                && s["first"]!.GetValue<long>() <= offset && offset <= s["last"]!.GetValue<long>() && s["border"] is not null);
+            bool caret = render["caret"]!["visible"]!.GetValue<bool>()
+                && Math.Abs(render["caret"]!["left"]!.GetValue<double>() - cell["hexLeft"]!.GetValue<double>()) < render["cellWidth"]!.GetValue<double>()
+                && RowOf(render, offset)!["index"]!.GetValue<int>() == render["caret"]!["row"]!.GetValue<int>();
+            return $"underline={cell["underline"]!.GetValue<string>()} frame={framed} selected={cell["selected"]!.GetValue<bool>()} caret={caret}";
+        }
+
+        string[] shapes = [.. new long[] { 0x20, 0x40, 0x60, 0x65, 0x80 }.Select(Shape)];
+        Assert.Equal(shapes.Length, shapes.Distinct().Count());
+        Assert.Equal("underline=solid frame=False selected=False caret=False", shapes[0]);
+        Assert.Equal("underline=none frame=True selected=False caret=False", shapes[1]);
+        Assert.Equal("underline=none frame=False selected=True caret=False", shapes[2]);
+        Assert.Equal("underline=none frame=False selected=False caret=True", shapes[3]);
+        Assert.Equal("underline=none frame=False selected=False caret=False", shapes[4]);
+
+        // 2. 使われている色はすべてシステム色 (WindowText、Window、Highlight、HighlightText、GrayText、HotTrack)。
+        var system = new HashSet<string>();
+        foreach (string key in new[] { "SystemColorWindowTextColor", "SystemColorWindowColor", "SystemColorHighlightColor",
+            "SystemColorHighlightTextColor", "SystemColorGrayTextColor", "SystemColorHotlightColor" })
+        {
+            system.Add(await SystemColorAsync(app, key));
+        }
+
+        Assert.Equal(await SystemColorAsync(app, "SystemColorHighlightColor"), CellOf(render, 0x60)!["background"]!.GetValue<string>());
+        var used = new List<string>();
+        foreach (long offset in new long[] { 0x20, 0x40, 0x60, 0x65, 0x80 })
+        {
+            JsonObject cell = CellOf(render, offset)!;
+            used.AddRange(new[] { "foreground", "textForeground", "hexBackground", "textBackground" }
+                .Select(k => cell[k]?.GetValue<string>()).OfType<string>());
+        }
+
+        used.AddRange(highlights["segments"]!.AsArray().SelectMany(s => new[] { s!["background"], s["border"] }).Select(c => c?.GetValue<string>()).OfType<string>());
+        Assert.All(used, c => Assert.Contains(c, system));
+    });
+
     // ---- UI-29 ----
 
     [Fact]
