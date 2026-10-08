@@ -209,7 +209,7 @@ public sealed partial class MainWindow
     {
         IReadOnlyList<Core.View.EditorState> editors = e.Editors;
         DocumentViewModel? doc = editors.Count == 1 ? Vm.Documents.FirstOrDefault(d => d.Editor == editors[0]) : null;
-        ShowNotice(Loc.Format("Find_ReplacedCount", e.Count.ToString("N0", CultureInfo.CurrentCulture)), InfoBarSeverity.Success, doc,
+        ShowNotice(Loc.Format("Find_ReplacedCount", e.Count), InfoBarSeverity.Success, doc,
             undo: new NotificationAction(Loc.Get("Common_Undo"), () =>
             {
                 foreach (Core.View.EditorState editor in editors.Where(x => !x.Document.IsEditLocked && !x.Document.IsDisposed))

@@ -30,6 +30,9 @@ public static class TestHooks
 
     public static TestHookSettings Settings { get; private set; } = new();
 
+    /// <summary>管理者として実行している扱い (テスト用の設定 elevated。TC-UI-02-02)。</summary>
+    public static bool SimulatesElevation => Active && Settings.Elevated;
+
     /// <summary>設定ファイルのパス (--test-hooks の値)。</summary>
     public static string? SettingsPath { get; private set; }
 
@@ -520,6 +523,8 @@ public sealed class TestHookException(string place) : Exception($"Unhandled exce
 public static class TestHooks
 {
     public static bool Active => false;
+
+    public static bool SimulatesElevation => false;
 
     public static bool SuppressActivation => false;
 

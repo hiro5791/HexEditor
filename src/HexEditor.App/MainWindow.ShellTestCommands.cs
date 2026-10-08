@@ -25,6 +25,17 @@ public sealed partial class MainWindow
                 (int)TestHookSettings.ReadLong(request["x"], 100), (int)TestHookSettings.ReadLong(request["y"], 100),
                 (int)TestHookSettings.ReadLong(request["width"], 1200), (int)TestHookSettings.ReadLong(request["height"], 800)))),
             "fullScreenPointer" => Run(() => OnFullScreenPointer(request["y"]?.GetValue<double>() ?? 0)),
+
+            // 分割バーで矢印キーを押す (キーの処理は Splitter.OnKeyDown と同じ Nudge。UI-01 の仕様 5)。
+            "splitterKey" => Run(() =>
+            {
+                var splitter = (Controls.Splitter)(FindElement(request["id"]!.GetValue<string>()) ?? throw new ArgumentException("No splitter."));
+                string key = request["key"]?.GetValue<string>() ?? "Left";
+                for (long i = 0; i < TestHookSettings.ReadLong(request["count"], 1); i++)
+                {
+                    splitter.Nudge(key is "Right" or "Down");
+                }
+            }),
             _ => null,
         };
     }

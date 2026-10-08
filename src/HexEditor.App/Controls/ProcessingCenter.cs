@@ -158,7 +158,7 @@ public static class OperationText
         // 検索の処理では、これまでに見つかった一致の数 (FIND-02 の仕様 2)。
         if (op.Matches is long matches)
         {
-            parts.Add(Loc.Format("Operations_Matches", matches.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)));
+            parts.Add(Loc.Format("Operations_Matches", matches));
         }
 
         parts.Add(Loc.Format("Operations_Elapsed",op.Elapsed.ToString(op.Elapsed.TotalHours >= 1 ? @"h\:mm\:ss" : @"m\:ss")));

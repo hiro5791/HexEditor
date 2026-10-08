@@ -16,6 +16,61 @@ public sealed class MenuTests
     private static async Task<string> MenuTextAsync(AppSession app, string id) => (await MenuItemAsync(app, id))["text"]!.GetValue<string>();
 
     [Fact]
+    [Trait(UiTest.TC, "TC-UI-03-01")]
+    public Task Changed_shortcut_appears_in_the_menu_without_restart() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync();
+
+        // 1. 設定画面の「キーボード」で「ファイル: 開く」に Ctrl+Shift+F12 を追加する (設定画面を開いたまま)。
+        await app.SendAsync("settingsPage", new JsonObject { ["open"] = true, ["category"] = "keyboard" });
+        JsonObject added = await app.SendAsync("assignKey", new JsonObject { ["command"] = "file.open", ["key"] = "Ctrl+Shift+F12" });
+        Assert.True(added["added"]!.GetValue<bool>());
+
+        // 2〜3. メニューの「開く」のショートカットの表示。
+        await app.WaitUntilAsync(async () => (await MenuItemAsync(app, "Command_Open"))["shortcut"]?.GetValue<string>()?.Contains("F12", StringComparison.Ordinal) == true,
+            TimeSpan.FromSeconds(5), "the new shortcut in the menu");
+        string shortcut = (await MenuItemAsync(app, "Command_Open"))["shortcut"]!.GetValue<string>();
+        Assert.Contains("Ctrl+O", shortcut, StringComparison.Ordinal);
+        Assert.Contains("Ctrl+Shift+F12", shortcut, StringComparison.Ordinal);
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-UI-03-03")]
+    public Task Every_menu_item_is_found_in_the_command_palette() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+
+        // 1. すべてのメニュー・サブメニューの項目の表示名 (コマンドを実行する項目。最近使ったファイルなどの一覧の項目は除く)。
+        var items = (await app.SendAsync("menuTexts"))["items"]!.AsArray().Select(i => i!.AsObject())
+            .Where(i => i["command"]?.GetValue<string>() is { Length: > 0 }).ToList();
+        Assert.True(items.Count > 40, $"only {items.Count} menu items");
+
+        // 2〜3. 項目ごとに、> のモードで表示名を入れ、候補に同じコマンドがあるか。
+        var missing = new List<string>();
+        foreach (JsonObject item in items)
+        {
+            string name = MenuName(item["text"]!.GetValue<string>());
+            JsonObject palette = await app.SendAsync("palette", new JsonObject { ["text"] = ">" + name });
+            string command = item["command"]!.GetValue<string>();
+            if (!palette["entries"]!.AsArray().Any(e => e!["key"]?.GetValue<string>() is { } key && (key == "command:" + command || key == "argument:" + command)))
+            {
+                missing.Add($"{item["path"]} ({command})");
+            }
+        }
+
+        await app.SendAsync("paletteClose");
+        Assert.True(missing.Count == 0, "not found in the command palette:\n" + string.Join("\n", missing));
+    });
+
+    /// <summary>メニューの表示名から、日本語のアクセスキーの「(X)」と末尾の「…」を除く。</summary>
+    private static string MenuName(string text)
+    {
+        // 末尾の括弧 (日本語のアクセスキー「(F)」、文字コードの「(932)」などの補足) は名前に含めない。
+        string name = System.Text.RegularExpressions.Regex.Replace(text, @"\s*\([^()]*\)$", string.Empty);
+        return name.TrimEnd('…', '.').Trim();
+    }
+
+    [Fact]
     [Trait(UiTest.TC, "TC-EDIT-19-07")]
     public Task Undo_and_redo_items_show_the_operation_name() => UiTestContext.RunAsync(async ctx =>
     {

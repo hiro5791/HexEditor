@@ -50,7 +50,15 @@ public sealed partial class MainWindow
 
     /// <summary>候補の検索用の文字列 (表示言語の表示名・英語名・別名・カテゴリ名)。コマンドが変わるまで使い回す。</summary>
     private List<CommandSearchItem> PaletteItems() => _paletteItems ??= [.. CommandService.Catalog.All.Where(c => !c.Hidden)
-        .Select(c => new CommandSearchItem(c.Id, CommandService.CategoryName(c.Category), CommandService.DisplayName(c), CommandService.EnglishName(c), CommandService.Aliases(c)))];
+        .Select(c => new CommandSearchItem(c.Id, CommandService.CategoryName(c.Category), CommandService.DisplayName(c), CommandService.EnglishName(c), CommandService.Aliases(c),
+            _menus?.Items.Where(i => i.Id == c.Id).Select(i => MenuItemName(i.Item.Text))))];
+
+    /// <summary>メニューの項目の表示名から、日本語のアクセスキーの「(X)」と末尾の「…」を除く。</summary>
+    private static string MenuItemName(string text)
+    {
+        string name = System.Text.RegularExpressions.Regex.Replace(text, @"\([A-Za-z0-9]\)$", string.Empty);
+        return name.TrimEnd('…').TrimEnd('.').Trim();
+    }
 
     private static IComparer<string> DisplayOrder => StringComparer.Create(CultureInfo.CurrentUICulture, ignoreCase: true);
 

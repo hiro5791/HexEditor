@@ -303,6 +303,8 @@ public sealed partial class MainWindow
             }
         }
 
+        // 幅 1024 px 未満では左右のパネルを折りたたむ (UI-01 の仕様 4。MainWindow.PanelCollapse.cs)。
+        ApplyPanelCollapse();
         ApplyFloatingPanels();
         SyncHashTarget();
         SyncAnnotationPanels();

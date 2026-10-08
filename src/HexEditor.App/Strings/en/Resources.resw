@@ -371,7 +371,7 @@ Details were written to:
   <data name="Status_More.AutomationProperties.Name" xml:space="preserve"><value>More status items</value></data>
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>More status items</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
-  <data name="Operations_Matches" xml:space="preserve"><value>{0} matches</value></data>
+  <data name="Operations_Matches" xml:space="preserve"><value>{0, plural, one {# match} other {# matches}}</value></data>
   <data name="Menu_Analysis.Title" xml:space="preserve"><value>Analysis</value></data>
   <data name="Menu_Analysis.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_Analysis_Hash.Text" xml:space="preserve"><value>Hash...</value></data>
@@ -1676,7 +1676,7 @@ Details were written to:
   <data name="Find_HistoryDelete_Tip" xml:space="preserve"><value>Remove from the history</value></data>
   <data name="Find_FindAll.Content" xml:space="preserve"><value>Find all</value></data>
   <data name="Find_FindAll_Name" xml:space="preserve"><value>Find all</value></data>
-  <data name="Find_FoundCount" xml:space="preserve"><value>{0} matches found.</value></data>
+  <data name="Find_FoundCount" xml:space="preserve"><value>{0, plural, one {# match found.} other {# matches found.}}</value></data>
   <data name="Find_Scope_Range.Content" xml:space="preserve"><value>Offset range</value></data>
   <data name="Find_RangeStart.PlaceholderText" xml:space="preserve"><value>Start (e.g. 0x100)</value></data>
   <data name="Find_RangeEnd.PlaceholderText" xml:space="preserve"><value>End, inclusive (e.g. end-0x10)</value></data>
@@ -1738,11 +1738,11 @@ Details were written to:
   <data name="Find_ReplaceTooLong" xml:space="preserve"><value>The replacement ({0} bytes) is longer than the match ({1} bytes), so the length can't be kept.</value></data>
   <data name="Find_ReplaceCannotResize" xml:space="preserve"><value>The length of this document can't be changed. Choose “Pad and keep the length”.</value></data>
   <data name="Find_Replacing" xml:space="preserve"><value>Replacing...</value></data>
-  <data name="Find_ReplacedCount" xml:space="preserve"><value>Replaced {0} matches.</value></data>
+  <data name="Find_ReplacedCount" xml:space="preserve"><value>{0, plural, one {Replaced # match.} other {Replaced # matches.}}</value></data>
   <data name="Find_ReplaceAllCancelled" xml:space="preserve"><value>Nothing was replaced.</value></data>
   <data name="Find_ReplaceAllFailed" xml:space="preserve"><value>Couldn't replace: {0}</value></data>
   <data name="Find_ReplaceAllConfirm_Title" xml:space="preserve"><value>Replace all matches?</value></data>
-  <data name="Find_ReplaceAllConfirm_Body" xml:space="preserve"><value>{0} matches will be replaced. Keeping the information needed to undo this uses memory or temporary-file space.</value></data>
+  <data name="Find_ReplaceAllConfirm_Body" xml:space="preserve"><value>{0, plural, one {# match will be replaced.} other {# matches will be replaced.}} Keeping the information needed to undo this uses memory or temporary-file space.</value></data>
   <data name="Find_ReplaceAllConfirm_Replace" xml:space="preserve"><value>Replace</value></data>
   <data name="Find_ReplaceAllConfirm_Cancel" xml:space="preserve"><value>Don't replace</value></data>
   <data name="Find_Overflow_Title" xml:space="preserve"><value>The replacement goes past the end</value></data>
@@ -1765,7 +1765,7 @@ Details were written to:
   <data name="SearchResults_ExportJson.Text" xml:space="preserve"><value>Export as JSON...</value></data>
   <data name="SearchResults_List_Name" xml:space="preserve"><value>Search results</value></data>
   <data name="SearchResults_List_Selected" xml:space="preserve"><value>Search results, {0} of {1}: {2}, {3}</value></data>
-  <data name="SearchResults_Summary" xml:space="preserve"><value>{0}: {1} — {2} matches ({3})</value></data>
+  <data name="SearchResults_Summary" xml:space="preserve"><value>{0}: {1} — {2, plural, one {# match} other {# matches}} ({3})</value></data>
   <data name="SearchResults_State_Running" xml:space="preserve"><value>searching</value></data>
   <data name="SearchResults_State_Completed" xml:space="preserve"><value>completed</value></data>
   <data name="SearchResults_State_Cancelled" xml:space="preserve"><value>interrupted</value></data>
@@ -1902,7 +1902,7 @@ Details were written to:
   <data name="Menu_View_Utf16Odd.AccessKey" xml:space="preserve"><value>O</value></data>
   <data name="Menu_Go_History.Text" xml:space="preserve"><value>History</value></data>
   <data name="Menu_Go_History.AccessKey" xml:space="preserve"><value>H</value></data>
-  <data name="Menu_View_GroupBytes" xml:space="preserve"><value>{0} bytes</value></data>
+  <data name="Menu_View_GroupBytes" xml:space="preserve"><value>{0, plural, one {# byte} other {# bytes}}</value></data>
   <data name="Scheme_default" xml:space="preserve"><value>Default</value></data>
   <data name="Scheme_solarized" xml:space="preserve"><value>Solarized</value></data>
   <data name="Scheme_contrast" xml:space="preserve"><value>High contrast style</value></data>

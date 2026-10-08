@@ -85,6 +85,7 @@ public sealed record VirtualSourceSpec(
 ///   "killAt": "saveWrite" | "saveBeforeReplace" | "saveAfterReplace" | "inPlaceAfterJournal",
 ///   "unhandledException": "uiThread" | "background" | "unobservedTask" | "save",
 ///   "unhandledExceptionDelayMs": 0,
+///   "elevated": true,                           // 管理者として実行している扱い (タイトルの「(管理者)」。昇格はしない)
 ///   "culture": "de-DE",                         // 地域設定の上書き (OS の設定を変えずに CultureInfo.CurrentCulture を変える)
 ///   "timeZone": "Tokyo Standard Time",          // インスペクタの「ローカル時刻」のタイムゾーン (OS の設定を変えない。INSP-15)
 ///   "openPicker": [ "C:\a.bin" ],               // 「開く」のダイアログの代わりに返すファイル ([] はキャンセル)
@@ -118,6 +119,9 @@ public sealed record TestHookSettings
 
     /// <summary>地域設定 (数値・サイズの書式。null ならシステムの既定)。表示言語は --ui-lang で変える。</summary>
     public string? Culture { get; init; }
+
+    /// <summary>管理者として実行している扱いにする (昇格せずに UI-02 の「(管理者)」を確かめる。TC-UI-02-02)。</summary>
+    public bool Elevated { get; init; }
 
     /// <summary>インスペクタの「ローカル時刻」に使うタイムゾーンの ID (null ならシステムの設定)。</summary>
     public string? TimeZone { get; init; }
@@ -162,6 +166,7 @@ public sealed record TestHookSettings
             UnhandledExceptionDelayMs = (int)ReadLong(root["unhandledExceptionDelayMs"], 0),
             AnsiCodePage = root["ansiCodePage"] is { } cp ? (int)ReadLong(cp, 0) : null,
             Culture = root["culture"]?.GetValue<string>(),
+            Elevated = root["elevated"]?.GetValue<bool>() ?? false,
             TimeZone = root["timeZone"]?.GetValue<string>(),
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),

@@ -248,6 +248,8 @@ public sealed partial class MainWindow
                         ["id"] = AutomationProperties.GetAutomationId(flyoutItem),
                         ["text"] = flyoutItem.Text,
                         ["accessKey"] = flyoutItem.AccessKey,
+                        ["command"] = HexEditor.App.Commands.CommandUi.GetId(flyoutItem),
+                        ["shortcut"] = flyoutItem.KeyboardAcceleratorTextOverride,
                     });
                     break;
             }

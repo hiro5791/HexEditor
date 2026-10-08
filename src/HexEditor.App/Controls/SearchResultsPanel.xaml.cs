@@ -801,7 +801,7 @@ public sealed partial class SearchResultsPanel : UserControl
             state = Loc.Get("SearchResults_State_Running");
         }
 
-        Summary.Text = Loc.Format("SearchResults_Summary", _kindName, _query, TotalCount.ToString("N0", CultureInfo.CurrentCulture), state);
+        Summary.Text = Loc.Format("SearchResults_Summary", _kindName, _query, TotalCount, state);
         ContinueButton.Visibility = !running && _groups.Count == 1 && limited is { SpillFailed: false } ? Visibility.Visible : Visibility.Collapsed;
         CancelButton.Visibility = running ? Visibility.Visible : Visibility.Collapsed;
     }

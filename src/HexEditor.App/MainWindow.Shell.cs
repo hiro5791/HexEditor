@@ -13,6 +13,7 @@ public sealed partial class MainWindow
     {
         InitializeZoom();
         InitializeFullScreen();
+        InitializePanelCollapse();
         Vm.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(MainViewModel.Selected))
@@ -21,5 +22,8 @@ public sealed partial class MainWindow
                 WatchUndoNames();
             }
         };
+
+        // 文書がなくても、起動したときから「(管理者)」「(セーフモード)」を付ける (UI-02 の仕様 3)。
+        UpdateTitle();
     }
 }

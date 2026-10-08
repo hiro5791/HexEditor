@@ -148,7 +148,10 @@ public sealed partial class MainWindow
         };
     }
 
-    /// <summary>前回の位置と大きさに戻す。画面の外になる場合は戻さない。</summary>
+    /// <summary>
+    /// 前回の位置と大きさに戻す。画面の外になる場合 (外したモニターにあったなど) は、主モニターの中央に既定の大きさで出す
+    /// (UI-01 の「エラー」)。
+    /// </summary>
     private void RestoreBounds(SessionWindow window)
     {
         if (window.Width < 200 || window.Height < 150)
@@ -156,14 +159,25 @@ public sealed partial class MainWindow
             return;
         }
 
-        var rect = new RectInt32(window.X, window.Y, window.Width, window.Height);
-        DisplayArea? area = DisplayArea.GetFromRect(rect, DisplayAreaFallback.None);
-        if (area is null)
+        static Core.View.PixelRect Pixels(RectInt32 r) => new(r.X, r.Y, r.Width, r.Height);
+        var areas = new List<Core.View.PixelRect>();
+        // DisplayArea.FindAll() の一覧は foreach で列挙すると例外になる (CsWinRT の既知の問題) ので、番号で読む。
+        IReadOnlyList<DisplayArea> displays = DisplayArea.FindAll();
+        for (int i = 0; i < displays.Count; i++)
         {
-            return;
+            areas.Add(Pixels(displays[i].WorkArea));
         }
 
-        AppWindow.MoveAndResize(rect);
+        DisplayArea primary = DisplayArea.Primary;
+        double scale = GetDpiForWindow(Microsoft.UI.Win32Interop.GetWindowFromWindowId(AppWindow.Id)) / 96.0;
+        Core.View.PixelRect placed = Core.View.WindowPlacement.Restore(
+            new Core.View.PixelRect(window.X, window.Y, window.Width, window.Height), areas, Pixels(primary.WorkArea), scale);
+        AppWindow.MoveAndResize(new RectInt32(placed.X, placed.Y, placed.Width, placed.Height));
+        if (placed.X != window.X || placed.Y != window.Y)
+        {
+            AppLog.Info("The saved window position is off screen; centered on the primary monitor.");
+            return;
+        }
         if (window.Maximized && AppWindow.Presenter is OverlappedPresenter presenter)
         {
             presenter.Maximize();
