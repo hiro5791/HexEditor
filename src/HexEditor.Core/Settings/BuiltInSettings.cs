@@ -56,6 +56,7 @@ public static class BuiltInSettings
         new("view.jump.position", SettingCategories.View, SettingKind.Choice, "third") { Options = ["top", "third", "center"], Order = 40 },
         new("view.tooltips", SettingCategories.View, SettingKind.Bool, true) { Order = 50 },
         new("view.text.nonPrintable", SettingCategories.View, SettingKind.Choice, "dot") { Options = ["dot", "space", "controlPictures"], Order = 55 },
+        new("view.text.invalidSymbol", SettingCategories.View, SettingKind.Choice, "dot") { Options = ["dot", "replacement"], Order = 56 },
         new("view.modified.keepAfterSave", SettingCategories.View, SettingKind.Bool, false) { Order = 60 },
         new("view.modified.showDeletions", SettingCategories.View, SettingKind.Bool, false) { Order = 61 },
 

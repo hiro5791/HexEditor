@@ -374,6 +374,7 @@ public sealed partial class HexView
                 TextCellKind.Continuation => _frame.Style.ShowContinuation ? "·" : " ",
                 TextCellKind.Empty => " ",
                 TextCellKind.NonPrintable => _text[c].Text,
+                TextCellKind.Invalid when _text[c].Text.Length > 0 => _text[c].Text,
                 _ => ".",
             },
         };
@@ -521,7 +522,7 @@ public sealed partial class HexView
                     Brush fore = TextForeground(c, palette);
                     TextCell decoded = _text[c];
                     // 制御文字の図記号 (VIEW-21 の仕様 7) も等幅フォントにないことがあるため、同じく別に描く。
-                    if (KindAt(c) is CellKind.Normal or CellKind.Modified && decoded.Kind is TextCellKind.Char or TextCellKind.NonPrintable
+                    if (KindAt(c) is CellKind.Normal or CellKind.Modified && decoded.Kind is TextCellKind.Char or TextCellKind.NonPrintable or TextCellKind.Invalid
                         && NeedsOverlay(decoded))
                     {
                         // 全角・結合文字などは別の TextBlock で、文字の範囲のセルに収めて描く (VIEW-22 の仕様 2・3・6)。

@@ -44,6 +44,9 @@ public static class ViewOptions
     /// <summary>表示しない文字の記号 (VIEW-21 の仕様 7。dot / space / controlPictures、既定 dot)。</summary>
     public const string NonPrintableKey = "view.text.nonPrintable";
 
+    /// <summary>不正なバイトの記号 (VIEW-22 の仕様 5。dot / replacement (U+FFFD)、既定 dot)。</summary>
+    public const string InvalidSymbolKey = "view.text.invalidSymbol";
+
     /// <summary>読み上げの詳しさ (UI-51 の仕様 2。full / brief / offsetOnly / none、既定 full)。</summary>
     public const string VerbosityKey = "a11y.announce.verbosity";
 
@@ -104,6 +107,9 @@ public static class ViewOptions
             "controlPictures" => NonPrintableStyle.ControlPictures,
             _ => NonPrintableStyle.Dot,
         };
+        view.InvalidSymbol = settings.GetString(InvalidSymbolKey, "dot") == "replacement"
+            ? TextCellDecoder.ReplacementInvalidSymbol
+            : TextCellDecoder.DefaultInvalidSymbol;
         view.AnnouncementVerbosity = settings.GetString(VerbosityKey, "full") switch
         {
             "brief" => AnnounceVerbosity.Brief,

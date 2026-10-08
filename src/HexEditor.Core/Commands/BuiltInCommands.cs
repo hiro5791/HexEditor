@@ -207,6 +207,7 @@ public static class BuiltInCommands
         new("view.resetDefault", "view") { Condition = "documentOpen" },
         new("view.announcePosition", "view") { Condition = "documentOpen" },
         new("view.utf16Odd", "view") { Condition = "documentOpen" },
+        .. Enumerable.Range(0, 4).Select(p => new CommandDefinition($"view.utf32Phase{p}", "view") { Condition = "documentOpen" }),
         new("view.encoding.utf8", "view") { Condition = "documentOpen" },
         new("view.encoding.utf16le", "view") { Condition = "documentOpen" },
         new("view.encoding.utf16be", "view") { Condition = "documentOpen" },

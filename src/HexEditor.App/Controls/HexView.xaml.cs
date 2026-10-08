@@ -642,7 +642,7 @@ public sealed partial class HexView : UserControl
         ByteState[] dataStates = _work.DecodeStates;
         int read = snapshot.ReadForDisplay(dataStart, data.AsSpan(0, length), dataStates.AsSpan(0, length));
         TextCellDecoder.Decode(encoding, data.AsSpan(0, read), dataStart, readStart, cells.AsSpan(lead, windowLength),
-            dataStates.AsSpan(0, read), view.Utf16Phase, view.Utf32Phase, NonPrintableStyle);
+            dataStates.AsSpan(0, read), view.Utf16Phase, view.Utf32Phase, NonPrintableStyle, InvalidSymbol);
         return cells;
     }
 
@@ -749,6 +749,7 @@ public sealed partial class HexView : UserControl
         if (!visible)
         {
             CompositionBox.Visibility = Visibility.Collapsed;
+            PlaceCharacterRange(false, 0, 0, 0);
             return;
         }
 
@@ -762,6 +763,7 @@ public sealed partial class HexView : UserControl
         // もう一方の列の対応位置は枠で示す (VIEW-06 の仕様 4)。テキスト列ではそのバイトが属する文字のセル全体を囲む (VIEW-22)。
         (double textLeft, double textWidth) = TextCharacterRange(layout, columns, _editor.Cursor);
         SetRect(SecondaryCaret, hexActive ? textLeft : hexX, y, hexActive ? textWidth : _cellWidth * 2, _rowHeight);
+        PlaceCharacterRange(!hexActive && columns.ShowText && textWidth > _cellWidth && textLeft != textX, textLeft, y, textWidth);
 
         // 上書きモードは塗りつぶしの帯、挿入モードは縦棒 (VIEW-06 の仕様 3。色だけで区別しない)。フォーカスがなければ枠 (VIEW-01 の仕様 13)。
         if (_editor.InsertMode)
@@ -805,6 +807,37 @@ public sealed partial class HexView : UserControl
     }
 
     /// <summary>テキスト列で、オフセットのバイトが属する文字のセルの範囲 (VIEW-06 の仕様 4、VIEW-22 の仕様 9)。</summary>
+    private Microsoft.UI.Xaml.Shapes.Rectangle? _characterRange;
+
+    /// <summary>
+    /// テキスト列で、文字の範囲の途中のバイトにカーソルがあるとき、その文字の範囲全体を薄く強調する (VIEW-22 の仕様 9)。
+    /// 行の文字の奥に置く。
+    /// </summary>
+    private void PlaceCharacterRange(bool show, double left, double y, double width)
+    {
+        if (!show)
+        {
+            if (_characterRange is not null)
+            {
+                _characterRange.Visibility = Visibility.Collapsed;
+            }
+
+            return;
+        }
+
+        if (_characterRange is null)
+        {
+            _characterRange = new Microsoft.UI.Xaml.Shapes.Rectangle { IsHitTestVisible = false };
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetAccessibilityView(_characterRange,
+                Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+            ContentHost.Children.Insert(ContentHost.Children.IndexOf(RowsLayer), _characterRange);
+        }
+
+        _characterRange.Visibility = Visibility.Visible;
+        _characterRange.Fill = _palette!.SelectionInactive;
+        SetRect(_characterRange, left, y, width, _rowHeight);
+    }
+
     private (double Left, double Width) TextCharacterRange(HexLayout layout, RowColumns columns, long offset)
     {
         int column = layout.ColumnOf(offset);

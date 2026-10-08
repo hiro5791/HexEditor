@@ -175,6 +175,12 @@ public sealed partial class HexView
             ["width"] = SecondaryCaret.Width,
             ["strokeThickness"] = SecondaryCaret.StrokeThickness,
         };
+        result["characterRange"] = new JsonObject
+        {
+            ["visible"] = _characterRange?.Visibility == Visibility.Visible,
+            ["left"] = _characterRange is null ? 0 : Microsoft.UI.Xaml.Controls.Canvas.GetLeft(_characterRange),
+            ["width"] = _characterRange?.Width ?? 0,
+        };
         return result;
     }
 

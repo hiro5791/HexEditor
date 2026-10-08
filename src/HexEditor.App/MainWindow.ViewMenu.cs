@@ -189,6 +189,17 @@ public sealed partial class MainWindow
         encoding.Items.Add(new MenuFlyoutSeparator());
         encoding.Items.Add(Toggle("Command_ViewUtf16Odd", "Menu_View_Utf16Odd", v => v.Utf16Phase == 1, (v, on) => v with { Utf16Phase = on ? 1 : 0 }));
 
+        // UTF-32 の開始位置 (オフセットを 4 で割った余り。VIEW-22 の仕様 4)。
+        MenuFlyoutSubItem utf32 = Sub("Command_ViewUtf32Start", "Menu_View_Utf32Start");
+        for (int phase = 0; phase < 4; phase++)
+        {
+            int p = phase;
+            utf32.Items.Add(Radio("Command_ViewUtf32Phase" + p, Loc.Format("Menu_View_Utf32Phase", p), "Utf32Phase",
+                () => ChangeView(v => v with { Utf32Phase = p }), p.ToString(System.Globalization.CultureInfo.InvariantCulture), v => v.Utf32Phase == p));
+        }
+
+        encoding.Items.Add(utf32);
+
         // 文字の範囲の残りのセルに続きの記号「·」を薄く表示する (VIEW-22 の仕様 2)。
         encoding.Items.Add(Toggle("Command_ViewContinuation", "Menu_View_Continuation", v => v.ShowContinuation, (v, on) => v with { ShowContinuation = on }));
         InitializeEncodingList(encoding);

@@ -2415,4 +2415,19 @@
   <data name="CmdAlias_view_scrollLineUp" xml:space="preserve"><value>うえに すくろーる いちぎょう</value></data>
   <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>表示: 1 行下にスクロール</value></data>
   <data name="CmdAlias_view_scrollLineDown" xml:space="preserve"><value>したに すくろーる いちぎょう</value></data>
+  <data name="Set_view_text_invalidSymbol" xml:space="preserve"><value>不正なバイトの記号</value></data>
+  <data name="SetDesc_view_text_invalidSymbol" xml:space="preserve"><value>テキスト列の文字コードで正しくないバイトの表示方法です。</value></data>
+  <data name="SetOpt_view_text_invalidSymbol_dot" xml:space="preserve"><value>ドット (.)</value></data>
+  <data name="SetOpt_view_text_invalidSymbol_replacement" xml:space="preserve"><value>置換文字 (�)</value></data>
+  <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>UTF-32 の開始位置(P)</value></data>
+  <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>オフセットを 4 で割った余り {0}</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>表示: UTF-32 を余り 0 の位置から解読</value></data>
+  <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり ぜろ</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>表示: UTF-32 を余り 1 の位置から解読</value></data>
+  <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり いち</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>表示: UTF-32 を余り 2 の位置から解読</value></data>
+  <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり に</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>表示: UTF-32 を余り 3 の位置から解読</value></data>
+  <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり さん</value></data>
 </root>

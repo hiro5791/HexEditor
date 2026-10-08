@@ -131,6 +131,22 @@ public sealed partial class HexView
 
     private NonPrintableStyle _nonPrintableStyle;
 
+    /// <summary>不正なバイトの記号 (VIEW-22 の仕様 5。設定 view.text.invalidSymbol、既定 <c>.</c>)。</summary>
+    public string InvalidSymbol
+    {
+        get => _invalidSymbol;
+        set
+        {
+            if (_invalidSymbol != value)
+            {
+                _invalidSymbol = value;
+                QueueRender();
+            }
+        }
+    }
+
+    private string _invalidSymbol = TextCellDecoder.DefaultInvalidSymbol;
+
     /// <summary>
     /// バイトに付いている情報の名前 (ブックマーク名など。VIEW-07 の仕様 2 の「付加情報」、UI-51 の「ブックマーク 名前」)。
     /// 提供元 (INSP、TPL) が設定する。範囲で問い合わせるため、ブロックしないこと。

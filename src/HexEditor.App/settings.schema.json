@@ -451,6 +451,15 @@
       "type": "boolean",
       "default": false
     },
+    "view.text.invalidSymbol": {
+      "description": "Symbol for invalid bytes",
+      "type": "string",
+      "enum": [
+        "dot",
+        "replacement"
+      ],
+      "default": "dot"
+    },
     "view.text.nonPrintable": {
       "description": "Symbol for non-printable characters",
       "type": "string",
