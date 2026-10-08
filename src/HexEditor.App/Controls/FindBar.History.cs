@@ -15,7 +15,13 @@ public sealed partial class FindBar
 {
     private readonly HistoryCursor _historyCursor = new();
     private readonly HistoryCursor _replaceCursor = new();
-    private bool _applyingHistory;
+    /// <summary>
+    /// コードで検索欄・置換欄に入れた文字列 (TextChanged は後から非同期に届くため、利用者の入力と区別する。届いたら null に戻す)。
+    /// これと同じ文字列の変更では、履歴の位置を戻さず、インクリメンタルサーチもしない。
+    /// </summary>
+    private string? _programmaticQuery;
+
+    private string? _programmaticReplace;
 
     /// <summary>検索履歴 (null なら履歴を使わない)。</summary>
     public SearchHistory? History { get; set; }
@@ -105,29 +111,34 @@ public sealed partial class FindBar
 
     private void Apply(HistoryList list, SearchHistoryEntry entry)
     {
-        _applyingHistory = true;
-        _suppressIncremental = true;
-        try
+        if (list == HistoryList.Find)
         {
-            if (list == HistoryList.Find)
-            {
-                ApplyConditions(entry.Conditions);
-                Query.Text = entry.Text;
-                Query.SelectionStart = Query.Text.Length;
-            }
-            else
-            {
-                ReplaceQuery.Text = entry.Text;
-                ReplaceQuery.SelectionStart = ReplaceQuery.Text.Length;
-            }
+            ApplyConditions(entry.Conditions);
+            SetQueryText(entry.Text);
+            Query.SelectionStart = Query.Text.Length;
         }
-        finally
+        else
         {
-            _applyingHistory = false;
-            _suppressIncremental = false;
+            if (ReplaceQuery.Text != entry.Text)
+            {
+                _programmaticReplace = entry.Text;
+                ReplaceQuery.Text = entry.Text;
+            }
+
+            ReplaceQuery.SelectionStart = ReplaceQuery.Text.Length;
         }
 
         Validate();
+    }
+
+    /// <summary>検索欄に文字列を入れる (利用者の入力ではないので、履歴の位置を保ち、インクリメンタルサーチもしない)。</summary>
+    private void SetQueryText(string text)
+    {
+        if (Query.Text != text)
+        {
+            _programmaticQuery = text;
+            Query.Text = text;
+        }
     }
 
     /// <summary>検索履歴を消去する (「検索履歴を消去」。FIND-28)。</summary>

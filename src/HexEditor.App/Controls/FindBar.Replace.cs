@@ -57,6 +57,12 @@ public sealed partial class FindBar
     /// <summary>長さが違う場合の扱いの選択を強調しているか (置換語と一致の長さが違う。FIND-24 の画面)。</summary>
     internal bool PolicyHighlighted { get; private set; }
 
+    /// <summary>テスト用: 「長さが違う場合」の選択 (0: 長さを変える、1: 埋めて長さを保つ、2: 後ろを上書きする)。</summary>
+    internal int PolicyIndex => LengthPolicyChoice.SelectedIndex;
+
+    /// <summary>テスト用: 「長さを変える」を選べるか。</summary>
+    internal bool PolicyChangeEnabled => PolicyChangeItem.IsEnabled;
+
     private void SetReplaceMode(bool replace)
     {
         ReplaceRow.Visibility = replace ? Visibility.Visible : Visibility.Collapsed;
@@ -191,7 +197,9 @@ public sealed partial class FindBar
 
     private void ReplaceQuery_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (!_applyingHistory)
+        bool programmatic = _programmaticReplace is not null && _programmaticReplace == ReplaceQuery.Text;
+        _programmaticReplace = null;
+        if (!programmatic)
         {
             _replaceCursor.Reset();
         }
@@ -252,9 +260,9 @@ public sealed partial class FindBar
             return;
         }
 
+        AddReplacementToHistory();
         if (_navigator.IsLastMatch(editor.SelectionStart, editor.SelectionLength))
         {
-            AddReplacementToHistory();
             ReplaceOneResult result;
             try
             {

@@ -20,7 +20,6 @@ public sealed partial class FindBar
     private Task _incrementalTask = Task.CompletedTask;
     private long _origin;
     private bool _composing;
-    private bool _suppressIncremental;
     private bool _incrementalMoved;
     private int _incrementalId;
     private static int s_incrementalRunning;
@@ -39,7 +38,7 @@ public sealed partial class FindBar
     /// <summary>入力が変わったら、150 ms 後に探す (待っている間にまた入力があれば待ち直す)。</summary>
     private void ScheduleIncremental()
     {
-        if (_suppressIncremental || _applyingHistory || !IsOpen || IncrementalChoice.IsChecked != true
+        if (!IsOpen || IncrementalChoice.IsChecked != true
             || Kind is not (SearchKind.Hex or SearchKind.Text) || _composing || _incrementalTimer is null)
         {
             return;
@@ -74,10 +73,26 @@ public sealed partial class FindBar
         DocumentSnapshot snapshot = editor.Document.Current;
         long origin = Math.Clamp(_origin, 0, snapshot.Length);
         SearchScope window = CurrentScope.Clip(origin, SearchScope.IncrementalWindow, snapshot.Length, out bool truncated);
-        int running = Interlocked.Increment(ref s_incrementalRunning);
-        AppLog.Info($"Incremental search: start #{id} (running {running})");
-        Task<SearchHit?> search = Task.Run(() => SearchEngine.Find(snapshot, pattern, origin, forward: true, wrap: false,
-            new SearchOptions { Scope = window }, null, cts.Token), cts.Token);
+        Task<SearchHit?> search = Task.Run(() =>
+        {
+            // 実行中の検索の数を記録する (テストで「同時に 1 つだけ」を確かめる。仕様 2)。
+            int running = Interlocked.Increment(ref s_incrementalRunning);
+            AppLog.Info($"Incremental search: start #{id} (running {running})");
+            try
+            {
+                return SearchEngine.Find(snapshot, pattern, origin, forward: true, wrap: false, new SearchOptions { Scope = window }, null, cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                AppLog.Info($"Incremental search: cancel #{id}");
+                throw;
+            }
+            finally
+            {
+                running = Interlocked.Decrement(ref s_incrementalRunning);
+                AppLog.Info($"Incremental search: end #{id} (running {running})");
+            }
+        }, cts.Token);
         _incrementalTask = search;
         SearchHit? hit;
         try
@@ -86,13 +101,10 @@ public sealed partial class FindBar
         }
         catch (OperationCanceledException)
         {
-            AppLog.Info($"Incremental search: cancel #{id}");
             return;
         }
         finally
         {
-            running = Interlocked.Decrement(ref s_incrementalRunning);
-            AppLog.Info($"Incremental search: end #{id} (running {running})");
             if (_incremental == cts)
             {
                 _incremental = null;

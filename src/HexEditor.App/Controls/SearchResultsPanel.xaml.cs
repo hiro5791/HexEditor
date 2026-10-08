@@ -414,15 +414,27 @@ public sealed partial class SearchResultsPanel : UserControl
         HighlightsChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    /// <summary>ドキュメントが変わったら、位置の補正と状態の印を作り直す (FIND-03 の仕様 3・4)。</summary>
-    private void Document_Changed(object? sender, DocumentChangedEventArgs e) => DispatcherQueue.TryEnqueue(() =>
+    /// <summary>今の状態に合わせた行の部品 (ドキュメントが変わっていたら作り直す)。</summary>
+    private SearchResultRowFactory? EnsureFactory()
     {
-        if (_results is { } results && _editor is { } editor)
+        if (_results is { } results && _editor is { } editor
+            && (_factory is null || !ReferenceEquals(_factory.Current.Tree, editor.Document.Current.Tree)))
         {
             _factory = new SearchResultRowFactory(results, editor.Document.Current, _encoding);
             _generation++;
             _cache.Clear();
             _fetching.Clear();
+        }
+
+        return _factory;
+    }
+
+    /// <summary>ドキュメントが変わったら、位置の補正と状態の印を作り直す (FIND-03 の仕様 3・4)。</summary>
+    private void Document_Changed(object? sender, DocumentChangedEventArgs e) => DispatcherQueue.TryEnqueue(() =>
+    {
+        if (_results is not null)
+        {
+            EnsureFactory();
             Render();
         }
     });
@@ -497,6 +509,7 @@ public sealed partial class SearchResultsPanel : UserControl
             return;
         }
 
+        EnsureFactory();
         EnsureRows();
         long count = results.LongCount;
         int visible = _rows.Count;
@@ -728,7 +741,7 @@ public sealed partial class SearchResultsPanel : UserControl
     /// <summary>その一致に移動して選択する (FIND-20 の仕様 8)。削除済みの一致は削除された位置に移動する (FIND-03 の仕様 3)。</summary>
     internal void Jump(long index)
     {
-        if (_results is not { } results || _editor is not { } editor || _factory is not { } factory || index < 0 || index >= results.LongCount)
+        if (_results is not { } results || _editor is not { } editor || EnsureFactory() is not { } factory || index < 0 || index >= results.LongCount)
         {
             return;
         }
@@ -747,7 +760,7 @@ public sealed partial class SearchResultsPanel : UserControl
     /// <summary>↑ / ↓ で行を移したときのプレビュー: エディタをその位置にスクロールする (カーソルは動かさない。FIND-20 の仕様 8)。</summary>
     private void Preview(long index)
     {
-        if (_results is not { } results || _editor is not { } editor || _factory is not { } factory || index < 0 || index >= results.LongCount)
+        if (_results is not { } results || _editor is not { } editor || EnsureFactory() is not { } factory || index < 0 || index >= results.LongCount)
         {
             return;
         }

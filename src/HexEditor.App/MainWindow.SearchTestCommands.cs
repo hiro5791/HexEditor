@@ -65,6 +65,8 @@ public sealed partial class MainWindow
         ["replaceMode"] = FindBar.IsReplaceMode,
         ["kind"] = FindBar.Kind.ToString(),
         ["policyHighlighted"] = FindBar.PolicyHighlighted,
+        ["policyIndex"] = FindBar.PolicyIndex,
+        ["policyChangeEnabled"] = FindBar.PolicyChangeEnabled,
         ["incrementalTruncated"] = FindBar.IncrementalTruncated,
         ["history"] = new JsonArray([.. FindBar.HistoryTexts(HistoryList.Find).Select(t => (JsonNode?)t)]),
         ["replaceHistory"] = new JsonArray([.. FindBar.HistoryTexts(HistoryList.Replace).Select(t => (JsonNode?)t)]),
@@ -84,7 +86,8 @@ public sealed partial class MainWindow
         SearchResults? results = SearchResults.Results;
         long total = results?.LongCount ?? 0;
         long from = request["from"]?.GetValue<long>() ?? SearchResults.TopIndex;
-        long count = Math.Min(request["count"]?.GetValue<long>() ?? SearchResults.VisibleRowCount, Math.Max(0, total - from));
+        // 行の内容はドキュメントを読むため、指定したときだけ作る (状態だけを何度も読むテストで UI のスレッドを止めない)。
+        long count = Math.Min(request["count"]?.GetValue<long>() ?? 0, Math.Max(0, total - from));
         var rows = new JsonArray();
         if (request["offsetsOnly"]?.GetValue<bool>() == true && results is not null)
         {

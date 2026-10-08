@@ -118,7 +118,8 @@
                 x:Name="OptionsToggle"
                 Grid.Column="7"
                 AutomationProperties.AutomationId="Find_Options"
-                Click="OptionsToggle_Click">
+                Checked="OptionsToggle_Click"
+                Unchecked="OptionsToggle_Click">
                 <FontIcon FontSize="12" Glyph="&#xE71C;" />
             </ToggleButton>
             <!--  0.5 秒を超えた検索の進捗バーとキャンセルボタン (FIND-02 の仕様 1)。  -->
@@ -277,22 +278,26 @@
                 x:Name="CaseChoice"
                 x:Uid="Find_CaseSensitive"
                 AutomationProperties.AutomationId="Find_CaseSensitive"
-                Click="Check_Changed" />
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
             <CheckBox
                 x:Name="WordChoice"
                 x:Uid="Find_WholeWord"
                 AutomationProperties.AutomationId="Find_WholeWord"
-                Click="Check_Changed" />
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
             <CheckBox
                 x:Name="EscapeChoice"
                 x:Uid="Find_Escapes"
                 AutomationProperties.AutomationId="Find_Escapes"
-                Click="Check_Changed" />
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
             <CheckBox
                 x:Name="AlignChoice"
                 x:Uid="Find_Align"
                 AutomationProperties.AutomationId="Find_Align"
-                Click="Check_Changed" />
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
             <!--  整数 (FIND-13): サイズ、符号、エンディアン。  -->
             <ComboBox
                 x:Name="IntBitsChoice"

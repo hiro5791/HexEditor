@@ -224,14 +224,11 @@ public sealed partial class FindBar : UserControl
             {
                 byte[] bytes = new byte[editor.SelectionLength];
                 editor.Document.Current.Read(editor.SelectionStart, bytes);
-                _suppressIncremental = true;
-                Query.Text = Kind == SearchKind.Text && TryDecode(bytes, out string? text) ? text : ToHex(bytes);
+                SetQueryText(Kind == SearchKind.Text && TryDecode(bytes, out string? text) ? text : ToHex(bytes));
                 if (Kind == SearchKind.Text && Query.Text.Length > 0 && !TryDecode(bytes, out _))
                 {
                     KindChoice.SelectedIndex = 0;
                 }
-
-                _suppressIncremental = false;
             }
 
             // 選択範囲の検索は、開いたときの選択範囲に固定する (FIND-11 の仕様 1)。
@@ -546,6 +543,9 @@ public sealed partial class FindBar : UserControl
         NotFound,
     }
 
+    /// <summary>直前に検証した検索語と条件 (変わったかどうかの判定)。</summary>
+    private string? _patternKey;
+
     /// <summary>今の検索範囲 (FIND-11)。</summary>
     private SearchScope CurrentScope => ScopeChoice.SelectedIndex switch
     {
@@ -580,13 +580,22 @@ public sealed partial class FindBar : UserControl
         RangeStart.Visibility = RangeEnd.Visibility = RangeInfo.Visibility = Show(range);
         ValidateRange();
 
-        _navigator.Reset();
-        _counting?.Cancel();
-        _counting = null;
-        _count?.Dispose();
-        _count = null;
-        CountButton.Visibility = Visibility.Collapsed;
-        CountText.Visibility = Visibility.Visible;
+        // 検索語・条件・対象のビューが変わったときだけ、直前の一致と件数を忘れる (同じ条件で開き直しても置換を続けられる)。
+        string key = string.Join('|', _editor?.GetHashCode(), kind, Query.Text, SelectedEncoding, CaseChoice.IsChecked, WordChoice.IsChecked,
+            EscapeChoice.IsChecked, AlignChoice.IsChecked, SelectedBits, SignChoice.SelectedIndex, EndianChoice.SelectedIndex,
+            FloatChoice.SelectedIndex, ToleranceChoice.SelectedIndex, ToleranceValue.Text, ScopeChoice.SelectedIndex, RangeStart.Text, RangeEnd.Text);
+        if (key != _patternKey)
+        {
+            _patternKey = key;
+            _navigator.Reset();
+            _counting?.Cancel();
+            _counting = null;
+            _count?.Dispose();
+            _count = null;
+            CountButton.Visibility = Visibility.Collapsed;
+            CountText.Visibility = Visibility.Visible;
+        }
+
         try
         {
             _pattern = BuildPattern(kind);
@@ -818,13 +827,18 @@ public sealed partial class FindBar : UserControl
 
     private void Query_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (!_applyingHistory)
+        bool programmatic = _programmaticQuery is not null && _programmaticQuery == Query.Text;
+        _programmaticQuery = null;
+        if (!programmatic)
         {
             _historyCursor.Reset();
         }
 
         Validate();
-        ScheduleIncremental();
+        if (!programmatic)
+        {
+            ScheduleIncremental();
+        }
     }
 
     private void Option_Changed(object sender, SelectionChangedEventArgs e)
