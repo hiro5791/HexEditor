@@ -57,6 +57,9 @@ public static class TestDataCatalog
         // ---- cases/04-search.md の表 ----
         new("TD-FIND-RANDOM-10G", 10 * GiB, "種 4401 の乱数 (スパースにしない)。最後の 8 バイトが HEXEND!!", WriteFindRandom),
 
+        // ---- cases/05-inspector-and-annotations.md の表 ----
+        new("TD-INSP-VALUES", 256, "インスペクタの解釈の確認用の値 (0x00 に int32 の 12,345 など)", path => WriteAll(path, InspectorValues())),
+
         // ---- cases/09-ui-and-settings.md の表 ----
         new("TD-UI-SECRET", 4 * KiB, "secret-content.bin: HEXEDITOR-SECRET-7F3A の繰り返し",
             path => WriteGenerated(path, 4 * KiB, (o, s) => Repeat(SecretMarker, o, s)), dir => Path.Combine(dir, "TD-UI-SECRET", "secret-content.bin")),
@@ -196,6 +199,25 @@ public static class TestDataCatalog
     private static IEnumerable<long> Around(long p) => [p - MarkerLength, p];
 
     private static void WriteAll(string path, byte[] data) => File.WriteAllBytes(path, data);
+
+    /// <summary>TD-INSP-VALUES: 下記以外はすべて 00 の 256 バイト。</summary>
+    public static byte[] InspectorValues()
+    {
+        byte[] data = new byte[256];
+        void Put(int offset, params byte[] bytes) => bytes.CopyTo(data, offset);
+        Put(0x00, 0x39, 0x30, 0x00, 0x00);
+        Put(0x10, 0x01, 0x02, 0x03, 0x04);
+        Put(0x18, 0xE3, 0x81, 0x82);
+        Put(0x20, 0x41);
+        Put(0x30, 0xE5, 0x8E, 0x26);
+        Put(0x34, 0x81, 0x00);
+        Put(0x40, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x00);
+        Put(0x50, 0xFF, 0x80, 0x00, 0xFF);
+        Put(0x60, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
+        Put(0x90, 0x00, 0x00, 0x21, 0x00);
+        Put(0xA0, 0xEB, 0x10);
+        return data;
+    }
 
     /// <summary><paramref name="text"/> を先頭から繰り返した内容。</summary>
     private static void Repeat(string text, long offset, Span<byte> destination)

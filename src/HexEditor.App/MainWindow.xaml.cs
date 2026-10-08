@@ -51,6 +51,7 @@ public sealed partial class MainWindow : Window
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
+        InitializeAnnotations();
 
         // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
         var noticeTimer = DispatcherQueue.CreateTimer();
@@ -456,6 +457,7 @@ public sealed partial class MainWindow : Window
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
         view.DocumentName = (view.DataContext as DocumentViewModel)?.DisplayName;
         UpdateMatchHighlights(view);
+        AttachAnnotations(view);
 
         view.Focus(FocusState.Programmatic);
     }

@@ -77,6 +77,7 @@ public sealed record VirtualSourceSpec(
 ///   "unhandledException": "uiThread" | "background" | "unobservedTask" | "save",
 ///   "unhandledExceptionDelayMs": 0,
 ///   "culture": "de-DE",                         // 地域設定の上書き (OS の設定を変えずに CultureInfo.CurrentCulture を変える)
+///   "timeZone": "Tokyo Standard Time",          // インスペクタの「ローカル時刻」のタイムゾーン (OS の設定を変えない。INSP-15)
 ///   "openPicker": [ "C:\a.bin" ],               // 「開く」のダイアログの代わりに返すファイル ([] はキャンセル)
 ///   "savePicker": "C:\b.bin",                   // 「名前を付けて保存」のダイアログの代わりに返すパス ("" はキャンセル)
 ///   "freeSpace": 1048576                        // 保存先・ジャーナルの置き場所の空き容量の上書き (ENG-25)
@@ -108,6 +109,9 @@ public sealed record TestHookSettings
 
     /// <summary>地域設定 (数値・サイズの書式。null ならシステムの既定)。表示言語は --ui-lang で変える。</summary>
     public string? Culture { get; init; }
+
+    /// <summary>インスペクタの「ローカル時刻」に使うタイムゾーンの ID (null ならシステムの設定)。</summary>
+    public string? TimeZone { get; init; }
 
     /// <summary>「開く」のダイアログの代わりに返すファイル。null なら本物のダイアログを出す。</summary>
     public IReadOnlyList<string>? OpenPicker { get; init; }
@@ -149,6 +153,7 @@ public sealed record TestHookSettings
             UnhandledExceptionDelayMs = (int)ReadLong(root["unhandledExceptionDelayMs"], 0),
             AnsiCodePage = root["ansiCodePage"] is { } cp ? (int)ReadLong(cp, 0) : null,
             Culture = root["culture"]?.GetValue<string>(),
+            TimeZone = root["timeZone"]?.GetValue<string>(),
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),
             FreeSpace = root["freeSpace"] is { } free ? ReadLong(free, 0) : null,

@@ -97,6 +97,55 @@ public static class InspectorDecoder
     }
 
     /// <summary>
+    /// 書き換えの入力欄に最初に入れる、現在の値 (INSP-17 の仕様 1)。入力の書式で読み直せる形 (桁区切りなし、日時は ISO 8601、
+    /// 文字は文字そのもの)。値がなければ空。
+    /// </summary>
+    public static string EditText(string typeId, ReadOnlySpan<byte> data, ReadOnlySpan<ByteState> states, Endianness endian, InspectorOptions o)
+    {
+        InspectorType type = InspectorTypes.Get(typeId);
+        InspectorOptions plain = o with
+        {
+            Culture = CultureInfo.InvariantCulture,
+            DigitGrouping = false,
+            IntegerBase = o.IntegerBase,
+            FloatFormat = o.FloatFormat == FloatFormat.HexFloat ? FloatFormat.HexFloat : FloatFormat.Shortest,
+            DateTimeStyle = DateTimeStyle.Iso8601,
+            Text = o.Text with { NoTimeZone = string.Empty, Denormal = "{0}" },
+        };
+        InspectorValue value = Decode(type, data, states, endian, plain);
+        if (value.Status != InspectorStatus.Ok)
+        {
+            return string.Empty;
+        }
+
+        switch (type.Group)
+        {
+            case InspectorGroup.Text:
+            {
+                // 「あ  U+3042  (3 バイト)」の先頭の文字。制御文字 (名前で表示するもの) は空にする。
+                int cut = value.Text.IndexOf("  U+", StringComparison.Ordinal);
+                string ch = cut > 0 ? value.Text[..cut] : string.Empty;
+                bool controlName = ch.Length >= 2 && ch.All(c => char.IsAsciiLetterUpper(c) || char.IsAsciiDigit(c));
+                return controlName ? string.Empty : ch;
+            }
+
+            case InspectorGroup.Float:
+                return value.Text switch
+                {
+                    "+0" => "0",
+                    "∞" => "inf",
+                    "-∞" => "-inf",
+                    _ when value.Text.StartsWith("NaN", StringComparison.Ordinal) => "nan",
+                    _ => value.Text,
+                };
+            case InspectorGroup.DateTime:
+                return value.Text.Trim();
+            default:
+                return value.Text;
+        }
+    }
+
+    /// <summary>
     /// 必要なバイトがそろっているか。足りなければ「—」(残りのバイト数をツールチップで示す)、読み込み中なら「…」、
     /// 読めなければ「読み込めません」。そろっていれば null。
     /// </summary>

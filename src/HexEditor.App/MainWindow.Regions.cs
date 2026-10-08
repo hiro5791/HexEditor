@@ -92,11 +92,15 @@ public sealed partial class MainWindow
     private enum Region
     {
         Tabs,
+        Bookmarks,
         Editor,
+        Inspector,
         StatusBar,
     }
 
-    /// <summary>タブ列 → エディタ → ステータスバー の順にフォーカスを移す (表示されている領域だけ。パネルはフェーズ 1 以降)。</summary>
+    /// <summary>
+    /// タブ列 → ブックマーク一覧 → エディタ → インスペクタ → ステータスバー の順にフォーカスを移す (表示されている領域だけ)。
+    /// </summary>
     private void MoveToRegion(bool forward)
     {
         var regions = new List<Region>();
@@ -105,7 +109,17 @@ public sealed partial class MainWindow
             regions.Add(Region.Tabs);
         }
 
+        if (BookmarksVisible && Vm.Documents.Count > 0)
+        {
+            regions.Add(Region.Bookmarks);
+        }
+
         regions.Add(Region.Editor);
+        if (InspectorVisible && Vm.Documents.Count > 0)
+        {
+            regions.Add(Region.Inspector);
+        }
+
         if (StatusBar.Visibility == Visibility.Visible)
         {
             regions.Add(Region.StatusBar);
@@ -123,6 +137,16 @@ public sealed partial class MainWindow
         if (Root.XamlRoot is null || FocusManager.GetFocusedElement(Root.XamlRoot) is not DependencyObject focused)
         {
             return null;
+        }
+
+        if (PanelHasFocus(inspector: true))
+        {
+            return Region.Inspector;
+        }
+
+        if (PanelHasFocus(inspector: false))
+        {
+            return Region.Bookmarks;
         }
 
         for (DependencyObject? node = focused; node is not null; node = VisualTreeHelper.GetParent(node))
@@ -171,6 +195,12 @@ public sealed partial class MainWindow
                     FocusEditor();
                 }
 
+                break;
+            case Region.Bookmarks:
+                FocusPanel(inspector: false);
+                break;
+            case Region.Inspector:
+                FocusPanel(inspector: true);
                 break;
             case Region.StatusBar:
                 StatusButtons.FirstOrDefault(b => b.Visibility == Visibility.Visible)?.Focus(FocusState.Keyboard);

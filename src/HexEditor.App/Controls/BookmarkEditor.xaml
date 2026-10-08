@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.BookmarkEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    AutomationProperties.AutomationId="BookmarkEditor">
+    <!--
+        ブックマークの編集 (INSP-24)。非モーダルのフライアウトの中身。変更は入力と同時に反映し、「保存」ボタンはない。
+        Esc でフライアウトを閉じる。
+    -->
+    <StackPanel Width="360" Spacing="8">
+        <TextBox
+            x:Name="NameBox"
+            x:Uid="Bookmark_Name"
+            AutomationProperties.AutomationId="Bookmark_Name"
+            MaxLength="256"
+            TextChanged="NameBox_TextChanged" />
+        <TextBlock
+            x:Name="NameNote"
+            AutomationProperties.AutomationId="Bookmark_NameNote"
+            AutomationProperties.LiveSetting="Polite"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            Style="{ThemeResource CaptionTextBlockStyle}"
+            TextWrapping="Wrap" />
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBox
+                x:Name="StartBox"
+                x:Uid="Bookmark_Start"
+                AutomationProperties.AutomationId="Bookmark_Start"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                TextChanged="Range_TextChanged" />
+            <TextBox
+                x:Name="LengthBox"
+                x:Uid="Bookmark_Length"
+                Grid.Column="1"
+                AutomationProperties.AutomationId="Bookmark_Length"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                TextChanged="Range_TextChanged" />
+        </Grid>
+        <TextBlock
+            x:Name="RangeInfo"
+            AutomationProperties.AutomationId="Bookmark_RangeInfo"
+            AutomationProperties.LiveSetting="Polite"
+            FlowDirection="LeftToRight"
+            Style="{ThemeResource CaptionTextBlockStyle}"
+            TextWrapping="Wrap" />
+        <TextBlock x:Uid="Bookmark_ColorLabel" />
+        <StackPanel x:Name="ColorChoices" Orientation="Horizontal" Spacing="4" />
+        <ToggleButton
+            x:Name="CustomToggle"
+            x:Uid="Bookmark_CustomColor"
+            AutomationProperties.AutomationId="Bookmark_CustomColor"
+            Click="CustomToggle_Click" />
+        <ColorPicker
+            x:Name="Picker"
+            AutomationProperties.AutomationId="Bookmark_ColorPicker"
+            ColorChanged="Picker_ColorChanged"
+            IsAlphaEnabled="False"
+            IsMoreButtonVisible="False"
+            Visibility="Collapsed" />
+        <ComboBox
+            x:Name="NumberChoice"
+            x:Uid="Bookmark_Number"
+            AutomationProperties.AutomationId="Bookmark_Number"
+            SelectionChanged="NumberChoice_SelectionChanged" />
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Uid="Bookmark_CommentLabel" VerticalAlignment="Center" />
+            <ToggleButton
+                x:Name="PreviewToggle"
+                x:Uid="Bookmark_PreviewToggle"
+                Grid.Column="1"
+                AutomationProperties.AutomationId="Bookmark_PreviewToggle"
+                Click="PreviewToggle_Click" />
+        </Grid>
+        <TextBox
+            x:Name="CommentBox"
+            Height="140"
+            AcceptsReturn="True"
+            AutomationProperties.AutomationId="Bookmark_Comment"
+            FontFamily="Cascadia Mono, Consolas"
+            MaxLength="65536"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            TextChanged="CommentBox_TextChanged"
+            TextWrapping="Wrap" />
+        <ScrollViewer
+            x:Name="PreviewHost"
+            Height="140"
+            AutomationProperties.AutomationId="Bookmark_PreviewHost"
+            Visibility="Collapsed">
+            <RichTextBlock
+                x:Name="Preview"
+                AutomationProperties.AutomationId="Bookmark_Preview"
+                IsTextSelectionEnabled="True"
+                TextWrapping="Wrap" />
+        </ScrollViewer>
+        <TextBlock
+            x:Name="CommentRemaining"
+            AutomationProperties.AutomationId="Bookmark_CommentRemaining"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            Style="{ThemeResource CaptionTextBlockStyle}" />
+    </StackPanel>
+</UserControl>

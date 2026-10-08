@@ -137,6 +137,30 @@
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
                         <MenuFlyoutSeparator />
+                        <!--  ブックマーク (INSP-23〜INSP-26)  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_Go_Bookmarks" AutomationProperties.AutomationId="Command_Bookmarks">
+                            <MenuFlyoutItem x:Uid="Menu_Go_ToggleBookmark" AutomationProperties.AutomationId="Command_ToggleBookmark" Click="ToggleBookmark_Click">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="F2" Modifiers="Control" />
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem x:Uid="Menu_Go_NextBookmark" AutomationProperties.AutomationId="Command_NextBookmark" Click="NextBookmark_Click">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="F2" />
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem x:Uid="Menu_Go_PreviousBookmark" AutomationProperties.AutomationId="Command_PreviousBookmark" Click="PreviousBookmark_Click">
+                                <MenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="F2" Modifiers="Shift" />
+                                </MenuFlyoutItem.KeyboardAccelerators>
+                            </MenuFlyoutItem>
+                            <MenuFlyoutItem x:Uid="Menu_Go_EditBookmark" AutomationProperties.AutomationId="Command_EditBookmark" Click="EditBookmark_Click" />
+                            <MenuFlyoutItem x:Uid="Menu_Go_BookmarkList" AutomationProperties.AutomationId="Command_BookmarkList" Click="BookmarkList_Click" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutSubItem x:Name="NumberedSetMenu" x:Uid="Menu_Go_NumberedSet" AutomationProperties.AutomationId="Command_NumberedSet" />
+                            <MenuFlyoutSubItem x:Name="NumberedGoMenu" x:Uid="Menu_Go_NumberedGo" AutomationProperties.AutomationId="Command_NumberedGo" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Go_Start" AutomationProperties.AutomationId="Command_GoStart" Click="GoStart_Click" />
                         <MenuFlyoutItem x:Uid="Menu_Go_End" AutomationProperties.AutomationId="Command_GoEnd" Click="GoEnd_Click" />
                     </MenuBarItem>
@@ -151,6 +175,15 @@
                             <RadioMenuFlyoutItem x:Name="EncodingAnsi" AutomationProperties.AutomationId="Command_EncodingAnsi" Click="Encoding_Click" GroupName="Encoding" Tag="ansi" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
+                        <!--  パネル (INSP-01、INSP-26)  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_View_Panels" AutomationProperties.AutomationId="Command_Panels">
+                            <ToggleMenuFlyoutItem x:Name="InspectorMenuItem" x:Uid="Menu_View_Inspector" AutomationProperties.AutomationId="Command_ToggleInspector" Click="ToggleInspector_Click">
+                                <ToggleMenuFlyoutItem.KeyboardAccelerators>
+                                    <KeyboardAccelerator Key="I" Modifiers="Control,Shift" />
+                                </ToggleMenuFlyoutItem.KeyboardAccelerators>
+                            </ToggleMenuFlyoutItem>
+                            <ToggleMenuFlyoutItem x:Name="BookmarksMenuItem" x:Uid="Menu_View_BookmarksPanel" AutomationProperties.AutomationId="Command_ToggleBookmarks" Click="ToggleBookmarks_Click" />
+                        </MenuFlyoutSubItem>
                         <ToggleMenuFlyoutItem x:Name="StatusBarToggle" x:Uid="Menu_View_StatusBar" AutomationProperties.AutomationId="Command_StatusBar" Click="StatusBarToggle_Click" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Help">
