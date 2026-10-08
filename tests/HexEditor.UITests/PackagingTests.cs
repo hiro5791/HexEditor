@@ -114,6 +114,152 @@ public sealed class PackagingTests
         Assert.Equal(1, feed.Requests);
     });
 
+    [Fact]
+    public Task Update_bar_is_shown_in_windows_opened_later_and_closing_it_closes_it_everywhere() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions());
+        await app.SendAsync("showUpdateMessage", new JsonObject { ["version"] = "0.9.1", ["kind"] = "Portable" });
+
+        // 帯はアプリ全体のもの (PKG-22 の仕様 1): 後から開いたウィンドウにも同じ帯が出る。
+        await app.KeyAsync("N", ctrl: true, shift: true);
+        await WindowManagementTests.WaitForWindowsAsync(app, 2);
+        JsonObject second = await app.SendAsync("updateState", new JsonObject { ["window"] = 1 });
+        Assert.True(second["barVisible"]!.GetValue<bool>());
+        Assert.Equal("Version 0.9.1 is available.", second["message"]!.GetValue<string>());
+
+        // 一方のウィンドウで閉じると、すべてのウィンドウで閉じる。
+        await app.SendAsync("closeUpdateBar", new JsonObject { ["window"] = 1 });
+        Assert.False((await app.SendAsync("updateState", new JsonObject { ["window"] = 0 }))["barVisible"]!.GetValue<bool>());
+        Assert.False((await app.SendAsync("updateState", new JsonObject { ["window"] = 1 }))["barVisible"]!.GetValue<bool>());
+
+        // 閉じた後に開いたウィンドウには出ない。
+        await app.KeyAsync("N", ctrl: true, shift: true);
+        await WindowManagementTests.WaitForWindowsAsync(app, 3);
+        Assert.False((await app.SendAsync("updateState", new JsonObject { ["window"] = 2 }))["barVisible"]!.GetValue<bool>());
+    });
+
+    [Fact]
+    public Task Turning_on_offline_mode_disables_the_download_button_of_the_shown_bar() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await app.SendAsync("showUpdateMessage", new JsonObject { ["version"] = "0.9.1", ["kind"] = "Installer" });
+        JsonObject state = await app.SendAsync("updateState");
+        Assert.True(Button(state, "Download")["enabled"]!.GetValue<bool>());
+
+        // 帯を出した後でオフラインモードにする (UI-58 の仕様 3): 「ダウンロード」は無効になり理由を表示する。リリースノート
+        // (ブラウザで開く) は無効にしない。
+        await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), "{\"$schemaVersion\": 1, \"network.offline\": true}");
+        await app.WaitUntilAsync(async () => !Button(await app.SendAsync("updateState"), "Download")["enabled"]!.GetValue<bool>(),
+            TimeSpan.FromSeconds(10), "the Download button to be disabled");
+        state = await app.SendAsync("updateState");
+        Assert.Equal("Offline mode is on", state["reason"]!.GetValue<string>());
+        Assert.True(Button(state, "ReleaseNotes")["enabled"]!.GetValue<bool>());
+
+        // オフラインモードを外すと、また押せる。
+        await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), "{\"$schemaVersion\": 1}");
+        await app.WaitUntilAsync(async () => Button(await app.SendAsync("updateState"), "Download")["enabled"]!.GetValue<bool>(),
+            TimeSpan.FromSeconds(10), "the Download button to be enabled");
+    });
+
+    private static JsonObject Button(JsonObject state, string kind) =>
+        state["buttons"]!.AsArray().Select(b => b!.AsObject()).Single(b => b["kind"]!.GetValue<string>() == kind);
+
+    [Fact]
+    public Task Update_settings_show_the_version_channel_and_last_check() => UiTestContext.RunAsync(async ctx =>
+    {
+        await using var feed = new FakeUpdateFeed();
+        AppSession app = await ctx.StartAsync(new AppOptions
+        {
+            Profile = await ProfileWithSettings(ctx, $"{{\"$schemaVersion\": 1, \"test.update.source\": \"{feed.RepositoryUrl}\"}}"),
+        });
+        await app.SendAsync("settingsPage", new JsonObject { ["category"] = "update" });
+        Assert.StartsWith("Current version: ", await app.UiaNameAsync("Settings_UpdateVersion"));
+        Assert.Equal("Channel: Stable", await app.UiaNameAsync("Settings_UpdateChannel"));
+        Assert.Equal("Not checked yet.", await app.UiaNameAsync("Settings_UpdateLastChecked"));
+
+        // 確認すると、最後に確認した日時が出る (PKG-22 の仕様 3)。開発中の版 (0.0.0-local) はプレビュー版ではないので、
+        // 「今すぐ最新の安定版に戻す」は出さない (PKG-21 の仕様 4)。
+        await app.SendAsync("updateCheck", new JsonObject { ["manual"] = true });
+        await app.WaitUntilAsync(async () => (await app.UiaNameAsync("Settings_UpdateLastChecked")).StartsWith("Last checked: ", StringComparison.Ordinal),
+            TimeSpan.FromSeconds(10), "the last check time");
+        Assert.Null(app.Find("Settings_UpdateReturnToStable"));
+    });
+
+    // ---- UI-54、UI-56 Explorer 連携の設定画面 ----
+
+    [Fact]
+    public Task Explorer_settings_show_each_entry_and_open_the_default_apps_page() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions());
+        await app.SendAsync("settingsPage", new JsonObject { ["category"] = "explorer" });
+
+        // 開発中の実行は登録しない (レジストリを変えない)。右クリックメニューとファイルの関連付けは別の行。
+        Assert.Equal("Not available in this build.", await app.UiaNameAsync("Settings_ExplorerStatus"));
+        Assert.Equal("Right-click menu \"Open with HexEditor\"", await app.UiaNameAsync("Settings_ExplorerContextMenuTitle"));
+        Assert.Equal("File associations", await app.UiaNameAsync("Settings_ExplorerFileAssociationsTitle"));
+
+        // 「既定のアプリを設定」は Windows の「既定のアプリ」を開く (UI-56 の仕様 3。テスト用のビルドは開かずに記録する)。
+        await app.UiaInvokeAsync("Settings_ExplorerDefaultApps");
+        Assert.Equal("ms-settings:defaultapps", await LaunchedUrlAsync(app));
+    });
+
+    // ---- UI-58 プライバシーの各スイッチ ----
+
+    [Fact]
+    public Task Privacy_list_has_a_switch_for_each_feature() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await app.SendAsync("settingsPage", new JsonObject { ["category"] = "privacy" });
+        foreach (string feature in new[] { "Updates", "Downloads", "Components", "BrowserPages" })
+        {
+            Assert.True(AppSession.IsToggled(await app.WaitForAsync("Settings_NetworkSwitch_" + feature)), feature);
+        }
+
+        // テンプレートのダウンロードを止める: 設定 network.downloads.enabled が false になり、同じ設定を使う追加コンポーネントの
+        // スイッチも切れる。
+        (await app.WaitForAsync("Settings_NetworkSwitch_Downloads")).Patterns.Toggle.Pattern.Toggle();
+        await app.WaitUntilAsync(() => Task.FromResult(File.Exists(Path.Combine(profile, "settings.json"))
+            && File.ReadAllText(Path.Combine(profile, "settings.json")).Contains("\"network.downloads.enabled\": false")),
+            TimeSpan.FromSeconds(5), "network.downloads.enabled = false in settings.json");
+        await app.WaitUntilAsync(async () => !AppSession.IsToggled(await app.WaitForAsync("Settings_NetworkSwitch_Components")),
+            TimeSpan.FromSeconds(5), "the Components switch to follow");
+    });
+
+    // ---- PKG-31 詳細の「他の版から設定を取り込む」 ----
+
+    [Fact]
+    public Task Advanced_settings_offer_importing_from_another_edition() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions());
+        await app.SendAsync("settingsPage", new JsonObject { ["category"] = "advanced" });
+
+        // この PC にある他の配布形態の設定 (インストーラ版・MSIX 版) の有無はテストの環境によるため、区画があることだけを見る。
+        Assert.Contains(await app.UiaNameAsync("Settings_ImportOtherStatus"), new[]
+        {
+            "Settings of another edition of HexEditor were found on this PC. The other edition's folder is not changed.",
+            "No settings of another edition of HexEditor were found on this PC.",
+        });
+    });
+
+    // ---- --unregister (08 の AUTO-36 の 9、10 の PKG-09) ----
+
+    [Fact]
+    public Task Unregister_option_exits_without_a_window() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        var watch = Stopwatch.StartNew();
+
+        // 開発中の実行は何も登録しないので、何もせずに 0 で終わる (GUI を起動せず、既存のインスタンスにも転送しない)。
+        int exit = await ctx.LaunchAndWaitAsync(new AppOptions { Profile = profile, NewInstance = false, ExtraArgs = ["--unregister"] }, TimeSpan.FromSeconds(30));
+        Assert.Equal(0, exit);
+        Assert.True(watch.Elapsed < TimeSpan.FromSeconds(20), $"took {watch.Elapsed.TotalSeconds:0} s");
+        string log = string.Join("\n", Directory.GetFiles(profile, "*.log", SearchOption.AllDirectories).Select(File.ReadAllText));
+        Assert.Contains("--unregister (Development)", log);
+        Assert.Contains("--unregister finished (nothing to do).", log);
+    });
+
     // ---- UI-41 翻訳の誤りを報告 ----
 
     [Theory]

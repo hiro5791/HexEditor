@@ -35,6 +35,13 @@ public static class Program
             AppEnvironment = AppEnvironment.DetectCurrent(typeof(Program).Assembly, CommandLine.TestProfile);
             TestHooks.Initialize(args, CommandLine);
 
+            // --unregister (08 の AUTO-36 の 9): 登録を消して終わる。GUI を起動せず、既存のインスタンスにも転送しない。
+            if (CommandLine.Unregister)
+            {
+                step = "unregister";
+                return UnregisterCommand.Run(Environment, CommandLine);
+            }
+
             // 3. 未処理例外の記録 (PKG-30)。
             step = "crash-reporter";
             CrashReporter.Initialize(Environment);

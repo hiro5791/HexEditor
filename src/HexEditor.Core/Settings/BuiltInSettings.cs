@@ -113,17 +113,27 @@ public static class BuiltInSettings
         // ---- 更新 (PKG-17〜PKG-22) ----
         new("update.checkAutomatically", SettingCategories.Update, SettingKind.Bool, true) { Order = 10 },
         new("update.downloadAutomatically", SettingCategories.Update, SettingKind.Bool, true) { Order = 20, Distributions = [SettingDistributions.Installer] },
-        new("update.channel", SettingCategories.Update, SettingKind.Choice, "stable") { Options = ["stable", "preview"], Order = 30 },
+        // MSIX 版 (Store 版) は安定版だけのため、チャネルを出さない (10 の PKG-21 の仕様 3)。
+        new("update.channel", SettingCategories.Update, SettingKind.Choice, "stable")
+        {
+            Options = ["stable", "preview"], Order = 30,
+            Distributions = [SettingDistributions.Installer, SettingDistributions.Portable, SettingDistributions.Development],
+        },
         new("update.skippedVersion", SettingCategories.Update, SettingKind.String, string.Empty) { Order = 40, ShowInPage = false },
 
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },
-        new("network.downloads.enabled", SettingCategories.Privacy, SettingKind.Bool, true) { Order = 20 },
-        new("network.translationReport.enabled", SettingCategories.Privacy, SettingKind.Bool, true) { Order = 30 },
+        // 機能ごとのスイッチは「ネットワークを使う機能」の一覧の各行に置く (UI-58 の画面。PackagingSections)。
+        new("network.downloads.enabled", SettingCategories.Privacy, SettingKind.Bool, true) { Order = 20, ShowInPage = false },
+        new("network.translationReport.enabled", SettingCategories.Privacy, SettingKind.Bool, true) { Order = 30, ShowInPage = false },
 
         // ---- Explorer 連携 (UI-35、UI-54、UI-56) ----
         new("shell.jumpList.enabled", SettingCategories.Explorer, SettingKind.Bool, true) { Order = 10 },
-        new("shell.openWith.extensions", SettingCategories.Explorer, SettingKind.String, string.Empty) { Order = 20 },
+        // 「プログラムから開く」の拡張子は「Explorer 連携」の区画のチェックボックスで選ぶ (UI-56 の画面。インストーラ版・ポータブル版だけ)。
+        new("shell.openWith.extensions", SettingCategories.Explorer, SettingKind.String, string.Empty)
+        {
+            Order = 20, ShowInPage = false, Distributions = [SettingDistributions.Installer, SettingDistributions.Portable],
+        },
 
         // ---- アクセシビリティ (UI-51) ----
         new("a11y.announce.verbosity", SettingCategories.Accessibility, SettingKind.Choice, "full") { Options = ["full", "brief", "offsetOnly", "none"], Order = 10 },
@@ -135,6 +145,9 @@ public static class BuiltInSettings
         // 「コマンドラインから使えるようにする」(10 の PKG-08 の仕様 6)。インストーラ版だけ。値はユーザーの PATH に反映し、他の PC に
         // 持ち出さない (PATH の状態は PC ごと)。
         new("shell.commandLine.enabled", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 30, Distributions = [SettingDistributions.Installer], Exportable = false },
+
+        // アンインストールでデータフォルダも消す (10 の PKG-09 の仕様 2)。インストーラ版だけ。アンインストール前のフックが読む。
+        new("uninstall.removeUserData", SettingCategories.Advanced, SettingKind.Bool, false) { Order = 40, Distributions = [SettingDistributions.Installer], Exportable = false },
     ];
 
     public static JsonNode? DefaultOf(string key) => All.FirstOrDefault(s => s.Key == key)?.Default?.DeepClone();

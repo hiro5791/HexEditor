@@ -2407,4 +2407,51 @@ Details were written to:
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>base address row shift</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>View: Continuation marks in multibyte characters</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>utf-8 multibyte</value></data>
+  <data name="Unregister_ManagedByWindows" xml:space="preserve"><value>This copy of HexEditor is managed by Windows. To remove it, uninstall it from Settings &gt; Apps.</value></data>
+  <data name="Unregister_NothingRegistered" xml:space="preserve"><value>This copy of HexEditor doesn't register anything on this PC.</value></data>
+  <data name="Unregister_Done" xml:space="preserve"><value>HexEditor's registrations on this PC were removed.</value></data>
+  <data name="Shell_FailureSeparator" xml:space="preserve"><value>; </value></data>
+  <data name="Shell_FailureItem" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Shell_Item_ContextMenu" xml:space="preserve"><value>Right-click menu "Open with HexEditor"</value></data>
+  <data name="Shell_Item_FileAssociations" xml:space="preserve"><value>File associations</value></data>
+  <data name="Shell_Item_AppPaths" xml:space="preserve"><value>App Paths (Run dialog)</value></data>
+  <data name="Shell_Item_CommandLine" xml:space="preserve"><value>Command line (PATH)</value></data>
+  <data name="Shell_Item_JumpList" xml:space="preserve"><value>Jump list</value></data>
+  <data name="Shell_Item_Toast" xml:space="preserve"><value>Notification registration</value></data>
+  <data name="Shell_Item_Registry" xml:space="preserve"><value>Registry</value></data>
+  <data name="Shell_Reason_Denied" xml:space="preserve"><value>access was denied (a group policy may block changes to the registry)</value></data>
+  <data name="Shell_Reason_Io" xml:space="preserve"><value>the registry couldn't be written</value></data>
+  <data name="Shell_Reason_TimeLimit" xml:space="preserve"><value>skipped because it took too long</value></data>
+  <data name="Shell_Reason_Other" xml:space="preserve"><value>an unexpected error occurred</value></data>
+  <data name="Shell_ItemRegistered" xml:space="preserve"><value>Registered.</value></data>
+  <data name="Shell_ItemNotRegistered" xml:space="preserve"><value>Not registered.</value></data>
+  <data name="Shell_ItemStale" xml:space="preserve"><value>Registered, but it points to an old location: {0}</value></data>
+  <data name="Shell_ItemOther" xml:space="preserve"><value>Registered by another copy of HexEditor: {0}</value></data>
+  <data name="Shell_OpenWithAddPlaceholder" xml:space="preserve"><value>Other extension (for example .hex)</value></data>
+  <data name="Shell_OpenWithAdd" xml:space="preserve"><value>Add</value></data>
+  <data name="Shell_OpenWithNote" xml:space="preserve"><value>Changes take effect the next time you register the file associations.</value></data>
+  <data name="Shell_DefaultApps" xml:space="preserve"><value>Set default apps</value></data>
+  <data name="SetSection_UpdateInfo" xml:space="preserve"><value>Update status</value></data>
+  <data name="SetSearch_UpdateInfo" xml:space="preserve"><value>version channel last checked store stable preview</value></data>
+  <data name="Update_CurrentVersion" xml:space="preserve"><value>Current version: {0}</value></data>
+  <data name="Update_ChannelInfo" xml:space="preserve"><value>Channel: {0}</value></data>
+  <data name="Update_LastChecked" xml:space="preserve"><value>Last checked: {0}</value></data>
+  <data name="Update_NeverChecked" xml:space="preserve"><value>Not checked yet.</value></data>
+  <data name="Update_StoreNote" xml:space="preserve"><value>Automatic updates by Microsoft Store follow the Store settings.</value></data>
+  <data name="Update_ReturnToStable" xml:space="preserve"><value>Return to the latest stable version now</value></data>
+  <data name="Update_ReturnToStableNote" xml:space="preserve"><value>You're using a preview version on the stable channel. It won't be updated until a stable version newer than this one is released.</value></data>
+  <data name="Update_ReturnToStableTitle" xml:space="preserve"><value>Return to the stable version?</value></data>
+  <data name="Update_ReturnToStableBody" xml:space="preserve"><value>HexEditor will change to the latest stable version, which is older than the version you're using. Settings of newer features may be ignored.</value></data>
+  <data name="SetSection_ImportOther" xml:space="preserve"><value>Import settings from another edition</value></data>
+  <data name="SetSearch_ImportOther" xml:space="preserve"><value>import migrate installer store portable edition</value></data>
+  <data name="Migration_Description" xml:space="preserve"><value>Settings of another edition of HexEditor were found on this PC. The other edition's folder is not changed.</value></data>
+  <data name="Migration_NoneFound" xml:space="preserve"><value>No settings of another edition of HexEditor were found on this PC.</value></data>
+  <data name="Migration_Title" xml:space="preserve"><value>Import settings</value></data>
+  <data name="Migration_Body" xml:space="preserve"><value>Choose what to import from the {0} of HexEditor.</value></data>
+  <data name="Migration_ImportButton" xml:space="preserve"><value>Import</value></data>
+  <data name="SetSection_MsixUninstall" xml:space="preserve"><value>Uninstalling</value></data>
+  <data name="SetSearch_MsixUninstall" xml:space="preserve"><value>uninstall remove export backup</value></data>
+  <data name="Settings_MsixUninstallNote" xml:space="preserve"><value>Uninstalling HexEditor also deletes its settings. Export your settings if you need them.</value></data>
+  <data name="Set_uninstall_removeUserData" xml:space="preserve"><value>Delete my data when uninstalling</value></data>
+  <data name="SetDesc_uninstall_removeUserData" xml:space="preserve"><value>Delete the settings, logs and recovery data when HexEditor is uninstalled. Data that is kept is used the next time you install HexEditor.</value></data>
 </root>

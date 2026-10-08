@@ -356,6 +356,11 @@
       "type": "boolean",
       "default": false
     },
+    "uninstall.removeUserData": {
+      "description": "Delete my data when uninstalling",
+      "type": "boolean",
+      "default": false
+    },
     "update.channel": {
       "description": "Update channel",
       "type": "string",
