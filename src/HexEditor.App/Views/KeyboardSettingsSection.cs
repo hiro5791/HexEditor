@@ -6,20 +6,28 @@ using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Markup;
 using Windows.System;
 
 namespace HexEditor.App.Views;
 
+/// <summary>キーボードの設定の表の 1 行 (UI-18 の仕様 1)。文字列は表示言語・キーボード配列で解決したもの。</summary>
+public sealed record KeyboardRow(CommandDefinition Command, string Category, string Name, string English, string Keys, string Scope,
+    string Origin, string Warnings, bool CanReset);
+
 /// <summary>
 /// 設定画面の「キーボード」(UI-18〜UI-21): プリセットの選択、全コマンドの割り当ての表 (カテゴリ・表示名・英語名・キー・有効範囲・
 /// 由来)、検索 (表示名・英語名・ID・キーの表記)、「キーで検索」、行ごとの「編集」「既定に戻す」、「すべて既定に戻す」、
-/// インポート / エクスポート。
+/// インポート / エクスポート。表は仮想化した ListView で、検索の 1 文字ごとに作り直すのは行のデータだけ。
 /// </summary>
-public sealed partial class KeyboardSettingsSection : UserControl
+public sealed partial class KeyboardSettingsSection : UserControl, IKeyCaptureHost
 {
+    // 列の幅 (比率)。見出しと行で同じにする。狭い幅や画面全体のズーム 400% でも列が重ならず、文字は折り返す (UI-08 の受け入れ基準 7)。
+    private static readonly double[] ColumnWidths = [1.2, 2.2, 2, 2, 1.2, 1];
+
     private readonly MainWindow _window;
     private readonly TextBox _search = new();
-    private readonly StackPanel _rows = new() { Spacing = 0 };
+    private readonly ListView _rows = new();
     private readonly ComboBox _preset = new() { MinWidth = 220 };
     private readonly ToggleButton _byKey = new();
     private bool _changingPreset;
@@ -53,18 +61,17 @@ public sealed partial class KeyboardSettingsSection : UserControl
         AutomationProperties.SetName(_search, Loc.Get("Keys_SearchPlaceholder"));
         _search.TextChanged += (_, _) => Fill();
 
-        // 「キーで検索」: 次に押したキーの組み合わせで絞り込む (UI-18 の仕様 2)。
+        // 「キーで検索」: 次に押したキーの組み合わせで絞り込む (UI-18 の仕様 2)。押したキーは、ウィンドウのキーの振り分け
+        // (コマンドの実行) より先に受け取る (IKeyCaptureHost)。
         _byKey.Content = Loc.Get("Keys_SearchByKey");
         AutomationProperties.SetAutomationId(_byKey, "Keyboard_SearchByKey");
         _byKey.Click += (_, _) =>
         {
             if (_byKey.IsChecked == true)
             {
-                _search.Text = string.Empty;
-                _search.Focus(FocusState.Programmatic);
+                StartSearchByKey();
             }
         };
-        _search.PreviewKeyDown += Search_PreviewKeyDown;
         tools.Children.Add(_search);
         tools.Children.Add(_byKey);
         tools.Children.Add(Action("Keys_Import", "Keyboard_Import", () => _ = window.Commands.ExecuteAsync("settings.importKeybindings")));
@@ -72,14 +79,105 @@ public sealed partial class KeyboardSettingsSection : UserControl
         tools.Children.Add(Action("Keys_ResetAll", "Keyboard_ResetAll", () => _ = ResetAllAsync()));
         root.Children.Add(new ScrollViewer { Content = tools, HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, VerticalScrollBarVisibility = ScrollBarVisibility.Disabled, HorizontalScrollMode = ScrollMode.Auto, VerticalScrollMode = ScrollMode.Disabled });
 
+        // 表: 見出し (Grid) と行 (仮想化した ListView。UI-18 の「画面」)。
+        root.Children.Add(Header());
         AutomationProperties.SetAutomationId(_rows, "Keyboard_Rows");
+        AutomationProperties.SetName(_rows, Loc.Get("SetSection_Keyboard"));
+        _rows.SelectionMode = ListViewSelectionMode.None;
+        _rows.IsItemClickEnabled = false;
+        _rows.TabNavigation = KeyboardNavigationMode.Local;
+        _rows.ItemTemplate = RowTemplate.Value;
+        _rows.MaxHeight = 480;
+        _rows.ContainerContentChanging += Rows_ContainerContentChanging;
         root.Children.Add(_rows);
         Content = root;
 
+        // 設定画面は外側でスクロールするので、表の高さを画面に合わせて決める (高さを決めないと仮想化されない)。
+        Loaded += (_, _) =>
+        {
+            FitHeight();
+            if (XamlRoot is { } xamlRoot)
+            {
+                xamlRoot.Changed -= XamlRoot_Changed;
+                xamlRoot.Changed += XamlRoot_Changed;
+            }
+        };
+
+        // 割り当ての変更を即座に反映する (UI-18 の仕様 10)。設定画面のタブを隠すと Unloaded になるので、表示のたびにつなぎ直す。
         Action changed = () => DispatcherQueue.TryEnqueue(Fill);
-        CommandService.BindingsChanged += changed;
-        Unloaded += (_, _) => CommandService.BindingsChanged -= changed;
+        Loaded += (_, _) =>
+        {
+            CommandService.BindingsChanged -= changed;
+            CommandService.BindingsChanged += changed;
+            Fill();
+            ApplyPendingFilter();
+        };
+        Unloaded += (_, _) =>
+        {
+            CommandService.BindingsChanged -= changed;
+            if (XamlRoot is { } xamlRoot)
+            {
+                xamlRoot.Changed -= XamlRoot_Changed;
+            }
+        };
         Fill();
+    }
+
+    /// <summary>今の表の行 (絞り込んだもの。テスト用の命令からも使う)。</summary>
+    public IReadOnlyList<KeyboardRow> Rows { get; private set; } = [];
+
+    /// <summary>「キーで検索」でキーを待っている (IKeyCaptureHost)。</summary>
+    public bool IsCapturingKeys => _byKey.IsChecked == true;
+
+    /// <summary>
+    /// ウィンドウが頼んだ絞り込み (コマンドパレットの「ショートカットを変更」、ショートカット一覧の「変更」) を入れ、検索欄にフォーカスを置く。
+    /// </summary>
+    public void ApplyPendingFilter()
+    {
+        if (_window.PendingKeyboardFilter is { } filter)
+        {
+            _window.PendingKeyboardFilter = null;
+            _search.Text = filter;
+            _search.Focus(FocusState.Programmatic);
+        }
+    }
+
+    /// <summary>「キーで検索」を始める (ボタンと同じ。テスト用の命令からも使う)。</summary>
+    public void StartSearchByKey()
+    {
+        _byKey.IsChecked = true;
+        _search.Text = string.Empty;
+        _search.Focus(FocusState.Programmatic);
+    }
+
+    /// <summary>
+    /// 「キーで検索」中に押したキーを受け取る (ウィンドウのキーの振り分けより先に呼ばれる)。修飾キーだけの打鍵は待ち続け、Esc で
+    /// やめる。Tab はフォーカスの移動に使う。受け取ったら true。
+    /// </summary>
+    public bool TryCaptureKey(KeyStroke stroke)
+    {
+        if (!IsCapturingKeys)
+        {
+            return false;
+        }
+
+        if (VirtualKeys.IsModifier(stroke.Key) || stroke.Key == 229)
+        {
+            return true;
+        }
+
+        if (stroke.Modifiers == KeyModifiers.None && stroke.Key == VirtualKeys.Tab)
+        {
+            return false;
+        }
+
+        _byKey.IsChecked = false;
+        if (!(stroke.Modifiers == KeyModifiers.None && stroke.Key == VirtualKeys.Escape))
+        {
+            _search.Text = stroke.ToString();
+        }
+
+        return true;
     }
 
     private static Button Action(string key, string id, Action action)
@@ -90,95 +188,195 @@ public sealed partial class KeyboardSettingsSection : UserControl
         return b;
     }
 
-    private void Search_PreviewKeyDown(object sender, KeyRoutedEventArgs e)
-    {
-        if (_byKey.IsChecked != true || VirtualKeys.IsModifier((int)e.Key))
-        {
-            return;
-        }
+    private void XamlRoot_Changed(XamlRoot sender, XamlRootChangedEventArgs args) => FitHeight();
 
-        e.Handled = true;
-        _byKey.IsChecked = false;
-        _search.Text = new KeyStroke(KeyCapture.Modifiers(), (int)e.Key).ToString();
+    private void FitHeight()
+    {
+        double height = XamlRoot?.Size.Height ?? 800;
+        _rows.MaxHeight = Math.Max(320, height - 320);
     }
 
-    /// <summary>表を作り直す。</summary>
+    /// <summary>表を作り直す (行のデータだけを作り、表示は ListView が見えている行だけ作る)。</summary>
     public void Fill()
     {
         _changingPreset = true;
         _preset.SelectedIndex = Array.IndexOf(KeyPresets.Ids, CommandService.Keys.Preset);
         _changingPreset = false;
 
-        _rows.Children.Clear();
-        _rows.Children.Add(Row(null, [Loc.Get("Keys_ColCategory"), Loc.Get("Keys_ColCommand"), Loc.Get("Keys_ColKeys"), Loc.Get("Keys_ColScope"), Loc.Get("Keys_ColOrigin")]));
         string query = _search.Text;
+        var rows = new List<KeyboardRow>();
         foreach (CommandDefinition c in CommandService.Catalog.All.Where(c => !c.Hidden))
         {
             var bindings = CommandService.Keys.BindingsFor(c.Id);
             string keys = KeyboardLayout.Format(bindings.Select(b => b.Binding.Chord));
             string stored = string.Join(" ", bindings.Select(b => b.Binding.Chord.ToString()));
+            string english = CommandService.EnglishName(c);
             var row = new ShortcutRow(c.Id, CommandService.CategoryName(c.Category), CommandService.DisplayName(c), keys,
                 string.Join(", ", bindings.Select(b => CommandService.ScopeName(b.Binding.Scope)).Distinct()), KeyScope.Global);
-            if (!ShortcutList.Matches(row, query, CommandService.EnglishName(c), stored))
+            if (!ShortcutList.Matches(row, query, english, stored))
             {
                 continue;
             }
 
             string origin = string.Join(", ", bindings.Select(b => Loc.Get("KeyOrigin_" + b.Origin)).Distinct());
-            string english = CommandService.EnglishName(c);
-            string name = english == row.Command ? row.Command : $"{row.Command} ({english})";
             var warnings = bindings.SelectMany(b => KeyAssign.StateWarnings(b.Binding.Chord)).Distinct().ToList();
-            _rows.Children.Add(Row(c, [row.Category, name, warnings.Count > 0 ? $"{keys} ⚠ {string.Join(" ", warnings)}" : keys, row.Scope, origin]));
+            bool canReset = bindings.Any(b => b.Origin == BindingOrigin.User) || CommandService.Keys.UserEntries.Any(e => e.Command == c.Id);
+            rows.Add(new KeyboardRow(c, row.Category, row.Command, english == row.Command ? string.Empty : english, keys, row.Scope, origin,
+                string.Join(" ", warnings), canReset));
         }
+
+        Rows = rows;
+        _rows.ItemsSource = rows;
     }
 
-    private Grid Row(CommandDefinition? command, string[] cells)
+    private static Grid Columns()
     {
         var grid = new Grid { ColumnSpacing = 8, Padding = new Thickness(4, 6, 4, 6) };
-        // 幅はすべて比率で決める (狭い幅や画面全体のズーム 400% でも列が重ならず、文字は折り返す。UI-08 の受け入れ基準 7)。
-        double[] widths = [1.2, 3, 2, 1.2, 1];
-        foreach (double w in widths)
+        foreach (double w in ColumnWidths)
         {
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(w, GridUnitType.Star) });
         }
 
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        for (int i = 0; i < cells.Length; i++)
-        {
-            var t = new TextBlock { Text = cells[i], TextWrapping = TextWrapping.Wrap, VerticalAlignment = VerticalAlignment.Center };
-            if (command is null)
-            {
-                t.Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"];
-            }
-            else if (i == 2)
-            {
-                t.FlowDirection = FlowDirection.LeftToRight;
-                AutomationProperties.SetAutomationId(t, "KeyboardKeys_" + command.Id);
-            }
+        return grid;
+    }
 
+    /// <summary>見出しの行。ボタンの列は、行のボタンと同じ幅を見えないボタンで取る (列をそろえる)。</summary>
+    private static UIElement Header()
+    {
+        Grid grid = Columns();
+        // 行の ListViewItem の左右の余白に合わせる。
+        grid.Padding = new Thickness(16, 6, 12, 6);
+        string[] titles = [Loc.Get("Keys_ColCategory"), Loc.Get("Keys_ColCommand"), Loc.Get("Keys_ColEnglish"), Loc.Get("Keys_ColKeys"), Loc.Get("Keys_ColScope"), Loc.Get("Keys_ColOrigin")];
+        for (int i = 0; i < titles.Length; i++)
+        {
+            var t = new TextBlock { Text = titles[i], TextWrapping = TextWrapping.Wrap, Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"] };
             Grid.SetColumn(t, i);
             grid.Children.Add(t);
         }
 
-        if (command is not null)
+        var spacer = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4, Opacity = 0, IsHitTestVisible = false };
+        AutomationProperties.SetAccessibilityView(spacer, Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+        spacer.Children.Add(new Button { Content = Loc.Get("Keys_Edit"), IsTabStop = false });
+        spacer.Children.Add(new Button { Content = Loc.Get("Keys_ResetRow"), IsTabStop = false });
+        Grid.SetColumn(spacer, titles.Length);
+        grid.Children.Add(spacer);
+        AutomationProperties.SetAutomationId(grid, "Keyboard_Header");
+        return grid;
+    }
+
+    /// <summary>行の見た目 (仮想化のためのテンプレート)。文字列はコードで入れる。</summary>
+    private static readonly Lazy<DataTemplate> RowTemplate = new(() => (DataTemplate)XamlReader.Load("""
+        <DataTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+          <Grid ColumnSpacing="8" Padding="0,6">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="1.2*" />
+              <ColumnDefinition Width="2.2*" />
+              <ColumnDefinition Width="2*" />
+              <ColumnDefinition Width="2*" />
+              <ColumnDefinition Width="1.2*" />
+              <ColumnDefinition Width="1*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="CategoryText" VerticalAlignment="Center" TextWrapping="Wrap" />
+            <TextBlock x:Name="NameText" Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap" />
+            <TextBlock x:Name="EnglishText" Grid.Column="2" VerticalAlignment="Center" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            <StackPanel Grid.Column="3" VerticalAlignment="Center">
+              <TextBlock x:Name="KeysText" FlowDirection="LeftToRight" TextWrapping="Wrap" />
+              <TextBlock x:Name="WarningText" TextWrapping="Wrap" Foreground="{ThemeResource SystemFillColorCautionBrush}" Style="{ThemeResource CaptionTextBlockStyle}" />
+            </StackPanel>
+            <TextBlock x:Name="ScopeText" Grid.Column="4" VerticalAlignment="Center" TextWrapping="Wrap" />
+            <TextBlock x:Name="OriginText" Grid.Column="5" VerticalAlignment="Center" TextWrapping="Wrap" />
+            <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+              <Button x:Name="EditButton" />
+              <Button x:Name="ResetButton" />
+            </StackPanel>
+          </Grid>
+        </DataTemplate>
+        """));
+
+    private void Rows_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+    {
+        if (args.Item is not KeyboardRow row || args.ItemContainer.ContentTemplateRoot is not Grid root)
         {
-            AutomationProperties.SetAutomationId(grid, "KeyboardRow_" + command.Id);
-            var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4 };
-            var edit = new Button { Content = Loc.Get("Keys_Edit") };
-            AutomationProperties.SetAutomationId(edit, "KeyboardEdit_" + command.Id);
-            AutomationProperties.SetName(edit, Loc.Format("Keys_EditFor", CommandService.DisplayName(command)));
-            edit.Click += async (_, _) => await EditAsync(command);
-            var reset = new Button { Content = Loc.Get("Keys_ResetRow"), IsEnabled = CommandService.Keys.BindingsFor(command.Id).Any(b => b.Origin == BindingOrigin.User) || CommandService.Keys.UserEntries.Any(e => e.Command == command.Id) };
-            AutomationProperties.SetAutomationId(reset, "KeyboardReset_" + command.Id);
-            AutomationProperties.SetName(reset, Loc.Format("Keys_ResetRowFor", CommandService.DisplayName(command)));
-            reset.Click += (_, _) => CommandService.Keys.ResetCommand(command.Id);
-            buttons.Children.Add(edit);
-            buttons.Children.Add(reset);
-            Grid.SetColumn(buttons, cells.Length);
-            grid.Children.Add(buttons);
+            return;
         }
 
-        return grid;
+        string id = row.Command.Id;
+        args.ItemContainer.HorizontalContentAlignment = HorizontalAlignment.Stretch;
+        AutomationProperties.SetAutomationId(args.ItemContainer, "KeyboardRow_" + id);
+        AutomationProperties.SetName(args.ItemContainer, $"{row.Category}: {row.Name} {row.Keys}");
+        Set("CategoryText", row.Category);
+        Set("NameText", row.Name);
+        Set("EnglishText", row.English);
+        Set("KeysText", row.Keys, "KeyboardKeys_" + id);
+        Set("WarningText", row.Warnings, "KeyboardWarning_" + id);
+        Set("ScopeText", row.Scope);
+        Set("OriginText", row.Origin);
+
+        if (root.FindName("EditButton") is Button edit)
+        {
+            edit.Content = Loc.Get("Keys_Edit");
+            edit.Tag = row;
+            AutomationProperties.SetAutomationId(edit, "KeyboardEdit_" + id);
+            AutomationProperties.SetName(edit, Loc.Format("Keys_EditFor", row.Name));
+            edit.Click -= Edit_Click;
+            edit.Click += Edit_Click;
+        }
+
+        if (root.FindName("ResetButton") is Button reset)
+        {
+            reset.Content = Loc.Get("Keys_ResetRow");
+            reset.Tag = row;
+            reset.IsEnabled = row.CanReset;
+            AutomationProperties.SetAutomationId(reset, "KeyboardReset_" + id);
+            AutomationProperties.SetName(reset, Loc.Format("Keys_ResetRowFor", row.Name));
+            reset.Click -= Reset_Click;
+            reset.Click += Reset_Click;
+        }
+
+        void Set(string name, string text, string? automationId = null)
+        {
+            if (root.FindName(name) is TextBlock t)
+            {
+                t.Text = text;
+                t.Visibility = text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+                if (automationId is not null)
+                {
+                    AutomationProperties.SetAutomationId(t, automationId);
+                }
+            }
+        }
+    }
+
+    private async void Edit_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { Tag: KeyboardRow row })
+        {
+            await EditAsync(row.Command);
+        }
+    }
+
+    private void Reset_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { Tag: KeyboardRow row })
+        {
+            ResetCommand(row.Command.Id);
+        }
+    }
+
+    /// <summary>
+    /// 行の「既定に戻す」(UI-18 の仕様 8)。既定のキーが他のコマンドに割り当て済みなら、そのキーは戻さずに知らせる (テスト用の命令からも使う)。
+    /// </summary>
+    public IReadOnlyList<KeyConflict> ResetCommand(string commandId)
+    {
+        IReadOnlyList<KeyConflict> skipped = CommandService.Keys.ResetCommand(commandId);
+        foreach (KeyConflict c in skipped)
+        {
+            _window.ShowSettingsNotice(Loc.Format("Keys_ResetSkipped", KeyboardLayout.Format(c.First.Chord), CommandService.DisplayName(c.Second.Command)));
+        }
+
+        return skipped;
     }
 
     /// <summary>「すべて既定に戻す」(確認ダイアログあり。UI-18 の仕様 8)。</summary>
@@ -228,7 +426,7 @@ public sealed partial class KeyboardSettingsSection : UserControl
         CommandService.Keys.SwitchPreset(preset, preferUser);
         if (preview.Error is { } error)
         {
-            _window.ShowSettingsNotice(Loc.Format("Keys_PresetError", error));
+            _window.ShowSettingsNotice(Loc.Format("Keys_PresetError", CommandService.PresetErrorText(error)));
         }
     }
 

@@ -2407,4 +2407,37 @@ Details were written to:
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>base address row shift</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>View: Continuation marks in multibyte characters</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>utf-8 multibyte</value></data>
+  <data name="Settings_Unreadable" xml:space="preserve"><value>The settings file could not be read ({0}). HexEditor started with the default settings, and changes to the settings are not saved in this session.</value></data>
+  <data name="Settings_ExternalErrorLine" xml:space="preserve"><value>The edited settings file has an error (line {0}). The previous settings remain in use.</value></data>
+  <data name="Settings_SaveFailed" xml:space="preserve"><value>Could not save the settings: {0}</value></data>
+  <data name="Keys_FileTooNew" xml:space="preserve"><value>The keyboard shortcuts file was written by a newer version of HexEditor, so changes to shortcuts are not saved.</value></data>
+  <data name="Keys_InvalidJson" xml:space="preserve"><value>The file is not valid JSON.</value></data>
+  <data name="KeysError_MissingCommand" xml:space="preserve"><value>"command" is missing.</value></data>
+  <data name="KeysError_InvalidKey" xml:space="preserve"><value>Invalid "key": {0}</value></data>
+  <data name="KeysError_InvalidScope" xml:space="preserve"><value>Invalid "when": {0}</value></data>
+  <data name="KeyPresetError_NotFound" xml:space="preserve"><value>The preset {0} does not exist.</value></data>
+  <data name="KeyPresetError_Invalid" xml:space="preserve"><value>The preset {0} has an error (line {1}).</value></data>
+  <data name="ImportError_InvalidJson" xml:space="preserve"><value>The file is not valid JSON (line {0}).</value></data>
+  <data name="ImportError_NotSettingsFile" xml:space="preserve"><value>This is not a HexEditor settings file.</value></data>
+  <data name="ImportError_MissingVersion" xml:space="preserve"><value>$schemaVersion is missing.</value></data>
+  <data name="Keys_ResetSkipped" xml:space="preserve"><value>{0} was not restored because it is assigned to "{1}".</value></data>
+  <data name="Keys_ColEnglish" xml:space="preserve"><value>English name</value></data>
+  <data name="Keys_ImportMode" xml:space="preserve"><value>How to import</value></data>
+  <data name="Keys_ImportItem" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Keys_ImportChangedItem" xml:space="preserve"><value>{0}: {1} → {2}</value></data>
+  <data name="Keys_ImportAddedHeader" xml:space="preserve"><value>Added</value></data>
+  <data name="Keys_ImportChangedHeader" xml:space="preserve"><value>Changed</value></data>
+  <data name="Keys_ImportRemovedHeader" xml:space="preserve"><value>Removed</value></data>
+  <data name="Keys_ImportNoChanges" xml:space="preserve"><value>No shortcuts change.</value></data>
+  <data name="Keys_ImportErrorsHeader" xml:space="preserve"><value>Lines that could not be read (skipped)</value></data>
+  <data name="Keys_ImportErrorLine" xml:space="preserve"><value>Line {0}: {1}</value></data>
+  <data name="FileType_Html" xml:space="preserve"><value>HTML file</value></data>
+  <data name="TitleBar_Palette" xml:space="preserve"><value>Search commands ({0})</value></data>
+  <data name="TitleBar_PaletteNoKey" xml:space="preserve"><value>Search commands</value></data>
+  <data name="Palette_ChangeShortcut" xml:space="preserve"><value>Change shortcut</value></data>
+  <data name="Cmd_settings_changeLanguage" xml:space="preserve"><value>Change display language</value></data>
+  <data name="CmdAlias_settings_changeLanguage" xml:space="preserve"><value>language locale ui translation</value></data>
+  <data name="CmdArg_view_colorScheme" xml:space="preserve"><value>Choose a color scheme.</value></data>
+  <data name="CmdArg_view_encoding_select" xml:space="preserve"><value>Choose an encoding (type to filter, for example utf-16).</value></data>
+  <data name="CmdArg_view_bytesPerRowCustom" xml:space="preserve"><value>Enter the number of bytes per row (for example 24), then press Enter.</value></data>
 </root>

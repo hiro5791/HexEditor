@@ -50,7 +50,9 @@ public sealed partial class CommandRegistryTests
         var errors = new List<string>();
         foreach (CommandDefinition c in BuiltInCommands.All)
         {
-            foreach (string key in new[] { c.NameKey, c.AliasKey, c.CategoryKey })
+            // 引数を尋ねるコマンドは、入力欄の案内 (CmdArg_…) も持つ (UI-17 の仕様 7)。
+            string[] keys = c.Argument is null ? [c.NameKey, c.AliasKey, c.CategoryKey] : [c.NameKey, c.AliasKey, c.CategoryKey, "CmdArg_" + CommandDefinition.KeyPart(c.Id)];
+            foreach (string key in keys)
             {
                 if (!en.TryGetValue(key, out string? value) || string.IsNullOrWhiteSpace(value))
                 {

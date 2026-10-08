@@ -18,7 +18,16 @@ public enum SettingsLoadStatus
 
     /// <summary>古い形式を移行した。移行前のファイルは .bak-v&lt;版&gt; で残した。</summary>
     Migrated,
+
+    /// <summary>
+    /// ファイルはあるが読めなかった (ほかのプロセスが使っている、アクセス権がないなど)。既定値で動き、ファイルを上書きしないよう
+    /// 書き込みを止める (<see cref="SettingsStore.ReadOnly"/>)。理由は <see cref="SettingsStore.LoadError"/>。
+    /// </summary>
+    Unreadable,
 }
+
+/// <summary>外部で編集された設定ファイルが読めなかった (UI-23 の「エラー」)。<see cref="Line"/> は 1 始まり (0 は不明)。</summary>
+public sealed record SettingsEditError(int Line, string Detail);
 
 /// <summary>設定ファイルの書き込みの時点 (テスト用の強制終了。TC-UI-23-05)。</summary>
 public enum SettingsWritePoint
@@ -68,14 +77,28 @@ public sealed class SettingsStore : IDisposable
     /// <summary>設定が変わった (アプリ内の変更、または外部の編集の読み直し)。引数は変わったキー。どのスレッドからも呼ばれる。</summary>
     public event Action<IReadOnlyCollection<string>>? Changed;
 
-    /// <summary>外部で編集されたファイルが JSON として読めなかった (直前の値を使い続ける)。引数は理由 (行番号を含む)。</summary>
-    public event Action<string>? ExternalEditFailed;
+    /// <summary>外部で編集されたファイルが JSON として読めなかった (直前の値を使い続ける)。</summary>
+    public event Action<SettingsEditError>? ExternalEditFailed;
+
+    /// <summary>
+    /// 書き込みに失敗した (UI-22 の「エラー」。値はセッション中だけ有効)。引数は理由。失敗が続いても、成功するまでは 1 回だけ知らせる。
+    /// 書き込みのスレッド (タイマー) から呼ばれることがある。
+    /// </summary>
+    public event Action<string>? WriteFailed;
+
+    /// <summary>JSON として読めなかったファイルを残した場所 (<see cref="SettingsLoadStatus.Broken"/> のとき。残せなければ null)。</summary>
+    public string? BrokenFilePath { get; private set; }
+
+    /// <summary>ファイルが読めなかった理由 (<see cref="SettingsLoadStatus.Unreadable"/> のとき)。</summary>
+    public string? LoadError { get; private set; }
 
     /// <summary>ファイルを読む。読めなければ既定値で動き、壊れたファイルを残す。</summary>
     public SettingsLoadStatus Load()
     {
         lock (_lock)
         {
+            BrokenFilePath = null;
+            LoadError = null;
             if (!File.Exists(PathName))
             {
                 _values = [];
@@ -92,17 +115,29 @@ public sealed class SettingsStore : IDisposable
                 // 壊れたファイルは別名で残し、既定値で起動する。
                 try
                 {
-                    File.Move(PathName, Path.Combine(Folder, $"{FileName}.broken-{DateTime.Now:yyyyMMdd-HHmmss}"));
+                    string broken = Path.Combine(Folder, $"{FileName}.broken-{DateTime.Now:yyyyMMdd-HHmmss}");
+                    File.Move(PathName, broken);
+                    BrokenFilePath = broken;
                 }
                 catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
                 {
+                    // 名前を変えられなければ、上書きしないよう書き込みを止める。
+                    ReadOnly = true;
                 }
 
                 _values = [];
                 return SettingsLoadStatus.Broken;
             }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                // 読めないファイルを既定値で上書きしない。
+                _values = [];
+                ReadOnly = true;
+                LoadError = ex.Message;
+                return SettingsLoadStatus.Unreadable;
+            }
 
-            int version = parsed["$schemaVersion"]?.GetValue<int>() ?? SchemaVersion;
+            int version = Commands.KeyBindingsDocument.ReadVersion(parsed["$schemaVersion"], SchemaVersion);
             parsed.Remove("$schema");
             parsed.Remove("$schemaVersion");
             _values = parsed;
@@ -114,7 +149,18 @@ public sealed class SettingsStore : IDisposable
 
             if (version < SchemaVersion)
             {
-                File.Copy(PathName, Path.Combine(Folder, $"{FileName}.bak-v{version}"), overwrite: true);
+                try
+                {
+                    File.Copy(PathName, Path.Combine(Folder, $"{FileName}.bak-v{version}"), overwrite: true);
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    // 移行前のファイルを残せなければ、移行した内容で上書きしない。
+                    ReadOnly = true;
+                    LoadError = ex.Message;
+                    return SettingsLoadStatus.Unreadable;
+                }
+
                 WriteNow();
                 return SettingsLoadStatus.Migrated;
             }
@@ -201,6 +247,7 @@ public sealed class SettingsStore : IDisposable
             if (changed.Count > 0)
             {
                 _dirty = true;
+                _pendingKeys.UnionWith(changed);
                 _writeTimer.Change(WriteDelay, Timeout.InfiniteTimeSpan);
             }
         }
@@ -230,7 +277,10 @@ public sealed class SettingsStore : IDisposable
     public void SetInt(string key, int value, int defaultValue) =>
         Set(key, value == defaultValue ? null : JsonValue.Create(value));
 
-    /// <summary>まだ書いていない変更をすぐに書く (終了時など)。</summary>
+    /// <summary>
+    /// まだ書いていない変更をすぐに書く (終了時など)。書けなければ <see cref="WriteFailed"/> で知らせ、例外は投げない
+    /// (書き込みのタイマーのスレッドで例外を投げるとプロセスが終わるため)。
+    /// </summary>
     public void Flush()
     {
         lock (_lock)
@@ -242,14 +292,23 @@ public sealed class SettingsStore : IDisposable
         }
     }
 
-    /// <summary>今の内容ですぐに書く (ファイルがなくても書く。「設定ファイルを開く」の前など)。</summary>
-    public void SaveNow()
+    /// <summary>今の内容ですぐに書く (ファイルがなくても書く。「設定ファイルを開く」の前など)。書けたら true。</summary>
+    public bool SaveNow()
     {
         lock (_lock)
         {
-            if (!_disposed)
+            return !_disposed && WriteNow();
+        }
+    }
+
+    /// <summary>まだ書いていない変更がある (書き込み待ち、または書き込みに失敗した)。</summary>
+    public bool HasPendingChanges
+    {
+        get
+        {
+            lock (_lock)
             {
-                WriteNow();
+                return _dirty;
             }
         }
     }
@@ -269,6 +328,10 @@ public sealed class SettingsStore : IDisposable
     }
 
     private bool _dirty;
+    private bool _writeFailing;
+
+    /// <summary>アプリ内で変えて、まだファイルに書いていないキー (外部の編集を読み直すときに失わないため)。</summary>
+    private readonly HashSet<string> _pendingKeys = new(StringComparer.Ordinal);
 
     private void Set(string key, JsonNode? value)
     {
@@ -290,20 +353,46 @@ public sealed class SettingsStore : IDisposable
             }
 
             _dirty = true;
+            _pendingKeys.Add(key);
             _writeTimer.Change(WriteDelay, Timeout.InfiniteTimeSpan);
         }
 
         Changed?.Invoke([key]);
     }
 
-    private void WriteNow()
+    /// <summary>書く (ロックの中で呼ぶ)。書けなければ変更を残したまま (次の変更でもう一度書く) <see cref="WriteFailed"/> で知らせる。</summary>
+    private bool WriteNow()
     {
-        _dirty = false;
         if (ReadOnly)
         {
-            return;
+            _dirty = false;
+            return false;
         }
 
+        _dirty = false;
+        try
+        {
+            WriteFile();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            _dirty = true;
+            if (!_writeFailing)
+            {
+                _writeFailing = true;
+                WriteFailed?.Invoke(ex.Message);
+            }
+
+            return false;
+        }
+
+        _writeFailing = false;
+        _pendingKeys.Clear();
+        return true;
+    }
+
+    private void WriteFile()
+    {
         var root = new JsonObject();
         if (SchemaUrl is not null)
         {
@@ -357,10 +446,10 @@ public sealed class SettingsStore : IDisposable
             }
             catch (JsonException ex)
             {
-                ExternalEditFailed?.Invoke(ex.LineNumber is { } line ? $"line {line + 1}: {ex.Message}" : ex.Message);
+                ExternalEditFailed?.Invoke(new SettingsEditError((int)(ex.LineNumber ?? -1) + 1, ex.Message));
                 return;
             }
-            catch (IOException)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
                 return;
             }
@@ -372,6 +461,19 @@ public sealed class SettingsStore : IDisposable
         IReadOnlyCollection<string> changed;
         lock (_lock)
         {
+            // アプリ内で変えてまだ書いていない値は、読み直した内容より優先する (変更を失わない。次の書き込みでファイルに入る)。
+            foreach (string key in _pendingKeys)
+            {
+                if (_values[key] is { } local)
+                {
+                    parsed[key] = local.DeepClone();
+                }
+                else
+                {
+                    parsed.Remove(key);
+                }
+            }
+
             changed = _values.Select(p => p.Key).Union(parsed.Select(p => p.Key))
                 .Where(k => _values[k]?.ToJsonString() != parsed[k]?.ToJsonString())
                 .ToList();
@@ -386,7 +488,7 @@ public sealed class SettingsStore : IDisposable
 
     private static JsonObject Parse(string text) =>
         JsonNode.Parse(text, documentOptions: new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true })
-            as JsonObject ?? throw new JsonException("settings.json の先頭がオブジェクトではありません。");
+            as JsonObject ?? throw new JsonException("The root of settings.json is not an object.", null, 0, 0);
 
     public void Dispose()
     {

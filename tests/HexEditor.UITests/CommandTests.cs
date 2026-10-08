@@ -396,4 +396,255 @@ public sealed class CommandTests
         Assert.Contains("File", headings);
         Assert.Contains("Help", headings);
     });
+
+    // ---- UI-02 タイトルバーの入口、UI-17 / UI-18 の呼び出し ----
+
+    [Fact]
+    public Task Title_bar_entry_shows_the_shortcut_and_opens_command_mode() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync();
+        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+        await app.ResizeAsync((int)(1280 * scale), (int)(800 * scale));
+        JsonObject entry = await app.SendAsync("titleBarPalette");
+        Assert.Equal("Search commands (Ctrl+Shift+P)", entry["text"]!.GetValue<string>());
+        Assert.False(entry["compact"]!.GetValue<bool>());
+        double width = entry["width"]!.GetValue<double>();
+        Assert.InRange(width, 240, 400);
+
+        // ウィンドウ幅が 900 px 未満では虫眼鏡のアイコンだけ。
+        await app.ResizeAsync((int)(800 * scale), (int)(600 * scale));
+        await app.WaitUntilAsync(async () => (await app.SendAsync("titleBarPalette"))["compact"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the compact entry");
+        Assert.True((await app.SendAsync("titleBarPalette"))["width"]!.GetValue<double>() < 100);
+
+        // 押すとコマンドモードで開く。
+        entry = await app.SendAsync("titleBarPalette", new JsonObject { ["invoke"] = true });
+        Assert.True(entry["paletteOpen"]!.GetValue<bool>());
+        Assert.Equal(">", entry["paletteText"]!.GetValue<string>());
+    });
+
+    [Fact]
+    public Task Palette_entry_menu_changes_the_shortcut_of_the_command() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync();
+        await app.KeyAsync("P", ctrl: true, shift: true);
+        await app.SendAsync("palette", new JsonObject { ["text"] = ">Go to offset" });
+        JsonObject r = await app.SendAsync("paletteChangeShortcut", new JsonObject { ["id"] = "go.goTo" });
+        Assert.False(r["paletteOpen"]!.GetValue<bool>());
+        await app.IdleAsync();
+        JsonObject page = await app.SendAsync("settingsPage");
+        Assert.Equal(("settings", "keyboard"), (page["active"]!.GetValue<string>(), page["category"]!.GetValue<string>()));
+        JsonObject section = await app.SendAsync("keyboardSection");
+        Assert.Equal("go.goTo", section["search"]!.GetValue<string>());
+        Assert.Equal(["go.goTo"], section["rows"]!.AsArray().Select(x => x!["command"]!.GetValue<string>()));
+    });
+
+    // ---- UI-18 ショートカットの変更 (表、キーで検索、既定に戻す) ----
+
+    [Fact]
+    public Task Search_by_key_filters_instead_of_running_the_command() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        JsonObject r = await app.SendAsync("keyboardSection", new JsonObject { ["searchByKey"] = "G", ["ctrl"] = true });
+        Assert.True(r["capturing"]!.GetValue<bool>());
+        Assert.True(r["handled"]!.GetValue<bool>());
+        Assert.Null(r["command"]);
+        Assert.False(r["capturingAfter"]!.GetValue<bool>());
+        Assert.Equal("Ctrl+G", r["search"]!.GetValue<string>());
+        Assert.False(r["goToBarVisible"]!.GetValue<bool>());
+        Assert.Contains(r["rows"]!.AsArray(), x => x!["command"]!.GetValue<string>() == "go.goTo");
+        Assert.DoesNotContain(r["rows"]!.AsArray(), x => x!["command"]!.GetValue<string>() == "search.find");
+
+        // 修飾キーだけの打鍵は待ち続ける。
+        r = await app.SendAsync("keyboardSection", new JsonObject { ["searchByKey"] = "Control" });
+        Assert.True(r["capturingAfter"]!.GetValue<bool>());
+    });
+
+    [Fact]
+    public Task Keyboard_table_is_a_virtualized_list_with_an_english_name_column() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = "ja" });
+        JsonObject r = await app.SendAsync("keyboardSection");
+        JsonObject open = r["rows"]!.AsArray().Select(x => x!.AsObject()).Single(x => x["command"]!.GetValue<string>() == "file.open");
+        Assert.Equal(("開く", "Open"), (open["name"]!.GetValue<string>(), open["english"]!.GetValue<string>()));
+        int rows = r["rows"]!.AsArray().Count;
+        int realized = r["realized"]!.GetValue<int>();
+        Assert.InRange(realized, 1, rows - 1);
+
+        // 絞り込みは行のデータだけを作り直す。
+        r = await app.SendAsync("keyboardSection", new JsonObject { ["search"] = "ctrl+g" });
+        Assert.Contains(r["rows"]!.AsArray(), x => x!["command"]!.GetValue<string>() == "go.goTo");
+        Assert.True(r["rows"]!.AsArray().Count < rows);
+    });
+
+    [Fact]
+    public Task Resetting_a_row_does_not_take_back_a_key_moved_to_another_command() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync();
+        Assert.True((await app.SendAsync("assignKey", new JsonObject { ["command"] = "go.goTo", ["key"] = "Ctrl+F", ["replace"] = true }))["added"]!.GetValue<bool>());
+        JsonObject r = await app.SendAsync("keyboardSection", new JsonObject { ["reset"] = "search.find" });
+        JsonObject skipped = Assert.Single(r["skipped"]!.AsArray())!.AsObject();
+        Assert.Equal(("Ctrl+F", "go.goTo"), (skipped["key"]!.GetValue<string>(), skipped["other"]!.GetValue<string>()));
+        Assert.Empty(await KeysAsync(app, "search.find"));
+        Assert.Equal(["Ctrl+G (global)", "Ctrl+F (global)"], await KeysAsync(app, "go.goTo"));
+        await app.WaitForNotificationAsync(m => m.Contains("was not restored", StringComparison.Ordinal), "the notice");
+    });
+
+    [Fact]
+    public Task Hex_view_menu_shows_the_current_shortcuts() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        Assert.True((await app.SendAsync("assignKey", new JsonObject { ["command"] = "edit.copy", ["key"] = "Ctrl+Shift+F7", ["scope"] = "editor" }))["added"]!.GetValue<bool>());
+        JsonObject render = await app.RenderAsync();
+        await ViewOps.RightClickAsync(app, ViewOps.CellPoint(render, 0));
+        await app.IdleAsync();
+        JsonObject menu = await app.SendAsync("hexViewMenuShortcuts");
+        await app.SendAsync("hideContextMenu");
+        Assert.Equal((await CommandAsync(app, "edit.copy"))["shortcut"]!.GetValue<string>(), menu["HexViewMenu_Copy"]!.GetValue<string>());
+        Assert.Contains("F7", menu["HexViewMenu_Copy"]!.GetValue<string>());
+        Assert.Equal((await CommandAsync(app, "edit.cut"))["shortcut"]!.GetValue<string>(), menu["HexViewMenu_Cut"]!.GetValue<string>());
+    });
+
+    // ---- UI-21 インポートの差分の一覧 ----
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-UI-21-02")]
+    public Task Import_preview_lists_added_changed_and_removed_items_and_bad_lines() => UiTestContext.RunAsync(async ctx =>
+    {
+        string file = Path.Combine(ctx.Root, "keys.json");
+        await File.WriteAllTextAsync(file, """
+            {
+              "$schemaVersion": 1,
+              "preset": "default",
+              "bindings": [
+                { "command": "go.goTo", "key": "Ctrl+J" },
+                { "command": "go.start", "key": "Ctrl+Shift+F7" },
+                { "command": "-file.reload", "key": "Ctrl+R" },
+                { "command": "go.end", "key": "Hyper+Q" }
+              ]
+            }
+            """);
+        AppSession app = await ctx.StartAsync();
+        foreach (string mode in new[] { "merge", "replace" })
+        {
+            JsonObject preview = await app.SendAsync("importKeys", new JsonObject { ["path"] = file, ["mode"] = mode });
+            Assert.Equal(["Start of file: Ctrl+Shift+F7"], preview["added"]!.AsArray().Select(x => x!.GetValue<string>()));
+            Assert.Equal(["Go to offset: Ctrl+G → Ctrl+G, Ctrl+J"], preview["changed"]!.AsArray().Select(x => x!.GetValue<string>()));
+            Assert.Equal(["Reload: Ctrl+R"], preview["removed"]!.AsArray().Select(x => x!.GetValue<string>()));
+            Assert.Equal(["Line 8: Invalid \"key\": Hyper+Q"], preview["errors"]!.AsArray().Select(x => x!.GetValue<string>()));
+        }
+    });
+
+    // ---- UI-43 の呼び出し、UI-39 の画面 ----
+
+    [Fact]
+    public Task Change_language_command_opens_the_language_setting() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync();
+        Assert.True((await app.SendAsync("execute", new JsonObject { ["id"] = "settings.changeLanguage", ["fromPalette"] = true }))["executed"]!.GetValue<bool>());
+        await app.IdleAsync();
+        JsonObject page = await app.SendAsync("settingsPage");
+        Assert.Equal(("settings", "language"), (page["active"]!.GetValue<string>(), page["category"]!.GetValue<string>()));
+    });
+
+    [Fact]
+    public Task Shortcut_list_is_one_tab_for_the_whole_app() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync();
+        await app.SendAsync("execute", new JsonObject { ["id"] = "help.shortcuts" });
+        await app.KeyAsync("N", ctrl: true, shift: true);
+        await WindowManagementTests.WaitForWindowsAsync(app, 2);
+        await app.SendAsync("execute", new JsonObject { ["window"] = 1, ["id"] = "help.shortcuts" });
+        Assert.Empty((await TabTests.TabsAsync(app, 1))["toolTabs"]!.AsArray());
+        Assert.Equal(["shortcuts"], (await TabTests.TabsAsync(app, 0))["toolTabs"]!.AsArray().Select(p => p!.GetValue<string>()));
+    });
+
+    // ---- UI-17 の仕様 7 引数を尋ねるコマンド ----
+
+    [Fact]
+    public Task Palette_asks_for_arguments() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+
+        // 一覧から選ぶ引数 (文字コード)。
+        await app.KeyAsync("P", ctrl: true, shift: true);
+        await app.SendAsync("palette", new JsonObject { ["text"] = ">view.encoding.select" });
+        Assert.True((await app.SendAsync("paletteEnter"))["invoked"]!.GetValue<bool>());
+        JsonObject state = await app.SendAsync("palette");
+        Assert.True(state["open"]!.GetValue<bool>());
+        Assert.StartsWith("Choose an encoding", state["message"]!.GetValue<string>());
+        state = await app.SendAsync("palette", new JsonObject { ["text"] = "utf-16 be" });
+        Assert.Equal("argument:view.encoding.select:utf-16be", state["entries"]!.AsArray()[0]!["key"]!.GetValue<string>());
+        Assert.True((await app.SendAsync("paletteEnter"))["invoked"]!.GetValue<bool>());
+        Assert.Contains("16", (await app.RenderAsync())["encoding"]!.GetValue<string>());
+
+        // 入力を確かめる引数 (1 行のバイト数)。誤りは一覧の上に出し、Enter を無効にする。
+        await app.KeyAsync("P", ctrl: true, shift: true);
+        await app.SendAsync("palette", new JsonObject { ["text"] = ">view.bytesPerRowCustom" });
+        Assert.True((await app.SendAsync("paletteEnter"))["invoked"]!.GetValue<bool>());
+        state = await app.SendAsync("palette", new JsonObject { ["text"] = "0" });
+        Assert.False(string.IsNullOrEmpty(state["message"]?.GetValue<string>()));
+        Assert.False((await app.SendAsync("paletteEnter"))["invoked"]!.GetValue<bool>());
+        await app.SendAsync("palette", new JsonObject { ["text"] = "24" });
+        Assert.True((await app.SendAsync("paletteEnter"))["invoked"]!.GetValue<bool>());
+        Assert.Equal(24, (await app.DocumentAsync())["bytesPerRow"]!.GetValue<int>());
+    });
+
+    // ---- UI-18 の「エラー」 keybindings.json の誤り ----
+
+    [Fact]
+    public Task Invalid_keybindings_file_is_kept_before_it_is_rewritten() => UiTestContext.RunAsync(async ctx =>
+    {
+        const string invalid = """
+            {
+              "$schemaVersion": 1,
+              "bindings": [
+                { "command": "go.goTo", "key": "Ctrl+J" },
+                { "command": "search.find", "key": "Hyper+Q" }
+              ]
+            }
+            """;
+        string profile = Profile(ctx, keybindings: invalid);
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await app.WaitForNotificationAsync(m => m.Contains("line 5", StringComparison.Ordinal), "the line number of the error");
+        Assert.Equal(["Ctrl+G (global)", "Ctrl+J (global)"], await KeysAsync(app, "go.goTo"));
+
+        // 割り当てを変えて保存すると、前のファイルを keybindings.json.broken-<日時> として残す。
+        await app.SendAsync("assignKey", new JsonObject { ["command"] = "go.end", ["key"] = "Ctrl+Shift+F8" });
+        await app.SendAsync("flushSettings");
+        string kept = Assert.Single(Directory.GetFiles(profile, "keybindings.json.broken-*"));
+        Assert.Equal(invalid, await File.ReadAllTextAsync(kept));
+        Assert.Contains("Ctrl+Shift+F8", await File.ReadAllTextAsync(Path.Combine(profile, "keybindings.json")));
+    });
+
+    [Fact]
+    public Task Too_new_keybindings_file_is_read_but_not_written() => UiTestContext.RunAsync(async ctx =>
+    {
+        const string newer = """{ "$schemaVersion": 2, "preset": "default", "bindings": [ { "command": "go.goTo", "key": "Ctrl+J" } ] }""";
+        string profile = Profile(ctx, keybindings: newer);
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await app.WaitForNotificationAsync(m => m.Contains("newer version", StringComparison.Ordinal), "the newer file notice");
+        Assert.Equal(["Ctrl+G (global)", "Ctrl+J (global)"], await KeysAsync(app, "go.goTo"));
+        await app.SendAsync("assignKey", new JsonObject { ["command"] = "go.end", ["key"] = "Ctrl+Shift+F8" });
+        await Task.Delay(1000);
+        await app.SendAsync("flushSettings");
+        Assert.Equal(newer, await File.ReadAllTextAsync(Path.Combine(profile, "keybindings.json")));
+    });
+
+    // ---- UI-20 の仕様 3 押せないキーの表示 ----
+
+    [Fact]
+    public Task Shortcut_list_and_keyboard_table_show_the_same_layout_warnings() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 今の配列で押せるかは配列による (作業中の PC の配列は変えない)。表と一覧が同じ判定を表示することを確かめる。
+        AppSession app = await ctx.StartAsync();
+        Assert.True((await app.SendAsync("assignKey", new JsonObject { ["command"] = "go.end", ["key"] = "Ctrl+Oem8" }))["added"]!.GetValue<bool>());
+        JsonObject list = await app.SendAsync("shortcutWarnings");
+        JsonObject table = await app.SendAsync("keyboardSection", new JsonObject { ["search"] = "go.end" });
+        string tableWarning = table["rows"]!.AsArray().Single(r => r!["command"]!.GetValue<string>() == "go.end")!["warnings"]!.GetValue<string>();
+        Assert.Equal(tableWarning, list["go.end global"]?.GetValue<string>() ?? string.Empty);
+        if (tableWarning.Length > 0)
+        {
+            Assert.Contains("cannot be pressed", tableWarning);
+        }
+    });
 }

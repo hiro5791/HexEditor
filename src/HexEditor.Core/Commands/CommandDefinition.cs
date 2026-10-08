@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 namespace HexEditor.Core.Commands;
 
 /// <summary>引数を尋ねるコマンドの引数の定義 (UI-16 の仕様 1、UI-17 の仕様 7)。</summary>
-/// <param name="PromptKey">入力欄の案内のリソースのキー。</param>
+/// <remarks>入力欄の案内は表示言語のリソース <c>CmdArg_&lt;ID の . を _ に&gt;</c> (App が引く)。</remarks>
 /// <param name="Kind">入力の種類 (<c>expression</c>: 00-overview.md 6 章の入力式、<c>text</c>: 文字列)。</param>
-public sealed record CommandArgument(string PromptKey, string Kind = "text");
+public sealed record CommandArgument(string Kind = "text");
 
 /// <summary>
 /// コマンドの定義 (UI-16 の仕様 1)。メニュー・ツールバー・コマンドパレット・ショートカット・マクロ・スクリプトから同じものを呼ぶ。

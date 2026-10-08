@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -13,8 +14,21 @@ public sealed record KeyBindingEntry(string Command, KeyChord Chord, KeyScope Sc
     public KeyBinding Binding => new(Chord, Scope);
 }
 
-/// <summary>keybindings.json の読み込みで飛ばした行。</summary>
-public sealed record KeyBindingsError(int Line, string Message);
+/// <summary>keybindings.json の行の誤りの種類 (表示の文は App がリソースから作る)。</summary>
+public enum KeyBindingsErrorKind
+{
+    /// <summary><c>command</c> がない。</summary>
+    MissingCommand,
+
+    /// <summary><c>key</c> の表記が正しくない (<see cref="KeyBindingsError.Value"/> に値)。</summary>
+    InvalidKey,
+
+    /// <summary><c>when</c> の値が正しくない (<see cref="KeyBindingsError.Value"/> に値)。</summary>
+    InvalidScope,
+}
+
+/// <summary>keybindings.json の読み込みで飛ばした行 (行番号は 1 始まり。0 は不明)。</summary>
+public sealed record KeyBindingsError(int Line, KeyBindingsErrorKind Kind, string? Value = null);
 
 /// <summary>
 /// キー割り当ての設定ファイル (keybindings.json。UI-18 の仕様 9、UI-19 の仕様 5、UI-21)。プリセットとの差分を持つ。
@@ -48,7 +62,7 @@ public sealed class KeyBindingsDocument
     {
         var options = new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true };
         JsonObject root = JsonNode.Parse(json, documentOptions: options) as JsonObject
-            ?? throw new JsonException("keybindings.json の先頭がオブジェクトではありません。", null, 1, 0);
+            ?? throw new JsonException("The root of keybindings.json is not an object.", null, 0, 0);
         IReadOnlyList<int> lines = BindingLines(json);
 
         var entries = new List<KeyBindingEntry>();
@@ -61,21 +75,21 @@ public sealed class KeyBindingsDocument
                 if (bindings[i] is not JsonObject item
                     || item["command"] is not JsonValue c || !c.TryGetValue(out string? command) || string.IsNullOrWhiteSpace(command))
                 {
-                    errors.Add(new KeyBindingsError(line, "command がありません。"));
+                    errors.Add(new KeyBindingsError(line, KeyBindingsErrorKind.MissingCommand));
                     continue;
                 }
 
                 string? key = item["key"] is JsonValue k && k.TryGetValue(out string? ks) ? ks : null;
                 if (!KeyChord.TryParse(key, out KeyChord chord))
                 {
-                    errors.Add(new KeyBindingsError(line, $"key の表記が正しくありません: {key}"));
+                    errors.Add(new KeyBindingsError(line, KeyBindingsErrorKind.InvalidKey, key));
                     continue;
                 }
 
                 string? when = item["when"] is JsonValue w && w.TryGetValue(out string? ws) ? ws : null;
                 if (!KeyScopes.TryParse(when, out KeyScope scope))
                 {
-                    errors.Add(new KeyBindingsError(line, $"when の値が正しくありません: {when}"));
+                    errors.Add(new KeyBindingsError(line, KeyBindingsErrorKind.InvalidScope, when));
                     continue;
                 }
 
@@ -84,9 +98,35 @@ public sealed class KeyBindingsDocument
             }
         }
 
-        int version = root["$schemaVersion"] is JsonValue v && v.TryGetValue(out int n) ? n : CurrentSchemaVersion;
+        int version = ReadVersion(root["$schemaVersion"]);
         string preset = root["preset"] is JsonValue p && p.TryGetValue(out string? ps) && !string.IsNullOrWhiteSpace(ps) ? ps : KeyPresets.Default;
         return new KeyBindingsDocument { SchemaVersion = version, Preset = preset, Bindings = entries, Errors = errors };
+    }
+
+    /// <summary>
+    /// <c>$schemaVersion</c> を読む (設定ファイル・エクスポートのファイルでも使う)。整数でない値 (小数・数字の文字列) も読める範囲で
+    /// 読み、読めなければ <paramref name="fallback"/> とみなす。
+    /// </summary>
+    public static int ReadVersion(JsonNode? node, int fallback = CurrentSchemaVersion)
+    {
+        if (node is not JsonValue v)
+        {
+            return fallback;
+        }
+
+        if (v.TryGetValue(out int n))
+        {
+            return n;
+        }
+
+        if (v.TryGetValue(out double d) && double.IsFinite(d))
+        {
+            // 小数は切り上げる (1.5 は 1 より新しい版とみなす)。
+            return d >= int.MaxValue ? int.MaxValue : d <= int.MinValue ? int.MinValue : (int)Math.Ceiling(d);
+        }
+
+        return v.TryGetValue(out string? s) && int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsed)
+            ? parsed : fallback;
     }
 
     /// <summary>ファイルの形式で書く。<c>when</c> はグローバルなら省略する。</summary>
@@ -114,7 +154,9 @@ public sealed class KeyBindingsDocument
             ["preset"] = Preset,
             ["bindings"] = bindings,
         };
-        return root.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+
+        // 利用者が編集するファイルなので、キーの表記の「+」などを \u のエスケープにしない (読みやすくする)。
+        return root.ToJsonString(new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
     }
 
     /// <summary>bindings の各要素の行番号 (1 始まり)。誤りの表示に使う。</summary>

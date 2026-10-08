@@ -5,7 +5,11 @@ using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.App.Views;
 using HexEditor.Core.Commands;
+using HexEditor.Core.Expressions;
 using HexEditor.Core.View;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Controls;
 
 namespace HexEditor.App;
 
@@ -37,9 +41,118 @@ public sealed partial class MainWindow
             _pendingArgument = null;
             FocusEditor();
         };
-        CommandService.Catalog.Changed += (_, _) => _paletteItems = null;
-        CommandService.BindingsChanged += () => _paletteItems = null;
+
+        // 候補の右クリック >「ショートカットを変更」(UI-18 の呼び出し)。
+        Palette.ChangeShortcutRequested += (_, id) => OpenKeyboardSettingsFor(id);
+
+        // アプリ全体のイベントは、ウィンドウを本当に閉じたときに外す。
+        EventHandler catalogChanged = (_, _) => _paletteItems = null;
+        Action bindingsChanged = () =>
+        {
+            _paletteItems = null;
+            DispatcherQueue.TryEnqueue(UpdatePaletteButton);
+        };
+        CommandService.Catalog.Changed += catalogChanged;
+        CommandService.BindingsChanged += bindingsChanged;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                CommandService.Catalog.Changed -= catalogChanged;
+                CommandService.BindingsChanged -= bindingsChanged;
+            }
+        };
+
+        InitializePaletteButton();
     }
+
+    // ---- タイトルバーの入口 (UI-02 の仕様 4) ----
+
+    /// <summary>この幅 (DIP) より狭いウィンドウでは、入口を虫眼鏡のアイコンだけにする。</summary>
+    private const double PaletteButtonCompactWidth = 900;
+
+    private Button? _paletteButton;
+    private TextBlock? _paletteButtonText;
+
+    /// <summary>
+    /// タイトルバーのコマンドパレットの入口: 幅 240〜400 px のボタンに「コマンドを検索 (Ctrl+Shift+P)」(今の割り当てのキー) を
+    /// 表示し、押すとコマンドモード (「&gt;」) で開く。ウィンドウ幅が 900 px 未満では虫眼鏡のアイコンだけにする。
+    /// TitleBar の Content に置くので、ドラッグ領域から除かれる (仕様 5)。
+    /// </summary>
+    private void InitializePaletteButton()
+    {
+        _paletteButtonText = new TextBlock { VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
+
+        // 文字列が入りきらない (翻訳が長い・メニューバーが広い) ときは、切れた文字列を出さずにアイコンだけにする。
+        _paletteButtonText.IsTextTrimmedChanged += (_, _) =>
+        {
+            if (_paletteButtonText.IsTextTrimmed && !_paletteTextOverflow)
+            {
+                _paletteTextOverflow = true;
+                UpdatePaletteButton();
+            }
+        };
+        var content = new Grid { ColumnSpacing = 8 };
+        content.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        content.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        content.Children.Add(new FontIcon { Glyph = "", FontSize = 14 });
+        Grid.SetColumn(_paletteButtonText, 1);
+        content.Children.Add(_paletteButtonText);
+        _paletteButton = new Button
+        {
+            Content = content,
+            Height = 32,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            HorizontalContentAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Padding = new Thickness(10, 0, 10, 0),
+        };
+        AutomationProperties.SetAutomationId(_paletteButton, "TitleBar_Palette");
+        _paletteButton.Click += (_, _) => OpenPalette(">");
+        AppTitleBar.Content = _paletteButton;
+        Root.SizeChanged += (_, _) =>
+        {
+            // 幅が変わったら、文字列が入るかをもう一度確かめる。
+            _paletteTextOverflow = false;
+            UpdatePaletteButton();
+            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+            {
+                if (_paletteButtonText.IsTextTrimmed && _paletteButtonText.Visibility == Visibility.Visible && !_paletteTextOverflow)
+                {
+                    _paletteTextOverflow = true;
+                    UpdatePaletteButton();
+                }
+            });
+        };
+        UpdatePaletteButton();
+    }
+
+    /// <summary>入口の文字列が入りきらなかった (次にウィンドウの幅が変わるまでアイコンだけにする)。</summary>
+    private bool _paletteTextOverflow;
+
+    /// <summary>入口の表示 (キーの表記と、ウィンドウの幅による表示の切り替え) を更新する。</summary>
+    private void UpdatePaletteButton()
+    {
+        if (_paletteButton is null || _paletteButtonText is null)
+        {
+            return;
+        }
+
+        KeyChord? first = CommandService.Keys.BindingsFor("help.commandPalette").Select(b => b.Binding.Chord).FirstOrDefault();
+        string text = first is null ? Loc.Get("TitleBar_PaletteNoKey") : Loc.Format("TitleBar_Palette", KeyboardLayout.Format(first));
+        bool compact = (Root.ActualWidth > 0 && Root.ActualWidth < PaletteButtonCompactWidth) || _paletteTextOverflow;
+        _paletteButtonText.Text = text;
+        _paletteButtonText.Visibility = compact ? Visibility.Collapsed : Visibility.Visible;
+        _paletteButton.MinWidth = compact ? 0 : 240;
+        _paletteButton.MaxWidth = compact ? 48 : 400;
+        _paletteButton.HorizontalAlignment = compact ? HorizontalAlignment.Center : HorizontalAlignment.Stretch;
+        AutomationProperties.SetName(_paletteButton, text);
+        ToolTipService.SetToolTip(_paletteButton, text);
+    }
+
+    /// <summary>入口の状態 (テスト用の命令)。</summary>
+    internal (string Text, bool Compact, double Width) PaletteButtonState =>
+        (_paletteButtonText?.Text ?? string.Empty, _paletteButtonText?.Visibility != Visibility.Visible, _paletteButton?.ActualWidth ?? 0);
 
     /// <summary>パレットを開く。<paramref name="prefix"/> は初めの入力 (Ctrl+Shift+P / F1 はコマンドモードの「&gt;」)。</summary>
     public void OpenPalette(string prefix)
@@ -123,6 +236,7 @@ public sealed partial class MainWindow
             Shortcut = CommandService.ShortcutText(item.Id),
             Reason = state.Enabled ? string.Empty : state.Reason ?? string.Empty,
             Completion = ">" + item.DisplayName.Original,
+            CommandId = item.Id,
             Invoke = () => InvokeFromPalette(item.Id),
         };
     }
@@ -140,17 +254,129 @@ public sealed partial class MainWindow
         await Commands.ExecuteAsync(id, fromPalette: true);
     }
 
-    private PaletteResult ArgumentMode(CommandDefinition command, string text) =>
-        new([new PaletteEntry
+    /// <summary>
+    /// 引数を尋ねる (UI-17 の仕様 7)。選べる値の一覧があるコマンド (文字コード・配色) は、入力で絞り込んだ一覧から選ぶ。
+    /// 入力を確かめられるコマンド (1 行のバイト数) は、誤りを一覧の上に出して Enter を無効にする。
+    /// </summary>
+    private PaletteResult ArgumentMode(CommandDefinition command, string text)
+    {
+        // 案内は表示言語のリソース CmdArg_<ID の . を _ に>。
+        string prompt = Loc.Get("CmdArg_" + CommandDefinition.KeyPart(command.Id));
+        Func<Task> Run(string argument) => async () =>
+        {
+            _pendingArgument = null;
+            await Commands.ExecuteAsync(command.Id, argument, fromPalette: true);
+        };
+
+        if (ArgumentChoices(command.Id) is { } choices)
+        {
+            string q = SearchText.Normalize(text.Trim());
+            var entries = new List<PaletteEntry>();
+            foreach ((string value, string label) in choices)
+            {
+                FuzzyMatch m = FuzzyMatcher.Match(new SearchText(label), q);
+                if (m.Success || FuzzyMatcher.Match(new SearchText(value), q).Success)
+                {
+                    entries.Add(new PaletteEntry
+                    {
+                        Key = "argument:" + command.Id + ":" + value,
+                        Title = label,
+                        Highlights = m.Success ? m.Positions : [],
+                        Shortcut = value,
+                        Invoke = Run(value),
+                    });
+                }
+            }
+
+            return new PaletteResult(entries, entries.Count == 0 ? Loc.Get("Palette_NoMatch") : prompt, EnterEnabled: entries.Count > 0);
+        }
+
+        if (text.Trim().Length == 0)
+        {
+            return new PaletteResult([], prompt, EnterEnabled: false);
+        }
+
+        if (ArgumentError(command.Id, text) is { } error)
+        {
+            return new PaletteResult([], error, EnterEnabled: false);
+        }
+
+        return new PaletteResult([new PaletteEntry
         {
             Key = "argument:" + command.Id,
             Title = Loc.Format("Palette_RunWith", CommandService.Title(command), text),
-            Invoke = async () =>
+            Invoke = Run(text),
+        }], prompt);
+    }
+
+    /// <summary>引数の選べる値 (値と表示名)。一覧から選ぶコマンドでなければ null。</summary>
+    private IReadOnlyList<(string Value, string Label)>? ArgumentChoices(string id) => id switch
+    {
+        EncodingSelectCommand => [.. EncodingCatalog.All.Where(e => e.Selectable).Select(e => (e.Id, EncodingDisplayText(e)))],
+        ColorSchemeCommand => [.. new ColorSchemeStore(App.Settings.Folder).All().Select(s => (s.Name, s.BuiltIn ? Loc.Get("Scheme_" + s.Name) : s.Name))],
+        _ => null,
+    };
+
+    /// <summary>入力した引数の誤り (なければ null)。</summary>
+    private string? ArgumentError(string id, string text) => id switch
+    {
+        "view.bytesPerRowCustom" => BytesPerRowArgumentError(text, out _),
+        _ => null,
+    };
+
+    /// <summary>1 行のバイト数の入力を確かめる (「表示 > 1 行のバイト数 > 指定…」と同じ規則。VIEW-08)。</summary>
+    private string? BytesPerRowArgumentError(string text, out int bytesPerRow)
+    {
+        bytesPerRow = 0;
+        if (Editor is not { } editor)
+        {
+            return Loc.Get("Command_NoDocument");
+        }
+
+        if (!TryEvaluate(text, editor, DefaultRadix.Decimal, out long value))
+        {
+            return Loc.Get("ViewInput_Invalid");
+        }
+
+        string? error = editor.View.ValidateBytesPerRow(value) switch
+        {
+            BytesPerRowError.OutOfRange => Loc.Get("ViewInput_BytesPerRowRange"),
+            BytesPerRowError.NotMultipleOfGroup => Loc.Format("ViewInput_BytesPerRowGroup", editor.View.RowUnit),
+            _ => null,
+        };
+        bytesPerRow = (int)value;
+        return error;
+    }
+
+    /// <summary>
+    /// 引数を受け取る処理を足す (表示のメニューが登録した処理を包む)。引数がなければ元の処理 (入力のダイアログ) を呼ぶ。
+    /// RegisterCommandHandlers の最後 (表示のメニューの登録の後) に呼ぶ。
+    /// </summary>
+    private void RegisterArgumentHandlers()
+    {
+        if (Commands.HandlerOf("view.bytesPerRowCustom") is { } original)
+        {
+            Commands.Register("view.bytesPerRowCustom", new CommandHandler(argument =>
             {
-                _pendingArgument = null;
-                await Commands.ExecuteAsync(command.Id, text, fromPalette: true);
-            },
-        }], Loc.Get(command.Argument!.PromptKey));
+                if (argument is not { Length: > 0 } text)
+                {
+                    return original.Execute(null);
+                }
+
+                if (BytesPerRowArgumentError(text, out int bytesPerRow) is { } error)
+                {
+                    ShowNotice(error, InfoBarSeverity.Warning);
+                }
+                else if (Editor is { } editor)
+                {
+                    editor.ApplyView(editor.View with { BytesPerRow = bytesPerRow, AutoBytesPerRow = false });
+                    UpdateViewMenu();
+                }
+
+                return Task.CompletedTask;
+            }, original.State));
+        }
+    }
 
     /// <summary>「:」オフセットへ移動 (00-overview.md 6 章の入力式。Ctrl+G と同じ処理)。</summary>
     private PaletteResult OffsetMode(string text)

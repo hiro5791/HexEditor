@@ -93,6 +93,113 @@ public sealed class SettingsStoreTests : IDisposable
         Assert.Equal("light", store.GetString("ui.theme", "system"));
     }
 
+    [Fact]
+    public void Broken_file_path_is_reported_for_the_open_file_button()
+    {
+        File.WriteAllText(Path.Combine(_dir, SettingsStore.FileName), "[1, 2]");
+        using var store = new SettingsStore(_dir);
+        Assert.Equal(SettingsLoadStatus.Broken, store.Load());
+        Assert.NotNull(store.BrokenFilePath);
+        Assert.Equal("[1, 2]", File.ReadAllText(store.BrokenFilePath!));
+    }
+
+    [Fact]
+    public void Write_failure_is_reported_once_and_does_not_throw()
+    {
+        // 設定フォルダの場所にファイルがある (フォルダを作れない) = 書き込めない。
+        string blocked = Path.Combine(_dir, "blocked");
+        File.WriteAllText(blocked, string.Empty);
+        using var store = new SettingsStore(blocked);
+        store.Load();
+        var failures = new List<string>();
+        store.WriteFailed += failures.Add;
+
+        store.SetString("ui.theme", "dark", "system");
+        store.Flush();
+        store.SetString("ui.theme", "light", "system");
+        Assert.False(store.SaveNow());
+
+        Assert.Single(failures);
+        Assert.True(store.HasPendingChanges);
+        Assert.Equal("light", store.GetString("ui.theme", "system"));
+    }
+
+    [Fact]
+    public async Task Write_failure_on_the_timer_thread_does_not_crash()
+    {
+        string blocked = Path.Combine(_dir, "blocked");
+        File.WriteAllText(blocked, string.Empty);
+        using var store = new SettingsStore(blocked);
+        var failed = new TaskCompletionSource<string>();
+        store.WriteFailed += m => failed.TrySetResult(m);
+        store.SetBool("log.debug", true, false);
+        Task done = await Task.WhenAny(failed.Task, Task.Delay(TimeSpan.FromSeconds(5)));
+        Assert.True(done == failed.Task, "書き込みの失敗を知らせる");
+    }
+
+    [Fact]
+    public void Unreadable_file_is_not_overwritten()
+    {
+        string path = Path.Combine(_dir, SettingsStore.FileName);
+        File.WriteAllText(path, """{ "$schemaVersion": 1, "ui.theme": "dark" }""");
+        using var store = new SettingsStore(_dir);
+        using (new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
+        {
+            Assert.Equal(SettingsLoadStatus.Unreadable, store.Load());
+        }
+
+        Assert.NotNull(store.LoadError);
+        Assert.True(store.ReadOnly);
+        store.SetString("ui.theme", "light", "system");
+        store.Flush();
+        Assert.Contains("dark", File.ReadAllText(path));
+    }
+
+    [Theory]
+    [InlineData("\"1\"", SettingsLoadStatus.Ok)]
+    [InlineData("1.0", SettingsLoadStatus.Ok)]
+    [InlineData("1.5", SettingsLoadStatus.TooNew)]
+    [InlineData("\"abc\"", SettingsLoadStatus.Ok)]
+    [InlineData("null", SettingsLoadStatus.Ok)]
+    [InlineData("{}", SettingsLoadStatus.Ok)]
+    public void Non_integer_schema_versions_are_read_without_crashing(string version, SettingsLoadStatus expected)
+    {
+        File.WriteAllText(Path.Combine(_dir, SettingsStore.FileName), $$"""{ "$schemaVersion": {{version}}, "ui.theme": "dark" }""");
+        using var store = new SettingsStore(_dir);
+        Assert.Equal(expected, store.Load());
+        Assert.Equal("dark", store.GetString("ui.theme", "system"));
+    }
+
+    [Fact]
+    public async Task Reloading_external_edits_keeps_unsaved_changes()
+    {
+        using var store = new SettingsStore(_dir);
+        store.Load();
+        store.SaveNow();
+        store.StartWatching();
+        var changed = new TaskCompletionSource<IReadOnlyCollection<string>>();
+        store.Changed += keys =>
+        {
+            if (keys.Contains("ui.theme"))
+            {
+                changed.TrySetResult(keys);
+            }
+        };
+
+        // まだ書いていない変更 (書き込みは 500 ms 後) があるうちに、外部で別のキーを書き換える。
+        store.SetBool("log.debug", true, false);
+        File.WriteAllText(store.PathName, """{ "$schemaVersion": 1, "ui.theme": "light" }""");
+        Task done = await Task.WhenAny(changed.Task, Task.Delay(TimeSpan.FromSeconds(2)));
+        Assert.True(done == changed.Task, "外部の変更を読み直す");
+        Assert.Equal("light", store.GetString("ui.theme", "system"));
+        Assert.True(store.GetBool("log.debug", false));
+
+        store.Flush();
+        JsonObject json = JsonNode.Parse(File.ReadAllText(store.PathName))!.AsObject();
+        Assert.Equal("light", json["ui.theme"]!.GetValue<string>());
+        Assert.True(json["log.debug"]!.GetValue<bool>());
+    }
+
     public void Dispose()
     {
         try

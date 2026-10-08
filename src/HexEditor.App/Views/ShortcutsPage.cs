@@ -100,8 +100,24 @@ public sealed partial class ShortcutsPage : UserControl
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(140) });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-                var keys = new TextBlock { Text = row.Keys, FlowDirection = FlowDirection.LeftToRight, TextWrapping = TextWrapping.Wrap, VerticalAlignment = VerticalAlignment.Center };
-                AutomationProperties.SetAutomationId(keys, $"ShortcutKeys_{row.CommandId}_{KeyScopes.Name(row.ScopeValue)}");
+                var keyText = new TextBlock { Text = row.Keys, FlowDirection = FlowDirection.LeftToRight, TextWrapping = TextWrapping.Wrap };
+                AutomationProperties.SetAutomationId(keyText, $"ShortcutKeys_{row.CommandId}_{KeyScopes.Name(row.ScopeValue)}");
+                var keys = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+                keys.Children.Add(keyText);
+
+                // 今の配列で押せないキー・AltGr の文字入力と重なるキー (UI-20 の仕様 3、4)。コマンドはメニューとパレットから実行できる。
+                if (Warnings(row) is { Length: > 0 } warning)
+                {
+                    var note = new TextBlock
+                    {
+                        Text = warning,
+                        TextWrapping = TextWrapping.Wrap,
+                        Style = (Style)Application.Current.Resources["CaptionTextBlockStyle"],
+                        Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["SystemFillColorCautionBrush"],
+                    };
+                    AutomationProperties.SetAutomationId(note, $"ShortcutWarning_{row.CommandId}_{KeyScopes.Name(row.ScopeValue)}");
+                    keys.Children.Add(note);
+                }
                 var name = new TextBlock { Text = row.Command, TextWrapping = TextWrapping.Wrap, VerticalAlignment = VerticalAlignment.Center };
                 var scope = new TextBlock { Text = row.Scope, VerticalAlignment = VerticalAlignment.Center };
                 var change = new Button { Content = Loc.Get("Shortcuts_Change") };
@@ -121,6 +137,10 @@ public sealed partial class ShortcutsPage : UserControl
             }
         }
     }
+
+    /// <summary>行のキーの注意 (「この配列では押せません」など。UI-20 の仕様 3)。なければ空。</summary>
+    public static string Warnings(ShortcutRow row) => string.Join(" ", CommandService.Keys.BindingsFor(row.CommandId)
+        .Where(b => b.Binding.Scope == row.ScopeValue).SelectMany(b => KeyAssign.StateWarnings(b.Binding.Chord)).Distinct());
 
     /// <summary>HTML (UI-39 の仕様 4)。</summary>
     public string ToHtml() => ShortcutList.ToHtml(FilteredRows(), Loc.Get("Shortcuts_Title"), Loc.Get("Keys_ColKeys"), Loc.Get("Keys_ColCommand"),

@@ -59,7 +59,13 @@ public sealed partial class MainWindow
             RefreshShortcutsPage();
         });
         CommandService.BindingsChanged += bindingsChanged;
-        Closed += (_, _) => CommandService.BindingsChanged -= bindingsChanged;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                CommandService.BindingsChanged -= bindingsChanged;
+            }
+        };
         Commands.StatesChanged += UpdateCommandStates;
 
         // キーボード配列が変わったらキーの表示を作り直す (UI-20 の仕様 2)。
@@ -198,6 +204,9 @@ public sealed partial class MainWindow
         Commands.Register("help.reportProblem", () => ReportProblem_Click(this, e));
         RegisterPackagingCommands();
         Commands.Register("help.about", () => About_Click(this, e));
+
+        // 引数を尋ねるコマンド (UI-17 の仕様 7) の処理。他の登録の後に呼ぶ。
+        RegisterArgumentHandlers();
     }
 
     /// <summary>メニュー・ツールバーの有効状態とチェックの状態を更新する (UI-03 の仕様 3)。</summary>
@@ -217,11 +226,34 @@ public sealed partial class MainWindow
             return;
         }
 
-        DispatchResult result = _keys.Dispatch((int)e.Key, CurrentModifiers(), CurrentKeyContext());
-        if (result.Handled)
+        DependencyObject? focused = Root.XamlRoot is null ? null : FocusManager.GetFocusedElement(Root.XamlRoot) as DependencyObject;
+        if (RouteKey(focused, (int)e.Key, CurrentModifiers(), CurrentKeyContext()).Handled)
         {
             e.Handled = true;
         }
+    }
+
+    /// <summary>
+    /// キーを振り分ける。フォーカスのある部品が押したキーをそのまま受け取っている場合 (「キーで検索」。UI-18 の仕様 2) は、
+    /// コマンドに振り分けずにその部品に渡す。テスト用の命令からも使う。
+    /// </summary>
+    private DispatchResult RouteKey(DependencyObject? focused, int key, KeyModifiers modifiers, KeyContext context)
+    {
+        for (DependencyObject? node = focused; node is not null; node = VisualTreeHelper.GetParent(node))
+        {
+            if (node is IKeyCaptureHost host)
+            {
+                if (host.IsCapturingKeys && host.TryCaptureKey(new KeyStroke(modifiers, key)))
+                {
+                    _keys.Reset();
+                    return new DispatchResult(true);
+                }
+
+                break;
+            }
+        }
+
+        return _keys.Dispatch(key, modifiers, context);
     }
 
     private static KeyModifiers CurrentModifiers()

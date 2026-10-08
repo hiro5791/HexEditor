@@ -1074,12 +1074,12 @@ public sealed partial class HexView
     {
         var menu = new MenuFlyout();
         AutomationProperties.SetAutomationId(menu, "HexViewContextMenu");
-        menu.Items.Add(MenuItem("Cut", Loc.Get("Menu_Edit_Cut/Text"), "Ctrl+X", () => CommandRequested?.Invoke(this, EditorCommand.Cut)));
-        menu.Items.Add(MenuItem("Copy", Loc.Get("Menu_Edit_Copy/Text"), "Ctrl+C", () => CommandRequested?.Invoke(this, EditorCommand.Copy)));
-        menu.Items.Add(MenuItem("Paste", Loc.Get("Menu_Edit_Paste/Text"), "Ctrl+V", () => CommandRequested?.Invoke(this, EditorCommand.Paste)));
-        menu.Items.Add(MenuItem("PasteOverwrite", Loc.Get("Menu_Edit_PasteOverwrite/Text"), "Ctrl+B",
+        menu.Items.Add(MenuItem("Cut", Loc.Get("Menu_Edit_Cut/Text"), "edit.cut", () => CommandRequested?.Invoke(this, EditorCommand.Cut)));
+        menu.Items.Add(MenuItem("Copy", Loc.Get("Menu_Edit_Copy/Text"), "edit.copy", () => CommandRequested?.Invoke(this, EditorCommand.Copy)));
+        menu.Items.Add(MenuItem("Paste", Loc.Get("Menu_Edit_Paste/Text"), "edit.paste", () => CommandRequested?.Invoke(this, EditorCommand.Paste)));
+        menu.Items.Add(MenuItem("PasteOverwrite", Loc.Get("Menu_Edit_PasteOverwrite/Text"), "edit.pasteOverwrite",
             () => CommandRequested?.Invoke(this, EditorCommand.PasteOverwrite)));
-        menu.Items.Add(MenuItem("Delete", Loc.Get("HexView_Menu_Delete"), "Delete", () =>
+        menu.Items.Add(MenuItem("Delete", Loc.Get("HexView_Menu_Delete"), "key:Delete", () =>
         {
             if (_editor is not null)
             {
@@ -1087,11 +1087,11 @@ public sealed partial class HexView
             }
         }));
         menu.Items.Add(new MenuFlyoutSeparator());
-        menu.Items.Add(MenuItem("SelectAll", Loc.Get("Menu_Edit_SelectAll/Text"), "Ctrl+A",
+        menu.Items.Add(MenuItem("SelectAll", Loc.Get("Menu_Edit_SelectAll/Text"), "edit.selectAll",
             () => CommandRequested?.Invoke(this, EditorCommand.SelectAll)));
-        menu.Items.Add(MenuItem("ClearSelection", Loc.Get("HexView_Menu_ClearSelection"), "Esc", () => _editor?.ClearSelection()));
+        menu.Items.Add(MenuItem("ClearSelection", Loc.Get("HexView_Menu_ClearSelection"), "key:Escape", () => _editor?.ClearSelection()));
         menu.Items.Add(new MenuFlyoutSeparator());
-        menu.Items.Add(MenuItem("ToggleInsert", Loc.Get("Menu_Edit_ToggleInsert/Text"), "Insert", () =>
+        menu.Items.Add(MenuItem("ToggleInsert", Loc.Get("Menu_Edit_ToggleInsert/Text"), "edit.toggleInsert", () =>
         {
             if (_editor is not null)
             {
@@ -1101,22 +1101,39 @@ public sealed partial class HexView
         menu.Closed += (_, _) => Focus(FocusState.Programmatic);
         return menu;
 
-        MenuFlyoutItem MenuItem(string id, string text, string keys, Action action)
+        // ショートカットの表示は、開くたびにコマンドの今の割り当てから取る (UpdateContextMenu。UI-16 の仕様 2、UI-18 の仕様 10)。
+        // 「key:」で始まるものはコマンドではない Hex ビュー自身のキー (配列の表記にする)。
+        MenuFlyoutItem MenuItem(string id, string text, string shortcut, Action action)
         {
-            var item = new MenuFlyoutItem { Text = text, KeyboardAcceleratorTextOverride = keys, Tag = id };
+            var item = new MenuFlyoutItem { Text = text, Tag = id };
+            _contextMenuShortcuts[item] = shortcut;
             AutomationProperties.SetAutomationId(item, "HexViewMenu_" + id);
             item.Click += (_, _) => action();
             return item;
         }
     }
 
-    /// <summary>今の状態で使えない項目を無効にする。</summary>
+    /// <summary>右クリックメニューの項目のショートカット (コマンド ID、または「key:」とキーの名前)。</summary>
+    private readonly Dictionary<MenuFlyoutItem, string> _contextMenuShortcuts = [];
+
+    /// <summary>右クリックメニューの項目 (AutomationId) と、表示しているショートカット (テスト用の命令)。開いたことがなければ空。</summary>
+    internal IReadOnlyDictionary<string, string> ContextMenuShortcutTexts =>
+        _contextMenuShortcuts.Keys.ToDictionary(i => AutomationProperties.GetAutomationId(i), i => i.KeyboardAcceleratorTextOverride ?? string.Empty);
+
+    /// <summary>今の状態で使えない項目を無効にし、ショートカットの表示を今の割り当てにする。</summary>
     private void UpdateContextMenu(MenuFlyout menu)
     {
         EditorState editor = _editor!;
         bool editable = !editor.ReadOnly && !editor.Document.IsEditLocked;
         foreach (MenuFlyoutItemBase item in menu.Items)
         {
+            if (item is MenuFlyoutItem shortcutItem && _contextMenuShortcuts.TryGetValue(shortcutItem, out string? shortcut))
+            {
+                shortcutItem.KeyboardAcceleratorTextOverride = shortcut.StartsWith("key:", StringComparison.Ordinal)
+                    ? Commands.KeyboardLayout.Format(Core.Commands.KeyChord.Parse(shortcut[4..]))
+                    : Commands.CommandService.ShortcutText(shortcut);
+            }
+
             if (item is MenuFlyoutItem m)
             {
                 m.IsEnabled = (string)m.Tag switch

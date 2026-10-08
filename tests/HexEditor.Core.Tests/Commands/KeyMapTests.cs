@@ -144,6 +144,8 @@ public sealed class KeyMapTests
         map.Add("search.find", KeyBinding.Parse("Ctrl+Shift+F7"), false);
         Assert.Equal("Ctrl+Shift+F7", Keys(map, "search.find"));
 
+        // 利用者が読めるよう、キーの表記の「+」をエスケープしない。
+        Assert.Contains("\"Ctrl+Shift+F7\"", map.ToDocument().ToJson());
         var copy = new KeyMap(Catalog());
         copy.Load(KeyBindingsDocument.Parse(map.ToDocument().ToJson()));
         Assert.Equal("Ctrl+Shift+F7", Keys(copy, "search.find"));
@@ -151,6 +153,73 @@ public sealed class KeyMapTests
         map.ResetCommand("search.find");
         Assert.Equal("Ctrl+F", Keys(map, "search.find"));
         Assert.Empty(map.UserEntries);
+    }
+
+    [Fact]
+    public void Reset_command_does_not_create_duplicates_with_keys_moved_to_other_commands()
+    {
+        // 「検索」の Ctrl+F を「オフセットへ移動」に付け替えた (置き換える) 後で、「検索」を既定に戻す。
+        var map = new KeyMap(Catalog());
+        Assert.True(map.Add("go.goTo", KeyBinding.Parse("Ctrl+F"), replaceConflicts: true));
+        Assert.Equal(string.Empty, Keys(map, "search.find"));
+
+        IReadOnlyList<KeyConflict> skipped = map.ResetCommand("search.find");
+
+        KeyConflict conflict = Assert.Single(skipped);
+        Assert.Equal(("search.find", "go.goTo", "Ctrl+F"), (conflict.First.Command, conflict.Second.Command, conflict.First.Chord.ToString()));
+        Assert.Equal(string.Empty, Keys(map, "search.find"));
+        Assert.Equal("Ctrl+G, Ctrl+F", Keys(map, "go.goTo"));
+        var duplicates = map.All.GroupBy(b => b.Binding).Where(g => g.Count() > 1).ToList();
+        Assert.Empty(duplicates);
+
+        // 重ならないキーは戻る。
+        map.Remove("go.goTo", KeyBinding.Parse("Ctrl+F"));
+        Assert.Empty(map.ResetCommand("search.find"));
+        Assert.Equal("Ctrl+F", Keys(map, "search.find"));
+    }
+
+    [Fact]
+    public void Line_errors_have_kinds_and_values_instead_of_text()
+    {
+        const string json = """
+            {
+              "bindings": [
+                { "key": "Ctrl+J" },
+                { "command": "go.goTo", "key": "Hyper+Q" },
+                { "command": "go.goTo", "key": "Ctrl+J", "when": "nowhere" }
+              ]
+            }
+            """;
+        KeyBindingsDocument doc = KeyBindingsDocument.Parse(json);
+        Assert.Equal(
+            [(3, KeyBindingsErrorKind.MissingCommand, (string?)null), (4, KeyBindingsErrorKind.InvalidKey, "Hyper+Q"), (5, KeyBindingsErrorKind.InvalidScope, "nowhere")],
+            doc.Errors.Select(e => (e.Line, e.Kind, e.Value)));
+    }
+
+    [Theory]
+    [InlineData("2", 2)]
+    [InlineData("\"3\"", 3)]
+    [InlineData("1.5", 2)]
+    [InlineData("\"x\"", 1)]
+    [InlineData("true", 1)]
+    public void Schema_version_is_read_leniently(string value, int expected) =>
+        Assert.Equal(expected, KeyBindingsDocument.Parse($$"""{ "$schemaVersion": {{value}}, "bindings": [] }""").SchemaVersion);
+
+    [Fact]
+    public void Preset_010editor_follows_the_official_keys()
+    {
+        var map = new KeyMap(Catalog());
+        map.SwitchPreset("010editor", preferUser: true);
+        Assert.Equal("Ctrl+H, Ctrl+R", Keys(map, "search.replace"));
+        Assert.Equal(string.Empty, Keys(map, "file.reload"));
+        Assert.Equal("Ctrl+W, Ctrl+F4", Keys(map, "file.close"));
+        Assert.Equal("Ctrl+Alt+W", Keys(map, "file.closeAll"));
+        Assert.Equal("Ctrl+Y, Ctrl+Shift+Z", Keys(map, "edit.redo"));
+        Assert.Equal("Ctrl+E (editor), Ctrl+Shift+A (editor)", Keys(map, "edit.selectRange"));
+        Assert.Equal("Ctrl+B", Keys(map, "go.bookmark.edit"));
+        Assert.Equal(string.Empty, Keys(map, "edit.pasteOverwrite"));
+        Assert.Equal("Ctrl+I", Keys(map, "edit.insertFile"));
+        Assert.Equal("Ctrl+K", Keys(map, "analysis.hash"));
     }
 
     [Fact]
@@ -195,7 +264,7 @@ public sealed class KeyMapTests
     {
         foreach (string preset in KeyPresets.Ids)
         {
-            IReadOnlyList<KeyBindingEntry> entries = KeyPresets.Load(preset, out string? error);
+            IReadOnlyList<KeyBindingEntry> entries = KeyPresets.Load(preset, out KeyPresetError? error);
             Assert.Null(error);
             var catalog = CommandCatalog.CreateBuiltIn();
             Assert.All(entries, e => Assert.True(catalog.Contains(e.Command), $"{preset}: 知らないコマンド {e.Command}"));
@@ -259,7 +328,7 @@ public sealed class KeyMapTests
     [Fact]
     public void Unknown_preset_falls_back_to_default()
     {
-        Assert.Empty(KeyPresets.Load("nope", out string? error));
+        Assert.Empty(KeyPresets.Load("nope", out KeyPresetError? error));
         Assert.NotNull(error);
         var map = new KeyMap(Catalog());
         map.Load(KeyBindingsDocument.Parse("""{ "preset": "nope", "bindings": [] }"""));

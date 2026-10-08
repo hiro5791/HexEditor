@@ -19,10 +19,38 @@ public sealed record SkippedSetting(string Key, string Value);
 /// <summary>設定の区分のインポートの結果の見込み。</summary>
 public sealed record SettingsImportPlan(JsonObject Result, IReadOnlyList<SkippedSetting> Skipped, int ChangedCount);
 
-/// <summary>読めないエクスポートのファイル (形式が違う・新しすぎる)。</summary>
-public sealed class SettingsBundleException(string message, bool tooNew = false) : Exception(message)
+/// <summary>エクスポートのファイルが読めない理由の種類 (表示の文は App がリソースから作る)。</summary>
+public enum SettingsBundleError
 {
-    public bool TooNew { get; } = tooNew;
+    /// <summary>上限 (<see cref="SettingsBundle.MaxBytes"/>) を超えている。</summary>
+    TooLarge,
+
+    /// <summary>JSON として読めない (<see cref="SettingsBundleException.Line"/> に行番号)。</summary>
+    InvalidJson,
+
+    /// <summary>HexEditor の設定のファイルではない。</summary>
+    NotSettingsFile,
+
+    /// <summary><c>$schemaVersion</c> がない。</summary>
+    MissingVersion,
+
+    /// <summary>新しい版のアプリで作られた (<see cref="SettingsBundleException.Version"/> に版)。</summary>
+    TooNew,
+}
+
+/// <summary>読めないエクスポートのファイル (形式が違う・新しすぎる)。<see cref="Exception.Message"/> は記録用 (英語) で、表示には使わない。</summary>
+public sealed class SettingsBundleException(SettingsBundleError error, int line = 0, int version = 0)
+    : Exception($"Settings bundle error: {error}")
+{
+    public SettingsBundleError Error { get; } = error;
+
+    public bool TooNew => Error == SettingsBundleError.TooNew;
+
+    /// <summary>JSON として読めない位置 (1 始まり。0 は不明)。</summary>
+    public int Line { get; } = line;
+
+    /// <summary>新しすぎるファイルの <c>$schemaVersion</c>。</summary>
+    public int Version { get; } = version;
 }
 
 /// <summary>
@@ -119,34 +147,34 @@ public sealed class SettingsBundle
     {
         if (Encoding.UTF8.GetByteCount(json) > MaxBytes)
         {
-            throw new SettingsBundleException("ファイルが大きすぎます (上限 10 MB)。");
+            throw new SettingsBundleException(SettingsBundleError.TooLarge);
         }
 
         JsonObject root;
         try
         {
             root = JsonNode.Parse(json, documentOptions: new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true })
-                as JsonObject ?? throw new SettingsBundleException("HexEditor の設定のファイルではありません。");
+                as JsonObject ?? throw new SettingsBundleException(SettingsBundleError.NotSettingsFile);
         }
         catch (JsonException ex)
         {
-            throw new SettingsBundleException(ex.Message);
+            throw new SettingsBundleException(SettingsBundleError.InvalidJson, (int)(ex.LineNumber ?? 0) + 1);
         }
 
         if (root["app"] is not JsonValue app || !app.TryGetValue(out string? name) || name != AppName)
         {
-            throw new SettingsBundleException("HexEditor の設定のファイルではありません。");
+            throw new SettingsBundleException(SettingsBundleError.NotSettingsFile);
         }
 
-        int version = root["$schemaVersion"] is JsonValue v && v.TryGetValue(out int n) ? n : 0;
+        int version = KeyBindingsDocument.ReadVersion(root["$schemaVersion"], fallback: 0);
         if (version > CurrentSchemaVersion)
         {
-            throw new SettingsBundleException($"新しい版のファイルです ($schemaVersion {version})。", tooNew: true);
+            throw new SettingsBundleException(SettingsBundleError.TooNew, version: version);
         }
 
         if (version < 1)
         {
-            throw new SettingsBundleException("$schemaVersion がありません。");
+            throw new SettingsBundleException(SettingsBundleError.MissingVersion);
         }
 
         KeyBindingsDocument? keys = null;
@@ -156,9 +184,14 @@ public sealed class SettingsBundle
             {
                 keys = KeyBindingsDocument.Parse(k.ToJsonString());
             }
-            catch (JsonException ex)
+            catch (JsonException)
             {
-                throw new SettingsBundleException(ex.Message);
+                throw new SettingsBundleException(SettingsBundleError.NotSettingsFile);
+            }
+
+            if (keys.IsTooNew)
+            {
+                throw new SettingsBundleException(SettingsBundleError.TooNew, version: keys.SchemaVersion);
             }
         }
 
