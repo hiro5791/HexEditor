@@ -372,8 +372,8 @@
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>その他の項目</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>一致 {0} 件</value></data>
-  <data name="Menu_Analysis.Title" xml:space="preserve"><value>解析(A)</value></data>
-  <data name="Menu_Analysis.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Analysis.Title" xml:space="preserve"><value>解析(L)</value></data>
+  <data name="Menu_Analysis.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_Analysis_Hash.Text" xml:space="preserve"><value>ハッシュ(H)...</value></data>
   <data name="Menu_Analysis_Hash.AccessKey" xml:space="preserve"><value>H</value></data>
   <data name="Operation_Hash" xml:space="preserve"><value>ハッシュの計算</value></data>
