@@ -46,7 +46,7 @@ public sealed partial class MainWindow
         _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request)
             ?? HandleInspectorTestCommand(cmd, request) ?? await HandlePackagingTestCommandsAsync(cmd, request)
             ?? HandleEditTestCommand(cmd, request) ?? await HandleSearchTestCommandsAsync(cmd, request)
-            ?? await HandleViewTestCommandsAsync(cmd, request),
+            ?? await HandleViewTestCommandsAsync(cmd, request) ?? await HandleTabsTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>

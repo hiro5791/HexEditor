@@ -399,11 +399,10 @@ public sealed class SessionAndRecentTests
         Assert.Equal(["seq.bin", "bytes.bin"], await again.TabNamesAsync());
     });
 
-    [Fact(Skip = "複数ウィンドウ (UI-14) が未実装 (タブの担当が作る)。1 つのウィンドウのタブ・カーソル・位置の復元は Session_restores_tabs_cursors_and_bounds で確認している")]
-    [Trait(UiTest.TC, "TC-UI-31-01")]
-    public Task Two_windows_with_ten_tabs_are_restored() => Task.CompletedTask;
-
-    /// <summary>TC-UI-31-01 のうち 1 つのウィンドウの部分: タブの並び・アクティブなタブ・カーソル・ウィンドウの位置と大きさ。</summary>
+    /// <summary>
+    /// 1 つのウィンドウのタブの並び・アクティブなタブ・カーソル・ウィンドウの位置と大きさ。2 つのウィンドウの TC-UI-31-01 は
+    /// WindowManagementTests。
+    /// </summary>
     [Fact]
     public Task Session_restores_tabs_cursors_and_bounds() => UiTestContext.RunAsync(async ctx =>
     {

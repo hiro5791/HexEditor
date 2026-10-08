@@ -76,9 +76,9 @@ public sealed partial class DocumentViewModel
     /// <summary>セッション・閉じたタブの記録。</summary>
     public SessionTab ToSessionTab()
     {
-        if (MissingRecord is { } missing)
+        if ((MissingRecord ?? PendingRecord) is { } record)
         {
-            return missing;
+            return record with { Pinned = IsPinned };
         }
 
         FileStamp? stamp = OpenedStamp;
@@ -87,6 +87,7 @@ public sealed partial class DocumentViewModel
             Kind = FilePath is null ? SessionTabKind.Untitled : SessionTabKind.File,
             Path = FilePath,
             DisplayName = DisplayName,
+            Pinned = IsPinned,
             ReadOnly = Document.ReadOnlyReason is ReadOnlyReason.User or ReadOnlyReason.OpenedReadOnly,
             Cursor = Editor.Cursor,
             SelectionStart = Editor.SelectionStart,

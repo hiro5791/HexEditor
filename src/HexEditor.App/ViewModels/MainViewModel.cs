@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HexEditor.App.Services;
 using HexEditor.Core.Engine;
+using HexEditor.Core.Files;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Recovery;
 using HexEditor.Core.Saving;
@@ -12,7 +13,7 @@ namespace HexEditor.App.ViewModels;
 /// <summary>メインウィンドウの状態: 開いているドキュメントと、ファイル操作 (ENG-10、ENG-11、ENG-20〜ENG-22)。</summary>
 public sealed partial class MainViewModel : ObservableObject
 {
-    private int _untitledCount;
+    private readonly AppWideState _app;
 
     private readonly DocumentOptions _options;
     private readonly string _journalDirectory;
@@ -23,6 +24,34 @@ public sealed partial class MainViewModel : ObservableObject
         Memory = memory;
         _options = options;
         _journalDirectory = journalDirectory;
+        _app = new AppWideState();
+        Recent = new RecentFileList();
+        ClosedTabs = new ClosedTabHistory();
+    }
+
+    /// <summary>
+    /// 同じプロセスの別のウィンドウの状態 (UI-14)。長時間処理・メモリ・最近使ったファイル・閉じたタブ・外部変更の監視・無題の番号は
+    /// アプリ全体で共有し、開いているドキュメントと通知はウィンドウごとに持つ。
+    /// </summary>
+    public MainViewModel(MainViewModel shared)
+    {
+        Operations = shared.Operations;
+        Memory = shared.Memory;
+        _options = shared._options;
+        _journalDirectory = shared._journalDirectory;
+        _app = shared._app;
+        Recent = shared.Recent;
+        ClosedTabs = shared.ClosedTabs;
+        _files = shared._files;
+        ExternalChanges = shared.ExternalChanges;
+    }
+
+    /// <summary>アプリ全体で 1 つの値 (ウィンドウの間で共有する)。</summary>
+    private sealed class AppWideState
+    {
+        public int UntitledCount;
+
+        public BackupSettings? Backup;
     }
 
     public OperationCenter Operations { get; }
@@ -45,7 +74,7 @@ public sealed partial class MainViewModel : ObservableObject
     /// </summary>
     public DocumentViewModel NewDocument(long length, byte[] fill)
     {
-        string name = Loc.Format("Untitled_Name", ++_untitledCount);
+        string name = Loc.Format("Untitled_Name", ++_app.UntitledCount);
         var doc = new Document(MemoryByteSource.CreateEmpty(name), _options);
         if (length > 0)
         {
@@ -62,11 +91,12 @@ public sealed partial class MainViewModel : ObservableObject
     public DocumentViewModel Open(string path, int? insertAt = null, bool readOnly = false, bool restorePosition = true)
     {
         string full = Path.GetFullPath(path);
-        DocumentViewModel? existing = Documents.FirstOrDefault(d => string.Equals(d.FilePath, full, StringComparison.OrdinalIgnoreCase));
+        DocumentViewModel? existing = FindSameFile(full);
         if (existing is not null)
         {
+            // まだ開いていない復元したタブは、選ぶとウィンドウが開いた文書に置き換える (UI-31 の仕様 6)。
             Selected = existing;
-            return existing;
+            return existing.IsPending && Selected is { } opened ? opened : existing;
         }
 
         var doc = new Document(FileByteSource.Open(full), _options);
@@ -211,7 +241,11 @@ public sealed partial class MainViewModel : ObservableObject
     }
 
     /// <summary>「バックアップを作る」の設定 (ENG-26)。null なら作らない。</summary>
-    public BackupSettings? BackupSettings { get; set; }
+    public BackupSettings? BackupSettings
+    {
+        get => _app.Backup;
+        set => _app.Backup = value;
+    }
 
     /// <summary>次の保存 1 回だけバックアップを作らない (「バックアップなしで保存」。ENG-26 の「エラー」)。</summary>
     public bool SkipBackupOnce { get; set; }
@@ -383,19 +417,13 @@ public sealed partial class MainViewModel : ObservableObject
         {
             if (doc.LockState == FileLockState.Failed)
             {
-                LockFailed?.Invoke(this, vm);
+                MainViewModel owner = vm.Owner ?? this;
+                owner.LockFailed?.Invoke(owner, vm);
             }
         };
         Memory.Register(doc);
-        if (insertAt is int index && index >= 0 && index <= Documents.Count)
-        {
-            Documents.Insert(index, vm);
-        }
-        else
-        {
-            Documents.Add(vm);
-        }
-
+        vm.Owner = this;
+        InsertDocument(vm, insertAt);
         Selected = vm;
         return vm;
     }

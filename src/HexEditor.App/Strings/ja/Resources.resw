@@ -2047,4 +2047,57 @@
   <data name="Settings_FontDefault" xml:space="preserve"><value>既定 (Cascadia Mono)</value></data>
   <data name="Settings_FontMissing" xml:space="preserve"><value>{0} が見つかりません。既定のフォントを使います。</value></data>
   <data name="Settings_ShowAllFonts" xml:space="preserve"><value>すべてのフォントを表示</value></data>
+  <data name="Cmd_file_closeSaved" xml:space="preserve"><value>保存済みのタブを閉じる</value></data>
+  <data name="CmdAlias_file_closeSaved" xml:space="preserve"><value>ほぞんずみのたぶをとじる</value></data>
+  <data name="Cmd_tab_next" xml:space="preserve"><value>次のタブ (最近使った順)</value></data>
+  <data name="CmdAlias_tab_next" xml:space="preserve"><value>つぎのたぶ</value></data>
+  <data name="Cmd_tab_previous" xml:space="preserve"><value>前のタブ (最近使った順)</value></data>
+  <data name="CmdAlias_tab_previous" xml:space="preserve"><value>まえのたぶ</value></data>
+  <data name="Cmd_tab_nextInOrder" xml:space="preserve"><value>次のタブ (並び順)</value></data>
+  <data name="CmdAlias_tab_nextInOrder" xml:space="preserve"><value>つぎのたぶ ならびじゅん</value></data>
+  <data name="Cmd_tab_previousInOrder" xml:space="preserve"><value>前のタブ (並び順)</value></data>
+  <data name="CmdAlias_tab_previousInOrder" xml:space="preserve"><value>まえのたぶ ならびじゅん</value></data>
+  <data name="Cmd_tab_togglePin" xml:space="preserve"><value>ピン留めの切り替え</value></data>
+  <data name="CmdAlias_tab_togglePin" xml:space="preserve"><value>ぴんどめのきりかえ</value></data>
+  <data name="Cmd_tab_moveLeft" xml:space="preserve"><value>左へ移動</value></data>
+  <data name="CmdAlias_tab_moveLeft" xml:space="preserve"><value>ひだりへいどう</value></data>
+  <data name="Cmd_tab_moveRight" xml:space="preserve"><value>右へ移動</value></data>
+  <data name="CmdAlias_tab_moveRight" xml:space="preserve"><value>みぎへいどう</value></data>
+  <data name="Cmd_tab_moveToNewWindow" xml:space="preserve"><value>新しいウィンドウに移動</value></data>
+  <data name="CmdAlias_tab_moveToNewWindow" xml:space="preserve"><value>あたらしいうぃんどうにいどう</value></data>
+  <data name="Cmd_window_new" xml:space="preserve"><value>新しいウィンドウ</value></data>
+  <data name="CmdAlias_window_new" xml:space="preserve"><value>あたらしいうぃんどう</value></data>
+  <data name="Cmd_window_next" xml:space="preserve"><value>次のウィンドウ</value></data>
+  <data name="CmdAlias_window_next" xml:space="preserve"><value>つぎのうぃんどう</value></data>
+  <data name="CmdCategory_tab" xml:space="preserve"><value>タブ</value></data>
+  <data name="Menu_File_NewWindow.Text" xml:space="preserve"><value>新しいウィンドウ(W)</value></data>
+  <data name="Menu_File_NewWindow.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Tab_CloseSaved" xml:space="preserve"><value>保存済みのタブを閉じる</value></data>
+  <data name="Tab_CloseAll" xml:space="preserve"><value>すべて閉じる</value></data>
+  <data name="Tab_Pin" xml:space="preserve"><value>ピン留め</value></data>
+  <data name="Tab_Unpin" xml:space="preserve"><value>ピン留めを外す</value></data>
+  <data name="Tab_MoveToNewWindow" xml:space="preserve"><value>新しいウィンドウに移動</value></data>
+  <data name="Tab_MoveToWindow" xml:space="preserve"><value>別のウィンドウに移動</value></data>
+  <data name="Tab_WindowItem" xml:space="preserve"><value>ウィンドウ {0}: {1}</value></data>
+  <data name="Tab_WindowEmpty" xml:space="preserve"><value>(タブなし)</value></data>
+  <data name="Tab_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+  <data name="Tab_RevealInExplorer" xml:space="preserve"><value>エクスプローラーで表示</value></data>
+  <data name="Tab_ReadOnly" xml:space="preserve"><value>読み取り専用</value></data>
+  <data name="Tab_ToolTipSize" xml:space="preserve"><value>サイズ: {0}</value></data>
+  <data name="Tab_ToolTipKind_File" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Tab_ToolTipKind_Untitled" xml:space="preserve"><value>新規 (無題)</value></data>
+  <data name="Tab_ToolTipReadOnly" xml:space="preserve"><value>読み取り専用</value></data>
+  <data name="Tab_AllTabs" xml:space="preserve"><value>すべてのタブ</value></data>
+  <data name="Tab_Switcher" xml:space="preserve"><value>タブの切り替え</value></data>
+  <data name="Tab_MoveFailed" xml:space="preserve"><value>タブを移動できませんでした</value></data>
+  <data name="Tab_Pinned" xml:space="preserve"><value>ピン留め</value></data>
+  <data name="Set_window_openExternalIn" xml:space="preserve"><value>外部から開いたファイルを開く場所</value></data>
+  <data name="SetDesc_window_openExternalIn" xml:space="preserve"><value>エクスプローラーやコマンドラインから開いたファイルを、どのウィンドウで開くか。</value></data>
+  <data name="SetOpt_window_openExternalIn_lastActiveWindow" xml:space="preserve"><value>最後にアクティブだったウィンドウ</value></data>
+  <data name="SetOpt_window_openExternalIn_newWindow" xml:space="preserve"><value>新しいウィンドウ</value></data>
+  <data name="Set_window_launchWithoutFileOpensNewWindow" xml:space="preserve"><value>ファイルを指定せずに起動したら新しいウィンドウを開く</value></data>
+  <data name="SetDesc_window_launchWithoutFileOpensNewWindow" xml:space="preserve"><value>HexEditor の実行中にファイルを指定せずに起動したとき、既存のウィンドウを前面に出すだけでなく、新しいウィンドウを開きます。</value></data>
+  <data name="Command_NoOtherWindow" xml:space="preserve"><value>他のウィンドウがありません。</value></data>
+  <data name="Command_OnlyTab" xml:space="preserve"><value>ウィンドウのタブがこれだけです。</value></data>
+  <data name="Command_TabAtEdge" xml:space="preserve"><value>これ以上タブを移動できません。</value></data>
 </root>

@@ -29,7 +29,8 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     public Document Document { get; }
 
     /// <summary>通知 (文書の範囲の通知をタブの中に出すため。UI-36)。</summary>
-    public Core.Notifications.NotificationCenter? Notifications { get; init; }
+    /// <remarks>タブを別のウィンドウに移すと、移した先のウィンドウの通知に替わる (UI-11 の仕様 3)。</remarks>
+    public Core.Notifications.NotificationCenter? Notifications { get; set; }
 
     /// <summary>このドキュメントの復旧用データ (ENG-27)。作れなかった場合は null (編集は続けられる)。</summary>
     public DocumentRecovery? Recovery { get; init; }
@@ -93,9 +94,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     /// (形で区別する) を先頭に付ける。
     /// </summary>
     public string Header => (Document.IsReadOnly ? LockGlyph + " " : string.Empty) + (Document.IsModified ? "● " : string.Empty)
-        + (HasExternalChange ? "⚠ " : string.Empty) + DisplayName;
-
-    public string ToolTip => FilePath ?? DisplayName;
+        + (HasExternalChange ? "⚠ " : string.Empty) + TabTitle;
 
     public bool IsUntitled => FilePath is null;
 
@@ -103,6 +102,8 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     {
         FilePath = path;
         DisplayName = Path.GetFileName(path);
+        OnPropertyChanged(nameof(DisplayName));
+        OnPropertyChanged(nameof(TabTitle));
         OnPropertyChanged(nameof(Header));
         OnPropertyChanged(nameof(ToolTip));
     }

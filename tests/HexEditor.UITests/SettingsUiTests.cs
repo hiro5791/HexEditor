@@ -38,14 +38,19 @@ public sealed class SettingsUiTests
     [Trait(UiTest.TC, "TC-UI-22-02")]
     public Task Theme_change_applies_while_settings_stay_open() => UiTestContext.RunAsync(async ctx =>
     {
-        // 複数ウィンドウ (UI-14) は後半で作るので、ウィンドウ 1 つで確かめる。
+        // 前提: 2 つのウィンドウを開き、ウィンドウ 1 で設定画面を開いた。
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = CommandTests.Profile(ctx, """{ "$schemaVersion": 1, "ui.theme": "light" }""") });
-        await app.SendAsync("settingsPage", new JsonObject { ["category"] = "appearance" });
+        await app.KeyAsync("N", ctrl: true, shift: true);
+        await WindowManagementTests.WaitForWindowsAsync(app, 2);
+        await app.SendAsync("settingsPage", new JsonObject { ["window"] = 0, ["category"] = "appearance" });
+
+        // 1〜2. テーマを「ダーク」にすると、1 秒以内に両方のウィンドウがダークテーマになる。
         var sw = Stopwatch.StartNew();
-        Assert.True((await app.SendAsync("settingSet", new JsonObject { ["key"] = "ui.theme", ["value"] = "dark" }))["valid"]!.GetValue<bool>());
-        await app.WaitUntilAsync(async () => (await app.StateAsync())["actualTheme"]!.GetValue<string>() == "Dark", TimeSpan.FromSeconds(1), "the dark theme");
+        Assert.True((await app.SendAsync("settingSet", new JsonObject { ["window"] = 0, ["key"] = "ui.theme", ["value"] = "dark" }))["valid"]!.GetValue<bool>());
+        await app.WaitUntilAsync(async () => (await WindowManagementTests.WindowsAsync(app)).All(w => w!["theme"]!.GetValue<string>() == "Dark"),
+            TimeSpan.FromSeconds(1), "the dark theme in both windows");
         Assert.True(sw.ElapsedMilliseconds < 1000);
-        Assert.Equal("settings", (await app.SendAsync("settingsPage"))["active"]!.GetValue<string>());
+        Assert.Equal("settings", (await app.SendAsync("settingsPage", new JsonObject { ["window"] = 0 }))["active"]!.GetValue<string>());
     });
 
     [Fact]

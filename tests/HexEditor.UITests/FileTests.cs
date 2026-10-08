@@ -43,7 +43,7 @@ public sealed class FileTests
     [Trait(UiTest.TC, "TC-ENG-10-03")]
     public Task Saving_untitled_opens_save_as() => Task.CompletedTask;
 
-    [Fact(Skip = "ENG-11 の仕様 (シンボリックリンク・ジャンクション経由のパスも同じファイルと判定する) が未実装: パスの文字列だけで比べるため新しいタブになる。同じパスを 2 回開く場合は合格")]
+    [Fact]
     [Trait(UiTest.TC, "TC-ENG-11-02")]
     public Task Opening_the_same_file_twice_does_not_add_tabs() => UiTestContext.RunAsync(async ctx =>
     {
@@ -217,10 +217,6 @@ public sealed class FileTests
         Assert.Single(Process.GetProcessesByName(Path.GetFileNameWithoutExtension(AppLocator.ExePath)),
             p => SameExe(p) && CommandLineHasProfile(p, ctx.DefaultProfile!));
     });
-
-    [Fact(Skip = "UI-15 の設定 window.openExternalIn (newWindow) と複数ウィンドウが未実装")]
-    [Trait(UiTest.TC, "TC-UI-15-02")]
-    public Task New_window_setting_opens_a_second_window() => Task.CompletedTask;
 
     [Fact(Skip = "既存のウィンドウを前面に出すことを確かめるテストで、作業中の PC のフォーカスを奪うため実行しない (CI 専用の仕組みが必要)")]
     [Trait(UiTest.TC, "TC-UI-15-04")]

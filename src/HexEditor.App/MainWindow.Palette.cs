@@ -108,7 +108,8 @@ public sealed partial class MainWindow
         {
             Key = "command:" + item.Id,
             Title = item.Title,
-            Highlights = match?.Field == CommandMatchField.DisplayName ? [.. match.Match.Positions.Select(p => p + offset)] : [],
+            Highlights = match?.Field == CommandMatchField.DisplayName ? [.. match.Match.Positions.Select(p => p + offset)]
+                : match?.Field == CommandMatchField.Title ? match.Match.Positions : [],
             Secondary = english ? item.EnglishName.Original : null,
             SecondaryHighlights = english ? match!.Match.Positions : [],
             Shortcut = CommandService.ShortcutText(item.Id),

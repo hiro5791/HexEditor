@@ -56,6 +56,15 @@ public sealed partial class MainWindow
             return null;
         }
 
+        // 別のウィンドウで開いているファイルは、そのタブをアクティブにする (UI-09 の仕様 1、UI-14)。
+        if (WindowManager.FindOpenElsewhere(this, path) is { } elsewhere)
+        {
+            elsewhere.Window.Vm.Selected = elsewhere.Document;
+            WindowManager.MarkActive(elsewhere.Window);
+            WindowManager.BringToFront(elsewhere.Window);
+            return elsewhere.Document;
+        }
+
         try
         {
             DocumentViewModel doc = Vm.Open(path, insertAt, readOnly, restorePosition);

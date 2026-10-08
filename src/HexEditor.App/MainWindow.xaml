@@ -98,6 +98,8 @@
                         <MenuFlyoutItem x:Uid="Menu_File_Open" cmd:CommandUi.Id="file.open" AutomationProperties.AutomationId="Command_Open" />
                         <!--  読み取り専用で開く (ENG-14 の仕様 1)。標準のダイアログにチェックボックスを置けないため、別の項目にする。  -->
                         <MenuFlyoutItem x:Uid="Menu_File_OpenReadOnly" cmd:CommandUi.Id="file.openReadOnly" AutomationProperties.AutomationId="Command_OpenReadOnly" />
+                        <!--  新しいウィンドウ (UI-14)  -->
+                        <MenuFlyoutItem x:Uid="Menu_File_NewWindow" cmd:CommandUi.Id="window.new" AutomationProperties.AutomationId="Command_NewWindow" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_File_Save" cmd:CommandUi.Id="file.save" AutomationProperties.AutomationId="Command_Save" />
                         <MenuFlyoutItem x:Uid="Menu_File_SaveAs" cmd:CommandUi.Id="file.saveAs" AutomationProperties.AutomationId="Command_SaveAs" />
@@ -313,16 +315,16 @@
                     VerticalAlignment="Stretch">
                     <TabView.TabItemTemplate>
                         <DataTemplate x:DataType="vm:DocumentViewModel">
-                            <TabViewItem Header="{x:Bind Header, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}">
+                            <!--  タブ (UI-09): 見出しは種類のアイコンと状態の印と表示名。右クリックメニューはコードで作る (MainWindow.Tabs.cs)。  -->
+                            <TabViewItem
+                                AutomationProperties.Name="{x:Bind Header, Mode=OneWay}"
+                                Header="{x:Bind Header, Mode=OneWay}"
+                                ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}">
                                 <TabViewItem.ContextFlyout>
-                                    <MenuFlyout>
-                                        <MenuFlyoutItem x:Uid="Tab_Close" cmd:CommandUi.Id="file.close" Click="TabClose_Click" />
-                                        <MenuFlyoutItem x:Uid="Tab_CloseOthers" cmd:CommandUi.Id="file.closeOthers" Click="TabCloseOthers_Click" />
-                                        <MenuFlyoutItem x:Uid="Tab_CloseRight" cmd:CommandUi.Id="file.closeToRight" Click="TabCloseRight_Click" />
-                                    </MenuFlyout>
+                                    <MenuFlyout Opening="TabMenu_Opening" />
                                 </TabViewItem.ContextFlyout>
                                 <TabViewItem.IconSource>
-                                    <SymbolIconSource Symbol="Document" />
+                                    <FontIconSource Glyph="{x:Bind IconGlyph, Mode=OneWay}" />
                                 </TabViewItem.IconSource>
                                 <Grid>
                                     <Grid.RowDefinitions>

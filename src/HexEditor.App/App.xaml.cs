@@ -133,6 +133,9 @@ public partial class App : Application
         MainWindow.RegisterSearchResultsPanel();
         var window = new MainWindow(vm);
         Window = window;
+
+        // 複数ウィンドウ (UI-14): 最初のウィンドウ。設定・テーマなどの変更は全ウィンドウに反映する (仕様 2)。
+        WindowManager.Register(window);
         window.ApplyAppearance();
         window.ShowSettingsStatus(settingsStatus);
         window.ShowKeybindingsStatus();
@@ -151,11 +154,20 @@ public partial class App : Application
             ApplyRecoveryInterval();
             AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
             CrashReporter.WriteMiniDump = Settings.GetBool(CrashReporter.MiniDumpKey, false);
-            window.ApplyAppearance();
-            window.ApplyEditorSettings();
+            foreach (MainWindow w in WindowManager.Windows)
+            {
+                w.ApplyAppearance();
+                w.ApplyEditorSettings();
+            }
         });
-        Settings.ExternalEditFailed += reason => DispatcherQueue.TryEnqueue(() => window.ShowSettingsEditError(reason));
-        Appearance.SystemColorsChanged += () => DispatcherQueue.TryEnqueue(window.ApplyAppearance);
+        Settings.ExternalEditFailed += reason => DispatcherQueue.TryEnqueue(() => WindowManager.Current.ShowSettingsEditError(reason));
+        Appearance.SystemColorsChanged += () => DispatcherQueue.TryEnqueue(() =>
+        {
+            foreach (MainWindow w in WindowManager.Windows)
+            {
+                w.ApplyAppearance();
+            }
+        });
         try
         {
             Settings.StartWatching();
@@ -165,33 +177,30 @@ public partial class App : Application
             AppLog.Warning($"Settings watcher unavailable: {ex.GetType().Name}");
         }
 
-        // 他のアプリの書き込みを禁止できなかったら、その文書の中で知らせる (ENG-15 の仕様 2)。
-        vm.LockFailed += (_, doc) => DispatcherQueue.TryEnqueue(() => window.ShowLockFailed(doc));
-
         // メモリの上限の監視 (ENG-08)。1 秒ごとに集計し、上限を超えたら減らす。減らしきれなければ知らせる。
         _memoryMonitor = new MemoryMonitor(vm.Memory);
-        _memoryMonitor.OverLimit += (_, _) => DispatcherQueue.TryEnqueue(() => window.ShowMemoryOverLimit(vm.Memory.Limit));
+        _memoryMonitor.OverLimit += (_, _) => DispatcherQueue.TryEnqueue(() => WindowManager.Current.ShowMemoryOverLimit(vm.Memory.Limit));
         _memoryMonitor.LowMemory += (_, _) => AppLog.Warning("Low memory notification: cache trimmed.");
 
         // トースト通知を押したら、ウィンドウを前に出す (UI-36 の仕様 8)。
-        ToastNotifier.Invoked += () => DispatcherQueue.TryEnqueue(window.Activate);
+        ToastNotifier.Invoked += () => DispatcherQueue.TryEnqueue(() => WindowManager.Current.Activate());
 
         // 異常終了の直前に未保存の編集内容を書き出す (PKG-30 の仕様 1 の 1)。
-        CrashReporter.WriteRecovery = timeout => vm.WriteRecoveryNow(timeout);
+        CrashReporter.WriteRecovery = WindowManager.WriteRecoveryNow;
 
         // 復旧用データの定期の書き出し (ENG-27 の仕様 1。既定 1 分ごと)。
         // タイマーはフィールドに持つ (ローカル変数だけだとガベージコレクションで回収され、書き出しが止まる)。
         _recoveryTimer = DispatcherQueue.CreateTimer();
-        _recoveryTimer.Tick += async (_, _) => await vm.WriteRecoveryAsync(window.ShowRecoveryWriteError);
+        _recoveryTimer.Tick += async (_, _) => await WindowManager.WriteRecoveryAsync();
         ApplyRecoveryInterval();
 
         // セッション・閉じたタブの記録を読み、起動時の動作 (UI-30) に従ってタブを戻す。コマンドラインのファイルより先に行い、
         // 指定されたファイルをアクティブなタブにする (UI-30 の仕様 2)。
         window.PrepareStartup();
 
-        // 既存のインスタンスに転送された起動 (2 つ目の起動で指定したファイル) を、このウィンドウのタブとして開く (UI-15)。
-        SingleInstance.Redirected += commandLine =>
-            DispatcherQueue.TryEnqueue(() => window.OpenFromCommandLine(commandLine, activate: !DevOptions.NoActivate && !TestHooks.SuppressActivation));
+        // 既存のインスタンスに転送された起動 (2 つ目の起動で指定したファイル) を、最後にアクティブだったウィンドウ (設定
+        // window.openExternalIn と --new-window によっては新しいウィンドウ) のタブとして開く (UI-15)。
+        SingleInstance.Redirected += commandLine => DispatcherQueue.TryEnqueue(() => WindowManager.OpenRedirected(commandLine));
 
         // コマンドラインで指定したファイルを開く (AUTO-37)。指定がなければスタートページを出す (UI-01 の仕様 2)。
         // テスト用のビルドでは、異常を再現するデータソースもここで開く (テスト方針 7.2)。
@@ -199,15 +208,7 @@ public partial class App : Application
 
         // 開発中の確認用: 作業の邪魔にならないよう、起動したら前のウィンドウに戻し、自分は後ろに回る。
         // 自動テスト (--test-hooks) では一度もアクティブにせずに表示する。
-        if (!TestHooks.ShowWithoutActivation(window))
-        {
-            nint previous = DevOptions.NoActivate ? DevOptions.ForegroundWindow() : 0;
-            window.Activate();
-            if (previous != 0)
-            {
-                DevOptions.SendToBack(window, previous);
-            }
-        }
+        WindowManager.Show(window);
 
         // テスト用のメニューと命令の通り道 (テスト用のビルドだけ。テスト方針 8.4)。
         TestHooks.OnLaunched(window, vm);

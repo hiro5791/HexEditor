@@ -273,8 +273,8 @@
 | Ctrl+R | 再読み込み | | F2 / Shift+F2 | 次 / 前のブックマーク |
 | Ctrl+W / Ctrl+F4 | タブを閉じる | | Ctrl+Shift+1〜9 | 番号付きブックマークの設定 |
 | Ctrl+Shift+T | 閉じたタブを開き直す | | Ctrl+1〜9 | 番号付きブックマークへ移動 |
-| Ctrl+Tab / Ctrl+Shift+Tab | 次 / 前のタブ | | Alt+F5 / Shift+Alt+F5 | 次 / 前の差分 |
-| Ctrl+PageDown / Ctrl+PageUp | 次 / 前のタブ | | F12 | 定義へ移動 (テンプレート) / 分岐先へ移動 (逆アセンブル) |
+| Ctrl+Tab / Ctrl+Shift+Tab | 次 / 前のタブ (最近使った順) | | Alt+F5 / Shift+Alt+F5 | 次 / 前の差分 |
+| Ctrl+PageDown / Ctrl+PageUp | 次 / 前のタブ (並び順) | | F12 | 定義へ移動 (テンプレート) / 分岐先へ移動 (逆アセンブル) |
 | F6 / Shift+F6 | 次 / 前の領域へフォーカスを移す | | Ctrl+Shift+P / F1 | コマンドパレット |
 | Ctrl+P | 印刷 | | Ctrl+, | 設定 |
 | Ctrl+Z | 元に戻す | | Ctrl+= / Ctrl+- / Ctrl+0 | 拡大 / 縮小 / 100% に戻す |

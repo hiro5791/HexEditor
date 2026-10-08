@@ -47,67 +47,33 @@ public sealed partial class MainWindow
         }
     }
 
-    // ---- タブの右クリックメニュー ----
-
-    private async void TabCloseOthers_Click(object sender, RoutedEventArgs e)
-    {
-        if (TabOf(sender) is { } doc)
-        {
-            await CloseAsync(Vm.Documents.Where(d => d != doc).ToList());
-        }
-    }
-
-    private async void TabCloseRight_Click(object sender, RoutedEventArgs e)
-    {
-        if (TabOf(sender) is { } doc)
-        {
-            await CloseAsync(Vm.Documents.Skip(Vm.Documents.IndexOf(doc) + 1).ToList());
-        }
-    }
-
-    private async void TabClose_Click(object sender, RoutedEventArgs e)
-    {
-        if (TabOf(sender) is { } doc)
-        {
-            await CloseAsync([doc]);
-        }
-    }
+    // タブの右クリックメニューは MainWindow.Tabs.cs (UI-09 の仕様 9)。
 
     private static DocumentViewModel? TabOf(object sender) => (sender as FrameworkElement)?.DataContext as DocumentViewModel;
 
-    private void Exit_Click(object sender, RoutedEventArgs e) => Close();
+    /// <summary>ファイル > 終了: すべてのウィンドウを閉じてアプリを終了する (UI-14 の仕様 4)。</summary>
+    private async void Exit_Click(object sender, RoutedEventArgs e) => await WindowManager.ExitAsync(this);
 
     /// <summary>
-    /// ウィンドウを閉じる (終了): 全部の文書をまとめて確認してから閉じ、一時ファイルと復旧用データを消してから終わる
-    /// (ENG-17 の仕様 3・9)。
+    /// ウィンドウを閉じる。他のウィンドウがあれば、このウィンドウの文書だけを確認して閉じる (UI-13 の仕様 5)。最後のウィンドウなら終了:
+    /// 全部の文書をまとめて確認してから閉じ、一時ファイルと復旧用データを消してから終わる (ENG-17 の仕様 3・9)。
     /// </summary>
     private async void MainWindow_Closed(object sender, WindowEventArgs args)
     {
         if (_closingConfirmed)
         {
+            WindowManager.Unregister(this);
             return;
         }
 
         args.Handled = true;
-
-        // 閉じる前のタブをセッションに残す (閉じた後は文書がなくなるため。UI-31 の仕様 2)。
-        Core.Files.SessionState session = Vm.CaptureSession(CurrentBounds());
-        if (!await CloseAsync(Vm.Documents.ToList()))
+        if (WindowManager.Windows.Count > 1 && !WindowManager.IsExiting)
         {
+            await CloseThisWindowAsync();
             return;
         }
 
-        _closingConfirmed = true;
-        _sessionTimer?.Stop();
-        SaveSession(session);
-        App.Settings.Flush();
-        SavePanelLayout();
-        HexEditor.App.Commands.CommandService.Flush();
-        AppLog.Info("Exited");
-
-        // 確認のダイアログを出さずに CloseAsync が終わった場合、ここはまだ Closed の処理の中で、そのまま Close を呼んでも
-        // 無視される (ウィンドウが残り、プロセスが終わらない)。処理を抜けてから閉じる。
-        DispatcherQueue.TryEnqueue(Close);
+        await WindowManager.ExitAsync(this);
     }
 
     /// <summary>
@@ -213,10 +179,12 @@ public sealed partial class MainWindow
         {
             foreach ((DocumentViewModel doc, CheckBox box) in boxes.Where(b => b.Box.IsChecked == true))
             {
-                Vm.Selected = doc;
+                // アプリの終了では、他のウィンドウの文書もその文書のウィンドウで保存する (UI-13 の仕様 2、UI-14)。
+                MainWindow owner = WindowManager.OwnerOf(doc) ?? this;
+                owner.Vm.Selected = doc;
 
                 // 保存に失敗したら、その文書を残して閉じる処理を中断する (ENG-17 の仕様 4)。
-                if (!await SaveAsync(doc, saveAs: false))
+                if (!await owner.SaveAsync(doc, saveAs: false))
                 {
                     return false;
                 }

@@ -36,6 +36,7 @@ public static class BuiltInCommands
         new("file.closeAll", "file") { Condition = "documentOpen" },
         new("file.closeOthers", "file") { Condition = "documentOpen" },
         new("file.closeToRight", "file") { Condition = "documentOpen" },
+        new("file.closeSaved", "file") { Condition = "documentOpen" },
         new("file.exit", "file"),
 
         // ---- 編集 ----
@@ -187,7 +188,19 @@ public static class BuiltInCommands
         // ---- 解析 ----
         new("analysis.hash", "analysis") { Condition = "documentOpen" },
 
-        // ---- ウィンドウ ----
+        // ---- タブ (UI-09〜UI-11) ----
+        new("tab.next", "tab") { DefaultBindings = [K("Ctrl+Tab")] },
+        new("tab.previous", "tab") { DefaultBindings = [K("Ctrl+Shift+Tab")] },
+        new("tab.nextInOrder", "tab") { DefaultBindings = [K("Ctrl+PageDown")] },
+        new("tab.previousInOrder", "tab") { DefaultBindings = [K("Ctrl+PageUp")] },
+        new("tab.togglePin", "tab") { Condition = "documentOpen" },
+        new("tab.moveLeft", "tab") { Condition = "documentOpen" },
+        new("tab.moveRight", "tab") { Condition = "documentOpen" },
+        new("tab.moveToNewWindow", "tab") { Condition = "documentOpen" },
+
+        // ---- ウィンドウ (UI-14) ----
+        new("window.new", "window") { DefaultBindings = [K("Ctrl+Shift+N")] },
+        new("window.next", "window"),
         new("window.restoreSession", "window"),
 
         // ---- ツール・設定 ----

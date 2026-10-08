@@ -341,27 +341,34 @@ public sealed class ViewMiscTests
     [Trait(UiTest.TC, "TC-UI-28-01")]
     public Task Color_scheme_applies_immediately() => UiTestContext.RunAsync(async ctx =>
     {
-        // 複数ウィンドウ (UI-14) はウェーブ 2 のため、開いているすべてのタブの Hex ビューに反映されることを確かめる。
+        // 前提: ウィンドウ 1 に TD-SEQ-1M、ウィンドウ 2 に TD-BYTES-256。
         string profile = ctx.NewProfile();
         WriteSettings(profile, new JsonObject { ["ui.theme"] = "light" });
-        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M"), ctx.TestData("TD-BYTES-256")] });
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
         int pid = app.Pid;
-        await MenuAsync(app, "Command_ViewColorScheme_solarized");
-        Assert.Equal("#FFFDF6E3", (await app.RenderAsync())["background"]!.GetValue<string>());
-        await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
+        await app.KeyAsync("N", ctrl: true, shift: true);
+        await WindowManagementTests.WaitForWindowsAsync(app, 2);
+        await app.SendAsync("uiOpen", new JsonObject { ["window"] = 1, ["path"] = ctx.TestData("TD-BYTES-256") });
 
-        // タブを切り替えた後、その Hex ビューが読み込まれるまで待つ。
-        await app.WaitUntilAsync(async () =>
+        // 1. ウィンドウ 1 で「ソラライズド」を選ぶ。
+        await app.SendAsync("invoke", new JsonObject { ["window"] = 0, ["id"] = "Command_ViewColorScheme_solarized" });
+
+        // 2. 両方のウィンドウの Hex ビューの背景がソラライズドの背景色になる (再起動なし)。
+        foreach (int window in new[] { 0, 1 })
         {
-            try
+            await app.WaitUntilAsync(async () =>
             {
-                return (await app.RenderAsync())["background"]?.GetValue<string>() == "#FFFDF6E3";
-            }
-            catch (InvalidOperationException)
-            {
-                return false;
-            }
-        }, TimeSpan.FromSeconds(10), "the solarized background in the other tab");
+                try
+                {
+                    return (await app.SendAsync("render", new JsonObject { ["window"] = window }))["background"]?.GetValue<string>() == "#FFFDF6E3";
+                }
+                catch (InvalidOperationException)
+                {
+                    return false;
+                }
+            }, TimeSpan.FromSeconds(10), $"the solarized background in window {window + 1}");
+        }
+
         Assert.Equal(pid, (await app.StateAsync())["pid"]!.GetValue<int>());
     });
 

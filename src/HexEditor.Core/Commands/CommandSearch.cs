@@ -8,6 +8,9 @@ public enum CommandMatchField
     Alias,
     Category,
     Id,
+
+    /// <summary>「カテゴリ: 表示名」の全体 (パレットに出ているとおりに入力した。例: 「タブ: 右へ移動」)。</summary>
+    Title,
 }
 
 /// <summary>
@@ -24,6 +27,7 @@ public sealed class CommandSearchItem
         EnglishName = new SearchText(englishName);
         Aliases = aliases.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(a => new SearchText(a)).ToList();
         IdText = new SearchText(id);
+        TitleText = new SearchText(Title);
     }
 
     public string Id { get; }
@@ -37,6 +41,9 @@ public sealed class CommandSearchItem
     public IReadOnlyList<SearchText> Aliases { get; }
 
     public SearchText IdText { get; }
+
+    /// <summary>「カテゴリ: 表示名」(表示どおりの入力で探す)。</summary>
+    public SearchText TitleText { get; }
 
     /// <summary>「カテゴリ: 表示名」(候補の表示。UI-17 の仕様 5)。</summary>
     public string Title => $"{Category.Original}: {DisplayName.Original}";
@@ -114,6 +121,7 @@ public static class CommandSearch
 
         Try(item.Category, CommandMatchField.Category, 3);
         Try(item.IdText, CommandMatchField.Id, 4);
+        Try(item.TitleText, CommandMatchField.Title, 0);
         return best;
     }
 }

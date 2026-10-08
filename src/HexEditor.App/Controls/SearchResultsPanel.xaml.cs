@@ -437,9 +437,11 @@ public sealed partial class SearchResultsPanel : UserControl
         }
         finally
         {
-            if (_running == cts)
+            // タブを別のウィンドウに移していれば、移した先の一覧で後始末をする (UI-11 の仕様 3)。
+            SearchResultsPanel owner = OwnerOfRun(cts);
+            if (owner._running == cts)
             {
-                _running = null;
+                owner._running = null;
             }
 
             // キャンセルされた場合、まだ探していないドキュメントの結果は「中断」にする。
@@ -449,10 +451,10 @@ public sealed partial class SearchResultsPanel : UserControl
             }
 
             AppLog.Info($"Find all: end ({string.Join(", ", groups.Select(g => g.Results.State).Distinct())}, {groups.Sum(g => g.Results.LongCount)} matches)");
-            if (_groups.SequenceEqual(groups))
+            if (owner._groups.SequenceEqual(groups))
             {
-                _dirty = true;
-                Refresh();
+                owner._dirty = true;
+                owner.Refresh();
             }
             else
             {

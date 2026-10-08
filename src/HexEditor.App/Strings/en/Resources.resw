@@ -2047,4 +2047,57 @@ Details were written to:
   <data name="Settings_FontDefault" xml:space="preserve"><value>Default (Cascadia Mono)</value></data>
   <data name="Settings_FontMissing" xml:space="preserve"><value>{0} was not found. The default font is used.</value></data>
   <data name="Settings_ShowAllFonts" xml:space="preserve"><value>Show all fonts</value></data>
+  <data name="Cmd_file_closeSaved" xml:space="preserve"><value>Close saved tabs</value></data>
+  <data name="CmdAlias_file_closeSaved" xml:space="preserve"><value>close unmodified tabs</value></data>
+  <data name="Cmd_tab_next" xml:space="preserve"><value>Next tab (most recently used)</value></data>
+  <data name="CmdAlias_tab_next" xml:space="preserve"><value>switch tab mru ctrl tab</value></data>
+  <data name="Cmd_tab_previous" xml:space="preserve"><value>Previous tab (most recently used)</value></data>
+  <data name="CmdAlias_tab_previous" xml:space="preserve"><value>switch tab mru back</value></data>
+  <data name="Cmd_tab_nextInOrder" xml:space="preserve"><value>Next tab</value></data>
+  <data name="CmdAlias_tab_nextInOrder" xml:space="preserve"><value>switch tab right</value></data>
+  <data name="Cmd_tab_previousInOrder" xml:space="preserve"><value>Previous tab</value></data>
+  <data name="CmdAlias_tab_previousInOrder" xml:space="preserve"><value>switch tab left</value></data>
+  <data name="Cmd_tab_togglePin" xml:space="preserve"><value>Toggle pin</value></data>
+  <data name="CmdAlias_tab_togglePin" xml:space="preserve"><value>pin unpin tab</value></data>
+  <data name="Cmd_tab_moveLeft" xml:space="preserve"><value>Move left</value></data>
+  <data name="CmdAlias_tab_moveLeft" xml:space="preserve"><value>reorder tab left</value></data>
+  <data name="Cmd_tab_moveRight" xml:space="preserve"><value>Move right</value></data>
+  <data name="CmdAlias_tab_moveRight" xml:space="preserve"><value>reorder tab right</value></data>
+  <data name="Cmd_tab_moveToNewWindow" xml:space="preserve"><value>Move to new window</value></data>
+  <data name="CmdAlias_tab_moveToNewWindow" xml:space="preserve"><value>detach tab tear off</value></data>
+  <data name="Cmd_window_new" xml:space="preserve"><value>New window</value></data>
+  <data name="CmdAlias_window_new" xml:space="preserve"><value>open another window</value></data>
+  <data name="Cmd_window_next" xml:space="preserve"><value>Next window</value></data>
+  <data name="CmdAlias_window_next" xml:space="preserve"><value>switch window</value></data>
+  <data name="CmdCategory_tab" xml:space="preserve"><value>Tab</value></data>
+  <data name="Menu_File_NewWindow.Text" xml:space="preserve"><value>New window</value></data>
+  <data name="Menu_File_NewWindow.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Tab_CloseSaved" xml:space="preserve"><value>Close saved tabs</value></data>
+  <data name="Tab_CloseAll" xml:space="preserve"><value>Close all</value></data>
+  <data name="Tab_Pin" xml:space="preserve"><value>Pin</value></data>
+  <data name="Tab_Unpin" xml:space="preserve"><value>Unpin</value></data>
+  <data name="Tab_MoveToNewWindow" xml:space="preserve"><value>Move to new window</value></data>
+  <data name="Tab_MoveToWindow" xml:space="preserve"><value>Move to another window</value></data>
+  <data name="Tab_WindowItem" xml:space="preserve"><value>Window {0}: {1}</value></data>
+  <data name="Tab_WindowEmpty" xml:space="preserve"><value>(no tabs)</value></data>
+  <data name="Tab_CopyPath" xml:space="preserve"><value>Copy path</value></data>
+  <data name="Tab_RevealInExplorer" xml:space="preserve"><value>Show in Explorer</value></data>
+  <data name="Tab_ReadOnly" xml:space="preserve"><value>Read-only</value></data>
+  <data name="Tab_ToolTipSize" xml:space="preserve"><value>Size: {0}</value></data>
+  <data name="Tab_ToolTipKind_File" xml:space="preserve"><value>File</value></data>
+  <data name="Tab_ToolTipKind_Untitled" xml:space="preserve"><value>New (untitled)</value></data>
+  <data name="Tab_ToolTipReadOnly" xml:space="preserve"><value>Read-only</value></data>
+  <data name="Tab_AllTabs" xml:space="preserve"><value>All tabs</value></data>
+  <data name="Tab_Switcher" xml:space="preserve"><value>Switch tab</value></data>
+  <data name="Tab_MoveFailed" xml:space="preserve"><value>The tab could not be moved.</value></data>
+  <data name="Tab_Pinned" xml:space="preserve"><value>Pinned</value></data>
+  <data name="Set_window_openExternalIn" xml:space="preserve"><value>Open files from other apps in</value></data>
+  <data name="SetDesc_window_openExternalIn" xml:space="preserve"><value>Where files opened from Explorer or the command line are opened.</value></data>
+  <data name="SetOpt_window_openExternalIn_lastActiveWindow" xml:space="preserve"><value>The last active window</value></data>
+  <data name="SetOpt_window_openExternalIn_newWindow" xml:space="preserve"><value>A new window</value></data>
+  <data name="Set_window_launchWithoutFileOpensNewWindow" xml:space="preserve"><value>Starting without a file opens a new window</value></data>
+  <data name="SetDesc_window_launchWithoutFileOpensNewWindow" xml:space="preserve"><value>When HexEditor is already running, starting it again without a file opens a new window instead of only bringing the existing window to the front.</value></data>
+  <data name="Command_NoOtherWindow" xml:space="preserve"><value>There is no other window.</value></data>
+  <data name="Command_OnlyTab" xml:space="preserve"><value>This is the only tab in the window.</value></data>
+  <data name="Command_TabAtEdge" xml:space="preserve"><value>The tab cannot move further.</value></data>
 </root>

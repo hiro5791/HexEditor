@@ -237,8 +237,11 @@ public sealed partial class MainWindow
             "insertBytes" => TestInsertBytes(request),
             "exit" => Run(() =>
             {
-                _closingConfirmed = true;
-                Close();
+                // 確認を出さずにすべてのウィンドウを閉じる (複数ウィンドウ。UI-14)。
+                foreach (MainWindow w in WindowManager.Windows.ToList())
+                {
+                    w.CloseForExit();
+                }
             }),
             _ => await HandleMoreTestCommandsAsync(cmd, request) ?? throw new ArgumentException($"Unknown command: {cmd}"),
         };

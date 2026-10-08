@@ -32,10 +32,10 @@ public sealed partial class MainViewModel
     private FilesContext? _files;
 
     /// <summary>最近使ったファイル。ジャンプリスト (UI-35) もこの一覧と <see cref="RecentFileList.Changed"/> を使う。</summary>
-    public RecentFileList Recent { get; } = new();
+    public RecentFileList Recent { get; }
 
     /// <summary>閉じたタブ (アプリ全体。UI-12)。</summary>
-    public ClosedTabHistory ClosedTabs { get; } = new();
+    public ClosedTabHistory ClosedTabs { get; }
 
     public FilesContext? Files => _files;
 
@@ -62,9 +62,10 @@ public sealed partial class MainViewModel
         ExternalChanges = new ExternalChangeMonitor(files.Watcher);
         ExternalChanges.Detected += (file, kind) =>
         {
-            if (file.Owner is DocumentViewModel vm)
+            // 監視はアプリ全体で 1 つ。今そのタブを持っているウィンドウに知らせる (UI-14、UI-11)。
+            if (file.Owner is DocumentViewModel vm && (vm.Owner ?? this) is { } owner)
             {
-                ExternalChangeDetected?.Invoke(vm, kind);
+                owner.ExternalChangeDetected?.Invoke(vm, kind);
             }
         };
     }
@@ -183,6 +184,11 @@ public sealed partial class MainViewModel
             }
 
             vm.RestorePosition(tab.Cursor, tab.SelectionStart, tab.SelectionLength, tab.TopRow);
+            if (tab.Pinned)
+            {
+                SetPinned(vm, true);
+            }
+
             return vm;
         }
 
@@ -224,8 +230,8 @@ public sealed partial class MainViewModel
     };
 
     /// <summary>
-    /// セッションのタブを開く (UI-31 の仕様 5〜7)。見つからないファイルはタブを残して「ファイルが見つかりません」を表示する。前回の終了後に
-    /// サイズや更新日時が変わっていたら、カーソル位置を長さの範囲に収め、<paramref name="changed"/> で知らせる。
+    /// セッションのタブを開く (UI-31 の仕様 5〜7)。アクティブなタブだけをすぐに開き、他のタブは見出しだけを出して初めて表示したときに開く
+    /// (仕様 6。<see cref="AddPending"/>)。
     /// </summary>
     public void RestoreTabs(SessionWindow window, Func<string, bool, DocumentViewModel?> open, Action<DocumentViewModel> changed)
     {
@@ -238,24 +244,8 @@ public sealed partial class MainViewModel
                 continue;
             }
 
-            DocumentViewModel? vm = File.Exists(tab.Path) ? open(tab.Path!, tab.ReadOnly) : AddMissing(tab);
-            if (vm is null)
-            {
-                continue;
-            }
-
-            if (!vm.IsMissing)
-            {
-                vm.RestorePosition(tab.Cursor, tab.SelectionStart, tab.SelectionLength, tab.TopRow);
-                FileStamp? stamp = vm.OpenedStamp;
-                if (stamp is not null && tab.LastWriteTimeUtc != default
-                    && (stamp.Length != tab.Length || stamp.LastWriteTimeUtc != tab.LastWriteTimeUtc))
-                {
-                    changed(vm);
-                }
-            }
-
-            if (i == window.ActiveTab)
+            DocumentViewModel? vm = i == window.ActiveTab ? OpenRestored(tab, open, changed, null) : AddPending(tab);
+            if (vm is not null && i == window.ActiveTab)
             {
                 active = vm;
             }
@@ -265,13 +255,48 @@ public sealed partial class MainViewModel
         {
             Selected = active;
         }
+        else if (Selected is { IsPending: true } || (Selected is null && Documents.Count > 0))
+        {
+            Selected = Documents.FirstOrDefault(d => !d.IsPending) ?? Documents.FirstOrDefault();
+        }
+    }
+
+    /// <summary>
+    /// セッションのタブ 1 つを開く (UI-31 の仕様 5・7)。見つからないファイルはタブを残して「ファイルが見つかりません」を表示する。前回の
+    /// 終了後にサイズや更新日時が変わっていたら、カーソル位置を長さの範囲に収め、<paramref name="changed"/> で知らせる。
+    /// </summary>
+    public DocumentViewModel? OpenRestored(SessionTab tab, Func<string, bool, DocumentViewModel?> open, Action<DocumentViewModel> changed, int? insertAt)
+    {
+        DocumentViewModel? vm = File.Exists(tab.Path) ? open(tab.Path!, tab.ReadOnly) : AddMissing(tab, insertAt);
+        if (vm is null)
+        {
+            return null;
+        }
+
+        if (tab.Pinned && !vm.IsPinned)
+        {
+            SetPinned(vm, true);
+        }
+
+        if (!vm.IsMissing)
+        {
+            vm.RestorePosition(tab.Cursor, tab.SelectionStart, tab.SelectionLength, tab.TopRow);
+            FileStamp? stamp = vm.OpenedStamp;
+            if (stamp is not null && tab.LastWriteTimeUtc != default
+                && (stamp.Length != tab.Length || stamp.LastWriteTimeUtc != tab.LastWriteTimeUtc))
+            {
+                changed(vm);
+            }
+        }
+
+        return vm;
     }
 
     /// <summary>見つからないファイルのタブ (UI-31 の「エラー」)。内容は空で、編集できない。</summary>
     public DocumentViewModel AddMissing(SessionTab tab, int? insertAt = null)
     {
         var doc = new Document(MemoryByteSource.CreateEmpty(tab.DisplayName), _options);
-        var vm = new DocumentViewModel(doc, null, tab.DisplayName) { MissingPath = tab.Path, MissingRecord = tab, Notifications = Notifications };
+        var vm = new DocumentViewModel(doc, null, tab.DisplayName) { MissingPath = tab.Path, MissingRecord = tab, Notifications = Notifications, IsPinned = tab.Pinned };
         vm.Editor.ReadOnly = true;
         return AddViewModel(vm, insertAt);
     }

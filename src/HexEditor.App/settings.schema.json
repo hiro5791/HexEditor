@@ -440,6 +440,20 @@
       "description": "Show tooltips",
       "type": "boolean",
       "default": true
+    },
+    "window.launchWithoutFileOpensNewWindow": {
+      "description": "Starting without a file opens a new window",
+      "type": "boolean",
+      "default": false
+    },
+    "window.openExternalIn": {
+      "description": "Open files from other apps in",
+      "type": "string",
+      "enum": [
+        "lastActiveWindow",
+        "newWindow"
+      ],
+      "default": "lastActiveWindow"
     }
   },
   "required": [

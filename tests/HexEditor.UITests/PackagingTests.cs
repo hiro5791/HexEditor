@@ -291,9 +291,24 @@ public sealed class PackagingTests
         Assert.Equal(app.Pid, Assert.Single(Process.GetProcessesByName("HexEditor"), p => SamePath(p, AppLocator.ExePath) && StartedAfter(p, testStart)).Id);
     });
 
-    [Fact(Skip = "The jump list task --new-window needs multiple windows in one process (UI-14), which is not implemented yet.")]
+    [Fact]
     [Trait(UiTest.TC, "TC-UI-35-02")]
-    public Task Jump_list_new_window_opens_a_second_window_in_the_same_process() => Task.CompletedTask;
+    public Task Jump_list_new_window_opens_a_second_window_in_the_same_process() => UiTestContext.RunAsync(async ctx =>
+    {
+        DateTime testStart = DateTime.Now;
+        AppSession app = await ctx.StartAsync(new AppOptions { NewInstance = false });
+        JsonArray items = [];
+        await app.WaitUntilAsync(async () => (items = (await app.SendAsync("jumpList"))["items"]!.AsArray())
+            .Any(i => i!["category"]!.GetValue<string>() == "Tasks"), TimeSpan.FromSeconds(30), "the jump list");
+        string arguments = items.First(i => i!["category"]!.GetValue<string>() == "Tasks" && i["arguments"]!.GetValue<string>() == "--new-window")!["arguments"]!.GetValue<string>();
+
+        // 1. ジャンプリストの「新しいウィンドウ」と同じ引数で起動する (既存のプロセスに転送される)。
+        Assert.Equal(0, await ctx.LaunchAndWaitAsync(new AppOptions { NewInstance = false, ExtraArgs = [arguments] }, TimeSpan.FromSeconds(30)));
+
+        // 2. プロセスは 1 つで、ウィンドウが 2 つ。
+        await WindowManagementTests.WaitForWindowsAsync(app, 2);
+        Assert.Equal(app.Pid, Assert.Single(Process.GetProcessesByName("HexEditor"), p => SamePath(p, AppLocator.ExePath) && StartedAfter(p, testStart)).Id);
+    });
 
     private static async Task<string> FileMenuTitleAsync(AppSession app) =>
         (await app.SendAsync("menuTexts"))["items"]!.AsArray().First(i => i!["menu"]?.GetValue<bool>() == true)!["text"]!.GetValue<string>();

@@ -31,6 +31,10 @@ public static class BuiltInSettings
         new("ui.statusBar.items", SettingCategories.General, SettingKind.String, string.Empty) { Order = 21, ShowInPage = false },
         new(StartupPlanner.RestoreOnStartupKey, SettingCategories.General, SettingKind.Choice, "always") { Options = ["always", "ask", "never"], Order = 30 },
 
+        // 外部から開いたファイルの開き方 (UI-15 の仕様 2・4)。
+        new("window.openExternalIn", SettingCategories.General, SettingKind.Choice, "lastActiveWindow") { Options = ["lastActiveWindow", "newWindow"], Order = 40 },
+        new("window.launchWithoutFileOpensNewWindow", SettingCategories.General, SettingKind.Bool, false) { Order = 41 },
+
         // ---- 外観 ----
         new("ui.theme", SettingCategories.Appearance, SettingKind.Choice, "system") { Options = ["system", "light", "dark"], Order = 10 },
         new("ui.backdrop", SettingCategories.Appearance, SettingKind.Choice, "mica") { Options = ["mica", "micaAlt", "none"], Order = 20 },

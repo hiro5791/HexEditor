@@ -259,7 +259,8 @@ public static class TestHooks
             }
         };
 
-        TestChannel.Start(window.HandleTestCommandAsync);
+        // 命令はウィンドウを指定できる (複数ウィンドウ。UI-14)。指定がなければ最後にアクティブだったウィンドウ。
+        TestChannel.Start(WindowManager.HandleTestCommandAsync);
 
         if (Settings.UnhandledException is { } place && Interlocked.Exchange(ref _startupThrown, 1) == 0
             && place != ExceptionPlace.Save)
@@ -271,6 +272,9 @@ public static class TestHooks
             timer.Start();
         }
     }
+
+    /// <summary>2 つ目以降のウィンドウを作った (テスト用のメニューを付ける)。</summary>
+    public static void OnWindowCreated(MainWindow window) => window.AttachTestMenu();
 
     // ---- データソース ----
 
@@ -540,6 +544,10 @@ public static class TestHooks
     public static bool ShowWithoutActivation(Window window) => false;
 
     public static void OnLaunched(MainWindow window, MainViewModel vm)
+    {
+    }
+
+    public static void OnWindowCreated(MainWindow window)
     {
     }
 

@@ -48,6 +48,9 @@ public sealed partial class MainWindow : Window
 
         InitializeStatusBar();
         InitializeDragDrop();
+
+        // タブ (UI-09〜UI-11)。選択の変化を他の処理より先に受け、復元したタブを開く (UI-31 の仕様 6)。
+        InitializeTabs();
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
         InitializeSearch();
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));

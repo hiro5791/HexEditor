@@ -20,7 +20,6 @@ public sealed partial class MainWindow
     private SessionState _startupSession = new();
     private bool _restoreAfterRecovery;
     private bool _sessionOffered;
-    private Microsoft.UI.Dispatching.DispatcherQueueTimer? _sessionTimer;
 
     /// <summary>
     /// 起動の準備 (コマンドラインのファイルを開く前に呼ぶ)。セッションを読み、閉じたタブの記録を戻し、ウィンドウの位置を戻す。
@@ -48,6 +47,8 @@ public sealed partial class MainWindow
             RestoreBounds(window);
         }
 
+        // 2 つ目以降のウィンドウのタブも、起動時の動作に従って戻す (UI-14 の仕様 5、UI-31)。
+
         switch (StartupPlanner.Decide(FileSettings.RestoreOnStartup(App.Settings), session))
         {
             case StartupSessionAction.Restore when HasRecoveryData():
@@ -62,11 +63,8 @@ public sealed partial class MainWindow
                 break;
         }
 
-        // 正常終了時と、30 秒ごと (変化があったときだけ) に session.json に書く (UI-31 の仕様 2)。
-        _sessionTimer = DispatcherQueue.CreateTimer();
-        _sessionTimer.Interval = SessionStore.SaveInterval;
-        _sessionTimer.Tick += (_, _) => SaveSession();
-        _sessionTimer.Start();
+        // 正常終了時と、30 秒ごと (変化があったときだけ) に session.json に書く (UI-31 の仕様 2)。全ウィンドウの分をまとめて書く。
+        WindowManager.StartSessionTimer();
     }
 
     /// <summary>復旧の提案を出すか (起動時の復旧の画面の対象があるか)。</summary>
@@ -96,21 +94,46 @@ public sealed partial class MainWindow
         }
     }
 
-    /// <summary>セッションのタブを開く (UI-31)。</summary>
+    /// <summary>
+    /// セッションのウィンドウとタブを開く (UI-31、UI-14 の仕様 5)。1 つ目のウィンドウの記録はこのウィンドウに、2 つ目以降は新しいウィンドウに
+    /// 戻す (タブのないウィンドウは作らない)。最後にアクティブだったウィンドウを戻す。
+    /// </summary>
     private void RestoreSession(SessionState session, IReadOnlyList<string> exclude)
     {
-        if (session.Windows.FirstOrDefault() is not { } window)
+        var restored = new List<MainWindow>();
+        for (int i = 0; i < session.Windows.Count; i++)
         {
-            return;
+            SessionWindow record = session.Windows[i];
+            SessionWindow tabs = StartupPlanner.WithoutRecovered(record, exclude);
+            if (i > 0 && !tabs.Tabs.Any(SessionRules.IsRestorable))
+            {
+                continue;
+            }
+
+            MainWindow target = i == 0 ? this : WindowManager.CreateWindow(this, record);
+            target.RestoreWindowTabs(record, tabs);
+            restored.Add(target);
         }
 
+        if (session.LastActiveWindow > 0 && session.LastActiveWindow < session.Windows.Count && restored.Count > 1)
+        {
+            WindowManager.MarkActive(restored[Math.Min(session.LastActiveWindow, restored.Count - 1)]);
+        }
+        else if (restored.Count > 0)
+        {
+            WindowManager.MarkActive(restored[0]);
+        }
+    }
+
+    /// <summary>ウィンドウ 1 つ分のパネルの配置とタブを戻す (UI-31)。</summary>
+    private void RestoreWindowTabs(SessionWindow window, SessionWindow tabs)
+    {
         // パネルの配置を戻す (UI-31 の仕様 1。記録がなければ最後に閉じたウィンドウの配置のまま。UI-05 の仕様 7)。
         if (window.Panels is { ValueKind: System.Text.Json.JsonValueKind.Object } panels)
         {
             RestorePanelLayout(System.Text.Json.Nodes.JsonNode.Parse(panels.GetRawText()));
         }
 
-        SessionWindow tabs = StartupPlanner.WithoutRecovered(window, exclude);
         Vm.RestoreTabs(
             tabs,
             (path, readOnly) => TryOpen(path, readOnly: readOnly, restorePosition: false),
@@ -148,6 +171,9 @@ public sealed partial class MainWindow
         };
     }
 
+    /// <summary>セッションに書くこのウィンドウの記録 (位置・大きさ・パネル・タブ)。</summary>
+    public SessionWindow CaptureSessionWindow() => Vm.CaptureWindow(CurrentBounds());
+
     /// <summary>前回の位置と大きさに戻す。画面の外になる場合は戻さない。</summary>
     private void RestoreBounds(SessionWindow window)
     {
@@ -179,14 +205,14 @@ public sealed partial class MainWindow
         }
 
         // 「前回のセッションを復元」を押さずに使っている間は、前回のセッションを上書きしない (タブを開くまで)。
-        if (_sessionOffered && Vm.Documents.Count == 0)
+        if (_sessionOffered && WindowManager.Windows.All(w => w.Vm.Documents.Count == 0))
         {
             return;
         }
 
         try
         {
-            files.Session.SaveIfChanged(state ?? Vm.CaptureSession(CurrentBounds()));
+            files.Session.SaveIfChanged(state ?? WindowManager.CaptureSession());
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -221,7 +247,16 @@ public sealed partial class MainWindow
                 DismissWelcome();
             }
         };
-        Vm.Recent.Changed += (_, _) => DispatcherQueue.TryEnqueue(RefreshRecentViews);
+        // 最近使ったファイルはアプリ全体で 1 つ。閉じたウィンドウには知らせない (UI-14)。
+        EventHandler recentChanged = (_, _) => DispatcherQueue.TryEnqueue(RefreshRecentViews);
+        Vm.Recent.Changed += recentChanged;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                Vm.Recent.Changed -= recentChanged;
+            }
+        };
         RefreshRecentViews();
     }
 
