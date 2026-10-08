@@ -204,14 +204,15 @@ public sealed class WindowShellTests
     public Task Panel_dropped_outside_the_window_floats_and_other_windows_reject_it() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
-        // ウィンドウの右に、浮動パネルが画面に収まる余白を残す (CI のランナーの画面は 1024 px 幅。浮動パネルは画面の中に置き直される)。
+        // ウィンドウの右に、画面の余白を残す (CI のランナーの画面は 1024 px 幅。画面にかからない位置の浮動パネルは
+        // メインウィンドウの横に置き直される。PanelLayout.EnsureOnScreen)。
         JsonObject screen = await app.SendAsync("shellState");
         int monitorRight = screen["monitorX"]!.GetValue<int>() + screen["monitorWidth"]!.GetValue<int>();
-        await app.SendAsync("moveWindow", new JsonObject { ["x"] = 0, ["y"] = 0, ["width"] = Math.Min(1100, monitorRight - 400), ["height"] = 800 });
+        await app.SendAsync("moveWindow", new JsonObject { ["x"] = 0, ["y"] = 0, ["width"] = Math.Min(1100, monitorRight - 300), ["height"] = 800 });
         JsonObject placed = await app.SendAsync("shellState");
         int windowRight = placed["x"]!.GetValue<int>() + placed["width"]!.GetValue<int>();
-        int dropX = Math.Min(windowRight + 200, monitorRight - 300);
-        Assert.True(dropX > windowRight, $"the screen is too narrow ({monitorRight} px)");
+        int dropX = Math.Min(windowRight + 200, monitorRight - 50);
+        Assert.True(dropX > windowRight, $"no screen right of the window (window right {windowRight}, screen right {monitorRight})");
         await app.SendAsync("panelShow", new JsonObject { ["id"] = "inspector" });
         Assert.Equal("right", (await app.SendAsync("panels"))["panels"]!["inspector"]!["location"]!.GetValue<string>());
 

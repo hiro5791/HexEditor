@@ -42,6 +42,9 @@ public sealed class AppearanceSettingsTests
     public Task Duplicated_scheme_is_edited_with_a_live_preview_and_contrast_warnings() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = LightProfile(ctx), Files = [ctx.TestData("TD-BYTES-256")] });
+
+        // Hex 表示ができてから設定画面を開く (遅い CI のランナーでは、起動直後はまだ Hex 表示がない)。
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(30), "the hex view");
         await app.SendAsync("colorScheme", new JsonObject { ["action"] = "select", ["name"] = "solarized" });
 
         // 一覧に同梱の 3 つの配色があり、選んでいるのはソラライズド。同梱の配色は編集できない (複製して編集する。仕様 3)。

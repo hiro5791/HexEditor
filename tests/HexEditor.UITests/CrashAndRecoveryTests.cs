@@ -121,7 +121,7 @@ public sealed class CrashAndRecoveryTests
         // 3. 同じ設定フォルダで起動すると、復旧の画面に表示名・パス・保存日時・変更の量と「復旧する」「破棄」「あとで」が出る。
         AppSession again = await ctx.StartAsync(new AppOptions { Hooks = hooks });
         AutomationElement dialog = await WaitForRecoveryDialogAsync(again);
-        string text = AppSession.AllText(dialog);
+        string text = await again.WaitForDialogTextAsync(dialog, "seq.bin", path, "bytes changed");
         Assert.Contains("seq.bin", text);
         Assert.Contains(path, text);
         Assert.Matches(@"Saved .+ · [\d,]+ bytes changed", text);

@@ -48,7 +48,10 @@ public sealed class NotificationTests
     {
         // 他のアプリを前面にする代わりに、ウィンドウが非アクティブになったときと同じ扱いにする (テスト用の命令)。テスト用のビルドは
         // 利用者の画面にトーストを出さず、ログに書く (ToastNotifier)。TD-UI-SPARSE-10G の代わりに遅い仮想のデータソース。
-        AppSession app = await ctx.StartAsync(new AppOptions { WaitForEditor = false, Profile = ctx.NewProfile() });
+        // ポータブル版はトースト通知が既定で無効 (UI-36) なので、どの配布形態でも有効にして確かめる (CI の ui-distro)。
+        string profile = ctx.NewProfile();
+        ViewOps.WriteSettings(profile, new JsonObject { ["notifications.toast"] = true });
+        AppSession app = await ctx.StartAsync(new AppOptions { WaitForEditor = false, Profile = profile });
         await app.SendAsync("openVirtual", new JsonObject { ["name"] = "slow-24G", ["length"] = 24L << 30, ["content"] = "zero", ["delayMs"] = 8 });
         await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the hex view");
 

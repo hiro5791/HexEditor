@@ -26,8 +26,7 @@ public sealed partial class SaveDialogTests
         // 1〜2. 確認のダイアログの本文とボタン。長さが変わる場合の「その場で保存」(ENG-24) はフェーズ 2 のため出ない。
         await app.KeyAsync("S", ctrl: true);
         var dialog = await app.WaitForDialogAsync("SaveDialog");
-        string text = AppSession.AllText(dialog);
-        Assert.Contains("This file has 2 hard links. Saving safely breaks the links", text, StringComparison.Ordinal);
+        await app.WaitForDialogTextAsync(dialog, "This file has 2 hard links. Saving safely breaks the links");
         Assert.NotNull(app.Button("Save safely (break the links)"));
         Assert.NotNull(app.Button("Cancel"));
         Assert.Null(app.Button("Save in place (keep the links; the file may be damaged if saving is interrupted)"));
@@ -78,7 +77,7 @@ public sealed partial class SaveDialogTests
         // ずらしながらのその場保存 (ENG-24、フェーズ 2) と同時に加える。
         await app.KeyAsync("S", ctrl: true);
         var dialog = await app.WaitForDialogAsync("SaveDialog");
-        string text = AppSession.AllText(dialog);
+        string text = await app.WaitForDialogTextAsync(dialog, "Available: 1.00 MB (1,048,576 bytes)");
         string drive = Path.GetPathRoot(path)!.TrimEnd('\\');
         Assert.Contains($"There isn't enough free space on the destination drive ({drive}", text, StringComparison.Ordinal);
         Assert.Contains("Required: 17.00 MB (17,825,793 bytes)", text, StringComparison.Ordinal);

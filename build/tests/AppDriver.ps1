@@ -254,27 +254,57 @@ function Get-UiaText($Element) {
 }
 
 # Fills the file name of the system Save dialog (FileSavePicker) and presses Save, without focus or keyboard.
+# The dialog first goes to the folder of $Path (its path typed as the name, then Save), then saves the file name there:
+# with the whole path typed at once, the dialog can still check the folder it started in (on read-only media it said
+# "You can't save to 'E:\data'"). A message box of the dialog (OK) is closed and the step is tried once more.
 function Complete-SaveDialog([int]$ProcessId, [string]$Path) {
-    $dialog = Find-UiaElement -ProcessId $ProcessId -ClassName '#32770' -Seconds 20
-    $condition = New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::AutomationIdProperty, '1001')
-    $name = $dialog.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $condition)
-    if (-not $name) { throw 'The file name box of the Save dialog was not found.' }
-    $value = $name.GetCurrentPattern([System.Windows.Automation.ValuePattern]::Pattern)
-    $value.SetValue($Path)
-    if ($value.Current.Value -ne $Path) { throw "The file name box of the Save dialog has '$($value.Current.Value)', not '$Path'." }
-    $save = $dialog.FindFirst([System.Windows.Automation.TreeScope]::Children,
-        (New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::AutomationIdProperty, '1')))
-    if (-not $save) { throw 'The Save button of the Save dialog was not found.' }
-    Invoke-UiaElement $save
-    # The dialog closes, unless Windows asks something (a message box of the dialog: the text goes to the error).
-    $deadline = (Get-Date).AddSeconds(15)
-    $dialogCondition = New-Object System.Windows.Automation.PropertyCondition([System.Windows.Automation.AutomationElement]::ClassNameProperty, '#32770')
-    while ((Get-Date) -lt $deadline) {
-        $open = @(Get-UiaWindows $ProcessId | ForEach-Object { $_.FindFirst([System.Windows.Automation.TreeScope]::Subtree, $dialogCondition) } | Where-Object { $_ })
-        if ($open.Count -eq 0) { return }
-        Start-Sleep -Milliseconds 250
+    $e = [System.Windows.Automation.AutomationElement]
+    $dialogCondition = New-Object System.Windows.Automation.PropertyCondition($e::ClassNameProperty, '#32770')
+    $nameCondition = New-Object System.Windows.Automation.PropertyCondition($e::AutomationIdProperty, '1001')
+    $buttonCondition = New-Object System.Windows.Automation.PropertyCondition($e::AutomationIdProperty, '1')
+    # The Save dialog (the #32770 window with the file name box) and the message boxes of the process.
+    function Get-Dialogs {
+        @(Get-UiaWindows $ProcessId | ForEach-Object { $_.FindAll([System.Windows.Automation.TreeScope]::Subtree, $dialogCondition) } | Where-Object { $_ })
     }
-    throw "The Save dialog did not close: $((@($open | ForEach-Object { Get-UiaText $_ })) -join ' | ')"
+    function Close-MessageBoxes {
+        foreach ($d in Get-Dialogs) {
+            if (-not $d.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $nameCondition)) {
+                Write-Host "Save dialog message: $((Get-UiaText $d) -replace "`n", ' | ')"
+                $ok = $d.FindFirst([System.Windows.Automation.TreeScope]::Descendants, (New-Object System.Windows.Automation.PropertyCondition($e::NameProperty, 'OK')))
+                if ($ok) { Invoke-UiaElement $ok; Start-Sleep -Milliseconds 500 }
+            }
+        }
+    }
+    function Submit([string]$Text) {
+        $dialog = @(Get-Dialogs | Where-Object { $_.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $nameCondition) }) | Select-Object -First 1
+        if (-not $dialog) { return $false }
+        $value = $dialog.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $nameCondition).GetCurrentPattern([System.Windows.Automation.ValuePattern]::Pattern)
+        $value.SetValue($Text)
+        if ($value.Current.Value -ne $Text) { throw "The file name box of the Save dialog has '$($value.Current.Value)', not '$Text'." }
+        $save = $dialog.FindFirst([System.Windows.Automation.TreeScope]::Children, $buttonCondition)
+        if (-not $save) { throw 'The Save button of the Save dialog was not found.' }
+        Invoke-UiaElement $save
+        Start-Sleep -Seconds 1
+        $true
+    }
+
+    [void](Find-UiaElement -ProcessId $ProcessId -AutomationId '1001' -Seconds 20)
+    # 1. Go to the folder.
+    [void](Submit (Split-Path -Parent $Path))
+    Close-MessageBoxes
+    # 2. Save the file name in it (once more after a message box).
+    for ($attempt = 0; $attempt -lt 2; $attempt++) {
+        if (-not (Submit (Split-Path -Leaf $Path))) { break }
+        $deadline = (Get-Date).AddSeconds(15)
+        while ((Get-Date) -lt $deadline -and (Get-Dialogs).Count -gt 0) {
+            if (@(Get-Dialogs | Where-Object { -not $_.FindFirst([System.Windows.Automation.TreeScope]::Descendants, $nameCondition) }).Count -gt 0) { break }
+            Start-Sleep -Milliseconds 250
+        }
+        if ((Get-Dialogs).Count -eq 0) { return }
+        Close-MessageBoxes
+    }
+    $open = Get-Dialogs
+    if ($open.Count -gt 0) { throw "The Save dialog did not close: $((@($open | ForEach-Object { Get-UiaText $_ })) -join ' | ')" }
 }
 
 # ---- Native information about processes, files and shortcuts ----

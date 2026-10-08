@@ -69,12 +69,36 @@ public sealed class PackagingTests
 
     // ---- 更新の確認と InfoBar (PKG-17、PKG-20、PKG-22) ----
 
+    /// <summary>
+    /// 偽の配布元 (FakeUpdateFeed。GitHub Releases の API) を確かめる方法か。開発中の実行 (test.update.source) とポータブル版は true。
+    /// インストーラ版 (Velopack) と MSIX 版 (Microsoft Store) は別の方法で確かめるので (PKG-17 の仕様 4。CI の update のジョブ)、
+    /// 配布形態のテスト (ui-distro) では、その配布形態の方法を使っていることだけを確かめて false を返す。
+    /// </summary>
+    private static async Task<bool> ChecksGitHubReleasesAsync(AppSession app)
+    {
+        string? line = null;
+        await app.WaitUntilAsync(async () => (line = (await app.LogAsync()).FirstOrDefault(l => l.Contains(" Updates: ", StringComparison.Ordinal))) is not null,
+            TimeSpan.FromSeconds(10), "the update method in the log");
+        if (line!.Contains("Updates: Portable", StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        Assert.True(AppLocator.IsConfigured, $"the development build does not check the test source: {line}");
+        Assert.Matches("Updates: (Installer|Store)", line);
+        return false;
+    }
+
     [Fact]
     public Task Manual_check_shows_up_to_date_or_the_new_version_with_its_buttons() => UiTestContext.RunAsync(async ctx =>
     {
         await using var feed = new FakeUpdateFeed();
         string profile = await ProfileWithSettings(ctx, $"{{\"$schemaVersion\": 1, \"test.update.source\": \"{feed.RepositoryUrl}\"}}");
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
+        if (!await ChecksGitHubReleasesAsync(app))
+        {
+            return;
+        }
 
         // 配布元にリリースがない (開発中の版 0.0.0-local より新しいものがない): 「最新の版です」、ボタンなし、8 秒で閉じる。
         JsonObject state = await app.SendAsync("updateCheck", new JsonObject { ["manual"] = true });
@@ -109,6 +133,11 @@ public sealed class PackagingTests
             Profile = await ProfileWithSettings(ctx, $"{{\"$schemaVersion\": 1, \"test.update.source\": \"{feed.RepositoryUrl}\"}}"),
         });
         var started = Stopwatch.StartNew();
+        if (!await ChecksGitHubReleasesAsync(app))
+        {
+            return;
+        }
+
         await app.WaitUntilAsync(async () => (await app.SendAsync("updateState"))["barVisible"]!.GetValue<bool>(), TimeSpan.FromSeconds(60), "the automatic check");
         Assert.True(started.Elapsed > TimeSpan.FromSeconds(24), $"checked after {started.Elapsed.TotalSeconds:0} s");
         Assert.Equal(1, feed.Requests);
@@ -248,6 +277,12 @@ public sealed class PackagingTests
     [Fact]
     public Task Unregister_option_exits_without_a_window() => UiTestContext.RunAsync(async ctx =>
     {
+        // 配布形態のビルドの --unregister は利用者の登録 (HKCU) を消すので、CI のランナーでだけ動かす (作業中の PC では開発中のビルドだけ)。
+        if (AppLocator.IsConfigured && Environment.GetEnvironmentVariable("GITHUB_ACTIONS") is null)
+        {
+            return;
+        }
+
         string profile = ctx.NewProfile();
         var watch = Stopwatch.StartNew();
 

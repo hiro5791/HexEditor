@@ -126,8 +126,7 @@ public sealed class ReplaceAndHistoryTests
         // 1〜2. 確認ダイアログ: 件数と Undo の情報の容量。ボタンは「置換する」「やめる」。
         await app.UiaInvokeAsync("Find_ReplaceAll");
         var dialog = await app.WaitForDialogAsync("ReplaceAllConfirm");
-        string text = AppSession.AllText(dialog);
-        Assert.Contains("1,500,000", text, StringComparison.Ordinal);
+        string text = await app.WaitForDialogTextAsync(dialog, "1,500,000");
         Assert.Contains("undo", text, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("Replace", UiHelpers.DialogButtons(dialog));
         Assert.Contains("Don't replace", UiHelpers.DialogButtons(dialog));

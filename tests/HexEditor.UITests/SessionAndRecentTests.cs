@@ -325,9 +325,7 @@ public sealed class SessionAndRecentTests
         // 1〜2. Ctrl+W で、本文に「seq.bin への変更を保存しますか?」と変更量 (1 か所) があり、ボタンは「保存」「保存しない」「キャンセル」。
         await app.KeyAsync("W", ctrl: true);
         AutomationElement dialog = await app.WaitForAsync("CloseDialog");
-        string text = AppSession.AllText(dialog);
-        Assert.Contains("Save changes to seq.bin?", text);
-        Assert.Contains("1 places", text);
+        await app.WaitForDialogTextAsync(dialog, "Save changes to seq.bin?", "1 places");
         IReadOnlyList<string> buttons = UiHelpers.DialogButtons(dialog);
         Assert.Contains("Save", buttons);
         Assert.Contains("Don't save", buttons);
@@ -400,9 +398,7 @@ public sealed class SessionAndRecentTests
         await app.KeyAsync("W", ctrl: true);
         AutomationElement dialog = await app.WaitForAsync("CloseDialog");
 
-        // ダイアログの中身は表示の後に UI オートメーションに現れる (遅い CI のランナーでは、最初に読むと題名だけのことがある)。
-        await app.WaitUntilAsync(() => Task.FromResult(AppSession.AllText(dialog).Contains("is running", StringComparison.Ordinal)),
-            TimeSpan.FromSeconds(5), $"the running save in the dialog ({AppSession.AllText(dialog)})");
+        await app.WaitForDialogTextAsync(dialog, "is running");
         IReadOnlyList<string> buttons = UiHelpers.DialogButtons(dialog);
         Assert.Contains("Close after saving", buttons);
         Assert.Contains("Stop and close", buttons);

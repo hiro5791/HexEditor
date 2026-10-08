@@ -94,8 +94,7 @@ public sealed class ExternalChangeTests
         // 1〜2. 「変更を破棄して再読み込み」の確認に「3 か所、3 バイト」と Undo で戻せることが書かれ、ボタンは「破棄して再読み込み」「キャンセル」。
         await app.CommandAsync("Command_DiscardReload");
         AutomationElement dialog = await app.WaitForAsync("DiscardDialog");
-        string text = AppSession.AllText(dialog);
-        Assert.Contains("3 places, 3 bytes", text);
+        string text = await app.WaitForDialogTextAsync(dialog, "3 places, 3 bytes", "Ctrl+Z");
         Assert.Contains("Ctrl+Z", text);
         IReadOnlyList<string> buttons = UiHelpers.DialogButtons(dialog);
         Assert.Contains("Discard and reload", buttons);

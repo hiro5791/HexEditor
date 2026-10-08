@@ -117,6 +117,25 @@ public static class UiHelpers
         }
     }
 
+    /// <summary>
+    /// ダイアログの文字が <paramref name="expected"/> をすべて含むまで待ち、文字を返す。ダイアログの中身 (変更量など) は表示の後に
+    /// UI オートメーションに現れることがある (遅い CI のランナー・リリースのビルド)。
+    /// </summary>
+    public static async Task<string> WaitForDialogTextAsync(this AppSession app, FlaUI.Core.AutomationElements.AutomationElement dialog, params string[] expected)
+    {
+        string text = string.Empty;
+        try
+        {
+            await app.WaitUntilAsync(() => Task.FromResult(expected.All((text = AppSession.AllText(dialog)).Contains)), TimeSpan.FromSeconds(5), "the dialog text");
+        }
+        catch (TimeoutException)
+        {
+            throw new TimeoutException($"The dialog text has no '{string.Join("', '", expected.Where(e => !text.Contains(e, StringComparison.Ordinal)))}': {text}");
+        }
+
+        return text;
+    }
+
     /// <summary>ダイアログ (AutomationId で指定) が出るまで待ち、その要素を返す。</summary>
     public static Task<FlaUI.Core.AutomationElements.AutomationElement> WaitForDialogAsync(this AppSession app, string automationId) =>
         app.WaitForAsync(automationId);
