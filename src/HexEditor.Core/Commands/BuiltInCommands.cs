@@ -180,6 +180,17 @@ public static class BuiltInCommands
         new("view.panel.searchResults", "view"),
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
+
+        // ズーム (UI-08)。記号のキーは配列によって押せないので、メニューとコマンドパレットからも実行できる (仕様 6)。
+        new("view.zoomIn", "view") { DefaultBindings = [K("Ctrl+OemPlus")] },
+        new("view.zoomOut", "view") { DefaultBindings = [K("Ctrl+OemMinus")] },
+        new("view.zoomReset", "view") { DefaultBindings = [K("Ctrl+0")] },
+        new("view.uiZoomIn", "view"),
+        new("view.uiZoomOut", "view"),
+        new("view.uiZoomReset", "view"),
+
+        // 全画面表示 (UI-07)。
+        new("view.fullScreen", "view") { DefaultBindings = [K("F11")] },
         new("view.theme.system", "view"),
         new("view.theme.light", "view"),
         new("view.theme.dark", "view"),

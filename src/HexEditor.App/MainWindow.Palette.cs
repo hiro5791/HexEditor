@@ -271,7 +271,7 @@ public sealed partial class MainWindow
     private PaletteResult SettingsMode(string query)
     {
         var results = query.Trim().Length == 0
-            ? CommandService.Settings.All.Where(s => s.ShowInPage).Select(s => new Core.Settings.SettingSearchResult(s, [])).ToList()
+            ? CommandService.Settings.All.Where(CommandService.Settings.IsShown).Select(s => new Core.Settings.SettingSearchResult(s, [])).ToList()
             : CommandService.Settings.Search(query, SettingsPage.Texts);
         var entries = results.Select(r =>
         {

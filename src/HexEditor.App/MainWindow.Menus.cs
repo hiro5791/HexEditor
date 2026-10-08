@@ -33,7 +33,7 @@ public sealed partial class MainWindow
         ThemeDark.IsChecked = theme == "dark";
         bool statusBar = App.Settings.GetBool(StatusBarVisibleKey, true);
         StatusBarToggle.IsChecked = statusBar;
-        StatusBar.Visibility = statusBar ? Visibility.Visible : Visibility.Collapsed;
+        StatusBar.Visibility = statusBar && !HidesStatusBarForFullScreen ? Visibility.Visible : Visibility.Collapsed;
         QueueStatusBarLayout();
     }
 

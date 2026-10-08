@@ -135,10 +135,11 @@ public sealed partial class KeyboardSettingsSection : UserControl
     private Grid Row(CommandDefinition? command, string[] cells)
     {
         var grid = new Grid { ColumnSpacing = 8, Padding = new Thickness(4, 6, 4, 6) };
-        double[] widths = [110, 3, 2, 110, 90];
+        // 幅はすべて比率で決める (狭い幅や画面全体のズーム 400% でも列が重ならず、文字は折り返す。UI-08 の受け入れ基準 7)。
+        double[] widths = [1.2, 3, 2, 1.2, 1];
         foreach (double w in widths)
         {
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = w > 10 ? new GridLength(w) : new GridLength(w, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(w, GridUnitType.Star) });
         }
 
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });

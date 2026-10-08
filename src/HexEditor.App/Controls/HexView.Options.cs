@@ -60,7 +60,10 @@ public sealed partial class HexView
         }
     }
 
-    /// <summary>画面全体のズームの倍率 (UI-08 の 3。VIEW-43 の仕様 1 で Hex 表示のズームと掛け算)。</summary>
+    /// <summary>
+    /// 画面全体のズームの倍率 (UI-08 の 3)。拡大はウィンドウのルート要素で行う (Controls.ZoomHost) ので、文字の大きさには掛けず、
+    /// セル幅と行の高さを物理ピクセルに合わせるときにだけ使う (VIEW-43 の仕様 2)。
+    /// </summary>
     public double ScreenZoom
     {
         get => _screenZoom;

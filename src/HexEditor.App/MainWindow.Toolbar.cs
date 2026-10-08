@@ -37,7 +37,7 @@ public sealed partial class MainWindow
     private void RefreshToolbar()
     {
         bool visible = App.Settings.GetBool(ToolbarItems.VisibleKey, false);
-        Toolbar.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+        Toolbar.Visibility = visible && !_fullScreen ? Visibility.Visible : Visibility.Collapsed;
         Toolbar.PrimaryCommands.Clear();
         if (!visible)
         {
@@ -76,6 +76,9 @@ public sealed partial class MainWindow
         {
             button.IsEnabled = Commands.StateOf((string)button.Tag).Enabled;
         }
+
+        // 「元に戻す」「やり直し」のツールチップとメニューの項目名に操作名を入れる (EDIT-19 の仕様 11)。
+        UpdateUndoNames();
     }
 
     /// <summary>「ツールバーのカスタマイズ」(仕様 2): コマンドの追加・削除・並べ替え。変更はその場で反映する。</summary>

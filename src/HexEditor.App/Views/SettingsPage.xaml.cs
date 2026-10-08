@@ -130,7 +130,7 @@ public sealed partial class SettingsPage : UserControl
         header.Children.Add(more);
         Items.Children.Add(header);
 
-        var settings = CommandService.Settings.InCategory(_category).Where(s => s.ShowInPage).ToList();
+        var settings = CommandService.Settings.InCategory(_category).Where(CommandService.Settings.IsShown).ToList();
         foreach (SettingDefinition s in settings)
         {
             Items.Children.Add(BuildCard(s, []));

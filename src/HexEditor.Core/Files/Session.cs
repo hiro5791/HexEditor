@@ -41,6 +41,9 @@ public sealed record SessionTab
 
     /// <summary>文書ごとの表示設定 (表示の担当が決める形。持たなければ null)。</summary>
     public JsonElement? View { get; init; }
+
+    /// <summary>タブごとの Hex 表示の倍率 (百分率。UI-08 の仕様 2 の 4。適用範囲が「今のタブだけ」のときだけ。それ以外は null)。</summary>
+    public int? Zoom { get; init; }
 }
 
 /// <summary>ウィンドウ 1 つの記録 (UI-31 の仕様 1 のウィンドウの単位)。位置と大きさは物理ピクセル。</summary>

@@ -318,15 +318,17 @@ public sealed partial class WindowTests
     [Trait(UiTest.TC, "TC-UI-52-03")]
     public Task F6_and_shift_f6_move_between_regions() => UiTestContext.RunAsync(async ctx =>
     {
-        // 右パネル・下パネル・左パネル (データインスペクタなど) はフェーズ 1 のため、表示されている領域は
-        // タブ列・エディタ・ステータスバーだけ。仕様 1 の順で、F6 はエディタの次の表示中の領域 (ステータスバー) に移る。
+        // データインスペクタ (右パネル) を表示した状態。仕様 1 の順 (タブ列 → エディタ → 右パネル → …) で、F6 はエディタの次の
+        // 右パネルに移る。
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.KeyAsync("I", ctrl: true, shift: true);
+        await app.WaitUntilAsync(() => app.IsShownAsync("RightPanel"), TimeSpan.FromSeconds(10), "the right panel");
         Assert.StartsWith("HexView", await app.FocusAsync("editor"), StringComparison.Ordinal);
 
         await app.KeyAsync("F6");
         await app.IdleAsync();
         JsonObject focus = await app.SendAsync("focus", new JsonObject { ["target"] = "none" });
-        Assert.Contains("StatusBar", focus["where"]?.GetValue<string>() ?? string.Empty, StringComparison.Ordinal);
+        Assert.Contains("RightPanel", focus["where"]?.GetValue<string>() ?? string.Empty, StringComparison.Ordinal);
 
         Assert.StartsWith("HexView", await app.FocusAsync("editor"), StringComparison.Ordinal);
         await app.KeyAsync("F6", shift: true);

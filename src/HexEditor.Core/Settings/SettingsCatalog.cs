@@ -33,6 +33,15 @@ public sealed class SettingsCatalog
 
     public IReadOnlyList<SettingDefinition> All => _ordered;
 
+    /// <summary>
+    /// 実行中の配布形態 (<see cref="SettingDistributions"/> の値)。配布形態に固有の項目 (<see cref="SettingDefinition.Distributions"/>)
+    /// を設定画面と検索に出すかを決める。null なら区別しない。
+    /// </summary>
+    public string? Distribution { get; set; }
+
+    /// <summary>設定画面と検索に出す項目か (<see cref="SettingDefinition.ShowInPage"/> と配布形態)。</summary>
+    public bool IsShown(SettingDefinition setting) => setting.IsShownIn(Distribution);
+
     public event EventHandler? Changed;
 
     public void Register(SettingDefinition setting)
@@ -72,7 +81,7 @@ public sealed class SettingsCatalog
             return results;
         }
 
-        foreach (SettingDefinition s in _ordered.Where(s => s.ShowInPage))
+        foreach (SettingDefinition s in _ordered.Where(IsShown))
         {
             SettingTexts t = texts(s);
             var name = new SearchText(t.Name);

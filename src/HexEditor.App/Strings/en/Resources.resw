@@ -2047,4 +2047,72 @@ Details were written to:
   <data name="Settings_FontDefault" xml:space="preserve"><value>Default (Cascadia Mono)</value></data>
   <data name="Settings_FontMissing" xml:space="preserve"><value>{0} was not found. The default font is used.</value></data>
   <data name="Settings_ShowAllFonts" xml:space="preserve"><value>Show all fonts</value></data>
+  <data name="Cmd_view_zoomIn" xml:space="preserve"><value>Zoom in</value></data>
+  <data name="CmdAlias_view_zoomIn" xml:space="preserve"><value>bigger larger font size magnify hex zoom</value></data>
+  <data name="Cmd_view_zoomOut" xml:space="preserve"><value>Zoom out</value></data>
+  <data name="CmdAlias_view_zoomOut" xml:space="preserve"><value>smaller font size hex zoom</value></data>
+  <data name="Cmd_view_zoomReset" xml:space="preserve"><value>Reset zoom to 100%</value></data>
+  <data name="CmdAlias_view_zoomReset" xml:space="preserve"><value>actual size default hex zoom</value></data>
+  <data name="Cmd_view_uiZoomIn" xml:space="preserve"><value>Zoom in entire screen</value></data>
+  <data name="CmdAlias_view_uiZoomIn" xml:space="preserve"><value>ui scale bigger</value></data>
+  <data name="Cmd_view_uiZoomOut" xml:space="preserve"><value>Zoom out entire screen</value></data>
+  <data name="CmdAlias_view_uiZoomOut" xml:space="preserve"><value>ui scale smaller</value></data>
+  <data name="Cmd_view_uiZoomReset" xml:space="preserve"><value>Reset screen zoom to 100%</value></data>
+  <data name="CmdAlias_view_uiZoomReset" xml:space="preserve"><value>ui scale actual size</value></data>
+  <data name="Cmd_view_fullScreen" xml:space="preserve"><value>Toggle full screen</value></data>
+  <data name="CmdAlias_view_fullScreen" xml:space="preserve"><value>full screen maximize</value></data>
+  <data name="Menu_View_Zoom.Text" xml:space="preserve"><value>Zoom</value></data>
+  <data name="Menu_View_Zoom.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_ZoomIn.Text" xml:space="preserve"><value>Zoom in</value></data>
+  <data name="Menu_View_ZoomIn.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_ZoomOut.Text" xml:space="preserve"><value>Zoom out</value></data>
+  <data name="Menu_View_ZoomOut.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_ZoomReset.Text" xml:space="preserve"><value>Reset zoom to 100%</value></data>
+  <data name="Menu_View_ZoomReset.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_UiZoomIn.Text" xml:space="preserve"><value>Zoom in entire screen</value></data>
+  <data name="Menu_View_UiZoomIn.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_UiZoomOut.Text" xml:space="preserve"><value>Zoom out entire screen</value></data>
+  <data name="Menu_View_UiZoomOut.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_UiZoomReset.Text" xml:space="preserve"><value>Reset screen zoom to 100%</value></data>
+  <data name="Menu_View_UiZoomReset.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_FullScreen.Text" xml:space="preserve"><value>Full screen</value></data>
+  <data name="Menu_View_FullScreen.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Status_HexZoom" xml:space="preserve"><value>Hex {0}%</value></data>
+  <data name="Status_UiZoom" xml:space="preserve"><value>Screen {0}%</value></data>
+  <data name="Status_HexZoomTip" xml:space="preserve"><value>Hex zoom. Click to reset it to 100%.</value></data>
+  <data name="Status_UiZoomTip" xml:space="preserve"><value>Screen zoom. Click to reset it to 100%.</value></data>
+  <data name="Status_Item_Zoom" xml:space="preserve"><value>Zoom</value></data>
+  <data name="Notice_FullScreenExit" xml:space="preserve"><value>Press F11 to exit full screen.</value></data>
+  <data name="Set_ui_fullScreen_showStatusBar" xml:space="preserve"><value>Show the status bar in full screen</value></data>
+  <data name="SetDesc_ui_fullScreen_showStatusBar" xml:space="preserve"><value>Keep the status bar visible while the window is in full screen.</value></data>
+  <data name="Set_view_zoom_hexScope" xml:space="preserve"><value>Hex zoom applies to</value></data>
+  <data name="SetDesc_view_zoom_hexScope" xml:space="preserve"><value>Whether zooming the hex view (Ctrl+=, Ctrl+-) changes all tabs or only the current tab.</value></data>
+  <data name="SetOpt_view_zoom_hexScope_all" xml:space="preserve"><value>All tabs</value></data>
+  <data name="SetOpt_view_zoom_hexScope_tab" xml:space="preserve"><value>Current tab only</value></data>
+  <data name="Set_view_zoom_hex" xml:space="preserve"><value>Hex zoom (%)</value></data>
+  <data name="SetDesc_view_zoom_hex" xml:space="preserve"><value>The zoom of the hex view shared by all tabs.</value></data>
+  <data name="Set_view_zoom_ui" xml:space="preserve"><value>Screen zoom (%)</value></data>
+  <data name="SetDesc_view_zoom_ui" xml:space="preserve"><value>Zoom the entire app, including menus, panels and dialogs (50 to 400%).</value></data>
+  <data name="Menu_Edit_UndoNamed" xml:space="preserve"><value>Undo: {0}</value></data>
+  <data name="Menu_Edit_RedoNamed" xml:space="preserve"><value>Redo: {0}</value></data>
+  <data name="Command_UndoNamed" xml:space="preserve"><value>Undo: {0}</value></data>
+  <data name="Command_RedoNamed" xml:space="preserve"><value>Redo: {0}</value></data>
+  <data name="EditOp_Typing" xml:space="preserve"><value>Typing</value></data>
+  <data name="EditOp_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="EditOp_Insert" xml:space="preserve"><value>Insert</value></data>
+  <data name="EditOp_Overwrite" xml:space="preserve"><value>Overwrite</value></data>
+  <data name="EditOp_Paste" xml:space="preserve"><value>Paste</value></data>
+  <data name="EditOp_PasteOverwrite" xml:space="preserve"><value>Paste (overwrite)</value></data>
+  <data name="EditOp_Fill" xml:space="preserve"><value>Fill</value></data>
+  <data name="EditOp_InsertPattern" xml:space="preserve"><value>Insert pattern</value></data>
+  <data name="EditOp_InsertRandom" xml:space="preserve"><value>Insert random bytes</value></data>
+  <data name="EditOp_FillRandom" xml:space="preserve"><value>Fill with random bytes</value></data>
+  <data name="EditOp_InsertBytes" xml:space="preserve"><value>Insert bytes</value></data>
+  <data name="EditOp_InsertFile" xml:space="preserve"><value>Insert file</value></data>
+  <data name="EditOp_OverwriteFile" xml:space="preserve"><value>Overwrite with file</value></data>
+  <data name="EditOp_Resize" xml:space="preserve"><value>Change file size</value></data>
+  <data name="EditOp_Truncate" xml:space="preserve"><value>Truncate at cursor</value></data>
+  <data name="EditOp_WriteRecordAddress" xml:space="preserve"><value>Write record address</value></data>
+  <data name="EditOp_Discard" xml:space="preserve"><value>Discard changes</value></data>
+  <data name="EditOp_Merge" xml:space="preserve"><value>Merge external changes</value></data>
 </root>

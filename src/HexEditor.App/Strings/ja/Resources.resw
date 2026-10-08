@@ -2047,4 +2047,72 @@
   <data name="Settings_FontDefault" xml:space="preserve"><value>既定 (Cascadia Mono)</value></data>
   <data name="Settings_FontMissing" xml:space="preserve"><value>{0} が見つかりません。既定のフォントを使います。</value></data>
   <data name="Settings_ShowAllFonts" xml:space="preserve"><value>すべてのフォントを表示</value></data>
+  <data name="Cmd_view_zoomIn" xml:space="preserve"><value>拡大</value></data>
+  <data name="CmdAlias_view_zoomIn" xml:space="preserve"><value>かくだい ずーむ おおきく</value></data>
+  <data name="Cmd_view_zoomOut" xml:space="preserve"><value>縮小</value></data>
+  <data name="CmdAlias_view_zoomOut" xml:space="preserve"><value>しゅくしょう ずーむ ちいさく</value></data>
+  <data name="Cmd_view_zoomReset" xml:space="preserve"><value>ズームを 100% に戻す</value></data>
+  <data name="CmdAlias_view_zoomReset" xml:space="preserve"><value>ずーむをもとにもどす</value></data>
+  <data name="Cmd_view_uiZoomIn" xml:space="preserve"><value>画面全体を拡大</value></data>
+  <data name="CmdAlias_view_uiZoomIn" xml:space="preserve"><value>がめんぜんたいをかくだい ずーむ</value></data>
+  <data name="Cmd_view_uiZoomOut" xml:space="preserve"><value>画面全体を縮小</value></data>
+  <data name="CmdAlias_view_uiZoomOut" xml:space="preserve"><value>がめんぜんたいをしゅくしょう ずーむ</value></data>
+  <data name="Cmd_view_uiZoomReset" xml:space="preserve"><value>画面全体のズームを 100% に戻す</value></data>
+  <data name="CmdAlias_view_uiZoomReset" xml:space="preserve"><value>がめんぜんたいのずーむをもとにもどす</value></data>
+  <data name="Cmd_view_fullScreen" xml:space="preserve"><value>全画面表示の切り替え</value></data>
+  <data name="CmdAlias_view_fullScreen" xml:space="preserve"><value>ぜんがめんひょうじ</value></data>
+  <data name="Menu_View_Zoom.Text" xml:space="preserve"><value>ズーム(Z)</value></data>
+  <data name="Menu_View_Zoom.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_ZoomIn.Text" xml:space="preserve"><value>拡大(I)</value></data>
+  <data name="Menu_View_ZoomIn.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_ZoomOut.Text" xml:space="preserve"><value>縮小(O)</value></data>
+  <data name="Menu_View_ZoomOut.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_ZoomReset.Text" xml:space="preserve"><value>ズームを 100% に戻す(R)</value></data>
+  <data name="Menu_View_ZoomReset.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_UiZoomIn.Text" xml:space="preserve"><value>画面全体を拡大(E)</value></data>
+  <data name="Menu_View_UiZoomIn.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_UiZoomOut.Text" xml:space="preserve"><value>画面全体を縮小(N)</value></data>
+  <data name="Menu_View_UiZoomOut.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_UiZoomReset.Text" xml:space="preserve"><value>画面全体のズームを 100% に戻す(S)</value></data>
+  <data name="Menu_View_UiZoomReset.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_FullScreen.Text" xml:space="preserve"><value>全画面表示(F)</value></data>
+  <data name="Menu_View_FullScreen.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Status_HexZoom" xml:space="preserve"><value>Hex {0}%</value></data>
+  <data name="Status_UiZoom" xml:space="preserve"><value>画面 {0}%</value></data>
+  <data name="Status_HexZoomTip" xml:space="preserve"><value>Hex 表示のズーム。クリックで 100% に戻します。</value></data>
+  <data name="Status_UiZoomTip" xml:space="preserve"><value>画面全体のズーム。クリックで 100% に戻します。</value></data>
+  <data name="Status_Item_Zoom" xml:space="preserve"><value>ズーム</value></data>
+  <data name="Notice_FullScreenExit" xml:space="preserve"><value>F11 で全画面表示を終了します。</value></data>
+  <data name="Set_ui_fullScreen_showStatusBar" xml:space="preserve"><value>全画面表示でステータスバーを表示する</value></data>
+  <data name="SetDesc_ui_fullScreen_showStatusBar" xml:space="preserve"><value>全画面表示の間もステータスバーを表示します。</value></data>
+  <data name="Set_view_zoom_hexScope" xml:space="preserve"><value>Hex 表示のズームの適用範囲</value></data>
+  <data name="SetDesc_view_zoom_hexScope" xml:space="preserve"><value>Hex 表示のズーム (Ctrl+=、Ctrl+-) を全タブに共通にするか、今のタブだけにするか。</value></data>
+  <data name="SetOpt_view_zoom_hexScope_all" xml:space="preserve"><value>全タブ共通</value></data>
+  <data name="SetOpt_view_zoom_hexScope_tab" xml:space="preserve"><value>今のタブだけ</value></data>
+  <data name="Set_view_zoom_hex" xml:space="preserve"><value>Hex 表示のズーム (%)</value></data>
+  <data name="SetDesc_view_zoom_hex" xml:space="preserve"><value>全タブに共通の Hex 表示のズームの倍率。</value></data>
+  <data name="Set_view_zoom_ui" xml:space="preserve"><value>画面全体のズーム (%)</value></data>
+  <data name="SetDesc_view_zoom_ui" xml:space="preserve"><value>メニュー・パネル・ダイアログを含むアプリ全体の倍率 (50〜400%)。</value></data>
+  <data name="Menu_Edit_UndoNamed" xml:space="preserve"><value>元に戻す: {0}(U)</value></data>
+  <data name="Menu_Edit_RedoNamed" xml:space="preserve"><value>やり直し: {0}(R)</value></data>
+  <data name="Command_UndoNamed" xml:space="preserve"><value>元に戻す: {0}</value></data>
+  <data name="Command_RedoNamed" xml:space="preserve"><value>やり直し: {0}</value></data>
+  <data name="EditOp_Typing" xml:space="preserve"><value>入力</value></data>
+  <data name="EditOp_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="EditOp_Insert" xml:space="preserve"><value>挿入</value></data>
+  <data name="EditOp_Overwrite" xml:space="preserve"><value>上書き</value></data>
+  <data name="EditOp_Paste" xml:space="preserve"><value>貼り付け</value></data>
+  <data name="EditOp_PasteOverwrite" xml:space="preserve"><value>上書き貼り付け</value></data>
+  <data name="EditOp_Fill" xml:space="preserve"><value>塗りつぶし</value></data>
+  <data name="EditOp_InsertPattern" xml:space="preserve"><value>パターンの挿入</value></data>
+  <data name="EditOp_InsertRandom" xml:space="preserve"><value>乱数の挿入</value></data>
+  <data name="EditOp_FillRandom" xml:space="preserve"><value>乱数で塗りつぶし</value></data>
+  <data name="EditOp_InsertBytes" xml:space="preserve"><value>バイトの挿入</value></data>
+  <data name="EditOp_InsertFile" xml:space="preserve"><value>ファイルの内容の挿入</value></data>
+  <data name="EditOp_OverwriteFile" xml:space="preserve"><value>ファイルの内容で上書き</value></data>
+  <data name="EditOp_Resize" xml:space="preserve"><value>ファイルサイズの変更</value></data>
+  <data name="EditOp_Truncate" xml:space="preserve"><value>カーソル位置で切り詰める</value></data>
+  <data name="EditOp_WriteRecordAddress" xml:space="preserve"><value>レコードのアドレスに書く</value></data>
+  <data name="EditOp_Discard" xml:space="preserve"><value>変更の破棄</value></data>
+  <data name="EditOp_Merge" xml:space="preserve"><value>外部の変更とのマージ</value></data>
 </root>

@@ -62,7 +62,7 @@ public sealed class EditCommandTests
     }
 
     /// <summary>一覧の項目を表示の文字列で選ぶ (ダイアログの中身ができるまで待つ)。</summary>
-    private static async Task SelectItemAsync(AppSession app, string id, string text)
+    internal static async Task SelectItemAsync(AppSession app, string id, string text)
     {
         await app.WaitUntilAsync(async () => (await ElementAsync(app, id))["found"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), id);
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = id, ["index"] = 0, ["text"] = text });

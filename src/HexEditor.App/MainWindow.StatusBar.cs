@@ -15,10 +15,10 @@ public sealed partial class MainWindow
 
     /// <summary>項目の ID (設定 ui.statusBar.items と右クリックメニューに使う)。</summary>
     private static readonly string[] StatusItemIds =
-        ["cursor", "value", "selection", "column", "encoding", "mode", "modified", "size", "operations", "notifications"];
+        ["cursor", "value", "selection", "column", "encoding", "mode", "modified", "size", "zoom", "operations", "notifications"];
 
     /// <summary>幅が足りないときに隠す順 (UI-06 の仕様 5)。カーソル位置・選択範囲・入力モード・変更の有無・処理センターは隠さない。</summary>
-    private static readonly string[] CollapseOrder = ["column", "value", "size-short", "encoding", "size", "notifications"];
+    private static readonly string[] CollapseOrder = ["zoom", "column", "value", "size-short", "encoding", "size", "notifications"];
 
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _operationsTimer;
     private TaskbarProgress? _taskbar;
@@ -217,13 +217,15 @@ public sealed partial class MainWindow
             ["mode"] = doc is not null,
             ["modified"] = doc is not null && doc.Document.IsModified,
             ["size"] = doc is not null,
+            ["zoom"] = true,
             ["operations"] = operations,
             ["notifications"] = true,
         };
         foreach (Button button in StatusButtons)
         {
             string id = (string)button.Tag;
-            button.Visibility = wanted[id] && IsStatusItemVisible(id) ? Visibility.Visible : Visibility.Collapsed;
+            bool want = id == "zoom" ? IsZoomStatusWanted(button) : wanted[id];
+            button.Visibility = want && IsStatusItemVisible(id) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         StatusSize.Content = doc?.SizeText ?? string.Empty;
@@ -250,12 +252,15 @@ public sealed partial class MainWindow
                 continue;
             }
 
-            Button target = StatusButtons.First(b => (string)b.Tag == step);
-            if (target.Visibility == Visibility.Visible)
+            // ズームは Hex 表示と画面全体の 2 つの項目がある。
+            foreach (Button target in StatusButtons.Where(b => (string)b.Tag == step).ToList())
             {
-                target.Visibility = Visibility.Collapsed;
-                _statusOverflow.Add(target);
-                StatusMore.Visibility = Visibility.Visible;
+                if (target.Visibility == Visibility.Visible)
+                {
+                    target.Visibility = Visibility.Collapsed;
+                    _statusOverflow.Add(target);
+                    StatusMore.Visibility = Visibility.Visible;
+                }
             }
         }
     }

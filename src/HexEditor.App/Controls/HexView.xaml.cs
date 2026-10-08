@@ -297,10 +297,12 @@ public sealed partial class HexView : UserControl
     /// </summary>
     private void MeasureCell()
     {
-        double scale = _rasterizationScale > 0 ? _rasterizationScale : 1;
+        // 画面全体のズームはルート要素の拡大で行う (UI-08 の仕様 3)。物理ピクセルへの切り上げは、拡大した後の倍率で行う。
+        double scale = (_rasterizationScale > 0 ? _rasterizationScale : 1) * _screenZoom;
 
-        // フォントの大きさ = 設定 × Hex 表示のズーム × 画面全体のズーム × Windows の文字サイズ (VIEW-43 の仕様 1)。
-        _fontSize = _baseFontSize * (FollowTextScaling ? TextScaleFactor : 1) * _zoom * _screenZoom;
+        // フォントの大きさ = 設定 × Hex 表示のズーム × Windows の文字サイズ (VIEW-43 の仕様 1)。画面全体のズームの倍率は
+        // ルート要素の拡大で掛かる。
+        _fontSize = _baseFontSize * (FollowTextScaling ? TextScaleFactor : 1) * _zoom;
         var probe = new TextBlock
         {
             Text = new string('0', 64),

@@ -46,7 +46,7 @@ public sealed partial class MainWindow
         _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request)
             ?? HandleInspectorTestCommand(cmd, request) ?? await HandlePackagingTestCommandsAsync(cmd, request)
             ?? HandleEditTestCommand(cmd, request) ?? await HandleSearchTestCommandsAsync(cmd, request)
-            ?? await HandleViewTestCommandsAsync(cmd, request),
+            ?? await HandleViewTestCommandsAsync(cmd, request) ?? await HandleShellTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>
@@ -367,7 +367,8 @@ public sealed partial class MainWindow
                 return true;
             }
         }
-        else if (NaturalSize(text, text.ActualWidth + 1).Height > text.ActualHeight + 2)
+        // 画面全体のズーム (UI-08) では、文字の送り幅の端数の丸めが倍率で変わるので、幅の許容を 1 epx 広げる。
+        else if (NaturalSize(text, text.ActualWidth + (Controls.ScreenZoom.AppliedFor(text.XamlRoot) > 1 ? 2 : 1)).Height > text.ActualHeight + 2)
         {
             return true;
         }
@@ -433,6 +434,13 @@ public sealed partial class MainWindow
             TextLineBounds = text.TextLineBounds,
             Padding = text.Padding,
         };
+
+        // 画面全体のズーム (UI-08) では、元の文字列と同じ倍率でピクセルに合わせて測る (端数の丸めの違いで折り返さないように)。
+        if (Controls.ScreenZoom.AppliedFor(text.XamlRoot) is var zoom && zoom != 1 && text.XamlRoot is { } root)
+        {
+            probe.RasterizationScale = root.RasterizationScale * zoom;
+        }
+
         probe.Measure(new Size(width, double.PositiveInfinity));
         return probe.DesiredSize;
     }

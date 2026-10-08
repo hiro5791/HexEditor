@@ -213,6 +213,12 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     /// <summary>パスを持たない項目をコピーした一時ファイル (ENG-12 の仕様 2)。閉じるときに消す。</summary>
     public string? TemporaryFile { get; set; }
 
+    /// <summary>
+    /// このタブの Hex 表示の倍率 (百分率。UI-08 の仕様 2 の 2〜4)。適用範囲が「今のタブだけ」のときに使う。null なら全タブ共通の倍率。
+    /// セッションに保存し、閉じたタブを開き直しても引き継がない。
+    /// </summary>
+    public int? HexZoom { get; set; }
+
     /// <summary>閉じる: ドキュメントを解放してから、復旧用データをフォルダごと消す (仕様 5)。</summary>
     public void Dispose()
     {
