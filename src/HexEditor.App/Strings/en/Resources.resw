@@ -2442,4 +2442,6 @@ Details were written to:
   <data name="SetDesc_view_scrollBar_selectionMark" xml:space="preserve"><value>Draws a mark on the vertical scroll bar covering the selected range.</value></data>
   <data name="Set_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>Show bookmarks on the scroll bar</value></data>
   <data name="SetDesc_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>Draws thin marks on the vertical scroll bar where bookmarks start, in the bookmark's color.</value></data>
+  <data name="Set_diagnostics_hexView_overlay" xml:space="preserve"><value>Show rendering diagnostics in the Hex view</value></data>
+  <data name="SetDesc_diagnostics_hexView_overlay" xml:space="preserve"><value>Shows a small table in the top right of the Hex view with the frame rate, drawing time and frames that waited for data. For investigating performance.</value></data>
 </root>

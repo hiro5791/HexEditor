@@ -2442,4 +2442,6 @@
   <data name="SetDesc_view_scrollBar_selectionMark" xml:space="preserve"><value>縦のスクロールバーに、選択範囲の位置を示す印を表示します。</value></data>
   <data name="Set_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>スクロールバーにブックマークを表示</value></data>
   <data name="SetDesc_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>縦のスクロールバーの、ブックマークの開始位置に、ブックマークの色で細い印を表示します。</value></data>
+  <data name="Set_diagnostics_hexView_overlay" xml:space="preserve"><value>Hex ビューに描画の診断を表示</value></data>
+  <data name="SetDesc_diagnostics_hexView_overlay" xml:space="preserve"><value>Hex ビューの右上に、フレームレート・描画時間・読み込み待ちのフレーム数を示す小さな表を表示します。性能の調査用です。</value></data>
 </root>

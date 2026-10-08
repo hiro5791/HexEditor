@@ -100,6 +100,20 @@ public sealed class ViewMiscTests
     });
 
     [Fact]
+    public Task Diagnostics_overlay_is_enabled_from_the_settings() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-04 の仕様 8: 診断表示は既定オフ。設定 (詳細 > 診断) で有効にする。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        Assert.False(await app.IsShownAsync("HexViewDiagnostics"));
+
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["diagnostics.hexView.overlay"] = true });
+        AppSession other = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        await other.IdleAsync();
+        await other.WaitUntilAsync(() => other.IsShownAsync("HexViewDiagnostics"), TimeSpan.FromSeconds(10), "diagnostics overlay");
+    });
+
+    [Fact]
     public Task Scroll_bar_marks_for_selection_and_bookmarks_follow_the_settings() => UiTestContext.RunAsync(async ctx =>
     {
         // VIEW-02 の仕様 9: 既定はカーソル位置 (と検索結果) だけ。設定で選択範囲とブックマークの印も出せる。

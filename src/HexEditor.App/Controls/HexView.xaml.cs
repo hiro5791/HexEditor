@@ -207,6 +207,25 @@ public sealed partial class HexView : UserControl
         set => _diagnostics.Enabled = value;
     }
 
+    /// <summary>
+    /// 設定「Hex ビューの診断表示」(diagnostics.hexView.overlay) の値。設定が変わったときだけ診断表示を切り替える
+    /// (テスト用の命令で有効にした診断表示を、ほかの設定の変更で消さないため)。
+    /// </summary>
+    public bool DiagnosticsSetting
+    {
+        get => _diagnosticsSetting;
+        set
+        {
+            if (_diagnosticsSetting != value)
+            {
+                _diagnosticsSetting = value;
+                DiagnosticsEnabled = value;
+            }
+        }
+    }
+
+    private bool _diagnosticsSetting;
+
     /// <summary>診断の記録を書き出すファイル (CSV)。null なら書き出さない。性能のテストが読む。</summary>
     public string? DiagnosticsLogPath
     {

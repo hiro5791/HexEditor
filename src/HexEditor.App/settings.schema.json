@@ -26,6 +26,11 @@
       "type": "boolean",
       "default": true
     },
+    "diagnostics.hexView.overlay": {
+      "description": "Show rendering diagnostics in the Hex view",
+      "type": "boolean",
+      "default": false
+    },
     "diagnostics.writeMiniDump": {
       "description": "Save a memory dump on crash",
       "type": "boolean",

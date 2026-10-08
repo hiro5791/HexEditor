@@ -107,6 +107,9 @@ public static class ViewOptions
             "controlPictures" => NonPrintableStyle.ControlPictures,
             _ => NonPrintableStyle.Dot,
         };
+        // 描画性能の診断表示 (VIEW-04 の仕様 8。設定の「詳細」の診断の項目。既定オフ)。
+        view.DiagnosticsSetting = settings.GetBool("diagnostics.hexView.overlay", false);
+
         // スクロールバーの印 (VIEW-02 の仕様 9。既定はカーソル位置と検索結果だけ)。
         view.ShowCursorMarker = settings.GetBool("view.scrollBar.cursorMark", true);
         view.ShowSearchMarkers = settings.GetBool("view.scrollBar.searchMarks", true);
