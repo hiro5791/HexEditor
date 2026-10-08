@@ -45,6 +45,7 @@ public sealed class AppSession : IAsyncDisposable
     private AppSession(Process process, string profile, TestChannelClient channel, nint hwnd)
     {
         Process = process;
+        AppLocator.Record(process);
         Profile = profile;
         Channel = channel;
         Hwnd = hwnd;
@@ -333,8 +334,19 @@ public sealed class AppSession : IAsyncDisposable
     // ---- UI オートメーション (フォーカスを使わないパターンだけ) ----
 
     /// <summary>AutomationId の要素を探す。見つからなければ null。</summary>
-    public AutomationElement? Find(string automationId) =>
-        Window.FindFirstDescendant(cf => cf.ByAutomationId(automationId));
+    public AutomationElement? Find(string automationId)
+    {
+        try
+        {
+            return Window.FindFirstDescendant(cf => cf.ByAutomationId(automationId));
+        }
+        catch (System.Runtime.InteropServices.COMException)
+        {
+            // ダイアログを開いている・閉じている途中は UI オートメーションの木が変わり、E_UNEXPECTED などで失敗することがある
+            // (遅い CI のランナー)。まだ見つからないとして、呼び出し側が待ち直す。
+            return null;
+        }
+    }
 
     /// <summary>AutomationId の要素が現れるまで待つ。</summary>
     public async Task<AutomationElement> WaitForAsync(string automationId, TimeSpan? timeout = null)

@@ -89,7 +89,12 @@ public sealed partial class OperationsTests
             cancel.Patterns.Invoke.Pattern.Invoke();
             await app.WaitUntilAsync(async () => CancelledCount(await app.StateAsync()) > before, TimeSpan.FromSeconds(5), "the cancellation");
             watch.Stop();
-            Assert.True(watch.ElapsedMilliseconds <= 200, $"the operation stopped {watch.ElapsedMilliseconds} ms after the cancel button");
+
+            // キャンセルの要求から処理が止まるまでをアプリの中で計った時間で判定する (ボタンを押す UI オートメーションの呼び出しと、
+            // 状態を読む命令の往復は含めない。混んだ CI のランナーでは往復だけで数百 ms かかる)。
+            double stopped = (await app.StateAsync())["operations"]!.AsArray()
+                .First(o => o!["state"]!.GetValue<string>() == "Cancelled")!["cancelToEndMs"]!.GetValue<double>();
+            Assert.True(stopped <= 200, $"the operation stopped {stopped:F0} ms after the cancel request ({watch.ElapsedMilliseconds} ms after the button with the round trips)");
 
             // 処理センターの状態が「キャンセル済み」になる (一覧は 250 ms ごとに更新)。
             await app.WaitUntilAsync(() => Task.FromResult(app.Find("Operations_Result") is { } r && AppSession.NameOf(r) == "Cancelled"),

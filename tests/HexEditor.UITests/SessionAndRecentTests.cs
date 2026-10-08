@@ -405,7 +405,7 @@ public sealed class SessionAndRecentTests
         Assert.Contains("Cancel", buttons);
 
         // 4〜5. 「保存が終わったら閉じる」で、保存の完了後にタブが閉じ、ファイルの長さは 16,777,217 バイト。
-        app.Button("Close after saving")!.Patterns.Invoke.Pattern.Invoke();
+        await app.InvokeDialogButtonAsync("Close after saving");
         await app.WaitUntilAsync(async () => (await app.TabNamesAsync()).Count == 0, TimeSpan.FromSeconds(60), "the tab to close");
         Assert.Equal(16_777_217, new FileInfo(path).Length);
     });

@@ -51,6 +51,10 @@ public static class UiHelpers
         return (Math.Min(width, shell["monitorWidth"]!.GetValue<int>() - 40), Math.Min(height, shell["monitorHeight"]!.GetValue<int>() - 40));
     }
 
+    /// <summary>テスト対象のアプリの配布形態 (Development、Portable、Installer、Msix)。</summary>
+    public static async Task<string> DistributionAsync(this AppSession app) =>
+        (await app.StateAsync())["distribution"]!.GetValue<string>();
+
     /// <summary>ウィンドウの大きさを物理ピクセルで変える。</summary>
     public static async Task ResizeAsync(this AppSession app, int width, int height)
     {

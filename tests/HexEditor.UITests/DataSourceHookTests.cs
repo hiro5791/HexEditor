@@ -94,6 +94,10 @@ public sealed class DataSourceHookTests
         };
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = hooks });
 
+        // 起動の直後の初めての描画 (速い起動のリリースのビルドでは、まだ続いている) は測らない。
+        await app.IdleAsync();
+        await Task.Delay(500);
+
         // UI スレッドの応答を、2 本目の命令の通り道で 10 ms ごとに確かめる。
         using TestChannelClient monitor = (await TestChannelClient.ConnectAsync(app.Pid, () => app.Process.HasExited, TimeSpan.FromSeconds(10)))!;
         using var stop = new CancellationTokenSource();

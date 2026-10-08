@@ -57,8 +57,15 @@ public sealed class EditCommandTests
         return e["text"]?.GetValue<string>() ?? e["content"]?.GetValue<string>() ?? string.Empty;
     }
 
-    private static Task SetCheckedAsync(AppSession app, string id, bool value = true) =>
-        app.SendAsync("setChecked", new JsonObject { ["id"] = id, ["value"] = value });
+    /// <summary>
+    /// ダイアログの中のトグルを切り替える。ダイアログ自体は UI オートメーションに見えていても、中身が XAML の木に入るのは少し後のことが
+    /// ある (リリースのビルド) ので、見つかるまで待つ。
+    /// </summary>
+    private static async Task SetCheckedAsync(AppSession app, string id, bool value = true)
+    {
+        await app.WaitUntilAsync(async () => (await ElementAsync(app, id))["found"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), id);
+        await app.SendAsync("setChecked", new JsonObject { ["id"] = id, ["value"] = value });
+    }
 
     /// <summary>一覧の項目 (ダイアログの中身ができるまで待つ)。</summary>
     private static async Task<JsonObject> ListItemsAsync(AppSession app, string id)

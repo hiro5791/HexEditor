@@ -406,6 +406,24 @@ public sealed class ViewTests
         await app.SendAsync("setSystem", new JsonObject { ["wheelScrollLines"] = null });
     });
 
+    /// <summary>配置 (セルの幅・位置) が 2 回続けて同じになるまで待ち、その描画の情報を返す。</summary>
+    private static async Task<JsonObject> StableRenderAsync(AppSession app)
+    {
+        JsonObject render = null!;
+        string? previous = null;
+        await app.WaitUntilAsync(async () =>
+        {
+            await Task.Delay(100);
+            await app.IdleAsync();
+            render = await app.RenderAsync();
+            string layout = $"{render["cellWidth"]} {render["offsetLeft"]} {render["contentLeft"]} {CellPoint(render, 0).X}";
+            bool stable = layout == previous;
+            previous = layout;
+            return stable;
+        }, TimeSpan.FromSeconds(10), "a stable layout");
+        return render;
+    }
+
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-28-03")]
     public Task Horizontal_scroll_keeps_the_offset_column() => UiTestContext.RunAsync(async ctx =>
@@ -422,6 +440,9 @@ public sealed class ViewTests
             render = await app.RenderAsync();
             return render["horizontalBarVisible"]!.GetValue<bool>();
         }, TimeSpan.FromSeconds(10), "the horizontal scroll bar");
+
+        // 文字の大きさの変更による配置の変化が落ち着くまで待つ (速いリリースのビルドでは、横のスクロールバーが出た時点ではまだ変わる)。
+        render = await StableRenderAsync(app);
         double cell = render["cellWidth"]!.GetValue<double>();
         double offsetX = render["offsetLeft"]!.GetValue<double>();
         double hexX = CellPoint(render, 0).X;
@@ -455,12 +476,14 @@ public sealed class ViewTests
             render = await app.RenderAsync();
             return render["horizontalBarVisible"]!.GetValue<bool>();
         }, TimeSpan.FromSeconds(10), "the horizontal scroll bar");
+        render = await StableRenderAsync(app);
         double cell = render["cellWidth"]!.GetValue<double>();
         double offsetX = render["offsetLeft"]!.GetValue<double>();
         double hexX = CellPoint(render, 0).X;
         double contentLeft = render["contentLeft"]!.GetValue<double>();
 
         await WheelAsync(app, -120, count: 10, shift: true);
+        await app.IdleAsync();
         render = await app.RenderAsync();
         Assert.Equal(hexX - 30 * cell, CellPoint(render, 0).X, 3);
         Assert.Equal(offsetX - Math.Min(30 * cell, contentLeft), render["offsetLeft"]!.GetValue<double>(), 3);
@@ -541,7 +564,7 @@ public sealed class ViewTests
     {
         // TD-PE-X64 の代わりに、テスト対象の HexEditor の実行ファイル (x64 の Windows 実行ファイル) の複製を使う。
         string exe = Path.Combine(ctx.Root, "pe-x64.exe");
-        File.Copy(AppLocator.ExePath, exe);
+        File.Copy(AppLocator.ImagePath, exe);
         byte[] head = File.ReadAllBytes(exe).AsSpan(0, 0x40).ToArray();
         long lfanew = BitConverter.ToUInt32(head, 0x3C);
         long length = new FileInfo(exe).Length;

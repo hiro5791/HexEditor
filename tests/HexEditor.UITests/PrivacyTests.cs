@@ -27,7 +27,7 @@ public sealed class PrivacyTests
 
         // TD-PE-X64 の代わりに、テスト対象の HexEditor の実行ファイルの複製。
         string pe = Path.Combine(ctx.Root, "pe-x64.exe");
-        File.Copy(AppLocator.ExePath, pe, overwrite: true);
+        File.Copy(AppLocator.ImagePath, pe, overwrite: true);
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [seq] });
 
         var outbound = new List<string>();

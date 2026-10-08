@@ -16,6 +16,40 @@ public static class AppLocator
 
     public static string RepositoryRoot { get; } = FindRepositoryRoot();
 
+    /// <summary>
+    /// 起動したアプリのプロセスの実行ファイル (最初に起動したときに記録する)。MSIX 版は実行エイリアス (<see cref="ExePath"/>。
+    /// %LocalAppData%\Microsoft\WindowsApps\hexeditor.exe) で起動するが、プロセスの実行ファイルはパッケージの中の HexEditor.exe。
+    /// </summary>
+    public static string ImagePath => _imagePath ?? ExePath;
+
+    private static string? _imagePath;
+
+    /// <summary>アプリのプロセスの実行ファイルを記録する (AppSession が起動・接続したとき)。</summary>
+    public static void Record(System.Diagnostics.Process process)
+    {
+        try
+        {
+            _imagePath ??= process.MainModule?.FileName;
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
+        {
+        }
+    }
+
+    /// <summary>プロセスがテスト対象のアプリ (同じ実行ファイル) か。MSIX 版の実行エイリアスも考える。</summary>
+    public static bool IsAppProcess(System.Diagnostics.Process process)
+    {
+        try
+        {
+            string? file = process.MainModule?.FileName;
+            return string.Equals(file, ExePath, StringComparison.OrdinalIgnoreCase) || string.Equals(file, _imagePath, StringComparison.OrdinalIgnoreCase);
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
+        {
+            return false;
+        }
+    }
+
     /// <summary>HEXEDITOR_APP_EXE で配布形態のビルド (CI の ui-distro) を指定した。false なら開発中のビルド (dotnet build の出力)。</summary>
     public static bool IsConfigured => Environment.GetEnvironmentVariable("HEXEDITOR_APP_EXE") is { Length: > 0 };
 

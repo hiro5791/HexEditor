@@ -23,6 +23,14 @@ public sealed class OpenAndDropTests
     {
         // コマンドパレット (フェーズ 1) の代わりに、同じコマンドのメニューの項目から開く。
         AppSession app = await ctx.StartAsync();
+
+        // 測る前に、新しいタブの Hex 表示を 1 度作っておく (テスト用のビルド (Debug) の初めての JIT の分を測らない)。
+        await app.SendAsync("new");
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0
+            && (await app.RenderAsync())["firstFrameTime"]!.GetValue<long>() != 0, TimeSpan.FromSeconds(10), "the warm-up view");
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+
         await app.CommandAsync("Command_NewWithSize");
         await app.WaitForAsync("NewSize_Size");
         await app.UiaSetValueAsync("NewSize_Size", "1T");
@@ -36,8 +44,12 @@ public sealed class OpenAndDropTests
         await app.WaitUntilAsync(async () => (await app.StateAsync())["hexViews"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the hex view");
         watch.Stop();
 
-        // 計測には UI オートメーションと命令の通り道の往復 (数十 ms) を含むため、往復の分を足した上限で判定する。
-        Assert.True(watch.ElapsedMilliseconds <= 100 + 400, $"creating took {watch.ElapsedMilliseconds} ms");
+        // 作り始めてから Hex 表示の最初の描画までを、アプリの中の時刻で判定する (ダイアログの閉じる動きと、UI オートメーション・命令の
+        // 通り道の往復は含めない。混んだ CI のランナーでは往復だけで数百 ms かかる)。
+        await app.WaitUntilAsync(async () => (await app.RenderAsync())["firstFrameTime"]!.GetValue<long>() != 0, TimeSpan.FromSeconds(10), "the first frame");
+        long created = (await app.StateAsync())["newDocumentCreatedAt"]!.GetValue<long>();
+        long shown = (await app.RenderAsync())["firstFrameTime"]!.GetValue<long>() - created;
+        Assert.True(shown <= 100, $"creating took {shown} ms ({watch.ElapsedMilliseconds} ms after the button with the round trips)");
 
         // 3. 長さとピースの数 (生成ピース 1 つ)。
         JsonObject doc = await app.DocumentAsync();
@@ -77,6 +89,15 @@ public sealed class OpenAndDropTests
             Assert.False((await app.UiOpenAsync(path))["opened"]!.GetValue<bool>());
             JsonObject notice = await app.WaitForNotificationAsync(m => m.Contains("locked.bin", StringComparison.Ordinal), "the error");
             string message = notice["message"]!.GetValue<string>();
+
+            // MSIX 版 (CI の ui-distro) では、Restart Manager がパッケージの外のプロセスを返さないことがある。そのときは使っている
+            // アプリの名前のない文言 (ENG-11 の「エラー」: 分からなければ名前を出さない)。
+            if (await app.DistributionAsync() == "Msix" && message.Contains("another app is using it", StringComparison.Ordinal))
+            {
+                Assert.Empty(await app.TabNamesAsync());
+                return;
+            }
+
             Assert.Contains("being used by", message, StringComparison.Ordinal);
             Assert.Contains("PowerShell", message, StringComparison.OrdinalIgnoreCase);
             Assert.Empty(await app.TabNamesAsync());
@@ -200,9 +221,9 @@ public sealed class OpenAndDropTests
         await app.DropAsync(files);
 
         var dialog = await app.WaitForDialogAsync("DropConfirmDialog");
-        Assert.Contains("Open 30 files?", AppSession.AllText(dialog), StringComparison.Ordinal);
-        Assert.NotNull(app.Button("Open"));
-        Assert.NotNull(app.Button("Cancel"));
+        await app.WaitForDialogTextAsync(dialog, "Open 30 files?");
+        await app.WaitUntilAsync(() => Task.FromResult(app.Button("Open") is not null && app.Button("Cancel") is not null), TimeSpan.FromSeconds(5),
+            "the Open and Cancel buttons");
         await app.InvokeDialogButtonAsync("Open");
         await app.WaitForTabsAsync(30);
     });

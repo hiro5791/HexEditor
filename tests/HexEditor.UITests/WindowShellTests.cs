@@ -72,7 +72,7 @@ public sealed class WindowShellTests
         {
             var watch = Stopwatch.StartNew();
             while ((restarted = Process.GetProcessesByName("HexEditor")
-                .FirstOrDefault(p => p.Id != app.Pid && StartedAfter(p, since) && SamePath(p, AppLocator.ExePath))) is null)
+                .FirstOrDefault(p => p.Id != app.Pid && StartedAfter(p, since) && AppLocator.IsAppProcess(p))) is null)
             {
                 Assert.True(watch.Elapsed < TimeSpan.FromSeconds(30), "the app did not restart");
                 await Task.Delay(200);
@@ -107,17 +107,6 @@ public sealed class WindowShellTests
         }
     }
 
-    private static bool SamePath(Process p, string exe)
-    {
-        try
-        {
-            return string.Equals(p.MainModule?.FileName, exe, StringComparison.OrdinalIgnoreCase);
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-    }
 
     // ---- UI-13、UI-14: 閉じる確認のキャンセルと、閉じたウィンドウの購読 ----
 
@@ -396,7 +385,7 @@ public sealed class WindowShellTests
         await app.WaitUntilAsync(async () => (await app.StateAsync())["activeOperations"]!.GetValue<int>() > 0, Wait, "the save");
         await app.KeyAsync("W", ctrl: true);
         await app.WaitForAsync("CloseDialog");
-        app.Button("Close after saving")!.Patterns.Invoke.Pattern.Invoke();
+        await app.InvokeDialogButtonAsync("Close after saving");
 
         // 保存の進捗のダイアログが出て、保存が終わると自動で閉じ、タブも閉じる。
         await app.WaitUntilAsync(async () => (await app.SendAsync("closeWait"))["open"]!.GetValue<bool>(), Wait, "the waiting dialog");

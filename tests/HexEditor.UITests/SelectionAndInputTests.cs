@@ -135,20 +135,19 @@ public sealed class SelectionAndInputTests
         await Task.Delay(300);
         await app.SendAsync("announcements", new JsonObject { ["clear"] = true });
 
-        long lastKey = 0;
-        for (int i = 0; i < 40; i++)
-        {
-            await app.KeyAsync("Right", shift: true);
-            lastKey = Environment.TickCount64;
-            await Task.Delay(30);
-        }
+        // 40 回の入力を 1 つの命令で送る (1 回ずつ送ると、混んだ CI のランナーでは命令の往復が読み上げの待ち時間 0.5 秒を超え、
+        // 途中でも読み上げてしまう。入力の間隔ではなく、続けて押したときに 1 件にまとめることを確かめる)。
+        long sent = Environment.TickCount64;
+        await app.KeyAsync("Right", shift: true, count: 40);
+        long lastKey = Environment.TickCount64;
 
         await Task.Delay(1000);
         var selection = (await app.SendAsync("announcements"))["items"]!.AsArray()
             .Where(a => a!["id"]!.GetValue<string>() == "HexViewSelection").ToList();
         JsonNode only = Assert.Single(selection)!;
         long after = only["time"]!.GetValue<long>() - lastKey;
-        Assert.InRange(after, 450, 700);
+        // 最後の入力は命令を送ってから答えが返るまでの間 (その往復の分だけ前でもよい)。
+        Assert.InRange(after, 450 - (lastKey - sent), 700);
         string text = only["text"]!.GetValue<string>();
         Assert.Contains("0x00000010", text.Replace(" ", string.Empty));
         Assert.Contains("40 bytes", text);

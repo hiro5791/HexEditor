@@ -217,7 +217,9 @@ public sealed class ReadOnlySourceTests
 
         await app.KeyAsync("R", ctrl: true);
         await app.WaitForNotificationAsync(m => m.Contains(message, StringComparison.Ordinal), "the notice again");
-        Assert.Contains("Merge", NoticeButtons(app));
+
+        // ボタンは通知の後に UI オートメーションに現れる。
+        await app.WaitUntilAsync(() => Task.FromResult(NoticeButtons(app).Contains("Merge")), TimeSpan.FromSeconds(5), "the Merge button");
         Assert.Equal(0xAA, (await app.BytesAsync(0x10, 1))[0]);
     });
 

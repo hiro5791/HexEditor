@@ -724,11 +724,8 @@ public sealed class ViewMiscTests
 
         // 2. 30 回押す間は読み上げず、最後の入力の後に 1 件だけ。
         await app.SendAsync("announcements", new JsonObject { ["clear"] = true });
-        for (int i = 0; i < 30; i++)
-        {
-            await app.KeyAsync("Right");
-            await Task.Delay(20);
-        }
+        // 30 回の入力を 1 つの命令で送る (1 回ずつ送ると、混んだ CI のランナーでは命令の往復が読み上げの待ち時間 150 ms を超える)。
+        await app.KeyAsync("Right", count: 30);
 
         await Task.Delay(400);
         JsonArray items = (await app.SendAsync("announcements", new JsonObject { ["clear"] = true }))["items"]!.AsArray();

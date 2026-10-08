@@ -230,7 +230,7 @@ public sealed class FileTests
     {
         try
         {
-            return string.Equals(p.MainModule?.FileName, AppLocator.ExePath, StringComparison.OrdinalIgnoreCase);
+            return AppLocator.IsAppProcess(p);
         }
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
         {

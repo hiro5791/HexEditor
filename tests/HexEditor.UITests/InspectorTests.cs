@@ -80,7 +80,14 @@ public sealed class InspectorTests
         await PanelKeyAsync(app, "Enter");
         await app.IdleAsync();
         Assert.True((await RowAsync(app, type))["editing"]!.GetValue<bool>(), "the input box did not open");
+
+        // 入力欄は開いた後に今の値を入れて全選択する (リリースのビルドでは少し後になる)。その前に入れると今の値で上書きされるので、
+        // 全選択が済んでから入れ、入ったことを確かめる。
+        await app.WaitUntilAsync(async () => await app.ElementAsync("Inspector_Edit") is var box && box["found"]!.GetValue<bool>()
+            && box["selectedText"]?.GetValue<string>() == box["text"]?.GetValue<string>(), TimeSpan.FromSeconds(5), "the input box to be ready");
         await app.UiaSetValueAsync("Inspector_Edit", text);
+        await app.WaitUntilAsync(async () => (await app.ElementAsync("Inspector_Edit"))["text"]?.GetValue<string>() == text, TimeSpan.FromSeconds(5),
+            "the typed value in the input box");
     }
 
     /// <summary>値を書き込む (入力して Enter)。</summary>
@@ -344,10 +351,15 @@ public sealed class InspectorTests
         }
 
         // 2: Tab でビットのボタンへ (最上位 = 7)。3: → で 6。
+        // 選んだ行のビットのボタンは、行を選んだ少し後に XAML の木に入る。入る前に Tab を押すと、移る先がない。
+        await app.WaitUntilAsync(async () => (await app.ElementAsync("Inspector_Bit_binary8_7"))["found"]!.GetValue<bool>(), TimeSpan.FromSeconds(5),
+            "the bit buttons");
+        await app.IdleAsync();
         await PanelKeyAsync(app, "Tab");
-        Assert.Equal(7, (await StateAsync(app))["focusedBit"]!.GetValue<int>());
+        await app.WaitUntilAsync(async () => (await StateAsync(app))["focusedBit"]?.GetValue<int>() == 7, TimeSpan.FromSeconds(5), "bit 7 focused");
+
         await PanelKeyAsync(app, "Right");
-        Assert.Equal(6, (await StateAsync(app))["focusedBit"]!.GetValue<int>());
+        await app.WaitUntilAsync(async () => (await StateAsync(app))["focusedBit"]?.GetValue<int>() == 6, TimeSpan.FromSeconds(5), "bit 6 focused");
 
         // 4: Space で反転 (41 → 01)。
         await PanelKeyAsync(app, "Space");
@@ -460,7 +472,10 @@ public sealed class InspectorTests
         await app.SendAsync("inspectorSelect", new JsonObject { ["id"] = "uint16" });
         await PanelKeyAsync(app, "Enter");
         await app.IdleAsync();
-        JsonObject box = await app.ElementAsync("Inspector_Edit");
+        // 全選択は入力欄にフォーカスが移った後に行われる (リリースのビルドでは少し後になる) ので、待つ。
+        JsonObject box = null!;
+        await app.WaitUntilAsync(async () => (box = await app.ElementAsync("Inspector_Edit"))["selectedText"]?.GetValue<string>() == "0",
+            TimeSpan.FromSeconds(5), "the whole value selected in the input box");
         Assert.Equal("0", box["text"]!.GetValue<string>());
         Assert.Equal("0", box["selectedText"]!.GetValue<string>());
 

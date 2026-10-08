@@ -261,7 +261,8 @@ public sealed class LocalizationTests
 
         // 2. 切れた文字列の一覧に、リソースキー付きで載る。
         var report = TrimReport.Describe(after, "start", "1280x800", TrimReport.PseudoKeys()).ToList();
-        Assert.Contains(report, line => line.Contains("Startup_ExportSettings", StringComparison.Ordinal) && line.Contains("TestProbe", StringComparison.Ordinal));
+        Assert.True(report.Any(line => line.Contains("Startup_ExportSettings", StringComparison.Ordinal) && line.Contains("TestProbe", StringComparison.Ordinal)),
+            "the probe is not reported:\n" + string.Join("\n", report));
         Assert.Contains("Text clipped", string.Join("\n", await app.LogAsync()), StringComparison.Ordinal);
 
         // 3. 切れた文字列が増えたときの判定は警告 (失敗ではない)。

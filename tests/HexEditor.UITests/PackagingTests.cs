@@ -204,6 +204,13 @@ public sealed class PackagingTests
         });
         await app.SendAsync("settingsPage", new JsonObject { ["category"] = "update" });
         Assert.StartsWith("Current version: ", await app.UiaNameAsync("Settings_UpdateVersion"));
+        if (await app.DistributionAsync() == "Msix")
+        {
+            // MSIX 版はチャネルを選ばず、Store の自動更新の説明を出す (PKG-19 の仕様 3)。
+            Assert.False(await app.IsShownAsync("Settings_UpdateChannel"));
+            return;
+        }
+
         Assert.Equal("Channel: Stable", await app.UiaNameAsync("Settings_UpdateChannel"));
         Assert.Equal("Not checked yet.", await app.UiaNameAsync("Settings_UpdateLastChecked"));
 
@@ -223,8 +230,22 @@ public sealed class PackagingTests
         AppSession app = await ctx.StartAsync(new AppOptions());
         await app.SendAsync("settingsPage", new JsonObject { ["category"] = "explorer" });
 
-        // 開発中の実行は登録しない (レジストリを変えない)。右クリックメニューとファイルの関連付けは別の行。
-        Assert.Equal("Not available in this build.", await app.UiaNameAsync("Settings_ExplorerStatus"));
+        // 開発中の実行は登録しない (レジストリを変えない)。MSIX 版は Windows の設定で管理する。インストーラ版・ポータブル版は
+        // 行ごとに状態と登録のボタンを出す (全体の状態の行はない)。右クリックメニューとファイルの関連付けは別の行。
+        switch (await app.DistributionAsync())
+        {
+            case "Msix":
+                Assert.Equal("Managed by Windows settings.", await app.UiaNameAsync("Settings_ExplorerStatus"));
+                break;
+            case "Installer" or "Portable":
+                await app.WaitForAsync("Settings_ExplorerContextMenuStatus");
+                Assert.Null(app.Find("Settings_ExplorerStatus"));
+                break;
+            default:
+                Assert.Equal("Not available in this build.", await app.UiaNameAsync("Settings_ExplorerStatus"));
+                break;
+        }
+
         Assert.Equal("Right-click menu \"Open with HexEditor\"", await app.UiaNameAsync("Settings_ExplorerContextMenuTitle"));
         Assert.Equal("File associations", await app.UiaNameAsync("Settings_ExplorerFileAssociationsTitle"));
 
@@ -424,7 +445,7 @@ public sealed class PackagingTests
             // 古いプロセスは終わっているので、そのセッションの待ち方 (終了で失敗する) は使わない。
             var wait = Stopwatch.StartNew();
             while ((restarted = Process.GetProcessesByName("HexEditor")
-                .FirstOrDefault(p => p.Id != app.Pid && StartedAfter(p, since) && SamePath(p, AppLocator.ExePath))) is null)
+                .FirstOrDefault(p => p.Id != app.Pid && StartedAfter(p, since) && AppLocator.IsAppProcess(p))) is null)
             {
                 Assert.True(wait.Elapsed < TimeSpan.FromSeconds(30), "the app did not restart");
                 await Task.Delay(200);
@@ -472,7 +493,7 @@ public sealed class PackagingTests
         Assert.Equal(0, exit);
         await app.WaitForTabsAsync(2);
         Assert.Contains(Path.GetFileName(seq), (await app.TabNamesAsync()).Select(Path.GetFileName));
-        Assert.Equal(app.Pid, Assert.Single(Process.GetProcessesByName("HexEditor"), p => SamePath(p, AppLocator.ExePath) && StartedAfter(p, testStart)).Id);
+        Assert.Equal(app.Pid, Assert.Single(Process.GetProcessesByName("HexEditor"), p => AppLocator.IsAppProcess(p) && StartedAfter(p, testStart)).Id);
     });
 
     [Fact]
@@ -491,7 +512,7 @@ public sealed class PackagingTests
 
         // 2. プロセスは 1 つで、ウィンドウが 2 つ。
         await WindowManagementTests.WaitForWindowsAsync(app, 2);
-        Assert.Equal(app.Pid, Assert.Single(Process.GetProcessesByName("HexEditor"), p => SamePath(p, AppLocator.ExePath) && StartedAfter(p, testStart)).Id);
+        Assert.Equal(app.Pid, Assert.Single(Process.GetProcessesByName("HexEditor"), p => AppLocator.IsAppProcess(p) && StartedAfter(p, testStart)).Id);
     });
 
     private static async Task<string> FileMenuTitleAsync(AppSession app) =>
@@ -509,17 +530,6 @@ public sealed class PackagingTests
         }
     }
 
-    private static bool SamePath(Process p, string exe)
-    {
-        try
-        {
-            return string.Equals(p.MainModule?.FileName, exe, StringComparison.OrdinalIgnoreCase);
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-    }
 
     /// <summary>プロセスの TCP の接続の相手 (IPv4・IPv6)。GetExtendedTcpTable (TCP_TABLE_OWNER_PID_ALL)。</summary>
     internal static class TcpConnections

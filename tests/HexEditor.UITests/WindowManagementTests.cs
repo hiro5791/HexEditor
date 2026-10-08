@@ -34,7 +34,7 @@ public sealed class WindowManagementTests
         {
             try
             {
-                return !p.HasExited && string.Equals(p.MainModule?.FileName, AppLocator.ExePath, StringComparison.OrdinalIgnoreCase)
+                return !p.HasExited && AppLocator.IsAppProcess(p)
                     && p.StartTime >= since.AddSeconds(-1);
             }
             catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
