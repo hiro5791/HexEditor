@@ -11,17 +11,20 @@ namespace HexEditor.App;
 /// </summary>
 public sealed partial class MainWindow
 {
-    /// <summary>検索の結果を出しておく時間 (FIND-02 の仕様 5)。</summary>
-    public static readonly TimeSpan SearchResultMessageDuration = TimeSpan.FromSeconds(5);
-
     private TextBlock? _statusMessage;
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _statusMessageTimer;
 
     /// <summary>今ステータスバーに出している一時的な文 (なければ空。テスト用)。</summary>
     internal string StatusMessageText => _statusMessage?.Text ?? string.Empty;
 
-    /// <summary>ステータスバーに一時的な文を出す (<paramref name="duration"/> 後に消す)。</summary>
-    internal void ShowStatusMessage(string message, TimeSpan duration)
+    /// <summary>一時的な文を出しておく既定の時間 (UI-06 の仕様 7)。</summary>
+    public static readonly TimeSpan StatusMessageDefaultDuration = TimeSpan.FromSeconds(5);
+
+    /// <summary>
+    /// ステータスバーに一時的な文を出す (UI-06 の仕様 7)。ウィンドウごとに 1 つで、新しい文が前の文を置き換える。
+    /// <paramref name="duration"/> (既定 5 秒) 後に消す。スクリーンリーダーには丁寧な通知で読み上げる。
+    /// </summary>
+    public void ShowStatusMessage(string message, TimeSpan? duration = null)
     {
         if (_statusMessage is null)
         {
@@ -52,7 +55,7 @@ public sealed partial class MainWindow
 
         _statusMessage.Text = message;
         _statusMessageTimer!.Stop();
-        _statusMessageTimer.Interval = duration;
+        _statusMessageTimer.Interval = duration ?? StatusMessageDefaultDuration;
         _statusMessageTimer.Start();
         AutomationPeer? peer = FrameworkElementAutomationPeer.FromElement(_statusMessage) ?? FrameworkElementAutomationPeer.CreatePeerForElement(_statusMessage);
         peer?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);

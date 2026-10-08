@@ -92,7 +92,7 @@ public sealed partial class MainWindow
         FindBar.ReplaceAllCompleted += FindBar_ReplaceAllCompleted;
         FindBar.ReplaceFailed += (_, message) => ShowNotice(message, InfoBarSeverity.Error, Vm.Selected);
         FindBar.AskUnreadable = AskUnreadableAsync;
-        FindBar.ResultReported += (_, message) => ShowStatusMessage(message, SearchResultMessageDuration);
+        FindBar.ResultReported += (_, message) => ShowStatusMessage(message);
         InitializeSearchExtras();
         AutomationProperties.SetAutomationId(SearchResults, "SearchResults");
         SearchResults.Visibility = Visibility.Collapsed;

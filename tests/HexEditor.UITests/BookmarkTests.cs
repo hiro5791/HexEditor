@@ -314,7 +314,9 @@ public sealed class BookmarkTests
         AppSession app = await StartAsync(ctx);
         await app.GoToAsync(0x123);
         await app.KeyAsync("Number5", ctrl: true);
-        await app.WaitForNotificationAsync(m => m.Contains("Numbered bookmark 5", StringComparison.Ordinal), "the message");
+        // 未設定の番号はステータスバーの一時的な文で知らせる (INSP-25 の仕様 2、UI-06 の仕様 7)。
+        await app.WaitUntilAsync(async () => ((await app.StateAsync())["statusMessage"]?.GetValue<string>() ?? string.Empty).Contains("Numbered bookmark 5", StringComparison.Ordinal),
+            TimeSpan.FromSeconds(10), "the message");
         Assert.Equal(0x123, await CursorAsync(app));
     });
 
@@ -367,7 +369,9 @@ public sealed class BookmarkTests
         await app.KeyAsync("F2");
         await app.IdleAsync();
         Assert.Equal(0x100, await CursorAsync(app));
-        await app.WaitForNotificationAsync(m => m.Contains("first bookmark", StringComparison.Ordinal), "the wrap message");
+        // 折り返しはステータスバーの一時的な文で知らせる (INSP-26 の仕様 7、UI-06 の仕様 7)。
+        await app.WaitUntilAsync(async () => ((await app.StateAsync())["statusMessage"]?.GetValue<string>() ?? string.Empty).Contains("first bookmark", StringComparison.Ordinal),
+            TimeSpan.FromSeconds(10), "the wrap message");
     });
 
     [Fact]

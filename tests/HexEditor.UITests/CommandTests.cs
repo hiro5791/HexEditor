@@ -259,8 +259,14 @@ public sealed class CommandTests
         await app.InvokeDialogButtonAsync("Reset to default");
 
         // 3. 500 ms 以上待ってから keybindings.json を読む。
+        // 書き出しは負荷の高いときに遅れることがあるため、空になるまで最大 10 秒待つ。
         await Task.Delay(1000);
-        JsonObject file = JsonNode.Parse(await File.ReadAllTextAsync(Path.Combine(profile, "keybindings.json")))!.AsObject();
+        JsonObject file = null!;
+        await app.WaitUntilAsync(async () =>
+        {
+            file = JsonNode.Parse(await File.ReadAllTextAsync(Path.Combine(profile, "keybindings.json")))!.AsObject();
+            return file["bindings"]!.AsArray().Count == 0;
+        }, TimeSpan.FromSeconds(10), "keybindings.json to be reset");
         Assert.Empty(file["bindings"]!.AsArray());
         Assert.Equal("default", file["preset"]!.GetValue<string>());
     });

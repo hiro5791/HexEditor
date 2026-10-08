@@ -172,7 +172,18 @@ public sealed partial class FindBar : UserControl
         {
             if (_editor != value)
             {
+                // 表示の文字コードが変わったら、「表示中の文字コードに合わせる」の検索語を作り直す (FIND-07 の仕様 1)。
+                if (_editor is not null)
+                {
+                    _editor.ViewChanged -= Editor_ViewChanged;
+                }
+
                 _editor = value;
+                if (_editor is not null)
+                {
+                    _editor.ViewChanged += Editor_ViewChanged;
+                }
+
                 UpdateReplaceAvailability();
                 Validate();
             }

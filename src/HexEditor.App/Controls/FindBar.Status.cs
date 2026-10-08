@@ -25,6 +25,15 @@ public sealed partial class FindBar
         }
     }
 
+    /// <summary>表示設定が変わった: 「表示中の文字コードに合わせる」で文字コードが変わっていれば検索語を作り直す。</summary>
+    private void Editor_ViewChanged(object? sender, EventArgs e)
+    {
+        if (SelectedEncoding == Core.Search.TextEncodings.DisplayEncodingId && Kind == Core.Search.SearchKind.Text)
+        {
+            DispatcherQueue.TryEnqueue(Validate);
+        }
+    }
+
     /// <summary>範囲を「選択範囲」にしている間の、その範囲 (エディタに枠で示す。FIND-11 の仕様 3)。それ以外は空。</summary>
     public IReadOnlyList<Core.Search.SearchRange> OutlinedScope => IsOpen && ScopeChoice.SelectedIndex == 1 ? _scope.Ranges : [];
 

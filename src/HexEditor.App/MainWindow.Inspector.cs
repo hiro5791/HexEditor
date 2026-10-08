@@ -634,7 +634,8 @@ public sealed partial class MainWindow
         BookmarkActions.GoTo(editor, target);
         if (jump.Wrapped)
         {
-            ShowNotice(Loc.Get(forward ? "Bookmarks_WrappedToStart" : "Bookmarks_WrappedToEnd"), InfoBarSeverity.Informational, Vm.Selected);
+            // 折り返しはステータスバーの一時的な文で知らせる (INSP-26 の仕様 7、UI-06 の仕様 7)。
+            ShowStatusMessage(Loc.Get(forward ? "Bookmarks_WrappedToStart" : "Bookmarks_WrappedToEnd"));
         }
     }
 
@@ -724,7 +725,8 @@ public sealed partial class MainWindow
         }
         else
         {
-            ShowNotice(Loc.Format("Bookmarks_NumberNotSet", number), InfoBarSeverity.Informational, Vm.Selected);
+            // 未設定の番号はステータスバーの一時的な文で知らせる (INSP-25 の仕様 2、UI-06 の仕様 7)。
+            ShowStatusMessage(Loc.Format("Bookmarks_NumberNotSet", number));
         }
     }
 

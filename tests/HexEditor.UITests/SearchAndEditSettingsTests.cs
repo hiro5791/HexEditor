@@ -117,8 +117,10 @@ public sealed class SearchAndEditSettingsTests
         Assert.DoesNotContain("cp50220", encodings); // 状態を持つ文字コードは出さない
 
         // 表示の文字コードを UTF-16 LE にすると、既定の「表示中の文字コードに合わせる」で UTF-16 LE として探す。
-        await app.SendAsync("execute", new JsonObject { ["id"] = "view.encoding.select", ["argument"] = "utf-16le" });
+        // 検索語を入れた後で表示の文字コードを変えても、変えた文字コードで探す。
         await app.UiaSetValueAsync("Find_Query", "AB");
+        await app.SendAsync("execute", new JsonObject { ["id"] = "view.encoding.select", ["argument"] = "utf-16le" });
+        await app.IdleAsync();
         await app.SendAsync("findKey", new JsonObject { ["key"] = "Enter" });
         await app.IdleAsync();
         JsonObject doc = await app.DocumentAsync();
@@ -234,7 +236,20 @@ public sealed class SearchAndEditSettingsTests
         // 10,000 件を超えるので確認ダイアログが出る。「やめる」ではブックマークを作らない。
         await app.SendAsync("searchResultsToBookmarks", new JsonObject { ["noWait"] = true });
         await app.WaitForAsync("BookmarksConfirm");
-        await app.SendAsync("dialogButton", new JsonObject { ["name"] = "CloseButton" });
+
+        // ダイアログのボタンは開いた直後にはまだないことがあるため、押せるまで試す。
+        await app.WaitUntilAsync(async () =>
+        {
+            try
+            {
+                await app.SendAsync("dialogButton", new JsonObject { ["name"] = "CloseButton" });
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+        }, TimeSpan.FromSeconds(10), "the dialog buttons");
         await app.IdleAsync();
         Assert.Equal(0, (await app.SendAsync("bookmarks"))["count"]!.GetValue<int>());
 
