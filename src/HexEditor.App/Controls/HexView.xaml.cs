@@ -467,7 +467,7 @@ public sealed partial class HexView : UserControl
         long selStart = _editor.SelectionStart;
         long selEnd = selStart + _editor.SelectionLength;
         var style = new RowStyle(view.LowercaseHex, view.DimZeros, view.AlternateColumns, view.AlternateTextColumns, view.HighlightModified,
-            view.ShowContinuation, _palette.HighContrast);
+            view.ShowContinuation, _palette.HighContrast, NonPrintableStyle);
         var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion, _editor.TextEncoding, style);
         long cursorRow = view.HighlightCurrentRow ? layout.RowOf(_editor.Cursor) : -1;
         int rebuilt = 0;
@@ -578,7 +578,7 @@ public sealed partial class HexView : UserControl
         var dataStates = new ByteState[length];
         int read = snapshot.ReadForDisplay(dataStart, data, dataStates);
         TextCellDecoder.Decode(encoding, data.AsSpan(0, read), dataStart, readStart, cells.AsSpan(lead, windowLength),
-            dataStates.AsSpan(0, read), view.Utf16Phase, view.Utf32Phase);
+            dataStates.AsSpan(0, read), view.Utf16Phase, view.Utf32Phase, NonPrintableStyle);
         return cells;
     }
 

@@ -174,6 +174,122 @@ public sealed class ViewOffsetAndTextTests
         Assert.Equal("+00000000", RowOf(await app.RenderAsync(), 0)!["offsetText"]!.GetValue<string>());
     });
 
+    // ---- VIEW-21 ----
+
+    /// <summary>表示 > 文字コード > その他… を開き、絞り込み欄に入力して一覧 ({open, items: [{id, text, enabled, description}]}) を返す。</summary>
+    private static async Task<JsonObject> EncodingListAsync(AppSession app, string filter)
+    {
+        JsonObject list = await app.SendAsync("encodingList");
+        if (!list["open"]!.GetValue<bool>())
+        {
+            await MenuAsync(app, "Command_EncodingMore");
+            await app.WaitUntilAsync(async () => (await app.SendAsync("encodingList"))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), "the list to open");
+        }
+
+        await app.UiaSetValueAsync("EncodingList_Filter", filter);
+        await app.IdleAsync();
+        list = await app.SendAsync("encodingList");
+        Assert.True(list["open"]!.GetValue<bool>());
+        Assert.Equal(filter, list["filter"]!.GetValue<string>());
+        return list;
+    }
+
+    /// <summary>一覧で絞り込み、その項目を選ぶ (Enter と同じ処理)。</summary>
+    private static async Task ChooseEncodingAsync(AppSession app, string filter, string id)
+    {
+        JsonObject list = await EncodingListAsync(app, filter);
+        Assert.Contains(list["items"]!.AsArray(), i => i!["id"]!.GetValue<string>() == id);
+        await app.SendAsync("encodingList", new JsonObject { ["choose"] = id });
+        await app.WaitUntilAsync(async () => !(await app.SendAsync("encodingList"))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), "the list to close");
+        await app.IdleAsync();
+    }
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-01")]
+    public Task Single_byte_code_pages_from_the_list() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-VIEW-PATTERNS")] });
+        await ChooseEncodingAsync(app, "1252", "cp1252");
+        Assert.Equal("é", CellOf(await app.RenderAsync(), 0x40)!["text"]!.GetValue<string>());
+        await ChooseEncodingAsync(app, "437", "cp437");
+        Assert.Equal("é", CellOf(await app.RenderAsync(), 0x41)!["text"]!.GetValue<string>());
+        await ChooseEncodingAsync(app, "037", "cp37");
+        Assert.Equal("A", CellOf(await app.RenderAsync(), 0x42)!["text"]!.GetValue<string>());
+        Assert.Equal("037", await app.UiaNameAsync("Status_Encoding"));
+
+        // 最近使った文字コード (仕様 8) がメニューの上部に新しい順に出る。
+        JsonObject list = await app.SendAsync("encodingList");
+        Assert.Equal(["cp37", "cp437", "cp1252"], list["recent"]!.AsArray().Select(r => r!.GetValue<string>()));
+        Assert.Equal("037 EBCDIC US-Canada", (await MenuItemAsync(app, "Command_EncodingRecent_0"))["text"]!.GetValue<string>());
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-02")]
+    public Task Stateful_encodings_cannot_be_chosen() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        JsonObject list = await EncodingListAsync(app, "2022");
+        JsonObject jis = list["items"]!.AsArray().Single(i => i!["id"]!.GetValue<string>() == "cp50220")!.AsObject();
+        Assert.False(jis["enabled"]!.GetValue<bool>());
+        Assert.Contains("arbitrary position", jis["description"]!.GetValue<string>());
+
+        await app.SendAsync("encodingList", new JsonObject { ["choose"] = "cp50220" });
+        await app.IdleAsync();
+        Assert.Equal("ascii", (await app.SendAsync("encodingList"))["encoding"]!.GetValue<string>());
+        Assert.Equal("ASCII", await app.UiaNameAsync("Status_Encoding"));
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-03")]
+    public Task Encoding_list_filter() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        static string[] Texts(JsonObject list) => [.. list["items"]!.AsArray().Select(i => i!["text"]!.GetValue<string>())];
+        Assert.Contains("932 Japanese (Shift-JIS)", Texts(await EncodingListAsync(app, "932")));
+        string[] lower = Texts(await EncodingListAsync(app, "jis"));
+        string[] upper = Texts(await EncodingListAsync(app, "JIS"));
+        Assert.Contains("932 Japanese (Shift-JIS)", lower);
+        Assert.Equal(lower, upper);
+        Assert.DoesNotContain("1252 Western European (Windows)", lower);
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-04")]
+    public Task Arabic_characters_stay_in_cell_order() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-VIEW-PATTERNS")] });
+        await ChooseEncodingAsync(app, "1256", "cp1256");
+        JsonObject render = await app.RenderAsync();
+        string[] expected = ["ا", "ل", "ع", "ر", "ب", "ي", "ة"];
+        double previous = double.MinValue;
+        for (int i = 0; i < expected.Length; i++)
+        {
+            JsonObject cell = CellOf(render, 0x90 + i)!;
+            Assert.Equal(expected[i], cell["glyph"]!.GetValue<string>());
+            double left = cell["glyphLeft"]!.GetValue<double>();
+            Assert.True(left > previous, $"0x{0x90 + i:X}: {left} <= {previous}");
+            Assert.Equal(cell["textLeft"]!.GetValue<double>(), left, 3);
+            previous = left;
+        }
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-05")]
+    public Task Control_pictures_for_non_printable_characters() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.text.nonPrintable"] = "controlPictures" });
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-BYTES-256")] });
+        JsonObject render = await app.RenderAsync();
+        foreach ((long offset, string symbol) in new[] { (0x00L, "␀"), (0x0AL, "␊"), (0x1FL, "␟"), (0x7FL, "␡") })
+        {
+            Assert.Equal(symbol, CellOf(render, offset)!["glyph"]!.GetValue<string>());
+        }
+
+        // 表示できる文字はそのまま。
+        Assert.Equal("A", CellOf(render, 0x41)!["text"]!.GetValue<string>());
+    });
+
     // ---- VIEW-22 ----
 
     private static async Task<AppSession> PatternsAsync(UiTestContext ctx, string encodingCommand)

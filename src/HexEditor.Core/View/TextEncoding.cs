@@ -5,7 +5,7 @@ using System.Text;
 namespace HexEditor.Core.View;
 
 /// <summary>
-/// テキスト列の文字コード (VIEW-21。フェーズ 0 は ASCII と ANSI だけ)。表示 (1 バイト 1 文字)、テキスト列への入力 (EDIT-12)、
+/// テキスト列の文字コード (VIEW-21)。選べる文字コードの一覧は <see cref="EncodingCatalog"/>。表示 (1 バイト 1 文字)、テキスト列への入力 (EDIT-12)、
 /// テキスト列からのコピー (EDIT-22) と貼り付け (EDIT-23) で同じものを使う。ドキュメントごとに持つ (VIEW-21 の仕様 8)。
 /// </summary>
 public sealed class TextEncoding
@@ -18,6 +18,10 @@ public sealed class TextEncoding
     private readonly Encoding _strict;
     private readonly Encoding _decoder;
     private readonly char[] _display = new char[256];
+    private readonly bool[] _hidden = new bool[256];
+
+    // 表示しない 1 バイトの文字の制御文字 (U+0000〜U+001F、U+007F。図記号の表示に使う)。制御文字でなければ -1。
+    private readonly short[] _control = new short[256];
 
     // 静的な初期化は書いた順に行われるため、ASCII・ANSI を作る前にコードページを使えるようにしておく。
     private static readonly bool ProviderRegistered = RegisterProvider();
@@ -40,9 +44,23 @@ public sealed class TextEncoding
             _ => TextEncodingKind.DoubleByte,
         };
         BigEndian = codePage is 1201 or 12001;
+
+        // EBCDIC は C1 が A になる文字コードとして見分ける (00〜3F の制御文字の位置が ASCII と違い、7F は `"`)。
+        IsEbcdic = Kind == TextEncodingKind.SingleByte && !isAscii && _decoder.GetString([0xC1]) == "A";
+        byte[] question = isAscii ? [(byte)'?'] : _strict.GetBytes("?");
         for (int b = 0; b < 256; b++)
         {
-            _display[b] = ToDisplay((byte)b);
+            _display[b] = ToDisplay((byte)b, question.Length == 1 ? question[0] : -1);
+            _hidden[b] = _display[b] == NonPrintable && _decoder.GetString([(byte)b]) != ".";
+            _control[b] = -1;
+            if (_hidden[b])
+            {
+                string s = isAscii && b > 0x7F ? string.Empty : _decoder.GetString([(byte)b]);
+                if (s.Length == 1 && (s[0] < 0x20 || s[0] == 0x7F))
+                {
+                    _control[b] = (short)s[0];
+                }
+            }
         }
     }
 
@@ -70,6 +88,11 @@ public sealed class TextEncoding
             return Ansi;
         }
 
+        if (id.Equals("oem", StringComparison.OrdinalIgnoreCase))
+        {
+            return Oem;
+        }
+
         lock (ById)
         {
             if (ById.TryGetValue(id, out TextEncoding? cached))
@@ -89,7 +112,9 @@ public sealed class TextEncoding
                     "utf-32be" => new TextEncoding("UTF-32 BE", 12001, false, "utf-32be"),
                     _ when id.StartsWith("cp", StringComparison.OrdinalIgnoreCase)
                         && int.TryParse(id.AsSpan(2), NumberStyles.None, CultureInfo.InvariantCulture, out int cp) && ProviderRegistered
-                        => new TextEncoding(cp.ToString(CultureInfo.InvariantCulture), cp, false),
+                        && EncodingCatalog.Find(id) is not { Stateful: true }
+                        => new TextEncoding(EncodingCatalog.Find(id)?.Label ?? cp.ToString(CultureInfo.InvariantCulture), cp, false,
+                            "cp" + cp.ToString(CultureInfo.InvariantCulture)),
                     _ => null,
                 };
             }
@@ -127,6 +152,9 @@ public sealed class TextEncoding
     /// <summary>ANSI (システムの既定のコードページ)。</summary>
     public static TextEncoding Ansi { get; private set; } = CreateAnsi();
 
+    /// <summary>OEM (システムの OEM コードページ。VIEW-21 の仕様 2 の「基本」)。</summary>
+    public static TextEncoding Oem { get; } = CreateOem();
+
     /// <summary>
     /// ANSI として使うコードページを変える (テスト用。システムの既定と違うコードページ (932 の Shift_JIS など) の動作を、どの PC でも
     /// 同じように確かめるため)。ドキュメントを開く前に呼ぶ。
@@ -147,11 +175,32 @@ public sealed class TextEncoding
 
     public bool IsAscii { get; }
 
+    /// <summary>1 バイトの EBCDIC。</summary>
+    public bool IsEbcdic { get; }
+
     /// <summary>
     /// テキスト列の 1 バイトの表示 (VIEW-21 の仕様 5・6)。制御文字・C1 制御文字・未定義のバイト、1 バイトだけでは文字に
     /// ならないバイト (多バイト文字の一部。表示規則は VIEW-22 で定める) は `.` にする。
     /// </summary>
     public char DisplayChar(byte value) => _display[value];
+
+    /// <summary>表示しない文字か (<see cref="DisplayChar"/> が `.` でも、その文字コードで `.` のバイトは表示する文字)。</summary>
+    public bool IsHidden(byte value) => _hidden[value];
+
+    /// <summary>
+    /// 表示しない 1 バイトの文字の記号 (VIEW-21 の仕様 7)。制御文字の図記号では、その文字コードで制御文字 (U+0000〜U+001F、U+007F)
+    /// になるバイトを図記号 (U+2400〜U+2421) にする。図記号のない文字 (C1 制御文字、未定義のバイトなど) は `.`。
+    /// </summary>
+    public string NonPrintableSymbol(byte value, NonPrintableStyle style) => Symbol(_control[value], style);
+
+    /// <summary>表示しない文字の記号 (<paramref name="codePoint"/> は解読した符号位置。分からなければ -1)。</summary>
+    public static string Symbol(int codePoint, NonPrintableStyle style) => style switch
+    {
+        NonPrintableStyle.Space => " ",
+        NonPrintableStyle.ControlPictures when codePoint is >= 0 and < 0x20 => ((char)(0x2400 + codePoint)).ToString(),
+        NonPrintableStyle.ControlPictures when codePoint == 0x7F => "␡",
+        _ => ".",
+    };
 
     /// <summary>
     /// 入力・貼り付けの文字列をバイト列にする (EDIT-12 の仕様 3・4)。表せない文字が含まれる場合は false (近似文字には置き換えない)。
@@ -198,9 +247,10 @@ public sealed class TextEncoding
 
     public override string ToString() => Name;
 
-    private char ToDisplay(byte value)
+    private char ToDisplay(byte value, int questionByte)
     {
-        if (value < 0x20 || value == 0x7F || (IsAscii && value > 0x7F))
+        // EBCDIC では 7F は文字 (`"`)。制御文字は解読した文字で判定する。
+        if ((!IsEbcdic && (value < 0x20 || value == 0x7F)) || (IsAscii && value > 0x7F))
         {
             return NonPrintable;
         }
@@ -212,7 +262,8 @@ public sealed class TextEncoding
         }
 
         char c = s[0];
-        return c == Replacement || char.IsControl(c) || (c is '?' && value != (byte)'?') ? NonPrintable : c;
+        // 未定義のバイトは置き換えの文字か `?` (最適な対応) になる。
+        return c == Replacement || char.IsControl(c) || (c is '?' && value != questionByte) ? NonPrintable : c;
     }
 
     private static TextEncoding CreateAnsi()
@@ -236,6 +287,27 @@ public sealed class TextEncoding
         }
     }
 
+    private static TextEncoding CreateOem()
+    {
+        int codePage = 437;
+        try
+        {
+            codePage = OperatingSystem.IsWindows() ? (int)GetOEMCP() : CultureInfo.CurrentCulture.TextInfo.OEMCodePage;
+        }
+        catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException)
+        {
+        }
+
+        try
+        {
+            return new TextEncoding("OEM", codePage, isAscii: false, id: "oem");
+        }
+        catch (Exception ex) when (ex is NotSupportedException or ArgumentException)
+        {
+            return new TextEncoding("OEM", 437, isAscii: false, id: "oem");
+        }
+    }
+
     private static bool RegisterProvider()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -244,6 +316,22 @@ public sealed class TextEncoding
 
     [DllImport("kernel32.dll")]
     private static extern uint GetACP();
+
+    [DllImport("kernel32.dll")]
+    private static extern uint GetOEMCP();
+}
+
+/// <summary>表示しない文字の記号 (VIEW-21 の仕様 7)。</summary>
+public enum NonPrintableStyle
+{
+    /// <summary>`.` (既定)。</summary>
+    Dot,
+
+    /// <summary>空白。</summary>
+    Space,
+
+    /// <summary>制御文字の図記号 (U+2400〜U+2421。例: 00 は ␀)。</summary>
+    ControlPictures,
 }
 
 /// <summary>テキスト列での解読の方法 (VIEW-22 の仕様 4)。</summary>

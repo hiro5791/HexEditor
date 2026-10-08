@@ -44,15 +44,6 @@ public sealed partial class MainWindow
     }
 
     /// <summary>テキスト列の文字コード (VIEW-21 のフェーズ 0: ASCII と ANSI)。入力・コピー・表示に使う。</summary>
-    private void Encoding_Click(object sender, RoutedEventArgs e)
-    {
-        if (Editor is { } editor && sender is RadioMenuFlyoutItem { Tag: string tag })
-        {
-            editor.TextEncoding = Core.View.TextEncoding.FromId(tag);
-            UpdateEncodingMenu();
-        }
-    }
-
     private void UpdateEncodingMenu()
     {
         EncodingAnsi.Text = Loc.Format("Menu_View_EncodingAnsi", Core.View.TextEncoding.Ansi.CodePage);
@@ -66,24 +57,12 @@ public sealed partial class MainWindow
                 radio.IsChecked = id == other;
             }
         }
+
+        UpdateRecentEncodingItems();
     }
 
-    /// <summary>ステータスバーの文字コードの項目: 文字コードの選択メニューを開く (UI-06 の仕様 1)。</summary>
-    private void StatusEncoding_Click(object sender, RoutedEventArgs e)
-    {
-        UpdateEncodingMenu();
-        var menu = new MenuFlyout();
-        foreach (string tag in Core.View.TextEncoding.SelectableIds)
-        {
-            string text = tag == "ansi" ? Loc.Format("Menu_View_EncodingAnsi", Core.View.TextEncoding.Ansi.CodePage) : Core.View.TextEncoding.FromId(tag).Name;
-            var item = new RadioMenuFlyoutItem { Text = text, Tag = tag, GroupName = "StatusEncoding" };
-            item.IsChecked = tag == (Editor?.TextEncoding.Id ?? "ascii");
-            item.Click += Encoding_Click;
-            menu.Items.Add(item);
-        }
-
-        menu.ShowAt(StatusEncoding);
-    }
+    /// <summary>ステータスバーの文字コードの項目: 文字コードの一覧を開く (UI-06 の仕様 1、VIEW-21 の「画面」)。</summary>
+    private void StatusEncoding_Click(object sender, RoutedEventArgs e) => ShowEncodingList(StatusEncoding);
 
     // ---- ヘルプ (UI-40) ----
 

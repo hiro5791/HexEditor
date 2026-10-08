@@ -2047,4 +2047,173 @@ Details were written to:
   <data name="Settings_FontDefault" xml:space="preserve"><value>Default (Cascadia Mono)</value></data>
   <data name="Settings_FontMissing" xml:space="preserve"><value>{0} was not found. The default font is used.</value></data>
   <data name="Settings_ShowAllFonts" xml:space="preserve"><value>Show all fonts</value></data>
+  <data name="Encoding_Name_ascii" xml:space="preserve"><value>ASCII (7 bit)</value></data>
+  <data name="Encoding_Name_ansi" xml:space="preserve"><value>ANSI (code page {0})</value></data>
+  <data name="Encoding_Name_oem" xml:space="preserve"><value>OEM (code page {0})</value></data>
+  <data name="Encoding_Name_utf-8" xml:space="preserve"><value>UTF-8</value></data>
+  <data name="Encoding_Name_utf-16le" xml:space="preserve"><value>UTF-16 LE</value></data>
+  <data name="Encoding_Name_utf-16be" xml:space="preserve"><value>UTF-16 BE</value></data>
+  <data name="Encoding_Name_utf-32le" xml:space="preserve"><value>UTF-32 LE</value></data>
+  <data name="Encoding_Name_utf-32be" xml:space="preserve"><value>UTF-32 BE</value></data>
+  <data name="Encoding_Name_cp65000" xml:space="preserve"><value>UTF-7</value></data>
+  <data name="Encoding_Name_cp874" xml:space="preserve"><value>Thai (Windows)</value></data>
+  <data name="Encoding_Name_cp1250" xml:space="preserve"><value>Central European (Windows)</value></data>
+  <data name="Encoding_Name_cp1251" xml:space="preserve"><value>Cyrillic (Windows)</value></data>
+  <data name="Encoding_Name_cp1252" xml:space="preserve"><value>Western European (Windows)</value></data>
+  <data name="Encoding_Name_cp1253" xml:space="preserve"><value>Greek (Windows)</value></data>
+  <data name="Encoding_Name_cp1254" xml:space="preserve"><value>Turkish (Windows)</value></data>
+  <data name="Encoding_Name_cp1255" xml:space="preserve"><value>Hebrew (Windows)</value></data>
+  <data name="Encoding_Name_cp1256" xml:space="preserve"><value>Arabic (Windows)</value></data>
+  <data name="Encoding_Name_cp1257" xml:space="preserve"><value>Baltic (Windows)</value></data>
+  <data name="Encoding_Name_cp1258" xml:space="preserve"><value>Vietnamese (Windows)</value></data>
+  <data name="Encoding_Name_cp28591" xml:space="preserve"><value>Western European (ISO-8859-1)</value></data>
+  <data name="Encoding_Name_cp28592" xml:space="preserve"><value>Central European (ISO-8859-2)</value></data>
+  <data name="Encoding_Name_cp28593" xml:space="preserve"><value>Latin 3 (ISO-8859-3)</value></data>
+  <data name="Encoding_Name_cp28594" xml:space="preserve"><value>Baltic (ISO-8859-4)</value></data>
+  <data name="Encoding_Name_cp28595" xml:space="preserve"><value>Cyrillic (ISO-8859-5)</value></data>
+  <data name="Encoding_Name_cp28596" xml:space="preserve"><value>Arabic (ISO-8859-6)</value></data>
+  <data name="Encoding_Name_cp28597" xml:space="preserve"><value>Greek (ISO-8859-7)</value></data>
+  <data name="Encoding_Name_cp28598" xml:space="preserve"><value>Hebrew, visual order (ISO-8859-8)</value></data>
+  <data name="Encoding_Name_cp38598" xml:space="preserve"><value>Hebrew, logical order (ISO-8859-8-I)</value></data>
+  <data name="Encoding_Name_cp28599" xml:space="preserve"><value>Turkish (ISO-8859-9)</value></data>
+  <data name="Encoding_Name_cp28600" xml:space="preserve"><value>Nordic (ISO-8859-10)</value></data>
+  <data name="Encoding_Name_cp28601" xml:space="preserve"><value>Thai (ISO-8859-11)</value></data>
+  <data name="Encoding_Name_cp28603" xml:space="preserve"><value>Estonian (ISO-8859-13)</value></data>
+  <data name="Encoding_Name_cp28604" xml:space="preserve"><value>Celtic (ISO-8859-14)</value></data>
+  <data name="Encoding_Name_cp28605" xml:space="preserve"><value>Latin 9 (ISO-8859-15)</value></data>
+  <data name="Encoding_Name_cp28606" xml:space="preserve"><value>South-Eastern European (ISO-8859-16)</value></data>
+  <data name="Encoding_Name_cp437" xml:space="preserve"><value>United States (DOS)</value></data>
+  <data name="Encoding_Name_cp720" xml:space="preserve"><value>Arabic (DOS)</value></data>
+  <data name="Encoding_Name_cp737" xml:space="preserve"><value>Greek (DOS)</value></data>
+  <data name="Encoding_Name_cp775" xml:space="preserve"><value>Baltic (DOS)</value></data>
+  <data name="Encoding_Name_cp850" xml:space="preserve"><value>Western European (DOS)</value></data>
+  <data name="Encoding_Name_cp852" xml:space="preserve"><value>Central European (DOS)</value></data>
+  <data name="Encoding_Name_cp855" xml:space="preserve"><value>Cyrillic (DOS 855)</value></data>
+  <data name="Encoding_Name_cp857" xml:space="preserve"><value>Turkish (DOS)</value></data>
+  <data name="Encoding_Name_cp858" xml:space="preserve"><value>Western European with euro (DOS)</value></data>
+  <data name="Encoding_Name_cp860" xml:space="preserve"><value>Portuguese (DOS)</value></data>
+  <data name="Encoding_Name_cp861" xml:space="preserve"><value>Icelandic (DOS)</value></data>
+  <data name="Encoding_Name_cp862" xml:space="preserve"><value>Hebrew (DOS)</value></data>
+  <data name="Encoding_Name_cp863" xml:space="preserve"><value>French Canadian (DOS)</value></data>
+  <data name="Encoding_Name_cp864" xml:space="preserve"><value>Arabic (DOS 864)</value></data>
+  <data name="Encoding_Name_cp865" xml:space="preserve"><value>Nordic (DOS)</value></data>
+  <data name="Encoding_Name_cp866" xml:space="preserve"><value>Cyrillic (DOS 866)</value></data>
+  <data name="Encoding_Name_cp869" xml:space="preserve"><value>Modern Greek (DOS)</value></data>
+  <data name="Encoding_Name_cp10000" xml:space="preserve"><value>Mac Roman</value></data>
+  <data name="Encoding_Name_cp10001" xml:space="preserve"><value>Japanese (Mac)</value></data>
+  <data name="Encoding_Name_cp10002" xml:space="preserve"><value>Traditional Chinese (Mac)</value></data>
+  <data name="Encoding_Name_cp10003" xml:space="preserve"><value>Korean (Mac)</value></data>
+  <data name="Encoding_Name_cp10004" xml:space="preserve"><value>Arabic (Mac)</value></data>
+  <data name="Encoding_Name_cp10005" xml:space="preserve"><value>Hebrew (Mac)</value></data>
+  <data name="Encoding_Name_cp10006" xml:space="preserve"><value>Greek (Mac)</value></data>
+  <data name="Encoding_Name_cp10007" xml:space="preserve"><value>Cyrillic (Mac)</value></data>
+  <data name="Encoding_Name_cp10008" xml:space="preserve"><value>Simplified Chinese (Mac)</value></data>
+  <data name="Encoding_Name_cp10010" xml:space="preserve"><value>Romanian (Mac)</value></data>
+  <data name="Encoding_Name_cp10017" xml:space="preserve"><value>Ukrainian (Mac)</value></data>
+  <data name="Encoding_Name_cp10021" xml:space="preserve"><value>Thai (Mac)</value></data>
+  <data name="Encoding_Name_cp10029" xml:space="preserve"><value>Central European (Mac)</value></data>
+  <data name="Encoding_Name_cp10079" xml:space="preserve"><value>Icelandic (Mac)</value></data>
+  <data name="Encoding_Name_cp10081" xml:space="preserve"><value>Turkish (Mac)</value></data>
+  <data name="Encoding_Name_cp10082" xml:space="preserve"><value>Croatian (Mac)</value></data>
+  <data name="Encoding_Name_cp932" xml:space="preserve"><value>Japanese (Shift-JIS)</value></data>
+  <data name="Encoding_Name_cp51932" xml:space="preserve"><value>Japanese (EUC-JP)</value></data>
+  <data name="Encoding_Name_cp20932" xml:space="preserve"><value>Japanese (EUC-JP, JIS X 0208 and 0212)</value></data>
+  <data name="Encoding_Name_cp50220" xml:space="preserve"><value>Japanese (ISO-2022-JP)</value></data>
+  <data name="Encoding_Name_cp50221" xml:space="preserve"><value>Japanese (ISO-2022-JP, 1-byte kana)</value></data>
+  <data name="Encoding_Name_cp50222" xml:space="preserve"><value>Japanese (ISO-2022-JP, SO/SI)</value></data>
+  <data name="Encoding_Name_cp936" xml:space="preserve"><value>Simplified Chinese (GBK)</value></data>
+  <data name="Encoding_Name_cp54936" xml:space="preserve"><value>Simplified Chinese (GB18030)</value></data>
+  <data name="Encoding_Name_cp51936" xml:space="preserve"><value>Simplified Chinese (EUC-CN)</value></data>
+  <data name="Encoding_Name_cp50227" xml:space="preserve"><value>Simplified Chinese (ISO-2022-CN)</value></data>
+  <data name="Encoding_Name_cp52936" xml:space="preserve"><value>Simplified Chinese (HZ)</value></data>
+  <data name="Encoding_Name_cp949" xml:space="preserve"><value>Korean (Unified Hangul Code)</value></data>
+  <data name="Encoding_Name_cp51949" xml:space="preserve"><value>Korean (EUC-KR)</value></data>
+  <data name="Encoding_Name_cp50225" xml:space="preserve"><value>Korean (ISO-2022-KR)</value></data>
+  <data name="Encoding_Name_cp950" xml:space="preserve"><value>Traditional Chinese (Big5)</value></data>
+  <data name="Encoding_Name_cp20866" xml:space="preserve"><value>Cyrillic (KOI8-R)</value></data>
+  <data name="Encoding_Name_cp21866" xml:space="preserve"><value>Cyrillic (KOI8-U)</value></data>
+  <data name="Encoding_Name_cp57002" xml:space="preserve"><value>ISCII Devanagari</value></data>
+  <data name="Encoding_Name_cp57003" xml:space="preserve"><value>ISCII Bengali</value></data>
+  <data name="Encoding_Name_cp57004" xml:space="preserve"><value>ISCII Tamil</value></data>
+  <data name="Encoding_Name_cp57005" xml:space="preserve"><value>ISCII Telugu</value></data>
+  <data name="Encoding_Name_cp57006" xml:space="preserve"><value>ISCII Assamese</value></data>
+  <data name="Encoding_Name_cp57007" xml:space="preserve"><value>ISCII Odia</value></data>
+  <data name="Encoding_Name_cp57008" xml:space="preserve"><value>ISCII Kannada</value></data>
+  <data name="Encoding_Name_cp57009" xml:space="preserve"><value>ISCII Malayalam</value></data>
+  <data name="Encoding_Name_cp57010" xml:space="preserve"><value>ISCII Gujarati</value></data>
+  <data name="Encoding_Name_cp57011" xml:space="preserve"><value>ISCII Punjabi</value></data>
+  <data name="Encoding_Name_cp708" xml:space="preserve"><value>Arabic (ASMO 708)</value></data>
+  <data name="Encoding_Name_cp1361" xml:space="preserve"><value>Korean (Johab)</value></data>
+  <data name="Encoding_Name_cp20000" xml:space="preserve"><value>Traditional Chinese (CNS)</value></data>
+  <data name="Encoding_Name_cp20001" xml:space="preserve"><value>Traditional Chinese (TCA)</value></data>
+  <data name="Encoding_Name_cp20002" xml:space="preserve"><value>Traditional Chinese (Eten)</value></data>
+  <data name="Encoding_Name_cp20003" xml:space="preserve"><value>Traditional Chinese (IBM 5550)</value></data>
+  <data name="Encoding_Name_cp20004" xml:space="preserve"><value>Traditional Chinese (TeleText)</value></data>
+  <data name="Encoding_Name_cp20005" xml:space="preserve"><value>Traditional Chinese (Wang)</value></data>
+  <data name="Encoding_Name_cp20105" xml:space="preserve"><value>Western European (IA5)</value></data>
+  <data name="Encoding_Name_cp20106" xml:space="preserve"><value>German (IA5)</value></data>
+  <data name="Encoding_Name_cp20107" xml:space="preserve"><value>Swedish (IA5)</value></data>
+  <data name="Encoding_Name_cp20108" xml:space="preserve"><value>Norwegian (IA5)</value></data>
+  <data name="Encoding_Name_cp20261" xml:space="preserve"><value>T.61</value></data>
+  <data name="Encoding_Name_cp20269" xml:space="preserve"><value>ISO 6937</value></data>
+  <data name="Encoding_Name_cp20936" xml:space="preserve"><value>Simplified Chinese (GB 2312-80)</value></data>
+  <data name="Encoding_Name_cp20949" xml:space="preserve"><value>Korean (Wansung)</value></data>
+  <data name="Encoding_Name_cp29001" xml:space="preserve"><value>Europa</value></data>
+  <data name="Encoding_Name_cp37" xml:space="preserve"><value>EBCDIC US-Canada</value></data>
+  <data name="Encoding_Name_cp20273" xml:space="preserve"><value>EBCDIC Germany</value></data>
+  <data name="Encoding_Name_cp20277" xml:space="preserve"><value>EBCDIC Denmark-Norway</value></data>
+  <data name="Encoding_Name_cp20278" xml:space="preserve"><value>EBCDIC Finland-Sweden</value></data>
+  <data name="Encoding_Name_cp20280" xml:space="preserve"><value>EBCDIC Italy</value></data>
+  <data name="Encoding_Name_cp20284" xml:space="preserve"><value>EBCDIC Spain</value></data>
+  <data name="Encoding_Name_cp20285" xml:space="preserve"><value>EBCDIC United Kingdom</value></data>
+  <data name="Encoding_Name_cp20290" xml:space="preserve"><value>EBCDIC Japanese katakana</value></data>
+  <data name="Encoding_Name_cp20297" xml:space="preserve"><value>EBCDIC France</value></data>
+  <data name="Encoding_Name_cp20420" xml:space="preserve"><value>EBCDIC Arabic</value></data>
+  <data name="Encoding_Name_cp20423" xml:space="preserve"><value>EBCDIC Greek</value></data>
+  <data name="Encoding_Name_cp20424" xml:space="preserve"><value>EBCDIC Hebrew</value></data>
+  <data name="Encoding_Name_cp500" xml:space="preserve"><value>EBCDIC International</value></data>
+  <data name="Encoding_Name_cp20833" xml:space="preserve"><value>EBCDIC Korean extended</value></data>
+  <data name="Encoding_Name_cp20838" xml:space="preserve"><value>EBCDIC Thai</value></data>
+  <data name="Encoding_Name_cp870" xml:space="preserve"><value>EBCDIC Multilingual Latin 2</value></data>
+  <data name="Encoding_Name_cp20871" xml:space="preserve"><value>EBCDIC Icelandic</value></data>
+  <data name="Encoding_Name_cp875" xml:space="preserve"><value>EBCDIC Modern Greek</value></data>
+  <data name="Encoding_Name_cp20880" xml:space="preserve"><value>EBCDIC Cyrillic Russian</value></data>
+  <data name="Encoding_Name_cp20905" xml:space="preserve"><value>EBCDIC Turkish</value></data>
+  <data name="Encoding_Name_cp20924" xml:space="preserve"><value>EBCDIC Latin 1 with euro</value></data>
+  <data name="Encoding_Name_cp21025" xml:space="preserve"><value>EBCDIC Cyrillic Serbian-Bulgarian</value></data>
+  <data name="Encoding_Name_cp1026" xml:space="preserve"><value>EBCDIC Turkish Latin 5</value></data>
+  <data name="Encoding_Name_cp1047" xml:space="preserve"><value>EBCDIC Latin 1 (open systems)</value></data>
+  <data name="Encoding_Name_cp1140" xml:space="preserve"><value>EBCDIC US-Canada with euro</value></data>
+  <data name="Encoding_Name_cp1141" xml:space="preserve"><value>EBCDIC Germany with euro</value></data>
+  <data name="Encoding_Name_cp1142" xml:space="preserve"><value>EBCDIC Denmark-Norway with euro</value></data>
+  <data name="Encoding_Name_cp1143" xml:space="preserve"><value>EBCDIC Finland-Sweden with euro</value></data>
+  <data name="Encoding_Name_cp1144" xml:space="preserve"><value>EBCDIC Italy with euro</value></data>
+  <data name="Encoding_Name_cp1145" xml:space="preserve"><value>EBCDIC Spain with euro</value></data>
+  <data name="Encoding_Name_cp1146" xml:space="preserve"><value>EBCDIC United Kingdom with euro</value></data>
+  <data name="Encoding_Name_cp1147" xml:space="preserve"><value>EBCDIC France with euro</value></data>
+  <data name="Encoding_Name_cp1148" xml:space="preserve"><value>EBCDIC International with euro</value></data>
+  <data name="Encoding_Name_cp1149" xml:space="preserve"><value>EBCDIC Icelandic with euro</value></data>
+  <data name="Encoding_Name_cp930" xml:space="preserve"><value>EBCDIC Japanese katakana mixed (SO/SI)</value></data>
+  <data name="Encoding_Name_cp939" xml:space="preserve"><value>EBCDIC Japanese Latin mixed (SO/SI)</value></data>
+  <data name="Menu_View_EncodingMore.Text" xml:space="preserve"><value>More encodings…</value></data>
+  <data name="Menu_View_EncodingMore.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_view_encoding_select" xml:space="preserve"><value>View: Select text encoding</value></data>
+  <data name="CmdAlias_view_encoding_select" xml:space="preserve"><value>charset code page ebcdic</value></data>
+  <data name="EncodingList_Title" xml:space="preserve"><value>Text encoding</value></data>
+  <data name="EncodingList_Filter" xml:space="preserve"><value>Filter by number or name</value></data>
+  <data name="EncodingList_Stateful" xml:space="preserve"><value>Not available for the text column: this encoding switches modes with escape sequences, so text cannot be shown correctly from an arbitrary position. It can be used for encoding conversion.</value></data>
+  <data name="EncodingList_Group_Basic" xml:space="preserve"><value>Basic</value></data>
+  <data name="EncodingList_Group_Unicode" xml:space="preserve"><value>Unicode</value></data>
+  <data name="EncodingList_Group_Windows" xml:space="preserve"><value>Windows</value></data>
+  <data name="EncodingList_Group_Iso" xml:space="preserve"><value>ISO</value></data>
+  <data name="EncodingList_Group_Dos" xml:space="preserve"><value>DOS</value></data>
+  <data name="EncodingList_Group_Mac" xml:space="preserve"><value>Mac</value></data>
+  <data name="EncodingList_Group_Cjk" xml:space="preserve"><value>CJK</value></data>
+  <data name="EncodingList_Group_Other" xml:space="preserve"><value>Other</value></data>
+  <data name="EncodingList_Group_Ebcdic" xml:space="preserve"><value>EBCDIC</value></data>
+  <data name="Set_view_text_nonPrintable" xml:space="preserve"><value>Symbol for non-printable characters</value></data>
+  <data name="SetDesc_view_text_nonPrintable" xml:space="preserve"><value>How control characters and undefined bytes are shown in the text column.</value></data>
+  <data name="SetOpt_view_text_nonPrintable_dot" xml:space="preserve"><value>Dot (.)</value></data>
+  <data name="SetOpt_view_text_nonPrintable_space" xml:space="preserve"><value>Space</value></data>
+  <data name="SetOpt_view_text_nonPrintable_controlPictures" xml:space="preserve"><value>Control pictures (␀)</value></data>
 </root>

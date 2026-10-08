@@ -61,13 +61,14 @@ public static class TextCellDecoder
     /// [<paramref name="windowStart"/>, windowStart + cells.Length) のセルを解読する。<paramref name="data"/> は
     /// [<paramref name="dataStart"/>, dataStart + data.Length) のバイト (表示範囲の前の読み戻しと後ろの先読みを含む)。
     /// <paramref name="states"/> を渡すと、<see cref="ByteState.Valid"/> でないバイトは文字の一部にしない (セルは <see cref="TextCellKind.Empty"/>)。
-    /// <paramref name="dataStart"/> が 0 なら、ドキュメントの先頭として扱う。
+    /// <paramref name="dataStart"/> が 0 なら、ドキュメントの先頭として扱う。<paramref name="nonPrintable"/> は表示しない文字の記号
+    /// (VIEW-21 の仕様 7)。
     /// </summary>
     public static void Decode(TextEncoding encoding, ReadOnlySpan<byte> data, long dataStart, long windowStart, Span<TextCell> cells,
-        ReadOnlySpan<ByteState> states = default, int utf16Phase = 0, int utf32Phase = 0)
+        ReadOnlySpan<ByteState> states = default, int utf16Phase = 0, int utf32Phase = 0, NonPrintableStyle nonPrintable = NonPrintableStyle.Dot)
     {
         cells.Fill(TextCell.None);
-        var ctx = new Context(encoding, data, dataStart, windowStart, cells, states);
+        var ctx = new Context(encoding, data, dataStart, windowStart, cells, states, nonPrintable);
         switch (encoding.Kind)
         {
             case TextEncodingKind.Utf8:
@@ -91,8 +92,9 @@ public static class TextCellDecoder
 
     /// <summary>解読の途中の状態。</summary>
     private ref struct Context(TextEncoding encoding, ReadOnlySpan<byte> data, long dataStart, long windowStart, Span<TextCell> cells,
-        ReadOnlySpan<ByteState> states)
+        ReadOnlySpan<ByteState> states, NonPrintableStyle nonPrintable)
     {
+        public readonly NonPrintableStyle NonPrintable = nonPrintable;
         public readonly TextEncoding Encoding = encoding;
         public readonly ReadOnlySpan<byte> Data = data;
         public readonly long DataStart = dataStart;
@@ -154,6 +156,11 @@ public static class TextCellDecoder
         public readonly void PutCodePoint(long offset, int span, int codePoint)
         {
             (TextCellKind kind, string text, bool wide) = Classify(codePoint);
+            if (kind == TextCellKind.NonPrintable && NonPrintable != NonPrintableStyle.Dot)
+            {
+                text = TextEncoding.Symbol(IsInvisible(codePoint) ? -1 : codePoint, NonPrintable);
+            }
+
             Put(offset, span, kind, text, wide);
         }
     }
@@ -171,8 +178,9 @@ public static class TextCellDecoder
 
             byte b = ctx.At(at);
             char c = ctx.Encoding.DisplayChar(b);
-            bool hidden = c == TextEncoding.NonPrintable && b != (byte)TextEncoding.NonPrintable;
-            ctx.Put(at, 1, hidden ? TextCellKind.NonPrintable : TextCellKind.Char, hidden ? "." : CharString(c), false);
+            bool hidden = ctx.Encoding.IsHidden(b);
+            ctx.Put(at, 1, hidden ? TextCellKind.NonPrintable : TextCellKind.Char,
+                hidden ? ctx.Encoding.NonPrintableSymbol(b, ctx.NonPrintable) : CharString(c), false);
         }
     }
 

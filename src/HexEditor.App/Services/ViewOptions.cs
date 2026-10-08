@@ -38,6 +38,9 @@ public static class ViewOptions
     /// <summary>「保存後も閉じるまで強調を残す」(VIEW-15 の仕様 8。既定 false)。</summary>
     public const string KeepChangesKey = "view.modified.keepAfterSave";
 
+    /// <summary>表示しない文字の記号 (VIEW-21 の仕様 7。dot / space / controlPictures、既定 dot)。</summary>
+    public const string NonPrintableKey = "view.text.nonPrintable";
+
     /// <summary>読み上げの詳しさ (UI-51 の仕様 2。full / brief / offsetOnly / none、既定 full)。</summary>
     public const string VerbosityKey = "a11y.announce.verbosity";
 
@@ -91,6 +94,12 @@ public static class ViewOptions
         }
 
         view.ShowToolTips = settings.GetBool(ToolTipsKey, true);
+        view.NonPrintableStyle = settings.GetString(NonPrintableKey, "dot") switch
+        {
+            "space" => NonPrintableStyle.Space,
+            "controlPictures" => NonPrintableStyle.ControlPictures,
+            _ => NonPrintableStyle.Dot,
+        };
         view.AnnouncementVerbosity = settings.GetString(VerbosityKey, "full") switch
         {
             "brief" => AnnounceVerbosity.Brief,

@@ -436,6 +436,16 @@
       "type": "boolean",
       "default": false
     },
+    "view.text.nonPrintable": {
+      "description": "Symbol for non-printable characters",
+      "type": "string",
+      "enum": [
+        "dot",
+        "space",
+        "controlPictures"
+      ],
+      "default": "dot"
+    },
     "view.tooltips": {
       "description": "Show tooltips",
       "type": "boolean",

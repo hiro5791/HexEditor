@@ -166,16 +166,10 @@ public sealed partial class MainWindow
                 && (t == theme || (theme == "system" && t is not ("light" or "dark")))));
         }
 
-        foreach ((string id, TextEncoding encoding) in new[] { ("view.encoding.ascii", TextEncoding.Ascii), ("view.encoding.ansi", TextEncoding.Ansi) })
+        foreach ((string id, string encoding) in new[] { ("view.encoding.ascii", "ascii"), ("view.encoding.ansi", "ansi") })
         {
-            Commands.Register(id, () =>
-            {
-                if (Editor is { } editor)
-                {
-                    editor.TextEncoding = encoding;
-                    UpdateEncodingMenu();
-                }
-            }, () => Vm.Selected is null ? NeedsDocument() : Toggle(Editor?.TextEncoding == encoding));
+            Commands.Register(id, () => SetEncoding(encoding),
+                () => Vm.Selected is null ? NeedsDocument() : Toggle(Editor?.TextEncoding.Id == encoding));
         }
 
         Commands.Register("view.statusBar", () =>

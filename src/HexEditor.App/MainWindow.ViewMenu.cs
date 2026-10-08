@@ -146,11 +146,7 @@ public sealed partial class MainWindow
             string command = EncodingCommandId(id);
             Commands.Register(command, () =>
             {
-                if (Editor is { } editor)
-                {
-                    editor.TextEncoding = Core.View.TextEncoding.FromId(encodingId);
-                    UpdateEncodingMenu();
-                }
+                SetEncoding(encodingId);
             }, () => Editor is { } e ? Toggle(e.TextEncoding.Id == encodingId) : NeedsDocument());
             CommandUi.SetId(radio, command);
             AutomationProperties.SetAutomationId(radio, "Command_Encoding_" + id);
@@ -160,6 +156,7 @@ public sealed partial class MainWindow
 
         encoding.Items.Add(new MenuFlyoutSeparator());
         encoding.Items.Add(Toggle("Command_ViewUtf16Odd", "Menu_View_Utf16Odd", v => v.Utf16Phase == 1, (v, on) => v with { Utf16Phase = on ? 1 : 0 }));
+        InitializeEncodingList(encoding);
 
         // 移動 > 履歴の一覧 (VIEW-31 の仕様 8)
         MenuBarItem go = MainMenu.Items.First(m => m.Items.OfType<MenuFlyoutItem>().Any(i => AutomationProperties.GetAutomationId(i) == "Command_GoBack"));

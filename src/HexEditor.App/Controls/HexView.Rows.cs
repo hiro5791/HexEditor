@@ -72,7 +72,7 @@ public sealed partial class HexView
 
     /// <summary>表示設定のうち、行の描き方に関わるもの (変われば全行を作り直す)。</summary>
     internal readonly record struct RowStyle(bool Lowercase, bool DimZeros, bool AlternateColumns, bool AlternateText, bool HighlightModified,
-        bool ShowContinuation, bool HighContrast);
+        bool ShowContinuation, bool HighContrast, NonPrintableStyle NonPrintable = NonPrintableStyle.Dot);
 
     /// <summary>1 フレームの中で全行に共通の条件 (変われば全行を作り直す)。</summary>
     internal readonly record struct RowFrame(RowColumns Columns, ActiveColumn Active, int PaletteVersion, TextEncoding Encoding, RowStyle Style);
@@ -357,6 +357,7 @@ public sealed partial class HexView
                 TextCellKind.Char => _text[c].Text,
                 TextCellKind.Continuation => _frame.Style.ShowContinuation ? "·" : " ",
                 TextCellKind.Empty => " ",
+                TextCellKind.NonPrintable => _text[c].Text,
                 _ => ".",
             },
         };
@@ -489,7 +490,9 @@ public sealed partial class HexView
                     string cell = TextCellText(c);
                     Brush fore = TextForeground(c, palette);
                     TextCell decoded = _text[c];
-                    if (KindAt(c) is CellKind.Normal or CellKind.Modified && decoded.Kind == TextCellKind.Char && NeedsOverlay(decoded))
+                    // 制御文字の図記号 (VIEW-21 の仕様 7) も等幅フォントにないことがあるため、同じく別に描く。
+                    if (KindAt(c) is CellKind.Normal or CellKind.Modified && decoded.Kind is TextCellKind.Char or TextCellKind.NonPrintable
+                        && NeedsOverlay(decoded))
                     {
                         // 全角・結合文字などは別の TextBlock で、文字の範囲のセルに収めて描く (VIEW-22 の仕様 2・3・6)。
                         int cells = decoded.Wide ? 2 : 1;

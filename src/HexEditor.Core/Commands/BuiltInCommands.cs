@@ -166,6 +166,7 @@ public static class BuiltInCommands
         new("view.encoding.utf32le", "view") { Condition = "documentOpen" },
         new("view.encoding.utf32be", "view") { Condition = "documentOpen" },
         new("view.encoding.shiftJis", "view") { Condition = "documentOpen" },
+        new("view.encoding.select", "view") { Condition = "documentOpen" },
         new("view.colorScheme", "view"),
         new("view.toolbar", "view"),
         new("view.statusBar", "view"),

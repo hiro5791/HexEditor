@@ -49,6 +49,7 @@ public static class BuiltInSettings
         new("view.scroll.cursorMargin", SettingCategories.View, SettingKind.Int, 0) { Min = 0, Max = 10, Order = 30 },
         new("view.jump.position", SettingCategories.View, SettingKind.Choice, "third") { Options = ["top", "third", "center"], Order = 40 },
         new("view.tooltips", SettingCategories.View, SettingKind.Bool, true) { Order = 50 },
+        new("view.text.nonPrintable", SettingCategories.View, SettingKind.Choice, "dot") { Options = ["dot", "space", "controlPictures"], Order = 55 },
         new("view.modified.keepAfterSave", SettingCategories.View, SettingKind.Bool, false) { Order = 60 },
 
         // データインスペクタ (INSP-01〜INSP-19)。行の構成とプリセットはパネルの「行の設定」で変える。
