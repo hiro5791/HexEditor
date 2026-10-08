@@ -44,6 +44,7 @@ public sealed partial class MainWindow
         ApplyAppearance();
         StringKeyTips.Apply(this, MainMenu, Root);
         UpdatePackagingMenu();
+        ShowPendingUpdateMessage();
         Action<IReadOnlyCollection<string>> settingsChanged = _ => DispatcherQueue.TryEnqueue(RefreshCommandUi);
         App.Settings.Changed += settingsChanged;
         Closed += (_, _) =>
