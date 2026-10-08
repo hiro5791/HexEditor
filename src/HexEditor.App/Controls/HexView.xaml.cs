@@ -655,7 +655,9 @@ public sealed partial class HexView : UserControl
     /// </summary>
     private void ReuseRowsByOffset(long firstOffset, int bytesPerRow, int rows)
     {
-        var byStart = new Dictionary<long, RowVisual>(_rows.Count);
+        // 作業用の入れ物は使い回す (描画のたびに作らない。VIEW-04 の仕様 3)。
+        Dictionary<long, RowVisual> byStart = _reuseByStart;
+        byStart.Clear();
         foreach (RowVisual row in _rows)
         {
             if (row.ContentRowStart != long.MinValue)
@@ -664,27 +666,44 @@ public sealed partial class HexView : UserControl
             }
         }
 
-        var ordered = new RowVisual?[_rows.Count];
-        var used = new HashSet<RowVisual>();
-        for (int r = 0; r < rows && r < ordered.Length; r++)
+        List<RowVisual?> ordered = _reuseOrdered;
+        HashSet<RowVisual> used = _reuseUsed;
+        ordered.Clear();
+        used.Clear();
+        for (int r = 0; r < _rows.Count; r++)
         {
-            if (byStart.TryGetValue(firstOffset + (long)r * bytesPerRow, out RowVisual? match) && used.Add(match))
+            RowVisual? match = null;
+            if (r < rows && byStart.TryGetValue(firstOffset + (long)r * bytesPerRow, out RowVisual? found) && used.Add(found))
             {
-                ordered[r] = match;
+                match = found;
+            }
+
+            ordered.Add(match);
+        }
+
+        int free = 0;
+        for (int r = 0; r < ordered.Count; r++)
+        {
+            if (ordered[r] is null)
+            {
+                while (used.Contains(_rows[free]))
+                {
+                    free++;
+                }
+
+                ordered[r] = _rows[free++];
             }
         }
 
-        var free = new Queue<RowVisual>(_rows.Where(v => !used.Contains(v)));
-        for (int r = 0; r < ordered.Length; r++)
-        {
-            ordered[r] ??= free.Dequeue();
-        }
-
-        for (int r = 0; r < ordered.Length; r++)
+        for (int r = 0; r < ordered.Count; r++)
         {
             _rows[r] = ordered[r]!;
         }
     }
+
+    private readonly Dictionary<long, RowVisual> _reuseByStart = [];
+    private readonly List<RowVisual?> _reuseOrdered = [];
+    private readonly HashSet<RowVisual> _reuseUsed = [];
 
     private void EnsureRowCount(int count)
     {

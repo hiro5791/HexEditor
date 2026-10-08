@@ -22,6 +22,16 @@ public sealed class FrameLog
 
     public List<Key> Keys { get; } = [];
 
+    /// <summary>前のフレームから起きた GC (世代ごとの回数と止まった時間)。遅いフレームの原因を調べるために出力する。</summary>
+    public sealed record Gc(double Time, int Gen0, int Gen1, int Gen2, double PauseMilliseconds);
+
+    public List<Gc> Collections { get; } = [];
+
+    /// <summary>GC の開始 (世代・理由・種類。理由 1 は明示的な要求、種類 0 は停止する GC)。</summary>
+    public sealed record GcStart(double Time, int Depth, int Reason, int Type);
+
+    public List<GcStart> CollectionStarts { get; } = [];
+
     public static FrameLog Read(string path)
     {
         var log = new FrameLog();
@@ -41,6 +51,12 @@ public sealed class FrameLog
                     break;
                 case "key" when f.Length >= 3:
                     log.Keys.Add(new Key(Num(1), f[2]));
+                    break;
+                case "gcstart" when f.Length >= 5:
+                    log.CollectionStarts.Add(new GcStart(Num(1), (int)Num(2), (int)Num(3), (int)Num(4)));
+                    break;
+                case "gc" when f.Length >= 6:
+                    log.Collections.Add(new Gc(Num(1), (int)Num(2), (int)Num(3), (int)Num(4), Num(5)));
                     break;
             }
         }

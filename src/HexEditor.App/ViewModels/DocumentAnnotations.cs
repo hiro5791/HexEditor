@@ -169,6 +169,11 @@ public sealed class DocumentAnnotations
         {
             AppLog.Warning($"Document data: cannot write bookmarks ({ex.GetType().Name}: {ex.Message})");
         }
+        finally
+        {
+            // 写しの領域を使い回す (100 万件の保存のたびに大きな配列を作らない)。
+            BookmarkStore.Release(snapshot);
+        }
     }
 
     private static readonly object WritesLock = new();

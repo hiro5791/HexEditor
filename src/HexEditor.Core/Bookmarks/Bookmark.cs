@@ -109,9 +109,35 @@ public sealed class Bookmark
 
     internal BookmarkCollection? Owner { get; set; }
 
-    internal BookmarkTree.Node? Node { get; set; }
-
     internal long _detachedStart;
+
+    // ---- 区間木のノードとしての値 (BookmarkTree) ----
+    // ノードを別のオブジェクトにせず、ブックマーク自体に持つ (100 万件でオブジェクトの数を減らし、GC の手間を減らす。VIEW-04 の受け入れ基準 4)。
+
+    /// <summary>木に入っている (<see cref="Owner"/> の一覧にある)。</summary>
+    internal bool InTree;
+
+    /// <summary>開始位置 (祖先の <see cref="Lazy"/> を足す前の値)。</summary>
+    internal long TreeStart;
+
+    /// <summary>部分木の終了位置 (開始 + 長さ) の最大値。</summary>
+    internal long MaxEnd;
+
+    /// <summary>子の部分木にまだ伝えていないずらし。</summary>
+    internal long Lazy;
+
+    internal int Priority;
+
+    internal int Size;
+
+    internal Bookmark? Left;
+
+    internal Bookmark? Right;
+
+    internal Bookmark? Parent;
+
+    /// <summary>作業用の番号 (保存の写し取りで、位置の配列の添字を覚える。UI スレッドだけで使う)。</summary>
+    internal int Scratch;
 
     /// <summary>入力式の <c>bm.名前</c> で使える名前か (英字・数字・<c>_</c> からなり、英字か <c>_</c> で始まる。INSP-24 の仕様 2)。</summary>
     public static bool IsExpressionName(string name) =>

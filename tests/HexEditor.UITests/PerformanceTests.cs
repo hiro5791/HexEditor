@@ -77,7 +77,20 @@ public sealed class PerformanceTests(ITestOutputHelper output)
             FrameLog.Render? render = log.Renders.LastOrDefault(r => r.Time <= slow.Time);
             output.WriteLine(string.Create(CultureInfo.InvariantCulture,
                 $"  {slow.Time:F0} ms: 間隔 {slow.Interval:F1} ms、直前の描画 {render?.Milliseconds:F2} ms (読み込み中 {render?.LoadingCells})"));
+            foreach (FrameLog.Gc gc in log.Collections.Where(g => g.Time == slow.Time))
+            {
+                output.WriteLine(string.Create(CultureInfo.InvariantCulture,
+                    $"    GC: 第 0 世代 {gc.Gen0}、第 1 世代 {gc.Gen1}、第 2 世代 {gc.Gen2}、停止 {gc.PauseMilliseconds:F1} ms"));
+            }
+
+            foreach (FrameLog.GcStart start in log.CollectionStarts.Where(g => g.Time <= slow.Time && g.Time >= slow.Time - slow.Interval))
+            {
+                output.WriteLine($"    GC の開始: 世代 {start.Depth}、理由 {start.Reason}、種類 {start.Type}");
+            }
         }
+
+        output.WriteLine(string.Create(CultureInfo.InvariantCulture,
+            $"  GC: 第 2 世代 {log.Collections.Sum(g => g.Gen2)} 回、第 1 世代 {log.Collections.Sum(g => g.Gen1)} 回、停止の合計 {log.Collections.Sum(g => g.PauseMilliseconds):F1} ms"));
         Assert.NotEmpty(intervals);
         Assert.True(FrameLog.Percentile(intervals, 0.99) <= FrameP99 && intervals.Max() <= FrameMax, $"{name}: {FrameLog.Describe(intervals)}");
     }

@@ -14,7 +14,10 @@ namespace HexEditor.App.Controls;
 /// <see cref="LogPath"/> があれば CSV で書き出す (性能のテストが読む。00-test-strategy 7.2 の「診断表示の記録」)。
 /// <para>
 /// CSV の行: <c>frame,時刻ms,間隔ms</c> / <c>render,時刻ms,描画ms,行数,作り直した行数,読み込み中のセル数,I/O待ち回数</c> /
-/// <c>key,時刻ms,キー</c> / <c>present,時刻ms,キー入力からの ms</c>。時刻は記録を始めてからのミリ秒。
+/// <c>key,時刻ms,キー</c> / <c>present,時刻ms,キー入力からの ms</c> /
+/// <c>gc,時刻ms,第 0 世代の回数,第 1 世代の回数,第 2 世代の回数,GC で止まった ms</c> (前のフレームから GC があったときだけ。
+/// 遅いフレームの原因を調べるため) / <c>gcstart,時刻ms,世代,理由,種類</c> (GC の開始。理由と種類は .NET の GCStart イベントの値:
+/// 理由 1 = 明示的な要求、種類 0 = 停止する GC・1 = バックグラウンド)。時刻は記録を始めてからのミリ秒。
 /// 描画は I/O を待たない (VIEW-03 の仕様 1) ため、I/O 待ち回数は常に 0 を書く。
 /// </para>
 /// </summary>
@@ -96,6 +99,8 @@ internal sealed class HexViewDiagnostics(FrameworkElement panel, TextBlock text)
 
     public void Stop()
     {
+        _gcListener?.Dispose();
+        _gcListener = null;
         if (_subscribed)
         {
             CompositionTarget.Rendering -= OnRendering;
@@ -107,6 +112,11 @@ internal sealed class HexViewDiagnostics(FrameworkElement panel, TextBlock text)
 
     private void Subscribe()
     {
+        if (_logPath is not null)
+        {
+            _gcListener ??= new GcListener();
+        }
+
         if (!_subscribed)
         {
             CompositionTarget.Rendering += OnRendering;
@@ -127,6 +137,12 @@ internal sealed class HexViewDiagnostics(FrameworkElement panel, TextBlock text)
         }
 
         _lastFrame = now;
+        RecordCollections(now);
+        while (_gcListener?.Starts.TryDequeue(out (long Time, uint Depth, uint Reason, uint Type) start) == true)
+        {
+            Write(string.Create(CultureInfo.InvariantCulture, $"gcstart,{Ms(start.Time)},{start.Depth},{start.Reason},{start.Type}"));
+        }
+
         if (_pendingKey >= 0 && _renderedSinceKey)
         {
             // キー入力のあと、描き直した内容を出すフレーム。
@@ -140,6 +156,56 @@ internal sealed class HexViewDiagnostics(FrameworkElement panel, TextBlock text)
             UpdateOverlay();
             _log?.Flush();
         }
+    }
+
+    private GcListener? _gcListener;
+
+    /// <summary>GC の開始のイベント (.NET の実行時のイベント) を受け取る。記録を書き出すときだけ使う。</summary>
+    private sealed class GcListener : System.Diagnostics.Tracing.EventListener
+    {
+        public System.Collections.Concurrent.ConcurrentQueue<(long Time, uint Depth, uint Reason, uint Type)> Starts { get; } = new();
+
+        protected override void OnEventSourceCreated(System.Diagnostics.Tracing.EventSource eventSource)
+        {
+            if (eventSource.Name == "Microsoft-Windows-DotNETRuntime")
+            {
+                // GC のキーワード (0x1)。
+                EnableEvents(eventSource, System.Diagnostics.Tracing.EventLevel.Informational, (System.Diagnostics.Tracing.EventKeywords)1);
+            }
+        }
+
+        protected override void OnEventWritten(System.Diagnostics.Tracing.EventWrittenEventArgs eventData)
+        {
+            if (eventData.EventName is { } name && name.StartsWith("GCStart", StringComparison.Ordinal) && eventData.Payload is { Count: >= 4 } p
+                && Starts is not null)
+            {
+                Starts.Enqueue((Stopwatch.GetTimestamp(), Convert.ToUInt32(p[1], CultureInfo.InvariantCulture),
+                    Convert.ToUInt32(p[2], CultureInfo.InvariantCulture), Convert.ToUInt32(p[3], CultureInfo.InvariantCulture)));
+            }
+        }
+    }
+
+    private int _gen0 = -1;
+    private int _gen1;
+    private int _gen2;
+    private TimeSpan _pause;
+
+    /// <summary>前のフレームから GC があれば、その回数を記録する (遅いフレームが GC によるものかを見分ける)。</summary>
+    private void RecordCollections(long now)
+    {
+        int gen0 = GC.CollectionCount(0);
+        int gen1 = GC.CollectionCount(1);
+        int gen2 = GC.CollectionCount(2);
+        if (_gen0 >= 0 && (gen0 != _gen0 || gen1 != _gen1 || gen2 != _gen2))
+        {
+            Write(string.Create(CultureInfo.InvariantCulture,
+                $"gc,{Ms(now)},{gen0 - _gen0},{gen1 - _gen1},{gen2 - _gen2},{(GC.GetTotalPauseDuration() - _pause).TotalMilliseconds:0.###}"));
+        }
+
+        _pause = GC.GetTotalPauseDuration();
+        _gen0 = gen0;
+        _gen1 = gen1;
+        _gen2 = gen2;
     }
 
     private void UpdateOverlay()

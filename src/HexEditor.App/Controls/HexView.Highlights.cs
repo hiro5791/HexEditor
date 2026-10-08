@@ -40,6 +40,9 @@ public sealed partial class HexView
     private readonly List<Rectangle> _highlightFront = [];
     private readonly List<Border> _offsetMarks = [];
     private readonly List<PlacedHighlight> _placed = [];
+    private readonly List<(HexHighlight Item, int Order)> _highlightItems = [];
+    private readonly HashSet<long> _markerRows = [];
+    private readonly List<IReadOnlyList<double>?> _frontDash = [];
     private Canvas? _backLayer;
     private Canvas? _frontLayer;
     private Canvas? _markLayer;
@@ -113,14 +116,19 @@ public sealed partial class HexView
         if (_highlightSources.Count > 0)
         {
             EnsureHighlightLayers();
-            var items = new List<HexHighlight>();
+            List<(HexHighlight Item, int Order)> items = _highlightItems;
+            items.Clear();
             foreach (Func<long, long, IEnumerable<HexHighlight>> source in _highlightSources.Values)
             {
-                items.AddRange(source(firstOffset, end));
+                foreach (HexHighlight h in source(firstOffset, end))
+                {
+                    items.Add((h, items.Count));
+                }
             }
 
-            // 奥の層から描く (同じ層は与えた順)。
-            foreach (HexHighlight h in items.OrderByDescending(h => (int)h.Layer))
+            // 奥の層から描く (同じ層は与えた順)。作業用の一覧は使い回す (描画のたびに作らない。VIEW-04 の仕様 3)。
+            items.Sort(static (a, b) => a.Item.Layer != b.Item.Layer ? b.Item.Layer.CompareTo(a.Item.Layer) : a.Order.CompareTo(b.Order));
+            foreach ((HexHighlight h, _) in items)
             {
                 long from = Math.Max(h.Offset, firstOffset);
                 long to = h.Length == 0 ? h.Offset + 1 : Math.Min(h.Offset + h.Length, end);
@@ -152,7 +160,8 @@ public sealed partial class HexView
         if (_markerSources.Count > 0)
         {
             EnsureHighlightLayers();
-            var seenRows = new HashSet<long>();
+            HashSet<long> seenRows = _markerRows;
+            seenRows.Clear();
             foreach (Func<long, long, IEnumerable<HexOffsetMarker>> source in _markerSources.Values)
             {
                 foreach (HexOffsetMarker m in source(firstOffset, end))
@@ -168,6 +177,7 @@ public sealed partial class HexView
             }
         }
 
+        _highlightItems.Clear();
         Hide(_highlightBack, backUsed);
         Hide(_highlightFront, frontUsed);
         for (int i = marksUsed; i < _offsetMarks.Count; i++)
@@ -201,7 +211,17 @@ public sealed partial class HexView
             r.Fill = null;
             r.Stroke = h.Border;
             r.StrokeThickness = 1;
-            r.StrokeDashArray = h.Dash is null ? null : [.. h.Dash];
+            // 破線の模様は変わったときだけ設定する (DoubleCollection を描画のたびに作らない)。
+            while (_frontDash.Count <= frontUsed - 1)
+            {
+                _frontDash.Add(null);
+            }
+
+            if (!ReferenceEquals(_frontDash[frontUsed - 1], h.Dash))
+            {
+                _frontDash[frontUsed - 1] = h.Dash;
+                r.StrokeDashArray = h.Dash is null ? null : [.. h.Dash];
+            }
             SetRect(r, x, y + 0.5, Math.Max(1, width), Math.Max(1, _rowHeight - 1));
         }
     }

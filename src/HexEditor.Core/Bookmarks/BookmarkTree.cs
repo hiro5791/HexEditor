@@ -4,32 +4,11 @@ namespace HexEditor.Core.Bookmarks;
 /// ブックマークの区間木 (INSP-23 の「巨大ファイル・長時間処理」)。開始位置 (同じなら作った順) で並べたトリープで、部分木の
 /// 終了位置の最大値を持つ。編集に合わせた位置のずらし (ある位置より後ろをまとめて動かす) は遅延して伝える。どれも
 /// 件数 n に対して O(log n) (範囲の検索は O(log n + 該当件数))。
-/// 各ノードの <see cref="Node.Start"/> は、祖先の <see cref="Node.Lazy"/> を足す前の値。
+/// 各ノードの <see cref="Bookmark.TreeStart"/> は、祖先の <see cref="Bookmark.Lazy"/> を足す前の値。
 /// </summary>
 internal sealed class BookmarkTree
 {
-    internal sealed class Node(Bookmark bookmark, long start, int priority)
-    {
-        public Bookmark Bookmark { get; } = bookmark;
-
-        public long Start = start;
-
-        /// <summary>部分木の終了位置 (開始 + 長さ) の最大値。</summary>
-        public long MaxEnd = start + bookmark.Length;
-
-        /// <summary>子の部分木にまだ伝えていないずらし。</summary>
-        public long Lazy;
-
-        public int Priority { get; } = priority;
-
-        public int Size = 1;
-
-        public Node? Left;
-        public Node? Right;
-        public Node? Parent;
-    }
-
-    private Node? _root;
+    private Bookmark? _root;
     private readonly Random _random = new(0x5EED);
 
     public int Count => _root?.Size ?? 0;
@@ -38,31 +17,33 @@ internal sealed class BookmarkTree
 
     // ---- 基本の操作 ----
 
-    private static void Push(Node n)
+    private static void Push(Bookmark n)
     {
         if (n.Lazy == 0)
         {
             return;
         }
 
-        foreach (Node? c in (Node?[])[n.Left, n.Right])
-        {
-            if (c is not null)
-            {
-                c.Start += n.Lazy;
-                c.MaxEnd += n.Lazy;
-                c.Lazy += n.Lazy;
-            }
-        }
-
+        Shift(n.Left, n.Lazy);
+        Shift(n.Right, n.Lazy);
         n.Lazy = 0;
     }
 
+    private static void Shift(Bookmark? c, long delta)
+    {
+        if (c is not null)
+        {
+            c.TreeStart += delta;
+            c.MaxEnd += delta;
+            c.Lazy += delta;
+        }
+    }
+
     /// <summary>子から値を集める (子は伝え終わっていること)。</summary>
-    private static void Pull(Node n)
+    private static void Pull(Bookmark n)
     {
         n.Size = 1 + (n.Left?.Size ?? 0) + (n.Right?.Size ?? 0);
-        long max = n.Start + n.Bookmark.Length;
+        long max = n.TreeStart + n.Length;
         if (n.Left is { } l)
         {
             max = Math.Max(max, l.MaxEnd + n.Lazy);
@@ -79,7 +60,7 @@ internal sealed class BookmarkTree
     }
 
     /// <summary>(開始, 番号) が key より小さいものを左、それ以外を右に分ける。</summary>
-    private static (Node? Left, Node? Right) Split(Node? t, Func<Node, bool> goesLeft)
+    private static (Bookmark? Left, Bookmark? Right) Split(Bookmark? t, Func<Bookmark, bool> goesLeft)
     {
         if (t is null)
         {
@@ -89,7 +70,7 @@ internal sealed class BookmarkTree
         Push(t);
         if (goesLeft(t))
         {
-            (Node? a, Node? b) = Split(t.Right, goesLeft);
+            (Bookmark? a, Bookmark? b) = Split(t.Right, goesLeft);
             t.Right = a;
             Pull(t);
             t.Parent = null;
@@ -102,7 +83,7 @@ internal sealed class BookmarkTree
         }
         else
         {
-            (Node? a, Node? b) = Split(t.Left, goesLeft);
+            (Bookmark? a, Bookmark? b) = Split(t.Left, goesLeft);
             t.Left = b;
             Pull(t);
             t.Parent = null;
@@ -115,11 +96,11 @@ internal sealed class BookmarkTree
         }
     }
 
-    private static Node? Merge(Node? a, Node? b)
+    private static Bookmark? Merge(Bookmark? a, Bookmark? b)
     {
         if (a is null || b is null)
         {
-            Node? only = a ?? b;
+            Bookmark? only = a ?? b;
             if (only is not null)
             {
                 only.Parent = null;
@@ -144,26 +125,31 @@ internal sealed class BookmarkTree
         return b;
     }
 
-    private static bool Before(Node n, long start, long id) => n.Start < start || n.Start == start && n.Bookmark.Id < id;
+    private static bool Before(Bookmark n, long start, long id) => n.TreeStart < start || n.TreeStart == start && n.Id < id;
 
     // ---- 追加・削除 ----
 
-    public Node Insert(Bookmark bookmark, long start)
+    /// <summary>ブックマーク自体をノードとして木に入れる (ノードを別のオブジェクトにしない。100 万件で GC の対象を減らす)。</summary>
+    public void Insert(Bookmark bookmark, long start)
     {
-        var node = new Node(bookmark, start, _random.Next());
-        (Node? l, Node? r) = Split(_root, n => Before(n, start, bookmark.Id));
-        _root = Merge(Merge(l, node), r);
-        bookmark.Node = node;
-        return node;
+        bookmark.TreeStart = start;
+        bookmark.MaxEnd = start + bookmark.Length;
+        bookmark.Lazy = 0;
+        bookmark.Size = 1;
+        bookmark.Priority = _random.Next();
+        bookmark.Left = bookmark.Right = bookmark.Parent = null;
+        (Bookmark? l, Bookmark? r) = Split(_root, n => Before(n, start, bookmark.Id));
+        _root = Merge(Merge(l, bookmark), r);
+        bookmark.InTree = true;
     }
 
     /// <summary>ノードを取り除く。祖先から順に遅延したずらしを伝えてから外す。</summary>
-    public void Remove(Node node)
+    public void Remove(Bookmark node)
     {
         PushPath(node);
         Push(node);
-        Node? replacement = Merge(node.Left, node.Right);
-        Node? parent = node.Parent;
+        Bookmark? replacement = Merge(node.Left, node.Right);
+        Bookmark? parent = node.Parent;
         if (parent is null)
         {
             _root = replacement;
@@ -182,20 +168,20 @@ internal sealed class BookmarkTree
             replacement.Parent = parent;
         }
 
-        for (Node? p = parent; p is not null; p = p.Parent)
+        for (Bookmark? p = parent; p is not null; p = p.Parent)
         {
             Pull(p);
         }
 
         node.Left = node.Right = node.Parent = null;
-        node.Bookmark.Node = null;
+        node.InTree = false;
     }
 
     /// <summary>根からノードまでの遅延したずらしを伝える (ノードの Start が本当の値になる)。</summary>
-    private static void PushPath(Node node)
+    private static void PushPath(Bookmark node)
     {
-        var path = new Stack<Node>();
-        for (Node? p = node.Parent; p is not null; p = p.Parent)
+        var path = new Stack<Bookmark>();
+        for (Bookmark? p = node.Parent; p is not null; p = p.Parent)
         {
             path.Push(p);
         }
@@ -207,10 +193,10 @@ internal sealed class BookmarkTree
     }
 
     /// <summary>ノードの本当の開始位置 (祖先の遅延したずらしを足す)。</summary>
-    public static long StartOf(Node node)
+    public static long StartOf(Bookmark node)
     {
-        long start = node.Start;
-        for (Node? p = node.Parent; p is not null; p = p.Parent)
+        long start = node.TreeStart;
+        for (Bookmark? p = node.Parent; p is not null; p = p.Parent)
         {
             start += p.Lazy;
         }
@@ -229,10 +215,10 @@ internal sealed class BookmarkTree
             return;
         }
 
-        (Node? l, Node? r) = Split(_root, n => inclusive ? n.Start < threshold : n.Start <= threshold);
+        (Bookmark? l, Bookmark? r) = Split(_root, n => inclusive ? n.TreeStart < threshold : n.TreeStart <= threshold);
         if (r is not null)
         {
-            r.Start += delta;
+            r.TreeStart += delta;
             r.MaxEnd += delta;
             r.Lazy += delta;
         }
@@ -246,9 +232,9 @@ internal sealed class BookmarkTree
     /// 開始 ≤ <paramref name="maxStart"/> かつ 終了 ≥ <paramref name="minEnd"/> のもの (開始位置の順)。
     /// <paramref name="strict"/> なら 開始 &lt; maxStart かつ 終了 &gt; minEnd。
     /// </summary>
-    public void Collect(long maxStart, long minEnd, bool strict, List<Node> output) => Collect(_root, 0, maxStart, minEnd, strict, output);
+    public void Collect(long maxStart, long minEnd, bool strict, List<Bookmark> output) => Collect(_root, 0, maxStart, minEnd, strict, output);
 
-    private static void Collect(Node? n, long offset, long maxStart, long minEnd, bool strict, List<Node> output)
+    private static void Collect(Bookmark? n, long offset, long maxStart, long minEnd, bool strict, List<Bookmark> output)
     {
         if (n is null)
         {
@@ -261,7 +247,7 @@ internal sealed class BookmarkTree
             return;
         }
 
-        long start = n.Start + offset;
+        long start = n.TreeStart + offset;
         long childOffset = offset + n.Lazy;
         Collect(n.Left, childOffset, maxStart, minEnd, strict, output);
         if (strict ? start >= maxStart : start > maxStart)
@@ -269,7 +255,7 @@ internal sealed class BookmarkTree
             return;
         }
 
-        long end = start + n.Bookmark.Length;
+        long end = start + n.Length;
         if (strict ? end > minEnd : end >= minEnd)
         {
             output.Add(n);
@@ -279,13 +265,13 @@ internal sealed class BookmarkTree
     }
 
     /// <summary>開始位置が <paramref name="offset"/> 以上で最も前のもの (<paramref name="strictlyAfter"/> なら より後ろ)。</summary>
-    public Node? FirstFrom(long offset, bool strictlyAfter)
+    public Bookmark? FirstFrom(long offset, bool strictlyAfter)
     {
-        Node? best = null;
+        Bookmark? best = null;
         long acc = 0;
-        for (Node? n = _root; n is not null;)
+        for (Bookmark? n = _root; n is not null;)
         {
-            long start = n.Start + acc;
+            long start = n.TreeStart + acc;
             if (strictlyAfter ? start > offset : start >= offset)
             {
                 best = n;
@@ -303,13 +289,13 @@ internal sealed class BookmarkTree
     }
 
     /// <summary>開始位置が <paramref name="offset"/> より前で最も後ろのもの。</summary>
-    public Node? LastBefore(long offset)
+    public Bookmark? LastBefore(long offset)
     {
-        Node? best = null;
+        Bookmark? best = null;
         long acc = 0;
-        for (Node? n = _root; n is not null;)
+        for (Bookmark? n = _root; n is not null;)
         {
-            long start = n.Start + acc;
+            long start = n.TreeStart + acc;
             if (start < offset)
             {
                 best = n;
@@ -326,9 +312,9 @@ internal sealed class BookmarkTree
         return best;
     }
 
-    public Node? First()
+    public Bookmark? First()
     {
-        Node? n = _root;
+        Bookmark? n = _root;
         while (n?.Left is not null)
         {
             n = n.Left;
@@ -337,9 +323,9 @@ internal sealed class BookmarkTree
         return n;
     }
 
-    public Node? Last()
+    public Bookmark? Last()
     {
-        Node? n = _root;
+        Bookmark? n = _root;
         while (n?.Right is not null)
         {
             n = n.Right;
@@ -349,10 +335,10 @@ internal sealed class BookmarkTree
     }
 
     /// <summary>開始位置の順にすべて (本当の開始位置を添える)。</summary>
-    public IEnumerable<(Node Node, long Start)> InOrder()
+    public IEnumerable<(Bookmark Bookmark, long Start)> InOrder()
     {
-        var stack = new Stack<(Node Node, long Offset)>();
-        Node? n = _root;
+        var stack = new Stack<(Bookmark Bookmark, long Offset)>();
+        Bookmark? n = _root;
         long offset = 0;
         while (stack.Count > 0 || n is not null)
         {
@@ -363,19 +349,19 @@ internal sealed class BookmarkTree
                 n = n.Left;
             }
 
-            (Node top, long topOffset) = stack.Pop();
-            yield return (top, top.Start + topOffset);
+            (Bookmark top, long topOffset) = stack.Pop();
+            yield return (top, top.TreeStart + topOffset);
             offset = topOffset + top.Lazy;
             n = top.Right;
         }
     }
 
     /// <summary>長さを変えた後に、祖先の終了位置の最大値を直す。</summary>
-    public static void Refresh(Node node)
+    public static void Refresh(Bookmark node)
     {
-        for (Node? p = node; p is not null; p = p.Parent)
+        for (Bookmark? p = node; p is not null; p = p.Parent)
         {
-            long max = p.Start + p.Bookmark.Length;
+            long max = p.TreeStart + p.Length;
             if (p.Left is { } l)
             {
                 max = Math.Max(max, l.MaxEnd + p.Lazy);
