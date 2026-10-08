@@ -97,9 +97,11 @@ public static class FontCatalog
 
     private static readonly System.Collections.Concurrent.ConcurrentDictionary<int, bool> s_displayable = new();
 
-    /// <summary>呼び出したスレッドで作ったフォント (DirectWrite の COM オブジェクトはスレッドをまたいで使わない)。</summary>
-    [ThreadStatic]
-    private static List<IDWriteFont1>? t_fonts;
+    /// <summary>
+    /// 各ファミリーのフォント。DirectWrite のオブジェクトは UI のスレッド (STA) からはインターフェイスを取れないため、スレッドプール (MTA) で
+    /// 作り、MTA のスレッドだけで使う。
+    /// </summary>
+    private static readonly Lazy<List<(string Name, IDWriteFont1 Font)>> s_fonts = new(RegularFonts, LazyThreadSafetyMode.ExecutionAndPublication);
 
     /// <summary>
     /// 文字を表示できるか: システムのフォントのどれかにその文字があるか (XAML の代替フォントで表示できる)。結果はコードポイントごとに覚える。
@@ -107,44 +109,67 @@ public static class FontCatalog
     /// </summary>
     public static bool CanDisplay(int codePoint)
     {
+        // 表示できる ASCII の文字はどの環境のフォントにもある (フォントの一覧を作らずに済ませる)。
+        if (codePoint is >= 0x20 and < 0x7F)
+        {
+            return true;
+        }
+
         if (s_displayable.TryGetValue(codePoint, out bool known))
         {
             return known;
         }
 
-        bool result = true;
-        try
-        {
-            t_fonts ??= RegularFonts();
-            if (t_fonts.Count > 0)
-            {
-                result = t_fonts.Any(f => f.HasCharacter((uint)codePoint, out bool exists) >= 0 && exists);
-            }
-        }
-        catch (Exception ex) when (ex is COMException or InvalidCastException or EntryPointNotFoundException or DllNotFoundException)
-        {
-            AppLog.Warning($"FontCatalog: 文字の有無を調べられません ({ex.Message})");
-        }
-
+        // UI のスレッドから呼ばれても、調べるのはスレッドプールで行う (最初の 1 回はフォントの一覧を作るので時間がかかる)。
+        bool result = Thread.CurrentThread.GetApartmentState() == ApartmentState.STA
+            ? Task.Run(() => HasGlyph(codePoint)).GetAwaiter().GetResult()
+            : HasGlyph(codePoint);
         s_displayable[codePoint] = result;
         return result;
     }
 
+    private static bool HasGlyph(int codePoint)
+    {
+        try
+        {
+            List<(string Name, IDWriteFont1 Font)> fonts = s_fonts.Value;
+            return fonts.Count == 0 || fonts.Any(f => f.Font.HasCharacter((uint)codePoint, out bool exists) >= 0 && exists);
+        }
+        catch (Exception ex) when (ex is COMException or InvalidCastException or EntryPointNotFoundException or DllNotFoundException)
+        {
+            AppLog.Warning($"FontCatalog: 文字の有無を調べられません ({ex.Message})");
+            return true;
+        }
+    }
+
     /// <summary>各ファミリーの標準の太さ・幅・形のフォント。</summary>
-    private static List<IDWriteFont1> RegularFonts()
+    private static List<(string Name, IDWriteFont1 Font)> RegularFonts()
+    {
+        try
+        {
+            return CreateRegularFonts();
+        }
+        catch (Exception ex) when (ex is COMException or InvalidCastException or EntryPointNotFoundException or DllNotFoundException)
+        {
+            AppLog.Warning($"FontCatalog: フォントを列挙できません ({ex.Message})");
+            return [];
+        }
+    }
+
+    private static List<(string Name, IDWriteFont1 Font)> CreateRegularFonts()
     {
         Guid iid = typeof(IDWriteFactory).GUID;
         Marshal.ThrowExceptionForHR(DWriteCreateFactory(0, ref iid, out object factoryObject));
         var factory = (IDWriteFactory)factoryObject;
         Marshal.ThrowExceptionForHR(factory.GetSystemFontCollection(out IDWriteFontCollection collection, false));
         uint count = collection.GetFontFamilyCount();
-        var result = new List<IDWriteFont1>((int)count);
+        var result = new List<(string, IDWriteFont1)>((int)count);
         for (uint i = 0; i < count; i++)
         {
             if (collection.GetFontFamily(i, out IDWriteFontFamily family) >= 0
                 && family.GetFirstMatchingFont(400, 5, 0, out IDWriteFont font) >= 0 && font is IDWriteFont1 font1)
             {
-                result.Add(font1);
+                result.Add((FamilyName(family) ?? string.Empty, font1));
             }
         }
 

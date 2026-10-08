@@ -156,6 +156,19 @@ public sealed class InspectorAndHashWave3Tests
         Assert.Equal(le, await InspectorTests.ValueAsync(app, "uint32"));
     });
 
+    // ---- INSP-09 ----
+
+    [Fact]
+    public Task Characters_without_a_glyph_show_only_the_code_point() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 仕様 3: 代替フォントでも表示できない文字 (U+0378 は未割り当てで、どのフォントにもない) はコードポイントだけ。
+        string file = ctx.WriteFile("glyphs.bin", [0xCD, 0xB8, 0xE3, 0x81, 0x82]);
+        AppSession app = await InspectorTests.StartAsync(ctx, file: file);
+        Assert.Equal("U+0378  (2 bytes)", await InspectorTests.ValueAsync(app, "utf8"));
+        await InspectorTests.GoAsync(app, 2);
+        Assert.Equal("あ  U+3042  (3 bytes)", await InspectorTests.ValueAsync(app, "utf8"));
+    });
+
     // ---- INSP-19 ----
 
     [Fact]
