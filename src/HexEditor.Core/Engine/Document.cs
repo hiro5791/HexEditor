@@ -214,6 +214,41 @@ public sealed class Document : IDisposable
     /// </summary>
     public bool IsEditLocked { get; internal set; }
 
+    // ---- 読み取り専用 (EDIT-16) ----
+
+    /// <summary>読み取り専用の理由。<see cref="ReadOnlyReason.None"/> なら編集できる (EDIT-16 の仕様 1)。</summary>
+    public ReadOnlyReason ReadOnlyReason { get; private set; }
+
+    /// <summary>読み取り専用か。読み取り専用の間、データを変える操作は <see cref="DocumentReadOnlyException"/> になる (仕様 2)。</summary>
+    public bool IsReadOnly => ReadOnlyReason != ReadOnlyReason.None;
+
+    /// <summary>読み取り専用を解除できるか、解除にどの手順が要るか (EDIT-16 の仕様 4、ENG-14 の仕様 2・3)。</summary>
+    public ReadOnlyRelease ReadOnlyRelease => ReadOnlyReason switch
+    {
+        ReadOnlyReason.None or ReadOnlyReason.User => ReadOnlyRelease.Immediate,
+        ReadOnlyReason.NoWriteTarget or ReadOnlyReason.WriteProtectionMode or ReadOnlyReason.ReadOnlyMedia => ReadOnlyRelease.NotAllowed,
+        _ => ReadOnlyRelease.NeedsConfirmation,
+    };
+
+    /// <summary><see cref="ReadOnlyReason"/> が変わった。</summary>
+    public event EventHandler? ReadOnlyChanged;
+
+    /// <summary>
+    /// 読み取り専用にする、または解除する (<see cref="ReadOnlyReason.None"/>)。未保存の変更はそのまま残す (EDIT-16 の仕様 5)。
+    /// 解除できるかの判断 (<see cref="ReadOnlyRelease"/>) と確認は呼び出し側で行う。
+    /// </summary>
+    public void SetReadOnly(ReadOnlyReason reason)
+    {
+        if (ReadOnlyReason == reason)
+        {
+            return;
+        }
+
+        ReadOnlyReason = reason;
+        History.BreakCoalescing();
+        ReadOnlyChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     /// <summary>内容が変わった。</summary>
     public event EventHandler<DocumentChangedEventArgs>? Changed;
 
@@ -635,6 +670,88 @@ public sealed class Document : IDisposable
         Apply(Current.Tree.Replace(offset, replaced, tree), offset, replaced, length, description, null);
     }
 
+    // ---- 作った内容の挿入・上書き (EDIT-14、EDIT-15、EDIT-29、EDIT-30) ----
+
+    /// <summary>
+    /// <paramref name="offset"/> に <paramref name="content"/> を挿入する。データソースの参照 (一時ファイル) は以後このドキュメントが持ち、
+    /// 閉じるときに閉じる。生成ピース・参照のピースで表すため、内容の長さに関係なく一定時間で終わる。
+    /// </summary>
+    public void InsertContent(long offset, EditContent content, string description = "挿入")
+    {
+        if (content.Length == 0)
+        {
+            content.Dispose();
+            return;
+        }
+
+        RequireResizable();
+        if (offset < 0 || offset > Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(offset), offset, "オフセットがドキュメントの範囲外です。");
+        }
+
+        if (content.Length > long.MaxValue - Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(content), "ドキュメントの長さが上限 (2^63 − 1) を超えます。");
+        }
+
+        PieceTree tree = TreeOf(content);
+        Apply(Current.Tree.Insert(offset, tree), offset, 0, content.Length, description, null);
+    }
+
+    /// <summary>
+    /// <paramref name="offset"/> から <paramref name="content"/> で上書きする。末尾を越える分は長さを変えられるデータソースでは追加し、
+    /// 変えられないデータソースでは拒否する (<see cref="Overwrite"/> と同じ)。
+    /// </summary>
+    public void OverwriteContent(long offset, EditContent content, string description = "上書き")
+    {
+        if (content.Length == 0)
+        {
+            content.Dispose();
+            return;
+        }
+
+        long replaced = CheckOverwrite(offset, content.Length);
+        PieceTree tree = TreeOf(content);
+        Apply(Current.Tree.Replace(offset, replaced, tree), offset, replaced, content.Length, description, null);
+    }
+
+    /// <summary>内容をピースの木にする。データソースの参照は外部参照の表に加える (以後このドキュメントが持つ)。</summary>
+    private PieceTree TreeOf(EditContent content)
+    {
+        RequireEditable();
+        switch (content.Kind)
+        {
+            case EditContentKind.Pattern:
+                return PieceTree.FromPiece(PatternPiece(content.Data!, content.Length, content.Position));
+            case EditContentKind.Random:
+                return PieceTree.FromPiece(Piece.Random(content.Seed, content.Position, content.Length));
+            case EditContentKind.Bytes:
+                return AppendToBuffer(content.Data!.AsSpan(0, (int)content.Length));
+            case EditContentKind.Original:
+                if (content.Position < 0 || content.Position + content.Length > Source.Length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(content), "元データの範囲外です。");
+                }
+
+                return PieceTree.FromPiece(Piece.Original(content.Position, content.Length));
+            default:
+                IByteSource source = content.TakeSource();
+                int index = _storage.Externals.IndexOf(source);
+                if (index < 0)
+                {
+                    _storage.Externals.Add(source);
+                    index = _storage.Externals.Count - 1;
+                    if (content.OwnsSource)
+                    {
+                        _ownedExternals.Add(source);
+                    }
+                }
+
+                return PieceTree.FromPiece(Piece.External(index, content.Position, content.Length));
+        }
+    }
+
     // ---- 削除 ----
 
     /// <summary>[offset, offset + length) を削除する。</summary>
@@ -766,7 +883,7 @@ public sealed class Document : IDisposable
         return PieceTree.FromPiece(Piece.Added(at, data.Length));
     }
 
-    private Piece PatternPiece(ReadOnlySpan<byte> pattern, long length)
+    private Piece PatternPiece(ReadOnlySpan<byte> pattern, long length, long phase = 0)
     {
         if (pattern.Length is < 1 or > GeneratedData.MaxPatternLength)
         {
@@ -775,7 +892,7 @@ public sealed class Document : IDisposable
 
         RequireEditable();
         long at = _storage.AddBuffer.Append(pattern);
-        return Piece.Pattern(at, pattern.Length, length);
+        return Piece.Pattern(at, pattern.Length, length, phase);
     }
 
     /// <summary>上書きで置き換える既存の長さを返す。長さを変えられないデータソースで末尾を越える場合は拒否する。</summary>
@@ -811,6 +928,11 @@ public sealed class Document : IDisposable
         if (IsEditLocked)
         {
             throw new DocumentLockedException();
+        }
+
+        if (IsReadOnly)
+        {
+            throw new DocumentReadOnlyException();
         }
     }
 
@@ -887,3 +1009,55 @@ public sealed class FixedLengthException() : InvalidOperationException("この�
 
 /// <summary>処理中で編集できない (ENG-09 の仕様 7)。</summary>
 public sealed class DocumentLockedException() : InvalidOperationException("処理中のため編集できません。");
+
+/// <summary>読み取り専用のドキュメントを変えようとした (EDIT-16 の仕様 2)。</summary>
+public sealed class DocumentReadOnlyException() : InvalidOperationException("このドキュメントは読み取り専用です。");
+
+/// <summary>
+/// 読み取り専用の理由 (EDIT-16 の仕様 1、ENG-14 の仕様 1)。どの理由で読み取り専用にするかは開く処理 (ENG-14) が決める。
+/// </summary>
+public enum ReadOnlyReason
+{
+    /// <summary>読み取り専用ではない。</summary>
+    None,
+
+    /// <summary>利用者が切り替えた (編集 > 読み取り専用)。そのまま解除できる。</summary>
+    User,
+
+    /// <summary>「読み取り専用で開く」を指定して開いた (データソースは読み取りのアクセス権だけで開いている)。</summary>
+    OpenedReadOnly,
+
+    /// <summary>ファイルに読み取り専用属性がある。解除には確認が要る (保存時に属性を外す。ENG-14 の仕様 3)。</summary>
+    FileAttribute,
+
+    /// <summary>書き込み権限がない。解除するときに書き込みで開けるかを確かめ、開けなければ読み取り専用のまま (ENG-14 の仕様 3)。</summary>
+    AccessDenied,
+
+    /// <summary>他のアプリが書き込みのために開いている (共有違反)。解除には書き込みで開き直す。</summary>
+    SharingViolation,
+
+    /// <summary>読み取り専用のメディアにある。解除できない。</summary>
+    ReadOnlyMedia,
+
+    /// <summary>ディスク・ボリューム・プロセスメモリの既定。解除には確認ダイアログと開き直しが要る。</summary>
+    Device,
+
+    /// <summary>書き戻す先のないデータソース (スナップショットなど)。解除できない (ENG-14 の仕様 2)。</summary>
+    NoWriteTarget,
+
+    /// <summary>書き込み保護モード (FOR-01) が有効。解除できない。</summary>
+    WriteProtectionMode,
+}
+
+/// <summary>読み取り専用の解除のしかた (EDIT-16 の仕様 4)。</summary>
+public enum ReadOnlyRelease
+{
+    /// <summary>そのまま解除できる (利用者が読み取り専用にした)。</summary>
+    Immediate,
+
+    /// <summary>確認ダイアログ・書き込みでの開き直し (ENG-14 の仕様 3) を経て解除する。</summary>
+    NeedsConfirmation,
+
+    /// <summary>解除できない。「編集を許可する」ボタンを出さない。</summary>
+    NotAllowed,
+}
