@@ -128,6 +128,31 @@ public sealed partial class MainWindow
     /// </summary>
     private async Task<JsonObject> TestPopupZoomAsync(string kind)
     {
+        if (kind == "tooltip")
+        {
+            // ツールチップ: ステータスバーに一時的なツールチップを付けて開き、文字の大きさを読む。
+            var tip = new ToolTip { Content = "Zoom" };
+            ToolTipService.SetToolTip(StatusBar, tip);
+            var tipOpened = new TaskCompletionSource();
+            void OnTipOpened(object sender, RoutedEventArgs e) => tipOpened.TrySetResult();
+            tip.Opened += OnTipOpened;
+            try
+            {
+                tip.IsOpen = true;
+                await Task.WhenAny(tipOpened.Task, Task.Delay(5000));
+                var next = new TaskCompletionSource();
+                DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => next.SetResult());
+                await next.Task;
+                return new JsonObject { ["opened"] = tip.IsOpen, ["appliedZoom"] = _zoomHost.AppliedZoom, ["toolTipFontSize"] = tip.FontSize };
+            }
+            finally
+            {
+                tip.Opened -= OnTipOpened;
+                tip.IsOpen = false;
+                ToolTipService.SetToolTip(StatusBar, null);
+            }
+        }
+
         FlyoutBase flyout = kind == "menu" ? StatusItemsMenu : NotificationHistoryFlyout;
         var opened = new TaskCompletionSource();
         void OnOpened(object? sender, object e) => opened.TrySetResult();

@@ -283,6 +283,8 @@ public sealed class WindowShellTests
         JsonObject menu100 = await app.SendAsync("popupZoom", new JsonObject { ["kind"] = "menu" });
         Assert.True(menu100["opened"]!.GetValue<bool>(), "the menu did not open");
         double font = menu100["menuFontSizes"]!.AsArray()[0]!.GetValue<double>();
+        JsonObject tip100 = await app.SendAsync("popupZoom", new JsonObject { ["kind"] = "tooltip" });
+        double tipFont = tip100["toolTipFontSize"]!.GetValue<double>();
 
         for (int i = 0; i < 3; i++)
         {
@@ -298,6 +300,9 @@ public sealed class WindowShellTests
         JsonObject flyout = await app.SendAsync("popupZoom", new JsonObject { ["kind"] = "flyout" });
         Assert.True(flyout["opened"]!.GetValue<bool>(), "the flyout did not open");
         Assert.Equal(1.5, flyout["flyoutZoom"]!.GetValue<double>(), 3);
+        JsonObject tip = await app.SendAsync("popupZoom", new JsonObject { ["kind"] = "tooltip" });
+        Assert.True(tip["opened"]!.GetValue<bool>(), "the tooltip did not open");
+        Assert.Equal(tipFont * 1.5, tip["toolTipFontSize"]!.GetValue<double>(), 1);
         await app.WaitUntilAsync(async () => Math.Abs((await app.SendAsync("floatingPanels"))["panels"]![0]!["appliedZoom"]!.GetValue<double>() - 1.5) < 0.01,
             Wait, "the floating panel at 150%");
 
@@ -306,6 +311,7 @@ public sealed class WindowShellTests
         await app.IdleAsync();
         JsonObject reset = await app.SendAsync("popupZoom", new JsonObject { ["kind"] = "menu" });
         Assert.All(reset["menuFontSizes"]!.AsArray(), f => Assert.Equal(font, f!.GetValue<double>(), 1));
+        Assert.Equal(tipFont, (await app.SendAsync("popupZoom", new JsonObject { ["kind"] = "tooltip" }))["toolTipFontSize"]!.GetValue<double>(), 1);
     });
 
     // ---- UI-09 の仕様 2: 未保存の印 ----

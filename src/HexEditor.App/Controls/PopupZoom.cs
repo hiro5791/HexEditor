@@ -25,6 +25,66 @@ public static class PopupZoom
 
     public static void SetFollowMenu(DependencyObject element, bool value) => element.SetValue(FollowMenuProperty, value);
 
+    /// <summary>
+    /// ポップアップに出る項目 (コンボボックスのドロップダウンの項目) の文字の大きさを倍率に合わせる (ComboBoxItem の暗黙のスタイル
+    /// から付ける)。ドロップダウンを開くたびに (表示に入るたびに) そのウィンドウの倍率にする。
+    /// </summary>
+    public static readonly DependencyProperty FollowItemProperty = DependencyProperty.RegisterAttached(
+        "FollowItem", typeof(bool), typeof(PopupZoom), new PropertyMetadata(false, OnFollowItemChanged));
+
+    public static bool GetFollowItem(DependencyObject element) => (bool)element.GetValue(FollowItemProperty);
+
+    public static void SetFollowItem(DependencyObject element, bool value) => element.SetValue(FollowItemProperty, value);
+
+    /// <summary>ツールチップの文字の大きさと最大の幅を倍率に合わせる (ToolTip の暗黙のスタイルから付ける)。開くたびに合わせる。</summary>
+    public static readonly DependencyProperty FollowToolTipProperty = DependencyProperty.RegisterAttached(
+        "FollowToolTip", typeof(bool), typeof(PopupZoom), new PropertyMetadata(false, OnFollowToolTipChanged));
+
+    public static bool GetFollowToolTip(DependencyObject element) => (bool)element.GetValue(FollowToolTipProperty);
+
+    public static void SetFollowToolTip(DependencyObject element, bool value) => element.SetValue(FollowToolTipProperty, value);
+
+    private static void OnFollowItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is Control item && e.NewValue is true)
+        {
+            item.Loading += (_, _) => ApplyToItem(item);
+            item.Loaded += (_, _) => ApplyToItem(item);
+        }
+    }
+
+    private static void ApplyToItem(Control item)
+    {
+        double factor = ScreenZoom.AppliedFor(item.XamlRoot);
+        ApplyFont(item, factor, (double)Application.Current.Resources["ControlContentThemeFontSize"] * factor);
+    }
+
+    private static void OnFollowToolTipChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is ToolTip tip && e.NewValue is true)
+        {
+            tip.Opened += (_, _) => ApplyToToolTip(tip);
+        }
+    }
+
+    /// <summary>ツールチップの文字の大きさ (倍率 × 既定の大きさ) と最大の幅。100% では、変えたものを元に戻す。</summary>
+    public static void ApplyToToolTip(ToolTip tip)
+    {
+        double factor = ScreenZoom.AppliedFor(tip.XamlRoot);
+        double fontSize = Application.Current.Resources.TryGetValue("ToolTipContentThemeFontSize", out object? size) && size is double s ? s : 12;
+        bool zoomed = (bool)tip.GetValue(ZoomedProperty);
+        ApplyFont(tip, factor, fontSize * factor);
+        if (factor != 1)
+        {
+            double maxWidth = Application.Current.Resources.TryGetValue("ToolTipMaxWidth", out object? width) && width is double w ? w : 320;
+            tip.MaxWidth = maxWidth * factor;
+        }
+        else if (zoomed)
+        {
+            tip.ClearValue(FrameworkElement.MaxWidthProperty);
+        }
+    }
+
     /// <summary>このクラスが文字の大きさを変えた項目の印 (100% に戻すときに、変えたものだけを元に戻す)。</summary>
     private static readonly DependencyProperty ZoomedProperty = DependencyProperty.RegisterAttached(
         "Zoomed", typeof(bool), typeof(PopupZoom), new PropertyMetadata(false));

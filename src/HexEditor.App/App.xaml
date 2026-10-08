@@ -21,6 +21,17 @@
             <Style BasedOn="{StaticResource DefaultMenuFlyoutPresenterStyle}" TargetType="MenuFlyoutPresenter">
                 <Setter Property="controls:PopupZoom.FollowMenu" Value="True" />
             </Style>
+            <!--  ツールバーのオーバーフロー (「…」) もメニューと同じく項目の文字の大きさを倍率に合わせる  -->
+            <Style BasedOn="{StaticResource DefaultCommandBarOverflowPresenterStyle}" TargetType="CommandBarOverflowPresenter">
+                <Setter Property="controls:PopupZoom.FollowMenu" Value="True" />
+            </Style>
+            <!--  コンボボックスのドロップダウンの項目とツールチップは、ポップアップに出るので文字の大きさを倍率に合わせる  -->
+            <Style BasedOn="{StaticResource DefaultComboBoxItemStyle}" TargetType="ComboBoxItem">
+                <Setter Property="controls:PopupZoom.FollowItem" Value="True" />
+            </Style>
+            <Style BasedOn="{StaticResource DefaultToolTipStyle}" TargetType="ToolTip">
+                <Setter Property="controls:PopupZoom.FollowToolTip" Value="True" />
+            </Style>
             <!--  フライアウトは中身を倍率どおりに拡大する (Controls/PopupZoom.cs。テンプレートは既定と同じで、全体を PopupZoomPanel に入れる)  -->
             <Style BasedOn="{StaticResource DefaultFlyoutPresenterStyle}" TargetType="FlyoutPresenter">
                 <Setter Property="Template">
