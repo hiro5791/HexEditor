@@ -146,22 +146,25 @@ public static class ViewOptions
         Attached.Add(doc, new object());
         var store = new ViewSettingsStore(settings, Documents);
         EditorState editor = doc.Editor;
+
+        // データソースの種類ごとの既定値 (VIEW-42 の仕様 2 の 3)。ファイルにはない (ディスクなどのデータソースが示す)。
+        System.Text.Json.Nodes.JsonObject? sourceDefaults = (doc.Document.Source as IViewDefaultsSource)?.ViewDefaults;
         if (doc.FilePath is { } path)
         {
-            (ViewSettings view, long? reference) = store.Load(path);
+            (ViewSettings view, long? reference) = store.Load(path, sourceDefaults);
             editor.ApplyView(view);
             editor.SetReferencePoint(reference);
         }
         else
         {
-            editor.ApplyView(store.Defaults);
+            editor.ApplyView(store.DefaultsFor(sourceDefaults));
         }
 
         editor.ViewChanged += (_, _) =>
         {
             if (doc.FilePath is { } p && !doc.Document.IsDisposed)
             {
-                store.Save(p, editor.View, editor.ReferencePoint);
+                store.Save(p, editor.View, editor.ReferencePoint, sourceDefaults);
             }
         };
     }
@@ -179,7 +182,7 @@ public static class ViewOptions
         }
 
         doc.Editor.ClearReferencePoint();
-        doc.Editor.ApplyView(store.Defaults);
+        doc.Editor.ApplyView(store.DefaultsFor((doc.Document.Source as IViewDefaultsSource)?.ViewDefaults));
     }
 
     private static double GetDouble(SettingsStore settings, string key, double defaultValue) =>
