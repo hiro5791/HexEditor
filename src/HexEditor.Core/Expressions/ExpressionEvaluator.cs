@@ -272,17 +272,22 @@ public sealed class ExpressionEvaluator
             throw new ExpressionException(ExpressionError.InvalidNumber, at);
         }
 
-        // 単位 K/M/G/T (1024 の累乗)。小数も受け付ける (例: 1.5G)。
+        // 単位 K/M/G/T (1024 の累乗)。小数も受け付ける (例: 1.5G)。K・M・G・T は 16 進の数字ではないので、接頭辞の付いた数値
+        // (0x10G、$10G、0b1K、0o7K) の後ろにも付けられる。接頭辞のない数値は、既定の基数の設定によらず常に 10 進とする
+        // (00-overview 6.1 の注。10G、1.5G)。
         long multiplier = 1;
+        bool decimalDigits = false;
         char last = char.ToUpperInvariant(token[^1]);
-        bool hexPrefixed = token.StartsWith("0x", StringComparison.OrdinalIgnoreCase) || token.StartsWith('$');
-        if (!hexPrefixed && last is 'K' or 'M' or 'G' or 'T')
+        if (last is 'K' or 'M' or 'G' or 'T')
         {
             multiplier = last switch { 'K' => 1L << 10, 'M' => 1L << 20, 'G' => 1L << 30, _ => 1L << 40 };
             token = token[..^1];
+            bool prefixed = token.StartsWith("0x", StringComparison.OrdinalIgnoreCase) || token.StartsWith('$')
+                || token.StartsWith("0b", StringComparison.OrdinalIgnoreCase) || token.StartsWith("0o", StringComparison.OrdinalIgnoreCase);
+            decimalDigits = !prefixed;
             if (token.Contains('.'))
             {
-                if (!decimal.TryParse(token.Replace("_", string.Empty), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal d))
+                if (prefixed || !decimal.TryParse(token.Replace("_", string.Empty), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal d))
                 {
                     throw new ExpressionException(ExpressionError.InvalidNumber, at);
                 }
@@ -292,7 +297,9 @@ public sealed class ExpressionEvaluator
             }
         }
 
-        long value = ParseInteger(token.Replace("_", string.Empty), at);
+        long value = decimalDigits
+            ? ParseInteger(token.Replace("_", string.Empty), at, forceRadix: 10)
+            : ParseInteger(token.Replace("_", string.Empty), at);
         try
         {
             return checked(value * multiplier);
@@ -303,9 +310,9 @@ public sealed class ExpressionEvaluator
         }
     }
 
-    private long ParseInteger(string token, int at)
+    private long ParseInteger(string token, int at, int? forceRadix = null)
     {
-        (string digits, int radix) = token switch
+        (string digits, int radix) = forceRadix is { } forced ? (token, forced) : token switch
         {
             _ when token.StartsWith("0x", StringComparison.OrdinalIgnoreCase) => (token[2..], 16),
             _ when token.StartsWith('$') => (token[1..], 16),

@@ -54,6 +54,34 @@ public sealed class ExpressionEvaluatorTests
     [InlineData("1.5G", 1610612736)]
     public void NumberFormats(string text, long expected) => Assert.Equal(expected, Eval(text));
 
+    /// <summary>
+    /// K/M/G/T で終わる接頭辞のない数値は、既定の基数の設定によらず常に 10 進 (00-overview 6.1 の注)。接頭辞の付いた数値は
+    /// その基数で読み、単位を掛ける (0x10G は 16 進)。
+    /// </summary>
+    [Theory]
+    [InlineData("10G", DefaultRadix.Hexadecimal, 10L << 30)]
+    [InlineData("10G", DefaultRadix.Decimal, 10L << 30)]
+    [InlineData("1.5G", DefaultRadix.Hexadecimal, 1610612736)]
+    [InlineData("16K", DefaultRadix.Hexadecimal, 16 * 1024)]
+    [InlineData("64M", DefaultRadix.Hexadecimal, 64L << 20)]
+    [InlineData("2T", DefaultRadix.Hexadecimal, 2L << 40)]
+    [InlineData("0x10G", DefaultRadix.Decimal, 16L << 30)]
+    [InlineData("0x10G", DefaultRadix.Hexadecimal, 16L << 30)]
+    [InlineData("$10K", DefaultRadix.Decimal, 16 * 1024)]
+    [InlineData("0b11K", DefaultRadix.Decimal, 3 * 1024)]
+    [InlineData("0x1_0K", DefaultRadix.Decimal, 16 * 1024)]
+    [InlineData("end-1K", DefaultRadix.Hexadecimal, 0x100 - 1024)]
+    public void SuffixedNumbersWithoutPrefixAreDecimal(string text, DefaultRadix radix, long expected) => Assert.Equal(expected, Eval(text, radix));
+
+    [Theory]
+    [InlineData("1AG")]
+    [InlineData("0x1.5G")]
+    public void SuffixedNumbersRejectOtherDigits(string text)
+    {
+        Assert.False(ExpressionEvaluator.TryEvaluate(text, new Context(), out _, out ExpressionException? error));
+        Assert.Equal(ExpressionError.InvalidNumber, error!.Error);
+    }
+
     [Fact]
     public void PlainNumbersFollowDefaultRadix()
     {
