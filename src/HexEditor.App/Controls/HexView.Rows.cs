@@ -75,7 +75,9 @@ public sealed partial class HexView
         bool ShowContinuation, bool HighContrast, NonPrintableStyle NonPrintable = NonPrintableStyle.Dot);
 
     /// <summary>1 フレームの中で全行に共通の条件 (変われば全行を作り直す)。</summary>
-    internal readonly record struct RowFrame(RowColumns Columns, ActiveColumn Active, int PaletteVersion, TextEncoding Encoding, RowStyle Style);
+    /// <remarks>Proportional: 等幅でないフォント。文字を 1 文字ずつセルの中央に描く (UI-29 の仕様 2)。</remarks>
+    internal readonly record struct RowFrame(RowColumns Columns, ActiveColumn Active, int PaletteVersion, TextEncoding Encoding, RowStyle Style,
+        bool Proportional = false);
 
     /// <summary>描いたセルの情報 (UI オートメーション・テストの描画モデルで返す)。</summary>
     internal readonly record struct CellPaint(string Text, Brush Foreground, Brush Background, string Layer, ChangeMark Underline);
@@ -105,6 +107,9 @@ public sealed partial class HexView
         private readonly List<Rectangle> _bars = [];
         private readonly List<Line> _lines = [];
         private readonly List<TextBlock> _glyphs = [];
+
+        // 別に描いた文字のセル (_glyphs と同じ並び): Hex 列か、セルの番号。選択などの層の文字の色を後から合わせる。
+        private readonly List<(bool Hex, int Cell)> _glyphCells = [];
 
         // 行の TextBlock の Run (Content.Inlines と同じ並び)。作り直さずに文字と色を書き換えて使い回す (Run を毎回作ると、XAML の
         // オブジェクトの追跡のために GC が増え、1 行のバイト数が多いとフレームが遅れる。VIEW-04 の仕様 3)。
@@ -316,8 +321,10 @@ public sealed partial class HexView
             Lines.Clear();
             Fill(frame, palette, cellWidth, rowHeight, measure);
             Highlight(frame, palette);
+            ColorGlyphs();
             DrawRowBackground(frame, palette, cellWidth, rowHeight);
             DrawUnderlines(frame, palette, cellWidth, rowHeight);
+            DrawMatchBorders(frame, palette, cellWidth, rowHeight);
             DrawDeletions(frame, palette, cellWidth, rowHeight);
             DrawAlternateLines(frame, palette, cellWidth, rowHeight);
             UpdateHatches(frame.Columns, palette, cellWidth, rowHeight);
@@ -498,7 +505,23 @@ public sealed partial class HexView
                 {
                     string cell = HexCellText(c);
                     Brush fore = HexForeground(c, palette);
-                    builder.Append(cell, fore);
+                    if (frame.Proportional)
+                    {
+                        // 等幅でないフォント: 1 文字ずつセルの中央に描き、行には空白を入れる (UI-29 の仕様 2)。
+                        for (int i = 0; i < cell.Length; i++)
+                        {
+                            if (cell[i] != ' ')
+                            {
+                                PlaceGlyph(cell[i].ToString(), (columns.HexIndex(c) + i) * cellWidth, cellWidth, fore, rowHeight, measure, hex: true, c);
+                            }
+                        }
+
+                        builder.AppendMasked(cell, fore);
+                    }
+                    else
+                    {
+                        builder.Append(cell, fore);
+                    }
                     hexPaint[c] = new CellPaint(cell, fore, palette.Background, "normal", _frame.Style.HighlightModified ? MarkAt(c) : ChangeMark.None);
                     int gap = c + 1 < b ? columns.HexIndex(c + 1) - columns.HexIndex(c) - RowFormat.HexCellChars : 0;
                     if (gap > 0)
@@ -528,8 +551,14 @@ public sealed partial class HexView
                         // 全角・結合文字などは別の TextBlock で、文字の範囲のセルに収めて描く (VIEW-22 の仕様 2・3・6)。
                         int cells = decoded.Wide ? 2 : 1;
                         cells = Math.Min(cells, Math.Max(1, b - c));
-                        glyphs[c] = PlaceGlyph(decoded.Text, columns.TextIndex(c) * cellWidth, cells * cellWidth, fore, rowHeight, measure);
+                        glyphs[c] = PlaceGlyph(decoded.Text, columns.TextIndex(c) * cellWidth, cells * cellWidth, fore, rowHeight, measure, hex: false, c);
                         builder.Append(" ", fore);
+                    }
+                    else if (frame.Proportional && cell.Length > 0 && cell != " ")
+                    {
+                        // 等幅でないフォント: セルの中央に描く (UI-29 の仕様 2)。
+                        glyphs[c] = PlaceGlyph(cell, columns.TextIndex(c) * cellWidth, cellWidth, fore, rowHeight, measure, hex: false, c);
+                        builder.AppendMasked(cell, fore);
                     }
                     else
                     {
@@ -551,7 +580,7 @@ public sealed partial class HexView
         private static readonly string[] SpaceStrings = [.. Enumerable.Range(0, 17).Select(n => new string(' ', n))];
 
         /// <summary>空白の文字列 (セルの間の空白。毎回作らない)。</summary>
-        private static string Spaces(int n) => n < SpaceStrings.Length ? SpaceStrings[n] : new string(' ', n);
+        internal static string Spaces(int n) => n < SpaceStrings.Length ? SpaceStrings[n] : new string(' ', n);
 
         private ChangeMark MarkAt(int c) => KindAt(c) is CellKind.Modified ? _marks[c] : ChangeMark.None;
 
@@ -560,7 +589,7 @@ public sealed partial class HexView
             cell.Wide || cell.Text.Length != 1 || cell.Text[0] is >= '̀' and <= 'ͯ' || cell.Text[0] >= '԰';
 
         private (string, double, double, double) PlaceGlyph(string text, double left, double width, Brush fore, double rowHeight,
-            Func<string, double> measure)
+            Func<string, double> measure, bool hex, int cellIndex)
         {
             TextBlock glyph;
             if (_glyphsUsed < _glyphs.Count)
@@ -575,9 +604,11 @@ public sealed partial class HexView
                 glyph.LineHeight = Content.LineHeight;
                 glyph.IsHitTestVisible = false;
                 _glyphs.Add(glyph);
+                _glyphCells.Add(default);
                 Container.Children.Add(glyph);
             }
 
+            _glyphCells[_glyphsUsed] = (hex, cellIndex);
             _glyphsUsed++;
             glyph.Visibility = Visibility.Visible;
             glyph.Text = text;
@@ -885,6 +916,80 @@ public sealed partial class HexView
         }
 
         /// <summary>
+        /// 別に描いた文字の色を、層 (選択範囲・検索の一致など) を重ねた後の文字の色に合わせる (行の TextBlock の文字は TextHighlighter が
+        /// 色を変えるが、別の TextBlock の文字には効かないため)。
+        /// </summary>
+        private void ColorGlyphs()
+        {
+            for (int i = 0; i < _glyphsUsed; i++)
+            {
+                (bool hex, int c) = _glyphCells[i];
+                CellPaint[] paint = hex ? HexPaint : TextPaint;
+                if (c < paint.Length && paint[c].Foreground is { } fore && !ReferenceEquals(_glyphs[i].Foreground, fore))
+                {
+                    _glyphs[i].Foreground = fore;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 検索の一致の枠線 (UI-28 の仕様 7: 色だけで伝えない。00-overview.md 11.5)。一致の続く範囲ごとに、Hex 列とテキスト列の
+        /// それぞれを 1 px の枠で囲む (行をまたぐ一致は行ごとに囲む)。ハイコントラストでは文字の色で描く。
+        /// </summary>
+        private void DrawMatchBorders(in RowFrame frame, Palette palette, double cellWidth, double rowHeight)
+        {
+            RowColumns columns = frame.Columns;
+            int count = Count;
+            int first = _matched.AsSpan(0, count).IndexOf(true);
+            if (first < 0)
+            {
+                return;
+            }
+
+            Brush brush = palette.HighContrast ? palette.Text : palette.MatchText;
+            for (int c = first; c < count; c++)
+            {
+                if (!_matched[c])
+                {
+                    continue;
+                }
+
+                int end = c;
+                while (end + 1 < count && _matched[end + 1])
+                {
+                    end++;
+                }
+
+                if (columns.ShowHex)
+                {
+                    double left = columns.HexIndex(c) * cellWidth;
+                    double right = (columns.HexIndex(end) + RowFormat.HexCellChars) * cellWidth;
+                    Box(left, right, rowHeight, brush);
+                    Lines.Add(("matchBorder", left, 0, right, rowHeight));
+                }
+
+                if (columns.ShowText)
+                {
+                    double left = columns.TextIndex(c) * cellWidth;
+                    double right = columns.TextIndex(end + 1) * cellWidth;
+                    Box(left, right, rowHeight, brush);
+                    Lines.Add(("matchBorderText", left, 0, right, rowHeight));
+                }
+
+                c = end;
+            }
+        }
+
+        /// <summary>[left, right) と行の高さの範囲を 1 px の枠で囲む。</summary>
+        private void Box(double left, double right, double rowHeight, Brush brush)
+        {
+            PlaceBar(left, 0, right - left, 1, brush);
+            PlaceBar(left, rowHeight - 1, right - left, 1, brush);
+            PlaceBar(left, 0, 1, rowHeight, brush);
+            PlaceBar(right - 1, 0, 1, rowHeight, brush);
+        }
+
+        /// <summary>
         /// 削除された位置 (VIEW-15 の仕様 5): 詰まった境界の左側のセルの右端に縦の線 (幅 2 px) を引く。色は「変更」の色 (ハイコントラストでは
         /// 文字の色)。Hex 列とテキスト列の両方に引く。
         /// </summary>
@@ -1187,6 +1292,20 @@ public sealed partial class HexView
 
             _used++;
             _text.Clear();
+        }
+
+        /// <summary>
+        /// 行には空白を描き、行の文字列 (UI オートメーション) には本当の文字を入れる (文字を別の TextBlock に描く場合。UI-29 の仕様 2)。
+        /// </summary>
+        public void AppendMasked(string text, Brush brush)
+        {
+            if (_text.Length == 0 && !ReferenceEquals(brush, _brush))
+            {
+                _brush = brush;
+            }
+
+            _text.Append(RowVisual.Spaces(text.Length));
+            _line.Append(text);
         }
 
         public void Append(string text, Brush brush)

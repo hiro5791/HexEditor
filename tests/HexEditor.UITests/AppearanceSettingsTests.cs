@@ -119,4 +119,28 @@ public sealed class AppearanceSettingsTests
         Assert.Equal(1.5, state["previewLineHeight"]!.GetValue<double>());
         Assert.StartsWith("Consolas", state["previewFont"]!.GetValue<string>());
     });
+
+    [Fact]
+    public Task Proportional_font_draws_each_character_centered_in_its_cell() => UiTestContext.RunAsync(async ctx =>
+    {
+        // UI-29 の仕様 2: 等幅でないフォントは、文字ごとに同じ幅のセルに中央揃えで描く。
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = LightProfile(ctx), Files = [ctx.TestData("TD-BYTES-256")] });
+        JsonObject render = await app.RenderAsync();
+        Assert.False(render["proportional"]!.GetValue<bool>());
+        Assert.True((await app.SendAsync("settingSet", new JsonObject { ["key"] = "view.font.family", ["value"] = "Segoe UI" }))["valid"]!.GetValue<bool>());
+        await app.WaitUntilAsync(async () => (await app.RenderAsync())["proportional"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the proportional font");
+        render = await app.RenderAsync();
+        double cell = render["cellWidth"]!.GetValue<double>();
+
+        // 幅の違う文字 (W と i) が、どちらもセルの左端からセル幅の範囲に描かれる。行の文字列 (UI オートメーション) は変わらない。
+        foreach (long offset in new[] { 0x57L, 0x69L })
+        {
+            JsonObject c = ViewOps.CellOf(render, offset)!;
+            Assert.Equal(((char)offset).ToString(), c["glyph"]!.GetValue<string>());
+            Assert.Equal(c["textLeft"]!.GetValue<double>(), c["glyphLeft"]!.GetValue<double>(), 2);
+            Assert.Equal(cell, c["glyphWidth"]!.GetValue<double>(), 2);
+        }
+
+        Assert.Contains("57", ViewOps.Row(render, 0x50)!["line"]!.GetValue<string>(), StringComparison.Ordinal);
+    });
 }

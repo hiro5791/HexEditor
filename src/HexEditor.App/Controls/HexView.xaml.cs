@@ -55,6 +55,12 @@ public sealed partial class HexView : UserControl
     private double _fontSize = DefaultFontSize;
     private int _characterSpacing;
     private double _cellWidth = 8;
+
+    /// <summary>
+    /// 等幅でないフォント (UI-29 の仕様 2)。文字は 1 文字ずつセルの中央に描き、行の TextBlock には空白だけを入れる (背景と下線の位置を
+    /// セルに合わせるため、字間は空白の送り幅がセル幅になるように決める)。
+    /// </summary>
+    private bool _proportional;
     private double _rowHeight = 16;
     private double _rasterizationScale = 1;
 
@@ -331,12 +337,29 @@ public sealed partial class HexView : UserControl
         };
         probe.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
         double advance = probe.DesiredSize.Width / 64;
-        double cell = Math.Ceiling(advance * scale) / scale;
+        double rowTextHeight = probe.DesiredSize.Height;
+
+        // 等幅でないフォント (UI-29 の仕様 2): セル幅は表示する ASCII の文字のいちばん広い送り幅にし、字間は空白の送り幅がセル幅に
+        // なるように決める (行の TextBlock には空白だけを入れ、文字は 1 文字ずつセルの中央に描く)。
+        double spaceAdvance = Advance(probe, " ");
+        _proportional = Math.Abs(Advance(probe, "i") - advance) > advance * 0.01 || Math.Abs(Advance(probe, "W") - advance) > advance * 0.01
+            || Math.Abs(spaceAdvance - advance) > advance * 0.01;
+        double basis = advance;
+        if (_proportional)
+        {
+            for (char ch = '!'; ch <= '~'; ch++)
+            {
+                basis = Math.Max(basis, Advance(probe, ch.ToString()));
+            }
+        }
+
+        double cell = Math.Ceiling(basis * scale) / scale;
 
         // 切り上げた分は字間で埋める (CharacterSpacing は 1/1000 em 単位)。
-        _characterSpacing = (int)Math.Round((cell - advance) / _fontSize * 1000);
-        _cellWidth = advance + _characterSpacing * _fontSize / 1000;
-        _rowHeight = Math.Ceiling(probe.DesiredSize.Height * _lineSpacing * scale) / scale;
+        double spaced = _proportional ? spaceAdvance : advance;
+        _characterSpacing = (int)Math.Round((cell - spaced) / _fontSize * 1000);
+        _cellWidth = spaced + _characterSpacing * _fontSize / 1000;
+        _rowHeight = Math.Ceiling(rowTextHeight * _lineSpacing * scale) / scale;
         CompositionText.FontFamily = _font;
         CompositionText.FontSize = _fontSize;
         CompositionText.CharacterSpacing = _characterSpacing;
@@ -349,6 +372,22 @@ public sealed partial class HexView : UserControl
         ApplyRulerFont();
         InvalidateRows();
         UpdateColumnsLayout();
+    }
+
+    /// <summary>
+    /// 1 文字の送り幅 (16 個並べた幅から求める)。空白は行末の空白が幅に入らないことがあるため、文字で挟んで測る。
+    /// </summary>
+    private static double Advance(TextBlock probe, string ch)
+    {
+        static double Width(TextBlock probe, string text)
+        {
+            probe.Text = text;
+            probe.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            return probe.DesiredSize.Width;
+        }
+
+        string repeated = string.Concat(Enumerable.Repeat(ch, 16));
+        return (Width(probe, "0" + repeated + "0") - Width(probe, "00")) / 16;
     }
 
     /// <summary>Windows の「文字サイズを大きくする」の倍率 (VIEW-41 の仕様 4)。</summary>
@@ -561,7 +600,7 @@ public sealed partial class HexView : UserControl
         long selEnd = selStart + _editor.SelectionLength;
         var style = new RowStyle(view.LowercaseHex, view.DimZeros, view.AlternateColumns, view.AlternateTextColumns, view.HighlightModified,
             view.ShowContinuation, _palette.HighContrast, NonPrintableStyle);
-        var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion, _editor.TextEncoding, style);
+        var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion, _editor.TextEncoding, style, _proportional);
         long cursorRow = view.HighlightCurrentRow ? layout.RowOf(_editor.Cursor) : -1;
         int rebuilt = 0;
         int loadingCells = 0;

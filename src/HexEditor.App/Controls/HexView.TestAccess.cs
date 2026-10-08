@@ -56,6 +56,7 @@ public sealed partial class HexView
         result["rowShift"] = layout.RowShift;
         result["offsetDigits"] = _rows.FirstOrDefault(r => r.Visible)?.OffsetDigits ?? _digits;
         result["cellWidth"] = _cellWidth;
+        result["proportional"] = _proportional;
         result["rowHeight"] = _rowHeight;
         result["focused"] = FocusState != FocusState.Unfocused;
         AddViewInfo(result);

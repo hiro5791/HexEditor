@@ -151,6 +151,13 @@ public sealed class FindBarTests
         JsonObject row0 = render["rows"]!.AsArray().Select(r => r!.AsObject()).Single(r => r["offsetText"]!.GetValue<string>().EndsWith("00000000", StringComparison.Ordinal));
         Assert.All(row0["cells"]!.AsArray().Take(4), c => Assert.True(c!["matched"]!.GetValue<bool>()));
         Assert.False(row0["cells"]![4]!["matched"]!.GetValue<bool>());
+
+        // 色だけで伝えない (UI-28 の仕様 7): 一致は Hex 列とテキスト列の両方で枠線でも囲む。
+        string[] borders = [.. row0["lines"]!.AsArray().Select(l => l!["kind"]!.GetValue<string>())];
+        Assert.Contains("matchBorder", borders);
+        Assert.Contains("matchBorderText", borders);
+        JsonObject border = row0["lines"]!.AsArray().Select(l => l!.AsObject()).First(l => l["kind"]!.GetValue<string>() == "matchBorder");
+        Assert.Equal(row0["cells"]![0]!["hexLeft"]!.GetValue<double>(), border["x1"]!.GetValue<double>(), 2);
     });
 
     [Fact]
