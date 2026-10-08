@@ -399,7 +399,10 @@ public sealed class SessionAndRecentTests
         await app.WaitUntilAsync(async () => (await app.StateAsync())["activeOperations"]!.GetValue<int>() > 0, TimeSpan.FromSeconds(10), "the save");
         await app.KeyAsync("W", ctrl: true);
         AutomationElement dialog = await app.WaitForAsync("CloseDialog");
-        Assert.Contains("is running", AppSession.AllText(dialog));
+
+        // ダイアログの中身は表示の後に UI オートメーションに現れる (遅い CI のランナーでは、最初に読むと題名だけのことがある)。
+        await app.WaitUntilAsync(() => Task.FromResult(AppSession.AllText(dialog).Contains("is running", StringComparison.Ordinal)),
+            TimeSpan.FromSeconds(5), $"the running save in the dialog ({AppSession.AllText(dialog)})");
         IReadOnlyList<string> buttons = UiHelpers.DialogButtons(dialog);
         Assert.Contains("Close after saving", buttons);
         Assert.Contains("Stop and close", buttons);
@@ -497,7 +500,8 @@ public sealed class SessionAndRecentTests
         }
 
         await EditingTests.SelectTabAsync(app, 2);
-        await app.ResizeAsync(1100, 760);
+        (int width, int height) = await app.FitToScreenAsync(1100, 760);
+        await app.ResizeAsync(width, height);
         string bounds = (await FilesStateAsync(app))["windowBounds"]!.GetValue<string>();
         await ExitAsync(app);
 

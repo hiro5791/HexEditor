@@ -307,10 +307,13 @@ public sealed class WindowManagementTests
             await SendToAsync(app, 1, "uiOpen", new JsonObject { ["path"] = f });
         }
 
+        // 復元したウィンドウは画面より大きくできない (CI のランナーの画面は小さい) ので、画面に収まる大きさにする。
+        (int width0, int height0) = await app.FitToScreenAsync(1280, 800);
+        (int width1, int height1) = await app.FitToScreenAsync(1000, 700);
         await SendToAsync(app, 0, "moveWindow", new JsonObject { ["x"] = 0, ["y"] = 0 });
-        await SendToAsync(app, 0, "resizePhysical", new JsonObject { ["width"] = 1280, ["height"] = 800 });
+        await SendToAsync(app, 0, "resizePhysical", new JsonObject { ["width"] = width0, ["height"] = height0 });
         await SendToAsync(app, 1, "moveWindow", new JsonObject { ["x"] = 600, ["y"] = 200 });
-        await SendToAsync(app, 1, "resizePhysical", new JsonObject { ["width"] = 1000, ["height"] = 700 });
+        await SendToAsync(app, 1, "resizePhysical", new JsonObject { ["width"] = width1, ["height"] = height1 });
         for (int n = 1; n <= 10; n++)
         {
             (int window, int index) = n <= 6 ? (0, n - 1) : (1, n - 7);

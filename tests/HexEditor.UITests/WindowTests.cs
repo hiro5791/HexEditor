@@ -58,17 +58,32 @@ public sealed partial class WindowTests
         // ダブルクリックでの最大化を Windows に任せる根拠である判定を確かめる: ウィンドウへの WM_NCHITTEST が
         // キャプション (HTCAPTION) を返し、その点が入力を通す領域 (InputNonClientPointerSource の Passthrough) に
         // 含まれない (メッセージを送るだけで、入力もフォーカスも動かさない)。
+        // 既定のウィンドウの大きさは画面で変わり (CI のランナーの画面は 1024 px 幅)、狭いとタイトルの右に余白がない。幅 1000 px にそろえる。
         AppSession app = await ctx.StartAsync();
+        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+        await app.ResizeAsync((int)(1000 * scale), (int)(700 * scale));
+        JsonObject state = await app.StateAsync();
         JsonObject title = await app.ElementAsync("WindowTitle");
         JsonObject menu = await app.ElementAsync("MainMenu");
-        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
 
-        // 1. タイトルの文字列より右の余白 (メニューバー・操作ボタンに重ならない点)。
-        double x = title["right"]!.GetValue<double>() + 40;
+        // 1. タイトルの文字列より右の余白 (メニューバー・右側の入力を通す要素・操作ボタンに重ならない点)。
+        // 余白の幅はウィンドウの幅で変わる (CI のランナーの画面は小さく、既定のウィンドウも狭い) ので、タイトルの右端と、
+        // その右にある次の入力を通す領域 (なければウィンドウ操作ボタンの左端) の中央を使う。
+        JsonObject regions = await app.SendAsync("nonClientRegions");
+        int buttonsLeft = regions["caption"]!.AsArray().Max(r => r!["right"]!.GetValue<int>()) - state["titleBarRightInset"]!.GetValue<int>();
         double y = (title["top"]!.GetValue<double>() + title["bottom"]!.GetValue<double>()) / 2;
+        double titleRight = title["right"]!.GetValue<double>() * scale;
+        double next = regions["passthrough"]!.AsArray().Concat(regions["caption"]!.AsArray())
+            .Where(r => r!["top"]!.GetValue<int>() <= y * scale && y * scale < r["bottom"]!.GetValue<int>())
+            .SelectMany(r => new[] { r!["left"]!.GetValue<int>(), r["right"]!.GetValue<int>() })
+            .Append(buttonsLeft)
+            .Where(edge => edge > titleRight + 1)
+            .DefaultIfEmpty((int)titleRight)
+            .Min();
+        Assert.True(next - titleRight >= 8, $"no blank title area right of the title ({titleRight}..{next})");
+        double x = (titleRight + next) / 2 / scale;
         Assert.True(x > menu["right"]!.GetValue<double>(), "the point is on the menu bar");
         Assert.Equal(WindowHitTest.Caption, WindowHitTest.At(app.Hwnd, x, y, scale));
-        JsonObject regions = await app.SendAsync("nonClientRegions");
         Assert.False(InAny(regions["passthrough"]!.AsArray(), x * scale, y * scale), "the blank title area is a passthrough region");
         Assert.True(InAny(regions["caption"]!.AsArray(), x * scale, y * scale), "the blank title area is not a caption region");
 

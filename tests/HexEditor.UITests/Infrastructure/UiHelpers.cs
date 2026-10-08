@@ -41,6 +41,16 @@ public static class UiHelpers
         return app.SendAsync("drop", request);
     }
 
+    /// <summary>
+    /// 画面に収まる大きさ (物理ピクセル)。ウィンドウを作り直したとき (セッションの復元など)、Windows は画面より大きいウィンドウを
+    /// 画面の大きさ (と枠) に縮める。CI のランナーの画面は小さい (1024 px 幅) ので、復元を確かめるテストはこの大きさを使う。
+    /// </summary>
+    public static async Task<(int Width, int Height)> FitToScreenAsync(this AppSession app, int width, int height)
+    {
+        JsonObject shell = await app.SendAsync("shellState");
+        return (Math.Min(width, shell["monitorWidth"]!.GetValue<int>() - 40), Math.Min(height, shell["monitorHeight"]!.GetValue<int>() - 40));
+    }
+
     /// <summary>ウィンドウの大きさを物理ピクセルで変える。</summary>
     public static async Task ResizeAsync(this AppSession app, int width, int height)
     {
@@ -91,14 +101,20 @@ public static class UiHelpers
     public static Task WaitForTabsAsync(this AppSession app, int count) =>
         app.WaitUntilAsync(async () => (await app.TabNamesAsync()).Count == count, TimeSpan.FromSeconds(30), $"{count} tabs");
 
-    /// <summary>ダイアログ (ContentDialog) のボタンを、表示名で押す (UI オートメーションの Invoke)。</summary>
-    public static async Task InvokeDialogButtonAsync(this AppSession app, string name)
+    /// <summary>
+    /// ダイアログ (ContentDialog) のボタンを、表示名で押す (UI オートメーションの Invoke)。<paramref name="idle"/> が false なら
+    /// 押した後の処理の完了を待たない (アプリが終わるボタン。待つとアプリが先に終わり、命令の通り道が閉じる)。
+    /// </summary>
+    public static async Task InvokeDialogButtonAsync(this AppSession app, string name, bool idle = true)
     {
         FlaUI.Core.AutomationElements.AutomationElement? button = null;
         await app.WaitUntilAsync(() => Task.FromResult((button = app.Window.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.Button))
             .FirstOrDefault(b => AppSession.NameOf(b) == name)) is not null), TimeSpan.FromSeconds(15), $"the button '{name}'");
         button!.Patterns.Invoke.Pattern.Invoke();
-        await app.IdleAsync();
+        if (idle)
+        {
+            await app.IdleAsync();
+        }
     }
 
     /// <summary>ダイアログ (AutomationId で指定) が出るまで待ち、その要素を返す。</summary>

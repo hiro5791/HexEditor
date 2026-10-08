@@ -100,17 +100,46 @@ public sealed class DataSourceHookTests
         double worst = 0;
         var total = Stopwatch.StartNew();
         var slow = new System.Collections.Concurrent.ConcurrentQueue<string>();
+
+        // テストのプロセス (と PC 全体) が止まった時間も記録する。混んだ CI のランナーでは仮想マシンごと数百 ms 止まることがあり、
+        // その間の往復の遅れはアプリの UI スレッドのせいではないので除く (止まった時間を差し引く)。
+        var pauses = new System.Collections.Concurrent.ConcurrentQueue<(long From, long To)>();
+        var pauseWatch = new Thread(() =>
+        {
+            long last = total.ElapsedMilliseconds;
+            while (!stop.IsCancellationRequested)
+            {
+                Thread.Sleep(5);
+                long now = total.ElapsedMilliseconds;
+                if (now - last > 30)
+                {
+                    pauses.Enqueue((last, now));
+                }
+
+                last = now;
+            }
+        }) { IsBackground = true, Priority = ThreadPriority.AboveNormal };
+        pauseWatch.Start();
+        double Paused(long from, long to) => pauses.Sum(p => Math.Max(0, Math.Min(to, p.To) - Math.Max(from, p.From)));
+
         Task watch = Task.Run(async () =>
         {
             while (!stop.IsCancellationRequested)
             {
+                long from = total.ElapsedMilliseconds;
                 var sw = Stopwatch.StartNew();
                 await monitor.SendAsync("ping");
-                worst = Math.Max(worst, sw.Elapsed.TotalMilliseconds);
-                if (sw.Elapsed.TotalMilliseconds > 50)
+                double blocked = sw.Elapsed.TotalMilliseconds;
+                if (blocked > 50)
                 {
-                    slow.Enqueue($"{total.ElapsedMilliseconds - sw.ElapsedMilliseconds}ms: {sw.ElapsedMilliseconds}ms");
+                    // 止まった時間の記録が追いつくのを待ってから差し引く。
+                    await Task.Delay(40);
+                    double paused = Paused(from, from + (long)blocked);
+                    slow.Enqueue($"{from}ms: {blocked:F0}ms (paused {paused:F0}ms)");
+                    blocked -= paused;
                 }
+
+                worst = Math.Max(worst, blocked);
                 await Task.Delay(10);
             }
         });

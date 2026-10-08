@@ -76,8 +76,10 @@ public sealed class PrivacyTests
             CheckConnections("save and settings");
 
             // タブを閉じて開き直す。
+            // 1 つずつ閉じ終わるのを待つ (閉じる前に次のタブを選ぶと、遅いランナーでは別のタブを閉じることがある)。
             await app.SendAsync("selectTab", new JsonObject { ["index"] = 2 });
             await app.KeyAsync("W", ctrl: true);
+            await app.WaitForTabsAsync(2);
             await app.SendAsync("selectTab", new JsonObject { ["index"] = 1 });
             await app.KeyAsync("W", ctrl: true);
             await app.WaitForTabsAsync(1);

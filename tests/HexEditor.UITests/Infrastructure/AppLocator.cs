@@ -16,6 +16,9 @@ public static class AppLocator
 
     public static string RepositoryRoot { get; } = FindRepositoryRoot();
 
+    /// <summary>HEXEDITOR_APP_EXE で配布形態のビルド (CI の ui-distro) を指定した。false なら開発中のビルド (dotnet build の出力)。</summary>
+    public static bool IsConfigured => Environment.GetEnvironmentVariable("HEXEDITOR_APP_EXE") is { Length: > 0 };
+
     private static string Find()
     {
         if (Environment.GetEnvironmentVariable("HEXEDITOR_APP_EXE") is { Length: > 0 } configured)

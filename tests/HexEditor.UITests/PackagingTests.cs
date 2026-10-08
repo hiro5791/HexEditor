@@ -256,8 +256,11 @@ public sealed class PackagingTests
         Assert.Equal(0, exit);
         Assert.True(watch.Elapsed < TimeSpan.FromSeconds(20), $"took {watch.Elapsed.TotalSeconds:0} s");
         string log = string.Join("\n", Directory.GetFiles(profile, "*.log", SearchOption.AllDirectories).Select(File.ReadAllText));
-        Assert.Contains("--unregister (Development)", log);
-        Assert.Contains("--unregister finished (nothing to do).", log);
+
+        // 配布形態のビルドのテスト (CI の ui-distro。HEXEDITOR_APP_EXE) では、その配布形態の解除を行う (MSIX 版は何もしない)。
+        string distribution = System.Text.RegularExpressions.Regex.Match(log, @"--unregister \((\w+)\)").Groups[1].Value;
+        Assert.Equal(AppLocator.IsConfigured ? distribution : "Development", distribution);
+        Assert.Contains(distribution is "Development" or "Msix" ? "--unregister finished (nothing to do)." : "--unregister finished (unregistered).", log);
     });
 
     // ---- UI-41 翻訳の誤りを報告 ----

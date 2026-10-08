@@ -64,7 +64,7 @@ public sealed class WindowShellTests
         await app.SendAsync("noticeAction", new JsonObject { ["label"] = "Restart now" });
         await app.WaitForAsync("Close_Item");
         Assert.Equal(2, app.Window.FindAllDescendants(cf => cf.ByAutomationId("Close_Item")).Length);
-        await app.InvokeDialogButtonAsync("Close without saving");
+        await app.InvokeDialogButtonAsync("Close without saving", idle: false);
         await app.WaitForExitAsync(TimeSpan.FromSeconds(30));
 
         Process? restarted = null;
@@ -204,7 +204,14 @@ public sealed class WindowShellTests
     public Task Panel_dropped_outside_the_window_floats_and_other_windows_reject_it() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
-        await app.SendAsync("moveWindow", new JsonObject { ["x"] = 0, ["y"] = 0, ["width"] = 1100, ["height"] = 800 });
+        // ウィンドウの右に、浮動パネルが画面に収まる余白を残す (CI のランナーの画面は 1024 px 幅。浮動パネルは画面の中に置き直される)。
+        JsonObject screen = await app.SendAsync("shellState");
+        int monitorRight = screen["monitorX"]!.GetValue<int>() + screen["monitorWidth"]!.GetValue<int>();
+        await app.SendAsync("moveWindow", new JsonObject { ["x"] = 0, ["y"] = 0, ["width"] = Math.Min(1100, monitorRight - 400), ["height"] = 800 });
+        JsonObject placed = await app.SendAsync("shellState");
+        int windowRight = placed["x"]!.GetValue<int>() + placed["width"]!.GetValue<int>();
+        int dropX = Math.Min(windowRight + 200, monitorRight - 300);
+        Assert.True(dropX > windowRight, $"the screen is too narrow ({monitorRight} px)");
         await app.SendAsync("panelShow", new JsonObject { ["id"] = "inspector" });
         Assert.Equal("right", (await app.SendAsync("panels"))["panels"]!["inspector"]!["location"]!.GetValue<string>());
 
@@ -213,10 +220,10 @@ public sealed class WindowShellTests
         Assert.Equal("right", inside["panels"]!["inspector"]!["location"]!.GetValue<string>());
 
         // ウィンドウの外で離すと、その位置の浮動パネルになる。
-        JsonObject outside = await app.SendAsync("panelDragOutside", new JsonObject { ["id"] = "inspector", ["x"] = 1300, ["y"] = 200 });
+        JsonObject outside = await app.SendAsync("panelDragOutside", new JsonObject { ["id"] = "inspector", ["x"] = dropX, ["y"] = 200 });
         Assert.Equal("floating", outside["panels"]!["inspector"]!["location"]!.GetValue<string>());
         JsonObject floating = (await app.SendAsync("floatingPanels"))["panels"]![0]!.AsObject();
-        Assert.InRange(floating["x"]!.GetValue<int>(), 1100, 1300);
+        Assert.InRange(floating["x"]!.GetValue<int>(), windowRight - 100, dropX);
 
         // 元に戻して、別のウィンドウの下の場所には落とせない (同じウィンドウの下には落とせる)。
         await app.SendAsync("panelMove", new JsonObject { ["id"] = "inspector", ["dock"] = "right" });
