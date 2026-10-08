@@ -35,19 +35,45 @@ public sealed class UiTestContext : IAsyncDisposable
             ? dir
             : Path.Combine(AppLocator.RepositoryRoot, "TestResults", "ui-artifacts");
 
-    /// <summary>テストの本体を実行する。失敗したら成果物を保存してから例外を投げ直す。</summary>
-    public static async Task RunAsync(Func<UiTestContext, Task> body, [CallerMemberName] string name = "")
+    /// <summary>1 件のテストの上限の既定値 (<see cref="UiTest.TimeoutScale"/> を掛ける)。</summary>
+    public static readonly TimeSpan DefaultLimit = TimeSpan.FromMinutes(10);
+
+    /// <summary>
+    /// テストの本体を実行する。失敗したら成果物を保存してから例外を投げ直す。<paramref name="limit"/> (既定 10 分。待ちの倍率を掛ける) を
+    /// 過ぎても終わらなければ、成果物を保存し、起動したアプリを止めて失敗にする (1 件が止まったまま CI のジョブの時間を使い切らない)。
+    /// </summary>
+    public static async Task RunAsync(Func<UiTestContext, Task> body, TimeSpan? limit = null, [CallerMemberName] string name = "")
     {
         await using var context = new UiTestContext(name);
+        TimeSpan hard = UiTest.Scaled(limit ?? DefaultLimit);
+        Task run = Task.Run(() => body(context));
+        if (await Task.WhenAny(run, Task.Delay(hard)) != run)
+        {
+            var timeout = new TimeoutException(
+                $"The test did not finish within {hard.TotalMinutes:0.#} min (the hard limit of the UI test harness); the apps it started were stopped.");
+            await Task.WhenAny(context.SaveArtifactsAsync(timeout), Task.Delay(TimeSpan.FromMinutes(1)));
+            context.KillAll();
+            throw timeout;
+        }
+
         try
         {
-            await body(context);
+            await run;
             context.AssertNoForegroundTheft();
         }
         catch (Exception ex)
         {
             await context.SaveArtifactsAsync(ex);
             throw;
+        }
+    }
+
+    /// <summary>起動したアプリをすべて強制終了する (止まったテストの後始末)。</summary>
+    private void KillAll()
+    {
+        foreach (AppSession session in _sessions.ToList())
+        {
+            session.Kill();
         }
     }
 

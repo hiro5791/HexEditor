@@ -276,7 +276,7 @@ public sealed class SelectionAndInputTests
         Assert.Equal(0x10, (await app.BytesAsync(0x10, 1))[0]);
         Assert.Equal(0, (await app.DocumentAsync())["undoCount"]!.GetValue<int>());
         Assert.Contains(await NoticesAsync(app), n => n.Contains("“ß”", StringComparison.Ordinal) && n.Contains("932", StringComparison.Ordinal));
-    }, $"{nameof(Unencodable_character_writes_nothing)}_{insertMode}");
+    }, name: $"{nameof(Unencodable_character_writes_nothing)}_{insertMode}");
 
     [Fact(Skip = "フランス語のキーボード配列への切り替えとデッドキーの入力が必要 (システム全体のキーボード配列とキーボード入力を変えるため、作業中の PC では行わない)")]
     [Trait(UiTest.TC, "TC-EDIT-12-04")]

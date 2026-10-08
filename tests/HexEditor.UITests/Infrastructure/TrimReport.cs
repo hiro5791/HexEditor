@@ -28,12 +28,7 @@ public static class TrimReport
         {
             if (!Cache.TryGetValue(language, out IReadOnlyList<(string, Regex)>? keys))
             {
-                // 疑似翻訳の .resw はアプリのビルドで作る (build/PseudoLocalize.targets)。アプリをビルドしない実行 (CI の ui-distro は
-                // 配布形態のビルドを入れて UI テストだけをビルドする) では、英語から同じ規則でここで作る。
-                Dictionary<string, string> values = language.StartsWith("qps-", StringComparison.Ordinal) && Folder(language) != language
-                    ? Load("en").Where(kv => !kv.Key.EndsWith(".AccessKey", StringComparison.Ordinal)).ToDictionary(kv => kv.Key, kv => Pseudo(kv.Value))
-                    : Load(Folder(language));
-                keys = [.. values.Select(kv => (kv.Key, ToPattern(kv.Value)))];
+                keys = [.. Values(language).Select(kv => (kv.Key, ToPattern(kv.Value)))];
                 Cache[language] = keys;
             }
 
@@ -43,7 +38,16 @@ public static class TrimReport
 
     /// <summary>キーの値 (表示言語と英語) に一致する照合 (ボタンを表示名で探すため)。</summary>
     public static IReadOnlyList<Regex> ValuePatterns(string key, string culture) =>
-        [.. new[] { Folder(culture), "en" }.Distinct().Select(Load).Where(d => d.ContainsKey(key)).Select(d => ToPattern(d[key]))];
+        [.. new[] { culture, "en" }.Distinct().Select(Values).Where(d => d.ContainsKey(key)).Select(d => ToPattern(d[key]))];
+
+    /// <summary>
+    /// 言語の .resw の値。疑似翻訳の .resw はアプリのビルドで作る (build/PseudoLocalize.targets) ので、アプリをビルドしない実行
+    /// (CI の ui-distro は配布形態のビルドを入れて UI テストだけをビルドする) では、英語から同じ規則でここで作る。
+    /// </summary>
+    private static Dictionary<string, string> Values(string language) =>
+        language.StartsWith("qps-", StringComparison.Ordinal) && Folder(language) != language
+            ? Load("en").Where(kv => !kv.Key.EndsWith(".AccessKey", StringComparison.Ordinal)).ToDictionary(kv => kv.Key, kv => Pseudo(kv.Value))
+            : Load(Folder(language));
 
     /// <summary>textCheck の結果を「画面 大きさ: 種類 "文字列" (キー) 場所」の行にする。</summary>
     public static IEnumerable<string> Describe(JsonObject check, string screen, string size, IReadOnlyList<(string Key, Regex Pattern)> keys)

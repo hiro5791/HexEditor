@@ -227,7 +227,7 @@ public sealed class EditingTests
         Assert.Equal(0x10, (await app.BytesAsync(0x10, 1))[0]);
         Assert.Equal(0x10, doc["cursor"]!.GetValue<long>());
         Assert.Equal(0, doc["undoCount"]!.GetValue<int>());
-    }, $"{nameof(Non_hex_keys_do_not_change_data)}_{insertMode}");
+    }, name: $"{nameof(Non_hex_keys_do_not_change_data)}_{insertMode}");
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-13-02")]

@@ -663,7 +663,7 @@ public sealed class ViewTests
         {
             Assert.True(Math.Abs(baseY - inputY) < 10, $"The options are wrapped at {width} (input {inputY}, base {baseY}).");
         }
-    }, $"{nameof(Go_to_bar_fits_in_german)}_{width}");
+    }, name: $"{nameof(Go_to_bar_fits_in_german)}_{width}");
 
     [Fact]
     public Task Go_to_history_is_kept_across_sessions() => UiTestContext.RunAsync(async ctx =>
@@ -775,7 +775,7 @@ public sealed class ViewTests
 
         await app.GoToAsync(0x1F00);
         Assert.Contains("0x00001F00", await app.UiaNameAsync("Status_Offset"));
-    }, $"{nameof(File_size_in_german_region)}_{language}");
+    }, name: $"{nameof(File_size_in_german_region)}_{language}");
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-40-05")]

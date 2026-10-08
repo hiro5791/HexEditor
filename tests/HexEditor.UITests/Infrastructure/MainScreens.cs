@@ -81,6 +81,7 @@ public static class MainScreens
         }
 
         bool documentOpen = false;
+        string? closeFailure = null;
         foreach (string name in names)
         {
             string? error = null;
@@ -104,14 +105,21 @@ public static class MainScreens
                 await SettleAsync(app);
             }
 
+            if (error is not null && closeFailure is not null)
+            {
+                error += $" (the previous screen was not closed: {closeFailure})";
+            }
+
             yield return (name, error);
+            closeFailure = null;
             try
             {
                 await CloseOneAsync(app, name);
             }
             catch (Exception ex) when (ex is TimeoutException or InvalidOperationException or IOException or ArgumentException or COMException)
             {
-                // 閉じられなかった: 次の画面の表示で失敗すれば、その画面が「失敗」になる。
+                // 閉じられなかった: 次の画面の表示で失敗すれば、その画面が「失敗」になる (理由に、閉じられなかったことを付ける)。
+                closeFailure = $"{name}: {ex.Message}";
             }
         }
     }

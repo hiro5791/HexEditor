@@ -288,20 +288,44 @@ jobs:
           HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
         run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI&Category!=Nightly" --logger "trx;LogFileName=ui.trx" --results-directory TestResults
 
-      # 長い UI テスト (オフラインモードでの 1 時間の操作。TC-UI-58-02) は毎晩と手動の実行だけ。
+      - name: Upload UI test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-results
+          path: TestResults/
+
+  # 長い UI テスト (1 時間の操作で外部への通信がない。TC-UI-57-01 など) は毎晩と手動の実行だけ。1 時間かかるので、通常の UI テストの
+  # ジョブとは分けて、ジョブの時間の上限を長くする。
+  ui-nightly:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Build app (x64, test build)
+        run: dotnet build src/HexEditor.App -c Debug -p:Platform=x64
+
+      - name: Build UI tests
+        run: dotnet build tests/HexEditor.UITests -c Release
+
       - name: Nightly UI tests
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         env:
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
           # 混んだランナーでは状態が変わるまでの待ちを長くする (性能の判定の時間は変えない)。
           HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
         run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=Nightly" --logger "trx;LogFileName=ui-nightly.trx" --results-directory TestResults
 
-      - name: Upload UI test results
+      - name: Upload nightly UI test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ui-test-results
+          name: ui-nightly-results
           path: TestResults/
 
   # 言語ごとのスクリーンショット (UI-47、TC-UI-47-01)。毎晩と手動の実行で、25 言語の主要な画面を撮り、言語ごとのフォルダに
@@ -371,7 +395,7 @@ jobs:
   # テストの網羅の一覧 (test-coverage.md。テスト方針 6.2、10 章の 4)。完了したフェーズ (0) に、テストケースのない受け入れ基準、
   # 自動テストのない「自動」のテストケース、失敗したテストケースがあれば失敗にする。
   coverage:
-    needs: [test-x64, ui-tests, screenshots]
+    needs: [test-x64, ui-tests, ui-nightly, screenshots]
     if: always()
     runs-on: windows-latest
     timeout-minutes: 15
@@ -393,6 +417,12 @@ jobs:
         with:
           name: ui-test-results
           path: results/ui
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: ui-nightly-results
+          path: results/ui-nightly
 
       - uses: actions/download-artifact@v4
         continue-on-error: true
@@ -565,7 +595,8 @@ jobs:
   ui-distro:
     needs: build-test
     runs-on: windows-latest
-    timeout-minutes: 60
+    # 待ちの倍率 2 (HEXEDITOR_UITEST_TIMEOUT_SCALE) で、失敗するテストの待ちが長くなる分の余裕を見る。
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:

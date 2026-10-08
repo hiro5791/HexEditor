@@ -13,7 +13,13 @@ public sealed class PrivacyTests
     [Fact]
     [Trait(UiTest.TC, "TC-UI-57-01")]
     [Trait(UiTest.Category, "Nightly")]
-    public Task An_hour_of_operations_makes_no_outbound_connections() => UiTestContext.RunAsync(async ctx =>
+    public Task An_hour_of_operations_makes_no_outbound_connections() => UiTestContext.RunAsync(RunForAnHour, OperationMinutes + TimeSpan.FromMinutes(15));
+
+    /// <summary>操作を繰り返す時間 (環境変数 HEXEDITOR_UI57_MINUTES。既定 60 分)。</summary>
+    private static TimeSpan OperationMinutes =>
+        TimeSpan.FromMinutes(double.TryParse(Environment.GetEnvironmentVariable("HEXEDITOR_UI57_MINUTES"), out double m) ? m : 60);
+
+    private static async Task RunForAnHour(UiTestContext ctx)
     {
         // ETW の TCP/IP・DNS の記録の代わりに、(1) アプリの通信の窓口 (NetworkClient) の記録と、(2) プロセスの TCP 接続の一覧
         // (GetExtendedTcpTable) を操作のたびに調べる。時間は環境変数 HEXEDITOR_UI57_MINUTES (既定 60 分) で変えられる。
@@ -95,7 +101,7 @@ public sealed class PrivacyTests
         Assert.Empty((await app.SendAsync("networkLog"))["requests"]!.AsArray());
         Assert.True(outbound.Count == 0, "outbound connections:\n" + string.Join("\n", outbound.Distinct()));
         Assert.True(round > 0);
-    });
+    }
 
     /// <summary>プロセスの TCP 接続の相手 (IPv4・IPv6)。</summary>
     private static class TcpConnections
