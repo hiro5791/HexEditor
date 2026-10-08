@@ -6,8 +6,11 @@ using HexEditor.UITests.Infrastructure;
 namespace HexEditor.UITests;
 
 /// <summary>
-/// 言語ごとのスクリーンショットの撮影 (UI-47)。毎晩の CI (ci.yml の ui-tests の「Screenshots」) で実行する
-/// (25 言語 × 画面 × テーマ × 大きさで 20 分ほどかかるため、UI テストの分類 (Category=UI) には入れない)。
+/// 言語ごとのスクリーンショットの撮影 (UI-47)。毎晩の CI (ci.yml の screenshots。言語を 5 つの組に分けて並列に実行する) で実行する
+/// (25 言語 × 画面 × テーマ × 大きさ × 表示倍率で時間がかかるため、UI テストの分類 (Category=UI) には入れない)。
+/// 表示倍率 200% は、モニターの表示倍率を変えずに再現する (テスト方針 7.2): 画面全体のズーム (UI-08 の仕様 3、設定 view.zoom.ui) を
+/// 200% にし、ウィンドウを物理ピクセルで 2 倍の大きさにする (論理的な大きさと文字・画像の解像度が 200% のモニターと同じになる)。
+/// 画面より大きいウィンドウにできない場合は、その大きさの画面を「失敗」と記録する。
 /// 出力: 環境変数 HEXEDITOR_SCREENSHOTS のフォルダ (既定は TestResults/screenshots) の下に言語ごとのフォルダを作り、PNG と一覧
 /// (index.html)、切れた文字列の一覧 (trimmed.txt) を置く。環境変数 HEXEDITOR_SCREENSHOTS_BASELINE に前回の出力があれば
 /// 切れた文字列の数を比べ、増えていれば警告にする (失敗にはしない。仕様 4)。HEXEDITOR_SCREENSHOT_LANGUAGES (カンマ区切り) で
@@ -27,7 +30,7 @@ public sealed class ScreenshotTests
 
     private static readonly (int Width, int Height)[] Sizes = [(1024, 768), (1920, 1080)];
 
-    /// <summary>表示倍率。200% は「表示倍率の変更の再現」(テスト方針 7.2) が未実装のため、撮影できずに「失敗」と記録する。</summary>
+    /// <summary>表示倍率 (200% は画面全体のズームで再現する)。</summary>
     private static readonly int[] Scales = [100, 200];
 
     public static string OutputRoot =>
@@ -57,7 +60,7 @@ public sealed class ScreenshotTests
         // 期待結果: 言語ごとのフォルダに、画面 × 表示倍率 2 × テーマ 2 × 大きさ 2 の数の PNG (失敗したものは一覧に「失敗」) と一覧の HTML。
         string[] folders = [.. Directory.GetDirectories(OutputRoot).Select(Path.GetFileName)!];
         Assert.Equal(languages.Order(), folders.Order());
-        int expected = MainScreens.Names.Length * Scales.Length * Themes.Length * Sizes.Length;
+        int expected = MainScreens.AllNames.Length * Scales.Length * Themes.Length * Sizes.Length;
         foreach (string folder in Directory.GetDirectories(OutputRoot))
         {
             string index = Path.Combine(folder, "index.html");
@@ -132,47 +135,53 @@ public sealed class ScreenshotTests
         var shots = new Shots(language, folder);
         bool pseudo = language.StartsWith("qps-", StringComparison.Ordinal);
         IReadOnlyList<(string, Regex)> keys = TrimReport.Keys(language);
-        foreach (string theme in Themes)
+        foreach (int scale in Scales)
         {
-            foreach ((int width, int height) in Sizes)
+            foreach (string theme in Themes)
             {
-                string size = $"{width}x{height}";
-                await using UiTestContext ctx = UiTestContext.Create($"shots-{language}-{theme}-{size}");
-                string profile = ctx.NewProfile();
-                await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), $"{{\"$schemaVersion\": 1, \"ui.theme\": \"{theme}\"}}");
-                var captured = new HashSet<string>();
-                try
+                foreach ((int width, int height) in Sizes)
                 {
-                    AppSession app = await ctx.StartAsync(new AppOptions
+                    string size = $"{width}x{height}";
+                    await using UiTestContext ctx = UiTestContext.Create($"shots-{language}-{theme}-{size}-{scale}");
+                    string profile = ctx.NewProfile();
+                    await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"),
+                        $"{{\"$schemaVersion\": 1, \"ui.theme\": \"{theme}\", \"view.zoom.ui\": {scale}}}");
+                    var done = new HashSet<string>();
+                    try
                     {
-                        Profile = profile,
-                        UiLanguage = pseudo ? null : language,
-                        ExtraArgs = pseudo ? ["--pseudo-locale", language] : [],
-                    });
-                    await foreach (string screen in MainScreens.ShowAsync(app, ctx, width, height))
-                    {
-                        string file = $"{screen}-{theme}-{size}-100.png";
-                        app.Screenshot().SavePng(Path.Combine(folder, file));
-                        shots.Rows.Add((screen, theme, size, 100, file, null));
-                        captured.Add(screen);
-                        foreach (string line in TrimReport.Describe(await app.TextCheckAsync(), screen, size, keys))
+                        AppSession app = await ctx.StartAsync(new AppOptions
                         {
-                            shots.Clipped.Add($"{theme} {line}");
+                            Profile = profile,
+                            UiLanguage = pseudo ? null : language,
+                            ExtraArgs = pseudo ? ["--pseudo-locale", language] : [],
+                        });
+                        await foreach ((string screen, string? error) in MainScreens.ShowAllAsync(app, ctx, width, height, zoom: scale / 100.0))
+                        {
+                            done.Add(screen);
+                            if (error is not null)
+                            {
+                                // 撮影に失敗した画面は一覧に「失敗」と記録し、続ける (UI-47 の「エラー」)。
+                                shots.Rows.Add((screen, theme, size, scale, null, error));
+                                continue;
+                            }
+
+                            string file = $"{screen}-{theme}-{size}-{scale}.png";
+                            app.Screenshot().SavePng(Path.Combine(folder, file));
+                            shots.Rows.Add((screen, theme, size, scale, file, null));
+                            foreach (string line in TrimReport.Describe(await app.TextCheckAsync(), screen, size, keys))
+                            {
+                                shots.Clipped.Add($"{theme} {scale}% {line}");
+                            }
                         }
                     }
-                }
-                catch (Exception ex) when (ex is TimeoutException or InvalidOperationException or IOException)
-                {
-                    // 撮影に失敗した画面は一覧に「失敗」と記録し、続ける (UI-47 の「エラー」)。
-                    foreach (string screen in MainScreens.Names.Where(s => !captured.Contains(s)))
+                    catch (Exception ex) when (ex is TimeoutException or InvalidOperationException or IOException)
                     {
-                        shots.Rows.Add((screen, theme, size, 100, null, ex.Message));
+                        // 起動できない・アプリが止まった: 残りの画面を「失敗」と記録し、続ける。
+                        foreach (string screen in MainScreens.AllNames.Where(s => !done.Contains(s)))
+                        {
+                            shots.Rows.Add((screen, theme, size, scale, null, ex.Message));
+                        }
                     }
-                }
-
-                foreach (string screen in MainScreens.Names)
-                {
-                    shots.Rows.Add((screen, theme, size, 200, null, "表示倍率の変更の再現 (テスト方針 7.2) が未実装のため、200% は撮影していない"));
                 }
             }
         }

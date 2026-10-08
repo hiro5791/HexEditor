@@ -175,6 +175,7 @@ public sealed partial class MainWindow
     /// <summary>ウィンドウの大きさ (物理ピクセル) を変える。前面には出さない。</summary>
     private JsonObject TestResizePhysical(JsonObject request)
     {
+        AllowWindowLargerThanScreen();
         AppWindow.Resize(new SizeInt32((int)TestHookSettings.ReadLong(request["width"], 1280), (int)TestHookSettings.ReadLong(request["height"], 800)));
         return new JsonObject { ["size"] = $"{AppWindow.Size.Width}x{AppWindow.Size.Height}" };
     }

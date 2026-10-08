@@ -286,14 +286,6 @@ jobs:
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
         run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=Nightly" --logger "trx;LogFileName=ui-nightly.trx" --results-directory TestResults
 
-      # 言語ごとのスクリーンショット (UI-47、TC-UI-47-01)。毎晩と手動の実行で、25 言語の主要な画面を撮り、言語ごとのフォルダに
-      # PNG と一覧 (index.html) を置く (成果物 ui-test-results の screenshots)。切れた文字列が増えたらジョブの概要に警告を出す。
-      - name: Screenshots (UI-47)
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        env:
-          HEXEDITOR_SCREENSHOTS: ${{ github.workspace }}\TestResults\screenshots
-        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=Screenshots" --logger "trx;LogFileName=screenshots.trx" --results-directory TestResults
-
       - name: Upload UI test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -301,10 +293,74 @@ jobs:
           name: ui-test-results
           path: TestResults/
 
+  # 言語ごとのスクリーンショット (UI-47、TC-UI-47-01)。毎晩と手動の実行で、25 言語の主要な画面を撮り、言語ごとのフォルダに
+  # PNG と一覧 (index.html) を置く (成果物 screenshots-<組>)。時間がかかるため、言語を 5 つの組に分けて並列に撮る。
+  # 前回の毎晩の実行の同じ組の成果物を基準 (HEXEDITOR_SCREENSHOTS_BASELINE) にし、切れた文字列が増えたらジョブの概要に警告を出す
+  # (失敗にはしない。UI-47 の仕様 4)。
+  screenshots:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 150
+    permissions:
+      contents: read
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        group:
+          - { name: "1", languages: "en,zh-Hans,zh-Hant,ja,ko" }
+          - { name: "2", languages: "id,vi,th,de,fr" }
+          - { name: "3", languages: "es,pt,it,ru,uk" }
+          - { name: "4", languages: "pl,cs,hu,ro,el" }
+          - { name: "5", languages: "ar,tr,fa,qps-ploc,qps-plocm" }
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Build app (x64, test build)
+        run: dotnet build src/HexEditor.App -c Debug -p:Platform=x64
+
+      - name: Build UI tests
+        run: dotnet build tests/HexEditor.UITests -c Release
+
+      # 前回の毎晩の実行 (このブランチ) の同じ組のスクリーンショットを基準にする。なければ比べない (初回)。
+      - name: Previous screenshots (baseline)
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $runs = gh run list --workflow ci.yml --branch '${{ github.ref_name }}' --event schedule --status completed --limit 10 --json databaseId --jq '.[].databaseId'
+          foreach ($id in $runs) {
+            if ("$id" -eq '${{ github.run_id }}') { continue }
+            gh run download $id --name 'screenshots-${{ matrix.group.name }}' --dir baseline
+            if ($LASTEXITCODE -eq 0 -and (Test-Path baseline/screenshots)) {
+              "HEXEDITOR_SCREENSHOTS_BASELINE=$((Resolve-Path baseline/screenshots).Path)" >> $env:GITHUB_ENV
+              Write-Host "Baseline: run $id"
+              break
+            }
+          }
+          $global:LASTEXITCODE = 0
+
+      - name: Screenshots (UI-47)
+        env:
+          HEXEDITOR_SCREENSHOTS: ${{ github.workspace }}\TestResults\screenshots
+          HEXEDITOR_SCREENSHOT_LANGUAGES: ${{ matrix.group.languages }}
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=Screenshots" --logger "trx;LogFileName=screenshots-${{ matrix.group.name }}.trx" --results-directory TestResults
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ matrix.group.name }}
+          path: TestResults/
+
   # テストの網羅の一覧 (test-coverage.md。テスト方針 6.2、10 章の 4)。完了したフェーズ (0) に、テストケースのない受け入れ基準、
   # 自動テストのない「自動」のテストケース、失敗したテストケースがあれば失敗にする。
   coverage:
-    needs: [test-x64, ui-tests]
+    needs: [test-x64, ui-tests, screenshots]
     if: always()
     runs-on: windows-latest
     timeout-minutes: 15
@@ -326,6 +382,12 @@ jobs:
         with:
           name: ui-test-results
           path: results/ui
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: screenshots-*
+          path: results/screenshots
 
       - name: Test coverage
         shell: pwsh
