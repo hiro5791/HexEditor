@@ -62,13 +62,20 @@ public static class TextCellDecoder
     /// [<paramref name="dataStart"/>, dataStart + data.Length) のバイト (表示範囲の前の読み戻しと後ろの先読みを含む)。
     /// <paramref name="states"/> を渡すと、<see cref="ByteState.Valid"/> でないバイトは文字の一部にしない (セルは <see cref="TextCellKind.Empty"/>)。
     /// <paramref name="dataStart"/> が 0 なら、ドキュメントの先頭として扱う。<paramref name="nonPrintable"/> は表示しない文字の記号
-    /// (VIEW-21 の仕様 7)。
+    /// (VIEW-21 の仕様 7)。<paramref name="invalidSymbol"/> は不正なバイトの記号 (VIEW-22 の仕様 5。既定 <c>.</c>、設定で U+FFFD)。
     /// </summary>
+    /// <summary>不正なバイトの既定の記号 (VIEW-22 の仕様 5)。</summary>
+    public const string DefaultInvalidSymbol = ".";
+
+    /// <summary>設定で選べる不正なバイトの記号 (U+FFFD)。</summary>
+    public const string ReplacementInvalidSymbol = "\uFFFD";
+
     public static void Decode(TextEncoding encoding, ReadOnlySpan<byte> data, long dataStart, long windowStart, Span<TextCell> cells,
-        ReadOnlySpan<ByteState> states = default, int utf16Phase = 0, int utf32Phase = 0, NonPrintableStyle nonPrintable = NonPrintableStyle.Dot)
+        ReadOnlySpan<ByteState> states = default, int utf16Phase = 0, int utf32Phase = 0, NonPrintableStyle nonPrintable = NonPrintableStyle.Dot,
+        string invalidSymbol = DefaultInvalidSymbol)
     {
         cells.Fill(TextCell.None);
-        var ctx = new Context(encoding, data, dataStart, windowStart, cells, states, nonPrintable);
+        var ctx = new Context(encoding, data, dataStart, windowStart, cells, states, nonPrintable, invalidSymbol);
         switch (encoding.Kind)
         {
             case TextEncodingKind.Utf8:
@@ -92,8 +99,9 @@ public static class TextCellDecoder
 
     /// <summary>解読の途中の状態。</summary>
     private ref struct Context(TextEncoding encoding, ReadOnlySpan<byte> data, long dataStart, long windowStart, Span<TextCell> cells,
-        ReadOnlySpan<ByteState> states, NonPrintableStyle nonPrintable)
+        ReadOnlySpan<ByteState> states, NonPrintableStyle nonPrintable, string invalidSymbol)
     {
+        public readonly string InvalidSymbol = invalidSymbol;
         public readonly NonPrintableStyle NonPrintable = nonPrintable;
         public readonly TextEncoding Encoding = encoding;
         public readonly ReadOnlySpan<byte> Data = data;
@@ -148,7 +156,7 @@ public static class TextCellDecoder
             {
                 if (Has(offset + i))
                 {
-                    Put(offset + i, 1, TextCellKind.Invalid, ".", false);
+                    Put(offset + i, 1, TextCellKind.Invalid, InvalidSymbol, false);
                 }
             }
         }

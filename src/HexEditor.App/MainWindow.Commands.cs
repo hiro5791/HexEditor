@@ -159,10 +159,17 @@ public sealed partial class MainWindow
         Commands.Register("go.nextNibble", () => Editor?.NextNibble(), NeedsDocument);
         Commands.Register("go.previousNibble", () => Editor?.PreviousNibble(), NeedsDocument);
         Commands.Register("go.toggleColumn", () => Editor?.ToggleColumn(), NeedsDocument);
+        Commands.Register("go.previousGroup", () => Editor?.MovePreviousGroup(), NeedsDocument);
+        Commands.Register("go.nextGroup", () => Editor?.MoveNextGroup(), NeedsDocument);
+        Commands.Register("view.scrollLineUp", () => Editor?.ScrollRows(-1), NeedsDocument);
+        Commands.Register("view.scrollLineDown", () => Editor?.ScrollRows(1), NeedsDocument);
         Commands.Register("go.back", () => GoBack_Click(this, e),
             () => NeedsDocument(d => d.Editor.CanGoBack ? null : Loc.Get("Command_NoHistory")));
         Commands.Register("go.forward", () => GoForward_Click(this, e),
             () => NeedsDocument(d => d.Editor.CanGoForward ? null : Loc.Get("Command_NoHistory")));
+        // 「移動: 履歴の一覧」(VIEW-31 の仕様 8): パレットに最新 20 件を出し、選ぶとその位置に移る。
+        Commands.Register("go.history", ShowHistoryInPalette,
+            () => NeedsDocument(d => d.Editor.RecentJumps.Count > 0 ? null : Loc.Get("Command_NoHistory")));
         Commands.Register("go.start", () => GoStart_Click(this, e), NeedsDocument);
         Commands.Register("go.end", () => GoEnd_Click(this, e), NeedsDocument);
         RegisterBookmarkCommands();

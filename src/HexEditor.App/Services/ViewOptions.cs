@@ -44,6 +44,9 @@ public static class ViewOptions
     /// <summary>表示しない文字の記号 (VIEW-21 の仕様 7。dot / space / controlPictures、既定 dot)。</summary>
     public const string NonPrintableKey = "view.text.nonPrintable";
 
+    /// <summary>不正なバイトの記号 (VIEW-22 の仕様 5。dot / replacement (U+FFFD)、既定 dot)。</summary>
+    public const string InvalidSymbolKey = "view.text.invalidSymbol";
+
     /// <summary>読み上げの詳しさ (UI-51 の仕様 2。full / brief / offsetOnly / none、既定 full)。</summary>
     public const string VerbosityKey = "a11y.announce.verbosity";
 
@@ -104,6 +107,21 @@ public static class ViewOptions
             "controlPictures" => NonPrintableStyle.ControlPictures,
             _ => NonPrintableStyle.Dot,
         };
+        // オフセット列を固定 (VIEW-28 の仕様 5。既定オン)。
+        view.KeepOffsetColumnFixed = settings.GetBool("view.scroll.fixedOffsetColumn", true);
+
+        // 描画性能の診断表示 (VIEW-04 の仕様 8。設定の「詳細」の診断の項目。既定オフ)。
+        view.DiagnosticsSetting = settings.GetBool("diagnostics.hexView.overlay", false);
+
+        // スクロールバーの印 (VIEW-02 の仕様 9。既定はカーソル位置と検索結果だけ)。
+        view.ShowCursorMarker = settings.GetBool("view.scrollBar.cursorMark", true);
+        view.ShowSearchMarkers = settings.GetBool("view.scrollBar.searchMarks", true);
+        view.ShowSelectionMarker = settings.GetBool("view.scrollBar.selectionMark", false);
+        view.ShowBookmarkMarkers = settings.GetBool("view.scrollBar.bookmarkMarks", false);
+        view.RefreshMarkers();
+        view.InvalidSymbol = settings.GetString(InvalidSymbolKey, "dot") == "replacement"
+            ? TextCellDecoder.ReplacementInvalidSymbol
+            : TextCellDecoder.DefaultInvalidSymbol;
         view.AnnouncementVerbosity = settings.GetString(VerbosityKey, "full") switch
         {
             "brief" => AnnounceVerbosity.Brief,
@@ -128,22 +146,25 @@ public static class ViewOptions
         Attached.Add(doc, new object());
         var store = new ViewSettingsStore(settings, Documents);
         EditorState editor = doc.Editor;
+
+        // データソースの種類ごとの既定値 (VIEW-42 の仕様 2 の 3)。ファイルにはない (ディスクなどのデータソースが示す)。
+        System.Text.Json.Nodes.JsonObject? sourceDefaults = (doc.Document.Source as IViewDefaultsSource)?.ViewDefaults;
         if (doc.FilePath is { } path)
         {
-            (ViewSettings view, long? reference) = store.Load(path);
+            (ViewSettings view, long? reference) = store.Load(path, sourceDefaults);
             editor.ApplyView(view);
             editor.SetReferencePoint(reference);
         }
         else
         {
-            editor.ApplyView(store.Defaults);
+            editor.ApplyView(store.DefaultsFor(sourceDefaults));
         }
 
         editor.ViewChanged += (_, _) =>
         {
             if (doc.FilePath is { } p && !doc.Document.IsDisposed)
             {
-                store.Save(p, editor.View, editor.ReferencePoint);
+                store.Save(p, editor.View, editor.ReferencePoint, sourceDefaults);
             }
         };
     }
@@ -161,7 +182,7 @@ public static class ViewOptions
         }
 
         doc.Editor.ClearReferencePoint();
-        doc.Editor.ApplyView(store.Defaults);
+        doc.Editor.ApplyView(store.DefaultsFor((doc.Document.Source as IViewDefaultsSource)?.ViewDefaults));
     }
 
     private static double GetDouble(SettingsStore settings, string key, double defaultValue) =>

@@ -6,6 +6,15 @@ using HexEditor.Core.Settings;
 namespace HexEditor.Core.View;
 
 /// <summary>
+/// データソースの種類ごとの表示設定の既定値を示すデータソース (VIEW-42 の仕様 2 の 3。ディスク・ボリュームでは区切り線「セクタ」など)。
+/// 値は <see cref="ViewSettings.ToJson"/> と同じ形の、変える項目だけの JSON。ファイルのデータソースは示さない。
+/// </summary>
+public interface IViewDefaultsSource
+{
+    JsonObject? ViewDefaults { get; }
+}
+
+/// <summary>
 /// 表示設定の保存 (VIEW-42 の仕様 2〜5)。全体の既定値は settings.json の <c>view.defaults</c>、ドキュメントごとの設定は
 /// ドキュメントに付随するデータ (00-overview 10 章。<see cref="DocumentDataStore"/> の種類 <c>view</c>) に、既定値と違う項目だけを書く。
 /// </summary>
@@ -20,14 +29,20 @@ public sealed class ViewSettingsStore(SettingsStore settings, DocumentDataStore 
     /// <summary>全体の既定値 (組み込みの既定値に「既定として保存」した項目を重ねたもの)。</summary>
     public ViewSettings Defaults => ViewSettings.FromJson(settings.GetNode(DefaultsKey) as JsonObject);
 
+    /// <summary>
+    /// データソースの種類ごとの既定値を重ねた既定値 (VIEW-42 の仕様 2 の 1〜3: 組み込み → 全体の既定値 → データソースの種類)。
+    /// </summary>
+    public ViewSettings DefaultsFor(JsonObject? sourceDefaults) =>
+        sourceDefaults is null || sourceDefaults.Count == 0 ? Defaults : ViewSettings.FromJson(sourceDefaults, Defaults);
+
     /// <summary>「既定として保存」(VIEW-42 の仕様 4): ドキュメント固有の項目を除いて全体の既定値にする。</summary>
     public void SaveDefaults(ViewSettings view) =>
         settings.SetNode(DefaultsKey, Diff(view.ToJson(includeDocumentSpecific: false), ViewSettings.Default.ToJson(includeDocumentSpecific: false)));
 
     /// <summary>ドキュメントの表示設定 (全体の既定値にドキュメントごとの設定を重ねたもの) と基準点。保存していなければ既定値。</summary>
-    public (ViewSettings View, long? ReferencePoint) Load(string documentPath)
+    public (ViewSettings View, long? ReferencePoint) Load(string documentPath, JsonObject? sourceDefaults = null)
     {
-        ViewSettings defaults = Defaults;
+        ViewSettings defaults = DefaultsFor(sourceDefaults);
         try
         {
             if (documents.ReadObject(documentPath, Kind) is not { } read)
@@ -46,9 +61,9 @@ public sealed class ViewSettingsStore(SettingsStore settings, DocumentDataStore 
     }
 
     /// <summary>ドキュメントごとの設定を保存する (VIEW-42 の仕様 3)。既定値と同じで基準点もなければ消す。</summary>
-    public void Save(string documentPath, ViewSettings view, long? referencePoint)
+    public void Save(string documentPath, ViewSettings view, long? referencePoint, JsonObject? sourceDefaults = null)
     {
-        JsonObject diff = Diff(view.ToJson(), Defaults.ToJson());
+        JsonObject diff = Diff(view.ToJson(), DefaultsFor(sourceDefaults).ToJson());
         try
         {
             if (diff.Count == 0 && referencePoint is null)

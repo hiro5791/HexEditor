@@ -354,4 +354,83 @@ public sealed class BookmarkTests
         Assert.True(watch.ElapsedMilliseconds < 2000, $"{watch.ElapsedMilliseconds} ms");
         Assert.Equal(16_000_000 - 16 + 1000, bm.Last!.Start);
     }
+
+    [Fact]
+    public void Capturing_a_million_bookmarks_for_saving_is_quick_and_reuses_the_buffer()
+    {
+        // VIEW-04 の受け入れ基準 4: 保存の写し取り (UI スレッド) で 1 件ずつオブジェクトを作らない。
+        var bm = new BookmarkCollection();
+        for (int i = 0; i < BookmarkCollection.MaxCount; i++)
+        {
+            bm.Add(i * 16L, 16, "bm" + i);
+        }
+
+        LoadedBookmarks warm = BookmarkStore.Capture(bm);
+        BookmarkStore.Release(warm);
+        long before = GC.GetAllocatedBytesForCurrentThread();
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        LoadedBookmarks snapshot = BookmarkStore.Capture(bm);
+        watch.Stop();
+        long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+        try
+        {
+            Assert.Equal(BookmarkCollection.MaxCount, snapshot.Items.Count);
+            Assert.Equal((16L * 999_999, "bm999999"), (snapshot.Items[999_999].Start, snapshot.Items[999_999].Name));
+
+            // 配列を借りて使い回すので、1 件ごとの割り当てはない (数 KB の作業用の領域だけ)。
+            Assert.True(allocated < 1_000_000, $"{allocated:N0} bytes");
+            // 時間はほかのテストと並んで動くと揺れるため、大まかな上限だけを確かめる (割り当てのなさが本体)。
+            Assert.True(watch.ElapsedMilliseconds < 5000, $"{watch.ElapsedMilliseconds} ms");
+        }
+        finally
+        {
+            BookmarkStore.Release(snapshot);
+        }
+
+        Assert.Empty(snapshot.Items);
+    }
+
+    [Fact]
+    public void Saved_positions_undo_unsaved_edits_and_keep_the_order()
+    {
+        using var doc = new Document(new MemoryByteSource(new byte[0x100]), Options());
+        BookmarkCollection bm = BookmarkCollection.Attach(doc);
+        bm.Add(0x10, 4, "a");
+        bm.Add(0x20, 4, "b");
+        bm.Add(0x20, 0, "c");
+
+        // 保存していない編集: 先頭に 0x40 バイト挿入、b を含む範囲を削除。
+        doc.Insert(0, new byte[0x40]);
+        doc.Delete(0x60, 4);
+        Assert.Equal(0x60, bm.FindByName("b")!.Start);
+        Assert.Equal(
+            [new BookmarkPosition(0x10, 4, false), new BookmarkPosition(0x20, 4, false), new BookmarkPosition(0x20, 0, false)],
+            bm.PositionsAtSavedState());
+
+        // Undo で保存した時点より前に戻った場合 (保存した時点はやり直せる側にある)。
+        doc.CompleteSave(new MemoryByteSource(new byte[doc.Length]));
+        doc.Undo();
+        doc.Undo();
+        Assert.Equal(0x20, bm.FindByName("b")!.Start);
+        Assert.Equal(
+            [new BookmarkPosition(0x50, 4, false), new BookmarkPosition(0x60, 0, true), new BookmarkPosition(0x60, 0, false)],
+            bm.PositionsAtSavedState());
+    }
+
+    [Fact]
+    public void Names_with_duplicates_are_found_after_removal()
+    {
+        var bm = new BookmarkCollection();
+        Bookmark first = bm.Add(0, 1, "dup");
+        Bookmark second = bm.Add(1, 1, "dup");
+        Bookmark third = bm.Add(2, 1, "dup");
+        Assert.Same(first, bm.FindByName("dup"));
+        bm.Remove(first);
+        Assert.Same(second, bm.FindByName("dup"));
+        bm.Remove(second);
+        Assert.Same(third, bm.FindByName("dup"));
+        bm.Rename(third, "other");
+        Assert.Null(bm.FindByName("dup"));
+        Assert.Same(third, bm.FindByName("other"));
+    }
 }

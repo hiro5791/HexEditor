@@ -41,6 +41,11 @@
       "type": "boolean",
       "default": true
     },
+    "diagnostics.hexView.overlay": {
+      "description": "Show rendering diagnostics in the Hex view",
+      "type": "boolean",
+      "default": false
+    },
     "diagnostics.writeMiniDump": {
       "description": "Save a memory dump on crash",
       "type": "boolean",
@@ -466,10 +471,44 @@
       "maximum": 10,
       "default": 0
     },
+    "view.scroll.fixedOffsetColumn": {
+      "description": "Keep the offset column fixed",
+      "type": "boolean",
+      "default": true
+    },
+    "view.scrollBar.bookmarkMarks": {
+      "description": "Show bookmarks on the scroll bar",
+      "type": "boolean",
+      "default": false
+    },
+    "view.scrollBar.cursorMark": {
+      "description": "Show the cursor position on the scroll bar",
+      "type": "boolean",
+      "default": true
+    },
+    "view.scrollBar.searchMarks": {
+      "description": "Show search results on the scroll bar",
+      "type": "boolean",
+      "default": true
+    },
+    "view.scrollBar.selectionMark": {
+      "description": "Show the selection on the scroll bar",
+      "type": "boolean",
+      "default": false
+    },
     "view.statusBar.showNibble": {
       "description": "Show nibble position",
       "type": "boolean",
       "default": false
+    },
+    "view.text.invalidSymbol": {
+      "description": "Symbol for invalid bytes",
+      "type": "string",
+      "enum": [
+        "dot",
+        "replacement"
+      ],
+      "default": "dot"
     },
     "view.text.nonPrintable": {
       "description": "Symbol for non-printable characters",

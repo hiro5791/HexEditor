@@ -52,10 +52,16 @@ public static class BuiltInSettings
         // ---- 表示 ----
         new("view.cursor.nibbleArrowKeys", SettingCategories.View, SettingKind.Bool, false) { Order = 10 },
         new("view.statusBar.showNibble", SettingCategories.View, SettingKind.Bool, false) { Order = 20 },
+        new("view.scroll.fixedOffsetColumn", SettingCategories.View, SettingKind.Bool, true) { Order = 31 },
         new("view.scroll.cursorMargin", SettingCategories.View, SettingKind.Int, 0) { Min = 0, Max = 10, Order = 30 },
         new("view.jump.position", SettingCategories.View, SettingKind.Choice, "third") { Options = ["top", "third", "center"], Order = 40 },
         new("view.tooltips", SettingCategories.View, SettingKind.Bool, true) { Order = 50 },
         new("view.text.nonPrintable", SettingCategories.View, SettingKind.Choice, "dot") { Options = ["dot", "space", "controlPictures"], Order = 55 },
+        new("view.scrollBar.cursorMark", SettingCategories.View, SettingKind.Bool, true) { Order = 57 },
+        new("view.scrollBar.searchMarks", SettingCategories.View, SettingKind.Bool, true) { Order = 58 },
+        new("view.scrollBar.selectionMark", SettingCategories.View, SettingKind.Bool, false) { Order = 59 },
+        new("view.scrollBar.bookmarkMarks", SettingCategories.View, SettingKind.Bool, false) { Order = 59 },
+        new("view.text.invalidSymbol", SettingCategories.View, SettingKind.Choice, "dot") { Options = ["dot", "replacement"], Order = 56 },
         new("view.modified.keepAfterSave", SettingCategories.View, SettingKind.Bool, false) { Order = 60 },
         new("view.modified.showDeletions", SettingCategories.View, SettingKind.Bool, false) { Order = 61 },
 
@@ -144,6 +150,7 @@ public static class BuiltInSettings
         // ---- 詳細 ----
         new("log.level", SettingCategories.Advanced, SettingKind.Choice, "info") { Options = ["info", "debug"], Order = 10 },
         new("diagnostics.writeMiniDump", SettingCategories.Advanced, SettingKind.Bool, false) { Order = 20 },
+        new("diagnostics.hexView.overlay", SettingCategories.Advanced, SettingKind.Bool, false) { Order = 21 },
 
         // 「コマンドラインから使えるようにする」(10 の PKG-08 の仕様 6)。インストーラ版だけ。値はユーザーの PATH に反映し、他の PC に
         // 持ち出さない (PATH の状態は PC ごと)。

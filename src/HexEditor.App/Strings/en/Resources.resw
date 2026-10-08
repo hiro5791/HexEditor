@@ -2564,4 +2564,44 @@ Details were written to:
   <data name="CmdCategory_accessibility" xml:space="preserve"><value>Accessibility</value></data>
   <data name="TranslationReport_Truncated" xml:space="preserve"><value>Showing the first {0} of {1} strings. Search to narrow the list.</value></data>
   <data name="SetGroup_translators" xml:space="preserve"><value>For translators</value></data>
+  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>Go: Previous group</value></data>
+  <data name="CmdAlias_go_previousGroup" xml:space="preserve"><value>group left word move back</value></data>
+  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>Go: Next group</value></data>
+  <data name="CmdAlias_go_nextGroup" xml:space="preserve"><value>group right word move forward</value></data>
+  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>View: Scroll up one row</value></data>
+  <data name="CmdAlias_view_scrollLineUp" xml:space="preserve"><value>scroll line row up</value></data>
+  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>View: Scroll down one row</value></data>
+  <data name="CmdAlias_view_scrollLineDown" xml:space="preserve"><value>scroll line row down</value></data>
+  <data name="Set_view_text_invalidSymbol" xml:space="preserve"><value>Symbol for invalid bytes</value></data>
+  <data name="SetDesc_view_text_invalidSymbol" xml:space="preserve"><value>How bytes that are not valid in the text column's encoding are shown.</value></data>
+  <data name="SetOpt_view_text_invalidSymbol_dot" xml:space="preserve"><value>Dot (.)</value></data>
+  <data name="SetOpt_view_text_invalidSymbol_replacement" xml:space="preserve"><value>Replacement character (�)</value></data>
+  <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>UTF-32 start position</value></data>
+  <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>Offset mod 4 = {0}</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>View: Decode UTF-32 from offsets with remainder 0</value></data>
+  <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>utf-32 start position phase 0</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>View: Decode UTF-32 from offsets with remainder 1</value></data>
+  <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>utf-32 start position phase 1</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>View: Decode UTF-32 from offsets with remainder 2</value></data>
+  <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>utf-32 start position phase 2</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>View: Decode UTF-32 from offsets with remainder 3</value></data>
+  <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>utf-32 start position phase 3</value></data>
+  <data name="Cmd_go_history" xml:space="preserve"><value>Go: History list</value></data>
+  <data name="CmdAlias_go_history" xml:space="preserve"><value>jump history list back recent positions</value></data>
+  <data name="GoTo_History_Name" xml:space="preserve"><value>Input history</value></data>
+  <data name="GoTo_History_Empty" xml:space="preserve"><value>No history</value></data>
+  <data name="Set_view_scrollBar_cursorMark" xml:space="preserve"><value>Show the cursor position on the scroll bar</value></data>
+  <data name="SetDesc_view_scrollBar_cursorMark" xml:space="preserve"><value>Draws a thin mark on the vertical scroll bar at the cursor's row.</value></data>
+  <data name="Set_view_scrollBar_searchMarks" xml:space="preserve"><value>Show search results on the scroll bar</value></data>
+  <data name="SetDesc_view_scrollBar_searchMarks" xml:space="preserve"><value>Draws thin marks on the vertical scroll bar where search results are.</value></data>
+  <data name="Set_view_scrollBar_selectionMark" xml:space="preserve"><value>Show the selection on the scroll bar</value></data>
+  <data name="SetDesc_view_scrollBar_selectionMark" xml:space="preserve"><value>Draws a mark on the vertical scroll bar covering the selected range.</value></data>
+  <data name="Set_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>Show bookmarks on the scroll bar</value></data>
+  <data name="SetDesc_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>Draws thin marks on the vertical scroll bar where bookmarks start, in the bookmark's color.</value></data>
+  <data name="Set_diagnostics_hexView_overlay" xml:space="preserve"><value>Show rendering diagnostics in the Hex view</value></data>
+  <data name="SetDesc_diagnostics_hexView_overlay" xml:space="preserve"><value>Shows a small table in the top right of the Hex view with the frame rate, drawing time and frames that waited for data. For investigating performance.</value></data>
+  <data name="Set_view_scroll_fixedOffsetColumn" xml:space="preserve"><value>Keep the offset column fixed</value></data>
+  <data name="SetDesc_view_scroll_fixedOffsetColumn" xml:space="preserve"><value>When scrolling horizontally, the offset column stays at the left edge. Turn off to scroll it together with the Hex and text columns.</value></data>
+  <data name="HexView_Menu_SetReference" xml:space="preserve"><value>Set as reference point</value></data>
 </root>

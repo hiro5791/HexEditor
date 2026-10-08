@@ -207,6 +207,25 @@ public sealed partial class HexView : UserControl
         set => _diagnostics.Enabled = value;
     }
 
+    /// <summary>
+    /// 設定「Hex ビューの診断表示」(diagnostics.hexView.overlay) の値。設定が変わったときだけ診断表示を切り替える
+    /// (テスト用の命令で有効にした診断表示を、ほかの設定の変更で消さないため)。
+    /// </summary>
+    public bool DiagnosticsSetting
+    {
+        get => _diagnosticsSetting;
+        set
+        {
+            if (_diagnosticsSetting != value)
+            {
+                _diagnosticsSetting = value;
+                DiagnosticsEnabled = value;
+            }
+        }
+    }
+
+    private bool _diagnosticsSetting;
+
     /// <summary>診断の記録を書き出すファイル (CSV)。null なら書き出さない。性能のテストが読む。</summary>
     public string? DiagnosticsLogPath
     {
@@ -642,7 +661,7 @@ public sealed partial class HexView : UserControl
         ByteState[] dataStates = _work.DecodeStates;
         int read = snapshot.ReadForDisplay(dataStart, data.AsSpan(0, length), dataStates.AsSpan(0, length));
         TextCellDecoder.Decode(encoding, data.AsSpan(0, read), dataStart, readStart, cells.AsSpan(lead, windowLength),
-            dataStates.AsSpan(0, read), view.Utf16Phase, view.Utf32Phase, NonPrintableStyle);
+            dataStates.AsSpan(0, read), view.Utf16Phase, view.Utf32Phase, NonPrintableStyle, InvalidSymbol);
         return cells;
     }
 
@@ -655,7 +674,9 @@ public sealed partial class HexView : UserControl
     /// </summary>
     private void ReuseRowsByOffset(long firstOffset, int bytesPerRow, int rows)
     {
-        var byStart = new Dictionary<long, RowVisual>(_rows.Count);
+        // 作業用の入れ物は使い回す (描画のたびに作らない。VIEW-04 の仕様 3)。
+        Dictionary<long, RowVisual> byStart = _reuseByStart;
+        byStart.Clear();
         foreach (RowVisual row in _rows)
         {
             if (row.ContentRowStart != long.MinValue)
@@ -664,27 +685,44 @@ public sealed partial class HexView : UserControl
             }
         }
 
-        var ordered = new RowVisual?[_rows.Count];
-        var used = new HashSet<RowVisual>();
-        for (int r = 0; r < rows && r < ordered.Length; r++)
+        List<RowVisual?> ordered = _reuseOrdered;
+        HashSet<RowVisual> used = _reuseUsed;
+        ordered.Clear();
+        used.Clear();
+        for (int r = 0; r < _rows.Count; r++)
         {
-            if (byStart.TryGetValue(firstOffset + (long)r * bytesPerRow, out RowVisual? match) && used.Add(match))
+            RowVisual? match = null;
+            if (r < rows && byStart.TryGetValue(firstOffset + (long)r * bytesPerRow, out RowVisual? found) && used.Add(found))
             {
-                ordered[r] = match;
+                match = found;
+            }
+
+            ordered.Add(match);
+        }
+
+        int free = 0;
+        for (int r = 0; r < ordered.Count; r++)
+        {
+            if (ordered[r] is null)
+            {
+                while (used.Contains(_rows[free]))
+                {
+                    free++;
+                }
+
+                ordered[r] = _rows[free++];
             }
         }
 
-        var free = new Queue<RowVisual>(_rows.Where(v => !used.Contains(v)));
-        for (int r = 0; r < ordered.Length; r++)
-        {
-            ordered[r] ??= free.Dequeue();
-        }
-
-        for (int r = 0; r < ordered.Length; r++)
+        for (int r = 0; r < ordered.Count; r++)
         {
             _rows[r] = ordered[r]!;
         }
     }
+
+    private readonly Dictionary<long, RowVisual> _reuseByStart = [];
+    private readonly List<RowVisual?> _reuseOrdered = [];
+    private readonly HashSet<RowVisual> _reuseUsed = [];
 
     private void EnsureRowCount(int count)
     {
@@ -730,6 +768,7 @@ public sealed partial class HexView : UserControl
         if (!visible)
         {
             CompositionBox.Visibility = Visibility.Collapsed;
+            PlaceCharacterRange(false, 0, 0, 0);
             return;
         }
 
@@ -743,9 +782,11 @@ public sealed partial class HexView : UserControl
         // もう一方の列の対応位置は枠で示す (VIEW-06 の仕様 4)。テキスト列ではそのバイトが属する文字のセル全体を囲む (VIEW-22)。
         (double textLeft, double textWidth) = TextCharacterRange(layout, columns, _editor.Cursor);
         SetRect(SecondaryCaret, hexActive ? textLeft : hexX, y, hexActive ? textWidth : _cellWidth * 2, _rowHeight);
+        PlaceCharacterRange(!hexActive && columns.ShowText && textWidth > _cellWidth && textLeft != textX, textLeft, y, textWidth);
 
         // 上書きモードは塗りつぶしの帯、挿入モードは縦棒 (VIEW-06 の仕様 3。色だけで区別しない)。フォーカスがなければ枠 (VIEW-01 の仕様 13)。
-        if (_editor.InsertMode)
+        // フォーカスがなければ、挿入モードでも枠で示す (VIEW-01 の仕様 13)。
+        if (_editor.InsertMode && _focused)
         {
             Caret.Fill = _palette!.Caret;
             Caret.Stroke = null;
@@ -786,6 +827,37 @@ public sealed partial class HexView : UserControl
     }
 
     /// <summary>テキスト列で、オフセットのバイトが属する文字のセルの範囲 (VIEW-06 の仕様 4、VIEW-22 の仕様 9)。</summary>
+    private Microsoft.UI.Xaml.Shapes.Rectangle? _characterRange;
+
+    /// <summary>
+    /// テキスト列で、文字の範囲の途中のバイトにカーソルがあるとき、その文字の範囲全体を薄く強調する (VIEW-22 の仕様 9)。
+    /// 行の文字の奥に置く。
+    /// </summary>
+    private void PlaceCharacterRange(bool show, double left, double y, double width)
+    {
+        if (!show)
+        {
+            if (_characterRange is not null)
+            {
+                _characterRange.Visibility = Visibility.Collapsed;
+            }
+
+            return;
+        }
+
+        if (_characterRange is null)
+        {
+            _characterRange = new Microsoft.UI.Xaml.Shapes.Rectangle { IsHitTestVisible = false };
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetAccessibilityView(_characterRange,
+                Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+            ContentHost.Children.Insert(ContentHost.Children.IndexOf(RowsLayer), _characterRange);
+        }
+
+        _characterRange.Visibility = Visibility.Visible;
+        _characterRange.Fill = _palette!.SelectionInactive;
+        SetRect(_characterRange, left, y, width, _rowHeight);
+    }
+
     private (double Left, double Width) TextCharacterRange(HexLayout layout, RowColumns columns, long offset)
     {
         int column = layout.ColumnOf(offset);
@@ -881,8 +953,7 @@ public sealed partial class HexView : UserControl
         double viewport = Math.Max(0, Surface.ActualWidth - ContentLeft);
         double max = Math.Max(0, ContentWidth - viewport);
         _horizontalOffset = Math.Clamp(_horizontalOffset, 0, max);
-        ContentShift.X = -_horizontalOffset;
-        RulerShift.X = -_horizontalOffset;
+        ApplyHorizontalShift();
 
         // 横スクロールバーは表示部分の幅が足りないときだけ出す (VIEW-28 の仕様 5)。
         Visibility visibility = max > 0.5 ? Visibility.Visible : Visibility.Collapsed;
@@ -904,6 +975,66 @@ public sealed partial class HexView : UserControl
         finally
         {
             _updatingScrollBar = false;
+        }
+    }
+
+    /// <summary>
+    /// 設定「オフセット列を固定」(VIEW-28 の仕様 5。view.scroll.fixedOffsetColumn、既定オン)。オフにすると、横スクロールで
+    /// オフセット列も左へ流れ、空いた所まで内容を表示する。
+    /// </summary>
+    public bool KeepOffsetColumnFixed
+    {
+        get => _keepOffsetColumnFixed;
+        set
+        {
+            if (_keepOffsetColumnFixed != value)
+            {
+                _keepOffsetColumnFixed = value;
+                ApplyHorizontalShift();
+            }
+        }
+    }
+
+    private bool _keepOffsetColumnFixed = true;
+    private readonly TranslateTransform _offsetShift = new();
+    private readonly TranslateTransform _offsetHeaderShift = new();
+
+    /// <summary>オフセット列が横スクロールで流れた幅 (固定のときは 0)。</summary>
+    internal double OffsetColumnShift => _keepOffsetColumnFixed ? 0 : Math.Min(_horizontalOffset, ContentLeft);
+
+    /// <summary>
+    /// 横スクロールの位置を内容・見出し・オフセット列に反映する。内容の絶対位置は固定・非固定で同じ (ContentLeft − 横の位置) なので、
+    /// 当たり判定などの座標の計算は変わらない。非固定のときは、内容を表示する領域の左端をオフセット列が流れた分だけ広げる。
+    /// </summary>
+    private void ApplyHorizontalShift()
+    {
+        double shift = OffsetColumnShift;
+        double contentLeft = ContentLeft;
+        ContentShift.X = -(_horizontalOffset - shift);
+        RulerShift.X = -(_horizontalOffset - shift);
+        double left = contentLeft - shift;
+        if (ContentViewport.Margin.Left != left)
+        {
+            ContentViewport.Margin = new Thickness(left, 0, 0, 0);
+            RulerViewport.Margin = new Thickness(left, 0, 0, 0);
+            ContentClip.Rect = new Windows.Foundation.Rect(0, 0, Math.Max(0, Surface.ActualWidth - left), Math.Max(0, Surface.ActualHeight));
+            RulerViewportClip.Rect = new Windows.Foundation.Rect(0, 0, Math.Max(0, Surface.ActualWidth - left), Math.Max(_rowHeight, 1));
+        }
+
+        if (OffsetHost.RenderTransform != _offsetShift)
+        {
+            OffsetHost.RenderTransform = _offsetShift;
+            OffsetHeader.RenderTransform = _offsetHeaderShift;
+        }
+
+        if (_offsetShift.X != -shift)
+        {
+            _offsetShift.X = -shift;
+            _offsetHeaderShift.X = -shift;
+
+            // 流れて左にはみ出した部分は描かない。
+            OffsetHost.Clip = shift > 0 ? new RectangleGeometry { Rect = new Windows.Foundation.Rect(shift, -10000, 100000, 20000) } : null;
+            OffsetHeader.Clip = shift > 0 ? new RectangleGeometry { Rect = new Windows.Foundation.Rect(shift, 0, 100000, 1000) } : null;
         }
     }
 

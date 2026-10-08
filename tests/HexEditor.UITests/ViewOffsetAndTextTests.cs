@@ -480,4 +480,73 @@ public sealed class ViewOffsetAndTextTests
         Assert.Equal("◌́", CellOf(render, 0x81)!["glyph"]!.GetValue<string>());
         Assert.Equal(" ", CellOf(render, 0x82)!["text"]!.GetValue<string>());
     });
+
+    [Fact]
+    public Task Invalid_bytes_can_use_the_replacement_character() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-22 の仕様 5: 設定で不正の記号を U+FFFD にできる。
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.text.invalidSymbol"] = "replacement" });
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-VIEW-PATTERNS")] });
+        await MenuAsync(app, "Command_Encoding_utf-8");
+        JsonObject render = await app.RenderAsync();
+        JsonObject bad = CellOf(render, 0x60)!;
+        Assert.Equal("Invalid", bad["textKind"]!.GetValue<string>());
+        Assert.Equal("�", bad["glyph"]?.GetValue<string>() ?? bad["text"]!.GetValue<string>());
+        Assert.Equal("(", CellOf(render, 0x61)!["text"]!.GetValue<string>());
+    });
+
+    [Fact]
+    public Task Cursor_inside_a_character_highlights_the_whole_character() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-22 の仕様 9: テキスト列で文字の範囲の途中にカーソルを置くと、文字の範囲全体を薄く強調する。
+        AppSession app = await PatternsAsync(ctx, "Command_Encoding_utf-8");
+        await app.SendAsync("click", new JsonObject { ["offset"] = 0x51, ["column"] = "Text" });
+        await app.IdleAsync();
+        JsonObject render = await app.RenderAsync();
+        JsonObject range = render["characterRange"]!.AsObject();
+        Assert.True(range["visible"]!.GetValue<bool>());
+        Assert.Equal(CellOf(render, 0x50)!["textLeft"]!.GetValue<double>(), range["left"]!.GetValue<double>(), 3);
+        Assert.True(range["width"]!.GetValue<double>() > render["cellWidth"]!.GetValue<double>());
+
+        // 文字の先頭のバイト、Hex 列では強調しない。
+        await app.SendAsync("click", new JsonObject { ["offset"] = 0x50, ["column"] = "Text" });
+        await app.IdleAsync();
+        Assert.False((await app.RenderAsync())["characterRange"]!["visible"]!.GetValue<bool>());
+        await app.SendAsync("click", new JsonObject { ["offset"] = 0x51, ["column"] = "Hex" });
+        await app.IdleAsync();
+        Assert.False((await app.RenderAsync())["characterRange"]!["visible"]!.GetValue<bool>());
+    });
+
+    [Fact]
+    public Task Utf32_start_position_can_be_chosen() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-22 の仕様 4: UTF-32 の開始位置 (オフセットを 4 で割った余り) を選べる。
+        AppSession app = await PatternsAsync(ctx, "Command_Encoding_utf-32le");
+        static string Shown(JsonObject render, long offset) =>
+            CellOf(render, offset)!["glyph"]?.GetValue<string>() ?? CellOf(render, offset)!["text"]!.GetValue<string>();
+
+        // 先頭の 4F 00 00 00 は、余り 0 では「O」。余り 1 では 01〜04 が 1 文字 (U+0000) になる。
+        Assert.Equal("O", Shown(await app.RenderAsync(), 0x00));
+        await MenuAsync(app, "Command_ViewUtf32Phase1");
+        JsonObject after = await app.RenderAsync();
+        Assert.NotEqual("O", Shown(after, 0x00));
+        foreach (long o in new long[] { 0x02, 0x03, 0x04 })
+        {
+            Assert.Equal("Continuation", CellOf(after, o)!["textKind"]!.GetValue<string>());
+        }
+    });
+
+    [Fact]
+    public Task Context_menu_sets_the_reference_point() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-20 の「呼び出し」: 右クリックメニュー「ここを基準点にする」。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-BYTES-256")] });
+        await RightClickAsync(app, CellPoint(await app.RenderAsync(), 0x40));
+        await app.UiaInvokeAsync("HexViewMenu_SetReference");
+        await app.IdleAsync();
+        JsonObject render = await app.RenderAsync();
+        Assert.Equal("+00000000", RowOf(render, 0x40)!["offsetText"]!.GetValue<string>());
+        Assert.Equal("-00000010", RowOf(render, 0x30)!["offsetText"]!.GetValue<string>());
+    });
 }

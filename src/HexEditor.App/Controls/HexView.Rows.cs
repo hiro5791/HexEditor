@@ -146,7 +146,10 @@ public sealed partial class HexView
         public bool HasContent => _count >= 0;
 
         /// <summary>画面と同じ書式の行の文字列 (オフセット列を除く。UI オートメーションの Text パターンに渡す。VIEW-41 の仕様 6)。</summary>
-        public string ContentText { get; private set; } = string.Empty;
+        public string ContentText => _contentText ??= _builder?.Line ?? string.Empty;
+
+        // 行の文字列は読まれたときに作る (描画のたびに 1 行分の文字列を作らない。1 行 4,096 バイトでは 1 行 32 KB になる)。
+        private string? _contentText;
 
         public string OffsetText => Offset.Text;
 
@@ -371,6 +374,7 @@ public sealed partial class HexView
                 TextCellKind.Continuation => _frame.Style.ShowContinuation ? "·" : " ",
                 TextCellKind.Empty => " ",
                 TextCellKind.NonPrintable => _text[c].Text,
+                TextCellKind.Invalid when _text[c].Text.Length > 0 => _text[c].Text,
                 _ => ".",
             },
         };
@@ -518,7 +522,7 @@ public sealed partial class HexView
                     Brush fore = TextForeground(c, palette);
                     TextCell decoded = _text[c];
                     // 制御文字の図記号 (VIEW-21 の仕様 7) も等幅フォントにないことがあるため、同じく別に描く。
-                    if (KindAt(c) is CellKind.Normal or CellKind.Modified && decoded.Kind is TextCellKind.Char or TextCellKind.NonPrintable
+                    if (KindAt(c) is CellKind.Normal or CellKind.Modified && decoded.Kind is TextCellKind.Char or TextCellKind.NonPrintable or TextCellKind.Invalid
                         && NeedsOverlay(decoded))
                     {
                         // 全角・結合文字などは別の TextBlock で、文字の範囲のセルに収めて描く (VIEW-22 の仕様 2・3・6)。
@@ -540,7 +544,8 @@ public sealed partial class HexView
                 }
             }
 
-            ContentText = builder.Flush();
+            builder.Flush();
+            _contentText = null;
         }
 
         private static readonly string[] SpaceStrings = [.. Enumerable.Range(0, 17).Select(n => new string(' ', n))];
@@ -583,7 +588,21 @@ public sealed partial class HexView
             // 文字の範囲に収まらない場合は横方向に縮小する (VIEW-22 の仕様 3)。収まる場合は範囲の中央に置く。
             glyph.Width = Math.Max(natural, width / scale);
             glyph.TextAlignment = TextAlignment.Center;
-            glyph.RenderTransform = scale < 1 ? new ScaleTransform { ScaleX = scale } : null;
+            if (scale < 1)
+            {
+                if (glyph.RenderTransform is ScaleTransform transform)
+                {
+                    transform.ScaleX = scale;
+                }
+                else
+                {
+                    glyph.RenderTransform = new ScaleTransform { ScaleX = scale };
+                }
+            }
+            else if (glyph.RenderTransform is not null)
+            {
+                glyph.RenderTransform = null;
+            }
             Canvas.SetLeft(glyph, left);
             Canvas.SetTop(glyph, 0);
             return (text, left, width, scale);
@@ -591,9 +610,67 @@ public sealed partial class HexView
 
         // ---- 背景 (VIEW-17 の層 2〜5・14・16) ----
 
+        // 背景の TextHighlighter は作り直さずに使い回す (行を作り直すたびに作ると、XAML のオブジェクトの追跡のために GC が増え、
+        // スクロール中のフレームが遅れる。VIEW-04 の仕様 3)。
+        private readonly List<TextHighlighter> _highlighters = [];
+        private int _highlightersUsed;
+        private int _highlightersShown;
+
+        /// <summary>使い回しの TextHighlighter を 1 つ取る (範囲は空)。</summary>
+        private TextHighlighter TakeHighlighter(Brush background, Brush? foreground)
+        {
+            TextHighlighter h;
+            if (_highlightersUsed < _highlighters.Count)
+            {
+                h = _highlighters[_highlightersUsed];
+                h.Ranges.Clear();
+            }
+            else
+            {
+                h = new TextHighlighter();
+                _highlighters.Add(h);
+            }
+
+            _highlightersUsed++;
+            if (!ReferenceEquals(h.Background, background))
+            {
+                h.Background = background;
+            }
+
+            if (!ReferenceEquals(h.Foreground, foreground))
+            {
+                h.Foreground = foreground;
+            }
+
+            return h;
+        }
+
+        /// <summary>範囲を入れた TextHighlighter を行に付ける。範囲がなければ取ったものを戻す。</summary>
+        private void ShowHighlighter(TextHighlighter h)
+        {
+            if (h.Ranges.Count == 0)
+            {
+                if (_highlightersUsed > 0 && ReferenceEquals(_highlighters[_highlightersUsed - 1], h))
+                {
+                    _highlightersUsed--;
+                }
+
+                return;
+            }
+
+            Content.TextHighlighters.Add(h);
+            _highlightersShown++;
+        }
+
         private void Highlight(in RowFrame frame, Palette palette)
         {
-            Content.TextHighlighters.Clear();
+            if (_highlightersShown > 0)
+            {
+                Content.TextHighlighters.Clear();
+            }
+
+            _highlightersUsed = 0;
+            _highlightersShown = 0;
             RowColumns columns = frame.Columns;
             int count = Count;
             bool hc = palette.HighContrast;
@@ -601,7 +678,7 @@ public sealed partial class HexView
             // 層 16: 列の交互色。現在行 (層 14) では現在行の背景が隠す。ハイコントラストでは縦の点線にする (DrawAlternateLines)。
             if (frame.Style.AlternateColumns && !hc && !_currentRow)
             {
-                var alt = new TextHighlighter { Background = palette.Alternate };
+                TextHighlighter alt = TakeHighlighter(palette.Alternate, null);
                 for (int c = 0; c < columns.BytesPerRow; c++)
                 {
                     if (!columns.Format.IsGroupStart(c) || columns.Format.GroupOf(c) % 2 == 0)
@@ -630,10 +707,7 @@ public sealed partial class HexView
                     }
                 }
 
-                if (alt.Ranges.Count > 0)
-                {
-                    Content.TextHighlighters.Add(alt);
-                }
+                ShowHighlighter(alt);
             }
 
             if (_currentRow && !hc)
@@ -663,17 +737,17 @@ public sealed partial class HexView
                 Brush textFore = hexActive ? palette.SelectionInactiveText : palette.SelectionText;
                 if (columns.ShowHex)
                 {
-                    var hex = new TextHighlighter { Background = hexBack, Foreground = hexFore };
+                    TextHighlighter hex = TakeHighlighter(hexBack, hexFore);
                     int hexStart = columns.HexIndex(first);
                     hex.Ranges.Add(new TextRange { StartIndex = hexStart, Length = columns.HexIndex(last) + 2 - hexStart });
-                    Content.TextHighlighters.Add(hex);
+                    ShowHighlighter(hex);
                 }
 
                 if (columns.ShowText)
                 {
-                    var text = new TextHighlighter { Background = textBack, Foreground = textFore };
+                    TextHighlighter text = TakeHighlighter(textBack, textFore);
                     text.Ranges.Add(new TextRange { StartIndex = columns.TextIndex(first), Length = last - first + 1 });
-                    Content.TextHighlighters.Add(text);
+                    ShowHighlighter(text);
                 }
 
                 for (int i = first; i <= last; i++)
@@ -687,15 +761,16 @@ public sealed partial class HexView
         private void AddRanges(RowColumns columns, bool[] flags, Brush background, Brush? foreground, string layer)
         {
             int count = Count;
-            var hex = new TextHighlighter { Background = background };
-            var text = new TextHighlighter { Background = background };
-            if (foreground is not null)
+            int first = flags.AsSpan(0, count).IndexOf(true);
+            if (first < 0)
             {
-                hex.Foreground = foreground;
-                text.Foreground = foreground;
+                // 範囲がない (ほとんどの行): TextHighlighter を取らない。
+                return;
             }
 
-            for (int c = 0; c < count; c++)
+            TextHighlighter hex = TakeHighlighter(background, foreground);
+            TextHighlighter text = TakeHighlighter(background, foreground);
+            for (int c = first; c < count; c++)
             {
                 if (!flags[c])
                 {
@@ -728,14 +803,17 @@ public sealed partial class HexView
                 c = end;
             }
 
-            if (hex.Ranges.Count > 0)
+            // 取った順の逆に戻す (空のものを使い回しの列に返すため)。
+            bool showHex = hex.Ranges.Count > 0;
+            ShowHighlighter(text);
+            if (showHex)
             {
                 Content.TextHighlighters.Add(hex);
+                _highlightersShown++;
             }
-
-            if (text.Ranges.Count > 0)
+            else
             {
-                Content.TextHighlighters.Add(text);
+                ShowHighlighter(hex);
             }
         }
 
@@ -1053,17 +1131,25 @@ public sealed partial class HexView
             _used = 0;
         }
 
-        /// <summary>残りを書き出し、行全体の文字列を返す。</summary>
-        public string Flush()
+        /// <summary>行全体の文字列 (読まれたときに作る)。</summary>
+        public string Line => _line.ToString();
+
+        /// <summary>
+        /// 残りを書き出す。余った Run は外さずに空にして残す (次に Run が増えたときに使い回す。Run を外して作り直すと、XAML の
+        /// オブジェクトの追跡のために GC が増える。VIEW-04 の仕様 3)。
+        /// </summary>
+        public void Flush()
         {
             FlushRun();
-            for (int i = runs.Count - 1; i >= _used; i--)
+            for (int i = _used; i < runs.Count; i++)
             {
-                row.Inlines.RemoveAt(i);
-                runs.RemoveAt(i);
+                RunSlot slot = runs[i];
+                if (slot.Text.Length != 0)
+                {
+                    slot.Run.Text = string.Empty;
+                    slot.Text = string.Empty;
+                }
             }
-
-            return _line.ToString();
         }
 
         private void FlushRun()
@@ -1073,15 +1159,16 @@ public sealed partial class HexView
                 return;
             }
 
-            string text = _text.ToString();
             // 書き換えは、覚えている文字と色 (managed の値) と比べて変わったときだけ行う (Run の値を読むと文字列の写しを作るため)。
+            // 同じ文字なら文字列を作らない。
             if (_used < runs.Count)
             {
                 RunSlot slot = runs[_used];
-                if (!string.Equals(slot.Text, text, StringComparison.Ordinal))
+                if (!_text.Equals(slot.Text.AsSpan()))
                 {
-                    slot.Run.Text = text;
-                    slot.Text = text;
+                    string changed = _text.ToString();
+                    slot.Run.Text = changed;
+                    slot.Text = changed;
                 }
 
                 if (!ReferenceEquals(slot.Brush, _brush))
@@ -1092,6 +1179,7 @@ public sealed partial class HexView
             }
             else
             {
+                string text = _text.ToString();
                 var run = new Run { Text = text, Foreground = _brush };
                 runs.Add(new RunSlot { Run = run, Text = text, Brush = _brush });
                 row.Inlines.Add(run);

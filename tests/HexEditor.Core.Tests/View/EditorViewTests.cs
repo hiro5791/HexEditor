@@ -315,4 +315,45 @@ public sealed class EditorViewTests
             File.Delete(path);
         }
     }
+
+    // ---- VIEW-25 の仕様 8 ----
+
+    [Fact]
+    public void Ctrl_arrows_move_by_group_and_ctrl_up_down_scroll_only()
+    {
+        EditorState e = Bytes256();
+        e.ApplyView(e.View with { GroupSize = 4 });
+        e.GoTo(6);
+        e.MovePreviousGroup();
+        Assert.Equal(4, e.Cursor);
+        e.MovePreviousGroup();
+        Assert.Equal(0, e.Cursor);
+        e.MovePreviousGroup();
+        Assert.Equal(0, e.Cursor);
+        e.MoveNextGroup();
+        Assert.Equal(4, e.Cursor);
+        e.GoTo(14);
+        e.MoveNextGroup();
+        Assert.Equal(16, e.Cursor);
+
+        // 末尾では最大値で止まる。
+        e.GoTo(254);
+        e.MoveNextGroup();
+        Assert.Equal(256, e.Cursor);
+
+        // グループ化が 1 のときは ← / → と同じ。
+        e.ApplyView(e.View with { GroupSize = 1 });
+        e.GoTo(10);
+        e.MoveNextGroup();
+        Assert.Equal(11, e.Cursor);
+        e.MovePreviousGroup();
+        Assert.Equal(10, e.Cursor);
+
+        // Ctrl+↑ / Ctrl+↓: カーソルを動かさずに 1 行。
+        EditorState big = Seq1M();
+        big.GoTo(0x100);
+        long top = big.TopRow;
+        big.ScrollRows(1);
+        Assert.Equal((top + 1, 0x100L), (big.TopRow, big.Cursor));
+    }
 }

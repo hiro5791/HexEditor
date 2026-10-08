@@ -43,7 +43,10 @@ public static class AnnotationBrushes
             : Get($"BookmarkMark{Index(color)}Brush", scope, highContrast);
 
     /// <summary>ハイコントラストの枠線の形: 1〜4 番目は実線、5〜8 番目は破線 (色と形の組み合わせで 8 色を区別する)。</summary>
-    public static IReadOnlyList<double>? Dash(BookmarkColor color) => Index(color) > 4 ? [3, 2] : null;
+    public static IReadOnlyList<double>? Dash(BookmarkColor color) => Index(color) > 4 ? DashPattern : null;
+
+    // 同じ配列を返す (描画で、変わったときだけ破線の模様を設定し直すため)。
+    private static readonly double[] DashPattern = [3, 2];
 
     /// <summary>任意の色は、色の一覧の 1 番目と同じ形で描く。</summary>
     private static int Index(BookmarkColor color) => color.IsCustom ? 1 : color.PaletteIndex;

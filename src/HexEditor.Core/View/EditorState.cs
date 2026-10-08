@@ -179,6 +179,28 @@ public sealed partial class EditorState
     /// <summary>設定「ジャンプ先の表示位置」(VIEW-34 の仕様 2。既定は上から 1/3)。</summary>
     public JumpPlacement JumpPlacement { get; set; } = JumpPlacement.Third;
 
+    /// <summary>
+    /// マウスでドラッグ中 (範囲選択など)。ビューが設定する。表示の更新の頻度を抑えるのに使う (VIEW-40 の仕様 4)。
+    /// 終わったときは <see cref="Changed"/> を出す (抑えていた表示を最新にするため)。
+    /// </summary>
+    public bool PointerDragging
+    {
+        get => _pointerDragging;
+        set
+        {
+            if (_pointerDragging != value)
+            {
+                _pointerDragging = value;
+                if (!value)
+                {
+                    RaiseChanged();
+                }
+            }
+        }
+    }
+
+    private bool _pointerDragging;
+
     /// <summary>カーソル・選択範囲・スクロール位置・モードが変わった。</summary>
     public event EventHandler? Changed;
 
@@ -274,6 +296,39 @@ public sealed partial class EditorState
         {
             MoveTo(layout.MaxCursor, extend, keepNibble: true);
         }
+    }
+
+    /// <summary>
+    /// 「移動: 前のグループへ」(Ctrl+←。VIEW-25 の仕様 8): グループの先頭にいなければそのグループの先頭へ、先頭にいれば前のグループの
+    /// 先頭へ。グループ化が 1 のときは ← と同じ。
+    /// </summary>
+    public void MovePreviousGroup(bool extend = false)
+    {
+        int group = Math.Max(1, View.GroupSize);
+        if (group == 1)
+        {
+            MoveLeft(extend);
+            return;
+        }
+
+        int within = (int)(Layout.ColumnOf(_cursor) % group);
+        long target = _cursor - (within == 0 ? group : within);
+        MoveTo(Math.Max(0, target), extend);
+    }
+
+    /// <summary>「移動: 次のグループへ」(Ctrl+→。VIEW-25 の仕様 8): 次のグループの先頭へ。最大値を超える場合は最大値へ。</summary>
+    public void MoveNextGroup(bool extend = false)
+    {
+        int group = Math.Max(1, View.GroupSize);
+        if (group == 1)
+        {
+            MoveRight(extend);
+            return;
+        }
+
+        int within = (int)(Layout.ColumnOf(_cursor) % group);
+        long target = SaturatingAdd(_cursor, group - within);
+        MoveTo(Math.Min(target, Layout.MaxCursor), extend);
     }
 
     public void MoveHome(bool extend = false) => MoveTo(Layout.RowStart(Layout.RowOf(_cursor)), extend);
@@ -394,13 +449,39 @@ public sealed partial class EditorState
         SetSelection(offset, length);
         _cursor = Math.Min(offset, Layout.MaxCursor);
         LowNibble = false;
-        long row = Layout.RowOf(_cursor);
-        if (row < _topRow || row >= _topRow + _visibleRows)
+        ScrollToJumpRange(_cursor, length, JumpPlacement.Center);
+        RaiseChanged();
+    }
+
+    /// <summary>
+    /// 範囲へのジャンプの表示位置 (VIEW-34 の仕様 3): 範囲全体が表示領域に入っていればスクロールしない。入っていなければ、範囲全体が
+    /// 入るならそうする (先頭の行を <paramref name="placement"/> の位置に置き、末尾がはみ出すなら末尾が一番下に来るまで戻す)。
+    /// 入らない場合は範囲の先頭を <paramref name="placement"/> の規則で置く。
+    /// </summary>
+    private void ScrollToJumpRange(long start, long length, JumpPlacement placement)
+    {
+        HexLayout layout = Layout;
+        long first = layout.RowOf(start);
+        long last = length > 0 ? layout.RowOf(Math.Min(start + length - 1, Math.Max(0, layout.Length - 1))) : first;
+        last = Math.Max(first, last);
+        long visible = Math.Max(1, _visibleRows);
+        if (first >= _topRow && last < _topRow + visible)
         {
-            SetTopRow(row - _visibleRows / 2);
+            return;
         }
 
-        RaiseChanged();
+        long top = placement switch
+        {
+            JumpPlacement.Top => first,
+            JumpPlacement.Center => first - visible / 2,
+            _ => first - visible / 3,
+        };
+        if (last - first + 1 <= visible && last >= top + visible)
+        {
+            top = last - visible + 1;
+        }
+
+        SetTopRow(Math.Min(top, first));
     }
 
     private void ScrollToJumpTarget()

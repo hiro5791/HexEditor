@@ -464,6 +464,18 @@ public sealed partial class MainWindow
         view.SetHighlightSource("bookmarks", (start, end) => BookmarkHighlights(view, start, end));
         view.SetOffsetMarkerSource("bookmarks", (start, end) => BookmarkMarks(view, start, end));
 
+        // スクロールバーの印 (VIEW-02 の仕様 9。設定でオン): その範囲から始まる最初のブックマークの色。木を引くので件数によらない。
+        view.BookmarkMarkerSource = (start, end) =>
+        {
+            if (DocumentOf(view) is not { } d || !_annotations.TryGetValue(d, out DocumentAnnotations? a))
+            {
+                return null;
+            }
+
+            Bookmark? first = start <= 0 ? a.Bookmarks.First : a.Bookmarks.After(start - 1);
+            return first is not null && first.Start < end ? AnnotationBrushes.Mark(first.Color, view, view.IsHighContrast) : null;
+        };
+
         // ブックマークの名前はツールチップ (VIEW-07) と位置の読み上げ (「ブックマーク 名前」。INSP-23 の仕様 9、UI-51) に出す。
         view.AnnotationNames = at => DocumentOf(view) is { } d && _annotations.TryGetValue(d, out DocumentAnnotations? a)
             ? [.. a.Bookmarks.Overlapping(at, at + 1).Select(b => b.Name)]
@@ -477,6 +489,7 @@ public sealed partial class MainWindow
         {
             ExtendHexViewEditMenu(menu);
             ExtendHexViewMenu(view, menu);
+            ExtendHexViewReferenceMenu(menu);
         });
     }
 

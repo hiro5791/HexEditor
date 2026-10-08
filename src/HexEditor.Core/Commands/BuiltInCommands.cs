@@ -109,9 +109,42 @@ public static class BuiltInCommands
         new("go.goTo", "go") { Icon = IconGoTo, DefaultBindings = [K("Ctrl+G")], Condition = "documentOpen" },
         new("go.nextNibble", "go") { Condition = "documentOpen" },
         new("go.previousNibble", "go") { Condition = "documentOpen" },
-        new("go.toggleColumn", "go") { Condition = "documentOpen" },
+        new("go.toggleColumn", "go")
+        {
+            // Hex ビューが自分で処理する (VIEW-27 の仕様 1。列が 2 つなので順と逆は同じ)。
+            DefaultBindings = [K("Tab", KeyScope.Editor), K("Shift+Tab", KeyScope.Editor)],
+            NativeScopes = [KeyScope.Editor],
+            Condition = "documentOpen",
+        },
+        new("go.previousGroup", "go")
+        {
+            // VIEW-25 の仕様 8。Hex ビューが自分で処理する (Shift を足すと選択範囲を広げる)。
+            DefaultBindings = [K("Ctrl+Left", KeyScope.Editor)],
+            NativeScopes = [KeyScope.Editor],
+            Condition = "documentOpen",
+        },
+        new("go.nextGroup", "go")
+        {
+            DefaultBindings = [K("Ctrl+Right", KeyScope.Editor)],
+            NativeScopes = [KeyScope.Editor],
+            Condition = "documentOpen",
+        },
+        new("view.scrollLineUp", "view")
+        {
+            // VIEW-25 の仕様 8: カーソルを動かさずに表示だけを 1 行動かす。
+            DefaultBindings = [K("Ctrl+Up", KeyScope.Editor)],
+            NativeScopes = [KeyScope.Editor],
+            Condition = "documentOpen",
+        },
+        new("view.scrollLineDown", "view")
+        {
+            DefaultBindings = [K("Ctrl+Down", KeyScope.Editor)],
+            NativeScopes = [KeyScope.Editor],
+            Condition = "documentOpen",
+        },
         new("go.back", "go") { Icon = IconBack, DefaultBindings = [K("Alt+Left")], Condition = "documentOpen && canGoBack" },
         new("go.forward", "go") { Icon = IconForward, DefaultBindings = [K("Alt+Right")], Condition = "documentOpen && canGoForward" },
+        new("go.history", "go") { Condition = "documentOpen && canGoBack" },
         new("go.start", "go") { Condition = "documentOpen" },
         new("go.end", "go") { Condition = "documentOpen" },
 
@@ -175,6 +208,7 @@ public static class BuiltInCommands
         new("view.resetDefault", "view") { Condition = "documentOpen" },
         new("view.announcePosition", "accessibility") { Condition = "documentOpen" },
         new("view.utf16Odd", "view") { Condition = "documentOpen" },
+        .. Enumerable.Range(0, 4).Select(p => new CommandDefinition($"view.utf32Phase{p}", "view") { Condition = "documentOpen" }),
         new("view.encoding.utf8", "view") { Condition = "documentOpen" },
         new("view.encoding.utf16le", "view") { Condition = "documentOpen" },
         new("view.encoding.utf16be", "view") { Condition = "documentOpen" },

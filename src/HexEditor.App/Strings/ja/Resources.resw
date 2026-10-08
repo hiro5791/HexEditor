@@ -2564,4 +2564,44 @@
   <data name="CmdCategory_accessibility" xml:space="preserve"><value>アクセシビリティ</value></data>
   <data name="TranslationReport_Truncated" xml:space="preserve"><value>{1} 件のうち最初の {0} 件を表示しています。検索で絞り込んでください。</value></data>
   <data name="SetGroup_translators" xml:space="preserve"><value>翻訳者向け</value></data>
+  <data name="Cmd_go_previousGroup" xml:space="preserve"><value>移動: 前のグループへ</value></data>
+  <data name="CmdAlias_go_previousGroup" xml:space="preserve"><value>まえの ぐるーぷ いどう</value></data>
+  <data name="Cmd_go_nextGroup" xml:space="preserve"><value>移動: 次のグループへ</value></data>
+  <data name="CmdAlias_go_nextGroup" xml:space="preserve"><value>つぎの ぐるーぷ いどう</value></data>
+  <data name="Cmd_view_scrollLineUp" xml:space="preserve"><value>表示: 1 行上にスクロール</value></data>
+  <data name="CmdAlias_view_scrollLineUp" xml:space="preserve"><value>うえに すくろーる いちぎょう</value></data>
+  <data name="Cmd_view_scrollLineDown" xml:space="preserve"><value>表示: 1 行下にスクロール</value></data>
+  <data name="CmdAlias_view_scrollLineDown" xml:space="preserve"><value>したに すくろーる いちぎょう</value></data>
+  <data name="Set_view_text_invalidSymbol" xml:space="preserve"><value>不正なバイトの記号</value></data>
+  <data name="SetDesc_view_text_invalidSymbol" xml:space="preserve"><value>テキスト列の文字コードで正しくないバイトの表示方法です。</value></data>
+  <data name="SetOpt_view_text_invalidSymbol_dot" xml:space="preserve"><value>ドット (.)</value></data>
+  <data name="SetOpt_view_text_invalidSymbol_replacement" xml:space="preserve"><value>置換文字 (�)</value></data>
+  <data name="Menu_View_Utf32Start.Text" xml:space="preserve"><value>UTF-32 の開始位置(P)</value></data>
+  <data name="Menu_View_Utf32Start.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_Utf32Phase" xml:space="preserve"><value>オフセットを 4 で割った余り {0}</value></data>
+  <data name="Cmd_view_utf32Phase0" xml:space="preserve"><value>表示: UTF-32 を余り 0 の位置から解読</value></data>
+  <data name="CmdAlias_view_utf32Phase0" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり ぜろ</value></data>
+  <data name="Cmd_view_utf32Phase1" xml:space="preserve"><value>表示: UTF-32 を余り 1 の位置から解読</value></data>
+  <data name="CmdAlias_view_utf32Phase1" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり いち</value></data>
+  <data name="Cmd_view_utf32Phase2" xml:space="preserve"><value>表示: UTF-32 を余り 2 の位置から解読</value></data>
+  <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり に</value></data>
+  <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>表示: UTF-32 を余り 3 の位置から解読</value></data>
+  <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり さん</value></data>
+  <data name="Cmd_go_history" xml:space="preserve"><value>移動: 履歴の一覧</value></data>
+  <data name="CmdAlias_go_history" xml:space="preserve"><value>りれき いちらん じゃんぷ もどる</value></data>
+  <data name="GoTo_History_Name" xml:space="preserve"><value>入力の履歴</value></data>
+  <data name="GoTo_History_Empty" xml:space="preserve"><value>履歴はありません</value></data>
+  <data name="Set_view_scrollBar_cursorMark" xml:space="preserve"><value>スクロールバーにカーソル位置を表示</value></data>
+  <data name="SetDesc_view_scrollBar_cursorMark" xml:space="preserve"><value>縦のスクロールバーの、カーソルのある行の位置に細い印を表示します。</value></data>
+  <data name="Set_view_scrollBar_searchMarks" xml:space="preserve"><value>スクロールバーに検索結果を表示</value></data>
+  <data name="SetDesc_view_scrollBar_searchMarks" xml:space="preserve"><value>縦のスクロールバーの、検索結果の位置に細い印を表示します。</value></data>
+  <data name="Set_view_scrollBar_selectionMark" xml:space="preserve"><value>スクロールバーに選択範囲を表示</value></data>
+  <data name="SetDesc_view_scrollBar_selectionMark" xml:space="preserve"><value>縦のスクロールバーに、選択範囲の位置を示す印を表示します。</value></data>
+  <data name="Set_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>スクロールバーにブックマークを表示</value></data>
+  <data name="SetDesc_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>縦のスクロールバーの、ブックマークの開始位置に、ブックマークの色で細い印を表示します。</value></data>
+  <data name="Set_diagnostics_hexView_overlay" xml:space="preserve"><value>Hex ビューに描画の診断を表示</value></data>
+  <data name="SetDesc_diagnostics_hexView_overlay" xml:space="preserve"><value>Hex ビューの右上に、フレームレート・描画時間・読み込み待ちのフレーム数を示す小さな表を表示します。性能の調査用です。</value></data>
+  <data name="Set_view_scroll_fixedOffsetColumn" xml:space="preserve"><value>オフセット列を固定</value></data>
+  <data name="SetDesc_view_scroll_fixedOffsetColumn" xml:space="preserve"><value>横にスクロールしても、オフセット列を左端に残します。オフにすると、Hex 列・テキスト列と一緒にスクロールします。</value></data>
+  <data name="HexView_Menu_SetReference" xml:space="preserve"><value>ここを基準点にする</value></data>
 </root>

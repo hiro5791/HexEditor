@@ -100,6 +100,73 @@ public sealed class ViewMiscTests
     });
 
     [Fact]
+    public Task Diagnostics_overlay_is_enabled_from_the_settings() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-04 の仕様 8: 診断表示は既定オフ。設定 (詳細 > 診断) で有効にする。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        Assert.False(await app.IsShownAsync("HexViewDiagnostics"));
+
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["diagnostics.hexView.overlay"] = true });
+        AppSession other = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        await other.IdleAsync();
+        await other.WaitUntilAsync(() => other.IsShownAsync("HexViewDiagnostics"), TimeSpan.FromSeconds(10), "diagnostics overlay");
+    });
+
+    [Fact]
+    public Task Scroll_bar_marks_for_selection_and_bookmarks_follow_the_settings() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-02 の仕様 9: 既定はカーソル位置 (と検索結果) だけ。設定で選択範囲とブックマークの印も出せる。
+        static async Task<List<string>> KindsAsync(AppSession app) =>
+            [.. (await app.RenderAsync())["scrollMarkers"]!.AsArray().Select(m => m!["kind"]!.GetValue<string>())];
+
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SendAsync("bookmarksAdd", new JsonObject { ["count"] = 3, ["step"] = 0x40000, ["length"] = 4 });
+        await app.SendAsync("select", new JsonObject { ["start"] = 0x80000, ["length"] = 0x10000 });
+        await app.IdleAsync();
+        Assert.Equal(["cursor"], await KindsAsync(app));
+
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.scrollBar.selectionMark"] = true, ["view.scrollBar.bookmarkMarks"] = true });
+        AppSession other = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        await other.SendAsync("bookmarksAdd", new JsonObject { ["count"] = 3, ["step"] = 0x40000, ["length"] = 4 });
+        await other.SendAsync("select", new JsonObject { ["start"] = 0x80000, ["length"] = 0x10000 });
+        await other.IdleAsync();
+        JsonArray marks = (await other.RenderAsync())["scrollMarkers"]!.AsArray();
+        Assert.Equal(3, marks.Count(m => m!["kind"]!.GetValue<string>() == "bookmark"));
+        JsonNode selection = Assert.Single(marks, m => m!["kind"]!.GetValue<string>() == "selection")!;
+        JsonNode cursor = Assert.Single(marks, m => m!["kind"]!.GetValue<string>() == "cursor")!;
+
+        // 選択範囲 (ファイルの 1/2 から 1/16) の印は、スクロールバーの中央付近にある。
+        double barTop = selection["top"]!.GetValue<double>();
+        Assert.True(barTop > 0 && selection["height"]!.GetValue<double>() >= 2);
+        Assert.True(cursor["top"]!.GetValue<double>() >= barTop - 3);
+    });
+
+    [Fact]
+    public Task History_list_is_available_in_the_command_palette() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-31 の仕様 8 と「呼び出し」: コマンドパレット「移動: 履歴の一覧」で最新の履歴を選んで移れる。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        foreach (string target in new[] { "0x1000", "0x2000", "0x3000" })
+        {
+            await GoToAsync(app, target);
+        }
+
+        await app.SendAsync("execute", new JsonObject { ["id"] = "go.history" });
+        JsonObject state = await app.SendAsync("palette");
+        Assert.True(state["open"]!.GetValue<bool>());
+        JsonArray entries = state["entries"]!.AsArray();
+        Assert.Equal(3, entries.Count);
+        Assert.All(entries, e => Assert.StartsWith("history:", e!["key"]!.GetValue<string>()));
+        Assert.Contains("2000", entries[0]!["title"]!.GetValue<string>());
+
+        await app.SendAsync("paletteEnter");
+        await app.IdleAsync();
+        Assert.Equal(0x2000, await CursorAsync(app));
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-VIEW-31-01")]
     public Task History_menu_items_follow_back_and_forward() => UiTestContext.RunAsync(async ctx =>
     {

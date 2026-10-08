@@ -39,6 +39,7 @@ public sealed partial class MainWindow
         Palette.Closed += (_, _) =>
         {
             _pendingArgument = null;
+            _pendingPick = null;
             FocusEditor();
         };
 
@@ -158,6 +159,7 @@ public sealed partial class MainWindow
     public void OpenPalette(string prefix)
     {
         _pendingArgument = null;
+        _pendingPick = null;
         Palette.Open(prefix);
     }
 
@@ -175,8 +177,60 @@ public sealed partial class MainWindow
 
     private static IComparer<string> DisplayOrder => StringComparer.Create(CultureInfo.CurrentUICulture, ignoreCase: true);
 
+    /// <summary>選ぶための一覧をパレットに出している間の検索 (ジャンプ履歴の一覧など)。閉じたら戻す。</summary>
+    private Func<string, PaletteResult>? _pendingPick;
+
+    /// <summary>「移動: 履歴の一覧」(VIEW-31 の仕様 8)。最新 20 件を「アドレス + その位置から 8 バイトの Hex」で出す。</summary>
+    private void ShowHistoryInPalette()
+    {
+        if (Editor is not { } editor)
+        {
+            return;
+        }
+
+        _pendingArgument = null;
+        _pendingPick = query =>
+        {
+            IReadOnlyList<JumpPoint> recent = editor.RecentJumps;
+            var entries = new List<PaletteEntry>();
+            for (int i = 0; i < recent.Count; i++)
+            {
+                int index = i;
+                string title = HistoryEntryText(editor, recent[i]);
+                if (query.Trim().Length > 0 && !title.Contains(query.Trim(), StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                entries.Add(new PaletteEntry
+                {
+                    Key = "history:" + i,
+                    Title = title,
+                    Invoke = () =>
+                    {
+                        _pendingPick = null;
+                        if (Editor == editor)
+                        {
+                            editor.GoBackTo(index);
+                        }
+
+                        return Task.CompletedTask;
+                    },
+                });
+            }
+
+            return new PaletteResult(entries, entries.Count == 0 ? Loc.Get("Palette_NoMatch") : null);
+        };
+        Palette.Open(string.Empty);
+    }
+
     private PaletteResult QueryPalette(string text)
     {
+        if (_pendingPick is { } pick)
+        {
+            return pick(text);
+        }
+
         if (_pendingArgument is { } waiting)
         {
             return ArgumentMode(waiting, text);

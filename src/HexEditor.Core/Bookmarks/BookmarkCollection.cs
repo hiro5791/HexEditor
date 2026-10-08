@@ -53,7 +53,7 @@ public sealed class BookmarkCollection
     private static readonly ConditionalWeakTable<Document, BookmarkCollection> Attached = new();
 
     private readonly BookmarkTree _tree = new();
-    private readonly Dictionary<string, List<Bookmark>> _byName = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, object> _byName = new(StringComparer.OrdinalIgnoreCase);
     private readonly Bookmark?[] _numbers = new Bookmark?[10];
     private readonly LinkedList<IReadOnlyList<(Bookmark Bookmark, BookmarkPosition Position)>> _deleted = new();
     private readonly TimeProvider _time;
@@ -234,7 +234,7 @@ public sealed class BookmarkCollection
             return saved;
         }
 
-        var nodes = new List<BookmarkTree.Node>();
+        var nodes = new List<Bookmark>();
         long o = op.Offset;
         long end = o + op.Removed;
 
@@ -242,15 +242,15 @@ public sealed class BookmarkCollection
         // まとめてずらす。
         _tree.Collect(end, o, strict: false, nodes);
         var moved = new List<(Bookmark Bookmark, BookmarkPosition After)>(nodes.Count);
-        foreach (BookmarkTree.Node node in nodes)
+        foreach (Bookmark node in nodes)
         {
-            Bookmark b = node.Bookmark;
+            Bookmark b = node;
             var before = new BookmarkPosition(BookmarkTree.StartOf(node), b.Length, b.RangeDeleted);
             saved.Add((b, before));
             moved.Add((b, op.Inserted > 0 ? MapInsert(before, o, op.Inserted) : MapDelete(before, o, op.Removed)));
         }
 
-        foreach (BookmarkTree.Node node in nodes)
+        foreach (Bookmark node in nodes)
         {
             _tree.Remove(node);
         }
@@ -281,7 +281,7 @@ public sealed class BookmarkCollection
             var present = op.Saved.Where(s => s.Bookmark.Owner == this).ToList();
             foreach ((Bookmark b, _) in present)
             {
-                _tree.Remove(b.Node!);
+                _tree.Remove(b);
             }
 
             var inverse = op.Inserted > 0 ? new EditOp(op.Offset, op.Inserted, 0) : new EditOp(op.Offset, 0, op.Removed);
@@ -388,14 +388,14 @@ public sealed class BookmarkCollection
         var removed = new List<(Bookmark, BookmarkPosition)>();
         foreach (Bookmark b in items)
         {
-            if (b.Owner != this || b.Node is not { } node)
+            if (b.Owner != this || !b.InTree)
             {
                 continue;
             }
 
-            long start = BookmarkTree.StartOf(node);
+            long start = BookmarkTree.StartOf(b);
             removed.Add((b, new BookmarkPosition(start, b.Length, b.RangeDeleted)));
-            _tree.Remove(node);
+            _tree.Remove(b);
             b.Owner = null;
             b._detachedStart = start;
             RemoveName(b);
@@ -464,10 +464,10 @@ public sealed class BookmarkCollection
     /// <summary>すべて外す (記録しない)。</summary>
     public void Clear()
     {
-        foreach ((BookmarkTree.Node node, _) in _tree.InOrder().ToList())
+        foreach ((Bookmark node, _) in _tree.InOrder().ToList())
         {
-            node.Bookmark.Owner = null;
-            node.Bookmark.Node = null;
+            node.Owner = null;
+            node.InTree = false;
         }
 
         _tree.Clear();
@@ -520,12 +520,12 @@ public sealed class BookmarkCollection
     {
         ArgumentOutOfRangeException.ThrowIfNegative(start);
         ArgumentOutOfRangeException.ThrowIfNegative(length);
-        if (b.Owner != this || b.Node is not { } node || BookmarkTree.StartOf(node) == start && b.Length == length)
+        if (b.Owner != this || !b.InTree || BookmarkTree.StartOf(b) == start && b.Length == length)
         {
             return;
         }
 
-        _tree.Remove(node);
+        _tree.Remove(b);
         b.Length = length;
         b.RangeDeleted = false;
         _tree.Insert(b, start);
@@ -594,27 +594,27 @@ public sealed class BookmarkCollection
 
     // ---- 検索 ----
 
-    public long StartOf(Bookmark b) => b.Node is { } node ? BookmarkTree.StartOf(node) : b._detachedStart;
+    public long StartOf(Bookmark b) => b.InTree ? BookmarkTree.StartOf(b) : b._detachedStart;
 
     /// <summary>開始位置の順のすべて。</summary>
-    public IEnumerable<Bookmark> All => _tree.InOrder().Select(p => p.Node.Bookmark);
+    public IEnumerable<Bookmark> All => _tree.InOrder().Select(p => p.Bookmark);
 
     /// <summary>開始位置の順のすべてと、その開始位置。</summary>
-    public IEnumerable<(Bookmark Bookmark, long Start)> AllWithStart => _tree.InOrder().Select(p => (p.Node.Bookmark, p.Start));
+    public IEnumerable<(Bookmark Bookmark, long Start)> AllWithStart => _tree.InOrder();
 
     /// <summary>[start, end) と重なるもの (長さ 0 のものは位置が範囲内なら含む)。表示範囲の強調に使う。</summary>
     public IReadOnlyList<Bookmark> Overlapping(long start, long end)
     {
-        var nodes = new List<BookmarkTree.Node>();
+        var nodes = new List<Bookmark>();
         _tree.Collect(end - 1, start, strict: false, nodes);
         var result = new List<Bookmark>(nodes.Count);
-        foreach (BookmarkTree.Node node in nodes)
+        foreach (Bookmark node in nodes)
         {
             long s = BookmarkTree.StartOf(node);
-            long e = s + node.Bookmark.Length;
-            if (node.Bookmark.Length == 0 ? s >= start && s < end : e > start)
+            long e = s + node.Length;
+            if (node.Length == 0 ? s >= start && s < end : e > start)
             {
-                result.Add(node.Bookmark);
+                result.Add(node);
             }
         }
 
@@ -623,17 +623,17 @@ public sealed class BookmarkCollection
 
     /// <summary><paramref name="offset"/> から始まるもの (同じ位置に複数あれば最初に作ったもの)。</summary>
     public Bookmark? StartingAt(long offset) =>
-        _tree.FirstFrom(offset, strictlyAfter: false) is { } node && BookmarkTree.StartOf(node) == offset ? node.Bookmark : null;
+        _tree.FirstFrom(offset, strictlyAfter: false) is { } node && BookmarkTree.StartOf(node) == offset ? node : null;
 
     /// <summary>開始位置が <paramref name="offset"/> より後ろで最も近いもの。</summary>
-    public Bookmark? After(long offset) => _tree.FirstFrom(offset, strictlyAfter: true)?.Bookmark;
+    public Bookmark? After(long offset) => _tree.FirstFrom(offset, strictlyAfter: true);
 
     /// <summary>開始位置が <paramref name="offset"/> より前で最も近いもの。</summary>
-    public Bookmark? Before(long offset) => _tree.LastBefore(offset)?.Bookmark;
+    public Bookmark? Before(long offset) => _tree.LastBefore(offset);
 
-    public Bookmark? First => _tree.First()?.Bookmark;
+    public Bookmark? First => _tree.First();
 
-    public Bookmark? Last => _tree.Last()?.Bookmark;
+    public Bookmark? Last => _tree.Last();
 
     public Bookmark? WithNumber(int number) => number is >= 1 and <= 9 ? _numbers[number] : null;
 
@@ -643,14 +643,21 @@ public sealed class BookmarkCollection
     /// </summary>
     public Bookmark? FindByName(string name)
     {
-        if (!Bookmark.IsExpressionName(name) || !_byName.TryGetValue(name, out List<Bookmark>? list))
+        if (!Bookmark.IsExpressionName(name) || !_byName.TryGetValue(name, out object? value))
         {
             return null;
         }
 
+        if (value is Bookmark single)
+        {
+            return single;
+        }
+
+        var list = (List<Bookmark>)value;
         return list.Where(b => b.Name == name).MinBy(b => b.Id) ?? list.MinBy(b => b.Id);
     }
 
+    // 名前ごとの値は、1 件ならそのブックマーク、2 件以上なら List (100 万件の名前ごとに List を作らない)。
     private void AddName(Bookmark b)
     {
         if (!Bookmark.IsExpressionName(b.Name))
@@ -658,37 +665,64 @@ public sealed class BookmarkCollection
             return;
         }
 
-        if (!_byName.TryGetValue(b.Name, out List<Bookmark>? list))
+        if (!_byName.TryGetValue(b.Name, out object? value))
         {
-            _byName[b.Name] = list = [];
+            _byName[b.Name] = b;
         }
-
-        list.Add(b);
+        else if (value is Bookmark other)
+        {
+            _byName[b.Name] = new List<Bookmark> { other, b };
+        }
+        else
+        {
+            ((List<Bookmark>)value).Add(b);
+        }
     }
 
     private void RemoveName(Bookmark b)
     {
-        if (_byName.TryGetValue(b.Name, out List<Bookmark>? list) && list.Remove(b) && list.Count == 0)
+        if (!_byName.TryGetValue(b.Name, out object? value))
+        {
+            return;
+        }
+
+        if (value == b)
         {
             _byName.Remove(b.Name);
+        }
+        else if (value is List<Bookmark> list && list.Remove(b))
+        {
+            if (list.Count == 1)
+            {
+                _byName[b.Name] = list[0];
+            }
         }
     }
 
     // ---- 保存 (INSP-23 の仕様 7) ----
 
     /// <summary>
-    /// ファイルに保存されている内容 (保存した時点、開いた時点) での位置。保存せずに閉じても、記録した位置がファイルの内容と
+    /// 保存する内容を <paramref name="buffer"/> に写し、件数を返す (<paramref name="buffer"/> は <see cref="Count"/> 以上の長さ)。
+    /// 位置は、ファイルに保存されている内容 (保存した時点、開いた時点) での位置。保存せずに閉じても、記録した位置がファイルの内容と
     /// 合うようにする。保存した時点に戻れない (Undo で戻ってから別の編集をした) 場合は今の位置。
+    /// 100 万件でも UI スレッドを長く止めないよう、1 件ごとのオブジェクトや辞書を作らない (VIEW-04 の受け入れ基準 4)。
     /// </summary>
-    public IReadOnlyList<(Bookmark Bookmark, BookmarkPosition Position)> PositionsAtSavedState()
+    internal int CaptureRecords(BookmarkRecord[] buffer)
     {
-        var list = AllWithStart.Select(p => (p.Bookmark, Position: new BookmarkPosition(p.Start, p.Bookmark.Length, p.Bookmark.RangeDeleted))).ToList();
-        if (_document is null || _savedIndex < 0 || _savedIndex == _appliedIndex)
+        int n = 0;
+        foreach ((Bookmark b, long start) in _tree.InOrder())
         {
-            return list;
+            b.Scratch = n;
+            buffer[n++] = new BookmarkRecord(start, b.Length, b.Name, b.Color, b.Comment, b.Number, b.Group, b.Created, b.Updated,
+                b.RangeDeleted, b.CreatedForNumber, b.EditedByUser, b.IsCustomized);
         }
 
-        var positions = list.ToDictionary(p => p.Bookmark, p => p.Position);
+        if (_document is null || _savedIndex < 0 || _savedIndex == _appliedIndex || n == 0)
+        {
+            return n;
+        }
+
+        Span<BookmarkRecord> items = buffer.AsSpan(0, n);
         if (_savedIndex < _appliedIndex)
         {
             for (int i = _appliedIndex; i > _savedIndex; i--)
@@ -698,16 +732,17 @@ public sealed class BookmarkCollection
                     for (int k = record.Ops.Count - 1; k >= 0; k--)
                     {
                         EditOp op = record.Ops[k];
-                        foreach (Bookmark b in positions.Keys.ToList())
+                        for (int j = 0; j < items.Length; j++)
                         {
-                            positions[b] = op.Inserted > 0 ? MapDelete(positions[b], op.Offset, op.Inserted) : MapInsert(positions[b], op.Offset, op.Removed);
+                            BookmarkPosition p = PositionOf(items[j]);
+                            items[j] = WithPosition(items[j], op.Inserted > 0 ? MapDelete(p, op.Offset, op.Inserted) : MapInsert(p, op.Offset, op.Removed));
                         }
 
                         foreach ((Bookmark b, BookmarkPosition before) in op.Saved)
                         {
-                            if (positions.ContainsKey(b))
+                            if (b.Owner == this && b.InTree)
                             {
-                                positions[b] = before;
+                                items[b.Scratch] = WithPosition(items[b.Scratch], before);
                             }
                         }
                     }
@@ -722,16 +757,44 @@ public sealed class BookmarkCollection
                 {
                     foreach (EditOp op in record.Ops)
                     {
-                        foreach (Bookmark b in positions.Keys.ToList())
+                        for (int j = 0; j < items.Length; j++)
                         {
-                            positions[b] = op.Inserted > 0 ? MapInsert(positions[b], op.Offset, op.Inserted) : MapDelete(positions[b], op.Offset, op.Removed);
+                            BookmarkPosition p = PositionOf(items[j]);
+                            items[j] = WithPosition(items[j], op.Inserted > 0 ? MapInsert(p, op.Offset, op.Inserted) : MapDelete(p, op.Offset, op.Removed));
                         }
                     }
                 }
             }
         }
 
-        return [.. positions.Select(p => (p.Key, p.Value)).OrderBy(p => p.Value.Start).ThenBy(p => p.Key.Id)];
+        // 位置の順に並べ直す (同じ位置は今の順。今の順は開始位置・作った順)。
+        var keys = new (long Start, int Index)[n];
+        for (int j = 0; j < n; j++)
+        {
+            keys[j] = (items[j].Start, j);
+        }
+
+        Array.Sort(keys, buffer, 0, n);
+        return n;
+
+        static BookmarkPosition PositionOf(in BookmarkRecord r) => new(r.Start, r.Length, r.RangeDeleted);
+
+        static BookmarkRecord WithPosition(in BookmarkRecord r, BookmarkPosition p) =>
+            r with { Start = p.Start, Length = p.Length, RangeDeleted = p.RangeDeleted };
+    }
+
+    /// <summary>保存する位置 (<see cref="CaptureRecords"/> と同じ。テスト・確認用)。</summary>
+    public IReadOnlyList<BookmarkPosition> PositionsAtSavedState()
+    {
+        var buffer = new BookmarkRecord[Count];
+        int n = CaptureRecords(buffer);
+        var result = new BookmarkPosition[n];
+        for (int i = 0; i < n; i++)
+        {
+            result[i] = new BookmarkPosition(buffer[i].Start, buffer[i].Length, buffer[i].RangeDeleted);
+        }
+
+        return result;
     }
 
     private void RaiseChanged(BookmarkChangeKind kind, IReadOnlyList<Bookmark> items)

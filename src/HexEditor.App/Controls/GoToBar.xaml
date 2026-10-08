@@ -5,21 +5,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!--  移動バー (VIEW-29)。モーダルにせず、エディタの上に表示する。  -->
     <Grid
+        x:Name="Root"
         Padding="12,6"
         Background="{ThemeResource LayerFillColorDefaultBrush}"
         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
         BorderThickness="0,0,0,1"
-        ColumnSpacing="8">
+        ColumnSpacing="8"
+        RowSpacing="6">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" MinWidth="120" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <TextBox
             x:Name="Input"
             x:Uid="GoTo_Input"
@@ -29,62 +33,75 @@
             FontFamily="Cascadia Mono, Consolas"
             KeyDown="Input_KeyDown"
             TextChanged="Input_TextChanged" />
+        <!--  入力の履歴 (VIEW-29 の仕様 12)。  -->
+        <DropDownButton
+            x:Name="HistoryButton"
+            Grid.Column="1"
+            AutomationProperties.AutomationId="GoTo_History">
+            <FontIcon FontSize="12" Glyph="&#xE81C;" />
+            <DropDownButton.Flyout>
+                <MenuFlyout x:Name="HistoryMenu" Opening="HistoryMenu_Opening" Placement="Bottom" />
+            </DropDownButton.Flyout>
+        </DropDownButton>
         <TextBlock
             x:Name="Interpretation"
-            Grid.Column="1"
+            Grid.Column="2"
             VerticalAlignment="Center"
             AutomationProperties.AutomationId="GoTo_Interpretation"
             AutomationProperties.LiveSetting="Polite"
             FlowDirection="LeftToRight"
             TextTrimming="CharacterEllipsis" />
-        <ComboBox
-            x:Name="BaseChoice"
-            Grid.Column="2"
-            AutomationProperties.AutomationId="GoTo_Base"
-            SelectedIndex="0"
-            SelectionChanged="Option_Changed">
-            <ComboBoxItem x:Uid="GoTo_Base_Auto" />
-            <ComboBoxItem x:Uid="GoTo_Base_Start" />
-            <ComboBoxItem x:Uid="GoTo_Base_Cursor" />
-            <ComboBoxItem x:Uid="GoTo_Base_End" />
-        </ComboBox>
-        <ComboBox
-            x:Name="UnitChoice"
+        <!--  選択項目。幅が足りないときは 2 段目に折り返す (VIEW-29 の「画面」)。  -->
+        <StackPanel
+            x:Name="Options"
             Grid.Column="3"
-            AutomationProperties.AutomationId="GoTo_Unit"
-            SelectedIndex="0"
-            SelectionChanged="Option_Changed">
-            <ComboBoxItem x:Uid="GoTo_Unit_Bytes" />
-            <ComboBoxItem x:Uid="GoTo_Unit_Rows" />
-            <ComboBoxItem x:Uid="GoTo_Unit_Sectors" />
-        </ComboBox>
-        <!--  ベースアドレスを設定しているときだけ「アドレスで指定 / オフセットで指定」を出す (VIEW-20 の仕様 4)。  -->
-        <ComboBox
-            x:Name="AddressChoice"
-            Grid.Column="4"
-            AutomationProperties.AutomationId="GoTo_Address"
-            SelectedIndex="0"
-            SelectionChanged="Option_Changed"
-            Visibility="Collapsed">
-            <ComboBoxItem x:Uid="GoTo_Address_Address" />
-            <ComboBoxItem x:Uid="GoTo_Address_Offset" />
-        </ComboBox>
-        <CheckBox
-            x:Name="SelectChoice"
-            x:Uid="GoTo_Select"
-            Grid.Column="5"
-            MinWidth="0"
-            AutomationProperties.AutomationId="GoTo_Select" />
+            Orientation="Horizontal"
+            Spacing="8">
+            <ComboBox
+                x:Name="BaseChoice"
+                AutomationProperties.AutomationId="GoTo_Base"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="GoTo_Base_Auto" />
+                <ComboBoxItem x:Uid="GoTo_Base_Start" />
+                <ComboBoxItem x:Uid="GoTo_Base_Cursor" />
+                <ComboBoxItem x:Uid="GoTo_Base_End" />
+            </ComboBox>
+            <ComboBox
+                x:Name="UnitChoice"
+                AutomationProperties.AutomationId="GoTo_Unit"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="GoTo_Unit_Bytes" />
+                <ComboBoxItem x:Uid="GoTo_Unit_Rows" />
+                <ComboBoxItem x:Uid="GoTo_Unit_Sectors" />
+            </ComboBox>
+            <!--  ベースアドレスを設定しているときだけ「アドレスで指定 / オフセットで指定」を出す (VIEW-20 の仕様 4)。  -->
+            <ComboBox
+                x:Name="AddressChoice"
+                AutomationProperties.AutomationId="GoTo_Address"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed"
+                Visibility="Collapsed">
+                <ComboBoxItem x:Uid="GoTo_Address_Address" />
+                <ComboBoxItem x:Uid="GoTo_Address_Offset" />
+            </ComboBox>
+            <CheckBox
+                x:Name="SelectChoice"
+                x:Uid="GoTo_Select"
+                MinWidth="0"
+                AutomationProperties.AutomationId="GoTo_Select" />
+        </StackPanel>
         <Button
             x:Name="GoButton"
             x:Uid="GoTo_Go"
-            Grid.Column="6"
+            Grid.Column="4"
             AutomationProperties.AutomationId="GoTo_Go"
             Click="Go_Click"
             Style="{StaticResource AccentButtonStyle}" />
         <Button
             x:Name="CloseButton"
-            Grid.Column="7"
+            Grid.Column="5"
             AutomationProperties.AutomationId="GoTo_Close"
             Click="Close_Click">
             <FontIcon FontSize="12" Glyph="&#xE711;" />

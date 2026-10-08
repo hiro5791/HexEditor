@@ -35,6 +35,16 @@ public sealed partial class HexView
     // マウスの左ボタンの状態
     private bool _pressed;
     private bool _dragging;
+
+    /// <summary>マウスのドラッグの始まりと終わり。ビューの状態にも知らせる (ステータスバーの更新を 30 fps に抑える。VIEW-40 の仕様 4)。</summary>
+    private void SetDragging(bool dragging)
+    {
+        _dragging = dragging;
+        if (_editor is not null && _editor.PointerDragging != dragging)
+        {
+            _editor.PointerDragging = dragging;
+        }
+    }
     private bool _rowDrag;
     private long _rowDragAnchor;
     private Point _pressPoint;
@@ -126,7 +136,7 @@ public sealed partial class HexView
 
         // 行の先頭のずれ (VIEW-20) で最初の行の先頭の空白のセルは、オフセット 0 として扱う。
         long firstInRow = Math.Max(0, rowStart);
-        if (_showOffset && point.X < ContentLeft - _cellWidth)
+        if (_showOffset && point.X < ContentLeft - _cellWidth - OffsetColumnShift)
         {
             hit = new HitResult(Math.Min(firstInRow, layout.MaxCursor), ActiveColumn.Hex, false, HitRegion.Offset, row);
             return true;
@@ -260,7 +270,7 @@ public sealed partial class HexView
 
         int count = NextClickCount(position);
         _pressed = true;
-        _dragging = false;
+        SetDragging(false);
         _rowDrag = false;
         _pressPoint = _lastPointer = position;
         _pressPointerId = pointerId;
@@ -336,7 +346,7 @@ public sealed partial class HexView
                 return false;
             }
 
-            _dragging = true;
+            SetDragging(true);
         }
 
         DragToPointer(position);
@@ -371,7 +381,7 @@ public sealed partial class HexView
     private void EndPointer()
     {
         _pressed = false;
-        _dragging = false;
+        SetDragging(false);
         _rowDrag = false;
         _touchActive = false;
         _autoScrollTimer.Stop();
@@ -1220,6 +1230,13 @@ public sealed partial class HexView
 
         switch (key)
         {
+            case VirtualKey.Left when ctrl:
+                // 前 / 次のグループへ (VIEW-25 の仕様 8。コマンド go.previousGroup / go.nextGroup の既定のキー)。
+                _editor.MovePreviousGroup(shift);
+                break;
+            case VirtualKey.Right when ctrl:
+                _editor.MoveNextGroup(shift);
+                break;
             case VirtualKey.Left:
                 _editor.MoveLeft(shift);
                 break;
