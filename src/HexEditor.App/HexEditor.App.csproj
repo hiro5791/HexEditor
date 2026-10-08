@@ -89,6 +89,20 @@
              Namespaces="&lt;Namespace Prefix='m' Uri='http://schemas.microsoft.com/appx/manifest/foundation/windows10' /&gt;" />
   </Target>
 
+  <!--
+    Windows 11 の新しい右クリックメニューの COM サーバー (09 の UI-55)。MSIX 版だけに入れる。DLL は build/publish.ps1 が
+    HexEditor.ShellExtension を NativeAOT で発行して HexShellExtensionDir で渡す (マニフェストの com:Class の Path と同じ名前)。
+    渡されない MSIX のビルド (開発中の実行) では入れず、新しいメニューは出ない。
+  -->
+  <ItemGroup Condition="'$(WindowsPackageType)' == 'MSIX' and '$(HexShellExtensionDir)' != ''">
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexShellExtensionDir)'))HexEditor.ShellExtension.dll" Link="HexEditor.ShellExtension.dll"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="HexWarnMissingShellExtension" BeforeTargets="BeforeBuild"
+          Condition="'$(WindowsPackageType)' == 'MSIX' and '$(HexShellExtensionDir)' == ''">
+    <Warning Text="HexShellExtensionDir が指定されていないため、HexEditor.ShellExtension.dll をパッケージに入れません (Windows 11 の新しい右クリックメニューが出ません。UI-55)。" />
+  </Target>
+
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>

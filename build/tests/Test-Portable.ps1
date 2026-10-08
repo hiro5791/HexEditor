@@ -23,6 +23,7 @@
                   the Explorer integration settings) and then the context menu key exists
     TC-UI-54-03   after moving the folder, the app-wide notice offers "Update" and the menu then points to the new exe
     TC-UI-56-03   unregistering removes every key and value that registering added
+    TC-UI-55-03   unsigned: the classic menu "Open with HexEditor" (Shell API) opens the file; no sparse package
     TC-UI-43-05   switching the display language and restarting does not crash (23 languages and "system")
     TC-PKG-31-01  the start page offers to import the installer settings; importing gives the dark theme and the
                   custom key binding; the installer data folder is not changed
@@ -41,6 +42,7 @@ $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/TestCase.ps1"
 . "$PSScriptRoot/AppDriver.ps1"
 . "$PSScriptRoot/ProcessMonitor.ps1"
+. "$PSScriptRoot/Explorer.ps1"
 if (-not $env:RUNNER_TEMP -and -not $PSBoundParameters.ContainsKey('WorkDir')) { throw 'Set -WorkDir (this script is meant for CI runners).' }
 
 function Expand-Portable([string]$Target) {
@@ -403,6 +405,33 @@ if ($TestZip) {
         foreach ($key in $menuKey, 'HKCU:\Software\Classes\HexEditor.Project', 'HKCU:\Software\Classes\HexEditor.Binary', 'HKCU:\Software\Classes\.hexproj') {
             Assert-True (-not (Test-Path -LiteralPath $key)) "$key remains"
         }
+    }
+
+    Invoke-TestCase 'TC-UI-55-03' 'unsigned portable: classic menu, no sparse package' {
+        $app = Expand-TestBuild (Join-Path $WorkDir 'shell-55')
+        $exe = Join-Path $app 'HexEditor.exe'
+        $file = Copy-TestData $TestDataDir 'TD-SEQ-1M' (Join-Path $WorkDir 'shell-55\seq55.bin')
+        $a = Start-TestApp -Exe $exe
+        try { [void](Send-TestCommand $a 'shell' @{ action = 'register' }) } finally { Stop-TestApp $a }
+        try {
+            # 1. The classic menu item through the Shell API, and run it.
+            $verb = Get-HexEditorVerb $file
+            Assert-True ($null -ne $verb) 'no "Open with HexEditor" in the classic context menu'
+            Enable-NoActivate
+            $verb.DoIt()
+            # 2. HexEditor of this folder starts with the file.
+            Wait-Until { @(Get-HexEditorFor 'seq55.bin').Count -gt 0 } 30 'HexEditor started for seq55.bin'
+            $started = @(Get-HexEditorFor 'seq55.bin')[0]
+            Assert-True ($started.ExecutablePath -ieq $exe) "the menu started $($started.ExecutablePath)"
+            Stop-Process -Id $started.ProcessId -Force
+            # 3. No sparse package (UI-55 spec 2 and 3: not provided while code signing is off).
+            $packages = Get-HexEditorPackages
+            Assert-True ($packages.Count -eq 0) "packages: $(($packages | ForEach-Object { $_.PackageFullName }) -join ', ')"
+        } finally {
+            $b = Start-TestApp -Exe $exe
+            try { [void](Send-TestCommand $b 'shell' @{ action = 'unregister' }) } finally { Stop-TestApp $b }
+        }
+        Add-TestNote 'TC-UI-55-03: the tab is checked through the command line of the started process (the menu starts the app without the test channel).'
     }
 
     Invoke-TestCase 'TC-UI-43-05' 'display language switch and restart (portable)' {

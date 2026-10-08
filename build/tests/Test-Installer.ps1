@@ -14,6 +14,7 @@
                   (Process Monitor records from the first install to the last uninstall)
     TC-UI-54-01   the classic context menu "Open with HexEditor" is registered in HKCU with the app icon
     TC-UI-54-04   three files opened with the menu end up in one process (the tabs are checked with a test build)
+    TC-UI-55-03   unsigned: the classic menu "Open with HexEditor" (Shell API) opens the file; no sparse package
     TC-UI-56-01   .hexproj is associated with HexEditor and opens it
     TC-UI-56-02   the default app of .iso does not change; HexEditor is added to "Open with"
   The UAC part of TC-PKG-07-01 (consent.exe) needs a dedicated runner account and is not checked here.
@@ -27,6 +28,7 @@ param(
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/TestCase.ps1"
 . "$PSScriptRoot/ProcessMonitor.ps1"
+. "$PSScriptRoot/Explorer.ps1"
 if (-not $env:GITHUB_ACTIONS) { throw 'This script installs HexEditor; run it only on CI runners.' }
 
 # TC-PKG-08-04: record every registry access from the first installation to the last uninstallation.
@@ -82,11 +84,15 @@ function Get-DefaultApp([string]$Extension) {
 $isoDefaultBefore = Get-DefaultApp '.iso'
 $contextMenuKey = 'HKCU:\Software\Classes\*\shell\HexEditor'
 
-# The classic context menu verbs of a file, as Explorer shows them (Shell.Application, the same IContextMenu verbs).
-function Get-ContextMenuVerbs([string]$Path) {
-    $shell = New-Object -ComObject Shell.Application
-    $item = $shell.NameSpace((Split-Path -Parent $Path)).ParseName((Split-Path -Leaf $Path))
-    @($item.Verbs() | ForEach-Object { $_ })
+# Waits until HexEditor runs for the file (its command line has the file name).
+function Wait-HexEditorFor([string]$FileName, [int]$Seconds = 30) {
+    $deadline = (Get-Date).AddSeconds($Seconds)
+    while ((Get-Date) -lt $deadline) {
+        $found = @(Get-HexEditorFor $FileName)
+        if ($found.Count -gt 0) { return $found[0] }
+        Start-Sleep -Milliseconds 250
+    }
+    throw "HexEditor did not start for $FileName within $Seconds s."
 }
 
 Invoke-TestCase 'TC-PKG-07-01' 'install as a normal user' {
@@ -160,6 +166,28 @@ Invoke-TestCase 'TC-UI-54-04' 'three files from the context menu: one process' {
         Assert-True ($running[0].MainWindowHandle -ne 0) 'no window'
     } finally { Stop-HexEditor }
     Add-TestNote 'TC-UI-54-04: the 3 tabs are counted with a test build (test channel); this release build only shows one process and one window.'
+}
+
+Invoke-TestCase 'TC-UI-55-03' 'unsigned installer: classic menu, no sparse package' {
+    # TD-SEQ-1M (1 MiB of 00 01 .. FF repeated).
+    $folder = Join-Path $env:RUNNER_TEMP 'menu55'
+    New-Item -ItemType Directory -Force $folder | Out-Null
+    $file = Join-Path $folder 'seq.bin'
+    [System.IO.File]::WriteAllBytes($file, [byte[]]((0..255) * 4096))
+    Stop-HexEditor
+    # 1. The classic menu item through the Shell API, and run it.
+    $verb = Get-HexEditorVerb $file
+    Assert-True ($null -ne $verb) 'no "Open with HexEditor" in the classic context menu'
+    $verb.DoIt()
+    try {
+        # 2. HexEditor starts with the file.
+        $started = Wait-HexEditorFor 'seq.bin'
+        Assert-True ($started.ExecutablePath -ieq $exe) "the menu started $($started.ExecutablePath)"
+    } finally { Stop-HexEditor }
+    # 3. No sparse package (UI-55 spec 2 and 3: not provided while code signing is off).
+    $packages = Get-HexEditorPackages
+    Assert-True ($packages.Count -eq 0) "packages: $(($packages | ForEach-Object { $_.PackageFullName }) -join ', ')"
+    Add-TestNote 'TC-UI-55-03: the tab is checked through the command line of the started process (a release build has no test channel).'
 }
 
 Invoke-TestCase 'TC-UI-56-01' '.hexproj opens HexEditor' {

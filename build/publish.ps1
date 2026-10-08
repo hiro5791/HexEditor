@@ -135,8 +135,15 @@ switch ($Distro) {
         Copy-Item (Join-Path $out "HexEditor-$channel-Setup.exe") (Join-Path $out "HexEditor-$Version-$Arch-Setup.exe")
     }
     'Msix' {
+        # The COM server of the Windows 11 context menu "Open with HexEditor" (UI-55, PKG-03 spec 1): a NativeAOT DLL
+        # (needs the C++ build tools of Visual Studio). HexEditor.App.csproj puts it into the package.
+        $shellExtension = Join-Path $staging 'ShellExtension'
+        Invoke-Checked 'dotnet' @('publish', (Join-Path $root 'src/HexEditor.ShellExtension/HexEditor.ShellExtension.csproj'),
+            '-c', $Configuration, '-r', $rid, "-p:HexVersion=$Version", '-nologo', '-o', $shellExtension)
+        if (-not (Test-Path (Join-Path $shellExtension 'HexEditor.ShellExtension.dll'))) { throw 'HexEditor.ShellExtension.dll was not produced (UI-55).' }
         # Store-only and unsigned: the Store signs it on submission (PKG-02, PKG-04).
         Invoke-Checked 'dotnet' (@('publish') + $common + @(
+            "-p:HexShellExtensionDir=$shellExtension",
             '-p:GenerateAppxPackageOnBuild=true',
             '-p:AppxPackageSigningEnabled=false',
             '-p:AppxBundle=Never',

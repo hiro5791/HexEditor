@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Windows 11 の新しい右クリックメニュー「HexEditor で開く」の COM サーバー (09 の UI-55、10 の PKG-03)。
+    IExplorerCommand を実装した DLL を NativeAOT で作り、MSIX 版のパッケージに入れる (build/publish.ps1 の Msix)。
+    マニフェストの com:SurrogateServer で登録し、Explorer は dllhost.exe (代理のプロセス) の中で読み込む。
+    発行 (dotnet publish -r win-x64 / win-arm64) には C++ のビルドツール (Visual Studio の「C++ によるデスクトップ開発」) が要る。
+    普通のビルドは IL の DLL になり、単体テスト (tests/HexEditor.Platform.Tests) から直接呼ぶ。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="HexEditor.Platform.Tests" />
+  </ItemGroup>
+
+</Project>

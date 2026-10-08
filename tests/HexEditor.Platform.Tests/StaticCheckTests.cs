@@ -11,6 +11,9 @@ public sealed partial class StaticCheckTests
     [
         "src/HexEditor.Platform/AppEnvironment.cs",
         "src/HexEditor.App/Hosting/VelopackBootstrap.cs",
+
+        // MSIX 版だけに入る右クリックメニューの DLL (UI-55)。配布形態の判定ではなく、パッケージのリソースを読むためにパッケージ名を使う。
+        "src/HexEditor.ShellExtension/PackageCommandHost.cs",
     ];
 
     [GeneratedRegex(@"#if\s+.*HEX_DISTRO_|GetCurrentPackageFullName|Package\.Current|portable\.marker")]
