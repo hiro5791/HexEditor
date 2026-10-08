@@ -53,6 +53,9 @@ public sealed class CommandHost
 
     public bool HasHandler(string id) => _handlers.ContainsKey(CommandService.Catalog.Canonical(id));
 
+    /// <summary>登録済みの処理 (引数を受け取る処理で包み直すときに使う)。なければ null。</summary>
+    public CommandHandler? HandlerOf(string id) => _handlers.GetValueOrDefault(CommandService.Catalog.Canonical(id));
+
     /// <summary>今の状態。処理が登録されていないコマンドは使えない。</summary>
     public CommandState StateOf(string id)
     {

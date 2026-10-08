@@ -149,6 +149,11 @@ public sealed class SettingsUiTests
         Assert.NotNull(notice);
         string file = Assert.Single(Directory.GetFiles(profile, "settings.json.broken-*"));
         Assert.Equal(broken, await File.ReadAllTextAsync(file));
+
+        // 「ファイルを開く」で、名前を変えて残したファイルを開く (UI-23 の「エラー」)。
+        Assert.Contains("Open file", notice["actions"]!.AsArray().Select(a => a!.GetValue<string>()));
+        await app.SendAsync("noticeAction", new JsonObject { ["label"] = "Open file" });
+        await app.WaitForLogAsync(l => l.Contains("Test hooks: launch file:", StringComparison.Ordinal) && l.Contains("settings.json.broken-", StringComparison.Ordinal), "the broken file is opened");
         Assert.False((await CardAsync(app, "ui.theme", new JsonObject { ["category"] = "appearance" }))["modified"]!.GetValue<bool>());
     });
 
@@ -390,5 +395,34 @@ public sealed class SettingsUiTests
         await app.IdleAsync();
         Assert.Equal("right", await LocationAsync(app, "inspector"));
         Assert.Equal("left", await LocationAsync(app, "bookmarks"));
+    });
+
+    // ---- UI-24 / UI-25 最近使ったファイルのリセットとインポート ----
+
+    [Fact]
+    public Task Resetting_and_importing_recent_files_update_the_shared_list() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = CommandTests.Profile(ctx);
+        string first = ctx.TestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [first] });
+        async Task<List<string>> RecentAsync() =>
+            [.. (await app.SendAsync("files"))["recent"]!.AsArray().Select(r => Path.GetFileName(r!["path"]!.GetValue<string>()))];
+        await app.WaitUntilAsync(async () => (await RecentAsync()).Count == 1, TimeSpan.FromSeconds(10), "the recent file");
+        string exported = Path.Combine(ctx.Root, "with-recent.json");
+        await app.SendAsync("exportSettings", new JsonObject { ["parts"] = new JsonArray("RecentAndState"), ["path"] = exported });
+
+        // リセットはメモリの一覧も空にする (残っていると、次に開いたときに recent.json に書き戻る)。
+        Assert.True((await app.SendAsync("resetAll", new JsonObject { ["parts"] = new JsonArray("RecentAndState") }))["done"]!.GetValue<bool>());
+        Assert.Empty(await RecentAsync());
+        await app.OpenAsync(ctx.TestData("TD-BYTES-256"));
+        await app.WaitUntilAsync(async () => (await RecentAsync()).Count == 1, TimeSpan.FromSeconds(10), "the new recent file");
+        Assert.DoesNotContain("TD-SEQ-1M", await File.ReadAllTextAsync(Path.Combine(profile, "recent.json")));
+
+        // マージで読み込むと、今の項目と合わせる。
+        await app.SendAsync("importSettings", new JsonObject { ["path"] = exported, ["modes"] = new JsonObject { ["RecentAndState"] = "merge" } });
+        List<string> merged = await RecentAsync();
+        Assert.Contains("TD-SEQ-1M.bin", merged);
+        Assert.Contains("TD-BYTES-256.bin", merged);
+        Assert.Contains("TD-SEQ-1M", await File.ReadAllTextAsync(Path.Combine(profile, "recent.json")));
     });
 }

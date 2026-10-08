@@ -37,7 +37,7 @@ public readonly record struct KeyResolution(KeyMatchKind Kind, EffectiveBinding?
 public sealed record KeyConflict(KeyAssignment First, KeyAssignment Second);
 
 /// <summary>プリセットを切り替えるときの、利用者の割り当てとプリセットの割り当ての重複 (UI-19 の仕様 4)。</summary>
-public sealed record PresetSwitchPreview(string Preset, IReadOnlyList<KeyConflict> Conflicts, string? Error);
+public sealed record PresetSwitchPreview(string Preset, IReadOnlyList<KeyConflict> Conflicts, KeyPresetError? Error);
 
 public enum KeyImportMode
 {
@@ -87,7 +87,7 @@ public sealed class KeyMap
     public string Preset { get; private set; } = KeyPresets.Default;
 
     /// <summary>プリセットが読めなかった理由 (<c>default</c> を使っている)。</summary>
-    public string? PresetError { get; private set; }
+    public KeyPresetError? PresetError { get; private set; }
 
     /// <summary>利用者の差分 (keybindings.json の bindings)。</summary>
     public IReadOnlyList<KeyBindingEntry> UserEntries => _user;
@@ -218,14 +218,32 @@ public sealed class KeyMap
         SetEffective(desired);
     }
 
-    /// <summary>コマンド 1 つを既定 (プリセットの割り当て) に戻す (UI-18 の仕様 8)。</summary>
-    public void ResetCommand(string command)
+    /// <summary>
+    /// コマンド 1 つを既定 (プリセットの割り当て) に戻す (UI-18 の仕様 8)。既定のキーが、同じ有効範囲で他のコマンドに割り当て済み
+    /// (利用者が付け替えたもの) の場合は、そのキーは戻さない (同じ有効範囲で 1 つのキーに 2 つのコマンドを割り当てない。仕様 6)。
+    /// 戻さなかった既定の割り当てと、それと重なる割り当ての組を返す。
+    /// </summary>
+    public IReadOnlyList<KeyConflict> ResetCommand(string command)
     {
         command = _catalog.Canonical(command);
         List<KeyAssignment> desired = Current();
         desired.RemoveAll(a => a.Command == command);
-        desired.AddRange(_base.Where(a => a.Command == command));
+        var skipped = new List<KeyConflict>();
+        foreach (KeyAssignment a in _base.Where(a => a.Command == command))
+        {
+            KeyAssignment? other = desired.FirstOrDefault(d => d.Command != command && Overlaps(d.Binding, a.Binding));
+            if (other is not null)
+            {
+                skipped.Add(new KeyConflict(a, other));
+            }
+            else if (!desired.Contains(a))
+            {
+                desired.Add(a);
+            }
+        }
+
         SetEffective(desired);
+        return skipped;
     }
 
     /// <summary>すべて既定に戻す: 利用者の差分を空にする (UI-18 の受け入れ基準 5)。</summary>
@@ -239,7 +257,7 @@ public sealed class KeyMap
 
     public PresetSwitchPreview PreviewPreset(string preset)
     {
-        IReadOnlyList<KeyBindingEntry> entries = KeyPresets.Load(preset, out string? error);
+        IReadOnlyList<KeyBindingEntry> entries = KeyPresets.Load(preset, out KeyPresetError? error);
         List<KeyAssignment> newBase = Apply(Defaults(), entries, out _);
         List<KeyAssignment> afterUser = Apply(newBase, _user, out _);
         var conflicts = new List<KeyConflict>();
@@ -339,7 +357,7 @@ public sealed class KeyMap
 
     private void SetPresetCore(string preset)
     {
-        _presetEntries = [.. KeyPresets.Load(preset, out string? error)];
+        _presetEntries = [.. KeyPresets.Load(preset, out KeyPresetError? error)];
         PresetError = error;
         Preset = error is null && KeyPresets.Exists(preset) ? preset : KeyPresets.Default;
     }

@@ -34,8 +34,28 @@ public static class CommandService
 
     public static string KeybindingsPath => Path.Combine(Folder, KeyBindingsDocument.FileName);
 
-    /// <summary>keybindings.json の誤り (InfoBar で知らせる。UI-18 の「エラー」)。行番号 (0 は不明) と理由。</summary>
+    /// <summary>keybindings.json の誤り (InfoBar で知らせる。UI-18 の「エラー」)。行番号 (0 は不明) と理由 (表示言語の文)。</summary>
     public static (int Line, string Message)? KeybindingsError { get; private set; }
+
+    /// <summary>
+    /// keybindings.json に書き込まない (新しい版のアプリが書いたファイル、または読めなかったファイル。UI-18 の「エラー」)。
+    /// 割り当ての変更はセッション中だけ有効。
+    /// </summary>
+    public static bool KeybindingsReadOnly { get; private set; }
+
+    /// <summary>keybindings.json が新しい版のアプリで書かれている (InfoBar で知らせる)。</summary>
+    public static bool KeybindingsTooNew { get; private set; }
+
+    /// <summary>
+    /// 読んだ keybindings.json に不正な部分がある。次に書くとき、元のファイルを <c>keybindings.json.broken-&lt;日時&gt;</c> として残す
+    /// (利用者が書いた内容を黙って失わない。UI-18 の「エラー」)。
+    /// </summary>
+    private static bool _keepInvalidFile;
+
+    /// <summary>keybindings.json を書けなかった (InfoBar で知らせる。UI-22 の「エラー」と同じ)。引数は理由。書き込みのスレッドから呼ばれることがある。</summary>
+    public static event Action<string>? SaveFailed;
+
+    private static bool _saveFailing;
 
     /// <summary>キー割り当てか配列が変わった (メニュー・ツールバー・一覧の表示を作り直す)。</summary>
     public static event Action? BindingsChanged;
@@ -68,6 +88,9 @@ public static class CommandService
     public static void LoadKeybindings()
     {
         KeybindingsError = null;
+        KeybindingsReadOnly = false;
+        KeybindingsTooNew = false;
+        _keepInvalidFile = false;
         _loading = true;
         try
         {
@@ -79,22 +102,32 @@ public static class CommandService
 
             KeyBindingsDocument doc = KeyBindingsDocument.Parse(File.ReadAllText(KeybindingsPath));
             Keys.Load(doc);
-            if (doc.Errors.Count > 0)
+            if (doc.IsTooNew)
             {
-                KeybindingsError = (doc.Errors[0].Line, doc.Errors[0].Message);
+                // 新しい版のアプリが書いたファイル: 読める割り当てだけを使い、書き込みを止める (UI-23 の仕様 6 と同じ)。
+                KeybindingsTooNew = true;
+                KeybindingsReadOnly = true;
+            }
+            else if (doc.Errors.Count > 0)
+            {
+                _keepInvalidFile = true;
+                KeybindingsError = (doc.Errors[0].Line, LineErrorText(doc.Errors[0]));
             }
             else if (Keys.PresetError is { } presetError)
             {
-                KeybindingsError = (0, presetError);
+                KeybindingsError = (0, PresetErrorText(presetError));
             }
         }
         catch (JsonException ex)
         {
             Keys.Load(new KeyBindingsDocument());
-            KeybindingsError = ((int)(ex.LineNumber ?? 0) + 1, ex.Message);
+            _keepInvalidFile = true;
+            KeybindingsError = ((int)(ex.LineNumber ?? 0) + 1, Loc.Get("Keys_InvalidJson"));
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
+            // 読めないファイルを既定の割り当てで上書きしない。
+            KeybindingsReadOnly = true;
             KeybindingsError = (0, ex.Message);
         }
         finally
@@ -103,8 +136,21 @@ public static class CommandService
         }
     }
 
+    /// <summary>keybindings.json の行の誤りの表示 (UI-18 の「エラー」、UI-21 のインポートの差分)。</summary>
+    public static string LineErrorText(KeyBindingsError error) =>
+        Loc.Format("KeysError_" + error.Kind, error.Value ?? string.Empty);
+
+    /// <summary>同梱のプリセットが読めない理由の表示 (UI-19 の「エラー」)。</summary>
+    public static string PresetErrorText(KeyPresetError error) =>
+        Loc.Format("KeyPresetError_" + error.Kind, error.Preset, error.Line);
+
     private static void ScheduleSave()
     {
+        if (KeybindingsReadOnly)
+        {
+            return;
+        }
+
         _saveTimer ??= new Timer(_ => SaveKeybindingsNow(), null, Timeout.Infinite, Timeout.Infinite);
         _saveTimer.Change(SettingsStore.WriteDelay, Timeout.InfiniteTimeSpan);
     }
@@ -115,19 +161,43 @@ public static class CommandService
     /// </summary>
     public static void CancelPendingKeybindingsSave() => _saveTimer?.Change(Timeout.Infinite, Timeout.Infinite);
 
-    /// <summary>keybindings.json を書く (一時ファイルに書いてから置き換える)。</summary>
-    public static void SaveKeybindingsNow()
+    /// <summary>
+    /// keybindings.json を書く (一時ファイルに書いてから置き換える)。書けなければ <see cref="SaveFailed"/> で知らせ、割り当てはセッション中だけ
+    /// 有効にする (例外は投げない。タイマーのスレッドから呼ばれるため)。書けたら true。
+    /// </summary>
+    public static bool SaveKeybindingsNow()
     {
+        if (KeybindingsReadOnly)
+        {
+            return false;
+        }
+
         try
         {
             string json = App.DispatcherQueue is { } q && !q.HasThreadAccess
                 ? RunOnUi(() => Keys.ToDocument().ToJson())
                 : Keys.ToDocument().ToJson();
+            if (_keepInvalidFile && File.Exists(KeybindingsPath))
+            {
+                // 不正だったファイルは上書きする前に別名で残す (UI-18 の「エラー」)。
+                File.Copy(KeybindingsPath, KeybindingsPath + ".broken-" + DateTime.Now.ToString("yyyyMMdd-HHmmss", System.Globalization.CultureInfo.InvariantCulture), overwrite: true);
+            }
+
+            _keepInvalidFile = false;
             WriteAtomic(KeybindingsPath, json);
+            _saveFailing = false;
+            return true;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             AppLog.Warning($"keybindings.json not saved: {ex.Message}");
+            if (!_saveFailing)
+            {
+                _saveFailing = true;
+                SaveFailed?.Invoke(ex.Message);
+            }
+
+            return false;
         }
     }
 

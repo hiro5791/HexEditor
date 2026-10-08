@@ -5,6 +5,19 @@ namespace HexEditor.App.Commands;
 /// <summary>キーを押した場所 (UI-18 の仕様 5 の有効範囲と、文字を入力できる場所か。UI-20 の仕様 4)。</summary>
 public readonly record struct KeyContext(KeyScope Scope, bool TextInput);
 
+/// <summary>
+/// 押したキーの組み合わせをそのまま受け取る部品 (設定画面の「キーで検索」。UI-18 の仕様 2)。この部品の中にフォーカスがあると、
+/// ウィンドウはキーをコマンドに振り分ける前に <see cref="TryCaptureKey"/> を呼び、true ならコマンドを実行しない
+/// (例: Ctrl+G で「オフセットへ移動」を開かず、Ctrl+G で絞り込む)。
+/// </summary>
+public interface IKeyCaptureHost
+{
+    bool IsCapturingKeys { get; }
+
+    /// <summary>キーを受け取ったら true。</summary>
+    bool TryCaptureKey(KeyStroke stroke);
+}
+
 /// <summary>振り分けの結果。</summary>
 public readonly record struct DispatchResult(bool Handled, string? Command = null)
 {

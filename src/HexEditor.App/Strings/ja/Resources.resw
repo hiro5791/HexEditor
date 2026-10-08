@@ -2462,4 +2462,37 @@
   <data name="Settings_MsixUninstallNote" xml:space="preserve"><value>アンインストールすると設定も削除されます。必要な場合は設定をエクスポートしてください。</value></data>
   <data name="Set_uninstall_removeUserData" xml:space="preserve"><value>アンインストール時にデータを削除する</value></data>
   <data name="SetDesc_uninstall_removeUserData" xml:space="preserve"><value>アンインストールしたときに、設定・ログ・復旧用のデータを削除します。残したデータは次にインストールしたときに使われます。</value></data>
+  <data name="Settings_Unreadable" xml:space="preserve"><value>設定ファイルを読み込めませんでした ({0})。既定の設定で起動しました。この間の設定の変更は保存しません。</value></data>
+  <data name="Settings_ExternalErrorLine" xml:space="preserve"><value>編集された設定ファイルに誤りがあります ({0} 行目)。直前の設定を使い続けます。</value></data>
+  <data name="Settings_SaveFailed" xml:space="preserve"><value>設定を保存できませんでした: {0}</value></data>
+  <data name="Keys_FileTooNew" xml:space="preserve"><value>キーボードショートカットの設定ファイルは新しい版の HexEditor で書かれているため、ショートカットの変更は保存しません。</value></data>
+  <data name="Keys_InvalidJson" xml:space="preserve"><value>JSON として読めません。</value></data>
+  <data name="KeysError_MissingCommand" xml:space="preserve"><value>command がありません。</value></data>
+  <data name="KeysError_InvalidKey" xml:space="preserve"><value>key の表記が正しくありません: {0}</value></data>
+  <data name="KeysError_InvalidScope" xml:space="preserve"><value>when の値が正しくありません: {0}</value></data>
+  <data name="KeyPresetError_NotFound" xml:space="preserve"><value>プリセット {0} がありません。</value></data>
+  <data name="KeyPresetError_Invalid" xml:space="preserve"><value>プリセット {0} に誤りがあります ({1} 行目)。</value></data>
+  <data name="ImportError_InvalidJson" xml:space="preserve"><value>JSON として読めません ({0} 行目)。</value></data>
+  <data name="ImportError_NotSettingsFile" xml:space="preserve"><value>HexEditor の設定のファイルではありません。</value></data>
+  <data name="ImportError_MissingVersion" xml:space="preserve"><value>$schemaVersion がありません。</value></data>
+  <data name="Keys_ResetSkipped" xml:space="preserve"><value>{0} は「{1}」に割り当てられているため戻しませんでした。</value></data>
+  <data name="Keys_ColEnglish" xml:space="preserve"><value>英語名</value></data>
+  <data name="Keys_ImportMode" xml:space="preserve"><value>読み込み方</value></data>
+  <data name="Keys_ImportItem" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Keys_ImportChangedItem" xml:space="preserve"><value>{0}: {1} → {2}</value></data>
+  <data name="Keys_ImportAddedHeader" xml:space="preserve"><value>追加</value></data>
+  <data name="Keys_ImportChangedHeader" xml:space="preserve"><value>変更</value></data>
+  <data name="Keys_ImportRemovedHeader" xml:space="preserve"><value>削除</value></data>
+  <data name="Keys_ImportNoChanges" xml:space="preserve"><value>変わるショートカットはありません。</value></data>
+  <data name="Keys_ImportErrorsHeader" xml:space="preserve"><value>読み込めなかった行 (飛ばします)</value></data>
+  <data name="Keys_ImportErrorLine" xml:space="preserve"><value>{0} 行目: {1}</value></data>
+  <data name="FileType_Html" xml:space="preserve"><value>HTML ファイル</value></data>
+  <data name="TitleBar_Palette" xml:space="preserve"><value>コマンドを検索 ({0})</value></data>
+  <data name="TitleBar_PaletteNoKey" xml:space="preserve"><value>コマンドを検索</value></data>
+  <data name="Palette_ChangeShortcut" xml:space="preserve"><value>ショートカットを変更</value></data>
+  <data name="Cmd_settings_changeLanguage" xml:space="preserve"><value>表示言語を変更</value></data>
+  <data name="CmdAlias_settings_changeLanguage" xml:space="preserve"><value>ひょうじげんごをへんこう げんご</value></data>
+  <data name="CmdArg_view_colorScheme" xml:space="preserve"><value>配色を選んでください。</value></data>
+  <data name="CmdArg_view_encoding_select" xml:space="preserve"><value>文字コードを選んでください (入力で絞り込み。例: utf-16)。</value></data>
+  <data name="CmdArg_view_bytesPerRowCustom" xml:space="preserve"><value>1 行のバイト数を入力して Enter を押してください (例: 24)。</value></data>
 </root>

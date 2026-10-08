@@ -84,13 +84,10 @@ public partial class App : Application
         // 初回起動では $schema と $schemaVersion だけの settings.json を作る (UI-23 の受け入れ基準 1)。
         if (settingsStatus == SettingsLoadStatus.Ok && !File.Exists(Settings.PathName))
         {
-            try
+            // 書けなくても例外にはならない (SettingsStore が知らせる。UI-22 の「エラー」)。
+            if (!Settings.SaveNow())
             {
-                Settings.SaveNow();
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                AppLog.Warning($"settings.json not created: {ex.Message}");
+                AppLog.Warning("settings.json not created.");
             }
         }
         AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
@@ -163,7 +160,11 @@ public partial class App : Application
                 w.ApplyEditorSettings();
             }
         });
-        Settings.ExternalEditFailed += reason => DispatcherQueue.TryEnqueue(() => WindowManager.Current.ShowSettingsEditError(reason));
+        Settings.ExternalEditFailed += error => DispatcherQueue.TryEnqueue(() => WindowManager.Current.ShowSettingsEditError(error));
+
+        // 設定・キー割り当てを書けなかった (UI-22 の「エラー」)。値はセッション中だけ有効にする。
+        Settings.WriteFailed += reason => DispatcherQueue.TryEnqueue(() => WindowManager.Current.ShowSettingsSaveFailed(reason));
+        Commands.CommandService.SaveFailed += reason => DispatcherQueue.TryEnqueue(() => WindowManager.Current.ShowSettingsSaveFailed(reason));
         Appearance.SystemColorsChanged += () => DispatcherQueue.TryEnqueue(() =>
         {
             foreach (MainWindow w in WindowManager.Windows)

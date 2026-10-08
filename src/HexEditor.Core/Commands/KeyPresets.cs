@@ -2,6 +2,19 @@ using System.Text.Json;
 
 namespace HexEditor.Core.Commands;
 
+/// <summary>プリセットが読めなかった理由の種類 (表示の文は App がリソースから作る)。</summary>
+public enum KeyPresetErrorKind
+{
+    /// <summary>その ID のプリセットが同梱されていない。</summary>
+    NotFound,
+
+    /// <summary>同梱のファイルが JSON として読めない、または不正な行がある (<see cref="KeyPresetError.Line"/>)。</summary>
+    Invalid,
+}
+
+/// <summary>プリセットが読めなかった理由 (UI-19 の「エラー」)。<see cref="Line"/> は 1 始まり (0 は不明)。</summary>
+public sealed record KeyPresetError(string Preset, KeyPresetErrorKind Kind, int Line = 0);
+
 /// <summary>
 /// ショートカットのプリセット (UI-19)。各プリセットは <c>default</c> との差分で、アプリに同梱する JSON (<c>Presets/&lt;ID&gt;.json</c>。
 /// Core のアセンブリに埋め込む) で定める。
@@ -17,7 +30,7 @@ public static class KeyPresets
     /// プリセットの差分を読む。読めない (知らない ID・壊れたファイル) 場合は空の差分 (= <c>default</c>) を返し、
     /// <paramref name="error"/> に理由を入れる (UI-19 の「エラー」)。
     /// </summary>
-    public static IReadOnlyList<KeyBindingEntry> Load(string id, out string? error)
+    public static IReadOnlyList<KeyBindingEntry> Load(string id, out KeyPresetError? error)
     {
         error = null;
         if (id == Default)
@@ -28,7 +41,7 @@ public static class KeyPresets
         using Stream? stream = typeof(KeyPresets).Assembly.GetManifestResourceStream($"HexEditor.Presets.{id}.json");
         if (stream is null)
         {
-            error = $"プリセット {id} がありません。";
+            error = new KeyPresetError(id, KeyPresetErrorKind.NotFound);
             return [];
         }
 
@@ -38,7 +51,7 @@ public static class KeyPresets
             KeyBindingsDocument doc = KeyBindingsDocument.Parse(reader.ReadToEnd());
             if (doc.Errors.Count > 0)
             {
-                error = $"プリセット {id} の {doc.Errors[0].Line} 行目: {doc.Errors[0].Message}";
+                error = new KeyPresetError(id, KeyPresetErrorKind.Invalid, doc.Errors[0].Line);
                 return [];
             }
 
@@ -46,7 +59,7 @@ public static class KeyPresets
         }
         catch (JsonException ex)
         {
-            error = $"プリセット {id}: {ex.Message}";
+            error = new KeyPresetError(id, KeyPresetErrorKind.Invalid, (int)(ex.LineNumber ?? 0) + 1);
             return [];
         }
     }

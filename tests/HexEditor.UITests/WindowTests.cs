@@ -82,7 +82,7 @@ public sealed partial class WindowTests
     {
         // 実際のマウスのクリックは行わない (作業中の PC の入力を奪うため)。メニューバーの各メニューの中央が
         // キャプション (ドラッグ領域) ではなくクライアント領域と判定されることを WM_NCHITTEST で確かめ、メニューが
-        // UI オートメーションで開けることを確かめる。コマンドパレットの入口はコマンドパレット (UI-17、フェーズ 1) と同時に作る。
+        // UI オートメーションで開けることを確かめる。コマンドパレットの入口も同じく確かめ、UI オートメーションの Invoke で押す。
         AppSession app = await ctx.StartAsync();
         var menus = app.Window.FindFirstDescendant(cf => cf.ByAutomationId("MainMenu"))!.FindAllChildren()
             .Where(m => AppSession.NameOf(m) != "Test").ToList();
@@ -98,6 +98,15 @@ public sealed partial class WindowTests
             Assert.True(InAny(passthrough, cx, cy), $"{AppSession.NameOf(m)} is in the drag region");
             Assert.True(m.Patterns.ExpandCollapse.IsSupported, $"{AppSession.NameOf(m)} cannot be expanded");
         }
+
+        // 3〜4. コマンドパレットの入口 (UI-02 の仕様 4): 中央が入力を通す領域にあり、押すとコマンドパレットが開く。
+        JsonObject entry = await app.ElementAsync("TitleBar_Palette");
+        double scale = (await app.StateAsync())["scale"]!.GetValue<double>();
+        double ex = (entry["left"]!.GetValue<double>() + entry["right"]!.GetValue<double>()) / 2 * scale;
+        double ey = (entry["top"]!.GetValue<double>() + entry["bottom"]!.GetValue<double>()) / 2 * scale;
+        Assert.True(InAny(passthrough, ex, ey), "the command palette entry is in the drag region");
+        await app.UiaInvokeAsync("TitleBar_Palette");
+        await app.WaitUntilAsync(async () => (await app.SendAsync("palette"))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the command palette");
     });
 
     [Theory]

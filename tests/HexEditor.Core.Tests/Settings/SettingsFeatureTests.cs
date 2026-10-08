@@ -245,10 +245,20 @@ public sealed class SettingsFeatureTests : IDisposable
     [Fact]
     public void Bundles_of_the_wrong_format_or_too_new_are_rejected()
     {
-        Assert.Throws<SettingsBundleException>(() => SettingsBundle.Parse("{ not json"));
-        Assert.Throws<SettingsBundleException>(() => SettingsBundle.Parse("""{ "$schemaVersion": 1, "app": "Other" }"""));
+        var invalid = Assert.Throws<SettingsBundleException>(() => SettingsBundle.Parse("{\n not json"));
+        Assert.Equal((SettingsBundleError.InvalidJson, 2), (invalid.Error, invalid.Line));
+        Assert.Equal(SettingsBundleError.NotSettingsFile,
+            Assert.Throws<SettingsBundleException>(() => SettingsBundle.Parse("""{ "$schemaVersion": 1, "app": "Other" }""")).Error);
+        Assert.Equal(SettingsBundleError.MissingVersion,
+            Assert.Throws<SettingsBundleException>(() => SettingsBundle.Parse("""{ "app": "HexEditor" }""")).Error);
         var tooNew = Assert.Throws<SettingsBundleException>(() => SettingsBundle.Parse("""{ "$schemaVersion": 2, "app": "HexEditor" }"""));
         Assert.True(tooNew.TooNew);
+        Assert.Equal(2, tooNew.Version);
+        Assert.True(Assert.Throws<SettingsBundleException>(() =>
+            SettingsBundle.Parse("""{ "$schemaVersion": 1, "app": "HexEditor", "keybindings": { "$schemaVersion": 5, "bindings": [] } }""")).TooNew);
+
+        // 表示の文はリソースから作るので、Core の例外の文は日本語を含まない (英語の記録用)。
+        Assert.DoesNotMatch(@"[぀-ヿ]", invalid.Message);
         SettingsBundle ok = SettingsBundle.Parse("""{ "$schemaVersion": 1, "app": "HexEditor", "themes": [ { "name": "a.json", "content": {} }, { "name": "..\\x.json", "content": {} } ] }""");
         Assert.Equal(SettingsParts.Themes, ok.Parts);
         Assert.Single(ok.Themes!);

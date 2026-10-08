@@ -99,20 +99,34 @@ public sealed partial class MainWindow : Window
     {
         if (status == Core.Settings.SettingsLoadStatus.Broken)
         {
-            ShowNotice(Loc.Get("Settings_Broken"), InfoBarSeverity.Warning, actions:
-            [
-                new NotificationAction(Loc.Get("Settings_OpenFolder"), () => _ = Windows.System.Launcher.LaunchFolderPathAsync(App.Settings.Folder)),
-            ]);
+            // 「ファイルを開く」: 名前を変えて残したファイルを開く (UI-23 の「エラー」)。
+            var actions = new List<NotificationAction>();
+            if (App.Settings.BrokenFilePath is { } broken)
+            {
+                actions.Add(new NotificationAction(Loc.Get("Keys_OpenFile"), () => _ = OpenUriAsync(new Uri(broken))));
+            }
+
+            actions.Add(new NotificationAction(Loc.Get("Settings_OpenFolder"), () => _ = Windows.System.Launcher.LaunchFolderPathAsync(App.Settings.Folder)));
+            ShowNotice(Loc.Get("Settings_Broken"), InfoBarSeverity.Warning, actions: actions);
         }
         else if (status == Core.Settings.SettingsLoadStatus.TooNew)
         {
             ShowNotice(Loc.Get("Settings_TooNew"), InfoBarSeverity.Warning);
+        }
+        else if (status == Core.Settings.SettingsLoadStatus.Unreadable)
+        {
+            ShowNotice(Loc.Format("Settings_Unreadable", App.Settings.LoadError ?? string.Empty), InfoBarSeverity.Warning);
         }
     }
 
     /// <summary>keybindings.json の誤り (読める部分だけを使う。UI-18 の「エラー」)。</summary>
     public void ShowKeybindingsStatus()
     {
+        if (HexEditor.App.Commands.CommandService.KeybindingsTooNew)
+        {
+            ShowNotice(Loc.Get("Keys_FileTooNew"), InfoBarSeverity.Warning);
+        }
+
         if (HexEditor.App.Commands.CommandService.KeybindingsError is { } error)
         {
             ShowNotice(error.Line > 0 ? Loc.Format("Keys_FileError", error.Line) : Loc.Format("Keys_FileErrorNoLine", error.Message), InfoBarSeverity.Warning, actions:
@@ -123,8 +137,12 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>外部で編集された設定ファイルが読めない (直前の値を使い続ける)。</summary>
-    public void ShowSettingsEditError(string reason) =>
-        ShowNotice(Loc.Format("Settings_ExternalError", reason), InfoBarSeverity.Error);
+    public void ShowSettingsEditError(Core.Settings.SettingsEditError error) =>
+        ShowNotice(error.Line > 0 ? Loc.Format("Settings_ExternalErrorLine", error.Line) : Loc.Format("Settings_ExternalError", error.Detail), InfoBarSeverity.Error);
+
+    /// <summary>設定・キー割り当てを書けなかった (UI-22 の「エラー」。値はセッション中だけ有効)。</summary>
+    public void ShowSettingsSaveFailed(string reason) =>
+        ShowNotice(Loc.Format("Settings_SaveFailed", reason), InfoBarSeverity.Error);
 
     /// <summary>通知の履歴の時刻の表示。</summary>
     public static string FormatHistoryTime(DateTime utc) => utc.ToLocalTime().ToString("T");

@@ -123,6 +123,13 @@ public sealed partial class MainWindow
                         ["second"] = c.Second.Command,
                     })]),
                 };
+
+                // 差分の一覧 (追加・変更・削除の項目) と読み込めなかった行 (UI-21 の仕様 2。ダイアログと同じ文)。
+                KeyImportLines lines = ImportLines(preview);
+                result["added"] = new JsonArray([.. lines.Added.Select(l => (JsonNode?)l)]);
+                result["changed"] = new JsonArray([.. lines.Changed.Select(l => (JsonNode?)l)]);
+                result["removed"] = new JsonArray([.. lines.Removed.Select(l => (JsonNode?)l)]);
+                result["errors"] = new JsonArray([.. doc.Errors.Select(e => (JsonNode?)Loc.Format("Keys_ImportErrorLine", e.Line, CommandService.LineErrorText(e)))]);
                 if (request["apply"]?.GetValue<bool>() == true)
                 {
                     ApplyKeybindingsImport(preview);
@@ -264,9 +271,122 @@ public sealed partial class MainWindow
                 OpenShortcutsPage();
                 await SaveShortcutsHtmlAsync();
                 return new JsonObject();
+            case "shortcutWarnings":
+            {
+                // ショートカット一覧の各行の注意 (「この配列では押せません」など。UI-20 の仕様 3)。
+                OpenShortcutsPage();
+                return new JsonObject([.. _shortcutsPage!.FilteredRows().Where(r => ShortcutsPage.Warnings(r).Length > 0)
+                    .Select(r => new KeyValuePair<string, JsonNode?>(r.CommandId + " " + KeyScopes.Name(r.ScopeValue), ShortcutsPage.Warnings(r)))]);
+            }
+
+            case "titleBarPalette":
+            {
+                // タイトルバーのコマンドパレットの入口 (UI-02 の仕様 4)。invoke で押す。
+                if (request["invoke"]?.GetValue<bool>() == true)
+                {
+                    OpenPalette(">");
+                }
+
+                (string label, bool compact, double width) = PaletteButtonState;
+                return new JsonObject { ["text"] = label, ["compact"] = compact, ["width"] = width, ["paletteOpen"] = Palette.IsOpen, ["paletteText"] = Palette.Text };
+            }
+
+            case "paletteChangeShortcut":
+                // 候補の右クリック >「ショートカットを変更」と同じ処理 (UI-18 の呼び出し)。
+                Palette.RequestChangeShortcut(Str(request, "id"));
+                await Task.Delay(50);
+                return new JsonObject
+                {
+                    ["paletteOpen"] = Palette.IsOpen,
+                    ["active"] = ActiveToolPage,
+                    ["category"] = _settingsPage?.Category,
+                    ["search"] = (SettingsPage.FindByAutomationId(ToolPageHost, "Keyboard_Search") as TextBox)?.Text,
+                    ["hasMenu"] = Palette.Entries.Any(e => e.CommandId == Str(request, "id")),
+                };
+            case "keyboardSection":
+                return KeyboardSectionState(request);
+            case "hexViewMenuShortcuts":
+                return new JsonObject([.. (CurrentView()?.ContextMenuShortcutTexts ?? new Dictionary<string, string>())
+                    .Select(p => new KeyValuePair<string, JsonNode?>(p.Key, p.Value))]);
             default:
                 return null;
         }
+    }
+
+    /// <summary>
+    /// 設定画面の「キーボード」の表 (UI-18)。<c>searchByKey</c> を渡すと「キーで検索」を押してから、そのキーを検索欄にフォーカスがある
+    /// ときと同じ経路 (ウィンドウのキーの振り分け) で押す。<c>reset</c> を渡すと、その行の「既定に戻す」を押す。
+    /// </summary>
+    private JsonObject KeyboardSectionState(JsonObject request)
+    {
+        // 開いている「キーボード」はそのまま使う (開き直すと表が作り直され、検索欄が空になる)。
+        if (ActiveToolPage != "settings" || _settingsPage?.Category != SettingCategories.Keyboard)
+        {
+            OpenSettingsPage(SettingCategories.Keyboard);
+        }
+
+        _settingsPage!.UpdateLayout();
+        TextBox search = SettingsPage.FindByAutomationId(ToolPageHost, "Keyboard_Search") as TextBox ?? throw new InvalidOperationException("No keyboard section.");
+        KeyboardSettingsSection section = Ancestor<KeyboardSettingsSection>(search) ?? throw new InvalidOperationException("No keyboard section.");
+        var result = new JsonObject();
+        if (request["search"] is { } text)
+        {
+            search.Text = text.GetValue<string>();
+        }
+
+        if (request["searchByKey"] is { } key)
+        {
+            section.StartSearchByKey();
+            result["capturing"] = section.IsCapturingKeys;
+            KeyModifiers modifiers = (request["ctrl"]?.GetValue<bool>() == true ? KeyModifiers.Ctrl : 0) | (request["shift"]?.GetValue<bool>() == true ? KeyModifiers.Shift : 0)
+                | (request["alt"]?.GetValue<bool>() == true ? KeyModifiers.Alt : 0);
+            DispatchResult r = RouteKey(search, (int)Enum.Parse<Windows.System.VirtualKey>(key.GetValue<string>(), ignoreCase: true), modifiers, new KeyContext(KeyScope.Global, true));
+            result["handled"] = r.Handled;
+            result["command"] = r.Command;
+        }
+
+        if (request["reset"] is { } reset)
+        {
+            result["skipped"] = new JsonArray([.. section.ResetCommand(reset.GetValue<string>()).Select(c => (JsonNode?)new JsonObject
+            {
+                ["key"] = c.First.Chord.ToString(),
+                ["other"] = c.Second.Command,
+            })]);
+        }
+
+        section.Fill();
+        section.UpdateLayout();
+        result["search"] = search.Text;
+        result["capturingAfter"] = section.IsCapturingKeys;
+        result["rows"] = new JsonArray([.. section.Rows.Select(r => (JsonNode?)new JsonObject
+        {
+            ["command"] = r.Command.Id,
+            ["name"] = r.Name,
+            ["english"] = r.English,
+            ["keys"] = r.Keys,
+            ["origin"] = r.Origin,
+            ["warnings"] = r.Warnings,
+            ["canReset"] = r.CanReset,
+        })]);
+        ListView list = (ListView)SettingsPage.FindByAutomationId(ToolPageHost, "Keyboard_Rows")!;
+        result["realized"] = Enumerable.Range(0, section.Rows.Count).Count(i => list.ContainerFromIndex(i) is not null);
+        result["isListView"] = true;
+        result["goToBarVisible"] = GoToBar.Visibility == Visibility.Visible;
+        return result;
+    }
+
+    private static T? Ancestor<T>(DependencyObject node)
+        where T : class
+    {
+        for (DependencyObject? n = node; n is not null; n = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(n))
+        {
+            if (n is T found)
+            {
+                return found;
+            }
+        }
+
+        return null;
     }
 
     private static string Str(JsonObject request, string name) => request[name]?.GetValue<string>() ?? throw new ArgumentException($"{name} is required.");

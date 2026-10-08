@@ -38,6 +38,8 @@ public sealed partial class MainWindow
             OpenSettingsPage(SettingCategories.Keyboard);
             DispatcherQueue.TryEnqueue(() => (SettingsPage.FindByAutomationId(ToolPageHost, "Keyboard_Preset") as Control)?.Focus(FocusState.Programmatic));
         });
+        // 「設定: 表示言語を変更」(UI-43 の呼び出し): 設定画面の「言語」の表示言語の項目を開く。
+        Commands.Register("settings.changeLanguage", () => OpenSettingsPage(SettingCategories.Language, "ui.language"));
         Commands.Register("settings.exportKeybindings", ExportKeybindingsAsync);
         Commands.Register("settings.importKeybindings", ImportKeybindingsAsync);
         Commands.Register("settings.export", ExportSettingsAsync);
@@ -89,9 +91,17 @@ public sealed partial class MainWindow
         }
     }
 
-    /// <summary>ショートカット一覧を開く (UI-39。設定画面と同じく 1 つだけ)。</summary>
+    /// <summary>ショートカット一覧を開く (UI-39。設定画面と同じくアプリ全体で 1 つだけ。別のウィンドウで開いていれば、そのタブを前に出す)。</summary>
     public void OpenShortcutsPage()
     {
+        if (WindowManager.Windows.FirstOrDefault(w => w != this && w.ToolTabIds.Contains("shortcuts")) is { } other)
+        {
+            WindowManager.MarkActive(other);
+            WindowManager.BringToFront(other);
+            other.OpenShortcutsPage();
+            return;
+        }
+
         _shortcutsPage ??= new ShortcutsPage(this);
         _shortcutsPage.Refresh();
         ShowToolPage("shortcuts", _shortcutsPage);
@@ -295,6 +305,9 @@ public sealed partial class MainWindow
         {
             CommandService.State.Clear();
             CommandService.Recent.Clear();
+
+            // 最近使ったファイルの一覧はアプリ全体で 1 つ (メモリの一覧も空にする。残すと次の記録で recent.json に書き戻る)。
+            Vm.Recent.Load("{}");
         }
 
         try
@@ -404,18 +417,8 @@ public sealed partial class MainWindow
             }
         }
 
-        JsonNode? recent = null;
-        string recentPath = Path.Combine(folder, SettingsFiles.Recent);
-        if (File.Exists(recentPath))
-        {
-            try
-            {
-                recent = JsonNode.Parse(File.ReadAllText(recentPath));
-            }
-            catch (JsonException)
-            {
-            }
-        }
+        // 最近使ったファイルはメモリの一覧から書き出す (絶対パス。ポータブル版の recent.json は exe からの相対パスで、別の環境では解決できないため)。
+        JsonNode? recent = parts.HasFlag(SettingsParts.RecentAndState) ? JsonNode.Parse(Vm.Recent.ToJson()) : null;
 
         var bundle = SettingsBundle.Create(parts, Program.Environment.AppVersion.ToString(), App.Settings.Snapshot(), CommandService.Settings,
             CommandService.Keys.ToDocument(), themes, recent);
@@ -484,14 +487,14 @@ public sealed partial class MainWindow
         {
             if (new FileInfo(path).Length > SettingsBundle.MaxBytes)
             {
-                throw new SettingsBundleException(Loc.Get("Settings_ImportTooLarge"));
+                throw new SettingsBundleException(SettingsBundleError.TooLarge);
             }
 
             return SettingsBundle.Parse(File.ReadAllText(path));
         }
         catch (SettingsBundleException ex)
         {
-            ShowNotice(Loc.Format(ex.TooNew ? "Settings_ImportTooNew" : "Settings_ImportInvalid", ex.Message), InfoBarSeverity.Error);
+            ShowNotice(BundleErrorText(ex), InfoBarSeverity.Error);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -500,6 +503,14 @@ public sealed partial class MainWindow
 
         return null;
     }
+
+    /// <summary>エクスポートのファイルが読めない理由の表示 (UI-25 の「エラー」)。</summary>
+    public static string BundleErrorText(SettingsBundleException ex) => ex.Error switch
+    {
+        SettingsBundleError.TooLarge => Loc.Get("Settings_ImportTooLarge"),
+        SettingsBundleError.TooNew => Loc.Format("Settings_ImportTooNew", "$schemaVersion " + ex.Version.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+        _ => Loc.Format("Settings_ImportInvalid", Loc.Format("ImportError_" + ex.Error, ex.Line)),
+    };
 
     /// <summary>
     /// インポートの本体 (テスト用の命令からも呼ぶ)。前に UI-24 と同じバックアップを作る。不正な値の項目は飛ばし、一覧を出す。
@@ -549,7 +560,9 @@ public sealed partial class MainWindow
 
         if (modes.TryGetValue(SettingsParts.RecentAndState, out ImportMode recentMode) && recentMode != ImportMode.Skip && bundle.Recent is { } recent)
         {
-            CommandService.WriteAtomic(Path.Combine(App.Settings.Folder, SettingsFiles.Recent), recent.ToJsonString());
+            // 最近使ったファイルはメモリの一覧 (アプリ全体で 1 つ) に読み込み、一覧が recent.json に書く (ファイルだけを書き換えると、
+            // 次の記録でメモリの一覧に上書きされる)。マージでは今の項目と合わせ、同じパスは新しい方を残す。
+            ImportRecent(recent, recentMode);
         }
 
         App.Settings.Flush();
@@ -564,6 +577,30 @@ public sealed partial class MainWindow
         }
 
         return skipped;
+    }
+
+    /// <summary>最近使ったファイルを読み込む (UI-25 の仕様 3)。読めない内容なら何もしない。</summary>
+    private void ImportRecent(JsonNode recent, ImportMode mode)
+    {
+        try
+        {
+            JsonArray items = recent["items"] is JsonArray imported ? (JsonArray)imported.DeepClone() : [];
+            if (mode == ImportMode.Merge && JsonNode.Parse(Vm.Recent.ToJson())?["items"] is JsonArray current)
+            {
+                foreach (JsonNode? item in current)
+                {
+                    items.Add(item?.DeepClone());
+                }
+            }
+
+            var merged = recent.DeepClone().AsObject();
+            merged["items"] = items;
+            Vm.Recent.Load(merged.ToJsonString());
+        }
+        catch (Exception ex) when (ex is JsonException or InvalidOperationException)
+        {
+            AppLog.Warning($"recent files not imported: {ex.Message}");
+        }
     }
 
     // ---- キー割り当てのインポート / エクスポート (UI-21) ----
@@ -598,42 +635,118 @@ public sealed partial class MainWindow
             return;
         }
 
-        // 差分と重複を表示し、「置き換える」と「マージ」を選ばせる (UI-21 の仕様 2)。
+        // 差分 (追加・変更・削除) と重複を表示し、「マージ」と「置き換える」を選ばせる (UI-21 の仕様 2)。選んだ読み込み方の差分を出す。
         KeyImportPreview replace = CommandService.Keys.PreviewImport(doc, KeyImportMode.Replace);
         KeyImportPreview merge = CommandService.Keys.PreviewImport(doc, KeyImportMode.Merge);
+        var mode = new RadioButtons { Header = Loc.Get("Keys_ImportMode"), MaxColumns = 2 };
+        mode.Items.Add(Loc.Get("ImportMode_Merge"));
+        mode.Items.Add(Loc.Get("ImportMode_Replace"));
+        mode.SelectedIndex = 0;
+        AutomationProperties.SetAutomationId(mode, "KeysImport_Mode");
+        var previewHost = new ContentControl { HorizontalContentAlignment = HorizontalAlignment.Stretch, IsTabStop = false };
+        void ShowPreview() => previewHost.Content = ImportPreviewView(mode.SelectedIndex == 1 ? replace : merge, doc.Errors);
+        mode.SelectionChanged += (_, _) => ShowPreview();
+        ShowPreview();
+        var body = new StackPanel { Spacing = 12 };
+        body.Children.Add(mode);
+        body.Children.Add(previewHost);
         var dialog = new ContentDialog
         {
             XamlRoot = Root.XamlRoot,
             RequestedTheme = Root.ActualTheme,
             FlowDirection = Root.FlowDirection,
             Title = Loc.Get("Keys_ImportTitle"),
-            Content = new ScrollViewer { MaxHeight = 420, Content = ImportPreviewView(merge) },
-            PrimaryButtonText = Loc.Get("ImportMode_Replace"),
-            SecondaryButtonText = Loc.Get("ImportMode_Merge"),
+            Content = new ScrollViewer { MaxHeight = 480, Content = body },
+            PrimaryButtonText = Loc.Get("Settings_ImportConfirm"),
             CloseButtonText = Loc.Get("Common_Cancel"),
-            DefaultButton = ContentDialogButton.Secondary,
+            DefaultButton = ContentDialogButton.Primary,
         };
         AutomationProperties.SetAutomationId(dialog, "KeysImportDialog");
-        ContentDialogResult result = await dialog.ShowAsync();
-        if (result != ContentDialogResult.None)
+        if (await dialog.ShowAsync() == ContentDialogResult.Primary)
         {
-            ApplyKeybindingsImport(result == ContentDialogResult.Primary ? replace : merge);
+            ApplyKeybindingsImport(mode.SelectedIndex == 1 ? replace : merge);
         }
     }
 
-    /// <summary>差分の一覧の表示 (追加・変更・削除、重複、不明なコマンド)。</summary>
-    public static StackPanel ImportPreviewView(KeyImportPreview preview)
+    /// <summary>インポートの差分の項目 (表示する文。テスト用の命令からも使う)。</summary>
+    public sealed record KeyImportLines(IReadOnlyList<string> Added, IReadOnlyList<string> Changed, IReadOnlyList<string> Removed);
+
+    /// <summary>
+    /// 差分を、コマンドごとの「追加」(今は割り当てがなく、読み込むと付く)・「変更」(キーが変わる)・「削除」(読み込むと割り当てが
+    /// なくなる) に分ける (UI-21 の仕様 2)。
+    /// </summary>
+    public static KeyImportLines ImportLines(KeyImportPreview preview)
+    {
+        string Keys(IEnumerable<KeyAssignment> list) => string.Join(", ", list.Select(a => a.Scope == KeyScope.Global
+            ? KeyboardLayout.Format(a.Chord) : $"{KeyboardLayout.Format(a.Chord)} ({CommandService.ScopeName(a.Scope)})"));
+        var added = new List<string>();
+        var changed = new List<string>();
+        var removed = new List<string>();
+        foreach (string command in preview.ChangedCommands)
+        {
+            var before = CommandService.Keys.BindingsFor(command).Select(b => new KeyAssignment(b.Command, b.Binding)).ToList();
+            var after = before.Where(a => !preview.Removed.Contains(a)).Concat(preview.Added.Where(a => a.Command == command)).ToList();
+            string name = CommandService.DisplayName(command);
+            if (before.Count == 0)
+            {
+                added.Add(Loc.Format("Keys_ImportItem", name, Keys(after)));
+            }
+            else if (after.Count == 0)
+            {
+                removed.Add(Loc.Format("Keys_ImportItem", name, Keys(before)));
+            }
+            else
+            {
+                changed.Add(Loc.Format("Keys_ImportChangedItem", name, Keys(before), Keys(after)));
+            }
+        }
+
+        return new KeyImportLines(added, changed, removed);
+    }
+
+    /// <summary>差分の一覧の表示 (追加・変更・削除の項目、重複、不明なコマンド、読み込めなかった行)。</summary>
+    public static StackPanel ImportPreviewView(KeyImportPreview preview, IReadOnlyList<KeyBindingsError> errors)
     {
         var body = new StackPanel { Spacing = 6, MinWidth = 420 };
         AutomationProperties.SetAutomationId(body, "KeysImportPreview");
-        void Line(string text, string id)
+        void Line(string text, string id, bool heading = false)
         {
             var t = new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap };
+            if (heading)
+            {
+                t.Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"];
+                t.Margin = new Thickness(0, 6, 0, 0);
+                AutomationProperties.SetHeadingLevel(t, Microsoft.UI.Xaml.Automation.Peers.AutomationHeadingLevel.Level3);
+            }
+
             AutomationProperties.SetAutomationId(t, id);
             body.Children.Add(t);
         }
 
         Line(Loc.Format("Keys_ImportSummary", preview.Added.Count, preview.ChangedCommands.Count, preview.Removed.Count), "KeysImport_Summary");
+        KeyImportLines lines = ImportLines(preview);
+        foreach ((IReadOnlyList<string> items, string header, string id) in new[]
+        {
+            (lines.Added, "Keys_ImportAddedHeader", "Added"),
+            (lines.Changed, "Keys_ImportChangedHeader", "Changed"),
+            (lines.Removed, "Keys_ImportRemovedHeader", "Removed"),
+        })
+        {
+            if (items.Count > 0)
+            {
+                Line(Loc.Get(header), "KeysImport_" + id + "Header", heading: true);
+                foreach (string item in items)
+                {
+                    Line(item, "KeysImport_" + id);
+                }
+            }
+        }
+
+        if (preview.ChangedCommands.Count == 0)
+        {
+            Line(Loc.Get("Keys_ImportNoChanges"), "KeysImport_NoChanges");
+        }
+
         foreach (KeyConflict c in preview.Conflicts)
         {
             Line(Loc.Format("Keys_ImportConflict", KeyboardLayout.Format(c.First.Chord), CommandService.DisplayName(c.First.Command), CommandService.DisplayName(c.Second.Command),
@@ -643,6 +756,16 @@ public sealed partial class MainWindow
         if (preview.UnknownCommands > 0)
         {
             Line(Loc.Format("Keys_ImportUnknown", preview.UnknownCommands), "KeysImport_Unknown");
+        }
+
+        // 読み込めなかった行 (その行は飛ばして読み込む)。
+        if (errors.Count > 0)
+        {
+            Line(Loc.Get("Keys_ImportErrorsHeader"), "KeysImport_ErrorsHeader", heading: true);
+            foreach (KeyBindingsError error in errors)
+            {
+                Line(Loc.Format("Keys_ImportErrorLine", error.Line, CommandService.LineErrorText(error)), "KeysImport_Error");
+            }
         }
 
         return body;
@@ -669,7 +792,7 @@ public sealed partial class MainWindow
         }
         catch (JsonException ex)
         {
-            ShowNotice(Loc.Format("Settings_ImportInvalid", ex.Message), InfoBarSeverity.Error);
+            ShowNotice(Loc.Format("Settings_ImportInvalid", Loc.Format("ImportError_InvalidJson", (int)(ex.LineNumber ?? 0) + 1)), InfoBarSeverity.Error);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -711,21 +834,47 @@ public sealed partial class MainWindow
     /// <summary>設定画面の「キーボード」を、そのコマンドで絞り込んで開く (UI-39 の仕様 5)。</summary>
     public void OpenKeyboardSettingsFor(string commandId)
     {
+        // 設定画面はアプリ全体で 1 つ。別のウィンドウで開いていれば、そのウィンドウで絞り込む。
+        if (SettingsOpenElsewhere() is { } other)
+        {
+            other.OpenKeyboardSettingsFor(commandId);
+            return;
+        }
+
+        // 絞り込みは「キーボード」の表が表示されたときに入れる (開いたばかりの画面は、まだ表の部品ができていない)。
+        PendingKeyboardFilter = commandId;
         OpenSettingsPage(SettingCategories.Keyboard);
         DispatcherQueue.TryEnqueue(() =>
         {
-            if (SettingsPage.FindByAutomationId(ToolPageHost, "Keyboard_Search") is TextBox search)
+            if (SettingsPage.FindByAutomationId(ToolPageHost, "Keyboard_Search") is TextBox { IsLoaded: true } search
+                && VisualAncestor<KeyboardSettingsSection>(search) is { } section)
             {
-                search.Text = commandId;
-                search.Focus(FocusState.Programmatic);
+                section.ApplyPendingFilter();
             }
         });
+    }
+
+    /// <summary>設定画面の「キーボード」を開いたときに入れる絞り込み (コマンド ID)。表が受け取ったら null に戻す。</summary>
+    internal string? PendingKeyboardFilter { get; set; }
+
+    private static T? VisualAncestor<T>(DependencyObject node)
+        where T : class
+    {
+        for (DependencyObject? n = node; n is not null; n = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(n))
+        {
+            if (n is T found)
+            {
+                return found;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>「HTML として保存」(UI-39 の仕様 4)。</summary>
     public async Task SaveShortcutsHtmlAsync()
     {
-        if (_shortcutsPage is null || await PickSaveFileAsync("HexEditor.ShortcutsHtml", "shortcuts.html") is not { } path)
+        if (_shortcutsPage is null || await PickSaveFileAsync("HexEditor.ShortcutsHtml", "shortcuts.html", "FileType_Html") is not { } path)
         {
             return;
         }
@@ -750,7 +899,16 @@ public sealed partial class MainWindow
         }
 
         string path = Path.Combine(App.TempRoot, "shortcuts.html");
-        CommandService.WriteAtomic(path, _shortcutsPage.ToHtml());
+        try
+        {
+            CommandService.WriteAtomic(path, _shortcutsPage.ToHtml());
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            ShowNotice(Loc.Format("Settings_ExportFailed", ex.Message), InfoBarSeverity.Error);
+            return;
+        }
+
         await OpenUriAsync(new Uri(path));
     }
 
@@ -759,7 +917,8 @@ public sealed partial class MainWindow
 
     // ---- 補助 ----
 
-    private async Task<string?> PickSaveFileAsync(string identifier, string suggestedName)
+    /// <summary>保存先を選ぶ。<paramref name="fileTypeKey"/> はファイルの種類の表示名のリソースのキー (既定は JSON)。</summary>
+    private async Task<string?> PickSaveFileAsync(string identifier, string suggestedName, string fileTypeKey = "FileType_Json")
     {
         if (TestHooks.TrySavePicker(suggestedName, out string? chosen))
         {
@@ -767,7 +926,7 @@ public sealed partial class MainWindow
         }
 
         var picker = new FileSavePicker(WindowId) { SuggestedFileName = suggestedName, SettingsIdentifier = identifier };
-        picker.FileTypeChoices.Add(Loc.Get("FileType_Json"), [Path.GetExtension(suggestedName)]);
+        picker.FileTypeChoices.Add(Loc.Get(fileTypeKey), [Path.GetExtension(suggestedName)]);
         return (await picker.PickSaveFileAsync())?.Path;
     }
 
