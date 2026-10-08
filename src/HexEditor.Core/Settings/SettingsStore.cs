@@ -139,6 +139,18 @@ public sealed class SettingsStore : IDisposable
         }
     }
 
+    /// <summary>JSON の値 (配列・オブジェクト。検索履歴など) の写し。なければ null。</summary>
+    public JsonNode? GetJson(string key)
+    {
+        lock (_lock)
+        {
+            return _values[key]?.DeepClone();
+        }
+    }
+
+    /// <summary>JSON の値を変える。null ならファイルから消す。</summary>
+    public void SetJson(string key, JsonNode? value) => Set(key, value?.DeepClone());
+
     /// <summary>値を変える。既定値と同じなら、ファイルから消す (仕様 4)。</summary>
     public void SetString(string key, string value, string defaultValue) =>
         Set(key, value == defaultValue ? null : JsonValue.Create(value));

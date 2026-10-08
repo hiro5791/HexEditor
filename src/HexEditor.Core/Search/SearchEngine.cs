@@ -60,7 +60,7 @@ public static class SearchEngine
             foreach (SearchRange r in ranges)
             {
                 long lo = Math.Max(r.Offset, start);
-                if (lo < r.End && scan.ForwardIn(lo, r.End, long.MaxValue) is (long at, int len))
+                if (lo < r.End && scan.ForwardIn(lo, r.End, long.MaxValue, r) is (long at, int len))
                 {
                     return new SearchHit(at, len, false);
                 }
@@ -70,7 +70,7 @@ public static class SearchEngine
             {
                 foreach (SearchRange r in ranges)
                 {
-                    if (r.Offset < start && scan.ForwardIn(r.Offset, Math.Min(r.End, start + maxLen - 1), start) is (long at, int len))
+                    if (r.Offset < start && scan.ForwardIn(r.Offset, Math.Min(r.End, start + maxLen - 1), start, r) is (long at, int len))
                     {
                         return new SearchHit(at, len, true);
                     }
@@ -82,7 +82,7 @@ public static class SearchEngine
             for (int i = ranges.Count - 1; i >= 0; i--)
             {
                 SearchRange r = ranges[i];
-                if (r.Offset < start && scan.BackwardIn(r.Offset, Math.Min(r.End, start - 1 + maxLen), start) is (long at, int len))
+                if (r.Offset < start && scan.BackwardIn(r.Offset, Math.Min(r.End, start - 1 + maxLen), start, r) is (long at, int len))
                 {
                     return new SearchHit(at, len, false);
                 }
@@ -94,7 +94,7 @@ public static class SearchEngine
                 {
                     SearchRange r = ranges[i];
                     long lo = Math.Max(r.Offset, start);
-                    if (lo < r.End && scan.BackwardIn(lo, r.End, long.MaxValue) is (long at, int len))
+                    if (lo < r.End && scan.BackwardIn(lo, r.End, long.MaxValue, r) is (long at, int len))
                     {
                         return new SearchHit(at, len, true);
                     }
@@ -103,6 +103,35 @@ public static class SearchEngine
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// 単語単位の検索 (FIND-10 の仕様 4) で、[at, at + length) の前後が単語の境界か。範囲 <paramref name="range"/> の端は境界とみなす。
+    /// 単語単位でなければ常に true。読めないバイトは境界とみなす。
+    /// </summary>
+    internal static bool AcceptsWord(DocumentSnapshot snapshot, SearchPattern pattern, SearchRange range, long at, long length)
+    {
+        if (pattern.Word is not { } word)
+        {
+            return true;
+        }
+
+        Span<byte> before = stackalloc byte[WordBoundary.MaxCharBytes];
+        Span<byte> after = stackalloc byte[WordBoundary.MaxCharBytes];
+        int beforeLength = (int)Math.Clamp(at - range.Offset, 0, WordBoundary.MaxCharBytes);
+        long end = at + length;
+        int afterLength = (int)Math.Clamp(range.End - end, 0, WordBoundary.MaxCharBytes);
+        if (beforeLength > 0 && !snapshot.Read(at - beforeLength, before[..beforeLength]).IsComplete)
+        {
+            beforeLength = 0;
+        }
+
+        if (afterLength > 0 && !snapshot.Read(end, after[..afterLength]).IsComplete)
+        {
+            afterLength = 0;
+        }
+
+        return word.Accept(before[..beforeLength], after[..afterLength]);
     }
 
     // ---- すべて検索・件数の数え上げ ----
@@ -123,12 +152,25 @@ public static class SearchEngine
     /// <paramref name="results"/> の条件ですべての一致を探し、追加していく。呼び出し側は先に
     /// <see cref="SearchResults.MatchesAdded"/> を購読しておける (ストリーミング)。
     /// </summary>
-    public static void FindAll(SearchResults results, LongRunningOperation? operation = null, CancellationToken cancellationToken = default)
+    public static void FindAll(SearchResults results, LongRunningOperation? operation = null, CancellationToken cancellationToken = default) =>
+        FindAllFrom(results, long.MinValue, operation, cancellationToken);
+
+    /// <summary>
+    /// 件数の上限で止めたすべて検索を続ける (FIND-20 の仕様 6)。上限を 2 倍にし、一覧の最後の一致の続き (重なる一致を含めない
+    /// 場合は一致の末尾、含める場合は開始 + 1) から探す。重複も取りこぼしもない。
+    /// </summary>
+    public static void ContinueFindAll(SearchResults results, LongRunningOperation? operation = null, CancellationToken cancellationToken = default)
+    {
+        long? from = results.PrepareContinue();
+        FindAllFrom(results, from ?? long.MinValue, operation, cancellationToken);
+    }
+
+    private static void FindAllFrom(SearchResults results, long startFrom, LongRunningOperation? operation, CancellationToken cancellationToken)
     {
         var scan = new Scan(results.Snapshot, results.Pattern, results.Options, operation, cancellationToken, results.TotalBytes);
         try
         {
-            bool limited = scan.CollectAll(results);
+            bool limited = scan.CollectAll(results, startFrom);
             results.SetState(limited ? SearchResultsState.LimitReached : SearchResultsState.Completed);
         }
         catch (OperationCanceledException)
@@ -190,8 +232,9 @@ public static class SearchEngine
                     complete = false;
                 }
 
+                SearchRange range = r;
                 Collect(pattern, bytes.AsSpan(segStart, i - segStart), from + segStart, 0, offset + length, true, result,
-                    m => m.End > offset);
+                    m => m.End > offset, pattern.Word is null ? null : (at, len) => AcceptsWord(snapshot, pattern, range, at, len));
                 segStart = i + 1;
             }
         }
@@ -201,10 +244,10 @@ public static class SearchEngine
 
     /// <summary>
     /// <paramref name="data"/> の中で、開始が [minStart, maxStart) の一致を昇順に集める。<paramref name="overlapping"/> が false なら
-    /// 一致の末尾の次から探す。
+    /// 一致の末尾の次から探す。<paramref name="accept"/> が false を返す一致 (単語の境界でないもの) は数えず、次の位置から探し直す。
     /// </summary>
     private static void Collect(SearchPattern pattern, ReadOnlySpan<byte> data, long baseOffset, long minStart, long maxStart,
-        bool overlapping, List<SearchMatch> sink, Func<SearchMatch, bool>? filter = null)
+        bool overlapping, List<SearchMatch> sink, Func<SearchMatch, bool>? filter = null, Func<long, long, bool>? accept = null)
     {
         int from = (int)Math.Clamp(minStart - baseOffset, 0, data.Length);
         while (from < data.Length)
@@ -221,7 +264,13 @@ public static class SearchEngine
                 return;
             }
 
-            var match = new SearchMatch(at, len);
+            if (accept is not null && !accept(at, len))
+            {
+                from += found + 1;
+                continue;
+            }
+
+            var match = new SearchMatch(at, len, pattern.VariantAt(data[(from + found)..]));
             if (filter is null || filter(match))
             {
                 sink.Add(match);
@@ -248,6 +297,9 @@ public static class SearchEngine
         private readonly List<SearchRange> _reported = [];
         private long _done;
 
+        /// <summary>次 / 前を検索で今調べている範囲 (単語の境界の判定に使う)。</summary>
+        private SearchRange _range;
+
         public Scan(DocumentSnapshot snapshot, SearchPattern pattern, SearchOptions options, LongRunningOperation? operation,
             CancellationToken token, long total)
         {
@@ -261,9 +313,10 @@ public static class SearchEngine
             _overlap = pattern.MaxMatchLength - 1;
         }
 
-        /// <summary>[from, to) にすっかり収まり、開始が maxStart 未満の最初の一致。</summary>
-        public (long, int)? ForwardIn(long from, long to, long maxStart)
+        /// <summary>[from, to) にすっかり収まり、開始が maxStart 未満の最初の一致。<paramref name="range"/> は単語の境界の判定に使う範囲。</summary>
+        public (long, int)? ForwardIn(long from, long to, long maxStart, SearchRange range)
         {
+            _range = range;
             IEnumerable<(long, int)> Plan()
             {
                 for (long pos = from; pos < maxStart && to - pos >= _pattern.MinMatchLength; pos += _chunkSize)
@@ -301,8 +354,9 @@ public static class SearchEngine
         }
 
         /// <summary>[from, to) にすっかり収まり、開始が maxStart 未満の最後の一致。チャンクを末尾側から読む (FIND-01 の仕様 8)。</summary>
-        public (long, int)? BackwardIn(long from, long to, long maxStart)
+        public (long, int)? BackwardIn(long from, long to, long maxStart, SearchRange range)
         {
+            _range = range;
             IEnumerable<(long, int)> Plan()
             {
                 for (long end = to; end - from >= _pattern.MinMatchLength; end -= _chunkSize)
@@ -329,10 +383,22 @@ public static class SearchEngine
                 {
                     int segStart = g >= 0 ? gaps[g].End : 0;
                     ReadOnlySpan<byte> segment = data[segStart..cursor];
-                    int found = _pattern.LastIndexOf(segment, chunk.Offset + segStart, Math.Max(0, limit - segStart), out int len);
-                    if (found >= 0)
+                    int segLimit = Math.Max(0, limit - segStart);
+                    while (true)
                     {
-                        return (chunk.Offset + segStart + found, len);
+                        int found = _pattern.LastIndexOf(segment, chunk.Offset + segStart, segLimit, out int len);
+                        if (found < 0)
+                        {
+                            break;
+                        }
+
+                        long at = chunk.Offset + segStart + found;
+                        if (AcceptsWord(_snapshot, _pattern, _range, at, len))
+                        {
+                            return (at, len);
+                        }
+
+                        segLimit = found;
                     }
 
                     if (g >= 0)
@@ -348,30 +414,45 @@ public static class SearchEngine
             return null;
         }
 
-        /// <summary>範囲のすべての一致を集める。上限で止めたら true。</summary>
-        public bool CollectAll(SearchResults results)
+        /// <summary>
+        /// 範囲のすべての一致を集める。開始が <paramref name="startFrom"/> 以上の一致だけを集める (「続ける」)。上限で止めたら true。
+        /// </summary>
+        public bool CollectAll(SearchResults results, long startFrom = long.MinValue)
         {
+            IReadOnlyList<SearchRange> ranges = _options.Scope.Resolve(_snapshot.Length);
+            long skipped = ranges.Sum(r => Math.Clamp(startFrom - r.Offset, 0, r.Length));
+            if (skipped > 0)
+            {
+                Advance(skipped);
+            }
+
             IEnumerable<ChunkPlan> Plan()
             {
-                foreach (SearchRange r in _options.Scope.Resolve(_snapshot.Length))
+                foreach (SearchRange r in ranges)
                 {
-                    for (long pos = r.Offset; pos < r.End; pos += _chunkSize)
+                    long first = Math.Max(r.Offset, startFrom);
+                    for (long pos = first; pos < r.End; pos += _chunkSize)
                     {
                         long coreEnd = Math.Min(r.End, pos + _chunkSize);
-                        yield return new ChunkPlan(pos, coreEnd, Math.Min(r.End, coreEnd + _overlap));
+                        yield return new ChunkPlan(pos, coreEnd, Math.Min(r.End, coreEnd + _overlap), r);
                     }
                 }
             }
 
             int parallelism = Math.Max(1, _options.MaxDegreeOfParallelism);
             bool overlapping = _options.IncludeOverlapping;
-            long maxMatches = _options.MaxMatches;
             using IEnumerator<ChunkPlan> plan = Plan().GetEnumerator(); // 計画は少しずつ作る (チャンクの数に比例したメモリを使わない)
             var batchPlans = new ChunkPlan[parallelism];
             byte[][] buffers = new byte[parallelism][];
             var chunkResults = new ChunkResult[parallelism];
-            long carriedEnd = long.MinValue; // 重ならない一致: 直前に採った一致の末尾
-            long count = 0;
+            long carriedEnd = startFrom; // 重ならない一致: 直前に採った一致の末尾
+            long count = results.LongCount;
+            long limit = results.Limit;
+            if (count >= limit)
+            {
+                return true;
+            }
+
             while (true)
             {
                 Check();
@@ -427,7 +508,7 @@ public static class SearchEngine
                             ReportOrdered(results, cr.Gaps[gapIndex]);
                         }
 
-                        if (count == maxMatches)
+                        if (count >= limit)
                         {
                             Flush(results, accepted);
                             return true;
@@ -439,6 +520,12 @@ public static class SearchEngine
                     }
 
                     Flush(results, accepted);
+                    if (results.SpillFailed)
+                    {
+                        // 一時ファイルを作れなかった: メモリ上の件数で止める (FIND-20 の「エラー」)。
+                        return true;
+                    }
+
                     for (; gapIndex < cr.Gaps.Count; gapIndex++)
                     {
                         ReportOrdered(results, cr.Gaps[gapIndex]);
@@ -479,7 +566,7 @@ public static class SearchEngine
             long from = startFrom;
             foreach ((int gapStart, int gapEnd) in Gaps(chunk))
             {
-                Collect(_pattern, data[cursor..gapStart], p.Offset + cursor, from, p.CoreEnd, overlapping, matches);
+                Collect(_pattern, data[cursor..gapStart], p.Offset + cursor, from, p.CoreEnd, overlapping, matches, null, Accept(p.Range));
                 if (!overlapping && matches.Count > 0)
                 {
                     from = Math.Max(from, matches[^1].End);
@@ -495,9 +582,13 @@ public static class SearchEngine
                 cursor = gapEnd;
             }
 
-            Collect(_pattern, data[cursor..], p.Offset + cursor, from, p.CoreEnd, overlapping, matches);
+            Collect(_pattern, data[cursor..], p.Offset + cursor, from, p.CoreEnd, overlapping, matches, null, Accept(p.Range));
             return new ChunkResult(matches, gaps);
         }
+
+        /// <summary>単語の境界の判定 (単語単位でなければ null)。</summary>
+        private Func<long, long, bool>? Accept(SearchRange range) =>
+            _pattern.Word is null ? null : (at, len) => AcceptsWord(_snapshot, _pattern, range, at, len);
 
         /// <summary>すべて検索の読めない範囲を、位置の順に知らせて記録する。</summary>
         private void ReportOrdered(SearchResults results, UnreadableRange range)
@@ -511,11 +602,28 @@ public static class SearchEngine
             results.AddSkipped(range);
         }
 
-        /// <summary><paramref name="data"/> の中の最初の一致。</summary>
+        /// <summary><paramref name="data"/> の中の最初の一致 (単語単位なら境界を満たすもの)。</summary>
         private (long, int)? FirstIn(ReadOnlySpan<byte> data, long baseOffset)
         {
-            int found = _pattern.IndexOf(data, baseOffset, out int len);
-            return found >= 0 ? (baseOffset + found, len) : null;
+            int from = 0;
+            while (from <= data.Length)
+            {
+                int found = _pattern.IndexOf(data[from..], baseOffset + from, out int len);
+                if (found < 0)
+                {
+                    return null;
+                }
+
+                long at = baseOffset + from + found;
+                if (AcceptsWord(_snapshot, _pattern, _range, at, len))
+                {
+                    return (at, len);
+                }
+
+                from += found + 1;
+            }
+
+            return null;
         }
 
         /// <summary>次 / 前を検索で出会った読めない範囲を知らせる。知らせ済みの部分は除く。</summary>
@@ -647,7 +755,7 @@ public static class SearchEngine
         }
     }
 
-    private readonly record struct ChunkPlan(long Offset, long CoreEnd, long ReadEnd);
+    private readonly record struct ChunkPlan(long Offset, long CoreEnd, long ReadEnd, SearchRange Range);
 
     private sealed record ChunkResult(List<SearchMatch> Matches, List<UnreadableRange> Gaps);
 
