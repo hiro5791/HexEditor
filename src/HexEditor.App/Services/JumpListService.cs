@@ -70,6 +70,18 @@ public sealed class JumpListService
         }
     }
 
+    /// <summary>
+    /// ジャンプリストを消す (ポータブル版の「この PC から登録を解除」。10 の PKG-09 の仕様 4)。テスト用のビルドで異常を再現する仕組みが
+    /// 有効なときは、ジャンプリストを作らないため何もしない。失敗は例外のまま呼び出し元に返す (失敗した項目の一覧に出す)。
+    /// </summary>
+    public static void DeleteList(string appId)
+    {
+        if (!TestHooks.Active)
+        {
+            Native.Delete(appId);
+        }
+    }
+
     /// <summary>ICustomDestinationList の呼び出し。</summary>
     private static class Native
     {

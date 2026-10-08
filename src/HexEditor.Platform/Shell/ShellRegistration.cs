@@ -20,6 +20,15 @@ public interface IUserRegistry
 
     /// <summary>キーがあり、値もサブキーもないか。</summary>
     bool IsKeyEmpty(string key);
+
+    /// <summary>
+    /// 文字列の値を環境変数を展開せずに読む (<c>REG_EXPAND_SZ</c> の <c>%USERPROFILE%</c> などをそのまま)。
+    /// <c>Expandable</c> は <c>REG_EXPAND_SZ</c> か。値がなければ null。
+    /// </summary>
+    (string Value, bool Expandable)? GetRawString(string key, string name);
+
+    /// <summary>文字列の値を書く。<paramref name="expandable"/> なら <c>REG_EXPAND_SZ</c>、そうでなければ <c>REG_SZ</c>。</summary>
+    void SetString(string key, string name, string value, bool expandable);
 }
 
 /// <summary>実際の HKCU。</summary>
@@ -55,6 +64,23 @@ public sealed class WindowsUserRegistry : IUserRegistry
     {
         using RegistryKey? k = Registry.CurrentUser.OpenSubKey(key);
         return k is not null && k.ValueCount == 0 && k.SubKeyCount == 0;
+    }
+
+    public (string Value, bool Expandable)? GetRawString(string key, string name)
+    {
+        using RegistryKey? k = Registry.CurrentUser.OpenSubKey(key);
+        if (k?.GetValue(name, null, RegistryValueOptions.DoNotExpandEnvironmentNames) is not string value)
+        {
+            return null;
+        }
+
+        return (value, k.GetValueKind(name) == RegistryValueKind.ExpandString);
+    }
+
+    public void SetString(string key, string name, string value, bool expandable)
+    {
+        using RegistryKey k = Registry.CurrentUser.CreateSubKey(key, writable: true);
+        k.SetValue(name, value, expandable ? RegistryValueKind.ExpandString : RegistryValueKind.String);
     }
 }
 
@@ -96,7 +122,7 @@ public sealed record ShellRegistrationStatus(string Id, bool Registered, string?
 /// <summary>
 /// Explorer 連携のレジストリの登録の一覧 (PKG-08 の仕様 3、09 の UI-54、UI-56)。登録と解除で同じ一覧を使う。HKCU だけに書き、HKLM には書かない。
 /// インストーラ版はフックで登録し、ポータブル版は設定画面のボタンで登録する (既定は登録しない)。MSIX 版はマニフェストで宣言する (登録しない)。
-/// PATH (PKG-08 の仕様 6) はその機能を作るときにこの一覧に加える。
+/// ユーザーの PATH (PKG-08 の仕様 6) は既存の値の一部を書き換えるため、この一覧ではなく <see cref="UserPath"/> で扱う。
 /// </summary>
 public static class ShellRegistration
 {

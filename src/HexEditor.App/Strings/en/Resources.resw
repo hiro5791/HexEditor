@@ -1346,6 +1346,12 @@ Details were written to:
   <data name="Shell_NotAvailable" xml:space="preserve"><value>Not available in this build.</value></data>
   <data name="Shell_StateUnavailable" xml:space="preserve"><value>The registration state could not be read.</value></data>
   <data name="Shell_OtherDistribution" xml:space="preserve"><value>Another edition of HexEditor is also registered. The menu may show two items.</value></data>
+  <data name="SetSection_UnregisterPc" xml:space="preserve"><value>Unregister from this PC</value></data>
+  <data name="SetSearch_UnregisterPc" xml:space="preserve"><value>uninstall remove registry portable</value></data>
+  <data name="Shell_UnregisterPcDescription" xml:space="preserve"><value>Removes what this copy of HexEditor registered on this PC: the right-click menu, file associations, the jump list, the notification registration and the temporary files.</value></data>
+  <data name="Shell_UnregisterPcButton" xml:space="preserve"><value>Unregister from this PC</value></data>
+  <data name="Shell_UnregisterPcDone" xml:space="preserve"><value>HexEditor was unregistered from this PC. Delete the HexEditor folder to complete the uninstall.</value></data>
+  <data name="Shell_UnregisterPcFailed" xml:space="preserve"><value>Some items couldn't be removed: {0}</value></data>
   <data name="Network_Feature_Updates" xml:space="preserve"><value>Update checks and downloads</value></data>
   <data name="Network_Feature_Downloads" xml:space="preserve"><value>Downloading templates and plugins</value></data>
   <data name="Network_Feature_Components" xml:space="preserve"><value>Downloading additional components</value></data>

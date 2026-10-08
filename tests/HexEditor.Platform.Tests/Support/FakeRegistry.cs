@@ -9,6 +9,7 @@ namespace HexEditor.Platform.Tests.Support;
 public sealed class FakeRegistry : IUserRegistry
 {
     private readonly Dictionary<string, Dictionary<string, string>> _keys = new(StringComparer.OrdinalIgnoreCase);
+    private readonly HashSet<string> _expandable = new(StringComparer.OrdinalIgnoreCase);
 
     public bool FailWrites { get; set; }
 
@@ -57,6 +58,32 @@ public sealed class FakeRegistry : IUserRegistry
             values.Remove(name);
 
             // 値がなくなってもキーは残る (実際のレジストリと同じ)。
+        }
+    }
+
+    public (string Value, bool Expandable)? GetRawString(string key, string name) =>
+        GetValue(key, name) is { } value ? (value, _expandable.Contains($"{key}|{name}")) : null;
+
+    public void SetString(string key, string name, string value, bool expandable)
+    {
+        SetValue(key, name, value);
+        if (expandable)
+        {
+            _expandable.Add($"{key}|{name}");
+        }
+        else
+        {
+            _expandable.Remove($"{key}|{name}");
+        }
+    }
+
+    /// <summary>テストの準備: 種類を指定して値を置く (REG_EXPAND_SZ の PATH など)。</summary>
+    public void SeedString(string key, string name, string value, bool expandable)
+    {
+        Set(key, name, value);
+        if (expandable)
+        {
+            _expandable.Add($"{key}|{name}");
         }
     }
 

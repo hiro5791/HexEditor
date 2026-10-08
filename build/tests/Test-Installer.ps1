@@ -10,6 +10,9 @@
     TC-PKG-11-02  the Velopack hook arguments exit within 5 s without a window
     TC-PKG-09-01  data is kept by a default uninstall
     TC-PKG-09-02  uninstall.removeUserData = true removes the data folder
+    TC-PKG-08-01  after the installation: the context menu key and every key of ShellRegistration exist; the user
+                  PATH has %LocalAppData%\HexEditor\current\ once at its end and its other entries are unchanged
+    TC-PKG-08-02  after the uninstallation: no key or value of ShellRegistration remains; the user PATH is as before
     TC-PKG-08-04  no writes to HKLM by Setup.exe, Update.exe and HexEditor.exe during all of the above
                   (Process Monitor records from the first install to the last uninstall)
     TC-UI-54-01   the classic context menu "Open with HexEditor" is registered in HKCU with the app icon
@@ -82,6 +85,28 @@ function Get-DefaultApp([string]$Extension) {
     $sb.ToString()
 }
 $isoDefaultBefore = Get-DefaultApp '.iso'
+
+# The registration list of ShellRegistration (src/HexEditor.Platform/Shell/ShellRegistration.cs; the Platform test
+# InstallerScriptListsEveryShellRegistrationKey keeps this copy equal to it): keys that the hooks own, and the
+# value HexEditor.Binary in OpenWithProgids of the "Open with" extensions.
+$shellRegistrationKeys = @(
+    'Software\Microsoft\Windows\CurrentVersion\App Paths\HexEditor.exe',
+    'Software\Classes\*\shell\HexEditor',
+    'Software\Classes\HexEditor.Project',
+    'Software\Classes\HexEditor.Workspace',
+    'Software\Classes\HexEditor.Binary',
+    'Software\Classes\.hexproj',
+    'Software\Classes\.hexworkspace'
+)
+$openWithExtensions = @('.bin', '.dat', '.img', '.rom', '.dmp', '.raw', '.iso')
+
+# The user PATH (HKCU\Environment, not expanded) as its entries.
+function Get-UserPathEntries {
+    $value = (Get-Item 'HKCU:\Environment').GetValue('Path', '', 'DoNotExpandEnvironmentNames')
+    @("$value" -split ';' | Where-Object { $_ })
+}
+$userPathBefore = Get-UserPathEntries
+$commandLineFolder = (Join-Path $installRoot 'current') + '\'
 $contextMenuKey = 'HKCU:\Software\Classes\*\shell\HexEditor'
 
 # Waits until HexEditor runs for the file (its command line has the file name).
@@ -111,6 +136,23 @@ Invoke-TestCase 'TC-PKG-07-02' 'Start menu shortcut only' {
     foreach ($desktop in [Environment]::GetFolderPath('Desktop'), [Environment]::GetFolderPath('CommonDesktopDirectory')) {
         Assert-True (-not (Get-ChildItem $desktop -Filter 'HexEditor*.lnk' -ErrorAction SilentlyContinue)) "desktop shortcut in $desktop"
     }
+}
+
+Invoke-TestCase 'TC-PKG-08-01' 'registration and PATH after the installation' {
+    # 2. The context menu and the keys of ShellRegistration.
+    Assert-True (Test-Path -LiteralPath $contextMenuKey) "$contextMenuKey does not exist"
+    foreach ($key in $shellRegistrationKeys) { Assert-True (Test-Path -LiteralPath "HKCU:\$key") "HKCU\$key does not exist" }
+    foreach ($ext in $openWithExtensions) {
+        $values = Get-ItemProperty -LiteralPath "HKCU:\Software\Classes\$ext\OpenWithProgids" -ErrorAction SilentlyContinue
+        Assert-True ($null -ne $values -and $values.PSObject.Properties.Name -contains 'HexEditor.Binary') "HexEditor.Binary is not in $ext\OpenWithProgids"
+    }
+    # 3. The user PATH: the folder once at the end, the other entries unchanged.
+    $after = Get-UserPathEntries
+    $ours = @($after | Where-Object { $_.TrimEnd('\') -ieq $commandLineFolder.TrimEnd('\') })
+    Assert-True ($ours.Count -eq 1) "$commandLineFolder is $($ours.Count) times in the user PATH: $($after -join ';')"
+    Assert-True ($after[-1].TrimEnd('\') -ieq $commandLineFolder.TrimEnd('\')) "the last PATH entry is $($after[-1])"
+    $others = @($after | Where-Object { $_.TrimEnd('\') -ine $commandLineFolder.TrimEnd('\') })
+    Assert-True (($others -join ';') -eq ($userPathBefore -join ';')) "the other PATH entries changed: '$($userPathBefore -join ';')' -> '$($others -join ';')'"
 }
 
 Invoke-TestCase 'TC-PKG-07-04' 'App Paths' {
@@ -231,6 +273,17 @@ Invoke-TestCase 'TC-PKG-07-03' 'Apps entry and uninstall' {
     Assert-True (-not (Test-Path $appPathsKey)) 'App Paths remains (ShellRegistration)'
     Assert-True (-not (Test-Path -LiteralPath $contextMenuKey)) 'the context menu key remains (ShellRegistration)'
     Assert-True (-not (Test-Path 'HKCU:\Software\Classes\HexEditor.Project')) 'the ProgID HexEditor.Project remains'
+}
+
+Invoke-TestCase 'TC-PKG-08-02' 'registration and PATH are removed by the uninstallation' {
+    # The uninstallation (UninstallString) was run by TC-PKG-07-03 after the app had been started and closed.
+    foreach ($key in $shellRegistrationKeys) { Assert-True (-not (Test-Path -LiteralPath "HKCU:\$key")) "HKCU\$key remains" }
+    foreach ($ext in $openWithExtensions) {
+        $values = Get-ItemProperty -LiteralPath "HKCU:\Software\Classes\$ext\OpenWithProgids" -ErrorAction SilentlyContinue
+        Assert-True ($null -eq $values -or $values.PSObject.Properties.Name -notcontains 'HexEditor.Binary') "HexEditor.Binary remains in $ext\OpenWithProgids"
+    }
+    $after = Get-UserPathEntries
+    Assert-True (($after -join ';') -eq ($userPathBefore -join ';')) "the user PATH is '$($after -join ';')', before the installation '$($userPathBefore -join ';')'"
 }
 
 Invoke-TestCase 'TC-PKG-09-01' 'data is kept by a default uninstall' {

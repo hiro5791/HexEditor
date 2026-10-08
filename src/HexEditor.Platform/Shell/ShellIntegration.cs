@@ -28,9 +28,12 @@ public sealed record ShellIntegrationState(
 /// Explorer 連携の登録・解除・状態 (09 の UI-54、UI-56、10 の PKG-08)。インストーラ版はインストール時のフックで登録し、
 /// ポータブル版は設定画面のボタンで登録する。MSIX 版はマニフェストで宣言するため、ここでは登録しない (「Windows の設定で管理されます」)。
 /// 開発中の実行も登録しない (PKG-12 の仕様 1 の 4)。
+/// インストーラ版では、利用者が解除した項目を state.json (<paramref name="state"/>) に記録し、更新後のフックが登録し直さないようにする
+/// (PKG-08 の仕様 5)。登録し直したら記録を消す。
 /// </summary>
 public sealed class ShellIntegration(IUserRegistry registry, Distribution distribution, string exePath, OtherInstallations others,
-    Func<ShellLabels> labels, Func<IReadOnlyList<string>> extensions, Action? notifyAssociationsChanged = null)
+    Func<ShellLabels> labels, Func<IReadOnlyList<string>> extensions, Action? notifyAssociationsChanged = null, IStateSections? state = null,
+    Action? notifyEnvironmentChanged = null)
 {
     /// <summary>右クリックメニューと関連付けの項目 (App Paths は登録の対象外。インストーラ版のフックだけが扱う)。</summary>
     public static IReadOnlySet<string> ExplorerEntries { get; } = new HashSet<string> { ShellRegistration.ContextMenuId, ShellRegistration.FileAssociationsId };
@@ -69,8 +72,10 @@ public sealed class ShellIntegration(IUserRegistry registry, Distribution distri
         }
 
         var context = new ShellRegistrationContext(exePath, labels(), extensions());
-        IReadOnlyList<string> failures = ShellRegistration.Register(registry, context, new HashSet<string>(), only ?? ExplorerEntries);
+        IReadOnlySet<string> items = only ?? ExplorerEntries;
+        IReadOnlyList<string> failures = ShellRegistration.Register(registry, context, new HashSet<string>(), items);
         notifyAssociationsChanged?.Invoke();
+        RecordDisabled(items, disabled: false);
         return failures;
     }
 
@@ -82,9 +87,135 @@ public sealed class ShellIntegration(IUserRegistry registry, Distribution distri
             return ["unsupported"];
         }
 
-        IReadOnlyList<string> failures = ShellRegistration.Unregister(registry, only ?? ExplorerEntries);
+        IReadOnlySet<string> items = only ?? ExplorerEntries;
+        IReadOnlyList<string> failures = ShellRegistration.Unregister(registry, items);
         notifyAssociationsChanged?.Invoke();
+        RecordDisabled(items, disabled: true);
         return failures;
+    }
+
+    /// <summary>
+    /// ポータブル版の「この PC から登録を解除」(10 の PKG-09 の仕様 4): レジストリの登録 (右クリックメニュー、ファイルの関連付け、PATH)、
+    /// ジャンプリスト、トースト通知の登録、<c>%TEMP%\HexEditor-&lt;ハッシュ&gt;\</c> を消す。インストーラ版の登録 (インストーラ版の exe を
+    /// 指すもの) は消さない。使用中の一時ファイルは終了時に消える (PKG-06 の仕様 4)。失敗した項目と理由を返す (仕様の「エラー」: 一覧で表示する)。
+    /// </summary>
+    /// <param name="clearJumpList">ジャンプリストを消す (アプリの AppUserModelID の一覧)。</param>
+    /// <param name="unregisterToast">トースト通知の登録を解除する (Windows App SDK の AppNotificationManager.UnregisterAll)。</param>
+    /// <param name="tempFolder">このコピーの一時フォルダ。</param>
+    public IReadOnlyList<string> UnregisterFromThisPc(Action clearJumpList, Action unregisterToast, string tempFolder)
+    {
+        if (distribution != Distribution.Portable)
+        {
+            return ["unsupported"];
+        }
+
+        var failures = new List<string>();
+        try
+        {
+            HashSet<string> ours =
+            [
+                .. ShellRegistration.Status(registry)
+                    .Where(s => ExplorerEntries.Contains(s.Id) && s.Registered && !others.IsInstallerExe(s.RegisteredExe))
+                    .Select(s => s.Id),
+            ];
+            if (ours.Count > 0)
+            {
+                failures.AddRange(ShellRegistration.Unregister(registry, ours));
+                notifyAssociationsChanged?.Invoke();
+            }
+
+            if (UserPath.Remove(registry, UserPath.FolderFor(exePath)))
+            {
+                notifyEnvironmentChanged?.Invoke();
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException)
+        {
+            failures.Add($"registry: {ex.GetType().Name}");
+        }
+
+        Step("jumpList", clearJumpList);
+        Step("toast", unregisterToast);
+        DataDirectory.DeleteTempAtExit(tempFolder);
+        return failures;
+
+        void Step(string id, Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                // COM の失敗 (通知が使えない環境など) を含め、残りの項目を続ける。
+                failures.Add($"{id}: {ex.GetType().Name}");
+            }
+        }
+    }
+
+    /// <summary>「コマンドラインから使えるようにする」(PKG-08 の仕様 6) を変えられるか。インストーラ版だけ。</summary>
+    public bool CommandLineSupported => distribution == Distribution.Installer;
+
+    /// <summary>ユーザーの PATH にアプリのフォルダがあるか。</summary>
+    public bool CommandLineEnabled => CommandLineSupported && UserPath.Contains(registry, UserPath.FolderFor(exePath));
+
+    /// <summary>
+    /// ユーザーの PATH にアプリのフォルダを足す・消す (設定画面「詳細」の「コマンドラインから使えるようにする」。PKG-08 の仕様 6)。
+    /// 外した場合は state.json に記録し、更新後のフックで足し直さない。失敗した項目と理由を返す。
+    /// </summary>
+    public IReadOnlyList<string> SetCommandLineEnabled(bool enabled)
+    {
+        if (!CommandLineSupported)
+        {
+            return ["unsupported"];
+        }
+
+        try
+        {
+            string folder = UserPath.FolderFor(exePath);
+            if (enabled ? UserPath.Add(registry, folder) : UserPath.Remove(registry, folder))
+            {
+                notifyEnvironmentChanged?.Invoke();
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException)
+        {
+            return [$"{UserPath.Id}: {ex.GetType().Name}"];
+        }
+
+        RecordDisabled(new HashSet<string> { UserPath.Id }, disabled: !enabled);
+        return [];
+    }
+
+    /// <summary>利用者が解除した項目の記録 (state.json の <c>shellRegistration.disabled</c>)。インストーラ版だけが使う (更新後のフック)。</summary>
+    public IReadOnlySet<string> Disabled()
+    {
+        if (state?.ReadSection(InstallHooks.StateSection)[InstallHooks.DisabledKey] is System.Text.Json.Nodes.JsonArray array)
+        {
+            return array.Select(n => n is System.Text.Json.Nodes.JsonValue v && v.TryGetValue(out string? s) ? s : null).OfType<string>()
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        }
+
+        return new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    }
+
+    private void RecordDisabled(IReadOnlySet<string> items, bool disabled)
+    {
+        if (distribution != Distribution.Installer || state is null)
+        {
+            return;
+        }
+
+        HashSet<string> set = [.. Disabled()];
+        bool changed = disabled ? items.Count(set.Add) > 0 : items.Count(set.Remove) > 0;
+        if (!changed)
+        {
+            return;
+        }
+
+        System.Text.Json.Nodes.JsonObject section = state.ReadSection(InstallHooks.StateSection);
+        section[InstallHooks.DisabledKey] = new System.Text.Json.Nodes.JsonArray([.. set.Order(StringComparer.Ordinal).Select(s => (System.Text.Json.Nodes.JsonNode?)s)]);
+        state.WriteSection(InstallHooks.StateSection, section);
     }
 
     /// <summary>

@@ -21,6 +21,16 @@ public static class ToastNotifier
     public static bool IsEnabled(IAppEnvironment env) =>
         App.Settings.GetBool(SettingKey, env.Distribution != Distribution.Portable);
 
+    /// <summary>
+    /// トースト通知の登録 (非パッケージのアプリでは HKCU の AppUserModelId と COM の登録) を消す (ポータブル版の「この PC から登録を解除」。
+    /// 10 の PKG-09 の仕様 4)。失敗は例外のまま呼び出し元に返す (失敗した項目の一覧に出す)。
+    /// </summary>
+    public static void UnregisterAll()
+    {
+        AppNotificationManager.Default.UnregisterAll();
+        _registered = false;
+    }
+
     public static void Show(string title, string message)
     {
         if (TestHooks.Active)

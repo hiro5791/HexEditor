@@ -17,6 +17,10 @@ public sealed class InstallHooks
     public const string StateFileName = "state.json";
     public const string RemoveUserDataKey = "uninstall.removeUserData";
 
+    /// <summary>state.json の区分と、利用者が設定で解除した項目の ID の一覧のキー (PKG-08 の仕様 5)。</summary>
+    public const string StateSection = "shellRegistration";
+    public const string DisabledKey = "disabled";
+
     /// <summary>フックの制限時間 (PKG-08 の仕様 4)。</summary>
     public static readonly TimeSpan Budget = TimeSpan.FromSeconds(5);
 
@@ -24,6 +28,7 @@ public sealed class InstallHooks
     private readonly string _dataRoot;
     private readonly string _exePath;
     private readonly Action _notifyAssociationsChanged;
+    private readonly Action _notifyEnvironmentChanged;
     private readonly Stopwatch _clock = new();
     private readonly TimeSpan _budget;
     private readonly ShellLabels _labels;
@@ -33,9 +38,11 @@ public sealed class InstallHooks
     /// <param name="exePath">登録する exe (<c>current\HexEditor.exe</c>)。</param>
     /// <param name="notifyAssociationsChanged">SHChangeNotify(SHCNE_ASSOCCHANGED) の呼び出し (テストでは差し替える)。</param>
     /// <param name="labels">Explorer に出す文字列 (登録時の表示言語。09 の UI-54 の仕様 1)。null なら英語。</param>
+    /// <param name="notifyEnvironmentChanged">WM_SETTINGCHANGE ("Environment") の送信 (PATH を変えたとき。テストでは差し替える)。</param>
     public InstallHooks(IUserRegistry registry, string dataRoot, string exePath, Action? notifyAssociationsChanged = null, TimeSpan? budget = null,
-        ShellLabels? labels = null)
+        ShellLabels? labels = null, Action? notifyEnvironmentChanged = null)
     {
+        _notifyEnvironmentChanged = notifyEnvironmentChanged ?? UserPath.NotifyEnvironmentChanged;
         _labels = labels ?? ShellLabels.English;
         _registry = registry;
         _dataRoot = dataRoot;
@@ -46,20 +53,22 @@ public sealed class InstallHooks
 
     public string LogPath => Path.Combine(_dataRoot, "logs", LogFileName);
 
-    /// <summary>インストール後: 一覧を登録し、Explorer に知らせる。</summary>
+    /// <summary>インストール後: 一覧を登録し、Explorer に知らせる。ユーザーの PATH にアプリのフォルダを足す (仕様 6)。</summary>
     public void AfterInstall(string version) => Run("after-install", version, () => RegisterAll());
 
-    /// <summary>更新後: 新しい版の内容で登録し直す (冪等。利用者が解除した項目は登録しない)。</summary>
+    /// <summary>更新後: 新しい版の内容で登録し直す (冪等。利用者が解除した項目は登録しない。PATH も外した場合は足さない)。</summary>
     public void AfterUpdate(string version) => Run("after-update", version, () => RegisterAll());
 
     /// <summary>
-    /// アンインストール前: 一覧の登録をすべて消す。設定 <c>uninstall.removeUserData</c> が true ならデータフォルダを消す (PKG-09 の仕様 1)。
+    /// アンインストール前: 一覧の登録をすべて消し、PATH に足した項目を消す。設定 <c>uninstall.removeUserData</c> が true なら
+    /// データフォルダを消す (PKG-09 の仕様 1)。
     /// </summary>
     public void BeforeUninstall(string version) => Run("before-uninstall", version, () =>
     {
         IReadOnlyList<string> failures = ShellRegistration.Unregister(_registry, TimeUp);
         Log(failures.Count == 0 ? "Unregistered all entries." : "Unregister failed: " + string.Join(", ", failures));
         _notifyAssociationsChanged();
+        UpdatePath(add: false);
         if (ReadRemoveUserData())
         {
             Log("uninstall.removeUserData = true: deleting the data folder.");
@@ -93,7 +102,7 @@ public sealed class InstallHooks
         try
         {
             string path = Path.Combine(_dataRoot, StateFileName);
-            if (File.Exists(path) && JsonNode.Parse(File.ReadAllText(path))?["shellRegistration"]?["disabled"] is JsonArray array)
+            if (File.Exists(path) && JsonNode.Parse(File.ReadAllText(path))?[StateSection]?[DisabledKey] is JsonArray array)
             {
                 return array.Select(n => n?.GetValue<string>()).OfType<string>().ToHashSet(StringComparer.OrdinalIgnoreCase);
             }
@@ -128,9 +137,38 @@ public sealed class InstallHooks
     private void RegisterAll()
     {
         var context = new ShellRegistrationContext(_exePath, _labels, ReadOpenWithExtensions());
-        IReadOnlyList<string> failures = ShellRegistration.Register(_registry, context, ReadDisabled(), null, TimeUp);
+        IReadOnlySet<string> disabled = ReadDisabled();
+        IReadOnlyList<string> failures = ShellRegistration.Register(_registry, context, disabled, null, TimeUp);
         Log(failures.Count == 0 ? "Registered all entries." : "Register failed: " + string.Join(", ", failures));
         _notifyAssociationsChanged();
+
+        // 利用者が「コマンドラインから使えるようにする」を外していれば足さない (仕様 6)。
+        UpdatePath(add: !disabled.Contains(UserPath.Id));
+    }
+
+    /// <summary>ユーザーの PATH にアプリのフォルダを足す、または足した項目を消す (PKG-08 の仕様 6)。変えたら WM_SETTINGCHANGE で知らせる。</summary>
+    private void UpdatePath(bool add)
+    {
+        if (TimeUp())
+        {
+            Log("PATH: skipped (time limit)");
+            return;
+        }
+
+        string folder = UserPath.FolderFor(_exePath);
+        try
+        {
+            bool changed = add ? UserPath.Add(_registry, folder) : UserPath.Remove(_registry, folder);
+            Log($"PATH: {(add ? "add" : "remove")} {(changed ? "done" : "unchanged")}.");
+            if (changed)
+            {
+                _notifyEnvironmentChanged();
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException)
+        {
+            Log($"PATH {(add ? "add" : "remove")} failed: {ex.GetType().Name}");
+        }
     }
 
     private bool TimeUp() => _clock.Elapsed > _budget;
