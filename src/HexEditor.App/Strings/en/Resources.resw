@@ -2412,4 +2412,6 @@ Details were written to:
   <data name="A11y_OperationCompleted" xml:space="preserve"><value>{0} completed</value></data>
   <data name="A11y_OperationCancelled" xml:space="preserve"><value>{0} cancelled</value></data>
   <data name="CmdCategory_accessibility" xml:space="preserve"><value>Accessibility</value></data>
+  <data name="TranslationReport_Truncated" xml:space="preserve"><value>Showing the first {0} of {1} strings. Search to narrow the list.</value></data>
+  <data name="SetGroup_translators" xml:space="preserve"><value>For translators</value></data>
 </root>

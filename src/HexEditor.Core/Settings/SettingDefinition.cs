@@ -44,6 +44,12 @@ public sealed record SettingDefinition(string Key, string Category, SettingKind 
     public int Order { get; init; }
 
     /// <summary>
+    /// カテゴリの中の欄の見出し (リソース <c>SetGroup_&lt;Group&gt;</c>)。null なら見出しなし。設定画面は、見出しの変わり目に見出しを出す
+    /// (例: 「言語」の「翻訳者向け」欄。09 の UI-41 の仕様 5)。
+    /// </summary>
+    public string? Group { get; init; }
+
+    /// <summary>
     /// 設定画面に出す配布形態 (<see cref="SettingDistributions"/> の値)。空ならすべての配布形態で出す。
     /// 例: 更新の自動ダウンロードはインストーラ版だけ (10 の PKG-17 の仕様 2)。
     /// </summary>

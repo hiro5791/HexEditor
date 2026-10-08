@@ -2412,4 +2412,6 @@
   <data name="A11y_OperationCompleted" xml:space="preserve"><value>{0} が完了しました</value></data>
   <data name="A11y_OperationCancelled" xml:space="preserve"><value>{0} をキャンセルしました</value></data>
   <data name="CmdCategory_accessibility" xml:space="preserve"><value>アクセシビリティ</value></data>
+  <data name="TranslationReport_Truncated" xml:space="preserve"><value>{1} 件のうち最初の {0} 件を表示しています。検索で絞り込んでください。</value></data>
+  <data name="SetGroup_translators" xml:space="preserve"><value>翻訳者向け</value></data>
 </root>

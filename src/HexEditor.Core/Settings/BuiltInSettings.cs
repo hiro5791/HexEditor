@@ -108,7 +108,7 @@ public static class BuiltInSettings
         new("ui.language", SettingCategories.Language, SettingKind.Choice, "system") { Options = Languages, RequiresRestart = true, Order = 10 },
 
         // 翻訳者向け (UI-41 の仕様 5)。
-        new("i18n.showStringKeys", SettingCategories.Language, SettingKind.Bool, false) { RequiresRestart = true, Order = 20 },
+        new("i18n.showStringKeys", SettingCategories.Language, SettingKind.Bool, false) { RequiresRestart = true, Order = 20, Group = "translators" },
 
         // ---- 更新 (PKG-17〜PKG-22) ----
         new("update.checkAutomatically", SettingCategories.Update, SettingKind.Bool, true) { Order = 10 },
