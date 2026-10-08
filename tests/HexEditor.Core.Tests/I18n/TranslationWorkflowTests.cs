@@ -327,7 +327,132 @@ public sealed class TranslationWorkflowTests : IDisposable
         Assert.Contains("{{TRANSLATIONS}}", File.ReadAllText(RepoFile("build/release/release-notes-template.md")));
     }
 
-    /// <summary>DeepL API の偽物: 受けた text を「[言語コード] 原文」にして返す。</summary>
+    // ---- UI-48 の仕様 4: 機械翻訳の要求に用語集を渡す ----
+
+    private static Glossary TwoTermGlossary()
+    {
+        string[] header = [.. Glossary.FixedColumns, .. Glossary.LanguageColumns];
+        GlossaryTerm Term(string term, bool keep, params (string Language, string Value)[] values) =>
+            new(term, string.Empty, "noun", keep, values.ToDictionary(v => v.Language, v => v.Value, StringComparer.OrdinalIgnoreCase));
+        return new Glossary(header,
+        [
+            Term("offset", false, ("de", "Offset"), ("fr", "décalage"), ("zh-Hant", "位移")),
+            Term("UTF-8", true),
+        ]);
+    }
+
+    [Fact]
+    public async Task Glossary_is_passed_to_the_translation_api_and_deleted_afterwards()
+    {
+        WriteResw("en", ("A", "Go to offset"));
+        WriteResw("ja", ("A", "オフセットへ移動"));
+        using var server = new FakeDeepL { GlossaryTargets = ["de", "fr", "ja"] };
+        using var http = new HttpClient(server);
+        var translator = new DeepLTranslator(http, new Uri("https://deepl.test/"), "k");
+        TranslationRunResult result = await MachineTranslation.RunAsync(Strings, StatusPath, TwoTermGlossary(), translator, ["de", "fr", "ko"]);
+        Assert.Empty(result.Warnings);
+
+        // de と fr: 用語集を作り (英語 → 訳語。文頭の形も入れる。訳さない用語は入れない)、glossary_id を付けて訳し、最後に消す。
+        Assert.Equal(2, server.CreatedGlossaries.Count);
+        (string target, string entries) = server.CreatedGlossaries.Single(g => g.Target == "de");
+        Assert.Equal("de", target);
+        Assert.Equal(["offset\tOffset", "Offset\tOffset"], entries.Split('\n'));
+        Assert.Equal("Offset\tDécalage", server.CreatedGlossaries.Single(g => g.Target == "fr").Entries.Split('\n')[1]);
+        Assert.Equal(server.CreatedGlossaries.Count, server.DeletedGlossaries.Count);
+        Assert.Equal(["DE", "FR"], server.TranslateGlossaryIds.Where(t => t.GlossaryId is not null).Select(t => t.Target).Order());
+
+        // ko: 用語集の訳語がないので用語集なしで訳す。
+        Assert.Contains(server.TranslateGlossaryIds, t => t.Target == "KO" && t.GlossaryId is null);
+        Assert.Equal("[KO] Go to offset", Resw.LoadMap(Resw.PathFor(Strings, "ko"))["A"]);
+
+        // 用語集の言語の組み合わせは 1 回だけ問い合わせる。
+        Assert.Equal(1, server.PairQueries);
+    }
+
+    [Fact]
+    public async Task Glossary_is_skipped_for_unsupported_pairs_and_rejected_glossaries()
+    {
+        WriteResw("en", ("A", "Go to offset"));
+        using var server = new FakeDeepL { GlossaryTargets = ["zh"], RejectGlossaryFor = ["ZH-HANT"] };
+        using var http = new HttpClient(server);
+        var translator = new DeepLTranslator(http, new Uri("https://deepl.test/"), "k");
+        TranslationRunResult result = await MachineTranslation.RunAsync(Strings, StatusPath, TwoTermGlossary(), translator, ["de", "zh-Hant"]);
+        Assert.Empty(result.Warnings);
+
+        // de: DeepL が en → de の用語集に対応していない (この偽物では) ので作らない。
+        Assert.DoesNotContain(server.CreatedGlossaries, g => g.Target == "de");
+        Assert.Equal("[DE] Go to offset", Resw.LoadMap(Resw.PathFor(Strings, "de"))["A"]);
+
+        // zh-Hant: 用語集 (zh) を作ったが、訳の要求で受け付けられなかったので、用語集なしで訳し直し、用語集は消す。
+        Assert.Equal("zh", Assert.Single(server.CreatedGlossaries).Target);
+        Assert.Single(server.DeletedGlossaries);
+        Assert.Equal("[ZH-HANT] Go to offset", Resw.LoadMap(Resw.PathFor(Strings, "zh-Hant"))["A"]);
+        Assert.Contains(translator.Notes, n => n.StartsWith("zh-Hant:", StringComparison.Ordinal));
+        Assert.Contains(translator.Notes, n => n.StartsWith("de:", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void Glossary_entries_leave_out_do_not_translate_terms_and_missing_translations() =>
+        Assert.Empty(DeepLTranslator.GlossaryEntries(TwoTermGlossary(), "ko"));
+
+    // ---- UI-49: 日本語の状態と、状態のない訳 ----
+
+    [Fact]
+    public void Japanese_sync_marks_every_japanese_string_reviewed_without_an_api_key()
+    {
+        WriteResw("en", ("A", "One"), ("B", "Two"), ("C", "Three"));
+        WriteResw("ja", ("A", "一"), ("B", "二"));
+        File.WriteAllText(StatusPath, """{ "version": 1, "languages": { "ja": { "A": "reviewed:%H%" } } }""".Replace("%H%", TranslationStatus.Hash("Old")));
+        List<string> Errors() =>
+            [.. TranslationStatus.Load(StatusPath).Mismatches(Resw.LoadMap(Resw.PathFor(Strings, "en")), l => Resw.LoadMap(Resw.PathFor(Strings, l)))];
+
+        // A は原文のハッシュが古い、B は状態がない: どちらも check-status の誤り。
+        Assert.Equal(2, Errors().Count);
+        Assert.All(Errors(), e => Assert.Contains("sync-ja", e));
+
+        Assert.True(MachineTranslation.SyncJapanese(Strings, StatusPath));
+        Assert.Empty(Errors());
+        TranslationStatus status = TranslationStatus.Load(StatusPath);
+        Assert.Equal(new TranslationEntry(TranslationState.Reviewed, TranslationStatus.Hash("One")), status.Get("ja", "A"));
+        Assert.Equal(TranslationState.Reviewed, status.Get("ja", "B")!.State);
+        Assert.Null(status.Get("ja", "C"));
+
+        // 2 回目は変更なし。
+        Assert.False(MachineTranslation.SyncJapanese(Strings, StatusPath));
+    }
+
+    [Fact]
+    public void Translation_without_a_state_fails_the_check()
+    {
+        WriteResw("en", ("A", "One"));
+        WriteResw("de", ("A", "Eins"));
+        File.WriteAllText(StatusPath, """{ "version": 1, "languages": {} }""");
+        string error = Assert.Single(TranslationStatus.Load(StatusPath).Mismatches(Resw.LoadMap(Resw.PathFor(Strings, "en")), l => Resw.LoadMap(Resw.PathFor(Strings, l))));
+        Assert.StartsWith("de: A has a translation", error);
+    }
+
+    [Fact]
+    public void Translate_workflow_syncs_japanese_without_the_key_and_reuses_one_pull_request()
+    {
+        string workflow = File.ReadAllText(RepoFile(".github/workflows/translate.yml"));
+
+        // main への push でも動く (UI-49 の「呼び出し」)。
+        Assert.Matches(@"push:\s*\n\s*branches: \[main\]", workflow);
+
+        // 日本語の状態の同期は API キーなしで動く手順に分ける。
+        int sync = workflow.IndexOf("tools/I18nTool -- sync-ja", StringComparison.Ordinal);
+        Assert.True(sync > 0);
+        Assert.DoesNotContain("HEX_TRANSLATOR_KEY", workflow[workflow.LastIndexOf("- name:", sync, StringComparison.Ordinal)..sync]);
+
+        // 機械翻訳の PR は 1 つ: 決まったブランチを使い回す (日付のブランチを作らない)。
+        Assert.Contains("translations/machine", workflow);
+        Assert.DoesNotContain("Get-Date -Format yyyyMMdd", workflow);
+    }
+
+    /// <summary>
+    /// DeepL API の偽物: 受けた text を「[言語コード] 原文」にして返す。用語集の作成 (<c>POST /v2/glossaries</c>)・削除・言語の組み合わせの
+    /// 問い合わせにも DeepL と同じ形で応答する。
+    /// </summary>
     private sealed class FakeDeepL : HttpMessageHandler
     {
         public List<string> Requests { get; } = [];
@@ -335,6 +460,20 @@ public sealed class TranslationWorkflowTests : IDisposable
         public List<string> Texts { get; } = [];
 
         public bool Fail { get; init; }
+
+        /// <summary>用語集に対応している訳先 (DeepL の用語集の言語コード)。</summary>
+        public IReadOnlyList<string> GlossaryTargets { get; init; } = [];
+
+        /// <summary>用語集を付けた訳の要求を 400 で断る訳先 (target_lang)。</summary>
+        public IReadOnlyList<string> RejectGlossaryFor { get; init; } = [];
+
+        public int PairQueries { get; private set; }
+
+        public List<(string Target, string Entries)> CreatedGlossaries { get; } = [];
+
+        public List<string> DeletedGlossaries { get; } = [];
+
+        public List<(string Target, string? GlossaryId)> TranslateGlossaryIds { get; } = [];
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -344,10 +483,40 @@ public sealed class TranslationWorkflowTests : IDisposable
                 return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable);
             }
 
-            Assert.Equal("/v2/translate", request.RequestUri!.AbsolutePath);
-            string body = await request.Content!.ReadAsStringAsync(cancellationToken);
-            var form = body.Split('&').Select(p => p.Split('=', 2)).Select(p => (Key: WebUtility.UrlDecode(p[0]), Value: WebUtility.UrlDecode(p[1]))).ToList();
-            string target = form.Single(p => p.Key == "target_lang").Value;
+            string path = request.RequestUri!.AbsolutePath;
+            if (request.Method == HttpMethod.Get && path == "/v2/glossary-language-pairs")
+            {
+                PairQueries++;
+                var pairs = new JsonArray([.. GlossaryTargets.Select(t => (JsonNode)new JsonObject { ["source_lang"] = "en", ["target_lang"] = t })]);
+                return Json(new JsonObject { ["supported_languages"] = pairs });
+            }
+
+            if (request.Method == HttpMethod.Delete && path.StartsWith("/v2/glossaries/", StringComparison.Ordinal))
+            {
+                DeletedGlossaries.Add(path["/v2/glossaries/".Length..]);
+                return new HttpResponseMessage(HttpStatusCode.NoContent);
+            }
+
+            var form = (await request.Content!.ReadAsStringAsync(cancellationToken)).Split('&').Select(p => p.Split('=', 2))
+                .Select(p => (Key: WebUtility.UrlDecode(p[0]), Value: WebUtility.UrlDecode(p[1]))).ToList();
+            string Field(string name) => form.Single(p => p.Key == name).Value;
+            if (request.Method == HttpMethod.Post && path == "/v2/glossaries")
+            {
+                Assert.Equal("en", Field("source_lang"));
+                Assert.Equal("tsv", Field("entries_format"));
+                CreatedGlossaries.Add((Field("target_lang"), Field("entries")));
+                return Json(new JsonObject { ["glossary_id"] = "g" + CreatedGlossaries.Count });
+            }
+
+            Assert.Equal("/v2/translate", path);
+            string target = Field("target_lang");
+            string? glossaryId = form.Where(p => p.Key == "glossary_id").Select(p => p.Value).SingleOrDefault();
+            TranslateGlossaryIds.Add((target, glossaryId));
+            if (glossaryId is not null && RejectGlossaryFor.Contains(target))
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
             var translations = new JsonArray();
             foreach ((_, string text) in form.Where(p => p.Key == "text"))
             {
@@ -355,7 +524,9 @@ public sealed class TranslationWorkflowTests : IDisposable
                 translations.Add(new JsonObject { ["text"] = $"[{target}] {text}" });
             }
 
-            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(new JsonObject { ["translations"] = translations }.ToJsonString()) };
+            return Json(new JsonObject { ["translations"] = translations });
         }
+
+        private static HttpResponseMessage Json(JsonObject body) => new(HttpStatusCode.OK) { Content = new StringContent(body.ToJsonString()) };
     }
 }

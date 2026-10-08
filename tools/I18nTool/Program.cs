@@ -2,6 +2,7 @@
 //
 //   dotnet run --project tools/I18nTool -- check-glossary            用語集の形式と、訳さない用語の検査 (違反は警告)
 //   dotnet run --project tools/I18nTool -- check-status              状態ファイルの形式と .resw との食い違いの検査 (誤りは失敗)
+//   dotnet run --project tools/I18nTool -- sync-ja                   日本語の状態を .resw に合わせる (確認済み。API キー不要)
 //   dotnet run --project tools/I18nTool -- translate                 未翻訳の文字列を機械翻訳する (環境変数 HEX_TRANSLATOR_KEY と
 //                                                                    HEX_TRANSLATOR_ENDPOINT。既定は DeepL の https://api.deepl.com/)
 //   dotnet run --project tools/I18nTool -- coverage --out <file>      translation-coverage.json を書く
@@ -22,7 +23,7 @@ namespace HexEditor.I18nTool
         {
             if (args.Length == 0)
             {
-                Console.Error.WriteLine("usage: I18nTool check-glossary | check-status | translate | coverage --out <file> | release-table --coverage <file>");
+                Console.Error.WriteLine("usage: I18nTool check-glossary | check-status | sync-ja | translate | coverage --out <file> | release-table --coverage <file>");
                 return 2;
             }
 
@@ -61,6 +62,14 @@ namespace HexEditor.I18nTool
                         return errors > 0 ? 1 : 0;
                     }
 
+                    case "sync-ja":
+                    {
+                        // 日本語の状態を .resw に合わせる (日本語は開発者が書くので確認済み。UI-49 の仕様 2 の 1)。API キーは要らない。
+                        bool changed = MachineTranslation.SyncJapanese(strings, statusPath);
+                        Console.WriteLine(changed ? "ja: translation-status.json updated." : "ja: translation-status.json is up to date.");
+                        return 0;
+                    }
+
                     case "translate":
                     {
                         string? key = Environment.GetEnvironmentVariable("HEX_TRANSLATOR_KEY");
@@ -72,8 +81,14 @@ namespace HexEditor.I18nTool
 
                         var endpoint = new Uri(Environment.GetEnvironmentVariable("HEX_TRANSLATOR_ENDPOINT") is { Length: > 0 } e ? e : "https://api.deepl.com/");
                         using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(2) };
-                        TranslationRunResult result = await MachineTranslation.RunAsync(strings, statusPath, Glossary.Load(glossaryPath), new DeepLTranslator(http, endpoint, key));
+                        var translator = new DeepLTranslator(http, endpoint, key);
+                        TranslationRunResult result = await MachineTranslation.RunAsync(strings, statusPath, Glossary.Load(glossaryPath), translator);
                         Report(result.Warnings, "warning");
+                        foreach (string note in translator.Notes)
+                        {
+                            Console.WriteLine(note);
+                        }
+
                         foreach ((string language, int count) in result.Translated.Where(t => t.Value > 0 || result.MarkedStale[t.Key] > 0))
                         {
                             Console.WriteLine($"{language}: {count} translated, {result.MarkedStale[language]} marked stale.");

@@ -1,10 +1,20 @@
-# 未翻訳の文字列の機械翻訳 (09 の UI-49 の仕様 2)。毎晩と手動の起動で、en / ja の .resw に加わった文字列を残り 21 言語に訳し、
-# 変更があれば 1 つの Pull Request にまとめる。確認済みの訳は上書きしない (原文が変わったら要再確認にする)。
-# 機械翻訳の提供元は未決定 (DeepL API または Azure AI Translator)。今は DeepL API の形で呼ぶ。API キーは Secrets の HEX_TRANSLATOR_KEY。
-# 提供元の失敗は警告にし、その文字列は英語表示のまま次回に再試行する。
+# 未翻訳の文字列の機械翻訳 (09 の UI-49 の仕様 2)。main への push (en / ja の .resw・用語集の変更)、毎晩、手動の起動で、
+# en / ja の .resw に加わった文字列を残り 21 言語に訳し、変更があれば 1 つの Pull Request にまとめる。確認済みの訳は上書きしない
+# (原文が変わったら要再確認にする)。
+# 日本語の状態 (開発者が書くので確認済み) は API キーなしで同期する (sync-ja)。キーがなくても日本語の状態の PR は作る。
+# 機械翻訳の提供元は未決定 (DeepL API または Azure AI Translator)。今は DeepL API の形で呼び、用語集 (UI-48 の仕様 4) を渡す。
+# API キーは Secrets の HEX_TRANSLATOR_KEY。提供元の失敗は警告にし、その文字列は英語表示のまま次回に再試行する。
+# 開いている機械翻訳の PR は常に 1 つ: 決まったブランチ translations/machine を使い回し、確認のための変更 (PR への push) を残したまま
+# main を取り込んで訳を足す。
 name: translate
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - src/HexEditor.App/Strings/en/**
+      - src/HexEditor.App/Strings/ja/**
+      - docs/i18n/**
   schedule:
     - cron: "0 18 * * *"
   workflow_dispatch:
@@ -20,6 +30,7 @@ concurrency:
 env:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  BRANCH: translations/machine
 
 jobs:
   translate:
@@ -29,9 +40,36 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+          fetch-depth: 0
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
+
+      # 機械翻訳の PR が開いていれば、そのブランチに main を取り込んで続ける (PR を 1 つに保ち、PR 上の確認を消さない)。
+      # 開いていなければ (前の PR は取り込み済み)、main から作り直す。
+      - name: Reuse the translation branch
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          $open = gh pr list --head $env:BRANCH --state open --json number --jq '.[0].number'
+          if ($open) {
+            git fetch origin $env:BRANCH
+            git switch -c $env:BRANCH --track "origin/$env:BRANCH"
+            git merge --no-edit origin/main
+            if ($LASTEXITCODE -ne 0) { throw "origin/main could not be merged into $env:BRANCH; resolve the conflict in the pull request." }
+          } else {
+            git switch -c $env:BRANCH
+          }
+
+      - name: Japanese status
+        shell: pwsh
+        run: |
+          dotnet run --project tools/I18nTool -- sync-ja
+          if ($LASTEXITCODE -ne 0) { throw 'sync-ja failed' }
+
       - name: Machine translation
         id: translate
         shell: pwsh
@@ -45,22 +83,24 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'translation-status.json does not match the resources' }
           dotnet run --project tools/I18nTool -- check-glossary
           $changed = (git status --porcelain -- src/HexEditor.App/Strings docs/i18n) -ne $null
+          $ahead = [int](git rev-list --count origin/main..HEAD)
           "changed=$($changed.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+          "ahead=$ahead" >> $env:GITHUB_OUTPUT
+
       - name: Pull request
-        if: steps.translate.outputs.changed == 'true'
+        if: steps.translate.outputs.changed == 'true' || steps.translate.outputs.ahead != '0'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $branch = "translations/$(Get-Date -Format yyyyMMdd)"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git switch -c $branch
-          git add src/HexEditor.App/Strings docs/i18n/translation-status.json
-          git commit -m "Machine translation of new strings"
-          git push --force origin $branch
-          $existing = gh pr list --head $branch --json number --jq '.[0].number'
+          if ((git status --porcelain -- src/HexEditor.App/Strings docs/i18n) -ne $null) {
+            git add src/HexEditor.App/Strings docs/i18n/translation-status.json
+            git commit -m "Machine translation of new strings"
+          }
+          # PR が開いていればそのブランチの続き (早送り)、なければ main から作り直したブランチで置き換える。
+          git push --force-with-lease origin "HEAD:$env:BRANCH"
+          $existing = gh pr list --head $env:BRANCH --state open --json number --jq '.[0].number'
           if (-not $existing) {
-            gh pr create --base main --head $branch --title "Machine translation ($(Get-Date -Format yyyy-MM-dd))" `
-              --body "Machine translations of the strings that were added or changed in English (UI-49). Review them and mark the reviewed ones as ``reviewed`` in docs/i18n/translation-status.json."
+            gh pr create --base main --head $env:BRANCH --title "Machine translation" `
+              --body "Machine translations of the strings that were added or changed in English, and the state of the Japanese strings (UI-49). Review them and mark the reviewed ones as ``reviewed`` in docs/i18n/translation-status.json. This branch is reused by every run, so this stays the only open machine-translation pull request."
           }

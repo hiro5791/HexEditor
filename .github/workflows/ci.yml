@@ -144,7 +144,9 @@ jobs:
           retention-days: 7
           path: TestResults/
 
-  # リソースの検査 (09 の UI-42 の仕様 6)。用語集の検査 (UI-48) は検査ができたらここに加える。
+  # リソースの検査 (09 の UI-42 の仕様 6)、訳文の状態ファイルの検査 (UI-49)、用語集の検査 (UI-48 の仕様 5)。
+  # メニューのアクセスキーの重複は、XAML のメニューをここ (ResourceTests) で、コードで作るメニューを含む実行中のメニューを
+  # UI テスト (ui-tests の MenuAccessKeyTests。TC-UI-03-04) で調べる。
   i18n:
     runs-on: windows-latest
     timeout-minutes: 20
@@ -160,12 +162,13 @@ jobs:
           restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
       - name: Resource tests
         run: dotnet test tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true --filter "FullyQualifiedName~HexEditor.Core.Tests.I18n" --logger "console;verbosity=normal"
-      # 状態ファイルの形式と .resw との食い違いは失敗、用語集の訳さない用語の違反は警告 (UI-48 の仕様 5、UI-49 の「エラー」)。
+      # 状態ファイルの形式と .resw との食い違い (日本語の状態の同期漏れを含む) は失敗、用語集の訳さない用語の違反は警告
+      # (UI-48 の仕様 5、UI-49 の「エラー」)。日本語の同期漏れは dotnet run --project tools/I18nTool -- sync-ja で直す。
       - name: Translation status and glossary
         shell: pwsh
         run: |
           dotnet run --project tools/I18nTool -c Release -- check-status
-          if ($LASTEXITCODE -ne 0) { throw 'translation-status.json does not match the resources (UI-49)' }
+          if ($LASTEXITCODE -ne 0) { throw 'translation-status.json does not match the resources (UI-49). For Japanese, run: dotnet run --project tools/I18nTool -- sync-ja' }
           dotnet run --project tools/I18nTool -c Release -- check-glossary
           if ($LASTEXITCODE -ne 0) { throw 'glossary.csv has format errors (UI-48)' }
 
