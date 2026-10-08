@@ -2,7 +2,13 @@
   "$schemaVersion": 1,
   "preset": "010editor",
   "bindings": [
-    { "command": "-edit.redo", "key": "Ctrl+Shift+Z" },
-    { "command": "-file.close", "key": "Ctrl+W" }
+    { "command": "-file.reload", "key": "Ctrl+R" },
+    { "command": "search.replace", "key": "Ctrl+R" },
+    { "command": "file.closeAll", "key": "Ctrl+Alt+W" },
+    { "command": "edit.selectRange", "key": "Ctrl+Shift+A", "when": "editor" },
+    { "command": "-edit.pasteOverwrite", "key": "Ctrl+B", "when": "editor" },
+    { "command": "go.bookmark.edit", "key": "Ctrl+B" },
+    { "command": "edit.insertFile", "key": "Ctrl+I" },
+    { "command": "analysis.hash", "key": "Ctrl+K" }
   ]
 }
