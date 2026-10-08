@@ -54,6 +54,11 @@ public static class TestDataCatalog
         new("TD-ENG-ADS", KiB, "ads.bin: TD-SEQ-1M の先頭 1 KiB と、代替データストリーム secret・Zone.Identifier", WriteAds,
             dir => Path.Combine(dir, "TD-ENG-ADS", "ads.bin")),
 
+        // ---- cases/03-editing.md の表 ----
+        new("TD-EDIT-SEQ-1K", KiB, "オフセット n の値は n mod 256 (読み取り専用属性は付けない)", path => WriteGenerated(path, KiB, (o, s) => Sequence(o, s))),
+        new("TD-EDIT-IHEX-SMALL", 79, "隙間のある 3 行の Intel HEX (CRLF)", path => WriteAll(path, Encoding.ASCII.GetBytes(IhexSmall))),
+        new("TD-EDIT-SPARSE-10G", 10 * GiB, "先頭・末尾・1 GiB ごとの目印 (スパース)", path => WriteMarkers(path, 10 * GiB, MarkersEvery(10 * GiB, GiB))),
+
         // ---- cases/04-search.md の表 ----
         new("TD-FIND-RANDOM-10G", 10 * GiB, "種 4401 の乱数 (スパースにしない)。最後の 8 バイトが HEXEND!!", WriteFindRandom),
 
@@ -73,6 +78,9 @@ public static class TestDataCatalog
         ["secret"] = Encoding.ASCII.GetBytes("TOP-SECRET-DATA!"),
         ["Zone.Identifier"] = Encoding.ASCII.GetBytes("[ZoneTransfer]\r\nZoneId=3\r\nHostUrl=https://example.com/ads.bin\r\n"),
     };
+
+    /// <summary>TD-EDIT-IHEX-SMALL の内容 (0x10〜0x1F に 00〜0F、0x100〜0x103 に DE AD BE EF)。</summary>
+    public const string IhexSmall = ":10001000000102030405060708090A0B0C0D0E0F68\r\n:04010000DEADBEEFC3\r\n:00000001FF\r\n";
 
     /// <summary>TD-UI-SECRET の目印の文字列。</summary>
     public const string SecretMarker = "HEXEDITOR-SECRET-7F3A";
