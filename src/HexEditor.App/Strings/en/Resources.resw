@@ -372,4 +372,72 @@ Details were written to:
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>More status items</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>{0} matches</value></data>
+  <data name="Menu_Help_ReportTranslation.Text" xml:space="preserve"><value>Report a translation error...</value></data>
+  <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Check for updates</value></data>
+  <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_DisplayLanguage.Text" xml:space="preserve"><value>Display language...</value></data>
+  <data name="Menu_View_DisplayLanguage.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>Version {0} is available.</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>Version {0} is ready to install.</value></data>
+  <data name="Update_Updated" xml:space="preserve"><value>Updated to version {0}.</value></data>
+  <data name="Update_UpToDate" xml:space="preserve"><value>You're up to date (version {0}).</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>Couldn't check for updates: {0}</value></data>
+  <data name="Update_DownloadFailed" xml:space="preserve"><value>Couldn't download the update: {0}</value></data>
+  <data name="Update_ApplyFailed" xml:space="preserve"><value>The update to version {0} failed, and the previous version is still installed. The log is in {1}.</value></data>
+  <data name="Update_Reason_NoConnection" xml:space="preserve"><value>couldn't connect to the server.</value></data>
+  <data name="Update_Reason_RateLimited" xml:space="preserve"><value>the GitHub API limit was reached. Try again later.</value></data>
+  <data name="Update_Reason_Server" xml:space="preserve"><value>the server returned an error.</value></data>
+  <data name="Update_Reason_BadResponse" xml:space="preserve"><value>the server's response couldn't be read.</value></data>
+  <data name="Update_Reason_Offline" xml:space="preserve"><value>offline mode is on.</value></data>
+  <data name="Update_Reason_NotSupported" xml:space="preserve"><value>this build can't check for updates.</value></data>
+  <data name="Update_Button_Download" xml:space="preserve"><value>Download</value></data>
+  <data name="Update_Button_OpenStore" xml:space="preserve"><value>Update in Microsoft Store</value></data>
+  <data name="Update_Button_OpenDownloadPage" xml:space="preserve"><value>Open download page</value></data>
+  <data name="Update_Button_ReleaseNotes" xml:space="preserve"><value>Release notes</value></data>
+  <data name="Update_Button_Skip" xml:space="preserve"><value>Skip this version</value></data>
+  <data name="Update_Button_RestartToUpdate" xml:space="preserve"><value>Restart to update</value></data>
+  <data name="Update_Button_Later" xml:space="preserve"><value>Later</value></data>
+  <data name="Update_RestartBusy" xml:space="preserve"><value>You can restart when the running operations (such as saving) have finished.</value></data>
+  <data name="Operation_UpdateDownload" xml:space="preserve"><value>Downloading version {0}</value></data>
+  <data name="Network_OfflineReason" xml:space="preserve"><value>Offline mode is on</value></data>
+  <data name="OpenUrl_Title" xml:space="preserve"><value>Open this page?</value></data>
+  <data name="OpenUrl_Body" xml:space="preserve"><value>Offline mode is on. HexEditor will open this address in your browser:</value></data>
+  <data name="OpenUrl_UrlLabel" xml:space="preserve"><value>Address</value></data>
+  <data name="OpenUrl_Open" xml:space="preserve"><value>Open in browser</value></data>
+  <data name="OpenUrl_Copy" xml:space="preserve"><value>Copy address</value></data>
+  <data name="TranslationReport_Title" xml:space="preserve"><value>Report a translation error</value></data>
+  <data name="TranslationReport_Body" xml:space="preserve"><value>Choose the string to report. You can search by the text shown now, the English text or the resource key.</value></data>
+  <data name="TranslationReport_SearchPlaceholder" xml:space="preserve"><value>Search strings</value></data>
+  <data name="TranslationReport_ListName" xml:space="preserve"><value>Strings</value></data>
+  <data name="TranslationReport_Report" xml:space="preserve"><value>Report</value></data>
+  <data name="TranslationReport_ReportWithout" xml:space="preserve"><value>Report without choosing</value></data>
+  <data name="Language_Title" xml:space="preserve"><value>Display language</value></data>
+  <data name="Language_Header" xml:space="preserve"><value>Display language</value></data>
+  <data name="Language_System" xml:space="preserve"><value>Use Windows setting (current: {0})</value></data>
+  <data name="Language_Item" xml:space="preserve"><value>{0} ({1}, reviewed {2}%)</value></data>
+  <data name="Language_RestartNote" xml:space="preserve"><value>The new language is used after HexEditor restarts.</value></data>
+  <data name="Language_Apply" xml:space="preserve"><value>Change</value></data>
+  <data name="Language_RestartNotice" xml:space="preserve"><value>The display language changes after a restart.</value></data>
+  <data name="Language_RestartNow" xml:space="preserve"><value>Restart now</value></data>
+  <data name="Language_RestartFailed" xml:space="preserve"><value>HexEditor couldn't restart. Please restart it yourself.</value></data>
+  <data name="JumpList_Pinned" xml:space="preserve"><value>Pinned</value></data>
+  <data name="JumpList_Recent" xml:space="preserve"><value>Recent</value></data>
+  <data name="JumpList_Task_NewWindow" xml:space="preserve"><value>New window</value></data>
+  <data name="JumpList_Task_NewDocument" xml:space="preserve"><value>New file</value></data>
+  <data name="Shell_OpenWith" xml:space="preserve"><value>Open with HexEditor</value></data>
+  <data name="Shell_ProjectType" xml:space="preserve"><value>HexEditor project</value></data>
+  <data name="Shell_WorkspaceType" xml:space="preserve"><value>HexEditor workspace</value></data>
+  <data name="Shell_BinaryType" xml:space="preserve"><value>Binary file</value></data>
+  <data name="Shell_StaleRegistration" xml:space="preserve"><value>The Explorer right-click menu points to an old location of HexEditor.</value></data>
+  <data name="Shell_UpdateRegistration" xml:space="preserve"><value>Update</value></data>
+  <data name="Shell_Unregister" xml:space="preserve"><value>Unregister</value></data>
+  <data name="Shell_RegistrationFailed" xml:space="preserve"><value>The Explorer integration couldn't be changed: {0}</value></data>
+  <data name="Migration_Import" xml:space="preserve"><value>Import the settings of the {0} of HexEditor</value></data>
+  <data name="Migration_Done" xml:space="preserve"><value>The settings were imported.</value></data>
+  <data name="Migration_Failed" xml:space="preserve"><value>Some settings couldn't be imported: {0}</value></data>
+  <data name="Distribution_Installer" xml:space="preserve"><value>installer version</value></data>
+  <data name="Distribution_Msix" xml:space="preserve"><value>Microsoft Store version</value></data>
+  <data name="Distribution_Portable" xml:space="preserve"><value>portable version</value></data>
+  <data name="Distribution_Development" xml:space="preserve"><value>development version</value></data>
 </root>

@@ -372,4 +372,72 @@
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>その他の項目</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>一致 {0} 件</value></data>
+  <data name="Menu_Help_ReportTranslation.Text" xml:space="preserve"><value>翻訳の誤りを報告(W)...</value></data>
+  <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>更新の確認(U)</value></data>
+  <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_DisplayLanguage.Text" xml:space="preserve"><value>表示言語(G)...</value></data>
+  <data name="Menu_View_DisplayLanguage.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>版 {0} があります。</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>版 {0} の準備ができました。</value></data>
+  <data name="Update_Updated" xml:space="preserve"><value>版 {0} に更新しました。</value></data>
+  <data name="Update_UpToDate" xml:space="preserve"><value>最新の版です (版 {0})。</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>更新を確認できませんでした: {0}</value></data>
+  <data name="Update_DownloadFailed" xml:space="preserve"><value>更新をダウンロードできませんでした: {0}</value></data>
+  <data name="Update_ApplyFailed" xml:space="preserve"><value>版 {0} への更新に失敗し、前の版のままです。ログの場所: {1}</value></data>
+  <data name="Update_Reason_NoConnection" xml:space="preserve"><value>サーバーに接続できません。</value></data>
+  <data name="Update_Reason_RateLimited" xml:space="preserve"><value>GitHub の API の利用制限に達しました。しばらくしてからやり直してください。</value></data>
+  <data name="Update_Reason_Server" xml:space="preserve"><value>サーバーがエラーを返しました。</value></data>
+  <data name="Update_Reason_BadResponse" xml:space="preserve"><value>サーバーの応答を読めませんでした。</value></data>
+  <data name="Update_Reason_Offline" xml:space="preserve"><value>オフラインモードが有効です。</value></data>
+  <data name="Update_Reason_NotSupported" xml:space="preserve"><value>このビルドでは更新を確認できません。</value></data>
+  <data name="Update_Button_Download" xml:space="preserve"><value>ダウンロード</value></data>
+  <data name="Update_Button_OpenStore" xml:space="preserve"><value>Microsoft Store で更新</value></data>
+  <data name="Update_Button_OpenDownloadPage" xml:space="preserve"><value>ダウンロードページを開く</value></data>
+  <data name="Update_Button_ReleaseNotes" xml:space="preserve"><value>リリースノート</value></data>
+  <data name="Update_Button_Skip" xml:space="preserve"><value>この版をスキップ</value></data>
+  <data name="Update_Button_RestartToUpdate" xml:space="preserve"><value>再起動して更新</value></data>
+  <data name="Update_Button_Later" xml:space="preserve"><value>後で</value></data>
+  <data name="Update_RestartBusy" xml:space="preserve"><value>実行中の処理 (保存など) が終わると再起動できます。</value></data>
+  <data name="Operation_UpdateDownload" xml:space="preserve"><value>版 {0} のダウンロード</value></data>
+  <data name="Network_OfflineReason" xml:space="preserve"><value>オフラインモードが有効です</value></data>
+  <data name="OpenUrl_Title" xml:space="preserve"><value>このページを開きますか?</value></data>
+  <data name="OpenUrl_Body" xml:space="preserve"><value>オフラインモードが有効です。次のアドレスをブラウザで開きます:</value></data>
+  <data name="OpenUrl_UrlLabel" xml:space="preserve"><value>アドレス</value></data>
+  <data name="OpenUrl_Open" xml:space="preserve"><value>ブラウザで開く</value></data>
+  <data name="OpenUrl_Copy" xml:space="preserve"><value>アドレスをコピー</value></data>
+  <data name="TranslationReport_Title" xml:space="preserve"><value>翻訳の誤りを報告</value></data>
+  <data name="TranslationReport_Body" xml:space="preserve"><value>報告する文字列を選んでください。表示中の文字列、英語の原文、リソースキーで検索できます。</value></data>
+  <data name="TranslationReport_SearchPlaceholder" xml:space="preserve"><value>文字列を検索</value></data>
+  <data name="TranslationReport_ListName" xml:space="preserve"><value>文字列</value></data>
+  <data name="TranslationReport_Report" xml:space="preserve"><value>報告</value></data>
+  <data name="TranslationReport_ReportWithout" xml:space="preserve"><value>選ばずに報告</value></data>
+  <data name="Language_Title" xml:space="preserve"><value>表示言語</value></data>
+  <data name="Language_Header" xml:space="preserve"><value>表示言語</value></data>
+  <data name="Language_System" xml:space="preserve"><value>Windows の設定に従う (現在: {0})</value></data>
+  <data name="Language_Item" xml:space="preserve"><value>{0} ({1}、確認済み {2}%)</value></data>
+  <data name="Language_RestartNote" xml:space="preserve"><value>再起動後に新しい言語で表示されます。</value></data>
+  <data name="Language_Apply" xml:space="preserve"><value>変更</value></data>
+  <data name="Language_RestartNotice" xml:space="preserve"><value>表示言語は再起動後に反映されます。</value></data>
+  <data name="Language_RestartNow" xml:space="preserve"><value>今すぐ再起動</value></data>
+  <data name="Language_RestartFailed" xml:space="preserve"><value>再起動できませんでした。手動で再起動してください。</value></data>
+  <data name="JumpList_Pinned" xml:space="preserve"><value>固定済み</value></data>
+  <data name="JumpList_Recent" xml:space="preserve"><value>最近使ったもの</value></data>
+  <data name="JumpList_Task_NewWindow" xml:space="preserve"><value>新しいウィンドウ</value></data>
+  <data name="JumpList_Task_NewDocument" xml:space="preserve"><value>新規作成</value></data>
+  <data name="Shell_OpenWith" xml:space="preserve"><value>HexEditor で開く</value></data>
+  <data name="Shell_ProjectType" xml:space="preserve"><value>HexEditor プロジェクト</value></data>
+  <data name="Shell_WorkspaceType" xml:space="preserve"><value>HexEditor ワークスペース</value></data>
+  <data name="Shell_BinaryType" xml:space="preserve"><value>バイナリ ファイル</value></data>
+  <data name="Shell_StaleRegistration" xml:space="preserve"><value>右クリックメニューの登録が古い場所を指しています。</value></data>
+  <data name="Shell_UpdateRegistration" xml:space="preserve"><value>更新する</value></data>
+  <data name="Shell_Unregister" xml:space="preserve"><value>登録を解除する</value></data>
+  <data name="Shell_RegistrationFailed" xml:space="preserve"><value>Explorer 連携を変更できませんでした: {0}</value></data>
+  <data name="Migration_Import" xml:space="preserve"><value>{0}の HexEditor の設定を取り込む</value></data>
+  <data name="Migration_Done" xml:space="preserve"><value>設定を取り込みました。</value></data>
+  <data name="Migration_Failed" xml:space="preserve"><value>一部の設定を取り込めませんでした: {0}</value></data>
+  <data name="Distribution_Installer" xml:space="preserve"><value>インストーラ版</value></data>
+  <data name="Distribution_Msix" xml:space="preserve"><value>Microsoft Store 版</value></data>
+  <data name="Distribution_Portable" xml:space="preserve"><value>ポータブル版</value></data>
+  <data name="Distribution_Development" xml:space="preserve"><value>開発版</value></data>
 </root>

@@ -168,8 +168,9 @@ public sealed class TranslationWorkflowTests : IDisposable
         Assert.Equal(TranslationState.Reviewed, status.Get("ja", "Test_NewString")!.State);
         Assert.All(server.Requests, r => Assert.Equal("DeepL-Auth-Key test-key", r));
 
-        // 既に訳がある文字列は訳し直さない (この新しい文字列だけを送った)。
-        Assert.Equal(21, server.Texts.Count);
+        // 新しい文字列は 21 言語に 1 回ずつ送り、既に訳がある文字列 (例: Menu_File.Title の File) は訳し直さない。
+        Assert.Equal(21, server.Texts.Count(t => t == "A new string"));
+        Assert.DoesNotContain("File", server.Texts);
 
         // ワークフロー: 毎晩と手動の起動で、変更があれば 1 つの Pull Request を作る (UI-49 の仕様 2 の 3)。
         string workflow = File.ReadAllText(RepoFile(".github/workflows/translate.yml"));

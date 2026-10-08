@@ -152,6 +152,8 @@
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <ToggleMenuFlyoutItem x:Name="StatusBarToggle" x:Uid="Menu_View_StatusBar" AutomationProperties.AutomationId="Command_StatusBar" Click="StatusBarToggle_Click" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_View_DisplayLanguage" AutomationProperties.AutomationId="Command_DisplayLanguage" Click="DisplayLanguage_Click" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Help">
                         <MenuFlyoutItem x:Uid="Menu_Help_Documentation" AutomationProperties.AutomationId="Command_Documentation" Click="Documentation_Click">
@@ -160,6 +162,8 @@
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
                         <MenuFlyoutItem x:Uid="Menu_Help_Report" AutomationProperties.AutomationId="Command_ReportProblem" Click="ReportProblem_Click" />
+                        <MenuFlyoutItem x:Uid="Menu_Help_ReportTranslation" AutomationProperties.AutomationId="Command_ReportTranslation" Click="ReportTranslation_Click" />
+                        <MenuFlyoutItem x:Uid="Menu_Help_CheckForUpdates" AutomationProperties.AutomationId="Command_CheckForUpdates" Click="CheckForUpdates_Click" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Help_About" AutomationProperties.AutomationId="Command_About" Click="About_Click" />
                     </MenuBarItem>
@@ -176,6 +180,9 @@
             </TitleBar.LeftHeader>
         </TitleBar>
 
+
+        <!--  更新の InfoBar (PKG-22)。アプリ全体の通知で、ボタンが 3 つまであるため通知の一覧とは別に置く。  -->
+        <controls:UpdateBar x:Name="UpdateBar" Grid.Row="1" />
 
         <controls:NotificationHost
             x:Name="WindowNotifications"
