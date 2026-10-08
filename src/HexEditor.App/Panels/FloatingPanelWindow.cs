@@ -23,10 +23,18 @@ public sealed class FloatingPanelWindow : Window
         Area = new PanelDockArea { Dock = PanelDock.Floating };
         var root = new Grid();
         root.Children.Add(Area);
-        Content = root;
+
+        // 画面全体のズーム (UI-08 の仕様 3): メインウィンドウと同じ倍率で中身を拡大する。閉じたら倍率の変化の購読をやめる。
+        _zoomHost = new ZoomHost { Zoom = ScreenZoom.Factor };
+        _zoomHost.Children.Add(root);
+        Content = _zoomHost;
+        Action zoomChanged = () => DispatcherQueue.TryEnqueue(() => _zoomHost.Zoom = ScreenZoom.Factor);
+        ScreenZoom.Changed += zoomChanged;
+        Closed += (_, _) => ScreenZoom.Changed -= zoomChanged;
         Title = title;
         SystemBackdrop = new Microsoft.UI.Xaml.Media.MicaBackdrop();
-        if (owner.Content is FrameworkElement ownerRoot)
+        // メインウィンドウの中身は ZoomHost の中 (MainWindow.Zoom.cs)。テーマと向きは、その中のルートから受け継ぐ。
+        if ((owner.Content is ZoomHost { Children.Count: > 0 } host ? host.Children[0] : owner.Content) is FrameworkElement ownerRoot)
         {
             root.RequestedTheme = ownerRoot.ActualTheme;
             root.FlowDirection = ownerRoot.FlowDirection;
@@ -40,6 +48,11 @@ public sealed class FloatingPanelWindow : Window
             presenter.IsMaximizable = false;
         }
     }
+
+    private readonly ZoomHost _zoomHost;
+
+    /// <summary>実際に使っている画面全体の倍率 (テスト用)。</summary>
+    public double AppliedZoom => _zoomHost.AppliedZoom;
 
     public string PanelId { get; }
 
