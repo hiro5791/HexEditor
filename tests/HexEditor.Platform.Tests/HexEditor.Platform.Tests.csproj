@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\HexEditor.Platform\HexEditor.Platform.csproj" />
+    <ProjectReference Include="..\..\src\HexEditor.ShellExtension\HexEditor.ShellExtension.csproj" />
   </ItemGroup>
 
 </Project>

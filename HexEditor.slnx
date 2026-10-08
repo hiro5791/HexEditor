@@ -3,6 +3,7 @@
     <Project Path="src/HexEditor.App/HexEditor.App.csproj" />
     <Project Path="src/HexEditor.Core/HexEditor.Core.csproj" />
     <Project Path="src/HexEditor.Platform/HexEditor.Platform.csproj" />
+    <Project Path="src/HexEditor.ShellExtension/HexEditor.ShellExtension.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/HexEditor.Core.Tests/HexEditor.Core.Tests.csproj" />

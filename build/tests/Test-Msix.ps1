@@ -3,9 +3,15 @@
   Distribution tests of the MSIX version (CI runners only: installs packages signed with a throwaway certificate).
 
 .DESCRIPTION
+    TC-PKG-03-01  file type associations: proj.hexproj opens HexEditor of the package; the default app of .iso is
+                  unchanged and HexEditor is among its "Open with" handlers (SHAssocEnumHandlers)
     TC-PKG-03-02  hexeditor.exe (execution alias) in a new command prompt opens the file of the current folder
     TC-PKG-03-04  resources.pri has the 23 languages; with German as the user's language the Start menu
                   description (AppListEntry.DisplayInfo.Description) is the German one of resources.pri
+    TC-UI-55-01   Windows 11: the new context menu has one top-level "Open with HexEditor" without a submenu, and
+                  it starts HexEditor with the selected file (the packaged COM class is also called directly)
+    TC-UI-55-04   the COM class answers a null item array with HRESULTs; deleting the file while the menu is open
+                  and choosing "Open with HexEditor" leaves explorer.exe running with the same process IDs
     TC-PKG-28-02  the 1.3.0 package installs as an update of 1.3.0-preview.2 (1.3.999.0) without -ForceUpdateFromAnyVersion
   -TestMsix is a test build (build/publish.ps1 -Distro Msix -TestHooks). -PreviewMsix and -StableMsix are builds
   with -Version 1.3.0-preview.2 and -Version 1.3.0.
@@ -25,12 +31,98 @@ $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/TestCase.ps1"
 . "$PSScriptRoot/AppDriver.ps1"
 . "$PSScriptRoot/Msix.ps1"
+. "$PSScriptRoot/Explorer.ps1"
 if (-not $env:GITHUB_ACTIONS) { throw 'This script installs HexEditor; run it only on CI runners.' }
 if (-not $WorkDir) { $WorkDir = Join-Path $env:RUNNER_TEMP 'msix-tests' }
 New-Item -ItemType Directory -Force $WorkDir | Out-Null
 
 Uninstall-TestMsix
+# TC-PKG-03-01: the default app of .iso before the installation.
+$isoDefaultBefore = [HexTest.ExplorerNative]::DefaultApp('.iso')
 $package = Install-TestMsix $TestMsix
+
+Invoke-TestCase 'TC-PKG-03-01' 'file type associations of the MSIX version' {
+    # TD-UI-HEXPROJ: proj.hexproj next to seq.bin (TD-SEQ-1M).
+    $folder = Join-Path $WorkDir 'hexproj'
+    [void](Copy-TestData $TestDataDir 'TD-SEQ-1M' (Join-Path $folder 'seq.bin'))
+    $project = Join-Path $folder 'proj.hexproj'
+    Set-Content -Path $project -Value '{ "file": "seq.bin", "bookmarks": [ { "name": "proj-mark", "offset": 64, "length": 1 } ] }' -Encoding ascii
+    Get-Process HexEditor -ErrorAction SilentlyContinue | Stop-Process -Force
+    # 1. Open it with the default verb (ShellExecute "open", like a double click).
+    Enable-NoActivate
+    Start-Process $project
+    try {
+        Wait-Until { @(Get-HexEditorFor 'proj.hexproj').Count -gt 0 } 30 'HexEditor started for proj.hexproj'
+        $started = @(Get-HexEditorFor 'proj.hexproj')[0]
+        Assert-True ($started.ExecutablePath -like "$($package.InstallLocation)*") "proj.hexproj started $($started.ExecutablePath)"
+    } finally { Get-Process HexEditor -ErrorAction SilentlyContinue | Stop-Process -Force }
+    Add-TestNote 'TC-PKG-03-01: opening the project (the seq.bin tab) is the project file feature (UI-33); only the association is checked.'
+    # 2. The default app of .iso is unchanged and HexEditor is an "Open with" handler.
+    $isoDefault = [HexTest.ExplorerNative]::DefaultApp('.iso')
+    Assert-True ($isoDefault -eq $isoDefaultBefore) "the default app of .iso changed: '$isoDefaultBefore' -> '$isoDefault'"
+    $handlers = @([HexTest.ExplorerNative]::OpenWithHandlers('.iso'))
+    Write-Host "Open with .iso: $($handlers -join '; ')"
+    Assert-True (@($handlers | Where-Object { $_ -match 'HexEditor' }).Count -ge 1) 'HexEditor is not an "Open with" handler of .iso'
+}
+
+Invoke-TestCase 'TC-UI-55-01' 'Windows 11 context menu: one top-level "Open with HexEditor"' {
+    if ([Environment]::OSVersion.Version.Build -lt 22000) { Skip-TestCase 'the new context menu exists only on Windows 11 (UI-55 spec 4).' }
+    # The packaged COM class (dllhost.exe loads HexEditor.ShellExtension.dll) answers like Explorer asks it.
+    $probe = [HexTest.ExplorerNative]::ProbeExplorerCommand($script:ExplorerCommandClsid)
+    Assert-True ($probe[0] -eq 'Open with HexEditor') "GetTitle: '$($probe[0])'"
+    Assert-True ($probe[4] -eq '0') "GetFlags: $($probe[4]) (ECF_DEFAULT: no submenu)"
+    $file = Copy-TestData $TestDataDir 'TD-SEQ-1M' (Join-Path $WorkDir 'menu55\seq.bin')
+    Get-Process HexEditor -ErrorAction SilentlyContinue | Stop-Process -Force
+    Enable-NoActivate
+    # 1. Select the file in Explorer and press the Application key (Shift+F10 opens the classic menu).
+    $window = Open-ExplorerSelection $file
+    try {
+        # 2. The items of the new menu (UI Automation).
+        $items = @(Get-NewContextMenuItems 'Open with HexEditor')
+        Assert-True ($items.Count -eq 1) "$($items.Count) items named 'Open with HexEditor'"
+        Assert-True (-not $items[0].Submenu) 'the item opens a submenu'
+        Assert-True ($items[0].ParentType -like '*Menu') "the item is under $($items[0].ParentType), not the top level of the menu"
+        # 3. Choose it.
+        Invoke-UiaElement $items[0].Element
+        # 4. HexEditor of the package starts with the file.
+        Wait-Until { @(Get-HexEditorFor 'seq.bin').Count -gt 0 } 30 'HexEditor started for seq.bin'
+        $started = @(Get-HexEditorFor 'seq.bin')[0]
+        Assert-True ($started.ExecutablePath -like "$($package.InstallLocation)*") "the menu started $($started.ExecutablePath)"
+        Assert-True ($started.CommandLine -like "*$file*") "command line: $($started.CommandLine)"
+    } finally {
+        Close-ExplorerWindow $window
+        Get-Process HexEditor -ErrorAction SilentlyContinue | Stop-Process -Force
+    }
+    Add-TestNote 'TC-UI-55-01: the tab is checked through the command line of the started process (the menu starts the app without the test channel).'
+}
+
+Invoke-TestCase 'TC-UI-55-04' 'exceptions in the COM server do not crash Explorer' {
+    if ([Environment]::OSVersion.Version.Build -lt 22000) { Skip-TestCase 'the new context menu exists only on Windows 11 (UI-55 spec 4).' }
+    # 1-2. A null item array: HRESULTs only (the deleted file and the virtual folder item are covered by the
+    #      HexEditor.Platform.Tests ShellExtensionTests, which pass fake items).
+    $probe = [HexTest.ExplorerNative]::ProbeExplorerCommand($script:ExplorerCommandClsid)
+    Assert-True ($probe[1] -eq '0' -and $probe[2] -eq '0') "GetState: hr $($probe[1]), state $($probe[2])"
+    Assert-True ([int]$probe[3] -lt 0) "Invoke with no items returned $($probe[3])"
+    # 3. Open the menu of a file, delete the file, then choose "Open with HexEditor".
+    $file = Copy-TestData $TestDataDir 'TD-SEQ-1M' (Join-Path $WorkDir 'menu55-deleted\seq-deleted.bin')
+    Get-Process HexEditor -ErrorAction SilentlyContinue | Stop-Process -Force
+    Enable-NoActivate
+    $window = Open-ExplorerSelection $file
+    $explorerBefore = Get-ExplorerIds
+    try {
+        $items = @(Get-NewContextMenuItems 'Open with HexEditor')
+        Assert-True ($items.Count -ge 1) 'the new context menu has no "Open with HexEditor"'
+        [System.IO.File]::Delete($file)
+        Invoke-UiaElement $items[0].Element
+        Start-Sleep -Seconds 5
+        # 4. explorer.exe runs with the same process IDs.
+        $explorerAfter = Get-ExplorerIds
+        Assert-True (($explorerBefore -join ',') -eq ($explorerAfter -join ',')) "explorer.exe processes: $($explorerBefore -join ',') -> $($explorerAfter -join ',')"
+    } finally {
+        Close-ExplorerWindow $window
+        Get-Process HexEditor -ErrorAction SilentlyContinue | Stop-Process -Force
+    }
+}
 
 Invoke-TestCase 'TC-PKG-03-02' 'hexeditor.exe execution alias' {
     $work = 'C:\work'

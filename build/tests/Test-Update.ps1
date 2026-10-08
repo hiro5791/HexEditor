@@ -15,6 +15,8 @@
     TC-PKG-18-02  "Restart to update" starts 0.9.1 with the tabs and shows "Updated to version 0.9.1"
     TC-PKG-18-03  "Later", exit, start: 0.9.1
     TC-PKG-18-04  "Restart to update" is disabled while saving
+    TC-PKG-08-03  the context menu unregistered by the user (recorded in state.json) stays unregistered after the
+                  update 0.9.0 -> 0.9.1; the file associations are registered again
     TC-PKG-20-01  portable: "Version 0.9.1 is available" with its buttons; the download page of 0.9.1
     TC-PKG-20-02  "Skip this version" until 0.9.2 is published
     TC-PKG-21-01  preview channel finds 0.9.2-preview.1
@@ -221,6 +223,38 @@ Invoke-TestCase 'TC-PKG-18-03' 'Later: the next start is the new version' {
     Wait-Until { -not (Get-Process Update -ErrorAction SilentlyContinue) } 120 'Update.exe to finish'
     $b = Start-TestApp -Exe $installedExe
     try { Assert-True ((Get-Update $b).current -eq '0.9.1') "version: $((Get-Update $b).current)" } finally { Stop-TestApp $b }
+}
+
+Invoke-TestCase 'TC-PKG-08-03' 'a registration removed by the user does not come back with an update' {
+    Assert-Feed
+    Install-Version '0.9.0'
+    $menuKey = 'HKCU:\Software\Classes\*\shell\HexEditor'
+    $projectKey = 'HKCU:\Software\Classes\HexEditor.Project'
+    $a = Start-TestApp -Exe $installedExe
+    $oldPid = $a.Id
+    # 1. "Unregister" of the context menu (Explorer integration; the same call as the settings screen).
+    $state = Send-TestCommand $a 'shell' @{ action = 'unregister'; items = @('contextMenu') }
+    Assert-True (-not $state.contextMenu) 'the context menu is still registered'
+    Assert-True (@($state.disabled) -contains 'contextMenu') "state.json does not record it: $($state.disabled -join ', ')"
+    Assert-True (-not (Test-Path -LiteralPath $menuKey)) "$menuKey remains after unregistering"
+    # 2. Help > Check for updates, then "Restart to update".
+    [void](Send-TestCommand $a 'updateCheck' @{ manual = $true } -TimeoutSeconds 120)
+    Wait-Until { (Get-Update $a).messageKey -eq 'Update_Ready' } 300 'the download'
+    [void](Send-TestCommand $a 'updateButton' @{ button = 'RestartToUpdate' })
+    Close-TestChannel $a
+    $find = { Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $_.Id -ne $oldPid -and $_.Path -ieq $installedExe } | Select-Object -First 1 }
+    Wait-Until { $null -ne (& $find) } 120 'the updated app'
+    $new = & $find
+    Wait-Until { ($null -ne ($script:ch = Connect-TestChannel $new.Id 1000)) } 60 'the test channel of the updated app'
+    $b = [pscustomobject]@{ Process = $new; Id = $new.Id; Pipe = $script:ch.Pipe; Reader = $script:ch.Reader; Writer = $script:ch.Writer }
+    try {
+        # 3. The version, the context menu key and the file associations.
+        $s = Get-Update $b
+        Assert-True ($s.current -eq '0.9.1') "version after the update: $($s.current)"
+    } finally { Stop-TestApp $b }
+    Assert-True (-not (Test-Path -LiteralPath $menuKey)) "$menuKey came back with the update"
+    Assert-True (Test-Path -LiteralPath $projectKey) "$projectKey (file associations) was not registered again"
+    Add-TestNote 'TC-PKG-08-03: the button of the settings screen is pressed through the test command shell/unregister (the same ShellIntegration call).'
 }
 
 Invoke-TestCase 'TC-PKG-18-04' 'Restart to update is disabled while saving' {

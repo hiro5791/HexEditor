@@ -24,6 +24,39 @@ public static class PackagingSections
         {
             SearchKeys = ["SetSearch_Network"],
         });
+
+        // ポータブル版だけ: 「この PC から登録を解除」(10 の PKG-09 の仕様 4)。
+        if (Hosting.Program.Environment.Distribution == Platform.Distribution.Portable)
+        {
+            SettingsSections.Register(new SettingsSection(SettingCategories.Advanced, "unregisterPc", "SetSection_UnregisterPc", UnregisterFromThisPc)
+            {
+                SearchKeys = ["SetSearch_UnregisterPc"],
+            });
+        }
+    }
+
+    /// <summary>
+    /// 「この PC から登録を解除」: レジストリの登録、ジャンプリスト、トースト通知の登録、一時フォルダを消し、
+    /// 「フォルダを削除すればアンインストールは完了です」を出す。失敗した項目は一覧で出す (PKG-09 の「エラー」)。
+    /// </summary>
+    private static FrameworkElement UnregisterFromThisPc(MainWindow window)
+    {
+        var panel = new StackPanel { Spacing = 8 };
+        panel.Children.Add(new TextBlock { Text = Loc.Get("Shell_UnregisterPcDescription"), TextWrapping = TextWrapping.Wrap });
+        var button = new Button { Content = Loc.Get("Shell_UnregisterPcButton") };
+        AutomationProperties.SetAutomationId(button, "Settings_UnregisterPc");
+        var result = new TextBlock { TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed };
+        AutomationProperties.SetAutomationId(result, "Settings_UnregisterPcResult");
+        AutomationProperties.SetLiveSetting(result, Microsoft.UI.Xaml.Automation.Peers.AutomationLiveSetting.Polite);
+        button.Click += (_, _) =>
+        {
+            (_, string message) = ExplorerIntegration.UnregisterFromThisPc();
+            result.Text = message;
+            result.Visibility = Visibility.Visible;
+        };
+        panel.Children.Add(button);
+        panel.Children.Add(result);
+        return panel;
     }
 
     /// <summary>Explorer 連携: 状態と「登録する」「登録を解除する」。MSIX 版・開発中の実行では「Windows の設定で管理されます」など。</summary>

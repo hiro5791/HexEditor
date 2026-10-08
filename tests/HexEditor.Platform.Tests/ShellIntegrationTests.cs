@@ -28,12 +28,12 @@ public sealed class ShellIntegrationTests
     public void Installer_hooks_register_the_context_menu_under_hkcu_with_the_app_icon()
     {
         using var temp = new TempFolder();
-        new InstallHooks(_registry, temp.Path, InstallerExe, () => _notified++, labels: _labels).AfterInstall("1.0.0");
+        new InstallHooks(_registry, temp.Path, InstallerExe, () => _notified++, labels: _labels, notifyEnvironmentChanged: () => { }).AfterInstall("1.0.0");
         Assert.True(_registry.KeyExists(ShellRegistration.ContextMenuKey));
         Assert.Equal("HexEditor で開く", _registry.GetValue(@"Software\Classes\*\shell\HexEditor", null));
         Assert.Equal($"\"{InstallerExe}\",0", _registry.GetValue(ShellRegistration.ContextMenuKey, "Icon"));
         Assert.Equal($"\"{InstallerExe}\" \"%1\"", _registry.GetValue(ShellRegistration.ContextMenuKey + @"\command", null));
-        Assert.All(_registry.Keys, k => Assert.StartsWith(@"Software\", k));
+        Assert.All(_registry.Keys.Where(k => k != UserPath.EnvironmentKey), k => Assert.StartsWith(@"Software\", k));
     }
 
     [Fact]
@@ -184,4 +184,48 @@ public sealed class ShellIntegrationTests
     [InlineData(".hexproj;.bad/name;.ok", ".ok")]
     public void Extension_lists_are_normalized(string text, string expected) =>
         Assert.Equal(expected, string.Join(';', ShellRegistration.ParseExtensions(text)));
+
+    // ---- ポータブル版の「この PC から登録を解除」(10 の PKG-09 の仕様 4) ----
+
+    [Fact]
+    [Trait(TC, "TC-PKG-09-03")]
+    public void Unregister_from_this_pc_removes_the_registration_jump_list_toast_and_temp_folder()
+    {
+        using var temp = new TempFolder();
+        string tempFolder = temp.Sub("HexEditor-12345678");
+        Directory.CreateDirectory(Path.Combine(tempFolder, "doc"));
+        File.WriteAllText(Path.Combine(tempFolder, "doc", "edit.tmp"), "x");
+        IReadOnlyDictionary<string, string> before = _registry.Snapshot();
+        ShellIntegration shell = Shell(Distribution.Portable, PortableExe);
+        Assert.Empty(shell.Register());
+        int jumpList = 0, toast = 0;
+
+        Assert.Empty(shell.UnregisterFromThisPc(() => jumpList++, () => toast++, tempFolder));
+
+        // レジストリは登録の前と同じ (HexEditor のキー・値が残らない)、ジャンプリストとトースト通知の登録を消し、一時フォルダもない。
+        Assert.Equal(before.OrderBy(p => p.Key), _registry.Snapshot().OrderBy(p => p.Key));
+        Assert.DoesNotContain(_registry.Keys, k => k.Contains("HexEditor", StringComparison.OrdinalIgnoreCase));
+        Assert.Equal(1, jumpList);
+        Assert.Equal(1, toast);
+        Assert.False(Directory.Exists(tempFolder));
+    }
+
+    [Fact]
+    [Trait(TC, "TC-PKG-09-03")]
+    public void Unregister_from_this_pc_keeps_the_installer_registration_and_lists_failures()
+    {
+        // インストーラ版の登録 (別の配布形態) は消さない。
+        Shell(Distribution.Installer, InstallerExe).Register();
+        int jumpList = 0;
+        IReadOnlyList<string> failures = Shell(Distribution.Portable, PortableExe).UnregisterFromThisPc(
+            () => jumpList++, () => throw new System.Runtime.InteropServices.COMException("toast"), Path.Combine(Path.GetTempPath(), "HexEditor-none-" + Guid.NewGuid().ToString("N")));
+        Assert.True(_registry.KeyExists(ShellRegistration.ContextMenuKey));
+
+        // 失敗した項目は一覧で返し、残りの項目は続ける (PKG-09 の「エラー」)。
+        Assert.Equal(["toast: COMException"], failures);
+        Assert.Equal(1, jumpList);
+
+        // ポータブル版以外では使えない。
+        Assert.Equal(["unsupported"], Shell(Distribution.Installer, InstallerExe).UnregisterFromThisPc(() => { }, () => { }, Path.GetTempPath()));
+    }
 }

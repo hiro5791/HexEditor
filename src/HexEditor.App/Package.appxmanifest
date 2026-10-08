@@ -11,7 +11,10 @@
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
-  IgnorableNamespaces="uap rescap uap5">
+  xmlns:desktop4="http://schemas.microsoft.com/appx/manifest/desktop/windows10/4"
+  xmlns:desktop5="http://schemas.microsoft.com/appx/manifest/desktop/windows10/5"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
+  IgnorableNamespaces="uap rescap uap5 desktop4 desktop5 com">
   <Identity
     Name="HexEditor"
     Publisher="CN=Hiroyura"
@@ -68,6 +71,53 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
+        <!--
+          ファイルの関連付け (PKG-03 の仕様 1、09 の UI-56)。独自の形式は既定のアプリの候補、バイナリ形式は「プログラムから開く」の候補。
+          Windows はアプリが自分で既定のアプリを変えることを許さないため、どちらも既定のアプリは変えない (既定は利用者が選ぶ。
+          独自の形式は他に開くアプリがないため、そのまま HexEditor で開く)。表示名は言語ごとのリソース。
+        -->
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="hexeditor.project">
+            <uap:DisplayName>ms-resource:Shell_ProjectType</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.hexproj</uap:FileType>
+              <uap:FileType>.hexworkspace</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="hexeditor.binary">
+            <uap:DisplayName>ms-resource:Shell_BinaryType</uap:DisplayName>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.bin</uap:FileType>
+              <uap:FileType>.dat</uap:FileType>
+              <uap:FileType>.img</uap:FileType>
+              <uap:FileType>.rom</uap:FileType>
+              <uap:FileType>.dmp</uap:FileType>
+              <uap:FileType>.raw</uap:FileType>
+              <uap:FileType>.iso</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+        <!--
+          Windows 11 の新しい右クリックメニューの「HexEditor で開く」(09 の UI-55、PKG-03 の仕様 1)。すべてのファイルに 1 項目だけ出す。
+          Clsid は HexEditor.ShellExtension の ExplorerCommand.ClsidText と同じ値。DLL は build/publish.ps1 が NativeAOT で作って入れる。
+          Windows 10 では Explorer がこの宣言を使わない (従来のメニューは MSIX 版では出さない。UI-55 の仕様 4)。
+        -->
+        <desktop4:Extension Category="windows.fileExplorerContextMenus">
+          <desktop4:FileExplorerContextMenus>
+            <desktop5:ItemType Type="*">
+              <desktop5:Verb Id="OpenWithHexEditor" Clsid="2437333e-df0b-4c55-bdc1-be7265500b4d" />
+            </desktop5:ItemType>
+          </desktop4:FileExplorerContextMenus>
+        </desktop4:Extension>
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:SurrogateServer DisplayName="HexEditor Explorer command">
+              <com:Class Id="2437333e-df0b-4c55-bdc1-be7265500b4d" Path="HexEditor.ShellExtension.dll" ThreadingModel="STA" />
+            </com:SurrogateServer>
+          </com:ComServer>
+        </com:Extension>
         <uap5:Extension Category="windows.appExecutionAlias">
           <uap5:AppExecutionAlias>
             <uap5:ExecutionAlias Alias="hexeditor.exe" />

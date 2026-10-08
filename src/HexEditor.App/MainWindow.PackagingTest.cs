@@ -56,7 +56,9 @@ public sealed partial class MainWindow
         "menuItem" => TestMenuItem(request["id"]!.GetValue<string>()),
 
         // Explorer 連携 (配布のテスト。インストーラ版・ポータブル版の本物のレジストリに書く)。
-        "shell" => TestShell(request["action"]?.GetValue<string>() ?? "state"),
+        // items: 対象の項目 (contextMenu、fileAssociations。省略するとどちらも)。unregisterPc: ポータブル版の「この PC から登録を解除」。
+        // commandLine: インストーラ版の「コマンドラインから使えるようにする」(enabled)。
+        "shell" => TestShell(request["action"]?.GetValue<string>() ?? "state", request["items"] as JsonArray, request["enabled"]?.GetValue<bool>()),
 
         // 他の配布形態の設定の取り込み (PKG-31)。
         "importFromOtherDistribution" => TestImportSettings(),
@@ -186,18 +188,34 @@ public sealed partial class MainWindow
         return new JsonObject { ["found"] = false };
     }
 
-    private static JsonObject TestShell(string action)
+    private static JsonObject TestShell(string action, JsonArray? items, bool? enabled)
     {
         ShellIntegration shell = ExplorerIntegration.Shell;
-        IReadOnlyList<string> failures = action switch
+        HashSet<string>? only = items is null ? null : [.. items.Select(i => i?.GetValue<string>()).OfType<string>()];
+        string? message = null;
+        IReadOnlyList<string> failures = [];
+        switch (action)
         {
-            "register" => shell.Register(),
-            "unregister" => shell.Unregister(),
-            _ => [],
-        };
+            case "register":
+                failures = shell.Register(only);
+                break;
+            case "unregister":
+                failures = shell.Unregister(only);
+                break;
+            case "unregisterPc":
+                (failures, message) = ExplorerIntegration.UnregisterFromThisPc();
+                break;
+            case "commandLine":
+                failures = shell.SetCommandLineEnabled(enabled ?? true);
+                break;
+        }
+
         ShellIntegrationState state = shell.State();
         return new JsonObject
         {
+            ["message"] = message,
+            ["commandLine"] = shell.CommandLineEnabled,
+            ["disabled"] = new JsonArray([.. shell.Disabled().Order(StringComparer.Ordinal).Select(d => (JsonNode?)d)]),
             ["supported"] = state.Supported,
             ["contextMenu"] = state.ContextMenuRegistered,
             ["fileAssociations"] = state.FileAssociationsRegistered,

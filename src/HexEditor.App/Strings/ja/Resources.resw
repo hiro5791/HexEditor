@@ -1346,6 +1346,12 @@
   <data name="Shell_NotAvailable" xml:space="preserve"><value>このビルドでは使えません。</value></data>
   <data name="Shell_StateUnavailable" xml:space="preserve"><value>登録の状態を読めませんでした。</value></data>
   <data name="Shell_OtherDistribution" xml:space="preserve"><value>他の配布形態の HexEditor も登録されています。メニューに 2 つ出ることがあります。</value></data>
+  <data name="SetSection_UnregisterPc" xml:space="preserve"><value>この PC から登録を解除</value></data>
+  <data name="SetSearch_UnregisterPc" xml:space="preserve"><value>あんいんすとーる さくじょ れじすとり ぽーたぶる</value></data>
+  <data name="Shell_UnregisterPcDescription" xml:space="preserve"><value>この HexEditor がこの PC に登録したもの (右クリックメニュー、ファイルの関連付け、ジャンプリスト、通知の登録、一時ファイル) を消します。</value></data>
+  <data name="Shell_UnregisterPcButton" xml:space="preserve"><value>この PC から登録を解除</value></data>
+  <data name="Shell_UnregisterPcDone" xml:space="preserve"><value>この PC から登録を解除しました。フォルダを削除すればアンインストールは完了です。</value></data>
+  <data name="Shell_UnregisterPcFailed" xml:space="preserve"><value>解除できなかった項目があります: {0}</value></data>
   <data name="Network_Feature_Updates" xml:space="preserve"><value>更新の確認とダウンロード</value></data>
   <data name="Network_Feature_Downloads" xml:space="preserve"><value>テンプレート・プラグインのダウンロード</value></data>
   <data name="Network_Feature_Components" xml:space="preserve"><value>追加コンポーネントのダウンロード</value></data>

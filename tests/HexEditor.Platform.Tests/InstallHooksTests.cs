@@ -1,5 +1,6 @@
 using HexEditor.Platform.Shell;
 using HexEditor.Platform.Tests.Support;
+using static HexEditor.Platform.Tests.Support.TestSupport;
 
 namespace HexEditor.Platform.Tests;
 
@@ -15,7 +16,19 @@ public sealed class InstallHooksTests : IDisposable
 
     private string DataRoot => _temp.Sub("HexEditorData");
 
-    private InstallHooks Hooks(TimeSpan? budget = null) => new(_registry, DataRoot, Exe, () => _notified++, budget);
+    private const string Folder = @"C:\Users\u\AppData\Local\HexEditor\current\";
+    private int _environmentNotified;
+
+    private InstallHooks Hooks(TimeSpan? budget = null) => new(_registry, DataRoot, Exe, () => _notified++, budget, notifyEnvironmentChanged: () => _environmentNotified++);
+
+    /// <summary>設定画面 (インストーラ版) と同じ登録・解除。state.json はフックと同じデータフォルダのもの。</summary>
+    private ShellIntegration Settings(Distribution distribution = Distribution.Installer) =>
+        new(_registry, distribution, Exe, new OtherInstallations(_temp.Sub("LocalAppData")), () => ShellLabels.English,
+            () => ShellRegistration.DefaultOpenWithExtensions, null, new StateFile(DataRoot), () => _environmentNotified++);
+
+    private const string UserPathBefore = @"%USERPROFILE%\bin;C:\Tools";
+
+    private IReadOnlyList<string> PathEntries() => UserPath.Entries(_registry);
 
     [Fact]
     public void AfterInstallRegistersAppPathsInHkcu()
@@ -32,7 +45,7 @@ public sealed class InstallHooksTests : IDisposable
     {
         // 登録先はすべて HKCU (IUserRegistry は HKCU だけを扱う)。HKLM の場所を書いた項目がないことも確かめる (PKG-08 の仕様 3)。
         Hooks().AfterInstall("1.0.0");
-        Assert.All(_registry.Keys, key =>
+        Assert.All(_registry.Keys.Where(k => k != UserPath.EnvironmentKey), key =>
         {
             Assert.StartsWith(@"Software\", key);
             Assert.DoesNotContain("HKEY_LOCAL_MACHINE", key, StringComparison.OrdinalIgnoreCase);
@@ -67,7 +80,145 @@ public sealed class InstallHooksTests : IDisposable
         Hooks().AfterInstall("1.0.0");
         Hooks().BeforeUninstall("1.0.0");
         Assert.All(ShellRegistration.Entries, e => Assert.False(_registry.KeyExists(e.Key)));
-        Assert.Empty(_registry.Keys);
+        Assert.DoesNotContain(_registry.Keys, k => k != UserPath.EnvironmentKey);
+        Assert.Null(_registry.GetRawString(UserPath.EnvironmentKey, UserPath.ValueName));
+    }
+
+    // ---- 登録と PATH (PKG-08 の仕様 2・6) ----
+
+    [Fact]
+    [Trait(TC, "TC-PKG-08-01")]
+    public void AfterInstallRegistersTheMenuAndAppendsTheFolderToTheUserPathOnce()
+    {
+        _registry.SeedString(UserPath.EnvironmentKey, UserPath.ValueName, UserPathBefore, expandable: true);
+        Hooks().AfterInstall("1.0.0");
+
+        // 右クリックメニューと、ShellRegistration の一覧のキーがある。
+        Assert.True(_registry.KeyExists(ShellRegistration.ContextMenuKey));
+        Assert.All(ShellRegistration.Entries, e => Assert.All(e.OwnedKeys, k => Assert.True(_registry.KeyExists(k), k)));
+
+        // PATH の末尾に 1 つだけ足し、他の項目 (展開しない %USERPROFILE%) と値の種類はそのまま。
+        Assert.Equal([@"%USERPROFILE%\bin", @"C:\Tools", Folder], PathEntries());
+        Assert.True(_registry.GetRawString(UserPath.EnvironmentKey, UserPath.ValueName)!.Value.Expandable);
+        Assert.Equal(1, _environmentNotified);
+
+        // 更新を繰り返しても 1 つだけ。
+        Hooks().AfterUpdate("1.0.1");
+        Hooks().AfterUpdate("1.0.2");
+        Assert.Equal([@"%USERPROFILE%\bin", @"C:\Tools", Folder], PathEntries());
+        Assert.Equal(1, _environmentNotified);
+    }
+
+    [Theory]
+    [Trait(TC, "TC-PKG-08-01")]
+    [InlineData(@"C:\Tools;C:\Users\u\AppData\Local\HexEditor\current")]
+    [InlineData(@"c:\users\u\appdata\local\hexeditor\current\;C:\Tools")]
+    [InlineData(@"C:\Tools;""C:\Users\u\AppData\Local\HexEditor\current\"";")]
+    public void TheFolderIsNotAddedTwice(string path)
+    {
+        _registry.SeedString(UserPath.EnvironmentKey, UserPath.ValueName, path, expandable: false);
+        Hooks().AfterInstall("1.0.0");
+        Assert.Equal(path, _registry.GetValue(UserPath.EnvironmentKey, UserPath.ValueName));
+        Assert.Equal(0, _environmentNotified);
+    }
+
+    [Fact]
+    [Trait(TC, "TC-PKG-08-01")]
+    public void WithoutAUserPathTheValueIsCreated()
+    {
+        Hooks().AfterInstall("1.0.0");
+        (string value, bool expandable) = _registry.GetRawString(UserPath.EnvironmentKey, UserPath.ValueName)!.Value;
+        Assert.Equal(Folder, value);
+        Assert.True(expandable);
+    }
+
+    [Fact]
+    [Trait(TC, "TC-PKG-08-02")]
+    public void BeforeUninstallRemovesTheRegistrationAndOnlyTheAddedPathEntry()
+    {
+        _registry.SeedString(UserPath.EnvironmentKey, UserPath.ValueName, UserPathBefore, expandable: true);
+        _registry.Seed(@"Software\Classes\.iso\OpenWithProgids", "Other.Iso", string.Empty);
+        Hooks().AfterInstall("1.0.0");
+        Hooks().BeforeUninstall("1.0.0");
+
+        // ShellRegistration の一覧のキー・値がすべてない (他のアプリの値は残る)。
+        Assert.All(ShellRegistration.Entries, e => Assert.All(e.OwnedKeys, k => Assert.False(_registry.KeyExists(k), k)));
+        Assert.All(ShellRegistration.DefaultOpenWithExtensions, e =>
+            Assert.Null(_registry.GetValue($@"Software\Classes\{e}\OpenWithProgids", ShellRegistration.BinaryProgId)));
+        Assert.Equal(string.Empty, _registry.GetValue(@"Software\Classes\.iso\OpenWithProgids", "Other.Iso"));
+
+        // PATH はインストール前と同じ。
+        Assert.Equal(UserPathBefore, _registry.GetValue(UserPath.EnvironmentKey, UserPath.ValueName));
+        Assert.True(_registry.GetRawString(UserPath.EnvironmentKey, UserPath.ValueName)!.Value.Expandable);
+        Assert.Equal(2, _environmentNotified);
+    }
+
+    [Fact]
+    [Trait(TC, "TC-PKG-08-02")]
+    public void BeforeUninstallLeavesAPathWithoutTheFolderUnchanged()
+    {
+        _registry.SeedString(UserPath.EnvironmentKey, UserPath.ValueName, UserPathBefore, expandable: true);
+        Hooks().BeforeUninstall("1.0.0");
+        Assert.Equal(UserPathBefore, _registry.GetValue(UserPath.EnvironmentKey, UserPath.ValueName));
+        Assert.Equal(0, _environmentNotified);
+    }
+
+    // ---- 利用者が解除した登録は更新で復活しない (PKG-08 の仕様 2・5・6) ----
+
+    [Fact]
+    [Trait(TC, "TC-PKG-08-03")]
+    public void ContextMenuUnregisteredInTheSettingsStaysOffAfterAnUpdate()
+    {
+        Hooks().AfterInstall("0.9.0");
+
+        // 設定画面「Explorer 連携」で右クリックメニューの登録を解除する。
+        Assert.Empty(Settings().Unregister(new HashSet<string> { ShellRegistration.ContextMenuId }));
+        Assert.Contains(ShellRegistration.ContextMenuId, Hooks().ReadDisabled());
+
+        // 0.9.1 に更新: メニューは復活せず、ファイルの関連付けは登録し直される。
+        _registry.DeleteKeyTree($@"{ShellRegistration.ClassesKey}\{ShellRegistration.ProjectProgId}");
+        Hooks().AfterUpdate("0.9.1");
+        Assert.False(_registry.KeyExists(ShellRegistration.ContextMenuKey));
+        Assert.True(_registry.KeyExists($@"{ShellRegistration.ClassesKey}\{ShellRegistration.ProjectProgId}"));
+
+        // 登録し直すと記録が消え、次の更新でも登録したまま。
+        Assert.Empty(Settings().Register(new HashSet<string> { ShellRegistration.ContextMenuId }));
+        Assert.DoesNotContain(ShellRegistration.ContextMenuId, Hooks().ReadDisabled());
+        Hooks().AfterUpdate("0.9.2");
+        Assert.True(_registry.KeyExists(ShellRegistration.ContextMenuKey));
+    }
+
+    [Fact]
+    [Trait(TC, "TC-PKG-08-03")]
+    public void CommandLineTurnedOffStaysOffAfterAnUpdate()
+    {
+        _registry.SeedString(UserPath.EnvironmentKey, UserPath.ValueName, UserPathBefore, expandable: true);
+        Hooks().AfterInstall("0.9.0");
+        ShellIntegration settings = Settings();
+        Assert.True(settings.CommandLineEnabled);
+
+        // 設定画面「詳細」の「コマンドラインから使えるようにする」を外す。
+        Assert.Empty(settings.SetCommandLineEnabled(false));
+        Assert.False(settings.CommandLineEnabled);
+        Assert.Equal(UserPathBefore, _registry.GetValue(UserPath.EnvironmentKey, UserPath.ValueName));
+
+        Hooks().AfterUpdate("0.9.1");
+        Assert.DoesNotContain(PathEntries(), e => e.Equals(Folder, StringComparison.OrdinalIgnoreCase));
+
+        // 付け直すと、次の更新でも残る。
+        Assert.Empty(settings.SetCommandLineEnabled(true));
+        Hooks().AfterUpdate("0.9.2");
+        Assert.Single(PathEntries(), e => e.Equals(Folder, StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public void PortableVersionDoesNotRecordUnregistering()
+    {
+        // ポータブル版には更新後のフックがなく、データフォルダもアプリのフォルダの中にある (記録しない)。
+        Settings(Distribution.Portable).Register();
+        Settings(Distribution.Portable).Unregister();
+        Assert.False(File.Exists(Path.Combine(DataRoot, InstallHooks.StateFileName)));
+        Assert.Equal(["unsupported"], Settings(Distribution.Portable).SetCommandLineEnabled(false));
     }
 
     [Fact]
@@ -125,5 +276,27 @@ public sealed class InstallHooksTests : IDisposable
         Hooks().AfterUpdate("1.0.1");
         Hooks().BeforeUninstall("1.0.1");
         Assert.True(clock.Elapsed < InstallHooks.Budget);
+    }
+
+    /// <summary>
+    /// 配布のテスト (build/tests/Test-Installer.ps1 の TC-PKG-08-01・02) は Windows PowerShell で動き、アプリのアセンブリを読めないため、
+    /// ShellRegistration の一覧の写しを持つ。写しが一覧と同じであることを確かめる。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-PKG-08-02")]
+    public void InstallerScriptListsEveryShellRegistrationKey()
+    {
+        string script = File.ReadAllText(RepoFile("build/tests/Test-Installer.ps1"));
+        static IReadOnlyList<string> Quoted(string block) =>
+            [.. System.Text.RegularExpressions.Regex.Matches(block, "'([^']+)'").Select(m => m.Groups[1].Value)];
+        string Block(string name)
+        {
+            int start = script.IndexOf($"${name} = @(", StringComparison.Ordinal);
+            Assert.True(start >= 0, name);
+            return script[start..script.IndexOf(')', start)];
+        }
+
+        Assert.Equal(ShellRegistration.Entries.SelectMany(e => e.OwnedKeys), Quoted(Block("shellRegistrationKeys")));
+        Assert.Equal(ShellRegistration.DefaultOpenWithExtensions, Quoted(Block("openWithExtensions")));
     }
 }
