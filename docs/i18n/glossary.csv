@@ -13,7 +13,7 @@ long-running operation,work that may take 0.5 s or more and runs in the backgrou
 File,menu name,noun,false,ファイル,文件,檔案,파일,File,Tệp,ไฟล์,Datei,Fichier,Archivo,Arquivo,File,Файл,Файл,Plik,Soubor,Fájl,Fișier,Αρχείο,ملف,Dosya,فایل
 Edit,menu name,noun,false,編集,编辑,編輯,편집,Edit,Chỉnh sửa,แก้ไข,Bearbeiten,Modifier,Editar,Editar,Modifica,Правка,Редагування,Edycja,Úpravy,Szerkesztés,Editare,Επεξεργασία,تحرير,Düzen,ویرایش
 Search,menu name,noun,false,検索,搜索,搜尋,검색,Cari,Tìm kiếm,ค้นหา,Suchen,Rechercher,Buscar,Pesquisar,Cerca,Поиск,Пошук,Szukaj,Hledat,Keresés,Căutare,Αναζήτηση,بحث,Ara,جستجو
-Go,menu name (move to a position),noun,false,移動,转到,移至,이동,Buka,Đi tới,ไปที่,Gehe zu,Atteindre,Ir,Ir,Vai,Переход,Перехід,Przejdź,Přejít,Ugrás,Salt,Μετάβαση,انتقال,Git,رفتن
+Go,menu name (move to a position),noun,false,移動,转到,移至,이동,Navigasi,Đi tới,ไปที่,Gehe zu,Atteindre,Ir,Ir,Vai,Переход,Перехід,Przejdź,Přejít,Ugrás,Salt,Μετάβαση,انتقال,Git,رفتن
 View,menu name,noun,false,表示,视图,檢視,보기,Tampilan,Xem,มุมมอง,Ansicht,Affichage,Ver,Exibir,Visualizza,Вид,Вигляд,Widok,Zobrazení,Nézet,Vizualizare,Προβολή,عرض,Görünüm,نما
 Data,menu name,noun,false,データ,数据,資料,데이터,Data,Dữ liệu,ข้อมูล,Daten,Données,Datos,Dados,Dati,Данные,Дані,Dane,Data,Adatok,Date,Δεδομένα,البيانات,Veri,داده
 Analysis,menu name,noun,false,解析,分析,分析,분석,Analisis,Phân tích,วิเคราะห์,Analyse,Analyse,Análisis,Análise,Analisi,Анализ,Аналіз,Analiza,Analýza,Elemzés,Analiză,Ανάλυση,تحليل,Analiz,تحلیل
