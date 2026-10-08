@@ -318,7 +318,10 @@
                     <TabView.Resources>
                         <DataTemplate x:Key="DocumentTabTemplate" x:DataType="vm:DocumentViewModel">
                             <!--  タブ (UI-09): 見出しは種類のアイコンと状態の印と表示名。右クリックメニューはコードで作る (MainWindow.Tabs.cs)。  -->
-                            <TabViewItem AutomationProperties.Name="{x:Bind Header, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}">
+                            <TabViewItem
+                                AutomationProperties.Name="{x:Bind Header, Mode=OneWay}"
+                                Loaded="DocumentTab_Loaded"
+                                ToolTipService.ToolTip="{x:Bind ToolTip, Mode=OneWay}">
                                 <!--  長時間処理の実行中は小さな進捗リングを出す (UI-09 の仕様 2、UI-37 の仕様 8)。  -->
                                 <TabViewItem.Header>
                                     <StackPanel Orientation="Horizontal" Spacing="6">
@@ -330,7 +333,8 @@
                                             AutomationProperties.AccessibilityView="Raw"
                                             IsActive="{x:Bind IsBusy, Mode=OneWay}"
                                             Visibility="{x:Bind IsBusy, Mode=OneWay}" />
-                                        <TextBlock Text="{x:Bind Header, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
+                                        <!--  未保存の印 (●) は閉じるボタンの位置に出す (UI-09 の仕様 2。MainWindow.TabsUnsaved.cs)  -->
+                                        <TextBlock Text="{x:Bind local:MainWindow.VisibleTabHeader(Header, Document.IsModified), Mode=OneWay}" TextTrimming="CharacterEllipsis" />
                                     </StackPanel>
                                 </TabViewItem.Header>
                                 <TabViewItem.ContextFlyout>

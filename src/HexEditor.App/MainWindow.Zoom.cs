@@ -276,39 +276,10 @@ public sealed partial class MainWindow
             view.ScreenZoom = factor;
         }
 
-        // メニューの項目はウィンドウの外 (ポップアップ) に出るので、文字の大きさを倍率に合わせる。
-        double fontSize = (double)Application.Current.Resources["ControlContentThemeFontSize"] * factor;
-        foreach (MenuFlyoutItemBase item in AllMenuItems(MainMenu.Items.SelectMany(m => m.Items)))
-        {
-            if (item is Control control)
-            {
-                if (factor == 1)
-                {
-                    control.ClearValue(Control.FontSizeProperty);
-                }
-                else
-                {
-                    control.FontSize = fontSize;
-                }
-            }
-        }
-
+        // メニューとフライアウトはウィンドウの外 (ポップアップ) に出るので、開くたびに倍率に合わせる (Controls/PopupZoom.cs。
+        // App.xaml の暗黙のスタイルで、アプリのすべてのメニュー・フライアウトに付けている)。浮動パネルは自分で倍率に従う
+        // (Panels/FloatingPanelWindow.cs)。
         UpdateZoomStatus();
-    }
-
-    private static IEnumerable<MenuFlyoutItemBase> AllMenuItems(IEnumerable<MenuFlyoutItemBase> items)
-    {
-        foreach (MenuFlyoutItemBase item in items)
-        {
-            yield return item;
-            if (item is MenuFlyoutSubItem sub)
-            {
-                foreach (MenuFlyoutItemBase child in AllMenuItems(sub.Items))
-                {
-                    yield return child;
-                }
-            }
-        }
     }
 
     // ---- ステータスバー (UI-06、UI-08 の「画面」) ----

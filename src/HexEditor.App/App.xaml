@@ -17,6 +17,44 @@
             <Style BasedOn="{StaticResource DefaultContentDialogStyle}" TargetType="ContentDialog">
                 <Setter Property="controls:ScreenZoom.Follow" Value="True" />
             </Style>
+            <!--  メニュー (右クリックメニュー・メニューバー・サブメニュー) は項目の文字の大きさを倍率に合わせる (拡大はしない)  -->
+            <Style BasedOn="{StaticResource DefaultMenuFlyoutPresenterStyle}" TargetType="MenuFlyoutPresenter">
+                <Setter Property="controls:PopupZoom.FollowMenu" Value="True" />
+            </Style>
+            <!--  フライアウトは中身を倍率どおりに拡大する (Controls/PopupZoom.cs。テンプレートは既定と同じで、全体を PopupZoomPanel に入れる)  -->
+            <Style BasedOn="{StaticResource DefaultFlyoutPresenterStyle}" TargetType="FlyoutPresenter">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="FlyoutPresenter">
+                            <controls:PopupZoomPanel>
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BackgroundSizing="InnerBorderEdge"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{TemplateBinding CornerRadius}">
+                                    <ScrollViewer
+                                        x:Name="ScrollViewer"
+                                        AutomationProperties.AccessibilityView="Raw"
+                                        HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                        HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+                                        VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                        VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                                        ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}">
+                                        <ContentPresenter
+                                            Margin="{TemplateBinding Padding}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            Content="{TemplateBinding Content}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            ContentTransitions="{TemplateBinding ContentTransitions}" />
+                                    </ScrollViewer>
+                                </Border>
+                            </controls:PopupZoomPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

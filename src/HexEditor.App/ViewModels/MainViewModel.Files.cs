@@ -186,7 +186,9 @@ public sealed partial class MainViewModel
             vm.RestorePosition(tab.Cursor, tab.SelectionStart, tab.SelectionLength, tab.TopRow);
             if (tab.Pinned)
             {
+                // ピン留めのタブは、ピン留めの並びの中の元の位置に戻す (ピン留めすると並びの末尾に付くため。UI-12 の仕様 2)。
                 SetPinned(vm, true);
+                MoveDocument(vm, Math.Min(closed.Index, PinnedCount - 1));
             }
 
             return vm;

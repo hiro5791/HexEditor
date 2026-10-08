@@ -75,6 +75,7 @@ public sealed partial class MainWindow : Window
         InitializeToolPages();
         InitializePalette();
         RefreshToolbar();
+        SubscribeWindowSettings();
 
         // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。タイマーはフィールドに持つ (ローカル変数だけだとガベージコレクションで
         // 回収され、通知が閉じなくなる)。

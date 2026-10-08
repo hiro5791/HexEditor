@@ -61,6 +61,7 @@ public sealed partial class MainWindow
         CommandService.BindingsChanged += bindingsChanged;
         Closed += (_, _) =>
         {
+            // 閉じる確認でキャンセルされたウィンドウは、割り当ての変更を受け続ける。
             if (_closingConfirmed)
             {
                 CommandService.BindingsChanged -= bindingsChanged;

@@ -263,6 +263,73 @@ public static partial class WindowManager
         return true;
     }
 
+    /// <summary>
+    /// 「今すぐ再起動」(UI-43 の仕様 5、UI-13 の仕様 2): 全ウィンドウの文書をまとめて確かめ、全ウィンドウのセッションを保存してから
+    /// 再起動する。新しいプロセスはそのセッションを復元する (すべてのウィンドウとタブが戻る)。キャンセルされた・再起動できなかった
+    /// 場合は false (再起動できなかったときは、確認で閉じた文書は戻らない。呼び出し側が知らせる)。
+    /// </summary>
+    public static async Task<bool> RestartAsync(MainWindow from)
+    {
+        LastRestartFailed = false;
+        if (IsExiting || s_confirmingExit)
+        {
+            return false;
+        }
+
+        // 閉じる前のタブをセッションに残す (閉じた後は文書がなくなるため)。
+        SessionState session = CaptureSession();
+        s_confirmingExit = true;
+        try
+        {
+            if (!await from.ConfirmExitAsync())
+            {
+                return false;
+            }
+        }
+        finally
+        {
+            s_confirmingExit = false;
+        }
+
+        s_sessionTimer?.Stop();
+        SaveSessionForRestart(session);
+        App.Settings.Flush();
+        Commands.CommandService.Flush();
+        AppLog.Info("Restarting with the session");
+        LastRestartFailed = false;
+        if (AppRestart.Restart())
+        {
+            return true;
+        }
+
+        LastRestartFailed = true;
+        s_sessionTimer?.Start();
+        return false;
+    }
+
+    /// <summary>直前の <see cref="RestartAsync"/> が再起動に失敗した (キャンセルではない)。「手動で再起動してください」を出す。</summary>
+    public static bool LastRestartFailed { get; private set; }
+
+    /// <summary>
+    /// 再起動の前のセッションを書く。起動時に「前回のセッションを復元」を提案中でも上書きする (再起動では必ずこのセッションを戻すため)。
+    /// </summary>
+    private static void SaveSessionForRestart(SessionState session)
+    {
+        if (s_windows.Count == 0 || s_windows[0].Vm.Files is not { } files)
+        {
+            return;
+        }
+
+        try
+        {
+            files.Session.SaveIfChanged(session);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Warning($"session.json was not written before restarting: {ex.Message}");
+        }
+    }
+
     /// <summary>異常終了の直前に、全ウィンドウの文書の復旧用データを書き出す (PKG-30 の仕様 1 の 1)。</summary>
     public static void WriteRecoveryNow(TimeSpan timeout)
     {

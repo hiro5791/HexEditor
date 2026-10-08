@@ -2495,4 +2495,5 @@
   <data name="CmdArg_view_colorScheme" xml:space="preserve"><value>配色を選んでください。</value></data>
   <data name="CmdArg_view_encoding_select" xml:space="preserve"><value>文字コードを選んでください (入力で絞り込み。例: utf-16)。</value></data>
   <data name="CmdArg_view_bytesPerRowCustom" xml:space="preserve"><value>1 行のバイト数を入力して Enter を押してください (例: 24)。</value></data>
+  <data name="Close_Waiting" xml:space="preserve"><value>{0} が終わるのを待っています…</value></data>
 </root>

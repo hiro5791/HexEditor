@@ -53,7 +53,6 @@ public sealed partial class MainWindow
         StartJumpList(env);
         StringKeyTips.Apply(this, MainMenu, Root);
         UpdatePackagingMenu();
-        SubscribeWindowSettings();
         App.Settings.Changed += keys =>
         {
             if (keys.Contains(DisplayLanguages.SettingKey))
@@ -115,9 +114,22 @@ public sealed partial class MainWindow
         };
     }
 
-    /// <summary>設定の変更をこのウィンドウのコマンドの表示に反映する。ウィンドウを閉じたら購読をやめる。</summary>
+    /// <summary>
+    /// 設定の変更をこのウィンドウのコマンドの表示に反映する。ウィンドウを閉じたら購読をやめる。どのウィンドウもコンストラクターから
+    /// 1 回だけ呼ぶ (最初のウィンドウも 2 つ目以降も同じ経路)。このウィンドウの処理中の操作が変わったら「再起動」ボタンを更新する。
+    /// </summary>
     private void SubscribeWindowSettings()
     {
+        // 長時間処理の一覧はアプリ全体で 1 つ (UI-14) なので、閉じたウィンドウは購読をやめる。
+        EventHandler operationsChanged = (_, _) => DispatcherQueue.TryEnqueue(() =>
+        {
+            if (!_closingConfirmed)
+            {
+                RefreshRestartButton();
+            }
+        });
+        Vm.Operations.Changed += operationsChanged;
+
         Action<IReadOnlyCollection<string>> settingsChanged = _ => DispatcherQueue.TryEnqueue(() =>
         {
             if (!_closingConfirmed)
@@ -131,6 +143,7 @@ public sealed partial class MainWindow
             if (_closingConfirmed)
             {
                 App.Settings.Changed -= settingsChanged;
+                Vm.Operations.Changed -= operationsChanged;
             }
         };
     }
@@ -141,7 +154,6 @@ public sealed partial class MainWindow
     {
         UpdateService service = AppUpdates.Service;
         service.Changed += (_, _) => App.DispatcherQueue.TryEnqueue(RefreshRestartButtons);
-        WindowManager.Windows[0].Vm.Operations.Changed += (_, _) => App.DispatcherQueue.TryEnqueue(RefreshRestartButtons);
         App.Settings.Changed += keys =>
         {
             if (keys.Contains(NetworkPolicy.OfflineKey))

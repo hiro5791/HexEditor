@@ -16,7 +16,10 @@ namespace HexEditor.App;
 /// </summary>
 public sealed partial class MainWindow
 {
-    /// <summary>最後に閉じたウィンドウの配置 (新しいウィンドウが引き継ぐ。UI-05 の仕様 7)。state.json のキー。</summary>
+    /// <summary>
+    /// 最後に変更された配置 (どのウィンドウの変更でも書く)。起動時の最初のウィンドウが使う (UI-05 の仕様 7)。2 つ目以降のウィンドウは
+    /// 最後にアクティブだったウィンドウの配置を引き継ぐ (<see cref="WindowManager.CreateWindow"/>、UI-14 の仕様 1)。state.json のキー。
+    /// </summary>
     public const string LastPanelLayoutKey = "panels.lastLayout";
 
     private readonly Dictionary<string, FrameworkElement> _panelContents = new(StringComparer.Ordinal);
@@ -71,6 +74,12 @@ public sealed partial class MainWindow
         PanelRegistry.Registered += registered;
         Closed += (_, _) =>
         {
+            // 閉じる確認でキャンセルされたら (Closed は確認の前にも届く) 何もしない。浮動パネルと購読はそのまま。
+            if (!_closingConfirmed)
+            {
+                return;
+            }
+
             _windowClosing = true;
             PanelRegistry.Registered -= registered;
             SavePanelLayout();
@@ -83,15 +92,35 @@ public sealed partial class MainWindow
             }
         };
 
-        // ドラッグ中は、すべての場所をドロップ先として示す (UI-05 の仕様 3)。
-        Action<string?> dragging = id => DispatcherQueue.TryEnqueue(() => ShowDropTargets(id is not null));
+        // ドラッグ中は、すべての場所をドロップ先として示す (UI-05 の仕様 3)。別のウィンドウのパネルのドラッグでは示さない
+        // (パネルはウィンドウごとに持つので、別のウィンドウには落とせない)。
+        Action<string?> dragging = id =>
+        {
+            bool mine = id is not null && ReferenceEquals(PanelDockArea.DraggingOwner, this);
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                if (mine || (id is null && _showingDropTargets))
+                {
+                    _showingDropTargets = mine;
+                    ShowDropTargets(mine);
+                }
+            });
+        };
         PanelDockArea.DraggingChanged += dragging;
-        Closed += (_, _) => PanelDockArea.DraggingChanged -= dragging;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                PanelDockArea.DraggingChanged -= dragging;
+            }
+        };
         ApplyPanelLayout();
     }
 
     private void WireArea(PanelDockArea area)
     {
+        area.Owner = this;
+        area.DroppedOutside += (_, e) => FloatPanelAt(area, e.PanelId, e.ScreenPoint);
         area.TabSelected += (_, id) =>
         {
             _panelLayout.ActiveTab[area.Dock] = id;
@@ -200,6 +229,30 @@ public sealed partial class MainWindow
         _panelLayout.Move(id, dock, reg.DefaultDock);
         ApplyPanelLayout();
         FocusPanel(id);
+    }
+
+    /// <summary>ドラッグ中のドロップ先の枠を出している (このウィンドウのパネルのドラッグ)。</summary>
+    private bool _showingDropTargets;
+
+    /// <summary>
+    /// 見出しをどの領域にも落とさずにドラッグを終えた (UI-05 の仕様 3): メインウィンドウの外で終えたら、その位置に浮動パネルとして出す。
+    /// ウィンドウの中で終えた場合 (Esc でのキャンセルを含む) と、浮動にできないパネル・すでに浮動のパネルは何もしない。
+    /// </summary>
+    internal void FloatPanelAt(PanelDockArea from, string id, Windows.Graphics.PointInt32 at)
+    {
+        PanelBounds main = MainBounds();
+        bool inside = at.X >= main.X && at.X < main.Right && at.Y >= main.Y && at.Y < main.Bottom;
+        if (from.Dock == PanelDock.Floating || inside || PanelRegistry.Find(id) is not { CanFloat: true }
+            || _panelLayout.Find(id) is not { } placement)
+        {
+            return;
+        }
+
+        // 大きさは前回の浮動パネル (なければ既定)。見出しがポインタの下に来るように置く。
+        PanelBounds size = placement.FloatingBounds ?? DefaultFloatingBounds();
+        double scale = Root.XamlRoot?.RasterizationScale ?? 1;
+        placement.FloatingBounds = new PanelBounds(at.X - (int)(48 * scale), at.Y - (int)(16 * scale), size.Width, size.Height);
+        MovePanel(id, PanelDock.Floating);
     }
 
     private void ToggleDock(PanelDock dock)

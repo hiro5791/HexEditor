@@ -2495,4 +2495,5 @@ Details were written to:
   <data name="CmdArg_view_colorScheme" xml:space="preserve"><value>Choose a color scheme.</value></data>
   <data name="CmdArg_view_encoding_select" xml:space="preserve"><value>Choose an encoding (type to filter, for example utf-16).</value></data>
   <data name="CmdArg_view_bytesPerRowCustom" xml:space="preserve"><value>Enter the number of bytes per row (for example 24), then press Enter.</value></data>
+  <data name="Close_Waiting" xml:space="preserve"><value>Waiting for {0} to finish…</value></data>
 </root>

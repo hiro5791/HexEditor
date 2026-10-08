@@ -230,14 +230,81 @@ public sealed partial class MainWindow
             }
         }
 
-        // 処理が終わるのを待つ (キャンセルは 500 ms 以内に止まる。保存の完了を待つ場合は処理センターで進捗を示す)。
-        while (Vm.Operations.ActiveFor(doc.Document).Count > 0)
+        // 処理が終わるのを待つ (キャンセルは 500 ms 以内に止まる)。すぐに終わらなければ、進捗をダイアログに表示する
+        // (UI-13 の「巨大ファイル・長時間処理」)。待つのをキャンセルしたら閉じない (処理は続く)。
+        if (!await WaitForOperationsAsync(doc))
         {
-            await Task.Delay(50);
+            return false;
         }
 
         // 保存が終わったら閉じる: 保存に失敗して変更が残っていれば閉じない。
         return choice == ContentDialogResult.Primary || !doc.Document.IsModified;
+    }
+
+    /// <summary>進捗のダイアログを出すまでの時間 (これより早く終われば出さない)。</summary>
+    private static readonly TimeSpan WaitDialogDelay = TimeSpan.FromMilliseconds(300);
+
+    /// <summary>この文書の処理を待っているダイアログ (テスト用の命令が読む)。</summary>
+    private ContentDialog? _operationWaitDialog;
+
+    /// <summary>
+    /// 文書の長時間処理が終わるのを待つ。<see cref="WaitDialogDelay"/> で終わらなければ「<処理名> が終わるのを待っています」と進捗の
+    /// ダイアログを出し、終わったら自動で閉じる。待つのをやめた (キャンセル) ら false。
+    /// </summary>
+    private async Task<bool> WaitForOperationsAsync(DocumentViewModel doc)
+    {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        while (Vm.Operations.ActiveFor(doc.Document).Count > 0 && watch.Elapsed < WaitDialogDelay)
+        {
+            await Task.Delay(50);
+        }
+
+        if (Vm.Operations.ActiveFor(doc.Document) is not { Count: > 0 } ops)
+        {
+            return true;
+        }
+
+        var progress = new ProgressBar { Minimum = 0, Maximum = 1, IsIndeterminate = ops[0].Fraction is null };
+        AutomationProperties.SetAutomationId(progress, "CloseWait_Progress");
+        AutomationProperties.SetName(progress, ops[0].Name);
+        var text = new TextBlock { Text = Loc.Format("Close_Waiting", ops[0].Name), TextWrapping = TextWrapping.Wrap };
+        var body = new StackPanel { Spacing = 12, MinWidth = 360 };
+        body.Children.Add(text);
+        body.Children.Add(progress);
+        ContentDialog dialog = NewDialog(doc.DisplayName, body);
+        AutomationProperties.SetAutomationId(dialog, "CloseWaitDialog");
+        dialog.CloseButtonText = Loc.Get("Common_Cancel");
+        bool finished = false;
+        Microsoft.UI.Dispatching.DispatcherQueueTimer timer = DispatcherQueue.CreateTimer();
+        timer.Interval = TimeSpan.FromMilliseconds(100);
+        timer.Tick += (_, _) =>
+        {
+            IReadOnlyList<LongRunningOperation> active = Vm.Operations.ActiveFor(doc.Document);
+            if (active.Count == 0)
+            {
+                finished = true;
+                timer.Stop();
+                dialog.Hide();
+                return;
+            }
+
+            text.Text = Loc.Format("Close_Waiting", active[0].Name);
+            progress.IsIndeterminate = active[0].Fraction is null;
+            progress.Value = active[0].Fraction ?? 0;
+        };
+        timer.Start();
+        _operationWaitDialog = dialog;
+        try
+        {
+            await dialog.ShowAsync();
+        }
+        finally
+        {
+            timer.Stop();
+            _operationWaitDialog = null;
+        }
+
+        return finished || Vm.Operations.ActiveFor(doc.Document).Count == 0;
     }
 
     /// <summary>実体化の確認を出す量 (1 GB。EDIT-24 の仕様 6)。</summary>
