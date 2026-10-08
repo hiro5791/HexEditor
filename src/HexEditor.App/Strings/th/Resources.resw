@@ -105,7 +105,6 @@
   <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>วาง(P)</value></data>
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>วางทับ(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} ไบต์ วางได้เฉพาะภายใน HexEditor]</value></data>
-  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>ส่วนที่เลือกมีขนาดใหญ่กว่าขีดจำกัดของคลิปบอร์ด จึงวางได้เฉพาะภายใน HexEditor</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>{0} ไบต์ที่เกินจุดสิ้นสุดของเอกสารความยาวคงที่นี้ไม่ได้ถูกวาง</value></data>
   <data name="Clipboard_TextOmitted" xml:space="preserve"><value>รูปแบบข้อความของส่วนที่เลือกมีขนาดใหญ่กว่าขีดจำกัดของคลิปบอร์ด จึงคัดลอกเฉพาะข้อมูลไบนารี</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>กู้คืนการเปลี่ยนแปลงที่ยังไม่ได้บันทึก</value></data>

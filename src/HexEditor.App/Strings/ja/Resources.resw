@@ -105,7 +105,6 @@
   <data name="Menu_Edit_Paste.Text" xml:space="preserve"><value>貼り付け(P)</value></data>
   <data name="Menu_Edit_PasteOverwrite.Text" xml:space="preserve"><value>上書き貼り付け(O)</value></data>
   <data name="Clipboard_TooLarge" xml:space="preserve"><value>[HexEditor: {0} バイトのデータ。HexEditor 内でのみ貼り付けできます]</value></data>
-  <data name="Clipboard_InAppOnly" xml:space="preserve"><value>選択範囲がクリップボードの上限を超えているため、HexEditor の中でだけ貼り付けられます。</value></data>
   <data name="Clipboard_Truncated" xml:space="preserve"><value>長さを変えられないため、末尾を超える {0} バイトは貼り付けませんでした。</value></data>
   <data name="Clipboard_TextOmitted" xml:space="preserve"><value>選択範囲のテキスト形式がクリップボードの上限を超えているため、バイナリのデータだけをコピーしました。</value></data>
   <data name="Recovery_Title" xml:space="preserve"><value>未保存の編集内容の復旧</value></data>
@@ -2568,4 +2567,5 @@
   <data name="SetDesc_clipboard_hex_upperCase" xml:space="preserve"><value>de ad ではなく DE AD の形でコピーします。</value></data>
   <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>コピーする Hex 文字列の 1 行のバイト数</value></data>
   <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>このバイト数ごとに改行を入れます。0 は改行を入れません。</value></data>
+  <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>選択範囲 ({0}) は大きすぎるため、他のアプリには渡せません。HexEditor 内では貼り付けられます。</value></data>
 </root>

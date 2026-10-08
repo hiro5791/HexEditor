@@ -447,7 +447,10 @@ public sealed partial class MainWindow : Window
                 ClipboardPlan? copied = await _clipboard.CopyAsync(editor);
                 if (copied?.InAppOnly == true)
                 {
-                    ShowNotice(Loc.Get("Clipboard_InAppOnly"), InfoBarSeverity.Informational, Vm.Selected);
+                    // 「選択範囲 (12.3 GB) は大きすぎるため…」(EDIT-22 の仕様 5。「ファイルに書き出す」は TOOL-16 (フェーズ 2) の後)。
+                    string size = StatusFormat.ShortSize(editor.SelectionLength, System.Globalization.CultureInfo.CurrentCulture)
+                        ?? editor.SelectionLength.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    ShowNotice(Loc.Format("Clipboard_InAppOnlySize", size), InfoBarSeverity.Informational, Vm.Selected);
                 }
                 else if (copied?.TextOmitted == true)
                 {
