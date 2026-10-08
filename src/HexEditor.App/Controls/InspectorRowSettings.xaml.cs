@@ -59,7 +59,8 @@ public sealed partial class InspectorRowSettings : UserControl
     /// <summary>名前を付けたプリセット (settings.json に JSON の文字列で保存する)。</summary>
     public const string PresetsKey = "inspector.rowPresets";
 
-    private readonly List<RowSettingItem> _items = [];
+    private readonly System.Collections.ObjectModel.ObservableCollection<RowSettingItem> _items = [];
+    private RowSettingItem? _dragged;
     private InspectorViewModel? _vm;
     private bool _updating;
 
@@ -231,6 +232,62 @@ public sealed partial class InspectorRowSettings : UserControl
         item.IsChecked = !item.IsChecked;
         Apply(_vm.Layout.WithVisible(item.TypeId!, item.IsChecked));
     }
+
+    // ---- ドラッグでの並べ替え (INSP-19 の仕様 2) ----
+
+    private void SettingsList_DragItemsStarting(object sender, DragItemsStartingEventArgs e) =>
+        _dragged = e.Items.Count == 1 ? e.Items[0] as RowSettingItem : null;
+
+    /// <summary>一覧の中でドラッグして落とした: 落とした位置に合わせて行 (グループ) を動かす。</summary>
+    private void SettingsList_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+    {
+        RowSettingItem? dragged = _dragged;
+        _dragged = null;
+        if (dragged is null || args.DropResult != Windows.ApplicationModel.DataTransfer.DataPackageOperation.Move)
+        {
+            Rebuild();
+            return;
+        }
+
+        int index = _items.IndexOf(dragged);
+        if (index >= 0)
+        {
+            ReorderTo(dragged, index);
+        }
+    }
+
+    /// <summary>
+    /// 一覧の並びで <paramref name="item"/> を <paramref name="newIndex"/> に置いたときの順序にする。行は同じグループの中での位置、
+    /// グループの見出しはグループの順序で決める (ドラッグの結果。テスト用の命令からも呼ぶ)。
+    /// </summary>
+    internal void ReorderTo(RowSettingItem item, int newIndex)
+    {
+        if (_vm is null)
+        {
+            return;
+        }
+
+        // 置いた後の並び (一覧がまだ元の並びのとき、ここで動かした並びを作る)。
+        List<RowSettingItem> order = [.. _items];
+        order.Remove(item);
+        order.Insert(Math.Clamp(newIndex, 0, order.Count), item);
+        InspectorLayout layout = _vm.Layout;
+        if (item.IsGroup)
+        {
+            List<InspectorGroup> before = [.. layout.Groups];
+            List<InspectorGroup> after = [.. order.Where(i => i.IsGroup).Select(i => i.Group)];
+            Apply(layout.MoveGroup(item.Group, after.IndexOf(item.Group) - before.IndexOf(item.Group)));
+        }
+        else
+        {
+            List<string> before = [.. layout.RowsIn(item.Group).Select(r => r.TypeId)];
+            List<string> after = [.. order.Where(i => !i.IsGroup && i.Group == item.Group).Select(i => i.TypeId!)];
+            Apply(layout.MoveRow(item.TypeId!, after.IndexOf(item.TypeId!) - before.IndexOf(item.TypeId!)));
+        }
+    }
+
+    /// <summary>行の設定の項目 (テスト用)。</summary>
+    internal IReadOnlyList<RowSettingItem> Items => _items;
 
     private void Up_Click(object sender, RoutedEventArgs e) => Move(-1);
 

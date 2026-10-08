@@ -698,4 +698,27 @@ public sealed class InspectorTests
         List<string> after = await RowIdsAsync(app);
         Assert.Equal(before.IndexOf("int64") - 2, after.IndexOf("int64"));
     });
+
+    /// <summary>INSP-19 の仕様 2: 行の設定の一覧で、行とグループをドラッグして並べ替える (ドラッグを落としたのと同じ処理を呼ぶ)。</summary>
+    [Fact]
+    public Task Rows_and_groups_can_be_reordered_by_dragging() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await StartAsync(ctx);
+        List<string> before = await RowIdsAsync(app);
+        await app.UiaInvokeAsync("Inspector_Rows");
+        await app.WaitForAsync("Inspector_Setting_int64");
+
+        // 整数のグループの先頭 (見出しの次、一覧の 1 番目) に int64 を落とす。
+        Assert.True((await app.SendAsync("inspectorRowDrag", new JsonObject { ["item"] = "int64", ["to"] = 1 }))["moved"]!.GetValue<bool>());
+
+        // 浮動小数点のグループを一覧の先頭に落とす。
+        Assert.True((await app.SendAsync("inspectorRowDrag", new JsonObject { ["item"] = "Float", ["to"] = 0 }))["moved"]!.GetValue<bool>());
+        await app.SendAsync("panelKey", new JsonObject { ["key"] = "Escape" });
+        await WaitForRowsAsync(app);
+        List<string> after = await RowIdsAsync(app);
+        Assert.True(after.IndexOf("Inspector_Group_Float") < after.IndexOf("Inspector_Group_Integer"), string.Join(",", after));
+        string firstInteger = before.SkipWhile(id => id != "Inspector_Group_Integer").Skip(1).First();
+        Assert.Equal(after.IndexOf("Inspector_Group_Integer") + 1, after.IndexOf("int64"));
+        Assert.NotEqual("int64", firstInteger);
+    });
 }

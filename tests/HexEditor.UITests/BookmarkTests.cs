@@ -428,4 +428,64 @@ public sealed class BookmarkTests
         await app.UiaSetValueAsync("Bookmarks_Filter", string.Empty);
         Assert.Equal(3, (await RowsAsync(app)).Count);
     });
+    /// <summary>INSP-26 の仕様 1: 列の表示・順序を変えられ、再起動後も保たれる。</summary>
+    [Fact]
+    public Task Columns_can_be_shown_hidden_and_reordered() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        AppSession app = await StartAsync(ctx, profile: profile);
+        static string[] Header(JsonObject r) => [.. r["header"]!.AsArray().Select(h => h!.GetValue<string>())];
+        Assert.Equal(["No.", "●", "Name", "Start", "Length"], Header(await app.SendAsync("bookmarkColumns")));
+
+        Assert.Equal(["No.", "●", "Name", "Start", "Length", "Group"],
+            Header(await app.SendAsync("bookmarkColumns", new JsonObject { ["action"] = "toggle", ["column"] = "Group" })));
+        Assert.Equal(["No.", "●", "Name", "Start", "Group", "Length"],
+            Header(await app.SendAsync("bookmarkColumns", new JsonObject { ["action"] = "move", ["column"] = "Group", ["delta"] = -1 })));
+        Assert.Equal(["●", "Name", "Start", "Group", "Length"],
+            Header(await app.SendAsync("bookmarkColumns", new JsonObject { ["action"] = "toggle", ["column"] = "Number" })));
+
+        // 名前の列は非表示にできない。
+        Assert.Contains("Name", Header(await app.SendAsync("bookmarkColumns", new JsonObject { ["action"] = "toggle", ["column"] = "Name" })));
+
+        await app.SendAsync("exit");
+        await app.WaitForExitAsync(TimeSpan.FromSeconds(30));
+        AppSession again = await StartAsync(ctx, profile: profile);
+        Assert.Equal(["●", "Name", "Start", "Group", "Length"], Header(await again.SendAsync("bookmarkColumns")));
+    });
+
+    /// <summary>INSP-26 の仕様 8: 「すべてのドキュメント」で、開いているすべてのドキュメントのブックマークをドキュメントごとにまとめて出す。</summary>
+    [Fact]
+    public Task All_documents_option_lists_bookmarks_of_every_open_document() => UiTestContext.RunAsync(async ctx =>
+    {
+        string first = ctx.CopyTestData("TD-SEQ-1M");
+        string second = ctx.CopyTestData("TD-BYTES-256");
+        AppSession app = await StartAsync(ctx, file: first);
+        await ToggleAsync(app, 0x100);
+        await app.OpenAsync(second);
+        await app.IdleAsync();
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["selectedIndex"]!.GetValue<int>() == 1, TimeSpan.FromSeconds(10), "the second tab");
+        await ToggleAsync(app, 0x10);
+        await ToggleAsync(app, 0x20);
+        Assert.Equal(2, (await RowsAsync(app)).Count);
+
+        await app.CommandAsync("Bookmarks_AllDocuments");
+        await app.IdleAsync();
+        JsonObject list = await ListAsync(app);
+        Assert.Equal(3, list["rows"]!.AsArray().Count);
+        Assert.Equal([Path.GetFileName(first), Path.GetFileName(second), Path.GetFileName(second)],
+            list["rowDocuments"]!.AsArray().Select(d => d!.GetValue<string>()));
+        Assert.Equal("Document", list["header"]![0]!.GetValue<string>());
+
+        // 別のドキュメントのブックマークを選んで Enter: そのタブに切り替えて移動する。
+        await app.SendAsync("bookmarksSelect", new JsonObject { ["indices"] = new JsonArray(0) });
+        await InspectorTests.PanelKeyAsync(app, "Enter");
+        await app.IdleAsync();
+        Assert.Equal(0, (await app.StateAsync())["selectedIndex"]!.GetValue<int>());
+        Assert.Equal(0x100, await CursorAsync(app));
+
+        // オフに戻すと、今のドキュメントのものだけ。
+        await app.CommandAsync("Bookmarks_AllDocuments");
+        await app.IdleAsync();
+        Assert.Single(await RowsAsync(app));
+    });
 }

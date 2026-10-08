@@ -81,6 +81,24 @@ public sealed class HashPanelTests
         await app.WaitUntilAsync(async () => (await HashAsync(app))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the hash panel to reopen");
     });
 
+    /// <summary>ANA-18 の「呼び出し」: 選択範囲の右クリックメニュー「ハッシュを計算」でハッシュパネルを開く (選択がないときは無効)。</summary>
+    [Fact]
+    public Task Selection_context_menu_opens_the_hash_panel() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ANA-CHECK9")] });
+        JsonObject render = await app.RenderAsync();
+        await ViewOps.RightClickAsync(app, ViewOps.CellPoint(render, 0));
+        Assert.False((await app.WaitForAsync("HexViewMenu_ComputeHash")).IsEnabled);
+        await app.SendAsync("hideContextMenu");
+
+        await app.SelectAsync(0, 9);
+        await ViewOps.RightClickAsync(app, ViewOps.CellPoint(await app.RenderAsync(), 2));
+        await app.WaitUntilAsync(async () => (await app.WaitForAsync("HexViewMenu_ComputeHash")).IsEnabled, TimeSpan.FromSeconds(5), "the menu item");
+        await app.UiaInvokeAsync("HexViewMenu_ComputeHash");
+        await app.WaitUntilAsync(async () => (await HashAsync(app))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the hash panel");
+        await app.WaitForAsync("HashPanel");
+    });
+
     [Fact]
     [Trait(UiTest.TC, "TC-ANA-18-05")]
     public Task Selections_over_64_MB_are_not_recalculated_automatically() => UiTestContext.RunAsync(async ctx =>

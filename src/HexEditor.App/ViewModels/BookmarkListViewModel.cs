@@ -25,6 +25,10 @@ public sealed partial class BookmarkRowViewModel(Bookmark bookmark) : Observable
 
     public bool HasComment => Bookmark.Comment.Length > 0;
 
+    /// <summary>コメントの 1 行目を 2 行目に出すか (コメントがあり、コメントの列を出していないとき)。</summary>
+    public static Microsoft.UI.Xaml.Visibility CommentLineShown(bool hasComment, Microsoft.UI.Xaml.Visibility layout) =>
+        hasComment ? layout : Microsoft.UI.Xaml.Visibility.Collapsed;
+
     /// <summary>範囲がすべて削除された印 (INSP-23 の仕様 4)。</summary>
     public string DeletedText => Bookmark.RangeDeleted ? Loc.Get("Bookmarks_RangeDeleted") : string.Empty;
 
@@ -35,6 +39,15 @@ public sealed partial class BookmarkRowViewModel(Bookmark bookmark) : Observable
     public partial Microsoft.UI.Xaml.Media.Brush? Swatch { get; set; }
 
     public string ColorText => Bookmark.Color.IsCustom ? Bookmark.Color.ToString() : Loc.Format("Bookmarks_ColorNumber", Bookmark.Color.PaletteIndex);
+
+    /// <summary>グループの列 (INSP-26 の仕様 1)。</summary>
+    public string GroupText => Bookmark.Group ?? string.Empty;
+
+    /// <summary>ドキュメントの列 (「すべてのドキュメント」のとき。INSP-26 の仕様 8)。</summary>
+    public string DocumentName { get; set; } = string.Empty;
+
+    /// <summary>列の配置 (表示・順序。INSP-26 の仕様 1)。</summary>
+    public BookmarkColumnLayout Layout => BookmarkColumnLayout.Instance;
 
     /// <summary>読み上げ用の名前。</summary>
     public string AutomationName => Loc.Format("Bookmarks_RowName", Name, StartText, LengthText)
@@ -54,6 +67,7 @@ public enum BookmarkSortColumn
     Length,
     Color,
     Comment,
+    Group,
 }
 
 /// <summary>
@@ -69,6 +83,9 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
 
     /// <summary>行の表示用の項目を作ったときに呼ぶ (色見本を付ける)。</summary>
     public Action<BookmarkRowViewModel>? Prepare { get; set; }
+
+    /// <summary>行の表示用の項目を作ったときに付けるドキュメントの名前 (「すべてのドキュメント」のとき)。</summary>
+    public Func<Bookmark, string>? DocumentNameOf { get; set; }
 
     public int Count => _items.Length;
 
@@ -86,7 +103,7 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
     {
         if (!_rows.TryGetValue(b, out BookmarkRowViewModel? row))
         {
-            row = new BookmarkRowViewModel(b);
+            row = new BookmarkRowViewModel(b) { DocumentName = DocumentNameOf?.Invoke(b) ?? string.Empty };
             Prepare?.Invoke(row);
             _rows[b] = row;
         }
@@ -94,10 +111,10 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
         return row;
     }
 
-    public void Reset(Bookmark[] items)
+    public void Reset(Bookmark[] items, bool clearRows = false)
     {
         _items = items;
-        if (_rows.Count > 4096)
+        if (_rows.Count > 4096 || clearRows)
         {
             _rows.Clear();
         }
@@ -162,11 +179,43 @@ public sealed partial class BookmarkListViewModel : ObservableObject
     private DocumentAnnotations? _annotations;
     private bool _rebuildQueued;
 
+    // 「すべてのドキュメント」(INSP-26 の仕様 8): 一覧に出しているドキュメントと、ブックマークの持ち主。
+    private readonly List<DocumentAnnotations> _shown = [];
+    private readonly Dictionary<Bookmark, DocumentAnnotations> _owners = new(ReferenceEqualityComparer.Instance);
+    private bool _lastAllDocuments;
+
     public BookmarkRowList Rows { get; } = new();
 
     public DocumentAnnotations? Annotations => _annotations;
 
     public BookmarkCollection? Bookmarks => _annotations?.Bookmarks;
+
+    /// <summary>開いているすべてのドキュメントの付随データ (ウィンドウが渡す。「すべてのドキュメント」で使う)。</summary>
+    public Func<IReadOnlyList<DocumentAnnotations>>? AllAnnotations { get; set; }
+
+    /// <summary>
+    /// 「すべてのドキュメント」(INSP-26 の仕様 8。既定オフ): 開いているすべてのドキュメントのブックマークを、ドキュメントごとにまとめて表示する。
+    /// </summary>
+    [ObservableProperty]
+    public partial bool AllDocuments { get; set; }
+
+    partial void OnAllDocumentsChanged(bool value)
+    {
+        BookmarkColumnLayout.Instance.ShowDocument = value;
+        Rebuild();
+    }
+
+    /// <summary>ブックマークを持っているドキュメント (一覧に出しているもの。なければ今のドキュメント)。</summary>
+    public DocumentAnnotations? OwnerOf(Bookmark bookmark) => _owners.TryGetValue(bookmark, out DocumentAnnotations? owner) ? owner : _annotations;
+
+    /// <summary>開いているドキュメントが増えた・減った (「すべてのドキュメント」のときは一覧を作り直す)。</summary>
+    public void DocumentsChanged()
+    {
+        if (AllDocuments)
+        {
+            Rebuild();
+        }
+    }
 
     [ObservableProperty]
     public partial string Filter { get; set; } = string.Empty;
@@ -184,18 +233,29 @@ public sealed partial class BookmarkListViewModel : ObservableObject
 
     public void Attach(DocumentAnnotations? annotations)
     {
-        if (_annotations is not null)
-        {
-            _annotations.Bookmarks.Changed -= Bookmarks_Changed;
-        }
-
         _annotations = annotations;
-        if (_annotations is not null)
+        Rebuild();
+    }
+
+    /// <summary>一覧に出すドキュメントの変更を受ける (出すドキュメントが変わったら付け替える)。</summary>
+    private void Subscribe(IReadOnlyList<DocumentAnnotations> shown)
+    {
+        if (_shown.SequenceEqual(shown))
         {
-            _annotations.Bookmarks.Changed += Bookmarks_Changed;
+            return;
         }
 
-        Rebuild();
+        foreach (DocumentAnnotations a in _shown)
+        {
+            a.Bookmarks.Changed -= Bookmarks_Changed;
+        }
+
+        _shown.Clear();
+        _shown.AddRange(shown);
+        foreach (DocumentAnnotations a in _shown)
+        {
+            a.Bookmarks.Changed += Bookmarks_Changed;
+        }
     }
 
     partial void OnFilterChanged(string value) => Rebuild();
@@ -207,13 +267,13 @@ public sealed partial class BookmarkListViewModel : ObservableObject
             return;
         }
 
-        if (e.Kind == BookmarkChangeKind.Modified && SortColumn == BookmarkSortColumn.Start && Filter.Length == 0)
+        if (e.Kind == BookmarkChangeKind.Modified && SortColumn == BookmarkSortColumn.Start && Filter.Length == 0 && !AllDocuments)
         {
             Rows.UpdateRows(e.Items);
             return;
         }
 
-        if (e.Kind == BookmarkChangeKind.Positions && SortColumn == BookmarkSortColumn.Start)
+        if (e.Kind == BookmarkChangeKind.Positions && SortColumn == BookmarkSortColumn.Start && !AllDocuments)
         {
             // 位置が変わっても開始位置の順は変わらない (区間木の順)。表示中の行の数字だけを直す。
             Rows.UpdateRows();
@@ -247,13 +307,44 @@ public sealed partial class BookmarkListViewModel : ObservableObject
     /// <summary>絞り込みと並べ替えをして一覧を作り直す。</summary>
     public void Rebuild()
     {
-        if (!IsActive || Bookmarks is not { } bookmarks)
+        IReadOnlyList<DocumentAnnotations> shown = !IsActive ? []
+            : AllDocuments && AllAnnotations is { } all ? all()
+            : _annotations is { } current ? [current] : [];
+        Subscribe(shown);
+        bool modeChanged = _lastAllDocuments != AllDocuments;
+        _lastAllDocuments = AllDocuments;
+        _owners.Clear();
+        if (shown.Count == 0)
         {
-            Rows.Reset([]);
+            Rows.Reset([], modeChanged);
             CountText = string.Empty;
             return;
         }
 
+        // ドキュメントごとにまとめる (ドキュメントの順、その中で並べ替え)。
+        var items = new List<Bookmark>();
+        foreach (DocumentAnnotations a in shown)
+        {
+            Bookmark[] part = Sorted(a.Bookmarks);
+            if (AllDocuments)
+            {
+                foreach (Bookmark b in part)
+                {
+                    _owners[b] = a;
+                }
+            }
+
+            items.AddRange(part);
+        }
+
+        Rows.DocumentNameOf = AllDocuments ? b => _owners.TryGetValue(b, out DocumentAnnotations? a) ? a.Document.DisplayName : string.Empty : null;
+        Rows.Reset([.. items], modeChanged);
+        CountText = Loc.Format("Bookmarks_Count", items.Count.ToString("N0", CultureInfo.CurrentCulture));
+    }
+
+    /// <summary>1 つのドキュメントのブックマークを、絞り込みと並べ替えをして返す。</summary>
+    private Bookmark[] Sorted(BookmarkCollection bookmarks)
+    {
         IEnumerable<Bookmark> all = bookmarks.Ordered;
         string filter = Filter.Trim();
         if (filter.Length > 0)
@@ -264,7 +355,7 @@ public sealed partial class BookmarkListViewModel : ObservableObject
         Bookmark[] items = [.. all];
         // 文字列は序数比較 (大文字・小文字を区別しない。00-overview 5.4)。100 万件でも 1 秒以内に並べる (INSP-26 の受け入れ基準 5)。
         // 並べ替えの鍵は先に作り、同じ値どうしは開始位置の順にする (安定な並べ替え)。
-        if (SortColumn is BookmarkSortColumn.Name or BookmarkSortColumn.Comment or BookmarkSortColumn.Color)
+        if (SortColumn is BookmarkSortColumn.Name or BookmarkSortColumn.Comment or BookmarkSortColumn.Color or BookmarkSortColumn.Group)
         {
             string[] keys = new string[items.Length];
             int[] order = new int[items.Length];
@@ -275,6 +366,7 @@ public sealed partial class BookmarkListViewModel : ObservableObject
                 {
                     BookmarkSortColumn.Name => b.Name,
                     BookmarkSortColumn.Comment => b.Comment,
+                    BookmarkSortColumn.Group => b.Group ?? string.Empty,
                     _ => b.Color.ToString(),
                 };
                 order[i] = i;
@@ -320,7 +412,6 @@ public sealed partial class BookmarkListViewModel : ObservableObject
             Array.Reverse(items);
         }
 
-        Rows.Reset(items);
-        CountText = Loc.Format("Bookmarks_Count", items.Length.ToString("N0", CultureInfo.CurrentCulture));
+        return items;
     }
 }

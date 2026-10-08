@@ -42,6 +42,11 @@ public sealed partial class MainWindow
         "setHighContrast" => TestSetHighContrast(request),
         "inspectorLatencyResult" => _latencyResult ?? new JsonObject { ["pending"] = true },
         "bookmarksSummary" => TestBookmarksSummary(),
+        "bookmarkColumns" => TestBookmarkColumns(request),
+        "inspectorRowDrag" => new JsonObject
+        {
+            ["moved"] = InspectorView?.DragRowSetting(request["item"]!.GetValue<string>(), request["to"]!.GetValue<int>()) ?? false,
+        },
         _ => null,
     };
 
@@ -193,6 +198,30 @@ public sealed partial class MainWindow
         return new JsonObject();
     }
 
+    /// <summary>ブックマーク一覧の列の表示・移動 (見出しの右クリックメニューと同じ処理) と、今の列の並び。</summary>
+    private JsonObject TestBookmarkColumns(JsonObject request)
+    {
+        BookmarkColumn? column = request["column"]?.GetValue<string>() is { } name ? Enum.Parse<BookmarkColumn>(name, ignoreCase: true) : null;
+        switch (request["action"]?.GetValue<string>())
+        {
+            case "toggle" when column is { } c:
+                BookmarkColumns.Toggle(c);
+                break;
+            case "move" when column is { } c:
+                BookmarkColumns.Move(c, request["delta"]?.GetValue<int>() ?? 1);
+                break;
+            case "reset":
+                BookmarkColumns.Reset();
+                break;
+        }
+
+        return new JsonObject
+        {
+            ["columns"] = new JsonArray([.. BookmarkColumns.All.Select(c => (JsonNode?)((c.Visible ? string.Empty : "!") + c.Column))]),
+            ["header"] = new JsonArray([.. (BookmarkListView?.HeaderTexts ?? []).Select(t => (JsonNode?)t)]),
+        };
+    }
+
     private JsonObject TestBookmarks()
     {
         var all = new JsonArray();
@@ -217,6 +246,8 @@ public sealed partial class MainWindow
             ["count"] = all.Count,
             ["bookmarks"] = all,
             ["rows"] = rows,
+            ["rowDocuments"] = new JsonArray([.. _bookmarksVm.Rows.Bookmarks.Select(b => (JsonNode?)(_bookmarksVm.OwnerOf(b)?.Document.DisplayName ?? string.Empty))]),
+            ["header"] = new JsonArray([.. (BookmarkListView?.HeaderTexts ?? []).Select(t => (JsonNode?)t)]),
             ["selected"] = new JsonArray([.. (BookmarkListView?.SelectedBookmarks ?? []).Select(b => (JsonNode?)b.Name)]),
             ["hasFocus"] = (BookmarkListView?.ContainsFocus() ?? false),
             ["firstRowName"] = list?.ContainerFromIndex(0) is FrameworkElement first ? AutomationProperties.GetName(first) : null,
@@ -312,9 +343,13 @@ public sealed partial class MainWindow
 
     private JsonObject TestBookmarksSelect(JsonObject request)
     {
-        DocumentAnnotations a = CurrentAnnotations() ?? throw new InvalidOperationException("No document.");
-        var names = request["names"]!.AsArray().Select(n => n!.GetValue<string>()).ToHashSet();
-        (BookmarkListView ?? throw new InvalidOperationException("The bookmark list is not shown.")).SelectBookmarks(a.Bookmarks.All.Where(b => names.Contains(b.Name)));
+        _ = CurrentAnnotations() ?? throw new InvalidOperationException("No document.");
+        var names = request["names"]?.AsArray().Select(n => n!.GetValue<string>()).ToHashSet() ?? [];
+        var indices = request["indices"]?.AsArray().Select(n => n!.GetValue<int>()).ToHashSet() ?? [];
+
+        // 一覧に出している行から選ぶ (名前か行の番号。「すべてのドキュメント」では別のドキュメントのものも)。
+        (BookmarkListView ?? throw new InvalidOperationException("The bookmark list is not shown.")).SelectBookmarks(
+            _bookmarksVm.Rows.Bookmarks.Where((b, i) => names.Contains(b.Name) || indices.Contains(i)));
         if (request["focus"]?.GetValue<bool>() ?? true)
         {
             var list = (Microsoft.UI.Xaml.Controls.ListView)FindElement("Bookmarks_List")!;
