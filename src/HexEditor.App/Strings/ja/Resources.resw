@@ -2407,4 +2407,5 @@
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>ぎょうのせんとう</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>表示: マルチバイト文字の続きの記号</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>つづきのきごう</value></data>
+  <data name="Close_Waiting" xml:space="preserve"><value>{0} が終わるのを待っています…</value></data>
 </root>
