@@ -32,7 +32,9 @@ public static class BookmarkActions
     /// Ctrl+F2 (INSP-23 の仕様 2)。その位置から始まるブックマークがあれば外し、なければ付ける (選択範囲があれば選択範囲、
     /// なければカーソル位置の 1 バイト)。名前は「ブックマーク N」(<paramref name="autoName"/> に N を渡して作る)。
     /// </summary>
-    public static (BookmarkToggleOutcome Outcome, Bookmark? Bookmark) Toggle(BookmarkCollection bookmarks, EditorState editor, Func<int, string> autoName)
+    /// <param name="color">付けるときの色 (設定「ブックマークの既定の色」。null は色の一覧の 1 番目)。</param>
+    public static (BookmarkToggleOutcome Outcome, Bookmark? Bookmark) Toggle(BookmarkCollection bookmarks, EditorState editor, Func<int, string> autoName,
+        BookmarkColor? color = null)
     {
         long at = Anchor(editor);
         if (bookmarks.StartingAt(at) is { } existing)
@@ -49,14 +51,14 @@ public static class BookmarkActions
 
         long length = editor.HasSelection ? editor.SelectionLength : Math.Min(1, editor.Document.Length - at);
         int number = bookmarks.NextAutoNumber++;
-        return (BookmarkToggleOutcome.Added, bookmarks.Add(at, length, autoName(number)));
+        return (BookmarkToggleOutcome.Added, bookmarks.Add(at, length, autoName(number), color));
     }
 
     /// <summary>
     /// Ctrl+Shift+N (INSP-25 の仕様 1)。その位置から始まるブックマークに番号を付ける (すでに付いていれば外す)。なければ長さ 1、
     /// 名前「[N]」のブックマークを作る。上限で作れなければ null。
     /// </summary>
-    public static Bookmark? SetNumber(BookmarkCollection bookmarks, EditorState editor, int number)
+    public static Bookmark? SetNumber(BookmarkCollection bookmarks, EditorState editor, int number, BookmarkColor? color = null)
     {
         long at = Anchor(editor);
         if (bookmarks.StartingAt(at) is { } existing)
@@ -70,7 +72,7 @@ public static class BookmarkActions
             return null;
         }
 
-        Bookmark created = bookmarks.Add(at, Math.Min(1, editor.Document.Length - at), $"[{number}]");
+        Bookmark created = bookmarks.Add(at, Math.Min(1, editor.Document.Length - at), $"[{number}]", color);
         created.CreatedForNumber = true;
         bookmarks.SetNumber(created, number);
         return created;

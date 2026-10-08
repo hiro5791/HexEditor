@@ -31,6 +31,15 @@ public readonly record struct BookmarkColor
     /// <summary>既定の色 (色の一覧の 1 番目。INSP-23 の仕様 2)。</summary>
     public static BookmarkColor Default => Palette(1);
 
+    /// <summary>設定「ブックマークの既定の色」のキー (INSP-23 の仕様 2。値は色の一覧の番号 1〜8)。</summary>
+    public const string DefaultColorKey = "bookmarks.defaultColor";
+
+    /// <summary>設定の値から既定の色を求める (不正な値は色の一覧の 1 番目)。</summary>
+    public static BookmarkColor FromSetting(string? value) =>
+        int.TryParse(value, System.Globalization.NumberStyles.None, CultureInfo.InvariantCulture, out int index) && index is >= 1 and <= PaletteSize
+            ? Palette(index)
+            : Default;
+
     /// <summary>保存の書式: 一覧の色は番号、任意の色は <c>#RRGGBB</c>。</summary>
     public override string ToString() => IsCustom ? "#" + Rgb.ToString("X6", CultureInfo.InvariantCulture) : PaletteIndex.ToString(CultureInfo.InvariantCulture);
 

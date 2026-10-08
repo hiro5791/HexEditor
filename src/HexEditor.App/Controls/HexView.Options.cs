@@ -137,6 +137,9 @@ public sealed partial class HexView
     /// </summary>
     public Func<long, IReadOnlyList<string>>? AnnotationNames { get; set; }
 
+    /// <summary>ツールチップに出す付加情報 (ブックマークの名前とコメントの冒頭など)。null か空なら <see cref="AnnotationNames"/> を出す。</summary>
+    public Func<long, IReadOnlyList<string>>? AnnotationToolTips { get; set; }
+
     /// <summary>
     /// 注目している範囲の強調 (VIEW-17 の層 3) を、提供元の名前ごとに設定する。null で消す。範囲の強調の共通の仕組み
     /// (<see cref="SetHighlightSource"/>。HexView.Highlights.cs) の簡易版で、配色の「注目範囲」の色で塗る (ハイコントラストでは枠線)。

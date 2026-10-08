@@ -130,20 +130,36 @@ public sealed partial class InspectorRowSettings : UserControl
 
     private void UpdatePresets()
     {
-        while (PresetChoice.Items.Count > 4)
+        // 保存したプリセットの項目は、名前が変わったときだけ作り直す (プリセットを選んだ処理の中で、選んだ項目を消さないように)。
+        string[] names = [.. SavedPresets().Select(p => p.Key)];
+        if (!PresetChoice.Items.Skip(4).Select(i => (i as ComboBoxItem)?.Tag as string).SequenceEqual(names))
         {
-            PresetChoice.Items.RemoveAt(PresetChoice.Items.Count - 1);
-        }
+            while (PresetChoice.Items.Count > 4)
+            {
+                PresetChoice.Items.RemoveAt(PresetChoice.Items.Count - 1);
+            }
 
-        foreach (string name in SavedPresets().Select(p => p.Key))
-        {
-            PresetChoice.Items.Add(new ComboBoxItem { Content = name, Tag = name });
+            foreach (string name in names)
+            {
+                PresetChoice.Items.Add(new ComboBoxItem { Content = name, Tag = name });
+            }
         }
 
         InspectorLayout layout = _vm!.Layout;
         int index = Enum.GetValues<InspectorPreset>().ToList().FindIndex(p => InspectorLayout.FromPreset(p).Equals(layout));
+        if (index < 0)
+        {
+            // 保存したプリセットを適用した後も、そのプリセットを選んでいる状態で表示する (INSP-19 の仕様 4)。
+            int saved = SavedPresets().Select(p => p.Value is JsonValue v && v.TryGetValue(out string? text) ? text : null).ToList()
+                .FindIndex(text => text is not null && InspectorLayout.Parse(text).Equals(layout));
+            index = saved < 0 ? -1 : PresetChoice.Items.Count - SavedPresets().Count + saved;
+        }
+
         PresetChoice.SelectedIndex = index;
     }
+
+    /// <summary>プリセットの欄で選んでいる項目の文字列。</summary>
+    internal string? SelectedPresetText => PresetChoice.SelectedItem is ContentControl { Content: { } content } ? content.ToString() : null;
 
     private static JsonObject SavedPresets()
     {

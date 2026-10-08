@@ -25,11 +25,20 @@
                         <ComboBoxItem x:Uid="Hash_Target_Whole" />
                         <ComboBoxItem x:Uid="Hash_Target_Custom" />
                     </ComboBox>
-                    <Grid x:Name="CustomRange" ColumnSpacing="8" Visibility="Collapsed">
+                    <!--  範囲を指定: 開始と、長さまたは「終了 (このバイトを含む)」(06 の 0.1)。  -->
+                    <Grid
+                        x:Name="CustomRange"
+                        ColumnSpacing="8"
+                        RowSpacing="4"
+                        Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <TextBox
                             x:Uid="Hash_CustomStart"
                             AutomationProperties.AutomationId="Hash_CustomStart"
@@ -37,12 +46,24 @@
                             FontFamily="Cascadia Mono, Consolas"
                             Text="{x:Bind ViewModel.CustomStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBox
+                            x:Name="CustomLengthBox"
                             x:Uid="Hash_CustomLength"
                             Grid.Column="1"
                             AutomationProperties.AutomationId="Hash_CustomLength"
                             FlowDirection="LeftToRight"
                             FontFamily="Cascadia Mono, Consolas"
                             Text="{x:Bind ViewModel.CustomLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <ComboBox
+                            x:Name="CustomEndChoice"
+                            x:Uid="Hash_CustomEndKind"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            HorizontalAlignment="Stretch"
+                            AutomationProperties.AutomationId="Hash_CustomEndKind"
+                            SelectionChanged="CustomEndChoice_SelectionChanged">
+                            <ComboBoxItem x:Uid="Hash_CustomEndKind_Length" />
+                            <ComboBoxItem x:Uid="Hash_CustomEndKind_End" />
+                        </ComboBox>
                     </Grid>
                     <TextBlock
                         AutomationProperties.AutomationId="Hash_Range"

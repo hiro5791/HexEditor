@@ -178,6 +178,12 @@ public sealed record InspectorOptions
 
     /// <summary>現在時刻 (入力の <c>now</c>)。</summary>
     public TimeProvider Time { get; init; } = TimeProvider.System;
+
+    /// <summary>
+    /// 文字を表示できるか (代替フォントを含めて、どれかのフォントにその文字があるか。INSP-09 の仕様 3)。表示できない文字は
+    /// コードポイントだけを表示する。null ならすべて表示できるとみなす (UI がフォントを調べる関数を渡す)。
+    /// </summary>
+    public Func<int, bool>? CanDisplay { get; init; }
 }
 
 /// <summary>

@@ -196,6 +196,19 @@ public sealed class InspectorDecoderTests
     }
 
     [Fact]
+    public void Characters_no_font_can_show_are_shown_as_the_code_point_only()
+    {
+        // INSP-09 の仕様 3: 代替フォントでも表示できない文字は、コードポイントだけを表示する。
+        InspectorOptions noGlyph = Opts() with { CanDisplay = cp => cp != 0x0378 };
+        Assert.Equal("U+0378  (2 bytes)", Text(InspectorTypes.Utf8, Hex("CD B8"), options: noGlyph));
+        Assert.Equal("U+0378  (2 bytes)", Text(InspectorTypes.Utf16, Hex("78 03"), options: noGlyph));
+        Assert.Equal("あ  U+3042  (3 bytes)", Text(InspectorTypes.Utf8, Hex("E3 81 82"), options: noGlyph));
+
+        // 制御文字は名前のまま (フォントを調べない)。
+        Assert.StartsWith("LF  U+000A", Text(InspectorTypes.Utf8, Hex("0A"), options: Opts() with { CanDisplay = _ => false }));
+    }
+
+    [Fact]
     [Trait(TC, "TC-INSP-11-01")]
     public void Guid_and_uuid_components()
     {

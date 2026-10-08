@@ -120,7 +120,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
     private readonly SettingsStore? _settings;
     private readonly DispatcherQueue? _queue;
     private readonly DispatcherQueueTimer? _timer;
-    private readonly Dictionary<string, byte[]> _previous = [];
+    private Dictionary<string, byte[]> _previous = [];
     private DocumentViewModel? _target;
     private LongRunningOperation? _operation;
     private DocumentSnapshot? _computedSnapshot;
@@ -204,6 +204,10 @@ public sealed partial class HashPanelViewModel : ObservableObject
     [ObservableProperty]
     public partial string CustomLength { get; set; } = string.Empty;
 
+    /// <summary>2 つ目の欄を「終了 (このバイトを含む)」として読む (06 の 0.1。false なら長さ)。終了は <c>sel.last</c> と同じく最後のバイトの位置。</summary>
+    [ObservableProperty]
+    public partial bool CustomUsesEnd { get; set; }
+
     /// <summary>実際の開始・終了 (このバイトを含む)・長さ (0.1)。</summary>
     [ObservableProperty]
     public partial string RangeText { get; set; } = string.Empty;
@@ -282,23 +286,37 @@ public sealed partial class HashPanelViewModel : ObservableObject
             {
                 _target.Editor.Changed -= Editor_Changed;
                 _target.Document.Changed -= Document_Changed;
+                SaveHistory(_target);
             }
 
             CancelComputation();
             _target = value;
             _targetChosen = false;
-            _requestedRanges = [];
-            _seenSnapshot = null;
             Rows.Clear();
-            _previous.Clear();
             IsStale = false;
             StatusText = string.Empty;
+
+            // 結果の履歴はドキュメントごとに、パネルを閉じるまで持つ (ANA-18 の仕様 9)。タブを切り替えて戻ると前の結果が見える。
+            DocumentHashHistory history = _target is null ? new() : _history.GetOrCreateValue(_target);
+            _previous = history.Previous;
+            _computedSnapshot = history.Computed;
+            _lastRanges = history.LastRanges;
+            _requestedRanges = history.Requested;
+            _seenSnapshot = history.Seen;
+            foreach (HashRowViewModel row in history.Rows)
+            {
+                row.Value = Display.Display(row.Row);
+                Rows.Add(row);
+            }
+
             if (_target is not null)
             {
                 _target.Editor.Changed += Editor_Changed;
                 _target.Document.Changed += Document_Changed;
+                IsStale = Rows.Count > 0 && _computedSnapshot is not null && !ReferenceEquals(_target.Document.Current, _computedSnapshot);
             }
 
+            UpdateMatches();
             OnPropertyChanged();
             UpdateTarget(scheduleAuto: true);
         }
@@ -333,10 +351,19 @@ public sealed partial class HashPanelViewModel : ObservableObject
                 }
 
                 long count = length - start;
-                if (CustomLength.Trim().Length > 0
-                    && (!ExpressionEvaluator.TryEvaluate(CustomLength, context, out count, out _) || count < 0 || start + count > length))
+                if (CustomLength.Trim().Length > 0)
                 {
-                    return null;
+                    if (!ExpressionEvaluator.TryEvaluate(CustomLength, context, out long value, out _))
+                    {
+                        return null;
+                    }
+
+                    // 終了 (このバイトを含む) なら、長さは 終了 - 開始 + 1。
+                    count = CustomUsesEnd ? value - start + 1 : value;
+                    if (count < 0 || (CustomUsesEnd && value >= length) || start + count > length)
+                    {
+                        return null;
+                    }
                 }
 
                 return [new HashRange(start, count)];
@@ -349,6 +376,39 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     partial void OnCustomLengthChanged(string value) => UpdateTarget(scheduleAuto: true);
 
+    partial void OnCustomUsesEndChanged(bool value) => UpdateTarget(scheduleAuto: true);
+
+    /// <summary>パネルを閉じた: 結果の履歴を捨てる (ANA-18 の仕様 9)。</summary>
+    public void ClearHistory()
+    {
+        _history.Clear();
+        _previous = [];
+        Rows.Clear();
+    }
+
+    // ---- コマンド (ANA-21、ANA-22 の「呼び出し」) ----
+
+    /// <summary>
+    /// 「解析: ハッシュ値をコピー」: 結果が 1 行なら値だけ、複数なら「アルゴリズム名: 値」をすべての行についてコピーする。結果がなければ false。
+    /// </summary>
+    public bool CopyResults()
+    {
+        if (Rows.Count == 0)
+        {
+            return false;
+        }
+
+        if (Rows.Count == 1)
+        {
+            CopyValue(Rows[0]);
+        }
+        else
+        {
+            CopyNameValue(null);
+        }
+
+        return true;
+    }
     partial void OnAutoRecomputeChanged(bool value) => _settings?.SetBool(AutoKey, value, true);
 
     partial void OnFormatIndexChanged(int value) => RefreshValues();
@@ -630,6 +690,35 @@ public sealed partial class HashPanelViewModel : ObservableObject
     }
 
     // ---- 内部 ----
+
+    /// <summary>ドキュメントごとの結果の履歴 (ANA-18 の仕様 9)。</summary>
+    private sealed class DocumentHashHistory
+    {
+        public List<HashRowViewModel> Rows { get; set; } = [];
+
+        public Dictionary<string, byte[]> Previous { get; } = [];
+
+        public DocumentSnapshot? Computed { get; set; }
+
+        public DocumentSnapshot? Seen { get; set; }
+
+        public IReadOnlyList<HashRange> LastRanges { get; set; } = [];
+
+        public IReadOnlyList<HashRange> Requested { get; set; } = [];
+    }
+
+    /// <summary>閉じたドキュメントの履歴は残さない (ドキュメントが回収されれば消える)。</summary>
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<DocumentViewModel, DocumentHashHistory> _history = new();
+
+    private void SaveHistory(DocumentViewModel doc)
+    {
+        DocumentHashHistory history = _history.GetOrCreateValue(doc);
+        history.Rows = [.. Rows];
+        history.Computed = _computedSnapshot;
+        history.Seen = _seenSnapshot;
+        history.LastRanges = _lastRanges;
+        history.Requested = _requestedRanges;
+    }
 
     private string DocumentFileName => _target?.FilePath ?? _target?.DisplayName ?? "data.bin";
 

@@ -75,6 +75,9 @@ public static class BuiltInSettings
         new("inspector.rows", SettingCategories.View, SettingKind.String, string.Empty) { Order = 107, ShowInPage = false },
         new("inspector.rowPresets", SettingCategories.View, SettingKind.String, "{}") { Order = 108, ShowInPage = false },
 
+        // ブックマーク (INSP-23 の仕様 2): Ctrl+F2 で付けるときの色 (色の一覧の番号)。
+        new(Bookmarks.BookmarkColor.DefaultColorKey, SettingCategories.View, SettingKind.Choice, "1") { Options = ["1", "2", "3", "4", "5", "6", "7", "8"], Order = 110 },
+
         // ---- 編集 (EDIT-23、EDIT-26、EDIT-27) ----
         new("clipboard.compatFormats", SettingCategories.Editing, SettingKind.Bool, true) { Order = 10 },
         new("edit.pasteSpecial.preferLast", SettingCategories.Editing, SettingKind.Bool, true) { Order = 20 },

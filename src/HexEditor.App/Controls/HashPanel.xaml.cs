@@ -20,18 +20,60 @@ public sealed partial class HashPanel : UserControl
         InitializeComponent();
         AutomationProperties.SetName(this, Loc.Get("Panel_Hash_Title"));
         TargetChoice.SelectedIndex = (int)viewModel.TargetKind;
-        ViewModel.PropertyChanged += (_, e) =>
+        CustomEndChoice.SelectedIndex = viewModel.CustomUsesEnd ? 1 : 0;
+        UpdateComputeStyle();
+
+        // view model はウィンドウごとに 1 つで、パネルの中身は浮動パネルとの間を移るたびに作り直す。表示している間だけ通知を受ける。
+        ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+        Loaded += (_, _) =>
         {
-            if (e.PropertyName == nameof(HashPanelViewModel.TargetKind))
-            {
-                TargetChoice.SelectedIndex = (int)ViewModel.TargetKind;
-                CustomRange.Visibility = ViewModel.TargetKind == HashTargetKind.Custom ? Visibility.Visible : Visibility.Collapsed;
-            }
-            else if (e.PropertyName == nameof(HashPanelViewModel.ComputeHighlighted))
-            {
-                UpdateComputeStyle();
-            }
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            TargetChoice.SelectedIndex = (int)ViewModel.TargetKind;
+            UpdateComputeStyle();
         };
+        Unloaded += (_, _) => ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+    }
+
+    private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(HashPanelViewModel.TargetKind))
+        {
+            TargetChoice.SelectedIndex = (int)ViewModel.TargetKind;
+            CustomRange.Visibility = ViewModel.TargetKind == HashTargetKind.Custom ? Visibility.Visible : Visibility.Collapsed;
+        }
+        else if (e.PropertyName == nameof(HashPanelViewModel.ComputeHighlighted))
+        {
+            UpdateComputeStyle();
+        }
+    }
+
+    /// <summary>「照合」の期待値の入力欄にフォーカスを移す (「解析: ハッシュ値を照合」)。</summary>
+    public void FocusExpected()
+    {
+        if (!IsLoaded)
+        {
+            // 開いたばかりのパネルは、表示されてからフォーカスを移す。
+            RoutedEventHandler? loaded = null;
+            loaded = (_, _) =>
+            {
+                Loaded -= loaded;
+                FocusExpected();
+            };
+            Loaded += loaded;
+            return;
+        }
+
+        ExpectedBox.StartBringIntoView();
+        ExpectedBox.Focus(FocusState.Programmatic);
+        ExpectedBox.SelectAll();
+    }
+
+    /// <summary>2 つ目の欄を「長さ」と「終了 (このバイトを含む)」のどちらとして読むか (06 の 0.1)。</summary>
+    private void CustomEndChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        ViewModel.CustomUsesEnd = CustomEndChoice.SelectedIndex == 1;
+        CustomLengthBox.Header = Loc.Get(ViewModel.CustomUsesEnd ? "Hash_CustomEnd_Header" : "Hash_CustomLength/Header");
     }
 
     public HashPanelViewModel ViewModel { get; }

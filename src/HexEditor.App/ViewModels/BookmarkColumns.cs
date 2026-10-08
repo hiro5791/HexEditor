@@ -132,17 +132,20 @@ public static class BookmarkColumns
 /// 一覧の行と見出しの列の配置 (<see cref="BookmarkColumns"/> と「すべてのドキュメント」のドキュメントの列から作る)。行のテンプレートは
 /// 列ごとに 8 つの欄を持ち、この配置で各欄の位置・表示と欄の幅を決める (x:Bind で変更を受ける)。
 /// </summary>
-public sealed partial class BookmarkColumnLayout : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+public sealed partial class BookmarkColumnLayout : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, IDisposable
 {
     public const int Slots = 8;
 
-    public static BookmarkColumnLayout Instance { get; } = new();
-
-    private BookmarkColumnLayout()
+    public BookmarkColumnLayout()
     {
-        BookmarkColumns.Changed += (_, _) => Update();
+        BookmarkColumns.Changed += Columns_Changed;
         Update();
     }
+
+    private void Columns_Changed(object? sender, EventArgs e) => Update();
+
+    /// <summary>アプリ全体の列の設定の通知から外す (ウィンドウを閉じたとき)。</summary>
+    public void Dispose() => BookmarkColumns.Changed -= Columns_Changed;
 
     private bool _showDocument;
 

@@ -239,6 +239,29 @@ public sealed class BookmarkTests
     }
 
     [Fact]
+    public void New_bookmarks_use_the_default_color_setting()
+    {
+        // INSP-23 の仕様 2: 色は既定の色 (設定。既定は色の一覧の 1 番目)。番号付きブックマークで作るものも同じ。
+        using var doc = new Document(new MemoryByteSource(new byte[0x100]), Options());
+        var editor = new EditorState(doc);
+        BookmarkCollection bm = BookmarkCollection.Attach(doc);
+
+        Assert.Equal(BookmarkColor.Default, BookmarkActions.Toggle(bm, editor, n => $"Bookmark {n}").Bookmark!.Color);
+        editor.GoTo(0x10);
+        BookmarkColor third = BookmarkColor.FromSetting("3");
+        Assert.Equal(3, third.PaletteIndex);
+        Assert.Equal(third, BookmarkActions.Toggle(bm, editor, n => $"Bookmark {n}", third).Bookmark!.Color);
+        editor.GoTo(0x20);
+        Assert.Equal(third, BookmarkActions.SetNumber(bm, editor, 1, third)!.Color);
+
+        // 不正な設定の値は色の一覧の 1 番目。
+        foreach (string? bad in new[] { null, "", "0", "9", "x", "#FF0000" })
+        {
+            Assert.Equal(BookmarkColor.Default, BookmarkColor.FromSetting(bad));
+        }
+    }
+
+    [Fact]
     public void Names_usable_in_expressions()
     {
         using var doc = new Document(new MemoryByteSource(new byte[0x1000]), Options());

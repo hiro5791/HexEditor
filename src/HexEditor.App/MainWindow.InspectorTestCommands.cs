@@ -43,6 +43,15 @@ public sealed partial class MainWindow
         "inspectorLatencyResult" => _latencyResult ?? new JsonObject { ["pending"] = true },
         "bookmarksSummary" => TestBookmarksSummary(),
         "bookmarkColumns" => TestBookmarkColumns(request),
+        "appSubscriptions" => TestAppSubscriptions(),
+        "bookmarkToolTip" => new JsonObject
+        {
+            ["text"] = (CurrentView() ?? throw new InvalidOperationException("No hex view.")).CellToolTipText(TestHookSettings.ReadLong(request["offset"], 0), null),
+        },
+        "inspectorPreset" => new JsonObject
+        {
+            ["selected"] = InspectorView?.RowSettingsPresetText,
+        },
         "inspectorRowDrag" => new JsonObject
         {
             ["moved"] = InspectorView?.DragRowSetting(request["item"]!.GetValue<string>(), request["to"]!.GetValue<int>()) ?? false,
@@ -122,6 +131,23 @@ public sealed partial class MainWindow
             ["focusedBit"] = focused is Microsoft.UI.Xaml.Controls.Button { Tag: InspectorBitViewModel bit } ? bit.Index : null,
             ["rowSettingsOpen"] = (InspectorView?.RowSettingsOpen ?? false),
             ["items"] = items,
+        };
+    }
+
+    /// <summary>
+    /// アプリ全体のイベントにつないでいる処理の数 (設定の変更、ブックマーク一覧の列の設定)。ウィンドウを閉じると、そのウィンドウの分だけ減る。
+    /// </summary>
+    private static JsonObject TestAppSubscriptions()
+    {
+        const System.Reflection.BindingFlags Flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static;
+        static int Count(object? handler) => (handler as Delegate)?.GetInvocationList().Length ?? 0;
+        object? settings = typeof(HexEditor.Core.Settings.SettingsStore).GetField("Changed", Flags)?.GetValue(App.Settings);
+        object? columns = typeof(BookmarkColumns).GetField("Changed", Flags)?.GetValue(null);
+        return new JsonObject
+        {
+            ["settings"] = Count(settings),
+            ["bookmarkColumns"] = Count(columns),
+            ["windows"] = WindowManager.Windows.Count,
         };
     }
 

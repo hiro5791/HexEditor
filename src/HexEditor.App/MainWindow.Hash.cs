@@ -1,3 +1,4 @@
+using HexEditor.App.Commands;
 using HexEditor.App.Controls;
 using HexEditor.App.Panels;
 using HexEditor.App.Services;
@@ -35,7 +36,32 @@ public sealed partial class MainWindow
         }
     }
 
-    private void RegisterHashCommands() => Commands.Register("analysis.hash", ShowHashPanel, NeedsDocument);
+    private void RegisterHashCommands()
+    {
+        Commands.Register("analysis.hash", ShowHashPanel, NeedsDocument);
+
+        // 「解析: ハッシュ値を照合」(ANA-21): パネルを開き、期待値の入力欄にフォーカスを移す。
+        Commands.Register("analysis.hash.verify", () =>
+        {
+            ShowPanel(HashPanelId);
+            SyncHashTarget();
+            DispatcherQueue.TryEnqueue(() => _hashPanel?.FocusExpected());
+        }, NeedsDocument);
+
+        // 「解析: チェックサムファイルで検証」(ANA-21 の仕様 4): パネルを開き、チェックサムファイルを選ぶ。
+        Commands.Register("analysis.hash.verifyFile", async () =>
+        {
+            ShowPanel(HashPanelId);
+            SyncHashTarget();
+            await HashVm.VerifyWithFileAsync();
+        }, NeedsDocument);
+
+        // 「解析: ハッシュ値をコピー」(ANA-22): 計算済みの結果をコピーする。
+        Commands.Register("analysis.hash.copy", () => { HashVm.CopyResults(); }, () =>
+            NeedsDocument() is { Enabled: false } state ? state
+            : _hashVm is { Rows.Count: > 0 } ? CommandState.Available
+            : CommandState.Unavailable(Loc.Get("Hash_NoResults")));
+    }
 
     private HashPanelViewModel HashVm => _hashVm ??= new HashPanelViewModel(Vm.Operations, App.Settings)
     {
@@ -81,6 +107,10 @@ public sealed partial class MainWindow
         if (_hashVm is not null)
         {
             _hashVm.Target = IsHashPanelOpen ? Vm.Selected : null;
+            if (!IsHashPanelOpen)
+            {
+                _hashVm.ClearHistory();
+            }
         }
     }
 
@@ -147,6 +177,16 @@ public sealed partial class MainWindow
             case "compute":
                 await HashVm.ComputeAsync();
                 break;
+            case "custom":
+                // {start, end?, length?}: 範囲を指定 (06 の 0.1)。end を渡すと「終了 (このバイトを含む)」として指定する。
+                HashVm.ChooseTarget(ViewModels.HashTargetKind.Custom);
+                HashVm.CustomUsesEnd = request["end"] is not null;
+                HashVm.CustomStart = request["start"]?.GetValue<string>() ?? "0";
+                HashVm.CustomLength = (request["end"] ?? request["length"])?.GetValue<string>() ?? string.Empty;
+                break;
+            case "expected":
+                HashVm.ExpectedText = request["text"]?.GetValue<string>() ?? string.Empty;
+                break;
         }
 
         var state = new System.Text.Json.Nodes.JsonObject
@@ -168,6 +208,8 @@ public sealed partial class MainWindow
                 ["value"] = r.Value,
                 ["match"] = r.Match?.ToString(),
             })]);
+            state["verifyMessage"] = vm.VerifyMessage;
+            state["expected"] = vm.ExpectedText;
             state["checked"] = new System.Text.Json.Nodes.JsonArray([.. vm.Algorithms.Where(a => a.IsChecked).Select(a => (System.Text.Json.Nodes.JsonNode?)a.Id)]);
         }
 

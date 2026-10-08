@@ -286,6 +286,17 @@ public sealed partial class InspectorViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// 「インスペクタ: エンディアンの切り替え」(INSP-02 の「呼び出し」): 解釈に使うエンディアンを反対にする。反対にした結果がドキュメントの
+    /// エンディアンと同じなら「ドキュメントに従う」に戻し、違えばインスペクタの中だけで固定する。
+    /// </summary>
+    public void ToggleEndian()
+    {
+        Endianness flipped = Endian == Endianness.Little ? Endianness.Big : Endianness.Little;
+        EndianMode = flipped == DocumentEndian ? InspectorEndianMode.Document
+            : flipped == Endianness.Big ? InspectorEndianMode.Big : InspectorEndianMode.Little;
+    }
+
     public Endianness Endian => EndianMode switch
     {
         InspectorEndianMode.Little => Endianness.Little,
@@ -308,7 +319,11 @@ public sealed partial class InspectorViewModel : ObservableObject
         AnsiEncoding = AnsiEncoding,
         Text = InspectorStrings.Current,
         Time = TestableTime,
+        CanDisplay = CanDisplay,
     };
+
+    /// <summary>文字を表示できるか (INSP-09 の仕様 3。システムのフォントのどれかにその文字があるか)。</summary>
+    public static Func<int, bool>? CanDisplay { get; set; } = FontCatalog.CanDisplay;
 
     /// <summary>入力の <c>now</c> に使う時計 (テスト用のビルドでは固定できる)。</summary>
     public static TimeProvider TestableTime { get; set; } = TimeProvider.System;

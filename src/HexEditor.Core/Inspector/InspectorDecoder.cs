@@ -441,6 +441,9 @@ public static class InspectorDecoder
             < 0x20 => ControlNames[cp],
             0x7F => "DEL",
             >= 0x80 and <= 0x9F => string.Empty,
+
+            // 代替フォントでも表示できない文字は、コードポイントだけを表示する (INSP-09 の仕様 3)。
+            _ when o.CanDisplay is { } canDisplay && !canDisplay(cp) => string.Empty,
             _ => text,
         };
         string count = bytes == 1 ? o.Text.OneByte : string.Format(o.Culture, o.Text.Bytes, bytes);

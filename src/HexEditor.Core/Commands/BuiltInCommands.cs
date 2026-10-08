@@ -214,6 +214,14 @@ public static class BuiltInCommands
         // ---- 解析 ----
         new("analysis.hash", "analysis") { Condition = "documentOpen" },
 
+        // ハッシュパネルの照合とコピー (ANA-21、ANA-22 の「呼び出し」)。「一致するアルゴリズムを探す」と「カーソル位置に書き込む」はフェーズ 2 (F2-14)。
+        new("analysis.hash.verify", "analysis") { Condition = "documentOpen" },
+        new("analysis.hash.verifyFile", "analysis") { Condition = "documentOpen" },
+        new("analysis.hash.copy", "analysis") { Condition = "documentOpen" },
+
+        // ---- データインスペクタ (INSP-02 の「呼び出し」: インスペクタ: エンディアンの切り替え) ----
+        new("inspector.toggleEndian", "inspector") { Condition = "documentOpen" },
+
         // ---- タブ (UI-09〜UI-11) ----
         new("tab.next", "tab") { DefaultBindings = [K("Ctrl+Tab")] },
         new("tab.previous", "tab") { DefaultBindings = [K("Ctrl+Shift+Tab")] },
