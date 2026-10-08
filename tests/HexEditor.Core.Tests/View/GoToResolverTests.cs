@@ -24,6 +24,22 @@ public sealed class GoToResolverTests
         Assert.Equal(0x1F00, GoToResolver.Resolve(text, GoToBase.Auto, GoToUnit.Bytes, Editor()).Offset);
 
     [Fact]
+    public void By_address_subtracts_the_base_address()
+    {
+        // VIEW-20 の仕様 4・VIEW-29 の仕様 5: アドレスで指定した値からベースアドレスを引いてオフセットにする。
+        EditorState e = Editor();
+        e.ApplyView(e.View with { BaseAddress = 0x400000 });
+        Assert.Equal(0x1F00, GoToResolver.Resolve("0x401F00", GoToBase.Auto, GoToUnit.Bytes, e, byAddress: true).Offset);
+        Assert.Equal(0x1F00, GoToResolver.Resolve("0x1F00", GoToBase.Auto, GoToUnit.Bytes, e, byAddress: false).Offset);
+        Assert.True(GoToResolver.Resolve("0x3FFFFF", GoToBase.Auto, GoToUnit.Bytes, e, byAddress: true).OutOfRange);
+        Assert.True(GoToResolver.Resolve("0x420000", GoToBase.Auto, GoToUnit.Bytes, e, byAddress: true).OutOfRange);
+
+        // 相対の移動はアドレスに関係しない。
+        e.GoTo(0x100);
+        Assert.Equal(0x110, GoToResolver.Resolve("+0x10", GoToBase.Auto, GoToUnit.Bytes, e, byAddress: true).Offset);
+    }
+
+    [Fact]
     public void RelativeAndFromEnd()
     {
         EditorState e = Editor();

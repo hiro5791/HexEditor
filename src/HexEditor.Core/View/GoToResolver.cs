@@ -29,8 +29,12 @@ public readonly record struct GoToResult(long Offset, ExpressionException? Error
 /// <summary>移動バーの入力から移動先のオフセットを求める (VIEW-29)。</summary>
 public static class GoToResolver
 {
+    /// <param name="byAddress">
+    /// 「アドレスで指定」(VIEW-20 の仕様 4、VIEW-29 の仕様 5): 先頭からの値をアドレスとして、ベースアドレスを引いてオフセットにする。
+    /// カーソルから・末尾からの相対の移動では使わない。
+    /// </param>
     public static GoToResult Resolve(string text, GoToBase goToBase, GoToUnit unit, EditorState editor,
-        DefaultRadix radix = DefaultRadix.Hexadecimal)
+        DefaultRadix radix = DefaultRadix.Hexadecimal, bool byAddress = false)
     {
         var context = new EditorExpressionContext(editor);
         string trimmed = text.Trim();
@@ -52,6 +56,17 @@ public static class GoToResolver
         try
         {
             long amount = checked(value * scale);
+            ulong baseAddress = editor.View.BaseAddress;
+            if (byAddress && baseAddress != 0 && goToBase != GoToBase.FromEnd && !relative)
+            {
+                // アドレスがベースアドレスより前なら、ファイルの先頭より前 (範囲外)。
+                ulong address = unchecked((ulong)amount);
+                return address < baseAddress
+                    ? new GoToResult(-1, null, true)
+                    : new GoToResult((long)Math.Min(address - baseAddress, long.MaxValue), null,
+                        address - baseAddress > (ulong)editor.Layout.MaxCursor);
+            }
+
             long offset = goToBase == GoToBase.FromEnd ? checked(editor.Document.Length - amount)
                 : relative ? checked(editor.Cursor + amount)
                 : amount;

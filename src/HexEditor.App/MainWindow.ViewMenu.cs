@@ -28,6 +28,12 @@ public sealed partial class MainWindow
 
     private static readonly int[] BytesPerRowChoices = [8, 16, 32, 64];
 
+    /// <summary>メニューに出すセクタサイズ (VIEW-19 の仕様 6)。そのほかは「指定…」で入れる。</summary>
+    private static readonly int[] SectorSizeChoices = [512, 1024, 2048, 4096];
+
+    /// <summary>指定できるセクタサイズの上限。</summary>
+    private const int MaxSectorSize = 1 << 20;
+
     /// <summary>表示メニューと移動メニューに項目を加える (コンストラクタから 1 回呼ぶ)。</summary>
     private void InitializeViewMenu()
     {
@@ -87,6 +93,17 @@ public sealed partial class MainWindow
                 Loc.Get(key + "/AccessKey"), v => v.Radix == r));
         }
 
+        // セクタ形式のセクタサイズ (VIEW-19 の仕様 6)。ディスク・ボリュームではデータソースのセクタサイズを使う。
+        MenuFlyoutSubItem sectorSize = Sub("Command_ViewSectorSize", "Menu_View_SectorSize");
+        foreach (int size in SectorSizeChoices)
+        {
+            sectorSize.Items.Add(Radio("Command_ViewSectorSize" + size, Loc.Format("Menu_View_SectorSizeBytes", size.ToString("N0", CultureInfo.CurrentCulture)),
+                "SectorSize", () => ChangeView(v => v with { SectorSize = size }), size.ToString(CultureInfo.InvariantCulture)[..1],
+                v => v.SectorSize == size));
+        }
+
+        sectorSize.Items.Add(Item("Command_ViewSectorSizeCustom", "Menu_View_SectorSizeCustom", ShowSectorSizeInput));
+        radix.Items.Add(sectorSize);
         radix.Items.Add(new MenuFlyoutSeparator());
         radix.Items.Add(Item("Command_ViewBaseAddress", "Menu_View_BaseAddress", ShowBaseAddressInput));
         radix.Items.Add(Item("Command_ViewRowShift", "Menu_View_RowShift", ShowRowShiftInput));
@@ -454,6 +471,32 @@ public sealed partial class MainWindow
         {
             TryEvaluate(text, editor, DefaultRadix.Decimal, out long value);
             editor.ApplyView(editor.View with { BytesPerRow = (int)value, AutoBytesPerRow = false });
+            UpdateViewMenu();
+        });
+    }
+
+    /// <summary>「セクタサイズ > 指定…」(VIEW-19 の仕様 6)。1〜1 MiB の値を受け付ける。</summary>
+    private void ShowSectorSizeInput()
+    {
+        if (Editor is not { } editor)
+        {
+            return;
+        }
+
+        ShowInput(Loc.Get("ViewInput_SectorSize"), editor.View.SectorSize.ToString(CultureInfo.InvariantCulture), text =>
+        {
+            if (!TryEvaluate(text, editor, DefaultRadix.Decimal, out long value))
+            {
+                return (false, Loc.Get("ViewInput_Invalid"));
+            }
+
+            return value is < 1 or > MaxSectorSize
+                ? (false, Loc.Format("ViewInput_SectorSizeRange", MaxSectorSize.ToString("N0", CultureInfo.CurrentCulture)))
+                : (true, null);
+        }, text =>
+        {
+            TryEvaluate(text, editor, DefaultRadix.Decimal, out long value);
+            editor.ApplyView(editor.View with { SectorSize = (int)value });
             UpdateViewMenu();
         });
     }

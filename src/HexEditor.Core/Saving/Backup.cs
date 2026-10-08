@@ -92,24 +92,35 @@ public static class Backup
     public static void Copy(string source, string backup, LongRunningOperation? operation = null)
     {
         string temp = backup + ".tmp";
+
+        // コピーの間は、コピーするバイト数を全体として進捗を示す (ENG-26 の「巨大ファイル・長時間処理」)。終わったら元に戻す。
+        long? previousTotal = operation?.TotalBytes;
+        long previousProcessed = operation?.ProcessedBytes ?? 0;
         try
         {
             using (var input = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 0, FileOptions.SequentialScan))
             using (var output = new FileStream(temp, FileMode.Create, FileAccess.Write, FileShare.None, 0))
             {
                 output.SetLength(input.Length);
+                operation?.SetTotal(input.Length);
+                operation?.Report(0);
                 byte[] buffer = new byte[4 * 1024 * 1024];
+                long copied = 0;
                 int n;
                 while ((n = input.Read(buffer)) > 0)
                 {
                     operation?.CancellationToken.ThrowIfCancellationRequested();
                     output.Write(buffer, 0, n);
+                    copied += n;
+                    operation?.Report(copied);
                 }
 
                 output.Flush(flushToDisk: true);
             }
 
             File.Move(temp, backup, overwrite: true);
+            operation?.SetTotal(previousTotal);
+            operation?.Report(previousProcessed);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

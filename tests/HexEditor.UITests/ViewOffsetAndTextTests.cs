@@ -86,6 +86,48 @@ public sealed class ViewOffsetAndTextTests
         Assert.DoesNotContain("=", await app.UiaNameAsync("GoTo_Interpretation"));
     });
 
+    /// <summary>VIEW-19 の仕様 6: ファイルのセクタサイズを表示設定で変える (512、1,024、2,048、4,096、任意)。</summary>
+    [Fact]
+    public Task Sector_size_can_be_changed() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await GoToAsync(app, "0x1F00");
+        await MenuAsync(app, "Command_ViewRadixSector");
+        Assert.Contains("15:100", await StatusOffsetAsync(app));
+        await MenuAsync(app, "Command_ViewSectorSize1024");
+        Assert.Contains("7:300", await StatusOffsetAsync(app));
+        Assert.True((await MenuItemAsync(app, "Command_ViewSectorSize1024"))["checked"]!.GetValue<bool>());
+
+        // 任意の値 (入力欄)。範囲外は確定できない。
+        await MenuAsync(app, "Command_ViewSectorSizeCustom");
+        Assert.False((await InputAsync(app, "0"))["okEnabled"]!.GetValue<bool>());
+        await InputAsync(app, "4000", commit: true);
+        Assert.Contains("1:F60", await StatusOffsetAsync(app));
+        Assert.Equal(4000, (await ViewSettingsAsync(app))["view"]!["sectorSize"]!.GetValue<int>());
+    });
+
+    /// <summary>VIEW-20 の仕様 4: ベースアドレスを設定しているとき、移動バーは「アドレスで指定」(既定) と「オフセットで指定」を選べる。</summary>
+    [Fact]
+    public Task Go_to_bar_accepts_addresses_when_a_base_address_is_set() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await OpenGoToAsync(app);
+        Assert.False((await ElementAsync(app, "GoTo_Address"))["effectivelyVisible"]?.GetValue<bool>() ?? false);
+        await app.SendAsync("goToKey", new JsonObject { ["key"] = "Escape" });
+
+        await SetBaseAddressAsync(app, "0x400000");
+        await GoToAsync(app, "0x401F00");
+        Assert.Equal(0x1F00, await CursorAsync(app));
+
+        // オフセットで指定に切り替える。
+        await OpenGoToAsync(app);
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "GoTo_Address", ["index"] = 1 });
+        await app.UiaSetValueAsync("GoTo_Input", "0x2000");
+        await app.SendAsync("goToKey", new JsonObject { ["key"] = "Enter" });
+        await app.IdleAsync();
+        Assert.Equal(0x2000, await CursorAsync(app));
+    });
+
     // ---- VIEW-20 ----
 
     [Fact]
