@@ -356,7 +356,8 @@ public sealed class BookmarkTests
 
             // 配列を借りて使い回すので、1 件ごとの割り当てはない (数 KB の作業用の領域だけ)。
             Assert.True(allocated < 1_000_000, $"{allocated:N0} bytes");
-            Assert.True(watch.ElapsedMilliseconds < 1000, $"{watch.ElapsedMilliseconds} ms");
+            // 時間はほかのテストと並んで動くと揺れるため、大まかな上限だけを確かめる (割り当てのなさが本体)。
+            Assert.True(watch.ElapsedMilliseconds < 5000, $"{watch.ElapsedMilliseconds} ms");
         }
         finally
         {

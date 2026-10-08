@@ -212,6 +212,28 @@ public sealed partial class MainWindow
         UpdateSchemeMenu();
     }
 
+    /// <summary>Hex ビューの右クリックメニューの「ここを基準点にする」(VIEW-20 の「呼び出し」)。</summary>
+    private void ExtendHexViewReferenceMenu(MenuFlyout menu)
+    {
+        const string Id = "HexViewMenu_SetReference";
+        if (!menu.Items.Any(i => AutomationProperties.GetAutomationId(i) == Id))
+        {
+            var item = new MenuFlyoutItem { Text = Loc.Get("HexView_Menu_SetReference"), Tag = "SetReference" };
+            AutomationProperties.SetAutomationId(item, Id);
+            item.Click += (_, _) => _ = Commands.ExecuteAsync("view.setReference");
+            menu.Items.Add(new MenuFlyoutSeparator());
+            menu.Items.Add(item);
+        }
+
+        foreach (MenuFlyoutItemBase item in menu.Items)
+        {
+            if (AutomationProperties.GetAutomationId(item) == Id)
+            {
+                item.IsEnabled = Editor is not null;
+            }
+        }
+    }
+
     // ---- 項目を作る ----
 
     private MenuFlyoutSubItem Sub(string id, string key)

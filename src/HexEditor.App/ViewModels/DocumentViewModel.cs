@@ -18,15 +18,50 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         DisplayName = displayName;
         // ステータスバー・タブの見出しをまとめて更新する (空の名前は全プロパティの変更)。
         Document.Changed += (_, _) => OnPropertyChanged(string.Empty);
-        Editor.Changed += (_, _) => OnPropertyChanged(string.Empty);
         Document.ReadOnlyChanged += (_, _) => OnPropertyChanged(string.Empty);
 
         // カーソルの値は、読み込みが終わってから表示する (読み込みの通知はスレッドプールから来る)。
         var queue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+
+        // マウスのドラッグ中は、ステータスバーの更新を 30 fps に抑える (VIEW-40 の仕様 4)。それ以外はすぐ更新する (50 ms 以内)。
+        _statusTimer = queue?.CreateTimer();
+        if (_statusTimer is not null)
+        {
+            _statusTimer.IsRepeating = false;
+            _statusTimer.Interval = StatusInterval;
+            _statusTimer.Tick += (_, _) => RaiseStatus();
+        }
+
+        Editor.Changed += (_, _) =>
+        {
+            if (Editor.PointerDragging && _statusTimer is not null
+                && System.Diagnostics.Stopwatch.GetElapsedTime(_lastStatus) < StatusInterval)
+            {
+                if (!_statusTimer.IsRunning)
+                {
+                    _statusTimer.Start();
+                }
+
+                return;
+            }
+
+            RaiseStatus();
+        };
         Document.DataLoaded += (_, _) => queue?.TryEnqueue(() => OnPropertyChanged(nameof(ValueText)));
     }
 
     public Document Document { get; }
+
+    private static readonly TimeSpan StatusInterval = TimeSpan.FromMilliseconds(1000.0 / 30);
+    private readonly Microsoft.UI.Dispatching.DispatcherQueueTimer? _statusTimer;
+    private long _lastStatus;
+
+    private void RaiseStatus()
+    {
+        _statusTimer?.Stop();
+        _lastStatus = System.Diagnostics.Stopwatch.GetTimestamp();
+        OnPropertyChanged(string.Empty);
+    }
 
     /// <summary>通知 (文書の範囲の通知をタブの中に出すため。UI-36)。</summary>
     /// <remarks>タブを別のウィンドウに移すと、移した先のウィンドウの通知に替わる (UI-11 の仕様 3)。</remarks>

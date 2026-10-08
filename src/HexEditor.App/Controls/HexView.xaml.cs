@@ -785,7 +785,8 @@ public sealed partial class HexView : UserControl
         PlaceCharacterRange(!hexActive && columns.ShowText && textWidth > _cellWidth && textLeft != textX, textLeft, y, textWidth);
 
         // 上書きモードは塗りつぶしの帯、挿入モードは縦棒 (VIEW-06 の仕様 3。色だけで区別しない)。フォーカスがなければ枠 (VIEW-01 の仕様 13)。
-        if (_editor.InsertMode)
+        // フォーカスがなければ、挿入モードでも枠で示す (VIEW-01 の仕様 13)。
+        if (_editor.InsertMode && _focused)
         {
             Caret.Fill = _palette!.Caret;
             Caret.Stroke = null;

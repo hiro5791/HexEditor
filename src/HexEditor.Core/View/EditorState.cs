@@ -179,6 +179,28 @@ public sealed partial class EditorState
     /// <summary>設定「ジャンプ先の表示位置」(VIEW-34 の仕様 2。既定は上から 1/3)。</summary>
     public JumpPlacement JumpPlacement { get; set; } = JumpPlacement.Third;
 
+    /// <summary>
+    /// マウスでドラッグ中 (範囲選択など)。ビューが設定する。表示の更新の頻度を抑えるのに使う (VIEW-40 の仕様 4)。
+    /// 終わったときは <see cref="Changed"/> を出す (抑えていた表示を最新にするため)。
+    /// </summary>
+    public bool PointerDragging
+    {
+        get => _pointerDragging;
+        set
+        {
+            if (_pointerDragging != value)
+            {
+                _pointerDragging = value;
+                if (!value)
+                {
+                    RaiseChanged();
+                }
+            }
+        }
+    }
+
+    private bool _pointerDragging;
+
     /// <summary>カーソル・選択範囲・スクロール位置・モードが変わった。</summary>
     public event EventHandler? Changed;
 

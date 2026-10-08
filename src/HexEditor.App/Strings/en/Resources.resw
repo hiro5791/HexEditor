@@ -2446,4 +2446,5 @@ Details were written to:
   <data name="SetDesc_diagnostics_hexView_overlay" xml:space="preserve"><value>Shows a small table in the top right of the Hex view with the frame rate, drawing time and frames that waited for data. For investigating performance.</value></data>
   <data name="Set_view_scroll_fixedOffsetColumn" xml:space="preserve"><value>Keep the offset column fixed</value></data>
   <data name="SetDesc_view_scroll_fixedOffsetColumn" xml:space="preserve"><value>When scrolling horizontally, the offset column stays at the left edge. Turn off to scroll it together with the Hex and text columns.</value></data>
+  <data name="HexView_Menu_SetReference" xml:space="preserve"><value>Set as reference point</value></data>
 </root>

@@ -536,4 +536,17 @@ public sealed class ViewOffsetAndTextTests
             Assert.Equal("Continuation", CellOf(after, o)!["textKind"]!.GetValue<string>());
         }
     });
+
+    [Fact]
+    public Task Context_menu_sets_the_reference_point() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-20 の「呼び出し」: 右クリックメニュー「ここを基準点にする」。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-BYTES-256")] });
+        await RightClickAsync(app, CellPoint(await app.RenderAsync(), 0x40));
+        await app.UiaInvokeAsync("HexViewMenu_SetReference");
+        await app.IdleAsync();
+        JsonObject render = await app.RenderAsync();
+        Assert.Equal("+00000000", RowOf(render, 0x40)!["offsetText"]!.GetValue<string>());
+        Assert.Equal("-00000010", RowOf(render, 0x30)!["offsetText"]!.GetValue<string>());
+    });
 }

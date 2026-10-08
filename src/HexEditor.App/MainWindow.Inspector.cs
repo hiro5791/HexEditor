@@ -464,6 +464,7 @@ public sealed partial class MainWindow
         {
             ExtendHexViewEditMenu(menu);
             ExtendHexViewMenu(view, menu);
+            ExtendHexViewReferenceMenu(menu);
         });
     }
 
