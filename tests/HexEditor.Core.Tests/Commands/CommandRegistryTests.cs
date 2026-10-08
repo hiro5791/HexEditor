@@ -5,11 +5,16 @@ using System.Xml.Linq;
 using HexEditor.Core.Commands;
 using HexEditor.Core.Tests.Engine;
 using HexEditor.Core.Tests.I18n;
+using HexEditor.Core.Tests.Support;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
 
 namespace HexEditor.Core.Tests.Commands;
 
-/// <summary>コマンド登録 (UI-16)、コマンドパレットの検索 (UI-17)、ショートカット一覧 (UI-39)。</summary>
+/// <summary>
+/// コマンド登録 (UI-16)、コマンドパレットの検索 (UI-17)、ショートカット一覧 (UI-39)。絞り込みの時間 (TC-UI-17-03) を計るので、
+/// 他のテストと並列に動かさない。
+/// </summary>
+[Collection(TimingCollection.Name)]
 public sealed partial class CommandRegistryTests
 {
     private static string AppFolder => Path.GetDirectoryName(SourceTests.FindRepoFile("src/HexEditor.App/HexEditor.App.csproj"))!;
@@ -136,7 +141,12 @@ public sealed partial class CommandRegistryTests
         var items = Enumerable.Range(1, 1000).Select(i => new CommandSearchItem($"script.test{i:0000}", "Script", $"Test command {i:0000}", $"Test command {i:0000}", string.Empty))
             .Concat(Items("en")).ToList();
         IComparer<string> order = StringComparer.Create(CultureInfo.InvariantCulture, ignoreCase: true);
-        CommandSearch.Filter(items, "test05", order);
+        // 入力の長さごとに通る処理を先に一度ずつ動かしておく (JIT の分を計らない)。
+        for (int length = 1; length <= "test05".Length; length++)
+        {
+            CommandSearch.Filter(items, "test05"[..length], order);
+        }
+
         var times = new List<double>();
         for (int round = 0; round < 20; round++)
         {

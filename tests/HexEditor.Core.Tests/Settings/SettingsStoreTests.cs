@@ -200,6 +200,24 @@ public sealed class SettingsStoreTests : IDisposable
         Assert.True(json["log.debug"]!.GetValue<bool>());
     }
 
+    [Fact]
+    public void Writing_before_the_change_notice_keeps_the_external_edit()
+    {
+        // 変更の通知の処理が遅れ (混んだ PC)、通知を読み直す前にアプリ内の変更を書いても、外部の編集を上書きしない。
+        using var store = new SettingsStore(_dir);
+        store.Load();
+        store.SaveNow();
+        store.StartWatching();
+        store.SetBool("log.debug", true, false);
+        File.WriteAllText(store.PathName, """{ "$schemaVersion": 1, "ui.theme": "light" }""");
+        store.Flush();
+
+        Assert.Equal("light", store.GetString("ui.theme", "system"));
+        JsonObject json = JsonNode.Parse(File.ReadAllText(store.PathName))!.AsObject();
+        Assert.Equal("light", json["ui.theme"]!.GetValue<string>());
+        Assert.True(json["log.debug"]!.GetValue<bool>());
+    }
+
     public void Dispose()
     {
         try

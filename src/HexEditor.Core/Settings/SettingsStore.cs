@@ -369,6 +369,13 @@ public sealed class SettingsStore : IDisposable
             return false;
         }
 
+        // 外部の編集を監視しているときは、通知を読み直す前に書くと外部の編集を上書きして失う (通知の処理が遅れたとき)。
+        // 書く前に、前回の書き込みの後に変わったファイルを取り込む。
+        if (_watcher is not null && MergeExternalEdits() is { Count: > 0 } external)
+        {
+            ThreadPool.QueueUserWorkItem(_ => Changed?.Invoke(external));
+        }
+
         _dirty = false;
         try
         {
@@ -432,58 +439,62 @@ public sealed class SettingsStore : IDisposable
     {
         // 自分の書き込みによる通知は無視する。書き込み途中のファイルを読まないよう、少し待ってから読む。
         Thread.Sleep(100);
-        JsonObject parsed;
-        lock (_lock)
-        {
-            try
-            {
-                if (!File.Exists(PathName) || File.GetLastWriteTimeUtc(PathName) == _lastWriteByUs)
-                {
-                    return;
-                }
-
-                parsed = Parse(File.ReadAllText(PathName));
-            }
-            catch (JsonException ex)
-            {
-                ExternalEditFailed?.Invoke(new SettingsEditError((int)(ex.LineNumber ?? -1) + 1, ex.Message));
-                return;
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                return;
-            }
-
-            parsed.Remove("$schema");
-            parsed.Remove("$schemaVersion");
-        }
-
         IReadOnlyCollection<string> changed;
         lock (_lock)
         {
-            // アプリ内で変えてまだ書いていない値は、読み直した内容より優先する (変更を失わない。次の書き込みでファイルに入る)。
-            foreach (string key in _pendingKeys)
-            {
-                if (_values[key] is { } local)
-                {
-                    parsed[key] = local.DeepClone();
-                }
-                else
-                {
-                    parsed.Remove(key);
-                }
-            }
-
-            changed = _values.Select(p => p.Key).Union(parsed.Select(p => p.Key))
-                .Where(k => _values[k]?.ToJsonString() != parsed[k]?.ToJsonString())
-                .ToList();
-            _values = parsed;
+            changed = MergeExternalEdits();
         }
 
         if (changed.Count > 0)
         {
             Changed?.Invoke(changed);
         }
+    }
+
+    /// <summary>
+    /// 外部で書き換えたファイルを読み、値に取り込む (ロックの中で呼ぶ)。変わったキーを返す。前回この store が書いた後に
+    /// ファイルが変わっていなければ何もしない。アプリ内で変えてまだ書いていない値は、読み直した内容より優先する (変更を失わない)。
+    /// </summary>
+    private IReadOnlyCollection<string> MergeExternalEdits()
+    {
+        JsonObject parsed;
+        try
+        {
+            if (!File.Exists(PathName) || File.GetLastWriteTimeUtc(PathName) == _lastWriteByUs)
+            {
+                return [];
+            }
+
+            parsed = Parse(File.ReadAllText(PathName));
+        }
+        catch (JsonException ex)
+        {
+            ExternalEditFailed?.Invoke(new SettingsEditError((int)(ex.LineNumber ?? -1) + 1, ex.Message));
+            return [];
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return [];
+        }
+
+        parsed.Remove("$schema");
+        parsed.Remove("$schemaVersion");
+        foreach (string key in _pendingKeys)
+        {
+            if (_values[key] is { } local)
+            {
+                parsed[key] = local.DeepClone();
+            }
+            else
+            {
+                parsed.Remove(key);
+            }
+        }
+
+        List<string> changed = [.. _values.Select(p => p.Key).Union(parsed.Select(p => p.Key))
+            .Where(k => _values[k]?.ToJsonString() != parsed[k]?.ToJsonString())];
+        _values = parsed;
+        return changed;
     }
 
     private static JsonObject Parse(string text) =>
