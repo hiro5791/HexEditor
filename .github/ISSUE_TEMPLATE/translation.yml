@@ -1,0 +1,52 @@
+# 翻訳の報告用の Issue フォーム (09 の UI-41、UI-49 の仕様 5)。アプリのヘルプ >「翻訳の誤りを報告」が、
+# URL のクエリで language / key / current / version の欄を入力済みにして開く (id を変えないこと)。
+name: Translation error / 翻訳の誤り
+description: Report a wrong or unnatural translation (or a mistake in the English source text).
+title: "[Translation] "
+labels: ["translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping with the translation. The fields below were filled in by HexEditor.
+        Please write the correct text and, if you can, why. If you prefer to fix the `.resw` file yourself,
+        see "Fixing a translation with a pull request" in [CONTRIBUTING.md](https://github.com/hiro5791/HexEditor/blob/main/CONTRIBUTING.md).
+
+        翻訳の修正にご協力ありがとうございます。下の欄は HexEditor が入力しました。正しい訳と、できれば理由を書いてください。
+        `.resw` を直接直す場合は [CONTRIBUTING.md](https://github.com/hiro5791/HexEditor/blob/main/CONTRIBUTING.md) の手順を見てください。
+  - type: input
+    id: language
+    attributes:
+      label: Display language / 表示言語
+      description: The language folder name (for example de, ja, zh-Hans). en means the English source text.
+      placeholder: de
+    validations:
+      required: true
+  - type: input
+    id: key
+    attributes:
+      label: Resource key / リソースキー
+      description: Turn on "Show resource keys in tooltips" in Settings > Language to see the key of a string.
+      placeholder: Menu_File.Title
+  - type: textarea
+    id: current
+    attributes:
+      label: Current text / 現在の訳文
+      description: The text that HexEditor shows now.
+  - type: textarea
+    id: correct
+    attributes:
+      label: Correct text / 正しい訳
+      description: The text that should be shown. For an English report, the corrected source text.
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: Why / 理由
+      description: Optional. Where the string is used, what is wrong, a reference to the glossary (docs/i18n/glossary.csv).
+  - type: input
+    id: version
+    attributes:
+      label: HexEditor version / 版
+      placeholder: 1.0.0

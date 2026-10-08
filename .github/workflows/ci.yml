@@ -157,6 +157,14 @@ jobs:
           restore-keys: nuget-${{ runner.os }}-${{ runner.arch }}-
       - name: Resource tests
         run: dotnet test tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true --filter "FullyQualifiedName~HexEditor.Core.Tests.I18n" --logger "console;verbosity=normal"
+      # 状態ファイルの形式と .resw との食い違いは失敗、用語集の訳さない用語の違反は警告 (UI-48 の仕様 5、UI-49 の「エラー」)。
+      - name: Translation status and glossary
+        shell: pwsh
+        run: |
+          dotnet run --project tools/I18nTool -c Release -- check-status
+          if ($LASTEXITCODE -ne 0) { throw 'translation-status.json does not match the resources (UI-49)' }
+          dotnet run --project tools/I18nTool -c Release -- check-glossary
+          if ($LASTEXITCODE -ne 0) { throw 'glossary.csv has format errors (UI-48)' }
 
   # Markdown (docs/) と .editorconfig の検査。
   lint:
@@ -264,6 +272,13 @@ jobs:
         env:
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
         run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI" --logger "trx;LogFileName=ui.trx" --results-directory TestResults
+
+      # 長い UI テスト (オフラインモードでの 1 時間の操作。TC-UI-58-02) は毎晩と手動の実行だけ。
+      - name: Nightly UI tests
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=Nightly" --logger "trx;LogFileName=ui-nightly.trx" --results-directory TestResults
 
       # 言語ごとのスクリーンショット (UI-47、TC-UI-47-01)。毎晩と手動の実行で、25 言語の主要な画面を撮り、言語ごとのフォルダに
       # PNG と一覧 (index.html) を置く (成果物 ui-test-results の screenshots)。切れた文字列が増えたらジョブの概要に警告を出す。
@@ -441,6 +456,30 @@ jobs:
           ./build/tests/Test-Msix.ps1 -TestMsix (Get-ChildItem msix-test -Filter '*.msix').FullName `
             -PreviewMsix (Resolve-Path msix-versions/HexEditor-1.3.0-preview.2-x64.msix).Path `
             -StableMsix (Resolve-Path msix-versions/HexEditor-1.3.0-x64.msix).Path -TestDataDir (Resolve-Path testdata).Path
+          exit $LASTEXITCODE
+
+  # 更新のテスト (PKG-17〜PKG-22): 更新のテスト用の配布元 TD-PKG-UPDATE-FEED (変数 HEX_UPDATE_FEED_REPO のリポジトリ) の
+  # テスト用のビルドを入れて、更新の確認・ダウンロード・適用を確かめる。毎晩と手動の実行だけ。配布元がなければ Skipped になる。
+  update:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Test data
+        run: |
+          dotnet run --project tools/TestDataGen -c Release -- TD-SEQ-1M testdata
+          dotnet run --project tools/TestDataGen -c Release --no-build -- TD-BYTES-256 testdata
+          dotnet run --project tools/TestDataGen -c Release --no-build -- TD-RANDOM-16M testdata
+      - name: Update tests
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ./build/tests/Test-Update.ps1 -FeedRepo '${{ vars.HEX_UPDATE_FEED_REPO }}' -TestDataDir (Resolve-Path testdata).Path
           exit $LASTEXITCODE
 
   # 配布形態に依存しない UI テストを、3 種類の配布形態のテスト用のビルドで実行する (TC-PKG-01-02)。

@@ -177,13 +177,42 @@ public sealed class BuildScriptTests : IDisposable
     }
 
     [Fact]
+    [Trait(TC, "TC-PKG-29-02")]
     public void ReleaseNotesFailWithoutAChangelogSection()
     {
+        // リリースのワークフローは、タグの検証 (prepare) でこのスクリプトが失敗したらリリースを作らずに止まる (PKG-24 の手順 1)。
+        string release = File.ReadAllText(RepoFile(".github/workflows/release.yml"));
+        string prepare = release[release.IndexOf("  prepare:", StringComparison.Ordinal)..release.IndexOf("  build:", StringComparison.Ordinal)];
+        Assert.Contains("./build/release-notes.ps1 -Version $version", prepare);
+        Assert.Contains("if ($LASTEXITCODE -ne 0) { throw \"CHANGELOG.md has no section", prepare);
+        Assert.Contains("needs: prepare", release);
+
         string changelog = _temp.Sub("CHANGELOG.md");
         File.WriteAllText(changelog, "# Changelog\n\n## [1.1.0]\n\n- x\n");
         (int exit, string output) = RunScript("build/release-notes.ps1", null, "-Version", "1.2.0", "-Changelog", changelog);
         Assert.NotEqual(0, exit);
         Assert.Contains("1.2.0", output);
+    }
+
+    [Fact]
+    public void ReleaseNotesIncludeTheTranslationTableAfterTheChanges()
+    {
+        string changelog = _temp.Sub("CHANGELOG.md");
+        File.WriteAllText(changelog, "# Changelog\n\n## [1.2.0]\n\n### Added\n\n- New.\n");
+        string table = _temp.Sub("table.md");
+        File.WriteAllText(table, "## Translation progress\n\n| Language | Translated | Reviewed | Change |\n");
+        string notes = _temp.Sub("notes.md");
+        (int exit, string output) = RunScript("build/release-notes.ps1", null, "-Version", "1.2.0", "-Changelog", changelog, "-OutFile", notes, "-TranslationTable", table);
+        Assert.True(exit == 0, output);
+        string text = File.ReadAllText(notes);
+        Assert.True(text.IndexOf("- New.", StringComparison.Ordinal) < text.IndexOf("## Translation progress", StringComparison.Ordinal));
+        Assert.True(text.IndexOf("## Translation progress", StringComparison.Ordinal) < text.IndexOf("## Notes for each version", StringComparison.Ordinal));
+
+        // 表がなければ省き、警告を出す (PKG-29 の「エラー」)。
+        (int exit2, string output2) = RunScript("build/release-notes.ps1", null, "-Version", "1.2.0", "-Changelog", changelog, "-OutFile", notes);
+        Assert.Equal(0, exit2);
+        Assert.Contains("::warning::", output2);
+        Assert.DoesNotContain("Translation progress", File.ReadAllText(notes));
     }
 
     [Fact]

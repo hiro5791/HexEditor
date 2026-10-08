@@ -97,6 +97,14 @@ public sealed class UiTestContext : IAsyncDisposable
         return session;
     }
 
+    /// <summary>アプリが自分で起動したプロセス (再起動の後など) につなぎ、テストの終わりに閉じる。</summary>
+    public async Task<AppSession> AttachAsync(System.Diagnostics.Process process, string profile)
+    {
+        AppSession session = await AppSession.AttachAsync(process, profile);
+        _sessions.Add(session);
+        return session;
+    }
+
     /// <summary>
     /// 2 つ目の起動 (既存のインスタンスに転送されて終わるもの) を行い、終了コードを返す。
     /// </summary>

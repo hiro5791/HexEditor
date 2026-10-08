@@ -58,8 +58,8 @@ public static class Program
 
         PrepareSession();
 
-        // 6. 表示言語 (最初のウィンドウを作る前。UI-43)。
-        Localization.ApplyLanguageOverride(CommandLine.PseudoLocale ?? CommandLine.UiLanguage);
+        // 6. 表示言語 (最初のウィンドウを作る前。UI-43): --ui-lang、設定 ui.language、Windows の表示言語の順。
+        Localization.ApplyLanguage(CommandLine.PseudoLocale ?? CommandLine.UiLanguage, Environment.Locations.Settings);
 
         // 7. XAML の起動。終了するまで戻らない。
         Application.Start(callback =>

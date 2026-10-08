@@ -1248,4 +1248,113 @@
   <data name="CmdAlias_go_bookmark_set9" xml:space="preserve"><value>ばんごうつきぶっくまーくをせってい</value></data>
   <data name="Cmd_go_bookmark_goto9" xml:space="preserve"><value>番号付きブックマーク 9 へ移動</value></data>
   <data name="CmdAlias_go_bookmark_goto9" xml:space="preserve"><value>ばんごうつきぶっくまーくへいどう</value></data>
+  <data name="Menu_Help_ReportTranslation.Text" xml:space="preserve"><value>翻訳の誤りを報告(W)...</value></data>
+  <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>更新の確認(U)</value></data>
+  <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>版 {0} があります。</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>版 {0} の準備ができました。</value></data>
+  <data name="Update_Updated" xml:space="preserve"><value>版 {0} に更新しました。</value></data>
+  <data name="Update_UpToDate" xml:space="preserve"><value>最新の版です (版 {0})。</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>更新を確認できませんでした: {0}</value></data>
+  <data name="Update_DownloadFailed" xml:space="preserve"><value>更新をダウンロードできませんでした: {0}</value></data>
+  <data name="Update_ApplyFailed" xml:space="preserve"><value>版 {0} への更新に失敗し、前の版のままです。ログの場所: {1}</value></data>
+  <data name="Update_Reason_NoConnection" xml:space="preserve"><value>サーバーに接続できません。</value></data>
+  <data name="Update_Reason_RateLimited" xml:space="preserve"><value>GitHub の API の利用制限に達しました。しばらくしてからやり直してください。</value></data>
+  <data name="Update_Reason_Server" xml:space="preserve"><value>サーバーがエラーを返しました。</value></data>
+  <data name="Update_Reason_BadResponse" xml:space="preserve"><value>サーバーの応答を読めませんでした。</value></data>
+  <data name="Update_Reason_Offline" xml:space="preserve"><value>オフラインモードが有効です。</value></data>
+  <data name="Update_Reason_NotSupported" xml:space="preserve"><value>このビルドでは更新を確認できません。</value></data>
+  <data name="Update_Button_Download" xml:space="preserve"><value>ダウンロード</value></data>
+  <data name="Update_Button_OpenStore" xml:space="preserve"><value>Microsoft Store で更新</value></data>
+  <data name="Update_Button_OpenDownloadPage" xml:space="preserve"><value>ダウンロードページを開く</value></data>
+  <data name="Update_Button_ReleaseNotes" xml:space="preserve"><value>リリースノート</value></data>
+  <data name="Update_Button_Skip" xml:space="preserve"><value>この版をスキップ</value></data>
+  <data name="Update_Button_RestartToUpdate" xml:space="preserve"><value>再起動して更新</value></data>
+  <data name="Update_Button_Later" xml:space="preserve"><value>後で</value></data>
+  <data name="Update_RestartBusy" xml:space="preserve"><value>実行中の処理 (保存など) が終わると再起動できます。</value></data>
+  <data name="Operation_UpdateDownload" xml:space="preserve"><value>版 {0} のダウンロード</value></data>
+  <data name="Network_OfflineReason" xml:space="preserve"><value>オフラインモードが有効です</value></data>
+  <data name="OpenUrl_Title" xml:space="preserve"><value>このページを開きますか?</value></data>
+  <data name="OpenUrl_Body" xml:space="preserve"><value>オフラインモードが有効です。次のアドレスをブラウザで開きます:</value></data>
+  <data name="OpenUrl_UrlLabel" xml:space="preserve"><value>アドレス</value></data>
+  <data name="OpenUrl_Open" xml:space="preserve"><value>ブラウザで開く</value></data>
+  <data name="OpenUrl_Copy" xml:space="preserve"><value>アドレスをコピー</value></data>
+  <data name="TranslationReport_Title" xml:space="preserve"><value>翻訳の誤りを報告</value></data>
+  <data name="TranslationReport_Body" xml:space="preserve"><value>報告する文字列を選んでください。表示中の文字列、英語の原文、リソースキーで検索できます。</value></data>
+  <data name="TranslationReport_SearchPlaceholder" xml:space="preserve"><value>文字列を検索</value></data>
+  <data name="TranslationReport_ListName" xml:space="preserve"><value>文字列</value></data>
+  <data name="TranslationReport_Report" xml:space="preserve"><value>報告</value></data>
+  <data name="TranslationReport_ReportWithout" xml:space="preserve"><value>選ばずに報告</value></data>
+  <data name="Language_System" xml:space="preserve"><value>Windows の設定に従う (現在: {0})</value></data>
+  <data name="Language_Item" xml:space="preserve"><value>{0} ({1}、確認済み {2}%)</value></data>
+  <data name="Language_RestartNotice" xml:space="preserve"><value>表示言語は再起動後に反映されます。</value></data>
+  <data name="Language_RestartNow" xml:space="preserve"><value>今すぐ再起動</value></data>
+  <data name="Language_RestartFailed" xml:space="preserve"><value>再起動できませんでした。手動で再起動してください。</value></data>
+  <data name="JumpList_Pinned" xml:space="preserve"><value>固定済み</value></data>
+  <data name="JumpList_Recent" xml:space="preserve"><value>最近使ったもの</value></data>
+  <data name="JumpList_Task_NewWindow" xml:space="preserve"><value>新しいウィンドウ</value></data>
+  <data name="JumpList_Task_NewDocument" xml:space="preserve"><value>新規作成</value></data>
+  <data name="Shell_OpenWith" xml:space="preserve"><value>HexEditor で開く</value></data>
+  <data name="Shell_ProjectType" xml:space="preserve"><value>HexEditor プロジェクト</value></data>
+  <data name="Shell_WorkspaceType" xml:space="preserve"><value>HexEditor ワークスペース</value></data>
+  <data name="Shell_BinaryType" xml:space="preserve"><value>バイナリ ファイル</value></data>
+  <data name="Shell_StaleRegistration" xml:space="preserve"><value>右クリックメニューの登録が古い場所を指しています。</value></data>
+  <data name="Shell_UpdateRegistration" xml:space="preserve"><value>更新する</value></data>
+  <data name="Shell_Unregister" xml:space="preserve"><value>登録を解除する</value></data>
+  <data name="Shell_RegistrationFailed" xml:space="preserve"><value>Explorer 連携を変更できませんでした: {0}</value></data>
+  <data name="Migration_Import" xml:space="preserve"><value>{0}の HexEditor の設定を取り込む</value></data>
+  <data name="Migration_Done" xml:space="preserve"><value>設定を取り込みました。</value></data>
+  <data name="Migration_Failed" xml:space="preserve"><value>一部の設定を取り込めませんでした: {0}</value></data>
+  <data name="Distribution_Installer" xml:space="preserve"><value>インストーラ版</value></data>
+  <data name="Distribution_Msix" xml:space="preserve"><value>Microsoft Store 版</value></data>
+  <data name="Distribution_Portable" xml:space="preserve"><value>ポータブル版</value></data>
+  <data name="Distribution_Development" xml:space="preserve"><value>開発版</value></data>
+  <data name="Cmd_help_reportTranslation" xml:space="preserve"><value>翻訳の誤りを報告</value></data>
+  <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>ほんやくのあやまりをほうこく</value></data>
+  <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>更新の確認</value></data>
+  <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>こうしんのかくにん</value></data>
+  <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>ツールチップにリソースキーを表示する</value></data>
+  <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>翻訳者向け: 各文字列のツールチップにリソースキーを表示する。</value></data>
+  <data name="Set_update_checkAutomatically" xml:space="preserve"><value>更新を自動で確認する</value></data>
+  <data name="SetDesc_update_checkAutomatically" xml:space="preserve"><value>起動から 30 秒後と、その後 24 時間ごとに新しい版を確認する。</value></data>
+  <data name="Set_update_downloadAutomatically" xml:space="preserve"><value>更新を自動でダウンロードする</value></data>
+  <data name="SetDesc_update_downloadAutomatically" xml:space="preserve"><value>新しい版が見つかったら裏でダウンロードする (インストーラ版)。</value></data>
+  <data name="Set_update_channel" xml:space="preserve"><value>更新のチャネル</value></data>
+  <data name="SetDesc_update_channel" xml:space="preserve"><value>受け取るリリースの種類。</value></data>
+  <data name="SetOpt_update_channel_stable" xml:space="preserve"><value>安定版</value></data>
+  <data name="SetOpt_update_channel_preview" xml:space="preserve"><value>プレビュー版</value></data>
+  <data name="Set_update_skippedVersion" xml:space="preserve"><value>スキップした版</value></data>
+  <data name="SetDesc_update_skippedVersion" xml:space="preserve"><value>「この版をスキップ」で選んだ版。</value></data>
+  <data name="Set_network_offline" xml:space="preserve"><value>オフラインモード</value></data>
+  <data name="SetDesc_network_offline" xml:space="preserve"><value>更新の確認とダウンロードをすべて止める。Web ページは URL を確認してから開く。</value></data>
+  <data name="Set_network_downloads_enabled" xml:space="preserve"><value>ダウンロードを許可する</value></data>
+  <data name="SetDesc_network_downloads_enabled" xml:space="preserve"><value>操作したときに、テンプレート・プラグイン・追加コンポーネントをダウンロードする。</value></data>
+  <data name="Set_network_translationReport_enabled" xml:space="preserve"><value>翻訳の報告を許可する</value></data>
+  <data name="SetDesc_network_translationReport_enabled" xml:space="preserve"><value>翻訳の報告のフォームを、確認せずにブラウザで開く。</value></data>
+  <data name="Set_shell_jumpList_enabled" xml:space="preserve"><value>ジャンプリストを表示する</value></data>
+  <data name="SetDesc_shell_jumpList_enabled" xml:space="preserve"><value>タスクバーのジャンプリストに最近使ったファイルとピン留めしたファイルを出す。</value></data>
+  <data name="Set_shell_openWith_extensions" xml:space="preserve"><value>「プログラムから開く」の拡張子</value></data>
+  <data name="SetDesc_shell_openWith_extensions" xml:space="preserve"><value>「プログラムから開く」の候補にする拡張子 (; 区切り)。空なら .bin;.dat;.img;.rom;.dmp;.raw;.iso。</value></data>
+  <data name="SetSection_Explorer" xml:space="preserve"><value>エクスプローラーとの連携</value></data>
+  <data name="SetSearch_Explorer" xml:space="preserve"><value>みぎくりっくめにゅー かんれんづけ とうろく</value></data>
+  <data name="SetSection_Network" xml:space="preserve"><value>ネットワークを使う機能</value></data>
+  <data name="SetSearch_Network" xml:space="preserve"><value>ねっとわーく つうしん おふらいん ぷらいばしー</value></data>
+  <data name="Shell_Register" xml:space="preserve"><value>登録する</value></data>
+  <data name="Shell_Registered" xml:space="preserve"><value>「HexEditor で開く」が登録されています。</value></data>
+  <data name="Shell_NotRegistered" xml:space="preserve"><value>「HexEditor で開く」は登録されていません。</value></data>
+  <data name="Shell_ManagedByWindows" xml:space="preserve"><value>Windows の設定で管理されます。</value></data>
+  <data name="Shell_NotAvailable" xml:space="preserve"><value>このビルドでは使えません。</value></data>
+  <data name="Shell_StateUnavailable" xml:space="preserve"><value>登録の状態を読めませんでした。</value></data>
+  <data name="Shell_OtherDistribution" xml:space="preserve"><value>他の配布形態の HexEditor も登録されています。メニューに 2 つ出ることがあります。</value></data>
+  <data name="Network_Feature_Updates" xml:space="preserve"><value>更新の確認とダウンロード</value></data>
+  <data name="Network_Feature_Downloads" xml:space="preserve"><value>テンプレート・プラグインのダウンロード</value></data>
+  <data name="Network_Feature_Components" xml:space="preserve"><value>追加コンポーネントのダウンロード</value></data>
+  <data name="Network_Feature_BrowserPages" xml:space="preserve"><value>翻訳の誤り報告・ドキュメントのページ</value></data>
+  <data name="Network_Destination_Updates" xml:space="preserve"><value>GitHub Releases または Microsoft Store</value></data>
+  <data name="Network_Destination_Downloads" xml:space="preserve"><value>テンプレート・プラグインの配布先 (操作したときだけ)</value></data>
+  <data name="Network_Destination_Components" xml:space="preserve"><value>更新と同じ配布元 (操作したときだけ)</value></data>
+  <data name="Network_Destination_BrowserPages" xml:space="preserve"><value>GitHub (既定のブラウザで開く)</value></data>
+  <data name="Network_FeatureDetail" xml:space="preserve"><value>{0}。設定: {1}</value></data>
+  <data name="Network_UserDestinations" xml:space="preserve"><value>リモートのデータソースとスクリプトの通信は、利用者が指定した接続先に、許可したときだけ接続します。オフラインモードの対象外です。</value></data>
 </root>

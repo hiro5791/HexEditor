@@ -323,9 +323,14 @@ public sealed partial class SettingsPage : UserControl
         }
     }
 
+    /// <summary>
+    /// 選択肢の表示名。表示言語 (UI-43 の仕様 2) は「Windows の設定に従う (現在: 言語名)」と、各言語の自分の言語での名前・今の表示言語での名前・
+    /// 確認済みの割合。
+    /// </summary>
     public static string OptionLabel(SettingDefinition def, string option) =>
-        def.Key == "ui.language" && option != "system"
-            ? CultureInfo.GetCultureInfo(option).NativeName
+        def.Key == Platform.Localization.DisplayLanguages.SettingKey
+            ? MainWindow.DisplayLanguageItems().FirstOrDefault(i => i.Tag.Equals(option, StringComparison.OrdinalIgnoreCase)).Text
+                ?? CultureInfo.GetCultureInfo(option).NativeName
             : Loc.Get("SetOpt_" + Core.Commands.CommandDefinition.KeyPart(def.Key) + "_" + option);
 
     /// <summary>値を検証して保存する。検証に失敗したら赤枠と説明文で示し、保存しない (UI-22 の仕様 7)。</summary>

@@ -1,0 +1,66 @@
+# 未翻訳の文字列の機械翻訳 (09 の UI-49 の仕様 2)。毎晩と手動の起動で、en / ja の .resw に加わった文字列を残り 21 言語に訳し、
+# 変更があれば 1 つの Pull Request にまとめる。確認済みの訳は上書きしない (原文が変わったら要再確認にする)。
+# 機械翻訳の提供元は未決定 (DeepL API または Azure AI Translator)。今は DeepL API の形で呼ぶ。API キーは Secrets の HEX_TRANSLATOR_KEY。
+# 提供元の失敗は警告にし、その文字列は英語表示のまま次回に再試行する。
+name: translate
+
+on:
+  schedule:
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: translate
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  translate:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - name: Machine translation
+        id: translate
+        shell: pwsh
+        env:
+          HEX_TRANSLATOR_KEY: ${{ secrets.HEX_TRANSLATOR_KEY }}
+          HEX_TRANSLATOR_ENDPOINT: ${{ vars.HEX_TRANSLATOR_ENDPOINT }}
+        run: |
+          dotnet run --project tools/I18nTool -- translate
+          if ($LASTEXITCODE -ne 0) { throw 'translate failed' }
+          dotnet run --project tools/I18nTool -- check-status
+          if ($LASTEXITCODE -ne 0) { throw 'translation-status.json does not match the resources' }
+          dotnet run --project tools/I18nTool -- check-glossary
+          $changed = (git status --porcelain -- src/HexEditor.App/Strings docs/i18n) -ne $null
+          "changed=$($changed.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+      - name: Pull request
+        if: steps.translate.outputs.changed == 'true'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $branch = "translations/$(Get-Date -Format yyyyMMdd)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c $branch
+          git add src/HexEditor.App/Strings docs/i18n/translation-status.json
+          git commit -m "Machine translation of new strings"
+          git push --force origin $branch
+          $existing = gh pr list --head $branch --json number --jq '.[0].number'
+          if (-not $existing) {
+            gh pr create --base main --head $branch --title "Machine translation ($(Get-Date -Format yyyy-MM-dd))" `
+              --body "Machine translations of the strings that were added or changed in English (UI-49). Review them and mark the reviewed ones as ``reviewed`` in docs/i18n/translation-status.json."
+          }

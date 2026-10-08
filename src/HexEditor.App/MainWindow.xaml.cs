@@ -131,6 +131,12 @@ public sealed partial class MainWindow : Window
             TryOpen(file);
         }
 
+        // ジャンプリストの「新規作成」(--new-document。UI-35)。
+        if (commandLine.NewDocument)
+        {
+            Vm.NewDocument();
+        }
+
         if (commandLine.Offset is { } offset && Editor is { } editor
             && Core.Expressions.ExpressionEvaluator.TryEvaluate(offset, new Core.View.EditorExpressionContext(editor), out long target, out _))
         {

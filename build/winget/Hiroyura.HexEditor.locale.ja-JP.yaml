@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.locale.1.9.0.schema.json
+PackageIdentifier: Hiroyura.HexEditor
+PackageVersion: {{VERSION}}
+PackageLocale: ja-JP
+Publisher: Hiroyura
+PackageName: HexEditor
+License: MIT
+ShortDescription: どんな大きさのファイルやディスクでも開いて編集・検索・保存できる、Windows 向けのバイナリエディタ。
+ReleaseNotesUrl: https://github.com/hiro5791/HexEditor/releases/tag/v{{VERSION}}
+ManifestType: locale
+ManifestVersion: 1.9.0

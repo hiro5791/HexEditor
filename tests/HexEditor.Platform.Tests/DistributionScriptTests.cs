@@ -133,7 +133,8 @@ public sealed partial class DistributionScriptTests : IDisposable
             }
 
             File.WriteAllText(Path.Combine(assets, $"HexEditor-{Version}-win-{arch}-full.nupkg"), "full");
-            File.WriteAllText(Path.Combine(assets, $"releases.win-{arch}.json"), "{}");
+            File.WriteAllText(Path.Combine(assets, $"releases.win-{arch}-stable.json"), "{}");
+            File.WriteAllText(Path.Combine(assets, $"releases.win-{arch}-preview.json"), "{}");
             Directory.CreateDirectory(Path.Combine(store, arch));
             File.WriteAllText(Path.Combine(store, arch, $"HexEditor-{Version}-{arch}.msix"), "msix");
         }

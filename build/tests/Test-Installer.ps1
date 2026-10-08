@@ -12,6 +12,10 @@
     TC-PKG-09-02  uninstall.removeUserData = true removes the data folder
     TC-PKG-08-04  no writes to HKLM by Setup.exe, Update.exe and HexEditor.exe during all of the above
                   (Process Monitor records from the first install to the last uninstall)
+    TC-UI-54-01   the classic context menu "Open with HexEditor" is registered in HKCU with the app icon
+    TC-UI-54-04   three files opened with the menu end up in one process (the tabs are checked with a test build)
+    TC-UI-56-01   .hexproj is associated with HexEditor and opens it
+    TC-UI-56-02   the default app of .iso does not change; HexEditor is added to "Open with"
   The UAC part of TC-PKG-07-01 (consent.exe) needs a dedicated runner account and is not checked here.
   The update step of TC-PKG-08-04 waits for the updater (PKG-18, phase 1).
 #>
@@ -63,6 +67,28 @@ function Uninstall-HexEditor {
 
 if (Test-Path $dataRoot) { Remove-Item $dataRoot -Recurse -Force }
 
+# The default app of a file type (AssocQueryString ASSOCSTR_EXECUTABLE) for TC-UI-56-02.
+Add-Type -Namespace HexTest -Name Assoc -MemberDefinition @'
+[System.Runtime.InteropServices.DllImport("shlwapi.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+public static extern int AssocQueryStringW(int flags, int str, string assoc, string extra, System.Text.StringBuilder output, ref int length);
+'@
+function Get-DefaultApp([string]$Extension) {
+    $length = 1024
+    $sb = New-Object System.Text.StringBuilder $length
+    $hr = [HexTest.Assoc]::AssocQueryStringW(0, 2, $Extension, 'open', $sb, [ref]$length)
+    if ($hr -ne 0) { return '' }
+    $sb.ToString()
+}
+$isoDefaultBefore = Get-DefaultApp '.iso'
+$contextMenuKey = 'HKCU:\Software\Classes\*\shell\HexEditor'
+
+# The classic context menu verbs of a file, as Explorer shows them (Shell.Application, the same IContextMenu verbs).
+function Get-ContextMenuVerbs([string]$Path) {
+    $shell = New-Object -ComObject Shell.Application
+    $item = $shell.NameSpace((Split-Path -Parent $Path)).ParseName((Split-Path -Leaf $Path))
+    @($item.Verbs() | ForEach-Object { $_ })
+}
+
 Invoke-TestCase 'TC-PKG-07-01' 'install as a normal user' {
     Install-HexEditor
     Assert-True (Test-Path $exe) "$exe missing"
@@ -103,6 +129,65 @@ Invoke-TestCase 'TC-PKG-11-02' 'Velopack hook arguments' {
     Assert-True (Test-Path (Join-Path $dataRoot 'logs/install.log')) 'install.log was not written'
 }
 
+Invoke-TestCase 'TC-UI-54-01' 'context menu "Open with HexEditor" without UAC' {
+    Assert-True (Test-Path -LiteralPath $contextMenuKey) "$contextMenuKey does not exist"
+    $menu = Get-ItemProperty -LiteralPath $contextMenuKey
+    Assert-True ($menu.'(default)' -like '*HexEditor*') "menu name '$($menu.'(default)')'"
+    Assert-True ($menu.Icon -like "*$exe*") "icon '$($menu.Icon)'"
+    $command = (Get-ItemProperty -LiteralPath "$contextMenuKey\command").'(default)'
+    Assert-True ($command -eq ('"' + $exe + '" "%1"')) "command '$command'"
+    $file = Join-Path $env:RUNNER_TEMP 'menu-test.bin'
+    [System.IO.File]::WriteAllBytes($file, [byte[]](0..255))
+    $verbs = Get-ContextMenuVerbs $file
+    Assert-True (@($verbs | Where-Object { ($_.Name -replace '&', '') -like '*HexEditor*' }).Count -ge 1) ("verbs: " + (($verbs | ForEach-Object { $_.Name }) -join ', '))
+    Add-TestNote 'TC-UI-54-01: the UAC part (no elevated process during the installation) needs a standard user account on the runner.'
+}
+
+Invoke-TestCase 'TC-UI-54-04' 'three files from the context menu: one process' {
+    Stop-HexEditor
+    $folder = Join-Path $env:RUNNER_TEMP 'files50'
+    New-Item -ItemType Directory -Force $folder | Out-Null
+    $files = foreach ($n in 1..3) { $f = Join-Path $folder ('file{0:D2}.bin' -f $n); [System.IO.File]::WriteAllBytes($f, [byte[]](@($n) * 4096)); $f }
+    foreach ($f in $files) {
+        $verb = Get-ContextMenuVerbs $f | Where-Object { ($_.Name -replace '&', '') -like '*HexEditor*' } | Select-Object -First 1
+        Assert-True ($null -ne $verb) "no HexEditor verb for $f"
+        $verb.DoIt()
+    }
+    Start-Sleep -Seconds 10
+    $running = @(Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $_.Path -ieq $exe })
+    try {
+        Assert-True ($running.Count -eq 1) "$($running.Count) HexEditor processes"
+        Assert-True ($running[0].MainWindowHandle -ne 0) 'no window'
+    } finally { Stop-HexEditor }
+    Add-TestNote 'TC-UI-54-04: the 3 tabs are counted with a test build (test channel); this release build only shows one process and one window.'
+}
+
+Invoke-TestCase 'TC-UI-56-01' '.hexproj opens HexEditor' {
+    $progId = (Get-ItemProperty 'HKCU:\Software\Classes\.hexproj').'(default)'
+    Assert-True ($progId -eq 'HexEditor.Project') ".hexproj is associated with '$progId'"
+    Assert-True ((Get-DefaultApp '.hexproj') -ieq $exe) "the default app of .hexproj is '$(Get-DefaultApp '.hexproj')'"
+    $folder = Join-Path $env:RUNNER_TEMP 'hexproj'
+    New-Item -ItemType Directory -Force $folder | Out-Null
+    [System.IO.File]::WriteAllBytes((Join-Path $folder 'seq.bin'), [byte[]](0..255))
+    $project = Join-Path $folder 'proj.hexproj'
+    Set-Content -Path $project -Value '{ "file": "seq.bin", "bookmarks": [ { "name": "proj-mark", "offset": 64, "length": 1 } ] }' -Encoding utf8
+    Stop-HexEditor
+    Start-Process $project
+    Start-Sleep -Seconds 10
+    try {
+        $p = Get-CimInstance Win32_Process -Filter "Name = 'HexEditor.exe'" | Where-Object { $_.CommandLine -like '*proj.hexproj*' }
+        Assert-True ($null -ne $p) 'HexEditor was not started with proj.hexproj'
+    } finally { Stop-HexEditor }
+    Add-TestNote 'TC-UI-56-01: opening the project (the seq.bin tab and the bookmark proj-mark) is the project file feature (UI-33); only the association is checked.'
+}
+
+Invoke-TestCase 'TC-UI-56-02' 'the default app of .iso is kept' {
+    Assert-True ((Get-DefaultApp '.iso') -eq $isoDefaultBefore) "the default app of .iso changed: '$isoDefaultBefore' -> '$(Get-DefaultApp '.iso')'"
+    $openWith = Get-ItemProperty 'HKCU:\Software\Classes\.iso\OpenWithProgids' -ErrorAction SilentlyContinue
+    Assert-True ($null -ne $openWith -and $openWith.PSObject.Properties.Name -contains 'HexEditor.Binary') 'HexEditor.Binary is not in .iso\OpenWithProgids'
+    Add-TestNote 'TC-UI-56-02: the "Open with" list is checked through OpenWithProgids (SHAssocEnumHandlers is not called from PowerShell).'
+}
+
 Invoke-TestCase 'TC-PKG-07-03' 'Apps entry and uninstall' {
     $entry = Get-ItemProperty $uninstallKey
     Assert-True ($entry.DisplayName -like 'HexEditor*') "DisplayName $($entry.DisplayName)"
@@ -116,6 +201,8 @@ Invoke-TestCase 'TC-PKG-07-03' 'Apps entry and uninstall' {
     Assert-True (-not (Test-Path $installRoot) -or -not (Test-Path $exe)) "$installRoot remains"
     Assert-True (-not (Test-Path $uninstallKey)) 'the Uninstall key remains'
     Assert-True (-not (Test-Path $appPathsKey)) 'App Paths remains (ShellRegistration)'
+    Assert-True (-not (Test-Path -LiteralPath $contextMenuKey)) 'the context menu key remains (ShellRegistration)'
+    Assert-True (-not (Test-Path 'HKCU:\Software\Classes\HexEditor.Project')) 'the ProgID HexEditor.Project remains'
 }
 
 Invoke-TestCase 'TC-PKG-09-01' 'data is kept by a default uninstall' {

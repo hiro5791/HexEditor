@@ -71,6 +71,24 @@ public static class BuiltInSettings
         // ---- 言語 ----
         new("ui.language", SettingCategories.Language, SettingKind.Choice, "system") { Options = Languages, RequiresRestart = true, Order = 10 },
 
+        // 翻訳者向け (UI-41 の仕様 5)。
+        new("i18n.showStringKeys", SettingCategories.Language, SettingKind.Bool, false) { RequiresRestart = true, Order = 20 },
+
+        // ---- 更新 (PKG-17〜PKG-22) ----
+        new("update.checkAutomatically", SettingCategories.Update, SettingKind.Bool, true) { Order = 10 },
+        new("update.downloadAutomatically", SettingCategories.Update, SettingKind.Bool, true) { Order = 20 },
+        new("update.channel", SettingCategories.Update, SettingKind.Choice, "stable") { Options = ["stable", "preview"], Order = 30 },
+        new("update.skippedVersion", SettingCategories.Update, SettingKind.String, string.Empty) { Order = 40, ShowInPage = false },
+
+        // ---- プライバシー (UI-58) ----
+        new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },
+        new("network.downloads.enabled", SettingCategories.Privacy, SettingKind.Bool, true) { Order = 20 },
+        new("network.translationReport.enabled", SettingCategories.Privacy, SettingKind.Bool, true) { Order = 30 },
+
+        // ---- Explorer 連携 (UI-35、UI-54、UI-56) ----
+        new("shell.jumpList.enabled", SettingCategories.Explorer, SettingKind.Bool, true) { Order = 10 },
+        new("shell.openWith.extensions", SettingCategories.Explorer, SettingKind.String, string.Empty) { Order = 20 },
+
         // ---- 詳細 ----
         new("log.level", SettingCategories.Advanced, SettingKind.Choice, "info") { Options = ["info", "debug"], Order = 10 },
         new("diagnostics.writeMiniDump", SettingCategories.Advanced, SettingKind.Bool, false) { Order = 20 },

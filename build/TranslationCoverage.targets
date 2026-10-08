@@ -1,0 +1,99 @@
+<!--
+  翻訳の割合 (09 の UI-49 の仕様 4)。ビルド時に Strings/<言語>/Resources.resw と docs/i18n/translation-status.json から
+  translation-coverage.json を作り、アプリに同梱する (表示言語の一覧 UI-43 とリリースノート PKG-29 に使う)。
+  計算は tools/I18nTool の Coverage.Compute と同じ (翻訳済み = 英語のキーのうち訳があるものの割合、確認済み = そのうち状態が
+  reviewed のものの割合。どちらも切り捨ての百分率。英語は 100 / 100)。両方を同時に直すこと (テスト TC-UI-49-03 が比べる)。
+-->
+<Project>
+  <UsingTask TaskName="WriteTranslationCoverage" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <StringsFolder ParameterType="System.String" Required="true" />
+      <StatusFile ParameterType="System.String" Required="true" />
+      <Output ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.Collections.Generic" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Text" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Using Namespace="System.Xml.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        string[] languages = { "en", "zh-Hans", "zh-Hant", "ja", "ko", "id", "vi", "th", "de", "fr", "es", "pt",
+          "it", "ru", "uk", "pl", "cs", "hu", "ro", "el", "ar", "tr", "fa" };
+        Func<string, HashSet<string>> keys = lang =>
+        {
+          string path = Path.Combine(StringsFolder, lang, "Resources.resw");
+          return File.Exists(path)
+            ? new HashSet<string>(XDocument.Load(path).Root.Elements("data").Select(d => d.Attribute("name").Value), StringComparer.Ordinal)
+            : new HashSet<string>(StringComparer.Ordinal);
+        };
+
+        // 状態ファイル: "languages": { "<言語>": { "<キー>": "reviewed:<ハッシュ>", ... } }。JSON の読み込みに依存しないよう、
+        // 言語の区切りとキーと値の組を正規表現で読む (ツールが書く形式に限る)。
+        var reviewed = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+        if (File.Exists(StatusFile))
+        {
+          string text = File.ReadAllText(StatusFile);
+          var section = new Regex("\"(?<lang>[A-Za-z-]+)\"\\s*:\\s*\\{(?<body>[^{}]*)\\}");
+          var pair = new Regex("\"(?<key>[^\"]+)\"\\s*:\\s*\"reviewed:[0-9a-f]{16}\"");
+          foreach (Match m in section.Matches(text))
+          {
+            reviewed[m.Groups["lang"].Value] = new HashSet<string>(pair.Matches(m.Groups["body"].Value).Cast<Match>().Select(p => p.Groups["key"].Value), StringComparer.Ordinal);
+          }
+        }
+
+        HashSet<string> english = keys("en");
+        var json = new StringBuilder("{\n  \"languages\": {\n");
+        for (int i = 0; i < languages.Length; i++)
+        {
+          string lang = languages[i];
+          int translated = 100, ok = 100;
+          if (lang != "en" && english.Count > 0)
+          {
+            HashSet<string> values = keys(lang);
+            HashSet<string> done = reviewed.ContainsKey(lang) ? reviewed[lang] : new HashSet<string>();
+            int t = english.Count(values.Contains);
+            int r = english.Count(k => values.Contains(k) && done.Contains(k));
+            translated = (int)Math.Floor(t * 100.0 / english.Count);
+            ok = (int)Math.Floor(r * 100.0 / english.Count);
+          }
+
+          json.Append("    \"").Append(lang).Append("\": {\n      \"translated\": ").Append(translated)
+            .Append(",\n      \"reviewed\": ").Append(ok).Append("\n    }").Append(i + 1 < languages.Length ? "," : string.Empty).Append('\n');
+        }
+
+        json.Append("  }\n}\n");
+        Directory.CreateDirectory(Path.GetDirectoryName(Output));
+        if (!File.Exists(Output) || File.ReadAllText(Output) != json.ToString())
+        {
+          File.WriteAllText(Output, json.ToString(), new UTF8Encoding(false));
+        }
+]]></Code>
+    </Task>
+  </UsingTask>
+
+  <PropertyGroup>
+    <HexTranslationStatusFile>$(MSBuildThisFileDirectory)..\docs\i18n\translation-status.json</HexTranslationStatusFile>
+    <HexStringsFolder Condition="'$(HexStringsFolder)' == ''">$(MSBuildProjectDirectory)\Strings</HexStringsFolder>
+  </PropertyGroup>
+
+  <!-- IntermediateOutputPath は SDK の targets で決まるため、ターゲットの中で組み立てる。 -->
+  <Target Name="HexTranslationCoveragePath">
+    <PropertyGroup>
+      <HexTranslationCoverageFile>$(MSBuildProjectDirectory)\$(IntermediateOutputPath)translation-coverage.json</HexTranslationCoverageFile>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="HexTranslationCoverage" BeforeTargets="AssignTargetPaths" DependsOnTargets="HexTranslationCoveragePath"
+          Inputs="@(PRIResource);$(HexTranslationStatusFile);$(MSBuildThisFileFullPath)" Outputs="$(HexTranslationCoverageFile)">
+    <WriteTranslationCoverage StringsFolder="$(HexStringsFolder)" StatusFile="$(HexTranslationStatusFile)" Output="$(HexTranslationCoverageFile)" />
+  </Target>
+
+  <Target Name="HexIncludeTranslationCoverage" BeforeTargets="AssignTargetPaths" AfterTargets="HexTranslationCoverage">
+    <ItemGroup>
+      <Content Include="$(HexTranslationCoverageFile)" Link="translation-coverage.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+  </Target>
+</Project>

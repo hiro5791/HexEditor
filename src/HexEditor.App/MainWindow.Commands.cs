@@ -54,6 +54,7 @@ public sealed partial class MainWindow
         Action bindingsChanged = () => DispatcherQueue.TryEnqueue(() =>
         {
             _menus.RefreshShortcuts();
+            UpdatePackagingMenu();
             RefreshToolbar();
             RefreshShortcutsPage();
         });
@@ -193,6 +194,7 @@ public sealed partial class MainWindow
         Commands.Register("help.shortcuts", OpenShortcutsPage);
         Commands.Register("help.documentation", () => Documentation_Click(this, e));
         Commands.Register("help.reportProblem", () => ReportProblem_Click(this, e));
+        RegisterPackagingCommands();
         Commands.Register("help.about", () => About_Click(this, e));
     }
 
@@ -201,6 +203,7 @@ public sealed partial class MainWindow
     {
         _menus?.RefreshStates();
         RefreshToolbarStates();
+        UpdatePackagingMenu();
     }
 
     // ---- キーの振り分け ----

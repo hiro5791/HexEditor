@@ -819,17 +819,22 @@ public sealed partial class MainWindow
         return await dialog.ShowAsync() == ContentDialogResult.Primary;
     }
 
-    /// <summary>「今すぐ再起動」(UI-22 の仕様 6): 文書を閉じる確認をしてから、同じ引数で起動し直す。</summary>
+    /// <summary>
+    /// 「今すぐ再起動」(UI-22 の仕様 6、UI-43 の仕様 5): 文書を閉じる確認をしてから起動し直し、開いていたファイルを開き直す
+    /// (起動の引数の扱いは <see cref="AppRestart"/>)。
+    /// </summary>
     public async Task RestartAsync()
     {
+        List<string> files = [.. Vm.Documents.Select(d => d.FilePath).OfType<string>()];
         if (!await CloseAsync(Vm.Documents.ToList()))
         {
             return;
         }
 
-        App.Settings.Flush();
         CommandService.Flush();
-        string args = string.Join(' ', Environment.GetCommandLineArgs().Skip(1).Select(a => a.Contains(' ') ? $"\"{a}\"" : a));
-        Microsoft.Windows.AppLifecycle.AppInstance.Restart(args);
+        if (!AppRestart.Restart(files))
+        {
+            ShowNotice(Loc.Get("Language_RestartFailed"), InfoBarSeverity.Warning);
+        }
     }
 }

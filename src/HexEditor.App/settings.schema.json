@@ -35,6 +35,11 @@
       "type": "string",
       "default": ""
     },
+    "i18n.showStringKeys": {
+      "description": "Show resource keys in tooltips",
+      "type": "boolean",
+      "default": false
+    },
     "inspector.dateFormat": {
       "description": "Inspector: date format",
       "type": "string",
@@ -107,6 +112,21 @@
       ],
       "default": "info"
     },
+    "network.downloads.enabled": {
+      "description": "Allow downloads",
+      "type": "boolean",
+      "default": true
+    },
+    "network.offline": {
+      "description": "Offline mode",
+      "type": "boolean",
+      "default": false
+    },
+    "network.translationReport.enabled": {
+      "description": "Allow translation reports",
+      "type": "boolean",
+      "default": true
+    },
     "recent.maxItems": {
       "description": "Number of recent files",
       "type": "integer",
@@ -161,6 +181,16 @@
         "never"
       ],
       "default": "always"
+    },
+    "shell.jumpList.enabled": {
+      "description": "Show the jump list",
+      "type": "boolean",
+      "default": true
+    },
+    "shell.openWith.extensions": {
+      "description": "\u0022Open with\u0022 extensions",
+      "type": "string",
+      "default": ""
     },
     "storage.tempDirectory": {
       "description": "Folder for temporary data",
@@ -253,6 +283,30 @@
       "description": "Show toolbar",
       "type": "boolean",
       "default": false
+    },
+    "update.channel": {
+      "description": "Update channel",
+      "type": "string",
+      "enum": [
+        "stable",
+        "preview"
+      ],
+      "default": "stable"
+    },
+    "update.checkAutomatically": {
+      "description": "Check for updates automatically",
+      "type": "boolean",
+      "default": true
+    },
+    "update.downloadAutomatically": {
+      "description": "Download updates automatically",
+      "type": "boolean",
+      "default": true
+    },
+    "update.skippedVersion": {
+      "description": "Skipped version",
+      "type": "string",
+      "default": ""
     },
     "view.cursor.nibbleArrowKeys": {
       "description": "Move by nibble with arrow keys",

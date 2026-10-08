@@ -147,6 +147,8 @@ public static class BuiltInCommands
         new("help.shortcuts", "help") { Icon = IconKeyboard },
         new("help.documentation", "help") { Icon = IconHelp },
         new("help.reportProblem", "help"),
+        new("help.reportTranslation", "help"),
+        new("help.checkForUpdates", "help"),
         new("help.about", "help"),
     ];
 

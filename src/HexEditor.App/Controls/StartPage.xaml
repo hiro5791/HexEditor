@@ -28,7 +28,7 @@
                 BorderThickness="1"
                 CornerRadius="{ThemeResource OverlayCornerRadius}"
                 Visibility="{x:Bind ViewModel.ShowWelcome, Mode=OneWay}">
-                <StackPanel Spacing="12">
+                <StackPanel x:Name="WelcomeItems" Spacing="12">
                     <Grid ColumnSpacing="8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />

@@ -198,6 +198,8 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Help_Documentation" cmd:CommandUi.Id="help.documentation" AutomationProperties.AutomationId="Command_Documentation" />
                         <MenuFlyoutItem x:Uid="Menu_Help_Report" cmd:CommandUi.Id="help.reportProblem" AutomationProperties.AutomationId="Command_ReportProblem" />
+                        <MenuFlyoutItem x:Uid="Menu_Help_ReportTranslation" cmd:CommandUi.Id="help.reportTranslation" AutomationProperties.AutomationId="Command_ReportTranslation" />
+                        <MenuFlyoutItem x:Uid="Menu_Help_CheckForUpdates" cmd:CommandUi.Id="help.checkForUpdates" AutomationProperties.AutomationId="Command_CheckForUpdates" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Help_About" cmd:CommandUi.Id="help.about" AutomationProperties.AutomationId="Command_About" />
                     </MenuBarItem>
@@ -231,13 +233,16 @@
             </CommandBar.ContextFlyout>
         </CommandBar>
 
-        <controls:NotificationHost
-            x:Name="WindowNotifications"
-            Grid.Row="2"
-            AutomationProperties.AutomationId="WindowNotifications"
-            Center="{x:Bind Vm.Notifications}"
-            OverflowClicked="Notifications_OverflowClicked"
-            Scope="Window" />
+        <!--  更新の InfoBar (PKG-22) とアプリ全体の通知。更新の通知はボタンが 3 つまであるため通知の一覧とは別に置く。  -->
+        <StackPanel Grid.Row="2">
+            <controls:UpdateBar x:Name="UpdateBar" />
+            <controls:NotificationHost
+                x:Name="WindowNotifications"
+                AutomationProperties.AutomationId="WindowNotifications"
+                Center="{x:Bind Vm.Notifications}"
+                OverflowClicked="Notifications_OverflowClicked"
+                Scope="Window" />
+        </StackPanel>
 
         <controls:FindBar
             x:Name="FindBar"

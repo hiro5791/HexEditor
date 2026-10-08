@@ -210,6 +210,10 @@ public partial class App : Application
         // テスト用のメニューと命令の通り道 (テスト用のビルドだけ。テスト方針 8.4)。
         TestHooks.OnLaunched(window, vm);
 
+        // 更新の確認、ジャンプリスト、Explorer 連携の案内、他の配布形態の設定の取り込み (F1-22、F1-24、PKG-31)。
+        window.RecentFiles = new RecentJumpListSource(vm.Recent);
+        window.StartPackagingFeatures();
+
         // 前回の異常終了の後始末: 復旧の提案と、クラッシュ情報の通知 (ENG-27 の仕様 6、PKG-30 の仕様 2)。
         window.ShowStartupNoticesWhenLoaded();
     }

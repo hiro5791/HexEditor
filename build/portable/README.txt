@@ -43,6 +43,22 @@ You can also open a file directly:
 
     "C:\Tools\HexEditor\HexEditor.exe" file.bin
 
+Updating
+--------
+The portable version does not replace itself. When a new version is out,
+HexEditor shows "Version X is available" with "Open download page". To
+update:
+
+1. Close HexEditor.
+2. Extract the new zip to a new folder.
+3. Move the "Data" folder and portable.marker from the old HexEditor folder
+   to the new one (replace the new portable.marker).
+4. Delete the old folder. If you registered the Explorer context menu,
+   HexEditor offers to update the registration when you start the new copy.
+
+Checking for updates uses the internet (GitHub). Turn it off in the settings
+(update.checkAutomatically) or with offline mode (network.offline).
+
 Removing HexEditor
 ------------------
 If you registered the Explorer context menu or file associations from the
@@ -116,6 +132,21 @@ HexEditor は、どんな大きさのファイルやディスクも扱えるバ�
 ファイルを直接開くこともできます。
 
     "C:\Tools\HexEditor\HexEditor.exe" file.bin
+
+更新のしかた
+------------
+ポータブル版は自分では入れ替わりません。新しい版が出ると「版 X があります」と
+「ダウンロードページを開く」を表示します。更新するには次のようにします。
+
+1. HexEditor を終了します。
+2. 新しい zip を新しいフォルダに展開します。
+3. 古い HexEditor フォルダの「Data」フォルダと portable.marker を、新しい
+   フォルダに移します (新しい portable.marker は置き換えます)。
+4. 古いフォルダを削除します。右クリックメニューを登録していた場合は、新しい
+   フォルダの HexEditor を起動すると、登録の更新を案内します。
+
+更新の確認はインターネット (GitHub) に接続します。設定
+(update.checkAutomatically) またはオフラインモード (network.offline) で止められます。
 
 削除のしかた
 ------------

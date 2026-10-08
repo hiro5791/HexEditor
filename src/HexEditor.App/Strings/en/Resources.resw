@@ -1248,4 +1248,113 @@ Details were written to:
   <data name="CmdAlias_go_bookmark_set9" xml:space="preserve"><value>mark</value></data>
   <data name="Cmd_go_bookmark_goto9" xml:space="preserve"><value>Go to numbered bookmark 9</value></data>
   <data name="CmdAlias_go_bookmark_goto9" xml:space="preserve"><value>mark jump</value></data>
+  <data name="Menu_Help_ReportTranslation.Text" xml:space="preserve"><value>Report a translation error...</value></data>
+  <data name="Menu_Help_ReportTranslation.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Help_CheckForUpdates.Text" xml:space="preserve"><value>Check for updates</value></data>
+  <data name="Menu_Help_CheckForUpdates.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>Version {0} is available.</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>Version {0} is ready to install.</value></data>
+  <data name="Update_Updated" xml:space="preserve"><value>Updated to version {0}.</value></data>
+  <data name="Update_UpToDate" xml:space="preserve"><value>You're up to date (version {0}).</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>Couldn't check for updates: {0}</value></data>
+  <data name="Update_DownloadFailed" xml:space="preserve"><value>Couldn't download the update: {0}</value></data>
+  <data name="Update_ApplyFailed" xml:space="preserve"><value>The update to version {0} failed, and the previous version is still installed. The log is in {1}.</value></data>
+  <data name="Update_Reason_NoConnection" xml:space="preserve"><value>couldn't connect to the server.</value></data>
+  <data name="Update_Reason_RateLimited" xml:space="preserve"><value>the GitHub API limit was reached. Try again later.</value></data>
+  <data name="Update_Reason_Server" xml:space="preserve"><value>the server returned an error.</value></data>
+  <data name="Update_Reason_BadResponse" xml:space="preserve"><value>the server's response couldn't be read.</value></data>
+  <data name="Update_Reason_Offline" xml:space="preserve"><value>offline mode is on.</value></data>
+  <data name="Update_Reason_NotSupported" xml:space="preserve"><value>this build can't check for updates.</value></data>
+  <data name="Update_Button_Download" xml:space="preserve"><value>Download</value></data>
+  <data name="Update_Button_OpenStore" xml:space="preserve"><value>Update in Microsoft Store</value></data>
+  <data name="Update_Button_OpenDownloadPage" xml:space="preserve"><value>Open download page</value></data>
+  <data name="Update_Button_ReleaseNotes" xml:space="preserve"><value>Release notes</value></data>
+  <data name="Update_Button_Skip" xml:space="preserve"><value>Skip this version</value></data>
+  <data name="Update_Button_RestartToUpdate" xml:space="preserve"><value>Restart to update</value></data>
+  <data name="Update_Button_Later" xml:space="preserve"><value>Later</value></data>
+  <data name="Update_RestartBusy" xml:space="preserve"><value>You can restart when the running operations (such as saving) have finished.</value></data>
+  <data name="Operation_UpdateDownload" xml:space="preserve"><value>Downloading version {0}</value></data>
+  <data name="Network_OfflineReason" xml:space="preserve"><value>Offline mode is on</value></data>
+  <data name="OpenUrl_Title" xml:space="preserve"><value>Open this page?</value></data>
+  <data name="OpenUrl_Body" xml:space="preserve"><value>Offline mode is on. HexEditor will open this address in your browser:</value></data>
+  <data name="OpenUrl_UrlLabel" xml:space="preserve"><value>Address</value></data>
+  <data name="OpenUrl_Open" xml:space="preserve"><value>Open in browser</value></data>
+  <data name="OpenUrl_Copy" xml:space="preserve"><value>Copy address</value></data>
+  <data name="TranslationReport_Title" xml:space="preserve"><value>Report a translation error</value></data>
+  <data name="TranslationReport_Body" xml:space="preserve"><value>Choose the string to report. You can search by the text shown now, the English text or the resource key.</value></data>
+  <data name="TranslationReport_SearchPlaceholder" xml:space="preserve"><value>Search strings</value></data>
+  <data name="TranslationReport_ListName" xml:space="preserve"><value>Strings</value></data>
+  <data name="TranslationReport_Report" xml:space="preserve"><value>Report</value></data>
+  <data name="TranslationReport_ReportWithout" xml:space="preserve"><value>Report without choosing</value></data>
+  <data name="Language_System" xml:space="preserve"><value>Use Windows setting (current: {0})</value></data>
+  <data name="Language_Item" xml:space="preserve"><value>{0} ({1}, reviewed {2}%)</value></data>
+  <data name="Language_RestartNotice" xml:space="preserve"><value>The display language changes after a restart.</value></data>
+  <data name="Language_RestartNow" xml:space="preserve"><value>Restart now</value></data>
+  <data name="Language_RestartFailed" xml:space="preserve"><value>HexEditor couldn't restart. Please restart it yourself.</value></data>
+  <data name="JumpList_Pinned" xml:space="preserve"><value>Pinned</value></data>
+  <data name="JumpList_Recent" xml:space="preserve"><value>Recent</value></data>
+  <data name="JumpList_Task_NewWindow" xml:space="preserve"><value>New window</value></data>
+  <data name="JumpList_Task_NewDocument" xml:space="preserve"><value>New file</value></data>
+  <data name="Shell_OpenWith" xml:space="preserve"><value>Open with HexEditor</value></data>
+  <data name="Shell_ProjectType" xml:space="preserve"><value>HexEditor project</value></data>
+  <data name="Shell_WorkspaceType" xml:space="preserve"><value>HexEditor workspace</value></data>
+  <data name="Shell_BinaryType" xml:space="preserve"><value>Binary file</value></data>
+  <data name="Shell_StaleRegistration" xml:space="preserve"><value>The Explorer right-click menu points to an old location of HexEditor.</value></data>
+  <data name="Shell_UpdateRegistration" xml:space="preserve"><value>Update</value></data>
+  <data name="Shell_Unregister" xml:space="preserve"><value>Unregister</value></data>
+  <data name="Shell_RegistrationFailed" xml:space="preserve"><value>The Explorer integration couldn't be changed: {0}</value></data>
+  <data name="Migration_Import" xml:space="preserve"><value>Import the settings of the {0} of HexEditor</value></data>
+  <data name="Migration_Done" xml:space="preserve"><value>The settings were imported.</value></data>
+  <data name="Migration_Failed" xml:space="preserve"><value>Some settings couldn't be imported: {0}</value></data>
+  <data name="Distribution_Installer" xml:space="preserve"><value>installer version</value></data>
+  <data name="Distribution_Msix" xml:space="preserve"><value>Microsoft Store version</value></data>
+  <data name="Distribution_Portable" xml:space="preserve"><value>portable version</value></data>
+  <data name="Distribution_Development" xml:space="preserve"><value>development version</value></data>
+  <data name="Cmd_help_reportTranslation" xml:space="preserve"><value>Report a translation error</value></data>
+  <data name="CmdAlias_help_reportTranslation" xml:space="preserve"><value>translation language issue</value></data>
+  <data name="Cmd_help_checkForUpdates" xml:space="preserve"><value>Check for updates</value></data>
+  <data name="CmdAlias_help_checkForUpdates" xml:space="preserve"><value>update upgrade version</value></data>
+  <data name="Set_i18n_showStringKeys" xml:space="preserve"><value>Show resource keys in tooltips</value></data>
+  <data name="SetDesc_i18n_showStringKeys" xml:space="preserve"><value>For translators: show the resource key of each string in its tooltip.</value></data>
+  <data name="Set_update_checkAutomatically" xml:space="preserve"><value>Check for updates automatically</value></data>
+  <data name="SetDesc_update_checkAutomatically" xml:space="preserve"><value>Check for a new version 30 seconds after startup and then every 24 hours.</value></data>
+  <data name="Set_update_downloadAutomatically" xml:space="preserve"><value>Download updates automatically</value></data>
+  <data name="SetDesc_update_downloadAutomatically" xml:space="preserve"><value>Download a new version in the background when one is found (installer version).</value></data>
+  <data name="Set_update_channel" xml:space="preserve"><value>Update channel</value></data>
+  <data name="SetDesc_update_channel" xml:space="preserve"><value>Which releases to receive.</value></data>
+  <data name="SetOpt_update_channel_stable" xml:space="preserve"><value>Stable</value></data>
+  <data name="SetOpt_update_channel_preview" xml:space="preserve"><value>Preview</value></data>
+  <data name="Set_update_skippedVersion" xml:space="preserve"><value>Skipped version</value></data>
+  <data name="SetDesc_update_skippedVersion" xml:space="preserve"><value>The version chosen with "Skip this version".</value></data>
+  <data name="Set_network_offline" xml:space="preserve"><value>Offline mode</value></data>
+  <data name="SetDesc_network_offline" xml:space="preserve"><value>Turn off all update checks and downloads. Web pages are opened only after you see the address.</value></data>
+  <data name="Set_network_downloads_enabled" xml:space="preserve"><value>Allow downloads</value></data>
+  <data name="SetDesc_network_downloads_enabled" xml:space="preserve"><value>Allow downloading templates, plugins and additional components when you ask for them.</value></data>
+  <data name="Set_network_translationReport_enabled" xml:space="preserve"><value>Allow translation reports</value></data>
+  <data name="SetDesc_network_translationReport_enabled" xml:space="preserve"><value>Open the translation report form in the browser without asking first.</value></data>
+  <data name="Set_shell_jumpList_enabled" xml:space="preserve"><value>Show the jump list</value></data>
+  <data name="SetDesc_shell_jumpList_enabled" xml:space="preserve"><value>Show recent and pinned files in the taskbar jump list.</value></data>
+  <data name="Set_shell_openWith_extensions" xml:space="preserve"><value>"Open with" extensions</value></data>
+  <data name="SetDesc_shell_openWith_extensions" xml:space="preserve"><value>Extensions offered in "Open with", separated by ";". Empty uses .bin;.dat;.img;.rom;.dmp;.raw;.iso.</value></data>
+  <data name="SetSection_Explorer" xml:space="preserve"><value>File Explorer integration</value></data>
+  <data name="SetSearch_Explorer" xml:space="preserve"><value>context menu open with association register</value></data>
+  <data name="SetSection_Network" xml:space="preserve"><value>Features that use the network</value></data>
+  <data name="SetSearch_Network" xml:space="preserve"><value>network internet connection offline privacy</value></data>
+  <data name="Shell_Register" xml:space="preserve"><value>Register</value></data>
+  <data name="Shell_Registered" xml:space="preserve"><value>"Open with HexEditor" is registered.</value></data>
+  <data name="Shell_NotRegistered" xml:space="preserve"><value>"Open with HexEditor" is not registered.</value></data>
+  <data name="Shell_ManagedByWindows" xml:space="preserve"><value>Managed by Windows settings.</value></data>
+  <data name="Shell_NotAvailable" xml:space="preserve"><value>Not available in this build.</value></data>
+  <data name="Shell_StateUnavailable" xml:space="preserve"><value>The registration state could not be read.</value></data>
+  <data name="Shell_OtherDistribution" xml:space="preserve"><value>Another edition of HexEditor is also registered. The menu may show two items.</value></data>
+  <data name="Network_Feature_Updates" xml:space="preserve"><value>Update checks and downloads</value></data>
+  <data name="Network_Feature_Downloads" xml:space="preserve"><value>Downloading templates and plugins</value></data>
+  <data name="Network_Feature_Components" xml:space="preserve"><value>Downloading additional components</value></data>
+  <data name="Network_Feature_BrowserPages" xml:space="preserve"><value>Translation reports and documentation pages</value></data>
+  <data name="Network_Destination_Updates" xml:space="preserve"><value>GitHub Releases or Microsoft Store</value></data>
+  <data name="Network_Destination_Downloads" xml:space="preserve"><value>Template and plugin repositories, only when you ask</value></data>
+  <data name="Network_Destination_Components" xml:space="preserve"><value>The update distribution site, only when you ask</value></data>
+  <data name="Network_Destination_BrowserPages" xml:space="preserve"><value>GitHub, opened in your browser</value></data>
+  <data name="Network_FeatureDetail" xml:space="preserve"><value>{0}. Setting: {1}</value></data>
+  <data name="Network_UserDestinations" xml:space="preserve"><value>Remote data sources and script network access connect only to the destinations you specify, and only when you allow it. Offline mode does not apply to them.</value></data>
 </root>

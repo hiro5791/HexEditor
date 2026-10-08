@@ -93,9 +93,17 @@ public sealed partial class MainWindow
         ]);
     }
 
-    /// <summary>既定のブラウザで開く。開けなければ URL をクリップボードにコピーして知らせる (UI-40 の「エラー」)。</summary>
-    private async Task OpenUriAsync(Uri uri)
+    /// <summary>
+    /// 既定のブラウザで開く。開けなければ URL をクリップボードにコピーして知らせる (UI-40 の「エラー」)。
+    /// オフラインモードでは、開く前に URL を表示して開くかどうかを選ばせる (UI-58 の仕様 3。<paramref name="translationReport"/> は UI-41 の仕様 6)。
+    /// </summary>
+    private async Task OpenUriAsync(Uri uri, bool translationReport = false)
     {
+        if (!await ConfirmOpenWebPageAsync(uri, translationReport))
+        {
+            return;
+        }
+
         if (TestHooks.InterceptLaunch(uri))
         {
             return;

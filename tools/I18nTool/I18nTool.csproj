@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    翻訳の運用のツール (09 の UI-48 用語集、UI-49 機械翻訳と翻訳の確認、10 の PKG-29 リリースノートの翻訳の進捗)。CI から呼ぶ。
+    使い方は Program.cs の先頭のコメント。テストは tests/HexEditor.Core.Tests/I18n。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>HexEditor.I18nTool</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="HexEditor.Core.Tests" />
+  </ItemGroup>
+
+</Project>
