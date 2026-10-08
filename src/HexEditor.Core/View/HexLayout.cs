@@ -2,8 +2,9 @@ namespace HexEditor.Core.View;
 
 /// <summary>
 /// 行とオフセットの対応 (VIEW-01 の仕様 5〜7)。行番号・オフセットはすべて <see cref="long"/> で計算する。
+/// <paramref name="RowShift"/> は行の先頭のずれ a (VIEW-20 の仕様 5)。行 r はオフセット r × b − a から始まり、最初の行は先頭の a バイト分が空白になる。
 /// </summary>
-public readonly record struct HexLayout(int BytesPerRow, long Length, bool CanResize)
+public readonly record struct HexLayout(int BytesPerRow, long Length, bool CanResize, int RowShift = 0)
 {
     /// <summary>カーソルを置ける最大のオフセット (VIEW-25 の仕様 1)。長さを変えられる場合は末尾の次の位置 L。</summary>
     public long MaxCursor => CanResize ? Length : Math.Max(0, Length - 1);
@@ -12,13 +13,16 @@ public readonly record struct HexLayout(int BytesPerRow, long Length, bool CanRe
     public long TotalRows => LastRow == long.MaxValue ? long.MaxValue : LastRow + 1;
 
     /// <summary>最後の行 (最大値のカーソルがある行) の番号。</summary>
-    public long LastRow => MaxCursor / BytesPerRow;
+    public long LastRow => RowOf(MaxCursor);
 
-    public long RowOf(long offset) => offset / BytesPerRow;
+    /// <summary>オフセットのある行。ずれを足しても long を越えないよう、符号なしで計算する。</summary>
+    public long RowOf(long offset) => (long)(((ulong)Math.Max(0, offset) + (ulong)RowShift) / (ulong)BytesPerRow);
 
-    public long RowStart(long row) => row * BytesPerRow;
+    /// <summary>行の先頭のオフセット。最初の行はずれの分だけ負になる。</summary>
+    public long RowStart(long row) => row * BytesPerRow - RowShift;
 
-    public int ColumnOf(long offset) => (int)(offset % BytesPerRow);
+    /// <summary>行の中の位置 (0〜b − 1)。</summary>
+    public int ColumnOf(long offset) => (int)(((ulong)Math.Max(0, offset) + (ulong)RowShift) % (ulong)BytesPerRow);
 
     /// <summary>一番上に表示できる行の最大値 M (VIEW-02 の仕様 1)。</summary>
     public long MaxTopRow(int visibleRows) => Math.Max(0, LastRow - (Math.Max(1, visibleRows) - 1));

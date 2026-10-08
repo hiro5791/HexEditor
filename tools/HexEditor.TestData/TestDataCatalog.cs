@@ -57,6 +57,17 @@ public static class TestDataCatalog
         // ---- cases/04-search.md の表 ----
         new("TD-FIND-RANDOM-10G", 10 * GiB, "種 4401 の乱数 (スパースにしない)。最後の 8 バイトが HEXEND!!", WriteFindRandom),
 
+        // ---- テキスト (test-data.md の共通の表) ----
+        new("TD-TEXT-ASCII", 4 * KiB, "英文の ASCII テキスト (改行は CRLF)", path => WriteAll(path, Text(AsciiLines, Encoding.ASCII, 4 * KiB, bom: false))),
+        new("TD-TEXT-UTF8", 4 * KiB, "23 言語の短い文の UTF-8 (BOM なし)。絵文字・結合文字を含む",
+            path => WriteAll(path, Text(Utf8Lines, new UTF8Encoding(false), 4 * KiB, bom: false))),
+        new("TD-TEXT-UTF16LE", 8 * KiB, "TD-TEXT-UTF8 と同じ内容の UTF-16 LE (BOM 付き)",
+            path => WriteAll(path, Text(Utf8Lines, new UnicodeEncoding(false, true), 8 * KiB, bom: true))),
+        new("TD-TEXT-SJIS", 4 * KiB, "日本語の文の Shift_JIS (半角カナ・機種依存文字を含む)", path => WriteAll(path, Text(SjisLines, ShiftJis(), 4 * KiB, bom: false))),
+
+        // ---- cases/02-view-and-navigation.md の表 ----
+        new("TD-VIEW-PATTERNS", 512, "表示形式・文字コードの確認用の決まったバイト列", path => WriteAll(path, ViewPatterns())),
+
         // ---- cases/09-ui-and-settings.md の表 ----
         new("TD-UI-SECRET", 4 * KiB, "secret-content.bin: HEXEDITOR-SECRET-7F3A の繰り返し",
             path => WriteGenerated(path, 4 * KiB, (o, s) => Repeat(SecretMarker, o, s)), dir => Path.Combine(dir, "TD-UI-SECRET", "secret-content.bin")),
@@ -196,6 +207,118 @@ public static class TestDataCatalog
     private static IEnumerable<long> Around(long p) => [p - MarkerLength, p];
 
     private static void WriteAll(string path, byte[] data) => File.WriteAllBytes(path, data);
+
+    // ---- テキストのテストデータ ----
+
+    private static string[] AsciiLines =>
+    [
+        "The quick brown fox jumps over the lazy dog.",
+        "Pack my box with five dozen liquor jugs.",
+        "How vexingly quick daft zebras jump!",
+        "Sphinx of black quartz, judge my vow.",
+        "HexEditor test data: 0123456789 ABCDEF abcdef ~!@#$%^&*()_+-=[]{};':\",./<>?",
+    ];
+
+    /// <summary>23 言語の短い文 (絵文字・結合文字を含む)。</summary>
+    private static string[] Utf8Lines =>
+    [
+        "English: Hello, world!",
+        "日本語: こんにちは、世界。漢字とカタカナ",
+        "简体中文: 你好，世界",
+        "繁體中文: 你好，世界",
+        "한국어: 안녕하세요 세계",
+        "Deutsch: Grüße, schöne Welt",
+        "Français: Bonjour le monde, ça va ?",
+        "Español: ¡Hola, mundo! Ñandú",
+        "Italiano: Ciao mondo, perché",
+        "Português: Olá, mundo! Ação",
+        "Русский: Привет, мир",
+        "Українська: Привіт, світе",
+        "Polski: Witaj świecie, zażółć",
+        "Čeština: Ahoj světe, příliš",
+        "Magyar: Helló világ, árvíztűrő",
+        "Türkçe: Merhaba dünya, ışık",
+        "Nederlands: Hallo wereld",
+        "Svenska: Hej världen, åäö",
+        "العربية: مرحبا بالعالم",
+        "فارسی: سلام دنیا",
+        "עברית: שלום עולם",
+        "ไทย: สวัสดีชาวโลก",
+        "Tiếng Việt: Xin chào thế giới",
+        "Emoji: 😀🎉👍 ★ é ä (combining)",
+    ];
+
+    private static string[] SjisLines =>
+    [
+        "日本語の文章です。ひらがな、カタカナ、漢字を含みます。",
+        "半角カナ: ｱｲｳｴｵ ｶﾞｷﾞｸﾞ ﾊﾟﾋﾟﾌﾟ",
+        "機種依存文字: ①②③ ㈱ ㌔ Ⅰ Ⅱ Ⅲ",
+        "記号: ＡＢＣ　１２３　〒　※　→　♪",
+        "ASCII mixed: HexEditor 0123456789",
+    ];
+
+    /// <summary>行を CRLF で区切って並べ、<paramref name="size"/> バイトに収まらない行は入れずに空白で埋める。</summary>
+    private static byte[] Text(string[] lines, Encoding encoding, long size, bool bom)
+    {
+        var result = new List<byte>((int)size);
+        if (bom)
+        {
+            result.AddRange(encoding.GetPreamble());
+        }
+
+        byte[] space = encoding.GetBytes(" ");
+        for (int i = 0; ; i++)
+        {
+            byte[] line = encoding.GetBytes(lines[i % lines.Length] + "\r\n");
+            if (result.Count + line.Length > size)
+            {
+                break;
+            }
+
+            result.AddRange(line);
+        }
+
+        while (result.Count + space.Length <= size)
+        {
+            result.AddRange(space);
+        }
+
+        while (result.Count < size)
+        {
+            result.Add(0x20);
+        }
+
+        return [.. result];
+    }
+
+    private static Encoding ShiftJis()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        return Encoding.GetEncoding(932);
+    }
+
+    /// <summary>TD-VIEW-PATTERNS (cases/02-view-and-navigation.md の表)。</summary>
+    public static byte[] ViewPatterns()
+    {
+        byte[] data = new byte[512];
+        void Put(int offset, params byte[] bytes) => bytes.CopyTo(data, offset);
+        Put(0x000, 0x4F);
+        Put(0x010, 0xFF, 0xFF, 0xFF, 0xFF);
+        Put(0x020, 0x00, 0x00, 0xC0, 0x7F);
+        Put(0x030, 0xA4, 0x70, 0x9D, 0x3F, 0x00, 0x00, 0xC0, 0x3F);
+        Put(0x040, 0xE9, 0x82, 0xC1);
+        Put(0x050, 0xE3, 0x81, 0x82);
+        Put(0x060, 0xC3, 0x28);
+        Put(0x070, 0x3D, 0xD8, 0x00, 0xDE);
+        Put(0x080, 0x41, 0xCC, 0x81);
+        Put(0x090, 0xC7, 0xE1, 0xDA, 0xD1, 0xC8, 0xED, 0xC9);
+        Put(0x0BF, 0xE3, 0x81, 0x82);
+        Put(0x0E1, 0x48, 0x00, 0x65, 0x00, 0x6C, 0x00, 0x6C, 0x00, 0x6F, 0x00);
+        Put(0x100, 0xDE, 0xAD, 0xBE, 0xEF, 0x01, 0x02, 0x03, 0x04);
+        Put(0x110, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08);
+        Put(0x120, 0x34, 0x12);
+        return data;
+    }
 
     /// <summary><paramref name="text"/> を先頭から繰り返した内容。</summary>
     private static void Repeat(string text, long offset, Span<byte> destination)

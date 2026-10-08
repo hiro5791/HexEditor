@@ -65,7 +65,7 @@ public enum JumpPlacement
 /// 1 つのビューの、カーソル・選択範囲・スクロール位置・入力モード (VIEW-25〜VIEW-27、VIEW-34、EDIT-02、EDIT-10〜EDIT-13)。
 /// UI に依存しない。表示側は <see cref="VisibleRows"/> を設定し、<see cref="Changed"/> で再描画する。
 /// </summary>
-public sealed class EditorState
+public sealed partial class EditorState
 {
     private const string TypingKey = "typing";
 
@@ -79,19 +79,16 @@ public sealed class EditorState
     private long _selectionLength;
     private long _topRow;
     private int _visibleRows = 1;
-    private readonly LinkedList<JumpPoint> _back = new();
-    private readonly Stack<JumpPoint> _forward = new();
-
-    /// <summary>ジャンプ履歴の 1 件 (VIEW-31)。</summary>
-    private readonly record struct JumpPoint(long Offset, long TopRow, ActiveColumn Column);
+    private readonly JumpHistory _jumps = new();
 
     /// <summary>ジャンプ履歴の最大件数 (VIEW-31 の仕様 4)。</summary>
-    public const int JumpHistoryLimit = 100;
+    public const int JumpHistoryLimit = JumpHistory.Limit;
 
     public EditorState(Document document, int bytesPerRow = 16)
     {
         Document = document;
-        BytesPerRow = bytesPerRow;
+        BytesPerRow = Math.Clamp(bytesPerRow, 1, ViewSettings.MaxBytesPerRow);
+        _view = ViewSettings.Default with { BytesPerRow = BytesPerRow };
         Document.Changed += (_, e) => OnDocumentChanged(e);
     }
 
@@ -99,7 +96,7 @@ public sealed class EditorState
 
     public int BytesPerRow { get; private set; }
 
-    public HexLayout Layout => new(BytesPerRow, Document.Length, Document.CanResize);
+    public HexLayout Layout => new(BytesPerRow, Document.Length, Document.CanResize, View.EffectiveRowShift(BytesPerRow));
 
     /// <summary>カーソルのオフセット。</summary>
     public long Cursor => _cursor;
@@ -127,6 +124,8 @@ public sealed class EditorState
             if (!ReferenceEquals(_textEncoding, value))
             {
                 _textEncoding = value;
+                _view = _view with { Encoding = value.Id };
+                ViewChanged?.Invoke(this, EventArgs.Empty);
                 RaiseChanged();
             }
         }
@@ -317,34 +316,38 @@ public sealed class EditorState
         RaiseChanged();
     }
 
-    public bool CanGoBack => _back.Count > 0;
+    public bool CanGoBack => _jumps.CanGoBack;
 
-    public bool CanGoForward => _forward.Count > 0;
+    public bool CanGoForward => _jumps.CanGoForward;
 
-    /// <summary>ジャンプ履歴を 1 つ戻る (Alt+←。VIEW-31 の仕様 5)。</summary>
+    /// <summary>ジャンプ履歴を 1 つ戻る (Alt+←。VIEW-31 の仕様 5)。戻れなければ何もしない (仕様 10)。</summary>
     public void GoBack()
     {
-        if (_back.Last is not { } last)
+        if (_jumps.Back(CurrentPoint()) is { } point)
         {
-            return;
+            JumpTo(point);
         }
-
-        _back.RemoveLast();
-        _forward.Push(CurrentPoint());
-        JumpTo(last.Value);
     }
 
     /// <summary>ジャンプ履歴を 1 つ進む (Alt+→)。</summary>
     public void GoForward()
     {
-        if (_forward.Count == 0)
+        if (_jumps.Forward(CurrentPoint()) is { } point)
         {
-            return;
+            JumpTo(point);
         }
+    }
 
-        JumpPoint next = _forward.Pop();
-        _back.AddLast(CurrentPoint());
-        JumpTo(next);
+    /// <summary>「履歴の一覧」(VIEW-31 の仕様 8): 戻る側の新しいものから最大 20 件。</summary>
+    public IReadOnlyList<JumpPoint> RecentJumps => _jumps.Recent();
+
+    /// <summary>「履歴の一覧」で選んだ位置へ移る (一覧の <paramref name="index"/> 番目。0 が最新)。</summary>
+    public void GoBackTo(int index)
+    {
+        if (_jumps.BackTo(index, CurrentPoint()) is { } point)
+        {
+            JumpTo(point);
+        }
     }
 
     /// <summary>
@@ -406,72 +409,31 @@ public sealed class EditorState
         }
     }
 
-    private JumpPoint CurrentPoint() => new(_cursor, _topRow, ActiveColumn);
+    private JumpPoint CurrentPoint() => new(_cursor, Math.Max(0, Layout.RowStart(_topRow)), ActiveColumn);
 
-    /// <summary>移動前の位置を記録する。直前の記録と同じ行なら記録しない (VIEW-31 の仕様 3)。</summary>
-    private void RecordJump()
+    /// <summary>
+    /// 移動の直前の位置をジャンプ履歴に記録する (VIEW-31 の仕様 1)。直前の記録と同じ行なら記録しない (仕様 3)。検索・ブックマーク・
+    /// インスペクタなど、ほかの機能からの移動の前にも呼ぶ。
+    /// </summary>
+    public void RecordJump()
     {
-        JumpPoint point = CurrentPoint();
-        if (_back.Last is { } last && Layout.RowOf(last.Value.Offset) == Layout.RowOf(point.Offset))
-        {
-            _forward.Clear();
-            return;
-        }
-
-        _back.AddLast(point);
-        if (_back.Count > JumpHistoryLimit)
-        {
-            _back.RemoveFirst();
-        }
-
-        _forward.Clear();
+        HexLayout layout = Layout;
+        _jumps.Record(CurrentPoint(), (a, b) => layout.RowOf(a) == layout.RowOf(b));
     }
 
     private void JumpTo(JumpPoint point)
     {
         ClearSelectionAnchor();
-        _cursor = Math.Clamp(point.Offset, 0, Layout.MaxCursor);
+
+        // 移動先がドキュメントの最大値を超えている場合は最大値に移す (仕様 7)。
+        HexLayout layout = Layout;
+        _cursor = Math.Clamp(point.Offset, 0, layout.MaxCursor);
         LowNibble = false;
-        ActiveColumn = point.Column;
-        SetTopRow(point.TopRow);
+        ActiveColumn = VisibleColumn(point.Column);
+        SetTopRow(layout.RowOf(Math.Clamp(point.TopOffset, 0, layout.MaxCursor)));
         EnsureCursorVisible();
+        Document.History.BreakCoalescing();
         RaiseChanged();
-    }
-
-    /// <summary>挿入・削除に合わせて履歴の位置をずらす (VIEW-31 の仕様 6)。</summary>
-    private void AdjustJumpHistory(DocumentChangedEventArgs e)
-    {
-        if (e.IsWholeDocument)
-        {
-            return;
-        }
-
-        long Shift(long offset)
-        {
-            if (offset < e.Offset)
-            {
-                return offset;
-            }
-
-            if (offset < e.Offset + e.RemovedLength)
-            {
-                return e.Offset;
-            }
-
-            return offset - e.RemovedLength + e.InsertedLength;
-        }
-
-        for (LinkedListNode<JumpPoint>? node = _back.First; node is not null; node = node.Next)
-        {
-            node.Value = node.Value with { Offset = Shift(node.Value.Offset) };
-        }
-
-        JumpPoint[] forward = [.. _forward.Reverse().Select(p => p with { Offset = Shift(p.Offset) })];
-        _forward.Clear();
-        foreach (JumpPoint p in forward)
-        {
-            _forward.Push(p);
-        }
     }
 
     /// <summary>カーソルを動かさずに表示だけを動かす (Ctrl+↑ / Ctrl+↓、ホイール)。</summary>
@@ -492,7 +454,14 @@ public sealed class EditorState
     public void Click(long offset, ActiveColumn column, bool lowNibble, bool extend)
     {
         offset = Math.Clamp(offset, 0, Layout.MaxCursor);
-        ActiveColumn = column;
+
+        // 元の位置から 1 画面分 (b × V バイト) 以上離れたクリックはジャンプ履歴に記録する (VIEW-31 の仕様 1)。
+        if (!extend && Math.Abs((decimal)offset - _cursor) >= (decimal)BytesPerRow * _visibleRows)
+        {
+            RecordJump();
+        }
+
+        ActiveColumn = VisibleColumn(column);
         if (extend)
         {
             long anchor = _anchor >= 0 ? _anchor : _cursor;
@@ -536,6 +505,12 @@ public sealed class EditorState
     /// <summary>Tab / Shift+Tab で列を切り替える (VIEW-27)。</summary>
     public void ToggleColumn()
     {
+        // 表示されている列の間だけを移る。表示されている列が 1 つのときは何もしない (VIEW-16 の仕様 5)。
+        if (!View.ShowHexColumn || !View.ShowTextColumn)
+        {
+            return;
+        }
+
         ActiveColumn = ActiveColumn == ActiveColumn.Hex ? ActiveColumn.Text : ActiveColumn.Hex;
         LowNibble = false;
         Document.History.BreakCoalescing();
@@ -1125,7 +1100,8 @@ public sealed class EditorState
 
     private void OnDocumentChanged(DocumentChangedEventArgs e)
     {
-        AdjustJumpHistory(e);
+        _jumps.Adjust(e);
+        OnDocumentChangedForView(e);
         if (e.Selection is { } range)
         {
             // 元に戻す・やり直しの後は、その編集グループの範囲を選択して見える位置に出す (EDIT-19 の仕様 10)。
