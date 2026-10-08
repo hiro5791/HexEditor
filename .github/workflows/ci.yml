@@ -284,7 +284,7 @@ jobs:
       - name: UI tests
         env:
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
-        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI" --logger "trx;LogFileName=ui.trx" --results-directory TestResults
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI&Category!=Nightly" --logger "trx;LogFileName=ui.trx" --results-directory TestResults
 
       # 長い UI テスト (オフラインモードでの 1 時間の操作。TC-UI-58-02) は毎晩と手動の実行だけ。
       - name: Nightly UI tests
@@ -587,7 +587,7 @@ jobs:
         continue-on-error: true
         env:
           HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
-        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI" --logger "trx;LogFileName=ui-${{ matrix.distro }}.trx" --results-directory TestResults
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "Category=UI&Category!=Nightly" --logger "trx;LogFileName=ui-${{ matrix.distro }}.trx" --results-directory TestResults
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -168,11 +168,14 @@ public static class TestDataCatalog
 
     public static IReadOnlyCollection<TestDataItem> All => Items.Values;
 
-    /// <summary>テストデータの置き場所。環境変数 HEXEDITOR_TESTDATA で変えられる。</summary>
-    public static string CacheDirectory =>
+    /// <summary>
+    /// テストデータの置き場所。環境変数 HEXEDITOR_TESTDATA で変えられる。CI では "..	estdata" を含む形で渡すので、完全なパスに
+    /// 直して返す (アプリが表示・コピーするパスは正規化されているため、比べるテストが一致しない。StorageFile も ".." を含むパスを受け付けない)。
+    /// </summary>
+    public static string CacheDirectory => Path.GetFullPath(
         Environment.GetEnvironmentVariable("HEXEDITOR_TESTDATA") is { Length: > 0 } dir
             ? dir
-            : Path.Combine(Path.GetTempPath(), "HexEditorTestData");
+            : Path.Combine(Path.GetTempPath(), "HexEditorTestData"));
 
     /// <summary>テストデータのパスを返す。なければ生成する。</summary>
     public static string Get(string id) => Generate(id, CacheDirectory);

@@ -213,7 +213,58 @@ public sealed class AppSession : IAsyncDisposable
 
     // ---- 命令の通り道 ----
 
-    public Task<JsonObject> SendAsync(string cmd, JsonObject? args = null, TimeSpan? timeout = null) => Channel.SendAsync(cmd, args, timeout);
+    public async Task<JsonObject> SendAsync(string cmd, JsonObject? args = null, TimeSpan? timeout = null)
+    {
+        try
+        {
+            return await Channel.SendAsync(cmd, args, timeout);
+        }
+        catch (IOException ex)
+        {
+            // アプリが落ちた・終わった: 終了コードとクラッシュ情報・ログの末尾を失敗の文に入れる (CI のログだけで原因が分かるように)。
+            throw new IOException($"{ex.Message} (command '{cmd}'){ExitReport()}", ex);
+        }
+    }
+
+    /// <summary>アプリが終わっていれば、終了コード・最新のクラッシュ情報・ログの末尾。</summary>
+    public string ExitReport()
+    {
+        var text = new System.Text.StringBuilder();
+        try
+        {
+            if (!Process.WaitForExit(5000))
+            {
+                return " The process is still running.";
+            }
+
+            text.Append($" The process exited with code 0x{Process.ExitCode:X8}.");
+        }
+        catch (Exception e) when (e is InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            text.Append(" The exit code is unknown.");
+        }
+
+        static FileInfo? Newest(string folder, string pattern) => Directory.Exists(folder)
+            ? new DirectoryInfo(folder).GetFiles(pattern, SearchOption.AllDirectories).OrderByDescending(f => f.LastWriteTimeUtc).FirstOrDefault()
+            : null;
+        try
+        {
+            if (Newest(CrashFolder, "*.txt") is { } crash)
+            {
+                text.AppendLine().AppendLine($"--- {crash.Name}").AppendJoin(Environment.NewLine, File.ReadLines(crash.FullName).Take(60));
+            }
+
+            if (Newest(Profile, "*.log") is { } log)
+            {
+                text.AppendLine().AppendLine($"--- {log.Name} (last lines)").AppendJoin(Environment.NewLine, File.ReadLines(log.FullName).TakeLast(25));
+            }
+        }
+        catch (IOException)
+        {
+        }
+
+        return text.ToString();
+    }
 
     public Task<JsonObject> StateAsync() => SendAsync("state");
 
@@ -272,7 +323,7 @@ public sealed class AppSession : IAsyncDisposable
 
             if (Process.HasExited)
             {
-                throw new InvalidOperationException($"HexEditor exited (code {Process.ExitCode}) while waiting for {what}.");
+                throw new InvalidOperationException($"HexEditor exited while waiting for {what}.{ExitReport()}");
             }
 
             await Task.Delay(50);
