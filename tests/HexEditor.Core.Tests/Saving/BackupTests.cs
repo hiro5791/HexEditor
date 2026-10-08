@@ -28,6 +28,27 @@ public sealed class BackupTests : IDisposable
     }
 
     [Fact]
+    public async Task BackupCopyReportsItsProgressAndRestoresTheTotal()
+    {
+        // ENG-26 の「巨大ファイル・長時間処理」: その場保存のバックアップのコピーは長時間処理として進捗を示す。
+        string path = Path.Combine(_dir, "big.bin");
+        File.WriteAllBytes(path, new byte[10 * 1024 * 1024]);
+        var center = new Core.Operations.OperationCenter();
+        var seen = new List<(long Processed, long? Total)>();
+        await center.RunAsync("save", Core.Operations.OperationKind.WritesExternal, null, 123, op =>
+        {
+            op.ProgressChanged += (_, _) => seen.Add((op.ProcessedBytes, op.TotalBytes));
+            Backup.Copy(path, path + ".bak", op);
+            Assert.Equal(123, op.TotalBytes);
+            return Task.CompletedTask;
+        });
+
+        // 進捗の通知は 100 ms ごとにまとめるため、コピーの開始 (全体がファイルの大きさ) の通知を確かめる。
+        Assert.Contains(seen, s => s.Total == 10 * 1024 * 1024);
+        Assert.Equal(File.ReadAllBytes(path), File.ReadAllBytes(path + ".bak"));
+    }
+
+    [Fact]
     [Trait(TC, "TC-ENG-26-01")]
     public void SameFolderBackupsKeepTheConfiguredGenerations()
     {

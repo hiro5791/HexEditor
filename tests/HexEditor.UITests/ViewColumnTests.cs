@@ -518,6 +518,34 @@ public sealed class ViewColumnTests
         Assert.Equal("none", shifted["underline"]!.GetValue<string>());
     });
 
+    /// <summary>VIEW-15 の仕様 5: 設定「削除位置を表示」で、削除によって詰まった境界の左側のセルの右端に縦の線を引く (既定はオフ)。</summary>
+    [Fact]
+    public Task Deleted_positions_are_marked_when_enabled() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SelectAsync(0x44, 4);
+        await app.KeyAsync("Delete");
+        await GoToAsync(app, "0x100");
+        static IEnumerable<JsonNode?> Deletions(JsonObject render) =>
+            render["rows"]!.AsArray().SelectMany(r => r!["lines"]!.AsArray()).Where(l => l!["kind"]!.GetValue<string>().StartsWith("deletion", StringComparison.Ordinal));
+        Assert.Empty(Deletions(await app.RenderAsync()));
+
+        WriteSettings(app.Profile, new JsonObject { ["view.modified.showDeletions"] = true });
+        await app.WaitUntilAsync(async () => Deletions(await app.RenderAsync()).Any(), TimeSpan.FromSeconds(10), "the deletion marker");
+        JsonObject render = await app.RenderAsync();
+        JsonObject row = RowOf(render, 0x43)!;
+        JsonObject left = CellOf(render, 0x43)!;
+        JsonNode hex = Assert.Single(row["lines"]!.AsArray(), l => l!["kind"]!.GetValue<string>() == "deletion")!;
+        Assert.Equal(left["hexLeft"]!.GetValue<double>() + 2 * render["cellWidth"]!.GetValue<double>() - 1, hex["x1"]!.GetValue<double>(), 1);
+        Assert.Single(row["lines"]!.AsArray(), l => l!["kind"]!.GetValue<string>() == "deletionText");
+        Assert.Equal(2, Deletions(render).Count());
+
+        // Undo で消える。
+        await app.KeyAsync("Z", ctrl: true);
+        await app.IdleAsync();
+        Assert.Empty(Deletions(await app.RenderAsync()));
+    });
+
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-15-03")]
     public Task Modified_bytes_are_underlined_in_high_contrast() => UiTestContext.RunAsync(async ctx =>

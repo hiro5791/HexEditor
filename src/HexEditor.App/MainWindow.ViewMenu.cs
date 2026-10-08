@@ -28,6 +28,12 @@ public sealed partial class MainWindow
 
     private static readonly int[] BytesPerRowChoices = [8, 16, 32, 64];
 
+    /// <summary>メニューに出すセクタサイズ (VIEW-19 の仕様 6)。そのほかは「指定…」で入れる。</summary>
+    private static readonly int[] SectorSizeChoices = [512, 1024, 2048, 4096];
+
+    /// <summary>指定できるセクタサイズの上限。</summary>
+    private const int MaxSectorSize = 1 << 20;
+
     /// <summary>表示メニューと移動メニューに項目を加える (コンストラクタから 1 回呼ぶ)。</summary>
     private void InitializeViewMenu()
     {
@@ -51,6 +57,12 @@ public sealed partial class MainWindow
         columns.Items.Add(Toggle("Command_ViewLowercase", "Menu_View_Lowercase", v => v.LowercaseHex, (v, on) => v with { LowercaseHex = on }));
         columns.Items.Add(Toggle("Command_ViewDimZeros", "Menu_View_DimZeros", v => v.DimZeros, (v, on) => v with { DimZeros = on }));
         columns.Items.Add(Toggle("Command_ViewAlternate", "Menu_View_Alternate", v => v.AlternateColumns, (v, on) => v with { AlternateColumns = on }));
+        columns.Items.Add(Toggle("Command_ViewAlternateText", "Menu_View_AlternateText", v => v.AlternateTextColumns,
+            (v, on) => v with { AlternateTextColumns = on }));
+
+        // 8 バイトごとの中央区切り (VIEW-09 の仕様 3。グループ化が 8 以上のときは無効)。
+        columns.Items.Add(Toggle("Command_ViewMiddleSeparator", "Menu_View_MiddleSeparator", v => v.GroupSize < 8 && (v.MiddleSeparator ?? true),
+            (v, on) => v with { MiddleSeparator = on }, v => v.GroupSize < 8));
         columns.Items.Add(Toggle("Command_ViewModified", "Menu_View_Modified", v => v.HighlightModified, (v, on) => v with { HighlightModified = on }));
 
         // 1 行のバイト数 (VIEW-08)
@@ -64,6 +76,8 @@ public sealed partial class MainWindow
         bytesPerRow.Items.Add(Radio("Command_ViewBytesPerRowAuto", Loc.Get("Menu_View_BytesPerRowAuto" + "/Text"), "BytesPerRow",
             () => ChangeView(v => v with { AutoBytesPerRow = true }), Loc.Get("Menu_View_BytesPerRowAuto" + "/AccessKey"), v => v.AutoBytesPerRow));
         bytesPerRow.Items.Add(Item("Command_ViewBytesPerRowCustom", "Menu_View_BytesPerRowCustom", ShowBytesPerRowInput));
+        bytesPerRow.Items.Add(new MenuFlyoutSeparator());
+        bytesPerRow.Items.Add(Toggle("Command_ViewAutoPowerOfTwo", "Menu_View_AutoPowerOfTwo", v => v.AutoPowerOfTwo, (v, on) => v with { AutoPowerOfTwo = on }));
 
         // グループ化 (VIEW-09)
         MenuFlyoutSubItem group = Sub("Command_ViewGroup", "Menu_View_Group");
@@ -87,9 +101,27 @@ public sealed partial class MainWindow
                 Loc.Get(key + "/AccessKey"), v => v.Radix == r));
         }
 
+        // セクタ形式のセクタサイズ (VIEW-19 の仕様 6)。ディスク・ボリュームではデータソースのセクタサイズを使う。
+        MenuFlyoutSubItem sectorSize = Sub("Command_ViewSectorSize", "Menu_View_SectorSize");
+        foreach (int size in SectorSizeChoices)
+        {
+            sectorSize.Items.Add(Radio("Command_ViewSectorSize" + size, Loc.Format("Menu_View_SectorSizeBytes", size.ToString("N0", CultureInfo.CurrentCulture)),
+                "SectorSize", () => ChangeView(v => v with { SectorSize = size }), size.ToString(CultureInfo.InvariantCulture)[..1],
+                v => v.SectorSize == size));
+        }
+
+        sectorSize.Items.Add(Item("Command_ViewSectorSizeCustom", "Menu_View_SectorSizeCustom", ShowSectorSizeInput));
+        radix.Items.Add(sectorSize);
+
+        // 16 進の 4 桁ごとの「:」(VIEW-19 の仕様 5)。
+        radix.Items.Add(Toggle("Command_ViewHexDigitSeparator", "Menu_View_HexDigitSeparator", v => v.HexDigitSeparator,
+            (v, on) => v with { HexDigitSeparator = on }));
         radix.Items.Add(new MenuFlyoutSeparator());
         radix.Items.Add(Item("Command_ViewBaseAddress", "Menu_View_BaseAddress", ShowBaseAddressInput));
         radix.Items.Add(Item("Command_ViewRowShift", "Menu_View_RowShift", ShowRowShiftInput));
+
+        // 行の先頭をアドレスの区切りにそろえる (VIEW-20 の仕様 5。既定オン)。
+        radix.Items.Add(Toggle("Command_ViewAlignRows", "Menu_View_AlignRows", v => v.AlignRowsToAddress, (v, on) => v with { AlignRowsToAddress = on }));
         radix.Items.Add(Item("Command_ViewSetReference", "Menu_View_SetReference", () => Editor?.SetReferencePoint()));
         radix.Items.Add(Item("Command_ViewClearReference", "Menu_View_ClearReference", () => Editor?.ClearReferencePoint(),
             () => NeedsDocument(d => d.Editor.ReferencePoint is null ? Loc.Get("Command_NoReferencePoint") : null)));
@@ -146,11 +178,7 @@ public sealed partial class MainWindow
             string command = EncodingCommandId(id);
             Commands.Register(command, () =>
             {
-                if (Editor is { } editor)
-                {
-                    editor.TextEncoding = Core.View.TextEncoding.FromId(encodingId);
-                    UpdateEncodingMenu();
-                }
+                SetEncoding(encodingId);
             }, () => Editor is { } e ? Toggle(e.TextEncoding.Id == encodingId) : NeedsDocument());
             CommandUi.SetId(radio, command);
             AutomationProperties.SetAutomationId(radio, "Command_Encoding_" + id);
@@ -160,6 +188,10 @@ public sealed partial class MainWindow
 
         encoding.Items.Add(new MenuFlyoutSeparator());
         encoding.Items.Add(Toggle("Command_ViewUtf16Odd", "Menu_View_Utf16Odd", v => v.Utf16Phase == 1, (v, on) => v with { Utf16Phase = on ? 1 : 0 }));
+
+        // 文字の範囲の残りのセルに続きの記号「·」を薄く表示する (VIEW-22 の仕様 2)。
+        encoding.Items.Add(Toggle("Command_ViewContinuation", "Menu_View_Continuation", v => v.ShowContinuation, (v, on) => v with { ShowContinuation = on }));
+        InitializeEncodingList(encoding);
 
         // 移動 > 履歴の一覧 (VIEW-31 の仕様 8)
         MenuBarItem go = MainMenu.Items.First(m => m.Items.OfType<MenuFlyoutItem>().Any(i => AutomationProperties.GetAutomationId(i) == "Command_GoBack"));
@@ -461,6 +493,32 @@ public sealed partial class MainWindow
         {
             TryEvaluate(text, editor, DefaultRadix.Decimal, out long value);
             editor.ApplyView(editor.View with { BytesPerRow = (int)value, AutoBytesPerRow = false });
+            UpdateViewMenu();
+        });
+    }
+
+    /// <summary>「セクタサイズ > 指定…」(VIEW-19 の仕様 6)。1〜1 MiB の値を受け付ける。</summary>
+    private void ShowSectorSizeInput()
+    {
+        if (Editor is not { } editor)
+        {
+            return;
+        }
+
+        ShowInput(Loc.Get("ViewInput_SectorSize"), editor.View.SectorSize.ToString(CultureInfo.InvariantCulture), text =>
+        {
+            if (!TryEvaluate(text, editor, DefaultRadix.Decimal, out long value))
+            {
+                return (false, Loc.Get("ViewInput_Invalid"));
+            }
+
+            return value is < 1 or > MaxSectorSize
+                ? (false, Loc.Format("ViewInput_SectorSizeRange", MaxSectorSize.ToString("N0", CultureInfo.CurrentCulture)))
+                : (true, null);
+        }, text =>
+        {
+            TryEvaluate(text, editor, DefaultRadix.Decimal, out long value);
+            editor.ApplyView(editor.View with { SectorSize = (int)value });
             UpdateViewMenu();
         });
     }

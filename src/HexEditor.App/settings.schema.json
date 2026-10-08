@@ -434,6 +434,11 @@
       "type": "boolean",
       "default": false
     },
+    "view.modified.showDeletions": {
+      "description": "Show deleted positions",
+      "type": "boolean",
+      "default": false
+    },
     "view.scroll.cursorMargin": {
       "description": "Rows kept above and below the cursor",
       "type": "integer",
@@ -445,6 +450,16 @@
       "description": "Show nibble position",
       "type": "boolean",
       "default": false
+    },
+    "view.text.nonPrintable": {
+      "description": "Symbol for non-printable characters",
+      "type": "string",
+      "enum": [
+        "dot",
+        "space",
+        "controlPictures"
+      ],
+      "default": "dot"
     },
     "view.tooltips": {
       "description": "Show tooltips",

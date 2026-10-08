@@ -9,6 +9,41 @@ namespace HexEditor.UITests;
 [Trait(UiTest.Category, UiTest.UI)]
 public sealed class SearchResultsTests
 {
+    /// <summary>FIND-20 の仕様 9 (00-overview 9 章の「結果一覧」): 列の見出しで並べ替え、絞り込み欄で絞り込む。番号は見つかった順のまま。</summary>
+    [Fact]
+    public Task Results_can_be_sorted_and_filtered() => UiTestContext.RunAsync(async ctx =>
+    {
+        // `41 xx` (xx = 3, 1, 2, 1) が 0x10 ごと。
+        byte[] data = new byte[0x80];
+        byte[] seconds = [3, 1, 2, 1];
+        for (int k = 0; k < seconds.Length; k++)
+        {
+            data[k * 0x10] = 0x41;
+            data[(k * 0x10) + 1] = seconds[k];
+        }
+
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("sort.bin", data)] });
+        await OpenFindAsync(app, 0, "41 ??");
+        await FindAllAsync(app);
+        await WaitForResultsAsync(app, r => r["state"]?.GetValue<string>() == "Completed" && !r["running"]!.GetValue<bool>(), "the results");
+
+        static long[] Numbers(JsonObject r) => [.. r["rows"]!.AsArray().Select(row => row!["resultNumber"]!.GetValue<long>())];
+        JsonObject sorted = await app.SendAsync("searchResultsOrder", new JsonObject { ["sort"] = "Hex", ["count"] = 4 });
+        Assert.Equal([2L, 4, 3, 1], Numbers(sorted));
+        sorted = await app.SendAsync("searchResultsOrder", new JsonObject { ["sort"] = "Hex", ["count"] = 4 });
+        Assert.Equal([1L, 3, 4, 2], Numbers(sorted));
+
+        JsonObject filtered = await app.SendAsync("searchResultsOrder", new JsonObject { ["filter"] = "41 01", ["count"] = 4 });
+        Assert.Equal(2, filtered["viewCount"]!.GetValue<long>());
+        Assert.Equal(4, filtered["count"]!.GetValue<long>());
+        Assert.Equal([4L, 2], Numbers(filtered));
+
+        // 絞り込んだ一覧の行を選んで Enter: その一致に移動する。
+        await app.SendAsync("searchResultsClick", new JsonObject { ["index"] = 1 });
+        await app.IdleAsync();
+        Assert.Equal(0x10, (await app.DocumentAsync())["selectionStart"]!.GetValue<long>());
+    });
+
     [Fact]
     [Trait(UiTest.TC, "TC-FIND-20-01")]
     public Task Alt_enter_lists_all_matches() => UiTestContext.RunAsync(async ctx =>

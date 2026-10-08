@@ -137,6 +137,94 @@ public sealed class PerformanceTests(ITestOutputHelper output)
         AssertSixtyFps(log, "100 GiB で PageDown");
     });
 
+    /// <summary>1 フレームの描画時間の上限と目標 (VIEW-04 の仕様 4、受け入れ基準 3)。</summary>
+    private const double RenderLimit = 16.7;
+    private const double RenderTarget = 8;
+
+    /// <summary>
+    /// TC-VIEW-04-03 の手順 1・2: ホイールを 16 ms の間隔で 300 回下へ送り、横スクロールで右端に移って繰り返す。描画時間 (診断表示の記録) を返す。
+    /// ウィンドウの最大化は前面に出るため行わず、1920×1080 の大きさにする。
+    /// </summary>
+    private static async Task<List<double>> ScrollWideRowsAsync(UiTestContext ctx, AppSession app)
+    {
+        await app.ResizeAsync(1920, 1080);
+        await ViewSettingsOps.SetBytesPerRowAsync(app, 4096);
+        await app.IdleAsync();
+        string path = await EnableDiagnosticsAsync(ctx, app);
+        async Task WheelDownAsync()
+        {
+            var watch = Stopwatch.StartNew();
+            for (int i = 0; i < 300; i++)
+            {
+                await ViewOps.WheelAsync(app, -120);
+                int wait = (int)((i + 1) * 16 - watch.ElapsedMilliseconds);
+                if (wait > 0)
+                {
+                    await Task.Delay(wait);
+                }
+            }
+        }
+
+        await WheelDownAsync();
+        await ViewOps.WheelAsync(app, -120, count: 4096, horizontal: true);
+        await app.IdleAsync();
+        await WheelDownAsync();
+        FrameLog log = await StopDiagnosticsAsync(app, path);
+        return [.. log.Renders.Select(r => r.Milliseconds)];
+    }
+
+    private void AssertRenderTimes(IReadOnlyList<double> renders, string name)
+    {
+        output.WriteLine($"{name}: 描画 {renders.Count} 回、中央値 {FrameLog.Percentile(renders, 0.5):F2} ms、最大 {renders.Max():F2} ms");
+        Assert.NotEmpty(renders);
+        Assert.All(renders, r => Assert.True(r <= RenderLimit, $"{name}: {r:F2} ms"));
+        if (FrameLog.Percentile(renders, 0.5) > RenderTarget)
+        {
+            // 目標値 (8 ms) を超えた場合は警告だけにする (テストケースの期待結果)。
+            output.WriteLine($"警告: {name} の描画時間の中央値が目標の {RenderTarget} ms を超えています。");
+        }
+    }
+
+    [PerfEnvironmentFact]
+    [Trait(UiTest.TC, "TC-VIEW-04-03")]
+    public Task Scrolling_4096_bytes_per_row_keeps_frame_time() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-RANDOM-16M")] });
+        AssertRenderTimes(await ScrollWideRowsAsync(ctx, app), "1 行 4,096 バイト");
+    });
+
+    [PerfEnvironmentFact]
+    [Trait(UiTest.TC, "TC-VIEW-04-04")]
+    public Task A_million_bookmarks_keep_the_rendering_performance() => UiTestContext.RunAsync(async ctx =>
+    {
+        // TD-INSP-BM-1M の読み込み (INSP-30) はフェーズ 2 なので、同じ 100 万件をテスト用の命令の通り道で付ける。
+        string file = ctx.TestData("TD-SPARSE-100G");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [file] });
+        await app.SendAsync("bookmarksAdd", new JsonObject { ["count"] = 1_000_000, ["step"] = 1024, ["length"] = 16 }, TimeSpan.FromMinutes(2));
+        await app.IdleAsync();
+
+        // 手順 1: TC-VIEW-04-01 (PageDown を押し続けて 60 fps)。
+        string path = await EnableDiagnosticsAsync(ctx, app);
+        await HoldKeyAsync(app, "PageDown", TimeSpan.FromSeconds(10));
+        AssertSixtyFps(await StopDiagnosticsAsync(app, path), "ブックマーク 100 万件で PageDown");
+
+        // 手順 2: TC-VIEW-04-02 (矢印キーから画面まで 50 ms 以内)。
+        await app.KeyAsync("Home", ctrl: true);
+        path = await EnableDiagnosticsAsync(ctx, app);
+        for (int i = 0; i < 100; i++)
+        {
+            await KeyAsync(app, i < 50 ? "Right" : "Down");
+            await Task.Delay(200);
+        }
+
+        IReadOnlyList<double> latencies = (await StopDiagnosticsAsync(app, path)).KeyToFrame();
+        output.WriteLine(Latencies("ブックマーク 100 万件で矢印キーから画面まで", latencies));
+        Assert.All(latencies, l => Assert.True(l <= InputLatency, Latencies("矢印キーから画面まで", latencies)));
+
+        // 手順 3: TC-VIEW-04-03 の手順 1 (1 行 4,096 バイトでホイール)。
+        AssertRenderTimes(await ScrollWideRowsAsync(ctx, app), "ブックマーク 100 万件で 1 行 4,096 バイト");
+    });
+
     [PerfEnvironmentFact]
     [Trait(UiTest.TC, "TC-VIEW-04-02")]
     public Task Arrow_keys_reach_the_screen_within_fifty_milliseconds() => UiTestContext.RunAsync(async ctx =>

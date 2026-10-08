@@ -674,6 +674,15 @@ public sealed partial class MainWindow
             await Task.Delay(20);
         }
 
+        // 付随データ (ブックマーク) の読み書きは別のスレッドで行うため、それも待つ。
+        try
+        {
+            await ViewModels.DocumentAnnotations.WhenWritesDoneAsync().WaitAsync(TimeSpan.FromMilliseconds(Math.Max(1, timeoutMs)));
+        }
+        catch (TimeoutException)
+        {
+        }
+
         // 優先度の低い処理まで終わらせる (描画の予約など)。
         var flushed = new TaskCompletionSource();
         App.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => flushed.SetResult());

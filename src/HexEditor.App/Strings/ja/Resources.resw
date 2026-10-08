@@ -1098,17 +1098,6 @@
   <data name="Bookmarks_UndoName" xml:space="preserve"><value>削除を元に戻す</value></data>
   <data name="Bookmarks_Filter.PlaceholderText" xml:space="preserve"><value>名前・コメントで絞り込み</value></data>
   <data name="Bookmarks_Filter.AutomationProperties.Name" xml:space="preserve"><value>ブックマークの絞り込み</value></data>
-  <data name="Bookmarks_ColumnNumber.Content" xml:space="preserve"><value>番号</value></data>
-  <data name="Bookmarks_ColumnNumber.ToolTipService.ToolTip" xml:space="preserve"><value>番号で並べ替え</value></data>
-  <data name="Bookmarks_ColumnColor.Content" xml:space="preserve"><value>●</value></data>
-  <data name="Bookmarks_ColumnColor.ToolTipService.ToolTip" xml:space="preserve"><value>色で並べ替え</value></data>
-  <data name="Bookmarks_ColumnColor.AutomationProperties.Name" xml:space="preserve"><value>色で並べ替え</value></data>
-  <data name="Bookmarks_ColumnName.Content" xml:space="preserve"><value>名前</value></data>
-  <data name="Bookmarks_ColumnName.ToolTipService.ToolTip" xml:space="preserve"><value>名前で並べ替え</value></data>
-  <data name="Bookmarks_ColumnStart.Content" xml:space="preserve"><value>開始</value></data>
-  <data name="Bookmarks_ColumnStart.ToolTipService.ToolTip" xml:space="preserve"><value>開始オフセットで並べ替え</value></data>
-  <data name="Bookmarks_ColumnLength.Content" xml:space="preserve"><value>長さ</value></data>
-  <data name="Bookmarks_ColumnLength.ToolTipService.ToolTip" xml:space="preserve"><value>長さで並べ替え</value></data>
   <data name="Bookmarks_ColorNumber" xml:space="preserve"><value>色 {0}</value></data>
   <data name="Bookmarks_RowName" xml:space="preserve"><value>{0}、{1}、長さ {2}</value></data>
   <data name="Bookmarks_NumberName" xml:space="preserve"><value>番号 {0}</value></data>
@@ -2179,4 +2168,243 @@
   <data name="Drop_Insert" xml:space="preserve"><value>挿入</value></data>
   <data name="Menu_View_EncodingAscii.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Menu_View_EncodingAnsiAccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Encoding_Name_ascii" xml:space="preserve"><value>ASCII (7 ビット)</value></data>
+  <data name="Encoding_Name_ansi" xml:space="preserve"><value>ANSI (コードページ {0})</value></data>
+  <data name="Encoding_Name_oem" xml:space="preserve"><value>OEM (コードページ {0})</value></data>
+  <data name="Encoding_Name_utf-8" xml:space="preserve"><value>UTF-8</value></data>
+  <data name="Encoding_Name_utf-16le" xml:space="preserve"><value>UTF-16 LE</value></data>
+  <data name="Encoding_Name_utf-16be" xml:space="preserve"><value>UTF-16 BE</value></data>
+  <data name="Encoding_Name_utf-32le" xml:space="preserve"><value>UTF-32 LE</value></data>
+  <data name="Encoding_Name_utf-32be" xml:space="preserve"><value>UTF-32 BE</value></data>
+  <data name="Encoding_Name_cp65000" xml:space="preserve"><value>UTF-7</value></data>
+  <data name="Encoding_Name_cp874" xml:space="preserve"><value>タイ語 (Windows)</value></data>
+  <data name="Encoding_Name_cp1250" xml:space="preserve"><value>中央ヨーロッパ言語 (Windows)</value></data>
+  <data name="Encoding_Name_cp1251" xml:space="preserve"><value>キリル言語 (Windows)</value></data>
+  <data name="Encoding_Name_cp1252" xml:space="preserve"><value>西ヨーロッパ言語 (Windows)</value></data>
+  <data name="Encoding_Name_cp1253" xml:space="preserve"><value>ギリシャ語 (Windows)</value></data>
+  <data name="Encoding_Name_cp1254" xml:space="preserve"><value>トルコ語 (Windows)</value></data>
+  <data name="Encoding_Name_cp1255" xml:space="preserve"><value>ヘブライ語 (Windows)</value></data>
+  <data name="Encoding_Name_cp1256" xml:space="preserve"><value>アラビア語 (Windows)</value></data>
+  <data name="Encoding_Name_cp1257" xml:space="preserve"><value>バルト言語 (Windows)</value></data>
+  <data name="Encoding_Name_cp1258" xml:space="preserve"><value>ベトナム語 (Windows)</value></data>
+  <data name="Encoding_Name_cp28591" xml:space="preserve"><value>西ヨーロッパ言語 (ISO-8859-1)</value></data>
+  <data name="Encoding_Name_cp28592" xml:space="preserve"><value>中央ヨーロッパ言語 (ISO-8859-2)</value></data>
+  <data name="Encoding_Name_cp28593" xml:space="preserve"><value>ラテン 3 (ISO-8859-3)</value></data>
+  <data name="Encoding_Name_cp28594" xml:space="preserve"><value>バルト言語 (ISO-8859-4)</value></data>
+  <data name="Encoding_Name_cp28595" xml:space="preserve"><value>キリル言語 (ISO-8859-5)</value></data>
+  <data name="Encoding_Name_cp28596" xml:space="preserve"><value>アラビア語 (ISO-8859-6)</value></data>
+  <data name="Encoding_Name_cp28597" xml:space="preserve"><value>ギリシャ語 (ISO-8859-7)</value></data>
+  <data name="Encoding_Name_cp28598" xml:space="preserve"><value>ヘブライ語、表示順 (ISO-8859-8)</value></data>
+  <data name="Encoding_Name_cp38598" xml:space="preserve"><value>ヘブライ語、論理順 (ISO-8859-8-I)</value></data>
+  <data name="Encoding_Name_cp28599" xml:space="preserve"><value>トルコ語 (ISO-8859-9)</value></data>
+  <data name="Encoding_Name_cp28600" xml:space="preserve"><value>北欧言語 (ISO-8859-10)</value></data>
+  <data name="Encoding_Name_cp28601" xml:space="preserve"><value>タイ語 (ISO-8859-11)</value></data>
+  <data name="Encoding_Name_cp28603" xml:space="preserve"><value>エストニア語 (ISO-8859-13)</value></data>
+  <data name="Encoding_Name_cp28604" xml:space="preserve"><value>ケルト語 (ISO-8859-14)</value></data>
+  <data name="Encoding_Name_cp28605" xml:space="preserve"><value>ラテン 9 (ISO-8859-15)</value></data>
+  <data name="Encoding_Name_cp28606" xml:space="preserve"><value>南東ヨーロッパ言語 (ISO-8859-16)</value></data>
+  <data name="Encoding_Name_cp437" xml:space="preserve"><value>米国 (DOS)</value></data>
+  <data name="Encoding_Name_cp720" xml:space="preserve"><value>アラビア語 (DOS)</value></data>
+  <data name="Encoding_Name_cp737" xml:space="preserve"><value>ギリシャ語 (DOS)</value></data>
+  <data name="Encoding_Name_cp775" xml:space="preserve"><value>バルト言語 (DOS)</value></data>
+  <data name="Encoding_Name_cp850" xml:space="preserve"><value>西ヨーロッパ言語 (DOS)</value></data>
+  <data name="Encoding_Name_cp852" xml:space="preserve"><value>中央ヨーロッパ言語 (DOS)</value></data>
+  <data name="Encoding_Name_cp855" xml:space="preserve"><value>キリル言語 (DOS 855)</value></data>
+  <data name="Encoding_Name_cp857" xml:space="preserve"><value>トルコ語 (DOS)</value></data>
+  <data name="Encoding_Name_cp858" xml:space="preserve"><value>西ヨーロッパ言語、ユーロ記号付き (DOS)</value></data>
+  <data name="Encoding_Name_cp860" xml:space="preserve"><value>ポルトガル語 (DOS)</value></data>
+  <data name="Encoding_Name_cp861" xml:space="preserve"><value>アイスランド語 (DOS)</value></data>
+  <data name="Encoding_Name_cp862" xml:space="preserve"><value>ヘブライ語 (DOS)</value></data>
+  <data name="Encoding_Name_cp863" xml:space="preserve"><value>カナダ フランス語 (DOS)</value></data>
+  <data name="Encoding_Name_cp864" xml:space="preserve"><value>アラビア語 (DOS 864)</value></data>
+  <data name="Encoding_Name_cp865" xml:space="preserve"><value>北欧言語 (DOS)</value></data>
+  <data name="Encoding_Name_cp866" xml:space="preserve"><value>キリル言語 (DOS 866)</value></data>
+  <data name="Encoding_Name_cp869" xml:space="preserve"><value>現代ギリシャ語 (DOS)</value></data>
+  <data name="Encoding_Name_cp10000" xml:space="preserve"><value>Mac Roman (西ヨーロッパ言語)</value></data>
+  <data name="Encoding_Name_cp10001" xml:space="preserve"><value>日本語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10002" xml:space="preserve"><value>繁体字中国語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10003" xml:space="preserve"><value>韓国語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10004" xml:space="preserve"><value>アラビア語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10005" xml:space="preserve"><value>ヘブライ語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10006" xml:space="preserve"><value>ギリシャ語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10007" xml:space="preserve"><value>キリル言語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10008" xml:space="preserve"><value>簡体字中国語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10010" xml:space="preserve"><value>ルーマニア語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10017" xml:space="preserve"><value>ウクライナ語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10021" xml:space="preserve"><value>タイ語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10029" xml:space="preserve"><value>中央ヨーロッパ言語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10079" xml:space="preserve"><value>アイスランド語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10081" xml:space="preserve"><value>トルコ語 (Mac)</value></data>
+  <data name="Encoding_Name_cp10082" xml:space="preserve"><value>クロアチア語 (Mac)</value></data>
+  <data name="Encoding_Name_cp932" xml:space="preserve"><value>日本語 (シフト JIS)</value></data>
+  <data name="Encoding_Name_cp51932" xml:space="preserve"><value>日本語 (EUC-JP)</value></data>
+  <data name="Encoding_Name_cp20932" xml:space="preserve"><value>日本語 (EUC-JP、JIS X 0208 と 0212)</value></data>
+  <data name="Encoding_Name_cp50220" xml:space="preserve"><value>日本語 (ISO-2022-JP)</value></data>
+  <data name="Encoding_Name_cp50221" xml:space="preserve"><value>日本語 (ISO-2022-JP、1 バイト カタカナ)</value></data>
+  <data name="Encoding_Name_cp50222" xml:space="preserve"><value>日本語 (ISO-2022-JP、SO/SI)</value></data>
+  <data name="Encoding_Name_cp936" xml:space="preserve"><value>簡体字中国語 (GBK)</value></data>
+  <data name="Encoding_Name_cp54936" xml:space="preserve"><value>簡体字中国語 (GB18030)</value></data>
+  <data name="Encoding_Name_cp51936" xml:space="preserve"><value>簡体字中国語 (EUC-CN)</value></data>
+  <data name="Encoding_Name_cp50227" xml:space="preserve"><value>簡体字中国語 (ISO-2022-CN)</value></data>
+  <data name="Encoding_Name_cp52936" xml:space="preserve"><value>簡体字中国語 (HZ)</value></data>
+  <data name="Encoding_Name_cp949" xml:space="preserve"><value>韓国語 (統合型ハングル)</value></data>
+  <data name="Encoding_Name_cp51949" xml:space="preserve"><value>韓国語 (EUC-KR)</value></data>
+  <data name="Encoding_Name_cp50225" xml:space="preserve"><value>韓国語 (ISO-2022-KR)</value></data>
+  <data name="Encoding_Name_cp950" xml:space="preserve"><value>繁体字中国語 (Big5)</value></data>
+  <data name="Encoding_Name_cp20866" xml:space="preserve"><value>キリル言語 (KOI8-R)</value></data>
+  <data name="Encoding_Name_cp21866" xml:space="preserve"><value>キリル言語 (KOI8-U)</value></data>
+  <data name="Encoding_Name_cp57002" xml:space="preserve"><value>ISCII デーバナーガリー文字</value></data>
+  <data name="Encoding_Name_cp57003" xml:space="preserve"><value>ISCII ベンガル文字</value></data>
+  <data name="Encoding_Name_cp57004" xml:space="preserve"><value>ISCII タミル文字</value></data>
+  <data name="Encoding_Name_cp57005" xml:space="preserve"><value>ISCII テルグ文字</value></data>
+  <data name="Encoding_Name_cp57006" xml:space="preserve"><value>ISCII アッサム文字</value></data>
+  <data name="Encoding_Name_cp57007" xml:space="preserve"><value>ISCII オリヤー文字</value></data>
+  <data name="Encoding_Name_cp57008" xml:space="preserve"><value>ISCII カンナダ文字</value></data>
+  <data name="Encoding_Name_cp57009" xml:space="preserve"><value>ISCII マラヤーラム文字</value></data>
+  <data name="Encoding_Name_cp57010" xml:space="preserve"><value>ISCII グジャラート文字</value></data>
+  <data name="Encoding_Name_cp57011" xml:space="preserve"><value>ISCII グルムキー文字</value></data>
+  <data name="Encoding_Name_cp708" xml:space="preserve"><value>アラビア語 (ASMO 708)</value></data>
+  <data name="Encoding_Name_cp1361" xml:space="preserve"><value>韓国語 (Johab)</value></data>
+  <data name="Encoding_Name_cp20000" xml:space="preserve"><value>繁体字中国語 (CNS)</value></data>
+  <data name="Encoding_Name_cp20001" xml:space="preserve"><value>繁体字中国語 (TCA)</value></data>
+  <data name="Encoding_Name_cp20002" xml:space="preserve"><value>繁体字中国語 (Eten)</value></data>
+  <data name="Encoding_Name_cp20003" xml:space="preserve"><value>繁体字中国語 (IBM 5550)</value></data>
+  <data name="Encoding_Name_cp20004" xml:space="preserve"><value>繁体字中国語 (TeleText)</value></data>
+  <data name="Encoding_Name_cp20005" xml:space="preserve"><value>繁体字中国語 (Wang)</value></data>
+  <data name="Encoding_Name_cp20105" xml:space="preserve"><value>西ヨーロッパ言語 (IA5)</value></data>
+  <data name="Encoding_Name_cp20106" xml:space="preserve"><value>ドイツ語 (IA5)</value></data>
+  <data name="Encoding_Name_cp20107" xml:space="preserve"><value>スウェーデン語 (IA5)</value></data>
+  <data name="Encoding_Name_cp20108" xml:space="preserve"><value>ノルウェー語 (IA5)</value></data>
+  <data name="Encoding_Name_cp20261" xml:space="preserve"><value>T.61</value></data>
+  <data name="Encoding_Name_cp20269" xml:space="preserve"><value>ISO 6937</value></data>
+  <data name="Encoding_Name_cp20936" xml:space="preserve"><value>簡体字中国語 (GB 2312-80)</value></data>
+  <data name="Encoding_Name_cp20949" xml:space="preserve"><value>韓国語 (完成型)</value></data>
+  <data name="Encoding_Name_cp29001" xml:space="preserve"><value>Europa</value></data>
+  <data name="Encoding_Name_cp37" xml:space="preserve"><value>EBCDIC 米国・カナダ</value></data>
+  <data name="Encoding_Name_cp20273" xml:space="preserve"><value>EBCDIC ドイツ</value></data>
+  <data name="Encoding_Name_cp20277" xml:space="preserve"><value>EBCDIC デンマーク・ノルウェー</value></data>
+  <data name="Encoding_Name_cp20278" xml:space="preserve"><value>EBCDIC フィンランド・スウェーデン</value></data>
+  <data name="Encoding_Name_cp20280" xml:space="preserve"><value>EBCDIC イタリア</value></data>
+  <data name="Encoding_Name_cp20284" xml:space="preserve"><value>EBCDIC スペイン</value></data>
+  <data name="Encoding_Name_cp20285" xml:space="preserve"><value>EBCDIC 英国</value></data>
+  <data name="Encoding_Name_cp20290" xml:space="preserve"><value>EBCDIC 日本語カタカナ</value></data>
+  <data name="Encoding_Name_cp20297" xml:space="preserve"><value>EBCDIC フランス</value></data>
+  <data name="Encoding_Name_cp20420" xml:space="preserve"><value>EBCDIC アラビア語</value></data>
+  <data name="Encoding_Name_cp20423" xml:space="preserve"><value>EBCDIC ギリシャ語</value></data>
+  <data name="Encoding_Name_cp20424" xml:space="preserve"><value>EBCDIC ヘブライ語</value></data>
+  <data name="Encoding_Name_cp500" xml:space="preserve"><value>EBCDIC インターナショナル</value></data>
+  <data name="Encoding_Name_cp20833" xml:space="preserve"><value>EBCDIC 韓国語拡張</value></data>
+  <data name="Encoding_Name_cp20838" xml:space="preserve"><value>EBCDIC タイ語</value></data>
+  <data name="Encoding_Name_cp870" xml:space="preserve"><value>EBCDIC 多言語ラテン 2</value></data>
+  <data name="Encoding_Name_cp20871" xml:space="preserve"><value>EBCDIC アイスランド語</value></data>
+  <data name="Encoding_Name_cp875" xml:space="preserve"><value>EBCDIC 現代ギリシャ語</value></data>
+  <data name="Encoding_Name_cp20880" xml:space="preserve"><value>EBCDIC キリル言語 (ロシア語)</value></data>
+  <data name="Encoding_Name_cp20905" xml:space="preserve"><value>EBCDIC トルコ語</value></data>
+  <data name="Encoding_Name_cp20924" xml:space="preserve"><value>EBCDIC ラテン 1、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp21025" xml:space="preserve"><value>EBCDIC キリル言語 (セルビア語・ブルガリア語)</value></data>
+  <data name="Encoding_Name_cp1026" xml:space="preserve"><value>EBCDIC トルコ語 (ラテン 5)</value></data>
+  <data name="Encoding_Name_cp1047" xml:space="preserve"><value>EBCDIC ラテン 1 (オープン システム)</value></data>
+  <data name="Encoding_Name_cp1140" xml:space="preserve"><value>EBCDIC 米国・カナダ、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp1141" xml:space="preserve"><value>EBCDIC ドイツ、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp1142" xml:space="preserve"><value>EBCDIC デンマーク・ノルウェー、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp1143" xml:space="preserve"><value>EBCDIC フィンランド・スウェーデン、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp1144" xml:space="preserve"><value>EBCDIC イタリア、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp1145" xml:space="preserve"><value>EBCDIC スペイン、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp1146" xml:space="preserve"><value>EBCDIC 英国、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp1147" xml:space="preserve"><value>EBCDIC フランス、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp1148" xml:space="preserve"><value>EBCDIC インターナショナル、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp1149" xml:space="preserve"><value>EBCDIC アイスランド語、ユーロ記号付き</value></data>
+  <data name="Encoding_Name_cp930" xml:space="preserve"><value>EBCDIC 日本語カタカナ混在 (SO/SI)</value></data>
+  <data name="Encoding_Name_cp939" xml:space="preserve"><value>EBCDIC 日本語ラテン混在 (SO/SI)</value></data>
+  <data name="Menu_View_EncodingMore.Text" xml:space="preserve"><value>その他(M)…</value></data>
+  <data name="Menu_View_EncodingMore.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_view_encoding_select" xml:space="preserve"><value>表示: 文字コードの選択</value></data>
+  <data name="CmdAlias_view_encoding_select" xml:space="preserve"><value>もじこーど こーどぺーじ</value></data>
+  <data name="EncodingList_Title" xml:space="preserve"><value>文字コード</value></data>
+  <data name="EncodingList_Filter" xml:space="preserve"><value>番号・名前で絞り込み</value></data>
+  <data name="EncodingList_Stateful" xml:space="preserve"><value>テキスト列では選べません: エスケープシーケンスで状態を切り替える文字コードのため、任意の位置から正しく表示できません。文字コード変換では使えます。</value></data>
+  <data name="EncodingList_Group_Basic" xml:space="preserve"><value>基本</value></data>
+  <data name="EncodingList_Group_Unicode" xml:space="preserve"><value>Unicode</value></data>
+  <data name="EncodingList_Group_Windows" xml:space="preserve"><value>Windows</value></data>
+  <data name="EncodingList_Group_Iso" xml:space="preserve"><value>ISO</value></data>
+  <data name="EncodingList_Group_Dos" xml:space="preserve"><value>DOS</value></data>
+  <data name="EncodingList_Group_Mac" xml:space="preserve"><value>Mac</value></data>
+  <data name="EncodingList_Group_Cjk" xml:space="preserve"><value>CJK</value></data>
+  <data name="EncodingList_Group_Other" xml:space="preserve"><value>その他</value></data>
+  <data name="EncodingList_Group_Ebcdic" xml:space="preserve"><value>EBCDIC</value></data>
+  <data name="Set_view_text_nonPrintable" xml:space="preserve"><value>表示しない文字の記号</value></data>
+  <data name="SetDesc_view_text_nonPrintable" xml:space="preserve"><value>テキスト列で、制御文字や未定義のバイトをどう表示するかです。</value></data>
+  <data name="SetOpt_view_text_nonPrintable_dot" xml:space="preserve"><value>ピリオド (.)</value></data>
+  <data name="SetOpt_view_text_nonPrintable_space" xml:space="preserve"><value>空白</value></data>
+  <data name="SetOpt_view_text_nonPrintable_controlPictures" xml:space="preserve"><value>制御文字の図記号 (␀)</value></data>
+  <data name="Set_view_modified_showDeletions" xml:space="preserve"><value>削除位置を表示</value></data>
+  <data name="SetDesc_view_modified_showDeletions" xml:space="preserve"><value>保存していない削除で詰まった位置に縦の線を表示する。</value></data>
+  <data name="GoTo_Address_Name" xml:space="preserve"><value>アドレスかオフセットか</value></data>
+  <data name="GoTo_Address_Address.Content" xml:space="preserve"><value>アドレスで指定</value></data>
+  <data name="GoTo_Address_Offset.Content" xml:space="preserve"><value>オフセットで指定</value></data>
+  <data name="Menu_View_SectorSize.Text" xml:space="preserve"><value>セクタサイズ(Z)</value></data>
+  <data name="Menu_View_SectorSize.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_SectorSizeBytes" xml:space="preserve"><value>{0} バイト</value></data>
+  <data name="Menu_View_SectorSizeCustom.Text" xml:space="preserve"><value>指定(C)...</value></data>
+  <data name="Menu_View_SectorSizeCustom.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="ViewInput_SectorSize" xml:space="preserve"><value>セクタサイズ (バイト)</value></data>
+  <data name="ViewInput_SectorSizeRange" xml:space="preserve"><value>1〜{0} の値を指定してください。</value></data>
+  <data name="Cmd_view_sectorSize512" xml:space="preserve"><value>セクタサイズ: 512 バイト</value></data>
+  <data name="CmdAlias_view_sectorSize512" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="Cmd_view_sectorSize1024" xml:space="preserve"><value>セクタサイズ: 1,024 バイト</value></data>
+  <data name="CmdAlias_view_sectorSize1024" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="Cmd_view_sectorSize2048" xml:space="preserve"><value>セクタサイズ: 2,048 バイト</value></data>
+  <data name="CmdAlias_view_sectorSize2048" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="Cmd_view_sectorSize4096" xml:space="preserve"><value>セクタサイズ: 4,096 バイト</value></data>
+  <data name="CmdAlias_view_sectorSize4096" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="Cmd_view_sectorSizeCustom" xml:space="preserve"><value>セクタサイズ: 指定...</value></data>
+  <data name="CmdAlias_view_sectorSizeCustom" xml:space="preserve"><value>せくたさいず</value></data>
+  <data name="HexView_Menu_ComputeHash" xml:space="preserve"><value>ハッシュを計算</value></data>
+  <data name="SearchResults_Filter.PlaceholderText" xml:space="preserve"><value>絞り込み</value></data>
+  <data name="SearchResults_Filter_Name" xml:space="preserve"><value>結果をデータで絞り込み</value></data>
+  <data name="SearchResults_SortBy" xml:space="preserve"><value>{0} で並べ替え</value></data>
+  <data name="SearchResults_TooManyToSort" xml:space="preserve"><value>{0} 件を超える結果は並べ替え・絞り込みができません。</value></data>
+  <data name="Bookmarks_ColumnNumber" xml:space="preserve"><value>番号</value></data>
+  <data name="Bookmarks_ColumnColor" xml:space="preserve"><value>色</value></data>
+  <data name="Bookmarks_ColumnName" xml:space="preserve"><value>名前</value></data>
+  <data name="Bookmarks_ColumnStart" xml:space="preserve"><value>開始</value></data>
+  <data name="Bookmarks_ColumnLength" xml:space="preserve"><value>長さ</value></data>
+  <data name="Bookmarks_ColumnGroup" xml:space="preserve"><value>グループ</value></data>
+  <data name="Bookmarks_ColumnComment" xml:space="preserve"><value>コメント</value></data>
+  <data name="Bookmarks_ColumnDocument" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Bookmarks_MoveColumnLeft" xml:space="preserve"><value>列を左へ移動</value></data>
+  <data name="Bookmarks_MoveColumnRight" xml:space="preserve"><value>列を右へ移動</value></data>
+  <data name="Bookmarks_ResetColumns" xml:space="preserve"><value>列を既定に戻す</value></data>
+  <data name="Bookmarks_AllDocumentsName" xml:space="preserve"><value>すべてのドキュメント</value></data>
+  <data name="Bookmarks_SortBy" xml:space="preserve"><value>{0} で並べ替え</value></data>
+  <data name="Menu_View_AlternateText.Text" xml:space="preserve"><value>テキスト列にも交互色(X)</value></data>
+  <data name="Menu_View_AlternateText.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_View_MiddleSeparator.Text" xml:space="preserve"><value>8 バイトごとに区切る(S)</value></data>
+  <data name="Menu_View_MiddleSeparator.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_AutoPowerOfTwo.Text" xml:space="preserve"><value>自動のとき 2 のべき乗にそろえる(P)</value></data>
+  <data name="Menu_View_AutoPowerOfTwo.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_HexDigitSeparator.Text" xml:space="preserve"><value>16 進を 4 桁ごとに「:」で区切る(G)</value></data>
+  <data name="Menu_View_HexDigitSeparator.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_AlignRows.Text" xml:space="preserve"><value>行の先頭をアドレスの区切りにそろえる(L)</value></data>
+  <data name="Menu_View_AlignRows.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>マルチバイト文字の続きに記号を表示(N)</value></data>
+  <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Cmd_go_nextNibble" xml:space="preserve"><value>移動: 次のニブルへ</value></data>
+  <data name="CmdAlias_go_nextNibble" xml:space="preserve"><value>にぶる かーそる</value></data>
+  <data name="Cmd_go_previousNibble" xml:space="preserve"><value>移動: 前のニブルへ</value></data>
+  <data name="CmdAlias_go_previousNibble" xml:space="preserve"><value>にぶる かーそる</value></data>
+  <data name="Cmd_go_toggleColumn" xml:space="preserve"><value>移動: Hex 列とテキスト列の切り替え</value></data>
+  <data name="CmdAlias_go_toggleColumn" xml:space="preserve"><value>れつ きりかえ</value></data>
+  <data name="Cmd_view_middleSeparator" xml:space="preserve"><value>表示: 8 バイトごとの区切り</value></data>
+  <data name="CmdAlias_view_middleSeparator" xml:space="preserve"><value>くぎり</value></data>
+  <data name="Cmd_view_alternateText" xml:space="preserve"><value>表示: テキスト列の交互色</value></data>
+  <data name="CmdAlias_view_alternateText" xml:space="preserve"><value>こうごしょく</value></data>
+  <data name="Cmd_view_autoPowerOfTwo" xml:space="preserve"><value>表示: 自動の 1 行のバイト数を 2 のべき乗にそろえる</value></data>
+  <data name="CmdAlias_view_autoPowerOfTwo" xml:space="preserve"><value>いちぎょうのばいとすう</value></data>
+  <data name="Cmd_view_hexDigitSeparator" xml:space="preserve"><value>表示: オフセットを 4 桁ごとに区切る</value></data>
+  <data name="CmdAlias_view_hexDigitSeparator" xml:space="preserve"><value>おふせっと くぎり</value></data>
+  <data name="Cmd_view_alignRows" xml:space="preserve"><value>表示: 行の先頭をアドレスの区切りにそろえる</value></data>
+  <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>ぎょうのせんとう</value></data>
+  <data name="Cmd_view_continuation" xml:space="preserve"><value>表示: マルチバイト文字の続きの記号</value></data>
+  <data name="CmdAlias_view_continuation" xml:space="preserve"><value>つづきのきごう</value></data>
 </root>

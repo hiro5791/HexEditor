@@ -30,6 +30,13 @@
             <Button x:Name="UndoButton" AutomationProperties.AutomationId="Bookmarks_Undo" Click="Undo_Click">
                 <FontIcon FontSize="14" Glyph="&#xE7A7;" />
             </Button>
+            <!--  すべてのドキュメント (INSP-26 の仕様 8。既定オフ)  -->
+            <ToggleButton
+                x:Name="AllDocumentsButton"
+                AutomationProperties.AutomationId="Bookmarks_AllDocuments"
+                IsChecked="{x:Bind Vm.AllDocuments, Mode=TwoWay}">
+                <FontIcon FontSize="14" Glyph="&#xE8F1;" />
+            </ToggleButton>
             <TextBlock
                 VerticalAlignment="Center"
                 AutomationProperties.AutomationId="Bookmarks_Count"
@@ -43,24 +50,20 @@
             Margin="8,0"
             AutomationProperties.AutomationId="Bookmarks_Filter"
             Text="{x:Bind Vm.Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <!--  列の見出し: 押すとその列で並べ替える (INSP-26 の仕様 2)  -->
+        <!--
+            列の見出し: 押すとその列で並べ替える (INSP-26 の仕様 2)。右クリック (Shift+F10) のメニューで列の表示と順序を変える
+            (仕様 1)。見出しは列の配置に合わせてコードで作る。
+        -->
         <Grid
             x:Name="Header"
             Grid.Row="2"
             Padding="12,0,8,0"
-            ColumnSpacing="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="28" />
-                <ColumnDefinition Width="16" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="96" />
-                <ColumnDefinition Width="56" />
-            </Grid.ColumnDefinitions>
-            <HyperlinkButton x:Uid="Bookmarks_ColumnNumber" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortNumber" Click="Sort_Click" Tag="Number" />
-            <HyperlinkButton x:Uid="Bookmarks_ColumnColor" Grid.Column="1" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortColor" Click="Sort_Click" Tag="Color" />
-            <HyperlinkButton x:Uid="Bookmarks_ColumnName" Grid.Column="2" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortName" Click="Sort_Click" Tag="Name" />
-            <HyperlinkButton x:Uid="Bookmarks_ColumnStart" Grid.Column="3" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortStart" Click="Sort_Click" Tag="Start" />
-            <HyperlinkButton x:Uid="Bookmarks_ColumnLength" Grid.Column="4" Padding="0" AutomationProperties.AutomationId="Bookmarks_SortLength" Click="Sort_Click" Tag="Length" />
+            AutomationProperties.AutomationId="Bookmarks_Header"
+            ColumnSpacing="4"
+            ContextRequested="Header_ContextRequested">
+            <Grid.ContextFlyout>
+                <MenuFlyout x:Name="ColumnsMenu" Opening="ColumnsMenu_Opening" />
+            </Grid.ContextFlyout>
         </Grid>
         <ListView
             x:Name="List"
@@ -83,59 +86,92 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="vm:BookmarkRowViewModel">
+                    <!--  列は 8 つの欄のどれかに置く。位置・表示・幅は列の配置 (Layout) に従う (INSP-26 の仕様 1)。  -->
                     <Grid AutomationProperties.AccessibilityView="Raw" ColumnSpacing="4" ToolTipService.ToolTip="{x:Bind CommentLine, Mode=OneWay}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="28" />
-                            <ColumnDefinition Width="16" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="96" />
-                            <ColumnDefinition Width="56" />
+                            <ColumnDefinition Width="{x:Bind Layout.Width0, Mode=OneWay}" />
+                            <ColumnDefinition Width="{x:Bind Layout.Width1, Mode=OneWay}" />
+                            <ColumnDefinition Width="{x:Bind Layout.Width2, Mode=OneWay}" />
+                            <ColumnDefinition Width="{x:Bind Layout.Width3, Mode=OneWay}" />
+                            <ColumnDefinition Width="{x:Bind Layout.Width4, Mode=OneWay}" />
+                            <ColumnDefinition Width="{x:Bind Layout.Width5, Mode=OneWay}" />
+                            <ColumnDefinition Width="{x:Bind Layout.Width6, Mode=OneWay}" />
+                            <ColumnDefinition Width="{x:Bind Layout.Width7, Mode=OneWay}" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Center" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind NumberText, Mode=OneWay}" />
+                        <TextBlock
+                            Grid.Column="{x:Bind Layout.DocumentColumn, Mode=OneWay}"
+                            VerticalAlignment="Center"
+                            Text="{x:Bind DocumentName, Mode=OneWay}"
+                            TextTrimming="CharacterEllipsis"
+                            Visibility="{x:Bind Layout.DocumentVisibility, Mode=OneWay}" />
+                        <TextBlock
+                            Grid.Column="{x:Bind Layout.NumberColumn, Mode=OneWay}"
+                            VerticalAlignment="Center"
+                            FontFamily="Cascadia Mono, Consolas"
+                            Text="{x:Bind NumberText, Mode=OneWay}"
+                            Visibility="{x:Bind Layout.NumberVisibility, Mode=OneWay}" />
                         <Border
-                            Grid.Column="1"
+                            Grid.Column="{x:Bind Layout.ColorColumn, Mode=OneWay}"
                             Width="12"
                             Height="12"
                             VerticalAlignment="Center"
                             Background="{x:Bind Swatch, Mode=OneWay}"
                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                             BorderThickness="1"
-                            CornerRadius="2" />
-                        <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{x:Bind Name, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
+                            CornerRadius="2"
+                            Visibility="{x:Bind Layout.ColorVisibility, Mode=OneWay}" />
                         <TextBlock
-                            Grid.Column="3"
+                            Grid.Column="{x:Bind Layout.NameColumn, Mode=OneWay}"
+                            VerticalAlignment="Center"
+                            Text="{x:Bind Name, Mode=OneWay}"
+                            TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Grid.Column="{x:Bind Layout.StartColumn, Mode=OneWay}"
                             VerticalAlignment="Center"
                             FlowDirection="LeftToRight"
                             FontFamily="Cascadia Mono, Consolas"
-                            Text="{x:Bind StartText, Mode=OneWay}" />
+                            Text="{x:Bind StartText, Mode=OneWay}"
+                            Visibility="{x:Bind Layout.StartVisibility, Mode=OneWay}" />
                         <TextBlock
-                            Grid.Column="4"
+                            Grid.Column="{x:Bind Layout.LengthColumn, Mode=OneWay}"
                             VerticalAlignment="Center"
                             FlowDirection="LeftToRight"
                             FontFamily="Cascadia Mono, Consolas"
                             Text="{x:Bind LengthText, Mode=OneWay}"
-                            TextAlignment="Right" />
+                            TextAlignment="Right"
+                            Visibility="{x:Bind Layout.LengthVisibility, Mode=OneWay}" />
                         <TextBlock
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="3"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Grid.Column="{x:Bind Layout.GroupColumn, Mode=OneWay}"
+                            VerticalAlignment="Center"
+                            Text="{x:Bind GroupText, Mode=OneWay}"
+                            TextTrimming="CharacterEllipsis"
+                            Visibility="{x:Bind Layout.GroupVisibility, Mode=OneWay}" />
+                        <TextBlock
+                            Grid.Column="{x:Bind Layout.CommentColumn, Mode=OneWay}"
+                            VerticalAlignment="Center"
                             Text="{x:Bind CommentLine, Mode=OneWay}"
                             TextTrimming="CharacterEllipsis"
-                            Visibility="{x:Bind HasComment, Mode=OneWay}" />
-                        <TextBlock
+                            Visibility="{x:Bind Layout.CommentVisibility, Mode=OneWay}" />
+                        <StackPanel
                             Grid.Row="1"
-                            Grid.Column="2"
-                            Grid.ColumnSpan="3"
-                            Foreground="{ThemeResource SystemFillColorCautionBrush}"
-                            Style="{ThemeResource CaptionTextBlockStyle}"
-                            Text="{x:Bind DeletedText, Mode=OneWay}"
-                            Visibility="{x:Bind RangeDeleted, Mode=OneWay}" />
+                            Grid.Column="{x:Bind Layout.NameColumn, Mode=OneWay}"
+                            Grid.ColumnSpan="{x:Bind Layout.DetailSpan, Mode=OneWay}">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{x:Bind CommentLine, Mode=OneWay}"
+                                TextTrimming="CharacterEllipsis"
+                                Visibility="{x:Bind vm:BookmarkRowViewModel.CommentLineShown(HasComment, Layout.CommentLineVisibility), Mode=OneWay}" />
+                            <TextBlock
+                                Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{x:Bind DeletedText, Mode=OneWay}"
+                                Visibility="{x:Bind RangeDeleted, Mode=OneWay}" />
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

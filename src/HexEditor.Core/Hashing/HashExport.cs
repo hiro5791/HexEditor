@@ -86,7 +86,12 @@ public static class HashExport
     public static void WriteChecksumFile(string path, IEnumerable<HashResultRow> rows, string documentFileName)
     {
         string temp = path + ".tmp";
-        File.WriteAllText(temp, ChecksumLines(rows, documentFileName), new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+
+        // .sfv は「ファイル名 CRC」の形 (値は大文字の Hex)。それ以外は GNU coreutils の形。
+        string content = string.Equals(Path.GetExtension(path), ".sfv", StringComparison.OrdinalIgnoreCase)
+            ? Lines(rows.Select(r => $"{Path.GetFileName(documentFileName)} {Convert.ToHexString(r.Value)}"))
+            : ChecksumLines(rows, documentFileName);
+        File.WriteAllText(temp, content, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
         File.Move(temp, path, overwrite: true);
     }
 

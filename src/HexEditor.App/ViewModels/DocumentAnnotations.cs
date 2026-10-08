@@ -57,41 +57,69 @@ public sealed class DocumentAnnotations
 
     /// <summary>
     /// 記録した付随データを読む。ファイルのサイズ・更新日時が記録と違えば、ブックマークは適用せずに <see cref="Pending"/> に残す
-    /// (利用者に確認してから <see cref="ApplyPending"/> する)。
+    /// (利用者に確認してから <see cref="ApplyPending"/> する)。ファイルの読み込みと解析は別のスレッドで行い (100 万件でも UI を
+    /// 止めない)、適用は呼び出し元のスレッド (UI スレッド) で行う。読み終わるまでは保存しない (空の一覧で上書きしないため)。
     /// </summary>
-    public void Load()
+    public async Task LoadAsync()
     {
         if (Path is not { } path)
         {
+            Loaded = true;
             return;
         }
 
+        Task<(InspectorEndianMode? Endian, LoadedBookmarks? Bookmarks)> read = Task.Run(() => Read(_store, path));
+        Track(read);
+        (InspectorEndianMode? endian, LoadedBookmarks? loaded) = await read;
+        if (endian is { } mode)
+        {
+            _endian = mode;
+        }
+
+        if (loaded is not null)
+        {
+            if (Dirty)
+            {
+                // 読み終わる前に利用者がブックマークを変えた: 変えた内容を残す (記録は次の保存で上書きされる)。
+                AppLog.Info("Document data: bookmarks were changed while loading; the saved list was not applied");
+            }
+            else if (loaded.Header.Matches(Stamp))
+            {
+                BookmarkStore.Apply(Bookmarks, loaded, Document.Document.Length);
+                Dirty = false;
+            }
+            else
+            {
+                Pending = loaded;
+            }
+        }
+
+        Loaded = true;
+    }
+
+    /// <summary>付随データを読み終えた (<see cref="LoadAsync"/>)。</summary>
+    public bool Loaded { get; private set; }
+
+    private static (InspectorEndianMode?, LoadedBookmarks?) Read(DocumentDataStore store, string path)
+    {
+        InspectorEndianMode? endian = null;
+        LoadedBookmarks? bookmarks = null;
         try
         {
-            if (_store.ReadObject(path, InspectorKind) is { } inspector
+            if (store.ReadObject(path, InspectorKind) is { } inspector
                 && Enum.TryParse(inspector.Value["endian"]?.GetValue<string>(), ignoreCase: true, out InspectorEndianMode mode))
             {
-                _endian = mode;
+                endian = mode;
             }
 
-            if (BookmarkStore.Load(_store, path) is { } loaded)
-            {
-                if (loaded.Header.Matches(Stamp))
-                {
-                    BookmarkStore.Apply(Bookmarks, loaded, Document.Document.Length);
-                }
-                else
-                {
-                    Pending = loaded;
-                }
-            }
+            bookmarks = BookmarkStore.Load(store, path);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException or InvalidOperationException or FormatException)
         {
             AppLog.Warning($"Document data: cannot read ({ex.GetType().Name}: {ex.Message})");
         }
 
-        Dirty = false;
+        return (endian, bookmarks);
     }
 
     /// <summary>ファイルが変わっていたブックマークを、利用者の確認の後で適用する。</summary>
@@ -107,22 +135,75 @@ public sealed class DocumentAnnotations
 
     public void DiscardPending() => Pending = null;
 
-    /// <summary>ブックマークを保存する (変更があるとき、または <paramref name="force"/>)。</summary>
+    /// <summary>
+    /// ブックマークを保存する (変更があるとき、または <paramref name="force"/>)。保存する内容はここで写し取り、ファイルへの書き出しは
+    /// 別のスレッドで順に行う (100 万件でも UI を止めない)。書き終わりを待つには <see cref="WhenWritesDoneAsync"/>。
+    /// </summary>
     public void SaveBookmarks(bool force = false)
     {
-        if (Path is not { } path || !force && !Dirty || Pending is not null)
+        if (Path is not { } path || !force && !Dirty || Pending is not null || !Loaded)
         {
             return;
         }
 
+        LoadedBookmarks snapshot = BookmarkStore.Capture(Bookmarks);
+        FileStamp? stamp = Stamp;
+        DocumentDataStore store = _store;
+        Dirty = false;
+        lock (WritesLock)
+        {
+            // 書き出しは 1 本の列で順に行う (同じファイルへの書き出しが前後しないように)。
+            _writes = _writes.ContinueWith(_ => Write(store, path, stamp, snapshot), CancellationToken.None,
+                TaskContinuationOptions.None, TaskScheduler.Default);
+            Track(_writes);
+        }
+    }
+
+    private static void Write(DocumentDataStore store, string path, FileStamp? stamp, LoadedBookmarks snapshot)
+    {
         try
         {
-            BookmarkStore.Save(_store, path, Stamp, Bookmarks);
-            Dirty = false;
+            BookmarkStore.Write(store, path, stamp, snapshot);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             AppLog.Warning($"Document data: cannot write bookmarks ({ex.GetType().Name}: {ex.Message})");
+        }
+    }
+
+    private static readonly object WritesLock = new();
+    private static Task _writes = Task.CompletedTask;
+    private static readonly List<Task> InFlight = [];
+
+    private static void Track(Task task)
+    {
+        lock (InFlight)
+        {
+            InFlight.RemoveAll(t => t.IsCompleted);
+            InFlight.Add(task);
+        }
+    }
+
+    /// <summary>付随データの読み書きがすべて終わるまで待つ (アプリの終了、テストの待ち合わせ)。</summary>
+    public static Task WhenWritesDoneAsync()
+    {
+        lock (InFlight)
+        {
+            return Task.WhenAll([.. InFlight]);
+        }
+    }
+
+    /// <summary>付随データの書き出しが終わるまで待つ (ウィンドウを閉じたとき。UI スレッドを止めてよい場面だけ)。</summary>
+    public static bool WaitForWrites(TimeSpan timeout)
+    {
+        Task all = WhenWritesDoneAsync();
+        try
+        {
+            return all.Wait(timeout);
+        }
+        catch (AggregateException)
+        {
+            return true;
         }
     }
 

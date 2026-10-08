@@ -18,6 +18,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <TextBox
             x:Name="Input"
@@ -57,22 +58,33 @@
             <ComboBoxItem x:Uid="GoTo_Unit_Rows" />
             <ComboBoxItem x:Uid="GoTo_Unit_Sectors" />
         </ComboBox>
+        <!--  ベースアドレスを設定しているときだけ「アドレスで指定 / オフセットで指定」を出す (VIEW-20 の仕様 4)。  -->
+        <ComboBox
+            x:Name="AddressChoice"
+            Grid.Column="4"
+            AutomationProperties.AutomationId="GoTo_Address"
+            SelectedIndex="0"
+            SelectionChanged="Option_Changed"
+            Visibility="Collapsed">
+            <ComboBoxItem x:Uid="GoTo_Address_Address" />
+            <ComboBoxItem x:Uid="GoTo_Address_Offset" />
+        </ComboBox>
         <CheckBox
             x:Name="SelectChoice"
             x:Uid="GoTo_Select"
-            Grid.Column="4"
+            Grid.Column="5"
             MinWidth="0"
             AutomationProperties.AutomationId="GoTo_Select" />
         <Button
             x:Name="GoButton"
             x:Uid="GoTo_Go"
-            Grid.Column="5"
+            Grid.Column="6"
             AutomationProperties.AutomationId="GoTo_Go"
             Click="Go_Click"
             Style="{StaticResource AccentButtonStyle}" />
         <Button
             x:Name="CloseButton"
-            Grid.Column="6"
+            Grid.Column="7"
             AutomationProperties.AutomationId="GoTo_Close"
             Click="Close_Click">
             <FontIcon FontSize="12" Glyph="&#xE711;" />

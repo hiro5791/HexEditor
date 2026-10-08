@@ -79,7 +79,8 @@ public sealed partial class MainWindow
         // 前回の位置 (ENG-16) と同じ付随データの置き場所を使う。
         _documentData = Vm.Files?.Documents ?? new DocumentDataStore(Program.Environment.Locations.Documents);
         _inspectorVm = new InspectorViewModel(App.Settings);
-        _bookmarksVm = new BookmarkListViewModel();
+        // 「すべてのドキュメント」(INSP-26 の仕様 8) は、すべてのウィンドウで開いているドキュメント (UI-14)。
+        _bookmarksVm = new BookmarkListViewModel { AllAnnotations = AllWindowsAnnotations };
         _bookmarksVm.Rows.Prepare = row => row.Swatch = AnnotationBrushes.Mark(row.Bookmark.Color, Root, IsHighContrast);
 #if HEX_TEST_HOOKS
         if (TestHooks.Settings.TimeZone is { Length: > 0 } zone)
@@ -118,6 +119,13 @@ public sealed partial class MainWindow
         Closed += (_, _) =>
         {
             SaveAnnotations(force: true);
+
+            // 付随データの書き出し (別のスレッド) を待ってから終わる。
+            if (!DocumentAnnotations.WaitForWrites(TimeSpan.FromSeconds(30)))
+            {
+                AppLog.Warning("Document data: writing did not finish before closing");
+            }
+
             App.Settings.Flush();
         };
     }
@@ -198,16 +206,42 @@ public sealed partial class MainWindow
 
     // ---- ドキュメントの付随データ ----
 
+    /// <summary>すべてのウィンドウで開いているドキュメントの付随データ (ウィンドウの作った順、タブの順)。</summary>
+    private IReadOnlyList<DocumentAnnotations> AllWindowsAnnotations()
+    {
+        IEnumerable<MainWindow> windows = WindowManager.Windows.Contains(this) ? WindowManager.Windows : [this];
+        return [.. windows.SelectMany(w => w.Vm.Documents.Select(w.AnnotationsFor))];
+    }
+
     private void Documents_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        // 「すべてのドキュメント」の一覧は他のウィンドウのドキュメントも出すので、すべてのウィンドウに知らせる。
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            foreach (MainWindow w in WindowManager.Windows.Contains(this) ? WindowManager.Windows : [this])
+            {
+                w._bookmarksVm.DocumentsChanged();
+            }
+        });
         foreach (DocumentViewModel doc in e.NewItems?.OfType<DocumentViewModel>() ?? [])
         {
             AnnotationsFor(doc);
         }
 
-        foreach (DocumentViewModel doc in e.OldItems?.OfType<DocumentViewModel>() ?? [])
+        foreach (DocumentViewModel doc in e.Action == NotifyCollectionChangedAction.Move ? [] : e.OldItems?.OfType<DocumentViewModel>() ?? [])
         {
-            if (_annotations.Remove(doc, out DocumentAnnotations? closed))
+            if (!_annotations.Remove(doc, out DocumentAnnotations? closed))
+            {
+                continue;
+            }
+
+            UnhookAnnotations(doc);
+            if (Vm.IsRearranging && !doc.IsPending)
+            {
+                // 別のウィンドウへの移動 (UI-11): 付随データ (保存していないブックマークを含む) をそのまま移す。
+                s_movingAnnotations[doc] = closed;
+            }
+            else
             {
                 // 閉じたら付随データを書く (ファイルに保存されている内容での位置)。
                 closed.SaveBookmarks();
@@ -219,8 +253,23 @@ public sealed partial class MainWindow
             foreach (DocumentViewModel doc in _annotations.Keys.Where(d => !Vm.Documents.Contains(d)).ToList())
             {
                 _annotations.Remove(doc, out DocumentAnnotations? closed);
+                UnhookAnnotations(doc);
                 closed?.SaveBookmarks();
             }
+        }
+    }
+
+    /// <summary>別のウィンドウに移している途中のタブの付随データ (外したウィンドウから、受け取るウィンドウへ)。</summary>
+    private static readonly Dictionary<DocumentViewModel, DocumentAnnotations> s_movingAnnotations = new(ReferenceEqualityComparer.Instance);
+
+    /// <summary>付随データにつないだこのウィンドウの処理を外す処理 (タブを別のウィンドウに移すとき)。</summary>
+    private readonly Dictionary<DocumentViewModel, Action> _annotationHooks = new(ReferenceEqualityComparer.Instance);
+
+    private void UnhookAnnotations(DocumentViewModel doc)
+    {
+        if (_annotationHooks.Remove(doc, out Action? unhook))
+        {
+            unhook();
         }
     }
 
@@ -231,11 +280,24 @@ public sealed partial class MainWindow
             return existing;
         }
 
+        if (s_movingAnnotations.Remove(doc, out DocumentAnnotations? moved))
+        {
+            _annotations[doc] = moved;
+            HookAnnotations(doc, moved);
+            return moved;
+        }
+
         var annotations = new DocumentAnnotations(doc, _documentData);
         _annotations[doc] = annotations;
-        annotations.Load();
-        annotations.Bookmarks.Changed += (_, e) => Bookmarks_Changed(annotations, e);
-        doc.Document.Changed += (_, e) =>
+        _ = LoadAnnotationsAsync(doc, annotations);
+        HookAnnotations(doc, annotations);
+        return annotations;
+    }
+
+    private void HookAnnotations(DocumentViewModel doc, DocumentAnnotations annotations)
+    {
+        EventHandler<BookmarksChangedEventArgs> bookmarksChanged = (_, e) => Bookmarks_Changed(annotations, e);
+        EventHandler<DocumentChangedEventArgs> documentChanged = (_, e) =>
         {
             if (e.Kind == DocumentChangeKind.Saved)
             {
@@ -248,21 +310,37 @@ public sealed partial class MainWindow
                 QueueInspectorRefresh();
             }
         };
-        doc.Document.DataLoaded += (_, _) => DispatcherQueue.TryEnqueue(() =>
+        EventHandler dataLoaded = (_, _) => DispatcherQueue.TryEnqueue(() =>
         {
             if (doc == Vm.Selected)
             {
                 QueueInspectorRefresh();
             }
         });
-        doc.Editor.Changed += (_, _) =>
+        EventHandler editorChanged = (_, _) =>
         {
             if (doc == Vm.Selected)
             {
                 QueueInspectorRefresh();
             }
         };
+        annotations.Bookmarks.Changed += bookmarksChanged;
+        doc.Document.Changed += documentChanged;
+        doc.Document.DataLoaded += dataLoaded;
+        doc.Editor.Changed += editorChanged;
+        _annotationHooks[doc] = () =>
+        {
+            annotations.Bookmarks.Changed -= bookmarksChanged;
+            doc.Document.Changed -= documentChanged;
+            doc.Document.DataLoaded -= dataLoaded;
+            doc.Editor.Changed -= editorChanged;
+        };
+    }
 
+    /// <summary>付随データを (別のスレッドで) 読み、読み終わったら適用する。ファイルが変わっていれば確かめる。</summary>
+    private async Task LoadAnnotationsAsync(DocumentViewModel doc, DocumentAnnotations annotations)
+    {
+        await annotations.LoadAsync();
         if (annotations.Pending is { } pending)
         {
             // ファイルが記録したときから変わっている: 適用する前に確かめる (00-overview 10 章)。
@@ -278,7 +356,11 @@ public sealed partial class MainWindow
                 ]);
         }
 
-        return annotations;
+        if (doc == Vm.Selected)
+        {
+            SelectedView()?.RefreshHighlights();
+            QueueInspectorRefresh();
+        }
     }
 
     private DocumentAnnotations? CurrentAnnotations() => Vm.Selected is { } doc ? AnnotationsFor(doc) : null;
@@ -429,8 +511,16 @@ public sealed partial class MainWindow
     {
         const string ToggleId = "HexViewMenu_ToggleBookmark";
         const string EditId = "HexViewMenu_EditBookmark";
+        const string HashId = "HexViewMenu_ComputeHash";
         if (!menu.Items.Any(i => AutomationProperties.GetAutomationId(i) == ToggleId))
         {
+            // 選択範囲の「ハッシュを計算」(ANA-18 の「呼び出し」): ハッシュパネルを開き、選択範囲を対象に計算する。
+            var hash = new MenuFlyoutItem { Text = Loc.Get("HexView_Menu_ComputeHash"), Tag = "ComputeHash" };
+            AutomationProperties.SetAutomationId(hash, HashId);
+            hash.Click += (_, _) => _ = Commands.ExecuteAsync("analysis.hash");
+            menu.Items.Add(new MenuFlyoutSeparator());
+            menu.Items.Add(hash);
+
             menu.Items.Add(new MenuFlyoutSeparator());
             var toggle = new MenuFlyoutItem { Tag = "Bookmark" };
             AutomationProperties.SetAutomationId(toggle, ToggleId);
@@ -459,6 +549,10 @@ public sealed partial class MainWindow
                     break;
                 case EditId:
                     ((MenuFlyoutItem)item).IsEnabled = atCursor is not null;
+                    break;
+                case HashId:
+                    ((MenuFlyoutItem)item).IsEnabled = view.Editor?.HasSelection == true;
+                    ((MenuFlyoutItem)item).KeyboardAcceleratorTextOverride = CommandService.ShortcutText("analysis.hash");
                     break;
             }
         }
@@ -546,6 +640,28 @@ public sealed partial class MainWindow
 
     private void GoToBookmark(Bookmark b)
     {
+        // 「すべてのドキュメント」では、別のドキュメントのブックマークならそのタブに切り替えてから移動する (INSP-26 の仕様 8)。
+        // 別のウィンドウのドキュメントなら、そのウィンドウを前に出してタブを切り替える (UI-14)。
+        if (_bookmarksVm.OwnerOf(b)?.Document is { } owner && owner != Vm.Selected)
+        {
+            if (Vm.Documents.Contains(owner))
+            {
+                Vm.Selected = owner;
+            }
+            else if (WindowManager.OwnerOf(owner) is { } other)
+            {
+                other.Vm.Selected = owner;
+                WindowManager.MarkActive(other);
+                WindowManager.BringToFront(other);
+                if (other.Editor is { } otherEditor)
+                {
+                    BookmarkActions.GoTo(otherEditor, b);
+                }
+
+                return;
+            }
+        }
+
         if (Editor is { } editor)
         {
             BookmarkActions.GoTo(editor, b);
@@ -555,7 +671,7 @@ public sealed partial class MainWindow
     /// <summary>一覧で ↑ / ↓ で行を選んだ: カーソルは動かさずに、ブックマークの位置が見えるようにスクロールする (INSP-26 の仕様 4)。</summary>
     private void PreviewBookmark(Bookmark b)
     {
-        if (Editor is { } editor)
+        if (Editor is { } editor && _bookmarksVm.OwnerOf(b)?.Document == Vm.Selected)
         {
             long row = editor.Layout.RowOf(Math.Min(b.Start, editor.Layout.MaxCursor));
             if (row < editor.TopRow || row >= editor.TopRow + editor.VisibleRows)

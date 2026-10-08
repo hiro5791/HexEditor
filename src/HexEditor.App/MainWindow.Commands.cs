@@ -148,6 +148,10 @@ public sealed partial class MainWindow
         Commands.Register("search.findPrevious", () => FindPrevious_Click(this, e), NeedsDocument);
         RegisterSearchCommands();
         Commands.Register("go.goTo", () => GoTo_Click(this, e), NeedsDocument);
+        // ニブル単位の移動 (VIEW-26) と列の切り替え (VIEW-27) のコマンドパレットの項目 (ショートカットは既定なし。キーは Hex ビューが処理する)。
+        Commands.Register("go.nextNibble", () => Editor?.NextNibble(), NeedsDocument);
+        Commands.Register("go.previousNibble", () => Editor?.PreviousNibble(), NeedsDocument);
+        Commands.Register("go.toggleColumn", () => Editor?.ToggleColumn(), NeedsDocument);
         Commands.Register("go.back", () => GoBack_Click(this, e),
             () => NeedsDocument(d => d.Editor.CanGoBack ? null : Loc.Get("Command_NoHistory")));
         Commands.Register("go.forward", () => GoForward_Click(this, e),
@@ -167,16 +171,10 @@ public sealed partial class MainWindow
                 && (t == theme || (theme == "system" && t is not ("light" or "dark")))));
         }
 
-        foreach ((string id, TextEncoding encoding) in new[] { ("view.encoding.ascii", TextEncoding.Ascii), ("view.encoding.ansi", TextEncoding.Ansi) })
+        foreach ((string id, string encoding) in new[] { ("view.encoding.ascii", "ascii"), ("view.encoding.ansi", "ansi") })
         {
-            Commands.Register(id, () =>
-            {
-                if (Editor is { } editor)
-                {
-                    editor.TextEncoding = encoding;
-                    UpdateEncodingMenu();
-                }
-            }, () => Vm.Selected is null ? NeedsDocument() : Toggle(Editor?.TextEncoding == encoding));
+            Commands.Register(id, () => SetEncoding(encoding),
+                () => Vm.Selected is null ? NeedsDocument() : Toggle(Editor?.TextEncoding.Id == encoding));
         }
 
         Commands.Register("view.statusBar", () =>

@@ -40,8 +40,13 @@
         <ListView
             x:Name="SettingsList"
             MaxHeight="360"
+            AllowDrop="True"
             AutomationProperties.AutomationId="Inspector_SettingsList"
+            CanDragItems="True"
+            CanReorderItems="True"
             ContainerContentChanging="SettingsList_ContainerContentChanging"
+            DragItemsCompleted="SettingsList_DragItemsCompleted"
+            DragItemsStarting="SettingsList_DragItemsStarting"
             ItemTemplateSelector="{StaticResource SettingSelector}"
             KeyDown="SettingsList_KeyDown"
             SelectionChanged="SettingsList_SelectionChanged"

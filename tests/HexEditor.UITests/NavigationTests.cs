@@ -233,6 +233,53 @@ public sealed class NavigationTests
     });
 
     [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-27-02")]
+    public Task Tab_does_nothing_when_the_text_column_is_hidden() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.GoToAsync(0x40);
+        await ViewSettingsOps.MenuAsync(app, "Command_ViewTextColumn");
+        await app.FocusAsync("HexView");
+        await app.KeyAsync("Tab");
+        await app.IdleAsync();
+        Assert.Equal("Hex", await app.UiaNameAsync("Status_Column"));
+        await AssertCursorAsync(app, 0x40);
+        Assert.StartsWith("HexView", (await app.StateAsync())["focused"]!.GetValue<string>(), StringComparison.Ordinal);
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-29-08")]
+    public Task Alt_left_after_go_to_returns() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.GoToAsync(0x123);
+        await ViewOps.GoToAsync(app, "0x80000");
+        await AssertCursorAsync(app, 0x80000);
+        await app.KeyAsync("Left", alt: true);
+        await app.IdleAsync();
+        await AssertCursorAsync(app, 0x123);
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-30-02")]
+    public Task Alt_left_after_ctrl_home_and_ctrl_end_returns() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await ViewOps.GoToAsync(app, "0x54321");
+        await app.KeyAsync("Home", ctrl: true);
+        await AssertCursorAsync(app, 0);
+        await app.KeyAsync("Left", alt: true);
+        await app.IdleAsync();
+        await AssertCursorAsync(app, 0x54321);
+
+        await app.KeyAsync("End", ctrl: true);
+        await AssertCursorAsync(app, 0x100000);
+        await app.KeyAsync("Left", alt: true);
+        await app.IdleAsync();
+        await AssertCursorAsync(app, 0x54321);
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-VIEW-30-01")]
     public Task Ctrl_end_shows_the_last_row_at_the_bottom() => UiTestContext.RunAsync(async ctx =>
     {

@@ -86,6 +86,66 @@ public sealed class ViewOffsetAndTextTests
         Assert.DoesNotContain("=", await app.UiaNameAsync("GoTo_Interpretation"));
     });
 
+    /// <summary>VIEW-19 の仕様 6: ファイルのセクタサイズを表示設定で変える (512、1,024、2,048、4,096、任意)。</summary>
+    [Fact]
+    public Task Sector_size_can_be_changed() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await GoToAsync(app, "0x1F00");
+        await MenuAsync(app, "Command_ViewRadixSector");
+        Assert.Contains("15:100", await StatusOffsetAsync(app));
+        await MenuAsync(app, "Command_ViewSectorSize1024");
+        Assert.Contains("7:300", await StatusOffsetAsync(app));
+        Assert.True((await MenuItemAsync(app, "Command_ViewSectorSize1024"))["checked"]!.GetValue<bool>());
+
+        // 任意の値 (入力欄)。範囲外は確定できない。
+        await MenuAsync(app, "Command_ViewSectorSizeCustom");
+        Assert.False((await InputAsync(app, "0"))["okEnabled"]!.GetValue<bool>());
+        await InputAsync(app, "4000", commit: true);
+        Assert.Contains("1:F60", await StatusOffsetAsync(app));
+        Assert.Equal(4000, (await ViewSettingsAsync(app))["view"]!["sectorSize"]!.GetValue<int>());
+    });
+
+    /// <summary>表示メニューの切り替え: 中央区切り (VIEW-09 の仕様 3)、16 進の「:」(VIEW-19 の仕様 5)、行の先頭のそろえ (VIEW-20 の仕様 5)。</summary>
+    [Fact]
+    public Task View_menu_toggles_change_the_view_settings() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await MenuAsync(app, "Command_ViewHexDigitSeparator");
+        Assert.Equal("0000:0000", (await app.RenderAsync())["rows"]![0]!["offsetText"]!.GetValue<string>());
+
+        Assert.True((await MenuItemAsync(app, "Command_ViewMiddleSeparator"))["checked"]!.GetValue<bool>());
+        await MenuAsync(app, "Command_ViewMiddleSeparator");
+        Assert.False((await ViewSettingsAsync(app))["view"]!["middleSeparator"]!.GetValue<bool>());
+
+        await SetBaseAddressAsync(app, "0x401004");
+        Assert.Equal(4, (await app.RenderAsync())["rowShift"]!.GetValue<int>());
+        await MenuAsync(app, "Command_ViewAlignRows");
+        Assert.Equal(0, (await app.RenderAsync())["rowShift"]!.GetValue<int>());
+    });
+
+    /// <summary>VIEW-20 の仕様 4: ベースアドレスを設定しているとき、移動バーは「アドレスで指定」(既定) と「オフセットで指定」を選べる。</summary>
+    [Fact]
+    public Task Go_to_bar_accepts_addresses_when_a_base_address_is_set() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await OpenGoToAsync(app);
+        Assert.False((await ElementAsync(app, "GoTo_Address"))["effectivelyVisible"]?.GetValue<bool>() ?? false);
+        await app.SendAsync("goToKey", new JsonObject { ["key"] = "Escape" });
+
+        await SetBaseAddressAsync(app, "0x400000");
+        await GoToAsync(app, "0x401F00");
+        Assert.Equal(0x1F00, await CursorAsync(app));
+
+        // オフセットで指定に切り替える。
+        await OpenGoToAsync(app);
+        await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "GoTo_Address", ["index"] = 1 });
+        await app.UiaSetValueAsync("GoTo_Input", "0x2000");
+        await app.SendAsync("goToKey", new JsonObject { ["key"] = "Enter" });
+        await app.IdleAsync();
+        Assert.Equal(0x2000, await CursorAsync(app));
+    });
+
     // ---- VIEW-20 ----
 
     [Fact]
@@ -172,6 +232,122 @@ public sealed class ViewOffsetAndTextTests
         await app.KeyAsync("Delete");
         await app.IdleAsync();
         Assert.Equal("+00000000", RowOf(await app.RenderAsync(), 0)!["offsetText"]!.GetValue<string>());
+    });
+
+    // ---- VIEW-21 ----
+
+    /// <summary>表示 > 文字コード > その他… を開き、絞り込み欄に入力して一覧 ({open, items: [{id, text, enabled, description}]}) を返す。</summary>
+    private static async Task<JsonObject> EncodingListAsync(AppSession app, string filter)
+    {
+        JsonObject list = await app.SendAsync("encodingList");
+        if (!list["open"]!.GetValue<bool>())
+        {
+            await MenuAsync(app, "Command_EncodingMore");
+            await app.WaitUntilAsync(async () => (await app.SendAsync("encodingList"))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), "the list to open");
+        }
+
+        await app.UiaSetValueAsync("EncodingList_Filter", filter);
+        await app.IdleAsync();
+        list = await app.SendAsync("encodingList");
+        Assert.True(list["open"]!.GetValue<bool>());
+        Assert.Equal(filter, list["filter"]!.GetValue<string>());
+        return list;
+    }
+
+    /// <summary>一覧で絞り込み、その項目を選ぶ (Enter と同じ処理)。</summary>
+    private static async Task ChooseEncodingAsync(AppSession app, string filter, string id)
+    {
+        JsonObject list = await EncodingListAsync(app, filter);
+        Assert.Contains(list["items"]!.AsArray(), i => i!["id"]!.GetValue<string>() == id);
+        await app.SendAsync("encodingList", new JsonObject { ["choose"] = id });
+        await app.WaitUntilAsync(async () => !(await app.SendAsync("encodingList"))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), "the list to close");
+        await app.IdleAsync();
+    }
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-01")]
+    public Task Single_byte_code_pages_from_the_list() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-VIEW-PATTERNS")] });
+        await ChooseEncodingAsync(app, "1252", "cp1252");
+        Assert.Equal("é", CellOf(await app.RenderAsync(), 0x40)!["text"]!.GetValue<string>());
+        await ChooseEncodingAsync(app, "437", "cp437");
+        Assert.Equal("é", CellOf(await app.RenderAsync(), 0x41)!["text"]!.GetValue<string>());
+        await ChooseEncodingAsync(app, "037", "cp37");
+        Assert.Equal("A", CellOf(await app.RenderAsync(), 0x42)!["text"]!.GetValue<string>());
+        Assert.Equal("037", await app.UiaNameAsync("Status_Encoding"));
+
+        // 最近使った文字コード (仕様 8) がメニューの上部に新しい順に出る。
+        JsonObject list = await app.SendAsync("encodingList");
+        Assert.Equal(["cp37", "cp437", "cp1252"], list["recent"]!.AsArray().Select(r => r!.GetValue<string>()));
+        Assert.Equal("037 EBCDIC US-Canada", (await MenuItemAsync(app, "Command_EncodingRecent_0"))["text"]!.GetValue<string>());
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-02")]
+    public Task Stateful_encodings_cannot_be_chosen() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        JsonObject list = await EncodingListAsync(app, "2022");
+        JsonObject jis = list["items"]!.AsArray().Single(i => i!["id"]!.GetValue<string>() == "cp50220")!.AsObject();
+        Assert.False(jis["enabled"]!.GetValue<bool>());
+        Assert.Contains("arbitrary position", jis["description"]!.GetValue<string>());
+
+        await app.SendAsync("encodingList", new JsonObject { ["choose"] = "cp50220" });
+        await app.IdleAsync();
+        Assert.Equal("ascii", (await app.SendAsync("encodingList"))["encoding"]!.GetValue<string>());
+        Assert.Equal("ASCII", await app.UiaNameAsync("Status_Encoding"));
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-03")]
+    public Task Encoding_list_filter() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        static string[] Texts(JsonObject list) => [.. list["items"]!.AsArray().Select(i => i!["text"]!.GetValue<string>())];
+        Assert.Contains("932 Japanese (Shift-JIS)", Texts(await EncodingListAsync(app, "932")));
+        string[] lower = Texts(await EncodingListAsync(app, "jis"));
+        string[] upper = Texts(await EncodingListAsync(app, "JIS"));
+        Assert.Contains("932 Japanese (Shift-JIS)", lower);
+        Assert.Equal(lower, upper);
+        Assert.DoesNotContain("1252 Western European (Windows)", lower);
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-04")]
+    public Task Arabic_characters_stay_in_cell_order() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-VIEW-PATTERNS")] });
+        await ChooseEncodingAsync(app, "1256", "cp1256");
+        JsonObject render = await app.RenderAsync();
+        string[] expected = ["ا", "ل", "ع", "ر", "ب", "ي", "ة"];
+        double previous = double.MinValue;
+        for (int i = 0; i < expected.Length; i++)
+        {
+            JsonObject cell = CellOf(render, 0x90 + i)!;
+            Assert.Equal(expected[i], cell["glyph"]!.GetValue<string>());
+            double left = cell["glyphLeft"]!.GetValue<double>();
+            Assert.True(left > previous, $"0x{0x90 + i:X}: {left} <= {previous}");
+            Assert.Equal(cell["textLeft"]!.GetValue<double>(), left, 3);
+            previous = left;
+        }
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-21-05")]
+    public Task Control_pictures_for_non_printable_characters() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.text.nonPrintable"] = "controlPictures" });
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-BYTES-256")] });
+        JsonObject render = await app.RenderAsync();
+        foreach ((long offset, string symbol) in new[] { (0x00L, "␀"), (0x0AL, "␊"), (0x1FL, "␟"), (0x7FL, "␡") })
+        {
+            Assert.Equal(symbol, CellOf(render, offset)!["glyph"]!.GetValue<string>());
+        }
+
+        // 表示できる文字はそのまま。
+        Assert.Equal("A", CellOf(render, 0x41)!["text"]!.GetValue<string>());
     });
 
     // ---- VIEW-22 ----

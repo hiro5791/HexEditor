@@ -623,4 +623,18 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
 
     /// <summary>行の設定のフライアウトが開いているか。</summary>
     internal bool RowSettingsOpen => RowsFlyout.IsOpen;
+
+    /// <summary>
+    /// 行の設定の一覧で、項目 (型の名前、またはグループの名前) を <paramref name="index"/> の位置へドラッグしたのと同じ処理 (テスト用)。
+    /// </summary>
+    internal bool DragRowSetting(string key, int index)
+    {
+        if (RowSettings.Items.FirstOrDefault(i => i.TypeId == key || i.IsGroup && i.Group.ToString() == key) is not { } item)
+        {
+            return false;
+        }
+
+        RowSettings.ReorderTo(item, index);
+        return true;
+    }
 }

@@ -26,6 +26,7 @@ public sealed partial class GoToBar : UserControl
         AutomationProperties.SetName(Input, Loc.Get("GoTo_Input_Name"));
         AutomationProperties.SetName(BaseChoice, Loc.Get("GoTo_Base_Name"));
         AutomationProperties.SetName(UnitChoice, Loc.Get("GoTo_Unit_Name"));
+        AutomationProperties.SetName(AddressChoice, Loc.Get("GoTo_Address_Name"));
         AutomationProperties.SetName(CloseButton, Loc.Get("GoTo_Close_Name"));
         ToolTipService.SetToolTip(CloseButton, Loc.Get("GoTo_Close_Name"));
     }
@@ -39,6 +40,14 @@ public sealed partial class GoToBar : UserControl
     /// <summary>移動バーを開き、前回の入力を全選択した状態で入力欄にフォーカスを移す (VIEW-29 の仕様 1)。</summary>
     public void Open()
     {
+        // ベースアドレスを設定しているときは「アドレスで指定」を出し、既定にする (VIEW-20 の仕様 4)。
+        bool hasBase = Editor?.View.BaseAddress is > 0;
+        if (hasBase && AddressChoice.Visibility != Visibility.Visible)
+        {
+            AddressChoice.SelectedIndex = 0;
+        }
+
+        AddressChoice.Visibility = hasBase ? Visibility.Visible : Visibility.Collapsed;
         Visibility = Visibility.Visible;
         Input.Focus(FocusState.Programmatic);
         Input.SelectAll();
@@ -54,13 +63,14 @@ public sealed partial class GoToBar : UserControl
     /// <summary>接頭辞のない数値は、オフセットの基数が 10 進なら 10 進、それ以外は 16 進として解釈する (00-overview 6.1、VIEW-19 の仕様 8)。</summary>
     private GoToResult? Resolve() =>
         Editor is null ? null : GoToResolver.Resolve(Input.Text, (GoToBase)BaseChoice.SelectedIndex, (GoToUnit)UnitChoice.SelectedIndex, Editor,
-            Editor.View.Radix == OffsetRadix.Decimal ? Core.Expressions.DefaultRadix.Decimal : Core.Expressions.DefaultRadix.Hexadecimal);
+            Editor.View.Radix == OffsetRadix.Decimal ? Core.Expressions.DefaultRadix.Decimal : Core.Expressions.DefaultRadix.Hexadecimal,
+            byAddress: AddressChoice.Visibility == Visibility.Visible && AddressChoice.SelectedIndex == 0);
 
     /// <summary>解釈結果を常に表示する (VIEW-29 の仕様 6・7)。</summary>
     private void Update()
     {
         // 読み込み中 (SelectedIndex の初期化で SelectionChanged が来たとき) は、まだ要素がそろっていない。
-        if (Input is null || BaseChoice is null || UnitChoice is null || Interpretation is null || GoButton is null)
+        if (Input is null || BaseChoice is null || UnitChoice is null || AddressChoice is null || Interpretation is null || GoButton is null)
         {
             return;
         }

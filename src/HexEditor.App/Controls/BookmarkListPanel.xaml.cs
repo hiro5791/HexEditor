@@ -32,6 +32,11 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
             ToolTipService.SetToolTip(button, Loc.Get(key));
         }
 
+        AutomationProperties.SetName(AllDocumentsButton, Loc.Get("Bookmarks_AllDocumentsName"));
+        ToolTipService.SetToolTip(AllDocumentsButton, Loc.Get("Bookmarks_AllDocumentsName"));
+        BuildHeader();
+        BookmarkColumnLayout.Instance.PropertyChanged += (_, _) => BuildHeader();
+
         for (int i = 1; i <= BookmarkColor.PaletteSize; i++)
         {
             int index = i;
@@ -226,13 +231,17 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
     public void DeleteSelected()
     {
         IReadOnlyList<Bookmark> selected = SelectedBookmarks;
-        if (selected.Count == 0 || Vm.Bookmarks is not { } bookmarks)
+        if (selected.Count == 0)
         {
             return;
         }
 
         int index = List.SelectedIndex;
-        bookmarks.RemoveRange([.. selected]);
+        foreach (IGrouping<DocumentAnnotations?, Bookmark> owned in selected.GroupBy(Vm.OwnerOf))
+        {
+            owned.Key?.Bookmarks.RemoveRange([.. owned]);
+        }
+
         Deleted?.Invoke(this, selected);
         if (Vm.Rows.Count > 0)
         {
@@ -242,22 +251,114 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
 
     private void SetColor(BookmarkColor color)
     {
-        if (Vm.Bookmarks is not { } bookmarks)
-        {
-            return;
-        }
-
         foreach (Bookmark b in SelectedBookmarks)
         {
-            bookmarks.SetColor(b, color);
+            Vm.OwnerOf(b)?.Bookmarks.SetColor(b, color);
         }
     }
 
-    private void Sort_Click(object sender, RoutedEventArgs e)
+    // ---- 列の見出し (INSP-26 の仕様 1・2) ----
+
+    /// <summary>右クリック (Shift+F10) した見出しの列 (列の移動の対象)。</summary>
+    private BookmarkColumn? _menuColumn;
+
+    /// <summary>見出しを列の配置に合わせて作り直す。</summary>
+    private void BuildHeader()
     {
-        if (sender is FrameworkElement { Tag: string tag } && Enum.TryParse(tag, out BookmarkSortColumn column))
+        BookmarkColumnLayout layout = BookmarkColumnLayout.Instance;
+        Header.ColumnDefinitions.Clear();
+        Header.Children.Clear();
+        foreach (Microsoft.UI.Xaml.GridLength width in new[] { layout.Width0, layout.Width1, layout.Width2, layout.Width3, layout.Width4, layout.Width5, layout.Width6, layout.Width7 })
         {
-            Vm.Sort(column);
+            Header.ColumnDefinitions.Add(new ColumnDefinition { Width = width });
+        }
+
+        for (int i = 0; i < layout.Order.Count; i++)
+        {
+            BookmarkColumn? column = layout.Order[i];
+            string text = Loc.Get(column is { } c ? "Bookmarks_Column" + c : "Bookmarks_ColumnDocument");
+            var button = new HyperlinkButton
+            {
+                Content = column == BookmarkColumn.Color ? "●" : text,
+                Padding = new Thickness(0),
+            };
+            AutomationProperties.SetName(button, Loc.Format("Bookmarks_SortBy", text));
+            ToolTipService.SetToolTip(button, Loc.Format("Bookmarks_SortBy", text));
+            AutomationProperties.SetAutomationId(button, column is { } id ? "Bookmarks_Sort" + id : "Bookmarks_SortDocument");
+            if (column is { } sortable && SortOf(sortable) is { } sort)
+            {
+                button.Click += (_, _) => Vm.Sort(sort);
+            }
+            else
+            {
+                button.IsEnabled = column is not null;
+            }
+
+            button.ContextRequested += (_, _) => _menuColumn = column;
+            Grid.SetColumn(button, i);
+            Header.Children.Add(button);
         }
     }
+
+    private static BookmarkSortColumn? SortOf(BookmarkColumn column) => column switch
+    {
+        BookmarkColumn.Number => BookmarkSortColumn.Number,
+        BookmarkColumn.Color => BookmarkSortColumn.Color,
+        BookmarkColumn.Name => BookmarkSortColumn.Name,
+        BookmarkColumn.Start => BookmarkSortColumn.Start,
+        BookmarkColumn.Length => BookmarkSortColumn.Length,
+        BookmarkColumn.Group => BookmarkSortColumn.Group,
+        BookmarkColumn.Comment => BookmarkSortColumn.Comment,
+        _ => null,
+    };
+
+    private void Header_ContextRequested(UIElement sender, ContextRequestedEventArgs args)
+    {
+        if (args.OriginalSource is not HyperlinkButton)
+        {
+            _menuColumn = null;
+        }
+    }
+
+    /// <summary>見出しの右クリックメニュー: 列ごとの表示の切り替えと、右クリックした列の左右への移動。</summary>
+    private void ColumnsMenu_Opening(object? sender, object e)
+    {
+        ColumnsMenu.Items.Clear();
+        foreach ((BookmarkColumn column, bool visible) in BookmarkColumns.All)
+        {
+            var item = new ToggleMenuFlyoutItem
+            {
+                Text = Loc.Get("Bookmarks_Column" + column),
+                IsChecked = visible,
+                IsEnabled = column != BookmarkColumn.Name,
+            };
+            AutomationProperties.SetAutomationId(item, "Bookmarks_ShowColumn" + column);
+            item.Click += (_, _) => BookmarkColumns.Toggle(column);
+            ColumnsMenu.Items.Add(item);
+        }
+
+        ColumnsMenu.Items.Add(new MenuFlyoutSeparator());
+        foreach ((string key, int delta) in new[] { ("Bookmarks_MoveColumnLeft", -1), ("Bookmarks_MoveColumnRight", 1) })
+        {
+            var move = new MenuFlyoutItem { Text = Loc.Get(key), IsEnabled = _menuColumn is not null };
+            AutomationProperties.SetAutomationId(move, key);
+            BookmarkColumn? target = _menuColumn;
+            move.Click += (_, _) =>
+            {
+                if (target is { } c)
+                {
+                    BookmarkColumns.Move(c, delta);
+                }
+            };
+            ColumnsMenu.Items.Add(move);
+        }
+
+        var reset = new MenuFlyoutItem { Text = Loc.Get("Bookmarks_ResetColumns") };
+        AutomationProperties.SetAutomationId(reset, "Bookmarks_ResetColumns");
+        reset.Click += (_, _) => BookmarkColumns.Reset();
+        ColumnsMenu.Items.Add(reset);
+    }
+
+    /// <summary>見出しの並び (テスト用): 表示している列の見出しの文字列。</summary>
+    internal IReadOnlyList<string> HeaderTexts => [.. Header.Children.OfType<HyperlinkButton>().OrderBy(Grid.GetColumn).Select(b => b.Content as string ?? string.Empty)];
 }

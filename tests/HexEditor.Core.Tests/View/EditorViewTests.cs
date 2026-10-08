@@ -245,6 +245,44 @@ public sealed class EditorViewTests
         Assert.Equal([(0x20L, 1L, false)], e.Document.Current.EnumerateChanges(0, 0x100).ToList());
     }
 
+    [Fact]
+    public void Deleted_positions_are_reported_at_the_closed_up_boundary()
+    {
+        // VIEW-15 の仕様 5: 削除によって詰まった境界 (削除したバイトは p − 1 と p の間にあった)。
+        EditorState e = Seq1M();
+        Document doc = e.Document;
+        doc.Delete(0x30, 4);
+        Assert.Equal([0x30L], doc.Current.EnumerateDeletions(0, 0x100).ToList());
+
+        // 表示範囲の先頭の境界は含めず、末尾の境界は含める。
+        Assert.Empty(doc.Current.EnumerateDeletions(0x30, 0x10));
+        Assert.Equal([0x30L], doc.Current.EnumerateDeletions(0x20, 0x10).ToList());
+
+        // 挿入より多く置き換えた所は、変更の範囲の後ろの境界。挿入だけ・上書きだけは削除ではない。
+        doc.Insert(0x80, [1, 2]);
+        doc.Overwrite(0x90, [7]);
+        Assert.Equal([0x30L], doc.Current.EnumerateDeletions(0, 0x100).ToList());
+        using (doc.BeginGroup("置換"))
+        {
+            doc.Delete(0x40, 8);
+            doc.Insert(0x40, [9, 9]);
+        }
+
+        Assert.Equal([0x30L, 0x42L], doc.Current.EnumerateDeletions(0, 0x100).ToList());
+
+        // 末尾の削除。
+        doc.Delete(doc.Length - 0x10, 0x10);
+        Assert.Equal([doc.Length], doc.Current.EnumerateDeletions(doc.Length - 0x20, 0x20).ToList());
+
+        // Undo で元に戻ると削除の位置もなくなる。
+        while (doc.History.CanUndo)
+        {
+            doc.Undo();
+        }
+
+        Assert.Empty(doc.Current.EnumerateDeletions(0, doc.Length));
+    }
+
     private static void Save(Document doc)
     {
         var settings = new Core.Saving.SaveSettings { JournalDirectory = Path.Combine(Path.GetTempPath(), "hexeditor-view-journal") };

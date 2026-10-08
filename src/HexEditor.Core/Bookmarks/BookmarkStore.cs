@@ -21,10 +21,30 @@ public static class BookmarkStore
     public const int Version = 1;
 
     /// <summary>書く。ブックマークがなければ付随データを消す。</summary>
-    public static void Save(DocumentDataStore store, string documentPath, FileStamp? stamp, BookmarkCollection bookmarks)
+    public static void Save(DocumentDataStore store, string documentPath, FileStamp? stamp, BookmarkCollection bookmarks) =>
+        Write(store, documentPath, stamp, Capture(bookmarks));
+
+    /// <summary>
+    /// 保存する内容を写し取る (ブックマークの一覧を持つスレッド、つまり UI スレッドで呼ぶ)。写した内容は <see cref="Write"/> で別の
+    /// スレッドから書ける (100 万件の書き出しで UI を止めない)。
+    /// </summary>
+    public static LoadedBookmarks Capture(BookmarkCollection bookmarks)
     {
         IReadOnlyList<(Bookmark Bookmark, BookmarkPosition Position)> items = bookmarks.PositionsAtSavedState();
-        if (items.Count == 0 && bookmarks.NextAutoNumber <= 1)
+        var records = new List<BookmarkRecord>(items.Count);
+        foreach ((Bookmark b, BookmarkPosition p) in items)
+        {
+            records.Add(new BookmarkRecord(p.Start, p.Length, b.Name, b.Color, b.Comment, b.Number, b.Group, b.Created, b.Updated, p.RangeDeleted,
+                b.CreatedForNumber, b.EditedByUser, b.IsCustomized));
+        }
+
+        return new LoadedBookmarks(new DocumentDataHeader(string.Empty, null, null), bookmarks.NextAutoNumber, records);
+    }
+
+    /// <summary>写し取った内容を書く (どのスレッドからでもよい)。ブックマークがなければ付随データを消す。</summary>
+    public static void Write(DocumentDataStore store, string documentPath, FileStamp? stamp, LoadedBookmarks snapshot)
+    {
+        if (snapshot.Items.Count == 0 && snapshot.NextAutoNumber <= 1)
         {
             store.Delete(documentPath, Kind);
             return;
@@ -33,13 +53,13 @@ public static class BookmarkStore
         store.Write(documentPath, Kind, stamp, writer =>
         {
             writer.WriteNumber("version", Version);
-            writer.WriteNumber("nextNumber", bookmarks.NextAutoNumber);
+            writer.WriteNumber("nextNumber", snapshot.NextAutoNumber);
             writer.WriteStartArray("bookmarks");
-            foreach ((Bookmark b, BookmarkPosition p) in items)
+            foreach (BookmarkRecord b in snapshot.Items)
             {
                 writer.WriteStartObject();
-                writer.WriteNumber("start", p.Start);
-                writer.WriteNumber("length", p.Length);
+                writer.WriteNumber("start", b.Start);
+                writer.WriteNumber("length", b.Length);
                 writer.WriteString("name", b.Name);
                 writer.WriteString("color", b.Color.ToString());
                 if (b.Comment.Length > 0)
@@ -59,7 +79,7 @@ public static class BookmarkStore
 
                 writer.WriteString("created", b.Created);
                 writer.WriteString("updated", b.Updated);
-                if (p.RangeDeleted)
+                if (b.RangeDeleted)
                 {
                     writer.WriteBoolean("rangeDeleted", true);
                 }
@@ -74,7 +94,7 @@ public static class BookmarkStore
                     writer.WriteBoolean("edited", true);
                 }
 
-                if (b.IsCustomized)
+                if (b.Customized)
                 {
                     writer.WriteBoolean("customized", true);
                 }

@@ -129,11 +129,22 @@ public sealed partial class FindBar : UserControl
     }
 
     /// <summary>検索・数え上げ・すべて検索・すべて置換のどれかが実行中か。</summary>
-    private bool IsBusy => _running is not null || _counting is not null || _replacing is not null;
+    private bool IsBusy => _running is not null || _findingAll is not null || _counting is not null || _replacing is not null;
+
+    /// <summary>
+    /// 実行中のすべて検索。次・前の検索 (F3) や検索バーを閉じても止めず、キャンセルボタン・Esc・結果一覧のキャンセルで止める
+    /// (FIND-02 の仕様 4)。
+    /// </summary>
+    private CancellationTokenSource? _findingAll;
 
     /// <summary>実行中の検索と数え上げを取り消す (キャンセルボタン、検索欄の Esc。FIND-02 の仕様 3)。</summary>
-    private void CancelRunning()
+    private void CancelRunning(bool includeFindAll = true)
     {
+        if (includeFindAll)
+        {
+            _findingAll?.Cancel();
+        }
+
         _running?.Cancel();
         _counting?.Cancel();
         _replacing?.Cancel();
@@ -265,7 +276,7 @@ public sealed partial class FindBar : UserControl
 
     public void Close()
     {
-        CancelRunning();
+        CancelRunning(includeFindAll: false);
         _incrementalTimer?.Stop();
 
         // 「Esc で元の位置に戻る」がオンなら起点に戻る (FIND-27 の仕様 5)。
@@ -374,9 +385,9 @@ public sealed partial class FindBar : UserControl
 
         AddToHistory();
         StopIncremental();
-        _running?.Cancel();
+        _findingAll?.Cancel();
         var cts = new CancellationTokenSource();
-        _running = cts;
+        _findingAll = cts;
         int limit = Math.Clamp(App.Settings?.GetInt(FindAllLimitKey, 1_000_000) ?? 1_000_000, 1_000, 100_000_000);
         IReadOnlyList<SearchTarget> targets = FindAllTargets(editor, pattern, new SearchOptions
         {
@@ -400,9 +411,9 @@ public sealed partial class FindBar : UserControl
         }
         finally
         {
-            if (_running == cts)
+            if (_findingAll == cts)
             {
-                _running = null;
+                _findingAll = null;
                 UpdateProgress();
             }
         }

@@ -20,8 +20,12 @@ public sealed class EditCommandTests
 
     private static async Task<bool> PrimaryEnabledAsync(AppSession app) => (await app.WaitForAsync("PrimaryButton")).IsEnabled;
 
-    /// <summary>ダイアログのボタンを押し、処理が終わるまで待つ。PrimaryButton などのダイアログのボタン以外は AutomationId で押す。</summary>
-    internal static async Task PressAsync(AppSession app, string button = "PrimaryButton")
+    /// <summary>
+    /// ダイアログのボタンを押し、処理が終わるまで待つ。PrimaryButton などのダイアログのボタン以外は AutomationId で押す。
+    /// <paramref name="waitForOperations"/> が偽なら、始まった長時間処理の終わりを待たない (進捗を見てキャンセルするテスト用。
+    /// idle は長時間処理が終わるまで最大 10 秒待つため、10 秒前後で終わる処理では進捗を見る前に終わってしまう)。
+    /// </summary>
+    internal static async Task PressAsync(AppSession app, string button = "PrimaryButton", bool waitForOperations = true)
     {
         await app.WaitForAsync(button);
         if (button is "PrimaryButton" or "SecondaryButton" or "CloseButton")
@@ -38,8 +42,11 @@ public sealed class EditCommandTests
             await app.CommandAsync(button);
         }
 
-        await app.IdleAsync();
-        await app.IdleAsync();
+        if (waitForOperations)
+        {
+            await app.IdleAsync();
+            await app.IdleAsync();
+        }
     }
 
     private static async Task<string> TextAsync(AppSession app, string id)
@@ -504,7 +511,7 @@ public sealed class EditCommandTests
         await app.IdleAsync();
         await SelectItemAsync(app, "Fill_Kind", "Cryptographic random numbers");
         await app.IdleAsync();
-        await PressAsync(app);
+        await PressAsync(app, waitForOperations: false);
 
         await CancelWhenProgressAsync(app, 0.10);
         Assert.Equal(TestDataCatalog.Marker(0), await app.BytesAsync(0, 17));
@@ -615,7 +622,7 @@ public sealed class EditCommandTests
         await app.WaitForAsync("InsertFileDialog");
         await app.IdleAsync();
         await SetCheckedAsync(app, "InsertFile_Insert");
-        await PressAsync(app);
+        await PressAsync(app, waitForOperations: false);
 
         await CancelWhenProgressAsync(app, 0.05);
         JsonObject doc = await app.DocumentAsync();

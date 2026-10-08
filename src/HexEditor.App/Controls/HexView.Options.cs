@@ -99,6 +99,38 @@ public sealed partial class HexView
     /// <summary>設定「ツールチップを表示する」(VIEW-07。既定オン)。</summary>
     public bool ShowToolTips { get; set; } = true;
 
+    /// <summary>削除位置を表示 (VIEW-15 の仕様 5。設定 view.modified.showDeletions、既定オフ)。</summary>
+    public bool ShowDeletions
+    {
+        get => _showDeletions;
+        set
+        {
+            if (_showDeletions != value)
+            {
+                _showDeletions = value;
+                QueueRender();
+            }
+        }
+    }
+
+    private bool _showDeletions;
+
+    /// <summary>表示しない文字の記号 (VIEW-21 の仕様 7。設定 view.text.nonPrintable)。</summary>
+    public NonPrintableStyle NonPrintableStyle
+    {
+        get => _nonPrintableStyle;
+        set
+        {
+            if (_nonPrintableStyle != value)
+            {
+                _nonPrintableStyle = value;
+                QueueRender();
+            }
+        }
+    }
+
+    private NonPrintableStyle _nonPrintableStyle;
+
     /// <summary>
     /// バイトに付いている情報の名前 (ブックマーク名など。VIEW-07 の仕様 2 の「付加情報」、UI-51 の「ブックマーク 名前」)。
     /// 提供元 (INSP、TPL) が設定する。範囲で問い合わせるため、ブロックしないこと。

@@ -185,7 +185,7 @@ public sealed class DocumentSnapshot
                 continue;
             }
 
-            (long runStart, long runEnd, long overwritten) = ChangeRun(start, start + piece.Length);
+            (long runStart, long runEnd, long overwritten, _) = ChangeRun(start, start + piece.Length);
             long split = runStart + overwritten;
             long from = Math.Max(at, runStart);
             long to = Math.Min(end, runEnd);
@@ -203,8 +203,81 @@ public sealed class DocumentSnapshot
         }
     }
 
-    /// <summary>元データ以外のピースが続く範囲と、そのうち上書きとみなすバイト数。</summary>
-    private (long Start, long End, long Overwritten) ChangeRun(long pieceStart, long pieceEnd)
+    /// <summary>
+    /// [offset, offset + length] の中の、削除によって詰まった境界 (VIEW-15 の仕様 5)。境界の位置 p は、削除されたバイトが p − 1 と p の
+    /// 間にあったことを示す (p は offset より大きく offset + length 以下)。元データのピースが元データ上で飛んでいる所と、変更されたピースが
+    /// 置き換えた元データのバイト数より短い所 (挿入より多く削除した所。境界は変更の範囲の後ろ) を返す。表示範囲のピースだけを見る。
+    /// </summary>
+    public IEnumerable<long> EnumerateDeletions(long offset, long length)
+    {
+        long end = Math.Min(offset + length, Length);
+        if (offset < 0 || end <= 0 || offset > end)
+        {
+            yield break;
+        }
+
+        // 範囲の先頭の境界 (offset と offset − 1 の間) は含めないが、ピースは 1 バイト前のものから見る。
+        long cursor = Math.Max(0, offset - 1);
+        while (cursor < end)
+        {
+            if (Tree.PieceAt(cursor) is not { } found)
+            {
+                yield break;
+            }
+
+            (long start, Piece piece) = found;
+            long pieceEnd = start + piece.Length;
+            if (piece.Kind != PieceKind.Original)
+            {
+                (_, long runEnd, _, long removed) = ChangeRun(start, pieceEnd);
+                if (removed > 0 && runEnd > offset && runEnd <= end)
+                {
+                    yield return runEnd;
+                }
+
+                if (runEnd >= Length)
+                {
+                    yield break;
+                }
+
+                cursor = runEnd;
+                continue;
+            }
+
+            if (pieceEnd > offset && pieceEnd <= end)
+            {
+                if (pieceEnd == Length)
+                {
+                    // 末尾の後ろが削除されている。
+                    if (piece.Offset + piece.Length < _storage.Source.Length)
+                    {
+                        yield return pieceEnd;
+                    }
+
+                    yield break;
+                }
+
+                if (Tree.PieceAt(pieceEnd) is { } next && next.Piece.Kind == PieceKind.Original
+                    && next.Piece.Offset > piece.Offset + piece.Length)
+                {
+                    yield return pieceEnd;
+                }
+            }
+
+            if (pieceEnd >= Length)
+            {
+                yield break;
+            }
+
+            cursor = pieceEnd;
+        }
+    }
+
+    /// <summary>
+    /// 元データ以外のピースが続く範囲と、そのうち上書きとみなすバイト数、置き換えた元データのうち変更の範囲より多い分 (削除されたバイト数。
+    /// 前後をたどれなければ 0)。
+    /// </summary>
+    private (long Start, long End, long Overwritten, long Removed) ChangeRun(long pieceStart, long pieceEnd)
     {
         long runStart = pieceStart;
         long previousSourceEnd = 0;
@@ -254,7 +327,7 @@ public sealed class DocumentSnapshot
 
         long run = runEnd - runStart;
         long gap = Math.Max(0, nextSourceStart - previousSourceEnd);
-        return (runStart, runEnd, known ? Math.Min(gap, run) : run);
+        return (runStart, runEnd, known ? Math.Min(gap, run) : run, known ? Math.Max(0, gap - run) : 0);
     }
 
     private int CountWithinLength(long offset, int requested)

@@ -99,6 +99,22 @@ public sealed class HashVerificationTests : IDisposable
         Assert.NotNull(ChecksumFile.FindEntry(ChecksumFile.Parse($"{Md5}  dir/a.bin", null), "a.bin"));
     }
 
+    [Fact]
+    public void SavedSfvFileCanBeReadBack()
+    {
+        // ANA-22 の仕様 2: CRC-32 は .sfv (「ファイル名 CRC」) で保存し、ANA-21 の検証で読み戻せる。
+        string dataPath = Path.Combine(_dir, "check.bin");
+        File.WriteAllBytes(dataPath, Encoding.ASCII.GetBytes("123456789"));
+        using var doc = new Document(FileByteSource.Open(dataPath), Options());
+        HashComputation result = HashEngine.Compute(doc.Current, new HashRequest { Algorithms = [new HashAlgorithmChoice(HashCatalog.Get("crc32"))] });
+        string sfv = Path.Combine(_dir, "check" + HashExport.ChecksumExtension(HashCatalog.Get("crc32")));
+        HashExport.WriteChecksumFile(sfv, result.Rows, dataPath);
+        Assert.Equal("check.bin CBF43926\n", File.ReadAllText(sfv));
+        ChecksumEntry entry = Assert.Single(ChecksumFile.Parse(File.ReadAllText(sfv), ".sfv"));
+        Assert.Equal("check.bin", entry.FileName);
+        Assert.Equal(Convert.FromHexString("CBF43926"), entry.Value);
+    }
+
     [Sha256SumFact]
     [Trait(TC, "TC-ANA-22-02")]
     public void SavedChecksumFilePassesSha256SumCheck()

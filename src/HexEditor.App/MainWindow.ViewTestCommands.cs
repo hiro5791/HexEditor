@@ -42,6 +42,7 @@ public sealed partial class MainWindow
                 ["encoding"] = e.TextEncoding.Id,
             } : throw new InvalidOperationException("No document."),
             "colorScheme" => TestColorScheme(request),
+            "encodingList" => TestEncodingList(request),
             "systemColor" => new JsonObject
             {
                 ["color"] = Application.Current.Resources[request["key"]!.GetValue<string>()] is Windows.UI.Color c ? $"#{c.A:X2}{c.R:X2}{c.G:X2}{c.B:X2}" : null,
