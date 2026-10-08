@@ -56,8 +56,22 @@ public static class StartupError
         }
     }
 
+    /// <summary>完了の知らせ (コマンドラインの <c>--unregister</c>。08 の AUTO-36 の 9)。</summary>
+    public static void ShowInformation(string title, string message)
+    {
+        try
+        {
+            _ = MessageBoxW(0, message, title, MbOk | MbIconInformation | MbSetForeground);
+        }
+        catch (Exception)
+        {
+            // 表示できなくても終了する。
+        }
+    }
+
     private const uint MbOk = 0x0;
     private const uint MbIconError = 0x10;
+    private const uint MbIconInformation = 0x40;
     private const uint MbSetForeground = 0x10000;
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]

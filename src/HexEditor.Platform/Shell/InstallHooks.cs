@@ -32,6 +32,8 @@ public sealed class InstallHooks
     private readonly Stopwatch _clock = new();
     private readonly TimeSpan _budget;
     private readonly ShellLabels _labels;
+    private readonly Action? _clearJumpList;
+    private readonly Action? _unregisterToast;
     private bool _dataDeleted;
 
     /// <param name="dataRoot">データフォルダ (%LocalAppData%\HexEditorData)。</param>
@@ -39,9 +41,13 @@ public sealed class InstallHooks
     /// <param name="notifyAssociationsChanged">SHChangeNotify(SHCNE_ASSOCCHANGED) の呼び出し (テストでは差し替える)。</param>
     /// <param name="labels">Explorer に出す文字列 (登録時の表示言語。09 の UI-54 の仕様 1)。null なら英語。</param>
     /// <param name="notifyEnvironmentChanged">WM_SETTINGCHANGE ("Environment") の送信 (PATH を変えたとき。テストでは差し替える)。</param>
+    /// <param name="clearJumpList">ジャンプリストを消す (アンインストール前。仕様 2)。null なら何もしない。</param>
+    /// <param name="unregisterToast">トースト通知の登録を解除する (アンインストール前。仕様 2)。null なら何もしない。</param>
     public InstallHooks(IUserRegistry registry, string dataRoot, string exePath, Action? notifyAssociationsChanged = null, TimeSpan? budget = null,
-        ShellLabels? labels = null, Action? notifyEnvironmentChanged = null)
+        ShellLabels? labels = null, Action? notifyEnvironmentChanged = null, Action? clearJumpList = null, Action? unregisterToast = null)
     {
+        _clearJumpList = clearJumpList;
+        _unregisterToast = unregisterToast;
         _notifyEnvironmentChanged = notifyEnvironmentChanged ?? UserPath.NotifyEnvironmentChanged;
         _labels = labels ?? ShellLabels.English;
         _registry = registry;
@@ -60,21 +66,72 @@ public sealed class InstallHooks
     public void AfterUpdate(string version) => Run("after-update", version, () => RegisterAll());
 
     /// <summary>
-    /// アンインストール前: 一覧の登録をすべて消し、PATH に足した項目を消す。設定 <c>uninstall.removeUserData</c> が true なら
-    /// データフォルダを消す (PKG-09 の仕様 1)。
+    /// アンインストール前: 一覧の登録をすべて消し、ジャンプリストとトースト通知の登録を消し、PATH に足した項目を消す。
+    /// 設定 <c>uninstall.removeUserData</c> が true ならデータフォルダを消す (PKG-09 の仕様 1)。
     /// </summary>
     public void BeforeUninstall(string version) => Run("before-uninstall", version, () =>
     {
-        IReadOnlyList<string> failures = ShellRegistration.Unregister(_registry, TimeUp);
-        Log(failures.Count == 0 ? "Unregistered all entries." : "Unregister failed: " + string.Join(", ", failures));
-        _notifyAssociationsChanged();
-        UpdatePath(add: false);
+        _ = UnregisterEverything();
         if (ReadRemoveUserData())
         {
             Log("uninstall.removeUserData = true: deleting the data folder.");
             DeleteDataFolder();
         }
     });
+
+    /// <summary>
+    /// コマンドラインの <c>--unregister</c> (08 の AUTO-36 の 9): アンインストール前のフックと同じ解除 (データフォルダは消さない)。
+    /// 失敗した項目と理由を返す。経過は <c>install.log</c> に書く。
+    /// </summary>
+    public IReadOnlyList<string> Unregister()
+    {
+        IReadOnlyList<string> failures = [];
+        Run("unregister", "--unregister", () => failures = UnregisterEverything());
+        return failures;
+    }
+
+    /// <summary>レジストリの一覧の登録、ジャンプリスト、トースト通知の登録、PATH の項目を消す。失敗した項目と理由を返す。</summary>
+    private List<string> UnregisterEverything()
+    {
+        var failures = new List<string>(ShellRegistration.Unregister(_registry, TimeUp));
+        Log(failures.Count == 0 ? "Unregistered all entries." : "Unregister failed: " + string.Join(", ", failures));
+        _notifyAssociationsChanged();
+        Step("jumpList", _clearJumpList);
+        Step("toast", _unregisterToast);
+        if (!UpdatePath(add: false))
+        {
+            failures.Add($"{UserPath.Id}: failed");
+        }
+
+        return failures;
+
+        void Step(string id, Action? action)
+        {
+            if (action is null)
+            {
+                return;
+            }
+
+            if (TimeUp())
+            {
+                failures.Add($"{id}: skipped (time limit)");
+                Log($"{id}: skipped (time limit)");
+                return;
+            }
+
+            try
+            {
+                action();
+                Log($"{id}: removed.");
+            }
+            catch (Exception ex)
+            {
+                // COM の失敗 (通知が使えない環境など) でも残りの項目を続ける。
+                failures.Add($"{id}: {ex.GetType().Name}");
+                Log($"{id} failed: {ex.GetType().Name}");
+            }
+        }
+    }
 
     /// <summary>設定ファイル (平らな JSON。09 の UI-23) の <c>uninstall.removeUserData</c>。読めなければ false (データを残す)。</summary>
     public bool ReadRemoveUserData()
@@ -146,13 +203,16 @@ public sealed class InstallHooks
         UpdatePath(add: !disabled.Contains(UserPath.Id));
     }
 
-    /// <summary>ユーザーの PATH にアプリのフォルダを足す、または足した項目を消す (PKG-08 の仕様 6)。変えたら WM_SETTINGCHANGE で知らせる。</summary>
-    private void UpdatePath(bool add)
+    /// <summary>
+    /// ユーザーの PATH にアプリのフォルダを足す、または足した項目を消す (PKG-08 の仕様 6)。変えたら WM_SETTINGCHANGE で知らせる。
+    /// 失敗・時間切れなら false。
+    /// </summary>
+    private bool UpdatePath(bool add)
     {
         if (TimeUp())
         {
             Log("PATH: skipped (time limit)");
-            return;
+            return false;
         }
 
         string folder = UserPath.FolderFor(_exePath);
@@ -164,10 +224,13 @@ public sealed class InstallHooks
             {
                 _notifyEnvironmentChanged();
             }
+
+            return true;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException)
         {
             Log($"PATH {(add ? "add" : "remove")} failed: {ex.GetType().Name}");
+            return false;
         }
     }
 

@@ -109,6 +109,12 @@ public static class CommandService
         _saveTimer.Change(SettingsStore.WriteDelay, Timeout.InfiniteTimeSpan);
     }
 
+    /// <summary>
+    /// まだ書いていない keybindings.json の書き込みを取り消す (他の版の設定の取り込み。10 の PKG-31: 取り込んだファイルを古い割り当てで
+    /// 上書きしないよう、ファイルを置き換える前に呼び、置き換えた後に <see cref="LoadKeybindings"/> で読み直す)。
+    /// </summary>
+    public static void CancelPendingKeybindingsSave() => _saveTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+
     /// <summary>keybindings.json を書く (一時ファイルに書いてから置き換える)。</summary>
     public static void SaveKeybindingsNow()
     {

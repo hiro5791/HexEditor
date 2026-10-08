@@ -81,6 +81,13 @@
             <uap:DisplayName>ms-resource:Shell_ProjectType</uap:DisplayName>
             <uap:SupportedFileTypes>
               <uap:FileType>.hexproj</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="hexeditor.workspace">
+            <uap:DisplayName>ms-resource:Shell_WorkspaceType</uap:DisplayName>
+            <uap:SupportedFileTypes>
               <uap:FileType>.hexworkspace</uap:FileType>
             </uap:SupportedFileTypes>
           </uap:FileTypeAssociation>

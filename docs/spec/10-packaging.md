@@ -97,7 +97,8 @@
 
    | 拡張 | 内容 |
    | --- | --- |
-   | `uap:FileTypeAssociation` (`Name="hexeditor.project"`) | `.hexproj`、`.hexworkspace`。既定のアプリの候補 |
+   | `uap:FileTypeAssociation` (`Name="hexeditor.project"`) | `.hexproj`。既定のアプリの候補 |
+   | `uap:FileTypeAssociation` (`Name="hexeditor.workspace"`) | `.hexworkspace`。既定のアプリの候補 (種類の名前をプロジェクトと分ける。インストーラ版・ポータブル版の ProgID `HexEditor.Workspace` と同じ。09 の UI-56 の仕様 4) |
    | `uap:FileTypeAssociation` (`Name="hexeditor.binary"`) | `.bin`、`.dat`、`.img`、`.rom`、`.dmp`、`.raw`、`.iso`。「プログラムから開く」の候補 (09 の UI-56) |
    | `desktop4:FileExplorerContextMenus` + `desktop5:ItemType Type="*"` | 「HexEditor で開く」の `IExplorerCommand` (09 の UI-55) |
    | `com:Extension` (`com:SurrogateServer`) | 上記の `IExplorerCommand` の COM クラス |
@@ -307,7 +308,7 @@
 | 項目 | 内容 |
 | --- | --- |
 | ロードマップ | F0-15 |
-| 呼び出し | Windows の「アプリ」設定。ポータブル版はツール > 設定 > 詳細 >「この PC から登録を解除」、またはコマンドライン `--unregister` (08 の AUTO-36 の 9) |
+| 呼び出し | Windows の「アプリ」設定。ポータブル版はツール > 設定 > 詳細 >「この PC から登録を解除」、またはコマンドライン `--unregister` (08 の AUTO-36 の 9。`HexEditor.exe --unregister` はフェーズ 1 から使える。`hexed` はフェーズ 3) |
 
 **概要**: 配布形態ごとのアンインストールの動作と、ユーザーデータの扱いを定める。
 
@@ -688,7 +689,7 @@
    | --- | --- | --- |
    | `update.checkAutomatically` | `true` | 自動で確認する |
    | `update.downloadAutomatically` | `true` (インストーラ版のみ表示) | 見つかったら裏でダウンロードする |
-   | `update.channel` | `stable` | `stable` / `preview` (PKG-21) |
+   | `update.channel` | `stable` (MSIX 版では表示しない。Store 版は安定版だけのため。PKG-21 の仕様 3) | `stable` / `preview` (PKG-21) |
    | `update.skippedVersion` | (空) | 「この版をスキップ」した版 |
 
 3. `network.offline` (09 の UI-58) が `true` のときは、自動・手動とも確認しない。
@@ -745,6 +746,9 @@
 **仕様**:
 
 1. 新しい版が見つかり、`update.downloadAutomatically` が `true` なら裏でダウンロードする。差分パッケージがあれば差分を使い、なければ完全版を使う (Velopack が選ぶ)。ダウンロードは帯域を使い切らないよう低い優先度にする。
+   - 低い優先度の実装: Windows の HTTP の通信には優先度を指定する方法がないため、パッケージの読み取りの速さに上限 (4 MB/秒) を設けて他の通信の余裕を残す。
+   - 裏でダウンロードする場合は、「ダウンロード」のボタンの付いた「版 X があります」(PKG-22) を出さない。自動の確認では何も出さずにダウンロードし、完了後に仕様 2 の InfoBar を出す。手動の確認では「版 X があります」と「リリースノート」だけを出す (ダウンロードの進捗は処理センター)。
+   - ダウンロード中に 2 つ目のダウンロードは始めない。ダウンロードが済んだ後の手動の確認では、仕様 2 の InfoBar を出し直す。
 2. ダウンロードが終わったら InfoBar で「版 X の準備ができました」と「再起動して更新」「リリースノート」「後で」を表示する (PKG-22)。
 3. 「再起動して更新」は、未保存の変更の確認 (09 の UI-13) をしてからアプリを終了し、Velopack が更新を適用してアプリを再起動する。再起動後はセッションを復元する (09 の UI-31)。
 4. 「後で」を選んだ場合は、次にアプリを終了したときに適用する (`WaitExitThenApplyUpdates`)。次回の起動は新しい版になる。

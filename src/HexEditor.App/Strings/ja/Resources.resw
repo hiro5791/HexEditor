@@ -2415,4 +2415,51 @@
   <data name="Recovery_TempDetails" xml:space="preserve"><value>終わらなかった保存の一時ファイルが残っています。ファイル自体は変更されていません。</value></data>
   <data name="Recovery_TempDelete" xml:space="preserve"><value>削除</value></data>
   <data name="Recovery_DeleteFailed" xml:space="preserve"><value>削除できませんでした: {0}</value></data>
+  <data name="Unregister_ManagedByWindows" xml:space="preserve"><value>この HexEditor の登録は Windows が管理しています。削除するには Windows の設定の「アプリ」からアンインストールしてください。</value></data>
+  <data name="Unregister_NothingRegistered" xml:space="preserve"><value>この HexEditor はこの PC に何も登録しません。</value></data>
+  <data name="Unregister_Done" xml:space="preserve"><value>この PC から HexEditor の登録を解除しました。</value></data>
+  <data name="Shell_FailureSeparator" xml:space="preserve"><value>、</value></data>
+  <data name="Shell_FailureItem" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Shell_Item_ContextMenu" xml:space="preserve"><value>右クリックメニュー「HexEditor で開く」</value></data>
+  <data name="Shell_Item_FileAssociations" xml:space="preserve"><value>ファイルの関連付け</value></data>
+  <data name="Shell_Item_AppPaths" xml:space="preserve"><value>App Paths (ファイル名を指定して実行)</value></data>
+  <data name="Shell_Item_CommandLine" xml:space="preserve"><value>コマンドライン (PATH)</value></data>
+  <data name="Shell_Item_JumpList" xml:space="preserve"><value>ジャンプリスト</value></data>
+  <data name="Shell_Item_Toast" xml:space="preserve"><value>通知の登録</value></data>
+  <data name="Shell_Item_Registry" xml:space="preserve"><value>レジストリ</value></data>
+  <data name="Shell_Reason_Denied" xml:space="preserve"><value>アクセスが拒否されました (グループ ポリシーでレジストリの変更が禁止されている可能性があります)</value></data>
+  <data name="Shell_Reason_Io" xml:space="preserve"><value>レジストリに書き込めませんでした</value></data>
+  <data name="Shell_Reason_TimeLimit" xml:space="preserve"><value>時間がかかりすぎたため省略しました</value></data>
+  <data name="Shell_Reason_Other" xml:space="preserve"><value>予期しないエラーが発生しました</value></data>
+  <data name="Shell_ItemRegistered" xml:space="preserve"><value>登録されています。</value></data>
+  <data name="Shell_ItemNotRegistered" xml:space="preserve"><value>登録されていません。</value></data>
+  <data name="Shell_ItemStale" xml:space="preserve"><value>登録が古い場所を指しています: {0}</value></data>
+  <data name="Shell_ItemOther" xml:space="preserve"><value>他の HexEditor の登録があります: {0}</value></data>
+  <data name="Shell_OpenWithAddPlaceholder" xml:space="preserve"><value>その他の拡張子 (例: .hex)</value></data>
+  <data name="Shell_OpenWithAdd" xml:space="preserve"><value>追加</value></data>
+  <data name="Shell_OpenWithNote" xml:space="preserve"><value>変更は、次にファイルの関連付けを登録したときに反映されます。</value></data>
+  <data name="Shell_DefaultApps" xml:space="preserve"><value>既定のアプリを設定</value></data>
+  <data name="SetSection_UpdateInfo" xml:space="preserve"><value>更新の状態</value></data>
+  <data name="SetSearch_UpdateInfo" xml:space="preserve"><value>ばーじょん ちゃねる 最後に確認 すとあ 安定版 ぷれびゅー</value></data>
+  <data name="Update_CurrentVersion" xml:space="preserve"><value>現在の版: {0}</value></data>
+  <data name="Update_ChannelInfo" xml:space="preserve"><value>チャネル: {0}</value></data>
+  <data name="Update_LastChecked" xml:space="preserve"><value>最後に確認した日時: {0}</value></data>
+  <data name="Update_NeverChecked" xml:space="preserve"><value>まだ確認していません。</value></data>
+  <data name="Update_StoreNote" xml:space="preserve"><value>Microsoft Store による自動更新は Store の設定に従います。</value></data>
+  <data name="Update_ReturnToStable" xml:space="preserve"><value>今すぐ最新の安定版に戻す</value></data>
+  <data name="Update_ReturnToStableNote" xml:space="preserve"><value>安定版のチャネルでプレビュー版を使っています。この版より新しい安定版が出るまで更新されません。</value></data>
+  <data name="Update_ReturnToStableTitle" xml:space="preserve"><value>安定版に戻しますか?</value></data>
+  <data name="Update_ReturnToStableBody" xml:space="preserve"><value>使用中の版より古い、最新の安定版に戻します。新しい機能の設定は無視されることがあります。</value></data>
+  <data name="SetSection_ImportOther" xml:space="preserve"><value>他の版から設定を取り込む</value></data>
+  <data name="SetSearch_ImportOther" xml:space="preserve"><value>とりこみ いこう いんすとーら すとあ ぽーたぶる</value></data>
+  <data name="Migration_Description" xml:space="preserve"><value>この PC にある他の配布形態の HexEditor の設定です。元のフォルダは変更しません。</value></data>
+  <data name="Migration_NoneFound" xml:space="preserve"><value>この PC に他の配布形態の HexEditor の設定は見つかりませんでした。</value></data>
+  <data name="Migration_Title" xml:space="preserve"><value>設定の取り込み</value></data>
+  <data name="Migration_Body" xml:space="preserve"><value>{0} の HexEditor から取り込むものを選んでください。</value></data>
+  <data name="Migration_ImportButton" xml:space="preserve"><value>取り込む</value></data>
+  <data name="SetSection_MsixUninstall" xml:space="preserve"><value>アンインストール</value></data>
+  <data name="SetSearch_MsixUninstall" xml:space="preserve"><value>あんいんすとーる さくじょ えくすぽーと</value></data>
+  <data name="Settings_MsixUninstallNote" xml:space="preserve"><value>アンインストールすると設定も削除されます。必要な場合は設定をエクスポートしてください。</value></data>
+  <data name="Set_uninstall_removeUserData" xml:space="preserve"><value>アンインストール時にデータを削除する</value></data>
+  <data name="SetDesc_uninstall_removeUserData" xml:space="preserve"><value>アンインストールしたときに、設定・ログ・復旧用のデータを削除します。残したデータは次にインストールしたときに使われます。</value></data>
 </root>

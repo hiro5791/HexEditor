@@ -35,7 +35,45 @@ public static class ExplorerIntegration
 
         return (failures, failures.Count == 0
             ? Loc.Get("Shell_UnregisterPcDone")
-            : Loc.Format("Shell_UnregisterPcFailed", string.Join(", ", failures)));
+            : Loc.Format("Shell_UnregisterPcFailed", DescribeFailures(failures)));
+    }
+
+    /// <summary>
+    /// 登録・解除の失敗 (Platform が返す「項目の ID: 例外の型名」) を、表示言語の項目名と理由に直す (UI-54・UI-56 の「エラー」:
+    /// 設定画面に理由を表示する)。例: 「右クリックメニュー: アクセスが拒否されました (グループ ポリシーで…)」。
+    /// </summary>
+    public static string DescribeFailures(IReadOnlyList<string> failures) =>
+        string.Join(Loc.Get("Shell_FailureSeparator"), failures.Select(Describe));
+
+    private static string Describe(string failure)
+    {
+        int colon = failure.IndexOf(':', StringComparison.Ordinal);
+        string id = colon < 0 ? failure : failure[..colon].Trim();
+        string detail = colon < 0 ? failure : failure[(colon + 1)..].Trim();
+        if (id == "unsupported")
+        {
+            return Loc.Get("Shell_NotAvailable");
+        }
+
+        string item = id switch
+        {
+            ShellRegistration.ContextMenuId => Loc.Get("Shell_Item_ContextMenu"),
+            ShellRegistration.FileAssociationsId => Loc.Get("Shell_Item_FileAssociations"),
+            ShellRegistration.AppPathsId => Loc.Get("Shell_Item_AppPaths"),
+            UserPath.Id => Loc.Get("Shell_Item_CommandLine"),
+            "jumpList" => Loc.Get("Shell_Item_JumpList"),
+            "toast" => Loc.Get("Shell_Item_Toast"),
+            "registry" => Loc.Get("Shell_Item_Registry"),
+            _ => id,
+        };
+        string reason = detail switch
+        {
+            nameof(UnauthorizedAccessException) or nameof(System.Security.SecurityException) => Loc.Get("Shell_Reason_Denied"),
+            nameof(IOException) => Loc.Get("Shell_Reason_Io"),
+            _ when detail.Contains("time limit", StringComparison.Ordinal) => Loc.Get("Shell_Reason_TimeLimit"),
+            _ => Loc.Get("Shell_Reason_Other"),
+        };
+        return Loc.Format("Shell_FailureItem", item, reason);
     }
 
     /// <summary>今の表示言語の文字列。リソースを読めない段階 (インストールのフック) では英語。</summary>

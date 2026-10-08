@@ -29,15 +29,17 @@ public sealed class ManifestTests
     {
         XDocument manifest = Manifest();
 
-        // 独自の形式 (.hexproj、.hexworkspace) は既定のアプリの候補 (PKG-03 の仕様 1、UI-56 の仕様 1)。
-        Assert.Equal([".hexproj", ".hexworkspace"], FileTypes(manifest, "hexeditor.project"));
+        // 独自の形式 (.hexproj、.hexworkspace) は既定のアプリの候補 (PKG-03 の仕様 1、UI-56 の仕様 1)。種類はインストーラ版・
+        // ポータブル版の ProgID (HexEditor.Project、HexEditor.Workspace) と同じく別にする。
+        Assert.Equal([".hexproj"], FileTypes(manifest, "hexeditor.project"));
+        Assert.Equal([".hexworkspace"], FileTypes(manifest, "hexeditor.workspace"));
 
         // バイナリ形式は「プログラムから開く」の候補 (UI-56 の仕様 2 の 7 つ。インストーラ版・ポータブル版の既定の一覧と同じ)。
         Assert.Equal(ShellRegistration.DefaultOpenWithExtensions, FileTypes(manifest, "hexeditor.binary"));
 
-        // 関連付けは 2 つだけ。表示名は言語ごとのリソース (英語と日本語にある)。
+        // 関連付けは 3 つだけ。表示名は言語ごとのリソース (英語と日本語にある)。
         XElement[] associations = [.. manifest.Descendants(Uap + "FileTypeAssociation")];
-        Assert.Equal(2, associations.Length);
+        Assert.Equal(3, associations.Length);
         foreach (XElement association in associations)
         {
             string displayName = association.Element(Uap + "DisplayName")!.Value;

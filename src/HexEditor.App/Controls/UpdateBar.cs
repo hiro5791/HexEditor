@@ -125,6 +125,33 @@ public sealed partial class UpdateBar : UserControl
         }
     }
 
+    /// <summary>
+    /// オフラインモード (09 の UI-58 の仕様 3): 通信する「ダウンロード」「Microsoft Store で更新」を無効にして理由を表示する。
+    /// ブラウザでページを開くボタン (ダウンロードページ、リリースノート) は無効にしない (開く前に URL を表示する)。
+    /// </summary>
+    public void SetOffline(bool offline, string reason)
+    {
+        bool any = false;
+        foreach (UpdateButton kind in (UpdateButton[])[UpdateButton.Download, UpdateButton.OpenStore])
+        {
+            if (_byKind.TryGetValue(kind, out Button? button))
+            {
+                any = true;
+                button.IsEnabled = !offline;
+                AutomationProperties.SetHelpText(button, offline ? reason : string.Empty);
+            }
+        }
+
+        if (any)
+        {
+            _reason.Text = reason;
+            _reason.Visibility = offline ? Visibility.Visible : Visibility.Collapsed;
+        }
+    }
+
+    /// <summary>閉じるボタンを押したのと同じ (テスト用の命令)。<see cref="Closed"/> が起きる。</summary>
+    public void CloseByUser() => _bar.IsOpen = false;
+
     public void Hide()
     {
         _closeTimer.Stop();

@@ -142,6 +142,13 @@ public sealed partial class MainWindow
         UpdateService service = AppUpdates.Service;
         service.Changed += (_, _) => App.DispatcherQueue.TryEnqueue(RefreshRestartButtons);
         WindowManager.Windows[0].Vm.Operations.Changed += (_, _) => App.DispatcherQueue.TryEnqueue(RefreshRestartButtons);
+        App.Settings.Changed += keys =>
+        {
+            if (keys.Contains(NetworkPolicy.OfflineKey))
+            {
+                App.DispatcherQueue.TryEnqueue(RefreshRestartButtons);
+            }
+        };
         AppDomain.CurrentDomain.ProcessExit += (_, _) =>
         {
             // 記録はアプリの状態 (state.json) に置くので、終了の前に書き出す。
@@ -234,15 +241,54 @@ public sealed partial class MainWindow
         UpdateService service = AppUpdates.Service;
         UpdateCheckResult result = await service.CheckAsync(manual);
         AppLog.Info($"Update check ({(manual ? "manual" : "automatic")}): {result.Outcome} {result.Offer?.Version.SemVer} {result.Failure}");
-        if (UpdatePresentation.ForCheck(result, service.Current, service.Kind) is { } message)
+        await ShowUpdateResultAsync(result, manual);
+    }
+
+    /// <summary>
+    /// 確認の結果を帯に出し、インストーラ版で自動のダウンロードが有効なら裏でダウンロードする (PKG-18 の仕様 1)。その場合は
+    /// 「ダウンロード」付きの「版 X があります」を出さず、終わってから「版 X の準備ができました」を出す (仕様 2)。
+    /// </summary>
+    private async Task ShowUpdateResultAsync(UpdateCheckResult result, bool manual)
+    {
+        UpdateService service = AppUpdates.Service;
+        bool download = result.Outcome == UpdateCheckOutcome.Available && service.Phase == UpdatePhase.Available && service.ShouldDownloadAutomatically;
+        if (UpdatePresentation.ForCheck(result, service.Current, service.Kind, download) is { } message)
         {
             ShowUpdateMessage(message);
         }
 
-        // インストーラ版: 見つかったら裏でダウンロードする (PKG-18 の仕様 1)。
-        if (result.Outcome == UpdateCheckOutcome.Available && service.Phase == UpdatePhase.Available && service.ShouldDownloadAutomatically)
+        if (download)
         {
             await DownloadUpdateAsync(manual);
+        }
+    }
+
+    /// <summary>
+    /// 「今すぐ最新の安定版に戻す」(PKG-21 の仕様 4。設定画面「更新」): 確認の後、最新の安定版を探して古い版へ戻す。インストーラ版は
+    /// ダウンロードして「再起動して更新」を出す (AllowVersionDowngrade)。ポータブル版はその版のダウンロードページを案内する。
+    /// </summary>
+    internal async Task ReturnToStableAsync()
+    {
+        if (!await ConfirmAsync(Loc.Get("Update_ReturnToStableTitle"), Loc.Get("Update_ReturnToStableBody"), Loc.Get("Update_ReturnToStable"),
+            "ReturnToStableDialog"))
+        {
+            return;
+        }
+
+        UpdateService service = AppUpdates.Service;
+        UpdateCheckResult result = await service.FindLatestStableAsync();
+        AppLog.Info($"Return to stable: {result.Outcome} {result.Offer?.Version.SemVer} {result.Failure}");
+        if (result.Outcome == UpdateCheckOutcome.Available && result.Offer is { } offer && service.Kind == UpdateKind.Installer)
+        {
+            // 利用者が選んだ操作なので、自動のダウンロードの設定に関係なくダウンロードする。
+            ShowUpdateMessage(UpdatePresentation.Downloading(offer.Version));
+            await DownloadUpdateAsync(manual: true);
+            return;
+        }
+
+        if (UpdatePresentation.ForCheck(result, service.Current, service.Kind) is { } message)
+        {
+            ShowUpdateMessage(message);
         }
     }
 
@@ -250,20 +296,23 @@ public sealed partial class MainWindow
     private async Task DownloadUpdateAsync(bool manual)
     {
         UpdateService service = AppUpdates.Service;
-        if (service.Offer is not { } offer)
+
+        // ダウンロード中・ダウンロード済みなら 2 つ目を始めない (自動のダウンロード中に「ダウンロード」を押した場合など)。
+        if (service.Offer is not { } offer || service.Phase is UpdatePhase.Downloading or UpdatePhase.Ready)
         {
             return;
         }
 
         try
         {
+            bool downloaded = false;
             await Vm.Operations.RunAsync(Loc.Format("Operation_UpdateDownload", offer.Version.SemVer), OperationKind.ReadOnly, null, 100, async op =>
             {
                 EventHandler progress = (_, _) => op.Report(service.DownloadProgress);
                 service.Changed += progress;
                 try
                 {
-                    await service.DownloadAsync(op.CancellationToken);
+                    downloaded = await service.DownloadAsync(op.CancellationToken);
                 }
                 finally
                 {
@@ -272,7 +321,10 @@ public sealed partial class MainWindow
 
                 return true;
             });
-            ShowUpdateMessage(UpdatePresentation.Ready(offer.Version));
+            if (downloaded)
+            {
+                ShowUpdateMessage(UpdatePresentation.Ready(offer.Version));
+            }
         }
         catch (OperationCanceledException)
         {
@@ -313,6 +365,9 @@ public sealed partial class MainWindow
         UpdateOffer? offer = service.Offer;
         switch (button)
         {
+            case UpdateButton.Download or UpdateButton.OpenStore when AppUpdates.Policy.Offline:
+                // 無効表示の間に押された (UI-58 の仕様 3)。
+                break;
             case UpdateButton.Download:
                 HideUpdateMessage();
                 await DownloadUpdateAsync(manual: true);
@@ -356,9 +411,15 @@ public sealed partial class MainWindow
         AppUpdates.Service.ApplyAndRestart(AppRestart.Arguments(Environment.GetCommandLineArgs().Skip(1).ToList(), files));
     }
 
-    /// <summary>実行中の長時間処理 (保存を含む) があるときは「再起動して更新」を押せない (PKG-18 の仕様 5)。</summary>
-    private void RefreshRestartButton() =>
+    /// <summary>
+    /// 実行中の長時間処理 (保存を含む) があるときは「再起動して更新」を押せない (PKG-18 の仕様 5)。オフラインモードでは「ダウンロード」
+    /// 「Microsoft Store で更新」を押せない (UI-58 の仕様 3。帯を出した後にオフラインにした場合も)。
+    /// </summary>
+    private void RefreshRestartButton()
+    {
         UpdateBar.SetRestartEnabled(UpdateService.CanRestartNow(Vm.Operations.Active.Count), Loc.Get("Update_RestartBusy"));
+        UpdateBar.SetOffline(AppUpdates.Policy.Offline, Loc.Get("Network_OfflineReason"));
+    }
 
     // ---- ネットワークを使う機能の管理 (UI-58) ----
 
@@ -598,13 +659,15 @@ public sealed partial class MainWindow
                 AppLog.Info("Explorer menu name updated for the display language.");
             }
 
-            // ポータブル版のフォルダを移動した: 「右クリックメニューの登録が古い場所を指しています」(仕様 6)。
-            if (shell.State().Stale)
+            // ポータブル版のフォルダを移動した: 「右クリックメニューの登録が古い場所を指しています」(仕様 6)。「更新する」「登録を解除する」は
+            // 古い場所を指していた項目だけを対象にする (登録していなかった項目は登録しない)。
+            IReadOnlySet<string> stale = shell.StaleItems();
+            if (stale.Count > 0)
             {
                 ShowNotice(Loc.Get("Shell_StaleRegistration"), InfoBarSeverity.Warning, actions:
                 [
-                    new Core.Notifications.NotificationAction(Loc.Get("Shell_UpdateRegistration"), () => ReportShellFailures(shell.Register())),
-                    new Core.Notifications.NotificationAction(Loc.Get("Shell_Unregister"), () => ReportShellFailures(shell.Unregister())),
+                    new Core.Notifications.NotificationAction(Loc.Get("Shell_UpdateRegistration"), () => ReportShellFailures(shell.Register(stale))),
+                    new Core.Notifications.NotificationAction(Loc.Get("Shell_Unregister"), () => ReportShellFailures(shell.Unregister(stale))),
                 ]);
             }
         }
@@ -614,14 +677,18 @@ public sealed partial class MainWindow
         }
     }
 
+    /// <summary>設定画面の外 (起動時の案内、コマンドラインの設定) で失敗した登録の理由を、表示言語の文言で通知に出す (UI-54 の「エラー」)。</summary>
     internal void ReportShellFailures(IReadOnlyList<string> failures)
     {
         if (failures.Count > 0)
         {
             AppLog.Warning("Explorer registration failed: " + string.Join(", ", failures));
-            ShowNotice(Loc.Format("Shell_RegistrationFailed", string.Join(", ", failures)), InfoBarSeverity.Error);
+            ShowNotice(Loc.Format("Shell_RegistrationFailed", ExplorerIntegration.DescribeFailures(failures)), InfoBarSeverity.Error);
         }
     }
+
+    /// <summary>OS の画面 (既定のアプリの設定など) を開く。テスト用のビルドでは開かずに記録する。</summary>
+    internal Task OpenSystemPageAsync(Uri uri) => OpenUriAsync(uri);
 
     // ---- 他の配布形態の設定の取り込み (PKG-31) ----
 
@@ -641,18 +708,70 @@ public sealed partial class MainWindow
         {
             var button = new Button { Content = Loc.Format("Migration_Import", Loc.Get("Distribution_" + other.Distribution)) };
             AutomationProperties.SetAutomationId(button, "Start_ImportFrom_" + other.Distribution);
-            button.Click += (_, _) =>
+            button.Click += async (_, _) =>
             {
-                ImportSettingsFrom(other, MigrationCategories.All);
-                button.IsEnabled = false;
+                if (await ImportSettingsFromAsync(other) is not null)
+                {
+                    button.IsEnabled = false;
+                }
             };
             StartPage.AddWelcomeExtra(button);
         }
     }
 
+    /// <summary>取り込める他の配布形態の設定フォルダ (PKG-31 の仕様 1。設定画面「詳細」の「他の版から設定を取り込む」も使う)。</summary>
+    internal static IReadOnlyList<OtherDistributionData> OtherDistributionSettings()
+    {
+        IAppEnvironment env = Program.Environment;
+        string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        return SettingsMigration.Find(env.Distribution, env.Locations.Settings, localAppData);
+    }
+
+    /// <summary>取り込みのダイアログの区分 (PKG-31 の仕様 2。UI-25 のインポートと同じ区分と文言)。</summary>
+    private static readonly (MigrationCategories Category, string Key)[] MigrationParts =
+    [
+        (MigrationCategories.Settings, "SettingsPart_Settings"),
+        (MigrationCategories.KeyBindings, "SettingsPart_KeyBindings"),
+        (MigrationCategories.Themes, "SettingsPart_Themes"),
+        (MigrationCategories.RecentFiles, "SettingsPart_Recent"),
+        (MigrationCategories.DocumentData, "SettingsPart_Documents"),
+    ];
+
+    /// <summary>
+    /// 区分を選んで取り込む (PKG-31 の仕様 2)。設定・キー割り当て・配色は最初からオン、最近使ったファイルとドキュメントの付随データは
+    /// 選んだときだけ取り込む (ファイルのパスを含むため)。取り消した・何も選ばなかったら null。
+    /// </summary>
+    internal async Task<MigrationResult?> ImportSettingsFromAsync(OtherDistributionData other)
+    {
+        var body = new StackPanel { Spacing = 8 };
+        body.Children.Add(new TextBlock { Text = Loc.Format("Migration_Body", Loc.Get("Distribution_" + other.Distribution)), TextWrapping = TextWrapping.Wrap });
+        var boxes = new List<(MigrationCategories Category, CheckBox Box)>();
+        foreach ((MigrationCategories category, string key) in MigrationParts)
+        {
+            var box = new CheckBox { Content = Loc.Get(key), IsChecked = MigrationCategories.Default.HasFlag(category) };
+            AutomationProperties.SetAutomationId(box, "Migration_" + category);
+            boxes.Add((category, box));
+            body.Children.Add(box);
+        }
+
+        if (!await ConfirmAsync(Loc.Get("Migration_Title"), body, Loc.Get("Migration_ImportButton"), "ImportFromOtherDialog"))
+        {
+            return null;
+        }
+
+        MigrationCategories selected = boxes.Where(b => b.Box.IsChecked == true).Aggregate(MigrationCategories.None, (a, b) => a | b.Category);
+        return selected == MigrationCategories.None ? null : ImportSettingsFrom(other, selected);
+    }
+
     /// <summary>取り込む (UI-25 のインポートと同じ区分。元のフォルダは変えない)。失敗した区分は一覧で示す (PKG-31 の「エラー」)。</summary>
     public MigrationResult ImportSettingsFrom(OtherDistributionData other, MigrationCategories categories)
     {
+        // 取り込んだ keybindings.json を、まだ書いていない古い割り当てで上書きしない (取り込んだ後に読み直す)。
+        if (categories.HasFlag(MigrationCategories.KeyBindings))
+        {
+            CommandService.CancelPendingKeybindingsSave();
+        }
+
         MigrationResult result = SettingsMigration.Import(other.Folder, Program.Environment.Locations.Settings, categories, (key, value) =>
         {
             if (value is System.Text.Json.Nodes.JsonValue v)
@@ -672,8 +791,39 @@ public sealed partial class MainWindow
             }
         });
         App.Settings.Flush();
-        ApplyAppearance();
-        ApplyEditorSettings();
+        if (result.Imported.HasFlag(MigrationCategories.KeyBindings))
+        {
+            CommandService.LoadKeybindings();
+        }
+
+        // 最近使ったファイルは、この配布形態の一覧に読み直す (メモリの一覧で取り込んだファイルを上書きしないため)。
+        string recent = Path.Combine(Program.Environment.Locations.Settings, Core.Files.RecentFileStore.FileName);
+        if (result.Imported.HasFlag(MigrationCategories.RecentFiles) && File.Exists(recent))
+        {
+            try
+            {
+                Vm.Recent.Load(File.ReadAllText(recent), Program.Environment.Distribution == Platform.Distribution.Portable
+                    ? new Core.Files.RecentPathMapper(Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory))
+                    : null);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+            {
+                AppLog.Warning($"Imported recent files could not be read: {ex.GetType().Name}");
+            }
+        }
+
+        foreach (MainWindow w in WindowManager.Windows)
+        {
+            w.ApplyAppearance();
+            w.ApplyEditorSettings();
+        }
+
+        if (!WindowManager.Windows.Contains(this))
+        {
+            ApplyAppearance();
+            ApplyEditorSettings();
+        }
+
         AppLog.Info($"Imported settings from {other.Distribution}: {result.Imported}");
         if (result.Failed.Count > 0)
         {

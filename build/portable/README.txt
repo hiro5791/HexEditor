@@ -62,11 +62,12 @@ Checking for updates uses the internet (GitHub). Turn it off in the settings
 Removing HexEditor
 ------------------
 If you registered the Explorer context menu or file associations from the
-settings screen, remove them first with "hexed --unregister":
+settings screen, remove them first with "HexEditor.exe --unregister":
 
-    "C:\Tools\HexEditor\hexed.exe" --unregister
+    "C:\Tools\HexEditor\HexEditor.exe" --unregister
 
-(or Tools > Settings > Advanced > "Unregister from this PC").
+(or Tools > Settings > Advanced > "Unregister from this PC"). In versions
+that include hexed.exe, "hexed --unregister" does the same.
 Then delete the HexEditor folder. That is all.
 
 Windows SmartScreen warning
@@ -153,9 +154,10 @@ HexEditor は、どんな大きさのファイルやディスクも扱えるバ�
 設定画面で右クリックメニューやファイルの関連付けを登録した場合は、先に登録を
 解除します。
 
-    "C:\Tools\HexEditor\hexed.exe" --unregister
+    "C:\Tools\HexEditor\HexEditor.exe" --unregister
 
-(またはツール > 設定 > 詳細 >「この PC から登録を解除」)
+(またはツール > 設定 > 詳細 >「この PC から登録を解除」。hexed.exe を同梱している
+版では「hexed --unregister」でも同じです)
 その後、HexEditor のフォルダを削除すれば完了です。
 
 Windows SmartScreen の警告

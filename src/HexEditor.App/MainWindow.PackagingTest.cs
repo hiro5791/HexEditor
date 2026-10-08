@@ -24,6 +24,19 @@ public sealed partial class MainWindow
         "updateState" => TestUpdateState(),
         "updateButton" => TestUpdateButton(request["button"]!.GetValue<string>()),
 
+        // 更新の帯を出す (配布形態ごとのボタンの確認用。開発中の実行では Velopack・Store の確認ができないため)。
+        // message: available / ready、kind: Installer / Store / Portable、version。
+        "showUpdateMessage" => Run(() =>
+        {
+            SemanticVersion version = SemanticVersion.Parse(request["version"]?.GetValue<string>() ?? "9.9.9");
+            ShowUpdateMessage((request["message"]?.GetValue<string>() ?? "available") == "ready"
+                ? UpdatePresentation.Ready(version)
+                : UpdatePresentation.Available(version, Enum.Parse<UpdateKind>(request["kind"]?.GetValue<string>() ?? "Portable", ignoreCase: true)));
+        }),
+
+        // 利用者が更新の帯の閉じるボタンを押したのと同じ (InfoBar を閉じる)。
+        "closeUpdateBar" => Run(UpdateBar.CloseByUser),
+
         // 「アプリの時刻を進める」: 更新の自動の確認の時計を進める (PKG-17 のテスト)。
         "advanceUpdateClock" => Run(() => PackagingTestHooks.UpdateClockOffset += TimeSpan.FromHours(request["hours"]!.GetValue<double>())),
 

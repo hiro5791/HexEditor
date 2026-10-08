@@ -45,15 +45,7 @@ public sealed partial class MainWindow
         StringKeyTips.Apply(this, MainMenu, Root);
         UpdatePackagingMenu();
         ShowPendingUpdateMessage();
-        Action<IReadOnlyCollection<string>> settingsChanged = _ => DispatcherQueue.TryEnqueue(RefreshCommandUi);
-        App.Settings.Changed += settingsChanged;
-        Closed += (_, _) =>
-        {
-            if (_closingConfirmed)
-            {
-                App.Settings.Changed -= settingsChanged;
-            }
-        };
+        SubscribeWindowSettings();
         TestHooks.OnWindowCreated(this);
     }
 

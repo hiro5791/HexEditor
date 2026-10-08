@@ -1,7 +1,7 @@
 namespace HexEditor.Platform;
 
 /// <summary>
-/// GUI のコマンドライン (AUTO-37 のうち、今の版で扱うもの)。値を取るオプションの値はファイル名として扱わない。
+/// GUI のコマンドライン (AUTO-37 のうち、今の版で扱うもの、と AUTO-36 の 9 の <c>--unregister</c>)。値を取るオプションの値はファイル名として扱わない。
 /// </summary>
 public sealed record CommandLine(
     IReadOnlyList<string> Files,
@@ -12,7 +12,8 @@ public sealed record CommandLine(
     bool NewInstance,
     bool SafeMode,
     string? PseudoLocale = null,
-    bool NewDocument = false)
+    bool NewDocument = false,
+    bool Unregister = false)
 {
     private static readonly HashSet<string> OptionsWithValue =
     [
@@ -54,7 +55,8 @@ public sealed record CommandLine(
             flags.Contains("--new-instance"),
             flags.Contains("--safe-mode"),
             values.GetValueOrDefault("--pseudo-locale"),
-            flags.Contains("--new-document"));
+            flags.Contains("--new-document"),
+            flags.Contains("--unregister"));
     }
 
     /// <summary>

@@ -98,12 +98,28 @@ public static class UpdatePresentation
         _ => "Update_Reason_NoConnection",
     };
 
-    /// <summary>確認の結果を InfoBar の内容に直す。表示しないなら null (自動の確認で最新・失敗・スキップした版。PKG-17 の仕様 6)。</summary>
-    public static UpdateMessage? ForCheck(UpdateCheckResult result, SemanticVersion current, UpdateKind kind) => result.Outcome switch
-    {
-        UpdateCheckOutcome.Available when result.Offer is { } offer => Available(offer.Version, kind),
-        UpdateCheckOutcome.UpToDate when result.Manual => UpToDate(current),
-        UpdateCheckOutcome.Failed when result.Manual => Failed(result.Failure),
-        _ => null,
-    };
+    /// <summary>
+    /// 新しい版を裏でダウンロードしている (インストーラ版で <c>update.downloadAutomatically</c> が true。PKG-18 の仕様 1)。
+    /// 手動の確認の結果として「版 X があります」を出すが、「ダウンロード」「この版をスキップ」は出さない (ダウンロードは処理センターに出る)。
+    /// </summary>
+    public static UpdateMessage Downloading(SemanticVersion version) => new(
+        "Update_Available", [version.SemVer], UpdateMessageSeverity.Informational, [UpdateButton.ReleaseNotes]);
+
+    /// <summary>
+    /// 確認の結果を InfoBar の内容に直す。表示しないなら null (自動の確認で最新・失敗・スキップした版。PKG-17 の仕様 6)。
+    /// <paramref name="downloadsAutomatically"/> が true (見つけた版を続けて裏でダウンロードする) なら、「ダウンロード」付きの
+    /// 「版 X があります」は出さない (自動の確認では何も出さず、ダウンロードが終わってから「準備ができました」を出す。PKG-18 の仕様 1・2)。
+    /// </summary>
+    public static UpdateMessage? ForCheck(UpdateCheckResult result, SemanticVersion current, UpdateKind kind, bool downloadsAutomatically = false) =>
+        result.Outcome switch
+        {
+            UpdateCheckOutcome.Available when result.Offer is { } offer && downloadsAutomatically && kind == UpdateKind.Installer =>
+                result.Manual ? Downloading(offer.Version) : null,
+            UpdateCheckOutcome.Available when result.Offer is { } offer => Available(offer.Version, kind),
+            UpdateCheckOutcome.Downloading when result.Offer is { } offer => result.Manual ? Downloading(offer.Version) : null,
+            UpdateCheckOutcome.Ready when result.Offer is { } offer => Ready(offer.Version),
+            UpdateCheckOutcome.UpToDate when result.Manual => UpToDate(current),
+            UpdateCheckOutcome.Failed when result.Manual => Failed(result.Failure),
+            _ => null,
+        };
 }

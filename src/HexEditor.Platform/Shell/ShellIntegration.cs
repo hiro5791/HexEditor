@@ -25,6 +25,13 @@ public sealed record ShellIntegrationState(
     string? RegisteredExe);
 
 /// <summary>
+/// Explorer 連携の項目 1 つ (右クリックメニュー <see cref="ShellRegistration.ContextMenuId"/>、ファイルの関連付け
+/// <see cref="ShellRegistration.FileAssociationsId"/>) の状態。<see cref="Ours"/> は今の exe を指す登録。<see cref="Stale"/> は
+/// ポータブル版で古い場所を指す登録 (UI-54 の仕様 6)。<see cref="OtherDistribution"/> は他の配布形態の exe を指す登録 (仕様 7)。
+/// </summary>
+public sealed record ShellItemState(string Id, bool Registered, bool Ours, bool Stale, bool OtherDistribution, string? RegisteredExe);
+
+/// <summary>
 /// Explorer 連携の登録・解除・状態 (09 の UI-54、UI-56、10 の PKG-08)。インストーラ版はインストール時のフックで登録し、
 /// ポータブル版は設定画面のボタンで登録する。MSIX 版はマニフェストで宣言するため、ここでは登録しない (「Windows の設定で管理されます」)。
 /// 開発中の実行も登録しない (PKG-12 の仕様 1 の 4)。
@@ -45,7 +52,15 @@ public sealed class ShellIntegration(IUserRegistry registry, Distribution distri
     {
         if (!Supported)
         {
-            return new ShellIntegrationState(false, false, false, false, distribution == Distribution.Msix ? false : others.MsixInstalled, null);
+            // MSIX 版: インストーラ版・ポータブル版が HKCU に登録していれば、他の配布形態の登録として示す (UI-54 の仕様 7。読むだけ)。
+            if (distribution == Distribution.Msix)
+            {
+                IReadOnlyList<ShellRegistrationStatus> found = ShellRegistration.Status(registry);
+                ShellRegistrationStatus? any = found.FirstOrDefault(s => ExplorerEntries.Contains(s.Id) && s.Registered);
+                return new ShellIntegrationState(false, false, false, false, any is not null, any?.RegisteredExe);
+            }
+
+            return new ShellIntegrationState(false, false, false, false, others.MsixInstalled, null);
         }
 
         IReadOnlyList<ShellRegistrationStatus> status = ShellRegistration.Status(registry);
@@ -63,6 +78,37 @@ public sealed class ShellIntegration(IUserRegistry registry, Distribution distri
         return new ShellIntegrationState(true, menu.Registered, assoc.Registered, stale, other, registered);
     }
 
+    /// <summary>
+    /// 項目ごとの状態 (設定画面「Explorer 連携」の右クリックメニューとファイルの関連付けの行。UI-54 の仕様 5〜7、UI-56)。
+    /// 登録できない配布形態では空。
+    /// </summary>
+    public IReadOnlyList<ShellItemState> Items()
+    {
+        if (!Supported)
+        {
+            return [];
+        }
+
+        return
+        [
+            .. ShellRegistration.Status(registry).Where(s => ExplorerEntries.Contains(s.Id)).Select(s =>
+            {
+                bool ours = s.Registered && s.PointsTo(exePath);
+                bool installer = s.Registered && !ours && others.IsInstallerExe(s.RegisteredExe);
+                return new ShellItemState(s.Id, s.Registered, ours,
+                    Stale: distribution == Distribution.Portable && s.Registered && !ours && !installer,
+                    OtherDistribution: distribution == Distribution.Portable && installer || distribution == Distribution.Installer && s.Registered && !ours,
+                    s.RegisteredExe);
+            }),
+        ];
+    }
+
+    /// <summary>
+    /// ポータブル版の古い登録 (フォルダを移動した。UI-54 の仕様 6) のある項目。起動時の InfoBar の「更新する」「登録を解除する」は
+    /// この項目だけを対象にする (登録していなかった項目を登録しない)。
+    /// </summary>
+    public IReadOnlySet<string> StaleItems() => Items().Where(i => i.Stale).Select(i => i.Id).ToHashSet();
+
     /// <summary>右クリックメニューと関連付けを登録する (ポータブル版の「登録する」、古い登録の「更新する」)。失敗した項目と理由を返す。</summary>
     public IReadOnlyList<string> Register(IReadOnlySet<string>? only = null)
     {
@@ -79,7 +125,10 @@ public sealed class ShellIntegration(IUserRegistry registry, Distribution distri
         return failures;
     }
 
-    /// <summary>登録を解除する (「登録を解除する」。UI-54 の仕様 5、UI-56 の受け入れ基準 3: 関連するキーをすべて消す)。</summary>
+    /// <summary>
+    /// 登録を解除する (「登録を解除する」。UI-54 の仕様 5、UI-56 の受け入れ基準 3: 関連するキーをすべて消す)。
+    /// ポータブル版では、インストーラ版の exe を指す登録 (インストーラ版の登録) は消さない (「この PC から登録を解除」と同じ)。
+    /// </summary>
     public IReadOnlyList<string> Unregister(IReadOnlySet<string>? only = null)
     {
         if (!Supported)
@@ -88,6 +137,19 @@ public sealed class ShellIntegration(IUserRegistry registry, Distribution distri
         }
 
         IReadOnlySet<string> items = only ?? ExplorerEntries;
+        if (distribution == Distribution.Portable)
+        {
+            HashSet<string> installer =
+            [
+                .. ShellRegistration.Status(registry).Where(s => s.Registered && others.IsInstallerExe(s.RegisteredExe)).Select(s => s.Id),
+            ];
+            items = items.Where(i => !installer.Contains(i)).ToHashSet();
+            if (items.Count == 0)
+            {
+                return [];
+            }
+        }
+
         IReadOnlyList<string> failures = ShellRegistration.Unregister(registry, items);
         notifyAssociationsChanged?.Invoke();
         RecordDisabled(items, disabled: true);

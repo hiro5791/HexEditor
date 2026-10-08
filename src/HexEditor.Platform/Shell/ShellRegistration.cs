@@ -200,19 +200,38 @@ public static class ShellRegistration
         return space > 0 ? text[..space] : text;
     }
 
-    /// <summary>設定の拡張子の一覧を読む (<c>;</c> または <c>,</c> 区切り、先頭の <c>.</c> は省略可)。空なら既定の一覧。</summary>
+    /// <summary>
+    /// 設定の拡張子の一覧を読む (<c>;</c> または <c>,</c> 区切り、先頭の <c>.</c> は省略可)。空なら既定の一覧。
+    /// 区切りだけ (<c>;</c>) は「候補にしない」(設定画面ですべてのチェックを外した状態。<see cref="FormatExtensions"/>)。
+    /// </summary>
     public static IReadOnlyList<string> ParseExtensions(string? text)
     {
-        string[] parts = (text ?? string.Empty).Split([';', ',', ' '], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-        if (parts.Length == 0)
+        if (string.IsNullOrWhiteSpace(text))
         {
             return DefaultOpenWithExtensions;
         }
+
+        string[] parts = text.Split([';', ',', ' '], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         return [.. parts.Select(p => (p.StartsWith('.') ? p : "." + p).ToLowerInvariant())
             .Where(p => p.Length > 1 && p.Skip(1).All(ch => char.IsLetterOrDigit(ch) || ch is '_' or '-'))
             .Where(p => !OwnFormats.Any(f => f.Extension == p))
             .Distinct(StringComparer.OrdinalIgnoreCase)];
+    }
+
+    /// <summary>
+    /// 設定画面のチェックボックスで選んだ拡張子を設定の値にする (<see cref="ParseExtensions"/> の逆)。既定の一覧と同じなら空、
+    /// 何も選ばなければ <c>;</c>。
+    /// </summary>
+    public static string FormatExtensions(IEnumerable<string> extensions)
+    {
+        List<string> list = [.. ParseExtensions(string.Join(';', extensions.Append(";")))];
+        if (list.Count == DefaultOpenWithExtensions.Count && !list.Except(DefaultOpenWithExtensions, StringComparer.OrdinalIgnoreCase).Any())
+        {
+            return string.Empty;
+        }
+
+        return list.Count == 0 ? ";" : string.Join(';', list);
     }
 
     /// <summary>
