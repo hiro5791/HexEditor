@@ -100,6 +100,29 @@ public sealed class ViewMiscTests
     });
 
     [Fact]
+    public Task History_list_is_available_in_the_command_palette() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-31 の仕様 8 と「呼び出し」: コマンドパレット「移動: 履歴の一覧」で最新の履歴を選んで移れる。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        foreach (string target in new[] { "0x1000", "0x2000", "0x3000" })
+        {
+            await GoToAsync(app, target);
+        }
+
+        await app.SendAsync("execute", new JsonObject { ["id"] = "go.history" });
+        JsonObject state = await app.SendAsync("palette");
+        Assert.True(state["open"]!.GetValue<bool>());
+        JsonArray entries = state["entries"]!.AsArray();
+        Assert.Equal(3, entries.Count);
+        Assert.All(entries, e => Assert.StartsWith("history:", e!["key"]!.GetValue<string>()));
+        Assert.Contains("2000", entries[0]!["title"]!.GetValue<string>());
+
+        await app.SendAsync("paletteEnter");
+        await app.IdleAsync();
+        Assert.Equal(0x2000, await CursorAsync(app));
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-VIEW-31-01")]
     public Task History_menu_items_follow_back_and_forward() => UiTestContext.RunAsync(async ctx =>
     {

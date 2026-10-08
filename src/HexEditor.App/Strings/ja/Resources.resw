@@ -2430,4 +2430,6 @@
   <data name="CmdAlias_view_utf32Phase2" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり に</value></data>
   <data name="Cmd_view_utf32Phase3" xml:space="preserve"><value>表示: UTF-32 を余り 3 の位置から解読</value></data>
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり さん</value></data>
+  <data name="Cmd_go_history" xml:space="preserve"><value>移動: 履歴の一覧</value></data>
+  <data name="CmdAlias_go_history" xml:space="preserve"><value>りれき いちらん じゃんぷ もどる</value></data>
 </root>

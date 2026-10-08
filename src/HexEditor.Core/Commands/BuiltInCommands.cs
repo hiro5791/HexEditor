@@ -144,6 +144,7 @@ public static class BuiltInCommands
         },
         new("go.back", "go") { Icon = IconBack, DefaultBindings = [K("Alt+Left")], Condition = "documentOpen && canGoBack" },
         new("go.forward", "go") { Icon = IconForward, DefaultBindings = [K("Alt+Right")], Condition = "documentOpen && canGoForward" },
+        new("go.history", "go") { Condition = "documentOpen && canGoBack" },
         new("go.start", "go") { Condition = "documentOpen" },
         new("go.end", "go") { Condition = "documentOpen" },
 

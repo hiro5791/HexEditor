@@ -333,6 +333,18 @@ public sealed partial class MainWindow
 
     // ---- 履歴の一覧 (VIEW-31 の仕様 8) ----
 
+    /// <summary>履歴の一覧の 1 件: 「アドレス + その位置から 8 バイトの Hex」(VIEW-31 の仕様 8)。</summary>
+    private static string HistoryEntryText(EditorState editor, JumpPoint point)
+    {
+        // 表示用の読み込み (キャッシュにあるものだけ。UI スレッドで I/O を待たない)。
+        byte[] bytes = new byte[8];
+        var states = new Core.Engine.ByteState[8];
+        int n = point.Offset < editor.Document.Length ? editor.Document.Current.ReadForDisplay(point.Offset, bytes, states) : 0;
+        string hex = string.Join(' ', Enumerable.Range(0, n).Select(i => states[i] == Core.Engine.ByteState.Valid
+            ? bytes[i].ToString(editor.View.LowercaseHex ? "x2" : "X2", CultureInfo.InvariantCulture) : "··"));
+        return editor.OffsetFormat.Status(point.Offset, CultureInfo.CurrentCulture) + "  " + hex;
+    }
+
     /// <summary>最新 20 件を「アドレス + その位置から 8 バイトの Hex」の形で出す。履歴が変わったときだけ作り直す。</summary>
     private void UpdateHistoryMenu()
     {
@@ -355,14 +367,7 @@ public sealed partial class MainWindow
         for (int i = 0; i < recent.Count; i++)
         {
             int index = i;
-            JumpPoint point = recent[i];
-            // 表示用の読み込み (キャッシュにあるものだけ。UI スレッドで I/O を待たない)。
-            byte[] bytes = new byte[8];
-            var states = new Core.Engine.ByteState[8];
-            int n = point.Offset < editor!.Document.Length ? editor.Document.Current.ReadForDisplay(point.Offset, bytes, states) : 0;
-            string hex = string.Join(' ', Enumerable.Range(0, n).Select(i => states[i] == Core.Engine.ByteState.Valid
-                ? bytes[i].ToString(editor.View.LowercaseHex ? "x2" : "X2", CultureInfo.InvariantCulture) : "··"));
-            var item = new MenuFlyoutItem { Text = editor.OffsetFormat.Status(point.Offset, CultureInfo.CurrentCulture) + "  " + hex };
+            var item = new MenuFlyoutItem { Text = HistoryEntryText(editor!, recent[i]) };
             AutomationProperties.SetAutomationId(item, "Command_GoHistory_" + i);
             item.Click += (_, _) => Editor?.GoBackTo(index);
             _historyMenu.Items.Add(item);
