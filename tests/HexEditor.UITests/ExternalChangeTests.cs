@@ -38,6 +38,7 @@ public sealed class ExternalChangeTests
         AppSession app = await ctx.StartAsync(new AppOptions { Hooks = new JsonObject { ["openPicker"] = new JsonArray(path) } });
         await app.CommandAsync("Command_OpenReadOnly");
         await app.WaitForTabsAsync(1);
+        await EditingTests.SelectTabAsync(app, 0);
         Assert.True((await app.DocumentAsync())["readOnly"]!.GetValue<bool>());
         await app.TypeAsync("FF");
         Assert.False((await app.DocumentAsync())["modified"]!.GetValue<bool>());
