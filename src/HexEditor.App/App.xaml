@@ -3,6 +3,7 @@
     x:Class="HexEditor.App.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:HexEditor.App.Controls"
     xmlns:local="using:HexEditor.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -12,7 +13,10 @@
                 <ResourceDictionary Source="ms-appx:///Themes/AnnotationPalette.xaml" />
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
+            <!--  画面全体のズーム (UI-08 の仕様 3): ダイアログもウィンドウの中身と同じ倍率で拡大する  -->
+            <Style BasedOn="{StaticResource DefaultContentDialogStyle}" TargetType="ContentDialog">
+                <Setter Property="controls:ScreenZoom.Follow" Value="True" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

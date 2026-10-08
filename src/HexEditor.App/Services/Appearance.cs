@@ -38,6 +38,13 @@ public static class Appearance
     {
         ElementTheme theme = ThemeOf(settings);
         root.RequestedTheme = theme;
+
+        // 背景素材 (Mica) はウィンドウの中身の一番外側の要素のテーマに従う。画面全体のズームの入れ物 (ZoomHost) にも同じテーマを付ける。
+        if (window.Content is FrameworkElement content && content != root)
+        {
+            content.RequestedTheme = theme;
+        }
+
         window.AppWindow.TitleBar.PreferredTheme = theme switch
         {
             ElementTheme.Light => TitleBarTheme.Light,

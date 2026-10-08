@@ -19,13 +19,16 @@ public enum CommandMatchField
 /// </summary>
 public sealed class CommandSearchItem
 {
-    public CommandSearchItem(string id, string category, string displayName, string englishName, string aliases)
+    /// <param name="menuNames">メニューの項目の表示名 (アクセスキーの「(X)」を除く)。メニューと同じ名前で見つかるように、別名と同じく
+    /// 一致の対象にする (UI-03 の仕様 3 の受け入れ基準)。</param>
+    public CommandSearchItem(string id, string category, string displayName, string englishName, string aliases, IEnumerable<string>? menuNames = null)
     {
         Id = id;
         Category = new SearchText(category);
         DisplayName = new SearchText(displayName);
         EnglishName = new SearchText(englishName);
-        Aliases = aliases.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(a => new SearchText(a)).ToList();
+        Aliases = [.. aliases.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(a => new SearchText(a)),
+            .. (menuNames ?? []).Where(n => n.Length > 0).Select(n => new SearchText(n))];
         IdText = new SearchText(id);
         TitleText = new SearchText(Title);
     }

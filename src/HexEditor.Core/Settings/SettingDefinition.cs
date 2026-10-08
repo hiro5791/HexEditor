@@ -43,6 +43,16 @@ public sealed record SettingDefinition(string Key, string Category, SettingKind 
     /// <summary>カテゴリの中の並び。</summary>
     public int Order { get; init; }
 
+    /// <summary>
+    /// 設定画面に出す配布形態 (<see cref="SettingDistributions"/> の値)。空ならすべての配布形態で出す。
+    /// 例: 更新の自動ダウンロードはインストーラ版だけ (10 の PKG-17 の仕様 2)。
+    /// </summary>
+    public IReadOnlyList<string> Distributions { get; init; } = [];
+
+    /// <summary>配布形態 <paramref name="distribution"/> の設定画面に出すか (null は配布形態を区別しない)。</summary>
+    public bool IsShownIn(string? distribution) =>
+        ShowInPage && (Distributions.Count == 0 || distribution is null || Distributions.Contains(distribution, StringComparer.OrdinalIgnoreCase));
+
     public string NameKey => "Set_" + CommandDefinition.KeyPart(Key);
 
     public string DescriptionKey => "SetDesc_" + CommandDefinition.KeyPart(Key);
@@ -85,6 +95,15 @@ public sealed record SettingDefinition(string Key, string Category, SettingKind 
     }
 
     private bool InRange(double v) => (Min is not { } min || v >= min) && (Max is not { } max || v <= max);
+}
+
+/// <summary>配布形態の名前 (<see cref="SettingDefinition.Distributions"/>。Platform の Distribution の名前の小文字)。</summary>
+public static class SettingDistributions
+{
+    public const string Msix = "msix";
+    public const string Installer = "installer";
+    public const string Portable = "portable";
+    public const string Development = "development";
 }
 
 /// <summary>設定画面のカテゴリ (UI-22 の仕様 2)。表示名はリソース <c>SetCategory_&lt;ID&gt;</c>。</summary>

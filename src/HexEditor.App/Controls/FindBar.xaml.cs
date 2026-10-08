@@ -393,7 +393,7 @@ public sealed partial class FindBar : UserControl
             long total = targets.Sum(t => t.Results.LongCount);
             string message = total == 0
                 ? Loc.Get("Find_NotFound")
-                : Loc.Format("Find_FoundCount", total.ToString("N0", CultureInfo.CurrentCulture));
+                : Loc.Format("Find_FoundCount", total);
             Status.Text = cts.IsCancellationRequested ? Loc.Get("Find_Cancelled") : message;
             MarkQuery(total == 0 && !cts.IsCancellationRequested ? QueryState.NotFound : QueryState.Normal);
             Announce(Status.Text);

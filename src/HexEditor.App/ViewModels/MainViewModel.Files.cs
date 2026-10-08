@@ -281,6 +281,7 @@ public sealed partial class MainViewModel
         if (!vm.IsMissing)
         {
             vm.RestorePosition(tab.Cursor, tab.SelectionStart, tab.SelectionLength, tab.TopRow);
+            vm.HexZoom = tab.Zoom;
             FileStamp? stamp = vm.OpenedStamp;
             if (stamp is not null && tab.LastWriteTimeUtc != default
                 && (stamp.Length != tab.Length || stamp.LastWriteTimeUtc != tab.LastWriteTimeUtc))

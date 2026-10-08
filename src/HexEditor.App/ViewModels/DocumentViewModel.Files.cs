@@ -95,6 +95,7 @@ public sealed partial class DocumentViewModel
             TopRow = Editor.TopRow,
             Length = stamp?.Length ?? Document.Length,
             LastWriteTimeUtc = stamp?.LastWriteTimeUtc ?? default,
+            Zoom = HexZoom,
         };
     }
 }

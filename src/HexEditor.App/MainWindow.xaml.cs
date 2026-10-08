@@ -66,6 +66,9 @@ public sealed partial class MainWindow : Window
         // 表示メニューの項目 (VIEW-*)。コマンドとメニューをつなぐ前に作る。
         InitializeViewMenu();
 
+        // ズーム・全画面表示・領域の折りたたみなど、ウィンドウの枠の機能 (UI-01、UI-07、UI-08)。
+        InitializeShell();
+
         // コマンド・ツールバー・パネル・設定画面・コマンドパレット (UI-04、UI-05、UI-16〜UI-22)。
         InitializeCommands();
         InitializePanels();
@@ -172,7 +175,7 @@ public sealed partial class MainWindow : Window
         IAppEnvironment env = Program.Environment;
         string app = env.Channel == ReleaseChannel.Preview ? "HexEditor Preview" : "HexEditor";
         string title = Vm.Selected is { } d ? $"{(d.Document.IsModified ? "● " : string.Empty)}{d.DisplayName} - {app}" : app;
-        if (env.IsElevated)
+        if (env.IsElevated || TestHooks.SimulatesElevation)
         {
             title += " " + Loc.Get("Title_Administrator");
         }
@@ -550,6 +553,7 @@ public sealed partial class MainWindow : Window
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
         view.DocumentName = (view.DataContext as DocumentViewModel)?.DisplayName;
         ConfigureHexView(view);
+        AttachZoom(view);
         UpdateMatchHighlights(view);
         AttachAnnotations(view);
 

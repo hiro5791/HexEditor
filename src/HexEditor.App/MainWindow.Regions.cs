@@ -89,7 +89,7 @@ public sealed partial class MainWindow
     }
 
     /// <summary>
-    /// タブ列 → 左パネル → エディタ → 右パネル → 下パネル → ステータスバー の順にフォーカスを移す (表示されている領域だけ)。
+    /// タブ列 → エディタ → 右パネル → 下パネル → 左パネル → ステータスバー の順にフォーカスを移す (UI-52 の仕様 1。表示されている領域だけ)。
     /// パネルは見出し (移動・閉じるのメニュー。UI-05) → 中身 (一覧など。INSP-01、INSP-26) の順に止まる。
     /// </summary>
     private void MoveToRegion(bool forward)
@@ -100,31 +100,20 @@ public sealed partial class MainWindow
             regions.Add(Region.Tabs);
         }
 
-        if (LeftPanel.Visibility == Visibility.Visible)
-        {
-            regions.Add(Region.LeftPanel);
-            if (LeftPanel.HasBody)
-            {
-                regions.Add(Region.LeftPanelBody);
-            }
-        }
-
         regions.Add(Region.Editor);
-        if (RightPanel.Visibility == Visibility.Visible)
-        {
-            regions.Add(Region.RightPanel);
-            if (RightPanel.HasBody)
-            {
-                regions.Add(Region.RightPanelBody);
-            }
-        }
+        AddPanel(RightPanel, Region.RightPanel, Region.RightPanelBody);
+        AddPanel(BottomPanel, Region.BottomPanel, Region.BottomPanelBody);
+        AddPanel(LeftPanel, Region.LeftPanel, Region.LeftPanelBody);
 
-        if (BottomPanel.Visibility == Visibility.Visible)
+        void AddPanel(Controls.PanelDockArea panel, Region header, Region body)
         {
-            regions.Add(Region.BottomPanel);
-            if (BottomPanel.HasBody)
+            if (panel.Visibility == Visibility.Visible)
             {
-                regions.Add(Region.BottomPanelBody);
+                regions.Add(header);
+                if (panel.HasBody)
+                {
+                    regions.Add(body);
+                }
             }
         }
 

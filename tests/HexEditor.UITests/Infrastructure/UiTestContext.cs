@@ -151,6 +151,21 @@ public sealed class UiTestContext : IAsyncDisposable
                 AppSession s = _sessions[i];
                 if (s.Process.HasExited)
                 {
+                    // 落ちたアプリの記録 (クラッシュ情報とログ) を残す。
+                    foreach (string sub in new[] { "crash", "logs" })
+                    {
+                        string source = Path.Combine(s.Profile, sub);
+                        if (Directory.Exists(source))
+                        {
+                            string target = Path.Combine(folder, $"app{i + 1}-{sub}");
+                            Directory.CreateDirectory(target);
+                            foreach (string file in Directory.EnumerateFiles(source))
+                            {
+                                File.Copy(file, Path.Combine(target, Path.GetFileName(file)), overwrite: true);
+                            }
+                        }
+                    }
+
                     continue;
                 }
 

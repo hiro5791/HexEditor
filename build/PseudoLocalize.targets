@@ -30,6 +30,13 @@
                 continue;
             }
 
+            // ICU MessageFormat の複数形 ({0, plural, one {...} other {...}}。UI-42 の仕様 4) は書式を壊さないように置き換えず、囲むだけにする。
+            if (text.Contains(", plural,"))
+            {
+                value.Value = "[" + text + " " + new string('!', Math.Max(1, (int)Math.Ceiling(text.Length * 0.5))) + "]";
+                continue;
+            }
+
             var result = new StringBuilder("[");
             int last = 0;
             foreach (Match m in placeholder.Matches(text))
@@ -68,7 +75,7 @@
     Name="HexPseudoLocalize"
     BeforeTargets="PrepareForBuild;PrepareResources"
     Condition="'$(HexPseudoLocales)' != 'false'"
-    Inputs="$(MSBuildProjectDirectory)\Strings\en\Resources.resw"
+    Inputs="$(MSBuildProjectDirectory)\Strings\en\Resources.resw;$(MSBuildThisFileFullPath)"
     Outputs="$(MSBuildProjectDirectory)\Strings\qps-ploc\Resources.resw;$(MSBuildProjectDirectory)\Strings\qps-plocm\Resources.resw">
     <PseudoLocalizeResw
       Source="$(MSBuildProjectDirectory)\Strings\en\Resources.resw"

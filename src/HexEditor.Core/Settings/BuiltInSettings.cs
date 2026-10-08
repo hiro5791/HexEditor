@@ -2,6 +2,7 @@ using System.Text.Json.Nodes;
 using HexEditor.Core.Commands;
 using HexEditor.Core.Files;
 using HexEditor.Core.Saving;
+using HexEditor.Core.View;
 
 namespace HexEditor.Core.Settings;
 
@@ -29,6 +30,7 @@ public static class BuiltInSettings
         new(ToolbarItems.ItemsKey, SettingCategories.General, SettingKind.List, ToolbarItems.DefaultJson()) { Order = 11, ShowInPage = false },
         new("ui.statusBar.visible", SettingCategories.General, SettingKind.Bool, true) { Order = 20 },
         new("ui.statusBar.items", SettingCategories.General, SettingKind.String, string.Empty) { Order = 21, ShowInPage = false },
+        new("ui.fullScreen.showStatusBar", SettingCategories.General, SettingKind.Bool, true) { Order = 25 },
         new(StartupPlanner.RestoreOnStartupKey, SettingCategories.General, SettingKind.Choice, "always") { Options = ["always", "ask", "never"], Order = 30 },
 
         // 外部から開いたファイルの開き方 (UI-15 の仕様 2・4)。
@@ -54,6 +56,11 @@ public static class BuiltInSettings
         new("view.jump.position", SettingCategories.View, SettingKind.Choice, "third") { Options = ["top", "third", "center"], Order = 40 },
         new("view.tooltips", SettingCategories.View, SettingKind.Bool, true) { Order = 50 },
         new("view.modified.keepAfterSave", SettingCategories.View, SettingKind.Bool, false) { Order = 60 },
+
+        // ズーム (UI-08 の仕様 2・3)。全タブ共通の Hex 表示の倍率はズームの操作で変わるので、設定画面には出さない。
+        new(ZoomSettings.HexScopeKey, SettingCategories.View, SettingKind.Choice, ZoomSettings.ScopeAll) { Options = [ZoomSettings.ScopeAll, ZoomSettings.ScopeTab], Order = 70 },
+        new(ZoomSettings.HexKey, SettingCategories.View, SettingKind.Int, View.ZoomLevels.Default) { Min = 50, Max = 400, Order = 71, ShowInPage = false },
+        new(ZoomSettings.UiKey, SettingCategories.View, SettingKind.Int, View.ZoomLevels.Default) { Min = 50, Max = 400, Order = 72 },
 
         // データインスペクタ (INSP-01〜INSP-19)。行の構成とプリセットはパネルの「行の設定」で変える。
         new("inspector.integerBase", SettingCategories.View, SettingKind.Choice, "decimal") { Options = ["decimal", "hex", "octal"], Order = 100 },
@@ -103,7 +110,7 @@ public static class BuiltInSettings
 
         // ---- 更新 (PKG-17〜PKG-22) ----
         new("update.checkAutomatically", SettingCategories.Update, SettingKind.Bool, true) { Order = 10 },
-        new("update.downloadAutomatically", SettingCategories.Update, SettingKind.Bool, true) { Order = 20 },
+        new("update.downloadAutomatically", SettingCategories.Update, SettingKind.Bool, true) { Order = 20, Distributions = [SettingDistributions.Installer] },
         new("update.channel", SettingCategories.Update, SettingKind.Choice, "stable") { Options = ["stable", "preview"], Order = 30 },
         new("update.skippedVersion", SettingCategories.Update, SettingKind.String, string.Empty) { Order = 40, ShowInPage = false },
 

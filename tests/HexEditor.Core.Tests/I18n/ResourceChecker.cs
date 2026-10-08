@@ -22,7 +22,8 @@ public static partial class ResourceChecker
         "ToolTipService.ToolTip", "AutomationProperties.Name", "PrimaryButtonText", "SecondaryButtonText", "CloseButtonText",
     ];
 
-    [GeneratedRegex(@"\{\d+\}")]
+    // {0} と、ICU MessageFormat の {0, plural, ...} の引数の番号 (UI-42 の仕様 4)。
+    [GeneratedRegex(@"\{\d+(?=[,}])")]
     private static partial Regex Placeholder();
 
     /// <summary>コードの中のキーの参照: "Key" (文字列リテラル)。</summary>

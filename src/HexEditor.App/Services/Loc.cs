@@ -63,6 +63,11 @@ public static class Loc
         return _english.GetValueOrDefault(key.Replace('.', '/'));
     }
 
+    /// <summary>
+    /// 書式化する。数値の単数形・複数形は ICU MessageFormat の plural で書く (UI-42 の仕様 4。例:
+    /// <c>{0, plural, one {# match} other {# matches}}</c>)。複数形の規則は表示言語、数値の書式は地域設定に従う。
+    /// </summary>
     public static string Format(string key, params object[] args) =>
-        string.Format(System.Globalization.CultureInfo.CurrentCulture, Get(key), args);
+        Core.Text.MessageFormat.Format(Get(key), System.Globalization.CultureInfo.CurrentCulture,
+            System.Globalization.CultureInfo.CurrentUICulture.Name, args);
 }

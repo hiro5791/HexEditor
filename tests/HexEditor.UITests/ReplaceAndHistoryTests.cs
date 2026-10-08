@@ -182,7 +182,7 @@ public sealed class ReplaceAndHistoryTests
 
         // 3〜4. 「すべて置換」: 長さは 1,048,578。0x80000〜0x80006 は `01 02 03 04 05 06 00`。
         await app.UiaInvokeAsync("Find_ReplaceAll");
-        await app.WaitForNotificationAsync(m => m.Contains("Replaced 1 matches", StringComparison.Ordinal), "the replacement");
+        await app.WaitForNotificationAsync(m => m.Contains("Replaced 1 match.", StringComparison.Ordinal), "the replacement");
         Assert.Equal(1_048_578, (await app.DocumentAsync())["length"]!.GetValue<long>());
         Assert.Equal(new byte[] { 1, 2, 3, 4, 5, 6, 0 }, await app.BytesAsync(0x80000, 7));
 

@@ -269,6 +269,11 @@
       ],
       "default": "mica"
     },
+    "ui.fullScreen.showStatusBar": {
+      "description": "Show the status bar in full screen",
+      "type": "boolean",
+      "default": true
+    },
     "ui.language": {
       "description": "Display language",
       "type": "string",
@@ -440,6 +445,29 @@
       "description": "Show tooltips",
       "type": "boolean",
       "default": true
+    },
+    "view.zoom.hex": {
+      "description": "Hex zoom (%)",
+      "type": "integer",
+      "minimum": 50,
+      "maximum": 400,
+      "default": 100
+    },
+    "view.zoom.hexScope": {
+      "description": "Hex zoom applies to",
+      "type": "string",
+      "enum": [
+        "all",
+        "tab"
+      ],
+      "default": "all"
+    },
+    "view.zoom.ui": {
+      "description": "Screen zoom (%)",
+      "type": "integer",
+      "minimum": 50,
+      "maximum": 400,
+      "default": 100
     },
     "window.launchWithoutFileOpensNewWindow": {
       "description": "Starting without a file opens a new window",

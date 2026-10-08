@@ -300,22 +300,7 @@ public sealed class ViewMiscTests
         }
     });
 
-    [Fact]
-    [Trait(UiTest.TC, "TC-VIEW-43-04")]
-    public Task Hex_zoom_does_not_scale_the_rest_of_the_window() => UiTestContext.RunAsync(async ctx =>
-    {
-        // 画面全体のズーム (UI-08 の 3) のメニュー・ステータスバーの拡大は UI-08 で確かめる。ここでは Hex 表示のズームが Hex ビューの外の
-        // 大きさを変えないことと、画面全体のズームの倍率が Hex ビューのフォントに掛かることを確かめる。
-        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
-        double status = (await ElementAsync(app, "Status_Offset"))["height"]!.GetValue<double>();
-        double font = (await app.RenderAsync())["fontSize"]!.GetValue<double>();
-        await ZoomAsync(app, 1.5);
-        Assert.Equal(status, (await ElementAsync(app, "Status_Offset"))["height"]!.GetValue<double>(), 1);
-        await ZoomAsync(app, 1.0);
-        await app.SendAsync("screenZoom", new JsonObject { ["zoom"] = 1.5 });
-        await app.IdleAsync();
-        Assert.Equal(font * 1.5, (await app.RenderAsync())["fontSize"]!.GetValue<double>(), 2);
-    });
+    // TC-VIEW-43-04 (Hex 表示のズームと画面全体のズームの違い) は ZoomTests (UI-08) にある。
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-43-05")]

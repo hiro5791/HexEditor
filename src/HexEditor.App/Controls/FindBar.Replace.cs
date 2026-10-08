@@ -357,7 +357,7 @@ public sealed partial class FindBar
             if (count > 0)
             {
                 _navigator.Reset();
-                Status.Text = Loc.Format("Find_ReplacedCount", count.ToString("N0", CultureInfo.CurrentCulture));
+                Status.Text = Loc.Format("Find_ReplacedCount", count);
                 Announce(Status.Text);
                 ReplaceAllCompleted?.Invoke(this, new ReplaceAllCompletedEventArgs(count, replaced));
             }
@@ -451,7 +451,7 @@ public sealed partial class FindBar
                     ConfirmChoice choice = await OnUiAsync(() => Confirm?.Invoke(new ConfirmRequest(
                         "ReplaceAllConfirm",
                         Loc.Get("Find_ReplaceAllConfirm_Title"),
-                        Loc.Format("Find_ReplaceAllConfirm_Body", found.LongCount.ToString("N0", CultureInfo.CurrentCulture)),
+                        Loc.Format("Find_ReplaceAllConfirm_Body", found.LongCount),
                         Loc.Get("Find_ReplaceAllConfirm_Replace"),
                         null,
                         Loc.Get("Find_ReplaceAllConfirm_Cancel"))) ?? Task.FromResult(ConfirmChoice.Cancel));

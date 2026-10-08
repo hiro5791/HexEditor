@@ -56,13 +56,10 @@ public sealed class SettingsFeatureTests : IDisposable
     [Trait(TC, "TC-UI-22-03")]
     public void Search_finds_settings_by_localized_and_english_names_and_key()
     {
-        // UI-08 のズームの設定は後半で登録するので、ここでは同じ規則を「テーマ」と、登録したズームの項目で確かめる。
+        // UI-08 のズームの適用範囲 (view.zoom.hexScope) と「テーマ」で確かめる。
         Dictionary<string, string> en = Strings("en"), ja = Strings("ja");
         var catalog = SettingsCatalog.CreateBuiltIn();
-        catalog.Register(new SettingDefinition("view.zoom.hexScope", SettingCategories.View, SettingKind.Choice, "all") { Options = ["all", "tab"] });
-        SettingTexts Texts(SettingDefinition s) => s.Key == "view.zoom.hexScope"
-            ? new SettingTexts("Hex 表示のズームの適用範囲", "全タブ共通か今のタブだけか", "Hex zoom scope")
-            : new SettingTexts(ja[s.NameKey], ja[s.DescriptionKey], en[s.NameKey]);
+        SettingTexts Texts(SettingDefinition s) => new(ja[s.NameKey], ja[s.DescriptionKey], en[s.NameKey]);
 
         Assert.Contains(catalog.Search("zoom", Texts), r => r.Setting.Key == "view.zoom.hexScope");
         Assert.Contains(catalog.Search("ズーム", Texts), r => r.Setting.Key == "view.zoom.hexScope" && r.NamePositions.Count == 3);
@@ -234,9 +231,8 @@ public sealed class SettingsFeatureTests : IDisposable
     [Trait(TC, "TC-UI-25-03")]
     public void Invalid_values_are_skipped_and_listed()
     {
-        // TD-UI-SETEXP-BADVALUE。フォントの大きさ (UI-29) は組み込みの定義 (6〜72)。ズーム (UI-08) の項目はまだないので、同じ定義を足して確かめる。
+        // TD-UI-SETEXP-BADVALUE。フォントの大きさ (UI-29) は組み込みの定義 (6〜72)、ズーム (UI-08) は 50〜400。
         var catalog = SettingsCatalog.CreateBuiltIn();
-        catalog.Register(new SettingDefinition("view.zoom.hex", SettingCategories.View, SettingKind.Int, 100) { Min = 50, Max = 400 });
         SettingsBundle bundle = SettingsBundle.Parse("""{"$schemaVersion": 1, "app": "HexEditor", "version": "1.0.0", "settings": {"view.font.size": 200, "ui.theme": "purple", "view.zoom.hex": 150}}""");
         SettingsImportPlan plan = bundle.PlanSettings([], catalog, ImportMode.Merge);
         Assert.Equal(["ui.theme", "view.font.size"], plan.Skipped.Select(s => s.Key).Order());

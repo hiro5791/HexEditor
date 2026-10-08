@@ -78,6 +78,9 @@ public partial class App : Application
         Settings = new SettingsStore(env.Locations.Settings, new Uri(Path.Combine(AppContext.BaseDirectory, SettingsSchema.FileName)).AbsoluteUri);
         SettingsLoadStatus settingsStatus = Settings.Load();
 
+        // 配布形態に固有の設定項目 (更新の自動ダウンロードはインストーラ版だけ。10 の PKG-17)。開発用のビルドはすべて出す。
+        Commands.CommandService.Settings.Distribution = env.Distribution == Distribution.Development ? null : env.Distribution.ToString().ToLowerInvariant();
+
         // 初回起動では $schema と $schemaVersion だけの settings.json を作る (UI-23 の受け入れ基準 1)。
         if (settingsStatus == SettingsLoadStatus.Ok && !File.Exists(Settings.PathName))
         {
