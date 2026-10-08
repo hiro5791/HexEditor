@@ -109,12 +109,26 @@ public sealed partial class MainWindow
                 AttachAnnotationsToSelected();
             }
         };
-        App.Settings.Changed += _ => DispatcherQueue.TryEnqueue(() =>
+        // 設定はアプリ全体で 1 つ。閉じたウィンドウは購読をやめる (UI-14)。
+        Action<IReadOnlyCollection<string>> inspectorSettingsChanged = _ => DispatcherQueue.TryEnqueue(() =>
         {
+            if (_closingConfirmed)
+            {
+                return;
+            }
+
             _inspectorVm.ReloadSettings();
             InspectorView?.SyncOptions();
             SelectedView()?.RefreshHighlights();
         });
+        App.Settings.Changed += inspectorSettingsChanged;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                App.Settings.Changed -= inspectorSettingsChanged;
+            }
+        };
         BuildNumberedBookmarkMenus();
         Closed += (_, _) =>
         {

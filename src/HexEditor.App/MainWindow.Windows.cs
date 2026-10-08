@@ -66,7 +66,7 @@ public sealed partial class MainWindow
 
     /// <summary>
     /// このウィンドウだけを閉じる (他のウィンドウが残っている。UI-13 の仕様 5)。このウィンドウの文書だけを確かめる。パネルの配置は
-    /// 次に開くウィンドウが引き継ぐ (UI-05 の仕様 7)。
+    /// 最後に変更された配置として残す (次の起動の最初のウィンドウが使う。UI-05 の仕様 7)。
     /// </summary>
     private async Task CloseThisWindowAsync()
     {
@@ -153,5 +153,8 @@ public sealed partial class MainWindow
         _noticeTimer.Stop();
         _pollTimer?.Stop();
         _mruTimer?.Stop();
+        _operationsTimer?.Stop();
+        _revealTimer?.Stop();
+        _fullScreenNoticeTimer?.Stop();
     }
 }

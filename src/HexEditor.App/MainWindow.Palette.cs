@@ -37,8 +37,19 @@ public sealed partial class MainWindow
             _pendingArgument = null;
             FocusEditor();
         };
-        CommandService.Catalog.Changed += (_, _) => _paletteItems = null;
-        CommandService.BindingsChanged += () => _paletteItems = null;
+        // コマンドと割り当てはアプリ全体で 1 つ。閉じたウィンドウは購読をやめる (UI-14)。
+        EventHandler catalogChanged = (_, _) => _paletteItems = null;
+        Action bindingsChanged = () => _paletteItems = null;
+        CommandService.Catalog.Changed += catalogChanged;
+        CommandService.BindingsChanged += bindingsChanged;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                CommandService.Catalog.Changed -= catalogChanged;
+                CommandService.BindingsChanged -= bindingsChanged;
+            }
+        };
     }
 
     /// <summary>パレットを開く。<paramref name="prefix"/> は初めの入力 (Ctrl+Shift+P / F1 はコマンドモードの「&gt;」)。</summary>

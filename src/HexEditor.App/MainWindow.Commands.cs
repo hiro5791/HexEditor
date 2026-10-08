@@ -59,7 +59,14 @@ public sealed partial class MainWindow
             RefreshShortcutsPage();
         });
         CommandService.BindingsChanged += bindingsChanged;
-        Closed += (_, _) => CommandService.BindingsChanged -= bindingsChanged;
+        Closed += (_, _) =>
+        {
+            // 閉じる確認でキャンセルされたウィンドウは、割り当ての変更を受け続ける。
+            if (_closingConfirmed)
+            {
+                CommandService.BindingsChanged -= bindingsChanged;
+            }
+        };
         Commands.StatesChanged += UpdateCommandStates;
 
         // キーボード配列が変わったらキーの表示を作り直す (UI-20 の仕様 2)。

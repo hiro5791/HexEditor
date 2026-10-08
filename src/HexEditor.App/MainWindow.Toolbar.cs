@@ -22,7 +22,37 @@ public sealed partial class MainWindow
             RefreshToolbar();
         }, () => Toggle(App.Settings.GetBool(ToolbarItems.VisibleKey, false)));
         Commands.Register("view.customizeToolbar", CustomizeToolbarAsync);
+
+        // 高さは 40 px (UI-01 の仕様 1 の表)。CommandBar の既定 (48 px) をこのバーだけ変える (テンプレートを適用する前に置く)。
+        Toolbar.Resources["AppBarThemeCompactHeight"] = 40.0;
+
+        // ツールバーの表示と構成は設定 (全ウィンドウで共通)。別のウィンドウ・設定画面・設定ファイルの編集で変わったら、このウィンドウの
+        // ツールバーも作り直す (UI-14 の仕様 2)。閉じたウィンドウは購読をやめる。
+        Action<IReadOnlyCollection<string>> toolbarSettingsChanged = keys =>
+        {
+            if (keys.Contains(ToolbarItems.VisibleKey) || keys.Contains(ToolbarItems.ItemsKey))
+            {
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    if (!_closingConfirmed)
+                    {
+                        RefreshToolbar();
+                    }
+                });
+            }
+        };
+        App.Settings.Changed += toolbarSettingsChanged;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                App.Settings.Changed -= toolbarSettingsChanged;
+            }
+        };
     }
+
+    /// <summary>設定でツールバーを表示する (ui.toolbar.visible。既定では非表示)。</summary>
+    private static bool IsToolbarWanted => App.Settings.GetBool(ToolbarItems.VisibleKey, false);
 
     /// <summary>今の構成のコマンド ID (存在しないものを含む)。</summary>
     public IReadOnlyList<string> ToolbarItemIds => ToolbarItems.Parse(App.Settings.GetNode(ToolbarItems.ItemsKey));
@@ -36,8 +66,10 @@ public sealed partial class MainWindow
     /// <summary>ボタンを作り直す (構成・割り当て・表示の設定が変わったとき)。</summary>
     private void RefreshToolbar()
     {
-        bool visible = App.Settings.GetBool(ToolbarItems.VisibleKey, false);
-        Toolbar.Visibility = visible && !_fullScreen ? Visibility.Visible : Visibility.Collapsed;
+        bool visible = IsToolbarWanted;
+
+        // 全画面では隠す (上端にマウスを置いたときはタイトルバーと一緒に重ねて出す。UI-07 の仕様 2)。
+        Toolbar.Visibility = visible && AreTopBarsShown ? Visibility.Visible : Visibility.Collapsed;
         Toolbar.PrimaryCommands.Clear();
         if (!visible)
         {
