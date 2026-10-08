@@ -161,6 +161,20 @@ public static class TestHooks
     /// <summary>App.OnLaunched の最初に呼ぶ。ウィンドウを作る前の設定 (復旧用データの保存間隔など)。</summary>
     public static void BeforeLaunch()
     {
+        // 設定ファイルの書き込みの途中での強制終了 (TC-UI-23-05)。
+        if (Settings.KillAt is KillPoint.SettingsTemp or KillPoint.SettingsBeforeReplace or KillPoint.SettingsAfterReplace)
+        {
+            Core.Settings.SettingsStore.WriteHook = point =>
+            {
+                if ((point, Settings.KillAt) is (Core.Settings.SettingsWritePoint.TempHalfWritten, KillPoint.SettingsTemp)
+                    or (Core.Settings.SettingsWritePoint.BeforeReplace, KillPoint.SettingsBeforeReplace)
+                    or (Core.Settings.SettingsWritePoint.AfterReplace, KillPoint.SettingsAfterReplace))
+                {
+                    Kill("settings " + point);
+                }
+            };
+        }
+
         if (Settings.RecoveryInterval is { } interval)
         {
             App.RecoveryInterval = interval;

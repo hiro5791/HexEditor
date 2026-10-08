@@ -96,6 +96,8 @@ public sealed partial class MainWindow
 
         _closingConfirmed = true;
         App.Settings.Flush();
+        SavePanelLayout();
+        HexEditor.App.Commands.CommandService.Flush();
         AppLog.Info("Exited");
 
         // 確認のダイアログを出さずに CloseAsync が終わった場合、ここはまだ Closed の処理の中で、そのまま Close を呼んでも

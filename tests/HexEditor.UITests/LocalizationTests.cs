@@ -82,9 +82,11 @@ public sealed class LocalizationTests
         // 1. 最初のメニュー (ファイル) が一番右にあり、左へ 00-overview.md 7 章の順に並ぶ。
         var menus = app.Window.FindFirstDescendant(cf => cf.ByAutomationId("MainMenu"))!.FindAllChildren()
             .Where(m => AppSession.NameOf(m) != "Test").ToList();
-        Dictionary<string, string> ar = UiHelpers.LoadResw("ar");
-        string[] order = ["Menu_File", "Menu_Edit", "Menu_Search", "Menu_Go", "Menu_View", "Menu_Help"];
-        Assert.Equal(order.Select(k => ar[k + ".Title"]), menus.Select(AppSession.NameOf));
+        Dictionary<string, string> ar = UiHelpers.LoadResw("ar"), en = UiHelpers.LoadResw("en");
+        string[] order = ["Menu_File", "Menu_Edit", "Menu_Search", "Menu_Go", "Menu_View", "Menu_Tools", "Menu_Help"];
+
+        // 未翻訳のメニュー (機械翻訳の前の新しいもの) は英語で表示される。
+        Assert.Equal(order.Select(k => ar.GetValueOrDefault(k + ".Title") ?? en[k + ".Title"]), menus.Select(AppSession.NameOf));
         for (int i = 1; i < menus.Count; i++)
         {
             Assert.True(menus[i].BoundingRectangle.Right <= menus[i - 1].BoundingRectangle.Left + 1, $"{AppSession.NameOf(menus[i])} is not left of {AppSession.NameOf(menus[i - 1])}");

@@ -52,6 +52,13 @@ public sealed partial class MainWindow : Window
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
 
+        // コマンド・ツールバー・パネル・設定画面・コマンドパレット (UI-04、UI-05、UI-16〜UI-22)。
+        InitializeCommands();
+        InitializePanels();
+        InitializeToolPages();
+        InitializePalette();
+        RefreshToolbar();
+
         // 自動で閉じる通知の時間を数える (UI-36 の仕様 4)。
         var noticeTimer = DispatcherQueue.CreateTimer();
         noticeTimer.Interval = TimeSpan.FromSeconds(1);
@@ -79,6 +86,18 @@ public sealed partial class MainWindow : Window
         else if (status == Core.Settings.SettingsLoadStatus.TooNew)
         {
             ShowNotice(Loc.Get("Settings_TooNew"), InfoBarSeverity.Warning);
+        }
+    }
+
+    /// <summary>keybindings.json の誤り (読める部分だけを使う。UI-18 の「エラー」)。</summary>
+    public void ShowKeybindingsStatus()
+    {
+        if (HexEditor.App.Commands.CommandService.KeybindingsError is { } error)
+        {
+            ShowNotice(error.Line > 0 ? Loc.Format("Keys_FileError", error.Line) : Loc.Format("Keys_FileErrorNoLine", error.Message), InfoBarSeverity.Warning, actions:
+            [
+                new NotificationAction(Loc.Get("Keys_OpenFile"), () => _ = OpenUriAsync(new Uri(HexEditor.App.Commands.CommandService.KeybindingsPath))),
+            ]);
         }
     }
 

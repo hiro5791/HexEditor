@@ -372,4 +372,382 @@ Details were written to:
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>More status items</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>{0} matches</value></data>
+  <data name="Cmd_file_new" xml:space="preserve"><value>New</value></data>
+  <data name="CmdAlias_file_new" xml:space="preserve"><value>create blank empty</value></data>
+  <data name="Cmd_file_newWithSize" xml:space="preserve"><value>New with size</value></data>
+  <data name="CmdAlias_file_newWithSize" xml:space="preserve"><value>create blank length bytes</value></data>
+  <data name="Cmd_file_open" xml:space="preserve"><value>Open</value></data>
+  <data name="CmdAlias_file_open" xml:space="preserve"><value>load file</value></data>
+  <data name="Cmd_file_save" xml:space="preserve"><value>Save</value></data>
+  <data name="CmdAlias_file_save" xml:space="preserve"><value>write store</value></data>
+  <data name="Cmd_file_saveAs" xml:space="preserve"><value>Save as</value></data>
+  <data name="CmdAlias_file_saveAs" xml:space="preserve"><value>save copy rename</value></data>
+  <data name="Cmd_file_saveAll" xml:space="preserve"><value>Save all</value></data>
+  <data name="CmdAlias_file_saveAll" xml:space="preserve"><value>write all</value></data>
+  <data name="Cmd_file_close" xml:space="preserve"><value>Close</value></data>
+  <data name="CmdAlias_file_close" xml:space="preserve"><value>close tab</value></data>
+  <data name="Cmd_file_closeAll" xml:space="preserve"><value>Close all</value></data>
+  <data name="CmdAlias_file_closeAll" xml:space="preserve"><value>close all tabs</value></data>
+  <data name="Cmd_file_closeOthers" xml:space="preserve"><value>Close other tabs</value></data>
+  <data name="CmdAlias_file_closeOthers" xml:space="preserve"><value>close others</value></data>
+  <data name="Cmd_file_closeToRight" xml:space="preserve"><value>Close tabs to the right</value></data>
+  <data name="CmdAlias_file_closeToRight" xml:space="preserve"><value>close right</value></data>
+  <data name="Cmd_file_exit" xml:space="preserve"><value>Exit</value></data>
+  <data name="CmdAlias_file_exit" xml:space="preserve"><value>quit</value></data>
+  <data name="Cmd_edit_undo" xml:space="preserve"><value>Undo</value></data>
+  <data name="CmdAlias_edit_undo" xml:space="preserve"><value>revert</value></data>
+  <data name="Cmd_edit_redo" xml:space="preserve"><value>Redo</value></data>
+  <data name="CmdAlias_edit_redo" xml:space="preserve"><value>repeat</value></data>
+  <data name="Cmd_edit_cut" xml:space="preserve"><value>Cut</value></data>
+  <data name="CmdAlias_edit_cut" xml:space="preserve"><value>clipboard</value></data>
+  <data name="Cmd_edit_copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="CmdAlias_edit_copy" xml:space="preserve"><value>clipboard</value></data>
+  <data name="Cmd_edit_paste" xml:space="preserve"><value>Paste</value></data>
+  <data name="CmdAlias_edit_paste" xml:space="preserve"><value>clipboard insert</value></data>
+  <data name="Cmd_edit_pasteOverwrite" xml:space="preserve"><value>Paste (overwrite)</value></data>
+  <data name="CmdAlias_edit_pasteOverwrite" xml:space="preserve"><value>paste write replace</value></data>
+  <data name="Cmd_edit_selectAll" xml:space="preserve"><value>Select all</value></data>
+  <data name="CmdAlias_edit_selectAll" xml:space="preserve"><value>selection</value></data>
+  <data name="Cmd_edit_toggleInsert" xml:space="preserve"><value>Toggle overwrite / insert</value></data>
+  <data name="CmdAlias_edit_toggleInsert" xml:space="preserve"><value>insert mode overwrite mode</value></data>
+  <data name="Cmd_search_find" xml:space="preserve"><value>Find</value></data>
+  <data name="CmdAlias_search_find" xml:space="preserve"><value>search</value></data>
+  <data name="Cmd_search_findNext" xml:space="preserve"><value>Find next</value></data>
+  <data name="CmdAlias_search_findNext" xml:space="preserve"><value>search next</value></data>
+  <data name="Cmd_search_findPrevious" xml:space="preserve"><value>Find previous</value></data>
+  <data name="CmdAlias_search_findPrevious" xml:space="preserve"><value>search previous</value></data>
+  <data name="Cmd_go_goTo" xml:space="preserve"><value>Go to offset</value></data>
+  <data name="CmdAlias_go_goTo" xml:space="preserve"><value>jump address position</value></data>
+  <data name="Cmd_go_back" xml:space="preserve"><value>Back</value></data>
+  <data name="CmdAlias_go_back" xml:space="preserve"><value>navigate back history</value></data>
+  <data name="Cmd_go_forward" xml:space="preserve"><value>Forward</value></data>
+  <data name="CmdAlias_go_forward" xml:space="preserve"><value>navigate forward history</value></data>
+  <data name="Cmd_go_start" xml:space="preserve"><value>Start of file</value></data>
+  <data name="CmdAlias_go_start" xml:space="preserve"><value>beginning top</value></data>
+  <data name="Cmd_go_end" xml:space="preserve"><value>End of file</value></data>
+  <data name="CmdAlias_go_end" xml:space="preserve"><value>bottom last</value></data>
+  <data name="Cmd_view_encoding_ascii" xml:space="preserve"><value>Text encoding: ASCII</value></data>
+  <data name="CmdAlias_view_encoding_ascii" xml:space="preserve"><value>charset</value></data>
+  <data name="Cmd_view_encoding_ansi" xml:space="preserve"><value>Text encoding: ANSI</value></data>
+  <data name="CmdAlias_view_encoding_ansi" xml:space="preserve"><value>charset code page</value></data>
+  <data name="Cmd_view_toolbar" xml:space="preserve"><value>Toggle toolbar</value></data>
+  <data name="CmdAlias_view_toolbar" xml:space="preserve"><value>show hide toolbar</value></data>
+  <data name="Cmd_view_statusBar" xml:space="preserve"><value>Toggle status bar</value></data>
+  <data name="CmdAlias_view_statusBar" xml:space="preserve"><value>show hide status bar</value></data>
+  <data name="Cmd_view_leftPanel" xml:space="preserve"><value>Toggle left panel</value></data>
+  <data name="CmdAlias_view_leftPanel" xml:space="preserve"><value>show hide side bar</value></data>
+  <data name="Cmd_view_rightPanel" xml:space="preserve"><value>Toggle right panel</value></data>
+  <data name="CmdAlias_view_rightPanel" xml:space="preserve"><value>show hide side bar</value></data>
+  <data name="Cmd_view_bottomPanel" xml:space="preserve"><value>Toggle bottom panel</value></data>
+  <data name="CmdAlias_view_bottomPanel" xml:space="preserve"><value>show hide</value></data>
+  <data name="Cmd_view_resetPanelLayout" xml:space="preserve"><value>Reset panel layout</value></data>
+  <data name="CmdAlias_view_resetPanelLayout" xml:space="preserve"><value>restore default panels</value></data>
+  <data name="Cmd_view_customizeToolbar" xml:space="preserve"><value>Customize toolbar</value></data>
+  <data name="CmdAlias_view_customizeToolbar" xml:space="preserve"><value>edit toolbar buttons</value></data>
+  <data name="Cmd_view_panel_inspector" xml:space="preserve"><value>Toggle data inspector</value></data>
+  <data name="CmdAlias_view_panel_inspector" xml:space="preserve"><value>inspector values panel</value></data>
+  <data name="Cmd_view_nextRegion" xml:space="preserve"><value>Focus next region</value></data>
+  <data name="CmdAlias_view_nextRegion" xml:space="preserve"><value>focus pane</value></data>
+  <data name="Cmd_view_previousRegion" xml:space="preserve"><value>Focus previous region</value></data>
+  <data name="CmdAlias_view_previousRegion" xml:space="preserve"><value>focus pane</value></data>
+  <data name="Cmd_view_theme_system" xml:space="preserve"><value>Theme: Use Windows setting</value></data>
+  <data name="CmdAlias_view_theme_system" xml:space="preserve"><value>color mode</value></data>
+  <data name="Cmd_view_theme_light" xml:space="preserve"><value>Theme: Light</value></data>
+  <data name="CmdAlias_view_theme_light" xml:space="preserve"><value>color mode</value></data>
+  <data name="Cmd_view_theme_dark" xml:space="preserve"><value>Theme: Dark</value></data>
+  <data name="CmdAlias_view_theme_dark" xml:space="preserve"><value>color mode</value></data>
+  <data name="Cmd_settings_open" xml:space="preserve"><value>Open settings</value></data>
+  <data name="CmdAlias_settings_open" xml:space="preserve"><value>preferences options</value></data>
+  <data name="Cmd_settings_keyboard" xml:space="preserve"><value>Keyboard shortcuts</value></data>
+  <data name="CmdAlias_settings_keyboard" xml:space="preserve"><value>keybindings keys</value></data>
+  <data name="Cmd_settings_selectPreset" xml:space="preserve"><value>Select shortcut preset</value></data>
+  <data name="CmdAlias_settings_selectPreset" xml:space="preserve"><value>keymap hxd vscode 010 editor</value></data>
+  <data name="Cmd_settings_exportKeybindings" xml:space="preserve"><value>Export shortcuts</value></data>
+  <data name="CmdAlias_settings_exportKeybindings" xml:space="preserve"><value>keybindings save</value></data>
+  <data name="Cmd_settings_importKeybindings" xml:space="preserve"><value>Import shortcuts</value></data>
+  <data name="CmdAlias_settings_importKeybindings" xml:space="preserve"><value>keybindings load</value></data>
+  <data name="Cmd_settings_export" xml:space="preserve"><value>Export settings</value></data>
+  <data name="CmdAlias_settings_export" xml:space="preserve"><value>backup save</value></data>
+  <data name="Cmd_settings_import" xml:space="preserve"><value>Import settings</value></data>
+  <data name="CmdAlias_settings_import" xml:space="preserve"><value>restore load</value></data>
+  <data name="Cmd_settings_resetAll" xml:space="preserve"><value>Reset all settings</value></data>
+  <data name="CmdAlias_settings_resetAll" xml:space="preserve"><value>defaults factory</value></data>
+  <data name="Cmd_settings_openFile" xml:space="preserve"><value>Open settings file</value></data>
+  <data name="CmdAlias_settings_openFile" xml:space="preserve"><value>settings.json</value></data>
+  <data name="Cmd_settings_openDataFolder" xml:space="preserve"><value>Open data folder</value></data>
+  <data name="CmdAlias_settings_openDataFolder" xml:space="preserve"><value>explorer</value></data>
+  <data name="Cmd_help_commandPalette" xml:space="preserve"><value>Command palette</value></data>
+  <data name="CmdAlias_help_commandPalette" xml:space="preserve"><value>commands search</value></data>
+  <data name="Cmd_help_shortcuts" xml:space="preserve"><value>Keyboard shortcut list</value></data>
+  <data name="CmdAlias_help_shortcuts" xml:space="preserve"><value>keys reference cheat sheet</value></data>
+  <data name="Cmd_help_documentation" xml:space="preserve"><value>Documentation</value></data>
+  <data name="CmdAlias_help_documentation" xml:space="preserve"><value>help manual</value></data>
+  <data name="Cmd_help_reportProblem" xml:space="preserve"><value>Report a problem</value></data>
+  <data name="CmdAlias_help_reportProblem" xml:space="preserve"><value>bug issue feedback</value></data>
+  <data name="Cmd_help_about" xml:space="preserve"><value>About</value></data>
+  <data name="CmdAlias_help_about" xml:space="preserve"><value>version</value></data>
+  <data name="CmdCategory_file" xml:space="preserve"><value>File</value></data>
+  <data name="CmdCategory_edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="CmdCategory_search" xml:space="preserve"><value>Search</value></data>
+  <data name="CmdCategory_go" xml:space="preserve"><value>Go</value></data>
+  <data name="CmdCategory_view" xml:space="preserve"><value>View</value></data>
+  <data name="CmdCategory_settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="CmdCategory_help" xml:space="preserve"><value>Help</value></data>
+  <data name="Command_Title" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Command_Unavailable" xml:space="preserve"><value>{0} is not available now: {1}</value></data>
+  <data name="Command_NotAvailableHere" xml:space="preserve"><value>Not available in this window</value></data>
+  <data name="Command_NoDocument" xml:space="preserve"><value>No document is open</value></data>
+  <data name="Command_ReadOnly" xml:space="preserve"><value>The document is read-only</value></data>
+  <data name="Command_NoSelection" xml:space="preserve"><value>Nothing is selected</value></data>
+  <data name="Command_NothingToUndo" xml:space="preserve"><value>Nothing to undo</value></data>
+  <data name="Command_NothingToRedo" xml:space="preserve"><value>Nothing to redo</value></data>
+  <data name="Command_EmptyDocument" xml:space="preserve"><value>The document is empty</value></data>
+  <data name="Command_NoHistory" xml:space="preserve"><value>No jump history</value></data>
+  <data name="Command_NoPanels" xml:space="preserve"><value>No panel is placed here</value></data>
+  <data name="Command_PanelMissing" xml:space="preserve"><value>This panel is not available yet</value></data>
+  <data name="KeyScope_global" xml:space="preserve"><value>Global</value></data>
+  <data name="KeyScope_editor" xml:space="preserve"><value>Editor</value></data>
+  <data name="KeyScope_findBar" xml:space="preserve"><value>Find bar</value></data>
+  <data name="KeyScope_codeEditor" xml:space="preserve"><value>Code editor</value></data>
+  <data name="KeyScope_panel" xml:space="preserve"><value>Panel</value></data>
+  <data name="Menu_View_Panels.Text" xml:space="preserve"><value>Panels</value></data>
+  <data name="Menu_View_Panels.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_Toolbar.Text" xml:space="preserve"><value>Toolbar</value></data>
+  <data name="Menu_View_Toolbar.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_LeftPanel.Text" xml:space="preserve"><value>Left panel</value></data>
+  <data name="Menu_View_LeftPanel.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_RightPanel.Text" xml:space="preserve"><value>Right panel</value></data>
+  <data name="Menu_View_RightPanel.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_BottomPanel.Text" xml:space="preserve"><value>Bottom panel</value></data>
+  <data name="Menu_View_BottomPanel.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_Inspector.Text" xml:space="preserve"><value>Data inspector</value></data>
+  <data name="Menu_View_Inspector.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_ResetPanels.Text" xml:space="preserve"><value>Reset panel layout</value></data>
+  <data name="Menu_View_ResetPanels.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Tools.Title" xml:space="preserve"><value>Tools</value></data>
+  <data name="Menu_Tools.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Settings.Text" xml:space="preserve"><value>Settings</value></data>
+  <data name="Menu_Tools_Settings.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Help_CommandPalette.Text" xml:space="preserve"><value>Command palette</value></data>
+  <data name="Menu_Help_CommandPalette.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Help_Shortcuts.Text" xml:space="preserve"><value>Keyboard shortcuts</value></data>
+  <data name="Menu_Help_Shortcuts.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Toolbar_Customize.Text" xml:space="preserve"><value>Customize toolbar...</value></data>
+  <data name="Toolbar_ToolTip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Toolbar_Missing" xml:space="preserve"><value>Missing commands: {0}</value></data>
+  <data name="ToolbarCustomize_Title" xml:space="preserve"><value>Customize toolbar</value></data>
+  <data name="ToolbarCustomize_Items" xml:space="preserve"><value>Toolbar buttons</value></data>
+  <data name="ToolbarCustomize_Pick" xml:space="preserve"><value>Command to add</value></data>
+  <data name="ToolbarCustomize_Missing" xml:space="preserve"><value>{0} (not found)</value></data>
+  <data name="ToolbarCustomize_Up" xml:space="preserve"><value>Move up</value></data>
+  <data name="ToolbarCustomize_Down" xml:space="preserve"><value>Move down</value></data>
+  <data name="ToolbarCustomize_Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="ToolbarCustomize_Reset" xml:space="preserve"><value>Reset to default</value></data>
+  <data name="ToolbarCustomize_Add" xml:space="preserve"><value>Add</value></data>
+  <data name="Panel_Splitter" xml:space="preserve"><value>Resize panel</value></data>
+  <data name="Panel_More.AutomationProperties.Name" xml:space="preserve"><value>Panel options</value></data>
+  <data name="Panel_More.ToolTipService.ToolTip" xml:space="preserve"><value>Panel options</value></data>
+  <data name="Panel_Close.AutomationProperties.Name" xml:space="preserve"><value>Close panel</value></data>
+  <data name="Panel_Close.ToolTipService.ToolTip" xml:space="preserve"><value>Close panel</value></data>
+  <data name="Panel_NoDocument.Text" xml:space="preserve"><value>No document is open.</value></data>
+  <data name="Panel_Selected" xml:space="preserve"><value>Selected</value></data>
+  <data name="Panel_Move" xml:space="preserve"><value>Move</value></data>
+  <data name="Panel_MoveLeft" xml:space="preserve"><value>Left</value></data>
+  <data name="Panel_MoveRight" xml:space="preserve"><value>Right</value></data>
+  <data name="Panel_MoveBottom" xml:space="preserve"><value>Bottom</value></data>
+  <data name="Panel_MoveFloating" xml:space="preserve"><value>Floating</value></data>
+  <data name="Panel_CloseMenu" xml:space="preserve"><value>Close</value></data>
+  <data name="Palette_Input.PlaceholderText" xml:space="preserve"><value>Type a command, &gt; for commands, : for offset, ? for help</value></data>
+  <data name="Palette_Input.AutomationProperties.Name" xml:space="preserve"><value>Command palette</value></data>
+  <data name="Palette_Recent" xml:space="preserve"><value>Recently used</value></data>
+  <data name="Palette_AllCommands" xml:space="preserve"><value>All commands</value></data>
+  <data name="Palette_NoMatch" xml:space="preserve"><value>No matching items</value></data>
+  <data name="Palette_RunWith" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Palette_OffsetHint" xml:space="preserve"><value>Type an offset or expression (for example 0x1F00, end-0x10)</value></data>
+  <data name="Palette_GoTo" xml:space="preserve"><value>Go to {0} ({1})</value></data>
+  <data name="Palette_Tab" xml:space="preserve"><value>Tab: {0}</value></data>
+  <data name="Palette_FilesHint" xml:space="preserve"><value>Type the name of an open tab or a recent file</value></data>
+  <data name="Palette_NoBookmarks" xml:space="preserve"><value>No bookmarks</value></data>
+  <data name="Palette_HelpCommands" xml:space="preserve"><value>&gt; Commands</value></data>
+  <data name="Palette_HelpFiles" xml:space="preserve"><value>Open tabs and recent files (no prefix)</value></data>
+  <data name="Palette_HelpOffset" xml:space="preserve"><value>: Go to offset</value></data>
+  <data name="Palette_HelpBookmarks" xml:space="preserve"><value>@ Bookmarks</value></data>
+  <data name="Palette_HelpSettings" xml:space="preserve"><value># Settings</value></data>
+  <data name="Settings_Title.Text" xml:space="preserve"><value>Settings</value></data>
+  <data name="Settings_Search.PlaceholderText" xml:space="preserve"><value>Search settings</value></data>
+  <data name="Settings_Search.AutomationProperties.Name" xml:space="preserve"><value>Search settings</value></data>
+  <data name="Settings_RestartBar.Title" xml:space="preserve"><value>Restart required</value></data>
+  <data name="Settings_RestartBar.Message" xml:space="preserve"><value>Some changes take effect after restarting HexEditor.</value></data>
+  <data name="Settings_RestartNow.Content" xml:space="preserve"><value>Restart now</value></data>
+  <data name="Settings_CategoryMore" xml:space="preserve"><value>More options</value></data>
+  <data name="Settings_ResetCategory" xml:space="preserve"><value>Reset this category to default</value></data>
+  <data name="Settings_EmptyCategory" xml:space="preserve"><value>There are no settings in this category yet.</value></data>
+  <data name="Settings_NoResults" xml:space="preserve"><value>No settings match.</value></data>
+  <data name="Settings_SectionLink" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Settings_Modified" xml:space="preserve"><value>Changed from default</value></data>
+  <data name="Settings_RestartNote" xml:space="preserve"><value>Takes effect after restart.</value></data>
+  <data name="Settings_ResetItem" xml:space="preserve"><value>Reset to default</value></data>
+  <data name="Settings_On" xml:space="preserve"><value>On</value></data>
+  <data name="Settings_Off" xml:space="preserve"><value>Off</value></data>
+  <data name="Settings_InvalidNumber" xml:space="preserve"><value>Enter a number.</value></data>
+  <data name="Settings_OutOfRange" xml:space="preserve"><value>Enter a value from {0} to {1}.</value></data>
+  <data name="Settings_InvalidValue" xml:space="preserve"><value>This value is not valid.</value></data>
+  <data name="Settings_ResetDone" xml:space="preserve"><value>Reset "{0}" to default.</value></data>
+  <data name="Settings_NothingToReset" xml:space="preserve"><value>All settings in this category are already default.</value></data>
+  <data name="Settings_ResetCategoryTitle" xml:space="preserve"><value>Reset category</value></data>
+  <data name="Settings_ResetCategoryBody" xml:space="preserve"><value>{0} settings in "{1}" will be reset to default.</value></data>
+  <data name="Settings_ResetConfirm" xml:space="preserve"><value>Reset to default</value></data>
+  <data name="Settings_ResetAllTitle" xml:space="preserve"><value>Reset all settings</value></data>
+  <data name="Settings_ResetAllBody" xml:space="preserve"><value>Choose what to reset. The current files are copied to a backup folder first.</value></data>
+  <data name="Settings_BackupFailed" xml:space="preserve"><value>Could not create a backup, so nothing was changed: {0}</value></data>
+  <data name="Settings_ResetPartial" xml:space="preserve"><value>Some files could not be removed: {0}</value></data>
+  <data name="Settings_ResetAllDone" xml:space="preserve"><value>Settings were reset to default.</value></data>
+  <data name="SettingsPart_Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="SettingsPart_KeyBindings" xml:space="preserve"><value>Keyboard shortcuts</value></data>
+  <data name="SettingsPart_Themes" xml:space="preserve"><value>Custom color schemes</value></data>
+  <data name="SettingsPart_RecentAndState" xml:space="preserve"><value>Recent files and state</value></data>
+  <data name="SettingsPart_Recent" xml:space="preserve"><value>Recent files (contains file paths)</value></data>
+  <data name="SettingsPart_Documents" xml:space="preserve"><value>Document data (bookmarks and so on)</value></data>
+  <data name="Settings_ExportTitle" xml:space="preserve"><value>Export settings</value></data>
+  <data name="Settings_ExportConfirm" xml:space="preserve"><value>Export</value></data>
+  <data name="Settings_Exported" xml:space="preserve"><value>Saved {0}.</value></data>
+  <data name="Settings_ExportFailed" xml:space="preserve"><value>Could not save the file: {0}</value></data>
+  <data name="Settings_ImportPart" xml:space="preserve"><value>{0} ({1} changes)</value></data>
+  <data name="ImportMode_Replace" xml:space="preserve"><value>Replace</value></data>
+  <data name="ImportMode_Merge" xml:space="preserve"><value>Merge</value></data>
+  <data name="ImportMode_Skip" xml:space="preserve"><value>Do not import</value></data>
+  <data name="Settings_ImportTitle" xml:space="preserve"><value>Import settings</value></data>
+  <data name="Settings_ImportConfirm" xml:space="preserve"><value>Import</value></data>
+  <data name="Settings_ImportTooLarge" xml:space="preserve"><value>The file is too large.</value></data>
+  <data name="Settings_ImportTooNew" xml:space="preserve"><value>The file was made by a newer version of HexEditor and cannot be imported: {0}</value></data>
+  <data name="Settings_ImportInvalid" xml:space="preserve"><value>The file cannot be imported: {0}</value></data>
+  <data name="Settings_ImportSkipped" xml:space="preserve"><value>Skipped invalid values: {0}</value></data>
+  <data name="Settings_Imported" xml:space="preserve"><value>Imported.</value></data>
+  <data name="FileType_Json" xml:space="preserve"><value>JSON file</value></data>
+  <data name="Keys_ImportTitle" xml:space="preserve"><value>Import shortcuts</value></data>
+  <data name="Keys_ImportSummary" xml:space="preserve"><value>Added: {0}, changed commands: {1}, removed: {2}</value></data>
+  <data name="Keys_ImportConflict" xml:space="preserve"><value>{0} is assigned to both "{1}" and "{2}" ({3}). The imported one is used.</value></data>
+  <data name="Keys_ImportUnknown" xml:space="preserve"><value>Unknown commands: {0}</value></data>
+  <data name="Keys_ImportTooLarge" xml:space="preserve"><value>The file is too large (1 MB or less).</value></data>
+  <data name="Keys_FileError" xml:space="preserve"><value>There is an error in the keyboard shortcut settings (line {0}).</value></data>
+  <data name="Keys_FileErrorNoLine" xml:space="preserve"><value>There is an error in the keyboard shortcut settings: {0}</value></data>
+  <data name="Keys_OpenFile" xml:space="preserve"><value>Open file</value></data>
+  <data name="Keys_Preset" xml:space="preserve"><value>Preset</value></data>
+  <data name="KeyPreset_default" xml:space="preserve"><value>Default</value></data>
+  <data name="KeyPreset_hxd" xml:space="preserve"><value>HxD style</value></data>
+  <data name="KeyPreset_010editor" xml:space="preserve"><value>010 Editor style</value></data>
+  <data name="KeyPreset_vscode" xml:space="preserve"><value>VS Code style</value></data>
+  <data name="Keys_SearchPlaceholder" xml:space="preserve"><value>Search by name, command ID or key (for example ctrl+g)</value></data>
+  <data name="Keys_SearchByKey" xml:space="preserve"><value>Search by key</value></data>
+  <data name="Keys_Import" xml:space="preserve"><value>Import...</value></data>
+  <data name="Keys_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="Keys_ResetAll" xml:space="preserve"><value>Reset all to default</value></data>
+  <data name="Keys_ColCategory" xml:space="preserve"><value>Category</value></data>
+  <data name="Keys_ColCommand" xml:space="preserve"><value>Command</value></data>
+  <data name="Keys_ColKeys" xml:space="preserve"><value>Keys</value></data>
+  <data name="Keys_ColScope" xml:space="preserve"><value>Scope</value></data>
+  <data name="Keys_ColOrigin" xml:space="preserve"><value>Source</value></data>
+  <data name="KeyOrigin_Default" xml:space="preserve"><value>Default</value></data>
+  <data name="KeyOrigin_Preset" xml:space="preserve"><value>Preset</value></data>
+  <data name="KeyOrigin_User" xml:space="preserve"><value>User</value></data>
+  <data name="Keys_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Keys_EditFor" xml:space="preserve"><value>Edit shortcuts for {0}</value></data>
+  <data name="Keys_ResetRow" xml:space="preserve"><value>Reset</value></data>
+  <data name="Keys_ResetRowFor" xml:space="preserve"><value>Reset shortcuts for {0}</value></data>
+  <data name="Keys_ResetAllTitle" xml:space="preserve"><value>Reset all shortcuts</value></data>
+  <data name="Keys_ResetAllBody" xml:space="preserve"><value>All shortcuts you changed will be reset to the preset.</value></data>
+  <data name="Keys_PresetConflictTitle" xml:space="preserve"><value>Shortcut conflicts</value></data>
+  <data name="Keys_PresetConflictBody" xml:space="preserve"><value>Some of your shortcuts conflict with the preset.</value></data>
+  <data name="Keys_PresetConflict" xml:space="preserve"><value>{0}: "{1}" (yours) and "{2}" (preset)</value></data>
+  <data name="Keys_PreferUser" xml:space="preserve"><value>Keep my shortcuts</value></data>
+  <data name="Keys_PreferPreset" xml:space="preserve"><value>Use the preset</value></data>
+  <data name="Keys_PresetError" xml:space="preserve"><value>The preset could not be loaded, so the default is used: {0}</value></data>
+  <data name="Keys_RemoveKey" xml:space="preserve"><value>Remove</value></data>
+  <data name="Keys_AddKey" xml:space="preserve"><value>Add</value></data>
+  <data name="Keys_EditTitle" xml:space="preserve"><value>Shortcuts: {0}</value></data>
+  <data name="Keys_PressKeys" xml:space="preserve"><value>Press the keys (up to two strokes). Enter to confirm, Esc to clear.</value></data>
+  <data name="Keys_CaptureHeader" xml:space="preserve"><value>New shortcut</value></data>
+  <data name="Keys_ConflictIntro" xml:space="preserve"><value>This key is already assigned in the same scope:</value></data>
+  <data name="Keys_ConflictLine" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Keys_Replace" xml:space="preserve"><value>Replace</value></data>
+  <data name="Keys_Added" xml:space="preserve"><value>Added.</value></data>
+  <data name="Keys_ShadowWarning" xml:space="preserve"><value>In {0}, this command runs instead of "{1}".</value></data>
+  <data name="Keys_UnavailableOnLayout" xml:space="preserve"><value>This key cannot be pressed on the current keyboard layout.</value></data>
+  <data name="Keys_AltGrOverlap" xml:space="preserve"><value>This overlaps AltGr character input.</value></data>
+  <data name="KeyReject_ModifierOnly" xml:space="preserve"><value>A modifier key alone cannot be assigned.</value></data>
+  <data name="KeyReject_AltF4" xml:space="preserve"><value>Alt+F4 is used to close the window.</value></data>
+  <data name="KeyReject_WindowsKey" xml:space="preserve"><value>Combinations with the Windows key are used by Windows.</value></data>
+  <data name="KeyReject_CtrlAltDelete" xml:space="preserve"><value>Ctrl+Alt+Delete cannot be assigned.</value></data>
+  <data name="KeyReject_TypingKey" xml:space="preserve"><value>Letter and number keys without Ctrl or Alt are used for typing.</value></data>
+  <data name="KeyReject_Already" xml:space="preserve"><value>This key is already assigned to this command.</value></data>
+  <data name="KeyReject_Unknown" xml:space="preserve"><value>The shortcut could not be added.</value></data>
+  <data name="Shortcuts_Title" xml:space="preserve"><value>Keyboard shortcuts</value></data>
+  <data name="Shortcuts_AllScopes" xml:space="preserve"><value>All scopes</value></data>
+  <data name="Shortcuts_ShowUnassigned" xml:space="preserve"><value>Show commands without shortcuts</value></data>
+  <data name="Shortcuts_SaveHtml" xml:space="preserve"><value>Save as HTML...</value></data>
+  <data name="Shortcuts_Print" xml:space="preserve"><value>Print...</value></data>
+  <data name="Shortcuts_Change" xml:space="preserve"><value>Change</value></data>
+  <data name="ToolPage_Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="ToolPage_Shortcuts" xml:space="preserve"><value>Keyboard shortcuts</value></data>
+  <data name="ToolPage_Close" xml:space="preserve"><value>Close {0}</value></data>
+  <data name="SetSection_Keyboard" xml:space="preserve"><value>Keyboard shortcuts</value></data>
+  <data name="SetSection_Toolbar" xml:space="preserve"><value>Toolbar</value></data>
+  <data name="SetSection_Data" xml:space="preserve"><value>Data folder and settings files</value></data>
+  <data name="SetSearch_Keyboard" xml:space="preserve"><value>keybindings preset shortcut</value></data>
+  <data name="SetSearch_Toolbar" xml:space="preserve"><value>toolbar buttons customize</value></data>
+  <data name="SetSearch_Data" xml:space="preserve"><value>reset export import backup</value></data>
+  <data name="SetCategory_general" xml:space="preserve"><value>General</value></data>
+  <data name="SetCategory_appearance" xml:space="preserve"><value>Appearance</value></data>
+  <data name="SetCategory_view" xml:space="preserve"><value>View</value></data>
+  <data name="SetCategory_editing" xml:space="preserve"><value>Editing</value></data>
+  <data name="SetCategory_search" xml:space="preserve"><value>Search</value></data>
+  <data name="SetCategory_files" xml:space="preserve"><value>Files and saving</value></data>
+  <data name="SetCategory_keyboard" xml:space="preserve"><value>Keyboard</value></data>
+  <data name="SetCategory_language" xml:space="preserve"><value>Language</value></data>
+  <data name="SetCategory_accessibility" xml:space="preserve"><value>Accessibility</value></data>
+  <data name="SetCategory_automation" xml:space="preserve"><value>Automation</value></data>
+  <data name="SetCategory_update" xml:space="preserve"><value>Updates</value></data>
+  <data name="SetCategory_privacy" xml:space="preserve"><value>Privacy</value></data>
+  <data name="SetCategory_explorer" xml:space="preserve"><value>Explorer integration</value></data>
+  <data name="SetCategory_advanced" xml:space="preserve"><value>Advanced</value></data>
+  <data name="Set_ui_toolbar_visible" xml:space="preserve"><value>Show toolbar</value></data>
+  <data name="SetDesc_ui_toolbar_visible" xml:space="preserve"><value>Show buttons for frequently used commands below the title bar.</value></data>
+  <data name="Set_ui_toolbar_items" xml:space="preserve"><value>Toolbar buttons</value></data>
+  <data name="SetDesc_ui_toolbar_items" xml:space="preserve"><value>The commands shown on the toolbar.</value></data>
+  <data name="Set_ui_statusBar_visible" xml:space="preserve"><value>Show status bar</value></data>
+  <data name="SetDesc_ui_statusBar_visible" xml:space="preserve"><value>Show the cursor position, selection and mode at the bottom of the window.</value></data>
+  <data name="Set_ui_statusBar_items" xml:space="preserve"><value>Status bar items</value></data>
+  <data name="SetDesc_ui_statusBar_items" xml:space="preserve"><value>The items shown on the status bar.</value></data>
+  <data name="Set_ui_theme" xml:space="preserve"><value>Theme</value></data>
+  <data name="SetDesc_ui_theme" xml:space="preserve"><value>Light, dark, or follow the Windows app mode.</value></data>
+  <data name="SetOpt_ui_theme_system" xml:space="preserve"><value>Use Windows setting</value></data>
+  <data name="SetOpt_ui_theme_light" xml:space="preserve"><value>Light</value></data>
+  <data name="SetOpt_ui_theme_dark" xml:space="preserve"><value>Dark</value></data>
+  <data name="Set_ui_backdrop" xml:space="preserve"><value>Window background</value></data>
+  <data name="SetDesc_ui_backdrop" xml:space="preserve"><value>The material used for the window background.</value></data>
+  <data name="SetOpt_ui_backdrop_mica" xml:space="preserve"><value>Mica</value></data>
+  <data name="SetOpt_ui_backdrop_micaAlt" xml:space="preserve"><value>Mica Alt</value></data>
+  <data name="SetOpt_ui_backdrop_none" xml:space="preserve"><value>None</value></data>
+  <data name="Set_view_cursor_nibbleArrowKeys" xml:space="preserve"><value>Move by nibble with arrow keys</value></data>
+  <data name="SetDesc_view_cursor_nibbleArrowKeys" xml:space="preserve"><value>In the hex column, Left and Right move by half a byte.</value></data>
+  <data name="Set_view_statusBar_showNibble" xml:space="preserve"><value>Show nibble position</value></data>
+  <data name="SetDesc_view_statusBar_showNibble" xml:space="preserve"><value>Show which half of the byte the cursor is on in the status bar.</value></data>
+  <data name="Set_view_scroll_cursorMargin" xml:space="preserve"><value>Rows kept above and below the cursor</value></data>
+  <data name="SetDesc_view_scroll_cursorMargin" xml:space="preserve"><value>The number of rows kept visible around the cursor when scrolling.</value></data>
+  <data name="Set_view_jump_position" xml:space="preserve"><value>Position after a jump</value></data>
+  <data name="SetDesc_view_jump_position" xml:space="preserve"><value>Where the target row is shown after going to an offset.</value></data>
+  <data name="SetOpt_view_jump_position_top" xml:space="preserve"><value>Top</value></data>
+  <data name="SetOpt_view_jump_position_third" xml:space="preserve"><value>Upper third</value></data>
+  <data name="SetOpt_view_jump_position_center" xml:space="preserve"><value>Center</value></data>
+  <data name="Set_storage_tempDirectory" xml:space="preserve"><value>Folder for temporary data</value></data>
+  <data name="SetDesc_storage_tempDirectory" xml:space="preserve"><value>A drive with enough free space for temporary files and recovery data. Leave empty for the default.</value></data>
+  <data name="Set_ui_language" xml:space="preserve"><value>Display language</value></data>
+  <data name="SetDesc_ui_language" xml:space="preserve"><value>The language of menus and messages.</value></data>
+  <data name="SetOpt_ui_language_system" xml:space="preserve"><value>Use Windows setting</value></data>
+  <data name="Set_log_level" xml:space="preserve"><value>Log level</value></data>
+  <data name="SetDesc_log_level" xml:space="preserve"><value>Debug writes more details to the log.</value></data>
+  <data name="SetOpt_log_level_info" xml:space="preserve"><value>Normal</value></data>
+  <data name="SetOpt_log_level_debug" xml:space="preserve"><value>Debug</value></data>
+  <data name="Set_diagnostics_writeMiniDump" xml:space="preserve"><value>Save a memory dump on crash</value></data>
+  <data name="SetDesc_diagnostics_writeMiniDump" xml:space="preserve"><value>Saves a small memory dump for troubleshooting when HexEditor crashes.</value></data>
 </root>

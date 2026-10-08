@@ -2,10 +2,12 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Nodes;
+using HexEditor.App.Commands;
 using HexEditor.App.Controls;
 using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
+using HexEditor.Core.Commands;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.View;
@@ -372,7 +374,19 @@ public sealed partial class MainWindow
         string handledBy = "none";
         for (int i = 0; i < count; i++)
         {
-            if (CurrentView() is { } view && view.InjectKey(key, shift, ctrl, alt))
+            // 実際のキー入力と同じく、まずウィンドウのキーの振り分け (コマンドの割り当て。UI-18) に通す。
+            KeyModifiers modifiers = (ctrl ? KeyModifiers.Ctrl : 0) | (shift ? KeyModifiers.Shift : 0) | (alt ? KeyModifiers.Alt : 0);
+            KeyContext context = CurrentView() is { } v
+                ? new KeyContext(KeyScope.Editor, v.Editor?.ActiveColumn == ActiveColumn.Text)
+                : CurrentKeyContext();
+            DispatchResult dispatched = _keys.Dispatch((int)key, modifiers, context);
+            if (dispatched.Handled)
+            {
+                handledBy = dispatched.Command is not { } command ? "pending"
+                    : _menus.Find(command) is { } menuItem ? "menu:" + AutomationProperties.GetAutomationId(menuItem)
+                    : "command:" + command;
+            }
+            else if (CurrentView() is { } view && view.InjectKey(key, shift, ctrl, alt))
             {
                 handledBy = "hexView";
             }

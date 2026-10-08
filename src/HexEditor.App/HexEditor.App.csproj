@@ -61,6 +61,10 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <!-- 第三者のライセンス表示はすべての配布形態に入れる (PKG-05 の仕様 1、UI-40)。 -->
     <Content Include="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!-- settings.json の JSON スキーマ (UI-23 の仕様 8)。設定項目の登録から作る (Core のテスト SettingsSchemaIsUpToDate)。 -->
+    <!-- 英語の文字列 (表示言語に関係なく英語名で検索するため。Loc.English)。 -->
+    <EmbeddedResource Include="Strings\en\Resources.resw" LogicalName="HexEditor.Strings.en.resw" />
+    <Content Include="settings.schema.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- ビルドの配布形態を実行時に読めるようにする (判定の結果との食い違いの警告。PKG-12 の仕様 2)。 -->

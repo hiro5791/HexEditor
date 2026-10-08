@@ -40,7 +40,7 @@ public sealed partial class MainWindow
         "sourceStats" => TestSourceStats(),
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
-        _ => null,
+        _ => await HandleFrameworkTestCommandAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>
