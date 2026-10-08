@@ -132,17 +132,25 @@ public sealed class HashEngineTests
     [Fact]
     public async Task CancellationDiscardsTheResultQuickly()
     {
-        // 遅いデータソース (読み込み 1 回ごとに 20 ms) の 1 GiB を計算し、キャンセルから 1 秒以内に止まる。
-        var source = new FakeByteSource(1L << 30, (_, s) => s.Clear(), SourceCapabilities.None) { Delay = TimeSpan.FromMilliseconds(20) };
+        // 遅いデータソース (読み込み 1 回ごとに 20 ms) の 64 GiB を計算し、キャンセルから 1 秒以内に止まる。
+        // 計算が始まったことは固定の待ち時間ではなく処理済みのバイト数で確かめる (他のテストが並行してスレッドプールが混んでいると、
+        // 待ち時間の間に 1 GiB の計算が終わってしまうことがあった)。
+        var source = new FakeByteSource(64L << 30, (_, s) => s.Clear(), SourceCapabilities.None) { Delay = TimeSpan.FromMilliseconds(20) };
         using var doc = new Document(source, Options());
         var center = new OperationCenter();
         DocumentSnapshot snapshot = doc.Current;
         var request = new HashRequest { Algorithms = Choices("sha256"), ChunkSize = 1 << 20 };
         Task<HashComputation> task = center.RunAsync("Hash", OperationKind.ReadOnly, doc, HashEngine.TotalBytes(snapshot, request),
             op => Task.FromResult(HashEngine.Compute(snapshot, request, op)));
-        await Task.Delay(200);
         LongRunningOperation op = Assert.Single(center.Active);
+        var started = System.Diagnostics.Stopwatch.StartNew();
+        while (op.ProcessedBytes == 0 && !task.IsCompleted && started.Elapsed < TimeSpan.FromSeconds(30))
+        {
+            await Task.Delay(20);
+        }
+
         Assert.True(op.ProcessedBytes > 0);
+        Assert.False(task.IsCompleted);
         var watch = System.Diagnostics.Stopwatch.StartNew();
         op.Cancel();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => task);
