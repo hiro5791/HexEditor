@@ -60,7 +60,66 @@ public static class TestDataCatalog
         // ---- cases/09-ui-and-settings.md の表 ----
         new("TD-UI-SECRET", 4 * KiB, "secret-content.bin: HEXEDITOR-SECRET-7F3A の繰り返し",
             path => WriteGenerated(path, 4 * KiB, (o, s) => Repeat(SecretMarker, o, s)), dir => Path.Combine(dir, "TD-UI-SECRET", "secret-content.bin")),
+
+        // ---- cases/06-analysis.md の表 ----
+        new("TD-ANA-CHECK9", 9, "ASCII の 123456789", path => WriteAll(path, Encoding.ASCII.GetBytes("123456789"))),
+        new("TD-ANA-CHECK9-PAD", 20, "ASCII の 123456789 の後に 00 を 11 バイト", path => WriteAll(path, [.. Encoding.ASCII.GetBytes("123456789"), .. new byte[11]])),
+        new("TD-ANA-ABC", 3, "ASCII の abc", path => WriteAll(path, Encoding.ASCII.GetBytes("abc"))),
+        new("TD-ANA-SHA256SUM", Sha256SumLength, "TD-RANDOM-16M の sha256sum の出力 (TD-RANDOM-16M と同じフォルダに置く)", WriteSha256Sum,
+            dir => Path.Combine(dir, "TD-RANDOM-16M.sha256")),
     }.ToDictionary(i => i.Id);
+
+    /// <summary>TD-ANA-SHA256SUM の長さ: 64 桁の Hex、空白 2 つ、TD-RANDOM-16M.bin、LF。</summary>
+    private const long Sha256SumLength = 64 + 2 + 17 + 1;
+
+    /// <summary>Git for Windows に同梱の GNU coreutils の sha256sum (なければ null)。</summary>
+    public static string? FindSha256Sum()
+    {
+        foreach (string? root in new[] { Environment.GetEnvironmentVariable("ProgramFiles"), Environment.GetEnvironmentVariable("ProgramW6432") })
+        {
+            if (root is { Length: > 0 } && Path.Combine(root, "Git", "usr", "bin", "sha256sum.exe") is var path && File.Exists(path))
+            {
+                return path;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// TD-ANA-SHA256SUM: 同じフォルダの TD-RANDOM-16M.bin について sha256sum を実行した出力。sha256sum がなければ、同じ形
+    /// (<c>&lt;64 桁の小文字の Hex&gt;  TD-RANDOM-16M.bin</c> と LF) を .NET で計算して書く。
+    /// </summary>
+    private static void WriteSha256Sum(string path)
+    {
+        string dir = Path.GetDirectoryName(path)!;
+        Generate("TD-RANDOM-16M", dir);
+        string output;
+        if (FindSha256Sum() is { } exe)
+        {
+            var start = new System.Diagnostics.ProcessStartInfo(exe, "TD-RANDOM-16M.bin")
+            {
+                WorkingDirectory = dir,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+            using var process = System.Diagnostics.Process.Start(start)!;
+            output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            if (process.ExitCode != 0)
+            {
+                throw new InvalidOperationException($"sha256sum が失敗しました (終了コード {process.ExitCode})。");
+            }
+        }
+        else
+        {
+            using FileStream stream = File.OpenRead(Path.Combine(dir, "TD-RANDOM-16M.bin"));
+            output = Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(stream)) + "  TD-RANDOM-16M.bin\n";
+        }
+
+        File.WriteAllBytes(path, Encoding.UTF8.GetBytes(output.Replace("\r\n", "\n", StringComparison.Ordinal)));
+    }
 
     /// <summary>TD-ENG-SPARSE-100G-1M の乱数の位置と種。</summary>
     public const long SparseRandomOffset = 50 * GiB;
