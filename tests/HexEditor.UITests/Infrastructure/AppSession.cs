@@ -99,6 +99,19 @@ public sealed class AppSession : IAsyncDisposable
         return session;
     }
 
+    /// <summary>
+    /// アプリ自身が起動したプロセス (再起動の後の新しいプロセスなど) に、命令の通り道とウィンドウの準備ができるまで待ってつなぐ。
+    /// </summary>
+    public static async Task<AppSession> AttachAsync(Process process, string profile)
+    {
+        TestChannelClient channel = await TestChannelClient.ConnectAsync(process.Id, () => process.HasExited, TimeSpan.FromSeconds(60))
+            ?? throw new InvalidOperationException($"HexEditor (pid {process.Id}) did not open the test channel.");
+        nint hwnd = await WaitForWindowAsync(process, TimeSpan.FromSeconds(30));
+        var session = new AppSession(process, profile, channel, hwnd);
+        session.StartForegroundMonitor();
+        return session;
+    }
+
     /// <summary>起動するだけ (転送されて終わる 2 つ目の起動など)。</summary>
     public static Process Launch(AppOptions options, string profile, string hooksPath)
     {

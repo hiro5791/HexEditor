@@ -12,6 +12,10 @@
     TC-PKG-30-02  crash info and recovery data of each distribution are in the place of PKG-13
     TC-PKG-12-03  installer: the AppUserModelID of the process and window equals the Start menu shortcut's
     TC-PKG-15-01  -Arch arm64 on an ARM64 runner: every distribution runs as native ARM64, PE Machine of the exe
+    TC-PKG-31-02  the installer and the MSIX version run at the same time, are not redirected to each other and keep
+                  separate settings (dark / light)
+    TC-UI-43-05   installer: switching the display language and restarting does not crash (the portable version is
+                  checked in Test-Portable.ps1)
   -Setup and -Msix install HexEditor and are allowed only on CI runners (GITHUB_ACTIONS). Without them only the
   portable version (and -DevExe) is tested, nothing is installed and the clipboard is not used, so the script can
   run against a local test build: the windows open behind other windows and never take the focus.
@@ -321,6 +325,51 @@ if ($Arch -eq 'arm64') {
                 }
             } finally { Stop-TestApp $app }
         }
+    }
+}
+
+Invoke-TestCase 'TC-PKG-31-02' 'installer and MSIX side by side' {
+    $installer = $targets | Where-Object Name -eq 'Installer'
+    $store = $targets | Where-Object Name -eq 'Msix'
+    if (-not $installer -or -not $store) { Skip-TestCase 'needs both -Setup and -Msix.' }
+    Reset-Data $installer
+    Reset-Data $store
+    $a = Start-App $installer
+    try {
+        [void](Send-TestCommand $a 'invoke' @{ id = 'Command_ThemeDark' })
+        $b = Start-App $store
+        try {
+            Assert-True ($a.Id -ne $b.Id -and -not $a.Process.HasExited -and -not $b.Process.HasExited) 'the two versions were not separate processes'
+            Assert-True (-not (Test-Path (Join-Path $store.Data 'settings.json')) -or -not ((Get-Content (Join-Path $store.Data 'settings.json') -Raw) -match '"ui.theme"')) 'the MSIX version has a theme before it was changed'
+            [void](Send-TestCommand $b 'invoke' @{ id = 'Command_ThemeLight' })
+        } finally { Stop-TestApp $b }
+    } finally { Stop-TestApp $a }
+    Assert-True ((Get-Content (Join-Path $installer.Data 'settings.json') -Raw) -match '"ui.theme":\s*"dark"') 'the installer setting is not dark'
+    Assert-True ((Get-Content (Join-Path $store.Data 'settings.json') -Raw) -match '"ui.theme":\s*"light"') 'the MSIX setting is not light'
+}
+
+Invoke-TestCase 'TC-UI-43-05' 'installer: display language switch and restart' {
+    $installer = $targets | Where-Object Name -eq 'Installer'
+    if (-not $installer) { Skip-TestCase 'needs -Setup.' }
+    Reset-Data $installer
+    $crash = Join-Path $installer.Data 'crash'
+    foreach ($language in @('en', 'zh-Hans', 'zh-Hant', 'ja', 'ko', 'id', 'vi', 'th', 'de', 'fr', 'es', 'pt', 'it', 'ru', 'uk', 'pl', 'cs', 'hu', 'ro', 'el', 'ar', 'tr', 'fa', 'system')) {
+        $a = Start-App $installer
+        $oldPid = $a.Id
+        [void](Send-TestCommand $a 'setDisplayLanguage' @{ language = $language })
+        $label = @((Get-TestState $a).notifications | Where-Object { @($_.actions).Count -gt 0 })[0].actions[0]
+        [void](Send-TestCommand $a 'noticeAction' @{ label = $label })
+        Close-TestChannel $a
+        Assert-True ($a.Process.WaitForExit(30000)) "the app did not restart ($language)"
+        # Wait-Until runs the block in a child scope, so the process is looked up again afterwards.
+        $find = { Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $_.Id -ne $oldPid -and $_.Path -ieq $installer.Exe } | Select-Object -First 1 }
+        Wait-Until { $null -ne (& $find) } 30 "the restarted app ($language)"
+        $new = & $find
+        Assert-True (Wait-MainWindow $new 30) "no window after restarting in $language"
+        Start-Sleep -Seconds 2
+        Assert-True (-not $new.HasExited) "the app exited after restarting in $language"
+        Stop-Process -Id $new.Id -Force
+        Assert-True (@(Get-CrashReports $crash).Count -eq 0) "crash info after $language"
     }
 }
 

@@ -359,6 +359,7 @@ public sealed partial class MainWindow
             ["severity"] = n.Severity.ToString(),
             ["scope"] = n.Scope.ToString(),
             ["count"] = n.Count,
+            ["actions"] = new JsonArray([.. n.Actions.Select(a => (JsonNode?)a.Label)]),
         };
 
     /// <summary>キー 1 つ。Hex ビューが処理しなければ、メニューのショートカットキーとして扱う。</summary>

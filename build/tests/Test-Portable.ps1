@@ -19,6 +19,13 @@
     TC-PKG-06-02  start from a read-only volume (a VHDX attached read-only), InfoBar, edit, save elsewhere (CI only:
                   attaching a VHDX needs administrator rights)
     TC-PKG-13-03  after a forced termination, "Discard" removes the recovery data in Data\recovery
+    TC-UI-54-02   nothing is written to the registry until "Register" (the test command shell/register, the same call as
+                  the Explorer integration settings) and then the context menu key exists
+    TC-UI-54-03   after moving the folder, the app-wide notice offers "Update" and the menu then points to the new exe
+    TC-UI-56-03   unregistering removes every key and value that registering added
+    TC-UI-43-05   switching the display language and restarting does not crash (23 languages and "system")
+    TC-PKG-31-01  the start page offers to import the installer settings; importing gives the dark theme and the
+                  custom key binding; the installer data folder is not changed
 
   This starts windows, so do not run it on a desktop that someone is using.
 #>
@@ -327,6 +334,123 @@ if ($TestZip) {
             Wait-Until { -not (Test-Path (Join-Path $entry 'state.json')) } 15 'the recovery data to be removed'
         } finally { Stop-TestApp $b }
         Assert-True (@(Get-ChildItem $recovery -Recurse -Filter 'state.json' -ErrorAction SilentlyContinue).Count -eq 0) 'recovery data remains'
+    }
+
+    # ---- Explorer integration (UI-54, UI-56). These write the real HKCU of the runner and remove it again. ----
+
+    $menuKey = 'HKCU:\Software\Classes\*\shell\HexEditor'
+
+    Invoke-TestCase 'TC-UI-54-02' 'no registry writes until Register' {
+        $app = Expand-TestBuild (Join-Path $WorkDir 'shell-a')
+        $file = Copy-TestData $TestDataDir 'TD-SEQ-1M' (Join-Path $WorkDir 'shell-a\seq.bin')
+        $before = Export-UserSoftware (Join-Path $WorkDir 'shell-a\before.reg')
+        $a = Start-WithFile (Join-Path $app 'HexEditor.exe') $file
+        try {
+            [void](Send-TestCommand $a 'invoke' @{ id = 'Command_StatusBar' })
+        } finally { Stop-TestApp $a }
+        $after = Export-UserSoftware (Join-Path $WorkDir 'shell-a\after.reg')
+        $added = @($after | Where-Object { -not $before.Contains($_) -and $_ -match 'hexeditor' } |
+                Where-Object { -not (Test-WindowsRecorded ('\' + ($_ -split '\|', 2)[0].Substring('HKEY_CURRENT_USER\'.Length) + '\')) })
+        Assert-True ($added.Count -eq 0) ("values with HexEditor before registering: " + (($added | Select-Object -First 20) -join '; '))
+        $b = Start-TestApp -Exe (Join-Path $app 'HexEditor.exe')
+        try {
+            $state = Send-TestCommand $b 'shell' @{ action = 'register' }
+            Assert-True ($state.supported) 'the portable version cannot register'
+            Assert-True (@($state.failures).Count -eq 0) "register failed: $($state.failures -join ', ')"
+        } finally { Stop-TestApp $b }
+        Assert-True (Test-Path -LiteralPath $menuKey) "$menuKey does not exist after registering"
+        $c = Start-TestApp -Exe (Join-Path $app 'HexEditor.exe')
+        try { [void](Send-TestCommand $c 'shell' @{ action = 'unregister' }) } finally { Stop-TestApp $c }
+        Add-TestNote 'TC-UI-54-02: the button of the settings screen (Explorer integration, UI-22) is pressed through the test command until the settings screen exists.'
+    }
+
+    Invoke-TestCase 'TC-UI-54-03' 'moved portable folder: update the registration' {
+        $first = Expand-TestBuild (Join-Path $WorkDir 'p1')
+        $a = Start-TestApp -Exe (Join-Path $first 'HexEditor.exe')
+        try { [void](Send-TestCommand $a 'shell' @{ action = 'register' }) } finally { Stop-TestApp $a }
+        $moved = Join-Path $WorkDir 'p2'
+        if (Test-Path $moved) { Remove-Item $moved -Recurse -Force }
+        Move-Item (Join-Path $WorkDir 'p1') $moved
+        $exe = Join-Path $moved 'HexEditor\HexEditor.exe'
+        $b = Start-TestApp -Exe $exe
+        try {
+            Wait-Until { @((Get-TestState $b).notifications | Where-Object { $_.message -match 'old location' }).Count -gt 0 } 20 'the notice about the old registration'
+            $notice = @((Get-TestState $b).notifications | Where-Object { $_.message -match 'old location' })[0]
+            Assert-True (@($notice.actions) -contains 'Update' -and @($notice.actions) -contains 'Unregister') "buttons: $($notice.actions -join ', ')"
+            [void](Send-TestCommand $b 'noticeAction' @{ label = 'Update' })
+            Wait-Until { (Get-ItemProperty -LiteralPath "$menuKey\command").'(default)' -eq ('"' + $exe + '" "%1"') } 10 'the command to point to the new exe'
+        } finally {
+            try { [void](Send-TestCommand $b 'shell' @{ action = 'unregister' }) } catch { }
+            Stop-TestApp $b
+        }
+    }
+
+    Invoke-TestCase 'TC-UI-56-03' 'unregister removes everything that register added' {
+        $app = Expand-TestBuild (Join-Path $WorkDir 'shell-c')
+        $before = Export-UserSoftware (Join-Path $WorkDir 'shell-c\before.reg')
+        $a = Start-TestApp -Exe (Join-Path $app 'HexEditor.exe')
+        try {
+            $registered = Send-TestCommand $a 'shell' @{ action = 'register' }
+            Assert-True ($registered.contextMenu -and $registered.fileAssociations) 'not registered'
+            foreach ($progId in 'HexEditor.Project', 'HexEditor.Workspace', 'HexEditor.Binary') {
+                Assert-True (Test-Path "HKCU:\Software\Classes\$progId") "$progId was not registered"
+            }
+            [void](Send-TestCommand $a 'shell' @{ action = 'unregister' })
+        } finally { Stop-TestApp $a }
+        $after = Export-UserSoftware (Join-Path $WorkDir 'shell-c\after.reg')
+        $diff = @($after | Where-Object { -not $before.Contains($_) -and $_ -match 'hexeditor' })
+        Assert-True ($diff.Count -eq 0) ("left in the registry: " + (($diff | Select-Object -First 20) -join '; '))
+        foreach ($key in $menuKey, 'HKCU:\Software\Classes\HexEditor.Project', 'HKCU:\Software\Classes\HexEditor.Binary', 'HKCU:\Software\Classes\.hexproj') {
+            Assert-True (-not (Test-Path -LiteralPath $key)) "$key remains"
+        }
+    }
+
+    Invoke-TestCase 'TC-UI-43-05' 'display language switch and restart (portable)' {
+        $app = Expand-TestBuild (Join-Path $WorkDir 'lang')
+        $exe = Join-Path $app 'HexEditor.exe'
+        $crash = Join-Path $app 'Data\crash'
+        foreach ($language in @('en', 'zh-Hans', 'zh-Hant', 'ja', 'ko', 'id', 'vi', 'th', 'de', 'fr', 'es', 'pt', 'it', 'ru', 'uk', 'pl', 'cs', 'hu', 'ro', 'el', 'ar', 'tr', 'fa', 'system')) {
+            $a = Start-TestApp -Exe $exe
+            $oldPid = $a.Id
+            [void](Send-TestCommand $a 'setDisplayLanguage' @{ language = $language })
+            $label = @((Get-TestState $a).notifications | Where-Object { @($_.actions).Count -gt 0 })[0].actions[0]
+            [void](Send-TestCommand $a 'noticeAction' @{ label = $label })
+            Close-TestChannel $a
+            Assert-True ($a.Process.WaitForExit(30000)) "the app did not restart ($language)"
+            # Wait-Until runs the block in a child scope, so the process is looked up again afterwards.
+            $find = { Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $_.Id -ne $oldPid -and $_.Path -ieq $exe } | Select-Object -First 1 }
+            Wait-Until { $null -ne (& $find) } 30 "the restarted app ($language)"
+            $new = & $find
+            Assert-True (Wait-MainWindow $new 30) "no window after restarting in $language"
+            Start-Sleep -Seconds 2
+            Assert-True (-not $new.HasExited) "the app exited after restarting in $language"
+            $channel = Connect-TestChannel $new.Id 5000
+            if ($channel) { $b = [pscustomobject]@{ Process = $new; Id = $new.Id; Pipe = $channel.Pipe; Reader = $channel.Reader; Writer = $channel.Writer }; Stop-TestApp $b }
+            else { Stop-Process -Id $new.Id -Force }
+            Assert-True (-not (Test-Path $crash) -or @(Get-ChildItem $crash -File).Count -eq 0) "crash info after $language"
+        }
+    }
+
+    Invoke-TestCase 'TC-PKG-31-01' 'import the installer settings into the portable version' {
+        $installerData = Join-Path $env:LOCALAPPDATA 'HexEditorData'
+        if ((Test-Path $installerData) -and -not $env:GITHUB_ACTIONS) { Skip-TestCase "$installerData exists on this PC; CI runners only." }
+        New-Item -ItemType Directory -Force $installerData | Out-Null
+        $settings = Join-Path $installerData 'settings.json'
+        $keys = Join-Path $installerData 'keybindings.json'
+        Set-Content -Path $settings -Value '{"$schemaVersion": 1, "ui.theme": "dark"}' -Encoding ascii
+        Set-Content -Path $keys -Value '{"preset": "default", "bindings": [{"command": "edit.fill", "key": "Ctrl+K Ctrl+F", "when": "editor"}, {"command": "-file.print", "key": "Ctrl+P"}]}' -Encoding ascii
+        $stamp = @((Get-Item $settings).LastWriteTimeUtc, (Get-Item $keys).LastWriteTimeUtc)
+        $app = Expand-TestBuild (Join-Path $WorkDir 'import')
+        $a = Start-TestApp -Exe (Join-Path $app 'HexEditor.exe')
+        try {
+            $offer = Send-TestCommand $a 'importSettings'
+            Assert-True (@($offer.buttons | Where-Object { $_.id -eq 'Start_ImportFrom_Installer' }).Count -eq 1) 'no import button on the start page'
+            [void](Send-TestCommand $a 'invoke' @{ id = 'Start_ImportFrom_Installer' })
+            Wait-Until { (Get-TestState $a).actualTheme -eq 'Dark' } 10 'the dark theme'
+        } finally { Stop-TestApp $a }
+        Assert-True ((Get-Content (Join-Path $app 'Data\keybindings.json') -Raw) -match 'Ctrl\+K Ctrl\+F') 'the key binding was not imported'
+        Assert-True ((Get-Item $settings).LastWriteTimeUtc -eq $stamp[0] -and (Get-Item $keys).LastWriteTimeUtc -eq $stamp[1]) 'the installer files were changed'
+        if ($env:GITHUB_ACTIONS) { Remove-Item $installerData -Recurse -Force }
     }
 }
 

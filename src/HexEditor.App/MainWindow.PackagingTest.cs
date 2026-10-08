@@ -68,6 +68,9 @@ public sealed partial class MainWindow
             ["items"] = new JsonArray([.. DisplayLanguageItems().Select(i => (JsonNode?)new JsonObject { ["tag"] = i.Tag, ["text"] = i.Text })]),
         },
         "setDisplayLanguage" => Run(() => SetDisplayLanguage(request["language"]!.GetValue<string>())),
+
+        // 通知 (UI-36) の操作ボタンを押す (InfoBar の「今すぐ再起動」など)。
+        "noticeAction" => TestNoticeAction(request["label"]!.GetValue<string>()),
         _ => null,
     };
 
@@ -124,6 +127,22 @@ public sealed partial class MainWindow
 
         OnUpdateButton(kind);
         return new JsonObject();
+    }
+
+    private JsonObject TestNoticeAction(string label)
+    {
+        foreach (Core.Notifications.Notification notification in Vm.Notifications.Open)
+        {
+            if (notification.Actions.FirstOrDefault(a => a.Label == label) is { } action)
+            {
+                // 押した処理 (再起動など) は、この命令の答えを返した後に行う (答えの前にプロセスが終わらないように)。
+                Vm.Notifications.Dismiss(notification);
+                DispatcherQueue.TryEnqueue(() => action.Execute());
+                return new JsonObject { ["message"] = notification.Message };
+            }
+        }
+
+        throw new InvalidOperationException($"No notification has the button '{label}'.");
     }
 
     private JsonObject TestMenuItem(string id)
