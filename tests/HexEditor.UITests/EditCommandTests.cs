@@ -44,13 +44,22 @@ public sealed class EditCommandTests
 
     private static async Task<string> TextAsync(AppSession app, string id)
     {
-        JsonObject e = await ElementAsync(app, id);
-        Assert.True(e["found"]!.GetValue<bool>(), $"element {id}");
+        // ダイアログの中身は開いた直後にはまだないことがあるため、見つかるまで待つ。
+        JsonObject e = null!;
+        await app.WaitUntilAsync(async () => (e = await ElementAsync(app, id))["found"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), id);
         return e["text"]?.GetValue<string>() ?? e["content"]?.GetValue<string>() ?? string.Empty;
     }
 
     private static Task SetCheckedAsync(AppSession app, string id, bool value = true) =>
         app.SendAsync("setChecked", new JsonObject { ["id"] = id, ["value"] = value });
+
+    /// <summary>一覧の項目 (ダイアログの中身ができるまで待つ)。</summary>
+    private static async Task<JsonObject> ListItemsAsync(AppSession app, string id)
+    {
+        await app.WaitUntilAsync(async () => (await ElementAsync(app, id))["found"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), id);
+        await app.IdleAsync();
+        return await app.SendAsync("listItems", new JsonObject { ["id"] = id });
+    }
 
     /// <summary>一覧の項目を表示の文字列で選ぶ (ダイアログの中身ができるまで待つ)。</summary>
     private static async Task SelectItemAsync(AppSession app, string id, string text)
@@ -308,7 +317,7 @@ public sealed class EditCommandTests
         await app.WaitForAsync("PasteSpecialDialog");
         await app.IdleAsync();
 
-        JsonObject list = await app.SendAsync("listItems", new JsonObject { ["id"] = "PasteSpecial_Formats" });
+        JsonObject list = await ListItemsAsync(app, "PasteSpecial_Formats");
         int selected = list["selectedIndex"]!.GetValue<int>();
         Assert.StartsWith("Array notation", list["items"]![selected]!["text"]!.GetValue<string>());
         Assert.Contains("DE AD BE EF", await TextAsync(app, "PasteSpecial_Preview"));
@@ -323,7 +332,7 @@ public sealed class EditCommandTests
         await app.KeyAsync("V", ctrl: true, shift: true);
         await app.WaitForAsync("PasteSpecialDialog");
         await app.IdleAsync();
-        list = await app.SendAsync("listItems", new JsonObject { ["id"] = "PasteSpecial_Formats" });
+        list = await ListItemsAsync(app, "PasteSpecial_Formats");
         JsonObject hex = list["items"]!.AsArray().Select(i => i!.AsObject()).Single(i => i["text"]!.GetValue<string>().StartsWith("Hex string", StringComparison.Ordinal));
         Assert.Contains("Error: line 1, character 7", hex["text"]!.GetValue<string>());
         Assert.False(hex["enabled"]!.GetValue<bool>());
@@ -340,7 +349,7 @@ public sealed class EditCommandTests
         await app.KeyAsync("V", ctrl: true);
         await app.WaitForAsync("PasteSpecialDialog");
         await app.IdleAsync();
-        JsonObject list = await app.SendAsync("listItems", new JsonObject { ["id"] = "PasteSpecial_Formats" });
+        JsonObject list = await ListItemsAsync(app, "PasteSpecial_Formats");
         Assert.StartsWith("Base64", list["items"]![list["selectedIndex"]!.GetValue<int>()]!["text"]!.GetValue<string>());
         Assert.Contains("48 65 6C 6C 6F", await TextAsync(app, "PasteSpecial_Preview"));
         Assert.Contains("5 bytes", await TextAsync(app, "PasteSpecial_Length"));
@@ -360,7 +369,7 @@ public sealed class EditCommandTests
         await app.WaitForAsync("PasteSpecialDialog");
         await app.IdleAsync();
         Assert.Equal(0x10, (await app.BytesAsync(0x10, 1))[0]);
-        JsonObject list = await app.SendAsync("listItems", new JsonObject { ["id"] = "PasteSpecial_Formats" });
+        JsonObject list = await ListItemsAsync(app, "PasteSpecial_Formats");
         Assert.StartsWith("Base64", list["items"]![list["selectedIndex"]!.GetValue<int>()]!["text"]!.GetValue<string>());
         Assert.Contains(list["items"]!.AsArray(), i => i!["text"]!.GetValue<string>().StartsWith("Hex string — Error", StringComparison.Ordinal)
             && !i["enabled"]!.GetValue<bool>());
@@ -378,7 +387,7 @@ public sealed class EditCommandTests
         await app.KeyAsync("V", ctrl: true, shift: true);
         await app.WaitForAsync("PasteSpecialDialog");
         await app.IdleAsync();
-        JsonObject list = await app.SendAsync("listItems", new JsonObject { ["id"] = "PasteSpecial_Formats" });
+        JsonObject list = await ListItemsAsync(app, "PasteSpecial_Formats");
         Assert.StartsWith("Intel HEX", list["items"]![list["selectedIndex"]!.GetValue<int>()]!["text"]!.GetValue<string>());
         await SetCheckedAsync(app, "PasteSpecial_AtAddress");
         await app.IdleAsync();
