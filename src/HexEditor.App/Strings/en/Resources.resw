@@ -2434,4 +2434,12 @@ Details were written to:
   <data name="CmdAlias_go_history" xml:space="preserve"><value>jump history list back recent positions</value></data>
   <data name="GoTo_History_Name" xml:space="preserve"><value>Input history</value></data>
   <data name="GoTo_History_Empty" xml:space="preserve"><value>No history</value></data>
+  <data name="Set_view_scrollBar_cursorMark" xml:space="preserve"><value>Show the cursor position on the scroll bar</value></data>
+  <data name="SetDesc_view_scrollBar_cursorMark" xml:space="preserve"><value>Draws a thin mark on the vertical scroll bar at the cursor's row.</value></data>
+  <data name="Set_view_scrollBar_searchMarks" xml:space="preserve"><value>Show search results on the scroll bar</value></data>
+  <data name="SetDesc_view_scrollBar_searchMarks" xml:space="preserve"><value>Draws thin marks on the vertical scroll bar where search results are.</value></data>
+  <data name="Set_view_scrollBar_selectionMark" xml:space="preserve"><value>Show the selection on the scroll bar</value></data>
+  <data name="SetDesc_view_scrollBar_selectionMark" xml:space="preserve"><value>Draws a mark on the vertical scroll bar covering the selected range.</value></data>
+  <data name="Set_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>Show bookmarks on the scroll bar</value></data>
+  <data name="SetDesc_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>Draws thin marks on the vertical scroll bar where bookmarks start, in the bookmark's color.</value></data>
 </root>

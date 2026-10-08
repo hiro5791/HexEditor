@@ -175,6 +175,12 @@ public sealed partial class HexView
             ["width"] = SecondaryCaret.Width,
             ["strokeThickness"] = SecondaryCaret.StrokeThickness,
         };
+        result["scrollMarkers"] = new JsonArray([.. PlacedMarkers.Select(m => (JsonNode?)new JsonObject
+        {
+            ["kind"] = m.Kind,
+            ["top"] = m.Top,
+            ["height"] = m.Height,
+        })]);
         result["characterRange"] = new JsonObject
         {
             ["visible"] = _characterRange?.Visibility == Visibility.Visible,

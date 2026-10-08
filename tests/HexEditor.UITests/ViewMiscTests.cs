@@ -100,6 +100,36 @@ public sealed class ViewMiscTests
     });
 
     [Fact]
+    public Task Scroll_bar_marks_for_selection_and_bookmarks_follow_the_settings() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-02 の仕様 9: 既定はカーソル位置 (と検索結果) だけ。設定で選択範囲とブックマークの印も出せる。
+        static async Task<List<string>> KindsAsync(AppSession app) =>
+            [.. (await app.RenderAsync())["scrollMarkers"]!.AsArray().Select(m => m!["kind"]!.GetValue<string>())];
+
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SendAsync("bookmarksAdd", new JsonObject { ["count"] = 3, ["step"] = 0x40000, ["length"] = 4 });
+        await app.SendAsync("select", new JsonObject { ["start"] = 0x80000, ["length"] = 0x10000 });
+        await app.IdleAsync();
+        Assert.Equal(["cursor"], await KindsAsync(app));
+
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.scrollBar.selectionMark"] = true, ["view.scrollBar.bookmarkMarks"] = true });
+        AppSession other = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        await other.SendAsync("bookmarksAdd", new JsonObject { ["count"] = 3, ["step"] = 0x40000, ["length"] = 4 });
+        await other.SendAsync("select", new JsonObject { ["start"] = 0x80000, ["length"] = 0x10000 });
+        await other.IdleAsync();
+        JsonArray marks = (await other.RenderAsync())["scrollMarkers"]!.AsArray();
+        Assert.Equal(3, marks.Count(m => m!["kind"]!.GetValue<string>() == "bookmark"));
+        JsonNode selection = Assert.Single(marks, m => m!["kind"]!.GetValue<string>() == "selection")!;
+        JsonNode cursor = Assert.Single(marks, m => m!["kind"]!.GetValue<string>() == "cursor")!;
+
+        // 選択範囲 (ファイルの 1/2 から 1/16) の印は、スクロールバーの中央付近にある。
+        double barTop = selection["top"]!.GetValue<double>();
+        Assert.True(barTop > 0 && selection["height"]!.GetValue<double>() >= 2);
+        Assert.True(cursor["top"]!.GetValue<double>() >= barTop - 3);
+    });
+
+    [Fact]
     public Task History_list_is_available_in_the_command_palette() => UiTestContext.RunAsync(async ctx =>
     {
         // VIEW-31 の仕様 8 と「呼び出し」: コマンドパレット「移動: 履歴の一覧」で最新の履歴を選んで移れる。

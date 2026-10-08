@@ -446,6 +446,26 @@
       "maximum": 10,
       "default": 0
     },
+    "view.scrollBar.bookmarkMarks": {
+      "description": "Show bookmarks on the scroll bar",
+      "type": "boolean",
+      "default": false
+    },
+    "view.scrollBar.cursorMark": {
+      "description": "Show the cursor position on the scroll bar",
+      "type": "boolean",
+      "default": true
+    },
+    "view.scrollBar.searchMarks": {
+      "description": "Show search results on the scroll bar",
+      "type": "boolean",
+      "default": true
+    },
+    "view.scrollBar.selectionMark": {
+      "description": "Show the selection on the scroll bar",
+      "type": "boolean",
+      "default": false
+    },
     "view.statusBar.showNibble": {
       "description": "Show nibble position",
       "type": "boolean",

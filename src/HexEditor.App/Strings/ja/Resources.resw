@@ -2434,4 +2434,12 @@
   <data name="CmdAlias_go_history" xml:space="preserve"><value>りれき いちらん じゃんぷ もどる</value></data>
   <data name="GoTo_History_Name" xml:space="preserve"><value>入力の履歴</value></data>
   <data name="GoTo_History_Empty" xml:space="preserve"><value>履歴はありません</value></data>
+  <data name="Set_view_scrollBar_cursorMark" xml:space="preserve"><value>スクロールバーにカーソル位置を表示</value></data>
+  <data name="SetDesc_view_scrollBar_cursorMark" xml:space="preserve"><value>縦のスクロールバーの、カーソルのある行の位置に細い印を表示します。</value></data>
+  <data name="Set_view_scrollBar_searchMarks" xml:space="preserve"><value>スクロールバーに検索結果を表示</value></data>
+  <data name="SetDesc_view_scrollBar_searchMarks" xml:space="preserve"><value>縦のスクロールバーの、検索結果の位置に細い印を表示します。</value></data>
+  <data name="Set_view_scrollBar_selectionMark" xml:space="preserve"><value>スクロールバーに選択範囲を表示</value></data>
+  <data name="SetDesc_view_scrollBar_selectionMark" xml:space="preserve"><value>縦のスクロールバーに、選択範囲の位置を示す印を表示します。</value></data>
+  <data name="Set_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>スクロールバーにブックマークを表示</value></data>
+  <data name="SetDesc_view_scrollBar_bookmarkMarks" xml:space="preserve"><value>縦のスクロールバーの、ブックマークの開始位置に、ブックマークの色で細い印を表示します。</value></data>
 </root>

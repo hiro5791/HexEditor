@@ -107,6 +107,12 @@ public static class ViewOptions
             "controlPictures" => NonPrintableStyle.ControlPictures,
             _ => NonPrintableStyle.Dot,
         };
+        // スクロールバーの印 (VIEW-02 の仕様 9。既定はカーソル位置と検索結果だけ)。
+        view.ShowCursorMarker = settings.GetBool("view.scrollBar.cursorMark", true);
+        view.ShowSearchMarkers = settings.GetBool("view.scrollBar.searchMarks", true);
+        view.ShowSelectionMarker = settings.GetBool("view.scrollBar.selectionMark", false);
+        view.ShowBookmarkMarkers = settings.GetBool("view.scrollBar.bookmarkMarks", false);
+        view.RefreshMarkers();
         view.InvalidSymbol = settings.GetString(InvalidSymbolKey, "dot") == "replacement"
             ? TextCellDecoder.ReplacementInvalidSymbol
             : TextCellDecoder.DefaultInvalidSymbol;
