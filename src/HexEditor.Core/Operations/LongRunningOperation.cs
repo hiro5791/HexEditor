@@ -71,7 +71,26 @@ public sealed class LongRunningOperation
 
     public DateTimeOffset StartedAt { get; }
 
-    public OperationState State { get; internal set; } = OperationState.Pending;
+    public OperationState State
+    {
+        get => _state;
+        internal set
+        {
+            _state = value;
+            if (value is OperationState.Completed or OperationState.Failed or OperationState.Cancelled)
+            {
+                EndedAt ??= _time.GetUtcNow();
+            }
+        }
+    }
+
+    private OperationState _state = OperationState.Pending;
+
+    /// <summary>キャンセルを要求した時刻 (<see cref="Cancel"/>)。要求していなければ null。</summary>
+    public DateTimeOffset? CancelRequestedAt { get; private set; }
+
+    /// <summary>処理が終わった (完了・失敗・キャンセル済みになった) 時刻。実行中は null。</summary>
+    public DateTimeOffset? EndedAt { get; private set; }
 
     public Exception? Error { get; internal set; }
 
@@ -161,6 +180,7 @@ public sealed class LongRunningOperation
         if (State is OperationState.Pending or OperationState.Running)
         {
             State = OperationState.Cancelling;
+            CancelRequestedAt = _time.GetUtcNow();
             _cts.Cancel();
             ProgressChanged?.Invoke(this, EventArgs.Empty);
         }

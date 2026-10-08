@@ -342,6 +342,9 @@ public sealed partial class HexView
 
     private readonly List<(long Ms, string Id, string Text)> _announcements = [];
     private int _frames;
+
+    /// <summary>最初に描いた時刻 (Environment.TickCount64)。まだ描いていなければ 0。</summary>
+    private long _firstFrameTime;
     private int _placeholderFrames;
 
     partial void OnAnnounced(string text, string activityId)
@@ -356,6 +359,10 @@ public sealed partial class HexView
     partial void OnRendered(int placeholderCells)
     {
         _frames++;
+        if (_firstFrameTime == 0)
+        {
+            _firstFrameTime = Environment.TickCount64;
+        }
         if (placeholderCells > 0)
         {
             _placeholderFrames++;
@@ -396,6 +403,7 @@ public sealed partial class HexView
         result["focusFrame"] = FocusFrameOuter.Visibility == Visibility.Visible ? FocusFrameOuter.StrokeThickness : 0;
         result["caretBlinking"] = _focused && _blinkTimer.IsRunning;
         result["frames"] = _frames;
+        result["firstFrameTime"] = _firstFrameTime;
         result["placeholderFrames"] = _placeholderFrames;
         result["highContrast"] = IsHighContrast;
         result["zoom"] = _zoom;

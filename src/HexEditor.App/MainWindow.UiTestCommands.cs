@@ -63,6 +63,7 @@ public sealed partial class MainWindow
             ["processed"] = op.ProcessedBytes,
             ["total"] = op.TotalBytes,
             ["matches"] = op.Matches,
+            ["cancelToEndMs"] = op.CancelRequestedAt is { } asked && op.EndedAt is { } ended ? (ended - asked).TotalMilliseconds : null,
         })]);
         state["statusOperationsVisible"] = StatusOperations.Visibility == Visibility.Visible;
         state["statusOperationsText"] = StatusOperationsText.Text;
@@ -74,6 +75,8 @@ public sealed partial class MainWindow
         state["flowDirection"] = Root.FlowDirection.ToString();
         state["actualTheme"] = Root.ActualTheme.ToString();
         state["windowSize"] = $"{AppWindow.Size.Width}x{AppWindow.Size.Height}";
+        state["distribution"] = Hosting.Program.Environment.Distribution.ToString();
+        state["newDocumentCreatedAt"] = NewDocumentCreatedAt;
         state["scale"] = Root.XamlRoot?.RasterizationScale ?? 1;
 
         // タイトルバーのウィンドウ操作ボタンの場所 (左右の余白。物理ピクセル。UI-02 の仕様 2、UI-44)。

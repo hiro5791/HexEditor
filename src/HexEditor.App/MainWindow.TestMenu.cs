@@ -179,6 +179,7 @@ public sealed partial class MainWindow
     public async Task<JsonObject> HandleTestCommandAsync(JsonObject request)
     {
         string cmd = request["cmd"]?.GetValue<string>() ?? string.Empty;
+        await WhenContentLoadedAsync();
         JsonObject result = cmd switch
         {
             "ping" => new JsonObject { ["pid"] = Environment.ProcessId, ["hooks"] = TestHooks.SettingsPath },
@@ -269,6 +270,34 @@ public sealed partial class MainWindow
     private JsonObject DocumentResult(DocumentViewModel doc) => new() { ["index"] = Vm.Documents.IndexOf(doc), ["name"] = doc.DisplayName };
 
     /// <summary>選択中のタブの Hex ビュー。</summary>
+    /// <summary>
+    /// ウィンドウの中身が XAML の木に入る (XamlRoot ができる) まで待つ (最大 10 秒)。命令の通り道は起動の直後から開くので、速い起動
+    /// (リリースのビルド) では中身の読み込みより先に命令が届き、ダイアログ (XamlRoot が要る) やフォーカスの命令が失敗していた。
+    /// </summary>
+    private async Task WhenContentLoadedAsync()
+    {
+        if (Root.XamlRoot is not null)
+        {
+            return;
+        }
+
+        var loaded = new TaskCompletionSource();
+        void OnLoaded(object sender, RoutedEventArgs e) => loaded.TrySetResult();
+        Root.Loaded += OnLoaded;
+        try
+        {
+            var deadline = DateTime.UtcNow + TimeSpan.FromSeconds(10);
+            while (Root.XamlRoot is null && DateTime.UtcNow < deadline)
+            {
+                await Task.WhenAny(loaded.Task, Task.Delay(50));
+            }
+        }
+        finally
+        {
+            Root.Loaded -= OnLoaded;
+        }
+    }
+
     private HexView? CurrentView() => _views.FirstOrDefault(v => v.Editor == Editor);
 
     private JsonObject TestState()

@@ -170,9 +170,13 @@ public sealed partial class MainWindow
             return;
         }
 
+        NewDocumentCreatedAt = Environment.TickCount64;
         Vm.NewDocument(length, pattern);
         UpdateTitle();
     }
+
+    /// <summary>「サイズを指定して新規作成」で文書を作り始めた時刻 (Environment.TickCount64。ダイアログが閉じた後。テストが作成の時間を計る)。</summary>
+    internal long NewDocumentCreatedAt { get; private set; }
 
     private static void MarkInvalid(TextBox box, bool invalid)
     {
