@@ -30,6 +30,17 @@ public sealed class CommandLineTests
         Assert.Empty(CommandLine.ParseString(string.Empty).Files);
         Assert.Empty(CommandLine.Parse([]).Files);
     }
+
+    [Fact]
+    public void UnregisterIsAFlagAndNotAFile()
+    {
+        // HexEditor.exe --unregister (08 の AUTO-36 の 9)。
+        CommandLine c = CommandLine.Parse(["--unregister", "--test-profile", @"C:\p"]);
+        Assert.True(c.Unregister);
+        Assert.Empty(c.Files);
+        Assert.Equal(@"C:\p", c.TestProfile);
+        Assert.False(CommandLine.Parse(["a.bin"]).Unregister);
+    }
 }
 
 /// <summary>起動時のエラーの記録 (PKG-11 の「エラー」)。</summary>

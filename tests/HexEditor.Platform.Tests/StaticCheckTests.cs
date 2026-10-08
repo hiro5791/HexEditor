@@ -88,6 +88,9 @@ public sealed partial class StaticCheckTests
     {
         string text = File.ReadAllText(RepoFile("build/portable/README.txt"));
         Assert.Contains("hexed --unregister", text);
+
+        // フェーズ 1 から HexEditor.exe も --unregister を受け付ける (hexed.exe はフェーズ 3。08 の AUTO-36 の 9)。
+        Assert.Contains("HexEditor.exe\" --unregister", text);
         Assert.Contains("hexed.exe", text);
         Assert.Contains("PATH", text);
         Assert.Contains("DataDirectory=", text);

@@ -366,7 +366,7 @@ if ($TestZip) {
         Assert-True (Test-Path -LiteralPath $menuKey) "$menuKey does not exist after registering"
         $c = Start-TestApp -Exe (Join-Path $app 'HexEditor.exe')
         try { [void](Send-TestCommand $c 'shell' @{ action = 'unregister' }) } finally { Stop-TestApp $c }
-        Add-TestNote 'TC-UI-54-02: the button of the settings screen (Explorer integration, UI-22) is pressed through the test command until the settings screen exists.'
+        Add-TestNote 'TC-UI-54-02: the Register button of the settings screen (Explorer integration, one row per item) calls the same ShellIntegration.Register as the test command shell/register, which is used here (no clicks on the real desktop).'
     }
 
     Invoke-TestCase 'TC-UI-54-03' 'moved portable folder: update the registration' {

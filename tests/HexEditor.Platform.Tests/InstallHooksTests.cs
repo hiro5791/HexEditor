@@ -155,6 +155,67 @@ public sealed class InstallHooksTests : IDisposable
 
     [Fact]
     [Trait(TC, "TC-PKG-08-02")]
+    public void BeforeUninstallClearsTheJumpListAndTheToastRegistration()
+    {
+        int jumpList = 0, toast = 0;
+        var hooks = new InstallHooks(_registry, DataRoot, Exe, () => _notified++, notifyEnvironmentChanged: () => _environmentNotified++,
+            clearJumpList: () => jumpList++, unregisterToast: () => toast++);
+        hooks.AfterInstall("1.0.0");
+        Assert.Equal((0, 0), (jumpList, toast));
+        hooks.BeforeUninstall("1.0.0");
+        Assert.Equal((1, 1), (jumpList, toast));
+        string log = File.ReadAllText(hooks.LogPath);
+        Assert.Contains("jumpList: removed.", log);
+        Assert.Contains("toast: removed.", log);
+    }
+
+    [Fact]
+    public void FailingToastUnregistrationIsLoggedAndTheRestContinues()
+    {
+        _registry.SeedString(UserPath.EnvironmentKey, UserPath.ValueName, UserPathBefore, expandable: true);
+        int jumpList = 0;
+        var hooks = new InstallHooks(_registry, DataRoot, Exe, () => _notified++, notifyEnvironmentChanged: () => _environmentNotified++,
+            clearJumpList: () => jumpList++, unregisterToast: () => throw new System.Runtime.InteropServices.COMException("toast"));
+        hooks.AfterInstall("1.0.0");
+        hooks.BeforeUninstall("1.0.0");
+        Assert.Equal(1, jumpList);
+        Assert.False(_registry.KeyExists(ShellRegistration.ContextMenuKey));
+        Assert.Equal(UserPathBefore, _registry.GetValue(UserPath.EnvironmentKey, UserPath.ValueName));
+        Assert.Contains("toast failed: COMException", File.ReadAllText(hooks.LogPath));
+    }
+
+    [Fact]
+    public void UnregisterCommandRemovesEverythingButKeepsTheData()
+    {
+        // HexEditor.exe --unregister (インストーラ版。08 の AUTO-36 の 9): アンインストール前のフックと同じ解除で、データフォルダは消さない。
+        _registry.SeedString(UserPath.EnvironmentKey, UserPath.ValueName, UserPathBefore, expandable: true);
+        int jumpList = 0, toast = 0;
+        var hooks = new InstallHooks(_registry, DataRoot, Exe, () => _notified++, notifyEnvironmentChanged: () => _environmentNotified++,
+            clearJumpList: () => jumpList++, unregisterToast: () => toast++);
+        hooks.AfterInstall("1.0.0");
+        File.WriteAllText(Path.Combine(DataRoot, "settings.json"), "{\"uninstall.removeUserData\": true}");
+
+        UnregisterResult result = Unregistration.Run(Distribution.Installer, () => [], hooks.Unregister);
+        Assert.Empty(result.Failures);
+        Assert.Equal(0, result.ExitCode);
+        Assert.All(ShellRegistration.Entries, e => Assert.All(e.OwnedKeys, k => Assert.False(_registry.KeyExists(k), k)));
+        Assert.Equal(UserPathBefore, _registry.GetValue(UserPath.EnvironmentKey, UserPath.ValueName));
+        Assert.Equal((1, 1), (jumpList, toast));
+        Assert.True(File.Exists(Path.Combine(DataRoot, "settings.json")));
+        Assert.Contains("unregister --unregister", File.ReadAllText(hooks.LogPath));
+    }
+
+    [Fact]
+    public void UnregisterCommandReportsRegistryFailures()
+    {
+        Hooks().AfterInstall("1.0.0");
+        _registry.FailDeletes = true;
+        IReadOnlyList<string> failures = Hooks().Unregister();
+        Assert.Contains(failures, f => f.StartsWith(ShellRegistration.ContextMenuId + ": ", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    [Trait(TC, "TC-PKG-08-02")]
     public void BeforeUninstallLeavesAPathWithoutTheFolderUnchanged()
     {
         _registry.SeedString(UserPath.EnvironmentKey, UserPath.ValueName, UserPathBefore, expandable: true);

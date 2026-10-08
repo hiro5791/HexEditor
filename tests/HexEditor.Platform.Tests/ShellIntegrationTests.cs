@@ -228,4 +228,137 @@ public sealed class ShellIntegrationTests
         // ポータブル版以外では使えない。
         Assert.Equal(["unsupported"], Shell(Distribution.Installer, InstallerExe).UnregisterFromThisPc(() => { }, () => { }, Path.GetTempPath()));
     }
+
+    // ---- 設定画面の項目ごとの登録・解除 (UI-54 の仕様 5、UI-56) ----
+
+    [Fact]
+    public void Items_report_each_entry_separately_and_the_buttons_act_on_one_entry()
+    {
+        ShellIntegration shell = Shell(Distribution.Portable, PortableExe);
+        Assert.All(shell.Items(), i => Assert.False(i.Registered));
+
+        // 右クリックメニューだけを登録する: 関連付けは登録しない。
+        Assert.Empty(shell.Register(new HashSet<string> { ShellRegistration.ContextMenuId }));
+        Assert.True(_registry.KeyExists(ShellRegistration.ContextMenuKey));
+        Assert.False(_registry.KeyExists(@"Software\Classes\HexEditor.Project"));
+        ShellItemState menu = shell.Items().Single(i => i.Id == ShellRegistration.ContextMenuId);
+        Assert.True(menu.Ours);
+        Assert.False(shell.Items().Single(i => i.Id == ShellRegistration.FileAssociationsId).Registered);
+
+        // 関連付けを登録してから右クリックメニューだけを解除する: 関連付けは残る。
+        Assert.Empty(shell.Register(new HashSet<string> { ShellRegistration.FileAssociationsId }));
+        Assert.Empty(shell.Unregister(new HashSet<string> { ShellRegistration.ContextMenuId }));
+        Assert.False(_registry.KeyExists(ShellRegistration.ContextMenuKey));
+        Assert.True(shell.Items().Single(i => i.Id == ShellRegistration.FileAssociationsId).Ours);
+    }
+
+    [Fact]
+    public void Moved_portable_folder_updates_only_the_entries_that_were_registered()
+    {
+        Shell(Distribution.Portable, PortableExe).Register(new HashSet<string> { ShellRegistration.ContextMenuId });
+        ShellIntegration moved = Shell(Distribution.Portable, MovedExe);
+
+        // 古い場所を指すのは右クリックメニューだけ。「更新する」はその項目だけを登録し直す (関連付けを新しく登録しない)。
+        IReadOnlySet<string> stale = moved.StaleItems();
+        Assert.Equal([ShellRegistration.ContextMenuId], stale);
+        Assert.Empty(moved.Register(stale));
+        Assert.Equal($"\"{MovedExe}\" \"%1\"", _registry.GetValue(ShellRegistration.ContextMenuKey + @"\command", null));
+        Assert.False(_registry.KeyExists(@"Software\Classes\HexEditor.Project"));
+        Assert.Empty(moved.StaleItems());
+    }
+
+    [Fact]
+    public void Portable_unregister_keeps_the_installer_registration()
+    {
+        Shell(Distribution.Installer, InstallerExe).Register();
+        ShellIntegration portable = Shell(Distribution.Portable, PortableExe);
+        ShellItemState menu = portable.Items().Single(i => i.Id == ShellRegistration.ContextMenuId);
+        Assert.True(menu.OtherDistribution);
+        Assert.False(menu.Stale);
+
+        // ポータブル版の「登録を解除する」は、インストーラ版の exe を指す登録を消さない (「この PC から登録を解除」と同じ)。
+        Assert.Empty(portable.Unregister());
+        Assert.True(_registry.KeyExists(ShellRegistration.ContextMenuKey));
+        Assert.Equal($"\"{InstallerExe}\" \"%1\"", _registry.GetValue(ShellRegistration.ContextMenuKey + @"\command", null));
+        Assert.True(_registry.KeyExists(@"Software\Classes\HexEditor.Project"));
+    }
+
+    [Fact]
+    public void Msix_shows_registrations_of_another_distribution_without_changing_them()
+    {
+        Assert.False(Shell(Distribution.Msix, PortableExe).State().OtherDistributionRegistered);
+        Shell(Distribution.Installer, InstallerExe).Register();
+        IReadOnlyDictionary<string, string> before = _registry.Snapshot();
+        ShellIntegrationState msix = Shell(Distribution.Msix, PortableExe).State();
+        Assert.False(msix.Supported);
+        Assert.True(msix.OtherDistributionRegistered);
+        Assert.Equal(InstallerExe, msix.RegisteredExe);
+        Assert.Empty(Shell(Distribution.Msix, PortableExe).Items());
+        Assert.Equal(before.OrderBy(p => p.Key), _registry.Snapshot().OrderBy(p => p.Key));
+    }
+
+    [Theory]
+    [InlineData(new[] { ".bin", ".dat", ".img", ".rom", ".dmp", ".raw", ".iso" }, "")]
+    [InlineData(new[] { ".iso", ".rom", ".dat", ".bin", ".img", ".raw", ".dmp" }, "")]
+    [InlineData(new[] { ".bin", ".hex" }, ".bin;.hex")]
+    [InlineData(new string[0], ";")]
+    public void Checked_extensions_become_the_setting_value(string[] chosen, string expected)
+    {
+        string value = ShellRegistration.FormatExtensions(chosen);
+        Assert.Equal(expected, value);
+
+        // 読み直すと同じ一覧 (何も選ばなければ候補なし。空は既定の 7 つ)。
+        IReadOnlyList<string> parsed = ShellRegistration.ParseExtensions(value);
+        Assert.Equal(chosen.Order(), parsed.Order());
+    }
+
+    [Fact]
+    public void Registering_with_no_extensions_adds_no_open_with_entries()
+    {
+        var context = new ShellRegistrationContext(PortableExe, _labels, ShellRegistration.ParseExtensions(";"));
+        ShellRegistration.Register(_registry, context, new HashSet<string>(), new HashSet<string> { ShellRegistration.FileAssociationsId });
+        Assert.False(_registry.KeyExists(@"Software\Classes\.bin"));
+        Assert.True(_registry.KeyExists(@"Software\Classes\.hexproj"));
+    }
+
+    // ---- HexEditor.exe --unregister (08 の AUTO-36 の 9、10 の PKG-09) ----
+
+    [Fact]
+    public void Unregister_command_removes_the_portable_registration_and_exits_with_0()
+    {
+        using var temp = new TempFolder();
+        ShellIntegration shell = Shell(Distribution.Portable, PortableExe);
+        shell.Register();
+        int jumpList = 0, toast = 0;
+        UnregisterResult result = Unregistration.Run(Distribution.Portable,
+            () => shell.UnregisterFromThisPc(() => jumpList++, () => toast++, temp.Sub("HexEditor-1")), () => throw new InvalidOperationException());
+        Assert.True(result.Supported);
+        Assert.Equal(0, result.ExitCode);
+        Assert.DoesNotContain(_registry.Keys, k => k.Contains("HexEditor", StringComparison.OrdinalIgnoreCase));
+        Assert.Equal((1, 1), (jumpList, toast));
+    }
+
+    [Fact]
+    public void Unregister_command_exits_with_3_when_something_could_not_be_removed()
+    {
+        ShellIntegration shell = Shell(Distribution.Portable, PortableExe);
+        shell.Register();
+        UnregisterResult result = Unregistration.Run(Distribution.Portable,
+            () => shell.UnregisterFromThisPc(() => { }, () => throw new System.Runtime.InteropServices.COMException("toast"), Path.GetTempPath() + Guid.NewGuid().ToString("N")),
+            () => []);
+        Assert.Equal(["toast: COMException"], result.Failures);
+        Assert.Equal(3, result.ExitCode);
+    }
+
+    [Theory]
+    [InlineData(Distribution.Msix)]
+    [InlineData(Distribution.Development)]
+    public void Unregister_command_does_nothing_for_msix_and_development(Distribution distribution)
+    {
+        bool called = false;
+        UnregisterResult result = Unregistration.Run(distribution, () => { called = true; return []; }, () => { called = true; return []; });
+        Assert.False(result.Supported);
+        Assert.False(called);
+        Assert.Equal(0, result.ExitCode);
+    }
 }

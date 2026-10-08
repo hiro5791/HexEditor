@@ -38,8 +38,16 @@ public sealed class FakeRegistry : IUserRegistry
 
     public bool KeyExists(string key) => _keys.Keys.Any(k => k.Equals(key, StringComparison.OrdinalIgnoreCase) || k.StartsWith(key + "\\", StringComparison.OrdinalIgnoreCase));
 
+    /// <summary>キーの削除を失敗させる (グループ ポリシーで HKCU の変更が禁止されている場合の代わり)。</summary>
+    public bool FailDeletes { get; set; }
+
     public void DeleteKeyTree(string key)
     {
+        if (FailDeletes)
+        {
+            throw new UnauthorizedAccessException();
+        }
+
         foreach (string k in _keys.Keys.Where(k => k.Equals(key, StringComparison.OrdinalIgnoreCase) || k.StartsWith(key + "\\", StringComparison.OrdinalIgnoreCase)).ToList())
         {
             _keys.Remove(k);
