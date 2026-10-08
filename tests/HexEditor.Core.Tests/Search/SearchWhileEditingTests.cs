@@ -17,10 +17,14 @@ public sealed class SearchWhileEditingTests
     public async Task EditsDuringSearchDoNotChangeTheResults()
     {
         // 前提: 遅いデータソース (読み込み 1 MiB ごとに 5 ms。検索は 4 MiB のチャンクで読むので 1 回の読み込みに 20 ms) で TD-MARKERS-1G を開く。
+        // 混んだ CI ではテストのスレッドが数秒待たされることがあるため、遅延だけに頼らず、
+        // 編集が終わるまでは 25% より後ろを読ませない (検索が編集より先に終わらないことを保証する)。
         var slow = new FaultyByteSource(FileByteSource.Open(TestDataCatalog.Get("TD-MARKERS-1G")))
         {
             Delay = TimeSpan.FromMilliseconds(5 * SearchEngine.DefaultChunkSize / MiB),
+            HoldFromOffset = TestDataCatalog.GiB / 4,
         };
+        slow.Hold.Reset();
         using var doc = new Document(slow, Options());
         var center = new OperationCenter();
 
@@ -34,15 +38,22 @@ public sealed class SearchWhileEditingTests
         });
 
         // 手順 2: 進捗が 10% を超えたら、オフセット 0 に 1 MiB を挿入し、元の 0x20000000 の目印 (挿入で 1 MiB 後ろにずれた) を 00 で上書きする。
-        while (operation is null || (operation.Fraction ?? 0) <= 0.1)
+        try
         {
-            Assert.False(search.IsCompleted, "検索が先に終わりました (遅いデータソースの遅延が足りません)。");
-            await Task.Delay(1);
-        }
+            while (operation is null || (operation.Fraction ?? 0) <= 0.1)
+            {
+                Assert.False(search.IsCompleted, "検索が先に終わりました (遅いデータソースの遅延が足りません)。");
+                await Task.Delay(1);
+            }
 
-        doc.Insert(0, new byte[MiB]);
-        doc.Overwrite(0x20000000 + MiB, new byte[TestDataCatalog.MarkerLength]);
-        Assert.False(search.IsCompleted, "編集の前に検索が終わりました。");
+            doc.Insert(0, new byte[MiB]);
+            doc.Overwrite(0x20000000 + MiB, new byte[TestDataCatalog.MarkerLength]);
+            Assert.False(search.IsCompleted, "編集の前に検索が終わりました。");
+        }
+        finally
+        {
+            slow.Hold.Set();
+        }
 
         // 手順 3: 検索の完了を待つ。
         SearchResults results = await search;

@@ -125,6 +125,15 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
     /// <summary>この位置より前だけを読む要求には遅延を入れない (先頭の表示を待たずに済ませるため)。</summary>
     public long DelayFromOffset { get; set; }
 
+    /// <summary>
+    /// <see cref="HoldFromOffset"/> より後ろを読む要求は、<see cref="Hold"/> が開くまで待たせる
+    /// (処理の途中の状態をタイミングに頼らずに作るため)。既定は開いている。
+    /// </summary>
+    public ManualResetEventSlim Hold { get; } = new(initialState: true);
+
+    /// <summary><see cref="Hold"/> で待たせる範囲の始まり。</summary>
+    public long HoldFromOffset { get; set; }
+
     public override string DisplayName => Inner.DisplayName;
 
     public override string Identity => Inner.Identity;
@@ -179,6 +188,7 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
     public override ReadResult Read(long offset, Span<byte> buffer)
     {
         Interlocked.Exchange(ref _lastReadStarted, System.Diagnostics.Stopwatch.GetTimestamp());
+        WaitForHold(offset, buffer.Length, CancellationToken.None);
         if (Delays(offset, buffer.Length))
         {
             Thread.Sleep(Delay);
@@ -190,6 +200,7 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
     public override async ValueTask<ReadResult> ReadAsync(long offset, Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
         Interlocked.Exchange(ref _lastReadStarted, System.Diagnostics.Stopwatch.GetTimestamp());
+        WaitForHold(offset, buffer.Length, cancellationToken);
         if (Delays(offset, buffer.Length))
         {
             await Task.Delay(Delay, cancellationToken).ConfigureAwait(false);
@@ -197,6 +208,14 @@ public sealed class FaultyByteSource(IByteSource inner) : ByteSourceBase
 
         cancellationToken.ThrowIfCancellationRequested();
         return ReadCore(offset, buffer.Span);
+    }
+
+    private void WaitForHold(long offset, int length, CancellationToken cancellationToken)
+    {
+        if (offset + length > HoldFromOffset)
+        {
+            Hold.Wait(cancellationToken);
+        }
     }
 
     private bool Delays(long offset, int length) => Delay > TimeSpan.Zero && offset + length > DelayFromOffset;
