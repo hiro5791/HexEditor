@@ -2387,8 +2387,8 @@
   <data name="Menu_View_HexDigitSeparator.AccessKey" xml:space="preserve"><value>G</value></data>
   <data name="Menu_View_AlignRows.Text" xml:space="preserve"><value>行の先頭をアドレスの区切りにそろえる(L)</value></data>
   <data name="Menu_View_AlignRows.AccessKey" xml:space="preserve"><value>L</value></data>
-  <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>マルチバイト文字の続きに記号を表示(N)</value></data>
-  <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>マルチバイト文字の続きに記号を表示(C)</value></data>
+  <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>C</value></data>
   <data name="Cmd_go_nextNibble" xml:space="preserve"><value>移動: 次のニブルへ</value></data>
   <data name="CmdAlias_go_nextNibble" xml:space="preserve"><value>にぶる かーそる</value></data>
   <data name="Cmd_go_previousNibble" xml:space="preserve"><value>移動: 前のニブルへ</value></data>

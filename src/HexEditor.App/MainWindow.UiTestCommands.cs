@@ -248,7 +248,7 @@ public sealed partial class MainWindow
             switch (item)
             {
                 case MenuFlyoutSubItem sub:
-                    items.Add(new JsonObject { ["path"] = path + "/" + sub.Text, ["id"] = AutomationProperties.GetAutomationId(sub), ["text"] = sub.Text, ["accessKey"] = sub.AccessKey });
+                    items.Add(new JsonObject { ["path"] = path + "/" + sub.Text, ["parent"] = path, ["id"] = AutomationProperties.GetAutomationId(sub), ["text"] = sub.Text, ["accessKey"] = sub.AccessKey });
                     foreach (MenuFlyoutItemBase child in sub.Items)
                     {
                         Add(child, path + "/" + sub.Text);
@@ -258,7 +258,7 @@ public sealed partial class MainWindow
                 case MenuFlyoutItem flyoutItem:
                     items.Add(new JsonObject
                     {
-                        ["path"] = path + "/" + flyoutItem.Text,
+                        ["path"] = path + "/" + flyoutItem.Text, ["parent"] = path,
                         ["id"] = AutomationProperties.GetAutomationId(flyoutItem),
                         ["text"] = flyoutItem.Text,
                         ["accessKey"] = flyoutItem.AccessKey,

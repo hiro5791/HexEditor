@@ -2388,7 +2388,7 @@ Details were written to:
   <data name="Menu_View_AlignRows.Text" xml:space="preserve"><value>Align rows to the address</value></data>
   <data name="Menu_View_AlignRows.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_View_Continuation.Text" xml:space="preserve"><value>Show continuation marks in multibyte characters</value></data>
-  <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_Continuation.AccessKey" xml:space="preserve"><value>C</value></data>
   <data name="Cmd_go_nextNibble" xml:space="preserve"><value>Go: Next nibble</value></data>
   <data name="CmdAlias_go_nextNibble" xml:space="preserve"><value>nibble cursor</value></data>
   <data name="Cmd_go_previousNibble" xml:space="preserve"><value>Go: Previous nibble</value></data>
