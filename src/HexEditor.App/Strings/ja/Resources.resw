@@ -383,6 +383,10 @@
   <data name="Hash_Target_Custom.Content" xml:space="preserve"><value>範囲を指定</value></data>
   <data name="Hash_CustomStart.Header" xml:space="preserve"><value>開始</value></data>
   <data name="Hash_CustomLength.Header" xml:space="preserve"><value>長さ (空欄は末尾まで)</value></data>
+  <data name="Hash_CustomEnd_Header" xml:space="preserve"><value>終了 (このバイトを含む。空欄は末尾まで)</value></data>
+  <data name="Hash_CustomEndKind.Header" xml:space="preserve"><value>2 つ目の欄</value></data>
+  <data name="Hash_CustomEndKind_Length.Content" xml:space="preserve"><value>長さ</value></data>
+  <data name="Hash_CustomEndKind_End.Content" xml:space="preserve"><value>終了 (このバイトを含む)</value></data>
   <data name="Hash_Range" xml:space="preserve"><value>{0}〜{1} ({2} バイト)</value></data>
   <data name="Hash_RangeEmpty" xml:space="preserve"><value>{0} (0 バイト)</value></data>
   <data name="Hash_RangeInvalid" xml:space="preserve"><value>範囲がドキュメントの外にあります。</value></data>
@@ -927,9 +931,19 @@
   <data name="CmdAlias_view_panel_hash" xml:space="preserve"><value>はっしゅぱねるのひょうじきりかえ</value></data>
   <data name="Cmd_analysis_hash" xml:space="preserve"><value>ハッシュを計算</value></data>
   <data name="CmdAlias_analysis_hash" xml:space="preserve"><value>はっしゅをけいさん ちぇっくさむ</value></data>
+  <data name="Cmd_analysis_hash_verify" xml:space="preserve"><value>ハッシュ値を照合</value></data>
+  <data name="CmdAlias_analysis_hash_verify" xml:space="preserve"><value>はっしゅちをしょうごう きたいち ちぇっくさむ</value></data>
+  <data name="Cmd_analysis_hash_verifyFile" xml:space="preserve"><value>チェックサムファイルで検証</value></data>
+  <data name="CmdAlias_analysis_hash_verifyFile" xml:space="preserve"><value>ちぇっくさむふぁいるでけんしょう</value></data>
+  <data name="Cmd_analysis_hash_copy" xml:space="preserve"><value>ハッシュ値をコピー</value></data>
+  <data name="CmdAlias_analysis_hash_copy" xml:space="preserve"><value>はっしゅちをこぴー ちぇっくさむ</value></data>
+  <data name="Cmd_inspector_toggleEndian" xml:space="preserve"><value>エンディアンの切り替え</value></data>
+  <data name="CmdAlias_inspector_toggleEndian" xml:space="preserve"><value>えんでぃあんのきりかえ ばいとじゅん</value></data>
+  <data name="Hash_NoResults" xml:space="preserve"><value>ハッシュの計算結果がありません</value></data>
   <data name="Cmd_window_restoreSession" xml:space="preserve"><value>前回のセッションを復元</value></data>
   <data name="CmdAlias_window_restoreSession" xml:space="preserve"><value>ぜんかいのせっしょんをふくげん</value></data>
   <data name="CmdCategory_analysis" xml:space="preserve"><value>解析</value></data>
+  <data name="CmdCategory_inspector" xml:space="preserve"><value>インスペクタ</value></data>
   <data name="CmdCategory_window" xml:space="preserve"><value>ウィンドウ</value></data>
   <data name="Command_NoFile" xml:space="preserve"><value>ファイルの文書ではありません</value></data>
   <data name="Command_NoClosedTabs" xml:space="preserve"><value>閉じたタブがありません</value></data>
@@ -1099,6 +1113,7 @@
   <data name="Bookmarks_Filter.PlaceholderText" xml:space="preserve"><value>名前・コメントで絞り込み</value></data>
   <data name="Bookmarks_Filter.AutomationProperties.Name" xml:space="preserve"><value>ブックマークの絞り込み</value></data>
   <data name="Bookmarks_ColorNumber" xml:space="preserve"><value>色 {0}</value></data>
+  <data name="Bookmarks_ToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Bookmarks_RowName" xml:space="preserve"><value>{0}、{1}、長さ {2}</value></data>
   <data name="Bookmarks_NumberName" xml:space="preserve"><value>番号 {0}</value></data>
   <data name="Bookmarks_RangeDeleted" xml:space="preserve"><value>範囲が削除されました</value></data>
@@ -1194,6 +1209,16 @@
   <data name="SetDesc_inspector_digitGrouping" xml:space="preserve"><value>10 進の値を桁区切りで表示する (例: 12,345)。</value></data>
   <data name="Set_inspector_highlightTarget" xml:space="preserve"><value>インスペクタの対象を強調する</value></data>
   <data name="SetDesc_inspector_highlightTarget" xml:space="preserve"><value>選んだインスペクタの行のバイトを Hex ビューで強調する。</value></data>
+  <data name="Set_bookmarks_defaultColor" xml:space="preserve"><value>ブックマークの既定の色</value></data>
+  <data name="SetDesc_bookmarks_defaultColor" xml:space="preserve"><value>Ctrl+F2 や番号付きブックマークで付けるブックマークの色。</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_1" xml:space="preserve"><value>色 1</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_2" xml:space="preserve"><value>色 2</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_3" xml:space="preserve"><value>色 3</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_4" xml:space="preserve"><value>色 4</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_5" xml:space="preserve"><value>色 5</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_6" xml:space="preserve"><value>色 6</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_7" xml:space="preserve"><value>色 7</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_8" xml:space="preserve"><value>色 8</value></data>
   <data name="Set_inspector_useCursorWithSelection" xml:space="preserve"><value>インスペクタ: 選択範囲があってもカーソル位置を使う</value></data>
   <data name="SetDesc_inspector_useCursorWithSelection" xml:space="preserve"><value>選択範囲の先頭ではなく、カーソル位置のバイトを解釈する。</value></data>
   <data name="Set_inspector_rows" xml:space="preserve"><value>インスペクタの行</value></data>

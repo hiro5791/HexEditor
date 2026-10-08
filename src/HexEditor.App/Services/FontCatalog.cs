@@ -93,6 +93,64 @@ public static class FontCatalog
         return IsInstalled(PreferredFont) ? PreferredFont : FallbackFont;
     }
 
+    // ---- 文字を表示できるか (INSP-09 の仕様 3) ----
+
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<int, bool> s_displayable = new();
+
+    /// <summary>呼び出したスレッドで作ったフォント (DirectWrite の COM オブジェクトはスレッドをまたいで使わない)。</summary>
+    [ThreadStatic]
+    private static List<IDWriteFont1>? t_fonts;
+
+    /// <summary>
+    /// 文字を表示できるか: システムのフォントのどれかにその文字があるか (XAML の代替フォントで表示できる)。結果はコードポイントごとに覚える。
+    /// フォントを調べられない環境では表示できるとみなす。
+    /// </summary>
+    public static bool CanDisplay(int codePoint)
+    {
+        if (s_displayable.TryGetValue(codePoint, out bool known))
+        {
+            return known;
+        }
+
+        bool result = true;
+        try
+        {
+            t_fonts ??= RegularFonts();
+            if (t_fonts.Count > 0)
+            {
+                result = t_fonts.Any(f => f.HasCharacter((uint)codePoint, out bool exists) >= 0 && exists);
+            }
+        }
+        catch (Exception ex) when (ex is COMException or InvalidCastException or EntryPointNotFoundException or DllNotFoundException)
+        {
+            AppLog.Warning($"FontCatalog: 文字の有無を調べられません ({ex.Message})");
+        }
+
+        s_displayable[codePoint] = result;
+        return result;
+    }
+
+    /// <summary>各ファミリーの標準の太さ・幅・形のフォント。</summary>
+    private static List<IDWriteFont1> RegularFonts()
+    {
+        Guid iid = typeof(IDWriteFactory).GUID;
+        Marshal.ThrowExceptionForHR(DWriteCreateFactory(0, ref iid, out object factoryObject));
+        var factory = (IDWriteFactory)factoryObject;
+        Marshal.ThrowExceptionForHR(factory.GetSystemFontCollection(out IDWriteFontCollection collection, false));
+        uint count = collection.GetFontFamilyCount();
+        var result = new List<IDWriteFont1>((int)count);
+        for (uint i = 0; i < count; i++)
+        {
+            if (collection.GetFontFamily(i, out IDWriteFontFamily family) >= 0
+                && family.GetFirstMatchingFont(400, 5, 0, out IDWriteFont font) >= 0 && font is IDWriteFont1 font1)
+            {
+                result.Add(font1);
+            }
+        }
+
+        return result;
+    }
+
     private static List<FontFamilyInfo> Enumerate()
     {
         Guid iid = typeof(IDWriteFactory).GUID;
@@ -239,7 +297,8 @@ public static class FontCatalog
 
         void GetMetrics();
 
-        void HasCharacter();
+        [PreserveSig]
+        int HasCharacter(uint unicodeValue, [MarshalAs(UnmanagedType.Bool)] out bool exists);
 
         void CreateFontFace();
 

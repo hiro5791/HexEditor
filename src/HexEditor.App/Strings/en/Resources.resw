@@ -383,6 +383,10 @@ Details were written to:
   <data name="Hash_Target_Custom.Content" xml:space="preserve"><value>Specify range</value></data>
   <data name="Hash_CustomStart.Header" xml:space="preserve"><value>Start</value></data>
   <data name="Hash_CustomLength.Header" xml:space="preserve"><value>Length (empty: to the end)</value></data>
+  <data name="Hash_CustomEnd_Header" xml:space="preserve"><value>End, inclusive (empty: to the end)</value></data>
+  <data name="Hash_CustomEndKind.Header" xml:space="preserve"><value>Second field</value></data>
+  <data name="Hash_CustomEndKind_Length.Content" xml:space="preserve"><value>Length</value></data>
+  <data name="Hash_CustomEndKind_End.Content" xml:space="preserve"><value>End (inclusive)</value></data>
   <data name="Hash_Range" xml:space="preserve"><value>{0}–{1} ({2} bytes)</value></data>
   <data name="Hash_RangeEmpty" xml:space="preserve"><value>{0} (0 bytes)</value></data>
   <data name="Hash_RangeInvalid" xml:space="preserve"><value>The range is outside the document.</value></data>
@@ -927,9 +931,19 @@ Details were written to:
   <data name="CmdAlias_view_panel_hash" xml:space="preserve"><value>checksum digest</value></data>
   <data name="Cmd_analysis_hash" xml:space="preserve"><value>Calculate hash</value></data>
   <data name="CmdAlias_analysis_hash" xml:space="preserve"><value>checksum digest md5 sha crc</value></data>
+  <data name="Cmd_analysis_hash_verify" xml:space="preserve"><value>Verify hash value</value></data>
+  <data name="CmdAlias_analysis_hash_verify" xml:space="preserve"><value>compare expected checksum digest</value></data>
+  <data name="Cmd_analysis_hash_verifyFile" xml:space="preserve"><value>Verify with checksum file</value></data>
+  <data name="CmdAlias_analysis_hash_verifyFile" xml:space="preserve"><value>sha256sum md5sum sfv</value></data>
+  <data name="Cmd_analysis_hash_copy" xml:space="preserve"><value>Copy hash value</value></data>
+  <data name="CmdAlias_analysis_hash_copy" xml:space="preserve"><value>copy checksum digest</value></data>
+  <data name="Cmd_inspector_toggleEndian" xml:space="preserve"><value>Toggle endianness</value></data>
+  <data name="CmdAlias_inspector_toggleEndian" xml:space="preserve"><value>little big endian byte order LE BE</value></data>
+  <data name="Hash_NoResults" xml:space="preserve"><value>There are no hash results yet</value></data>
   <data name="Cmd_window_restoreSession" xml:space="preserve"><value>Restore previous session</value></data>
   <data name="CmdAlias_window_restoreSession" xml:space="preserve"><value>reopen tabs last time</value></data>
   <data name="CmdCategory_analysis" xml:space="preserve"><value>Analysis</value></data>
+  <data name="CmdCategory_inspector" xml:space="preserve"><value>Inspector</value></data>
   <data name="CmdCategory_window" xml:space="preserve"><value>Window</value></data>
   <data name="Command_NoFile" xml:space="preserve"><value>The document is not a file</value></data>
   <data name="Command_NoClosedTabs" xml:space="preserve"><value>No closed tabs</value></data>
@@ -1099,6 +1113,7 @@ Details were written to:
   <data name="Bookmarks_Filter.PlaceholderText" xml:space="preserve"><value>Filter by name or comment</value></data>
   <data name="Bookmarks_Filter.AutomationProperties.Name" xml:space="preserve"><value>Filter bookmarks</value></data>
   <data name="Bookmarks_ColorNumber" xml:space="preserve"><value>Color {0}</value></data>
+  <data name="Bookmarks_ToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Bookmarks_RowName" xml:space="preserve"><value>{0}, {1}, length {2}</value></data>
   <data name="Bookmarks_NumberName" xml:space="preserve"><value>number {0}</value></data>
   <data name="Bookmarks_RangeDeleted" xml:space="preserve"><value>Range deleted</value></data>
@@ -1194,6 +1209,16 @@ Details were written to:
   <data name="SetDesc_inspector_digitGrouping" xml:space="preserve"><value>Separate the digits of decimal values into groups (for example 12,345).</value></data>
   <data name="Set_inspector_highlightTarget" xml:space="preserve"><value>Highlight the inspector target</value></data>
   <data name="SetDesc_inspector_highlightTarget" xml:space="preserve"><value>Highlight the bytes of the selected inspector row in the Hex view.</value></data>
+  <data name="Set_bookmarks_defaultColor" xml:space="preserve"><value>Default bookmark color</value></data>
+  <data name="SetDesc_bookmarks_defaultColor" xml:space="preserve"><value>Color of bookmarks added with Ctrl+F2 or a numbered bookmark.</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_1" xml:space="preserve"><value>Color 1</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_2" xml:space="preserve"><value>Color 2</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_3" xml:space="preserve"><value>Color 3</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_4" xml:space="preserve"><value>Color 4</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_5" xml:space="preserve"><value>Color 5</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_6" xml:space="preserve"><value>Color 6</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_7" xml:space="preserve"><value>Color 7</value></data>
+  <data name="SetOpt_bookmarks_defaultColor_8" xml:space="preserve"><value>Color 8</value></data>
   <data name="Set_inspector_useCursorWithSelection" xml:space="preserve"><value>Inspector: use the cursor when there is a selection</value></data>
   <data name="SetDesc_inspector_useCursorWithSelection" xml:space="preserve"><value>Interpret the bytes at the cursor instead of the start of the selection.</value></data>
   <data name="Set_inspector_rows" xml:space="preserve"><value>Inspector rows</value></data>

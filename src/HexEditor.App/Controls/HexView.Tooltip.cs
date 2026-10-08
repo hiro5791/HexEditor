@@ -73,7 +73,7 @@ public sealed partial class HexView
         }
 
         // 付加情報: ブックマーク名など (各最大 3 件、超えた分は「ほか N 件」)。
-        if (AnnotationNames?.Invoke(offset) is { Count: > 0 } names)
+        if ((AnnotationToolTips?.Invoke(offset) is { Count: > 0 } tips ? tips : AnnotationNames?.Invoke(offset)) is { Count: > 0 } names)
         {
             string shown = string.Join(Loc.Get("HexView_Announce_ListSeparator"), names.Take(MaxAnnotationsInToolTip));
             if (names.Count > MaxAnnotationsInToolTip)

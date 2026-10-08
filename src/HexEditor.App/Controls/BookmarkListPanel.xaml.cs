@@ -35,7 +35,14 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
         AutomationProperties.SetName(AllDocumentsButton, Loc.Get("Bookmarks_AllDocumentsName"));
         ToolTipService.SetToolTip(AllDocumentsButton, Loc.Get("Bookmarks_AllDocumentsName"));
         BuildHeader();
-        BookmarkColumnLayout.Instance.PropertyChanged += (_, _) => BuildHeader();
+        // 列の配置はウィンドウの一覧と共有する。パネルの中身は浮動パネルとの間を移るたびに作り直すので、表示している間だけ受ける。
+        Loaded += (_, _) =>
+        {
+            Vm.Layout.PropertyChanged -= Layout_PropertyChanged;
+            Vm.Layout.PropertyChanged += Layout_PropertyChanged;
+            BuildHeader();
+        };
+        Unloaded += (_, _) => Vm.Layout.PropertyChanged -= Layout_PropertyChanged;
 
         for (int i = 1; i <= BookmarkColor.PaletteSize; i++)
         {
@@ -262,10 +269,12 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
     /// <summary>右クリック (Shift+F10) した見出しの列 (列の移動の対象)。</summary>
     private BookmarkColumn? _menuColumn;
 
+    private void Layout_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => BuildHeader();
+
     /// <summary>見出しを列の配置に合わせて作り直す。</summary>
     private void BuildHeader()
     {
-        BookmarkColumnLayout layout = BookmarkColumnLayout.Instance;
+        BookmarkColumnLayout layout = Vm.Layout;
         Header.ColumnDefinitions.Clear();
         Header.Children.Clear();
         foreach (Microsoft.UI.Xaml.GridLength width in new[] { layout.Width0, layout.Width1, layout.Width2, layout.Width3, layout.Width4, layout.Width5, layout.Width6, layout.Width7 })

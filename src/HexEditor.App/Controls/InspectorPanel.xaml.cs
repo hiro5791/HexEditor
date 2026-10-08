@@ -59,9 +59,48 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         BaseChoice.SelectedIndex = (int)vm.IntegerBase;
         FloatChoice.SelectedIndex = (int)vm.FloatFormat;
         UpdateUtcToggle();
-        RowSettings.ViewModel = vm;
-        vm.Items.CollectionChanged += Items_CollectionChanged;
         EndianMenu.Opening += (_, _) => UpdateEndianMenu();
+
+        // 状態 (ウィンドウごとの view model) の通知は表示している間だけ受ける。パネルの中身は浮動パネルとの間を移るたびに作り直すので、
+        // 外したパネルが通知を受け続けない (残らない) ようにする。
+        Attach();
+        Loaded += (_, _) => Attach();
+        Unloaded += (_, _) => Detach();
+    }
+
+    private bool _attached;
+
+    private void Attach()
+    {
+        if (_attached)
+        {
+            return;
+        }
+
+        _attached = true;
+        RowSettings.ViewModel = Vm;
+        Vm.Items.CollectionChanged += Items_CollectionChanged;
+        foreach (InspectorItemViewModel item in Vm.Items)
+        {
+            item.PropertyChanged -= Item_PropertyChanged;
+            item.PropertyChanged += Item_PropertyChanged;
+        }
+    }
+
+    private void Detach()
+    {
+        if (!_attached)
+        {
+            return;
+        }
+
+        _attached = false;
+        RowSettings.ViewModel = null;
+        Vm.Items.CollectionChanged -= Items_CollectionChanged;
+        foreach (InspectorItemViewModel item in Vm.Items)
+        {
+            item.PropertyChanged -= Item_PropertyChanged;
+        }
     }
 
     public InspectorViewModel Vm { get; }
@@ -623,6 +662,9 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
 
     /// <summary>行の設定のフライアウトが開いているか。</summary>
     internal bool RowSettingsOpen => RowsFlyout.IsOpen;
+
+    /// <summary>行の設定のプリセットの欄で選んでいる項目の文字列 (選んでいなければ null。テスト用の状態の表示)。</summary>
+    internal string? RowSettingsPresetText => RowSettings.SelectedPresetText;
 
     /// <summary>
     /// 行の設定の一覧で、項目 (型の名前、またはグループの名前) を <paramref name="index"/> の位置へドラッグしたのと同じ処理 (テスト用)。

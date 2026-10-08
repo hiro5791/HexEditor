@@ -46,8 +46,8 @@ public sealed partial class BookmarkRowViewModel(Bookmark bookmark) : Observable
     /// <summary>ドキュメントの列 (「すべてのドキュメント」のとき。INSP-26 の仕様 8)。</summary>
     public string DocumentName { get; set; } = string.Empty;
 
-    /// <summary>列の配置 (表示・順序。INSP-26 の仕様 1)。</summary>
-    public BookmarkColumnLayout Layout => BookmarkColumnLayout.Instance;
+    /// <summary>列の配置 (表示・順序。INSP-26 の仕様 1)。一覧 (ウィンドウ) ごとに 1 つで、行を作るときに付ける。</summary>
+    public required BookmarkColumnLayout Layout { get; init; }
 
     /// <summary>読み上げ用の名前。</summary>
     public string AutomationName => Loc.Format("Bookmarks_RowName", Name, StartText, LengthText)
@@ -84,6 +84,9 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
     /// <summary>行の表示用の項目を作ったときに呼ぶ (色見本を付ける)。</summary>
     public Action<BookmarkRowViewModel>? Prepare { get; set; }
 
+    /// <summary>行に付ける列の配置 (一覧の持ち主が渡す)。</summary>
+    public required BookmarkColumnLayout Layout { get; init; }
+
     /// <summary>行の表示用の項目を作ったときに付けるドキュメントの名前 (「すべてのドキュメント」のとき)。</summary>
     public Func<Bookmark, string>? DocumentNameOf { get; set; }
 
@@ -103,7 +106,7 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
     {
         if (!_rows.TryGetValue(b, out BookmarkRowViewModel? row))
         {
-            row = new BookmarkRowViewModel(b) { DocumentName = DocumentNameOf?.Invoke(b) ?? string.Empty };
+            row = new BookmarkRowViewModel(b) { Layout = Layout, DocumentName = DocumentNameOf?.Invoke(b) ?? string.Empty };
             Prepare?.Invoke(row);
             _rows[b] = row;
         }
@@ -184,7 +187,18 @@ public sealed partial class BookmarkListViewModel : ObservableObject
     private readonly Dictionary<Bookmark, DocumentAnnotations> _owners = new(ReferenceEqualityComparer.Instance);
     private bool _lastAllDocuments;
 
-    public BookmarkRowList Rows { get; } = new();
+    /// <summary>
+    /// 列の配置。列の表示・順序はアプリ全体で共通 (<see cref="BookmarkColumns"/>) だが、ドキュメントの列 (「すべてのドキュメント」) は
+    /// ウィンドウごとなので、配置もウィンドウごとに持つ。ウィンドウを閉じたら <see cref="Dispose"/> でアプリ全体の通知から外す。
+    /// </summary>
+    public BookmarkColumnLayout Layout { get; } = new();
+
+    public BookmarkRowList Rows { get; }
+
+    public BookmarkListViewModel() => Rows = new BookmarkRowList { Layout = Layout };
+
+    /// <summary>ウィンドウを閉じた: アプリ全体の列の設定の通知から外す。</summary>
+    public void Dispose() => Layout.Dispose();
 
     public DocumentAnnotations? Annotations => _annotations;
 
@@ -201,7 +215,7 @@ public sealed partial class BookmarkListViewModel : ObservableObject
 
     partial void OnAllDocumentsChanged(bool value)
     {
-        BookmarkColumnLayout.Instance.ShowDocument = value;
+        Layout.ShowDocument = value;
         Rebuild();
     }
 

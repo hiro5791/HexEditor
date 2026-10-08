@@ -109,15 +109,28 @@ public sealed partial class MainWindow
                 AttachAnnotationsToSelected();
             }
         };
-        App.Settings.Changed += _ => DispatcherQueue.TryEnqueue(() =>
+        // 設定はアプリ全体のもの。ウィンドウを閉じたら外す (閉じたウィンドウのインスペクタを更新し続けないように)。
+        Action<IReadOnlyCollection<string>> settingsChanged = _ => DispatcherQueue.TryEnqueue(() =>
         {
+            if (_closingConfirmed)
+            {
+                return;
+            }
+
             _inspectorVm.ReloadSettings();
             InspectorView?.SyncOptions();
             SelectedView()?.RefreshHighlights();
         });
+        App.Settings.Changed += settingsChanged;
         BuildNumberedBookmarkMenus();
         Closed += (_, _) =>
         {
+            if (_closingConfirmed)
+            {
+                App.Settings.Changed -= settingsChanged;
+                _bookmarksVm.Dispose();
+            }
+
             SaveAnnotations(force: true);
 
             // 付随データの書き出し (別のスレッド) を待ってから終わる。
@@ -199,6 +212,13 @@ public sealed partial class MainWindow
             Commands.Register($"go.bookmark.set{n}", () => SetNumberedBookmark(number), NeedsEditor);
             Commands.Register($"go.bookmark.goto{n}", () => GoToNumberedBookmark(number), NeedsEditor);
         }
+
+        // インスペクタ: エンディアンの切り替え (INSP-02 の「呼び出し」)。インスペクタのエンディアンはドキュメントごと。
+        Commands.Register("inspector.toggleEndian", () =>
+        {
+            _inspectorVm.ToggleEndian();
+            InspectorView?.SyncOptions();
+        }, NeedsEditor);
 
         // コマンドパレットの「@」(UI-17 の仕様 2): 作業中の文書のブックマーク。
         PaletteBookmarks = doc => AnnotationsFor(doc).Bookmarks.All.Select(b => new PaletteBookmark(b.Name, b.Start));
@@ -448,6 +468,11 @@ public sealed partial class MainWindow
         view.AnnotationNames = at => DocumentOf(view) is { } d && _annotations.TryGetValue(d, out DocumentAnnotations? a)
             ? [.. a.Bookmarks.Overlapping(at, at + 1).Select(b => b.Name)]
             : [];
+
+        // ツールチップには名前とコメントの冒頭を出す (INSP-23 の仕様 8。Markdown の描画と範囲の表示は INSP-31 (フェーズ 2))。
+        view.AnnotationToolTips = at => DocumentOf(view) is { } d && _annotations.TryGetValue(d, out DocumentAnnotations? a)
+            ? [.. a.Bookmarks.Overlapping(at, at + 1).Select(BookmarkToolTip)]
+            : [];
         view.SetContextMenuExtension(menu =>
         {
             ExtendHexViewEditMenu(menu);
@@ -501,6 +526,26 @@ public sealed partial class MainWindow
                 b.Number > 0 ? b.Number.ToString(CultureInfo.InvariantCulture) : string.Empty,
                 AnnotationBrushes.Get("BookmarkMarkTextBrush", view, hc), "bookmark:" + b.Name);
         }
+    }
+
+    /// <summary>コメントの冒頭として出す文字数。</summary>
+    private const int CommentExcerptLength = 80;
+
+    /// <summary>ツールチップの 1 項目: 名前と、コメントの最初の空でない行の冒頭 (長ければ「…」で切る)。</summary>
+    internal static string BookmarkToolTip(Bookmark b)
+    {
+        string? line = b.Comment.Split(['\r', '\n']).Select(l => l.Trim()).FirstOrDefault(l => l.Length > 0);
+        if (line is null)
+        {
+            return b.Name;
+        }
+
+        if (line.Length > CommentExcerptLength)
+        {
+            line = line[..CommentExcerptLength].TrimEnd() + "…";
+        }
+
+        return Loc.Format("Bookmarks_ToolTip", b.Name, line);
     }
 
     private DocumentViewModel? DocumentOf(HexView view) => Vm.Documents.FirstOrDefault(d => d.Editor == view.Editor);
@@ -580,7 +625,8 @@ public sealed partial class MainWindow
             return;
         }
 
-        (BookmarkToggleOutcome outcome, Bookmark? bookmark) = BookmarkActions.Toggle(a.Bookmarks, editor, n => Loc.Format("Bookmarks_DefaultName", n));
+        (BookmarkToggleOutcome outcome, Bookmark? bookmark) = BookmarkActions.Toggle(a.Bookmarks, editor, n => Loc.Format("Bookmarks_DefaultName", n),
+            DefaultBookmarkColor);
         switch (outcome)
         {
             case BookmarkToggleOutcome.LimitReached:
@@ -591,6 +637,9 @@ public sealed partial class MainWindow
                 break;
         }
     }
+
+    /// <summary>設定「ブックマークの既定の色」(INSP-23 の仕様 2。既定は色の一覧の 1 番目)。</summary>
+    private static BookmarkColor DefaultBookmarkColor => BookmarkColor.FromSetting(App.Settings.GetString(BookmarkColor.DefaultColorKey, "1"));
 
     /// <summary>ツールバーの「追加」: その位置にブックマークがなければ付ける (外さない)。</summary>
     private void AddBookmarkAtCursor()
@@ -704,7 +753,7 @@ public sealed partial class MainWindow
 
     private void SetNumberedBookmark(int number)
     {
-        if (CurrentAnnotations() is { } a && Editor is { } editor && BookmarkActions.SetNumber(a.Bookmarks, editor, number) is null)
+        if (CurrentAnnotations() is { } a && Editor is { } editor && BookmarkActions.SetNumber(a.Bookmarks, editor, number, DefaultBookmarkColor) is null)
         {
             ShowNotice(Loc.Format("Bookmarks_Limit", BookmarkCollection.MaxCount.ToString("N0", CultureInfo.CurrentCulture)), InfoBarSeverity.Error, Vm.Selected);
         }
