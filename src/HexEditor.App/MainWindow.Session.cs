@@ -49,7 +49,8 @@ public sealed partial class MainWindow
 
         // 2 つ目以降のウィンドウのタブも、起動時の動作に従って戻す (UI-14 の仕様 5、UI-31)。
 
-        switch (StartupPlanner.Decide(FileSettings.RestoreOnStartup(App.Settings), session))
+        // 「今すぐ再起動」(UI-43 の仕様 5) で起動したときは、設定に関係なく復元する。
+        switch (StartupPlanner.Decide(AppRestart.IsSessionRestart ? RestoreOnStartup.Always : FileSettings.RestoreOnStartup(App.Settings), session))
         {
             case StartupSessionAction.Restore when HasRecoveryData():
                 _restoreAfterRecovery = true;

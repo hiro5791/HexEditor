@@ -4,12 +4,23 @@ namespace HexEditor.App.Services;
 
 /// <summary>
 /// アプリの再起動 (09 の UI-43 の仕様 5「今すぐ再起動」)。<c>AppInstance.Restart</c> で再起動する。
-/// 起動時のオプションのうち、そのプロセスの間だけ有効な表示言語 (<c>--ui-lang</c>、<c>--pseudo-locale</c>) と開いていたファイルは外し、
-/// 代わりに開いているファイルを渡してタブを戻す。セッションの復元 (UI-31) ができたら、そちらに任せる。
+/// 起動時のオプションのうち、そのプロセスの間だけ有効な表示言語 (<c>--ui-lang</c>、<c>--pseudo-locale</c>) と開いていたファイルは外す。
+/// 開いていたウィンドウとタブはセッション (UI-31) で戻す: 再起動の前に全ウィンドウのセッションを保存し、<see cref="RestoreSessionFlag"/>
+/// を付けて起動する (設定 session.restoreOnStartup に関係なく復元する)。
 /// </summary>
 public static class AppRestart
 {
+    /// <summary>再起動の印: 起動時の動作の設定に関係なく、保存したセッションを復元する (UI-43 の仕様 5)。</summary>
+    public const string RestoreSessionFlag = "--restore-session";
+
     private static readonly HashSet<string> DropWithValue = ["--ui-lang", "--pseudo-locale", "--offset", "-g", "--select"];
+
+    /// <summary>このプロセスは「今すぐ再起動」で起動した (セッションを必ず復元する)。</summary>
+    public static bool IsSessionRestart { get; } = Environment.GetCommandLineArgs().Skip(1).Contains(RestoreSessionFlag);
+
+    /// <summary>セッションを復元する再起動の引数 (開いていたファイルは渡さない。セッションが戻す)。</summary>
+    public static IReadOnlyList<string> SessionArguments(IReadOnlyList<string> original) =>
+        [.. Arguments(original, []).Where(a => a != RestoreSessionFlag), RestoreSessionFlag];
 
     /// <summary>再起動の引数を作る (テスト用の --test-hooks / --test-profile などはそのまま渡す)。</summary>
     public static IReadOnlyList<string> Arguments(IReadOnlyList<string> original, IReadOnlyList<string> files)
@@ -38,10 +49,12 @@ public static class AppRestart
         return args;
     }
 
-    /// <summary>再起動する。戻ってきたら失敗 (理由をログに書き、false)。</summary>
-    public static bool Restart(IReadOnlyList<string> files)
+    /// <summary>
+    /// 保存したセッションを復元するように再起動する (呼ぶ前にセッションを保存しておく)。戻ってきたら失敗 (理由をログに書き、false)。
+    /// </summary>
+    public static bool Restart()
     {
-        IReadOnlyList<string> args = Arguments(Environment.GetCommandLineArgs().Skip(1).ToList(), files);
+        IReadOnlyList<string> args = SessionArguments(Environment.GetCommandLineArgs().Skip(1).ToList());
         string line = string.Join(' ', args.Select(Quote));
         AppLog.Info($"Restarting: {args.Count} argument(s)");
         try
