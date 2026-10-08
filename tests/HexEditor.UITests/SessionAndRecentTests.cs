@@ -455,6 +455,32 @@ public sealed class SessionAndRecentTests
     });
 
     /// <summary>
+    /// ask で復元せずに別のファイルを開いて終了したら、そのタブが次のセッションになる (前回のセッションを守るのはタブを開くまで)。
+    /// </summary>
+    [Fact]
+    public Task Ask_without_restoring_saves_the_files_opened_instead() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, "\"session.restoreOnStartup\": \"ask\"");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.CopyTestData("TD-SEQ-1M", "seq.bin")] });
+        await app.WaitForTabsAsync(1);
+        await ExitAsync(app);
+
+        // 復元を提案されたまま、別のファイルを開いて終了する。
+        AppSession second = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await second.WaitUntilAsync(async () => await second.IsShownAsync("Start_RestoreSession"), TimeSpan.FromSeconds(10), "the restore button");
+        await second.UiOpenAsync(ctx.CopyTestData("TD-BYTES-256", "bytes.bin"));
+        await second.WaitForTabsAsync(1);
+        await ExitAsync(second);
+
+        AppSession third = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await third.WaitUntilAsync(async () => await third.IsShownAsync("Start_RestoreSession"), TimeSpan.FromSeconds(10), "the restore button");
+        await third.UiaInvokeAsync("Start_RestoreSession");
+        await third.WaitForTabsAsync(1);
+        Assert.Equal(["bytes.bin"], await third.TabNamesAsync());
+    });
+
+    /// <summary>
     /// 1 つのウィンドウのタブの並び・アクティブなタブ・カーソル・ウィンドウの位置と大きさ。2 つのウィンドウの TC-UI-31-01 は
     /// WindowManagementTests。
     /// </summary>

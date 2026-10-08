@@ -19,7 +19,10 @@ public sealed partial class MainWindow
 {
     private SessionState _startupSession = new();
     private bool _restoreAfterRecovery;
-    private bool _sessionOffered;
+    /// <summary>
+    /// 起動時に「前回のセッションを復元」を提案中 (ask)。アプリ全体で 1 つ (最初のウィンドウを閉じても、終了するウィンドウが別でも同じ)。
+    /// </summary>
+    private static bool s_sessionOffered;
 
     /// <summary>
     /// 起動の準備 (コマンドラインのファイルを開く前に呼ぶ)。セッションを読み、閉じたタブの記録を戻し、ウィンドウの位置を戻す。
@@ -59,7 +62,7 @@ public sealed partial class MainWindow
                 RestoreSession(session, []);
                 break;
             case StartupSessionAction.Offer:
-                _sessionOffered = true;
+                s_sessionOffered = true;
                 StartPage.ViewModel.CanRestoreSession = true;
                 break;
         }
@@ -157,7 +160,7 @@ public sealed partial class MainWindow
     public void RestorePreviousSession()
     {
         StartPage.ViewModel.CanRestoreSession = false;
-        _sessionOffered = false;
+        s_sessionOffered = false;
         RestoreSession(_startupSession, [.. Vm.Documents.Select(d => d.FilePath).OfType<string>()]);
     }
 
@@ -316,15 +319,24 @@ public sealed partial class MainWindow
             return;
         }
 
-        // 「前回のセッションを復元」を押さずに使っている間は、前回のセッションを上書きしない (タブを開くまで)。
-        if (_sessionOffered && WindowManager.Windows.All(w => w.Vm.Documents.Count == 0))
+        // 「前回のセッションを復元」を押さずに使っている間は、前回のセッションを上書きしない (タブを開くまで)。書く内容で判断する
+        // (終了時は閉じる確認の前に写したタブを書く。確認の後はウィンドウに文書が残っていないため)。
+        SessionState session = state ?? WindowManager.CaptureSession();
+        bool hasTabs = session.Windows.Any(w => w.Tabs.Count > 0);
+        if (s_sessionOffered && !hasTabs)
         {
             return;
         }
 
         try
         {
-            files.Session.SaveIfChanged(state ?? WindowManager.CaptureSession());
+            files.Session.SaveIfChanged(session);
+
+            // 新しいセッションを書いたら、前回のセッションはもう残っていない (この後はタブを閉じても普通に書く)。
+            if (hasTabs)
+            {
+                s_sessionOffered = false;
+            }
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
