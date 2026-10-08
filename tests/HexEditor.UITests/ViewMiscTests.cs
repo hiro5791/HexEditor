@@ -334,8 +334,19 @@ public sealed class ViewMiscTests
         await MenuAsync(app, "Command_ViewColorScheme_solarized");
         Assert.Equal("#FFFDF6E3", (await app.RenderAsync())["background"]!.GetValue<string>());
         await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
-        await app.IdleAsync();
-        Assert.Equal("#FFFDF6E3", (await app.RenderAsync())["background"]!.GetValue<string>());
+
+        // タブを切り替えた後、その Hex ビューが読み込まれるまで待つ。
+        await app.WaitUntilAsync(async () =>
+        {
+            try
+            {
+                return (await app.RenderAsync())["background"]?.GetValue<string>() == "#FFFDF6E3";
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+        }, TimeSpan.FromSeconds(10), "the solarized background in the other tab");
         Assert.Equal(pid, (await app.StateAsync())["pid"]!.GetValue<int>());
     });
 
