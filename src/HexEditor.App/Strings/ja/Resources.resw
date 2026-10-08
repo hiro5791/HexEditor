@@ -983,7 +983,7 @@
   <data name="Inspector_BaseOctal.Content" xml:space="preserve"><value>8 進</value></data>
   <data name="Inspector_FloatShortest.Content" xml:space="preserve"><value>最短で正確</value></data>
   <data name="Inspector_FloatExponent.Content" xml:space="preserve"><value>指数表記</value></data>
-  <data name="Inspector_FloatHex.Content" xml:space="preserve"><value>16 進浮動小数点</value></data>
+  <data name="Inspector_FloatHex.Content" xml:space="preserve"><value>Hex 浮動小数点</value></data>
   <data name="Inspector_MenuCopy.Text" xml:space="preserve"><value>値をコピー</value></data>
   <data name="Inspector_MenuCopyAll.Text" xml:space="preserve"><value>すべての行をコピー</value></data>
   <data name="Inspector_MenuEdit.Text" xml:space="preserve"><value>値を編集</value></data>
@@ -1896,7 +1896,7 @@
   <data name="Menu_View_EncodingUtf32LE.AccessKey" xml:space="preserve"><value>I</value></data>
   <data name="Menu_View_EncodingUtf32BE.Text" xml:space="preserve"><value>UTF-32 BE(J)</value></data>
   <data name="Menu_View_EncodingUtf32BE.AccessKey" xml:space="preserve"><value>J</value></data>
-  <data name="Menu_View_EncodingShiftJis.Text" xml:space="preserve"><value>シフト JIS (932)(S)</value></data>
+  <data name="Menu_View_EncodingShiftJis.Text" xml:space="preserve"><value>Shift_JIS (932)(S)</value></data>
   <data name="Menu_View_EncodingShiftJis.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_View_Utf16Odd.Text" xml:space="preserve"><value>UTF-16 を奇数の位置から解読(O)</value></data>
   <data name="Menu_View_Utf16Odd.AccessKey" xml:space="preserve"><value>O</value></data>
@@ -2014,7 +2014,7 @@
   <data name="CmdAlias_view_encoding_utf32le" xml:space="preserve"><value>もじこーど</value></data>
   <data name="Cmd_view_encoding_utf32be" xml:space="preserve"><value>文字コード: UTF-32 BE</value></data>
   <data name="CmdAlias_view_encoding_utf32be" xml:space="preserve"><value>もじこーど</value></data>
-  <data name="Cmd_view_encoding_shiftJis" xml:space="preserve"><value>文字コード: シフト JIS</value></data>
+  <data name="Cmd_view_encoding_shiftJis" xml:space="preserve"><value>文字コード: Shift_JIS</value></data>
   <data name="CmdAlias_view_encoding_shiftJis" xml:space="preserve"><value>もじこーど しふとじす</value></data>
   <data name="Cmd_view_colorScheme" xml:space="preserve"><value>配色</value></data>
   <data name="CmdAlias_view_colorScheme" xml:space="preserve"><value>はいしょく</value></data>

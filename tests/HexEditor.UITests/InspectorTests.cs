@@ -142,7 +142,7 @@ public sealed class InspectorTests
         // 4: コマンド「データインスペクタの表示切り替え」(コマンドパレット F1-02 は UI の土台の担当。同じコマンドをメニューから実行する)。
         await app.CommandAsync("Command_ToggleInspector");
         await app.IdleAsync();
-        Assert.True(await app.IsShownAsync("InspectorPanel"));
+        await app.WaitUntilAsync(() => app.IsShownAsync("InspectorPanel"), TimeSpan.FromSeconds(10), "the inspector panel");
     });
 
     [Fact]
@@ -306,8 +306,11 @@ public sealed class InspectorTests
 
         // 1: 最下位ビットのボタンのツールチップがビット番号 0 を示し、Invoke で押す (行を表示させてから探す)。
         await app.SendAsync("inspectorSelect", new JsonObject { ["id"] = "binary8" });
-        JsonObject bit = await app.ElementAsync("Inspector_Bit_binary8_0");
-        Assert.True(bit["found"]!.GetValue<bool>());
+
+        // 行は一覧の下の方にあり、スクロールして作られるまで待つ。
+        JsonObject bit = new();
+        await app.WaitUntilAsync(async () => (bit = await app.ElementAsync("Inspector_Bit_binary8_0"))["found"]!.GetValue<bool>(),
+            TimeSpan.FromSeconds(10), "the bit buttons");
         Assert.Equal("Bit 0", bit["toolTip"]!.GetValue<string>());
         await app.UiaInvokeAsync("Inspector_Bit_binary8_0");
         await WaitForRowsAsync(app);

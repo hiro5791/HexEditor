@@ -162,7 +162,22 @@ public sealed class ViewMiscTests
         Assert.Equal(32, (await again.RenderAsync())["bytesPerRow"]!.GetValue<int>());
         await again.OpenAsync(ctx.TestData("TD-RANDOM-16M"));
         await again.IdleAsync();
-        Assert.Equal(16, (await again.RenderAsync())["bytesPerRow"]!.GetValue<int>());
+
+        // 新しいタブの Hex ビューが作られるまで待つ。
+        int bytesPerRow = 0;
+        await again.WaitUntilAsync(async () =>
+        {
+            try
+            {
+                bytesPerRow = (await again.RenderAsync())["bytesPerRow"]!.GetValue<int>();
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+        }, TimeSpan.FromSeconds(10), "the new tab's hex view");
+        Assert.Equal(16, bytesPerRow);
     });
 
     [Fact]

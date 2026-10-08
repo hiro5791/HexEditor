@@ -192,7 +192,10 @@ public sealed class ExternalChangeTests
         // 4. Ctrl+S で「元の場所にファイルを作り直します」と確かめて保存する。
         await app.KeyAsync("S", ctrl: true);
         AutomationElement dialog = await app.WaitForAsync("SaveDialog");
-        Assert.Contains("creates the file again in its original location", AppSession.AllText(dialog));
+
+        // ダイアログの中身は表示されてから作られるので、文言が出るまで待つ。
+        await app.WaitUntilAsync(() => Task.FromResult(AppSession.AllText(dialog).Contains("creates the file again in its original location", StringComparison.Ordinal)),
+            TimeSpan.FromSeconds(10), "the dialog text");
         await app.InvokeDialogButtonAsync("Save");
         await app.WaitUntilAsync(async () => !(await app.DocumentAsync())["modified"]!.GetValue<bool>(), TimeSpan.FromSeconds(20), "the save");
 
