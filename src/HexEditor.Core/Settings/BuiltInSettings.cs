@@ -57,6 +57,14 @@ public static class BuiltInSettings
         new("edit.pasteSpecial.preferLast", SettingCategories.Editing, SettingKind.Bool, true) { Order = 20 },
         new("edit.paste.detectWithoutConfirmation", SettingCategories.Editing, SettingKind.Bool, false) { Order = 30 },
 
+        // ---- 検索 (FIND-02、FIND-20、FIND-28) ----
+        new("search.maxMatchLength", SettingCategories.Search, SettingKind.Int, Search.SearchPattern.DefaultMaxMatchLength) { Min = 1, Max = Search.SearchPattern.MaxMaxMatchLength, Order = 10 },
+        new("search.findAll.limit", SettingCategories.Search, SettingKind.Int, 1_000_000) { Min = 1_000, Max = 100_000_000, Order = 20 },
+        new("search.results.preview", SettingCategories.Search, SettingKind.Bool, true) { Order = 30 },
+        new("search.results.f3Repeats", SettingCategories.Search, SettingKind.Bool, false) { Order = 40 },
+        new("search.history.limit", SettingCategories.Search, SettingKind.Int, Search.SearchHistory.DefaultLimit) { Min = 0, Max = Search.SearchHistory.MaxLimit, Order = 50 },
+        new("search.history.doNotSave", SettingCategories.Search, SettingKind.Bool, false) { Order = 60 },
+
         // ---- ファイルと保存 ----
         new("recent.maxItems", SettingCategories.Files, SettingKind.Int, RecentFileList.DefaultMaxItems) { Min = 0, Max = RecentFileList.MaxItemsLimit, Order = 1 },
         new("recent.restorePosition", SettingCategories.Files, SettingKind.Bool, true) { Order = 2 },

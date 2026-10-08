@@ -187,6 +187,42 @@
       "maximum": 60,
       "default": 1
     },
+    "search.findAll.limit": {
+      "description": "Find all: result limit",
+      "type": "integer",
+      "minimum": 1000,
+      "maximum": 100000000,
+      "default": 1000000
+    },
+    "search.history.doNotSave": {
+      "description": "Do not save search history",
+      "type": "boolean",
+      "default": false
+    },
+    "search.history.limit": {
+      "description": "Search history size",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 500,
+      "default": 50
+    },
+    "search.maxMatchLength": {
+      "description": "Maximum match length",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1048576,
+      "default": 4096
+    },
+    "search.results.f3Repeats": {
+      "description": "F3 searches again",
+      "type": "boolean",
+      "default": false
+    },
+    "search.results.preview": {
+      "description": "Preview results with Up and Down",
+      "type": "boolean",
+      "default": true
+    },
     "session.restoreOnStartup": {
       "description": "On startup",
       "type": "string",

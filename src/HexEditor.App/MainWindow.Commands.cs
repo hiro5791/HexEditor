@@ -145,6 +145,7 @@ public sealed partial class MainWindow
         Commands.Register("search.find", () => Find_Click(this, e), NeedsDocument);
         Commands.Register("search.findNext", () => FindNext_Click(this, e), NeedsDocument);
         Commands.Register("search.findPrevious", () => FindPrevious_Click(this, e), NeedsDocument);
+        RegisterSearchCommands();
         Commands.Register("go.goTo", () => GoTo_Click(this, e), NeedsDocument);
         Commands.Register("go.back", () => GoBack_Click(this, e),
             () => NeedsDocument(d => d.Editor.CanGoBack ? null : Loc.Get("Command_NoHistory")));

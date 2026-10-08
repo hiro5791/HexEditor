@@ -151,6 +151,9 @@
                         <MenuFlyoutItem x:Uid="Menu_Search_Find" cmd:CommandUi.Id="search.find" AutomationProperties.AutomationId="Command_Find" />
                         <MenuFlyoutItem x:Uid="Menu_Search_Next" cmd:CommandUi.Id="search.findNext" AutomationProperties.AutomationId="Command_FindNext" />
                         <MenuFlyoutItem x:Uid="Menu_Search_Previous" cmd:CommandUi.Id="search.findPrevious" AutomationProperties.AutomationId="Command_FindPrevious" />
+                        <MenuFlyoutItem x:Uid="Menu_Search_Replace" cmd:CommandUi.Id="search.replace" AutomationProperties.AutomationId="Command_Replace" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Search_ClearHistory" cmd:CommandUi.Id="search.clearHistory" AutomationProperties.AutomationId="Command_ClearSearchHistory" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Go">
                         <MenuFlyoutItem x:Uid="Menu_Go_GoTo" cmd:CommandUi.Id="go.goTo" AutomationProperties.AutomationId="Command_GoTo" />
@@ -194,6 +197,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Inspector" cmd:CommandUi.Id="view.panel.inspector" AutomationProperties.AutomationId="Command_ToggleInspector" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_BookmarksPanel" cmd:CommandUi.Id="view.panel.bookmarks" AutomationProperties.AutomationId="Command_ToggleBookmarks" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Hash" cmd:CommandUi.Id="view.panel.hash" AutomationProperties.AutomationId="Command_PanelHash" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />
                         </MenuFlyoutSubItem>
@@ -256,19 +260,21 @@
                 Scope="Window" />
         </StackPanel>
 
-        <controls:FindBar
-            x:Name="FindBar"
-            Grid.Row="3"
-            AutomationProperties.AutomationId="FindBar"
-            Closed="Bar_Closed"
-            Visibility="Collapsed" />
+        <!--  検索バー・移動バー。すべて検索の結果一覧 (FIND-20) は下のパネル (UI-05) に置く。  -->
+        <StackPanel Grid.Row="3">
+            <controls:FindBar
+                x:Name="FindBar"
+                AutomationProperties.AutomationId="FindBar"
+                Closed="Bar_Closed"
+                Visibility="Collapsed" />
 
-        <controls:GoToBar
-            x:Name="GoToBar"
-            Grid.Row="3"
-            AutomationProperties.AutomationId="GoToBar"
-            Closed="Bar_Closed"
-            Visibility="Collapsed" />
+            <controls:GoToBar
+                x:Name="GoToBar"
+                AutomationProperties.AutomationId="GoToBar"
+                Closed="Bar_Closed"
+                Visibility="Collapsed" />
+
+        </StackPanel>
 
         <!--
             作業領域 (UI-01 の仕様 1 の 4): 左パネル / エディタ / 右パネル、その下に下パネル (UI-05)。パネルの中身は

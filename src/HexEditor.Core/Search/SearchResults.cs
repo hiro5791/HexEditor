@@ -1,10 +1,15 @@
+using System.Buffers.Binary;
+using Microsoft.Win32.SafeHandles;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Sources;
 
 namespace HexEditor.Core.Search;
 
-/// <summary>すべて検索・件数の数え上げで見つかった一致 1 件。</summary>
-public readonly record struct SearchMatch(long Offset, long Length)
+/// <summary>
+/// すべて検索・件数の数え上げで見つかった一致 1 件。<see cref="Variant"/> は一致した種類 (<see cref="SearchPattern.Variants"/> の添字。
+/// エンディアン「両方」の LE / BE など)。
+/// </summary>
+public readonly record struct SearchMatch(long Offset, long Length, int Variant = 0)
 {
     public long End => Offset + Length;
 }
@@ -29,12 +34,31 @@ public enum SearchResultsState
 /// すべて検索・件数の数え上げの結果 (FIND-12、FIND-20 の基盤)。検索のスレッドが開始オフセットの昇順に追加していき、
 /// 追加のたびに <see cref="MatchesAdded"/> を出す (ストリーミング)。読み取りはどのスレッドからでもできる。
 /// 一致は検索した <see cref="Snapshot"/> 上の位置で、その後の編集に合わせた位置は <see cref="MatchTracker"/> で求める (FIND-03)。
+/// <para>
+/// メモリ上に置くのは <see cref="MemoryLimit"/> 件までで、それを超える分は一時ファイルに書き出す (FIND-20 の仕様 7。1 件 24 バイト)。
+/// 一時ファイルを作れなかった場合は、メモリ上の件数で止める (<see cref="SpillFailed"/>)。使い終わったら <see cref="Dispose"/> で一時ファイルを消す。
+/// </para>
 /// </summary>
-public sealed class SearchResults
+public sealed class SearchResults : IDisposable
 {
+    /// <summary>メモリ上に置く件数の既定の上限 (FIND-20 の仕様 7)。</summary>
+    public const int DefaultMemoryLimit = 1_000_000;
+
+    /// <summary>一時ファイルの 1 件のバイト数 (オフセット 8、長さ 8、種類 4、予備 4)。</summary>
+    private const int RecordSize = 24;
+
+    /// <summary>一時ファイルにまとめて書く件数。</summary>
+    private const int WriteBatch = 4096;
+
     private readonly object _lock = new();
     private readonly List<SearchMatch> _matches = [];
     private readonly List<UnreadableRange> _skipped = [];
+    private readonly List<SearchMatch> _pending = [];
+    private SafeFileHandle? _spill;
+    private string? _spillPath;
+    private long _spilled;
+    private long _limit;
+    private bool _disposed;
 
     public SearchResults(DocumentSnapshot snapshot, SearchPattern pattern, SearchOptions options)
     {
@@ -42,6 +66,7 @@ public sealed class SearchResults
         Pattern = pattern;
         Options = options;
         TotalBytes = options.Scope.TotalLength(snapshot.Length);
+        _limit = options.MaxMatches;
     }
 
     /// <summary>検索したスナップショット (一致の版。FIND-03 の仕様 2)。</summary>
@@ -59,6 +84,41 @@ public sealed class SearchResults
     /// <summary>上限に達して止めた (「100 万件以上」の表示)。</summary>
     public bool LimitReached => State == SearchResultsState.LimitReached;
 
+    /// <summary>件数の今の上限 (「続ける」で 2 倍になる。FIND-20 の仕様 6)。</summary>
+    public long Limit
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _limit;
+            }
+        }
+    }
+
+    /// <summary>メモリ上に置く件数の上限。超える分は一時ファイルに書く (テストでは小さくできる)。</summary>
+    public int MemoryLimit { get; init; } = DefaultMemoryLimit;
+
+    /// <summary>一時ファイルを置くフォルダ (null なら %TEMP%\HexEditor\search)。</summary>
+    public string? SpillDirectory { get; init; }
+
+    /// <summary>一時ファイルを作れなかったため、メモリ上の件数で止めた (FIND-20 の「エラー」)。理由は <see cref="SpillError"/>。</summary>
+    public bool SpillFailed { get; private set; }
+
+    public string? SpillError { get; private set; }
+
+    /// <summary>一時ファイルに書き出した件数。</summary>
+    public long SpilledCount
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _spilled + _pending.Count;
+            }
+        }
+    }
+
     /// <summary>これまでに見つかった件数。</summary>
     public int Count
     {
@@ -66,22 +126,27 @@ public sealed class SearchResults
         {
             lock (_lock)
             {
-                return _matches.Count;
+                return (int)Math.Min(int.MaxValue, TotalCountUnlocked);
             }
         }
     }
 
-    /// <summary>これまでに見つかった一致 (開始オフセットの昇順) の写し。</summary>
-    public IReadOnlyList<SearchMatch> Matches
+    /// <summary>これまでに見つかった件数 (long)。</summary>
+    public long LongCount
     {
         get
         {
             lock (_lock)
             {
-                return [.. _matches];
+                return TotalCountUnlocked;
             }
         }
     }
+
+    private long TotalCountUnlocked => _matches.Count + _spilled + _pending.Count;
+
+    /// <summary>これまでに見つかった一致 (開始オフセットの昇順) の写し。件数が多い場合は <see cref="GetRange"/> を使う。</summary>
+    public IReadOnlyList<SearchMatch> Matches => GetRange(0, (int)Math.Min(int.MaxValue, LongCount));
 
     /// <summary>飛ばした読めない範囲 (結果一覧の「読み込めなかった範囲」。FIND-01 の「エラー」)。</summary>
     public IReadOnlyList<UnreadableRange> SkippedRanges
@@ -102,14 +167,50 @@ public sealed class SearchResults
     public event EventHandler? StateChanged;
 
     /// <summary><paramref name="index"/> 番目の一致 (0 から)。</summary>
-    public SearchMatch this[int index]
+    public SearchMatch this[int index] => this[(long)index];
+
+    /// <summary><paramref name="index"/> 番目の一致 (0 から)。</summary>
+    public SearchMatch this[long index]
     {
         get
         {
             lock (_lock)
             {
-                return _matches[index];
+                return At(index);
             }
+        }
+    }
+
+    /// <summary>[start, start + count) 番目の一致の写し。</summary>
+    public IReadOnlyList<SearchMatch> GetRange(long start, int count)
+    {
+        lock (_lock)
+        {
+            long total = TotalCountUnlocked;
+            long end = Math.Min(total, start + Math.Max(0, count));
+            var result = new List<SearchMatch>((int)Math.Max(0, end - start));
+            for (long i = Math.Max(0, start); i < end; i++)
+            {
+                if (i < _matches.Count)
+                {
+                    result.Add(_matches[(int)i]);
+                    continue;
+                }
+
+                // 一時ファイルの部分はまとめて読む。
+                long fileIndex = i - _matches.Count;
+                if (fileIndex < _spilled)
+                {
+                    int n = (int)Math.Min(end - i, _spilled - fileIndex);
+                    ReadSpilled(fileIndex, n, result);
+                    i += n - 1;
+                    continue;
+                }
+
+                result.Add(_pending[(int)(fileIndex - _spilled)]);
+            }
+
+            return result;
         }
     }
 
@@ -120,8 +221,8 @@ public sealed class SearchResults
     {
         lock (_lock)
         {
-            int i = LowerBound(offset);
-            return i < _matches.Count && _matches[i].Offset == offset ? i : -1;
+            long i = LowerBound(offset);
+            return i < TotalCountUnlocked && At(i).Offset == offset ? (int)i : -1;
         }
     }
 
@@ -130,7 +231,7 @@ public sealed class SearchResults
     {
         lock (_lock)
         {
-            return LowerBound(offset);
+            return (int)LowerBound(offset);
         }
     }
 
@@ -140,17 +241,42 @@ public sealed class SearchResults
         lock (_lock)
         {
             // 開始が offset − 最長の一致 + 1 以上のものだけが重なりうる。
-            int i = LowerBound(offset - Pattern.MaxMatchLength + 1);
+            long i = LowerBound(offset - Pattern.MaxMatchLength + 1);
             var result = new List<SearchMatch>();
-            for (; i < _matches.Count && _matches[i].Offset < offset + length; i++)
+            long total = TotalCountUnlocked;
+            for (; i < total; i++)
             {
-                if (_matches[i].End > offset)
+                SearchMatch m = At(i);
+                if (m.Offset >= offset + length)
                 {
-                    result.Add(_matches[i]);
+                    break;
+                }
+
+                if (m.End > offset)
+                {
+                    result.Add(m);
                 }
             }
 
             return result;
+        }
+    }
+
+    /// <summary>上限を 2 倍にする (「続ける」。FIND-20 の仕様 6)。続きを探す開始位置を返す (一致がなければ null)。</summary>
+    internal long? PrepareContinue()
+    {
+        lock (_lock)
+        {
+            _limit = _limit >= long.MaxValue / 2 ? long.MaxValue : _limit * 2;
+            State = SearchResultsState.Running;
+            long total = TotalCountUnlocked;
+            if (total == 0)
+            {
+                return null;
+            }
+
+            SearchMatch last = At(total - 1);
+            return Options.IncludeOverlapping ? last.Offset + 1 : last.End;
         }
     }
 
@@ -164,12 +290,34 @@ public sealed class SearchResults
         int count;
         lock (_lock)
         {
-            _matches.AddRange(matches);
-            count = _matches.Count;
+            foreach (SearchMatch m in matches)
+            {
+                if (_spilled == 0 && _pending.Count == 0 && _matches.Count < MemoryLimit)
+                {
+                    _matches.Add(m);
+                    continue;
+                }
+
+                if (SpillFailed || (_spill is null && !OpenSpill()))
+                {
+                    break;
+                }
+
+                _pending.Add(m);
+                if (_pending.Count >= WriteBatch)
+                {
+                    FlushPending();
+                }
+            }
+
+            count = (int)Math.Min(int.MaxValue, TotalCountUnlocked);
         }
 
         MatchesAdded?.Invoke(this, count);
     }
+
+    /// <summary>上限 (または一時ファイルの失敗) で、これ以上加えられないか。</summary>
+    internal bool IsFull(long count) => count >= Limit || SpillFailed;
 
     internal void AddSkipped(UnreadableRange range)
     {
@@ -186,20 +334,189 @@ public sealed class SearchResults
         }
     }
 
+    /// <summary>
+    /// 探さないまま終わった結果を「中断」にする (「開いているすべてのドキュメント」のすべて検索を途中でキャンセルし、まだ探していない
+    /// ドキュメントがあるとき)。探し終えた結果は変えない。
+    /// </summary>
+    public void SetCancelled()
+    {
+        if (State == SearchResultsState.Running)
+        {
+            SetState(SearchResultsState.Cancelled);
+        }
+    }
+
     internal void SetState(SearchResultsState state)
     {
+        lock (_lock)
+        {
+            if (state != SearchResultsState.Running && _pending.Count > 0 && !SpillFailed)
+            {
+                FlushPending();
+            }
+
+            if (SpillFailed && state == SearchResultsState.Completed)
+            {
+                state = SearchResultsState.LimitReached;
+            }
+        }
+
         State = state;
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private int LowerBound(long offset)
+    public void Dispose()
     {
-        int lo = 0;
-        int hi = _matches.Count;
+        lock (_lock)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+            _spill?.Dispose();
+            _spill = null;
+            TryDelete(_spillPath);
+        }
+    }
+
+    private SearchMatch At(long index)
+    {
+        if (index < _matches.Count)
+        {
+            return _matches[(int)index];
+        }
+
+        long fileIndex = index - _matches.Count;
+        if (fileIndex < _spilled)
+        {
+            var one = new List<SearchMatch>(1);
+            ReadSpilled(fileIndex, 1, one);
+            return one[0];
+        }
+
+        return _pending[(int)(fileIndex - _spilled)];
+    }
+
+    private void ReadSpilled(long fileIndex, int count, List<SearchMatch> sink)
+    {
+        byte[] buffer = new byte[Math.Min(count, WriteBatch) * RecordSize];
+        long at = fileIndex;
+        int left = count;
+        while (left > 0)
+        {
+            int n = Math.Min(left, WriteBatch);
+            Span<byte> span = buffer.AsSpan(0, n * RecordSize);
+            int read = 0;
+            while (read < span.Length)
+            {
+                int r = RandomAccess.Read(_spill!, span[read..], (at * RecordSize) + read);
+                if (r <= 0)
+                {
+                    throw new IOException("検索結果の一時ファイルを読めません。");
+                }
+
+                read += r;
+            }
+
+            for (int k = 0; k < n; k++)
+            {
+                ReadOnlySpan<byte> rec = span.Slice(k * RecordSize, RecordSize);
+                sink.Add(new SearchMatch(
+                    BinaryPrimitives.ReadInt64LittleEndian(rec),
+                    BinaryPrimitives.ReadInt64LittleEndian(rec[8..]),
+                    BinaryPrimitives.ReadInt32LittleEndian(rec[16..])));
+            }
+
+            at += n;
+            left -= n;
+        }
+    }
+
+    /// <summary>まだ書いていない一致を一時ファイルに書く。失敗したら一時ファイルの分を捨て、メモリ上の件数で止める。</summary>
+    private void FlushPending()
+    {
+        if (_pending.Count == 0 || _disposed)
+        {
+            return;
+        }
+
+        try
+        {
+            if (_spill is null && !OpenSpill())
+            {
+                return;
+            }
+
+            byte[] buffer = new byte[_pending.Count * RecordSize];
+            for (int k = 0; k < _pending.Count; k++)
+            {
+                Span<byte> rec = buffer.AsSpan(k * RecordSize, RecordSize);
+                BinaryPrimitives.WriteInt64LittleEndian(rec, _pending[k].Offset);
+                BinaryPrimitives.WriteInt64LittleEndian(rec[8..], _pending[k].Length);
+                BinaryPrimitives.WriteInt32LittleEndian(rec[16..], _pending[k].Variant);
+            }
+
+            RandomAccess.Write(_spill!, buffer, _spilled * RecordSize);
+            _spilled += _pending.Count;
+            _pending.Clear();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            SpillFailed = true;
+            SpillError = ex.Message;
+            _pending.Clear();
+            _spill?.Dispose();
+            _spill = null;
+            TryDelete(_spillPath);
+            _spilled = 0;
+        }
+    }
+
+    /// <summary>一時ファイルを作る。作れなければ <see cref="SpillFailed"/> にして false。</summary>
+    private bool OpenSpill()
+    {
+        try
+        {
+            string folder = SpillDirectory ?? Path.Combine(Path.GetTempPath(), "HexEditor", "search");
+            Directory.CreateDirectory(folder);
+            _spillPath = Path.Combine(folder, $"results-{Guid.NewGuid():N}.bin");
+            _spill = File.OpenHandle(_spillPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None, FileOptions.DeleteOnClose);
+            return true;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            SpillFailed = true;
+            SpillError = ex.Message;
+            return false;
+        }
+    }
+
+    private static void TryDelete(string? path)
+    {
+        if (path is null)
+        {
+            return;
+        }
+
+        try
+        {
+            File.Delete(path);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+        }
+    }
+
+    private long LowerBound(long offset)
+    {
+        long lo = 0;
+        long hi = TotalCountUnlocked;
         while (lo < hi)
         {
-            int mid = (lo + hi) >>> 1;
-            if (_matches[mid].Offset < offset)
+            long mid = (lo + hi) >>> 1;
+            if (At(mid).Offset < offset)
             {
                 lo = mid + 1;
             }

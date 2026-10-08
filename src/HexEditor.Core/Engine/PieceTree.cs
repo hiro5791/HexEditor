@@ -35,6 +35,50 @@ public sealed class PieceTree
         return tree;
     }
 
+    /// <summary>
+    /// ピースの並びから平衡木を一度に作る (O(n)。すべて置換のように多数のピースを並べる場合に使う。FIND-23)。
+    /// 連続するピースは先にまとめる。長さ 0 のピースは捨てる。
+    /// </summary>
+    public static PieceTree Build(IReadOnlyList<Piece> pieces)
+    {
+        var merged = new List<Piece>(pieces.Count);
+        foreach (Piece piece in pieces)
+        {
+            if (piece.Length == 0)
+            {
+                continue;
+            }
+
+            if (merged.Count > 0 && merged[^1].TryAppend(piece, out Piece joined))
+            {
+                merged[^1] = joined;
+            }
+            else
+            {
+                merged.Add(piece);
+            }
+        }
+
+        long total = 0;
+        foreach (Piece piece in merged)
+        {
+            total = checked(total + piece.Length);
+        }
+
+        return new PieceTree(BuildBalanced(merged, 0, merged.Count));
+    }
+
+    private static Node? BuildBalanced(List<Piece> pieces, int start, int end)
+    {
+        if (start >= end)
+        {
+            return null;
+        }
+
+        int mid = (start + end) >>> 1;
+        return new Node(BuildBalanced(pieces, start, mid), pieces[mid], BuildBalanced(pieces, mid + 1, end));
+    }
+
     /// <summary><paramref name="offset"/> に <paramref name="piece"/> を挿入する。</summary>
     public PieceTree Insert(long offset, Piece piece) => Insert(offset, FromPiece(piece));
 

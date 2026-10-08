@@ -210,7 +210,9 @@ public sealed partial class PanelDockArea : UserControl
             (PanelDock.Bottom, "Panel_MoveBottom"), (PanelDock.Floating, "Panel_MoveFloating"),
         })
         {
-            var item = new MenuFlyoutItem { Text = Loc.Get(key), IsEnabled = dock != Dock };
+            // 浮動パネルにできないパネル (結果一覧など) は「浮動」を無効にする。
+            bool allowed = dock != PanelDock.Floating || Panels.PanelRegistry.Find(panelId)?.CanFloat != false;
+            var item = new MenuFlyoutItem { Text = Loc.Get(key), IsEnabled = dock != Dock && allowed };
             AutomationProperties.SetAutomationId(item, $"PanelMove_{panelId}_{PanelLayout.DockName(dock)}");
             item.Click += (_, _) => RequestMove(panelId, dock);
             move.Items.Add(item);

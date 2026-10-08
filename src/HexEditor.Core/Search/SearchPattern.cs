@@ -14,6 +14,46 @@ public enum PatternError
 
     /// <summary>エスケープ表記の誤り (`\q`、桁の足りない `\x4` など。FIND-07 の仕様 4)。</summary>
     InvalidEscape,
+
+    /// <summary>ワイルドカードだけの検索語 (FIND-06 の仕様 5)。</summary>
+    WildcardsOnly,
+
+    /// <summary>可変長のワイルドカード `*{m,n}` の範囲の誤り (m &gt; n、または一致の最大長を超える。FIND-06 の仕様 3)。</summary>
+    InvalidWildcardRange,
+
+    /// <summary>
+    /// 整数がサイズの範囲を超える (FIND-13 の仕様 3)。<see cref="PatternException.Arguments"/> は
+    /// ビット数、符号ありの最小・最大、符号なしの最小・最大 (地域設定で書式化したもの)。
+    /// </summary>
+    IntegerOutOfRange,
+
+    /// <summary>符号ありの範囲を超える。引数はビット数、最小、最大。</summary>
+    SignedOutOfRange,
+
+    /// <summary>符号なしの範囲を超える。引数はビット数、最小、最大。</summary>
+    UnsignedOutOfRange,
+
+    /// <summary>数値として読めない (FIND-13 の入力式の誤り、FIND-14 の `1,5` など)。<see cref="PatternException.Detail"/> は入力。</summary>
+    InvalidNumber,
+
+    /// <summary>値が浮動小数点の形式の範囲を超え、無限大になる (FIND-14 の「エラー」)。引数は形式の名前。</summary>
+    FloatOverflow,
+
+    /// <summary>許容誤差が負、または ULP が 0〜1,000,000 の整数でない (FIND-14 の仕様 3)。</summary>
+    InvalidTolerance,
+
+    /// <summary>置換語の `?` (ニブルのワイルドカード) と `*` は使えない (`??` だけが使える。FIND-22 の仕様 2)。</summary>
+    InvalidReplacementWildcard,
+}
+
+/// <summary>検索語の警告 (検索はできる)。</summary>
+[Flags]
+public enum PatternWarnings
+{
+    None = 0,
+
+    /// <summary>先頭と末尾のワイルドカードは照合に使わない (一致の範囲には含める。FIND-06 の仕様 4)。</summary>
+    EdgeWildcardsIgnored = 1,
 }
 
 /// <summary>検索語の誤り。<see cref="Position"/> は誤りのある文字の位置 (1 から数えた文字数。FIND-04 の仕様 6)。</summary>
@@ -24,12 +64,13 @@ public sealed class PatternException : Exception
     {
     }
 
-    public PatternException(PatternError error, string detail, int? position)
+    public PatternException(PatternError error, string detail, int? position, IReadOnlyList<string>? arguments = null)
         : base(position is int p ? $"{error}: {detail} ({p})" : $"{error}: {detail}")
     {
         Error = error;
         Detail = detail;
         Position = position;
+        Arguments = arguments ?? [];
     }
 
     public PatternError Error { get; }
@@ -41,6 +82,9 @@ public sealed class PatternException : Exception
     /// 誤りのある文字が検索語の何文字目か (1 から数える。サロゲートペアは 1 文字)。位置を示せない誤り (空、長すぎる) は null。
     /// </summary>
     public int? Position { get; }
+
+    /// <summary>説明文に入れる値 (範囲の数値など。地域設定で書式化済み)。空なら <see cref="Detail"/> を使う。</summary>
+    public IReadOnlyList<string> Arguments { get; }
 }
 
 /// <summary>テキストの検索語の解釈のしかた (FIND-07、FIND-10)。</summary>
@@ -54,14 +98,26 @@ public sealed record TextSearchOptions
 
     /// <summary>UTF-16 / UTF-32 で、一致の開始オフセットを 2 / 4 の倍数に限る (FIND-07 の仕様 5)。ほかの文字コードでは無視する。</summary>
     public bool AlignToCharacters { get; init; }
+
+    /// <summary>単語単位で探す (FIND-10 の仕様 4。既定オフ)。</summary>
+    public bool WholeWord { get; init; }
+}
+
+/// <summary>Hex の検索語の解釈のしかた (FIND-06)。</summary>
+public sealed record HexSearchOptions
+{
+    /// <summary>可変長のワイルドカード `*` の最大長 (「一致の最大長」。FIND-01 の仕様 3。既定 4,096 バイト)。</summary>
+    public int MaxWildcardLength { get; init; } = SearchPattern.DefaultMaxMatchLength;
 }
 
 /// <summary>
-/// 検索するバイト列。次の 3 種類がある。
+/// 検索するバイト列。次の種類がある。
 /// <list type="bullet">
 /// <item>リテラル: <see cref="Bytes"/> そのもの。</item>
 /// <item>ワイルドカード: <see cref="Mask"/> のビットが 1 の部分だけを比べる (FIND-06)。</item>
-/// <item>文字ごとの候補: 大文字・小文字を区別しないテキスト (FIND-10)。文字ごとに、変種を符号化したバイト列のどれかに一致する。</item>
+/// <item>文字ごとの候補: 大文字・小文字を区別しないテキスト (FIND-10)、エンディアン「両方」の数値 (FIND-13)。文字ごとに、候補のバイト列のどれかに一致する。</item>
+/// <item>可変長のワイルドカード `*` で区切った部分の並び (FIND-06 の仕様 3)。間の長さは最短で一致させる。</item>
+/// <item>値の比較: 各位置で値を復号して比べる (許容誤差のある浮動小数点、NaN。FIND-14)。</item>
 /// </list>
 /// </summary>
 public sealed class SearchPattern
@@ -69,17 +125,35 @@ public sealed class SearchPattern
     /// <summary>検索語の最大の長さ (FIND-05 の仕様 3)。</summary>
     public const int MaxLength = 1024 * 1024;
 
+    /// <summary>「一致の最大長」の既定値 (FIND-01 の仕様 3)。</summary>
+    public const int DefaultMaxMatchLength = 4096;
+
+    /// <summary>「一致の最大長」の設定の上限 (FIND-01 の仕様 3)。</summary>
+    public const int MaxMaxMatchLength = 1024 * 1024;
+
     /// <summary>文字ごとの候補 (候補がなければ null)。各要素は 1 文字 (またはエスケープの 1 バイト) の候補のバイト列。</summary>
     private readonly byte[][][]? _slots;
 
     /// <summary>先頭のバイトの候補 (文字ごとの候補のときだけ。FIND-01 の仕様 6)。</summary>
     private readonly SearchValues<byte>? _firstBytes;
 
-    private SearchPattern(byte[] bytes, byte[]? mask, byte[][][]? slots, int alignment)
+    /// <summary>可変長のワイルドカードで区切った部分 (可変長でなければ null)。</summary>
+    private readonly SearchPattern[]? _parts;
+
+    /// <summary><see cref="_parts"/> の間の長さの範囲 (要素数は部分の数 − 1)。</summary>
+    private readonly (int Min, int Max)[]? _gaps;
+
+    /// <summary>値の比較 (なければ null)。</summary>
+    private readonly ValueMatcher? _matcher;
+
+    private readonly bool _caseInsensitive;
+
+    private SearchPattern(byte[] bytes, byte[]? mask, byte[][][]? slots, int alignment, bool caseInsensitive = false)
     {
         Bytes = bytes;
         Mask = mask;
         _slots = slots;
+        _caseInsensitive = caseInsensitive;
         Alignment = Math.Max(1, alignment);
         (AnchorOffset, AnchorLength) = FindAnchor(mask, bytes.Length);
         if (slots is null)
@@ -94,8 +168,28 @@ public sealed class SearchPattern
         }
     }
 
+    private SearchPattern(SearchPattern[] parts, (int Min, int Max)[] gaps, byte[] bytes, byte[]? mask)
+    {
+        _parts = parts;
+        _gaps = gaps;
+        Bytes = bytes;
+        Mask = mask;
+        Alignment = 1;
+        MinMatchLength = parts.Sum(p => p.MinMatchLength) + gaps.Sum(g => g.Min);
+        MaxMatchLength = parts.Sum(p => p.MaxMatchLength) + gaps.Sum(g => g.Max);
+    }
+
+    private SearchPattern(ValueMatcher matcher, byte[] bytes)
+    {
+        _matcher = matcher;
+        Bytes = bytes;
+        Alignment = 1;
+        MinMatchLength = MaxMatchLength = matcher.Length;
+    }
+
     /// <summary>
     /// 検索語のバイト列。文字ごとの候補のときは、入力したとおりの文字を符号化したもの (変換結果の表示用。FIND-04 の仕様 7)。
+    /// 可変長のワイルドカードのときは、部分をつなげたもの。値の比較のときは、値をそのまま符号化したもの。
     /// </summary>
     public byte[] Bytes { get; }
 
@@ -106,10 +200,13 @@ public sealed class SearchPattern
     public int Length => Bytes.Length;
 
     /// <summary>ワイルドカードも文字ごとの候補もない (SIMD の IndexOf でそのまま探せる。FIND-01 の仕様 5)。</summary>
-    public bool IsLiteral => Mask is null && _slots is null;
+    public bool IsLiteral => Mask is null && _slots is null && _parts is null && _matcher is null;
 
     /// <summary>大文字・小文字を区別しない (文字ごとの候補を持つ)。</summary>
-    public bool IsCaseInsensitive => _slots is not null;
+    public bool IsCaseInsensitive => _caseInsensitive;
+
+    /// <summary>可変長のワイルドカード `*` を含む。</summary>
+    public bool HasVariableGap => _parts is not null;
 
     /// <summary>一致の最短の長さ。</summary>
     public int MinMatchLength { get; }
@@ -125,6 +222,64 @@ public sealed class SearchPattern
 
     internal int AnchorLength { get; }
 
+    /// <summary>検索語の警告 (先頭と末尾のワイルドカードなど)。</summary>
+    public PatternWarnings Warnings { get; private set; }
+
+    /// <summary>
+    /// 一致の種類の名前 (エンディアン「両方」の「LE」「BE」など。FIND-13 の仕様 4)。空なら種類はない。
+    /// <see cref="VariantAt"/> の値はこの添字。
+    /// </summary>
+    public IReadOnlyList<string> Variants { get; private init; } = [];
+
+    /// <summary>単語単位で探す (FIND-10 の仕様 4)。null なら単語の境界を調べない。</summary>
+    public WordBoundary? Word { get; private init; }
+
+    /// <summary>数値の検索の条件 (結果一覧の「値」列と置換語の符号化に使う。FIND-13、FIND-14)。数値でなければ null。</summary>
+    public NumericSearchInfo? Numeric { get; private set; }
+
+    /// <summary>
+    /// 変換結果の表示 (FIND-04 の仕様 7)。先頭 <paramref name="maxBytes"/> バイトを Hex で書き、ワイルドカードは `??` / `?`、
+    /// 可変長のワイルドカードは `*` (範囲を指定したものは `*{m,n}`) のまま書く。
+    /// </summary>
+    public string Preview(int maxBytes = 32)
+    {
+        var parts = new List<string>();
+        int shown = 0;
+        void AddBytes(SearchPattern p)
+        {
+            for (int i = 0; i < p.Bytes.Length && shown < maxBytes; i++, shown++)
+            {
+                byte m = p.Mask?[i] ?? 0xFF;
+                char hi = (m & 0xF0) == 0 ? '?' : "0123456789ABCDEF"[p.Bytes[i] >> 4];
+                char lo = (m & 0x0F) == 0 ? '?' : "0123456789ABCDEF"[p.Bytes[i] & 0xF];
+                parts.Add(string.Concat(hi, lo));
+            }
+        }
+
+        if (_parts is null)
+        {
+            AddBytes(this);
+        }
+        else
+        {
+            for (int k = 0; k < _parts.Length && shown < maxBytes; k++)
+            {
+                if (k > 0)
+                {
+                    (int min, int max) = _gaps![k - 1];
+                    parts.Add(min == 0 && max == _defaultGapMax ? "*" : $"*{{{min},{max}}}");
+                }
+
+                AddBytes(_parts[k]);
+            }
+        }
+
+        return string.Join(' ', parts);
+    }
+
+    /// <summary>可変長のワイルドカードの既定の最大長 (表示で `*` と書くかどうかの判定に使う)。</summary>
+    private int _defaultGapMax = DefaultMaxMatchLength;
+
     public static SearchPattern Literal(byte[] bytes)
     {
         CheckLength(bytes.Length);
@@ -133,77 +288,139 @@ public sealed class SearchPattern
 
     /// <summary>
     /// Hex 文字列から作る (00-overview 6.3、FIND-05、FIND-06)。空白・カンマ・改行・`0x`・`\x` は区切り。
-    /// `??` は任意の 1 バイト、`?` は任意の 1 ニブル。
+    /// `??` は任意の 1 バイト、`?` は任意の 1 ニブル、`*` は 0〜「一致の最大長」バイトの任意の並び (`*{m,n}` で範囲を指定)。
     /// </summary>
-    public static SearchPattern FromHex(string text)
+    public static SearchPattern FromHex(string text) => FromHex(text, new HexSearchOptions());
+
+    /// <inheritdoc cref="FromHex(string)"/>
+    public static SearchPattern FromHex(string text, HexSearchOptions options)
     {
-        var bytes = new List<byte>();
-        var mask = new List<byte>();
-        var digits = new List<char>();
-        int lastDigitPosition = 0;
-        int i = 0;
-        int position = 0; // 1 から数えた文字の位置 (サロゲートペアは 1 文字)
-        while (i < text.Length)
-        {
-            char c = text[i];
-            position++;
-            if (char.IsWhiteSpace(c) || c == ',')
-            {
-                i++;
-                continue;
-            }
-
-            if (c == '0' && i + 1 < text.Length && text[i + 1] is 'x' or 'X' && (digits.Count % 2 == 0))
-            {
-                i += 2;
-                position++;
-                continue;
-            }
-
-            if (c == '\\' && i + 1 < text.Length && text[i + 1] is 'x' or 'X')
-            {
-                i += 2;
-                position++;
-                continue;
-            }
-
-            if (!char.IsAsciiHexDigit(c) && c != '?')
-            {
-                string bad = char.IsHighSurrogate(c) && i + 1 < text.Length && char.IsLowSurrogate(text[i + 1])
-                    ? text.Substring(i, 2)
-                    : c.ToString();
-                throw new PatternException(PatternError.InvalidCharacter, bad, position);
-            }
-
-            digits.Add(c);
-            lastDigitPosition = position;
-            i++;
-        }
-
-        if (digits.Count == 0)
+        List<HexItem> items = ParseHexItems(text, options.MaxWildcardLength, allowWildcards: true);
+        if (items.Count == 0)
         {
             throw new PatternException(PatternError.Empty);
         }
 
-        if (digits.Count % 2 != 0)
+        // ワイルドカードだけの検索語はエラー (仕様 5)。
+        if (!items.Any(i => !i.IsGap && i.Mask != 0))
         {
-            // 対にならない最後の桁の位置を示す。
-            throw new PatternException(PatternError.OddDigits, digits[^1].ToString(), lastDigitPosition);
+            throw new PatternException(PatternError.WildcardsOnly);
         }
 
-        bool anyWildcard = false;
-        for (int d = 0; d < digits.Count; d += 2)
+        // 先頭と末尾の `??` / `*` は照合に使わない (仕様 4)。`??` は一致の範囲に含め、`*` は最短 (0 バイト) なので取り除く。
+        bool edge = (!items[0].IsGap && items[0].Mask == 0) || (!items[^1].IsGap && items[^1].Mask == 0)
+            || items[0].IsGap || items[^1].IsGap;
+        while (items[0].IsGap)
         {
-            (int hi, int hiMask) = Nibble(digits[d]);
-            (int lo, int loMask) = Nibble(digits[d + 1]);
-            bytes.Add((byte)((hi << 4) | lo));
-            mask.Add((byte)((hiMask << 4) | loMask));
-            anyWildcard |= hiMask == 0 || loMask == 0;
+            items.RemoveAt(0);
         }
 
-        CheckLength(bytes.Count);
-        return new SearchPattern([.. bytes], anyWildcard ? [.. mask] : null, null, 1);
+        while (items[^1].IsGap)
+        {
+            items.RemoveAt(items.Count - 1);
+        }
+
+        // `*` で部分に分ける。続けて書いた `*` は 1 つにまとめる。
+        var parts = new List<List<HexItem>> { new() };
+        var gaps = new List<(int Min, int Max)>();
+        foreach (HexItem item in items)
+        {
+            if (item.IsGap)
+            {
+                if (parts[^1].Count == 0)
+                {
+                    gaps[^1] = (gaps[^1].Min + item.GapMin, Math.Min(options.MaxWildcardLength, gaps[^1].Max + item.GapMax));
+                }
+                else
+                {
+                    gaps.Add((item.GapMin, item.GapMax));
+                    parts.Add([]);
+                }
+            }
+            else
+            {
+                parts[^1].Add(item);
+            }
+        }
+
+        SearchPattern[] built = [.. parts.Select(BuildFixed)];
+        CheckLength(built.Sum(p => p.Length));
+        PatternWarnings warnings = edge ? PatternWarnings.EdgeWildcardsIgnored : PatternWarnings.None;
+        if (built.Length == 1)
+        {
+            return built[0].With(warnings);
+        }
+
+        byte[] bytes = [.. built.SelectMany(p => p.Bytes)];
+        byte[]? mask = built.Any(p => p.Mask is not null) ? [.. built.SelectMany(p => p.Mask ?? Enumerable.Repeat((byte)0xFF, p.Length))] : null;
+        return new SearchPattern(built, [.. gaps], bytes, mask) { Warnings = warnings, _defaultGapMax = options.MaxWildcardLength };
     }
+
+    /// <summary>
+    /// 置換語の Hex 文字列 (FIND-22 の仕様 2)。`??` の位置は元のバイトを残す (戻り値の <c>Keep</c> が true)。
+    /// `?` (ニブル) と `*` は使えない。空 (空白だけ) なら長さ 0 (一致を削除する。FIND-22 の仕様 8)。
+    /// </summary>
+    public static (byte Value, bool Keep)[] ParseReplacementHex(string text)
+    {
+        List<HexItem> items = ParseHexItems(text, DefaultMaxMatchLength, allowWildcards: true);
+        var result = new (byte, bool)[items.Count];
+        for (int i = 0; i < items.Count; i++)
+        {
+            HexItem item = items[i];
+            if (item.IsGap || item.Mask is not (0x00 or 0xFF))
+            {
+                throw new PatternException(PatternError.InvalidReplacementWildcard, item.IsGap ? "*" : "?", item.Position);
+            }
+
+            result[i] = (item.Value, item.Mask == 0);
+        }
+
+        if (result.Length > MaxLength)
+        {
+            throw new PatternException(PatternError.TooLong);
+        }
+
+        return result;
+    }
+
+    /// <summary>候補のバイト列のどれかに一致するパターン (エンディアン「両方」など)。同じバイト列はまとめ、名前を「/」でつなぐ。</summary>
+    internal static SearchPattern FromAlternatives(IReadOnlyList<byte[]> alternatives, IReadOnlyList<string> labels)
+    {
+        var distinct = new List<byte[]>();
+        var names = new List<string>();
+        for (int i = 0; i < alternatives.Count; i++)
+        {
+            int same = distinct.FindIndex(a => a.AsSpan().SequenceEqual(alternatives[i]));
+            if (same >= 0)
+            {
+                if (!names[same].Split('/').Contains(labels[i]))
+                {
+                    names[same] += "/" + labels[i];
+                }
+            }
+            else
+            {
+                distinct.Add(alternatives[i]);
+                names.Add(labels[i]);
+            }
+        }
+
+        foreach (byte[] a in distinct)
+        {
+            CheckLength(a.Length);
+        }
+
+        if (distinct.Count == 1)
+        {
+            return new SearchPattern(distinct[0], null, null, 1) { Variants = names };
+        }
+
+        return new SearchPattern(distinct[0], null, [[.. distinct]], 1) { Variants = names };
+    }
+
+    /// <summary>各位置で値を比べるパターン (許容誤差のある浮動小数点など)。<paramref name="bytes"/> は変換結果の表示用。</summary>
+    internal static SearchPattern FromMatcher(ValueMatcher matcher, byte[] bytes, IReadOnlyList<string> labels) =>
+        new(matcher, bytes) { Variants = labels };
 
     /// <summary>文字列を文字コードで符号化して作る (FIND-07)。BOM は付けない。表せない文字はエラーにする。大文字・小文字を区別する。</summary>
     public static SearchPattern FromText(string text, Encoding encoding) => FromText(text, encoding, new TextSearchOptions());
@@ -227,6 +444,7 @@ public sealed class SearchPattern
         }
 
         int alignment = options.AlignToCharacters ? CharacterUnit(encoding) : 1;
+        WordBoundary? word = options.WholeWord ? new WordBoundary(encoding) : null;
 
         // 入力したとおりの符号化 (変換結果の表示と、区別する検索のバイト列)。
         var typed = new List<byte[]>(tokens.Count);
@@ -239,7 +457,7 @@ public sealed class SearchPattern
         CheckLength(bytes.Length);
         if (options.CaseSensitive)
         {
-            return new SearchPattern(bytes, null, null, alignment);
+            return new SearchPattern(bytes, null, null, alignment) { Word = word };
         }
 
         // 区別しない: 文字ごとに変種を作り、符号化できる変種だけを候補にする (FIND-10 の仕様 2)。
@@ -270,7 +488,7 @@ public sealed class SearchPattern
         }
 
         // 大文字・小文字のない文字だけなら、リテラルとして SIMD で探す。
-        return new SearchPattern(bytes, null, anyAlternative ? slots : null, alignment);
+        return new SearchPattern(bytes, null, anyAlternative ? slots : null, alignment, anyAlternative) { Word = word };
     }
 
     /// <summary>
@@ -314,6 +532,17 @@ public sealed class SearchPattern
     /// <summary><paramref name="data"/> の先頭で一致する長さ。一致しなければ −1。</summary>
     public int MatchLength(ReadOnlySpan<byte> data)
     {
+        if (_parts is not null)
+        {
+            int end = MatchParts(data, 0, 0);
+            return end;
+        }
+
+        if (_matcher is not null)
+        {
+            return data.Length >= _matcher.Length && _matcher.Match(data) >= 0 ? _matcher.Length : -1;
+        }
+
         if (_slots is not null)
         {
             return MatchSlots(data);
@@ -338,6 +567,36 @@ public sealed class SearchPattern
         }
 
         return Bytes.Length;
+    }
+
+    /// <summary>
+    /// <paramref name="data"/> の先頭で一致した種類 (<see cref="Variants"/> の添字)。種類がない・一致しない場合は 0。
+    /// </summary>
+    public int VariantAt(ReadOnlySpan<byte> data)
+    {
+        if (Variants.Count <= 1)
+        {
+            return 0;
+        }
+
+        if (_matcher is not null)
+        {
+            return data.Length >= _matcher.Length ? Math.Max(0, _matcher.Match(data)) : 0;
+        }
+
+        if (_slots is { Length: 1 })
+        {
+            byte[][] alternatives = _slots[0];
+            for (int i = 0; i < alternatives.Length; i++)
+            {
+                if (data.StartsWith(alternatives[i]))
+                {
+                    return i;
+                }
+            }
+        }
+
+        return 0;
     }
 
     /// <summary>
@@ -386,6 +645,44 @@ public sealed class SearchPattern
             return -1;
         }
 
+        if (_parts is not null)
+        {
+            // 最初の部分で候補を探し、残りの部分を最短で照合する (FIND-06 の仕様 3)。
+            SearchPattern first = _parts[0];
+            while (true)
+            {
+                int candidate = first.IndexOfUnaligned(data, from, out _);
+                if (candidate < 0)
+                {
+                    return -1;
+                }
+
+                int end = MatchParts(data, 0, candidate);
+                if (end >= 0)
+                {
+                    length = end - candidate;
+                    return candidate;
+                }
+
+                from = candidate + 1;
+            }
+        }
+
+        if (_matcher is not null)
+        {
+            int n = _matcher.Length;
+            for (int i = from; i + n <= data.Length; i++)
+            {
+                if (_matcher.Match(data[i..]) >= 0)
+                {
+                    length = n;
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         if (_slots is not null)
         {
             // 先頭の文字の候補のバイトで絞り込み、候補の位置だけを照合する (FIND-01 の仕様 6)。
@@ -420,7 +717,7 @@ public sealed class SearchPattern
 
         if (AnchorLength == 0)
         {
-            // すべてワイルドカード (例: ?? ??): 先頭から順に照合する。
+            // すべてワイルドカード (可変長の間の `??` など): 先頭から順に照合する。
             for (int i = from; i + Bytes.Length <= data.Length; i++)
             {
                 if (MatchLength(data[i..]) >= 0)
@@ -460,6 +757,46 @@ public sealed class SearchPattern
     private int LastIndexOfUnaligned(ReadOnlySpan<byte> data, int end, out int length)
     {
         length = 0;
+        if (_parts is not null)
+        {
+            SearchPattern first = _parts[0];
+            int limit = Math.Min(end, data.Length);
+            while (limit > 0)
+            {
+                int candidate = first.LastIndexOfUnaligned(data, limit, out _);
+                if (candidate < 0)
+                {
+                    return -1;
+                }
+
+                int matchEnd = MatchParts(data, 0, candidate);
+                if (matchEnd >= 0)
+                {
+                    length = matchEnd - candidate;
+                    return candidate;
+                }
+
+                limit = candidate;
+            }
+
+            return -1;
+        }
+
+        if (_matcher is not null)
+        {
+            int n = _matcher.Length;
+            for (int i = Math.Min(end - 1, data.Length - n); i >= 0; i--)
+            {
+                if (_matcher.Match(data[i..]) >= 0)
+                {
+                    length = n;
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         if (_slots is not null)
         {
             int limit = Math.Min(end, data.Length - MinMatchLength + 1);
@@ -531,6 +868,57 @@ public sealed class SearchPattern
     }
 
     /// <summary>
+    /// 部分 <paramref name="index"/> が <paramref name="at"/> から始まるとして、残りの部分を照合する。一致すれば一致の末尾
+    /// (データの先頭からの位置)、しなければ −1。間の長さは短いものから試す (最短一致)。
+    /// </summary>
+    private int MatchParts(ReadOnlySpan<byte> data, int index, int at)
+    {
+        SearchPattern part = _parts![index];
+        int len = part.MatchLength(data[at..]);
+        if (len < 0)
+        {
+            return -1;
+        }
+
+        int end = at + len;
+        if (index == _parts.Length - 1)
+        {
+            return end;
+        }
+
+        (int min, int max) = _gaps![index];
+        SearchPattern next = _parts[index + 1];
+        long lo = (long)end + min;
+        long hi = Math.Min((long)end + max, data.Length - next.MinMatchLength);
+        if (lo > hi)
+        {
+            return -1;
+        }
+
+        // 次の部分の開始が hi 以下になるよう、探す範囲を切る。
+        ReadOnlySpan<byte> window = data[..(int)Math.Min(data.Length, hi + next.MaxMatchLength)];
+        int from = (int)lo;
+        while (from <= hi)
+        {
+            int candidate = next.IndexOfUnaligned(window, from, out _);
+            if (candidate < 0 || candidate > hi)
+            {
+                return -1;
+            }
+
+            int result = MatchParts(data, index + 1, candidate);
+            if (result >= 0)
+            {
+                return result;
+            }
+
+            from = candidate + 1;
+        }
+
+        return -1;
+    }
+
+    /// <summary>
     /// 文字ごとの候補を先頭から照合する。各文字の候補は、文字コードの性質 (UTF-8・UTF-16・2 バイト文字コードは、ある文字の
     /// 符号化が別の文字の符号化の先頭部分にならない) から高々 1 つしか一致しないため、後戻りしない。
     /// </summary>
@@ -560,6 +948,33 @@ public sealed class SearchPattern
         return at;
     }
 
+    private SearchPattern With(PatternWarnings warnings)
+    {
+        if (warnings == PatternWarnings.None)
+        {
+            return this;
+        }
+
+        var copy = (SearchPattern)MemberwiseClone();
+        copy.Warnings = warnings;
+        return copy;
+    }
+
+    /// <summary>数値の検索の条件を付けた写し。</summary>
+    internal SearchPattern WithNumeric(NumericSearchInfo info)
+    {
+        var copy = (SearchPattern)MemberwiseClone();
+        copy.Numeric = info;
+        return copy;
+    }
+
+    private static SearchPattern BuildFixed(List<HexItem> items)
+    {
+        byte[] bytes = [.. items.Select(i => i.Value)];
+        bool anyWildcard = items.Any(i => i.Mask != 0xFF);
+        return new SearchPattern(bytes, anyWildcard ? [.. items.Select(i => i.Mask)] : null, null, 1);
+    }
+
     private static void CheckLength(int length)
     {
         if (length == 0)
@@ -573,8 +988,131 @@ public sealed class SearchPattern
         }
     }
 
+    /// <summary>Hex の検索語の 1 単位: 1 バイト (値とマスク)、または可変長のワイルドカード。</summary>
+    private readonly record struct HexItem(byte Value, byte Mask, bool IsGap, int GapMin, int GapMax, int Position);
+
+    /// <summary>Hex 文字列をバイトと可変長のワイルドカードに分ける。誤りは位置を付けて投げる。</summary>
+    private static List<HexItem> ParseHexItems(string text, int maxGap, bool allowWildcards)
+    {
+        var items = new List<HexItem>();
+        var digits = new List<(char Digit, int Position)>();
+        int i = 0;
+        int position = 0; // 1 から数えた文字の位置 (サロゲートペアは 1 文字)
+
+        void FlushDigits()
+        {
+            if (digits.Count % 2 != 0)
+            {
+                // 対にならない最後の桁の位置を示す。
+                throw new PatternException(PatternError.OddDigits, digits[^1].Digit.ToString(), digits[^1].Position);
+            }
+
+            for (int d = 0; d < digits.Count; d += 2)
+            {
+                (int hi, int hiMask) = Nibble(digits[d].Digit);
+                (int lo, int loMask) = Nibble(digits[d + 1].Digit);
+                items.Add(new HexItem((byte)((hi << 4) | lo), (byte)((hiMask << 4) | loMask), false, 0, 0, digits[d].Position));
+            }
+
+            digits.Clear();
+        }
+
+        while (i < text.Length)
+        {
+            char c = text[i];
+            position++;
+            if (char.IsWhiteSpace(c) || c == ',')
+            {
+                i++;
+                continue;
+            }
+
+            if (c == '0' && i + 1 < text.Length && text[i + 1] is 'x' or 'X' && (digits.Count % 2 == 0))
+            {
+                i += 2;
+                position++;
+                continue;
+            }
+
+            if (c == '\\' && i + 1 < text.Length && text[i + 1] is 'x' or 'X')
+            {
+                i += 2;
+                position++;
+                continue;
+            }
+
+            if (c == '*' && allowWildcards)
+            {
+                int starPosition = position;
+                if (digits.Count % 2 != 0)
+                {
+                    throw new PatternException(PatternError.OddDigits, digits[^1].Digit.ToString(), digits[^1].Position);
+                }
+
+                FlushDigits();
+                i++;
+                int min = 0;
+                int max = maxGap;
+                if (i < text.Length && text[i] == '{')
+                {
+                    int close = text.IndexOf('}', i);
+                    if (close < 0)
+                    {
+                        throw new PatternException(PatternError.InvalidWildcardRange, text[(i - 1)..], starPosition,
+                            [maxGap.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)]);
+                    }
+
+                    string range = text[(i + 1)..close];
+                    string[] bounds = range.Split(',');
+                    bool ok = bounds.Length is 1 or 2
+                        && int.TryParse(bounds[0].Trim(), System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out min);
+                    if (ok && bounds.Length == 2)
+                    {
+                        string upper = bounds[1].Trim();
+                        ok = upper.Length == 0 || int.TryParse(upper, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out max);
+                    }
+                    else if (ok)
+                    {
+                        max = min;
+                    }
+
+                    if (!ok || min > max || max > maxGap)
+                    {
+                        throw new PatternException(PatternError.InvalidWildcardRange, text[(i - 1)..(close + 1)], starPosition,
+                            [maxGap.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)]);
+                    }
+
+                    position += close - i + 1;
+                    i = close + 1;
+                }
+
+                items.Add(new HexItem(0, 0, true, min, max, starPosition));
+                continue;
+            }
+
+            if (!char.IsAsciiHexDigit(c) && !(c == '?' && allowWildcards))
+            {
+                string bad = char.IsHighSurrogate(c) && i + 1 < text.Length && char.IsLowSurrogate(text[i + 1])
+                    ? text.Substring(i, 2)
+                    : c.ToString();
+                throw new PatternException(PatternError.InvalidCharacter, bad, position);
+            }
+
+            digits.Add((c, position));
+            i++;
+        }
+
+        FlushDigits();
+        if (items.Count(it => !it.IsGap) > MaxLength)
+        {
+            throw new PatternException(PatternError.TooLong);
+        }
+
+        return items;
+    }
+
     /// <summary>表せない文字で例外を投げる文字コード。BOM は GetBytes では付かない。</summary>
-    private static Encoding StrictEncoding(Encoding encoding)
+    internal static Encoding StrictEncoding(Encoding encoding)
     {
         var strict = (Encoding)encoding.Clone();
         strict.EncoderFallback = EncoderFallback.ExceptionFallback;
@@ -616,6 +1154,27 @@ public sealed class SearchPattern
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// テキストの検索語をエスケープ表記ごと符号化する (置換語の符号化。FIND-22 の仕様 2)。表せない文字はエラーにする。
+    /// 空なら長さ 0。
+    /// </summary>
+    public static byte[] EncodeText(string text, Encoding encoding, bool useEscapes)
+    {
+        if (text.Length == 0)
+        {
+            return [];
+        }
+
+        Encoding strict = StrictEncoding(encoding);
+        var parts = new List<byte[]>();
+        foreach (TextToken token in Tokenize(text, useEscapes))
+        {
+            parts.Add(token.IsByte ? [token.Byte] : Encode(strict, token.Rune, token.Position));
+        }
+
+        return Concat(parts);
     }
 
     /// <summary>検索語の 1 単位: 1 文字、またはエスケープ `\xHH` の 1 バイト。<see cref="Position"/> は入力の何文字目か。</summary>
@@ -752,4 +1311,15 @@ public sealed class SearchPattern
 
         return (bestStart, bestLength);
     }
+}
+
+/// <summary>
+/// 各位置で値を復号して比べる照合 (許容誤差のある浮動小数点、NaN など。FIND-14 の仕様 8)。<see cref="Match"/> は
+/// <paramref name="data"/> の先頭 <see cref="Length"/> バイトが一致すれば種類の番号 (0 から)、しなければ −1 を返す。
+/// </summary>
+internal abstract class ValueMatcher(int length)
+{
+    public int Length { get; } = length;
+
+    public abstract int Match(ReadOnlySpan<byte> data);
 }

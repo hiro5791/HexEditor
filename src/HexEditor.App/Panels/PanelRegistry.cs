@@ -49,6 +49,9 @@ public sealed record PanelRegistration(string Id, string TitleKey, PanelDock Def
 
     public bool RequiresDocument { get; init; } = true;
 
+    /// <summary>浮動パネルにできるか。ウィンドウごとに 1 つの部品を使い回すパネル (結果一覧など) は false。</summary>
+    public bool CanFloat { get; init; } = true;
+
     /// <summary>見出しの文字列 (リソースを持たないプラグインのパネル用。設定すると <see cref="TitleKey"/> より優先する)。</summary>
     public string? Title { get; init; }
 }

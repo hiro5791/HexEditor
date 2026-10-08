@@ -85,6 +85,34 @@ public sealed class SearchScope
 
     /// <summary>範囲の合計のバイト数 (進捗の全体量。FIND-12 の 1 GiB の判定)。</summary>
     public long TotalLength(long documentLength) => Resolve(documentLength).Sum(r => r.Length);
+
+    /// <summary>
+    /// [start, start + length) と重なる部分だけの範囲 (インクリメンタルサーチの「起点から前方 256 MB」。FIND-27 の仕様 6)。
+    /// <paramref name="truncated"/> は、切った先にも範囲が残っているか (「Enter で続きを検索」を出すかどうか)。
+    /// </summary>
+    public SearchScope Clip(long start, long length, long documentLength, out bool truncated)
+    {
+        long end = length >= long.MaxValue - start ? long.MaxValue : start + length;
+        var clipped = new List<SearchRange>();
+        truncated = false;
+        foreach (SearchRange r in Resolve(documentLength))
+        {
+            long lo = Math.Max(r.Offset, start);
+            long hi = Math.Min(r.End, end);
+            if (hi > lo)
+            {
+                clipped.Add(new SearchRange(lo, hi - lo));
+            }
+
+            truncated |= r.End > end;
+        }
+
+        // 範囲が空になった場合も「ドキュメント全体」に戻らないよう、長さ 0 の範囲 1 つにする。
+        return clipped.Count == 0 ? new SearchScope([]) : new SearchScope([.. clipped]);
+    }
+
+    /// <summary>インクリメンタルサーチで 1 回に探す長さ (起点から前方 256 MB。FIND-27 の仕様 6)。</summary>
+    public const long IncrementalWindow = 256L * 1024 * 1024;
 }
 
 /// <summary>読めない範囲に出会ったときの動作 (FIND-01 の「エラー」)。</summary>

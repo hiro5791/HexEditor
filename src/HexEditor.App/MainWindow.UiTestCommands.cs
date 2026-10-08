@@ -45,7 +45,7 @@ public sealed partial class MainWindow
         // ファイル・セッションの命令 (MainWindow.FilesTestCommands.cs)、コマンド・パネル・設定の命令 (MainWindow.FrameworkTestCommands.cs)。
         _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request)
             ?? HandleInspectorTestCommand(cmd, request) ?? await HandlePackagingTestCommandsAsync(cmd, request)
-            ?? HandleEditTestCommand(cmd, request),
+            ?? HandleEditTestCommand(cmd, request) ?? await HandleSearchTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>
@@ -512,7 +512,7 @@ public sealed partial class MainWindow
     private JsonObject TestFindKey(JsonObject request)
     {
         var key = Enum.Parse<VirtualKey>(request["key"]!.GetValue<string>(), ignoreCase: true);
-        _ = FindBar.HandleQueryKeyAsync(key, request["shift"]?.GetValue<bool>() ?? false);
+        _ = FindBar.HandleQueryKeyAsync(key, request["shift"]?.GetValue<bool>() ?? false, request["alt"]?.GetValue<bool>() ?? false);
         return new JsonObject();
     }
 

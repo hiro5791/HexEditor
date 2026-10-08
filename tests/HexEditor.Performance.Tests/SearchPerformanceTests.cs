@@ -140,4 +140,171 @@ public sealed class SearchPerformanceTests
             Assert.True(slowest >= target, $"{pattern.Length} バイトのパターン: {slowest:F0} MiB/s (目標 {target} MiB/s)");
         }
     }
+
+    /// <summary>
+    /// TC-FIND-06-03: ワイルドカードを含む検索語で 10 GiB のファイルの末尾の一致を、OS のキャッシュにない状態から探す。
+    /// 速度が 500 MiB/s と読み込み速度の 80% のうち小さい方以上。性能テスト用の計測機でだけ実行する。
+    /// </summary>
+    [PerfMachineFact]
+    [Trait(TC, "TC-FIND-06-03")]
+    public void WildcardSearchOfTenGigabytesKeepsUpWithTheDisk()
+    {
+        string path = TestDataCatalog.Get("TD-FIND-RANDOM-10G");
+        long length = new FileInfo(path).Length;
+        FileCache.Purge();
+        double read;
+        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 0, FileOptions.SequentialScan))
+        {
+            byte[] buffer = new byte[4 * MiB];
+            var watch = Stopwatch.StartNew();
+            while (stream.Read(buffer) > 0)
+            {
+            }
+
+            read = length / (double)MiB / watch.Elapsed.TotalSeconds;
+        }
+
+        double target = Math.Min(500, read * 0.8);
+        foreach (string hex in new[] { "48 45 ?? 45 4E 44", "4? 45 58 45 4E 4?" })
+        {
+            double slowest = double.MaxValue;
+            for (int i = 0; i < 3; i++)
+            {
+                FileCache.Purge();
+                using var doc = new Document(FileByteSource.Open(path), Options());
+                var watch = Stopwatch.StartNew();
+                SearchHit? hit = SearchEngine.Find(doc.Current, SearchPattern.FromHex(hex), 0, forward: true, wrap: false);
+                double speed = length / (double)MiB / watch.Elapsed.TotalSeconds;
+                Assert.Equal(10_737_418_232, hit?.Offset);
+                slowest = Math.Min(slowest, speed);
+            }
+
+            Assert.True(slowest >= target, $"{hex}: {slowest:F0} MiB/s (目標 {target:F0} MiB/s、読み込み {read:F0} MiB/s)");
+        }
+    }
+
+    /// <summary>TD-FIND-HITS-1000 / TD-FIND-HITS-1500K をメモリ上に作る。</summary>
+    private static byte[] Hits(int count, int stride, byte[] pattern, int length)
+    {
+        byte[] data = new byte[length];
+        for (int k = 0; k < count; k++)
+        {
+            pattern.CopyTo(data, k * stride);
+        }
+
+        return data;
+    }
+
+    private static long ReplaceAll(Document doc, SearchPattern pattern, string replacement)
+    {
+        using SearchResults found = Replacer.FindForReplaceAll(doc.Current, pattern, SearchOptions.Default);
+        PreparedReplacement prepared = doc.PrepareReplacements(
+            Replacer.PlanAll(doc.Current, found, ReplacementTemplate.FromHex(replacement), new ReplaceOptions(), doc.CanResize));
+        doc.CommitReplacements(prepared, "すべて置換");
+        return prepared.Count;
+    }
+
+    /// <summary>
+    /// TC-FIND-23-01: 1 MiB のファイルの 1,000 件のすべて置換 (検索と適用) が 1 秒以内に終わり、Undo 1 回ですべて戻る。3 回行う。
+    /// 検索バーの UI を通さず、すべて置換と同じ部品を直接呼ぶ (完了の InfoBar は UI のテスト TC-FIND-23-04 で確かめる)。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-FIND-23-01")]
+    public void ReplacingAThousandMatchesTakesLessThanASecond()
+    {
+        byte[] data = Hits(1000, 1024, [0x12, 0x34, 0x56, 0x78], (int)MiB);
+        using var doc = new Document(new MemoryByteSource(data), Options());
+        SearchPattern find = SearchPattern.FromHex("12 34 56 78");
+        SearchPattern replaced = SearchPattern.FromHex("87 65 43 21");
+        for (int i = 0; i < 3; i++)
+        {
+            var watch = Stopwatch.StartNew();
+            Assert.Equal(1000, ReplaceAll(doc, find, "87 65 43 21"));
+            TimeSpan time = watch.Elapsed;
+            Assert.True(time <= TimeSpan.FromSeconds(1), $"{i + 1} 回目: {time.TotalMilliseconds:F0} ms");
+            Assert.Equal(0, SearchEngine.Count(doc.Current, find).Count);
+            Assert.Equal(1000, SearchEngine.Count(doc.Current, replaced).Count);
+            doc.Undo();
+            Assert.Equal(1000, SearchEngine.Count(doc.Current, find).Count);
+            Assert.Equal(0, SearchEngine.Count(doc.Current, replaced).Count);
+        }
+    }
+
+    /// <summary>
+    /// TC-FIND-23-05: 1,500,000 件の同じ長さの置換の適用が 5 秒以内 (目標。超えた場合は警告として出力する) で、
+    /// メモリ使用量の増加がメモリの上限 (既定 1 GB) を超えない。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-FIND-23-05")]
+    public void ApplyingMillionsOfSameLengthReplacementsIsFastAndBounded()
+    {
+        byte[] data = Hits(1_500_000, 4, [0xAB, 0xCD], 6_000_000);
+        using var doc = new Document(new MemoryByteSource(data), Options());
+        using SearchResults found = Replacer.FindForReplaceAll(doc.Current, SearchPattern.FromHex("AB CD"), SearchOptions.Default);
+        Assert.Equal(1_500_000, found.Count);
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, blocking: true, compacting: true);
+        using var process = Process.GetCurrentProcess();
+        long before = process.PrivateMemorySize64;
+        var watch = Stopwatch.StartNew();
+        PreparedReplacement prepared = doc.PrepareReplacements(
+            Replacer.PlanAll(doc.Current, found, ReplacementTemplate.FromHex("12 34"), new ReplaceOptions(), doc.CanResize));
+        doc.CommitReplacements(prepared, "すべて置換");
+        TimeSpan time = watch.Elapsed;
+        process.Refresh();
+        long growth = process.PrivateMemorySize64 - before;
+        Assert.Equal(1_500_000, prepared.Count);
+        Assert.Equal(new byte[] { 0x12, 0x34 }, PerfSupport.Read(doc, 5_999_996, 2));
+        Assert.True(growth <= GiB, $"メモリ使用量の増加: {growth / MiB} MiB");
+        if (time > TimeSpan.FromSeconds(5))
+        {
+            Console.WriteLine($"警告: 適用に {time.TotalSeconds:F1} 秒かかりました (目標 5 秒)。");
+        }
+
+        Assert.True(time <= TimeSpan.FromSeconds(30), $"適用の時間: {time.TotalSeconds:F1} 秒");
+    }
+
+    /// <summary>
+    /// TC-FIND-24-04: TD-SPARSE-100G で `@000000` (7 バイト) を `#0000000` (8 バイト) に「長さを変える」ですべて置換する。適用は 1 秒以内、
+    /// メモリ使用量の増加は 50 MB 以下、長さは 107,374,182,400 + 置換の件数。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-FIND-24-04")]
+    public void ChangingLengthReplaceAllOnHundredGigabytes()
+    {
+        using var doc = new Document(FileByteSource.Open(TestDataCatalog.Get("TD-SPARSE-100G")), Options());
+        using SearchResults found = Replacer.FindForReplaceAll(doc.Current, SearchPattern.FromText("@000000", Encoding.ASCII), SearchOptions.Default);
+        Assert.InRange(found.Count, 100, 1000);
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, blocking: true, compacting: true);
+        using var process = Process.GetCurrentProcess();
+        long before = process.PrivateMemorySize64;
+        var watch = Stopwatch.StartNew();
+        PreparedReplacement prepared = doc.PrepareReplacements(Replacer.PlanAll(doc.Current, found,
+            ReplacementTemplate.FromText("#0000000", Encoding.ASCII, false), new ReplaceOptions(), doc.CanResize));
+        doc.CommitReplacements(prepared, "すべて置換");
+        TimeSpan time = watch.Elapsed;
+        process.Refresh();
+        long growth = process.PrivateMemorySize64 - before;
+        Assert.True(time <= TimeSpan.FromSeconds(1), $"適用の時間: {time.TotalMilliseconds:F0} ms");
+        Assert.True(growth <= 50 * MiB, $"メモリ使用量の増加: {growth / MiB} MiB");
+        Assert.Equal((100 * GiB) + found.Count, doc.Length);
+    }
+
+    /// <summary>
+    /// TC-FIND-27-03: 100 GiB のファイルで、ファイルにない `DE` をインクリメンタルサーチと同じ範囲 (起点から前方 256 MB) で探す。
+    /// 範囲を読み終えたら止まり (「Enter で続きを検索」)、ファイル全体を読まない。検索は検索バーと同じくバックグラウンドで行い、
+    /// 入力の取り消しは UI のテスト (TC-FIND-27-02) で確かめる。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-FIND-27-03")]
+    public void IncrementalSearchStopsAfterTheWindow()
+    {
+        using var doc = new Document(FileByteSource.Open(TestDataCatalog.Get("TD-SPARSE-100G")), Options());
+        SearchScope window = SearchScope.WholeDocument.Clip(0, SearchScope.IncrementalWindow, doc.Length, out bool truncated);
+        Assert.True(truncated);
+        var watch = Stopwatch.StartNew();
+        SearchHit? hit = SearchEngine.Find(doc.Current, SearchPattern.FromHex("DE"), 0, forward: true, wrap: false, new SearchOptions { Scope = window });
+        TimeSpan time = watch.Elapsed;
+        Assert.Null(hit);
+        Assert.True(time <= TimeSpan.FromSeconds(10), $"{time.TotalSeconds:F1} 秒");
+    }
 }

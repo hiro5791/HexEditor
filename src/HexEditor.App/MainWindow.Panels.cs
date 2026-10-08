@@ -144,17 +144,30 @@ public sealed partial class MainWindow
     public bool IsPanelShown(string id) =>
         _panelLayout.Find(id) is { Visible: true } p && (p.Dock == PanelDock.Floating || !_panelLayout.HiddenDocks.Contains(p.Dock));
 
-    /// <summary>パネルを表示する (既定の場所、または前回の場所)。</summary>
-    public void ShowPanel(string id)
+    /// <summary>パネルを表示する (既定の場所、または前回の場所)。<paramref name="focus"/> なら見出しにフォーカスを移す。</summary>
+    public void ShowPanel(string id, bool focus = true)
     {
         if (PanelRegistry.Find(id) is not { } reg)
         {
             return;
         }
 
+        if (IsPanelShown(id) && !focus)
+        {
+            return;
+        }
+
         _panelLayout.Show(id, reg.DefaultDock);
+        if (!reg.CanFloat && _panelLayout.Find(id) is { Dock: PanelDock.Floating })
+        {
+            _panelLayout.Move(id, reg.DefaultDock, reg.DefaultDock);
+        }
+
         ApplyPanelLayout();
-        FocusPanel(id);
+        if (focus)
+        {
+            FocusPanel(id);
+        }
     }
 
     public void HidePanel(string id)
@@ -179,7 +192,7 @@ public sealed partial class MainWindow
     /// <summary>パネルを別の場所に移す (見出しのメニュー・ドラッグ。UI-05 の仕様 3、4)。</summary>
     public void MovePanel(string id, PanelDock dock)
     {
-        if (PanelRegistry.Find(id) is not { } reg)
+        if (PanelRegistry.Find(id) is not { } reg || (dock == PanelDock.Floating && !reg.CanFloat))
         {
             return;
         }
@@ -293,6 +306,7 @@ public sealed partial class MainWindow
         ApplyFloatingPanels();
         SyncHashTarget();
         SyncAnnotationPanels();
+        SyncSearchResultsPanel();
         SavePanelLayout();
         RefreshCommandUi();
     }

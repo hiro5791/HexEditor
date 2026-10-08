@@ -98,6 +98,11 @@ public static class BuiltInCommands
         new("search.find", "search") { Icon = IconFind, DefaultBindings = [K("Ctrl+F")], Condition = "documentOpen" },
         new("search.findNext", "search") { DefaultBindings = [K("F3")], Condition = "documentOpen" },
         new("search.findPrevious", "search") { DefaultBindings = [K("Shift+F3")], Condition = "documentOpen" },
+        new("search.replace", "search") { DefaultBindings = [K("Ctrl+H")], Condition = "documentOpen" },
+
+        // 検索バーでは検索バー自身が Alt+Enter を処理する (FIND-20)。
+        new("search.findAll", "search") { DefaultBindings = [K("Alt+Enter", KeyScope.FindBar)], NativeScopes = [KeyScope.FindBar], Condition = "documentOpen" },
+        new("search.clearHistory", "search"),
 
         // ---- 移動 ----
         new("go.goTo", "go") { Icon = IconGoTo, DefaultBindings = [K("Ctrl+G")], Condition = "documentOpen" },
@@ -128,6 +133,7 @@ public static class BuiltInCommands
         new("view.panel.inspector", "view") { Icon = IconInspector, DefaultBindings = [K("Ctrl+Shift+I")] },
         new("view.panel.hash", "view"),
         new("view.panel.bookmarks", "view"),
+        new("view.panel.searchResults", "view"),
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
         new("view.theme.system", "view"),

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.SearchResultsPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        「検索結果」の一覧 (FIND-20、FIND-21)。下のパネル (UI-05) に置く。パネルの見出しと閉じるボタンはパネルの枠が持つ。
+        行は見えている分だけ作り、100 万件以上でもスクロールが止まらないように自分で並べる (Hex ビューと同じ考え方)。
+    -->
+    <Grid Background="{ThemeResource LayerFillColorDefaultBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  見出し: 条件の要約・件数・状態、続ける、キャンセル、変換 (エクスポートを含む)。  -->
+        <Grid Padding="12,4" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                x:Name="Summary"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="SearchResults_Summary"
+                AutomationProperties.LiveSetting="Polite"
+                Style="{ThemeResource BodyStrongTextBlockStyle}"
+                TextTrimming="CharacterEllipsis" />
+            <Button
+                x:Name="ContinueButton"
+                x:Uid="SearchResults_Continue"
+                Grid.Column="1"
+                AutomationProperties.AutomationId="SearchResults_Continue"
+                Click="Continue_Click"
+                Visibility="Collapsed" />
+            <Button
+                x:Name="CancelButton"
+                x:Uid="SearchResults_Cancel"
+                Grid.Column="2"
+                AutomationProperties.AutomationId="SearchResults_Cancel"
+                Click="Cancel_Click"
+                Visibility="Collapsed" />
+            <DropDownButton
+                x:Name="ConvertButton"
+                x:Uid="SearchResults_Convert"
+                Grid.Column="3"
+                AutomationProperties.AutomationId="SearchResults_Convert">
+                <DropDownButton.Flyout>
+                    <MenuFlyout Placement="BottomEdgeAlignedRight">
+                        <MenuFlyoutItem
+                            x:Name="ToBookmarksItem"
+                            x:Uid="SearchResults_ToBookmarks"
+                            AutomationProperties.AutomationId="SearchResults_ToBookmarks"
+                            Click="ToBookmarks_Click" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem
+                            x:Uid="SearchResults_CopyHex"
+                            AutomationProperties.AutomationId="SearchResults_CopyHex"
+                            Click="CopyHex_Click" />
+                        <MenuFlyoutItem
+                            x:Uid="SearchResults_CopyText"
+                            AutomationProperties.AutomationId="SearchResults_CopyText"
+                            Click="CopyText_Click" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem
+                            x:Uid="SearchResults_ExportCsv"
+                            AutomationProperties.AutomationId="SearchResults_ExportCsv"
+                            Click="ExportCsv_Click" />
+                        <MenuFlyoutItem
+                            x:Uid="SearchResults_ExportJson"
+                            AutomationProperties.AutomationId="SearchResults_ExportJson"
+                            Click="ExportJson_Click" />
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+        </Grid>
+
+        <!--  列の見出し。列の幅はコードの Columns と同じ。  -->
+        <Grid
+            x:Name="ColumnHeaders"
+            Grid.Row="1"
+            Padding="12,2"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="0,1,0,1" />
+
+        <!--  行の一覧とスクロールバー。キーボードの操作は ListHost で受ける。  -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ContentControl
+                x:Name="ListHost"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
+                AutomationProperties.AutomationId="SearchResults_List"
+                GotFocus="ListHost_GotFocus"
+                IsTabStop="True"
+                KeyDown="ListHost_KeyDown"
+                LostFocus="ListHost_LostFocus"
+                PointerWheelChanged="ListHost_PointerWheelChanged"
+                SizeChanged="ListHost_SizeChanged"
+                UseSystemFocusVisuals="True">
+                <StackPanel x:Name="RowsPanel" Padding="12,0" Background="Transparent" />
+            </ContentControl>
+            <ScrollBar
+                x:Name="Scroll"
+                Grid.Column="1"
+                AutomationProperties.AutomationId="SearchResults_Scroll"
+                IndicatorMode="MouseIndicator"
+                Orientation="Vertical"
+                SmallChange="1"
+                ValueChanged="Scroll_ValueChanged" />
+        </Grid>
+    </Grid>
+</UserControl>

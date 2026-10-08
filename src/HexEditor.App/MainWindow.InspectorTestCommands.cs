@@ -245,6 +245,7 @@ public sealed partial class MainWindow
         ["color"] = b.Color.ToString(),
         ["comment"] = b.Comment,
         ["rangeDeleted"] = b.RangeDeleted,
+        ["group"] = b.Group,
     };
 
     /// <summary>{count, step, length, name}: 開始 k × step、長さ length、名前 name{k} のブックマークをまとめて付ける。</summary>
