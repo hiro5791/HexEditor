@@ -1,0 +1,10 @@
+{
+  "$schemaVersion": 1,
+  "preset": "vscode",
+  "bindings": [
+    { "command": "file.saveAll", "key": "Ctrl+K S" },
+    { "command": "file.closeAll", "key": "Ctrl+K Ctrl+W" },
+    { "command": "settings.keyboard", "key": "Ctrl+K Ctrl+S" },
+    { "command": "help.shortcuts", "key": "Ctrl+K Ctrl+R" }
+  ]
+}

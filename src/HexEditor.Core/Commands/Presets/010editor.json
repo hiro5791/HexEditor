@@ -1,0 +1,8 @@
+{
+  "$schemaVersion": 1,
+  "preset": "010editor",
+  "bindings": [
+    { "command": "-edit.redo", "key": "Ctrl+Shift+Z" },
+    { "command": "-file.close", "key": "Ctrl+W" }
+  ]
+}

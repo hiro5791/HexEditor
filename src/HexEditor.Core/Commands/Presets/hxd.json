@@ -1,0 +1,7 @@
+{
+  "$schemaVersion": 1,
+  "preset": "hxd",
+  "bindings": [
+    { "command": "-edit.redo", "key": "Ctrl+Shift+Z" }
+  ]
+}

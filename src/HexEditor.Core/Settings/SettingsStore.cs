@@ -20,6 +20,14 @@ public enum SettingsLoadStatus
     Migrated,
 }
 
+/// <summary>設定ファイルの書き込みの時点 (テスト用の強制終了。TC-UI-23-05)。</summary>
+public enum SettingsWritePoint
+{
+    TempHalfWritten,
+    BeforeReplace,
+    AfterReplace,
+}
+
 /// <summary>
 /// 設定 (<c>settings.json</c>。UI-23)。設定キーを <c>.</c> で区切った平らな JSON で、既定値と違う値だけを書く。
 /// 知らないキーは捨てずに残す。書き込みは一時ファイルに書いてから置き換え、変更から 500 ms 待ってまとめて書く。
@@ -139,6 +147,75 @@ public sealed class SettingsStore : IDisposable
         }
     }
 
+    public double GetDouble(string key, double defaultValue)
+    {
+        lock (_lock)
+        {
+            return SettingDefinition.TryGetNumber(_values[key], out double d) ? d : defaultValue;
+        }
+    }
+
+    /// <summary>値 (複製)。設定されていなければ null。</summary>
+    public JsonNode? GetNode(string key)
+    {
+        lock (_lock)
+        {
+            return _values[key]?.DeepClone();
+        }
+    }
+
+    /// <summary>既定値から変更されている (ファイルにある) か。</summary>
+    public bool Contains(string key)
+    {
+        lock (_lock)
+        {
+            return _values.ContainsKey(key);
+        }
+    }
+
+    /// <summary>ファイルにあるすべての値の複製 (知らないキーを含む)。</summary>
+    public JsonObject Snapshot()
+    {
+        lock (_lock)
+        {
+            return (JsonObject)_values.DeepClone();
+        }
+    }
+
+    /// <summary>値を変える。既定値と同じ (<paramref name="defaultValue"/> と JSON として等しい) か null なら、ファイルから消す。</summary>
+    public void SetNode(string key, JsonNode? value, JsonNode? defaultValue) =>
+        Set(key, value is null || JsonNode.DeepEquals(value, defaultValue) ? null : value.DeepClone());
+
+    /// <summary>
+    /// すべての値を置き換える (リセット・インポート。UI-24、UI-25)。変わったキーを <see cref="Changed"/> で知らせる。
+    /// </summary>
+    public void ReplaceAll(JsonObject values)
+    {
+        IReadOnlyCollection<string> changed;
+        lock (_lock)
+        {
+            changed = _values.Select(p => p.Key).Union(values.Select(p => p.Key))
+                .Where(k => _values[k]?.ToJsonString() != values[k]?.ToJsonString())
+                .ToList();
+            _values = (JsonObject)values.DeepClone();
+            if (changed.Count > 0)
+            {
+                _dirty = true;
+                _writeTimer.Change(WriteDelay, Timeout.InfiniteTimeSpan);
+            }
+        }
+
+        if (changed.Count > 0)
+        {
+            Changed?.Invoke(changed);
+        }
+    }
+
+    /// <summary>
+    /// 書き込みの各時点で呼ぶ (テスト用のビルドの強制終了。TC-UI-23-05、テスト方針 7.2)。製品では null。
+    /// </summary>
+    public static Action<SettingsWritePoint>? WriteHook { get; set; }
+
     /// <summary>値を変える。既定値と同じなら、ファイルから消す (仕様 4)。</summary>
     public void SetString(string key, string value, string defaultValue) =>
         Set(key, value == defaultValue ? null : JsonValue.Create(value));
@@ -155,6 +232,18 @@ public sealed class SettingsStore : IDisposable
         lock (_lock)
         {
             if (_dirty && !_disposed)
+            {
+                WriteNow();
+            }
+        }
+    }
+
+    /// <summary>今の内容ですぐに書く (ファイルがなくても書く。「設定ファイルを開く」の前など)。</summary>
+    public void SaveNow()
+    {
+        lock (_lock)
+        {
+            if (!_disposed)
             {
                 WriteNow();
             }
@@ -225,8 +314,24 @@ public sealed class SettingsStore : IDisposable
 
         Directory.CreateDirectory(Folder);
         string temp = PathName + ".tmp";
-        File.WriteAllText(temp, root.ToJsonString(WriteOptions), new UTF8Encoding(false));
+        byte[] bytes = new UTF8Encoding(false).GetBytes(root.ToJsonString(WriteOptions));
+        using (var stream = new FileStream(temp, FileMode.Create, FileAccess.Write, FileShare.None))
+        {
+            // 一時ファイルに半分まで書いた時点 (テスト用の強制終了の時点)。
+            stream.Write(bytes, 0, bytes.Length / 2);
+            if (WriteHook is { } hook)
+            {
+                stream.Flush(flushToDisk: true);
+                hook(SettingsWritePoint.TempHalfWritten);
+            }
+
+            stream.Write(bytes, bytes.Length / 2, bytes.Length - (bytes.Length / 2));
+            stream.Flush(flushToDisk: true);
+        }
+
+        WriteHook?.Invoke(SettingsWritePoint.BeforeReplace);
         File.Move(temp, PathName, overwrite: true);
+        WriteHook?.Invoke(SettingsWritePoint.AfterReplace);
         _lastWriteByUs = File.GetLastWriteTimeUtc(PathName);
     }
 
