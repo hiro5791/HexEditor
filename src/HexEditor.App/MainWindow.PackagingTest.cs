@@ -42,7 +42,7 @@ public sealed partial class MainWindow
         // ジャンプリストの内容 (UI-35)。
         "jumpList" => new JsonObject
         {
-            ["items"] = new JsonArray([.. (_jumpList?.LastPlan ?? []).Select(i => (JsonNode?)new JsonObject
+            ["items"] = new JsonArray([.. (s_jumpList?.LastPlan ?? []).Select(i => (JsonNode?)new JsonObject
             {
                 ["category"] = i.Category.ToString(),
                 ["title"] = i.Title,
@@ -50,7 +50,7 @@ public sealed partial class MainWindow
                 ["path"] = i.FilePath,
             })]),
         },
-        "jumpListNow" => Run(() => _jumpList?.Update()),
+        "jumpListNow" => Run(() => s_jumpList?.Update()),
 
         // メニューの項目の状態 (有効・無効、理由、ツールチップ)。
         "menuItem" => TestMenuItem(request["id"]!.GetValue<string>()),
@@ -224,7 +224,7 @@ public sealed partial class MainWindow
 
         return new JsonObject
         {
-            ["firstRun"] = _firstRun,
+            ["firstRun"] = s_firstRun,
             ["others"] = new JsonArray([.. others.Select(o => (JsonNode?)new JsonObject { ["distribution"] = o.Distribution.ToString(), ["folder"] = o.Folder })]),
             ["buttons"] = buttons,
         };

@@ -27,47 +27,77 @@ public sealed partial class MainWindow
     /// <summary>更新の自動の確認の時刻を見る間隔。</summary>
     private static readonly TimeSpan UpdateTimerInterval = TimeSpan.FromSeconds(5);
 
-    private Microsoft.UI.Dispatching.DispatcherQueueTimer? _updateTimer;
-    private JumpListService? _jumpList;
-    private bool _firstRun;
-    private string _language = "en";
+    // 更新の確認とジャンプリストはアプリ全体で 1 つ (UI-14 の仕様 2)。最初のウィンドウを閉じても他のウィンドウで動き続ける。
+    private static Microsoft.UI.Dispatching.DispatcherQueueTimer? s_updateTimer;
+    private static JumpListService? s_jumpList;
+    private static bool s_firstRun;
+    private static string s_language = "en";
 
     /// <summary>最近使ったファイルの一覧 (ジャンプリストが読む)。App が最近使ったファイル (UI-32) の一覧を渡す。</summary>
     public IRecentFilesSource RecentFiles { get; set; } = null!;
 
-    /// <summary>App.OnLaunched から、ウィンドウを作った後に呼ぶ。</summary>
+    /// <summary>
+    /// App.OnLaunched から、最初のウィンドウを作った後に 1 回呼ぶ。アプリ全体の処理 (更新の確認・ジャンプリスト・言語の変更の案内) は
+    /// どのウィンドウにも結び付けず、案内は最後にアクティブだったウィンドウに出す。
+    /// </summary>
     public void StartPackagingFeatures()
     {
         IAppEnvironment env = Program.Environment;
 
         // 初回起動の判定は、この起動で state.json を書く前に行う (PKG-31 の仕様 1、UI-38)。
-        _firstRun = !File.Exists(Path.Combine(env.Locations.Settings, Platform.StateFile.FileName));
-        _language = Localization.CurrentLanguage;
+        s_firstRun = !File.Exists(Path.Combine(env.Locations.Settings, Platform.StateFile.FileName));
+        s_language = Localization.CurrentLanguage;
         RecentFiles ??= new RecentJumpListSource(Vm.Recent);
 
         StartUpdates();
         StartJumpList(env);
         StringKeyTips.Apply(this, MainMenu, Root);
         UpdatePackagingMenu();
-        App.Settings.Changed += keys => DispatcherQueue.TryEnqueue(() =>
+        SubscribeWindowSettings();
+        App.Settings.Changed += keys =>
         {
-            RefreshCommandUi();
             if (keys.Contains(DisplayLanguages.SettingKey))
             {
-                ShowLanguageRestartNotice();
+                App.DispatcherQueue.TryEnqueue(() =>
+                {
+                    if (WindowManager.Windows.Count > 0)
+                    {
+                        WindowManager.Current.ShowLanguageRestartNotice();
+                    }
+                });
             }
-        });
+        };
         CheckExplorerRegistration();
         OfferSettingsImport(env);
     }
 
+    /// <summary>設定の変更をこのウィンドウのコマンドの表示に反映する。ウィンドウを閉じたら購読をやめる。</summary>
+    private void SubscribeWindowSettings()
+    {
+        Action<IReadOnlyCollection<string>> settingsChanged = _ => DispatcherQueue.TryEnqueue(() =>
+        {
+            if (!_closingConfirmed)
+            {
+                RefreshCommandUi();
+            }
+        });
+        App.Settings.Changed += settingsChanged;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                App.Settings.Changed -= settingsChanged;
+            }
+        };
+    }
+
     // ---- 更新 (PKG-17〜PKG-22) ----
 
-    private void StartUpdates()
+    private static void StartUpdates()
     {
         UpdateService service = AppUpdates.Service;
-        service.Changed += (_, _) => DispatcherQueue.TryEnqueue(RefreshRestartButton);
-        Vm.Operations.Changed += (_, _) => DispatcherQueue.TryEnqueue(RefreshRestartButton);
+        service.Changed += (_, _) => App.DispatcherQueue.TryEnqueue(RefreshRestartButtons);
+        WindowManager.Windows[0].Vm.Operations.Changed += (_, _) => App.DispatcherQueue.TryEnqueue(RefreshRestartButtons);
         AppDomain.CurrentDomain.ProcessExit += (_, _) =>
         {
             // 記録はアプリの状態 (state.json) に置くので、終了の前に書き出す。
@@ -78,22 +108,32 @@ public sealed partial class MainWindow
         // 更新後の初回起動: 「版 X に更新しました」。適用に失敗していたら「更新に失敗しました」とログの場所 (PKG-18 の仕様 6・「エラー」)。
         if (service.StartupNotice() is { } notice)
         {
-            ShowUpdateMessage(notice.Updated
+            WindowManager.Current.ShowUpdateMessage(notice.Updated
                 ? UpdatePresentation.Updated(notice.Version)
                 : UpdatePresentation.ApplyFailed(notice.Version, Program.Environment.Locations.Logs));
         }
 
         // 自動の確認 (起動から 30 秒後、その後 24 時間ごと。PKG-17 の仕様 1)。時刻になったかを 5 秒ごとに見る。
-        _updateTimer = DispatcherQueue.CreateTimer();
-        _updateTimer.Interval = UpdateTimerInterval;
-        _updateTimer.Tick += async (_, _) =>
+        // 結果は最後にアクティブだったウィンドウに出す。
+        s_updateTimer = App.DispatcherQueue.CreateTimer();
+        s_updateTimer.Interval = UpdateTimerInterval;
+        s_updateTimer.Tick += async (_, _) =>
         {
-            if (AppUpdates.Service.IsAutomaticCheckDue())
+            if (WindowManager.Windows.Count > 0 && !WindowManager.IsExiting && AppUpdates.Service.IsAutomaticCheckDue())
             {
-                await CheckForUpdatesAsync(manual: false);
+                await WindowManager.Current.CheckForUpdatesAsync(manual: false);
             }
         };
-        _updateTimer.Start();
+        s_updateTimer.Start();
+    }
+
+    /// <summary>すべてのウィンドウの「再起動して更新」のボタンの状態を更新する。</summary>
+    private static void RefreshRestartButtons()
+    {
+        foreach (MainWindow w in WindowManager.Windows)
+        {
+            w.RefreshRestartButton();
+        }
     }
 
     /// <summary>ヘルプの「更新の確認」「翻訳の誤りを報告」(コマンド。UI-16)。オフラインモードでは更新の確認を使えない (UI-58 の仕様 3)。</summary>
@@ -105,7 +145,7 @@ public sealed partial class MainWindow
     }
 
     /// <summary>更新の確認 (PKG-17)。手動なら結果を必ず表示し、自動なら新しい版があるときだけ表示する (仕様 6)。</summary>
-    private async Task CheckForUpdatesAsync(bool manual)
+    internal async Task CheckForUpdatesAsync(bool manual)
     {
         UpdateService service = AppUpdates.Service;
         UpdateCheckResult result = await service.CheckAsync(manual);
@@ -165,7 +205,7 @@ public sealed partial class MainWindow
         }
     }
 
-    private void ShowUpdateMessage(UpdateMessage message)
+    internal void ShowUpdateMessage(UpdateMessage message)
     {
         AppLog.Info($"Update notice: {message.MessageKey} {string.Join(",", message.Buttons)}");
         UpdateBar.Show(message, OnUpdateButton);
@@ -210,8 +250,9 @@ public sealed partial class MainWindow
             return;
         }
 
-        List<string> files = [.. Vm.Documents.Select(d => d.FilePath).OfType<string>()];
-        if (!await CloseAsync(Vm.Documents.ToList()))
+        // すべてのウィンドウの文書を確かめて閉じる (UI-13 の仕様 2 と同じ確認)。
+        List<string> files = [.. WindowManager.Windows.SelectMany(w => w.Vm.Documents).Select(d => d.FilePath).OfType<string>()];
+        if (!await ConfirmExitAsync())
         {
             return;
         }
@@ -309,7 +350,7 @@ public sealed partial class MainWindow
     /// </summary>
     private async Task ReportTranslationAsync()
     {
-        IReadOnlyList<ResourceString> strings = ResourceStrings.All(_language);
+        IReadOnlyList<ResourceString> strings = ResourceStrings.All(s_language);
         var search = new TextBox { PlaceholderText = Loc.Get("TranslationReport_SearchPlaceholder") };
         AutomationProperties.SetAutomationId(search, "TranslationReport_Search");
         AutomationProperties.SetName(search, Loc.Get("TranslationReport_SearchPlaceholder"));
@@ -357,7 +398,7 @@ public sealed partial class MainWindow
         }
 
         ResourceString? chosen = result == ContentDialogResult.Primary ? (list.SelectedItem as ListViewItem)?.Tag as ResourceString : null;
-        Uri url = TranslationReport.IssueUrl(_language, chosen?.Key, chosen?.Current, Program.Environment.AppVersion);
+        Uri url = TranslationReport.IssueUrl(s_language, chosen?.Key, chosen?.Current, Program.Environment.AppVersion);
         await OpenUriAsync(url, translationReport: true);
     }
 
@@ -410,14 +451,14 @@ public sealed partial class MainWindow
     public void SetDisplayLanguage(string tag) => App.Settings.SetString(DisplayLanguages.SettingKey, tag, DisplayLanguages.System);
 
     /// <summary>設定 ui.language が変わった (設定画面・はじめに・外部の編集): 「再起動後に反映されます」と「今すぐ再起動」を出す。</summary>
-    private void ShowLanguageRestartNotice()
+    internal void ShowLanguageRestartNotice()
     {
         string chosen = App.Settings.GetString(DisplayLanguages.SettingKey, DisplayLanguages.System);
         string effective = chosen.Equals(DisplayLanguages.System, StringComparison.OrdinalIgnoreCase)
             ? DisplayLanguages.Resolve(Localization.WindowsLanguages())
             : chosen;
         // 設定画面で変えたときは、設定画面の「今すぐ再起動」の帯が出る。
-        if (effective.Equals(_language, StringComparison.OrdinalIgnoreCase) || PendingRestartKeys.Contains(DisplayLanguages.SettingKey))
+        if (effective.Equals(s_language, StringComparison.OrdinalIgnoreCase) || PendingRestartKeys.Contains(DisplayLanguages.SettingKey))
         {
             return;
         }
@@ -433,15 +474,15 @@ public sealed partial class MainWindow
     private void StartJumpList(IAppEnvironment env)
     {
         string exe = Environment.ProcessPath ?? Path.Combine(AppContext.BaseDirectory, "HexEditor.exe");
-        _jumpList = new JumpListService(RecentFiles, env.AppUserModelId, exe, DispatcherQueue);
+        s_jumpList = new JumpListService(RecentFiles, env.AppUserModelId, exe, App.DispatcherQueue);
         App.Settings.Changed += keys =>
         {
             if (keys.Contains(JumpListPlan.EnabledKey))
             {
-                DispatcherQueue.TryEnqueue(() => _jumpList?.Schedule());
+                App.DispatcherQueue.TryEnqueue(() => s_jumpList?.Schedule());
             }
         };
-        _jumpList.Schedule();
+        s_jumpList.Schedule();
     }
 
     // ---- Explorer 連携 (UI-54 の仕様 1・6) ----
@@ -495,7 +536,7 @@ public sealed partial class MainWindow
     /// </summary>
     private void OfferSettingsImport(IAppEnvironment env)
     {
-        if (!_firstRun)
+        if (!s_firstRun)
         {
             return;
         }
