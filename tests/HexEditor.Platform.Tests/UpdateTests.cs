@@ -410,6 +410,149 @@ public sealed class UpdateTests : IDisposable
         Assert.Equal(0, backend.ApplyOnExitCalls);
     }
 
+    // ---- 見つけた後の確認・自動のダウンロードの再試行 (PKG-17 の仕様 1、PKG-18 の仕様 1・2・「エラー」) ----
+
+    [Fact]
+    public async Task Automatic_checks_continue_every_24_hours_after_a_version_was_found()
+    {
+        UpdateService service = Service("0.9.0");
+        Assert.Equal("0.9.1", Assert.Single(await RunAutomaticAsync(service, TimeSpan.FromSeconds(31))).Offer!.Version.SemVer);
+        Assert.Equal(UpdatePhase.Available, service.Phase);
+
+        // 帯を閉じただけ (この版をスキップしていない) でも、24 時間後にもう一度確認し、新しい版があればそれを知らせる。
+        _feed.Publish("0.9.2");
+        _clock.Advance(TimeSpan.FromHours(24) + TimeSpan.FromMinutes(1));
+        UpdateCheckResult again = Assert.Single(await RunAutomaticAsync(service, TimeSpan.FromSeconds(60)));
+        Assert.Equal("0.9.2", again.Offer!.Version.SemVer);
+        Assert.Equal(2, _feed.Requests.Count);
+    }
+
+    [Fact]
+    public async Task A_failed_check_keeps_the_version_found_before()
+    {
+        UpdateService service = Service("0.9.0");
+        await service.CheckAsync(manual: true);
+        _feed.Status = HttpStatusCode.InternalServerError;
+        Assert.Equal(UpdateCheckOutcome.Failed, (await service.CheckAsync(manual: true)).Outcome);
+        Assert.Equal(UpdatePhase.Available, service.Phase);
+        Assert.Equal("0.9.1", service.Offer!.Version.SemVer);
+    }
+
+    [Fact]
+    public async Task A_failed_automatic_download_is_retried_in_the_next_cycle()
+    {
+        var backend = new RecordingBackend(UpdateKind.Installer, "0.9.1") { FailDownloads = 1 };
+        UpdateService service = Service("0.9.0", backend: backend);
+        async Task<int> RunAsync(TimeSpan duration)
+        {
+            int downloads = 0;
+            foreach (UpdateCheckResult r in await RunAutomaticAsync(service, duration))
+            {
+                if (r.Outcome == UpdateCheckOutcome.Available && service.Phase == UpdatePhase.Available && service.ShouldDownloadAutomatically)
+                {
+                    downloads++;
+                    try
+                    {
+                        await service.DownloadAsync();
+                    }
+                    catch (IOException)
+                    {
+                        // 自動のときはログだけ (アプリの DownloadUpdateAsync と同じ)。
+                    }
+                }
+            }
+
+            return downloads;
+        }
+
+        Assert.Equal(1, await RunAsync(TimeSpan.FromSeconds(31)));
+        Assert.Equal(UpdatePhase.Available, service.Phase);
+
+        // 次の周期 (24 時間後) に確認し直し、もう一度ダウンロードする。
+        _clock.Advance(TimeSpan.FromHours(24) + TimeSpan.FromMinutes(1));
+        Assert.Equal(1, await RunAsync(TimeSpan.FromSeconds(60)));
+        Assert.Equal(UpdatePhase.Ready, service.Phase);
+        Assert.Equal(2, backend.DownloadCalls);
+
+        // ダウンロード済みなら、自動の確認はしない。
+        _clock.Advance(TimeSpan.FromHours(24) + TimeSpan.FromMinutes(1));
+        Assert.False(service.IsAutomaticCheckDue());
+    }
+
+    [Fact]
+    public async Task Pressing_download_during_the_automatic_download_does_not_start_a_second_one()
+    {
+        var gate = new TaskCompletionSource();
+        var backend = new RecordingBackend(UpdateKind.Installer, "0.9.1") { DownloadGate = gate.Task };
+        UpdateService service = Service("0.9.0", backend: backend);
+        await service.CheckAsync(manual: false);
+        Task<bool> first = service.DownloadAsync();
+        Assert.Equal(UpdatePhase.Downloading, service.Phase);
+        Assert.False(await service.DownloadAsync());
+        gate.SetResult();
+        Assert.True(await first);
+        Assert.False(await service.DownloadAsync());
+        Assert.Equal(1, backend.DownloadCalls);
+    }
+
+    [Fact]
+    public async Task With_automatic_download_the_available_bar_is_not_shown_and_a_manual_check_when_ready_shows_ready()
+    {
+        var backend = new RecordingBackend(UpdateKind.Installer, "0.9.1");
+        UpdateService service = Service("0.9.0", backend: backend);
+        UpdateCheckResult automatic = await service.CheckAsync(manual: false);
+
+        // 自動の確認: 「ダウンロード」付きの「版 X があります」は出さず、裏でダウンロードする。
+        Assert.Null(UpdatePresentation.ForCheck(automatic, service.Current, service.Kind, downloadsAutomatically: true));
+
+        // 手動の確認: 「版 X があります」を出すが、「ダウンロード」「この版をスキップ」は出さない (ダウンロードは処理センター)。
+        UpdateMessage manual = UpdatePresentation.ForCheck(automatic with { Manual = true }, service.Current, service.Kind, downloadsAutomatically: true)!;
+        Assert.Equal("Update_Available", manual.MessageKey);
+        Assert.Equal([UpdateButton.ReleaseNotes], manual.Buttons);
+
+        // 自動のダウンロードがオフなら、従来どおり「ダウンロード」を出す。
+        Assert.Equal(UpdateButton.Download, UpdatePresentation.ForCheck(automatic, service.Current, service.Kind)!.Buttons[0]);
+
+        // ダウンロードが済んだ後の手動の確認は「版 X の準備ができました」(Available ではない)。
+        await service.DownloadAsync();
+        UpdateCheckResult ready = await service.CheckAsync(manual: true);
+        Assert.Equal(UpdateCheckOutcome.Ready, ready.Outcome);
+        UpdateMessage message = UpdatePresentation.ForCheck(ready, service.Current, service.Kind, downloadsAutomatically: true)!;
+        Assert.Equal("Update_Ready", message.MessageKey);
+        Assert.Equal([UpdateButton.RestartToUpdate, UpdateButton.ReleaseNotes, UpdateButton.Later], message.Buttons);
+    }
+
+    // ---- PKG-21 の仕様 4 「今すぐ最新の安定版に戻す」 ----
+
+    [Fact]
+    public async Task Return_to_stable_is_offered_only_for_a_preview_on_the_stable_channel()
+    {
+        Assert.False(Service("0.9.1").CanReturnToStable);
+        UpdateService preview = Service("0.9.2-preview.1");
+        Assert.True(preview.CanReturnToStable);
+        new UpdatePreferences(_settings).Channel = ReleaseChannel.Preview;
+        Assert.False(preview.CanReturnToStable);
+        new UpdatePreferences(_settings).Channel = ReleaseChannel.Stable;
+        Assert.False(Service("0.9.2-preview.1", UpdateKind.Store, new RecordingBackend(UpdateKind.Store, null)).CanReturnToStable);
+
+        // 最新の安定版 (今の版より古い) を見つけ、新しい版と同じ流れ (Available) に乗せる。
+        UpdateCheckResult result = await preview.FindLatestStableAsync();
+        Assert.Equal(UpdateCheckOutcome.Available, result.Outcome);
+        Assert.Equal("0.9.1", result.Offer!.Version.SemVer);
+        Assert.Equal(UpdatePhase.Available, preview.Phase);
+        Assert.Equal([UpdateButton.OpenDownloadPage, UpdateButton.ReleaseNotes, UpdateButton.Skip],
+            UpdatePresentation.ForCheck(result, preview.Current, preview.Kind)!.Buttons);
+    }
+
+    [Fact]
+    public async Task Return_to_stable_in_offline_mode_does_not_connect()
+    {
+        _settings.SetBool(NetworkPolicy.OfflineKey, true);
+        UpdateCheckResult result = await Service("0.9.2-preview.1").FindLatestStableAsync();
+        Assert.Equal(UpdateFailure.Offline, result.Failure);
+        Assert.Empty(_feed.Requests);
+    }
+
     /// <summary>呼び出しを数える偽の実装 (インストーラ版の Velopack の代わり)。</summary>
     private sealed class RecordingBackend(UpdateKind kind, string? newest) : IUpdateBackend
     {
@@ -422,10 +565,29 @@ public sealed class UpdateTests : IDisposable
         public Task<UpdateOffer?> FindAsync(ReleaseChannel channel, bool manual, CancellationToken cancellationToken) =>
             Task.FromResult(newest is null ? null : new UpdateOffer(SemanticVersion.Parse(newest), new Uri("https://example.invalid/notes")));
 
-        public Task DownloadAsync(UpdateOffer offer, Action<int>? progress, CancellationToken cancellationToken)
+        public int DownloadCalls { get; private set; }
+
+        /// <summary>最初の何回のダウンロードを失敗させるか。</summary>
+        public int FailDownloads { get; set; }
+
+        /// <summary>ダウンロードを終わらせるまで待つ (ダウンロード中の操作のテスト)。</summary>
+        public Task? DownloadGate { get; set; }
+
+        public async Task DownloadAsync(UpdateOffer offer, Action<int>? progress, CancellationToken cancellationToken)
         {
+            DownloadCalls++;
+            if (DownloadGate is { } gate)
+            {
+                await gate;
+            }
+
+            if (FailDownloads > 0)
+            {
+                FailDownloads--;
+                throw new IOException("The download failed.");
+            }
+
             progress?.Invoke(100);
-            return Task.CompletedTask;
         }
 
         public void ApplyAndRestart(UpdateOffer offer, IReadOnlyList<string> restartArguments) => RestartCalls++;

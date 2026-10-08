@@ -44,6 +44,12 @@ public enum UpdateCheckOutcome
     NotChecked,
 
     Failed,
+
+    /// <summary>見つけた版をダウンロード中 (インストーラ版。確認し直さない)。</summary>
+    Downloading,
+
+    /// <summary>見つけた版のダウンロードが済んでいる (インストーラ版。「版 X の準備ができました」。PKG-18 の仕様 2)。</summary>
+    Ready,
 }
 
 public sealed record UpdateCheckResult(UpdateCheckOutcome Outcome, bool Manual, UpdateOffer? Offer = null, UpdateFailure Failure = UpdateFailure.None);
@@ -73,6 +79,7 @@ public sealed class UpdateService
     private readonly IStateSections? _state;
     private readonly Func<DateTimeOffset> _now;
     private readonly SemaphoreSlim _gate = new(1, 1);
+    private readonly Lock _downloadLock = new();
     private DateTimeOffset? _lastChecked;
 
     public UpdateService(IUpdateBackend backend, UpdatePreferences preferences, NetworkPolicy policy, SemanticVersion current,
@@ -120,9 +127,14 @@ public sealed class UpdateService
     /// <summary>次の自動の確認の時刻。</summary>
     public DateTimeOffset NextAutomaticCheck => UpdateSchedule.NextCheck(StartedAt, _lastChecked);
 
-    /// <summary>自動の確認をする時刻になったか (定期的に呼ぶ)。自動の確認が無効・オフラインなら false (通信しない)。</summary>
+    /// <summary>
+    /// 自動の確認をする時刻になったか (定期的に呼ぶ)。自動の確認が無効・オフラインなら false (通信しない)。
+    /// 新しい版が見つかった後 (Available。自動のダウンロードに失敗した場合を含む) も 24 時間ごとに確認し直す (PKG-17 の仕様 1、
+    /// PKG-18 の「エラー」: 次の周期で再試行)。確認中・ダウンロード中・ダウンロード済みのときは確認しない。
+    /// </summary>
     public bool IsAutomaticCheckDue() =>
-        _backend.Kind != UpdateKind.None && Phase == UpdatePhase.Idle && _policy.UpdateCheckAllowed(manual: false) && _now() >= NextAutomaticCheck;
+        _backend.Kind != UpdateKind.None && (Phase is UpdatePhase.Idle or UpdatePhase.Available) && _policy.UpdateCheckAllowed(manual: false)
+        && _now() >= NextAutomaticCheck;
 
     /// <summary>
     /// 更新の確認 (PKG-17)。オフラインなら通信せずに Failed (Offline)。自動の確認が無効なら自動では通信しない。
@@ -145,12 +157,14 @@ public sealed class UpdateService
         await _gate.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            // ダウンロード中・準備済みの版があれば確認し直さない。
+            // ダウンロード中・準備済みの版があれば確認し直さない (準備済みなら「版 X の準備ができました」を出し直す。PKG-18 の仕様 2)。
             if (Phase is UpdatePhase.Downloading or UpdatePhase.Ready && Offer is { } current)
             {
-                return new UpdateCheckResult(UpdateCheckOutcome.Available, manual, current);
+                return new UpdateCheckResult(Phase == UpdatePhase.Ready ? UpdateCheckOutcome.Ready : UpdateCheckOutcome.Downloading, manual, current);
             }
 
+            // 前に見つけた版 (Available) は、確認に失敗しても残す (次の周期で再試行する)。
+            UpdatePhase before = Phase;
             SetPhase(UpdatePhase.Checking);
             UpdateOffer? offer;
             try
@@ -160,19 +174,21 @@ public sealed class UpdateService
             catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 RecordChecked();
-                SetPhase(UpdatePhase.Idle);
+                SetPhase(before == UpdatePhase.Available && Offer is not null ? UpdatePhase.Available : UpdatePhase.Idle);
                 return new UpdateCheckResult(UpdateCheckOutcome.Failed, manual, Failure: Classify(ex));
             }
 
             RecordChecked();
             if (offer is null)
             {
+                Offer = null;
                 SetPhase(UpdatePhase.Idle);
                 return new UpdateCheckResult(UpdateCheckOutcome.UpToDate, manual);
             }
 
             if (!manual && _preferences.SkippedVersion is { } skipped && skipped.SameVersion(offer.Version))
             {
+                Offer = null;
                 SetPhase(UpdatePhase.Idle);
                 return new UpdateCheckResult(UpdateCheckOutcome.Skipped, manual, offer);
             }
@@ -183,7 +199,7 @@ public sealed class UpdateService
         }
         catch (OperationCanceledException)
         {
-            SetPhase(UpdatePhase.Idle);
+            SetPhase(Offer is null ? UpdatePhase.Idle : UpdatePhase.Available);
             throw;
         }
         finally
@@ -195,15 +211,29 @@ public sealed class UpdateService
     /// <summary>見つかった版を裏でダウンロードするか (インストーラ版で <c>update.downloadAutomatically</c> が true。PKG-18 の仕様 1)。</summary>
     public bool ShouldDownloadAutomatically => _backend.Kind == UpdateKind.Installer && _preferences.DownloadAutomatically && _policy.Allows(NetworkFeature.Updates);
 
-    /// <summary>ダウンロードする (インストーラ版)。成功したら Ready。失敗・取り消しは Available に戻して例外を投げる。</summary>
-    public async Task DownloadAsync(CancellationToken cancellationToken = default)
+    /// <summary>
+    /// ダウンロードする (インストーラ版)。成功したら Ready。失敗・取り消しは Available に戻して例外を投げる。
+    /// 既にダウンロード中・ダウンロード済みなら何もしない (false。自動のダウンロード中に「ダウンロード」を押しても 2 つ目を始めない)。
+    /// </summary>
+    public async Task<bool> DownloadAsync(CancellationToken cancellationToken = default)
     {
-        if (Offer is not { } offer || _backend.Kind != UpdateKind.Installer)
+        UpdateOffer offer;
+        lock (_downloadLock)
         {
-            throw new InvalidOperationException("There is no update to download.");
+            if (Phase is UpdatePhase.Downloading or UpdatePhase.Ready)
+            {
+                return false;
+            }
+
+            if (Offer is not { } found || _backend.Kind != UpdateKind.Installer)
+            {
+                throw new InvalidOperationException("There is no update to download.");
+            }
+
+            offer = found;
+            SetPhase(UpdatePhase.Downloading);
         }
 
-        SetPhase(UpdatePhase.Downloading);
         try
         {
             await _backend.DownloadAsync(offer, p =>
@@ -212,11 +242,64 @@ public sealed class UpdateService
                 Changed?.Invoke(this, EventArgs.Empty);
             }, cancellationToken).ConfigureAwait(false);
             SetPhase(UpdatePhase.Ready);
+            return true;
         }
         catch
         {
             SetPhase(UpdatePhase.Available);
             throw;
+        }
+    }
+
+    /// <summary>
+    /// 「今すぐ最新の安定版に戻す」を出すか (PKG-21 の仕様 4): 今の版がプレビュー版で、チャネルが stable。MSIX 版 (Store は安定版だけ) と
+    /// 更新しない配布形態では出さない。
+    /// </summary>
+    public bool CanReturnToStable =>
+        _backend.Kind is UpdateKind.Installer or UpdateKind.Portable && Current.Preview is not null && _preferences.Channel == ReleaseChannel.Stable;
+
+    /// <summary>
+    /// 「今すぐ最新の安定版に戻す」(PKG-21 の仕様 4。確認は呼び出し側が先に行う): 最新の安定版 (今の版より古くてもよい) を探し、
+    /// 見つかれば新しい版と同じ流れ (Available。インストーラ版はダウンロードして「再起動して更新」、ポータブル版はダウンロードページ) に乗せる。
+    /// オフラインなら通信せずに Failed (Offline)。今の版と同じ版しかなければ UpToDate。
+    /// </summary>
+    public async Task<UpdateCheckResult> FindLatestStableAsync(CancellationToken cancellationToken = default)
+    {
+        if (!_policy.UpdateCheckAllowed(manual: true))
+        {
+            return new UpdateCheckResult(UpdateCheckOutcome.Failed, true, Failure: UpdateFailure.Offline);
+        }
+
+        await _gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (Phase is UpdatePhase.Downloading)
+            {
+                return new UpdateCheckResult(UpdateCheckOutcome.Downloading, true, Offer);
+            }
+
+            UpdateOffer? offer;
+            try
+            {
+                offer = await _backend.FindLatestStableAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+            {
+                return new UpdateCheckResult(UpdateCheckOutcome.Failed, true, Failure: Classify(ex));
+            }
+
+            if (offer is null || offer.Version.SameVersion(Current))
+            {
+                return new UpdateCheckResult(UpdateCheckOutcome.UpToDate, true);
+            }
+
+            Offer = offer;
+            SetPhase(UpdatePhase.Available);
+            return new UpdateCheckResult(UpdateCheckOutcome.Available, true, offer);
+        }
+        finally
+        {
+            _gate.Release();
         }
     }
 
