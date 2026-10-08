@@ -294,7 +294,7 @@ Length: {2} ({3} bytes)</value></data>
   <data name="HexView_State_TextColumn" xml:space="preserve"><value>text column</value></data>
   <data name="HexView_State_LowNibble" xml:space="preserve"><value>low nibble</value></data>
   <data name="HexView_State_Modified" xml:space="preserve"><value>modified</value></data>
-  <data name="HexView_State_Insert" xml:space="preserve"><value>insert</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>insert mode</value></data>
   <data name="HexView_State_Selected" xml:space="preserve"><value>selected</value></data>
   <data name="HexView_State_Loading" xml:space="preserve"><value>loading</value></data>
   <data name="HexView_State_Unreadable" xml:space="preserve"><value>cannot be read</value></data>
@@ -2407,4 +2407,9 @@ Details were written to:
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>base address row shift</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>View: Continuation marks in multibyte characters</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>utf-8 multibyte</value></data>
+  <data name="HexView_Announce_HexColumn" xml:space="preserve"><value>Hex column</value></data>
+  <data name="HexView_Announce_TextColumn" xml:space="preserve"><value>Text column</value></data>
+  <data name="A11y_OperationCompleted" xml:space="preserve"><value>{0} completed</value></data>
+  <data name="A11y_OperationCancelled" xml:space="preserve"><value>{0} cancelled</value></data>
+  <data name="CmdCategory_accessibility" xml:space="preserve"><value>Accessibility</value></data>
 </root>

@@ -157,6 +157,9 @@ public sealed partial class MainWindow
                 continue;
             }
 
+            // 長時間処理の完了を読み上げる (UI-51 の仕様 5)。
+            AnnounceFinishedOperation(op);
+
             if (op.State == OperationState.Failed)
             {
                 DocumentViewModel? doc = Vm.Documents.FirstOrDefault(d => ReferenceEquals(d.Document, op.Target));

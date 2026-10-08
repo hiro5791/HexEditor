@@ -294,7 +294,7 @@
   <data name="HexView_State_TextColumn" xml:space="preserve"><value>テキスト列</value></data>
   <data name="HexView_State_LowNibble" xml:space="preserve"><value>下位</value></data>
   <data name="HexView_State_Modified" xml:space="preserve"><value>変更あり</value></data>
-  <data name="HexView_State_Insert" xml:space="preserve"><value>挿入</value></data>
+  <data name="HexView_State_Insert" xml:space="preserve"><value>挿入モード</value></data>
   <data name="HexView_State_Selected" xml:space="preserve"><value>選択中</value></data>
   <data name="HexView_State_Loading" xml:space="preserve"><value>読み込み中</value></data>
   <data name="HexView_State_Unreadable" xml:space="preserve"><value>読み取れません</value></data>
@@ -2407,4 +2407,9 @@
   <data name="CmdAlias_view_alignRows" xml:space="preserve"><value>ぎょうのせんとう</value></data>
   <data name="Cmd_view_continuation" xml:space="preserve"><value>表示: マルチバイト文字の続きの記号</value></data>
   <data name="CmdAlias_view_continuation" xml:space="preserve"><value>つづきのきごう</value></data>
+  <data name="HexView_Announce_HexColumn" xml:space="preserve"><value>Hex 列</value></data>
+  <data name="HexView_Announce_TextColumn" xml:space="preserve"><value>テキスト列</value></data>
+  <data name="A11y_OperationCompleted" xml:space="preserve"><value>{0} が完了しました</value></data>
+  <data name="A11y_OperationCancelled" xml:space="preserve"><value>{0} をキャンセルしました</value></data>
+  <data name="CmdCategory_accessibility" xml:space="preserve"><value>アクセシビリティ</value></data>
 </root>

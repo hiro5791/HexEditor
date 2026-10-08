@@ -189,6 +189,28 @@ public sealed partial class HexViewAutomationPeer(HexView owner) : FrameworkElem
 
     public void SetValue(string value) => owner.SetValueFromAutomation(value);
 
+    /// <summary>
+    /// 読み取り専用の切り替えを知らせる (UI-50 の仕様 5): ControlType (Edit ⇔ Document) と Value パターンの IsReadOnly。
+    /// </summary>
+    internal void RaiseReadOnlyChanged(bool before, bool after)
+    {
+        if (!ListenerExists(AutomationEvents.PropertyChanged))
+        {
+            return;
+        }
+
+        RaisePropertyChangedEvent(ValuePatternIdentifiers.IsReadOnlyProperty, before, after);
+        try
+        {
+            RaisePropertyChangedEvent(AutomationElementIdentifiers.ControlTypeProperty,
+                before ? AutomationControlType.Document : AutomationControlType.Edit, after ? AutomationControlType.Document : AutomationControlType.Edit);
+        }
+        catch (ArgumentException)
+        {
+            // ControlType の変更の通知を受け付けない UI オートメーションの実装では、次に読まれたときに新しい値が返る。
+        }
+    }
+
     // ---- Grid パターン ----
 
     public int RowCount => owner.VisibleRowCount;

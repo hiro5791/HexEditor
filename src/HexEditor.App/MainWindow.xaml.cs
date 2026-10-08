@@ -551,7 +551,7 @@ public sealed partial class MainWindow : Window
         }
 
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
-        view.DocumentName = (view.DataContext as DocumentViewModel)?.DisplayName;
+        TrackDocumentName(view);
         ConfigureHexView(view);
         AttachZoom(view);
         UpdateMatchHighlights(view);
