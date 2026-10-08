@@ -57,6 +57,21 @@ public sealed class FileByteSource : ByteSourceBase
     public FileStamp Stamp { get; }
 
     /// <summary>
+    /// 開いているハンドルで読んだ今の長さ・最終更新日時・ファイル ID (外部変更の検知。ENG-19 の仕様 1)。閉じた後・読めなければ null。
+    /// </summary>
+    public FileStamp? ReadCurrentStamp()
+    {
+        try
+        {
+            return _handle.IsClosed ? null : FileStamp.FromHandle(_handle);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ObjectDisposedException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
     /// ファイルを読み取りで開く。保存中の置き換え (ENG-22) と外部の編集を妨げないよう、共有は読み書き・削除を許す。
     /// </summary>
     public static FileByteSource Open(string path)

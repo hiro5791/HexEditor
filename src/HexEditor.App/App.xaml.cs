@@ -32,12 +32,38 @@ public partial class App : Application
     /// <summary>設定 (UI-23)。</summary>
     public static SettingsStore Settings { get; private set; } = null!;
 
-    /// <summary>復旧用データの保存間隔 (ENG-27 の仕様 1。設定画面ができるまでは既定の 1 分)。</summary>
-    public static TimeSpan RecoveryInterval { get; set; } = TimeSpan.FromMinutes(1);
+    /// <summary>
+    /// 復旧用データの保存間隔のテスト用の上書き (ENG-27 の仕様 1。--test-hooks の recoveryIntervalSeconds)。null なら設定
+    /// <c>save.recoveryIntervalMinutes</c> (既定 1 分、0 は無効) に従う。
+    /// </summary>
+    public static TimeSpan? RecoveryInterval { get; set; }
 
     public static Microsoft.UI.Dispatching.DispatcherQueue DispatcherQueue { get; private set; } = null!;
 
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _recoveryTimer;
+
+    /// <summary>復旧用データの保存間隔を反映する (0 = 無効なら止める。ENG-27 の仕様 1)。</summary>
+    private void ApplyRecoveryInterval()
+    {
+        if (_recoveryTimer is null)
+        {
+            return;
+        }
+
+        TimeSpan? interval = RecoveryInterval ?? FileSettings.RecoveryInterval(Settings);
+        if (interval is { } value)
+        {
+            if (_recoveryTimer.Interval != value || !_recoveryTimer.IsRunning)
+            {
+                _recoveryTimer.Interval = value;
+                _recoveryTimer.Start();
+            }
+        }
+        else
+        {
+            _recoveryTimer.Stop();
+        }
+    }
 
     /// <summary>メモリの監視 (ENG-08)。アプリの終了まで保持する。</summary>
     private MemoryMonitor? _memoryMonitor;
@@ -64,6 +90,23 @@ public partial class App : Application
             TempDirectory = custom.Length > 0 ? Path.Combine(custom, "HexEditor", "recovery") : env.Locations.Recovery,
         };
         var vm = new MainViewModel(new OperationCenter(TestHooks.Time), new EngineMemory(), options, env.Locations.Recovery);
+
+        // 最近使ったファイル・前回の位置・セッション・初回起動の状態 (ENG-16、UI-31、UI-38)。ポータブル版では exe と同じドライブの
+        // ファイルを exe からの相対パスで記録する (UI-32 の仕様 8)。
+        string exeFolder = Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
+        var files = new FilesContext
+        {
+            RecentStore = new Core.Files.RecentFileStore(env.Locations.Settings,
+                env.Distribution == Distribution.Portable ? new Core.Files.RecentPathMapper(exeFolder) : null),
+            Documents = new Core.Files.DocumentDataStore(env.Locations.Documents),
+            Session = new Core.Files.SessionStore(env.Locations.Settings),
+            State = new Core.Files.AppStateStore(env.Locations.Settings),
+            Watcher = new Core.Files.FileSystemChangeWatcher(),
+            RestorePosition = () => FileSettings.RestorePosition(Settings),
+        };
+        files.State.Load();
+        vm.InitializeFiles(files, FileSettings.RecentMaxItems(Settings));
+        vm.BackupSettings = FileSettings.Backup(Settings);
         var window = new MainWindow(vm);
         Window = window;
         window.ApplyAppearance();
@@ -78,6 +121,9 @@ public partial class App : Application
         // 外部で編集された設定・コントラストテーマの切り替えを反映する (UI-23 の仕様 7、UI-26 の仕様 3)。
         Settings.Changed += _ => DispatcherQueue.TryEnqueue(() =>
         {
+            vm.Recent.MaxItems = FileSettings.RecentMaxItems(Settings);
+            vm.BackupSettings = FileSettings.Backup(Settings);
+            ApplyRecoveryInterval();
             AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
             CrashReporter.WriteMiniDump = Settings.GetBool(CrashReporter.MiniDumpKey, false);
             window.ApplyAppearance();
@@ -111,9 +157,12 @@ public partial class App : Application
         // 復旧用データの定期の書き出し (ENG-27 の仕様 1。既定 1 分ごと)。
         // タイマーはフィールドに持つ (ローカル変数だけだとガベージコレクションで回収され、書き出しが止まる)。
         _recoveryTimer = DispatcherQueue.CreateTimer();
-        _recoveryTimer.Interval = RecoveryInterval;
         _recoveryTimer.Tick += async (_, _) => await vm.WriteRecoveryAsync(window.ShowRecoveryWriteError);
-        _recoveryTimer.Start();
+        ApplyRecoveryInterval();
+
+        // セッション・閉じたタブの記録を読み、起動時の動作 (UI-30) に従ってタブを戻す。コマンドラインのファイルより先に行い、
+        // 指定されたファイルをアクティブなタブにする (UI-30 の仕様 2)。
+        window.PrepareStartup();
 
         // 既存のインスタンスに転送された起動 (2 つ目の起動で指定したファイル) を、このウィンドウのタブとして開く (UI-15)。
         SingleInstance.Redirected += commandLine =>

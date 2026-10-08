@@ -63,6 +63,9 @@ public enum DocumentChangeKind
 
     /// <summary>保存による元データの切り替え (内容は変わらない)。</summary>
     Saved,
+
+    /// <summary>再読み込み・変更の破棄・外部の変更とのマージ (ENG-18、ENG-19)。</summary>
+    Reloaded,
 }
 
 /// <summary>
@@ -91,7 +94,7 @@ public sealed class DocumentChangedEventArgs(long offset, long removedLength, lo
 /// 編集対象 1 つ (ENG-02〜ENG-07)。編集は UI スレッドから呼ぶ。各編集は新しいスナップショットを作って履歴に積む。
 /// 長さを変えられないデータソースでは上書きだけを受け付ける (ENG-07)。
 /// </summary>
-public sealed class Document : IDisposable
+public sealed partial class Document : IDisposable
 {
     private readonly object _lifetimeLock = new();
     private readonly List<DocumentStorage> _storages = [];

@@ -84,8 +84,10 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
     public string DisplayName { get; private set; }
 
-    /// <summary>タブの見出し。変更があれば先頭に ● を付ける (色だけに頼らない)。</summary>
-    public string Header => Document.IsModified ? "● " + DisplayName : DisplayName;
+    /// <summary>
+    /// タブの見出し。変更があれば先頭に ● を付ける (色だけに頼らない)。外部で変更された (ENG-19) なら ⚠ を付ける (形で区別する)。
+    /// </summary>
+    public string Header => (Document.IsModified ? "● " : string.Empty) + (HasExternalChange ? "⚠ " : string.Empty) + DisplayName;
 
     public string ToolTip => FilePath ?? DisplayName;
 

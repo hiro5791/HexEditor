@@ -61,6 +61,9 @@ public sealed partial class MainWindow
             await ShowRecoveryDialogAsync(entries, journals);
         }
 
+        // 復旧の提案の後にセッションを復元する (UI-30 の仕様 3)。
+        ContinueStartupAfterRecovery();
+
         // 起動処理 (XAML の前) で見つかったこと (応答しない既存のインスタンス、書き込めないデータフォルダなど)。
         // 「設定をエクスポート」のボタン (Startup_ExportSettings) は設定のエクスポート (UI-25、フェーズ 1) ができてから付ける。
         foreach (StartupNotice notice in StartupNotices.TakeAll())

@@ -242,6 +242,17 @@ public sealed class EditHistory
     /// <summary>現在の状態を「保存した時点」にする。</summary>
     internal void MarkSaved() => _savedIndex = _current;
 
+    /// <summary>履歴を消去して <paramref name="initial"/> だけにし、その状態を「保存した時点」にする (外部で変更された元データの再読み込み。ENG-18)。</summary>
+    internal void Reset(DocumentSnapshot initial)
+    {
+        _entries.Clear();
+        _entries.Add(new HistoryEntry(initial, string.Empty, null));
+        _current = 0;
+        _savedIndex = 0;
+        _groupDepth = 0;
+        _groupStarted = false;
+    }
+
     /// <summary>保存した時点を履歴の外にする (復旧したドキュメントは最初から「変更あり」。ENG-27 の仕様 6)。</summary>
     internal void MarkUnsaved() => _savedIndex = -1;
 }

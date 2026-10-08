@@ -461,4 +461,82 @@
   <data name="Hash_VerifyUnknownAlgorithm" xml:space="preserve"><value>この行のアルゴリズムが分かりません。</value></data>
   <data name="Hash_VerifyResult" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Hash_ResultList.AutomationProperties.Name" xml:space="preserve"><value>結果</value></data>
+  <data name="Menu_File_OpenReadOnly.Text" xml:space="preserve"><value>読み取り専用で開く(Y)...</value></data>
+  <data name="Menu_File_OpenReadOnly.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_File_Reload.Text" xml:space="preserve"><value>再読み込み(R)</value></data>
+  <data name="Menu_File_Reload.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_File_DiscardReload.Text" xml:space="preserve"><value>変更を破棄して再読み込み(D)...</value></data>
+  <data name="Menu_File_DiscardReload.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_File_Recent.Text" xml:space="preserve"><value>最近使ったファイル(F)</value></data>
+  <data name="Menu_File_Recent.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_File_ReopenClosed.Text" xml:space="preserve"><value>閉じたタブを開き直す(T)</value></data>
+  <data name="Menu_File_ReopenClosed.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_File_ClearRecent.Text" xml:space="preserve"><value>一覧を消去(L)</value></data>
+  <data name="Menu_File_ClearRecent.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_ShowAllRecent.Text" xml:space="preserve"><value>すべて表示(S)...</value></data>
+  <data name="Menu_File_ShowAllRecent.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Recent_MenuItem" xml:space="preserve"><value>{0}  ({1})</value></data>
+  <data name="Recent_MenuItemMissing" xml:space="preserve"><value>{0}  ({1}) - 見つかりません</value></data>
+  <data name="Recent_NotFound" xml:space="preserve"><value>見つかりません</value></data>
+  <data name="Recent_Pinned" xml:space="preserve"><value>ピン留め</value></data>
+  <data name="Recent_Missing" xml:space="preserve"><value>{0} が見つかりません。</value></data>
+  <data name="Recent_Remove" xml:space="preserve"><value>一覧から削除</value></data>
+  <data name="Recent_Cleared" xml:space="preserve"><value>最近使ったファイルの一覧を消去しました。ピン留めしたファイルは残っています。</value></data>
+  <data name="Recent_Search" xml:space="preserve"><value>最近使ったファイルを検索</value></data>
+  <data name="Recent_AllTitle" xml:space="preserve"><value>最近使ったファイル</value></data>
+  <data name="Recent_Pin" xml:space="preserve"><value>ピン留め</value></data>
+  <data name="Recent_Unpin" xml:space="preserve"><value>ピン留めを外す</value></data>
+  <data name="Recent_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+  <data name="Recent_ShowInExplorer" xml:space="preserve"><value>エクスプローラーで表示</value></data>
+  <data name="Reopen_NotFound" xml:space="preserve"><value>{0} は見つかりませんでした。次に閉じたタブを開きます。</value></data>
+  <data name="Start_WelcomeTitle.Text" xml:space="preserve"><value>はじめに</value></data>
+  <data name="Start_WelcomeClose.Content" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Start_Language.Header" xml:space="preserve"><value>表示言語</value></data>
+  <data name="Start_LanguageSystem" xml:space="preserve"><value>Windows と同じ</value></data>
+  <data name="Start_LanguageRestart.Text" xml:space="preserve"><value>新しい表示言語は、次に HexEditor を起動したときに使われます。</value></data>
+  <data name="Start_Theme.Header" xml:space="preserve"><value>テーマ</value></data>
+  <data name="Start_ThemeSystem" xml:space="preserve"><value>システムの設定</value></data>
+  <data name="Start_ThemeLight" xml:space="preserve"><value>ライト</value></data>
+  <data name="Start_ThemeDark" xml:space="preserve"><value>ダーク</value></data>
+  <data name="Start_Preset.Header" xml:space="preserve"><value>ショートカットのプリセット</value></data>
+  <data name="Start_PresetDefault" xml:space="preserve"><value>既定</value></data>
+  <data name="Start_PresetHxd" xml:space="preserve"><value>HxD 風</value></data>
+  <data name="Start_Preset010" xml:space="preserve"><value>010 Editor 風</value></data>
+  <data name="Start_PresetVsCode" xml:space="preserve"><value>VS Code 風</value></data>
+  <data name="Start_NetworkInfo.Text" xml:space="preserve"><value>HexEditor がインターネットを使うのは、更新の確認、操作したときのテンプレート・プラグイン・コンポーネントのダウンロード、ヘルプと報告のページをブラウザで開くときだけです。設定 &gt; プライバシー で無効にできます。</value></data>
+  <data name="Start_RestoreSession.Content" xml:space="preserve"><value>前回のセッションを復元</value></data>
+  <data name="Start_RecentTitle.Text" xml:space="preserve"><value>最近使ったファイル</value></data>
+  <data name="Start_ShowAll.Content" xml:space="preserve"><value>すべて表示...</value></data>
+  <data name="Start_RecentList.AutomationProperties.Name" xml:space="preserve"><value>最近使ったファイル</value></data>
+  <data name="Start_PaletteHint.Text" xml:space="preserve"><value>コマンドを名前で探すには、コマンドパレット (Ctrl+Shift+P) を開きます。</value></data>
+  <data name="Session_Missing" xml:space="preserve"><value>ファイルが見つかりません: {0}</value></data>
+  <data name="Session_Close.Content" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Session_Locate.Content" xml:space="preserve"><value>場所を探す...</value></data>
+  <data name="Session_FileChanged" xml:space="preserve"><value>前回の終了後にファイルが変更されています。</value></data>
+  <data name="External_Reloaded" xml:space="preserve"><value>外部で変更されたため再読み込みしました。</value></data>
+  <data name="External_Changed" xml:space="preserve"><value>{0} は外部で変更されました。</value></data>
+  <data name="External_Mixed" xml:space="preserve"><value>{0} は外部で変更されました。保存していない変更と外部の変更が混ざっています。</value></data>
+  <data name="External_Deleted" xml:space="preserve"><value>{0} は削除または移動されました。編集は続けられます。保存すると元の場所にファイルを作り直します。</value></data>
+  <data name="External_Reload" xml:space="preserve"><value>再読み込み</value></data>
+  <data name="External_Merge" xml:space="preserve"><value>マージ</value></data>
+  <data name="External_Compare" xml:space="preserve"><value>比較</value></data>
+  <data name="External_Ignore" xml:space="preserve"><value>無視</value></data>
+  <data name="External_SaveAs" xml:space="preserve"><value>名前を付けて保存...</value></data>
+  <data name="External_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="External_OverwriteBody" xml:space="preserve"><value>{0} は外部で変更されています。保存すると外部で変更されたファイルを上書きします。</value></data>
+  <data name="External_RecreateBody" xml:space="preserve"><value>{0} は削除または移動されています。保存すると元の場所にファイルを作り直します。</value></data>
+  <data name="Discard_Title" xml:space="preserve"><value>{0} の変更を破棄しますか?</value></data>
+  <data name="Discard_Body" xml:space="preserve"><value>{0} か所、{1} バイトの変更を破棄して、ファイルを読み直します。</value></data>
+  <data name="Discard_Undoable" xml:space="preserve"><value>破棄した後も Ctrl+Z で元に戻せます。</value></data>
+  <data name="Discard_NotUndoable" xml:space="preserve"><value>ファイルが外部で変更されているため、元に戻せません。</value></data>
+  <data name="Discard_Confirm" xml:space="preserve"><value>破棄して再読み込み</value></data>
+  <data name="Discard_UndoName" xml:space="preserve"><value>変更の破棄</value></data>
+  <data name="Merge_Title" xml:space="preserve"><value>変更されたファイルとマージしますか?</value></data>
+  <data name="Merge_LengthChanged" xml:space="preserve"><value>外部の変更でファイルのサイズが {0} バイトから {1} バイトに変わりました。自分の変更は同じオフセットに適用し直すため、正しい位置にならない可能性があります。マージは Ctrl+Z で元に戻せます。</value></data>
+  <data name="Merge_UndoName" xml:space="preserve"><value>外部の変更とのマージ</value></data>
+  <data name="Backup_Failed" xml:space="preserve"><value>バックアップを作れないため保存を中止しました ({0})。</value></data>
+  <data name="Backup_SaveWithout" xml:space="preserve"><value>バックアップなしで保存</value></data>
+  <data name="BackupCopy_Title" xml:space="preserve"><value>バックアップのためにファイル全体をコピーしますか?</value></data>
+  <data name="BackupCopy_Body" xml:space="preserve"><value>バックアップのためにファイル全体 ({0}) をコピーしてから保存します。</value></data>
+  <data name="BackupCopy_Copy" xml:space="preserve"><value>コピーして保存</value></data>
 </root>

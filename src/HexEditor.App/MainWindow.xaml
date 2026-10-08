@@ -13,6 +13,46 @@
     </Window.SystemBackdrop>
 
     <Grid x:Name="Root">
+        <Grid.Resources>
+            <!--  「すべて表示…」の一覧の行 (UI-32 の仕様 4): ファイル名、フォルダ、サイズ、最後に開いた日時。  -->
+            <DataTemplate x:Key="RecentAllItemTemplate" x:DataType="vm:RecentEntryViewModel">
+                <Grid
+                    Padding="0,6"
+                    AutomationProperties.Name="{x:Bind AccessibleName, Mode=OneWay}"
+                    ColumnSpacing="12"
+                    Opacity="{x:Bind Opacity, Mode=OneWay}"
+                    ToolTipService.ToolTip="{x:Bind Path}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{x:Bind StatusText, Mode=OneWay}" />
+                    </StackPanel>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FlowDirection="LeftToRight"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{x:Bind Folder}"
+                        TextTrimming="CharacterEllipsis" />
+                    <TextBlock
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Text="{x:Bind SizeText, Mode=OneWay}" />
+                    <TextBlock
+                        Grid.Column="3"
+                        VerticalAlignment="Center"
+                        Text="{x:Bind LastOpened}" />
+                </Grid>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -59,6 +99,8 @@
                                 <KeyboardAccelerator Key="O" Modifiers="Control" />
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
+                        <!--  読み取り専用で開く (ENG-14 の仕様 1)。標準のダイアログにチェックボックスを置けないため、別の項目にする。  -->
+                        <MenuFlyoutItem x:Uid="Menu_File_OpenReadOnly" AutomationProperties.AutomationId="Command_OpenReadOnly" Click="OpenReadOnly_Click" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_File_Save" AutomationProperties.AutomationId="Command_Save" Click="Save_Click">
                             <MenuFlyoutItem.KeyboardAccelerators>
@@ -72,6 +114,30 @@
                         </MenuFlyoutItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_File_SaveAll" AutomationProperties.AutomationId="Command_SaveAll" Click="SaveAll_Click" />
+                        <MenuFlyoutSeparator />
+                        <!--  再読み込みと変更の破棄 (ENG-18)  -->
+                        <MenuFlyoutItem x:Uid="Menu_File_Reload" AutomationProperties.AutomationId="Command_Reload" Click="Reload_Click">
+                            <MenuFlyoutItem.KeyboardAccelerators>
+                                <KeyboardAccelerator Key="R" Modifiers="Control" />
+                            </MenuFlyoutItem.KeyboardAccelerators>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem x:Uid="Menu_File_DiscardReload" AutomationProperties.AutomationId="Command_DiscardReload" Click="DiscardReload_Click" />
+                        <MenuFlyoutSeparator />
+                        <!--
+                            最近使ったファイル (UI-32 の仕様 3): ピン留めした項目、最近の 10 件、閉じたタブを開き直す (UI-12)、一覧を消去、すべて表示。
+                            ファイルの項目はコードビハインドで先頭に並べる。Ctrl+Shift+T はウィンドウ全体のキーで受ける (サブメニューの中の項目のキーは
+                            サブメニューを開くまで働かないため)。
+                        -->
+                        <MenuFlyoutSubItem x:Name="RecentMenu" x:Uid="Menu_File_Recent" AutomationProperties.AutomationId="Command_Recent">
+                            <MenuFlyoutSeparator x:Name="RecentMenuSeparator" />
+                            <MenuFlyoutItem
+                                x:Uid="Menu_File_ReopenClosed"
+                                AutomationProperties.AutomationId="Command_ReopenClosedTab"
+                                Click="ReopenClosedTab_Click"
+                                KeyboardAcceleratorTextOverride="Ctrl+Shift+T" />
+                            <MenuFlyoutItem x:Uid="Menu_File_ClearRecent" AutomationProperties.AutomationId="Command_ClearRecent" Click="ClearRecent_Click" />
+                            <MenuFlyoutItem x:Uid="Menu_File_ShowAllRecent" AutomationProperties.AutomationId="Command_ShowAllRecent" Click="ShowAllRecent_Click" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_File_Close" AutomationProperties.AutomationId="Command_Close" Click="Close_Click">
                             <MenuFlyoutItem.KeyboardAccelerators>
@@ -202,26 +268,13 @@
             Closed="Bar_Closed"
             Visibility="Collapsed" />
 
-        <!--  スタートページ (UI-01 の仕様 2。文書が 1 つもないとき)。最近使ったファイル・初回の「はじめに」は UI-38 (フェーズ 1)。  -->
-        <ScrollViewer
+        <!--  スタートページ (UI-01 の仕様 2、UI-38。文書が 1 つもないとき)。  -->
+        <controls:StartPage
             x:Name="StartPage"
             Grid.Row="4"
             Canvas.ZIndex="1"
             AutomationProperties.AutomationId="StartPage"
-            Visibility="Collapsed">
-            <StackPanel
-                MaxWidth="720"
-                Margin="24,48"
-                HorizontalAlignment="Center"
-                Spacing="16">
-                <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Text="HexEditor" />
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Button x:Uid="Start_Open" AutomationProperties.AutomationId="Start_Open" Click="Open_Click" Style="{ThemeResource AccentButtonStyle}" />
-                    <Button x:Uid="Start_New" AutomationProperties.AutomationId="Start_New" Click="New_Click" />
-                </StackPanel>
-                <TextBlock x:Uid="Start_DropHint" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
-            </StackPanel>
-        </ScrollViewer>
+            Visibility="Collapsed" />
 
         <TabView
             x:Name="Tabs"
@@ -261,6 +314,24 @@
                                 Editor="{x:Bind Editor}"
                                 EditRejected="HexView_EditRejected"
                                 Loaded="HexView_Loaded" />
+                            <!--  セッションのファイルが見つからないタブ (UI-31 の「エラー」)  -->
+                            <StackPanel
+                                Grid.Row="1"
+                                Padding="24"
+                                AutomationProperties.AutomationId="Session_MissingPanel"
+                                Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+                                Spacing="12"
+                                Visibility="{x:Bind IsMissing}">
+                                <TextBlock
+                                    AutomationProperties.AutomationId="Session_MissingText"
+                                    FlowDirection="LeftToRight"
+                                    Text="{x:Bind MissingText}"
+                                    TextWrapping="Wrap" />
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Button x:Uid="Session_Close" AutomationProperties.AutomationId="Session_Close" Click="MissingClose_Click" />
+                                    <Button x:Uid="Session_Locate" AutomationProperties.AutomationId="Session_Locate" Click="MissingLocate_Click" />
+                                </StackPanel>
+                            </StackPanel>
                         </Grid>
                     </TabViewItem>
                 </DataTemplate>

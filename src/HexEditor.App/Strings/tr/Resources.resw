@@ -372,4 +372,6 @@ Ayrıntılar şuraya yazıldı:
   <data name="Status_More.ToolTipService.ToolTip" xml:space="preserve"><value>Diğer durum öğeleri</value></data>
   <data name="Find_Cancel.Content" xml:space="preserve"><value>İptal</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>{0} eşleşme</value></data>
+  <data name="Menu_File_OpenReadOnly.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_File_Recent.AccessKey" xml:space="preserve"><value>E</value></data>
 </root>

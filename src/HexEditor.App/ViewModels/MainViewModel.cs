@@ -57,7 +57,9 @@ public sealed partial class MainViewModel : ObservableObject
 
     /// <summary>ファイルを開く (ENG-11)。同じファイルが開いていればそのタブを選ぶ。</summary>
     /// <param name="insertAt">タブの挿入位置 (タブ列へのドロップ。UI-34)。null なら末尾。</param>
-    public DocumentViewModel Open(string path, int? insertAt = null)
+    /// <param name="readOnly">「読み取り専用で開く」(ENG-14 の仕様 1)。データソースは読み取りのアクセス権だけで開き、編集を受け付けない。</param>
+    /// <param name="restorePosition">前回の位置を戻す (ENG-16 の仕様 5。セッション・閉じたタブは自分の記録で戻すため false)。</param>
+    public DocumentViewModel Open(string path, int? insertAt = null, bool readOnly = false, bool restorePosition = true)
     {
         string full = Path.GetFullPath(path);
         DocumentViewModel? existing = Documents.FirstOrDefault(d => string.Equals(d.FilePath, full, StringComparison.OrdinalIgnoreCase));
@@ -68,7 +70,10 @@ public sealed partial class MainViewModel : ObservableObject
         }
 
         var doc = new Document(FileByteSource.Open(full), _options);
-        return Add(doc, full, Path.GetFileName(full), insertAt);
+        DocumentViewModel vm = Add(doc, full, Path.GetFileName(full), insertAt);
+        vm.Editor.ReadOnly = readOnly;
+        AfterOpened(vm, restorePosition);
+        return vm;
     }
 
     /// <summary>
@@ -99,7 +104,12 @@ public sealed partial class MainViewModel : ObservableObject
         {
             JournalDirectory = JournalDirectory,
             Volumes = TestHooks.Volumes ?? SystemVolumeInfoProvider.Instance,
+
+            // 外部で変更されたファイルの上書き・削除されたファイルの作り直しは、全体を書く (ENG-19 の仕様 5・8)。
+            AlwaysSafeSave = vm.OverwritesExternalChange || vm.SourceDeleted,
+            Backup = SkipBackupOnce ? null : BackupSettings,
         });
+        SkipBackupOnce = false;
         if (plan.Method == SaveMethod.NoChanges)
         {
             return true; // 変更がない: 書き込まない (ENG-20 の仕様 1)。
@@ -131,6 +141,13 @@ public sealed partial class MainViewModel : ObservableObject
 
         string name = Loc.Format("Operation_Save", Path.GetFileName(path));
         SaveResult result;
+
+        // 自分の保存による変化は外部変更として扱わない (ENG-19 の仕様 3)。
+        if (vm.Watch is { } watch)
+        {
+            ExternalChanges?.Suspend(watch);
+        }
+
         try
         {
             result = await Operations.RunAsync(
@@ -141,14 +158,37 @@ public sealed partial class MainViewModel : ObservableObject
         catch
         {
             SavePlanner.Abort(plan);
+            if (vm.Watch is { } failed)
+            {
+                ExternalChanges?.Rebase(failed, failed.Baseline);
+            }
+
             throw;
         }
 
         SavePlanner.Complete(plan, result);
+        if (result.BackupTime is { } backupTime)
+        {
+            AppLog.Info($"Backup created in {backupTime.TotalMilliseconds:F1} ms");
+        }
+
+        string? previousPath = vm.FilePath;
         vm.SetSavedPath(plan.TargetPath!);
         vm.OnSaved();
+        RebaseWatch(vm);
+        if (_files is not null && !string.Equals(previousPath, vm.FilePath, StringComparison.OrdinalIgnoreCase))
+        {
+            Recent.Record(vm.FilePath!, vm.DisplayName, _files.UtcNow());
+        }
+
         return true;
     }
+
+    /// <summary>「バックアップを作る」の設定 (ENG-26)。null なら作らない。</summary>
+    public BackupSettings? BackupSettings { get; set; }
+
+    /// <summary>次の保存 1 回だけバックアップを作らない (「バックアップなしで保存」。ENG-26 の「エラー」)。</summary>
+    public bool SkipBackupOnce { get; set; }
 
     /// <summary>その場保存のジャーナルの置き場所 (ENG-23。復旧用フォルダ。PKG-13)。</summary>
     private string JournalDirectory => _journalDirectory;
@@ -157,6 +197,7 @@ public sealed partial class MainViewModel : ObservableObject
     {
         // 取り除くと TabView の双方向の結び付けで Selected が null になるため、先に選択中かを調べておく。
         bool wasSelected = Selected == vm;
+        BeforeClose(vm, Documents.IndexOf(vm));
         Documents.Remove(vm);
         Notifications.DismissOwnedBy(vm);
         Memory.Unregister(vm.Document);
@@ -223,7 +264,9 @@ public sealed partial class MainViewModel : ObservableObject
             vm.Editor.GoTo(Math.Clamp(record.Cursor, 0, length));
         }
 
-        return AddViewModel(vm);
+        DocumentViewModel added = AddViewModel(vm);
+        StartWatching(added);
+        return added;
     }
 
     /// <summary>

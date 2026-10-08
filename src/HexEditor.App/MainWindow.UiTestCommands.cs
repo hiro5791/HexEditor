@@ -41,7 +41,9 @@ public sealed partial class MainWindow
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
         "hash" => await TestHashAsync(request),
-        _ => null,
+
+        // ファイル・セッションの命令 (MainWindow.FilesTestCommands.cs)。
+        _ => await HandleFilesTestCommandAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>
@@ -495,10 +497,7 @@ public sealed partial class MainWindow
         string key = request["key"]?.GetValue<string>() ?? "Startup_ExportSettings";
         var button = new Button { Content = Loc.Get(key), Width = TestHookSettings.ReadLong(request["width"], 60) };
         AutomationProperties.SetAutomationId(button, "TestProbe");
-        if (StartPage.Content is StackPanel panel)
-        {
-            panel.Children.Add(button);
-        }
+        StartPage.AddExtra(button);
 
         return new JsonObject { ["text"] = (string)button.Content };
     }

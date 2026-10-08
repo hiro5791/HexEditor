@@ -38,7 +38,9 @@ public sealed partial class MainWindow
     /// ファイルを開く。開けない場合は理由ごとの文言で知らせ (ENG-11 の「エラー」)、null を返す。書き込めないファイルは
     /// 開いたうえで理由を知らせる。
     /// </summary>
-    private DocumentViewModel? TryOpen(string path, int? insertAt = null)
+    /// <param name="readOnly">「読み取り専用で開く」(ENG-14)。</param>
+    /// <param name="restorePosition">前回の位置を戻す (ENG-16 の仕様 5)。</param>
+    private DocumentViewModel? TryOpen(string path, int? insertAt = null, bool readOnly = false, bool restorePosition = true)
     {
         string name = Path.GetFileName(path.TrimEnd('\\', '/'));
         if (path.StartsWith(@"\\.\", StringComparison.Ordinal))
@@ -56,7 +58,7 @@ public sealed partial class MainWindow
 
         try
         {
-            DocumentViewModel doc = Vm.Open(path, insertAt);
+            DocumentViewModel doc = Vm.Open(path, insertAt, readOnly, restorePosition);
             AppLog.Debug($"Opened {path}");
             if (!doc.Document.CanSave)
             {

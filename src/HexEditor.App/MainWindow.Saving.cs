@@ -83,6 +83,22 @@ public sealed partial class MainWindow
                 };
             }
 
+            case SaveIssue.BackupCopy when plan.BackupCopyBytes is { } bytes:
+            {
+                // その場保存のバックアップのためにファイル全体をコピーする (ENG-26 の仕様 5)。
+                ContentDialog dialog = SaveDialog(Loc.Get("BackupCopy_Title"), Loc.Format("BackupCopy_Body", Size(bytes)));
+                dialog.PrimaryButtonText = Loc.Get("BackupCopy_Copy");
+                dialog.SecondaryButtonText = Loc.Get("Backup_SaveWithout");
+                dialog.CloseButtonText = Loc.Get("Common_Cancel");
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                return await dialog.ShowAsync() switch
+                {
+                    ContentDialogResult.Primary => SavePlanner.CopyBackup(plan),
+                    ContentDialogResult.Secondary => SavePlanner.WithoutBackup(plan),
+                    _ => null,
+                };
+            }
+
             case SaveIssue.ReadOnly:
                 ShowNotice(Loc.Get("Error_SaveReadOnly"), InfoBarSeverity.Error, doc);
                 return null;
