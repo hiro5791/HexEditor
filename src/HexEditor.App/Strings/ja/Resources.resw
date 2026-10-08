@@ -2432,4 +2432,6 @@
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>ゆーてぃーえふ さんじゅうに かいしいち あまり さん</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>移動: 履歴の一覧</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>りれき いちらん じゃんぷ もどる</value></data>
+  <data name="GoTo_History_Name" xml:space="preserve"><value>入力の履歴</value></data>
+  <data name="GoTo_History_Empty" xml:space="preserve"><value>履歴はありません</value></data>
 </root>

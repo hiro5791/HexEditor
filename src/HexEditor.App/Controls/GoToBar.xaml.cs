@@ -17,8 +17,60 @@ public sealed partial class GoToBar : UserControl
     /// <summary>入力の履歴の最大件数 (VIEW-29 の仕様 12)。</summary>
     private const int HistoryLimit = 20;
 
-    private readonly List<string> _history = [];
+    /// <summary>state.json に保存する入力の履歴のキー (セッションをまたいで保存する。VIEW-29 の仕様 12)。</summary>
+    public const string HistoryStateKey = "goTo.history";
+
+    // 履歴はアプリ全体で 1 つ (どのウィンドウの移動バーからも同じ履歴を呼び出せる)。
+    private static List<string>? s_history;
     private int _historyIndex = -1;
+
+    /// <summary>入力の履歴 (新しい順)。初めて使うときに state.json から読む。</summary>
+    private static List<string> History
+    {
+        get
+        {
+            if (s_history is null)
+            {
+                s_history = [];
+                try
+                {
+                    if (global::HexEditor.App.Commands.CommandService.State?.Get(HistoryStateKey) is System.Text.Json.Nodes.JsonArray saved)
+                    {
+                        foreach (System.Text.Json.Nodes.JsonNode? item in saved)
+                        {
+                            if (item?.GetValueKind() == System.Text.Json.JsonValueKind.String && item.GetValue<string>() is { Length: > 0 } text
+                                && !s_history.Contains(text) && s_history.Count < HistoryLimit)
+                            {
+                                s_history.Add(text);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex) when (ex is InvalidOperationException or FormatException)
+                {
+                    AppLog.Info($"Go-to history not loaded: {ex.Message}");
+                }
+            }
+
+            return s_history;
+        }
+    }
+
+    private static void SaveHistory()
+    {
+        try
+        {
+            global::HexEditor.App.Commands.CommandService.State?.Set(HistoryStateKey,
+                new System.Text.Json.Nodes.JsonArray([.. History.Select(h => (System.Text.Json.Nodes.JsonNode?)h)]));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            AppLog.Info($"Go-to history not saved: {ex.Message}");
+        }
+    }
+
+    /// <summary>入力の履歴 (テスト用の読み出し)。</summary>
+    public static IReadOnlyList<string> SavedHistory => History;
 
     public GoToBar()
     {
@@ -29,6 +81,78 @@ public sealed partial class GoToBar : UserControl
         AutomationProperties.SetName(AddressChoice, Loc.Get("GoTo_Address_Name"));
         AutomationProperties.SetName(CloseButton, Loc.Get("GoTo_Close_Name"));
         ToolTipService.SetToolTip(CloseButton, Loc.Get("GoTo_Close_Name"));
+        AutomationProperties.SetName(HistoryButton, Loc.Get("GoTo_History_Name"));
+        ToolTipService.SetToolTip(HistoryButton, Loc.Get("GoTo_History_Name"));
+    }
+
+    /// <summary>選択項目を 2 段目に折り返しているか (幅が足りないとき。VIEW-29 の「画面」)。</summary>
+    public bool IsWrapped { get; private set; }
+
+    /// <summary>
+    /// 幅に応じて、選択項目を 1 段目の右か 2 段目に置く (訳文が長い言語でも項目が切れない)。親 (縦の StackPanel) は中身が
+    /// 広いとその幅で並べるため、配置後の大きさではなく、測るときに使える幅で決める。
+    /// </summary>
+    protected override Windows.Foundation.Size MeasureOverride(Windows.Foundation.Size availableSize)
+    {
+        if (!double.IsInfinity(availableSize.Width))
+        {
+            UpdateWrap(availableSize.Width);
+        }
+
+        return base.MeasureOverride(availableSize);
+    }
+
+    private void UpdateWrap(double width)
+    {
+        Options.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+        double fixedWidth = 0;
+        foreach (FrameworkElement part in (FrameworkElement[])[Input, HistoryButton, GoButton, CloseButton])
+        {
+            part.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            fixedWidth += part.DesiredSize.Width;
+        }
+
+        // 解釈結果の最小幅 120、列の間隔 8 × 5、左右の余白 12 × 2。
+        double needed = fixedWidth + Options.DesiredSize.Width + 120 + 8 * 5 + Root.Padding.Left + Root.Padding.Right;
+        bool wrap = width < needed;
+        if (wrap == IsWrapped)
+        {
+            return;
+        }
+
+        IsWrapped = wrap;
+        Grid.SetRow(Options, wrap ? 1 : 0);
+        Grid.SetColumn(Options, wrap ? 0 : 3);
+        Grid.SetColumnSpan(Options, wrap ? 6 : 1);
+        Options.HorizontalAlignment = wrap ? HorizontalAlignment.Left : HorizontalAlignment.Stretch;
+    }
+
+    /// <summary>履歴のドロップダウンを開く直前に、新しい順の一覧を作る (VIEW-29 の仕様 12)。</summary>
+    private void HistoryMenu_Opening(object? sender, object e)
+    {
+        HistoryMenu.Items.Clear();
+        if (History.Count == 0)
+        {
+            HistoryMenu.Items.Add(new MenuFlyoutItem { Text = Loc.Get("GoTo_History_Empty"), IsEnabled = false });
+            return;
+        }
+
+        for (int i = 0; i < History.Count; i++)
+        {
+            string text = History[i];
+            var item = new MenuFlyoutItem { Text = text, FontFamily = Input.FontFamily };
+            AutomationProperties.SetAutomationId(item, "GoTo_History_" + i);
+            item.Click += (_, _) => Recall(text);
+            HistoryMenu.Items.Add(item);
+        }
+    }
+
+    /// <summary>履歴の項目を入力欄に入れる。</summary>
+    public void Recall(string text)
+    {
+        Input.Text = text;
+        Input.Focus(FocusState.Programmatic);
+        Input.SelectAll();
     }
 
     /// <summary>移動の対象のビュー。</summary>
@@ -49,6 +173,12 @@ public sealed partial class GoToBar : UserControl
 
         AddressChoice.Visibility = hasBase ? Visibility.Visible : Visibility.Collapsed;
         Visibility = Visibility.Visible;
+        if (Input.Text.Length == 0 && History.Count > 0)
+        {
+            // 前回の入力 (別のウィンドウ・前のセッションのものを含む) を入れておく (VIEW-29 の仕様 1・12)。
+            Input.Text = History[0];
+        }
+
         Input.Focus(FocusState.Programmatic);
         Input.SelectAll();
         Update();
@@ -120,14 +250,16 @@ public sealed partial class GoToBar : UserControl
 
     private void Remember(string text)
     {
-        _history.Remove(text);
-        _history.Insert(0, text);
-        if (_history.Count > HistoryLimit)
+        List<string> history = History;
+        history.Remove(text);
+        history.Insert(0, text);
+        if (history.Count > HistoryLimit)
         {
-            _history.RemoveAt(_history.Count - 1);
+            history.RemoveAt(history.Count - 1);
         }
 
         _historyIndex = -1;
+        SaveHistory();
     }
 
     private void Input_TextChanged(object sender, TextChangedEventArgs e) => Update();
@@ -159,14 +291,14 @@ public sealed partial class GoToBar : UserControl
             case VirtualKey.Escape:
                 Close();
                 return true;
-            case VirtualKey.Up when _history.Count > 0:
-                _historyIndex = Math.Min(_historyIndex + 1, _history.Count - 1);
-                Input.Text = _history[_historyIndex];
+            case VirtualKey.Up when History.Count > 0:
+                _historyIndex = Math.Min(_historyIndex + 1, History.Count - 1);
+                Input.Text = History[_historyIndex];
                 Input.SelectAll();
                 return true;
             case VirtualKey.Down when _historyIndex > 0:
-                _historyIndex--;
-                Input.Text = _history[_historyIndex];
+                _historyIndex = Math.Min(_historyIndex - 1, History.Count - 1);
+                Input.Text = History[_historyIndex];
                 Input.SelectAll();
                 return true;
             default:

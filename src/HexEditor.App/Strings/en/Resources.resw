@@ -2432,4 +2432,6 @@ Details were written to:
   <data name="CmdAlias_view_utf32Phase3" xml:space="preserve"><value>utf-32 start position phase 3</value></data>
   <data name="Cmd_go_history" xml:space="preserve"><value>Go: History list</value></data>
   <data name="CmdAlias_go_history" xml:space="preserve"><value>jump history list back recent positions</value></data>
+  <data name="GoTo_History_Name" xml:space="preserve"><value>Input history</value></data>
+  <data name="GoTo_History_Empty" xml:space="preserve"><value>No history</value></data>
 </root>

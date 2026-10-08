@@ -557,6 +557,7 @@ public sealed class ViewTests
     });
 
     [Theory]
+    [InlineData(640)]
     [InlineData(1024)]
     [InlineData(1920)]
     [Trait(UiTest.TC, "TC-VIEW-29-10")]
@@ -573,7 +574,7 @@ public sealed class ViewTests
 
         JsonObject bar = (await ElementAsync(app, "GoToBar"))["bounds"]!.AsObject();
         var rects = new List<(string Id, double X, double Y, double W, double H)>();
-        foreach (string id in new[] { "GoTo_Input", "GoTo_Interpretation", "GoTo_Base", "GoTo_Unit", "GoTo_Select", "GoTo_Go", "GoTo_Close" })
+        foreach (string id in new[] { "GoTo_Input", "GoTo_History", "GoTo_Interpretation", "GoTo_Base", "GoTo_Unit", "GoTo_Select", "GoTo_Go", "GoTo_Close" })
         {
             JsonObject e = await ElementAsync(app, id);
             Assert.True(e["found"]!.GetValue<bool>(), id);
@@ -600,7 +601,44 @@ public sealed class ViewTests
                 Assert.False(overlap, $"{a.Id} overlaps {b.Id}.");
             }
         }
+
+        // 幅が足りないときは選択項目を 2 段目に折り返す (VIEW-29 の「画面」)。
+        double inputY = rects.Single(r => r.Id == "GoTo_Input").Y;
+        double baseY = rects.Single(r => r.Id == "GoTo_Base").Y;
+        if (width <= 640)
+        {
+            Assert.True(baseY > inputY + 10, $"The options are not wrapped (input {inputY}, base {baseY}).");
+        }
+        else if (width >= 1920)
+        {
+            Assert.True(Math.Abs(baseY - inputY) < 10, $"The options are wrapped at {width} (input {inputY}, base {baseY}).");
+        }
     }, $"{nameof(Go_to_bar_fits_in_german)}_{width}");
+
+    [Fact]
+    public Task Go_to_history_is_kept_across_sessions() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-29 の仕様 12: 入力の履歴を最大 20 件保存し、↑ / ↓ か一覧から呼び出せる。セッションをまたいで保存する。
+        string profile = ctx.NewProfile();
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        foreach (string input in new[] { "0x100", "0x200", "0x300" })
+        {
+            await GoToAsync(app, input);
+        }
+
+        await CommandTests.ExitAsync(app);
+        AppSession again = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        await OpenGoToAsync(again);
+        Assert.Equal("0x300", (await ElementAsync(again, "GoTo_Input"))["text"]!.GetValue<string>());
+        await again.SendAsync("goToKey", new JsonObject { ["key"] = "Up" });
+        await again.SendAsync("goToKey", new JsonObject { ["key"] = "Up" });
+        Assert.Equal("0x200", (await ElementAsync(again, "GoTo_Input"))["text"]!.GetValue<string>());
+        await again.SendAsync("goToKey", new JsonObject { ["key"] = "Up" });
+        Assert.Equal("0x100", (await ElementAsync(again, "GoTo_Input"))["text"]!.GetValue<string>());
+        await again.SendAsync("goToKey", new JsonObject { ["key"] = "Down" });
+        Assert.Equal("0x200", (await ElementAsync(again, "GoTo_Input"))["text"]!.GetValue<string>());
+        Assert.True((await ElementAsync(again, "GoTo_History"))["found"]!.GetValue<bool>());
+    });
 
     // ---- VIEW-34 (設定の読み込みと移動バーからのジャンプ。規則そのものは Core の CursorPlacementTests) ----
 
