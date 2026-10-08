@@ -14,7 +14,7 @@ namespace HexEditor.Core.Tests.Commands;
 /// コマンド登録 (UI-16)、コマンドパレットの検索 (UI-17)、ショートカット一覧 (UI-39)。絞り込みの時間 (TC-UI-17-03) を計るので、
 /// 他のテストと並列に動かさない。
 /// </summary>
-[Collection(TimingCollection.Name)]
+[Collection(SerialCollection.Name)]
 public sealed partial class CommandRegistryTests
 {
     private static string AppFolder => Path.GetDirectoryName(SourceTests.FindRepoFile("src/HexEditor.App/HexEditor.App.csproj"))!;

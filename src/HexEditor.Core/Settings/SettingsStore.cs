@@ -55,6 +55,9 @@ public sealed class SettingsStore : IDisposable
     private JsonObject _values = [];
     private FileSystemWatcher? _watcher;
     private DateTime _lastWriteByUs;
+
+    /// <summary>この store が最後に書いた内容 (更新日時が同じでも、外部の書き込みと見分けるため)。</summary>
+    private byte[]? _lastWrittenBytes;
     private bool _disposed;
 
     public SettingsStore(string folder, string? schemaUrl = null)
@@ -433,6 +436,7 @@ public sealed class SettingsStore : IDisposable
         File.Move(temp, PathName, overwrite: true);
         WriteHook?.Invoke(SettingsWritePoint.AfterReplace);
         _lastWriteByUs = File.GetLastWriteTimeUtc(PathName);
+        _lastWrittenBytes = bytes;
     }
 
     private void ReloadFromDisk()
@@ -460,12 +464,21 @@ public sealed class SettingsStore : IDisposable
         JsonObject parsed;
         try
         {
-            if (!File.Exists(PathName) || File.GetLastWriteTimeUtc(PathName) == _lastWriteByUs)
+            if (!File.Exists(PathName))
             {
                 return [];
             }
 
-            parsed = Parse(File.ReadAllText(PathName));
+            // 更新日時の分解能の中で続けて書かれると、外部の書き込みでも日時が同じになる。内容でも確かめる (自分が書いた内容と同じなら
+            // 自分の書き込み)。
+            byte[] current = File.ReadAllBytes(PathName);
+            if (_lastWrittenBytes is not null ? current.AsSpan().SequenceEqual(_lastWrittenBytes)
+                : File.GetLastWriteTimeUtc(PathName) == _lastWriteByUs)
+            {
+                return [];
+            }
+
+            parsed = Parse(new UTF8Encoding(false).GetString(current).TrimStart('\uFEFF'));
         }
         catch (JsonException ex)
         {

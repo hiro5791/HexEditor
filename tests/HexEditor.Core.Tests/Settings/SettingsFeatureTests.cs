@@ -5,11 +5,13 @@ using HexEditor.Core.Settings;
 using HexEditor.Core.Tests.Commands;
 using HexEditor.Core.Tests.Engine;
 using HexEditor.Core.Tests.I18n;
+using HexEditor.Core.Tests.Support;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
 
 namespace HexEditor.Core.Tests.Settings;
 
 /// <summary>設定画面 (UI-22)、保存形式 (UI-23)、リセット (UI-24)、インポート / エクスポート (UI-25)。</summary>
+[Collection(SerialCollection.Name)] // 静的な SettingsStore.WriteHook を使うテストがある (並列に動く他のテストの書き込みに効かないように)
 public sealed class SettingsFeatureTests : IDisposable
 {
     private readonly string _dir = Directory.CreateTempSubdirectory("hexeditor-settings2").FullName;

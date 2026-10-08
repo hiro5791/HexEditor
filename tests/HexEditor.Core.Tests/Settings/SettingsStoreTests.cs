@@ -1,10 +1,12 @@
 using System.Text.Json.Nodes;
 using HexEditor.Core.Settings;
+using HexEditor.Core.Tests.Support;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
 
 namespace HexEditor.Core.Tests.Settings;
 
-/// <summary>UI-23 設定の保存形式。</summary>
+/// <summary>UI-23 設定の保存形式。外部の編集を 1 秒以内に読み直すこと (仕様 7) を時間で確かめるので、他のテストと並列に動かさない。</summary>
+[Collection(SerialCollection.Name)]
 public sealed class SettingsStoreTests : IDisposable
 {
     private readonly string _dir = Directory.CreateTempSubdirectory("hexeditor-settings").FullName;
