@@ -471,6 +471,18 @@ public static class PasteDetector
                     continue;
                 }
 
+                if (c == '-' && options.SourceLiterals && i + 1 < text.Length && char.IsAsciiDigit(text[i + 1]))
+                {
+                    // 負の 10 進 (Java の符号付きの配列など。TOOL-09 の仕様 4)。要素の大きさの 2 の補数にする。
+                    i++;
+                    NumberToken positive = ReadNumber(ref i);
+                    int bits = (options.ElementSize is 1 or 2 or 4 or 8 ? options.ElementSize : 1) * 8;
+                    ulong mask = bits == 64 ? ulong.MaxValue : (1UL << bits) - 1;
+                    ulong negated = unchecked((ulong)-(long)positive.Value) & mask;
+                    (stack.Count > 0 ? stack.Peek() : top).Numbers.Add(positive with { Value = negated });
+                    continue;
+                }
+
                 if (char.IsAsciiDigit(c) || c == '$' || c == '&' && i + 1 < text.Length && text[i + 1] is 'H' or 'h')
                 {
                     NumberToken token = ReadNumber(ref i);

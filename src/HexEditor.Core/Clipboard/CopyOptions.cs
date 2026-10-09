@@ -157,6 +157,9 @@ public sealed record CopyOptions
     /// <summary>配列の要素の大きさ (1 / 2 / 4 / 8。仕様 5)。</summary>
     public int ElementSize { get; init; } = 1;
 
+    /// <summary>配列の要素を 10 進で書く (既定は 16 進。TOOL-09 の仕様 2)。</summary>
+    public bool ArrayDecimal { get; init; }
+
     /// <summary>配列の要素のエンディアン (既定はリトルエンディアン。ドキュメントの既定エンディアンを呼び出し側が入れる)。</summary>
     public bool BigEndian { get; init; }
 
