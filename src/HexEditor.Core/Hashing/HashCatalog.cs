@@ -9,6 +9,33 @@ public enum HashParameterKinds
     None = 0,
     Seed = 1,
     Complement = 2,
+
+    /// <summary>ワードのエンディアン。</summary>
+    Endian = 4,
+
+    /// <summary>ワードの符号 (符号あり / なし)。</summary>
+    Signed = 8,
+
+    /// <summary>鍵。</summary>
+    Key = 16,
+
+    /// <summary>出力長。</summary>
+    OutputLength = 32,
+
+    /// <summary>ed2k の旧方式 / 新方式。</summary>
+    Ed2kMode = 64,
+}
+
+/// <summary>パラメータの誤り (ANA-18 の「エラー」の「パラメータが不正」。その行だけ計算しない)。</summary>
+public enum HashParameterError
+{
+    None,
+
+    /// <summary>鍵の長さが違う。</summary>
+    KeyLength,
+
+    /// <summary>出力長が範囲外。</summary>
+    OutputLength,
 }
 
 /// <summary>ハッシュパネルで選べるアルゴリズム 1 つ (ANA-19)。</summary>
@@ -18,7 +45,8 @@ public sealed class HashAlgorithmInfo
 
     internal HashAlgorithmInfo(string id, string name, HashGroup group, int bits, Func<HashParameters, IHasher> create,
         IReadOnlyList<string>? aliases = null, HashParameterKinds parameters = HashParameterKinds.None, bool insecure = false,
-        bool available = true, CrcParameters? crc = null)
+        bool available = true, CrcParameters? crc = null, Func<HashParameters, int>? bitsFor = null,
+        Func<HashParameters, HashParameterError>? validate = null, bool slow = false, bool preferBase32 = false)
     {
         Id = id;
         Name = name;
@@ -30,7 +58,14 @@ public sealed class HashAlgorithmInfo
         IsInsecure = insecure;
         IsAvailable = available;
         Crc = crc;
+        _bitsFor = bitsFor;
+        _validate = validate;
+        IsSlow = slow;
+        PrefersBase32 = preferBase32;
     }
+
+    private readonly Func<HashParameters, int>? _bitsFor;
+    private readonly Func<HashParameters, HashParameterError>? _validate;
 
     /// <summary>設定・スクリプトで使う識別子 (地域設定に依存しない小文字)。</summary>
     public string Id { get; }
@@ -43,8 +78,24 @@ public sealed class HashAlgorithmInfo
 
     public HashGroup Group { get; }
 
-    /// <summary>出力のビット数。</summary>
+    /// <summary>出力のビット数 (出力長を選べるものは既定の長さ)。</summary>
     public int Bits { get; }
+
+    /// <summary>パラメータに応じた出力のビット数。</summary>
+    public int BitsFor(HashParameters? parameters) => _bitsFor is { } f && parameters is not null ? f(parameters) : Bits;
+
+    /// <summary>パラメータの誤り (なければ <see cref="HashParameterError.None"/>)。</summary>
+    public HashParameterError Validate(HashParameters? parameters) =>
+        _validate is { } f ? f(parameters ?? HashParameters.Default) : HashParameterError.None;
+
+    /// <summary>遅いアルゴリズム (全体の速度がこのアルゴリズムで決まることを行の注記に表示する。ANA-18 の「巨大ファイル」)。</summary>
+    public bool IsSlow { get; }
+
+    /// <summary>Base32 の表示を既定にする (TTH。ANA-19 の仕様 4)。</summary>
+    public bool PrefersBase32 { get; }
+
+    /// <summary>利用者が定義したカスタム CRC (ANA-20)。</summary>
+    public bool IsCustom { get; init; }
 
     public HashParameterKinds Parameters { get; }
 
@@ -94,6 +145,31 @@ public sealed class HashAlgorithmInfo
             parts.Add(parameters.Complement == HashComplement.Ones ? "ones' complement" : "two's complement");
         }
 
+        if (Parameters.HasFlag(HashParameterKinds.Endian) && parameters.BigEndian is bool be)
+        {
+            parts.Add(be ? "BE" : "LE");
+        }
+
+        if (Parameters.HasFlag(HashParameterKinds.Signed) && parameters.Signed)
+        {
+            parts.Add("signed");
+        }
+
+        if (Parameters.HasFlag(HashParameterKinds.Key) && parameters.KeyHex is { Length: > 0 } key)
+        {
+            parts.Add($"key={key}");
+        }
+
+        if (Parameters.HasFlag(HashParameterKinds.OutputLength) && parameters.OutputBits != 0 && parameters.OutputBits != Bits)
+        {
+            parts.Add($"{parameters.OutputBits} bit");
+        }
+
+        if (Parameters.HasFlag(HashParameterKinds.Ed2kMode) && parameters.Ed2k == Ed2kMode.Red)
+        {
+            parts.Add("red");
+        }
+
         return parts.Count == 0 ? Name : $"{Name} ({string.Join(", ", parts)})";
     }
 
@@ -104,39 +180,38 @@ public sealed class HashAlgorithmInfo
 public sealed record HashAlgorithmSet(string Id, IReadOnlyList<string> AlgorithmIds);
 
 /// <summary>
-/// 対応するアルゴリズムの一覧 (ANA-19)。フェーズ 1 の範囲 (加算 8 / 16 / 32 bit、XOR 8 bit、CRC-16/ARC、CRC-16/IBM-3740、CRC-32、
-/// CRC-32C、Adler-32、MD5、SHA-1、SHA-256、SHA-384、SHA-512) と、.NET 標準にある SHA-3、パラメータの例として xxHash32 / xxHash64。
+/// 対応するアルゴリズムの一覧 (ANA-19)。チェックサム・CRC・非暗号学的ハッシュは HashCatalog.Checksums.cs、暗号学的ハッシュは
+/// HashCatalog.Cryptographic.cs に表の順で並べる。利用者のカスタム CRC (ANA-20) は <see cref="Custom"/>。
 /// </summary>
-public static class HashCatalog
+public static partial class HashCatalog
 {
     public static readonly CrcParameters Crc16Arc = new(16, 0x8005, 0, true, true, 0, 0xBB3D);
     public static readonly CrcParameters Crc16Ibm3740 = new(16, 0x1021, 0xFFFF, false, false, 0, 0x29B1);
     public static readonly CrcParameters Crc32 = new(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF, 0xCBF43926);
     public static readonly CrcParameters Crc32C = new(32, 0x1EDC6F41, 0xFFFFFFFF, true, true, 0xFFFFFFFF, 0xE3069283);
 
-    /// <summary>一覧の順 (グループの順、グループの中は表の順)。</summary>
-    public static IReadOnlyList<HashAlgorithmInfo> All { get; } =
-    [
-        new("sum8", "Sum 8", HashGroup.Checksum, 8, p => new ByteSumHasher(8, p.Complement), ["add8", "加算 8"], HashParameterKinds.Complement),
-        new("sum16", "Sum 16", HashGroup.Checksum, 16, p => new ByteSumHasher(16, p.Complement), ["add16", "加算 16"], HashParameterKinds.Complement),
-        new("sum32", "Sum 32", HashGroup.Checksum, 32, p => new ByteSumHasher(32, p.Complement), ["add32", "加算 32"], HashParameterKinds.Complement),
-        new("xor8", "XOR 8", HashGroup.Checksum, 8, _ => new ByteXorHasher()),
-        Crc("crc16-arc", "CRC-16/ARC", Crc16Arc, ["CRC-16", "CRC-16/IBM", "ARC", "CRC-IBM"]),
-        Crc("crc16-ibm3740", "CRC-16/IBM-3740", Crc16Ibm3740, ["CRC-16/CCITT-FALSE", "CRC-16/AUTOSAR", "CRC-CCITT-FALSE"]),
-        Crc("crc32", "CRC-32", Crc32, ["CRC-32/ISO-HDLC", "CRC-32/ADCCP", "CRC-32/V-42", "CRC-32/XZ", "PKZIP"]),
-        Crc("crc32c", "CRC-32C", Crc32C, ["CRC-32/ISCSI", "CRC-32/BASE91-C", "CRC-32/CASTAGNOLI", "CRC-32/INTERLAKEN", "Castagnoli"]),
-        new("adler32", "Adler-32", HashGroup.NonCryptographic, 32, _ => new Adler32Hasher()),
-        new("xxh32", "xxHash32", HashGroup.NonCryptographic, 32, p => new XxHash32Hasher(p.Seed), ["XXH32"], HashParameterKinds.Seed),
-        new("xxh64", "xxHash64", HashGroup.NonCryptographic, 64, p => new XxHash64Hasher(p.Seed), ["XXH64"], HashParameterKinds.Seed),
-        Crypto("md5", "MD5", 128, HashAlgorithmName.MD5, insecure: true),
-        Crypto("sha1", "SHA-1", 160, HashAlgorithmName.SHA1, insecure: true, aliases: ["SHA1"]),
-        Crypto("sha256", "SHA-256", 256, HashAlgorithmName.SHA256, aliases: ["SHA256", "SHA-2"]),
-        Crypto("sha384", "SHA-384", 384, HashAlgorithmName.SHA384, aliases: ["SHA384"]),
-        Crypto("sha512", "SHA-512", 512, HashAlgorithmName.SHA512, aliases: ["SHA512"]),
-        Crypto("sha3-256", "SHA3-256", 256, HashAlgorithmName.SHA3_256, available: Sha3Supported(256), aliases: ["SHA3_256"]),
-        Crypto("sha3-384", "SHA3-384", 384, HashAlgorithmName.SHA3_384, available: Sha3Supported(384), aliases: ["SHA3_384"]),
-        Crypto("sha3-512", "SHA3-512", 512, HashAlgorithmName.SHA3_512, available: Sha3Supported(512), aliases: ["SHA3_512"]),
-    ];
+    /// <summary>最初から用意する一覧 (グループの順: チェックサム、CRC、非暗号学的ハッシュ、暗号学的ハッシュ。グループの中は表の順)。</summary>
+    public static IReadOnlyList<HashAlgorithmInfo> BuiltIn { get; } = [.. ChecksumAlgorithms(), .. CryptographicAlgorithms()];
+
+    private static IReadOnlyList<HashAlgorithmInfo> _custom = [];
+
+    /// <summary>利用者が定義したカスタム CRC (ANA-20。設定から読み込んだもの)。</summary>
+    public static IReadOnlyList<HashAlgorithmInfo> Custom => _custom;
+
+    /// <summary>一覧の順の全アルゴリズム (カスタム CRC は CRC のグループの最後)。</summary>
+    public static IReadOnlyList<HashAlgorithmInfo> All { get; private set; } = BuiltIn;
+
+    /// <summary>カスタム CRC の一覧が変わった。</summary>
+    public static event EventHandler? CustomChanged;
+
+    /// <summary>カスタム CRC の一覧を置き換える (ANA-20 の仕様 5)。</summary>
+    public static void SetCustom(IReadOnlyList<HashAlgorithmInfo> custom)
+    {
+        _custom = [.. custom];
+        int lastCrc = BuiltIn.ToList().FindLastIndex(a => a.Group == HashGroup.Crc);
+        All = [.. BuiltIn.Take(lastCrc + 1), .. _custom, .. BuiltIn.Skip(lastCrc + 1)];
+        CustomChanged?.Invoke(null, EventArgs.Empty);
+    }
 
     /// <summary>最初から用意するセット (ANA-18 の仕様 3)。一覧にない (この版で未対応の) アルゴリズムは含めない。</summary>
     public static IReadOnlyList<HashAlgorithmSet> BuiltInSets { get; } =
@@ -169,30 +244,6 @@ public static class HashCatalog
     /// <summary>絞り込み (ANA-19 の「画面」)。</summary>
     public static IEnumerable<HashAlgorithmInfo> Filter(string filter) => All.Where(a => a.MatchesFilter(filter));
 
-    private static HashAlgorithmInfo Crc(string id, string name, CrcParameters p, IReadOnlyList<string> aliases) =>
-        new(id, name, HashGroup.Crc, p.Width, _ => new CrcHasher(p), aliases, crc: p);
-
-    private static HashAlgorithmInfo Crypto(string id, string name, int bits, HashAlgorithmName algorithm, bool insecure = false,
-        bool available = true, IReadOnlyList<string>? aliases = null) =>
-        new(id, name, HashGroup.Cryptographic, bits, _ => new IncrementalHasher(algorithm), aliases, insecure: insecure, available: available);
-
-    private static bool Sha3Supported(int bits)
-    {
-        try
-        {
-            return bits switch
-            {
-                256 => SHA3_256.IsSupported,
-                384 => SHA3_384.IsSupported,
-                _ => SHA3_512.IsSupported,
-            };
-        }
-        catch (PlatformNotSupportedException)
-        {
-            return false;
-        }
-    }
-
     private static string[] Existing(params string[] ids) =>
-        [.. ids.Where(id => All.Any(a => a.Id == id && a.IsAvailable))];
+        [.. ids.Where(id => BuiltIn.Any(a => a.Id == id && a.IsAvailable))];
 }
