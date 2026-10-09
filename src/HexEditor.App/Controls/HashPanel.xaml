@@ -73,7 +73,110 @@
                         Style="{ThemeResource CaptionTextBlockStyle}"
                         Text="{x:Bind ViewModel.RangeText, Mode=OneWay}"
                         TextWrapping="Wrap" />
+                    <!--  マルチ選択の計算方法 (ANA-18 の仕様 1)  -->
+                    <ComboBox
+                        x:Uid="Hash_RangeMode"
+                        HorizontalAlignment="Stretch"
+                        AutomationProperties.AutomationId="Hash_RangeMode"
+                        SelectedIndex="{x:Bind ViewModel.RangeModeIndex, Mode=TwoWay}"
+                        Visibility="{x:Bind ViewModel.IsMultiRange, Mode=OneWay}">
+                        <ComboBoxItem x:Uid="Hash_RangeMode_Concatenate" />
+                        <ComboBoxItem x:Uid="Hash_RangeMode_PerRange" />
+                    </ComboBox>
                 </StackPanel>
+
+                <!--  除外範囲 (ANA-18 の仕様 2。既定で閉じる)  -->
+                <Expander
+                    x:Uid="Hash_Exclusions"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    AutomationProperties.AutomationId="Hash_Exclusions"
+                    IsExpanded="False">
+                    <StackPanel Spacing="8">
+                        <ItemsControl IsTabStop="False" ItemsSource="{x:Bind ViewModel.Exclusions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:HashExclusionViewModel">
+                                    <Grid Margin="0,2" ColumnSpacing="4" RowSpacing="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBox
+                                            x:Uid="Hash_ExclusionStart"
+                                            AutomationProperties.AutomationId="Hash_ExclusionStart"
+                                            FlowDirection="LeftToRight"
+                                            FontFamily="Cascadia Mono, Consolas"
+                                            Text="{x:Bind StartText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox
+                                            x:Uid="Hash_ExclusionLength"
+                                            Grid.Column="1"
+                                            AutomationProperties.AutomationId="Hash_ExclusionLength"
+                                            FlowDirection="LeftToRight"
+                                            FontFamily="Cascadia Mono, Consolas"
+                                            Text="{x:Bind LengthText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Button
+                                            x:Uid="Hash_ExclusionRemove"
+                                            Grid.Column="2"
+                                            VerticalAlignment="Bottom"
+                                            AutomationProperties.AutomationId="Hash_ExclusionRemove"
+                                            Click="ExclusionRemove_Click"
+                                            Tag="{x:Bind}">
+                                            <FontIcon FontSize="12" Glyph="&#xE74D;" />
+                                        </Button>
+                                        <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="4">
+                                            <FontIcon
+                                                FontSize="14"
+                                                Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                                Glyph="&#xE7BA;"
+                                                Visibility="{x:Bind HasWarning, Mode=OneWay}" />
+                                            <TextBlock
+                                                AutomationProperties.AutomationId="Hash_ExclusionWarning"
+                                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                                Text="{x:Bind Warning, Mode=OneWay}"
+                                                TextWrapping="Wrap" />
+                                            <TextBlock
+                                                FlowDirection="LeftToRight"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                                Text="{x:Bind RangeText, Mode=OneWay}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button x:Uid="Hash_ExclusionAdd" AutomationProperties.AutomationId="Hash_ExclusionAdd" Click="ExclusionAdd_Click" />
+                            <Button x:Uid="Hash_ExclusionAddSelection" AutomationProperties.AutomationId="Hash_ExclusionAddSelection" Click="ExclusionAddSelection_Click" />
+                        </StackPanel>
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <ComboBox
+                                x:Uid="Hash_ExclusionMode"
+                                HorizontalAlignment="Stretch"
+                                AutomationProperties.AutomationId="Hash_ExclusionMode"
+                                SelectedIndex="{x:Bind ViewModel.ExclusionModeIndex, Mode=TwoWay}">
+                                <ComboBoxItem x:Uid="Hash_ExclusionMode_Skip" />
+                                <ComboBoxItem x:Uid="Hash_ExclusionMode_Replace" />
+                            </ComboBox>
+                            <TextBox
+                                x:Uid="Hash_ExclusionValue"
+                                Grid.Column="1"
+                                AutomationProperties.AutomationId="Hash_ExclusionValue"
+                                FlowDirection="LeftToRight"
+                                FontFamily="Cascadia Mono, Consolas"
+                                IsEnabled="{x:Bind local:HashPanel.IsReplace(ViewModel.ExclusionModeIndex), Mode=OneWay}"
+                                Text="{x:Bind ViewModel.ReplacementText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander>
 
                 <!--  アルゴリズムの選択 (ANA-18 の仕様 3、ANA-19 の「画面」)  -->
                 <StackPanel Spacing="4">
@@ -108,11 +211,28 @@
                             </Button.Flyout>
                         </Button>
                     </Grid>
-                    <AutoSuggestBox
-                        x:Uid="Hash_Filter"
-                        AutomationProperties.AutomationId="Hash_Filter"
-                        QueryIcon="Find"
-                        Text="{x:Bind ViewModel.Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <AutoSuggestBox
+                            x:Uid="Hash_Filter"
+                            AutomationProperties.AutomationId="Hash_Filter"
+                            QueryIcon="Find"
+                            Text="{x:Bind ViewModel.Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--  カスタム CRC (ANA-20)  -->
+                        <DropDownButton x:Uid="Hash_CustomCrc" Grid.Column="1" AutomationProperties.AutomationId="Hash_CustomCrc">
+                            <DropDownButton.Flyout>
+                                <MenuFlyout x:Name="CustomCrcMenu" Opening="CustomCrcMenu_Opening">
+                                    <MenuFlyoutItem x:Uid="Hash_CustomCrcAdd" AutomationProperties.AutomationId="Hash_CustomCrcAdd" Click="CustomCrcAdd_Click" />
+                                    <MenuFlyoutItem x:Uid="Hash_CustomCrcExport" AutomationProperties.AutomationId="Hash_CustomCrcExport" Click="CustomCrcExport_Click" />
+                                    <MenuFlyoutItem x:Uid="Hash_CustomCrcImport" AutomationProperties.AutomationId="Hash_CustomCrcImport" Click="CustomCrcImport_Click" />
+                                    <MenuFlyoutSubItem x:Name="CustomCrcDeleteMenu" x:Uid="Hash_CustomCrcDelete" AutomationProperties.AutomationId="Hash_CustomCrcDelete" />
+                                </MenuFlyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                    </Grid>
                     <ItemsControl IsTabStop="False" ItemsSource="{x:Bind ViewModel.Groups}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="vm:HashAlgorithmGroupViewModel">
@@ -178,6 +298,11 @@
                         AutomationProperties.LiveSetting="Polite"
                         Text="{x:Bind ViewModel.StatusText, Mode=OneWay}"
                         TextWrapping="Wrap" />
+                    <Button
+                        x:Uid="Hash_AddUnreadable"
+                        AutomationProperties.AutomationId="Hash_AddUnreadable"
+                        Click="AddUnreadable_Click"
+                        Visibility="{x:Bind ViewModel.HasUnreadable, Mode=OneWay}" />
                     <!--  計算後に編集された (0.2 の 3)  -->
                     <InfoBar
                         x:Uid="Hash_Stale"
@@ -259,8 +384,8 @@
                                     AutomationProperties.AutomationId="{x:Bind local:HashPanel.RowId(Id)}"
                                     AutomationProperties.Name="{x:Bind AutomationName, Mode=OneWay}"
                                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                    BorderThickness="1"
+                                    BorderBrush="{x:Bind local:HashPanel.RowBorder(IsInvalid)}"
+                                    BorderThickness="{x:Bind local:HashPanel.RowBorderThickness(IsInvalid)}"
                                     ColumnSpacing="8"
                                     CornerRadius="{ThemeResource ControlCornerRadius}"
                                     RowSpacing="2">
@@ -283,6 +408,12 @@
                                             <MenuFlyoutItem x:Uid="Hash_CopyAllCsv" Click="CopyAllCsv_Click" />
                                             <MenuFlyoutSeparator />
                                             <MenuFlyoutItem x:Uid="Hash_SaveChecksum" Click="SaveChecksum_Click" Tag="{x:Bind}" />
+                                            <MenuFlyoutSeparator />
+                                            <MenuFlyoutItem
+                                                x:Uid="Hash_WriteAtCursor"
+                                                AutomationProperties.AutomationId="Hash_WriteAtCursor"
+                                                Click="WriteAtCursor_Click"
+                                                Tag="{x:Bind}" />
                                         </MenuFlyout>
                                     </Grid.ContextFlyout>
                                     <StackPanel Orientation="Horizontal" Spacing="6">
@@ -373,7 +504,16 @@
                         Style="{ThemeResource CaptionTextBlockStyle}"
                         TextWrapping="Wrap"
                         Visibility="{x:Bind ViewModel.IsExpectedError, Mode=OneWay}" />
-                    <Button x:Uid="Hash_VerifyFile" AutomationProperties.AutomationId="Hash_VerifyFile" Click="VerifyFile_Click" />
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button x:Uid="Hash_VerifyFile" AutomationProperties.AutomationId="Hash_VerifyFile" Click="VerifyFile_Click" />
+                        <!--  一致するアルゴリズムを探す (ANA-21 の仕様 5)  -->
+                        <Button x:Uid="Hash_FindAlgorithm" AutomationProperties.AutomationId="Hash_FindAlgorithm" Click="FindAlgorithm_Click" />
+                    </StackPanel>
+                    <TextBlock
+                        AutomationProperties.AutomationId="Hash_FindResult"
+                        AutomationProperties.LiveSetting="Polite"
+                        Text="{x:Bind ViewModel.FindResult, Mode=OneWay}"
+                        TextWrapping="Wrap" />
                     <TextBlock
                         AutomationProperties.AutomationId="Hash_VerifyMessage"
                         AutomationProperties.LiveSetting="Polite"

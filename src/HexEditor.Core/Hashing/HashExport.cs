@@ -10,8 +10,36 @@ public sealed record HashDisplayOptions(HashValueFormat Format = HashValueFormat
 {
     public static readonly HashDisplayOptions Default = new();
 
+    /// <summary>行の値の表示。TTH など Base32 を既定にするアルゴリズムは、Hex 大文字 (既定の形式) のとき Base32 で表示する (ANA-19 の仕様 4)。</summary>
     public string Display(HashResultRow row) =>
-        HashValueFormatter.Format(row.Value, row.Algorithm.IsNumeric, Format, LittleEndian);
+        row.Algorithm.PrefersBase32 && Format == HashValueFormat.HexUpper
+            ? Base32(row.Value)
+            : HashValueFormatter.Format(row.Value, row.Algorithm.IsNumeric, Format, LittleEndian);
+
+    /// <summary>RFC 4648 の Base32 (大文字、パディングなし)。</summary>
+    public static string Base32(ReadOnlySpan<byte> data)
+    {
+        const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+        var sb = new StringBuilder((data.Length * 8 + 4) / 5);
+        int buffer = 0, bits = 0;
+        foreach (byte b in data)
+        {
+            buffer = (buffer << 8) | b;
+            bits += 8;
+            while (bits >= 5)
+            {
+                sb.Append(alphabet[(buffer >> (bits - 5)) & 31]);
+                bits -= 5;
+            }
+        }
+
+        if (bits > 0)
+        {
+            sb.Append(alphabet[(buffer << (5 - bits)) & 31]);
+        }
+
+        return sb.ToString();
+    }
 }
 
 /// <summary>結果のコピーと書き出し (ANA-22)。</summary>
@@ -48,6 +76,32 @@ public static class HashExport
             if (row.Algorithm.Parameters.HasFlag(HashParameterKinds.Complement))
             {
                 parameters["complement"] = row.Choice.Parameters.Complement.ToString().ToLowerInvariant();
+            }
+
+            HashParameters p = row.Choice.Parameters;
+            if (row.Algorithm.Parameters.HasFlag(HashParameterKinds.Endian) && p.BigEndian is bool be)
+            {
+                parameters["bigEndian"] = be;
+            }
+
+            if (row.Algorithm.Parameters.HasFlag(HashParameterKinds.Signed))
+            {
+                parameters["signed"] = p.Signed;
+            }
+
+            if (row.Algorithm.Parameters.HasFlag(HashParameterKinds.Key) && p.KeyHex is { Length: > 0 } key)
+            {
+                parameters["key"] = key;
+            }
+
+            if (row.Algorithm.Parameters.HasFlag(HashParameterKinds.OutputLength))
+            {
+                parameters["outputBits"] = row.Algorithm.BitsFor(p);
+            }
+
+            if (row.Algorithm.Parameters.HasFlag(HashParameterKinds.Ed2kMode))
+            {
+                parameters["ed2k"] = p.Ed2k.ToString().ToLowerInvariant();
             }
 
             var item = new JsonObject
