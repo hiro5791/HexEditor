@@ -44,6 +44,7 @@ public sealed class ZoomTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-08-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_plus_twice_is_125_and_ctrl_0_hides_the_status() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });

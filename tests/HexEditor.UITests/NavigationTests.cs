@@ -27,6 +27,7 @@ public sealed class NavigationTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-01-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Empty_file_is_shown_as_one_blank_row() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-EMPTY")] });
@@ -128,6 +129,7 @@ public sealed class NavigationTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-25-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Down_near_the_end() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [Len100(ctx)] });
@@ -218,6 +220,7 @@ public sealed class NavigationTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-27-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Tab_switches_to_the_text_column() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -281,6 +284,7 @@ public sealed class NavigationTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-30-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_end_shows_the_last_row_at_the_bottom() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M"), Len100(ctx)] });

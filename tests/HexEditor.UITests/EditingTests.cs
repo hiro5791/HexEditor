@@ -33,6 +33,7 @@ public sealed class EditingTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-ENG-20-04")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Undo_and_redo_after_save() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.CopyTestData("TD-BYTES-256")] });
@@ -47,6 +48,7 @@ public sealed class EditingTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-19-06")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Undo_after_save_shows_modified_and_keeps_history() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.CopyTestData("TD-SEQ-1M")] });
@@ -85,6 +87,7 @@ public sealed class EditingTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-02-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Title_shows_unsaved_mark() => UiTestContext.RunAsync(async ctx =>
     {
         string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
@@ -98,6 +101,7 @@ public sealed class EditingTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-10-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Insert_key_switches_mode_and_caret_shape() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -150,6 +154,7 @@ public sealed class EditingTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-11-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Typing_two_digits_in_overwrite_mode() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -181,6 +186,7 @@ public sealed class EditingTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-11-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Typing_digits_in_insert_mode() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -231,6 +237,7 @@ public sealed class EditingTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-13-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Delete_and_backspace() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -271,6 +278,7 @@ public sealed class EditingTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-19-04")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Continuous_typing_is_undone_at_once() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ZERO-1M")] });

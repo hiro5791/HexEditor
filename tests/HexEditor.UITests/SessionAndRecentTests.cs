@@ -318,6 +318,7 @@ public sealed class SessionAndRecentTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-13-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Closing_a_modified_tab_asks_to_save() => UiTestContext.RunAsync(async ctx =>
     {
         string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
@@ -701,6 +702,7 @@ public sealed class SessionAndRecentTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-38-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Welcome_is_shown_only_on_the_first_start() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync();

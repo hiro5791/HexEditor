@@ -16,6 +16,7 @@ public sealed partial class WindowTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-01-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task First_launch_shows_title_bar_tabs_start_page_and_status_bar() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync();
@@ -93,6 +94,7 @@ public sealed partial class WindowTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-02-05")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Menu_bar_is_not_swallowed_by_the_drag_region() => UiTestContext.RunAsync(async ctx =>
     {
         // 実際のマウスのクリックは行わない (作業中の PC の入力を奪うため)。メニューバーの各メニューの中央が
@@ -128,6 +130,7 @@ public sealed partial class WindowTests
     [InlineData("en", "File")]
     [InlineData("ja", "ファイル(F)")]
     [Trait(UiTest.TC, "TC-UI-03-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Access_keys_open_the_file_dialog(string language, string fileTitle) => UiTestContext.RunAsync(async ctx =>
     {
         // Alt・F・O の実際のキー入力はシステムのキーボードを使うため送らない。アクセスキーの割り当て (Alt → F → O の
@@ -152,6 +155,7 @@ public sealed partial class WindowTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-06-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Status_bar_shows_the_last_offset_of_a_100_GB_source() => UiTestContext.RunAsync(async ctx =>
     {
         // TD-SPARSE-100G の代わりに同じ長さの仮想のデータソース (ディスクを使わない)。
@@ -340,6 +344,7 @@ public sealed partial class WindowTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-52-03")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task F6_and_shift_f6_move_between_regions() => UiTestContext.RunAsync(async ctx =>
     {
         // データインスペクタ (右パネル) を表示した状態。仕様 1 の順 (タブ列 → エディタ → 右パネル → …) で、F6 はエディタの次の

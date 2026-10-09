@@ -93,6 +93,7 @@ public sealed partial class TabTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-09-03")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_tab_switches_to_the_previously_used_tab() => UiTestContext.RunAsync(async ctx =>
     {
         string[] files = Files(ctx, 3);

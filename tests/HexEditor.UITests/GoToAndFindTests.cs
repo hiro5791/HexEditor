@@ -13,6 +13,7 @@ public sealed class GoToAndFindTests
 {
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-29-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Go_to_with_three_hex_notations() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -66,6 +67,7 @@ public sealed class GoToAndFindTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-29-05")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Values_beyond_the_end_are_rejected() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [NavigationTests.Len100(ctx)] });
@@ -95,6 +97,7 @@ public sealed class GoToAndFindTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-FIND-04-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_f_opens_and_close_returns_focus() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -136,6 +139,7 @@ public sealed class GoToAndFindTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-FIND-05-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Find_hex_smoke() => UiTestContext.RunAsync(async ctx =>
     {
         // TD-FIND-MARK-1M: すべて 00 の中に、オフセット 0x80000 から CA FE BA BE。
@@ -167,6 +171,7 @@ public sealed class GoToAndFindTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-FIND-07-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Find_text_smoke() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("TD-FIND-STRINGS.bin", FindStrings())] });
@@ -225,6 +230,7 @@ public sealed class GoToAndFindTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-FIND-09-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Overlapping_matches_and_find_previous() => UiTestContext.RunAsync(async ctx =>
     {
         // TD-FIND-AAAA: 0x00〜0x03 は 41 41 41 41、0x20〜0x21 は 41 41。

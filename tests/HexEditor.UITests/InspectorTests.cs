@@ -125,6 +125,7 @@ public sealed class InspectorTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-INSP-01-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_shift_i_toggles_the_panel() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await StartAsync(ctx, show: false);
@@ -265,6 +266,7 @@ public sealed class InspectorTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-INSP-03-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Integer_rows() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await StartAsync(ctx);
@@ -463,6 +465,7 @@ public sealed class InspectorTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-INSP-17-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Writing_0x1234_to_uint16() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await StartAsync(ctx);

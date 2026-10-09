@@ -53,6 +53,7 @@ public sealed class HashPanelTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-ANA-18-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Check9_gives_the_catalogue_crc32_and_md5() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ANA-CHECK9")] });

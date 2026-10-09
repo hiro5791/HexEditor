@@ -54,6 +54,7 @@ public sealed class WindowManagementTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-14-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_shift_n_opens_an_empty_window_in_the_same_process() => UiTestContext.RunAsync(async ctx =>
     {
         DateTime start = DateTime.Now;
@@ -294,6 +295,7 @@ public sealed class WindowManagementTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-31-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Two_windows_with_ten_tabs_are_restored() => UiTestContext.RunAsync(async ctx =>
     {
         // 前提: ウィンドウ 1 (0, 0)、1280 × 800 に file01〜06、ウィンドウ 2 (600, 200)、1000 × 700 に file07〜10。

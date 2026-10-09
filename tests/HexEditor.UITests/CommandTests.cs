@@ -139,6 +139,7 @@ public sealed class CommandTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-17-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Japanese_ui_finds_open_by_english_name_and_reading() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { UiLanguage = "ja" });

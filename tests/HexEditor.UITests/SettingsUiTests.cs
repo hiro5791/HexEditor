@@ -16,6 +16,7 @@ public sealed class SettingsUiTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-22-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Settings_open_only_once() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });

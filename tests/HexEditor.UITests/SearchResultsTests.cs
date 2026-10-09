@@ -46,6 +46,7 @@ public sealed class SearchResultsTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-FIND-20-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Alt_enter_lists_all_matches() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("TD-FIND-HITS-100.bin", Hits100())] });

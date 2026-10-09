@@ -110,6 +110,7 @@ public sealed class OpenAndDropTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-ENG-11-05")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Open_dialog_with_five_files() => UiTestContext.RunAsync(async ctx =>
     {
         // ダイアログで選ぶ代わりに、ダイアログの差し替えが 5 つのファイルを返す。手順 4 の初期フォルダは Windows の

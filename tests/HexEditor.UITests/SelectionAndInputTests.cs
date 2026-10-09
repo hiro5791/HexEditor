@@ -34,6 +34,7 @@ public sealed class SelectionAndInputTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-01-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Shift_click_keeps_the_anchor() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -157,6 +158,7 @@ public sealed class SelectionAndInputTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-03-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Select_all_keeps_the_scroll_position() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M"), ctx.TestData("TD-EMPTY")] });

@@ -17,6 +17,7 @@ public sealed class ReplaceAndHistoryTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-FIND-22-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_h_replaces_and_moves_to_the_next_match() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("TD-FIND-HITS-1000.bin", Hits1000())] });
@@ -148,6 +149,7 @@ public sealed class ReplaceAndHistoryTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-FIND-23-04")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Undo_in_the_completion_infobar_restores_everything() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("TD-FIND-HITS-1000.bin", Hits1000())] });

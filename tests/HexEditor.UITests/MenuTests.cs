@@ -64,6 +64,7 @@ public sealed class MenuTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-52-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Keyboard_only_open_edit_find_save_settings_and_menus() => UiTestContext.RunAsync(async ctx =>
     {
         // 作業中の PC ではシステムのキーボードの入力を送らない (テスト方針)。キーはアプリのキーの振り分け (KeyDispatcher) に渡す

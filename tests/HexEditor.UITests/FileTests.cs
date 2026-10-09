@@ -11,6 +11,7 @@ public sealed class FileTests
 {
     [Fact]
     [Trait(UiTest.TC, "TC-ENG-10-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_n_creates_numbered_untitled_tabs() => UiTestContext.RunAsync(async ctx =>
     {
         // 新しい設定フォルダで起動すると、ドキュメントは 1 つも開いていない (スタートページ。UI-01 の仕様 2)。
@@ -41,6 +42,7 @@ public sealed class FileTests
 
     [Fact(Skip = "Windows の標準の保存ダイアログはフォーカスを奪うため自動テストで操作しない。ファイル選択の差し替えの仕組み (テスト用) がまだない")]
     [Trait(UiTest.TC, "TC-ENG-10-03")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Saving_untitled_opens_save_as() => Task.CompletedTask;
 
     [Fact]
@@ -69,6 +71,7 @@ public sealed class FileTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-ENG-17-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Unmodified_tab_closes_without_dialog() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -80,6 +83,7 @@ public sealed class FileTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-ENG-17-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Closing_window_with_three_modified_tabs() => UiTestContext.RunAsync(async ctx =>
     {
         string[] paths = ["a.bin", "b.bin", "c.bin"];
@@ -127,10 +131,12 @@ public sealed class FileTests
 
     [Fact(Skip = "名前を付けて保存は Windows の標準の保存ダイアログを使い、フォーカスを奪うため自動テストで操作しない。最近使ったファイルも未実装")]
     [Trait(UiTest.TC, "TC-ENG-21-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Save_as_keeps_the_original_file() => Task.CompletedTask;
 
     [Fact]
     [Trait(UiTest.TC, "TC-ENG-22-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Forced_termination_while_saving_keeps_the_original() => UiTestContext.RunAsync(async ctx =>
     {
         // TD-ENG-SPARSE-10G の代わりに TD-SEQ-1M を使う (保存処理の進捗の通知は 4 MiB ごとのため、止める位置は
@@ -199,6 +205,7 @@ public sealed class FileTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-15-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Second_launch_is_redirected_to_the_existing_window() => UiTestContext.RunAsync(async ctx =>
     {
         string seq = ctx.TestData("TD-SEQ-1M");

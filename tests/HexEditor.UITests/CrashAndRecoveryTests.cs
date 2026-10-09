@@ -99,6 +99,7 @@ public sealed class CrashAndRecoveryTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-ENG-27-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Recovers_after_forced_termination() => UiTestContext.RunAsync(async ctx =>
     {
         string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");

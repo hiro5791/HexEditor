@@ -24,6 +24,7 @@ public sealed class ViewTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-01-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Start_middle_and_end_of_a_100_GB_file() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SPARSE-100G")] });
@@ -373,6 +374,7 @@ public sealed class ViewTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-28-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task One_wheel_notch_scrolls_three_rows() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
@@ -736,6 +738,7 @@ public sealed class ViewTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-VIEW-40-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Selection_item_and_its_tool_tip() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });

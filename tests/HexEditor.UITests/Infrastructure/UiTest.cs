@@ -15,6 +15,14 @@ public static class UiTest
     public const string UI = "UI";
 
     /// <summary>
+    /// 優先度「高」のテストケースの UI テスト (<c>[Trait(UiTest.Priority, UiTest.High)]</c>)。プルリクエスト・プッシュではこれだけを動かし
+    /// (テスト方針 9 章)、残りは毎晩動かす。テストケースの文書の優先度から build/Update-UiTestPriority.ps1 で付ける。
+    /// </summary>
+    public const string Priority = "Priority";
+
+    public const string High = "High";
+
+    /// <summary>
     /// 待つ時間の倍率 (環境変数 HEXEDITOR_UITEST_TIMEOUT_SCALE。既定 1)。混んだ CI のランナーでは状態が変わるまでに時間がかかるので、
     /// 待つ上限 (WaitUntilAsync、命令の答え) だけを延ばす。性能の判定の時間は変えない。
     /// </summary>

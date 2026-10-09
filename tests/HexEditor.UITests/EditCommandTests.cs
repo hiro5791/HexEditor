@@ -373,6 +373,7 @@ public sealed class EditCommandTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-23-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Odd_hex_text_opens_paste_special_with_base64() => UiTestContext.RunAsync(async ctx =>
     {
         // TC-EDIT-23-01 の手順 3〜4 (手順 1〜2 は ClipboardTests)。

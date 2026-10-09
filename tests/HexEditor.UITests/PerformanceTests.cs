@@ -479,6 +479,7 @@ public sealed class PerformanceTests(ITestOutputHelper output)
     /// </summary>
     [Theory]
     [Trait(UiTest.TC, "TC-ENG-11-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     [InlineData("TD-SPARSE-100G")]
     [InlineData("TD-EMPTY")]
     [InlineData("TD-SEQ-1M")]

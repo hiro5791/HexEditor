@@ -67,6 +67,7 @@ public sealed class BookmarkTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-INSP-23-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Ctrl_f2_sets_and_removes() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await StartAsync(ctx);
@@ -132,6 +133,7 @@ public sealed class BookmarkTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-INSP-23-06")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Bookmarks_survive_closing_and_reopening() => UiTestContext.RunAsync(async ctx =>
     {
         string file = ctx.CopyTestData("TD-SEQ-1M", "copy.bin");
