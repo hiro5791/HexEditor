@@ -47,8 +47,11 @@ public interface IExpressionContext
     /// <summary>クラスタサイズ。ファイルシステムを解析していなければ null。</summary>
     long? ClusterSize { get; }
 
-    /// <summary>レコード長。レコード表示 (VIEW-18) がオフなら null。</summary>
+    /// <summary>レコード長 (VIEW-18)。レコード表示がオフのときは最後に設定した値。使えなければ null。</summary>
     long? RecordLength { get; }
+
+    /// <summary>最初のレコードの開始オフセット (VIEW-18 の仕様 8。<c>recno</c> の計算に使う)。</summary>
+    long RecordStart => 0;
 
     /// <summary>名前付きブックマークの位置。なければ null。</summary>
     long? Bookmark(string name);
@@ -415,7 +418,10 @@ public sealed class ExpressionEvaluator
             "sector" => _context.SectorSize,
             "cluster" => _context.ClusterSize ?? throw new ExpressionException(ExpressionError.NotAvailable, at, name),
             "rec" => _context.RecordLength ?? throw new ExpressionException(ExpressionError.NotAvailable, at, name),
-            "recno" => _context.RecordLength is long r && r > 0 ? _context.Cursor / r : throw new ExpressionException(ExpressionError.NotAvailable, at, name),
+            // レコード番号は開始オフセットから数える。開始オフセットより前は入力エラー (VIEW-18 の仕様 8)。
+            "recno" => _context.RecordLength is long r && r > 0 && _context.Cursor >= _context.RecordStart
+                ? (_context.Cursor - _context.RecordStart) / r
+                : throw new ExpressionException(ExpressionError.NotAvailable, at, name),
             _ => throw new ExpressionException(ExpressionError.UnknownName, at, name),
         };
     }

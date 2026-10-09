@@ -65,6 +65,29 @@ public sealed class TextEncoding
     }
 
     /// <summary>
+    /// 独自の文字表 (VIEW-23) の文字コード。表示は文字表の最長一致で解読する (<see cref="TextEncodingKind.Table"/>)。1 バイトの表示の
+    /// 配列 (<see cref="DisplayChar"/> など) は ASCII と同じにする (文字表を使わない処理の安全のため)。
+    /// </summary>
+    private TextEncoding(TableFile table)
+        : this(table.Name, 20127, isAscii: true, id: TableEncodings.IdOf(table.Name))
+    {
+        Table = table;
+        Kind = TextEncodingKind.Table;
+    }
+
+    /// <summary>独自の文字表 (VIEW-23)。文字表の文字コードでなければ null。</summary>
+    public TableFile? Table { get; }
+
+    /// <summary>文字表を読み直したとき、前の文字コードを忘れる (次の <see cref="FromId"/> で作り直す)。</summary>
+    internal static void ForgetTable(string id)
+    {
+        lock (ById)
+        {
+            ById.Remove(id);
+        }
+    }
+
+    /// <summary>
     /// テキスト列で選べる文字コードの名前 (VIEW-21 のうち、VIEW-22 の表示規則を使うもの)。<see cref="FromId"/> に渡す。
     /// </summary>
     public static IReadOnlyList<string> SelectableIds { get; } =
@@ -105,6 +128,8 @@ public sealed class TextEncoding
             {
                 created = id.ToLowerInvariant() switch
                 {
+                    _ when id.StartsWith(TableEncodings.IdPrefix, StringComparison.OrdinalIgnoreCase)
+                        => TableEncodings.Find(id[TableEncodings.IdPrefix.Length..]) is { } table ? new TextEncoding(table) : null,
                     "utf-8" => new TextEncoding("UTF-8", 65001, false, "utf-8"),
                     "utf-16le" => new TextEncoding("UTF-16 LE", 1200, false, "utf-16le"),
                     "utf-16be" => new TextEncoding("UTF-16 BE", 1201, false, "utf-16be"),
@@ -207,6 +232,11 @@ public sealed class TextEncoding
     /// </summary>
     public bool TryEncode(string text, out byte[] bytes)
     {
+        if (Table is { } table)
+        {
+            return table.TryEncode(text, out bytes);
+        }
+
         try
         {
             bytes = _strict.GetBytes(text);
@@ -241,6 +271,11 @@ public sealed class TextEncoding
     /// </summary>
     public string Decode(ReadOnlySpan<byte> bytes)
     {
+        if (Table is { } table)
+        {
+            return table.Decode(bytes);
+        }
+
         string text = _decoder.GetString(bytes);
         return text.Contains('\0') ? text.Replace('\0', Replacement) : text;
     }
@@ -348,4 +383,7 @@ public enum TextEncodingKind
 
     /// <summary>GB18030 (2 バイトと 4 バイトの文字)。</summary>
     Gb18030,
+
+    /// <summary>独自の文字表 (VIEW-23。最長一致)。</summary>
+    Table,
 }

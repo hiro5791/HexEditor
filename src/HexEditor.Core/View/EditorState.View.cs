@@ -42,6 +42,12 @@ public sealed partial class EditorState
         }
 
         ApplyBytesPerRow(screenRow);
+        if (settings.PageView)
+        {
+            // ページ単位で表示にしたら、カーソルのある区切りを表示する (VIEW-33 の仕様 4)。
+            SetTopRow(_topRow, Layout.RowOf(_cursor));
+        }
+
         ActiveColumn before = ActiveColumn;
         ActiveColumn = VisibleColumn(ActiveColumn);
         if (before != ActiveColumn)
@@ -66,7 +72,7 @@ public sealed partial class EditorState
 
         long screenRow = Layout.RowOf(_cursor) - _topRow;
         _autoBytesPerRow = bytesPerRow;
-        if (_view.AutoBytesPerRow && BytesPerRow != bytesPerRow)
+        if (_view.AutoBytesPerRow && !_view.RecordRowsActive && BytesPerRow != bytesPerRow)
         {
             ApplyBytesPerRow(screenRow);
             RaiseChanged();
@@ -75,7 +81,7 @@ public sealed partial class EditorState
 
     private void ApplyBytesPerRow(long screenRow)
     {
-        int bytesPerRow = _view.AutoBytesPerRow && _autoBytesPerRow is { } auto ? auto : _view.BytesPerRow;
+        int bytesPerRow = _view.EffectiveBytesPerRow(_autoBytesPerRow);
         if (bytesPerRow == BytesPerRow && Layout.RowShift == _view.EffectiveRowShift(bytesPerRow))
         {
             return;

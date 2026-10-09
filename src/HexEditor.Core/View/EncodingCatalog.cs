@@ -15,6 +15,9 @@ public enum EncodingGroup
     Cjk,
     Other,
     Ebcdic,
+
+    /// <summary>独自の文字表 (VIEW-23)。</summary>
+    Custom,
 }
 
 /// <summary>
@@ -196,12 +199,37 @@ public static class EncodingCatalog
 
     private static readonly Lazy<IReadOnlyList<EncodingEntry>> Available = new(() => [.. Table.Where(IsAvailable)]);
 
-    /// <summary>この環境で使える文字コード (状態を持つものを含む)。分類の順、分類の中は表の順。</summary>
-    public static IReadOnlyList<EncodingEntry> All => Available.Value;
+    /// <summary>
+    /// この環境で使える文字コード (状態を持つものを含む)。分類の順、分類の中は表の順。最後に、読み込んだ独自の文字表 (VIEW-23 の仕様 6。
+    /// 分類「独自」) を名前の順に加える。
+    /// </summary>
+    public static IReadOnlyList<EncodingEntry> All
+    {
+        get
+        {
+            IReadOnlyList<string> tables = TableEncodings.Names;
+            return tables.Count == 0
+                ? Available.Value
+                : [.. Available.Value, .. tables.Select(name => new EncodingEntry(TableEncodings.IdOf(name), 0, name, EncodingGroup.Custom, name))];
+        }
+    }
 
     /// <summary>名前 (<c>ascii</c>、<c>cp932</c> など) の項目。一覧にない、またはこの環境で使えなければ null。</summary>
-    public static EncodingEntry? Find(string? id) =>
-        id is null ? null : All.FirstOrDefault(e => string.Equals(e.Id, id, StringComparison.OrdinalIgnoreCase));
+    public static EncodingEntry? Find(string? id)
+    {
+        if (id is null)
+        {
+            return null;
+        }
+
+        if (id.StartsWith(TableEncodings.IdPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            string name = id[TableEncodings.IdPrefix.Length..];
+            return TableEncodings.Find(name) is not null ? new EncodingEntry(TableEncodings.IdOf(name), 0, name, EncodingGroup.Custom, name) : null;
+        }
+
+        return Available.Value.FirstOrDefault(e => string.Equals(e.Id, id, StringComparison.OrdinalIgnoreCase));
+    }
 
     /// <summary>
     /// 絞り込みに合うか (仕様 3): 番号 (一覧の番号とコードページ番号)・名前 (表示名と英語名)・Web での名前 (<c>shift_jis</c> など) の
