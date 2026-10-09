@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\fixtures\hash\**\*" LinkBase="fixtures\hash" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\HexEditor.Core\HexEditor.Core.csproj" />
     <ProjectReference Include="..\..\tools\HexEditor.TestData\HexEditor.TestData.csproj" />
     <ProjectReference Include="..\..\tools\HexEditor.ManualTests\HexEditor.ManualTests.csproj" />

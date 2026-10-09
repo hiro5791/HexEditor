@@ -1,0 +1,1474 @@
+{
+  "source": "Greg Cook, Catalogue of parametrised CRC algorithms (https://reveng.sourceforge.io/crc-catalogue/all.htm)",
+  "entries": [
+    {
+      "name": "CRC-3/GSM",
+      "width": 3,
+      "poly": "0x3",
+      "init": "0x0",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x7",
+      "check": "0x4",
+      "residue": "0x2",
+      "aliases": []
+    },
+    {
+      "name": "CRC-3/ROHC",
+      "width": 3,
+      "poly": "0x3",
+      "init": "0x7",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0",
+      "check": "0x6",
+      "residue": "0x0",
+      "aliases": []
+    },
+    {
+      "name": "CRC-4/G-704",
+      "width": 4,
+      "poly": "0x3",
+      "init": "0x0",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0",
+      "check": "0x7",
+      "residue": "0x0",
+      "aliases": [
+        "CRC-4/ITU"
+      ]
+    },
+    {
+      "name": "CRC-4/INTERLAKEN",
+      "width": 4,
+      "poly": "0x3",
+      "init": "0xF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xF",
+      "check": "0xB",
+      "residue": "0x2",
+      "aliases": []
+    },
+    {
+      "name": "CRC-5/EPC-C1G2",
+      "width": 5,
+      "poly": "0x09",
+      "init": "0x09",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0x00",
+      "residue": "0x00",
+      "aliases": [
+        "CRC-5/EPC"
+      ]
+    },
+    {
+      "name": "CRC-5/G-704",
+      "width": 5,
+      "poly": "0x15",
+      "init": "0x00",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0x07",
+      "residue": "0x00",
+      "aliases": [
+        "CRC-5/ITU"
+      ]
+    },
+    {
+      "name": "CRC-5/USB",
+      "width": 5,
+      "poly": "0x05",
+      "init": "0x1F",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x1F",
+      "check": "0x19",
+      "residue": "0x06",
+      "aliases": []
+    },
+    {
+      "name": "CRC-6/CDMA2000-A",
+      "width": 6,
+      "poly": "0x27",
+      "init": "0x3F",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0x0D",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-6/CDMA2000-B",
+      "width": 6,
+      "poly": "0x07",
+      "init": "0x3F",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0x3B",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-6/DARC",
+      "width": 6,
+      "poly": "0x19",
+      "init": "0x00",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0x26",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-6/G-704",
+      "width": 6,
+      "poly": "0x03",
+      "init": "0x00",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0x06",
+      "residue": "0x00",
+      "aliases": [
+        "CRC-6/ITU"
+      ]
+    },
+    {
+      "name": "CRC-6/GSM",
+      "width": 6,
+      "poly": "0x2F",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x3F",
+      "check": "0x13",
+      "residue": "0x3A",
+      "aliases": []
+    },
+    {
+      "name": "CRC-7/MMC",
+      "width": 7,
+      "poly": "0x09",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0x75",
+      "residue": "0x00",
+      "aliases": [
+        "CRC-7"
+      ]
+    },
+    {
+      "name": "CRC-7/ROHC",
+      "width": 7,
+      "poly": "0x4F",
+      "init": "0x7F",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0x53",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-7/UMTS",
+      "width": 7,
+      "poly": "0x45",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0x61",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/AUTOSAR",
+      "width": 8,
+      "poly": "0x2F",
+      "init": "0xFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFF",
+      "check": "0xDF",
+      "residue": "0x42",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/BLUETOOTH",
+      "width": 8,
+      "poly": "0xA7",
+      "init": "0x00",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0x26",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/CDMA2000",
+      "width": 8,
+      "poly": "0x9B",
+      "init": "0xFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0xDA",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/DARC",
+      "width": 8,
+      "poly": "0x39",
+      "init": "0x00",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0x15",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/DVB-S2",
+      "width": 8,
+      "poly": "0xD5",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0xBC",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/GSM-A",
+      "width": 8,
+      "poly": "0x1D",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0x37",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/GSM-B",
+      "width": 8,
+      "poly": "0x49",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFF",
+      "check": "0x94",
+      "residue": "0x53",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/HITAG",
+      "width": 8,
+      "poly": "0x1D",
+      "init": "0xFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0xB4",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/I-432-1",
+      "width": 8,
+      "poly": "0x07",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x55",
+      "check": "0xA1",
+      "residue": "0xAC",
+      "aliases": [
+        "CRC-8/ITU"
+      ]
+    },
+    {
+      "name": "CRC-8/I-CODE",
+      "width": 8,
+      "poly": "0x1D",
+      "init": "0xFD",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0x7E",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/LTE",
+      "width": 8,
+      "poly": "0x9B",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0xEA",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/MAXIM-DOW",
+      "width": 8,
+      "poly": "0x31",
+      "init": "0x00",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0xA1",
+      "residue": "0x00",
+      "aliases": [
+        "CRC-8/MAXIM",
+        "DOW-CRC"
+      ]
+    },
+    {
+      "name": "CRC-8/MIFARE-MAD",
+      "width": 8,
+      "poly": "0x1D",
+      "init": "0xC7",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0x99",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/NRSC-5",
+      "width": 8,
+      "poly": "0x31",
+      "init": "0xFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0xF7",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/OPENSAFETY",
+      "width": 8,
+      "poly": "0x2F",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0x3E",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/ROHC",
+      "width": 8,
+      "poly": "0x07",
+      "init": "0xFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0xD0",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/SAE-J1850",
+      "width": 8,
+      "poly": "0x1D",
+      "init": "0xFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFF",
+      "check": "0x4B",
+      "residue": "0xC4",
+      "aliases": []
+    },
+    {
+      "name": "CRC-8/SMBUS",
+      "width": 8,
+      "poly": "0x07",
+      "init": "0x00",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00",
+      "check": "0xF4",
+      "residue": "0x00",
+      "aliases": [
+        "CRC-8"
+      ]
+    },
+    {
+      "name": "CRC-8/TECH-3250",
+      "width": 8,
+      "poly": "0x1D",
+      "init": "0xFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0x97",
+      "residue": "0x00",
+      "aliases": [
+        "CRC-8/AES",
+        "CRC-8/EBU"
+      ]
+    },
+    {
+      "name": "CRC-8/WCDMA",
+      "width": 8,
+      "poly": "0x9B",
+      "init": "0x00",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00",
+      "check": "0x25",
+      "residue": "0x00",
+      "aliases": []
+    },
+    {
+      "name": "CRC-10/ATM",
+      "width": 10,
+      "poly": "0x233",
+      "init": "0x000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000",
+      "check": "0x199",
+      "residue": "0x000",
+      "aliases": [
+        "CRC-10",
+        "CRC-10/I-610"
+      ]
+    },
+    {
+      "name": "CRC-10/CDMA2000",
+      "width": 10,
+      "poly": "0x3D9",
+      "init": "0x3FF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000",
+      "check": "0x233",
+      "residue": "0x000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-10/GSM",
+      "width": 10,
+      "poly": "0x175",
+      "init": "0x000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x3FF",
+      "check": "0x12A",
+      "residue": "0x0C6",
+      "aliases": []
+    },
+    {
+      "name": "CRC-11/FLEXRAY",
+      "width": 11,
+      "poly": "0x385",
+      "init": "0x01A",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000",
+      "check": "0x5A3",
+      "residue": "0x000",
+      "aliases": [
+        "CRC-11"
+      ]
+    },
+    {
+      "name": "CRC-11/UMTS",
+      "width": 11,
+      "poly": "0x307",
+      "init": "0x000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000",
+      "check": "0x061",
+      "residue": "0x000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-12/CDMA2000",
+      "width": 12,
+      "poly": "0xF13",
+      "init": "0xFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000",
+      "check": "0xD4D",
+      "residue": "0x000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-12/DECT",
+      "width": 12,
+      "poly": "0x80F",
+      "init": "0x000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000",
+      "check": "0xF5B",
+      "residue": "0x000",
+      "aliases": [
+        "X-CRC-12"
+      ]
+    },
+    {
+      "name": "CRC-12/GSM",
+      "width": 12,
+      "poly": "0xD31",
+      "init": "0x000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFF",
+      "check": "0xB34",
+      "residue": "0x178",
+      "aliases": []
+    },
+    {
+      "name": "CRC-12/UMTS",
+      "width": 12,
+      "poly": "0x80F",
+      "init": "0x000",
+      "refin": false,
+      "refout": true,
+      "xorout": "0x000",
+      "check": "0xDAF",
+      "residue": "0x000",
+      "aliases": [
+        "CRC-12/3GPP"
+      ]
+    },
+    {
+      "name": "CRC-13/BBC",
+      "width": 13,
+      "poly": "0x1CF5",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x04FA",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-14/DARC",
+      "width": 14,
+      "poly": "0x0805",
+      "init": "0x0000",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000",
+      "check": "0x082D",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-14/GSM",
+      "width": 14,
+      "poly": "0x202D",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x3FFF",
+      "check": "0x30AE",
+      "residue": "0x031E",
+      "aliases": []
+    },
+    {
+      "name": "CRC-15/CAN",
+      "width": 15,
+      "poly": "0x4599",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x059E",
+      "residue": "0x0000",
+      "aliases": [
+        "CRC-15"
+      ]
+    },
+    {
+      "name": "CRC-15/MPT1327",
+      "width": 15,
+      "poly": "0x6815",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0001",
+      "check": "0x2566",
+      "residue": "0x6815",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/ARC",
+      "width": 16,
+      "poly": "0x8005",
+      "init": "0x0000",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000",
+      "check": "0xBB3D",
+      "residue": "0x0000",
+      "aliases": [
+        "ARC",
+        "CRC-16",
+        "CRC-16/LHA",
+        "CRC-IBM"
+      ]
+    },
+    {
+      "name": "CRC-16/CDMA2000",
+      "width": 16,
+      "poly": "0xC867",
+      "init": "0xFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x4C06",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/CMS",
+      "width": 16,
+      "poly": "0x8005",
+      "init": "0xFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0xAEE7",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/DDS-110",
+      "width": 16,
+      "poly": "0x8005",
+      "init": "0x800D",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x9ECF",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/DECT-R",
+      "width": 16,
+      "poly": "0x0589",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0001",
+      "check": "0x007E",
+      "residue": "0x0589",
+      "aliases": [
+        "R-CRC-16"
+      ]
+    },
+    {
+      "name": "CRC-16/DECT-X",
+      "width": 16,
+      "poly": "0x0589",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x007F",
+      "residue": "0x0000",
+      "aliases": [
+        "X-CRC-16"
+      ]
+    },
+    {
+      "name": "CRC-16/DNP",
+      "width": 16,
+      "poly": "0x3D65",
+      "init": "0x0000",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFF",
+      "check": "0xEA82",
+      "residue": "0x66C5",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/EN-13757",
+      "width": 16,
+      "poly": "0x3D65",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFF",
+      "check": "0xC2B7",
+      "residue": "0xA366",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/GENIBUS",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0xFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFF",
+      "check": "0xD64E",
+      "residue": "0x1D0F",
+      "aliases": [
+        "CRC-16/DARC",
+        "CRC-16/EPC",
+        "CRC-16/EPC-C1G2",
+        "CRC-16/I-CODE"
+      ]
+    },
+    {
+      "name": "CRC-16/GSM",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFF",
+      "check": "0xCE3C",
+      "residue": "0x1D0F",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/IBM-3740",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0xFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x29B1",
+      "residue": "0x0000",
+      "aliases": [
+        "CRC-16/AUTOSAR",
+        "CRC-16/CCITT-FALSE"
+      ]
+    },
+    {
+      "name": "CRC-16/IBM-SDLC",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0xFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFF",
+      "check": "0x906E",
+      "residue": "0xF0B8",
+      "aliases": [
+        "CRC-16/ISO-HDLC",
+        "CRC-16/ISO-IEC-14443-3-B",
+        "CRC-16/X-25",
+        "CRC-B",
+        "X-25"
+      ]
+    },
+    {
+      "name": "CRC-16/ISO-IEC-14443-3-A",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0xC6C6",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000",
+      "check": "0xBF05",
+      "residue": "0x0000",
+      "aliases": [
+        "CRC-A"
+      ]
+    },
+    {
+      "name": "CRC-16/KERMIT",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0x0000",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000",
+      "check": "0x2189",
+      "residue": "0x0000",
+      "aliases": [
+        "CRC-16/BLUETOOTH",
+        "CRC-16/CCITT",
+        "CRC-16/CCITT-TRUE",
+        "CRC-16/V-41-LSB",
+        "CRC-CCITT",
+        "KERMIT"
+      ]
+    },
+    {
+      "name": "CRC-16/LJ1200",
+      "width": 16,
+      "poly": "0x6F63",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0xBDF4",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/M17",
+      "width": 16,
+      "poly": "0x5935",
+      "init": "0xFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x772B",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/MAXIM-DOW",
+      "width": 16,
+      "poly": "0x8005",
+      "init": "0x0000",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFF",
+      "check": "0x44C2",
+      "residue": "0xB001",
+      "aliases": [
+        "CRC-16/MAXIM"
+      ]
+    },
+    {
+      "name": "CRC-16/MCRF4XX",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0xFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000",
+      "check": "0x6F91",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/MODBUS",
+      "width": 16,
+      "poly": "0x8005",
+      "init": "0xFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000",
+      "check": "0x4B37",
+      "residue": "0x0000",
+      "aliases": [
+        "MODBUS"
+      ]
+    },
+    {
+      "name": "CRC-16/NRSC-5",
+      "width": 16,
+      "poly": "0x080B",
+      "init": "0xFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000",
+      "check": "0xA066",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/OPENSAFETY-A",
+      "width": 16,
+      "poly": "0x5935",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x5D38",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/OPENSAFETY-B",
+      "width": 16,
+      "poly": "0x755B",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x20FE",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/PROFIBUS",
+      "width": 16,
+      "poly": "0x1DCF",
+      "init": "0xFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFF",
+      "check": "0xA819",
+      "residue": "0xE394",
+      "aliases": [
+        "CRC-16/IEC-61158-2"
+      ]
+    },
+    {
+      "name": "CRC-16/RIELLO",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0xB2AA",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000",
+      "check": "0x63D0",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/SPI-FUJITSU",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0x1D0F",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0xE5CC",
+      "residue": "0x0000",
+      "aliases": [
+        "CRC-16/AUG-CCITT"
+      ]
+    },
+    {
+      "name": "CRC-16/T10-DIF",
+      "width": 16,
+      "poly": "0x8BB7",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0xD0DB",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/TELEDISK",
+      "width": 16,
+      "poly": "0xA097",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x0FB3",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/TMS37157",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0x89EC",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000",
+      "check": "0x26B1",
+      "residue": "0x0000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/UMTS",
+      "width": 16,
+      "poly": "0x8005",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0xFEE8",
+      "residue": "0x0000",
+      "aliases": [
+        "CRC-16/BUYPASS",
+        "CRC-16/VERIFONE"
+      ]
+    },
+    {
+      "name": "CRC-16/USB",
+      "width": 16,
+      "poly": "0x8005",
+      "init": "0xFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFF",
+      "check": "0xB4C8",
+      "residue": "0xB001",
+      "aliases": []
+    },
+    {
+      "name": "CRC-16/XMODEM",
+      "width": 16,
+      "poly": "0x1021",
+      "init": "0x0000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000",
+      "check": "0x31C3",
+      "residue": "0x0000",
+      "aliases": [
+        "CRC-16/ACORN",
+        "CRC-16/LTE",
+        "CRC-16/V-41-MSB",
+        "XMODEM",
+        "ZMODEM"
+      ]
+    },
+    {
+      "name": "CRC-17/CAN-FD",
+      "width": 17,
+      "poly": "0x1685B",
+      "init": "0x00000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00000",
+      "check": "0x04F03",
+      "residue": "0x00000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-21/CAN-FD",
+      "width": 21,
+      "poly": "0x102899",
+      "init": "0x000000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000000",
+      "check": "0x0ED841",
+      "residue": "0x000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-24/BLE",
+      "width": 24,
+      "poly": "0x00065B",
+      "init": "0x555555",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x000000",
+      "check": "0xC25A56",
+      "residue": "0x000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-24/FLEXRAY-A",
+      "width": 24,
+      "poly": "0x5D6DCB",
+      "init": "0xFEDCBA",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000000",
+      "check": "0x7979BD",
+      "residue": "0x000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-24/FLEXRAY-B",
+      "width": 24,
+      "poly": "0x5D6DCB",
+      "init": "0xABCDEF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000000",
+      "check": "0x1F23B8",
+      "residue": "0x000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-24/INTERLAKEN",
+      "width": 24,
+      "poly": "0x328B63",
+      "init": "0xFFFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFFFF",
+      "check": "0xB4F3E6",
+      "residue": "0x144E63",
+      "aliases": []
+    },
+    {
+      "name": "CRC-24/LTE-A",
+      "width": 24,
+      "poly": "0x864CFB",
+      "init": "0x000000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000000",
+      "check": "0xCDE703",
+      "residue": "0x000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-24/LTE-B",
+      "width": 24,
+      "poly": "0x800063",
+      "init": "0x000000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000000",
+      "check": "0x23EF52",
+      "residue": "0x000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-24/OPENPGP",
+      "width": 24,
+      "poly": "0x864CFB",
+      "init": "0xB704CE",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x000000",
+      "check": "0x21CF02",
+      "residue": "0x000000",
+      "aliases": [
+        "CRC-24"
+      ]
+    },
+    {
+      "name": "CRC-24/OS-9",
+      "width": 24,
+      "poly": "0x800063",
+      "init": "0xFFFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFFFF",
+      "check": "0x200FA5",
+      "residue": "0x800FE3",
+      "aliases": []
+    },
+    {
+      "name": "CRC-30/CDMA",
+      "width": 30,
+      "poly": "0x2030B9C7",
+      "init": "0x3FFFFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x3FFFFFFF",
+      "check": "0x04C34ABF",
+      "residue": "0x34EFA55A",
+      "aliases": []
+    },
+    {
+      "name": "CRC-31/PHILIPS",
+      "width": 31,
+      "poly": "0x04C11DB7",
+      "init": "0x7FFFFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x7FFFFFFF",
+      "check": "0x0CE9E46C",
+      "residue": "0x4EAF26F1",
+      "aliases": []
+    },
+    {
+      "name": "CRC-32/AIXM",
+      "width": 32,
+      "poly": "0x814141AB",
+      "init": "0x00000000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00000000",
+      "check": "0x3010BF7F",
+      "residue": "0x00000000",
+      "aliases": [
+        "CRC-32Q"
+      ]
+    },
+    {
+      "name": "CRC-32/AUTOSAR",
+      "width": 32,
+      "poly": "0xF4ACFB13",
+      "init": "0xFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFFFFFF",
+      "check": "0x1697D06A",
+      "residue": "0x904CDDBF",
+      "aliases": []
+    },
+    {
+      "name": "CRC-32/BASE91-D",
+      "width": 32,
+      "poly": "0xA833982B",
+      "init": "0xFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFFFFFF",
+      "check": "0x87315576",
+      "residue": "0x45270551",
+      "aliases": [
+        "CRC-32D"
+      ]
+    },
+    {
+      "name": "CRC-32/BZIP2",
+      "width": 32,
+      "poly": "0x04C11DB7",
+      "init": "0xFFFFFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFFFFFF",
+      "check": "0xFC891918",
+      "residue": "0xC704DD7B",
+      "aliases": [
+        "CRC-32/AAL5",
+        "CRC-32/DECT-B",
+        "B-CRC-32"
+      ]
+    },
+    {
+      "name": "CRC-32/CD-ROM-EDC",
+      "width": 32,
+      "poly": "0x8001801B",
+      "init": "0x00000000",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00000000",
+      "check": "0x6EC2EDC4",
+      "residue": "0x00000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-32/CKSUM",
+      "width": 32,
+      "poly": "0x04C11DB7",
+      "init": "0x00000000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFFFFFF",
+      "check": "0x765E7680",
+      "residue": "0xC704DD7B",
+      "aliases": [
+        "CKSUM",
+        "CRC-32/POSIX"
+      ]
+    },
+    {
+      "name": "CRC-32/ISCSI",
+      "width": 32,
+      "poly": "0x1EDC6F41",
+      "init": "0xFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFFFFFF",
+      "check": "0xE3069283",
+      "residue": "0xB798B438",
+      "aliases": [
+        "CRC-32/BASE91-C",
+        "CRC-32/CASTAGNOLI",
+        "CRC-32/INTERLAKEN",
+        "CRC-32C",
+        "CRC-32/NVME"
+      ]
+    },
+    {
+      "name": "CRC-32/ISO-HDLC",
+      "width": 32,
+      "poly": "0x04C11DB7",
+      "init": "0xFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFFFFFF",
+      "check": "0xCBF43926",
+      "residue": "0xDEBB20E3",
+      "aliases": [
+        "CRC-32",
+        "CRC-32/ADCCP",
+        "CRC-32/V-42",
+        "CRC-32/XZ",
+        "PKZIP"
+      ]
+    },
+    {
+      "name": "CRC-32/JAMCRC",
+      "width": 32,
+      "poly": "0x04C11DB7",
+      "init": "0xFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00000000",
+      "check": "0x340BC6D9",
+      "residue": "0x00000000",
+      "aliases": [
+        "JAMCRC"
+      ]
+    },
+    {
+      "name": "CRC-32/MEF",
+      "width": 32,
+      "poly": "0x741B8CD7",
+      "init": "0xFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x00000000",
+      "check": "0xD2C22F51",
+      "residue": "0x00000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-32/MPEG-2",
+      "width": 32,
+      "poly": "0x04C11DB7",
+      "init": "0xFFFFFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00000000",
+      "check": "0x0376E6E7",
+      "residue": "0x00000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-32/XFER",
+      "width": 32,
+      "poly": "0x000000AF",
+      "init": "0x00000000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x00000000",
+      "check": "0xBD0BE338",
+      "residue": "0x00000000",
+      "aliases": [
+        "XFER"
+      ]
+    },
+    {
+      "name": "CRC-40/GSM",
+      "width": 40,
+      "poly": "0x0004820009",
+      "init": "0x0000000000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFFFFFFFF",
+      "check": "0xD4164FC646",
+      "residue": "0xC4FF8071FF",
+      "aliases": []
+    },
+    {
+      "name": "CRC-64/ECMA-182",
+      "width": 64,
+      "poly": "0x42F0E1EBA9EA3693",
+      "init": "0x0000000000000000",
+      "refin": false,
+      "refout": false,
+      "xorout": "0x0000000000000000",
+      "check": "0x6C40DF5F0B497347",
+      "residue": "0x0000000000000000",
+      "aliases": [
+        "CRC-64"
+      ]
+    },
+    {
+      "name": "CRC-64/GO-ISO",
+      "width": 64,
+      "poly": "0x000000000000001B",
+      "init": "0xFFFFFFFFFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFFFFFFFFFFFFFF",
+      "check": "0xB90956C775A41001",
+      "residue": "0x5300000000000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-64/MS",
+      "width": 64,
+      "poly": "0x259C84CBA6426349",
+      "init": "0xFFFFFFFFFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000000000000000",
+      "check": "0x75D4B74F024ECEEA",
+      "residue": "0x0000000000000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-64/NVME",
+      "width": 64,
+      "poly": "0xAD93D23594C93659",
+      "init": "0xFFFFFFFFFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFFFFFFFFFFFFFF",
+      "check": "0xAE8B14860A799888",
+      "residue": "0xF310303B2B6F6E42",
+      "aliases": []
+    },
+    {
+      "name": "CRC-64/REDIS",
+      "width": 64,
+      "poly": "0xAD93D23594C935A9",
+      "init": "0x0000000000000000",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x0000000000000000",
+      "check": "0xE9C6D914C4B8D9CA",
+      "residue": "0x0000000000000000",
+      "aliases": []
+    },
+    {
+      "name": "CRC-64/WE",
+      "width": 64,
+      "poly": "0x42F0E1EBA9EA3693",
+      "init": "0xFFFFFFFFFFFFFFFF",
+      "refin": false,
+      "refout": false,
+      "xorout": "0xFFFFFFFFFFFFFFFF",
+      "check": "0x62EC59E3F1A4F00A",
+      "residue": "0xFCACBEBD5931A992",
+      "aliases": []
+    },
+    {
+      "name": "CRC-64/XZ",
+      "width": 64,
+      "poly": "0x42F0E1EBA9EA3693",
+      "init": "0xFFFFFFFFFFFFFFFF",
+      "refin": true,
+      "refout": true,
+      "xorout": "0xFFFFFFFFFFFFFFFF",
+      "check": "0x995DC9BBDF1939FA",
+      "residue": "0x49958C9ABD7D353F",
+      "aliases": [
+        "CRC-64/GO-ECMA"
+      ]
+    },
+    {
+      "name": "CRC-82/DARC",
+      "width": 82,
+      "poly": "0x0308C0111011401440411",
+      "init": "0x000000000000000000000",
+      "refin": true,
+      "refout": true,
+      "xorout": "0x000000000000000000000",
+      "check": "0x09EA83F625023801FD612",
+      "residue": "0x000000000000000000000",
+      "aliases": []
+    }
+  ]
+}
