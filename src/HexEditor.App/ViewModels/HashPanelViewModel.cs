@@ -515,7 +515,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     /// <summary>アルゴリズムの表示名 (チェックサムは訳す。それ以外はアルゴリズムの名前のまま)。</summary>
     public static string LocalizedName(HashAlgorithmInfo info) =>
-        info.Group == HashGroup.Checksum ? Loc.Get("Hash_Alg_" + info.Id) : info.Name;
+        info.Group == HashGroup.Checksum ? Loc.TryGet("Hash_Alg_" + info.Id) ?? info.Name : info.Name;
 
     /// <summary>対象範囲 (ドキュメントの範囲)。指定が正しくなければ null。</summary>
     public IReadOnlyList<HashRange>? ResolveRanges()
@@ -909,6 +909,95 @@ public sealed partial class HashPanelViewModel : ObservableObject
         VerifyMessage = row is null ? string.Empty
             : Loc.Format("Hash_VerifyResult", row.Name, row.MatchText);
     }
+
+    // ---- 一致するアルゴリズムを探す (ANA-21 の仕様 5) ----
+
+    /// <summary>「一致するアルゴリズムを探す」の結果の文。</summary>
+    [ObservableProperty]
+    public partial string FindResult { get; set; } = string.Empty;
+
+    /// <summary>対象が 1 MB を超えるときの確認 (所要時間の目安の秒数を渡す。null なら確認しない)。</summary>
+    public Func<long, Task<bool>>? ConfirmFind { get; set; }
+
+    /// <summary>この大きさを超える対象では、探す前に所要時間の目安を示して確認する。</summary>
+    public const long FindConfirmLimit = 1_000_000;
+
+    /// <summary>期待値の長さに合うすべてのアルゴリズムで計算し、一致したものを一覧にする (1 回の読み込み)。</summary>
+    public async Task FindMatchingAlgorithmsAsync()
+    {
+        if (_target is not { } doc)
+        {
+            return;
+        }
+
+        if (_expected is not { } expected)
+        {
+            FindResult = Loc.Get("Hash_FindNeedsExpected");
+            return;
+        }
+
+        RefreshExclusions();
+        if (ResolveRanges() is not { } ranges)
+        {
+            FindResult = Loc.Get("Hash_RangeInvalid");
+            return;
+        }
+
+        int candidates = AlgorithmFinder.Candidates(expected.Value.Length * 8).Count;
+        long total = ranges.Sum(r => r.Length);
+        if (total > FindConfirmLimit && ConfirmFind is { } confirm)
+        {
+            // 目安: 1 種類あたり 500 MB/s、最短 1 秒。
+            long seconds = Math.Max(1, (long)(total * (double)Math.Max(1, candidates) / 500_000_000));
+            if (!await confirm(seconds))
+            {
+                return;
+            }
+        }
+
+        TryParseReplacement(out byte replacement);
+        var target = new HashRequest
+        {
+            Ranges = ranges,
+            Algorithms = [],
+            Exclusions = [.. Exclusions.Where(x => x.Range is not null && !x.IsOutside).Select(x => x.Range!.Value)],
+            ExclusionMode = ExclusionModeIndex == 1 ? HashExclusionMode.Replace : HashExclusionMode.Skip,
+            ReplacementValue = replacement,
+        };
+        DocumentSnapshot snapshot = doc.Document.Current;
+        FindResult = Loc.Get("Hash_Finding");
+        try
+        {
+            AlgorithmSearchResult result = await _operations.RunAsync(Loc.Get("Operation_FindAlgorithm"), OperationKind.ReadOnly, doc.Document,
+                total, op => Task.FromResult(AlgorithmFinder.Find(snapshot, expected, target, op)));
+            FindResult = result.Matches.Count == 0
+                ? Loc.Format("Hash_FindNone", result.Tried)
+                : Loc.Format("Hash_FindFound", string.Join(", ", result.Matches.Select(m =>
+                    m.Match == HashMatch.MatchReversed ? Loc.Format("Hash_FindReversed", m.DisplayName) : m.DisplayName)), result.Tried);
+        }
+        catch (OperationCanceledException)
+        {
+            FindResult = Loc.Get("Hash_Cancelled");
+        }
+        catch (HashReadException e)
+        {
+            FindResult = Loc.Format("Hash_ReadError", "0x" + e.Range.Offset.ToString("X", CultureInfo.InvariantCulture));
+        }
+    }
+
+    // ---- カーソル位置に書き込む (ANA-22 の仕様 3・4)、カスタム CRC (ANA-20) ----
+
+    /// <summary>「カーソル位置に書き込む」(ウィンドウがダイアログを出して書き込む)。</summary>
+    public Func<HashRowViewModel, Task>? WriteAtCursor { get; set; }
+
+    /// <summary>カスタム CRC の追加・エクスポート・インポート・削除 (ウィンドウがダイアログ・ファイルの選択を出す)。</summary>
+    public Func<Task>? AddCustomCrc { get; set; }
+
+    public Func<Task>? ExportCustomCrc { get; set; }
+
+    public Func<Task>? ImportCustomCrc { get; set; }
+
+    public Action<string>? RemoveCustomCrc { get; set; }
 
     // ---- 内部 ----
 

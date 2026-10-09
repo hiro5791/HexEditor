@@ -39,6 +39,7 @@ public sealed partial class MainWindow
     private void RegisterHashCommands()
     {
         Commands.Register("analysis.hash", ShowHashPanel, NeedsDocument);
+        RegisterHashExtraCommands();
 
         // 「解析: ハッシュ値を照合」(ANA-21): パネルを開き、期待値の入力欄にフォーカスを移す。
         Commands.Register("analysis.hash.verify", () =>
@@ -63,7 +64,16 @@ public sealed partial class MainWindow
             : CommandState.Unavailable(Loc.Get("Hash_NoResults")));
     }
 
-    private HashPanelViewModel HashVm => _hashVm ??= new HashPanelViewModel(Vm.Operations, App.Settings)
+    private HashPanelViewModel HashVm => _hashVm ??= CreateHashVm();
+
+    private HashPanelViewModel CreateHashVm()
+    {
+        HashPanelViewModel vm = NewHashVm();
+        ConfigureHashVm(vm);
+        return vm;
+    }
+
+    private HashPanelViewModel NewHashVm() => new(Vm.Operations, App.Settings)
     {
         SetClipboardText = text =>
         {
@@ -187,6 +197,33 @@ public sealed partial class MainWindow
             case "expected":
                 HashVm.ExpectedText = request["text"]?.GetValue<string>() ?? string.Empty;
                 break;
+            case "exclusion":
+                // {start, length}: 除外範囲を加える。{mode: 0/1, value} で方法と置き換える値。
+                if (request["start"] is not null)
+                {
+                    HashVm.AddExclusion(request["start"]!.GetValue<string>(), request["length"]?.GetValue<string>() ?? "1");
+                }
+
+                if (request["mode"] is not null)
+                {
+                    HashVm.ExclusionModeIndex = (int)TestHookSettings.ReadLong(request["mode"], 0);
+                }
+
+                if (request["value"] is not null)
+                {
+                    HashVm.ReplacementText = request["value"]!.GetValue<string>();
+                }
+
+                break;
+            case "rangeMode":
+                HashVm.RangeModeIndex = (int)TestHookSettings.ReadLong(request["index"], 0);
+                break;
+            case "find":
+                await HashVm.FindMatchingAlgorithmsAsync();
+                break;
+            case "filter":
+                HashVm.Filter = request["text"]?.GetValue<string>() ?? string.Empty;
+                break;
         }
 
         var state = new System.Text.Json.Nodes.JsonObject
@@ -207,8 +244,18 @@ public sealed partial class MainWindow
                 ["name"] = r.Name,
                 ["value"] = r.Value,
                 ["match"] = r.Match?.ToString(),
+                ["invalid"] = r.IsInvalid,
+                ["note"] = r.Note,
             })]);
             state["verifyMessage"] = vm.VerifyMessage;
+            state["findResult"] = vm.FindResult;
+            state["multiRange"] = vm.IsMultiRange;
+            state["visible"] = new System.Text.Json.Nodes.JsonArray([.. vm.Algorithms.Where(a => a.IsVisible).Select(a => (System.Text.Json.Nodes.JsonNode?)a.Id)]);
+            state["exclusions"] = new System.Text.Json.Nodes.JsonArray([.. vm.Exclusions.Select(x => (System.Text.Json.Nodes.JsonNode?)new System.Text.Json.Nodes.JsonObject
+            {
+                ["range"] = x.RangeText,
+                ["warning"] = x.Warning,
+            })]);
             state["expected"] = vm.ExpectedText;
             state["checked"] = new System.Text.Json.Nodes.JsonArray([.. vm.Algorithms.Where(a => a.IsChecked).Select(a => (System.Text.Json.Nodes.JsonNode?)a.Id)]);
         }

@@ -2973,4 +2973,166 @@ Details were written to:
   <data name="DataOp_Error_TempSpace" xml:space="preserve"><value>The operation needs {0} GB of temporary space, but only {1} GB is free.</value></data>
   <data name="DataOp_Error_Read" xml:space="preserve"><value>Cannot read offset {0}. The document was not changed.</value></data>
   <data name="Operation_DataOperation" xml:space="preserve"><value>Data operation: {0}</value></data>
+  <data name="Cmd_data_case_upper" xml:space="preserve"><value>Uppercase</value></data>
+  <data name="CmdAlias_data_case_upper" xml:space="preserve"><value>case uppercase</value></data>
+  <data name="Cmd_data_case_upper_ascii" xml:space="preserve"><value>Uppercase (ASCII letters only)</value></data>
+  <data name="CmdAlias_data_case_upper_ascii" xml:space="preserve"><value>case ascii</value></data>
+  <data name="Cmd_data_case_upper_text" xml:space="preserve"><value>Uppercase (by text encoding)</value></data>
+  <data name="CmdAlias_data_case_upper_text" xml:space="preserve"><value>case unicode encoding</value></data>
+  <data name="Cmd_data_case_lower" xml:space="preserve"><value>Lowercase</value></data>
+  <data name="CmdAlias_data_case_lower" xml:space="preserve"><value>case lowercase</value></data>
+  <data name="Cmd_data_case_lower_ascii" xml:space="preserve"><value>Lowercase (ASCII letters only)</value></data>
+  <data name="CmdAlias_data_case_lower_ascii" xml:space="preserve"><value>case ascii</value></data>
+  <data name="Cmd_data_case_lower_text" xml:space="preserve"><value>Lowercase (by text encoding)</value></data>
+  <data name="CmdAlias_data_case_lower_text" xml:space="preserve"><value>case unicode encoding</value></data>
+  <data name="Cmd_data_case_swap" xml:space="preserve"><value>Swap case</value></data>
+  <data name="CmdAlias_data_case_swap" xml:space="preserve"><value>case swap case</value></data>
+  <data name="Cmd_data_case_swap_ascii" xml:space="preserve"><value>Swap case (ASCII letters only)</value></data>
+  <data name="CmdAlias_data_case_swap_ascii" xml:space="preserve"><value>case ascii</value></data>
+  <data name="Cmd_data_case_swap_text" xml:space="preserve"><value>Swap case (by text encoding)</value></data>
+  <data name="CmdAlias_data_case_swap_text" xml:space="preserve"><value>case unicode encoding</value></data>
+  <data name="Cmd_data_convertEncoding" xml:space="preserve"><value>Convert encoding...</value></data>
+  <data name="CmdAlias_data_convertEncoding" xml:space="preserve"><value>charset transcode utf-8 shift_jis ebcdic</value></data>
+  <data name="Cmd_analysis_hash_customCrc" xml:space="preserve"><value>Define custom CRC...</value></data>
+  <data name="CmdAlias_analysis_hash_customCrc" xml:space="preserve"><value>crc polynomial</value></data>
+  <data name="Cmd_analysis_hash_findAlgorithm" xml:space="preserve"><value>Find matching algorithm</value></data>
+  <data name="CmdAlias_analysis_hash_findAlgorithm" xml:space="preserve"><value>identify hash checksum</value></data>
+  <data name="Cmd_analysis_hash_writeAtCursor" xml:space="preserve"><value>Write hash value at cursor</value></data>
+  <data name="CmdAlias_analysis_hash_writeAtCursor" xml:space="preserve"><value>checksum write insert</value></data>
+  <data name="Set_edit_caseConversion" xml:space="preserve"><value>Case conversion method</value></data>
+  <data name="SetDesc_edit_caseConversion" xml:space="preserve"><value>How Data &gt; Change case converts text.</value></data>
+  <data name="SetOpt_edit_caseConversion_ascii" xml:space="preserve"><value>ASCII letters only</value></data>
+  <data name="SetOpt_edit_caseConversion_encoding" xml:space="preserve"><value>By the display text encoding (Unicode rules)</value></data>
+  <data name="Set_hash_customCrc" xml:space="preserve"><value>Custom CRCs</value></data>
+  <data name="SetDesc_hash_customCrc" xml:space="preserve"><value>The custom CRC algorithms defined in the hash panel.</value></data>
+  <data name="Operation_ConvertEncoding" xml:space="preserve"><value>Convert encoding</value></data>
+  <data name="Operation_ConvertCase" xml:space="preserve"><value>Change case</value></data>
+  <data name="Operation_FindAlgorithm" xml:space="preserve"><value>Find matching algorithm</value></data>
+  <data name="ConvertEncoding_Title" xml:space="preserve"><value>Convert encoding</value></data>
+  <data name="ConvertEncoding_Convert" xml:space="preserve"><value>Convert</value></data>
+  <data name="ConvertEncoding_Source" xml:space="preserve"><value>From</value></data>
+  <data name="ConvertEncoding_Target" xml:space="preserve"><value>To</value></data>
+  <data name="ConvertEncoding_Invalid" xml:space="preserve"><value>Bytes that cannot be decoded</value></data>
+  <data name="ConvertEncoding_Invalid_Error" xml:space="preserve"><value>Stop at the first one with an error</value></data>
+  <data name="ConvertEncoding_Invalid_Fffd" xml:space="preserve"><value>Replace with U+FFFD</value></data>
+  <data name="ConvertEncoding_Invalid_Keep" xml:space="preserve"><value>Keep them unchanged</value></data>
+  <data name="ConvertEncoding_Unmappable" xml:space="preserve"><value>Characters the target cannot represent</value></data>
+  <data name="ConvertEncoding_Unmappable_Error" xml:space="preserve"><value>Stop at the first one with an error</value></data>
+  <data name="ConvertEncoding_Unmappable_Question" xml:space="preserve"><value>Replace with ?</value></data>
+  <data name="ConvertEncoding_Unmappable_Custom" xml:space="preserve"><value>Replace with a character</value></data>
+  <data name="ConvertEncoding_Replacement" xml:space="preserve"><value>Replacement</value></data>
+  <data name="ConvertEncoding_StripBom" xml:space="preserve"><value>Remove the BOM at the start of the source</value></data>
+  <data name="ConvertEncoding_AddBom" xml:space="preserve"><value>Add a BOM to the result</value></data>
+  <data name="ConvertEncoding_Newline" xml:space="preserve"><value>Line breaks</value></data>
+  <data name="ConvertEncoding_Newline_Keep" xml:space="preserve"><value>Keep</value></data>
+  <data name="ConvertEncoding_Normalization" xml:space="preserve"><value>Unicode normalization</value></data>
+  <data name="ConvertEncoding_Normalization_None" xml:space="preserve"><value>None</value></data>
+  <data name="ConvertEncoding_LengthExact" xml:space="preserve"><value>{0} bytes → {1} bytes</value></data>
+  <data name="ConvertEncoding_LengthEstimate" xml:space="preserve"><value>{0} bytes → about {1} bytes</value></data>
+  <data name="ConvertEncoding_Error_Undecodable" xml:space="preserve"><value>The bytes at {0} ({1}) cannot be decoded.</value></data>
+  <data name="ConvertEncoding_Error_Unmappable" xml:space="preserve"><value>The character "{1}" at {0} cannot be represented in the target encoding.</value></data>
+  <data name="ConvertEncoding_Error_FixedLength" xml:space="preserve"><value>The length changes, but this document cannot change its length.</value></data>
+  <data name="ConvertEncoding_GoToOffset" xml:space="preserve"><value>Go to the offset</value></data>
+  <data name="Hash_RangeMode.Header" xml:space="preserve"><value>Multiple ranges</value></data>
+  <data name="Hash_RangeMode_Concatenate.Content" xml:space="preserve"><value>Concatenate into one value</value></data>
+  <data name="Hash_RangeMode_PerRange.Content" xml:space="preserve"><value>One value per range</value></data>
+  <data name="Hash_RangeMulti" xml:space="preserve"><value>{0} ranges, {1} bytes in total</value></data>
+  <data name="Hash_Exclusions.Header" xml:space="preserve"><value>Excluded ranges</value></data>
+  <data name="Hash_ExclusionStart.Header" xml:space="preserve"><value>Start</value></data>
+  <data name="Hash_ExclusionLength.Header" xml:space="preserve"><value>Length</value></data>
+  <data name="Hash_ExclusionRemove.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Remove excluded range</value></data>
+  <data name="Hash_ExclusionRemove.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Remove</value></data>
+  <data name="Hash_ExclusionAdd.Content" xml:space="preserve"><value>Add</value></data>
+  <data name="Hash_ExclusionAddSelection.Content" xml:space="preserve"><value>Add selection</value></data>
+  <data name="Hash_ExclusionMode.Header" xml:space="preserve"><value>Excluded bytes</value></data>
+  <data name="Hash_ExclusionMode_Skip.Content" xml:space="preserve"><value>Skip</value></data>
+  <data name="Hash_ExclusionMode_Replace.Content" xml:space="preserve"><value>Replace with a value</value></data>
+  <data name="Hash_ExclusionValue.Header" xml:space="preserve"><value>Value</value></data>
+  <data name="Hash_ExclusionOutside" xml:space="preserve"><value>Outside the target range (ignored)</value></data>
+  <data name="Hash_ExclusionInvalid" xml:space="preserve"><value>Enter a start and a length greater than 0.</value></data>
+  <data name="Hash_ReplacementInvalid" xml:space="preserve"><value>The replacement value must be 0x00 to 0xFF.</value></data>
+  <data name="Hash_AddUnreadable.Content" xml:space="preserve"><value>Add the unreadable range to the excluded ranges</value></data>
+  <data name="Hash_CustomCrc.Content" xml:space="preserve"><value>Custom CRC</value></data>
+  <data name="Hash_CustomCrcAdd.Text" xml:space="preserve"><value>Add custom CRC...</value></data>
+  <data name="Hash_CustomCrcExport.Text" xml:space="preserve"><value>Export...</value></data>
+  <data name="Hash_CustomCrcImport.Text" xml:space="preserve"><value>Import...</value></data>
+  <data name="Hash_CustomCrcDelete.Text" xml:space="preserve"><value>Delete</value></data>
+  <data name="Hash_WriteAtCursor.Text" xml:space="preserve"><value>Write at cursor...</value></data>
+  <data name="Hash_FindAlgorithm.Content" xml:space="preserve"><value>Find matching algorithm</value></data>
+  <data name="Hash_FindRun" xml:space="preserve"><value>Search</value></data>
+  <data name="Hash_FindConfirm" xml:space="preserve"><value>This calculates every algorithm of the same length. It takes about {0} seconds.</value></data>
+  <data name="Hash_FindNeedsExpected" xml:space="preserve"><value>Enter the expected value first.</value></data>
+  <data name="Hash_Finding" xml:space="preserve"><value>Searching...</value></data>
+  <data name="Hash_FindNone" xml:space="preserve"><value>No algorithm matches ({0} tried).</value></data>
+  <data name="Hash_FindFound" xml:space="preserve"><value>Matches: {0} ({1} tried).</value></data>
+  <data name="Hash_FindReversed" xml:space="preserve"><value>{0} (byte order reversed)</value></data>
+  <data name="Hash_Slow" xml:space="preserve"><value>Slow: the overall speed is limited by this algorithm.</value></data>
+  <data name="Hash_SignedValue" xml:space="preserve"><value>Signed: {0}</value></data>
+  <data name="Hash_ParameterError_KeyLength" xml:space="preserve"><value>The key length is not valid for this algorithm.</value></data>
+  <data name="Hash_ParameterError_OutputLength" xml:space="preserve"><value>The output length is not valid for this algorithm.</value></data>
+  <data name="Hash_ParameterError_None" xml:space="preserve"><value></value></data>
+  <data name="Hash_Endian" xml:space="preserve"><value>Word byte order</value></data>
+  <data name="Hash_Endian_Default" xml:space="preserve"><value>Default</value></data>
+  <data name="Hash_Endian_Little" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Hash_Endian_Big" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Hash_Signed" xml:space="preserve"><value>Signed words</value></data>
+  <data name="Hash_Key" xml:space="preserve"><value>Key (hex)</value></data>
+  <data name="Hash_KeyPlaceholder" xml:space="preserve"><value>None</value></data>
+  <data name="Hash_KeyInvalid" xml:space="preserve"><value>Enter the key as hex digits (an even number).</value></data>
+  <data name="Hash_OutputBits" xml:space="preserve"><value>Output length (bits)</value></data>
+  <data name="Hash_OutputBitsInvalid" xml:space="preserve"><value>Enter the output length in bits.</value></data>
+  <data name="Hash_Ed2k" xml:space="preserve"><value>Exact multiples of 9,728,000 bytes</value></data>
+  <data name="Hash_Ed2k_Blue" xml:space="preserve"><value>New method (blue)</value></data>
+  <data name="Hash_Ed2k_Red" xml:space="preserve"><value>Old method (red)</value></data>
+  <data name="HashWrite_Title" xml:space="preserve"><value>Write hash value at cursor</value></data>
+  <data name="HashWrite_Write" xml:space="preserve"><value>Write</value></data>
+  <data name="HashWrite_Row" xml:space="preserve"><value>Value</value></data>
+  <data name="HashWrite_Position" xml:space="preserve"><value>Overwrites from offset {0}.</value></data>
+  <data name="HashWrite_BigEndian" xml:space="preserve"><value>Big endian (as the number is written)</value></data>
+  <data name="HashWrite_LittleEndian" xml:space="preserve"><value>Little endian (least significant byte first)</value></data>
+  <data name="HashWrite_Warning" xml:space="preserve"><value>The destination is inside the calculated range, so writing changes the value.</value></data>
+  <data name="HashWrite_Error_End" xml:space="preserve"><value>Cannot write past the end of the document ({0} bytes left, {1} needed).</value></data>
+  <data name="CustomCrc_Title" xml:space="preserve"><value>Custom CRC</value></data>
+  <data name="CustomCrc_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="CustomCrc_Preset" xml:space="preserve"><value>Preset</value></data>
+  <data name="CustomCrc_Duplicate" xml:space="preserve"><value>Duplicate and edit</value></data>
+  <data name="CustomCrc_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="CustomCrc_Width" xml:space="preserve"><value>Width (bits)</value></data>
+  <data name="CustomCrc_Poly" xml:space="preserve"><value>Polynomial (poly)</value></data>
+  <data name="CustomCrc_Init" xml:space="preserve"><value>Initial value (init)</value></data>
+  <data name="CustomCrc_RefIn" xml:space="preserve"><value>Reflect input (refin)</value></data>
+  <data name="CustomCrc_RefOut" xml:space="preserve"><value>Reflect output (refout)</value></data>
+  <data name="CustomCrc_XorOut" xml:space="preserve"><value>Final XOR (xorout)</value></data>
+  <data name="CustomCrc_CheckValue" xml:space="preserve"><value>check: {0}</value></data>
+  <data name="CustomCrc_ResidueValue" xml:space="preserve"><value>residue: {0}</value></data>
+  <data name="CustomCrc_Field_Name" xml:space="preserve"><value>The name</value></data>
+  <data name="CustomCrc_Field_Width" xml:space="preserve"><value>The width</value></data>
+  <data name="CustomCrc_Field_Poly" xml:space="preserve"><value>The polynomial</value></data>
+  <data name="CustomCrc_Field_Init" xml:space="preserve"><value>The initial value</value></data>
+  <data name="CustomCrc_Field_RefIn" xml:space="preserve"><value>refin</value></data>
+  <data name="CustomCrc_Field_RefOut" xml:space="preserve"><value>refout</value></data>
+  <data name="CustomCrc_Field_XorOut" xml:space="preserve"><value>The final XOR</value></data>
+  <data name="CustomCrc_Field_Check" xml:space="preserve"><value>check</value></data>
+  <data name="CustomCrc_Field_Item" xml:space="preserve"><value>The item</value></data>
+  <data name="CustomCrc_Error_NameRequired" xml:space="preserve"><value>Enter a name.</value></data>
+  <data name="CustomCrc_Error_DuplicateName" xml:space="preserve"><value>An algorithm with this name already exists.</value></data>
+  <data name="CustomCrc_Error_WidthOutOfRange" xml:space="preserve"><value>The width must be 1 to 64.</value></data>
+  <data name="CustomCrc_Error_ValueTooWide" xml:space="preserve"><value>{0} must fit in {1} bits.</value></data>
+  <data name="CustomCrc_Error_MissingField" xml:space="preserve"><value>{0} is missing.</value></data>
+  <data name="CustomCrc_Error_InvalidValue" xml:space="preserve"><value>{0} is not a valid number.</value></data>
+  <data name="CustomCrc_Error_CheckMismatch" xml:space="preserve"><value>The check value does not match the parameters.</value></data>
+  <data name="CustomCrc_Error_NotAnObject" xml:space="preserve"><value>The item is not an object.</value></data>
+  <data name="CustomCrc_Error_InvalidJson" xml:space="preserve"><value>The file is not valid JSON.</value></data>
+  <data name="CustomCrc_Error_NotAnArray" xml:space="preserve"><value>The file does not contain an array.</value></data>
+  <data name="CustomCrc_ImportItemError" xml:space="preserve"><value>Cannot read item {0}: {1}</value></data>
+  <data name="CustomCrc_Imported" xml:space="preserve"><value>{0, plural, one {Imported # custom CRC.} other {Imported # custom CRCs.}}</value></data>
+  <data name="CustomCrc_Exported" xml:space="preserve"><value>Exported to {0}.</value></data>
+  <data name="Hash_Alg_sum64" xml:space="preserve"><value>Sum 64-bit</value></data>
+  <data name="Hash_Alg_sum16w" xml:space="preserve"><value>Sum 16-bit (words)</value></data>
+  <data name="Hash_Alg_sum32w" xml:space="preserve"><value>Sum 32-bit (words)</value></data>
+  <data name="Hash_Alg_sum64w" xml:space="preserve"><value>Sum 64-bit (words)</value></data>
+  <data name="Hash_Alg_inet16" xml:space="preserve"><value>Internet checksum</value></data>
+  <data name="Hash_Alg_xor16" xml:space="preserve"><value>XOR 16-bit</value></data>
+  <data name="Hash_Alg_xor32" xml:space="preserve"><value>XOR 32-bit</value></data>
+  <data name="Hash_Alg_xor64" xml:space="preserve"><value>XOR 64-bit</value></data>
 </root>

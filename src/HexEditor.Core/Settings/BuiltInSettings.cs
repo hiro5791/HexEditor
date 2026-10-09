@@ -89,6 +89,9 @@ public static class BuiltInSettings
         new("edit.pasteSpecial.preferLast", SettingCategories.Editing, SettingKind.Bool, true) { Order = 20 },
         new("edit.paste.detectWithoutConfirmation", SettingCategories.Editing, SettingKind.Bool, false) { Order = 30 },
 
+        // 大文字・小文字の変換の方法 (EDIT-39 の仕様 1。既定は ASCII の英字だけ)。
+        new("edit.caseConversion", SettingCategories.Editing, SettingKind.Choice, "ascii") { Options = ["ascii", "encoding"], Order = 40 },
+
         // 入力・削除・Undo・貼り付け・コピーの設定 (EDIT-10〜EDIT-13、EDIT-19、EDIT-22、EDIT-23)。キーと解釈は View.EditingSettings。
         new(View.EditingSettings.DefaultInputModeKey, SettingCategories.Editing, SettingKind.Choice, "overwrite") { Options = ["overwrite", "insert"], Order = 1 },
         new(View.EditingSettings.OverwriteSelectionTypingKey, SettingCategories.Editing, SettingKind.Choice, "overwriteFromStart") { Options = ["overwriteFromStart", "zeroFirst"], Order = 2 },
@@ -144,6 +147,9 @@ public static class BuiltInSettings
         new("hash.autoRecompute", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 100, ShowInPage = false },
         new("hash.algorithms", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 101, ShowInPage = false },
         new("hash.sets", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 102, ShowInPage = false },
+
+        // カスタム CRC (ANA-20 の仕様 5)。CRC カタログの項目名の JSON。
+        new("hash.customCrc", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 103, ShowInPage = false },
 
         // ---- 言語 ----
         new("ui.language", SettingCategories.Language, SettingKind.Choice, "system") { Options = Languages, RequiresRestart = true, Order = 10 },

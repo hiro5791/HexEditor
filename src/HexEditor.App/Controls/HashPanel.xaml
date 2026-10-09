@@ -233,7 +233,7 @@
                             </DropDownButton.Flyout>
                         </DropDownButton>
                     </Grid>
-                    <ItemsControl IsTabStop="False" ItemsSource="{x:Bind ViewModel.Groups}">
+                    <ItemsControl IsTabStop="False" ItemsSource="{x:Bind ViewModel.Groups, Mode=OneWay}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="vm:HashAlgorithmGroupViewModel">
                                 <Expander
