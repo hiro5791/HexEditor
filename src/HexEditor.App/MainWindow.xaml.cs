@@ -92,8 +92,17 @@ public sealed partial class MainWindow : Window
     /// <summary>テーマ・背景素材を反映する (UI-26、UI-27)。</summary>
     public void ApplyAppearance()
     {
+#if HEX_TEST_HOOKS
+        ElementTheme before = Root.ActualTheme;
+#endif
         Appearance.Apply(this, Root, App.Settings);
         UpdateThemeMenu();
+#if HEX_TEST_HOOKS
+        if (Root.ActualTheme != before)
+        {
+            _themeChangedAtMs = TestClock.NowMs;
+        }
+#endif
     }
 
     /// <summary>設定ファイルを読んだ結果を知らせる (UI-23 の「エラー」と仕様 6)。</summary>

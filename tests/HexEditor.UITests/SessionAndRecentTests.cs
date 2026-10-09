@@ -166,17 +166,17 @@ public sealed class SessionAndRecentTests
         await File.WriteAllTextAsync(Path.Combine(profile, "recent.json"), recent.ToJsonString());
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
 
-        // 1. サブメニューの項目がすぐに用意できる (存在の確認を待たない)。
-        var watch = System.Diagnostics.Stopwatch.StartNew();
+        // 1. サブメニューの項目がすぐに用意できる (存在の確認を待たない)。時間はアプリの中で測る (命令の往復の時間を含めない)。
         JsonObject state = await FilesStateAsync(app);
-        Assert.True(watch.ElapsedMilliseconds <= 500, $"{watch.ElapsedMilliseconds} ms");
+        double menuMs = state["elapsedMs"]!.GetValue<double>();
+        Assert.True(menuMs <= 500, $"{menuMs:F0} ms");
         Assert.Equal(2, state["recentMenu"]!.AsArray().Count);
 
-        // 2. 「すべて表示…」の一覧が 500 ms 以内に表示される。
-        watch.Restart();
+        // 2. 「すべて表示…」の一覧が 500 ms 以内に表示される (選んでから一覧の Loaded まで。アプリの中で測る)。
         await app.CommandAsync("Command_ShowAllRecent");
-        await app.WaitUntilAsync(async () => await app.IsShownAsync("RecentAll_List"), TimeSpan.FromSeconds(5), "the list");
-        Assert.True(watch.ElapsedMilliseconds <= 500, $"{watch.ElapsedMilliseconds} ms");
+        await app.WaitUntilAsync(async () => await app.IsShownAsync("RecentAll_List"), UiTest.Scaled(TimeSpan.FromSeconds(5)), "the list");
+        double listMs = (await FilesStateAsync(app))["recentAllShownMs"]!.GetValue<double>();
+        Assert.True(listMs <= 500, $"{listMs:F0} ms");
 
         // 3. remote.bin は薄く表示されず、「見つかりません」も付かない (ネットワークのパスは確かめない)。
         await Task.Delay(1000);

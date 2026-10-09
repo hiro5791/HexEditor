@@ -204,8 +204,10 @@ public sealed partial class MainWindow
                     return new JsonObject { ["valid"] = false };
                 }
 
+                // 変更を始めた時刻 (TestClock)。反映までの時間をアプリの中で測るため (往復の時間を含めない)。
+                double at = TestClock.NowMs;
                 ChangeSetting(def, value);
-                return new JsonObject { ["valid"] = true };
+                return new JsonObject { ["valid"] = true, ["atMs"] = at };
             }
 
             case "settingRaw":

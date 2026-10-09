@@ -160,6 +160,10 @@ public sealed partial class MainWindow
     /// </summary>
     private async void ShowAllRecent_Click(object sender, RoutedEventArgs e)
     {
+#if HEX_TEST_HOOKS
+        double started = TestClock.NowMs;
+        _recentAllShownMs = null;
+#endif
         var search = new TextBox { PlaceholderText = Loc.Get("Recent_Search") };
         AutomationProperties.SetAutomationId(search, "RecentAll_Search");
         AutomationProperties.SetName(search, Loc.Get("Recent_Search"));
@@ -171,6 +175,9 @@ public sealed partial class MainWindow
             ItemTemplate = (DataTemplate)Root.Resources["RecentAllItemTemplate"],
         };
         AutomationProperties.SetAutomationId(list, "RecentAll_List");
+#if HEX_TEST_HOOKS
+        list.Loaded += (_, _) => _recentAllShownMs ??= TestClock.NowMs - started;
+#endif
         AutomationProperties.SetName(list, Loc.Get("Recent_AllTitle"));
         var body = new StackPanel { Spacing = 12, MinWidth = 560 };
         body.Children.Add(search);

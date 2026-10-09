@@ -63,12 +63,15 @@ public sealed class SettingsUiTests
         await WindowManagementTests.WaitForWindowsAsync(app, 2);
         await app.SendAsync("settingsPage", new JsonObject { ["window"] = 0, ["category"] = "appearance" });
 
-        // 1〜2. テーマを「ダーク」にすると、1 秒以内に両方のウィンドウがダークテーマになる。
-        var sw = Stopwatch.StartNew();
-        Assert.True((await app.SendAsync("settingSet", new JsonObject { ["window"] = 0, ["key"] = "ui.theme", ["value"] = "dark" }))["valid"]!.GetValue<bool>());
+        // 1〜2. テーマを「ダーク」にすると、1 秒以内に両方のウィンドウがダークテーマになる。時間はアプリの中で測る (変更を始めた時刻から
+        // 各ウィンドウのテーマが変わった時刻まで)。命令の往復の時間は含めず、状態の確認は倍率を掛けた上限まで待つ。
+        JsonObject set = await app.SendAsync("settingSet", new JsonObject { ["window"] = 0, ["key"] = "ui.theme", ["value"] = "dark" });
+        Assert.True(set["valid"]!.GetValue<bool>());
         await app.WaitUntilAsync(async () => (await WindowManagementTests.WindowsAsync(app)).All(w => w!["theme"]!.GetValue<string>() == "Dark"),
-            TimeSpan.FromSeconds(1), "the dark theme in both windows");
-        Assert.True(sw.ElapsedMilliseconds < 1000);
+            UiTest.Scaled(TimeSpan.FromSeconds(5)), "the dark theme in both windows");
+        double at = set["atMs"]!.GetValue<double>();
+        double[] took = [.. (await WindowManagementTests.WindowsAsync(app)).Select(w => w!["themeChangedAtMs"]!.GetValue<double>() - at)];
+        Assert.True(took.All(t => t < 1000), $"{string.Join(", ", took.Select(t => $"{t:F0} ms"))}");
         Assert.Equal("settings", (await app.SendAsync("settingsPage", new JsonObject { ["window"] = 0 }))["active"]!.GetValue<string>());
     });
 
@@ -132,10 +135,13 @@ public sealed class SettingsUiTests
         string profile = CommandTests.Profile(ctx, """{ "$schemaVersion": 1, "ui.theme": "light" }""");
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile });
         Assert.Equal("Light", (await app.StateAsync())["actualTheme"]!.GetValue<string>());
-        var sw = Stopwatch.StartNew();
+        // 書き込んだ時刻からテーマが変わった時刻 (アプリの中で記録) まで。どちらも Stopwatch (QPC) の時刻で、プロセスをまたいで比べられる。
+        double written = Stopwatch.GetTimestamp() * 1000.0 / Stopwatch.Frequency;
         await File.WriteAllTextAsync(Path.Combine(profile, "settings.json"), """{ "$schemaVersion": 1, "ui.theme": "dark" }""");
-        await app.WaitUntilAsync(async () => (await app.StateAsync())["actualTheme"]!.GetValue<string>() == "Dark", TimeSpan.FromSeconds(2), "the dark theme");
-        Assert.True(sw.ElapsedMilliseconds < 1000, $"{sw.ElapsedMilliseconds} ms");
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["actualTheme"]!.GetValue<string>() == "Dark",
+            UiTest.Scaled(TimeSpan.FromSeconds(5)), "the dark theme");
+        double took = (await WindowManagementTests.WindowsAsync(app))[0]!["themeChangedAtMs"]!.GetValue<double>() - written;
+        Assert.True(took < 1000, $"{took:F0} ms");
     });
 
     [Fact]

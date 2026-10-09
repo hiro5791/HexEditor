@@ -193,7 +193,11 @@ public sealed partial class MainWindow
             ["selectedIndex"] = Vm.Selected is { } s ? Vm.Documents.IndexOf(s) : -1,
             ["startPageVisible"] = StartPage.Visibility == Microsoft.UI.Xaml.Visibility.Visible,
             ["theme"] = Root.ActualTheme.ToString(),
+            ["themeChangedAtMs"] = _themeChangedAtMs,
         };
     }
+
+    /// <summary>このウィンドウのテーマが最後に変わった時刻 (<see cref="TestClock.NowMs"/>。テスト用)。</summary>
+    private double? _themeChangedAtMs;
 }
 #endif

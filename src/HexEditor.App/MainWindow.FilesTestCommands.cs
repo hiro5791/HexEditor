@@ -41,8 +41,12 @@ public sealed partial class MainWindow
         };
     }
 
+    /// <summary>「すべて表示…」を選んでから一覧が表示される (Loaded) までの時間 (ミリ秒。テスト用)。</summary>
+    private double? _recentAllShownMs;
+
     private JsonObject TestFilesState()
     {
+        double started = TestClock.NowMs;
         var recent = new JsonArray();
         foreach (RecentItem item in Vm.Recent.Items)
         {
@@ -97,6 +101,9 @@ public sealed partial class MainWindow
             ["theme"] = App.Settings.GetString(Appearance.ThemeKey, Appearance.ThemeDefault),
             ["language"] = App.Settings.GetString(LanguageKey, "system"),
             ["preset"] = HexEditor.App.Commands.CommandService.Keys.Preset,
+            // 状態を集める時間 (最近使ったファイルのサブメニューを含む。アプリの中で測る) と、「すべて表示…」の一覧が表示されるまでの時間。
+            ["elapsedMs"] = TestClock.NowMs - started,
+            ["recentAllShownMs"] = _recentAllShownMs,
         };
     }
 
