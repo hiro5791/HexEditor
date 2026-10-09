@@ -402,11 +402,21 @@ public sealed class SearchResultsTests
     // ---- 補助 ----
 
     /// <summary>検索バーを開き、種類と検索語を入れる。</summary>
-    internal static async Task OpenFindAsync(AppSession app, int kind, string query, bool replace = false, string? encoding = null)
+    /// <summary>
+    /// 検索バーを開き、種類と検索の文字列を入れる。<paramref name="incremental"/> が false なら「入力しながら検索」(FIND-27) を切ってから
+    /// 入れる (入力の 150 ms 後のインクリメンタルサーチが最初の一致を選ぶと、続く Enter は次の一致に進む。どちらが先になるかは PC の
+    /// 速さで変わるので、Enter の動作を確かめるテストでは切る)。
+    /// </summary>
+    internal static async Task OpenFindAsync(AppSession app, int kind, string query, bool replace = false, string? encoding = null, bool incremental = true)
     {
         await app.KeyAsync(replace ? "H" : "F", ctrl: true);
         await app.IdleAsync();
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = kind });
+        if (!incremental)
+        {
+            await app.SendAsync("setChecked", new JsonObject { ["id"] = "Find_Incremental", ["value"] = false });
+        }
+
         if (encoding is not null)
         {
             await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = encoding });

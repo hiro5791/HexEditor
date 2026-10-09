@@ -30,6 +30,7 @@ public sealed class ReplaceAndHistoryTests
 
         // 3. `12 34 56 78` → `87 65 43 21`。Enter で最初の一致 (0x0)。
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 0 });
+        await app.SendAsync("setChecked", new JsonObject { ["id"] = "Find_Incremental", ["value"] = false });
         await app.UiaSetValueAsync("Find_Query", "12 34 56 78");
         await app.UiaSetValueAsync("Find_Replace", "87 65 43 21");
         await EnterAsync(app, 0);
@@ -308,7 +309,7 @@ public sealed class ReplaceAndHistoryTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
 
         // 1. Hex `10 11` で Enter。
-        await OpenFindAsync(app, 0, "10 11");
+        await OpenFindAsync(app, 0, "10 11", incremental: false);
         await EnterAsync(app, 0x10);
 
         // 2. テキスト (UTF-16LE)、大文字と小文字を区別する、`ab` で Enter。
@@ -351,7 +352,7 @@ public sealed class ReplaceAndHistoryTests
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [data] });
 
         // 1. `10 11`、`20 21`、`30 31` を順に検索する。
-        await OpenFindAsync(app, 0, "10 11");
+        await OpenFindAsync(app, 0, "10 11", incremental: false);
         await EnterAsync(app, 0x10);
         await app.UiaSetValueAsync("Find_Query", "20 21");
         await EnterAsync(app, 0x20);
@@ -400,7 +401,7 @@ public sealed class ReplaceAndHistoryTests
     public Task Removing_and_clearing_the_history() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
-        await OpenFindAsync(app, 0, "10 11");
+        await OpenFindAsync(app, 0, "10 11", incremental: false);
         await EnterAsync(app, 0x10);
         await app.UiaSetValueAsync("Find_Query", "20 21");
         await EnterAsync(app, 0x20);
@@ -428,7 +429,7 @@ public sealed class ReplaceAndHistoryTests
         AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
 
         // 1〜2. `10 11` を検索しても、一覧は空。
-        await OpenFindAsync(app, 0, "10 11");
+        await OpenFindAsync(app, 0, "10 11", incremental: false);
         await EnterAsync(app, 0x10);
         Assert.Empty((await FindBarAsync(app))["history"]!.AsArray());
 
@@ -451,14 +452,17 @@ public sealed class ReplaceAndHistoryTests
 
     private static async Task OpenReplaceAsync(AppSession app, string find, string? replace)
     {
-        await OpenFindAsync(app, 0, find, replace: true);
+        await OpenFindAsync(app, 0, find, replace: true, incremental: false);
         if (replace is not null)
         {
             await app.UiaSetValueAsync("Find_Replace", replace);
         }
     }
 
-    /// <summary>検索欄で Enter を押し、<paramref name="expected"/> が選ばれるまで待つ。</summary>
+    /// <summary>
+    /// 検索欄で Enter を押し、<paramref name="expected"/> が選ばれるまで待つ。検索バーは「入力しながら検索」を切って開いておく
+    /// (<see cref="SearchResultsTests.OpenFindAsync"/> の incremental)。
+    /// </summary>
     private static async Task EnterAsync(AppSession app, long expected)
     {
         await app.SendAsync("findKey", new JsonObject { ["key"] = "Enter" });

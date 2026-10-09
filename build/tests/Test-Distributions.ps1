@@ -88,7 +88,7 @@ if ($Msix) {
 # Removes the data of a distribution (only while it is not running). Never the Development data folder.
 function Reset-Data($Target) {
     $folder = if ($Target.Name -eq 'Msix') { $Target.InstallRoot } else { Split-Path -Parent $Target.Exe }
-    Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith($folder, [System.StringComparison]::OrdinalIgnoreCase) } |
+    Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $path = $_.Path; $path -and $folder -and $path.StartsWith($folder, [System.StringComparison]::OrdinalIgnoreCase) } |
         Stop-Process -Force -ErrorAction SilentlyContinue
     Start-Sleep -Milliseconds 500
     if ($Target.Name -eq 'Portable' -or $ci) {
@@ -140,10 +140,11 @@ function Start-App($Target, [string[]]$Arguments = @()) {
 }
 
 # Stops the processes of this run that are still there (so that no window is left behind after a failure).
+# The Path of a process is read once: it is looked up again on each use and is $null after the process exited.
 function Stop-LeftOvers {
     foreach ($t in $targets) {
         $folder = if ($t.Name -eq 'Msix') { $t.InstallRoot } else { Split-Path -Parent $t.Exe }
-        Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith($folder, [System.StringComparison]::OrdinalIgnoreCase) } |
+        Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $path = $_.Path; $path -and $folder -and $path.StartsWith($folder, [System.StringComparison]::OrdinalIgnoreCase) } |
             Stop-Process -Force -ErrorAction SilentlyContinue
     }
 }

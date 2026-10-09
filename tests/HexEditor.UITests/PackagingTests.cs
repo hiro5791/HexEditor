@@ -586,6 +586,10 @@ public sealed class PackagingTests
 [Trait(UiTest.Category, "Nightly")]
 public sealed class PackagingNightlyTests
 {
+    /// <summary>台本を繰り返す時間 (環境変数 HEXEDITOR_OFFLINE_SCRIPT_MINUTES。既定 60 分)。テストの上限はこれに 15 分を足す。</summary>
+    private static TimeSpan ScriptMinutes =>
+        TimeSpan.FromMinutes(double.TryParse(Environment.GetEnvironmentVariable("HEXEDITOR_OFFLINE_SCRIPT_MINUTES"), out double m) ? m : 60);
+
     /// <summary>
     /// TC-UI-58-02: オフラインモードで台本を繰り返しても、外部への通信がない。台本の長さは HEXEDITOR_OFFLINE_SCRIPT_MINUTES (既定 60 分)。
     /// 通信の確認は、アプリの通信の記録 (すべての通信の入口) と、プロセスの TCP の接続の一覧 (GetExtendedTcpTable、1 秒ごと) で行う。
@@ -636,5 +640,5 @@ public sealed class PackagingNightlyTests
         await monitor;
         Assert.Empty((await app.SendAsync("networkLog"))["requests"]!.AsArray());
         Assert.True(external.Count == 0, "external connections: " + string.Join(", ", external.Distinct()));
-    });
+    }, ScriptMinutes + TimeSpan.FromMinutes(15));
 }

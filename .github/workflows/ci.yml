@@ -300,7 +300,8 @@ jobs:
   ui-nightly:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
-    timeout-minutes: 120
+    # 1 時間のテストが 2 つ (TC-UI-57-01、TC-UI-58-02) と、その他の長いテスト (合わせて約 20 分) を順に動かす。
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
 
