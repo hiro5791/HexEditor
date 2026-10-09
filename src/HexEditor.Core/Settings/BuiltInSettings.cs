@@ -109,6 +109,28 @@ public static class BuiltInSettings
         new(View.EditingSettings.HexUpperCaseKey, SettingCategories.Editing, SettingKind.Bool, true) { Order = 42 },
         new(View.EditingSettings.HexBytesPerLineKey, SettingCategories.Editing, SettingKind.Int, 0) { Min = 0, Max = 1024, Order = 43 },
 
+        // 選択 (EDIT-05〜EDIT-07、EDIT-17、EDIT-18) とユーザークリップボード (EDIT-28)。
+        new(View.EditingSettings.MaxSelectionElementsKey, SettingCategories.Editing, SettingKind.Int, View.EditorState.DefaultMaxSelectionElements)
+        {
+            Min = 1_000,
+            Max = 10_000_000,
+            Order = 50,
+        },
+        new(View.EditingSettings.MaxRectangleRowsKey, SettingCategories.Editing, SettingKind.Int, View.EditorState.DefaultMaxRectangleRows)
+        {
+            Min = 1,
+            Max = 10_000_000,
+            Order = 51,
+        },
+        new(View.EditingSettings.SelectionShiftAmountKey, SettingCategories.Editing, SettingKind.Choice, "selectionLength")
+        {
+            Options = ["selectionLength", "lastAmount"],
+            Order = 52,
+        },
+        new(View.EditingSettings.SelectionDragDropKey, SettingCategories.Editing, SettingKind.Bool, true) { Order = 53 },
+        new(View.EditingSettings.ClipboardHistoryCountKey, SettingCategories.Editing, SettingKind.Int, 20) { Min = 0, Max = 100, Order = 54 },
+        new(View.EditingSettings.UserClipboardPersistKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 55 },
+
         // ---- 検索 (FIND-02、FIND-20、FIND-28) ----
         new("search.maxMatchLength", SettingCategories.Search, SettingKind.Int, Search.SearchPattern.DefaultMaxMatchLength) { Min = 1, Max = Search.SearchPattern.MaxMaxMatchLength, Order = 10 },
         new("search.findAll.limit", SettingCategories.Search, SettingKind.Int, 1_000_000) { Min = 1_000, Max = 100_000_000, Order = 20 },

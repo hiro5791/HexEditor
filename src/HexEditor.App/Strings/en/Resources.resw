@@ -2765,4 +2765,18 @@ Details were written to:
   <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Bytes per line in copied hex</value></data>
   <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Inserts a line break after this many bytes. 0 doesn't add line breaks.</value></data>
   <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>The selection ({0}) is too large to give to other apps. You can paste it inside HexEditor.</value></data>
+  <data name="Set_edit_multiSelection_maxElements" xml:space="preserve"><value>Maximum ranges in a multi-selection</value></data>
+  <data name="SetDesc_edit_multiSelection_maxElements" xml:space="preserve"><value>Adding ranges beyond this number is refused. 1,000 to 10,000,000.</value></data>
+  <data name="Set_edit_rectangle_maxRows" xml:space="preserve"><value>Maximum rows for rectangle edits that change the length</value></data>
+  <data name="SetDesc_edit_rectangle_maxRows" xml:space="preserve"><value>Deleting, inserting and inserting paste on a rectangle with more rows is refused. Overwriting is always allowed. Up to 10,000,000.</value></data>
+  <data name="Set_edit_selectionShift_amount" xml:space="preserve"><value>Amount for "Shift selection forward / back"</value></data>
+  <data name="SetDesc_edit_selectionShift_amount" xml:space="preserve"><value>The selection length, or the amount you last entered in "Shift selection by N bytes".</value></data>
+  <data name="SetOpt_edit_selectionShift_amount_selectionLength" xml:space="preserve"><value>Selection length</value></data>
+  <data name="SetOpt_edit_selectionShift_amount_lastAmount" xml:space="preserve"><value>Last amount entered</value></data>
+  <data name="Set_edit_selectionDragDrop" xml:space="preserve"><value>Drag and drop the selection</value></data>
+  <data name="SetDesc_edit_selectionDragDrop" xml:space="preserve"><value>Drag the selection to move it. Hold Ctrl to copy.</value></data>
+  <data name="Set_clipboard_history_count" xml:space="preserve"><value>Clipboard history items</value></data>
+  <data name="SetDesc_clipboard_history_count" xml:space="preserve"><value>Number of recent copies kept in the Clipboard panel. 0 keeps no history.</value></data>
+  <data name="Set_clipboard_user_persist" xml:space="preserve"><value>Keep user clipboards after exit</value></data>
+  <data name="SetDesc_clipboard_user_persist" xml:space="preserve"><value>Saves user clipboards up to 16 MiB each in the settings folder. Clipboard history isn't saved.</value></data>
 </root>
