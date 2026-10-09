@@ -16,7 +16,9 @@ public sealed class MemoryTests
     [Fact]
     public void CacheLimitIsSharedByAllDocuments()
     {
-        var memory = new EngineMemory();
+        // アプリ全体の上限を 48 MiB にして (1 つのドキュメントの割り当ては約 76 ブロック。下限は 4 MiB)、各ドキュメントで割り当てより多い
+        // 100 ブロックを読む (既定の 256 MiB で同じことを確かめると、1 つあたり 1,000 ブロックを読むことになり時間がかかる)。
+        var memory = new EngineMemory { CacheLimit = 48L * 1024 * 1024 };
         var docs = Enumerable.Range(0, 10).Select(_ => Big()).ToList();
         try
         {
@@ -25,21 +27,21 @@ public sealed class MemoryTests
                 memory.Register(doc);
             }
 
-            // 10 個のドキュメントで、キャッシュの上限の合計がアプリ全体の上限 (256 MiB) を超えない (ENG-08 の仕様 1)。
-            Assert.True(docs.Sum(d => d.Cache.CapacityBytes) <= EngineMemory.DefaultCacheLimit);
+            // 10 個のドキュメントで、キャッシュの上限の合計がアプリ全体の上限を超えない (ENG-08 の仕様 1)。
+            Assert.True(docs.Sum(d => d.Cache.CapacityBytes) <= memory.CacheLimit);
             foreach (Document doc in docs)
             {
-                for (long block = 0; block < 1000; block++)
+                for (long block = 0; block < 100; block++)
                 {
                     DocumentAssert.ReadForDisplayWhenLoaded(doc.Current, block * doc.Cache.BlockSize, 16);
                 }
             }
 
-            Assert.True(memory.CacheBytes <= EngineMemory.DefaultCacheLimit, $"{memory.CacheBytes}");
+            Assert.True(memory.CacheBytes <= memory.CacheLimit, $"{memory.CacheBytes}");
 
             // 閉じるとほかのドキュメントの割り当てが増える。
             memory.Unregister(docs[0]);
-            Assert.Equal(EngineMemory.DefaultCacheLimit / 9, docs[1].Cache.CapacityBytes);
+            Assert.Equal(memory.CacheLimit / 9, docs[1].Cache.CapacityBytes);
         }
         finally
         {
