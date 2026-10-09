@@ -32,6 +32,29 @@ public static class HashValueFormatter
         };
     }
 
+    /// <summary>
+    /// 数値の値 (ビッグエンディアンのバイト列、8 バイト以下) を、値のビット数の符号付き整数とみなした 10 進の文字列にする
+    /// (ANA-19 の仕様 1 の「符号ありの場合、結果は符号付き 10 進でも表示する」)。例: <c>FF FE</c> は <c>-2</c>。
+    /// </summary>
+    public static string FormatSignedDecimal(ReadOnlySpan<byte> value)
+    {
+        if (value.Length is 0 or > 8)
+        {
+            throw new ArgumentException("8 バイト以下の値を指定してください。", nameof(value));
+        }
+
+        return ToSigned(HashBytes.ToNumber(value), value.Length * 8).ToString(CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>下位 <paramref name="bits"/> ビットを符号付き整数とみなす (2 の補数)。</summary>
+    public static long ToSigned(ulong value, int bits)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(bits, 1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(bits, 64);
+        int shift = 64 - bits;
+        return unchecked((long)(value << shift) >> shift);
+    }
+
     /// <summary>表示・書き込みに使うバイト列 (数値の値で LE を選んだときは逆順)。</summary>
     public static byte[] Arrange(ReadOnlySpan<byte> value, bool numeric, bool littleEndian)
     {
