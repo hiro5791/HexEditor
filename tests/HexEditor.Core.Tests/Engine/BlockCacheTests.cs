@@ -9,6 +9,40 @@ namespace HexEditor.Core.Tests.Engine;
 /// <summary>ENG-06 ブロックキャッシュと非同期読み込み、ENG-08 メモリ使用量の管理。</summary>
 public sealed class BlockCacheTests
 {
+    /// <summary>読み込みのたびに例外を投げるデータソース (読み込みの処理が例外で止まらないことの確認)。</summary>
+    private sealed class ThrowingSource(long length) : ByteSourceBase
+    {
+        public int Reads;
+
+        public override string DisplayName => "throwing";
+
+        public override string Identity => "throwing";
+
+        public override long Length { get; } = length;
+
+        public override SourceCapabilities Capabilities => SourceCapabilities.None;
+
+        public override ReadResult Read(long offset, Span<byte> buffer)
+        {
+            Interlocked.Increment(ref Reads);
+            throw new IOException("The device is not ready.");
+        }
+    }
+
+    [Fact]
+    public void Exceptions_while_loading_do_not_stop_later_loads()
+    {
+        // 読み込みが例外になっても、そのブロックは読めない範囲として終わり、ワーカーが止まらない (止まると以後の読み込みが始まらず、
+        // 表示が「読み込み中」のままになる)。ワーカーの数 (4) より多くのブロックを読む。
+        var source = new ThrowingSource(64L * BlockCache.DefaultBlockSize);
+        using var doc = new Document(source, Options());
+        for (int block = 0; block < 16; block++)
+        {
+            (_, ByteState[] states) = ReadForDisplayWhenLoaded(doc.Current, (long)block * BlockCache.DefaultBlockSize, 16, timeoutMs: 5_000);
+            Assert.All(states, s => Assert.Equal(ByteState.Unreadable, s));
+        }
+    }
+
     [Fact]
     [Trait(TC, "TC-ENG-06-04")]
     public void OnlyUnreadableSectorBecomesUnreadable()

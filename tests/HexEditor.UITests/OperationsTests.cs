@@ -293,14 +293,19 @@ public sealed partial class OperationsTests
         await Task.Delay(4000);
         await app.UiaInvokeAsync("Status_Operations");
         await app.WaitForAsync("Operations_Details");
-        await Task.Delay(500);
-        string text = AppSession.NameOf(app.Find("Operations_Details")!);
         NumberFormatInfo format = new CultureInfo(culture).NumberFormat;
 
-        // 処理速度: 小数 2 桁のサイズ (StatusFormat.ShortSize と同じ書式)。小数点・数字は地域設定のもの。
+        // 処理速度: 小数 2 桁のサイズ (StatusFormat.ShortSize と同じ書式)。小数点・数字は地域設定のもの。一覧は 250 ms ごとに更新される。
         string digits = string.Join(string.Empty, format.NativeDigits);
-        Match speed = Regex.Match(text, $"([{Regex.Escape(digits)}0-9{Regex.Escape(format.NumberGroupSeparator)}]+){Regex.Escape(format.NumberDecimalSeparator)}([0-9{Regex.Escape(digits)}]{{2}}) [KMGT]B");
-        Assert.True(speed.Success, $"no speed in the regional format ({culture}): {text}");
+        string text = string.Empty;
+        Match speed = Match.Empty;
+        await app.EventuallyAsync(() =>
+        {
+            text = AppSession.NameOf(app.Find("Operations_Details")!);
+            speed = Regex.Match(text, $"([{Regex.Escape(digits)}0-9{Regex.Escape(format.NumberGroupSeparator)}]+){Regex.Escape(format.NumberDecimalSeparator)}([0-9{Regex.Escape(digits)}]{{2}}) [KMGT]B");
+            Assert.True(speed.Success, $"no speed in the regional format ({culture}): {text}");
+            return Task.CompletedTask;
+        });
         double value = double.Parse(speed.Value[..^3], NumberStyles.Number, format);
         Assert.Equal(value.ToString("N2", format), speed.Value[..^3]);
 

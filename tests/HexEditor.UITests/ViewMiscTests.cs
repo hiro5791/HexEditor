@@ -380,11 +380,9 @@ public sealed class ViewMiscTests
         await app.IdleAsync();
         int before = (await app.RenderAsync())["bytesPerRow"]!.GetValue<int>();
         await ZoomAsync(app, 1.331);
-        await Task.Delay(300);
-        Assert.True((await app.RenderAsync())["bytesPerRow"]!.GetValue<int>() < before);
+        await app.EventuallyAsync(async () => Assert.True((await app.RenderAsync())["bytesPerRow"]!.GetValue<int>() < before));
         await ZoomAsync(app, 1.0);
-        await Task.Delay(300);
-        Assert.Equal(before, (await app.RenderAsync())["bytesPerRow"]!.GetValue<int>());
+        await app.EventuallyAsync(async () => Assert.Equal(before, (await app.RenderAsync())["bytesPerRow"]!.GetValue<int>()));
     });
 
     // ---- UI-28 ----

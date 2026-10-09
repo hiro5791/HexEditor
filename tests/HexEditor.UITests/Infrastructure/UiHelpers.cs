@@ -9,6 +9,29 @@ namespace HexEditor.UITests.Infrastructure;
 /// </summary>
 public static class UiHelpers
 {
+    /// <summary>
+    /// 確かめる内容 (<paramref name="assertion"/>) が成り立つまで繰り返す (既定 10 秒。待ちの倍率を掛ける)。決まった時間だけ待ってから
+    /// 確かめると、遅い PC では反映の前に確かめてしまう。期限を過ぎたら最後の失敗をそのまま投げる。「何も起きない」ことを確かめる
+    /// (決まった時間の後も状態が変わらない) 場面には使わない。
+    /// </summary>
+    public static async Task EventuallyAsync(this AppSession app, Func<Task> assertion, TimeSpan? timeout = null)
+    {
+        var deadline = DateTime.UtcNow + UiTest.Scaled(timeout ?? TimeSpan.FromSeconds(10));
+        while (true)
+        {
+            try
+            {
+                await assertion();
+                return;
+            }
+            catch (Exception ex) when ((ex is Xunit.Sdk.XunitException or InvalidOperationException or NullReferenceException or KeyNotFoundException)
+                && DateTime.UtcNow < deadline && !app.Process.HasExited)
+            {
+                await Task.Delay(100);
+            }
+        }
+    }
+
     /// <summary>AutomationId の要素の状態 (アプリの中で探す。ポップアップの中も探す)。</summary>
     public static Task<JsonObject> ElementAsync(this AppSession app, string id) =>
         app.SendAsync("element", new JsonObject { ["id"] = id });
@@ -49,6 +72,19 @@ public static class UiHelpers
     {
         JsonObject shell = await app.SendAsync("shellState");
         return (Math.Min(width, shell["monitorWidth"]!.GetValue<int>() - 40), Math.Min(height, shell["monitorHeight"]!.GetValue<int>() - 40));
+    }
+
+    /// <summary>
+    /// 最後にキャンセルされた処理 (名前に <paramref name="name"/> を含む) の、キャンセルの要求から止まるまでの時間 (アプリの中で計った ms)。
+    /// ボタンを押す UI オートメーションの呼び出しと、状態を読む命令の往復を含まない。
+    /// </summary>
+    public static async Task<double> CancelToEndMsAsync(this AppSession app, string name)
+    {
+        JsonObject? op = null;
+        await app.WaitUntilAsync(async () => (op = (await app.StateAsync())["operations"]!.AsArray().Select(o => o!.AsObject())
+            .FirstOrDefault(o => o["state"]!.GetValue<string>() == "Cancelled" && o["name"]!.GetValue<string>().Contains(name, StringComparison.Ordinal)
+                && o["cancelToEndMs"] is not null)) is not null, TimeSpan.FromSeconds(10), $"the cancelled operation '{name}'");
+        return op!["cancelToEndMs"]!.GetValue<double>();
     }
 
     /// <summary>テスト対象のアプリの配布形態 (Development、Portable、Installer、Msix)。</summary>
@@ -113,8 +149,21 @@ public static class UiHelpers
     }
 
     /// <summary>タブの数が <paramref name="count"/> になるまで待つ。</summary>
-    public static Task WaitForTabsAsync(this AppSession app, int count) =>
-        app.WaitUntilAsync(async () => (await app.TabNamesAsync()).Count == count, TimeSpan.FromSeconds(30), $"{count} tabs");
+    public static async Task WaitForTabsAsync(this AppSession app, int count)
+    {
+        IReadOnlyList<string> names = [];
+        try
+        {
+            await app.WaitUntilAsync(async () => (names = await app.TabNamesAsync()).Count == count, TimeSpan.FromSeconds(30), $"{count} tabs");
+        }
+        catch (TimeoutException ex)
+        {
+            // 開いているタブと、閉じるのを止めたダイアログ・通知を失敗の文に入れる。
+            string dialogs = string.Join(" | ", app.Window.FindAllDescendants(cf => cf.ByClassName("ContentDialog"))
+                .Select(AppSession.AllText).Select(t => t.Length > 300 ? t[..300] : t));
+            throw new TimeoutException($"{ex.Message} Tabs: [{string.Join(", ", names)}]. Notices: [{app.NotificationsText()}]. Dialogs: [{dialogs}]", ex);
+        }
+    }
 
     /// <summary>
     /// ダイアログ (ContentDialog) のボタンを、表示名で押す (UI オートメーションの Invoke)。<paramref name="idle"/> が false なら

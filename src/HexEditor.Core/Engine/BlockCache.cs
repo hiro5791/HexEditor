@@ -272,6 +272,14 @@ public sealed class BlockCache : IDisposable
             {
                 block = await LoadAsync(index).ConfigureAwait(false);
             }
+            catch (Exception ex) when (ex is not OutOfMemoryException)
+            {
+                // 読み込みの例外でワーカーが止まると、_running が減らずに以後の読み込みが始まらず、表示が「読み込み中」のままになる。
+                // そのブロックは読めなかったものとしてキャッシュに入れる (ENG-06 の仕様 8。範囲が分かるので表示で示せる)。
+                long offset = index * BlockSize;
+                int length = (int)Math.Max(0, Math.Min(BlockSize, _source.Length - offset));
+                block = new CachedBlock(index, RentBlock(), length, [new UnreadableRange(offset, length, UnreadableReason.IoError, ex.HResult)]);
+            }
             finally
             {
                 lock (_lock)

@@ -27,12 +27,21 @@ public sealed class HashPanelTests
     private static async Task<JsonArray> WaitForRowsAsync(AppSession app, int count)
     {
         JsonArray rows = [];
-        await app.WaitUntilAsync(async () =>
+        JsonObject? last = null;
+        try
         {
-            JsonObject state = await HashAsync(app);
-            rows = state["rows"]!.AsArray();
-            return !state["computing"]!.GetValue<bool>() && rows.Count == count;
-        }, TimeSpan.FromSeconds(30), $"{count} hash results");
+            await app.WaitUntilAsync(async () =>
+            {
+                JsonObject state = last = await HashAsync(app);
+                rows = state["rows"]!.AsArray();
+                return !state["computing"]!.GetValue<bool>() && rows.Count == count;
+            }, TimeSpan.FromSeconds(30), $"{count} hash results");
+        }
+        catch (TimeoutException ex)
+        {
+            // 計算の状態 (計算中か、表の行、状態の文言) を失敗の文に入れる。
+            throw new TimeoutException($"{ex.Message} Last state: {last?.ToJsonString()}", ex);
+        }
         return rows;
     }
 
@@ -179,7 +188,10 @@ public sealed class HashPanelTests
         cancel.Patterns.Invoke.Pattern.Invoke();
         await app.WaitUntilAsync(async () => !(await HashAsync(app))["computing"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the cancellation");
         watch.Stop();
-        Assert.True(watch.ElapsedMilliseconds <= 1000, $"stopped {watch.ElapsedMilliseconds} ms after the cancel button");
+
+        // キャンセルの要求から止まるまでを、アプリの中で計った時間で判定する (ボタンの呼び出しと状態を読む往復は含めない)。
+        double stopped = await app.CancelToEndMsAsync("Hash");
+        Assert.True(stopped <= 1000, $"stopped {stopped:F0} ms after the cancel request ({watch.ElapsedMilliseconds} ms after the button with the round trips)");
         JsonObject state = await HashAsync(app);
         Assert.Empty(state["rows"]!.AsArray());
         Assert.Equal("The calculation was canceled.", state["status"]!.GetValue<string>());

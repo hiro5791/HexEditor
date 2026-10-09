@@ -91,6 +91,10 @@ public sealed class PrivacyTests
             await app.WaitForTabsAsync(1);
             await app.KeyAsync("T", ctrl: true, shift: true);
             await app.WaitForTabsAsync(2);
+
+            // 開き直したタブ (2 つ目) を選んでから閉じる (開き直しの処理の途中で Ctrl+W を押すと、どちらのタブが前にあるかが変わる)。
+            await app.IdleAsync();
+            await app.SendAsync("selectTab", new JsonObject { ["index"] = 1 });
             await app.KeyAsync("W", ctrl: true);
             await app.WaitForTabsAsync(1);
             CheckConnections("tabs");

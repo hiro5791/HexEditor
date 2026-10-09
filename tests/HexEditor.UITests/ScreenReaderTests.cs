@@ -117,11 +117,14 @@ public sealed class ScreenReaderTests
         };
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")], Hooks = hooks });
         await app.GoToAsync(0x20000);
-        await Task.Delay(600);
         AutomationElement view = await app.WaitForAsync("HexView");
-        string text = view.Patterns.Text.Pattern.DocumentRange.GetText(-1);
-        Assert.Contains("?? ?? ??", text);
-        Assert.DoesNotContain("··", text);
+        await app.EventuallyAsync(() =>
+        {
+            string text = view.Patterns.Text.Pattern.DocumentRange.GetText(-1);
+            Assert.Contains("?? ?? ??", text);
+            Assert.DoesNotContain("··", text);
+            return Task.CompletedTask;
+        });
     });
 
     [Fact]

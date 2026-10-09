@@ -297,9 +297,11 @@ public sealed class ZoomTests
             await app.CommandAsync("Command_UiZoomIn");
         }
 
-        await Task.Delay(300);
-        Assert.True(await HeightAsync(app, "Status_Offset") > status + 2, "the status bar did not grow");
-        Assert.True(await HeightAsync(app, "MainMenu") > menu + 2, "the menu bar did not grow");
+        await app.EventuallyAsync(async () =>
+        {
+            Assert.True(await HeightAsync(app, "Status_Offset") > status + 2, "the status bar did not grow");
+            Assert.True(await HeightAsync(app, "MainMenu") > menu + 2, "the menu bar did not grow");
+        });
         JsonObject render = await app.RenderAsync();
         double screenRow = render["rowHeight"]!.GetValue<double>() * render["screenZoom"]!.GetValue<double>();
         Assert.True(screenRow > row * 1.4, $"the hex view rows did not grow ({row} -> {screenRow})");

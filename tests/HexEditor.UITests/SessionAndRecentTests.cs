@@ -214,12 +214,14 @@ public sealed class SessionAndRecentTests
         // 1. 設定画面で recent.maxItems を 0 にする (設定画面と同じ処理)。
         Assert.True((await app.SendAsync("settingSet", new JsonObject { ["key"] = "recent.maxItems", ["value"] = 0 }))["valid"]!.GetValue<bool>());
 
-        // 2. 1 秒待ってジャンプリストを読むと、「固定済み」と「最近使ったもの」がなく、「タスク」は残っている。
-        await Task.Delay(1000);
-        IReadOnlyList<(string Category, string Arguments)> items = await JumpListAsync(app);
-        Assert.DoesNotContain(items, i => i.Category is "Pinned" or "Recent");
-        Assert.Contains(items, i => i.Category == "Tasks" && i.Arguments == "--new-window");
-        Assert.Contains(items, i => i.Category == "Tasks" && i.Arguments == "--new-document");
+        // 2. ジャンプリストを読むと (作り直しは 500 ms 後)、「固定済み」と「最近使ったもの」がなく、「タスク」は残っている。
+        await app.EventuallyAsync(async () =>
+        {
+            IReadOnlyList<(string Category, string Arguments)> items = await JumpListAsync(app);
+            Assert.DoesNotContain(items, i => i.Category is "Pinned" or "Recent");
+            Assert.Contains(items, i => i.Category == "Tasks" && i.Arguments == "--new-window");
+            Assert.Contains(items, i => i.Category == "Tasks" && i.Arguments == "--new-document");
+        });
     });
 
     private static async Task<IReadOnlyList<(string Category, string Arguments)>> JumpListAsync(AppSession app) =>

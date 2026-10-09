@@ -49,18 +49,21 @@ public sealed class ProcessingCenterTests
         await Task.Delay(2500);
         await app.UiaInvokeAsync("Status_Operations");
         await app.WaitForAsync("Operations_Details");
-        await Task.Delay(600);
 
-        // 3. 処理名・対象の文書名・進捗率・処理速度・残り時間・経過時間・キャンセルボタン。
-        string all = CenterText(app);
-        string details = AppSession.NameOf(app.Find("Operations_Details")!);
-        Assert.Contains("Hash", all, StringComparison.Ordinal);
-        Assert.Contains("slow-10G", all, StringComparison.Ordinal);
-        Assert.Matches(@"\d+%", details);
-        Assert.Matches(@"[\d.,]+ [KMGT]?B/s", details);
-        Assert.Matches(@"About \d+ (min|s) left", details);
-        Assert.Matches(@"Elapsed \d+:\d\d", details);
-        Assert.NotNull(app.Find("Operations_Cancel"));
+        // 3. 処理名・対象の文書名・進捗率・処理速度・残り時間・経過時間・キャンセルボタン (一覧は 250 ms ごとに更新される)。
+        await app.EventuallyAsync(() =>
+        {
+            string all = CenterText(app);
+            string details = AppSession.NameOf(app.Find("Operations_Details")!);
+            Assert.Contains("Hash", all, StringComparison.Ordinal);
+            Assert.Contains("slow-10G", all, StringComparison.Ordinal);
+            Assert.Matches(@"\d+%", details);
+            Assert.Matches(@"[\d.,]+ [KMGT]?B/s", details);
+            Assert.Matches(@"About \d+ (min|s) left", details);
+            Assert.Matches(@"Elapsed \d+:\d\d", details);
+            Assert.NotNull(app.Find("Operations_Cancel"));
+            return Task.CompletedTask;
+        });
     });
 
     [Fact]
@@ -79,7 +82,10 @@ public sealed class ProcessingCenterTests
         cancel.Patterns.Invoke.Pattern.Invoke();
         await app.WaitUntilAsync(async () => Running(await app.StateAsync(), "Hash") == 0, TimeSpan.FromSeconds(5), "the cancellation");
         watch.Stop();
-        Assert.True(watch.ElapsedMilliseconds <= 500, $"the reads stopped {watch.ElapsedMilliseconds} ms after the cancel button");
+
+        // キャンセルの要求から処理が止まるまでを、アプリの中で計った時間で判定する (ボタンの呼び出しと状態を読む往復は含めない)。
+        double stopped = await app.CancelToEndMsAsync("Hash");
+        Assert.True(stopped <= 500, $"the reads stopped {stopped:F0} ms after the cancel request ({watch.ElapsedMilliseconds} ms after the button with the round trips)");
 
         // 2. 行の結果が「キャンセル」。
         await app.WaitUntilAsync(() => Task.FromResult(app.Find("Operations_Result") is { } r && AppSession.NameOf(r) == "Cancelled"),
@@ -123,11 +129,14 @@ public sealed class ProcessingCenterTests
         }
         await app.UiaInvokeAsync("Status_Operations");
         await app.WaitForAsync("Operations_Details");
-        await Task.Delay(500);
-        Assert.Equal(2, app.Window.FindAllDescendants(cf => cf.ByAutomationId("Operations_Cancel")).Length);
-        string all = CenterText(app);
-        Assert.Contains("Hash", all, StringComparison.Ordinal);
-        Assert.Contains("Find", all, StringComparison.Ordinal);
+        await app.EventuallyAsync(() =>
+        {
+            Assert.Equal(2, app.Window.FindAllDescendants(cf => cf.ByAutomationId("Operations_Cancel")).Length);
+            string all = CenterText(app);
+            Assert.Contains("Hash", all, StringComparison.Ordinal);
+            Assert.Contains("Find", all, StringComparison.Ordinal);
+            return Task.CompletedTask;
+        });
     });
 
     [Fact]

@@ -479,11 +479,16 @@ public sealed class PackagingTests
         await app.OpenAsync(seq);
         await app.CommandAsync("Command_Close");
         await app.OpenAsync(bytes);
-        await Task.Delay(1000);
 
-        // ジャンプリストの「最近使ったもの」に TD-SEQ-1M がある (テスト用のビルドは Windows のジャンプリストを変えず、内容を記録する)。
-        JsonArray items = (await app.SendAsync("jumpList"))["items"]!.AsArray();
-        JsonNode recent = items.First(i => i!["category"]!.GetValue<string>() == "Recent" && i["path"]?.GetValue<string>() == seq)!;
+        // ジャンプリストの「最近使ったもの」に TD-SEQ-1M がある (テスト用のビルドは Windows のジャンプリストを変えず、内容を記録する。
+        // 作り直すのは一覧が変わってから 500 ms 後)。
+        JsonArray items = [];
+        JsonNode recent = null!;
+        await app.EventuallyAsync(async () =>
+        {
+            items = (await app.SendAsync("jumpList"))["items"]!.AsArray();
+            recent = Assert.Single(items, i => i!["category"]!.GetValue<string>() == "Recent" && i["path"]?.GetValue<string>() == seq)!;
+        });
         Assert.Equal(Path.GetFileName(seq), recent["title"]!.GetValue<string>());
         Assert.Contains(items, i => i!["category"]!.GetValue<string>() == "Tasks" && i["arguments"]!.GetValue<string>() == "--new-window");
 

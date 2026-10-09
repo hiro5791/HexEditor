@@ -261,6 +261,27 @@ public sealed partial class HexView
 
     // ---- 字形の幅 (VIEW-22 の縮小) ----
 
+    private string? _monospacedFor;
+    private bool _monospaced;
+
+    /// <summary>描画のフォント (指定の先頭) が等幅か。フォントの一覧ができる前は分からないので false (1 文字ずつ測る)。</summary>
+    private bool IsMonospacedFont()
+    {
+        if (!Services.FontCatalog.IsReady)
+        {
+            return false;
+        }
+
+        if (_monospacedFor != _fontFamilyName)
+        {
+            string primary = _fontFamilyName.Split(',')[0].Trim();
+            _monospaced = Services.FontCatalog.Families().Any(f => f.Monospaced && f.Name.Equals(primary, StringComparison.OrdinalIgnoreCase));
+            _monospacedFor = _fontFamilyName;
+        }
+
+        return _monospaced;
+    }
+
     private double MeasureGlyph(string text)
     {
         if (_glyphWidths.TryGetValue(text, out double width))
@@ -268,6 +289,16 @@ public sealed partial class HexView
             return width;
         }
 
+        // 等幅フォントの ASCII の文字は、どれも "0" と同じ幅 (1 文字ずつ測ると、初めて表示する頁で数十の文字を測ることになり、遅い PC
+        // では UI スレッドが数百 ms 止まる)。
+        if (text.Length == 1 && text[0] is >= ' ' and <= '~' and not '0' && IsMonospacedFont())
+        {
+            width = MeasureGlyph("0");
+            _glyphWidths[text] = width;
+            return width;
+        }
+
+        OnGlyphMeasured();
         var probe = new TextBlock { Text = text, FontFamily = _font, FontSize = _fontSize, IsTextScaleFactorEnabled = false, IsColorFontEnabled = false };
         probe.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
         width = probe.DesiredSize.Width;

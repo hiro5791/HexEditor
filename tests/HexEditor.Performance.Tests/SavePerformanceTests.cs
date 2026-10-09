@@ -48,6 +48,10 @@ public sealed class SavePerformanceTests(ITestOutputHelper output) : IDisposable
     {
         using Document doc = OpenCopy(out string path);
 
+        // 計る前に 1 度保存しておく (保存の処理の初めての JIT と、新しく作ったファイルの初めての書き出しの分を計らない)。
+        doc.Overwrite(1L << 20, [0xFE]);
+        Save(doc);
+
         // 手順 1〜3
         doc.Overwrite(1L << 32, [0xFF]);
         (TimeSpan time, long written, SaveMethod method) = Save(doc);

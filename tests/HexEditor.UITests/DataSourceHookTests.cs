@@ -99,6 +99,7 @@ public sealed class DataSourceHookTests
         await Task.Delay(500);
 
         JsonObject gcBefore = await app.StateAsync();
+        JsonObject renderBefore = await app.RenderAsync();
 
         // UI スレッドの応答を、2 本目の命令の通り道で 10 ms ごとに確かめる。
         using TestChannelClient monitor = (await TestChannelClient.ConnectAsync(app.Pid, () => app.Process.HasExited, TimeSpan.FromSeconds(10)))!;
@@ -173,9 +174,12 @@ public sealed class DataSourceHookTests
 
         // 命令の往復を含むため、判定の 50 ms に通り道の往復の余裕を足す。失敗したときは、その間のアプリの GC の停止時間も示す。
         JsonObject gcAfter = await app.StateAsync();
+        JsonObject renderAfter = await app.RenderAsync();
         Assert.True(worst < 100, $"UI thread blocked for {worst:F0} ms: {string.Join(", ", slow)}; GC pauses of the app "
             + $"{gcAfter["gcPauseMs"]!.GetValue<double>() - gcBefore["gcPauseMs"]!.GetValue<double>():F0} ms, "
-            + $"gen 2 collections {gcAfter["gen2Collections"]!.GetValue<int>() - gcBefore["gen2Collections"]!.GetValue<int>()}");
+            + $"gen 2 collections {gcAfter["gen2Collections"]!.GetValue<int>() - gcBefore["gen2Collections"]!.GetValue<int>()}; "
+            + $"longest render {renderAfter["maxRenderMs"]} ms (before {renderBefore["maxRenderMs"]} ms), "
+            + $"glyphs measured {renderAfter["glyphMeasures"]!.GetValue<int>() - renderBefore["glyphMeasures"]!.GetValue<int>()}");
         Assert.True(loading, "Rows that have not been read yet should be drawn as loading.");
         await app.IdleAsync();
         byte[] expected = new byte[16];

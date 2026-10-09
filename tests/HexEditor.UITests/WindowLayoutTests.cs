@@ -90,11 +90,8 @@ public sealed class WindowLayoutTests
 
         // 2〜3. ← を 3 回: 右パネルが 24 px 広がる。
         await app.SendAsync("splitterKey", new JsonObject { ["id"] = "RightSplitter", ["key"] = "Left", ["count"] = 3 });
-        await Task.Delay(200);
-        await app.IdleAsync();
-        double after = (await BoundsAsync(app, "RightPanel")).Width;
         double scale = (await app.SendAsync("shellState"))["appliedUiZoom"]!.GetValue<double>();
-        Assert.Equal(before + 24 * scale, after, 1);
+        await app.EventuallyAsync(async () => Assert.Equal(before + 24 * scale, (await BoundsAsync(app, "RightPanel")).Width, 1));
     });
 
     [Fact]

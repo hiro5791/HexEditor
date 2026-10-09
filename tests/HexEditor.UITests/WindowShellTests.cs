@@ -263,9 +263,8 @@ public sealed class WindowShellTests
         // 上端に置いて 400 ms: タイトルバー (メニュー)、ツールバー、タブ列が上から順に重なって出る。エディタは動かない。
         await app.SendAsync("fullScreenPointer", new JsonObject { ["y"] = 2 });
         await Task.Delay(400);
-        await app.IdleAsync();
-        JsonObject shown = await app.SendAsync("shellState");
-        Assert.True(shown["titleBarVisible"]!.GetValue<bool>(), "the title bar");
+        JsonObject shown = null!;
+        await app.EventuallyAsync(async () => Assert.True((shown = await app.SendAsync("shellState"))["titleBarVisible"]!.GetValue<bool>(), "the title bar"));
         Assert.True(shown["toolbarVisible"]!.GetValue<bool>(), "the toolbar");
         Assert.True(shown["tabStripVisible"]!.GetValue<bool>(), "the tab strip");
         Assert.Equal(editorTop, shown["editorTop"]!.GetValue<double>(), 1);

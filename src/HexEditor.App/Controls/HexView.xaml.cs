@@ -662,8 +662,10 @@ public sealed partial class HexView : UserControl
                 Services.Loc.Get("HexView_Status_UnreadableFound"), TimeSpan.FromSeconds(5)));
         }
 
-        _diagnostics.RecordRender(Stopwatch.GetElapsedTime(started), rows, rebuilt, loadingCells);
+        TimeSpan renderTime = Stopwatch.GetElapsedTime(started);
+        _diagnostics.RecordRender(renderTime, rows, rebuilt, loadingCells);
         OnRendered(placeholderCells);
+        OnRenderTimed(renderTime);
         RaiseAccessibilityChanges();
     }
 
@@ -706,6 +708,12 @@ public sealed partial class HexView : UserControl
 
     /// <summary>描画のたびに呼ぶ (テスト用のビルドで、仮表示 `··` を描いたフレームを数える)。</summary>
     partial void OnRendered(int placeholderCells);
+
+    /// <summary>1 回の描画にかかった時間 (テスト用のビルドで、UI スレッドが止まった原因を調べるために記録する)。</summary>
+    partial void OnRenderTimed(TimeSpan time);
+
+    /// <summary>字形の幅を測った (テスト用のビルドで数える)。</summary>
+    partial void OnGlyphMeasured();
 
     /// <summary>
     /// スクロールしたとき、同じ行 (先頭オフセット) を描いていた要素をその行に回す。内容が同じ行は作り直さずに位置だけ変わる

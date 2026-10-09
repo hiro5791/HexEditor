@@ -356,6 +356,13 @@ public sealed partial class HexView
         }
     }
 
+    private double _maxRenderMs;
+    private int _glyphMeasures;
+
+    partial void OnRenderTimed(TimeSpan time) => _maxRenderMs = Math.Max(_maxRenderMs, time.TotalMilliseconds);
+
+    partial void OnGlyphMeasured() => _glyphMeasures++;
+
     partial void OnRendered(int placeholderCells)
     {
         _frames++;
@@ -404,6 +411,8 @@ public sealed partial class HexView
         result["caretBlinking"] = _focused && _blinkTimer.IsRunning;
         result["frames"] = _frames;
         result["firstFrameTime"] = _firstFrameTime;
+        result["maxRenderMs"] = _maxRenderMs;
+        result["glyphMeasures"] = _glyphMeasures;
         result["placeholderFrames"] = _placeholderFrames;
         result["highContrast"] = IsHighContrast;
         result["zoom"] = _zoom;
