@@ -2765,4 +2765,212 @@ Details were written to:
   <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Bytes per line in copied hex</value></data>
   <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Inserts a line break after this many bytes. 0 doesn't add line breaks.</value></data>
   <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>The selection ({0}) is too large to give to other apps. You can paste it inside HexEditor.</value></data>
+  <data name="DataOp_Kind_Add" xml:space="preserve"><value>Add</value></data>
+  <data name="Cmd_data_op_add" xml:space="preserve"><value>Add</value></data>
+  <data name="CmdAlias_data_op_add" xml:space="preserve"><value>add</value></data>
+  <data name="DataOp_Kind_Subtract" xml:space="preserve"><value>Subtract</value></data>
+  <data name="Cmd_data_op_subtract" xml:space="preserve"><value>Subtract</value></data>
+  <data name="CmdAlias_data_op_subtract" xml:space="preserve"><value>subtract</value></data>
+  <data name="DataOp_Kind_ReverseSubtract" xml:space="preserve"><value>Reverse subtract</value></data>
+  <data name="Cmd_data_op_reverseSubtract" xml:space="preserve"><value>Reverse subtract</value></data>
+  <data name="CmdAlias_data_op_reverseSubtract" xml:space="preserve"><value>reverse subtract</value></data>
+  <data name="DataOp_Kind_Multiply" xml:space="preserve"><value>Multiply</value></data>
+  <data name="Cmd_data_op_multiply" xml:space="preserve"><value>Multiply</value></data>
+  <data name="CmdAlias_data_op_multiply" xml:space="preserve"><value>multiply</value></data>
+  <data name="DataOp_Kind_Divide" xml:space="preserve"><value>Divide</value></data>
+  <data name="Cmd_data_op_divide" xml:space="preserve"><value>Divide</value></data>
+  <data name="CmdAlias_data_op_divide" xml:space="preserve"><value>divide</value></data>
+  <data name="DataOp_Kind_ReverseDivide" xml:space="preserve"><value>Reverse divide</value></data>
+  <data name="Cmd_data_op_reverseDivide" xml:space="preserve"><value>Reverse divide</value></data>
+  <data name="CmdAlias_data_op_reverseDivide" xml:space="preserve"><value>reverse divide</value></data>
+  <data name="DataOp_Kind_Modulo" xml:space="preserve"><value>Modulo (remainder)</value></data>
+  <data name="Cmd_data_op_modulo" xml:space="preserve"><value>Modulo (remainder)</value></data>
+  <data name="CmdAlias_data_op_modulo" xml:space="preserve"><value>modulo (remainder)</value></data>
+  <data name="DataOp_Kind_Negate" xml:space="preserve"><value>Negate</value></data>
+  <data name="Cmd_data_op_negate" xml:space="preserve"><value>Negate</value></data>
+  <data name="CmdAlias_data_op_negate" xml:space="preserve"><value>negate</value></data>
+  <data name="DataOp_Kind_Abs" xml:space="preserve"><value>Absolute value</value></data>
+  <data name="Cmd_data_op_abs" xml:space="preserve"><value>Absolute value</value></data>
+  <data name="CmdAlias_data_op_abs" xml:space="preserve"><value>absolute value</value></data>
+  <data name="DataOp_Kind_And" xml:space="preserve"><value>AND</value></data>
+  <data name="Cmd_data_op_and" xml:space="preserve"><value>AND</value></data>
+  <data name="CmdAlias_data_op_and" xml:space="preserve"><value>and</value></data>
+  <data name="DataOp_Kind_Or" xml:space="preserve"><value>OR</value></data>
+  <data name="Cmd_data_op_or" xml:space="preserve"><value>OR</value></data>
+  <data name="CmdAlias_data_op_or" xml:space="preserve"><value>or</value></data>
+  <data name="DataOp_Kind_Xor" xml:space="preserve"><value>XOR</value></data>
+  <data name="Cmd_data_op_xor" xml:space="preserve"><value>XOR</value></data>
+  <data name="CmdAlias_data_op_xor" xml:space="preserve"><value>xor</value></data>
+  <data name="DataOp_Kind_Not" xml:space="preserve"><value>NOT</value></data>
+  <data name="Cmd_data_op_not" xml:space="preserve"><value>NOT</value></data>
+  <data name="CmdAlias_data_op_not" xml:space="preserve"><value>not</value></data>
+  <data name="DataOp_Kind_Nand" xml:space="preserve"><value>NAND</value></data>
+  <data name="Cmd_data_op_nand" xml:space="preserve"><value>NAND</value></data>
+  <data name="CmdAlias_data_op_nand" xml:space="preserve"><value>nand</value></data>
+  <data name="DataOp_Kind_Nor" xml:space="preserve"><value>NOR</value></data>
+  <data name="Cmd_data_op_nor" xml:space="preserve"><value>NOR</value></data>
+  <data name="CmdAlias_data_op_nor" xml:space="preserve"><value>nor</value></data>
+  <data name="DataOp_Kind_Xnor" xml:space="preserve"><value>XNOR</value></data>
+  <data name="Cmd_data_op_xnor" xml:space="preserve"><value>XNOR</value></data>
+  <data name="CmdAlias_data_op_xnor" xml:space="preserve"><value>xnor</value></data>
+  <data name="DataOp_Kind_ShiftLeft" xml:space="preserve"><value>Shift left</value></data>
+  <data name="Cmd_data_op_shiftLeft" xml:space="preserve"><value>Shift left</value></data>
+  <data name="CmdAlias_data_op_shiftLeft" xml:space="preserve"><value>shift left</value></data>
+  <data name="DataOp_Kind_ShiftRightLogical" xml:space="preserve"><value>Shift right (logical)</value></data>
+  <data name="Cmd_data_op_shiftRightLogical" xml:space="preserve"><value>Shift right (logical)</value></data>
+  <data name="CmdAlias_data_op_shiftRightLogical" xml:space="preserve"><value>shift right (logical)</value></data>
+  <data name="DataOp_Kind_ShiftRightArithmetic" xml:space="preserve"><value>Shift right (arithmetic)</value></data>
+  <data name="Cmd_data_op_shiftRightArithmetic" xml:space="preserve"><value>Shift right (arithmetic)</value></data>
+  <data name="CmdAlias_data_op_shiftRightArithmetic" xml:space="preserve"><value>shift right (arithmetic)</value></data>
+  <data name="DataOp_Kind_RotateLeft" xml:space="preserve"><value>Rotate left</value></data>
+  <data name="Cmd_data_op_rotateLeft" xml:space="preserve"><value>Rotate left</value></data>
+  <data name="CmdAlias_data_op_rotateLeft" xml:space="preserve"><value>rotate left</value></data>
+  <data name="DataOp_Kind_RotateRight" xml:space="preserve"><value>Rotate right</value></data>
+  <data name="Cmd_data_op_rotateRight" xml:space="preserve"><value>Rotate right</value></data>
+  <data name="CmdAlias_data_op_rotateRight" xml:space="preserve"><value>rotate right</value></data>
+  <data name="DataOp_Kind_ByteSwap16" xml:space="preserve"><value>Byte swap (16 bit)</value></data>
+  <data name="Cmd_data_op_byteSwap16" xml:space="preserve"><value>Byte swap (16 bit)</value></data>
+  <data name="CmdAlias_data_op_byteSwap16" xml:space="preserve"><value>byte swap (16 bit)</value></data>
+  <data name="DataOp_Kind_ByteSwap32" xml:space="preserve"><value>Byte swap (32 bit)</value></data>
+  <data name="Cmd_data_op_byteSwap32" xml:space="preserve"><value>Byte swap (32 bit)</value></data>
+  <data name="CmdAlias_data_op_byteSwap32" xml:space="preserve"><value>byte swap (32 bit)</value></data>
+  <data name="DataOp_Kind_ByteSwap64" xml:space="preserve"><value>Byte swap (64 bit)</value></data>
+  <data name="Cmd_data_op_byteSwap64" xml:space="preserve"><value>Byte swap (64 bit)</value></data>
+  <data name="CmdAlias_data_op_byteSwap64" xml:space="preserve"><value>byte swap (64 bit)</value></data>
+  <data name="DataOp_Kind_WordSwap32" xml:space="preserve"><value>Swap 16-bit words (within 32 bit)</value></data>
+  <data name="Cmd_data_op_wordSwap32" xml:space="preserve"><value>Swap 16-bit words (within 32 bit)</value></data>
+  <data name="CmdAlias_data_op_wordSwap32" xml:space="preserve"><value>swap 16-bit words (within 32 bit)</value></data>
+  <data name="DataOp_Kind_ReverseRange" xml:space="preserve"><value>Reverse byte order</value></data>
+  <data name="Cmd_data_op_reverseRange" xml:space="preserve"><value>Reverse byte order</value></data>
+  <data name="CmdAlias_data_op_reverseRange" xml:space="preserve"><value>reverse byte order</value></data>
+  <data name="DataOp_Kind_ReverseBits" xml:space="preserve"><value>Reverse bit order (each byte)</value></data>
+  <data name="Cmd_data_op_reverseBits" xml:space="preserve"><value>Reverse bit order (each byte)</value></data>
+  <data name="CmdAlias_data_op_reverseBits" xml:space="preserve"><value>reverse bit order (each byte)</value></data>
+  <data name="DataOp_Kind_SwapNibbles" xml:space="preserve"><value>Swap nibbles (each byte)</value></data>
+  <data name="Cmd_data_op_swapNibbles" xml:space="preserve"><value>Swap nibbles (each byte)</value></data>
+  <data name="CmdAlias_data_op_swapNibbles" xml:space="preserve"><value>swap nibbles (each byte)</value></data>
+  <data name="DataOp_Kind_Clamp" xml:space="preserve"><value>Clamp to min/max</value></data>
+  <data name="Cmd_data_op_clamp" xml:space="preserve"><value>Clamp to min/max</value></data>
+  <data name="CmdAlias_data_op_clamp" xml:space="preserve"><value>clamp to min/max</value></data>
+  <data name="DataOp_Kind_InsertBits" xml:space="preserve"><value>Insert bits</value></data>
+  <data name="Cmd_data_op_insertBits" xml:space="preserve"><value>Insert bits</value></data>
+  <data name="CmdAlias_data_op_insertBits" xml:space="preserve"><value>insert bits</value></data>
+  <data name="DataOp_Kind_DeleteBits" xml:space="preserve"><value>Delete bits</value></data>
+  <data name="Cmd_data_op_deleteBits" xml:space="preserve"><value>Delete bits</value></data>
+  <data name="CmdAlias_data_op_deleteBits" xml:space="preserve"><value>delete bits</value></data>
+  <data name="DataOp_Category_Arithmetic" xml:space="preserve"><value>Arithmetic</value></data>
+  <data name="DataOp_Category_Bitwise" xml:space="preserve"><value>Bitwise</value></data>
+  <data name="DataOp_Category_ShiftRotate" xml:space="preserve"><value>Shift / rotate</value></data>
+  <data name="DataOp_Category_Reorder" xml:space="preserve"><value>Reorder</value></data>
+  <data name="DataOp_Category_Clamp" xml:space="preserve"><value>Clamp</value></data>
+  <data name="DataOp_Category_BitInsertDelete" xml:space="preserve"><value>Insert / delete bits</value></data>
+  <data name="CmdCategory_data" xml:space="preserve"><value>Data</value></data>
+  <data name="CmdCategory_dataOperation" xml:space="preserve"><value>Data operation</value></data>
+  <data name="Cmd_data_operation" xml:space="preserve"><value>Data operations...</value></data>
+  <data name="CmdAlias_data_operation" xml:space="preserve"><value>arithmetic xor shift rotate swap</value></data>
+  <data name="Cmd_data_repeatOperation" xml:space="preserve"><value>Repeat last data operation</value></data>
+  <data name="CmdAlias_data_repeatOperation" xml:space="preserve"><value>again repeat</value></data>
+  <data name="Menu_Data.Title" xml:space="preserve"><value>Data</value></data>
+  <data name="Menu_Data.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Data_Operation.Text" xml:space="preserve"><value>Data operations...</value></data>
+  <data name="Menu_Data_Operation.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Data_RepeatOperation.Text" xml:space="preserve"><value>Repeat last data operation</value></data>
+  <data name="Menu_Data_RepeatOperation.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Data_ConvertEncoding.Text" xml:space="preserve"><value>Convert encoding...</value></data>
+  <data name="Menu_Data_ConvertEncoding.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Data_Case.Text" xml:space="preserve"><value>Change case</value></data>
+  <data name="Menu_Data_Case.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Data_CaseUpper.Text" xml:space="preserve"><value>Uppercase</value></data>
+  <data name="Menu_Data_CaseUpper.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Data_CaseLower.Text" xml:space="preserve"><value>Lowercase</value></data>
+  <data name="Menu_Data_CaseLower.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Data_CaseSwap.Text" xml:space="preserve"><value>Swap case</value></data>
+  <data name="Menu_Data_CaseSwap.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Analysis_CustomCrc.Text" xml:space="preserve"><value>Define custom CRC...</value></data>
+  <data name="Menu_Analysis_CustomCrc.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="HexViewMenu_DataOperation" xml:space="preserve"><value>Data operation</value></data>
+  <data name="DataOp_Title" xml:space="preserve"><value>Data operations</value></data>
+  <data name="DataOp_Run" xml:space="preserve"><value>Run</value></data>
+  <data name="DataOp_Category" xml:space="preserve"><value>Category</value></data>
+  <data name="DataOp_Kind" xml:space="preserve"><value>Operation</value></data>
+  <data name="DataOp_Target" xml:space="preserve"><value>Target</value></data>
+  <data name="DataOp_TargetSelection" xml:space="preserve"><value>Selection</value></data>
+  <data name="DataOp_TargetMultiSelection" xml:space="preserve"><value>Selection ({0} ranges)</value></data>
+  <data name="DataOp_TargetWhole" xml:space="preserve"><value>Whole document</value></data>
+  <data name="DataOp_TargetRange" xml:space="preserve"><value>Range</value></data>
+  <data name="DataOp_RangeStart" xml:space="preserve"><value>Start</value></data>
+  <data name="DataOp_RangeLength" xml:space="preserve"><value>Length</value></data>
+  <data name="DataOp_Type" xml:space="preserve"><value>Element type</value></data>
+  <data name="DataOp_Type_Unsigned" xml:space="preserve"><value>Unsigned integer</value></data>
+  <data name="DataOp_Type_Signed" xml:space="preserve"><value>Signed integer</value></data>
+  <data name="DataOp_Type_Float" xml:space="preserve"><value>Floating point</value></data>
+  <data name="DataOp_Size" xml:space="preserve"><value>Element size (bytes)</value></data>
+  <data name="DataOp_Endian" xml:space="preserve"><value>Byte order</value></data>
+  <data name="DataOp_LittleEndian" xml:space="preserve"><value>Little endian</value></data>
+  <data name="DataOp_BigEndian" xml:space="preserve"><value>Big endian</value></data>
+  <data name="DataOp_Operand" xml:space="preserve"><value>Operand</value></data>
+  <data name="DataOp_Increment" xml:space="preserve"><value>Operand increment</value></data>
+  <data name="DataOp_Process" xml:space="preserve"><value>Process N elements</value></data>
+  <data name="DataOp_Skip" xml:space="preserve"><value>then skip M elements</value></data>
+  <data name="DataOp_IncrementScope" xml:space="preserve"><value>Increment across ranges</value></data>
+  <data name="DataOp_IncrementScope_PerRange" xml:space="preserve"><value>Restart for each range</value></data>
+  <data name="DataOp_IncrementScope_Continuous" xml:space="preserve"><value>Continue across ranges</value></data>
+  <data name="DataOp_Overflow" xml:space="preserve"><value>On overflow</value></data>
+  <data name="DataOp_Overflow_Wrap" xml:space="preserve"><value>Wrap</value></data>
+  <data name="DataOp_Overflow_Saturate" xml:space="preserve"><value>Saturate</value></data>
+  <data name="DataOp_OperandSource" xml:space="preserve"><value>Operand</value></data>
+  <data name="DataOp_OperandSource_Number" xml:space="preserve"><value>Number</value></data>
+  <data name="DataOp_OperandSource_Key" xml:space="preserve"><value>Byte key</value></data>
+  <data name="DataOp_KeyOrigin" xml:space="preserve"><value>Key starts at</value></data>
+  <data name="DataOp_KeyIncrement" xml:space="preserve"><value>Key increment per round</value></data>
+  <data name="DataOp_XorNote" xml:space="preserve"><value>Running XOR twice with the same settings restores the original data.</value></data>
+  <data name="DataOp_ShiftBits" xml:space="preserve"><value>Bits</value></data>
+  <data name="DataOp_RotateIncrement" xml:space="preserve"><value>Rotation increment</value></data>
+  <data name="DataOp_Min" xml:space="preserve"><value>Minimum</value></data>
+  <data name="DataOp_Max" xml:space="preserve"><value>Maximum</value></data>
+  <data name="DataOp_NoLimit" xml:space="preserve"><value>No limit</value></data>
+  <data name="DataOp_BitOffset" xml:space="preserve"><value>Byte offset</value></data>
+  <data name="DataOp_BitIndex" xml:space="preserve"><value>Bit in the byte (7 = most significant)</value></data>
+  <data name="DataOp_BitCount" xml:space="preserve"><value>Number of bits</value></data>
+  <data name="DataOp_BitFill" xml:space="preserve"><value>Inserted bit value</value></data>
+  <data name="DataOp_BitOrder" xml:space="preserve"><value>Bit order</value></data>
+  <data name="DataOp_BitOrder_Msb" xml:space="preserve"><value>Most significant bit first</value></data>
+  <data name="DataOp_BitOrder_Lsb" xml:space="preserve"><value>Least significant bit first</value></data>
+  <data name="DataOp_BitScope" xml:space="preserve"><value>Shift</value></data>
+  <data name="DataOp_BitScope_Selection" xml:space="preserve"><value>Within the selection only</value></data>
+  <data name="DataOp_BitScope_ToEnd" xml:space="preserve"><value>To the end of the document</value></data>
+  <data name="DataOp_Preview" xml:space="preserve"><value>Preview (first 64 bytes)</value></data>
+  <data name="DataOp_PreviewBeforeLine" xml:space="preserve"><value>Before: {0}</value></data>
+  <data name="DataOp_PreviewAfterLine" xml:space="preserve"><value>After:  {0}</value></data>
+  <data name="DataOp_ValuesBeforeLine" xml:space="preserve"><value>Values before: {0}</value></data>
+  <data name="DataOp_ValuesAfterLine" xml:space="preserve"><value>Values after: {0}</value></data>
+  <data name="DataOp_ChangedCount" xml:space="preserve"><value>{0, plural, one {# byte changes} other {# bytes change}}</value></data>
+  <data name="DataOp_TrailingNote" xml:space="preserve"><value>{0, plural, one {The last # byte is shorter than an element and is not changed.} other {The last # bytes are shorter than an element and are not changed.}}</value></data>
+  <data name="DataOp_RewriteNote" xml:space="preserve"><value>This rewrites {0} of data.</value></data>
+  <data name="DataOp_RewriteConfirm" xml:space="preserve"><value>This rewrites {0} GB of data (uses {0} GB of temporary space).</value></data>
+  <data name="DataOp_RewriteRun" xml:space="preserve"><value>Run</value></data>
+  <data name="DataOp_NoPrevious" xml:space="preserve"><value>No data operation has been run yet.</value></data>
+  <data name="DataOp_Unchanged" xml:space="preserve"><value>The data does not change.</value></data>
+  <data name="DataOp_Result_Overflows" xml:space="preserve"><value>{0, plural, one {# element overflowed.} other {# elements overflowed.}}</value></data>
+  <data name="DataOp_Result_NaN" xml:space="preserve"><value>NaN: {0}, infinity: {1}.</value></data>
+  <data name="DataOp_Result_ZeroSkipped" xml:space="preserve"><value>{0, plural, one {# zero element was left unchanged.} other {# zero elements were left unchanged.}}</value></data>
+  <data name="DataOp_Result_Changed" xml:space="preserve"><value>{0, plural, one {# element changed.} other {# elements changed.}}</value></data>
+  <data name="DataOp_Error_Float" xml:space="preserve"><value>Enter a number such as 0.5 or 1e-3 (use . as the decimal point).</value></data>
+  <data name="DataOp_Error_Key" xml:space="preserve"><value>Enter a key.</value></data>
+  <data name="DataOp_Error_OperandOutOfRange" xml:space="preserve"><value>The value cannot be represented by the element type and size.</value></data>
+  <data name="DataOp_Error_DivideByZero" xml:space="preserve"><value>Cannot divide by 0.</value></data>
+  <data name="DataOp_Error_DivisorBecomesZero" xml:space="preserve"><value>The increment makes the divisor 0 for some element.</value></data>
+  <data name="DataOp_Error_TypeNotSupported" xml:space="preserve"><value>This operation cannot be used with this element type.</value></data>
+  <data name="DataOp_Error_InvalidSize" xml:space="preserve"><value>Floating point elements are 4 or 8 bytes.</value></data>
+  <data name="DataOp_Error_BitCountOutOfRange" xml:space="preserve"><value>The number of bits is out of range.</value></data>
+  <data name="DataOp_Error_MinGreaterThanMax" xml:space="preserve"><value>The minimum is greater than the maximum.</value></data>
+  <data name="DataOp_Error_KeyEmpty" xml:space="preserve"><value>The key is empty.</value></data>
+  <data name="DataOp_Error_KeyTooLong" xml:space="preserve"><value>The key can be at most 16 MiB.</value></data>
+  <data name="DataOp_Error_InvalidStride" xml:space="preserve"><value>Process at least 1 element and skip 0 or more.</value></data>
+  <data name="DataOp_Error_PositionOutOfRange" xml:space="preserve"><value>The position or range is outside the target.</value></data>
+  <data name="DataOp_Error_FixedLength" xml:space="preserve"><value>This document cannot change its length; use "Within the selection only".</value></data>
+  <data name="DataOp_Error_None" xml:space="preserve"><value></value></data>
+  <data name="DataOp_Error_TempSpace" xml:space="preserve"><value>The operation needs {0} GB of temporary space, but only {1} GB is free.</value></data>
+  <data name="DataOp_Error_Read" xml:space="preserve"><value>Cannot read offset {0}. The document was not changed.</value></data>
+  <data name="Operation_DataOperation" xml:space="preserve"><value>Data operation: {0}</value></data>
 </root>

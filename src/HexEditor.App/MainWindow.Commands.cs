@@ -148,6 +148,7 @@ public sealed partial class MainWindow
         Commands.Register("edit.toggleInsert", () => ToggleInsert_Click(this, e),
             () => NeedsEditable(d => d.Document.CanResize ? null : Loc.Get("Notice_FixedLength")));
         RegisterEditCommands();
+        RegisterDataCommands();
 
         // ---- 検索・移動 ----
         Commands.Register("search.find", () => Find_Click(this, e), NeedsDocument);
