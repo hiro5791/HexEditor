@@ -45,7 +45,7 @@ public sealed class EditingPerformanceTests(ITestOutputHelper output)
         }
 
         output.Report($"Ctrl+Shift+End: {Summary(times)}");
-        Assert.True(MaxExceptFirst(times) <= Limit, Summary(times));
+        TimeLimit(MaxExceptFirst(times) <= Limit, Summary(times));
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public sealed class EditingPerformanceTests(ITestOutputHelper output)
         }
 
         output.Report($"Ctrl+A: {Summary(times)}");
-        Assert.True(MaxExceptFirst(times) <= Limit, Summary(times));
+        TimeLimit(MaxExceptFirst(times) <= Limit, Summary(times));
     }
 
     [Fact]
@@ -93,7 +93,7 @@ public sealed class EditingPerformanceTests(ITestOutputHelper output)
         }
 
         output.Report($"挿入モードの入力 (50 GiB): {Summary(times)}");
-        Assert.True(MaxExceptFirst(times) <= InputLimit, Summary(times));
+        TimeLimit(MaxExceptFirst(times) <= InputLimit, Summary(times));
         Assert.Equal(107_374_182_400 + 101, doc.Length);
         Assert.Equal(Enumerable.Repeat((byte)0x11, 101).ToArray(), Read(doc, 0xC80000000, 101));
         Assert.Equal(TestDataCatalog.Marker(0xC80000000), Read(doc, 0xC80000000 + 101, 17));
@@ -131,8 +131,8 @@ public sealed class EditingPerformanceTests(ITestOutputHelper output)
         }
 
         output.Report($"50 GiB の削除: {Summary(deletes)} / 元に戻す: {Summary(undos)}");
-        Assert.True(MaxExceptFirst(deletes) <= Limit, "削除 " + Summary(deletes));
-        Assert.True(MaxExceptFirst(undos) <= Limit, "元に戻す " + Summary(undos));
+        TimeLimit(MaxExceptFirst(deletes) <= Limit, "削除 " + Summary(deletes));
+        TimeLimit(MaxExceptFirst(undos) <= Limit, "元に戻す " + Summary(undos));
     }
 
     [Fact]
@@ -185,7 +185,7 @@ public sealed class EditingPerformanceTests(ITestOutputHelper output)
         Assert.Equal(0xAA, Read(doc, 0x80000000, 1)[0]);
 
         output.Report(string.Join(Environment.NewLine, times.Select(t => $"{t.Step}: {Ms(t.Time)}")));
-        Assert.All(times, t => Assert.True(t.Time <= Limit, $"{t.Step}: {Ms(t.Time)}"));
+        TimeLimit(times.All(t => t.Time <= Limit), string.Join(", ", times.Select(t => $"{t.Step}: {Ms(t.Time)}")));
     }
 
     [Fact]
@@ -236,7 +236,7 @@ public sealed class EditingPerformanceTests(ITestOutputHelper output)
         }
 
         output.Report($"10 GiB のコピー: {Summary(times)}");
-        Assert.True(MaxExceptFirst(times) <= Limit, Summary(times));
+        TimeLimit(MaxExceptFirst(times) <= Limit, Summary(times));
 
         // 手順 3・4: 上限を超えるので、システムのクリップボードには Meta と 1 行のテキストだけ (InfoBar で知らせる)。
         Assert.True(plan!.InAppOnly);
@@ -281,7 +281,7 @@ public sealed class EditingPerformanceTests(ITestOutputHelper output)
         // 手順 4
         long after = PrivateBytesAfterGc();
         output.Report($"100 GiB の貼り付け: {Ms(paste)}、プライベートバイトの増加 {(after - before) / (double)MiB:F1} MiB");
-        Assert.True(paste <= TimeSpan.FromSeconds(1), Ms(paste));
+        TimeLimit(paste <= TimeSpan.FromSeconds(1), Ms(paste));
         Assert.True(after - before <= 50 * MiB, $"増加 {(after - before) / MiB} MiB");
     }
 }

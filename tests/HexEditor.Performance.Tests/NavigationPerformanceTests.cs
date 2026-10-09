@@ -49,7 +49,7 @@ public sealed class NavigationPerformanceTests(ITestOutputHelper output)
             long top = editor.TopRow * editor.BytesPerRow;
             Assert.Equal(ReadFile(path, top, shown.Length), shown);
             Assert.True(editor.Cursor >= top && editor.Cursor < top + shown.Length);
-            Assert.True(time <= TimeSpan.FromMilliseconds(100), $"0x{target:X}: {Ms(time)}");
+            TimeLimit(time <= TimeSpan.FromMilliseconds(100), $"0x{target:X}: {Ms(time)}");
         }
 
         output.Report("ジャンプから表示まで: " + string.Join("、", times));
@@ -174,7 +174,7 @@ public sealed class NavigationPerformanceTests(ITestOutputHelper output)
         doc!.Dispose();
         long read = readAfter - readBefore;
         output.Report($"{id}: 開く要求から先頭行の表示まで {Ms(time)}、読んだ量 {read:N0} バイト");
-        Assert.True(time <= TimeSpan.FromSeconds(1), Ms(time));
+        TimeLimit(time <= TimeSpan.FromSeconds(1), Ms(time));
         Assert.True(read <= MiB, $"{read:N0} バイト");
     }
 }

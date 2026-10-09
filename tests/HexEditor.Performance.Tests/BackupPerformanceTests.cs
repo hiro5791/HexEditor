@@ -42,8 +42,8 @@ public sealed class BackupPerformanceTests(ITestOutputHelper output) : IDisposab
         TimeSpan small = SaveWithBackup("TD-SEQ-1M");
         TimeSpan large = SaveWithBackup("TD-ENG-SPARSE-10G");
         output.Report($"バックアップの作成: 1 MiB {Ms(small)}、10 GiB {Ms(large)}");
-        Assert.True(small <= TimeSpan.FromSeconds(1), Ms(small));
-        Assert.True(large <= TimeSpan.FromSeconds(1), Ms(large));
-        Assert.True((large - small).Duration() < TimeSpan.FromMilliseconds(500), $"{Ms(small)} / {Ms(large)}");
+        TimeLimit(small <= TimeSpan.FromSeconds(1), Ms(small));
+        TimeLimit(large <= TimeSpan.FromSeconds(1), Ms(large));
+        TimeLimit((large - small).Duration() < TimeSpan.FromMilliseconds(500), $"{Ms(small)} / {Ms(large)}");
     }
 }

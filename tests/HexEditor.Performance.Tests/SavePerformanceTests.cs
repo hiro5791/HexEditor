@@ -57,7 +57,7 @@ public sealed class SavePerformanceTests(ITestOutputHelper output) : IDisposable
         (TimeSpan time, long written, SaveMethod method) = Save(doc);
         output.Report($"100 GiB の 1 バイトの保存 ({method}): {Ms(time)}、書き込み量 {written:N0} バイト");
         Assert.Equal(SaveMethod.InPlace, method);
-        Assert.True(time <= TimeSpan.FromSeconds(1), Ms(time));
+        TimeLimit(time <= TimeSpan.FromSeconds(1), Ms(time));
         Assert.Equal([0xFF], ReadFile(path, 1L << 32, 1));
         Assert.Equal(100 * GiB, new FileInfo(path).Length);
         Assert.False(doc.IsModified);
@@ -87,7 +87,7 @@ public sealed class SavePerformanceTests(ITestOutputHelper output) : IDisposable
         (TimeSpan time, long written, SaveMethod method) = Save(doc);
         output.Report($"100 GiB の 10 か所の保存 ({method}): {Ms(time)}、書き込み量 {written:N0} バイト");
         Assert.Equal(SaveMethod.InPlace, method);
-        Assert.True(time <= TimeSpan.FromSeconds(1), Ms(time));
+        TimeLimit(time <= TimeSpan.FromSeconds(1), Ms(time));
         Assert.True(written <= MiB, $"書き込み量 {written:N0} バイト");
 
         // 手順 3

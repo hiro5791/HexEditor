@@ -2,6 +2,7 @@ using System.Diagnostics;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Sources;
 using HexEditor.TestData;
+using static HexEditor.Performance.Tests.PerfSupport;
 
 namespace HexEditor.Performance.Tests;
 
@@ -68,7 +69,7 @@ public sealed class EnginePerformanceTests
         foreach (long offset in offsets)
         {
             TimeSpan max = MaxOf20(() => RestoreTo(doc, prepared), () => doc.Insert(offset, [0xAA]));
-            Assert.True(max < Limit, $"オフセット {offset:X}: {max.TotalMilliseconds} ms");
+            TimeLimit(max < Limit, $"オフセット {offset:X}: {max.TotalMilliseconds} ms");
 
             byte[] around = Read(doc, Math.Max(0, offset - 16), (int)Math.Min(33, doc.Length - Math.Max(0, offset - 16)));
             int at = (int)(offset - Math.Max(0, offset - 16));
@@ -86,13 +87,13 @@ public sealed class EnginePerformanceTests
         DocumentSnapshot original = doc.Current;
 
         TimeSpan delete = MaxOf20(() => RestoreTo(doc, original), () => doc.Delete(10 * GiB, 10 * GiB));
-        Assert.True(delete < Limit, $"削除: {delete.TotalMilliseconds} ms");
+        TimeLimit(delete < Limit, $"削除: {delete.TotalMilliseconds} ms");
         Assert.Equal(90 * GiB, doc.Length);
         Assert.Equal(ReadSnapshot(original, 20 * GiB, 17), Read(doc, 10 * GiB, 17));
 
         long from = (1L << 32) - GiB;
         TimeSpan copy = MaxOf20(() => RestoreTo(doc, original), () => doc.InsertCopy(60 * GiB, from, 10 * GiB));
-        Assert.True(copy < Limit, $"複製: {copy.TotalMilliseconds} ms");
+        TimeLimit(copy < Limit, $"複製: {copy.TotalMilliseconds} ms");
         Assert.Equal(110 * GiB, doc.Length);
         Assert.Equal(TestDataCatalog.Marker(1L << 32), Read(doc, 60 * GiB + GiB, 17));
     }
@@ -105,7 +106,7 @@ public sealed class EnginePerformanceTests
         long memoryBefore = doc.MemoryUsage.TotalInMemory;
         var watch = Stopwatch.StartNew();
         doc.OverwritePattern(0, 1L << 40, [0xDE, 0xAD, 0xBE, 0xEF]);
-        Assert.True(watch.Elapsed < Limit, $"{watch.Elapsed.TotalMilliseconds} ms");
+        TimeLimit(watch.Elapsed < Limit, $"{watch.Elapsed.TotalMilliseconds} ms");
         Assert.True(doc.MemoryUsage.TotalInMemory - memoryBefore <= TestDataCatalog.MiB);
 
         byte[] pattern = [0xDE, 0xAD, 0xBE, 0xEF];
@@ -140,8 +141,8 @@ public sealed class EnginePerformanceTests
             Assert.Equal(TestDataCatalog.Marker((1L << 32) + 10 * GiB), Read(doc, 1L << 32, 17));
         }
 
-        Assert.True(undo < Limit, $"Undo: {undo.TotalMilliseconds} ms");
-        Assert.True(redo < Limit, $"Redo: {redo.TotalMilliseconds} ms");
+        TimeLimit(undo < Limit, $"Undo: {undo.TotalMilliseconds} ms");
+        TimeLimit(redo < Limit, $"Redo: {redo.TotalMilliseconds} ms");
     }
 
     [Fact]
@@ -153,7 +154,7 @@ public sealed class EnginePerformanceTests
 
         var watch = Stopwatch.StartNew();
         doc.OverwritePattern(0, doc.Length, [0x00]);
-        Assert.True(watch.Elapsed < Limit, $"塗りつぶし: {watch.Elapsed.TotalMilliseconds} ms");
+        TimeLimit(watch.Elapsed < Limit, $"塗りつぶし: {watch.Elapsed.TotalMilliseconds} ms");
         long[] offsets = [1L << 31, 1L << 32, (1L << 40) - 8, doc.Length - 8];
         foreach (long offset in offsets)
         {
@@ -164,7 +165,7 @@ public sealed class EnginePerformanceTests
 
         watch.Restart();
         doc.Undo();
-        Assert.True(watch.Elapsed < Limit, $"Undo: {watch.Elapsed.TotalMilliseconds} ms");
+        TimeLimit(watch.Elapsed < Limit, $"Undo: {watch.Elapsed.TotalMilliseconds} ms");
         Assert.Equal(TestDataCatalog.Marker(1L << 32), Read(doc, 1L << 32, 17));
         Assert.Empty(doc.Current.EnumerateModifiedRanges());
     }

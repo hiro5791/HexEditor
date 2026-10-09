@@ -63,8 +63,8 @@ public sealed class ContentEditPerformanceTests(ITestOutputHelper output)
         }
 
         output.Report($"1 TiB の挿入: {Summary(inserts)} / 元に戻す: {Summary(undos)}");
-        Assert.True(MaxExceptFirst(inserts) <= Limit, "挿入 " + Summary(inserts));
-        Assert.True(MaxExceptFirst(undos) <= Limit, "元に戻す " + Summary(undos));
+        TimeLimit(MaxExceptFirst(inserts) <= Limit, "挿入 " + Summary(inserts));
+        TimeLimit(MaxExceptFirst(undos) <= Limit, "元に戻す " + Summary(undos));
     }
 
     [Fact]
@@ -108,7 +108,7 @@ public sealed class ContentEditPerformanceTests(ITestOutputHelper output)
         }
 
         output.Report($"4 GiB への変更: {Summary(times)}");
-        Assert.True(MaxExceptFirst(times) <= Limit, Summary(times));
+        TimeLimit(MaxExceptFirst(times) <= Limit, Summary(times));
     }
 
     [Fact]
@@ -139,6 +139,6 @@ public sealed class ContentEditPerformanceTests(ITestOutputHelper output)
         }
 
         output.Report($"100 GB の塗りつぶし: {Summary(times)}");
-        Assert.True(MaxExceptFirst(times) <= Limit, Summary(times));
+        TimeLimit(MaxExceptFirst(times) <= Limit, Summary(times));
     }
 }

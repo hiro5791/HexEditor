@@ -39,6 +39,30 @@ internal static class PerfSupport
         StartupPrivateBytes = process.PrivateMemorySize64;
     }
 
+    /// <summary>性能テスト用の固定の環境 (テスト方針 6.6。環境変数 HEXEDITOR_PERF_MACHINE が 1)。</summary>
+    public static bool IsPerfMachine => Environment.GetEnvironmentVariable("HEXEDITOR_PERF_MACHINE") == "1";
+
+    /// <summary>
+    /// 時間・速さの目標 (テスト方針 6.6)。性能テスト用の固定の環境では失敗にし、それ以外 (共有の CI ランナー・開発者の PC) では
+    /// 警告にする (標準出力と、CI ではジョブの概要に書く)。共有のランナーの時間は他の負荷で大きく変わり、合否を判定できないため。
+    /// メモリ使用量と書き込み量の上限は、どの環境でも Assert で失敗にする。
+    /// </summary>
+    public static void TimeLimit(bool ok, string message, [System.Runtime.CompilerServices.CallerMemberName] string test = "")
+    {
+        if (ok)
+        {
+            return;
+        }
+
+        Assert.False(IsPerfMachine, message);
+        string line = $"⚠ {test}: {message} (time limit, a failure only on the performance machine: HEXEDITOR_PERF_MACHINE=1)";
+        Console.WriteLine(line);
+        if (Environment.GetEnvironmentVariable("GITHUB_STEP_SUMMARY") is { Length: > 0 } summary)
+        {
+            File.AppendAllText(summary, "- " + line + Environment.NewLine);
+        }
+    }
+
     public static Document Open(string id) => new(FileByteSource.Open(TestDataCatalog.Get(id)), Options());
 
     public static EditorState Editor(Document doc) => new(doc) { VisibleRows = VisibleRows };

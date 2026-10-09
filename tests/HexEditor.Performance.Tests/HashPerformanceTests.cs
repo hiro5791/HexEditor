@@ -3,6 +3,7 @@ using HexEditor.Core.Engine;
 using HexEditor.Core.Hashing;
 using HexEditor.Core.Sources;
 using Xunit.Abstractions;
+using static HexEditor.Performance.Tests.PerfSupport;
 
 namespace HexEditor.Performance.Tests;
 
@@ -39,14 +40,14 @@ public sealed class HashPerformanceTests(ITestOutputHelper output)
     [Theory]
     [InlineData("crc32")]
     [InlineData("crc32c")]
-    public void TableCrcIsAtLeastOneGigabytePerSecond(string id) => Assert.True(MeasureGigabytesPerSecond(id) >= 1.0);
+    public void TableCrcIsAtLeastOneGigabytePerSecond(string id) => TimeLimit(MeasureGigabytesPerSecond(id) is var speed && speed >= 1.0, $"{speed:F2} GB/s");
 
     [Fact]
     public void Sha256IsAtLeastOneGigabytePerSecond()
     {
         // 目標は SHA 拡張命令のある CPU のもの (ANA-18)。.NET は OS (CNG) の実装を使い、命令があれば使う。
         double speed = MeasureGigabytesPerSecond("sha256");
-        Assert.True(speed >= 1.0, $"{speed:F2} GB/s");
+        TimeLimit(speed >= 1.0, $"{speed:F2} GB/s");
     }
 
     [Fact]
@@ -55,6 +56,6 @@ public sealed class HashPerformanceTests(ITestOutputHelper output)
         // よく使う 4 つは並列に計算するため、全体の速さは最も遅いもの (MD5) と同程度になる。
         double all = MeasureGigabytesPerSecond("crc32", "md5", "sha1", "sha256");
         double md5 = MeasureGigabytesPerSecond("md5");
-        Assert.True(all >= md5 * 0.6, $"{all:F2} GB/s (MD5 alone {md5:F2} GB/s)");
+        TimeLimit(all >= md5 * 0.6, $"{all:F2} GB/s (MD5 alone {md5:F2} GB/s)");
     }
 }

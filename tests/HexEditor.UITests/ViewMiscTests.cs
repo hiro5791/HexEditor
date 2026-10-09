@@ -653,6 +653,7 @@ public sealed class ViewMiscTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-UI-50-02")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Hex_view_value_reports_the_cursor() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-BYTES-256")] });
@@ -666,7 +667,7 @@ public sealed class ViewMiscTests
         Assert.Contains("J", value);
     });
 
-    [Fact]
+    [PerfEnvironmentFact]
     [Trait(UiTest.TC, "TC-UI-50-03")]
     [Trait(UiTest.Category, "Nightly")]
     public Task Document_range_is_fast_on_100_GB() => UiTestContext.RunAsync(async ctx =>

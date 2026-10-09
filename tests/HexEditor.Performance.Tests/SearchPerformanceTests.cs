@@ -5,6 +5,7 @@ using HexEditor.Core.Search;
 using HexEditor.Core.Sources;
 using HexEditor.TestData;
 using Xunit.Abstractions;
+using static HexEditor.Performance.Tests.PerfSupport;
 
 namespace HexEditor.Performance.Tests;
 
@@ -98,7 +99,7 @@ public sealed class SearchPerformanceTests(ITestOutputHelper output)
             TimeSpan time = watch.Elapsed;
             Assert.Equal(10_737_418_232, hit?.Offset);
             Assert.Equal(8, hit?.Length);
-            Assert.True(time <= TimeSpan.FromSeconds(10), $"{i + 1} 回目: {time.TotalSeconds:F2} 秒");
+            TimeLimit(time <= TimeSpan.FromSeconds(10), $"{i + 1} 回目: {time.TotalSeconds:F2} 秒");
             slowest = Math.Min(slowest, length / (double)MiB / time.TotalSeconds);
         }
 
@@ -116,7 +117,7 @@ public sealed class SearchPerformanceTests(ITestOutputHelper output)
             read = length / (double)MiB / watch.Elapsed.TotalSeconds;
         }
 
-        Assert.True(slowest >= read * 0.8, $"検索 {slowest:F0} MiB/s、読み込み {read:F0} MiB/s");
+        TimeLimit(slowest >= read * 0.8, $"検索 {slowest:F0} MiB/s、読み込み {read:F0} MiB/s");
     }
 
     /// <summary>
@@ -146,7 +147,7 @@ public sealed class SearchPerformanceTests(ITestOutputHelper output)
                 slowest = Math.Min(slowest, data.Length / (double)MiB / watch.Elapsed.TotalSeconds);
             }
 
-            Assert.True(slowest >= target, $"{pattern.Length} バイトのパターン: {slowest:F0} MiB/s (目標 {target} MiB/s)");
+            TimeLimit(slowest >= target, $"{pattern.Length} バイトのパターン: {slowest:F0} MiB/s (目標 {target} MiB/s)");
         }
     }
 
@@ -188,7 +189,7 @@ public sealed class SearchPerformanceTests(ITestOutputHelper output)
                 slowest = Math.Min(slowest, speed);
             }
 
-            Assert.True(slowest >= target, $"{hex}: {slowest:F0} MiB/s (目標 {target:F0} MiB/s、読み込み {read:F0} MiB/s)");
+            TimeLimit(slowest >= target, $"{hex}: {slowest:F0} MiB/s (目標 {target:F0} MiB/s、読み込み {read:F0} MiB/s)");
         }
     }
 
@@ -230,7 +231,7 @@ public sealed class SearchPerformanceTests(ITestOutputHelper output)
             var watch = Stopwatch.StartNew();
             Assert.Equal(1000, ReplaceAll(doc, find, "87 65 43 21"));
             TimeSpan time = watch.Elapsed;
-            Assert.True(time <= TimeSpan.FromSeconds(1), $"{i + 1} 回目: {time.TotalMilliseconds:F0} ms");
+            TimeLimit(time <= TimeSpan.FromSeconds(1), $"{i + 1} 回目: {time.TotalMilliseconds:F0} ms");
             Assert.Equal(0, SearchEngine.Count(doc.Current, find).Count);
             Assert.Equal(1000, SearchEngine.Count(doc.Current, replaced).Count);
             doc.Undo();
@@ -269,7 +270,7 @@ public sealed class SearchPerformanceTests(ITestOutputHelper output)
             Console.WriteLine($"警告: 適用に {time.TotalSeconds:F1} 秒かかりました (目標 5 秒)。");
         }
 
-        Assert.True(time <= TimeSpan.FromSeconds(30), $"適用の時間: {time.TotalSeconds:F1} 秒");
+        TimeLimit(time <= TimeSpan.FromSeconds(30), $"適用の時間: {time.TotalSeconds:F1} 秒");
     }
 
     /// <summary>
@@ -294,7 +295,7 @@ public sealed class SearchPerformanceTests(ITestOutputHelper output)
         process.Refresh();
         long growth = process.PrivateMemorySize64 - before;
         output.Report($"100 GiB の長さを変えるすべて置換 ({found.Count} 件) の適用: {time.TotalMilliseconds:F0} ms、メモリの増加 {growth / MiB} MiB");
-        Assert.True(time <= TimeSpan.FromSeconds(1), $"適用の時間: {time.TotalMilliseconds:F0} ms");
+        TimeLimit(time <= TimeSpan.FromSeconds(1), $"適用の時間: {time.TotalMilliseconds:F0} ms");
         Assert.True(growth <= 50 * MiB, $"メモリ使用量の増加: {growth / MiB} MiB");
         Assert.Equal((100 * GiB) + found.Count, doc.Length);
     }
@@ -315,6 +316,6 @@ public sealed class SearchPerformanceTests(ITestOutputHelper output)
         SearchHit? hit = SearchEngine.Find(doc.Current, SearchPattern.FromHex("DE"), 0, forward: true, wrap: false, new SearchOptions { Scope = window });
         TimeSpan time = watch.Elapsed;
         Assert.Null(hit);
-        Assert.True(time <= TimeSpan.FromSeconds(10), $"{time.TotalSeconds:F1} 秒");
+        TimeLimit(time <= TimeSpan.FromSeconds(10), $"{time.TotalSeconds:F1} 秒");
     }
 }
