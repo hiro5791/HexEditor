@@ -19,6 +19,48 @@ public sealed partial class StaticCheckTests
     [GeneratedRegex(@"#if\s+.*HEX_DISTRO_|GetCurrentPackageFullName|Package\.Current|portable\.marker")]
     private static partial Regex DistributionCheck();
 
+    /// <summary>ネットワークに接続してよいファイル: 通信の入口と、通信の入口で許可を確かめる Velopack のダウンロード (UI-57、UI-58)。</summary>
+    private static readonly string[] NetworkFiles =
+    [
+        "src/HexEditor.Platform/Network/NetworkClient.cs",
+        "src/HexEditor.App/Hosting/VelopackBootstrap.cs",
+    ];
+
+    [GeneratedRegex(@"\bnew\s+HttpClient\b|\bHttpClient\s*\(|\b(TcpClient|UdpClient|TcpListener|WebRequest|HttpWebRequest|WebClient|ClientWebSocket)\b|\bnew\s+Socket\s*\(|\bDns\.")]
+    private static partial Regex NetworkUse();
+
+    [Fact]
+    [Trait(TC, "TC-UI-57-03")]
+    [Trait(TC, "TC-UI-58-04")]
+    public void Only_the_network_client_connects_to_the_network()
+    {
+        var found = new List<string>();
+        foreach (string file in Directory.EnumerateFiles(RepoFile("src"), "*.cs", SearchOption.AllDirectories))
+        {
+            string relative = Path.GetRelativePath(RepoRoot, file).Replace('\\', '/');
+            if (relative.Contains("/obj/") || relative.Contains("/bin/") || NetworkFiles.Contains(relative, StringComparer.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            string[] lines = File.ReadAllLines(file);
+            for (int i = 0; i < lines.Length; i++)
+            {
+                string line = lines[i].TrimStart();
+                if (!line.StartsWith("//", StringComparison.Ordinal) && NetworkUse().IsMatch(line))
+                {
+                    found.Add($"{relative}:{i + 1}: {line}");
+                }
+            }
+        }
+
+        Assert.True(found.Count == 0, "network access outside NetworkClient:\n" + string.Join("\n", found));
+
+        // Velopack のダウンロードも、要求の前に通信の入口で許可を確かめる。
+        string velopack = File.ReadAllText(RepoFile("src/HexEditor.App/Hosting/VelopackBootstrap.cs"));
+        Assert.Contains("network.EnsureAllowed(NetworkFeature.Updates)", velopack, StringComparison.Ordinal);
+    }
+
     [Fact]
     [Trait(TC, "TC-PKG-01-03")]
     public void OnlyTheEnvironmentDetectsTheDistribution()

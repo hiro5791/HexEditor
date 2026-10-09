@@ -33,6 +33,33 @@ public sealed class ScreenshotTests
     /// <summary>表示倍率 (200% は画面全体のズームで再現する)。</summary>
     private static readonly int[] Scales = [100, 200];
 
+    /// <summary>撮る (表示倍率, 大きさ) の組み合わせ: 物理ピクセルのウィンドウが主モニターに収まるものだけ (UI-47 の仕様 2)。</summary>
+    private static IEnumerable<(int Scale, int Width, int Height)> Combinations()
+    {
+        int screenWidth = GetSystemMetrics(0), screenHeight = GetSystemMetrics(1);
+        double dpi = GetDpiForSystem() / 96.0;
+        foreach (int scale in Scales)
+        {
+            foreach ((int width, int height) in Sizes)
+            {
+                if (width * dpi * scale / 100 <= screenWidth && height * dpi * scale / 100 <= screenHeight)
+                {
+                    yield return (scale, width, height);
+                }
+            }
+        }
+    }
+
+    /// <summary>撮らない (画面に収まらない) 組み合わせ。</summary>
+    private static IEnumerable<(int Scale, int Width, int Height)> Skipped() =>
+        Scales.SelectMany(s => Sizes.Select(z => (s, z.Width, z.Height))).Except(Combinations());
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern int GetSystemMetrics(int index);
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern uint GetDpiForSystem();
+
     public static string OutputRoot =>
         Environment.GetEnvironmentVariable("HEXEDITOR_SCREENSHOTS") is { Length: > 0 } dir
             ? dir
@@ -57,10 +84,13 @@ public sealed class ScreenshotTests
             warnings.AddRange(shots.Compare());
         }
 
-        // 期待結果: 言語ごとのフォルダに、画面 × 表示倍率 2 × テーマ 2 × 大きさ 2 の数の PNG (失敗したものは一覧に「失敗」) と一覧の HTML。
+        // 期待結果: 言語ごとのフォルダに、画面 × 画面に収まる (表示倍率 × 大きさの) 組み合わせ × テーマ 2 の数の PNG (失敗したものは
+        // 一覧に「失敗」) と一覧の HTML。画面に収まらない組み合わせは撮らない (UI-47 の仕様 2。CI のランナーの画面は 1024 × 768)。
         string[] folders = [.. Directory.GetDirectories(OutputRoot).Select(Path.GetFileName)!];
         Assert.Equal(languages.Order(), folders.Order());
-        int expected = MainScreens.AllNames.Length * Scales.Length * Themes.Length * Sizes.Length;
+        int combinations = Combinations().Count();
+        Assert.True(combinations > 0, "no window size fits the screen");
+        int expected = MainScreens.AllNames.Length * combinations * Themes.Length;
         foreach (string folder in Directory.GetDirectories(OutputRoot))
         {
             string index = Path.Combine(folder, "index.html");
@@ -88,6 +118,9 @@ public sealed class ScreenshotTests
         public List<(string Screen, string Theme, string Size, int Scale, string? File, string? Error)> Rows { get; } = [];
 
         public SortedSet<string> Clipped { get; } = new(StringComparer.Ordinal);
+
+        /// <summary>画面が小さいため撮っていない組み合わせ (テーマ 大きさ 表示倍率)。一覧に記録する。</summary>
+        public List<string> Skipped { get; } = [];
 
         /// <summary>前回の出力 (HEXEDITOR_SCREENSHOTS_BASELINE) と比べ、増えた切れの行を返す。</summary>
         public IEnumerable<string> Compare()
@@ -124,7 +157,14 @@ public sealed class ScreenshotTests
                 html.Append("</tr>");
             }
 
-            html.Append("</table></body></html>");
+            html.Append("</table>");
+            if (Skipped.Count > 0)
+            {
+                html.Append("<p>画面が小さいため撮っていません / Not captured (the screen is too small): ")
+                    .Append(System.Net.WebUtility.HtmlEncode(string.Join(", ", Skipped))).Append("</p>");
+            }
+
+            html.Append("</body></html>");
             File.WriteAllText(Path.Combine(folder, "index.html"), html.ToString());
         }
     }
@@ -135,11 +175,19 @@ public sealed class ScreenshotTests
         var shots = new Shots(language, folder);
         bool pseudo = language.StartsWith("qps-", StringComparison.Ordinal);
         IReadOnlyList<(string, Regex)> keys = TrimReport.Keys(language);
+        foreach ((int scale, int width, int height) in Skipped())
+        {
+            foreach (string theme in Themes)
+            {
+                shots.Skipped.Add($"{theme} {width}x{height} {scale}%");
+            }
+        }
+
         foreach (int scale in Scales)
         {
             foreach (string theme in Themes)
             {
-                foreach ((int width, int height) in Sizes)
+                foreach ((int width, int height) in Sizes.Where(z => Combinations().Contains((scale, z.Width, z.Height))))
                 {
                     string size = $"{width}x{height}";
                     await using UiTestContext ctx = UiTestContext.Create($"shots-{language}-{theme}-{size}-{scale}");

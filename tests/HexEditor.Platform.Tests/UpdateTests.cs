@@ -52,6 +52,7 @@ public sealed class UpdateTests : IDisposable
 
     [Fact]
     [Trait(TC, "TC-PKG-17-01")]
+    [Trait(TC, "TC-UI-57-03")]
     public async Task Turning_off_automatic_checks_sends_nothing_at_start_or_after_24_hours()
     {
         _settings.SetBool(UpdatePreferences.CheckAutomaticallyKey, false);
@@ -144,6 +145,7 @@ public sealed class UpdateTests : IDisposable
     }
 
     [Fact]
+    [Trait(TC, "TC-UI-58-04")]
     public async Task Offline_mode_never_checks_and_the_manual_check_says_why()
     {
         _settings.SetBool(NetworkPolicy.OfflineKey, true);
@@ -545,6 +547,7 @@ public sealed class UpdateTests : IDisposable
     }
 
     [Fact]
+    [Trait(TC, "TC-UI-58-04")]
     public async Task Return_to_stable_in_offline_mode_does_not_connect()
     {
         _settings.SetBool(NetworkPolicy.OfflineKey, true);
