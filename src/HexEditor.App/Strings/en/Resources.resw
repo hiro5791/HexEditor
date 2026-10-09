@@ -2765,4 +2765,71 @@ Details were written to:
   <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Bytes per line in copied hex</value></data>
   <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Inserts a line break after this many bytes. 0 doesn't add line breaks.</value></data>
   <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>The selection ({0}) is too large to give to other apps. You can paste it inside HexEditor.</value></data>
+  <data name="Inspector_Row_int24" xml:space="preserve"><value>int24</value></data>
+  <data name="Inspector_Row_uint24" xml:space="preserve"><value>uint24</value></data>
+  <data name="Inspector_Row_int48" xml:space="preserve"><value>int48</value></data>
+  <data name="Inspector_Row_uint48" xml:space="preserve"><value>uint48</value></data>
+  <data name="Inspector_Row_int128" xml:space="preserve"><value>int128</value></data>
+  <data name="Inspector_Row_uint128" xml:space="preserve"><value>uint128</value></data>
+  <data name="Inspector_Row_half" xml:space="preserve"><value>half</value></data>
+  <data name="Inspector_Row_bfloat16" xml:space="preserve"><value>bfloat16</value></data>
+  <data name="Inspector_Row_float80" xml:space="preserve"><value>long double (80 bit)</value></data>
+  <data name="Inspector_Row_real48" xml:space="preserve"><value>Real48</value></data>
+  <data name="Inspector_Row_uleb128" xml:space="preserve"><value>ULEB128</value></data>
+  <data name="Inspector_Row_sleb128" xml:space="preserve"><value>SLEB128</value></data>
+  <data name="Inspector_Row_sqlitevarint" xml:space="preserve"><value>SQLite varint</value></data>
+  <data name="Inspector_Row_cstrAnsi" xml:space="preserve"><value>NUL-terminated (ANSI)</value></data>
+  <data name="Inspector_Row_cstrUtf8" xml:space="preserve"><value>NUL-terminated (UTF-8)</value></data>
+  <data name="Inspector_Row_cstrUtf16" xml:space="preserve"><value>NUL-terminated (UTF-16)</value></data>
+  <data name="Inspector_Row_pstr8Ansi" xml:space="preserve"><value>Pascal string (1-byte length, ANSI)</value></data>
+  <data name="Inspector_Row_pstr8Utf8" xml:space="preserve"><value>Pascal string (1-byte length, UTF-8)</value></data>
+  <data name="Inspector_Row_pstr16Ansi" xml:space="preserve"><value>Pascal string (2-byte length, ANSI)</value></data>
+  <data name="Inspector_Row_pstr16Utf8" xml:space="preserve"><value>Pascal string (2-byte length, UTF-8)</value></data>
+  <data name="Inspector_Row_pstr32Ansi" xml:space="preserve"><value>Pascal string (4-byte length, ANSI)</value></data>
+  <data name="Inspector_Row_pstr32Utf8" xml:space="preserve"><value>Pascal string (4-byte length, UTF-8)</value></data>
+  <data name="Inspector_Row_rgba8" xml:space="preserve"><value>RGBA8</value></data>
+  <data name="Inspector_Row_bgra8" xml:space="preserve"><value>BGRA8</value></data>
+  <data name="Inspector_Row_rgb8" xml:space="preserve"><value>RGB8</value></data>
+  <data name="Inspector_Row_rgb565" xml:space="preserve"><value>RGB565</value></data>
+  <data name="Inspector_Row_unixms" xml:space="preserve"><value>Unix time (ms, 64 bit) / Java</value></data>
+  <data name="Inspector_Row_oledate" xml:space="preserve"><value>OLE Automation date</value></data>
+  <data name="Inspector_Row_hfsplus" xml:space="preserve"><value>HFS+ date</value></data>
+  <data name="Inspector_Row_apfs" xml:space="preserve"><value>APFS date</value></data>
+  <data name="Inspector_Row_cocoa" xml:space="preserve"><value>Mac absolute time (Cocoa)</value></data>
+  <data name="Inspector_Row_sqldatetime" xml:space="preserve"><value>SQL Server datetime</value></data>
+  <data name="Inspector_Row_sqlsmalldatetime" xml:space="preserve"><value>SQL Server smalldatetime</value></data>
+  <data name="Inspector_Row_dotnetdatetime" xml:space="preserve"><value>.NET DateTime</value></data>
+  <data name="Inspector_Row_digitsdatetime" xml:space="preserve"><value>Date in decimal digits</value></data>
+  <data name="Inspector_FixedName" xml:space="preserve"><value>{0}.{1} ({2}, {3} bit)</value></data>
+  <data name="Inspector_FixedSigned" xml:space="preserve"><value>signed</value></data>
+  <data name="Inspector_FixedUnsigned" xml:space="preserve"><value>unsigned</value></data>
+  <data name="Inspector_Unnormal" xml:space="preserve"><value>Unnormal representation</value></data>
+  <data name="Inspector_TooLarge64" xml:space="preserve"><value>Exceeds 64 bit</value></data>
+  <data name="Inspector_StringCounts" xml:space="preserve"><value>({0, plural, one {# char} other {# chars}}, {1, plural, one {# byte} other {# bytes}})</value></data>
+  <data name="Inspector_NotTerminated" xml:space="preserve"><value>No terminator (4 KB or more)</value></data>
+  <data name="Inspector_NotTerminatedAtEnd" xml:space="preserve"><value>No terminator before the end of the data</value></data>
+  <data name="Inspector_ColorComponents" xml:space="preserve"><value>R {0}, G {1}, B {2}, A {3}</value></data>
+  <data name="Inspector_KindLocal" xml:space="preserve"><value>(local time)</value></data>
+  <data name="Inspector_KindUnspecified" xml:space="preserve"><value>(unspecified kind)</value></data>
+  <data name="Inspector_DigitsNeeded" xml:space="preserve"><value>At least 8 digits are needed ({0} found)</value></data>
+  <data name="Inspector_DigitsUnixSeconds" xml:space="preserve"><value>Unix seconds</value></data>
+  <data name="Inspector_DigitsUnixMilliseconds" xml:space="preserve"><value>Unix milliseconds</value></data>
+  <data name="Inspector_InvalidDigits" xml:space="preserve"><value>Invalid</value></data>
+  <data name="Inspector_ErrorVarIntLength" xml:space="preserve"><value>The byte count would change, so the value can't be written (was {0} bytes, now {1} bytes)</value></data>
+  <data name="Inspector_ErrorStringTooLong" xml:space="preserve"><value>Longer than the original length ({0} bytes)</value></data>
+  <data name="Inspector_ErrorNotTerminated" xml:space="preserve"><value>The original string has no terminator, so its length is unknown</value></data>
+  <data name="Inspector_ErrorColor" xml:space="preserve"><value>Enter a color such as #FF8000 or #FF8000FF</value></data>
+  <data name="Inspector_ErrorEscape" xml:space="preserve"><value>Invalid escape sequence (use \n, \t, \0, \xNN, \" or \\)</value></data>
+  <data name="Inspector_ErrorDigits" xml:space="preserve"><value>The value needs {1} digits, but the original has {0}</value></data>
+  <data name="Inspector_PickColorName" xml:space="preserve"><value>Choose a color</value></data>
+  <data name="Inspector_WriteColor" xml:space="preserve"><value>Write</value></data>
+  <data name="Inspector_FixedLabel.Text" xml:space="preserve"><value>Add a fixed-point row</value></data>
+  <data name="Inspector_FixedSignedBox.Content" xml:space="preserve"><value>Signed</value></data>
+  <data name="Inspector_FixedSignedBox.AutomationProperties.Name" xml:space="preserve"><value>Signed</value></data>
+  <data name="Inspector_FixedTotalName" xml:space="preserve"><value>Total bits</value></data>
+  <data name="Inspector_FixedFractionName" xml:space="preserve"><value>Fraction bits</value></data>
+  <data name="Inspector_AddFixed.Content" xml:space="preserve"><value>Add</value></data>
+  <data name="Inspector_RemoveFixed.Content" xml:space="preserve"><value>Remove row</value></data>
+  <data name="Inspector_FixedInvalid" xml:space="preserve"><value>The fraction bits must be 0 to {0}</value></data>
+  <data name="Inspector_FixedLimit" xml:space="preserve"><value>Up to {0} fixed-point rows can be added</value></data>
 </root>

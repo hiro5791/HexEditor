@@ -2765,4 +2765,71 @@
   <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>コピーする Hex 文字列の 1 行のバイト数</value></data>
   <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>このバイト数ごとに改行を入れます。0 は改行を入れません。</value></data>
   <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>選択範囲 ({0}) は大きすぎるため、他のアプリには渡せません。HexEditor 内では貼り付けられます。</value></data>
+  <data name="Inspector_Row_int24" xml:space="preserve"><value>int24</value></data>
+  <data name="Inspector_Row_uint24" xml:space="preserve"><value>uint24</value></data>
+  <data name="Inspector_Row_int48" xml:space="preserve"><value>int48</value></data>
+  <data name="Inspector_Row_uint48" xml:space="preserve"><value>uint48</value></data>
+  <data name="Inspector_Row_int128" xml:space="preserve"><value>int128</value></data>
+  <data name="Inspector_Row_uint128" xml:space="preserve"><value>uint128</value></data>
+  <data name="Inspector_Row_half" xml:space="preserve"><value>half</value></data>
+  <data name="Inspector_Row_bfloat16" xml:space="preserve"><value>bfloat16</value></data>
+  <data name="Inspector_Row_float80" xml:space="preserve"><value>long double (80 bit)</value></data>
+  <data name="Inspector_Row_real48" xml:space="preserve"><value>Real48</value></data>
+  <data name="Inspector_Row_uleb128" xml:space="preserve"><value>ULEB128</value></data>
+  <data name="Inspector_Row_sleb128" xml:space="preserve"><value>SLEB128</value></data>
+  <data name="Inspector_Row_sqlitevarint" xml:space="preserve"><value>SQLite varint</value></data>
+  <data name="Inspector_Row_cstrAnsi" xml:space="preserve"><value>NUL 終端 (ANSI)</value></data>
+  <data name="Inspector_Row_cstrUtf8" xml:space="preserve"><value>NUL 終端 (UTF-8)</value></data>
+  <data name="Inspector_Row_cstrUtf16" xml:space="preserve"><value>NUL 終端 (UTF-16)</value></data>
+  <data name="Inspector_Row_pstr8Ansi" xml:space="preserve"><value>Pascal 形式 (1 バイト長, ANSI)</value></data>
+  <data name="Inspector_Row_pstr8Utf8" xml:space="preserve"><value>Pascal 形式 (1 バイト長, UTF-8)</value></data>
+  <data name="Inspector_Row_pstr16Ansi" xml:space="preserve"><value>Pascal 形式 (2 バイト長, ANSI)</value></data>
+  <data name="Inspector_Row_pstr16Utf8" xml:space="preserve"><value>Pascal 形式 (2 バイト長, UTF-8)</value></data>
+  <data name="Inspector_Row_pstr32Ansi" xml:space="preserve"><value>Pascal 形式 (4 バイト長, ANSI)</value></data>
+  <data name="Inspector_Row_pstr32Utf8" xml:space="preserve"><value>Pascal 形式 (4 バイト長, UTF-8)</value></data>
+  <data name="Inspector_Row_rgba8" xml:space="preserve"><value>RGBA8</value></data>
+  <data name="Inspector_Row_bgra8" xml:space="preserve"><value>BGRA8</value></data>
+  <data name="Inspector_Row_rgb8" xml:space="preserve"><value>RGB8</value></data>
+  <data name="Inspector_Row_rgb565" xml:space="preserve"><value>RGB565</value></data>
+  <data name="Inspector_Row_unixms" xml:space="preserve"><value>Unix 時刻 (ミリ秒, 64 bit) / Java</value></data>
+  <data name="Inspector_Row_oledate" xml:space="preserve"><value>OLE オートメーション日付</value></data>
+  <data name="Inspector_Row_hfsplus" xml:space="preserve"><value>HFS+ 日時</value></data>
+  <data name="Inspector_Row_apfs" xml:space="preserve"><value>APFS 日時</value></data>
+  <data name="Inspector_Row_cocoa" xml:space="preserve"><value>Mac 絶対時刻 (Cocoa)</value></data>
+  <data name="Inspector_Row_sqldatetime" xml:space="preserve"><value>SQL Server datetime</value></data>
+  <data name="Inspector_Row_sqlsmalldatetime" xml:space="preserve"><value>SQL Server smalldatetime</value></data>
+  <data name="Inspector_Row_dotnetdatetime" xml:space="preserve"><value>.NET DateTime</value></data>
+  <data name="Inspector_Row_digitsdatetime" xml:space="preserve"><value>10 進の数字の日時</value></data>
+  <data name="Inspector_FixedName" xml:space="preserve"><value>{0}.{1} ({2}, {3} bit)</value></data>
+  <data name="Inspector_FixedSigned" xml:space="preserve"><value>符号あり</value></data>
+  <data name="Inspector_FixedUnsigned" xml:space="preserve"><value>符号なし</value></data>
+  <data name="Inspector_Unnormal" xml:space="preserve"><value>非正規の表現</value></data>
+  <data name="Inspector_TooLarge64" xml:space="preserve"><value>64 bit を超えています</value></data>
+  <data name="Inspector_StringCounts" xml:space="preserve"><value>({0} 文字, {1} バイト)</value></data>
+  <data name="Inspector_NotTerminated" xml:space="preserve"><value>終端なし (4 KB 以上)</value></data>
+  <data name="Inspector_NotTerminatedAtEnd" xml:space="preserve"><value>データの末尾まで終端がありません</value></data>
+  <data name="Inspector_ColorComponents" xml:space="preserve"><value>R {0}, G {1}, B {2}, A {3}</value></data>
+  <data name="Inspector_KindLocal" xml:space="preserve"><value>(ローカル時刻)</value></data>
+  <data name="Inspector_KindUnspecified" xml:space="preserve"><value>(種類の指定なし)</value></data>
+  <data name="Inspector_DigitsNeeded" xml:space="preserve"><value>8 桁以上の数字が必要です (数字は {0} 桁)</value></data>
+  <data name="Inspector_DigitsUnixSeconds" xml:space="preserve"><value>Unix 秒</value></data>
+  <data name="Inspector_DigitsUnixMilliseconds" xml:space="preserve"><value>Unix ミリ秒</value></data>
+  <data name="Inspector_InvalidDigits" xml:space="preserve"><value>不正</value></data>
+  <data name="Inspector_ErrorVarIntLength" xml:space="preserve"><value>バイト数が変わるため書き込めません (元: {0} バイト、新: {1} バイト)</value></data>
+  <data name="Inspector_ErrorStringTooLong" xml:space="preserve"><value>元の長さ ({0} バイト) を超えています</value></data>
+  <data name="Inspector_ErrorNotTerminated" xml:space="preserve"><value>元の文字列に終端がないため、長さが分かりません</value></data>
+  <data name="Inspector_ErrorColor" xml:space="preserve"><value>色は #FF8000 または #FF8000FF の形で入力してください</value></data>
+  <data name="Inspector_ErrorEscape" xml:space="preserve"><value>エスケープの書き方が正しくありません (\n、\t、\0、\xNN、\"、\\ を使えます)</value></data>
+  <data name="Inspector_ErrorDigits" xml:space="preserve"><value>元は {0} 桁ですが、この値は {1} 桁になります</value></data>
+  <data name="Inspector_PickColorName" xml:space="preserve"><value>色を選ぶ</value></data>
+  <data name="Inspector_WriteColor" xml:space="preserve"><value>書き込む</value></data>
+  <data name="Inspector_FixedLabel.Text" xml:space="preserve"><value>固定小数点の行を加える</value></data>
+  <data name="Inspector_FixedSignedBox.Content" xml:space="preserve"><value>符号あり</value></data>
+  <data name="Inspector_FixedSignedBox.AutomationProperties.Name" xml:space="preserve"><value>符号あり</value></data>
+  <data name="Inspector_FixedTotalName" xml:space="preserve"><value>全体のビット数</value></data>
+  <data name="Inspector_FixedFractionName" xml:space="preserve"><value>小数部のビット数</value></data>
+  <data name="Inspector_AddFixed.Content" xml:space="preserve"><value>加える</value></data>
+  <data name="Inspector_RemoveFixed.Content" xml:space="preserve"><value>行を外す</value></data>
+  <data name="Inspector_FixedInvalid" xml:space="preserve"><value>小数部のビット数は 0〜{0} にしてください</value></data>
+  <data name="Inspector_FixedLimit" xml:space="preserve"><value>固定小数点の行は {0} 行までです</value></data>
 </root>

@@ -70,6 +70,8 @@ public sealed partial class InspectorRowSettings : UserControl
         AutomationProperties.SetName(SettingsList, Loc.Get("Inspector_SettingsList_Name"));
         AutomationProperties.SetName(PresetChoice, Loc.Get("Inspector_PresetLabel/Text"));
         AutomationProperties.SetName(DateFormatChoice, Loc.Get("Inspector_DateFormatLabel/Text"));
+        AutomationProperties.SetName(FixedTotal, Loc.Get("Inspector_FixedTotalName"));
+        AutomationProperties.SetName(FixedFraction, Loc.Get("Inspector_FixedFractionName"));
     }
 
     public InspectorViewModel? ViewModel
@@ -181,6 +183,63 @@ public sealed partial class InspectorRowSettings : UserControl
         bool hasEndian = item?.TypeId is { } id && InspectorTypes.Get(id).HasEndian;
         OppositeBox.IsEnabled = hasEndian;
         OppositeBox.IsChecked = hasEndian && _vm!.Layout.Row(item!.TypeId!)!.Opposite;
+
+        // 行の設定で加えた固定小数点の行だけを外せる (既定の 2 行は非表示にする)。
+        RemoveFixedButton.IsEnabled = item?.TypeId is { } fixedId && InspectorTypes.IsFixedPoint(fixedId)
+            && InspectorTypes.All.All(t => t.Id != fixedId);
+        AddFixedButton.IsEnabled = _vm!.Layout.FixedRowCount < InspectorTypes.MaxFixedRows;
+    }
+
+    // ---- 固定小数点の行 (INSP-06 の仕様 3) ----
+
+    private void AddFixed_Click(object sender, RoutedEventArgs e) =>
+        AddFixed(FixedSigned.IsChecked == true, int.Parse((string)((ComboBoxItem)FixedTotal.SelectedItem).Tag, System.Globalization.CultureInfo.InvariantCulture),
+            double.IsNaN(FixedFraction.Value) ? -1 : (int)FixedFraction.Value);
+
+    /// <summary>固定小数点の行を加える (テスト用の命令からも呼ぶ)。加えられなければ説明文を出して false。</summary>
+    internal bool AddFixed(bool signed, int total, int fraction)
+    {
+        if (_vm is null)
+        {
+            return false;
+        }
+
+        var format = new FixedPointFormat(signed, total, fraction);
+        if (!format.IsValid)
+        {
+            ShowFixedError(Loc.Format("Inspector_FixedInvalid", total));
+            return false;
+        }
+
+        if (_vm.Layout.Row(format.Id) is null && _vm.Layout.FixedRowCount >= InspectorTypes.MaxFixedRows)
+        {
+            ShowFixedError(Loc.Format("Inspector_FixedLimit", InspectorTypes.MaxFixedRows));
+            return false;
+        }
+
+        FixedError.Visibility = Visibility.Collapsed;
+        Apply(_vm.Layout.WithFixedRow(format));
+        if (_items.FirstOrDefault(i => i.TypeId == format.Id) is { } added)
+        {
+            SettingsList.SelectedItem = added;
+            SettingsList.ScrollIntoView(added);
+        }
+
+        return true;
+    }
+
+    private void ShowFixedError(string text)
+    {
+        FixedError.Text = text;
+        FixedError.Visibility = Visibility.Visible;
+    }
+
+    private void RemoveFixed_Click(object sender, RoutedEventArgs e)
+    {
+        if (_vm is not null && SettingsList.SelectedItem is RowSettingItem { TypeId: { } id } && InspectorTypes.IsFixedPoint(id))
+        {
+            Apply(_vm.Layout.WithoutRow(id));
+        }
     }
 
     /// <summary>開いたら一覧の先頭の行にフォーカスを置く (キーボードだけで操作する。INSP-19 の受け入れ基準 4)。</summary>
@@ -390,7 +449,8 @@ public sealed partial class InspectorRowSettings : UserControl
     /// <summary>Tab / Shift+Tab と同じ順 (TabIndex の順) に、次 / 前の要素へフォーカスを移す。</summary>
     internal bool MoveFocus(DependencyObject focused, bool back)
     {
-        Control[] order = [SettingsList, UpButton, DownButton, OppositeBox, DateFormatChoice, PresetChoice, ResetButton, PresetName, SavePresetButton];
+        Control[] order = [SettingsList, UpButton, DownButton, OppositeBox, DateFormatChoice, PresetChoice, ResetButton, PresetName, SavePresetButton,
+            FixedSigned, FixedTotal, FixedFraction, AddFixedButton, RemoveFixedButton];
         int index = Array.FindIndex(order, c => c == focused || IsInside(focused, c));
         for (int step = 1; step <= order.Length; step++)
         {
