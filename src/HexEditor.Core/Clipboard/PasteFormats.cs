@@ -72,6 +72,12 @@ public sealed record PasteOptions
 
     /// <summary>Intel HEX・S-record の「カーソル位置に貼る」でレコード間の隙間を埋める値 (既定 FF。ENG-38 と同じ)。</summary>
     public byte GapFill { get; init; } = 0xFF;
+
+    /// <summary>
+    /// 配列表記で、文字リテラル <c>'A'</c>・文字列リテラル <c>"..."</c> (エスケープを解釈)・8 進のリテラル <c>0177</c> も要素として読む
+    /// (ソースコードの配列のインポート。TOOL-09 の仕様 4)。偽なら文字列は無視する (エスケープ文字列の形式で扱う)。
+    /// </summary>
+    public bool SourceLiterals { get; init; }
 }
 
 /// <summary>1 つの形式で解釈した結果。</summary>

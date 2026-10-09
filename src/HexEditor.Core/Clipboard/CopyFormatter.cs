@@ -148,7 +148,8 @@ public static partial class CopyFormatter
         CopyFormat.HexPlain => HexList(o, w, length, e => Hex(e, 2, o), "", ""),
         CopyFormat.HexCommaPrefixed => HexList(o, w, length, e => "0x" + Hex(e, 2, o), ", ", ","),
         CopyFormat.HexEscaped => HexList(o, w, length, e => "\\x" + Hex(e, 2, o), "", ""),
-        CopyFormat.HexUrl => new ListWriter(w, o, length, 1, int.MaxValue, e => "%" + Hex(e, 2, o)) { Separator = "" },
+        CopyFormat.HexUrl => new ListWriter(w, o, length, 1, int.MaxValue,
+            e => o.UrlKeepUnreserved && IsUrlUnreserved((byte)e) ? ((char)e).ToString() : "%" + Hex(e, 2, o)) { Separator = "" },
         CopyFormat.HexCustom => HexList(o, w, length, e => o.CustomPrefix + Hex(e, 2, o) + o.CustomSuffix, o.CustomSeparator, ""),
         CopyFormat.Decimal => HexList(o, w, length, e => e.ToString(CultureInfo.InvariantCulture), " ", ""),
         CopyFormat.Octal => HexList(o, w, length, e => Convert.ToString((long)e, 8), " ", ""),
@@ -169,6 +170,10 @@ public static partial class CopyFormatter
         CopyFormat.Json => new JsonWriter(w, o, offset, length),
         _ => new PositionWriter(w, o, offset, length),
     };
+
+    /// <summary>RFC 3986 の非予約文字 (英数字と <c>-._~</c>)。</summary>
+    private static bool IsUrlUnreserved(byte b) => b is >= (byte)'A' and <= (byte)'Z' or >= (byte)'a' and <= (byte)'z' or >= (byte)'0' and <= (byte)'9'
+        or (byte)'-' or (byte)'.' or (byte)'_' or (byte)'~';
 
     private static ListWriter HexList(CopyOptions o, TextWriter w, long length, Func<ulong, string> element, string separator, string lineEnd) =>
         new(w, o, length, 1, o.BytesPerLine, element) { Separator = separator, LineEnd = lineEnd };
