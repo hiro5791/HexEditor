@@ -415,7 +415,7 @@ public sealed class SearchResultsTests
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = kind });
         if (!incremental)
         {
-            await app.SendAsync("setChecked", new JsonObject { ["id"] = "Find_Incremental", ["value"] = false });
+            await DisableIncrementalAsync(app);
         }
 
         if (encoding is not null)
@@ -425,6 +425,14 @@ public sealed class SearchResultsTests
 
         await app.UiaSetValueAsync("Find_Query", query);
     }
+
+    /// <summary>
+    /// 「入力しながら検索」(FIND-27) を切る。入力の 150 ms 後に始まるインクリメンタルサーチは、検索欄の下の表示 (変換結果) を
+    /// 検索の結果で置き換え、最初の一致を選ぶ (続く「次を検索」は次の一致に進む)。テストの操作との前後は PC の速さで変わるため、
+    /// 変換結果や「次を検索」の動作を確かめるテストでは切る。
+    /// </summary>
+    internal static Task DisableIncrementalAsync(AppSession app) =>
+        app.SendAsync("setChecked", new JsonObject { ["id"] = "Find_Incremental", ["value"] = false });
 
     /// <summary>検索欄で Alt+Enter (すべて検索)。</summary>
     internal static Task FindAllAsync(AppSession app) => app.SendAsync("findKey", new JsonObject { ["key"] = "Enter", ["alt"] = true });

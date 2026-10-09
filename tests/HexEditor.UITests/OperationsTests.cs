@@ -162,6 +162,7 @@ public sealed partial class OperationsTests
         // (IdleAsync は長時間処理の終わりを待つため使わない。)
         await app.KeyAsync("F", ctrl: true);
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 0 });
+        await SearchResultsTests.DisableIncrementalAsync(app);
         (await app.WaitForAsync("Find_Query")).Patterns.Value.Pattern.SetValue("40 30 30 30 30 30 30 30 30 30 30 31");
         await app.WaitUntilAsync(async () => (await app.ElementAsync("Find_Status"))["text"]?.GetValue<string>().StartsWith("40 30", StringComparison.Ordinal) == true,
             TimeSpan.FromSeconds(5), "the query");
@@ -320,12 +321,13 @@ public sealed partial class OperationsTests
     private static int CancelledCount(JsonObject state) =>
         state["operations"]!.AsArray().Count(o => o!["state"]!.GetValue<string>() == "Cancelled");
 
-    /// <summary>検索バーを開き、種類「Hex」で検索語を入れる。</summary>
+    /// <summary>検索バーを開き、種類「Hex」で検索語を入れる。「入力しながら検索」は切る (<see cref="SearchResultsTests.DisableIncrementalAsync"/>)。</summary>
     internal static async Task OpenFindAsync(AppSession app, string hex)
     {
         await app.KeyAsync("F", ctrl: true);
         await app.IdleAsync();
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 0 });
+        await SearchResultsTests.DisableIncrementalAsync(app);
         await app.UiaSetValueAsync("Find_Query", hex);
     }
 

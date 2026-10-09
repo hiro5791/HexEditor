@@ -210,6 +210,7 @@ public sealed class FindBarTests
         await app.IdleAsync();
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 1 });
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Encoding", ["text"] = "ASCII (7 bit)" });
+        await SearchResultsTests.DisableIncrementalAsync(app);
         await app.UiaSetValueAsync("Find_Query", text);
     }
 

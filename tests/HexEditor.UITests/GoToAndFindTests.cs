@@ -325,10 +325,12 @@ public sealed class GoToAndFindTests
         await app.IdleAsync();
     }
 
+    /// <summary>検索バーを開く。「入力しながら検索」は切る (<see cref="SearchResultsTests.DisableIncrementalAsync"/>)。</summary>
     private static async Task OpenFindAsync(AppSession app)
     {
         Assert.Equal("menu:Command_Find", (await app.KeyAsync("F", ctrl: true))["handledBy"]!.GetValue<string>());
         await app.IdleAsync();
+        await SearchResultsTests.DisableIncrementalAsync(app);
     }
 
     private static async Task GoAsync(AppSession app, string input)
