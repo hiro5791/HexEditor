@@ -99,21 +99,24 @@ public static partial class HashCatalog
         new("fnv1a-64", "FNV-1a 64", HashGroup.NonCryptographic, 64, _ => new FnvHasher(64, true), ["FNV-1a/64", "FNV1a-64"]),
         new("fnv1-128", "FNV-1 128", HashGroup.NonCryptographic, 128, _ => new FnvHasher(128, false), ["FNV-1/128", "FNV1-128"]),
         new("fnv1a-128", "FNV-1a 128", HashGroup.NonCryptographic, 128, _ => new FnvHasher(128, true), ["FNV-1a/128", "FNV1a-128"]),
-        new("xxh32", "xxHash32", HashGroup.NonCryptographic, 32, p => new XxHash32Hasher(p.Seed), ["XXH32"], HashParameterKinds.Seed),
+        new("xxh32", "xxHash32", HashGroup.NonCryptographic, 32, p => new XxHash32Hasher(p.Seed), ["XXH32"], HashParameterKinds.Seed, validate: Seed32),
         new("xxh64", "xxHash64", HashGroup.NonCryptographic, 64, p => new XxHash64Hasher(p.Seed), ["XXH64"], HashParameterKinds.Seed),
         new("xxh3-64", "XXH3-64", HashGroup.NonCryptographic, 64, p => new Xxh3Hasher(p.Seed, false), ["XXH3", "XXH3_64bits"], HashParameterKinds.Seed),
         new("xxh3-128", "XXH3-128", HashGroup.NonCryptographic, 128, p => new Xxh3Hasher(p.Seed, true), ["XXH128", "XXH3_128bits"], HashParameterKinds.Seed),
         new("murmur3-x86-32", "MurmurHash3 x86_32", HashGroup.NonCryptographic, 32, p => new Murmur3Hasher(Murmur3Variant.X86_32, p.Seed),
-            ["Murmur3A", "MurmurHash3_x86_32"], HashParameterKinds.Seed),
+            ["Murmur3A", "MurmurHash3_x86_32"], HashParameterKinds.Seed, validate: Seed32),
         new("murmur3-x86-128", "MurmurHash3 x86_128", HashGroup.NonCryptographic, 128, p => new Murmur3Hasher(Murmur3Variant.X86_128, p.Seed),
-            ["Murmur3C", "MurmurHash3_x86_128"], HashParameterKinds.Seed),
+            ["Murmur3C", "MurmurHash3_x86_128"], HashParameterKinds.Seed, validate: Seed32),
         new("murmur3-x64-128", "MurmurHash3 x64_128", HashGroup.NonCryptographic, 128, p => new Murmur3Hasher(Murmur3Variant.X64_128, p.Seed),
-            ["Murmur3F", "MurmurHash3_x64_128"], HashParameterKinds.Seed),
-        new("murmur2", "MurmurHash2", HashGroup.NonCryptographic, 32, p => new Murmur2Hasher(false, p.Seed), ["Murmur2"], HashParameterKinds.Seed),
+            ["Murmur3F", "MurmurHash3_x64_128"], HashParameterKinds.Seed, validate: Seed32),
+        new("murmur2", "MurmurHash2", HashGroup.NonCryptographic, 32, p => new Murmur2Hasher(false, p.Seed), ["Murmur2"], HashParameterKinds.Seed, validate: Seed32),
         new("murmur64a", "MurmurHash64A", HashGroup.NonCryptographic, 64, p => new Murmur2Hasher(true, p.Seed), ["Murmur2B"], HashParameterKinds.Seed),
         Sip("siphash-2-4", "SipHash-2-4", 2, 4, ["SipHash"]),
         Sip("siphash-1-3", "SipHash-1-3", 1, 3, []),
     ];
+
+    /// <summary>シードが 32 bit のアルゴリズム (参照実装の API が uint32_t): 範囲外のシードはパラメータの誤りにする (ANA-19 の仕様 3)。</summary>
+    private static HashParameterError Seed32(HashParameters p) => p.Seed > uint.MaxValue ? HashParameterError.SeedRange : HashParameterError.None;
 
     private static HashAlgorithmInfo Crc(string id, string name, CrcParameters p, IReadOnlyList<string> aliases) =>
         new(id, name, HashGroup.Crc, p.Width, _ => new CrcHasher(p), aliases, crc: p);

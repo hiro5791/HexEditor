@@ -5011,6 +5011,7 @@
   <data name="Hash_ParameterError_KeyLength" xml:space="preserve"><value>鍵の長さがこのアルゴリズムに合いません。</value></data>
   <data name="Hash_ParameterError_OutputLength" xml:space="preserve"><value>出力長がこのアルゴリズムに合いません。</value></data>
   <data name="Hash_ParameterError_None" xml:space="preserve"><value></value></data>
+  <data name="Hash_ParameterError_SeedRange" xml:space="preserve"><value>シードがこのアルゴリズムの範囲 (0〜0xFFFFFFFF) を超えています。</value></data>
   <data name="Hash_Endian" xml:space="preserve"><value>ワードのエンディアン</value></data>
   <data name="Hash_Endian_Default" xml:space="preserve"><value>既定</value></data>
   <data name="Hash_Endian_Little" xml:space="preserve"><value>リトルエンディアン</value></data>

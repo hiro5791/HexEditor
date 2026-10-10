@@ -927,7 +927,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
     public Func<long, Task<bool>>? ConfirmFind { get; set; }
 
     /// <summary>この大きさを超える対象では、探す前に所要時間の目安を示して確認する。</summary>
-    public const long FindConfirmLimit = 1_000_000;
+    public const long FindConfirmLimit = 1024 * 1024;
 
     /// <summary>期待値の長さに合うすべてのアルゴリズムで計算し、一致したものを一覧にする (1 回の読み込み)。</summary>
     public async Task FindMatchingAlgorithmsAsync()
@@ -996,6 +996,9 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     /// <summary>「カーソル位置に書き込む」(ウィンドウがダイアログを出して書き込む)。</summary>
     public Func<HashRowViewModel, Task>? WriteAtCursor { get; set; }
+
+    /// <summary>カーソル位置に書き込めるか (読み取り専用のドキュメントでは false。右クリックメニューの項目を無効にする)。</summary>
+    public Func<bool>? CanWriteAtCursor { get; set; }
 
     /// <summary>カスタム CRC の追加・エクスポート・インポート・削除 (ウィンドウがダイアログ・ファイルの選択を出す)。</summary>
     public Func<Task>? AddCustomCrc { get; set; }

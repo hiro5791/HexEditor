@@ -14,7 +14,7 @@ public sealed record HashDisplayOptions(HashValueFormat Format = HashValueFormat
     public string Display(HashResultRow row) =>
         row.Algorithm.PrefersBase32 && Format == HashValueFormat.HexUpper
             ? Base32(row.Value)
-            : HashValueFormatter.Format(row.Value, row.Algorithm.IsNumeric, Format, LittleEndian);
+            : HashValueFormatter.Format(row.Value, row.IsNumeric, Format, LittleEndian);
 
     /// <summary>RFC 4648 の Base32 (大文字、パディングなし)。</summary>
     public static string Base32(ReadOnlySpan<byte> data)
@@ -176,7 +176,7 @@ public static class HashWriteBack
 {
     /// <summary>書き込むバイト列 (64 bit 以下の値は <paramref name="littleEndian"/> で下位のバイトから)。</summary>
     public static byte[] Bytes(HashResultRow row, bool littleEndian) =>
-        HashValueFormatter.Arrange(row.Value, row.Algorithm.IsNumeric, littleEndian);
+        HashValueFormatter.Arrange(row.Value, row.IsNumeric, littleEndian);
 
     /// <summary>
     /// 書き込み先が計算の対象範囲に含まれるか (警告を出すか)。除外範囲に含まれる部分は数えない (ANA-22 の仕様 4)。
