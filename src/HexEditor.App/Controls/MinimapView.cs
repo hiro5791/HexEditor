@@ -87,7 +87,15 @@ public sealed partial class MinimapView : Grid
         Unloaded += (_, _) =>
         {
             _computer.Stop();
-            Core.Statistics.DataClassifier.Remembered -= Classifier_Remembered;
+
+            // 置き場所を移すときは Loaded が Unloaded より先に来ることがあるため、本当に外れたときだけ購読をやめる。
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                if (!IsLoaded)
+                {
+                    Core.Statistics.DataClassifier.Remembered -= Classifier_Remembered;
+                }
+            });
         };
         Loaded += (_, _) =>
         {
@@ -153,10 +161,12 @@ public sealed partial class MinimapView : Grid
             }
 
             _editor = value;
+            Core.Statistics.DataClassifier.Remembered -= Classifier_Remembered;
             if (_editor is not null)
             {
                 _editor.Changed += Editor_Changed;
                 _editor.Document.Changed += Document_Changed;
+                Core.Statistics.DataClassifier.Remembered += Classifier_Remembered;
             }
 
             Restart(force: true);
@@ -761,6 +771,8 @@ public sealed partial class MinimapView : Grid
                 ["kind"] = m.Kind, ["top"] = m.Top, ["height"] = m.Height,
             })]),
             ["menuOpen"] = _menu?.IsOpen ?? false,
+            ["classified"] = _editor is not null && Core.Statistics.DataClassifier.LatestFor(_editor.Document) is not null,
+            ["classificationShown"] = ShowClassification?.Invoke() != false,
             ["classes"] = new System.Text.Json.Nodes.JsonArray([.. _placedClasses.Select(c => (System.Text.Json.Nodes.JsonNode?)new System.Text.Json.Nodes.JsonObject
             {
                 ["y"] = c.Y, ["class"] = c.Class.ToString(),

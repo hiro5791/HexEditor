@@ -299,7 +299,16 @@ public sealed class CompareAuditTests
         JsonObject stats = await app.SendAsync("stats");
         Assert.Contains("PNG", stats["classifyFileType"]!.GetValue<string>(), StringComparison.Ordinal);
 
-        await app.WaitUntilAsync(async () => (await app.SendAsync("minimap"))["classes"]!.AsArray().Count > 0, Wait, "the classification layer");
+        JsonObject minimap = [];
+        try
+        {
+            await app.WaitUntilAsync(async () => (minimap = await app.SendAsync("minimap"))["classes"]!.AsArray().Count > 0, Wait, "the classification layer");
+        }
+        catch (TimeoutException)
+        {
+            minimap.Remove("rows");
+            throw new TimeoutException(minimap.ToJsonString());
+        }
         JsonArray classes = (await app.SendAsync("minimap"))["classes"]!.AsArray();
         Assert.All(classes, c => Assert.NotEqual("None", c!["class"]!.GetValue<string>()));
     });
