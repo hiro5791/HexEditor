@@ -41,6 +41,7 @@ public sealed partial class HexView
     {
         _searchMarkers = offsets ?? [];
         UpdateMarkers();
+        _minimap?.Restart();
     }
 
     /// <summary>印の表示の設定が変わったので描き直す。</summary>

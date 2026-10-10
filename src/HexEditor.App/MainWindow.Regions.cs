@@ -81,6 +81,9 @@ public sealed partial class MainWindow
         LeftPanel,
         LeftPanelBody,
         Editor,
+
+        /// <summary>分割したもう一方のペイン (VIEW-37 の仕様 7)。</summary>
+        SecondPane,
         RightPanel,
         RightPanelBody,
         BottomPanel,
@@ -101,6 +104,12 @@ public sealed partial class MainWindow
         }
 
         regions.Add(Region.Editor);
+        if (Vm.Selected is { IsSplit: true })
+        {
+            // 分割した各ペインを別の領域として扱う (上 (左) → 下 (右)。VIEW-37 の仕様 7)。
+            regions.Add(Region.SecondPane);
+        }
+
         AddPanel(RightPanel, Region.RightPanel, Region.RightPanelBody);
         AddPanel(BottomPanel, Region.BottomPanel, Region.BottomPanelBody);
         AddPanel(LeftPanel, Region.LeftPanel, Region.LeftPanelBody);
@@ -158,6 +167,11 @@ public sealed partial class MainWindow
                 return BottomPanel.BodyContains(focused) ? Region.BottomPanelBody : Region.BottomPanel;
             }
 
+            if (node is Controls.HexView view && Vm.Selected is { SecondaryEditor: { } second } && ReferenceEquals(view.Editor, second))
+            {
+                return Region.SecondPane;
+            }
+
             if (node is Controls.HexView || node == StartPage)
             {
                 return Region.Editor;
@@ -191,9 +205,12 @@ public sealed partial class MainWindow
                 }
                 else
                 {
-                    FocusEditor();
+                    FocusPane(0);
                 }
 
+                break;
+            case Region.SecondPane:
+                FocusPane(1);
                 break;
             case Region.LeftPanel:
                 LeftPanel.FocusHeader();

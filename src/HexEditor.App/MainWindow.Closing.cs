@@ -29,7 +29,7 @@ public sealed partial class MainWindow
     private async void SaveAll_Click(object sender, RoutedEventArgs e)
     {
         // 無題のものは「名前を付けて保存」のダイアログを順に出す (ENG-17 の仕様 7)。
-        foreach (DocumentViewModel doc in Vm.Documents.Where(d => d.Document.IsModified).ToList())
+        foreach (DocumentViewModel doc in Vm.Documents.Where(d => d.Document.IsModified).GroupBy(d => d.Document).Select(g => g.First()).ToList())
         {
             Vm.Selected = doc;
             if (!await SaveAsync(doc, saveAs: false))
@@ -92,7 +92,9 @@ public sealed partial class MainWindow
         }
 
         // 2. 未保存の文書。
-        var modified = docs.Where(d => d.Document.IsModified && Vm.Documents.Contains(d)).ToList();
+        // 同じドキュメントのビューが残るタブは確かめない。同じドキュメントのビューを一緒に閉じるときは 1 回だけ確かめる (VIEW-38 の仕様 6)。
+        var modified = docs.Where(d => d.Document.IsModified && Vm.Documents.Contains(d) && !d.KeepsDocumentAfterClosing(docs))
+            .GroupBy(d => d.Document).Select(g => g.First()).ToList();
         if (modified.Count == 1)
         {
             Vm.Selected = modified[0];

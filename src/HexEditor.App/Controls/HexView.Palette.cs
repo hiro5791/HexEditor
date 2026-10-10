@@ -44,6 +44,8 @@ public sealed partial class HexView
         Brush FocusRange,
         Brush Separator,
         Brush SecondaryCaret,
+        Brush RecordAlternate,
+        Brush Difference,
         bool HighContrast)
     {
         /// <summary>テーマのリソースから作り、配色の値のある要素を置き換える。</summary>
@@ -86,6 +88,8 @@ public sealed partial class HexView
                 view.ProbeFocusRange.Fill,
                 view.ProbeSeparator.Fill,
                 view.ProbeSecondaryCaret.Fill,
+                view.ProbeRecordAlternate.Fill,
+                view.ProbeDifference.Fill,
                 highContrast);
             if (highContrast || scheme is null)
             {
@@ -116,6 +120,8 @@ public sealed partial class HexView
                 CurrentRow = Pick(SchemeElement.CurrentRowBackground, p.CurrentRow),
                 Match = Pick(SchemeElement.Match, p.Match),
                 Separator = Pick(SchemeElement.Separator, p.Separator),
+                RecordAlternate = Pick(SchemeElement.RecordAlternate, p.RecordAlternate),
+                Difference = Pick(SchemeElement.DiffChanged, p.Difference),
             };
         }
 
@@ -135,7 +141,7 @@ public sealed partial class HexView
             return new Palette(
                 text, text, hot, gray, highlight, highlightText, highlight, highlightText, text, gray, window, highlight, hot, hot, window,
                 text, text, gray, text, text, text, gray, window, window, highlight, text, highlight, highlightText, window, text, gray,
-                HighContrast: true);
+                window, hot, HighContrast: true);
         }
 
         public Brush For(CellKind kind) => kind switch

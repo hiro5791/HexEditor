@@ -330,6 +330,18 @@
             <controls:PanelDockArea x:Name="LeftPanel" Grid.RowSpan="3" AutomationProperties.AutomationId="LeftPanel" Visibility="Collapsed" />
             <controls:Splitter x:Name="LeftSplitter" Grid.RowSpan="3" Grid.Column="1" AutomationProperties.AutomationId="LeftSplitter" Visibility="Collapsed" />
             <Grid x:Name="EditorArea" Grid.Column="2">
+                <!--  並べて表示 (VIEW-39): 右の列に、並べたドキュメントのビューを置く (MainWindow.SideBySide.cs)。  -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="EditorMainColumn" Width="*" />
+                    <ColumnDefinition x:Name="SideBySideColumn" Width="0" />
+                </Grid.ColumnDefinitions>
+                <Grid
+                    x:Name="SideBySideHost"
+                    Grid.Column="1"
+                    AutomationProperties.AutomationId="SideBySideHost"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1,0,0,0"
+                    Visibility="Collapsed" />
                 <!--  スタートページ (UI-01 の仕様 2、UI-38。文書が 1 つもないとき)。  -->
                 <controls:StartPage
                     x:Name="StartPage"
@@ -385,12 +397,14 @@
                                         Center="{x:Bind Notifications}"
                                         Owner="{x:Bind}"
                                         Scope="Document" />
-                                    <controls:HexView
-                                        Grid.Row="1"
-                                        CommandRequested="HexView_CommandRequested"
-                                        Editor="{x:Bind Editor}"
-                                        EditRejected="HexView_EditRejected"
-                                        Loaded="HexView_Loaded" />
+                                    <!--  画面分割 (VIEW-37): 1 つ目のペインの Hex ビュー。分割すると PaneHost が 2 つ目を加える (MainWindow.Split.cs)。  -->
+                                    <controls:PaneHost Grid.Row="1" AutomationProperties.AutomationId="PaneHost">
+                                        <controls:HexView
+                                            CommandRequested="HexView_CommandRequested"
+                                            Editor="{x:Bind PrimaryEditor}"
+                                            EditRejected="HexView_EditRejected"
+                                            Loaded="HexView_Loaded" />
+                                    </controls:PaneHost>
                                     <!--  セッションのファイルが見つからないタブ (UI-31 の「エラー」)  -->
                                     <StackPanel
                                         Grid.Row="1"
@@ -493,11 +507,19 @@
                 <Button x:Name="StatusCursor" AutomationProperties.AutomationId="Status_Offset" Click="StatusCursor_Click" Content="{x:Bind Vm.Selected.CursorText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="cursor" />
                 <Button x:Name="StatusValue" AutomationProperties.AutomationId="Status_Value" Content="{x:Bind Vm.Selected.ValueText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="value" />
                 <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Click="StatusSelection_Click" Content="{x:Bind Vm.Selected.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.Selected.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
+                <!--  セクタ / ページ / レコード (VIEW-40、VIEW-18、VIEW-33)。有効なときだけ表示する。  -->
+                <Button x:Name="StatusPosition" AutomationProperties.AutomationId="Status_Position" Click="StatusCursor_Click" Content="{x:Bind Vm.Selected.PositionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="position" />
                 <Button x:Name="StatusColumn" AutomationProperties.AutomationId="Status_Column" Click="StatusColumn_Click" Content="{x:Bind Vm.Selected.ColumnText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="column" />
+                <!--  表示形式 (VIEW-10。Hex 以外のときだけ)  -->
+                <Button x:Name="StatusCellFormat" AutomationProperties.AutomationId="Status_Format" Click="StatusFormat_Click" Content="{x:Bind Vm.Selected.FormatText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="format" />
                 <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Click="StatusEncoding_Click" Content="{x:Bind Vm.Selected.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
+                <!--  エンディアン (VIEW-11 の仕様 3): クリックで切り替える。  -->
+                <Button x:Name="StatusEndian" AutomationProperties.AutomationId="Status_Endian" Click="StatusEndian_Click" Content="{x:Bind Vm.Selected.EndianText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="endian" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.Selected.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.Selected.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <Button x:Name="StatusSize" AutomationProperties.AutomationId="Status_Size" Click="StatusSize_Click" Content="{x:Bind Vm.Selected.SizeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="size" />
+                <!--  同期 (VIEW-39 の仕様 6): 同期スクロール中だけ表示する。クリックで同期のモードのメニュー。  -->
+                <Button x:Name="StatusSync" AutomationProperties.AutomationId="Status_Sync" Click="StatusSync_Click" Style="{StaticResource StatusItemStyle}" Tag="sync" />
                 <Button x:Name="StatusOperations" AutomationProperties.AutomationId="Status_Operations" Style="{StaticResource StatusItemStyle}" Tag="operations">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock x:Name="StatusOperationsText" VerticalAlignment="Center" />

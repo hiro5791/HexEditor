@@ -322,7 +322,7 @@ public sealed partial class CommandRegistryTests
         ["全画面表示"] = ["view.fullScreen"],
         ["データインスペクタの表示切り替え"] = ["view.panel.inspector"],
         ["マクロの記録開始 / 停止"] = ["-F3-06 (フェーズ 3)"],
-        ["画面を分割"] = ["-F2-02 (フェーズ 2)"],
+        ["画面を分割"] = ["view.split"],
         ["カーソル移動 (VIEW-25)"] = ["-Hex ビューが処理する移動キー"],
         ["Hex 列とテキスト列の切り替え (順 / 逆)"] = ["go.toggleColumn"],
         ["前 / 次のグループへ移動"] = ["go.previousGroup", "go.nextGroup"],

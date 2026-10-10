@@ -48,6 +48,8 @@
                     <StaticResource x:Key="HexViewRulerHighlightTextBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
                     <StaticResource x:Key="HexViewFocusRangeBrush" ResourceKey="SystemFillColorAttentionBackgroundBrush" />
                     <StaticResource x:Key="HexViewSeparatorBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewRecordAlternateBrush" ResourceKey="SystemFillColorSolidNeutralBackgroundBrush" />
+                    <StaticResource x:Key="HexViewDifferenceBrush" ResourceKey="SystemFillColorCriticalBackgroundBrush" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <StaticResource x:Key="HexViewBackgroundBrush" ResourceKey="SolidBackgroundFillColorBaseBrush" />
@@ -81,6 +83,8 @@
                     <StaticResource x:Key="HexViewRulerHighlightTextBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
                     <StaticResource x:Key="HexViewFocusRangeBrush" ResourceKey="SystemFillColorAttentionBackgroundBrush" />
                     <StaticResource x:Key="HexViewSeparatorBrush" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="HexViewRecordAlternateBrush" ResourceKey="SystemFillColorSolidNeutralBackgroundBrush" />
+                    <StaticResource x:Key="HexViewDifferenceBrush" ResourceKey="SystemFillColorCriticalBackgroundBrush" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="HighContrast">
                     <SolidColorBrush x:Key="HexViewBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
@@ -114,6 +118,8 @@
                     <SolidColorBrush x:Key="HexViewRulerHighlightTextBrush" Color="{ThemeResource SystemColorHighlightTextColor}" />
                     <SolidColorBrush x:Key="HexViewFocusRangeBrush" Color="{ThemeResource SystemColorWindowColor}" />
                     <SolidColorBrush x:Key="HexViewSeparatorBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+                    <SolidColorBrush x:Key="HexViewRecordAlternateBrush" Color="{ThemeResource SystemColorWindowColor}" />
+                    <SolidColorBrush x:Key="HexViewDifferenceBrush" Color="{ThemeResource SystemColorHotlightColor}" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <!--  つまみの最小の長さ (VIEW-02 の仕様 7)  -->
@@ -129,6 +135,8 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <!--  ミニマップ (VIEW-35。縦スクロールバーの左。HexView.Minimap.cs が置く)  -->
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
@@ -137,6 +145,7 @@
         -->
         <Grid
             x:Name="RulerBar"
+            Grid.ColumnSpan="2"
             AutomationProperties.AutomationId="HexView_Ruler"
             Background="{ThemeResource HexViewRulerBackgroundBrush}">
             <Button
@@ -205,6 +214,8 @@
                     <Canvas.RenderTransform>
                         <TranslateTransform x:Name="ContentShift" />
                     </Canvas.RenderTransform>
+                    <!--  行の下の面 (VIEW-17 の層 12〜16 の背景)。範囲の強調の面 (層 7〜11) より奥。  -->
+                    <Canvas x:Name="UnderLayer" AutomationProperties.AccessibilityView="Raw" IsHitTestVisible="False" />
                     <Canvas x:Name="RowsLayer" />
                     <Rectangle x:Name="SecondaryCaret" Stroke="{ThemeResource HexViewSecondaryCaretBrush}" StrokeThickness="1" />
                     <Rectangle x:Name="Caret" />
@@ -247,7 +258,7 @@
             </Border>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="1" Grid.Column="2">
             <primitives:ScrollBar
                 x:Name="VerticalBar"
                 AutomationProperties.AutomationId="HexViewVerticalScrollBar"
@@ -280,7 +291,7 @@
         <Rectangle
             x:Name="FocusFrameOuter"
             Grid.RowSpan="3"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="3"
             IsHitTestVisible="False"
             Stroke="{ThemeResource HexViewFocusOuterBrush}"
             StrokeThickness="2"
@@ -288,7 +299,7 @@
         <Rectangle
             x:Name="FocusFrameInner"
             Grid.RowSpan="3"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="3"
             Margin="2"
             IsHitTestVisible="False"
             Stroke="{ThemeResource HexViewFocusInnerBrush}"
@@ -324,6 +335,8 @@
             <Rectangle x:Name="ProbeFocusRange" Fill="{ThemeResource HexViewFocusRangeBrush}" />
             <Rectangle x:Name="ProbeSeparator" Fill="{ThemeResource HexViewSeparatorBrush}" />
             <Rectangle x:Name="ProbeSecondaryCaret" Fill="{ThemeResource HexViewSecondaryCaretBrush}" />
+            <Rectangle x:Name="ProbeRecordAlternate" Fill="{ThemeResource HexViewRecordAlternateBrush}" />
+            <Rectangle x:Name="ProbeDifference" Fill="{ThemeResource HexViewDifferenceBrush}" />
         </Canvas>
     </Grid>
 </UserControl>

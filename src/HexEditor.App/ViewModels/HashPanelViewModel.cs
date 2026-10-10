@@ -296,7 +296,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
             if (_target is not null)
             {
-                _target.Editor.Changed -= Editor_Changed;
+                _target.EditorChanged -= Editor_Changed;
                 _target.Document.Changed -= Document_Changed;
                 SaveHistory(_target);
             }
@@ -323,7 +323,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
             if (_target is not null)
             {
-                _target.Editor.Changed += Editor_Changed;
+                _target.EditorChanged += Editor_Changed;
                 _target.Document.Changed += Document_Changed;
                 IsStale = Rows.Count > 0 && _computedSnapshot is not null && !ReferenceEquals(_target.Document.Current, _computedSnapshot);
             }

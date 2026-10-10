@@ -3010,4 +3010,369 @@
   <data name="CopyAs_SeparateRanges" xml:space="preserve"><value>要素ごとに分ける (オフのときは連結する)</value></data>
   <data name="Drop_InsertCopy" xml:space="preserve"><value>コピーを挿入</value></data>
   <data name="Drop_PasteSpecial" xml:space="preserve"><value>形式を選択して貼り付け</value></data>
+  <data name="Menu_View_CellFormatHex.Text" xml:space="preserve"><value>16 進(H)</value></data>
+  <data name="Menu_View_CellFormatHex.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Cmd_view_cellFormatHex" xml:space="preserve"><value>セルの表示形式: 16 進</value></data>
+  <data name="CmdAlias_view_cellFormatHex" xml:space="preserve"><value>せるのひょうじけいしき へっくす</value></data>
+  <data name="Menu_View_CellFormatDecimal.Text" xml:space="preserve"><value>10 進 (符号なし)(D)</value></data>
+  <data name="Menu_View_CellFormatDecimal.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Cmd_view_cellFormatDecimal" xml:space="preserve"><value>セルの表示形式: 10 進 (符号なし)</value></data>
+  <data name="CmdAlias_view_cellFormatDecimal" xml:space="preserve"><value>せるのひょうじけいしき じっしん ふごうなし</value></data>
+  <data name="Menu_View_CellFormatSignedDecimal.Text" xml:space="preserve"><value>10 進 (符号あり)(S)</value></data>
+  <data name="Menu_View_CellFormatSignedDecimal.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Cmd_view_cellFormatSignedDecimal" xml:space="preserve"><value>セルの表示形式: 10 進 (符号あり)</value></data>
+  <data name="CmdAlias_view_cellFormatSignedDecimal" xml:space="preserve"><value>せるのひょうじけいしき じっしん ふごうあり</value></data>
+  <data name="Menu_View_CellFormatOctal.Text" xml:space="preserve"><value>8 進(O)</value></data>
+  <data name="Menu_View_CellFormatOctal.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Cmd_view_cellFormatOctal" xml:space="preserve"><value>セルの表示形式: 8 進</value></data>
+  <data name="CmdAlias_view_cellFormatOctal" xml:space="preserve"><value>せるのひょうじけいしき はっしん</value></data>
+  <data name="Menu_View_CellFormatBinary.Text" xml:space="preserve"><value>2 進(B)</value></data>
+  <data name="Menu_View_CellFormatBinary.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Cmd_view_cellFormatBinary" xml:space="preserve"><value>セルの表示形式: 2 進</value></data>
+  <data name="CmdAlias_view_cellFormatBinary" xml:space="preserve"><value>せるのひょうじけいしき にしん</value></data>
+  <data name="Menu_View_CellFormatInt16Hex.Text" xml:space="preserve"><value>16 bit 整数 (Hex)(1)</value></data>
+  <data name="Menu_View_CellFormatInt16Hex.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="Cmd_view_cellFormatInt16Hex" xml:space="preserve"><value>セルの表示形式: 16 bit 整数 (Hex)</value></data>
+  <data name="CmdAlias_view_cellFormatInt16Hex" xml:space="preserve"><value>せるのひょうじけいしき せいすう へっくす</value></data>
+  <data name="Menu_View_CellFormatInt16Decimal.Text" xml:space="preserve"><value>16 bit 整数 (10 進符号なし)(2)</value></data>
+  <data name="Menu_View_CellFormatInt16Decimal.AccessKey" xml:space="preserve"><value>2</value></data>
+  <data name="Cmd_view_cellFormatInt16Decimal" xml:space="preserve"><value>セルの表示形式: 16 bit 整数 (10 進符号なし)</value></data>
+  <data name="CmdAlias_view_cellFormatInt16Decimal" xml:space="preserve"><value>せるのひょうじけいしき せいすう ふごうなし</value></data>
+  <data name="Menu_View_CellFormatInt16SignedDecimal.Text" xml:space="preserve"><value>16 bit 整数 (10 進符号あり)(3)</value></data>
+  <data name="Menu_View_CellFormatInt16SignedDecimal.AccessKey" xml:space="preserve"><value>3</value></data>
+  <data name="Cmd_view_cellFormatInt16SignedDecimal" xml:space="preserve"><value>セルの表示形式: 16 bit 整数 (10 進符号あり)</value></data>
+  <data name="CmdAlias_view_cellFormatInt16SignedDecimal" xml:space="preserve"><value>せるのひょうじけいしき せいすう ふごうあり</value></data>
+  <data name="Menu_View_CellFormatInt32Hex.Text" xml:space="preserve"><value>32 bit 整数 (Hex)(4)</value></data>
+  <data name="Menu_View_CellFormatInt32Hex.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Cmd_view_cellFormatInt32Hex" xml:space="preserve"><value>セルの表示形式: 32 bit 整数 (Hex)</value></data>
+  <data name="CmdAlias_view_cellFormatInt32Hex" xml:space="preserve"><value>せるのひょうじけいしき せいすう へっくす</value></data>
+  <data name="Menu_View_CellFormatInt32Decimal.Text" xml:space="preserve"><value>32 bit 整数 (10 進符号なし)(5)</value></data>
+  <data name="Menu_View_CellFormatInt32Decimal.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Cmd_view_cellFormatInt32Decimal" xml:space="preserve"><value>セルの表示形式: 32 bit 整数 (10 進符号なし)</value></data>
+  <data name="CmdAlias_view_cellFormatInt32Decimal" xml:space="preserve"><value>せるのひょうじけいしき せいすう ふごうなし</value></data>
+  <data name="Menu_View_CellFormatInt32SignedDecimal.Text" xml:space="preserve"><value>32 bit 整数 (10 進符号あり)(6)</value></data>
+  <data name="Menu_View_CellFormatInt32SignedDecimal.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Cmd_view_cellFormatInt32SignedDecimal" xml:space="preserve"><value>セルの表示形式: 32 bit 整数 (10 進符号あり)</value></data>
+  <data name="CmdAlias_view_cellFormatInt32SignedDecimal" xml:space="preserve"><value>せるのひょうじけいしき せいすう ふごうあり</value></data>
+  <data name="Menu_View_CellFormatInt64Hex.Text" xml:space="preserve"><value>64 bit 整数 (Hex)(7)</value></data>
+  <data name="Menu_View_CellFormatInt64Hex.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Cmd_view_cellFormatInt64Hex" xml:space="preserve"><value>セルの表示形式: 64 bit 整数 (Hex)</value></data>
+  <data name="CmdAlias_view_cellFormatInt64Hex" xml:space="preserve"><value>せるのひょうじけいしき せいすう へっくす</value></data>
+  <data name="Menu_View_CellFormatInt64Decimal.Text" xml:space="preserve"><value>64 bit 整数 (10 進符号なし)(8)</value></data>
+  <data name="Menu_View_CellFormatInt64Decimal.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Cmd_view_cellFormatInt64Decimal" xml:space="preserve"><value>セルの表示形式: 64 bit 整数 (10 進符号なし)</value></data>
+  <data name="CmdAlias_view_cellFormatInt64Decimal" xml:space="preserve"><value>せるのひょうじけいしき せいすう ふごうなし</value></data>
+  <data name="Menu_View_CellFormatInt64SignedDecimal.Text" xml:space="preserve"><value>64 bit 整数 (10 進符号あり)(9)</value></data>
+  <data name="Menu_View_CellFormatInt64SignedDecimal.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Cmd_view_cellFormatInt64SignedDecimal" xml:space="preserve"><value>セルの表示形式: 64 bit 整数 (10 進符号あり)</value></data>
+  <data name="CmdAlias_view_cellFormatInt64SignedDecimal" xml:space="preserve"><value>せるのひょうじけいしき せいすう ふごうあり</value></data>
+  <data name="Menu_View_CellFormatFloat.Text" xml:space="preserve"><value>float (単精度)(F)</value></data>
+  <data name="Menu_View_CellFormatFloat.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Cmd_view_cellFormatFloat" xml:space="preserve"><value>セルの表示形式: float (単精度)</value></data>
+  <data name="CmdAlias_view_cellFormatFloat" xml:space="preserve"><value>せるのひょうじけいしき ふろーと たんせいど</value></data>
+  <data name="Menu_View_CellFormatDouble.Text" xml:space="preserve"><value>double (倍精度)(U)</value></data>
+  <data name="Menu_View_CellFormatDouble.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Cmd_view_cellFormatDouble" xml:space="preserve"><value>セルの表示形式: double (倍精度)</value></data>
+  <data name="CmdAlias_view_cellFormatDouble" xml:space="preserve"><value>せるのひょうじけいしき だぶる ばいせいど</value></data>
+  <data name="Menu_View_CellFormat.Text" xml:space="preserve"><value>セルの表示形式(F)</value></data>
+  <data name="Menu_View_CellFormat.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View_SpacePadding.Text" xml:space="preserve"><value>数値を空白で埋める(P)</value></data>
+  <data name="Menu_View_SpacePadding.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_Endian.Text" xml:space="preserve"><value>エンディアン(E)</value></data>
+  <data name="Menu_View_Endian.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_EndianLittle.Text" xml:space="preserve"><value>リトルエンディアン(L)</value></data>
+  <data name="Menu_View_EndianLittle.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_EndianBig.Text" xml:space="preserve"><value>ビッグエンディアン(B)</value></data>
+  <data name="Menu_View_EndianBig.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_ReverseGroups.Text" xml:space="preserve"><value>グループ内のバイトを逆順に表示(V)</value></data>
+  <data name="Menu_View_ReverseGroups.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_AddTextColumn.Text" xml:space="preserve"><value>テキスト列を追加(D)...</value></data>
+  <data name="Menu_View_AddTextColumn.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_View_RemoveTextColumn.Text" xml:space="preserve"><value>テキスト列を削除(K)</value></data>
+  <data name="Menu_View_RemoveTextColumn.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_LoadTable.Text" xml:space="preserve"><value>文字表ファイルを読み込む(T)...</value></data>
+  <data name="Menu_View_LoadTable.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ByteTheme.Text" xml:space="preserve"><value>バイトテーマ(B)</value></data>
+  <data name="Menu_View_ByteTheme.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_ByteThemeNone.Text" xml:space="preserve"><value>なし(N)</value></data>
+  <data name="Menu_View_ByteThemeNone.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_ByteThemeCategory.Text" xml:space="preserve"><value>種類別(C)</value></data>
+  <data name="Menu_View_ByteThemeCategory.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_ByteThemeGradient.Text" xml:space="preserve"><value>グラデーション(G)</value></data>
+  <data name="Menu_View_ByteThemeGradient.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_ByteThemeCustom.Text" xml:space="preserve"><value>独自(U)...</value></data>
+  <data name="Menu_View_ByteThemeCustom.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_ByteThemeDisabled" xml:space="preserve"><value>{0} (ハイコントラストでは無効)</value></data>
+  <data name="Menu_View_RecordsMenu.Text" xml:space="preserve"><value>レコード表示(D)</value></data>
+  <data name="Menu_View_RecordsMenu.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_View_Records.Text" xml:space="preserve"><value>レコード表示(R)</value></data>
+  <data name="Menu_View_Records.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_RecordSettings.Text" xml:space="preserve"><value>レコード表示の設定(S)...</value></data>
+  <data name="Menu_View_RecordSettings.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_RecordPerRow.Text" xml:space="preserve"><value>1 行を 1 レコードにする(W)</value></data>
+  <data name="Menu_View_RecordPerRow.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_View_RecordNumbers.Text" xml:space="preserve"><value>オフセット列にレコード番号を表示(N)</value></data>
+  <data name="Menu_View_RecordNumbers.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_SeparatorMenu.Text" xml:space="preserve"><value>区切り線(L)</value></data>
+  <data name="Menu_View_SeparatorMenu.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_SeparatorNone.Text" xml:space="preserve"><value>なし(N)</value></data>
+  <data name="Menu_View_SeparatorNone.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_SeparatorSector.Text" xml:space="preserve"><value>セクタ(S)</value></data>
+  <data name="Menu_View_SeparatorSector.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_SeparatorPage.Text" xml:space="preserve"><value>ページ(P)</value></data>
+  <data name="Menu_View_SeparatorPage.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_SeparatorCustom.Text" xml:space="preserve"><value>任意の長さ(C)...</value></data>
+  <data name="Menu_View_SeparatorCustom.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_SeparatorLabels.Text" xml:space="preserve"><value>見出しを表示(L)</value></data>
+  <data name="Menu_View_SeparatorLabels.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_PageView.Text" xml:space="preserve"><value>ページ単位で表示(V)</value></data>
+  <data name="Menu_View_PageView.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_MinimapMenu.Text" xml:space="preserve"><value>ミニマップ(M)</value></data>
+  <data name="Menu_View_MinimapMenu.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_Minimap.Text" xml:space="preserve"><value>ミニマップを表示(M)</value></data>
+  <data name="Menu_View_Minimap.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_MinimapEntropy.Text" xml:space="preserve"><value>エントロピー(E)</value></data>
+  <data name="Menu_View_MinimapEntropy.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_MinimapByteKinds.Text" xml:space="preserve"><value>バイトの種類(K)</value></data>
+  <data name="Menu_View_MinimapByteKinds.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_MinimapByteValue.Text" xml:space="preserve"><value>バイト値(V)</value></data>
+  <data name="Menu_View_MinimapByteValue.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_MinimapZero.Text" xml:space="preserve"><value>ゼロ以外の割合(Z)</value></data>
+  <data name="Menu_View_MinimapZero.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_MinimapByteTheme.Text" xml:space="preserve"><value>バイトテーマ (周辺のみ)(T)</value></data>
+  <data name="Menu_View_MinimapByteTheme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_MinimapWhole.Text" xml:space="preserve"><value>全体(W)</value></data>
+  <data name="Menu_View_MinimapWhole.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_View_MinimapAround.Text" xml:space="preserve"><value>周辺(A)</value></data>
+  <data name="Menu_View_MinimapAround.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_MinimapExact.Text" xml:space="preserve"><value>正確に計算(X)</value></data>
+  <data name="Menu_View_MinimapExact.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_View_SplitMenu.Text" xml:space="preserve"><value>画面分割(Q)</value></data>
+  <data name="Menu_View_SplitMenu.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_SplitHorizontal.Text" xml:space="preserve"><value>上下に分割(H)</value></data>
+  <data name="Menu_View_SplitHorizontal.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_SplitVertical.Text" xml:space="preserve"><value>左右に分割(V)</value></data>
+  <data name="Menu_View_SplitVertical.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_SplitRemove.Text" xml:space="preserve"><value>分割の解除(R)</value></data>
+  <data name="Menu_View_SplitRemove.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_SplitSync.Text" xml:space="preserve"><value>スクロールを同期(S)</value></data>
+  <data name="Menu_View_SplitSync.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_NextPane.Text" xml:space="preserve"><value>次のペインへ(N)</value></data>
+  <data name="Menu_View_NextPane.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_NewView.Text" xml:space="preserve"><value>新しいビューで開く(I)</value></data>
+  <data name="Menu_View_NewView.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_SideBySide.Text" xml:space="preserve"><value>並べて表示(U)...</value></data>
+  <data name="Menu_View_SideBySide.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_SyncMenu.Text" xml:space="preserve"><value>同期スクロール(Y)</value></data>
+  <data name="Menu_View_SyncMenu.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_View_SyncOff.Text" xml:space="preserve"><value>オフ(O)</value></data>
+  <data name="Menu_View_SyncOff.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_SyncSameOffset.Text" xml:space="preserve"><value>同じオフセット(S)</value></data>
+  <data name="Menu_View_SyncSameOffset.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_SyncKeepDifference.Text" xml:space="preserve"><value>位置の差を保つ(K)</value></data>
+  <data name="Menu_View_SyncKeepDifference.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_SyncDifferences.Text" xml:space="preserve"><value>違いを強調(D)</value></data>
+  <data name="Menu_View_SyncDifferences.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Go_NextRecord.Text" xml:space="preserve"><value>次のレコード(N)</value></data>
+  <data name="Menu_Go_NextRecord.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_PreviousRecord.Text" xml:space="preserve"><value>前のレコード(P)</value></data>
+  <data name="Menu_Go_PreviousRecord.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_NextPage.Text" xml:space="preserve"><value>次のページ(X)</value></data>
+  <data name="Menu_Go_NextPage.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Go_PreviousPage.Text" xml:space="preserve"><value>前のページ(V)</value></data>
+  <data name="Menu_Go_PreviousPage.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Command_LastTextColumn" xml:space="preserve"><value>テキスト列は 1 列以上必要です。</value></data>
+  <data name="Command_MinimapThemeNeedsAround" xml:space="preserve"><value>ミニマップの範囲が「周辺」のときだけ選べます。</value></data>
+  <data name="Command_NoSeparator" xml:space="preserve"><value>区切り線を選んでください。</value></data>
+  <data name="Command_NoTextColumn" xml:space="preserve"><value>テキスト列が表示されていません。</value></data>
+  <data name="Command_NotSideBySide" xml:space="preserve"><value>並べて表示していません。</value></data>
+  <data name="Command_NotSplit" xml:space="preserve"><value>画面を分割していません。</value></data>
+  <data name="Command_RecordPerRowFixed" xml:space="preserve"><value>1 行に 1 レコードを表示しているため、レコード長に合わせています。</value></data>
+  <data name="Command_RecordTooLong" xml:space="preserve"><value>レコード長が {0} バイト以下のときだけ選べます。</value></data>
+  <data name="Command_ReverseNeedsGroup" xml:space="preserve"><value>Hex 形式でグループ化が 2 以上のときだけ選べます。</value></data>
+  <data name="Command_TextColumnLimit" xml:space="preserve"><value>テキスト列は 5 列まで表示できます。</value></data>
+  <data name="HexView_Separator_Custom" xml:space="preserve"><value>区切り {0} ({1})</value></data>
+  <data name="HexView_Separator_Page" xml:space="preserve"><value>ページ {0} ({1})</value></data>
+  <data name="HexView_Separator_Sector" xml:space="preserve"><value>セクタ {0}</value></data>
+  <data name="HexView_Status_CellFormatReadOnly" xml:space="preserve"><value>この表示形式では直接編集できません。データインスペクタを使ってください。</value></data>
+  <data name="HexView_TextColumn_Even" xml:space="preserve"><value>{0} (偶数)</value></data>
+  <data name="HexView_TextColumn_Odd" xml:space="preserve"><value>{0} (奇数)</value></data>
+  <data name="HexView_TextColumn_Phase" xml:space="preserve"><value>{0} (開始位置 {1})</value></data>
+  <data name="HexView_TextColumn_ChangeEncoding" xml:space="preserve"><value>文字コードを変更...</value></data>
+  <data name="HexView_TextColumn_Remove" xml:space="preserve"><value>列を削除</value></data>
+  <data name="HexView_TextColumn_MoveLeft" xml:space="preserve"><value>左へ移動</value></data>
+  <data name="HexView_TextColumn_MoveRight" xml:space="preserve"><value>右へ移動</value></data>
+  <data name="Notice_ByteThemeInvalid" xml:space="preserve"><value>バイトテーマが正しくありません: {0} 行目のキー「{1}」。テーマは変えていません。</value></data>
+  <data name="Notice_ByteThemeUnreadable" xml:space="preserve"><value>バイトテーマを読めません: {0}</value></data>
+  <data name="Notice_TableEmpty" xml:space="preserve"><value>有効なエントリがないため、文字表を読み込みませんでした。</value></data>
+  <data name="Notice_TableInvalidLines" xml:space="preserve"><value>無視した行: {0}。</value></data>
+  <data name="Notice_TableLine" xml:space="preserve"><value>{0} 行目 ({1})</value></data>
+  <data name="Notice_TableLoaded" xml:space="preserve"><value>文字表を読み込みました: エントリ {0} 件、無視した行 {1} 行。</value></data>
+  <data name="Notice_TableTooMany" xml:space="preserve"><value>エントリが {0} 件を超えるため、文字表を読み込みませんでした。</value></data>
+  <data name="Notice_TableUnreadable" xml:space="preserve"><value>文字表を読めません: {0}</value></data>
+  <data name="TableError_NoEquals" xml:space="preserve"><value>「=」がない</value></data>
+  <data name="TableError_NotHex" xml:space="preserve"><value>左辺が Hex でない</value></data>
+  <data name="TableError_OddDigits" xml:space="preserve"><value>奇数桁</value></data>
+  <data name="TableError_TooLong" xml:space="preserve"><value>左辺が空か 8 バイトを超える</value></data>
+  <data name="TableError_EmptyValue" xml:space="preserve"><value>右辺が空</value></data>
+  <data name="EncodingList_Group_Custom" xml:space="preserve"><value>独自</value></data>
+  <data name="RecordSettings_Title" xml:space="preserve"><value>レコード表示</value></data>
+  <data name="RecordSettings_Length" xml:space="preserve"><value>レコード長 (バイト)</value></data>
+  <data name="RecordSettings_Start" xml:space="preserve"><value>最初のレコードの開始オフセット</value></data>
+  <data name="RecordSettings_PerRow" xml:space="preserve"><value>1 行を 1 レコードにする (4,096 バイト以下)</value></data>
+  <data name="RecordSettings_Numbers" xml:space="preserve"><value>オフセット列にレコード番号を表示</value></data>
+  <data name="RecordSettings_LengthRange" xml:space="preserve"><value>レコード長は 1〜2,147,483,647 で入力してください。</value></data>
+  <data name="RecordSettings_StartRange" xml:space="preserve"><value>開始オフセットは 0〜ドキュメントの長さで入力してください。</value></data>
+  <data name="Separator_NotMultiple" xml:space="preserve"><value>長さは 1 行のバイト数 ({0}) の倍数にしてください。</value></data>
+  <data name="Separator_Range" xml:space="preserve"><value>長さは {0}〜{1} で入力してください。</value></data>
+  <data name="Separator_RowShift" xml:space="preserve"><value>行の先頭をずらしている間は選べません。</value></data>
+  <data name="ViewInput_Separator" xml:space="preserve"><value>区切りの長さ (バイト)</value></data>
+  <data name="Status_Record" xml:space="preserve"><value>レコード #{0} +{1}</value></data>
+  <data name="Status_Page" xml:space="preserve"><value>ページ {0} / {1}</value></data>
+  <data name="Status_Sector" xml:space="preserve"><value>セクタ {0}</value></data>
+  <data name="Status_Section" xml:space="preserve"><value>区切り {0} / {1}</value></data>
+  <data name="Status_Sync" xml:space="preserve"><value>同期</value></data>
+  <data name="Status_ReversedEndian" xml:space="preserve"><value>{0} (逆順表示)</value></data>
+  <data name="Status_Item_Position" xml:space="preserve"><value>セクタ / ページ / レコード</value></data>
+  <data name="Status_Item_Format" xml:space="preserve"><value>表示形式</value></data>
+  <data name="Status_Item_Endian" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="Status_Item_Sync" xml:space="preserve"><value>同期</value></data>
+  <data name="Set_view_byteTheme" xml:space="preserve"><value>バイトテーマ</value></data>
+  <data name="SetDesc_view_byteTheme" xml:space="preserve"><value>バイトの値で文字に色を付けます (なし、種類別、グラデーション、独自のファイル)。</value></data>
+  <data name="Set_view_minimap_visible" xml:space="preserve"><value>ミニマップを表示</value></data>
+  <data name="SetDesc_view_minimap_visible" xml:space="preserve"><value>スクロールバーの左にデータの概要の帯を表示します。</value></data>
+  <data name="Set_view_minimap_width" xml:space="preserve"><value>ミニマップの幅</value></data>
+  <data name="SetDesc_view_minimap_width" xml:space="preserve"><value>ミニマップの幅 (40〜200)。</value></data>
+  <data name="Set_view_minimap_content" xml:space="preserve"><value>ミニマップの表示内容</value></data>
+  <data name="SetDesc_view_minimap_content" xml:space="preserve"><value>ミニマップの各行に表示する値。</value></data>
+  <data name="SetOpt_view_minimap_content_entropy" xml:space="preserve"><value>エントロピー</value></data>
+  <data name="SetOpt_view_minimap_content_byteKinds" xml:space="preserve"><value>バイトの種類</value></data>
+  <data name="SetOpt_view_minimap_content_byteValue" xml:space="preserve"><value>バイト値</value></data>
+  <data name="SetOpt_view_minimap_content_zero" xml:space="preserve"><value>ゼロ以外の割合</value></data>
+  <data name="SetOpt_view_minimap_content_byteTheme" xml:space="preserve"><value>バイトテーマ</value></data>
+  <data name="Set_view_minimap_range" xml:space="preserve"><value>ミニマップの範囲</value></data>
+  <data name="SetDesc_view_minimap_range" xml:space="preserve"><value>ドキュメント全体か、表示位置の周辺。</value></data>
+  <data name="SetOpt_view_minimap_range_whole" xml:space="preserve"><value>全体</value></data>
+  <data name="SetOpt_view_minimap_range_around" xml:space="preserve"><value>周辺</value></data>
+  <data name="Set_view_minimap_exact" xml:space="preserve"><value>ミニマップを正確に計算</value></data>
+  <data name="SetDesc_view_minimap_exact" xml:space="preserve"><value>標本ではなく、ドキュメント全体を長時間処理として読みます。</value></data>
+  <data name="Set_view_split_syncSettings" xml:space="preserve"><value>分割したペインの表示設定をそろえる</value></data>
+  <data name="SetDesc_view_split_syncSettings" xml:space="preserve"><value>一方のペインの表示設定の変更を、もう一方にも反映します。</value></data>
+  <data name="Set_view_sync_selection" xml:space="preserve"><value>選択範囲も同期</value></data>
+  <data name="SetDesc_view_sync_selection" xml:space="preserve"><value>同期スクロールで選択範囲も合わせます。</value></data>
+  <data name="Cmd_view_spacePadding" xml:space="preserve"><value>数値を空白で埋める</value></data>
+  <data name="CmdAlias_view_spacePadding" xml:space="preserve"><value>すうちをくうはくでうめる</value></data>
+  <data name="Cmd_view_endianLittle" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="CmdAlias_view_endianLittle" xml:space="preserve"><value>りとるえんでぃあん</value></data>
+  <data name="Cmd_view_endianBig" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="CmdAlias_view_endianBig" xml:space="preserve"><value>びっぐえんでぃあん</value></data>
+  <data name="Cmd_view_endianToggle" xml:space="preserve"><value>エンディアンの切り替え</value></data>
+  <data name="CmdAlias_view_endianToggle" xml:space="preserve"><value>えんでぃあんのきりかえ</value></data>
+  <data name="Cmd_view_reverseGroups" xml:space="preserve"><value>グループ内のバイトを逆順に表示</value></data>
+  <data name="CmdAlias_view_reverseGroups" xml:space="preserve"><value>ぐるーぷないのばいとをぎゃくじゅんにひょうじ</value></data>
+  <data name="Cmd_view_addTextColumn" xml:space="preserve"><value>テキスト列を追加</value></data>
+  <data name="CmdAlias_view_addTextColumn" xml:space="preserve"><value>てきすとれつをついか</value></data>
+  <data name="Cmd_view_removeTextColumn" xml:space="preserve"><value>テキスト列を削除</value></data>
+  <data name="CmdAlias_view_removeTextColumn" xml:space="preserve"><value>てきすとれつをさくじょ</value></data>
+  <data name="Cmd_view_byteThemeNone" xml:space="preserve"><value>バイトテーマ: なし</value></data>
+  <data name="CmdAlias_view_byteThemeNone" xml:space="preserve"><value>ばいとてーま なし</value></data>
+  <data name="Cmd_view_byteThemeCategory" xml:space="preserve"><value>バイトテーマ: 種類別</value></data>
+  <data name="CmdAlias_view_byteThemeCategory" xml:space="preserve"><value>ばいとてーま しゅるいべつ</value></data>
+  <data name="Cmd_view_byteThemeGradient" xml:space="preserve"><value>バイトテーマ: グラデーション</value></data>
+  <data name="CmdAlias_view_byteThemeGradient" xml:space="preserve"><value>ばいとてーま ぐらでーしょん</value></data>
+  <data name="Cmd_view_byteThemeCustom" xml:space="preserve"><value>バイトテーマ: 独自</value></data>
+  <data name="CmdAlias_view_byteThemeCustom" xml:space="preserve"><value>ばいとてーま どくじ</value></data>
+  <data name="Cmd_view_encoding_loadTable" xml:space="preserve"><value>文字表ファイルを読み込む</value></data>
+  <data name="CmdAlias_view_encoding_loadTable" xml:space="preserve"><value>もじひょうふぁいるをよみこむ</value></data>
+  <data name="Cmd_view_records" xml:space="preserve"><value>レコード表示の切り替え</value></data>
+  <data name="CmdAlias_view_records" xml:space="preserve"><value>れこーどひょうじのきりかえ</value></data>
+  <data name="Cmd_view_recordSettings" xml:space="preserve"><value>レコード表示の設定</value></data>
+  <data name="CmdAlias_view_recordSettings" xml:space="preserve"><value>れこーどひょうじのせってい</value></data>
+  <data name="Cmd_view_recordPerRow" xml:space="preserve"><value>1 行を 1 レコードにする</value></data>
+  <data name="CmdAlias_view_recordPerRow" xml:space="preserve"><value>いちぎょうをいちれこーどにする</value></data>
+  <data name="Cmd_view_recordNumbers" xml:space="preserve"><value>オフセット列にレコード番号を表示</value></data>
+  <data name="CmdAlias_view_recordNumbers" xml:space="preserve"><value>おふせっとれつにれこーどばんごうをひょうじ</value></data>
+  <data name="Cmd_go_nextRecord" xml:space="preserve"><value>次のレコード</value></data>
+  <data name="CmdAlias_go_nextRecord" xml:space="preserve"><value>つぎのれこーど</value></data>
+  <data name="Cmd_go_previousRecord" xml:space="preserve"><value>前のレコード</value></data>
+  <data name="CmdAlias_go_previousRecord" xml:space="preserve"><value>まえのれこーど</value></data>
+  <data name="Cmd_view_separatorNone" xml:space="preserve"><value>区切り線: なし</value></data>
+  <data name="CmdAlias_view_separatorNone" xml:space="preserve"><value>くぎりせん なし</value></data>
+  <data name="Cmd_view_separatorSector" xml:space="preserve"><value>区切り線: セクタ</value></data>
+  <data name="CmdAlias_view_separatorSector" xml:space="preserve"><value>くぎりせん せくた</value></data>
+  <data name="Cmd_view_separatorPage" xml:space="preserve"><value>区切り線: ページ</value></data>
+  <data name="CmdAlias_view_separatorPage" xml:space="preserve"><value>くぎりせん ぺーじ</value></data>
+  <data name="Cmd_view_separatorCustom" xml:space="preserve"><value>区切り線: 任意の長さ</value></data>
+  <data name="CmdAlias_view_separatorCustom" xml:space="preserve"><value>くぎりせん にんいのながさ</value></data>
+  <data name="Cmd_view_separatorLabels" xml:space="preserve"><value>区切り線の見出しを表示</value></data>
+  <data name="CmdAlias_view_separatorLabels" xml:space="preserve"><value>くぎりせんのみだしをひょうじ</value></data>
+  <data name="Cmd_view_pageView" xml:space="preserve"><value>ページ単位で表示</value></data>
+  <data name="CmdAlias_view_pageView" xml:space="preserve"><value>ぺーじたんいでひょうじ</value></data>
+  <data name="Cmd_go_nextPage" xml:space="preserve"><value>次のページ</value></data>
+  <data name="CmdAlias_go_nextPage" xml:space="preserve"><value>つぎのぺーじ</value></data>
+  <data name="Cmd_go_previousPage" xml:space="preserve"><value>前のページ</value></data>
+  <data name="CmdAlias_go_previousPage" xml:space="preserve"><value>まえのぺーじ</value></data>
+  <data name="Cmd_view_minimap" xml:space="preserve"><value>ミニマップの表示切り替え</value></data>
+  <data name="CmdAlias_view_minimap" xml:space="preserve"><value>みにまっぷのひょうじきりかえ</value></data>
+  <data name="Cmd_view_minimapEntropy" xml:space="preserve"><value>ミニマップの表示内容: エントロピー</value></data>
+  <data name="CmdAlias_view_minimapEntropy" xml:space="preserve"><value>みにまっぷ えんとろぴー</value></data>
+  <data name="Cmd_view_minimapByteKinds" xml:space="preserve"><value>ミニマップの表示内容: バイトの種類</value></data>
+  <data name="CmdAlias_view_minimapByteKinds" xml:space="preserve"><value>みにまっぷ ばいとのしゅるい</value></data>
+  <data name="Cmd_view_minimapByteValue" xml:space="preserve"><value>ミニマップの表示内容: バイト値</value></data>
+  <data name="CmdAlias_view_minimapByteValue" xml:space="preserve"><value>みにまっぷ ばいとち</value></data>
+  <data name="Cmd_view_minimapZero" xml:space="preserve"><value>ミニマップの表示内容: ゼロ以外の割合</value></data>
+  <data name="CmdAlias_view_minimapZero" xml:space="preserve"><value>みにまっぷ ぜろいがい</value></data>
+  <data name="Cmd_view_minimapByteTheme" xml:space="preserve"><value>ミニマップの表示内容: バイトテーマ</value></data>
+  <data name="CmdAlias_view_minimapByteTheme" xml:space="preserve"><value>みにまっぷ ばいとてーま</value></data>
+  <data name="Cmd_view_minimapWhole" xml:space="preserve"><value>ミニマップの範囲: 全体</value></data>
+  <data name="CmdAlias_view_minimapWhole" xml:space="preserve"><value>みにまっぷ ぜんたい</value></data>
+  <data name="Cmd_view_minimapAround" xml:space="preserve"><value>ミニマップの範囲: 周辺</value></data>
+  <data name="CmdAlias_view_minimapAround" xml:space="preserve"><value>みにまっぷ しゅうへん</value></data>
+  <data name="Cmd_view_minimapExact" xml:space="preserve"><value>ミニマップ: 正確に計算</value></data>
+  <data name="CmdAlias_view_minimapExact" xml:space="preserve"><value>みにまっぷ せいかくにけいさん</value></data>
+  <data name="Cmd_view_split" xml:space="preserve"><value>画面を分割</value></data>
+  <data name="CmdAlias_view_split" xml:space="preserve"><value>がめんをぶんかつ</value></data>
+  <data name="Cmd_view_splitHorizontal" xml:space="preserve"><value>画面を上下に分割</value></data>
+  <data name="CmdAlias_view_splitHorizontal" xml:space="preserve"><value>がめんをじょうげにぶんかつ</value></data>
+  <data name="Cmd_view_splitVertical" xml:space="preserve"><value>画面を左右に分割</value></data>
+  <data name="CmdAlias_view_splitVertical" xml:space="preserve"><value>がめんをさゆうにぶんかつ</value></data>
+  <data name="Cmd_view_splitRemove" xml:space="preserve"><value>分割の解除</value></data>
+  <data name="CmdAlias_view_splitRemove" xml:space="preserve"><value>ぶんかつのかいじょ</value></data>
+  <data name="Cmd_view_splitSync" xml:space="preserve"><value>分割したペインのスクロールを同期</value></data>
+  <data name="CmdAlias_view_splitSync" xml:space="preserve"><value>ぶんかつしたぺいんのすくろーるをどうき</value></data>
+  <data name="Cmd_view_nextPane" xml:space="preserve"><value>次のペインへ</value></data>
+  <data name="CmdAlias_view_nextPane" xml:space="preserve"><value>つぎのぺいんへ</value></data>
+  <data name="Cmd_view_newView" xml:space="preserve"><value>新しいビューで開く</value></data>
+  <data name="CmdAlias_view_newView" xml:space="preserve"><value>あたらしいびゅーでひらく</value></data>
+  <data name="Cmd_view_sideBySide" xml:space="preserve"><value>並べて表示</value></data>
+  <data name="CmdAlias_view_sideBySide" xml:space="preserve"><value>ならべてひょうじ</value></data>
+  <data name="Cmd_view_syncOff" xml:space="preserve"><value>同期スクロール: オフ</value></data>
+  <data name="CmdAlias_view_syncOff" xml:space="preserve"><value>どうきすくろーる おふ</value></data>
+  <data name="Cmd_view_syncSameOffset" xml:space="preserve"><value>同期スクロール: 同じオフセット</value></data>
+  <data name="CmdAlias_view_syncSameOffset" xml:space="preserve"><value>どうきすくろーる おなじおふせっと</value></data>
+  <data name="Cmd_view_syncKeepDifference" xml:space="preserve"><value>同期スクロール: 位置の差を保つ</value></data>
+  <data name="CmdAlias_view_syncKeepDifference" xml:space="preserve"><value>どうきすくろーる いちのさをたもつ</value></data>
+  <data name="Cmd_view_syncToggle" xml:space="preserve"><value>同期スクロールの切り替え</value></data>
+  <data name="CmdAlias_view_syncToggle" xml:space="preserve"><value>どうきすくろーるのきりかえ</value></data>
+  <data name="Cmd_view_syncDifferences" xml:space="preserve"><value>違いを強調</value></data>
+  <data name="CmdAlias_view_syncDifferences" xml:space="preserve"><value>ちがいをきょうちょう</value></data>
+  <data name="Operation_MinimapExact" xml:space="preserve"><value>ミニマップの計算</value></data>
+  <data name="Minimap_Mark_cursor" xml:space="preserve"><value>カーソル</value></data>
+  <data name="Minimap_Mark_selection" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Minimap_Mark_search" xml:space="preserve"><value>検索結果</value></data>
+  <data name="Minimap_Mark_bookmark" xml:space="preserve"><value>ブックマーク</value></data>
+  <data name="Minimap_Mark_modified" xml:space="preserve"><value>変更されたバイト</value></data>
+  <data name="Minimap_Mark_difference" xml:space="preserve"><value>差分</value></data>
+  <data name="Minimap_TipEntropy" xml:space="preserve"><value>エントロピー {0}</value></data>
+  <data name="Minimap_TipMean" xml:space="preserve"><value>平均値 {0}</value></data>
+  <data name="Minimap_TipNonZero" xml:space="preserve"><value>ゼロ以外 {0}%</value></data>
+  <data name="Command_NoOtherDocument" xml:space="preserve"><value>ほかのドキュメントを開いてください。</value></data>
+  <data name="Command_SideBySideLimit" xml:space="preserve"><value>並べて表示できるのは {0} つまでです。</value></data>
+  <data name="Command_SplitTooSmall" xml:space="preserve"><value>ウィンドウが小さいため分割できません。</value></data>
+  <data name="Command_ViewLimit" xml:space="preserve"><value>1 つのドキュメントのビューは {0} 個までです。</value></data>
+  <data name="SideBySide_Sync" xml:space="preserve"><value>同期スクロール</value></data>
+  <data name="SideBySide_Close" xml:space="preserve"><value>並べて表示を閉じる</value></data>
+  <data name="Set_view_minimap_hiddenMarks" xml:space="preserve"><value>ミニマップに表示しない印</value></data>
+  <data name="SetDesc_view_minimap_hiddenMarks" xml:space="preserve"><value>ミニマップに表示しない印。</value></data>
+  <data name="CmdArg_view_sideBySide" xml:space="preserve"><value>並べて表示するドキュメントを選んでください。</value></data>
 </root>

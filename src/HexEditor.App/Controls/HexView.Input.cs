@@ -110,7 +110,7 @@ public sealed partial class HexView
         BelowEnd,
     }
 
-    internal readonly record struct HitResult(long Offset, ActiveColumn Column, bool LowNibble, HitRegion Region, long Row);
+    internal readonly record struct HitResult(long Offset, ActiveColumn Column, bool LowNibble, HitRegion Region, long Row, int TextColumn = 0);
 
     /// <summary>Surface の座標から、セルを求める (VIEW-25 の仕様 6)。y が表示領域の外でも、その延長の行を返す。</summary>
     internal bool TryHitTest(Point point, out HitResult hit)
@@ -146,10 +146,19 @@ public sealed partial class HexView
         long offset;
         ActiveColumn column = ActiveColumn.Hex;
         bool low = false;
+        int textColumn = 0;
+        RowFormat format = columns.Format;
         if (!columns.ShowHex || (columns.ShowText && ch >= columns.TextIndex(0) - 1))
         {
+            // テキスト列が複数あるときは、その位置のテキスト列 (列の前の空白は右の列に含める。VIEW-24)。
             column = ActiveColumn.Text;
-            int rel = ch - columns.TextIndex(0);
+            int texts = Math.Max(1, format.ShownTextColumns);
+            while (textColumn + 1 < texts && ch >= format.TextColumnStart(textColumn + 1) - 1)
+            {
+                textColumn++;
+            }
+
+            int rel = ch - columns.TextIndex(textColumn, 0);
             offset = Math.Max(firstInRow, rowStart + Math.Clamp(rel, 0, b - 1));
 
             // 最終行の最後のバイトの右側は末尾位置 (EDIT-01 の仕様 11)。
@@ -160,13 +169,11 @@ public sealed partial class HexView
         }
         else
         {
-            int c = 0;
-            while (c < b - 1 && ch >= columns.HexIndex(c + 1) - 1)
-            {
-                c++;
-            }
-
-            low = ch - columns.HexIndex(c) >= 1;
+            // セルの前の空白は右のセルに含める。逆順表示・セルの表示形式でも、その位置にあるバイト (VIEW-10・VIEW-11)。
+            int valid = (int)Math.Clamp(layout.Length - rowStart, 0, b);
+            int c = format.ByteAtPointer(Math.Max(0, ch), valid);
+            (int start, _) = format.ByteSpan(c, valid);
+            low = format.IsHexBytes && ch - start >= 1;
             offset = rowStart + c;
             if (offset < firstInRow)
             {
@@ -181,7 +188,7 @@ public sealed partial class HexView
             low = false;
         }
 
-        hit = new HitResult(offset, column, low, column == ActiveColumn.Hex ? HitRegion.Hex : HitRegion.Text, row);
+        hit = new HitResult(offset, column, low, column == ActiveColumn.Hex ? HitRegion.Hex : HitRegion.Text, row, textColumn);
         return true;
     }
 
@@ -257,7 +264,7 @@ public sealed partial class HexView
         bool inside = _editor.HasSelection && _editor.IsSelected(hit.Offset);
         if (!inside)
         {
-            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false);
+            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false, hit.TextColumn);
         }
     }
 
@@ -287,7 +294,7 @@ public sealed partial class HexView
         if (shift)
         {
             // アンカーを変えずにクリックした位置までを選ぶ (EDIT-01 の仕様 4)。
-            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, true);
+            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, true, hit.TextColumn);
         }
         else if (hit.Region == HitRegion.Offset)
         {
@@ -309,7 +316,7 @@ public sealed partial class HexView
         }
         else
         {
-            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false);
+            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false, hit.TextColumn);
         }
 
         return true;
@@ -458,7 +465,7 @@ public sealed partial class HexView
             return;
         }
 
-        editor.Click(hit.Offset, ActiveColumn.Text, false, false);
+        editor.Click(hit.Offset, ActiveColumn.Text, false, false, hit.TextColumn);
         DocumentSnapshot snapshot = editor.Document.Current;
         long offset = hit.Offset;
 
@@ -746,7 +753,7 @@ public sealed partial class HexView
             // タップ: クリックと同じ。
             if (TryHitTest(position, out HitResult hit))
             {
-                _editor?.Click(hit.Offset, hit.Column, hit.LowNibble, false);
+                _editor?.Click(hit.Offset, hit.Column, hit.LowNibble, false, hit.TextColumn);
             }
 
             return;
@@ -1058,9 +1065,10 @@ public sealed partial class HexView
 
         RowColumns columns = Columns;
         int c = layout.ColumnOf(offset);
-        double x = column == ActiveColumn.Hex && columns.ShowHex ? columns.HexIndex(c) : columns.TextIndex(c);
-        double width = column == ActiveColumn.Hex ? 2 : 1;
-        rect = new Rect(ContentLeft + x * _cellWidth - _horizontalOffset, r * _rowHeight - _subRowOffset, width * _cellWidth, _rowHeight);
+        (double x, double width) = column == ActiveColumn.Hex && columns.ShowHex
+            ? HexCellRange(layout, columns, offset)
+            : (columns.TextIndex(Math.Clamp(_editor.TextColumn, 0, Math.Max(0, columns.Format.ShownTextColumns - 1)), c) * _cellWidth, _cellWidth);
+        rect = new Rect(ContentLeft + x - _horizontalOffset, r * _rowHeight - _subRowOffset, width, _rowHeight);
         return true;
     }
 
@@ -1294,8 +1302,8 @@ public sealed partial class HexView
                 _editor.PageDown(shift);
                 break;
             case VirtualKey.Tab when !ctrl:
-                // Tab / Shift+Tab で列を切り替える (VIEW-27 の仕様 1。列が 2 つなので順と逆は同じ)。
-                _editor.ToggleColumn();
+                // Tab / Shift+Tab で列を切り替える (VIEW-27 の仕様 1)。テキスト列が複数あれば順に移る (VIEW-24 の仕様 4)。
+                _editor.ToggleColumn(backward: shift);
                 break;
             case VirtualKey.Insert when !ctrl && !shift:
                 Report(_editor.ToggleInsertMode());
@@ -1405,7 +1413,7 @@ public sealed partial class HexView
             {
                 EditResult r = _editor.TypeHexDigit(ch);
                 Report(r);
-                if (r is EditResult.FixedLength or EditResult.NotEditable)
+                if (r is EditResult.FixedLength or EditResult.NotEditable or EditResult.CellFormatNotEditable)
                 {
                     break;
                 }
@@ -1427,8 +1435,9 @@ public sealed partial class HexView
 
     private void Report(EditResult result)
     {
+        // Hex 以外のセルの表示形式での入力 (CellFormatNotEditable) は、ウィンドウがステータスバーに文を出す (VIEW-10 の仕様 7)。
         if (result is EditResult.FixedLength or EditResult.FixedLengthDelete or EditResult.NotEditable or EditResult.NotEncodable
-            or EditResult.TooManyRows or EditResult.TooManyCarets)
+            or EditResult.TooManyRows or EditResult.TooManyCarets or EditResult.CellFormatNotEditable)
         {
             EditRejected?.Invoke(this, result);
         }

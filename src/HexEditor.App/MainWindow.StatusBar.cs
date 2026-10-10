@@ -15,10 +15,12 @@ public sealed partial class MainWindow
 
     /// <summary>項目の ID (設定 ui.statusBar.items と右クリックメニューに使う)。</summary>
     private static readonly string[] StatusItemIds =
-        ["cursor", "value", "selection", "column", "encoding", "mode", "modified", "size", "zoom", "operations", "notifications"];
+        ["cursor", "value", "selection", "position", "column", "format", "encoding", "endian", "mode", "modified", "size", "sync", "zoom", "operations",
+            "notifications"];
 
     /// <summary>幅が足りないときに隠す順 (UI-06 の仕様 5)。カーソル位置・選択範囲・入力モード・変更の有無・処理センターは隠さない。</summary>
-    private static readonly string[] CollapseOrder = ["zoom", "column", "value", "size-short", "encoding", "size", "notifications"];
+    private static readonly string[] CollapseOrder =
+        ["zoom", "sync", "format", "column", "position", "value", "size-short", "endian", "encoding", "size", "notifications"];
 
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _operationsTimer;
     private TaskbarProgress? _taskbar;
@@ -215,11 +217,15 @@ public sealed partial class MainWindow
             ["cursor"] = doc is not null,
             ["value"] = doc is not null && doc.ValueText.Length > 0,
             ["selection"] = doc is not null && (doc.Editor.HasSelection || doc.Editor.HasMultipleCarets),
+            ["position"] = doc is not null && doc.PositionText.Length > 0,
             ["column"] = doc is not null,
+            ["format"] = doc is not null && doc.FormatText.Length > 0,
             ["encoding"] = doc is not null,
+            ["endian"] = doc is not null,
             ["mode"] = doc is not null,
             ["modified"] = doc is not null && doc.Document.IsModified,
             ["size"] = doc is not null,
+            ["sync"] = SyncStatusText().Length > 0,
             ["zoom"] = true,
             ["operations"] = operations,
             ["notifications"] = true,
@@ -232,6 +238,7 @@ public sealed partial class MainWindow
         }
 
         StatusSize.Content = doc?.SizeText ?? string.Empty;
+        StatusSync.Content = SyncStatusText();
         _statusOverflow.Clear();
         StatusMore.Visibility = Visibility.Collapsed;
         double available = StatusBar.ActualWidth - StatusBar.Padding.Left - StatusBar.Padding.Right;
@@ -299,6 +306,43 @@ public sealed partial class MainWindow
     private void StatusCursor_Click(object sender, RoutedEventArgs e) => GoTo_Click(sender, e);
 
     private void StatusColumn_Click(object sender, RoutedEventArgs e) => Editor?.ToggleColumn();
+
+    /// <summary>エンディアン表示のクリック: ドキュメントのエンディアンを切り替える (VIEW-11 の仕様 3)。</summary>
+    private void StatusEndian_Click(object sender, RoutedEventArgs e) => _ = Commands.ExecuteAsync("view.endianToggle");
+
+    /// <summary>表示形式のクリック: セルの表示形式のメニュー (UI-06 の仕様 1)。</summary>
+    private void StatusFormat_Click(object sender, RoutedEventArgs e) => ShowSubMenuAt("Command_ViewCellFormat", StatusCellFormat);
+
+    /// <summary>同期のクリック: 同期のモードのメニュー (UI-06 の仕様 1)。</summary>
+    private void StatusSync_Click(object sender, RoutedEventArgs e) => ShowSubMenuAt("Command_ViewSyncMenu", StatusSync);
+
+    /// <summary>表示メニューのサブメニューの項目を、ステータスバーの項目の上にメニューとして出す (選ぶとコマンドを実行する)。</summary>
+    private void ShowSubMenuAt(string id, FrameworkElement anchor)
+    {
+        if (!_viewItems.TryGetValue(id, out MenuFlyoutItemBase? item) || item is not MenuFlyoutSubItem sub)
+        {
+            return;
+        }
+
+        RefreshCommandUi();
+        var menu = new MenuFlyout();
+        foreach (MenuFlyoutItemBase child in sub.Items)
+        {
+            if (child is MenuFlyoutItem source && HexEditor.App.Commands.CommandUi.GetId(source) is { } command)
+            {
+                var copy = new ToggleMenuFlyoutItem
+                {
+                    Text = source.Text,
+                    IsEnabled = source.IsEnabled,
+                    IsChecked = source is ToggleMenuFlyoutItem t ? t.IsChecked : source is RadioMenuFlyoutItem r && r.IsChecked,
+                };
+                copy.Click += (_, _) => _ = Commands.ExecuteAsync(command);
+                menu.Items.Add(copy);
+            }
+        }
+
+        menu.ShowAt(anchor);
+    }
 
     private async void StatusMode_Click(object sender, RoutedEventArgs e)
     {

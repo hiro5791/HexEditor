@@ -24,15 +24,19 @@ public static class EditorSettings
     /// <summary>設定をタブ 1 つに反映する。</summary>
     public static void Apply(SettingsStore settings, DocumentViewModel doc)
     {
-        EditorState editor = doc.Editor;
-        editor.NibbleArrowKeys = settings.GetBool(NibbleArrowKeysKey, false);
-        editor.CursorMargin = settings.GetInt(CursorMarginKey, 0);
-        editor.JumpPlacement = settings.GetString(JumpPositionKey, "third") switch
+        // 分割したペインのビューにも同じ設定を使う (VIEW-37)。
+        foreach (EditorState editor in doc.Panes)
         {
-            "top" => JumpPlacement.Top,
-            "center" => JumpPlacement.Center,
-            _ => JumpPlacement.Third,
-        };
+            editor.NibbleArrowKeys = settings.GetBool(NibbleArrowKeysKey, false);
+            editor.CursorMargin = settings.GetInt(CursorMarginKey, 0);
+            editor.JumpPlacement = settings.GetString(JumpPositionKey, "third") switch
+            {
+                "top" => JumpPlacement.Top,
+                "center" => JumpPlacement.Center,
+                _ => JumpPlacement.Third,
+            };
+        }
+
         doc.ShowNibble = settings.GetBool(ShowNibbleKey, false);
     }
 }

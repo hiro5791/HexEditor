@@ -1,5 +1,7 @@
 using HexEditor.Core.View;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 
 namespace HexEditor.App.Controls;
 
@@ -95,6 +97,93 @@ public sealed partial class HexView
             RemeasureAndRender();
         }
     }
+
+    // ---- バイトテーマ (VIEW-17) ----
+
+    private ByteTheme? _byteTheme;
+    private ThemeBrushes? _themeBrushes;
+    private (ByteTheme? Theme, int PaletteVersion, bool Dark)? _themeKey;
+
+    /// <summary>バイトテーマ (VIEW-17)。null は「なし」。ハイコントラストでは使わない (仕様 4)。</summary>
+    public ByteTheme? ByteTheme
+    {
+        get => _byteTheme;
+        set
+        {
+            if (!ReferenceEquals(_byteTheme, value))
+            {
+                _byteTheme = value;
+                _themeKey = null;
+                if (_minimap is not null)
+                {
+                    _minimap.ByteTheme = value;
+                }
+                InvalidateRows();
+                QueueRender();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 描画に使うバイトテーマのブラシ。文字色と背景色のコントラスト比が 3:1 未満なら、文字色を通常の文字色にする (仕様 9)。
+    /// ハイコントラストでは null (システム色だけを使う。仕様 4)。
+    /// </summary>
+    private ThemeBrushes? CurrentThemeBrushes()
+    {
+        if (_byteTheme is null || _palette is null || _palette.HighContrast)
+        {
+            return null;
+        }
+
+        bool dark = ActualTheme == ElementTheme.Dark;
+        if (_themeKey is { } key && ReferenceEquals(key.Theme, _byteTheme) && key.PaletteVersion == _paletteVersion && key.Dark == dark)
+        {
+            return _themeBrushes;
+        }
+
+        SchemeColor background = ToScheme(_palette.Background);
+        SchemeColor normal = ToScheme(_palette.HexText);
+        var cache = new Dictionary<SchemeColor, Brush>();
+        Brush BrushOf(SchemeColor c)
+        {
+            if (!cache.TryGetValue(c, out Brush? brush))
+            {
+                // テーマの色は利用者が選んだテーマのデータの値 (コードに直書きした色ではない)。
+                brush = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(c.A, c.R, c.G, c.B));
+                cache[c] = brush;
+            }
+
+            return brush;
+        }
+
+        var fore = new Brush?[256];
+        var back = new Brush?[256];
+        for (int b = 0; b < 256; b++)
+        {
+            ByteThemeColor color = _byteTheme.ColorOf((byte)b, dark);
+            SchemeColor behind = color.Background ?? background;
+            if (color.Text is { } text)
+            {
+                SchemeColor readable = ByteTheme.ReadableText(text, behind, normal);
+                fore[b] = readable == normal ? _palette.HexText : BrushOf(readable);
+            }
+
+            if (color.Background is { } bg)
+            {
+                back[b] = BrushOf(bg);
+            }
+        }
+
+        _themeBrushes = new ThemeBrushes(fore, back);
+        _themeKey = (_byteTheme, _paletteVersion, dark);
+        return _themeBrushes;
+    }
+
+    /// <summary>差分の層 (VIEW-17 の層 11) の色 (並べて表示の「違いを強調」VIEW-39、比較 ANA が使う)。</summary>
+    internal Brush DifferenceBrush => _palette?.Difference ?? (Brush)Application.Current.Resources["SystemFillColorCriticalBackgroundBrush"];
+
+    private static SchemeColor ToScheme(Microsoft.UI.Xaml.Media.Brush brush) =>
+        brush is SolidColorBrush s ? new SchemeColor(s.Color.A, s.Color.R, s.Color.G, s.Color.B) : new SchemeColor(0xFF, 0xFF, 0xFF, 0xFF);
 
     /// <summary>設定「ツールチップを表示する」(VIEW-07。既定オン)。</summary>
     public bool ShowToolTips { get; set; } = true;

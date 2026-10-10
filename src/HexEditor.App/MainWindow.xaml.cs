@@ -242,9 +242,11 @@ public sealed partial class MainWindow : Window
         }
 
         ApplyEditorSettings();
+        UpdateSelectedViews();
         UpdateTitle();
         UpdateCommandStates();
         UpdateEncodingMenu();
+        UpdateSyncStatus();
         QueueStatusBarLayout();
     }
 
@@ -331,7 +333,7 @@ public sealed partial class MainWindow : Window
             }
 
             // 別のウィンドウで開いているファイルにも保存しない (UI-14)。
-            if (Vm.Documents.Any(d => d != doc && string.Equals(d.FilePath, path, StringComparison.OrdinalIgnoreCase))
+            if (Vm.Documents.Any(d => !ReferenceEquals(d.Document, doc.Document) && string.Equals(d.FilePath, path, StringComparison.OrdinalIgnoreCase))
                 || WindowManager.FindOpenElsewhere(this, path) is not null)
             {
                 ShowNotice(Loc.Get("Error_SaveOpenElsewhere"), InfoBarSeverity.Error, doc);
@@ -618,7 +620,13 @@ public sealed partial class MainWindow : Window
             view.StatusMessageRequested += (_, args) =>
                 ShowNotice(args.Message, InfoBarSeverity.Informational, view.DataContext as DocumentViewModel);
             AttachSelectionEvents(view);
+            view.TextColumnEncodingRequested += HexView_TextColumnEncodingRequested;
         }
+
+        // 画面分割 (VIEW-37)・バイトテーマ (VIEW-17)・ミニマップ (VIEW-35)。
+        HookPanes(view);
+        view.ByteTheme = new ByteThemeStore(App.Settings.Folder).Resolve(App.Settings.GetString(ByteThemeKey, "none"));
+        AttachMinimap(view);
 
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
         TrackDocumentName(view);
@@ -701,6 +709,13 @@ public sealed partial class MainWindow : Window
 
     private void HexView_EditRejected(object? sender, EditResult result)
     {
+        if (result == EditResult.CellFormatNotEditable)
+        {
+            // Hex 以外のセルの表示形式では直接編集しない (VIEW-10 の仕様 7)。ステータスバーの一時的な文で知らせる。
+            ShowStatusMessage(Loc.Get("HexView_Status_CellFormatReadOnly"));
+            return;
+        }
+
         DocumentViewModel? doc = Vm.Selected;
         IReadOnlyList<LongRunningOperation> busy = doc is null ? [] : Vm.Operations.ActiveFor(doc.Document);
         if (result == EditResult.NotEditable && doc is { Editor.ReadOnly: true } && busy.Count == 0)

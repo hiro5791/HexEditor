@@ -561,6 +561,11 @@
       "type": "string",
       "default": ""
     },
+    "view.byteTheme": {
+      "description": "Byte theme",
+      "type": "string",
+      "default": "none"
+    },
     "view.colorScheme": {
       "description": "Color scheme",
       "type": "string",
@@ -610,6 +615,49 @@
       ],
       "default": "third"
     },
+    "view.minimap.content": {
+      "description": "Minimap content",
+      "type": "string",
+      "enum": [
+        "entropy",
+        "byteKinds",
+        "byteValue",
+        "zero",
+        "byteTheme"
+      ],
+      "default": "entropy"
+    },
+    "view.minimap.exact": {
+      "description": "Calculate the minimap exactly",
+      "type": "boolean",
+      "default": false
+    },
+    "view.minimap.hiddenMarks": {
+      "description": "Hidden minimap marks",
+      "type": "string",
+      "default": ""
+    },
+    "view.minimap.range": {
+      "description": "Minimap range",
+      "type": "string",
+      "enum": [
+        "whole",
+        "around"
+      ],
+      "default": "whole"
+    },
+    "view.minimap.visible": {
+      "description": "Show minimap",
+      "type": "boolean",
+      "default": false
+    },
+    "view.minimap.width": {
+      "description": "Minimap width",
+      "type": "integer",
+      "minimum": 40,
+      "maximum": 200,
+      "default": 80
+    },
     "view.modified.keepAfterSave": {
       "description": "Keep change marks after saving",
       "type": "boolean",
@@ -652,8 +700,18 @@
       "type": "boolean",
       "default": false
     },
+    "view.split.syncSettings": {
+      "description": "Keep split pane display settings the same",
+      "type": "boolean",
+      "default": false
+    },
     "view.statusBar.showNibble": {
       "description": "Show nibble position",
+      "type": "boolean",
+      "default": false
+    },
+    "view.sync.selection": {
+      "description": "Synchronize selection too",
       "type": "boolean",
       "default": false
     },

@@ -1,3 +1,4 @@
+using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
@@ -17,6 +18,18 @@ public enum HexHighlightLayer
 
     /// <summary>層 7: ブックマーク (INSP-23)。</summary>
     Bookmark = 7,
+
+    /// <summary>層 8: 注釈 (INSP-32。YARA、すべて検索の結果、スクリプト・プラグイン)。</summary>
+    Annotation = 8,
+
+    /// <summary>層 9: テンプレートの範囲の色分け (TPL-23)。</summary>
+    Template = 9,
+
+    /// <summary>層 10: 色付けルール (INSP-33)。</summary>
+    ColorRule = 10,
+
+    /// <summary>層 11: 差分 (比較 ANA-02〜ANA-04、並列表示の「違いを強調」VIEW-39)。</summary>
+    Difference = 11,
 }
 
 /// <summary>
@@ -111,6 +124,7 @@ public sealed partial class HexView
     private void RenderHighlights(long firstOffset, int rows, RowColumns columns)
     {
         _placed.Clear();
+        _placedBands.Clear();
         int bytesPerRow = columns.BytesPerRow;
         long end = firstOffset + (long)rows * bytesPerRow;
         int backUsed = 0;
@@ -131,6 +145,10 @@ public sealed partial class HexView
 
             // 奥の層から描く (同じ層は与えた順)。作業用の一覧は使い回す (描画のたびに作らない。VIEW-04 の仕様 3)。
             items.Sort(static (a, b) => a.Item.Layer != b.Item.Layer ? b.Item.Layer.CompareTo(a.Item.Layer) : a.Order.CompareTo(b.Order));
+            RowFormat format = columns.Format;
+            int texts = format.ShowText ? Math.Max(1, format.ShownTextColumns) : 0;
+            long length = _editor?.Layout.Length ?? 0;
+            Span<(int Start, int Length)> spans = stackalloc (int, int)[8];
             foreach ((HexHighlight h, _) in items)
             {
                 long from = Math.Max(h.Offset, firstOffset);
@@ -140,22 +158,45 @@ public sealed partial class HexView
                     continue;
                 }
 
+                bool band = h.Background is not null && (int)h.Layer >= (int)HexHighlightLayer.Bookmark && (int)h.Layer <= (int)HexHighlightLayer.ColorRule;
                 for (long rowStart = firstOffset + (from - firstOffset) / bytesPerRow * bytesPerRow; rowStart < to; rowStart += bytesPerRow)
                 {
                     int c0 = (int)(Math.Max(from, rowStart) - rowStart);
                     int c1 = (int)(Math.Min(to, rowStart + bytesPerRow) - rowStart) - 1;
                     double y = (rowStart - firstOffset) / bytesPerRow * _rowHeight - _subRowOffset;
-                    double hexLeft = columns.HexIndex(c0) * _cellWidth;
-                    double hexWidth = (columns.HexIndex(c1) + 2) * _cellWidth - hexLeft;
-                    double textLeft = columns.TextIndex(c0) * _cellWidth;
-                    double textWidth = (c1 - c0 + 1) * _cellWidth;
-                    if (h.Length == 0)
+                    int valid = (int)Math.Clamp(length - rowStart, 0, bytesPerRow);
+                    if (format.ShowHex)
                     {
-                        hexWidth = textWidth = 2;
+                        if (h.Length == 0)
+                        {
+                            PlaceSegment(h, "hex", rowStart + c0, rowStart + c1, format.ByteSpan(c0, valid).Start * _cellWidth, y, 2,
+                                ref backUsed, ref frontUsed);
+                        }
+                        else
+                        {
+                            // 逆順表示などで表示が分かれる範囲は、分けて描く (VIEW-11)。
+                            int n = format.HexSpans(c0, c1, valid, spans);
+                            for (int i = 0; i < n; i++)
+                            {
+                                PlaceSegment(h, "hex", rowStart + c0, rowStart + c1, spans[i].Start * _cellWidth, y, spans[i].Length * _cellWidth,
+                                    ref backUsed, ref frontUsed);
+                            }
+                        }
                     }
 
-                    PlaceSegment(h, "hex", rowStart + c0, rowStart + c1, hexLeft, y, hexWidth, ref backUsed, ref frontUsed);
-                    PlaceSegment(h, "text", rowStart + c0, rowStart + c1, textLeft, y, textWidth, ref backUsed, ref frontUsed);
+                    for (int t = 0; t < texts; t++)
+                    {
+                        double textLeft = format.TextIndex(t, c0) * _cellWidth;
+                        double textWidth = h.Length == 0 ? 2 : (c1 - c0 + 1) * _cellWidth;
+                        PlaceSegment(h, t == 0 ? "text" : "text" + (t + 1), rowStart + c0, rowStart + c1, textLeft, y, textWidth,
+                            ref backUsed, ref frontUsed);
+                    }
+
+                    // 層 7〜10 の背景が、選択範囲・検索の一致 (層 2〜5) に隠れるセルでは、下端に高さ 2 px の帯として残す (VIEW-17 の仕様 6)。
+                    if (band && h.Length > 0)
+                    {
+                        PlaceBands(h, format, firstOffset, rowStart, c0, c1, valid, texts, y, ref frontUsed);
+                    }
                 }
             }
         }
@@ -227,6 +268,83 @@ public sealed partial class HexView
             }
             SetRect(r, x, y + 0.5, Math.Max(1, width), Math.Max(1, _rowHeight - 1));
         }
+    }
+
+    /// <summary>帯の高さ (VIEW-17 の仕様 6)。</summary>
+    private const double BandHeight = 2;
+
+    /// <summary>描いた帯 (テスト用の読み出し): 層・提供元・列・最初と最後のバイト・色・高さ。</summary>
+    private readonly List<(HexHighlightLayer Layer, string Tag, string Column, long First, long Last, Brush Brush)> _placedBands = [];
+
+    /// <summary>
+    /// 選択範囲・検索の一致・注目している範囲に隠れるバイトに、強調の背景の色の帯をセルの下端 (変更の下線のすぐ上) に描く。
+    /// </summary>
+    private void PlaceBands(HexHighlight h, RowFormat format, long firstOffset, long rowStart, int c0, int c1, int valid, int texts, double y,
+        ref int frontUsed)
+    {
+        long selStart = _editor!.SelectionStart;
+        long selEnd = selStart + _editor.SelectionLength;
+        bool[] matched = _work.Matched;
+        bool Hidden(int c)
+        {
+            long offset = rowStart + c;
+            long index = offset - firstOffset;
+            return (offset >= selStart && offset < selEnd) || (index >= 0 && index < matched.Length && matched[index]);
+        }
+
+        Span<(int Start, int Length)> spans = stackalloc (int, int)[8];
+        for (int c = c0; c <= c1; c++)
+        {
+            if (!Hidden(c))
+            {
+                continue;
+            }
+
+            int last = c;
+            while (last + 1 <= c1 && Hidden(last + 1))
+            {
+                last++;
+            }
+
+            double top = y + _rowHeight - 3 - BandHeight;
+            if (format.ShowHex)
+            {
+                int n = format.HexSpans(c, last, valid, spans);
+                for (int i = 0; i < n; i++)
+                {
+                    PlaceBand(h.Background!, spans[i].Start * _cellWidth, top, spans[i].Length * _cellWidth, ref frontUsed);
+                }
+
+                _placedBands.Add((h.Layer, h.Tag, "hex", rowStart + c, rowStart + last, h.Background!));
+            }
+
+            for (int t = 0; t < texts; t++)
+            {
+                PlaceBand(h.Background!, format.TextIndex(t, c) * _cellWidth, top, (last - c + 1) * _cellWidth, ref frontUsed);
+                _placedBands.Add((h.Layer, h.Tag, t == 0 ? "text" : "text" + (t + 1), rowStart + c, rowStart + last, h.Background!));
+            }
+
+            c = last;
+        }
+    }
+
+    private void PlaceBand(Brush brush, double x, double y, double width, ref int frontUsed)
+    {
+        Rectangle r = Take(_highlightFront, _frontLayer!, frontUsed++);
+        while (_frontDash.Count <= frontUsed - 1)
+        {
+            _frontDash.Add(null);
+        }
+
+        if (_frontDash[frontUsed - 1] is not null)
+        {
+            _frontDash[frontUsed - 1] = null;
+            r.StrokeDashArray = null;
+        }
+
+        r.Fill = brush;
+        r.Stroke = null;
+        SetRect(r, x, y, Math.Max(1, width), BandHeight);
     }
 
     private static Rectangle Take(List<Rectangle> pool, Canvas layer, int index)
@@ -336,9 +454,25 @@ public sealed partial class HexView
             });
         }
 
+        var bands = new System.Text.Json.Nodes.JsonArray();
+        foreach ((HexHighlightLayer layer, string tag, string column, long first, long last, Brush brush) in _placedBands)
+        {
+            bands.Add(new System.Text.Json.Nodes.JsonObject
+            {
+                ["layer"] = (int)layer,
+                ["tag"] = tag,
+                ["column"] = column,
+                ["first"] = first,
+                ["last"] = last,
+                ["color"] = ColorOf(brush),
+                ["height"] = BandHeight,
+            });
+        }
+
         return new System.Text.Json.Nodes.JsonObject
         {
             ["segments"] = segments,
+            ["bands"] = bands,
             ["marks"] = marks,
             ["highContrast"] = IsHighContrast,
             ["rowHeight"] = _rowHeight,

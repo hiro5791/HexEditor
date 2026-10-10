@@ -52,6 +52,11 @@ public enum EditResult
 
     /// <summary>マルチ選択・矩形をカーソルにすると、カーソル数の上限 (10,000) を超える (EDIT-08 の仕様 3)。何もしていない。</summary>
     TooManyCarets,
+    /// <summary>
+    /// Hex 以外のセルの表示形式 (VIEW-10) で Hex 列に入力した。何もしていない。UI はステータスバーに「この表示形式では直接編集できません。
+    /// データインスペクタを使ってください」と出す (VIEW-10 の仕様 7)。
+    /// </summary>
+    CellFormatNotEditable,
 }
 
 /// <summary>ジャンプ先の表示位置 (VIEW-34 の仕様 2。設定 <c>view.jump.position</c>)。</summary>
@@ -135,9 +140,25 @@ public sealed partial class EditorState
     /// </summary>
     public TextEncoding TextEncoding
     {
-        get => _textEncoding;
+        get => TextColumn == 0 ? _textEncoding : TextEncodingOf(TextColumn);
         set
         {
+            int column = TextColumn;
+            if (column > 0)
+            {
+                // 2 列目以降のテキスト列 (VIEW-24): その列の文字コードだけを変える。
+                List<TextColumnSpec> columns = [.. _view.TextColumns];
+                if (column < columns.Count && !string.Equals(columns[column].Encoding, value.Id, StringComparison.OrdinalIgnoreCase))
+                {
+                    columns[column] = columns[column] with { Encoding = value.Id };
+                    _view = _view.WithTextColumns(columns);
+                    ViewChanged?.Invoke(this, EventArgs.Empty);
+                    RaiseChanged();
+                }
+
+                return;
+            }
+
             if (!ReferenceEquals(_textEncoding, value))
             {
                 _textEncoding = value;
@@ -146,6 +167,18 @@ public sealed partial class EditorState
                 RaiseChanged();
             }
         }
+    }
+
+    /// <summary>テキスト列 <paramref name="column"/> の文字コード (VIEW-24)。</summary>
+    public TextEncoding TextEncodingOf(int column)
+    {
+        if (column <= 0)
+        {
+            return _textEncoding;
+        }
+
+        IReadOnlyList<TextColumnSpec> columns = _view.TextColumns;
+        return column < columns.Count ? TextEncoding.FromId(columns[column].Encoding) : _textEncoding;
     }
 
     private TextEncoding _textEncoding = TextEncoding.Ascii;
@@ -230,7 +263,7 @@ public sealed partial class EditorState
             return;
         }
 
-        MoveTo(!extend && HasSelection ? _selectionStart : _cursor - 1, extend);
+        MoveTo(!extend && HasSelection ? _selectionStart : HorizontalTarget(forward: false), extend);
     }
 
     /// <summary>→。選択範囲がある場合 (Shift なし) は選択範囲の末尾 (最後のバイトの次) に移るだけ。</summary>
@@ -247,7 +280,7 @@ public sealed partial class EditorState
             return;
         }
 
-        MoveTo(!extend && HasSelection ? _selectionStart + _selectionLength : SaturatingAdd(_cursor, 1), extend);
+        MoveTo(!extend && HasSelection ? _selectionStart + _selectionLength : HorizontalTarget(forward: true), extend);
     }
 
     /// <summary>
@@ -285,7 +318,8 @@ public sealed partial class EditorState
         }
     }
 
-    private bool UsesNibbleArrows(bool extend) => NibbleArrowKeys && ActiveColumn == ActiveColumn.Hex && !extend && !HasSelection;
+    private bool UsesNibbleArrows(bool extend) => NibbleArrowKeys && ActiveColumn == ActiveColumn.Hex && !extend && !HasSelection
+        && View.CellFormat == CellFormat.Hex;
 
     private void AfterNibbleMove()
     {
@@ -598,7 +632,11 @@ public sealed partial class EditorState
     /// <summary>カーソルを動かさずに表示だけを動かす (Ctrl+↑ / Ctrl+↓、ホイール)。</summary>
     public void ScrollRows(long rows)
     {
-        SetTopRow(_topRow + rows);
+        if (!ScrollWithinSection(rows))
+        {
+            SetTopRow(_topRow + rows);
+        }
+
         RaiseChanged();
     }
 
@@ -610,11 +648,16 @@ public sealed partial class EditorState
     }
 
     /// <summary>マウスのクリック (VIEW-25 の仕様 6)。<paramref name="extend"/> は Shift+クリック (EDIT-01 の仕様 4: 両端を含む)。</summary>
-    public void Click(long offset, ActiveColumn column, bool lowNibble, bool extend)
+    /// <remarks><paramref name="textColumn"/> はテキスト列をクリックしたときのテキスト列の番号 (VIEW-24。-1 なら変えない)。</remarks>
+    public void Click(long offset, ActiveColumn column, bool lowNibble, bool extend, int textColumn = -1)
     {
         offset = Math.Clamp(offset, 0, Layout.MaxCursor);
         CollapseCarets();
         _rect = null;
+        if (column == ActiveColumn.Text && textColumn >= 0)
+        {
+            _textColumn = Math.Clamp(textColumn, 0, Math.Max(0, View.TextColumnCount - 1));
+        }
 
         // 元の位置から 1 画面分 (b × V バイト) 以上離れたクリックはジャンプ履歴に記録する (VIEW-31 の仕様 1)。
         if (!extend && Math.Abs((decimal)offset - _cursor) >= (decimal)BytesPerRow * _visibleRows)
@@ -623,6 +666,13 @@ public sealed partial class EditorState
         }
 
         ActiveColumn = VisibleColumn(column);
+
+        // 2 バイト以上のセルの表示形式の Hex 列では、カーソルはセルの先頭に置く (VIEW-10 の仕様 6)。
+        if (ActiveColumn == ActiveColumn.Hex && View.CellUnit > 1 && offset < Layout.Length)
+        {
+            offset = CellStartOf(offset);
+        }
+
         if (extend)
         {
             long anchor = _anchor >= 0 ? _anchor : _cursor;
@@ -664,19 +714,60 @@ public sealed partial class EditorState
         RaiseChanged();
     }
 
-    /// <summary>Tab / Shift+Tab で列を切り替える (VIEW-27)。</summary>
-    public void ToggleColumn()
+    /// <summary>
+    /// Tab / Shift+Tab で列を切り替える (VIEW-27)。テキスト列が複数あるときは Hex 列 → テキスト列 1 → テキスト列 2 … → Hex 列の順に移る
+    /// (VIEW-24 の仕様 4)。<paramref name="backward"/> は Shift+Tab (逆順)。
+    /// </summary>
+    public void ToggleColumn(bool backward = false)
     {
         // 表示されている列の間だけを移る。表示されている列が 1 つのときは何もしない (VIEW-16 の仕様 5)。
-        if (!View.ShowHexColumn || !View.ShowTextColumn)
+        int texts = View.ShowTextColumn ? Math.Clamp(View.TextColumnCount, 1, ViewSettings.MaxTextColumns) : 0;
+        int positions = (View.ShowHexColumn ? 1 : 0) + texts;
+        if (positions <= 1)
         {
             return;
         }
 
-        ActiveColumn = ActiveColumn == ActiveColumn.Hex ? ActiveColumn.Text : ActiveColumn.Hex;
+        // 位置の番号: Hex 列が 0、テキスト列 i が i + 1 (Hex 列がなければテキスト列 i が i)。
+        int hexSlots = View.ShowHexColumn ? 1 : 0;
+        int current = ActiveColumn == ActiveColumn.Hex ? 0 : hexSlots + Math.Clamp(TextColumn, 0, texts - 1);
+        int next = (current + (backward ? positions - 1 : 1)) % positions;
+        if (hexSlots == 1 && next == 0)
+        {
+            ActiveColumn = ActiveColumn.Hex;
+        }
+        else
+        {
+            ActiveColumn = ActiveColumn.Text;
+            TextColumn = next - hexSlots;
+        }
+
         LowNibble = false;
         Document.History.BreakCoalescing();
         RaiseChanged();
+    }
+
+    /// <summary>
+    /// 操作中のテキスト列 (VIEW-24。0 始まり)。カーソルが Hex 列にあるときは最後に操作したテキスト列。入力・コピー・ステータスバーの
+    /// 文字コードは、このテキスト列の文字コードを使う (VIEW-24 の仕様 5・6)。
+    /// </summary>
+    public int TextColumn
+    {
+        get => Math.Clamp(_textColumn, 0, Math.Max(0, View.TextColumnCount - 1));
+        private set => _textColumn = value;
+    }
+
+    private int _textColumn;
+
+    /// <summary>テキスト列をクリックした (VIEW-24)。その列を操作中のテキスト列にする。</summary>
+    public void SetTextColumn(int column)
+    {
+        int clamped = Math.Clamp(column, 0, Math.Max(0, View.TextColumnCount - 1));
+        if (clamped != _textColumn)
+        {
+            _textColumn = clamped;
+            RaiseChanged();
+        }
     }
 
     /// <summary>
@@ -755,6 +846,12 @@ public sealed partial class EditorState
         if (!CanEdit())
         {
             return EditResult.NotEditable;
+        }
+
+        // Hex 以外のセルの表示形式では、セルに直接入力しない (VIEW-10 の仕様 7。データインスペクタを使う)。
+        if (View.CellFormat != CellFormat.Hex)
+        {
+            return EditResult.CellFormatNotEditable;
         }
 
         if (!_caretLoop && (HasMultipleRanges || HasMultipleCarets))
@@ -1378,17 +1475,38 @@ public sealed partial class EditorState
     {
         long row = Layout.RowOf(_cursor);
         int margin = Math.Min(_cursorMargin, (_visibleRows - 1) / 2);
+        if (PageSection() is { } section && !SameSection(section, row, _topRow))
+        {
+            // ページ単位で表示: カーソルが別の区切りに移ったら、その区切りを表示する (VIEW-33 の仕様 4)。
+            SetTopRow(row < _topRow ? row - margin : row - _visibleRows + 1 + margin, row);
+            return;
+        }
+
         if (row < _topRow + margin)
         {
-            SetTopRow(row - margin);
+            SetTopRow(row - margin, row);
         }
         else if (row >= _topRow + _visibleRows - margin)
         {
-            SetTopRow(row - _visibleRows + 1 + margin);
+            SetTopRow(row - _visibleRows + 1 + margin, row);
         }
     }
 
-    private void SetTopRow(long row) => _topRow = Math.Clamp(row, 0, Layout.MaxTopRow(_visibleRows));
+    /// <summary>
+    /// 一番上の行を決める。ページ単位で表示 (VIEW-33 の仕様 4) のときは、<paramref name="anchorRow"/> (省略時は <paramref name="row"/>) の
+    /// ある区切りの中に収める。
+    /// </summary>
+    private void SetTopRow(long row, long? anchorRow = null)
+    {
+        long top = Math.Clamp(row, 0, Layout.MaxTopRow(_visibleRows));
+        if (PageSection() is { } section)
+        {
+            (long first, long last) = SectionRows(section, anchorRow ?? top);
+            top = Math.Clamp(top, first, Math.Max(first, last - _visibleRows + 1));
+        }
+
+        _topRow = top;
+    }
 
     private void SetSelection(long start, long length)
     {
@@ -1410,6 +1528,18 @@ public sealed partial class EditorState
         ShiftSelectionsForEdit(e);
         _jumps.Adjust(e);
         OnDocumentChangedForView(e);
+        if (FollowsEdits)
+        {
+            // 操作中でないビュー: 表示中のデータが動かないようにずらす。Undo の範囲の選択はしない (VIEW-37 の仕様 4、VIEW-38 の仕様 5)。
+            FollowEdit(e);
+            _knownLength = Document.Length;
+            _cursor = Math.Min(_cursor, Layout.MaxCursor);
+            SetTopRow(_topRow);
+            RaiseChanged();
+            return;
+        }
+
+        _knownLength = Document.Length;
         if (e.Selection is { } range)
         {
             // 元に戻す・やり直しの後は、その編集グループの範囲を選択して見える位置に出す (EDIT-19 の仕様 10)。

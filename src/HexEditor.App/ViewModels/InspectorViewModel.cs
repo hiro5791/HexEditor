@@ -170,8 +170,8 @@ public sealed partial class InspectorViewModel : ObservableObject
     public const string HighlightKey = "inspector.highlightTarget";
     public const string CursorWithSelectionKey = "inspector.useCursorWithSelection";
 
-    /// <summary>ドキュメントのエンディアン (VIEW-11 はフェーズ 2。それまではリトルエンディアン)。</summary>
-    public const Endianness DocumentEndian = Endianness.Little;
+    /// <summary>ドキュメントのエンディアン (VIEW-11 の仕様 2。インスペクタは既定でこれに従う。INSP-02)。</summary>
+    public Endianness DocumentEndian => _document?.Editor.View.BigEndian == true ? Endianness.Big : Endianness.Little;
 
     private readonly SettingsStore _settings;
     private readonly Dictionary<string, InspectorItemViewModel> _byKey = [];

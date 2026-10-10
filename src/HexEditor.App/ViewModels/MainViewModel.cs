@@ -270,11 +270,22 @@ public sealed partial class MainViewModel : ObservableObject
     {
         // 取り除くと TabView の双方向の結び付けで Selected が null になるため、先に選択中かを調べておく。
         bool wasSelected = Selected == vm;
-        BeforeClose(vm, Documents.IndexOf(vm));
+
+        // 同じドキュメントのビューがほかに残るときは、ドキュメントを閉じる処理をしない (VIEW-38 の仕様 6)。
+        bool otherViews = vm.HasOtherViews;
+        if (!otherViews)
+        {
+            BeforeClose(vm, Documents.IndexOf(vm));
+        }
+
         Documents.Remove(vm);
         Notifications.DismissOwnedBy(vm);
-        Memory.Unregister(vm.Document);
-        _ = MaterializeReferencesAsync(vm.Document);
+        if (!otherViews)
+        {
+            Memory.Unregister(vm.Document);
+            _ = MaterializeReferencesAsync(vm.Document);
+        }
+
         vm.Dispose();
         if (wasSelected || Selected == vm || Selected is null)
         {

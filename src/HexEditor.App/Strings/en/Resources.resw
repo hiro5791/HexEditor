@@ -3010,4 +3010,369 @@ Details were written to:
   <data name="CopyAs_SeparateRanges" xml:space="preserve"><value>Separate each range (instead of concatenating)</value></data>
   <data name="Drop_InsertCopy" xml:space="preserve"><value>Insert a copy</value></data>
   <data name="Drop_PasteSpecial" xml:space="preserve"><value>Paste Special</value></data>
+  <data name="Menu_View_CellFormatHex.Text" xml:space="preserve"><value>Hex</value></data>
+  <data name="Menu_View_CellFormatHex.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Cmd_view_cellFormatHex" xml:space="preserve"><value>Cell format: Hex</value></data>
+  <data name="CmdAlias_view_cellFormatHex" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatDecimal.Text" xml:space="preserve"><value>Decimal (unsigned)</value></data>
+  <data name="Menu_View_CellFormatDecimal.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Cmd_view_cellFormatDecimal" xml:space="preserve"><value>Cell format: Decimal (unsigned)</value></data>
+  <data name="CmdAlias_view_cellFormatDecimal" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatSignedDecimal.Text" xml:space="preserve"><value>Decimal (signed)</value></data>
+  <data name="Menu_View_CellFormatSignedDecimal.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Cmd_view_cellFormatSignedDecimal" xml:space="preserve"><value>Cell format: Decimal (signed)</value></data>
+  <data name="CmdAlias_view_cellFormatSignedDecimal" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatOctal.Text" xml:space="preserve"><value>Octal</value></data>
+  <data name="Menu_View_CellFormatOctal.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Cmd_view_cellFormatOctal" xml:space="preserve"><value>Cell format: Octal</value></data>
+  <data name="CmdAlias_view_cellFormatOctal" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatBinary.Text" xml:space="preserve"><value>Binary</value></data>
+  <data name="Menu_View_CellFormatBinary.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Cmd_view_cellFormatBinary" xml:space="preserve"><value>Cell format: Binary</value></data>
+  <data name="CmdAlias_view_cellFormatBinary" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatInt16Hex.Text" xml:space="preserve"><value>16-bit integer (hex)</value></data>
+  <data name="Menu_View_CellFormatInt16Hex.AccessKey" xml:space="preserve"><value>1</value></data>
+  <data name="Cmd_view_cellFormatInt16Hex" xml:space="preserve"><value>Cell format: 16-bit integer (hex)</value></data>
+  <data name="CmdAlias_view_cellFormatInt16Hex" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatInt16Decimal.Text" xml:space="preserve"><value>16-bit integer (unsigned decimal)</value></data>
+  <data name="Menu_View_CellFormatInt16Decimal.AccessKey" xml:space="preserve"><value>2</value></data>
+  <data name="Cmd_view_cellFormatInt16Decimal" xml:space="preserve"><value>Cell format: 16-bit integer (unsigned decimal)</value></data>
+  <data name="CmdAlias_view_cellFormatInt16Decimal" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatInt16SignedDecimal.Text" xml:space="preserve"><value>16-bit integer (signed decimal)</value></data>
+  <data name="Menu_View_CellFormatInt16SignedDecimal.AccessKey" xml:space="preserve"><value>3</value></data>
+  <data name="Cmd_view_cellFormatInt16SignedDecimal" xml:space="preserve"><value>Cell format: 16-bit integer (signed decimal)</value></data>
+  <data name="CmdAlias_view_cellFormatInt16SignedDecimal" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatInt32Hex.Text" xml:space="preserve"><value>32-bit integer (hex)</value></data>
+  <data name="Menu_View_CellFormatInt32Hex.AccessKey" xml:space="preserve"><value>4</value></data>
+  <data name="Cmd_view_cellFormatInt32Hex" xml:space="preserve"><value>Cell format: 32-bit integer (hex)</value></data>
+  <data name="CmdAlias_view_cellFormatInt32Hex" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatInt32Decimal.Text" xml:space="preserve"><value>32-bit integer (unsigned decimal)</value></data>
+  <data name="Menu_View_CellFormatInt32Decimal.AccessKey" xml:space="preserve"><value>5</value></data>
+  <data name="Cmd_view_cellFormatInt32Decimal" xml:space="preserve"><value>Cell format: 32-bit integer (unsigned decimal)</value></data>
+  <data name="CmdAlias_view_cellFormatInt32Decimal" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatInt32SignedDecimal.Text" xml:space="preserve"><value>32-bit integer (signed decimal)</value></data>
+  <data name="Menu_View_CellFormatInt32SignedDecimal.AccessKey" xml:space="preserve"><value>6</value></data>
+  <data name="Cmd_view_cellFormatInt32SignedDecimal" xml:space="preserve"><value>Cell format: 32-bit integer (signed decimal)</value></data>
+  <data name="CmdAlias_view_cellFormatInt32SignedDecimal" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatInt64Hex.Text" xml:space="preserve"><value>64-bit integer (hex)</value></data>
+  <data name="Menu_View_CellFormatInt64Hex.AccessKey" xml:space="preserve"><value>7</value></data>
+  <data name="Cmd_view_cellFormatInt64Hex" xml:space="preserve"><value>Cell format: 64-bit integer (hex)</value></data>
+  <data name="CmdAlias_view_cellFormatInt64Hex" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatInt64Decimal.Text" xml:space="preserve"><value>64-bit integer (unsigned decimal)</value></data>
+  <data name="Menu_View_CellFormatInt64Decimal.AccessKey" xml:space="preserve"><value>8</value></data>
+  <data name="Cmd_view_cellFormatInt64Decimal" xml:space="preserve"><value>Cell format: 64-bit integer (unsigned decimal)</value></data>
+  <data name="CmdAlias_view_cellFormatInt64Decimal" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatInt64SignedDecimal.Text" xml:space="preserve"><value>64-bit integer (signed decimal)</value></data>
+  <data name="Menu_View_CellFormatInt64SignedDecimal.AccessKey" xml:space="preserve"><value>9</value></data>
+  <data name="Cmd_view_cellFormatInt64SignedDecimal" xml:space="preserve"><value>Cell format: 64-bit integer (signed decimal)</value></data>
+  <data name="CmdAlias_view_cellFormatInt64SignedDecimal" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatFloat.Text" xml:space="preserve"><value>float (single precision)</value></data>
+  <data name="Menu_View_CellFormatFloat.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Cmd_view_cellFormatFloat" xml:space="preserve"><value>Cell format: float (single precision)</value></data>
+  <data name="CmdAlias_view_cellFormatFloat" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormatDouble.Text" xml:space="preserve"><value>double (double precision)</value></data>
+  <data name="Menu_View_CellFormatDouble.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Cmd_view_cellFormatDouble" xml:space="preserve"><value>Cell format: double (double precision)</value></data>
+  <data name="CmdAlias_view_cellFormatDouble" xml:space="preserve"><value>cell format number</value></data>
+  <data name="Menu_View_CellFormat.Text" xml:space="preserve"><value>Cell format</value></data>
+  <data name="Menu_View_CellFormat.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View_SpacePadding.Text" xml:space="preserve"><value>Pad numbers with spaces</value></data>
+  <data name="Menu_View_SpacePadding.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_Endian.Text" xml:space="preserve"><value>Endianness</value></data>
+  <data name="Menu_View_Endian.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_EndianLittle.Text" xml:space="preserve"><value>Little endian</value></data>
+  <data name="Menu_View_EndianLittle.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_EndianBig.Text" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Menu_View_EndianBig.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_ReverseGroups.Text" xml:space="preserve"><value>Show bytes in groups reversed</value></data>
+  <data name="Menu_View_ReverseGroups.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_AddTextColumn.Text" xml:space="preserve"><value>Add text column...</value></data>
+  <data name="Menu_View_AddTextColumn.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_View_RemoveTextColumn.Text" xml:space="preserve"><value>Remove text column</value></data>
+  <data name="Menu_View_RemoveTextColumn.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_LoadTable.Text" xml:space="preserve"><value>Load character table file...</value></data>
+  <data name="Menu_View_LoadTable.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ByteTheme.Text" xml:space="preserve"><value>Byte theme</value></data>
+  <data name="Menu_View_ByteTheme.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_ByteThemeNone.Text" xml:space="preserve"><value>None</value></data>
+  <data name="Menu_View_ByteThemeNone.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_ByteThemeCategory.Text" xml:space="preserve"><value>By kind</value></data>
+  <data name="Menu_View_ByteThemeCategory.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_ByteThemeGradient.Text" xml:space="preserve"><value>Gradient</value></data>
+  <data name="Menu_View_ByteThemeGradient.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_View_ByteThemeCustom.Text" xml:space="preserve"><value>Custom...</value></data>
+  <data name="Menu_View_ByteThemeCustom.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_ByteThemeDisabled" xml:space="preserve"><value>{0} (disabled in high contrast)</value></data>
+  <data name="Menu_View_RecordsMenu.Text" xml:space="preserve"><value>Records</value></data>
+  <data name="Menu_View_RecordsMenu.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_View_Records.Text" xml:space="preserve"><value>Show records</value></data>
+  <data name="Menu_View_Records.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_RecordSettings.Text" xml:space="preserve"><value>Record settings...</value></data>
+  <data name="Menu_View_RecordSettings.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_RecordPerRow.Text" xml:space="preserve"><value>One record per row</value></data>
+  <data name="Menu_View_RecordPerRow.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_View_RecordNumbers.Text" xml:space="preserve"><value>Record numbers in offset column</value></data>
+  <data name="Menu_View_RecordNumbers.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_SeparatorMenu.Text" xml:space="preserve"><value>Separator lines</value></data>
+  <data name="Menu_View_SeparatorMenu.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_SeparatorNone.Text" xml:space="preserve"><value>None</value></data>
+  <data name="Menu_View_SeparatorNone.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_SeparatorSector.Text" xml:space="preserve"><value>Sector</value></data>
+  <data name="Menu_View_SeparatorSector.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_SeparatorPage.Text" xml:space="preserve"><value>Page</value></data>
+  <data name="Menu_View_SeparatorPage.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_SeparatorCustom.Text" xml:space="preserve"><value>Custom length...</value></data>
+  <data name="Menu_View_SeparatorCustom.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_SeparatorLabels.Text" xml:space="preserve"><value>Show labels</value></data>
+  <data name="Menu_View_SeparatorLabels.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_PageView.Text" xml:space="preserve"><value>Show one page at a time</value></data>
+  <data name="Menu_View_PageView.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_MinimapMenu.Text" xml:space="preserve"><value>Minimap</value></data>
+  <data name="Menu_View_MinimapMenu.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_Minimap.Text" xml:space="preserve"><value>Show minimap</value></data>
+  <data name="Menu_View_Minimap.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_MinimapEntropy.Text" xml:space="preserve"><value>Entropy</value></data>
+  <data name="Menu_View_MinimapEntropy.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_View_MinimapByteKinds.Text" xml:space="preserve"><value>Byte kinds</value></data>
+  <data name="Menu_View_MinimapByteKinds.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_MinimapByteValue.Text" xml:space="preserve"><value>Byte value</value></data>
+  <data name="Menu_View_MinimapByteValue.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_MinimapZero.Text" xml:space="preserve"><value>Non-zero bytes</value></data>
+  <data name="Menu_View_MinimapZero.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_MinimapByteTheme.Text" xml:space="preserve"><value>Byte theme (around only)</value></data>
+  <data name="Menu_View_MinimapByteTheme.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_MinimapWhole.Text" xml:space="preserve"><value>Whole document</value></data>
+  <data name="Menu_View_MinimapWhole.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_View_MinimapAround.Text" xml:space="preserve"><value>Around the view</value></data>
+  <data name="Menu_View_MinimapAround.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_MinimapExact.Text" xml:space="preserve"><value>Calculate exactly</value></data>
+  <data name="Menu_View_MinimapExact.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_View_SplitMenu.Text" xml:space="preserve"><value>Split</value></data>
+  <data name="Menu_View_SplitMenu.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_SplitHorizontal.Text" xml:space="preserve"><value>Split top and bottom</value></data>
+  <data name="Menu_View_SplitHorizontal.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_View_SplitVertical.Text" xml:space="preserve"><value>Split left and right</value></data>
+  <data name="Menu_View_SplitVertical.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_SplitRemove.Text" xml:space="preserve"><value>Remove split</value></data>
+  <data name="Menu_View_SplitRemove.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_SplitSync.Text" xml:space="preserve"><value>Synchronize pane scrolling</value></data>
+  <data name="Menu_View_SplitSync.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_NextPane.Text" xml:space="preserve"><value>Next pane</value></data>
+  <data name="Menu_View_NextPane.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_NewView.Text" xml:space="preserve"><value>Open in new view</value></data>
+  <data name="Menu_View_NewView.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_SideBySide.Text" xml:space="preserve"><value>Show side by side...</value></data>
+  <data name="Menu_View_SideBySide.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_SyncMenu.Text" xml:space="preserve"><value>Synchronized scrolling</value></data>
+  <data name="Menu_View_SyncMenu.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_View_SyncOff.Text" xml:space="preserve"><value>Off</value></data>
+  <data name="Menu_View_SyncOff.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_SyncSameOffset.Text" xml:space="preserve"><value>Same offset</value></data>
+  <data name="Menu_View_SyncSameOffset.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_SyncKeepDifference.Text" xml:space="preserve"><value>Keep the difference</value></data>
+  <data name="Menu_View_SyncKeepDifference.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_SyncDifferences.Text" xml:space="preserve"><value>Highlight differences</value></data>
+  <data name="Menu_View_SyncDifferences.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Go_NextRecord.Text" xml:space="preserve"><value>Next record</value></data>
+  <data name="Menu_Go_NextRecord.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_PreviousRecord.Text" xml:space="preserve"><value>Previous record</value></data>
+  <data name="Menu_Go_PreviousRecord.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_NextPage.Text" xml:space="preserve"><value>Next page</value></data>
+  <data name="Menu_Go_NextPage.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Go_PreviousPage.Text" xml:space="preserve"><value>Previous page</value></data>
+  <data name="Menu_Go_PreviousPage.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Command_LastTextColumn" xml:space="preserve"><value>At least one text column is shown.</value></data>
+  <data name="Command_MinimapThemeNeedsAround" xml:space="preserve"><value>Only available when the minimap range is "Around the view".</value></data>
+  <data name="Command_NoSeparator" xml:space="preserve"><value>Choose separator lines first.</value></data>
+  <data name="Command_NoTextColumn" xml:space="preserve"><value>The text column is hidden.</value></data>
+  <data name="Command_NotSideBySide" xml:space="preserve"><value>No documents are shown side by side.</value></data>
+  <data name="Command_NotSplit" xml:space="preserve"><value>The view is not split.</value></data>
+  <data name="Command_RecordPerRowFixed" xml:space="preserve"><value>The row length follows the record length (one record per row).</value></data>
+  <data name="Command_RecordTooLong" xml:space="preserve"><value>Only available when the record length is {0} bytes or less.</value></data>
+  <data name="Command_ReverseNeedsGroup" xml:space="preserve"><value>Available when bytes are grouped (2 or more) in hex format.</value></data>
+  <data name="Command_TextColumnLimit" xml:space="preserve"><value>Up to 5 text columns can be shown.</value></data>
+  <data name="HexView_Separator_Custom" xml:space="preserve"><value>Section {0} ({1})</value></data>
+  <data name="HexView_Separator_Page" xml:space="preserve"><value>Page {0} ({1})</value></data>
+  <data name="HexView_Separator_Sector" xml:space="preserve"><value>Sector {0}</value></data>
+  <data name="HexView_Status_CellFormatReadOnly" xml:space="preserve"><value>Cells cannot be edited directly in this format. Use the data inspector.</value></data>
+  <data name="HexView_TextColumn_Even" xml:space="preserve"><value>{0} (even)</value></data>
+  <data name="HexView_TextColumn_Odd" xml:space="preserve"><value>{0} (odd)</value></data>
+  <data name="HexView_TextColumn_Phase" xml:space="preserve"><value>{0} (start {1})</value></data>
+  <data name="HexView_TextColumn_ChangeEncoding" xml:space="preserve"><value>Change encoding...</value></data>
+  <data name="HexView_TextColumn_Remove" xml:space="preserve"><value>Remove column</value></data>
+  <data name="HexView_TextColumn_MoveLeft" xml:space="preserve"><value>Move left</value></data>
+  <data name="HexView_TextColumn_MoveRight" xml:space="preserve"><value>Move right</value></data>
+  <data name="Notice_ByteThemeInvalid" xml:space="preserve"><value>The byte theme is not valid: line {0}, key "{1}". The theme was not changed.</value></data>
+  <data name="Notice_ByteThemeUnreadable" xml:space="preserve"><value>The byte theme could not be read: {0}</value></data>
+  <data name="Notice_TableEmpty" xml:space="preserve"><value>The character table was not loaded because it has no valid entries.</value></data>
+  <data name="Notice_TableInvalidLines" xml:space="preserve"><value>Ignored lines: {0}.</value></data>
+  <data name="Notice_TableLine" xml:space="preserve"><value>line {0} ({1})</value></data>
+  <data name="Notice_TableLoaded" xml:space="preserve"><value>Character table loaded: {0} entries, {1} lines ignored.</value></data>
+  <data name="Notice_TableTooMany" xml:space="preserve"><value>The character table was not loaded because it has more than {0} entries.</value></data>
+  <data name="Notice_TableUnreadable" xml:space="preserve"><value>The character table could not be read: {0}</value></data>
+  <data name="TableError_NoEquals" xml:space="preserve"><value>no "="</value></data>
+  <data name="TableError_NotHex" xml:space="preserve"><value>left side is not hex</value></data>
+  <data name="TableError_OddDigits" xml:space="preserve"><value>odd number of digits</value></data>
+  <data name="TableError_TooLong" xml:space="preserve"><value>left side is empty or longer than 8 bytes</value></data>
+  <data name="TableError_EmptyValue" xml:space="preserve"><value>right side is empty</value></data>
+  <data name="EncodingList_Group_Custom" xml:space="preserve"><value>Custom</value></data>
+  <data name="RecordSettings_Title" xml:space="preserve"><value>Records</value></data>
+  <data name="RecordSettings_Length" xml:space="preserve"><value>Record length (bytes)</value></data>
+  <data name="RecordSettings_Start" xml:space="preserve"><value>Start offset of the first record</value></data>
+  <data name="RecordSettings_PerRow" xml:space="preserve"><value>One record per row (4,096 bytes or less)</value></data>
+  <data name="RecordSettings_Numbers" xml:space="preserve"><value>Record numbers in offset column</value></data>
+  <data name="RecordSettings_LengthRange" xml:space="preserve"><value>Enter a record length from 1 to 2,147,483,647.</value></data>
+  <data name="RecordSettings_StartRange" xml:space="preserve"><value>Enter a start offset from 0 to the document length.</value></data>
+  <data name="Separator_NotMultiple" xml:space="preserve"><value>The length must be a multiple of the bytes per row ({0}).</value></data>
+  <data name="Separator_Range" xml:space="preserve"><value>Enter a length from {0} to {1}.</value></data>
+  <data name="Separator_RowShift" xml:space="preserve"><value>Not available while the row start is shifted.</value></data>
+  <data name="ViewInput_Separator" xml:space="preserve"><value>Separator length (bytes)</value></data>
+  <data name="Status_Record" xml:space="preserve"><value>Record #{0} +{1}</value></data>
+  <data name="Status_Page" xml:space="preserve"><value>Page {0} / {1}</value></data>
+  <data name="Status_Sector" xml:space="preserve"><value>Sector {0}</value></data>
+  <data name="Status_Section" xml:space="preserve"><value>Section {0} / {1}</value></data>
+  <data name="Status_Sync" xml:space="preserve"><value>Sync</value></data>
+  <data name="Status_ReversedEndian" xml:space="preserve"><value>{0} (reversed)</value></data>
+  <data name="Status_Item_Position" xml:space="preserve"><value>Sector / page / record</value></data>
+  <data name="Status_Item_Format" xml:space="preserve"><value>Cell format</value></data>
+  <data name="Status_Item_Endian" xml:space="preserve"><value>Endianness</value></data>
+  <data name="Status_Item_Sync" xml:space="preserve"><value>Synchronized scrolling</value></data>
+  <data name="Set_view_byteTheme" xml:space="preserve"><value>Byte theme</value></data>
+  <data name="SetDesc_view_byteTheme" xml:space="preserve"><value>Colors bytes by value (none, by kind, gradient, or a custom file).</value></data>
+  <data name="Set_view_minimap_visible" xml:space="preserve"><value>Show minimap</value></data>
+  <data name="SetDesc_view_minimap_visible" xml:space="preserve"><value>Shows the data overview strip next to the scroll bar.</value></data>
+  <data name="Set_view_minimap_width" xml:space="preserve"><value>Minimap width</value></data>
+  <data name="SetDesc_view_minimap_width" xml:space="preserve"><value>Width of the minimap (40 to 200).</value></data>
+  <data name="Set_view_minimap_content" xml:space="preserve"><value>Minimap content</value></data>
+  <data name="SetDesc_view_minimap_content" xml:space="preserve"><value>What the minimap shows for each pixel row.</value></data>
+  <data name="SetOpt_view_minimap_content_entropy" xml:space="preserve"><value>Entropy</value></data>
+  <data name="SetOpt_view_minimap_content_byteKinds" xml:space="preserve"><value>Byte kinds</value></data>
+  <data name="SetOpt_view_minimap_content_byteValue" xml:space="preserve"><value>Byte value</value></data>
+  <data name="SetOpt_view_minimap_content_zero" xml:space="preserve"><value>Non-zero bytes</value></data>
+  <data name="SetOpt_view_minimap_content_byteTheme" xml:space="preserve"><value>Byte theme</value></data>
+  <data name="Set_view_minimap_range" xml:space="preserve"><value>Minimap range</value></data>
+  <data name="SetDesc_view_minimap_range" xml:space="preserve"><value>The whole document, or the rows around the view.</value></data>
+  <data name="SetOpt_view_minimap_range_whole" xml:space="preserve"><value>Whole document</value></data>
+  <data name="SetOpt_view_minimap_range_around" xml:space="preserve"><value>Around the view</value></data>
+  <data name="Set_view_minimap_exact" xml:space="preserve"><value>Calculate the minimap exactly</value></data>
+  <data name="SetDesc_view_minimap_exact" xml:space="preserve"><value>Reads the whole document as a background task instead of sampling.</value></data>
+  <data name="Set_view_split_syncSettings" xml:space="preserve"><value>Keep split pane display settings the same</value></data>
+  <data name="SetDesc_view_split_syncSettings" xml:space="preserve"><value>Changes to display settings in one pane are applied to the other.</value></data>
+  <data name="Set_view_sync_selection" xml:space="preserve"><value>Synchronize selection too</value></data>
+  <data name="SetDesc_view_sync_selection" xml:space="preserve"><value>Synchronized scrolling also copies the selection.</value></data>
+  <data name="Cmd_view_spacePadding" xml:space="preserve"><value>Pad numbers with spaces</value></data>
+  <data name="CmdAlias_view_spacePadding" xml:space="preserve"><value>cell format</value></data>
+  <data name="Cmd_view_endianLittle" xml:space="preserve"><value>Little endian</value></data>
+  <data name="CmdAlias_view_endianLittle" xml:space="preserve"><value>endianness</value></data>
+  <data name="Cmd_view_endianBig" xml:space="preserve"><value>Big endian</value></data>
+  <data name="CmdAlias_view_endianBig" xml:space="preserve"><value>endianness</value></data>
+  <data name="Cmd_view_endianToggle" xml:space="preserve"><value>Toggle endianness</value></data>
+  <data name="CmdAlias_view_endianToggle" xml:space="preserve"><value>little big endian</value></data>
+  <data name="Cmd_view_reverseGroups" xml:space="preserve"><value>Show bytes in groups reversed</value></data>
+  <data name="CmdAlias_view_reverseGroups" xml:space="preserve"><value>byte swap</value></data>
+  <data name="Cmd_view_addTextColumn" xml:space="preserve"><value>Add text column</value></data>
+  <data name="CmdAlias_view_addTextColumn" xml:space="preserve"><value>encoding columns</value></data>
+  <data name="Cmd_view_removeTextColumn" xml:space="preserve"><value>Remove text column</value></data>
+  <data name="CmdAlias_view_removeTextColumn" xml:space="preserve"><value>encoding columns</value></data>
+  <data name="Cmd_view_byteThemeNone" xml:space="preserve"><value>Byte theme: None</value></data>
+  <data name="CmdAlias_view_byteThemeNone" xml:space="preserve"><value>colors</value></data>
+  <data name="Cmd_view_byteThemeCategory" xml:space="preserve"><value>Byte theme: By kind</value></data>
+  <data name="CmdAlias_view_byteThemeCategory" xml:space="preserve"><value>colors</value></data>
+  <data name="Cmd_view_byteThemeGradient" xml:space="preserve"><value>Byte theme: Gradient</value></data>
+  <data name="CmdAlias_view_byteThemeGradient" xml:space="preserve"><value>colors</value></data>
+  <data name="Cmd_view_byteThemeCustom" xml:space="preserve"><value>Byte theme: Custom</value></data>
+  <data name="CmdAlias_view_byteThemeCustom" xml:space="preserve"><value>colors json</value></data>
+  <data name="Cmd_view_encoding_loadTable" xml:space="preserve"><value>Load character table file</value></data>
+  <data name="CmdAlias_view_encoding_loadTable" xml:space="preserve"><value>tbl encoding</value></data>
+  <data name="Cmd_view_records" xml:space="preserve"><value>Toggle record view</value></data>
+  <data name="CmdAlias_view_records" xml:space="preserve"><value>records</value></data>
+  <data name="Cmd_view_recordSettings" xml:space="preserve"><value>Record view settings</value></data>
+  <data name="CmdAlias_view_recordSettings" xml:space="preserve"><value>records</value></data>
+  <data name="Cmd_view_recordPerRow" xml:space="preserve"><value>One record per row</value></data>
+  <data name="CmdAlias_view_recordPerRow" xml:space="preserve"><value>records</value></data>
+  <data name="Cmd_view_recordNumbers" xml:space="preserve"><value>Record numbers in offset column</value></data>
+  <data name="CmdAlias_view_recordNumbers" xml:space="preserve"><value>records</value></data>
+  <data name="Cmd_go_nextRecord" xml:space="preserve"><value>Next record</value></data>
+  <data name="CmdAlias_go_nextRecord" xml:space="preserve"><value>records</value></data>
+  <data name="Cmd_go_previousRecord" xml:space="preserve"><value>Previous record</value></data>
+  <data name="CmdAlias_go_previousRecord" xml:space="preserve"><value>records</value></data>
+  <data name="Cmd_view_separatorNone" xml:space="preserve"><value>Separator lines: None</value></data>
+  <data name="CmdAlias_view_separatorNone" xml:space="preserve"><value>separator</value></data>
+  <data name="Cmd_view_separatorSector" xml:space="preserve"><value>Separator lines: Sector</value></data>
+  <data name="CmdAlias_view_separatorSector" xml:space="preserve"><value>separator</value></data>
+  <data name="Cmd_view_separatorPage" xml:space="preserve"><value>Separator lines: Page</value></data>
+  <data name="CmdAlias_view_separatorPage" xml:space="preserve"><value>separator</value></data>
+  <data name="Cmd_view_separatorCustom" xml:space="preserve"><value>Separator lines: Custom length</value></data>
+  <data name="CmdAlias_view_separatorCustom" xml:space="preserve"><value>separator</value></data>
+  <data name="Cmd_view_separatorLabels" xml:space="preserve"><value>Show separator labels</value></data>
+  <data name="CmdAlias_view_separatorLabels" xml:space="preserve"><value>separator</value></data>
+  <data name="Cmd_view_pageView" xml:space="preserve"><value>Show one page at a time</value></data>
+  <data name="CmdAlias_view_pageView" xml:space="preserve"><value>separator page</value></data>
+  <data name="Cmd_go_nextPage" xml:space="preserve"><value>Next page</value></data>
+  <data name="CmdAlias_go_nextPage" xml:space="preserve"><value>separator</value></data>
+  <data name="Cmd_go_previousPage" xml:space="preserve"><value>Previous page</value></data>
+  <data name="CmdAlias_go_previousPage" xml:space="preserve"><value>separator</value></data>
+  <data name="Cmd_view_minimap" xml:space="preserve"><value>Toggle minimap</value></data>
+  <data name="CmdAlias_view_minimap" xml:space="preserve"><value>overview entropy</value></data>
+  <data name="Cmd_view_minimapEntropy" xml:space="preserve"><value>Minimap content: Entropy</value></data>
+  <data name="CmdAlias_view_minimapEntropy" xml:space="preserve"><value>minimap</value></data>
+  <data name="Cmd_view_minimapByteKinds" xml:space="preserve"><value>Minimap content: Byte kinds</value></data>
+  <data name="CmdAlias_view_minimapByteKinds" xml:space="preserve"><value>minimap</value></data>
+  <data name="Cmd_view_minimapByteValue" xml:space="preserve"><value>Minimap content: Byte value</value></data>
+  <data name="CmdAlias_view_minimapByteValue" xml:space="preserve"><value>minimap</value></data>
+  <data name="Cmd_view_minimapZero" xml:space="preserve"><value>Minimap content: Non-zero bytes</value></data>
+  <data name="CmdAlias_view_minimapZero" xml:space="preserve"><value>minimap</value></data>
+  <data name="Cmd_view_minimapByteTheme" xml:space="preserve"><value>Minimap content: Byte theme</value></data>
+  <data name="CmdAlias_view_minimapByteTheme" xml:space="preserve"><value>minimap</value></data>
+  <data name="Cmd_view_minimapWhole" xml:space="preserve"><value>Minimap range: Whole document</value></data>
+  <data name="CmdAlias_view_minimapWhole" xml:space="preserve"><value>minimap</value></data>
+  <data name="Cmd_view_minimapAround" xml:space="preserve"><value>Minimap range: Around the view</value></data>
+  <data name="CmdAlias_view_minimapAround" xml:space="preserve"><value>minimap</value></data>
+  <data name="Cmd_view_minimapExact" xml:space="preserve"><value>Minimap: Calculate exactly</value></data>
+  <data name="CmdAlias_view_minimapExact" xml:space="preserve"><value>minimap</value></data>
+  <data name="Cmd_view_split" xml:space="preserve"><value>Split or unsplit</value></data>
+  <data name="CmdAlias_view_split" xml:space="preserve"><value>split pane</value></data>
+  <data name="Cmd_view_splitHorizontal" xml:space="preserve"><value>Split top and bottom</value></data>
+  <data name="CmdAlias_view_splitHorizontal" xml:space="preserve"><value>split pane</value></data>
+  <data name="Cmd_view_splitVertical" xml:space="preserve"><value>Split left and right</value></data>
+  <data name="CmdAlias_view_splitVertical" xml:space="preserve"><value>split pane</value></data>
+  <data name="Cmd_view_splitRemove" xml:space="preserve"><value>Remove split</value></data>
+  <data name="CmdAlias_view_splitRemove" xml:space="preserve"><value>split pane</value></data>
+  <data name="Cmd_view_splitSync" xml:space="preserve"><value>Synchronize split pane scrolling</value></data>
+  <data name="CmdAlias_view_splitSync" xml:space="preserve"><value>split pane</value></data>
+  <data name="Cmd_view_nextPane" xml:space="preserve"><value>Next pane</value></data>
+  <data name="CmdAlias_view_nextPane" xml:space="preserve"><value>split pane</value></data>
+  <data name="Cmd_view_newView" xml:space="preserve"><value>Open in new view</value></data>
+  <data name="CmdAlias_view_newView" xml:space="preserve"><value>view tab</value></data>
+  <data name="Cmd_view_sideBySide" xml:space="preserve"><value>Show side by side</value></data>
+  <data name="CmdAlias_view_sideBySide" xml:space="preserve"><value>compare sync</value></data>
+  <data name="Cmd_view_syncOff" xml:space="preserve"><value>Synchronized scrolling: Off</value></data>
+  <data name="CmdAlias_view_syncOff" xml:space="preserve"><value>sync</value></data>
+  <data name="Cmd_view_syncSameOffset" xml:space="preserve"><value>Synchronized scrolling: Same offset</value></data>
+  <data name="CmdAlias_view_syncSameOffset" xml:space="preserve"><value>sync</value></data>
+  <data name="Cmd_view_syncKeepDifference" xml:space="preserve"><value>Synchronized scrolling: Keep the difference</value></data>
+  <data name="CmdAlias_view_syncKeepDifference" xml:space="preserve"><value>sync</value></data>
+  <data name="Cmd_view_syncToggle" xml:space="preserve"><value>Toggle synchronized scrolling</value></data>
+  <data name="CmdAlias_view_syncToggle" xml:space="preserve"><value>sync</value></data>
+  <data name="Cmd_view_syncDifferences" xml:space="preserve"><value>Highlight differences</value></data>
+  <data name="CmdAlias_view_syncDifferences" xml:space="preserve"><value>sync compare</value></data>
+  <data name="Operation_MinimapExact" xml:space="preserve"><value>Calculating the minimap</value></data>
+  <data name="Minimap_Mark_cursor" xml:space="preserve"><value>Cursor</value></data>
+  <data name="Minimap_Mark_selection" xml:space="preserve"><value>Selection</value></data>
+  <data name="Minimap_Mark_search" xml:space="preserve"><value>Search results</value></data>
+  <data name="Minimap_Mark_bookmark" xml:space="preserve"><value>Bookmarks</value></data>
+  <data name="Minimap_Mark_modified" xml:space="preserve"><value>Modified bytes</value></data>
+  <data name="Minimap_Mark_difference" xml:space="preserve"><value>Differences</value></data>
+  <data name="Minimap_TipEntropy" xml:space="preserve"><value>entropy {0}</value></data>
+  <data name="Minimap_TipMean" xml:space="preserve"><value>mean value {0}</value></data>
+  <data name="Minimap_TipNonZero" xml:space="preserve"><value>non-zero {0}%</value></data>
+  <data name="Command_NoOtherDocument" xml:space="preserve"><value>Open another document first.</value></data>
+  <data name="Command_SideBySideLimit" xml:space="preserve"><value>Up to {0} views can be shown side by side.</value></data>
+  <data name="Command_SplitTooSmall" xml:space="preserve"><value>The window is too small to split.</value></data>
+  <data name="Command_ViewLimit" xml:space="preserve"><value>Up to {0} views can be opened for a document.</value></data>
+  <data name="SideBySide_Sync" xml:space="preserve"><value>Synchronized scrolling</value></data>
+  <data name="SideBySide_Close" xml:space="preserve"><value>Close side-by-side view</value></data>
+  <data name="Set_view_minimap_hiddenMarks" xml:space="preserve"><value>Hidden minimap marks</value></data>
+  <data name="SetDesc_view_minimap_hiddenMarks" xml:space="preserve"><value>Marks not shown on the minimap.</value></data>
+  <data name="CmdArg_view_sideBySide" xml:space="preserve"><value>Choose a document to show side by side.</value></data>
 </root>

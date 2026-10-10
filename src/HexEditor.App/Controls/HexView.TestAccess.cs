@@ -83,22 +83,44 @@ public sealed partial class HexView
 
             string line = row.ContentText;
             var cells = new JsonArray();
+            RowFormat format = columns.Format;
+            int valid = row.Count;
             for (int c = 0; c < bytesPerRow; c++)
             {
                 CellPaint hexPaint = c < row.HexPaint.Length ? row.HexPaint[c] : default;
                 CellPaint textPaint = c < row.TextPaint.Length ? row.TextPaint[c] : default;
-                int hex = columns.ShowHex ? columns.HexIndex(c) : -1;
+                (int hex, int hexLength) = columns.ShowHex ? format.ByteSpan(c, valid) : (-1, 0);
                 int textIndex = columns.ShowText ? columns.TextIndex(c) : -1;
-                if (columns.ShowHex && hex + 2 > line.Length)
+                if (columns.ShowHex && hex + hexLength > line.Length)
                 {
                     break;
                 }
 
                 bool selected = hexPaint.Layer == "selection";
                 string underline = row.UnderlineAt(c);
+
+                // Hex 形式は 1 バイトの 2 文字、ほかの形式はバイトを含むセルの文字列 (VIEW-10)。
+                string? hexText = !columns.ShowHex ? null : format.IsHexBytes ? line.Substring(hex, 2) : hexPaint.Text ?? line.Substring(hex, hexLength);
                 var cell = new JsonObject
                 {
-                    ["hex"] = columns.ShowHex ? line.Substring(hex, 2) : null,
+                    ["hex"] = hexText,
+                    ["frame"] = hexPaint.Frame,
+                    ["highlightBackground"] = _placed.Count == 0 ? null : HighlightBackgroundAt(row.ContentRowStart + c, "hex"),
+
+                    // テキスト列が複数のときだけ列ごとの内容を出す (1 行 4,096 バイトの読み出しを重くしない)。
+                    ["texts"] = format.ShownTextColumns <= 1 ? null : new JsonArray([.. Enumerable.Range(0, format.ShownTextColumns).Select(t =>
+                    {
+                        int at = columns.ShowText ? columns.TextIndex(t, c) : -1;
+                        (string Glyph, double, double, double)? g = t < row.GlyphsByColumn.Length && c < row.GlyphsByColumn[t].Length ? row.GlyphsByColumn[t][c] : null;
+                        return (JsonNode?)new JsonObject
+                        {
+                            ["text"] = at >= 0 && at < line.Length ? line[at].ToString() : string.Empty,
+                            ["glyph"] = g?.Glyph,
+                            ["kind"] = row.TextAt(t, c).Kind.ToString(),
+                            ["left"] = at >= 0 ? at * _cellWidth : null,
+                            ["background"] = t < row.TextPaints.Length && c < row.TextPaints[t].Length && row.TextPaints[t][c].Background is { } tb ? ColorOf(tb) : null,
+                        };
+                    })]),
                     ["text"] = textIndex >= 0 && textIndex < line.Length ? line[textIndex].ToString() : string.Empty,
                     ["foreground"] = hexPaint.Foreground is { } hf ? ColorOf(hf) : null,
                     ["textForeground"] = textPaint.Foreground is { } tf ? ColorOf(tf) : null,
@@ -143,6 +165,12 @@ public sealed partial class HexView
                 ["offsetText"] = row.OffsetText,
                 ["line"] = RowLineOf(row),
                 ["cells"] = cells,
+                ["hexCells"] = format.IsHexBytes && !format.Reverse ? null : HexCellsOf(row, format, line),
+                ["separator"] = row.SeparatorLabel,
+                ["underFills"] = new JsonArray([.. row.UnderFills.Select(u => (JsonNode?)new JsonObject
+                {
+                    ["layer"] = u.Layer, ["column"] = u.Column, ["first"] = u.First, ["last"] = u.Last, ["color"] = ColorOf(u.Brush),
+                })]),
                 ["currentRow"] = row.IsCurrentRow,
                 ["lines"] = new JsonArray([.. row.Lines.Select(l => (JsonNode?)new JsonObject
                 {
@@ -193,6 +221,94 @@ public sealed partial class HexView
 
     private string RowLineOf(RowVisual row) => _showOffset ? row.OffsetText.PadRight(_digits) + "  " + row.ContentText : row.ContentText;
 
+    /// <summary>
+    /// 行の Hex 列のセルの一覧 (VIEW-10 の確認用): 表示の並び順に、文字列・単位のバイト数・最初のバイト・枠の種類・左端。
+    /// </summary>
+    private JsonArray HexCellsOf(RowVisual row, RowFormat format, string line)
+    {
+        var result = new JsonArray();
+        if (!format.ShowHex)
+        {
+            return result;
+        }
+
+        int valid = row.Count;
+        if (format.IsHexBytes)
+        {
+            for (int s = 0; s < format.BytesPerRow; s++)
+            {
+                int c = format.ByteOfSlot(s, valid);
+                int at = format.CellStart(s);
+                result.Add(new JsonObject
+                {
+                    ["text"] = at + 2 <= line.Length ? line.Substring(at, 2) : string.Empty,
+                    ["bytes"] = 1,
+                    ["first"] = c,
+                    ["frame"] = c < row.HexPaint.Length ? row.HexPaint[c].Frame : null,
+                    ["left"] = at * _cellWidth,
+                });
+            }
+
+            return result;
+        }
+
+        int unit = format.Unit;
+        for (int k = 0; k < format.CellsPerRow; k++)
+        {
+            int first = k * unit;
+            if (format.IsCompleteCell(k, valid) && first >= row.Lead)
+            {
+                result.Add(new JsonObject
+                {
+                    ["text"] = row.HexPaint[first].Text,
+                    ["bytes"] = unit,
+                    ["first"] = first,
+                    ["frame"] = null,
+                    ["left"] = format.CellStart(k) * _cellWidth,
+                });
+                continue;
+            }
+
+            // 端数のバイト (VIEW-10 の仕様 5): 1 バイトずつ。
+            for (int c = first; c < Math.Min(format.BytesPerRow, first + unit); c++)
+            {
+                if (c < row.Lead || c >= valid)
+                {
+                    continue;
+                }
+
+                (int start, _) = format.ByteSpan(c, valid);
+                result.Add(new JsonObject
+                {
+                    ["text"] = row.HexPaint[c].Text,
+                    ["bytes"] = 1,
+                    ["first"] = c,
+                    ["frame"] = row.HexPaint[c].Frame,
+                    ["left"] = start * _cellWidth,
+                });
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>範囲の強調の面に描いたバイトの背景 (一番手前のもの。VIEW-17 の層 7〜11)。なければ null。</summary>
+    private string? HighlightBackgroundAt(long offset, string column)
+    {
+        string? color = null;
+        int layer = int.MaxValue;
+        foreach (PlacedHighlight p in _placed)
+        {
+            if (p.Background is { } brush && p.Column == column && offset >= p.First && offset <= p.Last && (int)p.Layer <= layer)
+            {
+                color = ColorOf(brush);
+                layer = (int)p.Layer;
+            }
+        }
+
+        return color;
+    }
+
     /// <summary>列見出しの描画モデル (VIEW-05、VIEW-06 の仕様 2)。x 座標は内容の領域の左端から (セルの hexLeft と同じ基準)。</summary>
     private JsonObject RulerModel()
     {
@@ -223,6 +339,11 @@ public sealed partial class HexView
             ["fontSize"] = RulerText.FontSize,
             ["height"] = RulerBar.ActualHeight,
             ["radixMenuOpen"] = RadixMenuOpen,
+            ["textHeaders"] = new JsonArray([.. _textHeaders.Select(h => (JsonNode?)new JsonObject
+            {
+                ["column"] = h.Column, ["name"] = h.Name, ["left"] = h.Index * _cellWidth,
+            })]),
+            ["textColumnMenuOpen"] = _textColumnMenu?.IsOpen ?? false,
         };
     }
 
@@ -420,6 +541,15 @@ public sealed partial class HexView
         result["screenZoom"] = _screenZoom;
         result["fontFamily"] = _fontFamilyName;
         result["encoding"] = _editor?.TextEncoding.Name;
+        result["activeColumn"] = _editor is null ? null : _editor.ActiveColumn == Core.View.ActiveColumn.Hex ? "hex" : "text" + (_editor.TextColumn + 1);
+        result["textColumn"] = _editor?.TextColumn;
+        result["cellFormat"] = _editor?.View.CellFormat.ToString();
+        result["textColumns"] = _editor is null ? null : new JsonArray([.. Enumerable.Range(0, _editor.View.TextColumnCount)
+            .Select(t => (JsonNode?)new JsonObject { ["name"] = TextColumnName(t), ["encoding"] = _editor.TextEncodingOf(t).Id })]);
+        result["byteTheme"] = _byteTheme?.Name;
+        result["recordAlternateColor"] = _palette is null ? null : ColorOf(_palette.RecordAlternate);
+        result["differenceColor"] = _palette is null ? null : ColorOf(_palette.Difference);
+        result["separatorColor"] = _palette is null ? null : ColorOf(_palette.Separator);
         if (_palette is not null)
         {
             result["background"] = ColorOf(_palette.Background);

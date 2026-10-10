@@ -347,13 +347,13 @@ public sealed partial class MainWindow
         annotations.Bookmarks.Changed += bookmarksChanged;
         doc.Document.Changed += documentChanged;
         doc.Document.DataLoaded += dataLoaded;
-        doc.Editor.Changed += editorChanged;
+        doc.EditorChanged += editorChanged;
         _annotationHooks[doc] = () =>
         {
             annotations.Bookmarks.Changed -= bookmarksChanged;
             doc.Document.Changed -= documentChanged;
             doc.Document.DataLoaded -= dataLoaded;
-            doc.Editor.Changed -= editorChanged;
+            doc.EditorChanged -= editorChanged;
         };
     }
 
