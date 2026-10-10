@@ -5235,4 +5235,5 @@
   <data name="Preset_SectionHelp" xml:space="preserve"><value>プリセットは名前を付けた表示設定の組です。拡張子を指定したプリセットは、その拡張子のファイルを初めて開いたときに適用します。</value></data>
   <data name="SetSection_ViewPresets" xml:space="preserve"><value>表示プリセット</value></data>
   <data name="SetSearch_ViewPresets" xml:space="preserve"><value>ひょうじ ぷりせっと 1 行のバイト数 拡張子 エクスポート インポート</value></data>
+  <data name="CmdArg_view_presetApply" xml:space="preserve"><value>プリセットの名前を入力してください。</value></data>
 </root>

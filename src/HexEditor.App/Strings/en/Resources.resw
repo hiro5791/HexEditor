@@ -5235,4 +5235,5 @@ Details were written to:
   <data name="Preset_SectionHelp" xml:space="preserve"><value>Presets are named sets of view settings. A preset with extensions is applied the first time a matching file is opened.</value></data>
   <data name="SetSection_ViewPresets" xml:space="preserve"><value>View presets</value></data>
   <data name="SetSearch_ViewPresets" xml:space="preserve"><value>view presets bytes per row extensions export import</value></data>
+  <data name="CmdArg_view_presetApply" xml:space="preserve"><value>Type the name of a preset.</value></data>
 </root>

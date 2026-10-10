@@ -6162,6 +6162,7 @@
       "CmdArg_view_bytesPerRowCustom": "reviewed:b1384e255b3a87f0",
       "CmdArg_view_colorScheme": "reviewed:b0ae4c572f4b9027",
       "CmdArg_view_encoding_select": "reviewed:582f0f2c3b1d37c2",
+      "CmdArg_view_presetApply": "reviewed:76ff27d8ae134dce",
       "CmdArg_view_sideBySide": "reviewed:e3e0e22e3ae56401",
       "CmdCategory_accessibility": "reviewed:d3368cbffe23c98d",
       "CmdCategory_analysis": "reviewed:e70d8eb9050021ad",
