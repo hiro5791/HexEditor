@@ -472,8 +472,9 @@
 | 確認する基準 | TOOL-04 の受け入れ基準 5 |
 | 種別 | 自動: UI |
 | 優先度 | 中 |
-| フェーズ | 2 |
+| フェーズ | 3 |
 | テストデータ | TD-TOOL-FW-128K、TD-TOOL-JS-EXPORT |
+| 備考 | コマンドライン (`hexed convert`、AUTO-44) とスクリプト (`exportRange`、AUTO-09) がフェーズ 3 のため、フェーズ 3 で自動テストにする |
 | 環境 | 標準 |
 
 **前提**: TD-TOOL-FW-128K を開いている。比べる形式とオプションの組を次のとおり決めている: `ihex` (レコード長 32、開始アドレス 0x08000000)、`srec` (レコード長 32、S3)、`base64` (1 行 64 文字)、`hextext` (1 行 32 バイト、区切り「カンマと空白」)、`c` (要素 4 バイト、リトルエンディアン)。
@@ -2693,15 +2694,15 @@
 | TD-TOOL-IHEX-1G | 約 1 GiB | 種 1 で作った乱数 384 MiB を、開始アドレス 0、レコード長 16、I32HEX、大文字、改行 CRLF で Intel HEX にしたもの。元のバイナリの長さと SHA-256 も記録する |
 | TD-TOOL-IHEX-BADSUM | 約 3 KiB | TD-IHEX の 5 行目のチェックサムの 2 桁を、正しい値 + 1 (下位 8 bit) に変えたもの |
 | TD-TOOL-IHEX-SPARSE | 約 200 バイト | I32HEX。`04` レコード 0x0000 の後にアドレス 0x0000 に `00`〜`0F` の 16 バイト、`04` レコード 0xFFFF の後にアドレス 0x0000 (= 0xFFFF0000) に `F0`〜`FF` の 16 バイト、`01` レコード |
-| TD-TOOL-IHEX-OBJCOPY | 約 360 KiB | TD-TOOL-FW-128K を GNU objcopy 2.42 で `objcopy -I binary -O ihex --change-addresses 0x08000000` で変換したもの (レコード長 16、I32HEX、大文字)。改行は CRLF に変換して置く |
+| TD-TOOL-IHEX-OBJCOPY | 約 360 KiB | TD-TOOL-FW-128K を GNU objcopy 2.42 で `objcopy -I binary -O ihex --change-addresses 0x08000000` で変換したもの (レコード長 16、I32HEX、大文字、実行開始アドレスなし)。改行は CRLF に変換して置く。CI に objcopy がないため、テストデータ生成ツールが objcopy の出力の形 (先頭と 64 KB ごとの `04` レコード、境界をまたがない 16 バイトのレコード、`01` レコード) をアプリの変換処理とは別の実装で再現する |
 | TD-TOOL-IHEX-COMMENT | 約 3 KiB | TD-IHEX の 1 行目の前に、コメント行 `; build 1.0` を 1 行加えたもの |
 | TD-TOOL-SREC-S19 | 約 9 KiB | TD-RANDOM-16M の先頭 4 KiB を、アドレス 0x1000 から S1 で、`S0` の文字列 `HEXEDTEST`、レコード長 16、`S5` あり、`S9` の開始アドレス 0x1000 で表したもの |
 | TD-TOOL-SREC-S28 | 約 9 KiB | 同じデータを、アドレス 0x010000 から S2 で、`S8` の開始アドレス 0x010000 |
 | TD-TOOL-SREC-S37 | 約 9 KiB | 同じデータを、アドレス 0x08000000 から S3 で、`S7` の開始アドレス 0x08000000 |
 | TD-TOOL-SREC-BADCOUNT | 約 9 KiB | TD-TOOL-SREC-S19 の `S5` のレコード数を実際の数 + 1 にしたもの (`S5` の行のチェックサムは正しく計算し直す) |
-| TD-TOOL-SREC-SRECCAT | 約 300 KiB | TD-TOOL-FW-128K を SRecord 1.65 の `srec_cat` で、`-binary -offset 0x08000000 -o - -motorola -line-length=74` (レコード長 32)、ヘッダ `HEXEDTEST`、開始アドレス 0x08000000、S3 で出力したもの。改行は CRLF |
+| TD-TOOL-SREC-SRECCAT | 約 300 KiB | TD-TOOL-FW-128K を SRecord 1.65 の `srec_cat` で、`-binary -offset 0x08000000 -o - -motorola -line-length=74` (レコード長 32)、ヘッダ `HEXEDTEST`、開始アドレス 0x08000000、S3 で出力したもの。改行は CRLF。CI に srec_cat がないため、テストデータ生成ツールが同じ設定の出力の形 (S0・S3・S5・S7) をアプリの変換処理とは別の実装で再現する |
 | TD-TOOL-PEM | 約 1.5 KiB | テスト用の自己署名証明書 (RSA 2048、固定の鍵と有効期間で作る) を PEM にしたもの。DER の SHA-256 も記録する |
-| TD-TOOL-DUMPS | 5 ファイル | TD-BYTES-256 を、`xxd` (vim 9.0)、`hexdump -C` (util-linux 2.39)、`od -A x -t x1` (GNU coreutils 9.4)、`certutil -encodehex` (Windows 11)、このアプリのダンプ (TOOL-10 のテキスト、既定の設定) で出力したもの |
+| TD-TOOL-DUMPS | 5 ファイル | TD-BYTES-256 を、`xxd` (vim 9.0)、`hexdump -C` (util-linux 2.39)、`od -A x -t x1` (GNU coreutils 9.4)、`certutil -encodehex` (Windows 11)、このアプリのダンプ (TOOL-10 のテキスト、既定の設定) で出力したもの。CI に各ツールがないため、テストデータ生成ツールが各ツールの出力の形を再現する (xxd・od・certutil の形は実際の出力と突き合わせて確かめた) |
 | TD-TOOL-SPECIAL | 64 バイト | ASCII の `<`、`>`、`&`、`"`、`\`、`{`、`}`、`$`、`%`、`#`、`_`、`^`、`~`、バッククォート (0x60)、縦線 (0x7C) の 15 バイトを 4 回繰り返し、最後に `A` を 4 バイト加えたもの |
 | TD-TOOL-SEQ-8M | 8 MiB | TD-SEQ-1M と同じ規則 (オフセット n の値は n mod 256) で 8 MiB |
 | TD-TOOL-ZERO-32M | 32 MiB (スパース) | すべて `00` |
