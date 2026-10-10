@@ -103,21 +103,21 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
             {
                 await c.RunAsync();
             }
-        }, () => ActiveCompare is null ? CompareState(Loc.Get("Compare_NoTab")) : CommandState.Available);
+        }, () => ActiveCompare is null ? CompareUnavailable(Loc.Get("Compare_NoTab")) : CommandState.Available);
         Commands.Register("compare.syncScroll", () =>
         {
             if (ActiveCompare is { } c)
             {
                 c.SyncScroll = !c.SyncScroll;
             }
-        }, () => ActiveCompare is { } c ? Toggle(c.SyncScroll) : CompareState(Loc.Get("Compare_NoTab")));
+        }, () => ActiveCompare is { } c ? Toggle(c.SyncScroll) : CompareUnavailable(Loc.Get("Compare_NoTab")));
         Commands.Register("compare.layout", () =>
         {
             if (ActiveCompare is { } c)
             {
                 c.Stacked = !c.Stacked;
             }
-        }, () => ActiveCompare is { } c ? Toggle(c.Stacked) : CompareState(Loc.Get("Compare_NoTab")));
+        }, () => ActiveCompare is { } c ? Toggle(c.Stacked) : CompareUnavailable(Loc.Get("Compare_NoTab")));
         foreach ((string id, MergeDirection direction, bool all) in new[]
         {
             ("compare.copyRight", MergeDirection.ToRight, false), ("compare.copyLeft", MergeDirection.ToLeft, false),
@@ -130,8 +130,8 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
                 {
                     await CopyDiffsAsync(c, direction, null, all);
                 }
-            }, () => CurrentCompare is not { } c ? CompareState(Loc.Get("Compare_NoTab"))
-                : c.CopyBlockedReason(direction) is { } reason ? CompareState(reason) : CommandState.Available);
+            }, () => CurrentCompare is not { } c ? CompareUnavailable(Loc.Get("Compare_NoTab"))
+                : c.CopyBlockedReason(direction) is { } reason ? CompareUnavailable(reason) : CommandState.Available);
         }
 
         Commands.Register("compare.showDiffList", () => ShowPanel(DiffsPanelId));
@@ -141,7 +141,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
             {
                 await ExportDiffsAsync(c, "report", null);
             }
-        }, () => CurrentCompare?.Result is null ? CompareState(Loc.Get("Compare_NoResult")) : CommandState.Available);
+        }, () => CurrentCompare?.Result is null ? CompareUnavailable(Loc.Get("Compare_NoResult")) : CommandState.Available);
 
         Vm.Documents.CollectionChanged += Compare_DocumentsChanged;
         Vm.PropertyChanged += (_, e) =>
@@ -165,7 +165,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         };
     }
 
-    private static CommandState CompareState(string reason) => CommandState.Unavailable(reason);
+    private static CommandState CompareUnavailable(string reason) => CommandState.Unavailable(reason);
 
     /// <summary>マージ・レポートの対象の比較 (表示中の比較タブ、なければ最後に使った比較タブ)。</summary>
     private CompareSessionViewModel? CurrentCompare => ActiveCompare ?? (_lastCompare is { } last && _compares.Contains(last) ? last : null);
@@ -198,7 +198,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
     }
 
     private CommandState DiffNavigationState() =>
-        DiffNavigationTarget() is { Session.Result: not null } ? CommandState.Available : CompareState(Loc.Get("Compare_NoResult"));
+        DiffNavigationTarget() is { Session.Result: not null } ? CommandState.Available : CompareUnavailable(Loc.Get("Compare_NoResult"));
 
     /// <summary>次 / 前の差分へ移動する (ANA-05)。</summary>
     private void MoveDiff(bool next)

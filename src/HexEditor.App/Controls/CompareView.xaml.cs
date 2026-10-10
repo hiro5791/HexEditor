@@ -68,16 +68,10 @@ public sealed partial class CompareView : UserControl
         session.ViewChanged += Session_ViewChanged;
         session.PropertyChanged += Session_PropertyChanged;
         MessageBar.Closed += (_, _) => _dismissedMessage = Session.StatusMessage;
-        Unloaded += (_, _) => _subscribed = false;
-        Loaded += (_, _) =>
-        {
-            _subscribed = true;
-            UpdateAll();
-        };
+        Loaded += (_, _) => UpdateAll();
         UpdateAll();
     }
 
-    private bool _subscribed = true;
     private string? _dismissedMessage;
 
     public CompareSessionViewModel Session { get; }
@@ -390,6 +384,9 @@ public sealed partial class CompareView : UserControl
     }
 
     // ---- 操作 ----
+
+    /// <summary>方式のコンボボックスで選ぶ (テスト用の命令からも使う)。</summary>
+    public void SelectMethod(int index) => MethodBox.SelectedIndex = index;
 
     private async void Recompare_Click(object sender, RoutedEventArgs e) => await _host.ExecuteAsync("compare.recompare");
 

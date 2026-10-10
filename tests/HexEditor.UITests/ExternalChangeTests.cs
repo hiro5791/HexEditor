@@ -14,7 +14,7 @@ public sealed class ExternalChangeTests
     private static int ExternalNotices(IReadOnlyList<JsonObject> notices) =>
         notices.Count(n => n["message"]!.GetValue<string>().Contains("changed by another app", StringComparison.Ordinal));
 
-    private static async Task PressNoticeButtonAsync(AppSession app, string name)
+    internal static async Task PressNoticeButtonAsync(AppSession app, string name)
     {
         AutomationElement? button = null;
         await app.WaitUntilAsync(() => Task.FromResult((button = app.Window.FindAllDescendants(cf => cf.ByAutomationId("Notification_Action"))
@@ -152,10 +152,10 @@ public sealed class ExternalChangeTests
         File.WriteAllBytes(temp, replaced);
         File.Replace(temp, path, null);
 
-        // 2. 「a.bin は外部で変更されました」と「再読み込み」「マージ」「無視」(「比較」は ANA-08 の実装後)。
+        // 2. 「a.bin は外部で変更されました」と「再読み込み」「マージ」「比較」(ANA-08)「無視」。
         await ExternalNoticeAsync(app, "a.bin was changed by another app.");
         IReadOnlyList<string> buttons = NoticeButtons(app);
-        Assert.Equal(["Reload", "Merge", "Ignore"], buttons);
+        Assert.Equal(["Reload", "Merge", "Compare", "Ignore"], buttons);
         Assert.Contains("⚠", (await app.DocumentAsync())["header"]!.GetValue<string>());
 
         // 3〜4. 「マージ」で 0x10 が AA、0x80000 が BB。
