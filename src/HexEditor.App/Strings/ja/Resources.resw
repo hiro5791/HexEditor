@@ -5230,8 +5230,13 @@
   <data name="Preset_Imported" xml:space="preserve"><value>{0} 個のプリセットをインポートしました。</value></data>
   <data name="Preset_ImportError" xml:space="preserve"><value>{0} のプリセットをインポートできませんでした: {1}</value></data>
   <data name="Preset_ImportErrorLine" xml:space="preserve"><value>{0} のプリセットをインポートできませんでした ({1} 行目): {2}</value></data>
+  <data name="Preset_ImportTooMany" xml:space="preserve"><value>{0} のプリセットはインポートしませんでした: プリセットが {1} 個になりますが、保存できるのは {2} 個までです。先にプリセットを削除してください。</value></data>
   <data name="Preset_ExportError" xml:space="preserve"><value>プリセットをエクスポートできませんでした ({0})。</value></data>
   <data name="Preset_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="Preset_Edit" xml:space="preserve"><value>編集...</value></data>
+  <data name="Preset_EditTitle" xml:space="preserve"><value>プリセットの編集</value></data>
+  <data name="Preset_NameInUse" xml:space="preserve"><value>{0} という名前のプリセットはすでにあります。</value></data>
+  <data name="Preset_Edited" xml:space="preserve"><value>プリセット {0} を更新しました。</value></data>
   <data name="Preset_Export" xml:space="preserve"><value>エクスポート...</value></data>
   <data name="Preset_Import" xml:space="preserve"><value>インポート...</value></data>
   <data name="Preset_SectionHelp" xml:space="preserve"><value>プリセットは名前を付けた表示設定の組です。拡張子を指定したプリセットは、その拡張子のファイルを初めて開いたときに適用します。</value></data>

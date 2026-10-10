@@ -85,6 +85,17 @@ public sealed class ViewPhase2Tests
 
     // ---- VIEW-18 ----
 
+    /// <summary>VIEW-18 の仕様 5・7: レコード内の位置はオフセットの基数に従う (8 進を含む)。</summary>
+    [Fact]
+    public void Position_in_the_record_follows_the_offset_radix()
+    {
+        Assert.Equal("0x0C", RecordLayout.WithinText(12, OffsetRadix.Hex, lowercase: false));
+        Assert.Equal("0x0c", RecordLayout.WithinText(12, OffsetRadix.Hex, lowercase: true));
+        Assert.Equal("12", RecordLayout.WithinText(12, OffsetRadix.Decimal, lowercase: false));
+        Assert.Equal("0o14", RecordLayout.WithinText(12, OffsetRadix.Octal, lowercase: false));
+        Assert.Equal("0014", RecordLayout.WithinDigits(12, OffsetRadix.Octal, lowercase: false, 4));
+    }
+
     [Fact]
     public void Records_are_counted_from_the_start_offset()
     {

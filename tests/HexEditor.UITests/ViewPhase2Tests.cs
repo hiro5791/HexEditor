@@ -418,6 +418,30 @@ public sealed class ViewPhase2Tests
         Assert.False(await app.IsShownAsync("Status_Position"));
     });
 
+    /// <summary>VIEW-18 の「画面」: フライアウトの入力はその場で反映する (OK を押さなくてよい)。仕様 7: 位置は 8 進にも従う。</summary>
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-18-05")]
+    public Task Record_settings_apply_while_typing_and_status_follows_octal() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await OpenAsync(ctx, "TD-SEQ-1M");
+        JsonObject state = await app.SendAsync("recordSettings", new JsonObject { ["open"] = true, ["length"] = "100", ["start"] = "0x40" });
+        Assert.True(state["open"]!.GetValue<bool>());
+        await app.IdleAsync();
+        JsonObject view = (await app.SendAsync("viewSettings"))["view"]!.AsObject();
+        Assert.True(view["recordView"]!.GetValue<bool>());
+        Assert.Equal(100, view["recordLength"]!.GetValue<int>());
+        Assert.Equal(0x40, view["recordStart"]!.GetValue<long>());
+
+        // 不正な値は反映しない。
+        await app.SendAsync("recordSettings", new JsonObject { ["length"] = "0" });
+        Assert.Equal(100, (await app.SendAsync("viewSettings"))["view"]!["recordLength"]!.GetValue<int>());
+        await app.SendAsync("recordSettings", new JsonObject { ["length"] = "100", ["commit"] = true });
+
+        await GoToAsync(app, "0x10D");
+        await ExecuteAsync(app, "view.radixOctal");
+        Assert.Equal("Record #2 +0o5", await app.UiaNameAsync("Status_Position"));
+    });
+
     // ---- VIEW-23 ----
 
     private static async Task LoadTableAsync(AppSession app, UiTestContext ctx)

@@ -5230,8 +5230,13 @@ Details were written to:
   <data name="Preset_Imported" xml:space="preserve"><value>Imported {0, plural, one {# preset} other {# presets}}.</value></data>
   <data name="Preset_ImportError" xml:space="preserve"><value>The presets in {0} could not be imported: {1}</value></data>
   <data name="Preset_ImportErrorLine" xml:space="preserve"><value>The presets in {0} could not be imported (line {1}): {2}</value></data>
+  <data name="Preset_ImportTooMany" xml:space="preserve"><value>The presets in {0} were not imported: there would be {1} presets, but up to {2} can be kept. Delete some presets first.</value></data>
   <data name="Preset_ExportError" xml:space="preserve"><value>The presets could not be exported ({0}).</value></data>
   <data name="Preset_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Preset_Edit" xml:space="preserve"><value>Edit...</value></data>
+  <data name="Preset_EditTitle" xml:space="preserve"><value>Edit the preset</value></data>
+  <data name="Preset_NameInUse" xml:space="preserve"><value>A preset named {0} already exists.</value></data>
+  <data name="Preset_Edited" xml:space="preserve"><value>Updated the preset {0}.</value></data>
   <data name="Preset_Export" xml:space="preserve"><value>Export...</value></data>
   <data name="Preset_Import" xml:space="preserve"><value>Import...</value></data>
   <data name="Preset_SectionHelp" xml:space="preserve"><value>Presets are named sets of view settings. A preset with extensions is applied the first time a matching file is opened.</value></data>

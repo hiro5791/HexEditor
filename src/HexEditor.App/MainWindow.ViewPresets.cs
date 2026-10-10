@@ -169,7 +169,16 @@ public sealed partial class MainWindow
         try
         {
             IReadOnlyList<ViewPreset> imported = ViewPresets.Import(File.ReadAllText(path));
-            PresetStore.SavePresets([.. PresetStore.Presets, .. imported]);
+
+            // 上限 (100 個) を超える場合は切り捨てずに読み込まず、InfoBar で知らせる (VIEW-42 の仕様 6、「エラー」)。
+            if (ViewPresets.Merge(PresetStore.Presets, imported, out int total) is not { } merged)
+            {
+                LastPresetImportError = Loc.Format("Preset_ImportTooMany", Path.GetFileName(path), total, ViewPresets.MaxPresets);
+                ShowNotice(LastPresetImportError, InfoBarSeverity.Warning);
+                return false;
+            }
+
+            PresetStore.SavePresets(merged);
             ViewPresetsChanged?.Invoke(null, EventArgs.Empty);
             ShowNotice(Loc.Format("Preset_Imported", imported.Count), InfoBarSeverity.Success);
             return true;
@@ -186,6 +195,48 @@ public sealed partial class MainWindow
 
         ShowNotice(LastPresetImportError, InfoBarSeverity.Error);
         return false;
+    }
+
+    /// <summary>
+    /// 既存のプリセットの名前と自動適用の条件を変える (VIEW-42 の仕様 6)。ほかのプリセットと同じ名前なら InfoBar で知らせて変えない。
+    /// </summary>
+    internal bool EditViewPreset(string oldName, string newName, string extensions)
+    {
+        if (ViewPresets.Edit(PresetStore.Presets, oldName, newName, extensions) is not { } edited)
+        {
+            if (newName.Trim().Length > 0)
+            {
+                ShowNotice(Loc.Format("Preset_NameInUse", newName.Trim()), InfoBarSeverity.Warning);
+            }
+
+            return false;
+        }
+
+        PresetStore.SavePresets(edited);
+        ViewPresetsChanged?.Invoke(null, EventArgs.Empty);
+        ShowStatusMessage(Loc.Format("Preset_Edited", newName.Trim()));
+        return true;
+    }
+
+    /// <summary>「編集...」: 選んだプリセットの名前と自動適用の条件を入力して変える。</summary>
+    private async Task EditPresetAsync(string oldName)
+    {
+        if (PresetStore.Presets.FirstOrDefault(p => string.Equals(p.Name, oldName, StringComparison.OrdinalIgnoreCase)) is not { } preset)
+        {
+            return;
+        }
+
+        var name = new TextBox { Header = Loc.Get("Preset_Name"), Text = preset.Name };
+        AutomationProperties.SetAutomationId(name, "Preset_Name");
+        var extensions = new TextBox { Header = Loc.Get("Preset_Extensions"), PlaceholderText = ".gba;.nes", Text = string.Join(";", preset.Extensions) };
+        AutomationProperties.SetAutomationId(extensions, "Preset_Extensions");
+        var body = new StackPanel { Spacing = 8, MinWidth = 320 };
+        body.Children.Add(name);
+        body.Children.Add(extensions);
+        if (await ConfirmAsync(Loc.Get("Preset_EditTitle"), body, Loc.Get("Preset_Save"), "PresetEditDialog") && name.Text.Trim().Length > 0)
+        {
+            EditViewPreset(preset.Name, name.Text, extensions.Text);
+        }
     }
 
     /// <summary>プリセットを削除する。</summary>
@@ -207,6 +258,8 @@ public sealed partial class MainWindow
         var list = new ListView { SelectionMode = ListViewSelectionMode.Single, MaxHeight = 240, MinWidth = 320 };
         AutomationProperties.SetAutomationId(list, "Presets_List");
         AutomationProperties.SetName(list, Loc.Get("SetSection_ViewPresets"));
+        var edit = new Button { Content = Loc.Get("Preset_Edit") };
+        AutomationProperties.SetAutomationId(edit, "Presets_Edit");
         var delete = new Button { Content = Loc.Get("Preset_Delete") };
         AutomationProperties.SetAutomationId(delete, "Presets_Delete");
         var export = new Button { Content = Loc.Get("Preset_Export") };
@@ -225,11 +278,19 @@ public sealed partial class MainWindow
                 list.Items.Add(item);
             }
 
-            delete.IsEnabled = list.SelectedItem is not null;
+            edit.IsEnabled = delete.IsEnabled = list.SelectedItem is not null;
             export.IsEnabled = list.Items.Count > 0;
         }
 
-        list.SelectionChanged += (_, _) => delete.IsEnabled = list.SelectedItem is not null;
+        list.SelectionChanged += (_, _) => edit.IsEnabled = delete.IsEnabled = list.SelectedItem is not null;
+        edit.Click += async (_, _) =>
+        {
+            if (list.SelectedItem is ListViewItem { Tag: string name })
+            {
+                await EditPresetAsync(name);
+                Fill();
+            }
+        };
         delete.Click += (_, _) =>
         {
             if (list.SelectedItem is ListViewItem { Tag: string name })
@@ -272,6 +333,7 @@ public sealed partial class MainWindow
         };
         Fill();
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        buttons.Children.Add(edit);
         buttons.Children.Add(delete);
         buttons.Children.Add(export);
         buttons.Children.Add(import);
@@ -301,9 +363,15 @@ public sealed partial class MainWindow
             DeleteViewPreset(delete);
         }
 
+        if (request["edit"]?.GetValue<string>() is { } edit)
+        {
+            EditViewPreset(edit, request["name"]?.GetValue<string>() ?? edit, request["extensions"]?.GetValue<string>() ?? string.Empty);
+        }
+
         return new JsonObject
         {
             ["presets"] = new JsonArray([.. PresetStore.Presets.Select(p => (JsonNode?)p.Name)]),
+            ["extensions"] = new JsonArray([.. PresetStore.Presets.Select(p => (JsonNode?)string.Join(";", p.Extensions))]),
             ["error"] = LastPresetImportError,
         };
     }

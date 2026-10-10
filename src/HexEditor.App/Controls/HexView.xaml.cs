@@ -830,13 +830,7 @@ public sealed partial class HexView : UserControl
             return null;
         }
 
-        int digits = RecordPositionDigits(view);
-        string position = view.Radix switch
-        {
-            OffsetRadix.Decimal => within.ToString(System.Globalization.CultureInfo.InvariantCulture).PadLeft(digits, '0'),
-            OffsetRadix.Octal => Convert.ToString(within, 8).PadLeft(digits, '0'),
-            _ => within.ToString(view.LowercaseHex ? "x" : "X", System.Globalization.CultureInfo.InvariantCulture).PadLeft(digits, '0'),
-        };
+        string position = RecordLayout.WithinDigits(within, view.Radix, view.LowercaseHex, RecordPositionDigits(view));
         return "#" + index.ToString(System.Globalization.CultureInfo.InvariantCulture) + ":" + position;
     }
 
