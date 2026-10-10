@@ -323,6 +323,22 @@ public sealed partial class FindBar
             : string.Empty;
     }
 
+    /// <summary>「複数の語を検索」のコマンド (FIND-26): 検索欄を複数行の一覧にする。</summary>
+    public void ShowMultiTerm()
+    {
+        OptionsToggle.IsChecked = true;
+        MultiTermToggle.IsChecked = true;
+    }
+
+    /// <summary>「一致しない箇所を検索」のコマンド (FIND-25): 種類「Hex」で「一致しない箇所を探す」をオンにする。</summary>
+    public void ShowMismatch()
+    {
+        KindChoice.SelectedIndex = (int)SearchKind.Hex;
+        OptionsToggle.IsChecked = true;
+        MismatchChoice.IsChecked = true;
+        Query.Focus(FocusState.Programmatic);
+    }
+
     /// <summary>テスト用: 検索欄の見出し (スクリーンリーダーが読む名前)。</summary>
     internal string QueryLabel => AutomationProperties.GetName(Query);
 

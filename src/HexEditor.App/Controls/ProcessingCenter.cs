@@ -175,6 +175,12 @@ public static class OperationText
             parts.Add(Loc.Format("Operations_Matches", matches));
         }
 
+        // 処理の詳細 (複数ファイル検索のファイル数・今のファイル。FIND-30 の「巨大ファイル・長時間処理」)。
+        if (op.Detail is { Length: > 0 } detail)
+        {
+            parts.Add(detail);
+        }
+
         parts.Add(Loc.Format("Operations_Elapsed",op.Elapsed.ToString(op.Elapsed.TotalHours >= 1 ? @"h\:mm\:ss" : @"m\:ss")));
         if (op.State == OperationState.Cancelling)
         {
