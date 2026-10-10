@@ -14,13 +14,13 @@ public sealed class ShiftSaveTests
     public Task Shift_save_from_the_free_space_dialog_asks_every_time() => UiTestContext.RunAsync(async ctx =>
     {
         // 空き容量が足りない仮想ディスク (管理者の権限が要る) の代わりに、異常を再現する仕組みで空き容量を 20 MiB にする。安全な保存には
-        // 16 MiB + 16 MiB が要るため足りず、ずらしながらの保存は伸びる 1 KiB と余裕の 16 MiB で足りる。
+        // 16 MiB + 16 MiB が要るため足りず、ずらしながらの保存は伸びる分 (16 バイト。キー入力で入れるため 1 KiB より小さくする) と余裕の 16 MiB で足りる。
         string path = ctx.CopyTestData("TD-RANDOM-16M", "big.bin");
         byte[] original = File.ReadAllBytes(path);
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = new JsonObject { ["freeSpace"] = 20L << 20 } });
         await app.GoToAsync(0);
         await app.KeyAsync("Insert");
-        await app.TypeAsync(string.Concat(Enumerable.Repeat("5A", 1024)));
+        await app.TypeAsync(string.Concat(Enumerable.Repeat("5A", 16)));
 
         for (int round = 0; round < 2; round++)
         {
@@ -41,9 +41,9 @@ public sealed class ShiftSaveTests
             if (round == 0)
             {
                 byte[] saved = File.ReadAllBytes(path);
-                Assert.Equal(original.Length + 1024, saved.Length);
-                Assert.All(saved[..1024], b => Assert.Equal(0x5A, b));
-                Assert.Equal(SHA256.HashData(original), SHA256.HashData(saved[1024..]));
+                Assert.Equal(original.Length + 16, saved.Length);
+                Assert.All(saved[..16], b => Assert.Equal(0x5A, b));
+                Assert.Equal(SHA256.HashData(original), SHA256.HashData(saved[16..]));
 
                 // 5. もう 1 バイト挿入して同じ方法で保存する。
                 await app.GoToAsync(5000);
