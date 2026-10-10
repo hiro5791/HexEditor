@@ -30,7 +30,7 @@ public sealed partial class HistoryPanel : UserControl, Panels.IPanelContent
     /// <summary>一覧を作り直したら、現在の状態の行を見える位置に出す。</summary>
     private void Vm_Refreshed(object? sender, EventArgs e)
     {
-        int row = Vm.CurrentIndex - 1;
+        int row = Vm.CurrentIndex;
         if (row >= 0 && row < Vm.Rows.Count)
         {
             List.ScrollIntoView(Vm.Rows[row]);

@@ -8,7 +8,7 @@
     AutomationProperties.LandmarkType="Custom">
     <!--
         クリップボードパネル (EDIT-28)。ユーザークリップボード 1〜9 とクリップボード履歴 (新しい順)。上部に「貼り付け」「上書き貼り付け」
-        「消去」「名前を付ける」、履歴には「ユーザークリップボードに移す」。各項目は番号または日時、名前、大きさ、先頭 16 バイト、コピー元。
+        「消去」「名前を付ける」、履歴には「ユーザークリップボードに移す」。一覧の右クリックメニュー (Shift+F10 も) にも同じ操作を出す (仕様 2)。各項目は番号または日時、名前、大きさ、先頭 16 バイト、コピー元。
     -->
     <Grid RowSpacing="4">
         <Grid.RowDefinitions>
@@ -51,6 +51,7 @@
             x:Name="SlotList"
             Grid.Row="2"
             AutomationProperties.AutomationId="ClipboardPanel_Slots"
+            ContextRequested="List_ContextRequested"
             DoubleTapped="List_DoubleTapped"
             ItemsSource="{x:Bind Vm.Slots}"
             KeyDown="List_KeyDown"
@@ -75,6 +76,7 @@
             x:Name="HistoryList"
             Grid.Row="4"
             AutomationProperties.AutomationId="ClipboardPanel_History"
+            ContextRequested="List_ContextRequested"
             DoubleTapped="List_DoubleTapped"
             ItemsSource="{x:Bind Vm.History}"
             KeyDown="List_KeyDown"

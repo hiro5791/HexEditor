@@ -2968,6 +2968,8 @@
   <data name="Operation_InvertSelection" xml:space="preserve"><value>選択の反転</value></data>
   <data name="Operation_PasteRectangle" xml:space="preserve"><value>矩形の貼り付け</value></data>
   <data name="Operation_ExportSelection" xml:space="preserve"><value>選択範囲のエクスポート</value></data>
+  <data name="Operation_ImportSelection" xml:space="preserve"><value>選択範囲のインポート</value></data>
+  <data name="Operation_LoadSelection" xml:space="preserve"><value>選択セットの読み込み</value></data>
   <data name="SelectionSets_None" xml:space="preserve"><value>保存した選択範囲はありません。</value></data>
   <data name="SelectionSets_TooMany" xml:space="preserve"><value>選択範囲は 1 ドキュメントあたり {0} 個まで保存できます。</value></data>
   <data name="SelectionSets_Saved" xml:space="preserve"><value>選択範囲を「{0}」として保存しました。</value></data>
@@ -3011,6 +3013,7 @@
   <data name="History_SelectRange.Text" xml:space="preserve"><value>この範囲へ移動</value></data>
   <data name="History_CompareMenu.Text" xml:space="preserve"><value>2 つの時点を比較</value></data>
   <data name="History_SavedMark" xml:space="preserve"><value>保存</value></data>
+  <data name="History_Opened" xml:space="preserve"><value>開いた時点</value></data>
   <data name="History_CurrentState" xml:space="preserve"><value>現在の状態</value></data>
   <data name="History_RedoState" xml:space="preserve"><value>やり直し可能</value></data>
   <data name="History_Range" xml:space="preserve"><value>{0} ({1} バイト)</value></data>

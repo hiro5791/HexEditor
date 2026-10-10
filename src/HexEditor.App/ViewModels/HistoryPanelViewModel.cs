@@ -14,7 +14,7 @@ public sealed class HistoryRow
 {
     public required int Index { get; init; }
 
-    /// <summary>番号 (履歴の項目の番号。1 が最初の編集)。</summary>
+    /// <summary>番号 (履歴の項目の番号。0 が開いた時点、1 が最初の編集)。</summary>
     public string NumberText => Index.ToString(CultureInfo.CurrentCulture);
 
     public required string Name { get; init; }
@@ -39,6 +39,9 @@ public sealed class HistoryRow
     public string SavedText => IsSaved ? Loc.Get("History_SavedMark") : string.Empty;
 
     public string CurrentMark => IsCurrent ? "▶" : string.Empty;
+
+    /// <summary>現在の状態の行の色の印 (左端の帯。色だけで区別しないよう太字と印も付ける。仕様 2)。</summary>
+    public Microsoft.UI.Xaml.Visibility CurrentBarVisibility => IsCurrent ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
 
     public Windows.UI.Text.FontWeight Weight => IsCurrent ? Microsoft.UI.Text.FontWeights.Bold : Microsoft.UI.Text.FontWeights.Normal;
 
@@ -198,8 +201,8 @@ public sealed partial class HistoryPanelViewModel : ObservableObject
     /// <summary>行の件数が変わった、または現在の位置が変わったので一覧を作り直す。</summary>
     public void Refresh()
     {
-        // 開いた時点 (項目 0) は行にしない。行 i は項目 i + 1 (番号 1 が最初の編集)。
-        Rows.Reset(Math.Max(0, (_doc?.Document.History.Count ?? 1) - 1));
+        // 行 i は項目 i。行 0 は開いた時点 (そこへ移るとすべて元に戻す。開いた直後に保存した印・現在の状態の印もここに付く)。
+        Rows.Reset(_doc?.Document.History.Count ?? 0);
         OnPropertyChanged(nameof(CurrentIndex));
         OnPropertyChanged(nameof(CanUndo));
         OnPropertyChanged(nameof(CanRedo));
@@ -228,6 +231,7 @@ public sealed partial class HistoryPanelViewModel : ObservableObject
     {
         if (_doc is not { } doc || index <= 0 || index >= doc.Document.History.Count)
         {
+            // 開いた時点の行には対象範囲がない。
             return;
         }
 
@@ -256,7 +260,7 @@ public sealed partial class HistoryPanelViewModel : ObservableObject
 
     private HistoryRow CreateRow(int row)
     {
-        int index = row + 1;
+        int index = row;
         if (_doc is not { } doc || index >= doc.Document.History.Count)
         {
             return new HistoryRow
@@ -281,10 +285,12 @@ public sealed partial class HistoryPanelViewModel : ObservableObject
         return new HistoryRow
         {
             Index = index,
-            Name = MainWindow.EditOperationName(entry.Description),
+            Name = index == 0 ? Loc.Get("History_Opened") : MainWindow.EditOperationName(entry.Description),
             RangeText = range,
             DeltaText = delta,
-            TimeText = entry.Time == default ? string.Empty : entry.Time.ToLocalTime().ToString("T", culture),
+
+            // 日時 (仕様 1): 日付と時刻。
+            TimeText = entry.Time == default ? string.Empty : entry.Time.ToLocalTime().ToString("g", culture),
             IsSaved = index == history.SavedIndex,
             IsCurrent = index == history.CurrentIndex,
             IsRedo = index > history.CurrentIndex,
@@ -309,6 +315,8 @@ public sealed partial class HistoryPanelViewModel : ObservableObject
                 ["redo"] = row.IsRedo,
                 ["bold"] = row.Weight.Weight == Microsoft.UI.Text.FontWeights.Bold.Weight,
                 ["opacity"] = row.Opacity,
+                ["time"] = row.TimeText,
+                ["colorBar"] = row.CurrentBarVisibility == Microsoft.UI.Xaml.Visibility.Visible,
             });
         }
 

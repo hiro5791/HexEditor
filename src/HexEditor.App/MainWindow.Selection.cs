@@ -31,6 +31,12 @@ public sealed partial class MainWindow
     /// <summary>ドキュメントごとの選択セット (EDIT-09)。初めて使うときに付随データから読む。</summary>
     private static readonly ConditionalWeakTable<Document, SelectionSetCollection> s_selectionSets = [];
 
+    /// <summary>選択セットごとの保存 (UI スレッドの外で、間引いて書く。EDIT-09)。</summary>
+    private static readonly ConditionalWeakTable<SelectionSetCollection, Core.Files.DebouncedWriter> s_selectionSetWriters = [];
+
+    /// <summary>保存を間引く時間。</summary>
+    private static readonly TimeSpan BackgroundSaveDelay = TimeSpan.FromMilliseconds(300);
+
     private void RegisterSelectionCommands()
     {
         string noSelection = Loc.Get("Command_NoSelection");
@@ -536,18 +542,14 @@ public sealed partial class MainWindow
         {
             sets = doc.FilePath is { } path ? SelectionSetCollection.Load(_documentData, path) : new SelectionSetCollection();
             s_selectionSets.AddOrUpdate(doc.Document, sets);
+            var writer = new Core.Files.DebouncedWriter(BackgroundSaveDelay, ex => AppLog.Warning($"選択セットを保存できません: {ex.Message}"));
+            s_selectionSetWriters.AddOrUpdate(sets, writer);
             sets.Changed += (_, _) =>
             {
+                // 100 万要素の選択セットも UI スレッドで書かない (写しだけを作り、書くのは間引いてスレッドプールで)。
                 if (doc.FilePath is { } p)
                 {
-                    try
-                    {
-                        sets.Save(_documentData, p, (doc.Document.Source as Core.Sources.FileByteSource)?.Stamp);
-                    }
-                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-                    {
-                        AppLog.Warning($"選択セットを保存できません: {ex.Message}");
-                    }
+                    writer.Request(sets.CaptureSave(_documentData, p, (doc.Document.Source as Core.Sources.FileByteSource)?.Stamp));
                 }
             };
         }
@@ -717,12 +719,15 @@ public sealed partial class MainWindow
             return;
         }
 
-        ApplySelectionSet(doc, setToLoad, add.IsChecked == true);
+        await ApplySelectionSetAsync(doc, setToLoad, add.IsChecked == true);
         FocusEditor();
     }
 
-    /// <summary>選択セットを選択にする。長さより後ろの要素は切り詰める・除外し、件数を InfoBar で知らせる (仕様 4)。</summary>
-    private void ApplySelectionSet(DocumentViewModel doc, SelectionSet set, bool add)
+    /// <summary>
+    /// 選択セットを選択にする。長さより後ろの要素は切り詰める・除外し、件数を InfoBar で知らせる (仕様 4)。要素が 10,000 個を超える置き換えは、
+    /// 選択の集合を長時間処理で作ってから入れる (「巨大ファイル・長時間処理」: 100 万要素の読み込みは進捗とキャンセル)。
+    /// </summary>
+    private async Task ApplySelectionSetAsync(DocumentViewModel doc, SelectionSet set, bool add)
     {
         EditorState editor = doc.Editor;
         (IReadOnlyList<ByteRange> ranges, RectSelection? rect, int truncated, int removed) =
@@ -732,8 +737,30 @@ public sealed partial class MainWindow
             HexLayout layout = editor.Layout;
             editor.SelectRectangle(layout.RowStart(r.FirstRow) + r.FirstColumn, layout.RowStart(r.LastRow) + r.LastColumn);
         }
+        else if (!add && rect is null && ranges.Count > ManyElements)
+        {
+            long length = doc.Document.Length;
+            int max = editor.MaxSelectionElements;
+            try
+            {
+                (RangeSet built, bool cut) = await Vm.Operations.RunAsync(Loc.Get("Operation_LoadSelection"), OperationKind.ReadOnly, doc.Document, null,
+                    op => Task.Run(() => EditorState.BuildSelectionSet(ranges, length, max, op.CancellationToken)));
+                if (doc.Document.Length != length)
+                {
+                    return;
+                }
+
+                SelectionResult result = editor.SetSelectionSet(built);
+                ReportSelection(result == SelectionResult.Done && cut ? SelectionResult.Truncated : result);
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+        }
         else
         {
+            // 矩形を現在の選択に追加する場合も、要素数の上限で打ち切る (行の一覧は上限までしか作らない)。
             IEnumerable<ByteRange> items = rect is { } r2 ? r2.Ranges(doc.Document.Length) : ranges;
             ReportSelection(editor.SetSelections(items, add));
         }
@@ -803,11 +830,19 @@ public sealed partial class MainWindow
 
         try
         {
-            string content = await File.ReadAllTextAsync(path);
-            List<ByteRange> ranges = SelectionFile.Parse(content, out _);
+            // 読み込みと書式の解釈は長時間処理で行う (100 万要素のファイルでも UI を止めない。EDIT-09 の「巨大ファイル・長時間処理」)。
+            List<ByteRange> ranges = await Vm.Operations.RunAsync(Loc.Get("Operation_ImportSelection"), OperationKind.ReadOnly, doc.Document, null,
+                op => Task.Run(async () =>
+                {
+                    string content = await File.ReadAllTextAsync(path, op.CancellationToken);
+                    return SelectionFile.Parse(content, out _);
+                }));
             var set = new SelectionSet(Path.GetFileNameWithoutExtension(path), ranges, null, DateTimeOffset.Now);
-            ApplySelectionSet(doc, set, add: false);
+            await ApplySelectionSetAsync(doc, set, add: false);
             FocusEditor();
+        }
+        catch (OperationCanceledException)
+        {
         }
         catch (SelectionImportException ex)
         {

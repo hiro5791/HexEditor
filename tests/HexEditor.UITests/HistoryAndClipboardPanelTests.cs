@@ -35,29 +35,43 @@ public sealed class HistoryAndClipboardPanelTests
         await TypeAtAsync(app, 0x40, "A4");
         await TypeAtAsync(app, 0x50, "A5");
 
-        // 4. 履歴パネル: 5 行、操作名は「入力」、範囲は各 1 バイト、長さの変化は 0、3 番目の行に「保存」の印。
+        // 4. 履歴パネル: 開いた時点の行 (番号 0) と 5 行、操作名は「入力」、範囲は各 1 バイト、長さの変化は 0、3 番目の編集の行に「保存」の印。
+        //    日時は日付と時刻。
         Assert.True(await SelectionTests.ExecuteAsync(app, "view.panel.history"));
         await app.WaitForAsync("History_List");
         JsonArray rows = (await app.SendAsync("historyPanel"))["rows"]!.AsArray();
-        Assert.Equal(5, rows.Count);
-        Assert.All(rows, r => Assert.Equal("Typing", r!["name"]!.GetValue<string>()));
+        Assert.Equal(6, rows.Count);
+        Assert.Equal(0, rows[0]!["index"]!.GetValue<int>());
+        Assert.Equal(string.Empty, rows[0]!["range"]!.GetValue<string>());
+        Assert.All(rows.Skip(1), r => Assert.Equal("Typing", r!["name"]!.GetValue<string>()));
         Assert.Equal(["0x10 (1 bytes)", "0x20 (1 bytes)", "0x30 (1 bytes)", "0x40 (1 bytes)", "0x50 (1 bytes)"],
-            rows.Select(r => r!["range"]!.GetValue<string>().Replace("00000", string.Empty, StringComparison.Ordinal)));
-        Assert.All(rows, r => Assert.Equal("0", r!["delta"]!.GetValue<string>()));
-        Assert.Equal([false, false, true, false, false], rows.Select(r => r!["saved"]!.GetValue<bool>()));
+            rows.Skip(1).Select(r => r!["range"]!.GetValue<string>().Replace("00000", string.Empty, StringComparison.Ordinal)));
+        Assert.All(rows.Skip(1), r => Assert.Equal("0", r!["delta"]!.GetValue<string>()));
+        Assert.Equal([false, false, false, true, false, false], rows.Select(r => r!["saved"]!.GetValue<bool>()));
+        Assert.Contains(DateTime.Now.Year.ToString(System.Globalization.CultureInfo.InvariantCulture), rows[1]!["time"]!.GetValue<string>(),
+            StringComparison.Ordinal);
 
-        // 5〜6. 1 番目の行 (ダブルクリック・Enter と同じ処理): 0x10 だけが A1。1 番目の行が太字と印で強調され、2〜5 番目は薄い。
+        // 5〜6. 1 番目の編集の行 (ダブルクリック・Enter と同じ処理): 0x10 だけが A1。その行が色・太字・印で強調され、後ろの行は薄い。
         await app.SendAsync("historyGoTo", new JsonObject { ["index"] = 1 });
         await app.IdleAsync();
         Assert.Equal(new byte[] { 0xA1, 0x20, 0x30, 0x40, 0x50 }, await ValuesAsync(app));
         rows = (await app.SendAsync("historyPanel"))["rows"]!.AsArray();
-        Assert.True(rows[0]!["current"]!.GetValue<bool>() && rows[0]!["bold"]!.GetValue<bool>());
-        Assert.All(rows.Skip(1), r => Assert.True(r!["redo"]!.GetValue<bool>() && r["opacity"]!.GetValue<double>() < 1));
+        Assert.True(rows[1]!["current"]!.GetValue<bool>() && rows[1]!["bold"]!.GetValue<bool>() && rows[1]!["colorBar"]!.GetValue<bool>());
+        Assert.False(rows[0]!["colorBar"]!.GetValue<bool>());
+        Assert.All(rows.Skip(2), r => Assert.True(r!["redo"]!.GetValue<bool>() && r["opacity"]!.GetValue<double>() < 1));
 
         // 7〜8. Ctrl+Y で 2 番目の編集がやり直される。
         await app.KeyAsync("Y", ctrl: true);
         await app.IdleAsync();
         Assert.Equal(new byte[] { 0xA1, 0xA2, 0x30, 0x40, 0x50 }, await ValuesAsync(app));
+
+        // 開いた時点の行へ移るとすべての編集を元に戻す。
+        await app.SendAsync("historyGoTo", new JsonObject { ["index"] = 0 });
+        await app.IdleAsync();
+        Assert.Equal(new byte[] { 0x10, 0x20, 0x30, 0x40, 0x50 }, await ValuesAsync(app));
+        rows = (await app.SendAsync("historyPanel"))["rows"]!.AsArray();
+        Assert.True(rows[0]!["current"]!.GetValue<bool>());
+        Assert.All(rows.Skip(1), r => Assert.True(r!["redo"]!.GetValue<bool>()));
     });
 
     private static async Task<byte[]> ValuesAsync(AppSession app) =>

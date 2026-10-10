@@ -64,7 +64,7 @@
                         ColumnSpacing="8"
                         Opacity="{x:Bind Opacity}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="Auto" MinWidth="28" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -72,7 +72,17 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock FontWeight="{x:Bind Weight}" Text="{x:Bind CurrentMark}" />
+                        <!--  現在の状態の行: 色 (左端のアクセント色の帯) に加えて太字と印 (EDIT-20 の仕様 2)  -->
+                        <Rectangle
+                            Width="3"
+                            HorizontalAlignment="Left"
+                            Fill="{ThemeResource AccentFillColorDefaultBrush}"
+                            Visibility="{x:Bind CurrentBarVisibility}" />
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            FontWeight="{x:Bind Weight}"
+                            Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                            Text="{x:Bind CurrentMark}" />
                         <TextBlock Grid.Column="1" FontWeight="{x:Bind Weight}" Text="{x:Bind NumberText}" />
                         <TextBlock Grid.Column="2" FontWeight="{x:Bind Weight}" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />
                         <TextBlock Grid.Column="3" FontFamily="Cascadia Mono, Consolas" FontWeight="{x:Bind Weight}" Text="{x:Bind RangeText}" />

@@ -188,9 +188,20 @@ public sealed class SelectionSetCollection
     // ---- 保存と読み込み (付随データ) ----
 
     /// <summary>付随データに書く (100 万要素でも書けるよう、要素は配列で書き流す)。選択セットがなければ消す。</summary>
-    public void Save(DocumentDataStore store, string documentPath, FileStamp? stamp)
+    public void Save(DocumentDataStore store, string documentPath, FileStamp? stamp) => CaptureSave(store, documentPath, stamp)();
+
+    /// <summary>
+    /// 今の選択セットの一覧を写し取り、それを付随データに書く処理を返す (UI スレッドで写し、書くのは別のスレッドでよい。選択セットの要素は変わらない)。
+    /// </summary>
+    public Action CaptureSave(DocumentDataStore store, string documentPath, FileStamp? stamp)
     {
-        if (_sets.Count == 0)
+        SelectionSet[] sets = [.. _sets];
+        return () => Write(store, documentPath, stamp, sets);
+    }
+
+    private static void Write(DocumentDataStore store, string documentPath, FileStamp? stamp, SelectionSet[] sets)
+    {
+        if (sets.Length == 0)
         {
             store.Delete(documentPath, Kind);
             return;
@@ -199,7 +210,7 @@ public sealed class SelectionSetCollection
         store.Write(documentPath, Kind, stamp, writer =>
         {
             writer.WriteStartArray("sets");
-            foreach (SelectionSet set in _sets)
+            foreach (SelectionSet set in sets)
             {
                 writer.WriteStartObject();
                 writer.WriteString("name", set.Name);

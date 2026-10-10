@@ -334,24 +334,7 @@ public sealed partial class EditorState
             set = new RangeSet();
         }
 
-        bool truncated = false;
-        foreach (ByteRange r in ranges)
-        {
-            long s = Math.Clamp(r.Start, 0, length);
-            long n = Math.Clamp(r.Length, 0, length - s);
-            if (n <= 0)
-            {
-                continue;
-            }
-
-            if (set.Count >= MaxSelectionElements && !set.Touching(s, n).Any())
-            {
-                truncated = true;
-                break;
-            }
-
-            set.Add(new ByteRange(s, n));
-        }
+        bool truncated = AddClamped(set, ranges, length, MaxSelectionElements, default);
 
         if (set.Count == 0)
         {
@@ -502,6 +485,48 @@ public sealed partial class EditorState
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// 要素の一覧から選択の集合を作る (<see cref="SetSelections"/> の置き換えと同じ規則: ドキュメントの範囲に切り詰め、重なり・隣接は結合し、
+    /// 要素数の上限で打ち切る)。ドキュメントの状態は変えないので、要素の多い選択 (選択セットの読み込みなど) はバックグラウンドで作り、
+    /// <see cref="SetSelectionSet"/> で入れる (EDIT-09 の「巨大ファイル・長時間処理」)。
+    /// </summary>
+    public static (RangeSet Set, bool Truncated) BuildSelectionSet(IEnumerable<ByteRange> ranges, long documentLength, int maxElements,
+        CancellationToken cancellationToken = default)
+    {
+        var set = new RangeSet();
+        bool truncated = AddClamped(set, ranges, documentLength, maxElements, cancellationToken);
+        return (set, truncated);
+    }
+
+    /// <summary>要素を切り詰めて加える。上限で打ち切ったら true。</summary>
+    private static bool AddClamped(RangeSet set, IEnumerable<ByteRange> ranges, long length, int maxElements, CancellationToken cancellationToken)
+    {
+        int i = 0;
+        foreach (ByteRange r in ranges)
+        {
+            if ((++i & 0xFFF) == 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            long s = Math.Clamp(r.Start, 0, length);
+            long n = Math.Clamp(r.Length, 0, length - s);
+            if (n <= 0)
+            {
+                continue;
+            }
+
+            if (set.Count >= maxElements && !set.Touching(s, n).Any())
+            {
+                return true;
+            }
+
+            set.Add(new ByteRange(s, n));
+        }
+
+        return false;
     }
 
     /// <summary>
