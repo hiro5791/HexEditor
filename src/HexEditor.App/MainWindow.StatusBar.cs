@@ -229,6 +229,9 @@ public sealed partial class MainWindow
 
             // プロセスメモリの即時書き込み (ENG-34): オンの間は必ず示す (利用者が隠せる項目にしない)。
             ["immediate"] = doc?.ImmediateWriteText is { Length: > 0 },
+
+            // 補助プロセス (管理者権限) が動いている間の盾のアイコン (ENG-28): これも隠せない。
+            ["helper"] = App.Devices?.IsHelperRunning == true,
             ["size"] = doc is not null,
             ["sync"] = SyncStatusText().Length > 0,
             ["zoom"] = true,
@@ -239,7 +242,7 @@ public sealed partial class MainWindow
         {
             string id = (string)button.Tag;
             bool want = id == "zoom" ? IsZoomStatusWanted(button) : wanted[id];
-            button.Visibility = want && (id == "immediate" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
+            button.Visibility = want && (id is "immediate" or "helper" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         StatusSize.Content = doc?.SizeText ?? string.Empty;

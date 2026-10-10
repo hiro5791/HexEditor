@@ -180,8 +180,10 @@ public sealed partial class MainWindow
             return;
         }
 
+        // 表示・非表示はステータスバーの並べ方 (UpdateStatusBarLayout) が決める。
         bool running = App.Devices.IsHelperRunning;
-        StatusHelperShield.Visibility = running ? Visibility.Visible : Visibility.Collapsed;
         ToolTipService.SetToolTip(StatusHelperShield, running ? Loc.Get("Status_HelperRunning") : null);
+        Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(StatusHelperShield, running ? Loc.Get("Status_HelperRunning") : string.Empty);
+        UpdateStatusBarLayout();
     }
 }
