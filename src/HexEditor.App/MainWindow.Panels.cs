@@ -360,6 +360,7 @@ public sealed partial class MainWindow
         ApplyPanelCollapse();
         ApplyFloatingPanels();
         SyncHashTarget();
+        SyncStatisticsTargets();
         SyncAnnotationPanels();
         SyncSearchResultsPanel();
         SavePanelLayout();

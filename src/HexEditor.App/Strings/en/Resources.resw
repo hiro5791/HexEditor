@@ -2765,4 +2765,284 @@ Details were written to:
   <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Bytes per line in copied hex</value></data>
   <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Inserts a line break after this many bytes. 0 doesn't add line breaks.</value></data>
   <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>The selection ({0}) is too large to give to other apps. You can paste it inside HexEditor.</value></data>
+  <data name="Cmd_analysis_statistics" xml:space="preserve"><value>Show statistics</value></data>
+  <data name="CmdAlias_analysis_statistics" xml:space="preserve"><value>histogram distribution</value></data>
+  <data name="Cmd_analysis_descriptive" xml:space="preserve"><value>Descriptive statistics</value></data>
+  <data name="CmdAlias_analysis_descriptive" xml:space="preserve"><value>mean median variance</value></data>
+  <data name="Cmd_analysis_entropy" xml:space="preserve"><value>Entropy</value></data>
+  <data name="CmdAlias_analysis_entropy" xml:space="preserve"><value>redundancy compression ratio</value></data>
+  <data name="Cmd_analysis_entropyGraph" xml:space="preserve"><value>Entropy graph</value></data>
+  <data name="CmdAlias_analysis_entropyGraph" xml:space="preserve"><value>entropy chart blocks</value></data>
+  <data name="Cmd_analysis_digram" xml:space="preserve"><value>Digram</value></data>
+  <data name="CmdAlias_analysis_digram" xml:space="preserve"><value>byte pairs heatmap</value></data>
+  <data name="Cmd_analysis_byteDistribution" xml:space="preserve"><value>Byte distribution by position</value></data>
+  <data name="CmdAlias_analysis_byteDistribution" xml:space="preserve"><value>offset heatmap</value></data>
+  <data name="Cmd_analysis_patterns" xml:space="preserve"><value>Frequent byte sequences</value></data>
+  <data name="CmdAlias_analysis_patterns" xml:space="preserve"><value>n-gram period pattern</value></data>
+  <data name="Cmd_analysis_classify" xml:space="preserve"><value>Detect encrypted or compressed data</value></data>
+  <data name="CmdAlias_analysis_classify" xml:space="preserve"><value>classify entropy random</value></data>
+  <data name="Cmd_analysis_fileType" xml:space="preserve"><value>Detect file type</value></data>
+  <data name="CmdAlias_analysis_fileType" xml:space="preserve"><value>magic mime format</value></data>
+  <data name="Cmd_analysis_fileType_here" xml:space="preserve"><value>Detect file type from here</value></data>
+  <data name="CmdAlias_analysis_fileType_here" xml:space="preserve"><value>magic offset</value></data>
+  <data name="Cmd_analysis_fileType_embedded" xml:space="preserve"><value>Find embedded file types</value></data>
+  <data name="CmdAlias_analysis_fileType_embedded" xml:space="preserve"><value>carve signature scan</value></data>
+  <data name="Cmd_view_panel_statistics" xml:space="preserve"><value>Toggle statistics panel</value></data>
+  <data name="CmdAlias_view_panel_statistics" xml:space="preserve"><value>histogram entropy</value></data>
+  <data name="Cmd_view_panel_fileType" xml:space="preserve"><value>Toggle file type panel</value></data>
+  <data name="CmdAlias_view_panel_fileType" xml:space="preserve"><value>magic mime</value></data>
+  <data name="Menu_Analysis_Statistics.Text" xml:space="preserve"><value>Statistics...</value></data>
+  <data name="Menu_Analysis_Statistics.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Analysis_Classify.Text" xml:space="preserve"><value>Detect Encrypted/Compressed Data</value></data>
+  <data name="Menu_Analysis_Classify.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Analysis_FileType.Text" xml:space="preserve"><value>Detect File Type</value></data>
+  <data name="Menu_Analysis_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View_Statistics.Text" xml:space="preserve"><value>Statistics</value></data>
+  <data name="Menu_View_Statistics.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_FileType.Text" xml:space="preserve"><value>File Type</value></data>
+  <data name="Menu_View_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="HexView_Menu_Statistics" xml:space="preserve"><value>Statistics</value></data>
+  <data name="HexView_Menu_FileTypeHere" xml:space="preserve"><value>Detect file type from here</value></data>
+  <data name="Panel_Statistics_Title" xml:space="preserve"><value>Statistics</value></data>
+  <data name="Panel_FileType_Title" xml:space="preserve"><value>File type</value></data>
+  <data name="Status_Item_FileType" xml:space="preserve"><value>File type</value></data>
+  <data name="Status_FileTypeName" xml:space="preserve"><value>File type: {0}</value></data>
+  <data name="Operation_Statistics" xml:space="preserve"><value>Statistics</value></data>
+  <data name="Operation_CompressionEstimate" xml:space="preserve"><value>Compression estimate</value></data>
+  <data name="Operation_EntropyGraph" xml:space="preserve"><value>Entropy graph</value></data>
+  <data name="Operation_Patterns" xml:space="preserve"><value>Pattern statistics</value></data>
+  <data name="Operation_Classify" xml:space="preserve"><value>Data classification</value></data>
+  <data name="Operation_FindEmbedded" xml:space="preserve"><value>Find embedded file types</value></data>
+  <data name="Set_analysis_fileType_autoDetect" xml:space="preserve"><value>Detect the file type when opening</value></data>
+  <data name="SetDesc_analysis_fileType_autoDetect" xml:space="preserve"><value>Reads the first and last 64 KB in the background and shows the most likely format in the status bar.</value></data>
+  <data name="Set_analysis_classify_constantShare" xml:space="preserve"><value>Classification: constant threshold</value></data>
+  <data name="SetDesc_analysis_classify_constantShare" xml:space="preserve"><value>A block is constant when its most frequent value has at least this share (0.99 = 99%).</value></data>
+  <data name="Set_analysis_classify_textShare" xml:space="preserve"><value>Classification: text threshold</value></data>
+  <data name="SetDesc_analysis_classify_textShare" xml:space="preserve"><value>A block is text when at least this share is printable ASCII, whitespace or valid UTF-8 / UTF-16.</value></data>
+  <data name="Set_analysis_classify_encryptedEntropy" xml:space="preserve"><value>Classification: encrypted entropy</value></data>
+  <data name="SetDesc_analysis_classify_encryptedEntropy" xml:space="preserve"><value>Minimum entropy (bits per byte) for encrypted or random data.</value></data>
+  <data name="Set_analysis_classify_pValueLow" xml:space="preserve"><value>Classification: lowest p-value</value></data>
+  <data name="SetDesc_analysis_classify_pValueLow" xml:space="preserve"><value>Encrypted or random blocks must have a chi-square p-value of at least this value.</value></data>
+  <data name="Set_analysis_classify_pValueHigh" xml:space="preserve"><value>Classification: highest p-value</value></data>
+  <data name="SetDesc_analysis_classify_pValueHigh" xml:space="preserve"><value>Encrypted or random blocks must have a chi-square p-value of at most this value.</value></data>
+  <data name="Set_analysis_classify_compressedEntropy" xml:space="preserve"><value>Classification: compressed entropy</value></data>
+  <data name="SetDesc_analysis_classify_compressedEntropy" xml:space="preserve"><value>Minimum entropy (bits per byte) for compressed data.</value></data>
+  <data name="Set_statistics_autoRecompute" xml:space="preserve"><value>Recalculate statistics automatically</value></data>
+  <data name="SetDesc_statistics_autoRecompute" xml:space="preserve"><value>Recalculates the statistics 300 ms after the target range changes (up to 64 MB).</value></data>
+  <data name="SetGroup_analysis" xml:space="preserve"><value>Analysis</value></data>
+  <data name="FileType_MagicError" xml:space="preserve"><value>{0} could not be read: line {1}</value></data>
+  <data name="Stats_Target.Header" xml:space="preserve"><value>Range</value></data>
+  <data name="Stats_Target_Selection.Content" xml:space="preserve"><value>Selection</value></data>
+  <data name="Stats_Target_Multi.Content" xml:space="preserve"><value>Multiple selection</value></data>
+  <data name="Stats_Target_Whole.Content" xml:space="preserve"><value>Whole document</value></data>
+  <data name="Stats_Target_Custom.Content" xml:space="preserve"><value>Specify range</value></data>
+  <data name="Stats_CustomStart.Header" xml:space="preserve"><value>Start</value></data>
+  <data name="Stats_CustomLength.Header" xml:space="preserve"><value>Length or end</value></data>
+  <data name="Stats_CustomUsesEnd.Content" xml:space="preserve"><value>End (inclusive)</value></data>
+  <data name="Stats_Type.Header" xml:space="preserve"><value>Type</value></data>
+  <data name="Stats_BigEndian.Header" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="Stats_Stride.Header" xml:space="preserve"><value>Stride</value></data>
+  <data name="Stats_Stride.PlaceholderText" xml:space="preserve"><value>Type size</value></data>
+  <data name="Stats_BinCount.Header" xml:space="preserve"><value>Bins</value></data>
+  <data name="Stats_BinAuto.Content" xml:space="preserve"><value>Automatic range</value></data>
+  <data name="Stats_BinAuto.ToolTipService.ToolTip" xml:space="preserve"><value>Minimum to maximum. For 32/64-bit types over 16 million elements this needs a second read, which doubles the time.</value></data>
+  <data name="Stats_BinMin.Header" xml:space="preserve"><value>Minimum</value></data>
+  <data name="Stats_BinMax.Header" xml:space="preserve"><value>Maximum</value></data>
+  <data name="Stats_PerValue.Content" xml:space="preserve"><value>Per value (65,536)</value></data>
+  <data name="Stats_AutoRecompute.Content" xml:space="preserve"><value>Recalculate automatically</value></data>
+  <data name="Stats_Compute.Content" xml:space="preserve"><value>Recalculate</value></data>
+  <data name="Stats_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Stats_Stale.Text" xml:space="preserve"><value>The results are for the content before editing.</value></data>
+  <data name="Stats_Tab_Histogram.Text" xml:space="preserve"><value>Histogram</value></data>
+  <data name="Stats_Tab_Descriptive.Text" xml:space="preserve"><value>Descriptive</value></data>
+  <data name="Stats_Tab_Entropy.Text" xml:space="preserve"><value>Entropy</value></data>
+  <data name="Stats_Tab_Digram.Text" xml:space="preserve"><value>Digram</value></data>
+  <data name="Stats_Tab_Pattern.Text" xml:space="preserve"><value>Patterns</value></data>
+  <data name="Stats_Tab_Classify.Text" xml:space="preserve"><value>Classification</value></data>
+  <data name="Stats_AsTable.Content" xml:space="preserve"><value>Show as table</value></data>
+  <data name="Stats_LogScale.Content" xml:space="preserve"><value>Logarithmic scale</value></data>
+  <data name="Stats_ShowPercent.Content" xml:space="preserve"><value>Percent</value></data>
+  <data name="Stats_Sort.Header" xml:space="preserve"><value>Sort</value></data>
+  <data name="Stats_Sort_Value.Content" xml:space="preserve"><value>By value</value></data>
+  <data name="Stats_Sort_Count.Content" xml:space="preserve"><value>By count</value></data>
+  <data name="Stats_CopyTable.Content" xml:space="preserve"><value>Copy table</value></data>
+  <data name="Stats_Export.Content" xml:space="preserve"><value>Export</value></data>
+  <data name="Stats_ExportCsv.Text" xml:space="preserve"><value>CSV...</value></data>
+  <data name="Stats_ExportJson.Text" xml:space="preserve"><value>JSON...</value></data>
+  <data name="Stats_CopyValue.Content" xml:space="preserve"><value>Copy value</value></data>
+  <data name="Stats_CopyAll.Content" xml:space="preserve"><value>Copy all</value></data>
+  <data name="Stats_EstimateCompression.Content" xml:space="preserve"><value>Estimate compression ratio</value></data>
+  <data name="Stats_BlockSize.Header" xml:space="preserve"><value>Block size</value></data>
+  <data name="Stats_ZeroSeries.Content" xml:space="preserve"><value>0x00 share</value></data>
+  <data name="Stats_PrintableSeries.Content" xml:space="preserve"><value>Printable ASCII share</value></data>
+  <data name="Stats_Threshold.Header" xml:space="preserve"><value>Threshold (bits)</value></data>
+  <data name="Stats_ZoomIn.Content" xml:space="preserve"><value>Zoom in</value></data>
+  <data name="Stats_ZoomOut.Content" xml:space="preserve"><value>Zoom out</value></data>
+  <data name="Stats_ExportGraph.Content" xml:space="preserve"><value>Export CSV...</value></data>
+  <data name="Stats_DigramMode.Header" xml:space="preserve"><value>Chart</value></data>
+  <data name="Stats_DigramMode_Pairs.Content" xml:space="preserve"><value>Digram</value></data>
+  <data name="Stats_DigramMode_Positions.Content" xml:space="preserve"><value>By position</value></data>
+  <data name="Stats_NGramLength.Header" xml:space="preserve"><value>Length (n)</value></data>
+  <data name="Stats_TopCount.Header" xml:space="preserve"><value>Top</value></data>
+  <data name="Stats_MinCount.Header" xml:space="preserve"><value>Minimum count</value></data>
+  <data name="Stats_AlignModulus.Header" xml:space="preserve"><value>Offset mod</value></data>
+  <data name="Stats_AlignRemainder.Header" xml:space="preserve"><value>Equals</value></data>
+  <data name="Stats_ExcludeUniform.Content" xml:space="preserve"><value>Exclude all 0x00 / all 0xFF</value></data>
+  <data name="Stats_ComputePatterns.Content" xml:space="preserve"><value>Calculate</value></data>
+  <data name="Stats_PatternView.Header" xml:space="preserve"><value>Results</value></data>
+  <data name="Stats_PatternView_Frequent.Content" xml:space="preserve"><value>Frequent byte sequences</value></data>
+  <data name="Stats_PatternView_Periods.Content" xml:space="preserve"><value>Periods</value></data>
+  <data name="Stats_ClassBlockSize.Header" xml:space="preserve"><value>Block size</value></data>
+  <data name="Stats_Classify.Content" xml:space="preserve"><value>Classify</value></data>
+  <data name="Stats_EstimateNotice.Text" xml:space="preserve"><value>This is an estimate based on statistics and can be wrong.</value></data>
+  <data name="Stats_Aborted" xml:space="preserve"><value>Stopped ({0}% done)</value></data>
+  <data name="Stats_AlignInvalid" xml:space="preserve"><value>The position condition is invalid.</value></data>
+  <data name="Stats_BarName" xml:space="preserve"><value>{0}: {1} ({2}%)</value></data>
+  <data name="Stats_BinRange" xml:space="preserve"><value>{0} to {1}</value></data>
+  <data name="Stats_BinRangeInvalid" xml:space="preserve"><value>The bin range is invalid.</value></data>
+  <data name="Stats_BlockName" xml:space="preserve"><value>Block {0}, {1}, entropy {2}</value></data>
+  <data name="Stats_BlockRowName" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Stats_BlockSize_Auto" xml:space="preserve"><value>Automatic</value></data>
+  <data name="Stats_Bytes" xml:space="preserve"><value>{0} bytes</value></data>
+  <data name="Stats_Cancelled" xml:space="preserve"><value>Cancelled.</value></data>
+  <data name="Stats_ChiSquareValue" xml:space="preserve"><value>{0} (p = {1})</value></data>
+  <data name="Stats_ClassBand" xml:space="preserve"><value>Classification band</value></data>
+  <data name="Stats_ClassRowName" xml:space="preserve"><value>{0}, {1}, {2} bytes</value></data>
+  <data name="Stats_Col_Value" xml:space="preserve"><value>Value</value></data>
+  <data name="Stats_Col_Char" xml:space="preserve"><value>Character</value></data>
+  <data name="Stats_Col_Count" xml:space="preserve"><value>Count</value></data>
+  <data name="Stats_Col_Percent" xml:space="preserve"><value>Percent</value></data>
+  <data name="Stats_Col_Cumulative" xml:space="preserve"><value>Cumulative</value></data>
+  <data name="Stats_CompressionFailed" xml:space="preserve"><value>The trial compression failed: {0}</value></data>
+  <data name="Stats_CompressionRatio" xml:space="preserve"><value>Estimated compression ratio</value></data>
+  <data name="Stats_DecompressUnavailable" xml:space="preserve"><value>Decompression is not available yet.</value></data>
+  <data name="Stats_DigramCell" xml:space="preserve"><value>{0}: {1} ({2}%)</value></data>
+  <data name="Stats_DigramChart" xml:space="preserve"><value>Digram</value></data>
+  <data name="Stats_DigramRowName" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="Stats_DigramSummary" xml:space="preserve"><value>Digram, {0} pairs, most frequent {1} ({2})</value></data>
+  <data name="Stats_DigramTooShort" xml:space="preserve"><value>Specify a range of 2 bytes or more.</value></data>
+  <data name="Stats_Entropy" xml:space="preserve"><value>Entropy</value></data>
+  <data name="Stats_EntropyBits" xml:space="preserve"><value>{0} bits per element</value></data>
+  <data name="Stats_EntropyChart" xml:space="preserve"><value>Entropy graph</value></data>
+  <data name="Stats_EntropyDesc" xml:space="preserve"><value>Shannon entropy of the histogram bins</value></data>
+  <data name="Stats_EntropyPercent" xml:space="preserve"><value>Entropy (%)</value></data>
+  <data name="Stats_GraphSummary" xml:space="preserve"><value>Entropy graph, {0} blocks, maximum {1} bits at {2}</value></data>
+  <data name="Stats_HistogramChart" xml:space="preserve"><value>Histogram</value></data>
+  <data name="Stats_HistogramRowName" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="Stats_HistogramSummary" xml:space="preserve"><value>Histogram, {0} bins, most frequent {1} ({2})</value></data>
+  <data name="Stats_Item_Specials" xml:space="preserve"><value>NaN / +∞ / −∞</value></data>
+  <data name="Stats_LegendName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="Stats_Menu_Decompress" xml:space="preserve"><value>Decompress from here...</value></data>
+  <data name="Stats_Menu_FindAll" xml:space="preserve"><value>Find all occurrences of this value</value></data>
+  <data name="Stats_Menu_GoTo" xml:space="preserve"><value>Go to</value></data>
+  <data name="Stats_Menu_GoToFirst" xml:space="preserve"><value>Go to the first occurrence</value></data>
+  <data name="Stats_Menu_GoToNext" xml:space="preserve"><value>Go to the next occurrence</value></data>
+  <data name="Stats_Menu_RecordView" xml:space="preserve"><value>Show records of this length</value></data>
+  <data name="Stats_MinimumSize" xml:space="preserve"><value>Theoretical minimum size</value></data>
+  <data name="Stats_ModeCount" xml:space="preserve"><value>{0} times</value></data>
+  <data name="Stats_MoreModes" xml:space="preserve"><value>and {0} more</value></data>
+  <data name="Stats_NGramRowName" xml:space="preserve"><value>{0}. {1}: {2}</value></data>
+  <data name="Stats_NameValue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Stats_NoElements" xml:space="preserve"><value>There are no elements.</value></data>
+  <data name="Stats_NoPatterns" xml:space="preserve"><value>No sequence appears at least the minimum count.</value></data>
+  <data name="Stats_OutOfRange" xml:space="preserve"><value>Below the range: {0}, above the range: {1}</value></data>
+  <data name="Stats_PatternsCancelled" xml:space="preserve"><value>Cancelled. Partial results were discarded.</value></data>
+  <data name="Stats_PeriodRowName" xml:space="preserve"><value>{0}. period {1}: {2}</value></data>
+  <data name="Stats_PiValue" xml:space="preserve"><value>{0} (error {1}%)</value></data>
+  <data name="Stats_PositionCell" xml:space="preserve"><value>{0} to {1}, {2}: {3} ({4}%)</value></data>
+  <data name="Stats_PositionChart" xml:space="preserve"><value>Byte distribution by position</value></data>
+  <data name="Stats_RangeInvalid" xml:space="preserve"><value>The range is invalid.</value></data>
+  <data name="Stats_Redundancy" xml:space="preserve"><value>Redundancy</value></data>
+  <data name="Stats_RegionName" xml:space="preserve"><value>{0}, {1}, {2} bytes</value></data>
+  <data name="Stats_Remainder" xml:space="preserve"><value>Remainder: {0} bytes</value></data>
+  <data name="Stats_Sample" xml:space="preserve"><value>Sample: {0} / {1}</value></data>
+  <data name="Stats_SaveFailed" xml:space="preserve"><value>Could not save: {0}</value></data>
+  <data name="Stats_Saved" xml:space="preserve"><value>Saved {0}.</value></data>
+  <data name="Stats_SignatureKind" xml:space="preserve"><value>Signature: {0}</value></data>
+  <data name="Stats_Specials" xml:space="preserve"><value>NaN: {0}, +∞: {1}, −∞: {2}</value></data>
+  <data name="Stats_StrideInvalid" xml:space="preserve"><value>The stride must be 1 to 65,536.</value></data>
+  <data name="Stats_Unreadable" xml:space="preserve"><value>Unreadable ranges: {0}, {1} bytes</value></data>
+  <data name="Stats_Unreadable_Cell" xml:space="preserve"><value>Unreadable</value></data>
+  <data name="Stats_ValueNotFound" xml:space="preserve"><value>The value was not found.</value></data>
+  <data name="Stats_Share_Zero" xml:space="preserve"><value>0x00</value></data>
+  <data name="Stats_Share_Ff" xml:space="preserve"><value>0xFF</value></data>
+  <data name="Stats_Share_Printable" xml:space="preserve"><value>Printable ASCII</value></data>
+  <data name="Stats_Share_Whitespace" xml:space="preserve"><value>Whitespace</value></data>
+  <data name="Stats_Share_Control" xml:space="preserve"><value>Other control characters</value></data>
+  <data name="Stats_Share_High" xml:space="preserve"><value>0x80 to 0xFF</value></data>
+  <data name="Stats_Verdict_Repetitive" xml:space="preserve"><value>Mostly repetitions of the same value</value></data>
+  <data name="Stats_Verdict_TextOrStructured" xml:space="preserve"><value>Possibly text or structured data</value></data>
+  <data name="Stats_Verdict_Binary" xml:space="preserve"><value>Possibly general binary (executables and so on)</value></data>
+  <data name="Stats_Verdict_CompressedOrEncrypted" xml:space="preserve"><value>Possibly compressed or encrypted data</value></data>
+  <data name="Stats_Why_NoElements" xml:space="preserve"><value>There are no elements.</value></data>
+  <data name="Stats_Why_TooFewElements" xml:space="preserve"><value>There are too few elements.</value></data>
+  <data name="Stats_Why_AllSame" xml:space="preserve"><value>All values are the same.</value></data>
+  <data name="Stats_Why_TooManyElements" xml:space="preserve"><value>Not calculated because there are too many elements.</value></data>
+  <data name="Stats_Why_NotApplicable" xml:space="preserve"><value>Not available for this type.</value></data>
+  <data name="Stats_Class_None" xml:space="preserve"><value>Not classified</value></data>
+  <data name="Stats_Class_Zero" xml:space="preserve"><value>Zero-filled</value></data>
+  <data name="Stats_Class_Constant" xml:space="preserve"><value>Constant</value></data>
+  <data name="Stats_Class_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="Stats_Class_Encrypted" xml:space="preserve"><value>Encrypted or random</value></data>
+  <data name="Stats_Class_Compressed" xml:space="preserve"><value>Compressed</value></data>
+  <data name="Stats_Class_Binary" xml:space="preserve"><value>Binary</value></data>
+  <data name="Stats_Class_Unreadable" xml:space="preserve"><value>Unreadable</value></data>
+  <data name="Stats_Confidence_Low" xml:space="preserve"><value>Low</value></data>
+  <data name="Stats_Confidence_Medium" xml:space="preserve"><value>Medium</value></data>
+  <data name="Stats_Confidence_High" xml:space="preserve"><value>High</value></data>
+  <data name="Stats_Item_Count" xml:space="preserve"><value>Elements</value></data>
+  <data name="Stats_ItemDesc_Count" xml:space="preserve"><value>Number of counted elements (excluding NaN and infinity)</value></data>
+  <data name="Stats_Item_Sum" xml:space="preserve"><value>Sum</value></data>
+  <data name="Stats_ItemDesc_Sum" xml:space="preserve"><value>Sum of the elements (exact 128-bit for integers, compensated for floating point)</value></data>
+  <data name="Stats_Item_Minimum" xml:space="preserve"><value>Minimum</value></data>
+  <data name="Stats_ItemDesc_Minimum" xml:space="preserve"><value>Smallest element</value></data>
+  <data name="Stats_Item_Maximum" xml:space="preserve"><value>Maximum</value></data>
+  <data name="Stats_ItemDesc_Maximum" xml:space="preserve"><value>Largest element</value></data>
+  <data name="Stats_Item_Range" xml:space="preserve"><value>Range</value></data>
+  <data name="Stats_ItemDesc_Range" xml:space="preserve"><value>Maximum minus minimum</value></data>
+  <data name="Stats_Item_Mean" xml:space="preserve"><value>Mean</value></data>
+  <data name="Stats_ItemDesc_Mean" xml:space="preserve"><value>Sum divided by the number of elements</value></data>
+  <data name="Stats_Item_PopulationVariance" xml:space="preserve"><value>Population variance</value></data>
+  <data name="Stats_ItemDesc_PopulationVariance" xml:space="preserve"><value>Welford method, divided by n</value></data>
+  <data name="Stats_Item_SampleVariance" xml:space="preserve"><value>Sample variance</value></data>
+  <data name="Stats_ItemDesc_SampleVariance" xml:space="preserve"><value>Unbiased, divided by n − 1</value></data>
+  <data name="Stats_Item_PopulationStdDev" xml:space="preserve"><value>Population standard deviation</value></data>
+  <data name="Stats_ItemDesc_PopulationStdDev" xml:space="preserve"><value>Square root of the population variance</value></data>
+  <data name="Stats_Item_SampleStdDev" xml:space="preserve"><value>Sample standard deviation</value></data>
+  <data name="Stats_ItemDesc_SampleStdDev" xml:space="preserve"><value>Square root of the sample variance</value></data>
+  <data name="Stats_Item_Median" xml:space="preserve"><value>Median</value></data>
+  <data name="Stats_ItemDesc_Median" xml:space="preserve"><value>Middle value (average of the middle two for an even count)</value></data>
+  <data name="Stats_Item_Q1" xml:space="preserve"><value>First quartile</value></data>
+  <data name="Stats_ItemDesc_Q1" xml:space="preserve"><value>Linear interpolation, same as QUARTILE.INC</value></data>
+  <data name="Stats_Item_Q3" xml:space="preserve"><value>Third quartile</value></data>
+  <data name="Stats_ItemDesc_Q3" xml:space="preserve"><value>Linear interpolation, same as QUARTILE.INC</value></data>
+  <data name="Stats_Item_Mode" xml:space="preserve"><value>Mode</value></data>
+  <data name="Stats_ItemDesc_Mode" xml:space="preserve"><value>Most frequent values (up to 5, smallest first)</value></data>
+  <data name="Stats_Item_Skewness" xml:space="preserve"><value>Skewness</value></data>
+  <data name="Stats_ItemDesc_Skewness" xml:space="preserve"><value>Adjusted Fisher-Pearson coefficient</value></data>
+  <data name="Stats_Item_Kurtosis" xml:space="preserve"><value>Excess kurtosis</value></data>
+  <data name="Stats_ItemDesc_Kurtosis" xml:space="preserve"><value>Excess kurtosis (0 for a normal distribution)</value></data>
+  <data name="Stats_Item_ChiSquare" xml:space="preserve"><value>Chi-square</value></data>
+  <data name="Stats_ItemDesc_ChiSquare" xml:space="preserve"><value>Against a uniform distribution, 255 degrees of freedom, with the p-value</value></data>
+  <data name="Stats_Item_SerialCorrelation" xml:space="preserve"><value>Serial correlation</value></data>
+  <data name="Stats_ItemDesc_SerialCorrelation" xml:space="preserve"><value>Correlation of adjacent elements (−1 to 1)</value></data>
+  <data name="Stats_Item_Pi" xml:space="preserve"><value>Monte Carlo π</value></data>
+  <data name="Stats_ItemDesc_Pi" xml:space="preserve"><value>π estimated from 6-byte coordinates, a randomness indicator</value></data>
+  <data name="FileType_Detect.Content" xml:space="preserve"><value>Detect</value></data>
+  <data name="FileType_DetectHere.Content" xml:space="preserve"><value>Detect from cursor</value></data>
+  <data name="FileType_FindEmbedded.Content" xml:space="preserve"><value>Find embedded file types</value></data>
+  <data name="FileType_Base" xml:space="preserve"><value>Detected from {0}</value></data>
+  <data name="FileType_CandidateName" xml:space="preserve"><value>{0}, {1}, {2}</value></data>
+  <data name="FileType_Detecting" xml:space="preserve"><value>Detecting...</value></data>
+  <data name="FileType_EmbeddedCount" xml:space="preserve"><value>{0} found</value></data>
+  <data name="FileType_EmbeddedName" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="FileType_MatchName" xml:space="preserve"><value>{0}, {1}</value></data>
+  <data name="FileType_Mismatch" xml:space="preserve"><value>The extension does not match the content.</value></data>
+  <data name="FileType_Source_BuiltIn" xml:space="preserve"><value>Built-in</value></data>
+  <data name="FileType_Unknown" xml:space="preserve"><value>Unknown format (data)</value></data>
+  <data name="FileType_Text_Ascii" xml:space="preserve"><value>Text (ASCII)</value></data>
+  <data name="FileType_Text_Utf8" xml:space="preserve"><value>Text (UTF-8)</value></data>
+  <data name="FileType_Text_Utf8Bom" xml:space="preserve"><value>Text (UTF-8 with BOM)</value></data>
+  <data name="FileType_Text_Utf16LE" xml:space="preserve"><value>Text (UTF-16 LE)</value></data>
+  <data name="FileType_Text_Utf16BE" xml:space="preserve"><value>Text (UTF-16 BE)</value></data>
 </root>

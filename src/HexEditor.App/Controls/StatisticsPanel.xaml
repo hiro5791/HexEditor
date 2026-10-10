@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.StatisticsPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:charts="using:HexEditor.App.Controls.Charts"
+    xmlns:local="using:HexEditor.App.Controls"
+    xmlns:vm="using:HexEditor.App.ViewModels">
+    <!--
+        統計パネル (ANA-10〜ANA-16。既定は下部)。上部に対象範囲・型・エンディアン・ストライド・ビンの設定、中央にタブ
+        「ヒストグラム」「記述統計」「エントロピー」「ダイグラム」「パターン」「分類」。各グラフに「表で表示」(06 の 0.4)。
+        見出しと閉じるボタンはパネルの枠 (PanelDockArea、UI-05) が持つ。
+    -->
+    <Grid Padding="12,4,12,8" RowSpacing="6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  対象範囲と要素の設定 (06 の 0.1、ANA-10 の仕様 1〜3)  -->
+        <local:WrapPanel>
+            <ComboBox
+                x:Name="TargetChoice"
+                x:Uid="Stats_Target"
+                MinWidth="150"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="Stats_Target"
+                SelectionChanged="TargetChoice_SelectionChanged">
+                <ComboBoxItem x:Uid="Stats_Target_Selection" />
+                <ComboBoxItem x:Uid="Stats_Target_Multi" />
+                <ComboBoxItem x:Uid="Stats_Target_Whole" />
+                <ComboBoxItem x:Uid="Stats_Target_Custom" />
+            </ComboBox>
+            <TextBox
+                x:Name="CustomStartBox"
+                x:Uid="Stats_CustomStart"
+                Width="120"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="Stats_CustomStart"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                Text="{x:Bind ViewModel.CustomStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="Collapsed" />
+            <TextBox
+                x:Name="CustomLengthBox"
+                x:Uid="Stats_CustomLength"
+                Width="120"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="Stats_CustomLength"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                Text="{x:Bind ViewModel.CustomLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="Collapsed" />
+            <CheckBox
+                x:Name="CustomEndBox"
+                x:Uid="Stats_CustomUsesEnd"
+                Margin="0,0,8,4"
+                VerticalAlignment="Bottom"
+                AutomationProperties.AutomationId="Stats_CustomUsesEnd"
+                IsChecked="{x:Bind ViewModel.CustomUsesEnd, Mode=TwoWay}"
+                Visibility="Collapsed" />
+            <ComboBox
+                x:Uid="Stats_Type"
+                MinWidth="90"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="Stats_Type"
+                ItemsSource="{x:Bind ViewModel.TypeNames}"
+                SelectedIndex="{x:Bind ViewModel.TypeIndex, Mode=TwoWay}" />
+            <ToggleSwitch
+                x:Uid="Stats_BigEndian"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="Stats_BigEndian"
+                IsEnabled="{x:Bind ViewModel.IsMultiByte, Mode=OneWay}"
+                IsOn="{x:Bind ViewModel.BigEndian, Mode=TwoWay}" />
+            <TextBox
+                x:Uid="Stats_Stride"
+                Width="100"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="Stats_Stride"
+                FlowDirection="LeftToRight"
+                IsEnabled="{x:Bind ViewModel.IsMultiByte, Mode=OneWay}"
+                Text="{x:Bind ViewModel.Stride, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <NumberBox
+                x:Uid="Stats_BinCount"
+                Width="120"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="Stats_BinCount"
+                IsEnabled="{x:Bind ViewModel.CanChooseBins, Mode=OneWay}"
+                Maximum="65536"
+                Minimum="2"
+                SpinButtonPlacementMode="Compact"
+                Value="{x:Bind ViewModel.BinCount, Mode=TwoWay}" />
+            <CheckBox
+                x:Uid="Stats_BinAuto"
+                Margin="0,0,8,4"
+                VerticalAlignment="Bottom"
+                AutomationProperties.AutomationId="Stats_BinAuto"
+                IsChecked="{x:Bind ViewModel.BinAuto, Mode=TwoWay}"
+                IsEnabled="{x:Bind ViewModel.CanChooseBins, Mode=OneWay}" />
+            <TextBox
+                x:Uid="Stats_BinMin"
+                Width="90"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="Stats_BinMin"
+                IsEnabled="{x:Bind ViewModel.CanChooseBins, Mode=OneWay}"
+                Text="{x:Bind ViewModel.BinMin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox
+                x:Uid="Stats_BinMax"
+                Width="90"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="Stats_BinMax"
+                IsEnabled="{x:Bind ViewModel.CanChooseBins, Mode=OneWay}"
+                Text="{x:Bind ViewModel.BinMax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <CheckBox
+                x:Uid="Stats_PerValue"
+                Margin="0,0,8,4"
+                VerticalAlignment="Bottom"
+                AutomationProperties.AutomationId="Stats_PerValue"
+                IsChecked="{x:Bind ViewModel.PerValue, Mode=TwoWay}"
+                IsEnabled="{x:Bind ViewModel.CanPerValue, Mode=OneWay}" />
+        </local:WrapPanel>
+
+        <!--  範囲・計算・状態  -->
+        <Grid Grid.Row="1" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel VerticalAlignment="Center" Spacing="2">
+                <TextBlock
+                    AutomationProperties.AutomationId="Stats_Range"
+                    AutomationProperties.LiveSetting="Polite"
+                    FlowDirection="LeftToRight"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Text="{x:Bind ViewModel.RangeText, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    AutomationProperties.AutomationId="Stats_Note"
+                    AutomationProperties.LiveSetting="Polite"
+                    Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Text="{x:Bind ViewModel.ResultNote, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    x:Name="StaleText"
+                    x:Uid="Stats_Stale"
+                    AutomationProperties.AutomationId="Stats_Stale"
+                    Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Visibility="Collapsed" />
+                <TextBlock
+                    AutomationProperties.AutomationId="Stats_Status"
+                    AutomationProperties.LiveSetting="Polite"
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Text="{x:Bind ViewModel.StatusText, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+            <CheckBox
+                x:Uid="Stats_AutoRecompute"
+                Grid.Column="1"
+                AutomationProperties.AutomationId="Stats_AutoRecompute"
+                IsChecked="{x:Bind ViewModel.AutoRecompute, Mode=TwoWay}" />
+            <Button
+                x:Name="ComputeButton"
+                x:Uid="Stats_Compute"
+                Grid.Column="2"
+                AutomationProperties.AutomationId="Stats_Compute"
+                Click="Compute_Click"
+                IsEnabled="{x:Bind ViewModel.IsIdle, Mode=OneWay}" />
+            <Button
+                x:Uid="Stats_Cancel"
+                Grid.Column="3"
+                AutomationProperties.AutomationId="Stats_Cancel"
+                Command="{x:Bind ViewModel.CancelCommand}" />
+        </Grid>
+
+        <SelectorBar x:Name="Tabs" Grid.Row="2" SelectionChanged="Tabs_SelectionChanged">
+            <SelectorBarItem x:Uid="Stats_Tab_Histogram" AutomationProperties.AutomationId="Stats_Tab_Histogram" IsSelected="True" Tag="Histogram" />
+            <SelectorBarItem x:Uid="Stats_Tab_Descriptive" AutomationProperties.AutomationId="Stats_Tab_Descriptive" Tag="Descriptive" />
+            <SelectorBarItem x:Uid="Stats_Tab_Entropy" AutomationProperties.AutomationId="Stats_Tab_Entropy" Tag="Entropy" />
+            <SelectorBarItem x:Uid="Stats_Tab_Digram" AutomationProperties.AutomationId="Stats_Tab_Digram" Tag="Digram" />
+            <SelectorBarItem x:Uid="Stats_Tab_Pattern" AutomationProperties.AutomationId="Stats_Tab_Pattern" Tag="Pattern" />
+            <SelectorBarItem x:Uid="Stats_Tab_Classify" AutomationProperties.AutomationId="Stats_Tab_Classify" Tag="Classify" />
+        </SelectorBar>
+
+        <ProgressBar
+            Grid.Row="2"
+            VerticalAlignment="Bottom"
+            AutomationProperties.AutomationId="Stats_Progress"
+            Maximum="1"
+            Visibility="{x:Bind ViewModel.IsComputing, Mode=OneWay}"
+            Value="{x:Bind ViewModel.Progress, Mode=OneWay}" />
+
+        <Grid Grid.Row="3">
+            <!--  ヒストグラム (ANA-10)  -->
+            <Grid x:Name="HistogramPage" RowSpacing="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <local:WrapPanel>
+                    <ToggleButton x:Uid="Stats_AsTable" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_HistogramAsTable" IsChecked="{x:Bind ViewModel.HistogramAsTable, Mode=TwoWay}" />
+                    <CheckBox x:Uid="Stats_LogScale" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_LogScale" IsChecked="{x:Bind ViewModel.LogScale, Mode=TwoWay}" />
+                    <CheckBox x:Uid="Stats_ShowPercent" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_ShowPercent" IsChecked="{x:Bind ViewModel.ShowPercent, Mode=TwoWay}" />
+                    <ComboBox x:Name="SortChoice" x:Uid="Stats_Sort" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_Sort" SelectedIndex="{x:Bind ViewModel.HistogramSort, Mode=TwoWay}">
+                        <ComboBoxItem x:Uid="Stats_Sort_Value" />
+                        <ComboBoxItem x:Uid="Stats_Sort_Count" />
+                    </ComboBox>
+                    <Button x:Uid="Stats_CopyTable" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_CopyTable" Click="CopyTable_Click" />
+                    <Button x:Uid="Stats_Export" AutomationProperties.AutomationId="Stats_Export">
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem x:Uid="Stats_ExportCsv" AutomationProperties.AutomationId="Stats_ExportCsv" Click="ExportCsv_Click" />
+                                <MenuFlyoutItem x:Uid="Stats_ExportJson" AutomationProperties.AutomationId="Stats_ExportJson" Click="ExportJson_Click" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </local:WrapPanel>
+                <charts:HistogramChart
+                    x:Name="Histogram"
+                    Grid.Row="1"
+                    MinHeight="120"
+                    AutomationProperties.AutomationId="Stats_HistogramChart"
+                    AutomationProperties.HelpText="{x:Bind ViewModel.HistogramSummary, Mode=OneWay}"
+                    Histogram="{x:Bind ViewModel.Histogram, Mode=OneWay}"
+                    LogScale="{x:Bind ViewModel.LogScale, Mode=OneWay}"
+                    ShowPercent="{x:Bind ViewModel.ShowPercent, Mode=OneWay}" />
+                <ListView
+                    x:Name="HistogramTable"
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="Stats_HistogramTable"
+                    DoubleTapped="HistogramTable_DoubleTapped"
+                    ItemsSource="{x:Bind ViewModel.HistogramRows}"
+                    SelectionMode="Single"
+                    Visibility="Collapsed">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:HistogramRowViewModel">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="160" />
+                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="90" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock FlowDirection="LeftToRight" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind Value}" />
+                                <TextBlock Grid.Column="1" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind Character}" />
+                                <TextBlock Grid.Column="2" HorizontalTextAlignment="Right" Text="{x:Bind CountText}" />
+                                <TextBlock Grid.Column="3" HorizontalTextAlignment="Right" Text="{x:Bind PercentText}" />
+                                <TextBlock Grid.Column="4" HorizontalTextAlignment="Right" Text="{x:Bind CumulativeText}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackPanel Grid.Row="2" Spacing="2">
+                    <TextBlock AutomationProperties.AutomationId="Stats_HistogramExtras" Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind ViewModel.HistogramExtras, Mode=OneWay}" />
+                    <ItemsControl AutomationProperties.AutomationId="Stats_Shares" IsTabStop="False" ItemsSource="{x:Bind ViewModel.ShareRows}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <local:WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:NameValueRowViewModel">
+                                <TextBlock Margin="0,0,16,0" AutomationProperties.Name="{x:Bind AutomationName}" Style="{ThemeResource CaptionTextBlockStyle}">
+                                    <Run Text="{x:Bind Name}" /><Run Text=": " /><Run Text="{x:Bind Value}" />
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+
+            <!--  記述統計 (ANA-11)  -->
+            <Grid x:Name="DescriptivePage" RowSpacing="4" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button x:Uid="Stats_CopyValue" AutomationProperties.AutomationId="Stats_CopyValue" Click="CopyValue_Click" />
+                    <Button x:Uid="Stats_CopyAll" AutomationProperties.AutomationId="Stats_CopyAll" Click="CopyAll_Click" />
+                </StackPanel>
+                <ListView
+                    x:Name="DescriptiveList"
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="Stats_Descriptive"
+                    ItemsSource="{x:Bind ViewModel.DescriptiveRows}"
+                    SelectionMode="Single">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:NameValueRowViewModel">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{x:Bind Name}" ToolTipService.ToolTip="{x:Bind Description}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    AutomationProperties.AutomationId="{x:Bind Id}"
+                                    FontFamily="Cascadia Mono, Consolas"
+                                    IsTextSelectionEnabled="True"
+                                    Text="{x:Bind Value}"
+                                    TextWrapping="Wrap"
+                                    ToolTipService.ToolTip="{x:Bind ToolTip}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <!--  エントロピー (ANA-12、ANA-13)  -->
+            <Grid x:Name="EntropyPage" RowSpacing="4" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ItemsControl AutomationProperties.AutomationId="Stats_EntropyValues" IsTabStop="False" ItemsSource="{x:Bind ViewModel.EntropyRows}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <local:WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:NameValueRowViewModel">
+                            <TextBlock
+                                Margin="0,0,16,0"
+                                AutomationProperties.AutomationId="{x:Bind Id}"
+                                AutomationProperties.Name="{x:Bind AutomationName}"
+                                IsTextSelectionEnabled="True"
+                                ToolTipService.ToolTip="{x:Bind ToolTip}">
+                                <Run Text="{x:Bind Name}" /><Run Text=": " /><Run Text="{x:Bind Value}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="Stats_Verdict"
+                    AutomationProperties.LiveSetting="Polite"
+                    FontWeight="SemiBold"
+                    Text="{x:Bind ViewModel.Verdict, Mode=OneWay}" />
+                <local:WrapPanel Grid.Row="2">
+                    <CheckBox x:Uid="Stats_EstimateCompression" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_EstimateCompression" IsChecked="{x:Bind ViewModel.EstimateCompression, Mode=TwoWay}" />
+                    <ComboBox
+                        x:Uid="Stats_BlockSize"
+                        Margin="0,0,8,0"
+                        AutomationProperties.AutomationId="Stats_BlockSize"
+                        ItemsSource="{x:Bind ViewModel.BlockSizeNames}"
+                        SelectedIndex="{x:Bind ViewModel.BlockSizeIndex, Mode=TwoWay}" />
+                    <CheckBox x:Uid="Stats_ZeroSeries" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_ZeroSeries" IsChecked="{x:Bind ViewModel.ShowZeroSeries, Mode=TwoWay}" />
+                    <CheckBox x:Uid="Stats_PrintableSeries" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_PrintableSeries" IsChecked="{x:Bind ViewModel.ShowPrintableSeries, Mode=TwoWay}" />
+                    <NumberBox
+                        x:Uid="Stats_Threshold"
+                        Width="110"
+                        Margin="0,0,8,0"
+                        AutomationProperties.AutomationId="Stats_Threshold"
+                        Maximum="8"
+                        Minimum="0"
+                        SmallChange="0.1"
+                        SpinButtonPlacementMode="Compact"
+                        Value="{x:Bind ViewModel.Threshold, Mode=TwoWay}" />
+                    <Button x:Uid="Stats_ZoomIn" Margin="0,0,4,0" AutomationProperties.AutomationId="Stats_ZoomIn" Click="ZoomIn_Click" />
+                    <Button x:Uid="Stats_ZoomOut" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_ZoomOut" Click="ZoomOut_Click" />
+                    <ToggleButton x:Uid="Stats_AsTable" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_GraphAsTable" IsChecked="{x:Bind ViewModel.GraphAsTable, Mode=TwoWay}" />
+                    <Button x:Uid="Stats_ExportGraph" AutomationProperties.AutomationId="Stats_ExportGraph" Click="ExportGraph_Click" />
+                </local:WrapPanel>
+                <charts:EntropyChart
+                    x:Name="EntropyGraph"
+                    Grid.Row="3"
+                    AutomationProperties.AutomationId="Stats_EntropyChart"
+                    AutomationProperties.HelpText="{x:Bind ViewModel.GraphSummary, Mode=OneWay}"
+                    Blocks="{x:Bind ViewModel.Blocks, Mode=OneWay}"
+                    DetailBlocks="{x:Bind ViewModel.DetailBlocks, Mode=OneWay}"
+                    SelectedBlock="{x:Bind ViewModel.SelectedBlock, Mode=TwoWay}"
+                    ShowPrintable="{x:Bind ViewModel.ShowPrintableSeries, Mode=OneWay}"
+                    ShowZero="{x:Bind ViewModel.ShowZeroSeries, Mode=OneWay}"
+                    Threshold="{x:Bind ViewModel.Threshold, Mode=OneWay}" />
+                <ListView
+                    x:Name="BlockTable"
+                    Grid.Row="3"
+                    AutomationProperties.AutomationId="Stats_BlockTable"
+                    DoubleTapped="BlockTable_DoubleTapped"
+                    ItemsSource="{x:Bind ViewModel.BlockRows}"
+                    Visibility="Collapsed">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:EntropyBlockRowViewModel">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock FlowDirection="LeftToRight" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind Offset}" />
+                                <TextBlock Grid.Column="1" Text="{x:Bind BlockSize}" />
+                                <TextBlock Grid.Column="2" HorizontalTextAlignment="Right" Text="{x:Bind Entropy}" />
+                                <TextBlock Grid.Column="3" HorizontalTextAlignment="Right" Text="{x:Bind Zero}" />
+                                <TextBlock Grid.Column="4" HorizontalTextAlignment="Right" Text="{x:Bind Printable}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <!--  ダイグラムと位置ごとのバイト分布 (ANA-14)  -->
+            <Grid x:Name="DigramPage" RowSpacing="4" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <local:WrapPanel>
+                    <ComboBox x:Uid="Stats_DigramMode" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_DigramMode" SelectedIndex="{x:Bind ViewModel.DigramMode, Mode=TwoWay}">
+                        <ComboBoxItem x:Uid="Stats_DigramMode_Pairs" />
+                        <ComboBoxItem x:Uid="Stats_DigramMode_Positions" />
+                    </ComboBox>
+                    <ToggleButton x:Uid="Stats_AsTable" AutomationProperties.AutomationId="Stats_DigramAsTable" IsChecked="{x:Bind ViewModel.DigramAsTable, Mode=TwoWay}" />
+                </local:WrapPanel>
+                <TextBlock
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="Stats_DigramMessage"
+                    AutomationProperties.LiveSetting="Polite"
+                    Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                    Text="{x:Bind ViewModel.DigramMessage, Mode=OneWay}" />
+                <Viewbox x:Name="DigramBox" Grid.Row="2" Stretch="Uniform" StretchDirection="Both">
+                    <charts:HeatmapChart
+                        x:Name="DigramChart"
+                        Width="256"
+                        Height="256"
+                        AutomationProperties.AutomationId="Stats_DigramChart"
+                        Values="{x:Bind ViewModel.Digram.Counts, Mode=OneWay, FallbackValue={x:Null}}" />
+                </Viewbox>
+                <Viewbox x:Name="PositionBox" Grid.Row="2" Stretch="Uniform" StretchDirection="Both" Visibility="Collapsed">
+                    <charts:HeatmapChart
+                        x:Name="PositionChart"
+                        Width="512"
+                        Height="256"
+                        AutomationProperties.AutomationId="Stats_PositionChart"
+                        Columns="512"
+                        Values="{x:Bind ViewModel.Positions.Counts, Mode=OneWay, FallbackValue={x:Null}}" />
+                </Viewbox>
+                <ListView
+                    x:Name="DigramTable"
+                    Grid.Row="2"
+                    AutomationProperties.AutomationId="Stats_DigramTable"
+                    DoubleTapped="DigramTable_DoubleTapped"
+                    ItemsSource="{x:Bind ViewModel.DigramRows}"
+                    Visibility="Collapsed">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:DigramRowViewModel">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="90" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock FlowDirection="LeftToRight" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind Pair}" />
+                                <TextBlock Grid.Column="1" HorizontalTextAlignment="Right" Text="{x:Bind CountText}" />
+                                <TextBlock Grid.Column="2" HorizontalTextAlignment="Right" Text="{x:Bind PercentText}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <!--  パターン統計 (ANA-15)  -->
+            <Grid x:Name="PatternPage" RowSpacing="4" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <local:WrapPanel>
+                    <NumberBox x:Uid="Stats_NGramLength" Width="110" Margin="0,0,8,4" AutomationProperties.AutomationId="Stats_NGramLength" Maximum="16" Minimum="2" SpinButtonPlacementMode="Compact" Value="{x:Bind ViewModel.NGramLength, Mode=TwoWay}" />
+                    <NumberBox x:Uid="Stats_TopCount" Width="120" Margin="0,0,8,4" AutomationProperties.AutomationId="Stats_TopCount" Maximum="10000" Minimum="10" SpinButtonPlacementMode="Compact" Value="{x:Bind ViewModel.TopCount, Mode=TwoWay}" />
+                    <NumberBox x:Uid="Stats_MinCount" Width="110" Margin="0,0,8,4" AutomationProperties.AutomationId="Stats_MinCount" Minimum="2" SpinButtonPlacementMode="Compact" Value="{x:Bind ViewModel.MinCount, Mode=TwoWay}" />
+                    <TextBox x:Uid="Stats_AlignModulus" Width="90" Margin="0,0,8,4" AutomationProperties.AutomationId="Stats_AlignModulus" Text="{x:Bind ViewModel.AlignModulus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox x:Uid="Stats_AlignRemainder" Width="90" Margin="0,0,8,4" AutomationProperties.AutomationId="Stats_AlignRemainder" Text="{x:Bind ViewModel.AlignRemainder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox x:Uid="Stats_ExcludeUniform" Margin="0,0,8,4" VerticalAlignment="Bottom" AutomationProperties.AutomationId="Stats_ExcludeUniform" IsChecked="{x:Bind ViewModel.ExcludeUniform, Mode=TwoWay}" />
+                    <Button x:Uid="Stats_ComputePatterns" Margin="0,0,8,4" VerticalAlignment="Bottom" AutomationProperties.AutomationId="Stats_ComputePatterns" Click="ComputePatterns_Click" IsEnabled="{x:Bind ViewModel.IsPatternIdle, Mode=OneWay}" Style="{ThemeResource AccentButtonStyle}" />
+                    <Button x:Uid="Stats_Cancel" Margin="0,0,8,4" VerticalAlignment="Bottom" AutomationProperties.AutomationId="Stats_CancelPatterns" Click="CancelPatterns_Click" />
+                </local:WrapPanel>
+                <Grid Grid.Row="1" ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:Uid="Stats_PatternView" AutomationProperties.AutomationId="Stats_PatternView" SelectedIndex="{x:Bind ViewModel.PatternView, Mode=TwoWay}">
+                        <ComboBoxItem x:Uid="Stats_PatternView_Frequent" />
+                        <ComboBoxItem x:Uid="Stats_PatternView_Periods" />
+                    </ComboBox>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" AutomationProperties.AutomationId="Stats_PatternStatus" AutomationProperties.LiveSetting="Polite" Text="{x:Bind ViewModel.PatternStatus, Mode=OneWay}" />
+                </Grid>
+                <ListView
+                    x:Name="NGramList"
+                    Grid.Row="2"
+                    AutomationProperties.AutomationId="Stats_NGrams"
+                    DoubleTapped="NGramList_DoubleTapped"
+                    ItemsSource="{x:Bind ViewModel.NGramRows}"
+                    RightTapped="NGramList_RightTapped">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:NGramRowViewModel">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="300" />
+                                    <ColumnDefinition Width="140" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="120" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock HorizontalTextAlignment="Right" Text="{x:Bind Rank}" />
+                                <TextBlock Grid.Column="1" FlowDirection="LeftToRight" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind Hex}" />
+                                <TextBlock Grid.Column="2" FlowDirection="LeftToRight" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind Text}" />
+                                <TextBlock Grid.Column="3" HorizontalTextAlignment="Right" Text="{x:Bind CountText}" />
+                                <TextBlock Grid.Column="4" HorizontalTextAlignment="Right" Text="{x:Bind PercentText}" />
+                                <TextBlock Grid.Column="5" FlowDirection="LeftToRight" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind First}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListView
+                    x:Name="PeriodList"
+                    Grid.Row="2"
+                    AutomationProperties.AutomationId="Stats_Periods"
+                    ItemsSource="{x:Bind ViewModel.PeriodRows}"
+                    RightTapped="PeriodList_RightTapped"
+                    Visibility="Collapsed">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:PeriodRowViewModel">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock HorizontalTextAlignment="Right" Text="{x:Bind Rank}" />
+                                <TextBlock Grid.Column="1" HorizontalTextAlignment="Right" Text="{x:Bind Period}" />
+                                <TextBlock Grid.Column="2" HorizontalTextAlignment="Right" Text="{x:Bind Ratio}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <!--  暗号化・圧縮データの検出 (ANA-16)  -->
+            <Grid x:Name="ClassifyPage" RowSpacing="4" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <local:WrapPanel>
+                    <ComboBox x:Uid="Stats_ClassBlockSize" Margin="0,0,8,0" AutomationProperties.AutomationId="Stats_ClassBlockSize" ItemsSource="{x:Bind ViewModel.ClassBlockSizeNames}" SelectedIndex="{x:Bind ViewModel.ClassBlockSizeIndex, Mode=TwoWay}" />
+                    <Button x:Uid="Stats_Classify" Margin="0,0,8,0" VerticalAlignment="Bottom" AutomationProperties.AutomationId="Stats_Classify" Click="Classify_Click" IsEnabled="{x:Bind ViewModel.IsClassifyIdle, Mode=OneWay}" Style="{ThemeResource AccentButtonStyle}" />
+                    <Button x:Uid="Stats_Cancel" VerticalAlignment="Bottom" AutomationProperties.AutomationId="Stats_CancelClassify" Click="CancelClassify_Click" />
+                </local:WrapPanel>
+                <TextBlock
+                    x:Uid="Stats_EstimateNotice"
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="Stats_EstimateNotice"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    TextWrapping="Wrap" />
+                <charts:ClassBand
+                    Grid.Row="2"
+                    AutomationProperties.AutomationId="Stats_ClassBand"
+                    RegionInvoked="ClassBand_RegionInvoked"
+                    Result="{x:Bind ViewModel.Classification, Mode=OneWay}" />
+                <ItemsControl Grid.Row="3" AutomationProperties.AutomationId="Stats_Legend" IsTabStop="False" ItemsSource="{x:Bind ViewModel.Legend}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <local:WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:LegendItemViewModel">
+                            <StackPanel
+                                Margin="0,0,16,0"
+                                AutomationProperties.ItemStatus="{x:Bind Pattern}"
+                                AutomationProperties.Name="{x:Bind AutomationName}"
+                                Orientation="Horizontal"
+                                Spacing="6">
+                                <charts:PatternSwatch Class="{x:Bind Class}" />
+                                <TextBlock VerticalAlignment="Center" Style="{ThemeResource CaptionTextBlockStyle}">
+                                    <Run Text="{x:Bind Name}" /><Run Text=" " /><Run Text="{x:Bind Share}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Grid Grid.Row="4" RowSpacing="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock AutomationProperties.AutomationId="Stats_ClassifyStatus" AutomationProperties.LiveSetting="Polite" Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind ViewModel.ClassifyStatus, Mode=OneWay}" />
+                    <ListView
+                        x:Name="ClassList"
+                        Grid.Row="1"
+                        AutomationProperties.AutomationId="Stats_ClassList"
+                        DoubleTapped="ClassList_DoubleTapped"
+                        ItemsSource="{x:Bind ViewModel.ClassRows}"
+                        RightTapped="ClassList_RightTapped">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ClassRowViewModel">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="130" />
+                                        <ColumnDefinition Width="130" />
+                                        <ColumnDefinition Width="200" />
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="70" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock FlowDirection="LeftToRight" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind Offset}" />
+                                    <TextBlock Grid.Column="1" HorizontalTextAlignment="Right" Text="{x:Bind Length}" />
+                                    <TextBlock Grid.Column="2" Text="{x:Bind Kind}" />
+                                    <TextBlock Grid.Column="3" HorizontalTextAlignment="Right" Text="{x:Bind Entropy}" />
+                                    <TextBlock Grid.Column="4" Text="{x:Bind Confidence}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

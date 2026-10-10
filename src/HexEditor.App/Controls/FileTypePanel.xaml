@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.FileTypePanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HexEditor.App.Controls"
+    xmlns:vm="using:HexEditor.App.ViewModels">
+    <!--
+        「ファイル形式」パネル (ANA-17、既定は右)。判定結果の候補一覧と、選んだ候補の詳細 (一致した条件とその位置へ移動するリンク)、
+        埋め込まれた形式の結果。見出しと閉じるボタンはパネルの枠が持つ。
+    -->
+    <Grid Padding="12,8,12,12" RowSpacing="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Spacing="4">
+            <TextBlock
+                AutomationProperties.AutomationId="FileType_Summary"
+                AutomationProperties.LiveSetting="Polite"
+                Style="{ThemeResource BodyStrongTextBlockStyle}"
+                Text="{x:Bind ViewModel.Summary, Mode=OneWay}"
+                TextWrapping="Wrap" />
+            <TextBlock
+                AutomationProperties.AutomationId="FileType_Mismatch"
+                AutomationProperties.LiveSetting="Assertive"
+                Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                Text="{x:Bind ViewModel.MismatchText, Mode=OneWay}"
+                TextWrapping="Wrap" />
+            <TextBlock
+                AutomationProperties.AutomationId="FileType_Base"
+                FlowDirection="LeftToRight"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{ThemeResource CaptionTextBlockStyle}"
+                Text="{x:Bind ViewModel.BaseText, Mode=OneWay}" />
+        </StackPanel>
+        <local:WrapPanel Grid.Row="1">
+            <Button x:Uid="FileType_Detect" Margin="0,0,8,4" AutomationProperties.AutomationId="FileType_Detect" Click="Detect_Click" />
+            <Button x:Uid="FileType_DetectHere" Margin="0,0,8,4" AutomationProperties.AutomationId="FileType_DetectHere" Click="DetectHere_Click" />
+        </local:WrapPanel>
+        <Grid Grid.Row="2" RowSpacing="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ListView
+                x:Name="CandidateList"
+                AutomationProperties.AutomationId="FileType_Candidates"
+                ItemsSource="{x:Bind ViewModel.Candidates}"
+                SelectedItem="{x:Bind ViewModel.SelectedCandidate, Mode=TwoWay}"
+                SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:FileTypeCandidateViewModel">
+                        <StackPanel Padding="0,4" Spacing="2">
+                            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Name}" TextWrapping="Wrap" />
+                            <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Style="{ThemeResource CaptionTextBlockStyle}" TextWrapping="Wrap">
+                                <Run Text="{x:Bind Mime}" /><Run Text="  " /><Run Text="{x:Bind Extensions}" /><Run Text="  " /><Run Text="{x:Bind Confidence}" /><Run Text="  " /><Run Text="{x:Bind Source}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ItemsControl Grid.Row="1" AutomationProperties.AutomationId="FileType_Matches" IsTabStop="False" ItemsSource="{x:Bind ViewModel.Matches}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:FileTypeMatchViewModel">
+                        <HyperlinkButton Padding="2" AutomationProperties.Name="{x:Bind ToString()}" Click="Match_Click" Tag="{x:Bind OffsetValue}">
+                            <TextBlock FlowDirection="LeftToRight">
+                                <Run Text="{x:Bind Offset}" /><Run Text="  " /><Run Text="{x:Bind Length}" />
+                            </TextBlock>
+                        </HyperlinkButton>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+        <local:WrapPanel Grid.Row="3">
+            <Button
+                x:Uid="FileType_FindEmbedded"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="FileType_FindEmbedded"
+                Click="FindEmbedded_Click"
+                IsEnabled="{x:Bind ViewModel.IsIdle, Mode=OneWay}" />
+            <Button x:Uid="Stats_Cancel" Margin="0,0,8,4" AutomationProperties.AutomationId="FileType_CancelEmbedded" Click="Cancel_Click" />
+            <TextBlock
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="FileType_EmbeddedStatus"
+                AutomationProperties.LiveSetting="Polite"
+                Text="{x:Bind ViewModel.EmbeddedStatus, Mode=OneWay}" />
+        </local:WrapPanel>
+        <ListView
+            x:Name="EmbeddedList"
+            Grid.Row="4"
+            AutomationProperties.AutomationId="FileType_Embedded"
+            DoubleTapped="EmbeddedList_DoubleTapped"
+            ItemsSource="{x:Bind ViewModel.Embedded}"
+            KeyDown="EmbeddedList_KeyDown">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:EmbeddedFormatViewModel">
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="50" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock FlowDirection="LeftToRight" FontFamily="Cascadia Mono, Consolas" Text="{x:Bind Offset}" />
+                        <TextBlock Grid.Column="1" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind Mime}" />
+                        <TextBlock Grid.Column="2" HorizontalTextAlignment="Right" Text="{x:Bind Confidence}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</UserControl>

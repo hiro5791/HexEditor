@@ -199,6 +199,8 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Inspector" cmd:CommandUi.Id="view.panel.inspector" AutomationProperties.AutomationId="Command_ToggleInspector" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_BookmarksPanel" cmd:CommandUi.Id="view.panel.bookmarks" AutomationProperties.AutomationId="Command_ToggleBookmarks" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Hash" cmd:CommandUi.Id="view.panel.hash" AutomationProperties.AutomationId="Command_PanelHash" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_Statistics" cmd:CommandUi.Id="view.panel.statistics" AutomationProperties.AutomationId="Command_PanelStatistics" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_FileType" cmd:CommandUi.Id="view.panel.fileType" AutomationProperties.AutomationId="Command_PanelFileType" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />
@@ -206,6 +208,9 @@
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Analysis">
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Hash" cmd:CommandUi.Id="analysis.hash" AutomationProperties.AutomationId="Command_Hash" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_Statistics" cmd:CommandUi.Id="analysis.statistics" AutomationProperties.AutomationId="Command_Statistics" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_Classify" cmd:CommandUi.Id="analysis.classify" AutomationProperties.AutomationId="Command_Classify" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_FileType" cmd:CommandUi.Id="analysis.fileType" AutomationProperties.AutomationId="Command_FileType" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Tools">
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
@@ -463,6 +468,7 @@
                 <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Click="StatusSelection_Click" Content="{x:Bind Vm.Selected.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.Selected.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
                 <Button x:Name="StatusColumn" AutomationProperties.AutomationId="Status_Column" Click="StatusColumn_Click" Content="{x:Bind Vm.Selected.ColumnText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="column" />
                 <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Click="StatusEncoding_Click" Content="{x:Bind Vm.Selected.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
+                <Button x:Name="StatusFileType" AutomationProperties.AutomationId="Status_FileType" Click="StatusFileType_Click" Style="{StaticResource StatusItemStyle}" Tag="fileType" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.Selected.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.Selected.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <Button x:Name="StatusSize" AutomationProperties.AutomationId="Status_Size" Click="StatusSize_Click" Content="{x:Bind Vm.Selected.SizeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="size" />

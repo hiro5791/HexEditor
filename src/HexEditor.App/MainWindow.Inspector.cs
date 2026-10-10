@@ -489,6 +489,7 @@ public sealed partial class MainWindow
         {
             ExtendHexViewEditMenu(menu);
             ExtendHexViewMenu(view, menu);
+            ExtendHexViewStatisticsMenu(menu);
             ExtendHexViewReferenceMenu(menu);
         });
     }
