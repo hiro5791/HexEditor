@@ -31,6 +31,15 @@ public enum CaseConversionMode
     EncodingAware,
 }
 
+/// <summary>大文字・小文字の変換の結果 (データが変わったか。変わらなければ反映せず、元に戻す操作も作らない)。</summary>
+public sealed class CaseConversionStats
+{
+    /// <summary>
+    /// データが変わったか。「ASCII の英字だけ」は変えたバイトがあったか。「文字コードに従う」は常に true (変わったかを調べない)。
+    /// </summary>
+    public bool Changed { get; internal set; }
+}
+
 /// <summary>
 /// 大文字・小文字の変換 (EDIT-39)。範囲を 1 MiB ずつ読んで <see cref="ContentSink"/> に書き、<see cref="RangeReplacement"/> として返す
 /// (反映は <see cref="TransformApplier.Apply"/>)。「ASCII の英字だけ」は SIMD で処理する。「文字コードに従う」は文字コード変換 (EDIT-38) と
@@ -49,8 +58,10 @@ public static class CaseConversion
     /// <param name="progressBase">進捗に足すバイト数 (複数の範囲を続けて変換するとき、それまでの範囲の長さ)。</param>
     /// <exception cref="OperationCanceledException">キャンセルされた。書きかけの一時ファイルは消す。</exception>
     /// <exception cref="IOException">読めない範囲がある。</exception>
+    /// <param name="stats">データが変わったかを記録する (変わらなければ反映しない)。</param>
     public static RangeReplacement Convert(DocumentSnapshot snapshot, TargetRange range, CaseOperation operation, CaseConversionMode mode,
-        string encodingId, Func<ContentSink> createSink, LongRunningOperation? progress = null, long progressBase = 0)
+        string encodingId, Func<ContentSink> createSink, LongRunningOperation? progress = null, long progressBase = 0,
+        CaseConversionStats? stats = null)
     {
         Transcoder.Setup? setup = mode == CaseConversionMode.EncodingAware ? CreateSetup(operation, encodingId) : null;
         ContentSink sink = createSink();
@@ -59,10 +70,16 @@ public static class CaseConversion
             if (setup is not null)
             {
                 Transcoder.Run(snapshot, range, setup, new SinkOutput(sink), progress, progressBase);
+
+                // 「文字コードに従う」は変わったかを調べない (変わったものとして扱う)。
+                if (stats is not null)
+                {
+                    stats.Changed = true;
+                }
             }
             else
             {
-                ConvertAsciiRange(snapshot, range, operation, sink, progress, progressBase);
+                ConvertAsciiRange(snapshot, range, operation, sink, progress, progressBase, stats);
             }
 
             return new RangeReplacement(range, sink.Complete());
@@ -77,7 +94,8 @@ public static class CaseConversion
     /// すべての範囲を、それぞれ別に変換する (EDIT-39 の仕様 5)。どれかが失敗・キャンセルされたら、作った内容をすべて捨てて例外を投げる。
     /// </summary>
     public static IReadOnlyList<RangeReplacement> ConvertAll(DocumentSnapshot snapshot, IReadOnlyList<TargetRange> ranges, CaseOperation operation,
-        CaseConversionMode mode, string encodingId, Func<ContentSink> createSink, LongRunningOperation? progress = null)
+        CaseConversionMode mode, string encodingId, Func<ContentSink> createSink, LongRunningOperation? progress = null,
+        CaseConversionStats? stats = null)
     {
         if (mode == CaseConversionMode.EncodingAware)
         {
@@ -91,7 +109,7 @@ public static class CaseConversion
         {
             foreach (TargetRange range in ranges)
             {
-                parts.Add(Convert(snapshot, range, operation, mode, encodingId, createSink, progress, done));
+                parts.Add(Convert(snapshot, range, operation, mode, encodingId, createSink, progress, done, stats));
                 done += range.Length;
             }
         }
@@ -106,38 +124,56 @@ public static class CaseConversion
 
     /// <summary>ドキュメントの今の内容の、選択範囲のすべての要素を変換する (結果はドキュメントの一時フォルダ)。</summary>
     public static IReadOnlyList<RangeReplacement> ConvertAll(Document document, ISelectionRanges ranges, CaseOperation operation,
-        CaseConversionMode mode, string encodingId, LongRunningOperation? progress = null, Action<long>? checkSpace = null) =>
-        ConvertAll(document.Current, ranges.Ranges, operation, mode, encodingId, () => ContentSink.For(document, checkSpace), progress);
+        CaseConversionMode mode, string encodingId, LongRunningOperation? progress = null, Action<long>? checkSpace = null,
+        CaseConversionStats? stats = null) =>
+        ConvertAll(document.Current, ranges.Ranges, operation, mode, encodingId, () => ContentSink.For(document, checkSpace), progress, stats);
 
-    /// <summary>「ASCII の英字だけ」の変換をその場で行う (<c>a</c>〜<c>z</c>・<c>A</c>〜<c>Z</c> 以外のバイトは変えない)。</summary>
-    public static void ConvertAscii(Span<byte> data, CaseOperation operation)
+    /// <summary>
+    /// 「ASCII の英字だけ」の変換をその場で行う (<c>a</c>〜<c>z</c>・<c>A</c>〜<c>Z</c> 以外のバイトは変えない)。変わったバイトがあれば true。
+    /// </summary>
+    public static bool ConvertAscii(Span<byte> data, CaseOperation operation)
     {
         ref byte start = ref MemoryMarshal.GetReference(data);
         nuint length = (nuint)data.Length;
         nuint i = 0;
+        bool changed = false;
         if (Vector256.IsHardwareAccelerated && length >= (nuint)Vector256<byte>.Count)
         {
+            Vector256<byte> any = Vector256<byte>.Zero;
             for (; i + (nuint)Vector256<byte>.Count <= length; i += (nuint)Vector256<byte>.Count)
             {
                 Vector256<byte> v = Vector256.LoadUnsafe(ref start, i);
-                (v ^ Flip(v, operation)).StoreUnsafe(ref start, i);
+                Vector256<byte> flip = Flip(v, operation);
+                any |= flip;
+                (v ^ flip).StoreUnsafe(ref start, i);
             }
+
+            changed |= any != Vector256<byte>.Zero;
         }
 
         if (Vector128.IsHardwareAccelerated)
         {
+            Vector128<byte> any = Vector128<byte>.Zero;
             for (; i + (nuint)Vector128<byte>.Count <= length; i += (nuint)Vector128<byte>.Count)
             {
                 Vector128<byte> v = Vector128.LoadUnsafe(ref start, i);
-                (v ^ Flip(v, operation)).StoreUnsafe(ref start, i);
+                Vector128<byte> flip = Flip(v, operation);
+                any |= flip;
+                (v ^ flip).StoreUnsafe(ref start, i);
             }
+
+            changed |= any != Vector128<byte>.Zero;
         }
 
         for (; i < length; i++)
         {
             ref byte b = ref Unsafe.Add(ref start, i);
-            b = Map(b, operation);
+            byte mapped = Map(b, operation);
+            changed |= mapped != b;
+            b = mapped;
         }
+
+        return changed;
     }
 
     /// <summary>1 バイトの「ASCII の英字だけ」の変換。</summary>
@@ -192,7 +228,7 @@ public static class CaseConversion
     }
 
     private static void ConvertAsciiRange(DocumentSnapshot snapshot, TargetRange range, CaseOperation operation, ContentSink sink,
-        LongRunningOperation? progress, long progressBase)
+        LongRunningOperation? progress, long progressBase, CaseConversionStats? stats)
     {
         sink.ExpectedLength = range.Length;
         int size = (int)Math.Min(Transcoder.ChunkSize, Math.Max(1, range.Length));
@@ -204,7 +240,11 @@ public static class CaseConversion
                 ContentSink.Checkpoint(progress, progressBase + (pos - range.Offset));
                 Span<byte> chunk = buffer.AsSpan(0, (int)Math.Min(size, range.End - pos));
                 Transcoder.ReadChunk(snapshot, pos, chunk);
-                ConvertAscii(chunk, operation);
+                if (ConvertAscii(chunk, operation) && stats is not null)
+                {
+                    stats.Changed = true;
+                }
+
                 sink.Write(chunk);
             }
 

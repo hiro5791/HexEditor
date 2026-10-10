@@ -126,6 +126,19 @@ public sealed partial class MainWindow
             ModifiedRanges = length > 0 ? [.. doc.Document.Current.EnumerateModifiedRanges(start, length)] : [],
             ModifiedColor = color,
             ScreenBytesPerRow = editor.BytesPerRow,
+
+            // 画面表示どおり: グループ化・中央区切り・セルの表示形式・逆順表示・オフセットの基数・列の有無も画面に合わせる
+            // (EDIT-25 の仕様 6、VIEW-11 の仕様 5)。
+            ScreenGroupSize = editor.View.GroupSize,
+            ScreenMiddleSeparator = editor.View.EffectiveMiddleSeparator(editor.BytesPerRow),
+            ScreenCellFormat = editor.View.CellFormat,
+            ScreenReverseGroups = editor.View.ReverseGroups,
+            ScreenBigEndian = editor.View.BigEndian,
+            ScreenSpacePadding = editor.View.SpacePadding,
+            DecimalOffsets = editor.View.Radix == OffsetRadix.Decimal,
+            ShowOffset = editor.View.ShowOffsetColumn,
+            ShowHex = editor.View.ShowHexColumn,
+            ShowText = editor.View.ShowTextColumn || !editor.View.ShowHexColumn,
             Encoding = editor.TextEncoding,
             RecordBytes = s.RecordBytes,
             BaseAddress = s.BaseAddress,

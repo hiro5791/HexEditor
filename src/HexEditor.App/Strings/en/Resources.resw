@@ -4976,7 +4976,11 @@ Details were written to:
   <data name="ConvertEncoding_Error_Undecodable" xml:space="preserve"><value>The bytes at {0} ({1}) cannot be decoded.</value></data>
   <data name="ConvertEncoding_Error_Unmappable" xml:space="preserve"><value>The character "{1}" at {0} cannot be represented in the target encoding.</value></data>
   <data name="ConvertEncoding_Error_FixedLength" xml:space="preserve"><value>The length changes, but this document cannot change its length.</value></data>
+  <data name="ConvertEncoding_Error_UnknownEncoding" xml:space="preserve"><value>The encoding "{0}" is not available.</value></data>
+  <data name="ConvertEncoding_Error_InvalidReplacement" xml:space="preserve"><value>The replacement "{0}" cannot be represented in the target encoding.</value></data>
+  <data name="ConvertEncoding_Error_Settings" xml:space="preserve"><value>The conversion settings are not valid.</value></data>
   <data name="ConvertEncoding_GoToOffset" xml:space="preserve"><value>Go to the offset</value></data>
+  <data name="EncodingPicker_Placeholder" xml:space="preserve"><value>Search by name, ID or code page</value></data>
   <data name="Hash_Exclusions.Header" xml:space="preserve"><value>Excluded ranges</value></data>
   <data name="Hash_ExclusionStart.Header" xml:space="preserve"><value>Start</value></data>
   <data name="Hash_ExclusionLength.Header" xml:space="preserve"><value>Length</value></data>

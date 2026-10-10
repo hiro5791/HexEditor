@@ -53,4 +53,59 @@ public sealed class DataOperationPerformanceTests(ITestOutputHelper output)
         output.Report($"100 GB への 8 ビットの挿入: {Summary(times)}");
         TimeLimit(MaxExceptFirst(times) <= Limit, Summary(times));
     }
+
+    /// <summary>
+    /// 長時間処理のデータ演算の処理速度 (EDIT-31 の「巨大ファイル」2): XOR (鍵) とバイトスワップの速度が、同じ範囲を 1 MiB ずつ読んで一時ファイルに
+    /// 書くだけ (計算なし) の速度の 80% 以上。読み込み元はスパースファイル (TD-SPARSE-100G) の先頭 512 MiB で、比べるのは計算の分の遅れ。
+    /// </summary>
+    [Theory]
+    [InlineData(DataOperationKind.Xor)]
+    [InlineData(DataOperationKind.ByteSwap32)]
+    public void Data_operation_throughput_is_at_least_80_percent_of_copying(DataOperationKind kind)
+    {
+        const long length = 512 * MiB;
+        using Document doc = Open("TD-SPARSE-100G");
+        TargetRange[] range = [new(0, length)];
+        var spec = new DataOperationSpec
+        {
+            Kind = kind,
+            OperandSource = kind == DataOperationKind.Xor ? OperandSource.KeyBytes : OperandSource.Number,
+            Key = [0xDE, 0xAD, 0xBE],
+        };
+        DataOperationRunner runner = DataOperationRunner.For(doc);
+        string temp = Path.Combine(doc.Options.TempDirectory, doc.Id.ToString("N"));
+
+        var copies = new List<TimeSpan>();
+        var operations = new List<TimeSpan>();
+        for (int i = 0; i < 5; i++)
+        {
+            copies.Add(Time(() => CopyToTemp(doc.Current, length, temp)));
+            operations.Add(Time(() =>
+            {
+                DataOperationResult result = runner.Run(doc.Current, range, spec);
+                Assert.True(result.Stats.Changed || kind != DataOperationKind.Xor);
+                TransformApplier.DisposeAll(result.Replacements);
+            }));
+        }
+
+        TimeSpan copy = copies.Skip(1).Min();
+        TimeSpan operation = operations.Skip(1).Min();
+        double ratio = copy.TotalSeconds / operation.TotalSeconds;
+        string message = $"{kind}: 演算 {length / MiB / operation.TotalSeconds:F0} MiB/s、読み書きだけ {length / MiB / copy.TotalSeconds:F0} MiB/s (比 {ratio:P0})";
+        output.Report(message);
+        TimeLimit(ratio >= 0.8, message);
+    }
+
+    /// <summary>計算なしで 1 MiB ずつ読み、一時ファイルに書く (演算と同じ読み書きの経路)。</summary>
+    private static void CopyToTemp(DocumentSnapshot snapshot, long length, string folder)
+    {
+        using var writer = new TempContentWriter(folder, length, "perf");
+        byte[] buffer = new byte[DataOperationRunner.ChunkSize];
+        for (long position = 0; position < length; position += buffer.Length)
+        {
+            int n = (int)Math.Min(buffer.Length, length - position);
+            Assert.True(snapshot.Read(position, buffer.AsSpan(0, n)).IsComplete);
+            writer.Write(buffer.AsSpan(0, n));
+        }
+    }
 }

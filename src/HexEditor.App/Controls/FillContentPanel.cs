@@ -29,14 +29,21 @@ internal sealed class FillContentPanel : StackPanel
     private readonly TextBlock _error;
     private readonly Dictionary<FillKind, StackPanel> _sections = [];
     private readonly StackPanel _repeatSection;
+    private readonly int _maxPatternLength;
+    private readonly string _patternTooLongKey;
     private bool _loading;
 
     /// <param name="editor">文字コード・入力式の名前に使う。</param>
     /// <param name="settingsKey">記憶に使う設定のキー (塗りつぶしと挿入で別に覚える)。</param>
     /// <param name="allowRepeatOptions">繰り返しと起点の設定を出すか (塗りつぶしだけ)。</param>
     /// <param name="kinds">選べる種類 (null ならすべて。データ演算の鍵は Hex・テキスト・ファイル・クリップボード)。</param>
-    public FillContentPanel(EditorState editor, string settingsKey, bool allowRepeatOptions, IReadOnlyList<FillKind>? kinds = null)
+    /// <param name="maxPatternLength">Hex・テキストの長さの上限 (塗りつぶしは 1 MiB、データ演算の鍵は 16 MiB。EDIT-33 の仕様 2)。</param>
+    /// <param name="patternTooLongKey">上限を超えたときの文言のリソースキー。</param>
+    public FillContentPanel(EditorState editor, string settingsKey, bool allowRepeatOptions, IReadOnlyList<FillKind>? kinds = null,
+        int maxPatternLength = FillSpec.MaxPatternLength, string patternTooLongKey = "Fill_Error_PatternTooLong")
     {
+        _maxPatternLength = maxPatternLength;
+        _patternTooLongKey = patternTooLongKey;
         _kinds = kinds is null ? AllKinds : [.. kinds];
         _editor = editor;
         _settingsKey = settingsKey;
@@ -184,9 +191,9 @@ internal sealed class FillContentPanel : StackPanel
                     error ??= Loc.Get(string.IsNullOrWhiteSpace(_pattern.Text) ? "Fill_Error_EmptyPattern" : "Fill_Error_HexPattern");
                     DialogParts.MarkInvalid(_pattern, true);
                 }
-                else if (bytes.Length > FillSpec.MaxPatternLength)
+                else if (bytes.Length > _maxPatternLength)
                 {
-                    error ??= Loc.Get("Fill_Error_PatternTooLong");
+                    error ??= Loc.Get(_patternTooLongKey);
                     DialogParts.MarkInvalid(_pattern, true);
                 }
 
@@ -205,9 +212,9 @@ internal sealed class FillContentPanel : StackPanel
                     error ??= Loc.Format("Notice_NotEncodableChar", encoding.FirstUnencodable(text) ?? text, encoding.Name);
                     DialogParts.MarkInvalid(_text, true);
                 }
-                else if (encoded.Length > FillSpec.MaxPatternLength)
+                else if (encoded.Length > _maxPatternLength)
                 {
-                    error ??= Loc.Get("Fill_Error_PatternTooLong");
+                    error ??= Loc.Get(_patternTooLongKey);
                     DialogParts.MarkInvalid(_text, true);
                 }
                 else

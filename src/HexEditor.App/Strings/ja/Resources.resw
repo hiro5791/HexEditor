@@ -4976,7 +4976,11 @@
   <data name="ConvertEncoding_Error_Undecodable" xml:space="preserve"><value>オフセット {0} のバイト列 ({1}) を解釈できません。</value></data>
   <data name="ConvertEncoding_Error_Unmappable" xml:space="preserve"><value>オフセット {0} の文字「{1}」は変換先の文字コードで表せません。</value></data>
   <data name="ConvertEncoding_Error_FixedLength" xml:space="preserve"><value>長さが変わりますが、このドキュメントは長さを変えられません。</value></data>
+  <data name="ConvertEncoding_Error_UnknownEncoding" xml:space="preserve"><value>文字コード「{0}」は使えません。</value></data>
+  <data name="ConvertEncoding_Error_InvalidReplacement" xml:space="preserve"><value>置き換えの文字列「{0}」は変換先の文字コードで表せません。</value></data>
+  <data name="ConvertEncoding_Error_Settings" xml:space="preserve"><value>変換の設定が正しくありません。</value></data>
   <data name="ConvertEncoding_GoToOffset" xml:space="preserve"><value>そのオフセットへ移動</value></data>
+  <data name="EncodingPicker_Placeholder" xml:space="preserve"><value>名前・ID・コードページ番号で検索</value></data>
   <data name="Hash_Exclusions.Header" xml:space="preserve"><value>除外範囲</value></data>
   <data name="Hash_ExclusionStart.Header" xml:space="preserve"><value>開始</value></data>
   <data name="Hash_ExclusionLength.Header" xml:space="preserve"><value>長さ</value></data>

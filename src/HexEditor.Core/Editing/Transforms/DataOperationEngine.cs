@@ -1,6 +1,8 @@
 using System.Buffers.Binary;
 using System.Globalization;
 using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Saving;
@@ -364,6 +366,22 @@ internal sealed class ElementProcessor
             return;
         }
 
+        // 飛ばしのない並べ替えは、要素ごとに分けずにチャンク全体をまとめて処理する (EDIT-31 の「巨大ファイル」2)。
+        if (_spec.Category == DataOperationCategory.Reorder && _spec.SkipCount == 0)
+        {
+            long changed = ReorderAll(data[..whole]);
+            if (changed > 0)
+            {
+                _stats.ChangedElements += changed;
+                _stats.Changed = true;
+            }
+
+            long count = whole / _size;
+            _processed += count;
+            _elementIndex += count;
+            return;
+        }
+
         for (int i = 0; i < whole; i += _size, _elementIndex++)
         {
             if (_elementIndex % _cycle >= _spec.ProcessCount)
@@ -415,8 +433,12 @@ internal sealed class ElementProcessor
 
     // ---- ベクトル化した経路: すべての要素を同じパターンとのビット演算で処理する ----
 
+    /// <summary>パターンをこの長さ以上になるまで繰り返す (短いパターンでもベクトルの幅で演算できるようにする)。</summary>
+    internal const int MinPatternBlock = 4096;
+
     /// <summary>
     /// 増分なし・飛ばしなしのビット演算 (数値のオペランド、または増分なしの鍵) は、バイト列のパターンとのバイトごとの演算にできる。
+    /// パターンは <see cref="MinPatternBlock"/> バイト以上になるまで繰り返す (長さは元のパターンの倍数なので、位置の剰余で引ける)。
     /// </summary>
     private byte[]? BuildPattern()
     {
@@ -427,7 +449,7 @@ internal sealed class ElementProcessor
 
         if (_spec.UsesKey)
         {
-            return _spec.KeyIncrement % 256 == 0 ? _spec.Key : null;
+            return _spec.KeyIncrement % 256 == 0 && _spec.Key is { } key ? Repeat(key) : null;
         }
 
         if (_spec.Increment != 0 && _spec.UsesOperand)
@@ -437,7 +459,24 @@ internal sealed class ElementProcessor
 
         byte[] element = new byte[_size];
         WriteRaw(element, (ulong)((UInt128)_spec.Operand & _mask), _bigEndian);
-        return element;
+        return Repeat(element);
+    }
+
+    private static byte[] Repeat(byte[] pattern)
+    {
+        if (pattern.Length == 0 || pattern.Length >= MinPatternBlock)
+        {
+            return pattern;
+        }
+
+        int times = (MinPatternBlock + pattern.Length - 1) / pattern.Length;
+        byte[] block = new byte[pattern.Length * times];
+        for (int i = 0; i < times; i++)
+        {
+            pattern.CopyTo(block, i * pattern.Length);
+        }
+
+        return block;
     }
 
     private void ProcessPattern(Span<byte> data, long offset)
@@ -470,15 +509,19 @@ internal sealed class ElementProcessor
     private bool BitwiseSpan(Span<byte> data, ReadOnlySpan<byte> key)
     {
         bool changed = false;
+        bool countBytes = _size == 1;
+        long changedBytes = 0;
+        DataOperationKind kind = _spec.Kind;
         int i = 0;
         if (Vector.IsHardwareAccelerated && data.Length >= Vector<byte>.Count)
         {
             int width = Vector<byte>.Count;
             for (; i <= data.Length - width; i += width)
             {
-                var x = new Vector<byte>(data.Slice(i, width));
+                Span<byte> target = data.Slice(i, width);
+                var x = new Vector<byte>(target);
                 var k = new Vector<byte>(key.Slice(i, width));
-                Vector<byte> r = _spec.Kind switch
+                Vector<byte> r = kind switch
                 {
                     DataOperationKind.And => x & k,
                     DataOperationKind.Or => x | k,
@@ -491,10 +534,13 @@ internal sealed class ElementProcessor
                 if (r != x)
                 {
                     changed = true;
-                    _stats.ChangedElements += _size == 1 ? CountDiff(x, r) : 0;
-                }
+                    if (countBytes)
+                    {
+                        changedBytes += width - CountSet(Vector.Equals(x, r));
+                    }
 
-                r.CopyTo(data.Slice(i, width));
+                    r.CopyTo(target);
+                }
             }
         }
 
@@ -505,23 +551,16 @@ internal sealed class ElementProcessor
             if (data[i] != before)
             {
                 changed = true;
-                _stats.ChangedElements += _size == 1 ? 1 : 0;
+                changedBytes++;
             }
         }
 
-        return changed;
-    }
-
-    private static int CountDiff(Vector<byte> a, Vector<byte> b)
-    {
-        Vector<byte> eq = Vector.Equals(a, b);
-        int same = 0;
-        for (int j = 0; j < Vector<byte>.Count; j++)
+        if (countBytes)
         {
-            same += eq[j] != 0 ? 1 : 0;
+            _stats.ChangedElements += changedBytes;
         }
 
-        return Vector<byte>.Count - same;
+        return changed;
     }
 
     // ---- 整数の要素 ----
@@ -711,6 +750,13 @@ internal sealed class ElementProcessor
             return clamped == x ? raw : ToRaw(clamped, single);
         }
 
+        // 逆除算で x が 0 (±0) の要素は、整数と同じく変えずに件数を数える (EDIT-32 の仕様 1 の表と仕様 3)。
+        if (_spec.Kind == DataOperationKind.ReverseDivide && x == 0)
+        {
+            _stats.ZeroSkipped++;
+            return raw;
+        }
+
         double op = _spec.FloatOperand + _spec.FloatIncrement * _processed;
         if (single)
         {
@@ -748,9 +794,147 @@ internal sealed class ElementProcessor
 
     // ---- 並べ替え (EDIT-35) ----
 
+    /// <summary>まとめて並べ替える (飛ばしなし)。変わった要素の数を返す。</summary>
+    private long ReorderAll(Span<byte> data)
+    {
+        switch (_spec.Kind)
+        {
+            case DataOperationKind.ByteSwap16:
+                return SwapAll<ushort>(data);
+            case DataOperationKind.ByteSwap32:
+                return SwapAll<uint>(data);
+            case DataOperationKind.ByteSwap64:
+                return SwapAll<ulong>(data);
+            case DataOperationKind.WordSwap32:
+            {
+                // 32 bit の中の前後の 16 bit の入れ替えは、16 bit のローテートと同じ (エンディアンによらない)。
+                long changed = 0;
+                Span<uint> words = MemoryMarshal.Cast<byte, uint>(data);
+                for (int i = 0; i < words.Length; i++)
+                {
+                    uint v = words[i];
+                    uint r = BitOperations.RotateLeft(v, 16);
+                    if (r != v)
+                    {
+                        words[i] = r;
+                        changed++;
+                    }
+                }
+
+                return changed;
+            }
+
+            default:
+            {
+                bool bits = _spec.Kind == DataOperationKind.ReverseBits;
+                long changed = 0;
+                for (int i = 0; i < data.Length; i++)
+                {
+                    byte b = data[i];
+                    byte r = bits ? ReverseBits(b) : (byte)((b << 4) | (b >> 4));
+                    if (r != b)
+                    {
+                        data[i] = r;
+                        changed++;
+                    }
+                }
+
+                return changed;
+            }
+        }
+    }
+
+    /// <summary>作業用の領域 (チャンクの大きさ。1 つの処理で使い回す)。</summary>
+    private byte[]? _scratch;
+
+    /// <summary>要素ごとにバイト順を逆にする (<see cref="BinaryPrimitives.ReverseEndianness(ReadOnlySpan{uint}, Span{uint})"/> はベクトル化されている)。</summary>
+    private long SwapAll<T>(Span<byte> data)
+        where T : unmanaged, IBinaryInteger<T>
+    {
+        if (_scratch is null || _scratch.Length < data.Length)
+        {
+            _scratch = new byte[Math.Max(data.Length, 64)];
+        }
+
+        Span<byte> scratch = _scratch.AsSpan(0, data.Length);
+        Span<T> source = MemoryMarshal.Cast<byte, T>(data);
+        Span<T> swapped = MemoryMarshal.Cast<byte, T>(scratch);
+        if (typeof(T) == typeof(ushort))
+        {
+            BinaryPrimitives.ReverseEndianness(MemoryMarshal.Cast<byte, ushort>(data), MemoryMarshal.Cast<byte, ushort>(scratch));
+        }
+        else if (typeof(T) == typeof(uint))
+        {
+            BinaryPrimitives.ReverseEndianness(MemoryMarshal.Cast<byte, uint>(data), MemoryMarshal.Cast<byte, uint>(scratch));
+        }
+        else
+        {
+            BinaryPrimitives.ReverseEndianness(MemoryMarshal.Cast<byte, ulong>(data), MemoryMarshal.Cast<byte, ulong>(scratch));
+        }
+
+        long changed = CountDifferent<T>(source, swapped);
+        if (changed > 0)
+        {
+            scratch.CopyTo(data);
+        }
+
+        return changed;
+    }
+
+    /// <summary>比較の結果 (要素ごとに全ビット 1 か 0) のうち、1 の要素の数 (最上位ビットを集めて数える)。</summary>
+    private static int CountSet<T>(Vector<T> mask)
+        where T : struct
+    {
+        if (Vector<byte>.Count == 32)
+        {
+            return BitOperations.PopCount(Vector256.ExtractMostSignificantBits(mask.AsVector256()));
+        }
+
+        if (Vector<byte>.Count == 16)
+        {
+            return BitOperations.PopCount(Vector128.ExtractMostSignificantBits(mask.AsVector128()));
+        }
+
+        if (Vector<byte>.Count == 64)
+        {
+            return BitOperations.PopCount(Vector512.ExtractMostSignificantBits(mask.AsVector512()));
+        }
+
+        int n = 0;
+        for (int i = 0; i < Vector<T>.Count; i++)
+        {
+            n += mask[i].Equals(default(T)) ? 0 : 1;
+        }
+
+        return n;
+    }
+
+    /// <summary>位置ごとに値が違う要素の数。</summary>
+    private static long CountDifferent<T>(ReadOnlySpan<T> a, ReadOnlySpan<T> b)
+        where T : unmanaged, IBinaryInteger<T>
+    {
+        long same = 0;
+        int i = 0;
+        if (Vector.IsHardwareAccelerated && Vector<T>.IsSupported)
+        {
+            int width = Vector<T>.Count;
+            for (; i <= a.Length - width; i += width)
+            {
+                same += CountSet(Vector.Equals(new Vector<T>(a.Slice(i, width)), new Vector<T>(b.Slice(i, width))));
+            }
+        }
+
+        for (; i < a.Length; i++)
+        {
+            same += a[i] == b[i] ? 1 : 0;
+        }
+
+        return a.Length - same;
+    }
+
     private void Reorder(Span<byte> element)
     {
-        byte[] before = element.ToArray();
+        ulong before = ReadRaw(element, false);
         switch (_spec.Kind)
         {
             case DataOperationKind.ByteSwap16 or DataOperationKind.ByteSwap32 or DataOperationKind.ByteSwap64:
@@ -767,7 +951,7 @@ internal sealed class ElementProcessor
                 break;
         }
 
-        Count(!element.SequenceEqual(before));
+        Count(ReadRaw(element, false) != before);
     }
 
     public static byte ReverseBits(byte b)

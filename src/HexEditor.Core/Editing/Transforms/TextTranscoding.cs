@@ -42,7 +42,7 @@ public static class TextTransforms
         }
 
         return EncodingCatalog.Find(encodingId)?.CodePage
-            ?? throw new ArgumentException($"文字コード '{encodingId}' は使えません。", nameof(encodingId));
+            ?? throw new CharsetSettingsException(CharsetSettingsError.UnknownEncoding, encodingId, nameof(encodingId));
     }
 
     /// <summary>コードページの文字コードを、指定した代替処理で作る (best fit は使わない)。</summary>

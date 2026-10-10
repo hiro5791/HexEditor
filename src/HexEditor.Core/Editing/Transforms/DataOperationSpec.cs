@@ -309,6 +309,14 @@ public sealed record DataOperationSpec
                 return DataOperationError.TypeNotSupported;
             }
 
+            // 4 バイト (float) で表せない値 (1e39 など) は、∞ に丸めずに範囲外とする (EDIT-31 の仕様 5)。
+            if (Kind == DataOperationKind.Clamp
+                ? !FitsFloat(FloatMin) || !FitsFloat(FloatMax)
+                : UsesOperand && (!FitsFloat(FloatOperand) || !FitsFloat(FloatIncrement)))
+            {
+                return DataOperationError.OperandOutOfRange;
+            }
+
             return Kind == DataOperationKind.Clamp && FloatMin is double fmin && FloatMax is double fmax && fmin > fmax
                 ? DataOperationError.MinGreaterThanMax
                 : DataOperationError.None;
@@ -390,6 +398,10 @@ public sealed record DataOperationSpec
 
         return value >= 0 && value <= (Int128)DataOperationMath.Mask(bits);
     }
+
+    /// <summary>浮動小数点の値が要素の大きさで表せるか (4 バイトでは float に丸めて ±∞ にならないこと。null は指定なし)。</summary>
+    public bool FitsFloat(double? value) =>
+        value is not double v || !double.IsFinite(v) || Size != 4 || float.IsFinite((float)v);
 
     /// <summary>増分は符号付きの値も受け付ける (要素の大きさでラップする)。</summary>
     private static bool FitsIncrement(Int128 value, int bits) =>

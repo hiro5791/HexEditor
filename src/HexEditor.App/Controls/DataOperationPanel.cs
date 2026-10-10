@@ -107,7 +107,7 @@ internal sealed class DataOperationPanel : StackPanel
         _operandSource = DialogParts.Combo("DataOp_OperandSource", Loc.Get("DataOp_OperandSource"),
             [Loc.Get("DataOp_OperandSource_Number"), Loc.Get("DataOp_OperandSource_Key")], 0);
         _key = new FillContentPanel(editor, "data.operation.key", allowRepeatOptions: false,
-            [FillKind.HexPattern, FillKind.Text, FillKind.File, FillKind.Clipboard]);
+            [FillKind.HexPattern, FillKind.Text, FillKind.File, FillKind.Clipboard], DataOperationSpec.MaxKeyLength, "DataOp_Error_KeyTooLong");
         _keyOrigin = DialogParts.Combo("DataOp_KeyOrigin", Loc.Get("DataOp_KeyOrigin"), [Loc.Get("Fill_OriginRange"), Loc.Get("Fill_OriginZero")], 0);
         _keyIncrement = DialogParts.Field("DataOp_KeyIncrement", Loc.Get("DataOp_KeyIncrement"), "0");
         _keyPanel = Stack(_key, Row(_keyOrigin, _keyIncrement));
@@ -174,6 +174,14 @@ internal sealed class DataOperationPanel : StackPanel
                 OnChanged();
             }
         };
+        // 浮動小数点を選んだら、要素の大きさが 1 / 2 バイトのときは 4 バイト (float) にする (EDIT-31 の仕様 3)。
+        _type.SelectionChanged += (_, _) =>
+        {
+            if (!_loading && _type.SelectedIndex == (int)ElementType.Float && _size.SelectedIndex < 2)
+            {
+                _size.SelectedIndex = 2;
+            }
+        };
         foreach (ComboBox combo in new[] { _kind, _type, _size, _endian, _overflow, _operandSource, _keyOrigin, _scope, _bitIndex, _bitFill, _bitOrder, _bitScope })
         {
             combo.SelectionChanged += (_, _) => OnChanged();
@@ -224,6 +232,20 @@ internal sealed class DataOperationPanel : StackPanel
             {
                 error ??= Loc.Format("Fill_Error_Range", StatusFormat.Hex(min), StatusFormat.Hex(max));
                 DialogParts.MarkInvalid(box, true);
+            }
+
+            return v;
+        }
+
+        // オペランド・増分・最小値・最大値は符号なし 8 バイトの値 (2^63 以上) も書けるよう 128 bit で評価する (EDIT-31 の仕様 5)。
+        // 要素の型と大きさに収まるかは DataOperationSpec.Validate で調べる。
+        Int128 EvalWide(TextBox box)
+        {
+            if (!DialogParts.TryEvaluateWide(box.Text, context, out Int128 v, out ExpressionException? e))
+            {
+                error ??= DialogParts.ExpressionError(e!);
+                DialogParts.MarkInvalid(box, true);
+                return 0;
             }
 
             return v;
@@ -298,7 +320,7 @@ internal sealed class DataOperationPanel : StackPanel
             }
             else
             {
-                spec = spec with { Operand = Eval(_operand), Increment = Eval(_increment) };
+                spec = spec with { Operand = EvalWide(_operand), Increment = EvalWide(_increment) };
             }
         }
 
@@ -331,8 +353,8 @@ internal sealed class DataOperationPanel : StackPanel
             case DataOperationCategory.Clamp:
                 spec = spec with
                 {
-                    Min = string.IsNullOrWhiteSpace(_min.Text) ? null : Eval(_min),
-                    Max = string.IsNullOrWhiteSpace(_max.Text) ? null : Eval(_max),
+                    Min = string.IsNullOrWhiteSpace(_min.Text) ? null : EvalWide(_min),
+                    Max = string.IsNullOrWhiteSpace(_max.Text) ? null : EvalWide(_max),
                 };
                 break;
             case DataOperationCategory.BitInsertDelete:
@@ -359,8 +381,8 @@ internal sealed class DataOperationPanel : StackPanel
                 error = Loc.Get("DataOp_Error_" + specError);
                 TextBox? box = specError switch
                 {
-                    DataOperationError.OperandOutOfRange or DataOperationError.DivideByZero or DataOperationError.DivisorBecomesZero =>
-                        spec.Category == DataOperationCategory.Clamp ? _min : _operand,
+                    DataOperationError.OperandOutOfRange => OutOfRangeField(spec),
+                    DataOperationError.DivideByZero or DataOperationError.DivisorBecomesZero => _operand,
                     DataOperationError.BitCountOutOfRange => spec.Category == DataOperationCategory.ShiftRotate ? _shiftBits : _bitCount,
                     DataOperationError.MinGreaterThanMax => _max,
                     DataOperationError.InvalidStride => _process,
@@ -377,6 +399,20 @@ internal sealed class DataOperationPanel : StackPanel
         _error.Text = error ?? string.Empty;
         UpdatePreview(error is null ? spec : null, ranges);
         return error is null ? new DataOperationRequest(spec, ranges, keySource is { Kind: FillKind.File or FillKind.Clipboard } ? keySource : null) : null;
+    }
+
+    /// <summary>範囲外の値を入れた欄 (オペランド・増分・最小値・最大値のどれか)。</summary>
+    private TextBox OutOfRangeField(DataOperationSpec spec)
+    {
+        int bits = spec.EffectiveSize * 8;
+        if (spec.Category == DataOperationCategory.Clamp)
+        {
+            bool minFits = spec.IsFloat ? spec.FitsFloat(spec.FloatMin) : spec.Min is not { } min || spec.Fits(min, bits);
+            return minFits ? _max : _min;
+        }
+
+        bool operandFits = spec.IsFloat ? spec.FitsFloat(spec.FloatOperand) : spec.Fits(spec.Operand, bits);
+        return operandFits ? _increment : _operand;
     }
 
     /// <summary>最後に使った演算と設定を記憶する。</summary>

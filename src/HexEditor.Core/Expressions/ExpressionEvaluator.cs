@@ -69,36 +69,67 @@ public enum DefaultRadix
 
 /// <summary>
 /// 入力式 (00-overview 6 章) を評価する。数値の書き方、単位 K/M/G/T、演算子、名前、読み取り関数を受け付ける。
-/// 計算は 64 bit の符号付き整数で行い、桁あふれは誤りにする。
+/// 計算は 64 bit の符号付き整数で行い、桁あふれは誤りにする (<see cref="EvaluateWide"/> は 128 bit)。
 /// </summary>
 public sealed class ExpressionEvaluator
 {
     private readonly string _text;
     private readonly IExpressionContext _context;
     private readonly DefaultRadix _radix;
+
+    /// <summary>128 bit で計算する (<see cref="EvaluateWide"/>)。false なら途中の値もすべて 64 bit の符号付き整数に収める。</summary>
+    private readonly bool _wide;
     private int _pos;
 
-    private ExpressionEvaluator(string text, IExpressionContext context, DefaultRadix radix)
+    private ExpressionEvaluator(string text, IExpressionContext context, DefaultRadix radix, bool wide)
     {
         _text = text;
         _context = context;
         _radix = radix;
+        _wide = wide;
     }
 
-    public static long Evaluate(string text, IExpressionContext context, DefaultRadix radix = DefaultRadix.Hexadecimal)
+    public static long Evaluate(string text, IExpressionContext context, DefaultRadix radix = DefaultRadix.Hexadecimal) =>
+        (long)new ExpressionEvaluator(text, context, radix, wide: false).Run();
+
+    /// <summary>
+    /// 128 bit の符号付き整数で評価する。数値は符号なし 64 bit の最大値 (0xFFFFFFFFFFFFFFFF) まで書け、u64le() などの読み取り関数も
+    /// 2^63 以上の値を返せる (データ演算のオペランド。EDIT-31 の仕様 5)。結果が要素の型に収まるかは呼び出し側で調べる。
+    /// </summary>
+    public static Int128 EvaluateWide(string text, IExpressionContext context, DefaultRadix radix = DefaultRadix.Hexadecimal) =>
+        new ExpressionEvaluator(text, context, radix, wide: true).Run();
+
+    /// <summary><see cref="EvaluateWide"/> で評価できれば値を返し、できなければ誤りを返す。</summary>
+    public static bool TryEvaluateWide(string text, IExpressionContext context, out Int128 value, out ExpressionException? error,
+        DefaultRadix radix = DefaultRadix.Hexadecimal)
     {
-        var evaluator = new ExpressionEvaluator(text, context, radix);
-        evaluator.SkipSpaces();
-        if (evaluator.AtEnd)
+        try
+        {
+            value = EvaluateWide(text, context, radix);
+            error = null;
+            return true;
+        }
+        catch (ExpressionException ex)
+        {
+            value = 0;
+            error = ex;
+            return false;
+        }
+    }
+
+    private Int128 Run()
+    {
+        SkipSpaces();
+        if (AtEnd)
         {
             throw new ExpressionException(ExpressionError.Empty, 0);
         }
 
-        long value = evaluator.ParseBinary(0);
-        evaluator.SkipSpaces();
-        if (!evaluator.AtEnd)
+        Int128 value = ParseBinary(0);
+        SkipSpaces();
+        if (!AtEnd)
         {
-            throw new ExpressionException(evaluator.Peek() == ')' ? ExpressionError.Syntax : ExpressionError.Syntax, evaluator._pos);
+            throw new ExpressionException(ExpressionError.Syntax, _pos);
         }
 
         return value;
@@ -141,9 +172,9 @@ public sealed class ExpressionEvaluator
         ("|", 1), ("^", 2), ("&", 3), ("<<", 4), (">>", 4), ("+", 5), ("-", 5), ("*", 6), ("/", 6), ("%", 6),
     ];
 
-    private long ParseBinary(int minPrecedence)
+    private Int128 ParseBinary(int minPrecedence)
     {
-        long left = ParseUnary();
+        Int128 left = ParseUnary();
         while (true)
         {
             SkipSpaces();
@@ -164,12 +195,41 @@ public sealed class ExpressionEvaluator
 
             int at = _pos;
             _pos += match.Value.Op.Length;
-            long right = ParseBinary(match.Value.Precedence + 1);
+            Int128 right = ParseBinary(match.Value.Precedence + 1);
             left = Apply(match.Value.Op, left, right, at);
         }
     }
 
-    private static long Apply(string op, long a, long b, int at)
+    private Int128 Apply(string op, Int128 a, Int128 b, int at) => _wide ? ApplyWide(op, a, b, at) : ApplyLong(op, (long)a, (long)b, at);
+
+    /// <summary>128 bit の計算 (桁あふれは誤り)。</summary>
+    private static Int128 ApplyWide(string op, Int128 a, Int128 b, int at)
+    {
+        try
+        {
+            return op switch
+            {
+                "+" => checked(a + b),
+                "-" => checked(a - b),
+                "*" => checked(a * b),
+                "/" => b == 0 ? throw new ExpressionException(ExpressionError.DivideByZero, at) : a / b,
+                "%" => b == 0 ? throw new ExpressionException(ExpressionError.DivideByZero, at) : a % b,
+                "&" => a & b,
+                "|" => a | b,
+                "^" => a ^ b,
+                "<<" => b < 0 || b > 127 || ((a << (int)b) >> (int)b) != a
+                    ? throw new ExpressionException(ExpressionError.Overflow, at) : a << (int)b,
+                ">>" => b < 0 || b > 127 ? throw new ExpressionException(ExpressionError.Overflow, at) : a >> (int)b,
+                _ => throw new ExpressionException(ExpressionError.Syntax, at),
+            };
+        }
+        catch (OverflowException)
+        {
+            throw new ExpressionException(ExpressionError.Overflow, at);
+        }
+    }
+
+    private static long ApplyLong(string op, long a, long b, int at)
     {
         try
         {
@@ -194,7 +254,7 @@ public sealed class ExpressionEvaluator
         }
     }
 
-    private long ParseUnary()
+    private Int128 ParseUnary()
     {
         SkipSpaces();
         int at = _pos;
@@ -202,8 +262,8 @@ public sealed class ExpressionEvaluator
         {
             case '-':
                 _pos++;
-                long v = ParseUnary();
-                return v == long.MinValue ? throw new ExpressionException(ExpressionError.Overflow, at) : -v;
+                Int128 v = ParseUnary();
+                return v == (_wide ? Int128.MinValue : long.MinValue) ? throw new ExpressionException(ExpressionError.Overflow, at) : -v;
             case '+':
                 _pos++;
                 return ParseUnary();
@@ -215,7 +275,7 @@ public sealed class ExpressionEvaluator
         }
     }
 
-    private long ParsePrimary()
+    private Int128 ParsePrimary()
     {
         SkipSpaces();
         int at = _pos;
@@ -223,7 +283,7 @@ public sealed class ExpressionEvaluator
         if (c == '(')
         {
             _pos++;
-            long value = ParseBinary(0);
+            Int128 value = ParseBinary(0);
             SkipSpaces();
             if (Peek() != ')')
             {
@@ -243,7 +303,7 @@ public sealed class ExpressionEvaluator
         {
             // 16 進の英字で始まり h で終わる数値 (例: FFh) は名前より先に数値として読む。
             int save = _pos;
-            if (TryParseHexWithSuffix(out long hex))
+            if (TryParseHexWithSuffix(out Int128 hex))
             {
                 return hex;
             }
@@ -266,7 +326,7 @@ public sealed class ExpressionEvaluator
 
     // ---- 数値 (00-overview 6.1) ----
 
-    private long ParseNumber()
+    private Int128 ParseNumber()
     {
         int at = _pos;
         string token = ReadToken(allowDot: true);
@@ -296,24 +356,23 @@ public sealed class ExpressionEvaluator
                 }
 
                 decimal scaled = d * multiplier;
-                return scaled > long.MaxValue ? throw new ExpressionException(ExpressionError.Overflow, at) : (long)decimal.Floor(scaled);
+                return scaled > MaxLiteral ? throw new ExpressionException(ExpressionError.Overflow, at) : (Int128)decimal.Floor(scaled);
             }
         }
 
-        long value = decimalDigits
+        Int128 value = decimalDigits
             ? ParseInteger(token.Replace("_", string.Empty), at, forceRadix: 10)
             : ParseInteger(token.Replace("_", string.Empty), at);
-        try
-        {
-            return checked(value * multiplier);
-        }
-        catch (OverflowException)
-        {
-            throw new ExpressionException(ExpressionError.Overflow, at);
-        }
+
+        // 値は符号なし 64 bit 以下、単位は 2^40 以下なので、積は 128 bit であふれない。
+        Int128 scaledValue = value * multiplier;
+        return scaledValue > MaxLiteral ? throw new ExpressionException(ExpressionError.Overflow, at) : scaledValue;
     }
 
-    private long ParseInteger(string token, int at, int? forceRadix = null)
+    /// <summary>数値として書ける最大値 (64 bit の計算では符号付きの最大値、128 bit の計算では符号なし 64 bit の最大値)。</summary>
+    private ulong MaxLiteral => _wide ? ulong.MaxValue : long.MaxValue;
+
+    private Int128 ParseInteger(string token, int at, int? forceRadix = null)
     {
         (string digits, int radix) = forceRadix is { } forced ? (token, forced) : token switch
         {
@@ -348,10 +407,10 @@ public sealed class ExpressionEvaluator
             result = result * (ulong)radix + (ulong)d;
         }
 
-        return result > long.MaxValue ? throw new ExpressionException(ExpressionError.Overflow, at) : (long)result;
+        return result > MaxLiteral ? throw new ExpressionException(ExpressionError.Overflow, at) : result;
     }
 
-    private bool TryParseHexWithSuffix(out long value)
+    private bool TryParseHexWithSuffix(out Int128 value)
     {
         value = 0;
         int at = _pos;
@@ -383,7 +442,7 @@ public sealed class ExpressionEvaluator
 
     // ---- 名前と読み取り関数 (00-overview 6.2) ----
 
-    private long ParseName()
+    private Int128 ParseName()
     {
         int at = _pos;
         int start = _pos;
@@ -426,10 +485,10 @@ public sealed class ExpressionEvaluator
         };
     }
 
-    private long ParseFunction(string name, int at)
+    private Int128 ParseFunction(string name, int at)
     {
         _pos++; // '('
-        long argument = ParseBinary(0);
+        Int128 argument = ParseBinary(0);
         SkipSpaces();
         if (Peek() != ')')
         {
@@ -440,7 +499,7 @@ public sealed class ExpressionEvaluator
         (int size, bool signed, bool bigEndian, bool isFloat) = ParseFunctionName(name.ToLowerInvariant(), at, name);
         Span<byte> bytes = stackalloc byte[8];
         Span<byte> target = bytes[..size];
-        if (argument < 0 || !_context.TryRead(argument, target))
+        if (argument < 0 || argument > long.MaxValue || !_context.TryRead((long)argument, target))
         {
             throw new ExpressionException(ExpressionError.Unreadable, at, name);
         }
@@ -474,6 +533,11 @@ public sealed class ExpressionEvaluator
 
         if (!signed && size == 8 && raw > long.MaxValue)
         {
+            if (_wide)
+            {
+                return raw;
+            }
+
             throw new ExpressionException(ExpressionError.Overflow, at, name);
         }
 

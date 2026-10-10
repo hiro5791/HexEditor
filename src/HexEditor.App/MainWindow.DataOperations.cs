@@ -203,10 +203,11 @@ public sealed partial class MainWindow
             spec = spec with { Key = key };
         }
 
-        s_lastDataOperation = request with { Spec = spec, KeySource = null };
+        // 「前回のデータ演算を繰り返す」で使うのは、設定の確認を通った演算だけ (EDIT-31 の仕様 11)。
+        DataOperationRequest remembered = request with { Spec = spec, KeySource = null };
         if (spec.Category == DataOperationCategory.BitInsertDelete)
         {
-            await RunBitShiftAsync(doc, spec, request.Ranges);
+            await RunBitShiftAsync(doc, spec, request.Ranges, () => s_lastDataOperation = remembered);
             return;
         }
 
@@ -216,6 +217,8 @@ public sealed partial class MainWindow
             ShowNotice(Loc.Get("DataOp_Error_" + error), InfoBarSeverity.Error, doc);
             return;
         }
+
+        s_lastDataOperation = remembered;
 
         // 値が変わらない演算は実行しない (EDIT-31 の「巨大ファイル」5)。
         if (spec.IsIdentity())
@@ -389,7 +392,8 @@ public sealed partial class MainWindow
 
     // ---- ビットの挿入・削除 (EDIT-37) ----
 
-    private async Task RunBitShiftAsync(DocumentViewModel doc, DataOperationSpec spec, IReadOnlyList<TargetRange> ranges)
+    /// <param name="validated">設定の確認を通ったときに呼ぶ (前回の演算として記憶する)。</param>
+    private async Task RunBitShiftAsync(DocumentViewModel doc, DataOperationSpec spec, IReadOnlyList<TargetRange> ranges, Action validated)
     {
         Document document = doc.Document;
         TargetRange? region = ranges.FirstOrDefault(r => r.Offset <= spec.BitOffset && spec.BitOffset < r.End);
@@ -400,6 +404,8 @@ public sealed partial class MainWindow
             ShowNotice(Loc.Get("DataOp_Error_" + info.Error), InfoBarSeverity.Error, doc);
             return;
         }
+
+        validated();
 
         // 1 GiB を超えて書き直す場合は確認する (EDIT-37 の「巨大ファイル」)。
         if (info.RewriteBytes > BitShifter.ConfirmLimit)
