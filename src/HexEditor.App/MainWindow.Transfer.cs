@@ -133,7 +133,7 @@ public sealed partial class MainWindow
         return row;
     }
 
-    private static TextBox PreviewBox(string id) => new()
+    private static TextBox PreviewBox(string id) => new TextBox
     {
         IsReadOnly = true,
         AcceptsReturn = true,
