@@ -92,6 +92,15 @@ public static class NumericRange
             throw new PatternException(PatternError.InvalidNumber, text);
         }
 
+        // 端が形式の範囲を超える場合 (half で 70000 など) はエラー (仕様の「エラー」。FIND-14 と同じ FloatOverflow)。
+        foreach (double? bound in new[] { min, max })
+        {
+            if (bound is double v)
+            {
+                _ = NumericSearch.Round(v, options.Format);
+            }
+        }
+
         if (min is { } lo && max is { } hi && lo > hi)
         {
             throw new PatternException(PatternError.RangeOrder, text, null,

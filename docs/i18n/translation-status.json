@@ -9438,6 +9438,7 @@
       "Operation_Patterns": "reviewed:788e46e7e47d6321",
       "Operation_ReplaceAll": "reviewed:a1670258ef34698b",
       "Operation_Resize": "reviewed:235cac564499edc2",
+      "Operation_ResultsToSelection": "reviewed:d493a35e8128b04f",
       "Operation_Save": "reviewed:1ad6cfdae47dfc5f",
       "Operation_Statistics": "reviewed:a656107e99c71dea",
       "Operation_UpdateDownload": "reviewed:dd4292ed5de902e2",

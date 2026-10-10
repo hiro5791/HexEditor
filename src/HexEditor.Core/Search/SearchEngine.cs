@@ -213,6 +213,9 @@ public static class SearchEngine
         complete = true;
         var result = new List<SearchMatch>();
         int maxLen = pattern.MaxMatchLength;
+
+        // 正規表現は、1 回の描画で照合に使う時間の合計を抑える (UI スレッドを止めない。RegexMatcher.ViewBudget)。
+        System.Diagnostics.Stopwatch? clock = pattern.IsRegex ? System.Diagnostics.Stopwatch.StartNew() : null;
         foreach (SearchRange r in (scope ?? SearchScope.WholeDocument).Resolve(snapshot.Length))
         {
             long from = Math.Max(r.Offset, offset - maxLen + 1);
@@ -239,7 +242,8 @@ public static class SearchEngine
                 }
 
                 SearchRange range = r;
-                var context = new ScanContext(snapshot, r.Offset, r.End, segStart > 0 || from == r.Offset, i < n || from + i == r.End, ForView: true);
+                var context = new ScanContext(snapshot, r.Offset, r.End, segStart > 0 || from == r.Offset, i < n || from + i == r.End, ForView: true,
+                    Clock: clock);
                 try
                 {
                     Collect(pattern, bytes.AsSpan(segStart, i - segStart), from + segStart, 0, offset + length, true, result,
@@ -695,13 +699,16 @@ public static class SearchEngine
 
         private System.Diagnostics.Stopwatch? _clock;
 
+        /// <summary>照合の途中でキャンセルを確かめる処理 (<see cref="ScanContext.CheckCancel"/>)。</summary>
+        private Action? _check;
+
         /// <summary>チャンクの中の区間 [segStart, segEnd) の照合の事情 (前後が範囲の端・読めない範囲か)。</summary>
         private ScanContext Context(Chunk chunk, int segStart, int segEnd, SearchRange? range = null, System.Diagnostics.Stopwatch? clock = null)
         {
             SearchRange r = range ?? _range;
             bool startBoundary = segStart > 0 || chunk.Offset <= r.Offset;
             bool endBoundary = segEnd < chunk.Count || chunk.Offset + chunk.Count >= r.End;
-            return new ScanContext(_snapshot, r.Offset, r.End, startBoundary, endBoundary, false, clock ?? Clock);
+            return new ScanContext(_snapshot, r.Offset, r.End, startBoundary, endBoundary, false, clock ?? Clock, _check ??= Check);
         }
 
         /// <summary>

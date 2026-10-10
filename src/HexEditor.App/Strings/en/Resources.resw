@@ -1802,6 +1802,7 @@ Details were written to:
   <data name="Operation_ReplaceAll" xml:space="preserve"><value>Replacing</value></data>
   <data name="Operation_FindAll" xml:space="preserve"><value>Find all</value></data>
   <data name="Operation_ExportResults" xml:space="preserve"><value>Exporting search results</value></data>
+  <data name="Operation_ResultsToSelection" xml:space="preserve"><value>Converting search results to a selection</value></data>
   <data name="SearchResults_Continue.Content" xml:space="preserve"><value>Continue</value></data>
   <data name="SearchResults_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
   <data name="SearchResults_Convert.Content" xml:space="preserve"><value>Convert</value></data>

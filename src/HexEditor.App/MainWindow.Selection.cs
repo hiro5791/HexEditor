@@ -91,7 +91,10 @@ public sealed partial class MainWindow
         SearchResults.SelectionRequested += (_, e) =>
         {
             ActivateEditor(e.Editor);
-            ReportSelection(e.Editor.SetSelections(e.Ranges));
+            SelectionResult result = e.Editor.SetSelections(e.Ranges);
+
+            // 変換で上限を超えた結果を数え上げなかった場合も、上限まで変換した旨を知らせる。
+            ReportSelection(e.Truncated && result == SelectionResult.Done ? SelectionResult.Truncated : result);
             FocusEditor();
         };
     }

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Text;
 using HexEditor.Core.Engine;
+using HexEditor.Core.Operations;
 using HexEditor.Core.Search;
 using static HexEditor.Core.Tests.Search.SearchTestData;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
@@ -133,6 +134,130 @@ public sealed class RegexSearchTests
         using SearchResults results = SearchEngine.FindAll(doc.Current, slow, new SearchOptions { OnTimeout = _ => UnreadableAction.Skip });
         Assert.Equal(SearchResultsState.Completed, results.State);
         Assert.Equal([new SearchRange(0, 0x200)], results.TimedOutRanges);
+    }
+
+    [Fact]
+    public void TextRegexClassesAreUnicode()
+    {
+        // FIND-18 の仕様 1 の注: テキストの正規表現の数字・単語のクラスは Unicode で判定する (全角数字も数字)。[0-9] は ASCII だけ。
+        byte[] data = Utf8.GetBytes("a１b1");
+        Assert.Equal([1L, 5], FindAll(data, RegexSearch.Text(@"\d", Utf8, new RegexSearchOptions())).Select(m => m.Offset));
+        Assert.Equal([5L], FindAll(data, RegexSearch.Text("[0-9]", Utf8, new RegexSearchOptions())).Select(m => m.Offset));
+    }
+
+    [Fact]
+    public async Task CancelStopsABacktrackingMatchWithin200Milliseconds()
+    {
+        // FIND-02 の仕様 3: 後戻りする方式の照合が破滅的な後戻りで終わらなくても、キャンセルの要求から 200 ms 以内に検索を止める
+        // (時間の上限 60 秒を待たない)。止まった時刻は検索の処理の中で記録する。
+        byte[] data = new byte[0x200];
+        Array.Fill(data, (byte)'a', 0x100, 40);
+        using Document doc = Doc(data);
+        SearchPattern slow = RegexSearch.Text("(a+)+(?=b)", Encoding.ASCII, new RegexSearchOptions { TimeLimit = RegexSearch.MaxTimeLimit });
+        using var started = new ManualResetEventSlim();
+        slow.Regex!.SlowMatchStartedForTest = started.Set;
+        var center = new OperationCenter();
+        LongRunningOperation? running = null;
+        DateTimeOffset stoppedAt = default;
+        Task task = center.RunAsync("すべて検索", OperationKind.ReadOnly, doc, data.Length, op =>
+        {
+            running = op;
+            try
+            {
+                using SearchResults results = SearchEngine.FindAll(doc.Current, slow, new SearchOptions(), op);
+            }
+            catch (OperationCanceledException)
+            {
+                stoppedAt = DateTimeOffset.UtcNow;
+                throw;
+            }
+
+            return Task.CompletedTask;
+        });
+
+        Assert.True(started.Wait(TimeSpan.FromSeconds(30)), "照合が別のスレッドに移らなかった");
+        running!.Cancel();
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => task);
+        TimeSpan latency = stoppedAt - running.CancelRequestedAt!.Value;
+        Assert.True(latency < TimeSpan.FromMilliseconds(200), $"キャンセルから止まるまで {latency.TotalMilliseconds} ms");
+        Assert.Equal(OperationState.Cancelled, running.State);
+
+        // 次 / 前を検索 (CancellationToken) も同じ。
+        using var cts = new CancellationTokenSource();
+        using var started2 = new ManualResetEventSlim();
+        slow.Regex!.SlowMatchStartedForTest = started2.Set;
+        DateTimeOffset stopped2 = default;
+        Task find = Task.Run(() =>
+        {
+            try
+            {
+                SearchEngine.Find(doc.Current, slow, 0, true, false, new SearchOptions(), null, cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                stopped2 = DateTimeOffset.UtcNow;
+                throw;
+            }
+        });
+        Assert.True(started2.Wait(TimeSpan.FromSeconds(30)));
+        DateTimeOffset requested = DateTimeOffset.UtcNow;
+        cts.Cancel();
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => find);
+        Assert.True(stopped2 - requested < TimeSpan.FromMilliseconds(200), $"{(stopped2 - requested).TotalMilliseconds} ms");
+    }
+
+    [Fact]
+    public void BacktrackingMatchesStillRespectTheChunkTimeLimit()
+    {
+        // 照合を別のスレッドに移しても、チャンクごとの時間の上限 (FIND-18 の仕様 6) で止まり、上限より早くは止まらない。
+        byte[] data = new byte[0x200];
+        Array.Fill(data, (byte)'a', 0x100, 40);
+        using Document doc = Doc(data);
+        var limit = TimeSpan.FromMilliseconds(400);
+        SearchPattern slow = RegexSearch.Text("(a+)+(?=b)", Encoding.ASCII, new RegexSearchOptions { TimeLimit = limit });
+        var asked = new List<SearchRange>();
+        var watch = Stopwatch.StartNew();
+        using SearchResults results = SearchEngine.FindAll(doc.Current, slow, new SearchOptions { OnTimeout = r => { asked.Add(r); return UnreadableAction.Skip; } });
+        watch.Stop();
+        Assert.Equal([new SearchRange(0, 0x200)], asked);
+        Assert.Equal([new SearchRange(0, 0x200)], results.TimedOutRanges);
+        Assert.True(watch.Elapsed >= limit, watch.Elapsed.ToString());
+
+        // 遅いが上限までに終わる照合 (多くの環境で短い上限を超えて別のスレッドに移る) は、時間の上限にならずに一致する。
+        byte[] some = Encoding.ASCII.GetBytes(new string('a', 22) + "xaaab");
+        SearchPattern ok = RegexSearch.Text("(a+)+(?=b)", Encoding.ASCII, new RegexSearchOptions { TimeLimit = RegexSearch.MaxTimeLimit });
+        Assert.Equal([new SearchMatch(23, 3)], FindAll(some, ok));
+    }
+
+    [Fact]
+    public void ViewHighlightingBoundsTheTotalRegexTime()
+    {
+        // 表示中の範囲の強調 (UI スレッド) は、1 回の描画で照合に使う時間の合計を抑える。一致ごとに後戻りで時間がかかるパターンでも、
+        // 1 回の呼び出しは上限 (50 ms) と 1 回の照合の上限 (30 ms) の分しかかからない。
+        var sb = new StringBuilder();
+        for (int i = 0; i < 400; i++)
+        {
+            sb.Append('a', 18).Append('c');
+        }
+
+        byte[] data = Encoding.ASCII.GetBytes(sb.ToString());
+        using Document doc = Doc(data);
+        SearchPattern p = RegexSearch.Text("(a+)+(?=b)|c", Encoding.ASCII, new RegexSearchOptions());
+        bool complete = false;
+        TimeSpan elapsed = TimeSpan.Zero;
+        for (int i = 0; i < 1000 && !complete; i++)
+        {
+            var watch = Stopwatch.StartNew();
+            _ = SearchEngine.FindInView(doc.Current, p, 0, data.Length, null, out complete);
+            elapsed = watch.Elapsed;
+            if (!complete)
+            {
+                Thread.Sleep(5);
+            }
+        }
+
+        Assert.True(complete);
+        Assert.True(elapsed < TimeSpan.FromMilliseconds(500), elapsed.ToString());
     }
 
     /// <summary>TD-PNG の代わりの小さい PNG (シグネチャと IHDR・IEND)。</summary>

@@ -1,6 +1,7 @@
 using System.Text;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Search;
+using HexEditor.Core.Selection;
 using static HexEditor.Core.Tests.Search.SearchTestData;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
 
@@ -50,6 +51,56 @@ public sealed class FindAllResultsTests
         Assert.Equal(1_000_000, results.IndexOf(4_000_000));
         Assert.Equal(1_499_999, results.CountBefore(5_999_996));
         Assert.Equal([new SearchMatch(4_000_000, 2)], results.Overlapping(4_000_000, 3));
+    }
+
+    [Fact]
+    public void ConvertingManyResultsToASelectionStopsAtTheLimit()
+    {
+        // FIND-21 の仕様 2: 一時ファイルに書き出した 1,500,000 件の結果をマルチ選択に変換すると、先頭から 1,000,000 範囲だけになり、
+        // それ以降の結果は数え上げない (読まない)。打ち切ったことを返す (InfoBar で知らせる)。
+        using Document doc = Doc(Hits1500K());
+        var options = new SearchOptions { MaxMatches = 2_000_000, ChunkSize = 256 * 1024 };
+        using var results = new SearchResults(doc.Current, SearchPattern.FromHex("AB CD"), options) { MemoryLimit = 300_000, SpillDirectory = SpillFolder() };
+        SearchEngine.FindAll(results);
+        Assert.Equal(1_500_000, results.Count);
+        Assert.True(results.SpilledCount > 0);
+
+        long located = 0;
+        (int, ByteRange)? Locate(long i)
+        {
+            located++;
+            SearchMatch m = results[i];
+            return (0, new ByteRange(m.Offset, m.Length));
+        }
+
+        IEnumerable<long> All()
+        {
+            for (long i = 0; i < results.LongCount; i++)
+            {
+                yield return i;
+            }
+        }
+
+        SelectionConversion<int> converted = SearchResultsConversion.ToSelectionRanges(All(), Locate, SearchResultsConversion.MaxSelectionRanges);
+        Assert.True(converted.Truncated);
+        List<ByteRange> ranges = Assert.Single(converted.Ranges).Value;
+        Assert.Equal(1_000_000, ranges.Count);
+        Assert.Equal(new ByteRange(0, 2), ranges[0]);
+        Assert.Equal(new ByteRange(4L * 999_999, 2), ranges[^1]);
+        Assert.Equal(1_000_001, located);
+
+        // 上限に収まる場合は打ち切らない。長さ 0 の範囲は除く。
+        SelectionConversion<int> small = SearchResultsConversion.ToSelectionRanges([0L, 1, 2], i => i == 1 ? (0, new ByteRange(9, 0)) : Locate(i), 1_000);
+        Assert.False(small.Truncated);
+        Assert.Equal([new ByteRange(0, 2), new ByteRange(8, 2)], small.Ranges[0]);
+
+        // キャンセル。
+        Assert.ThrowsAny<OperationCanceledException>(() =>
+        {
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+            SearchResultsConversion.ToSelectionRanges(All(), Locate, int.MaxValue, null, cts.Token);
+        });
     }
 
     [Fact]

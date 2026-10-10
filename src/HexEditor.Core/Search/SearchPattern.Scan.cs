@@ -38,6 +38,7 @@ public sealed partial class SearchPattern
         bool positional = Position is { IsNone: false } || Alignment > 1;
         for (long window = (baseOffset + from) / SubWindow * SubWindow; window < baseOffset + end; window += SubWindow)
         {
+            context.CheckCancel?.Invoke();
             int cs = (int)Math.Max(from, window - baseOffset);
             int ce = (int)Math.Min(end, window + SubWindow - baseOffset);
             int gatherFrom = (int)Math.Max(cs, next - baseOffset);

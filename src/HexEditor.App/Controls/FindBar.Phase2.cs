@@ -108,8 +108,66 @@ public sealed partial class FindBar
         AutomationProperties.SetName(TermList, Loc.Get("Find_TermList_Name"));
         MultiEncodingHint.Text = Loc.Format("Find_MultiEncoding_Hint", SearchPattern.MaxEncodings);
         Terms.CollectionChanged += (_, _) => Validate();
-        RegexSingleline.IsChecked = false;
+        SyncSinglelineToKind();
     }
+
+    // ---- `s` フラグの既定 (FIND-18 の仕様 2、FIND-19 の仕様 3) ----
+
+    /// <summary>テキストの正規表現の `s` フラグ (既定オフ)。利用者が切り替えたらこのウィンドウの間は覚えておく。</summary>
+    private bool _singlelineText;
+
+    /// <summary>バイト列の正規表現の `s` フラグ (既定オン: `.` は 0A を含む任意のバイトに一致する)。</summary>
+    private bool _singlelineBytes = true;
+
+    /// <summary>チェックボックスが今どちらの種類の値を表しているか。</summary>
+    private SearchKind? _singlelineKind;
+
+    private bool _settingSingleline;
+
+    /// <summary>種類が正規表現に変わったら、`s` のチェックボックスをその種類の値 (既定または利用者が選んだ値) にする。</summary>
+    private void SyncSinglelineToKind()
+    {
+        SearchKind kind = Kind;
+        if (kind is not (SearchKind.RegexText or SearchKind.RegexBytes) || kind == _singlelineKind)
+        {
+            return;
+        }
+
+        _singlelineKind = kind;
+        _settingSingleline = true;
+        try
+        {
+            RegexSingleline.IsChecked = kind == SearchKind.RegexBytes ? _singlelineBytes : _singlelineText;
+        }
+        finally
+        {
+            _settingSingleline = false;
+        }
+    }
+
+    private void RegexSingleline_Changed(object sender, RoutedEventArgs e)
+    {
+        if (!_settingSingleline && _singlelineKind is { } kind)
+        {
+            bool value = RegexSingleline.IsChecked == true;
+            if (kind == SearchKind.RegexBytes)
+            {
+                _singlelineBytes = value;
+            }
+            else
+            {
+                _singlelineText = value;
+            }
+        }
+
+        Validate();
+    }
+
+    /// <summary>テスト用: 符号化できずに除いた文字コードの警告 (表示していなければ空)。</summary>
+    internal string EncodingWarningMessage => EncodingWarning.Visibility == Visibility.Visible ? EncodingWarningText.Text : string.Empty;
+
+    /// <summary>テスト用: `s` フラグのチェックボックスの状態。</summary>
+    internal bool RegexSinglelineChecked => RegexSingleline.IsChecked == true;
 
     // ---- パターンの作成 ----
 
@@ -308,6 +366,11 @@ public sealed partial class FindBar
         MaskQuery.Visibility = Show(IsMask && MaskModeChoice.SelectedIndex == 0);
         RangeExcludeChoice.Visibility = Show(IsRange);
         MultiEncodingButton.Visibility = Show(kind == SearchKind.Text && IsMultiEncoding && !multiTerm);
+
+        // 符号化できない文字コードは除いて検索し、警告を出す (FIND-08 の仕様 6)。
+        bool excluded = kind == SearchKind.Text && IsMultiEncoding && !multiTerm && _pattern is not null && _excludedEncodings.Count > 0;
+        EncodingWarningText.Text = excluded ? Loc.Format("Find_EncodingsExcluded", string.Join(", ", _excludedEncodings)) : string.Empty;
+        EncodingWarning.Visibility = Show(excluded);
         bool custom = PositionChoice.SelectedIndex == 1;
         foreach (Button preset in new[] { PositionPreset2, PositionPreset4, PositionPreset8, PositionPreset16, PositionPresetSector })
         {
@@ -387,8 +450,7 @@ public sealed partial class FindBar
         if (pattern.Parts.Count > 0)
         {
             string parts = string.Join("  ", pattern.Variants.Take(4).Select((v, i) => $"{v}: {pattern.Parts[i].Preview(8)}"));
-            string excluded = _excludedEncodings.Count > 0 ? "  " + Loc.Format("Find_EncodingsExcluded", string.Join(", ", _excludedEncodings)) : string.Empty;
-            return (pattern.Variants.Count > 4 ? Loc.Format("Find_PartsMore", parts, pattern.Variants.Count) : parts) + excluded + position;
+            return (pattern.Variants.Count > 4 ? Loc.Format("Find_PartsMore", parts, pattern.Variants.Count) : parts) + position;
         }
 
         return position.Length > 0 ? null : null;
