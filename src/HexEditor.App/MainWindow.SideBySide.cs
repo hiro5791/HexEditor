@@ -3,6 +3,7 @@ using HexEditor.App.Controls;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Engine;
+using HexEditor.Core.Files;
 using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
@@ -135,6 +136,93 @@ public sealed partial class MainWindow
             _sideBySide.Add(g);
             return g;
         }
+    }
+
+    // ---- セッション (VIEW-39 の仕様 7) ----
+
+    /// <summary>並べて表示の組の記録。番号はセッションに書くタブ (復元できるタブ) の中の番号。</summary>
+    private List<SessionSideBySide> CaptureSideBySide()
+    {
+        List<DocumentViewModel> restorable = [.. Vm.Documents.Where(d => SessionRules.IsRestorable(d.ToSessionTab()))];
+        var groups = new List<SessionSideBySide>();
+        foreach (SideBySideGroup group in _sideBySide)
+        {
+            int left = restorable.IndexOf(group.Left);
+            List<int> partners = [.. group.Partners.Select(p => restorable.IndexOf(p)).Where(i => i >= 0)];
+            if (left >= 0 && partners.Count > 0)
+            {
+                groups.Add(new SessionSideBySide
+                {
+                    Left = left,
+                    Partners = partners,
+                    Mode = group.Mode.ToString(),
+                    Differences = group.HighlightDifferences,
+                });
+            }
+        }
+
+        return groups;
+    }
+
+    /// <summary>
+    /// 記録した並べて表示の組を戻す。<paramref name="first"/> は復元したタブの最初の番号。まだ開いていない (遅延して開く) タブは開く。
+    /// 「比較に従う」は比較の結果がないので「同じオフセット」で戻す。
+    /// </summary>
+    private void RestoreSideBySide(SessionWindow window, int first)
+    {
+        if (window.SideBySide.Count == 0)
+        {
+            return;
+        }
+
+        DocumentViewModel? selected = Vm.Selected;
+        DocumentViewModel? At(int index)
+        {
+            int i = first + index;
+            if (i < 0 || i >= Vm.Documents.Count)
+            {
+                return null;
+            }
+
+            if (Vm.Documents[i].IsPending)
+            {
+                MaterializePending(Vm.Documents[i]);
+            }
+
+            return Vm.Documents[i] is { IsPending: false, IsMissing: false } d ? d : null;
+        }
+
+        foreach (SessionSideBySide record in window.SideBySide)
+        {
+            if (At(record.Left) is not { } left)
+            {
+                continue;
+            }
+
+            foreach (int partner in record.Partners)
+            {
+                if (At(partner) is { } p && !ReferenceEquals(p.Document, left.Document))
+                {
+                    AddSideBySide(left, p);
+                }
+            }
+
+            if (SideBySideOf(left) is { } group)
+            {
+                SyncMode mode = Enum.TryParse(record.Mode, out SyncMode m) && m != SyncMode.Mapped ? m : SyncMode.SameOffset;
+                group.Resync(mode, App.Settings.GetBool("view.sync.selection", false));
+                group.HighlightDifferences = record.Differences;
+                UpdateDifferenceSources(group);
+            }
+        }
+
+        if (selected is not null && Vm.Documents.Contains(selected))
+        {
+            Vm.Selected = selected;
+        }
+
+        ShowSideBySide();
+        UpdateSyncStatus();
     }
 
     private void HookSideBySide()

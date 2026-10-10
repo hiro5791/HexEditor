@@ -85,6 +85,14 @@ public sealed partial class MainViewModel
             vm.RestorePosition(fitted.Cursor, fitted.SelectionStart, fitted.SelectionLength, fitted.TopRow);
         }
 
+        // 分割の状態 (VIEW-37 の仕様 10)。ファイルが記録したときから変わっていれば戻さない。
+        if (restorePosition && _files.RestorePosition()
+            && _files.Documents.ReadObject(path, DocumentViewModel.SplitDataKind) is { } split
+            && split.Header.Matches(vm.OpenedStamp))
+        {
+            vm.RestoreSplit(split.Value);
+        }
+
         StartWatching(vm);
     }
 
@@ -160,6 +168,22 @@ public sealed partial class MainViewModel
             if (error is not null)
             {
                 AppLog.Warning($"The position was not saved: {error}");
+            }
+
+            try
+            {
+                if (vm.SplitState() is { } split)
+                {
+                    _files.Documents.WriteObject(path, DocumentViewModel.SplitDataKind, stamp, split);
+                }
+                else
+                {
+                    _files.Documents.Delete(path, DocumentViewModel.SplitDataKind);
+                }
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warning($"The split state was not saved: {e.Message}");
             }
 
             Recent.Record(path, vm.DisplayName, _files.UtcNow());

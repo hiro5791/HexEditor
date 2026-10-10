@@ -55,7 +55,7 @@ public static class CellFormatter
 
     /// <summary>
     /// セルの文字数 (仕様 1 の表)。float / double は符号と非正規化数の印 <c>d</c> を含めて最長の表記が入る幅にする
-    /// (float 15、double 24。仕様の表の注)。
+    /// (float 15、double 25。仕様の表の注)。
     /// </summary>
     public static int Chars(CellFormat format) => format switch
     {
@@ -74,7 +74,7 @@ public static class CellFormatter
         CellFormat.Int64Decimal => 20,
         CellFormat.Int64SignedDecimal => 20,
         CellFormat.Float => 15,
-        CellFormat.Double => 24,
+        CellFormat.Double => 25,
         _ => 2,
     };
 

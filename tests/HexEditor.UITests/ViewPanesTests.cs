@@ -288,6 +288,30 @@ public sealed class ViewPanesTests
         Assert.Single((await PanesAsync(app))["views"]!.AsArray());
     });
 
+    /// <summary>VIEW-37 の仕様 10: 分割の状態 (向き・各ペインの位置) は付随データに保存し、開き直すと戻る。</summary>
+    [Fact]
+    public Task Split_state_is_restored_when_the_file_is_reopened() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        await ExecuteAsync(app, "view.splitVertical");
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 1 });
+        await app.SendAsync("goto", new JsonObject { ["offset"] = 0x4000 });
+        await app.IdleAsync();
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+
+        await app.OpenAsync(path);
+        await app.WaitForTabsAsync(1);
+        await app.IdleAsync();
+        JsonObject panes = await PanesAsync(app);
+        Assert.True(panes["split"]!.GetValue<bool>());
+        Assert.True(panes["sideBySide"]!.GetValue<bool>());
+        JsonArray views = panes["views"]!.AsArray();
+        Assert.Equal(2, views.Count);
+        Assert.Equal(0x4000, views[1]!["cursor"]!.GetValue<long>());
+    });
+
     // ---- VIEW-38 ----
 
     [Fact]
@@ -455,6 +479,30 @@ public sealed class ViewPanesTests
         }
 
         Assert.False(await app.IsShownAsync("CompareResults"));
+    });
+
+    /// <summary>VIEW-39 の仕様 7: 並べたドキュメントと同期のモードは、セッションの復元で戻る。</summary>
+    [Fact]
+    public Task Side_by_side_is_restored_with_the_session() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        string left = ctx.CopyTestData("TD-SEQ-1M");
+        string right = ctx.CopyTestData("TD-VIEW-SEQ-MOD");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [left, right] });
+        await app.WaitForTabsAsync(2);
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
+        await ExecuteAsync(app, "view.sideBySide", "1");
+        await MenuAsync(app, "Command_ViewSyncKeepDifference");
+        await app.CommandAsync("Command_Exit");
+        await app.WaitForExitAsync(UiTest.Scaled(TimeSpan.FromSeconds(20)));
+
+        AppSession again = await ctx.StartAsync(new AppOptions { Profile = profile });
+        await again.WaitForTabsAsync(2);
+        await again.IdleAsync();
+        JsonObject state = await again.SendAsync("sideBySide");
+        Assert.True(state["active"]!.GetValue<bool>());
+        Assert.Equal("KeepDifference", state["mode"]!.GetValue<string>());
+        Assert.Single(state["partners"]!.AsArray());
     });
 
     [Fact]

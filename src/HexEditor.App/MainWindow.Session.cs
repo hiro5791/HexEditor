@@ -148,10 +148,12 @@ public sealed partial class MainWindow
             RestorePanelLayout(System.Text.Json.Nodes.JsonNode.Parse(panels.GetRawText()));
         }
 
+        int first = Vm.Documents.Count;
         Vm.RestoreTabs(
             tabs,
             (path, readOnly) => TryOpen(path, readOnly: readOnly, restorePosition: false),
             vm => ShowNotice(Loc.Get("Session_FileChanged"), InfoBarSeverity.Informational, vm));
+        RestoreSideBySide(tabs, first);
         AppLog.Info($"Session restored: {Vm.Documents.Count} tab(s)");
         UpdateTitle();
     }
@@ -256,7 +258,7 @@ public sealed partial class MainWindow
     private static extern bool GetMonitorInfo(nint monitor, ref MonitorInfoEx info);
 
     /// <summary>セッションに書くこのウィンドウの記録 (位置・大きさ・パネル・タブ)。</summary>
-    public SessionWindow CaptureSessionWindow() => Vm.CaptureWindow(CurrentBounds());
+    public SessionWindow CaptureSessionWindow() => Vm.CaptureWindow(CurrentBounds()) with { SideBySide = CaptureSideBySide() };
 
     /// <summary>
     /// 前回の位置と大きさに戻す。画面の外になる場合と、記録したモニターがない場合 (外したモニターにあったなど) は、主モニターの中央に既定の

@@ -100,6 +100,55 @@ public sealed partial class DocumentViewModel
         return second;
     }
 
+    /// <summary>付随データの種類: 分割の状態 (VIEW-37 の仕様 10)。</summary>
+    public const string SplitDataKind = "split";
+
+    /// <summary>分割の状態 (向き、比率、各ペインの位置)。分割していなければ null。</summary>
+    public System.Text.Json.Nodes.JsonObject? SplitState() => SecondaryEditor is { } second
+        ? new System.Text.Json.Nodes.JsonObject
+        {
+            ["sideBySide"] = SplitSideBySide,
+            ["ratio"] = SplitRatio,
+            ["activePane"] = ActivePane,
+            ["panes"] = new System.Text.Json.Nodes.JsonArray(
+                [.. new[] { PrimaryEditor, second }.Select(p => (System.Text.Json.Nodes.JsonNode?)new System.Text.Json.Nodes.JsonObject
+                {
+                    ["top"] = p.TopOffset,
+                    ["cursor"] = p.Cursor,
+                })]),
+        }
+        : null;
+
+    /// <summary>保存した分割の状態を戻す (VIEW-37 の仕様 10)。位置はドキュメントの長さに収める。</summary>
+    public void RestoreSplit(System.Text.Json.Nodes.JsonObject state)
+    {
+        try
+        {
+            if (state["panes"] is not System.Text.Json.Nodes.JsonArray { Count: 2 } panes)
+            {
+                return;
+            }
+
+            Split(state["sideBySide"]?.GetValue<bool>() ?? false);
+            SplitRatio = Math.Clamp(state["ratio"]?.GetValue<double>() ?? 0.5, 0.05, 0.95);
+            long length = Document.Length;
+            EditorState[] editors = [PrimaryEditor, SecondaryEditor!];
+            for (int i = 0; i < 2; i++)
+            {
+                long top = Math.Clamp(panes[i]?["top"]?.GetValue<long>() ?? 0, 0, length);
+                long cursor = Math.Clamp(panes[i]?["cursor"]?.GetValue<long>() ?? 0, 0, length);
+                editors[i].SyncTo(top, cursor);
+            }
+
+            ActivePane = Math.Clamp(state["activePane"]?.GetValue<int>() ?? 0, 0, 1);
+            PanesChanged?.Invoke(this, EventArgs.Empty);
+        }
+        catch (Exception e) when (e is InvalidOperationException or FormatException)
+        {
+            // 壊れた記録は使わない。
+        }
+    }
+
     /// <summary>分割を解除する。操作中のペインを残す (VIEW-37 の仕様 9)。</summary>
     public void Unsplit()
     {

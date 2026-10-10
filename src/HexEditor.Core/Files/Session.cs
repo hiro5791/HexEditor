@@ -74,6 +74,22 @@ public sealed record SessionWindow
 
     /// <summary>パネルの配置と大きさ (パネルの担当が決める形)。</summary>
     public JsonElement? Panels { get; init; }
+
+    /// <summary>並べて表示の組 (VIEW-39 の仕様 7)。番号は <see cref="Tabs"/> の中。</summary>
+    public List<SessionSideBySide> SideBySide { get; init; } = [];
+}
+
+/// <summary>並べて表示の組 1 つの記録 (VIEW-39 の仕様 7): 左のタブ、並べたタブ、同期のモード、違いを強調。</summary>
+public sealed record SessionSideBySide
+{
+    public int Left { get; init; }
+
+    public List<int> Partners { get; init; } = [];
+
+    /// <summary>同期のモード (<c>Off</c>、<c>SameOffset</c>、<c>KeepDifference</c>、<c>Mapped</c>)。</summary>
+    public string Mode { get; init; } = "SameOffset";
+
+    public bool Differences { get; init; }
 }
 
 /// <summary>閉じたタブの記録 (UI-12 の仕様 1): タブの記録と、元の並び位置。</summary>
