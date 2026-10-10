@@ -17,6 +17,13 @@ public static class TextTransforms
     /// <summary>対象の合計の長さが長時間処理になるか (4 MiB を超えるか)。</summary>
     public static bool IsLongRunning(long totalLength) => totalLength > LongRunningThreshold;
 
+    /// <summary>
+    /// 対象の範囲が長時間処理になるか: 合計の長さが 4 MiB を超えるか、範囲が 10,000 個を超える (マルチ選択・矩形の要素ごとの変換。
+    /// EDIT-07 の「巨大ファイル・長時間処理」)。
+    /// </summary>
+    public static bool IsLongRunning(IReadOnlyCollection<TargetRange> ranges) =>
+        ranges.Count > DataOperationRunner.LongRunningRanges || IsLongRunning(TotalLength(ranges));
+
     /// <summary>対象の範囲の合計の長さ。</summary>
     public static long TotalLength(IEnumerable<TargetRange> ranges) => ranges.Sum(r => r.Length);
 

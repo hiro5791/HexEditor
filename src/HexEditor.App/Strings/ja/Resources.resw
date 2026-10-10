@@ -2948,6 +2948,7 @@
   <data name="Notice_RectangleToMultiLimit" xml:space="preserve"><value>矩形の行数 ({0} 行) がマルチ選択の上限 ({1}) を超えるため変換できません。</value></data>
   <data name="Notice_RectangleRowLimit" xml:space="preserve"><value>矩形が {0} 行あり、上限 {1} 行を超えています。上書きの操作は使えます。</value></data>
   <data name="Notice_RectanglePasteInserted" xml:space="preserve"><value>{0} 行に挿入しました。挿入モードで行ごとに挿入したため、後ろの行の配置はずれています。</value></data>
+  <data name="Notice_RectangleListLimit" xml:space="preserve"><value>矩形の行数 ({0} 行) が上限 ({1}) を超えるため、範囲ごとに行う操作は実行できません。塗りつぶしは使えます。</value></data>
   <data name="Command_NoRectangle" xml:space="preserve"><value>矩形選択がありません。</value></data>
   <data name="Command_UserClipboardEmpty" xml:space="preserve"><value>このユーザークリップボードは空です。</value></data>
   <data name="Command_ClipboardHistoryEmpty" xml:space="preserve"><value>クリップボード履歴は空です。</value></data>

@@ -405,6 +405,22 @@ public sealed partial class EditorState
         return Document.CanResize && CheckRectangleRows() is null ? RangeDeleteAction.Delete : RangeDeleteAction.None;
     }
 
+    /// <summary>
+    /// 要素 (範囲) の一覧を作ってから行う操作 (データ演算、文字コード変換、大文字・小文字の変換) の前に、矩形の行数が上限を超えていないかを
+    /// 確かめる。超えていればその上限を返す (一覧を作らずに実行しない)。上限はマルチ選択の要素数の上限 (EDIT-07 の仕様 3) で、
+    /// 長さが変わりうる操作では矩形の行数の上限 (EDIT-17 の仕様 6) も加える。マルチ選択は要素数が上限以内なので null。
+    /// </summary>
+    public long? RectangleListLimitExceeded(bool changesLength)
+    {
+        if (_rect is null)
+        {
+            return null;
+        }
+
+        long limit = changesLength ? Math.Min(MaxRectangleRows, MaxSelectionElements) : MaxSelectionElements;
+        return SelectedRangeCount > limit ? limit : null;
+    }
+
     /// <summary>矩形の行数が長さの変わる操作の上限 (EDIT-17 の仕様 6) を超えていれば <see cref="EditResult.TooManyRows"/>。</summary>
     public EditResult? CheckRectangleRows() =>
         _rect is { } r && SelectionSnapshot.RectangleRowCount(r, Layout.Length) > MaxRectangleRows ? EditResult.TooManyRows : null;

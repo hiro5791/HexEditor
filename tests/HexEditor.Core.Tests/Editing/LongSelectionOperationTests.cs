@@ -174,6 +174,39 @@ public sealed class LongSelectionOperationTests
     }
 
     [Fact]
+    public void Range_list_operations_refuse_rectangles_over_the_limit_and_run_long_above_10000_ranges()
+    {
+        (Document doc, EditorState s) = MultiSelectionTests.Create(0x10000);
+        using (doc)
+        {
+            // 0x1000 行の矩形。要素数の上限 (1,000 以上) の範囲で、上限を 0x1000 未満にすると一覧を作る操作は実行しない。
+            s.SelectRectangle(0, 0xFFF1);
+            Assert.Equal(0x1000, s.SelectedRangeCount);
+            Assert.Null(s.RectangleListLimitExceeded(changesLength: true));
+            s.MaxSelectionElements = 0x0FFF;
+            Assert.Equal(0x0FFF, s.RectangleListLimitExceeded(changesLength: false));
+
+            // 長さが変わりうる操作は矩形の行数の上限も加える。
+            s.MaxSelectionElements = 1_000_000;
+            s.MaxRectangleRows = 100;
+            Assert.Null(s.RectangleListLimitExceeded(changesLength: false));
+            Assert.Equal(100, s.RectangleListLimitExceeded(changesLength: true));
+
+            // マルチ選択は要素数が上限以内なので確かめない。
+            s.SetSelections(Every2(10));
+            Assert.Null(s.RectangleListLimitExceeded(changesLength: true));
+        }
+
+        // 範囲が 10,000 個を超えるデータ演算・文字の変換は、合計が小さくても長時間処理。
+        var small = Enumerable.Range(0, 10_000).Select(i => new Core.Editing.Transforms.TargetRange(i * 2L, 1)).ToList();
+        Assert.False(Core.Editing.Transforms.DataOperationRunner.IsLongRunning(small));
+        Assert.False(Core.Editing.Transforms.TextTransforms.IsLongRunning(small));
+        small.Add(new Core.Editing.Transforms.TargetRange(30_000, 1));
+        Assert.True(Core.Editing.Transforms.DataOperationRunner.IsLongRunning(small));
+        Assert.True(Core.Editing.Transforms.TextTransforms.IsLongRunning(small));
+    }
+
+    [Fact]
     public void Renaming_a_selection_set_reports_why_it_failed()
     {
         (Document doc, EditorState s) = MultiSelectionTests.Create(0x100);

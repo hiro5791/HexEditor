@@ -2948,6 +2948,7 @@ Details were written to:
   <data name="Notice_RectangleToMultiLimit" xml:space="preserve"><value>The rectangle has {0} rows, which exceeds the multi-selection limit ({1}), so it can't be converted.</value></data>
   <data name="Notice_RectangleRowLimit" xml:space="preserve"><value>The rectangle has {0} rows, more than the limit of {1} rows. Overwrite operations are still available.</value></data>
   <data name="Notice_RectanglePasteInserted" xml:space="preserve"><value>{0, plural, one {Inserted into # row.} other {Inserted into # rows.}} Because each row was inserted in insert mode, the rows after it have shifted.</value></data>
+  <data name="Notice_RectangleListLimit" xml:space="preserve"><value>The rectangle has {0} rows, which exceeds the limit ({1}) for operations that work on each range. Fill can still be used.</value></data>
   <data name="Command_NoRectangle" xml:space="preserve"><value>There's no rectangle selection.</value></data>
   <data name="Command_UserClipboardEmpty" xml:space="preserve"><value>This user clipboard is empty.</value></data>
   <data name="Command_ClipboardHistoryEmpty" xml:space="preserve"><value>The clipboard history is empty.</value></data>
