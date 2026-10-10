@@ -72,6 +72,15 @@ public sealed record RecoveryRecord
 
     /// <summary>範囲の長さを変えられるか。</summary>
     public bool RangeResizable { get; init; }
+
+    /// <summary>ディスク・ボリュームのドキュメント (ENG-29) のデバイスのパス。ファイルなら null (ENG-27 の仕様 6: 変更範囲マップを復旧する)。</summary>
+    public string? DevicePath { get; init; }
+
+    /// <summary>デバイスのシリアル番号 (一致しなければ復旧しない)。</summary>
+    public string? DeviceSerial { get; init; }
+
+    /// <summary>範囲を指定して開いたデバイスの開始位置。</summary>
+    public long DeviceRangeStart { get; init; }
 }
 
 /// <summary>
@@ -119,8 +128,9 @@ public sealed class DocumentRecovery : IDisposable
         string? path = (document.Source as FileByteSource)?.Path;
         FileStamp? stamp = (document.Source as FileByteSource)?.Stamp;
         (long, long, bool)? range = document.Source is FileByteSource { IsRange: true } r ? (r.RangeStart, r.Length, r.RangeResizable) : null;
+        (string, string?, long)? device = document.Source is Devices.DeviceByteSource d ? (d.Path, d.Info.SerialNumber, d.Info.RangeStart) : null;
         return new RecoveryCapture(document, snapshot, document.Id, document.Source.DisplayName, path, stamp, document.AddBuffer.Length,
-            cursor, selectionStart, selectionLength, range);
+            cursor, selectionStart, selectionLength, range, device);
     }
 
     /// <summary>
@@ -176,6 +186,9 @@ public sealed class DocumentRecovery : IDisposable
                 RangeStart = capture.Range?.Start,
                 RangeLength = capture.Range?.Length,
                 RangeResizable = capture.Range?.Resizable ?? false,
+                DevicePath = capture.Device?.Path,
+                DeviceSerial = capture.Device?.Serial,
+                DeviceRangeStart = capture.Device?.RangeStart ?? 0,
             };
 
             string temp = StatePath + ".tmp";
@@ -294,4 +307,5 @@ public sealed record RecoveryCapture(
     long Cursor,
     long SelectionStart,
     long SelectionLength,
-    (long Start, long Length, bool Resizable)? Range = null);
+    (long Start, long Length, bool Resizable)? Range = null,
+    (string Path, string? Serial, long RangeStart)? Device = null);

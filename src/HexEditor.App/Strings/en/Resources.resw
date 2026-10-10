@@ -5204,4 +5204,6 @@ Details were written to:
   <data name="Tab_CreateSnapshot" xml:space="preserve"><value>Create Snapshot</value></data>
   <data name="Compare_Kind_RegionAdded" xml:space="preserve"><value>Region added</value></data>
   <data name="Compare_Kind_RegionRemoved" xml:space="preserve"><value>Region removed</value></data>
+  <data name="Recovery_DeviceMissing" xml:space="preserve"><value>The device {0} of this recovery data is not connected.</value></data>
+  <data name="Recovery_DeviceSerialMismatch" xml:space="preserve"><value>The device at {0} is not the same device (the serial number differs). The changes were not recovered.</value></data>
 </root>

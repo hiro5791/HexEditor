@@ -9493,6 +9493,8 @@
       "Recovery_Body": "reviewed:af919a70da219b3d",
       "Recovery_DeleteFailed": "reviewed:8f91f983f995a8ee",
       "Recovery_Details": "reviewed:a9d356f43b83ff13",
+      "Recovery_DeviceMissing": "reviewed:bad3eeb4f32b82bf",
+      "Recovery_DeviceSerialMismatch": "reviewed:5090eb863da49a64",
       "Recovery_Discard": "reviewed:eb1a70e39274bb76",
       "Recovery_Failed": "reviewed:615d0dffce426b0b",
       "Recovery_JournalDetails": "reviewed:2ebd8301ee79564c",

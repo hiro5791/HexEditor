@@ -5204,4 +5204,6 @@
   <data name="Tab_CreateSnapshot" xml:space="preserve"><value>スナップショットを作成</value></data>
   <data name="Compare_Kind_RegionAdded" xml:space="preserve"><value>領域の追加</value></data>
   <data name="Compare_Kind_RegionRemoved" xml:space="preserve"><value>領域の削除</value></data>
+  <data name="Recovery_DeviceMissing" xml:space="preserve"><value>この復旧用データのデバイス {0} が接続されていません。</value></data>
+  <data name="Recovery_DeviceSerialMismatch" xml:space="preserve"><value>{0} のデバイスは同じデバイスではありません (シリアル番号が違います)。変更は復旧していません。</value></data>
 </root>

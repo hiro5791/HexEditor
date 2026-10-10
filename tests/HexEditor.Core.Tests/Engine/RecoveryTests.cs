@@ -25,6 +25,45 @@ public sealed class RecoveryTests : IDisposable
     }
 
     [Fact]
+    public void Disk_document_records_the_device_and_is_recovered_onto_the_reopened_device()
+    {
+        // ENG-27 の仕様 6: ディスク・ボリュームは変更範囲マップを復旧する (開き直したデバイスに戻す)。
+        var access = new Core.Devices.FakeDeviceAccess(new Core.Devices.FakeDeviceSpec
+        {
+            Elevated = true,
+            Disks = [new Core.Devices.FakeDiskSpec { Number = 1, SectorSize = 512, Size = 1024 * 1024, Serial = "SER1" }],
+        });
+        Core.Devices.IDeviceHandle handle = access.Open(Core.Devices.DevicePath.PhysicalDrive(1), writable: false);
+        var device = new Core.Devices.DeviceByteSource(handle, access,
+            new Core.Devices.DeviceOpenInfo { Path = handle.Path, DisplayName = "Disk 1", SerialNumber = "SER1" });
+        var doc = new Document(device, Options());
+        var recovery = new DocumentRecovery(Root, doc.Id);
+        doc.Overwrite(0x200, [1, 2, 3]);
+        byte[] expected = Read(doc.Current, 0, 0x400);
+        recovery.Write(DocumentRecovery.Capture(doc, 0x200, 0x200, 0)!);
+        SimulateCrash(doc, recovery);
+
+        RecoveryEntry entry = Assert.Single(RecoveryStore.Scan(Root));
+        Assert.Equal(handle.Path, entry.Record.DevicePath);
+        Assert.Equal("SER1", entry.Record.DeviceSerial);
+        Assert.Null(entry.Record.Path);
+        Assert.Throws<InvalidDataException>(() => RecoveryStore.Restore(entry, Options()));
+
+        Core.Devices.IDeviceHandle again = access.Open(Core.Devices.DevicePath.PhysicalDrive(1), writable: false);
+        var reopened = new Core.Devices.DeviceByteSource(again, access, new Core.Devices.DeviceOpenInfo { Path = again.Path, DisplayName = "Disk 1" });
+        RestoredDocument restored = RecoveryStore.Restore(Assert.Single(RecoveryStore.Scan(Root)), Options(), reopened);
+        using (Document doc2 = restored.Document)
+        {
+            Assert.False(restored.SourceChanged);
+            Assert.True(doc2.IsModified);
+            Assert.Equal(expected, Read(doc2.Current, 0, 0x400));
+        }
+
+        restored.Recovery.Dispose();
+        access.Dispose();
+    }
+
+    [Fact]
     public void Range_document_is_recovered_with_the_same_range()
     {
         // ENG-27 の仕様 2 (範囲 ENG-13): 範囲を開いたドキュメントは、同じ範囲を開き直して変更を戻す。

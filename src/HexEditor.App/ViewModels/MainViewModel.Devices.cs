@@ -50,7 +50,9 @@ public sealed partial class MainViewModel
         }
 
         var doc = new Document(source, _options);
-        DocumentViewModel vm = Add(doc, null, source.DisplayName);
+
+        // プロセスメモリは復旧しない (プロセスが終了しているため。ENG-27 の仕様 6)。
+        DocumentViewModel vm = Add(doc, null, source.DisplayName, recovery: false);
         doc.SetReadOnly(readOnly ? ReadOnlyReason.Device : ReadOnlyReason.None);
         WatchDisconnect(vm, source);
         return vm;
@@ -90,9 +92,19 @@ public sealed partial class MainViewModel
         }
 
         var doc = new Document(source, _options);
-        DocumentViewModel vm = Add(doc, null, source.DisplayName);
+        DocumentViewModel vm = Add(doc, null, source.DisplayName, recovery: false);
         doc.SetReadOnly(ReadOnlyReason.NoWriteTarget);
         return vm;
+    }
+
+    /// <summary>復旧したディスク・ボリュームのドキュメント (ENG-27 の仕様 6) を、切断の監視の対象にする。書き込みは改めて許可させる。</summary>
+    public void WatchRestoredDevice(DocumentViewModel vm)
+    {
+        if (vm.Document.Source is DeviceByteSource device)
+        {
+            vm.Document.SetReadOnly(ReadOnlyReason.Device);
+            WatchDisconnect(vm, device);
+        }
     }
 
     /// <summary>切断・終了を監視し、起きたらドキュメントを読み取り専用にして知らせる (ENG-29 の仕様 11、ENG-32 の仕様 9)。</summary>

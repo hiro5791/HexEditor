@@ -65,12 +65,25 @@ public static class RecoveryStore
     /// 復旧する。元のファイルを開き直し、記録したピースの一覧を復元したドキュメントを「変更あり」の状態で返す。
     /// 復旧用データは新しいドキュメントの復旧用データとして引き継ぐ (同じフォルダ)。失敗したら例外で、データは残す。
     /// </summary>
-    public static RestoredDocument Restore(RecoveryEntry entry, DocumentOptions options)
+    public static RestoredDocument Restore(RecoveryEntry entry, DocumentOptions options) => Restore(entry, options, null);
+
+    /// <summary>
+    /// 復旧する。ディスク・ボリュームの記録 (<see cref="RecoveryRecord.DevicePath"/>) は、呼び出し側が開き直したデバイスのデータソースを
+    /// <paramref name="device"/> に渡す (管理者権限・シリアル番号の確認は呼び出し側。ENG-27 の仕様 6)。範囲外になった変更は除く。
+    /// </summary>
+    public static RestoredDocument Restore(RecoveryEntry entry, DocumentOptions options, IByteSource? device)
     {
         RecoveryRecord record = entry.Record;
         bool sourceChanged = false;
         IByteSource source;
-        if (record.Path is null)
+        if (record.DevicePath is not null)
+        {
+            source = device ?? throw new InvalidDataException("The device of this recovery data is not open.");
+            // デバイスは更新日時を持たない。記録した元データの範囲より短くなっていたら「変わった」とし、範囲外の部分を除く。
+            long recordedEnd = record.Pieces.Where(p => p.Kind == PieceKind.Original).Select(p => p.Offset + p.Length).DefaultIfEmpty(0).Max();
+            sourceChanged = source.Length < recordedEnd;
+        }
+        else if (record.Path is null)
         {
             source = MemoryByteSource.CreateEmpty(record.DisplayName);
         }
