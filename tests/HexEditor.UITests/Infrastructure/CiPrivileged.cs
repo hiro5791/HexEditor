@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Management;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
@@ -32,10 +33,14 @@ public sealed class CiPrivilegedFactAttribute : FactAttribute
 /// <summary>CI の ui-privileged のジョブが用意する環境 (build/tests/Mount-TestVhd.ps1、Install-TestBuild.ps1)。</summary>
 public static class CiPrivileged
 {
-    /// <summary>CI の管理者権限のランナーで、特権のテストを実行してよい。</summary>
+    /// <summary>
+    /// CI の管理者権限のランナーで、特権のテストを実行してよい。GitHub のホストランナー (使い捨ての VM。RUNNER_ENVIRONMENT=github-hosted)
+    /// に限る (セルフホストのランナーは人の PC かもしれないため、仮想ディスクの接続・UAC の変更・インストールをしない)。
+    /// </summary>
     public static bool Enabled =>
         Environment.GetEnvironmentVariable(CiPrivilegedFactAttribute.Variable) == "1"
-        && string.Equals(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"), "true", StringComparison.OrdinalIgnoreCase);
+        && string.Equals(Environment.GetEnvironmentVariable("GITHUB_ACTIONS"), "true", StringComparison.OrdinalIgnoreCase)
+        && string.Equals(Environment.GetEnvironmentVariable("RUNNER_ENVIRONMENT"), "github-hosted", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>テストするビルドの配布形態 (Msix / Installer / Portable。指定がなければ Development)。</summary>
     public static string Distribution => Environment.GetEnvironmentVariable("HEXEDITOR_APP_DISTRO") is { Length: > 0 } d ? d : "Development";
@@ -54,7 +59,7 @@ public static class CiPrivileged
     {
         if (!Enabled)
         {
-            throw new InvalidOperationException("This needs the privileged CI job (HEXEDITOR_CI_PRIVILEGED=1 on a GitHub Actions runner).");
+            throw new InvalidOperationException("This needs the privileged CI job (HEXEDITOR_CI_PRIVILEGED=1 on a GitHub-hosted Actions runner).");
         }
     }
 
@@ -352,7 +357,9 @@ public static class CiPrivileged
 
 /// <summary>
 /// プロセスの作成の見張り (TC-ENG-28-03、TC-PKG-14-03、TC-PKG-14-06): 見張りの間に新しく現れた <c>consent.exe</c> (UAC の確認) と
-/// <c>HexEditor.Elevated.exe</c> のプロセス ID を集める。20 ms ごとに一覧を取る (UAC の確認の画面は数百 ms 以上残る)。
+/// <c>HexEditor.Elevated.exe</c> のプロセス ID を集める。プロセスの作成の通知 (WMI の Win32_ProcessStartTrace。すぐに終わるプロセスも
+/// 漏らさない。管理者権限が要る) と、20 ms ごとの一覧の両方で見る。通知は目印のプロセス (cmd.exe) の作成が届くのを待って、
+/// 見張りが始まったこと・それまでの通知が届いたことを確かめる。
 /// </summary>
 public sealed class ProcessWatch : IAsyncDisposable
 {
@@ -363,9 +370,17 @@ public sealed class ProcessWatch : IAsyncDisposable
     private readonly object _lock = new();
     private readonly List<string> _seen = [];
 
+    private readonly ManagementEventWatcher _trace;
+    private readonly HashSet<int> _sentinels = [];
+
     public ProcessWatch()
     {
+        CiPrivileged.EnsureEnabled();
         _before = [.. Names.SelectMany(Process.GetProcessesByName).Select(p => { using (p) { return p.Id; } })];
+        _trace = new ManagementEventWatcher(new WqlEventQuery("SELECT ProcessID, ProcessName FROM Win32_ProcessStartTrace"));
+        _trace.EventArrived += OnProcessStarted;
+        _trace.Start();
+        WaitForSentinel();
         _loop = Task.Run(async () =>
         {
             while (!_stop.IsCancellationRequested)
@@ -403,11 +418,15 @@ public sealed class ProcessWatch : IAsyncDisposable
         });
     }
 
-    /// <summary>見張りの間に作られたプロセス (「consent.exe (1234)」の形)。</summary>
+    /// <summary>
+    /// 見張りの間に作られたプロセス (「consent.exe (1234)」の形)。目印のプロセスの通知が届くのを待ってから返す (それより前に作られた
+    /// プロセスの通知は届いている)。
+    /// </summary>
     public IReadOnlyList<string> Seen
     {
         get
         {
+            WaitForSentinel();
             lock (_lock)
             {
                 return [.. _seen];
@@ -420,5 +439,51 @@ public sealed class ProcessWatch : IAsyncDisposable
         await _stop.CancelAsync();
         await _loop;
         _stop.Dispose();
+        _trace.Stop();
+        _trace.Dispose();
+    }
+
+    private void OnProcessStarted(object sender, EventArrivedEventArgs e)
+    {
+        string name = Path.GetFileNameWithoutExtension(e.NewEvent["ProcessName"] as string ?? string.Empty);
+        int pid = Convert.ToInt32(e.NewEvent["ProcessID"], System.Globalization.CultureInfo.InvariantCulture);
+        lock (_lock)
+        {
+            if (_sentinels.Remove(pid))
+            {
+                Monitor.PulseAll(_lock);
+                return;
+            }
+
+            if (Names.Contains(name, StringComparer.OrdinalIgnoreCase))
+            {
+                string entry = $"{name}.exe ({pid})";
+                if (!_seen.Contains(entry))
+                {
+                    _seen.Add(entry);
+                }
+            }
+        }
+    }
+
+    /// <summary>目印のプロセスを作り、その作成の通知が届くまで待つ (20 秒まで)。</summary>
+    private void WaitForSentinel()
+    {
+        lock (_lock)
+        {
+            using Process sentinel = Process.Start(new ProcessStartInfo("cmd.exe", "/c exit") { CreateNoWindow = true, UseShellExecute = false })!;
+            _sentinels.Add(sentinel.Id);
+            DateTime limit = DateTime.UtcNow + TimeSpan.FromSeconds(20);
+            while (_sentinels.Contains(sentinel.Id))
+            {
+                TimeSpan left = limit - DateTime.UtcNow;
+                if (left <= TimeSpan.Zero)
+                {
+                    throw new TimeoutException("Win32_ProcessStartTrace did not report the sentinel process.");
+                }
+
+                Monitor.Wait(_lock, left);
+            }
+        }
     }
 }
