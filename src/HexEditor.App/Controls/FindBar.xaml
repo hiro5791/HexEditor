@@ -375,6 +375,27 @@
                     </Flyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
+            <!--  符号化できずに除いた文字コードの警告 (FIND-08 の仕様 6)。  -->
+            <StackPanel
+                x:Name="EncodingWarning"
+                VerticalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="4"
+                Visibility="Collapsed">
+                <FontIcon
+                    VerticalAlignment="Center"
+                    AutomationProperties.AccessibilityView="Raw"
+                    FontSize="14"
+                    Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                    Glyph="&#xE7BA;" />
+                <TextBlock
+                    x:Name="EncodingWarningText"
+                    MaxWidth="360"
+                    VerticalAlignment="Center"
+                    AutomationProperties.AutomationId="Find_EncodingWarning"
+                    AutomationProperties.LiveSetting="Polite"
+                    TextWrapping="Wrap" />
+            </StackPanel>
             <CheckBox
                 x:Name="CaseChoice"
                 x:Uid="Find_CaseSensitive"

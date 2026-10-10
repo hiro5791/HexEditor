@@ -178,6 +178,26 @@ public sealed class SearchPhase2Tests
     });
 
     [Fact]
+    public Task Encodings_that_cannot_encode_the_text_are_excluded_with_a_warning() => UiTestContext.RunAsync(async ctx =>
+    {
+        // FIND-08 の仕様 6: 文字列を符号化できない文字コードは除いて、警告を表示する (残りで検索する)。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("small.bin", new byte[256])] });
+        await OpenFindAsync(app, 1, "Test", incremental: false);
+        await ShowOptionsAsync(app);
+        JsonObject state = await Phase2Async(app, new JsonObject { ["multiEncodings"] = new JsonArray("ascii", "utf-8") });
+        Assert.Equal(string.Empty, state["encodingWarning"]!.GetValue<string>());
+
+        await app.UiaSetValueAsync("Find_Query", "日本");
+        string warning = string.Empty;
+        await app.WaitUntilAsync(async () => (warning = (await Phase2Async(app))["encodingWarning"]!.GetValue<string>()).Length > 0,
+            UiTest.Scaled(TimeSpan.FromSeconds(5)), "the warning");
+        Assert.Contains("ASCII", warning, StringComparison.Ordinal);
+        Assert.DoesNotContain("UTF-8", warning, StringComparison.Ordinal);
+        Assert.True((await Phase2Async(app))["hasPattern"]!.GetValue<bool>());
+        Assert.DoesNotContain("encode", await FindStatusAsync(app), StringComparison.Ordinal);
+    });
+
+    [Fact]
     public Task Byte_regex_turns_the_s_flag_on_by_default() => UiTestContext.RunAsync(async ctx =>
     {
         // FIND-19 の仕様 3: 種類「正規表現 (バイト列)」では `s` フラグを既定でオンにする (テキストは既定オフ。FIND-18 の仕様 2)。

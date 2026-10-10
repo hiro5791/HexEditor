@@ -47,6 +47,7 @@ public sealed partial class MainWindow
                     ["termCount"] = FindBar.Terms.Count,
                     ["hasPattern"] = FindBar.HasPattern,
                     ["regexSingleline"] = FindBar.RegexSinglelineChecked,
+                    ["encodingWarning"] = FindBar.EncodingWarningMessage,
                     ["statusMessage"] = StatusMessageText,
                     ["variantCounts"] = new JsonArray([.. SearchResults.VariantCounts.Select(v => (JsonNode?)new JsonObject { ["name"] = v.Name, ["count"] = v.Count })]),
                 };

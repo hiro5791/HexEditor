@@ -163,6 +163,9 @@ public sealed partial class FindBar
         Validate();
     }
 
+    /// <summary>テスト用: 符号化できずに除いた文字コードの警告 (表示していなければ空)。</summary>
+    internal string EncodingWarningMessage => EncodingWarning.Visibility == Visibility.Visible ? EncodingWarningText.Text : string.Empty;
+
     /// <summary>テスト用: `s` フラグのチェックボックスの状態。</summary>
     internal bool RegexSinglelineChecked => RegexSingleline.IsChecked == true;
 
@@ -363,6 +366,11 @@ public sealed partial class FindBar
         MaskQuery.Visibility = Show(IsMask && MaskModeChoice.SelectedIndex == 0);
         RangeExcludeChoice.Visibility = Show(IsRange);
         MultiEncodingButton.Visibility = Show(kind == SearchKind.Text && IsMultiEncoding && !multiTerm);
+
+        // 符号化できない文字コードは除いて検索し、警告を出す (FIND-08 の仕様 6)。
+        bool excluded = kind == SearchKind.Text && IsMultiEncoding && !multiTerm && _pattern is not null && _excludedEncodings.Count > 0;
+        EncodingWarningText.Text = excluded ? Loc.Format("Find_EncodingsExcluded", string.Join(", ", _excludedEncodings)) : string.Empty;
+        EncodingWarning.Visibility = Show(excluded);
         bool custom = PositionChoice.SelectedIndex == 1;
         foreach (Button preset in new[] { PositionPreset2, PositionPreset4, PositionPreset8, PositionPreset16, PositionPresetSector })
         {
@@ -442,8 +450,7 @@ public sealed partial class FindBar
         if (pattern.Parts.Count > 0)
         {
             string parts = string.Join("  ", pattern.Variants.Take(4).Select((v, i) => $"{v}: {pattern.Parts[i].Preview(8)}"));
-            string excluded = _excludedEncodings.Count > 0 ? "  " + Loc.Format("Find_EncodingsExcluded", string.Join(", ", _excludedEncodings)) : string.Empty;
-            return (pattern.Variants.Count > 4 ? Loc.Format("Find_PartsMore", parts, pattern.Variants.Count) : parts) + excluded + position;
+            return (pattern.Variants.Count > 4 ? Loc.Format("Find_PartsMore", parts, pattern.Variants.Count) : parts) + position;
         }
 
         return position.Length > 0 ? null : null;
