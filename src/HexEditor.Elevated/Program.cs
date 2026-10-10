@@ -123,7 +123,8 @@ internal static class Program
 
             (IDeviceAccess devices, IProcessAccess processes) = Backend(options);
             Log($"Connected to {parentPid}");
-            var operations = new PrivilegedOperations(devices, processes, Log, AppVersion());
+            string version = options.TryGetValue("--app-version", out string? v) ? v : AppVersion();
+            var operations = new PrivilegedOperations(devices, processes, Log, version);
             var server = new HelperServer(pipe, operations, Log) { IdleTimeout = idleMinutes <= 0 ? null : TimeSpan.FromMinutes(idleMinutes) };
             HelperServerExit exit = await server.RunAsync(stop.Token);
             (devices as IDisposable)?.Dispose();
