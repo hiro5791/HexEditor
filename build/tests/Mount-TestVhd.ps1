@@ -23,7 +23,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 if ($env:GITHUB_ACTIONS -ne 'true' -or $env:RUNNER_ENVIRONMENT -ne 'github-hosted') {
-    # 使い捨ての GitHub のホストランナーだけ (セルフホストのランナーは人の PC かもしれない)。
+    # Disposable GitHub-hosted runners only (a self-hosted runner may be someone's PC).
     throw 'This script attaches a virtual disk and changes UAC; run it only on GitHub-hosted CI runners (RUNNER_ENVIRONMENT=github-hosted).'
 }
 
