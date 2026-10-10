@@ -5035,7 +5035,6 @@
   <data name="DataOp_Error_InvalidStride" xml:space="preserve"><value>処理する要素は 1 以上、飛ばす要素は 0 以上にしてください。</value></data>
   <data name="DataOp_Error_PositionOutOfRange" xml:space="preserve"><value>位置または範囲が対象の外です。</value></data>
   <data name="DataOp_Error_FixedLength" xml:space="preserve"><value>長さを変えられないドキュメントです。「選択範囲の中だけ」を使ってください。</value></data>
-  <data name="DataOp_Error_None" xml:space="preserve"><value></value></data>
   <data name="DataOp_Error_TempSpace" xml:space="preserve"><value>演算に一時領域が {0} GB 必要ですが、空きは {1} GB です。</value></data>
   <data name="DataOp_Error_Read" xml:space="preserve"><value>オフセット {0} を読み込めません。ドキュメントは変更していません。</value></data>
   <data name="Operation_DataOperation" xml:space="preserve"><value>データ演算: {0}</value></data>
@@ -5136,7 +5135,6 @@
   <data name="Hash_SignedValue" xml:space="preserve"><value>符号付き: {0}</value></data>
   <data name="Hash_ParameterError_KeyLength" xml:space="preserve"><value>鍵の長さがこのアルゴリズムに合いません。</value></data>
   <data name="Hash_ParameterError_OutputLength" xml:space="preserve"><value>出力長がこのアルゴリズムに合いません。</value></data>
-  <data name="Hash_ParameterError_None" xml:space="preserve"><value></value></data>
   <data name="Hash_ParameterError_SeedRange" xml:space="preserve"><value>シードがこのアルゴリズムの範囲 (0〜0xFFFFFFFF) を超えています。</value></data>
   <data name="Hash_Endian" xml:space="preserve"><value>ワードのエンディアン</value></data>
   <data name="Hash_Endian_Default" xml:space="preserve"><value>既定</value></data>
