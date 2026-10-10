@@ -2798,7 +2798,7 @@ Details were written to:
   <data name="Menu_Analysis_FileType.Text" xml:space="preserve"><value>Detect File Type</value></data>
   <data name="Menu_Analysis_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
   <data name="Menu_View_Statistics.Text" xml:space="preserve"><value>Statistics</value></data>
-  <data name="Menu_View_Statistics.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_Statistics.AccessKey" xml:space="preserve"><value>Q</value></data>
   <data name="Menu_View_FileType.Text" xml:space="preserve"><value>File Type</value></data>
   <data name="Menu_View_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
   <data name="HexView_Menu_Statistics" xml:space="preserve"><value>Statistics</value></data>

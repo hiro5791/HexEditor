@@ -210,7 +210,7 @@ internal static class ChartSupport
     public static Brush Brush(string key, FrameworkElement scope) => AnnotationBrushes.Get(key, scope, IsHighContrast);
 
     public static Windows.UI.Color Color(string key, FrameworkElement scope) =>
-        Brush(key, scope) is SolidColorBrush s ? s.Color : Microsoft.UI.Colors.Gray;
+        Brush(key, scope) is SolidColorBrush s ? s.Color : default;
 
     /// <summary>
     /// 模様の形 (リソース名 Pattern_*): 斜線、交差、点、横線、縦線、市松、なし。<paramref name="r"/> の中を <paramref name="step"/> の間隔で描く。

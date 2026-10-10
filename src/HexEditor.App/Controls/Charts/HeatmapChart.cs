@@ -36,7 +36,7 @@ public sealed partial class HeatmapChart : UserControl
         UseSystemFocusVisuals = true;
         _root.Children.Add(_image);
         _root.Children.Add(_focus);
-        _root.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+        _root.Background = (Brush)Application.Current.Resources["SubtleFillColorTransparentBrush"];
         Content = _root;
         ActualThemeChanged += (_, _) => Render();
         SizeChanged += (_, _) => DrawFocus();
@@ -195,7 +195,7 @@ public sealed partial class HeatmapChart : UserControl
         Windows.UI.Color back = ChartSupport.Color(hc ? "SolidBackgroundFillColorBaseBrush" : "LayerFillColorDefaultBrush", this);
         if (back.A == 0)
         {
-            back = ActualTheme == ElementTheme.Dark ? Microsoft.UI.Colors.Black : Microsoft.UI.Colors.White;
+            back = ChartSupport.Color("SolidBackgroundFillColorBaseBrush", this);
         }
 
         byte[] pixels = new byte[width * height * 4];

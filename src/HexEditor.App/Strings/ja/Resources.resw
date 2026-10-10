@@ -2798,7 +2798,7 @@
   <data name="Menu_Analysis_FileType.Text" xml:space="preserve"><value>ファイル形式の判定</value></data>
   <data name="Menu_Analysis_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
   <data name="Menu_View_Statistics.Text" xml:space="preserve"><value>統計</value></data>
-  <data name="Menu_View_Statistics.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_Statistics.AccessKey" xml:space="preserve"><value>Q</value></data>
   <data name="Menu_View_FileType.Text" xml:space="preserve"><value>ファイル形式</value></data>
   <data name="Menu_View_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
   <data name="HexView_Menu_Statistics" xml:space="preserve"><value>統計</value></data>

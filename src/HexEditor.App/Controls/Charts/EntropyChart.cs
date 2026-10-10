@@ -47,7 +47,7 @@ public sealed partial class EntropyChart : UserControl, IChartItems
     private const double MaxEntropy = 8;
 
     private readonly Grid _root = new();
-    private readonly Canvas _canvas = new() { Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent) };
+    private readonly Canvas _canvas = new() { Background = (Brush)Application.Current.Resources["SubtleFillColorTransparentBrush"] };
     private readonly Path _hatch = new() { StrokeThickness = 1, Opacity = 0.5 };
     private readonly Path _unreadable = new() { StrokeThickness = 1 };
     private readonly Path _line = new() { StrokeThickness = 1.5 };

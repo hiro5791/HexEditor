@@ -22,7 +22,7 @@ public sealed partial class ClassBand : UserControl, IChartItems
     public static readonly DependencyProperty ResultProperty = DependencyProperty.Register(nameof(Result), typeof(object), typeof(ClassBand),
         new PropertyMetadata(null, (d, _) => ((ClassBand)d).Redraw()));
 
-    private readonly Canvas _canvas = new() { Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent) };
+    private readonly Canvas _canvas = new() { Background = (Brush)Application.Current.Resources["SubtleFillColorTransparentBrush"] };
     private ChartAutomationPeer? _peer;
 
     public ClassBand()

@@ -51,7 +51,7 @@ public sealed partial class HistogramChart : UserControl, IChartItems
         _root.Children.Add(_axisTop);
         _root.Children.Add(_axisLeft);
         _root.Children.Add(_axisRight);
-        _root.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+        _root.Background = (Brush)Application.Current.Resources["SubtleFillColorTransparentBrush"];
         _canvas.Margin = new Thickness(0, 16, 0, 16);
         Content = _root;
         SizeChanged += (_, _) => Redraw();
