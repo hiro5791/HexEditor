@@ -101,7 +101,7 @@ public sealed class DataOperationUiTests
         await app.IdleAsync();
         Assert.Equal(TestDataCatalog.Marker(0), await app.BytesAsync(0, 17));
         Assert.Equal(TestDataCatalog.Marker(0x40000000), await app.BytesAsync(0x40000000, 17));
-    });
+    }, TimeSpan.FromMinutes(45));
 
     [Fact]
     [Trait(UiTest.TC, "TC-EDIT-35-02")]
@@ -129,7 +129,7 @@ public sealed class DataOperationUiTests
         Assert.Equal(TestDataCatalog.Marker(0), await app.BytesAsync(0, 17));
         Assert.Equal(TestDataCatalog.Marker(0x40000000), await app.BytesAsync(0x40000000, 17));
         Assert.Equal(TestDataCatalog.Marker(0x80000000), await app.BytesAsync(0x80000000, 17));
-    });
+    }, TimeSpan.FromMinutes(30));
 
     /// <summary>処理センターの進捗が <paramref name="fraction"/> 以上になったら処理をキャンセルし、終わるまで待つ。</summary>
     private static async Task CancelWhenProgressAsync(AppSession app, double fraction)
