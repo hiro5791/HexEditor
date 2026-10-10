@@ -625,7 +625,20 @@ public sealed class ViewPanesTests
         Assert.Equal("Same offset", await app.UiaNameAsync("SideBySide_SyncMode1"));
         (await app.WaitForAsync("SideBySide_Sync1")).Patterns.ExpandCollapse.Pattern.Expand();
         await app.WaitForAsync("SideBySide_Sync1_KeepDifference");
-        await app.UiaInvokeAsync("SideBySide_Sync1_KeepDifference");
+        FlaUI.Core.AutomationElements.AutomationElement item = await app.WaitForAsync("SideBySide_Sync1_KeepDifference");
+        if (item.Patterns.Invoke.IsSupported)
+        {
+            item.Patterns.Invoke.Pattern.Invoke();
+        }
+        else if (item.Patterns.SelectionItem.IsSupported)
+        {
+            item.Patterns.SelectionItem.Pattern.Select();
+        }
+        else
+        {
+            item.Patterns.Toggle.Pattern.Toggle();
+        }
+
         await app.IdleAsync();
         Assert.Equal("KeepDifference", (await app.SendAsync("sideBySide"))["mode"]!.GetValue<string>());
         Assert.Equal("Keep the difference", await app.UiaNameAsync("SideBySide_SyncMode1"));
