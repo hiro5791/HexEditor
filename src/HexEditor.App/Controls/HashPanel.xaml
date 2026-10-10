@@ -25,6 +25,18 @@
                         <ComboBoxItem x:Uid="Hash_Target_Whole" />
                         <ComboBoxItem x:Uid="Hash_Target_Custom" />
                     </ComboBox>
+                    <!--  マルチ選択の計算方法 (ANA-18 の仕様 1)。マルチ選択・矩形選択のときだけ出す。  -->
+                    <ComboBox
+                        x:Name="RangeModeChoice"
+                        x:Uid="Hash_RangeMode"
+                        HorizontalAlignment="Stretch"
+                        AutomationProperties.AutomationId="Hash_RangeMode"
+                        SelectedIndex="0"
+                        SelectionChanged="RangeModeChoice_SelectionChanged"
+                        Visibility="{x:Bind ViewModel.HasMultipleRanges, Mode=OneWay}">
+                        <ComboBoxItem x:Uid="Hash_RangeMode_Concatenate" />
+                        <ComboBoxItem x:Uid="Hash_RangeMode_PerRange" />
+                    </ComboBox>
                     <!--  範囲を指定: 開始と、長さまたは「終了 (このバイトを含む)」(06 の 0.1)。  -->
                     <Grid
                         x:Name="CustomRange"

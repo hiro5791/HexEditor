@@ -228,4 +228,63 @@ public sealed class MultiCursorTests
         Assert.False(definition.Validate(System.Text.Json.Nodes.JsonValue.Create(10_000_001)));
         Assert.True(definition.Validate(System.Text.Json.Nodes.JsonValue.Create(10_000_000)));
     }
+
+    // ---- 選択範囲のドラッグ & ドロップ (EDIT-18) ----
+
+    [Fact]
+    public void Dropping_the_selection_moves_copies_or_overwrites()
+    {
+        (Document doc, EditorState s) = MultiSelectionTests.Create(0x100);
+        using (doc)
+        {
+            // 受け入れ基準 1: 0x00〜0x0F を 0x40 へ移動し、Ctrl+Z 1 回で戻る。
+            s.Select(0, 0x10);
+            Assert.False(s.CanDropSelectionAt(0x08, SelectionDropKind.Move));
+            Assert.Equal(EditResult.Done, s.DropSelection(0x40, SelectionDropKind.Move));
+            Assert.Equal(0x100, doc.Length);
+            Assert.Equal(new byte[] { 0x10, 0x11 }, Read(doc, 0, 2));
+            Assert.Equal(new byte[] { 0x3F, 0x00 }, Read(doc, 0x2F, 2));
+            Assert.Equal(new byte[] { 0x0F, 0x40 }, Read(doc, 0x3F, 2));
+            Assert.Equal((0x30L, 0x10L), (s.SelectionStart, s.SelectionLength));
+            s.Undo();
+            Assert.Equal(Enumerable.Range(0, 0x50).Select(i => (byte)i), Read(doc, 0, 0x50));
+            Assert.False(doc.History.CanUndo);
+
+            // 受け入れ基準 2: Ctrl でコピー。
+            s.Select(0, 0x10);
+            Assert.Equal(EditResult.Done, s.DropSelection(0x40, SelectionDropKind.Copy));
+            Assert.Equal(0x110, doc.Length);
+            Assert.Equal(new byte[] { 0x00, 0x0F, 0x40 }, new[] { Read(doc, 0x40, 1)[0], Read(doc, 0x4F, 1)[0], Read(doc, 0x50, 1)[0] });
+            s.Undo();
+
+            // 上書きモードで Shift: ドロップ位置から上書き。
+            s.Select(0, 4);
+            Assert.Equal(EditResult.Done, s.DropSelection(0x80, SelectionDropKind.Overwrite));
+            Assert.Equal(0x100, doc.Length);
+            Assert.Equal(new byte[] { 0, 1, 2, 3, 0x84 }, Read(doc, 0x80, 5));
+        }
+    }
+
+    [Fact]
+    public void Copy_as_writes_multiple_ranges_concatenated_or_separately()
+    {
+        byte[] data = [.. Enumerable.Range(0, 0x40).Select(i => (byte)i)];
+        Core.Clipboard.ByteReader read = (o, d) => data.AsSpan((int)o, d.Length).CopyTo(d);
+        ByteRange[] ranges = [new(0x10, 2), new(0x20, 2)];
+        var options = new Core.Clipboard.CopyOptions();
+        string Write(Core.Clipboard.CopyFormat format, Core.Clipboard.CopyRangesMode mode)
+        {
+            var writer = new StringWriter();
+            Core.Clipboard.CopyFormatter.WriteRanges(format, options, read, ranges, mode, writer);
+            return writer.ToString();
+        }
+
+        Assert.Equal("10 11 20 21", Write(Core.Clipboard.CopyFormat.HexSpaced, Core.Clipboard.CopyRangesMode.Concatenate));
+        Assert.Equal("10 11\r\n\r\n20 21", Write(Core.Clipboard.CopyFormat.HexSpaced, Core.Clipboard.CopyRangesMode.Separate));
+        Assert.Equal("10 11\r\n20 21", Write(Core.Clipboard.CopyFormat.HexSpaced, Core.Clipboard.CopyRangesMode.Rows));
+        string c = Write(Core.Clipboard.CopyFormat.ArrayC, Core.Clipboard.CopyRangesMode.Separate);
+        Assert.Contains("data_0[2]", c);
+        Assert.Contains("data_1[2]", c);
+        Assert.StartsWith("[", Write(Core.Clipboard.CopyFormat.Json, Core.Clipboard.CopyRangesMode.Separate));
+    }
 }

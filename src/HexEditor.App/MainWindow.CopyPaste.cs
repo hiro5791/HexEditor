@@ -76,6 +76,9 @@ public sealed partial class MainWindow
         public string Prefix { get; init; } = string.Empty;
 
         public string Suffix { get; init; } = string.Empty;
+
+        /// <summary>マルチ選択を要素ごとに分ける (EDIT-25 の仕様 7。既定は連結)。</summary>
+        public bool SeparateRanges { get; init; }
     }
 
     private static CopyAsState LoadCopyAsState()
@@ -137,8 +140,28 @@ public sealed partial class MainWindow
     }
 
     /// <summary>出力の推定サイズ (バイト。クリップボードのテキストは UTF-16)。</summary>
-    private static long EstimateBytes(CopyFormat format, CopyOptions options, DocumentSnapshot snapshot, long start, long length) =>
-        CopyFormatter.EstimateChars(format, options, (o, d) => snapshot.Read(o, d), start, length) * 2;
+    private long EstimateBytes(CopyFormat format, CopyOptions options, DocumentSnapshot snapshot, long start, long length) =>
+        _copyAsRanges is { } ranges
+            ? CopyFormatter.EstimateChars(format, options, CopyFormatter.Concatenated(ranges, (o, d) => snapshot.Read(o, d)), 0, ranges.Sum(r => r.Length)) * 2
+            : CopyFormatter.EstimateChars(format, options, (o, d) => snapshot.Read(o, d), start, length) * 2;
+
+    // マルチ選択・矩形選択の「形式を選択してコピー」の要素と、連結するか分けるか (EDIT-25 の仕様 7)。単一の選択では null。
+    private IReadOnlyList<Core.Selection.ByteRange>? _copyAsRanges;
+    private CopyRangesMode _copyAsMode;
+
+    /// <summary>今の選択からマルチ選択の要素を決める (矩形は行ごとに改行する)。</summary>
+    private void PrepareCopyAsRanges(EditorState editor, bool separate)
+    {
+        _copyAsRanges = editor.HasMultipleRanges ? [.. editor.SelectedRanges] : null;
+        _copyAsMode = editor.SelectionKind == SelectionKind.Rectangle ? CopyRangesMode.Rows : separate ? CopyRangesMode.Separate : CopyRangesMode.Concatenate;
+    }
+
+    /// <summary>出力を書く (マルチ選択なら要素ごと・連結)。</summary>
+    private IReadOnlyList<CopyNote> WriteCopyAs(CopyFormat format, CopyOptions options, DocumentSnapshot snapshot, long start, long length,
+        TextWriter writer, CancellationToken cancellationToken = default, Action<long>? progress = null) =>
+        _copyAsRanges is { } ranges
+            ? CopyFormatter.WriteRanges(format, options, (o, d) => snapshot.Read(o, d), ranges, _copyAsMode, writer, cancellationToken, progress)
+            : CopyFormatter.Write(format, options, (o, d) => snapshot.Read(o, d), start, length, writer, cancellationToken, progress);
 
     // ---- 形式を選択してコピー (EDIT-25) ----
 
@@ -174,6 +197,7 @@ public sealed partial class MainWindow
         CopyOptions options = OptionsOf(state, doc);
         long start = doc.Editor.HasSelection ? doc.Editor.SelectionStart : doc.Editor.Cursor;
         long length = doc.Editor.SelectionLength;
+        PrepareCopyAsRanges(doc.Editor, state.SeparateRanges);
         if (CopyFormatter.Validate(state.Format, options, start, length) is not null)
         {
             ShowNotice(Loc.Get("CopyAs_Error_Options"), InfoBarSeverity.Error, doc);
@@ -201,7 +225,7 @@ public sealed partial class MainWindow
                     string Render(CopyFormat f)
                     {
                         var writer = new StringWriter(CultureInfo.InvariantCulture);
-                        CopyFormatter.Write(f, options, (o, d) => snapshot.Read(o, d), start, length, writer, op.CancellationToken, op.Report);
+                        WriteCopyAs(f, options, snapshot, start, length, writer, op.CancellationToken, op.Report);
                         return writer.ToString();
                     }
 
@@ -284,10 +308,15 @@ public sealed partial class MainWindow
         TextBox prefix = DialogParts.Field("CopyAs_Prefix", Loc.Get("CopyAs_Prefix"), state.Prefix);
         TextBox suffix = DialogParts.Field("CopyAs_Suffix", Loc.Get("CopyAs_Suffix"), state.Suffix);
         TextBlock settingsError = DialogParts.Caption("CopyAs_SettingsError");
+
+        // マルチ選択: 「連結する」(既定) / 「要素ごとに分ける」(EDIT-25 の仕様 7)。矩形選択は行ごとに改行する。
+        CheckBox separateRanges = DialogParts.Check("CopyAs_SeparateRanges", Loc.Get("CopyAs_SeparateRanges"), state.SeparateRanges);
+        separateRanges.Visibility = editor.SelectionKind == SelectionKind.Multiple ? Visibility.Visible : Visibility.Collapsed;
+        PrepareCopyAsRanges(editor, state.SeparateRanges);
         var settings = new StackPanel { Spacing = 6, Width = 300 };
         foreach (UIElement el in new UIElement[]
         {
-            bytesPerLine, upper, newLine, indent, variable, elementSize, bigEndian, variant, syntax, wrap, delimiters, fileName, layout, colors,
+            separateRanges, bytesPerLine, upper, newLine, indent, variable, elementSize, bigEndian, variant, syntax, wrap, delimiters, fileName, layout, colors,
             recordBytes, baseAddress, header, jsonData, decimalPosition, separator, prefix, suffix, settingsError,
         })
         {
@@ -356,6 +385,7 @@ public sealed partial class MainWindow
                 Separator = separator.Text,
                 Prefix = prefix.Text,
                 Suffix = suffix.Text,
+                SeparateRanges = separateRanges.IsChecked == true,
             };
         }
 
@@ -426,7 +456,7 @@ public sealed partial class MainWindow
             IReadOnlyList<CopyNote> notes = [];
             try
             {
-                notes = CopyFormatter.Write(current, options, (o, d) => snapshot.Read(o, d), start, length, limited);
+                notes = WriteCopyAs(current, options, snapshot, start, length, limited);
             }
             catch (LimitedWriter.FullException)
             {
@@ -459,7 +489,9 @@ public sealed partial class MainWindow
             combo.SelectionChanged += (_, _) => Update();
         }
 
-        foreach (CheckBox check in new[] { upper, bigEndian, variant, wrap, delimiters, colors, decimalPosition })
+        separateRanges.Checked += (_, _) => PrepareCopyAsRanges(editor, separate: true);
+        separateRanges.Unchecked += (_, _) => PrepareCopyAsRanges(editor, separate: false);
+        foreach (CheckBox check in new[] { upper, bigEndian, variant, wrap, delimiters, colors, decimalPosition, separateRanges })
         {
             check.Checked += (_, _) => Update();
             check.Unchecked += (_, _) => Update();
@@ -514,7 +546,7 @@ public sealed partial class MainWindow
                 {
                     using (var writer = new StreamWriter(temp, false, new UTF8Encoding(false), 1024 * 1024))
                     {
-                        CopyFormatter.Write(format, options, (o, d) => snapshot.Read(o, d), start, length, writer, op.CancellationToken, op.Report);
+                        WriteCopyAs(format, options, snapshot, start, length, writer, op.CancellationToken, op.Report);
                     }
 
                     File.Move(temp, path, overwrite: true);

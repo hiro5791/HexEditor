@@ -58,9 +58,13 @@ public sealed partial class HashRowViewModel(HashResultRow row) : ObservableObje
 
     public string Id => Row.Algorithm.Id;
 
-    public string Name => Row.Algorithm.Parameters == HashParameterKinds.None
+    public string Name => (Row.Algorithm.Parameters == HashParameterKinds.None
         ? HashPanelViewModel.LocalizedName(Row.Algorithm)
-        : Row.Choice.DisplayName.Replace(Row.Algorithm.Name, HashPanelViewModel.LocalizedName(Row.Algorithm), StringComparison.Ordinal);
+        : Row.Choice.DisplayName.Replace(Row.Algorithm.Name, HashPanelViewModel.LocalizedName(Row.Algorithm), StringComparison.Ordinal))
+        + (RangeLabel.Length > 0 ? " [" + RangeLabel + "]" : string.Empty);
+
+    /// <summary>「範囲ごとに値を求める」(ANA-18 の仕様 1) のときの、行の範囲 (開始–終了)。それ以外は空。</summary>
+    public string RangeLabel { get; init; } = string.Empty;
 
     public string BitsText => Loc.Format("Hash_Bits", Row.Algorithm.Bits);
 
@@ -197,6 +201,14 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     [ObservableProperty]
     public partial HashTargetKind TargetKind { get; set; }
+
+    /// <summary>マルチ選択の計算方法 (ANA-18 の仕様 1。既定は連結して 1 つの値)。</summary>
+    [ObservableProperty]
+    public partial HashRangeMode RangeMode { get; set; }
+
+    /// <summary>対象の選択がマルチ選択・矩形選択か (計算方法の選択を出す)。</summary>
+    [ObservableProperty]
+    public partial bool HasMultipleRanges { get; set; }
 
     [ObservableProperty]
     public partial string CustomStart { get; set; } = "0";
@@ -338,6 +350,9 @@ public sealed partial class HashPanelViewModel : ObservableObject
         long length = doc.Document.Length;
         switch (TargetKind)
         {
+            case HashTargetKind.Selection when editor.HasMultipleRanges:
+                // マルチ選択・矩形選択: すべての要素 (オフセットの小さい順。ANA-18 の仕様 1)。
+                return [.. editor.SelectedRanges.Select(r => new HashRange(r.Start, r.Length))];
             case HashTargetKind.Selection when editor.HasSelection:
                 return [new HashRange(editor.SelectionStart, editor.SelectionLength)];
             case HashTargetKind.Selection:
@@ -371,6 +386,13 @@ public sealed partial class HashPanelViewModel : ObservableObject
     }
 
     partial void OnTargetKindChanged(HashTargetKind value) => UpdateTarget(scheduleAuto: true);
+
+    partial void OnRangeModeChanged(HashRangeMode value)
+    {
+        // 計算方法を変えたら、同じ範囲でも計算し直す。
+        _requestedRanges = [];
+        UpdateTarget(scheduleAuto: true);
+    }
 
     partial void OnCustomStartChanged(string value) => UpdateTarget(scheduleAuto: true);
 
@@ -491,7 +513,8 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
         DocumentSnapshot snapshot = doc.Document.Current;
         _requestedRanges = ranges;
-        var request = new HashRequest { Ranges = ranges, Algorithms = choices };
+        bool perRange = RangeMode == HashRangeMode.PerRange && ranges.Count > 1;
+        var request = new HashRequest { Ranges = ranges, Algorithms = choices, RangeMode = perRange ? HashRangeMode.PerRange : HashRangeMode.Concatenate };
         long total = HashEngine.TotalBytes(snapshot, request);
         ComputeHighlighted = false;
         StatusText = string.Empty;
@@ -520,7 +543,11 @@ public sealed partial class HashPanelViewModel : ObservableObject
             IsStale = !ReferenceEquals(doc.Document.Current, snapshot);
             foreach (HashResultRow row in result.Rows)
             {
-                var vm = new HashRowViewModel(row) { Value = Display.Display(row) };
+                var vm = new HashRowViewModel(row)
+                {
+                    Value = Display.Display(row),
+                    RangeLabel = perRange && row.Ranges.Count == 1 ? Hex(row.Ranges[0].Offset) + "–" + Hex(row.Ranges[0].End - 1) : string.Empty,
+                };
                 string key = row.Choice.DisplayName + "|" + string.Join(';', row.Ranges);
                 vm.IsChanged = _previous.TryGetValue(key, out byte[]? before) && !before.AsSpan().SequenceEqual(row.Value);
                 _previous[key] = row.Value;
@@ -831,8 +858,11 @@ public sealed partial class HashPanelViewModel : ObservableObject
             return;
         }
 
+        HasMultipleRanges = TargetKind == HashTargetKind.Selection && doc.Editor.HasMultipleRanges;
         HashRange r = ranges[0];
-        RangeText = r.Length == 0
+        RangeText = ranges.Count > 1
+            ? Loc.Format("Hash_Ranges", ranges.Count, ranges.Sum(x => x.Length).ToString("N0", CultureInfo.CurrentCulture))
+            : r.Length == 0
             ? Loc.Format("Hash_RangeEmpty", Hex(r.Offset))
             : Loc.Format("Hash_Range", Hex(r.Offset), Hex(r.End - 1), r.Length.ToString("N0", CultureInfo.CurrentCulture));
         // 編集による変化 (ドキュメント全体の長さが変わったなど) では自動で計算しない (結果は「編集前の内容のもの」と表示する)。

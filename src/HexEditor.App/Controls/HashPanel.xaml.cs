@@ -112,6 +112,14 @@ public sealed partial class HashPanel : UserControl
     private void UpdateComputeStyle() =>
         ComputeButton.Style = ViewModel.ComputeHighlighted ? (Style)Application.Current.Resources["AccentButtonStyle"] : null;
 
+    private void RangeModeChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (RangeModeChoice.SelectedIndex >= 0)
+        {
+            ViewModel.RangeMode = (Core.Hashing.HashRangeMode)RangeModeChoice.SelectedIndex;
+        }
+    }
+
     private void TargetChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (TargetChoice.SelectedIndex >= 0 && (HashTargetKind)TargetChoice.SelectedIndex != ViewModel.TargetKind)

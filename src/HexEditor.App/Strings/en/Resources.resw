@@ -3003,4 +3003,9 @@ Details were written to:
   <data name="ClipboardPanel_SlotsHeader" xml:space="preserve"><value>User clipboards</value></data>
   <data name="ClipboardPanel_HistoryHeader" xml:space="preserve"><value>Clipboard history</value></data>
   <data name="SearchResults_ToSelection.Text" xml:space="preserve"><value>To Selection</value></data>
+  <data name="Hash_RangeMode.Header" xml:space="preserve"><value>Multi-selection</value></data>
+  <data name="Hash_RangeMode_Concatenate.Content" xml:space="preserve"><value>Concatenate into one value</value></data>
+  <data name="Hash_RangeMode_PerRange.Content" xml:space="preserve"><value>One value per range</value></data>
+  <data name="Hash_Ranges" xml:space="preserve"><value>{0, plural, one {# range} other {# ranges}}, {1} bytes total</value></data>
+  <data name="CopyAs_SeparateRanges" xml:space="preserve"><value>Separate each range (instead of concatenating)</value></data>
 </root>

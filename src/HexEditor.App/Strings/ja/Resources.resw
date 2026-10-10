@@ -3003,4 +3003,9 @@
   <data name="ClipboardPanel_SlotsHeader" xml:space="preserve"><value>ユーザークリップボード</value></data>
   <data name="ClipboardPanel_HistoryHeader" xml:space="preserve"><value>クリップボード履歴</value></data>
   <data name="SearchResults_ToSelection.Text" xml:space="preserve"><value>選択範囲に</value></data>
+  <data name="Hash_RangeMode.Header" xml:space="preserve"><value>マルチ選択の計算方法</value></data>
+  <data name="Hash_RangeMode_Concatenate.Content" xml:space="preserve"><value>連結して 1 つの値を求める</value></data>
+  <data name="Hash_RangeMode_PerRange.Content" xml:space="preserve"><value>範囲ごとに値を求める</value></data>
+  <data name="Hash_Ranges" xml:space="preserve"><value>{0} 個の範囲、計 {1} バイト</value></data>
+  <data name="CopyAs_SeparateRanges" xml:space="preserve"><value>要素ごとに分ける (オフのときは連結する)</value></data>
 </root>
