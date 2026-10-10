@@ -184,14 +184,16 @@ public sealed partial class Document : IDisposable
     /// <summary>現在の元データ。保存 (ENG-20) の後は保存したファイルに変わる。</summary>
     public IByteSource Source => _storage.Source;
 
+    /// <summary>Undo 履歴。連動ビュー (ENG-39) では親のドキュメントの履歴 (親でも子でも同じ履歴を Undo する)。</summary>
     public EditHistory History { get; }
 
-    public DocumentSnapshot Current => History.Current;
+    /// <summary>現在の内容。連動ビューでは親の現在の内容の範囲。</summary>
+    public DocumentSnapshot Current => _linkView ?? History.Current;
 
     public long Length => Current.Length;
 
-    /// <summary>挿入・削除・切り取り・挿入貼り付けができるか (ENG-07)。</summary>
-    public bool CanResize => Source.Capabilities.HasFlag(SourceCapabilities.CanResize);
+    /// <summary>挿入・削除・切り取り・挿入貼り付けができるか (ENG-07)。連動ビューは長さ固定 (ENG-39 の仕様 1)。</summary>
+    public bool CanResize => LinkedParent is null && Source.Capabilities.HasFlag(SourceCapabilities.CanResize);
 
     /// <summary>元のデータソースに保存できるか (ENG-01 の仕様 6)。偽なら「名前を付けて保存」だけになる。</summary>
     public bool CanSave => Source.Capabilities.HasFlag(SourceCapabilities.CanWrite);
@@ -579,6 +581,11 @@ public sealed partial class Document : IDisposable
     private PieceTree ContentFrom(DocumentSnapshot source, long sourceOffset, long length)
     {
         RequireEditable();
+        if (LinkedParent is { } linkParent)
+        {
+            // 連動ビューの内容は親のデータ (参照の記録も親が持つ)。
+            return linkParent.ContentFrom(source, sourceOffset, length);
+        }
         // 同じ元データ (保存で切り替わる前のスナップショットは別の元データ) ならピースをそのまま共有できる。
         if (ReferenceEquals(source.Storage, _storage))
         {
@@ -601,6 +608,10 @@ public sealed partial class Document : IDisposable
     private PieceTree ContentFrom(SnapshotRange range, long rangeOffset, long length)
     {
         RequireEditable();
+        if (LinkedParent is { } linkParent)
+        {
+            return linkParent.ContentFrom(range, rangeOffset, length);
+        }
         if (rangeOffset < 0 || length < 0 || rangeOffset + length > range.Length)
         {
             throw new ArgumentOutOfRangeException(nameof(rangeOffset));
@@ -723,6 +734,10 @@ public sealed partial class Document : IDisposable
     private PieceTree TreeOf(EditContent content)
     {
         RequireEditable();
+        if (LinkedParent is { } linkParent)
+        {
+            return linkParent.TreeOf(content);
+        }
         switch (content.Kind)
         {
             case EditContentKind.Pattern:
@@ -774,6 +789,13 @@ public sealed partial class Document : IDisposable
     /// <summary>元に戻す。取り消した編集グループの、編集前の範囲を選択するよう通知する (EDIT-19 の仕様 10)。</summary>
     public void Undo()
     {
+        if (LinkedParent is { } linkParent)
+        {
+            RequireEditable();
+            linkParent.Undo();
+            return;
+        }
+
         RequireEditable();
         HistoryEntry undone = History.Undo();
         (long, long)? selection = undone.Range is { } r ? (r.Offset, r.BeforeLength) : null;
@@ -783,6 +805,13 @@ public sealed partial class Document : IDisposable
     /// <summary>やり直す。やり直した編集グループの、編集後の範囲を選択するよう通知する。</summary>
     public void Redo()
     {
+        if (LinkedParent is { } linkParent)
+        {
+            RequireEditable();
+            linkParent.Redo();
+            return;
+        }
+
         RequireEditable();
         HistoryEntry redone = History.Redo();
         (long, long)? selection = redone.Range is { } r ? (r.Offset, r.AfterLength) : null;
@@ -950,6 +979,13 @@ public sealed partial class Document : IDisposable
 
     private void Apply(PieceTree tree, long offset, long removed, long inserted, string description, string? coalesceKey)
     {
+        if (LinkedParent is { } linkParent)
+        {
+            // 連動ビューの編集は親のドキュメントの編集として記録する (ENG-39 の仕様 1)。子の内容は親の変更の通知で作り直す。
+            linkParent.ApplyFromLinkedView(tree, _linkStart, _linkLength, offset, removed, inserted, description, coalesceKey);
+            return;
+        }
+
         History.Push(new DocumentSnapshot(_storage, tree), description, coalesceKey, offset, removed, inserted);
         UpdateLock();
         Changed?.Invoke(this, new DocumentChangedEventArgs(offset, removed, inserted, isWholeDocument: false));
@@ -1023,6 +1059,12 @@ public sealed partial class Document : IDisposable
     /// </summary>
     public void Dispose()
     {
+        if (LinkedParent is not null)
+        {
+            DisposeLinkedView();
+            return;
+        }
+
         lock (_lifetimeLock)
         {
             if (_disposed)
