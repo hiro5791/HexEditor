@@ -119,7 +119,64 @@ public sealed partial class HexView
         }
     }
 
-    /// <summary>描画の最後に、表示中の範囲の強調と目印を置く (Render から呼ぶ)。</summary>
+    /// <summary>セルごとの、手前の層 (7〜11) の最も手前の背景 (文字色のコントラストの規則 VIEW-17 の仕様 9 に使う)。使い回す。</summary>
+    private Brush?[] _layerBackWork = [];
+
+    /// <summary>
+    /// 表示中の範囲の強調を提供元から集め、奥の層から並べる (行を描く前に呼ぶ)。あわせて、セルごとの手前の層の背景を
+    /// <see cref="_layerBackWork"/> に入れる。背景のあるセルが 1 つでもあれば true。
+    /// </summary>
+    private bool GatherHighlights(long firstOffset, int span)
+    {
+        List<(HexHighlight Item, int Order)> items = _highlightItems;
+        items.Clear();
+        if (_layerBackWork.Length < span)
+        {
+            _layerBackWork = new Brush?[span];
+        }
+        else
+        {
+            Array.Clear(_layerBackWork, 0, span);
+        }
+
+        if (_highlightSources.Count == 0)
+        {
+            return false;
+        }
+
+        long end = firstOffset + span;
+        foreach (Func<long, long, IEnumerable<HexHighlight>> source in _highlightSources.Values)
+        {
+            foreach (HexHighlight h in source(firstOffset, end))
+            {
+                items.Add((h, items.Count));
+            }
+        }
+
+        // 奥の層から描く (同じ層は与えた順)。作業用の一覧は使い回す (描画のたびに作らない。VIEW-04 の仕様 3)。
+        items.Sort(static (a, b) => a.Item.Layer != b.Item.Layer ? b.Item.Layer.CompareTo(a.Item.Layer) : a.Order.CompareTo(b.Order));
+        bool any = false;
+        foreach ((HexHighlight h, _) in items)
+        {
+            if (h.Background is null || h.Length <= 0 || h.Layer is < CellLayer.Bookmark or > CellLayer.Difference)
+            {
+                continue;
+            }
+
+            // 奥から順に上書きするので、最後に残るのが最も手前の背景。
+            long from = Math.Max(h.Offset, firstOffset);
+            long to = Math.Min(h.Offset + h.Length, end);
+            if (from < to)
+            {
+                _layerBackWork.AsSpan((int)(from - firstOffset), (int)(to - from)).Fill(h.Background);
+                any = true;
+            }
+        }
+
+        return any;
+    }
+
+    /// <summary>描画の最後に、表示中の範囲の強調と目印を置く (Render から呼ぶ。強調は先に <see cref="GatherHighlights"/> で集めておく)。</summary>
     private void RenderHighlights(long firstOffset, int rows, RowColumns columns)
     {
         _placed.Clear();
@@ -131,21 +188,10 @@ public sealed partial class HexView
         int frontUsed = 0;
         int marksUsed = 0;
         int patternsUsed = 0;
-        if (_highlightSources.Count > 0)
+        if (_highlightItems.Count > 0)
         {
             EnsureHighlightLayers();
             List<(HexHighlight Item, int Order)> items = _highlightItems;
-            items.Clear();
-            foreach (Func<long, long, IEnumerable<HexHighlight>> source in _highlightSources.Values)
-            {
-                foreach (HexHighlight h in source(firstOffset, end))
-                {
-                    items.Add((h, items.Count));
-                }
-            }
-
-            // 奥の層から描く (同じ層は与えた順)。作業用の一覧は使い回す (描画のたびに作らない。VIEW-04 の仕様 3)。
-            items.Sort(static (a, b) => a.Item.Layer != b.Item.Layer ? b.Item.Layer.CompareTo(a.Item.Layer) : a.Order.CompareTo(b.Order));
             RowFormat format = columns.Format;
             int texts = format.ShowText ? Math.Max(1, format.ShownTextColumns) : 0;
             long length = _editor?.Layout.Length ?? 0;

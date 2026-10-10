@@ -129,13 +129,14 @@ public sealed class ByteTheme
         [.. Enumerable.Range(0, 256).Select(b => new ByteThemeColor(GradientColor(0.3 + b / 255.0 * 0.7), null))]);
 
     /// <summary>
-    /// 文字色と背景色のコントラスト比が 3:1 未満なら、通常の文字色に置き換える (VIEW-17 の仕様 9)。
+    /// 文字色と背景色のコントラスト比が 3:1 未満なら、通常の文字色 (4.5:1 に届かなければ黒か白) に置き換える (VIEW-17 の仕様 9。
+    /// 規則は <see cref="CellContrast"/>)。
     /// </summary>
     public static SchemeColor ReadableText(SchemeColor text, SchemeColor background, SchemeColor normal) =>
-        SchemeColor.ContrastRatio(text, background) < MinimumContrast ? normal : text;
+        CellContrast.Replacement(text, background, normal) ?? text;
 
     /// <summary>置き換えの基準のコントラスト比 (VIEW-17 の仕様 9)。</summary>
-    public const double MinimumContrast = 3.0;
+    public const double MinimumContrast = CellContrast.MinimumContrast;
 
     /// <summary>
     /// 独自テーマの JSON を読む (仕様 3)。キーは 2 桁の Hex か <c>XX-YY</c>、後に書いたものが優先。値は色の文字列か

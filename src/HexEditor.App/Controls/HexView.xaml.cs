@@ -644,6 +644,7 @@ public sealed partial class HexView : UserControl
         }
 
         bool ruleColors = FillCellForegrounds(firstOffset, span);
+        bool layerBacks = GatherHighlights(firstOffset, span);
         var columns = new RowColumns(format);
 
         // 選択範囲 (層 2)。マルチ選択・矩形選択は見えている範囲の要素だけを尋ねる (EDIT-06・EDIT-07 の「巨大ファイル」)。
@@ -709,7 +710,8 @@ public sealed partial class HexView : UserControl
                 matched.AsSpan(from, bytesPerRow), focus.AsSpan(from, bytesPerRow), deleted.AsSpan(from, bytesPerRow), _work.Texts, from,
                 mode, selected.AsSpan(from, bytesPerRow),
                 _editor.TopRow + r == cursorRow, decor, _palette, _cellWidth, _rowHeight, MeasureGlyph,
-                ruleColors ? _ruleHexWork.AsSpan(from, bytesPerRow) : default, ruleColors ? _ruleTextWork.AsSpan(from, bytesPerRow) : default))
+                ruleColors ? _ruleHexWork.AsSpan(from, bytesPerRow) : default, ruleColors ? _ruleTextWork.AsSpan(from, bytesPerRow) : default,
+                layerBacks ? _layerBackWork.AsSpan(from, bytesPerRow) : default))
             {
                 rebuilt++;
             }

@@ -286,6 +286,38 @@ public sealed class ViewPhase2Tests
         Assert.Equal("#FF0050A0", Cell(render, 0x42)["foreground"]!.GetValue<string>());
     });
 
+    /// <summary>
+    /// VIEW-17 の仕様 9 はすべての層に: 色付けルール (層 10) の濃い背景の上のバイトテーマの文字色も、読める色 (4.5:1 以上) に置き換える。
+    /// ルールの背景がないバイトは指定どおりの色のまま。
+    /// </summary>
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-17-08")]
+    public Task Low_contrast_text_on_a_rule_background_is_replaced() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await OpenAsync(ctx, "TD-BYTES-256");
+        await MenuAsync(app, "Command_ThemeLight");
+        await app.KeyAsync("End", ctrl: true);
+        await app.SendAsync("openPickerPath", new JsonObject { ["path"] = ctx.TestData("TD-VIEW-THEME-LOWCONTRAST") });
+        await MenuAsync(app, "Command_ViewByteThemeCustom");
+
+        // 0x42 の文字 #0050A0 と同じ色の背景 (色付けルールの層)。
+        await app.SendAsync("addHighlight", new JsonObject { ["offset"] = 0x42, ["length"] = 1, ["layer"] = 10, ["background"] = "#FF0050A0" });
+        await app.IdleAsync();
+        JsonObject render = await app.RenderAsync();
+        string fore = Cell(render, 0x42)["foreground"]!.GetValue<string>();
+        Assert.NotEqual("#FF0050A0", fore);
+        Assert.True(Contrast(fore, "#FF0050A0") >= 4.5, $"{fore} on #FF0050A0");
+
+        // テキスト列も同じ。
+        string text = Cell(render, 0x42)["textForeground"]!.GetValue<string>();
+        Assert.True(Contrast(text, "#FF0050A0") >= 4.5, $"{text} on #FF0050A0");
+
+        // ルールの背景を外すと、指定どおりの色に戻る。
+        await app.SendAsync("addHighlight", new JsonObject { ["clear"] = true });
+        await app.IdleAsync();
+        Assert.Equal("#FF0050A0", Cell(await app.RenderAsync(), 0x42)["foreground"]!.GetValue<string>());
+    });
+
     /// <summary>WCAG 2 のコントラスト比 (#AARRGGBB)。</summary>
     internal static double Contrast(string a, string b)
     {
