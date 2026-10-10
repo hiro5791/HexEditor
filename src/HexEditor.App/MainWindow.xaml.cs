@@ -670,6 +670,13 @@ public sealed partial class MainWindow : Window
 
     private void HexView_EditRejected(object? sender, EditResult result)
     {
+        if (result == EditResult.CellFormatNotEditable)
+        {
+            // Hex 以外のセルの表示形式では直接編集しない (VIEW-10 の仕様 7)。ステータスバーの一時的な文で知らせる。
+            ShowStatusMessage(Loc.Get("HexView_Status_CellFormatReadOnly"));
+            return;
+        }
+
         DocumentViewModel? doc = Vm.Selected;
         IReadOnlyList<LongRunningOperation> busy = doc is null ? [] : Vm.Operations.ActiveFor(doc.Document);
         if (result == EditResult.NotEditable && doc is { Editor.ReadOnly: true } && busy.Count == 0)

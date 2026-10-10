@@ -582,9 +582,14 @@ public sealed partial class EditorState
     }
 
     /// <summary>マウスのクリック (VIEW-25 の仕様 6)。<paramref name="extend"/> は Shift+クリック (EDIT-01 の仕様 4: 両端を含む)。</summary>
-    public void Click(long offset, ActiveColumn column, bool lowNibble, bool extend)
+    /// <remarks><paramref name="textColumn"/> はテキスト列をクリックしたときのテキスト列の番号 (VIEW-24。-1 なら変えない)。</remarks>
+    public void Click(long offset, ActiveColumn column, bool lowNibble, bool extend, int textColumn = -1)
     {
         offset = Math.Clamp(offset, 0, Layout.MaxCursor);
+        if (column == ActiveColumn.Text && textColumn >= 0)
+        {
+            _textColumn = Math.Clamp(textColumn, 0, Math.Max(0, View.TextColumnCount - 1));
+        }
 
         // 元の位置から 1 画面分 (b × V バイト) 以上離れたクリックはジャンプ履歴に記録する (VIEW-31 の仕様 1)。
         if (!extend && Math.Abs((decimal)offset - _cursor) >= (decimal)BytesPerRow * _visibleRows)

@@ -214,8 +214,8 @@ public readonly record struct RowFormat(int BytesPerRow, int GroupSize = 1, bool
     /// </summary>
     public int ByteAtHexIndex(int index) => ByteAtHexIndex(index, BytesPerRow);
 
-    /// <summary>Hex 列の文字位置から、その位置を含むバイト (または左隣のバイト) の行内の位置。</summary>
-    public int ByteAtHexIndex(int index, int valid)
+    /// <summary>Hex 列の文字位置を含むセル (または左隣のセル) の表示の位置。</summary>
+    public int CellAt(int index)
     {
         int lo = 0;
         int hi = CellsPerRow - 1;
@@ -231,6 +231,23 @@ public readonly record struct RowFormat(int BytesPerRow, int GroupSize = 1, bool
                 hi = mid - 1;
             }
         }
+
+        return lo;
+    }
+
+    /// <summary>
+    /// マウスの位置 (Hex 列の文字位置) のバイト。セルの前の空白は右のセルに含める (VIEW-25 の仕様 6)。
+    /// </summary>
+    public int ByteAtPointer(int index, int valid)
+    {
+        int k = CellAt(index + 1);
+        return ByteAtHexIndex(Math.Max(index, CellStart(k)), valid);
+    }
+
+    /// <summary>Hex 列の文字位置から、その位置を含むバイト (または左隣のバイト) の行内の位置。</summary>
+    public int ByteAtHexIndex(int index, int valid)
+    {
+        int lo = CellAt(index);
 
         if (IsHexBytes)
         {

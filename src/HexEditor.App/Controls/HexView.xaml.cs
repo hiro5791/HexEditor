@@ -116,6 +116,7 @@ public sealed partial class HexView : UserControl
 
         Loaded += HexView_Loaded;
         Unloaded += HexView_Unloaded;
+        RulerBar.RightTapped += RulerBar_RightTapped;
         InitializeInput();
         InitializeTextInput();
         InitializeOptions();
@@ -425,13 +426,16 @@ public sealed partial class HexView : UserControl
 
         public bool[] Deleted { get; private set; } = [];
 
-        public TextCell[] Text { get; private set; } = [];
+        /// <summary>テキスト列ごとの解読結果 (VIEW-24。0 が 1 列目)。</summary>
+        public TextCell[][] Texts { get; private set; } = [[]];
+
+        public TextCell[] Text => Texts[0];
 
         public byte[] DecodeBytes { get; private set; } = [];
 
         public ByteState[] DecodeStates { get; private set; } = [];
 
-        public void Ensure(int span)
+        public void Ensure(int span, int textColumns)
         {
             if (Bytes.Length < span)
             {
@@ -441,7 +445,16 @@ public sealed partial class HexView : UserControl
                 Matched = new bool[span];
                 Focus = new bool[span];
                 Deleted = new bool[span];
-                Text = new TextCell[span];
+                Texts = [];
+            }
+
+            if (Texts.Length != textColumns || Texts[0].Length < Bytes.Length)
+            {
+                Texts = new TextCell[Math.Max(1, textColumns)][];
+                for (int t = 0; t < Texts.Length; t++)
+                {
+                    Texts[t] = new TextCell[Bytes.Length];
+                }
             }
         }
 
@@ -502,7 +515,10 @@ public sealed partial class HexView : UserControl
         int bytesPerRow = layout.BytesPerRow;
         OffsetFormat offsetFormat = _editor.OffsetFormat;
         RowFormat format = RowFormat.For(view, bytesPerRow);
-        int digits = offsetFormat.ColumnWidth;
+        bool recordNumbers = view.RecordView && view.RecordNumbers;
+
+        // オフセット列にレコード番号を表示するときは、その文字数も入る幅にする (VIEW-18 の仕様 5)。
+        int digits = recordNumbers ? Math.Max(offsetFormat.ColumnWidth, RecordLabelWidth(view, layout)) : offsetFormat.ColumnWidth;
         if (digits != _digits || bytesPerRow != _bytesPerRow || format != _format || _showOffset != view.ShowOffsetColumn)
         {
             _digits = digits;
@@ -520,6 +536,13 @@ public sealed partial class HexView : UserControl
 
         // 上下 1 行ずつの余分 (VIEW-04 の仕様 1)。行内のずれがあると下にもう 1 行見える。
         int rows = (int)Math.Max(1, Math.Min(_editor.VisibleRows + 2, layout.TotalRows - _editor.TopRow));
+
+        // ページ単位で表示: 一番上の行の区切りの外の行は描かない (VIEW-33 の仕様 4)。
+        if (_editor.VisibleSectionRows is { } section)
+        {
+            rows = (int)Math.Max(1, Math.Min(rows, section.Last - _editor.TopRow + 1));
+        }
+
         EnsureRowCount(rows);
 
         // 行の先頭のずれ (VIEW-20) があると、最初の行は負のオフセットから始まる。データは 0 から読む。
@@ -527,10 +550,11 @@ public sealed partial class HexView : UserControl
         int lead = (int)Math.Max(0, -firstOffset);
         long readStart = firstOffset + lead;
         int span = rows * bytesPerRow;
+        int textColumns = Math.Max(1, format.ShownTextColumns);
 
         // 1 フレームの作業用の配列は使い回す (1 行 4,096 バイトでは 1 フレームで数 MB になり、毎回作ると大きなオブジェクトの GC で
         // フレームが遅れる。VIEW-04 の仕様 3・4)。行は内容を写して持つので、次のフレームで上書きしてよい。
-        _work.Ensure(span);
+        _work.Ensure(span, textColumns);
         byte[] bytes = _work.Bytes;
         ByteState[] states = _work.States;
         Array.Clear(bytes, 0, span);
@@ -594,14 +618,29 @@ public sealed partial class HexView : UserControl
                 }
             }
         }
-        TextCell[] text = DecodeText(snapshot, view, readStart, lead, span, available);
+        int tableColumns = 0;
+        IReadOnlyList<TextColumnSpec> textSpecs = view.TextColumns;
+        for (int t = 0; t < textColumns; t++)
+        {
+            TextEncoding encoding = _editor.TextEncodingOf(t);
+            TextColumnSpec spec = t < textSpecs.Count ? textSpecs[t] : new TextColumnSpec(encoding.Id);
+            DecodeText(snapshot, view, encoding, spec, _work.Texts[t], readStart, lead, span, available);
+            tableColumns |= encoding.Kind == TextEncodingKind.Table ? 1 << t : 0;
+        }
+
         var columns = new RowColumns(format);
         long selStart = _editor.SelectionStart;
         long selEnd = selStart + _editor.SelectionLength;
         var style = new RowStyle(view.LowercaseHex, view.DimZeros, view.AlternateColumns, view.AlternateTextColumns, view.HighlightModified,
-            view.ShowContinuation, _palette.HighContrast, NonPrintableStyle);
-        var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion, _editor.TextEncoding, style, _proportional);
+            view.ShowContinuation, _palette.HighContrast, NonPrintableStyle, view.SpacePadding);
+        RecordLayout? records = view.RecordView ? RecordLayout.For(view) : null;
+        var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion, _editor.TextEncoding, style, _proportional,
+            CurrentThemeBrushes(), records, tableColumns, _editor.TextColumn);
         long cursorRow = view.HighlightCurrentRow ? layout.RowOf(_editor.Cursor) : -1;
+        long sectionLength = SeparatorsShown(view, layout) ? _editor.SectionLength : 0;
+        int offsetWidth = digits;
+        object? offsetKey = recordNumbers ? (view.RecordStart, view.RecordLength, offsetWidth, view.Radix) : null;
+        Func<long, string?>? recordLabel = recordNumbers ? start => RecordLabel(view, start) : null;
         int rebuilt = 0;
         int loadingCells = 0;
         int placeholderCells = 0;
@@ -617,10 +656,16 @@ public sealed partial class HexView : UserControl
             bool rowLoading = rowStates[rowLead..count].Contains(ByteState.Loading);
             anyUnreadable |= rowStates[rowLead..count].Contains(ByteState.Unreadable);
             RowVisual row = _rows[r];
-            if (row.OffsetRowStart != rowStart || !ReferenceEquals(row.OffsetFormatUsed, offsetFormat) || row.OffsetDigits != digits)
+            if (row.OffsetRowStart != rowStart || !ReferenceEquals(row.OffsetFormatUsed, offsetFormat) || row.OffsetDigits != offsetWidth
+                || !Equals(row.OffsetKeyUsed, offsetKey))
             {
-                row.SetOffset(rowStart, offsetFormat, _palette);
+                row.SetOffset(rowStart, offsetFormat, _palette, recordLabel, offsetKey, offsetWidth);
             }
+
+            // 区切り線と見出し (VIEW-33 の仕様 3)。
+            RowDecor decor = sectionLength > 0 && rowStart >= 0 && rowStart % sectionLength == 0 && rowStart <= layout.Length
+                ? new RowDecor(true, view.SeparatorLabels ? SeparatorLabel(view, rowStart, sectionLength) : null)
+                : default;
 
             row.OffsetShown = _showOffset;
             CellMode mode = !rowLoading ? CellMode.Normal : inGrace ? CellMode.Blank : CellMode.Placeholder;
@@ -634,9 +679,9 @@ public sealed partial class HexView : UserControl
             // 猶予中で、同じ行の前の内容があればそのまま残す (VIEW-03 の仕様 3)。
             bool keep = mode == CellMode.Blank && row.ContentRowStart == rowStart && row.HasContent;
             if (!keep && row.Update(frame, rowStart, rowLead, count, bytes.AsSpan(from, bytesPerRow), rowStates, marks.AsSpan(from, bytesPerRow),
-                matched.AsSpan(from, bytesPerRow), focus.AsSpan(from, bytesPerRow), deleted.AsSpan(from, bytesPerRow), text.AsSpan(from, bytesPerRow),
+                matched.AsSpan(from, bytesPerRow), focus.AsSpan(from, bytesPerRow), deleted.AsSpan(from, bytesPerRow), _work.Texts, from,
                 mode, selStart, selEnd,
-                _editor.TopRow + r == cursorRow, _palette, _cellWidth, _rowHeight, MeasureGlyph))
+                _editor.TopRow + r == cursorRow, decor, _palette, _cellWidth, _rowHeight, MeasureGlyph))
             {
                 rebuilt++;
             }
@@ -680,21 +725,20 @@ public sealed partial class HexView : UserControl
     }
 
     /// <summary>
-    /// テキスト列の解読 (VIEW-21、VIEW-22)。マルチバイトの文字コードでは、同期点を探すための読み戻しと末尾の文字の先読みを付けて読む。
+    /// テキスト列 1 つの解読 (VIEW-21〜VIEW-24)。マルチバイトの文字コードでは、同期点を探すための読み戻しと末尾の文字の先読みを付けて読む。
     /// </summary>
-    private TextCell[] DecodeText(DocumentSnapshot snapshot, ViewSettings view, long readStart, int lead, int span, int available)
+    private void DecodeText(DocumentSnapshot snapshot, ViewSettings view, TextEncoding encoding, TextColumnSpec spec, TextCell[] cells,
+        long readStart, int lead, int span, int available)
     {
-        TextCell[] cells = _work.Text;
         Array.Clear(cells, 0, span);
         if (!view.ShowTextColumn || available <= lead)
         {
-            return cells;
+            return;
         }
 
-        TextEncoding encoding = _editor!.TextEncoding;
         int windowLength = available - lead;
         int back = (int)Math.Min(readStart, TextCellDecoder.LookbackFor(encoding));
-        int ahead = encoding.Kind == TextEncodingKind.SingleByte ? 0 : TextCellDecoder.Lookahead;
+        int ahead = TextCellDecoder.LookaheadFor(encoding);
         long dataStart = readStart - back;
         int length = back + windowLength + ahead;
         _work.EnsureDecode(length);
@@ -702,8 +746,69 @@ public sealed partial class HexView : UserControl
         ByteState[] dataStates = _work.DecodeStates;
         int read = snapshot.ReadForDisplay(dataStart, data.AsSpan(0, length), dataStates.AsSpan(0, length));
         TextCellDecoder.Decode(encoding, data.AsSpan(0, read), dataStart, readStart, cells.AsSpan(lead, windowLength),
-            dataStates.AsSpan(0, read), view.Utf16Phase, view.Utf32Phase, NonPrintableStyle, InvalidSymbol);
-        return cells;
+            dataStates.AsSpan(0, read), spec.Utf16Phase, spec.Utf32Phase, NonPrintableStyle, InvalidSymbol);
+    }
+
+    // ---- 区切り線 (VIEW-33)・レコード番号 (VIEW-18) ----
+
+    /// <summary>区切り線を引くか (区切りの長さが 1 行のバイト数の倍数で、行の境目と合うときだけ。VIEW-33 の仕様 2)。</summary>
+    private bool SeparatorsShown(ViewSettings view, HexLayout layout)
+    {
+        long length = SectionLayout.LengthFor(view, _editor!.SectorSize);
+        return length > 0 && SectionLayout.Validate(length, layout.BytesPerRow, layout.RowShift) is null;
+    }
+
+    /// <summary>区切り線の見出し (VIEW-33 の仕様 3): 「セクタ 15」「ページ 3 (0x3000)」。番号は 0 始まり。</summary>
+    private string SeparatorLabel(ViewSettings view, long rowStart, long length)
+    {
+        long index = rowStart / length;
+        string number = index.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+        string offset = "0x" + rowStart.ToString(view.LowercaseHex ? "x" : "X", System.Globalization.CultureInfo.InvariantCulture);
+        return view.Separator switch
+        {
+            SeparatorKind.Sector => Services.Loc.Format("HexView_Separator_Sector", number),
+            SeparatorKind.Page => Services.Loc.Format("HexView_Separator_Page", number, offset),
+            _ => Services.Loc.Format("HexView_Separator_Custom", number, offset),
+        };
+    }
+
+    /// <summary>レコード番号の表示の文字数 (「#」+ 最大のレコード番号 + 「:」+ レコード内の位置。VIEW-18 の仕様 5)。</summary>
+    private static int RecordLabelWidth(ViewSettings view, HexLayout layout)
+    {
+        RecordLayout records = RecordLayout.For(view);
+        long max = records.IndexOf(Math.Max(records.Start, layout.MaxCursor)) ?? 0;
+        return 2 + max.ToString(System.Globalization.CultureInfo.InvariantCulture).Length + RecordPositionDigits(view);
+    }
+
+    private static int RecordPositionDigits(ViewSettings view)
+    {
+        long last = Math.Max(1, view.RecordLength - 1);
+        int digits = view.Radix == OffsetRadix.Decimal ? last.ToString(System.Globalization.CultureInfo.InvariantCulture).Length
+            : view.Radix == OffsetRadix.Octal ? Convert.ToString(last, 8).Length
+            : last.ToString("X", System.Globalization.CultureInfo.InvariantCulture).Length;
+        return Math.Max(4, digits);
+    }
+
+    /// <summary>
+    /// 行の先頭のオフセット列のレコード番号 (VIEW-18 の仕様 5): 「#1024:0004」。レコード番号は 10 進、レコード内の位置はオフセットの基数。
+    /// 開始オフセットより前の行は null (通常のオフセット)。
+    /// </summary>
+    private static string? RecordLabel(ViewSettings view, long rowStart)
+    {
+        RecordLayout records = RecordLayout.For(view);
+        if (records.IndexOf(rowStart) is not { } index || records.WithinOf(rowStart) is not { } within)
+        {
+            return null;
+        }
+
+        int digits = RecordPositionDigits(view);
+        string position = view.Radix switch
+        {
+            OffsetRadix.Decimal => within.ToString(System.Globalization.CultureInfo.InvariantCulture).PadLeft(digits, '0'),
+            OffsetRadix.Octal => Convert.ToString(within, 8).PadLeft(digits, '0'),
+            _ => within.ToString(view.LowercaseHex ? "x" : "X", System.Globalization.CultureInfo.InvariantCulture).PadLeft(digits, '0'),
+        };
+        return "#" + index.ToString(System.Globalization.CultureInfo.InvariantCulture) + ":" + position;
     }
 
     /// <summary>描画のたびに呼ぶ (テスト用のビルドで、仮表示 `··` を描いたフレームを数える)。</summary>
@@ -779,6 +884,7 @@ public sealed partial class HexView : UserControl
             _rows.Add(row);
             OffsetHost.Children.Add(row.Offset);
             RowsLayer.Children.Add(row.Container);
+            UnderLayer.Children.Add(row.Under);
         }
     }
 
@@ -816,19 +922,36 @@ public sealed partial class HexView : UserControl
         {
             CompositionBox.Visibility = Visibility.Collapsed;
             PlaceCharacterRange(false, 0, 0, 0);
+            PlaceExtraCarets(layout, columns, -1, 0, 0, visible: false);
             return;
         }
 
         int column = layout.ColumnOf(_editor.Cursor);
         double y = row * _rowHeight - _subRowOffset;
-        double hexX = columns.HexIndex(column) * _cellWidth;
-        double textX = columns.TextIndex(column) * _cellWidth;
+        (double hexX, double hexWidth) = HexCellRange(layout, columns, _editor.Cursor);
+        int textColumn = Math.Clamp(_editor.TextColumn, 0, Math.Max(0, columns.Format.ShownTextColumns - 1));
+        double textX = columns.TextIndex(textColumn, column) * _cellWidth;
         bool hexActive = _editor.ActiveColumn == ActiveColumn.Hex;
-        double activeX = hexActive ? hexX + (_editor.LowNibble ? _cellWidth : 0) : textX;
+        bool hexBytes = columns.Format.IsHexBytes;
+
+        // Hex 以外のセルの表示形式では、カーソルはセル全体を強調し、ニブルの位置を持たない (VIEW-10 の仕様 6)。
+        double activeX = hexActive ? hexX + (hexBytes && _editor.LowNibble ? _cellWidth : 0) : textX;
+        double activeWidth = hexActive && !hexBytes ? hexWidth : _cellWidth;
 
         // もう一方の列の対応位置は枠で示す (VIEW-06 の仕様 4)。テキスト列ではそのバイトが属する文字のセル全体を囲む (VIEW-22)。
-        (double textLeft, double textWidth) = TextCharacterRange(layout, columns, _editor.Cursor);
-        SetRect(SecondaryCaret, hexActive ? textLeft : hexX, y, hexActive ? textWidth : _cellWidth * 2, _rowHeight);
+        // テキスト列が複数あるときは、すべてのテキスト列に枠を出す (VIEW-24 の仕様 7)。
+        (double textLeft, double textWidth) = TextCharacterRange(layout, columns, _editor.Cursor, textColumn);
+        (double firstLeft, double firstWidth) = TextCharacterRange(layout, columns, _editor.Cursor, 0);
+        if (hexActive)
+        {
+            SetRect(SecondaryCaret, firstLeft, y, firstWidth, _rowHeight);
+        }
+        else
+        {
+            SetRect(SecondaryCaret, hexX, y, hexWidth, _rowHeight);
+        }
+
+        PlaceExtraCarets(layout, columns, hexActive ? -1 : textColumn, hexActive ? 0 : -1, y, visible);
         PlaceCharacterRange(!hexActive && columns.ShowText && textWidth > _cellWidth && textLeft != textX, textLeft, y, textWidth);
 
         // 上書きモードは塗りつぶしの帯、挿入モードは縦棒 (VIEW-06 の仕様 3。色だけで区別しない)。フォーカスがなければ枠 (VIEW-01 の仕様 13)。
@@ -846,7 +969,7 @@ public sealed partial class HexView : UserControl
             Caret.Fill = _palette!.Caret;
             Caret.Stroke = null;
             SetCaretOpacity(BandOpacity);
-            SetRect(Caret, activeX, y, _cellWidth, _rowHeight);
+            SetRect(Caret, activeX, y, activeWidth, _rowHeight);
         }
         else
         {
@@ -854,7 +977,7 @@ public sealed partial class HexView : UserControl
             Caret.Stroke = _palette!.Caret;
             Caret.StrokeThickness = 1;
             SetCaretOpacity(1);
-            SetRect(Caret, activeX, y, _cellWidth, _rowHeight);
+            SetRect(Caret, activeX, y, activeWidth, _rowHeight);
         }
 
         PlaceComposition(activeX, y);
@@ -905,17 +1028,17 @@ public sealed partial class HexView : UserControl
         SetRect(_characterRange, left, y, width, _rowHeight);
     }
 
-    private (double Left, double Width) TextCharacterRange(HexLayout layout, RowColumns columns, long offset)
+    private (double Left, double Width) TextCharacterRange(HexLayout layout, RowColumns columns, long offset, int textColumn = 0)
     {
         int column = layout.ColumnOf(offset);
-        double left = columns.TextIndex(column) * _cellWidth;
+        double left = columns.TextIndex(textColumn, column) * _cellWidth;
         long r = layout.RowOf(offset) - _editor!.TopRow;
         if (r < 0 || r >= _rows.Count || !_rows[(int)r].Visible)
         {
             return (left, _cellWidth);
         }
 
-        TextCell cell = _rows[(int)r].TextAt(column);
+        TextCell cell = _rows[(int)r].TextAt(textColumn, column);
         if (cell.Kind is not (TextCellKind.Char or TextCellKind.Continuation) || cell.Span <= 1 || cell.Offset < 0)
         {
             return (left, _cellWidth);
@@ -924,7 +1047,64 @@ public sealed partial class HexView : UserControl
         long rowStart = layout.RowStart(layout.RowOf(offset));
         int first = (int)Math.Max(0, cell.Offset - rowStart);
         int last = (int)Math.Min(columns.BytesPerRow - 1, cell.Offset + cell.Span - 1 - rowStart);
-        return (columns.TextIndex(first) * _cellWidth, (last - first + 1) * _cellWidth);
+        return (columns.TextIndex(textColumn, first) * _cellWidth, (last - first + 1) * _cellWidth);
+    }
+
+    /// <summary>
+    /// Hex 列でオフセットのバイトを示す範囲 (左端と幅)。Hex 形式では 2 文字のセル、ほかの形式ではバイトを含むセル全体 (VIEW-10 の仕様 6)。
+    /// 単位に満たない端数のバイトは 2 文字。
+    /// </summary>
+    internal (double Left, double Width) HexCellRange(HexLayout layout, RowColumns columns, long offset)
+    {
+        RowFormat format = columns.Format;
+        int c = layout.ColumnOf(offset);
+        long rowStart = layout.RowStart(layout.RowOf(offset));
+        int valid = (int)Math.Clamp(layout.Length - rowStart, 0, layout.BytesPerRow);
+        if (format.IsHexBytes)
+        {
+            return (format.ByteSpan(c, valid).Start * _cellWidth, 2 * _cellWidth);
+        }
+
+        int k = c / format.Unit;
+        return format.IsCompleteCell(k, valid) || c >= valid
+            ? (format.CellStart(k) * _cellWidth, format.CellChars * _cellWidth)
+            : (format.ByteSpan(c, valid).Start * _cellWidth, 2 * _cellWidth);
+    }
+
+    private readonly List<Microsoft.UI.Xaml.Shapes.Rectangle> _extraCarets = [];
+
+    /// <summary>2 列目以降のテキスト列の対応位置の枠 (VIEW-24 の仕様 7)。<paramref name="activeText"/> は操作中のテキスト列 (Hex 列なら -1)。</summary>
+    private void PlaceExtraCarets(HexLayout layout, RowColumns columns, int activeText, int skip, double y, bool visible)
+    {
+        int texts = columns.ShowText ? Math.Max(1, columns.Format.ShownTextColumns) : 0;
+        int used = 0;
+        for (int t = 0; visible && t < texts; t++)
+        {
+            // 1 列目は SecondaryCaret が受け持つ (Hex 列が操作中のとき)。テキスト列が操作中なら、その列には枠を出さない。
+            if (t == activeText || t == skip)
+            {
+                continue;
+            }
+
+            if (used >= _extraCarets.Count)
+            {
+                var rect = new Microsoft.UI.Xaml.Shapes.Rectangle { IsHitTestVisible = false, StrokeThickness = 1 };
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAccessibilityView(rect, Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+                ContentHost.Children.Insert(ContentHost.Children.IndexOf(SecondaryCaret), rect);
+                _extraCarets.Add(rect);
+            }
+
+            Microsoft.UI.Xaml.Shapes.Rectangle frame = _extraCarets[used++];
+            (double left, double width) = TextCharacterRange(layout, columns, _editor!.Cursor, t);
+            frame.Stroke = SecondaryCaret.Stroke;
+            frame.Visibility = Visibility.Visible;
+            SetRect(frame, left, y, width, _rowHeight);
+        }
+
+        for (int i = used; i < _extraCarets.Count; i++)
+        {
+            _extraCarets[i].Visibility = Visibility.Collapsed;
+        }
     }
 
     private static void SetRect(FrameworkElement element, double x, double y, double width, double height)
@@ -1107,8 +1287,10 @@ public sealed partial class HexView : UserControl
 
         RowColumns columns = Columns;
         int column = _editor.Layout.ColumnOf(_editor.Cursor);
-        double left = (_editor.ActiveColumn == ActiveColumn.Hex ? columns.HexIndex(column) : columns.TextIndex(column)) * _cellWidth;
-        double right = left + _cellWidth * (_editor.ActiveColumn == ActiveColumn.Hex ? 2 : 1);
+        (double left, double width) = _editor.ActiveColumn == ActiveColumn.Hex
+            ? HexCellRange(_editor.Layout, columns, _editor.Cursor)
+            : (columns.TextIndex(Math.Clamp(_editor.TextColumn, 0, Math.Max(0, columns.Format.ShownTextColumns - 1)), column) * _cellWidth, _cellWidth);
+        double right = left + width;
         double viewport = Math.Max(0, Surface.ActualWidth - ContentLeft);
         if (left < _horizontalOffset)
         {
