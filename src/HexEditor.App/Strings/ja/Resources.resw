@@ -2857,4 +2857,218 @@
   <data name="Bookmarks_DeleteGroupMoveToParent" xml:space="preserve"><value>中のブックマークを親のグループに移す</value></data>
   <data name="Bookmarks_DropToGroup" xml:space="preserve"><value>このグループに移動</value></data>
   <data name="Bookmarks_GroupDeleted" xml:space="preserve"><value>グループ "{0}" を削除しました。</value></data>
+  <data name="Annotations_ColumnMore" xml:space="preserve"><value>{0} +{1}</value></data>
+  <data name="Annotations_DescriptionName" xml:space="preserve"><value>カーソル位置の説明</value></data>
+  <data name="Annotations_NoDescription" xml:space="preserve"><value>カーソル位置にブックマーク・注釈はありません。</value></data>
+  <data name="Annotations_Origin_Bookmark" xml:space="preserve"><value>ブックマーク</value></data>
+  <data name="Annotations_Origin_Yara" xml:space="preserve"><value>YARA</value></data>
+  <data name="Annotations_Origin_SearchResults" xml:space="preserve"><value>すべて検索の結果</value></data>
+  <data name="Annotations_Origin_Template" xml:space="preserve"><value>構造体テンプレート</value></data>
+  <data name="Annotations_Origin_Script" xml:space="preserve"><value>スクリプト</value></data>
+  <data name="Annotations_Range" xml:space="preserve"><value>{0}〜{1} ({2} バイト)</value></data>
+  <data name="Annotations_Style_Background" xml:space="preserve"><value>背景色</value></data>
+  <data name="Annotations_Style_Border" xml:space="preserve"><value>枠線</value></data>
+  <data name="Annotations_Style_Underline" xml:space="preserve"><value>下線</value></data>
+  <data name="Bookmarks_ExportError" xml:space="preserve"><value>{0} に書き出せませんでした: {1}</value></data>
+  <data name="Bookmarks_Exported" xml:space="preserve"><value>{0} 件のブックマークを {1} に書き出しました。</value></data>
+  <data name="Bookmarks_ImportAppend" xml:space="preserve"><value>追加する</value></data>
+  <data name="Bookmarks_ImportReplace" xml:space="preserve"><value>置き換える</value></data>
+  <data name="Bookmarks_ImportShift" xml:space="preserve"><value>オフセットのずれ (例: +0x200)</value></data>
+  <data name="Bookmarks_ImportShiftError" xml:space="preserve"><value>ずれは +0x200 のような入力式で入力してください</value></data>
+  <data name="Bookmarks_ImportOk" xml:space="preserve"><value>読み込む</value></data>
+  <data name="Bookmarks_ImportError" xml:space="preserve"><value>{0} を読み込めませんでした{1}: {2}</value></data>
+  <data name="Bookmarks_ImportErrorAt" xml:space="preserve"><value> ({0} 行目、{1} 文字目)</value></data>
+  <data name="Bookmarks_ImportErrorLine" xml:space="preserve"><value> ({0} 行目)</value></data>
+  <data name="Bookmarks_Imported" xml:space="preserve"><value>{0} 件のブックマークを読み込みました。{1} 件を飛ばしました。</value></data>
+  <data name="Bookmarks_ImportedNumbers" xml:space="preserve"><value>既存のブックマークから移した番号: {0}。外した番号: {1} 件。</value></data>
+  <data name="Bookmarks_SelectionGroup" xml:space="preserve"><value>選択範囲 {0}</value></data>
+  <data name="Bookmarks_SelectionName" xml:space="preserve"><value>選択 {0}</value></data>
+  <data name="Bookmarks_SelectionLimit" xml:space="preserve"><value>先頭の {0} 範囲だけを選択しました。</value></data>
+  <data name="Coloring_PanelName" xml:space="preserve"><value>色付けルール</value></data>
+  <data name="Coloring_ScopeDocument.Content" xml:space="preserve"><value>このドキュメント</value></data>
+  <data name="Coloring_ScopeGlobal.Content" xml:space="preserve"><value>全体</value></data>
+  <data name="Coloring_AddName" xml:space="preserve"><value>ルールを追加</value></data>
+  <data name="Coloring_DeleteName" xml:space="preserve"><value>ルールを削除</value></data>
+  <data name="Coloring_MoveUpName" xml:space="preserve"><value>上へ (優先する)</value></data>
+  <data name="Coloring_MoveDownName" xml:space="preserve"><value>下へ</value></data>
+  <data name="Coloring_Name.Header" xml:space="preserve"><value>名前</value></data>
+  <data name="Coloring_Kind.Header" xml:space="preserve"><value>条件</value></data>
+  <data name="Coloring_Kind_ByteValues" xml:space="preserve"><value>バイト値</value></data>
+  <data name="Coloring_Kind_OffsetRange" xml:space="preserve"><value>オフセット範囲</value></data>
+  <data name="Coloring_Kind_Period" xml:space="preserve"><value>周期</value></data>
+  <data name="Coloring_Kind_HexPattern" xml:space="preserve"><value>Hex パターン</value></data>
+  <data name="Coloring_Kind_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="Coloring_Kind_Regex" xml:space="preserve"><value>正規表現</value></data>
+  <data name="Coloring_Kind_Number" xml:space="preserve"><value>数値</value></data>
+  <data name="Coloring_PatternName" xml:space="preserve"><value>条件の値</value></data>
+  <data name="Coloring_PatternHeader_ByteValues" xml:space="preserve"><value>値と範囲の並び (00、20-7E、7F, 80-FF)</value></data>
+  <data name="Coloring_PatternHeader_OffsetRange" xml:space="preserve"><value>開始 (入力式)</value></data>
+  <data name="Coloring_PatternHeader_Period" xml:space="preserve"><value>周期</value></data>
+  <data name="Coloring_PatternHeader_HexPattern" xml:space="preserve"><value>Hex パターン (?? は任意の 1 バイト)</value></data>
+  <data name="Coloring_PatternHeader_Text" xml:space="preserve"><value>文字列</value></data>
+  <data name="Coloring_PatternHeader_Regex" xml:space="preserve"><value>正規表現 (一致の最大長は 256 バイト)</value></data>
+  <data name="Coloring_PatternHeader_Number" xml:space="preserve"><value>値または範囲 (0..0xFF)</value></data>
+  <data name="Coloring_End.Header" xml:space="preserve"><value>終了 (このバイトを含む)</value></data>
+  <data name="Coloring_Modulus.Header" xml:space="preserve"><value>間隔 (バイト)</value></data>
+  <data name="Coloring_Remainder.Header" xml:space="preserve"><value>位置</value></data>
+  <data name="Coloring_PeriodLength.Header" xml:space="preserve"><value>長さ</value></data>
+  <data name="Coloring_CodePage.Header" xml:space="preserve"><value>文字コード</value></data>
+  <data name="Coloring_CaseSensitive.Content" xml:space="preserve"><value>大文字・小文字を区別する</value></data>
+  <data name="Coloring_RegexOnText.Content" xml:space="preserve"><value>解読した文字列に使う</value></data>
+  <data name="Coloring_NumberType.Header" xml:space="preserve"><value>型</value></data>
+  <data name="Coloring_BigEndian.Content" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Coloring_UseForeground.Content" xml:space="preserve"><value>文字色</value></data>
+  <data name="Coloring_UseBackground.Content" xml:space="preserve"><value>背景色</value></data>
+  <data name="Coloring_BorderChoice.Header" xml:space="preserve"><value>枠線</value></data>
+  <data name="Coloring_Border_None" xml:space="preserve"><value>枠線なし</value></data>
+  <data name="Coloring_Border_Solid" xml:space="preserve"><value>実線</value></data>
+  <data name="Coloring_Border_Dashed" xml:space="preserve"><value>破線</value></data>
+  <data name="Coloring_Border_Dotted" xml:space="preserve"><value>点線</value></data>
+  <data name="Coloring_Target.Header" xml:space="preserve"><value>適用先</value></data>
+  <data name="Coloring_Target_Both" xml:space="preserve"><value>両方</value></data>
+  <data name="Coloring_Target_Hex" xml:space="preserve"><value>Hex 列</value></data>
+  <data name="Coloring_Target_Text" xml:space="preserve"><value>テキスト列</value></data>
+  <data name="Coloring_RangeStart.Header" xml:space="preserve"><value>適用範囲の開始 (入力式)</value></data>
+  <data name="Coloring_RangeStart.PlaceholderText" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="Coloring_RangeEnd.Header" xml:space="preserve"><value>終了 (このバイトを含む)</value></data>
+  <data name="Coloring_RangeEnd.PlaceholderText" xml:space="preserve"><value>ドキュメントの末尾</value></data>
+  <data name="Coloring_Summary" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Coloring_ForegroundText" xml:space="preserve"><value>文字色 {0}</value></data>
+  <data name="Coloring_BackgroundText" xml:space="preserve"><value>背景色 {0}</value></data>
+  <data name="Coloring_Unnamed" xml:space="preserve"><value>(名前なし)</value></data>
+  <data name="Coloring_Enabled" xml:space="preserve"><value>有効</value></data>
+  <data name="Coloring_Disabled" xml:space="preserve"><value>無効</value></data>
+  <data name="Coloring_DefaultName" xml:space="preserve"><value>ルール {0}</value></data>
+  <data name="Coloring_NewRuleName" xml:space="preserve"><value>選択範囲の値</value></data>
+  <data name="Coloring_FromSelectionUnavailable" xml:space="preserve"><value>1〜256 バイトを選択してください</value></data>
+  <data name="Coloring_Error_Empty" xml:space="preserve"><value>条件を入力してください</value></data>
+  <data name="Coloring_Error_InvalidByteValues" xml:space="preserve"><value>"{0}" はバイト値や 20-7E のような範囲ではありません</value></data>
+  <data name="Coloring_Error_InvalidExpression" xml:space="preserve"><value>"{0}" は入力式として読めません</value></data>
+  <data name="Coloring_Error_InvalidPattern" xml:space="preserve"><value>パターンが正しくありません ({0})</value></data>
+  <data name="Coloring_Error_InvalidRegex" xml:space="preserve"><value>正規表現が正しくありません: {0}</value></data>
+  <data name="Coloring_Error_InvalidNumber" xml:space="preserve"><value>"{0}" は値や 0..0xFF のような範囲ではありません</value></data>
+  <data name="Coloring_Error_InvalidPeriod" xml:space="preserve"><value>位置は 0 以上で、間隔より小さくしてください ({0})</value></data>
+  <data name="Coloring_Error_InvalidRange" xml:space="preserve"><value>終了が開始より前です ({0})</value></data>
+  <data name="Coloring_Preset_dimZero" xml:space="preserve"><value>ゼロを薄く表示</value></data>
+  <data name="Coloring_Preset_printableAscii" xml:space="preserve"><value>印字可能な ASCII</value></data>
+  <data name="Coloring_Preset_controlCharacters" xml:space="preserve"><value>制御文字</value></data>
+  <data name="Coloring_Preset_ff" xml:space="preserve"><value>FF</value></data>
+  <data name="Coloring_Preset_highBit" xml:space="preserve"><value>上位ビットが 1</value></data>
+  <data name="FileType_BookmarksJson" xml:space="preserve"><value>HexEditor ブックマーク</value></data>
+  <data name="FileType_Csv" xml:space="preserve"><value>CSV (UTF-8)</value></data>
+  <data name="FileType_WxTags" xml:space="preserve"><value>wxHexEditor のタグ</value></data>
+  <data name="FileType_HexProject" xml:space="preserve"><value>HexEditor プロジェクト</value></data>
+  <data name="FileType_Markdown" xml:space="preserve"><value>Markdown</value></data>
+  <data name="Legend_PanelName" xml:space="preserve"><value>凡例</value></data>
+  <data name="Legend_CountAll.Content" xml:space="preserve"><value>全体の件数を数える</value></data>
+  <data name="Legend_Count" xml:space="preserve"><value>表示範囲で {0} 件</value></data>
+  <data name="Legend_Total" xml:space="preserve"><value>全体で {0} 件</value></data>
+  <data name="Legend_Counting" xml:space="preserve"><value>色付けルールの一致を数える</value></data>
+  <data name="Legend_Searching" xml:space="preserve"><value>色付けルールの一致を探す</value></data>
+  <data name="Legend_Shape0" xml:space="preserve"><value>実線</value></data>
+  <data name="Legend_Shape1" xml:space="preserve"><value>破線</value></data>
+  <data name="Legend_Shape2" xml:space="preserve"><value>点線</value></data>
+  <data name="Legend_Shape3" xml:space="preserve"><value>一点鎖線</value></data>
+  <data name="Legend_NextName" xml:space="preserve"><value>{0} の次の一致</value></data>
+  <data name="Legend_PreviousName" xml:space="preserve"><value>{0} の前の一致</value></data>
+  <data name="Legend_NoNext" xml:space="preserve"><value>カーソルより後ろに一致はありません</value></data>
+  <data name="Legend_NoPrevious" xml:space="preserve"><value>カーソルより前に一致はありません</value></data>
+  <data name="Menu_File_ImportExport.Text" xml:space="preserve"><value>インポート / エクスポート</value></data>
+  <data name="Menu_File_ImportExport.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_File_ImportBookmarks.Text" xml:space="preserve"><value>ブックマークをインポート…</value></data>
+  <data name="Menu_File_ImportBookmarks.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_File_ExportBookmarks.Text" xml:space="preserve"><value>ブックマークをエクスポート…</value></data>
+  <data name="Menu_File_ExportBookmarks.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Edit_SelectionToBookmarks.Text" xml:space="preserve"><value>選択範囲をブックマークに</value></data>
+  <data name="Menu_Edit_SelectionToBookmarks.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Go_PositionManager.Text" xml:space="preserve"><value>位置マネージャ</value></data>
+  <data name="Menu_Go_PositionManager.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Go_ShowDescription.Text" xml:space="preserve"><value>カーソル位置の説明を表示</value></data>
+  <data name="Menu_Go_ShowDescription.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Go_BookmarksToSelection.Text" xml:space="preserve"><value>ブックマークを選択範囲に</value></data>
+  <data name="Menu_Go_BookmarksToSelection.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_Annotations.Text" xml:space="preserve"><value>注釈</value></data>
+  <data name="Menu_View_Annotations.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_AnnotationsToggle.Text" xml:space="preserve"><value>注釈を表示</value></data>
+  <data name="Menu_View_AnnotationsToggle.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_AnnotationsColumn.Text" xml:space="preserve"><value>注釈の列</value></data>
+  <data name="Menu_View_AnnotationsColumn.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_AnnotationsBookmark.Text" xml:space="preserve"><value>ブックマーク</value></data>
+  <data name="Menu_View_AnnotationsBookmark.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_AnnotationsYara.Text" xml:space="preserve"><value>YARA</value></data>
+  <data name="Menu_View_AnnotationsYara.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_View_AnnotationsSearch.Text" xml:space="preserve"><value>すべて検索の結果</value></data>
+  <data name="Menu_View_AnnotationsSearch.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View_AnnotationsTemplate.Text" xml:space="preserve"><value>構造体テンプレート</value></data>
+  <data name="Menu_View_AnnotationsTemplate.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_AnnotationsScript.Text" xml:space="preserve"><value>スクリプト・プラグイン</value></data>
+  <data name="Menu_View_AnnotationsScript.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_Coloring.Text" xml:space="preserve"><value>色付けルール</value></data>
+  <data name="Menu_View_Coloring.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_ColoringRules.Text" xml:space="preserve"><value>色付けルール</value></data>
+  <data name="Menu_View_ColoringRules.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_ColoringFromSelection.Text" xml:space="preserve"><value>選択範囲の値で色付けルールを作成</value></data>
+  <data name="Menu_View_ColoringFromSelection.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_Legend.Text" xml:space="preserve"><value>凡例</value></data>
+  <data name="Menu_View_Legend.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_PositionManagerPanel.Text" xml:space="preserve"><value>位置マネージャ</value></data>
+  <data name="Menu_View_PositionManagerPanel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_ColoringRulesPanel.Text" xml:space="preserve"><value>色付けルール</value></data>
+  <data name="Menu_View_ColoringRulesPanel.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_LegendPanel.Text" xml:space="preserve"><value>凡例</value></data>
+  <data name="Menu_View_LegendPanel.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="PositionManager_PanelName" xml:space="preserve"><value>位置マネージャ</value></data>
+  <data name="PositionManager_OnlyComments.Content" xml:space="preserve"><value>説明のあるものだけ</value></data>
+  <data name="PositionManager_Follow.Content" xml:space="preserve"><value>カーソルに追従する</value></data>
+  <data name="PositionManager_ExportName" xml:space="preserve"><value>書き出す</value></data>
+  <data name="PositionManager_ExportMarkdown.Text" xml:space="preserve"><value>Markdown…</value></data>
+  <data name="PositionManager_ExportHtml.Text" xml:space="preserve"><value>HTML…</value></data>
+  <data name="PositionManager_ExportRange" xml:space="preserve"><value>{0}〜{1} ({2} バイト)</value></data>
+  <data name="PositionManager_Exported" xml:space="preserve"><value>説明を {0} に書き出しました。</value></data>
+  <data name="PositionManager_ExportError" xml:space="preserve"><value>{0} に書き出せませんでした: {1}</value></data>
+  <data name="PositionManager_NoSelection" xml:space="preserve"><value>ブックマークを選んでください</value></data>
+  <data name="Cmd_edit_selectionToBookmarks" xml:space="preserve"><value>選択範囲をブックマークに変換</value></data>
+  <data name="CmdAlias_edit_selectionToBookmarks" xml:space="preserve"><value>せんたくはんいをぶっくまーくにへんかん</value></data>
+  <data name="Cmd_go_bookmark_toSelection" xml:space="preserve"><value>ブックマークを選択範囲に変換</value></data>
+  <data name="CmdAlias_go_bookmark_toSelection" xml:space="preserve"><value>ぶっくまーくをせんたくはんいにへんかん</value></data>
+  <data name="Cmd_go_bookmark_showDescription" xml:space="preserve"><value>カーソル位置の説明を表示</value></data>
+  <data name="CmdAlias_go_bookmark_showDescription" xml:space="preserve"><value>かーそるいちのせつめいをひょうじ</value></data>
+  <data name="Cmd_file_importBookmarks" xml:space="preserve"><value>ブックマークをインポート</value></data>
+  <data name="CmdAlias_file_importBookmarks" xml:space="preserve"><value>ぶっくまーくをいんぽーと</value></data>
+  <data name="Cmd_file_exportBookmarks" xml:space="preserve"><value>ブックマークをエクスポート</value></data>
+  <data name="CmdAlias_file_exportBookmarks" xml:space="preserve"><value>ぶっくまーくをえくすぽーと</value></data>
+  <data name="Cmd_view_panel_positionManager" xml:space="preserve"><value>位置マネージャ</value></data>
+  <data name="CmdAlias_view_panel_positionManager" xml:space="preserve"><value>いちまねーじゃ</value></data>
+  <data name="Cmd_view_panel_coloringRules" xml:space="preserve"><value>色付けルール</value></data>
+  <data name="CmdAlias_view_panel_coloringRules" xml:space="preserve"><value>いろづけるーる</value></data>
+  <data name="Cmd_view_panel_legend" xml:space="preserve"><value>凡例の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_legend" xml:space="preserve"><value>はんれいのひょうじきりかえ</value></data>
+  <data name="Cmd_view_annotations_toggle" xml:space="preserve"><value>注釈の表示切り替え</value></data>
+  <data name="CmdAlias_view_annotations_toggle" xml:space="preserve"><value>ちゅうしゃくのひょうじきりかえ</value></data>
+  <data name="Cmd_view_annotations_column" xml:space="preserve"><value>注釈の列の表示切り替え</value></data>
+  <data name="CmdAlias_view_annotations_column" xml:space="preserve"><value>ちゅうしゃくのれつのひょうじきりかえ</value></data>
+  <data name="Cmd_view_annotations_bookmark" xml:space="preserve"><value>注釈: ブックマーク</value></data>
+  <data name="CmdAlias_view_annotations_bookmark" xml:space="preserve"><value>ちゅうしゃく ぶっくまーく</value></data>
+  <data name="Cmd_view_annotations_yara" xml:space="preserve"><value>注釈: YARA</value></data>
+  <data name="CmdAlias_view_annotations_yara" xml:space="preserve"><value>ちゅうしゃく やら</value></data>
+  <data name="Cmd_view_annotations_searchResults" xml:space="preserve"><value>注釈: すべて検索の結果</value></data>
+  <data name="CmdAlias_view_annotations_searchResults" xml:space="preserve"><value>ちゅうしゃく すべてけんさくのけっか</value></data>
+  <data name="Cmd_view_annotations_template" xml:space="preserve"><value>注釈: 構造体テンプレート</value></data>
+  <data name="CmdAlias_view_annotations_template" xml:space="preserve"><value>ちゅうしゃく てんぷれーと</value></data>
+  <data name="Cmd_view_annotations_script" xml:space="preserve"><value>注釈: スクリプト・プラグイン</value></data>
+  <data name="CmdAlias_view_annotations_script" xml:space="preserve"><value>ちゅうしゃく すくりぷと</value></data>
+  <data name="Cmd_view_coloring_fromSelection" xml:space="preserve"><value>選択範囲の値で色付けルールを作成</value></data>
+  <data name="CmdAlias_view_coloring_fromSelection" xml:space="preserve"><value>せんたくはんいのあたいでいろづけるーるをさくせい</value></data>
+  <data name="Set_positionManager_followCursor" xml:space="preserve"><value>位置マネージャをカーソルに追従させる</value></data>
+  <data name="SetDesc_positionManager_followCursor" xml:space="preserve"><value>カーソルを含むブックマークを位置マネージャの一覧で選びます。</value></data>
+  <data name="Set_bookmarks_richToolTip" xml:space="preserve"><value>ブックマークの説明をツールチップに表示する</value></data>
+  <data name="SetDesc_bookmarks_richToolTip" xml:space="preserve"><value>ブックマークの範囲にマウスを重ねると、名前・範囲・コメント (Markdown) を表示します。</value></data>
+  <data name="Set_annotations_hidden" xml:space="preserve"><value>非表示の注釈の出どころ</value></data>
+  <data name="SetDesc_annotations_hidden" xml:space="preserve"><value>Hex ビューに表示しない注釈の出どころ。</value></data>
+  <data name="Set_annotations_column" xml:space="preserve"><value>注釈の列を表示する</value></data>
+  <data name="SetDesc_annotations_column" xml:space="preserve"><value>テキスト列の右に、その行で始まる注釈のラベルを表示します。</value></data>
+  <data name="Set_coloring_rules" xml:space="preserve"><value>全体の色付けルール</value></data>
+  <data name="SetDesc_coloring_rules" xml:space="preserve"><value>すべてのドキュメントに適用する色付けルール。「色付けルール」パネルで編集します。</value></data>
+  <data name="Set_coloring_highContrastColors" xml:space="preserve"><value>ハイコントラストでも色付けルールの色を使う</value></data>
+  <data name="SetDesc_coloring_highContrastColors" xml:space="preserve"><value>オフのときは、ハイコントラストでは色付けルールの色を使わず、枠線の形で区別します。</value></data>
 </root>

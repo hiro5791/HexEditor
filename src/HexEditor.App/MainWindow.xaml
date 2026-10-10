@@ -120,6 +120,11 @@
                             <MenuFlyoutItem x:Uid="Menu_File_ClearRecent" cmd:CommandUi.Id="file.recent.clear" AutomationProperties.AutomationId="Command_ClearRecent" />
                             <MenuFlyoutItem x:Uid="Menu_File_ShowAllRecent" cmd:CommandUi.Id="file.recent.showAll" AutomationProperties.AutomationId="Command_ShowAllRecent" />
                         </MenuFlyoutSubItem>
+                        <!--  インポート / エクスポート (INSP-30 のブックマーク)  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_File_ImportExport" AutomationProperties.AutomationId="Command_ImportExport">
+                            <MenuFlyoutItem x:Uid="Menu_File_ImportBookmarks" cmd:CommandUi.Id="file.importBookmarks" AutomationProperties.AutomationId="Command_ImportBookmarks" />
+                            <MenuFlyoutItem x:Uid="Menu_File_ExportBookmarks" cmd:CommandUi.Id="file.exportBookmarks" AutomationProperties.AutomationId="Command_ExportBookmarks" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_File_Close" cmd:CommandUi.Id="file.close" AutomationProperties.AutomationId="Command_Close" />
                         <MenuFlyoutItem x:Uid="Menu_File_CloseAll" cmd:CommandUi.Id="file.closeAll" AutomationProperties.AutomationId="Command_CloseAll" />
@@ -139,6 +144,8 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_SelectAll" cmd:CommandUi.Id="edit.selectAll" AutomationProperties.AutomationId="Command_SelectAll" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_SelectRange" cmd:CommandUi.Id="edit.selectRange" AutomationProperties.AutomationId="Command_SelectRange" />
+                        <!--  選択範囲をブックマークに (INSP-28)  -->
+                        <MenuFlyoutItem x:Uid="Menu_Edit_SelectionToBookmarks" cmd:CommandUi.Id="edit.selectionToBookmarks" AutomationProperties.AutomationId="Command_SelectionToBookmarks" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_InsertBytes" cmd:CommandUi.Id="edit.insertBytes" AutomationProperties.AutomationId="Command_InsertBytes" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_InsertFile" cmd:CommandUi.Id="edit.insertFile" AutomationProperties.AutomationId="Command_InsertFile" />
@@ -169,6 +176,10 @@
                             <MenuFlyoutItem x:Uid="Menu_Go_PreviousBookmark" cmd:CommandUi.Id="go.bookmark.previous" AutomationProperties.AutomationId="Command_PreviousBookmark" />
                             <MenuFlyoutItem x:Uid="Menu_Go_EditBookmark" cmd:CommandUi.Id="go.bookmark.edit" AutomationProperties.AutomationId="Command_EditBookmark" />
                             <MenuFlyoutItem x:Uid="Menu_Go_BookmarkList" cmd:CommandUi.Id="go.bookmark.list" AutomationProperties.AutomationId="Command_BookmarkList" />
+                            <!--  位置マネージャ・カーソル位置の説明 (INSP-31)、ブックマークを選択範囲に (INSP-28)  -->
+                            <MenuFlyoutItem x:Uid="Menu_Go_PositionManager" cmd:CommandUi.Id="view.panel.positionManager" AutomationProperties.AutomationId="Command_PositionManager" />
+                            <MenuFlyoutItem x:Uid="Menu_Go_ShowDescription" cmd:CommandUi.Id="go.bookmark.showDescription" AutomationProperties.AutomationId="Command_ShowDescription" />
+                            <MenuFlyoutItem x:Uid="Menu_Go_BookmarksToSelection" cmd:CommandUi.Id="go.bookmark.toSelection" AutomationProperties.AutomationId="Command_BookmarksToSelection" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutSubItem x:Name="NumberedSetMenu" x:Uid="Menu_Go_NumberedSet" AutomationProperties.AutomationId="Command_NumberedSet" />
                             <MenuFlyoutSubItem x:Name="NumberedGoMenu" x:Uid="Menu_Go_NumberedGo" AutomationProperties.AutomationId="Command_NumberedGo" />
@@ -187,6 +198,22 @@
                             <RadioMenuFlyoutItem x:Name="EncodingAscii" x:Uid="Menu_View_EncodingAscii" cmd:CommandUi.Id="view.encoding.ascii" AutomationProperties.AutomationId="Command_EncodingAscii" GroupName="Encoding" />
                             <RadioMenuFlyoutItem x:Name="EncodingAnsi" cmd:CommandUi.Id="view.encoding.ansi" AutomationProperties.AutomationId="Command_EncodingAnsi" GroupName="Encoding" />
                         </MenuFlyoutSubItem>
+                        <!--  注釈 (INSP-32): 出どころごとの表示と注釈の列。色付けルール (INSP-33・INSP-34)。  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_View_Annotations" AutomationProperties.AutomationId="Command_Annotations">
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsToggle" cmd:CommandUi.Id="view.annotations.toggle" AutomationProperties.AutomationId="Command_AnnotationsToggle" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsColumn" cmd:CommandUi.Id="view.annotations.column" AutomationProperties.AutomationId="Command_AnnotationsColumn" />
+                            <MenuFlyoutSeparator />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsBookmark" cmd:CommandUi.Id="view.annotations.bookmark" AutomationProperties.AutomationId="Command_AnnotationsBookmark" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsYara" cmd:CommandUi.Id="view.annotations.yara" AutomationProperties.AutomationId="Command_AnnotationsYara" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsSearch" cmd:CommandUi.Id="view.annotations.searchResults" AutomationProperties.AutomationId="Command_AnnotationsSearchResults" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsTemplate" cmd:CommandUi.Id="view.annotations.template" AutomationProperties.AutomationId="Command_AnnotationsTemplate" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsScript" cmd:CommandUi.Id="view.annotations.script" AutomationProperties.AutomationId="Command_AnnotationsScript" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_View_Coloring" AutomationProperties.AutomationId="Command_Coloring">
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_ColoringRules" cmd:CommandUi.Id="view.panel.coloringRules" AutomationProperties.AutomationId="Command_ColoringRules" />
+                            <MenuFlyoutItem x:Uid="Menu_View_ColoringFromSelection" cmd:CommandUi.Id="view.coloring.fromSelection" AutomationProperties.AutomationId="Command_ColoringFromSelection" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_Legend" cmd:CommandUi.Id="view.panel.legend" AutomationProperties.AutomationId="Command_Legend" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <!--  パネルの表示切り替え (UI-01 の仕様 6、UI-04、UI-05)。  -->
                         <MenuFlyoutSubItem x:Uid="Menu_View_Panels" AutomationProperties.AutomationId="Command_Panels">
@@ -200,6 +227,9 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_BookmarksPanel" cmd:CommandUi.Id="view.panel.bookmarks" AutomationProperties.AutomationId="Command_ToggleBookmarks" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Hash" cmd:CommandUi.Id="view.panel.hash" AutomationProperties.AutomationId="Command_PanelHash" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_PositionManagerPanel" cmd:CommandUi.Id="view.panel.positionManager" AutomationProperties.AutomationId="Command_TogglePositionManager" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_ColoringRulesPanel" cmd:CommandUi.Id="view.panel.coloringRules" AutomationProperties.AutomationId="Command_ToggleColoringRules" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_LegendPanel" cmd:CommandUi.Id="view.panel.legend" AutomationProperties.AutomationId="Command_ToggleLegend" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />
                         </MenuFlyoutSubItem>

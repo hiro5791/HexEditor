@@ -68,6 +68,9 @@ public sealed class CompiledColoringRule
     /// <summary>適用する範囲 [Start, End)。null はドキュメント全体。</summary>
     public (long Start, long End)? Scope { get; private init; }
 
+    /// <summary>オフセット範囲の条件の、解釈したときの範囲 [Start, End)。それ以外は null。</summary>
+    public (long Start, long End)? ResolvedOffsets => OffsetRange;
+
     /// <summary>Hex パターン・テキストの条件の検索語 (凡例の「次へ」で検索エンジンを使う。INSP-34 の仕様 3)。</summary>
     public SearchPattern? SearchPattern => Pattern;
 

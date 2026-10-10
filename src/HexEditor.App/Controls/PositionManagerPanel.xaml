@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.PositionManagerPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:HexEditor.App.ViewModels"
+    AutomationProperties.AutomationId="PositionManagerPanel"
+    AutomationProperties.LandmarkType="Custom"
+    SizeChanged="Panel_SizeChanged">
+    <!--
+        位置マネージャ (INSP-31): ブックマークを開始オフセット順に並べた一覧と、選んだブックマークのコメントの編集欄・プレビュー。
+        幅が広ければ左右、狭ければ上下に並べる。コメントの変更は入力と同時に反映する (ブックマーク一覧にも出る)。
+    -->
+    <Grid x:Name="Root" RowSpacing="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Padding="8,6,8,0" Orientation="Horizontal" Spacing="8">
+            <CheckBox
+                x:Name="OnlyCommentsBox"
+                x:Uid="PositionManager_OnlyComments"
+                MinWidth="0"
+                AutomationProperties.AutomationId="PositionManager_OnlyComments"
+                IsChecked="{x:Bind Vm.OnlyWithComments, Mode=TwoWay}" />
+            <CheckBox
+                x:Name="FollowBox"
+                x:Uid="PositionManager_Follow"
+                MinWidth="0"
+                AutomationProperties.AutomationId="PositionManager_Follow"
+                Click="FollowBox_Click" />
+            <DropDownButton x:Name="ExportButton" AutomationProperties.AutomationId="PositionManager_Export">
+                <FontIcon FontSize="14" Glyph="&#xEDE1;" />
+                <DropDownButton.Flyout>
+                    <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                        <MenuFlyoutItem x:Uid="PositionManager_ExportMarkdown" AutomationProperties.AutomationId="PositionManager_ExportMarkdown" Click="ExportMarkdown_Click" />
+                        <MenuFlyoutItem x:Uid="PositionManager_ExportHtml" AutomationProperties.AutomationId="PositionManager_ExportHtml" Click="ExportHtml_Click" />
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+            <TextBlock
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="PositionManager_Count"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{x:Bind Vm.CountText, Mode=OneWay}" />
+        </StackPanel>
+        <Grid x:Name="Body" Grid.Row="1" Padding="8,0,8,8" ColumnSpacing="8" RowSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="ListColumn" Width="*" />
+                <ColumnDefinition x:Name="EditorColumn" Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition x:Name="ListRow" Height="*" />
+                <RowDefinition x:Name="EditorRow" Height="0" />
+            </Grid.RowDefinitions>
+            <ListView
+                x:Name="List"
+                AutomationProperties.AutomationId="PositionManager_List"
+                ContainerContentChanging="List_ContainerContentChanging"
+                ItemsSource="{x:Bind Vm.Rows}"
+                SelectionChanged="List_SelectionChanged"
+                SelectionMode="Single">
+                <ListView.ItemContainerStyle>
+                    <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem">
+                        <Setter Property="MinHeight" Value="36" />
+                        <Setter Property="Padding" Value="8,2" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PositionRowViewModel">
+                        <StackPanel AutomationProperties.AccessibilityView="Raw">
+                            <TextBlock Text="{x:Bind Name, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
+                            <TextBlock
+                                FlowDirection="LeftToRight"
+                                FontFamily="Cascadia Mono, Consolas"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{x:Bind RangeText, Mode=OneWay}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Grid x:Name="EditorArea" Grid.Column="1" RowSpacing="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <TextBlock
+                        AutomationProperties.AutomationId="PositionManager_Title"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="{x:Bind Vm.SelectedTitle, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis" />
+                    <TextBlock
+                        FlowDirection="LeftToRight"
+                        FontFamily="Cascadia Mono, Consolas"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{x:Bind Vm.SelectedRange, Mode=OneWay}" />
+                </StackPanel>
+                <ToggleButton
+                    x:Name="PreviewToggle"
+                    x:Uid="Bookmark_PreviewToggle"
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="PositionManager_PreviewToggle"
+                    Click="PreviewToggle_Click"
+                    IsEnabled="{x:Bind Vm.HasSelection, Mode=OneWay}" />
+                <TextBox
+                    x:Name="CommentBox"
+                    Grid.Row="2"
+                    AcceptsReturn="True"
+                    AutomationProperties.AutomationId="PositionManager_Comment"
+                    FontFamily="Cascadia Mono, Consolas"
+                    IsEnabled="{x:Bind Vm.HasSelection, Mode=OneWay}"
+                    MaxLength="65536"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    TextChanged="CommentBox_TextChanged"
+                    TextWrapping="Wrap" />
+                <ScrollViewer
+                    x:Name="PreviewHost"
+                    Grid.Row="2"
+                    AutomationProperties.AutomationId="PositionManager_PreviewHost"
+                    Visibility="Collapsed">
+                    <RichTextBlock x:Name="Preview" AutomationProperties.AutomationId="PositionManager_Preview" TextWrapping="Wrap" />
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
