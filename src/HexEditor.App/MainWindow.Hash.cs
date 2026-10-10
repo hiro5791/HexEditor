@@ -218,6 +218,10 @@ public sealed partial class MainWindow
             case "rangeMode":
                 HashVm.RangeModeIndex = (int)TestHookSettings.ReadLong(request["index"], 0);
                 break;
+            case "write":
+                // 「カーソル位置に書き込む」のダイアログを開く (閉じるのを待たない)。
+                _ = WriteHashAtCursorAsync(null);
+                break;
             case "find":
                 await HashVm.FindMatchingAlgorithmsAsync();
                 break;

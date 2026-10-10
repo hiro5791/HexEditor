@@ -134,7 +134,9 @@ public sealed partial class MainWindow
             info.Text = shortage > 0
                 ? Loc.Format("HashWrite_Error_End", doc.Document.Length - offset, bytes.Length)
                 : DialogParts.Hex(bytes);
-            warning.IsOpen = HashWriteBack.OverlapsTarget(offset, bytes.Length, vm.LastRanges, vm.LastExclusions);
+            bool overlaps = HashWriteBack.OverlapsTarget(offset, bytes.Length, vm.LastRanges, vm.LastExclusions);
+            warning.IsOpen = overlaps;
+            warning.Visibility = overlaps ? Visibility.Visible : Visibility.Collapsed;
             dialog.IsPrimaryButtonEnabled = shortage == 0;
         }
 

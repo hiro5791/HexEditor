@@ -351,6 +351,9 @@ public sealed partial class HashPanelViewModel : ObservableObject
         return true;
     }
 
+    /// <summary>対象範囲を選び直す (マルチ選択が変わったとき)。</summary>
+    public void RefreshTarget() => UpdateTarget(scheduleAuto: true);
+
     partial void OnExclusionModeIndexChanged(int value) => RefreshExclusions();
 
     partial void OnReplacementTextChanged(string value) => RefreshExclusions();
@@ -1125,7 +1128,8 @@ public sealed partial class HashPanelViewModel : ObservableObject
         // 選択範囲の有無で既定を切り替える (0.1 の「既定になる条件」)。利用者が選んだ後は変えない。
         if (!_targetChosen && TargetKind != HashTargetKind.Custom)
         {
-            HashTargetKind auto = doc.Editor.HasSelection ? HashTargetKind.Selection : HashTargetKind.WholeDocument;
+            bool selected = doc.Editor.HasSelection || SelectionRanges?.Invoke(doc) is { Count: > 1 };
+            HashTargetKind auto = selected ? HashTargetKind.Selection : HashTargetKind.WholeDocument;
             if (TargetKind != auto)
             {
                 TargetKind = auto;

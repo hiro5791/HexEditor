@@ -40,6 +40,13 @@ public sealed partial class MainWindow
             return multi.Ranges;
         }
 
+#if HEX_TEST_HOOKS
+        if (_testMultiSelection is { Count: > 0 } test)
+        {
+            return test;
+        }
+#endif
+
         EditorState editor = doc.Editor;
         return editor.HasSelection ? [new TargetRange(editor.SelectionStart, editor.SelectionLength)] : [];
     }
@@ -416,4 +423,18 @@ public sealed partial class MainWindow
             plan.Dispose();
         }
     }
+
+#if HEX_TEST_HOOKS
+    /// <summary>テスト用のマルチ選択 (マルチ選択の担当がつなぐまでの代わり)。</summary>
+    private IReadOnlyList<TargetRange>? _testMultiSelection;
+
+    /// <summary>テスト用の命令 "multiSelection": {ranges: [[start, length], ...]}。空ならやめる。</summary>
+    private System.Text.Json.Nodes.JsonObject TestMultiSelection(System.Text.Json.Nodes.JsonObject request)
+    {
+        _testMultiSelection = [.. (request["ranges"]?.AsArray() ?? []).Select(r => new TargetRange(
+            TestHookSettings.ReadLong(r![0], 0), TestHookSettings.ReadLong(r[1], 0)))];
+        _hashVm?.RefreshTarget();
+        return new System.Text.Json.Nodes.JsonObject { ["count"] = _testMultiSelection.Count };
+    }
+#endif
 }
