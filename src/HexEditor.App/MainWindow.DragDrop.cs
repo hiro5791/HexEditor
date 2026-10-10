@@ -1,5 +1,6 @@
 using HexEditor.App.Hosting;
 using HexEditor.App.Services;
+using HexEditor.Core.Notifications;
 using HexEditor.Core.Operations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -11,7 +12,7 @@ namespace HexEditor.App;
 
 /// <summary>
 /// ファイルのドロップで開く (UI-34、ENG-12)。エディタ領域・空のウィンドウへのドロップは末尾に、タブ列へのドロップは
-/// ドロップした位置にタブを開く。フォルダは開かない。21 個以上は確認する。
+/// ドロップした位置にタブを開く。フォルダは開かない (複数ファイル検索の対象にするボタンを出す)。21 個以上は確認する。
 /// </summary>
 public sealed partial class MainWindow
 {
@@ -119,11 +120,15 @@ public sealed partial class MainWindow
     internal async Task DropItemsAsync(IReadOnlyList<IStorageItem> items, int? insertAt)
     {
         var files = items.OfType<StorageFile>().ToList();
-        int folders = items.Count - files.Count;
-        if (folders > 0)
+        List<string> folders = [.. items.OfType<StorageFolder>().Select(f => f.Path).Where(p => !string.IsNullOrEmpty(p))];
+        int skipped = items.Count - files.Count;
+        if (skipped > 0)
         {
-            // フォルダは開かない (UI-34 の仕様 4)。複数ファイル検索 (フェーズ 2) ができたらボタンを付ける。
-            ShowNotice(Loc.Format("Drop_FoldersSkipped", folders), InfoBarSeverity.Warning);
+            // フォルダは開かない (UI-34 の仕様 4)。「複数ファイル検索」ボタンで、ドロップしたフォルダを対象にした複数ファイル検索を開く (FIND-30)。
+            NotificationAction[]? search = folders.Count > 0
+                ? [new NotificationAction(Loc.Get("Drop_MultiFileSearch"), () => OpenMultiFileFor(folders))]
+                : null;
+            ShowNotice(Loc.Format("Drop_FoldersSkipped", skipped), InfoBarSeverity.Warning, actions: search);
         }
 
         if (files.Count >= ConfirmDropCount && !await ConfirmOpenManyAsync(files.Count))

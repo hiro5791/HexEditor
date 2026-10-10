@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
@@ -22,20 +23,42 @@ public sealed record OpenFileDocument(string Path, EditorState Editor);
 /// <summary>
 /// 「複数ファイル検索」パネル (FIND-30、FIND-31)。フォルダのファイルを並列に検索し、結果をファイルごとにまとめて出す。置換モードでは
 /// チェックした一致だけを、確認のあとファイルごとの安全な保存で置換する (開いているドキュメントはエディタ上で置換し、Undo で戻せる)。
+/// 一致は Core の結果 (メモリ上は 1,000,000 件まで、超える分は一時ファイル) に置き、一覧の行は見えている分だけ作る。
 /// </summary>
 public sealed partial class MultiFileSearchPanel : UserControl
 {
     /// <summary>名前を付けて保存した対象の指定 (アプリの状態。FIND-30 の仕様 9)。</summary>
     public const string TargetSetsKey = "search.multiFile.targets";
 
+    /// <summary>検索中に一覧を更新する間隔 (一致ごとに更新しない)。</summary>
+    private static readonly TimeSpan RefreshInterval = TimeSpan.FromMilliseconds(150);
+
     private CancellationTokenSource? _running;
     private MultiFileSearchResults? _results;
-    private SearchPattern? _pattern;
+    private MultiFileResultView? _view;
+    private SearchQuery? _query;
+    private BuiltSearchPattern? _built;
     private ReplacementTemplate? _template;
     private bool _ready;
 
+    /// <summary>検索バーから取り込んだ、パネルの欄にない条件 (複数の文字コード・複数の語)。</summary>
+    private SearchQuery? _extras;
+
+    /// <summary>検索の条件 (「続ける」で同じものを使う)。</summary>
+    private SearchOptions _searchOptions = new();
+    private Dictionary<string, OpenDocumentSnapshot> _openSnapshots = new(StringComparer.OrdinalIgnoreCase);
+    private int _parallelism = MultiFileSearch.DefaultParallelism;
+    private LongRunningOperation? _operation;
+
+    /// <summary>置換の結果の表示 (ファイルの番号ごと)。</summary>
+    private readonly Dictionary<int, string> _outcomeTexts = [];
+    private int _refreshPending;
+    private readonly ConcurrentQueue<MultiFileRow> _previewQueue = new();
+    private int _previewRunning;
+
     public MultiFileSearchPanel()
     {
+        Rows = new MultiFileRowList(CreateRow);
         InitializeComponent();
         foreach (EncodingEntry entry in TermRow.Encodings)
         {
@@ -43,10 +66,25 @@ public sealed partial class MultiFileSearchPanel : UserControl
         }
 
         EncodingChoice.SelectedIndex = Math.Max(0, TermRow.Encodings.ToList().FindIndex(e => e.Id == "ascii"));
+        foreach (int bits in NumericSearch.IntegerSizes)
+        {
+            IntBitsChoice.Items.Add(new ComboBoxItem { Content = Loc.Format("Find_IntBits_Item", bits), Tag = bits });
+        }
+
+        IntBitsChoice.SelectedIndex = NumericSearch.IntegerSizes.ToList().IndexOf(32);
         AutomationProperties.SetName(ModeChoice, Loc.Get("MultiFile_Mode_Name"));
         AutomationProperties.SetName(KindChoice, Loc.Get("Find_Kind_Name"));
         AutomationProperties.SetName(EncodingChoice, Loc.Get("Find_Encoding_Name"));
+        AutomationProperties.SetName(IntBitsChoice, Loc.Get("Find_IntBits_Name"));
+        AutomationProperties.SetName(SignChoice, Loc.Get("Find_Sign_Name"));
+        AutomationProperties.SetName(FloatChoice, Loc.Get("Find_FloatFormat_Name"));
+        AutomationProperties.SetName(EndianChoice, Loc.Get("Find_Endian_Name"));
+        AutomationProperties.SetName(ToleranceChoice, Loc.Get("Find_Tolerance_Name"));
+        AutomationProperties.SetName(ToleranceValue, Loc.Get("Find_ToleranceValue_Name"));
+        AutomationProperties.SetName(MaskModeChoice, Loc.Get("Find_MaskMode_Name"));
         AutomationProperties.SetName(LengthPolicyChoice, Loc.Get("Find_LengthPolicy_Name"));
+        AutomationProperties.SetName(FillerChoice, Loc.Get("Find_Filler_Name"));
+        AutomationProperties.SetName(FillerCustom, Loc.Get("Find_FillerCustom_Name"));
         AutomationProperties.SetName(FolderList, Loc.Get("MultiFile_Folders_Name"));
         AutomationProperties.SetName(ResultList, Loc.Get("MultiFile_Results_Name"));
         AutomationProperties.SetName(TargetSetChoice, Loc.Get("MultiFile_TargetSet_Name"));
@@ -58,8 +96,8 @@ public sealed partial class MultiFileSearchPanel : UserControl
     /// <summary>検索するフォルダ。</summary>
     public ObservableCollection<string> Folders { get; } = [];
 
-    /// <summary>結果の行 (ファイルの行と、その下の一致の行)。</summary>
-    public ObservableCollection<MultiFileRow> Rows { get; } = [];
+    /// <summary>結果の行 (ファイルの行と、その下の一致の行)。見えている行だけを作る。</summary>
+    public MultiFileRowList Rows { get; }
 
     public OperationCenter? Operations { get; set; }
 
@@ -73,6 +111,9 @@ public sealed partial class MultiFileSearchPanel : UserControl
 
     /// <summary>既定のフォルダ (現在のドキュメントのフォルダ。FIND-30 の仕様 2)。</summary>
     public Func<string?>? DefaultFolder { get; set; }
+
+    /// <summary>検索バーの今の条件 (「検索バーの条件を使う」。FIND-30 の仕様 1)。</summary>
+    public Func<SearchQuery?>? FindBarQuery { get; set; }
 
     /// <summary>結果を開く: そのファイルをタブで開き (開いていれば切り替え)、一致を選択する (FIND-30 の仕様 6)。</summary>
     public event EventHandler<(string Path, long Offset, long Length)>? OpenRequested;
@@ -88,12 +129,25 @@ public sealed partial class MultiFileSearchPanel : UserControl
     /// <summary>テスト用: 結果。</summary>
     internal MultiFileSearchResults? Results => _results;
 
+    /// <summary>テスト用: 行の並び。</summary>
+    internal MultiFileResultView? View => _view;
+
     /// <summary>テスト用: 置換の結果 (ファイルごと)。</summary>
     internal IReadOnlyList<FileReplaceOutcome> Outcomes { get; private set; } = [];
 
     internal string SummaryText => Summary.Text;
 
     internal string ErrorText => Error.Text;
+
+    internal bool ContinueVisible => ContinueButton.Visibility == Visibility.Visible;
+
+    internal string ExtrasDescription => ExtrasText.Text;
+
+    /// <summary>テスト用: 1 ファイルあたりの件数の上限 (既定 10,000)。</summary>
+    internal int PerFileLimit { get; set; } = MultiFileSearch.DefaultPerFileLimit;
+
+    /// <summary>テスト用: メモリ上に置く一致の件数の上限 (null なら既定の 1,000,000)。</summary>
+    internal int? MemoryLimit { get; set; }
 
     /// <summary>パネルを表示したとき: フォルダがなければ現在のドキュメントのフォルダを入れる。</summary>
     public void PrepareToShow(bool replace)
@@ -109,6 +163,21 @@ public sealed partial class MultiFileSearchPanel : UserControl
         }
 
         Query.Focus(FocusState.Programmatic);
+    }
+
+    /// <summary>フォルダを対象にする (Explorer からのフォルダのドロップ。FIND-30 の「呼び出し」、UI-34 の仕様 4)。</summary>
+    public void SetFolders(IEnumerable<string> folders)
+    {
+        Folders.Clear();
+        foreach (string f in folders)
+        {
+            if (!Folders.Contains(f, StringComparer.OrdinalIgnoreCase))
+            {
+                Folders.Add(f);
+            }
+        }
+
+        Validate();
     }
 
     /// <summary>テスト用: 条件と対象を入れる。</summary>
@@ -136,11 +205,7 @@ public sealed partial class MultiFileSearchPanel : UserControl
 
         if (request["folders"] is JsonArray folders)
         {
-            Folders.Clear();
-            foreach (JsonNode? f in folders)
-            {
-                Folders.Add(f!.GetValue<string>());
-            }
+            SetFolders([.. folders.Select(f => f!.GetValue<string>())]);
         }
 
         if (request["exclude"]?.GetValue<string>() is { } exclude)
@@ -158,64 +223,223 @@ public sealed partial class MultiFileSearchPanel : UserControl
             BackupChoice.IsChecked = backup.GetValue<bool>();
         }
 
+        if (request["options"] is JsonObject o)
+        {
+            static void Set(CheckBox box, JsonNode? node)
+            {
+                if (node is not null)
+                {
+                    box.IsChecked = node.GetValue<bool>();
+                }
+            }
+
+            static void Index(ComboBox box, JsonNode? node)
+            {
+                if (node is not null)
+                {
+                    box.SelectedIndex = node.GetValue<int>();
+                }
+            }
+
+            Set(CaseChoice, o["caseSensitive"]);
+            Set(WordChoice, o["wholeWord"]);
+            Set(EscapeChoice, o["escapes"]);
+            Set(RangeExcludeChoice, o["rangeExclude"]);
+            Set(RegexIgnoreCase, o["regexIgnoreCase"]);
+            Set(RegexMultiline, o["regexMultiline"]);
+            Set(RegexSingleline, o["regexSingleline"]);
+            Set(MaskChoice, o["mask"]);
+            Set(MismatchChoice, o["mismatch"]);
+            Index(SignChoice, o["sign"]);
+            Index(EndianChoice, o["endian"]);
+            Index(FloatChoice, o["floatFormat"]);
+            Index(MaskModeChoice, o["maskMode"]);
+            Index(LengthPolicyChoice, o["lengthPolicy"]);
+            Index(FillerChoice, o["filler"]);
+            if (o["intBits"] is { } bits)
+            {
+                IntBitsChoice.SelectedIndex = NumericSearch.IntegerSizes.ToList().IndexOf(bits.GetValue<int>());
+            }
+
+            if (o["encoding"]?.GetValue<string>() is { } encoding)
+            {
+                EncodingChoice.SelectedItem = EncodingChoice.Items.OfType<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == encoding);
+            }
+
+            MaskQuery.Text = o["maskText"]?.GetValue<string>() ?? MaskQuery.Text;
+            FillerCustom.Text = o["fillerCustom"]?.GetValue<string>() ?? FillerCustom.Text;
+            PositionModulus.Text = o["positionModulus"]?.GetValue<string>() ?? PositionModulus.Text;
+            PositionRemainder.Text = o["positionRemainder"]?.GetValue<string>() ?? PositionRemainder.Text;
+            ToleranceChoice.SelectedIndex = o["tolerance"]?.GetValue<int>() ?? ToleranceChoice.SelectedIndex;
+            ToleranceValue.Text = o["toleranceValue"]?.GetValue<string>() ?? ToleranceValue.Text;
+        }
+
+        if (request["perFileLimit"] is { } perFile)
+        {
+            PerFileLimit = perFile.GetValue<int>();
+        }
+
+        if (request["memoryLimit"] is { } memory)
+        {
+            MemoryLimit = memory.GetValue<int>();
+        }
+
         Validate();
     }
 
     /// <summary>テスト用: 行のチェックを切り替える (ファイルのパスの末尾と、一致の番号。番号がなければファイルの行)。</summary>
     internal bool SetChecked(string fileSuffix, int? match, bool value)
     {
-        MultiFileRow? file = Rows.FirstOrDefault(r => r.IsFile && r.File.Path.EndsWith(fileSuffix, StringComparison.OrdinalIgnoreCase));
-        if (file is null)
+        if (FindFile(fileSuffix) is not int f)
         {
             return false;
         }
 
-        MultiFileRow row = match is int m ? file.Children[m] : file;
-        row.Checked = value;
+        _view!.SetChecked(f, match ?? -1, value);
+        ShowChecks(f);
+        Validate();
         return true;
     }
 
     /// <summary>テスト用: 行を開く (ダブルクリック・Enter と同じ)。</summary>
     internal bool OpenRow(string fileSuffix, int match)
     {
-        MultiFileRow? file = Rows.FirstOrDefault(r => r.IsFile && r.File.Path.EndsWith(fileSuffix, StringComparison.OrdinalIgnoreCase));
-        if (file is null || match >= file.Children.Count)
+        if (FindFile(fileSuffix) is not int f || match >= _view!.MatchCount(f))
         {
             return false;
         }
 
-        ResultList.SelectedItem = file.Children[match];
-        Open(file.Children[match]);
+        int row = (int)_view.RowOf(f, match);
+        ResultList.SelectedIndex = row;
+        Open(Rows[row]);
         return true;
     }
 
-    // ---- 条件 ----
+    private int? FindFile(string fileSuffix)
+    {
+        if (_view is not { } view)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < view.FileCount; i++)
+        {
+            if (view.File(i).Path.EndsWith(fileSuffix, StringComparison.OrdinalIgnoreCase))
+            {
+                return i;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>テスト用: 行の内容 (行のオブジェクトを作らずに。一致のデータは含まない)。</summary>
+    internal (FileSearchResult File, SearchMatch? Match, string Title, bool? Checked) DescribeRow(int row)
+    {
+        (int f, int m) = _view!.RowAt(row);
+        FileSearchResult file = _view.File(f);
+        return m < 0
+            ? (file, null, FileTitle(f), _view.IsChecked(f, -1))
+            : (file, file.MatchAt(m), MatchTitle(file.MatchAt(m), null, 0), _view.IsChecked(f, m));
+    }
+
+    // ---- 条件 (FIND-30 の仕様 1: 検索バーと同じ種類・オプション) ----
 
     private SearchKind Kind => (SearchKind)Math.Max(0, KindChoice.SelectedIndex);
 
-    private Encoding SelectedEncoding => EncodingChoice.SelectedItem is ComboBoxItem { Tag: string id } && TextEncodings.FromCatalogId(id) is { } e
-        ? e
-        : Encoding.ASCII;
+    private string EncodingId => EncodingChoice.SelectedItem is ComboBoxItem { Tag: string id } ? id : "ascii";
 
-    /// <summary>検索バーと同じ種類の検索語 (FIND-30 の仕様 1)。</summary>
-    private SearchPattern BuildPattern() => Kind switch
+    private int SelectedBits => IntBitsChoice.SelectedItem is ComboBoxItem { Tag: int bits } ? bits : 32;
+
+    private bool HasTerms => _extras?.Terms is not null;
+
+    private bool HasEncodings => _extras is { Encodings.Count: > 0 } && Kind == SearchKind.Text && !HasTerms;
+
+    /// <summary>パネルの欄と、検索バーから取り込んだ条件をまとめた検索条件。位置の条件の入力が不正なら <see cref="PatternException"/>。</summary>
+    private SearchQuery CurrentQuery() => new()
     {
-        SearchKind.Text => SearchPattern.FromText(Query.Text, SelectedEncoding, new TextSearchOptions { CaseSensitive = CaseChoice.IsChecked == true }),
-        SearchKind.Integer => NumericRange.IsRange(Query.Text)
-            ? NumericRange.Integer(Query.Text, new IntegerSearchOptions())
-            : NumericSearch.Integer(Query.Text, new IntegerSearchOptions()),
-        SearchKind.Float => NumericSearch.Float(Query.Text, new FloatSearchOptions()),
-        SearchKind.RegexText => RegexSearch.Text(Query.Text, SelectedEncoding, new RegexSearchOptions { IgnoreCase = CaseChoice.IsChecked != true }),
-        SearchKind.RegexBytes => RegexSearch.Bytes(Query.Text, new RegexSearchOptions { Singleline = true }),
-        _ => SearchPattern.FromHex(Query.Text),
+        Kind = Kind,
+        Text = Query.Text,
+        EncodingId = EncodingId,
+        Encodings = HasEncodings ? _extras!.Encodings : [],
+        CaseSensitive = CaseChoice.IsChecked == true,
+        WholeWord = WordChoice.IsChecked == true,
+        UseEscapes = EscapeChoice.IsChecked == true,
+        AlignToCharacters = AlignChoice.IsChecked == true,
+        IntegerBits = SelectedBits,
+        Sign = (IntegerSign)Math.Max(0, SignChoice.SelectedIndex),
+        Endian = (SearchEndian)Math.Max(0, EndianChoice.SelectedIndex),
+        FloatFormat = (FloatFormat)Math.Max(0, FloatChoice.SelectedIndex),
+        Tolerance = (ToleranceKind)Math.Max(0, ToleranceChoice.SelectedIndex),
+        ToleranceText = ToleranceValue.Text,
+        RangeExclude = RangeExcludeChoice.IsChecked == true,
+        RegexIgnoreCase = RegexIgnoreCase.IsChecked == true,
+        RegexMultiline = RegexMultiline.IsChecked == true,
+        RegexSingleline = RegexSingleline.IsChecked == true,
+        Mask = MaskChoice.IsChecked == true && Kind == SearchKind.Hex,
+        MaskBits = MaskModeChoice.SelectedIndex == 1,
+        MaskText = MaskQuery.Text,
+        Mismatch = MismatchChoice.IsChecked == true && Kind == SearchKind.Hex,
+        MismatchAligned = MismatchAlignChoice.IsChecked == true,
+        Position = ReadPosition(),
+        Terms = _extras?.Terms,
+        TermLabels = _extras?.TermLabels,
     };
 
-    private ReplacementTemplate BuildTemplate(SearchPattern pattern) => Kind switch
+    /// <summary>位置の条件 (周期・余りは数。空なら条件なし)。</summary>
+    private PositionCondition? ReadPosition()
     {
-        SearchKind.Text => ReplacementTemplate.FromText(ReplaceQuery.Text, SelectedEncoding, false),
-        SearchKind.Integer or SearchKind.Float when pattern.Numeric is { } numeric => ReplacementTemplate.FromNumeric(ReplaceQuery.Text, numeric),
-        SearchKind.RegexText or SearchKind.RegexBytes => ReplacementTemplate.FromRegex(pattern, ReplaceQuery.Text),
-        _ => ReplacementTemplate.FromHex(ReplaceQuery.Text),
+        if (PositionModulus.Text.Trim().Length == 0)
+        {
+            return null;
+        }
+
+        var context = new NoContext();
+        if (!ExpressionEvaluator.TryEvaluate(PositionModulus.Text, context, out long x, out _, DefaultRadix.Decimal))
+        {
+            throw new PatternException(PatternError.PositionModulus, PositionModulus.Text, null,
+                [PositionCondition.MaxModulus.ToString("N0", CultureInfo.CurrentCulture)]);
+        }
+
+        string remainder = PositionRemainder.Text.Trim().Length == 0 ? "0" : PositionRemainder.Text;
+        if (!ExpressionEvaluator.TryEvaluate(remainder, context, out long y, out _, DefaultRadix.Decimal))
+        {
+            throw new PatternException(PatternError.PositionRemainder, remainder, null, [Math.Max(0, x - 1).ToString("N0", CultureInfo.CurrentCulture)]);
+        }
+
+        return PositionCondition.Create(x, y);
+    }
+
+    /// <summary>埋め草 (FIND-24 の仕様 3)。指定バイトが不正なら null。</summary>
+    private byte[]? CurrentFiller()
+    {
+        switch (FillerChoice.SelectedIndex)
+        {
+            case 1:
+                return [0xFF];
+            case 2:
+                return Kind == SearchKind.Text ? SearchPattern.EncodeText(" ", TextEncodings.FromCatalogId(EncodingId) ?? Encoding.ASCII, false) : [0x20];
+            case 3:
+                try
+                {
+                    (byte Value, bool Keep)[] bytes = SearchPattern.ParseReplacementHex(FillerCustom.Text);
+                    return bytes.Length is >= 1 and <= 16 && !bytes.Any(b => b.Keep) ? [.. bytes.Select(b => b.Value)] : null;
+                }
+                catch (PatternException)
+                {
+                    return null;
+                }
+
+            default:
+                return [0x00];
+        }
+    }
+
+    /// <summary>置換の条件 (長さが違う場合の扱いと埋め草。FIND-24)。</summary>
+    private ReplaceOptions CurrentReplaceOptions() => new()
+    {
+        Policy = (LengthPolicy)Math.Max(0, LengthPolicyChoice.SelectedIndex),
+        Filler = CurrentFiller() ?? [0x00],
     };
 
     /// <summary>対象の指定 (FIND-30 の仕様 2)。サイズ・深さの入力が不正なら null。</summary>
@@ -268,6 +492,8 @@ public sealed partial class MultiFileSearchPanel : UserControl
         return problem is null ? targets : null;
     }
 
+    private static Visibility Show(bool visible) => visible ? Visibility.Visible : Visibility.Collapsed;
+
     private void Validate()
     {
         if (!_ready)
@@ -276,120 +502,183 @@ public sealed partial class MultiFileSearchPanel : UserControl
         }
 
         bool replace = IsReplaceMode;
-        ReplaceRow.Visibility = ReplaceButton.Visibility = replace ? Visibility.Visible : Visibility.Collapsed;
-        EncodingChoice.Visibility = Kind is SearchKind.Text or SearchKind.RegexText ? Visibility.Visible : Visibility.Collapsed;
-        CaseChoice.Visibility = Kind is SearchKind.Text or SearchKind.RegexText ? Visibility.Visible : Visibility.Collapsed;
+        SearchKind kind = Kind;
+        bool terms = HasTerms;
+        bool text = kind == SearchKind.Text && !terms;
+        bool regexText = kind == SearchKind.RegexText && !terms;
+        bool regex = kind is SearchKind.RegexText or SearchKind.RegexBytes && !terms;
+        bool hex = kind == SearchKind.Hex && !terms;
+        bool integer = kind == SearchKind.Integer && !terms;
+        bool floating = kind == SearchKind.Float && !terms;
+        bool range = (integer || floating) && NumericRange.IsRange(Query.Text);
+        bool mask = hex && MaskChoice.IsChecked == true && MismatchChoice.IsChecked != true;
+        ReplaceRow.Visibility = ReplaceButton.Visibility = Show(replace);
+        Query.Visibility = Show(!terms);
+        EncodingChoice.Visibility = Show((text && !HasEncodings) || regexText);
+        CaseChoice.Visibility = WordChoice.Visibility = Show(text || terms);
+        EscapeChoice.Visibility = Show(text);
+        AlignChoice.Visibility = Show(text || regexText);
+        IntBitsChoice.Visibility = SignChoice.Visibility = Show(integer);
+        FloatChoice.Visibility = Show(floating);
+        ToleranceChoice.Visibility = Show(floating && !range);
+        ToleranceValue.Visibility = Show(floating && !range && ToleranceChoice.SelectedIndex > 0);
+        EndianChoice.Visibility = Show(integer || floating || terms);
+        RangeExcludeChoice.Visibility = Show(range);
+        RegexIgnoreCase.Visibility = RegexMultiline.Visibility = RegexSingleline.Visibility = Show(regex);
+        MaskChoice.Visibility = MismatchChoice.Visibility = Show(hex);
+        MaskModeChoice.Visibility = Show(mask);
+        MaskQuery.Visibility = Show(mask && MaskModeChoice.SelectedIndex == 0);
+        MismatchAlignChoice.Visibility = Show(hex && MismatchChoice.IsChecked == true);
+        FillerChoice.Visibility = Show(replace && LengthPolicyChoice.SelectedIndex == (int)LengthPolicy.PadKeepLength);
+        FillerCustom.Visibility = Show(FillerChoice.Visibility == Visibility.Visible && FillerChoice.SelectedIndex == 3);
+        ExtrasText.Text = _extras is null ? string.Empty
+            : terms ? Loc.Format("MultiFile_Extras_Terms", _extras.Terms!.Count)
+            : _extras.Encodings.Count > 0 ? Loc.Format("MultiFile_Extras_Encodings", string.Join(", ", _extras.Encodings)) : string.Empty;
+        ClearExtrasButton.Visibility = Show(ExtrasText.Text.Length > 0);
+
         string? error = null;
+        _built = null;
+        _query = null;
         try
         {
-            _pattern = Query.Text.Length == 0 ? null : BuildPattern();
+            _query = CurrentQuery();
+            _built = Query.Text.Length == 0 && !terms ? null : SearchQueryBuilder.Build(_query, FindBar.QueryEnvironment(null));
         }
         catch (PatternException ex)
         {
-            _pattern = null;
-            error = Loc.Format("MultiFile_QueryInvalid", ex.Error.ToString());
+            string message = FindBar.ErrorText(ex);
+            error = Loc.Format("MultiFile_QueryInvalid", ex.InMask ? Loc.Format("Find_MaskError", message) : message);
         }
 
         _template = null;
-        if (replace && _pattern is not null)
+        if (replace && _built is { } built && _query is { } q)
         {
-            try
+            if (!q.CanReplace)
             {
-                _template = BuildTemplate(_pattern);
+                error = Loc.Get("Find_ReplaceUnsupported");
             }
-            catch (PatternException ex)
+            else
             {
-                error = Loc.Format("MultiFile_ReplaceInvalid", ex.Error.ToString());
+                try
+                {
+                    _template = SearchQueryBuilder.BuildTemplate(q, built, ReplaceQuery.Text, FindBar.QueryEnvironment(null));
+                }
+                catch (PatternException ex)
+                {
+                    error = Loc.Format("MultiFile_ReplaceInvalid", FindBar.ErrorText(ex));
+                }
+
+                if (LengthPolicyChoice.SelectedIndex == (int)LengthPolicy.PadKeepLength && CurrentFiller() is null)
+                {
+                    _template = null;
+                    error = Loc.Get("Find_FillerInvalid");
+                }
             }
         }
 
         Error.Text = error ?? string.Empty;
-        SearchButton.IsEnabled = _pattern is not null && _running is null && Folders.Count > 0;
+        SearchButton.IsEnabled = _built is not null && _running is null && Folders.Count > 0;
         ReplaceButton.IsEnabled = replace && _template is not null && _results is { State: not MultiFileSearchState.Running } && _running is null
-            && Rows.Any(r => r.IsFile && r.Checked != false);
-        foreach (MultiFileRow row in Rows)
+            && (_view?.AnyChecked ?? false);
+        Visibility checks = Show(replace);
+        foreach (MultiFileRow row in Rows.Realized)
         {
-            row.CheckVisibility = replace ? Visibility.Visible : Visibility.Collapsed;
+            row.CheckVisibility = checks;
         }
+
+        ContinueButton.Visibility = Show(_results is { CanContinue: true } && _running is null);
     }
 
     // ---- 検索 (FIND-30) ----
 
     /// <summary>「検索」。対象のフォルダがなければ検索の前にエラーを出す (「エラー」)。</summary>
-    public async Task SearchAsync()
+    public Task SearchAsync() => RunSearchAsync(continuing: false);
+
+    /// <summary>「続ける」: 上限を 2 倍にして、続きから探す (FIND-20 の仕様 6、FIND-30 の仕様 8)。</summary>
+    public Task ContinueAsync() => RunSearchAsync(continuing: true);
+
+    private async Task RunSearchAsync(bool continuing)
     {
-        if (_pattern is not { } pattern || _running is not null)
+        if (_running is not null)
         {
             return;
         }
 
-        if (BuildTargets(out string? targetError) is not { } targets)
+        MultiFileSearchResults results;
+        long totalLimit = Math.Clamp(App.Settings?.GetInt(MultiFileSearch.TotalLimitKey, (int)MultiFileSearch.DefaultTotalLimit) ?? MultiFileSearch.DefaultTotalLimit,
+            MultiFileSearch.MinTotalLimit, MultiFileSearch.MaxTotalLimit);
+        if (continuing)
         {
-            Error.Text = targetError ?? string.Empty;
-            return;
-        }
-
-        if (MultiFileSearch.MissingFolders(targets) is { Count: > 0 } missing)
-        {
-            Error.Text = Loc.Format("MultiFile_FolderMissing", string.Join(", ", missing));
-            return;
-        }
-
-        Error.Text = string.Empty;
-        Rows.Clear();
-        Outcomes = [];
-        var cts = new CancellationTokenSource();
-        _running = cts;
-        CancelButton.IsEnabled = true;
-        Validate();
-        var results = new MultiFileSearchResults(pattern, targets);
-        _results = results;
-
-        // 開いているドキュメントは、検索を始めたときの (未保存の編集を含む) 状態を検索する。
-        var open = new Dictionary<string, OpenDocumentSnapshot>(StringComparer.OrdinalIgnoreCase);
-        foreach (OpenFileDocument doc in OpenDocuments?.Invoke() ?? [])
-        {
-            open[doc.Path] = new OpenDocumentSnapshot(doc.Editor.Document.Current, doc.Editor.Document.Length, File.GetLastWriteTimeUtc(doc.Path));
-        }
-
-        int parallelism = Math.Clamp(App.Settings?.GetInt(MultiFileSearch.ParallelismKey, MultiFileSearch.DefaultParallelism) ?? MultiFileSearch.DefaultParallelism,
-            1, MultiFileSearch.MaxParallelism);
-        int added = 0;
-        var flushLock = new object();
-        void Flush()
-        {
-            // 検索のスレッドは並列に動くため、行を作るのは 1 つずつ (同じファイルの行を 2 回作らない)。
-            var rows = new List<MultiFileRow>();
-            lock (flushLock)
-            {
-                IReadOnlyList<FileSearchResult> files = results.Files;
-                for (; added < files.Count; added++)
-                {
-                    rows.AddRange(BuildRows(files[added]));
-                }
-            }
-
-            if (rows.Count == 0)
+            if (_results is not { CanContinue: true } current)
             {
                 return;
             }
 
-            DispatcherQueue.TryEnqueue(() =>
+            results = current;
+        }
+        else
+        {
+            if (_built is not { } built)
             {
-                if (_results == results)
-                {
-                    foreach (MultiFileRow row in rows)
-                    {
-                        row.CheckVisibility = IsReplaceMode ? Visibility.Visible : Visibility.Collapsed;
-                        Rows.Add(row);
-                    }
+                return;
+            }
 
-                    UpdateSummary();
+            if (BuildTargets(out string? targetError) is not { } targets)
+            {
+                Error.Text = targetError ?? string.Empty;
+                return;
+            }
+
+            if (MultiFileSearch.MissingFolders(targets) is { Count: > 0 } missing)
+            {
+                Error.Text = Loc.Format("MultiFile_FolderMissing", string.Join(", ", missing));
+                return;
+            }
+
+            Error.Text = string.Empty;
+            _results?.Dispose();
+            results = new MultiFileSearchResults(built.Pattern, targets)
+            {
+                MemoryLimit = MemoryLimit ?? MatchStore.DefaultMemoryLimit,
+                MismatchMinRepeat = Math.Clamp(App.Settings?.GetInt(MismatchSearch.MinRepeatKey, MismatchSearch.DefaultMinRepeat) ?? MismatchSearch.DefaultMinRepeat,
+                    1, MismatchSearch.MaxMinRepeat),
+            };
+            _results = results;
+            _view = new MultiFileResultView(results);
+            _outcomeTexts.Clear();
+            Outcomes = [];
+            Rows.Reset(0);
+
+            // 開いているドキュメントは、検索を始めたときの (未保存の編集を含む) 状態を検索する。
+            _openSnapshots = new Dictionary<string, OpenDocumentSnapshot>(StringComparer.OrdinalIgnoreCase);
+            foreach (OpenFileDocument doc in OpenDocuments?.Invoke() ?? [])
+            {
+                _openSnapshots[doc.Path] = new OpenDocumentSnapshot(doc.Editor.Document.Current, doc.Editor.Document.Length, File.GetLastWriteTimeUtc(doc.Path));
+            }
+
+            _parallelism = Math.Clamp(App.Settings?.GetInt(MultiFileSearch.ParallelismKey, MultiFileSearch.DefaultParallelism) ?? MultiFileSearch.DefaultParallelism,
+                1, MultiFileSearch.MaxParallelism);
+            _searchOptions = new SearchOptions { ChunkSize = FindBar.ChunkSizeSetting };
+            results.Changed += (_, _) =>
+            {
+                if (_operation is { } op)
+                {
+                    op.ReportMatches(results.MatchCount);
+                    op.ReportDetail(Loc.Format("MultiFile_Progress", results.ProcessedFiles.ToString("N0", CultureInfo.CurrentCulture),
+                        results.FoundFiles.ToString("N0", CultureInfo.CurrentCulture), results.CurrentFile ?? string.Empty));
                 }
-            });
+
+                ScheduleRefresh(results);
+            };
         }
 
-        AppLog.Info($"Multi-file search: start ({targets.Folders.Count} folder(s))");
+        var cts = new CancellationTokenSource();
+        _running = cts;
+        CancelButton.IsEnabled = true;
+        Validate();
+        Dictionary<string, OpenDocumentSnapshot> open = _openSnapshots;
+        OpenDocumentSnapshot? OpenSnapshot(string path) => open.TryGetValue(path, out OpenDocumentSnapshot? s) ? s : null;
+        AppLog.Info($"Multi-file search: {(continuing ? "continue" : "start")} ({results.Targets.Folders.Count} folder(s))");
         try
         {
             async Task Work(LongRunningOperation? op)
@@ -400,18 +689,23 @@ public sealed partial class MultiFileSearchPanel : UserControl
                     cts.Token.Register(op.Cancel);
                 }
 
-                results.Changed += (_, _) =>
+                _operation = op;
+                try
                 {
-                    op?.ReportMatches(results.MatchCount);
-                    op?.ReportDetail(Loc.Format("MultiFile_Progress", results.ProcessedFiles.ToString("N0", CultureInfo.CurrentCulture),
-                        results.FoundFiles.ToString("N0", CultureInfo.CurrentCulture), results.CurrentFile ?? string.Empty));
-                    if (results.Files.Count > added)
+                    if (continuing)
                     {
-                        Flush();
+                        await MultiFileSearch.ContinueAsync(results, _searchOptions, OpenSnapshot, _parallelism, PerFileLimit, op, token);
                     }
-                };
-                await MultiFileSearch.RunAsync(results, new SearchOptions { ChunkSize = FindBar.ChunkSizeSetting }, path => open.TryGetValue(path, out var s) ? s : null,
-                    parallelism, MultiFileSearch.DefaultPerFileLimit, MultiFileSearch.DefaultTotalLimit, op, token);
+                    else
+                    {
+                        await MultiFileSearch.RunAsync(results, _searchOptions, OpenSnapshot, _parallelism, PerFileLimit, totalLimit, op, token);
+                    }
+                }
+                finally
+                {
+                    _operation = null;
+                }
+
                 op?.ReportDetail(Loc.Format("MultiFile_Progress", results.ProcessedFiles.ToString("N0", CultureInfo.CurrentCulture),
                     results.FoundFiles.ToString("N0", CultureInfo.CurrentCulture), string.Empty));
             }
@@ -430,67 +724,205 @@ public sealed partial class MultiFileSearchPanel : UserControl
         }
         finally
         {
-            Flush();
             if (_running == cts)
             {
                 _running = null;
             }
 
             CancelButton.IsEnabled = false;
-            AppLog.Info($"Multi-file search: end ({results.State}, {results.Files.Count} file(s), {results.MatchCount} match(es))");
-            DispatcherQueue.TryEnqueue(() =>
+            AppLog.Info($"Multi-file search: end ({results.State}, {results.FileCount} file(s), {results.MatchCount} match(es), {results.InMemoryMatches} in memory)");
+            if (_results == results)
             {
+                RefreshRows();
                 UpdateSummary();
-                Validate();
-            });
+            }
+
+            Validate();
         }
     }
 
-    /// <summary>ファイルの行と一致の行を作る (一致のデータを読む。検索のスレッドで呼ぶ)。</summary>
-    private static List<MultiFileRow> BuildRows(FileSearchResult file)
+    /// <summary>一覧の更新をまとめて行う (結果が変わるたびではなく、<see cref="RefreshInterval"/> ごとに 1 回)。</summary>
+    private void ScheduleRefresh(MultiFileSearchResults results)
     {
-        string date = file.LastWriteUtc.ToLocalTime().ToString("g", CultureInfo.CurrentCulture);
-        var fileRow = MultiFileRow.ForFile(file, Loc.Format("MultiFile_FileRow", file.Path, file.Matches.Count.ToString("N0", CultureInfo.CurrentCulture),
-            file.Size.ToString("N0", CultureInfo.CurrentCulture), date));
-        var rows = new List<MultiFileRow> { fileRow };
-        Microsoft.Win32.SafeHandles.SafeFileHandle? handle = null;
-        try
+        if (Interlocked.Exchange(ref _refreshPending, 1) == 1)
         {
-            if (file.Snapshot is null)
-            {
-                handle = File.OpenHandle(file.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-            }
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
+            return;
         }
 
-        using (handle)
+        _ = Task.Delay(RefreshInterval).ContinueWith(_ => DispatcherQueue.TryEnqueue(() =>
         {
-            byte[] buffer = new byte[16];
-            foreach (SearchMatch m in file.Matches)
+            Volatile.Write(ref _refreshPending, 0);
+            if (_results == results)
             {
-                int n = (int)Math.Min(buffer.Length, m.Length);
-                int got = 0;
+                RefreshRows();
+                UpdateSummary();
+            }
+        }), TaskScheduler.Default);
+    }
+
+    /// <summary>加わったファイル・一致を一覧に入れる (知らせは 1 回。選択している行は保つ)。</summary>
+    private void RefreshRows()
+    {
+        if (_view is not { } view || !view.Refresh())
+        {
+            return;
+        }
+
+        int selected = ResultList.SelectedIndex;
+        Rows.Reset((int)Math.Min(int.MaxValue, view.RowCount));
+        if (selected >= 0 && selected < Rows.Count)
+        {
+            ResultList.SelectedIndex = selected;
+        }
+
+        Validate();
+    }
+
+    /// <summary>行を作る (一覧が尋ねた行だけ)。一致のデータは後から読み込む。</summary>
+    private MultiFileRow CreateRow(int row)
+    {
+        (int f, int m) = _view!.RowAt(row);
+        FileSearchResult file = _view.File(f);
+        Visibility checks = Show(IsReplaceMode);
+        if (m < 0)
+        {
+            return new MultiFileRow(row, f, file, -1, null, FileTitle(f), _view.IsChecked(f, -1), checks, RowChecked);
+        }
+
+        SearchMatch match = file.MatchAt(m);
+        var created = new MultiFileRow(row, f, file, m, match, MatchTitle(match, null, 0), _view.IsChecked(f, m), checks, RowChecked);
+        QueuePreview(created);
+        return created;
+    }
+
+    /// <summary>ファイルの行の見出し: パス、件数、サイズ、更新日時。上限で止めた・続きがある・置換の結果。</summary>
+    private string FileTitle(int fileIndex)
+    {
+        FileSearchResult file = _view!.File(fileIndex);
+        CultureInfo culture = CultureInfo.CurrentCulture;
+        string title = Loc.Format("MultiFile_FileRow", file.Path, _view.MatchCount(fileIndex).ToString("N0", culture), file.Size.ToString("N0", culture),
+            file.LastWriteUtc.ToLocalTime().ToString("g", culture));
+        if (file.LimitReached)
+        {
+            title += "  " + Loc.Format("MultiFile_FileLimit", PerFileLimit.ToString("N0", culture));
+        }
+        else if (file.Incomplete)
+        {
+            title += "  " + Loc.Get("MultiFile_FileIncomplete");
+        }
+
+        return _outcomeTexts.TryGetValue(fileIndex, out string? outcome) ? title + "  — " + outcome : title;
+    }
+
+    /// <summary>一致の行: オフセット、長さ、一致データ (Hex / テキスト。先頭 16 バイト)。データがまだなければ「…」。</summary>
+    private static string MatchTitle(SearchMatch m, byte[]? data, int got)
+    {
+        string hex = data is null ? "…" : string.Join(' ', data.Take(got).Select(b => b.ToString("X2", CultureInfo.InvariantCulture))) + (m.Length > got ? " …" : string.Empty);
+        string text = data is null ? string.Empty : new([.. data.Take(got).Select(b => b is >= 0x20 and < 0x7F ? (char)b : '.')]);
+        return Loc.Format("MultiFile_MatchRow", StatusFormat.Hex(m.Offset), m.Length.ToString("N0", CultureInfo.CurrentCulture), hex, text);
+    }
+
+    /// <summary>見えている一致の行のデータを、UI のスレッドの外で読む (ファイルごとに 1 回開く)。</summary>
+    private void QueuePreview(MultiFileRow row)
+    {
+        _previewQueue.Enqueue(row);
+        if (Interlocked.Exchange(ref _previewRunning, 1) == 0)
+        {
+            _ = Task.Run(LoadPreviews);
+        }
+    }
+
+    private void LoadPreviews()
+    {
+        while (true)
+        {
+            var rows = new List<MultiFileRow>();
+            while (_previewQueue.TryDequeue(out MultiFileRow? r))
+            {
+                rows.Add(r);
+            }
+
+            var titles = new List<(MultiFileRow Row, string Title)>();
+            foreach (IGrouping<FileSearchResult, MultiFileRow> group in rows.GroupBy(r => r.File))
+            {
+                FileSearchResult file = group.Key;
+                Microsoft.Win32.SafeHandles.SafeFileHandle? handle = null;
                 try
                 {
-                    got = file.Snapshot is { } snapshot ? snapshot.Read(m.Offset, buffer.AsSpan(0, n)).BytesReturned
-                        : handle is not null ? RandomAccess.Read(handle, buffer.AsSpan(0, n), m.Offset) : 0;
+                    if (file.Snapshot is null)
+                    {
+                        handle = File.OpenHandle(file.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                    }
                 }
-                catch (IOException)
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
                 {
                 }
 
-                string hex = string.Join(' ', buffer.Take(got).Select(b => b.ToString("X2", CultureInfo.InvariantCulture))) + (m.Length > n ? " …" : string.Empty);
-                string text = new([.. buffer.Take(got).Select(b => b is >= 0x20 and < 0x7F ? (char)b : '.')]);
-                rows.Add(MultiFileRow.ForMatch(fileRow, m, Loc.Format("MultiFile_MatchRow", StatusFormat.Hex(m.Offset), m.Length.ToString("N0", CultureInfo.CurrentCulture), hex, text)));
+                using (handle)
+                {
+                    foreach (MultiFileRow row in group)
+                    {
+                        SearchMatch m = row.Match!.Value;
+                        byte[] buffer = new byte[(int)Math.Min(16, m.Length)];
+                        int got = 0;
+                        try
+                        {
+                            got = file.Snapshot is { } snapshot ? snapshot.Read(m.Offset, buffer).BytesReturned
+                                : handle is not null ? RandomAccess.Read(handle, buffer, m.Offset) : 0;
+                        }
+                        catch (IOException)
+                        {
+                        }
+
+                        titles.Add((row, MatchTitle(m, buffer, got)));
+                    }
+                }
+            }
+
+            if (titles.Count > 0)
+            {
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    foreach ((MultiFileRow row, string title) in titles)
+                    {
+                        row.Title = title;
+                    }
+                });
+            }
+
+            Volatile.Write(ref _previewRunning, 0);
+            if (_previewQueue.IsEmpty || Interlocked.Exchange(ref _previewRunning, 1) == 1)
+            {
+                return;
             }
         }
-
-        return rows;
     }
 
-    /// <summary>見出し: 一致のあったファイル数・件数・状態、一致のなかったファイル数、スキップしたファイル (FIND-30 の仕様 7)。</summary>
+    /// <summary>行のチェックが変わった: 結果の並びに記録し、同じファイルの見えている行の表示を合わせる。</summary>
+    private void RowChecked(MultiFileRow row, bool? value)
+    {
+        if (_view is null)
+        {
+            return;
+        }
+
+        _view.SetChecked(row.FileIndex, row.MatchIndex, value ?? true);
+        ShowChecks(row.FileIndex);
+        Validate();
+    }
+
+    private void ShowChecks(int fileIndex)
+    {
+        foreach (MultiFileRow r in Rows.Realized.Where(r => r.FileIndex == fileIndex))
+        {
+            r.ShowChecked(_view!.IsChecked(r.FileIndex, r.MatchIndex));
+        }
+    }
+
+    /// <summary>
+    /// 見出し: 一致のあったファイル数・件数・状態、一致のなかったファイル数、上限で止めた旨、スキップしたファイル (FIND-30 の仕様 7)。
+    /// スキップしたファイルの一覧は、メニューを開くときに作る。
+    /// </summary>
     private void UpdateSummary()
     {
         if (_results is not { } r)
@@ -506,21 +938,48 @@ public sealed partial class MultiFileSearchPanel : UserControl
             MultiFileSearchState.LimitReached => "MultiFile_State_Limit",
             _ => "SearchResults_State_Completed",
         });
-        Summary.Text = Loc.Format("MultiFile_Summary", r.Files.Count, r.MatchCount, r.FilesWithoutMatches, state);
-        IReadOnlyList<SkippedFile> skipped = r.Skipped;
-        SkippedButton.Visibility = skipped.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
-        string skippedText = Loc.Format("MultiFile_Skipped", skipped.Count);
+        string text = Loc.Format("MultiFile_Summary", r.FileCount, r.MatchCount, r.FilesWithoutMatches, state);
+        if (r.State == MultiFileSearchState.LimitReached)
+        {
+            text += " " + (r.SpillFailed
+                ? Loc.Format("MultiFile_SpillFailed", r.SpillError ?? string.Empty)
+                : Loc.Format("MultiFile_LimitNote", r.Limit.ToString("N0", CultureInfo.CurrentCulture)));
+        }
+
+        Summary.Text = text;
+        int skipped = r.SkippedCount;
+        SkippedButton.Visibility = Show(skipped > 0);
+        string skippedText = Loc.Format("MultiFile_Skipped", skipped);
         SkippedButton.Content = skippedText;
         AutomationProperties.SetName(SkippedButton, skippedText);
+        ContinueButton.Visibility = Show(r.CanContinue && _running is null);
+    }
+
+    private void SkippedMenu_Opening(object sender, object e)
+    {
         SkippedMenu.Items.Clear();
-        foreach (SkippedFile s in skipped.Take(200))
+        foreach (SkippedFile s in _results?.SkippedHead(200) ?? [])
         {
             SkippedMenu.Items.Add(new MenuFlyoutItem { Text = Loc.Format("MultiFile_SkippedItem", s.Path, ReasonText(s.Reason, s.Message)), IsEnabled = false });
         }
     }
 
-    internal static string ReasonText(FileSkipReason reason, string message) =>
-        Loc.Get("MultiFile_Reason_" + reason) + (message.Length > 0 && reason is FileSkipReason.IoError ? $" ({message})" : string.Empty);
+    internal static string ReasonText(FileSkipReason reason, string message)
+    {
+        string text = Loc.Get("MultiFile_Reason_" + reason);
+        if (message.Length == 0)
+        {
+            return text;
+        }
+
+        return reason switch
+        {
+            FileSkipReason.IoError or FileSkipReason.RegexTimedOut => $"{text} ({message})",
+            FileSkipReason.CannotReplace when Enum.TryParse(message, out ReplaceIssue issue) && Loc.TryGet("MultiFile_Issue_" + issue) is { } detail
+                => $"{text} ({detail})",
+            _ => text,
+        };
+    }
 
     private void Open(MultiFileRow row)
     {
@@ -528,8 +987,9 @@ public sealed partial class MultiFileSearchPanel : UserControl
         {
             OpenRequested?.Invoke(this, (row.File.Path, m.Offset, m.Length));
         }
-        else if (row.Children.FirstOrDefault()?.Match is { } first)
+        else if (row.File.MatchCount > 0)
         {
+            SearchMatch first = row.File.MatchAt(0);
             OpenRequested?.Invoke(this, (row.File.Path, first.Offset, first.Length));
         }
     }
@@ -539,18 +999,19 @@ public sealed partial class MultiFileSearchPanel : UserControl
     /// <summary>「置換を実行」: 確認ダイアログのあと、チェックした一致を置換して保存する。</summary>
     public async Task ReplaceAsync()
     {
-        if (_results is not { } results || _template is not { } template || _pattern is not { } pattern || _running is not null)
+        if (_results is not { } results || _view is not { } view || _template is not { } template || _built is not { } built || _running is not null)
         {
             return;
         }
 
-        List<(MultiFileRow Row, IReadOnlyList<SearchMatch> Matches)> work = [.. Rows.Where(r => r.IsFile).Select(r => (r, r.CheckedMatches)).Where(w => w.Item2.Count > 0)];
+        SearchPattern pattern = built.Pattern;
+        List<int> work = [.. Enumerable.Range(0, view.FileCount).Where(f => view.CheckedCount(f) > 0)];
         if (work.Count == 0)
         {
             return;
         }
 
-        long count = work.Sum(w => (long)w.Matches.Count);
+        long count = work.Sum(f => (long)view.CheckedCount(f));
         bool backup = BackupChoice.IsChecked == true;
         ConfirmChoice choice = Confirm is null ? ConfirmChoice.Cancel : await Confirm(new ConfirmRequest(
             "MultiFileReplaceConfirm",
@@ -567,7 +1028,7 @@ public sealed partial class MultiFileSearchPanel : UserControl
         var options = new MultiFileReplaceOptions
         {
             Template = template,
-            ReplaceOptions = new ReplaceOptions { Policy = (LengthPolicy)Math.Max(0, LengthPolicyChoice.SelectedIndex) },
+            ReplaceOptions = CurrentReplaceOptions(),
             Backup = backup,
             ClearReadOnly = ClearReadOnlyChoice.IsChecked == true,
             JournalDirectory = Path.Combine(Path.GetTempPath(), "HexEditor", "multifile-replace"),
@@ -590,25 +1051,25 @@ public sealed partial class MultiFileSearchPanel : UserControl
                     cts.Token.Register(op.Cancel);
                 }
 
-                int done = 0;
-                foreach ((MultiFileRow row, IReadOnlyList<SearchMatch> matches) in work)
+                foreach (int f in work)
                 {
                     token.ThrowIfCancellationRequested();
-                    op?.ReportDetail(Loc.Format("MultiFile_ReplaceProgress", done, work.Count, row.File.Path));
+                    FileSearchResult file = view.File(f);
+                    op?.ReportDetail(Loc.Format("MultiFile_ReplaceProgress", outcomes.Count, work.Count, file.Path));
+                    IReadOnlyList<SearchMatch> matches = await OnUiAsync(() => view.CheckedMatches(f));
                     FileReplaceOutcome outcome;
-                    if (open.TryGetValue(row.File.Path, out EditorState? editor))
+                    if (open.TryGetValue(file.Path, out EditorState? editor))
                     {
                         // 開いているドキュメントはエディタ上で置換する (Undo で戻せる。保存は利用者が行う。仕様 6)。
-                        outcome = await OnUiAsync(() => ReplaceInEditor(editor, row.File.Path, matches, pattern, options));
+                        outcome = await OnUiAsync(() => MultiFileSearch.ReplaceInEditor(editor, file.Path, matches, pattern, options, Loc.Get("History_ReplaceAll")));
                     }
                     else
                     {
-                        outcome = await Task.Run(() => MultiFileSearch.ReplaceInFile(row.File, matches, pattern, options, null, token), token);
+                        outcome = await Task.Run(() => MultiFileSearch.ReplaceInFile(file, matches, pattern, options, null, token), token);
                     }
 
                     outcomes.Add(outcome);
-                    done++;
-                    DispatcherQueue.TryEnqueue(() => row.Title += "  — " + OutcomeText(outcome));
+                    DispatcherQueue.TryEnqueue(() => ShowOutcome(f, outcome));
                 }
             }
 
@@ -632,51 +1093,34 @@ public sealed partial class MultiFileSearchPanel : UserControl
                 _running = null;
             }
 
+            // キャンセルなどで置換しなかったファイルは「処理していない」と表示する (どのファイルまで置換したか分かるように)。
+            for (int i = outcomes.Count; i < work.Count; i++)
+            {
+                FileReplaceOutcome skipped = new(view.File(work[i]).Path, FileReplaceStatus.NotProcessed, 0, null, string.Empty);
+                outcomes.Add(skipped);
+                ShowOutcome(work[i], skipped);
+            }
+
             CancelButton.IsEnabled = false;
             Outcomes = outcomes;
             int replacedFiles = outcomes.Count(o => o.Status is FileReplaceStatus.Replaced or FileReplaceStatus.ReplacedInEditor && o.Count > 0);
             long replaced = outcomes.Sum(o => o.Status is FileReplaceStatus.Replaced or FileReplaceStatus.ReplacedInEditor ? o.Count : 0);
             int skippedFiles = outcomes.Count(o => o.Status is FileReplaceStatus.Skipped or FileReplaceStatus.Failed);
-            int notProcessed = work.Count - outcomes.Count;
+            int notProcessed = outcomes.Count(o => o.Status == FileReplaceStatus.NotProcessed);
             Summary.Text = Loc.Format("MultiFile_ReplaceSummary", replacedFiles, replaced, skippedFiles, notProcessed);
             AppLog.Info($"Multi-file replace: end ({replacedFiles} file(s), {replaced} replacement(s), {skippedFiles} skipped, {notProcessed} not processed)");
             Validate();
         }
     }
 
-    /// <summary>開いているドキュメントでの置換 (UI のスレッド。1 ファイルで 1 回の Undo)。</summary>
-    private static FileReplaceOutcome ReplaceInEditor(EditorState editor, string path, IReadOnlyList<SearchMatch> matches, SearchPattern pattern, MultiFileReplaceOptions options)
+    /// <summary>ファイルの行に置換の結果を出す (仕様 9)。</summary>
+    private void ShowOutcome(int fileIndex, FileReplaceOutcome outcome)
     {
-        Document doc = editor.Document;
-        if (doc.IsReadOnly || editor.ReadOnly)
+        _outcomeTexts[fileIndex] = OutcomeText(outcome);
+        foreach (MultiFileRow r in Rows.Realized.Where(r => r.FileIndex == fileIndex && r.IsFile))
         {
-            return new FileReplaceOutcome(path, FileReplaceStatus.Skipped, 0, FileSkipReason.ReadOnly, string.Empty);
+            r.Title = FileTitle(fileIndex);
         }
-
-        DocumentSnapshot current = doc.Current;
-        var edits = new List<ReplacementEdit>();
-        long previousEnd = 0;
-        foreach (SearchMatch m in matches.OrderBy(m => m.Offset))
-        {
-            if (m.Offset < previousEnd || !Replacer.TryVerify(current, pattern, m.Offset, out int length, out int variant))
-            {
-                continue;
-            }
-
-            if (Replacer.Plan(options.Template, m.Offset, length, variant, options.ReplaceOptions, current.Length, doc.CanResize, out ReplacementEdit? edit, current)
-                == ReplaceIssue.None)
-            {
-                previousEnd = edit!.Offset + edit.RemoveLength;
-                edits.Add(edit);
-            }
-        }
-
-        if (edits.Count > 0)
-        {
-            doc.ApplyReplacements(edits, Loc.Get("History_ReplaceAll"));
-        }
-
-        return new FileReplaceOutcome(path, FileReplaceStatus.ReplacedInEditor, edits.Count, null, string.Empty);
     }
 
     internal static string OutcomeText(FileReplaceOutcome o) => o.Status switch
@@ -690,6 +1134,11 @@ public sealed partial class MultiFileSearchPanel : UserControl
 
     private Task<T> OnUiAsync<T>(Func<T> action)
     {
+        if (DispatcherQueue.HasThreadAccess)
+        {
+            return Task.FromResult(action());
+        }
+
         var tcs = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
         if (!DispatcherQueue.TryEnqueue(() =>
         {
@@ -711,6 +1160,62 @@ public sealed partial class MultiFileSearchPanel : UserControl
 
     /// <summary>実行中の検索・置換を取り消す。</summary>
     public void Cancel() => _running?.Cancel();
+
+    // ---- 検索バーの条件の取り込み (FIND-30 の仕様 1) ----
+
+    /// <summary>
+    /// 検索バーの今の条件を取り込む。パネルの欄にあるもの (種類・検索語・オプション・位置の条件) は欄に入れ、欄にないもの
+    /// (複数の文字コード・複数の語) はまとめて持つ (「解除」で外す)。
+    /// </summary>
+    internal void UseQuery(SearchQuery q)
+    {
+        _ready = false;
+        KindChoice.SelectedIndex = (int)q.Kind;
+        Query.Text = q.Text;
+        if (EncodingChoice.Items.OfType<ComboBoxItem>().FirstOrDefault(i => (string)i.Tag == q.EncodingId) is { } item)
+        {
+            EncodingChoice.SelectedItem = item;
+        }
+
+        CaseChoice.IsChecked = q.CaseSensitive;
+        WordChoice.IsChecked = q.WholeWord;
+        EscapeChoice.IsChecked = q.UseEscapes;
+        AlignChoice.IsChecked = q.AlignToCharacters;
+        IntBitsChoice.SelectedIndex = Math.Max(0, NumericSearch.IntegerSizes.ToList().IndexOf(q.IntegerBits));
+        SignChoice.SelectedIndex = (int)q.Sign;
+        EndianChoice.SelectedIndex = (int)q.Endian;
+        FloatChoice.SelectedIndex = (int)q.FloatFormat;
+        ToleranceChoice.SelectedIndex = (int)q.Tolerance;
+        ToleranceValue.Text = q.ToleranceText;
+        RangeExcludeChoice.IsChecked = q.RangeExclude;
+        RegexIgnoreCase.IsChecked = q.RegexIgnoreCase;
+        RegexMultiline.IsChecked = q.RegexMultiline;
+        RegexSingleline.IsChecked = q.RegexSingleline ?? false;
+        MaskChoice.IsChecked = q.Mask;
+        MaskModeChoice.SelectedIndex = q.MaskBits ? 1 : 0;
+        MaskQuery.Text = q.MaskText;
+        MismatchChoice.IsChecked = q.Mismatch;
+        MismatchAlignChoice.IsChecked = q.MismatchAligned;
+        PositionModulus.Text = q.Position is { IsNone: false } p ? p.Modulus.ToString(CultureInfo.InvariantCulture) : string.Empty;
+        PositionRemainder.Text = q.Position is { IsNone: false } r ? r.Remainder.ToString(CultureInfo.InvariantCulture) : string.Empty;
+        _extras = q.Terms is not null || q.Encodings.Count > 0 ? new SearchQuery { Terms = q.Terms, TermLabels = q.TermLabels, Encodings = q.Encodings } : null;
+        _ready = true;
+        Validate();
+    }
+
+    private void UseFindBar_Click(object sender, RoutedEventArgs e)
+    {
+        if (FindBarQuery?.Invoke() is { } q)
+        {
+            UseQuery(q);
+        }
+    }
+
+    private void ClearExtras_Click(object sender, RoutedEventArgs e)
+    {
+        _extras = null;
+        Validate();
+    }
 
     // ---- 対象の指定の保存 (FIND-30 の仕様 9) ----
 
@@ -794,6 +1299,8 @@ public sealed partial class MultiFileSearchPanel : UserControl
 
     private async void Search_Click(object sender, RoutedEventArgs e) => await SearchAsync();
 
+    private async void Continue_Click(object sender, RoutedEventArgs e) => await ContinueAsync();
+
     private async void Replace_Click(object sender, RoutedEventArgs e) => await ReplaceAsync();
 
     private void Cancel_Click(object sender, RoutedEventArgs e) => Cancel();
@@ -847,11 +1354,10 @@ public sealed partial class MultiFileSearchPanel : UserControl
         {
             e.Handled = true;
             toggle.Checked = toggle.Checked != true;
-            Validate();
         }
     }
 
-    /// <summary>サイズの入力式の文脈 (名前と読み取りは使わない)。</summary>
+    /// <summary>サイズ・位置の条件の入力式の文脈 (名前と読み取りは使わない)。</summary>
     private sealed class NoContext : IExpressionContext
     {
         public long Cursor => 0;

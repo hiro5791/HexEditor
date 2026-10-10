@@ -87,6 +87,11 @@ public sealed partial class MainWindow
                 }
 
                 MultiFileSearch.Configure(request);
+                if (request["useFindBar"]?.GetValue<bool>() == true)
+                {
+                    MultiFileSearch.UseQuery(FindBar.CaptureQuery());
+                }
+
                 if (request["check"] is JsonObject check)
                 {
                     MultiFileSearch.SetChecked(check["file"]!.GetValue<string>(), (int?)check["match"]?.GetValue<long>(), check["value"]!.GetValue<bool>());
@@ -96,6 +101,17 @@ public sealed partial class MainWindow
                 {
                     _ = MultiFileSearch.SearchAsync();
                     await Task.Yield();
+                }
+
+                if (request["continue"]?.GetValue<bool>() == true)
+                {
+                    _ = MultiFileSearch.ContinueAsync();
+                    await Task.Yield();
+                }
+
+                if (request["cancel"]?.GetValue<bool>() == true)
+                {
+                    MultiFileSearch.Cancel();
                 }
 
                 if (request["runReplace"]?.GetValue<bool>() == true)
@@ -110,27 +126,41 @@ public sealed partial class MainWindow
                     MultiFileSearch.OpenRow(open["file"]!.GetValue<string>(), (int)open["match"]!.GetValue<long>());
                 }
 
-                return TestMultiFileState();
+                return TestMultiFileState(request);
 
             default:
                 return null;
         }
     }
 
-    private JsonObject TestMultiFileState()
+    /// <summary>
+    /// 複数ファイル検索のパネルの状態。行は <c>rowsFrom</c> から <c>rowsCount</c> 行 (既定 0 から 500 行) を、行のオブジェクトを作らずに返す。
+    /// <c>realize</c> なら、その範囲の行を一覧と同じように作る (作った行の数 <c>createdRows</c> の確認用)。
+    /// </summary>
+    private JsonObject TestMultiFileState(JsonObject request)
     {
         MultiFileSearchResults? r = MultiFileSearch.Results;
         var rows = new JsonArray();
-        foreach (MultiFileRow row in MultiFileSearch.Rows)
+        long total = MultiFileSearch.View?.RowCount ?? 0;
+        long from = request["rowsFrom"]?.GetValue<long>() ?? 0;
+        long count = Math.Min(request["rowsCount"]?.GetValue<long>() ?? 500, Math.Max(0, total - from));
+        bool realize = request["realize"]?.GetValue<bool>() == true;
+        for (long i = from; i < from + count; i++)
         {
+            (FileSearchResult file, SearchMatch? match, string title, bool? isChecked) = MultiFileSearch.DescribeRow((int)i);
+            if (realize)
+            {
+                _ = MultiFileSearch.Rows[(int)i];
+            }
+
             rows.Add(new JsonObject
             {
-                ["file"] = row.IsFile,
-                ["path"] = row.File.Path,
-                ["offset"] = row.Match?.Offset,
-                ["length"] = row.Match?.Length,
-                ["title"] = row.Title,
-                ["checked"] = row.Checked,
+                ["file"] = match is null,
+                ["path"] = file.Path,
+                ["offset"] = match?.Offset,
+                ["length"] = match?.Length,
+                ["title"] = title,
+                ["checked"] = isChecked,
             });
         }
 
@@ -139,14 +169,21 @@ public sealed partial class MainWindow
             ["visible"] = IsPanelShown(MultiFilePanelId),
             ["running"] = MultiFileSearch.IsRunning,
             ["state"] = r?.State.ToString(),
-            ["files"] = r?.Files.Count ?? 0,
+            ["files"] = r?.FileCount ?? 0,
             ["matches"] = r?.MatchCount ?? 0,
+            ["inMemory"] = r?.InMemoryMatches ?? 0,
+            ["limit"] = r?.Limit ?? 0,
+            ["canContinue"] = MultiFileSearch.ContinueVisible,
             ["processed"] = r?.ProcessedFiles ?? 0,
             ["found"] = r?.FoundFiles ?? 0,
             ["withoutMatches"] = r?.FilesWithoutMatches ?? 0,
-            ["skipped"] = new JsonArray([.. (r?.Skipped ?? []).Select(s => (JsonNode?)new JsonObject { ["path"] = s.Path, ["reason"] = s.Reason.ToString() })]),
+            ["skipped"] = new JsonArray([.. (r?.SkippedHead(1000) ?? []).Select(s => (JsonNode?)new JsonObject { ["path"] = s.Path, ["reason"] = s.Reason.ToString() })]),
             ["summary"] = MultiFileSearch.SummaryText,
             ["error"] = MultiFileSearch.ErrorText,
+            ["extras"] = MultiFileSearch.ExtrasDescription,
+            ["rowCount"] = total,
+            ["listCount"] = MultiFileSearch.Rows.Count,
+            ["createdRows"] = MultiFileSearch.Rows.CreatedRows,
             ["outcomes"] = new JsonArray([.. MultiFileSearch.Outcomes.Select(o => (JsonNode?)new JsonObject
             {
                 ["path"] = o.Path,

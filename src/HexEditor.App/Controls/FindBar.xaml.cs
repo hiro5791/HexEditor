@@ -725,58 +725,11 @@ public sealed partial class FindBar : UserControl
     private static Visibility Show(bool visible) => visible ? Visibility.Visible : Visibility.Collapsed;
 
     /// <summary>今の種類と条件で検索語のパターンを作る。誤りは <see cref="PatternException"/>。</summary>
-    private SearchPattern BuildPattern(SearchKind kind) => kind switch
-    {
-        SearchKind.Text => SearchPattern.FromText(Query.Text, SearchEncoding, new TextSearchOptions
-        {
-            CaseSensitive = CaseChoice.IsChecked == true,
-            UseEscapes = EscapeChoice.IsChecked == true,
-            AlignToCharacters = AlignChoice.IsChecked == true,
-            WholeWord = WordChoice.IsChecked == true,
-        }),
-        SearchKind.Integer => NumericSearch.Integer(Query.Text, new IntegerSearchOptions
-        {
-            Bits = SelectedBits,
-            Sign = (IntegerSign)Math.Max(0, SignChoice.SelectedIndex),
-            Endian = (SearchEndian)Math.Max(0, EndianChoice.SelectedIndex),
-        }, Editor is { } editor ? new EditorExpressionContext(editor) : null),
-        SearchKind.Float => NumericSearch.Float(Query.Text, new FloatSearchOptions
-        {
-            Format = (FloatFormat)Math.Max(0, FloatChoice.SelectedIndex),
-            Endian = (SearchEndian)Math.Max(0, EndianChoice.SelectedIndex),
-            Tolerance = (ToleranceKind)Math.Max(0, ToleranceChoice.SelectedIndex),
-            ToleranceValue = ParseTolerance(),
-        }),
-        _ => SearchPattern.FromHex(Query.Text, new HexSearchOptions
-        {
-            MaxWildcardLength = Math.Clamp(App.Settings?.GetInt(MaxMatchLengthKey, SearchPattern.DefaultMaxMatchLength) ?? SearchPattern.DefaultMaxMatchLength,
-                1, SearchPattern.MaxMaxMatchLength),
-        }),
-    };
+    private SearchPattern BuildPattern(SearchKind kind) => SearchQueryBuilder.Build(
+        CaptureQuery() with { Kind = kind, Encodings = [], Mask = false, Mismatch = false, Position = null, Terms = null, TermLabels = null },
+        QueryEnvironment(Editor is { } editor ? new EditorExpressionContext(editor) : null)).Pattern;
 
     private int SelectedBits => IntBitsChoice.SelectedItem is ComboBoxItem { Tag: int bits } ? bits : 32;
-
-    /// <summary>許容誤差の入力 (小数点は `.`。空なら 0)。読めない値は誤りにする。</summary>
-    private double ParseTolerance()
-    {
-        if (ToleranceChoice.SelectedIndex <= 0)
-        {
-            return 0;
-        }
-
-        string t = ToleranceValue.Text.Trim();
-        if (t.Length == 0)
-        {
-            return 0;
-        }
-
-        if (!double.TryParse(t, NumberStyles.AllowDecimalPoint | NumberStyles.AllowExponent | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out double v))
-        {
-            throw new PatternException(PatternError.InvalidTolerance, t);
-        }
-
-        return v;
-    }
 
     /// <summary>
     /// 変換結果の表示 (FIND-04 の仕様 7)。Hex・テキストは先頭 32 バイト、整数はエンディアンごとのバイト列 (「34 12 (LE), 12 34 (BE)」)、
@@ -813,7 +766,7 @@ public sealed partial class FindBar : UserControl
     private static string Hex(byte[] bytes) => string.Join(' ', bytes.Select(b => b.ToString("X2", CultureInfo.InvariantCulture)));
 
     /// <summary>誤りの説明文。範囲などの値があればそれを、なければ誤りのある語を入れる。</summary>
-    private static string ErrorText(PatternException ex) => ex.Error == PatternError.RegexSyntax
+    internal static string ErrorText(PatternException ex) => ex.Error == PatternError.RegexSyntax
         ? Loc.Format("Find_Error_RegexSyntax", Loc.TryGet("Find_RegexError_" + ex.Detail) ?? Loc.Get("Find_RegexError_Other"))
         : ex.Arguments.Count > 0 ? Loc.Format("Find_Error_" + ex.Error, [.. ex.Arguments]) : Loc.Format("Find_Error_" + ex.Error, ex.Detail);
 
