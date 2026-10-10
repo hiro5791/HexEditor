@@ -951,7 +951,8 @@ public sealed partial class HexView
         ActiveColumn column = _hoverRegion == HitRegion.Text ? ActiveColumn.Text : ActiveColumn.Hex;
         if (!IsUnreadableShown(offset))
         {
-            OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, null) : string.Empty, (offset, column));
+            FrameworkElement? rich = ShowToolTips ? RichToolTipContent?.Invoke(offset) : null;
+            OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, null, rich is null) : string.Empty, (offset, column), rich);
             return;
         }
 
@@ -973,7 +974,7 @@ public sealed partial class HexView
         });
     }
 
-    private void OpenCellToolTip(long hover, string text, (long Offset, ActiveColumn Column)? cell)
+    private void OpenCellToolTip(long hover, string text, (long Offset, ActiveColumn Column)? cell, FrameworkElement? rich = null)
     {
         if (_hoverOffset != hover || string.IsNullOrEmpty(text))
         {
@@ -982,7 +983,9 @@ public sealed partial class HexView
 
         _cellToolTip ??= new ToolTip();
         AutomationProperties.SetAutomationId(_cellToolTip, "HexViewCellToolTip");
-        _cellToolTip.Content = text;
+        // 注釈の説明 (Markdown を描いたもの。INSP-31 の仕様 4、INSP-32 の仕様 5) は文字列の下に並べる。
+        _cellToolTip.Content = rich is null ? text : new StackPanel { Spacing = 6, MaxWidth = 480, Children = { new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap }, rich } };
+        LastRichToolTip = rich;
         ToolTipService.SetToolTip(Surface, _cellToolTip);
         if (cell is { } c && TryGetCellRect(c.Offset, out Rect rect, c.Column))
         {
@@ -996,12 +999,16 @@ public sealed partial class HexView
     /// <summary>最後に出したツールチップの文字列 (テスト用)。閉じたら null。</summary>
     internal string? LastToolTip { get; private set; }
 
+    /// <summary>最後に出したツールチップの注釈の部分 (テスト用)。</summary>
+    internal FrameworkElement? LastRichToolTip { get; private set; }
+
     /// <summary>ツールチップが開いているか。</summary>
     internal bool CellToolTipOpen => _cellToolTip?.IsOpen ?? false;
 
     private void HideCellToolTip()
     {
         LastToolTip = null;
+        LastRichToolTip = null;
         if (_cellToolTip is not null)
         {
             _cellToolTip.IsOpen = false;

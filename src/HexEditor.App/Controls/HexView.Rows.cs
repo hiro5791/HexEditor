@@ -93,6 +93,10 @@ public sealed partial class HexView
         private bool[] _matched = [];
         private bool[] _focus = [];
 
+        // 色付けルール (VIEW-17 の層 10、INSP-33) の文字色。null は指定なし。
+        private Brush?[] _ruleHex = [];
+        private Brush?[] _ruleText = [];
+
         // そのバイトの後ろ (右) に削除によって詰まった境界がある (VIEW-15 の仕様 5)。
         private bool[] _deleted = [];
         private TextCell[] _text = [];
@@ -267,7 +271,8 @@ public sealed partial class HexView
         public bool Update(in RowFrame frame, long rowStart, int lead, int count, ReadOnlySpan<byte> bytes, ReadOnlySpan<ByteState> states,
             ReadOnlySpan<ChangeMark> marks, ReadOnlySpan<bool> matched, ReadOnlySpan<bool> focus, ReadOnlySpan<bool> deleted, ReadOnlySpan<TextCell> text,
             CellMode mode,
-            long selStart, long selEnd, bool currentRow, Palette palette, double cellWidth, double rowHeight, Func<string, double> measure)
+            long selStart, long selEnd, bool currentRow, Palette palette, double cellWidth, double rowHeight, Func<string, double> measure,
+            ReadOnlySpan<Brush?> ruleHex = default, ReadOnlySpan<Brush?> ruleText = default)
         {
             long selFrom = Math.Max(selStart, rowStart + lead) - rowStart;
             long selTo = Math.Min(selEnd, rowStart + count) - rowStart;
@@ -281,6 +286,7 @@ public sealed partial class HexView
                 && bytes[..count].SequenceEqual(_bytes.AsSpan(0, count)) && states[..count].SequenceEqual(_states.AsSpan(0, count))
                 && marks[..count].SequenceEqual(_marks.AsSpan(0, count)) && matched[..count].SequenceEqual(_matched.AsSpan(0, count))
                 && focus[..count].SequenceEqual(_focus.AsSpan(0, count)) && deleted[..count].SequenceEqual(_deleted.AsSpan(0, count))
+                && SameRule(ruleHex, _ruleHex, count) && SameRule(ruleText, _ruleText, count)
                 && SameText(text, count))
             {
                 return false;
@@ -306,6 +312,15 @@ public sealed partial class HexView
                 _text = new TextCell[b];
             }
 
+            if (_ruleHex.Length < b)
+            {
+                _ruleHex = new Brush?[b];
+                _ruleText = new Brush?[b];
+            }
+
+            CopyRule(ruleHex, _ruleHex, count);
+            CopyRule(ruleText, _ruleText, count);
+
             bytes[..count].CopyTo(_bytes);
             states[..count].CopyTo(_states);
             marks[..count].CopyTo(_marks);
@@ -330,6 +345,26 @@ public sealed partial class HexView
             UpdateHatches(frame.Columns, palette, cellWidth, rowHeight);
             HideUnused();
             return true;
+        }
+
+        private static bool SameRule(ReadOnlySpan<Brush?> given, Brush?[] kept, int count)
+        {
+            for (int c = 0; c < count; c++)
+            {
+                Brush? a = c < given.Length ? given[c] : null;
+                if (!ReferenceEquals(a, c < kept.Length ? kept[c] : null))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static void CopyRule(ReadOnlySpan<Brush?> given, Brush?[] kept, int count)
+        {
+            Array.Clear(kept);
+            given[..Math.Min(count, given.Length)].CopyTo(kept);
         }
 
         private bool SameText(ReadOnlySpan<TextCell> text, int count)
@@ -432,6 +467,12 @@ public sealed partial class HexView
                 return MarkBrush(_marks[c], palette);
             }
 
+            // 色付けルール (層 10) は、変更されたバイト (層 6) より奥、ゼロのグレー表示 (層 13) より手前。
+            if (_ruleHex[c] is { } rule)
+            {
+                return rule;
+            }
+
             return _frame.Style.DimZeros && _bytes[c] == 0 ? palette.Zero : palette.HexText;
         }
 
@@ -451,6 +492,11 @@ public sealed partial class HexView
             if (_frame.Style.HighlightModified && _marks[c] != ChangeMark.None)
             {
                 return MarkBrush(_marks[c], palette);
+            }
+
+            if (_ruleText[c] is { } rule)
+            {
+                return rule;
             }
 
             TextCell cell = _text[c];

@@ -595,6 +595,7 @@ public sealed partial class HexView : UserControl
             }
         }
         TextCell[] text = DecodeText(snapshot, view, readStart, lead, span, available);
+        bool ruleColors = FillCellForegrounds(firstOffset, span);
         var columns = new RowColumns(format);
         long selStart = _editor.SelectionStart;
         long selEnd = selStart + _editor.SelectionLength;
@@ -636,7 +637,8 @@ public sealed partial class HexView : UserControl
             if (!keep && row.Update(frame, rowStart, rowLead, count, bytes.AsSpan(from, bytesPerRow), rowStates, marks.AsSpan(from, bytesPerRow),
                 matched.AsSpan(from, bytesPerRow), focus.AsSpan(from, bytesPerRow), deleted.AsSpan(from, bytesPerRow), text.AsSpan(from, bytesPerRow),
                 mode, selStart, selEnd,
-                _editor.TopRow + r == cursorRow, _palette, _cellWidth, _rowHeight, MeasureGlyph))
+                _editor.TopRow + r == cursorRow, _palette, _cellWidth, _rowHeight, MeasureGlyph,
+                ruleColors ? _ruleHexWork.AsSpan(from, bytesPerRow) : default, ruleColors ? _ruleTextWork.AsSpan(from, bytesPerRow) : default))
             {
                 rebuilt++;
             }
@@ -653,6 +655,7 @@ public sealed partial class HexView : UserControl
         PlaceCaret(layout, columns);
         UpdateRuler(layout, view, offsetFormat);
         RenderHighlights(firstOffset, rows, columns);
+        RenderAnnotationColumn(firstOffset, rows, columns);
         UpdateMarkers();
         if (anyUnreadable && !_unreadableReported)
         {
@@ -803,7 +806,7 @@ public sealed partial class HexView : UserControl
     internal double ContentLeft => LeftPadding + OffsetChars * _cellWidth;
 
     /// <summary>内容の全体の幅。</summary>
-    private double ContentWidth => (_format.LineLength + 1) * _cellWidth;
+    private double ContentWidth => (_format.LineLength + 1 + AnnotationColumnExtra) * _cellWidth;
 
     private void PlaceCaret(HexLayout layout, RowColumns columns)
     {

@@ -14,15 +14,28 @@ public enum HexHighlightLayer
 
     /// <summary>層 7: ブックマーク (INSP-23)。</summary>
     Bookmark = 7,
+
+    /// <summary>層 8: 注釈 (ブックマーク・テンプレート以外の出どころ。INSP-32)。</summary>
+    Annotation = 8,
+
+    /// <summary>層 9: テンプレートの範囲の色分け (TPL-23。注釈の出どころ「テンプレート」もここに描く)。</summary>
+    Template = 9,
+
+    /// <summary>層 10: 色付けルール (INSP-33、INSP-34)。</summary>
+    ColoringRule = 10,
 }
 
 /// <summary>
 /// Hex 列とテキスト列に重ねる範囲の強調 1 つ。<see cref="Background"/> は背景 (null なら塗らない)、<see cref="Border"/> は枠線
 /// (null なら描かない)、<see cref="Dash"/> は枠線の破線の模様 (ハイコントラストで形を変えて区別する)。<see cref="Tag"/> は
 /// 提供元の識別 (テスト用の読み出しに出す)。長さ 0 の範囲は位置に細い縦線を描く。
+/// <para>
+/// <see cref="Level"/> は同じ層の中の重なりの段 (0 が外側。注釈の入れ子 INSP-32 の仕様 4): 枠線・下線を段ごとに 2 px ずつ内側に描き、
+/// 後の (内側の) 項目ほど上に描く。<see cref="Underline"/> なら枠線の代わりにセルの下端に線を引く (<see cref="Border"/> の色)。
+/// </para>
 /// </summary>
 public sealed record HexHighlight(long Offset, long Length, HexHighlightLayer Layer, Brush? Background, Brush? Border,
-    IReadOnlyList<double>? Dash = null, string Tag = "");
+    IReadOnlyList<double>? Dash = null, string Tag = "", int Level = 0, bool Underline = false);
 
 /// <summary>オフセット列の目印 (ブックマークの開始位置。INSP-23 の仕様 8、INSP-25 の仕様 5)。<see cref="Text"/> は番号など。</summary>
 public sealed record HexOffsetMarker(long Offset, Brush Fill, Brush? Border, string Text, Brush? Foreground, string Tag = "");
@@ -50,7 +63,7 @@ public sealed partial class HexView
 
     /// <summary>描いた強調 (テスト用の読み出し)。Column は "hex" か "text"。</summary>
     private readonly record struct PlacedHighlight(HexHighlightLayer Layer, string Tag, string Column, long First, long Last, Brush? Background,
-        Brush? Border, IReadOnlyList<double>? Dash);
+        Brush? Border, IReadOnlyList<double>? Dash, int Level, bool Underline, int Order);
 
     // ハイコントラストの判定は IsHighContrast (HexView.Options.cs。テスト用の模擬 ForcedHighContrast を含む) を使う。
 
@@ -196,7 +209,7 @@ public sealed partial class HexView
 
     private void PlaceSegment(HexHighlight h, string column, long first, long last, double x, double y, double width, ref int backUsed, ref int frontUsed)
     {
-        _placed.Add(new PlacedHighlight(h.Layer, h.Tag, column, first, last, h.Background, h.Border, h.Dash));
+        _placed.Add(new PlacedHighlight(h.Layer, h.Tag, column, first, last, h.Background, h.Border, h.Dash, h.Level, h.Underline, _placed.Count));
         if (h.Background is not null)
         {
             Rectangle r = Take(_highlightBack, _backLayer!, backUsed++);
@@ -205,7 +218,26 @@ public sealed partial class HexView
             SetRect(r, x, y, width, _rowHeight);
         }
 
-        if (h.Border is not null)
+        if (h.Border is not null && h.Underline)
+        {
+            // 下線 (段ごとに 2 px ずつ上へ)。
+            Rectangle line = Take(_highlightFront, _frontLayer!, frontUsed++);
+            line.Fill = h.Border;
+            line.Stroke = null;
+            while (_frontDash.Count <= frontUsed - 1)
+            {
+                _frontDash.Add(null);
+            }
+
+            if (_frontDash[frontUsed - 1] is not null)
+            {
+                _frontDash[frontUsed - 1] = null;
+                line.StrokeDashArray = null;
+            }
+
+            SetRect(line, x, y + _rowHeight - 2 - 2 * h.Level, Math.Max(1, width), 1.5);
+        }
+        else if (h.Border is not null)
         {
             Rectangle r = Take(_highlightFront, _frontLayer!, frontUsed++);
             r.Fill = null;
@@ -222,7 +254,8 @@ public sealed partial class HexView
                 _frontDash[frontUsed - 1] = h.Dash;
                 r.StrokeDashArray = h.Dash is null ? null : [.. h.Dash];
             }
-            SetRect(r, x, y + 0.5, Math.Max(1, width), Math.Max(1, _rowHeight - 1));
+            double inset = 2 * h.Level;
+            SetRect(r, x + inset, y + 0.5 + inset, Math.Max(1, width - 2 * inset), Math.Max(1, _rowHeight - 1 - 2 * inset));
         }
     }
 
@@ -318,6 +351,9 @@ public sealed partial class HexView
                 ["background"] = MaybeColor(p.Background),
                 ["border"] = MaybeColor(p.Border),
                 ["dash"] = p.Dash is null ? null : string.Join(",", p.Dash),
+                ["level"] = p.Level,
+                ["underline"] = p.Underline,
+                ["order"] = p.Order,
             });
         }
 

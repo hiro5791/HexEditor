@@ -21,7 +21,7 @@ public sealed partial class HexView
     private static CultureInfo Culture => CultureInfo.CurrentCulture;
 
     /// <summary>Hex 列・テキスト列のセルのツールチップ (VIEW-07 の仕様 2・3)。<paramref name="unreadable"/> は読み取れない理由。</summary>
-    internal string CellToolTipText(long offset, string? unreadable)
+    internal string CellToolTipText(long offset, string? unreadable, bool includeAnnotations = true)
     {
         EditorState editor = _editor!;
         bool lower = editor.View.LowercaseHex;
@@ -73,7 +73,7 @@ public sealed partial class HexView
         }
 
         // 付加情報: ブックマーク名など (各最大 3 件、超えた分は「ほか N 件」)。
-        if ((AnnotationToolTips?.Invoke(offset) is { Count: > 0 } tips ? tips : AnnotationNames?.Invoke(offset)) is { Count: > 0 } names)
+        if (includeAnnotations && (AnnotationToolTips?.Invoke(offset) is { Count: > 0 } tips ? tips : AnnotationNames?.Invoke(offset)) is { Count: > 0 } names)
         {
             string shown = string.Join(Loc.Get("HexView_Announce_ListSeparator"), names.Take(MaxAnnotationsInToolTip));
             if (names.Count > MaxAnnotationsInToolTip)
