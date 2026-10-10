@@ -373,6 +373,9 @@ public sealed partial class MainViewModel : ObservableObject
             vm.EncodedStamp = record.EncodedStamp;
         }
 
+        // インポートしたドキュメントの付随データ (エクスポートの既定値。TOOL-05・06 の仕様 2)。
+        vm.ImportedSettings = record.ImportedSettings;
+
         if (record.RangeStart is { } rangeStart)
         {
             vm.RangeLabel = DocumentViewModel.FormatRange(rangeStart, record.RangeLength ?? 0);

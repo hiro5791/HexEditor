@@ -145,6 +145,12 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         (string, string, Core.Sources.FileStamp?)? encoded = Encoded is { } e && FilePath is { } encodedPath ? (encodedPath, e.Format, EncodedStamp) : null;
         RecoveryCapture? capture = DocumentRecovery.Capture(Document, Editor.Cursor, Editor.SelectionStart, Editor.SelectionLength, encoded,
             Encoded?.GapFill ?? Core.Formats.EncodedFile.DefaultGapFill);
+        if (capture is not null && ImportedSettings is { } imported)
+        {
+            // インポートの付随データ (実行開始アドレス・S0 の文字列。TOOL-05・06 の仕様 2) も復旧で戻す。
+            capture = capture with { ImportedSettings = imported };
+        }
+
         _lastRecorded = capture?.Snapshot ?? _lastRecorded;
         return capture;
     }

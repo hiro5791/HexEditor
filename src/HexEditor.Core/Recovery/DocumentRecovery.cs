@@ -93,6 +93,11 @@ public sealed record RecoveryRecord
 
     /// <summary>デコードしたときの隙間の塗りつぶしの値 (ENG-38 の仕様 3)。null は既定の FF。</summary>
     public int? EncodedGapFill { get; init; }
+
+    /// <summary>
+    /// インポートしたドキュメント (TOOL-05〜07) の付随データ (実行開始アドレス・S0 の文字列など。エクスポートの既定値)。それ以外は null。
+    /// </summary>
+    public Formats.EncodedFileSettings? ImportedSettings { get; init; }
 }
 
 /// <summary>
@@ -206,6 +211,7 @@ public sealed class DocumentRecovery : IDisposable
                 EncodedFormat = capture.Encoded?.Format,
                 EncodedStamp = capture.Encoded?.Stamp,
                 EncodedGapFill = capture.Encoded is null || capture.EncodedGapFill == Formats.EncodedFile.DefaultGapFill ? null : capture.EncodedGapFill,
+                ImportedSettings = capture.ImportedSettings,
             };
 
             string temp = StatePath + ".tmp";
@@ -330,4 +336,7 @@ public sealed record RecoveryCapture(
 {
     /// <summary>デコードしたときの隙間の塗りつぶしの値 (ENG-38 の仕様 3)。</summary>
     public byte EncodedGapFill { get; init; } = Formats.EncodedFile.DefaultGapFill;
+
+    /// <summary>インポートしたドキュメントの付随データ (<see cref="RecoveryRecord.ImportedSettings"/>)。</summary>
+    public Formats.EncodedFileSettings? ImportedSettings { get; init; }
 }

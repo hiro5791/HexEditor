@@ -93,6 +93,30 @@ public sealed class RecoveryTests : IDisposable
     }
 
     [Fact]
+    public void Imported_settings_are_recovered_with_an_untitled_document()
+    {
+        // インポートしたドキュメント (TOOL-05・06 の仕様 2) の実行開始アドレス・S0 の文字列は、エクスポートの既定値として復旧でも戻す。
+        var doc = new Document(MemoryByteSource.CreateEmpty("image.hex"), Options());
+        var recovery = new DocumentRecovery(Root, doc.Id);
+        doc.Insert(0, [1, 2, 3, 4]);
+        var imported = new Core.Formats.EncodedFileSettings { Format = Core.Formats.FormatIds.SRecord, StartAddress = 0x8000, Header = "boot" };
+        recovery.Write(DocumentRecovery.Capture(doc, 0, 0, 0)! with { ImportedSettings = imported });
+        SimulateCrash(doc, recovery);
+
+        RecoveryEntry entry = Assert.Single(RecoveryStore.Scan(Root));
+        Assert.Equal(imported, entry.Record.ImportedSettings);
+        RestoredDocument restored = RecoveryStore.Restore(entry, Options());
+        using (Document again = restored.Document)
+        {
+            Assert.Equal([1, 2, 3, 4], Read(again.Current, 0, 4));
+            Assert.Equal(0x8000, restored.Record.ImportedSettings!.StartAddress);
+            Assert.Equal("boot", restored.Record.ImportedSettings.Header);
+        }
+
+        restored.Recovery.Dispose();
+    }
+
+    [Fact]
     public void Range_document_is_recovered_with_the_same_range()
     {
         // ENG-27 の仕様 2 (範囲 ENG-13): 範囲を開いたドキュメントは、同じ範囲を開き直して変更を戻す。
