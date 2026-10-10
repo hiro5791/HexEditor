@@ -380,7 +380,7 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
                 }
                 else if (driver.TopRow != top)
                 {
-                    FollowScroll(driver, follower.Editor, fromRight);
+                    FollowScroll(driver, follower.Editor, driver.TopRow - top);
                 }
             }
         }
@@ -396,13 +396,11 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         Sync(() => follower.FollowTo(mapped, follower.Layout.RowOf(mapped) - rowOnScreen));
     }
 
-    /// <summary>スクロールだけが変わった: 一番上の行の位置に対応する位置を一番上にする。</summary>
-    private void FollowScroll(EditorState driver, EditorState follower, bool fromRight)
-    {
-        long topOffset = driver.Layout.RowStart(driver.TopRow);
-        long mapped = Math.Clamp(DiffNavigation.Map(Result!, fromRight, topOffset), 0, follower.Layout.MaxCursor);
-        Sync(() => follower.ScrollToRow(follower.Layout.RowOf(mapped)));
-    }
+    /// <summary>
+    /// スクロールだけが変わった: もう一方も同じ行数だけスクロールする (カーソルで合わせた左右の行の対応を保つ。対応する位置が同じ高さのまま)。
+    /// </summary>
+    private void FollowScroll(EditorState driver, EditorState follower, long rows) =>
+        Sync(() => follower.ScrollToRow(follower.TopRow + rows));
 
     private void Sync(Action action)
     {

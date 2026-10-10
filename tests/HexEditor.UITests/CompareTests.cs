@@ -141,7 +141,7 @@ public sealed class CompareTests
             ["left"] = new JsonObject { ["target"] = 0 },
             ["right"] = new JsonObject { ["target"] = 1 },
             ["method"] = "insertDelete",
-            ["window"] = "1M",
+            ["resyncWindow"] = "1M",
             ["minMatch"] = "16",
         });
         await DialogAsync(app, "compare");
@@ -232,12 +232,14 @@ public sealed class CompareTests
         {
             // 変更 (0x100)・挿入 (右の 0x800)・削除 (左の 0xC00) と、揃えるための空白 (左の 0x800、右の 0xC10)。
             await app.SendAsync("compareFocus", new JsonObject { ["right"] = false });
-            await app.GoToAsync(0x100);
-            Dictionary<string, JsonObject> left = await KindsAsync(false);
-            await app.GoToAsync(0xC00);
-            foreach ((string k, JsonObject v) in await KindsAsync(false))
+            var left = new Dictionary<string, JsonObject>();
+            foreach (long at in new long[] { 0x100, 0x800, 0xC00 })
             {
-                left[k] = v;
+                await app.GoToAsync(at);
+                foreach ((string k, JsonObject v) in await KindsAsync(false))
+                {
+                    left[k] = v;
+                }
             }
 
             await app.SendAsync("compareFocus", new JsonObject { ["right"] = true });
@@ -341,8 +343,8 @@ public sealed class CompareTests
         long end = top + L(state["left"]!["visibleRows"]) * 16;
         Assert.InRange(0xC0000, top - 0x1000, end + 0x1000);
         Assert.Equal(top, L(state["right"]!["topOffset"]));
-        JsonObject map = await app.SendAsync("compareHighlights", new JsonObject { ["right"] = false });
-        Assert.Equal(4, map["mapLines"]!.AsArray().Count);
+        await app.WaitUntilAsync(async () => (await app.SendAsync("compareHighlights", new JsonObject { ["right"] = false }))["mapLines"]!.AsArray().Count == 4,
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the difference map");
     });
 
     [Fact]

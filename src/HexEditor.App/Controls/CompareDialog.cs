@@ -132,9 +132,17 @@ public sealed partial class CompareDialog : Grid
 
     // ---- テスト用の命令からも使う操作 ----
 
-    public void SetTarget(bool right, int index) => (right ? _right : _left).Target.SelectedIndex = index;
+    public void SetTarget(bool right, int index)
+    {
+        (right ? _right : _left).Target.SelectedIndex = index;
+        Validate();
+    }
 
-    public void SetPath(bool right, string path) => (right ? _right : _left).Path.Text = path;
+    public void SetPath(bool right, string path)
+    {
+        (right ? _right : _left).Path.Text = path;
+        Validate();
+    }
 
     public void SetRange(bool right, string? start, string? length)
     {
@@ -148,6 +156,8 @@ public sealed partial class CompareDialog : Grid
         {
             side.Length.Text = length;
         }
+
+        Validate();
     }
 
     public void SetMethod(CompareMethod method)
@@ -178,6 +188,8 @@ public sealed partial class CompareDialog : Grid
         {
             _unit.SelectedIndex = i;
         }
+
+        Validate();
     }
 
     /// <summary>「左右を入れ替え」(ANA-01 の受け入れ基準 4): 対象・パス・開始・長さをまとめて入れ替える。</summary>

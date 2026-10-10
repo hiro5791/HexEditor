@@ -294,6 +294,14 @@ public sealed partial class DiffListPanel : UserControl
     private void RenderGraph()
     {
         DiffDistribution? distribution = _session?.Distribution;
+        if (distribution is not null && TableToggle.IsChecked == true)
+        {
+            GraphTable.ItemsSource = Enumerable.Range(0, distribution.Count)
+                .Select(b => Loc.Format("Compare_Graph_TableRow", Hex(distribution.BucketStart(b)),
+                    (distribution.Ratios[b] * 100).ToString("N2", CultureInfo.CurrentCulture)))
+                .ToList();
+        }
+
         int used = 0;
         double width = Graph.ActualWidth;
         double height = Graph.Height;
@@ -322,13 +330,6 @@ public sealed partial class DiffListPanel : UserControl
             int maxAt = Array.IndexOf([.. distribution.Ratios], max);
             AutomationProperties.SetName(Graph, Loc.Format("Compare_Graph_Summary", distribution.Count.ToString("N0", CultureInfo.CurrentCulture),
                 (max * 100).ToString("N2", CultureInfo.CurrentCulture), Hex(distribution.BucketStart(Math.Max(0, maxAt)))));
-            if (TableToggle.IsChecked == true)
-            {
-                GraphTable.ItemsSource = Enumerable.Range(0, distribution.Count)
-                    .Select(b => Loc.Format("Compare_Graph_TableRow", Hex(distribution.BucketStart(b)),
-                        (distribution.Ratios[b] * 100).ToString("N2", CultureInfo.CurrentCulture)))
-                    .ToList();
-            }
         }
 
         for (int i = used; i < _bars.Count; i++)

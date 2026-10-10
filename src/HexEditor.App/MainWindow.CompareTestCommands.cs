@@ -28,6 +28,12 @@ public sealed partial class MainWindow
                 return TestCompareState(request);
             case "compareWait":
                 // 比較の完了を待つ (結果の状態を返す)。
+                var opened = System.Diagnostics.Stopwatch.StartNew();
+                while ((ActiveCompare ?? CurrentCompare) is null && opened.Elapsed < TimeSpan.FromSeconds(10))
+                {
+                    await Task.Delay(20);
+                }
+
                 if ((ActiveCompare ?? CurrentCompare) is { } waiting)
                 {
                     var watch = System.Diagnostics.Stopwatch.StartNew();
@@ -164,7 +170,7 @@ public sealed partial class MainWindow
         var options = new CompareOptions
         {
             Method = request["method"]?.GetValue<string>() == "insertDelete" ? CompareMethod.InsertDelete : CompareMethod.Simple,
-            Window = (int)TestHookSettings.ReadLong(request["window"], CompareOptions.DefaultWindow),
+            Window = (int)TestHookSettings.ReadLong(request["resyncWindow"], CompareOptions.DefaultWindow),
             MinMatch = (int)TestHookSettings.ReadLong(request["minMatch"], CompareOptions.DefaultMinMatch),
             MergeGap = (int)TestHookSettings.ReadLong(request["mergeGap"], 0),
             Unit = (int)TestHookSettings.ReadLong(request["unit"], 1),
@@ -190,7 +196,7 @@ public sealed partial class MainWindow
             case "open":
                 _ = Commands.ExecuteAsync("analysis.compare");
                 var watch = System.Diagnostics.Stopwatch.StartNew();
-                while (_compareDialog is null && watch.Elapsed < TimeSpan.FromSeconds(10))
+                while ((_compareDialog is null || !_compareDialog.IsLoaded) && watch.Elapsed < TimeSpan.FromSeconds(10))
                 {
                     await Task.Delay(20);
                 }
@@ -221,21 +227,39 @@ public sealed partial class MainWindow
                     dialog.SetMethod(m.GetValue<string>() == "insertDelete" ? CompareMethod.InsertDelete : CompareMethod.Simple);
                 }
 
-                dialog.SetOptions(request["window"]?.GetValue<string>(), request["minMatch"]?.GetValue<string>(), request["mergeGap"]?.GetValue<string>(),
+                dialog.SetOptions(request["resyncWindow"]?.GetValue<string>(), request["minMatch"]?.GetValue<string>(), request["mergeGap"]?.GetValue<string>(),
                     request["unit"] is { } u ? (int)u.GetValue<long>() : null);
                 break;
             case "swap" when _compareDialog is { } dialog:
                 dialog.Swap();
                 break;
             case "compare":
-                TestDialogButton("PrimaryButton");
+                await PressCompareDialogButtonAsync("PrimaryButton");
                 break;
             case "cancel":
-                TestDialogButton("CloseButton");
+                await PressCompareDialogButtonAsync("CloseButton");
                 break;
         }
 
         return _compareDialog?.State() ?? new JsonObject { ["open"] = false };
+    }
+
+    /// <summary>ダイアログのボタンを押す (ダイアログが表示されるまで待つ)。</summary>
+    private async Task PressCompareDialogButtonAsync(string name)
+    {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        while (true)
+        {
+            try
+            {
+                TestDialogButton(name);
+                return;
+            }
+            catch (ArgumentException) when (watch.Elapsed < TimeSpan.FromSeconds(10))
+            {
+                await Task.Delay(50);
+            }
+        }
     }
 
     private void RenderCompareViews(CompareSessionViewModel session)
