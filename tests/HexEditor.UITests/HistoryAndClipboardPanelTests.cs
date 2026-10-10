@@ -191,6 +191,10 @@ public sealed class HistoryAndClipboardPanelTests
         // 1. 範囲ごとに値を求める: 3 行。
         await app.CommandAsync("Command_Hash");
         await app.SendAsync("hash", new JsonObject { ["action"] = "algorithms", ["ids"] = new JsonArray("crc32") });
+
+        // 計算方法の選択は、マルチ選択のときだけ出る。
+        await app.WaitUntilAsync(async () => (await ElementAsync(app, "Hash_RangeMode"))["visibility"]?.GetValue<string>() == "Visible",
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the calculation method choice");
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Hash_RangeMode", ["index"] = 1 });
         await app.SendAsync("hash", new JsonObject { ["action"] = "compute" }, TimeSpan.FromSeconds(60));
         JsonArray rows = await WaitForHashRowsAsync(app, 3);

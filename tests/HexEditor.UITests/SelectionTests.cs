@@ -294,19 +294,25 @@ public sealed class SelectionTests
         long before = (await app.StateAsync())["privateBytes"]!.GetValue<long>();
 
         // 1〜3. 矩形は範囲を選択 (Ctrl+E) の「矩形として選択」で作る (受け入れ基準 4 の注記)。列 0〜3、最終行まで。
-        await SelectRectangleAsync(app, "0", "end-1");
+        await SelectRectangleAsync(app, "0", "end-0xFFD");
         JsonObject doc = await app.DocumentAsync();
         long rows = doc["selectionCount"]!.GetValue<long>();
         Assert.True(rows >= 26_214_000, $"{rows} rows");
-        Assert.Contains($"× 4 bytes", await StatusSelectionAsync(app));
+        // ステータスバーの表示は UI オートメーションで読まない (1 行 4,096 バイトでは Hex ビューのセルの要素が多く、木をたどるのに時間がかかる)。
+        JsonObject rect = doc["rectangle"]!.AsObject();
+        Assert.Equal((0, 3), (rect["firstColumn"]!.GetValue<int>(), rect["lastColumn"]!.GetValue<int>()));
+        Assert.Equal(rows * 4, doc["selectedBytes"]!.GetValue<long>());
         long after = (await app.StateAsync())["privateBytes"]!.GetValue<long>();
         Assert.True(after - before <= 50L * 1024 * 1024, $"memory grew by {(after - before) / 1024 / 1024} MB");
 
-        // 5. Ctrl+End で末尾へ: 最終行の列 0〜3 が選択されている。
-        await app.KeyAsync("End", ctrl: true);
-        JsonObject render = await app.RenderAsync();
+        // 5. 表示を末尾までスクロールする (Ctrl+End はカーソルの移動なので選択を解除する。スクロールバーのつまみを末尾へ動かす)。
+        await app.SendAsync("scrollBar", new JsonObject { ["type"] = "ThumbTrack", ["value"] = 1_000_000 });
+        await app.SendAsync("scrollBar", new JsonObject { ["type"] = "EndScroll", ["value"] = 1_000_000 });
         long lastRow = (100L << 30) - 4096;
-        Assert.All(Enumerable.Range(0, 4), c => Assert.True(CellOf(render, lastRow + c)?["selected"]?.GetValue<bool>() == true));
+        JsonObject render = await WaitForContentAsync(app, lastRow);
+        string docText = (await app.DocumentAsync()).ToJsonString();
+        Assert.All(Enumerable.Range(0, 4), c => Assert.True(CellOf(render, lastRow + c)?["selected"]?.GetValue<bool>() == true,
+            $"{CellOf(render, lastRow + c)?.ToJsonString()} doc={docText}"));
     });
 
     /// <summary>範囲を選択 (Ctrl+E) の「矩形として選択」: 開始のバイトと終了のバイトを対角とする矩形。</summary>
@@ -318,6 +324,13 @@ public sealed class SelectionTests
         await app.UiaSetValueAsync("SelectRange_Start", start);
         await app.UiaSetValueAsync("SelectRange_End", end);
         await app.SendAsync("setChecked", new JsonObject { ["id"] = "SelectRange_Rectangle", ["value"] = true });
+        if (!(await app.WaitForAsync("PrimaryButton")).IsEnabled)
+        {
+            string Describe(JsonObject e) => e.ToJsonString();
+            Assert.Fail("Select range: " + string.Join(" / ", await Task.WhenAll(new[] { "SelectRange_StartResult", "SelectRange_EndResult", "SelectRange_LengthResult" }
+                .Select(async id => id + "=" + Describe(await ElementAsync(app, id))))));
+        }
+
         await EditCommandTests.PressAsync(app);
     }
 
@@ -502,7 +515,7 @@ public sealed class SelectionTests
         await ViewSettingsOps.SetBytesPerRowAsync(app, 4096);
 
         // 1〜2. 2,000,000 行 × 列 0〜1 の矩形 (範囲を選択の「矩形として選択」で作る)。
-        await SelectRectangleAsync(app, "0", (1_999_999L * 4096 + 1).ToString(System.Globalization.CultureInfo.InvariantCulture));
+        await SelectRectangleAsync(app, "0", "0x" + (1_999_999L * 4096 + 1).ToString("X", System.Globalization.CultureInfo.InvariantCulture));
         Assert.Equal(2_000_000, (await app.DocumentAsync())["selectionCount"]!.GetValue<long>());
 
         // 3〜4. Delete は行われず、上限のメッセージが出る。
@@ -516,7 +529,7 @@ public sealed class SelectionTests
         await app.CommandAsync("Command_Fill");
         await app.WaitForAsync("FillDialog");
         await app.IdleAsync();
-        await app.UiaSetValueAsync("Fill_Value", "FF");
+        await app.UiaSetValueAsync("Fill_Value", "0xFF");
         await EditCommandTests.PressAsync(app);
         Assert.Equal(new byte[] { 0xFF, 0xFF }, await app.BytesAsync(0, 2));
         Assert.Equal(new byte[] { 0xFF, 0xFF }, await app.BytesAsync(1_999_999L * 4096, 2));

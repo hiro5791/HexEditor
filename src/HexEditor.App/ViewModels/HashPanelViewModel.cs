@@ -338,6 +338,9 @@ public sealed partial class HashPanelViewModel : ObservableObject
     public static string LocalizedName(HashAlgorithmInfo info) =>
         info.Group == HashGroup.Checksum ? Loc.Get("Hash_Alg_" + info.Id) : info.Name;
 
+    /// <summary>これより要素の多いマルチ選択は、選択が変わるたびに要素を並べない (自動で計算しない)。</summary>
+    private const long AutoRangeLimit = 100_000;
+
     /// <summary>対象範囲 (ドキュメントの範囲)。指定が正しくなければ null。</summary>
     public IReadOnlyList<HashRange>? ResolveRanges()
     {
@@ -848,6 +851,20 @@ public sealed partial class HashPanelViewModel : ObservableObject
                 TargetKind = auto;
                 return;
             }
+        }
+
+        // 要素の多いマルチ選択・矩形 (100 GB の全体にわたる矩形など) は、要素を並べずに数だけを示し、自動では計算しない
+        // (要素は「計算」を押したときに作る)。
+        if (TargetKind == HashTargetKind.Selection && doc.Editor.HasMultipleRanges && doc.Editor.SelectedRangeCount > AutoRangeLimit)
+        {
+            HasMultipleRanges = true;
+            IsRangeError = false;
+            RangeText = Loc.Format("Hash_Ranges", doc.Editor.SelectedRangeCount,
+                doc.Editor.SelectedByteCount.ToString("N0", CultureInfo.CurrentCulture));
+            _timer?.Stop();
+            ComputeHighlighted = true;
+            _requestedRanges = [];
+            return;
         }
 
         IReadOnlyList<HashRange>? ranges = ResolveRanges();

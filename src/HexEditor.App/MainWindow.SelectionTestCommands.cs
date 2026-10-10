@@ -18,6 +18,9 @@ public sealed partial class MainWindow
 
         // クリップボードパネルの項目 (ユーザークリップボード 1〜9 と履歴)。
         "clipboardPanel" => ClipboardVm.TestModel(),
+
+        // 矩形を選ぶ (範囲を選択の「矩形として選択」と同じ処理。対角の 2 つのオフセット)。
+        "selectRectangle" => TestEditor(e => e.SelectRectangle(request["start"]!.GetValue<long>(), request["end"]!.GetValue<long>())),
         _ => null,
     };
 
