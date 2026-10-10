@@ -224,6 +224,20 @@ public static class BuiltInSettings
         new("analysis.classify.pValueLow", SettingCategories.Advanced, SettingKind.Number, 0.01) { Min = 0, Max = 0.5, Step = 0.01, Order = 115, Group = "analysis" },
         new("analysis.classify.pValueHigh", SettingCategories.Advanced, SettingKind.Number, 0.99) { Min = 0.5, Max = 1, Step = 0.01, Order = 116, Group = "analysis" },
         new("analysis.classify.compressedEntropy", SettingCategories.Advanced, SettingKind.Number, 7.2) { Min = 0, Max = 8, Step = 0.05, Order = 117, Group = "analysis" },
+        // ディスク・プロセス (ENG-28 の仕様 5・6、ENG-32 の仕様 3、ENG-33 の仕様 6)。
+        new(DeviceSettings.HelperTimeoutKey, SettingCategories.Advanced, SettingKind.Int, 30)
+        {
+            Min = 5, Max = 300, Order = 120, Group = "devices",
+            Distributions = [SettingDistributions.Installer, SettingDistributions.Portable, SettingDistributions.Development],
+        },
+        new(DeviceSettings.HelperIdleKey, SettingCategories.Advanced, SettingKind.Int, 10)
+        {
+            Min = 0, Max = 60, Order = 121, Group = "devices",
+            Distributions = [SettingDistributions.Installer, SettingDistributions.Portable, SettingDistributions.Development],
+        },
+        new(DeviceSettings.ProcessReadOnlyKey, SettingCategories.Advanced, SettingKind.Bool, true) { Order = 122, Group = "devices" },
+        new(DeviceSettings.MemoryMapRefreshKey, SettingCategories.Advanced, SettingKind.Int, 5) { Min = 0, Max = 60, Order = 123, Group = "devices" },
+
         // カスタム CRC (ANA-20 の仕様 5)。CRC カタログの項目名の JSON。
         new("hash.customCrc", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 103, ShowInPage = false },
 

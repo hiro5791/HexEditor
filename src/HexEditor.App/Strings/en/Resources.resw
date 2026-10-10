@@ -1426,6 +1426,8 @@ Details were written to:
   <data name="ReadOnly_Confirm_AccessDenied" xml:space="preserve"><value>You may not have permission to write to this file. Try to allow editing anyway?</value></data>
   <data name="ReadOnly_Confirm_SharingViolation" xml:space="preserve"><value>Another app has this file open for writing. Allow editing? Changes made by the other app may conflict.</value></data>
   <data name="ReadOnly_Confirm_Device" xml:space="preserve"><value>This allows writing to the device. Nothing is written until you save.</value></data>
+  <data name="ReadOnly_AllowWrite" xml:space="preserve"><value>Allow writing</value></data>
+  <data name="ReadOnly_Confirm_DeviceTarget" xml:space="preserve"><value>This allows writing to {0}. Nothing is written until you save.</value></data>
   <data name="ReadOnly_CannotRelease_NoWriteTarget" xml:space="preserve"><value>This data source can't be written to, so it stays read-only.</value></data>
   <data name="ReadOnly_CannotRelease_WriteProtectionMode" xml:space="preserve"><value>Write protection mode is on, so documents stay read-only.</value></data>
   <data name="ReadOnly_CannotRelease_ReadOnlyMedia" xml:space="preserve"><value>The file is on read-only media, so it stays read-only.</value></data>
@@ -4494,6 +4496,15 @@ Details were written to:
   <data name="Set_statistics_autoRecompute" xml:space="preserve"><value>Recalculate statistics automatically</value></data>
   <data name="SetDesc_statistics_autoRecompute" xml:space="preserve"><value>Recalculates the statistics 300 ms after the target range changes (up to 64 MB).</value></data>
   <data name="SetGroup_analysis" xml:space="preserve"><value>Analysis</value></data>
+  <data name="SetDesc_memoryMap_refreshSeconds" xml:space="preserve"><value>How often the Memory map panel reads the region list again while it is shown. 0 turns it off.</value></data>
+  <data name="Set_memoryMap_refreshSeconds" xml:space="preserve"><value>Memory map refresh interval (seconds)</value></data>
+  <data name="SetDesc_process_openReadOnly" xml:space="preserve"><value>The default of "Open read-only" in the Open process dialog.</value></data>
+  <data name="Set_process_openReadOnly" xml:space="preserve"><value>Open processes read-only by default</value></data>
+  <data name="SetDesc_devices_helperIdleMinutes" xml:space="preserve"><value>The helper ends this long after the last disk or process opened through it is closed. 0 keeps it until HexEditor exits. When it is needed again, Windows asks for administrator rights again.</value></data>
+  <data name="Set_devices_helperIdleMinutes" xml:space="preserve"><value>Close the administrator helper after (minutes)</value></data>
+  <data name="SetDesc_devices_helperTimeoutSeconds" xml:space="preserve"><value>A request to the administrator helper process that takes longer fails; reads become unreadable.</value></data>
+  <data name="Set_devices_helperTimeoutSeconds" xml:space="preserve"><value>Administrator helper request time limit (seconds)</value></data>
+  <data name="SetGroup_devices" xml:space="preserve"><value>Disks and processes</value></data>
   <data name="FileType_MagicError" xml:space="preserve"><value>{0} could not be read: line {1}</value></data>
   <data name="Stats_Target.Header" xml:space="preserve"><value>Range</value></data>
   <data name="Stats_Target_Selection.Content" xml:space="preserve"><value>Selection</value></data>
@@ -5087,9 +5098,60 @@ Details were written to:
   <data name="OpenDisk_NoLabel" xml:space="preserve"><value>no label</value></data>
   <data name="OpenDisk_EnumError" xml:space="preserve"><value>The disk list could not be read ({0}).</value></data>
   <data name="OpenDisk_Error" xml:space="preserve"><value>The device could not be opened ({0}).</value></data>
-  <data name="OpenDisk_AccessDenied" xml:space="preserve"><value>The device is in use and could not be opened.</value></data>
+  <data name="OpenDisk_AccessDenied" xml:space="preserve"><value>The device could not be opened ({0}).</value></data>
   <data name="OpenDisk_NoMedia" xml:space="preserve"><value>No media is inserted.</value></data>
   <data name="OpenDisk_BitLocker" xml:space="preserve"><value>This volume is locked by BitLocker. Unlock it before opening.</value></data>
+  <data name="OpenDisk_MediaAbsent" xml:space="preserve"><value>No media</value></data>
+  <data name="OpenDisk_MediaPresent" xml:space="preserve"><value>Media inserted</value></data>
+  <data name="OpenDisk_OpticalName" xml:space="preserve"><value>Optical drive {0}</value></data>
+  <data name="OpenDisk_BitLocker_Locked" xml:space="preserve"><value>locked</value></data>
+  <data name="OpenDisk_BitLocker_Unlocked" xml:space="preserve"><value>unlocked</value></data>
+  <data name="OpenDisk_BitLocker_NotEncrypted" xml:space="preserve"><value>not encrypted</value></data>
+  <data name="OpenDisk_BitLocker_Unknown" xml:space="preserve"><value>unknown</value></data>
+  <data name="OpenDisk_VolumeDetail" xml:space="preserve"><value>{0}  {1}  Disk {2}  BitLocker: {3}</value></data>
+  <data name="OpenDisk_Style_Raw" xml:space="preserve"><value>No partitions</value></data>
+  <data name="OpenDisk_Style_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="OpenDisk_Style_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="OpenDisk_Bus_Other" xml:space="preserve"><value>Other</value></data>
+  <data name="OpenDisk_Bus_Virtual" xml:space="preserve"><value>Virtual</value></data>
+  <data name="OpenDisk_Bus_Mmc" xml:space="preserve"><value>MMC</value></data>
+  <data name="OpenDisk_Bus_Sd" xml:space="preserve"><value>SD</value></data>
+  <data name="OpenDisk_Bus_Sas" xml:space="preserve"><value>SAS</value></data>
+  <data name="OpenDisk_Bus_Scsi" xml:space="preserve"><value>SCSI</value></data>
+  <data name="OpenDisk_Bus_Usb" xml:space="preserve"><value>USB</value></data>
+  <data name="OpenDisk_Bus_Nvme" xml:space="preserve"><value>NVMe</value></data>
+  <data name="OpenDisk_Bus_Ata" xml:space="preserve"><value>ATA</value></data>
+  <data name="OpenDisk_Bus_Sata" xml:space="preserve"><value>SATA</value></data>
+  <data name="OpenDisk_DiskDetail" xml:space="preserve"><value>{0}  {1}  Sectors {2}  Removable: {3}  System disk: {4}</value></data>
+  <data name="Common_No" xml:space="preserve"><value>No</value></data>
+  <data name="Common_Yes" xml:space="preserve"><value>Yes</value></data>
+  <data name="OpenProcess_ModuleName" xml:space="preserve"><value>{0} - {1}</value></data>
+  <data name="OpenProcess_ChooseModule" xml:space="preserve"><value>Choose a module</value></data>
+  <data name="OpenProcess_ScopeRange" xml:space="preserve"><value>Specify a range</value></data>
+  <data name="OpenProcess_ScopeModule" xml:space="preserve"><value>Choose a module</value></data>
+  <data name="OpenProcess_ScopeWhole" xml:space="preserve"><value>Whole address space</value></data>
+  <data name="OpenProcess_Sort_User" xml:space="preserve"><value>User</value></data>
+  <data name="OpenProcess_Sort_Memory" xml:space="preserve"><value>Memory used (largest first)</value></data>
+  <data name="OpenProcess_Sort_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="OpenProcess_Sort_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="OpenProcess_Refresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="OpenProcess_OwnOnly" xml:space="preserve"><value>Show only my processes</value></data>
+  <data name="OpenProcess_Filter" xml:space="preserve"><value>Filter (name, PID, title)</value></data>
+  <data name="OpenDevice_RangeStartOutside" xml:space="preserve"><value>The start must be inside the device.</value></data>
+  <data name="OpenDevice_RangeNotAligned" xml:space="preserve"><value>The start must be on a sector boundary (a multiple of {0} bytes).</value></data>
+  <data name="OpenDevice_Unit_Bytes" xml:space="preserve"><value>Bytes</value></data>
+  <data name="OpenDevice_Unit_Sectors" xml:space="preserve"><value>Sectors</value></data>
+  <data name="OpenDevice_RangeUnit" xml:space="preserve"><value>Unit</value></data>
+  <data name="OpenDevice_RangeToEnd" xml:space="preserve"><value>To the end</value></data>
+  <data name="OpenDevice_RangeLength" xml:space="preserve"><value>Length</value></data>
+  <data name="OpenDevice_RangeStart" xml:space="preserve"><value>Start</value></data>
+  <data name="OpenDevice_Range" xml:space="preserve"><value>Open a range</value></data>
+  <data name="OpenDevice_Sort_Size" xml:space="preserve"><value>Size (largest first)</value></data>
+  <data name="OpenDevice_Sort_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="OpenDevice_Sort_Kind" xml:space="preserve"><value>Kind</value></data>
+  <data name="OpenDevice_SortBy" xml:space="preserve"><value>Sort by</value></data>
+  <data name="OpenProcess_LockedTip" xml:space="preserve"><value>This can't be opened because Windows protects it.</value></data>
+  <data name="OpenDevice_ShieldTip" xml:space="preserve"><value>Administrator rights are required to open this.</value></data>
   <data name="OpenProcess_Title" xml:space="preserve"><value>Open process memory</value></data>
   <data name="OpenProcess_Name" xml:space="preserve"><value>{0} (PID {1})</value></data>
   <data name="OpenProcess_EnumError" xml:space="preserve"><value>The process list could not be read ({0}).</value></data>
@@ -5114,12 +5176,27 @@ Details were written to:
   <data name="DiskWrite_LockFailed" xml:space="preserve"><value>The write was cancelled because the volume {0} could not be locked.</value></data>
   <data name="DiskWrite_RolledBack" xml:space="preserve"><value>An error occurred during the write, so the disk was restored to its state before the write ({0}).</value></data>
   <data name="DiskWrite_Partial" xml:space="preserve"><value>Part of the disk has been overwritten. It can be recovered on the next launch ({0}).</value></data>
+  <data name="DiskWrite_WriteProtected" xml:space="preserve"><value>This device is write-protected.</value></data>
+  <data name="DiskWrite_ErrorAt" xml:space="preserve"><value>sector {0}, {1}</value></data>
+  <data name="DiskWrite_Unreadable" xml:space="preserve"><value>The write was not started because part of the old content could not be read.</value></data>
+  <data name="DiskWrite_Cancelled" xml:space="preserve"><value>The write was cancelled. The disk is as it was before the write.</value></data>
+  <data name="DiskWrite_WriteUnprotected" xml:space="preserve"><value>Write without protection</value></data>
+  <data name="DiskWrite_JournalTooLarge" xml:space="preserve"><value>The change is too large to record the old content. If saving is interrupted, it can't be undone.</value></data>
+  <data name="DiskWrite_PartialUnprotected" xml:space="preserve"><value>Part of the disk has been overwritten and the old content was not recorded ({0}).</value></data>
   <data name="ProcessWrite_Title" xml:space="preserve"><value>Write to process memory</value></data>
   <data name="ProcessWrite_Body" xml:space="preserve"><value>Write {2} bytes to the memory of process {0} (PID {1}). The process may crash.</value></data>
   <data name="ProcessWrite_Write" xml:space="preserve"><value>Write</value></data>
   <data name="ProcessWrite_Protected" xml:space="preserve"><value>The target page is read-only ({0}). Make it temporarily writable and write?</value></data>
   <data name="ProcessWrite_ChangeProtect" xml:space="preserve"><value>Change protection temporarily and write</value></data>
   <data name="ProcessWrite_Failed" xml:space="preserve"><value>{0} range(s) could not be written.</value></data>
+  <data name="ProcessWrite_ImmediateEnable" xml:space="preserve"><value>Turn on immediate write</value></data>
+  <data name="ProcessWrite_ImmediateConfirm" xml:space="preserve"><value>Every edit will be written to the memory of {0} (PID {1}) immediately. The process may crash.</value></data>
+  <data name="ProcessWrite_Reason_WriteError" xml:space="preserve"><value>write error</value></data>
+  <data name="ProcessWrite_Reason_ProcessExited" xml:space="preserve"><value>the process has exited</value></data>
+  <data name="ProcessWrite_Reason_Protected" xml:space="preserve"><value>read-only page</value></data>
+  <data name="ProcessWrite_Reason_Unallocated" xml:space="preserve"><value>not allocated</value></data>
+  <data name="ProcessWrite_FailedRange" xml:space="preserve"><value>{0}, {1} bytes: {2}</value></data>
+  <data name="ProcessWrite_Exited" xml:space="preserve"><value>The process has exited, so the changes could not be written.</value></data>
   <data name="ProcessWrite_ImmediateOn" xml:space="preserve"><value>Immediate write is on.</value></data>
   <data name="ProcessWrite_ImmediateOff" xml:space="preserve"><value>Immediate write is off.</value></data>
   <data name="GoToSector_Title" xml:space="preserve"><value>Go to sector</value></data>
@@ -5127,11 +5204,17 @@ Details were written to:
   <data name="AdminGuide_Title" xml:space="preserve"><value>Administrator rights are required</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>Reading a physical disk or an internal disk's volume directly requires Windows administrator rights.</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>This process requires administrator rights to open.</value></data>
-  <data name="AdminGuide_Steps" xml:space="preserve"><value>To run as administrator: 1. Close HexEditor. 2. Right-click HexEditor in the Start menu or Explorer. 3. Choose "Run as administrator".</value></data>
   <data name="AdminGuide_UsbAlternative" xml:space="preserve"><value>Removable USB storage volumes can be opened without administrator rights.</value></data>
   <data name="AdminGuide_StoreDownload" xml:space="preserve"><value>The installer and portable editions can use administrator operations by prompting for rights only when needed.</value></data>
   <data name="AdminGuide_Restart" xml:space="preserve"><value>Restart as administrator</value></data>
   <data name="AdminGuide_Declined" xml:space="preserve"><value>The disk could not be opened because administrator rights were not granted.</value></data>
+  <data name="Helper_StartFailed" xml:space="preserve"><value>The administrator helper process could not be started ({0}).</value></data>
+  <data name="Helper_Tampered" xml:space="preserve"><value>The administrator helper process may have been tampered with, so it was not started.</value></data>
+  <data name="AdminGuide_DownloadLink" xml:space="preserve"><value>Download the installer or portable edition</value></data>
+  <data name="AdminGuide_DragDropLimit" xml:space="preserve"><value>While running as administrator, files can't be dragged in from File Explorer.</value></data>
+  <data name="AdminGuide_StepsPortable" xml:space="preserve"><value>To run HexEditor as administrator: 1. Close HexEditor. 2. Right-click HexEditor.exe in File Explorer. 3. Choose "Run as administrator".</value></data>
+  <data name="AdminGuide_StepsStart" xml:space="preserve"><value>To run HexEditor as administrator: 1. Close HexEditor. 2. Right-click HexEditor in the Start menu. 3. Choose "More" &gt; "Run as administrator".</value></data>
+  <data name="AdminGuide_DeclinedProcess" xml:space="preserve"><value>The process could not be opened because administrator rights were not granted.</value></data>
   <data name="Status_ImmediateWrite" xml:space="preserve"><value>Immediate write</value></data>
   <data name="Status_HelperRunning" xml:space="preserve"><value>Administrator helper process is running</value></data>
   <data name="MemoryMap_RegionsTab" xml:space="preserve"><value>Regions</value></data>
@@ -5139,6 +5222,27 @@ Details were written to:
   <data name="MemoryMap_NoProcess" xml:space="preserve"><value>Open a process to see its memory map.</value></data>
   <data name="MemoryMap_NoAccess" xml:space="preserve"><value>No access</value></data>
   <data name="MemoryMap_Unallocated" xml:space="preserve"><value>Unallocated</value></data>
+  <data name="MemoryMap_Type_Private" xml:space="preserve"><value>Private</value></data>
+  <data name="MemoryMap_Type_Mapped" xml:space="preserve"><value>Mapped</value></data>
+  <data name="MemoryMap_Type_Image" xml:space="preserve"><value>Image</value></data>
+  <data name="MemoryMap_State_Free" xml:space="preserve"><value>Free</value></data>
+  <data name="MemoryMap_State_Reserve" xml:space="preserve"><value>Reserve</value></data>
+  <data name="MemoryMap_State_Commit" xml:space="preserve"><value>Commit</value></data>
+  <data name="MemoryMap_CopyAddress" xml:space="preserve"><value>Copy address</value></data>
+  <data name="MemoryMap_OpenInNewTab" xml:space="preserve"><value>Open this region in a new tab</value></data>
+  <data name="MemoryMap_SelectRegion" xml:space="preserve"><value>Select region</value></data>
+  <data name="MemoryMap_Error" xml:space="preserve"><value>The memory region list could not be read ({0}).</value></data>
+  <data name="MemoryMap_Descending" xml:space="preserve"><value>Descending</value></data>
+  <data name="MemoryMap_Sort_Name" xml:space="preserve"><value>Module or file</value></data>
+  <data name="MemoryMap_Sort_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="MemoryMap_Sort_Protect" xml:space="preserve"><value>Protection</value></data>
+  <data name="MemoryMap_Sort_State" xml:space="preserve"><value>State</value></data>
+  <data name="MemoryMap_Sort_Size" xml:space="preserve"><value>Size</value></data>
+  <data name="MemoryMap_Sort_Start" xml:space="preserve"><value>Start address</value></data>
+  <data name="MemoryMap_SortBy" xml:space="preserve"><value>Sort by</value></data>
+  <data name="MemoryMap_ShowFree" xml:space="preserve"><value>Show free regions</value></data>
+  <data name="MemoryMap_Filter" xml:space="preserve"><value>Filter (name, protection, state)</value></data>
+  <data name="MemoryMap_View" xml:space="preserve"><value>Memory map view</value></data>
   <data name="Annotations_Origin_Analysis" xml:space="preserve"><value>Analysis</value></data>
   <data name="Menu_View_AnnotationsAnalysis.Text" xml:space="preserve"><value>Analysis Results</value></data>
   <data name="Menu_View_AnnotationsAnalysis.AccessKey" xml:space="preserve"><value>N</value></data>
@@ -5170,6 +5274,7 @@ Details were written to:
   <data name="Device_Disconnected" xml:space="preserve"><value>The device was removed. Unsaved changes are kept.</value></data>
   <data name="Device_HelperExited" xml:space="preserve"><value>The administrator helper process has exited. Unsaved changes are kept.</value></data>
   <data name="Process_Exited" xml:space="preserve"><value>The process has exited. Data already read is still shown; the document is now read-only.</value></data>
+  <data name="Process_Unallocated" xml:space="preserve"><value>This range is not allocated, so it can't be edited.</value></data>
   <data name="Device_Reconnect" xml:space="preserve"><value>Reconnect</value></data>
   <data name="Device_ReconnectFailed" xml:space="preserve"><value>Could not reconnect: {0}</value></data>
   <data name="Device_Reconnected" xml:space="preserve"><value>Reconnected.</value></data>

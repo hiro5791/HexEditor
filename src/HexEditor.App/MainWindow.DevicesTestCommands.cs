@@ -1,6 +1,7 @@
 #if HEX_TEST_HOOKS
 using System.Text.Json.Nodes;
 using HexEditor.App.Services;
+using HexEditor.App.ViewModels;
 using HexEditor.Core.Devices;
 using HexEditor.Core.Processes;
 
@@ -49,29 +50,36 @@ public sealed partial class MainWindow
 
             case "openDisk":
             {
+                // ダイアログで選んだのと同じ経路 (OpenDeviceItemAsync)。readOnly (既定 true)、range ({start, length, sectors}) を指定できる。
                 string path = request["path"]!.GetValue<string>();
                 DeviceCatalog catalog = App.Devices.EnumerateDevices();
-                DiskInfo? disk = catalog.FindDisk(path);
                 VolumeDeviceInfo? volume = catalog.FindVolume(path);
                 bool usb = volume?.IsRemovableUsb ?? false;
                 OpenRoute route = App.Devices.RouteForDisk(usb);
-                if (route == OpenRoute.GuidanceNeeded)
+                if (route == OpenRoute.GuidanceNeeded && request["showGuidance"]?.GetValue<bool>() != true)
                 {
                     return new JsonObject { ["route"] = "guidance" };
                 }
 
-                var info = new DeviceOpenInfo
+                DeviceListItem? item = DeviceItems(catalog).FirstOrDefault(i => string.Equals(i.CreateInfo().Path, path, StringComparison.OrdinalIgnoreCase));
+                if (item is null)
                 {
-                    Path = path,
-                    DisplayName = disk is not null ? DiskDisplayName(disk) : volume is not null ? VolumeDisplayName(volume) : path,
-                    SerialNumber = disk?.SerialNumber,
-                    Disk = disk,
-                    Volume = volume,
-                };
-                DeviceByteSource source = await App.Devices.OpenDeviceAsync(info, writable: false, route);
-                Vm.OpenDevice(source);
+                    return new JsonObject { ["error"] = "not found" };
+                }
+
+                bool readOnly = request["readOnly"]?.GetValue<bool>() ?? true;
+                DeviceRangeInput? range = request["range"] is JsonObject r
+                    ? new DeviceRangeInput(r["start"]?.ToString() ?? "0", r["length"]?.ToString() ?? string.Empty, r["sectors"]?.GetValue<bool>() ?? false)
+                    : null;
+                DocumentViewModel? vm = await OpenDeviceItemAsync(item, readOnly, range);
                 UpdateHelperShield();
-                return new JsonObject { ["route"] = route.ToString(), ["length"] = source.Length, ["helper"] = App.Devices.IsHelperRunning };
+                return vm?.Device is not { } source
+                    ? new JsonObject { ["route"] = route.ToString(), ["error"] = "not opened", ["guidance"] = LastAdminGuidance }
+                    : new JsonObject
+                    {
+                        ["route"] = source.Route.ToString(), ["length"] = source.Length, ["helper"] = App.Devices.IsHelperRunning,
+                        ["readOnly"] = vm.Document.IsReadOnly, ["writable"] = source.Handle.Writable, ["rangeStart"] = source.Info.RangeStart,
+                    };
             }
 
             case "openProcess":
@@ -89,12 +97,67 @@ public sealed partial class MainWindow
                     return new JsonObject { ["route"] = route.ToString() };
                 }
 
-                var info = new ProcessOpenInfo { DisplayName = ProcessDisplayName(entry) };
-                ProcessMemoryByteSource source = await App.Devices.OpenProcessAsync(pid, info, writable: false, route);
-                Vm.OpenProcess(source, readOnly: true);
-                ShowMemoryMapPanel();
+                bool readOnly = request["readOnly"]?.GetValue<bool>() ?? true;
+                string? moduleName = request["module"]?.GetValue<string>();
+                ProcessOpenScope scope = moduleName is not null ? ProcessOpenScope.Module : ProcessOpenScope.Whole;
+                DocumentViewModel? vm = await OpenProcessEntryAsync(entry, readOnly, scope, null,
+                    modules => Task.FromResult(modules.FirstOrDefault(m => string.Equals(m.Name, moduleName, StringComparison.OrdinalIgnoreCase))));
                 UpdateHelperShield();
-                return new JsonObject { ["route"] = route.ToString(), ["modules"] = source.Modules.Count };
+                if (vm?.ProcessMemory is not { } source)
+                {
+                    return new JsonObject { ["route"] = route.ToString(), ["error"] = "not opened" };
+                }
+
+                return new JsonObject
+                {
+                    ["route"] = route.ToString(), ["modules"] = source.Modules.Count, ["readOnly"] = vm.Document.IsReadOnly,
+                    ["baseAddress"] = source.BaseAddress, ["length"] = source.Length, ["name"] = vm.DisplayName,
+                };
+            }
+
+            case "immediateWrite":
+            {
+                // 即時書き込みモード (ENG-34 の仕様 2)。確認ダイアログを経ずに設定する (確認はダイアログのテストで見る)。
+                if (Vm.Selected is { IsProcessMemory: true } doc)
+                {
+                    doc.ProcessWriteConfirmed = true;
+                    SetImmediateWrite(doc, request["on"]?.GetValue<bool>() ?? true);
+                    return new JsonObject { ["on"] = doc.ImmediateWrite };
+                }
+
+                return new JsonObject { ["error"] = "no process" };
+            }
+
+            case "memoryMapPanel":
+            {
+                // メモリマップのパネルの一覧 (表示している行の文字列) と、右クリックメニューの操作。
+                if (FindPanelContent<Panels.MemoryMapPanel>("memoryMap") is not { } panel)
+                {
+                    return new JsonObject { ["error"] = "no panel" };
+                }
+
+                if (request["select"] is { } select && !panel.SelectRowAt(TestHookSettings.ReadLong(select, 0)))
+                {
+                    return new JsonObject { ["error"] = "no row" };
+                }
+
+                switch (request["action"]?.GetValue<string>())
+                {
+                    case "selectRegion":
+                        panel.SelectRegion();
+                        break;
+                    case "openInNewTab":
+                        panel.OpenRegionInNewTab();
+                        break;
+                }
+
+                return new JsonObject
+                {
+                    ["rows"] = new JsonArray([.. panel.RegionTexts.Select(t => (JsonNode?)t)]),
+                    ["selection"] = Vm.Selected is { } d ? new JsonArray(d.Editor.SelectionStart, d.Editor.SelectionLength) : null,
+                    ["tab"] = Vm.Selected?.DisplayName,
+                    ["position"] = Vm.Selected?.PositionText,
+                };
             }
 
             case "processWrite":
@@ -108,6 +171,19 @@ public sealed partial class MainWindow
                 }
 
                 return new JsonObject { ["at"] = System.Diagnostics.Stopwatch.GetTimestamp() * 1000.0 / System.Diagnostics.Stopwatch.Frequency };
+            }
+
+            case "processRead":
+            {
+                // 偽のプロセスのメモリの今の内容 (書き込みが届いたかを確かめる)。
+                int pid = (int)TestHookSettings.ReadLong(request["pid"], 0);
+                int length = (int)TestHookSettings.ReadLong(request["length"], 1);
+                if (TestHooks.FakeProcesses?.Direct is FakeProcessAccess direct)
+                {
+                    return new JsonObject { ["hex"] = Convert.ToHexString(direct.Process(pid).ReadRaw(TestHookSettings.ReadLong(request["address"], 0), length)) };
+                }
+
+                return new JsonObject { ["error"] = "no fake processes" };
             }
 
             case "autoRefresh":

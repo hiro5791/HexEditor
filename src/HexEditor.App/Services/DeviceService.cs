@@ -1,6 +1,7 @@
 using HexEditor.Core.Devices;
 using HexEditor.Core.Elevation;
 using HexEditor.Core.Processes;
+using HexEditor.Core.Settings;
 using HexEditor.Platform;
 
 namespace HexEditor.App.Services;
@@ -79,6 +80,9 @@ public sealed class DeviceService : IAsyncDisposable
             .OfType<System.Reflection.AssemblyMetadataAttribute>()
             .FirstOrDefault(a => a.Key == "HelperSha256")?.Value is { Length: > 0 } hash ? hash : null;
 
+    /// <summary>配布形態 (管理者権限の案内の手順を配布形態ごとに変える。ENG-28 の仕様 12 の 2)。</summary>
+    public Distribution Distribution => _env.Distribution;
+
     /// <summary>補助プロセスを起動できる配布形態 (インストーラ・ポータブル)。</summary>
     public bool HelperSupported => _env.Distribution is Distribution.Installer or Distribution.Portable or Distribution.Development;
 
@@ -128,13 +132,16 @@ public sealed class DeviceService : IAsyncDisposable
     /// <summary>
     /// デバイスを開く。<paramref name="route"/> が <see cref="OpenRoute.Helper"/> のときは補助プロセスを起動する (UAC の確認が出る)。
     /// </summary>
-    public async Task<DeviceByteSource> OpenDeviceAsync(DeviceOpenInfo info, bool writable, OpenRoute route, CancellationToken cancellationToken = default)
+    /// <param name="adjust">開いたデバイスの大きさ・セクタサイズを見て開く情報を変える (範囲を指定して開く。ENG-29 の仕様 2)。例外は呼び出し側へ。</param>
+    public async Task<DeviceByteSource> OpenDeviceAsync(DeviceOpenInfo info, bool writable, OpenRoute route, CancellationToken cancellationToken = default,
+        Func<DeviceGeometry, DeviceOpenInfo, DeviceOpenInfo>? adjust = null)
     {
         IDeviceAccess access = await DeviceAccessForAsync(route, cancellationToken).ConfigureAwait(true);
         IDeviceHandle handle = access.Open(info.Path, writable);
         try
         {
-            return new DeviceByteSource(handle, access, info with { Route = ToDeviceRoute(route) });
+            DeviceOpenInfo final = adjust is null ? info : adjust(handle.Geometry, info);
+            return new DeviceByteSource(handle, access, final with { Route = ToDeviceRoute(route) });
         }
         catch
         {
@@ -228,7 +235,10 @@ public sealed class DeviceService : IAsyncDisposable
             Launcher = new RunAsHelperLauncher(),
             AppVersion = _env.AppVersion,
             ExpectedSha256 = HelperSha256,
-            IdleMinutes = 10,
+
+            // 待ち時間の上限 (ENG-28 の仕様 5) と、ハンドルが 0 になってから終了するまで (仕様 6。0 は「アプリの終了まで残す」)。
+            RequestTimeout = TimeSpan.FromSeconds(Math.Clamp(App.Settings?.GetInt(DeviceSettings.HelperTimeoutKey, 30) ?? 30, 5, 300)),
+            IdleMinutes = Math.Clamp(App.Settings?.GetInt(DeviceSettings.HelperIdleKey, 10) ?? 10, 0, 60),
             Log = AppLog.Info,
         });
         session.StateChanged += (_, _) => HelperStateChanged?.Invoke(this, EventArgs.Empty);

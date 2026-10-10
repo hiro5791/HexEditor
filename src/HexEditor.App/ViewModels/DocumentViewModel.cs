@@ -355,6 +355,12 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
                 parts.Add(Loc.Format("Status_Record", recordNo.ToString(CultureInfo.InvariantCulture), position));
             }
 
+            // プロセスメモリ: カーソルのある領域 (ENG-33 の仕様 4)。例: kernel32.dll+0x1A2B0 (RX)。
+            if (ProcessMemory is { } process && process.DescribeAddress(process.BaseAddress + cursor) is { Length: > 0 } region)
+            {
+                parts.Add(region);
+            }
+
             return string.Join("  ", parts);
         }
     }

@@ -170,6 +170,10 @@ public sealed partial class MainWindow
     }
 
     /// <summary>パネルが表示されているか (隠した領域にあるものは表示されていない)。</summary>
+    /// <summary>作ったパネルの中身 (テスト用の命令の通り道から使う)。まだ作っていなければ null。</summary>
+    internal T? FindPanelContent<T>(string id)
+        where T : FrameworkElement => _panelContents.TryGetValue(id, out FrameworkElement? content) ? content as T : null;
+
     public bool IsPanelShown(string id) =>
         _panelLayout.Find(id) is { Visible: true } p && (p.Dock == PanelDock.Floating || !_panelLayout.HiddenDocks.Contains(p.Dock));
 

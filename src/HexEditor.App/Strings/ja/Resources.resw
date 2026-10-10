@@ -1426,6 +1426,8 @@
   <data name="ReadOnly_Confirm_AccessDenied" xml:space="preserve"><value>このファイルに書き込む権限がない可能性があります。編集の許可を試しますか?</value></data>
   <data name="ReadOnly_Confirm_SharingViolation" xml:space="preserve"><value>他のアプリがこのファイルを書き込みのために開いています。編集を許可しますか? 他のアプリの変更と競合することがあります。</value></data>
   <data name="ReadOnly_Confirm_Device" xml:space="preserve"><value>このデバイスに書き込めるようにします。保存するまで実際には書き込みません。</value></data>
+  <data name="ReadOnly_AllowWrite" xml:space="preserve"><value>書き込みを許可</value></data>
+  <data name="ReadOnly_Confirm_DeviceTarget" xml:space="preserve"><value>{0} に書き込めるようにします。保存するまで実際には書き込みません。</value></data>
   <data name="ReadOnly_CannotRelease_NoWriteTarget" xml:space="preserve"><value>データソースが書き込みに対応していないため、読み取り専用のままです。</value></data>
   <data name="ReadOnly_CannotRelease_WriteProtectionMode" xml:space="preserve"><value>書き込み保護モードが有効なため、読み取り専用のままです。</value></data>
   <data name="ReadOnly_CannotRelease_ReadOnlyMedia" xml:space="preserve"><value>読み取り専用のメディアにあるため、読み取り専用のままです。</value></data>
@@ -4494,6 +4496,15 @@
   <data name="Set_statistics_autoRecompute" xml:space="preserve"><value>統計を自動で再計算する</value></data>
   <data name="SetDesc_statistics_autoRecompute" xml:space="preserve"><value>対象範囲が変わってから 300 ms 後に統計を再計算します (64 MB まで)。</value></data>
   <data name="SetGroup_analysis" xml:space="preserve"><value>解析</value></data>
+  <data name="SetDesc_memoryMap_refreshSeconds" xml:space="preserve"><value>メモリマップのパネルを表示している間、領域の一覧を取り直す間隔です。0 にすると更新しません。</value></data>
+  <data name="Set_memoryMap_refreshSeconds" xml:space="preserve"><value>メモリマップの更新の間隔 (秒)</value></data>
+  <data name="SetDesc_process_openReadOnly" xml:space="preserve"><value>「プロセスを開く」の「読み取り専用で開く」の既定です。</value></data>
+  <data name="Set_process_openReadOnly" xml:space="preserve"><value>プロセスを読み取り専用で開く</value></data>
+  <data name="SetDesc_devices_helperIdleMinutes" xml:space="preserve"><value>補助プロセスで開いたディスク・プロセスをすべて閉じてから、この時間がたつと終了します。0 にするとアプリの終了まで残します。再び必要になると、管理者権限の確認がもう一度出ます。</value></data>
+  <data name="Set_devices_helperIdleMinutes" xml:space="preserve"><value>管理者権限の補助プロセスを終了するまでの時間 (分)</value></data>
+  <data name="SetDesc_devices_helperTimeoutSeconds" xml:space="preserve"><value>補助プロセスへの要求がこれより長くかかると失敗とし、読み込みは「読めない」にします。</value></data>
+  <data name="Set_devices_helperTimeoutSeconds" xml:space="preserve"><value>管理者権限の補助プロセスの待ち時間の上限 (秒)</value></data>
+  <data name="SetGroup_devices" xml:space="preserve"><value>ディスクとプロセス</value></data>
   <data name="FileType_MagicError" xml:space="preserve"><value>{0} を読み込めません: {1} 行目</value></data>
   <data name="Stats_Target.Header" xml:space="preserve"><value>対象範囲</value></data>
   <data name="Stats_Target_Selection.Content" xml:space="preserve"><value>選択範囲</value></data>
@@ -5087,9 +5098,60 @@
   <data name="OpenDisk_NoLabel" xml:space="preserve"><value>ラベルなし</value></data>
   <data name="OpenDisk_EnumError" xml:space="preserve"><value>ディスクの一覧を取得できませんでした ({0})。</value></data>
   <data name="OpenDisk_Error" xml:space="preserve"><value>デバイスを開けませんでした ({0})。</value></data>
-  <data name="OpenDisk_AccessDenied" xml:space="preserve"><value>デバイスが使用中で開けませんでした。</value></data>
+  <data name="OpenDisk_AccessDenied" xml:space="preserve"><value>デバイスを開けませんでした ({0})。</value></data>
   <data name="OpenDisk_NoMedia" xml:space="preserve"><value>メディアが入っていません。</value></data>
   <data name="OpenDisk_BitLocker" xml:space="preserve"><value>このボリュームは BitLocker でロックされています。ロックを解除してから開いてください。</value></data>
+  <data name="OpenDisk_MediaAbsent" xml:space="preserve"><value>メディアなし</value></data>
+  <data name="OpenDisk_MediaPresent" xml:space="preserve"><value>メディアあり</value></data>
+  <data name="OpenDisk_OpticalName" xml:space="preserve"><value>光学ドライブ {0}</value></data>
+  <data name="OpenDisk_BitLocker_Locked" xml:space="preserve"><value>ロック中</value></data>
+  <data name="OpenDisk_BitLocker_Unlocked" xml:space="preserve"><value>ロック解除済み</value></data>
+  <data name="OpenDisk_BitLocker_NotEncrypted" xml:space="preserve"><value>暗号化なし</value></data>
+  <data name="OpenDisk_BitLocker_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="OpenDisk_VolumeDetail" xml:space="preserve"><value>{0}  {1}  ディスク {2}  BitLocker: {3}</value></data>
+  <data name="OpenDisk_Style_Raw" xml:space="preserve"><value>パーティションなし</value></data>
+  <data name="OpenDisk_Style_Gpt" xml:space="preserve"><value>GPT</value></data>
+  <data name="OpenDisk_Style_Mbr" xml:space="preserve"><value>MBR</value></data>
+  <data name="OpenDisk_Bus_Other" xml:space="preserve"><value>その他</value></data>
+  <data name="OpenDisk_Bus_Virtual" xml:space="preserve"><value>仮想</value></data>
+  <data name="OpenDisk_Bus_Mmc" xml:space="preserve"><value>MMC</value></data>
+  <data name="OpenDisk_Bus_Sd" xml:space="preserve"><value>SD</value></data>
+  <data name="OpenDisk_Bus_Sas" xml:space="preserve"><value>SAS</value></data>
+  <data name="OpenDisk_Bus_Scsi" xml:space="preserve"><value>SCSI</value></data>
+  <data name="OpenDisk_Bus_Usb" xml:space="preserve"><value>USB</value></data>
+  <data name="OpenDisk_Bus_Nvme" xml:space="preserve"><value>NVMe</value></data>
+  <data name="OpenDisk_Bus_Ata" xml:space="preserve"><value>ATA</value></data>
+  <data name="OpenDisk_Bus_Sata" xml:space="preserve"><value>SATA</value></data>
+  <data name="OpenDisk_DiskDetail" xml:space="preserve"><value>{0}  {1}  セクタ {2}  取り外し可能: {3}  システムディスク: {4}</value></data>
+  <data name="Common_No" xml:space="preserve"><value>いいえ</value></data>
+  <data name="Common_Yes" xml:space="preserve"><value>はい</value></data>
+  <data name="OpenProcess_ModuleName" xml:space="preserve"><value>{0} - {1}</value></data>
+  <data name="OpenProcess_ChooseModule" xml:space="preserve"><value>モジュールを選ぶ</value></data>
+  <data name="OpenProcess_ScopeRange" xml:space="preserve"><value>範囲を指定</value></data>
+  <data name="OpenProcess_ScopeModule" xml:space="preserve"><value>モジュールを選ぶ</value></data>
+  <data name="OpenProcess_ScopeWhole" xml:space="preserve"><value>アドレス空間全体</value></data>
+  <data name="OpenProcess_Sort_User" xml:space="preserve"><value>ユーザー</value></data>
+  <data name="OpenProcess_Sort_Memory" xml:space="preserve"><value>使用メモリ (大きい順)</value></data>
+  <data name="OpenProcess_Sort_Pid" xml:space="preserve"><value>PID</value></data>
+  <data name="OpenProcess_Sort_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="OpenProcess_Refresh" xml:space="preserve"><value>更新</value></data>
+  <data name="OpenProcess_OwnOnly" xml:space="preserve"><value>自分のプロセスだけ表示</value></data>
+  <data name="OpenProcess_Filter" xml:space="preserve"><value>絞り込み (名前・PID・タイトル)</value></data>
+  <data name="OpenDevice_RangeStartOutside" xml:space="preserve"><value>開始はデバイスの中の位置にしてください。</value></data>
+  <data name="OpenDevice_RangeNotAligned" xml:space="preserve"><value>開始はセクタの境界 ({0} バイトの倍数) にしてください。</value></data>
+  <data name="OpenDevice_Unit_Bytes" xml:space="preserve"><value>バイト</value></data>
+  <data name="OpenDevice_Unit_Sectors" xml:space="preserve"><value>セクタ数</value></data>
+  <data name="OpenDevice_RangeUnit" xml:space="preserve"><value>単位</value></data>
+  <data name="OpenDevice_RangeToEnd" xml:space="preserve"><value>末尾まで</value></data>
+  <data name="OpenDevice_RangeLength" xml:space="preserve"><value>長さ</value></data>
+  <data name="OpenDevice_RangeStart" xml:space="preserve"><value>開始</value></data>
+  <data name="OpenDevice_Range" xml:space="preserve"><value>範囲を指定して開く</value></data>
+  <data name="OpenDevice_Sort_Size" xml:space="preserve"><value>サイズ (大きい順)</value></data>
+  <data name="OpenDevice_Sort_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="OpenDevice_Sort_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="OpenDevice_SortBy" xml:space="preserve"><value>並べ替え</value></data>
+  <data name="OpenProcess_LockedTip" xml:space="preserve"><value>Windows によって保護されているため開けません</value></data>
+  <data name="OpenDevice_ShieldTip" xml:space="preserve"><value>開くには管理者権限が必要です</value></data>
   <data name="OpenProcess_Title" xml:space="preserve"><value>プロセスのメモリを開く</value></data>
   <data name="OpenProcess_Name" xml:space="preserve"><value>{0} (PID {1})</value></data>
   <data name="OpenProcess_EnumError" xml:space="preserve"><value>プロセスの一覧を取得できませんでした ({0})。</value></data>
@@ -5114,12 +5176,27 @@
   <data name="DiskWrite_LockFailed" xml:space="preserve"><value>ボリューム {0} をロックできないため書き込みを中止しました。</value></data>
   <data name="DiskWrite_RolledBack" xml:space="preserve"><value>書き込み中にエラーが発生したため、書き込み前の状態に戻しました ({0})。</value></data>
   <data name="DiskWrite_Partial" xml:space="preserve"><value>ディスクの一部だけが書き換わっています。次回起動時に復旧できます ({0})。</value></data>
+  <data name="DiskWrite_WriteProtected" xml:space="preserve"><value>このデバイスは書き込みが禁止されています。</value></data>
+  <data name="DiskWrite_ErrorAt" xml:space="preserve"><value>セクタ {0}、{1}</value></data>
+  <data name="DiskWrite_Unreadable" xml:space="preserve"><value>旧内容の一部を読めなかったため、書き込みを始めませんでした。</value></data>
+  <data name="DiskWrite_Cancelled" xml:space="preserve"><value>書き込みを中止しました。ディスクは書き込み前の状態です。</value></data>
+  <data name="DiskWrite_WriteUnprotected" xml:space="preserve"><value>保護なしで書き込む</value></data>
+  <data name="DiskWrite_JournalTooLarge" xml:space="preserve"><value>変更が大きいため旧内容を記録できません。保存の途中で止まると元に戻せません。</value></data>
+  <data name="DiskWrite_PartialUnprotected" xml:space="preserve"><value>ディスクの一部だけが書き換わっています。旧内容を記録していないため、元に戻せません ({0})。</value></data>
   <data name="ProcessWrite_Title" xml:space="preserve"><value>プロセスメモリに書き込む</value></data>
   <data name="ProcessWrite_Body" xml:space="preserve"><value>プロセス {0} (PID {1}) のメモリに {2} バイト書き込みます。プロセスが異常終了する可能性があります。</value></data>
   <data name="ProcessWrite_Write" xml:space="preserve"><value>書き込む</value></data>
   <data name="ProcessWrite_Protected" xml:space="preserve"><value>書き込み先のページが読み取り専用です ({0})。一時的に書き込み可能にして書き込みますか。</value></data>
   <data name="ProcessWrite_ChangeProtect" xml:space="preserve"><value>保護を一時的に変更して書き込む</value></data>
   <data name="ProcessWrite_Failed" xml:space="preserve"><value>{0} か所の範囲を書き込めませんでした。</value></data>
+  <data name="ProcessWrite_ImmediateEnable" xml:space="preserve"><value>即時書き込みをオンにする</value></data>
+  <data name="ProcessWrite_ImmediateConfirm" xml:space="preserve"><value>編集のたびに、プロセス {0} (PID {1}) のメモリにすぐ書き込みます。プロセスが異常終了する可能性があります。</value></data>
+  <data name="ProcessWrite_Reason_WriteError" xml:space="preserve"><value>書き込みエラー</value></data>
+  <data name="ProcessWrite_Reason_ProcessExited" xml:space="preserve"><value>プロセスが終了した</value></data>
+  <data name="ProcessWrite_Reason_Protected" xml:space="preserve"><value>読み取り専用のページ</value></data>
+  <data name="ProcessWrite_Reason_Unallocated" xml:space="preserve"><value>割り当てられていない</value></data>
+  <data name="ProcessWrite_FailedRange" xml:space="preserve"><value>{0}、{1} バイト: {2}</value></data>
+  <data name="ProcessWrite_Exited" xml:space="preserve"><value>プロセスが終了したため書き込めませんでした。</value></data>
   <data name="ProcessWrite_ImmediateOn" xml:space="preserve"><value>即時書き込みを有効にしました。</value></data>
   <data name="ProcessWrite_ImmediateOff" xml:space="preserve"><value>即時書き込みを無効にしました。</value></data>
   <data name="GoToSector_Title" xml:space="preserve"><value>セクタへ移動</value></data>
@@ -5127,11 +5204,17 @@
   <data name="AdminGuide_Title" xml:space="preserve"><value>管理者権限が必要です</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>物理ディスクや内蔵ディスクのボリュームを直接読むには、Windows の管理者権限が必要です。</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>このプロセスを開くには管理者権限が必要です。</value></data>
-  <data name="AdminGuide_Steps" xml:space="preserve"><value>管理者として実行するには: 1. HexEditor を閉じます。2. スタートメニューまたはエクスプローラーで HexEditor を右クリックします。3.「管理者として実行」を選びます。</value></data>
   <data name="AdminGuide_UsbAlternative" xml:space="preserve"><value>取り外し可能な USB ストレージのボリュームは管理者権限なしで開けます。</value></data>
   <data name="AdminGuide_StoreDownload" xml:space="preserve"><value>インストーラ版・ポータブル版は、必要なときだけ管理者権限の確認を出して管理者権限の操作を使えます。</value></data>
   <data name="AdminGuide_Restart" xml:space="preserve"><value>管理者として再起動</value></data>
   <data name="AdminGuide_Declined" xml:space="preserve"><value>管理者権限が得られなかったため、ディスクを開けませんでした。</value></data>
+  <data name="Helper_StartFailed" xml:space="preserve"><value>管理者権限の補助プロセスを起動できませんでした ({0})。</value></data>
+  <data name="Helper_Tampered" xml:space="preserve"><value>補助プロセスが改ざんされている可能性があるため、起動しませんでした。</value></data>
+  <data name="AdminGuide_DownloadLink" xml:space="preserve"><value>インストーラ版・ポータブル版のダウンロードページ</value></data>
+  <data name="AdminGuide_DragDropLimit" xml:space="preserve"><value>管理者として実行している間は、エクスプローラーからのドラッグ &amp; ドロップでファイルを開けません。</value></data>
+  <data name="AdminGuide_StepsPortable" xml:space="preserve"><value>管理者として起動し直す手順: 1. HexEditor を閉じます。2. エクスプローラーで HexEditor.exe を右クリックします。3. 「管理者として実行」を選びます。</value></data>
+  <data name="AdminGuide_StepsStart" xml:space="preserve"><value>管理者として起動し直す手順: 1. HexEditor を閉じます。2. スタートメニューで HexEditor を右クリックします。3. 「その他」&gt;「管理者として実行」を選びます。</value></data>
+  <data name="AdminGuide_DeclinedProcess" xml:space="preserve"><value>管理者権限が得られなかったため、プロセスを開けませんでした。</value></data>
   <data name="Status_ImmediateWrite" xml:space="preserve"><value>即時書き込み</value></data>
   <data name="Status_HelperRunning" xml:space="preserve"><value>管理者権限の補助プロセスが実行中</value></data>
   <data name="MemoryMap_RegionsTab" xml:space="preserve"><value>領域</value></data>
@@ -5139,6 +5222,27 @@
   <data name="MemoryMap_NoProcess" xml:space="preserve"><value>プロセスを開くとメモリマップが表示されます。</value></data>
   <data name="MemoryMap_NoAccess" xml:space="preserve"><value>アクセス不可</value></data>
   <data name="MemoryMap_Unallocated" xml:space="preserve"><value>未割り当て</value></data>
+  <data name="MemoryMap_Type_Private" xml:space="preserve"><value>プライベート</value></data>
+  <data name="MemoryMap_Type_Mapped" xml:space="preserve"><value>マップ</value></data>
+  <data name="MemoryMap_Type_Image" xml:space="preserve"><value>イメージ</value></data>
+  <data name="MemoryMap_State_Free" xml:space="preserve"><value>空き</value></data>
+  <data name="MemoryMap_State_Reserve" xml:space="preserve"><value>予約</value></data>
+  <data name="MemoryMap_State_Commit" xml:space="preserve"><value>コミット</value></data>
+  <data name="MemoryMap_CopyAddress" xml:space="preserve"><value>アドレスをコピー</value></data>
+  <data name="MemoryMap_OpenInNewTab" xml:space="preserve"><value>この領域を新しいタブで開く</value></data>
+  <data name="MemoryMap_SelectRegion" xml:space="preserve"><value>領域を選択</value></data>
+  <data name="MemoryMap_Error" xml:space="preserve"><value>メモリ領域の一覧を取得できませんでした ({0})。</value></data>
+  <data name="MemoryMap_Descending" xml:space="preserve"><value>降順</value></data>
+  <data name="MemoryMap_Sort_Name" xml:space="preserve"><value>モジュール・ファイル</value></data>
+  <data name="MemoryMap_Sort_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="MemoryMap_Sort_Protect" xml:space="preserve"><value>保護属性</value></data>
+  <data name="MemoryMap_Sort_State" xml:space="preserve"><value>状態</value></data>
+  <data name="MemoryMap_Sort_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="MemoryMap_Sort_Start" xml:space="preserve"><value>開始アドレス</value></data>
+  <data name="MemoryMap_SortBy" xml:space="preserve"><value>並べ替え</value></data>
+  <data name="MemoryMap_ShowFree" xml:space="preserve"><value>空きの領域を表示</value></data>
+  <data name="MemoryMap_Filter" xml:space="preserve"><value>絞り込み (名前・保護属性・状態)</value></data>
+  <data name="MemoryMap_View" xml:space="preserve"><value>メモリマップの表示</value></data>
   <data name="Annotations_Origin_Analysis" xml:space="preserve"><value>解析</value></data>
   <data name="Menu_View_AnnotationsAnalysis.Text" xml:space="preserve"><value>解析の結果</value></data>
   <data name="Menu_View_AnnotationsAnalysis.AccessKey" xml:space="preserve"><value>N</value></data>
@@ -5170,6 +5274,7 @@
   <data name="Device_Disconnected" xml:space="preserve"><value>デバイスが取り外されました。未保存の変更は残っています。</value></data>
   <data name="Device_HelperExited" xml:space="preserve"><value>管理者権限の補助プロセスが終了しました。未保存の変更は残っています。</value></data>
   <data name="Process_Exited" xml:space="preserve"><value>プロセスが終了しました。読み込み済みのデータは表示できます。ドキュメントは読み取り専用になりました。</value></data>
+  <data name="Process_Unallocated" xml:space="preserve"><value>この範囲は割り当てられていないため編集できません。</value></data>
   <data name="Device_Reconnect" xml:space="preserve"><value>再接続</value></data>
   <data name="Device_ReconnectFailed" xml:space="preserve"><value>再接続できませんでした: {0}</value></data>
   <data name="Device_Reconnected" xml:space="preserve"><value>再接続しました。</value></data>

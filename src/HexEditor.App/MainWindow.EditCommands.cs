@@ -129,6 +129,19 @@ public sealed partial class MainWindow
                 return false;
         }
 
+        if (document.ReadOnlyReason == ReadOnlyReason.Device && (doc.IsDevice || doc.IsProcessMemory))
+        {
+            // ディスク・ボリューム・プロセス: 対象を示して「書き込みを許可」を確かめ、読み書きのアクセス権で開き直す (ENG-14 の仕様 3)。
+            if (!await ConfirmDeviceWritingAsync(doc) || !await ReopenDeviceForWritingAsync(doc))
+            {
+                return false;
+            }
+
+            document.SetReadOnly(ReadOnlyReason.None);
+            FocusEditor();
+            return true;
+        }
+
         ContentDialog dialog = DialogParts.Dialog(Root, "ReadOnlyConfirmDialog", Loc.Get("ReadOnly_Confirm_Title"),
             new TextBlock { Text = Loc.Get("ReadOnly_Confirm_" + document.ReadOnlyReason), TextWrapping = TextWrapping.Wrap, MaxWidth = 420 },
             Loc.Get("ReadOnly_AllowEdit"));
