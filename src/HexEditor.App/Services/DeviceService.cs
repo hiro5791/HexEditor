@@ -240,6 +240,9 @@ public sealed class DeviceService : IAsyncDisposable
             RequestTimeout = TimeSpan.FromSeconds(Math.Clamp(App.Settings?.GetInt(DeviceSettings.HelperTimeoutKey, 30) ?? 30, 5, 300)),
             IdleMinutes = Math.Clamp(App.Settings?.GetInt(DeviceSettings.HelperIdleKey, 10) ?? 10, 0, 60),
             Log = AppLog.Info,
+
+            // 補助プロセスが実行したコマンドの種類・対象・結果 (データの内容は書かない。ENG-28 の仕様 9)。
+            LogPath = AppLog.Folder is { } folder ? Path.Combine(folder, "helper.log") : null,
         });
         session.StateChanged += (_, _) => HelperStateChanged?.Invoke(this, EventArgs.Empty);
         session.Disconnected += (_, _) => HelperDisconnected?.Invoke(this, EventArgs.Empty);

@@ -1,3 +1,4 @@
+#if HEX_TEST_HOOKS
 using System.Text.Json.Nodes;
 using HexEditor.Core.Selection;
 using HexEditor.Core.View;
@@ -62,3 +63,4 @@ public sealed partial class MainWindow
             : null;
     }
 }
+#endif

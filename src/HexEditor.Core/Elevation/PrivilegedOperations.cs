@@ -155,6 +155,12 @@ public sealed class PrivilegedOperations : IDisposable
 
                 byte[] data = new byte[length];
                 int error = handle.ReadSectors(offset, data);
+                if (error != 0)
+                {
+                    // 読み込みは数が多いため、失敗だけを記録する (ENG-28 の仕様 9)。
+                    _log($"ReadSectors {handle.Path} 0x{offset:X} {length} -> {error}");
+                }
+
                 return error == 0 ? Ok(data) : Fail(error);
             }
 

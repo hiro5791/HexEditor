@@ -20,7 +20,8 @@ public sealed class ElevatedHelperIntegrationTests : IDisposable
     {
         string csproj = SourceTests.FindRepoFile("src/HexEditor.Elevated/HexEditor.Elevated.csproj");
         string baseDir = Path.GetDirectoryName(csproj)!;
-        foreach (string config in new[] { "Debug", "Release" })
+        // テスト用の仕組み (偽のデバイス) を持つ Debug のビルドだけを使う (製品版の Release のビルドは実機のデバイスを使うため使わない)。
+        foreach (string config in new[] { "Debug" })
         {
             string dir = Path.Combine(baseDir, "bin", config);
             if (!Directory.Exists(dir))

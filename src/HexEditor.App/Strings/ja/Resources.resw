@@ -5220,8 +5220,6 @@
   <data name="MemoryMap_RegionsTab" xml:space="preserve"><value>領域</value></data>
   <data name="MemoryMap_ModulesTab" xml:space="preserve"><value>モジュール</value></data>
   <data name="MemoryMap_NoProcess" xml:space="preserve"><value>プロセスを開くとメモリマップが表示されます。</value></data>
-  <data name="MemoryMap_NoAccess" xml:space="preserve"><value>アクセス不可</value></data>
-  <data name="MemoryMap_Unallocated" xml:space="preserve"><value>未割り当て</value></data>
   <data name="MemoryMap_Type_Private" xml:space="preserve"><value>プライベート</value></data>
   <data name="MemoryMap_Type_Mapped" xml:space="preserve"><value>マップ</value></data>
   <data name="MemoryMap_Type_Image" xml:space="preserve"><value>イメージ</value></data>

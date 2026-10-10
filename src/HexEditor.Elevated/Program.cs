@@ -121,7 +121,12 @@ internal static class Program
                 return ExitHandshake;
             }
 
-            (IDeviceAccess devices, IProcessAccess processes) = Backend(options);
+            if (Backend(options) is not ({ } devices, { } processes))
+            {
+                await pipe.DisposeAsync();
+                return ExitBadArguments;
+            }
+
             Log($"Connected to {parentPid}");
             string version = options.TryGetValue("--app-version", out string? v) ? v : AppVersion();
             var operations = new PrivilegedOperations(devices, processes, Log, version);
@@ -132,7 +137,7 @@ internal static class Program
         }
     }
 
-    private static (IDeviceAccess Devices, IProcessAccess Processes) Backend(Dictionary<string, string> options)
+    private static (IDeviceAccess Devices, IProcessAccess Processes)? Backend(Dictionary<string, string> options)
     {
 #if HEX_TEST_HOOKS
         // テスト用のビルドだけ: 偽のデバイス・プロセスで動かす (補助プロセスの通信を、実際のディスクに触れずに確かめる)。
@@ -144,8 +149,15 @@ internal static class Program
             Log("Using fake devices (test hooks)");
             return (new FakeDeviceAccess(spec, elevated: true), new FakeProcessAccess(processSpec, elevated: true));
         }
+#else
+        // 製品版のビルドは偽のデバイスを持たない。テスト用の引数を渡されたら、実際のディスク・プロセスに触れずに止める
+        // (テスト用でないビルドがテストから起動されても、実機のデバイスを開かない)。
+        if (options.ContainsKey("--test-fake-devices") || options.ContainsKey("--test-fake-processes"))
+        {
+            Log("Test arguments given to a build without test hooks; refusing to run");
+            return null;
+        }
 #endif
-        _ = options;
         Win32ProcessAccess.EnableDebugPrivilege();
         return (Win32DeviceAccess.Instance, Win32ProcessAccess.Instance);
     }

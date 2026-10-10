@@ -181,6 +181,33 @@ public sealed class HelperSecurityTests
     }
 
     [Fact]
+    public void The_helper_hash_covers_the_exe_and_its_own_files_like_the_publish_script()
+    {
+        string dir = Directory.CreateTempSubdirectory("hexeditor-helperhash").FullName;
+        try
+        {
+            string exe = Path.Combine(dir, "HexEditor.Elevated.exe");
+            File.WriteAllBytes(exe, [1, 2, 3]);
+            File.WriteAllBytes(Path.Combine(dir, "HexEditor.Elevated.dll"), [4, 5]);
+            File.WriteAllBytes(Path.Combine(dir, "HexEditor.Elevated.runtimeconfig.json"), [6]);
+
+            // build/publish.ps1 と同じ: 決まった順につないだ内容の SHA-256 (ないファイル (deps.json) は飛ばす)。
+            string expected = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(new byte[] { 1, 2, 3, 4, 5, 6 }));
+            Assert.Equal(expected, HelperIntegrity.ComputeHash(exe));
+
+            // 本体の dll だけを差し替えても見つかる。
+            File.WriteAllBytes(Path.Combine(dir, "HexEditor.Elevated.dll"), [4, 6]);
+            Assert.NotEqual(expected, HelperIntegrity.ComputeHash(exe));
+            Assert.Contains("'HexEditor.Elevated.exe', 'HexEditor.Elevated.dll', 'HexEditor.Elevated.deps.json', 'HexEditor.Elevated.runtimeconfig.json'",
+                File.ReadAllText(Engine.SourceTests.FindRepoFile("build/publish.ps1")), StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+    }
+
+    [Fact]
     [Trait("TC", "TC-ENG-28-06")]
     public void Malformed_or_unknown_requests_are_rejected_and_unexpected_failures_are_answered()
     {
