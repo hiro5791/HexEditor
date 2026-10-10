@@ -34,6 +34,7 @@ public sealed partial class MainWindow
     private void RegisterSelectionCommands()
     {
         string noSelection = Loc.Get("Command_NoSelection");
+        InitializeSelectionDrop();
         CommandState NeedsSelection() => NeedsDocument(d => d.Editor.HasSelection ? null : noSelection);
 
         // ---- ずらす・広げる (EDIT-05) ----
@@ -112,6 +113,7 @@ public sealed partial class MainWindow
     private void AttachSelectionEvents(HexView view)
     {
         view.SelectionRejected += (_, result) => ReportSelection(result);
+        view.SelectionDragStarting += (_, e) => FillSelectionDragData(e);
         view.CaretInputFailed += (_, count) =>
             ShowNotice(Loc.Format("Notice_CaretInputFailed", count), InfoBarSeverity.Warning, Vm.Selected);
     }

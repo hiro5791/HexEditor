@@ -3008,4 +3008,6 @@ Details were written to:
   <data name="Hash_RangeMode_PerRange.Content" xml:space="preserve"><value>One value per range</value></data>
   <data name="Hash_Ranges" xml:space="preserve"><value>{0, plural, one {# range} other {# ranges}}, {1} bytes total</value></data>
   <data name="CopyAs_SeparateRanges" xml:space="preserve"><value>Separate each range (instead of concatenating)</value></data>
+  <data name="Drop_InsertCopy" xml:space="preserve"><value>Insert a copy</value></data>
+  <data name="Drop_PasteSpecial" xml:space="preserve"><value>Paste Special</value></data>
 </root>
