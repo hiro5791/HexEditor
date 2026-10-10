@@ -23,8 +23,9 @@ public sealed class HelperPipeSecurityTests : IDisposable
     private static string? FindHelperExe()
     {
         string csproj = SourceTests.FindRepoFile("src/HexEditor.Elevated/HexEditor.Elevated.csproj");
-        string bin = Path.Combine(Path.GetDirectoryName(csproj)!, "bin", "Debug");
-        return Directory.Exists(bin) ? Directory.GetFiles(bin, "HexEditor.Elevated.exe", SearchOption.AllDirectories).FirstOrDefault() : null;
+        // テスト用のビルド (Debug、または -p:HexTestHooks=true の Release) の補助プロセス (--test-fake-devices を受け付ける)。
+        return new[] { "Debug", "Release" }.Select(c => Path.Combine(Path.GetDirectoryName(csproj)!, "bin", c)).Where(Directory.Exists)
+            .SelectMany(d => Directory.GetFiles(d, "HexEditor.Elevated.exe", SearchOption.AllDirectories)).FirstOrDefault();
     }
 
     private HelperSession CreateSession(string exe, IHelperLauncher launcher, List<string> log, string? pipeName = null)
