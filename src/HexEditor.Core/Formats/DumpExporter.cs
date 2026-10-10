@@ -24,6 +24,12 @@ public sealed class DumpExporter
     private bool _firstRow = true;
     private int _highlight;
 
+    /// <summary>RTF の色の表の番号 (RRGGBB → 番号。1・2 は変更バイト・ブックマークの既定の色)。</summary>
+    private readonly Dictionary<string, int> _rtfColors = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>行ごとの強調 (色付けルール。<see cref="DumpOptions.RowHighlights"/>)。</summary>
+    private IReadOnlyList<DumpHighlight> _rowHighlights = [];
+
     public DumpExporter(TextWriter writer, string format, DumpOptions options, string newLine, long offset, long length)
     {
         _w = writer;
@@ -72,6 +78,12 @@ public sealed class DumpExporter
                 break;
             case FormatIds.Rtf:
                 WriteRtfHead();
+                break;
+            case FormatIds.Tex when _o.TexDocument:
+                // 単独で処理できる文書 (pdflatex で直接処理できる。TOOL-10 の受け入れ基準 3)。
+                _w.Write($"\\documentclass{{article}}{_nl}\\usepackage{{alltt}}{_nl}\\usepackage{{xcolor}}{_nl}");
+                _w.Write($"\\usepackage[margin=1cm,landscape]{{geometry}}{_nl}\\begin{{document}}{_nl}\\footnotesize{_nl}");
+                _w.Write(_o.Tex == TexEnvironment.AlltColor ? $"\\begin{{alltt}}{_nl}" : $"\\begin{{verbatim}}{_nl}");
                 break;
             case FormatIds.Tex when _o.Tex == TexEnvironment.AlltColor:
                 _w.Write($"% \\usepackage{{alltt}} \\usepackage{{xcolor}}{_nl}\\begin{{alltt}}{_nl}");
@@ -135,11 +147,13 @@ public sealed class DumpExporter
             case FormatIds.Rtf:
                 _w.Write($"}}{_nl}");
                 break;
-            case FormatIds.Tex when _o.Tex == TexEnvironment.AlltColor:
-                _w.Write($"\\end{{alltt}}{_nl}");
-                break;
             case FormatIds.Tex:
-                _w.Write($"\\end{{verbatim}}{_nl}");
+                _w.Write(_o.Tex == TexEnvironment.AlltColor ? $"\\end{{alltt}}{_nl}" : $"\\end{{verbatim}}{_nl}");
+                if (_o.TexDocument)
+                {
+                    _w.Write($"\\end{{document}}{_nl}");
+                }
+
                 break;
             case FormatIds.Markdown when !_o.MarkdownTable:
                 _w.Write($"```{_nl}");
@@ -170,7 +184,23 @@ public sealed class DumpExporter
         int size = (int)Math.Round(Math.Clamp(_o.RtfFontSize, 4, 72) * 2);
         _w.Write("{\\rtf1\\ansi\\ansicpg1252\\deff0");
         _w.Write($"{{\\fonttbl{{\\f0\\fmodern\\fprq1 {RtfEscape(_o.RtfFont)};}}}}");
-        _w.Write("{\\colortbl ;\\red196\\green43\\blue28;\\red122\\green79\\blue0;}");
+        // 色の表: 1 は変更バイト、2 はブックマークの既定の色、3 以降は強調の色 (ブックマーク・色付けルールの色。最大 200 色)。
+        // 色付けルールの色は行ごとに求めるため、表に入れられるのは先に分かっている強調の色だけ (それ以外はブックマークの既定の色)。
+        var table = new StringBuilder("{\\colortbl ;\\red196\\green43\\blue28;\\red122\\green79\\blue0;");
+        foreach (string? color in _o.Highlights.Select(h => h.Color).Concat(_o.RuleColors))
+        {
+            if (_rtfColors.Count >= 200)
+            {
+                break;
+            }
+
+            if (ParseColor(color) is { } rgb && _rtfColors.TryAdd(RgbText(rgb), _rtfColors.Count + 3))
+            {
+                table.Append(CultureInfo.InvariantCulture, $"\\red{rgb >> 16 & 0xFF}\\green{rgb >> 8 & 0xFF}\\blue{rgb & 0xFF};");
+            }
+        }
+
+        _w.Write(table.Append('}').ToString());
         _w.Write($"{_nl}\\f0\\fs{size} ");
     }
 
@@ -205,7 +235,40 @@ public sealed class DumpExporter
         return c;
     }
 
-    private (DumpHighlightKind Kind, string? Name)? HighlightAt(long position)
+    /// <summary><c>#RRGGBB</c> (または <c>#AARRGGBB</c>) を 0xRRGGBB にする。読めなければ null。</summary>
+    internal static uint? ParseColor(string? color)
+    {
+        if (color is not { Length: 7 or 9 } || color[0] != '#'
+            || !uint.TryParse(color.AsSpan(1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint value))
+        {
+            return null;
+        }
+
+        return value & 0xFFFFFF;
+    }
+
+    private static string RgbText(uint rgb) => rgb.ToString("X6", CultureInfo.InvariantCulture);
+
+    /// <summary>その位置の強調: 先に分かっている強調 (変更バイト・ブックマーク) を優先し、なければ行ごとの強調 (色付けルール)。</summary>
+    private DumpHighlight? HighlightAt(long position)
+    {
+        if (FixedHighlightAt(position) is { } mark)
+        {
+            return mark;
+        }
+
+        foreach (DumpHighlight h in _rowHighlights)
+        {
+            if (h.Offset <= position && position < h.Offset + h.Length)
+            {
+                return h;
+            }
+        }
+
+        return null;
+    }
+
+    private DumpHighlight? FixedHighlightAt(long position)
     {
         IReadOnlyList<DumpHighlight> list = _o.Highlights;
         while (_highlight < list.Count && list[_highlight].Offset + list[_highlight].Length <= position)
@@ -218,7 +281,7 @@ public sealed class DumpExporter
         {
             if (list[i].Offset + list[i].Length > position)
             {
-                return (list[i].Kind, list[i].Name);
+                return list[i];
             }
         }
 
@@ -229,7 +292,8 @@ public sealed class DumpExporter
     {
         int perRow = _row.Length;
         string offsetText = OffsetText(_rowOffset);
-        var hexCells = new List<(string Text, (DumpHighlightKind Kind, string? Name)? Mark)>(_count);
+        _rowHighlights = Colors && _o.RowHighlights is { } rows ? rows(_rowOffset, _count) : [];
+        var hexCells = new List<(string Text, DumpHighlight? Mark)>(_count);
         for (int i = 0; i < _count; i++)
         {
             string cell = _row[i].ToString(_o.UpperCase ? "X2" : "x2", CultureInfo.InvariantCulture);
@@ -278,7 +342,7 @@ public sealed class DumpExporter
         return width;
     }
 
-    private void WriteDumpRow(string offsetText, List<(string Text, (DumpHighlightKind Kind, string? Name)? Mark)> cells, string text, int perRow)
+    private void WriteDumpRow(string offsetText, List<(string Text, DumpHighlight? Mark)> cells, string text, int perRow)
     {
         string sep = _o.Separator == DumpColumnSeparator.Bar ? " | " : "  ";
         bool first = true;
@@ -325,7 +389,7 @@ public sealed class DumpExporter
         }
     }
 
-    private void WriteCell(string cell, (DumpHighlightKind Kind, string? Name)? mark)
+    private void WriteCell(string cell, DumpHighlight? mark)
     {
         if (mark is not { } m)
         {
@@ -338,25 +402,37 @@ public sealed class DumpExporter
             case FormatIds.Html:
             {
                 string cls = m.Kind switch { DumpHighlightKind.Modified => "mod", DumpHighlightKind.Bookmark => "mark", _ => "rule" };
-                string title = m.Kind == DumpHighlightKind.Bookmark && _o.BookmarkTooltips && m.Name is { Length: > 0 } name
+                string title = m.Kind != DumpHighlightKind.Modified && _o.BookmarkTooltips && m.Name is { Length: > 0 } name
                     ? $" title=\"{HtmlEscape(name)}\"" : string.Empty;
-                _w.Write($"<span class=\"{cls}\"{title}>{cell}</span>");
+
+                // ブックマーク・色付けルールの色は半透明の背景色にする (クラスの下線・枠も付くため、色だけで伝えない。仕様 4)。
+                string style = m.Kind != DumpHighlightKind.Modified && ParseColor(m.Color) is { } rgb
+                    ? $" style=\"background-color: #{RgbText(rgb)}55\"" : string.Empty;
+                _w.Write($"<span class=\"{cls}\"{title}{style}>{cell}</span>");
                 break;
             }
 
             case FormatIds.Rtf:
-                _w.Write(m.Kind == DumpHighlightKind.Modified ? $"{{\\cf1\\b\\ul {cell}}}" : $"{{\\cf2\\uld {cell}}}");
+            {
+                int color = m.Kind != DumpHighlightKind.Modified && ParseColor(m.Color) is { } c && _rtfColors.TryGetValue(RgbText(c), out int index)
+                    ? index : 2;
+                _w.Write(m.Kind == DumpHighlightKind.Modified ? $"{{\\cf1\\b\\ul {cell}}}" : $"{{\\cf{color}\\uld {cell}}}");
                 break;
+            }
+
             case FormatIds.Tex:
-                _w.Write(m.Kind == DumpHighlightKind.Modified ? $"\\textcolor{{red}}{{\\underline{{{cell}}}}}" : $"\\textcolor{{blue}}{{\\underline{{{cell}}}}}");
+            {
+                string tex = m.Kind == DumpHighlightKind.Modified ? "{red}" : ParseColor(m.Color) is { } t ? $"[HTML]{{{RgbText(t)}}}" : "{blue}";
+                _w.Write($"\\textcolor{tex}{{\\underline{{{cell}}}}}");
                 break;
+            }
             default:
                 _w.Write(cell);
                 break;
         }
     }
 
-    private void WriteMarkdownTableRow(string offsetText, List<(string Text, (DumpHighlightKind Kind, string? Name)? Mark)> cells, string text)
+    private void WriteMarkdownTableRow(string offsetText, List<(string Text, DumpHighlight? Mark)> cells, string text)
     {
         var parts = new List<string>();
         if (_o.ShowOffset)

@@ -8,7 +8,8 @@ namespace HexEditor.Core.Formats;
 /// マルチ選択を「範囲ごとに別ファイル」で書き出すときのファイル名 (TOOL-04 の仕様 1、TOOL-16 の仕様 1)。記号は TOOL-13 と同じ
 /// (<c>{name}</c> 元のファイル名 (拡張子を含む)、<c>{base}</c> 拡張子なし、<c>{ext}</c> 拡張子 (点を含む)、<c>{index}</c> 1 から始まる番号、
 /// <c>{offset}</c> 開始オフセットの 16 進) に、<c>{start}</c> (開始オフセットの 16 進。<c>{offset}</c> と同じ) と <c>{length}</c> (長さの 16 進) を加えたもの。
-/// <c>{index:000}</c> のように書式を付けられる (数値の書式)。
+/// <c>{index:000}</c> のように書式を付けられる (数値の書式)。<c>{name}</c>・<c>{base}</c>・<c>{ext}</c> は TOOL-13 と同じく元のドキュメントの
+/// ファイル名から作る (保存先として選んだファイル名ではない。保存先は書き出すフォルダを決める)。
 /// </summary>
 public static partial class RangeFileNames
 {
@@ -19,7 +20,7 @@ public static partial class RangeFileNames
     private static partial Regex Symbol();
 
     /// <summary>
-    /// 1 つの範囲のファイル名 (フォルダを含まない)。<paramref name="fileName"/> は保存先として選んだファイル名 (拡張子を含む)。
+    /// 1 つの範囲のファイル名 (フォルダを含まない)。<paramref name="fileName"/> は元のドキュメントのファイル名 (拡張子を含む)。
     /// ファイル名に使えない文字は <c>_</c> に置き換える。
     /// </summary>
     public static string Expand(string pattern, string fileName, int index, long start, long length)
@@ -49,7 +50,10 @@ public static partial class RangeFileNames
         return sb.ToString();
     }
 
-    /// <summary>すべての範囲のファイル名 (同じ名前になる範囲があれば null。形式に番号か位置を入れる必要がある)。</summary>
+    /// <summary>
+    /// すべての範囲のファイル名 (同じ名前になる範囲があれば null。形式に番号か位置を入れる必要がある)。<paramref name="fileName"/> は元のドキュメントの
+    /// ファイル名。
+    /// </summary>
     public static IReadOnlyList<string>? ExpandAll(string pattern, string fileName, IReadOnlyList<(long Offset, long Length)> ranges)
     {
         var names = new List<string>(ranges.Count);
@@ -67,4 +71,8 @@ public static partial class RangeFileNames
 
         return names;
     }
+
+    /// <summary>フォルダにすでにあるファイルの名前 (上書きの確認に使う。TOOL-16 の仕様 2)。</summary>
+    public static IReadOnlyList<string> Existing(string folder, IEnumerable<string> names) =>
+        [.. names.Where(n => File.Exists(Path.Combine(folder, n)))];
 }

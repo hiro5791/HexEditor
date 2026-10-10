@@ -4,6 +4,7 @@ using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Formats;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace HexEditor.App;
@@ -48,6 +49,8 @@ public sealed partial class MainWindow
                 return TestOpenAdvanced(request);
             case "transfer":
                 return await TestTransferAsync(request);
+            case "saveRange":
+                return TestSaveRange(request);
             case "openRangeInTab":
             {
                 // 選択範囲・ブックマークを新しいタブで開く (ENG-39) を、範囲を指定して呼ぶ。開くまでの時間はアプリの中で計る。
@@ -232,6 +235,12 @@ public sealed partial class MainWindow
             foreach ((string key, JsonNode? value) in fields)
             {
                 string text = value!.ToString();
+                if (s.Setters.TryGetValue(key, out Action<string>? set))
+                {
+                    set(text);
+                    continue;
+                }
+
                 switch (s.Fields[key])
                 {
                     case TextBox box:
@@ -245,6 +254,12 @@ public sealed partial class MainWindow
                         break;
                 }
             }
+        }
+
+        // UUEncode のファイルを名前で選ぶ (TOOL-07 の仕様 1)。
+        if (request["uuFile"]?.GetValue<string>() is { } uuName && s.UuFiles is { } uu)
+        {
+            uu.SelectedIndex = uu.Items.Cast<object>().Select(i => i.ToString()).ToList().IndexOf(uuName);
         }
 
         // 入力の変更でプレビューを作り直す (TextChanged は後から届くため、ここで直接呼ぶ) 処理の完了を待つ。
@@ -262,6 +277,57 @@ public sealed partial class MainWindow
             ["summary"] = s.Summary.Text,
             ["canRun"] = s.Dialog.IsPrimaryButtonEnabled,
             ["fields"] = new JsonArray([.. s.Fields.Keys.Select(k => (JsonNode?)k)]),
+            ["values"] = new JsonObject([.. s.Fields.Select(f => new KeyValuePair<string, JsonNode?>(f.Key, f.Value switch
+            {
+                TextBox box => box.Text,
+                CheckBox check => check.IsChecked == true ? "true" : "false",
+                ComboBox { IsEditable: true } combo => combo.Text,
+                ComboBox combo => combo.SelectedIndex.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                _ => null,
+            }))]),
+            ["issues"] = s.Issues is { } list
+                ? new JsonArray([.. list.Items.OfType<TextBlock>().Select(t => (JsonNode?)t.Text)]) : new JsonArray(),
+            ["uuFiles"] = s.UuFiles is { Visibility: Visibility.Visible } files
+                ? new JsonArray([.. files.Items.Select(i => (JsonNode?)i.ToString())]) : new JsonArray(),
+        };
+    }
+
+    /// <summary>
+    /// 「選択範囲をファイルに保存」の小さなダイアログ (TOOL-16): {target: "selection" | "range", start, length, mode: 0 (範囲ごと) | 1 (つなげる), pattern}。
+    /// </summary>
+    private JsonObject TestSaveRange(JsonObject request)
+    {
+        SaveRangeDialogState s = SaveRangeForTest ?? throw new InvalidOperationException("The dialog is not open.");
+        if (request["target"]?.GetValue<string>() is { } target)
+        {
+            (target == "range" ? s.Range : s.Selection).IsChecked = true;
+        }
+
+        if (request["start"]?.GetValue<string>() is { } start)
+        {
+            s.Start.Text = start;
+        }
+
+        if (request["length"]?.GetValue<string>() is { } length)
+        {
+            s.Length.Text = length;
+        }
+
+        if (request["mode"] is { } mode)
+        {
+            s.Mode.SelectedIndex = (int)TestHookSettings.ReadLong(mode, 1);
+        }
+
+        if (request["pattern"]?.GetValue<string>() is { } pattern)
+        {
+            s.Pattern.Text = pattern;
+        }
+
+        return new JsonObject
+        {
+            ["canRun"] = s.Dialog.IsPrimaryButtonEnabled,
+            ["modeShown"] = s.Mode.Visibility == Visibility.Visible,
+            ["patternShown"] = s.Pattern.Visibility == Visibility.Visible,
         };
     }
 }

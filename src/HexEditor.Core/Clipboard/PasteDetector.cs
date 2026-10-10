@@ -357,6 +357,34 @@ public static class PasteDetector
             var stack = new Stack<Group>();
             var top = new Group('\0', 0);
             bool keyword = false, anyPrefixed = false;
+
+            // 誤りを読み飛ばして集める (ソースコードの配列のインポート。数値として解釈できない部分をすべて一覧にする)。
+            bool collecting = options.CollectErrors && !Detecting;
+            var skipped = new List<PasteError>();
+
+            // 解釈できない数値: 誤りを集めて、その語の終わりまで読み飛ばす。
+            bool TryNumber(ref int at, out NumberToken token)
+            {
+                int start = at;
+                try
+                {
+                    token = ReadNumber(ref at);
+                    return true;
+                }
+                catch (PasteParseException ex) when (collecting)
+                {
+                    skipped.Add(ErrorAt(ex.Index, ex.Reason));
+                    at = Math.Max(at, start + 1);
+                    while (at < text.Length && (char.IsAsciiLetterOrDigit(text[at]) || text[at] is '_' or '.'))
+                    {
+                        at++;
+                    }
+
+                    token = null!;
+                    return false;
+                }
+            }
+
             int i = 0;
             while (i < text.Length)
             {
@@ -391,6 +419,13 @@ public static class PasteDetector
 
                     if (j >= text.Length || text[j] != c)
                     {
+                        if (collecting)
+                        {
+                            skipped.Add(ErrorAt(i, "unclosed"));
+                            i = j;
+                            continue;
+                        }
+
                         throw Fail(i, "unclosed", plausible: true);
                     }
 
@@ -475,7 +510,11 @@ public static class PasteDetector
                 {
                     // 負の 10 進 (Java の符号付きの配列など。TOOL-09 の仕様 4)。要素の大きさの 2 の補数にする。
                     i++;
-                    NumberToken positive = ReadNumber(ref i);
+                    if (!TryNumber(ref i, out NumberToken positive))
+                    {
+                        continue;
+                    }
+
                     int bits = (options.ElementSize is 1 or 2 or 4 or 8 ? options.ElementSize : 1) * 8;
                     ulong mask = bits == 64 ? ulong.MaxValue : (1UL << bits) - 1;
                     ulong negated = unchecked((ulong)-(long)positive.Value) & mask;
@@ -485,7 +524,11 @@ public static class PasteDetector
 
                 if (char.IsAsciiDigit(c) || c == '$' || c == '&' && i + 1 < text.Length && text[i + 1] is 'H' or 'h')
                 {
-                    NumberToken token = ReadNumber(ref i);
+                    if (!TryNumber(ref i, out NumberToken token))
+                    {
+                        continue;
+                    }
+
                     anyPrefixed |= token.Prefixed;
                     (stack.Count > 0 ? stack.Peek() : top).Numbers.Add(token);
                     continue;
@@ -493,6 +536,13 @@ public static class PasteDetector
 
                 if (char.IsWhiteSpace(c) || c is ',' or '=' or ';' or ':' or '<' or '>' or '*' or '-' or '+' or '!')
                 {
+                    i++;
+                    continue;
+                }
+
+                if (collecting)
+                {
+                    skipped.Add(ErrorAt(i, "char"));
                     i++;
                     continue;
                 }
@@ -521,6 +571,12 @@ public static class PasteDetector
             {
                 if (n.Value > max)
                 {
+                    if (collecting)
+                    {
+                        skipped.Add(ErrorAt(n.Index, "range"));
+                        continue;
+                    }
+
                     throw Fail(n.Index, "range", plausible: true);
                 }
 
@@ -531,7 +587,7 @@ public static class PasteDetector
                 }
             }
 
-            return new PasteCandidate(PasteFormat.Array, [.. bytes], null);
+            return new PasteCandidate(PasteFormat.Array, [.. bytes], null) { SkippedErrors = skipped };
         }
 
         /// <summary>0x / $ / &amp;H / h 接尾辞 / 10 進の数値。型の接尾辞 (u、L、UL、n、US など) は無視する。</summary>

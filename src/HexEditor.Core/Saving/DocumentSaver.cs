@@ -423,7 +423,7 @@ public static class DocumentSaver
     }
 
     /// <summary>シンボリックリンクの場合はリンク先のファイルを置き換える (ENG-22 の手順 1)。</summary>
-    private static string ResolveTarget(string path)
+    internal static string ResolveTarget(string path)
     {
         var info = new FileInfo(path);
         if (info.Exists && info.LinkTarget is not null)
@@ -439,7 +439,7 @@ public static class DocumentSaver
     }
 
     /// <summary>消す。消せなければ false (残った一時ファイルは次回起動時の復旧の画面で片付ける。ENG-27 の仕様 7)。</summary>
-    private static bool TryDelete(string path)
+    internal static bool TryDelete(string path)
     {
         try
         {

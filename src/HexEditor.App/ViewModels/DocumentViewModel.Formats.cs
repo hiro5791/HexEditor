@@ -40,6 +40,15 @@ public sealed partial class DocumentViewModel
     /// <summary>デコードして開いた形式の、元の形式で保存するための設定。デコードしていなければ null。</summary>
     public EncodedFileSettings? Encoded { get; set; }
 
+    /// <summary>
+    /// インポートで新しいドキュメントにしたときの元のファイルの値 (実行開始アドレス・<c>S0</c> の文字列など。TOOL-05・TOOL-06 の仕様 2 の付随データ)。
+    /// 保存の形式は変えず、エクスポートの既定値にだけ使う。<see cref="Encoded"/> があればそちらを使う。
+    /// </summary>
+    public EncodedFileSettings? ImportedSettings { get; set; }
+
+    /// <summary>エクスポートの既定値にする、インポート時の値 (デコードして開いた形式、またはインポートの付随データ)。</summary>
+    public EncodedFileSettings? ImportedValues => Encoded ?? ImportedSettings;
+
     /// <summary>デコードしたときの元のファイルの値 (復旧用データに記録し、復旧のときに変わったかを調べる)。</summary>
     public FileStamp? EncodedStamp { get; set; }
 

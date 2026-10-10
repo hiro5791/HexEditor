@@ -137,6 +137,19 @@ public enum CopyOptionError
 /// <summary>
 /// 「形式を選択してコピー」の設定 (EDIT-25 の仕様 3〜5 と形式ごとの設定)。既定値は仕様の既定値。
 /// </summary>
+/// <summary>
+/// 配列の定義の修飾 (TOOL-09 の仕様 2 の「<c>const</c> / <c>static</c> などの修飾」)。<see cref="Default"/> は言語ごとの従来の形
+/// (C++ の <c>constexpr</c>、JavaScript の <c>const</c>、Rust の <c>let</c> など)。表せない組み合わせは、その言語で近い形にする。
+/// </summary>
+public enum ArrayModifier
+{
+    Default,
+    None,
+    Const,
+    Static,
+    StaticConst,
+}
+
 public sealed record CopyOptions
 {
     /// <summary>改行 (CRLF が既定。仕様 3)。</summary>
@@ -159,6 +172,9 @@ public sealed record CopyOptions
 
     /// <summary>配列の要素を 10 進で書く (既定は 16 進。TOOL-09 の仕様 2)。</summary>
     public bool ArrayDecimal { get; init; }
+
+    /// <summary>配列の定義の修飾 (既定は言語ごとの従来の形)。</summary>
+    public ArrayModifier Modifier { get; init; }
 
     /// <summary>配列の要素のエンディアン (既定はリトルエンディアン。ドキュメントの既定エンディアンを呼び出し側が入れる)。</summary>
     public bool BigEndian { get; init; }

@@ -301,6 +301,29 @@ public sealed class ColoringEngine
         return complete;
     }
 
+    /// <summary>
+    /// 範囲 [<paramref name="start"/>, start + hex.Length) をその場で評価する (キャッシュを使わない。ダンプのエクスポートの色付け (TOOL-10) のように、
+    /// 先頭から順に全体を読む処理で使う)。読めない範囲は色を付けない。
+    /// </summary>
+    public static void EvaluateNow(DocumentSnapshot snapshot, ColoringRuleSet rules, long start, Span<ColoringCell> hex, Span<ColoringCell> text)
+    {
+        hex.Fill(ColoringCell.None);
+        text.Fill(ColoringCell.None);
+        int length = (int)Math.Min(hex.Length, Math.Max(0, snapshot.Length - start));
+        if (rules.IsEmpty || length <= 0)
+        {
+            return;
+        }
+
+        int margin = rules.MaxMatchLength - 1;
+        long dataStart = Math.Max(0, start - margin);
+        long dataEnd = Math.Min(snapshot.Length, start + length + margin);
+        byte[] data = new byte[dataEnd - dataStart];
+        ReadResult read = snapshot.Read(dataStart, data);
+        ByteState[] states = StatesOf(read, dataStart, data.Length);
+        rules.Evaluate(data, states, dataStart, start, hex[..length], text[..length]);
+    }
+
     /// <summary>チャンク 1 つを評価してキャッシュに入れる (別のスレッド)。</summary>
     private void EvaluateChunk(DocumentSnapshot snapshot, ColoringRuleSet rules, long chunk)
     {

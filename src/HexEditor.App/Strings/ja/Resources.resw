@@ -5148,7 +5148,7 @@
   <data name="Export_MultiPerRange" xml:space="preserve"><value>範囲ごとに別ファイル</value></data>
   <data name="Export_MultiConcatenate" xml:space="preserve"><value>つなげて 1 つのファイル</value></data>
   <data name="Export_MultiPattern" xml:space="preserve"><value>ファイル名の形式</value></data>
-  <data name="Export_MultiPatternHelp" xml:space="preserve"><value>範囲ごとに違うファイル名にしてください。{base}、{ext}、{name}、{index}、{start} ({offset})、{length} を使えます。</value></data>
+  <data name="Export_MultiPatternHelp" xml:space="preserve"><value>範囲ごとに違うファイル名にしてください。{base}、{ext}、{name} (ドキュメントのファイル名)、{index}、{start} ({offset})、{length} を使えます。</value></data>
   <data name="SaveSelection_MultiTitle" xml:space="preserve"><value>選択範囲をファイルに保存</value></data>
   <data name="SaveSelection_Continue" xml:space="preserve"><value>続ける</value></data>
   <data name="Menu_View_SyncMapped.Text" xml:space="preserve"><value>比較に従う(C)</value></data>
@@ -5236,4 +5236,26 @@
   <data name="SetSection_ViewPresets" xml:space="preserve"><value>表示プリセット</value></data>
   <data name="SetSearch_ViewPresets" xml:space="preserve"><value>ひょうじ ぷりせっと 1 行のバイト数 拡張子 エクスポート インポート</value></data>
   <data name="CmdArg_view_presetApply" xml:space="preserve"><value>プリセットの名前を入力してください。</value></data>
+  <data name="Import_UuFile" xml:space="preserve"><value>読み込むファイル</value></data>
+  <data name="Import_IssuesHeader" xml:space="preserve"><value>誤りと警告</value></data>
+  <data name="Import_DropCaption" xml:space="preserve"><value>このファイルをインポート</value></data>
+  <data name="Import_InferredSize" xml:space="preserve"><value>要素のサイズ: {0} バイト (型名から推定。「要素のサイズ」で変えられます)</value></data>
+  <data name="Import_ChosenSize" xml:space="preserve"><value>要素のサイズ: {0} バイト</value></data>
+  <data name="ImportIssue_Warning" xml:space="preserve"><value>警告:</value></data>
+  <data name="Export_OverwriteTitle" xml:space="preserve"><value>ファイルの上書き</value></data>
+  <data name="Export_OverwriteBody" xml:space="preserve"><value>{0, plural, other {次の # 個のファイルがすでにあります。上書きしますか?}}
+{1}</value></data>
+  <data name="Export_Overwrite" xml:space="preserve"><value>上書きする</value></data>
+  <data name="SaveAsFormat_Title" xml:space="preserve"><value>形式の選択</value></data>
+  <data name="FormatSettings_FinalNewLine" xml:space="preserve"><value>最後の行の後に改行を付ける</value></data>
+  <data name="Transfer_execType" xml:space="preserve"><value>実行開始アドレスのレコード</value></data>
+  <data name="Transfer_Choice_linear" xml:space="preserve"><value>05 開始リニアアドレス</value></data>
+  <data name="Transfer_Choice_segment" xml:space="preserve"><value>03 開始セグメントアドレス</value></data>
+  <data name="Transfer_modifier" xml:space="preserve"><value>修飾</value></data>
+  <data name="Transfer_Choice_default" xml:space="preserve"><value>言語の既定</value></data>
+  <data name="Transfer_Choice_const" xml:space="preserve"><value>const (読み取り専用)</value></data>
+  <data name="Transfer_Choice_static" xml:space="preserve"><value>static</value></data>
+  <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const (static の読み取り専用)</value></data>
+  <data name="Transfer_textEncoding" xml:space="preserve"><value>文字コード (ascii、utf-8、cp932 など)</value></data>
+  <data name="Transfer_texDocument" xml:space="preserve"><value>単独で処理できる文書にする (\documentclass から \end{document} まで)</value></data>
 </root>

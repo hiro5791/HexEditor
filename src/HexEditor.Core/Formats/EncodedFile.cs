@@ -1,6 +1,7 @@
 using HexEditor.Core.Clipboard;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
+using HexEditor.Core.Saving;
 
 namespace HexEditor.Core.Formats;
 
@@ -83,16 +84,18 @@ public static class EncodedFile
     }
 
     /// <summary>
-    /// 元の形式に変換して書き出す (TOOL-11 の仕様 2。安全な保存と同じく一時ファイルに書いてから置き換える)。隙間は出力しない。
+    /// 元の形式に変換して書き出す (TOOL-11 の仕様 2)。安全な保存 (ENG-22) と同じく、隠し属性の一時ファイルに書いてから置き換え (属性・ACL・
+    /// 作成日時を引き継ぐ)、<paramref name="backup"/> があればバックアップ (ENG-26) を残し、<paramref name="markerDirectory"/> があれば一時ファイルを
+    /// 記録する。隙間は出力しない。作ったバックアップを返す。
     /// </summary>
-    public static void Save(DocumentSnapshot snapshot, long baseAddress, EncodedFileSettings settings, string path,
-        LongRunningOperation? operation = null)
+    public static BackupOutcome? Save(DocumentSnapshot snapshot, long baseAddress, EncodedFileSettings settings, string path,
+        LongRunningOperation? operation = null, BackupSettings? backup = null, string? markerDirectory = null)
     {
         Validate(snapshot, baseAddress, settings);
         ExportOptions options = ExportOptionsFor(settings);
         ExportSource source = SourceOf(snapshot, baseAddress, Path.GetFileName(path));
         operation?.SetTotal(snapshot.Length);
-        Exporter.WriteFile(path, stream => Exporter.Write(source, [(0, snapshot.Length)], options, stream,
-            operation?.CancellationToken ?? default, done => operation?.Report(done)));
+        return SafeFileWriter.Write(path, stream => Exporter.Write(source, [(0, snapshot.Length)], options, stream,
+            operation?.CancellationToken ?? default, done => operation?.Report(done)), backup, markerDirectory);
     }
 }
