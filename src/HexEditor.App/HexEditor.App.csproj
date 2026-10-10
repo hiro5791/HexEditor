@@ -140,7 +140,17 @@
   -->
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
+    <!--
+      Windows App SDK 2.5.1 の部品のうち使うものだけを参照する (メタパッケージ Microsoft.WindowsAppSDK は AI・ML・検索・ウィジェットの
+      部品 (onnxruntime.dll、DirectML.dll など約 20 MB) も配布物に入れ、ポータブル版の zip が PKG-16 の目標 100 MB を超えるため)。
+      版はメタパッケージ 2.5.1 の依存と同じ。
+    -->
+    <PackageReference Include="Microsoft.WindowsAppSDK.Base" Version="2.0.4" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.DWrite" Version="2.1.0" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Foundation" Version="2.3.12" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.InteractiveExperiences" Version="2.1.9" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.Runtime" Version="2.5.1" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="2.3.9" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools.WinApp" Version="0.7.1" />
   </ItemGroup>
