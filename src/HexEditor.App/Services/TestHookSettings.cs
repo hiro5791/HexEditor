@@ -23,6 +23,9 @@ public enum KillPoint
     /// <summary>その場保存 (ENG-23) で、ジャーナルを書いた後、ファイルに書き込む前。</summary>
     InPlaceAfterJournal,
 
+    /// <summary>ずらしながらのその場保存 (ENG-24) で、<see cref="TestHookSettings.KillAtBytes"/> バイトを書いた時点。</summary>
+    ShiftWrite,
+
     /// <summary>設定ファイルの書き込み (UI-23 の仕様 5) で、一時ファイルに半分まで書いた時点 (TD-UI-HOOK-KILL-SETTINGS-TEMP)。</summary>
     SettingsTemp,
 
@@ -114,6 +117,9 @@ public sealed record TestHookSettings
 
     public KillPoint KillAt { get; init; }
 
+    /// <summary>ずらしながらのその場保存で強制終了する書き込み量 (既定 512 MiB。TC-ENG-24-03)。</summary>
+    public long KillAtBytes { get; init; } = 512L * 1024 * 1024;
+
     public ExceptionPlace? UnhandledException { get; init; }
 
     public int UnhandledExceptionDelayMs { get; init; }
@@ -180,6 +186,7 @@ public sealed record TestHookSettings
                 ? new SaveFault(ReadLong(f["atByte"], 0), ParseEnum<SaveFaultKind>(f["kind"], SaveFaultKind.Io), f["once"]?.GetValue<bool>() ?? false)
                 : null,
             KillAt = ParseEnum(root["killAt"], KillPoint.None),
+            KillAtBytes = ReadLong(root["killAtBytes"], 512L * 1024 * 1024),
             UnhandledException = root["unhandledException"] is { } e ? ParseEnum(e, ExceptionPlace.UiThread) : null,
             UnhandledExceptionDelayMs = (int)ReadLong(root["unhandledExceptionDelayMs"], 0),
             AnsiCodePage = root["ansiCodePage"] is { } cp ? (int)ReadLong(cp, 0) : null,

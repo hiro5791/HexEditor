@@ -275,9 +275,10 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
             OffsetFormat.Hex(Editor.SelectionLength, Editor.View.LowercaseHex), StatusFormat.Number(Editor.SelectionLength, Culture))
         : string.Empty;
 
-    public string ModeText => Editor.ReadOnly ? LockGlyph + " " + Loc.Get("Status_ReadOnly")
+    /// <summary>モード。デコードして開いたドキュメントは形式 (「Intel HEX」など。ENG-38 の画面) を前に付ける。</summary>
+    public string ModeText => (FileFormatText.Length > 0 ? FileFormatText + " · " : string.Empty) + (Editor.ReadOnly ? LockGlyph + " " + Loc.Get("Status_ReadOnly")
         : !Document.CanResize ? Loc.Get("Status_OverwriteFixed")
-        : Editor.InsertMode ? Loc.Get("Status_Insert") : Loc.Get("Status_Overwrite");
+        : Editor.InsertMode ? Loc.Get("Status_Insert") : Loc.Get("Status_Overwrite"));
 
     public string ColumnText => Editor.ActiveColumn == ActiveColumn.Hex ? Loc.Get("Status_ColumnHex") : Loc.Get("Status_ColumnText");
 

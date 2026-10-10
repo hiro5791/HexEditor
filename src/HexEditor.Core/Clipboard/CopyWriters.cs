@@ -228,9 +228,13 @@ internal sealed class Base64Writer(TextWriter writer, CopyOptions options, bool 
     {
         if (_carryCount > 0)
         {
-            Put(Convert.ToBase64String(_carry.AsSpan(0, _carryCount)));
+            string last = Convert.ToBase64String(_carry.AsSpan(0, _carryCount));
+            Put(O.Base64Padding ? last : last.TrimEnd('='));
         }
     }
+
+    /// <summary>1 行の文字数 (0 は改行なし)。</summary>
+    private int LineLength => !wrap ? 0 : O.Base64LineLength ?? (O.Base64Wrap ? 76 : 0);
 
     private void Put(string text)
     {
@@ -239,7 +243,8 @@ internal sealed class Base64Writer(TextWriter writer, CopyOptions options, bool 
             text = text.Replace('+', '-').Replace('/', '_');
         }
 
-        if (!wrap || !O.Base64Wrap)
+        int lineLength = LineLength;
+        if (lineLength <= 0)
         {
             W.Write(text);
             return;
@@ -247,7 +252,7 @@ internal sealed class Base64Writer(TextWriter writer, CopyOptions options, bool 
 
         foreach (char c in text)
         {
-            if (_column == 76)
+            if (_column == lineLength)
             {
                 W.Write(NL);
                 _column = 0;
@@ -259,6 +264,32 @@ internal sealed class Base64Writer(TextWriter writer, CopyOptions options, bool 
     }
 }
 
+/// <summary>決まった文字数で改行しながら書く (Base32・Ascii85 の 1 行の文字数。TOOL-07)。</summary>
+internal sealed class WrappingWriter(TextWriter inner, int lineLength, string newLine)
+{
+    private int _column;
+
+    public void Write(char c)
+    {
+        if (lineLength > 0 && _column == lineLength)
+        {
+            inner.Write(newLine);
+            _column = 0;
+        }
+
+        inner.Write(c);
+        _column++;
+    }
+
+    public void Write(ReadOnlySpan<char> text)
+    {
+        foreach (char c in text)
+        {
+            Write(c);
+        }
+    }
+}
+
 /// <summary>Base32 (RFC 4648)、Base32hex。</summary>
 internal sealed class Base32Writer(TextWriter writer, CopyOptions options) : FormatWriter(writer, options)
 {
@@ -266,6 +297,7 @@ internal sealed class Base32Writer(TextWriter writer, CopyOptions options) : For
     public const string HexAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
 
     private readonly byte[] _carry = new byte[5];
+    private readonly WrappingWriter _out = new(writer, options.Base32LineLength, options.NewLine);
     private int _carryCount;
 
     private string Alphabet => O.Base32Hex ? HexAlphabet : Standard;
@@ -304,7 +336,14 @@ internal sealed class Base32Writer(TextWriter writer, CopyOptions options) : For
         string alphabet = Alphabet;
         for (int i = 0; i < 8; i++)
         {
-            W.Write(i < chars ? alphabet[(int)((v >> (35 - i * 5)) & 31)] : '=');
+            if (i < chars)
+            {
+                _out.Write(alphabet[(int)((v >> (35 - i * 5)) & 31)]);
+            }
+            else if (O.Base32Padding)
+            {
+                _out.Write('=');
+            }
         }
     }
 }
@@ -315,6 +354,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
     public const string Z85Alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-:+=^!/*?&<>()[]{}@%$#";
 
     private readonly byte[] _carry = new byte[4];
+    private readonly WrappingWriter _out = new(writer, options.Ascii85LineLength, options.NewLine);
     private int _carryCount;
 
     private bool Z85 => O.Ascii85 == Ascii85Variant.Z85;
@@ -323,7 +363,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
     {
         if (!Z85 && O.Ascii85Delimiters)
         {
-            W.Write("<~");
+            _out.Write("<~");
         }
     }
 
@@ -350,7 +390,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
 
         if (!Z85 && O.Ascii85Delimiters)
         {
-            W.Write("~>");
+            _out.Write("~>");
         }
     }
 
@@ -359,7 +399,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
         uint v = (uint)(_carry[0] << 24 | _carry[1] << 16 | _carry[2] << 8 | _carry[3]);
         if (!Z85 && bytes == 4 && v == 0)
         {
-            W.Write('z');
+            _out.Write('z');
             return;
         }
 
@@ -371,7 +411,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
             chars[i] = Z85 ? Z85Alphabet[(int)digit] : (char)(digit + 33);
         }
 
-        W.Write(chars[..(bytes + 1)]);
+        _out.Write(chars[..(bytes + 1)]);
     }
 }
 
@@ -384,7 +424,7 @@ internal sealed class UuWriter(TextWriter writer, CopyOptions options, bool xx) 
     private readonly byte[] _line = new byte[LineBytes];
     private int _count;
 
-    public override void Begin() => W.Write($"begin 644 {O.EncodedFileName}{NL}");
+    public override void Begin() => W.Write($"begin {O.EncodedFileMode} {O.EncodedFileName}{NL}");
 
     public override void Write(ReadOnlySpan<byte> data, long at)
     {
@@ -443,7 +483,7 @@ internal sealed class QuotedPrintableWriter(TextWriter writer, CopyOptions optio
         {
             bool literal = b is >= 33 and <= 126 && b != '=';
             int width = literal ? 1 : 3;
-            if (_column + width > 75)
+            if (_column + width > Math.Max(4, O.QuotedPrintableLineLength) - 1)
             {
                 W.Write('=');
                 W.Write(NL);
@@ -729,169 +769,61 @@ internal sealed class TextFormatWriter(TextWriter writer, CopyOptions options) :
     public override void Write(ReadOnlySpan<byte> data, long at) => W.Write(O.Encoding.Decode(data));
 }
 
-/// <summary>Intel HEX。アドレス拡張は最大のアドレスで自動に選ぶ (0xFFFF 以下はなし、0xFFFFF 以下はレコード型 02、それ以上は 04)。</summary>
+/// <summary>
+/// Intel HEX。アドレス拡張は最大のアドレスで自動に選ぶ (0xFFFF 以下はなし、0xFFFFF 以下はレコード型 02、それ以上は 04)。レコードの書き方は
+/// エクスポート (TOOL-05) と共通 (<see cref="Formats.RecordExporter"/>)。
+/// </summary>
 internal sealed class IntelHexWriter : FormatWriter
 {
-    private readonly byte[] _record;
-    private readonly long _first;
-    private readonly int _mode; // 0: 拡張なし、2: 型 02、4: 型 04
-    private int _count;
-    private long _recordAddress;
-    private long _upper;
+    private readonly Formats.IntelHexSink _sink;
+    private readonly long _base;
 
     public IntelHexWriter(TextWriter writer, CopyOptions options, long offset, long length) : base(writer, options)
     {
-        _record = new byte[Math.Clamp(options.RecordBytes, 1, 255)];
-        _first = offset + options.BaseAddress;
-        long last = _first + Math.Max(0, length - 1);
-        _mode = last <= 0xFFFF ? 0 : last <= 0xFFFFF ? 2 : 4;
-        _recordAddress = _first;
+        _base = options.BaseAddress;
+        long last = offset + options.BaseAddress + Math.Max(0, length - 1);
+        Formats.IntelHexAddressMode mode = last <= 0xFFFF ? Formats.IntelHexAddressMode.I8Hex
+            : last <= 0xFFFFF ? Formats.IntelHexAddressMode.I16Hex : Formats.IntelHexAddressMode.I32Hex;
+        _sink = new Formats.IntelHexSink(writer, new Formats.RecordExportOptions { RecordLength = options.RecordBytes }, mode, options.NewLine);
     }
 
-    public override void Write(ReadOnlySpan<byte> data, long at)
-    {
-        foreach (byte b in data)
-        {
-            long address = _recordAddress + _count;
-            // レコードは 64 KiB の境界をまたがない。
-            if (_count > 0 && (address & 0xFFFF) == 0)
-            {
-                Flush();
-            }
+    public override void Write(ReadOnlySpan<byte> data, long at) => _sink.Put(at + _base, data);
 
-            _record[_count++] = b;
-            if (_count == _record.Length)
-            {
-                Flush();
-            }
-        }
-    }
-
-    public override void End()
-    {
-        if (_count > 0)
-        {
-            Flush();
-        }
-
-        W.Write(":00000001FF");
-        W.Write(NL);
-    }
-
-    private void Flush()
-    {
-        long address = _recordAddress;
-        long upper = _mode switch { 2 => (address & 0xF0000) >> 4, 4 => address >> 16, _ => 0 };
-        if (upper != _upper)
-        {
-            Line(0, (byte)(_mode == 2 ? 2 : 4), [(byte)(upper >> 8), (byte)upper]);
-            _upper = upper;
-        }
-
-        Line((int)(address & 0xFFFF), 0, _record.AsSpan(0, _count));
-        _recordAddress += _count;
-        _count = 0;
-    }
-
-    private void Line(int address, byte type, ReadOnlySpan<byte> data)
-    {
-        var sb = new StringBuilder(":");
-        int sum = data.Length + (address >> 8) + (address & 0xFF) + type;
-        sb.Append(data.Length.ToString("X2", CultureInfo.InvariantCulture));
-        sb.Append(address.ToString("X4", CultureInfo.InvariantCulture));
-        sb.Append(type.ToString("X2", CultureInfo.InvariantCulture));
-        foreach (byte b in data)
-        {
-            sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-            sum += b;
-        }
-
-        sb.Append(((byte)(-sum)).ToString("X2", CultureInfo.InvariantCulture));
-        W.Write(sb);
-        W.Write(NL);
-    }
+    public override void End() => _sink.End(null, false, finalNewLine: true);
 }
 
-/// <summary>Motorola S-record。アドレスの大きさで S19 / S28 / S37 を自動で選ぶ (指定も可)。</summary>
+/// <summary>
+/// Motorola S-record。アドレスの大きさで S19 / S28 / S37 を自動で選ぶ (指定も可)。レコード数 (S5) は出さない。レコードの書き方は
+/// エクスポート (TOOL-06) と共通。
+/// </summary>
 internal sealed class SRecordWriter : FormatWriter
 {
-    private readonly byte[] _record;
+    private readonly Formats.SRecordSink _sink;
     private readonly long _first;
-    private readonly int _addressBytes;
-    private int _count;
-    private long _recordAddress;
+    private readonly long _base;
 
     public SRecordWriter(TextWriter writer, CopyOptions options, long offset, long length) : base(writer, options)
     {
-        _record = new byte[Math.Clamp(options.RecordBytes, 1, 250)];
+        _base = options.BaseAddress;
         _first = offset + options.BaseAddress;
         long last = _first + Math.Max(0, length - 1);
-        _addressBytes = options.SRecordKind switch
+        int addressBytes = options.SRecordKind switch
         {
             SRecordKind.S19 => 2,
             SRecordKind.S28 => 3,
             SRecordKind.S37 => 4,
             _ => last <= 0xFFFF ? 2 : last <= 0xFFFFFF ? 3 : 4,
         };
-        _recordAddress = _first;
+        _sink = new Formats.SRecordSink(writer, new Formats.RecordExportOptions { RecordLength = Math.Min(options.RecordBytes, 250) },
+            addressBytes, options.NewLine);
     }
 
-    public override void Begin() => Line(0, 0, Encoding.ASCII.GetBytes(O.SRecordHeader), addressBytes: 2);
+    public override void Begin() => _sink.WriteHeader(O.SRecordHeader);
 
-    public override void Write(ReadOnlySpan<byte> data, long at)
-    {
-        foreach (byte b in data)
-        {
-            _record[_count++] = b;
-            if (_count == _record.Length)
-            {
-                Flush();
-            }
-        }
-    }
+    public override void Write(ReadOnlySpan<byte> data, long at) => _sink.Put(at + _base, data);
 
-    public override void End()
-    {
-        if (_count > 0)
-        {
-            Flush();
-        }
-
-        // 終わりのレコード (S9 / S8 / S7)。開始アドレスは先頭のアドレス。
-        Line(11 - _addressBytes, _first, [], _addressBytes);
-    }
-
-    private void Flush()
-    {
-        Line(_addressBytes - 1, _recordAddress, _record.AsSpan(0, _count), _addressBytes);
-        _recordAddress += _count;
-        _count = 0;
-    }
-
-    private void Line(int type, long address, ReadOnlySpan<byte> data, int addressBytes)
-    {
-        var sb = new StringBuilder("S");
-        sb.Append(type.ToString(CultureInfo.InvariantCulture));
-        int count = addressBytes + data.Length + 1;
-        int sum = count;
-        sb.Append(count.ToString("X2", CultureInfo.InvariantCulture));
-        for (int i = addressBytes - 1; i >= 0; i--)
-        {
-            int b = (int)((address >> (i * 8)) & 0xFF);
-            sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-            sum += b;
-        }
-
-        foreach (byte b in data)
-        {
-            sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-            sum += b;
-        }
-
-        sb.Append(((byte)~sum).ToString("X2", CultureInfo.InvariantCulture));
-        W.Write(sb);
-        W.Write(NL);
-    }
+    // 終わりのレコード (S9 / S8 / S7)。開始アドレスは先頭のアドレス。
+    public override void End() => _sink.End(writeCount: false, _first, finalNewLine: true);
 }
 
 /// <summary>JSON (<c>{"offset": 256, "length": 4, "data": "3q2+7w=="}</c>)。data は Base64 / Hex 文字列 / 数値の配列。</summary>

@@ -157,6 +157,9 @@ public sealed record CopyOptions
     /// <summary>配列の要素の大きさ (1 / 2 / 4 / 8。仕様 5)。</summary>
     public int ElementSize { get; init; } = 1;
 
+    /// <summary>配列の要素を 10 進で書く (既定は 16 進。TOOL-09 の仕様 2)。</summary>
+    public bool ArrayDecimal { get; init; }
+
     /// <summary>配列の要素のエンディアン (既定はリトルエンディアン。ドキュメントの既定エンディアンを呼び出し側が入れる)。</summary>
     public bool BigEndian { get; init; }
 
@@ -193,6 +196,32 @@ public sealed record CopyOptions
 
     /// <summary>UUEncode / XXEncode の begin 行のファイル名。</summary>
     public string EncodedFileName { get; init; } = "data.bin";
+
+    // ---- ファイルへのエクスポートで選べる設定 (TOOL-07 の仕様 1)。既定値は Copy As の出力と同じになる ----
+
+    /// <summary>Base64 の 1 行の文字数 (0 は改行なし)。null なら <see cref="Base64Wrap"/> に従う (76 または改行なし)。</summary>
+    public int? Base64LineLength { get; init; }
+
+    /// <summary>Base64 のパディング (<c>=</c>) を付ける (既定)。</summary>
+    public bool Base64Padding { get; init; } = true;
+
+    /// <summary>Base32 の 1 行の文字数 (0 は改行なし。既定)。</summary>
+    public int Base32LineLength { get; init; }
+
+    /// <summary>Base32 のパディングを付ける (既定)。</summary>
+    public bool Base32Padding { get; init; } = true;
+
+    /// <summary>Ascii85 の 1 行の文字数 (0 は改行なし。既定)。<c>&lt;~</c> <c>~&gt;</c> も数える。</summary>
+    public int Ascii85LineLength { get; init; }
+
+    /// <summary>UUEncode の begin 行のモード (既定 644)。</summary>
+    public string EncodedFileMode { get; init; } = "644";
+
+    /// <summary>Quoted-Printable の 1 行の文字数 (ソフト改行の <c>=</c> を含む。既定 76)。</summary>
+    public int QuotedPrintableLineLength { get; init; } = 76;
+
+    /// <summary>URL エンコードで RFC 3986 の非予約文字 (英数字と <c>-._~</c>) を変換しない。偽ならすべて <c>%XX</c> にする (Copy As の既定)。</summary>
+    public bool UrlKeepUnreserved { get; init; }
 
     public DocumentLayout Layout { get; init; } = DocumentLayout.Dump;
 

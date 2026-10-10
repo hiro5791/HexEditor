@@ -21,6 +21,9 @@ public enum SaveMethod
 
     /// <summary>一時ファイルに書き出して置き換える安全な保存 (ENG-22)。名前を付けて保存 (ENG-21) もこれ。</summary>
     Safe,
+
+    /// <summary>長さが変わる保存を、元のファイルの中でデータをずらしながら行う (ENG-24)。</summary>
+    ShiftInPlace,
 }
 
 /// <summary>保存を始める前に見つかった問題 (ENG-20 の仕様 3)。UI は種類に応じて確認ダイアログまたはエラーを出す。</summary>
@@ -58,6 +61,12 @@ public enum SaveIssue
     HardLinks,
 
     /// <summary>
+    /// ずらしながらのその場保存 (<see cref="SavePlan.Shift"/>) の実行前の確認。毎回確認ダイアログを出し (ENG-24 の仕様 3)、「その場で保存」なら
+    /// <see cref="SavePlanner.ConfirmShift"/> で続ける。
+    /// </summary>
+    ConfirmShift,
+
+    /// <summary>
     /// その場保存のバックアップのためにファイル全体 (<see cref="SavePlan.BackupCopyBytes"/>。1 GiB 超) をコピーする (ENG-26 の仕様 5)。UI は
     /// 「コピーして保存」(<see cref="SavePlanner.CopyBackup"/>)「バックアップなしで保存」(<see cref="SavePlanner.WithoutBackup"/>)
     /// 「キャンセル」を選ばせる。
@@ -91,6 +100,12 @@ public sealed record SaveSettings
 
     /// <summary>「バックアップを作る」(ENG-26)。null なら作らない (既定)。</summary>
     public BackupSettings? Backup { get; init; }
+
+    /// <summary>設定「長さが変わる場合もその場で書く」(ENG-24)。オンでも実行のたびに確認する。</summary>
+    public bool ShiftWhenLengthChanges { get; init; }
+
+    /// <summary>ずらしながらのその場保存の退避ファイルの置き場所 (追加バッファの一時ファイルと同じ場所)。null ならジャーナルの置き場所。</summary>
+    public string? SpillDirectory { get; init; }
 }
 
 /// <summary>保存の計画: どの方式で、どこに、何を書くか。<see cref="SavePlanner.Plan"/> で作り、UI スレッドで確認してから実行する。</summary>
@@ -118,9 +133,15 @@ public sealed record SavePlan
     public int? LinkCount { get; init; }
 
     /// <summary>
-    /// リンクを保つその場保存ができる (長さが同じ)。長さが変わる場合のずらしながらのその場保存 (ENG-24) はフェーズ 2。
+    /// リンクを保つその場保存ができる (長さが同じならその場保存、変わるならずらしながらのその場保存 ENG-24)。
     /// </summary>
     public bool CanKeepLinks { get; init; }
+
+    /// <summary>ずらしながらのその場保存を選べる (空き容量不足のダイアログの「その場でずらしながら保存」。ENG-25)。</summary>
+    public bool CanShift { get; init; }
+
+    /// <summary>ずらしながらのその場保存の計画 (<see cref="SaveMethod.ShiftInPlace"/>)。</summary>
+    public ShiftPlan? Shift { get; init; }
 
     public required SaveSettings Settings { get; init; }
 
@@ -134,15 +155,24 @@ public sealed record SavePlan
     public bool BackupCopyConfirmed { get; init; }
 
     /// <summary>書き込みを行う計画で、確認の要る問題がない (<see cref="SavePlanner.Execute"/> できる)。</summary>
-    public bool CanExecute => Issue == SaveIssue.None && Method is SaveMethod.InPlace or SaveMethod.InPlaceUnprotected or SaveMethod.Safe;
+    public bool CanExecute => Issue == SaveIssue.None
+        && Method is SaveMethod.InPlace or SaveMethod.InPlaceUnprotected or SaveMethod.Safe or SaveMethod.ShiftInPlace;
 
     /// <summary>書き出す量 (進捗の全体)。</summary>
-    public long TotalBytes => Method == SaveMethod.Safe ? Snapshot.Length : InPlaceSaver.JournalSize(Snapshot) * 2;
+    public long TotalBytes => Method switch
+    {
+        SaveMethod.Safe => Snapshot.Length,
+        SaveMethod.ShiftInPlace => Shift is { } s ? s.BackupBytes + s.SpillBytes + s.WriteBytes : Snapshot.Length,
+        _ => InPlaceSaver.JournalSize(Snapshot) * 2,
+    };
 }
 
 /// <summary>保存の結果。UI スレッドで <see cref="SavePlanner.Complete"/> に渡す。</summary>
 public sealed record SaveResult(FileByteSource? SavedFile, InPlaceSaveResult? InPlace)
 {
+    /// <summary>ずらしながらのその場保存の結果 (ENG-24)。</summary>
+    public ShiftSaveResult? Shift { get; init; }
+
     /// <summary>バックアップの作成にかかった時間 (作らなければ null。TC-ENG-26-02 のログ)。</summary>
     public TimeSpan? BackupTime { get; init; }
 
@@ -159,6 +189,9 @@ public sealed record SaveResult(FileByteSource? SavedFile, InPlaceSaveResult? In
 /// </summary>
 public static class SavePlanner
 {
+    /// <summary>設定「長さが変わる場合もその場で書く」(ENG-24) のキー。</summary>
+    public const string ShiftInPlaceKey = "save.shiftInPlace";
+
     /// <summary>保存の方式を決め、始める前の確認をする (ENG-20 の仕様 1・3、ENG-25)。</summary>
     /// <param name="targetPath">保存先。null は「元の場所に保存」(無題なら <see cref="SaveMethod.SaveAs"/>)。</param>
     public static SavePlan Plan(Document document, string? targetPath, SaveSettings settings)
@@ -200,7 +233,9 @@ public static class SavePlanner
             return CheckInPlace(plan with { Method = SaveMethod.InPlace });
         }
 
-        // 置き換えでハードリンクが切れる場合は先に確かめる (ENG-22 の仕様 4)。
+        bool canShift = sameFile && File.Exists(target) && ShiftSaver.CanShift(snapshot, target);
+
+        // 置き換えでハードリンクが切れる場合は先に確かめる (ENG-22 の仕様 4)。長さが変わる場合も、ずらしながらのその場保存でリンクを保てる (ENG-24)。
         if (sameFile && FileStamp.LinkCount(target) is int links and > 1)
         {
             return plan with
@@ -208,11 +243,17 @@ public static class SavePlanner
                 Method = SaveMethod.Safe,
                 Issue = SaveIssue.HardLinks,
                 LinkCount = links,
-                CanKeepLinks = InPlaceSaver.CanSaveInPlace(snapshot, target),
+                CanKeepLinks = InPlaceSaver.CanSaveInPlace(snapshot, target) || canShift,
             };
         }
 
-        return CheckSafe(plan with { Method = SaveMethod.Safe });
+        // 設定「長さが変わる場合もその場で書く」(ENG-24)。実行のたびに確認する。
+        if (canShift && settings.ShiftWhenLengthChanges && !settings.AlwaysSafeSave)
+        {
+            return UseShiftInPlace(plan);
+        }
+
+        return CheckSafe(plan with { Method = SaveMethod.Safe, CanShift = canShift });
     }
 
     /// <summary>ハードリンクの確認で「安全に保存 (リンクを切る)」を選んだ。空き容量などの確認を続ける。</summary>
@@ -221,9 +262,42 @@ public static class SavePlanner
 
     /// <summary>ハードリンクの確認で「その場で保存 (リンクを保つ)」を選んだ。ジャーナルの確認を続ける。</summary>
     public static SavePlan KeepLinks(SavePlan plan) =>
-        plan.CanKeepLinks
+        !plan.CanKeepLinks ? throw new InvalidOperationException("この保存はその場で書けません。")
+        : InPlaceSaver.CanSaveInPlace(plan.Snapshot, plan.TargetPath!)
             ? CheckInPlace(plan with { Method = SaveMethod.InPlace, Issue = SaveIssue.None, LinkCount = null })
-            : throw new InvalidOperationException("長さが変わる保存はその場で書けません (ENG-24 は未実装)。");
+            : UseShiftInPlace(plan with { LinkCount = null });
+
+    /// <summary>
+    /// ずらしながらのその場保存にする (ENG-24。空き容量不足のダイアログの「その場でずらしながら保存」、ハードリンクの確認の「その場で保存」、設定)。
+    /// 書き込み計画を作り、確認ダイアログ (<see cref="SaveIssue.ConfirmShift"/>) を出す計画を返す。ファイルが長くなる分の空き容量がなければ
+    /// 空き容量不足。
+    /// </summary>
+    public static SavePlan UseShiftInPlace(SavePlan plan)
+    {
+        string spill = plan.Settings.SpillDirectory ?? plan.Settings.JournalDirectory;
+        long? temporary = plan.Settings.Volumes.GetVolume(ExistingFolder(spill))?.AvailableFreeSpace;
+        ShiftPlan shift = ShiftSaver.Plan(plan.Snapshot, temporary);
+        long growth = shift.FinalLength - shift.OriginalLength;
+        VolumeInfo? volume = plan.Settings.Volumes.GetVolume(ExistingFolder(Path.GetDirectoryName(plan.TargetPath!)!));
+        if (growth > 0 && volume?.AvailableFreeSpace is long available && available < growth + DocumentSaver.FreeSpaceMargin)
+        {
+            return plan with
+            {
+                Method = SaveMethod.Safe,
+                Issue = SaveIssue.InsufficientSpace,
+                Space = new SpaceShortage(volume.Name, growth + DocumentSaver.FreeSpaceMargin, available),
+                CanShift = false,
+            };
+        }
+
+        return plan with { Method = SaveMethod.ShiftInPlace, Issue = SaveIssue.ConfirmShift, Shift = shift, Space = null, CanShift = true };
+    }
+
+    /// <summary>ずらしながらのその場保存の確認ダイアログで「その場で保存」を選んだ。</summary>
+    public static SavePlan ConfirmShift(SavePlan plan) =>
+        plan.Method == SaveMethod.ShiftInPlace && plan.Shift is not null
+            ? plan with { Issue = SaveIssue.None }
+            : throw new InvalidOperationException("ずらしながらのその場保存の計画ではありません。");
 
     /// <summary>ジャーナルの確認で「安全な保存を使う」を選んだ。安全な保存の確認 (空き容量など) をやり直す。</summary>
     public static SavePlan UseSafeSave(SavePlan plan) =>
@@ -254,6 +328,14 @@ public static class SavePlanner
             throw new InvalidOperationException($"この計画は実行できません ({plan.Method}, {plan.Issue})。");
         }
 
+        if (plan.Method == SaveMethod.ShiftInPlace)
+        {
+            // 書き込みを始めたらキャンセルできない (ENG-24 の仕様 5)。
+            ShiftSaveResult shift = ShiftSaver.Save(plan.Snapshot, plan.Shift!, plan.Settings.JournalDirectory,
+                plan.Settings.SpillDirectory ?? plan.Settings.JournalDirectory, operation, () => operation?.DisallowCancel());
+            return new SaveResult(null, null) { Shift = shift };
+        }
+
         if (plan.Method == SaveMethod.Safe)
         {
             FileByteSource saved = DocumentSaver.Save(plan.Snapshot, plan.TargetPath!, operation, plan.Settings.Volumes, plan.Backup,
@@ -279,7 +361,11 @@ public static class SavePlanner
     /// <summary>保存の完了を反映する (UI スレッド。ENG-20 の仕様 4)。</summary>
     public static void Complete(SavePlan plan, SaveResult result)
     {
-        if (result.InPlace is { } inPlace)
+        if (result.Shift is { } shift)
+        {
+            plan.Document.CompleteShiftSave(shift);
+        }
+        else if (result.InPlace is { } inPlace)
         {
             plan.Document.CompleteInPlaceSave(inPlace);
         }
@@ -336,7 +422,7 @@ public static class SavePlanner
     {
         string folder = Path.GetDirectoryName(plan.TargetPath!)!;
         VolumeInfo? volume = plan.Settings.Volumes.GetVolume(ExistingFolder(folder));
-        long length = plan.Snapshot.Length;
+        long length = DocumentSaver.OutputLength(plan.Snapshot, plan.TargetPath!);
         if (volume?.MaxFileSize is long max && length > max)
         {
             return plan with { Issue = SaveIssue.FileTooLarge, SizeLimit = new FileSizeLimit(volume.Name, volume.FileSystem!, max, length) };

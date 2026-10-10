@@ -264,5 +264,12 @@ public static class TestSavePoints
         get => InPlaceSaver.AfterJournalWritten;
         set => InPlaceSaver.AfterJournalWritten = value;
     }
+
+    /// <summary>ずらしながらのその場保存 (ENG-24) で、書き込んだ量 (バイト) ごとに呼ぶ。</summary>
+    public static Action<long>? AfterShiftBytesWritten
+    {
+        get => ShiftSaver.AfterBytesWritten;
+        set => ShiftSaver.AfterBytesWritten = value;
+    }
 }
 #endif

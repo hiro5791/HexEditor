@@ -265,6 +265,8 @@
                     <MenuFlyoutItem x:Name="MenuGo" x:Uid="Bookmarks_MenuGo" AutomationProperties.AutomationId="Bookmarks_MenuGo" Click="MenuGo_Click" />
                     <MenuFlyoutItem x:Name="MenuRename" x:Uid="Bookmarks_MenuRename" AutomationProperties.AutomationId="Bookmarks_MenuRename" Click="MenuRename_Click" />
                     <MenuFlyoutItem x:Name="MenuEdit" x:Uid="Bookmarks_MenuEdit" AutomationProperties.AutomationId="Bookmarks_MenuEdit" Click="Edit_Click" />
+                    <!--  ブックマークの範囲を新しいタブで開く (ENG-39 の仕様 3。範囲を持たないブックマークは開けない)  -->
+                    <MenuFlyoutItem x:Name="OpenInNewTabItem" x:Uid="Bookmarks_MenuOpenInNewTab" AutomationProperties.AutomationId="Bookmarks_MenuOpenInNewTab" Click="OpenInNewTab_Click" />
                     <MenuFlyoutSubItem x:Name="ColorMenu" x:Uid="Bookmarks_MenuColor" AutomationProperties.AutomationId="Bookmarks_MenuColor" />
                     <!--  グループに移動 (INSP-27 の仕様 5)、選択範囲にする (INSP-28 の仕様 2)  -->
                     <MenuFlyoutSubItem x:Name="MoveGroupMenu" x:Uid="Bookmarks_MenuMoveToGroup" AutomationProperties.AutomationId="Bookmarks_MenuMoveToGroup" />

@@ -138,6 +138,7 @@ public sealed partial class HexView
                     // 読み込みの状態 (Unreadable のセルには斜線の模様を重ねて描く。VIEW-03 の仕様 5)。
                     ["state"] = c >= row.Lead && c < row.Count ? row.States[c].ToString() : null,
                     ["hatched"] = c >= row.Lead && c < row.Count && row.States[c] == Core.Engine.ByteState.Unreadable,
+                    ["noData"] = c >= row.Lead && c < row.Count && row.States[c] == Core.Engine.ByteState.NoData,
                 };
                 if (selected)
                 {

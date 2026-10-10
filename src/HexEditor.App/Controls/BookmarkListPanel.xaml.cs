@@ -291,7 +291,7 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
             }
         }
 
-        foreach (Control c in new Control[] { MenuGo, MenuEdit, MoveGroupMenu, MenuToSelection })
+        foreach (Control c in new Control[] { MenuGo, MenuEdit, MoveGroupMenu, MenuToSelection, OpenInNewTabItem })
         {
             c.Visibility = group is null ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -306,6 +306,9 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
         MenuNewSubgroup.IsEnabled = group is not null && group.Group.Depth < BookmarkGroups.MaxDepth;
         MenuToSelection.IsEnabled = any;
         BuildMoveGroupMenu();
+
+        // 範囲を持たないブックマークは新しいタブで開けない (ENG-39 の仕様 3)。
+        OpenInNewTabItem.IsEnabled = List.SelectedItem is BookmarkRowViewModel { Bookmark.Length: > 0 };
     }
 
     /// <summary>「グループに移動」のサブメニュー: グループなし、今あるグループ、新しいグループ。</summary>
@@ -374,6 +377,17 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
         {
             FrameworkElement anchor = List.ContainerFromItem(row) as FrameworkElement ?? List;
             EditRequested?.Invoke(this, (row.Bookmark, anchor, rename));
+        }
+    }
+
+    /// <summary>ブックマークの範囲を新しいタブで開く (ENG-39 の仕様 3)。</summary>
+    public event EventHandler<Bookmark>? OpenInNewTabRequested;
+
+    private void OpenInNewTab_Click(object sender, RoutedEventArgs e)
+    {
+        if (List.SelectedItem is BookmarkRowViewModel { Bookmark.Length: > 0 } row)
+        {
+            OpenInNewTabRequested?.Invoke(this, row.Bookmark);
         }
     }
 

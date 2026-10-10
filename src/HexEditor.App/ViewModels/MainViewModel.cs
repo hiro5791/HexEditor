@@ -154,6 +154,10 @@ public sealed partial class MainViewModel : ObservableObject
             // 外部で変更されたファイルの上書き・削除されたファイルの作り直しは、全体を書く (ENG-19 の仕様 5・8)。
             AlwaysSafeSave = vm.OverwritesExternalChange || vm.SourceDeleted,
             Backup = SkipBackupOnce ? null : BackupSettings,
+
+            // ずらしながらのその場保存 (ENG-24): 設定と、退避ファイルの置き場所 (追加バッファの一時ファイルと同じ場所)。
+            ShiftWhenLengthChanges = ShiftWhenLengthChanges,
+            SpillDirectory = Path.Combine(_options.TempDirectory, doc.Id.ToString("N")),
         });
         SkipBackupOnce = false;
         if (plan.Method == SaveMethod.NoChanges)
@@ -212,6 +216,17 @@ public sealed partial class MainViewModel : ObservableObject
                 op => Task.FromResult(SavePlanner.Execute(plan, op)),
                 locked => doc.SetEditLock(locked));
         }
+        catch (ShiftSaveFailedException ex)
+        {
+            // ずらしながらのその場保存の途中で失敗: 退避した旧内容でドキュメントの内容を保つ (ENG-24 の「エラー」)。ファイルは壊れている可能性がある。
+            doc.RecoverAfterShiftFailure(ex.Recovered);
+            if (vm.Watch is { } failed)
+            {
+                ExternalChanges?.Rebase(failed, failed.Baseline);
+            }
+
+            throw;
+        }
         catch
         {
             SavePlanner.Abort(plan);
@@ -260,6 +275,9 @@ public sealed partial class MainViewModel : ObservableObject
         set => _app.Backup = value;
     }
 
+    /// <summary>設定「長さが変わる場合もその場で書く」(ENG-24)。</summary>
+    public bool ShiftWhenLengthChanges { get; set; }
+
     /// <summary>次の保存 1 回だけバックアップを作らない (「バックアップなしで保存」。ENG-26 の「エラー」)。</summary>
     public bool SkipBackupOnce { get; set; }
 
@@ -275,6 +293,12 @@ public sealed partial class MainViewModel : ObservableObject
         bool otherViews = vm.HasOtherViews;
         if (!otherViews)
         {
+            // 親のタブを閉じると連動ビューのタブも閉じる (ENG-39 の仕様 1)。
+            foreach (DocumentViewModel child in LinkedTabsOf(vm))
+            {
+                (child.Owner ?? this).Close(child);
+            }
+
             BeforeClose(vm, Documents.IndexOf(vm));
         }
 
@@ -413,12 +437,15 @@ public sealed partial class MainViewModel : ObservableObject
         all.Wait(timeout);
     }
 
-    private DocumentViewModel Add(Document doc, string? path, string name, int? insertAt = null)
+    /// <param name="recovery">
+    /// 復旧用データを作るか。範囲を指定して開いた (ENG-13)・デコードして開いた (ENG-38) ドキュメントは、元データをファイルとして開き直せないため作らない。
+    /// </param>
+    private DocumentViewModel Add(Document doc, string? path, string name, int? insertAt = null, bool recovery = true)
     {
-        DocumentRecovery? recovery = null;
+        DocumentRecovery? recoveryData = null;
         try
         {
-            recovery = new DocumentRecovery(RecoveryRoot, doc.Id);
+            recoveryData = recovery ? new DocumentRecovery(RecoveryRoot, doc.Id) : null;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -426,7 +453,7 @@ public sealed partial class MainViewModel : ObservableObject
             AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
         }
 
-        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recovery, Notifications = Notifications }, insertAt);
+        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recoveryData, Notifications = Notifications }, insertAt);
     }
 
     /// <summary>
@@ -445,7 +472,12 @@ public sealed partial class MainViewModel : ObservableObject
                 owner.LockFailed?.Invoke(owner, vm);
             }
         };
-        Memory.Register(doc);
+        if (doc.LinkedParent is null)
+        {
+            // 連動ビューは親とデータを共有するため、メモリの使用量を二重に数えない。
+            Memory.Register(doc);
+        }
+
         vm.Owner = this;
         InsertDocument(vm, insertAt);
         Selected = vm;

@@ -174,10 +174,20 @@ public sealed class LongRunningOperation
     /// <summary>これまでに見つかった一致の数を報告する (検索の処理だけが呼ぶ)。</summary>
     public void ReportMatches(long count) => Interlocked.Exchange(ref _matches, Math.Max(0, count));
 
-    /// <summary>キャンセルを要求する。処理は 200 ms 以内に止まる (ENG-09 の仕様 5)。</summary>
+    /// <summary>キャンセルできるか (ずらしながらのその場保存は書き込みを始めたらキャンセルできない。ENG-24 の仕様 5)。</summary>
+    public bool CanCancel { get; private set; } = true;
+
+    /// <summary>これ以降キャンセルを受け付けない。UI はキャンセルボタンを無効にし、理由をツールチップで示す。</summary>
+    public void DisallowCancel()
+    {
+        CanCancel = false;
+        ProgressChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>キャンセルを要求する。処理は 200 ms 以内に止まる (ENG-09 の仕様 5)。キャンセルできない処理では何もしない。</summary>
     public void Cancel()
     {
-        if (State is OperationState.Pending or OperationState.Running)
+        if (CanCancel && State is OperationState.Pending or OperationState.Running)
         {
             State = OperationState.Cancelling;
             CancelRequestedAt = _time.GetUtcNow();

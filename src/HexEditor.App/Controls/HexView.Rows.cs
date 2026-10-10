@@ -28,6 +28,9 @@ public sealed partial class HexView
         Loading,
         Unreadable,
         Empty,
+
+        /// <summary>データのないアドレス (Intel HEX などの隙間。ENG-38 の仕様 3)。値 (塗りつぶしの値) を淡く表示する。</summary>
+        NoData,
     }
 
     /// <summary>変更されたバイトの種類 (VIEW-15)。下線の形が違う (実線・2 本線・点線)。</summary>
@@ -472,6 +475,7 @@ public sealed partial class HexView
             {
                 ByteState.Loading => CellKind.Loading,
                 ByteState.Unreadable => CellKind.Unreadable,
+                ByteState.NoData => CellKind.NoData,
                 _ => _marks[c] != ChangeMark.None ? CellKind.Modified : CellKind.Normal,
             };
         }
@@ -546,7 +550,7 @@ public sealed partial class HexView
         private Brush HexForeground(int c, Palette palette)
         {
             CellKind kind = KindAt(c);
-            if (kind is CellKind.Empty or CellKind.Loading)
+            if (kind is CellKind.Empty or CellKind.Loading or CellKind.NoData)
             {
                 return palette.Dim;
             }
@@ -595,7 +599,7 @@ public sealed partial class HexView
         private Brush TextForeground(int column, int c, Palette palette)
         {
             CellKind kind = KindAt(c);
-            if (kind is CellKind.Empty or CellKind.Loading)
+            if (kind is CellKind.Empty or CellKind.Loading or CellKind.NoData)
             {
                 return palette.Dim;
             }

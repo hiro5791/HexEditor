@@ -293,6 +293,29 @@ public sealed partial class MainWindow : Window
     /// <summary>保存する。保存しなかった (キャンセル・失敗) 場合は false。</summary>
     private async Task<bool> SaveAsync(DocumentViewModel doc, bool saveAs)
     {
+        // 連動ビューの保存は親のドキュメントを保存する (ENG-39 の仕様 1)。
+        if (doc.LinkParent is { } linkParent)
+        {
+            return await SaveAsync(linkParent, saveAs);
+        }
+
+        // デコードして開いたドキュメントは元の形式で保存する (TOOL-11 の仕様 2・3)。
+        if (doc.Encoded is { } encoded && doc.FilePath is { } encodedPath)
+        {
+            if (!saveAs)
+            {
+                return !doc.Document.IsModified || await SaveEncodedAsync(doc, encodedPath, encoded);
+            }
+
+            if (await SaveEncodedAsAsync(doc, encoded) is { } done)
+            {
+                return done;
+            }
+
+            // バイナリとして保存する: 以後はバイナリのドキュメント。
+            doc.Encoded = null;
+        }
+
         string? path = doc.FilePath;
 
         // 変更のない文書を同じファイルに保存しても、ファイルには触れない (ENG-20。更新日時を変えない)。
@@ -307,7 +330,13 @@ public sealed partial class MainWindow : Window
         {
             // 初期フォルダは元のファイルのフォルダ、無題なら前回保存したフォルダ (ENG-21 の仕様 1)。
             string suggestedName = doc.IsUntitled ? doc.DisplayName + ".bin" : doc.DisplayName;
-            if (TestHooks.TrySavePicker(suggestedName, out string? chosen))
+            if (_binarySaveAsPath is { } binaryPath)
+            {
+                // デコードしたドキュメントの「名前を付けて保存」でバイナリの保存先を選んだ (TOOL-11 の仕様 3)。
+                path = binaryPath;
+                _binarySaveAsPath = null;
+            }
+            else if (TestHooks.TrySavePicker(suggestedName, out string? chosen))
             {
                 path = chosen;
             }
@@ -366,6 +395,14 @@ public sealed partial class MainWindow : Window
         catch (InsufficientSpaceException ex)
         {
             ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error, doc);
+        }
+        catch (ShiftSaveFailedException)
+        {
+            // ずらしながらのその場保存の途中のエラー (ENG-24 の「エラー」)。内容はこのタブに残っているので、別の場所に保存してもらう。
+            ShowNotice(Loc.Get("Shift_Failed"), InfoBarSeverity.Error, doc, actions:
+            [
+                new NotificationAction(Loc.Get("Menu_File_SaveAs/Text").TrimEnd('.', '…'), () => _ = SaveAsync(doc, saveAs: true)),
+            ]);
         }
         catch (InPlaceSaveRolledBackException)
         {
@@ -514,10 +551,13 @@ public sealed partial class MainWindow : Window
 
                 if (copied?.InAppOnly == true)
                 {
-                    // 「選択範囲 (12.3 GB) は大きすぎるため…」(EDIT-22 の仕様 5。「ファイルに書き出す」は TOOL-16 (フェーズ 2) の後)。
+                    // 「選択範囲 (12.3 GB) は大きすぎるため…」と「ファイルに書き出す」(EDIT-22 の仕様 5、TOOL-16)。
                     string size = StatusFormat.ShortSize(editor.SelectionLength, System.Globalization.CultureInfo.CurrentCulture)
                         ?? editor.SelectionLength.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                    ShowNotice(Loc.Format("Clipboard_InAppOnlySize", size), InfoBarSeverity.Informational, Vm.Selected);
+                    ShowNotice(Loc.Format("Clipboard_InAppOnlySize", size), InfoBarSeverity.Informational, Vm.Selected, actions:
+                    [
+                        new NotificationAction(Loc.Get("Clipboard_WriteToFile"), () => _ = Commands.ExecuteAsync("file.saveSelection")),
+                    ]);
                 }
                 else if (copied?.TextOmitted == true)
                 {

@@ -184,14 +184,16 @@ public sealed partial class Document : IDisposable
     /// <summary>現在の元データ。保存 (ENG-20) の後は保存したファイルに変わる。</summary>
     public IByteSource Source => _storage.Source;
 
+    /// <summary>Undo 履歴。連動ビュー (ENG-39) では親のドキュメントの履歴 (親でも子でも同じ履歴を Undo する)。</summary>
     public EditHistory History { get; }
 
-    public DocumentSnapshot Current => History.Current;
+    /// <summary>現在の内容。連動ビューでは親の現在の内容の範囲。</summary>
+    public DocumentSnapshot Current => _linkView ?? History.Current;
 
     public long Length => Current.Length;
 
-    /// <summary>挿入・削除・切り取り・挿入貼り付けができるか (ENG-07)。</summary>
-    public bool CanResize => Source.Capabilities.HasFlag(SourceCapabilities.CanResize);
+    /// <summary>挿入・削除・切り取り・挿入貼り付けができるか (ENG-07)。連動ビューは長さ固定 (ENG-39 の仕様 1)。</summary>
+    public bool CanResize => LinkedParent is null && Source.Capabilities.HasFlag(SourceCapabilities.CanResize);
 
     /// <summary>元のデータソースに保存できるか (ENG-01 の仕様 6)。偽なら「名前を付けて保存」だけになる。</summary>
     public bool CanSave => Source.Capabilities.HasFlag(SourceCapabilities.CanWrite);
@@ -579,6 +581,11 @@ public sealed partial class Document : IDisposable
     private PieceTree ContentFrom(DocumentSnapshot source, long sourceOffset, long length)
     {
         RequireEditable();
+        if (LinkedParent is { } linkParent)
+        {
+            // 連動ビューの内容は親のデータ (参照の記録も親が持つ)。
+            return linkParent.ContentFrom(source, sourceOffset, length);
+        }
         // 同じ元データ (保存で切り替わる前のスナップショットは別の元データ) ならピースをそのまま共有できる。
         if (ReferenceEquals(source.Storage, _storage))
         {
@@ -601,6 +608,10 @@ public sealed partial class Document : IDisposable
     private PieceTree ContentFrom(SnapshotRange range, long rangeOffset, long length)
     {
         RequireEditable();
+        if (LinkedParent is { } linkParent)
+        {
+            return linkParent.ContentFrom(range, rangeOffset, length);
+        }
         if (rangeOffset < 0 || length < 0 || rangeOffset + length > range.Length)
         {
             throw new ArgumentOutOfRangeException(nameof(rangeOffset));
@@ -723,6 +734,10 @@ public sealed partial class Document : IDisposable
     private PieceTree TreeOf(EditContent content)
     {
         RequireEditable();
+        if (LinkedParent is { } linkParent)
+        {
+            return linkParent.TreeOf(content);
+        }
         switch (content.Kind)
         {
             case EditContentKind.Pattern:
@@ -774,6 +789,13 @@ public sealed partial class Document : IDisposable
     /// <summary>元に戻す。取り消した編集グループの、編集前の範囲を選択するよう通知する (EDIT-19 の仕様 10)。</summary>
     public void Undo()
     {
+        if (LinkedParent is { } linkParent)
+        {
+            RequireEditable();
+            linkParent.Undo();
+            return;
+        }
+
         RequireEditable();
         HistoryEntry undone = History.Undo();
         (long, long)? selection = undone.Range is { } r ? (r.Offset, r.BeforeLength) : null;
@@ -783,6 +805,13 @@ public sealed partial class Document : IDisposable
     /// <summary>やり直す。やり直した編集グループの、編集後の範囲を選択するよう通知する。</summary>
     public void Redo()
     {
+        if (LinkedParent is { } linkParent)
+        {
+            RequireEditable();
+            linkParent.Redo();
+            return;
+        }
+
         RequireEditable();
         HistoryEntry redone = History.Redo();
         (long, long)? selection = redone.Range is { } r ? (r.Offset, r.AfterLength) : null;
@@ -851,7 +880,70 @@ public sealed partial class Document : IDisposable
         Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true, DocumentChangeKind.Saved));
     }
 
-    private Saving.OverlayByteSource? _lastOverlay;
+    private Saving.IRebasableOverlay? _lastOverlay;
+
+    /// <summary>
+    /// ずらしながらのその場保存の完了 (ENG-24)。保存前の版が読む元データを「今のファイル + 退避した旧内容」の重ね合わせに差し替え、現在の版は
+    /// 書き換えたファイルを指す新しい元データにする。Undo 履歴を破棄する計画だった場合は、履歴を消して今の状態だけを残す (仕様 7)。
+    /// </summary>
+    public void CompleteShiftSave(Saving.ShiftSaveResult result)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (result.Source.Length != Length)
+        {
+            throw new InvalidOperationException("保存したファイルの長さがドキュメントと違います。");
+        }
+
+        DocumentStorage before = _storage;
+        if (!result.DiscardedHistory)
+        {
+            InstallShiftOverlay(before, result);
+        }
+
+        _storage = CreateStorage(result.Source, before.AddBuffer);
+        PieceTree tree = result.Source.Length > 0 ? PieceTree.FromPiece(Piece.Original(0, result.Source.Length)) : PieceTree.Empty;
+        var snapshot = new DocumentSnapshot(_storage, tree);
+        if (result.DiscardedHistory)
+        {
+            History.Reset(snapshot);
+        }
+        else
+        {
+            History.ReplaceCurrent(snapshot);
+        }
+
+        History.MarkSaved();
+        ResumeLock();
+        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true, DocumentChangeKind.Saved));
+    }
+
+    /// <summary>
+    /// ずらしながらのその場保存が途中で失敗した (ENG-24 の「エラー」): 退避した旧内容があれば、今のドキュメントの内容 (保存前の元データを指す) を
+    /// 退避から読むようにして保つ。
+    /// </summary>
+    public void RecoverAfterShiftFailure(Saving.ShiftSaveResult? recovered)
+    {
+        if (recovered is not null && !_disposed)
+        {
+            InstallShiftOverlay(_storage, recovered);
+        }
+
+        ResumeLock();
+    }
+
+    private void InstallShiftOverlay(DocumentStorage before, Saving.ShiftSaveResult result)
+    {
+        var overlay = new Saving.ShiftOverlaySource(before.Source, before.AddBuffer, result.Backups, result.OriginalLength);
+        if (_lastOverlay is { } previous)
+        {
+            previous.Inner = overlay;
+        }
+
+        _lastOverlay = overlay;
+        before.Source = overlay;
+        before.Cache.Dispose();
+        before.Cache = NewCache(overlay);
+    }
 
     /// <summary>
     /// 元に戻す・やり直しの履歴を消し、今の状態だけを残す (EDIT-19 の仕様 9 の設定「保存時に履歴を消す」。保存の直後に呼ぶ)。
@@ -887,6 +979,13 @@ public sealed partial class Document : IDisposable
 
     private void Apply(PieceTree tree, long offset, long removed, long inserted, string description, string? coalesceKey)
     {
+        if (LinkedParent is { } linkParent)
+        {
+            // 連動ビューの編集は親のドキュメントの編集として記録する (ENG-39 の仕様 1)。子の内容は親の変更の通知で作り直す。
+            linkParent.ApplyFromLinkedView(tree, _linkStart, _linkLength, offset, removed, inserted, description, coalesceKey);
+            return;
+        }
+
         History.Push(new DocumentSnapshot(_storage, tree), description, coalesceKey, offset, removed, inserted);
         UpdateLock();
         Changed?.Invoke(this, new DocumentChangedEventArgs(offset, removed, inserted, isWholeDocument: false));
@@ -960,6 +1059,12 @@ public sealed partial class Document : IDisposable
     /// </summary>
     public void Dispose()
     {
+        if (LinkedParent is not null)
+        {
+            DisposeLinkedView();
+            return;
+        }
+
         lock (_lifetimeLock)
         {
             if (_disposed)

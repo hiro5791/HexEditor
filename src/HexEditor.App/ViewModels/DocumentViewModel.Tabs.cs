@@ -46,7 +46,7 @@ public sealed partial class DocumentViewModel
     private string _nameSuffix = string.Empty;
 
     /// <summary>見出しの名前: ピン留めしたタブは先頭 8 文字 (UI-10 の仕様 2)、それ以外は表示名と区別の親フォルダ名。</summary>
-    public string TabTitle => (IsPinned ? TabStripRules.PinnedTitle(DisplayName) : DisplayName + NameSuffix) + ViewSuffix;
+    public string TabTitle => (IsPinned ? TabStripRules.PinnedTitle(DisplayName) : DisplayName + RangeLabel + NameSuffix) + ViewSuffix;
 
     /// <summary>タブのツールチップ (UI-09 の仕様 4): 完全なパス、サイズ、種類、読み取り専用かどうか。</summary>
     public string ToolTip
@@ -54,6 +54,12 @@ public sealed partial class DocumentViewModel
         get
         {
             var lines = new List<string> { FilePath ?? MissingPath ?? PendingRecord?.Path ?? DisplayName };
+            if (LinkParent is { } parent)
+            {
+                // 連動ビュー: 親のドキュメント名と範囲 (ENG-39 の画面)。
+                lines.Add(Services.Loc.Format("Linked_ToolTip", parent.DisplayName + RangeLabel));
+            }
+
             if (PendingRecord is null && !IsMissing)
             {
                 lines.Add(Loc.Format("Tab_ToolTipSize", StatusFormat.ShortSize(Document.Length, System.Globalization.CultureInfo.CurrentCulture)
@@ -92,5 +98,5 @@ public sealed partial class DocumentViewModel
     private bool _isBusy;
 
     /// <summary>種類のアイコン (Segoe Fluent Icons。UI-09 の仕様 2)。ピン留めはピンのアイコン (UI-10)。</summary>
-    public string IconGlyph => IsPinned ? "" : IsUntitled && !IsMissing && PendingRecord is null ? "" : "";
+    public string IconGlyph => IsPinned ? "" : IsLinkedView ? "" : IsUntitled && !IsMissing && PendingRecord is null ? "" : "";
 }

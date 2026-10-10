@@ -284,6 +284,13 @@ public static class TestHooks
                 Kill("in-place save after journal");
             }
         };
+        TestSavePoints.AfterShiftBytesWritten = written =>
+        {
+            if (Settings.KillAt == KillPoint.ShiftWrite && written >= Settings.KillAtBytes)
+            {
+                Kill("shift save after " + written + " bytes");
+            }
+        };
 
         // 命令はウィンドウを指定できる (複数ウィンドウ。UI-14)。指定がなければ最後にアクティブだったウィンドウ。
         TestChannel.Start(WindowManager.HandleTestCommandAsync);

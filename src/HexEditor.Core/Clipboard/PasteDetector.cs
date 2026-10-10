@@ -378,6 +378,46 @@ public static class PasteDetector
                     continue;
                 }
 
+                if (c is '"' or '\'' && IsSourceLiteral(i, stack.Count > 0))
+                {
+                    // 文字リテラル 'A' と文字列リテラル "..." (エスケープを解釈) を要素として取り出す (ソースコードの配列のインポートと共通。
+                    // TOOL-09 の仕様 4)。Python の bytes リテラル (b"…") はエスケープ文字列の形式で扱う。
+                    var literal = new List<byte>();
+                    int j = i + 1;
+                    while (j < text.Length && text[j] != c && text[j] != '\n')
+                    {
+                        j = text[j] > 0x7F ? AppendUtf8(j, literal) : Unescape(j, literal, quoted: true);
+                    }
+
+                    if (j >= text.Length || text[j] != c)
+                    {
+                        throw Fail(i, "unclosed", plausible: true);
+                    }
+
+                    Group target = stack.Count > 0 ? stack.Peek() : top;
+                    if (c == '\'')
+                    {
+                        ulong value = 0;
+                        foreach (byte b in literal)
+                        {
+                            value = value << 8 | b;
+                        }
+
+                        target.Numbers.Add(new NumberToken(i, value, Prefixed: true));
+                    }
+                    else
+                    {
+                        foreach (byte b in literal)
+                        {
+                            target.Numbers.Add(new NumberToken(i, b, Prefixed: true));
+                        }
+                    }
+
+                    anyPrefixed = true;
+                    i = j + 1;
+                    continue;
+                }
+
                 if (c is '"' or '\'')
                 {
                     // 文字列は無視する (エスケープ文字列の形式で扱う)。
@@ -428,6 +468,18 @@ public static class PasteDetector
 
                     string word = text[start..i].TrimEnd(':').TrimStart('.');
                     keyword |= Directives.Contains(word) || word.StartsWith("Data.", StringComparison.OrdinalIgnoreCase);
+                    continue;
+                }
+
+                if (c == '-' && options.SourceLiterals && i + 1 < text.Length && char.IsAsciiDigit(text[i + 1]))
+                {
+                    // 負の 10 進 (Java の符号付きの配列など。TOOL-09 の仕様 4)。要素の大きさの 2 の補数にする。
+                    i++;
+                    NumberToken positive = ReadNumber(ref i);
+                    int bits = (options.ElementSize is 1 or 2 or 4 or 8 ? options.ElementSize : 1) * 8;
+                    ulong mask = bits == 64 ? ulong.MaxValue : (1UL << bits) - 1;
+                    ulong negated = unchecked((ulong)-(long)positive.Value) & mask;
+                    (stack.Count > 0 ? stack.Peek() : top).Numbers.Add(positive with { Value = negated });
                     continue;
                 }
 
@@ -532,9 +584,37 @@ public static class PasteDetector
                 throw Fail(start, "number", plausible: prefixed);
             }
 
+            if (!hex && options.SourceLiterals && body.Length > 1 && body[0] == '0' && body.All(c => c is >= '0' and <= '7'))
+            {
+                // C などの 8 進のリテラル (0177。TOOL-09 の仕様 4)。
+                return new NumberToken(start, Convert.ToUInt64(body, 8), true);
+            }
+
             ulong value = hex ? ulong.Parse(body, NumberStyles.HexNumber, CultureInfo.InvariantCulture)
                 : ulong.TryParse(body, NumberStyles.None, CultureInfo.InvariantCulture, out ulong d) ? d : throw Fail(start, "number");
             return new NumberToken(start, value, prefixed);
+        }
+
+        /// <summary>
+        /// <paramref name="i"/> の引用符を配列の要素のリテラルとして読むか: 括弧の中、または代入 (<c>=</c>) の後にあり、Python の bytes リテラル
+        /// (<c>b"…"</c>) でないもの。ソースコードのインポート (<see cref="PasteOptions.SourceLiterals"/>) では常に読む。
+        /// </summary>
+        private bool IsSourceLiteral(int i, bool bracketed)
+        {
+            if (i > 0 && text[i - 1] is 'b' or 'B' && (i == 1 || !char.IsAsciiLetterOrDigit(text[i - 2])))
+            {
+                return false;
+            }
+
+            return options.SourceLiterals || bracketed || text.LastIndexOf('=', i) >= 0;
+        }
+
+        /// <summary>ASCII 以外の文字 1 つを UTF-8 で加える (文字列リテラルの中の日本語など)。</summary>
+        private int AppendUtf8(int i, List<byte> bytes)
+        {
+            int length = char.IsHighSurrogate(text[i]) && i + 1 < text.Length ? 2 : 1;
+            bytes.AddRange(Encoding.UTF8.GetBytes(text.Substring(i, length)));
+            return i + length;
         }
 
         // ---- エスケープ文字列 ----

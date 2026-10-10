@@ -148,7 +148,8 @@ public static partial class CopyFormatter
         CopyFormat.HexPlain => HexList(o, w, length, e => Hex(e, 2, o), "", ""),
         CopyFormat.HexCommaPrefixed => HexList(o, w, length, e => "0x" + Hex(e, 2, o), ", ", ","),
         CopyFormat.HexEscaped => HexList(o, w, length, e => "\\x" + Hex(e, 2, o), "", ""),
-        CopyFormat.HexUrl => new ListWriter(w, o, length, 1, int.MaxValue, e => "%" + Hex(e, 2, o)) { Separator = "" },
+        CopyFormat.HexUrl => new ListWriter(w, o, length, 1, int.MaxValue,
+            e => o.UrlKeepUnreserved && IsUrlUnreserved((byte)e) ? ((char)e).ToString() : "%" + Hex(e, 2, o)) { Separator = "" },
         CopyFormat.HexCustom => HexList(o, w, length, e => o.CustomPrefix + Hex(e, 2, o) + o.CustomSuffix, o.CustomSeparator, ""),
         CopyFormat.Decimal => HexList(o, w, length, e => e.ToString(CultureInfo.InvariantCulture), " ", ""),
         CopyFormat.Octal => HexList(o, w, length, e => Convert.ToString((long)e, 8), " ", ""),
@@ -170,6 +171,10 @@ public static partial class CopyFormatter
         _ => new PositionWriter(w, o, offset, length),
     };
 
+    /// <summary>RFC 3986 の非予約文字 (英数字と <c>-._~</c>)。</summary>
+    private static bool IsUrlUnreserved(byte b) => b is >= (byte)'A' and <= (byte)'Z' or >= (byte)'a' and <= (byte)'z' or >= (byte)'0' and <= (byte)'9'
+        or (byte)'-' or (byte)'.' or (byte)'_' or (byte)'~';
+
     private static ListWriter HexList(CopyOptions o, TextWriter w, long length, Func<ulong, string> element, string separator, string lineEnd) =>
         new(w, o, length, 1, o.BytesPerLine, element) { Separator = separator, LineEnd = lineEnd };
 
@@ -186,8 +191,12 @@ public static partial class CopyFormatter
         string name = o.VariableName;
         string nl = o.NewLine;
         string N = count.ToString(CultureInfo.InvariantCulture);
-        string hx(ulong v) => "0x" + Hex(v, digits, o);
         int idx = e switch { 1 => 0, 2 => 1, 4 => 2, _ => 3 };
+
+        // 10 進 (TOOL-09 の仕様 2 の「16 進 / 10 進」)。C / C++ の 4・8 バイトは符号なしの接尾辞を付ける。
+        string dec(ulong v) => v.ToString(CultureInfo.InvariantCulture)
+            + (format is CopyFormat.ArrayC or CopyFormat.ArrayCpp ? (e == 8 ? "ULL" : e == 4 ? "U" : string.Empty) : string.Empty);
+        string hx(ulong v) => o.ArrayDecimal ? dec(v) : "0x" + Hex(v, digits, o);
         string pick(string a, string b, string c, string d) => idx switch { 0 => a, 1 => b, 2 => c, _ => d };
 
         ListWriter list(Func<ulong, string> element, string singleOpen, string singleClose, string multiOpen, string multiClose,
@@ -235,12 +244,16 @@ public static partial class CopyFormatter
             case CopyFormat.ArrayJava:
             {
                 string type = pick("byte", "short", "int", "long");
+                // Java の 10 進のリテラルは符号付きの範囲だけ (int・long は 2 の補数の値で書く)。
+                string jv(ulong v) => !o.ArrayDecimal ? hx(v)
+                    : idx == 2 ? unchecked((int)(uint)v).ToString(CultureInfo.InvariantCulture)
+                    : idx == 3 ? unchecked((long)v).ToString(CultureInfo.InvariantCulture) : v.ToString(CultureInfo.InvariantCulture);
                 string elem(ulong v) => idx switch
                 {
-                    0 => "(byte) " + hx(v),
-                    1 => "(short) " + hx(v),
-                    2 => hx(v),
-                    _ => hx(v) + "L",
+                    0 => "(byte) " + jv(v),
+                    1 => "(short) " + jv(v),
+                    2 => jv(v),
+                    _ => jv(v) + "L",
                 };
                 return list(elem, $"{type}[] {name} = {{ ", " };", $"{type}[] {name} = {{", "};");
             }
@@ -276,7 +289,7 @@ public static partial class CopyFormatter
             {
                 string type = pick("Byte", "Word", "LongWord", "UInt64");
                 string head = $"const {name}: array[0..{count - 1}] of {type} = (";
-                return list(v => "$" + Hex(v, digits, o), head, ");", head, ");");
+                return list(v => o.ArrayDecimal ? dec(v) : "$" + Hex(v, digits, o), head, ");", head, ");");
             }
 
             case CopyFormat.ArrayVisualBasic:
@@ -284,7 +297,7 @@ public static partial class CopyFormatter
                 string type = pick("Byte", "UShort", "UInteger", "ULong");
                 string suffix = pick(string.Empty, "US", "UI", "UL");
                 string head = $"Dim {name} As {type}() = {{";
-                return list(v => "&H" + Hex(v, digits, o) + suffix, head, "}", head, "}");
+                return list(v => (o.ArrayDecimal ? dec(v) : "&H" + Hex(v, digits, o)) + suffix, head, "}", head, "}");
             }
 
             case CopyFormat.ArrayPureBasic:
