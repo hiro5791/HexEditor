@@ -48,7 +48,10 @@ public sealed partial class SearchResultsPanel
         string count = SelectionCount.ToString("N0", CultureInfo.CurrentCulture);
         TargetSelectedItem.Text = Loc.Format("SearchResults_TargetSelectedCount", count);
         TargetAllItem.Text = Loc.Format("SearchResults_TargetAllCount", RowCount.ToString("N0", CultureInfo.CurrentCulture));
+        ExportTextItem.Visibility = IsStrings ? Visibility.Visible : Visibility.Collapsed;
     }
+
+    private async void ExportText_Click(object sender, RoutedEventArgs e) => await ExportAsync(ExportFormat.Text);
 
     private void Target_Click(object sender, RoutedEventArgs e) => _targetSelected = ReferenceEquals(sender, TargetSelectedItem);
 
@@ -206,7 +209,7 @@ public sealed partial class SearchResultsPanel
 
         var targets = _groups
             .Where(g => !g.Editor.Document.IsDisposed)
-            .Select(g => new SearchTarget(g.Editor, g.Name, new SearchResults(g.Editor.Document.Current, g.Results.Pattern, g.Results.Options)))
+            .Select(g => new SearchTarget(g.Editor, g.Name, g.Results.Renew(g.Editor.Document.Current)))
             .ToList();
         if (targets.Count == 0)
         {
@@ -257,9 +260,60 @@ public sealed partial class SearchResultsPanel
     internal IReadOnlyList<UnreadableRange> SkippedRanges => [.. _groups.SelectMany(g => g.Results.SkippedRanges)];
 
     /// <summary>「読み込めなかった範囲 (N)」のボタンとメニュー (選ぶとその位置に移動する)。</summary>
+    /// <summary>
+    /// 語ごとの件数 (FIND-26 の仕様 7) と、文字コードごとの件数 (FIND-08)。検索が終わったら数え、見出しのボタンから一覧で見られる。
+    /// </summary>
+    private void UpdateVariantCounts(bool running)
+    {
+        SearchResults? results = _groups.Count == 1 ? _groups[0].Results : null;
+        bool show = results is not null && (results.VariantColumnOverride ?? results.Pattern.VariantColumn) is VariantColumn.Term or VariantColumn.Encoding
+            && (results.VariantNames ?? results.Pattern.Variants).Count > 1 && !running;
+        VariantCountsButton.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+        if (!show || ReferenceEquals(_countedResults, results) && _countedTotal == results!.LongCount)
+        {
+            return;
+        }
+
+        _countedResults = results;
+        _countedTotal = results!.LongCount;
+        IReadOnlyList<string> names = results.VariantNames ?? results.Pattern.Variants;
+        long[] counts = new long[names.Count];
+        const int Batch = 65536;
+        for (long start = 0; start < _countedTotal; start += Batch)
+        {
+            foreach (SearchMatch m in results.GetRange(start, (int)Math.Min(Batch, _countedTotal - start)))
+            {
+                if (m.Variant >= 0 && m.Variant < counts.Length)
+                {
+                    counts[m.Variant]++;
+                }
+            }
+        }
+
+        VariantCounts = [.. names.Select((n, i) => (n, counts[i]))];
+        string text = Loc.Get(results.Pattern.VariantColumn == VariantColumn.Term ? "SearchResults_TermCounts" : "SearchResults_EncodingCounts");
+        VariantCountsButton.Content = text;
+        AutomationProperties.SetName(VariantCountsButton, text);
+        VariantCountsMenu.Items.Clear();
+        foreach ((string name, long count) in VariantCounts)
+        {
+            VariantCountsMenu.Items.Add(new MenuFlyoutItem
+            {
+                Text = Loc.Format("SearchResults_VariantCount", name, count.ToString("N0", CultureInfo.CurrentCulture)),
+                IsEnabled = false,
+            });
+        }
+    }
+
+    private SearchResults? _countedResults;
+    private long _countedTotal = -1;
+
+    /// <summary>語 (文字コード) ごとの件数 (テスト用)。</summary>
+    internal IReadOnlyList<(string Name, long Count)> VariantCounts { get; private set; } = [];
+
     private void UpdateSkipped()
     {
-        int count = _groups.Sum(g => g.Results.SkippedRanges.Count);
+        int count = _groups.Sum(g => g.Results.SkippedRanges.Count + g.Results.TimedOutRanges.Count);
         SkippedButton.Visibility = count > 0 ? Visibility.Visible : Visibility.Collapsed;
         if (count == 0)
         {
@@ -283,6 +337,24 @@ public sealed partial class SearchResultsPanel
                 {
                     Text = Loc.Format("SearchResults_SkippedItem", StatusFormat.Hex(r.Offset), r.Length.ToString("N0", CultureInfo.CurrentCulture),
                         Loc.Get("Find_Unreadable_Reason_" + r.Reason)),
+                };
+                EditorState editor = g.Editor;
+                long offset = r.Offset;
+                item.Click += (_, _) =>
+                {
+                    ActivateRequested?.Invoke(this, editor);
+                    editor.GoTo(Math.Min(offset, editor.Document.Length));
+                };
+                SkippedMenu.Items.Add(item);
+            }
+
+            // 正規表現の時間の上限に達して飛ばしたチャンク (FIND-18 の「エラー」)。
+            foreach (SearchRange r in g.Results.TimedOutRanges.Take(SkippedMenuLimit - SkippedMenu.Items.Count))
+            {
+                var item = new MenuFlyoutItem
+                {
+                    Text = Loc.Format("SearchResults_SkippedItem", StatusFormat.Hex(r.Offset), r.Length.ToString("N0", CultureInfo.CurrentCulture),
+                        Loc.Get("SearchResults_TimedOut")),
                 };
                 EditorState editor = g.Editor;
                 long offset = r.Offset;

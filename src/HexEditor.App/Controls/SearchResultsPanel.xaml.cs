@@ -49,9 +49,13 @@ public sealed partial class SearchResultsPanel : UserControl
         ("SearchResults_Column_Text", 200, true, ColumnKind.Always, SearchResultSortKey.Text),
         ("SearchResults_Column_Context", 300, true, ColumnKind.Always, null),
         (StatusColumn, 120, false, ColumnKind.Always, SearchResultSortKey.Status),
-        ("SearchResults_Column_Endian", 64, false, ColumnKind.Numeric, null),
+        (VariantColumnKey, 140, false, ColumnKind.Variant, null),
         ("SearchResults_Column_Value", 180, true, ColumnKind.Numeric, null),
+        ("SearchResults_Column_Chars", 72, false, ColumnKind.Strings, null),
     ];
+
+    /// <summary>種類の列 (エンディアン・文字コード・検索語・値の解釈) の位置の鍵。見出しは結果の種類で決める。</summary>
+    private const string VariantColumnKey = "SearchResults_Column_Variant";
 
     // ---- 並べ替えと絞り込み (00-overview 9 章の「結果一覧」、FIND-20 の仕様 9) ----
 
@@ -96,7 +100,9 @@ public sealed partial class SearchResultsPanel : UserControl
     {
         Always,
         Documents,
+        Variant,
         Numeric,
+        Strings,
     }
 
     /// <summary>長時間処理の管理 (ENG-09)。</summary>
@@ -205,6 +211,14 @@ public sealed partial class SearchResultsPanel : UserControl
         }
 
         SearchResults results = _groups[0].Results;
+        if (results.HighlightFromResults)
+        {
+            // 一致しない箇所・文字列の抽出: 結果の範囲そのものを強調する (検索の後に編集していなければ)。
+            return ReferenceEquals(results.Snapshot.Tree, snapshot.Tree)
+                ? [.. results.Overlapping(offset, length).Select(m => (m.Offset, m.Length))]
+                : [];
+        }
+
         return SearchEngine.FindInView(snapshot, results.Pattern, offset, length, results.Options.Scope, out _)
             .Select(m => (m.Offset, m.Length)).ToList();
     }
@@ -228,7 +242,7 @@ public sealed partial class SearchResultsPanel : UserControl
             return;
         }
 
-        string extension = format == ExportFormat.Csv ? ".csv" : ".json";
+        string extension = format switch { ExportFormat.Csv => ".csv", ExportFormat.Text => ".txt", _ => ".json" };
         if (!TestHooks.TrySavePicker("results" + extension, out string? path))
         {
             var picker = new FileSavePicker(WindowId)
@@ -236,7 +250,12 @@ public sealed partial class SearchResultsPanel : UserControl
                 SuggestedFileName = "results" + extension,
                 SettingsIdentifier = "HexEditor.ExportSearchResults",
             };
-            picker.FileTypeChoices.Add(Loc.Get(format == ExportFormat.Csv ? "SearchResults_FileType_Csv" : "SearchResults_FileType_Json"), [extension]);
+            picker.FileTypeChoices.Add(Loc.Get(format switch
+            {
+                ExportFormat.Csv => "SearchResults_FileType_Csv",
+                ExportFormat.Text => "SearchResults_FileType_Text",
+                _ => "SearchResults_FileType_Json",
+            }), [extension]);
             path = (await picker.PickSaveFileAsync())?.Path;
         }
 
@@ -595,7 +614,24 @@ public sealed partial class SearchResultsPanel : UserControl
 
     // ---- 表示 ----
 
-    private bool IsNumeric => _groups.Count > 0 && _groups[0].Results.Pattern is { } p && (p.Numeric is not null || p.Variants.Count > 1);
+    /// <summary>値の列を出すか (数値の検索)。</summary>
+    private bool IsNumeric => _groups.Count > 0 && _groups[0].Results.Pattern.Numeric is not null;
+
+    /// <summary>種類の列を出すか (エンディアン「両方」、複数の文字コード、複数語、範囲の解釈、文字列の抽出の文字コード)。</summary>
+    private bool HasVariant => _groups.Count > 0 && _groups[0].Results is { } r
+        && (r.VariantNames is not null || r.Pattern.Numeric is not null || r.Pattern.Variants.Count > 1);
+
+    /// <summary>文字列の抽出の結果か (文字数の列を出す)。</summary>
+    private bool IsStrings => _groups.Count > 0 && StringExtractor.IsStrings(_groups[0].Results);
+
+    /// <summary>種類の列の見出し。</summary>
+    private string VariantHeader => (_groups.Count > 0 ? _groups[0].Results.VariantColumnOverride ?? _groups[0].Results.Pattern.VariantColumn : VariantColumn.Endian) switch
+    {
+        VariantColumn.Encoding => Loc.Get("SearchResults_Column_Encoding"),
+        VariantColumn.Term => Loc.Get("SearchResults_Column_Term"),
+        VariantColumn.Interpretation => Loc.Get("SearchResults_Column_Interpretation"),
+        _ => Loc.Get("SearchResults_Column_Endian"),
+    };
 
     private bool ShowsDocuments => _groups.Count > 1;
 
@@ -740,8 +776,9 @@ public sealed partial class SearchResultsPanel : UserControl
     }
 
     private IEnumerable<(string Key, double Width, bool Mono)> VisibleColumns() =>
-        Columns.Where(c => c.Kind == ColumnKind.Always || (c.Kind == ColumnKind.Numeric && IsNumeric) || (c.Kind == ColumnKind.Documents && ShowsDocuments))
-            .Select(c => (c.Key, c.Width, c.Mono));
+        Columns.Where(c => c.Kind == ColumnKind.Always || (c.Kind == ColumnKind.Numeric && IsNumeric) || (c.Kind == ColumnKind.Documents && ShowsDocuments)
+                || (c.Kind == ColumnKind.Variant && HasVariant) || (c.Kind == ColumnKind.Strings && IsStrings))
+            .Select(c => (c.Key, c.Kind == ColumnKind.Always && c.Key == "SearchResults_Column_Text" && IsStrings ? 400 : c.Width, c.Mono));
 
     private void BuildHeaders()
     {
@@ -751,7 +788,8 @@ public sealed partial class SearchResultsPanel : UserControl
         foreach ((string key, double width, bool _) in VisibleColumns())
         {
             ColumnHeaders.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(width) });
-            string text = Loc.Get(key);
+            string text = key == VariantColumnKey ? VariantHeader
+                : key == "SearchResults_Column_Text" && IsStrings ? Loc.Get("SearchResults_Column_String") : Loc.Get(key);
             FrameworkElement header;
             if (Columns.First(c => c.Key == key).Sort is { } sort)
             {
@@ -914,10 +952,19 @@ public sealed partial class SearchResultsPanel : UserControl
             r.Before + " | " + r.After,
             StatusText(r.Status),
         ]);
-        if (IsNumeric)
+        if (HasVariant)
         {
             cells.Add(r.Variant ?? string.Empty);
+        }
+
+        if (IsNumeric)
+        {
             cells.Add(r.Value ?? string.Empty);
+        }
+
+        if (IsStrings)
+        {
+            cells.Add(r.Chars?.ToString("N0", CultureInfo.CurrentCulture) ?? string.Empty);
         }
 
         return [.. cells];
@@ -1049,6 +1096,7 @@ public sealed partial class SearchResultsPanel : UserControl
         ResearchButton.Visibility = stale ? Visibility.Visible : Visibility.Collapsed;
         PinButton.IsChecked = IsPinned;
         UpdateSkipped();
+        UpdateVariantCounts(running);
     }
 
     private void UpdateAccessibleName()

@@ -66,16 +66,29 @@
                 AutomationProperties.AutomationId="SearchResults_Research"
                 Click="Research_Click"
                 Visibility="Collapsed" />
-            <!--  読み込めなかった範囲 (FIND-01 の「エラー」)。項目はコードで作る。  -->
-            <DropDownButton
-                x:Name="SkippedButton"
+            <StackPanel
                 Grid.Column="3"
-                AutomationProperties.AutomationId="SearchResults_Skipped"
-                Visibility="Collapsed">
-                <DropDownButton.Flyout>
-                    <MenuFlyout x:Name="SkippedMenu" Placement="BottomEdgeAlignedRight" />
-                </DropDownButton.Flyout>
-            </DropDownButton>
+                Orientation="Horizontal"
+                Spacing="8">
+                <!--  語ごとの件数 (FIND-26 の仕様 7)。項目はコードで作る。  -->
+                <DropDownButton
+                    x:Name="VariantCountsButton"
+                    AutomationProperties.AutomationId="SearchResults_VariantCounts"
+                    Visibility="Collapsed">
+                    <DropDownButton.Flyout>
+                        <MenuFlyout x:Name="VariantCountsMenu" Placement="BottomEdgeAlignedRight" />
+                    </DropDownButton.Flyout>
+                </DropDownButton>
+                <!--  読み込めなかった範囲 (FIND-01 の「エラー」)。項目はコードで作る。  -->
+                <DropDownButton
+                    x:Name="SkippedButton"
+                    AutomationProperties.AutomationId="SearchResults_Skipped"
+                    Visibility="Collapsed">
+                    <DropDownButton.Flyout>
+                        <MenuFlyout x:Name="SkippedMenu" Placement="BottomEdgeAlignedRight" />
+                    </DropDownButton.Flyout>
+                </DropDownButton>
+            </StackPanel>
             <Button
                 x:Name="ContinueButton"
                 x:Uid="SearchResults_Continue"
@@ -142,6 +155,13 @@
                             x:Uid="SearchResults_ExportJson"
                             AutomationProperties.AutomationId="SearchResults_ExportJson"
                             Click="ExportJson_Click" />
+                        <!--  文字列の抽出の結果は 1 行 1 文字列のテキストにも書き出せる (FIND-32 の仕様 5)。  -->
+                        <MenuFlyoutItem
+                            x:Name="ExportTextItem"
+                            x:Uid="SearchResults_ExportText"
+                            AutomationProperties.AutomationId="SearchResults_ExportText"
+                            Click="ExportText_Click"
+                            Visibility="Collapsed" />
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>

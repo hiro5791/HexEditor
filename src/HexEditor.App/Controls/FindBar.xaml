@@ -39,6 +39,8 @@
                 <ComboBoxItem x:Uid="Find_Kind_Text" />
                 <ComboBoxItem x:Uid="Find_Kind_Integer" />
                 <ComboBoxItem x:Uid="Find_Kind_Float" />
+                <ComboBoxItem x:Uid="Find_Kind_RegexText" />
+                <ComboBoxItem x:Uid="Find_Kind_RegexBytes" />
             </ComboBox>
             <StackPanel
                 Grid.Column="1"
@@ -55,6 +57,15 @@
                     TextChanged="Query_TextChanged"
                     TextCompositionEnded="Query_CompositionEnded"
                     TextCompositionStarted="Query_CompositionStarted" />
+                <!--  複数語 (FIND-26): 検索欄を複数行の一覧に変える。  -->
+                <ToggleButton
+                    x:Name="MultiTermToggle"
+                    Padding="6,4"
+                    AutomationProperties.AutomationId="Find_MultiTerm"
+                    Checked="MultiTermToggle_Changed"
+                    Unchecked="MultiTermToggle_Changed">
+                    <FontIcon FontSize="12" Glyph="&#xE8FD;" />
+                </ToggleButton>
                 <!--  検索履歴の一覧 (FIND-28 の仕様 4)。  -->
                 <Button
                     x:Name="HistoryButton"
@@ -150,6 +161,66 @@
                 <FontIcon FontSize="12" Glyph="&#xE711;" />
             </Button>
         </Grid>
+
+        <!--  複数語の一覧 (FIND-26 の画面)。行ごとに有効、種類、検索語、文字コード・サイズ・エンディアン。  -->
+        <StackPanel
+            x:Name="MultiTermRow"
+            Spacing="4"
+            Visibility="Collapsed">
+            <local:WrapPanel>
+                <Button x:Name="TermAddButton" x:Uid="Find_TermAdd" AutomationProperties.AutomationId="Find_TermAdd" Click="TermAdd_Click" />
+                <Button x:Name="TermRemoveButton" x:Uid="Find_TermRemove" AutomationProperties.AutomationId="Find_TermRemove" Click="TermRemove_Click" />
+                <Button x:Name="TermUpButton" x:Uid="Find_TermUp" AutomationProperties.AutomationId="Find_TermUp" Click="TermMove_Click" Tag="-1" />
+                <Button x:Name="TermDownButton" x:Uid="Find_TermDown" AutomationProperties.AutomationId="Find_TermDown" Click="TermMove_Click" Tag="1" />
+                <Button x:Name="TermImportButton" x:Uid="Find_TermImport" AutomationProperties.AutomationId="Find_TermImport" Click="TermImport_Click" />
+                <Button x:Name="TermSaveButton" x:Uid="Find_TermSave" AutomationProperties.AutomationId="Find_TermSave" Click="TermSave_Click" />
+                <Button x:Name="TermLoadButton" x:Uid="Find_TermLoad" AutomationProperties.AutomationId="Find_TermLoad" Click="TermLoad_Click" />
+                <TextBlock
+                    x:Name="TermSummary"
+                    VerticalAlignment="Center"
+                    AutomationProperties.AutomationId="Find_TermSummary"
+                    AutomationProperties.LiveSetting="Polite" />
+            </local:WrapPanel>
+            <ListView
+                x:Name="TermList"
+                MaxHeight="200"
+                AutomationProperties.AutomationId="Find_TermList"
+                ItemsSource="{x:Bind Terms}"
+                SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:TermRow">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <CheckBox
+                                MinWidth="0"
+                                AutomationProperties.Name="{x:Bind EnabledName, Mode=OneTime}"
+                                IsChecked="{x:Bind Enabled, Mode=TwoWay}" />
+                            <ComboBox
+                                Width="120"
+                                AutomationProperties.Name="{x:Bind KindName, Mode=OneTime}"
+                                ItemsSource="{x:Bind KindNames, Mode=OneTime}"
+                                SelectedIndex="{x:Bind KindIndex, Mode=TwoWay}" />
+                            <TextBox
+                                Width="220"
+                                AutomationProperties.Name="{x:Bind TextName, Mode=OneTime}"
+                                BorderBrush="{x:Bind ErrorBrush, Mode=OneWay}"
+                                FlowDirection="LeftToRight"
+                                FontFamily="Cascadia Mono, Consolas"
+                                Text="{x:Bind Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <ComboBox
+                                Width="200"
+                                AutomationProperties.Name="{x:Bind OptionName, Mode=OneTime}"
+                                ItemsSource="{x:Bind OptionNames, Mode=OneWay}"
+                                SelectedIndex="{x:Bind OptionIndex, Mode=TwoWay}"
+                                Visibility="{x:Bind OptionVisibility, Mode=OneWay}" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                                Text="{x:Bind Error, Mode=OneWay}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
 
         <!--  置換欄の行 (FIND-22〜24)。Ctrl+H で開いたときだけ出す。  -->
         <local:WrapPanel x:Name="ReplaceRow" Visibility="Collapsed">
@@ -275,6 +346,35 @@
                 x:Name="EncodingChoice"
                 AutomationProperties.AutomationId="Find_Encoding"
                 SelectionChanged="Option_Changed" />
+            <!--  複数の文字コード (FIND-08): チェックボックス付きの一覧 (最大 8 種類) と、名前を付けて保存した組み合わせ。  -->
+            <DropDownButton
+                x:Name="MultiEncodingButton"
+                AutomationProperties.AutomationId="Find_MultiEncoding"
+                Visibility="Collapsed">
+                <DropDownButton.Flyout>
+                    <Flyout x:Name="MultiEncodingFlyout" Opening="MultiEncodingFlyout_Opening" Placement="BottomEdgeAlignedLeft">
+                        <StackPanel Width="320" Spacing="6">
+                            <TextBlock x:Name="MultiEncodingHint" TextWrapping="Wrap" />
+                            <ScrollViewer MaxHeight="280">
+                                <StackPanel x:Name="MultiEncodingList" AutomationProperties.AutomationId="Find_MultiEncodingList" />
+                            </ScrollViewer>
+                            <ComboBox
+                                x:Name="EncodingSetChoice"
+                                HorizontalAlignment="Stretch"
+                                AutomationProperties.AutomationId="Find_EncodingSet"
+                                SelectionChanged="EncodingSet_Changed" />
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBox
+                                    x:Name="EncodingSetName"
+                                    x:Uid="Find_EncodingSetName"
+                                    Width="180"
+                                    AutomationProperties.AutomationId="Find_EncodingSetName" />
+                                <Button x:Name="EncodingSetSave" x:Uid="Find_EncodingSetSave" AutomationProperties.AutomationId="Find_EncodingSetSave" Click="EncodingSetSave_Click" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Flyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
             <CheckBox
                 x:Name="CaseChoice"
                 x:Uid="Find_CaseSensitive"
@@ -299,6 +399,125 @@
                 AutomationProperties.AutomationId="Find_Align"
                 Checked="Check_Changed"
                 Unchecked="Check_Changed" />
+            <!--  正規表現のフラグ (FIND-18 の仕様 2) と、一致の最大長の説明 (FIND-01 の仕様 3)。  -->
+            <CheckBox
+                x:Name="RegexIgnoreCase"
+                x:Uid="Find_RegexIgnoreCase"
+                AutomationProperties.AutomationId="Find_RegexIgnoreCase"
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
+            <CheckBox
+                x:Name="RegexMultiline"
+                x:Uid="Find_RegexMultiline"
+                AutomationProperties.AutomationId="Find_RegexMultiline"
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
+            <CheckBox
+                x:Name="RegexSingleline"
+                x:Uid="Find_RegexSingleline"
+                AutomationProperties.AutomationId="Find_RegexSingleline"
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
+            <TextBlock
+                x:Name="RegexNote"
+                MaxWidth="420"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Find_RegexNote"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                TextWrapping="Wrap" />
+            <HyperlinkButton
+                x:Name="RegexSettingsLink"
+                x:Uid="Find_RegexSettings"
+                AutomationProperties.AutomationId="Find_RegexSettings"
+                Click="RegexSettings_Click" />
+            <!--  ビットマスク (FIND-16): 値とマスク、またはビットパターン。  -->
+            <CheckBox
+                x:Name="MaskChoice"
+                x:Uid="Find_Mask"
+                AutomationProperties.AutomationId="Find_Mask"
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
+            <ComboBox
+                x:Name="MaskModeChoice"
+                AutomationProperties.AutomationId="Find_MaskMode"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="Find_MaskMode_ValueMask" />
+                <ComboBoxItem x:Uid="Find_MaskMode_Bits" />
+            </ComboBox>
+            <TextBox
+                x:Name="MaskQuery"
+                x:Uid="Find_MaskQuery"
+                Width="200"
+                AutomationProperties.AutomationId="Find_MaskQuery"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                TextChanged="Range_TextChanged" />
+            <!--  一致しない箇所 (FIND-25)。  -->
+            <CheckBox
+                x:Name="MismatchChoice"
+                x:Uid="Find_Mismatch"
+                AutomationProperties.AutomationId="Find_Mismatch"
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
+            <CheckBox
+                x:Name="MismatchAlignChoice"
+                x:Uid="Find_MismatchAlign"
+                AutomationProperties.AutomationId="Find_MismatchAlign"
+                Checked="Check_Changed"
+                IsChecked="True"
+                Unchecked="Check_Changed" />
+            <!--  範囲の検索の「除外」(FIND-15 の仕様 5)。  -->
+            <CheckBox
+                x:Name="RangeExcludeChoice"
+                x:Uid="Find_RangeExclude"
+                AutomationProperties.AutomationId="Find_RangeExclude"
+                Checked="Check_Changed"
+                Unchecked="Check_Changed" />
+            <!--  位置の条件 (FIND-17): 条件なし / 指定する (x、y、基準)。よく使う値のボタン。  -->
+            <ComboBox
+                x:Name="PositionChoice"
+                AutomationProperties.AutomationId="Find_Position"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="Find_Position_None" />
+                <ComboBoxItem x:Uid="Find_Position_Custom" />
+            </ComboBox>
+            <TextBox
+                x:Name="PositionModulus"
+                x:Uid="Find_PositionModulus"
+                Width="110"
+                AutomationProperties.AutomationId="Find_PositionModulus"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                TextChanged="Range_TextChanged" />
+            <TextBox
+                x:Name="PositionRemainder"
+                x:Uid="Find_PositionRemainder"
+                Width="110"
+                AutomationProperties.AutomationId="Find_PositionRemainder"
+                FlowDirection="LeftToRight"
+                FontFamily="Cascadia Mono, Consolas"
+                TextChanged="Range_TextChanged" />
+            <ComboBox
+                x:Name="PositionBaseChoice"
+                AutomationProperties.AutomationId="Find_PositionBase"
+                SelectedIndex="0"
+                SelectionChanged="Option_Changed">
+                <ComboBoxItem x:Uid="Find_PositionBase_Offset" />
+                <ComboBoxItem x:Uid="Find_PositionBase_Address" />
+            </ComboBox>
+            <Button x:Name="PositionPreset2" x:Uid="Find_PositionPreset2" AutomationProperties.AutomationId="Find_PositionPreset2" Click="PositionPreset_Click" Tag="2" />
+            <Button x:Name="PositionPreset4" x:Uid="Find_PositionPreset4" AutomationProperties.AutomationId="Find_PositionPreset4" Click="PositionPreset_Click" Tag="4" />
+            <Button x:Name="PositionPreset8" x:Uid="Find_PositionPreset8" AutomationProperties.AutomationId="Find_PositionPreset8" Click="PositionPreset_Click" Tag="8" />
+            <Button x:Name="PositionPreset16" x:Uid="Find_PositionPreset16" AutomationProperties.AutomationId="Find_PositionPreset16" Click="PositionPreset_Click" Tag="16" />
+            <Button x:Name="PositionPresetSector" x:Uid="Find_PositionPresetSector" AutomationProperties.AutomationId="Find_PositionPresetSector" Click="PositionPreset_Click" Tag="sector" />
+            <TextBlock
+                x:Name="PositionInfo"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="Find_PositionInfo"
+                AutomationProperties.LiveSetting="Polite"
+                FlowDirection="LeftToRight" />
             <!--  整数 (FIND-13): サイズ、符号、エンディアン。  -->
             <ComboBox
                 x:Name="IntBitsChoice"

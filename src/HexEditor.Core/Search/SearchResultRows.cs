@@ -21,7 +21,8 @@ public sealed record SearchResultRow(
     string Before,
     string After,
     string? Variant,
-    string? Value);
+    string? Value,
+    long? Chars = null);
 
 /// <summary>結果一覧の行を作る (表示とエクスポートで共通)。</summary>
 public sealed class SearchResultRowFactory
@@ -84,8 +85,27 @@ public sealed class SearchResultRowFactory
         }
 
         SearchPattern pattern = _results.Pattern;
-        string? variant = pattern.Variants.Count > 1 && match.Variant < pattern.Variants.Count ? pattern.Variants[match.Variant] : null;
+        IReadOnlyList<string> names = _results.VariantNames ?? pattern.Variants;
+        string? variant = (names.Count > 1 || _results.VariantNames is not null) && match.Variant >= 0 && match.Variant < names.Count ? names[match.Variant] : null;
         string? value = null;
+        string text;
+        long? chars = null;
+        if (_results.VariantEncodings is { } encodings && match.Variant >= 0 && match.Variant < encodings.Count)
+        {
+            // 文字列の抽出: 一致した文字コードで、最初の 4,096 文字まで (FIND-32 の仕様 1・3)。
+            byte[]? whole = Read(t.Offset, Math.Min(length, StringExtractionOptions.DefaultMaxLength * 4L), nonBlocking);
+            if (whole is null)
+            {
+                return null;
+            }
+
+            text = StringExtractor.Text(whole, encodings[match.Variant], StringExtractionOptions.DefaultMaxLength);
+            chars = match.Extra;
+        }
+        else
+        {
+            text = TextOf(data);
+        }
         if (pattern.Numeric is { } numeric && t.Status != MatchStatus.Deleted)
         {
             byte[]? valueBytes = data.Length >= numeric.ByteLength ? data : Read(t.Offset, numeric.ByteLength, nonBlocking);
@@ -105,11 +125,12 @@ public sealed class SearchResultRowFactory
             match.Offset,
             t.Status,
             HexOf(data),
-            TextOf(data),
+            text,
             HexOf(before),
             HexOf(after),
             variant,
-            value);
+            value,
+            chars);
     }
 
     /// <summary>今の状態の範囲を読む。<paramref name="nonBlocking"/> なら表示用の読み込みで、読み込み中のバイトがあれば null。</summary>
@@ -160,6 +181,9 @@ public enum ExportFormat
     /// <summary>UTF-8 (BOM 付き)、区切りはカンマ。</summary>
     Csv,
     Json,
+
+    /// <summary>テキスト (UTF-8、1 行に 1 件の「テキスト」の列。文字列の抽出の 1 行 1 文字列。FIND-32 の仕様 5)。</summary>
+    Text,
 }
 
 /// <summary>エクスポートの列の見出しと状態の文言 (表示言語の文字列を UI から渡す)。</summary>
@@ -215,8 +239,9 @@ public static class SearchResultsExporter
         CancellationToken cancellationToken = default)
     {
         labels ??= new ExportLabels();
-        SearchPattern pattern = groups[0].Rows.Results.Pattern;
-        bool numeric = pattern.Numeric is not null || pattern.Variants.Count > 1;
+        SearchResults first = groups[0].Rows.Results;
+        SearchPattern pattern = first.Pattern;
+        bool numeric = pattern.Numeric is not null || pattern.Variants.Count > 1 || first.VariantNames is not null;
         bool documents = groups.Any(g => g.Document is not null);
         long total = indices?.Count ?? groups.Sum(g => g.Rows.Results.LongCount);
         operation?.SetTotal(total);
@@ -287,6 +312,15 @@ public static class SearchResultsExporter
         {
             WriteCsv(stream, Enumerate(), labels, numeric, documents);
         }
+        else if (format == ExportFormat.Text)
+        {
+            using var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false), 65536, leaveOpen: true);
+            foreach ((string? _, SearchResultRow r) in Enumerate())
+            {
+                writer.Write(r.Text.Replace("\r", " ", StringComparison.Ordinal).Replace("\n", " ", StringComparison.Ordinal));
+                writer.Write("\r\n");
+            }
+        }
         else
         {
             WriteJson(stream, Enumerate(), numeric, documents);
@@ -333,7 +367,7 @@ public static class SearchResultsExporter
             if (numeric)
             {
                 fields.Add(r.Variant ?? string.Empty);
-                fields.Add(r.Value ?? string.Empty);
+                fields.Add(r.Value ?? r.Chars?.ToString(CultureInfo.InvariantCulture) ?? string.Empty);
             }
 
             writer.Write(string.Join(',', fields.Select(Csv)));
@@ -367,6 +401,11 @@ public static class SearchResultsExporter
             {
                 writer.WriteString("endian", r.Variant ?? string.Empty);
                 writer.WriteString("value", r.Value ?? string.Empty);
+            }
+
+            if (r.Chars is long chars)
+            {
+                writer.WriteNumber("chars", chars);
             }
 
             writer.WriteEndObject();

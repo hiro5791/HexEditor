@@ -17,6 +17,12 @@ public sealed partial class FindBar
     /// </summary>
     public Func<UnreadableRange, EditorState, CancellationToken, Task<UnreadableAction>>? AskUnreadable { get; set; }
 
+    /// <summary>
+    /// 正規表現の照合がチャンクの時間の上限に達したとき、そのチャンクを飛ばして続けるか中止するかを尋ねる (FIND-18 の「エラー」。
+    /// MainWindow が InfoBar で尋ねる。検索のスレッドから呼ばれる)。null なら尋ねずに飛ばす。
+    /// </summary>
+    public Func<SearchRange, EditorState, CancellationToken, Task<UnreadableAction>>? AskTimeout { get; set; }
+
     /// <summary>設定のチャンクの大きさ (バイト)。</summary>
     internal static int ChunkSizeSetting =>
         SearchSettings.ChunkSizeBytes(App.Settings?.GetInt(SearchSettings.ChunkSizeKey, SearchSettings.DefaultChunkSizeKiB) ?? SearchSettings.DefaultChunkSizeKiB);
@@ -39,7 +45,19 @@ public sealed partial class FindBar
             ? range => handler(range, editor, token).GetAwaiter().GetResult()
             : null;
         var decider = new ReadErrorDecider(policy, ask);
-        return new SearchOptions { Scope = scope, ChunkSize = ChunkSizeSetting, OnUnreadable = decider.Decide };
+
+        // 時間の上限は 1 回の検索で 1 回だけ尋ね、その答えを残りのチャンクにも使う (件数の数え上げなどは尋ねずに飛ばす)。
+        UnreadableAction? timeoutAnswer = interactive ? null : UnreadableAction.Skip;
+        var timeoutLock = new object();
+        Func<SearchRange, UnreadableAction> onTimeout = range =>
+        {
+            lock (timeoutLock)
+            {
+                timeoutAnswer ??= AskTimeout is { } handler ? handler(range, editor, token).GetAwaiter().GetResult() : UnreadableAction.Skip;
+                return timeoutAnswer.Value;
+            }
+        };
+        return new SearchOptions { Scope = scope, ChunkSize = ChunkSizeSetting, OnUnreadable = decider.Decide, OnTimeout = onTimeout };
     }
 
     /// <summary>読めない範囲のために中止した (「中止する」を選んだ、または設定が「中止する」)。</summary>
