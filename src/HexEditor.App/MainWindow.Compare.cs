@@ -757,6 +757,38 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         view.StatusMessageRequested += (_, args) => ShowNotice(args.Message, InfoBarSeverity.Informational, side.Owner);
         view.CommandRequested += HexView_CommandRequested;
         view.EditRejected += HexView_EditRejected;
+        view.MinimapDifferences = MinimapDifferencesOf(session, side.IsRight);
+    }
+
+    /// <summary>
+    /// ミニマップの差分の印 (VIEW-35 の仕様 6) の提供元。印は描くたびに求めるため、結果・件数・状態が変わったときだけ作り直す
+    /// (差分が数百万件でも、カーソルを動かすたびに全件を読まない)。
+    /// </summary>
+    private static Func<IEnumerable<(long Offset, long Length, DiffKind Kind)>> MinimapDifferencesOf(CompareSessionViewModel session, bool right)
+    {
+        (CompareResult? Result, long Count, CompareState State) key = default;
+        IReadOnlyList<(long Offset, long Length, DiffKind Kind)> marks = [];
+        long builtAt = 0;
+        return () =>
+        {
+            if (session.Result is not { } result)
+            {
+                return [];
+            }
+
+            // 比較中は 1 秒に 1 回まで作り直す (見つかった差分を順に示しつつ、全件を読み直し続けない)。
+            (CompareResult?, long, CompareState) now = (result, result.Diffs.Count, result.State);
+            bool throttled = result.State == CompareState.Running && ReferenceEquals(key.Result, result) && Environment.TickCount64 - builtAt < 1000;
+            if (now != key && !throttled)
+            {
+                builtAt = Environment.TickCount64;
+                CompareRange range = right ? result.Right : result.Left;
+                marks = DiffMarks.Build(result.Diffs.Enumerate(), right, range.Length);
+                key = now;
+            }
+
+            return marks;
+        };
     }
 
     // ---- IDiffListHost (ANA-06・ANA-07) ----

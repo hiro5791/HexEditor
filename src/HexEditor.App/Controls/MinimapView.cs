@@ -252,6 +252,9 @@ public sealed partial class MinimapView : Grid
     /// <summary>描き直す (印の ON / OFF を変えたとき)。</summary>
     internal void Redraw() => QueueDraw();
 
+    /// <summary>印の帯だけを描き直す (印の元が変わった。ピクセルの描き直しはしない)。</summary>
+    internal void RefreshMarks() => UpdateMarks();
+
     /// <summary>統計パネルで分類した (表示中のドキュメントなら「分類」レイヤを描き直す)。</summary>
     private void Classifier_Remembered(object? sender, Document document)
     {
