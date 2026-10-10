@@ -137,6 +137,15 @@ public sealed class RegexSearchTests
     }
 
     [Fact]
+    public void TextRegexClassesAreUnicode()
+    {
+        // FIND-18 の仕様 1 の注: テキストの正規表現の数字・単語のクラスは Unicode で判定する (全角数字も数字)。[0-9] は ASCII だけ。
+        byte[] data = Utf8.GetBytes("a１b1");
+        Assert.Equal([1L, 5], FindAll(data, RegexSearch.Text(@"\d", Utf8, new RegexSearchOptions())).Select(m => m.Offset));
+        Assert.Equal([5L], FindAll(data, RegexSearch.Text("[0-9]", Utf8, new RegexSearchOptions())).Select(m => m.Offset));
+    }
+
+    [Fact]
     public async Task CancelStopsABacktrackingMatchWithin200Milliseconds()
     {
         // FIND-02 の仕様 3: 後戻りする方式の照合が破滅的な後戻りで終わらなくても、キャンセルの要求から 200 ms 以内に検索を止める
