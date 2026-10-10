@@ -202,14 +202,22 @@ public sealed class OpenAndDropTests
     [Trait(UiTest.TC, "TC-UI-34-02")]
     public Task Dropping_a_folder_does_not_open_it() => UiTestContext.RunAsync(async ctx =>
     {
-        // 「複数ファイル検索」ボタンは複数ファイル検索 (フェーズ 2) と同時に付ける。ここではタブが開かず、フォルダを
-        // 開けない旨 (1 個をスキップ) の通知が出ることを確かめる。
+        // タブは開かず、フォルダを開けない旨 (1 個をスキップ) の通知と「複数ファイル検索」ボタンが出る。ボタンを押すと、
+        // ドロップしたフォルダを対象にして複数ファイル検索のパネルが開く (FIND-30 の「呼び出し」)。
         string folder = Path.GetDirectoryName(Files50(ctx)[0])!;
         AppSession app = await ctx.StartAsync();
         await app.DropAsync([folder]);
         JsonObject notice = await app.WaitForNotificationAsync(m => m.StartsWith("Folders can't be opened", StringComparison.Ordinal), "the folder notice");
         Assert.Contains("(1 skipped)", notice["message"]!.GetValue<string>(), StringComparison.Ordinal);
+        Assert.Contains("use Search in files", notice["message"]!.GetValue<string>(), StringComparison.Ordinal);
         Assert.Equal("Warning", notice["severity"]!.GetValue<string>());
+        Assert.Empty(await app.TabNamesAsync());
+
+        await app.SendAsync("noticeAction", new JsonObject { ["label"] = "Search in files" });
+        JsonObject panel = [];
+        await app.WaitUntilAsync(async () => (panel = await app.SendAsync("multiFile", []))["visible"]!.GetValue<bool>(),
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the multi-file search panel");
+        Assert.Equal([folder], panel["folders"]!.AsArray().Select(f => f!.GetValue<string>()));
         Assert.Empty(await app.TabNamesAsync());
     });
 

@@ -146,6 +146,9 @@ public sealed partial class MultiFileSearchPanel : UserControl
     /// <summary>テスト用: 1 ファイルあたりの件数の上限 (既定 10,000)。</summary>
     internal int PerFileLimit { get; set; } = MultiFileSearch.DefaultPerFileLimit;
 
+    /// <summary>テスト用: 置換で、各ファイル (番号) を処理する直前に呼ぶ (途中のキャンセルの再現)。</summary>
+    internal Action<int>? BeforeReplaceFile { get; set; }
+
     /// <summary>テスト用: メモリ上に置く一致の件数の上限 (null なら既定の 1,000,000)。</summary>
     internal int? MemoryLimit { get; set; }
 
@@ -1053,6 +1056,7 @@ public sealed partial class MultiFileSearchPanel : UserControl
 
                 foreach (int f in work)
                 {
+                    BeforeReplaceFile?.Invoke(outcomes.Count);
                     token.ThrowIfCancellationRequested();
                     FileSearchResult file = view.File(f);
                     op?.ReportDetail(Loc.Format("MultiFile_ReplaceProgress", outcomes.Count, work.Count, file.Path));
@@ -1211,11 +1215,14 @@ public sealed partial class MultiFileSearchPanel : UserControl
         }
     }
 
-    private void ClearExtras_Click(object sender, RoutedEventArgs e)
+    /// <summary>取り込んだ複数の文字コード・複数の語を外す。</summary>
+    internal void ClearExtras()
     {
         _extras = null;
         Validate();
     }
+
+    private void ClearExtras_Click(object sender, RoutedEventArgs e) => ClearExtras();
 
     // ---- 対象の指定の保存 (FIND-30 の仕様 9) ----
 

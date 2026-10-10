@@ -87,6 +87,11 @@ public sealed partial class MainWindow
                 }
 
                 MultiFileSearch.Configure(request);
+                if (request["clearExtras"]?.GetValue<bool>() == true)
+                {
+                    MultiFileSearch.ClearExtras();
+                }
+
                 if (request["useFindBar"]?.GetValue<bool>() == true)
                 {
                     MultiFileSearch.UseQuery(FindBar.CaptureQuery());
@@ -112,6 +117,19 @@ public sealed partial class MainWindow
                 if (request["cancel"]?.GetValue<bool>() == true)
                 {
                     MultiFileSearch.Cancel();
+                }
+
+                if (request["cancelReplaceAt"] is { } cancelAt)
+                {
+                    // 置換の途中のキャンセル: その番号のファイルを処理する直前に取り消す。
+                    int at = cancelAt.GetValue<int>();
+                    MultiFileSearch.BeforeReplaceFile = i =>
+                    {
+                        if (i == at)
+                        {
+                            MultiFileSearch.Cancel();
+                        }
+                    };
                 }
 
                 if (request["runReplace"]?.GetValue<bool>() == true)
@@ -181,6 +199,7 @@ public sealed partial class MainWindow
             ["summary"] = MultiFileSearch.SummaryText,
             ["error"] = MultiFileSearch.ErrorText,
             ["extras"] = MultiFileSearch.ExtrasDescription,
+            ["folders"] = new JsonArray([.. MultiFileSearch.Folders.Select(f => (JsonNode?)f)]),
             ["rowCount"] = total,
             ["listCount"] = MultiFileSearch.Rows.Count,
             ["createdRows"] = MultiFileSearch.Rows.CreatedRows,
