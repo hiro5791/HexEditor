@@ -154,6 +154,10 @@ public sealed partial class MainViewModel : ObservableObject
             // 外部で変更されたファイルの上書き・削除されたファイルの作り直しは、全体を書く (ENG-19 の仕様 5・8)。
             AlwaysSafeSave = vm.OverwritesExternalChange || vm.SourceDeleted,
             Backup = SkipBackupOnce ? null : BackupSettings,
+
+            // ずらしながらのその場保存 (ENG-24): 設定と、退避ファイルの置き場所 (追加バッファの一時ファイルと同じ場所)。
+            ShiftWhenLengthChanges = ShiftWhenLengthChanges,
+            SpillDirectory = Path.Combine(_options.TempDirectory, doc.Id.ToString("N")),
         });
         SkipBackupOnce = false;
         if (plan.Method == SaveMethod.NoChanges)
@@ -212,6 +216,17 @@ public sealed partial class MainViewModel : ObservableObject
                 op => Task.FromResult(SavePlanner.Execute(plan, op)),
                 locked => doc.SetEditLock(locked));
         }
+        catch (ShiftSaveFailedException ex)
+        {
+            // ずらしながらのその場保存の途中で失敗: 退避した旧内容でドキュメントの内容を保つ (ENG-24 の「エラー」)。ファイルは壊れている可能性がある。
+            doc.RecoverAfterShiftFailure(ex.Recovered);
+            if (vm.Watch is { } failed)
+            {
+                ExternalChanges?.Rebase(failed, failed.Baseline);
+            }
+
+            throw;
+        }
         catch
         {
             SavePlanner.Abort(plan);
@@ -259,6 +274,9 @@ public sealed partial class MainViewModel : ObservableObject
         get => _app.Backup;
         set => _app.Backup = value;
     }
+
+    /// <summary>設定「長さが変わる場合もその場で書く」(ENG-24)。</summary>
+    public bool ShiftWhenLengthChanges { get; set; }
 
     /// <summary>次の保存 1 回だけバックアップを作らない (「バックアップなしで保存」。ENG-26 の「エラー」)。</summary>
     public bool SkipBackupOnce { get; set; }

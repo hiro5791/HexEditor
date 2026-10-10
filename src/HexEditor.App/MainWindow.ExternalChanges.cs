@@ -195,7 +195,8 @@ public sealed partial class MainWindow
         FileByteSource source;
         try
         {
-            source = FileByteSource.Open(path);
+            // 範囲を指定して開いたタブは同じ範囲で開き直す (ENG-13 の仕様 7: 外部変更の検知はファイル全体)。
+            source = doc.RangeSource?.Reopen() ?? FileByteSource.Open(path);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -288,7 +289,8 @@ public sealed partial class MainWindow
         FileByteSource source;
         try
         {
-            source = FileByteSource.Open(path);
+            // 範囲を指定して開いたタブは同じ範囲で開き直す (ENG-13 の仕様 7: 外部変更の検知はファイル全体)。
+            source = doc.RangeSource?.Reopen() ?? FileByteSource.Open(path);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

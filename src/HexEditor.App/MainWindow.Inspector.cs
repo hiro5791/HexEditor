@@ -149,6 +149,13 @@ public sealed partial class MainWindow
     {
         var list = new BookmarkListPanel(_bookmarksVm);
         list.GoToRequested += (_, b) => GoToBookmark(b);
+        list.OpenInNewTabRequested += (_, b) =>
+        {
+            if (Vm.Selected is { } doc)
+            {
+                OpenRangeInNewTab(doc, b.Start, b.Length, b.Name, copy: false);
+            }
+        };
         list.PreviewRequested += (_, b) => PreviewBookmark(b);
         list.EditRequested += (_, e) => EditBookmark(e.Bookmark, e.Anchor, e.Rename);
         list.Deleted += (_, items) => ShowBookmarksDeleted(items);
@@ -490,6 +497,7 @@ public sealed partial class MainWindow
             ExtendHexViewEditMenu(menu);
             ExtendHexViewMenu(view, menu);
             ExtendHexViewReferenceMenu(menu);
+            ExtendHexViewFilesMenu(menu);
         });
     }
 

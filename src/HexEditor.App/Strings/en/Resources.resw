@@ -3063,4 +3063,21 @@ Details were written to:
   <data name="Transfer_Choice_ascii" xml:space="preserve"><value>ASCII</value></data>
   <data name="Transfer_Choice_lowest" xml:space="preserve"><value>Lowest address at offset 0</value></data>
   <data name="Transfer_Choice_absolute" xml:space="preserve"><value>Address as offset</value></data>
+  <data name="Menu_Selection_OpenInNewTab" xml:space="preserve"><value>Open in a new tab</value></data>
+  <data name="Menu_Selection_Export" xml:space="preserve"><value>Export selection...</value></data>
+  <data name="Menu_Selection_SaveToFile" xml:space="preserve"><value>Save selection to a file...</value></data>
+  <data name="Clipboard_WriteToFile" xml:space="preserve"><value>Write to a file</value></data>
+  <data name="Bookmarks_MenuOpenInNewTab.Text" xml:space="preserve"><value>Open in a new tab</value></data>
+  <data name="Tab_FormatSettings" xml:space="preserve"><value>Format settings...</value></data>
+  <data name="SaveSpace_Shift" xml:space="preserve"><value>Save in place by shifting data</value></data>
+  <data name="Shift_Title" xml:space="preserve"><value>Save in place</value></data>
+  <data name="Shift_Body" xml:space="preserve"><value>{0} will be rewritten in place. If the app or PC stops while saving, the file will be damaged and can't be restored. Amount to rewrite: {1}. Temporary space needed: {2}.</value></data>
+  <data name="Shift_DiscardHistory" xml:space="preserve"><value>There isn't enough free space to keep the content before saving, so the undo history before saving will be discarded.</value></data>
+  <data name="Shift_Save" xml:space="preserve"><value>Save in place</value></data>
+  <data name="Shift_Failed" xml:space="preserve"><value>An error occurred while saving in place. The file may be damaged. Your unsaved content is still in this tab; save it to another location.</value></data>
+  <data name="Recovery_ShiftDetails" xml:space="preserve"><value>Saving {0} in place was interrupted last time ({1}). The file may be damaged.</value></data>
+  <data name="Recovery_ShiftDismiss" xml:space="preserve"><value>Dismiss</value></data>
+  <data name="Operations_CannotCancel" xml:space="preserve"><value>Writing has started and can't be canceled. Canceling now would damage the file.</value></data>
+  <data name="Set_save_shiftInPlace" xml:space="preserve"><value>Save in place even when the length changes</value></data>
+  <data name="SetDesc_save_shiftInPlace" xml:space="preserve"><value>Shifts data inside the original file instead of writing a temporary file. Needs little free space, but if saving is interrupted the file is damaged. You're asked every time.</value></data>
 </root>

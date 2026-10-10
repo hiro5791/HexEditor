@@ -141,7 +141,7 @@ public sealed partial class HexView
         public Brush For(CellKind kind) => kind switch
         {
             CellKind.Modified => Modified,
-            CellKind.Loading or CellKind.Empty => Dim,
+            CellKind.Loading or CellKind.Empty or CellKind.NoData => Dim,
             _ => Text,
         };
     }

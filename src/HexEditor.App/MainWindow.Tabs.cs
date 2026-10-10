@@ -439,6 +439,16 @@ public sealed partial class MainWindow
                 Vm.Selected = doc;
                 _ = Commands.ExecuteAsync("edit.readOnly");
             }, Checked: doc.Editor.ReadOnly),
+
+            // デコードして開いたドキュメントの「形式の設定...」(TOOL-11 の仕様 2)。
+            .. doc.Encoded is null ? Array.Empty<TabMenuEntry?>() :
+            [
+                new("TabMenu_FormatSettings", Loc.Get("Tab_FormatSettings"), true, () =>
+                {
+                    Vm.Selected = doc;
+                    _ = Commands.ExecuteAsync("file.formatSettings");
+                }),
+            ],
         ];
     }
 }

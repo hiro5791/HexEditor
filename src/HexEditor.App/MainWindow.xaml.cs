@@ -394,6 +394,14 @@ public sealed partial class MainWindow : Window
         {
             ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error, doc);
         }
+        catch (ShiftSaveFailedException)
+        {
+            // ずらしながらのその場保存の途中のエラー (ENG-24 の「エラー」)。内容はこのタブに残っているので、別の場所に保存してもらう。
+            ShowNotice(Loc.Get("Shift_Failed"), InfoBarSeverity.Error, doc, actions:
+            [
+                new NotificationAction(Loc.Get("Menu_File_SaveAs/Text").TrimEnd('.', '…'), () => _ = SaveAsync(doc, saveAs: true)),
+            ]);
+        }
         catch (InPlaceSaveRolledBackException)
         {
             ShowNotice(Loc.Get("Error_SaveRolledBack"), InfoBarSeverity.Error, doc);
@@ -511,10 +519,13 @@ public sealed partial class MainWindow : Window
                 ClipboardPlan? copied = await _clipboard.CopyAsync(editor);
                 if (copied?.InAppOnly == true)
                 {
-                    // 「選択範囲 (12.3 GB) は大きすぎるため…」(EDIT-22 の仕様 5。「ファイルに書き出す」は TOOL-16 (フェーズ 2) の後)。
+                    // 「選択範囲 (12.3 GB) は大きすぎるため…」と「ファイルに書き出す」(EDIT-22 の仕様 5、TOOL-16)。
                     string size = StatusFormat.ShortSize(editor.SelectionLength, System.Globalization.CultureInfo.CurrentCulture)
                         ?? editor.SelectionLength.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                    ShowNotice(Loc.Format("Clipboard_InAppOnlySize", size), InfoBarSeverity.Informational, Vm.Selected);
+                    ShowNotice(Loc.Format("Clipboard_InAppOnlySize", size), InfoBarSeverity.Informational, Vm.Selected, actions:
+                    [
+                        new NotificationAction(Loc.Get("Clipboard_WriteToFile"), () => _ = Commands.ExecuteAsync("file.saveSelection")),
+                    ]);
                 }
                 else if (copied?.TextOmitted == true)
                 {

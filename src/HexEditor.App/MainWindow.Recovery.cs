@@ -59,9 +59,12 @@ public sealed partial class MainWindow
 
         // 異常終了で残った安全な保存の一時ファイル (ENG-22 の仕様 7)。記録は保存のジャーナルと同じフォルダにある。
         IReadOnlyList<LeftoverTempFile> leftovers = SaveTempMarker.Find(defaultRoot);
-        if (entries.Count > 0 || journals.Count > 0 || leftovers.Count > 0)
+
+        // 中断したずらしながらのその場保存 (ENG-24 の仕様 6)。自動の修復はせず、ファイルが壊れている可能性を示すだけ。
+        IReadOnlyList<ShiftInterruption> shifts = ShiftSaver.FindInterrupted(defaultRoot);
+        if (entries.Count > 0 || journals.Count > 0 || leftovers.Count > 0 || shifts.Count > 0)
         {
-            await ShowRecoveryDialogAsync(entries, journals, leftovers);
+            await ShowRecoveryDialogAsync(entries, journals, leftovers, shifts);
         }
 
         // 復旧の提案の後にセッションを復元する (UI-30 の仕様 3)。
@@ -126,8 +129,9 @@ public sealed partial class MainWindow
     /// 一時ファイル (ENG-22 の仕様 7) は「削除」だけを出す (ENG-27 の仕様 7)。
     /// </summary>
     private async Task ShowRecoveryDialogAsync(IReadOnlyList<RecoveryEntry> entries, IReadOnlyList<string> journals,
-        IReadOnlyList<LeftoverTempFile> leftovers)
+        IReadOnlyList<LeftoverTempFile> leftovers, IReadOnlyList<ShiftInterruption>? shifts = null)
     {
+        shifts ??= [];
         var list = new StackPanel { Spacing = 12 };
         var dialog = new ContentDialog
         {
@@ -138,7 +142,7 @@ public sealed partial class MainWindow
             FlowDirection = Root.FlowDirection,
         };
         AutomationProperties.SetAutomationId(dialog, "RecoveryDialog");
-        int remaining = entries.Count + journals.Count + leftovers.Count;
+        int remaining = entries.Count + journals.Count + leftovers.Count + shifts.Count;
 
         void Done(FrameworkElement row)
         {
@@ -241,6 +245,25 @@ public sealed partial class MainWindow
                 },
                 discardText: Loc.Get("Recovery_TempDelete"),
                 discardId: "Recovery_DeleteTemp");
+            list.Children.Add(row);
+        }
+
+        foreach (ShiftInterruption shift in shifts)
+        {
+            FrameworkElement? row = null;
+            row = RecoveryRow(
+                Path.GetFileName(shift.TargetPath),
+                shift.TargetPath,
+                Loc.Format("Recovery_ShiftDetails", Path.GetFileName(shift.TargetPath), shift.StartedUtc.ToLocalTime().ToString("g")),
+                restoreText: null,
+                restore: null,
+                () =>
+                {
+                    ShiftSaver.Dismiss(shift);
+                    Done(row!);
+                },
+                discardText: Loc.Get("Recovery_ShiftDismiss"),
+                discardId: "Recovery_ShiftDismiss");
             list.Children.Add(row);
         }
 

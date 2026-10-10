@@ -205,6 +205,9 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
                 c.IsEnabled = any;
             }
         }
+
+        // 範囲を持たないブックマークは新しいタブで開けない (ENG-39 の仕様 3)。
+        OpenInNewTabItem.IsEnabled = List.SelectedItem is BookmarkRowViewModel { Bookmark.Length: > 0 };
     }
 
     private void Add_Click(object sender, RoutedEventArgs e) => AddRequested?.Invoke(this, EventArgs.Empty);
@@ -221,6 +224,17 @@ public sealed partial class BookmarkListPanel : UserControl, Panels.IPanelConten
         {
             FrameworkElement anchor = List.ContainerFromItem(row) as FrameworkElement ?? List;
             EditRequested?.Invoke(this, (row.Bookmark, anchor, rename));
+        }
+    }
+
+    /// <summary>ブックマークの範囲を新しいタブで開く (ENG-39 の仕様 3)。</summary>
+    public event EventHandler<Bookmark>? OpenInNewTabRequested;
+
+    private void OpenInNewTab_Click(object sender, RoutedEventArgs e)
+    {
+        if (List.SelectedItem is BookmarkRowViewModel { Bookmark.Length: > 0 } row)
+        {
+            OpenInNewTabRequested?.Invoke(this, row.Bookmark);
         }
     }
 

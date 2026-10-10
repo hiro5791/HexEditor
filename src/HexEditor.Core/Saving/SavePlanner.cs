@@ -189,6 +189,9 @@ public sealed record SaveResult(FileByteSource? SavedFile, InPlaceSaveResult? In
 /// </summary>
 public static class SavePlanner
 {
+    /// <summary>設定「長さが変わる場合もその場で書く」(ENG-24) のキー。</summary>
+    public const string ShiftInPlaceKey = "save.shiftInPlace";
+
     /// <summary>保存の方式を決め、始める前の確認をする (ENG-20 の仕様 1・3、ENG-25)。</summary>
     /// <param name="targetPath">保存先。null は「元の場所に保存」(無題なら <see cref="SaveMethod.SaveAs"/>)。</param>
     public static SavePlan Plan(Document document, string? targetPath, SaveSettings settings)

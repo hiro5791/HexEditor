@@ -307,6 +307,11 @@
       "maximum": 60,
       "default": 1
     },
+    "save.shiftInPlace": {
+      "description": "Save in place even when the length changes",
+      "type": "boolean",
+      "default": false
+    },
     "search.chunkSize": {
       "description": "Search chunk size (KiB)",
       "type": "integer",

@@ -180,6 +180,8 @@
                     <MenuFlyoutItem x:Uid="Bookmarks_MenuGo" AutomationProperties.AutomationId="Bookmarks_MenuGo" Click="MenuGo_Click" />
                     <MenuFlyoutItem x:Uid="Bookmarks_MenuRename" AutomationProperties.AutomationId="Bookmarks_MenuRename" Click="MenuRename_Click" />
                     <MenuFlyoutItem x:Uid="Bookmarks_MenuEdit" AutomationProperties.AutomationId="Bookmarks_MenuEdit" Click="Edit_Click" />
+                    <!--  ブックマークの範囲を新しいタブで開く (ENG-39 の仕様 3。範囲を持たないブックマークは開けない)  -->
+                    <MenuFlyoutItem x:Name="OpenInNewTabItem" x:Uid="Bookmarks_MenuOpenInNewTab" AutomationProperties.AutomationId="Bookmarks_MenuOpenInNewTab" Click="OpenInNewTab_Click" />
                     <MenuFlyoutSubItem x:Name="ColorMenu" x:Uid="Bookmarks_MenuColor" AutomationProperties.AutomationId="Bookmarks_MenuColor" />
                     <MenuFlyoutSeparator />
                     <MenuFlyoutItem x:Uid="Bookmarks_MenuDelete" AutomationProperties.AutomationId="Bookmarks_MenuDelete" Click="Delete_Click" />

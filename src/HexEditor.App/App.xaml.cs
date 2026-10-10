@@ -123,6 +123,7 @@ public partial class App : Application
         vm.InitializeFiles(files, FileSettings.RecentMaxItems(Settings));
         ViewOptions.Documents = files.Documents;
         vm.BackupSettings = FileSettings.Backup(Settings);
+        vm.ShiftWhenLengthChanges = Settings.GetBool(Core.Saving.SavePlanner.ShiftInPlaceKey, false);
 
         // コマンドパレットの「ファイル」モードの候補 (UI-17 の仕様 2、UI-32)。
         MainWindow.PaletteRecentFiles = () => vm.Recent.Items.Select(i => new PaletteRecentFile(i.DisplayName, i.Path));
@@ -152,6 +153,7 @@ public partial class App : Application
         {
             vm.Recent.MaxItems = FileSettings.RecentMaxItems(Settings);
             vm.BackupSettings = FileSettings.Backup(Settings);
+            vm.ShiftWhenLengthChanges = Settings.GetBool(Core.Saving.SavePlanner.ShiftInPlaceKey, false);
             ApplyRecoveryInterval();
             AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
             CrashReporter.WriteMiniDump = Settings.GetBool(CrashReporter.MiniDumpKey, false);
