@@ -286,8 +286,10 @@ public sealed class CharsetConversionTests
         var options = new CharsetConversionOptions("utf-8", "ascii") { Unmappable = UnmappableHandling.Custom, CustomReplacement = "*" };
         Assert.Equal(new byte[] { 0x41, 0x2A, 0x42 }, Convert(Utf8("A日B"), options));
 
-        // 変換先で表せない置き換えの文字列は使えない。
-        Assert.Throws<ArgumentException>(() => Convert(Utf8("A日B"), options with { CustomReplacement = "日" }));
+        // 変換先で表せない置き換えの文字列は使えない (UI が地域化した文言を出せるよう、誤りの種類と文字列を持つ)。
+        var ex = Assert.Throws<CharsetSettingsException>(() => Convert(Utf8("A日B"), options with { CustomReplacement = "日" }));
+        Assert.Equal(CharsetSettingsError.InvalidReplacement, ex.Error);
+        Assert.Equal("日", ex.Value);
     }
 
     [Fact]
@@ -548,7 +550,10 @@ public sealed class CharsetConversionTests
     [Fact]
     public void Unknown_encoding_is_an_argument_error()
     {
-        Assert.Throws<ArgumentException>(() => Convert([0x41], new CharsetConversionOptions("cp99999", "utf-8")));
+        var ex = Assert.Throws<CharsetSettingsException>(() => Convert([0x41], new CharsetConversionOptions("cp99999", "utf-8")));
+        Assert.Equal(CharsetSettingsError.UnknownEncoding, ex.Error);
+        Assert.Equal("cp99999", ex.Value);
+        Assert.IsAssignableFrom<ArgumentException>(ex);
         Assert.Equal(932, TextTransforms.ResolveCodePage("cp932"));
         Assert.Equal(20127, TextTransforms.ResolveCodePage("ascii"));
     }

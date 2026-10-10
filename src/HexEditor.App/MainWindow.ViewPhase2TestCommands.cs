@@ -119,7 +119,10 @@ public sealed partial class MainWindow
         };
     }
 
-    /// <summary>ミニマップ: state (描画モデル) / click (高さに対する割合 fraction の位置) / exact (正確に計算を始める)。</summary>
+    /// <summary>
+    /// ミニマップ: state (描画モデル) / click (高さに対する割合 fraction の位置) / exact (正確に計算を始める) / resize (境界のドラッグで幅を
+    /// width にする) / wheel (ミニマップの上でホイールを delta で count 回)。
+    /// </summary>
     private JsonObject TestMinimap(JsonObject request)
     {
         HexView view = TargetView(request);
@@ -132,6 +135,19 @@ public sealed partial class MainWindow
                 return new JsonObject { ["text"] = m.ToolTipText(m.ActualHeight * (request["fraction"]?.GetValue<double>() ?? 0)) };
             case "exact":
                 StartExactMinimap();
+                break;
+            case "resize" when view.Minimap is { } m:
+                // 左の境界のドラッグ (始める・幅を変える・離す) と同じ処理。
+                m.BeginResizeForTest();
+                m.ResizeTo(request["width"]?.GetValue<double>() ?? 80);
+                m.EndResize();
+                break;
+            case "wheel" when view.Minimap is { } m:
+                for (int i = 0; i < (int)(request["count"]?.GetValue<long>() ?? 1); i++)
+                {
+                    m.Wheel?.Invoke((int)(request["delta"]?.GetValue<long>() ?? -120));
+                }
+
                 break;
         }
 
@@ -166,7 +182,9 @@ public sealed partial class MainWindow
             _recordNumbers!.IsChecked = numbers;
         }
 
-        ValidateRecordSettings();
+        // 入力欄の変化の通知 (TextChanged など) と同じ処理: 入力をその場で反映する (VIEW-18 の「画面」)。通知は欄が読み込まれる前には届かないため、
+        // ここで呼ぶ。
+        ApplyRecordSettings(force: false);
         if (request["commit"]?.GetValue<bool>() == true)
         {
             CommitRecordSettings();

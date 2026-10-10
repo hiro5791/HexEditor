@@ -235,6 +235,27 @@
                     </Border>
                 </Canvas>
             </Canvas>
+            <!--  選択範囲のドラッグの効果 (EDIT-18 の「画面」: 挿入位置の縦線の近くに「移動」「コピー」「上書き」)  -->
+            <Border
+                x:Name="DropLabel"
+                Padding="4,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Background="{ThemeResource HexViewPanelBrush}"
+                BorderBrush="{ThemeResource HexViewCaretBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                IsHitTestVisible="False"
+                Visibility="Collapsed">
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="DropLabelShift" />
+                </Border.RenderTransform>
+                <TextBlock
+                    x:Name="DropLabelText"
+                    AutomationProperties.AutomationId="HexViewDropLabel"
+                    FontSize="12"
+                    Foreground="{ThemeResource HexViewTextBrush}" />
+            </Border>
             <!--  診断表示 (VIEW-04 の仕様 8。既定はオフ)  -->
             <Border
                 x:Name="DiagnosticsPanel"

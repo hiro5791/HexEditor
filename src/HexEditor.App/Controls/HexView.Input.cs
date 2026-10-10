@@ -672,9 +672,28 @@ public sealed partial class HexView
             // 1 ノッチで Windows の設定の行数 (仕様 1)。120 未満の入力はピクセルとして蓄積する (仕様 2)。
             uint lines = WheelScrollLines();
             double rowsPerNotch = lines == WheelPageScroll ? Math.Max(1, _editor.VisibleRows - 1) : lines;
+            if (_editor.VisibleSectionRows is not null)
+            {
+                // ページ単位で表示: 区切りの中でスクロールし、端でさらに回すと隣の区切りへ移る (VIEW-33 の仕様 4)。行内のずれは使わず、
+                // 1 行に満たない入力は蓄積する。
+                _subRowOffset = 0;
+                _pageWheelRows += -delta / 120.0 * rowsPerNotch;
+                long rows = (long)Math.Truncate(_pageWheelRows);
+                if (rows != 0)
+                {
+                    _pageWheelRows -= rows;
+                    _editor.ScrollRows(rows);
+                }
+
+                return;
+            }
+
             ScrollByPixels(-delta / 120.0 * rowsPerNotch * _rowHeight);
         }
     }
+
+    /// <summary>ページ単位で表示しているときの、1 行に満たないホイールの入力の蓄積 (行)。</summary>
+    private double _pageWheelRows;
 
     /// <summary>ピクセル単位で縦にスクロールする。一番上の行 (long) と行内のずれを分けて持つ (VIEW-28 の仕様 2)。</summary>
     private void ScrollByPixels(double pixels)
@@ -823,8 +842,15 @@ public sealed partial class HexView
 
     private void ScrollToBarValue(double newValue)
     {
-        long maxTop = _editor!.Layout.MaxTopRow(_editor.VisibleRows);
         long value = (long)Math.Round(newValue);
+        if (_editor!.PageScrollPosition is { } page)
+        {
+            // ページ単位で表示: 区切り単位の位置 (VIEW-33 の仕様 4)。
+            _editor.ScrollToPagePosition(value >= ScrollMapping.Scale(page.MaxPosition) ? page.MaxPosition : ScrollMapping.ToRow(value, page.MaxPosition));
+            return;
+        }
+
+        long maxTop = _editor.Layout.MaxTopRow(_editor.VisibleRows);
         long row = value >= ScrollMapping.Scale(maxTop) ? maxTop : ScrollMapping.ToRow(value, maxTop);
         _editor.ScrollToRow(row);
     }
@@ -911,20 +937,23 @@ public sealed partial class HexView
     {
         long offset = -1;
         HitRegion region = HitRegion.Hex;
+        int textColumn = 0;
         if (_editor is not null && TryHitTest(position, out HitResult hit) && hit.Region is HitRegion.Hex or HitRegion.Text or HitRegion.Offset
             && (ShowToolTips || IsUnreadableShown(hit.Offset)) && (hit.Region == HitRegion.Offset || hit.Offset < _editor.Layout.Length))
         {
             offset = hit.Region == HitRegion.Offset ? -2 - hit.Row : hit.Offset;
             region = hit.Region;
+            textColumn = hit.Region == HitRegion.Text ? hit.TextColumn : 0;
         }
 
-        if (offset == _hoverOffset && region == _hoverRegion)
+        if (offset == _hoverOffset && region == _hoverRegion && textColumn == _hoverTextColumn)
         {
             return;
         }
 
         _hoverOffset = offset;
         _hoverRegion = region;
+        _hoverTextColumn = textColumn;
         HideCellToolTip();
         _hoverTimer.Stop();
         if (offset != -1)
@@ -934,6 +963,9 @@ public sealed partial class HexView
     }
 
     private HitRegion _hoverRegion;
+
+    /// <summary>マウスを合わせているテキスト列 (VIEW-24。ツールチップの文字をこの列の文字コードで示す)。Hex 列では 0。</summary>
+    private int _hoverTextColumn;
 
     private bool IsUnreadableShown(long offset)
     {
@@ -973,11 +1005,12 @@ public sealed partial class HexView
         if (!IsUnreadableShown(offset))
         {
             FrameworkElement? rich = ShowToolTips ? RichToolTipContent?.Invoke(offset) : null;
-            OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, null, rich is null) : string.Empty, (offset, column), rich);
+            OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, null, rich is null, _hoverTextColumn) : string.Empty, (offset, column), rich);
             return;
         }
 
         DocumentSnapshot snapshot = _editor.Document.Current;
+        int textColumn = _hoverTextColumn;
         _ = Task.Run(() =>
         {
             // 読めない理由はデータソースに尋ねる (キャッシュ済みならすぐ返る)。
@@ -989,7 +1022,7 @@ public sealed partial class HexView
             {
                 if (_hoverOffset == hover)
                 {
-                    OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, reason) : reason, (offset, column));
+                    OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, reason, textColumn: textColumn) : reason, (offset, column));
                 }
             });
         });
@@ -1137,6 +1170,19 @@ public sealed partial class HexView
                 Report(_editor.ToggleInsertMode());
             }
         }));
+
+        // カーソルがテキスト列にあるときの「テキスト列」(VIEW-24 の仕様 3 を、Shift+F10・アプリケーションキーからも使えるようにする)。
+        var textColumn = new MenuFlyoutSubItem { Text = Loc.Get("HexView_Menu_TextColumn"), Tag = "TextColumn" };
+        AutomationProperties.SetAutomationId(textColumn, "HexViewMenu_TextColumn");
+        foreach (MenuFlyoutItem item in CreateTextColumnItems("HexViewMenu_TextColumn", () => _editor?.TextColumn ?? 0))
+        {
+            textColumn.Items.Add(item);
+        }
+
+        _contextTextColumnSeparator = new MenuFlyoutSeparator();
+        menu.Items.Add(_contextTextColumnSeparator);
+        menu.Items.Add(textColumn);
+        _contextTextColumnMenu = textColumn;
         menu.Closed += (_, _) => Focus(FocusState.Programmatic);
         return menu;
 
@@ -1151,6 +1197,9 @@ public sealed partial class HexView
             return item;
         }
     }
+
+    private MenuFlyoutSubItem? _contextTextColumnMenu;
+    private MenuFlyoutSeparator? _contextTextColumnSeparator;
 
     /// <summary>右クリックメニューの項目のショートカット (コマンド ID、または「key:」とキーの名前)。</summary>
     private readonly Dictionary<MenuFlyoutItem, string> _contextMenuShortcuts = [];
@@ -1191,6 +1240,14 @@ public sealed partial class HexView
                     _ => true,
                 };
             }
+        }
+
+        // 「テキスト列」はカーソルがテキスト列にあるときだけ出す。
+        if (_contextTextColumnMenu is { } textColumn)
+        {
+            bool onText = editor.ActiveColumn == ActiveColumn.Text && editor.View.ShowTextColumn;
+            textColumn.Visibility = _contextTextColumnSeparator!.Visibility = onText ? Visibility.Visible : Visibility.Collapsed;
+            UpdateTextColumnItems(textColumn.Items, editor.TextColumn);
         }
     }
 
@@ -1319,6 +1376,15 @@ public sealed partial class HexView
                 break;
             case VirtualKey.Insert when !ctrl && !shift:
                 Report(_editor.ToggleInsertMode());
+                break;
+            case VirtualKey.Delete when !shift && LongRangeDeleteRequested is { } longDelete
+                && _editor.LongRangeDeleteAction(backspace: false) is var action && action != RangeDeleteAction.None:
+                // 要素数の多いマルチ選択・矩形の削除は長時間処理にする (EDIT-07・EDIT-17 の「巨大ファイル・長時間処理」)。
+                longDelete(this, action);
+                break;
+            case VirtualKey.Back when LongRangeDeleteRequested is { } longBack
+                && _editor.LongRangeDeleteAction(backspace: true) is var backAction && backAction != RangeDeleteAction.None:
+                longBack(this, backAction);
                 break;
             case VirtualKey.Delete when !shift:
                 DeleteWithAnnouncement(_editor.Delete);

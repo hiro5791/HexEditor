@@ -85,6 +85,17 @@ public sealed class ViewPhase2Tests
 
     // ---- VIEW-18 ----
 
+    /// <summary>VIEW-18 の仕様 5・7: レコード内の位置はオフセットの基数に従う (8 進を含む)。</summary>
+    [Fact]
+    public void Position_in_the_record_follows_the_offset_radix()
+    {
+        Assert.Equal("0x0C", RecordLayout.WithinText(12, OffsetRadix.Hex, lowercase: false));
+        Assert.Equal("0x0c", RecordLayout.WithinText(12, OffsetRadix.Hex, lowercase: true));
+        Assert.Equal("12", RecordLayout.WithinText(12, OffsetRadix.Decimal, lowercase: false));
+        Assert.Equal("0o14", RecordLayout.WithinText(12, OffsetRadix.Octal, lowercase: false));
+        Assert.Equal("0014", RecordLayout.WithinDigits(12, OffsetRadix.Octal, lowercase: false, 4));
+    }
+
     [Fact]
     public void Records_are_counted_from_the_start_offset()
     {
@@ -159,6 +170,75 @@ public sealed class ViewPhase2Tests
         }
     }
 
+    [Fact]
+    public void Page_view_scroll_bar_moves_in_section_units()
+    {
+        // 1 MiB、1 行 16 バイト、ページ 4,096 バイト = 256 行、表示 30 行: 区切りの中の一番上の行の候補は 227 個、区切りは 256 個。
+        (Document doc, EditorState state) = Create(1024 * 1024, visibleRows: 30);
+        using (doc)
+        {
+            Assert.Null(state.PageScrollPosition);
+            state.ApplyView(state.View with { Separator = SeparatorKind.Page, PageView = true });
+            (long max, long position, long sections) = state.PageScrollPosition!.Value;
+            Assert.Equal(256, sections);
+            Assert.Equal(256L * 227 - 1, max);
+            Assert.Equal(0, position);
+
+            // 3 番目の区切りの中ほど: 一番上の行は区切り 3 の中に収まる。
+            state.ScrollToPagePosition(3 * 227 + 100);
+            Assert.Equal(3 * 256 + 100, state.TopRow);
+            Assert.Equal(3 * 227 + 100, state.PageScrollPosition!.Value.Position);
+
+            // 区切りの中の最後の位置: 区切りの最後の行が一番下に来る。次の位置は次の区切りの先頭。
+            state.ScrollToPagePosition(3 * 227 + 226);
+            Assert.Equal(4 * 256 - 30, state.TopRow);
+            state.ScrollToPagePosition(4 * 227);
+            Assert.Equal(4 * 256, state.TopRow);
+
+            // 最大の位置は最後の区切りの最後の行が一番下に来る位置。
+            state.ScrollToPagePosition(max);
+            Assert.Equal(256 * 256 - 30, state.TopRow);
+            Assert.Equal(max, state.PageScrollPosition!.Value.Position);
+        }
+    }
+
+    [Fact]
+    public void Sector_number_is_shown_independently_of_the_page_part()
+    {
+        (Document doc, EditorState state) = Create(0x10000);
+        using (doc)
+        {
+            Assert.False(state.ShowsSectorInStatus);
+            state.ApplyView(state.View with { Separator = SeparatorKind.Page });
+            Assert.False(state.ShowsSectorInStatus);
+            state.ApplyView(state.View with { Radix = OffsetRadix.Sector });
+            Assert.True(state.ShowsSectorInStatus);
+            state.ApplyView(state.View with { Radix = OffsetRadix.Hex, Separator = SeparatorKind.Sector });
+            Assert.True(state.ShowsSectorInStatus);
+        }
+
+        // ディスク (データソースのセクタサイズ) では、区切り線がページでも常に表示する。
+        using var disk = new Document(new FakeByteSource(new byte[0x10000], SourceCapabilities.CanWrite, sectorSize: 4096), Options());
+        var diskState = new EditorState(disk) { VisibleRows = 10 };
+        diskState.ApplyView(diskState.View with { Separator = SeparatorKind.Page });
+        Assert.True(diskState.ShowsSectorInStatus);
+    }
+
+    [Fact]
+    public void Go_to_sector_offset_puts_the_sector_at_the_top()
+    {
+        (Document doc, EditorState state) = Create(0x100000);
+        using (doc)
+        {
+            Assert.True(state.GoToSectorOffset(64 * 512));
+            Assert.Equal(0x8000, state.Cursor);
+            Assert.Equal(0x8000 / 16, state.TopRow);
+            state.GoBack();
+            Assert.Equal(0, state.Cursor);
+            Assert.False(state.GoToSectorOffset(0x200000));
+        }
+    }
+
     // ---- VIEW-10・VIEW-11・VIEW-24 ----
 
     [Fact]
@@ -213,6 +293,25 @@ public sealed class ViewPhase2Tests
             state.ToggleColumn(backward: true);
             Assert.Equal(2, state.TextColumn);
         }
+    }
+
+    /// <summary>VIEW-24 の仕様 3: テキスト列を左右に移す・削除する。端の列は移せず、最後の 1 列は消せない。</summary>
+    [Fact]
+    public void Text_columns_move_left_and_right_and_are_removed()
+    {
+        ViewSettings view = ViewSettings.Default.WithTextColumns([new("ascii"), new("utf-16le", 1), new("cp932")]);
+        ViewSettings right = view.WithTextColumnMoved(0, +1)!;
+        Assert.Equal(["utf-16le", "ascii", "cp932"], right.TextColumns.Select(c => c.Encoding));
+        Assert.Equal(1, right.Utf16Phase);
+        ViewSettings left = view.WithTextColumnMoved(2, -1)!;
+        Assert.Equal(["ascii", "cp932", "utf-16le"], left.TextColumns.Select(c => c.Encoding));
+        Assert.Equal(1, left.TextColumns[2].Utf16Phase);
+        Assert.Null(view.WithTextColumnMoved(0, -1));
+        Assert.Null(view.WithTextColumnMoved(2, +1));
+        Assert.Null(view.WithTextColumnMoved(5, -1));
+
+        Assert.Equal(["ascii", "cp932"], view.WithoutTextColumn(1)!.TextColumns.Select(c => c.Encoding));
+        Assert.Null(ViewSettings.Default.WithoutTextColumn(0));
     }
 
     // ---- VIEW-37・VIEW-38 ----
@@ -341,5 +440,92 @@ public sealed class ViewPhase2Tests
         }
 
         Assert.Equal(48, minimap.RowOf(rowBytes * 48 + 5));
+    }
+
+    private static void WaitComputed(MinimapComputer minimap)
+    {
+        var done = new ManualResetEventSlim();
+        EventHandler handler = (_, _) =>
+        {
+            if (minimap.Computed == minimap.RowCount)
+            {
+                done.Set();
+            }
+        };
+        minimap.Progress += handler;
+        if (minimap.Computed == minimap.RowCount)
+        {
+            done.Set();
+        }
+
+        Assert.True(done.Wait(TimeSpan.FromSeconds(20)));
+        minimap.Progress -= handler;
+    }
+
+    [Fact]
+    public void Minimap_byte_theme_keeps_the_bytes_of_each_row_around_the_view()
+    {
+        // 「周辺」+「バイトテーマ」(仕様 3): 1 ピクセル行 = Hex ビューの 1 行、各バイトを 1 ピクセルとしてバイトテーマの色で描く。
+        (Document doc, EditorState state) = Create(0x10000, visibleRows: 20);
+        using (doc)
+        using (var minimap = new MinimapComputer { KeepBytes = true })
+        {
+            state.ScrollToRow(0x100);
+            (long first, long rowBytes, int count) = MinimapComputer.Around(doc.Length, 100, state.Layout, state.TopRow, state.VisibleRows);
+            Assert.Equal(16, rowBytes);
+            minimap.Start(doc.Current, first, rowBytes, count);
+            WaitComputed(minimap);
+            for (int i = 0; i < count; i++)
+            {
+                ReadOnlySpan<byte> row = minimap.RowBytesOf(i);
+                Assert.Equal(16, row.Length);
+                for (int k = 0; k < 16; k++)
+                {
+                    Assert.Equal((byte)(first + i * 16 + k), row[k]);
+                }
+            }
+
+            // 色: テーマの背景色、なければ文字色、テーマが「なし」なら種類別の色。
+            Assert.Equal(ByteTheme.CategoryColor(ByteCategory.Printable, false), MinimapComputer.ByteColor(null, 0x41, false));
+            Assert.Equal(ByteTheme.Gradient.ColorOf(0x80, true).Text, MinimapComputer.ByteColor(ByteTheme.Gradient, 0x80, true));
+
+            // バイトを残さない設定に戻すと、同じ割り当てでも計算し直してバイトを捨てる。
+            minimap.KeepBytes = false;
+            minimap.Start(doc.Current, first, rowBytes, count);
+            WaitComputed(minimap);
+            Assert.True(minimap.RowBytesOf(0).IsEmpty);
+        }
+    }
+
+    [Fact]
+    public async Task Minimap_exact_result_is_cached_per_document()
+    {
+        // 「正確に計算」(仕様 5): 結果はドキュメントごとにキャッシュし、別のビュー (別の計算) で同じ内容を開いても再利用する。
+        byte[] data = new byte[1 << 20];
+        new Random(20261011).NextBytes(data.AsSpan(0, data.Length / 4));
+        using var doc = new Document(new FakeByteSource(data, SourceCapabilities.CanWrite), Options());
+        var operations = new HexEditor.Core.Operations.OperationCenter();
+        (long first, long rowBytes, int count) = MinimapComputer.Whole(doc.Length, 32, 16);
+        Assert.True(rowBytes > MinimapComputer.SampleSize);
+        using (var a = new MinimapComputer())
+        {
+            a.Start(doc.Current, first, rowBytes, count);
+            Assert.True(a.NeedsExact);
+            await a.ComputeExactAsync(operations, "exact", doc);
+            Assert.True(a.IsExact);
+            Assert.False(a.NeedsExact);
+        }
+
+        using var b = new MinimapComputer();
+        b.Start(doc.Current, first, rowBytes, count);
+        Assert.True(b.IsExact);
+        Assert.False(b.NeedsExact);
+        Assert.Equal(count, b.Computed);
+
+        // 内容が変わったら使わない。
+        doc.Overwrite(0, [1, 2, 3]);
+        b.Start(doc.Current, first, rowBytes, count);
+        Assert.False(b.IsExact);
+        Assert.True(b.NeedsExact);
     }
 }

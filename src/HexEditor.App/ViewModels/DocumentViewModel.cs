@@ -335,18 +335,18 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
             ViewSettings v = e.View;
             var parts = new List<string>();
             long cursor = e.Cursor;
-            if (v.Separator is SeparatorKind.Sector || (v.Separator == SeparatorKind.None
-                && (v.Radix == OffsetRadix.Sector || Document.Source.LogicalSectorSize > 1)))
+            // セクタ番号 (VIEW-32 の仕様 6) と区切りの番号 (VIEW-33 の仕様 6) は別々に決める。区切り線がセクタなら区切りはセクタ番号で示す。
+            if (e.ShowsSectorInStatus)
             {
-                var sectors = new SectionLayout(e.SectorSize, Document.Length);
-                string index = sectors.IndexOf(cursor).ToString(Culture);
+                string index = e.CursorSector.ToString(Culture);
 
                 // ディスク・ディスクイメージはセクタサイズも示す (ENG-31 の「画面」)。
                 parts.Add(Document.Source.LogicalSectorSize > 1
                     ? Loc.Format("Status_SectorWithSize", index, Document.Source.LogicalSectorSize.ToString("N0", Culture))
                     : Loc.Format("Status_Sector", index));
             }
-            else if (v.Separator != SeparatorKind.None && e.SectionLength > 0)
+
+            if (v.Separator is not (SeparatorKind.None or SeparatorKind.Sector) && e.SectionLength > 0)
             {
                 SectionLayout sections = e.Sections;
                 string index = sections.IndexOf(cursor).ToString("N0", Culture);
@@ -356,8 +356,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
             if (v.RecordView && RecordLayout.For(v) is var records && records.IndexOf(cursor) is { } recordNo && records.WithinOf(cursor) is { } within)
             {
-                string position = v.Radix == OffsetRadix.Decimal ? within.ToString(Culture)
-                    : "0x" + within.ToString(v.LowercaseHex ? "x2" : "X2", CultureInfo.InvariantCulture);
+                string position = RecordLayout.WithinText(within, v.Radix, v.LowercaseHex);
                 parts.Add(Loc.Format("Status_Record", recordNo.ToString(CultureInfo.InvariantCulture), position));
             }
 

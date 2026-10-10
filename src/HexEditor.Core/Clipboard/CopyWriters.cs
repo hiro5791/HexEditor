@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using HexEditor.Core.View;
 
 namespace HexEditor.Core.Clipboard;
 
@@ -508,10 +509,15 @@ internal sealed class QuotedPrintableWriter(TextWriter writer, CopyOptions optio
 /// <summary>
 /// 画面表示どおりのダンプ (オフセット・Hex・テキストの 3 列) と、それを使う文書形式 (HTML・RTF・Markdown・TeX)。
 /// 行は選択範囲の先頭から <see cref="CopyOptions.ScreenBytesPerRow"/> バイトずつ。最後の行の Hex の列は空白で埋めてテキストの列をそろえる。
+/// Hex の列はグループ化・中央区切り・セルの表示形式・グループ内の逆順表示も画面と同じにする (EDIT-25 の仕様 6、VIEW-11 の仕様 5)。
 /// </summary>
 internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFormat format, long offset, long length) : FormatWriter(writer, options)
 {
     private readonly byte[] _row = new byte[Math.Max(1, options.ScreenBytesPerRow)];
+    private readonly RowFormat _layout = new(Math.Max(1, options.ScreenBytesPerRow), Math.Max(1, options.ScreenGroupSize),
+        options.ScreenMiddleSeparator, CellFormat: options.ScreenCellFormat,
+        Reverse: options.ScreenReverseGroups && options.ScreenCellFormat == CellFormat.Hex && options.ScreenGroupSize > 1,
+        BigEndian: options.ScreenBigEndian);
     private int _count;
     private readonly long _start = offset;
     private readonly long _length = length;
@@ -612,21 +618,18 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
             : _rowOffset.ToString(O.UpperCase ? "X" : "x", CultureInfo.InvariantCulture).PadLeft(OffsetDigits, '0');
         var hex = new StringBuilder();
         var plain = new StringBuilder();
-        for (int i = 0; i < _count; i++)
+        int position = 0;
+        foreach ((int start, string cell, bool modified) in Cells())
         {
-            string cell = CopyFormatter.Hex(_row[i], 2, O);
-            if (i > 0)
-            {
-                hex.Append(' ');
-                plain.Append(' ');
-            }
-
+            hex.Append(' ', start - position);
+            plain.Append(' ', start - position);
             plain.Append(cell);
-            hex.Append(Colors && IsModified(_rowOffset + i) ? Highlight(cell) : cell);
+            hex.Append(Colors && modified ? Highlight(cell) : cell);
+            position = start + cell.Length;
         }
 
         // 最後の行は Hex の列を空白で埋めて、テキストの列の位置をそろえる。
-        int pad = (RowBytes - _count) * 3;
+        int pad = Math.Max(0, _layout.HexWidth - position);
         string text = Text();
 
         bool first = _rowIndex == 0;
@@ -660,6 +663,53 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
         _rowOffset += _count;
         _count = 0;
         _rowIndex++;
+    }
+
+    /// <summary>
+    /// 行の Hex 列のセル (表示の位置の順)。画面と同じ配置 (<see cref="RowFormat"/>): グループ化 (VIEW-09) の間と中央区切りの空白、
+    /// セルの表示形式 (VIEW-10。単位に満たない端数は 1 バイトずつ Hex)、グループ内の逆順表示 (VIEW-11 の仕様 4・5・7)。
+    /// <c>Modified</c> はセルのどれかのバイトが変更されているか。
+    /// </summary>
+    private List<(int Start, string Text, bool Modified)> Cells()
+    {
+        var cells = new List<(int Start, string Text, bool Modified)>(_count);
+
+        // 変更の判定は位置の昇順に行う (IsModified は前に進むだけ)。
+        if (_layout.IsHexBytes)
+        {
+            for (int i = 0; i < _count; i++)
+            {
+                cells.Add((_layout.ByteSpan(i, _count).Start, CopyFormatter.Hex(_row[i], 2, O), Colors && IsModified(_rowOffset + i)));
+            }
+        }
+        else
+        {
+            int unit = _layout.Unit;
+            for (int k = 0; k * unit < _count; k++)
+            {
+                int first = k * unit;
+                if (_layout.IsCompleteCell(k, _count))
+                {
+                    bool modified = false;
+                    for (int i = first; i < first + unit; i++)
+                    {
+                        modified |= Colors && IsModified(_rowOffset + i);
+                    }
+
+                    string cell = CellFormatter.Format(O.ScreenCellFormat, _row.AsSpan(first, unit), O.ScreenBigEndian, O.ScreenSpacePadding, !O.UpperCase);
+                    cells.Add((_layout.CellStart(k), cell, modified));
+                    continue;
+                }
+
+                for (int i = first; i < _count; i++)
+                {
+                    cells.Add((_layout.ByteSpan(i, _count).Start, CopyFormatter.Hex(_row[i], 2, O), Colors && IsModified(_rowOffset + i)));
+                }
+            }
+        }
+
+        cells.Sort(static (a, b) => a.Start.CompareTo(b.Start));
+        return cells;
     }
 
     private string Columns(string offsetText, string hex, string text)

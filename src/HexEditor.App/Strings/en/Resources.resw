@@ -274,6 +274,7 @@ Length: {2} ({3} bytes)</value></data>
   <data name="HexView_HelpText" xml:space="preserve"><value>Tab switches between the Hex and text columns. F6 moves to the next area.</value></data>
   <data name="HexView_Menu_Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Clear selection</value></data>
+  <data name="HexView_Menu_TextColumn" xml:space="preserve"><value>Text column</value></data>
   <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Some ranges cannot be read.</value></data>
   <data name="HexView_Unreadable" xml:space="preserve"><value>Cannot be read</value></data>
   <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Cannot be read: device I/O error ({0})</value></data>
@@ -1501,6 +1502,7 @@ Details were written to:
   <data name="RangeEdit_Error_ReadOnly" xml:space="preserve"><value>This document is read-only.</value></data>
   <data name="InsertBytes_Title" xml:space="preserve"><value>Insert Bytes</value></data>
   <data name="InsertBytes_Position" xml:space="preserve"><value>Position</value></data>
+  <data name="InsertBytes_RectangleRows" xml:space="preserve"><value>{0, plural, one {Inserts into # row} other {Inserts into # rows}} (at the left edge of each row of the rectangle).</value></data>
   <data name="InsertBytes_Count" xml:space="preserve"><value>Number of bytes</value></data>
   <data name="InsertBytes_SelectInserted" xml:space="preserve"><value>Select the inserted range</value></data>
   <data name="InsertBytes_Insert" xml:space="preserve"><value>Insert</value></data>
@@ -2941,12 +2943,16 @@ Details were written to:
   <data name="Status_Rectangle" xml:space="preserve"><value>Rectangle {0} rows × {1} bytes ({2} bytes total)</value></data>
   <data name="Status_Carets" xml:space="preserve"><value>{0, plural, one {# cursor} other {# cursors}}</value></data>
   <data name="Notice_SelectionOutOfRange" xml:space="preserve"><value>The selection can't be shifted any further.</value></data>
+  <data name="Notice_ResizeOutOfRange" xml:space="preserve"><value>The selection can't be extended or shrunk that far (it would go past the start or end of the document, or become empty).</value></data>
   <data name="Notice_TooManyElements" xml:space="preserve"><value>A multi-selection can have up to {0} ranges. No range was added.</value></data>
   <data name="Notice_SelectionTruncated" xml:space="preserve"><value>Only the first {0} ranges were selected (the multi-selection limit).</value></data>
   <data name="Notice_TooManyCarets" xml:space="preserve"><value>You can have up to {0} cursors.</value></data>
   <data name="Notice_CaretInputFailed" xml:space="preserve"><value>{0, plural, one {# cursor couldn't take the input.} other {# cursors couldn't take the input.}}</value></data>
   <data name="Notice_RectangleTooManyRows" xml:space="preserve"><value>The rectangle has {0} rows, more than the multi-selection limit ({1}), so it can't be converted. The selection was cleared.</value></data>
+  <data name="Notice_RectangleToMultiLimit" xml:space="preserve"><value>The rectangle has {0} rows, which exceeds the multi-selection limit ({1}), so it can't be converted.</value></data>
   <data name="Notice_RectangleRowLimit" xml:space="preserve"><value>The rectangle has {0} rows, more than the limit of {1} rows. Overwrite operations are still available.</value></data>
+  <data name="Notice_RectanglePasteInserted" xml:space="preserve"><value>{0, plural, one {Inserted into # row.} other {Inserted into # rows.}} Because each row was inserted in insert mode, the rows after it have shifted.</value></data>
+  <data name="Notice_RectangleListLimit" xml:space="preserve"><value>The rectangle has {0} rows, which exceeds the limit ({1}) for operations that work on each range. Fill can still be used.</value></data>
   <data name="Command_NoRectangle" xml:space="preserve"><value>There's no rectangle selection.</value></data>
   <data name="Command_UserClipboardEmpty" xml:space="preserve"><value>This user clipboard is empty.</value></data>
   <data name="Command_ClipboardHistoryEmpty" xml:space="preserve"><value>The clipboard history is empty.</value></data>
@@ -2963,7 +2969,11 @@ Details were written to:
   <data name="Fill_ContinueAcross" xml:space="preserve"><value>Continue the content across ranges (instead of restarting in each range)</value></data>
   <data name="Fill_RangesInfo" xml:space="preserve"><value>{0, plural, one {# range} other {# ranges}}, {1} bytes total</value></data>
   <data name="Operation_DeleteRanges" xml:space="preserve"><value>Deleting ranges</value></data>
+  <data name="Operation_InvertSelection" xml:space="preserve"><value>Inverting the selection</value></data>
+  <data name="Operation_PasteRectangle" xml:space="preserve"><value>Pasting the rectangle</value></data>
   <data name="Operation_ExportSelection" xml:space="preserve"><value>Exporting selection</value></data>
+  <data name="Operation_ImportSelection" xml:space="preserve"><value>Importing the selection</value></data>
+  <data name="Operation_LoadSelection" xml:space="preserve"><value>Loading the selection set</value></data>
   <data name="SelectionSets_None" xml:space="preserve"><value>There are no saved selections.</value></data>
   <data name="SelectionSets_TooMany" xml:space="preserve"><value>A document can have up to {0} saved selections.</value></data>
   <data name="SelectionSets_Saved" xml:space="preserve"><value>Saved the selection as "{0}".</value></data>
@@ -2982,6 +2992,8 @@ Details were written to:
   <data name="LoadSelection_Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="LoadSelection_Rename" xml:space="preserve"><value>Rename</value></data>
   <data name="LoadSelection_NewName" xml:space="preserve"><value>New name</value></data>
+  <data name="LoadSelection_RenameInvalid" xml:space="preserve"><value>Enter a name of 1 to {0} characters.</value></data>
+  <data name="LoadSelection_RenameDuplicate" xml:space="preserve"><value>A selection set named "{0}" already exists.</value></data>
   <data name="LoadSelection_Note" xml:space="preserve"><value>Saved selections keep their offsets. Unlike bookmarks, they don't move when you insert or delete data.</value></data>
   <data name="LoadSelection_Load" xml:space="preserve"><value>Load</value></data>
   <data name="SelectionFile_Csv" xml:space="preserve"><value>CSV</value></data>
@@ -3005,6 +3017,7 @@ Details were written to:
   <data name="History_SelectRange.Text" xml:space="preserve"><value>Go to This Range</value></data>
   <data name="History_CompareMenu.Text" xml:space="preserve"><value>Compare Two Points</value></data>
   <data name="History_SavedMark" xml:space="preserve"><value>Saved</value></data>
+  <data name="History_Opened" xml:space="preserve"><value>Opened</value></data>
   <data name="History_CurrentState" xml:space="preserve"><value>current state</value></data>
   <data name="History_RedoState" xml:space="preserve"><value>can be redone</value></data>
   <data name="History_Range" xml:space="preserve"><value>{0} ({1} bytes)</value></data>
@@ -3035,6 +3048,9 @@ Details were written to:
   <data name="Hash_Ranges" xml:space="preserve"><value>{0, plural, one {# range} other {# ranges}}, {1} bytes total</value></data>
   <data name="CopyAs_SeparateRanges" xml:space="preserve"><value>Separate each range (instead of concatenating)</value></data>
   <data name="Drop_InsertCopy" xml:space="preserve"><value>Insert a copy</value></data>
+  <data name="HexView_DropMove" xml:space="preserve"><value>Move</value></data>
+  <data name="HexView_DropCopy" xml:space="preserve"><value>Copy</value></data>
+  <data name="HexView_DropOverwrite" xml:space="preserve"><value>Overwrite</value></data>
   <data name="Drop_PasteSpecial" xml:space="preserve"><value>Paste Special</value></data>
   <data name="Menu_View_CellFormatHex.Text" xml:space="preserve"><value>Hex</value></data>
   <data name="Menu_View_CellFormatHex.AccessKey" xml:space="preserve"><value>H</value></data>
@@ -3116,6 +3132,12 @@ Details were written to:
   <data name="Menu_View_AddTextColumn.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="Menu_View_RemoveTextColumn.Text" xml:space="preserve"><value>Remove text column</value></data>
   <data name="Menu_View_RemoveTextColumn.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.Text" xml:space="preserve"><value>Move text column left</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_MoveTextColumnRight.Text" xml:space="preserve"><value>Move text column right</value></data>
+  <data name="Menu_View_MoveTextColumnRight.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TextColumnEncoding.Text" xml:space="preserve"><value>Text column encoding...</value></data>
+  <data name="Menu_View_TextColumnEncoding.AccessKey" xml:space="preserve"><value>U</value></data>
   <data name="Menu_View_LoadTable.Text" xml:space="preserve"><value>Load character table file...</value></data>
   <data name="Menu_View_LoadTable.AccessKey" xml:space="preserve"><value>T</value></data>
   <data name="Menu_View_ByteTheme.Text" xml:space="preserve"><value>Byte theme</value></data>
@@ -3208,6 +3230,7 @@ Details were written to:
   <data name="Menu_Go_PreviousPage.Text" xml:space="preserve"><value>Previous page</value></data>
   <data name="Menu_Go_PreviousPage.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Command_LastTextColumn" xml:space="preserve"><value>At least one text column is shown.</value></data>
+  <data name="Command_TextColumnAtEdge" xml:space="preserve"><value>The text column can't move further in that direction.</value></data>
   <data name="Command_MinimapThemeNeedsAround" xml:space="preserve"><value>Only available when the minimap range is "Around the view".</value></data>
   <data name="Command_NoSeparator" xml:space="preserve"><value>Choose separator lines first.</value></data>
   <data name="Command_NoTextColumn" xml:space="preserve"><value>The text column is hidden.</value></data>
@@ -3301,6 +3324,12 @@ Details were written to:
   <data name="CmdAlias_view_addTextColumn" xml:space="preserve"><value>encoding columns</value></data>
   <data name="Cmd_view_removeTextColumn" xml:space="preserve"><value>Remove text column</value></data>
   <data name="CmdAlias_view_removeTextColumn" xml:space="preserve"><value>encoding columns</value></data>
+  <data name="Cmd_view_moveTextColumnLeft" xml:space="preserve"><value>Move text column left</value></data>
+  <data name="CmdAlias_view_moveTextColumnLeft" xml:space="preserve"><value>reorder swap</value></data>
+  <data name="Cmd_view_moveTextColumnRight" xml:space="preserve"><value>Move text column right</value></data>
+  <data name="CmdAlias_view_moveTextColumnRight" xml:space="preserve"><value>reorder swap</value></data>
+  <data name="Cmd_view_textColumnEncoding" xml:space="preserve"><value>Change encoding of the text column</value></data>
+  <data name="CmdAlias_view_textColumnEncoding" xml:space="preserve"><value>charset</value></data>
   <data name="Cmd_view_byteThemeNone" xml:space="preserve"><value>Byte theme: None</value></data>
   <data name="CmdAlias_view_byteThemeNone" xml:space="preserve"><value>colors</value></data>
   <data name="Cmd_view_byteThemeCategory" xml:space="preserve"><value>Byte theme: By kind</value></data>
@@ -3384,6 +3413,7 @@ Details were written to:
   <data name="Cmd_view_syncDifferences" xml:space="preserve"><value>Highlight differences</value></data>
   <data name="CmdAlias_view_syncDifferences" xml:space="preserve"><value>sync compare</value></data>
   <data name="Operation_MinimapExact" xml:space="preserve"><value>Calculating the minimap</value></data>
+  <data name="Minimap_Mark_viewport" xml:space="preserve"><value>Visible range</value></data>
   <data name="Minimap_Mark_cursor" xml:space="preserve"><value>Cursor</value></data>
   <data name="Minimap_Mark_selection" xml:space="preserve"><value>Selection</value></data>
   <data name="Minimap_Mark_search" xml:space="preserve"><value>Search results</value></data>
@@ -4021,6 +4051,8 @@ Details were written to:
   <data name="Clipboard_WriteToFile" xml:space="preserve"><value>Write to a file</value></data>
   <data name="Bookmarks_MenuOpenInNewTab.Text" xml:space="preserve"><value>Open in a new tab</value></data>
   <data name="Tab_FormatSettings" xml:space="preserve"><value>Format settings...</value></data>
+  <data name="Tab_NewView" xml:space="preserve"><value>Open in new view</value></data>
+  <data name="Tab_ShowToRight" xml:space="preserve"><value>Show to the right</value></data>
   <data name="SaveSpace_Shift" xml:space="preserve"><value>Save in place by shifting data</value></data>
   <data name="Shift_Title" xml:space="preserve"><value>Save in place</value></data>
   <data name="Shift_Body" xml:space="preserve"><value>{0} will be rewritten in place. If the app or PC stops while saving, the file will be damaged and can't be restored. Amount to rewrite: {1}. Temporary space needed: {2}.</value></data>
@@ -5000,7 +5032,11 @@ Details were written to:
   <data name="ConvertEncoding_Error_Undecodable" xml:space="preserve"><value>The bytes at {0} ({1}) cannot be decoded.</value></data>
   <data name="ConvertEncoding_Error_Unmappable" xml:space="preserve"><value>The character "{1}" at {0} cannot be represented in the target encoding.</value></data>
   <data name="ConvertEncoding_Error_FixedLength" xml:space="preserve"><value>The length changes, but this document cannot change its length.</value></data>
+  <data name="ConvertEncoding_Error_UnknownEncoding" xml:space="preserve"><value>The encoding "{0}" is not available.</value></data>
+  <data name="ConvertEncoding_Error_InvalidReplacement" xml:space="preserve"><value>The replacement "{0}" cannot be represented in the target encoding.</value></data>
+  <data name="ConvertEncoding_Error_Settings" xml:space="preserve"><value>The conversion settings are not valid.</value></data>
   <data name="ConvertEncoding_GoToOffset" xml:space="preserve"><value>Go to the offset</value></data>
+  <data name="EncodingPicker_Placeholder" xml:space="preserve"><value>Search by name, ID or code page</value></data>
   <data name="Hash_Exclusions.Header" xml:space="preserve"><value>Excluded ranges</value></data>
   <data name="Hash_ExclusionStart.Header" xml:space="preserve"><value>Start</value></data>
   <data name="Hash_ExclusionLength.Header" xml:space="preserve"><value>Length</value></data>
@@ -5100,7 +5136,6 @@ Details were written to:
   <data name="Hash_Alg_xor32" xml:space="preserve"><value>XOR 32-bit</value></data>
   <data name="Hash_Alg_xor64" xml:space="preserve"><value>XOR 64-bit</value></data>
   <data name="Common_Open" xml:space="preserve"><value>Open</value></data>
-  <data name="Common_Go" xml:space="preserve"><value>Go</value></data>
   <data name="Common_Unknown" xml:space="preserve"><value>Unknown</value></data>
   <data name="Command_ProcessOnly" xml:space="preserve"><value>This command is only available for process memory.</value></data>
   <data name="Panel_MemoryMap_Title" xml:space="preserve"><value>Memory map</value></data>
@@ -5213,8 +5248,6 @@ Details were written to:
   <data name="ProcessWrite_Exited" xml:space="preserve"><value>The process has exited, so the changes could not be written.</value></data>
   <data name="ProcessWrite_ImmediateOn" xml:space="preserve"><value>Immediate write is on.</value></data>
   <data name="ProcessWrite_ImmediateOff" xml:space="preserve"><value>Immediate write is off.</value></data>
-  <data name="GoToSector_Title" xml:space="preserve"><value>Go to sector</value></data>
-  <data name="GoToSector_Label" xml:space="preserve"><value>Sector number</value></data>
   <data name="AdminGuide_Title" xml:space="preserve"><value>Administrator rights are required</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>Reading a physical disk or an internal disk's volume directly requires Windows administrator rights.</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>This process requires administrator rights to open.</value></data>
@@ -5347,8 +5380,13 @@ Details were written to:
   <data name="Preset_Imported" xml:space="preserve"><value>Imported {0, plural, one {# preset} other {# presets}}.</value></data>
   <data name="Preset_ImportError" xml:space="preserve"><value>The presets in {0} could not be imported: {1}</value></data>
   <data name="Preset_ImportErrorLine" xml:space="preserve"><value>The presets in {0} could not be imported (line {1}): {2}</value></data>
+  <data name="Preset_ImportTooMany" xml:space="preserve"><value>The presets in {0} were not imported: there would be {1} presets, but up to {2} can be kept. Delete some presets first.</value></data>
   <data name="Preset_ExportError" xml:space="preserve"><value>The presets could not be exported ({0}).</value></data>
   <data name="Preset_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Preset_Edit" xml:space="preserve"><value>Edit...</value></data>
+  <data name="Preset_EditTitle" xml:space="preserve"><value>Edit the preset</value></data>
+  <data name="Preset_NameInUse" xml:space="preserve"><value>A preset named {0} already exists.</value></data>
+  <data name="Preset_Edited" xml:space="preserve"><value>Updated the preset {0}.</value></data>
   <data name="Preset_Export" xml:space="preserve"><value>Export...</value></data>
   <data name="Preset_Import" xml:space="preserve"><value>Import...</value></data>
   <data name="Preset_SectionHelp" xml:space="preserve"><value>Presets are named sets of view settings. A preset with extensions is applied the first time a matching file is opened.</value></data>

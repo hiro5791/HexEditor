@@ -217,6 +217,35 @@ public sealed class BlockCacheTests
         Assert.All(states, s => Assert.Equal(ByteState.Loading, s));
     }
 
+    /// <summary>
+    /// キャッシュに入れながら読む (マルチカーソルの位置のバイト。EDIT-08): 同じブロックの 2 回目以降はデータソースを読まず、内容は正しい。
+    /// </summary>
+    [Fact]
+    public void ReadThroughCacheLoadsEachBlockOnce()
+    {
+        var source = new CountingFile(TestDataCatalog.Get("TD-MARKERS-1G"));
+        using var doc = new Document(source, Options());
+        int before = source.ReadCount;
+        var one = new byte[1];
+        for (long offset = 0x100000; offset < 0x100000 + BlockCache.DefaultBlockSize; offset += 0x1000)
+        {
+            doc.Current.ReadThroughCache(offset, one);
+            byte[] expected = new byte[1];
+            doc.Current.Read(offset, expected);
+            Assert.Equal(expected, one);
+        }
+
+        Assert.Equal(1, source.ReadCount - before);
+        Assert.Contains(0x100000 / BlockCache.DefaultBlockSize, doc.Cache.CachedBlockIndexes());
+
+        // 編集した後も、元データの部分はキャッシュから、追加した部分は追加バッファから読む。
+        doc.Overwrite(0x100010, [0xAB], "test");
+        var two = new byte[2];
+        doc.Current.ReadThroughCache(0x10000F, two);
+        Assert.Equal(0xAB, two[1]);
+        Assert.Equal(1, source.ReadCount - before);
+    }
+
     /// <summary>読み込みの回数を数えるファイルのデータソース。</summary>
     private sealed class CountingFile(string path) : ByteSourceBase
     {

@@ -54,6 +54,7 @@ public sealed partial class MainWindow : Window
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
         InitializeSearch();
         InitializeEditingSettings();
+        InitializeMinimapSettings();
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
         InitializeExternalChanges();
@@ -558,14 +559,23 @@ public sealed partial class MainWindow : Window
                         return;
                     }
 
-                    ClipboardPlan plan = await _clipboard.CopyRangesAsync(editor);
-                    if (plan.InAppOnly)
+                    long copiedBytes = editor.SelectedByteCount;
+                    if (await _clipboard.CopyRangesAsync(editor) is not { } plan)
                     {
+                        // 矩形の行数が要素数の上限を超える: 要素の一覧を作らずに知らせる。
                         ShowNotice(Loc.Get("Clipboard_RangesTooLarge"), InfoBarSeverity.Error, multiDoc);
                         return;
                     }
 
-                    RecordClipboardHistory(multiDoc, _clipboard.LastCopiedRanges);
+                    if (plan.InAppOnly)
+                    {
+                        // 上限を超える: アプリ内クリップボードに入れ、単一の範囲と同じ InfoBar と「ファイルに書き出す」(EDIT-22 の仕様 5・8)。
+                        ShowInAppOnlyNotice(multiDoc, copiedBytes);
+                    }
+                    else
+                    {
+                        RecordClipboardHistory(multiDoc, _clipboard.LastCopiedRanges);
+                    }
                     if (command == EditorCommand.Cut)
                     {
                         await DeleteSelectedRangesAsync(multiDoc, "切り取り");
@@ -580,15 +590,9 @@ public sealed partial class MainWindow : Window
                     RecordClipboardHistory(copiedDoc, null);
                 }
 
-                if (copied?.InAppOnly == true)
+                if (copied?.InAppOnly == true && Vm.Selected is { } inAppDoc)
                 {
-                    // 「選択範囲 (12.3 GB) は大きすぎるため…」と「ファイルに書き出す」(EDIT-22 の仕様 5、TOOL-16)。
-                    string size = StatusFormat.ShortSize(editor.SelectionLength, System.Globalization.CultureInfo.CurrentCulture)
-                        ?? editor.SelectionLength.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                    ShowNotice(Loc.Format("Clipboard_InAppOnlySize", size), InfoBarSeverity.Informational, Vm.Selected, actions:
-                    [
-                        new NotificationAction(Loc.Get("Clipboard_WriteToFile"), () => _ = Commands.ExecuteAsync("file.saveSelection")),
-                    ]);
+                    ShowInAppOnlyNotice(inAppDoc, editor.SelectionLength);
                 }
                 else if (copied?.TextOmitted == true)
                 {
@@ -611,6 +615,22 @@ public sealed partial class MainWindow : Window
 
                 _clipboard.PasteDetectedWithoutConfirmation = App.Settings.GetBool(PasteWithoutConfirmationKey, false);
                 PasteOutcome outcome = await _clipboard.PasteAsync(editor, command == EditorCommand.PasteOverwrite, ConfirmTruncateAsync);
+                if (_clipboard.LastRectangleInsertRows > 0 && Vm.Selected is { } rectDoc)
+                {
+                    // 矩形の各行への挿入: 行数の上限を超えたら知らせ、挿入したら行数と後ろの行がずれた注記を示す (EDIT-17 の仕様 3・6)。
+                    if (outcome == PasteOutcome.TooManyRows)
+                    {
+                        ShowNotice(Loc.Format("Notice_RectangleRowLimit", _clipboard.LastRectangleInsertRows.ToString("N0", System.Globalization.CultureInfo.CurrentCulture),
+                            editor.MaxRectangleRows.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)), InfoBarSeverity.Error, rectDoc);
+                        break;
+                    }
+
+                    if (outcome == PasteOutcome.Done)
+                    {
+                        ShowRectangleInsertNote(rectDoc, _clipboard.LastRectangleInsertRows);
+                    }
+                }
+
                 if (outcome == PasteOutcome.NeedsSpecialPaste && Vm.Selected is { } special)
                 {
                     // Hex 列で Hex として読めず、他の形式に当てはまる: 形式を選択して貼り付けを開く (EDIT-23 の仕様 2、EDIT-26)。
@@ -649,6 +669,17 @@ public sealed partial class MainWindow : Window
 
                 break;
         }
+    }
+
+    /// <summary>「選択範囲 (12.3 GB) は大きすぎるため…」と「ファイルに書き出す」(EDIT-22 の仕様 5、TOOL-16)。</summary>
+    private void ShowInAppOnlyNotice(DocumentViewModel doc, long bytes)
+    {
+        string size = StatusFormat.ShortSize(bytes, System.Globalization.CultureInfo.CurrentCulture)
+            ?? bytes.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+        ShowNotice(Loc.Format("Clipboard_InAppOnlySize", size), InfoBarSeverity.Informational, doc, actions:
+        [
+            new NotificationAction(Loc.Get("Clipboard_WriteToFile"), () => _ = Commands.ExecuteAsync("file.saveSelection")),
+        ]);
     }
 
     private void ToggleInsert_Click(object sender, RoutedEventArgs e)
@@ -728,7 +759,10 @@ public sealed partial class MainWindow : Window
     /// <summary>選択中のタブの Hex ビューにフォーカスを戻す。</summary>
     private void FocusEditor() => _views.FirstOrDefault(v => v.Editor == Editor)?.Focus(FocusState.Programmatic);
 
-    private void GoTo_Click(object sender, RoutedEventArgs e)
+    private void GoTo_Click(object sender, RoutedEventArgs e) => OpenGoToBar();
+
+    /// <summary>移動バーを開く。<paramref name="unit"/> を指定するとその単位の状態で開く (「セクタへ移動」。VIEW-32 の仕様 4)。</summary>
+    private void OpenGoToBar(Core.View.GoToUnit? unit = null)
     {
         if (Editor is null)
         {
@@ -738,7 +772,7 @@ public sealed partial class MainWindow : Window
         // 移動バーは検索バーと同じ場所に出す (VIEW-29 の仕様 1)。
         FindBar.Visibility = Visibility.Collapsed;
         GoToBar.Editor = Editor;
-        GoToBar.Open();
+        GoToBar.Open(unit);
     }
 
     private void Bar_Closed(object? sender, EventArgs e) => FocusEditor();

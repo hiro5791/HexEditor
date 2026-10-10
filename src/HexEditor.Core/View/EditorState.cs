@@ -1251,6 +1251,35 @@ public sealed partial class EditorState
             }
         });
 
+    /// <summary>
+    /// アプリ内クリップボードの範囲の参照の中の要素を連結して貼る (マルチ選択・矩形からの大きなコピー。EDIT-22 の仕様 5・8、EDIT-24)。
+    /// 要素ごとに範囲の参照から挿入・上書きするので、データをコピーしない。<paramref name="parts"/> の位置は <paramref name="range"/> の先頭から。
+    /// </summary>
+    public EditResult Paste(SnapshotRange range, IReadOnlyList<Selection.ByteRange> parts, bool overwrite, bool allowTruncate = false) =>
+        PasteCore(parts.Sum(p => p.Length), overwrite, allowTruncate, (insert, at, n) =>
+        {
+            long written = 0;
+            foreach (Selection.ByteRange part in parts)
+            {
+                long k = Math.Min(part.Length, n - written);
+                if (k <= 0)
+                {
+                    break;
+                }
+
+                if (insert)
+                {
+                    Document.InsertFrom(at + written, range, part.Start, k);
+                }
+                else
+                {
+                    Document.OverwriteFrom(at + written, range, part.Start, k);
+                }
+
+                written += k;
+            }
+        });
+
     /// <summary>バイト列の貼り付け (システムのクリップボードから)。</summary>
     public EditResult Paste(byte[] data, bool overwrite, bool allowTruncate = false) =>
         PasteCore(data.Length, overwrite, allowTruncate, (insert, at, n) =>

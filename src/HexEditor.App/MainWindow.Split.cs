@@ -17,6 +17,9 @@ public sealed partial class MainWindow
 {
     private readonly HashSet<DocumentViewModel> _paneHooks = [];
 
+    /// <summary>表示設定をそろえる処理 (VIEW-37 の仕様 3) をつないだ分割 (2 つ目のペインのビュー)。</summary>
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<EditorState, object> _paneSettingsHooked = [];
+
     /// <summary>Hex ビューの入っている PaneHost。</summary>
     private static PaneHost? HostOf(HexView view) => VisualTreeHelper.GetParent(view) as PaneHost;
 
@@ -91,6 +94,8 @@ public sealed partial class MainWindow
     /// <summary>タブの中の Hex ビューを、分割の状態に合わせる。</summary>
     private void RefreshPanes(DocumentViewModel doc)
     {
+        // 付随データから戻した分割 (VIEW-37 の仕様 10) でも、表示設定をそろえる設定が効くようにつなぐ。
+        HookPaneSettings(doc);
         if (PaneHostOf(doc) is not { } host)
         {
             return;
@@ -132,16 +137,18 @@ public sealed partial class MainWindow
 
     // ---- コマンド ----
 
-    /// <summary>分割できるか (2 ペインの最小の大きさを確保できなければ無効。VIEW-37 の「エラー」)。</summary>
-    private CommandState SplitState()
+    /// <summary>
+    /// <paramref name="orientation"/> の向きに分割できるか (VIEW-37 の「エラー」): 2 ペインの最小の大きさを確保できなければ無効。
+    /// 上下 (Vertical) は高さ、左右 (Horizontal) は幅で、向きごとに決める。
+    /// </summary>
+    private CommandState SplitState(Orientation orientation)
     {
         if (Vm.Selected is null)
         {
             return NeedsDocument();
         }
 
-        if (SelectedView() is { ActualHeight: > 0 } view && view.ActualHeight < 2 * (5 * view.RowHeight) + PaneHost.SplitterSize
-            && view.ActualWidth < 2 * 120 + PaneHost.SplitterSize)
+        if (SelectedView() is { ActualHeight: > 0 } view && !FitsSplit(view.ActualWidth, view.ActualHeight, view.RowHeight, orientation))
         {
             return CommandState.Unavailable(Loc.Get("Command_SplitTooSmall"));
         }
@@ -149,7 +156,17 @@ public sealed partial class MainWindow
         return CommandState.Available;
     }
 
-    private CommandState SplitToggleState() => Vm.Selected is { IsSplit: true } ? CommandState.Available : SplitState();
+    /// <summary>
+    /// 2 ペインの最小の大きさ (上下: 各ペイン 3 行と列見出し・横スクロールバーの分で 5 行、左右: 各ペイン <see cref="PaneHost.MinPaneWidth"/>) を
+    /// 確保できるか。
+    /// </summary>
+    internal static bool FitsSplit(double width, double height, double rowHeight, Orientation orientation) => orientation == Orientation.Vertical
+        ? height >= 2 * (5 * rowHeight) + PaneHost.SplitterSize
+        : width >= 2 * PaneHost.MinPaneWidth + PaneHost.SplitterSize;
+
+    /// <summary>Ctrl+\ の状態: 分割していれば解除でき、していなければ前回の向きで分割できるか。</summary>
+    private CommandState SplitToggleState() => Vm.Selected is { IsSplit: true } ? CommandState.Available
+        : SplitState(Vm.Selected is { LastSplitSideBySide: true } ? Orientation.Horizontal : Orientation.Vertical);
 
     /// <summary>Ctrl+\ (VIEW-37 の仕様 1): 分割していなければ前回の向き (既定は上下) で分割し、分割していれば解除する。</summary>
     private void ToggleSplit()
@@ -172,7 +189,7 @@ public sealed partial class MainWindow
     /// <summary>分割する。<paramref name="orientation"/> が Vertical なら上下、Horizontal なら左右。</summary>
     private void SplitSelected(Orientation orientation)
     {
-        if (Vm.Selected is not { } doc || !SplitState().Enabled)
+        if (Vm.Selected is not { } doc || !SplitState(orientation).Enabled)
         {
             return;
         }
@@ -180,7 +197,6 @@ public sealed partial class MainWindow
         doc.Split(orientation == Orientation.Horizontal);
         ApplyEditorSettings();
         RefreshPanes(doc);
-        HookPaneSettings(doc);
     }
 
     private void UnsplitSelected()
@@ -233,10 +249,13 @@ public sealed partial class MainWindow
     /// </summary>
     private void HookPaneSettings(DocumentViewModel doc)
     {
-        if (doc.SecondaryEditor is not { } second)
+        // 分割ごとに 1 回だけつなぐ (2 つ目のペインのビューで見分ける)。
+        if (doc.SecondaryEditor is not { } second || _paneSettingsHooked.TryGetValue(second, out _))
         {
             return;
         }
+
+        _paneSettingsHooked.Add(second, new object());
 
         EditorState first = doc.PrimaryEditor;
         bool applying = false;
@@ -264,14 +283,26 @@ public sealed partial class MainWindow
 
     // ---- 新しいビュー (VIEW-38) ----
 
-    private CommandState NewViewState() => Vm.Selected is not { } doc ? NeedsDocument()
+    private CommandState NewViewState() => Vm.Selected is not { } doc ? NeedsDocument() : NewViewState(doc);
+
+    /// <summary><paramref name="doc"/> の新しいビューを作れるか (上限に達していれば無効。VIEW-38 の「エラー」)。</summary>
+    private static CommandState NewViewState(DocumentViewModel doc) => doc.IsPending || doc.IsMissing ? CommandState.Unavailable(string.Empty)
         : doc.Share.Views.Count >= DocumentViewModel.MaxViews ? CommandState.Unavailable(Loc.Format("Command_ViewLimit", DocumentViewModel.MaxViews))
         : CommandState.Available;
 
     /// <summary>「新しいビューで開く」(VIEW-38 の仕様 1): 同じドキュメントを表示するタブを、今のタブの右に作る。</summary>
     private void OpenNewView()
     {
-        if (Vm.Selected is not { } doc || doc.CreateView() is not { } view)
+        if (Vm.Selected is { } doc)
+        {
+            OpenNewView(doc);
+        }
+    }
+
+    /// <summary><paramref name="doc"/> の新しいビューを、そのタブの右に作って選ぶ (タブの右クリックメニューからも使う)。</summary>
+    private void OpenNewView(DocumentViewModel doc)
+    {
+        if (!NewViewState(doc).Enabled || doc.CreateView() is not { } view)
         {
             return;
         }

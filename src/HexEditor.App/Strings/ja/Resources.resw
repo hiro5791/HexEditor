@@ -274,6 +274,7 @@
   <data name="HexView_HelpText" xml:space="preserve"><value>Tab で Hex 列とテキスト列を切り替え。F6 で次の領域へ移動します。</value></data>
   <data name="HexView_Menu_Delete" xml:space="preserve"><value>削除</value></data>
   <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>選択の解除</value></data>
+  <data name="HexView_Menu_TextColumn" xml:space="preserve"><value>テキスト列</value></data>
   <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>読み取れない範囲があります</value></data>
   <data name="HexView_Unreadable" xml:space="preserve"><value>読み取れません</value></data>
   <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>読み取れません: デバイスの I/O エラー ({0})</value></data>
@@ -1501,6 +1502,7 @@
   <data name="RangeEdit_Error_ReadOnly" xml:space="preserve"><value>この文書は読み取り専用です。</value></data>
   <data name="InsertBytes_Title" xml:space="preserve"><value>バイトの挿入</value></data>
   <data name="InsertBytes_Position" xml:space="preserve"><value>挿入する位置</value></data>
+  <data name="InsertBytes_RectangleRows" xml:space="preserve"><value>{0} 行に挿入します (矩形の各行の左端)。</value></data>
   <data name="InsertBytes_Count" xml:space="preserve"><value>バイト数</value></data>
   <data name="InsertBytes_SelectInserted" xml:space="preserve"><value>挿入後に挿入した範囲を選択する</value></data>
   <data name="InsertBytes_Insert" xml:space="preserve"><value>挿入</value></data>
@@ -2941,12 +2943,16 @@
   <data name="Status_Rectangle" xml:space="preserve"><value>矩形 {0} 行 × {1} バイト (計 {2} バイト)</value></data>
   <data name="Status_Carets" xml:space="preserve"><value>{0} 個のカーソル</value></data>
   <data name="Notice_SelectionOutOfRange" xml:space="preserve"><value>これ以上ずらせません。</value></data>
+  <data name="Notice_ResizeOutOfRange" xml:space="preserve"><value>選択範囲をそこまで広げる・狭めることはできません (先頭より前・末尾より後ろになるか、長さが 0 になります)。</value></data>
   <data name="Notice_TooManyElements" xml:space="preserve"><value>マルチ選択の要素数の上限 ({0}) を超えるため、追加しませんでした。</value></data>
   <data name="Notice_SelectionTruncated" xml:space="preserve"><value>マルチ選択の上限のため、先頭から {0} 個の範囲だけを選択しました。</value></data>
   <data name="Notice_TooManyCarets" xml:space="preserve"><value>カーソルは {0} 個までです。</value></data>
   <data name="Notice_CaretInputFailed" xml:space="preserve"><value>{0} 個のカーソルで入力できませんでした。</value></data>
   <data name="Notice_RectangleTooManyRows" xml:space="preserve"><value>矩形の行数 ({0} 行) がマルチ選択の上限 ({1}) を超えるため変換できません。選択を解除しました。</value></data>
+  <data name="Notice_RectangleToMultiLimit" xml:space="preserve"><value>矩形の行数 ({0} 行) がマルチ選択の上限 ({1}) を超えるため変換できません。</value></data>
   <data name="Notice_RectangleRowLimit" xml:space="preserve"><value>矩形が {0} 行あり、上限 {1} 行を超えています。上書きの操作は使えます。</value></data>
+  <data name="Notice_RectanglePasteInserted" xml:space="preserve"><value>{0} 行に挿入しました。挿入モードで行ごとに挿入したため、後ろの行の配置はずれています。</value></data>
+  <data name="Notice_RectangleListLimit" xml:space="preserve"><value>矩形の行数 ({0} 行) が上限 ({1}) を超えるため、範囲ごとに行う操作は実行できません。塗りつぶしは使えます。</value></data>
   <data name="Command_NoRectangle" xml:space="preserve"><value>矩形選択がありません。</value></data>
   <data name="Command_UserClipboardEmpty" xml:space="preserve"><value>このユーザークリップボードは空です。</value></data>
   <data name="Command_ClipboardHistoryEmpty" xml:space="preserve"><value>クリップボード履歴は空です。</value></data>
@@ -2963,7 +2969,11 @@
   <data name="Fill_ContinueAcross" xml:space="preserve"><value>要素をまたいで続ける (オフのときは要素ごとに先頭から)</value></data>
   <data name="Fill_RangesInfo" xml:space="preserve"><value>{0} 個の範囲、計 {1} バイト</value></data>
   <data name="Operation_DeleteRanges" xml:space="preserve"><value>範囲の削除</value></data>
+  <data name="Operation_InvertSelection" xml:space="preserve"><value>選択の反転</value></data>
+  <data name="Operation_PasteRectangle" xml:space="preserve"><value>矩形の貼り付け</value></data>
   <data name="Operation_ExportSelection" xml:space="preserve"><value>選択範囲のエクスポート</value></data>
+  <data name="Operation_ImportSelection" xml:space="preserve"><value>選択範囲のインポート</value></data>
+  <data name="Operation_LoadSelection" xml:space="preserve"><value>選択セットの読み込み</value></data>
   <data name="SelectionSets_None" xml:space="preserve"><value>保存した選択範囲はありません。</value></data>
   <data name="SelectionSets_TooMany" xml:space="preserve"><value>選択範囲は 1 ドキュメントあたり {0} 個まで保存できます。</value></data>
   <data name="SelectionSets_Saved" xml:space="preserve"><value>選択範囲を「{0}」として保存しました。</value></data>
@@ -2982,6 +2992,8 @@
   <data name="LoadSelection_Delete" xml:space="preserve"><value>削除</value></data>
   <data name="LoadSelection_Rename" xml:space="preserve"><value>名前を変更</value></data>
   <data name="LoadSelection_NewName" xml:space="preserve"><value>新しい名前</value></data>
+  <data name="LoadSelection_RenameInvalid" xml:space="preserve"><value>名前は 1〜{0} 文字で入力してください。</value></data>
+  <data name="LoadSelection_RenameDuplicate" xml:space="preserve"><value>「{0}」という名前の選択セットは既にあります。</value></data>
   <data name="LoadSelection_Note" xml:space="preserve"><value>保存した選択範囲のオフセットは、データの挿入・削除でずれても調整しません (ブックマークとは異なります)。</value></data>
   <data name="LoadSelection_Load" xml:space="preserve"><value>読み込む</value></data>
   <data name="SelectionFile_Csv" xml:space="preserve"><value>CSV</value></data>
@@ -3005,6 +3017,7 @@
   <data name="History_SelectRange.Text" xml:space="preserve"><value>この範囲へ移動</value></data>
   <data name="History_CompareMenu.Text" xml:space="preserve"><value>2 つの時点を比較</value></data>
   <data name="History_SavedMark" xml:space="preserve"><value>保存</value></data>
+  <data name="History_Opened" xml:space="preserve"><value>開いた時点</value></data>
   <data name="History_CurrentState" xml:space="preserve"><value>現在の状態</value></data>
   <data name="History_RedoState" xml:space="preserve"><value>やり直し可能</value></data>
   <data name="History_Range" xml:space="preserve"><value>{0} ({1} バイト)</value></data>
@@ -3035,6 +3048,9 @@
   <data name="Hash_Ranges" xml:space="preserve"><value>{0} 個の範囲、計 {1} バイト</value></data>
   <data name="CopyAs_SeparateRanges" xml:space="preserve"><value>要素ごとに分ける (オフのときは連結する)</value></data>
   <data name="Drop_InsertCopy" xml:space="preserve"><value>コピーを挿入</value></data>
+  <data name="HexView_DropMove" xml:space="preserve"><value>移動</value></data>
+  <data name="HexView_DropCopy" xml:space="preserve"><value>コピー</value></data>
+  <data name="HexView_DropOverwrite" xml:space="preserve"><value>上書き</value></data>
   <data name="Drop_PasteSpecial" xml:space="preserve"><value>形式を選択して貼り付け</value></data>
   <data name="Menu_View_CellFormatHex.Text" xml:space="preserve"><value>16 進(H)</value></data>
   <data name="Menu_View_CellFormatHex.AccessKey" xml:space="preserve"><value>H</value></data>
@@ -3116,6 +3132,12 @@
   <data name="Menu_View_AddTextColumn.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="Menu_View_RemoveTextColumn.Text" xml:space="preserve"><value>テキスト列を削除(K)</value></data>
   <data name="Menu_View_RemoveTextColumn.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.Text" xml:space="preserve"><value>テキスト列を左へ移動(J)</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_MoveTextColumnRight.Text" xml:space="preserve"><value>テキスト列を右へ移動(I)</value></data>
+  <data name="Menu_View_MoveTextColumnRight.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TextColumnEncoding.Text" xml:space="preserve"><value>テキスト列の文字コード(U)...</value></data>
+  <data name="Menu_View_TextColumnEncoding.AccessKey" xml:space="preserve"><value>U</value></data>
   <data name="Menu_View_LoadTable.Text" xml:space="preserve"><value>文字表ファイルを読み込む(T)...</value></data>
   <data name="Menu_View_LoadTable.AccessKey" xml:space="preserve"><value>T</value></data>
   <data name="Menu_View_ByteTheme.Text" xml:space="preserve"><value>バイトテーマ(B)</value></data>
@@ -3208,6 +3230,7 @@
   <data name="Menu_Go_PreviousPage.Text" xml:space="preserve"><value>前のページ(V)</value></data>
   <data name="Menu_Go_PreviousPage.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Command_LastTextColumn" xml:space="preserve"><value>テキスト列は 1 列以上必要です。</value></data>
+  <data name="Command_TextColumnAtEdge" xml:space="preserve"><value>テキスト列はその方向にはこれ以上移動できません。</value></data>
   <data name="Command_MinimapThemeNeedsAround" xml:space="preserve"><value>ミニマップの範囲が「周辺」のときだけ選べます。</value></data>
   <data name="Command_NoSeparator" xml:space="preserve"><value>区切り線を選んでください。</value></data>
   <data name="Command_NoTextColumn" xml:space="preserve"><value>テキスト列が表示されていません。</value></data>
@@ -3301,6 +3324,12 @@
   <data name="CmdAlias_view_addTextColumn" xml:space="preserve"><value>てきすとれつをついか</value></data>
   <data name="Cmd_view_removeTextColumn" xml:space="preserve"><value>テキスト列を削除</value></data>
   <data name="CmdAlias_view_removeTextColumn" xml:space="preserve"><value>てきすとれつをさくじょ</value></data>
+  <data name="Cmd_view_moveTextColumnLeft" xml:space="preserve"><value>テキスト列を左へ移動</value></data>
+  <data name="CmdAlias_view_moveTextColumnLeft" xml:space="preserve"><value>てきすとれつをひだりへいどう</value></data>
+  <data name="Cmd_view_moveTextColumnRight" xml:space="preserve"><value>テキスト列を右へ移動</value></data>
+  <data name="CmdAlias_view_moveTextColumnRight" xml:space="preserve"><value>てきすとれつをみぎへいどう</value></data>
+  <data name="Cmd_view_textColumnEncoding" xml:space="preserve"><value>テキスト列の文字コードを変更</value></data>
+  <data name="CmdAlias_view_textColumnEncoding" xml:space="preserve"><value>てきすとれつのもじこーどをへんこう</value></data>
   <data name="Cmd_view_byteThemeNone" xml:space="preserve"><value>バイトテーマ: なし</value></data>
   <data name="CmdAlias_view_byteThemeNone" xml:space="preserve"><value>ばいとてーま なし</value></data>
   <data name="Cmd_view_byteThemeCategory" xml:space="preserve"><value>バイトテーマ: 種類別</value></data>
@@ -3384,6 +3413,7 @@
   <data name="Cmd_view_syncDifferences" xml:space="preserve"><value>違いを強調</value></data>
   <data name="CmdAlias_view_syncDifferences" xml:space="preserve"><value>ちがいをきょうちょう</value></data>
   <data name="Operation_MinimapExact" xml:space="preserve"><value>ミニマップの計算</value></data>
+  <data name="Minimap_Mark_viewport" xml:space="preserve"><value>表示中の範囲</value></data>
   <data name="Minimap_Mark_cursor" xml:space="preserve"><value>カーソル</value></data>
   <data name="Minimap_Mark_selection" xml:space="preserve"><value>選択範囲</value></data>
   <data name="Minimap_Mark_search" xml:space="preserve"><value>検索結果</value></data>
@@ -4021,6 +4051,8 @@
   <data name="Clipboard_WriteToFile" xml:space="preserve"><value>ファイルに書き出す</value></data>
   <data name="Bookmarks_MenuOpenInNewTab.Text" xml:space="preserve"><value>新しいタブで開く</value></data>
   <data name="Tab_FormatSettings" xml:space="preserve"><value>形式の設定...</value></data>
+  <data name="Tab_NewView" xml:space="preserve"><value>新しいビューで開く</value></data>
+  <data name="Tab_ShowToRight" xml:space="preserve"><value>右に並べて表示</value></data>
   <data name="SaveSpace_Shift" xml:space="preserve"><value>その場でずらしながら保存</value></data>
   <data name="Shift_Title" xml:space="preserve"><value>その場で保存</value></data>
   <data name="Shift_Body" xml:space="preserve"><value>{0} をその場で書き換えます。保存中にアプリや PC が停止すると、ファイルが壊れて元に戻せなくなります。書き換える量: {1}、一時的に必要な容量: {2}</value></data>
@@ -5000,7 +5032,11 @@
   <data name="ConvertEncoding_Error_Undecodable" xml:space="preserve"><value>オフセット {0} のバイト列 ({1}) を解釈できません。</value></data>
   <data name="ConvertEncoding_Error_Unmappable" xml:space="preserve"><value>オフセット {0} の文字「{1}」は変換先の文字コードで表せません。</value></data>
   <data name="ConvertEncoding_Error_FixedLength" xml:space="preserve"><value>長さが変わりますが、このドキュメントは長さを変えられません。</value></data>
+  <data name="ConvertEncoding_Error_UnknownEncoding" xml:space="preserve"><value>文字コード「{0}」は使えません。</value></data>
+  <data name="ConvertEncoding_Error_InvalidReplacement" xml:space="preserve"><value>置き換えの文字列「{0}」は変換先の文字コードで表せません。</value></data>
+  <data name="ConvertEncoding_Error_Settings" xml:space="preserve"><value>変換の設定が正しくありません。</value></data>
   <data name="ConvertEncoding_GoToOffset" xml:space="preserve"><value>そのオフセットへ移動</value></data>
+  <data name="EncodingPicker_Placeholder" xml:space="preserve"><value>名前・ID・コードページ番号で検索</value></data>
   <data name="Hash_Exclusions.Header" xml:space="preserve"><value>除外範囲</value></data>
   <data name="Hash_ExclusionStart.Header" xml:space="preserve"><value>開始</value></data>
   <data name="Hash_ExclusionLength.Header" xml:space="preserve"><value>長さ</value></data>
@@ -5100,7 +5136,6 @@
   <data name="Hash_Alg_xor32" xml:space="preserve"><value>XOR 32 bit</value></data>
   <data name="Hash_Alg_xor64" xml:space="preserve"><value>XOR 64 bit</value></data>
   <data name="Common_Open" xml:space="preserve"><value>開く</value></data>
-  <data name="Common_Go" xml:space="preserve"><value>移動</value></data>
   <data name="Common_Unknown" xml:space="preserve"><value>不明</value></data>
   <data name="Command_ProcessOnly" xml:space="preserve"><value>このコマンドはプロセスメモリでのみ使えます。</value></data>
   <data name="Panel_MemoryMap_Title" xml:space="preserve"><value>メモリマップ</value></data>
@@ -5213,8 +5248,6 @@
   <data name="ProcessWrite_Exited" xml:space="preserve"><value>プロセスが終了したため書き込めませんでした。</value></data>
   <data name="ProcessWrite_ImmediateOn" xml:space="preserve"><value>即時書き込みを有効にしました。</value></data>
   <data name="ProcessWrite_ImmediateOff" xml:space="preserve"><value>即時書き込みを無効にしました。</value></data>
-  <data name="GoToSector_Title" xml:space="preserve"><value>セクタへ移動</value></data>
-  <data name="GoToSector_Label" xml:space="preserve"><value>セクタ番号</value></data>
   <data name="AdminGuide_Title" xml:space="preserve"><value>管理者権限が必要です</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>物理ディスクや内蔵ディスクのボリュームを直接読むには、Windows の管理者権限が必要です。</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>このプロセスを開くには管理者権限が必要です。</value></data>
@@ -5347,8 +5380,13 @@
   <data name="Preset_Imported" xml:space="preserve"><value>{0} 個のプリセットをインポートしました。</value></data>
   <data name="Preset_ImportError" xml:space="preserve"><value>{0} のプリセットをインポートできませんでした: {1}</value></data>
   <data name="Preset_ImportErrorLine" xml:space="preserve"><value>{0} のプリセットをインポートできませんでした ({1} 行目): {2}</value></data>
+  <data name="Preset_ImportTooMany" xml:space="preserve"><value>{0} のプリセットはインポートしませんでした: プリセットが {1} 個になりますが、保存できるのは {2} 個までです。先にプリセットを削除してください。</value></data>
   <data name="Preset_ExportError" xml:space="preserve"><value>プリセットをエクスポートできませんでした ({0})。</value></data>
   <data name="Preset_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="Preset_Edit" xml:space="preserve"><value>編集...</value></data>
+  <data name="Preset_EditTitle" xml:space="preserve"><value>プリセットの編集</value></data>
+  <data name="Preset_NameInUse" xml:space="preserve"><value>{0} という名前のプリセットはすでにあります。</value></data>
+  <data name="Preset_Edited" xml:space="preserve"><value>プリセット {0} を更新しました。</value></data>
   <data name="Preset_Export" xml:space="preserve"><value>エクスポート...</value></data>
   <data name="Preset_Import" xml:space="preserve"><value>インポート...</value></data>
   <data name="Preset_SectionHelp" xml:space="preserve"><value>プリセットは名前を付けた表示設定の組です。拡張子を指定したプリセットは、その拡張子のファイルを初めて開いたときに適用します。</value></data>

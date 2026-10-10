@@ -20,8 +20,11 @@ public sealed partial class HexView
 
     private static CultureInfo Culture => CultureInfo.CurrentCulture;
 
-    /// <summary>Hex 列・テキスト列のセルのツールチップ (VIEW-07 の仕様 2・3)。<paramref name="unreadable"/> は読み取れない理由。</summary>
-    internal string CellToolTipText(long offset, string? unreadable, bool includeAnnotations = true)
+    /// <summary>
+    /// Hex 列・テキスト列のセルのツールチップ (VIEW-07 の仕様 2・3)。<paramref name="unreadable"/> は読み取れない理由。文字は
+    /// <paramref name="textColumn"/> のテキスト列 (マウスを合わせた列。Hex 列なら 1 列目) の文字コードで示す (VIEW-24)。
+    /// </summary>
+    internal string CellToolTipText(long offset, string? unreadable, bool includeAnnotations = true, int textColumn = 0)
     {
         EditorState editor = _editor!;
         bool lower = editor.View.LowercaseHex;
@@ -45,7 +48,7 @@ public sealed partial class HexView
             byte b = one[0];
             lines.Add(Loc.Format("HexView_Tip_Value", (lower ? HexStringsLower : HexStrings)[b], b.ToString(Culture), ((sbyte)b).ToString(Culture),
                 Convert.ToString(b, 8), Convert.ToString(b, 2).PadLeft(8, '0')));
-            if (CharacterDescription(offset) is { } character)
+            if (CharacterDescription(offset, textColumn) is { } character)
             {
                 lines.Add(Loc.Format("HexView_Tip_Char", character));
             }
@@ -106,8 +109,11 @@ public sealed partial class HexView
         return Loc.Format("HexView_Tip_Row", row.ToString("N0", Culture), format.Status(start, Culture), format.Status(Math.Max(start, end), Culture));
     }
 
-    /// <summary>テキスト列の文字と符号位置 (例: <c>あ U+3042 (UTF-8: E3 81 82)</c>)。表示中の行の解読結果を使う。</summary>
-    private string? CharacterDescription(long offset)
+    /// <summary>
+    /// テキスト列 <paramref name="textColumn"/> の文字と符号位置 (例: <c>あ U+3042 (UTF-8: E3 81 82)</c>)。表示中の行の解読結果を使う。
+    /// 文字表 (VIEW-23) の項目は、セルに収まらず切り詰めた文字列も全体を示す (VIEW-23 の仕様 4)。
+    /// </summary>
+    private string? CharacterDescription(long offset, int textColumn)
     {
         EditorState editor = _editor!;
         HexLayout layout = editor.Layout;
@@ -117,7 +123,8 @@ public sealed partial class HexView
             return null;
         }
 
-        TextCell cell = _rows[(int)r].TextAt(layout.ColumnOf(offset));
+        textColumn = Math.Clamp(textColumn, 0, Math.Max(0, editor.View.TextColumnCount - 1));
+        TextCell cell = _rows[(int)r].TextAt(textColumn, layout.ColumnOf(offset));
         if (cell.Kind is not (TextCellKind.Char or TextCellKind.Continuation) || cell.Offset < 0)
         {
             return cell.Kind == TextCellKind.NonPrintable ? Loc.Get("HexView_Char_Unprintable") : null;
@@ -125,14 +132,14 @@ public sealed partial class HexView
 
         // 続きのセルでは、文字の先頭のセルの文字を示す。
         long first = cell.Offset;
-        TextCell head = first == offset ? cell : HeadCell(first) ?? cell;
+        TextCell head = first == offset ? cell : HeadCell(first, textColumn) ?? cell;
         string text = head.Text.TrimStart(TextCellDecoder.DottedCircle);
         if (text.Length == 0)
         {
             return null;
         }
 
-        int codePoint = char.ConvertToUtf32(text, 0);
+        TextEncoding encoding = editor.TextEncodingOf(textColumn);
         byte[] bytes = new byte[Math.Max(1, head.Span)];
         editor.Document.Current.Read(first, bytes);
         var hex = new StringBuilder();
@@ -141,14 +148,21 @@ public sealed partial class HexView
             hex.Append(hex.Length > 0 ? " " : string.Empty).Append((editor.View.LowercaseHex ? HexStringsLower : HexStrings)[b]);
         }
 
-        return $"{head.Text} U+{codePoint:X4} ({editor.TextEncoding.Name}: {hex})";
+        // 文字表の項目 (例: <END>) は複数の文字のことがあるので、符号位置ではなく文字列全体を示す。
+        if (encoding.Table is not null && System.Globalization.StringInfo.ParseCombiningCharacters(head.Text).Length > 1)
+        {
+            return $"{head.Text} ({encoding.Name}: {hex})";
+        }
+
+        int codePoint = char.ConvertToUtf32(text, 0);
+        return $"{head.Text} U+{codePoint:X4} ({encoding.Name}: {hex})";
     }
 
-    private TextCell? HeadCell(long offset)
+    private TextCell? HeadCell(long offset, int textColumn)
     {
         HexLayout layout = _editor!.Layout;
         long r = layout.RowOf(offset) - _editor.TopRow;
-        return r >= 0 && r < _rows.Count && _rows[(int)r].Visible ? _rows[(int)r].TextAt(layout.ColumnOf(offset)) : null;
+        return r >= 0 && r < _rows.Count && _rows[(int)r].Visible ? _rows[(int)r].TextAt(textColumn, layout.ColumnOf(offset)) : null;
     }
 
     /// <summary>マウスの「戻る」(XButton1) と「進む」(XButton2) (VIEW-31)。</summary>

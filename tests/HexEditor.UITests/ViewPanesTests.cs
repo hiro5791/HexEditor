@@ -160,6 +160,119 @@ public sealed class ViewPanesTests
         Assert.Equal(16, await CursorAsync(app));
     });
 
+    [Fact]
+    public Task Byte_theme_draws_each_byte_as_a_pixel_around_the_view() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 仕様 3: 「周辺」+「バイトテーマ」は 1 ピクセル行 = 1 行で、各バイトを 1 ピクセルとしてバイトテーマの色で描く。
+        AppSession app = await MinimapAppAsync(ctx, "TD-SEQ-1M");
+        await ExecuteAsync(app, "view.minimapAround");
+        await ExecuteAsync(app, "view.minimapByteTheme");
+        JsonObject state = await MinimapAsync(app);
+        Assert.Equal("ByteTheme", state["content"]!.GetValue<string>());
+        Assert.Equal(16, state["rowBytes"]!.GetValue<long>());
+        var colorOf = new Dictionary<int, string>();
+        foreach (JsonNode? row in state["rows"]!.AsArray())
+        {
+            long start = row!["start"]!.GetValue<long>();
+            JsonArray pixels = row["pixels"]!.AsArray();
+            Assert.Equal(16, pixels.Count);
+            for (int k = 0; k < 16; k++)
+            {
+                // TD-SEQ-1M はオフセット n の値が n mod 256。同じ値は同じ色。
+                int value = (int)((start + k) % 256);
+                string color = pixels[k]!.GetValue<string>();
+                Assert.Equal(colorOf.TryAdd(value, color) ? color : colorOf[value], color);
+            }
+        }
+
+        Assert.NotEqual(colorOf[0x00], colorOf[0x41]);
+    });
+
+    [Fact]
+    public Task Dragging_the_edge_changes_and_saves_the_width() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 仕様 1・9: 幅は境界のドラッグで 40〜200 epx に変えられ、全ドキュメント共通の設定として保存する。
+        AppSession app = await MinimapAppAsync(ctx, "TD-SEQ-1M");
+        await MinimapAsync(app);
+        JsonObject state = await app.SendAsync("minimap", new JsonObject { ["action"] = "resize", ["width"] = 150 });
+        Assert.Equal(150, state["requestedWidth"]!.GetValue<double>());
+        state = await app.SendAsync("minimap", new JsonObject { ["action"] = "resize", ["width"] = 500 });
+        Assert.Equal(200, state["requestedWidth"]!.GetValue<double>());
+        string settings = Path.Combine(app.Profile, "settings.json");
+        await app.WaitUntilAsync(() => Task.FromResult(File.Exists(settings)
+            && JsonNode.Parse(File.ReadAllText(settings))?["view.minimap.width"]?.GetValue<int>() == 200),
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the saved width");
+
+        // キーボードでの代わりの設定 (view.minimap.width) を変えても反映される。
+        await app.SendAsync("settingSet", new JsonObject { ["key"] = "view.minimap.width", ["value"] = 60 });
+        await app.WaitUntilAsync(async () => (await app.SendAsync("minimap"))["requestedWidth"]!.GetValue<double>() == 60,
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the width from the setting");
+    });
+
+    [Fact]
+    public Task Wheel_on_the_minimap_scrolls_like_the_hex_view() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 仕様 7: ホイールは Hex ビューと同じ縦スクロール (Windows の設定の行数、1 ノッチ未満の入力の蓄積)。
+        AppSession app = await MinimapAppAsync(ctx, "TD-SEQ-1M");
+        await MinimapAsync(app);
+        await app.SendAsync("setSystem", new JsonObject { ["wheelScrollLines"] = 5 });
+        await app.SendAsync("minimap", new JsonObject { ["action"] = "wheel", ["delta"] = -120 });
+        await app.IdleAsync();
+        Assert.Equal(5, await TopRowAsync(app));
+        await app.SendAsync("minimap", new JsonObject { ["action"] = "wheel", ["delta"] = -60, ["count"] = 2 });
+        await app.IdleAsync();
+        Assert.Equal(10, await TopRowAsync(app));
+    });
+
+    [Fact]
+    public Task Visible_range_mark_can_be_turned_off() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 仕様 6: 「表示中の範囲」の印も ON / OFF を選べる。
+        AppSession app = await MinimapAppAsync(ctx, "TD-SEQ-1M");
+        JsonObject state = await MinimapAsync(app);
+        Assert.Contains(state["marks"]!.AsArray(), m => m!["kind"]!.GetValue<string>() == "viewport");
+        await app.SendAsync("settingSet", new JsonObject { ["key"] = "view.minimap.hiddenMarks", ["value"] = "viewport" });
+        await app.WaitUntilAsync(async () =>
+        {
+            await app.KeyAsync("Down");
+            return !(await app.SendAsync("minimap"))["marks"]!.AsArray().Any(m => m!["kind"]!.GetValue<string>() == "viewport");
+        }, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the viewport mark to disappear");
+    });
+
+    [Fact]
+    public Task Exact_setting_applies_to_newly_opened_documents() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 仕様 5: 「正確に計算」がオンなら、新しく開いたドキュメントも正確に計算し、結果はドキュメントごとに再利用する。
+        AppSession app = await MinimapAppAsync(ctx, "TD-SEQ-1M");
+        await MinimapAsync(app);
+        await app.SendAsync("settingSet", new JsonObject { ["key"] = "view.minimap.exact", ["value"] = true });
+        await app.OpenAsync(ctx.TestData("TD-VIEW-ENTROPY"));
+        await app.WaitForTabsAsync(2);
+        await app.IdleAsync();
+        await WaitForExactAsync(app, TimeSpan.FromSeconds(60));
+
+        // 別のタブに切り替えて戻っても、計算し直さずに正確な値を使う。
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
+        await app.IdleAsync();
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = 1 });
+        await app.IdleAsync();
+        await WaitForExactAsync(app, TimeSpan.FromSeconds(5));
+    });
+
+    /// <summary>選択中のタブのミニマップが正確な値になるまで待つ (タブを開いた・切り替えた直後は Hex ビューの読み込みを待つ)。</summary>
+    private static Task WaitForExactAsync(AppSession app, TimeSpan timeout) => app.WaitUntilAsync(async () =>
+    {
+        try
+        {
+            return (await app.SendAsync("minimap"))["exact"]!.GetValue<bool>();
+        }
+        catch (InvalidOperationException)
+        {
+            // 新しいタブの Hex ビューがまだ読み込まれていない。
+            return false;
+        }
+    }, UiTest.Scaled(timeout), "the exact minimap");
+
     // ---- VIEW-37 ----
 
     private static async Task<JsonObject> PanesAsync(AppSession app) => await app.SendAsync("panes");
@@ -312,6 +425,73 @@ public sealed class ViewPanesTests
         Assert.Equal(0x4000, views[1]!["cursor"]!.GetValue<long>());
     });
 
+    /// <summary>VIEW-42 の仕様 3: 分割した 2 つ目のペインで変えた表示設定も、ドキュメントごとの設定として保存する (分割を解除した後も)。</summary>
+    [Fact]
+    public Task View_settings_changed_in_the_second_pane_are_saved() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        await SplitAsync(app);
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 1 });
+        await ExecuteAsync(app, "view.bytesPerRow32");
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+        await app.OpenAsync(path);
+        await app.WaitForTabsAsync(1);
+        await app.IdleAsync();
+        Assert.Equal(32, (await ViewAsync(app, "pane2"))["bytesPerRow"]!.GetValue<int>());
+
+        // 2 つ目のペインを残して分割を解除し、残ったペインで変える。
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 1 });
+        await ExecuteAsync(app, "view.splitRemove");
+        await ExecuteAsync(app, "view.bytesPerRow8");
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+        await app.OpenAsync(path);
+        await app.WaitForTabsAsync(1);
+        await app.IdleAsync();
+        Assert.Equal(8, (await ViewAsync(app, "active"))["bytesPerRow"]!.GetValue<int>());
+    });
+
+    /// <summary>VIEW-37 の仕様 3: 付随データから戻した分割でも、「分割したペインの表示設定をそろえる」が効く。</summary>
+    [Fact]
+    public Task Restored_split_keeps_pane_settings_in_sync() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.split.syncSettings"] = true });
+        string path = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [path] });
+        await SplitAsync(app);
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+        await app.OpenAsync(path);
+        await app.WaitForTabsAsync(1);
+        await app.IdleAsync();
+        Assert.True((await PanesAsync(app))["split"]!.GetValue<bool>());
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 0 });
+        await ExecuteAsync(app, "view.bytesPerRow32");
+        Assert.Equal(32, (await ViewAsync(app, "pane2"))["bytesPerRow"]!.GetValue<int>());
+    });
+
+    /// <summary>VIEW-37 の「エラー」: 2 ペインの最小の大きさを確保できない向きの分割だけを無効にする。</summary>
+    [Fact]
+    public Task Split_is_disabled_per_orientation_when_the_window_is_too_small() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 大きな文字 (30 pt) と低いウィンドウで、上下の 2 ペイン (各 5 行分) が入らないようにする。左右は入る。
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.font.size"] = 30 });
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SendAsync("resize", new JsonObject { ["width"] = 1000, ["height"] = 420 });
+        await app.IdleAsync();
+        await app.SendAsync("refreshMenus");
+        JsonArray commands = (await app.SendAsync("commands"))["items"]!.AsArray();
+        bool Enabled(string id) => commands.Single(c => c!["id"]!.GetValue<string>() == id)!["enabled"]!.GetValue<bool>();
+        Assert.False(Enabled("view.splitHorizontal"));
+        Assert.True(Enabled("view.splitVertical"));
+        await ExecuteAsync(app, "view.splitVertical");
+        Assert.True((await PanesAsync(app))["split"]!.GetValue<bool>());
+    });
+
     // ---- VIEW-38 ----
 
     [Fact]
@@ -327,6 +507,22 @@ public sealed class ViewPanesTests
         await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
         await app.IdleAsync();
         Assert.Equal("Offset: 0x00000000", await StatusOffsetAsync(app));
+    });
+
+    /// <summary>VIEW-38 の「呼び出し」: タブの右クリックメニュー「新しいビューで開く」。</summary>
+    [Fact]
+    public Task New_view_from_the_tab_menu() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SendAsync("tabMenu", new JsonObject { ["index"] = 0, ["item"] = "TabMenu_NewView" });
+        await app.IdleAsync();
+        JsonArray tabs = (await app.SendAsync("tabs"))["tabs"]!.AsArray();
+        Assert.Equal(2, tabs.Count);
+        Assert.EndsWith(": 2", tabs[1]!["title"]!.GetValue<string>());
+
+        // 同じドキュメントのタブには「右に並べて表示」を使えない (別のドキュメントだけ)。
+        JsonArray items = (await app.SendAsync("tabMenuItems", new JsonObject { ["index"] = 0 }))["items"]!.AsArray();
+        Assert.False(items.Single(i => i!["id"]!.GetValue<string>() == "TabMenu_ShowToRight")!["enabled"]!.GetValue<bool>());
     });
 
     [Fact]
@@ -515,5 +711,67 @@ public sealed class ViewPanesTests
         await app.KeyAsync("Home", ctrl: true);
         await app.IdleAsync();
         Assert.Equal(0, (await ViewAsync(app, "side1"))["cursor"]!.GetValue<long>());
+    });
+
+    /// <summary>VIEW-39 の「呼び出し」: タブの右クリックメニュー「右に並べて表示」は、操作中のタブの右にそのタブを並べる。</summary>
+    [Fact]
+    public Task Show_to_the_right_from_the_tab_menu() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M"), ctx.TestData("TD-VIEW-SEQ-MOD")] });
+        await app.WaitForTabsAsync(2);
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
+        JsonArray items = (await app.SendAsync("tabMenuItems", new JsonObject { ["index"] = 0 }))["items"]!.AsArray();
+        Assert.False(items.Single(i => i!["id"]!.GetValue<string>() == "TabMenu_ShowToRight")!["enabled"]!.GetValue<bool>());
+        await app.SendAsync("tabMenu", new JsonObject { ["index"] = 1, ["item"] = "TabMenu_ShowToRight" });
+        await app.IdleAsync();
+        JsonObject state = await app.SendAsync("sideBySide");
+        Assert.True(state["active"]!.GetValue<bool>());
+        Assert.Single(state["partners"]!.AsArray());
+        Assert.Equal("SameOffset", state["mode"]!.GetValue<string>());
+    });
+
+    /// <summary>VIEW-39 の「画面」: 鎖のボタンは同期のモードを示し、押すとモードを選べる。</summary>
+    [Fact]
+    public Task Chain_button_shows_and_selects_the_sync_mode() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await SideBySideAsync(ctx);
+        Assert.Equal("Same offset", await app.UiaNameAsync("SideBySide_SyncMode1"));
+        (await app.WaitForAsync("SideBySide_Sync1")).Patterns.ExpandCollapse.Pattern.Expand();
+        await app.WaitForAsync("SideBySide_Sync1_KeepDifference");
+        FlaUI.Core.AutomationElements.AutomationElement item = await app.WaitForAsync("SideBySide_Sync1_KeepDifference");
+        if (item.Patterns.Invoke.IsSupported)
+        {
+            item.Patterns.Invoke.Pattern.Invoke();
+        }
+        else if (item.Patterns.SelectionItem.IsSupported)
+        {
+            item.Patterns.SelectionItem.Pattern.Select();
+        }
+        else
+        {
+            item.Patterns.Toggle.Pattern.Toggle();
+        }
+
+        await app.IdleAsync();
+        Assert.Equal("KeepDifference", (await app.SendAsync("sideBySide"))["mode"]!.GetValue<string>());
+        Assert.Equal("Keep the difference", await app.UiaNameAsync("SideBySide_SyncMode1"));
+    });
+
+    /// <summary>VIEW-39: 左のドキュメントを分割したら、同期は操作中のペインに従う。</summary>
+    [Fact]
+    public Task Sync_follows_the_active_pane_of_the_left_document() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await SideBySideAsync(ctx);
+        await ExecuteAsync(app, "view.splitHorizontal");
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 1 });
+        await app.IdleAsync();
+        await app.SendAsync("goto", new JsonObject { ["offset"] = 0x5000 });
+        await app.IdleAsync();
+        Assert.Equal(0x5000, (await ViewAsync(app, "side1"))["cursor"]!.GetValue<long>());
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 0 });
+        await app.IdleAsync();
+        await app.SendAsync("goto", new JsonObject { ["offset"] = 0x300 });
+        await app.IdleAsync();
+        Assert.Equal(0x300, (await ViewAsync(app, "side1"))["cursor"]!.GetValue<long>());
     });
 }

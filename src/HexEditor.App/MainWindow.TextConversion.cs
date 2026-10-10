@@ -60,6 +60,11 @@ public sealed partial class MainWindow
             return;
         }
 
+        if (!RangeListAllowed(doc, changesLength: true))
+        {
+            return;
+        }
+
         IReadOnlyList<TargetRange> ranges = TextTargetOf(doc);
         if (await ShowConvertEncodingDialogAsync(doc, ranges) is not { } options)
         {
@@ -92,9 +97,10 @@ public sealed partial class MainWindow
     {
         EncodingEntry[] entries = [.. EncodingCatalog.All.Where(e => e.Selectable)];
         string current = doc.Editor.TextEncoding.Id;
-        int Index(string id) => Math.Max(0, Array.FindIndex(entries, e => string.Equals(e.Id, id, StringComparison.OrdinalIgnoreCase)));
-        ComboBox source = DialogParts.Combo("ConvertEncoding_Source", Loc.Get("ConvertEncoding_Source"), entries.Select(EncodingDisplayText), Index(current));
-        ComboBox target = DialogParts.Combo("ConvertEncoding_Target", Loc.Get("ConvertEncoding_Target"), entries.Select(EncodingDisplayText), Index("utf-8"));
+
+        // 変換元・変換先は検索できるドロップダウン (名前・ID・コードページ番号の一部で絞り込める。EDIT-38 の「画面」)。
+        var source = new EncodingPicker("ConvertEncoding_Source", Loc.Get("ConvertEncoding_Source"), entries, current);
+        var target = new EncodingPicker("ConvertEncoding_Target", Loc.Get("ConvertEncoding_Target"), entries, "utf-8");
         ComboBox invalid = DialogParts.Combo("ConvertEncoding_Invalid", Loc.Get("ConvertEncoding_Invalid"),
             [Loc.Get("ConvertEncoding_Invalid_Error"), Loc.Get("ConvertEncoding_Invalid_Fffd"), Loc.Get("ConvertEncoding_Invalid_Keep")], 0);
         ComboBox unmappable = DialogParts.Combo("ConvertEncoding_Unmappable", Loc.Get("ConvertEncoding_Unmappable"),
@@ -106,12 +112,6 @@ public sealed partial class MainWindow
             [Loc.Get("ConvertEncoding_Newline_Keep"), "CRLF", "LF", "CR"], 0);
         ComboBox normalization = DialogParts.Combo("ConvertEncoding_Normalization", Loc.Get("ConvertEncoding_Normalization"),
             [Loc.Get("ConvertEncoding_Normalization_None"), "NFC", "NFD", "NFKC", "NFKD"], 0);
-        foreach (ComboBox combo in new[] { source, target })
-        {
-            // 項目が多いので、入力した文字で絞り込める (「検索できるドロップダウン」)。
-            combo.IsTextSearchEnabled = true;
-        }
-
         TextBlock before = DialogParts.Caption("ConvertEncoding_PreviewBefore", monospace: true);
         TextBlock after = DialogParts.Caption("ConvertEncoding_PreviewAfter", monospace: true);
         TextBlock beforeText = DialogParts.Caption("ConvertEncoding_PreviewBeforeText");
@@ -134,7 +134,7 @@ public sealed partial class MainWindow
         {
             result = null;
             replacement.Visibility = unmappable.SelectedIndex == 2 ? Visibility.Visible : Visibility.Collapsed;
-            var options = new CharsetConversionOptions(entries[Math.Max(0, source.SelectedIndex)].Id, entries[Math.Max(0, target.SelectedIndex)].Id)
+            var options = new CharsetConversionOptions(source.Selected.Id, target.Selected.Id)
             {
                 InvalidSource = invalid.SelectedIndex switch { 1 => InvalidSourceHandling.ReplaceWithFffd, 2 => InvalidSourceHandling.KeepBytes, _ => InvalidSourceHandling.Error },
                 Unmappable = unmappable.SelectedIndex switch { 1 => UnmappableHandling.Question, 2 => UnmappableHandling.Custom, _ => UnmappableHandling.Error },
@@ -145,6 +145,7 @@ public sealed partial class MainWindow
                 Normalization = (UnicodeNormalization)Math.Max(0, normalization.SelectedIndex),
             };
             error.Text = before.Text = after.Text = beforeText.Text = afterText.Text = length.Text = string.Empty;
+            DialogParts.MarkInvalid(replacement, false);
             try
             {
                 // プレビュー: 先頭の範囲の先頭 256 バイトの変換前と変換後、変換後の推定の長さ (仕様 8)。
@@ -173,7 +174,8 @@ public sealed partial class MainWindow
             }
             catch (ArgumentException ex)
             {
-                error.Text = ex.Message;
+                error.Text = SettingsErrorText(ex);
+                DialogParts.MarkInvalid(replacement, ex is CharsetSettingsException { Error: CharsetSettingsError.InvalidReplacement });
             }
             catch (IOException ex)
             {
@@ -183,10 +185,13 @@ public sealed partial class MainWindow
             dialog.IsPrimaryButtonEnabled = result is not null;
         }
 
-        foreach (ComboBox combo in new[] { source, target, invalid, unmappable, newline, normalization })
+        foreach (ComboBox combo in new[] { invalid, unmappable, newline, normalization })
         {
             combo.SelectionChanged += (_, _) => Update();
         }
+
+        source.SelectionChanged += (_, _) => Update();
+        target.SelectionChanged += (_, _) => Update();
 
         foreach (CheckBox check in new[] { stripBom, addBom })
         {
@@ -220,6 +225,14 @@ public sealed partial class MainWindow
     private static string ConversionErrorText(CharsetConversionException e) => e.Kind == CharsetConversionErrorKind.UndecodableSource
         ? Loc.Format("ConvertEncoding_Error_Undecodable", StatusFormat.Hex(e.Offset), DialogParts.Hex(e.Bytes))
         : Loc.Format("ConvertEncoding_Error_Unmappable", StatusFormat.Hex(e.Offset), e.Text ?? string.Empty);
+
+    /// <summary>設定の誤り (使えない文字コード、表せない置き換えの文字列) の文言。Core の例外の文言は使わない (地域化のため)。</summary>
+    private static string SettingsErrorText(ArgumentException e) => e switch
+    {
+        CharsetSettingsException { Error: CharsetSettingsError.UnknownEncoding } s => Loc.Format("ConvertEncoding_Error_UnknownEncoding", s.Value),
+        CharsetSettingsException s => Loc.Format("ConvertEncoding_Error_InvalidReplacement", s.Value),
+        _ => Loc.Get("ConvertEncoding_Error_Settings"),
+    };
 
     private static void LoadComboStates(string key, params (ComboBox Combo, string Name)[] combos)
     {
@@ -257,13 +270,28 @@ public sealed partial class MainWindow
 
         CaseConversionMode method = mode ?? (App.Settings.GetString(CaseConversionKey, "ascii") == "encoding"
             ? CaseConversionMode.EncodingAware : CaseConversionMode.AsciiOnly);
+        if (!RangeListAllowed(doc, changesLength: true))
+        {
+            return;
+        }
+
         IReadOnlyList<TargetRange> ranges = TextTargetOf(doc);
         Document document = doc.Document;
         DocumentSnapshot snapshot = document.Current;
         string encoding = doc.Editor.TextEncoding.Id;
         Func<ContentSink> sink = () => ContentSink.For(document, CheckTempSpace(document));
+        var stats = new CaseConversionStats();
         IReadOnlyList<RangeReplacement>? parts = await RunTextTransformAsync(doc, Loc.Get("Operation_ConvertCase"), ranges,
-            op => CaseConversion.ConvertAll(snapshot, ranges, operation, method, encoding, sink, op));
+            op => CaseConversion.ConvertAll(snapshot, ranges, operation, method, encoding, sink, op, stats));
+
+        // 値が変わらない変換は反映しない (元に戻す操作を作らない)。
+        if (parts is not null && !stats.Changed)
+        {
+            TransformApplier.DisposeAll(parts);
+            ShowNotice(Loc.Get("DataOp_Unchanged"), InfoBarSeverity.Informational, doc);
+            return;
+        }
+
         ApplyTextTransform(doc, parts, "大文字・小文字の変換");
     }
 
@@ -274,7 +302,7 @@ public sealed partial class MainWindow
     {
         try
         {
-            return await RunTransformAsync(doc, name, TextTransforms.TotalLength(ranges), TextTransforms.IsLongRunning(TextTransforms.TotalLength(ranges)), work);
+            return await RunTransformAsync(doc, name, TextTransforms.TotalLength(ranges), TextTransforms.IsLongRunning(ranges), work);
         }
         catch (CharsetConversionException e)
         {
@@ -290,7 +318,7 @@ public sealed partial class MainWindow
         }
         catch (ArgumentException e)
         {
-            ShowNotice(e.Message, InfoBarSeverity.Error, doc);
+            ShowNotice(SettingsErrorText(e), InfoBarSeverity.Error, doc);
             return null;
         }
     }

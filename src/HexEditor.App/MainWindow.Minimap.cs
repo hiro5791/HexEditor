@@ -18,7 +18,7 @@ public sealed partial class MainWindow
     internal const string MinimapExactKey = "view.minimap.exact";
     private const string MinimapHiddenMarksKey = "view.minimap.hiddenMarks";
 
-    private static readonly string[] MinimapMarkKinds = ["cursor", "selection", "search", "bookmark", "modified", "difference"];
+    private static readonly string[] MinimapMarkKinds = ["viewport", "cursor", "selection", "search", "bookmark", "modified", "difference"];
 
     private bool MinimapVisible => App.Settings.GetBool(MinimapVisibleKey, false);
 
@@ -32,6 +32,29 @@ public sealed partial class MainWindow
     };
 
     private MinimapRange MinimapRangeSetting => App.Settings.GetString(MinimapRangeKey, "whole") == "around" ? MinimapRange.Around : MinimapRange.Whole;
+
+    /// <summary>
+    /// コンストラクターから 1 回呼ぶ。設定画面などでミニマップの設定 (幅・正確に計算など) が変わったら、このウィンドウのビューに反映する
+    /// (幅の変更のキーボードでの代わりは設定画面の「ミニマップの幅」。仕様 1・9)。
+    /// </summary>
+    private void InitializeMinimapSettings()
+    {
+        Action<IReadOnlyCollection<string>> settingsChanged = keys =>
+        {
+            if (keys.Any(k => k.StartsWith("view.minimap.", StringComparison.Ordinal)))
+            {
+                DispatcherQueue.TryEnqueue(ApplyMinimapSettings);
+            }
+        };
+        App.Settings.Changed += settingsChanged;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                App.Settings.Changed -= settingsChanged;
+            }
+        };
+    }
 
     private void ToggleMinimap()
     {
@@ -59,17 +82,19 @@ public sealed partial class MainWindow
     }
 
     /// <summary>
-    /// 「正確に計算」(仕様 5): 選択中のタブのミニマップの範囲全体を読む長時間処理。処理センターに表示し、キャンセルできる。
+    /// 「正確に計算」(仕様 5): 選択中のタブのミニマップの範囲全体を読む長時間処理。処理センターに表示し、キャンセルできる。オンの間は、
+    /// 新しく開いた・切り替えたドキュメントも正確に計算する (結果はドキュメントごとにキャッシュする)。
     /// </summary>
     private void ToggleMinimapExact()
     {
         bool on = !App.Settings.GetBool(MinimapExactKey, false);
         App.Settings.SetBool(MinimapExactKey, on, false);
-        RefreshCommandUi();
         if (on)
         {
             StartExactMinimap();
         }
+
+        ApplyMinimapSettings();
     }
 
     private void StartExactMinimap()
@@ -78,6 +103,22 @@ public sealed partial class MainWindow
         {
             _ = RunExactMinimapAsync(minimap, doc.Document);
         }
+    }
+
+    /// <summary>ミニマップが「正確に計算」を求めた (設定がオンで、開いた・切り替えたドキュメントの値がまだ正確でない。仕様 5)。</summary>
+    private void RunExactMinimap(MinimapView minimap)
+    {
+        if (minimap.Editor?.Document is { IsDisposed: false } document)
+        {
+            _ = RunExactMinimapAsync(minimap, document);
+        }
+    }
+
+    /// <summary>ミニマップの境界のドラッグで変えた幅を、全ドキュメント共通の設定に保存する (仕様 1・9)。</summary>
+    private void HexView_MinimapWidthCommitted(object? sender, double width)
+    {
+        App.Settings.SetInt(MinimapWidthKey, (int)Math.Round(width), 80);
+        ApplyMinimapSettings();
     }
 
     private async Task RunExactMinimapAsync(MinimapView minimap, Core.Engine.Document document)
@@ -103,6 +144,10 @@ public sealed partial class MainWindow
         view.HiddenMinimapMarks = new HashSet<string>(App.Settings.GetString(MinimapHiddenMarksKey, string.Empty)
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
         view.MinimapMenuOpening = BuildMinimapMenu;
+        view.MinimapExactRunner = RunExactMinimap;
+        view.MinimapExact = App.Settings.GetBool(MinimapExactKey, false);
+        view.MinimapWidthCommitted -= HexView_MinimapWidthCommitted;
+        view.MinimapWidthCommitted += HexView_MinimapWidthCommitted;
         if (MinimapVisible)
         {
             view.SetMinimapMode(MinimapContentSetting, MinimapRangeSetting);

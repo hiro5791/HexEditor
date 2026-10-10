@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices.WindowsRuntime;
+using HexEditor.Core.Compare;
 using HexEditor.Core.Engine;
 using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
@@ -31,6 +32,14 @@ public sealed partial class MinimapView : Grid
     private readonly MinimapComputer _computer = new();
     private readonly Microsoft.UI.Dispatching.DispatcherQueueTimer _recompute;
     private readonly List<Shape> _markShapes = [];
+    private readonly Microsoft.UI.Input.InputCursor _resizeCursor = Microsoft.UI.Input.InputSystemCursor.Create(Microsoft.UI.Input.InputSystemCursorShape.SizeWestEast);
+    private readonly SchemeColor[] _byteColors = new SchemeColor[256];
+    private (ByteTheme? Theme, bool Dark, bool HighContrast)? _byteColorsKey;
+    private bool _resizing;
+    private double _resizeStartX;
+    private double _resizeStartWidth;
+    private Brush? _hatchSource;
+    private LinearGradientBrush? _hatch;
     private WriteableBitmap? _bitmap;
     private byte[] _pixels = [];
     private EditorState? _editor;
@@ -67,15 +76,33 @@ public sealed partial class MinimapView : Grid
         PointerReleased += (_, e) =>
         {
             _draggingViewport = false;
+            EndResize();
             ReleasePointerCapture(e.Pointer);
+        };
+        PointerCaptureLost += (_, _) =>
+        {
+            _draggingViewport = false;
+            EndResize();
         };
         PointerWheelChanged += (_, e) =>
         {
-            int delta = e.GetCurrentPoint(this).Properties.MouseWheelDelta;
-            _editor?.ScrollRows(-delta / 120 * 3);
+            // Hex ビューと同じ縦スクロール (仕様 7。Windows の設定の行数、1 ノッチ未満の入力の蓄積は Hex ビューの処理を使う)。
+            Microsoft.UI.Input.PointerPointProperties props = e.GetCurrentPoint(this).Properties;
+            if (!props.IsHorizontalMouseWheel)
+            {
+                Wheel?.Invoke(props.MouseWheelDelta);
+            }
+
             e.Handled = true;
         };
-        PointerExited += (_, _) => HideToolTip();
+        PointerExited += (_, _) =>
+        {
+            HideToolTip();
+            if (!_resizing)
+            {
+                ProtectedCursor = null;
+            }
+        };
         ContextRequested += (_, e) =>
         {
             ShowMenu(e.TryGetPosition(this, out Windows.Foundation.Point p) ? p : new Windows.Foundation.Point(0, 0));
@@ -94,6 +121,15 @@ public sealed partial class MinimapView : Grid
             if (_content != value)
             {
                 _content = value;
+
+                // バイトテーマはピクセル行ごとのバイトを使う (仕様 3)。
+                bool keep = value == MinimapContent.ByteTheme;
+                if (_computer.KeepBytes != keep)
+                {
+                    _computer.KeepBytes = keep;
+                    Restart(force: true);
+                }
+
                 QueueDraw();
             }
         }
@@ -120,8 +156,45 @@ public sealed partial class MinimapView : Grid
     /// <summary>ハイコントラスト (色を使わず WindowText の棒の長さだけで示す。仕様 4)。</summary>
     public bool HighContrast { get; set; }
 
-    /// <summary>バイトテーマ (表示内容「バイトテーマ」で使う)。</summary>
-    public ByteTheme? ByteTheme { get; set; }
+    /// <summary>バイトテーマ (表示内容「バイトテーマ」で使う。Hex ビューと同じテーマ)。</summary>
+    public ByteTheme? ByteTheme
+    {
+        get => _byteTheme;
+        set
+        {
+            if (!ReferenceEquals(_byteTheme, value))
+            {
+                _byteTheme = value;
+                QueueDraw();
+            }
+        }
+    }
+
+    private ByteTheme? _byteTheme;
+
+    /// <summary>表示中の範囲の枠を出す (仕様 6 の印の ON / OFF)。</summary>
+    public bool ShowViewport { get; set; } = true;
+
+    /// <summary>設定「正確に計算」がオン (仕様 5)。新しく開いた・切り替えたドキュメントも正確に計算する。</summary>
+    public bool ExactWanted { get; set; }
+
+    /// <summary>今の割り当ての「正確に計算」が必要になった (ウィンドウが処理センターで実行する)。</summary>
+    public event EventHandler? ExactNeeded;
+
+    /// <summary>ホイールの入力 (1 ノッチ 120 単位。Hex ビューが自分のホイールの処理で縦にスクロールする)。</summary>
+    public Action<int>? Wheel { get; set; }
+
+    /// <summary>境界のドラッグで幅を変えた (仕様 1。ドラッグを終えたときの幅)。</summary>
+    public event EventHandler<double>? WidthCommitted;
+
+    /// <summary>幅の最小値 (仕様 1)。</summary>
+    public const double MinimumWidth = 40;
+
+    /// <summary>幅の最大値 (仕様 1)。</summary>
+    public const double MaximumWidth = 200;
+
+    /// <summary>幅を変えるためにドラッグできる左の境界の幅 (epx)。</summary>
+    public const double ResizeGrip = 4;
 
     /// <summary>表示している Hex ビューのビュー。</summary>
     public EditorState? Editor
@@ -207,6 +280,7 @@ public sealed partial class MinimapView : Grid
         }
 
         _computer.Invalidate(_editor.Document.Current, edit.Offset, edit.Length);
+        RequestExactIfNeeded();
         QueueDraw();
     }
 
@@ -224,7 +298,17 @@ public sealed partial class MinimapView : Grid
             ? MinimapComputer.Around(snapshot.Length, PixelRows, _editor.Layout, _editor.TopRow, _editor.VisibleRows)
             : MinimapComputer.Whole(snapshot.Length, PixelRows, _editor.BytesPerRow);
         _computer.Start(snapshot, first, rowBytes, count, force);
+        RequestExactIfNeeded();
         QueueDraw();
+    }
+
+    /// <summary>設定「正確に計算」がオンで、今の割り当てがまだ正確でなければ、ウィンドウに計算を頼む (仕様 5)。</summary>
+    internal void RequestExactIfNeeded()
+    {
+        if (ExactWanted && _computer.NeedsExact)
+        {
+            ExactNeeded?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void QueueDraw()
@@ -303,10 +387,17 @@ public sealed partial class MinimapView : Grid
         SchemeColor back = BackgroundColor();
         SchemeColor gray = ThemeColor("SystemColorGrayTextColor");
         bool dark = ActualTheme == ElementTheme.Dark;
+        bool byteTheme = _content == MinimapContent.ByteTheme;
+        if (byteTheme)
+        {
+            UpdateByteColors(dark, back);
+        }
+
         for (int y = 0; y < height; y++)
         {
             int row = _computer.RowCount == 0 ? -1 : (int)((long)y * _computer.RowCount / height);
             MinimapStats? stats = row >= 0 ? _computer.Row(row) : null;
+            ReadOnlySpan<byte> rowBytes = byteTheme && stats is not null ? _computer.RowBytesOf(row) : [];
             for (int x = 0; x < width; x++)
             {
                 SchemeColor c = back;
@@ -326,6 +417,14 @@ public sealed partial class MinimapView : Grid
                 {
                     // 読み取れない範囲を含むピクセル行は斜線の模様 (「エラー」)。
                     c = gray;
+                }
+                else if (byteTheme)
+                {
+                    // バイトテーマ (「周辺」のときだけ): 各バイトを 1 ピクセルとし、バイトテーマの色で描く (仕様 3)。
+                    if (x < barArea && x < rowBytes.Length)
+                    {
+                        c = _byteColors[rowBytes[x]];
+                    }
                 }
                 else if (x < barArea)
                 {
@@ -347,6 +446,26 @@ public sealed partial class MinimapView : Grid
 
         _bitmap.Invalidate();
         UpdateMarks();
+    }
+
+    /// <summary>
+    /// バイトテーマの 256 色 (テーマ・ライト / ダーク・ハイコントラストが変わったときだけ作り直す)。ハイコントラストでは色を使わず、
+    /// <c>00</c> 以外を WindowText で描く (仕様 4)。
+    /// </summary>
+    private void UpdateByteColors(bool dark, SchemeColor back)
+    {
+        if (_byteColorsKey is { } key && ReferenceEquals(key.Theme, _byteTheme) && key.Dark == dark && key.HighContrast == HighContrast)
+        {
+            return;
+        }
+
+        SchemeColor text = ThemeColor("SystemColorWindowTextColor");
+        for (int b = 0; b < 256; b++)
+        {
+            _byteColors[b] = HighContrast ? (b == 0 ? back : text) : MinimapComputer.ByteColor(_byteTheme, (byte)b, dark);
+        }
+
+        _byteColorsKey = (_byteTheme, dark, HighContrast);
     }
 
     private SchemeColor PixelColor(MinimapStats stats, int x, int barArea, bool dark, SchemeColor back)
@@ -392,7 +511,11 @@ public sealed partial class MinimapView : Grid
         Canvas.SetTop(_viewport, top);
         _viewport.Width = ActualWidth;
         _viewport.Height = Math.Max(2, bottom - top);
-        _placedMarks.Add(("viewport", top, Math.Max(2, bottom - top)));
+        _viewport.Visibility = ShowViewport ? Visibility.Visible : Visibility.Collapsed;
+        if (ShowViewport)
+        {
+            _placedMarks.Add(("viewport", top, Math.Max(2, bottom - top)));
+        }
 
         if (marks.ShowSelection && _editor.HasSelection)
         {
@@ -417,7 +540,7 @@ public sealed partial class MinimapView : Grid
         {
             foreach ((long offset, Brush brush) in marks.Bookmarks)
             {
-                Place(ref used, left, Y(offset) - 2, band, 5, brush, "bookmark", isLine: false, triangle: true);
+                Place(ref used, left, Y(offset) - 2, band, 5, brush, "bookmark", isLine: false, MarkShape.Triangle);
             }
         }
 
@@ -432,10 +555,23 @@ public sealed partial class MinimapView : Grid
 
         if (marks.ShowDifferences)
         {
-            foreach ((long offset, long length) in marks.Differences)
+            // 差分の種類ごとの模様 (仕様 6): 変更は塗りつぶし、挿入は斜線、削除 (この側では長さ 0 の位置) は点。
+            foreach ((long offset, long length, DiffKind kind) in marks.Differences)
             {
                 (double t, double b) = Span(offset, offset + length);
-                Place(ref used, left, t, band, Math.Max(1, b - t), marks.DifferenceBrush, "difference", isLine: false);
+                switch (kind)
+                {
+                    case DiffKind.Inserted:
+                        Place(ref used, left, t, band, Math.Max(2, b - t), HatchOf(marks.DifferenceBrush), "difference-inserted", isLine: false);
+                        break;
+                    case DiffKind.Deleted:
+                        Place(ref used, left + 1, Y(offset) - 2, band - 2, band - 2, marks.DifferenceBrush, "difference-deleted", isLine: false,
+                            MarkShape.Dot);
+                        break;
+                    default:
+                        Place(ref used, left, t, band, Math.Max(1, b - t), marks.DifferenceBrush, "difference-changed", isLine: false);
+                        break;
+                }
             }
         }
 
@@ -452,18 +588,65 @@ public sealed partial class MinimapView : Grid
 
     private readonly List<(string Kind, double Top, double Height)> _placedMarks = [];
 
-    private void Place(ref int used, double x, double y, double width, double height, Brush brush, string kind, bool isLine, bool triangle = false)
+    /// <summary>印の形 (仕様 6)。</summary>
+    private enum MarkShape
+    {
+        Rectangle,
+        Triangle,
+        Dot,
+    }
+
+    private static MarkShape ShapeOf(Shape shape) => shape switch
+    {
+        Polygon => MarkShape.Triangle,
+        Ellipse => MarkShape.Dot,
+        _ => MarkShape.Rectangle,
+    };
+
+    /// <summary>斜線の模様のブラシ (差分の「挿入」)。元のブラシが変わったときだけ作り直す。</summary>
+    private Brush HatchOf(Brush source)
+    {
+        if (!ReferenceEquals(source, _hatchSource) || _hatch is null)
+        {
+            SchemeColor gray = ThemeColor("SystemColorGrayTextColor");
+            Windows.UI.Color color = source is SolidColorBrush solid ? solid.Color : Microsoft.UI.ColorHelper.FromArgb(gray.A, gray.R, gray.G, gray.B);
+            Windows.UI.Color clear = Microsoft.UI.ColorHelper.FromArgb(0, color.R, color.G, color.B);
+            _hatch = new LinearGradientBrush
+            {
+                MappingMode = BrushMappingMode.Absolute,
+                StartPoint = new Windows.Foundation.Point(0, 0),
+                EndPoint = new Windows.Foundation.Point(3, 3),
+                SpreadMethod = GradientSpreadMethod.Repeat,
+                GradientStops =
+                {
+                    new GradientStop { Color = color, Offset = 0 },
+                    new GradientStop { Color = color, Offset = 0.5 },
+                    new GradientStop { Color = clear, Offset = 0.5 },
+                    new GradientStop { Color = clear, Offset = 1 },
+                },
+            };
+            _hatchSource = source;
+        }
+
+        return _hatch;
+    }
+
+    private void Place(ref int used, double x, double y, double width, double height, Brush brush, string kind, bool isLine,
+        MarkShape form = MarkShape.Rectangle)
     {
         Shape shape;
-        if (used < _markShapes.Count && (_markShapes[used] is Polygon) == triangle)
+        if (used < _markShapes.Count && ShapeOf(_markShapes[used]) == form)
         {
             shape = _markShapes[used];
         }
         else
         {
-            shape = triangle
-                ? new Polygon { IsHitTestVisible = false, Points = { new(0, 0), new(width, height / 2), new(0, height) } }
-                : new Rectangle { IsHitTestVisible = false };
+            shape = form switch
+            {
+                MarkShape.Triangle => new Polygon { IsHitTestVisible = false, Points = { new(0, 0), new(width, height / 2), new(0, height) } },
+                MarkShape.Dot => new Ellipse { IsHitTestVisible = false },
+                _ => new Rectangle { IsHitTestVisible = false },
+            };
             if (used < _markShapes.Count)
             {
                 _marks.Children.Remove(_markShapes[used]);
@@ -480,7 +663,7 @@ public sealed partial class MinimapView : Grid
         used++;
         shape.Visibility = Visibility.Visible;
         shape.Fill = brush;
-        if (shape is Rectangle)
+        if (shape is Rectangle or Ellipse)
         {
             shape.Width = width;
             shape.Height = height;
@@ -524,9 +707,20 @@ public sealed partial class MinimapView : Grid
             return;
         }
 
+        if (point.Position.X < ResizeGrip && Parent is UIElement parent)
+        {
+            // 左の境界のドラッグで幅を変える (仕様 1)。幅が変わると自分の座標がずれるので、親の座標で測る。
+            _resizing = true;
+            _resizeStartX = e.GetCurrentPoint(parent).Position.X;
+            _resizeStartWidth = ActualWidth;
+            CapturePointer(e.Pointer);
+            e.Handled = true;
+            return;
+        }
+
         double y = point.Position.Y;
         double top = Canvas.GetTop(_viewport);
-        if (y >= top && y <= top + _viewport.Height)
+        if (ShowViewport && y >= top && y <= top + _viewport.Height)
         {
             // 表示中の範囲の枠のドラッグ: カーソルを動かさずにスクロールする。
             _draggingViewport = true;
@@ -542,7 +736,21 @@ public sealed partial class MinimapView : Grid
 
     private void OnPointerMoved(object sender, PointerRoutedEventArgs e)
     {
-        double y = e.GetCurrentPoint(this).Position.Y;
+        if (_resizing)
+        {
+            if (Parent is UIElement parent)
+            {
+                ResizeTo(_resizeStartWidth + _resizeStartX - e.GetCurrentPoint(parent).Position.X);
+            }
+
+            return;
+        }
+
+        Windows.Foundation.Point position = e.GetCurrentPoint(this).Position;
+
+        // 左の境界では左右の矢印のカーソルにする (仕様 1)。
+        ProtectedCursor = position.X < ResizeGrip ? _resizeCursor : null;
+        double y = position.Y;
         if (_draggingViewport && _editor is not null)
         {
             int row = RowAt(y - _dragOffset);
@@ -556,6 +764,23 @@ public sealed partial class MinimapView : Grid
 
         ShowToolTipAt(y);
     }
+
+    /// <summary>幅を変える (40〜200 epx。仕様 1)。境界のドラッグとテスト用の命令から呼ぶ。</summary>
+    internal void ResizeTo(double width) => Width = Math.Round(Math.Clamp(width, MinimumWidth, MaximumWidth));
+
+    /// <summary>境界のドラッグを終えた: 幅を設定に保存してもらう (仕様 1・9)。テスト用の命令からも呼ぶ。</summary>
+    internal void EndResize()
+    {
+        if (_resizing)
+        {
+            _resizing = false;
+            ProtectedCursor = null;
+            WidthCommitted?.Invoke(this, Width);
+        }
+    }
+
+    /// <summary>境界のドラッグを始めたのと同じ状態にする (テスト用の命令から呼ぶ)。</summary>
+    internal void BeginResizeForTest() => _resizing = true;
 
     /// <summary>
     /// クリック: その位置にカーソルを移し、ジャンプとして表示する (VIEW-34。ジャンプ履歴に記録する)。テスト用の命令からも呼ぶ。
@@ -637,12 +862,22 @@ public sealed partial class MinimapView : Grid
     {
         var rows = new System.Text.Json.Nodes.JsonArray();
         bool dark = ActualTheme == ElementTheme.Dark;
+        bool byteTheme = _content == MinimapContent.ByteTheme;
+        if (byteTheme)
+        {
+            UpdateByteColors(dark, BackgroundColor());
+        }
+
         for (int i = 0; i < _computer.RowCount; i++)
         {
             (long start, long length) = _computer.RangeOf(i);
             MinimapStats? s = _computer.Row(i);
             rows.Add(new System.Text.Json.Nodes.JsonObject
             {
+                // バイトテーマ: ピクセル行の各ピクセル (= 各バイト) の色。
+                ["pixels"] = byteTheme && s is not null
+                    ? new System.Text.Json.Nodes.JsonArray([.. _computer.RowBytesOf(i).ToArray().Select(b => (System.Text.Json.Nodes.JsonNode?)_byteColors[b].ToString())])
+                    : null,
                 ["start"] = start,
                 ["length"] = length,
                 ["value"] = s?.ValueOf(_content),
@@ -657,6 +892,7 @@ public sealed partial class MinimapView : Grid
         {
             ["visible"] = Visibility == Visibility.Visible,
             ["width"] = ActualWidth,
+            ["requestedWidth"] = Width,
             ["height"] = ActualHeight,
             ["content"] = _content.ToString(),
             ["range"] = _range.ToString(),
@@ -686,7 +922,7 @@ internal sealed record MinimapMarks(
     IReadOnlyList<long> Search,
     IReadOnlyList<(long Offset, Brush Brush)> Bookmarks,
     IReadOnlyList<(long Offset, long Length)> Modified,
-    IReadOnlyList<(long Offset, long Length)> Differences,
+    IReadOnlyList<(long Offset, long Length, DiffKind Kind)> Differences,
     Brush CursorBrush,
     Brush Selection,
     Brush SearchBrush,

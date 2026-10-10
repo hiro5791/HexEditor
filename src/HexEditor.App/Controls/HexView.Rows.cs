@@ -15,7 +15,7 @@ namespace HexEditor.App.Controls;
 /// <summary>
 /// Hex ビューの行の要素 (VIEW-01 の仕様 2・8、VIEW-04 の仕様 3)。1 行を 1 つの TextBlock (色の違う区間ごとの Run) で描き、下線・枠・模様は
 /// 図形で重ねる。重ねる順は VIEW-17 の仕様 5 の表に従う: 奥の層 (層 12〜16: バイトテーマの背景・現在行・レコードの交互色・列の交互色) は
-/// 行の下の面 (<see cref="RowVisual.Under"/>) に四角形で、層 7〜11 (ブックマークなど) はその上の範囲の強調の面 (HexView.Highlights.cs) に、
+/// 行の下の面 (<see cref="RowVisual.Under"/>。合成の図形の層 <see cref="SpriteLayer"/>) に四角形で、層 7〜11 (ブックマークなど) はその上の範囲の強調の面 (HexView.Highlights.cs) に、
 /// 層 2〜5 (選択範囲・検索の一致) は行の文字の TextHighlighter で描く。
 /// </summary>
 public sealed partial class HexView
@@ -121,6 +121,9 @@ public sealed partial class HexView
         private Brush?[] _ruleHex = [];
         private Brush?[] _ruleText = [];
 
+        /// <summary>セルごとの手前の層 (7〜11) の背景 (文字色のコントラストの規則に使う。VIEW-17 の仕様 9)。</summary>
+        private Brush?[] _layerBack = [];
+
         // そのバイトの後ろ (右) に削除によって詰まった境界がある (VIEW-15 の仕様 5)。
         private bool[] _deleted = [];
 
@@ -135,7 +138,6 @@ public sealed partial class HexView
         private RowFrame _frame;
         private readonly List<Path> _hatches = [];
         private readonly List<Rectangle> _bars = [];
-        private readonly List<Rectangle> _underBars = [];
         private readonly List<Line> _lines = [];
         private readonly List<TextBlock> _glyphs = [];
         private TextBlock? _separatorLabel;
@@ -147,23 +149,17 @@ public sealed partial class HexView
         // オブジェクトの追跡のために GC が増え、1 行のバイト数が多いとフレームが遅れる。VIEW-04 の仕様 3)。
         private readonly List<RunSlot> _runs = [];
         private RunBuilder? _builder;
-        private readonly Rectangle _rowBack;
         private int _barsUsed;
-        private int _underUsed;
         private int _linesUsed;
         private int _glyphsUsed;
 
-        public RowVisual(FontFamily font, double fontSize, double rowHeight, int spacing)
+        public RowVisual(FontFamily font, double fontSize, double rowHeight, int spacing, SpriteLayer under)
         {
             Offset = CreateText();
             Content = CreateText();
-            _rowBack = new Rectangle { IsHitTestVisible = false, Visibility = Visibility.Collapsed };
-            AutomationProperties.SetAccessibilityView(_rowBack, AccessibilityView.Raw);
             Container = new Canvas();
             Container.Children.Add(Content);
-            Under = new Canvas { IsHitTestVisible = false };
-            AutomationProperties.SetAccessibilityView(Under, AccessibilityView.Raw);
-            Under.Children.Add(_rowBack);
+            Under = under;
             ApplyFont(font, fontSize, rowHeight, spacing);
         }
 
@@ -174,8 +170,11 @@ public sealed partial class HexView
         /// <summary>内容の TextBlock と、下線・枠・模様の図形を入れる。</summary>
         public Canvas Container { get; }
 
-        /// <summary>行の下の面 (範囲の強調の面より奥): 層 12〜16 の背景 (バイトテーマ・現在行・レコードの交互色・列の交互色)。</summary>
-        public Canvas Under { get; }
+        /// <summary>
+        /// 行の下の面 (範囲の強調の面より奥): 層 12〜16 の背景 (バイトテーマ・現在行・レコードの交互色・列の交互色)。合成の図形で描く
+        /// (XAML の要素を作らない。VIEW-04)。
+        /// </summary>
+        public SpriteLayer Under { get; }
 
         public long OffsetRowStart { get; private set; } = long.MinValue;
 
@@ -253,7 +252,7 @@ public sealed partial class HexView
                 if (Container.Visibility != v)
                 {
                     Container.Visibility = v;
-                    Under.Visibility = v;
+                    Under.IsVisible = value;
                 }
 
                 if (Offset.Visibility != v)
@@ -303,7 +302,7 @@ public sealed partial class HexView
                 Top = y;
                 Canvas.SetTop(Offset, y);
                 Canvas.SetTop(Container, y);
-                Canvas.SetTop(Under, y);
+                Under.SetTop(y);
             }
         }
 
@@ -328,7 +327,8 @@ public sealed partial class HexView
         public bool Update(in RowFrame frame, long rowStart, int lead, int count, ReadOnlySpan<byte> bytes, ReadOnlySpan<ByteState> states,
             ReadOnlySpan<ChangeMark> marks, ReadOnlySpan<bool> matched, ReadOnlySpan<bool> focus, ReadOnlySpan<bool> deleted, TextCell[][] texts,
             int textFrom, CellMode mode, ReadOnlySpan<bool> selected, bool currentRow, RowDecor decor, Palette palette, double cellWidth,
-            double rowHeight, Func<string, double> measure, ReadOnlySpan<Brush?> ruleHex = default, ReadOnlySpan<Brush?> ruleText = default)
+            double rowHeight, Func<string, double> measure, ReadOnlySpan<Brush?> ruleHex = default, ReadOnlySpan<Brush?> ruleText = default,
+            ReadOnlySpan<Brush?> layerBack = default)
         {
             int columns = Math.Max(1, frame.Columns.Format.ShownTextColumns);
             if (_count == count && _lead == lead && ContentRowStart == rowStart && _mode == mode && _frame == frame
@@ -336,7 +336,7 @@ public sealed partial class HexView
                 && bytes[..count].SequenceEqual(_bytes.AsSpan(0, count)) && states[..count].SequenceEqual(_states.AsSpan(0, count))
                 && marks[..count].SequenceEqual(_marks.AsSpan(0, count)) && matched[..count].SequenceEqual(_matched.AsSpan(0, count))
                 && focus[..count].SequenceEqual(_focus.AsSpan(0, count)) && deleted[..count].SequenceEqual(_deleted.AsSpan(0, count))
-                && SameRule(ruleHex, _ruleHex, count) && SameRule(ruleText, _ruleText, count)
+                && SameRule(ruleHex, _ruleHex, count) && SameRule(ruleText, _ruleText, count) && SameRule(layerBack, _layerBack, count)
                 && SameText(texts, textFrom, count, columns))
             {
                 return false;
@@ -378,10 +378,12 @@ public sealed partial class HexView
             {
                 _ruleHex = new Brush?[b];
                 _ruleText = new Brush?[b];
+                _layerBack = new Brush?[b];
             }
 
             CopyRule(ruleHex, _ruleHex, count);
             CopyRule(ruleText, _ruleText, count);
+            CopyRule(layerBack, _layerBack, count);
 
             bytes[..count].CopyTo(_bytes);
             states[..count].CopyTo(_states);
@@ -399,7 +401,7 @@ public sealed partial class HexView
             }
 
             _barsUsed = 0;
-            _underUsed = 0;
+            Under.Begin();
             _linesUsed = 0;
             _glyphsUsed = 0;
             Lines.Clear();
@@ -543,6 +545,46 @@ public sealed partial class HexView
         }
 
         // ---- 文字 ----
+
+        /// <summary>
+        /// 文字色を、セルの背景に対して読める色にする (VIEW-17 の仕様 9)。色を付ける層の背景 (手前の層 7〜11、バイトテーマの背景) があるセルが
+        /// 対象で、背景はそれと行の下の面の層 (14 現在行、15 レコードの交互色、16 列の交互色) を重ねたもの。選択範囲は Highlight で同じ規則を使う。
+        /// </summary>
+        private Brush ReadableFore(Brush fore, int c, bool text, in RowFrame frame, Palette palette)
+        {
+            if (palette.HighContrast)
+            {
+                return fore;
+            }
+
+            Brush? top = c < _layerBack.Length ? _layerBack[c] : null;
+            Brush? under = null;
+            if (frame.Theme is { AnyBackground: true } theme && frame.Columns.Format.IsHexBytes && c < Count
+                && KindAt(c) is CellKind.Normal or CellKind.Modified && theme.Back[_bytes[c]] is { } themeBack)
+            {
+                under = themeBack;
+            }
+            else if (top is null)
+            {
+                // 色を付ける層の背景がなければ (通常の背景・現在行・交互色は配色で文字色と組にして決めた色)、置き換えない。薄く表示する文字
+                // (ゼロのグレー表示、読み込み中の仮表示、色付けルールの「ゼロを薄く」) は、わざと薄くしているため。
+                return fore;
+            }
+            else if (_currentRow)
+            {
+                under = palette.CurrentRow;
+            }
+            else if (frame.Records is { } records && c >= _lead && records.IsOdd(ContentRowStart + c))
+            {
+                under = palette.RecordAlternate;
+            }
+            else if (frame.Style.AlternateColumns && (!text || frame.Style.AlternateText) && frame.Columns.Format.GroupOf(c) % 2 == 1)
+            {
+                under = palette.Alternate;
+            }
+
+            return palette.Readable(fore, under, top, text ? palette.TextText : palette.HexText);
+        }
 
         /// <summary>バイトテーマの文字色 (層 12。値で決まる層なので、読めるバイトだけ。VIEW-17 の仕様 7)。</summary>
         private Brush? ThemeFore(int c) => _frame.Theme is { } theme && c < Count ? theme.Fore[_bytes[c]] : null;
@@ -725,7 +767,7 @@ public sealed partial class HexView
             {
                 int c = format.ByteOfSlot(s, valid);
                 string cell = HexCellText(c);
-                Brush fore = HexForeground(c, palette);
+                Brush fore = ReadableFore(HexForeground(c, palette), c, text: false, frame, palette);
                 if (frame.Proportional)
                 {
                     // 等幅でないフォント: 1 文字ずつセルの中央に描き、行には空白を入れる (UI-29 の仕様 2)。
@@ -786,7 +828,7 @@ public sealed partial class HexView
                 {
                     string text = CellFormatter.Format(format.CellFormat, _bytes.AsSpan(first, unit), format.BigEndian, frame.Style.SpacePad,
                         frame.Style.Lowercase);
-                    Brush fore = CellForeground(first, unit, palette);
+                    Brush fore = ReadableFore(CellForeground(first, unit, palette), first, text: false, frame, palette);
                     AppendCellText(frame, text, fore, startChar, cellWidth, rowHeight, measure, builder, first);
                     for (int c = first; c <= last; c++)
                     {
@@ -812,7 +854,7 @@ public sealed partial class HexView
                     for (int c = first; c <= last; c++)
                     {
                         string text = HexCellText(c);
-                        Brush fore = HexForeground(c, palette);
+                        Brush fore = ReadableFore(HexForeground(c, palette), c, text: false, frame, palette);
                         AppendCellText(frame, text, fore, startChar + used, cellWidth, rowHeight, measure, builder, c);
                         used += RowFormat.HexCellChars;
                         bool partial = c >= _lead && c < valid;
@@ -866,7 +908,7 @@ public sealed partial class HexView
             for (int c = 0; c < count; c++)
             {
                 string cell = TextCellText(column, c);
-                Brush fore = TextForeground(column, c, palette);
+                Brush fore = ReadableFore(TextForeground(column, c, palette), c, text: true, frame, palette);
                 TextCell decoded = TextAt(column, c);
                 double left = format.TextIndex(column, c) * cellWidth;
 
@@ -1090,7 +1132,7 @@ public sealed partial class HexView
             {
                 bool hexActive = frame.Active == ActiveColumn.Hex;
                 Brush hexBack = hexActive ? palette.Selection : palette.SelectionInactive;
-                Brush hexFore = hexActive ? palette.SelectionText : palette.SelectionInactiveText;
+                Brush hexFore = palette.Readable(hexActive ? palette.SelectionText : palette.SelectionInactiveText, null, hexBack, palette.HexText);
                 TextHighlighter? hex = columns.ShowHex ? TakeHighlighter(hexBack, hexFore) : null;
                 for (int first = firstSelected; first < Count; first++)
                 {
@@ -1127,7 +1169,7 @@ public sealed partial class HexView
                 {
                     bool active = !hexActive && t == frame.ActiveText;
                     Brush textBack = active ? palette.Selection : palette.SelectionInactive;
-                    Brush textFore = active ? palette.SelectionText : palette.SelectionInactiveText;
+                    Brush textFore = palette.Readable(active ? palette.SelectionText : palette.SelectionInactiveText, null, textBack, palette.TextText);
                     TextHighlighter text = TakeHighlighter(textBack, textFore);
                     for (int first = firstSelected; first < Count; first++)
                     {
@@ -1325,14 +1367,7 @@ public sealed partial class HexView
             // 層 14: 現在行 (VIEW-06 の仕様 1)。ハイコントラストでは背景を塗らず、行の上下に 1 px の線を引く。
             if (_currentRow && !hc)
             {
-                _rowBack.Visibility = Visibility.Visible;
-                _rowBack.Fill = palette.CurrentRow;
-                _rowBack.Width = width;
-                _rowBack.Height = rowHeight;
-            }
-            else
-            {
-                _rowBack.Visibility = Visibility.Collapsed;
+                Under.Fill(palette.CurrentRow, 0, 0, width, rowHeight);
             }
 
             if (_currentRow && hc)
@@ -1389,10 +1424,7 @@ public sealed partial class HexView
                 }
             }
 
-            for (int i = _underUsed; i < _underBars.Count; i++)
-            {
-                _underBars[i].Visibility = Visibility.Collapsed;
-            }
+            Under.End();
         }
 
         /// <summary>Hex 列の [c0, c1] を行の下の面に塗る。<paramref name="contiguousCells"/> ならグループの間の空白も塗る。</summary>
@@ -1414,33 +1446,7 @@ public sealed partial class HexView
             UnderFills.Add((layer, column == 0 ? "text" : "text" + (column + 1), c0, c1, brush));
         }
 
-        private void PlaceUnder(double x, double width, double height, Brush brush)
-        {
-            Rectangle bar;
-            if (_underUsed < _underBars.Count)
-            {
-                bar = _underBars[_underUsed];
-            }
-            else
-            {
-                bar = new Rectangle { IsHitTestVisible = false };
-                AutomationProperties.SetAccessibilityView(bar, AccessibilityView.Raw);
-                _underBars.Add(bar);
-                Under.Children.Add(bar);
-            }
-
-            _underUsed++;
-            bar.Visibility = Visibility.Visible;
-            if (!ReferenceEquals(bar.Fill, brush))
-            {
-                bar.Fill = brush;
-            }
-
-            bar.Width = Math.Max(0, width);
-            bar.Height = height;
-            Canvas.SetLeft(bar, x);
-            Canvas.SetTop(bar, 0);
-        }
+        private void PlaceUnder(double x, double width, double height, Brush brush) => Under.Fill(brush, x, 0, width, height);
 
         // ---- 下線・枠・線 ----
 

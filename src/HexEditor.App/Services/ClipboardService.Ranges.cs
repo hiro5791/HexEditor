@@ -23,16 +23,36 @@ public sealed partial class ClipboardService
     public byte[]? LastCopiedRanges { get; private set; }
 
     /// <summary>
-    /// マルチ選択・矩形をコピーする。上限 (既定 64 MiB) を超える場合はアプリ内でだけ貼れる参照を作れないため、何も入れずに
-    /// <see cref="ClipboardPlan.InAppOnly"/> を返す (呼び出し側は大きすぎる旨を知らせる)。
+    /// マルチ選択・矩形をコピーする。上限 (既定 64 MiB) を超える場合は、要素を参照で持つアプリ内クリップボード (EDIT-24) に入れ、システムの
+    /// クリップボードには `HexEditor.Meta` とテキストの 1 行だけを入れて <see cref="ClipboardPlan.InAppOnly"/> を返す (EDIT-22 の仕様 5・8。
+    /// 呼び出し側は InfoBar と「ファイルに書き出す」を出す)。矩形の行数がマルチ選択の要素数の上限を超える場合は要素の一覧を作らずに何もせず null。
     /// </summary>
-    public async Task<ClipboardPlan> CopyRangesAsync(EditorState editor)
+    public async Task<ClipboardPlan?> CopyRangesAsync(EditorState editor)
     {
         SelectionSnapshot selection = editor.CaptureSelection();
         long total = selection.TotalLength;
         LastCopiedRanges = null;
+        if (selection.Rectangle is not null && selection.Count > editor.MaxSelectionElements)
+        {
+            return null;
+        }
+
         if (total > SystemLimit)
         {
+            List<ByteRange> parts = [.. selection.Ranges];
+            InAppClip clip = InApp.CopyRanges(editor.Document, parts);
+            var inAppMeta = new JsonObject
+            {
+                ["instance"] = InstanceId,
+                ["serial"] = clip.Serial,
+                ["offset"] = selection.Bounds.Start,
+                ["length"] = total,
+                ["name"] = editor.Document.Source.DisplayName,
+            };
+            var inAppPackage = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
+            inAppPackage.SetData(MetaFormat, inAppMeta.ToJsonString());
+            inAppPackage.SetText(Loc.Format("Clipboard_TooLarge", total.ToString("N0")));
+            SetContentWithRetry(inAppPackage);
             return new ClipboardPlan(false, ClipboardTextKind.TooLargeLine);
         }
 
@@ -156,6 +176,31 @@ public sealed partial class ClipboardService
         }
 
         // 矩形の貼り付け: 上書き貼り付け (Ctrl+B) は各行を上書き、通常の貼り付けは入力モードに従う。
-        return editor.PasteRectangle(pieces, overwrite || !editor.InsertMode);
+        bool rowsOverwrite = overwrite || !editor.InsertMode;
+        if (editor.RectanglePasteInserts(rowsOverwrite))
+        {
+            // 挿入は長さが変わる操作: 行数の上限 (EDIT-17 の仕様 6) を超えれば行わず、10,000 行を超えれば長時間処理にする。
+            LastRectangleInsertRows = pieces.Count;
+            if (pieces.Count > editor.MaxRectangleRows)
+            {
+                return EditResult.TooManyRows;
+            }
+
+            if (pieces.Count > EditorState.LongRunningElements && LongRectangleInsert is { } longInsert)
+            {
+                return await longInsert(editor, pieces);
+            }
+        }
+
+        return editor.PasteRectangle(pieces, rowsOverwrite);
     }
+
+    /// <summary>直前の貼り付けで、矩形の各行に挿入した (しようとした) 行数。挿入していなければ 0 (UI は行数と注記を示す。EDIT-17 の「画面」)。</summary>
+    public long LastRectangleInsertRows { get; private set; }
+
+    /// <summary>
+    /// 行数の多い (10,000 行を超える) 矩形の挿入の貼り付けを長時間処理で行う (EDIT-17 の「巨大ファイル・長時間処理」)。ウィンドウが設定する。
+    /// 引数は貼り付け先と各行の内容。
+    /// </summary>
+    public Func<EditorState, IReadOnlyList<byte[]>, Task<EditResult>>? LongRectangleInsert { get; set; }
 }

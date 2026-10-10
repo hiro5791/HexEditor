@@ -565,9 +565,17 @@ public sealed class SelectionTests
         await Pointer(app, "move", (target.x - 2, target.y));
         await Pointer(app, "move", target);
 
+        // 挿入位置の近くに効果の文字 (「移動」) が出る (EDIT-18 の「画面」)。
+        JsonObject moving = await app.DocumentAsync();
+        Assert.Equal("move", moving["dropEffect"]!.GetValue<string>());
+        string moveLabel = moving["dropLabel"]!.GetValue<string>();
+        Assert.False(string.IsNullOrEmpty(moveLabel));
+
         // 3. Ctrl を押すと「コピー」の表示になる。
         await Pointer(app, "move", target, ctrl: true);
-        Assert.Equal("copy", (await app.DocumentAsync())["dropEffect"]!.GetValue<string>());
+        JsonObject copying = await app.DocumentAsync();
+        Assert.Equal("copy", copying["dropEffect"]!.GetValue<string>());
+        Assert.NotEqual(moveLabel, copying["dropLabel"]!.GetValue<string>());
         await Pointer(app, "up", target, ctrl: true);
         await app.IdleAsync();
 
@@ -589,7 +597,9 @@ public sealed class SelectionTests
         await Pointer(app, "move", target);
 
         // 3. ポインタは禁止の形 (実際のポインタの代わりに、ビューが示すドロップの効果を読む)。
-        Assert.Equal("none", (await app.DocumentAsync())["dropEffect"]!.GetValue<string>());
+        JsonObject refused = await app.DocumentAsync();
+        Assert.Equal("none", refused["dropEffect"]!.GetValue<string>());
+        Assert.Null(refused["dropLabel"]);
         await Pointer(app, "up", target);
         await app.IdleAsync();
         Assert.Equal(Enumerable.Range(0, 0x40).Select(i => (byte)i), await app.BytesAsync(0, 0x40));

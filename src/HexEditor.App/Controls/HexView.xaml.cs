@@ -644,6 +644,7 @@ public sealed partial class HexView : UserControl
         }
 
         bool ruleColors = FillCellForegrounds(firstOffset, span);
+        bool layerBacks = GatherHighlights(firstOffset, span);
         var columns = new RowColumns(format);
 
         // 選択範囲 (層 2)。マルチ選択・矩形選択は見えている範囲の要素だけを尋ねる (EDIT-06・EDIT-07 の「巨大ファイル」)。
@@ -709,7 +710,8 @@ public sealed partial class HexView : UserControl
                 matched.AsSpan(from, bytesPerRow), focus.AsSpan(from, bytesPerRow), deleted.AsSpan(from, bytesPerRow), _work.Texts, from,
                 mode, selected.AsSpan(from, bytesPerRow),
                 _editor.TopRow + r == cursorRow, decor, _palette, _cellWidth, _rowHeight, MeasureGlyph,
-                ruleColors ? _ruleHexWork.AsSpan(from, bytesPerRow) : default, ruleColors ? _ruleTextWork.AsSpan(from, bytesPerRow) : default))
+                ruleColors ? _ruleHexWork.AsSpan(from, bytesPerRow) : default, ruleColors ? _ruleTextWork.AsSpan(from, bytesPerRow) : default,
+                layerBacks ? _layerBackWork.AsSpan(from, bytesPerRow) : default))
             {
                 rebuilt++;
             }
@@ -830,13 +832,7 @@ public sealed partial class HexView : UserControl
             return null;
         }
 
-        int digits = RecordPositionDigits(view);
-        string position = view.Radix switch
-        {
-            OffsetRadix.Decimal => within.ToString(System.Globalization.CultureInfo.InvariantCulture).PadLeft(digits, '0'),
-            OffsetRadix.Octal => Convert.ToString(within, 8).PadLeft(digits, '0'),
-            _ => within.ToString(view.LowercaseHex ? "x" : "X", System.Globalization.CultureInfo.InvariantCulture).PadLeft(digits, '0'),
-        };
+        string position = RecordLayout.WithinDigits(within, view.Radix, view.LowercaseHex, RecordPositionDigits(view));
         return "#" + index.ToString(System.Globalization.CultureInfo.InvariantCulture) + ":" + position;
     }
 
@@ -901,6 +897,11 @@ public sealed partial class HexView : UserControl
         }
     }
 
+    private SpriteSurface? _sprites;
+
+    /// <summary>背景の面 (行の下の面と範囲の強調の軽い背景。合成の図形)。</summary>
+    private SpriteSurface Sprites => _sprites ??= new SpriteSurface(UnderLayer);
+
     private readonly Dictionary<long, RowVisual> _reuseByStart = [];
     private readonly List<RowVisual?> _reuseOrdered = [];
     private readonly HashSet<RowVisual> _reuseUsed = [];
@@ -909,11 +910,10 @@ public sealed partial class HexView : UserControl
     {
         while (_rows.Count < count)
         {
-            var row = new RowVisual(_font, _fontSize, _rowHeight, _characterSpacing);
+            var row = new RowVisual(_font, _fontSize, _rowHeight, _characterSpacing, Sprites.CreateRowLayer());
             _rows.Add(row);
             OffsetHost.Children.Add(row.Offset);
             RowsLayer.Children.Add(row.Container);
-            UnderLayer.Children.Add(row.Under);
         }
     }
 
@@ -1184,6 +1184,20 @@ public sealed partial class HexView : UserControl
             if (_editor is null)
             {
                 VerticalBar.Maximum = 0;
+                return;
+            }
+
+            if (_editor.PageScrollPosition is { } page)
+            {
+                // ページ単位で表示: スクロールバーは区切り単位で動き、区切りの行数が表示行数より多いときはその中でスクロールする
+                // (VIEW-33 の仕様 4)。位置の数が多いときは行と同じ換算 (VIEW-02 の仕様 2) を使う。
+                long pageScale = ScrollMapping.Scale(page.MaxPosition);
+                VerticalBar.Minimum = 0;
+                VerticalBar.Maximum = pageScale;
+                VerticalBar.SmallChange = 1;
+                VerticalBar.LargeChange = Math.Max(1, _editor.VisibleRows - 1);
+                VerticalBar.ViewportSize = pageScale == 0 ? 1 : Math.Max(1, (double)pageScale / Math.Max(1, page.Sections));
+                VerticalBar.Value = ScrollMapping.ToValue(page.Position, page.MaxPosition);
                 return;
             }
 

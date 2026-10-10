@@ -162,6 +162,34 @@ public sealed class CaseConversionTests
         Assert.Equal(0, doc.History.CurrentIndex);
     }
 
+    [Fact]
+    [Trait(TC, "TC-EDIT-39-01")]
+    public void Ascii_only_conversion_reports_whether_anything_changed()
+    {
+        // 英字のない範囲・すでに大文字の範囲は変わらない (反映せず、元に戻す操作を作らない)。ベクトルの幅を超える長さも調べる。
+        byte[] digits = Encoding.ASCII.GetBytes(new string('7', 100));
+        Assert.False(CaseConversion.ConvertAscii(digits.ToArray(), CaseOperation.Upper));
+        Assert.False(CaseConversion.ConvertAscii(Encoding.ASCII.GetBytes(new string('A', 70)), CaseOperation.Upper));
+        byte[] tail = Encoding.ASCII.GetBytes(new string('A', 70) + "z");
+        Assert.True(CaseConversion.ConvertAscii(tail, CaseOperation.Upper));
+        Assert.Equal((byte)'Z', tail[^1]);
+
+        using Document doc = Doc([.. digits, 0xE9]);
+        var unchanged = new CaseConversionStats();
+        TransformApplier.DisposeAll(CaseConversion.ConvertAll(doc, SelectionRanges.Single(0, doc.Length), CaseOperation.Lower,
+            CaseConversionMode.AsciiOnly, "utf-8", stats: unchanged));
+        Assert.False(unchanged.Changed);
+
+        var changed = new CaseConversionStats();
+        TransformApplier.DisposeAll(CaseConversion.ConvertAll(doc, SelectionRanges.Single(0, doc.Length), CaseOperation.Swap,
+            CaseConversionMode.AsciiOnly, "utf-8", stats: changed));
+        Assert.False(changed.Changed);
+        using Document letters = Doc(Encoding.ASCII.GetBytes("abc"));
+        TransformApplier.DisposeAll(CaseConversion.ConvertAll(letters, SelectionRanges.Single(0, 3), CaseOperation.Swap,
+            CaseConversionMode.AsciiOnly, "utf-8", stats: changed));
+        Assert.True(changed.Changed);
+    }
+
     // ---- 文字コードに従う ----
 
     [Fact]

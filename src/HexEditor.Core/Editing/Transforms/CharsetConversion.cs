@@ -108,6 +108,29 @@ public sealed class CharsetConversionException(CharsetConversionErrorKind kind, 
     public string? Text { get; } = text;
 }
 
+/// <summary>文字コード変換の設定の誤りの種類 (ダイアログの入力欄のエラー。文言は UI がリソースから作る)。</summary>
+public enum CharsetSettingsError
+{
+    /// <summary>文字コードが一覧にない・この環境で使えない。</summary>
+    UnknownEncoding,
+
+    /// <summary>「指定した文字に置き換える」の文字列が変換先で表せない (または空)。</summary>
+    InvalidReplacement,
+}
+
+/// <summary>
+/// 文字コード変換・大文字小文字の変換の設定の誤り (EDIT-38 の「エラー」)。<see cref="Value"/> は問題の文字コードの名前または置き換えの文字列。
+/// </summary>
+public sealed class CharsetSettingsException(CharsetSettingsError error, string value, string paramName, Exception? inner = null)
+    : ArgumentException(error == CharsetSettingsError.UnknownEncoding
+        ? $"Encoding '{value}' is not available."
+        : $"The replacement '{value}' cannot be represented in the target encoding.", paramName, inner)
+{
+    public CharsetSettingsError Error { get; } = error;
+
+    public string Value { get; } = value;
+}
+
 /// <summary>プレビュー (EDIT-38 の仕様 8)。</summary>
 /// <param name="Before">変換前の先頭 256 バイト。</param>
 /// <param name="After">変換後の先頭 (変換前の先頭 256 バイトを変換したもののうち、文字の境界で切った 256 バイトまで。BOM を付ける場合は含む)。</param>
@@ -357,7 +380,7 @@ public static class CharsetConverter
         }
         catch (Exception ex) when (ex is EncoderFallbackException or ArgumentException)
         {
-            throw new ArgumentException($"置き換えの文字列 '{replacement}' は変換先で表せません。", nameof(replacement), ex);
+            throw new CharsetSettingsException(CharsetSettingsError.InvalidReplacement, replacement, nameof(replacement), ex);
         }
     }
 

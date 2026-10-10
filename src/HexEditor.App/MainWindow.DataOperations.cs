@@ -37,6 +37,22 @@ public sealed partial class MainWindow
         return editor.HasSelection ? [new TargetRange(editor.SelectionStart, editor.SelectionLength)] : [];
     }
 
+    /// <summary>
+    /// 要素の一覧を作る操作 (データ演算、文字コード変換など) の前に、矩形の行数が上限を超えていないかを確かめる。超えていれば一覧を作らずに
+    /// InfoBar で知らせて false (EDIT-06 の仕様 6、EDIT-17 の仕様 6)。
+    /// </summary>
+    private bool RangeListAllowed(DocumentViewModel doc, bool changesLength)
+    {
+        if (doc.Editor.RectangleListLimitExceeded(changesLength) is not { } limit)
+        {
+            return true;
+        }
+
+        ShowNotice(Loc.Format("Notice_RectangleListLimit", doc.Editor.SelectedRangeCount.ToString("N0", CultureInfo.CurrentCulture),
+            limit.ToString("N0", CultureInfo.CurrentCulture)), InfoBarSeverity.Warning, doc);
+        return false;
+    }
+
     /// <summary>コマンド ID の演算名の部分 (<c>data.op.byteSwap16</c>)。</summary>
     internal static string DataOperationCommandId(DataOperationKind kind) =>
         "data.op." + char.ToLowerInvariant(kind.ToString()[0]) + kind.ToString()[1..];
@@ -45,7 +61,7 @@ public sealed partial class MainWindow
     {
         Commands.Register("data.operation", () => DataOperationAsync(null), () => NeedsEditable(DataTargetReason));
         Commands.Register("data.repeatOperation", RepeatDataOperationAsync, () => NeedsEditable(d =>
-            s_lastDataOperation is null ? Loc.Get("DataOp_NoPrevious") : SelectionRangesOf(d).Count == 0 ? Loc.Get("Command_NoSelection") : null));
+            s_lastDataOperation is null ? Loc.Get("DataOp_NoPrevious") : !d.Editor.HasSelection ? Loc.Get("Command_NoSelection") : null));
 
         // コマンドパレット「データ演算: <演算名>」(演算ごとのコマンド)。並べ替えは選択範囲にそのまま実行する (EDIT-35 の「呼び出し」)。
         foreach (DataOperationKind kind in Enum.GetValues<DataOperationKind>())
@@ -121,7 +137,7 @@ public sealed partial class MainWindow
     /// <summary>データ演算ダイアログを開く。並べ替えのコマンドは選択範囲があればダイアログを開かずに実行する。</summary>
     private async Task DataOperationAsync(DataOperationKind? kind)
     {
-        if (Vm.Selected is not { } doc || !EnsureEditable(doc))
+        if (Vm.Selected is not { } doc || !EnsureEditable(doc) || !RangeListAllowed(doc, changesLength: false))
         {
             return;
         }
@@ -168,7 +184,8 @@ public sealed partial class MainWindow
     /// <summary>「前回のデータ演算を繰り返す」: 最後の演算と設定を、今の選択範囲にダイアログを開かずに実行する (EDIT-31 の仕様 11)。</summary>
     private async Task RepeatDataOperationAsync()
     {
-        if (Vm.Selected is not { } doc || s_lastDataOperation is not { } last || !EnsureEditable(doc))
+        if (Vm.Selected is not { } doc || s_lastDataOperation is not { } last || !EnsureEditable(doc)
+            || !RangeListAllowed(doc, changesLength: last.Spec.Category == DataOperationCategory.BitInsertDelete))
         {
             return;
         }
@@ -203,10 +220,11 @@ public sealed partial class MainWindow
             spec = spec with { Key = key };
         }
 
-        s_lastDataOperation = request with { Spec = spec, KeySource = null };
+        // 「前回のデータ演算を繰り返す」で使うのは、設定の確認を通った演算だけ (EDIT-31 の仕様 11)。
+        DataOperationRequest remembered = request with { Spec = spec, KeySource = null };
         if (spec.Category == DataOperationCategory.BitInsertDelete)
         {
-            await RunBitShiftAsync(doc, spec, request.Ranges);
+            await RunBitShiftAsync(doc, spec, request.Ranges, () => s_lastDataOperation = remembered);
             return;
         }
 
@@ -216,6 +234,8 @@ public sealed partial class MainWindow
             ShowNotice(Loc.Get("DataOp_Error_" + error), InfoBarSeverity.Error, doc);
             return;
         }
+
+        s_lastDataOperation = remembered;
 
         // 値が変わらない演算は実行しない (EDIT-31 の「巨大ファイル」5)。
         if (spec.IsIdentity())
@@ -389,7 +409,8 @@ public sealed partial class MainWindow
 
     // ---- ビットの挿入・削除 (EDIT-37) ----
 
-    private async Task RunBitShiftAsync(DocumentViewModel doc, DataOperationSpec spec, IReadOnlyList<TargetRange> ranges)
+    /// <param name="validated">設定の確認を通ったときに呼ぶ (前回の演算として記憶する)。</param>
+    private async Task RunBitShiftAsync(DocumentViewModel doc, DataOperationSpec spec, IReadOnlyList<TargetRange> ranges, Action validated)
     {
         Document document = doc.Document;
         TargetRange? region = ranges.FirstOrDefault(r => r.Offset <= spec.BitOffset && spec.BitOffset < r.End);
@@ -400,6 +421,8 @@ public sealed partial class MainWindow
             ShowNotice(Loc.Get("DataOp_Error_" + info.Error), InfoBarSeverity.Error, doc);
             return;
         }
+
+        validated();
 
         // 1 GiB を超えて書き直す場合は確認する (EDIT-37 の「巨大ファイル」)。
         if (info.RewriteBytes > BitShifter.ConfirmLimit)

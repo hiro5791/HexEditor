@@ -106,4 +106,28 @@ public sealed class ViewPresetTests
         Assert.NotNull(state["error"]);
         Assert.Equal(afterFuture, state["presets"]!.AsArray().Select(p => p!.GetValue<string>()));
     });
+
+    /// <summary>VIEW-42 の仕様 6・「エラー」: 既存のプリセットの名前と条件を編集できる。インポートで上限を超える場合は切り捨てずに知らせる。</summary>
+    [Fact]
+    public Task Presets_can_be_edited_and_imports_over_the_limit_are_refused() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await SavePresetAsync(app, "Old", ".gb");
+        await SavePresetAsync(app, "Other", string.Empty);
+        JsonObject state = await app.SendAsync("viewPresets", new JsonObject { ["edit"] = "Old", ["name"] = "NES", ["extensions"] = ".nes;.fds" });
+        Assert.Equal(["NES", "Other"], state["presets"]!.AsArray().Select(p => p!.GetValue<string>()));
+        Assert.Equal(".nes;.fds", state["extensions"]![0]!.GetValue<string>());
+
+        // ほかのプリセットと同じ名前には変えない。
+        state = await app.SendAsync("viewPresets", new JsonObject { ["edit"] = "NES", ["name"] = "other" });
+        Assert.Equal(["NES", "Other"], state["presets"]!.AsArray().Select(p => p!.GetValue<string>()));
+
+        // 99 個を足すと 101 個になる: 読み込まず、理由を示す。
+        string many = Path.Combine(ctx.Root, "many.json");
+        var presets = new JsonArray([.. Enumerable.Range(0, 99).Select(i => (JsonNode?)new JsonObject { ["name"] = "P" + i, ["view"] = new JsonObject() })]);
+        File.WriteAllText(many, new JsonObject { ["presets"] = presets }.ToJsonString());
+        state = await app.SendAsync("viewPresets", new JsonObject { ["import"] = many });
+        Assert.Contains("101", state["error"]!.GetValue<string>());
+        Assert.Equal(2, state["presets"]!.AsArray().Count);
+    });
 }

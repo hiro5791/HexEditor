@@ -42,7 +42,8 @@ public sealed partial class Document
 
         PieceTree before = Current.Tree;
         long length = before.Length;
-        var pieces = new List<Piece>();
+        var pieces = new List<Piece>((int)Math.Min(before.PieceCount + 16, 1 << 20));
+        var walker = new PieceTree.Walker(before);
         var patterns = new Dictionary<byte[], long>(ReferenceEqualityComparer.Instance);
         long cursor = 0, count = 0, first = -1, lastEnd = 0;
         foreach (ContentEdit edit in edits)
@@ -59,7 +60,7 @@ public sealed partial class Document
                 operation?.CancellationToken.ThrowIfCancellationRequested();
             }
 
-            AddRange(before, cursor, edit.Offset - cursor, pieces);
+            walker.CopyTo(edit.Offset, pieces);
             if (edit.Content is { Length: > 0 } content)
             {
                 pieces.Add(PieceOf(content, patterns));
@@ -71,6 +72,7 @@ public sealed partial class Document
             }
 
             cursor = edit.Offset + edit.RemoveLength;
+            walker.SkipTo(cursor);
             lastEnd = cursor;
             count++;
             operation?.Report(edit.Offset);
@@ -81,7 +83,7 @@ public sealed partial class Document
             return new PreparedReplacement(before, before, 0, 0, 0, 0);
         }
 
-        AddRange(before, cursor, length - cursor, pieces);
+        walker.CopyTo(length, pieces);
         PieceTree tree = PieceTree.Build(pieces);
         if (tree.Length != length && !CanResize)
         {

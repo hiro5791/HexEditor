@@ -213,13 +213,27 @@ public sealed class UserClipboards : IDisposable
     public bool WillBeLost(int number) => Persist && Get(number) is { Length: > PersistLimit };
 
     /// <summary>終了後も残す内容を <paramref name="folder"/> に書く (設定がオフなら消す)。16 MiB を超える項目は書かない。</summary>
-    public void Save(string folder)
+    public void Save(string folder) => CaptureSave(folder)();
+
+    /// <summary>
+    /// 今の番号の内容・名前・設定を写し取り、それを <paramref name="folder"/> に書く処理を返す (UI スレッドで写し、書くのは別のスレッドでよい)。
+    /// 書く前に番号が変わって項目の参照が手放された場合、その項目は書けない (次の保存で書き直す)。
+    /// </summary>
+    public Action CaptureSave(string folder)
+    {
+        ClipboardEntry?[] entries = [.. _slots];
+        string?[] names = [.. _names];
+        bool persist = Persist;
+        return () => Write(folder, entries, names, persist);
+    }
+
+    private static void Write(string folder, ClipboardEntry?[] entries, string?[] names, bool persist)
     {
         string index = Path.Combine(folder, IndexFileName);
         for (int n = 1; n <= SlotCount; n++)
         {
             string file = DataFile(folder, n);
-            byte[]? data = Persist ? Get(n)?.ReadAll(PersistLimit) : null;
+            byte[]? data = persist ? TryReadAll(entries[n - 1]) : null;
             if (data is null)
             {
                 if (File.Exists(file))
@@ -234,7 +248,7 @@ public sealed class UserClipboards : IDisposable
             File.WriteAllBytes(file, data);
         }
 
-        if (!Persist)
+        if (!persist)
         {
             if (File.Exists(index))
             {
@@ -253,12 +267,12 @@ public sealed class UserClipboards : IDisposable
         {
             writer.WriteStartObject();
             writer.WriteNumber("number", n);
-            if (NameOf(n) is { } name)
+            if (names[n - 1] is { } name)
             {
                 writer.WriteString("name", name);
             }
 
-            if (Get(n) is { Length: <= PersistLimit } entry)
+            if (entries[n - 1] is { Length: <= PersistLimit } entry)
             {
                 writer.WriteString("source", entry.SourceName);
                 writer.WriteNumber("offset", entry.SourceOffset);
@@ -270,6 +284,19 @@ public sealed class UserClipboards : IDisposable
 
         writer.WriteEndArray();
         writer.WriteEndObject();
+    }
+
+    /// <summary>項目の内容を読む (16 MiB 以下)。参照が手放された後なら null。</summary>
+    private static byte[]? TryReadAll(ClipboardEntry? entry)
+    {
+        try
+        {
+            return entry?.ReadAll(PersistLimit);
+        }
+        catch (Exception ex) when (ex is ObjectDisposedException or InvalidOperationException)
+        {
+            return null;
+        }
     }
 
     /// <summary>保存した内容を読む (起動時。設定がオンのとき)。読めないものは飛ばす。</summary>

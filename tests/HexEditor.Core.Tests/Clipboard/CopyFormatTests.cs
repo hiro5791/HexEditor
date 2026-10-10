@@ -254,4 +254,41 @@ public sealed class CopyFormatTests
         Assert.Equal(2, text.Split("\r\n").Length);
         Assert.StartsWith("00000000  00 01 02 03 04 FF 06", text);
     }
+
+    /// <summary>
+    /// 画面表示どおりは、グループ化・中央区切り・グループ内の逆順表示・セルの表示形式も画面に合わせる (EDIT-25 の仕様 6、VIEW-11 の仕様 5)。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-EDIT-25-01")]
+    public void Screen_dump_follows_grouping_reversal_and_cell_format()
+    {
+        byte[] data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        var hexOnly = new CopyOptions { ScreenBytesPerRow = 8, ShowText = false };
+
+        // グループ化 4 (グループの間に空白)。
+        CopyOptions grouped = hexOnly with { ScreenGroupSize = 4 };
+        Assert.Equal("00000000  01020304 05060708\r\n00000008  090A", F(CopyFormat.ScreenDump, grouped, data));
+
+        // グループ内の逆順表示。末尾の不完全なグループは逆にしない (VIEW-11 の仕様 7)。テキスト列は逆にしない (仕様 8)。
+        Assert.Equal("00000000  04030201 08070605\r\n00000008  090A", F(CopyFormat.ScreenDump, grouped with { ScreenReverseGroups = true }, data));
+        Assert.Equal("00000000  04030201  ....",
+            F(CopyFormat.ScreenDump, new CopyOptions { ScreenBytesPerRow = 4, ScreenGroupSize = 4, ScreenReverseGroups = true }, [1, 2, 3, 4]));
+
+        // グループ化 1 では逆順表示は効かない (VIEW-11 の仕様 10)。
+        Assert.Equal("00000000  01 02 03 04", F(CopyFormat.ScreenDump, hexOnly with { ScreenReverseGroups = true }, [1, 2, 3, 4]));
+
+        // 中央区切り (8 バイトごとにもう 1 文字)。
+        Assert.Equal("00000000  01 02 03 04 05 06 07 08  09 0A",
+            F(CopyFormat.ScreenDump, new CopyOptions { ScreenMiddleSeparator = true, ShowText = false }, data));
+
+        // セルの表示形式 (16 bit の 10 進と Hex。単位に満たない端数は 1 バイトずつ Hex。VIEW-10 の仕様 5)。
+        CopyOptions int16 = hexOnly with { ScreenCellFormat = Core.View.CellFormat.Int16Decimal };
+        Assert.Equal("00000000  00513 01027 02", F(CopyFormat.ScreenDump, int16, [1, 2, 3, 4, 2]));
+        Assert.Equal("00000000  3412", F(CopyFormat.ScreenDump, hexOnly with { ScreenCellFormat = Core.View.CellFormat.Int16Hex }, [0x12, 0x34]));
+        Assert.Equal("00000000  1234",
+            F(CopyFormat.ScreenDump, hexOnly with { ScreenCellFormat = Core.View.CellFormat.Int16Hex, ScreenBigEndian = true }, [0x12, 0x34]));
+
+        // 既定 (グループ化 1、Hex) はこれまでと同じ。
+        Assert.Equal("00000000  DE AD BE EF" + new string(' ', 36) + "  ....", F(CopyFormat.ScreenDump));
+    }
 }

@@ -16,6 +16,19 @@ public enum SelectionDropKind
     Overwrite,
 }
 
+/// <summary>要素数の多いマルチ選択・矩形への Delete / Backspace を長時間処理で行うときの操作 (EDIT-07 の「巨大ファイル・長時間処理」)。</summary>
+public enum RangeDeleteAction
+{
+    /// <summary>長時間処理にしない (その場で行う)。</summary>
+    None,
+
+    /// <summary>すべての要素を削除する。</summary>
+    Delete,
+
+    /// <summary>すべての要素を 00 で塗りつぶす (上書きモードで長さを変えない Delete。EDIT-13 の仕様 5)。</summary>
+    ZeroFill,
+}
+
 /// <summary>
 /// マルチ選択・矩形選択・マルチカーソルへの編集 (EDIT-07 の仕様 7・8、EDIT-08 の仕様 4〜7、EDIT-17)。
 /// </summary>
@@ -168,7 +181,7 @@ public sealed partial class EditorState
         var results = new Caret[all.Count];
         int failures = 0;
         long shift = 0, previous = -1;
-        Span<byte> one = stackalloc byte[1];
+        byte[] currents = ReadBytesUnderCarets(snapshot, all, InsertMode);
         for (int i = 0; i < all.Count; i++)
         {
             Caret c = all[i].Caret;
@@ -182,12 +195,7 @@ public sealed partial class EditorState
             }
 
             previous = c.Offset;
-            byte current = 0;
-            if (!atEnd)
-            {
-                snapshot.Read(c.Offset, one);
-                current = one[0];
-            }
+            byte current = currents[i];
 
             if (!c.LowNibble && (InsertMode || atEnd))
             {
@@ -242,6 +250,48 @@ public sealed partial class EditorState
         EnsureCursorVisible();
         RaiseChanged();
         return edits.Count > 0 ? EditResult.Done : EditResult.FixedLength;
+    }
+
+    /// <summary>
+    /// 各カーソルの位置のバイトを読む (上位ニブルへの挿入・末尾では読まない)。カーソルは位置の昇順に並んでいること。
+    /// 元データの読み込みは 1 回ごとにファイルの読み込みになる (同じファイルへの読み込みは並列にしても OS の中で順番になる)。
+    /// カーソルが密にある (キャッシュの 1 ブロックに平均 4 個以上) 場合は、ブロックごと表示用のキャッシュに入れて読み、読み込みの回数を
+    /// 減らす (次の入力ではキャッシュから読める。カーソル 10,000 個で 50 ms 以内。EDIT-08 の「巨大ファイル・長時間処理」)。
+    /// まばらな場合は 1 バイトずつ直接読む (キャッシュを追い出さない)。
+    /// </summary>
+    private static byte[] ReadBytesUnderCarets(DocumentSnapshot snapshot, List<(Caret Caret, int Order)> carets, bool insertMode)
+    {
+        var bytes = new byte[carets.Count];
+        long length = snapshot.Length;
+        int blockSize = snapshot.CacheBlockSize;
+        int needed = 0, blocks = 0;
+        long lastBlock = -1;
+        foreach ((Caret c, _) in carets)
+        {
+            if (c.Offset < length && (c.LowNibble || !insertMode))
+            {
+                needed++;
+                if (c.Offset / blockSize != lastBlock)
+                {
+                    lastBlock = c.Offset / blockSize;
+                    blocks++;
+                }
+            }
+        }
+
+        bool throughCache = needed >= 64 && needed >= blocks * 4L;
+        Span<byte> one = stackalloc byte[1];
+        for (int i = 0; i < carets.Count; i++)
+        {
+            Caret c = carets[i].Caret;
+            if (c.Offset < length && (c.LowNibble || !insertMode))
+            {
+                _ = throughCache ? snapshot.ReadThroughCache(c.Offset, one) : snapshot.Read(c.Offset, one);
+                bytes[i] = one[0];
+            }
+        }
+
+        return bytes;
     }
 
     /// <summary>移動キーをすべてのカーソルに適用する (EDIT-08 の仕様 4)。各カーソルが自分の選択範囲を持つ。</summary>
@@ -326,6 +376,49 @@ public sealed partial class EditorState
         PreparedReplacement prepared = PrepareRangeDeletion(Document, selection);
         CommitRangeDeletion(prepared, selection, description);
         return EditResult.Done;
+    }
+
+    /// <summary>
+    /// 要素数がこれを超える要素ごとの操作 (削除、反転、塗りつぶし、矩形の長さが変わる操作) は長時間処理として行う
+    /// (EDIT-07・EDIT-17 の「巨大ファイル・長時間処理」)。
+    /// </summary>
+    public const int LongRunningElements = 10_000;
+
+    /// <summary>
+    /// Delete / Backspace をマルチ選択・矩形に対して押したとき、要素数が <see cref="LongRunningElements"/> を超えるなら長時間処理で行う操作を返す
+    /// (UI はキー操作をその場で行わずに長時間処理に回す)。その場で行う (要素数が少ない、編集できないなど) なら <see cref="RangeDeleteAction.None"/>。
+    /// </summary>
+    public RangeDeleteAction LongRangeDeleteAction(bool backspace)
+    {
+        if (_caretLoop || !HasMultipleRanges || !CanEdit() || SelectedRangeCount <= LongRunningElements)
+        {
+            return RangeDeleteAction.None;
+        }
+
+        // 上書きモードの Delete で「長さを変えない」設定なら 00 で塗りつぶす (EDIT-13 の仕様 5)。
+        if (!backspace && !InsertMode && Options.DeleteKeepsLengthInOverwrite)
+        {
+            return RangeDeleteAction.ZeroFill;
+        }
+
+        // 固定長・矩形の行数の上限超過は、その場の処理がすぐ知らせる。
+        return Document.CanResize && CheckRectangleRows() is null ? RangeDeleteAction.Delete : RangeDeleteAction.None;
+    }
+
+    /// <summary>
+    /// 要素 (範囲) の一覧を作ってから行う操作 (データ演算、文字コード変換、大文字・小文字の変換) の前に、矩形の行数が上限を超えていないかを
+    /// 確かめる。超えていればその上限を返す (一覧を作らずに実行しない)。上限はマルチ選択の要素数の上限 (EDIT-07 の仕様 3) で、
+    /// 長さが変わりうる操作では矩形の行数の上限 (EDIT-17 の仕様 6) も加える。マルチ選択は要素数が上限以内なので null。
+    /// </summary>
+    public long? RectangleListLimitExceeded(bool changesLength)
+    {
+        if (_rect is null)
+        {
+            return null;
+        }
+
+        long limit = changesLength ? Math.Min(MaxRectangleRows, MaxSelectionElements) : MaxSelectionElements;
+        return SelectedRangeCount > limit ? limit : null;
     }
 
     /// <summary>矩形の行数が長さの変わる操作の上限 (EDIT-17 の仕様 6) を超えていれば <see cref="EditResult.TooManyRows"/>。</summary>
@@ -499,6 +592,56 @@ public sealed partial class EditorState
     }
 
     /// <summary>
+    /// 矩形の貼り付け (EDIT-17 の仕様 3) が各行の位置に挿入するか (通常の貼り付けで挿入モード、長さを変えられるドキュメント)。
+    /// 挿入は長さが変わる操作なので行数の上限があり、<see cref="LongRunningElements"/> 行を超える場合は長時間処理にする。
+    /// </summary>
+    public bool RectanglePasteInserts(bool overwrite) => !overwrite && InsertMode && Document.CanResize;
+
+    /// <summary>矩形の貼り付けの左上 (矩形選択の左上、選択範囲の先頭、またはカーソル)。</summary>
+    public long RectanglePasteOrigin => _rect is { } rect ? rect.RowLeft(rect.FirstRow) : _selectionLength > 0 ? _selectionStart : _cursor;
+
+    /// <summary>
+    /// 矩形の各行を <paramref name="origin"/> から 1 行ずつ下の行の位置に挿入した木を作る (ドキュメントはまだ変えない)。行数ぶんの
+    /// ピース操作を 1 回の木の作り直しで行う (EDIT-17 の「巨大ファイル・長時間処理」)。行数が多い場合は長時間処理の中で呼ぶ。
+    /// </summary>
+    public static PreparedReplacement PrepareRectangleRowsInsert(Document document, IReadOnlyList<byte[]> rows, long origin, int bytesPerRow,
+        Operations.LongRunningOperation? operation = null, bool ignoreEditLock = false, CancellationToken cancellationToken = default)
+    {
+        long length = document.Length;
+        IEnumerable<ContentEdit> Edits()
+        {
+            // 挿入位置は元のドキュメントのオフセット (上の行の挿入で下の行の位置はずれない)。
+            for (int k = 0; k < rows.Count; k++)
+            {
+                long at = origin + (long)k * bytesPerRow;
+                if (at > length)
+                {
+                    yield break;
+                }
+
+                if (rows[k].Length > 0)
+                {
+                    yield return new ContentEdit(at, 0, EditContent.Bytes(rows[k]));
+                }
+            }
+        }
+
+        return document.PrepareContentEdits(Edits(), operation, ignoreEditLock, cancellationToken);
+    }
+
+    /// <summary><see cref="PrepareRectangleRowsInsert"/> で作った木を 1 回の編集として入れ、カーソルを左上に置く。</summary>
+    public void CommitRectangleRowsInsert(PreparedReplacement prepared, long origin)
+    {
+        CollapseCarets();
+        ClearSelectionAnchor();
+        Document.CommitReplacements(prepared, "貼り付け");
+        _cursor = Math.Min(origin, Layout.MaxCursor);
+        LowNibble = false;
+        EnsureCursorVisible();
+        RaiseChanged();
+    }
+
+    /// <summary>
     /// 矩形の貼り付け (EDIT-17 の仕様 3): クリップボードの矩形の各行を、主カーソルの列を左端として 1 行ずつ下の行に貼る。
     /// <paramref name="overwrite"/> (上書き貼り付け、または上書きモード) なら各行の該当バイトを上書きし、そうでなければ各行の位置に挿入する
     /// (後ろの行の配置はずれる)。全体を 1 つの編集グループにする。
@@ -515,32 +658,30 @@ public sealed partial class EditorState
             return EditResult.Ignored;
         }
 
-        bool insert = !overwrite && InsertMode && Document.CanResize;
+        bool insert = RectanglePasteInserts(overwrite);
         if (insert && rows.Count > MaxRectangleRows)
         {
             return EditResult.TooManyRows;
         }
 
-        CollapseCarets();
-        long start = _rect is { } rect ? rect.RowLeft(rect.FirstRow) : _selectionLength > 0 ? _selectionStart : _cursor;
-        ClearSelectionAnchor();
-        long length = Document.Length;
-        EditResult result = EditResult.Done;
-        using (Document.BeginGroup(insert ? "貼り付け" : "上書き貼り付け"))
+        long start = RectanglePasteOrigin;
+        if (insert)
         {
-            // 下の行から順に貼る (挿入で上の行の位置がずれないように)。
+            CommitRectangleRowsInsert(PrepareRectangleRowsInsert(Document, rows, start, BytesPerRow), start);
+            return EditResult.Done;
+        }
+
+        CollapseCarets();
+        ClearSelectionAnchor();
+        EditResult result = EditResult.Done;
+        using (Document.BeginGroup("上書き貼り付け"))
+        {
             for (int k = rows.Count - 1; k >= 0; k--)
             {
                 byte[] row = rows[k];
                 long at = start + (long)k * BytesPerRow;
-                if (at > length || row.Length == 0)
+                if (at > Document.Length || row.Length == 0)
                 {
-                    continue;
-                }
-
-                if (insert)
-                {
-                    Document.Insert(at, row, "貼り付け");
                     continue;
                 }
 

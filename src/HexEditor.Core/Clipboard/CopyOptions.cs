@@ -250,8 +250,26 @@ public sealed record CopyOptions
     /// <summary>変更されたバイトの色 (HTML・RTF に書く。`#RRGGBB`)。</summary>
     public string ModifiedColor { get; init; } = "#C42B1C";
 
-    // 画面表示どおり (現在の表示設定)
+    // 画面表示どおり (現在の表示設定。EDIT-25 の仕様 6、VIEW-11 の仕様 5)
     public int ScreenBytesPerRow { get; init; } = 16;
+
+    /// <summary>グループ化のバイト数 (VIEW-09。既定 1)。</summary>
+    public int ScreenGroupSize { get; init; } = 1;
+
+    /// <summary>中央区切り (VIEW-09 の仕様 3。<see cref="ViewSettings.EffectiveMiddleSeparator"/> の値)。</summary>
+    public bool ScreenMiddleSeparator { get; init; }
+
+    /// <summary>セルの表示形式 (VIEW-10)。</summary>
+    public CellFormat ScreenCellFormat { get; init; } = CellFormat.Hex;
+
+    /// <summary>グループ内のバイトを逆順に表示 (VIEW-11 の仕様 4。Hex 形式でグループ化が 2 以上のときだけ効く)。</summary>
+    public bool ScreenReverseGroups { get; init; }
+
+    /// <summary>2 バイト以上のセルの値のエンディアン (ドキュメントのエンディアン。VIEW-11)。</summary>
+    public bool ScreenBigEndian { get; init; }
+
+    /// <summary>10 進・8 進のセルを 0 ではなく空白で埋める (VIEW-10 の仕様 2)。</summary>
+    public bool ScreenSpacePadding { get; init; }
 
     public bool ShowOffset { get; init; } = true;
 

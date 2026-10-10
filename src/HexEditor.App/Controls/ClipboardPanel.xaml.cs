@@ -111,11 +111,20 @@ public sealed partial class ClipboardPanel : UserControl, Panels.IPanelContent
     private void MoveMenu_Opening(object? sender, object e)
     {
         MoveMenu.Items.Clear();
+        foreach (MenuFlyoutItem item in MoveItems("ClipboardPanel_MoveTo"))
+        {
+            MoveMenu.Items.Add(item);
+        }
+    }
+
+    /// <summary>「ユーザークリップボードに移す」の 1〜9 の項目。</summary>
+    private IEnumerable<MenuFlyoutItem> MoveItems(string automationPrefix)
+    {
         for (int n = 1; n <= UserClipboards.SlotCount; n++)
         {
             int number = n;
             var item = new MenuFlyoutItem { Text = Loc.Format("ClipboardPanel_Slot", n) };
-            AutomationProperties.SetAutomationId(item, "ClipboardPanel_MoveTo" + n);
+            AutomationProperties.SetAutomationId(item, automationPrefix + n);
             item.Click += (_, _) =>
             {
                 if (_selected is { HistoryIndex: >= 0 } row)
@@ -123,8 +132,67 @@ public sealed partial class ClipboardPanel : UserControl, Panels.IPanelContent
                     Vm.Clipboards.CopyHistoryToSlot(row.HistoryIndex, number);
                 }
             };
-            MoveMenu.Items.Add(item);
+            yield return item;
         }
+    }
+
+    /// <summary>
+    /// 一覧の右クリックメニュー (EDIT-28 の仕様 2: 上書き貼り付けはパネルの右クリックメニューから選ぶ)。押した項目を選び、上部のボタンと同じ
+    /// 「貼り付け」「上書き貼り付け」「消去」「名前を付ける」「ユーザークリップボードに移す」を出す。Shift+F10 / アプリケーションキーでも開く。
+    /// </summary>
+    private void List_ContextRequested(UIElement sender, ContextRequestedEventArgs args)
+    {
+        var list = (ListView)sender;
+        if ((args.OriginalSource as FrameworkElement)?.DataContext is ClipboardItemRow row)
+        {
+            list.SelectedItem = row;
+        }
+
+        if (_selected is null || !ReferenceEquals(list.SelectedItem, _selected))
+        {
+            return;
+        }
+
+        var menu = new MenuFlyout();
+        MenuFlyoutItem Item(string id, string key, RoutedEventHandler click, bool enabled)
+        {
+            var item = new MenuFlyoutItem { Text = Loc.Get(key), IsEnabled = enabled };
+            AutomationProperties.SetAutomationId(item, "ClipboardPanel_Menu_" + id);
+            item.Click += click;
+            menu.Items.Add(item);
+            return item;
+        }
+
+        Item("Paste", "ClipboardPanel_PasteButton", Paste_Click, PasteButton.IsEnabled);
+        Item("PasteOverwrite", "ClipboardPanel_PasteOverwriteButton", PasteOverwrite_Click, PasteOverwriteButton.IsEnabled);
+        if (_selected.Number > 0)
+        {
+            Item("Clear", "ClipboardPanel_ClearButton", Clear_Click, ClearButton.IsEnabled);
+            Item("Rename", "ClipboardPanel_RenameButton", (_, _) => RenameFlyout.ShowAt(RenameButton), RenameButton.IsEnabled);
+        }
+
+        if (_selected.HistoryIndex >= 0)
+        {
+            var move = new MenuFlyoutSubItem { Text = Loc.Get("ClipboardPanel_MoveButton") };
+            AutomationProperties.SetAutomationId(move, "ClipboardPanel_Menu_MoveToSlot");
+            foreach (MenuFlyoutItem item in MoveItems("ClipboardPanel_Menu_MoveTo"))
+            {
+                move.Items.Add(item);
+            }
+
+            menu.Items.Add(move);
+        }
+
+        if (args.TryGetPosition(list, out Windows.Foundation.Point position))
+        {
+            menu.ShowAt(list, new Microsoft.UI.Xaml.Controls.Primitives.FlyoutShowOptions { Position = position });
+        }
+        else
+        {
+            menu.ShowAt(list.ContainerFromItem(_selected) as FrameworkElement ?? list);
+        }
+
+        args.Handled = true;
     }
 
     private void List_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e) => Paste(overwrite: false);

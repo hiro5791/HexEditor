@@ -112,6 +112,20 @@ internal static class DialogParts
         return ExpressionEvaluator.TryEvaluate(text, context, out value, out error, radix);
     }
 
+    /// <summary>入力式を 128 bit で評価する (符号なし 64 bit の値も書ける。データ演算のオペランド)。</summary>
+    public static bool TryEvaluateWide(string text, IExpressionContext context, out Int128 value, out ExpressionException? error,
+        DefaultRadix radix = DefaultRadix.Hexadecimal)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            value = 0;
+            error = new ExpressionException(Core.Expressions.ExpressionError.Empty, 0);
+            return false;
+        }
+
+        return ExpressionEvaluator.TryEvaluateWide(text, context, out value, out error, radix);
+    }
+
     // ---- 入力履歴 (EDIT-04 の仕様 10) ----
 
     /// <summary>最後に付けた入力履歴 (入力欄の AutomationId ごと。テスト用の読み出し)。</summary>
