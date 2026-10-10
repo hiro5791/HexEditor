@@ -382,6 +382,76 @@ public sealed class FormatFileTests
         Assert.Equal(new byte[] { 0xA1, 0xA2, 0xA3, 0xA4 }, await app.BytesAsync(0, 4));
     });
 
+    /// <summary>
+    /// TC-ENG-07-01: 長さを変えられないドキュメントでは、長さを変える操作がメニュー・コマンドパレット・右クリックメニューで無効になり、
+    /// Insert キーでは InfoBar を出して上書きモードのまま。物理ディスク (管理者の権限と仮想ディスクが要る) の代わりに、同じ長さ固定
+    /// (ENG-07) のドキュメントになる「範囲を指定して開く」(ENG-13。長さの変更を許さない既定) を使う。
+    /// </summary>
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-07-01")]
+    public Task Fixed_length_document_disables_length_changing_operations() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
+        AppSession app = await ctx.StartAsync();
+        await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openAdvanced" });
+        await app.WaitForDialogAsync("OpenAdvancedDialog");
+        await app.SendAsync("openAdvancedSet", new JsonObject { ["path"] = path, ["range"] = true, ["start"] = "0x1000", ["length"] = "0x1000" });
+        await app.InvokeDialogButtonAsync("Open");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["isRange"]?.GetValue<bool>() == true, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the range tab");
+        Assert.False((await DocAsync(app))["canResize"]!.GetValue<bool>());
+        await app.SelectAsync(0x10, 0x10);
+        await app.IdleAsync();
+
+        // 1. メニュー (コマンドの状態がメニューの項目の有効・無効になる): 長さを変える操作は無効、上書き貼り付けは有効。
+        string[] lengthChanging = ["edit.cut", "edit.insertBytes", "edit.toggleInsert", "edit.resize", "edit.truncate", "edit.insertRectangle"];
+        List<JsonObject> commands = [.. (await app.SendAsync("commands"))["items"]!.AsArray().Select(n => n!.AsObject())];
+        JsonObject Command(string id) => commands.Single(c => c["id"]!.GetValue<string>() == id);
+        foreach (string id in lengthChanging)
+        {
+            Assert.False(Command(id)["enabled"]!.GetValue<bool>(), id);
+        }
+
+        Assert.True(Command("edit.pasteOverwrite")["enabled"]!.GetValue<bool>());
+        Assert.NotNull(Command("edit.cut")["menu"]);
+
+        // 2. コマンドパレット: 同じコマンドは理由付きの無効表示。
+        foreach (string id in new[] { "edit.cut", "edit.insertBytes", "edit.toggleInsert", "edit.pasteOverwrite" })
+        {
+            JsonObject palette = await app.SendAsync("palette", new JsonObject { ["text"] = ">" + Command(id)["title"]!.GetValue<string>() });
+            JsonObject entry = palette["entries"]!.AsArray().Select(e => e!.AsObject()).First(e => e["key"]!.GetValue<string>() == "command:" + id);
+            string reason = entry["reason"]?.GetValue<string>() ?? string.Empty;
+            if (id == "edit.pasteOverwrite")
+            {
+                Assert.Equal(string.Empty, reason);
+            }
+            else
+            {
+                Assert.Contains("can't change length", reason, StringComparison.Ordinal);
+            }
+        }
+
+        await app.SendAsync("paletteClose");
+
+        // 3. 右クリックメニュー: 切り取り・削除・挿入モードの切り替えは無効、上書き貼り付けは有効。
+        JsonObject render = await app.RenderAsync();
+        await ViewOps.RightClickAsync(app, ViewOps.CellPoint(render, 0x14));
+        await app.WaitForAsync("HexViewMenu_Cut");
+        foreach (string item in new[] { "HexViewMenu_Cut", "HexViewMenu_Delete", "HexViewMenu_ToggleInsert" })
+        {
+            Assert.False((await app.WaitForAsync(item)).IsEnabled, item);
+        }
+
+        Assert.True((await app.WaitForAsync("HexViewMenu_PasteOverwrite")).IsEnabled);
+        Assert.True((await app.WaitForAsync("HexViewMenu_Copy")).IsEnabled);
+        await app.SendAsync("hideContextMenu");
+
+        // 4. Insert キー: 上書きモードのまま InfoBar を出す。ステータスバーのモードは「上書き (固定長)」。
+        await app.KeyAsync("Insert");
+        await app.WaitForNotificationAsync(m => m.Contains("only overwrite mode is available", StringComparison.Ordinal), "the fixed-length notice");
+        Assert.Equal("Overwrite (fixed length)", (await DocAsync(app))["modeText"]!.GetValue<string>());
+        Assert.Equal(0x1000L, (await DocAsync(app))["length"]!.GetValue<long>());
+    });
+
     private static string ChecksumOf(params int[] bytes) => ((0x100 - bytes.Sum() % 0x100) % 0x100).ToString("X2");
 
     /// <summary>ENG-39 の「エラー」: マルチ選択では最初の範囲だけを開くか、範囲ごとにタブを開くかを確かめる (10 個を超えると件数を示す)。</summary>
