@@ -2832,4 +2832,29 @@ Details were written to:
   <data name="Inspector_RemoveFixed.Content" xml:space="preserve"><value>Remove row</value></data>
   <data name="Inspector_FixedInvalid" xml:space="preserve"><value>The fraction bits must be 0 to {0}</value></data>
   <data name="Inspector_FixedLimit" xml:space="preserve"><value>Up to {0} fixed-point rows can be added</value></data>
+  <data name="Bookmark_Group.Header" xml:space="preserve"><value>Group</value></data>
+  <data name="Bookmark_Group.AutomationProperties.Name" xml:space="preserve"><value>Group</value></data>
+  <data name="Bookmark_GroupNone" xml:space="preserve"><value>(No group)</value></data>
+  <data name="Bookmarks_GroupTooDeep" xml:space="preserve"><value>Groups can be nested up to {0} levels</value></data>
+  <data name="Bookmarks_InHiddenGroup" xml:space="preserve"><value>in a hidden group</value></data>
+  <data name="Bookmarks_GroupShown" xml:space="preserve"><value>Shown</value></data>
+  <data name="Bookmarks_GroupHidden" xml:space="preserve"><value>Hidden</value></data>
+  <data name="Bookmarks_GroupRowName" xml:space="preserve"><value>Group {0}, {1} bookmarks, {2}</value></data>
+  <data name="Bookmarks_NewGroupName" xml:space="preserve"><value>New group</value></data>
+  <data name="Bookmarks_ImportName" xml:space="preserve"><value>Import bookmarks</value></data>
+  <data name="Bookmarks_ExportName" xml:space="preserve"><value>Export bookmarks</value></data>
+  <data name="Bookmarks_GroupNoColor" xml:space="preserve"><value>No color</value></data>
+  <data name="Bookmarks_MenuMoveToGroup.Text" xml:space="preserve"><value>Move to group</value></data>
+  <data name="Bookmarks_MenuToSelection.Text" xml:space="preserve"><value>Select these ranges</value></data>
+  <data name="Bookmarks_MenuGroupVisible.Text" xml:space="preserve"><value>Show group</value></data>
+  <data name="Bookmarks_MenuNewSubgroup.Text" xml:space="preserve"><value>New subgroup</value></data>
+  <data name="Bookmarks_MoveToNewGroup" xml:space="preserve"><value>New group…</value></data>
+  <data name="Bookmarks_NewGroupDefaultName" xml:space="preserve"><value>Group</value></data>
+  <data name="Bookmarks_GroupNameHeader" xml:space="preserve"><value>Group name</value></data>
+  <data name="Bookmarks_GroupRename" xml:space="preserve"><value>Rename</value></data>
+  <data name="Bookmarks_DeleteGroupPrompt" xml:space="preserve"><value>Delete the group "{0}" ({1} bookmarks)?</value></data>
+  <data name="Bookmarks_DeleteGroupWithContents" xml:space="preserve"><value>Delete the bookmarks in it too</value></data>
+  <data name="Bookmarks_DeleteGroupMoveToParent" xml:space="preserve"><value>Move the bookmarks to the parent group</value></data>
+  <data name="Bookmarks_DropToGroup" xml:space="preserve"><value>Move to this group</value></data>
+  <data name="Bookmarks_GroupDeleted" xml:space="preserve"><value>Deleted the group "{0}".</value></data>
 </root>

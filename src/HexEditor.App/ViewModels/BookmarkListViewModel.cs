@@ -38,10 +38,24 @@ public sealed partial class BookmarkRowViewModel(Bookmark bookmark) : Observable
     [ObservableProperty]
     public partial Microsoft.UI.Xaml.Media.Brush? Swatch { get; set; }
 
-    public string ColorText => Bookmark.Color.IsCustom ? Bookmark.Color.ToString() : Loc.Format("Bookmarks_ColorNumber", Bookmark.Color.PaletteIndex);
+    /// <summary>色の列: グループの色を使っているときも、表示している色を示す (INSP-27 の仕様 2)。</summary>
+    public BookmarkColor ShownColor { get; set; }
+
+    public string ColorText => ShownColor.IsCustom ? ShownColor.ToString() : Loc.Format("Bookmarks_ColorNumber", ShownColor.PaletteIndex);
 
     /// <summary>グループの列 (INSP-26 の仕様 1)。</summary>
     public string GroupText => Bookmark.Group ?? string.Empty;
+
+    /// <summary>ツリー表示の字下げ (グループの階層。INSP-27)。</summary>
+    [ObservableProperty]
+    public partial Microsoft.UI.Xaml.Thickness Indent { get; set; }
+
+    /// <summary>非表示のグループのブックマークは薄く表示する (INSP-27 の仕様 3)。</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(RowOpacity))]
+    public partial bool Dimmed { get; set; }
+
+    public double RowOpacity => Dimmed ? 0.45 : 1.0;
 
     /// <summary>ドキュメントの列 (「すべてのドキュメント」のとき。INSP-26 の仕様 8)。</summary>
     public string DocumentName { get; set; } = string.Empty;
@@ -52,9 +66,55 @@ public sealed partial class BookmarkRowViewModel(Bookmark bookmark) : Observable
     /// <summary>読み上げ用の名前。</summary>
     public string AutomationName => Loc.Format("Bookmarks_RowName", Name, StartText, LengthText)
         + (Bookmark.Number > 0 ? ", " + Loc.Format("Bookmarks_NumberName", Bookmark.Number) : string.Empty)
-        + (RangeDeleted ? ", " + DeletedText : string.Empty);
+        + (RangeDeleted ? ", " + DeletedText : string.Empty)
+        + (Dimmed ? ", " + Loc.Get("Bookmarks_InHiddenGroup") : string.Empty);
 
     /// <summary>ブックマークが変わったので表示を更新する。</summary>
+    public void Update() => OnPropertyChanged(string.Empty);
+}
+
+/// <summary>
+/// ブックマーク一覧のグループの行 (INSP-27 の「画面」): 名前、件数、表示 / 非表示のトグル (目のアイコンと文字の状態表示)、色見本。
+/// </summary>
+public sealed partial class BookmarkGroupRowViewModel(BookmarkGroup group, BookmarkCollection owner) : ObservableObject
+{
+    public BookmarkGroup Group { get; } = group;
+
+    public BookmarkCollection Owner { get; } = owner;
+
+    public string Name => Group.Name;
+
+    public string Path => Group.Path;
+
+    /// <summary>件数 (下のグループのものを含む)。</summary>
+    [ObservableProperty]
+    public partial string CountText { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Chevron))]
+    public partial bool IsExpanded { get; set; } = true;
+
+    public string Chevron => IsExpanded ? "" : "";
+
+    /// <summary>字下げ (階層)。</summary>
+    public Microsoft.UI.Xaml.Thickness Indent => new((Group.Depth - 1) * 16, 0, 0, 0);
+
+    /// <summary>自身か祖先が非表示。</summary>
+    public bool Hidden => !Owner.IsGroupVisible(Group.Path);
+
+    public string EyeGlyph => Group.Visible ? "" : "";
+
+    /// <summary>表示 / 非表示の状態の文字 (色・アイコンだけに頼らない)。</summary>
+    public string VisibilityText => Loc.Get(Group.Visible ? "Bookmarks_GroupShown" : "Bookmarks_GroupHidden");
+
+    public double RowOpacity => Hidden ? 0.45 : 1.0;
+
+    /// <summary>グループの色の見本 (色がなければ null)。</summary>
+    [ObservableProperty]
+    public partial Microsoft.UI.Xaml.Media.Brush? Swatch { get; set; }
+
+    public string AutomationName => Loc.Format("Bookmarks_GroupRowName", Name, CountText, VisibilityText);
+
     public void Update() => OnPropertyChanged(string.Empty);
 }
 
@@ -71,18 +131,24 @@ public enum BookmarkSortColumn
 }
 
 /// <summary>
-/// 表示する行の並び。ブックマークの参照の配列だけを持ち、行の表示用の項目は一覧が表示するときに作る (100 万件でも仮想化する。
-/// INSP-26 の「巨大ファイル・長時間処理」)。
+/// 表示する行の並び (ブックマークか、ツリー表示のグループの行)。ブックマークの参照の配列だけを持ち、行の表示用の項目は一覧が表示する
+/// ときに作る (100 万件でも仮想化する。INSP-26 の「巨大ファイル・長時間処理」)。
 /// </summary>
-public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>, INotifyCollectionChanged
+public sealed class BookmarkRowList : IList, IReadOnlyList<object>, INotifyCollectionChanged
 {
-    private Bookmark[] _items = [];
+    private object[] _entries = [];
+    private Bookmark[] _bookmarks = [];
+    private Dictionary<Bookmark, int> _depths = new(ReferenceEqualityComparer.Instance);
     private readonly Dictionary<Bookmark, BookmarkRowViewModel> _rows = new(ReferenceEqualityComparer.Instance);
+    private readonly Dictionary<BookmarkGroup, BookmarkGroupRowViewModel> _groupRows = new(ReferenceEqualityComparer.Instance);
 
     public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
     /// <summary>行の表示用の項目を作ったときに呼ぶ (色見本を付ける)。</summary>
     public Action<BookmarkRowViewModel>? Prepare { get; set; }
+
+    /// <summary>グループの行の表示用の項目を作ったときに呼ぶ。</summary>
+    public Action<BookmarkGroupRowViewModel>? PrepareGroup { get; set; }
 
     /// <summary>行に付ける列の配置 (一覧の持ち主が渡す)。</summary>
     public required BookmarkColumnLayout Layout { get; init; }
@@ -90,11 +156,23 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
     /// <summary>行の表示用の項目を作ったときに付けるドキュメントの名前 (「すべてのドキュメント」のとき)。</summary>
     public Func<Bookmark, string>? DocumentNameOf { get; set; }
 
-    public int Count => _items.Length;
+    /// <summary>ブックマークが非表示のグループにあるか (薄く表示する)。</summary>
+    public Func<Bookmark, bool>? IsHidden { get; set; }
 
-    public IReadOnlyList<Bookmark> Bookmarks => _items;
+    public int Count => _entries.Length;
 
-    public BookmarkRowViewModel this[int index] => Row(_items[index]);
+    /// <summary>一覧のブックマーク (表示の順。グループの行を除く)。</summary>
+    public IReadOnlyList<Bookmark> Bookmarks => _bookmarks;
+
+    /// <summary>表示の順の項目 (<see cref="Bookmark"/> か <see cref="BookmarkGroup"/>)。</summary>
+    public IReadOnlyList<object> Entries => _entries;
+
+    public object this[int index] => _entries[index] switch
+    {
+        Bookmark b => Row(b),
+        BookmarkGroupEntry g => GroupRow(g),
+        _ => throw new InvalidOperationException(),
+    };
 
     object? IList.this[int index]
     {
@@ -111,17 +189,40 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
             _rows[b] = row;
         }
 
+        row.Indent = new Microsoft.UI.Xaml.Thickness(_depths.TryGetValue(b, out int depth) ? depth * 16 : 0, 0, 0, 0);
+        row.Dimmed = IsHidden?.Invoke(b) ?? false;
         return row;
     }
 
-    public void Reset(Bookmark[] items, bool clearRows = false)
+    private BookmarkGroupRowViewModel GroupRow(BookmarkGroupEntry entry)
     {
-        _items = items;
+        if (!_groupRows.TryGetValue(entry.Group, out BookmarkGroupRowViewModel? row))
+        {
+            row = new BookmarkGroupRowViewModel(entry.Group, entry.Owner);
+            _groupRows[entry.Group] = row;
+        }
+
+        row.CountText = entry.Count.ToString("N0", CultureInfo.CurrentCulture);
+        row.IsExpanded = entry.Expanded;
+        PrepareGroup?.Invoke(row);
+        return row;
+    }
+
+    /// <summary>
+    /// 並びを置き換える。<paramref name="entries"/> は <see cref="Bookmark"/> か <see cref="BookmarkGroupEntry"/>。<paramref name="depths"/> は
+    /// ツリー表示のときのブックマークの階層 (字下げ)。
+    /// </summary>
+    public void Reset(object[] entries, bool clearRows = false, Dictionary<Bookmark, int>? depths = null)
+    {
+        _entries = entries;
+        _bookmarks = entries.Length == 0 ? [] : entries.All(e => e is Bookmark) ? [.. entries.Cast<Bookmark>()] : [.. entries.OfType<Bookmark>()];
+        _depths = depths ?? new(ReferenceEqualityComparer.Instance);
         if (_rows.Count > 4096 || clearRows)
         {
             _rows.Clear();
         }
 
+        _groupRows.Clear();
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
@@ -131,17 +232,31 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
         foreach (BookmarkRowViewModel row in only is null ? _rows.Values : only.Where(_rows.ContainsKey).Select(b => _rows[b]))
         {
             Prepare?.Invoke(row);
+            row.Dimmed = IsHidden?.Invoke(row.Bookmark) ?? false;
             row.Update();
         }
     }
 
-    public int IndexOf(Bookmark b) => Array.IndexOf(_items, b);
+    public int IndexOf(Bookmark b) => Array.IndexOf(_entries, b);
 
-    public int IndexOf(object? value) => value is BookmarkRowViewModel r ? IndexOf(r.Bookmark) : -1;
+    public int IndexOf(BookmarkGroup g) => Array.FindIndex(_entries, e => e is BookmarkGroupEntry entry && entry.Group == g);
+
+    public int IndexOf(object? value) => value switch
+    {
+        BookmarkRowViewModel r => IndexOf(r.Bookmark),
+        BookmarkGroupRowViewModel g => IndexOf(g.Group),
+        _ => -1,
+    };
 
     public bool Contains(object? value) => IndexOf(value) >= 0;
 
-    public IEnumerator<BookmarkRowViewModel> GetEnumerator() => _items.Select(Row).GetEnumerator();
+    public IEnumerator<object> GetEnumerator()
+    {
+        for (int i = 0; i < _entries.Length; i++)
+        {
+            yield return this[i];
+        }
+    }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -165,12 +280,15 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<BookmarkRowViewModel>
 
     public void CopyTo(Array array, int index)
     {
-        for (int i = 0; i < _items.Length; i++)
+        for (int i = 0; i < _entries.Length; i++)
         {
             array.SetValue(this[i], index + i);
         }
     }
 }
+
+/// <summary>ツリー表示のグループの行の項目 (グループ、持ち主、件数、展開しているか)。</summary>
+public sealed record BookmarkGroupEntry(BookmarkGroup Group, BookmarkCollection Owner, int Count, bool Expanded);
 
 /// <summary>
 /// ブックマーク一覧 (INSP-26)。開いているドキュメントのブックマークを、絞り込み (名前・コメント。大文字・小文字を区別しない) と
@@ -352,8 +470,108 @@ public sealed partial class BookmarkListViewModel : ObservableObject
         }
 
         Rows.DocumentNameOf = AllDocuments ? b => _owners.TryGetValue(b, out DocumentAnnotations? a) ? a.Document.DisplayName : string.Empty : null;
-        Rows.Reset([.. items], modeChanged);
+        Rows.IsHidden = b => OwnerOf(b) is { } owner && !owner.Bookmarks.IsVisible(b);
+        if (!AllDocuments && shown[0].Bookmarks.Groups.Count > 0)
+        {
+            // グループがある場合はツリーで表示する (INSP-26 の「画面」、INSP-27)。
+            (object[] tree, Dictionary<Bookmark, int> depths) = BuildTree(shown[0].Bookmarks, items);
+            Rows.Reset(tree, modeChanged, depths);
+        }
+        else
+        {
+            Rows.Reset([.. items], modeChanged);
+        }
+
         CountText = Loc.Format("Bookmarks_Count", items.Count.ToString("N0", CultureInfo.CurrentCulture));
+    }
+
+    /// <summary>折りたたんでいるグループのパス (ドキュメントによらない)。</summary>
+    private readonly HashSet<string> _collapsed = new(StringComparer.Ordinal);
+
+    /// <summary>グループの行を折りたたむ・展開する。</summary>
+    public void ToggleExpanded(BookmarkGroup group)
+    {
+        if (!_collapsed.Remove(group.Path))
+        {
+            _collapsed.Add(group.Path);
+        }
+
+        Rebuild();
+    }
+
+    public bool IsExpanded(BookmarkGroup group) => !_collapsed.Contains(group.Path);
+
+    /// <summary>
+    /// ツリーの並び: 各グループの行の後に、その下のグループ (名前の順) と、そのグループのブックマーク (並べ替えの順) を置く。グループなしの
+    /// ブックマークは最後。絞り込み中は、一致するブックマークのあるグループだけを出す。
+    /// </summary>
+    private (object[] Entries, Dictionary<Bookmark, int> Depths) BuildTree(BookmarkCollection bookmarks, List<Bookmark> sorted)
+    {
+        var byGroup = new Dictionary<string, List<Bookmark>>(StringComparer.Ordinal);
+        var ungrouped = new List<Bookmark>();
+        foreach (Bookmark b in sorted)
+        {
+            if (b.Group is { } g)
+            {
+                if (!byGroup.TryGetValue(g, out List<Bookmark>? list))
+                {
+                    byGroup[g] = list = [];
+                }
+
+                list.Add(b);
+            }
+            else
+            {
+                ungrouped.Add(b);
+            }
+        }
+
+        // 下のグループを含む件数。
+        var counts = new Dictionary<string, int>(StringComparer.Ordinal);
+        foreach ((string path, List<Bookmark> list) in byGroup)
+        {
+            foreach (string p in BookmarkGroups.SelfAndAncestors(path))
+            {
+                counts[p] = counts.GetValueOrDefault(p) + list.Count;
+            }
+        }
+
+        ILookup<string, BookmarkGroup> children = bookmarks.Groups.ToLookup(g => g.ParentPath ?? string.Empty, StringComparer.Ordinal);
+        bool filtering = Filter.Trim().Length > 0;
+        var entries = new List<object>(sorted.Count + bookmarks.Groups.Count);
+        var depths = new Dictionary<Bookmark, int>(ReferenceEqualityComparer.Instance);
+        void Add(string parent)
+        {
+            foreach (BookmarkGroup group in children[parent].OrderBy(g => g.Name, StringComparer.OrdinalIgnoreCase))
+            {
+                int count = counts.GetValueOrDefault(group.Path);
+                if (filtering && count == 0)
+                {
+                    continue;
+                }
+
+                bool expanded = IsExpanded(group);
+                entries.Add(new BookmarkGroupEntry(group, bookmarks, count, expanded));
+                if (!expanded)
+                {
+                    continue;
+                }
+
+                Add(group.Path);
+                if (byGroup.TryGetValue(group.Path, out List<Bookmark>? list))
+                {
+                    foreach (Bookmark b in list)
+                    {
+                        depths[b] = group.Depth;
+                        entries.Add(b);
+                    }
+                }
+            }
+        }
+
+        Add(string.Empty);
+        entries.AddRange(ungrouped);
+        return ([.. entries], depths);
     }
 
     /// <summary>1 つのドキュメントのブックマークを、絞り込みと並べ替えをして返す。</summary>

@@ -3,6 +3,7 @@
     x:Class="HexEditor.App.Controls.BookmarkListPanel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HexEditor.App.Controls"
     xmlns:vm="using:HexEditor.App.ViewModels"
     AutomationProperties.AutomationId="BookmarksPanel"
     AutomationProperties.LandmarkType="Custom">
@@ -10,6 +11,168 @@
         ブックマーク一覧 (INSP-26)。上部にツールバー (追加・編集・削除・元に戻す) と絞り込み欄、その下に仮想化した一覧。
         一覧の中のキー: Enter で移動、Delete で削除、Shift+F10 / アプリケーションキーで右クリックメニュー (00-overview 8.6)。
     -->
+    <UserControl.Resources>
+        <DataTemplate x:Key="BookmarkTemplate" x:DataType="vm:BookmarkRowViewModel">
+            <!--  列は 8 つの欄のどれかに置く。位置・表示・幅は列の配置 (Layout) に従う (INSP-26 の仕様 1)。  -->
+            <Grid
+                Margin="{x:Bind Indent, Mode=OneWay}"
+                AutomationProperties.AccessibilityView="Raw"
+                ColumnSpacing="4"
+                Opacity="{x:Bind RowOpacity, Mode=OneWay}"
+                ToolTipService.ToolTip="{x:Bind CommentLine, Mode=OneWay}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{x:Bind Layout.Width0, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Layout.Width1, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Layout.Width2, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Layout.Width3, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Layout.Width4, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Layout.Width5, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Layout.Width6, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Layout.Width7, Mode=OneWay}" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Column="{x:Bind Layout.DocumentColumn, Mode=OneWay}"
+                    VerticalAlignment="Center"
+                    Text="{x:Bind DocumentName, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis"
+                    Visibility="{x:Bind Layout.DocumentVisibility, Mode=OneWay}" />
+                <TextBlock
+                    Grid.Column="{x:Bind Layout.NumberColumn, Mode=OneWay}"
+                    VerticalAlignment="Center"
+                    FontFamily="Cascadia Mono, Consolas"
+                    Text="{x:Bind NumberText, Mode=OneWay}"
+                    Visibility="{x:Bind Layout.NumberVisibility, Mode=OneWay}" />
+                <Border
+                    Grid.Column="{x:Bind Layout.ColorColumn, Mode=OneWay}"
+                    Width="12"
+                    Height="12"
+                    VerticalAlignment="Center"
+                    Background="{x:Bind Swatch, Mode=OneWay}"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="2"
+                    Visibility="{x:Bind Layout.ColorVisibility, Mode=OneWay}" />
+                <TextBlock
+                    Grid.Column="{x:Bind Layout.NameColumn, Mode=OneWay}"
+                    VerticalAlignment="Center"
+                    Text="{x:Bind Name, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis" />
+                <TextBlock
+                    Grid.Column="{x:Bind Layout.StartColumn, Mode=OneWay}"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    FontFamily="Cascadia Mono, Consolas"
+                    Text="{x:Bind StartText, Mode=OneWay}"
+                    Visibility="{x:Bind Layout.StartVisibility, Mode=OneWay}" />
+                <TextBlock
+                    Grid.Column="{x:Bind Layout.LengthColumn, Mode=OneWay}"
+                    VerticalAlignment="Center"
+                    FlowDirection="LeftToRight"
+                    FontFamily="Cascadia Mono, Consolas"
+                    Text="{x:Bind LengthText, Mode=OneWay}"
+                    TextAlignment="Right"
+                    Visibility="{x:Bind Layout.LengthVisibility, Mode=OneWay}" />
+                <TextBlock
+                    Grid.Column="{x:Bind Layout.GroupColumn, Mode=OneWay}"
+                    VerticalAlignment="Center"
+                    Text="{x:Bind GroupText, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis"
+                    Visibility="{x:Bind Layout.GroupVisibility, Mode=OneWay}" />
+                <TextBlock
+                    Grid.Column="{x:Bind Layout.CommentColumn, Mode=OneWay}"
+                    VerticalAlignment="Center"
+                    Text="{x:Bind CommentLine, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis"
+                    Visibility="{x:Bind Layout.CommentVisibility, Mode=OneWay}" />
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="{x:Bind Layout.NameColumn, Mode=OneWay}"
+                    Grid.ColumnSpan="{x:Bind Layout.DetailSpan, Mode=OneWay}">
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{x:Bind CommentLine, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis"
+                        Visibility="{x:Bind vm:BookmarkRowViewModel.CommentLineShown(HasComment, Layout.CommentLineVisibility), Mode=OneWay}" />
+                    <TextBlock
+                        Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{x:Bind DeletedText, Mode=OneWay}"
+                        Visibility="{x:Bind RangeDeleted, Mode=OneWay}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--
+            グループの行 (INSP-27 の「画面」): 折りたたみ、色見本、名前、件数、表示 / 非表示のトグル (目のアイコンと文字の状態表示)。
+            ブックマークをこの行にドラッグするとグループに入れる (仕様 5)。
+        -->
+        <DataTemplate x:Key="GroupTemplate" x:DataType="vm:BookmarkGroupRowViewModel">
+            <Grid
+                Margin="{x:Bind Indent}"
+                AllowDrop="True"
+                AutomationProperties.AccessibilityView="Raw"
+                Background="Transparent"
+                ColumnSpacing="6"
+                DragOver="Group_DragOver"
+                Drop="Group_Drop"
+                Opacity="{x:Bind RowOpacity, Mode=OneWay}"
+                Tag="{x:Bind}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <FontIcon
+                    AutomationProperties.AccessibilityView="Raw"
+                    FontSize="10"
+                    Glyph="{x:Bind Chevron, Mode=OneWay}"
+                    Tag="{x:Bind}"
+                    Tapped="GroupChevron_Tapped" />
+                <Border
+                    Grid.Column="1"
+                    Width="12"
+                    Height="12"
+                    VerticalAlignment="Center"
+                    Background="{x:Bind Swatch, Mode=OneWay}"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="2" />
+                <TextBlock
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Style="{ThemeResource BodyStrongTextBlockStyle}"
+                    Text="{x:Bind Name, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis" />
+                <TextBlock
+                    Grid.Column="3"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="{x:Bind CountText, Mode=OneWay}" />
+                <Button
+                    Grid.Column="4"
+                    Padding="6,2"
+                    AutomationProperties.AutomationId="Bookmarks_GroupVisibility"
+                    AutomationProperties.Name="{x:Bind VisibilityText, Mode=OneWay}"
+                    Click="GroupVisibility_Click"
+                    IsTabStop="False"
+                    Tag="{x:Bind}"
+                    ToolTipService.ToolTip="{x:Bind VisibilityText, Mode=OneWay}">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <FontIcon FontSize="12" Glyph="{x:Bind EyeGlyph, Mode=OneWay}" />
+                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind VisibilityText, Mode=OneWay}" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </DataTemplate>
+        <local:BookmarkRowTemplateSelector x:Key="RowSelector" Bookmark="{StaticResource BookmarkTemplate}" Group="{StaticResource GroupTemplate}" />
+    </UserControl.Resources>
+
     <Grid RowSpacing="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -29,6 +192,16 @@
             </Button>
             <Button x:Name="UndoButton" AutomationProperties.AutomationId="Bookmarks_Undo" Click="Undo_Click">
                 <FontIcon FontSize="14" Glyph="&#xE7A7;" />
+            </Button>
+            <!--  グループの作成 (INSP-27)、インポート・エクスポート (INSP-30)  -->
+            <Button x:Name="NewGroupButton" AutomationProperties.AutomationId="Bookmarks_NewGroup" Click="NewGroup_Click">
+                <FontIcon FontSize="14" Glyph="&#xE8F4;" />
+            </Button>
+            <Button x:Name="ImportButton" AutomationProperties.AutomationId="Bookmarks_Import" Click="Import_Click">
+                <FontIcon FontSize="14" Glyph="&#xE8B5;" />
+            </Button>
+            <Button x:Name="ExportButton" AutomationProperties.AutomationId="Bookmarks_Export" Click="Export_Click">
+                <FontIcon FontSize="14" Glyph="&#xEDE1;" />
             </Button>
             <!--  すべてのドキュメント (INSP-26 の仕様 8。既定オフ)  -->
             <ToggleButton
@@ -69,10 +242,13 @@
             x:Name="List"
             Grid.Row="3"
             AutomationProperties.AutomationId="Bookmarks_List"
+            CanDragItems="True"
             ContainerContentChanging="List_ContainerContentChanging"
             ContextRequested="List_ContextRequested"
+            DragItemsStarting="List_DragItemsStarting"
             IsItemClickEnabled="True"
             ItemClick="List_ItemClick"
+            ItemTemplateSelector="{StaticResource RowSelector}"
             ItemsSource="{x:Bind Vm.Rows}"
             KeyDown="List_KeyDown"
             SelectionChanged="List_SelectionChanged"
@@ -84,105 +260,20 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 </Style>
             </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="vm:BookmarkRowViewModel">
-                    <!--  列は 8 つの欄のどれかに置く。位置・表示・幅は列の配置 (Layout) に従う (INSP-26 の仕様 1)。  -->
-                    <Grid AutomationProperties.AccessibilityView="Raw" ColumnSpacing="4" ToolTipService.ToolTip="{x:Bind CommentLine, Mode=OneWay}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{x:Bind Layout.Width0, Mode=OneWay}" />
-                            <ColumnDefinition Width="{x:Bind Layout.Width1, Mode=OneWay}" />
-                            <ColumnDefinition Width="{x:Bind Layout.Width2, Mode=OneWay}" />
-                            <ColumnDefinition Width="{x:Bind Layout.Width3, Mode=OneWay}" />
-                            <ColumnDefinition Width="{x:Bind Layout.Width4, Mode=OneWay}" />
-                            <ColumnDefinition Width="{x:Bind Layout.Width5, Mode=OneWay}" />
-                            <ColumnDefinition Width="{x:Bind Layout.Width6, Mode=OneWay}" />
-                            <ColumnDefinition Width="{x:Bind Layout.Width7, Mode=OneWay}" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBlock
-                            Grid.Column="{x:Bind Layout.DocumentColumn, Mode=OneWay}"
-                            VerticalAlignment="Center"
-                            Text="{x:Bind DocumentName, Mode=OneWay}"
-                            TextTrimming="CharacterEllipsis"
-                            Visibility="{x:Bind Layout.DocumentVisibility, Mode=OneWay}" />
-                        <TextBlock
-                            Grid.Column="{x:Bind Layout.NumberColumn, Mode=OneWay}"
-                            VerticalAlignment="Center"
-                            FontFamily="Cascadia Mono, Consolas"
-                            Text="{x:Bind NumberText, Mode=OneWay}"
-                            Visibility="{x:Bind Layout.NumberVisibility, Mode=OneWay}" />
-                        <Border
-                            Grid.Column="{x:Bind Layout.ColorColumn, Mode=OneWay}"
-                            Width="12"
-                            Height="12"
-                            VerticalAlignment="Center"
-                            Background="{x:Bind Swatch, Mode=OneWay}"
-                            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="2"
-                            Visibility="{x:Bind Layout.ColorVisibility, Mode=OneWay}" />
-                        <TextBlock
-                            Grid.Column="{x:Bind Layout.NameColumn, Mode=OneWay}"
-                            VerticalAlignment="Center"
-                            Text="{x:Bind Name, Mode=OneWay}"
-                            TextTrimming="CharacterEllipsis" />
-                        <TextBlock
-                            Grid.Column="{x:Bind Layout.StartColumn, Mode=OneWay}"
-                            VerticalAlignment="Center"
-                            FlowDirection="LeftToRight"
-                            FontFamily="Cascadia Mono, Consolas"
-                            Text="{x:Bind StartText, Mode=OneWay}"
-                            Visibility="{x:Bind Layout.StartVisibility, Mode=OneWay}" />
-                        <TextBlock
-                            Grid.Column="{x:Bind Layout.LengthColumn, Mode=OneWay}"
-                            VerticalAlignment="Center"
-                            FlowDirection="LeftToRight"
-                            FontFamily="Cascadia Mono, Consolas"
-                            Text="{x:Bind LengthText, Mode=OneWay}"
-                            TextAlignment="Right"
-                            Visibility="{x:Bind Layout.LengthVisibility, Mode=OneWay}" />
-                        <TextBlock
-                            Grid.Column="{x:Bind Layout.GroupColumn, Mode=OneWay}"
-                            VerticalAlignment="Center"
-                            Text="{x:Bind GroupText, Mode=OneWay}"
-                            TextTrimming="CharacterEllipsis"
-                            Visibility="{x:Bind Layout.GroupVisibility, Mode=OneWay}" />
-                        <TextBlock
-                            Grid.Column="{x:Bind Layout.CommentColumn, Mode=OneWay}"
-                            VerticalAlignment="Center"
-                            Text="{x:Bind CommentLine, Mode=OneWay}"
-                            TextTrimming="CharacterEllipsis"
-                            Visibility="{x:Bind Layout.CommentVisibility, Mode=OneWay}" />
-                        <StackPanel
-                            Grid.Row="1"
-                            Grid.Column="{x:Bind Layout.NameColumn, Mode=OneWay}"
-                            Grid.ColumnSpan="{x:Bind Layout.DetailSpan, Mode=OneWay}">
-                            <TextBlock
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Style="{ThemeResource CaptionTextBlockStyle}"
-                                Text="{x:Bind CommentLine, Mode=OneWay}"
-                                TextTrimming="CharacterEllipsis"
-                                Visibility="{x:Bind vm:BookmarkRowViewModel.CommentLineShown(HasComment, Layout.CommentLineVisibility), Mode=OneWay}" />
-                            <TextBlock
-                                Foreground="{ThemeResource SystemFillColorCautionBrush}"
-                                Style="{ThemeResource CaptionTextBlockStyle}"
-                                Text="{x:Bind DeletedText, Mode=OneWay}"
-                                Visibility="{x:Bind RangeDeleted, Mode=OneWay}" />
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
             <ListView.ContextFlyout>
                 <MenuFlyout x:Name="RowMenu" Opening="RowMenu_Opening">
-                    <MenuFlyoutItem x:Uid="Bookmarks_MenuGo" AutomationProperties.AutomationId="Bookmarks_MenuGo" Click="MenuGo_Click" />
-                    <MenuFlyoutItem x:Uid="Bookmarks_MenuRename" AutomationProperties.AutomationId="Bookmarks_MenuRename" Click="MenuRename_Click" />
-                    <MenuFlyoutItem x:Uid="Bookmarks_MenuEdit" AutomationProperties.AutomationId="Bookmarks_MenuEdit" Click="Edit_Click" />
+                    <MenuFlyoutItem x:Name="MenuGo" x:Uid="Bookmarks_MenuGo" AutomationProperties.AutomationId="Bookmarks_MenuGo" Click="MenuGo_Click" />
+                    <MenuFlyoutItem x:Name="MenuRename" x:Uid="Bookmarks_MenuRename" AutomationProperties.AutomationId="Bookmarks_MenuRename" Click="MenuRename_Click" />
+                    <MenuFlyoutItem x:Name="MenuEdit" x:Uid="Bookmarks_MenuEdit" AutomationProperties.AutomationId="Bookmarks_MenuEdit" Click="Edit_Click" />
                     <MenuFlyoutSubItem x:Name="ColorMenu" x:Uid="Bookmarks_MenuColor" AutomationProperties.AutomationId="Bookmarks_MenuColor" />
+                    <!--  グループに移動 (INSP-27 の仕様 5)、選択範囲にする (INSP-28 の仕様 2)  -->
+                    <MenuFlyoutSubItem x:Name="MoveGroupMenu" x:Uid="Bookmarks_MenuMoveToGroup" AutomationProperties.AutomationId="Bookmarks_MenuMoveToGroup" />
+                    <MenuFlyoutItem x:Name="MenuToSelection" x:Uid="Bookmarks_MenuToSelection" AutomationProperties.AutomationId="Bookmarks_MenuToSelection" Click="MenuToSelection_Click" />
+                    <!--  グループの行の操作 (INSP-27)  -->
+                    <ToggleMenuFlyoutItem x:Name="MenuGroupVisible" x:Uid="Bookmarks_MenuGroupVisible" AutomationProperties.AutomationId="Bookmarks_MenuGroupVisible" Click="MenuGroupVisible_Click" />
+                    <MenuFlyoutItem x:Name="MenuNewSubgroup" x:Uid="Bookmarks_MenuNewSubgroup" AutomationProperties.AutomationId="Bookmarks_MenuNewSubgroup" Click="NewGroup_Click" />
                     <MenuFlyoutSeparator />
-                    <MenuFlyoutItem x:Uid="Bookmarks_MenuDelete" AutomationProperties.AutomationId="Bookmarks_MenuDelete" Click="Delete_Click" />
+                    <MenuFlyoutItem x:Name="MenuDelete" x:Uid="Bookmarks_MenuDelete" AutomationProperties.AutomationId="Bookmarks_MenuDelete" Click="Delete_Click" />
                 </MenuFlyout>
             </ListView.ContextFlyout>
         </ListView>

@@ -554,8 +554,15 @@ public sealed partial class BookmarkCollection
             EnsureGroup(group);
         }
 
+        if (b.Group == group)
+        {
+            return;
+        }
+
         b.Group = group;
-        Touch(b, customized: b.IsCustomized);
+        b.EditedByUser = true;
+        b.Updated = _time.GetUtcNow().UtcDateTime;
+        RaiseChanged(BookmarkChangeKind.Groups, [b]);
     }
 
     /// <summary>

@@ -2832,4 +2832,29 @@
   <data name="Inspector_RemoveFixed.Content" xml:space="preserve"><value>行を外す</value></data>
   <data name="Inspector_FixedInvalid" xml:space="preserve"><value>小数部のビット数は 0〜{0} にしてください</value></data>
   <data name="Inspector_FixedLimit" xml:space="preserve"><value>固定小数点の行は {0} 行までです</value></data>
+  <data name="Bookmark_Group.Header" xml:space="preserve"><value>グループ</value></data>
+  <data name="Bookmark_Group.AutomationProperties.Name" xml:space="preserve"><value>グループ</value></data>
+  <data name="Bookmark_GroupNone" xml:space="preserve"><value>(グループなし)</value></data>
+  <data name="Bookmarks_GroupTooDeep" xml:space="preserve"><value>グループは {0} 階層までです</value></data>
+  <data name="Bookmarks_InHiddenGroup" xml:space="preserve"><value>非表示のグループ</value></data>
+  <data name="Bookmarks_GroupShown" xml:space="preserve"><value>表示</value></data>
+  <data name="Bookmarks_GroupHidden" xml:space="preserve"><value>非表示</value></data>
+  <data name="Bookmarks_GroupRowName" xml:space="preserve"><value>グループ {0}、{1} 件、{2}</value></data>
+  <data name="Bookmarks_NewGroupName" xml:space="preserve"><value>グループの作成</value></data>
+  <data name="Bookmarks_ImportName" xml:space="preserve"><value>ブックマークをインポート</value></data>
+  <data name="Bookmarks_ExportName" xml:space="preserve"><value>ブックマークをエクスポート</value></data>
+  <data name="Bookmarks_GroupNoColor" xml:space="preserve"><value>色なし</value></data>
+  <data name="Bookmarks_MenuMoveToGroup.Text" xml:space="preserve"><value>グループに移動</value></data>
+  <data name="Bookmarks_MenuToSelection.Text" xml:space="preserve"><value>選択範囲にする</value></data>
+  <data name="Bookmarks_MenuGroupVisible.Text" xml:space="preserve"><value>グループを表示</value></data>
+  <data name="Bookmarks_MenuNewSubgroup.Text" xml:space="preserve"><value>下にグループを作成</value></data>
+  <data name="Bookmarks_MoveToNewGroup" xml:space="preserve"><value>新しいグループ…</value></data>
+  <data name="Bookmarks_NewGroupDefaultName" xml:space="preserve"><value>グループ</value></data>
+  <data name="Bookmarks_GroupNameHeader" xml:space="preserve"><value>グループの名前</value></data>
+  <data name="Bookmarks_GroupRename" xml:space="preserve"><value>名前を変更</value></data>
+  <data name="Bookmarks_DeleteGroupPrompt" xml:space="preserve"><value>グループ「{0}」({1} 件) を削除します。</value></data>
+  <data name="Bookmarks_DeleteGroupWithContents" xml:space="preserve"><value>中のブックマークも削除する</value></data>
+  <data name="Bookmarks_DeleteGroupMoveToParent" xml:space="preserve"><value>中のブックマークを親のグループに移す</value></data>
+  <data name="Bookmarks_DropToGroup" xml:space="preserve"><value>このグループに移動</value></data>
+  <data name="Bookmarks_GroupDeleted" xml:space="preserve"><value>グループ "{0}" を削除しました。</value></data>
 </root>
