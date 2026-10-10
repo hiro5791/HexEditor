@@ -74,6 +74,67 @@ public sealed class CompareResult : IDisposable
     public long DiffCount => Diffs.Count;
 
     /// <summary>
+    /// 差分として数える件数 (読み込み不可を除く)。読み込み不可の範囲は一覧と比較ビューに表示するが、差分には数えない (ANA-09 の仕様 8。
+    /// ステータスバーの「差分 n / N」の N)。
+    /// </summary>
+    public long CountedDiffs => Math.Max(0, Diffs.Count - CountOf(DiffKind.Unreadable));
+
+    private (long Count, long Unreadable, long[] Indices)? _unreadableIndex;
+
+    /// <summary>
+    /// 差分 <paramref name="index"/> が、読み込み不可を除いて何番目か (0 から)。読み込み不可の差分なら null。読み込み不可の差分の位置の
+    /// 索引は件数が変わったときだけ作り直す (読み込み不可がなければ作らない)。
+    /// </summary>
+    public long? CountedOrdinal(long index)
+    {
+        if (index < 0 || index >= Diffs.Count)
+        {
+            return null;
+        }
+
+        long unreadable = CountOf(DiffKind.Unreadable);
+        if (unreadable == 0)
+        {
+            return index;
+        }
+
+        if (Diffs[index].Kind == DiffKind.Unreadable)
+        {
+            return null;
+        }
+
+        long count = Diffs.Count;
+        long[] indices;
+        lock (_lock)
+        {
+            if (_unreadableIndex is { } cached && cached.Count == count && cached.Unreadable == unreadable)
+            {
+                indices = cached.Indices;
+            }
+            else
+            {
+                var list = new List<long>();
+                long i = 0;
+                foreach (DiffRange d in Diffs.Enumerate())
+                {
+                    if (d.Kind == DiffKind.Unreadable)
+                    {
+                        list.Add(i);
+                    }
+
+                    i++;
+                }
+
+                indices = [.. list];
+                _unreadableIndex = (count, unreadable, indices);
+            }
+        }
+
+        int before = Array.BinarySearch(indices, index);
+        return index - (before >= 0 ? before : ~before);
+    }
+
+    /// <summary>
     /// 異なるバイトの総数 (ANA-02 の仕様 6)。単純比較では実際に値の違うバイトと、長さの違いの残りの部分。挿入・削除を考慮した比較では
     /// 差分の左右の長さの大きい方の合計。読み込み不可の範囲は数えない。
     /// </summary>

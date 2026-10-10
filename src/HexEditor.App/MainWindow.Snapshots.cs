@@ -57,17 +57,80 @@ public sealed partial class MainWindow
             return;
         }
 
+        await CreateSnapshotNamedAsync(doc, process, chosen);
+    }
+
+    /// <summary>名前を決めた後の作成 (権限不足なら昇格した補助プロセスでの再試行を提案する)。テスト用の命令からも呼ぶ。</summary>
+    internal async Task CreateSnapshotNamedAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string chosen)
+    {
         try
         {
-            SnapshotByteSource snapshot = await Vm.Operations.RunAsync(Loc.Format("Snapshot_Creating", chosen), Core.Operations.OperationKind.ReadOnly,
-                doc.Document, null, op => Task.FromResult(Snapshots.CreateTemporary(process, chosen, operation: op)));
-            DocumentViewModel opened = Vm.OpenSnapshotSource(snapshot);
-            LastSnapshot = opened;
-            AppLog.Info($"Snapshot created: {snapshot.Path}");
-            if (snapshot.Metadata.UnreadablePages is { Count: > 0 } gaps)
-            {
-                ShowNotice(Loc.Format("Snapshot_Unreadable", gaps.Count, Size(gaps.Sum(g => g.Size))), InfoBarSeverity.Informational, opened);
-            }
+            await CaptureSnapshotAsync(doc, process, chosen);
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        catch (ProcessAccessException ex) when (ex.Failure == ProcessOpenFailure.AccessDenied)
+        {
+            // 権限不足でプロセスを読めない (ANA-09 の「エラー」): プロセスを開くとき (01) と同じく、昇格した補助プロセスでの再試行を提案する。
+            await OfferElevatedSnapshotAsync(doc, process, chosen);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+        {
+            ShowNotice(Loc.Format("Snapshot_Error", ex.Message), InfoBarSeverity.Error, doc);
+        }
+
+        UpdateTitle();
+    }
+
+    /// <summary>スナップショットを一時フォルダに作り、読み取り専用のタブで開く (長時間処理)。</summary>
+    private async Task CaptureSnapshotAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string name)
+    {
+        SnapshotByteSource snapshot = await Vm.Operations.RunAsync(Loc.Format("Snapshot_Creating", name), Core.Operations.OperationKind.ReadOnly,
+            doc.Document, null, op => Task.FromResult(Snapshots.CreateTemporary(process, name, operation: op)));
+        DocumentViewModel opened = Vm.OpenSnapshotSource(snapshot);
+        LastSnapshot = opened;
+        AppLog.Info($"Snapshot created: {snapshot.Path}");
+        if (snapshot.Metadata.UnreadablePages is { Count: > 0 } gaps)
+        {
+            ShowNotice(Loc.Format("Snapshot_Unreadable", gaps.Count, Size(gaps.Sum(g => g.Size))), InfoBarSeverity.Informational, opened);
+        }
+    }
+
+    /// <summary>
+    /// 権限不足でスナップショットを作れなかった: 昇格した補助プロセス (ENG-28。<see cref="Services.DeviceService"/> の経路) でプロセスを開き直して
+    /// 作り直すことを提案する。補助プロセスを使えない配布形態では、管理者として実行する案内を出す。既に管理者なら理由を知らせるだけ。
+    /// </summary>
+    private async Task OfferElevatedSnapshotAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string name)
+    {
+        OpenRoute route = DeviceService.RouteForProcess(ProcessAccessLevel.NeedsElevation);
+        if (route == OpenRoute.SameProcess)
+        {
+            ShowNotice(Loc.Format("Snapshot_Error", Loc.Get("Snapshot_AccessDenied")), InfoBarSeverity.Error, doc);
+            return;
+        }
+
+        if (route != OpenRoute.Helper)
+        {
+            await ShowAdminGuidanceAsync(Loc.Get("AdminGuide_Process"));
+            return;
+        }
+
+        if (!await ConfirmAsync(Loc.Get("Snapshot_CreateTitle"), Loc.Get("Snapshot_NeedsAdmin"), Loc.Get("OpenProcess_OpenElevated"),
+            "SnapshotElevatedDialog"))
+        {
+            return;
+        }
+
+        try
+        {
+            using ProcessMemoryByteSource elevated = await DeviceService.OpenProcessAsync(process.Pid, process.Info, writable: false, route);
+            RefreshHelperIndicator();
+            await CaptureSnapshotAsync(doc, elevated, name);
+        }
+        catch (HexEditor.Core.Elevation.HelperElevationDeclinedException)
+        {
+            ShowNotice(Loc.Get("AdminGuide_Declined"), InfoBarSeverity.Informational);
         }
         catch (OperationCanceledException)
         {
@@ -76,8 +139,6 @@ public sealed partial class MainWindow
         {
             ShowNotice(Loc.Format("Snapshot_Error", ex.Message), InfoBarSeverity.Error, doc);
         }
-
-        UpdateTitle();
     }
 
     /// <summary>最後に作ったスナップショットのタブ (テスト用)。</summary>

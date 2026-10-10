@@ -1,5 +1,6 @@
 #if HEX_TEST_HOOKS
 using System.Text.Json.Nodes;
+using HexEditor.App.Commands;
 using HexEditor.App.Controls;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
@@ -158,6 +159,84 @@ public sealed partial class MainWindow
                 }
 
                 return TestCompareState(request);
+            case "compareOptions":
+                // ツールバーの「オプション」(ANA-04 の「画面」): {unit, mergeGap, resyncWindow, minMatch, apply}。
+                if (ActiveCompare is { } optSession && _compareViews.TryGetValue(optSession, out CompareView? optView))
+                {
+                    optView.LoadOptions();
+                    optView.SetOptionInputs(request["unit"] is { } unitNode ? (int)unitNode.GetValue<long>() : null, request["mergeGap"]?.GetValue<string>(),
+                        request["resyncWindow"]?.GetValue<string>(), request["minMatch"]?.GetValue<string>());
+                    bool applied = request["apply"]?.GetValue<bool>() == true && await optView.ApplyOptionsAsync();
+                    JsonObject opt = TestCompareState(request);
+                    opt["applied"] = applied;
+                    opt["inputs"] = optView.OptionsState();
+                    opt["remembered"] = CommandService.State?.Get(CompareOptionsKey)?.DeepClone();
+                    return opt;
+                }
+
+                return TestCompareState(request);
+            case "compareRegions":
+                // 領域のコンボボックス (ANA-09 の「画面」): {right, select}。
+                if (ActiveCompare is { } regionSession && _compareViews.TryGetValue(regionSession, out CompareView? regionView))
+                {
+                    bool regionRight = request["right"]?.GetValue<bool>() ?? false;
+                    if (request["select"] is { } select)
+                    {
+                        regionView.SelectRegion(regionRight, (int)select.GetValue<long>());
+                    }
+
+                    JsonObject regionState = TestCompareState(request);
+                    regionState["regions"] = regionView.RegionsState(regionRight);
+                    regionState["otherRegions"] = regionView.RegionsState(!regionRight);
+                    return regionState;
+                }
+
+                return TestCompareState(request);
+            case "compareListMenu":
+                // 差分の一覧の右クリックメニューの項目の状態 (有効か、ツールチップ)。
+                JsonObject menuState = TestCompareState(request);
+                menuState["menu"] = DiffPanel.MenuState();
+                return menuState;
+            case "compareSideView":
+                // 片側の表示設定を変える (ANA-04 の仕様 2 の確認): {right, bytesPerRow, groupSize, encoding}。
+                if ((ActiveCompare ?? CurrentCompare) is { } viewSession)
+                {
+                    CompareSideViewModel side = request["right"]?.GetValue<bool>() == true ? viewSession.Right : viewSession.Left;
+                    Core.View.ViewSettings settings = side.Editor.View;
+                    if (request["bytesPerRow"] is { } bpr)
+                    {
+                        settings = settings with { BytesPerRow = (int)bpr.GetValue<long>(), AutoBytesPerRow = false };
+                    }
+
+                    if (request["groupSize"] is { } group)
+                    {
+                        settings = settings with { GroupSize = (int)group.GetValue<long>() };
+                    }
+
+                    side.Editor.ApplyView(settings);
+                    if (request["encoding"] is { } encoding)
+                    {
+                        side.Editor.TextEncoding = Core.View.TextEncoding.FromId(encoding.GetValue<string>());
+                    }
+                }
+
+                return TestCompareState(request);
+            case "snapshotCreate":
+                // 「スナップショットを作成」の名前を決めた後の処理 (権限不足なら昇格の確認のダイアログが出る。答えは待たない): {name}。
+                if (Vm.Selected is { ProcessMemory: { } snapProcess } snapDoc)
+                {
+                    _ = CreateSnapshotNamedAsync(snapDoc, snapProcess, request["name"]?.GetValue<string>() ?? "snapshot");
+                }
+
+                return new JsonObject();
+            case "snapshotState":
+                return new JsonObject
+                {
+                    ["last"] = LastSnapshot?.DisplayName,
+                    ["lastPath"] = (LastSnapshot?.Document.Source as Core.Processes.SnapshotByteSource)?.Path,
+                    ["helper"] = App.Devices.IsHelperRunning,
+                    ["tabs"] = new JsonArray([.. Vm.Documents.Select(d => (JsonNode?)d.DisplayName)]),
+                };
             case "compareHighlights":
                 if (ActiveCompare is { } hlSession && _compareViews.TryGetValue(hlSession, out CompareView? hlView))
                 {
@@ -185,8 +264,8 @@ public sealed partial class MainWindow
     {
         DocumentViewModel Doc(string path) => Vm.Documents.FirstOrDefault(d => string.Equals(d.FilePath, Path.GetFullPath(path), StringComparison.OrdinalIgnoreCase))
             ?? TryOpen(path) ?? throw new InvalidOperationException("Cannot open " + path);
-        DocumentViewModel left = Doc(request["left"]!.GetValue<string>());
-        DocumentViewModel right = Doc(request["right"]!.GetValue<string>());
+        DocumentViewModel? left = request["left"] is { } l ? Doc(l.GetValue<string>()) : null;
+        DocumentViewModel? right = request["right"] is { } r ? Doc(r.GetValue<string>()) : null;
         var options = new CompareOptions
         {
             Method = request["method"]?.GetValue<string>() == "insertDelete" ? CompareMethod.InsertDelete : CompareMethod.Simple,
@@ -196,10 +275,12 @@ public sealed partial class MainWindow
             Unit = (int)TestHookSettings.ReadLong(request["unit"], 1),
         };
         long? Length(string key) => request[key] is null ? null : TestHookSettings.ReadLong(request[key], 0);
-        Task<CompareSessionViewModel?> open = OpenCompareAsync(
-            new CompareTargetSpec(CompareSourceKind.Document, left, null, TestHookSettings.ReadLong(request["leftStart"], 0), Length("leftLength")),
-            new CompareTargetSpec(CompareSourceKind.Document, right, null, TestHookSettings.ReadLong(request["rightStart"], 0), Length("rightLength")),
-            options);
+
+        // 「ファイルを選択...」と同じ、比較タブの中だけで開く側 ({leftFile} / {rightFile})。.hexsnap はスナップショットとして開く。
+        CompareTargetSpec Spec(string side, DocumentViewModel? doc) => request[side + "File"] is { } file
+            ? new CompareTargetSpec(CompareSourceKind.File, null, Path.GetFullPath(file.GetValue<string>()), TestHookSettings.ReadLong(request[side + "Start"], 0), Length(side + "Length"))
+            : new CompareTargetSpec(CompareSourceKind.Document, doc, null, TestHookSettings.ReadLong(request[side + "Start"], 0), Length(side + "Length"));
+        Task<CompareSessionViewModel?> open = OpenCompareAsync(Spec("left", left), Spec("right", right), options);
         if (request["noWait"]?.GetValue<bool>() != true)
         {
             await open;
@@ -333,6 +414,9 @@ public sealed partial class MainWindow
                 ["closed"] = side.IsClosed,
                 ["modified"] = side.Document.IsModified,
                 ["length"] = side.Document.Length,
+                ["bytesPerRow"] = e.BytesPerRow,
+                ["groupSize"] = e.View.GroupSize,
+                ["encoding"] = e.View.Encoding,
             };
             if (_compareViews.TryGetValue(s, out CompareView? view))
             {
@@ -346,6 +430,8 @@ public sealed partial class MainWindow
         state["title"] = s.Title;
         state["running"] = s.IsRunning;
         state["stale"] = s.IsStale;
+        state["staleExternal"] = s.StaleByExternalChange;
+        state["options"] = s.Options.ToJson();
         state["message"] = s.StatusMessage;
         state["sync"] = s.SyncScroll;
         state["stacked"] = s.Stacked;
@@ -363,6 +449,8 @@ public sealed partial class MainWindow
             state["state"] = r.State.ToString();
             state["method"] = r.Method.ToString();
             state["diffCount"] = r.Diffs.Count;
+            state["countedDiffs"] = r.CountedDiffs;
+            state["byRegion"] = r.ByRegion;
             state["differentBytes"] = r.DifferentBytes;
             state["matchPercent"] = r.MatchPercent;
             state["stoppedAt"] = r.StoppedAt;

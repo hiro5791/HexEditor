@@ -114,6 +114,19 @@ public sealed class SnapshotByteSource : ByteSourceBase, IRegionMapSource
                     dest[read..].Clear();
                     (bad ??= []).Add(new UnreadableRange(at + read, n - read, UnreadableReason.Unallocated));
                 }
+
+                // 作成時に読めなかったページ (メタデータに記録。データの位置は 0 のまま)。比較では「読み込み不可」になり、差分に数えない
+                // (ANA-09 の仕様 8)。
+                foreach (SnapshotGap gap in _metadata.UnreadablePages)
+                {
+                    long gs = Math.Max(gap.BaseAddress, at);
+                    long ge = Math.Min(gap.BaseAddress + gap.Size, regionEnd);
+                    if (gs < ge)
+                    {
+                        target.Slice((int)(gs - offset), (int)(ge - gs)).Clear();
+                        (bad ??= []).Add(new UnreadableRange(gs, ge - gs, UnreadableReason.IoError));
+                    }
+                }
             }
 
             at = regionEnd;

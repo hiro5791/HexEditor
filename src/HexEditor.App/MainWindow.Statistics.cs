@@ -62,7 +62,13 @@ public sealed partial class MainWindow
     {
         GoTo = GoToFromAnalysis,
         Annotations = AnalysisAnnotations,
+        MultiSelectionOf = MultiSelectionRanges,
     };
+
+    /// <summary>マルチ選択 (EDIT-07) の要素 (2 つ以上のときだけ。06 の 0.1 の「マルチ選択」)。</summary>
+    private static IReadOnlyList<HashRange> MultiSelectionRanges(Core.View.EditorState editor) => editor.HasMultipleRanges
+        ? [.. editor.SelectedRanges.Where(r => r.Length > 0).Select(r => new HashRange(r.Start, r.Length))]
+        : [];
 
     private StatisticsViewModel CreateStatisticsViewModel() => new(Vm.Operations, App.Settings)
     {
@@ -85,11 +91,12 @@ public sealed partial class MainWindow
         OpenDecompress = DecompressHook is { } decompress ? (offset, format) => decompress(this, offset, format) : null,
 
         // マルチ選択 (EDIT-07) の要素、ドキュメントのエンディアン (VIEW-11)、共通の注釈レイヤー (INSP-32)。
-        MultiSelectionOf = editor => editor.HasMultipleRanges
-            ? [.. editor.SelectedRanges.Where(r => r.Length > 0).Select(r => new HashRange(r.Start, r.Length))]
-            : [],
+        MultiSelectionOf = MultiSelectionRanges,
         DocumentBigEndian = doc => doc.Editor.View.BigEndian,
         Annotations = AnalysisAnnotations,
+
+        // ファイル形式の判定の結果を分類に渡す (ANA-17 の仕様 7)。
+        FileTypeOf = document => FileTypeViewModel.ReportOf(document)?.Best,
     };
 
     /// <summary>解析の注釈 (分類・埋め込まれた形式) を共通の注釈レイヤー (INSP-32) に載せる口。</summary>
@@ -124,14 +131,11 @@ public sealed partial class MainWindow
 
     private FileTypePanel CreateFileTypePanel()
     {
-        var panel = new FileTypePanel(FileTypeVm) { EmbeddedRanges = EmbeddedRanges };
+        var panel = new FileTypePanel(FileTypeVm);
         AutomationProperties.SetAutomationId(panel, "FileTypePanel");
         _fileTypePanel = panel;
         return panel;
     }
-
-    private IReadOnlyList<HashRange> EmbeddedRanges() =>
-        Editor is { HasSelection: true } e ? [new HashRange(e.SelectionStart, e.SelectionLength)] : [];
 
     private void RegisterStatisticsCommands()
     {
@@ -160,7 +164,7 @@ public sealed partial class MainWindow
         Commands.Register("analysis.fileType.embedded", async () =>
         {
             ShowFileTypePanel();
-            await FileTypeVm.FindEmbeddedAsync(EmbeddedRanges());
+            await FileTypeVm.FindEmbeddedAsync();
         }, NeedsDocument);
 
         // 作業中の文書が変わったら、パネルの対象とステータスバーの形式表示を切り替える。

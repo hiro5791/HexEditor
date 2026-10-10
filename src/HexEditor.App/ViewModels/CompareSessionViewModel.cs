@@ -22,6 +22,12 @@ public enum CompareSourceKind
     Saved,
 
     /// <summary>
+    /// プロセスのスナップショット (ANA-09 の仕様 3。<c>.hexsnap</c> を比較タブの中だけで読み取り専用で開き、領域ごとに比べる)。
+    /// ダイアログの「スナップショット...」。
+    /// </summary>
+    Snapshot,
+
+    /// <summary>
     /// 比較タブの中だけで読み取り専用で開く内容 (<see cref="CompareTargetSpec.Open"/> が作る)。履歴パネルの「2 つの時点を比較」(EDIT-20 の仕様 5)、
     /// プロセスのスナップショット (ANA-09) など。
     /// </summary>
@@ -74,8 +80,46 @@ public sealed class CompareSideViewModel : IDisposable
     /// <summary>この側のドキュメントのタブが閉じられた (比較を中止した。ANA-04 の「エラー」)。</summary>
     public bool IsClosed { get; internal set; }
 
+    /// <summary>
+    /// 比較タブが自分で開いたディスク上のファイル (「ファイルを選択...」・保存済みの内容) のパス。外部変更 (ENG-19) を監視し、再比較で
+    /// 開き直す。それ以外は null。
+    /// </summary>
+    public string? FilePath { get; init; }
+
+    /// <summary>外部変更の監視をやめる処理 (監視していなければ null)。</summary>
+    internal Action? StopWatching { get; set; }
+
+    /// <summary>外部変更の監視が開き直す前の基準を新しくする処理 (再比較で開き直したとき)。</summary>
+    internal Action? RebaseWatch { get; set; }
+
+    /// <summary>この側のファイルが外部で変更された (再比較で開き直す)。</summary>
+    public bool ChangedOnDisk { get; internal set; }
+
+    /// <summary>外部変更を検知した (監視のスレッドから呼ばれる)。</summary>
+    public event EventHandler? ExternalChange;
+
+    internal void RaiseExternalChange() => ExternalChange?.Invoke(this, EventArgs.Empty);
+
+    /// <summary>
+    /// 外部で変更されたファイルを開き直す (再比較の前。この側が自分で開いたファイルだけ)。開けなければ例外 (IOException など)。
+    /// </summary>
+    internal void ReopenIfChanged()
+    {
+        if (!ChangedOnDisk || !OwnsDocument || FilePath is not { } path || View.Document.Source is not HexEditor.Core.Sources.FileByteSource)
+        {
+            ChangedOnDisk = false;
+            return;
+        }
+
+        View.Document.ReplaceSource(HexEditor.Core.Sources.FileByteSource.Open(path));
+        ChangedOnDisk = false;
+        RebaseWatch?.Invoke();
+    }
+
     public void Dispose()
     {
+        StopWatching?.Invoke();
+        StopWatching = null;
         if (OwnsDocument)
         {
             View.Dispose();
@@ -130,6 +174,7 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
     private bool _merging;
     private long[]? _listView;
     private CancellationTokenSource? _listCts;
+    private readonly CompareViewLink _viewLink;
 
     internal CompareSessionViewModel(int number, CompareSideViewModel left, CompareSideViewModel right, CompareTargetSpec leftSpec,
         CompareTargetSpec rightSpec, CompareOptions options, OperationCenter operations, Microsoft.UI.Dispatching.DispatcherQueue queue)
@@ -146,14 +191,15 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         _refresh.Interval = TimeSpan.FromMilliseconds(500);
         _refresh.Tick += (_, _) => RaiseResultChanged();
 
-        // 表示設定 (1 行のバイト数、グループ化、文字コード) は左右で共通にする (仕様 2)。右は左に合わせる。
-        Right.Editor.ApplyView(Left.Editor.View);
-        Right.Editor.TextEncoding = Left.Editor.TextEncoding;
+        // 表示設定 (1 行のバイト数、グループ化、文字コード) は左右で共通にする (仕様 2)。右を左に合わせ、その後もどちらかを変えたら
+        // もう一方に写す。
+        _viewLink = new CompareViewLink(Left.Editor, Right.Editor);
 
         foreach (CompareSideViewModel side in new[] { Left, Right })
         {
             side.Editor.Changed += Editor_Changed;
             side.Document.Changed += Document_Changed;
+            side.ExternalChange += Side_ExternalChange;
             Remember(side.Editor);
         }
     }
@@ -189,6 +235,10 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
     /// <summary>比較を始めた後にどちらかのドキュメントが編集された (「再比較」の InfoBar。ANA-04 の仕様 7)。</summary>
     [ObservableProperty]
     public partial bool IsStale { get; private set; }
+
+    /// <summary>古くなった理由が外部変更 (ENG-19) か (InfoBar の文を変える。ANA-04 の「エラー」)。</summary>
+    [ObservableProperty]
+    public partial bool StaleByExternalChange { get; private set; }
 
     /// <summary>比較タブの上部に出す状態の文 (中止・失敗・ドキュメントが閉じられた)。なければ null。</summary>
     [ObservableProperty]
@@ -243,6 +293,18 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         {
         }
 
+        // 外部で変更されたファイルを比較タブが自分で開いていた側は、開き直して新しい内容で比べる (ANA-04 の「エラー」)。
+        try
+        {
+            Left.ReopenIfChanged();
+            Right.ReopenIfChanged();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            StatusMessage = Loc.Format("Compare_Failed", ex.Message);
+            return;
+        }
+
         CompareResult? old = Result;
         DocumentSnapshot leftSnapshot = Left.Document.Current;
         DocumentSnapshot rightSnapshot = Right.Document.Current;
@@ -255,6 +317,7 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         Distribution = null;
         _listView = null;
         IsStale = false;
+        StaleByExternalChange = false;
         StatusMessage = null;
         old?.Dispose();
 
@@ -378,12 +441,45 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         StatusMessage = Loc.Get(side.IsRight ? "Compare_RightClosed" : "Compare_LeftClosed");
     }
 
+    /// <summary>
+    /// 片側のファイルが外部で変更された (ENG-19): 通常のタブと同じ通知はタブ側が出し、比較タブにも「再比較」を出す (ANA-04 の「エラー」)。
+    /// 比較タブが自分で開いたファイルは、再比較で開き直す。
+    /// </summary>
+    public void MarkExternalChange(CompareSideViewModel side)
+    {
+        if (side.OwnsDocument)
+        {
+            side.ChangedOnDisk = true;
+        }
+
+        if (Result is not null)
+        {
+            StaleByExternalChange = true;
+            IsStale = true;
+        }
+    }
+
+    private void Side_ExternalChange(object? sender, EventArgs e)
+    {
+        if (sender is CompareSideViewModel side)
+        {
+            _queue.TryEnqueue(() => MarkExternalChange(side));
+        }
+    }
+
     private void Document_Changed(object? sender, DocumentChangedEventArgs e)
     {
         // マージ (ANA-07) は対応付けを更新するので古くならない (仕様 5)。
-        if (!_merging && Result is not null)
+        // 再比較の前に開き直した (外部変更) ときの通知は、その後の新しい結果を古くしない。
+        if (!_merging && Result is { } current)
         {
-            _queue.TryEnqueue(() => IsStale = true);
+            _queue.TryEnqueue(() =>
+            {
+                if (ReferenceEquals(Result, current))
+                {
+                    IsStale = true;
+                }
+            });
         }
     }
 
@@ -511,6 +607,19 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         ViewChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    /// <summary>
+    /// 通常のタブから差分へ移動した (ANA-05 の仕様 6): 選んでいる差分の番号を合わせる (ステータスバーの「差分 n / N」と次の移動の基準)。
+    /// </summary>
+    public void SetCurrentIndex(long index)
+    {
+        if (Result is { } r && index >= 0 && index < r.Diffs.Count && index != CurrentIndex)
+        {
+            CurrentIndex = index;
+            OnPropertyChanged(nameof(StatusText));
+            ViewChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
     /// <summary>差分マップのクリック (仕様 5): 片側の比較範囲のうち <paramref name="fraction"/> の位置へ移動する。</summary>
     public void JumpToFraction(bool right, double fraction)
     {
@@ -557,9 +666,11 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
             }
 
             CultureInfo culture = CultureInfo.CurrentCulture;
-            long count = r.Diffs.Count;
-            string position = CurrentIndex >= 0 && CurrentIndex < count
-                ? Loc.Format("Compare_Status_Position", (CurrentIndex + 1).ToString("N0", culture), count.ToString("N0", culture))
+
+            // 読み込み不可の範囲は差分に数えない (ANA-09 の仕様 8)。番号も読み込み不可を除いて数える。
+            long count = r.CountedDiffs;
+            string position = CurrentIndex >= 0 && CurrentIndex < r.Diffs.Count && r.CountedOrdinal(CurrentIndex) is { } ordinal
+                ? Loc.Format("Compare_Status_Position", (ordinal + 1).ToString("N0", culture), count.ToString("N0", culture))
                 : Loc.Format("Compare_Status_Count", count.ToString("N0", culture));
             return Loc.Format("Compare_Status", position, r.DifferentBytes.ToString("N0", culture), r.MatchPercent.ToString("N2", culture));
         }
@@ -872,10 +983,12 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         _running?.Cancel();
         _listCts?.Cancel();
         _refresh.Stop();
+        _viewLink.Dispose();
         foreach (CompareSideViewModel side in new[] { Left, Right })
         {
             side.Editor.Changed -= Editor_Changed;
             side.Document.Changed -= Document_Changed;
+            side.ExternalChange -= Side_ExternalChange;
             side.Dispose();
         }
 

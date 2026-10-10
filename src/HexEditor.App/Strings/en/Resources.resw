@@ -3423,6 +3423,7 @@ Details were written to:
   <data name="Minimap_Mark_bookmark" xml:space="preserve"><value>Bookmarks</value></data>
   <data name="Minimap_Mark_modified" xml:space="preserve"><value>Modified bytes</value></data>
   <data name="Minimap_Mark_difference" xml:space="preserve"><value>Differences</value></data>
+  <data name="Minimap_Mark_classification" xml:space="preserve"><value>Classification</value></data>
   <data name="Minimap_TipEntropy" xml:space="preserve"><value>entropy {0}</value></data>
   <data name="Minimap_TipMean" xml:space="preserve"><value>mean value {0}</value></data>
   <data name="Minimap_TipNonZero" xml:space="preserve"><value>non-zero {0}%</value></data>
@@ -4408,6 +4409,7 @@ Details were written to:
   <data name="EditOp_CopyDiffLeft" xml:space="preserve"><value>Copy differences to the left</value></data>
   <data name="Compare_Panel_Title" xml:space="preserve"><value>Differences</value></data>
   <data name="Compare_StaleBar.Message" xml:space="preserve"><value>The content has changed. The comparison results are out of date.</value></data>
+  <data name="Compare_StaleBar_External" xml:space="preserve"><value>A file in this comparison was changed by another app. The comparison results are out of date.</value></data>
   <data name="Compare_StaleRecompare.Content" xml:space="preserve"><value>Compare again</value></data>
   <data name="Compare_List_Empty.Text" xml:space="preserve"><value>No comparison yet. Use Analysis &gt; Compare &gt; Compare files.</value></data>
   <data name="Compare_List_MinLength.PlaceholderText" xml:space="preserve"><value>Min. length</value></data>
@@ -4438,6 +4440,9 @@ Details were written to:
   <data name="Compare_Method_InsertDelete" xml:space="preserve"><value>Comparison that detects insertions and deletions</value></data>
   <data name="Compare_Method_InsertDeleteApprox" xml:space="preserve"><value>Detects insertions and deletions (approximate)</value></data>
   <data name="Compare_Method_Name" xml:space="preserve"><value>Comparison method</value></data>
+  <data name="Compare_Toolbar_Options" xml:space="preserve"><value>Options</value></data>
+  <data name="Compare_Options_Apply" xml:space="preserve"><value>Compare again</value></data>
+  <data name="Compare_Region_Name" xml:space="preserve"><value>Region</value></data>
   <data name="Compare_Summary_Method" xml:space="preserve"><value>Method</value></data>
   <data name="Compare_Summary_Bytes" xml:space="preserve"><value>Compared bytes</value></data>
   <data name="Compare_Summary_BytesValue" xml:space="preserve"><value>left {0}, right {1}</value></data>
@@ -4506,6 +4511,8 @@ Details were written to:
   <data name="Compare_Dialog_Options" xml:space="preserve"><value>Options</value></data>
   <data name="Compare_Dialog_Target" xml:space="preserve"><value>Target</value></data>
   <data name="Compare_Dialog_ChooseFile" xml:space="preserve"><value>Choose a file...</value></data>
+  <data name="Compare_Dialog_ChooseSnapshot" xml:space="preserve"><value>Snapshot...</value></data>
+  <data name="Compare_Dialog_NotSnapshot" xml:space="preserve"><value>The file is not a process snapshot (.hexsnap).</value></data>
   <data name="Compare_Dialog_Path" xml:space="preserve"><value>File path</value></data>
   <data name="Compare_Dialog_Browse" xml:space="preserve"><value>Browse...</value></data>
   <data name="Compare_Dialog_Start" xml:space="preserve"><value>Start offset</value></data>
@@ -4631,6 +4638,7 @@ Details were written to:
   <data name="Stats_Compute.Content" xml:space="preserve"><value>Recalculate</value></data>
   <data name="Stats_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
   <data name="Stats_Stale.Text" xml:space="preserve"><value>The results are for the content before editing.</value></data>
+  <data name="Stats_ClassifyFileType" xml:space="preserve"><value>File type used for the estimate: {0}</value></data>
   <data name="Stats_Tab_Histogram.Text" xml:space="preserve"><value>Histogram</value></data>
   <data name="Stats_Tab_Descriptive.Text" xml:space="preserve"><value>Descriptive</value></data>
   <data name="Stats_Tab_Entropy.Text" xml:space="preserve"><value>Entropy</value></data>
@@ -5409,6 +5417,8 @@ Details were written to:
   <data name="Snapshot_Creating" xml:space="preserve"><value>Creating snapshot {0}</value></data>
   <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} pages ({1}) could not be read and are not in the snapshot.</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>The snapshot could not be created or saved ({0}).</value></data>
+  <data name="Snapshot_AccessDenied" xml:space="preserve"><value>Access to the process memory was denied.</value></data>
+  <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>Administrator rights are needed to read this process. Create the snapshot again with administrator rights?</value></data>
   <data name="Snapshot_Saved" xml:space="preserve"><value>Saved {0}.</value></data>
   <data name="Snapshot_NoneToCompare" xml:space="preserve"><value>Create a snapshot first (Analysis > Compare > Create Process Snapshot).</value></data>
   <data name="FileType_Snapshot" xml:space="preserve"><value>Process snapshot</value></data>

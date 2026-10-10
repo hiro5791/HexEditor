@@ -23,6 +23,9 @@ public sealed partial class MinimapView : Grid
     /// <summary>印の帯の幅 (仕様 6)。</summary>
     public const double MarkBand = 6;
 
+    /// <summary>「分類」レイヤの帯の幅 (ANA-16 の仕様 7。印の帯の左に置く)。</summary>
+    public const double ClassBand = 6;
+
     /// <summary>編集の後に計算し直すまでの待ち (仕様 8)。</summary>
     private static readonly TimeSpan RecomputeDelay = TimeSpan.FromMilliseconds(500);
 
@@ -108,7 +111,24 @@ public sealed partial class MinimapView : Grid
             ShowMenu(e.TryGetPosition(this, out Windows.Foundation.Point p) ? p : new Windows.Foundation.Point(0, 0));
             e.Handled = true;
         };
-        Unloaded += (_, _) => _computer.Stop();
+        Unloaded += (_, _) =>
+        {
+            _computer.Stop();
+
+            // 置き場所を移すときは Loaded が Unloaded より先に来ることがあるため、本当に外れたときだけ購読をやめる。
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                if (!IsLoaded)
+                {
+                    Core.Statistics.DataClassifier.Remembered -= Classifier_Remembered;
+                }
+            });
+        };
+        Loaded += (_, _) =>
+        {
+            Core.Statistics.DataClassifier.Remembered -= Classifier_Remembered;
+            Core.Statistics.DataClassifier.Remembered += Classifier_Remembered;
+        };
         ActualThemeChanged += (_, _) => QueueDraw();
     }
 
@@ -214,15 +234,71 @@ public sealed partial class MinimapView : Grid
             }
 
             _editor = value;
+            Core.Statistics.DataClassifier.Remembered -= Classifier_Remembered;
             if (_editor is not null)
             {
                 _editor.Changed += Editor_Changed;
                 _editor.Document.Changed += Document_Changed;
+                Core.Statistics.DataClassifier.Remembered += Classifier_Remembered;
             }
 
             Restart(force: true);
         }
     }
+
+    /// <summary>「分類」レイヤを表示するか (印の ON / OFF。既定は ON。分類の結果があるときだけ描く)。</summary>
+    internal Func<bool>? ShowClassification { get; set; }
+
+    /// <summary>描き直す (印の ON / OFF を変えたとき)。</summary>
+    internal void Redraw() => QueueDraw();
+
+    /// <summary>統計パネルで分類した (表示中のドキュメントなら「分類」レイヤを描き直す)。</summary>
+    private void Classifier_Remembered(object? sender, Document document)
+    {
+        if (ReferenceEquals(_editor?.Document, document))
+        {
+            DispatcherQueue.TryEnqueue(QueueDraw);
+        }
+    }
+
+    /// <summary>
+    /// 「分類」レイヤの結果 (ANA-16 の仕様 7): 統計パネルが最後に分類した結果 (<see cref="Core.Statistics.DataClassifier.LatestFor"/>)。
+    /// 印を OFF にしている・結果がない・結果の範囲がドキュメントの長さを越える (編集で短くなった) なら null。
+    /// </summary>
+    private Core.Statistics.ClassificationResult? Classification()
+    {
+        if (_editor is null || ShowClassification?.Invoke() == false)
+        {
+            return null;
+        }
+
+        return Core.Statistics.DataClassifier.LatestFor(_editor.Document) is { } r && r.Ranges.End <= _editor.Document.Length ? r : null;
+    }
+
+    /// <summary>分類の色 (統計パネルの分類の帯と同じ。ANA-16 の「画面」)。ハイコントラストでは背景のまま模様だけで示す。</summary>
+    private SchemeColor ClassColor(Core.Statistics.DataClass c, SchemeColor back)
+    {
+        if (HighContrast || c == Core.Statistics.DataClass.None)
+        {
+            return back;
+        }
+
+        return Application.Current.Resources.TryGetValue(Charts.ClassBand.BrushKey(c), out object? value) && value is SolidColorBrush brush
+            ? new SchemeColor(0xFF, brush.Color.R, brush.Color.G, brush.Color.B)
+            : back;
+    }
+
+    /// <summary>色が見えなくても分類を区別できる模様 (統計パネルの凡例の模様と同じ種類)。</summary>
+    internal static bool ClassPattern(Core.Statistics.DataClass c, int x, int y) => c switch
+    {
+        Core.Statistics.DataClass.Constant => y % 3 == 0,
+        Core.Statistics.DataClass.Text => x % 2 == 0 && y % 3 == 0,
+        Core.Statistics.DataClass.Encrypted => (x + y) % 3 == 0 || (x - y + 300) % 3 == 0,
+        Core.Statistics.DataClass.Compressed => (x + y) % 3 == 0,
+        Core.Statistics.DataClass.Binary => x % 2 == 0,
+        Core.Statistics.DataClass.Unreadable => (x / 2 + y / 2) % 2 == 0,
+        _ => false,
+    };
 
     /// <summary>計算 (テスト・「正確に計算」で使う)。</summary>
     public MinimapComputer Computer => _computer;
@@ -393,17 +469,37 @@ public sealed partial class MinimapView : Grid
             UpdateByteColors(dark, back);
         }
 
+        // 「分類」レイヤ (ANA-16 の仕様 7): 印の帯の左に、ピクセル行の範囲で最も多い分類を色と模様で描く。
+        Core.Statistics.ClassificationResult? classes = Classification();
+        int classStart = classes is null ? barArea : Math.Max(1, barArea - (int)Math.Round(ClassBand * Scale));
+        SchemeColor patternColor = ThemeColor(HighContrast ? "SystemColorWindowTextColor" : "TextFillColorPrimary");
+        _placedClasses.Clear();
         for (int y = 0; y < height; y++)
         {
             int row = _computer.RowCount == 0 ? -1 : (int)((long)y * _computer.RowCount / height);
             MinimapStats? stats = row >= 0 ? _computer.Row(row) : null;
             ReadOnlySpan<byte> rowBytes = byteTheme && stats is not null ? _computer.RowBytesOf(row) : [];
+            Core.Statistics.DataClass rowClass = Core.Statistics.DataClass.None;
+            if (classes is not null && row >= 0 && row < _computer.RowCount)
+            {
+                (long rs, long rl) = _computer.RangeOf(row);
+                rowClass = classes.ClassOf(rs, rl);
+                if (_placedClasses.Count == 0 || _placedClasses[^1].Class != rowClass)
+                {
+                    _placedClasses.Add((y, rowClass));
+                }
+            }
+
             for (int x = 0; x < width; x++)
             {
                 SchemeColor c = back;
                 if (row < 0 || row >= _computer.RowCount)
                 {
                     // ドキュメントの外。
+                }
+                else if (x >= classStart && x < barArea && classes is not null)
+                {
+                    c = ClassPattern(rowClass, x - classStart, y) ? patternColor : ClassColor(rowClass, back);
                 }
                 else if (stats is null)
                 {
@@ -421,14 +517,14 @@ public sealed partial class MinimapView : Grid
                 else if (byteTheme)
                 {
                     // バイトテーマ (「周辺」のときだけ): 各バイトを 1 ピクセルとし、バイトテーマの色で描く (仕様 3)。
-                    if (x < barArea && x < rowBytes.Length)
+                    if (x < classStart && x < rowBytes.Length)
                     {
                         c = _byteColors[rowBytes[x]];
                     }
                 }
-                else if (x < barArea)
+                else if (x < classStart)
                 {
-                    c = PixelColor(stats, x, barArea, dark, back);
+                    c = PixelColor(stats, x, classStart, dark, back);
                 }
 
                 int i = (y * width + x) * 4;
@@ -587,6 +683,9 @@ public sealed partial class MinimapView : Grid
     }
 
     private readonly List<(string Kind, double Top, double Height)> _placedMarks = [];
+
+    /// <summary>「分類」レイヤの描いた分類 (ピクセルの y、分類。分類が変わる行だけ。テスト用)。</summary>
+    private readonly List<(int Y, Core.Statistics.DataClass Class)> _placedClasses = [];
 
     /// <summary>印の形 (仕様 6)。</summary>
     private enum MarkShape
@@ -907,6 +1006,12 @@ public sealed partial class MinimapView : Grid
                 ["kind"] = m.Kind, ["top"] = m.Top, ["height"] = m.Height,
             })]),
             ["menuOpen"] = _menu?.IsOpen ?? false,
+            ["classified"] = _editor is not null && Core.Statistics.DataClassifier.LatestFor(_editor.Document) is not null,
+            ["classificationShown"] = ShowClassification?.Invoke() != false,
+            ["classes"] = new System.Text.Json.Nodes.JsonArray([.. _placedClasses.Select(c => (System.Text.Json.Nodes.JsonNode?)new System.Text.Json.Nodes.JsonObject
+            {
+                ["y"] = c.Y, ["class"] = c.Class.ToString(),
+            })]),
         };
     }
 }

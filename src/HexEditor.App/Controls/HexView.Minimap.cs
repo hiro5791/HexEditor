@@ -63,7 +63,7 @@ public sealed partial class HexView
         _minimap.Range = range;
     }
 
-    /// <summary>表示しない印 (VIEW-35 の仕様 6。viewport / cursor / selection / search / bookmark / modified / difference)。</summary>
+    /// <summary>表示しない印 (VIEW-35 の仕様 6。viewport / cursor / selection / search / bookmark / modified / difference / classification)。</summary>
     public IReadOnlySet<string> HiddenMinimapMarks
     {
         get => _hiddenMinimapMarks;
@@ -73,6 +73,7 @@ public sealed partial class HexView
             if (_minimap is not null)
             {
                 _minimap.ShowViewport = !value.Contains("viewport");
+                _minimap.Redraw();
             }
         }
     }
@@ -128,6 +129,7 @@ public sealed partial class HexView
         Grid.SetColumn(_minimap, 1);
         ((Grid)Content).Children.Add(_minimap);
         _minimap.Marks = MinimapMarksNow;
+        _minimap.ShowClassification = () => !HiddenMinimapMarks.Contains("classification");
         _minimap.HighContrast = IsHighContrast;
         _minimap.ByteTheme = _byteTheme;
         _minimap.MenuOpening = menu => MinimapMenuOpening?.Invoke(this, menu);

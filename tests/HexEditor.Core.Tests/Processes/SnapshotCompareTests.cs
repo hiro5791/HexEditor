@@ -120,6 +120,77 @@ public sealed class SnapshotCompareTests : IDisposable
         }
     }
 
+    [Fact]
+    public void Pages_that_could_not_be_read_are_unreadable_and_not_counted()
+    {
+        // ANA-09 の仕様 8: スナップショットで読めなかったページは「読み込み不可」で、差分に数えない。
+        (FakeProcessAccess access, ProcessMemoryByteSource process) = Process();
+        using (process)
+        {
+            string path = Path.Combine(_dir, "gap" + HexSnapshot.Extension);
+            SnapshotMetadata metadata = HexSnapshot.Capture(process, path);
+            metadata = metadata with { UnreadablePages = [new SnapshotGap(PrivateBase + 0x1000, 0x1000)] };
+            using var withGap = new SnapshotByteSource(path, metadata, "gap");
+            byte[] buffer = new byte[0x3000];
+            Sources.ReadResult read = withGap.Read(PrivateBase, buffer);
+            Assert.Contains(read.Unreadable, u => u.Offset == PrivateBase + 0x1000 && u.Length == 0x1000);
+
+            access.Process(Pid).WriteRaw(PrivateBase + 0x20, [1]);
+            using SnapshotByteSource later = Snapshot(process, "later");
+            using CompareResult result = Compare(withGap, later);
+            Assert.Equal(1, result.CountOf(DiffKind.Unreadable));
+            Assert.Equal(1, result.CountedDiffs);
+            Assert.Equal(0, result.DifferentBytes - 1);
+        }
+    }
+
+    [Fact]
+    public void Snapshot_files_are_recognised_by_their_header()
+    {
+        // ANA-09 の仕様 3: 「ファイルを選択...」で選んだ .hexsnap も、スナップショットとして領域ごとに比べる。
+        (_, ProcessMemoryByteSource process) = Process();
+        using (process)
+        {
+            using SnapshotByteSource s1 = Snapshot(process, "S1");
+            Assert.True(HexSnapshot.IsSnapshotFile(s1.Path));
+            string other = Path.Combine(_dir, "plain.bin");
+            File.WriteAllBytes(other, new byte[64]);
+            Assert.False(HexSnapshot.IsSnapshotFile(other));
+            Assert.False(HexSnapshot.IsSnapshotFile(Path.Combine(_dir, "missing.bin")));
+        }
+    }
+
+    [Fact]
+    public void Capturing_without_read_rights_reports_access_denied_and_leaves_no_file()
+    {
+        // ANA-09 の「エラー」: 権限不足でプロセスを読めない。呼び出し側が昇格した補助プロセスでの再試行を提案する (偽のプロセスで再現)。
+        var spec = new FakeProcessListSpec
+        {
+            Processes =
+            [
+                new FakeProcessSpec
+                {
+                    Pid = Pid, Name = "Locked.exe", AddressLimit = 0x800000, ReadNeedsElevation = true,
+                    Regions = [new FakeRegionSpec { Base = PrivateBase, Size = 0x2000, Protect = PageProtection.ReadWrite, Data = "11" }],
+                },
+            ],
+        };
+        var direct = new FakeProcessAccess(spec, elevated: false);
+        string path = Path.Combine(_dir, "denied" + HexSnapshot.Extension);
+        using (var source = new ProcessMemoryByteSource(direct.Open(Pid, false), direct, new ProcessOpenInfo { DisplayName = "Locked.exe" }))
+        {
+            ProcessAccessException ex = Assert.Throws<ProcessAccessException>(() => HexSnapshot.Capture(source, path));
+            Assert.Equal(ProcessOpenFailure.AccessDenied, ex.Failure);
+        }
+
+        Assert.False(File.Exists(path));
+
+        var elevated = new FakeProcessAccess(spec, elevated: true);
+        using var allowed = new ProcessMemoryByteSource(elevated.Open(Pid, false), elevated, new ProcessOpenInfo { DisplayName = "Locked.exe" });
+        SnapshotMetadata metadata = HexSnapshot.Capture(allowed, path);
+        Assert.Single(metadata.Regions);
+    }
+
     public void Dispose()
     {
         try

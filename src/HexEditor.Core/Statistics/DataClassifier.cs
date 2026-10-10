@@ -65,6 +65,13 @@ public sealed record ClassifyRequest
     public int BlockSize { get; init; } = 4096;
 
     public ClassThresholds Thresholds { get; init; } = new();
+
+    /// <summary>
+    /// ファイル形式の判定 (ANA-17) の結果 (最も確度の高い候補)。ANA-17 の仕様 7 で分類に渡す。対象がドキュメントの先頭から始まり、形式が
+    /// 圧縮されたデータの形式 (<see cref="DataClassifier.IsCompressedFormat"/>) なら、高エントロピーのブロックを「暗号化・乱数」ではなく
+    /// 「圧縮」とする (統計だけでは区別しにくいため。確度は中)。
+    /// </summary>
+    public FileTypes.FileTypeCandidate? FileType { get; init; }
 }
 
 /// <summary>同じ分類のブロックが続く区間 (ANA-16 の仕様 3)。オフセットはドキュメント上の位置。</summary>
@@ -93,8 +100,54 @@ public sealed class ClassificationResult
 
     public required UnreadableSummary Unreadable { get; init; }
 
+    /// <summary>判定に使ったファイル形式の名前 (ANA-17 の仕様 7。使わなかったら null)。</summary>
+    public string? FileTypeName { get; init; }
+
     /// <summary>分類ごとのバイト数 (帯の割合)。</summary>
     public long BytesOf(DataClass c) => Regions.Where(r => r.Class == c).Sum(r => r.Length);
+
+    /// <summary>
+    /// ドキュメントの範囲 [<paramref name="offset"/>, +<paramref name="length"/>) で最も多い分類 (ミニマップの「分類」レイヤの 1 ピクセル行。
+    /// ANA-16 の仕様 7)。分類していない範囲なら <see cref="DataClass.None"/>。ブロックが多い場合は最大 1,024 個を等間隔に見る。
+    /// </summary>
+    public DataClass ClassOf(long offset, long length)
+    {
+        if (Classes.Length == 0 || length <= 0)
+        {
+            return DataClass.None;
+        }
+
+        Span<long> counts = stackalloc long[Enum.GetValues<DataClass>().Length];
+        long end = offset + length;
+        foreach (Hashing.HashRange r in Ranges.Ranges)
+        {
+            long s = Math.Max(offset, r.Offset);
+            long e = Math.Min(end, r.Offset + r.Length);
+            if (s >= e || Ranges.ToLogical(s) is not long ls)
+            {
+                continue;
+            }
+
+            long first = ls / BlockSize;
+            long last = Math.Min(Classes.Length - 1, (ls + (e - s) - 1) / BlockSize);
+            long step = Math.Max(1, (last - first + 1) / 1024);
+            for (long b = first; b <= last; b += step)
+            {
+                counts[(int)Classes[b]] += step;
+            }
+        }
+
+        int best = 0;
+        for (int c = 1; c < counts.Length; c++)
+        {
+            if (counts[c] > counts[best] || (best == (int)DataClass.None && counts[c] > 0))
+            {
+                best = c;
+            }
+        }
+
+        return counts[best] > 0 ? (DataClass)best : DataClass.None;
+    }
 }
 
 /// <summary>
@@ -112,13 +165,30 @@ public static class DataClassifier
 
     private static readonly ConditionalWeakTable<Document, ClassificationResult> Latest = new();
 
+    /// <summary>中身が圧縮されたデータの形式 (アーカイブ・圧縮ファイル・圧縮した画像や音声・動画) の MIME か。</summary>
+    public static bool IsCompressedFormat(string mime) => mime.ToLowerInvariant() switch
+    {
+        "application/zip" or "application/gzip" or "application/x-7z-compressed" or "application/x-xz" or "application/zstd"
+            or "application/x-bzip2" or "application/x-lz4" or "application/x-lzip" or "application/x-brotli" or "application/vnd.rar"
+            or "application/vnd.ms-cab-compressed" or "application/x-mozlz4" or "application/epub+zip" => true,
+        "image/png" or "image/apng" or "image/jpeg" or "image/webp" or "audio/mpeg" or "audio/mp4" or "video/mp4" or "video/mpeg" => true,
+        var m => m.EndsWith("+zip", StringComparison.Ordinal),
+    };
+
     /// <summary>
     /// ドキュメント全体の最新の分類の結果 (ミニマップの「分類」レイヤ (ANA-16 の仕様 7、VIEW-35) が読む)。なければ null。
     /// </summary>
     public static ClassificationResult? LatestFor(Document document) => Latest.TryGetValue(document, out ClassificationResult? r) ? r : null;
 
     /// <summary>最新の結果として記録する (統計パネルが計算したとき)。</summary>
-    public static void Remember(Document document, ClassificationResult result) => Latest.AddOrUpdate(document, result);
+    public static void Remember(Document document, ClassificationResult result)
+    {
+        Latest.AddOrUpdate(document, result);
+        Remembered?.Invoke(null, document);
+    }
+
+    /// <summary>最新の結果が変わった (ミニマップの「分類」レイヤを描き直す)。購読した側は不要になったら外す。</summary>
+    public static event EventHandler<Document>? Remembered;
 
     /// <summary>
     /// 分類する。キャンセルした場合は、処理済みの範囲の結果を持つ結果を返す (<see cref="ClassificationResult.Completed"/> が false)。
@@ -188,8 +258,25 @@ public static class DataClassifier
         }
 
         Smooth(classes, length, blockSize);
+
+        // ファイル形式が圧縮されたデータの形式なら、高エントロピーのブロックは「圧縮」とする (ANA-17 の仕様 7)。
+        string? fileType = null;
+        if (request.FileType is { } type && IsCompressedFormat(type.Mime) && ranges.Start == 0)
+        {
+            fileType = type.Name;
+            for (int i = 0; i < count; i++)
+            {
+                if (classes[i] == DataClass.Encrypted)
+                {
+                    classes[i] = DataClass.Compressed;
+                    confidence[i] = Confidence.Medium;
+                }
+            }
+        }
+
         return new ClassificationResult
         {
+            FileTypeName = fileType,
             Ranges = ranges,
             BlockSize = blockSize,
             Classes = classes,

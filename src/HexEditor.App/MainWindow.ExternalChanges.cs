@@ -55,6 +55,9 @@ public sealed partial class MainWindow
         _pollTimer.Start();
     }
 
+    /// <summary>外部変更を検知した (比較タブに「再比較」を出す。MainWindow.Compare.cs)。</summary>
+    partial void OnDocumentChangedOnDisk(DocumentViewModel doc);
+
     private void CheckSelectedForExternalChange()
     {
         if (Vm.Selected?.Watch is { } watch && Vm.ExternalChanges is { } monitor)
@@ -73,6 +76,7 @@ public sealed partial class MainWindow
         }
 
         AppLog.Info($"External change: {kind} ({(doc.Document.IsModified ? "modified" : "unmodified")})");
+        OnDocumentChangedOnDisk(doc);
 
         // ドキュメントを変える長時間処理の実行中 (ENG-09 の仕様 7) は、再読み込みもマージもできない。処理が終わってから扱う。
         if (doc.Document.IsEditLocked)

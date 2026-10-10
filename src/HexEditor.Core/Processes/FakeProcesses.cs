@@ -41,6 +41,9 @@ public sealed record FakeProcessSpec
 
     public ProcessAccessLevel Access { get; init; } = ProcessAccessLevel.Direct;
 
+    /// <summary>開けるが、昇格していなければメモリを読めない (読み込みが権限不足になる。ANA-09 の「エラー」の再現)。</summary>
+    public bool ReadNeedsElevation { get; init; }
+
     public bool CurrentUser { get; init; } = true;
 
     public long AddressLimit { get; init; } = 0x7FFF_FFFF_0000;
@@ -311,16 +314,18 @@ public sealed class FakeProcessAccess : IProcessAccess
         }
 
         OpenCount++;
-        return new Memory(process, writable);
+        return new Memory(process, writable, Elevated);
     }
 
     private sealed class Memory : IProcessMemory
     {
         private readonly FakeProcess _process;
+        private readonly bool _elevated;
 
-        public Memory(FakeProcess process, bool writable)
+        public Memory(FakeProcess process, bool writable, bool elevated)
         {
             _process = process;
+            _elevated = elevated;
             Writable = writable;
             process.ExitedEvent += (_, _) => Exited?.Invoke(this, EventArgs.Empty);
         }
@@ -344,7 +349,16 @@ public sealed class FakeProcessAccess : IProcessAccess
 
         public IReadOnlyList<ProcessModule> EnumModules() => _process.Spec.Modules;
 
-        public int Read(long address, Span<byte> buffer, out int read) => _process.Read(address, buffer, out read);
+        public int Read(long address, Span<byte> buffer, out int read)
+        {
+            if (_process.Spec.ReadNeedsElevation && !_elevated)
+            {
+                read = 0;
+                return Win32Errors.AccessDenied;
+            }
+
+            return _process.Read(address, buffer, out read);
+        }
 
         public int Write(long address, ReadOnlySpan<byte> data, out int written)
         {

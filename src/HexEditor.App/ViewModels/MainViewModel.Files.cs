@@ -67,6 +67,11 @@ public sealed partial class MainViewModel
             {
                 owner.ExternalChangeDetected?.Invoke(vm, kind);
             }
+            else if (file.Owner is CompareSideViewModel side)
+            {
+                // 比較タブが自分で開いたファイル (ANA-04 の「エラー」): 比較タブに「再比較」を出す。
+                side.RaiseExternalChange();
+            }
         };
     }
 
