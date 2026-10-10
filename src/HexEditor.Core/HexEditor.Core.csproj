@@ -15,4 +15,9 @@
     <EmbeddedResource Include="Commands\Presets\*.json" LogicalName="HexEditor.Presets.%(Filename).json" />
   </ItemGroup>
 
+  <!-- ファイル形式の判定の内蔵のシグネチャデータベース (ANA-17 の仕様 1)。本プロジェクトが自前で作成・保守する。 -->
+  <ItemGroup>
+    <EmbeddedResource Include="FileTypes\magic.json" LogicalName="HexEditor.FileTypes.magic.json" />
+  </ItemGroup>
+
 </Project>

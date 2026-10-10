@@ -21,6 +21,53 @@
       ],
       "default": "full"
     },
+    "analysis.classify.compressedEntropy": {
+      "description": "Classification: compressed entropy",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 8,
+      "default": 7.2
+    },
+    "analysis.classify.constantShare": {
+      "description": "Classification: constant threshold",
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1,
+      "default": 0.99
+    },
+    "analysis.classify.encryptedEntropy": {
+      "description": "Classification: encrypted entropy",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 8,
+      "default": 7.9
+    },
+    "analysis.classify.pValueHigh": {
+      "description": "Classification: highest p-value",
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1,
+      "default": 0.99
+    },
+    "analysis.classify.pValueLow": {
+      "description": "Classification: lowest p-value",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 0.5,
+      "default": 0.01
+    },
+    "analysis.classify.textShare": {
+      "description": "Classification: text threshold",
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1,
+      "default": 0.95
+    },
+    "analysis.fileType.autoDetect": {
+      "description": "Detect the file type when opening",
+      "type": "boolean",
+      "default": true
+    },
     "annotations.column": {
       "description": "Show the annotation column",
       "type": "boolean",
@@ -490,6 +537,11 @@
       "description": "\u0022Open with\u0022 extensions",
       "type": "string",
       "default": ""
+    },
+    "statistics.autoRecompute": {
+      "description": "Recalculate statistics automatically",
+      "type": "boolean",
+      "default": true
     },
     "storage.tempDirectory": {
       "description": "Folder for temporary data",

@@ -253,7 +253,7 @@ public sealed partial class WindowTests
         var overflow = state["statusOverflow"]!.AsArray().Select(n => n!.GetValue<string>()).ToList();
         Assert.NotEmpty(overflow);
         // UI-06 の仕様 5 の順 (ズーム・同期・表示形式・セクタなどは、この状態では表示していない)。
-        string[] order = ["column", "value", "endian", "encoding", "size", "notifications"];
+        string[] order = ["column", "value", "endian", "encoding", "fileType", "size", "notifications"];
         Assert.Equal(order.Take(overflow.Count), overflow);
         Assert.True(await app.IsShownAsync("Status_More"), "the … button is not shown");
         foreach (string id in overflow)

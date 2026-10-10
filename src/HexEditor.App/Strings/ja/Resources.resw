@@ -4406,4 +4406,284 @@
   <data name="Compare_DisabledToolTip" xml:space="preserve"><value>{0} ({1})</value></data>
   <data name="Compare_Graph_Buckets" xml:space="preserve"><value>区間 {0} 個</value></data>
   <data name="Compare_Graph_BucketsName" xml:space="preserve"><value>区間の数</value></data>
+  <data name="Cmd_analysis_statistics" xml:space="preserve"><value>統計を表示</value></data>
+  <data name="CmdAlias_analysis_statistics" xml:space="preserve"><value>とうけいをひょうじ ひすとぐらむ ぶんぷ</value></data>
+  <data name="Cmd_analysis_descriptive" xml:space="preserve"><value>記述統計</value></data>
+  <data name="CmdAlias_analysis_descriptive" xml:space="preserve"><value>きじゅつとうけい へいきん ちゅうおうち ぶんさん</value></data>
+  <data name="Cmd_analysis_entropy" xml:space="preserve"><value>エントロピー</value></data>
+  <data name="CmdAlias_analysis_entropy" xml:space="preserve"><value>えんとろぴー じょうちょうど あっしゅくりつ</value></data>
+  <data name="Cmd_analysis_entropyGraph" xml:space="preserve"><value>エントロピーグラフ</value></data>
+  <data name="CmdAlias_analysis_entropyGraph" xml:space="preserve"><value>えんとろぴーぐらふ</value></data>
+  <data name="Cmd_analysis_digram" xml:space="preserve"><value>ダイグラム</value></data>
+  <data name="CmdAlias_analysis_digram" xml:space="preserve"><value>だいぐらむ ばいとのくみ</value></data>
+  <data name="Cmd_analysis_byteDistribution" xml:space="preserve"><value>位置ごとのバイト分布</value></data>
+  <data name="CmdAlias_analysis_byteDistribution" xml:space="preserve"><value>いちごとのばいとぶんぷ</value></data>
+  <data name="Cmd_analysis_patterns" xml:space="preserve"><value>よく現れるバイト列</value></data>
+  <data name="CmdAlias_analysis_patterns" xml:space="preserve"><value>よくあらわれるばいとれつ ぱたーん しゅうき</value></data>
+  <data name="Cmd_analysis_classify" xml:space="preserve"><value>暗号化・圧縮データを検出</value></data>
+  <data name="CmdAlias_analysis_classify" xml:space="preserve"><value>あんごうか あっしゅく けんしゅつ ぶんるい</value></data>
+  <data name="Cmd_analysis_fileType" xml:space="preserve"><value>ファイル形式を判定</value></data>
+  <data name="CmdAlias_analysis_fileType" xml:space="preserve"><value>ふぁいるけいしきをはんてい まじっく</value></data>
+  <data name="Cmd_analysis_fileType_here" xml:space="preserve"><value>ここからの形式を判定</value></data>
+  <data name="CmdAlias_analysis_fileType_here" xml:space="preserve"><value>ここからのけいしきをはんてい</value></data>
+  <data name="Cmd_analysis_fileType_embedded" xml:space="preserve"><value>埋め込まれた形式を探す</value></data>
+  <data name="CmdAlias_analysis_fileType_embedded" xml:space="preserve"><value>うめこまれたけいしきをさがす しぐねちゃ</value></data>
+  <data name="Cmd_view_panel_statistics" xml:space="preserve"><value>統計パネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_statistics" xml:space="preserve"><value>とうけいぱねる</value></data>
+  <data name="Cmd_view_panel_fileType" xml:space="preserve"><value>ファイル形式パネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_fileType" xml:space="preserve"><value>ふぁいるけいしきぱねる</value></data>
+  <data name="Menu_Analysis_Statistics.Text" xml:space="preserve"><value>統計...</value></data>
+  <data name="Menu_Analysis_Statistics.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Analysis_Classify.Text" xml:space="preserve"><value>暗号化・圧縮データの検出</value></data>
+  <data name="Menu_Analysis_Classify.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Analysis_FileType.Text" xml:space="preserve"><value>ファイル形式の判定</value></data>
+  <data name="Menu_Analysis_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View_Statistics.Text" xml:space="preserve"><value>統計</value></data>
+  <data name="Menu_View_Statistics.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_FileType.Text" xml:space="preserve"><value>ファイル形式</value></data>
+  <data name="Menu_View_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="HexView_Menu_Statistics" xml:space="preserve"><value>統計</value></data>
+  <data name="HexView_Menu_FileTypeHere" xml:space="preserve"><value>ここからの形式を判定</value></data>
+  <data name="Panel_Statistics_Title" xml:space="preserve"><value>統計</value></data>
+  <data name="Panel_FileType_Title" xml:space="preserve"><value>ファイル形式</value></data>
+  <data name="Status_Item_FileType" xml:space="preserve"><value>ファイル形式</value></data>
+  <data name="Status_FileTypeName" xml:space="preserve"><value>ファイル形式: {0}</value></data>
+  <data name="Operation_Statistics" xml:space="preserve"><value>統計</value></data>
+  <data name="Operation_CompressionEstimate" xml:space="preserve"><value>圧縮率の推定</value></data>
+  <data name="Operation_EntropyGraph" xml:space="preserve"><value>エントロピーグラフ</value></data>
+  <data name="Operation_Patterns" xml:space="preserve"><value>パターン統計</value></data>
+  <data name="Operation_Classify" xml:space="preserve"><value>データの分類</value></data>
+  <data name="Operation_FindEmbedded" xml:space="preserve"><value>埋め込まれた形式の探索</value></data>
+  <data name="Set_analysis_fileType_autoDetect" xml:space="preserve"><value>開いたときにファイル形式を判定する</value></data>
+  <data name="SetDesc_analysis_fileType_autoDetect" xml:space="preserve"><value>先頭と末尾の 64 KB をバックグラウンドで読み、最も確からしい形式をステータスバーに表示します。</value></data>
+  <data name="Set_analysis_classify_constantShare" xml:space="preserve"><value>分類: 定数のしきい値</value></data>
+  <data name="SetDesc_analysis_classify_constantShare" xml:space="preserve"><value>最頻値の割合がこの値以上のブロックを「定数」にします (0.99 = 99%)。</value></data>
+  <data name="Set_analysis_classify_textShare" xml:space="preserve"><value>分類: テキストのしきい値</value></data>
+  <data name="SetDesc_analysis_classify_textShare" xml:space="preserve"><value>印字可能 ASCII・空白類、または UTF-8 / UTF-16 として妥当な割合がこの値以上のブロックを「テキスト」にします。</value></data>
+  <data name="Set_analysis_classify_encryptedEntropy" xml:space="preserve"><value>分類: 暗号化のエントロピー</value></data>
+  <data name="SetDesc_analysis_classify_encryptedEntropy" xml:space="preserve"><value>暗号化・乱数とみなすエントロピー (ビット / バイト) の下限です。</value></data>
+  <data name="Set_analysis_classify_pValueLow" xml:space="preserve"><value>分類: p 値の下限</value></data>
+  <data name="SetDesc_analysis_classify_pValueLow" xml:space="preserve"><value>暗号化・乱数のブロックのカイ二乗の p 値の下限です。</value></data>
+  <data name="Set_analysis_classify_pValueHigh" xml:space="preserve"><value>分類: p 値の上限</value></data>
+  <data name="SetDesc_analysis_classify_pValueHigh" xml:space="preserve"><value>暗号化・乱数のブロックのカイ二乗の p 値の上限です。</value></data>
+  <data name="Set_analysis_classify_compressedEntropy" xml:space="preserve"><value>分類: 圧縮のエントロピー</value></data>
+  <data name="SetDesc_analysis_classify_compressedEntropy" xml:space="preserve"><value>圧縮とみなすエントロピー (ビット / バイト) の下限です。</value></data>
+  <data name="Set_statistics_autoRecompute" xml:space="preserve"><value>統計を自動で再計算する</value></data>
+  <data name="SetDesc_statistics_autoRecompute" xml:space="preserve"><value>対象範囲が変わってから 300 ms 後に統計を再計算します (64 MB まで)。</value></data>
+  <data name="SetGroup_analysis" xml:space="preserve"><value>解析</value></data>
+  <data name="FileType_MagicError" xml:space="preserve"><value>{0} を読み込めません: {1} 行目</value></data>
+  <data name="Stats_Target.Header" xml:space="preserve"><value>対象範囲</value></data>
+  <data name="Stats_Target_Selection.Content" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Stats_Target_Multi.Content" xml:space="preserve"><value>マルチ選択</value></data>
+  <data name="Stats_Target_Whole.Content" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="Stats_Target_Custom.Content" xml:space="preserve"><value>範囲を指定</value></data>
+  <data name="Stats_CustomStart.Header" xml:space="preserve"><value>開始</value></data>
+  <data name="Stats_CustomLength.Header" xml:space="preserve"><value>長さ / 終了</value></data>
+  <data name="Stats_CustomUsesEnd.Content" xml:space="preserve"><value>終了 (このバイトを含む)</value></data>
+  <data name="Stats_Type.Header" xml:space="preserve"><value>型</value></data>
+  <data name="Stats_BigEndian.Header" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Stats_Stride.Header" xml:space="preserve"><value>ストライド</value></data>
+  <data name="Stats_Stride.PlaceholderText" xml:space="preserve"><value>型のサイズ</value></data>
+  <data name="Stats_BinCount.Header" xml:space="preserve"><value>ビンの数</value></data>
+  <data name="Stats_BinAuto.Content" xml:space="preserve"><value>範囲を自動</value></data>
+  <data name="Stats_BinAuto.ToolTipService.ToolTip" xml:space="preserve"><value>最小値〜最大値。32 / 64 bit の型で要素が 1,600 万を超える場合は 2 回目の読み込みが必要なため、時間が 2 倍になります。</value></data>
+  <data name="Stats_BinMin.Header" xml:space="preserve"><value>最小</value></data>
+  <data name="Stats_BinMax.Header" xml:space="preserve"><value>最大</value></data>
+  <data name="Stats_PerValue.Content" xml:space="preserve"><value>値ごと (65,536 個)</value></data>
+  <data name="Stats_AutoRecompute.Content" xml:space="preserve"><value>自動で再計算</value></data>
+  <data name="Stats_Compute.Content" xml:space="preserve"><value>再計算</value></data>
+  <data name="Stats_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Stats_Stale.Text" xml:space="preserve"><value>結果は編集前の内容のものです。</value></data>
+  <data name="Stats_Tab_Histogram.Text" xml:space="preserve"><value>ヒストグラム</value></data>
+  <data name="Stats_Tab_Descriptive.Text" xml:space="preserve"><value>記述統計</value></data>
+  <data name="Stats_Tab_Entropy.Text" xml:space="preserve"><value>エントロピー</value></data>
+  <data name="Stats_Tab_Digram.Text" xml:space="preserve"><value>ダイグラム</value></data>
+  <data name="Stats_Tab_Pattern.Text" xml:space="preserve"><value>パターン</value></data>
+  <data name="Stats_Tab_Classify.Text" xml:space="preserve"><value>分類</value></data>
+  <data name="Stats_AsTable.Content" xml:space="preserve"><value>表で表示</value></data>
+  <data name="Stats_LogScale.Content" xml:space="preserve"><value>対数目盛り</value></data>
+  <data name="Stats_ShowPercent.Content" xml:space="preserve"><value>割合 (%)</value></data>
+  <data name="Stats_Sort.Header" xml:space="preserve"><value>並べ替え</value></data>
+  <data name="Stats_Sort_Value.Content" xml:space="preserve"><value>値の順</value></data>
+  <data name="Stats_Sort_Count.Content" xml:space="preserve"><value>件数の順</value></data>
+  <data name="Stats_CopyTable.Content" xml:space="preserve"><value>表をコピー</value></data>
+  <data name="Stats_Export.Content" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="Stats_ExportCsv.Text" xml:space="preserve"><value>CSV...</value></data>
+  <data name="Stats_ExportJson.Text" xml:space="preserve"><value>JSON...</value></data>
+  <data name="Stats_CopyValue.Content" xml:space="preserve"><value>値をコピー</value></data>
+  <data name="Stats_CopyAll.Content" xml:space="preserve"><value>すべてコピー</value></data>
+  <data name="Stats_EstimateCompression.Content" xml:space="preserve"><value>圧縮率を推定する</value></data>
+  <data name="Stats_BlockSize.Header" xml:space="preserve"><value>ブロックの大きさ</value></data>
+  <data name="Stats_ZeroSeries.Content" xml:space="preserve"><value>0x00 の割合</value></data>
+  <data name="Stats_PrintableSeries.Content" xml:space="preserve"><value>印字可能な ASCII の割合</value></data>
+  <data name="Stats_Threshold.Header" xml:space="preserve"><value>しきい値 (ビット)</value></data>
+  <data name="Stats_ZoomIn.Content" xml:space="preserve"><value>拡大</value></data>
+  <data name="Stats_ZoomOut.Content" xml:space="preserve"><value>縮小</value></data>
+  <data name="Stats_ExportGraph.Content" xml:space="preserve"><value>CSV にエクスポート...</value></data>
+  <data name="Stats_DigramMode.Header" xml:space="preserve"><value>図</value></data>
+  <data name="Stats_DigramMode_Pairs.Content" xml:space="preserve"><value>ダイグラム</value></data>
+  <data name="Stats_DigramMode_Positions.Content" xml:space="preserve"><value>位置ごとの分布</value></data>
+  <data name="Stats_NGramLength.Header" xml:space="preserve"><value>長さ (n)</value></data>
+  <data name="Stats_TopCount.Header" xml:space="preserve"><value>上位</value></data>
+  <data name="Stats_MinCount.Header" xml:space="preserve"><value>最小件数</value></data>
+  <data name="Stats_AlignModulus.Header" xml:space="preserve"><value>オフセット mod</value></data>
+  <data name="Stats_AlignRemainder.Header" xml:space="preserve"><value>の値</value></data>
+  <data name="Stats_ExcludeUniform.Content" xml:space="preserve"><value>すべて 0x00 / 0xFF の列を除く</value></data>
+  <data name="Stats_ComputePatterns.Content" xml:space="preserve"><value>計算</value></data>
+  <data name="Stats_PatternView.Header" xml:space="preserve"><value>結果</value></data>
+  <data name="Stats_PatternView_Frequent.Content" xml:space="preserve"><value>よく現れるバイト列</value></data>
+  <data name="Stats_PatternView_Periods.Content" xml:space="preserve"><value>周期</value></data>
+  <data name="Stats_ClassBlockSize.Header" xml:space="preserve"><value>ブロックの大きさ</value></data>
+  <data name="Stats_Classify.Content" xml:space="preserve"><value>分類する</value></data>
+  <data name="Stats_EstimateNotice.Text" xml:space="preserve"><value>統計に基づく推定で、誤判定がありえます。</value></data>
+  <data name="Stats_Aborted" xml:space="preserve"><value>途中で中止 ({0}% まで)</value></data>
+  <data name="Stats_AlignInvalid" xml:space="preserve"><value>位置の条件が正しくありません。</value></data>
+  <data name="Stats_BarName" xml:space="preserve"><value>{0}: {1} 件 ({2}%)</value></data>
+  <data name="Stats_BinRange" xml:space="preserve"><value>{0}〜{1}</value></data>
+  <data name="Stats_BinRangeInvalid" xml:space="preserve"><value>ビンの範囲が正しくありません。</value></data>
+  <data name="Stats_BlockName" xml:space="preserve"><value>ブロック {0}、{1}、エントロピー {2}</value></data>
+  <data name="Stats_BlockRowName" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Stats_BlockSize_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="Stats_Bytes" xml:space="preserve"><value>{0} バイト</value></data>
+  <data name="Stats_Cancelled" xml:space="preserve"><value>キャンセルしました。</value></data>
+  <data name="Stats_ChiSquareValue" xml:space="preserve"><value>{0} (p = {1})</value></data>
+  <data name="Stats_ClassBand" xml:space="preserve"><value>分類の帯</value></data>
+  <data name="Stats_ClassRowName" xml:space="preserve"><value>{0}、{1}、{2} バイト</value></data>
+  <data name="Stats_Col_Value" xml:space="preserve"><value>値</value></data>
+  <data name="Stats_Col_Char" xml:space="preserve"><value>文字</value></data>
+  <data name="Stats_Col_Count" xml:space="preserve"><value>件数</value></data>
+  <data name="Stats_Col_Percent" xml:space="preserve"><value>割合</value></data>
+  <data name="Stats_Col_Cumulative" xml:space="preserve"><value>累積割合</value></data>
+  <data name="Stats_CompressionFailed" xml:space="preserve"><value>試し圧縮に失敗しました: {0}</value></data>
+  <data name="Stats_CompressionRatio" xml:space="preserve"><value>圧縮率の推定</value></data>
+  <data name="Stats_DecompressUnavailable" xml:space="preserve"><value>展開機能はまだ使えません。</value></data>
+  <data name="Stats_DigramCell" xml:space="preserve"><value>{0}: {1} 件 ({2}%)</value></data>
+  <data name="Stats_DigramChart" xml:space="preserve"><value>ダイグラム</value></data>
+  <data name="Stats_DigramRowName" xml:space="preserve"><value>{0}: {1} 件 ({2})</value></data>
+  <data name="Stats_DigramSummary" xml:space="preserve"><value>ダイグラム、組 {0} 個、最多 {1} ({2} 件)</value></data>
+  <data name="Stats_DigramTooShort" xml:space="preserve"><value>2 バイト以上の範囲を指定してください。</value></data>
+  <data name="Stats_Entropy" xml:space="preserve"><value>エントロピー</value></data>
+  <data name="Stats_EntropyBits" xml:space="preserve"><value>{0} ビット / 要素</value></data>
+  <data name="Stats_EntropyChart" xml:space="preserve"><value>エントロピーグラフ</value></data>
+  <data name="Stats_EntropyDesc" xml:space="preserve"><value>ヒストグラムのビンの出現確率から求めるシャノンエントロピー</value></data>
+  <data name="Stats_EntropyPercent" xml:space="preserve"><value>エントロピー (%)</value></data>
+  <data name="Stats_GraphSummary" xml:space="preserve"><value>エントロピーグラフ、ブロック {0} 個、最大 {1} ビット、オフセット {2}</value></data>
+  <data name="Stats_HistogramChart" xml:space="preserve"><value>ヒストグラム</value></data>
+  <data name="Stats_HistogramRowName" xml:space="preserve"><value>{0}: {1} 件 ({2})</value></data>
+  <data name="Stats_HistogramSummary" xml:space="preserve"><value>ヒストグラム、ビン {0} 個、最多 {1} ({2} 件)</value></data>
+  <data name="Stats_Item_Specials" xml:space="preserve"><value>NaN / +∞ / −∞</value></data>
+  <data name="Stats_LegendName" xml:space="preserve"><value>{0}、{1}</value></data>
+  <data name="Stats_Menu_Decompress" xml:space="preserve"><value>ここから展開...</value></data>
+  <data name="Stats_Menu_FindAll" xml:space="preserve"><value>この値をすべて検索</value></data>
+  <data name="Stats_Menu_GoTo" xml:space="preserve"><value>移動</value></data>
+  <data name="Stats_Menu_GoToFirst" xml:space="preserve"><value>最初の出現位置へ移動</value></data>
+  <data name="Stats_Menu_GoToNext" xml:space="preserve"><value>次の出現位置へ移動</value></data>
+  <data name="Stats_Menu_RecordView" xml:space="preserve"><value>この長さでレコード表示</value></data>
+  <data name="Stats_MinimumSize" xml:space="preserve"><value>理論上の最小サイズ</value></data>
+  <data name="Stats_ModeCount" xml:space="preserve"><value>{0} 回</value></data>
+  <data name="Stats_MoreModes" xml:space="preserve"><value>ほか {0} 個</value></data>
+  <data name="Stats_NGramRowName" xml:space="preserve"><value>{0} 位 {1}: {2} 件</value></data>
+  <data name="Stats_NameValue" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Stats_NoElements" xml:space="preserve"><value>要素が 1 つもありません。</value></data>
+  <data name="Stats_NoPatterns" xml:space="preserve"><value>最小件数以上現れる列はありません。</value></data>
+  <data name="Stats_OutOfRange" xml:space="preserve"><value>範囲より小さい: {0}、範囲より大きい: {1}</value></data>
+  <data name="Stats_PatternsCancelled" xml:space="preserve"><value>キャンセルしました。途中の結果は破棄しました。</value></data>
+  <data name="Stats_PeriodRowName" xml:space="preserve"><value>{0} 位 周期 {1}: {2}</value></data>
+  <data name="Stats_PiValue" xml:space="preserve"><value>{0} (誤差 {1}%)</value></data>
+  <data name="Stats_PositionCell" xml:space="preserve"><value>{0}〜{1}、{2}: {3} 件 ({4}%)</value></data>
+  <data name="Stats_PositionChart" xml:space="preserve"><value>位置ごとのバイト分布</value></data>
+  <data name="Stats_RangeInvalid" xml:space="preserve"><value>範囲が正しくありません。</value></data>
+  <data name="Stats_Redundancy" xml:space="preserve"><value>冗長度</value></data>
+  <data name="Stats_RegionName" xml:space="preserve"><value>{0}、{1}、{2} バイト</value></data>
+  <data name="Stats_Remainder" xml:space="preserve"><value>端数: {0} バイト</value></data>
+  <data name="Stats_Sample" xml:space="preserve"><value>標本: {0} / {1}</value></data>
+  <data name="Stats_SaveFailed" xml:space="preserve"><value>保存できません: {0}</value></data>
+  <data name="Stats_Saved" xml:space="preserve"><value>{0} に保存しました。</value></data>
+  <data name="Stats_SignatureKind" xml:space="preserve"><value>シグネチャ: {0}</value></data>
+  <data name="Stats_Specials" xml:space="preserve"><value>NaN: {0}、+∞: {1}、−∞: {2}</value></data>
+  <data name="Stats_StrideInvalid" xml:space="preserve"><value>ストライドは 1〜65,536 で指定してください。</value></data>
+  <data name="Stats_Unreadable" xml:space="preserve"><value>読み込めなかった範囲: {0} か所、{1} バイト</value></data>
+  <data name="Stats_Unreadable_Cell" xml:space="preserve"><value>読み込み不可</value></data>
+  <data name="Stats_ValueNotFound" xml:space="preserve"><value>その値は見つかりませんでした。</value></data>
+  <data name="Stats_Share_Zero" xml:space="preserve"><value>0x00</value></data>
+  <data name="Stats_Share_Ff" xml:space="preserve"><value>0xFF</value></data>
+  <data name="Stats_Share_Printable" xml:space="preserve"><value>印字可能な ASCII</value></data>
+  <data name="Stats_Share_Whitespace" xml:space="preserve"><value>空白類</value></data>
+  <data name="Stats_Share_Control" xml:space="preserve"><value>その他の制御文字</value></data>
+  <data name="Stats_Share_High" xml:space="preserve"><value>0x80〜0xFF</value></data>
+  <data name="Stats_Verdict_Repetitive" xml:space="preserve"><value>ほぼ同じ値の繰り返し</value></data>
+  <data name="Stats_Verdict_TextOrStructured" xml:space="preserve"><value>テキストや構造化データの可能性</value></data>
+  <data name="Stats_Verdict_Binary" xml:space="preserve"><value>一般的なバイナリ (実行形式など) の可能性</value></data>
+  <data name="Stats_Verdict_CompressedOrEncrypted" xml:space="preserve"><value>圧縮または暗号化されたデータの可能性</value></data>
+  <data name="Stats_Why_NoElements" xml:space="preserve"><value>要素がありません。</value></data>
+  <data name="Stats_Why_TooFewElements" xml:space="preserve"><value>要素が足りません。</value></data>
+  <data name="Stats_Why_AllSame" xml:space="preserve"><value>すべて同じ値です。</value></data>
+  <data name="Stats_Why_TooManyElements" xml:space="preserve"><value>要素数が多すぎるため求めていません。</value></data>
+  <data name="Stats_Why_NotApplicable" xml:space="preserve"><value>この型では求めません。</value></data>
+  <data name="Stats_Class_None" xml:space="preserve"><value>未分類</value></data>
+  <data name="Stats_Class_Zero" xml:space="preserve"><value>ゼロ埋め</value></data>
+  <data name="Stats_Class_Constant" xml:space="preserve"><value>定数</value></data>
+  <data name="Stats_Class_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="Stats_Class_Encrypted" xml:space="preserve"><value>暗号化・乱数</value></data>
+  <data name="Stats_Class_Compressed" xml:space="preserve"><value>圧縮</value></data>
+  <data name="Stats_Class_Binary" xml:space="preserve"><value>バイナリ</value></data>
+  <data name="Stats_Class_Unreadable" xml:space="preserve"><value>読み込み不可</value></data>
+  <data name="Stats_Confidence_Low" xml:space="preserve"><value>低</value></data>
+  <data name="Stats_Confidence_Medium" xml:space="preserve"><value>中</value></data>
+  <data name="Stats_Confidence_High" xml:space="preserve"><value>高</value></data>
+  <data name="Stats_Item_Count" xml:space="preserve"><value>要素数</value></data>
+  <data name="Stats_ItemDesc_Count" xml:space="preserve"><value>数えた要素の数 (NaN・∞ を除く)</value></data>
+  <data name="Stats_Item_Sum" xml:space="preserve"><value>合計</value></data>
+  <data name="Stats_ItemDesc_Sum" xml:space="preserve"><value>要素の合計 (整数型は 128 bit で正確に、浮動小数点は補正付き加算)</value></data>
+  <data name="Stats_Item_Minimum" xml:space="preserve"><value>最小値</value></data>
+  <data name="Stats_ItemDesc_Minimum" xml:space="preserve"><value>最も小さい要素</value></data>
+  <data name="Stats_Item_Maximum" xml:space="preserve"><value>最大値</value></data>
+  <data name="Stats_ItemDesc_Maximum" xml:space="preserve"><value>最も大きい要素</value></data>
+  <data name="Stats_Item_Range" xml:space="preserve"><value>範囲</value></data>
+  <data name="Stats_ItemDesc_Range" xml:space="preserve"><value>最大値 − 最小値</value></data>
+  <data name="Stats_Item_Mean" xml:space="preserve"><value>平均</value></data>
+  <data name="Stats_ItemDesc_Mean" xml:space="preserve"><value>合計 / 要素数</value></data>
+  <data name="Stats_Item_PopulationVariance" xml:space="preserve"><value>母分散</value></data>
+  <data name="Stats_ItemDesc_PopulationVariance" xml:space="preserve"><value>Welford の方法、n で割る</value></data>
+  <data name="Stats_Item_SampleVariance" xml:space="preserve"><value>標本分散</value></data>
+  <data name="Stats_ItemDesc_SampleVariance" xml:space="preserve"><value>不偏分散、n − 1 で割る</value></data>
+  <data name="Stats_Item_PopulationStdDev" xml:space="preserve"><value>母標準偏差</value></data>
+  <data name="Stats_ItemDesc_PopulationStdDev" xml:space="preserve"><value>母分散の平方根</value></data>
+  <data name="Stats_Item_SampleStdDev" xml:space="preserve"><value>標本標準偏差</value></data>
+  <data name="Stats_ItemDesc_SampleStdDev" xml:space="preserve"><value>標本分散の平方根</value></data>
+  <data name="Stats_Item_Median" xml:space="preserve"><value>中央値</value></data>
+  <data name="Stats_ItemDesc_Median" xml:space="preserve"><value>中央の値 (偶数個なら中央 2 つの平均)</value></data>
+  <data name="Stats_Item_Q1" xml:space="preserve"><value>第 1 四分位数</value></data>
+  <data name="Stats_ItemDesc_Q1" xml:space="preserve"><value>線形補間 (QUARTILE.INC と同じ)</value></data>
+  <data name="Stats_Item_Q3" xml:space="preserve"><value>第 3 四分位数</value></data>
+  <data name="Stats_ItemDesc_Q3" xml:space="preserve"><value>線形補間 (QUARTILE.INC と同じ)</value></data>
+  <data name="Stats_Item_Mode" xml:space="preserve"><value>最頻値</value></data>
+  <data name="Stats_ItemDesc_Mode" xml:space="preserve"><value>最も多く現れる値 (小さい順に最大 5 個)</value></data>
+  <data name="Stats_Item_Skewness" xml:space="preserve"><value>歪度</value></data>
+  <data name="Stats_ItemDesc_Skewness" xml:space="preserve"><value>調整済み Fisher-Pearson 係数</value></data>
+  <data name="Stats_Item_Kurtosis" xml:space="preserve"><value>尖度</value></data>
+  <data name="Stats_ItemDesc_Kurtosis" xml:space="preserve"><value>超過尖度 (正規分布で 0)</value></data>
+  <data name="Stats_Item_ChiSquare" xml:space="preserve"><value>カイ二乗値</value></data>
+  <data name="Stats_ItemDesc_ChiSquare" xml:space="preserve"><value>一様分布を仮定した値 (自由度 255) と p 値</value></data>
+  <data name="Stats_Item_SerialCorrelation" xml:space="preserve"><value>系列相関係数</value></data>
+  <data name="Stats_ItemDesc_SerialCorrelation" xml:space="preserve"><value>隣り合う要素の相関係数 (−1〜1)</value></data>
+  <data name="Stats_Item_Pi" xml:space="preserve"><value>モンテカルロ法の π</value></data>
+  <data name="Stats_ItemDesc_Pi" xml:space="preserve"><value>6 バイトを 1 組の座標とした π の推定値。乱数性の目安</value></data>
+  <data name="FileType_Detect.Content" xml:space="preserve"><value>判定</value></data>
+  <data name="FileType_DetectHere.Content" xml:space="preserve"><value>カーソル位置から判定</value></data>
+  <data name="FileType_FindEmbedded.Content" xml:space="preserve"><value>埋め込まれた形式を探す</value></data>
+  <data name="FileType_Base" xml:space="preserve"><value>{0} から判定</value></data>
+  <data name="FileType_CandidateName" xml:space="preserve"><value>{0}、{1}、{2}</value></data>
+  <data name="FileType_Detecting" xml:space="preserve"><value>判定しています...</value></data>
+  <data name="FileType_EmbeddedCount" xml:space="preserve"><value>{0} 件</value></data>
+  <data name="FileType_EmbeddedName" xml:space="preserve"><value>{0}: {1} ({2})</value></data>
+  <data name="FileType_MatchName" xml:space="preserve"><value>{0}、{1}</value></data>
+  <data name="FileType_Mismatch" xml:space="preserve"><value>拡張子と内容が一致しません。</value></data>
+  <data name="FileType_Source_BuiltIn" xml:space="preserve"><value>内蔵</value></data>
+  <data name="FileType_Unknown" xml:space="preserve"><value>不明な形式 (データ)</value></data>
+  <data name="FileType_Text_Ascii" xml:space="preserve"><value>テキスト (ASCII)</value></data>
+  <data name="FileType_Text_Utf8" xml:space="preserve"><value>テキスト (UTF-8)</value></data>
+  <data name="FileType_Text_Utf8Bom" xml:space="preserve"><value>テキスト (UTF-8、BOM 付き)</value></data>
+  <data name="FileType_Text_Utf16LE" xml:space="preserve"><value>テキスト (UTF-16 LE)</value></data>
+  <data name="FileType_Text_Utf16BE" xml:space="preserve"><value>テキスト (UTF-16 BE)</value></data>
 </root>

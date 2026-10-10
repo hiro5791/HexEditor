@@ -208,6 +208,7 @@ public sealed partial class MainWindow
         // ---- 解析 ----
         RegisterHashCommands();
         RegisterCompareCommands();
+        RegisterStatisticsCommands();
 
         // ---- 設定・ヘルプ ----
         RegisterSettingsCommands();

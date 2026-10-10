@@ -42,6 +42,8 @@ public sealed partial class MainWindow
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
         "hash" => await TestHashAsync(request),
+        "stats" => await TestStatisticsAsync(request),
+        "fileType" => await TestFileTypeAsync(request),
 
         // ファイル・セッションの命令 (MainWindow.FilesTestCommands.cs)、コマンド・パネル・設定の命令 (MainWindow.FrameworkTestCommands.cs)。
         _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request)

@@ -291,6 +291,8 @@ public static class BuiltInCommands
         new("view.customizeToolbar", "view"),
         new("view.panel.inspector", "view") { Icon = IconInspector, DefaultBindings = [K("Ctrl+Shift+I")] },
         new("view.panel.hash", "view"),
+        new("view.panel.statistics", "view"),
+        new("view.panel.fileType", "view"),
         new("view.panel.bookmarks", "view"),
         new("view.panel.searchResults", "view"),
         new("view.panel.history", "view"),
@@ -385,6 +387,19 @@ public static class BuiltInCommands
         new("compare.copyAllLeft", "compare"),
         new("compare.showDiffList", "compare"),
         new("compare.saveReport", "compare"),
+
+        // 統計 (ANA-10〜ANA-16) とファイル形式の判定 (ANA-17)。ショートカットは既定なし。
+        new("analysis.statistics", "analysis") { Condition = "documentOpen" },
+        new("analysis.descriptive", "analysis") { Condition = "documentOpen" },
+        new("analysis.entropy", "analysis") { Condition = "documentOpen" },
+        new("analysis.entropyGraph", "analysis") { Condition = "documentOpen" },
+        new("analysis.digram", "analysis") { Condition = "documentOpen" },
+        new("analysis.byteDistribution", "analysis") { Condition = "documentOpen" },
+        new("analysis.patterns", "analysis") { Condition = "documentOpen" },
+        new("analysis.classify", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileType", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileType.here", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileType.embedded", "analysis") { Condition = "documentOpen" },
 
         // ---- データインスペクタ (INSP-02 の「呼び出し」: インスペクタ: エンディアンの切り替え) ----
         new("inspector.toggleEndian", "inspector") { Condition = "documentOpen" },

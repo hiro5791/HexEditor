@@ -282,6 +282,8 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Inspector" cmd:CommandUi.Id="view.panel.inspector" AutomationProperties.AutomationId="Command_ToggleInspector" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_BookmarksPanel" cmd:CommandUi.Id="view.panel.bookmarks" AutomationProperties.AutomationId="Command_ToggleBookmarks" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Hash" cmd:CommandUi.Id="view.panel.hash" AutomationProperties.AutomationId="Command_PanelHash" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_Statistics" cmd:CommandUi.Id="view.panel.statistics" AutomationProperties.AutomationId="Command_PanelStatistics" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_FileType" cmd:CommandUi.Id="view.panel.fileType" AutomationProperties.AutomationId="Command_PanelFileType" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_HistoryPanel" cmd:CommandUi.Id="view.panel.history" AutomationProperties.AutomationId="Command_ToggleHistory" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ClipboardPanel" cmd:CommandUi.Id="view.panel.clipboard" AutomationProperties.AutomationId="Command_ToggleClipboard" />
@@ -300,6 +302,9 @@
                             <MenuFlyoutItem x:Uid="Menu_Analysis_CompareSaved" cmd:CommandUi.Id="analysis.compareSaved" AutomationProperties.AutomationId="Command_CompareSaved" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Hash" cmd:CommandUi.Id="analysis.hash" AutomationProperties.AutomationId="Command_Hash" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_Statistics" cmd:CommandUi.Id="analysis.statistics" AutomationProperties.AutomationId="Command_Statistics" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_Classify" cmd:CommandUi.Id="analysis.classify" AutomationProperties.AutomationId="Command_Classify" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_FileType" cmd:CommandUi.Id="analysis.fileType" AutomationProperties.AutomationId="Command_FileType" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Tools">
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
@@ -577,6 +582,7 @@
                 <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Click="StatusEncoding_Click" Content="{x:Bind Vm.StatusDocument.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
                 <!--  エンディアン (VIEW-11 の仕様 3): クリックで切り替える。  -->
                 <Button x:Name="StatusEndian" AutomationProperties.AutomationId="Status_Endian" Click="StatusEndian_Click" Content="{x:Bind Vm.StatusDocument.EndianText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="endian" />
+                <Button x:Name="StatusFileType" AutomationProperties.AutomationId="Status_FileType" Click="StatusFileType_Click" Style="{StaticResource StatusItemStyle}" Tag="fileType" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.StatusDocument.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.StatusDocument.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <!--  比較タブの表示中: 「差分 12 / 340」、異なるバイト数、一致率 (ANA-04 の仕様 6)。  -->

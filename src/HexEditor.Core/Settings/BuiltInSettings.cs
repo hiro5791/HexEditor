@@ -212,6 +212,16 @@ public static class BuiltInSettings
         new("hash.algorithms", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 101, ShowInPage = false },
         new("hash.sets", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 102, ShowInPage = false },
 
+        // 統計 (ANA-10) の「自動で再計算」、ファイル形式の自動判定 (ANA-17 の仕様 4)、分類のしきい値 (ANA-16 の仕様 6)。
+        new("statistics.autoRecompute", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 110, ShowInPage = false },
+        new("analysis.fileType.autoDetect", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 111, Group = "analysis" },
+        new("analysis.classify.constantShare", SettingCategories.Advanced, SettingKind.Number, 0.99) { Min = 0.5, Max = 1, Step = 0.01, Order = 112, Group = "analysis" },
+        new("analysis.classify.textShare", SettingCategories.Advanced, SettingKind.Number, 0.95) { Min = 0.5, Max = 1, Step = 0.01, Order = 113, Group = "analysis" },
+        new("analysis.classify.encryptedEntropy", SettingCategories.Advanced, SettingKind.Number, 7.9) { Min = 0, Max = 8, Step = 0.05, Order = 114, Group = "analysis" },
+        new("analysis.classify.pValueLow", SettingCategories.Advanced, SettingKind.Number, 0.01) { Min = 0, Max = 0.5, Step = 0.01, Order = 115, Group = "analysis" },
+        new("analysis.classify.pValueHigh", SettingCategories.Advanced, SettingKind.Number, 0.99) { Min = 0.5, Max = 1, Step = 0.01, Order = 116, Group = "analysis" },
+        new("analysis.classify.compressedEntropy", SettingCategories.Advanced, SettingKind.Number, 7.2) { Min = 0, Max = 8, Step = 0.05, Order = 117, Group = "analysis" },
+
         // ---- 言語 ----
         new("ui.language", SettingCategories.Language, SettingKind.Choice, "system") { Options = Languages, RequiresRestart = true, Order = 10 },
 
