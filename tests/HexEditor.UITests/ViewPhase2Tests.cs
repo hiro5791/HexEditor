@@ -663,7 +663,18 @@ public sealed class ViewPhase2Tests
         await RightClickAsync(app, CellPoint(render, 0x10, text: true));
 
         // メニューの中を探すのはアプリの中で (項目が多いメニューは、UI オートメーションの木に出るまで時間がかかることがある)。
-        await app.WaitUntilAsync(() => app.IsShownAsync("HexViewMenu_TextColumn"), UiTest.Scaled(TimeSpan.FromSeconds(15)), "text column submenu");
+        // 要素の検索は UI スレッドで木を全部たどるため、続けて問い合わせるとメニューの表示が進まない: 先に UI スレッドが空くのを待ち、間を空けて確かめる。
+        await app.IdleAsync();
+        await app.WaitUntilAsync(async () =>
+        {
+            if (await app.IsShownAsync("HexViewMenu_TextColumn"))
+            {
+                return true;
+            }
+
+            await Task.Delay(250);
+            return false;
+        }, UiTest.Scaled(TimeSpan.FromSeconds(15)), "text column submenu");
         await app.SendAsync("hideContextMenu");
         await RightClickAsync(app, CellPoint(render, 0x10));
         await app.WaitForAsync("HexViewMenu_Copy");
