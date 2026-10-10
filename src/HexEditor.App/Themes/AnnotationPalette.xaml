@@ -43,6 +43,30 @@
             <StaticResource x:Key="BookmarkMarkTextBrush" ResourceKey="TextOnAccentFillColorPrimaryBrush" />
             <StaticResource x:Key="InspectorTargetBrush" ResourceKey="SystemFillColorAttentionBackgroundBrush" />
             <StaticResource x:Key="InspectorTargetBorderBrush" ResourceKey="AccentFillColorDefaultBrush" />
+            <!--  色の行の色見本の市松模様と枠線 (INSP-12 の仕様 2・3)  -->
+            <Color x:Key="InspectorCheckerLightColor">#FFFFFFFF</Color>
+            <SolidColorBrush x:Key="InspectorCheckerLightBrush" Color="{StaticResource InspectorCheckerLightColor}" />
+            <Color x:Key="InspectorCheckerDarkColor">#FFCCCCCC</Color>
+            <SolidColorBrush x:Key="InspectorCheckerDarkBrush" Color="{StaticResource InspectorCheckerDarkColor}" />
+            <StaticResource x:Key="InspectorSwatchBorderBrush" ResourceKey="ControlStrongStrokeColorDefaultBrush" />
+            <!--  注釈の出どころごとの既定の色 (INSP-32 の仕様 4)  -->
+            <Color x:Key="AnnotationYaraColor">#FF0063B1</Color>
+            <SolidColorBrush x:Key="AnnotationYaraBrush" Color="{StaticResource AnnotationYaraColor}" />
+            <Color x:Key="AnnotationSearchColor">#FFCA5010</Color>
+            <SolidColorBrush x:Key="AnnotationSearchBrush" Color="{StaticResource AnnotationSearchColor}" />
+            <Color x:Key="AnnotationScriptColor">#FF8764B8</Color>
+            <SolidColorBrush x:Key="AnnotationScriptBrush" Color="{StaticResource AnnotationScriptColor}" />
+            <Color x:Key="AnnotationTemplateColor">#FF038387</Color>
+            <SolidColorBrush x:Key="AnnotationTemplateBrush" Color="{StaticResource AnnotationTemplateColor}" />
+            <Color x:Key="AnnotationYaraBackgroundColor">#FFD3E3FF</Color>
+            <SolidColorBrush x:Key="AnnotationYaraBackgroundBrush" Color="{StaticResource AnnotationYaraBackgroundColor}" />
+            <Color x:Key="AnnotationSearchBackgroundColor">#FFFFE2C2</Color>
+            <SolidColorBrush x:Key="AnnotationSearchBackgroundBrush" Color="{StaticResource AnnotationSearchBackgroundColor}" />
+            <Color x:Key="AnnotationScriptBackgroundColor">#FFE6D9FF</Color>
+            <SolidColorBrush x:Key="AnnotationScriptBackgroundBrush" Color="{StaticResource AnnotationScriptBackgroundColor}" />
+            <Color x:Key="AnnotationTemplateBackgroundColor">#FFC8EEF0</Color>
+            <SolidColorBrush x:Key="AnnotationTemplateBackgroundBrush" Color="{StaticResource AnnotationTemplateBackgroundColor}" />
+            <StaticResource x:Key="AnnotationColumnTextBrush" ResourceKey="TextFillColorSecondaryBrush" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <Color x:Key="BookmarkBackground1Color">#FF5C2626</Color>
@@ -80,6 +104,28 @@
             <StaticResource x:Key="BookmarkMarkTextBrush" ResourceKey="TextFillColorInverseBrush" />
             <StaticResource x:Key="InspectorTargetBrush" ResourceKey="SystemFillColorAttentionBackgroundBrush" />
             <StaticResource x:Key="InspectorTargetBorderBrush" ResourceKey="AccentFillColorDefaultBrush" />
+            <Color x:Key="InspectorCheckerLightColor">#FF5A5A5A</Color>
+            <SolidColorBrush x:Key="InspectorCheckerLightBrush" Color="{StaticResource InspectorCheckerLightColor}" />
+            <Color x:Key="InspectorCheckerDarkColor">#FF3A3A3A</Color>
+            <SolidColorBrush x:Key="InspectorCheckerDarkBrush" Color="{StaticResource InspectorCheckerDarkColor}" />
+            <StaticResource x:Key="InspectorSwatchBorderBrush" ResourceKey="ControlStrongStrokeColorDefaultBrush" />
+            <Color x:Key="AnnotationYaraColor">#FF60A5FA</Color>
+            <SolidColorBrush x:Key="AnnotationYaraBrush" Color="{StaticResource AnnotationYaraColor}" />
+            <Color x:Key="AnnotationSearchColor">#FFFF9F5A</Color>
+            <SolidColorBrush x:Key="AnnotationSearchBrush" Color="{StaticResource AnnotationSearchColor}" />
+            <Color x:Key="AnnotationScriptColor">#FFC4A7F0</Color>
+            <SolidColorBrush x:Key="AnnotationScriptBrush" Color="{StaticResource AnnotationScriptColor}" />
+            <Color x:Key="AnnotationTemplateColor">#FF4FD1D5</Color>
+            <SolidColorBrush x:Key="AnnotationTemplateBrush" Color="{StaticResource AnnotationTemplateColor}" />
+            <Color x:Key="AnnotationYaraBackgroundColor">#FF1E3A5F</Color>
+            <SolidColorBrush x:Key="AnnotationYaraBackgroundBrush" Color="{StaticResource AnnotationYaraBackgroundColor}" />
+            <Color x:Key="AnnotationSearchBackgroundColor">#FF5A3518</Color>
+            <SolidColorBrush x:Key="AnnotationSearchBackgroundBrush" Color="{StaticResource AnnotationSearchBackgroundColor}" />
+            <Color x:Key="AnnotationScriptBackgroundColor">#FF3E2E5C</Color>
+            <SolidColorBrush x:Key="AnnotationScriptBackgroundBrush" Color="{StaticResource AnnotationScriptBackgroundColor}" />
+            <Color x:Key="AnnotationTemplateBackgroundColor">#FF13444A</Color>
+            <SolidColorBrush x:Key="AnnotationTemplateBackgroundBrush" Color="{StaticResource AnnotationTemplateBackgroundColor}" />
+            <StaticResource x:Key="AnnotationColumnTextBrush" ResourceKey="TextFillColorSecondaryBrush" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
             <SolidColorBrush x:Key="BookmarkBackground1Brush" Color="{ThemeResource SystemColorWindowColor}" />
@@ -101,6 +147,18 @@
             <SolidColorBrush x:Key="BookmarkMarkTextBrush" Color="{ThemeResource SystemColorWindowColor}" />
             <SolidColorBrush x:Key="InspectorTargetBrush" Color="{ThemeResource SystemColorWindowColor}" />
             <SolidColorBrush x:Key="InspectorTargetBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="InspectorCheckerLightBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="InspectorCheckerDarkBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+            <SolidColorBrush x:Key="InspectorSwatchBorderBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="AnnotationYaraBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="AnnotationSearchBrush" Color="{ThemeResource SystemColorHotlightColor}" />
+            <SolidColorBrush x:Key="AnnotationScriptBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="AnnotationTemplateBrush" Color="{ThemeResource SystemColorGrayTextColor}" />
+            <SolidColorBrush x:Key="AnnotationYaraBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="AnnotationSearchBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="AnnotationScriptBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="AnnotationTemplateBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="AnnotationColumnTextBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

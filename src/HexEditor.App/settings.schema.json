@@ -21,6 +21,16 @@
       ],
       "default": "full"
     },
+    "annotations.column": {
+      "description": "Show the annotation column",
+      "type": "boolean",
+      "default": false
+    },
+    "annotations.hidden": {
+      "description": "Hidden annotation sources",
+      "type": "string",
+      "default": ""
+    },
     "bookmarks.defaultColor": {
       "description": "Default bookmark color",
       "type": "string",
@@ -35,6 +45,11 @@
         "8"
       ],
       "default": "1"
+    },
+    "bookmarks.richToolTip": {
+      "description": "Show bookmark descriptions in tooltips",
+      "type": "boolean",
+      "default": true
     },
     "clipboard.compatFormats": {
       "description": "Copy in formats other hex editors read",
@@ -76,6 +91,16 @@
       "description": "Keep user clipboards after exit",
       "type": "boolean",
       "default": false
+    },
+    "coloring.highContrastColors": {
+      "description": "Use coloring rule colors in high contrast",
+      "type": "boolean",
+      "default": false
+    },
+    "coloring.rules": {
+      "description": "Coloring rules for all documents",
+      "type": "string",
+      "default": ""
     },
     "diagnostics.hexView.overlay": {
       "description": "Show rendering diagnostics in the Hex view",
@@ -299,6 +324,11 @@
     },
     "network.translationReport.enabled": {
       "description": "Allow translation reports",
+      "type": "boolean",
+      "default": true
+    },
+    "positionManager.followCursor": {
+      "description": "Position manager follows the cursor",
       "type": "boolean",
       "default": true
     },

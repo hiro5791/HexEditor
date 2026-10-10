@@ -103,6 +103,14 @@ public static class BuiltInSettings
         // ブックマーク (INSP-23 の仕様 2): Ctrl+F2 で付けるときの色 (色の一覧の番号)。
         new(Bookmarks.BookmarkColor.DefaultColorKey, SettingCategories.View, SettingKind.Choice, "1") { Options = ["1", "2", "3", "4", "5", "6", "7", "8"], Order = 110 },
 
+        // 位置マネージャとツールチップ (INSP-31 の仕様 2・4)、注釈の表示 (INSP-32)、色付けルール (INSP-33、INSP-34)。
+        new("positionManager.followCursor", SettingCategories.View, SettingKind.Bool, true) { Order = 111 },
+        new("bookmarks.richToolTip", SettingCategories.View, SettingKind.Bool, true) { Order = 112 },
+        new("annotations.hidden", SettingCategories.View, SettingKind.String, string.Empty) { Order = 113, ShowInPage = false },
+        new("annotations.column", SettingCategories.View, SettingKind.Bool, false) { Order = 114 },
+        new("coloring.rules", SettingCategories.View, SettingKind.String, string.Empty) { Order = 115, ShowInPage = false },
+        new("coloring.highContrastColors", SettingCategories.View, SettingKind.Bool, false) { Order = 116 },
+
         // ---- 編集 (EDIT-23、EDIT-26、EDIT-27) ----
         new("clipboard.compatFormats", SettingCategories.Editing, SettingKind.Bool, true) { Order = 10 },
         new("edit.pasteSpecial.preferLast", SettingCategories.Editing, SettingKind.Bool, true) { Order = 20 },

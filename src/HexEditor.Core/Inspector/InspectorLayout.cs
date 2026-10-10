@@ -14,7 +14,7 @@ public enum InspectorPreset
     All,
     DateTime,
 
-    /// <summary>「組み込み向け」(整数、2 進。固定小数点と half はフェーズ 2)。</summary>
+    /// <summary>「組み込み向け」(整数、固定小数点、half、2 進)。</summary>
     Embedded,
 }
 
@@ -48,13 +48,60 @@ public sealed class InspectorLayout : IEquatable<InspectorLayout>
         {
             InspectorPreset.All => true,
             InspectorPreset.DateTime => t.Group == InspectorGroup.DateTime,
-            InspectorPreset.Embedded => t.Group == InspectorGroup.Integer || InspectorTypes.IsBinary(t.Id),
+            InspectorPreset.Embedded => t.Group == InspectorGroup.Integer || InspectorTypes.IsBinary(t.Id) || InspectorTypes.IsFixedPoint(t.Id)
+                || t.Id == InspectorTypes.Half,
             _ => InspectorTypes.Basic.Contains(t.Id),
         };
         return new InspectorLayout(DefaultGroups, [.. InspectorTypes.All.Select(t => new InspectorRowConfig(t.Id, Shown(t)))]);
     }
 
     public InspectorRowConfig? Row(string typeId) => Rows.FirstOrDefault(r => r.TypeId == typeId);
+
+    /// <summary>
+    /// 1 回の更新で読むバイト数 (INSP-01 の仕様 4): 文字列 (INSP-10) の行を表示していれば 4 KB、標準の型だけなら 128 バイト。
+    /// </summary>
+    public int ReadLength => Rows.Any(r => r.Visible && InspectorTypes.IsString(r.TypeId)) ? InspectorDecoder.MaxReadLength : InspectorDecoder.ReadLength;
+
+    /// <summary>固定小数点の行の数 (INSP-06 の仕様 3。最大 16 行)。</summary>
+    public int FixedRowCount => Rows.Count(r => InspectorTypes.IsFixedPoint(r.TypeId));
+
+    /// <summary>
+    /// 固定小数点の行を加える (INSP-06 の仕様 3)。浮動小数点のグループの末尾に表示する行として加える。すでにある形式なら表示にするだけ。
+    /// 上限 (16 行) に達していれば変えない。
+    /// </summary>
+    public InspectorLayout WithFixedRow(FixedPointFormat format)
+    {
+        if (!format.IsValid)
+        {
+            return this;
+        }
+
+        if (Row(format.Id) is not null)
+        {
+            return WithVisible(format.Id, true);
+        }
+
+        if (FixedRowCount >= InspectorTypes.MaxFixedRows)
+        {
+            return this;
+        }
+
+        var rows = Rows.ToList();
+        int last = rows.FindLastIndex(r => InspectorTypes.Get(r.TypeId).Group == InspectorGroup.Float);
+        rows.Insert(last + 1, new InspectorRowConfig(format.Id, true));
+        return new InspectorLayout(Groups, rows);
+    }
+
+    /// <summary>行の設定で加えた固定小数点の行を外す (一覧の型の行は外せない。非表示にする)。</summary>
+    public InspectorLayout WithoutRow(string typeId)
+    {
+        if (InspectorTypes.All.Any(t => t.Id == typeId))
+        {
+            return WithVisible(typeId, false);
+        }
+
+        return new InspectorLayout(Groups, [.. Rows.Where(r => r.TypeId != typeId)]);
+    }
 
     /// <summary>グループの中の行 (表示の順序。非表示の行を含む)。</summary>
     public IReadOnlyList<InspectorRowConfig> RowsIn(InspectorGroup group) =>
@@ -177,7 +224,8 @@ public sealed class InspectorLayout : IEquatable<InspectorLayout>
             foreach (JsonNode? node in root["rows"]?.AsArray() ?? [])
             {
                 string? id = node?["id"]?.GetValue<string>();
-                if (id is not null && InspectorTypes.Find(id) is not null && rows.All(r => r.TypeId != id))
+                if (id is not null && InspectorTypes.Find(id) is not null && rows.All(r => r.TypeId != id)
+                    && (!InspectorTypes.IsFixedPoint(id) || rows.Count(r => InspectorTypes.IsFixedPoint(r.TypeId)) < InspectorTypes.MaxFixedRows))
                 {
                     rows.Add(new InspectorRowConfig(id, node!["visible"]?.GetValue<bool>() ?? true, node["opposite"]?.GetValue<bool>() ?? false));
                 }

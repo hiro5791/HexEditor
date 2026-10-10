@@ -79,6 +79,25 @@
             x:Uid="Bookmark_Number"
             AutomationProperties.AutomationId="Bookmark_Number"
             SelectionChanged="NumberChoice_SelectionChanged" />
+        <!--
+            グループ (INSP-27): 一覧から選ぶか、パス (Body/Tables のように / で区切る) を入力して Enter。8 階層まで。
+        -->
+        <ComboBox
+            x:Name="GroupChoice"
+            x:Uid="Bookmark_Group"
+            HorizontalAlignment="Stretch"
+            AutomationProperties.AutomationId="Bookmark_Group"
+            IsEditable="True"
+            SelectionChanged="GroupChoice_SelectionChanged"
+            TextSubmitted="GroupChoice_TextSubmitted" />
+        <TextBlock
+            x:Name="GroupError"
+            AutomationProperties.AutomationId="Bookmark_GroupError"
+            AutomationProperties.LiveSetting="Assertive"
+            Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+            Style="{ThemeResource CaptionTextBlockStyle}"
+            TextWrapping="Wrap"
+            Visibility="Collapsed" />
         <Grid ColumnSpacing="8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />

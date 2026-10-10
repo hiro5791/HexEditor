@@ -70,6 +70,7 @@ public sealed partial class BookmarkEditor : UserControl
         LengthBox.Text = bookmark.Length.ToString(CultureInfo.InvariantCulture);
         CommentBox.Text = bookmark.Comment;
         NumberChoice.SelectedIndex = bookmark.Number;
+        LoadGroups();
         CustomToggle.IsChecked = bookmark.Color.IsCustom;
         Picker.Visibility = bookmark.Color.IsCustom ? Visibility.Visible : Visibility.Collapsed;
         if (bookmark.Color.IsCustom)
@@ -240,6 +241,57 @@ public sealed partial class BookmarkEditor : UserControl
         if (!_loading && _bookmark is not null && _bookmarks is not null && NumberChoice.SelectedIndex >= 0)
         {
             _bookmarks.SetNumber(_bookmark, NumberChoice.SelectedIndex);
+        }
+    }
+
+    // ---- グループ (INSP-27) ----
+
+    /// <summary>グループの欄の選択肢: 「グループなし」と、今あるグループのパス。</summary>
+    private void LoadGroups()
+    {
+        GroupChoice.Items.Clear();
+        GroupChoice.Items.Add(Loc.Get("Bookmark_GroupNone"));
+        foreach (string path in _bookmarks!.Groups.Select(g => g.Path).Order(StringComparer.OrdinalIgnoreCase))
+        {
+            GroupChoice.Items.Add(path);
+        }
+
+        GroupChoice.SelectedIndex = _bookmark!.Group is { } group ? GroupChoice.Items.IndexOf(group) : 0;
+        GroupError.Visibility = Visibility.Collapsed;
+    }
+
+    private void GroupChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_loading && GroupChoice.SelectedIndex >= 0)
+        {
+            ApplyGroup(GroupChoice.SelectedIndex == 0 ? null : GroupChoice.SelectedItem as string);
+        }
+    }
+
+    private void GroupChoice_TextSubmitted(ComboBox sender, ComboBoxTextSubmittedEventArgs args)
+    {
+        string text = args.Text.Trim();
+        args.Handled = true;
+        ApplyGroup(text.Length == 0 || text == Loc.Get("Bookmark_GroupNone") ? null : text);
+    }
+
+    /// <summary>グループを付け替える (入力したパスのグループがなければ作る)。9 階層目なら説明文を出して変えない。</summary>
+    internal void ApplyGroup(string? path)
+    {
+        if (_bookmark is null || _bookmarks is null)
+        {
+            return;
+        }
+
+        try
+        {
+            _bookmarks.SetGroup(_bookmark, path);
+            GroupError.Visibility = Visibility.Collapsed;
+        }
+        catch (BookmarkGroupDepthException)
+        {
+            GroupError.Text = Loc.Format("Bookmarks_GroupTooDeep", BookmarkGroups.MaxDepth);
+            GroupError.Visibility = Visibility.Visible;
         }
     }
 

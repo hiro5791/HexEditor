@@ -40,6 +40,34 @@ public readonly record struct BookmarkColor
             ? Palette(index)
             : Default;
 
+    /// <summary>
+    /// 色の一覧の代表の RGB (ライトテーマの見本の色。Themes/AnnotationPalette.xaml の BookmarkMarkN)。テーマに依存しない書き出し
+    /// (CSV の <c>#RRGGBB</c>、wxHexEditor のタグ。INSP-30) に使う。
+    /// </summary>
+    private static readonly uint[] CanonicalRgb = [0xD13438, 0xCA5010, 0x9D7700, 0x107C10, 0x038387, 0x0063B1, 0x8764B8, 0xC239B3];
+
+    /// <summary>書き出し用の RGB (一覧の色は代表の色)。</summary>
+    public uint ExportRgb => IsCustom ? Rgb : CanonicalRgb[PaletteIndex - 1];
+
+    /// <summary><c>#RRGGBB</c> の書き出しの書式。</summary>
+    public string HexText => "#" + ExportRgb.ToString("X6", CultureInfo.InvariantCulture);
+
+    /// <summary>RGB から色を作る (代表の色と同じなら色の一覧の色)。</summary>
+    public static BookmarkColor FromRgb(uint rgb)
+    {
+        int index = Array.IndexOf(CanonicalRgb, rgb & 0xFFFFFF);
+        return index >= 0 ? Palette(index + 1) : Custom(rgb);
+    }
+
+    /// <summary><c>#RRGGBB</c> を読む。読めなければ null。</summary>
+    public static BookmarkColor? ParseHex(string? text)
+    {
+        text = text?.Trim();
+        return text is { Length: 7 } && text[0] == '#' && uint.TryParse(text.AsSpan(1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint rgb)
+            ? FromRgb(rgb)
+            : null;
+    }
+
     /// <summary>保存の書式: 一覧の色は番号、任意の色は <c>#RRGGBB</c>。</summary>
     public override string ToString() => IsCustom ? "#" + Rgb.ToString("X6", CultureInfo.InvariantCulture) : PaletteIndex.ToString(CultureInfo.InvariantCulture);
 
@@ -90,8 +118,14 @@ public sealed class Bookmark
     /// <summary>番号 (1〜9。なければ 0。INSP-25)。</summary>
     public int Number { get; internal set; }
 
-    /// <summary>グループ (INSP-27。フェーズ 2)。保存・読み込みだけ行う。</summary>
+    /// <summary>グループのパス (INSP-27。<c>Body/Tables</c> のように <c>/</c> で区切る)。グループなしは null。</summary>
     public string? Group { get; internal set; }
+
+    /// <summary>
+    /// 色を個別に設定した (INSP-27 の仕様 2: 個別に設定していないブックマークはグループの色で表示する)。付けたときの既定の色は
+    /// 個別の設定ではない。
+    /// </summary>
+    public bool ColorSet { get; internal set; }
 
     public DateTime Created { get; internal set; }
 

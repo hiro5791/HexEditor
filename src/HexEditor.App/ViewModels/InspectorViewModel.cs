@@ -85,6 +85,19 @@ public sealed partial class InspectorItemViewModel : ObservableObject
     [ObservableProperty]
     public partial string? ToolTip { get; set; }
 
+    /// <summary>表示を省いた値の全体 (文字列の行の「値をコピー」。INSP-10 の仕様 2)。なければ <see cref="Value"/>。</summary>
+    public string? FullText { get; set; }
+
+    /// <summary>色の行の色 (0xRRGGBBAA。INSP-12)。色の行でなければ null。</summary>
+    public uint? Rgba { get; set; }
+
+    /// <summary>色見本の色 (INSP-12 の仕様 2・3)。</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasSwatch))]
+    public partial Microsoft.UI.Xaml.Media.Brush? Swatch { get; set; }
+
+    public bool HasSwatch => Swatch is not null;
+
     [ObservableProperty]
     public partial InspectorStatus Status { get; set; }
 
@@ -403,7 +416,7 @@ public sealed partial class InspectorViewModel : ObservableObject
         OriginText = Loc.Format("Inspector_Origin", Origin.ToString(Origin > uint.MaxValue ? "X16" : "X8", CultureInfo.InvariantCulture));
 
         DocumentSnapshot snapshot = doc.Document.Current;
-        int count = (int)Math.Clamp(snapshot.Length - Origin, 0, InspectorDecoder.ReadLength);
+        int count = (int)Math.Clamp(snapshot.Length - Origin, 0, Layout.ReadLength);
         _data = new byte[count];
         _states = new ByteState[count];
         if (count > 0)
@@ -440,7 +453,14 @@ public sealed partial class InspectorViewModel : ObservableObject
                     row.Value = r.Value.Text;
                 }
 
-                row.ToolTip = r.Value.ToolTip ?? (ReadOnly ? Loc.Get("Inspector_ReadOnlyTip") : null);
+                row.ToolTip = r.Value.ToolTip ?? (r.Value.FullText is { Length: > 0 } full && full.Length > InspectorDecoder.MaxStringDisplay ? full[..Math.Min(full.Length, 4096)] : null)
+                    ?? (ReadOnly ? Loc.Get("Inspector_ReadOnlyTip") : null);
+                row.FullText = r.Value.FullText;
+                if (row.Rgba != r.Value.Rgba || (r.Value.Rgba is not null) != row.HasSwatch)
+                {
+                    row.Rgba = r.Value.Rgba;
+                    row.Swatch = r.Value.Rgba is { } rgba ? new Microsoft.UI.Xaml.Media.SolidColorBrush(Services.AnnotationBrushes.FromRgba(rgba)) : null;
+                }
                 if (row.IsBinary)
                 {
                     bool valid = r.Value.Status == InspectorStatus.Ok;
@@ -523,7 +543,9 @@ public sealed partial class InspectorViewModel : ObservableObject
     /// <summary>行の名前: 型の名前、反対のエンディアンの行は「int32 (BE)」、エンディアンに従わない行は「(固定)」付き。</summary>
     public static string RowName(string typeId, bool opposite, Endianness endian)
     {
-        string name = Loc.Get("Inspector_Row_" + typeId);
+        string name = InspectorTypes.Get(typeId).Fixed is { } f
+            ? Loc.Format("Inspector_FixedName", f.IntegerBits, f.FractionBits, Loc.Get(f.Signed ? "Inspector_FixedSigned" : "Inspector_FixedUnsigned"), f.TotalBits)
+            : Loc.Get("Inspector_Row_" + typeId);
         if (opposite)
         {
             return Loc.Format("Inspector_RowOpposite", name, endian == Endianness.Big ? "BE" : "LE");
@@ -650,7 +672,7 @@ public sealed partial class InspectorViewModel : ObservableObject
     {
         DocumentViewModel doc = _document!;
         long available = doc.Document.Length - Origin;
-        return InspectorEncoder.Encode(item.TypeId, text, item.Endian, Options, available, new EditorExpressionContext(doc.Editor));
+        return InspectorEncoder.Encode(item.TypeId, text, item.Endian, Options, available, new EditorExpressionContext(doc.Editor), _data);
     }
 
     /// <summary>
@@ -716,7 +738,28 @@ public sealed partial class InspectorViewModel : ObservableObject
 
     // ---- コピー (INSP-01 の仕様 7) ----
 
-    public static string CopyText(InspectorItemViewModel item) => item.Value;
+    public static string CopyText(InspectorItemViewModel item) => item.FullText ?? item.Value;
+
+    /// <summary>色の選択 (ColorPicker) で選んだ色を書き込む (INSP-12 の仕様 4)。</summary>
+    public bool WriteColor(InspectorItemViewModel item, Windows.UI.Color color)
+    {
+        if (item.Kind != InspectorItemKind.Row || !InspectorTypes.IsColor(item.TypeId) || ReadOnly || _document is not { } doc)
+        {
+            return false;
+        }
+
+        string text = $"#{color.R:X2}{color.G:X2}{color.B:X2}{color.A:X2}";
+        InspectorEncodeResult result = Encode(item, text);
+        if (result.Bytes is not { } bytes)
+        {
+            return false;
+        }
+
+        Write(doc, bytes);
+        StoredText = result.StoredText is { } stored ? Loc.Format("Inspector_StoredValue", stored) : string.Empty;
+        Refresh();
+        return true;
+    }
 
     /// <summary>すべての行 (タブ区切りのテキスト)。</summary>
     public string AllRowsText() =>
@@ -784,5 +827,23 @@ public static class InspectorStrings
         ErrorNotEncodable = Loc.Get("Inspector_ErrorNotEncodable"),
         ErrorPastEnd = Loc.Get("Inspector_ErrorPastEnd"),
         ErrorReadOnly = Loc.Get("Inspector_ReadOnlyTip"),
+        Unnormal = Loc.Get("Inspector_Unnormal"),
+        TooLarge64 = Loc.Get("Inspector_TooLarge64"),
+        StringCounts = Loc.Get("Inspector_StringCounts"),
+        NotTerminated = Loc.Get("Inspector_NotTerminated"),
+        NotTerminatedAtEnd = Loc.Get("Inspector_NotTerminatedAtEnd"),
+        ColorComponents = Loc.Get("Inspector_ColorComponents"),
+        KindLocal = Loc.Get("Inspector_KindLocal"),
+        KindUnspecified = Loc.Get("Inspector_KindUnspecified"),
+        DigitsNeeded = Loc.Get("Inspector_DigitsNeeded"),
+        DigitsUnixSeconds = Loc.Get("Inspector_DigitsUnixSeconds"),
+        DigitsUnixMilliseconds = Loc.Get("Inspector_DigitsUnixMilliseconds"),
+        InvalidDigits = Loc.Get("Inspector_InvalidDigits"),
+        ErrorVarIntLength = Loc.Get("Inspector_ErrorVarIntLength"),
+        ErrorStringTooLong = Loc.Get("Inspector_ErrorStringTooLong"),
+        ErrorNotTerminated = Loc.Get("Inspector_ErrorNotTerminated"),
+        ErrorColor = Loc.Get("Inspector_ErrorColor"),
+        ErrorEscape = Loc.Get("Inspector_ErrorEscape"),
+        ErrorDigits = Loc.Get("Inspector_ErrorDigits"),
     };
 }

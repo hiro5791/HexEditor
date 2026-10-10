@@ -12,7 +12,7 @@ public sealed record InspectorRowResult(string TypeId, bool Opposite, Endianness
 public sealed record InspectorGroupResult(InspectorGroup Group, IReadOnlyList<InspectorRowResult> Rows);
 
 /// <summary>
-/// 起点のデータを、行の構成に従ってすべての行で解釈する (INSP-01)。起点から最大 128 バイトだけを、ブロックキャッシュから
+/// 起点のデータを、行の構成に従ってすべての行で解釈する (INSP-01)。起点から最大 128 バイト (文字列の行があれば 4 KB) だけを、ブロックキャッシュから
 /// 待たずに読む (キャッシュにないバイトは「…」。仕様 3・4)。ファイルサイズに依存しない。
 /// </summary>
 public static class DataInspector
@@ -20,7 +20,7 @@ public static class DataInspector
     public static IReadOnlyList<InspectorGroupResult> Evaluate(DocumentSnapshot snapshot, long origin, InspectorLayout layout,
         Endianness endian, InspectorOptions options)
     {
-        int count = (int)Math.Clamp(snapshot.Length - origin, 0, InspectorDecoder.ReadLength);
+        int count = (int)Math.Clamp(snapshot.Length - origin, 0, layout.ReadLength);
         byte[] data = new byte[count];
         var states = new ByteState[count];
         if (count > 0)

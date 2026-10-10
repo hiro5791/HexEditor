@@ -181,7 +181,7 @@ public sealed partial class HexView
 
         result["rows"] = rows;
         result["ruler"] = RulerModel();
-        result["toolTip"] = new JsonObject { ["open"] = CellToolTipOpen, ["text"] = LastToolTip };
+        result["toolTip"] = new JsonObject { ["open"] = CellToolTipOpen, ["text"] = LastToolTip, ["rich"] = RichToolTipRuns(LastRichToolTip) };
         result["caret"] = new JsonObject
         {
             ["visible"] = Caret.Visibility == Visibility.Visible,

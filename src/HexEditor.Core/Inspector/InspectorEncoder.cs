@@ -17,14 +17,15 @@ public sealed record InspectorEncodeResult(byte[]? Bytes, string? Error, string?
 }
 
 /// <summary>入力した値を型の表現のバイト列にする (INSP-03、INSP-05、INSP-08、INSP-09、INSP-11、INSP-13、INSP-15、INSP-17)。</summary>
-public static class InspectorEncoder
+public static partial class InspectorEncoder
 {
     /// <summary>
     /// <paramref name="available"/> は起点から末尾までのバイト数 (末尾を越える書き込みは誤り。INSP-17 の仕様 4)。
-    /// <paramref name="expressions"/> は整数の入力式の名前 (<c>cur</c> など) に使う。
+    /// <paramref name="expressions"/> は整数の入力式の名前 (<c>cur</c> など) に使う。<paramref name="current"/> は起点からの今のバイト
+    /// (可変長の型で元の長さ・形式を知るため。INSP-07 の仕様 5、INSP-10 の仕様 5、INSP-14 の仕様 4)。
     /// </summary>
     public static InspectorEncodeResult Encode(string typeId, string input, Endianness endian, InspectorOptions o, long available,
-        IExpressionContext? expressions = null)
+        IExpressionContext? expressions = null, ReadOnlySpan<byte> current = default)
     {
         InspectorType type = InspectorTypes.Get(typeId);
         if (type.FixedEndian)
@@ -32,7 +33,7 @@ public static class InspectorEncoder
             endian = Endianness.Little;
         }
 
-        InspectorEncodeResult result = type.Id switch
+        InspectorEncodeResult result = EncodeExtended(type, input, endian, o, expressions, current) ?? type.Id switch
         {
             InspectorTypes.Int8 or InspectorTypes.Int16 or InspectorTypes.Int32 or InspectorTypes.Int64 => Integer(type, input, endian, signed: true, o, expressions),
             InspectorTypes.UInt8 or InspectorTypes.UInt16 or InspectorTypes.UInt32 or InspectorTypes.UInt64 => Integer(type, input, endian, signed: false, o, expressions),

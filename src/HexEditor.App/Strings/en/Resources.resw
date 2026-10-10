@@ -3375,4 +3375,311 @@ Details were written to:
   <data name="Set_view_minimap_hiddenMarks" xml:space="preserve"><value>Hidden minimap marks</value></data>
   <data name="SetDesc_view_minimap_hiddenMarks" xml:space="preserve"><value>Marks not shown on the minimap.</value></data>
   <data name="CmdArg_view_sideBySide" xml:space="preserve"><value>Choose a document to show side by side.</value></data>
+  <data name="Inspector_Row_int24" xml:space="preserve"><value>int24</value></data>
+  <data name="Inspector_Row_uint24" xml:space="preserve"><value>uint24</value></data>
+  <data name="Inspector_Row_int48" xml:space="preserve"><value>int48</value></data>
+  <data name="Inspector_Row_uint48" xml:space="preserve"><value>uint48</value></data>
+  <data name="Inspector_Row_int128" xml:space="preserve"><value>int128</value></data>
+  <data name="Inspector_Row_uint128" xml:space="preserve"><value>uint128</value></data>
+  <data name="Inspector_Row_half" xml:space="preserve"><value>half</value></data>
+  <data name="Inspector_Row_bfloat16" xml:space="preserve"><value>bfloat16</value></data>
+  <data name="Inspector_Row_float80" xml:space="preserve"><value>long double (80 bit)</value></data>
+  <data name="Inspector_Row_real48" xml:space="preserve"><value>Real48</value></data>
+  <data name="Inspector_Row_uleb128" xml:space="preserve"><value>ULEB128</value></data>
+  <data name="Inspector_Row_sleb128" xml:space="preserve"><value>SLEB128</value></data>
+  <data name="Inspector_Row_sqlitevarint" xml:space="preserve"><value>SQLite varint</value></data>
+  <data name="Inspector_Row_cstrAnsi" xml:space="preserve"><value>NUL-terminated (ANSI)</value></data>
+  <data name="Inspector_Row_cstrUtf8" xml:space="preserve"><value>NUL-terminated (UTF-8)</value></data>
+  <data name="Inspector_Row_cstrUtf16" xml:space="preserve"><value>NUL-terminated (UTF-16)</value></data>
+  <data name="Inspector_Row_pstr8Ansi" xml:space="preserve"><value>Pascal string (1-byte length, ANSI)</value></data>
+  <data name="Inspector_Row_pstr8Utf8" xml:space="preserve"><value>Pascal string (1-byte length, UTF-8)</value></data>
+  <data name="Inspector_Row_pstr16Ansi" xml:space="preserve"><value>Pascal string (2-byte length, ANSI)</value></data>
+  <data name="Inspector_Row_pstr16Utf8" xml:space="preserve"><value>Pascal string (2-byte length, UTF-8)</value></data>
+  <data name="Inspector_Row_pstr32Ansi" xml:space="preserve"><value>Pascal string (4-byte length, ANSI)</value></data>
+  <data name="Inspector_Row_pstr32Utf8" xml:space="preserve"><value>Pascal string (4-byte length, UTF-8)</value></data>
+  <data name="Inspector_Row_rgba8" xml:space="preserve"><value>RGBA8</value></data>
+  <data name="Inspector_Row_bgra8" xml:space="preserve"><value>BGRA8</value></data>
+  <data name="Inspector_Row_rgb8" xml:space="preserve"><value>RGB8</value></data>
+  <data name="Inspector_Row_rgb565" xml:space="preserve"><value>RGB565</value></data>
+  <data name="Inspector_Row_unixms" xml:space="preserve"><value>Unix time (ms, 64 bit) / Java</value></data>
+  <data name="Inspector_Row_oledate" xml:space="preserve"><value>OLE Automation date</value></data>
+  <data name="Inspector_Row_hfsplus" xml:space="preserve"><value>HFS+ date</value></data>
+  <data name="Inspector_Row_apfs" xml:space="preserve"><value>APFS date</value></data>
+  <data name="Inspector_Row_cocoa" xml:space="preserve"><value>Mac absolute time (Cocoa)</value></data>
+  <data name="Inspector_Row_sqldatetime" xml:space="preserve"><value>SQL Server datetime</value></data>
+  <data name="Inspector_Row_sqlsmalldatetime" xml:space="preserve"><value>SQL Server smalldatetime</value></data>
+  <data name="Inspector_Row_dotnetdatetime" xml:space="preserve"><value>.NET DateTime</value></data>
+  <data name="Inspector_Row_digitsdatetime" xml:space="preserve"><value>Date in decimal digits</value></data>
+  <data name="Inspector_FixedName" xml:space="preserve"><value>{0}.{1} ({2}, {3} bit)</value></data>
+  <data name="Inspector_FixedSigned" xml:space="preserve"><value>signed</value></data>
+  <data name="Inspector_FixedUnsigned" xml:space="preserve"><value>unsigned</value></data>
+  <data name="Inspector_Unnormal" xml:space="preserve"><value>Unnormal representation</value></data>
+  <data name="Inspector_TooLarge64" xml:space="preserve"><value>Exceeds 64 bit</value></data>
+  <data name="Inspector_StringCounts" xml:space="preserve"><value>({0, plural, one {# char} other {# chars}}, {1, plural, one {# byte} other {# bytes}})</value></data>
+  <data name="Inspector_NotTerminated" xml:space="preserve"><value>No terminator (4 KB or more)</value></data>
+  <data name="Inspector_NotTerminatedAtEnd" xml:space="preserve"><value>No terminator before the end of the data</value></data>
+  <data name="Inspector_ColorComponents" xml:space="preserve"><value>R {0}, G {1}, B {2}, A {3}</value></data>
+  <data name="Inspector_KindLocal" xml:space="preserve"><value>(local time)</value></data>
+  <data name="Inspector_KindUnspecified" xml:space="preserve"><value>(unspecified kind)</value></data>
+  <data name="Inspector_DigitsNeeded" xml:space="preserve"><value>At least 8 digits are needed ({0} found)</value></data>
+  <data name="Inspector_DigitsUnixSeconds" xml:space="preserve"><value>Unix seconds</value></data>
+  <data name="Inspector_DigitsUnixMilliseconds" xml:space="preserve"><value>Unix milliseconds</value></data>
+  <data name="Inspector_InvalidDigits" xml:space="preserve"><value>Invalid</value></data>
+  <data name="Inspector_ErrorVarIntLength" xml:space="preserve"><value>The byte count would change, so the value can't be written (was {0} bytes, now {1} bytes)</value></data>
+  <data name="Inspector_ErrorStringTooLong" xml:space="preserve"><value>Longer than the original length ({0} bytes)</value></data>
+  <data name="Inspector_ErrorNotTerminated" xml:space="preserve"><value>The original string has no terminator, so its length is unknown</value></data>
+  <data name="Inspector_ErrorColor" xml:space="preserve"><value>Enter a color such as #FF8000 or #FF8000FF</value></data>
+  <data name="Inspector_ErrorEscape" xml:space="preserve"><value>Invalid escape sequence (use \n, \t, \0, \xNN, \" or \\)</value></data>
+  <data name="Inspector_ErrorDigits" xml:space="preserve"><value>The value needs {1} digits, but the original has {0}</value></data>
+  <data name="Inspector_PickColorName" xml:space="preserve"><value>Choose a color</value></data>
+  <data name="Inspector_WriteColor" xml:space="preserve"><value>Write</value></data>
+  <data name="Inspector_FixedLabel.Text" xml:space="preserve"><value>Add a fixed-point row</value></data>
+  <data name="Inspector_FixedSignedBox.Content" xml:space="preserve"><value>Signed</value></data>
+  <data name="Inspector_FixedSignedBox.AutomationProperties.Name" xml:space="preserve"><value>Signed</value></data>
+  <data name="Inspector_FixedTotalName" xml:space="preserve"><value>Total bits</value></data>
+  <data name="Inspector_FixedFractionName" xml:space="preserve"><value>Fraction bits</value></data>
+  <data name="Inspector_AddFixed.Content" xml:space="preserve"><value>Add</value></data>
+  <data name="Inspector_RemoveFixed.Content" xml:space="preserve"><value>Remove row</value></data>
+  <data name="Inspector_FixedInvalid" xml:space="preserve"><value>The fraction bits must be 0 to {0}</value></data>
+  <data name="Inspector_FixedLimit" xml:space="preserve"><value>Up to {0} fixed-point rows can be added</value></data>
+  <data name="Bookmark_Group.Header" xml:space="preserve"><value>Group</value></data>
+  <data name="Bookmark_Group.AutomationProperties.Name" xml:space="preserve"><value>Group</value></data>
+  <data name="Bookmark_GroupNone" xml:space="preserve"><value>(No group)</value></data>
+  <data name="Bookmarks_GroupTooDeep" xml:space="preserve"><value>Groups can be nested up to {0} levels</value></data>
+  <data name="Bookmarks_InHiddenGroup" xml:space="preserve"><value>in a hidden group</value></data>
+  <data name="Bookmarks_GroupShown" xml:space="preserve"><value>Shown</value></data>
+  <data name="Bookmarks_GroupHidden" xml:space="preserve"><value>Hidden</value></data>
+  <data name="Bookmarks_GroupRowName" xml:space="preserve"><value>Group {0}, {1} bookmarks, {2}</value></data>
+  <data name="Bookmarks_NewGroupName" xml:space="preserve"><value>New group</value></data>
+  <data name="Bookmarks_ImportName" xml:space="preserve"><value>Import bookmarks</value></data>
+  <data name="Bookmarks_ExportName" xml:space="preserve"><value>Export bookmarks</value></data>
+  <data name="Bookmarks_GroupNoColor" xml:space="preserve"><value>No color</value></data>
+  <data name="Bookmarks_MenuMoveToGroup.Text" xml:space="preserve"><value>Move to group</value></data>
+  <data name="Bookmarks_MenuToSelection.Text" xml:space="preserve"><value>Select these ranges</value></data>
+  <data name="Bookmarks_MenuGroupVisible.Text" xml:space="preserve"><value>Show group</value></data>
+  <data name="Bookmarks_MenuNewSubgroup.Text" xml:space="preserve"><value>New subgroup</value></data>
+  <data name="Bookmarks_MoveToNewGroup" xml:space="preserve"><value>New group…</value></data>
+  <data name="Bookmarks_NewGroupDefaultName" xml:space="preserve"><value>Group</value></data>
+  <data name="Bookmarks_GroupNameHeader" xml:space="preserve"><value>Group name</value></data>
+  <data name="Bookmarks_GroupRename" xml:space="preserve"><value>Rename</value></data>
+  <data name="Bookmarks_DeleteGroupPrompt" xml:space="preserve"><value>Delete the group "{0}" ({1} bookmarks)?</value></data>
+  <data name="Bookmarks_DeleteGroupWithContents" xml:space="preserve"><value>Delete the bookmarks in it too</value></data>
+  <data name="Bookmarks_DeleteGroupMoveToParent" xml:space="preserve"><value>Move the bookmarks to the parent group</value></data>
+  <data name="Bookmarks_DropToGroup" xml:space="preserve"><value>Move to this group</value></data>
+  <data name="Bookmarks_GroupDeleted" xml:space="preserve"><value>Deleted the group "{0}".</value></data>
+  <data name="Annotations_ColumnMore" xml:space="preserve"><value>{0} +{1}</value></data>
+  <data name="Annotations_DescriptionName" xml:space="preserve"><value>Description at the cursor</value></data>
+  <data name="Annotations_NoDescription" xml:space="preserve"><value>There is no bookmark or annotation at the cursor.</value></data>
+  <data name="Annotations_Origin_Bookmark" xml:space="preserve"><value>Bookmark</value></data>
+  <data name="Annotations_Origin_Yara" xml:space="preserve"><value>YARA</value></data>
+  <data name="Annotations_Origin_SearchResults" xml:space="preserve"><value>Find all results</value></data>
+  <data name="Annotations_Origin_Template" xml:space="preserve"><value>Template</value></data>
+  <data name="Annotations_Origin_Script" xml:space="preserve"><value>Script</value></data>
+  <data name="Annotations_Range" xml:space="preserve"><value>{0}–{1} ({2} bytes)</value></data>
+  <data name="Annotations_Style_Background" xml:space="preserve"><value>Background</value></data>
+  <data name="Annotations_Style_Border" xml:space="preserve"><value>Border</value></data>
+  <data name="Annotations_Style_Underline" xml:space="preserve"><value>Underline</value></data>
+  <data name="Bookmarks_ExportError" xml:space="preserve"><value>Couldn't export to {0}: {1}</value></data>
+  <data name="Bookmarks_Exported" xml:space="preserve"><value>Exported {0, plural, one {# bookmark} other {# bookmarks}} to {1}.</value></data>
+  <data name="Bookmarks_ImportAppend" xml:space="preserve"><value>Add to the current bookmarks</value></data>
+  <data name="Bookmarks_ImportReplace" xml:space="preserve"><value>Replace the current bookmarks</value></data>
+  <data name="Bookmarks_ImportShift" xml:space="preserve"><value>Offset shift (for example +0x200)</value></data>
+  <data name="Bookmarks_ImportShiftError" xml:space="preserve"><value>Enter the shift as an expression such as +0x200</value></data>
+  <data name="Bookmarks_ImportOk" xml:space="preserve"><value>Import</value></data>
+  <data name="Bookmarks_ImportError" xml:space="preserve"><value>Couldn't import {0}{1}: {2}</value></data>
+  <data name="Bookmarks_ImportErrorAt" xml:space="preserve"><value> (line {0}, position {1})</value></data>
+  <data name="Bookmarks_ImportErrorLine" xml:space="preserve"><value> (line {0})</value></data>
+  <data name="Bookmarks_Imported" xml:space="preserve"><value>Imported {0, plural, one {# bookmark} other {# bookmarks}}. Skipped {1}.</value></data>
+  <data name="Bookmarks_ImportedNumbers" xml:space="preserve"><value>Numbers moved from existing bookmarks: {0}. Numbers removed: {1}.</value></data>
+  <data name="Bookmarks_SelectionGroup" xml:space="preserve"><value>Selections {0}</value></data>
+  <data name="Bookmarks_SelectionName" xml:space="preserve"><value>Selection {0}</value></data>
+  <data name="Bookmarks_SelectionLimit" xml:space="preserve"><value>Only the first {0} ranges were selected.</value></data>
+  <data name="Coloring_PanelName" xml:space="preserve"><value>Coloring rules</value></data>
+  <data name="Coloring_ScopeDocument.Content" xml:space="preserve"><value>This document</value></data>
+  <data name="Coloring_ScopeGlobal.Content" xml:space="preserve"><value>All documents</value></data>
+  <data name="Coloring_AddName" xml:space="preserve"><value>Add rule</value></data>
+  <data name="Coloring_DeleteName" xml:space="preserve"><value>Delete rule</value></data>
+  <data name="Coloring_MoveUpName" xml:space="preserve"><value>Move up (higher priority)</value></data>
+  <data name="Coloring_MoveDownName" xml:space="preserve"><value>Move down</value></data>
+  <data name="Coloring_Name.Header" xml:space="preserve"><value>Name</value></data>
+  <data name="Coloring_Kind.Header" xml:space="preserve"><value>Condition</value></data>
+  <data name="Coloring_Kind_ByteValues" xml:space="preserve"><value>Byte values</value></data>
+  <data name="Coloring_Kind_OffsetRange" xml:space="preserve"><value>Offset range</value></data>
+  <data name="Coloring_Kind_Period" xml:space="preserve"><value>Period</value></data>
+  <data name="Coloring_Kind_HexPattern" xml:space="preserve"><value>Hex pattern</value></data>
+  <data name="Coloring_Kind_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="Coloring_Kind_Regex" xml:space="preserve"><value>Regular expression</value></data>
+  <data name="Coloring_Kind_Number" xml:space="preserve"><value>Number</value></data>
+  <data name="Coloring_PatternName" xml:space="preserve"><value>Condition value</value></data>
+  <data name="Coloring_PatternHeader_ByteValues" xml:space="preserve"><value>Values and ranges (00, 20-7E, 7F, 80-FF)</value></data>
+  <data name="Coloring_PatternHeader_OffsetRange" xml:space="preserve"><value>Start (expression)</value></data>
+  <data name="Coloring_PatternHeader_Period" xml:space="preserve"><value>Period</value></data>
+  <data name="Coloring_PatternHeader_HexPattern" xml:space="preserve"><value>Hex pattern (?? matches any byte)</value></data>
+  <data name="Coloring_PatternHeader_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="Coloring_PatternHeader_Regex" xml:space="preserve"><value>Regular expression (matches up to 256 bytes)</value></data>
+  <data name="Coloring_PatternHeader_Number" xml:space="preserve"><value>Value or range (0..0xFF)</value></data>
+  <data name="Coloring_End.Header" xml:space="preserve"><value>End (this byte included)</value></data>
+  <data name="Coloring_Modulus.Header" xml:space="preserve"><value>Every (bytes)</value></data>
+  <data name="Coloring_Remainder.Header" xml:space="preserve"><value>At position</value></data>
+  <data name="Coloring_PeriodLength.Header" xml:space="preserve"><value>Length</value></data>
+  <data name="Coloring_CodePage.Header" xml:space="preserve"><value>Encoding</value></data>
+  <data name="Coloring_CaseSensitive.Content" xml:space="preserve"><value>Match case</value></data>
+  <data name="Coloring_RegexOnText.Content" xml:space="preserve"><value>Match decoded text</value></data>
+  <data name="Coloring_NumberType.Header" xml:space="preserve"><value>Type</value></data>
+  <data name="Coloring_BigEndian.Content" xml:space="preserve"><value>Big endian</value></data>
+  <data name="Coloring_UseForeground.Content" xml:space="preserve"><value>Text color</value></data>
+  <data name="Coloring_UseBackground.Content" xml:space="preserve"><value>Background</value></data>
+  <data name="Coloring_BorderChoice.Header" xml:space="preserve"><value>Border</value></data>
+  <data name="Coloring_Border_None" xml:space="preserve"><value>No border</value></data>
+  <data name="Coloring_Border_Solid" xml:space="preserve"><value>Solid border</value></data>
+  <data name="Coloring_Border_Dashed" xml:space="preserve"><value>Dashed border</value></data>
+  <data name="Coloring_Border_Dotted" xml:space="preserve"><value>Dotted border</value></data>
+  <data name="Coloring_Target.Header" xml:space="preserve"><value>Apply to</value></data>
+  <data name="Coloring_Target_Both" xml:space="preserve"><value>Hex and text</value></data>
+  <data name="Coloring_Target_Hex" xml:space="preserve"><value>Hex column</value></data>
+  <data name="Coloring_Target_Text" xml:space="preserve"><value>Text column</value></data>
+  <data name="Coloring_RangeStart.Header" xml:space="preserve"><value>Only from (expression)</value></data>
+  <data name="Coloring_RangeStart.PlaceholderText" xml:space="preserve"><value>Whole document</value></data>
+  <data name="Coloring_RangeEnd.Header" xml:space="preserve"><value>Up to (this byte included)</value></data>
+  <data name="Coloring_RangeEnd.PlaceholderText" xml:space="preserve"><value>End of document</value></data>
+  <data name="Coloring_Summary" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Coloring_ForegroundText" xml:space="preserve"><value>text {0}</value></data>
+  <data name="Coloring_BackgroundText" xml:space="preserve"><value>background {0}</value></data>
+  <data name="Coloring_Unnamed" xml:space="preserve"><value>(No name)</value></data>
+  <data name="Coloring_Enabled" xml:space="preserve"><value>enabled</value></data>
+  <data name="Coloring_Disabled" xml:space="preserve"><value>disabled</value></data>
+  <data name="Coloring_DefaultName" xml:space="preserve"><value>Rule {0}</value></data>
+  <data name="Coloring_NewRuleName" xml:space="preserve"><value>Selected bytes</value></data>
+  <data name="Coloring_FromSelectionUnavailable" xml:space="preserve"><value>Select 1 to 256 bytes</value></data>
+  <data name="Coloring_Error_Empty" xml:space="preserve"><value>Enter a condition</value></data>
+  <data name="Coloring_Error_InvalidByteValues" xml:space="preserve"><value>"{0}" isn't a byte value or range such as 20-7E</value></data>
+  <data name="Coloring_Error_InvalidExpression" xml:space="preserve"><value>"{0}" isn't a valid expression</value></data>
+  <data name="Coloring_Error_InvalidPattern" xml:space="preserve"><value>The pattern is invalid ({0})</value></data>
+  <data name="Coloring_Error_InvalidRegex" xml:space="preserve"><value>The regular expression is invalid: {0}</value></data>
+  <data name="Coloring_Error_InvalidNumber" xml:space="preserve"><value>"{0}" isn't a value or range such as 0..0xFF</value></data>
+  <data name="Coloring_Error_InvalidPeriod" xml:space="preserve"><value>The position must be 0 or more and less than the period ({0})</value></data>
+  <data name="Coloring_Error_InvalidRange" xml:space="preserve"><value>The end is before the start ({0})</value></data>
+  <data name="Coloring_Preset_dimZero" xml:space="preserve"><value>Dim zeros</value></data>
+  <data name="Coloring_Preset_printableAscii" xml:space="preserve"><value>Printable ASCII</value></data>
+  <data name="Coloring_Preset_controlCharacters" xml:space="preserve"><value>Control characters</value></data>
+  <data name="Coloring_Preset_ff" xml:space="preserve"><value>FF</value></data>
+  <data name="Coloring_Preset_highBit" xml:space="preserve"><value>High bit set</value></data>
+  <data name="FileType_BookmarksJson" xml:space="preserve"><value>HexEditor bookmarks</value></data>
+  <data name="FileType_Csv" xml:space="preserve"><value>CSV (UTF-8)</value></data>
+  <data name="FileType_WxTags" xml:space="preserve"><value>wxHexEditor tags</value></data>
+  <data name="FileType_HexProject" xml:space="preserve"><value>HexEditor project</value></data>
+  <data name="FileType_Markdown" xml:space="preserve"><value>Markdown</value></data>
+  <data name="Legend_PanelName" xml:space="preserve"><value>Legend</value></data>
+  <data name="Legend_CountAll.Content" xml:space="preserve"><value>Count in the whole document</value></data>
+  <data name="Legend_Count" xml:space="preserve"><value>{0, plural, one {# match on screen} other {# matches on screen}}</value></data>
+  <data name="Legend_Total" xml:space="preserve"><value>{0} in the whole document</value></data>
+  <data name="Legend_Counting" xml:space="preserve"><value>Counting coloring rule matches</value></data>
+  <data name="Legend_Searching" xml:space="preserve"><value>Finding a coloring rule match</value></data>
+  <data name="Legend_Shape0" xml:space="preserve"><value>Solid border</value></data>
+  <data name="Legend_Shape1" xml:space="preserve"><value>Dashed border</value></data>
+  <data name="Legend_Shape2" xml:space="preserve"><value>Dotted border</value></data>
+  <data name="Legend_Shape3" xml:space="preserve"><value>Dash-dot border</value></data>
+  <data name="Legend_NextName" xml:space="preserve"><value>Next match of {0}</value></data>
+  <data name="Legend_PreviousName" xml:space="preserve"><value>Previous match of {0}</value></data>
+  <data name="Legend_NoNext" xml:space="preserve"><value>No more matches after the cursor</value></data>
+  <data name="Legend_NoPrevious" xml:space="preserve"><value>No more matches before the cursor</value></data>
+  <data name="Menu_File_ImportExport.Text" xml:space="preserve"><value>Import / Export</value></data>
+  <data name="Menu_File_ImportExport.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_File_ImportBookmarks.Text" xml:space="preserve"><value>Import Bookmarks…</value></data>
+  <data name="Menu_File_ImportBookmarks.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_File_ExportBookmarks.Text" xml:space="preserve"><value>Export Bookmarks…</value></data>
+  <data name="Menu_File_ExportBookmarks.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Edit_SelectionToBookmarks.Text" xml:space="preserve"><value>Selection to Bookmarks</value></data>
+  <data name="Menu_Edit_SelectionToBookmarks.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Go_PositionManager.Text" xml:space="preserve"><value>Position Manager</value></data>
+  <data name="Menu_Go_PositionManager.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Go_ShowDescription.Text" xml:space="preserve"><value>Show Description at Cursor</value></data>
+  <data name="Menu_Go_ShowDescription.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Go_BookmarksToSelection.Text" xml:space="preserve"><value>Bookmarks to Selection</value></data>
+  <data name="Menu_Go_BookmarksToSelection.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_Annotations.Text" xml:space="preserve"><value>Annotations</value></data>
+  <data name="Menu_View_Annotations.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_AnnotationsToggle.Text" xml:space="preserve"><value>Show Annotations</value></data>
+  <data name="Menu_View_AnnotationsToggle.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_AnnotationsColumn.Text" xml:space="preserve"><value>Annotation Column</value></data>
+  <data name="Menu_View_AnnotationsColumn.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_AnnotationsBookmark.Text" xml:space="preserve"><value>Bookmarks</value></data>
+  <data name="Menu_View_AnnotationsBookmark.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_AnnotationsYara.Text" xml:space="preserve"><value>YARA</value></data>
+  <data name="Menu_View_AnnotationsYara.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_View_AnnotationsSearch.Text" xml:space="preserve"><value>Find All Results</value></data>
+  <data name="Menu_View_AnnotationsSearch.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_View_AnnotationsTemplate.Text" xml:space="preserve"><value>Templates</value></data>
+  <data name="Menu_View_AnnotationsTemplate.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_AnnotationsScript.Text" xml:space="preserve"><value>Scripts and Plugins</value></data>
+  <data name="Menu_View_AnnotationsScript.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_Coloring.Text" xml:space="preserve"><value>Coloring Rules</value></data>
+  <data name="Menu_View_Coloring.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_ColoringRules.Text" xml:space="preserve"><value>Coloring Rules</value></data>
+  <data name="Menu_View_ColoringRules.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_ColoringFromSelection.Text" xml:space="preserve"><value>Create Rule from Selection</value></data>
+  <data name="Menu_View_ColoringFromSelection.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_Legend.Text" xml:space="preserve"><value>Legend</value></data>
+  <data name="Menu_View_Legend.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_PositionManagerPanel.Text" xml:space="preserve"><value>Position Manager</value></data>
+  <data name="Menu_View_PositionManagerPanel.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_ColoringRulesPanel.Text" xml:space="preserve"><value>Coloring Rules</value></data>
+  <data name="Menu_View_ColoringRulesPanel.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_LegendPanel.Text" xml:space="preserve"><value>Legend</value></data>
+  <data name="Menu_View_LegendPanel.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="PositionManager_PanelName" xml:space="preserve"><value>Position manager</value></data>
+  <data name="PositionManager_OnlyComments.Content" xml:space="preserve"><value>With description only</value></data>
+  <data name="PositionManager_Follow.Content" xml:space="preserve"><value>Follow cursor</value></data>
+  <data name="PositionManager_ExportName" xml:space="preserve"><value>Export notes</value></data>
+  <data name="PositionManager_ExportMarkdown.Text" xml:space="preserve"><value>Markdown…</value></data>
+  <data name="PositionManager_ExportHtml.Text" xml:space="preserve"><value>HTML…</value></data>
+  <data name="PositionManager_ExportRange" xml:space="preserve"><value>{0}–{1} ({2} bytes)</value></data>
+  <data name="PositionManager_Exported" xml:space="preserve"><value>Exported the notes to {0}.</value></data>
+  <data name="PositionManager_ExportError" xml:space="preserve"><value>Couldn't export to {0}: {1}</value></data>
+  <data name="PositionManager_NoSelection" xml:space="preserve"><value>Select a bookmark</value></data>
+  <data name="Cmd_edit_selectionToBookmarks" xml:space="preserve"><value>Convert selection to bookmarks</value></data>
+  <data name="CmdAlias_edit_selectionToBookmarks" xml:space="preserve"><value>selection bookmarks</value></data>
+  <data name="Cmd_go_bookmark_toSelection" xml:space="preserve"><value>Convert bookmarks to selection</value></data>
+  <data name="CmdAlias_go_bookmark_toSelection" xml:space="preserve"><value>bookmarks select</value></data>
+  <data name="Cmd_go_bookmark_showDescription" xml:space="preserve"><value>Show description at cursor</value></data>
+  <data name="CmdAlias_go_bookmark_showDescription" xml:space="preserve"><value>comment note</value></data>
+  <data name="Cmd_file_importBookmarks" xml:space="preserve"><value>Import bookmarks</value></data>
+  <data name="CmdAlias_file_importBookmarks" xml:space="preserve"><value>load bookmarks tags</value></data>
+  <data name="Cmd_file_exportBookmarks" xml:space="preserve"><value>Export bookmarks</value></data>
+  <data name="CmdAlias_file_exportBookmarks" xml:space="preserve"><value>save bookmarks tags</value></data>
+  <data name="Cmd_view_panel_positionManager" xml:space="preserve"><value>Position manager</value></data>
+  <data name="CmdAlias_view_panel_positionManager" xml:space="preserve"><value>notes descriptions</value></data>
+  <data name="Cmd_view_panel_coloringRules" xml:space="preserve"><value>Coloring rules</value></data>
+  <data name="CmdAlias_view_panel_coloringRules" xml:space="preserve"><value>highlight colors</value></data>
+  <data name="Cmd_view_panel_legend" xml:space="preserve"><value>Toggle legend</value></data>
+  <data name="CmdAlias_view_panel_legend" xml:space="preserve"><value>key colors</value></data>
+  <data name="Cmd_view_annotations_toggle" xml:space="preserve"><value>Toggle annotations</value></data>
+  <data name="CmdAlias_view_annotations_toggle" xml:space="preserve"><value>annotations</value></data>
+  <data name="Cmd_view_annotations_column" xml:space="preserve"><value>Toggle annotation column</value></data>
+  <data name="CmdAlias_view_annotations_column" xml:space="preserve"><value>labels column</value></data>
+  <data name="Cmd_view_annotations_bookmark" xml:space="preserve"><value>Annotations: bookmarks</value></data>
+  <data name="CmdAlias_view_annotations_bookmark" xml:space="preserve"><value>annotation source</value></data>
+  <data name="Cmd_view_annotations_yara" xml:space="preserve"><value>Annotations: YARA</value></data>
+  <data name="CmdAlias_view_annotations_yara" xml:space="preserve"><value>annotation source</value></data>
+  <data name="Cmd_view_annotations_searchResults" xml:space="preserve"><value>Annotations: find all results</value></data>
+  <data name="CmdAlias_view_annotations_searchResults" xml:space="preserve"><value>annotation source</value></data>
+  <data name="Cmd_view_annotations_template" xml:space="preserve"><value>Annotations: templates</value></data>
+  <data name="CmdAlias_view_annotations_template" xml:space="preserve"><value>annotation source</value></data>
+  <data name="Cmd_view_annotations_script" xml:space="preserve"><value>Annotations: scripts and plugins</value></data>
+  <data name="CmdAlias_view_annotations_script" xml:space="preserve"><value>annotation source</value></data>
+  <data name="Cmd_view_coloring_fromSelection" xml:space="preserve"><value>Create coloring rule from selection</value></data>
+  <data name="CmdAlias_view_coloring_fromSelection" xml:space="preserve"><value>highlight pattern</value></data>
+  <data name="Set_positionManager_followCursor" xml:space="preserve"><value>Position manager follows the cursor</value></data>
+  <data name="SetDesc_positionManager_followCursor" xml:space="preserve"><value>Selects the bookmark that contains the cursor in the position manager.</value></data>
+  <data name="Set_bookmarks_richToolTip" xml:space="preserve"><value>Show bookmark descriptions in tooltips</value></data>
+  <data name="SetDesc_bookmarks_richToolTip" xml:space="preserve"><value>Shows the name, range and comment (Markdown) of a bookmark when you hover over it.</value></data>
+  <data name="Set_annotations_hidden" xml:space="preserve"><value>Hidden annotation sources</value></data>
+  <data name="SetDesc_annotations_hidden" xml:space="preserve"><value>Annotation sources that aren't shown in the hex view.</value></data>
+  <data name="Set_annotations_column" xml:space="preserve"><value>Show the annotation column</value></data>
+  <data name="SetDesc_annotations_column" xml:space="preserve"><value>Shows the labels of annotations that start in each row, to the right of the text column.</value></data>
+  <data name="Set_coloring_rules" xml:space="preserve"><value>Coloring rules for all documents</value></data>
+  <data name="SetDesc_coloring_rules" xml:space="preserve"><value>Coloring rules applied to every document. Edit them in the Coloring rules panel.</value></data>
+  <data name="Set_coloring_highContrastColors" xml:space="preserve"><value>Use coloring rule colors in high contrast</value></data>
+  <data name="SetDesc_coloring_highContrastColors" xml:space="preserve"><value>In high contrast themes, coloring rules are shown with border shapes instead of colors unless this is on.</value></data>
+  <data name="Coloring_Sample.Text" xml:space="preserve"><value>Ab</value></data>
 </root>

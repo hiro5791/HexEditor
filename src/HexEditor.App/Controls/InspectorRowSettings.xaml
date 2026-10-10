@@ -36,6 +36,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ListView
             x:Name="SettingsList"
@@ -119,6 +120,60 @@
                     Click="SavePreset_Click"
                     TabIndex="8" />
             </StackPanel>
+        </StackPanel>
+        <!--
+            固定小数点の行を加える (INSP-06 の仕様 3): 符号・全体のビット数 (8 / 16 / 32 / 64)・小数部のビット数 (0〜全体)。最大 16 行。
+            行の設定で加えた行は「外す」で一覧から外せる。
+        -->
+        <StackPanel Grid.Row="5" Spacing="4">
+            <TextBlock x:Uid="Inspector_FixedLabel" />
+            <local:WrapPanel HorizontalSpacing="8" VerticalSpacing="4">
+                <CheckBox
+                    x:Name="FixedSigned"
+                    x:Uid="Inspector_FixedSignedBox"
+                    MinWidth="0"
+                    AutomationProperties.AutomationId="Inspector_FixedSigned"
+                    IsChecked="True"
+                    TabIndex="9" />
+                <ComboBox
+                    x:Name="FixedTotal"
+                    AutomationProperties.AutomationId="Inspector_FixedTotal"
+                    SelectedIndex="2"
+                    TabIndex="10">
+                    <ComboBoxItem Content="8" Tag="8" />
+                    <ComboBoxItem Content="16" Tag="16" />
+                    <ComboBoxItem Content="32" Tag="32" />
+                    <ComboBoxItem Content="64" Tag="64" />
+                </ComboBox>
+                <NumberBox
+                    x:Name="FixedFraction"
+                    Width="96"
+                    AutomationProperties.AutomationId="Inspector_FixedFraction"
+                    Maximum="64"
+                    Minimum="0"
+                    SpinButtonPlacementMode="Compact"
+                    TabIndex="11"
+                    Value="16" />
+                <Button
+                    x:Name="AddFixedButton"
+                    x:Uid="Inspector_AddFixed"
+                    AutomationProperties.AutomationId="Inspector_AddFixed"
+                    Click="AddFixed_Click"
+                    TabIndex="12" />
+                <Button
+                    x:Name="RemoveFixedButton"
+                    x:Uid="Inspector_RemoveFixed"
+                    AutomationProperties.AutomationId="Inspector_RemoveFixed"
+                    Click="RemoveFixed_Click"
+                    TabIndex="13" />
+            </local:WrapPanel>
+            <TextBlock
+                x:Name="FixedError"
+                AutomationProperties.AutomationId="Inspector_FixedError"
+                AutomationProperties.LiveSetting="Polite"
+                Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                TextWrapping="Wrap"
+                Visibility="Collapsed" />
         </StackPanel>
     </Grid>
 </UserControl>

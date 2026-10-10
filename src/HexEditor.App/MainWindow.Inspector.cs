@@ -71,6 +71,8 @@ public sealed partial class MainWindow
             PanelRegistry.Register(new PanelRegistration(BookmarksPanelId, "Bookmarks_PanelName", PanelDock.Left,
                 ctx => ((MainWindow)ctx.Window).CreateBookmarkListPanel()));
         }
+
+        RegisterPhase2AnnotationPanels();
     }
 
     /// <summary>コンストラクターから呼ぶ (パネルとコマンドより先)。</summary>
@@ -81,7 +83,9 @@ public sealed partial class MainWindow
         _inspectorVm = new InspectorViewModel(App.Settings);
         // 「すべてのドキュメント」(INSP-26 の仕様 8) は、すべてのウィンドウで開いているドキュメント (UI-14)。
         _bookmarksVm = new BookmarkListViewModel { AllAnnotations = AllWindowsAnnotations };
-        _bookmarksVm.Rows.Prepare = row => row.Swatch = AnnotationBrushes.Mark(row.Bookmark.Color, Root, IsHighContrast);
+        _bookmarksVm.Rows.Prepare = PrepareBookmarkRow;
+        _bookmarksVm.Rows.PrepareGroup = PrepareGroupRow;
+        InitializeAnnotationLayers();
 #if HEX_TEST_HOOKS
         if (TestHooks.Settings.TimeZone is { Length: > 0 } zone)
         {
@@ -118,6 +122,7 @@ public sealed partial class MainWindow
             }
 
             _inspectorVm.ReloadSettings();
+            GlobalColoringRules.Reload();
             InspectorView?.SyncOptions();
             SelectedView()?.RefreshHighlights();
         });
@@ -129,6 +134,7 @@ public sealed partial class MainWindow
             {
                 App.Settings.Changed -= settingsChanged;
                 _bookmarksVm.Dispose();
+                _positionVm?.Detach();
             }
 
             SaveAnnotations(force: true);
@@ -154,6 +160,7 @@ public sealed partial class MainWindow
         list.Deleted += (_, items) => ShowBookmarksDeleted(items);
         list.AddRequested += (_, _) => AddBookmarkAtCursor();
         list.UndoRequested += (_, _) => CurrentAnnotations()?.Bookmarks.UndoDelete();
+        HookBookmarkListPhase2(list);
         return list;
     }
 
@@ -184,6 +191,8 @@ public sealed partial class MainWindow
             _bookmarksVm.IsActive = bookmarks;
             _bookmarksVm.Rebuild();
         }
+
+        SyncPhase2Panels();
     }
 
     /// <summary>ブックマークのコマンド (INSP-23、INSP-25、INSP-26。キーは 00-overview.md 8.2)。</summary>
@@ -219,6 +228,8 @@ public sealed partial class MainWindow
             _inspectorVm.ToggleEndian();
             InspectorView?.SyncOptions();
         }, NeedsEditor);
+
+        RegisterAnnotationCommands();
 
         // コマンドパレットの「@」(UI-17 の仕様 2): 作業中の文書のブックマーク。
         PaletteBookmarks = doc => AnnotationsFor(doc).Bookmarks.All.Select(b => new PaletteBookmark(b.Name, b.Start));
@@ -342,6 +353,7 @@ public sealed partial class MainWindow
             if (doc == Vm.Selected)
             {
                 QueueInspectorRefresh();
+                QueueAnnotationPanelsRefresh();
             }
         };
         annotations.Bookmarks.Changed += bookmarksChanged;
@@ -397,6 +409,7 @@ public sealed partial class MainWindow
         DocumentAnnotations? annotations = doc is null ? null : AnnotationsFor(doc);
         _inspectorVm.Attach(doc, annotations);
         _bookmarksVm.Attach(annotations);
+        AttachPhase2Panels(annotations);
         foreach (HexView view in _views)
         {
             AttachAnnotations(view);
@@ -414,6 +427,7 @@ public sealed partial class MainWindow
         if (annotations.Document == Vm.Selected)
         {
             SelectedView()?.RefreshHighlights();
+            QueueAnnotationPanelsRefresh();
         }
     }
 
@@ -478,13 +492,14 @@ public sealed partial class MainWindow
 
         // ブックマークの名前はツールチップ (VIEW-07) と位置の読み上げ (「ブックマーク 名前」。INSP-23 の仕様 9、UI-51) に出す。
         view.AnnotationNames = at => DocumentOf(view) is { } d && _annotations.TryGetValue(d, out DocumentAnnotations? a)
-            ? [.. a.Bookmarks.Overlapping(at, at + 1).Select(b => b.Name)]
+            ? [.. a.Layer.At(at).Select(x => x.Annotation.Label)]
             : [];
 
         // ツールチップには名前とコメントの冒頭を出す (INSP-23 の仕様 8。Markdown の描画と範囲の表示は INSP-31 (フェーズ 2))。
         view.AnnotationToolTips = at => DocumentOf(view) is { } d && _annotations.TryGetValue(d, out DocumentAnnotations? a)
-            ? [.. a.Bookmarks.Overlapping(at, at + 1).Select(BookmarkToolTip)]
+            ? [.. a.Bookmarks.Overlapping(at, at + 1).Where(a.Bookmarks.IsVisible).Select(BookmarkToolTip)]
             : [];
+        AttachAnnotationLayers(view);
         view.SetContextMenuExtension(menu =>
         {
             ExtendHexViewEditMenu(menu);
@@ -514,13 +529,28 @@ public sealed partial class MainWindow
         }
 
         // ハイコントラストでは背景を塗らず、システム色の枠線と線の形で示す (INSP-23 の仕様 8、INSP-24 の仕様 4)。
-        bool hc = view.IsHighContrast;
-        foreach (Bookmark b in annotations.Bookmarks.Overlapping(start, end))
+        // 非表示のグループ (INSP-27 の仕様 3) と、出どころ「ブックマーク」を非表示にしたとき (INSP-32 の仕様 2) は出さない。
+        // 色はグループの色を使う (色を個別に設定していなければ。INSP-27 の仕様 2)。
+        if (!annotations.Layer.Display.IsVisible(Core.Annotations.AnnotationOrigin.Bookmark))
         {
-            yield return hc
-                ? new HexHighlight(b.Start, b.Length, HexHighlightLayer.Bookmark, null, AnnotationBrushes.Mark(b.Color, view, true),
-                    AnnotationBrushes.Dash(b.Color), "bookmark:" + b.Name)
-                : new HexHighlight(b.Start, b.Length, HexHighlightLayer.Bookmark, AnnotationBrushes.Background(b.Color, view, false), null,
+            yield break;
+        }
+
+        bool hc = view.IsHighContrast;
+        Core.Annotations.AnnotationStyle style = annotations.Layer.Display.StyleOf(Core.Annotations.AnnotationOrigin.Bookmark);
+        BookmarkCollection bookmarks = annotations.Bookmarks;
+        foreach (Bookmark b in bookmarks.Overlapping(start, end))
+        {
+            if (!bookmarks.IsVisible(b))
+            {
+                continue;
+            }
+
+            BookmarkColor color = bookmarks.EffectiveColor(b);
+            yield return hc || style != Core.Annotations.AnnotationStyle.Background
+                ? new HexHighlight(b.Start, b.Length, HexHighlightLayer.Bookmark, null, AnnotationBrushes.Mark(color, view, hc),
+                    hc ? AnnotationBrushes.Dash(color) : null, "bookmark:" + b.Name, Underline: style == Core.Annotations.AnnotationStyle.Underline)
+                : new HexHighlight(b.Start, b.Length, HexHighlightLayer.Bookmark, AnnotationBrushes.Background(color, view, false), null,
                     null, "bookmark:" + b.Name);
         }
     }
@@ -533,9 +563,14 @@ public sealed partial class MainWindow
         }
 
         bool hc = view.IsHighContrast;
-        foreach (Bookmark b in annotations.Bookmarks.Overlapping(start, end).Where(b => b.Start >= start && b.Start < end))
+        if (!annotations.Layer.Display.IsVisible(Core.Annotations.AnnotationOrigin.Bookmark))
         {
-            yield return new HexOffsetMarker(b.Start, AnnotationBrushes.Mark(b.Color, view, hc), null,
+            yield break;
+        }
+
+        foreach (Bookmark b in annotations.Bookmarks.Overlapping(start, end).Where(b => b.Start >= start && b.Start < end && annotations.Bookmarks.IsVisible(b)))
+        {
+            yield return new HexOffsetMarker(b.Start, AnnotationBrushes.Mark(annotations.Bookmarks.EffectiveColor(b), view, hc), null,
                 b.Number > 0 ? b.Number.ToString(CultureInfo.InvariantCulture) : string.Empty,
                 AnnotationBrushes.Get("BookmarkMarkTextBrush", view, hc), "bookmark:" + b.Name);
         }

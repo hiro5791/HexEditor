@@ -349,6 +349,24 @@ public static class BuiltInCommands
         // ---- データインスペクタ (INSP-02 の「呼び出し」: インスペクタ: エンディアンの切り替え) ----
         new("inspector.toggleEndian", "inspector") { Condition = "documentOpen" },
 
+        // ---- ブックマークのグループ・変換・インポート / エクスポート、位置マネージャ、注釈、色付けルール (INSP-27〜INSP-34) ----
+        new("edit.selectionToBookmarks", "edit") { Condition = "documentOpen" },
+        new("go.bookmark.toSelection", "go") { Condition = "documentOpen" },
+        new("go.bookmark.showDescription", "go") { Condition = "documentOpen" },
+        new("file.importBookmarks", "file") { Condition = "documentOpen" },
+        new("file.exportBookmarks", "file") { Condition = "documentOpen" },
+        new("view.panel.positionManager", "view"),
+        new("view.panel.coloringRules", "view"),
+        new("view.panel.legend", "view"),
+        new("view.annotations.toggle", "view"),
+        new("view.annotations.column", "view"),
+        new("view.annotations.bookmark", "view"),
+        new("view.annotations.yara", "view"),
+        new("view.annotations.searchResults", "view"),
+        new("view.annotations.template", "view"),
+        new("view.annotations.script", "view"),
+        new("view.coloring.fromSelection", "view") { Condition = "documentOpen" },
+
         // ---- タブ (UI-09〜UI-11) ----
         new("tab.next", "tab") { DefaultBindings = [K("Ctrl+Tab")] },
         new("tab.previous", "tab") { DefaultBindings = [K("Ctrl+Shift+Tab")] },

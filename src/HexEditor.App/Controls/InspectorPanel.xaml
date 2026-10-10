@@ -56,13 +56,64 @@
                         Visibility="{x:Bind CanExpand, Mode=OneWay}" />
                     <TextBlock Text="{x:Bind Name, Mode=OneWay}" TextTrimming="CharacterEllipsis" />
                 </StackPanel>
-                <TextBlock
+                <Grid
                     Grid.Column="1"
+                    ColumnSpacing="6"
                     FlowDirection="LeftToRight"
-                    FontFamily="Cascadia Mono, Consolas"
-                    Text="{x:Bind Value, Mode=OneWay}"
-                    TextWrapping="Wrap"
-                    Visibility="{x:Bind IsNotEditing, Mode=OneWay}" />
+                    Visibility="{x:Bind IsNotEditing, Mode=OneWay}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <!--
+                        色の行の色見本 (INSP-12 の仕様 2・3): 縦横 16 px の四角、枠線付き。透明度のある色は市松模様の上に重ねる。
+                        色見本だけで情報を伝えない (値の文字列に #RRGGBBAA と成分を出す)。
+                    -->
+                    <Grid
+                        Width="16"
+                        Height="16"
+                        VerticalAlignment="Center"
+                        AutomationProperties.AccessibilityView="Raw"
+                        AutomationProperties.AutomationId="Inspector_Swatch"
+                        Visibility="{x:Bind HasSwatch, Mode=OneWay}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Rectangle Fill="{ThemeResource InspectorCheckerLightBrush}" />
+                        <Rectangle Grid.Column="1" Fill="{ThemeResource InspectorCheckerDarkBrush}" />
+                        <Rectangle Grid.Row="1" Fill="{ThemeResource InspectorCheckerDarkBrush}" />
+                        <Rectangle Grid.Row="1" Grid.Column="1" Fill="{ThemeResource InspectorCheckerLightBrush}" />
+                        <Border
+                            Grid.RowSpan="2"
+                            Grid.ColumnSpan="2"
+                            Background="{x:Bind Swatch, Mode=OneWay}"
+                            BorderBrush="{ThemeResource InspectorSwatchBorderBrush}"
+                            BorderThickness="1" />
+                    </Grid>
+                    <TextBlock
+                        Grid.Column="1"
+                        FontFamily="Cascadia Mono, Consolas"
+                        Text="{x:Bind Value, Mode=OneWay}"
+                        TextWrapping="Wrap" />
+                    <!--  色の選択 (INSP-12 の仕様 4。ColorPicker をフライアウトで表示)  -->
+                    <Button
+                        Grid.Column="2"
+                        Padding="4,0"
+                        VerticalAlignment="Center"
+                        AutomationProperties.AutomationId="Inspector_PickColor"
+                        Click="PickColor_Click"
+                        Loaded="PickColor_Loaded"
+                        Tag="{x:Bind}"
+                        Visibility="{x:Bind HasSwatch, Mode=OneWay}">
+                        <FontIcon FontSize="12" Glyph="&#xE790;" />
+                    </Button>
+                </Grid>
                 <StackPanel
                     Grid.Column="1"
                     x:Name="EditArea"
