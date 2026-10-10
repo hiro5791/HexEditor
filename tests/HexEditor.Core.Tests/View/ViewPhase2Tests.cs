@@ -238,6 +238,14 @@ public sealed class ViewPhase2Tests
             Assert.False(lower.HasSelection);
             Assert.Equal(0x8005, lower.Cursor);
             Assert.Equal(0x8000, lower.TopOffset);
+
+            // 1 バイトずつ 16 回の挿入 (挿入モードの入力) でも、16 バイト分ずれる (行の先頭への丸めでずれを失わない)。
+            for (int i = 0; i < 16; i++)
+            {
+                doc.Insert(i, new byte[1]);
+            }
+
+            Assert.Equal(0x8010, lower.TopOffset);
         }
     }
 

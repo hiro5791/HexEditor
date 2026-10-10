@@ -296,9 +296,9 @@ public sealed class ViewPanesTests
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
         await MenuAsync(app, "Command_ViewNewView");
-        IReadOnlyList<string> tabs = await app.TabNamesAsync();
+        JsonArray tabs = (await app.SendAsync("tabs"))["tabs"]!.AsArray();
         Assert.Equal(2, tabs.Count);
-        Assert.EndsWith(": 2", tabs[1]);
+        Assert.EndsWith(": 2", tabs[1]!["title"]!.GetValue<string>());
         await GoToAsync(app, "0x80000");
         await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
         await app.IdleAsync();
@@ -340,7 +340,7 @@ public sealed class ViewPanesTests
         Assert.False(await app.IsShownAsync("CloseDialog"));
         await app.KeyAsync("W", ctrl: true);
         await app.WaitForAsync("CloseDialog", UiTest.Scaled(TimeSpan.FromSeconds(10)));
-        await app.UiaInvokeAsync("CloseDialog_DontSave");
+        await app.InvokeDialogButtonAsync("Don't save");
         await app.WaitForTabsAsync(0);
     });
 

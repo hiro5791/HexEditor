@@ -234,6 +234,9 @@ public sealed partial class EditorState
     /// <summary>直前に知っていたドキュメントの長さ (元に戻す・やり直しの長さの変化を求める)。</summary>
     private long _knownLength = -1;
 
+    /// <summary>ほかのビューの編集でずらした一番上の位置 (行の先頭に丸める前)。</summary>
+    private long _followTop = -1;
+
     /// <summary>ほかのビューの編集に合わせて位置をずらす。</summary>
     private void FollowEdit(DocumentChangedEventArgs e)
     {
@@ -250,7 +253,11 @@ public sealed partial class EditorState
             return;
         }
 
-        long top = JumpHistory.ShiftForEdit(TopOffset, e);
+        // 一番上の行は行単位なので、1 バイトずつの挿入では行の先頭に丸められてずれが失われる。ずらした正確な位置を覚えておき、
+        // 同じ行を表示している間は続けてそこからずらす (16 バイトの挿入の後に 1 行分ずれる)。
+        long current = _followTop >= 0 && Layout.RowOf(_followTop) == _topRow ? _followTop : TopOffset;
+        long top = JumpHistory.ShiftForEdit(current, e);
+        _followTop = top;
         _cursor = JumpHistory.ShiftForEdit(_cursor, e);
         if (_anchor >= 0)
         {
