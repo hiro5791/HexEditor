@@ -509,6 +509,9 @@ internal sealed class RegexMatcher : MultiMatcher
 {
     private readonly Regex _regex;
     private readonly Regex _viewRegex;
+
+    /// <summary>後戻りする方式で、まず試す短い時間の上限 (<see cref="SliceTimeout"/>) の正規表現 (後戻りしない方式なら null)。</summary>
+    private readonly Regex? _sliceRegex;
     private readonly ByteTextDecoder? _decoder;
     private readonly Encoding? _encoding;
     private readonly int _maxLength;
@@ -528,7 +531,29 @@ internal sealed class RegexMatcher : MultiMatcher
             : options.TimeLimit > RegexSearch.MaxTimeLimit ? RegexSearch.MaxTimeLimit : options.TimeLimit;
         LeadingContext = Math.Min(RegexSearch.MaxContext, _maxLength);
         Source = source;
+        if (!nonBacktracking)
+        {
+            _sliceRegex = new Regex(regex.ToString(), regex.Options, SliceTimeout);
+        }
     }
+
+    /// <summary>
+    /// 後戻りする方式で、1 回の照合をそのスレッドで続ける時間。これを超えた照合は別のスレッドに移し、キャンセルとチャンクの時間の上限を
+    /// 確かめながら待つ (.NET の照合は途中で止められないため。FIND-02 の仕様 3)。
+    /// </summary>
+    internal static readonly TimeSpan SliceTimeout = TimeSpan.FromMilliseconds(50);
+
+    /// <summary>別のスレッドに移した照合を待つ間に、キャンセルを確かめる間隔。</summary>
+    private static readonly TimeSpan PollInterval = TimeSpan.FromMilliseconds(10);
+
+    /// <summary>
+    /// 表示中の範囲の強調 (UI スレッド) で、1 回の描画の照合に使う時間の合計の上限。これを超えたら残りの強調はあきらめる
+    /// (1 回の照合の上限 30 ms と合わせて、1 回の描画で最大でも約 80 ms)。
+    /// </summary>
+    internal static readonly TimeSpan ViewBudget = TimeSpan.FromMilliseconds(50);
+
+    /// <summary>テスト用: 別のスレッドに移した照合を待ち始めたときに呼ぶ。</summary>
+    internal Action? SlowMatchStartedForTest { get; set; }
 
     /// <summary>入力した正規表現。</summary>
     public string Source { get; }
@@ -677,7 +702,16 @@ internal sealed class RegexMatcher : MultiMatcher
         int startAt = CharAt(from);
         while (startAt <= input.Length)
         {
-            if (clock is not null && !NonBacktracking && clock.Elapsed > TimeLimit)
+            context.CheckCancel?.Invoke();
+            if (context.ForView)
+            {
+                if (clock is not null && clock.Elapsed > ViewBudget)
+                {
+                    // 表示中の範囲の強調に使う時間の合計の上限: 残りはあきらめる (UI を止めない)。
+                    return;
+                }
+            }
+            else if (clock is not null && !NonBacktracking && clock.Elapsed > TimeLimit)
             {
                 throw new RegexChunkTimeoutException();
             }
@@ -685,7 +719,7 @@ internal sealed class RegexMatcher : MultiMatcher
             Match m;
             try
             {
-                m = regex.Match(input, startAt);
+                m = context.ForView || _sliceRegex is null ? regex.Match(input, startAt) : MatchBacktracking(input, startAt, context, clock);
             }
             catch (RegexMatchTimeoutException)
             {
@@ -726,6 +760,56 @@ internal sealed class RegexMatcher : MultiMatcher
             {
                 // 一致の最大長を超える一致は報告せず、その後ろから探す (FIND-01 の仕様 3)。
                 startAt = m.Index + m.Length;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 後戻りする方式の 1 回の照合。まず短い時間の上限 (<see cref="SliceTimeout"/>) でこのスレッドで照合し、終わらなければ別のスレッドで
+    /// 照合し直して、キャンセルとチャンクの時間の上限 (<see cref="TimeLimit"/>、<paramref name="clock"/> で測る) を確かめながら待つ。
+    /// キャンセルなら <see cref="OperationCanceledException"/>、時間の上限なら <see cref="RegexChunkTimeoutException"/> を投げ、
+    /// 別のスレッドの照合は待たずに手放す (その照合は自分の時間の上限で終わる)。
+    /// </summary>
+    private Match MatchBacktracking(string input, int startAt, in ScanContext context, Stopwatch? clock)
+    {
+        try
+        {
+            return _sliceRegex!.Match(input, startAt);
+        }
+        catch (RegexMatchTimeoutException)
+        {
+        }
+
+        Stopwatch own = clock ?? Stopwatch.StartNew();
+        if (own.Elapsed > TimeLimit)
+        {
+            throw new RegexChunkTimeoutException();
+        }
+
+        Regex regex = _regex;
+        Task<Match?> slow = Task.Factory.StartNew<Match?>(() =>
+        {
+            try
+            {
+                return regex.Match(input, startAt);
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return null; // 手放した後に時間の上限に達しても、観測されない例外を残さない。
+            }
+        }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        SlowMatchStartedForTest?.Invoke();
+        while (true)
+        {
+            if (slow.Wait(PollInterval))
+            {
+                return slow.Result ?? throw new RegexChunkTimeoutException();
+            }
+
+            context.CheckCancel?.Invoke();
+            if (own.Elapsed > TimeLimit)
+            {
+                throw new RegexChunkTimeoutException();
             }
         }
     }

@@ -105,10 +105,12 @@ internal enum MatchDecision
 
 /// <summary>
 /// 照合するバッファの周りの事情。正規表現 (FIND-18、FIND-19) は、バッファの前の文脈 (後読み・<c>\b</c>) をドキュメントから読み、
-/// バッファの端が範囲の本当の端か (<c>$</c>) を知る必要がある。
+/// バッファの端が範囲の本当の端か (<c>$</c>) を知る必要がある。<see cref="CheckCancel"/> はキャンセルの確認 (要求されていれば
+/// <see cref="OperationCanceledException"/> を投げる)。チャンクの中の区間ごと・正規表現の照合ごとに呼び、キャンセルの要求から
+/// 200 ms 以内に止める (FIND-02 の仕様 3)。
 /// </summary>
 internal readonly record struct ScanContext(DocumentSnapshot? Snapshot, long RangeStart, long RangeEnd, bool StartIsBoundary, bool EndIsBoundary,
-    bool ForView = false, System.Diagnostics.Stopwatch? Clock = null);
+    bool ForView = false, System.Diagnostics.Stopwatch? Clock = null, Action? CheckCancel = null);
 
 /// <summary>
 /// 複数の一致をまとめて求める照合 (複数語・複数の文字コード・正規表現)。<see cref="Gather"/> は、開始が [from, coreEnd) の一致を
