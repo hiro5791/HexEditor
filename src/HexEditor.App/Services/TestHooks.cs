@@ -33,6 +33,9 @@ public static class TestHooks
     /// <summary>管理者として実行している扱い (テスト用の設定 elevated。TC-UI-02-02)。</summary>
     public static bool SimulatesElevation => Active && Settings.Elevated;
 
+    /// <summary>管理者として実行中のドロップの案内を出してよい (テスト用のビルドでは設定 adminDropNotice のときだけ。UI-34 の仕様 7)。</summary>
+    public static bool AllowsAdminDropNotice => !Active || Settings.AdminDropNotice;
+
     /// <summary>設定ファイルのパス (--test-hooks の値)。</summary>
     public static string? SettingsPath { get; private set; }
 
@@ -94,6 +97,18 @@ public static class TestHooks
             System.Globalization.CultureInfo.DefaultThreadCurrentCulture = info;
             System.Globalization.CultureInfo.CurrentCulture = info;
             AppLog.Info($"Test hooks: culture {culture}");
+        }
+
+        // ディスクの書き込みで、ボリュームをロックした後・書き込みの直前に止める (ロックを保持したまま。TC-ENG-28-08)。止まったことを
+        // 印のファイルで知らせ、このプロセスが終了させられるまで待つ。
+        if (Settings.PauseAfterVolumeLock is { Length: > 0 } marker)
+        {
+            Core.Devices.DiskWrite.AfterLock = () =>
+            {
+                AppLog.Info("Test hooks: paused after the volume lock");
+                File.WriteAllText(marker, Environment.ProcessId.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                Thread.Sleep(Timeout.Infinite);
+            };
         }
     }
 
@@ -649,6 +664,8 @@ public static class TestHooks
     public static bool Active => false;
 
     public static bool SimulatesElevation => false;
+
+    public static bool AllowsAdminDropNotice => true;
 
     public static bool SuppressActivation => false;
 

@@ -354,8 +354,9 @@ public sealed class AnnotationTests
         await app.KeyAsync("Escape");
         await app.GoToAsync(0x104);
         await app.CommandAsync("Command_ShowDescription");
-        await app.WaitUntilAsync(async () => (await app.SendAsync("descriptionFlyout"))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the flyout");
-        Assert.Equal("ScrollViewer:Annotations_DescriptionFlyout", await app.FocusedAsync());
+        // フライアウトが開いた直後は Popup にフォーカスがあることがある (遅い環境)。説明の領域にフォーカスが入るまで待つ。
+        await app.WaitUntilAsync(async () => (await app.SendAsync("descriptionFlyout"))["focused"]!.GetValue<bool>()
+            && await app.FocusedAsync() == "ScrollViewer:Annotations_DescriptionFlyout", TimeSpan.FromSeconds(5), "the focus in the description flyout");
         JsonObject flyout = await app.SendAsync("descriptionFlyout");
         Assert.Contains(flyout["runs"]!.AsArray(), r => r!["text"]!.GetValue<string>() == paragraph);
         Assert.True(flyout["scrollableHeight"]!.GetValue<double>() > 0);
@@ -439,7 +440,16 @@ public sealed class AnnotationTests
             await app.WaitUntilAsync(async () =>
             {
                 await app.IdleAsync();
-                last = await app.SendAsync("highlights");
+                try
+                {
+                    last = await app.SendAsync("highlights");
+                }
+                catch (InvalidOperationException e) when (e.Message.Contains("No hex view", StringComparison.Ordinal))
+                {
+                    // タブを切り替えた直後は、そのタブの Hex ビューがまだできていないことがある。
+                    return false;
+                }
+
                 return ready(last);
             }, TimeSpan.FromSeconds(10), "the coloring rules to be drawn");
         }

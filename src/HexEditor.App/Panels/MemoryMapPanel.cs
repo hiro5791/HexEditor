@@ -32,6 +32,7 @@ public sealed partial class MemoryMapPanel : UserControl, IPanelContent
     private readonly DispatcherQueueTimer? _timer;
     private List<MemoryMapRow> _allRows = [];
     private List<RegionRow> _shownRows = [];
+    private IReadOnlyList<ProcessModule> _shownModules = [];
     private EditorState? _editor;
     private DocumentViewModel? _document;
     private bool _refreshing;
@@ -160,6 +161,28 @@ public sealed partial class MemoryMapPanel : UserControl, IPanelContent
 
     /// <summary>表示している領域の行 (テスト用)。</summary>
     internal IReadOnlyList<string> RegionTexts => [.. _shownRows.Select(r => r.Text)];
+
+    /// <summary>「領域」タブの行の数 (テスト用。TC-ENG-33-03)。</summary>
+    internal int RegionRowCount => _regions.ItemsSource is null ? 0 : _shownRows.Count;
+
+    /// <summary>
+    /// 「領域」の一覧で 1 ページ下へ移る (テスト用。PageDown のキーと同じく、見えている行の数だけ選択を進めて表示する。TC-ENG-33-03)。
+    /// </summary>
+    internal void PageDownForTest()
+    {
+        int count = RegionRowCount;
+        if (count == 0)
+        {
+            return;
+        }
+
+        _tab.SelectedIndex = 0;
+        _regions.Focus(FocusState.Programmatic);
+        double rowHeight = _regions.ContainerFromIndex(Math.Max(0, _regions.SelectedIndex)) is FrameworkElement row && row.ActualHeight > 0 ? row.ActualHeight : 40;
+        int page = Math.Max(1, (int)(_regions.ActualHeight / rowHeight) - 1);
+        _regions.SelectedIndex = Math.Min(count - 1, Math.Max(0, _regions.SelectedIndex) + page);
+        _regions.ScrollIntoView(_regions.SelectedItem);
+    }
 
     private void OnActiveDocumentChanged(object? sender, EventArgs e)
     {
@@ -311,8 +334,16 @@ public sealed partial class MemoryMapPanel : UserControl, IPanelContent
                 modules = snapshot.Modules;
             }
 
+            // 一覧が変わっていなければ作り直さない (5 秒ごとの更新で数万行を作り直すと、スクロール中のフレームが落ちる。ENG-33 の受け入れ基準 4)。
+            if (_empty.Visibility == Visibility.Collapsed && _regions.ItemsSource is not null && rows.SequenceEqual(_allRows)
+                && _modules.ItemsSource is not null && modules.SequenceEqual(_shownModules))
+            {
+                return;
+            }
+
             _empty.Visibility = Visibility.Collapsed;
             _allRows = rows;
+            _shownModules = modules;
             ApplyFilter(keepSelection: true);
             object? selectedModule = (_modules.SelectedItem as ModuleRow)?.Address;
             var moduleRows = modules.Select(m => new ModuleRow(m.BaseAddress, FormatModule(m))).ToList();

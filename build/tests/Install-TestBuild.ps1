@@ -6,7 +6,7 @@
   -Distro Portable  : -Path is the portable zip; it is extracted
   -Distro Installer : -Path is Setup.exe; it is installed with --silent (the app that it starts is closed)
   -Distro Msix      : -Path is the .msix; it is signed with a throwaway certificate and installed (Msix.ps1)
-  The UI tests (tests/HexEditor.UITests) then start HEXEDITOR_APP_EXE: the extracted HexEditor.exe,
+  The UI tests (tests/HexEditor.UITests) then start HEXEDITOR_APP_EXE (HEXEDITOR_APP_DISTRO is the distribution): the extracted HexEditor.exe,
   %LocalAppData%\HexEditor\current\HexEditor.exe or the execution alias hexeditor.exe of the package.
 #>
 [CmdletBinding()]
@@ -42,4 +42,8 @@ switch ($Distro) {
 
 if (-not (Test-Path $exe)) { throw "$exe does not exist" }
 Write-Host "HEXEDITOR_APP_EXE=$exe"
-if ($env:GITHUB_ENV) { Add-Content -Path $env:GITHUB_ENV -Value "HEXEDITOR_APP_EXE=$exe" -Encoding utf8 }
+if ($env:GITHUB_ENV) {
+    Add-Content -Path $env:GITHUB_ENV -Value "HEXEDITOR_APP_EXE=$exe" -Encoding utf8
+    # The distribution, for the UI tests that run only with one of them (CiPrivilegedFact in tests/HexEditor.UITests).
+    Add-Content -Path $env:GITHUB_ENV -Value "HEXEDITOR_APP_DISTRO=$Distro" -Encoding utf8
+}

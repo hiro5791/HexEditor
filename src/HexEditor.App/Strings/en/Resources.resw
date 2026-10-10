@@ -5218,6 +5218,7 @@ Details were written to:
   <data name="AdminGuide_Title" xml:space="preserve"><value>Administrator rights are required</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>Reading a physical disk or an internal disk's volume directly requires Windows administrator rights.</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>This process requires administrator rights to open.</value></data>
+  <data name="AdminGuide_Steps" xml:space="preserve"><value>To run as administrator: 1. Close HexEditor. 2. Right-click HexEditor in the Start menu. 3. Choose More &gt; "Run as administrator".</value></data>
   <data name="AdminGuide_UsbAlternative" xml:space="preserve"><value>Removable USB storage volumes can be opened without administrator rights.</value></data>
   <data name="AdminGuide_StoreDownload" xml:space="preserve"><value>The installer and portable editions can use administrator operations by prompting for rights only when needed.</value></data>
   <data name="AdminGuide_Restart" xml:space="preserve"><value>Restart as administrator</value></data>

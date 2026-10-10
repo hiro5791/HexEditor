@@ -88,6 +88,8 @@ jobs:
       - name: Build
         run: |
           dotnet build tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true
+          # 補助プロセス (テスト用のビルド): 補助プロセスの結合テスト (ENG-28。昇格せず偽のデバイスで起動する) が使う。
+          dotnet build src/HexEditor.Elevated -c Release -p:HexTestHooks=true
           dotnet build tests/HexEditor.Platform.Tests -c Release
           dotnet build tests/HexEditor.Performance.Tests -c Release -p:HexTestHooks=true
           dotnet build tools/TestDataGen -c Release
@@ -401,7 +403,7 @@ jobs:
   # テストの網羅の一覧 (test-coverage.md。テスト方針 6.2、10 章の 4)。完了したフェーズ (0) に、テストケースのない受け入れ基準、
   # 自動テストのない「自動」のテストケース、失敗したテストケースがあれば失敗にする。
   coverage:
-    needs: [test-x64, ui-tests, ui-nightly, screenshots]
+    needs: [test-x64, ui-tests, ui-nightly, screenshots, ui-privileged]
     if: always()
     runs-on: windows-latest
     timeout-minutes: 15
@@ -435,6 +437,12 @@ jobs:
         with:
           pattern: screenshots-*
           path: results/screenshots
+
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: ui-privileged-*
+          path: results/ui-privileged
 
       - name: Test coverage
         shell: pwsh
@@ -602,6 +610,57 @@ jobs:
         run: |
           ./build/tests/Test-Update.ps1 -FeedRepo '${{ vars.HEX_UPDATE_FEED_REPO }}' -TestDataDir (Resolve-Path testdata).Path
           exit $LASTEXITCODE
+
+  # 管理者権限・仮想ディスク・配布形態のインストール・本物の補助プロセスの昇格が要る UI テスト (tests/HexEditor.UITests/PrivilegedTests.cs。
+  # ENG-14、ENG-28、ENG-32、PKG-04、PKG-14、UI-34)。ランナーのテストのプロセスは管理者として動く。TD-VHDX-MBR を作って接続し
+  # (Mount-TestVhd.ps1。UAC は「確認なしで昇格」)、配布形態ごとにテスト用のビルドを入れて実行する。テストは HEXEDITOR_CI_PRIVILEGED=1 の
+  # ときだけ動き (開発者の PC ではスキップ)、配布形態 (HEXEDITOR_APP_DISTRO) ごとに担当のケースだけを実行する。毎晩と手動の実行だけ。
+  ui-privileged:
+    needs: build-test
+    runs-on: windows-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [Msix, Installer, Portable]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      - uses: actions/download-artifact@v4
+        with:
+          name: HexEditorTest-${{ matrix.distro }}-x64
+          path: testbuild
+      - name: Install
+        shell: powershell
+        run: |
+          $file = Get-ChildItem testbuild | Where-Object { $_.Name -like '*-portable.zip' -or $_.Name -like 'HexEditor-0.0.0-local-*-Setup.exe' -or $_.Name -like '*.msix' } | Select-Object -First 1
+          ./build/tests/Install-TestBuild.ps1 -Distro ${{ matrix.distro }} -Path $file.FullName
+      - name: Attach TD-VHDX-MBR
+        shell: powershell
+        run: ./build/tests/Mount-TestVhd.ps1
+      - name: Build UI tests and TestTarget
+        run: |
+          dotnet build tests/HexEditor.UITests -c Release
+          dotnet build tools/TestTarget -c Release
+      - name: Privileged UI tests
+        env:
+          HEXEDITOR_CI_PRIVILEGED: "1"
+          HEXEDITOR_UITEST_ARTIFACTS: ${{ github.workspace }}\TestResults\ui-artifacts
+          HEXEDITOR_UITEST_TIMEOUT_SCALE: "2"
+        run: dotnet test tests/HexEditor.UITests -c Release --no-build --filter "FullyQualifiedName~HexEditor.UITests.PrivilegedTests." --logger "trx;LogFileName=ui-privileged-${{ matrix.distro }}.trx" --logger "console;verbosity=normal" --results-directory TestResults
+      - name: Detach TD-VHDX-MBR
+        if: always()
+        shell: powershell
+        run: ./build/tests/Mount-TestVhd.ps1 -Dismount
+      - name: Upload privileged UI test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-privileged-${{ matrix.distro }}
+          retention-days: 7
+          path: TestResults/
 
   # 配布形態で動きが変わりうる UI テストを、3 種類の配布形態のテスト用のビルドで実行し、結果が同じことを確かめる (TC-PKG-01-02)。
   # 対象は、データの置き場所・登録・再起動・1 つのインスタンス・リソース (翻訳、pri) に関わるテストの組だけ。編集・表示・検索など

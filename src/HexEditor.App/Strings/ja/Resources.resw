@@ -5218,6 +5218,7 @@
   <data name="AdminGuide_Title" xml:space="preserve"><value>管理者権限が必要です</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>物理ディスクや内蔵ディスクのボリュームを直接読むには、Windows の管理者権限が必要です。</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>このプロセスを開くには管理者権限が必要です。</value></data>
+  <data name="AdminGuide_Steps" xml:space="preserve"><value>管理者として実行するには: 1. HexEditor を閉じます。2. スタートメニューで HexEditor を右クリックします。3.「その他」&gt;「管理者として実行」を選びます。</value></data>
   <data name="AdminGuide_UsbAlternative" xml:space="preserve"><value>取り外し可能な USB ストレージのボリュームは管理者権限なしで開けます。</value></data>
   <data name="AdminGuide_StoreDownload" xml:space="preserve"><value>インストーラ版・ポータブル版は、必要なときだけ管理者権限の確認を出して管理者権限の操作を使えます。</value></data>
   <data name="AdminGuide_Restart" xml:space="preserve"><value>管理者として再起動</value></data>
