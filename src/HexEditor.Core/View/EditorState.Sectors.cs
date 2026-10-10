@@ -3,44 +3,22 @@ namespace HexEditor.Core.View;
 /// <summary>セクタ単位の移動 (VIEW-32)。</summary>
 public sealed partial class EditorState
 {
-    /// <summary>セクタ番号 (0 始まり、切り捨て)。末尾の次の位置は最後のセクタに属する (仕様 2)。</summary>
-    public static long SectorOf(long offset, long length, int sectorSize)
-    {
-        long count = SectorCount(length, sectorSize);
-        return count == 0 ? 0 : Math.Min(offset / sectorSize, count - 1);
-    }
+    // セクタの区切りの計算は、区切り線・ページ単位の表示 (VIEW-33) と同じ SectionLayout で行う (区切りの長さ = セクタサイズ)。
 
-    /// <summary>セクタ数 ⌈長さ ÷ セクタサイズ⌉ (末尾の端数も 1 つと数える)。</summary>
-    public static long SectorCount(long length, int sectorSize) => length <= 0 ? 0 : ((length - 1) / sectorSize) + 1;
+    /// <summary>セクタ番号 (0 始まり、切り捨て)。末尾の次の位置は最後のセクタに属する (仕様 2)。</summary>
+    public static long SectorOf(long offset, long length, int sectorSize) => new SectionLayout(sectorSize, length).IndexOf(offset);
+
+    /// <summary>セクタ数 ⌈長さ ÷ セクタサイズ⌉ (末尾の端数も 1 つと数える)。長さ 0 なら 0。</summary>
+    public static long SectorCount(long length, int sectorSize) => length <= 0 ? 0 : new SectionLayout(sectorSize, length).Count;
 
     /// <summary>カーソルのあるセクタ番号 (ステータスバー。仕様 6)。</summary>
     public long CursorSector => SectorOf(Cursor, Document.Length, SectorSize);
 
     /// <summary>「次のセクタ」の移動先 (仕様 2)。動かない場合は null。</summary>
-    public static long? NextSectorTarget(long cursor, long length, int sectorSize)
-    {
-        long count = SectorCount(length, sectorSize);
-        long sector = SectorOf(cursor, length, sectorSize);
-        return count == 0 || sector >= count - 1 ? null : (sector + 1) * sectorSize;
-    }
+    public static long? NextSectorTarget(long cursor, long length, int sectorSize) => new SectionLayout(sectorSize, length).Next(cursor);
 
     /// <summary>「前のセクタ」の移動先 (仕様 3)。動かない場合は null。</summary>
-    public static long? PreviousSectorTarget(long cursor, long length, int sectorSize)
-    {
-        if (length <= 0)
-        {
-            return null;
-        }
-
-        long sector = SectorOf(cursor, length, sectorSize);
-        long start = sector * sectorSize;
-        if (cursor > start)
-        {
-            return start;
-        }
-
-        return sector > 0 ? (sector - 1) * sectorSize : null;
-    }
+    public static long? PreviousSectorTarget(long cursor, long length, int sectorSize) => new SectionLayout(sectorSize, length).Previous(cursor);
 
     /// <summary>次のセクタの先頭へ移動する。移動したら true。</summary>
     public bool MoveNextSector() => MoveToSector(NextSectorTarget(Cursor, Document.Length, SectorSize));
