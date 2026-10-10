@@ -171,6 +171,9 @@ public sealed partial class MainWindow
         })]);
         result["legend"] = new JsonArray([.. vm.Legend.Select(l => (JsonNode?)new JsonObject { ["name"] = l.Name, ["pattern"] = l.Pattern })]);
         result["classifyStatus"] = vm.ClassifyStatus;
+        result["classifyStale"] = vm.ClassificationStale;
+        result["classifyFileType"] = vm.ClassifyFileTypeNote;
+        result["patternStale"] = vm.PatternStale;
         return result;
     }
 

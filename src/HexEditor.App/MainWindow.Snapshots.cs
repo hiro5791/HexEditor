@@ -57,6 +57,12 @@ public sealed partial class MainWindow
             return;
         }
 
+        await CreateSnapshotNamedAsync(doc, process, chosen);
+    }
+
+    /// <summary>名前を決めた後の作成 (権限不足なら昇格した補助プロセスでの再試行を提案する)。テスト用の命令からも呼ぶ。</summary>
+    internal async Task CreateSnapshotNamedAsync(DocumentViewModel doc, ProcessMemoryByteSource process, string chosen)
+    {
         try
         {
             await CaptureSnapshotAsync(doc, process, chosen);
