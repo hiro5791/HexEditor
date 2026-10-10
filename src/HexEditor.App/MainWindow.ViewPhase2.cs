@@ -517,8 +517,11 @@ public sealed partial class MainWindow
     private TextBlock? _recordError;
     private Button? _recordOk;
 
-    /// <summary>フライアウトに今の設定を入れている間 (入力の変化をその場で反映しない)。</summary>
-    private bool _recordFilling;
+    /// <summary>
+    /// フライアウトを開いたときの入力 (レコード長、開始、1 行 1 レコード、番号)。入力の変化の通知は後から届くため、開いたときのままの入力では
+    /// 反映しない (開いただけでレコード表示をオンにしない)。
+    /// </summary>
+    private (long Length, long Start, bool PerRow, bool Numbers)? _recordOpened;
 
     /// <summary>
     /// 「レコード表示…」(VIEW-18 の仕様 1): レコード長・開始オフセット (入力式)・1 行を 1 レコード・レコード番号の表示を、モーダルでない
@@ -552,12 +555,12 @@ public sealed partial class MainWindow
             _recordOk = new Button { Content = Loc.Get("Common_Ok"), Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
             AutomationProperties.SetAutomationId(_recordOk, "RecordSettings_Ok");
             _recordOk.Click += (_, _) => CommitRecordSettings();
-            _recordLength.TextChanged += (_, _) => ApplyRecordSettings();
-            _recordStart.TextChanged += (_, _) => ApplyRecordSettings();
-            _recordPerRow.Checked += (_, _) => ApplyRecordSettings();
-            _recordPerRow.Unchecked += (_, _) => ApplyRecordSettings();
-            _recordNumbers.Checked += (_, _) => ApplyRecordSettings();
-            _recordNumbers.Unchecked += (_, _) => ApplyRecordSettings();
+            _recordLength.TextChanged += (_, _) => ApplyRecordSettings(force: false);
+            _recordStart.TextChanged += (_, _) => ApplyRecordSettings(force: false);
+            _recordPerRow.Checked += (_, _) => ApplyRecordSettings(force: false);
+            _recordPerRow.Unchecked += (_, _) => ApplyRecordSettings(force: false);
+            _recordNumbers.Checked += (_, _) => ApplyRecordSettings(force: false);
+            _recordNumbers.Unchecked += (_, _) => ApplyRecordSettings(force: false);
             var panel = new StackPanel { Spacing = 8 };
             panel.Children.Add(new TextBlock { Text = Loc.Get("RecordSettings_Title"), Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"] });
             foreach (UIElement e in (UIElement[])[_recordLength, _recordStart, _recordPerRow, _recordNumbers, _recordError, _recordOk])
@@ -571,19 +574,11 @@ public sealed partial class MainWindow
         }
 
         ViewSettings v = editor.View;
-        _recordFilling = true;
-        try
-        {
-            _recordLength!.Text = v.RecordLength.ToString(CultureInfo.InvariantCulture);
-            _recordStart!.Text = "0x" + v.RecordStart.ToString("X", CultureInfo.InvariantCulture);
-            _recordPerRow!.IsChecked = v.RecordPerRow;
-            _recordNumbers!.IsChecked = v.RecordNumbers;
-        }
-        finally
-        {
-            _recordFilling = false;
-        }
-
+        _recordOpened = (v.RecordLength, v.RecordStart, v.RecordPerRow, v.RecordNumbers);
+        _recordLength!.Text = v.RecordLength.ToString(CultureInfo.InvariantCulture);
+        _recordStart!.Text = "0x" + v.RecordStart.ToString("X", CultureInfo.InvariantCulture);
+        _recordPerRow!.IsChecked = v.RecordPerRow;
+        _recordNumbers!.IsChecked = v.RecordNumbers;
         ValidateRecordSettings();
         _recordFlyout.ShowAt(view, new FlyoutShowOptions { Placement = FlyoutPlacementMode.TopEdgeAlignedLeft, Position = new Windows.Foundation.Point(view.ContentLeft, 0) });
     }
@@ -625,33 +620,40 @@ public sealed partial class MainWindow
     /// <summary>OK: 入力を反映して閉じる。</summary>
     private void CommitRecordSettings()
     {
-        if (ApplyRecordSettings())
+        if (ApplyRecordSettings(force: true))
         {
             _recordFlyout?.Hide();
         }
     }
 
-    /// <summary>入力が正しければ、その場でレコード表示に反映する (VIEW-18 の「画面」)。反映できたら true。</summary>
-    private bool ApplyRecordSettings()
+    /// <summary>
+    /// 入力が正しければ、その場でレコード表示に反映する (VIEW-18 の「画面」)。<paramref name="force"/> が false (入力の変化) なら、開いたときの
+    /// 入力のままでは反映しない。正しい入力なら true。
+    /// </summary>
+    private bool ApplyRecordSettings(bool force)
     {
-        if (_recordFilling)
-        {
-            return false;
-        }
-
         if (Editor is not { } editor || ValidateRecordSettings() is not { } values)
         {
             return false;
         }
 
         bool perRow = _recordPerRow!.IsChecked == true && values.Length <= ViewSettings.MaxBytesPerRow;
+        bool numbers = _recordNumbers!.IsChecked == true;
+        if (!force && _recordOpened == (values.Length, values.Start, _recordPerRow.IsChecked == true, numbers))
+        {
+            return true;
+        }
+
+        // 一度反映したら、開いたときの入力に戻したときも反映する。
+        _recordOpened = null;
+
         ViewSettings next = editor.View with
         {
             RecordView = true,
             RecordLength = (int)values.Length,
             RecordStart = values.Start,
             RecordPerRow = perRow,
-            RecordNumbers = _recordNumbers!.IsChecked == true,
+            RecordNumbers = numbers,
         };
         if (next != editor.View)
         {
