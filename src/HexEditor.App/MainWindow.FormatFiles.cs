@@ -773,15 +773,61 @@ public sealed partial class MainWindow
 
     // ---- 選択範囲・ブックマークを新しいタブで開く (ENG-39) ----
 
-    /// <summary>選択範囲を連動ビュー (既定) またはコピーとして新しいタブで開く。範囲の大きさに関係なく即座に開く。</summary>
-    private void OpenSelectionInNewTab(bool copy)
+    /// <summary>範囲ごとにタブを開くとき、件数を確認ダイアログで示す境 (ENG-39 の「エラー」。これを超えると件数を示す)。</summary>
+    private const int ManyLinkedTabs = 10;
+
+    /// <summary>
+    /// 選択範囲を連動ビュー (既定) またはコピーとして新しいタブで開く。範囲の大きさに関係なく即座に開く。マルチ選択では、最初の範囲だけを
+    /// 開くか、範囲ごとにタブを開くかを確かめる (ENG-39 の「エラー」。10 個を超える場合は件数を示す)。
+    /// </summary>
+    private async Task OpenSelectionInNewTab(bool copy)
     {
         if (Vm.Selected is not { } doc || !doc.Editor.HasSelection)
         {
             return;
         }
 
-        OpenRangeInNewTab(doc, doc.Editor.SelectionStart, doc.Editor.SelectionLength, null, copy);
+        if (!doc.Editor.HasMultipleRanges)
+        {
+            OpenRangeInNewTab(doc, doc.Editor.SelectionStart, doc.Editor.SelectionLength, null, copy);
+            return;
+        }
+
+        // 確認の間に選択が変わっても、確認したときの範囲を開く。
+        List<Core.Selection.ByteRange> ranges = [.. doc.Editor.SelectedRanges.Where(r => r.Length > 0)];
+        if (ranges.Count <= 1)
+        {
+            if (ranges.Count == 1)
+            {
+                OpenRangeInNewTab(doc, ranges[0].Start, ranges[0].Length, null, copy);
+            }
+
+            return;
+        }
+
+        string body = Loc.Format("LinkedMulti_Body", ranges.Count);
+        if (ranges.Count > ManyLinkedTabs)
+        {
+            body += Environment.NewLine + Environment.NewLine + Loc.Format("LinkedMulti_ManyTabs", ranges.Count);
+        }
+
+        ContentDialog dialog = DialogParts.Dialog(Root, "OpenSelectionRangesDialog", Loc.Get("LinkedMulti_Title"),
+            new TextBlock { Text = body, TextWrapping = TextWrapping.Wrap, MaxWidth = 420 },
+            Loc.Get("LinkedMulti_First"), Loc.Get("LinkedMulti_Each"));
+        switch (await dialog.ShowQueuedAsync())
+        {
+            case ContentDialogResult.Primary when !doc.Document.IsDisposed:
+                OpenRangeInNewTab(doc, ranges[0].Start, ranges[0].Length, null, copy);
+                break;
+            case ContentDialogResult.Secondary when !doc.Document.IsDisposed:
+                // 連動ビューは親の直後に入るため、後ろの範囲から開いてタブをオフセット順に並べる (コピーは末尾に足す)。
+                foreach (Core.Selection.ByteRange range in copy ? ranges : Enumerable.Reverse(ranges))
+                {
+                    OpenRangeInNewTab(doc, range.Start, range.Length, null, copy);
+                }
+
+                break;
+        }
     }
 
     /// <summary>範囲を新しいタブで開く (ブックマークから開く場合はブックマークの名前をタブの名前にする。仕様 3)。</summary>
@@ -792,7 +838,8 @@ public sealed partial class MainWindow
             return null;
         }
 
-        LinkedTabOpenedAt = Environment.TickCount64;
+        long started = System.Diagnostics.Stopwatch.GetTimestamp();
+        LastLinkedTabOpenMs = null;
         DocumentViewModel vm = copy ? Vm.OpenAsCopy(doc, offset, length, name) : Vm.OpenLinkedView(doc, offset, length, name);
         ApplyLinkedOrRangeView(vm);
         if (!copy)
@@ -801,11 +848,15 @@ public sealed partial class MainWindow
         }
 
         UpdateTitle();
+
+        // 表示が終わるまで (レイアウト・描画の後に回る低い優先度の処理) の時間を記録する (TC-ENG-39-01 はアプリの中で計る)。
+        DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low,
+            () => LastLinkedTabOpenMs = System.Diagnostics.Stopwatch.GetElapsedTime(started).TotalMilliseconds);
         return vm;
     }
 
-    /// <summary>「新しいタブで開く」を始めた時刻 (Environment.TickCount64。テストが開くまでの時間を計る)。</summary>
-    internal long LinkedTabOpenedAt { get; private set; }
+    /// <summary>最後に「新しいタブで開く」でタブを開いて表示するまでにかかった時間 (ミリ秒。まだ表示していなければ null)。</summary>
+    internal double? LastLinkedTabOpenMs { get; private set; }
 
     /// <summary>連動ビューの範囲が動いた・切断された: 見出しとベースアドレスを合わせ、切断なら知らせる (仕様 1)。</summary>
     private void OnLinkChanged(DocumentViewModel vm)

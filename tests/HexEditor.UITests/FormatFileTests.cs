@@ -308,16 +308,72 @@ public sealed class FormatFileTests
         Assert.False(parent["modified"]!.GetValue<bool>());
     });
 
+    /// <summary>ENG-39 の「エラー」: マルチ選択では最初の範囲だけを開くか、範囲ごとにタブを開くかを確かめる (10 個を超えると件数を示す)。</summary>
+    [Fact]
+    public Task Multi_selection_asks_how_to_open_the_ranges() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        static JsonArray Ranges(int count) => new([.. Enumerable.Range(0, count).Select(i => (JsonNode?)new JsonArray(0x1000 + i * 0x100, 0x10))]);
+
+        // 3 個: 範囲ごとに開く → 3 つの連動ビュー。本文に件数の注意はない。
+        await app.SendAsync("multiSelection", new JsonObject { ["ranges"] = Ranges(3) });
+        await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openSelectionInNewTab" });
+        var dialog = await app.WaitForDialogAsync("OpenSelectionRangesDialog");
+        string text = await app.WaitForDialogTextAsync(dialog, "The selection has 3 ranges");
+        Assert.DoesNotContain("tabs.", text, StringComparison.Ordinal);
+        Assert.NotNull(app.Button("Open the first range"));
+        Assert.NotNull(app.Button("Open each range"));
+        await app.InvokeDialogButtonAsync("Open each range");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["tabs"]!.GetValue<int>() == 4, UiTest.Scaled(TimeSpan.FromSeconds(10)), "3 linked tabs");
+        for (int i = 1; i <= 3; i++)
+        {
+            JsonObject child = await DocAsync(app, i);
+            Assert.True(child["linked"]!.GetValue<bool>());
+            Assert.Equal((0x1000L + (i - 1) * 0x100, 0x10L), (child["linkStart"]!.GetValue<long>(), child["length"]!.GetValue<long>()));
+        }
+
+        // 12 個: 件数を示す。最初の範囲だけを開く → 1 つ増える。
+        await SelectTabAsync(app, 0);
+        await app.SendAsync("multiSelection", new JsonObject { ["ranges"] = Ranges(12) });
+        await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openSelectionAsCopy" });
+        dialog = await app.WaitForDialogAsync("OpenSelectionRangesDialog");
+        await app.WaitForDialogTextAsync(dialog, "The selection has 12 ranges", "opens 12 tabs");
+        await app.InvokeDialogButtonAsync("Open the first range");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["tabs"]!.GetValue<int>() == 5, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the copy tab");
+        JsonObject copy = await DocAsync(app);
+        Assert.False(copy["linked"]!.GetValue<bool>());
+        Assert.Equal(0x10L, copy["length"]!.GetValue<long>());
+        byte[] expected = new byte[0x10];
+        TestDataCatalog.Sequence(0x1000, expected);
+        Assert.Equal(expected, await app.BytesAsync(0, 0x10));
+    });
+
     [Fact]
     [Trait(UiTest.TC, "TC-ENG-39-01")]
     [Trait("Category", "Nightly")]
     public Task Linked_view_of_5_gib_opens_fast() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ENG-SPARSE-10G")] });
-        JsonObject r = await app.SendAsync("openRangeInTab", new JsonObject { ["offset"] = 2L << 30, ["length"] = 5L << 30 });
-        double ms = r["elapsedMs"]!.GetValue<double>();
-        Assert.True(ms < 100 || !PerfEnvironmentFactAttribute.IsPerfMachine, $"{ms} ms");
+        const long start = 2L << 30, length = 5L << 30;
+        await app.SelectAsync(start, length);
+        await app.IdleAsync();
+
+        // 1. 選択範囲の中 (表示中の行) を右クリックし、メニューの「新しいタブで開く」を選ぶ。開いて表示するまでの時間はアプリの中で計る。
+        JsonObject render = await app.RenderAsync();
+        long rowStart = render["rows"]!.AsArray().Select(r => r!["rowStart"]!.GetValue<long>())
+            .First(o => o >= start && o < start + length - 16);
+        await ViewOps.RightClickAsync(app, ViewOps.CellPoint(render, rowStart + 1));
+        string item = "HexViewMenu_file.openSelectionInNewTab";
+        await app.WaitUntilAsync(async () => (await app.WaitForAsync(item)).IsEnabled, UiTest.Scaled(TimeSpan.FromSeconds(5)), "the menu item");
+        await app.UiaInvokeAsync(item);
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["linkedOpenMs"] is not null, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the linked tab");
         JsonObject doc = await DocAsync(app);
+        Assert.True(doc["linked"]!.GetValue<bool>());
+        double ms = doc["linkedOpenMs"]!.GetValue<double>();
+        Assert.True(ms < 100 || !PerfEnvironmentFactAttribute.IsPerfMachine, $"{ms} ms");
+
+        // 2〜3. 先頭のアドレス・長さ・内容と、親の 4 GiB の位置。
         Assert.Equal((0x80000000L, 5L << 30), (doc["baseAddress"]!.GetValue<long>(), doc["length"]!.GetValue<long>()));
         Assert.Equal(TestDataCatalog.Marker(0x80000000), await app.BytesAsync(0, 17));
         Assert.Equal(TestDataCatalog.Marker(0x100000000), await app.BytesAsync(0x100000000 - 0x80000000, 17));

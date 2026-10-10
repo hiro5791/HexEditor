@@ -3833,6 +3833,11 @@ Details were written to:
   <data name="FormatIssues_None" xml:space="preserve"><value>No errors.</value></data>
   <data name="Linked_ToolTip" xml:space="preserve"><value>Linked to {0}</value></data>
   <data name="Linked_Disconnected" xml:space="preserve"><value>The original range was deleted.</value></data>
+  <data name="LinkedMulti_Title" xml:space="preserve"><value>Open selection in a new tab</value></data>
+  <data name="LinkedMulti_Body" xml:space="preserve"><value>The selection has {0} ranges. Open only the first range, or open each range in its own tab?</value></data>
+  <data name="LinkedMulti_ManyTabs" xml:space="preserve"><value>Opening each range opens {0} tabs.</value></data>
+  <data name="LinkedMulti_First" xml:space="preserve"><value>Open the first range</value></data>
+  <data name="LinkedMulti_Each" xml:space="preserve"><value>Open each range</value></data>
   <data name="Transfer_Format" xml:space="preserve"><value>Format</value></data>
   <data name="Transfer_Preview" xml:space="preserve"><value>Preview</value></data>
   <data name="Import_Title" xml:space="preserve"><value>Import</value></data>

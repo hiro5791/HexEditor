@@ -3833,6 +3833,11 @@
   <data name="FormatIssues_None" xml:space="preserve"><value>誤りはありません。</value></data>
   <data name="Linked_ToolTip" xml:space="preserve"><value>連動: {0}</value></data>
   <data name="Linked_Disconnected" xml:space="preserve"><value>元の範囲が削除されました。</value></data>
+  <data name="LinkedMulti_Title" xml:space="preserve"><value>選択範囲を新しいタブで開く</value></data>
+  <data name="LinkedMulti_Body" xml:space="preserve"><value>選択範囲は {0} 個の範囲からなります。最初の範囲だけを開くか、範囲ごとにタブを開くかを選んでください。</value></data>
+  <data name="LinkedMulti_ManyTabs" xml:space="preserve"><value>範囲ごとに開くと、{0} 個のタブを開きます。</value></data>
+  <data name="LinkedMulti_First" xml:space="preserve"><value>最初の範囲を開く</value></data>
+  <data name="LinkedMulti_Each" xml:space="preserve"><value>範囲ごとに開く</value></data>
   <data name="Transfer_Format" xml:space="preserve"><value>形式</value></data>
   <data name="Transfer_Preview" xml:space="preserve"><value>プレビュー</value></data>
   <data name="Import_Title" xml:space="preserve"><value>インポート</value></data>

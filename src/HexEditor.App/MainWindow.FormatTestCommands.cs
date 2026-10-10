@@ -100,6 +100,7 @@ public sealed partial class MainWindow
             ["issues"] = doc.FormatIssues.Count,
             ["sha256"] = request["hash"]?.GetValue<bool>() == true ? Sha256(d.Current) : null,
             ["tabs"] = Vm.Documents.Count,
+            ["linkedOpenMs"] = LastLinkedTabOpenMs,
         };
     }
 
