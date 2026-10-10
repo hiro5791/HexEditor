@@ -21,16 +21,22 @@ public sealed partial class FileTypePanel : UserControl, IPanelContent
 
     public FileTypeViewModel ViewModel { get; }
 
-    /// <summary>「埋め込まれた形式を探す」の対象範囲 (選択範囲があれば選択範囲、なければ全体)。</summary>
-    public Func<IReadOnlyList<HashRange>>? EmbeddedRanges { get; set; }
-
     public bool FocusContent() => CandidateList.Focus(FocusState.Keyboard);
 
     private void Detect_Click(object sender, RoutedEventArgs e) => _ = ViewModel.DetectAsync();
 
     private void DetectHere_Click(object sender, RoutedEventArgs e) => _ = ViewModel.DetectHereAsync();
 
-    private void FindEmbedded_Click(object sender, RoutedEventArgs e) => _ = ViewModel.FindEmbeddedAsync(EmbeddedRanges?.Invoke() ?? []);
+    private void FindEmbedded_Click(object sender, RoutedEventArgs e) => _ = ViewModel.FindEmbeddedAsync();
+
+    /// <summary>対象範囲の選択欄を利用者が選んだ (以後、選択範囲の有無で既定を切り替えない。06 の 0.1)。</summary>
+    private void EmbeddedTarget_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (EmbeddedTarget.SelectedIndex >= 0 && EmbeddedTarget.SelectedIndex != ViewModel.EmbeddedTargetIndex)
+        {
+            ViewModel.ChooseEmbeddedTarget((Core.Statistics.AnalysisTargetKind)EmbeddedTarget.SelectedIndex);
+        }
+    }
 
     private void Cancel_Click(object sender, RoutedEventArgs e) => ViewModel.Cancel();
 

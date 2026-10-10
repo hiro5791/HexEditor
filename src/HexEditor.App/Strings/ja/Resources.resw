@@ -3386,6 +3386,7 @@
   <data name="Minimap_Mark_bookmark" xml:space="preserve"><value>ブックマーク</value></data>
   <data name="Minimap_Mark_modified" xml:space="preserve"><value>変更されたバイト</value></data>
   <data name="Minimap_Mark_difference" xml:space="preserve"><value>差分</value></data>
+  <data name="Minimap_Mark_classification" xml:space="preserve"><value>分類</value></data>
   <data name="Minimap_TipEntropy" xml:space="preserve"><value>エントロピー {0}</value></data>
   <data name="Minimap_TipMean" xml:space="preserve"><value>平均値 {0}</value></data>
   <data name="Minimap_TipNonZero" xml:space="preserve"><value>ゼロ以外 {0}%</value></data>
@@ -4303,6 +4304,7 @@
   <data name="EditOp_CopyDiffLeft" xml:space="preserve"><value>差分を左へコピー</value></data>
   <data name="Compare_Panel_Title" xml:space="preserve"><value>差分</value></data>
   <data name="Compare_StaleBar.Message" xml:space="preserve"><value>内容が変更されました。比較結果は古くなっています。</value></data>
+  <data name="Compare_StaleBar_External" xml:space="preserve"><value>比較しているファイルが外部で変更されました。比較結果は古くなっています。</value></data>
   <data name="Compare_StaleRecompare.Content" xml:space="preserve"><value>再比較</value></data>
   <data name="Compare_List_Empty.Text" xml:space="preserve"><value>比較結果はありません。解析 &gt; 比較 &gt; ファイルを比較 で比較できます。</value></data>
   <data name="Compare_List_MinLength.PlaceholderText" xml:space="preserve"><value>最小の長さ</value></data>
@@ -4333,6 +4335,9 @@
   <data name="Compare_Method_InsertDelete" xml:space="preserve"><value>挿入・削除を考慮した比較</value></data>
   <data name="Compare_Method_InsertDeleteApprox" xml:space="preserve"><value>挿入・削除を考慮 (近似)</value></data>
   <data name="Compare_Method_Name" xml:space="preserve"><value>比較方式</value></data>
+  <data name="Compare_Toolbar_Options" xml:space="preserve"><value>オプション</value></data>
+  <data name="Compare_Options_Apply" xml:space="preserve"><value>再比較</value></data>
+  <data name="Compare_Region_Name" xml:space="preserve"><value>領域</value></data>
   <data name="Compare_Summary_Method" xml:space="preserve"><value>比較方式</value></data>
   <data name="Compare_Summary_Bytes" xml:space="preserve"><value>比較したバイト数</value></data>
   <data name="Compare_Summary_BytesValue" xml:space="preserve"><value>左 {0}、右 {1}</value></data>
@@ -4401,6 +4406,8 @@
   <data name="Compare_Dialog_Options" xml:space="preserve"><value>オプション</value></data>
   <data name="Compare_Dialog_Target" xml:space="preserve"><value>対象</value></data>
   <data name="Compare_Dialog_ChooseFile" xml:space="preserve"><value>ファイルを選択...</value></data>
+  <data name="Compare_Dialog_ChooseSnapshot" xml:space="preserve"><value>スナップショット...</value></data>
+  <data name="Compare_Dialog_NotSnapshot" xml:space="preserve"><value>プロセスのスナップショット (.hexsnap) ではありません。</value></data>
   <data name="Compare_Dialog_Path" xml:space="preserve"><value>ファイルのパス</value></data>
   <data name="Compare_Dialog_Browse" xml:space="preserve"><value>参照...</value></data>
   <data name="Compare_Dialog_Start" xml:space="preserve"><value>開始オフセット</value></data>
@@ -4517,6 +4524,7 @@
   <data name="Stats_Compute.Content" xml:space="preserve"><value>再計算</value></data>
   <data name="Stats_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
   <data name="Stats_Stale.Text" xml:space="preserve"><value>結果は編集前の内容のものです。</value></data>
+  <data name="Stats_ClassifyFileType" xml:space="preserve"><value>推定に使ったファイル形式: {0}</value></data>
   <data name="Stats_Tab_Histogram.Text" xml:space="preserve"><value>ヒストグラム</value></data>
   <data name="Stats_Tab_Descriptive.Text" xml:space="preserve"><value>記述統計</value></data>
   <data name="Stats_Tab_Entropy.Text" xml:space="preserve"><value>エントロピー</value></data>
@@ -5199,6 +5207,8 @@
   <data name="Snapshot_Creating" xml:space="preserve"><value>スナップショット {0} を作成</value></data>
   <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} ページ ({1}) を読めなかったため、スナップショットに含まれていません。</value></data>
   <data name="Snapshot_Error" xml:space="preserve"><value>スナップショットを作成・保存できませんでした ({0})。</value></data>
+  <data name="Snapshot_AccessDenied" xml:space="preserve"><value>プロセスのメモリを読む権限がありません。</value></data>
+  <data name="Snapshot_NeedsAdmin" xml:space="preserve"><value>このプロセスを読むには管理者権限が必要です。管理者権限でスナップショットを作り直しますか?</value></data>
   <data name="Snapshot_Saved" xml:space="preserve"><value>{0} を保存しました。</value></data>
   <data name="Snapshot_NoneToCompare" xml:space="preserve"><value>先にスナップショットを作成してください (解析 > 比較 > プロセスのスナップショットを作成)。</value></data>
   <data name="FileType_Snapshot" xml:space="preserve"><value>プロセスのスナップショット</value></data>

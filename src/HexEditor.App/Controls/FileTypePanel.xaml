@@ -75,7 +75,52 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
-        <local:WrapPanel Grid.Row="3">
+        <StackPanel Grid.Row="3" Spacing="4">
+        <!--  「埋め込まれた形式を探す」の対象範囲 (06 の 0.1 の共通の選択欄と、実際の範囲の表示)。  -->
+        <local:WrapPanel>
+            <ComboBox
+                x:Name="EmbeddedTarget"
+                x:Uid="Stats_Target"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="FileType_EmbeddedTarget"
+                SelectedIndex="{x:Bind ViewModel.EmbeddedTargetIndex, Mode=OneWay}"
+                SelectionChanged="EmbeddedTarget_SelectionChanged">
+                <ComboBoxItem x:Uid="Stats_Target_Selection" />
+                <ComboBoxItem x:Uid="Stats_Target_Multi" />
+                <ComboBoxItem x:Uid="Stats_Target_Whole" />
+                <ComboBoxItem x:Uid="Stats_Target_Custom" />
+            </ComboBox>
+            <TextBox
+                x:Uid="Stats_CustomStart"
+                Width="110"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="FileType_EmbeddedStart"
+                FontFamily="Cascadia Mono, Consolas"
+                Text="{x:Bind ViewModel.EmbeddedStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{x:Bind ViewModel.IsEmbeddedCustom, Mode=OneWay}" />
+            <TextBox
+                x:Uid="Stats_CustomLength"
+                Width="110"
+                Margin="0,0,8,4"
+                AutomationProperties.AutomationId="FileType_EmbeddedLength"
+                FontFamily="Cascadia Mono, Consolas"
+                Text="{x:Bind ViewModel.EmbeddedLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{x:Bind ViewModel.IsEmbeddedCustom, Mode=OneWay}" />
+            <CheckBox
+                x:Uid="Stats_CustomUsesEnd"
+                Margin="0,0,8,4"
+                VerticalAlignment="Bottom"
+                AutomationProperties.AutomationId="FileType_EmbeddedUsesEnd"
+                IsChecked="{x:Bind ViewModel.EmbeddedUsesEnd, Mode=TwoWay}"
+                Visibility="{x:Bind ViewModel.IsEmbeddedCustom, Mode=OneWay}" />
+        </local:WrapPanel>
+        <TextBlock
+            AutomationProperties.AutomationId="FileType_EmbeddedRange"
+            FlowDirection="LeftToRight"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            Style="{ThemeResource CaptionTextBlockStyle}"
+            Text="{x:Bind ViewModel.EmbeddedRangeText, Mode=OneWay}" />
+        <local:WrapPanel>
             <Button
                 x:Uid="FileType_FindEmbedded"
                 Margin="0,0,8,4"
@@ -89,6 +134,7 @@
                 AutomationProperties.LiveSetting="Polite"
                 Text="{x:Bind ViewModel.EmbeddedStatus, Mode=OneWay}" />
         </local:WrapPanel>
+        </StackPanel>
         <ListView
             x:Name="EmbeddedList"
             Grid.Row="4"

@@ -569,6 +569,11 @@ public sealed partial class StatisticsViewModel : ObservableObject
             ClassificationStale = !ReferenceEquals(d.Document.Current, _classifiedSnapshot);
         }
 
+        if (_patternSnapshot is not null && _target is { } p)
+        {
+            PatternStale = !ReferenceEquals(p.Document.Current, _patternSnapshot);
+        }
+
         UpdateTarget(scheduleAuto: false);
     }
 

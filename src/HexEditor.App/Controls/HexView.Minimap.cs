@@ -64,7 +64,17 @@ public sealed partial class HexView
     }
 
     /// <summary>表示しない印 (VIEW-35 の仕様 6。cursor / selection / search / bookmark / modified / difference)。</summary>
-    public IReadOnlySet<string> HiddenMinimapMarks { get; set; } = new HashSet<string>();
+    public IReadOnlySet<string> HiddenMinimapMarks
+    {
+        get => _hiddenMinimapMarks;
+        set
+        {
+            _hiddenMinimapMarks = value;
+            _minimap?.Redraw();
+        }
+    }
+
+    private IReadOnlySet<string> _hiddenMinimapMarks = new HashSet<string>();
 
     /// <summary>差分の範囲の提供元 (比較 ANA が設定する。[start, end) に重なる差分)。null なら差分の印はない。</summary>
     public Func<IEnumerable<(long Offset, long Length)>>? MinimapDifferences { get; set; }
@@ -84,6 +94,7 @@ public sealed partial class HexView
         Grid.SetColumn(_minimap, 1);
         ((Grid)Content).Children.Add(_minimap);
         _minimap.Marks = MinimapMarksNow;
+        _minimap.ShowClassification = () => !HiddenMinimapMarks.Contains("classification");
         _minimap.HighContrast = IsHighContrast;
         _minimap.ByteTheme = _byteTheme;
         _minimap.MenuOpening = menu => MinimapMenuOpening?.Invoke(this, menu);

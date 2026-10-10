@@ -53,6 +53,12 @@ public sealed partial class StatisticsViewModel
     [ObservableProperty]
     public partial string PatternStatus { get; set; } = string.Empty;
 
+    /// <summary>計算後にドキュメントが編集された (06 の 0.2 の 3:「結果は編集前の内容のものです」。「計算」で計算し直す)。</summary>
+    [ObservableProperty]
+    public partial bool PatternStale { get; set; }
+
+    private DocumentSnapshot? _patternSnapshot;
+
     public ObservableCollection<NGramRowViewModel> NGramRows { get; } = [];
 
     public ObservableCollection<PeriodRowViewModel> PeriodRows { get; } = [];
@@ -68,6 +74,8 @@ public sealed partial class StatisticsViewModel
         NGramRows.Clear();
         PeriodRows.Clear();
         PatternStatus = string.Empty;
+        PatternStale = false;
+        _patternSnapshot = null;
     }
 
     /// <summary>よく現れるバイト列と周期を求める。キャンセルした場合は結果を破棄する (ANA-15)。</summary>
@@ -133,6 +141,9 @@ public sealed partial class StatisticsViewModel
                 PeriodRows.Add(new PeriodRowViewModel(i + 1, periods[i]));
             }
 
+            _patternSnapshot = snapshot;
+            PatternStale = !ReferenceEquals(doc.Document.Current, snapshot);
+
             PatternStatus = result.Rows.Count == 0 ? Loc.Get("Stats_NoPatterns") : string.Empty;
         }
         catch (OperationCanceledException)
@@ -180,6 +191,13 @@ public sealed partial class StatisticsViewModel
     [ObservableProperty]
     public partial string ClassifyStatus { get; set; } = string.Empty;
 
+    /// <summary>分類に使ったファイル形式 (ANA-17 の仕様 7)。使わなかったら空。</summary>
+    [ObservableProperty]
+    public partial string ClassifyFileTypeNote { get; set; } = string.Empty;
+
+    /// <summary>ドキュメントのファイル形式の判定の結果 (ANA-17。ウィンドウが設定する)。分類に渡す (ANA-17 の仕様 7)。</summary>
+    public Func<Document, HexEditor.Core.FileTypes.FileTypeCandidate?>? FileTypeOf { get; init; }
+
     public ObservableCollection<string> ClassBlockSizeNames { get; } = [];
 
     public ObservableCollection<ClassRowViewModel> ClassRows { get; } = [];
@@ -220,6 +238,7 @@ public sealed partial class StatisticsViewModel
         ClassRows.Clear();
         Legend.Clear();
         ClassifyStatus = string.Empty;
+        ClassifyFileTypeNote = string.Empty;
     }
 
     /// <summary>詳細設定のしきい値 (ANA-16 の仕様 6)。</summary>
@@ -257,6 +276,7 @@ public sealed partial class StatisticsViewModel
             Ranges = ranges,
             BlockSize = ClassBlockSizes[Math.Clamp(ClassBlockSizeIndex, 0, ClassBlockSizes.Count - 1)],
             Thresholds = Thresholds(),
+            FileType = FileTypeOf?.Invoke(doc.Document),
         };
         DocumentSnapshot snapshot = doc.Document.Current;
         IsClassifying = true;
@@ -321,6 +341,7 @@ public sealed partial class StatisticsViewModel
 
         ClassifyStatus = result.Completed ? string.Empty
             : Loc.Format("Stats_Aborted", (result.Fraction * 100).ToString("N0", culture));
+        ClassifyFileTypeNote = result.FileTypeName is { } type ? Loc.Format("Stats_ClassifyFileType", type) : string.Empty;
         Annotations?.SetAnnotations(_target!.Document, AnalysisAnnotationSources.Classes,
             [.. result.Regions.Where(r => r.Class is not DataClass.Zero).Select(r => new AnalysisAnnotation(r.Offset, r.Length, ClassName(r.Class),
                 "class." + r.Class.ToString().ToLowerInvariant()))]);

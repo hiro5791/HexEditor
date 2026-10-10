@@ -124,6 +124,9 @@ public sealed partial class CompareDialog : Grid
     /// <summary>「ファイルを選択...」の「参照」でファイルを選ぶ処理 (ウィンドウが設定する)。</summary>
     public Func<Task<string?>>? BrowseFile { get; set; }
 
+    /// <summary>「スナップショット...」の「参照」で <c>.hexsnap</c> を選ぶ処理 (ウィンドウが設定する。ANA-09 の仕様 3)。</summary>
+    public Func<Task<string?>>? BrowseSnapshot { get; set; }
+
     /// <summary>左右の指定 (正しい入力のとき)。</summary>
     public (CompareTargetSpec Left, CompareTargetSpec Right) Targets => (_left.Spec!, _right.Spec!);
 
@@ -337,7 +340,8 @@ public sealed partial class CompareDialog : Grid
             AutomationProperties.SetAutomationId(browse, $"CompareDialog_{id}Browse");
             browse.Click += async (_, _) =>
             {
-                if (_owner.BrowseFile is { } pick && await pick() is { } chosen)
+                Func<Task<string?>>? browser = Candidate?.Kind == CompareSourceKind.Snapshot ? _owner.BrowseSnapshot : _owner.BrowseFile;
+                if (browser is { } pick && await pick() is { } chosen)
                 {
                     Path.Text = chosen;
                 }
@@ -391,7 +395,7 @@ public sealed partial class CompareDialog : Grid
             Spec = null;
             TargetError.Text = string.Empty;
             CompareCandidate? candidate = Candidate;
-            PathRow.Visibility = candidate?.Kind == CompareSourceKind.File ? Visibility.Visible : Visibility.Collapsed;
+            PathRow.Visibility = candidate?.Kind is CompareSourceKind.File or CompareSourceKind.Snapshot ? Visibility.Visible : Visibility.Collapsed;
             if (candidate is null)
             {
                 TargetError.Text = Loc.Get("Compare_Dialog_NoTarget");
@@ -403,9 +407,9 @@ public sealed partial class CompareDialog : Grid
             string? path = null;
             switch (candidate.Kind)
             {
-                case CompareSourceKind.File:
+                case CompareSourceKind.File or CompareSourceKind.Snapshot:
                     path = Path.Text.Trim().Trim('"');
-                    string? reason = FileProblem(path, out length);
+                    string? reason = FileProblem(path, out length) ?? SnapshotProblem(path, candidate.Kind == CompareSourceKind.Snapshot, ref length);
                     if (reason is not null)
                     {
                         TargetError.Text = reason;
@@ -482,6 +486,29 @@ public sealed partial class CompareDialog : Grid
 
             Spec = new CompareTargetSpec(candidate.Kind, candidate.Document, path, start, rangeLength);
             return true;
+        }
+
+        /// <summary>
+        /// <c>.hexsnap</c> の確認 (ANA-09 の仕様 3)。スナップショットなら長さをアドレス空間の大きさにする (オフセット = 仮想アドレス)。
+        /// <paramref name="required"/> (「スナップショット...」) でスナップショットでなければ理由を返す。
+        /// </summary>
+        private static string? SnapshotProblem(string path, bool required, ref long length)
+        {
+            if (!Core.Processes.HexSnapshot.IsSnapshotFile(path))
+            {
+                return required ? Loc.Get("Compare_Dialog_NotSnapshot") : null;
+            }
+
+            try
+            {
+                using FileStream stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                length = Core.Processes.HexSnapshot.ReadMetadata(stream).AddressLimit;
+                return null;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidDataException or System.Text.Json.JsonException)
+            {
+                return Loc.Get("Compare_Dialog_NotSnapshot");
+            }
         }
 
         /// <summary>ファイルを開けない理由 (存在しない・アクセス拒否など。ANA-01 の「エラー」)。開けるなら null。</summary>

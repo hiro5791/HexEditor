@@ -62,6 +62,8 @@ public sealed partial class CompareView : UserControl
         RightMap = CreateMap(session.Right);
         LeftHeader = CreateHeader(session.Left);
         RightHeader = CreateHeader(session.Right);
+        LeftRegions = CreateRegionBox(session.Left);
+        RightRegions = CreateRegionBox(session.Right);
         BuildToolbar();
         Layout();
 
@@ -88,6 +90,11 @@ public sealed partial class CompareView : UserControl
     private TextBlock LeftHeader { get; }
 
     private TextBlock RightHeader { get; }
+
+    /// <summary>領域のコンボボックス (プロセスメモリ・スナップショットの側だけ。ANA-09 の「画面」)。</summary>
+    private ComboBox? LeftRegions { get; }
+
+    private ComboBox? RightRegions { get; }
 
     public HexView ViewOf(bool right) => right ? RightView : LeftView;
 
@@ -163,14 +170,27 @@ public sealed partial class CompareView : UserControl
     private Grid SidePanel(bool right)
     {
         TextBlock header = right ? RightHeader : LeftHeader;
+        ComboBox? regions = right ? RightRegions : LeftRegions;
         HexView view = ViewOf(right);
         DiffMap map = MapOf(right);
-        foreach (FrameworkElement element in new FrameworkElement[] { header, view, map })
+        foreach (FrameworkElement? element in new FrameworkElement?[] { header, regions, view, map })
         {
-            if (element.Parent is Panel old)
+            if (element?.Parent is Panel old)
             {
                 old.Children.Remove(element);
             }
+        }
+
+        // 見出しの行: 名前と比較範囲、右に領域のコンボボックス。
+        var headerRow = new Grid();
+        headerRow.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        headerRow.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        headerRow.Children.Add(header);
+        if (regions is not null)
+        {
+            Grid.SetColumn(regions, 1);
+            regions.VerticalAlignment = VerticalAlignment.Center;
+            headerRow.Children.Add(regions);
         }
 
         var panel = new Grid
@@ -182,11 +202,11 @@ public sealed partial class CompareView : UserControl
         panel.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         panel.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         panel.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        Grid.SetColumnSpan(header, 2);
+        Grid.SetColumnSpan(headerRow, 2);
         Grid.SetRow(view, 1);
         Grid.SetRow(map, 1);
         Grid.SetColumn(map, 1);
-        panel.Children.Add(header);
+        panel.Children.Add(headerRow);
         panel.Children.Add(view);
         panel.Children.Add(map);
         return panel;
@@ -243,6 +263,10 @@ public sealed partial class CompareView : UserControl
             };
             Toolbar.PrimaryCommands.Add((ICommandBarElement)button);
         }
+
+        // 方式ごとのオプションを変えて再比較する (ANA-04 の「画面」の「オプション」)。
+        Toolbar.PrimaryCommands.Add(new AppBarSeparator());
+        Toolbar.PrimaryCommands.Add(CreateOptionsButton());
     }
 
     // ---- 表示の更新 ----
@@ -259,6 +283,7 @@ public sealed partial class CompareView : UserControl
         LeftMap.UpdateViewport();
         RightMap.UpdateViewport();
         RefreshToolbarStates();
+        UpdateRegionSelection();
     }
 
     private void Session_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -283,6 +308,7 @@ public sealed partial class CompareView : UserControl
         _settingMethod = false;
 
         StaleBar.IsOpen = Session.IsStale && !Session.IsRunning;
+        StaleBar.Message = Loc.Get(Session.StaleByExternalChange ? "Compare_StaleBar_External" : "Compare_StaleBar/Message");
         string? message = Session.StatusMessage;
         MessageBar.Message = message ?? string.Empty;
         MessageBar.IsOpen = message is not null && message != _dismissedMessage;

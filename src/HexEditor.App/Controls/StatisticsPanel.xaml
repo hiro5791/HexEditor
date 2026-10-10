@@ -494,7 +494,17 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+                    <!--  計算後に編集した (06 の 0.2 の 3)。「計算」で計算し直す。  -->
+                    <TextBlock
+                        x:Uid="Stats_Stale"
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        AutomationProperties.AutomationId="Stats_PatternStale"
+                        Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Visibility="{x:Bind ViewModel.PatternStale, Mode=OneWay}" />
                     <ComboBox x:Uid="Stats_PatternView" AutomationProperties.AutomationId="Stats_PatternView" SelectedIndex="{x:Bind ViewModel.PatternView, Mode=TwoWay}">
                         <ComboBoxItem x:Uid="Stats_PatternView_Frequent" />
                         <ComboBoxItem x:Uid="Stats_PatternView_Periods" />
@@ -567,13 +577,28 @@
                     <Button x:Uid="Stats_Classify" Margin="0,0,8,0" VerticalAlignment="Bottom" AutomationProperties.AutomationId="Stats_Classify" Click="Classify_Click" IsEnabled="{x:Bind ViewModel.IsClassifyIdle, Mode=OneWay}" Style="{ThemeResource AccentButtonStyle}" />
                     <Button x:Uid="Stats_Cancel" VerticalAlignment="Bottom" AutomationProperties.AutomationId="Stats_CancelClassify" Click="CancelClassify_Click" />
                 </local:WrapPanel>
-                <TextBlock
-                    x:Uid="Stats_EstimateNotice"
-                    Grid.Row="1"
-                    AutomationProperties.AutomationId="Stats_EstimateNotice"
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Style="{ThemeResource CaptionTextBlockStyle}"
-                    TextWrapping="Wrap" />
+                <StackPanel Grid.Row="1" Spacing="2">
+                    <TextBlock
+                        x:Uid="Stats_EstimateNotice"
+                        AutomationProperties.AutomationId="Stats_EstimateNotice"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        TextWrapping="Wrap" />
+                    <!--  分類に使ったファイル形式 (ANA-17 の仕様 7)。  -->
+                    <TextBlock
+                        AutomationProperties.AutomationId="Stats_ClassifyFileType"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{x:Bind ViewModel.ClassifyFileTypeNote, Mode=OneWay}"
+                        TextWrapping="Wrap" />
+                    <!--  計算後に編集した (06 の 0.2 の 3)。「分類」で計算し直す。  -->
+                    <TextBlock
+                        x:Uid="Stats_Stale"
+                        AutomationProperties.AutomationId="Stats_ClassifyStale"
+                        Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Visibility="{x:Bind ViewModel.ClassificationStale, Mode=OneWay}" />
+                </StackPanel>
                 <charts:ClassBand
                     Grid.Row="2"
                     AutomationProperties.AutomationId="Stats_ClassBand"

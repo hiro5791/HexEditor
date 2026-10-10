@@ -168,6 +168,7 @@ public sealed partial class FileTypeViewModel(OperationCenter operations) : Obse
             Embedded.Clear();
             EmbeddedStatus = string.Empty;
             OnPropertyChanged();
+            WatchTargetEditor(value);
             ShowReport(value is null ? null : ReportOf(value.Document), 0);
         }
     }
@@ -252,7 +253,21 @@ public sealed partial class FileTypeViewModel(OperationCenter operations) : Obse
         }
     }
 
-    /// <summary>「埋め込まれた形式を探す」(ANA-17 の仕様 6): 長時間処理。キャンセルしたら見つかった分を残さない。</summary>
+    /// <summary>
+    /// 「埋め込まれた形式を探す」(ANA-17 の仕様 6): 対象範囲 (06 の 0.1) で探す長時間処理。キャンセルしたら見つかった分を残さない。
+    /// </summary>
+    public Task FindEmbeddedAsync()
+    {
+        if (ResolveEmbeddedRanges() is not { } ranges)
+        {
+            EmbeddedStatus = Loc.Get("Stats_RangeInvalid");
+            return Task.CompletedTask;
+        }
+
+        return FindEmbeddedAsync(ranges);
+    }
+
+    /// <summary>指定の範囲で埋め込まれた形式を探す。</summary>
     public async Task FindEmbeddedAsync(IReadOnlyList<HashRange> ranges)
     {
         if (_target is not { } doc)

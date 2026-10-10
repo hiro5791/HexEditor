@@ -579,15 +579,61 @@ public sealed partial class DiffListPanel : UserControl
         menu.Items.Add(bookmarks);
         menu.Items.Add(new MenuFlyoutSeparator());
         menu.Items.Add(MenuItem("DiffListMenu_ExportCsv", "Compare_Export_SelectedCsv", () => _ = Host?.ExportDiffsAsync(_session!, "csv", SelectedIndices)));
-        menu.Opening += (_, _) =>
-        {
-            bool any = _selected.Count > 0 && _session?.Result is not null;
-            foreach (MenuFlyoutItemBase item in menu.Items)
-            {
-                item.IsEnabled = any;
-            }
-        };
+        menu.Opening += (_, _) => UpdateMenuStates(menu);
+        _menu = menu;
         ListHost.ContextFlyout = menu;
+    }
+
+    private MenuFlyout? _menu;
+
+    /// <summary>
+    /// 右クリックメニューの項目の有効・無効。コピーは書き込み先が読み取り専用なら無効にし、ツールチップに理由 (「右側は読み取り専用です」) を
+    /// 出す (ANA-07 の「エラー」)。
+    /// </summary>
+    private void UpdateMenuStates(MenuFlyout menu)
+    {
+        bool any = _selected.Count > 0 && _session?.Result is not null;
+        foreach (MenuFlyoutItemBase item in menu.Items)
+        {
+            string id = AutomationProperties.GetAutomationId(item);
+            MergeDirection? direction = id switch
+            {
+                "DiffListMenu_CopyRight" => MergeDirection.ToRight,
+                "DiffListMenu_CopyLeft" => MergeDirection.ToLeft,
+                _ => null,
+            };
+            string? reason = direction is { } d && any ? _session!.CopyBlockedReason(d) : null;
+            item.IsEnabled = any && reason is null;
+            if (direction is not null)
+            {
+                ToolTipService.SetToolTip(item, reason);
+            }
+        }
+    }
+
+    /// <summary>右クリックメニューの項目の状態 (テスト用): 自動化 ID → (有効か、ツールチップ)。</summary>
+    internal System.Text.Json.Nodes.JsonObject MenuState()
+    {
+        var state = new System.Text.Json.Nodes.JsonObject();
+        if (_menu is null)
+        {
+            return state;
+        }
+
+        UpdateMenuStates(_menu);
+        foreach (MenuFlyoutItemBase item in _menu.Items)
+        {
+            if (AutomationProperties.GetAutomationId(item) is { Length: > 0 } id)
+            {
+                state[id] = new System.Text.Json.Nodes.JsonObject
+                {
+                    ["enabled"] = item.IsEnabled,
+                    ["toolTip"] = ToolTipService.GetToolTip(item) as string,
+                };
+            }
+        }
+
+        return state;
     }
 
     private void Copy(MergeDirection direction)

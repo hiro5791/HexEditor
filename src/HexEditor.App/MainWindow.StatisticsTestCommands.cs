@@ -250,7 +250,31 @@ public sealed partial class MainWindow
                 break;
             case "embedded":
                 ShowFileTypePanel();
-                await FileTypeVm.FindEmbeddedAsync(EmbeddedRanges());
+                await FileTypeVm.FindEmbeddedAsync();
+                break;
+            case "embeddedTarget":
+                // 「埋め込まれた形式を探す」の対象範囲 (06 の 0.1): {target: 0〜3, start, length, usesEnd}。
+                ShowFileTypePanel();
+                if (request["target"] is { } target)
+                {
+                    FileTypeVm.ChooseEmbeddedTarget((Core.Statistics.AnalysisTargetKind)target.GetValue<long>());
+                }
+
+                if (request["start"] is { } start)
+                {
+                    FileTypeVm.EmbeddedStart = start.GetValue<string>();
+                }
+
+                if (request["length"] is { } length)
+                {
+                    FileTypeVm.EmbeddedLength = length.GetValue<string>();
+                }
+
+                if (request["usesEnd"] is { } usesEnd)
+                {
+                    FileTypeVm.EmbeddedUsesEnd = usesEnd.GetValue<bool>();
+                }
+
                 break;
         }
 
@@ -267,6 +291,9 @@ public sealed partial class MainWindow
             result["mismatch"] = vm.MismatchText;
             result["candidates"] = new JsonArray([.. vm.Candidates.Select(c => (JsonNode?)new JsonObject { ["name"] = c.Name, ["mime"] = c.Mime, ["confidence"] = c.Candidate.Confidence })]);
             result["embedded"] = new JsonArray([.. vm.Embedded.Select(e => (JsonNode?)new JsonObject { ["offset"] = e.Format.Offset, ["name"] = e.Name, ["mime"] = e.Mime })]);
+            result["embeddedTarget"] = vm.EmbeddedTargetIndex;
+            result["embeddedRange"] = vm.EmbeddedRangeText;
+            result["embeddedStatus"] = vm.EmbeddedStatus;
         }
 
         return result;

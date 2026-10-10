@@ -237,6 +237,9 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
             {
                 DiffRange d = result.Diffs[s.Index];
                 target.Editor.SelectMatch(d.Start(target.Right), d.Length(target.Right));
+
+                // 比較タブの「差分 n / N」と次の移動の基準も、この差分にする。
+                target.Session.SetCurrentIndex(s.Index);
             }
         }
 
@@ -272,6 +275,9 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
 
         candidates.Add(new CompareCandidate(Loc.Get("Compare_Dialog_ChooseFile"), CompareSourceKind.File, null));
         int fileIndex = candidates.Count - 1;
+
+        // 保存した .hexsnap (ANA-09 の仕様 3)。開いているスナップショットのタブはドキュメントの一覧に名前で出る (仕様 4)。
+        candidates.Add(new CompareCandidate(Loc.Get("Compare_Dialog_ChooseSnapshot"), CompareSourceKind.Snapshot, null));
         int IndexOf(DocumentViewModel? d) => d is null ? -1 : candidates.FindIndex(c => c.Kind == CompareSourceKind.Document && c.Document == d);
         int leftIndex = IndexOf(left ?? Vm.Documents.ElementAtOrDefault(0));
         int rightIndex = IndexOf(right ?? Vm.Documents.FirstOrDefault(d => d != (left ?? Vm.Documents.ElementAtOrDefault(0))));
@@ -290,6 +296,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         var content = new CompareDialog(candidates, CompareOptions.FromJson(CommandService.State?.Get(CompareOptionsKey)), leftIndex, rightIndex)
         {
             BrowseFile = PickCompareFileAsync,
+            BrowseSnapshot = PickCompareSnapshotAsync,
         };
         var dialog = new ContentDialog
         {
@@ -339,6 +346,19 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         return (await picker.PickSingleFileAsync())?.Path;
     }
 
+    private async Task<string?> PickCompareSnapshotAsync()
+    {
+        const string settingsIdentifier = "HexEditor.CompareSnapshot";
+        if (TestHooks.OpenPickerResult(settingsIdentifier) is { Count: > 0 } paths)
+        {
+            return paths[0];
+        }
+
+        var picker = new FileOpenPicker(WindowId) { SettingsIdentifier = settingsIdentifier };
+        picker.FileTypeFilter.Add(Core.Processes.HexSnapshot.Extension);
+        return (await picker.PickSingleFileAsync())?.Path;
+    }
+
     /// <summary>
     /// 比較タブを開いて比較を始める (ANA-01 の仕様 5〜8)。同じ組み合わせの比較タブがあれば、そのタブに切り替えて再比較する (仕様 6)。
     /// 開けなかった場合 (ファイルが開けない) は理由を知らせて null。
@@ -375,6 +395,9 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         };
         var view = new CompareView(this, session);
         view.Focused += (_, side) => OnCompareSideFocused(session, side);
+
+        // ツールバーの「オプション」で変えた値も次回の既定にする (ANA-01 の仕様 4)。
+        view.OptionsApplied += (_, applied) => CommandService.State?.Set(CompareOptionsKey, applied.ToJson());
         _compares.Add(session);
         _compareViews[session] = view;
         session.PropertyChanged += (_, _) => UpdateCompareStatus();
@@ -429,7 +452,29 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
                 return new CompareSideViewModel(right, contentView, null, ownsDocument: true, contentName);
             default:
                 string path = spec.Path ?? spec.Document?.FilePath ?? throw new IOException(Loc.Get("Compare_Dialog_NoPath"));
-                var document = new Document(FileByteSource.Open(path), Vm.DocumentOptions);
+
+                // .hexsnap はスナップショットとして開き、領域ごとに比べる (ANA-09 の仕様 3・5。「ファイルを選択...」で選んだ場合も)。
+                if (spec.Kind == CompareSourceKind.Snapshot || (spec.Kind == CompareSourceKind.File && Core.Processes.HexSnapshot.IsSnapshotFile(path)))
+                {
+                    Core.Processes.SnapshotByteSource snapshot;
+                    try
+                    {
+                        snapshot = Core.Processes.SnapshotByteSource.Open(path);
+                    }
+                    catch (Exception ex) when (ex is InvalidDataException or System.Text.Json.JsonException or EndOfStreamException)
+                    {
+                        throw new IOException(Loc.Get("Compare_Dialog_NotSnapshot"), ex);
+                    }
+
+                    var snapshotDocument = new Document(snapshot, Vm.DocumentOptions);
+                    snapshotDocument.SetReadOnly(ReadOnlyReason.NoWriteTarget);
+                    var snapshotView = new DocumentViewModel(snapshotDocument, null, snapshot.DisplayName) { Notifications = Vm.Notifications };
+                    EditorSettings.Apply(App.Settings, snapshotView);
+                    return new CompareSideViewModel(right, snapshotView, null, ownsDocument: true, snapshot.DisplayName);
+                }
+
+                var fileSource = FileByteSource.Open(path);
+                var document = new Document(fileSource, Vm.DocumentOptions);
                 document.SetReadOnly(ReadOnlyReason.OpenedReadOnly);
                 string name = spec.Kind == CompareSourceKind.Saved ? Loc.Format("Compare_SavedName", spec.Document!.DisplayName) : Path.GetFileName(path);
                 var fileView = new DocumentViewModel(document, path, name) { Notifications = Vm.Notifications };
@@ -439,7 +484,48 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
                 }
 
                 EditorSettings.Apply(App.Settings, fileView);
-                return new CompareSideViewModel(right, fileView, null, ownsDocument: true, name);
+                var side = new CompareSideViewModel(right, fileView, null, ownsDocument: true, name) { FilePath = path };
+                WatchCompareSide(side, fileSource);
+                return side;
+        }
+    }
+
+    /// <summary>
+    /// 比較タブが自分で開いたファイルの外部変更 (ENG-19) を監視する。検知したら比較タブに「再比較」を出し、再比較で開き直す
+    /// (ANA-04 の「エラー」)。監視は通常のタブと同じ仕組み (<see cref="ExternalChangeMonitor"/>) を使う。
+    /// </summary>
+    private void WatchCompareSide(CompareSideViewModel side, FileByteSource source)
+    {
+        if (Vm.ExternalChanges is not { } monitor || side.FilePath is not { } path)
+        {
+            return;
+        }
+
+        WatchedFile watch = monitor.Track(side, path, source.Stamp, source.ReadCurrentStamp);
+        side.StopWatching = () => monitor.Untrack(watch);
+        side.RebaseWatch = () =>
+        {
+            if (side.View.Document.Source is FileByteSource reopened)
+            {
+                monitor.Rebase(watch, reopened.ReadCurrentStamp() ?? reopened.Stamp, reopened.ReadCurrentStamp);
+            }
+        };
+    }
+
+    /// <summary>
+    /// 通常のタブのファイルが外部で変更された (ENG-19): そのドキュメントを比べている比較タブにも「再比較」を出す (ANA-04 の「エラー」)。
+    /// </summary>
+    partial void OnDocumentChangedOnDisk(DocumentViewModel doc)
+    {
+        foreach (CompareSessionViewModel session in _compares)
+        {
+            foreach (CompareSideViewModel side in new[] { session.Left, session.Right })
+            {
+                if (side.Owner == doc && !side.IsClosed)
+                {
+                    session.MarkExternalChange(side);
+                }
+            }
         }
     }
 

@@ -18,7 +18,7 @@ public sealed partial class MainWindow
     internal const string MinimapExactKey = "view.minimap.exact";
     private const string MinimapHiddenMarksKey = "view.minimap.hiddenMarks";
 
-    private static readonly string[] MinimapMarkKinds = ["cursor", "selection", "search", "bookmark", "modified", "difference"];
+    private static readonly string[] MinimapMarkKinds = ["cursor", "selection", "search", "bookmark", "modified", "difference", "classification"];
 
     private bool MinimapVisible => App.Settings.GetBool(MinimapVisibleKey, false);
 
