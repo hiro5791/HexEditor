@@ -510,6 +510,7 @@ public sealed partial class MainWindow
         view.SetContextMenuExtension(menu =>
         {
             ExtendHexViewEditMenu(menu);
+            ExtendHexViewDataMenu(menu);
             ExtendHexViewMenu(view, menu);
             ExtendHexViewStatisticsMenu(menu);
             ExtendHexViewReferenceMenu(menu);

@@ -4686,4 +4686,370 @@
   <data name="FileType_Text_Utf8Bom" xml:space="preserve"><value>テキスト (UTF-8、BOM 付き)</value></data>
   <data name="FileType_Text_Utf16LE" xml:space="preserve"><value>テキスト (UTF-16 LE)</value></data>
   <data name="FileType_Text_Utf16BE" xml:space="preserve"><value>テキスト (UTF-16 BE)</value></data>
+  <data name="DataOp_Kind_Add" xml:space="preserve"><value>加算</value></data>
+  <data name="Cmd_data_op_add" xml:space="preserve"><value>加算</value></data>
+  <data name="CmdAlias_data_op_add" xml:space="preserve"><value>かさん たしざん</value></data>
+  <data name="DataOp_Kind_Subtract" xml:space="preserve"><value>減算</value></data>
+  <data name="Cmd_data_op_subtract" xml:space="preserve"><value>減算</value></data>
+  <data name="CmdAlias_data_op_subtract" xml:space="preserve"><value>げんざん ひきざん</value></data>
+  <data name="DataOp_Kind_ReverseSubtract" xml:space="preserve"><value>逆減算</value></data>
+  <data name="Cmd_data_op_reverseSubtract" xml:space="preserve"><value>逆減算</value></data>
+  <data name="CmdAlias_data_op_reverseSubtract" xml:space="preserve"><value>ぎゃくげんざん</value></data>
+  <data name="DataOp_Kind_Multiply" xml:space="preserve"><value>乗算</value></data>
+  <data name="Cmd_data_op_multiply" xml:space="preserve"><value>乗算</value></data>
+  <data name="CmdAlias_data_op_multiply" xml:space="preserve"><value>じょうざん かけざん</value></data>
+  <data name="DataOp_Kind_Divide" xml:space="preserve"><value>除算</value></data>
+  <data name="Cmd_data_op_divide" xml:space="preserve"><value>除算</value></data>
+  <data name="CmdAlias_data_op_divide" xml:space="preserve"><value>じょざん わりざん</value></data>
+  <data name="DataOp_Kind_ReverseDivide" xml:space="preserve"><value>逆除算</value></data>
+  <data name="Cmd_data_op_reverseDivide" xml:space="preserve"><value>逆除算</value></data>
+  <data name="CmdAlias_data_op_reverseDivide" xml:space="preserve"><value>ぎゃくじょざん</value></data>
+  <data name="DataOp_Kind_Modulo" xml:space="preserve"><value>剰余</value></data>
+  <data name="Cmd_data_op_modulo" xml:space="preserve"><value>剰余</value></data>
+  <data name="CmdAlias_data_op_modulo" xml:space="preserve"><value>じょうよ あまり</value></data>
+  <data name="DataOp_Kind_Negate" xml:space="preserve"><value>符号反転</value></data>
+  <data name="Cmd_data_op_negate" xml:space="preserve"><value>符号反転</value></data>
+  <data name="CmdAlias_data_op_negate" xml:space="preserve"><value>ふごうはんてん</value></data>
+  <data name="DataOp_Kind_Abs" xml:space="preserve"><value>絶対値</value></data>
+  <data name="Cmd_data_op_abs" xml:space="preserve"><value>絶対値</value></data>
+  <data name="CmdAlias_data_op_abs" xml:space="preserve"><value>ぜったいち</value></data>
+  <data name="DataOp_Kind_And" xml:space="preserve"><value>AND</value></data>
+  <data name="Cmd_data_op_and" xml:space="preserve"><value>AND</value></data>
+  <data name="CmdAlias_data_op_and" xml:space="preserve"><value>あんど ろんりせき</value></data>
+  <data name="DataOp_Kind_Or" xml:space="preserve"><value>OR</value></data>
+  <data name="Cmd_data_op_or" xml:space="preserve"><value>OR</value></data>
+  <data name="CmdAlias_data_op_or" xml:space="preserve"><value>おあ ろんりわ</value></data>
+  <data name="DataOp_Kind_Xor" xml:space="preserve"><value>XOR</value></data>
+  <data name="Cmd_data_op_xor" xml:space="preserve"><value>XOR</value></data>
+  <data name="CmdAlias_data_op_xor" xml:space="preserve"><value>えっくすおあ はいたてきろんりわ</value></data>
+  <data name="DataOp_Kind_Not" xml:space="preserve"><value>NOT</value></data>
+  <data name="Cmd_data_op_not" xml:space="preserve"><value>NOT</value></data>
+  <data name="CmdAlias_data_op_not" xml:space="preserve"><value>のっと はんてん</value></data>
+  <data name="DataOp_Kind_Nand" xml:space="preserve"><value>NAND</value></data>
+  <data name="Cmd_data_op_nand" xml:space="preserve"><value>NAND</value></data>
+  <data name="CmdAlias_data_op_nand" xml:space="preserve"><value>なんど</value></data>
+  <data name="DataOp_Kind_Nor" xml:space="preserve"><value>NOR</value></data>
+  <data name="Cmd_data_op_nor" xml:space="preserve"><value>NOR</value></data>
+  <data name="CmdAlias_data_op_nor" xml:space="preserve"><value>のあ</value></data>
+  <data name="DataOp_Kind_Xnor" xml:space="preserve"><value>XNOR</value></data>
+  <data name="Cmd_data_op_xnor" xml:space="preserve"><value>XNOR</value></data>
+  <data name="CmdAlias_data_op_xnor" xml:space="preserve"><value>えっくすのあ</value></data>
+  <data name="DataOp_Kind_ShiftLeft" xml:space="preserve"><value>左シフト</value></data>
+  <data name="Cmd_data_op_shiftLeft" xml:space="preserve"><value>左シフト</value></data>
+  <data name="CmdAlias_data_op_shiftLeft" xml:space="preserve"><value>ひだりしふと</value></data>
+  <data name="DataOp_Kind_ShiftRightLogical" xml:space="preserve"><value>右シフト (論理)</value></data>
+  <data name="Cmd_data_op_shiftRightLogical" xml:space="preserve"><value>右シフト (論理)</value></data>
+  <data name="CmdAlias_data_op_shiftRightLogical" xml:space="preserve"><value>みぎしふと ろんり</value></data>
+  <data name="DataOp_Kind_ShiftRightArithmetic" xml:space="preserve"><value>右シフト (算術)</value></data>
+  <data name="Cmd_data_op_shiftRightArithmetic" xml:space="preserve"><value>右シフト (算術)</value></data>
+  <data name="CmdAlias_data_op_shiftRightArithmetic" xml:space="preserve"><value>みぎしふと さんじゅつ</value></data>
+  <data name="DataOp_Kind_RotateLeft" xml:space="preserve"><value>左ローテート</value></data>
+  <data name="Cmd_data_op_rotateLeft" xml:space="preserve"><value>左ローテート</value></data>
+  <data name="CmdAlias_data_op_rotateLeft" xml:space="preserve"><value>ひだりろーてーと かいてん</value></data>
+  <data name="DataOp_Kind_RotateRight" xml:space="preserve"><value>右ローテート</value></data>
+  <data name="Cmd_data_op_rotateRight" xml:space="preserve"><value>右ローテート</value></data>
+  <data name="CmdAlias_data_op_rotateRight" xml:space="preserve"><value>みぎろーてーと かいてん</value></data>
+  <data name="DataOp_Kind_ByteSwap16" xml:space="preserve"><value>バイトスワップ (16 bit)</value></data>
+  <data name="Cmd_data_op_byteSwap16" xml:space="preserve"><value>バイトスワップ (16 bit)</value></data>
+  <data name="CmdAlias_data_op_byteSwap16" xml:space="preserve"><value>ばいとすわっぷ えんでぃあん</value></data>
+  <data name="DataOp_Kind_ByteSwap32" xml:space="preserve"><value>バイトスワップ (32 bit)</value></data>
+  <data name="Cmd_data_op_byteSwap32" xml:space="preserve"><value>バイトスワップ (32 bit)</value></data>
+  <data name="CmdAlias_data_op_byteSwap32" xml:space="preserve"><value>ばいとすわっぷ えんでぃあん</value></data>
+  <data name="DataOp_Kind_ByteSwap64" xml:space="preserve"><value>バイトスワップ (64 bit)</value></data>
+  <data name="Cmd_data_op_byteSwap64" xml:space="preserve"><value>バイトスワップ (64 bit)</value></data>
+  <data name="CmdAlias_data_op_byteSwap64" xml:space="preserve"><value>ばいとすわっぷ えんでぃあん</value></data>
+  <data name="DataOp_Kind_WordSwap32" xml:space="preserve"><value>16 bit ワードのスワップ (32 bit 内)</value></data>
+  <data name="Cmd_data_op_wordSwap32" xml:space="preserve"><value>16 bit ワードのスワップ (32 bit 内)</value></data>
+  <data name="CmdAlias_data_op_wordSwap32" xml:space="preserve"><value>わーどのすわっぷ</value></data>
+  <data name="DataOp_Kind_ReverseRange" xml:space="preserve"><value>バイト順を反転</value></data>
+  <data name="Cmd_data_op_reverseRange" xml:space="preserve"><value>バイト順を反転</value></data>
+  <data name="CmdAlias_data_op_reverseRange" xml:space="preserve"><value>ばいとじゅんをはんてん ぎゃくじゅん</value></data>
+  <data name="DataOp_Kind_ReverseBits" xml:space="preserve"><value>ビット順の反転 (各バイト)</value></data>
+  <data name="Cmd_data_op_reverseBits" xml:space="preserve"><value>ビット順の反転 (各バイト)</value></data>
+  <data name="CmdAlias_data_op_reverseBits" xml:space="preserve"><value>びっとじゅんのはんてん</value></data>
+  <data name="DataOp_Kind_SwapNibbles" xml:space="preserve"><value>ニブルの入れ替え (各バイト)</value></data>
+  <data name="Cmd_data_op_swapNibbles" xml:space="preserve"><value>ニブルの入れ替え (各バイト)</value></data>
+  <data name="CmdAlias_data_op_swapNibbles" xml:space="preserve"><value>にぶるのいれかえ</value></data>
+  <data name="DataOp_Kind_Clamp" xml:space="preserve"><value>最小値・最大値で制限</value></data>
+  <data name="Cmd_data_op_clamp" xml:space="preserve"><value>最小値・最大値で制限</value></data>
+  <data name="CmdAlias_data_op_clamp" xml:space="preserve"><value>さいしょうち さいだいち せいげん くらんぷ</value></data>
+  <data name="DataOp_Kind_InsertBits" xml:space="preserve"><value>ビットを挿入</value></data>
+  <data name="Cmd_data_op_insertBits" xml:space="preserve"><value>ビットを挿入</value></data>
+  <data name="CmdAlias_data_op_insertBits" xml:space="preserve"><value>びっとをそうにゅう</value></data>
+  <data name="DataOp_Kind_DeleteBits" xml:space="preserve"><value>ビットを削除</value></data>
+  <data name="Cmd_data_op_deleteBits" xml:space="preserve"><value>ビットを削除</value></data>
+  <data name="CmdAlias_data_op_deleteBits" xml:space="preserve"><value>びっとをさくじょ</value></data>
+  <data name="DataOp_Category_Arithmetic" xml:space="preserve"><value>算術</value></data>
+  <data name="DataOp_Category_Bitwise" xml:space="preserve"><value>ビット演算</value></data>
+  <data name="DataOp_Category_ShiftRotate" xml:space="preserve"><value>シフト・ローテート</value></data>
+  <data name="DataOp_Category_Reorder" xml:space="preserve"><value>並べ替え</value></data>
+  <data name="DataOp_Category_Clamp" xml:space="preserve"><value>制限</value></data>
+  <data name="DataOp_Category_BitInsertDelete" xml:space="preserve"><value>ビットの挿入・削除</value></data>
+  <data name="CmdCategory_data" xml:space="preserve"><value>データ</value></data>
+  <data name="CmdCategory_dataOperation" xml:space="preserve"><value>データ演算</value></data>
+  <data name="Cmd_data_operation" xml:space="preserve"><value>データ演算...</value></data>
+  <data name="CmdAlias_data_operation" xml:space="preserve"><value>でーためんざん えんざん けいさん</value></data>
+  <data name="Cmd_data_repeatOperation" xml:space="preserve"><value>前回のデータ演算を繰り返す</value></data>
+  <data name="CmdAlias_data_repeatOperation" xml:space="preserve"><value>ぜんかいのでーたえんざんをくりかえす</value></data>
+  <data name="Menu_Data.Title" xml:space="preserve"><value>データ(D)</value></data>
+  <data name="Menu_Data.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Data_Operation.Text" xml:space="preserve"><value>データ演算(O)...</value></data>
+  <data name="Menu_Data_Operation.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Data_RepeatOperation.Text" xml:space="preserve"><value>前回のデータ演算を繰り返す(R)</value></data>
+  <data name="Menu_Data_RepeatOperation.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Data_ConvertEncoding.Text" xml:space="preserve"><value>文字コード変換(E)...</value></data>
+  <data name="Menu_Data_ConvertEncoding.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Data_Case.Text" xml:space="preserve"><value>大文字・小文字の変換(C)</value></data>
+  <data name="Menu_Data_Case.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Data_CaseUpper.Text" xml:space="preserve"><value>大文字に(U)</value></data>
+  <data name="Menu_Data_CaseUpper.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Data_CaseLower.Text" xml:space="preserve"><value>小文字に(L)</value></data>
+  <data name="Menu_Data_CaseLower.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Data_CaseSwap.Text" xml:space="preserve"><value>大文字と小文字を入れ替える(S)</value></data>
+  <data name="Menu_Data_CaseSwap.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Analysis_CustomCrc.Text" xml:space="preserve"><value>カスタム CRC を定義(C)...</value></data>
+  <data name="Menu_Analysis_CustomCrc.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="HexViewMenu_DataOperation" xml:space="preserve"><value>データ演算</value></data>
+  <data name="DataOp_Title" xml:space="preserve"><value>データ演算</value></data>
+  <data name="DataOp_Run" xml:space="preserve"><value>実行</value></data>
+  <data name="DataOp_Category" xml:space="preserve"><value>分類</value></data>
+  <data name="DataOp_Kind" xml:space="preserve"><value>演算</value></data>
+  <data name="DataOp_Target" xml:space="preserve"><value>対象範囲</value></data>
+  <data name="DataOp_TargetSelection" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="DataOp_TargetMultiSelection" xml:space="preserve"><value>選択範囲 ({0} 個の範囲)</value></data>
+  <data name="DataOp_TargetWhole" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="DataOp_TargetRange" xml:space="preserve"><value>範囲を指定</value></data>
+  <data name="DataOp_RangeStart" xml:space="preserve"><value>開始</value></data>
+  <data name="DataOp_RangeLength" xml:space="preserve"><value>長さ</value></data>
+  <data name="DataOp_Type" xml:space="preserve"><value>要素の型</value></data>
+  <data name="DataOp_Type_Unsigned" xml:space="preserve"><value>符号なし整数</value></data>
+  <data name="DataOp_Type_Signed" xml:space="preserve"><value>符号付き整数</value></data>
+  <data name="DataOp_Type_Float" xml:space="preserve"><value>浮動小数点</value></data>
+  <data name="DataOp_Size" xml:space="preserve"><value>要素の大きさ (バイト)</value></data>
+  <data name="DataOp_Endian" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="DataOp_LittleEndian" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="DataOp_BigEndian" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="DataOp_Operand" xml:space="preserve"><value>オペランド</value></data>
+  <data name="DataOp_Increment" xml:space="preserve"><value>オペランドの増分</value></data>
+  <data name="DataOp_Process" xml:space="preserve"><value>処理する要素の数 (N)</value></data>
+  <data name="DataOp_Skip" xml:space="preserve"><value>飛ばす要素の数 (M)</value></data>
+  <data name="DataOp_IncrementScope" xml:space="preserve"><value>範囲ごとの増分</value></data>
+  <data name="DataOp_IncrementScope_PerRange" xml:space="preserve"><value>範囲ごとにやり直す</value></data>
+  <data name="DataOp_IncrementScope_Continuous" xml:space="preserve"><value>範囲をまたいで続ける</value></data>
+  <data name="DataOp_Overflow" xml:space="preserve"><value>あふれたときの扱い</value></data>
+  <data name="DataOp_Overflow_Wrap" xml:space="preserve"><value>ラップ</value></data>
+  <data name="DataOp_Overflow_Saturate" xml:space="preserve"><value>飽和</value></data>
+  <data name="DataOp_OperandSource" xml:space="preserve"><value>オペランドの指定</value></data>
+  <data name="DataOp_OperandSource_Number" xml:space="preserve"><value>数値</value></data>
+  <data name="DataOp_OperandSource_Key" xml:space="preserve"><value>バイト列の鍵</value></data>
+  <data name="DataOp_KeyOrigin" xml:space="preserve"><value>鍵の起点</value></data>
+  <data name="DataOp_KeyIncrement" xml:space="preserve"><value>鍵の増分 (1 周ごと)</value></data>
+  <data name="DataOp_XorNote" xml:space="preserve"><value>同じ設定で XOR を 2 回実行すると元のデータに戻ります。</value></data>
+  <data name="DataOp_ShiftBits" xml:space="preserve"><value>ビット数</value></data>
+  <data name="DataOp_RotateIncrement" xml:space="preserve"><value>回転量の増分</value></data>
+  <data name="DataOp_Min" xml:space="preserve"><value>最小値</value></data>
+  <data name="DataOp_Max" xml:space="preserve"><value>最大値</value></data>
+  <data name="DataOp_NoLimit" xml:space="preserve"><value>制限しない</value></data>
+  <data name="DataOp_BitOffset" xml:space="preserve"><value>位置 (バイトのオフセット)</value></data>
+  <data name="DataOp_BitIndex" xml:space="preserve"><value>バイト内のビット (7 が最上位)</value></data>
+  <data name="DataOp_BitCount" xml:space="preserve"><value>ビット数</value></data>
+  <data name="DataOp_BitFill" xml:space="preserve"><value>埋める値</value></data>
+  <data name="DataOp_BitOrder" xml:space="preserve"><value>ビットの並び順</value></data>
+  <data name="DataOp_BitOrder_Msb" xml:space="preserve"><value>最上位ビットから</value></data>
+  <data name="DataOp_BitOrder_Lsb" xml:space="preserve"><value>最下位ビットから</value></data>
+  <data name="DataOp_BitScope" xml:space="preserve"><value>ずらす範囲</value></data>
+  <data name="DataOp_BitScope_Selection" xml:space="preserve"><value>選択範囲の中だけ</value></data>
+  <data name="DataOp_BitScope_ToEnd" xml:space="preserve"><value>ドキュメントの末尾まで</value></data>
+  <data name="DataOp_Preview" xml:space="preserve"><value>プレビュー (先頭 64 バイト)</value></data>
+  <data name="DataOp_PreviewBeforeLine" xml:space="preserve"><value>変更前: {0}</value></data>
+  <data name="DataOp_PreviewAfterLine" xml:space="preserve"><value>変更後: {0}</value></data>
+  <data name="DataOp_ValuesBeforeLine" xml:space="preserve"><value>変更前の値: {0}</value></data>
+  <data name="DataOp_ValuesAfterLine" xml:space="preserve"><value>変更後の値: {0}</value></data>
+  <data name="DataOp_ChangedCount" xml:space="preserve"><value>{0} バイトが変わります</value></data>
+  <data name="DataOp_TrailingNote" xml:space="preserve"><value>最後の {0} バイトは要素に満たないため変更しません。</value></data>
+  <data name="DataOp_RewriteNote" xml:space="preserve"><value>{0} のデータを書き直します。</value></data>
+  <data name="DataOp_RewriteConfirm" xml:space="preserve"><value>{0} GB のデータを書き直します (一時領域を {0} GB 使います)。</value></data>
+  <data name="DataOp_RewriteRun" xml:space="preserve"><value>実行する</value></data>
+  <data name="DataOp_NoPrevious" xml:space="preserve"><value>まだデータ演算を実行していません。</value></data>
+  <data name="DataOp_Unchanged" xml:space="preserve"><value>データは変わりません。</value></data>
+  <data name="DataOp_Result_Overflows" xml:space="preserve"><value>あふれた要素: {0} 個。</value></data>
+  <data name="DataOp_Result_NaN" xml:space="preserve"><value>NaN: {0} 個、∞: {1} 個。</value></data>
+  <data name="DataOp_Result_ZeroSkipped" xml:space="preserve"><value>0 のため変えなかった要素: {0} 個。</value></data>
+  <data name="DataOp_Result_Changed" xml:space="preserve"><value>変更した要素: {0} 個。</value></data>
+  <data name="DataOp_Error_Float" xml:space="preserve"><value>0.5 や 1e-3 のような数値を入力してください (小数点は . です)。</value></data>
+  <data name="DataOp_Error_Key" xml:space="preserve"><value>鍵を入力してください。</value></data>
+  <data name="DataOp_Error_OperandOutOfRange" xml:space="preserve"><value>要素の型と大きさで表せない値です。</value></data>
+  <data name="DataOp_Error_DivideByZero" xml:space="preserve"><value>0 では割れません。</value></data>
+  <data name="DataOp_Error_DivisorBecomesZero" xml:space="preserve"><value>増分によって途中で除数が 0 になります。</value></data>
+  <data name="DataOp_Error_TypeNotSupported" xml:space="preserve"><value>この要素の型では使えない演算です。</value></data>
+  <data name="DataOp_Error_InvalidSize" xml:space="preserve"><value>浮動小数点の要素は 4 または 8 バイトです。</value></data>
+  <data name="DataOp_Error_BitCountOutOfRange" xml:space="preserve"><value>ビット数が範囲外です。</value></data>
+  <data name="DataOp_Error_MinGreaterThanMax" xml:space="preserve"><value>最小値が最大値より大きくなっています。</value></data>
+  <data name="DataOp_Error_KeyEmpty" xml:space="preserve"><value>鍵が空です。</value></data>
+  <data name="DataOp_Error_KeyTooLong" xml:space="preserve"><value>鍵は 16 MiB までです。</value></data>
+  <data name="DataOp_Error_InvalidStride" xml:space="preserve"><value>処理する要素は 1 以上、飛ばす要素は 0 以上にしてください。</value></data>
+  <data name="DataOp_Error_PositionOutOfRange" xml:space="preserve"><value>位置または範囲が対象の外です。</value></data>
+  <data name="DataOp_Error_FixedLength" xml:space="preserve"><value>長さを変えられないドキュメントです。「選択範囲の中だけ」を使ってください。</value></data>
+  <data name="DataOp_Error_None" xml:space="preserve"><value></value></data>
+  <data name="DataOp_Error_TempSpace" xml:space="preserve"><value>演算に一時領域が {0} GB 必要ですが、空きは {1} GB です。</value></data>
+  <data name="DataOp_Error_Read" xml:space="preserve"><value>オフセット {0} を読み込めません。ドキュメントは変更していません。</value></data>
+  <data name="Operation_DataOperation" xml:space="preserve"><value>データ演算: {0}</value></data>
+  <data name="Cmd_data_case_upper" xml:space="preserve"><value>大文字に</value></data>
+  <data name="CmdAlias_data_case_upper" xml:space="preserve"><value>おおもじに</value></data>
+  <data name="Cmd_data_case_upper_ascii" xml:space="preserve"><value>大文字に (ASCII の英字だけ)</value></data>
+  <data name="CmdAlias_data_case_upper_ascii" xml:space="preserve"><value>おおもじに あすきー</value></data>
+  <data name="Cmd_data_case_upper_text" xml:space="preserve"><value>大文字に (文字コードに従う)</value></data>
+  <data name="CmdAlias_data_case_upper_text" xml:space="preserve"><value>おおもじに もじこーど</value></data>
+  <data name="Cmd_data_case_lower" xml:space="preserve"><value>小文字に</value></data>
+  <data name="CmdAlias_data_case_lower" xml:space="preserve"><value>こもじに</value></data>
+  <data name="Cmd_data_case_lower_ascii" xml:space="preserve"><value>小文字に (ASCII の英字だけ)</value></data>
+  <data name="CmdAlias_data_case_lower_ascii" xml:space="preserve"><value>こもじに あすきー</value></data>
+  <data name="Cmd_data_case_lower_text" xml:space="preserve"><value>小文字に (文字コードに従う)</value></data>
+  <data name="CmdAlias_data_case_lower_text" xml:space="preserve"><value>こもじに もじこーど</value></data>
+  <data name="Cmd_data_case_swap" xml:space="preserve"><value>大文字と小文字を入れ替える</value></data>
+  <data name="CmdAlias_data_case_swap" xml:space="preserve"><value>おおもじとこもじをいれかえる</value></data>
+  <data name="Cmd_data_case_swap_ascii" xml:space="preserve"><value>大文字と小文字を入れ替える (ASCII の英字だけ)</value></data>
+  <data name="CmdAlias_data_case_swap_ascii" xml:space="preserve"><value>おおもじとこもじをいれかえる あすきー</value></data>
+  <data name="Cmd_data_case_swap_text" xml:space="preserve"><value>大文字と小文字を入れ替える (文字コードに従う)</value></data>
+  <data name="CmdAlias_data_case_swap_text" xml:space="preserve"><value>おおもじとこもじをいれかえる もじこーど</value></data>
+  <data name="Cmd_data_convertEncoding" xml:space="preserve"><value>文字コード変換...</value></data>
+  <data name="CmdAlias_data_convertEncoding" xml:space="preserve"><value>もじこーどへんかん</value></data>
+  <data name="Cmd_analysis_hash_customCrc" xml:space="preserve"><value>カスタム CRC を定義...</value></data>
+  <data name="CmdAlias_analysis_hash_customCrc" xml:space="preserve"><value>かすたむしーあーるしー</value></data>
+  <data name="Cmd_analysis_hash_findAlgorithm" xml:space="preserve"><value>一致するアルゴリズムを探す</value></data>
+  <data name="CmdAlias_analysis_hash_findAlgorithm" xml:space="preserve"><value>いっちするあるごりずむをさがす</value></data>
+  <data name="Cmd_analysis_hash_writeAtCursor" xml:space="preserve"><value>ハッシュ値をカーソル位置に書き込む</value></data>
+  <data name="CmdAlias_analysis_hash_writeAtCursor" xml:space="preserve"><value>はっしゅちをかーそるいちにかきこむ</value></data>
+  <data name="Set_edit_caseConversion" xml:space="preserve"><value>大文字・小文字の変換の方法</value></data>
+  <data name="SetDesc_edit_caseConversion" xml:space="preserve"><value>データ &gt; 大文字・小文字の変換で使う変換の方法。</value></data>
+  <data name="SetOpt_edit_caseConversion_ascii" xml:space="preserve"><value>ASCII の英字だけ</value></data>
+  <data name="SetOpt_edit_caseConversion_encoding" xml:space="preserve"><value>表示の文字コードに従う (Unicode の規則)</value></data>
+  <data name="Set_hash_customCrc" xml:space="preserve"><value>カスタム CRC</value></data>
+  <data name="SetDesc_hash_customCrc" xml:space="preserve"><value>ハッシュパネルで定義したカスタム CRC。</value></data>
+  <data name="Operation_ConvertEncoding" xml:space="preserve"><value>文字コード変換</value></data>
+  <data name="Operation_ConvertCase" xml:space="preserve"><value>大文字・小文字の変換</value></data>
+  <data name="Operation_FindAlgorithm" xml:space="preserve"><value>一致するアルゴリズムを探す</value></data>
+  <data name="ConvertEncoding_Title" xml:space="preserve"><value>文字コード変換</value></data>
+  <data name="ConvertEncoding_Convert" xml:space="preserve"><value>変換</value></data>
+  <data name="ConvertEncoding_Source" xml:space="preserve"><value>変換元の文字コード</value></data>
+  <data name="ConvertEncoding_Target" xml:space="preserve"><value>変換先の文字コード</value></data>
+  <data name="ConvertEncoding_Invalid" xml:space="preserve"><value>変換元で解釈できないバイト列</value></data>
+  <data name="ConvertEncoding_Invalid_Error" xml:space="preserve"><value>最初の箇所でエラーにして中止する</value></data>
+  <data name="ConvertEncoding_Invalid_Fffd" xml:space="preserve"><value>U+FFFD に置き換える</value></data>
+  <data name="ConvertEncoding_Invalid_Keep" xml:space="preserve"><value>そのまま残す</value></data>
+  <data name="ConvertEncoding_Unmappable" xml:space="preserve"><value>変換先で表せない文字</value></data>
+  <data name="ConvertEncoding_Unmappable_Error" xml:space="preserve"><value>最初の箇所でエラーにして中止する</value></data>
+  <data name="ConvertEncoding_Unmappable_Question" xml:space="preserve"><value>? に置き換える</value></data>
+  <data name="ConvertEncoding_Unmappable_Custom" xml:space="preserve"><value>指定した文字に置き換える</value></data>
+  <data name="ConvertEncoding_Replacement" xml:space="preserve"><value>置き換える文字</value></data>
+  <data name="ConvertEncoding_StripBom" xml:space="preserve"><value>変換元の先頭の BOM を取り除く</value></data>
+  <data name="ConvertEncoding_AddBom" xml:space="preserve"><value>変換先に BOM を付ける</value></data>
+  <data name="ConvertEncoding_Newline" xml:space="preserve"><value>改行の変換</value></data>
+  <data name="ConvertEncoding_Newline_Keep" xml:space="preserve"><value>そのまま</value></data>
+  <data name="ConvertEncoding_Normalization" xml:space="preserve"><value>Unicode の正規化</value></data>
+  <data name="ConvertEncoding_Normalization_None" xml:space="preserve"><value>しない</value></data>
+  <data name="ConvertEncoding_LengthExact" xml:space="preserve"><value>{0} バイト → {1} バイト</value></data>
+  <data name="ConvertEncoding_LengthEstimate" xml:space="preserve"><value>{0} バイト → 約 {1} バイト</value></data>
+  <data name="ConvertEncoding_Error_Undecodable" xml:space="preserve"><value>オフセット {0} のバイト列 ({1}) を解釈できません。</value></data>
+  <data name="ConvertEncoding_Error_Unmappable" xml:space="preserve"><value>オフセット {0} の文字「{1}」は変換先の文字コードで表せません。</value></data>
+  <data name="ConvertEncoding_Error_FixedLength" xml:space="preserve"><value>長さが変わりますが、このドキュメントは長さを変えられません。</value></data>
+  <data name="ConvertEncoding_GoToOffset" xml:space="preserve"><value>そのオフセットへ移動</value></data>
+  <data name="Hash_Exclusions.Header" xml:space="preserve"><value>除外範囲</value></data>
+  <data name="Hash_ExclusionStart.Header" xml:space="preserve"><value>開始</value></data>
+  <data name="Hash_ExclusionLength.Header" xml:space="preserve"><value>長さ</value></data>
+  <data name="Hash_ExclusionRemove.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>除外範囲を削除</value></data>
+  <data name="Hash_ExclusionRemove.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>削除</value></data>
+  <data name="Hash_ExclusionAdd.Content" xml:space="preserve"><value>追加</value></data>
+  <data name="Hash_ExclusionAddSelection.Content" xml:space="preserve"><value>選択範囲を追加</value></data>
+  <data name="Hash_ExclusionMode.Header" xml:space="preserve"><value>除外の方法</value></data>
+  <data name="Hash_ExclusionMode_Skip.Content" xml:space="preserve"><value>飛ばす</value></data>
+  <data name="Hash_ExclusionMode_Replace.Content" xml:space="preserve"><value>値に置き換える</value></data>
+  <data name="Hash_ExclusionValue.Header" xml:space="preserve"><value>置き換える値</value></data>
+  <data name="Hash_ExclusionOutside" xml:space="preserve"><value>対象範囲の外です (計算では無視します)</value></data>
+  <data name="Hash_ExclusionInvalid" xml:space="preserve"><value>開始と 1 以上の長さを入力してください。</value></data>
+  <data name="Hash_ReplacementInvalid" xml:space="preserve"><value>置き換える値は 0x00〜0xFF です。</value></data>
+  <data name="Hash_AddUnreadable.Content" xml:space="preserve"><value>読めない範囲を除外範囲に追加</value></data>
+  <data name="Hash_CustomCrc.Content" xml:space="preserve"><value>カスタム CRC</value></data>
+  <data name="Hash_CustomCrcAdd.Text" xml:space="preserve"><value>カスタム CRC を追加...</value></data>
+  <data name="Hash_CustomCrcExport.Text" xml:space="preserve"><value>エクスポート...</value></data>
+  <data name="Hash_CustomCrcImport.Text" xml:space="preserve"><value>インポート...</value></data>
+  <data name="Hash_CustomCrcDelete.Text" xml:space="preserve"><value>削除</value></data>
+  <data name="Hash_WriteAtCursor.Text" xml:space="preserve"><value>カーソル位置に書き込む...</value></data>
+  <data name="Hash_FindAlgorithm.Content" xml:space="preserve"><value>一致するアルゴリズムを探す</value></data>
+  <data name="Hash_FindRun" xml:space="preserve"><value>探す</value></data>
+  <data name="Hash_FindConfirm" xml:space="preserve"><value>長さが同じすべてのアルゴリズムで計算します。約 {0} 秒かかります。</value></data>
+  <data name="Hash_FindNeedsExpected" xml:space="preserve"><value>先に期待値を入力してください。</value></data>
+  <data name="Hash_Finding" xml:space="preserve"><value>探しています...</value></data>
+  <data name="Hash_FindNone" xml:space="preserve"><value>一致するアルゴリズムはありません ({0} 種類を試しました)。</value></data>
+  <data name="Hash_FindFound" xml:space="preserve"><value>一致: {0} ({1} 種類を試しました)。</value></data>
+  <data name="Hash_FindReversed" xml:space="preserve"><value>{0} (バイト順が逆)</value></data>
+  <data name="Hash_Slow" xml:space="preserve"><value>遅いアルゴリズムです。全体の速度はこのアルゴリズムで決まります。</value></data>
+  <data name="Hash_SignedValue" xml:space="preserve"><value>符号付き: {0}</value></data>
+  <data name="Hash_ParameterError_KeyLength" xml:space="preserve"><value>鍵の長さがこのアルゴリズムに合いません。</value></data>
+  <data name="Hash_ParameterError_OutputLength" xml:space="preserve"><value>出力長がこのアルゴリズムに合いません。</value></data>
+  <data name="Hash_ParameterError_None" xml:space="preserve"><value></value></data>
+  <data name="Hash_Endian" xml:space="preserve"><value>ワードのエンディアン</value></data>
+  <data name="Hash_Endian_Default" xml:space="preserve"><value>既定</value></data>
+  <data name="Hash_Endian_Little" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="Hash_Endian_Big" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Hash_Signed" xml:space="preserve"><value>符号あり</value></data>
+  <data name="Hash_Key" xml:space="preserve"><value>鍵 (Hex)</value></data>
+  <data name="Hash_KeyPlaceholder" xml:space="preserve"><value>なし</value></data>
+  <data name="Hash_KeyInvalid" xml:space="preserve"><value>鍵は偶数桁の Hex で入力してください。</value></data>
+  <data name="Hash_OutputBits" xml:space="preserve"><value>出力長 (bit)</value></data>
+  <data name="Hash_OutputBitsInvalid" xml:space="preserve"><value>出力長をビット数で入力してください。</value></data>
+  <data name="Hash_Ed2k" xml:space="preserve"><value>9,728,000 バイトの倍数のときの扱い</value></data>
+  <data name="Hash_Ed2k_Blue" xml:space="preserve"><value>新方式 (blue)</value></data>
+  <data name="Hash_Ed2k_Red" xml:space="preserve"><value>旧方式 (red)</value></data>
+  <data name="HashWrite_Title" xml:space="preserve"><value>カーソル位置に書き込む</value></data>
+  <data name="HashWrite_Write" xml:space="preserve"><value>書き込む</value></data>
+  <data name="HashWrite_Row" xml:space="preserve"><value>書き込む値</value></data>
+  <data name="HashWrite_Position" xml:space="preserve"><value>オフセット {0} から上書きします。</value></data>
+  <data name="HashWrite_BigEndian" xml:space="preserve"><value>ビッグエンディアン (数値の表記の順)</value></data>
+  <data name="HashWrite_LittleEndian" xml:space="preserve"><value>リトルエンディアン (下位のバイトから)</value></data>
+  <data name="HashWrite_Warning" xml:space="preserve"><value>書き込み先が計算の対象範囲に含まれるため、書き込むと値が変わります。</value></data>
+  <data name="HashWrite_Error_End" xml:space="preserve"><value>末尾を超えるため書き込めません (残り {0} バイト、必要 {1} バイト)。</value></data>
+  <data name="CustomCrc_Title" xml:space="preserve"><value>カスタム CRC</value></data>
+  <data name="CustomCrc_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="CustomCrc_Preset" xml:space="preserve"><value>プリセット</value></data>
+  <data name="CustomCrc_Duplicate" xml:space="preserve"><value>複製して編集</value></data>
+  <data name="CustomCrc_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="CustomCrc_Width" xml:space="preserve"><value>幅 (width)</value></data>
+  <data name="CustomCrc_Poly" xml:space="preserve"><value>多項式 (poly)</value></data>
+  <data name="CustomCrc_Init" xml:space="preserve"><value>初期値 (init)</value></data>
+  <data name="CustomCrc_RefIn" xml:space="preserve"><value>入力の反転 (refin)</value></data>
+  <data name="CustomCrc_RefOut" xml:space="preserve"><value>出力の反転 (refout)</value></data>
+  <data name="CustomCrc_XorOut" xml:space="preserve"><value>最終 XOR (xorout)</value></data>
+  <data name="CustomCrc_CheckValue" xml:space="preserve"><value>check: {0}</value></data>
+  <data name="CustomCrc_ResidueValue" xml:space="preserve"><value>residue: {0}</value></data>
+  <data name="CustomCrc_Field_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="CustomCrc_Field_Width" xml:space="preserve"><value>幅</value></data>
+  <data name="CustomCrc_Field_Poly" xml:space="preserve"><value>多項式</value></data>
+  <data name="CustomCrc_Field_Init" xml:space="preserve"><value>初期値</value></data>
+  <data name="CustomCrc_Field_RefIn" xml:space="preserve"><value>入力の反転</value></data>
+  <data name="CustomCrc_Field_RefOut" xml:space="preserve"><value>出力の反転</value></data>
+  <data name="CustomCrc_Field_XorOut" xml:space="preserve"><value>最終 XOR</value></data>
+  <data name="CustomCrc_Field_Check" xml:space="preserve"><value>check</value></data>
+  <data name="CustomCrc_Field_Item" xml:space="preserve"><value>項目</value></data>
+  <data name="CustomCrc_Error_NameRequired" xml:space="preserve"><value>名前を入力してください。</value></data>
+  <data name="CustomCrc_Error_DuplicateName" xml:space="preserve"><value>同じ名前のアルゴリズムがあります。</value></data>
+  <data name="CustomCrc_Error_WidthOutOfRange" xml:space="preserve"><value>幅は 1〜64 です。</value></data>
+  <data name="CustomCrc_Error_ValueTooWide" xml:space="preserve"><value>{0}は {1} bit 以内で指定してください。</value></data>
+  <data name="CustomCrc_Error_MissingField" xml:space="preserve"><value>{0}がありません。</value></data>
+  <data name="CustomCrc_Error_InvalidValue" xml:space="preserve"><value>{0}が正しい数値ではありません。</value></data>
+  <data name="CustomCrc_Error_CheckMismatch" xml:space="preserve"><value>check の値がパラメータと合いません。</value></data>
+  <data name="CustomCrc_Error_NotAnObject" xml:space="preserve"><value>項目がオブジェクトではありません。</value></data>
+  <data name="CustomCrc_Error_InvalidJson" xml:space="preserve"><value>JSON として読めません。</value></data>
+  <data name="CustomCrc_Error_NotAnArray" xml:space="preserve"><value>配列ではありません。</value></data>
+  <data name="CustomCrc_ImportItemError" xml:space="preserve"><value>{0} 件目の項目を読み込めません: {1}</value></data>
+  <data name="CustomCrc_Imported" xml:space="preserve"><value>カスタム CRC を {0} 件取り込みました。</value></data>
+  <data name="CustomCrc_Exported" xml:space="preserve"><value>{0} にエクスポートしました。</value></data>
+  <data name="Hash_Alg_sum64" xml:space="preserve"><value>加算 64 bit</value></data>
+  <data name="Hash_Alg_sum16w" xml:space="preserve"><value>加算 16 bit (ワード単位)</value></data>
+  <data name="Hash_Alg_sum32w" xml:space="preserve"><value>加算 32 bit (ワード単位)</value></data>
+  <data name="Hash_Alg_sum64w" xml:space="preserve"><value>加算 64 bit (ワード単位)</value></data>
+  <data name="Hash_Alg_inet16" xml:space="preserve"><value>インターネットチェックサム</value></data>
+  <data name="Hash_Alg_xor16" xml:space="preserve"><value>XOR 16 bit</value></data>
+  <data name="Hash_Alg_xor32" xml:space="preserve"><value>XOR 32 bit</value></data>
+  <data name="Hash_Alg_xor64" xml:space="preserve"><value>XOR 64 bit</value></data>
 </root>

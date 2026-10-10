@@ -187,6 +187,7 @@ public static class HashEngine
     public static byte[] ComputeBytes(HashAlgorithmInfo algorithm, ReadOnlySpan<byte> data, HashParameters? parameters = null)
     {
         IHasher hasher = algorithm.CreateHasher(parameters);
+        (hasher as ILengthPrefixedHasher)?.DeclareLength(data.Length);
         hasher.Append(data);
         return hasher.Finish();
     }
@@ -204,6 +205,17 @@ public static class HashEngine
         {
             // 読む単位: 範囲を除外で分けた部分。置き換える部分は読まずに値で埋める。
             List<(long Offset, long Length, bool Replace)> parts = Split(ranges, exclusions, request.ExclusionMode);
+
+            // 計算の始めに長さが必要なアルゴリズム (MurmurHash2 など) には、入力の長さの合計を先に渡す。
+            long total = parts.Sum(p => p.Length);
+            foreach (IHasher hasher in hashers)
+            {
+                if (hasher is ILengthPrefixedHasher prefixed)
+                {
+                    prefixed.DeclareLength(total);
+                }
+            }
+
             Task<int>? pending = null;
             int partIndex = 0;
             long partDone = 0;

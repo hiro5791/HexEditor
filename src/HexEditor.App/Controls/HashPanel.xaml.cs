@@ -102,6 +102,15 @@ public sealed partial class HashPanel : UserControl
 
     public static string ChangedId(string id) => "Hash_Changed_" + id;
 
+    /// <summary>パラメータが不正な行の赤枠 (ANA-18 の「エラー」)。色は ThemeResource のブラシ。</summary>
+    public static Microsoft.UI.Xaml.Media.Brush RowBorder(bool invalid) =>
+        (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources[invalid ? "SystemFillColorCriticalBrush" : "CardStrokeColorDefaultBrush"];
+
+    public static Thickness RowBorderThickness(bool invalid) => new(invalid ? 2 : 1);
+
+    /// <summary>除外の方法が「置き換える」か (値の欄を有効にする)。</summary>
+    public static bool IsReplace(int modeIndex) => modeIndex == 1;
+
     public static string CopyName(string name) => Loc.Format("Hash_CopyRow_Name", name);
 
     public static string SettingsName(string name) => Loc.Format("Hash_Settings_Name", name);
@@ -111,14 +120,6 @@ public sealed partial class HashPanel : UserControl
 
     private void UpdateComputeStyle() =>
         ComputeButton.Style = ViewModel.ComputeHighlighted ? (Style)Application.Current.Resources["AccentButtonStyle"] : null;
-
-    private void RangeModeChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (RangeModeChoice.SelectedIndex >= 0)
-        {
-            ViewModel.RangeMode = (Core.Hashing.HashRangeMode)RangeModeChoice.SelectedIndex;
-        }
-    }
 
     private void TargetChoice_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -197,6 +198,53 @@ public sealed partial class HashPanel : UserControl
             panel.Children.Add(seed);
         }
 
+        ComboBox? endian = null, ed2k = null;
+        CheckBox? signed = null;
+        TextBox? key = null, outputBits = null;
+        if (algorithm.Parameters.HasFlag(HashParameterKinds.Endian))
+        {
+            endian = new ComboBox { Header = Loc.Get("Hash_Endian"), HorizontalAlignment = HorizontalAlignment.Stretch };
+            endian.Items.Add(Loc.Get("Hash_Endian_Default"));
+            endian.Items.Add(Loc.Get("Hash_Endian_Little"));
+            endian.Items.Add(Loc.Get("Hash_Endian_Big"));
+            endian.SelectedIndex = current.BigEndian switch { null => 0, false => 1, true => 2 };
+            AutomationProperties.SetAutomationId(endian, "Hash_Endian");
+            panel.Children.Add(endian);
+        }
+
+        if (algorithm.Parameters.HasFlag(HashParameterKinds.Signed))
+        {
+            signed = new CheckBox { Content = Loc.Get("Hash_Signed"), IsChecked = current.Signed };
+            AutomationProperties.SetAutomationId(signed, "Hash_Signed");
+            panel.Children.Add(signed);
+        }
+
+        if (algorithm.Parameters.HasFlag(HashParameterKinds.Key))
+        {
+            key = new TextBox { Header = Loc.Get("Hash_Key"), Text = current.KeyHex ?? string.Empty, FlowDirection = FlowDirection.LeftToRight,
+                FontFamily = new Microsoft.UI.Xaml.Media.FontFamily("Cascadia Mono, Consolas"), PlaceholderText = Loc.Get("Hash_KeyPlaceholder") };
+            AutomationProperties.SetAutomationId(key, "Hash_Key");
+            panel.Children.Add(key);
+        }
+
+        if (algorithm.Parameters.HasFlag(HashParameterKinds.OutputLength))
+        {
+            outputBits = new TextBox { Header = Loc.Get("Hash_OutputBits"), Text = algorithm.BitsFor(current).ToString(System.Globalization.CultureInfo.InvariantCulture),
+                FlowDirection = FlowDirection.LeftToRight };
+            AutomationProperties.SetAutomationId(outputBits, "Hash_OutputBits");
+            panel.Children.Add(outputBits);
+        }
+
+        if (algorithm.Parameters.HasFlag(HashParameterKinds.Ed2kMode))
+        {
+            ed2k = new ComboBox { Header = Loc.Get("Hash_Ed2k"), HorizontalAlignment = HorizontalAlignment.Stretch };
+            ed2k.Items.Add(Loc.Get("Hash_Ed2k_Blue"));
+            ed2k.Items.Add(Loc.Get("Hash_Ed2k_Red"));
+            ed2k.SelectedIndex = (int)current.Ed2k;
+            AutomationProperties.SetAutomationId(ed2k, "Hash_Ed2kMode");
+            panel.Children.Add(ed2k);
+        }
+
         if (algorithm.Parameters.HasFlag(HashParameterKinds.Complement))
         {
             complement = new ComboBox { Header = Loc.Get("Hash_Complement"), HorizontalAlignment = HorizontalAlignment.Stretch };
@@ -224,18 +272,121 @@ public sealed partial class HashPanel : UserControl
             ulong value = current.Seed;
             if (seed is not null && !HashSelection.TryParseSeed(seed.Text, out value))
             {
+                error.Text = Loc.Get("Hash_SeedInvalid");
                 error.Visibility = Visibility.Visible;
                 return;
             }
 
-            ViewModel.SetParameters(algorithm.Id, current with
+            string? keyHex = current.KeyHex;
+            if (key is not null)
+            {
+                string compact = new([.. key.Text.Where(c => !char.IsWhiteSpace(c) && c is not ':' and not '-')]);
+                if (compact.Length > 0 && (compact.Length % 2 != 0 || !compact.All(char.IsAsciiHexDigit)))
+                {
+                    error.Text = Loc.Get("Hash_KeyInvalid");
+                    error.Visibility = Visibility.Visible;
+                    return;
+                }
+
+                keyHex = compact.Length == 0 ? null : compact.ToUpperInvariant();
+            }
+
+            int bits = current.OutputBits;
+            if (outputBits is not null && !int.TryParse(outputBits.Text, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out bits))
+            {
+                error.Text = Loc.Get("Hash_OutputBitsInvalid");
+                error.Visibility = Visibility.Visible;
+                return;
+            }
+
+            HashParameters updated = current with
             {
                 Seed = value,
                 Complement = complement is null ? current.Complement : (HashComplement)Math.Max(0, complement.SelectedIndex),
-            });
+                BigEndian = endian is null ? current.BigEndian : endian.SelectedIndex switch { 1 => false, 2 => true, _ => null },
+                Signed = signed is null ? current.Signed : signed.IsChecked == true,
+                KeyHex = keyHex,
+                OutputBits = bits == algorithm.Bits ? 0 : bits,
+                Ed2k = ed2k is null ? current.Ed2k : (Ed2kMode)Math.Max(0, ed2k.SelectedIndex),
+            };
+            if (algorithm.Validate(updated) is var problem && problem != HashParameterError.None)
+            {
+                error.Text = Loc.Get("Hash_ParameterError_" + problem);
+                error.Visibility = Visibility.Visible;
+                return;
+            }
+
+            ViewModel.SetParameters(algorithm.Id, updated);
             flyout.Hide();
         };
         panel.Children.Add(apply);
         flyout.ShowAt(anchor, new FlyoutShowOptions { Placement = FlyoutPlacementMode.Bottom });
+    }
+
+    // ---- 除外範囲 (ANA-18 の仕様 2) ----
+
+    private void ExclusionAdd_Click(object sender, RoutedEventArgs e) => ViewModel.AddExclusion("0", "1");
+
+    private void ExclusionAddSelection_Click(object sender, RoutedEventArgs e) => ViewModel.AddSelectionExclusion();
+
+    private void ExclusionRemove_Click(object sender, RoutedEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.Tag is HashExclusionViewModel item)
+        {
+            ViewModel.RemoveExclusion(item);
+        }
+    }
+
+    private void AddUnreadable_Click(object sender, RoutedEventArgs e) => ViewModel.AddUnreadableExclusion();
+
+    // ---- 一致するアルゴリズムを探す、カーソル位置に書き込む、カスタム CRC ----
+
+    private async void FindAlgorithm_Click(object sender, RoutedEventArgs e) => await ViewModel.FindMatchingAlgorithmsAsync();
+
+    private async void WriteAtCursor_Click(object sender, RoutedEventArgs e)
+    {
+        if (RowOf(sender) is { } row && ViewModel.WriteAtCursor is { } write)
+        {
+            await write(row);
+        }
+    }
+
+    private async void CustomCrcAdd_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.AddCustomCrc is { } add)
+        {
+            await add();
+        }
+    }
+
+    private async void CustomCrcExport_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.ExportCustomCrc is { } export)
+        {
+            await export();
+        }
+    }
+
+    private async void CustomCrcImport_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.ImportCustomCrc is { } import)
+        {
+            await import();
+        }
+    }
+
+    /// <summary>「削除」のサブメニューに、定義したカスタム CRC を並べる。</summary>
+    private void CustomCrcMenu_Opening(object? sender, object e)
+    {
+        CustomCrcDeleteMenu.Items.Clear();
+        foreach (HashAlgorithmInfo custom in HashCatalog.Custom)
+        {
+            var item = new MenuFlyoutItem { Text = custom.Name, Tag = custom.Name };
+            AutomationProperties.SetAutomationId(item, "Hash_CustomCrcDelete_" + custom.Name);
+            item.Click += (_, _) => ViewModel.RemoveCustomCrc?.Invoke(custom.Name);
+            CustomCrcDeleteMenu.Items.Add(item);
+        }
+
+        CustomCrcDeleteMenu.IsEnabled = HashCatalog.Custom.Count > 0;
     }
 }

@@ -364,11 +364,29 @@ public static class BuiltInCommands
         new("view.syncKeepDifference", "view") { Condition = "documentOpen" },
         new("view.syncToggle", "view") { Condition = "documentOpen" },
         new("view.syncDifferences", "view") { Condition = "documentOpen" },
+        // ---- データ (EDIT-31〜EDIT-39)。ショートカットは既定なし ----
+        new("data.operation", "data") { Condition = "documentOpen && !readOnly" },
+        new("data.repeatOperation", "data") { Condition = "documentOpen && !readOnly" },
+
+        // コマンドパレット「データ演算: <演算名>」(EDIT-31 の「呼び出し」)。ID は data.op.<演算名の先頭を小文字にしたもの>。
+        .. Enum.GetValues<Editing.Transforms.DataOperationKind>().Select(k =>
+            new CommandDefinition("data.op." + char.ToLowerInvariant(k.ToString()[0]) + k.ToString()[1..], "dataOperation")
+            {
+                Condition = "documentOpen && !readOnly",
+            }),
+        new("data.convertEncoding", "data") { Condition = "documentOpen && !readOnly" },
+        new("data.case.upper", "data") { Condition = "documentOpen && !readOnly" },
+        new("data.case.lower", "data") { Condition = "documentOpen && !readOnly" },
+        new("data.case.swap", "data") { Condition = "documentOpen && !readOnly" },
+
+        // 変換方法ごとのコマンド (EDIT-39 の「画面」)。
+        .. new[] { "upper", "lower", "swap" }.SelectMany(op => new[] { "ascii", "text" }.Select(method =>
+            new CommandDefinition($"data.case.{op}.{method}", "data") { Condition = "documentOpen && !readOnly" })),
 
         // ---- 解析 ----
         new("analysis.hash", "analysis") { Condition = "documentOpen" },
 
-        // ハッシュパネルの照合とコピー (ANA-21、ANA-22 の「呼び出し」)。「一致するアルゴリズムを探す」と「カーソル位置に書き込む」はフェーズ 2 (F2-14)。
+        // ハッシュパネルの照合とコピー (ANA-21、ANA-22 の「呼び出し」)。
         new("analysis.hash.verify", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.verifyFile", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.copy", "analysis") { Condition = "documentOpen" },
@@ -400,6 +418,10 @@ public static class BuiltInCommands
         new("analysis.fileType", "analysis") { Condition = "documentOpen" },
         new("analysis.fileType.here", "analysis") { Condition = "documentOpen" },
         new("analysis.fileType.embedded", "analysis") { Condition = "documentOpen" },
+        // カスタム CRC (ANA-20)、一致するアルゴリズムを探す (ANA-21 の仕様 5)、カーソル位置に書き込む (ANA-22 の仕様 3)。
+        new("analysis.hash.customCrc", "analysis"),
+        new("analysis.hash.findAlgorithm", "analysis") { Condition = "documentOpen" },
+        new("analysis.hash.writeAtCursor", "analysis") { Condition = "documentOpen && !readOnly" },
 
         // ---- データインスペクタ (INSP-02 の「呼び出し」: インスペクタ: エンディアンの切り替え) ----
         new("inspector.toggleEndian", "inspector") { Condition = "documentOpen" },

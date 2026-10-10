@@ -36,7 +36,7 @@ public static class HashBytes
 }
 
 /// <summary>
-/// 加算 8 / 16 / 32 bit (バイト単位) のチェックサム (ANA-19 の仕様 1)。各バイトを符号なしで足し、幅で切り捨てる。
+/// 加算 8 / 16 / 32 / 64 bit (バイト単位) のチェックサム (ANA-19 の仕様 1)。各バイトを符号なしで足し、幅で切り捨てる。
 /// </summary>
 public sealed class ByteSumHasher(int bits, HashComplement complement) : IHasher
 {

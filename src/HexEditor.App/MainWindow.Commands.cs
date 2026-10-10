@@ -152,6 +152,7 @@ public sealed partial class MainWindow
         RegisterEditCommands();
         RegisterSelectionCommands();
         RegisterUserClipboardCommands();
+        RegisterDataCommands();
 
         // ---- 検索・移動 ----
         Commands.Register("search.find", () => Find_Click(this, e), NeedsDocument);

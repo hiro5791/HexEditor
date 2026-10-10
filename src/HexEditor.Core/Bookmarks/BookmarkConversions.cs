@@ -9,46 +9,24 @@ public readonly record struct SelectedRange(long Start, long Length)
 }
 
 /// <summary>
-/// マルチ選択 (EDIT-07、F2-12) と矩形選択 (F2-15) の選択範囲を読み書きする口 (INSP-28 との境目)。選択範囲の担当が実装し、
-/// <see cref="MultiSelectionBridge.Provider"/> に登録する。矩形選択は行ごとの範囲を返す (INSP-28 の仕様 3)。
-/// </summary>
-public interface IMultiSelectionSource
-{
-    /// <summary>今の選択範囲 (開始位置の順。選択がなければ空)。</summary>
-    IReadOnlyList<SelectedRange> Ranges { get; }
-
-    /// <summary>選択範囲を置き換える (2 つ以上ならマルチ選択にする)。</summary>
-    void SetRanges(IReadOnlyList<SelectedRange> ranges);
-}
-
-/// <summary>
-/// エディタの選択範囲 (マルチ選択を含む) の取得と設定 (INSP-28)。マルチ選択の実装 (<see cref="Provider"/>) がなければ、
-/// <see cref="EditorState"/> の 1 つの選択範囲を使う (2 つ以上を設定すると最初の範囲だけを選ぶ)。
+/// エディタの選択範囲 (マルチ選択・矩形選択を含む。EDIT-07) の取得と設定 (INSP-28)。矩形選択は行ごとの範囲を返す (INSP-28 の仕様 3)。
 /// </summary>
 public static class MultiSelectionBridge
 {
-    /// <summary>エディタのマルチ選択を返す関数 (選択範囲の担当が起動時に設定する)。null ならエディタの 1 つの選択範囲を使う。</summary>
-    public static Func<EditorState, IMultiSelectionSource?>? Provider { get; set; }
+    /// <summary>今の選択範囲 (開始位置の順。長さ 0 の要素は含めない。選択がなければ空)。</summary>
+    public static IReadOnlyList<SelectedRange> RangesOf(EditorState editor) =>
+        [.. editor.SelectedRanges.Where(r => r.Length > 0).Select(r => new SelectedRange(r.Start, r.Length))];
 
-    public static IReadOnlyList<SelectedRange> RangesOf(EditorState editor)
-    {
-        if (Provider?.Invoke(editor) is { } multi && multi.Ranges.Count > 0)
-        {
-            return multi.Ranges;
-        }
-
-        return editor.HasSelection ? [new SelectedRange(editor.SelectionStart, editor.SelectionLength)] : [];
-    }
-
+    /// <summary>選択範囲を置き換える (2 つ以上ならマルチ選択にする)。</summary>
     public static void Select(EditorState editor, IReadOnlyList<SelectedRange> ranges)
     {
-        if (Provider?.Invoke(editor) is { } multi)
-        {
-            multi.SetRanges(ranges);
-        }
-        else if (ranges.Count > 0)
+        if (ranges.Count == 1)
         {
             editor.Select(ranges[0].Start, ranges[0].Length);
+        }
+        else if (ranges.Count > 1)
+        {
+            editor.SetSelections(ranges.Select(r => new Selection.ByteRange(r.Start, r.Length)));
         }
     }
 }

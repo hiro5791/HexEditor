@@ -295,6 +295,18 @@
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />
                         </MenuFlyoutSubItem>
                     </MenuBarItem>
+                    <!--  データ (EDIT-31〜EDIT-39)  -->
+                    <MenuBarItem x:Uid="Menu_Data">
+                        <MenuFlyoutItem x:Uid="Menu_Data_Operation" cmd:CommandUi.Id="data.operation" AutomationProperties.AutomationId="Command_DataOperation" />
+                        <MenuFlyoutItem x:Uid="Menu_Data_RepeatOperation" cmd:CommandUi.Id="data.repeatOperation" AutomationProperties.AutomationId="Command_RepeatDataOperation" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Data_ConvertEncoding" cmd:CommandUi.Id="data.convertEncoding" AutomationProperties.AutomationId="Command_ConvertEncoding" />
+                        <MenuFlyoutSubItem x:Uid="Menu_Data_Case" AutomationProperties.AutomationId="Command_CaseConversion">
+                            <MenuFlyoutItem x:Uid="Menu_Data_CaseUpper" cmd:CommandUi.Id="data.case.upper" AutomationProperties.AutomationId="Command_CaseUpper" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_CaseLower" cmd:CommandUi.Id="data.case.lower" AutomationProperties.AutomationId="Command_CaseLower" />
+                            <MenuFlyoutItem x:Uid="Menu_Data_CaseSwap" cmd:CommandUi.Id="data.case.swap" AutomationProperties.AutomationId="Command_CaseSwap" />
+                        </MenuFlyoutSubItem>
+                    </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Analysis">
                         <!--  比較 (ANA-01、ANA-08)  -->
                         <MenuFlyoutSubItem x:Uid="Menu_Analysis_Compare" AutomationProperties.AutomationId="Command_CompareMenu">
@@ -305,6 +317,7 @@
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Statistics" cmd:CommandUi.Id="analysis.statistics" AutomationProperties.AutomationId="Command_Statistics" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Classify" cmd:CommandUi.Id="analysis.classify" AutomationProperties.AutomationId="Command_Classify" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_FileType" cmd:CommandUi.Id="analysis.fileType" AutomationProperties.AutomationId="Command_FileType" />
+                        <MenuFlyoutItem x:Uid="Menu_Analysis_CustomCrc" cmd:CommandUi.Id="analysis.hash.customCrc" AutomationProperties.AutomationId="Command_CustomCrc" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Tools">
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />

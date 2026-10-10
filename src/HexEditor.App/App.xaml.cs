@@ -131,6 +131,7 @@ public partial class App : Application
         // パネル (UI-05) の登録。ウィンドウを作る前に行う。
         MainWindow.RegisterHashPanel();
         MainWindow.RegisterStatisticsPanels(env.Locations.Settings);
+        MainWindow.LoadCustomCrcs();
         MainWindow.RegisterAnnotationPanels();
         MainWindow.RegisterSearchResultsPanel();
         MainWindow.RegisterSelectionPanels();

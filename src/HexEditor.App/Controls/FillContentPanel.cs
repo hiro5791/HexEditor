@@ -16,9 +16,10 @@ namespace HexEditor.App.Controls;
 /// </summary>
 internal sealed class FillContentPanel : StackPanel
 {
-    private static readonly FillKind[] Kinds =
+    private static readonly FillKind[] AllKinds =
         [FillKind.Byte, FillKind.HexPattern, FillKind.Text, FillKind.Random, FillKind.CryptoRandom, FillKind.Counter, FillKind.File, FillKind.Clipboard];
 
+    private readonly FillKind[] _kinds;
     private readonly EditorState _editor;
     private readonly string _settingsKey;
     private readonly ComboBox _kind;
@@ -33,12 +34,14 @@ internal sealed class FillContentPanel : StackPanel
     /// <param name="editor">文字コード・入力式の名前に使う。</param>
     /// <param name="settingsKey">記憶に使う設定のキー (塗りつぶしと挿入で別に覚える)。</param>
     /// <param name="allowRepeatOptions">繰り返しと起点の設定を出すか (塗りつぶしだけ)。</param>
-    public FillContentPanel(EditorState editor, string settingsKey, bool allowRepeatOptions)
+    /// <param name="kinds">選べる種類 (null ならすべて。データ演算の鍵は Hex・テキスト・ファイル・クリップボード)。</param>
+    public FillContentPanel(EditorState editor, string settingsKey, bool allowRepeatOptions, IReadOnlyList<FillKind>? kinds = null)
     {
+        _kinds = kinds is null ? AllKinds : [.. kinds];
         _editor = editor;
         _settingsKey = settingsKey;
         Spacing = 8;
-        _kind = DialogParts.Combo("Fill_Kind", Loc.Get("Fill_Kind"), Kinds.Select(k => Loc.Get("Fill_Kind_" + k)), 0);
+        _kind = DialogParts.Combo("Fill_Kind", Loc.Get("Fill_Kind"), _kinds.Select(k => Loc.Get("Fill_Kind_" + k)), 0);
         Children.Add(_kind);
 
         _value = DialogParts.Field("Fill_Value", Loc.Get("Fill_Value"), "00");
@@ -123,7 +126,7 @@ internal sealed class FillContentPanel : StackPanel
     /// <summary>入力が変わった。</summary>
     public event EventHandler? Changed;
 
-    public FillKind Kind => Kinds[Math.Max(0, _kind.SelectedIndex)];
+    public FillKind Kind => _kinds[Math.Max(0, _kind.SelectedIndex)];
 
     /// <summary>ファイルの内容を選んだ場合のパス (ダイアログがファイルを選ぶため)。</summary>
     public string FilePath
@@ -295,7 +298,7 @@ internal sealed class FillContentPanel : StackPanel
             Dictionary<string, string> state = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? [];
             string Get(string key, string fallback) => state.TryGetValue(key, out string? v) ? v : fallback;
             int Index(string key) => int.TryParse(Get(key, "0"), out int i) ? i : 0;
-            _kind.SelectedIndex = Math.Max(0, Array.IndexOf(Kinds, Enum.TryParse(Get("kind", "Byte"), out FillKind k) ? k : FillKind.Byte));
+            _kind.SelectedIndex = Math.Max(0, Array.IndexOf(_kinds, Enum.TryParse(Get("kind", "Byte"), out FillKind k) ? k : _kinds[0]));
             _value.Text = Get("value", _value.Text);
             _pattern.Text = Get("pattern", _pattern.Text);
             _text.Text = Get("text", _text.Text);

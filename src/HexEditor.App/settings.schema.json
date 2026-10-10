@@ -168,6 +168,15 @@
       ],
       "default": "moveCursor"
     },
+    "edit.caseConversion": {
+      "description": "Case conversion method",
+      "type": "string",
+      "enum": [
+        "ascii",
+        "encoding"
+      ],
+      "default": "ascii"
+    },
     "edit.defaultInputMode": {
       "description": "Input mode for newly opened files",
       "type": "string",
@@ -276,6 +285,11 @@
       "description": "Recalculate hashes automatically",
       "type": "boolean",
       "default": true
+    },
+    "hash.customCrc": {
+      "description": "Custom CRCs",
+      "type": "string",
+      "default": ""
     },
     "hash.sets": {
       "description": "Hash algorithm sets",

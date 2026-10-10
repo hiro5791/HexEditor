@@ -52,24 +52,63 @@ public sealed partial class HashAlgorithmItem(HashAlgorithmInfo info) : Observab
 public sealed record HashAlgorithmGroupViewModel(string Title, string Key, IReadOnlyList<HashAlgorithmItem> Items);
 
 /// <summary>結果の表の 1 行 (ANA-18 の仕様 5、ANA-21 の仕様 6)。</summary>
-public sealed partial class HashRowViewModel(HashResultRow row) : ObservableObject
+/// <param name="rangeIndex">「範囲ごとに値を求める」の範囲の番号 (0 始まり。連結・単一の範囲なら -1。ANA-18 の仕様 1)。</param>
+/// <param name="error">パラメータが不正で計算しなかった理由 (ANA-18 の「エラー」。その行だけ計算しない)。</param>
+public sealed partial class HashRowViewModel(HashResultRow row, int rangeIndex = -1, string? error = null) : ObservableObject
 {
     public HashResultRow Row { get; } = row;
 
-    public string Id => Row.Algorithm.Id;
+    /// <summary>行の識別子 (AutomationId に使う。範囲ごとの行は <c>crc32@2</c> のように範囲の番号を付ける)。</summary>
+    public string Id => rangeIndex < 0 ? Row.Algorithm.Id : $"{Row.Algorithm.Id}@{rangeIndex + 1}";
+
+    /// <summary>アルゴリズムの ID。</summary>
+    public string AlgorithmId => Row.Algorithm.Id;
 
     public string Name => (Row.Algorithm.Parameters == HashParameterKinds.None
         ? HashPanelViewModel.LocalizedName(Row.Algorithm)
         : Row.Choice.DisplayName.Replace(Row.Algorithm.Name, HashPanelViewModel.LocalizedName(Row.Algorithm), StringComparison.Ordinal))
-        + (RangeLabel.Length > 0 ? " [" + RangeLabel + "]" : string.Empty);
+        + (rangeIndex >= 0 && Row.Ranges.Count > 0 ? $" [0x{Row.Ranges[0].Offset:X}–0x{Row.Ranges[0].End - 1:X}]" : string.Empty);
 
-    /// <summary>「範囲ごとに値を求める」(ANA-18 の仕様 1) のときの、行の範囲 (開始–終了)。それ以外は空。</summary>
-    public string RangeLabel { get; init; } = string.Empty;
+    public string BitsText => Loc.Format("Hash_Bits", Row.Algorithm.BitsFor(Row.Choice.Parameters));
 
-    public string BitsText => Loc.Format("Hash_Bits", Row.Algorithm.Bits);
+    /// <summary>パラメータが不正で計算しなかった (行を赤枠にする)。</summary>
+    public bool IsInvalid => error is not null;
 
-    /// <summary>安全でないことの注記 (MD5、SHA-1)。</summary>
-    public string Note => Row.Algorithm.IsInsecure ? Loc.Get("Hash_Insecure") : string.Empty;
+    /// <summary>
+    /// 行の注記: 安全でないこと (MD5、SHA-1 など)、遅いアルゴリズム (全体の速度がこのアルゴリズムで決まる。ANA-18 の「巨大ファイル」)、
+    /// 符号ありの合計の符号付き 10 進 (ANA-19 の仕様 1)、パラメータの誤り。
+    /// </summary>
+    public string Note
+    {
+        get
+        {
+            var parts = new List<string>();
+            if (error is not null)
+            {
+                parts.Add(error);
+            }
+
+            if (Row.Algorithm.IsInsecure)
+            {
+                parts.Add(Loc.Get("Hash_Insecure"));
+            }
+
+            if (Row.Algorithm.IsSlow)
+            {
+                parts.Add(Loc.Get("Hash_Slow"));
+            }
+
+            if (error is null && Row.Choice.Parameters.Signed && Row.Algorithm.Parameters.HasFlag(HashParameterKinds.Signed) && Row.Value.Length is > 0 and <= 8)
+            {
+                int bits = Row.Value.Length * 8;
+                ulong raw = HashBytes.ToNumber(Row.Value);
+                long signedValue = bits == 64 ? (long)raw : (long)(raw << (64 - bits)) >> (64 - bits);
+                parts.Add(Loc.Format("Hash_SignedValue", signedValue.ToString(CultureInfo.CurrentCulture)));
+            }
+
+            return string.Join(" ", parts);
+        }
+    }
 
     public bool HasParameters => Row.Algorithm.Parameters != HashParameterKinds.None;
 
@@ -121,6 +160,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
     public static readonly TimeSpan AutoDelay = TimeSpan.FromMilliseconds(300);
 
     private readonly OperationCenter _operations;
+    private IReadOnlyList<HashRange> _lastExclusions = [];
     private readonly SettingsStore? _settings;
     private readonly DispatcherQueue? _queue;
     private readonly DispatcherQueueTimer? _timer;
@@ -150,24 +190,174 @@ public sealed partial class HashPanelViewModel : ObservableObject
             _timer.Tick += (_, _) => OnAutoTimer();
         }
 
-        foreach (HashAlgorithmInfo info in HashCatalog.All)
-        {
-            var item = new HashAlgorithmItem(info);
-            item.PropertyChanged += (_, e) =>
-            {
-                if (e.PropertyName is nameof(HashAlgorithmItem.IsChecked) or nameof(HashAlgorithmItem.Parameters) && !_applyingSet)
-                {
-                    SaveSelection();
-                }
-            };
-            Algorithms.Add(item);
-        }
-
+        RebuildAlgorithms();
+        HashCatalog.CustomChanged += Catalog_CustomChanged;
         AutoRecompute = _settings?.GetBool(AutoKey, true) ?? true;
         UserSets = [.. HashSelection.DeserializeSets(_settings?.GetString(SetsKey, string.Empty))];
         IReadOnlyList<HashAlgorithmChoice> saved = HashSelection.Deserialize(_settings?.GetString(AlgorithmsKey, string.Empty));
         ApplyChoices(saved.Count > 0 ? saved : [.. HashCatalog.DefaultSet.AlgorithmIds.Select(id => new HashAlgorithmChoice(HashCatalog.Get(id)))]);
         RebuildSetNames();
+    }
+
+    /// <summary>
+    /// アルゴリズムの一覧を作り直す (カスタム CRC の追加・削除。ANA-20)。選んでいたアルゴリズムとパラメータは引き継ぐ。
+    /// </summary>
+    private void RebuildAlgorithms()
+    {
+        Dictionary<string, (bool Checked, HashParameters Parameters)> previous = Algorithms.ToDictionary(a => a.Id, a => (a.IsChecked, a.Parameters));
+        bool first = Algorithms.Count == 0;
+        _applyingSet = true;
+        try
+        {
+            Algorithms.Clear();
+            foreach (HashAlgorithmInfo info in HashCatalog.All)
+            {
+                var item = new HashAlgorithmItem(info);
+                if (previous.TryGetValue(info.Id, out var state))
+                {
+                    item.IsChecked = state.Checked;
+                    item.Parameters = state.Parameters;
+                }
+
+                item.IsVisible = info.MatchesFilter(Filter);
+                item.PropertyChanged += (_, e) =>
+                {
+                    if (e.PropertyName is nameof(HashAlgorithmItem.IsChecked) or nameof(HashAlgorithmItem.Parameters) && !_applyingSet)
+                    {
+                        SaveSelection();
+                    }
+                };
+                Algorithms.Add(item);
+            }
+        }
+        finally
+        {
+            _applyingSet = false;
+        }
+
+        _groups = null;
+        if (!first)
+        {
+            OnPropertyChanged(nameof(Groups));
+        }
+    }
+
+    private void Catalog_CustomChanged(object? sender, EventArgs e)
+    {
+        if (_queue is { HasThreadAccess: false } queue)
+        {
+            queue.TryEnqueue(RebuildAlgorithms);
+            return;
+        }
+
+        RebuildAlgorithms();
+    }
+
+    /// <summary>除外範囲 (ANA-18 の仕様 2)。</summary>
+    public ObservableCollection<HashExclusionViewModel> Exclusions { get; } = [];
+
+    /// <summary>除外の方法 (0: 飛ばす、1: 置き換える)。</summary>
+    [ObservableProperty]
+    public partial int ExclusionModeIndex { get; set; }
+
+    /// <summary>「置き換える」で使う値 (既定 0x00)。</summary>
+    [ObservableProperty]
+    public partial string ReplacementText { get; set; } = "00";
+
+    [ObservableProperty]
+    public partial bool IsReplacementError { get; set; }
+
+    /// <summary>マルチ選択の計算方法 (0: 連結して 1 つの値、1: 範囲ごと。ANA-18 の仕様 1)。</summary>
+    [ObservableProperty]
+    public partial int RangeModeIndex { get; set; }
+
+    /// <summary>対象範囲が複数 (マルチ選択) か。計算方法の選択を表示する。</summary>
+    [ObservableProperty]
+    public partial bool IsMultiRange { get; set; }
+
+    /// <summary>読めない範囲 (「読めない範囲を除外範囲に追加」のボタンを出す。ANA-18 の「エラー」)。</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasUnreadable))]
+    public partial HashRange? Unreadable { get; set; }
+
+    public bool HasUnreadable => Unreadable is not null;
+
+    /// <summary>最後に計算したときの除外範囲 (書き込みの警告に使う。ANA-22 の仕様 4)。</summary>
+    public IReadOnlyList<HashRange> LastExclusions => _lastExclusions;
+
+    /// <summary>除外範囲を加える (開始と長さの入力式)。</summary>
+    public void AddExclusion(string start, string length)
+    {
+        Exclusions.Add(new HashExclusionViewModel(this) { StartText = start, LengthText = length });
+        RefreshExclusions();
+    }
+
+    /// <summary>「選択範囲を追加」。</summary>
+    public void AddSelectionExclusion()
+    {
+        if (_target is { } doc && doc.Editor.HasSelection)
+        {
+            AddExclusion($"0x{doc.Editor.SelectionStart:X}", $"0x{doc.Editor.SelectionLength:X}");
+        }
+    }
+
+    /// <summary>「読めない範囲を除外範囲に追加」(ANA-18 の「エラー」)。</summary>
+    public void AddUnreadableExclusion()
+    {
+        if (Unreadable is { } r)
+        {
+            AddExclusion($"0x{r.Offset:X}", $"0x{r.Length:X}");
+            Unreadable = null;
+        }
+    }
+
+    public void RemoveExclusion(HashExclusionViewModel item)
+    {
+        Exclusions.Remove(item);
+        RefreshExclusions();
+    }
+
+    /// <summary>除外範囲の入力を評価し、対象範囲の外の行に警告を付ける (計算では無視する)。</summary>
+    internal void RefreshExclusions()
+    {
+        IReadOnlyList<HashRange> targets = ResolveRanges() ?? [];
+        foreach (HashExclusionViewModel item in Exclusions)
+        {
+            item.Resolve(_target is { } doc ? new EditorExpressionContext(doc.Editor) : null, _target?.Document.Length ?? 0, targets);
+        }
+
+        IsReplacementError = !TryParseReplacement(out _);
+    }
+
+    private bool TryParseReplacement(out byte value)
+    {
+        value = 0;
+        if (_target is not { } doc)
+        {
+            return true;
+        }
+
+        if (!ExpressionEvaluator.TryEvaluate(ReplacementText, new EditorExpressionContext(doc.Editor), out long v, out _) || v is < 0 or > 255)
+        {
+            return false;
+        }
+
+        value = (byte)v;
+        return true;
+    }
+
+    /// <summary>対象範囲を選び直す (マルチ選択が変わったとき)。</summary>
+    public void RefreshTarget() => UpdateTarget(scheduleAuto: true);
+
+    partial void OnExclusionModeIndexChanged(int value) => RefreshExclusions();
+
+    partial void OnReplacementTextChanged(string value) => RefreshExclusions();
+
+    partial void OnRangeModeIndexChanged(int value)
+    {
+        // 計算方法を変えたら、同じ範囲でも計算し直す。
+        _requestedRanges = [];
+        UpdateTarget(scheduleAuto: true);
     }
 
     /// <summary>テキストをクリップボードに入れる (アプリのクリップボードの抽象。テストでは代わりのもの)。</summary>
@@ -201,14 +391,6 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     [ObservableProperty]
     public partial HashTargetKind TargetKind { get; set; }
-
-    /// <summary>マルチ選択の計算方法 (ANA-18 の仕様 1。既定は連結して 1 つの値)。</summary>
-    [ObservableProperty]
-    public partial HashRangeMode RangeMode { get; set; }
-
-    /// <summary>対象の選択がマルチ選択・矩形選択か (計算方法の選択を出す)。</summary>
-    [ObservableProperty]
-    public partial bool HasMultipleRanges { get; set; }
 
     [ObservableProperty]
     public partial string CustomStart { get; set; } = "0";
@@ -336,7 +518,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
     /// <summary>アルゴリズムの表示名 (チェックサムは訳す。それ以外はアルゴリズムの名前のまま)。</summary>
     public static string LocalizedName(HashAlgorithmInfo info) =>
-        info.Group == HashGroup.Checksum ? Loc.Get("Hash_Alg_" + info.Id) : info.Name;
+        info.Group == HashGroup.Checksum ? Loc.TryGet("Hash_Alg_" + info.Id) ?? info.Name : info.Name;
 
     /// <summary>これより要素の多いマルチ選択は、選択が変わるたびに要素を並べない (自動で計算しない)。</summary>
     private const long AutoRangeLimit = 100_000;
@@ -389,13 +571,6 @@ public sealed partial class HashPanelViewModel : ObservableObject
     }
 
     partial void OnTargetKindChanged(HashTargetKind value) => UpdateTarget(scheduleAuto: true);
-
-    partial void OnRangeModeChanged(HashRangeMode value)
-    {
-        // 計算方法を変えたら、同じ範囲でも計算し直す。
-        _requestedRanges = [];
-        UpdateTarget(scheduleAuto: true);
-    }
 
     partial void OnCustomStartChanged(string value) => UpdateTarget(scheduleAuto: true);
 
@@ -507,17 +682,33 @@ public sealed partial class HashPanelViewModel : ObservableObject
         _timer?.Stop();
         CancelComputation();
         IReadOnlyList<HashRange>? ranges = ResolveRanges();
-        HashAlgorithmChoice[] choices = [.. Algorithms.Where(a => a.IsChecked && a.IsAvailable).Select(a => a.Choice)];
-        if (ranges is null || choices.Length == 0)
+        HashAlgorithmChoice[] selected = [.. Algorithms.Where(a => a.IsChecked && a.IsAvailable).Select(a => a.Choice)];
+
+        // パラメータが不正な行は計算しない (ANA-18 の「エラー」)。
+        HashAlgorithmChoice[] choices = [.. selected.Where(c => c.Algorithm.Validate(c.Parameters) == HashParameterError.None)];
+        HashAlgorithmChoice[] invalid = [.. selected.Except(choices)];
+        RefreshExclusions();
+        if (ranges is null || selected.Length == 0 || IsReplacementError)
         {
-            StatusText = ranges is null ? Loc.Get("Hash_RangeInvalid") : Loc.Get("Hash_NoAlgorithm");
+            StatusText = ranges is null ? Loc.Get("Hash_RangeInvalid") : IsReplacementError ? Loc.Get("Hash_ReplacementInvalid") : Loc.Get("Hash_NoAlgorithm");
             return;
         }
 
+        TryParseReplacement(out byte replacement);
+        IReadOnlyList<HashRange> exclusions = [.. Exclusions.Where(x => x.Range is not null && !x.IsOutside).Select(x => x.Range!.Value)];
         DocumentSnapshot snapshot = doc.Document.Current;
         _requestedRanges = ranges;
-        bool perRange = RangeMode == HashRangeMode.PerRange && ranges.Count > 1;
-        var request = new HashRequest { Ranges = ranges, Algorithms = choices, RangeMode = perRange ? HashRangeMode.PerRange : HashRangeMode.Concatenate };
+        bool perRange = ranges.Count > 1 && RangeModeIndex == 1;
+        var request = new HashRequest
+        {
+            Ranges = ranges,
+            Algorithms = choices,
+            RangeMode = perRange ? HashRangeMode.PerRange : HashRangeMode.Concatenate,
+            Exclusions = exclusions,
+            ExclusionMode = ExclusionModeIndex == 1 ? HashExclusionMode.Replace : HashExclusionMode.Skip,
+            ReplacementValue = replacement,
+        };
+        Unreadable = null;
         long total = HashEngine.TotalBytes(snapshot, request);
         ComputeHighlighted = false;
         StatusText = string.Empty;
@@ -543,14 +734,17 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
             _computedSnapshot = snapshot;
             _lastRanges = result.Ranges;
+            _lastExclusions = exclusions;
             IsStale = !ReferenceEquals(doc.Document.Current, snapshot);
+            foreach (HashAlgorithmChoice c in invalid)
+            {
+                Rows.Add(new HashRowViewModel(new HashResultRow(c, [], ranges), error: Loc.Get("Hash_ParameterError_" + c.Algorithm.Validate(c.Parameters))));
+            }
+
             foreach (HashResultRow row in result.Rows)
             {
-                var vm = new HashRowViewModel(row)
-                {
-                    Value = Display.Display(row),
-                    RangeLabel = perRange && row.Ranges.Count == 1 ? Hex(row.Ranges[0].Offset) + "–" + Hex(row.Ranges[0].End - 1) : string.Empty,
-                };
+                int rangeIndex = perRange ? IndexOfRange(result.Ranges, row.Ranges) : -1;
+                var vm = new HashRowViewModel(row, rangeIndex) { Value = Display.Display(row) };
                 string key = row.Choice.DisplayName + "|" + string.Join(';', row.Ranges);
                 vm.IsChanged = _previous.TryGetValue(key, out byte[]? before) && !before.AsSpan().SequenceEqual(row.Value);
                 _previous[key] = row.Value;
@@ -570,6 +764,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
         catch (HashReadException e)
         {
             StatusText = Loc.Format("Hash_ReadError", "0x" + e.Range.Offset.ToString("X", CultureInfo.InvariantCulture));
+            Unreadable = new HashRange(e.Range.Offset, e.Range.Length);
         }
         finally
         {
@@ -580,6 +775,9 @@ public sealed partial class HashPanelViewModel : ObservableObject
             }
         }
     }
+
+    private static int IndexOfRange(IReadOnlyList<HashRange> all, IReadOnlyList<HashRange> rowRanges) =>
+        rowRanges.Count == 0 ? -1 : Math.Max(0, all.ToList().IndexOf(rowRanges[0]));
 
     [RelayCommand(CanExecute = nameof(IsComputing))]
     public void Cancel() => CancelComputation();
@@ -719,6 +917,95 @@ public sealed partial class HashPanelViewModel : ObservableObject
             : Loc.Format("Hash_VerifyResult", row.Name, row.MatchText);
     }
 
+    // ---- 一致するアルゴリズムを探す (ANA-21 の仕様 5) ----
+
+    /// <summary>「一致するアルゴリズムを探す」の結果の文。</summary>
+    [ObservableProperty]
+    public partial string FindResult { get; set; } = string.Empty;
+
+    /// <summary>対象が 1 MB を超えるときの確認 (所要時間の目安の秒数を渡す。null なら確認しない)。</summary>
+    public Func<long, Task<bool>>? ConfirmFind { get; set; }
+
+    /// <summary>この大きさを超える対象では、探す前に所要時間の目安を示して確認する。</summary>
+    public const long FindConfirmLimit = 1_000_000;
+
+    /// <summary>期待値の長さに合うすべてのアルゴリズムで計算し、一致したものを一覧にする (1 回の読み込み)。</summary>
+    public async Task FindMatchingAlgorithmsAsync()
+    {
+        if (_target is not { } doc)
+        {
+            return;
+        }
+
+        if (_expected is not { } expected)
+        {
+            FindResult = Loc.Get("Hash_FindNeedsExpected");
+            return;
+        }
+
+        RefreshExclusions();
+        if (ResolveRanges() is not { } ranges)
+        {
+            FindResult = Loc.Get("Hash_RangeInvalid");
+            return;
+        }
+
+        int candidates = AlgorithmFinder.Candidates(expected.Value.Length * 8).Count;
+        long total = ranges.Sum(r => r.Length);
+        if (total > FindConfirmLimit && ConfirmFind is { } confirm)
+        {
+            // 目安: 1 種類あたり 500 MB/s、最短 1 秒。
+            long seconds = Math.Max(1, (long)(total * (double)Math.Max(1, candidates) / 500_000_000));
+            if (!await confirm(seconds))
+            {
+                return;
+            }
+        }
+
+        TryParseReplacement(out byte replacement);
+        var target = new HashRequest
+        {
+            Ranges = ranges,
+            Algorithms = [],
+            Exclusions = [.. Exclusions.Where(x => x.Range is not null && !x.IsOutside).Select(x => x.Range!.Value)],
+            ExclusionMode = ExclusionModeIndex == 1 ? HashExclusionMode.Replace : HashExclusionMode.Skip,
+            ReplacementValue = replacement,
+        };
+        DocumentSnapshot snapshot = doc.Document.Current;
+        FindResult = Loc.Get("Hash_Finding");
+        try
+        {
+            AlgorithmSearchResult result = await _operations.RunAsync(Loc.Get("Operation_FindAlgorithm"), OperationKind.ReadOnly, doc.Document,
+                total, op => Task.FromResult(AlgorithmFinder.Find(snapshot, expected, target, op)));
+            FindResult = result.Matches.Count == 0
+                ? Loc.Format("Hash_FindNone", result.Tried)
+                : Loc.Format("Hash_FindFound", string.Join(", ", result.Matches.Select(m =>
+                    m.Match == HashMatch.MatchReversed ? Loc.Format("Hash_FindReversed", m.DisplayName) : m.DisplayName)), result.Tried);
+        }
+        catch (OperationCanceledException)
+        {
+            FindResult = Loc.Get("Hash_Cancelled");
+        }
+        catch (HashReadException e)
+        {
+            FindResult = Loc.Format("Hash_ReadError", "0x" + e.Range.Offset.ToString("X", CultureInfo.InvariantCulture));
+        }
+    }
+
+    // ---- カーソル位置に書き込む (ANA-22 の仕様 3・4)、カスタム CRC (ANA-20) ----
+
+    /// <summary>「カーソル位置に書き込む」(ウィンドウがダイアログを出して書き込む)。</summary>
+    public Func<HashRowViewModel, Task>? WriteAtCursor { get; set; }
+
+    /// <summary>カスタム CRC の追加・エクスポート・インポート・削除 (ウィンドウがダイアログ・ファイルの選択を出す)。</summary>
+    public Func<Task>? AddCustomCrc { get; set; }
+
+    public Func<Task>? ExportCustomCrc { get; set; }
+
+    public Func<Task>? ImportCustomCrc { get; set; }
+
+    public Action<string>? RemoveCustomCrc { get; set; }
+
     // ---- 内部 ----
 
     /// <summary>ドキュメントごとの結果の履歴 (ANA-18 の仕様 9)。</summary>
@@ -845,7 +1132,8 @@ public sealed partial class HashPanelViewModel : ObservableObject
         // 選択範囲の有無で既定を切り替える (0.1 の「既定になる条件」)。利用者が選んだ後は変えない。
         if (!_targetChosen && TargetKind != HashTargetKind.Custom)
         {
-            HashTargetKind auto = doc.Editor.HasSelection ? HashTargetKind.Selection : HashTargetKind.WholeDocument;
+            bool selected = doc.Editor.HasSelection || doc.Editor.HasMultipleRanges;
+            HashTargetKind auto = selected ? HashTargetKind.Selection : HashTargetKind.WholeDocument;
             if (TargetKind != auto)
             {
                 TargetKind = auto;
@@ -857,7 +1145,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
         // (要素は「計算」を押したときに作る)。
         if (TargetKind == HashTargetKind.Selection && doc.Editor.HasMultipleRanges && doc.Editor.SelectedRangeCount > AutoRangeLimit)
         {
-            HasMultipleRanges = true;
+            IsMultiRange = true;
             IsRangeError = false;
             RangeText = Loc.Format("Hash_Ranges", doc.Editor.SelectedRangeCount,
                 doc.Editor.SelectedByteCount.ToString("N0", CultureInfo.CurrentCulture));
@@ -875,7 +1163,8 @@ public sealed partial class HashPanelViewModel : ObservableObject
             return;
         }
 
-        HasMultipleRanges = TargetKind == HashTargetKind.Selection && doc.Editor.HasMultipleRanges;
+        IsMultiRange = ranges.Count > 1;
+        RefreshExclusions();
         HashRange r = ranges[0];
         RangeText = ranges.Count > 1
             ? Loc.Format("Hash_Ranges", ranges.Count, ranges.Sum(x => x.Length).ToString("N0", CultureInfo.CurrentCulture))
@@ -914,4 +1203,57 @@ public sealed partial class HashPanelViewModel : ObservableObject
     }
 
     private static string Hex(long value) => "0x" + value.ToString("X", CultureInfo.InvariantCulture);
+}
+
+/// <summary>除外範囲の一覧の 1 行 (ANA-18 の仕様 2)。開始と長さは入力式。</summary>
+public sealed partial class HashExclusionViewModel(HashPanelViewModel owner) : ObservableObject
+{
+    [ObservableProperty]
+    public partial string StartText { get; set; } = "0";
+
+    [ObservableProperty]
+    public partial string LengthText { get; set; } = "1";
+
+    /// <summary>評価した範囲 (入力が正しくなければ null)。</summary>
+    public HashRange? Range { get; private set; }
+
+    /// <summary>対象範囲の外にある (計算では無視する)。</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasWarning))]
+    public partial bool IsOutside { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasWarning))]
+    public partial bool IsInvalid { get; set; }
+
+    public bool HasWarning => IsOutside || IsInvalid;
+
+    /// <summary>警告の文言 (「対象範囲の外です」、入力の誤り)。</summary>
+    [ObservableProperty]
+    public partial string Warning { get; set; } = string.Empty;
+
+    /// <summary>範囲の表示 (例: <c>0x10–0x13 (4)</c>)。</summary>
+    [ObservableProperty]
+    public partial string RangeText { get; set; } = string.Empty;
+
+    partial void OnStartTextChanged(string value) => owner.RefreshExclusions();
+
+    partial void OnLengthTextChanged(string value) => owner.RefreshExclusions();
+
+    internal void Resolve(IExpressionContext? context, long documentLength, IReadOnlyList<HashRange> targets)
+    {
+        Range = null;
+        if (context is not null
+            && ExpressionEvaluator.TryEvaluate(StartText, context, out long start, out _)
+            && ExpressionEvaluator.TryEvaluate(LengthText, context, out long length, out _)
+            && start >= 0 && length > 0 && start <= documentLength)
+        {
+            Range = new HashRange(start, Math.Min(length, documentLength - start));
+        }
+
+        IsInvalid = Range is null;
+        IsOutside = Range is { } r && HashEngine.ExclusionsOutside(targets, [r]).Count > 0;
+        Warning = IsInvalid ? Loc.Get("Hash_ExclusionInvalid") : IsOutside ? Loc.Get("Hash_ExclusionOutside") : string.Empty;
+        RangeText = Range is { } x && x.Length > 0 ? $"0x{x.Offset:X}–0x{x.End - 1:X} ({x.Length.ToString("N0", CultureInfo.CurrentCulture)})" : string.Empty;
+    }
 }

@@ -228,7 +228,7 @@ public sealed class HashAlgorithmTests
         Assert.True(HashCatalog.Get("md5").IsInsecure);
         Assert.True(HashCatalog.Get("sha1").IsInsecure);
         Assert.False(HashCatalog.Get("sha256").IsInsecure);
-        Assert.Equal(SHA3_256.IsSupported, HashCatalog.Get("sha3-256").IsAvailable);
+        Assert.True(HashCatalog.Get("sha3-256").IsAvailable); // OS の SHA-3 が使えなくても代わりの実装で計算できる (ANA-19 の仕様 5)。
     }
 
     [Fact]

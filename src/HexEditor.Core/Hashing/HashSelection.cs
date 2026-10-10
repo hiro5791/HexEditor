@@ -63,6 +63,31 @@ public static class HashSelection
                 o["complement"] = c.Parameters.Complement.ToString().ToLowerInvariant();
             }
 
+            if (c.Parameters.BigEndian is bool be)
+            {
+                o["bigEndian"] = be;
+            }
+
+            if (c.Parameters.Signed)
+            {
+                o["signed"] = true;
+            }
+
+            if (c.Parameters.KeyHex is { Length: > 0 } key)
+            {
+                o["key"] = key;
+            }
+
+            if (c.Parameters.OutputBits != 0)
+            {
+                o["outputBits"] = c.Parameters.OutputBits;
+            }
+
+            if (c.Parameters.Ed2k != Ed2kMode.Blue)
+            {
+                o["ed2k"] = c.Parameters.Ed2k.ToString().ToLowerInvariant();
+            }
+
             return (JsonNode?)o;
         })]);
 
@@ -79,11 +104,29 @@ public static class HashSelection
             ulong seed = o["seed"] is JsonValue s && s.TryGetValue(out ulong v) ? v : 0;
             HashComplement complement = o["complement"] is JsonValue c && c.TryGetValue(out string? cs)
                 && Enum.TryParse(cs, ignoreCase: true, out HashComplement parsed) ? parsed : HashComplement.None;
-            result.Add(new HashAlgorithmChoice(algorithm, new HashParameters { Seed = seed, Complement = complement }));
+            bool? bigEndian = o["bigEndian"] is JsonValue b && b.TryGetValue(out bool bv) ? bv : null;
+            bool signed = o["signed"] is JsonValue sg && sg.TryGetValue(out bool sv) && sv;
+            string? key = o["key"] is JsonValue k && k.TryGetValue(out string? ks) && IsHex(ks) ? ks.ToUpperInvariant() : null;
+            int outputBits = o["outputBits"] is JsonValue ob && ob.TryGetValue(out int obv) ? obv : 0;
+            Ed2kMode ed2k = o["ed2k"] is JsonValue e && e.TryGetValue(out string? es)
+                && Enum.TryParse(es, ignoreCase: true, out Ed2kMode em) ? em : Ed2kMode.Blue;
+            result.Add(new HashAlgorithmChoice(algorithm, new HashParameters
+            {
+                Seed = seed,
+                Complement = complement,
+                BigEndian = bigEndian,
+                Signed = signed,
+                KeyHex = key,
+                OutputBits = outputBits,
+                Ed2k = ed2k,
+            }));
         }
 
         return result;
     }
+
+    private static bool IsHex(string? text) =>
+        text is { Length: > 0 } && text.Length % 2 == 0 && text.All(char.IsAsciiHexDigit);
 
     /// <summary>シードの入力 (10 進、または <c>0x</c> 付きの 16 進)。</summary>
     public static bool TryParseSeed(string text, out ulong seed)

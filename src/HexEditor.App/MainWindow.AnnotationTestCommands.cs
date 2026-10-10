@@ -1,5 +1,4 @@
 #if HEX_TEST_HOOKS
-using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
 using HexEditor.App.Controls;
 using HexEditor.App.Services;
@@ -11,31 +10,6 @@ using HexEditor.Core.View;
 using Windows.System;
 
 namespace HexEditor.App;
-
-/// <summary>
-/// マルチ選択の代わり (テスト用のビルドだけ)。選択範囲の担当のマルチ選択 (<see cref="MultiSelectionBridge.Provider"/>) がなければ入れる。
-/// 設定した範囲は、エディタの選択範囲が最初の範囲のままの間だけ有効。
-/// </summary>
-internal sealed class TestMultiSelection(EditorState editor) : IMultiSelectionSource
-{
-    private static readonly ConditionalWeakTable<EditorState, TestMultiSelection> Table = new();
-    private IReadOnlyList<SelectedRange> _ranges = [];
-
-    public static void InstallIfMissing() => MultiSelectionBridge.Provider ??= e => Table.GetValue(e, x => new TestMultiSelection(x));
-
-    public IReadOnlyList<SelectedRange> Ranges =>
-        _ranges.Count > 0 && editor.SelectionStart == _ranges[0].Start && editor.SelectionLength == _ranges[0].Length ? _ranges
-        : editor.HasSelection ? [new SelectedRange(editor.SelectionStart, editor.SelectionLength)] : [];
-
-    public void SetRanges(IReadOnlyList<SelectedRange> ranges)
-    {
-        _ranges = [.. ranges];
-        if (ranges.Count > 0)
-        {
-            editor.Select(ranges[0].Start, ranges[0].Length);
-        }
-    }
-}
 
 /// <summary>
 /// テスト用の命令の通り道の、注釈 (INSP-27〜INSP-34) の命令。
