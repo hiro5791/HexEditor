@@ -3395,6 +3395,7 @@ Details were written to:
   <data name="Cmd_view_syncDifferences" xml:space="preserve"><value>Highlight differences</value></data>
   <data name="CmdAlias_view_syncDifferences" xml:space="preserve"><value>sync compare</value></data>
   <data name="Operation_MinimapExact" xml:space="preserve"><value>Calculating the minimap</value></data>
+  <data name="Minimap_Mark_viewport" xml:space="preserve"><value>Visible range</value></data>
   <data name="Minimap_Mark_cursor" xml:space="preserve"><value>Cursor</value></data>
   <data name="Minimap_Mark_selection" xml:space="preserve"><value>Selection</value></data>
   <data name="Minimap_Mark_search" xml:space="preserve"><value>Search results</value></data>
@@ -5095,7 +5096,6 @@ Details were written to:
   <data name="Hash_Alg_xor32" xml:space="preserve"><value>XOR 32-bit</value></data>
   <data name="Hash_Alg_xor64" xml:space="preserve"><value>XOR 64-bit</value></data>
   <data name="Common_Open" xml:space="preserve"><value>Open</value></data>
-  <data name="Common_Go" xml:space="preserve"><value>Go</value></data>
   <data name="Common_Unknown" xml:space="preserve"><value>Unknown</value></data>
   <data name="Command_ProcessOnly" xml:space="preserve"><value>This command is only available for process memory.</value></data>
   <data name="Panel_MemoryMap_Title" xml:space="preserve"><value>Memory map</value></data>
@@ -5141,8 +5141,6 @@ Details were written to:
   <data name="ProcessWrite_Failed" xml:space="preserve"><value>{0} range(s) could not be written.</value></data>
   <data name="ProcessWrite_ImmediateOn" xml:space="preserve"><value>Immediate write is on.</value></data>
   <data name="ProcessWrite_ImmediateOff" xml:space="preserve"><value>Immediate write is off.</value></data>
-  <data name="GoToSector_Title" xml:space="preserve"><value>Go to sector</value></data>
-  <data name="GoToSector_Label" xml:space="preserve"><value>Sector number</value></data>
   <data name="AdminGuide_Title" xml:space="preserve"><value>Administrator rights are required</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>Reading a physical disk or an internal disk's volume directly requires Windows administrator rights.</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>This process requires administrator rights to open.</value></data>

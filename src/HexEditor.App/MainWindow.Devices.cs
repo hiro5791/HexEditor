@@ -32,7 +32,7 @@ public sealed partial class MainWindow
 
         Commands.Register("go.nextSector", () => Vm.Selected?.Editor.MoveNextSector(), NeedsDocument);
         Commands.Register("go.previousSector", () => Vm.Selected?.Editor.MovePreviousSector(), NeedsDocument);
-        Commands.Register("go.toSector", () => _ = GoToSectorAsync(), NeedsDocument);
+        Commands.Register("go.toSector", GoToSector, NeedsDocument);
         Commands.Register("go.nextMemoryRegion", () => Vm.Selected?.Editor.MoveNextRegion(),
             () => NeedsDocument(d => d.IsProcessMemory || d.Snapshot is not null ? null : Loc.Get("Command_ProcessOnly")));
         Commands.Register("go.previousMemoryRegion", () => Vm.Selected?.Editor.MovePreviousRegion(),
@@ -371,20 +371,8 @@ public sealed partial class MainWindow
         }
     }
 
-    private async Task GoToSectorAsync()
-    {
-        if (Vm.Selected is not { } doc)
-        {
-            return;
-        }
-
-        var box = new NumberBox { SpinButtonPlacementMode = NumberBoxSpinButtonPlacementMode.Hidden, Minimum = 0, SmallChange = 1, LargeChange = 16 };
-        AutomationProperties.SetName(box, Loc.Get("GoToSector_Label"));
-        if (await ConfirmAsync(Loc.Get("GoToSector_Title"), box, Loc.Get("Common_Go"), "GoToSectorDialog") && !double.IsNaN(box.Value))
-        {
-            doc.Editor.GoToSector((long)box.Value);
-        }
-    }
+    /// <summary>「セクタへ移動」: 移動バー (VIEW-29) を単位「セクタ」の状態で開く (VIEW-32 の仕様 4)。</summary>
+    private void GoToSector() => OpenGoToBar(Core.View.GoToUnit.Sectors);
 
     // ---- 補助プロセスの案内 (ENG-28 の仕様 12) ----
 

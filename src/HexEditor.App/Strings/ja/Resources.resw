@@ -3395,6 +3395,7 @@
   <data name="Cmd_view_syncDifferences" xml:space="preserve"><value>違いを強調</value></data>
   <data name="CmdAlias_view_syncDifferences" xml:space="preserve"><value>ちがいをきょうちょう</value></data>
   <data name="Operation_MinimapExact" xml:space="preserve"><value>ミニマップの計算</value></data>
+  <data name="Minimap_Mark_viewport" xml:space="preserve"><value>表示中の範囲</value></data>
   <data name="Minimap_Mark_cursor" xml:space="preserve"><value>カーソル</value></data>
   <data name="Minimap_Mark_selection" xml:space="preserve"><value>選択範囲</value></data>
   <data name="Minimap_Mark_search" xml:space="preserve"><value>検索結果</value></data>
@@ -5095,7 +5096,6 @@
   <data name="Hash_Alg_xor32" xml:space="preserve"><value>XOR 32 bit</value></data>
   <data name="Hash_Alg_xor64" xml:space="preserve"><value>XOR 64 bit</value></data>
   <data name="Common_Open" xml:space="preserve"><value>開く</value></data>
-  <data name="Common_Go" xml:space="preserve"><value>移動</value></data>
   <data name="Common_Unknown" xml:space="preserve"><value>不明</value></data>
   <data name="Command_ProcessOnly" xml:space="preserve"><value>このコマンドはプロセスメモリでのみ使えます。</value></data>
   <data name="Panel_MemoryMap_Title" xml:space="preserve"><value>メモリマップ</value></data>
@@ -5141,8 +5141,6 @@
   <data name="ProcessWrite_Failed" xml:space="preserve"><value>{0} か所の範囲を書き込めませんでした。</value></data>
   <data name="ProcessWrite_ImmediateOn" xml:space="preserve"><value>即時書き込みを有効にしました。</value></data>
   <data name="ProcessWrite_ImmediateOff" xml:space="preserve"><value>即時書き込みを無効にしました。</value></data>
-  <data name="GoToSector_Title" xml:space="preserve"><value>セクタへ移動</value></data>
-  <data name="GoToSector_Label" xml:space="preserve"><value>セクタ番号</value></data>
   <data name="AdminGuide_Title" xml:space="preserve"><value>管理者権限が必要です</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>物理ディスクや内蔵ディスクのボリュームを直接読むには、Windows の管理者権限が必要です。</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>このプロセスを開くには管理者権限が必要です。</value></data>

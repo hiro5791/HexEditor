@@ -54,6 +54,7 @@ public sealed partial class MainWindow : Window
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
         InitializeSearch();
         InitializeEditingSettings();
+        InitializeMinimapSettings();
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
         InitializeExternalChanges();
@@ -757,7 +758,10 @@ public sealed partial class MainWindow : Window
     /// <summary>選択中のタブの Hex ビューにフォーカスを戻す。</summary>
     private void FocusEditor() => _views.FirstOrDefault(v => v.Editor == Editor)?.Focus(FocusState.Programmatic);
 
-    private void GoTo_Click(object sender, RoutedEventArgs e)
+    private void GoTo_Click(object sender, RoutedEventArgs e) => OpenGoToBar();
+
+    /// <summary>移動バーを開く。<paramref name="unit"/> を指定するとその単位の状態で開く (「セクタへ移動」。VIEW-32 の仕様 4)。</summary>
+    private void OpenGoToBar(Core.View.GoToUnit? unit = null)
     {
         if (Editor is null)
         {
@@ -767,7 +771,7 @@ public sealed partial class MainWindow : Window
         // 移動バーは検索バーと同じ場所に出す (VIEW-29 の仕様 1)。
         FindBar.Visibility = Visibility.Collapsed;
         GoToBar.Editor = Editor;
-        GoToBar.Open();
+        GoToBar.Open(unit);
     }
 
     private void Bar_Closed(object? sender, EventArgs e) => FocusEditor();

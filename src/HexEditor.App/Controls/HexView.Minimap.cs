@@ -45,7 +45,7 @@ public sealed partial class HexView
         get => _minimapWidth;
         set
         {
-            _minimapWidth = Math.Clamp(value, 40, 200);
+            _minimapWidth = Math.Clamp(value, MinimapView.MinimumWidth, MinimapView.MaximumWidth);
             if (_minimap is not null)
             {
                 _minimap.Width = _minimapWidth;
@@ -63,11 +63,49 @@ public sealed partial class HexView
         _minimap.Range = range;
     }
 
-    /// <summary>表示しない印 (VIEW-35 の仕様 6。cursor / selection / search / bookmark / modified / difference)。</summary>
-    public IReadOnlySet<string> HiddenMinimapMarks { get; set; } = new HashSet<string>();
+    /// <summary>表示しない印 (VIEW-35 の仕様 6。viewport / cursor / selection / search / bookmark / modified / difference)。</summary>
+    public IReadOnlySet<string> HiddenMinimapMarks
+    {
+        get => _hiddenMinimapMarks;
+        set
+        {
+            _hiddenMinimapMarks = value;
+            if (_minimap is not null)
+            {
+                _minimap.ShowViewport = !value.Contains("viewport");
+            }
+        }
+    }
 
-    /// <summary>差分の範囲の提供元 (比較 ANA が設定する。[start, end) に重なる差分)。null なら差分の印はない。</summary>
-    public Func<IEnumerable<(long Offset, long Length)>>? MinimapDifferences { get; set; }
+    private IReadOnlySet<string> _hiddenMinimapMarks = new HashSet<string>();
+
+    /// <summary>
+    /// 差分の提供元 (比較 ANA が設定する。この側のオフセットと長さ、差分の種類)。null なら差分の印はない。削除はこの側では長さ 0 の位置。
+    /// </summary>
+    public Func<IEnumerable<(long Offset, long Length, Core.Compare.DiffKind Kind)>>? MinimapDifferences { get; set; }
+
+    /// <summary>設定「正確に計算」(VIEW-35 の仕様 5)。オンなら、新しく開いた・切り替えたドキュメントも正確に計算する。</summary>
+    public bool MinimapExact
+    {
+        get => _minimapExact;
+        set
+        {
+            _minimapExact = value;
+            if (_minimap is not null)
+            {
+                _minimap.ExactWanted = value;
+                _minimap.RequestExactIfNeeded();
+            }
+        }
+    }
+
+    private bool _minimapExact;
+
+    /// <summary>「正確に計算」を実行する (ウィンドウが処理センターで行う)。</summary>
+    public Action<MinimapView>? MinimapExactRunner { get; set; }
+
+    /// <summary>ミニマップの境界のドラッグで幅を変えた (VIEW-35 の仕様 1。ウィンドウが全ドキュメント共通の設定に保存する)。</summary>
+    public event EventHandler<double>? MinimapWidthCommitted;
 
     /// <summary>ミニマップの右クリックメニューの項目 (ウィンドウが作る)。</summary>
     public Action<HexView, MenuFlyout>? MinimapMenuOpening { get; set; }
@@ -79,7 +117,13 @@ public sealed partial class HexView
             return;
         }
 
-        _minimap = new MinimapView { Width = _minimapWidth, Visibility = Visibility.Collapsed };
+        _minimap = new MinimapView
+        {
+            Width = _minimapWidth,
+            Visibility = Visibility.Collapsed,
+            ShowViewport = !_hiddenMinimapMarks.Contains("viewport"),
+            ExactWanted = _minimapExact,
+        };
         Grid.SetRow(_minimap, 1);
         Grid.SetColumn(_minimap, 1);
         ((Grid)Content).Children.Add(_minimap);
@@ -88,6 +132,15 @@ public sealed partial class HexView
         _minimap.ByteTheme = _byteTheme;
         _minimap.MenuOpening = menu => MinimapMenuOpening?.Invoke(this, menu);
         _minimap.Navigated += (_, _) => Focus(FocusState.Programmatic);
+
+        // ホイールは Hex ビューと同じ縦スクロール (VIEW-35 の仕様 7。VIEW-28 の行数と蓄積)。
+        _minimap.Wheel = delta => Wheel(delta, horizontal: false, shift: false);
+        _minimap.WidthCommitted += (_, width) =>
+        {
+            _minimapWidth = Math.Clamp(width, MinimapView.MinimumWidth, MinimapView.MaximumWidth);
+            MinimapWidthCommitted?.Invoke(this, _minimapWidth);
+        };
+        _minimap.ExactNeeded += (sender, _) => MinimapExactRunner?.Invoke((MinimapView)sender!);
     }
 
     /// <summary>ミニマップの印の今の位置。</summary>

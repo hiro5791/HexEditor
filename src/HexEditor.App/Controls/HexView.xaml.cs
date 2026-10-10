@@ -1191,6 +1191,20 @@ public sealed partial class HexView : UserControl
                 return;
             }
 
+            if (_editor.PageScrollPosition is { } page)
+            {
+                // ページ単位で表示: スクロールバーは区切り単位で動き、区切りの行数が表示行数より多いときはその中でスクロールする
+                // (VIEW-33 の仕様 4)。位置の数が多いときは行と同じ換算 (VIEW-02 の仕様 2) を使う。
+                long pageScale = ScrollMapping.Scale(page.MaxPosition);
+                VerticalBar.Minimum = 0;
+                VerticalBar.Maximum = pageScale;
+                VerticalBar.SmallChange = 1;
+                VerticalBar.LargeChange = Math.Max(1, _editor.VisibleRows - 1);
+                VerticalBar.ViewportSize = pageScale == 0 ? 1 : Math.Max(1, (double)pageScale / Math.Max(1, page.Sections));
+                VerticalBar.Value = ScrollMapping.ToValue(page.Position, page.MaxPosition);
+                return;
+            }
+
             long maxTop = _editor.Layout.MaxTopRow(_editor.VisibleRows);
             long scale = ScrollMapping.Scale(maxTop);
             VerticalBar.Minimum = 0;

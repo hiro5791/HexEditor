@@ -157,6 +157,55 @@ public sealed partial class EditorState
     public (long First, long Last)? VisibleSectionRows => PageSection() is { } length ? SectionRows(length, _topRow) : null;
 
     /// <summary>
+    /// ページ単位で表示しているときの縦スクロールバーの位置 (VIEW-33 の仕様 4: スクロールバーは区切り単位で動き、1 区切りの行数が表示行数より
+    /// 多い場合はその中でスクロールする)。位置は「区切りの番号 × 区切りの中の一番上の行の候補の数 + 区切りの中のずれ」で、
+    /// <see cref="ScrollMapping"/> の行の代わりに使う。ページ単位で表示していなければ null。
+    /// </summary>
+    public (long MaxPosition, long Position, long Sections)? PageScrollPosition
+    {
+        get
+        {
+            if (PageSection() is not { } length)
+            {
+                return null;
+            }
+
+            (long perSection, long steps) = PageScrollSteps(length);
+            // 区切りの数は ⌈長さ ÷ 区切りの長さ⌉ (末尾の次の位置は最後の区切りに属する。仕様 6)。
+            long sections = Math.Max(1, Sections.Count);
+            (long first, _) = SectionRows(length, _topRow);
+            long position = first / perSection * steps + Math.Clamp(_topRow - first, 0, steps - 1);
+            long max = (long)Int128.Min((Int128)sections * steps - 1, long.MaxValue);
+            return (Math.Max(0, max), Math.Min(position, max), sections);
+        }
+    }
+
+    /// <summary>ページ単位の縦スクロールバーの位置 (<see cref="PageScrollPosition"/>) へスクロールする。カーソルは動かさない。</summary>
+    public void ScrollToPagePosition(long position)
+    {
+        if (PageSection() is not { } length)
+        {
+            return;
+        }
+
+        (long perSection, long steps) = PageScrollSteps(length);
+        position = Math.Max(0, position);
+        long section = position / steps;
+        long first = (long)Int128.Min((Int128)section * perSection, Layout.LastRow);
+        (first, long last) = SectionRows(length, first);
+        long top = Math.Clamp(first + position % steps, first, Math.Max(first, last - _visibleRows + 1));
+        SetTopRow(top, first);
+        RaiseChanged();
+    }
+
+    /// <summary>1 区切りの行数と、区切りの中の一番上の行の候補の数 (行数が表示行数以下なら 1)。</summary>
+    private (long PerSection, long Steps) PageScrollSteps(long sectionLength)
+    {
+        long perSection = Math.Max(1, sectionLength / BytesPerRow);
+        return (perSection, Math.Max(1, perSection - _visibleRows + 1));
+    }
+
+    /// <summary>
     /// ページ単位で表示しているときのスクロール (ホイール・Ctrl+↑↓)。区切りの端でさらにスクロールすると、隣の区切りへ移る (VIEW-33 の仕様 4)。
     /// </summary>
     private bool ScrollWithinSection(long rows)

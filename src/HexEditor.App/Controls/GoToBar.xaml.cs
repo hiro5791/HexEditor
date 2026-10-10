@@ -161,9 +161,17 @@ public sealed partial class GoToBar : UserControl
     /// <summary>移動バーを閉じた (エディタにフォーカスを戻すため)。</summary>
     public event EventHandler? Closed;
 
-    /// <summary>移動バーを開き、前回の入力を全選択した状態で入力欄にフォーカスを移す (VIEW-29 の仕様 1)。</summary>
-    public void Open()
+    /// <summary>
+    /// 移動バーを開き、前回の入力を全選択した状態で入力欄にフォーカスを移す (VIEW-29 の仕様 1)。<paramref name="unit"/> を指定すると、
+    /// その単位の状態で開く (「セクタへ移動」は単位「セクタ」。VIEW-32 の仕様 4)。
+    /// </summary>
+    public void Open(GoToUnit? unit = null)
     {
+        if (unit is { } u)
+        {
+            UnitChoice.SelectedIndex = (int)u;
+        }
+
         // ベースアドレスを設定しているときは「アドレスで指定」を出し、既定にする (VIEW-20 の仕様 4)。
         bool hasBase = Editor?.View.BaseAddress is > 0;
         if (hasBase && AddressChoice.Visibility != Visibility.Visible)
@@ -244,7 +252,16 @@ public sealed partial class GoToBar : UserControl
         }
 
         Remember(Input.Text.Trim());
-        Editor.GoTo(r.Offset, SelectChoice.IsChecked == true);
+        if (UnitChoice.SelectedIndex == (int)GoToUnit.Sectors && SelectChoice.IsChecked != true)
+        {
+            // セクタ単位の移動は、セクタの先頭行を画面の一番上に表示する (VIEW-32 の仕様 5、VIEW-34 の仕様 2)。
+            Editor.GoToSectorOffset(r.Offset);
+        }
+        else
+        {
+            Editor.GoTo(r.Offset, SelectChoice.IsChecked == true);
+        }
+
         return true;
     }
 

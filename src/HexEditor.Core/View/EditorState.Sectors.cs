@@ -14,6 +14,12 @@ public sealed partial class EditorState
     /// <summary>カーソルのあるセクタ番号 (ステータスバー。仕様 6)。</summary>
     public long CursorSector => SectorOf(Cursor, Document.Length, SectorSize);
 
+    /// <summary>
+    /// ステータスバーにセクタ番号を表示するか (仕様 6): ディスク・ボリュームでは常に、ファイルではオフセットの形式がセクタのとき、または
+    /// 区切り線がセクタのとき。区切り (VIEW-33 の仕様 6) の表示とは別に決める。
+    /// </summary>
+    public bool ShowsSectorInStatus => Document.Source.LogicalSectorSize > 1 || View.Radix == OffsetRadix.Sector || View.Separator == SeparatorKind.Sector;
+
     /// <summary>「次のセクタ」の移動先 (仕様 2)。動かない場合は null。</summary>
     public static long? NextSectorTarget(long cursor, long length, int sectorSize) => new SectionLayout(sectorSize, length).Next(cursor);
 
@@ -32,6 +38,11 @@ public sealed partial class EditorState
         long count = SectorCount(Document.Length, SectorSize);
         return sector >= 0 && sector < count && MoveToSector(sector * SectorSize);
     }
+
+    /// <summary>
+    /// 移動バーの単位「セクタ」で求めたオフセットへ移動する (仕様 4・5: セクタの先頭行を画面の一番上に表示し、ジャンプ履歴に記録する)。
+    /// </summary>
+    public bool GoToSectorOffset(long offset) => offset >= 0 && offset <= Layout.MaxCursor && MoveToSector(offset);
 
     private bool MoveToSector(long? target)
     {
