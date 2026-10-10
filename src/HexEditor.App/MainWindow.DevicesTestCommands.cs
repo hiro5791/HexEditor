@@ -108,7 +108,7 @@ public sealed partial class MainWindow
                 // メモリマップのパネルの「領域」タブ: 行の数と、1 ページ下へ (TC-ENG-33-03)。
                 if (FindElement("MemoryMapPanel") is not Panels.MemoryMapPanel panel)
                 {
-                    return new JsonObject { ["error"] = "no panel" };
+                    return new JsonObject { ["rows"] = 0, ["error"] = "no panel" };
                 }
 
                 if (request["action"]?.GetValue<string>() == "pageDown")
@@ -117,6 +117,19 @@ public sealed partial class MainWindow
                 }
 
                 return new JsonObject { ["rows"] = panel.RegionRowCount };
+            }
+
+            case "dismissNotice":
+            {
+                // 文言に match を含む通知を閉じる (InfoBar の閉じるボタンと同じ。TC-UI-34-06)。
+                string match = request["match"]!.GetValue<string>();
+                var notices = Vm.Notifications.Open.Where(n => n.Message.Contains(match, StringComparison.Ordinal)).ToList();
+                foreach (Core.Notifications.Notification n in notices)
+                {
+                    Vm.Notifications.Dismiss(n);
+                }
+
+                return new JsonObject { ["dismissed"] = notices.Count };
             }
 
             case "helperInfo":

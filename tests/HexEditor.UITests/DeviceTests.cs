@@ -104,6 +104,25 @@ public sealed class DeviceTests
     });
 
     [Fact]
+    [Trait("TC", "TC-ENG-14-02")]
+    public Task Allowing_writes_to_a_disk_asks_with_the_model_and_size_and_reopens_it_for_writing() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 偽のディスクで ENG-14 の仕様 3 の確認を確かめる (実際の物理ディスク (TD-VHDX-MBR) では PrivilegedTests が CI で確かめる)。
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx) });
+        await app.SendAsync("openDisk", new JsonObject { ["path"] = @"\\.\PhysicalDrive0" });
+        await app.WaitForTabsAsync(1);
+        Assert.True((await app.DocumentAsync())["readOnly"]!.GetValue<bool>());
+
+        await app.CommandAsync("Command_ReadOnly");
+        var confirm = await app.WaitForDialogAsync("ReadOnlyConfirmDialog");
+        await app.WaitForDialogTextAsync(confirm, "This allows writing to the device. Nothing is written until you save.", "Fake Disk", "64");
+        Assert.Equal(new[] { "Allow writing", "Cancel" }.Order(), UiHelpers.DialogButtons(confirm).Order());
+        await app.InvokeDialogButtonAsync("Allow writing");
+        await app.WaitUntilAsync(async () => !(await app.DocumentAsync())["readOnly"]!.GetValue<bool>(), TimeSpan.FromSeconds(10), "the read-only state to be released");
+        Assert.DoesNotContain(await app.NotificationsAsync(), n => n["severity"]!.GetValue<string>() == "Error");
+    });
+
+    [Fact]
     [Trait("TC", "TC-ENG-32-01")]
     public Task A_same_user_process_opens_without_a_helper() => UiTestContext.RunAsync(async ctx =>
     {

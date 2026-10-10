@@ -70,6 +70,12 @@ public sealed record HelperSessionOptions
     /// <summary>このアプリのログ。</summary>
     public Action<string>? Log { get; init; }
 
+    /// <summary>
+    /// パイプ名 (テスト用。null なら接続のたびにランダムに作る)。同じ名前のパイプが先にあると作れないこと (ENG-28 の仕様 2 の 1。
+    /// TC-ENG-28-07 の手順 3) を確かめるために使う。
+    /// </summary>
+    public string? PipeName { get; init; }
+
     /// <summary>このプロセスの ID (テストで差し替えない)。</summary>
     public int CurrentPid { get; init; } = Environment.ProcessId;
 }
@@ -139,7 +145,7 @@ public sealed class HelperSession : IAsyncDisposable
             }
 
             VerifyIntegrity(path);
-            string name = HelperPipes.NewPipeName();
+            string name = _options.PipeName ?? HelperPipes.NewPipeName();
             byte[] secret = HelperPipes.NewSecret();
 
             // 同じ名前のパイプを他のプロセスが先に作っていたら、ここで失敗する (補助プロセスは起動しない。TC-ENG-28-07)。

@@ -96,6 +96,34 @@ public sealed class PerformanceTests(ITestOutputHelper output)
     }
 
     [PerfEnvironmentFact]
+    [Trait(UiTest.TC, "TC-ENG-33-03")]
+    public Task Memory_map_with_twenty_thousand_regions_scrolls_at_sixty_fps() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 前提: TestTarget に、保護属性を交互に変えた 4 KiB の領域を 20,000 個確保させ、アドレス空間全体を開く (同じ利用者のプロセス)。
+        using TestTargetProcess target = await TestTargetProcess.StartAsync(ctx, regions: 20_000);
+        AppSession app = await ctx.StartAsync(new AppOptions());
+        JsonObject opened = await app.SendAsync("openProcess", new JsonObject { ["pid"] = target.Pid });
+        Assert.Equal("Direct", opened["route"]!.GetValue<string>());
+
+        // 手順 1: 「領域」タブの行の数が 10,000 以上。
+        int rows = 0;
+        await app.WaitUntilAsync(async () => (rows = (await app.SendAsync("memoryMapPanel"))["rows"]!.GetValue<int>()) >= 10_000,
+            TimeSpan.FromSeconds(30), "the memory map rows");
+        output.WriteLine($"rows: {rows}");
+
+        // 手順 2・3: 一覧で PageDown を 16 ms 間隔で 500 回 (一覧の 1 ページ分の移動をテスト用の命令で行う)。描画の間隔を記録する。
+        string path = await EnableDiagnosticsAsync(ctx, app);
+        for (int i = 0; i < 500; i++)
+        {
+            await app.SendAsync("memoryMapPanel", new JsonObject { ["action"] = "pageDown" });
+            await Task.Delay(16);
+        }
+
+        FrameLog log = await StopDiagnosticsAsync(app, path);
+        AssertSixtyFps(log, "メモリマップの 2 万の領域のスクロール");
+    });
+
+    [PerfEnvironmentFact]
     [Trait(UiTest.TC, "TC-VIEW-03-02")]
     public Task Scrolling_a_slow_source_keeps_sixty_fps() => UiTestContext.RunAsync(async ctx =>
     {

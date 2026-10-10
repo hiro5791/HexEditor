@@ -20,6 +20,8 @@ public sealed partial class MemoryMapPanel : UserControl, IPanelContent
     private readonly ComboBox _tab = new();
     private readonly TextBlock _empty = new() { Visibility = Visibility.Collapsed, Margin = new Thickness(8) };
     private readonly DispatcherQueueTimer? _timer;
+    private IReadOnlyList<SourceRegion>? _shownRegions;
+    private IReadOnlyList<ProcessModule>? _shownModules;
 
     public MemoryMapPanel(PanelContext context)
     {
@@ -116,12 +118,23 @@ public sealed partial class MemoryMapPanel : UserControl, IPanelContent
             _empty.Visibility = Visibility.Visible;
             _regions.ItemsSource = null;
             _modules.ItemsSource = null;
+            _shownRegions = null;
+            _shownModules = null;
             UpdateTabVisibility();
             return;
         }
 
         _empty.Visibility = Visibility.Collapsed;
         (IReadOnlyList<SourceRegion> regions, IReadOnlyList<ProcessModule> mods, long bas) = data.Value;
+
+        // 一覧が変わっていなければ作り直さない (5 秒ごとの更新で数万行を作り直すと、スクロール中のフレームが落ちる。ENG-33 の受け入れ基準 4)。
+        if (keepSelection && ReferenceEquals(regions, _shownRegions) && ReferenceEquals(mods, _shownModules))
+        {
+            return;
+        }
+
+        _shownRegions = regions;
+        _shownModules = mods;
         object? selectedRegion = keepSelection ? (_regions.SelectedItem as RegionRow)?.Offset : null;
 
         // 「空き」の領域は既定で隠す (ENG-33 の仕様 2)。
