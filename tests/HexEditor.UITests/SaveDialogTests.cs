@@ -23,13 +23,13 @@ public sealed partial class SaveDialogTests
         await app.KeyAsync("Insert");
         await app.TypeAsync("00");
 
-        // 1〜2. 確認のダイアログの本文とボタン。長さが変わる場合の「その場で保存」(ENG-24) はフェーズ 2 のため出ない。
+        // 1〜2. 確認のダイアログの本文とボタン。長さが変わる場合も「その場で保存」(ずらしながらのその場保存。ENG-24) を選べる。
         await app.KeyAsync("S", ctrl: true);
         var dialog = await app.WaitForDialogAsync("SaveDialog");
         await app.WaitForDialogTextAsync(dialog, "This file has 2 hard links. Saving safely breaks the links");
         Assert.NotNull(app.Button("Save safely (break the links)"));
         Assert.NotNull(app.Button("Cancel"));
-        Assert.Null(app.Button("Save in place (keep the links; the file may be damaged if saving is interrupted)"));
+        Assert.NotNull(app.Button("Save in place (keep the links; the file may be damaged if saving is interrupted)"));
 
         // 3〜4. 「安全に保存 (リンクを切る)」: a.bin は保存後の内容、link.bin は元の内容のまま (リンクが切れた)。
         await app.InvokeDialogButtonAsync("Save safely (break the links)");
@@ -73,8 +73,7 @@ public sealed partial class SaveDialogTests
         await app.KeyAsync("Insert");
         await app.TypeAsync("00");
 
-        // 1〜2. ダイアログの本文 (ドライブ・必要量・空き容量を単位付きで) とボタン。「その場でずらしながら保存」は
-        // ずらしながらのその場保存 (ENG-24、フェーズ 2) と同時に加える。
+        // 1〜2. ダイアログの本文 (ドライブ・必要量・空き容量を単位付きで) とボタン (「その場でずらしながら保存」は ENG-24)。
         await app.KeyAsync("S", ctrl: true);
         var dialog = await app.WaitForDialogAsync("SaveDialog");
         string text = await app.WaitForDialogTextAsync(dialog, "Available: 1.00 MB (1,048,576 bytes)");
@@ -83,6 +82,7 @@ public sealed partial class SaveDialogTests
         Assert.Contains("Required: 17.00 MB (17,825,793 bytes)", text, StringComparison.Ordinal);
         Assert.Contains("Available: 1.00 MB (1,048,576 bytes)", text, StringComparison.Ordinal);
         Assert.NotNull(app.Button("Save to another location"));
+        Assert.NotNull(app.Button("Save in place by shifting data"));
         Assert.NotNull(app.Button("Cancel"));
 
         // 3. ファイルは変わらず、一時ファイルもない。

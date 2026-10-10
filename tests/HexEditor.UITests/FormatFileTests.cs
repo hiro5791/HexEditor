@@ -107,7 +107,7 @@ public sealed class FormatFileTests
             await app.WaitUntilAsync(async () => !(await DocAsync(app))["modified"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(30)), "the save");
             string[] after = File.ReadAllLines(path);
             Assert.Equal(before.Length, after.Length);
-            int changed = Assert.Single(Enumerable.Range(0, before.Length).Where(i => before[i] != after[i]));
+            int changed = Assert.Single(Enumerable.Range(0, before.Length), i => before[i] != after[i]);
             Assert.Equal(before[changed].Length, after[changed].Length);
             if (id == "TD-BASE64")
             {
