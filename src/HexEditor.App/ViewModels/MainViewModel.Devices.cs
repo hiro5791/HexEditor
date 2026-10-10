@@ -29,6 +29,13 @@ public sealed partial class MainViewModel
         DocumentViewModel vm = Add(doc, null, source.DisplayName);
         doc.SetReadOnly(ReadOnlyReason.Device);
         WatchDisconnect(vm, source);
+
+        // 開いたディスク・ボリュームを最近使ったファイルに記録する (ENG-29 の仕様 12、ENG-16、UI-32)。
+        if (_files is not null)
+        {
+            Recent.Record(source.Path, source.DisplayName, _files.UtcNow(), Core.Files.RecentItemKind.Disk);
+        }
+
         return vm;
     }
 
@@ -60,7 +67,16 @@ public sealed partial class MainViewModel
         }
 
         var doc = new Document(source, _options);
-        return Add(doc, null, source.DisplayName);
+        DocumentViewModel vm = Add(doc, null, source.DisplayName);
+
+        // ディスクイメージとして開いたファイルを、セクタサイズ付きで最近使ったファイルに記録する (ENG-31、ENG-16)。
+        if (_files is not null)
+        {
+            Recent.Record(source.Path, source.DisplayName, _files.UtcNow(), Core.Files.RecentItemKind.DiskImage,
+                new Core.Files.RecentOpenOptions { SectorSize = source.LogicalSectorSize });
+        }
+
+        return vm;
     }
 
     /// <summary>保存済み・作成したスナップショット (`.hexsnap`) のタブを開く (ENG-35 の仕様 4)。読み取り専用 (書き戻す先がない)。</summary>
