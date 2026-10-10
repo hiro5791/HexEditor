@@ -156,6 +156,11 @@ public sealed partial class HexView : UserControl
             }
 
             _editor = value;
+            if (_minimap is { Visibility: Visibility.Visible })
+            {
+                _minimap.Editor = value;
+            }
+
             _subRowOffset = 0;
             _horizontalOffset = 0;
             _unreadableReported = false;
@@ -481,6 +486,11 @@ public sealed partial class HexView : UserControl
     {
         _palette = Palette.Load(this, _colorScheme, IsHighContrast);
         _paletteVersion++;
+        if (_minimap is not null)
+        {
+            _minimap.HighContrast = IsHighContrast;
+            _minimap.Restart(force: true);
+        }
         Surface.Background = _palette.Background;
         InvalidateRows();
         QueueRender();

@@ -65,6 +65,25 @@ public static class BuiltInSettings
         new("view.modified.keepAfterSave", SettingCategories.View, SettingKind.Bool, false) { Order = 60 },
         new("view.modified.showDeletions", SettingCategories.View, SettingKind.Bool, false) { Order = 61 },
 
+        // バイトテーマ (VIEW-17)。表示メニューで選ぶ (none / category / gradient / custom:ファイル名)。
+        new("view.byteTheme", SettingCategories.View, SettingKind.String, "none") { Order = 62, ShowInPage = false },
+
+        // ミニマップ (VIEW-35 の仕様 9。全ドキュメント共通)。表示内容・範囲は表示メニューとミニマップの右クリックメニューで変える。
+        new("view.minimap.visible", SettingCategories.View, SettingKind.Bool, false) { Order = 63 },
+        new("view.minimap.width", SettingCategories.View, SettingKind.Int, 80) { Min = 40, Max = 200, Order = 64 },
+        new("view.minimap.content", SettingCategories.View, SettingKind.Choice, "entropy")
+        {
+            Options = ["entropy", "byteKinds", "byteValue", "zero", "byteTheme"],
+            Order = 65,
+        },
+        new("view.minimap.range", SettingCategories.View, SettingKind.Choice, "whole") { Options = ["whole", "around"], Order = 66 },
+        new("view.minimap.exact", SettingCategories.View, SettingKind.Bool, false) { Order = 67 },
+        new("view.minimap.hiddenMarks", SettingCategories.View, SettingKind.String, string.Empty) { Order = 67, ShowInPage = false },
+
+        // 画面分割・並列表示 (VIEW-37 の仕様 3、VIEW-39 の仕様 3)。
+        new("view.split.syncSettings", SettingCategories.View, SettingKind.Bool, false) { Order = 68 },
+        new("view.sync.selection", SettingCategories.View, SettingKind.Bool, false) { Order = 69 },
+
         // ズーム (UI-08 の仕様 2・3)。全タブ共通の Hex 表示の倍率はズームの操作で変わるので、設定画面には出さない。
         new(ZoomSettings.HexScopeKey, SettingCategories.View, SettingKind.Choice, ZoomSettings.ScopeAll) { Options = [ZoomSettings.ScopeAll, ZoomSettings.ScopeTab], Order = 70 },
         new(ZoomSettings.HexKey, SettingCategories.View, SettingKind.Int, View.ZoomLevels.Default) { Min = 50, Max = 400, Order = 71, ShowInPage = false },

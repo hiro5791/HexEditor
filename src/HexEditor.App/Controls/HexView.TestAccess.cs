@@ -105,8 +105,10 @@ public sealed partial class HexView
                 {
                     ["hex"] = hexText,
                     ["frame"] = hexPaint.Frame,
-                    ["highlightBackground"] = HighlightBackgroundAt(row.ContentRowStart + c, "hex"),
-                    ["texts"] = new JsonArray([.. Enumerable.Range(0, Math.Max(1, format.ShownTextColumns)).Select(t =>
+                    ["highlightBackground"] = _placed.Count == 0 ? null : HighlightBackgroundAt(row.ContentRowStart + c, "hex"),
+
+                    // テキスト列が複数のときだけ列ごとの内容を出す (1 行 4,096 バイトの読み出しを重くしない)。
+                    ["texts"] = format.ShownTextColumns <= 1 ? null : new JsonArray([.. Enumerable.Range(0, format.ShownTextColumns).Select(t =>
                     {
                         int at = columns.ShowText ? columns.TextIndex(t, c) : -1;
                         (string Glyph, double, double, double)? g = t < row.GlyphsByColumn.Length && c < row.GlyphsByColumn[t].Length ? row.GlyphsByColumn[t][c] : null;
@@ -163,7 +165,7 @@ public sealed partial class HexView
                 ["offsetText"] = row.OffsetText,
                 ["line"] = RowLineOf(row),
                 ["cells"] = cells,
-                ["hexCells"] = HexCellsOf(row, format, line),
+                ["hexCells"] = format.IsHexBytes && !format.Reverse ? null : HexCellsOf(row, format, line),
                 ["separator"] = row.SeparatorLabel,
                 ["underFills"] = new JsonArray([.. row.UnderFills.Select(u => (JsonNode?)new JsonObject
                 {

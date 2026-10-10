@@ -187,7 +187,9 @@ public sealed partial class MainWindow
         }
 
         encoding.Items.Add(new MenuFlyoutSeparator());
-        encoding.Items.Add(Toggle("Command_ViewUtf16Odd", "Menu_View_Utf16Odd", v => v.Utf16Phase == 1, (v, on) => v with { Utf16Phase = on ? 1 : 0 }));
+        // 開始位置は操作中のテキスト列のもの (VIEW-24 の仕様 2)。
+        encoding.Items.Add(Toggle("Command_ViewUtf16Odd", "Menu_View_Utf16Odd", v => ActiveTextSpec(v).Utf16Phase == 1,
+            (v, on) => WithActiveTextSpec(v, s => s with { Utf16Phase = on ? 1 : 0 })));
 
         // UTF-32 の開始位置 (オフセットを 4 で割った余り。VIEW-22 の仕様 4)。
         MenuFlyoutSubItem utf32 = Sub("Command_ViewUtf32Start", "Menu_View_Utf32Start");
@@ -195,7 +197,8 @@ public sealed partial class MainWindow
         {
             int p = phase;
             utf32.Items.Add(Radio("Command_ViewUtf32Phase" + p, Loc.Format("Menu_View_Utf32Phase", p), "Utf32Phase",
-                () => ChangeView(v => v with { Utf32Phase = p }), p.ToString(System.Globalization.CultureInfo.InvariantCulture), v => v.Utf32Phase == p));
+                () => ChangeView(v => WithActiveTextSpec(v, s => s with { Utf32Phase = p })), p.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                v => ActiveTextSpec(v).Utf32Phase == p));
         }
 
         encoding.Items.Add(utf32);
@@ -209,6 +212,9 @@ public sealed partial class MainWindow
         _historyMenu = Sub("Command_GoHistory", "Menu_Go_History");
         int forward = go.Items.IndexOf(go.Items.OfType<MenuFlyoutItem>().First(i => AutomationProperties.GetAutomationId(i) == "Command_GoForward"));
         go.Items.Insert(forward + 1, _historyMenu);
+
+        // フェーズ 2 の表示の項目 (VIEW-10・VIEW-11・VIEW-17・VIEW-18・VIEW-23・VIEW-24・VIEW-33・VIEW-35・VIEW-37〜VIEW-39)。
+        InitializeViewPhase2Menu(view, columns, encoding, go);
         UpdateSchemeMenu();
     }
 
@@ -267,11 +273,11 @@ public sealed partial class MainWindow
         Bind(new MenuFlyoutItem { Text = Loc.Get(key + "/Text"), AccessKey = Loc.Get(key + "/AccessKey") }, id, action, state ?? NeedsDocument);
 
     private ToggleMenuFlyoutItem Toggle(string id, string key, Func<ViewSettings, bool> get, Func<ViewSettings, bool, ViewSettings> set,
-        Func<ViewSettings, bool>? canChange = null) =>
+        Func<ViewSettings, bool>? canChange = null, string? reason = null) =>
         Bind(new ToggleMenuFlyoutItem { Text = Loc.Get(key + "/Text"), AccessKey = Loc.Get(key + "/AccessKey") }, id,
             () => ChangeView(v => set(v, !get(v))),
             () => Editor is not { } e ? NeedsDocument()
-                : canChange is not null && !canChange(e.View) ? new CommandState(false, Loc.Get("Command_LastColumn"), get(e.View))
+                : canChange is not null && !canChange(e.View) ? new CommandState(false, reason ?? Loc.Get("Command_LastColumn"), get(e.View))
                 : Toggle(get(e.View)));
 
     private RadioMenuFlyoutItem Radio(string id, string text, string group, Action action, string accessKey, Func<ViewSettings, bool> isChecked) =>

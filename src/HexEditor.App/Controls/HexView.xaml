@@ -135,6 +135,8 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <!--  ミニマップ (VIEW-35。縦スクロールバーの左。HexView.Minimap.cs が置く)  -->
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
@@ -143,6 +145,7 @@
         -->
         <Grid
             x:Name="RulerBar"
+            Grid.ColumnSpan="2"
             AutomationProperties.AutomationId="HexView_Ruler"
             Background="{ThemeResource HexViewRulerBackgroundBrush}">
             <Button
@@ -255,7 +258,7 @@
             </Border>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="1" Grid.Column="2">
             <primitives:ScrollBar
                 x:Name="VerticalBar"
                 AutomationProperties.AutomationId="HexViewVerticalScrollBar"
@@ -288,7 +291,7 @@
         <Rectangle
             x:Name="FocusFrameOuter"
             Grid.RowSpan="3"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="3"
             IsHitTestVisible="False"
             Stroke="{ThemeResource HexViewFocusOuterBrush}"
             StrokeThickness="2"
@@ -296,7 +299,7 @@
         <Rectangle
             x:Name="FocusFrameInner"
             Grid.RowSpan="3"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="3"
             Margin="2"
             IsHitTestVisible="False"
             Stroke="{ThemeResource HexViewFocusInnerBrush}"

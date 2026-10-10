@@ -114,6 +114,10 @@ public sealed partial class HexView
             {
                 _byteTheme = value;
                 _themeKey = null;
+                if (_minimap is not null)
+                {
+                    _minimap.ByteTheme = value;
+                }
                 InvalidateRows();
                 QueueRender();
             }
@@ -174,6 +178,9 @@ public sealed partial class HexView
         _themeKey = (_byteTheme, _paletteVersion, dark);
         return _themeBrushes;
     }
+
+    /// <summary>差分の層 (VIEW-17 の層 11) の色 (並べて表示の「違いを強調」VIEW-39、比較 ANA が使う)。</summary>
+    internal Brush DifferenceBrush => _palette?.Difference ?? (Brush)Application.Current.Resources["SystemFillColorCriticalBackgroundBrush"];
 
     private static SchemeColor ToScheme(Microsoft.UI.Xaml.Media.Brush brush) =>
         brush is SolidColorBrush s ? new SchemeColor(s.Color.A, s.Color.R, s.Color.G, s.Color.B) : new SchemeColor(0xFF, 0xFF, 0xFF, 0xFF);

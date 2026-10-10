@@ -46,7 +46,7 @@ public sealed partial class DocumentViewModel
     private string _nameSuffix = string.Empty;
 
     /// <summary>見出しの名前: ピン留めしたタブは先頭 8 文字 (UI-10 の仕様 2)、それ以外は表示名と区別の親フォルダ名。</summary>
-    public string TabTitle => IsPinned ? TabStripRules.PinnedTitle(DisplayName) : DisplayName + NameSuffix;
+    public string TabTitle => (IsPinned ? TabStripRules.PinnedTitle(DisplayName) : DisplayName + NameSuffix) + ViewSuffix;
 
     /// <summary>タブのツールチップ (UI-09 の仕様 4): 完全なパス、サイズ、種類、読み取り専用かどうか。</summary>
     public string ToolTip

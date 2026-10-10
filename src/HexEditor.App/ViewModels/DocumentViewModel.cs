@@ -13,7 +13,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     public DocumentViewModel(Document document, string? filePath, string displayName)
     {
         Document = document;
-        Editor = new EditorState(document);
+        PrimaryEditor = new EditorState(document);
         FilePath = filePath;
         DisplayName = displayName;
         // ステータスバー・タブの見出しをまとめて更新する (空の名前は全プロパティの変更)。
@@ -32,23 +32,43 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
             _statusTimer.Tick += (_, _) => RaiseStatus();
         }
 
-        Editor.Changed += (_, _) =>
-        {
-            if (Editor.PointerDragging && _statusTimer is not null
-                && System.Diagnostics.Stopwatch.GetElapsedTime(_lastStatus) < StatusInterval)
-            {
-                if (!_statusTimer.IsRunning)
-                {
-                    _statusTimer.Start();
-                }
-
-                return;
-            }
-
-            RaiseStatus();
-        };
+        AttachPane(PrimaryEditor);
         Document.DataLoaded += (_, _) => queue?.TryEnqueue(() => OnPropertyChanged(nameof(ValueText)));
     }
+
+    /// <summary>ペインのビューの変化でステータスバーを更新し、<see cref="EditorChanged"/> を出す。</summary>
+    private void AttachPane(EditorState editor) => editor.Changed += Pane_Changed;
+
+    private void DetachPane(EditorState editor) => editor.Changed -= Pane_Changed;
+
+    private void Pane_Changed(object? sender, EventArgs e)
+    {
+        EditorChanged?.Invoke(this, EventArgs.Empty);
+        if (!ReferenceEquals(sender, Editor))
+        {
+            // 操作中でないペインの変化はステータスバーに関係しない。
+            return;
+        }
+
+        if (Editor.PointerDragging && _statusTimer is not null
+            && System.Diagnostics.Stopwatch.GetElapsedTime(_lastStatus) < StatusInterval)
+        {
+            if (!_statusTimer.IsRunning)
+            {
+                _statusTimer.Start();
+            }
+
+            return;
+        }
+
+        RaiseStatus();
+    }
+
+    /// <summary>
+    /// どちらかのペインのビュー (カーソル・選択範囲・スクロール位置・表示設定) が変わった、または操作中のペインが替わった
+    /// (インスペクタ・ハッシュのパネルが購読する。VIEW-37)。
+    /// </summary>
+    public event EventHandler? EditorChanged;
 
     public Document Document { get; }
 
@@ -68,7 +88,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     public Core.Notifications.NotificationCenter? Notifications { get; set; }
 
     /// <summary>このドキュメントの復旧用データ (ENG-27)。作れなかった場合は null (編集は続けられる)。</summary>
-    public DocumentRecovery? Recovery { get; init; }
+    public DocumentRecovery? Recovery { get; set; }
 
     private DocumentSnapshot? _lastRecorded;
 
@@ -114,7 +134,8 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         _lastRecorded = null;
     }
 
-    public EditorState Editor { get; }
+    /// <summary>操作中のペインのビュー (分割していなければ <see cref="PrimaryEditor"/>。VIEW-37 の仕様 6)。</summary>
+    public EditorState Editor => ActivePane == 1 && SecondaryEditor is { } second ? second : PrimaryEditor;
 
     /// <summary>保存先のパス。無題のドキュメントでは null。</summary>
     public string? FilePath { get; private set; }
@@ -246,6 +267,62 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
     public string ModifiedText => Document.IsModified ? "● " + Loc.Get("Status_Modified") : string.Empty;
 
+    /// <summary>
+    /// セクタ / ページ / レコード (VIEW-40 の仕様 1): 「セクタ 15」(ディスク・セクタ形式・区切り線がセクタのとき。VIEW-32 の仕様 6)、
+    /// 「ページ 3 / 25,600」(区切り線があるとき。VIEW-33 の仕様 6)、「レコード #1024 +0x04」(レコード表示がオンのとき。VIEW-18 の仕様 7)。
+    /// 該当しなければ空 (表示しない)。
+    /// </summary>
+    public string PositionText
+    {
+        get
+        {
+            if (Document.IsDisposed)
+            {
+                return string.Empty;
+            }
+
+            EditorState e = Editor;
+            ViewSettings v = e.View;
+            var parts = new List<string>();
+            long cursor = e.Cursor;
+            if (v.Separator is SeparatorKind.Sector || (v.Separator == SeparatorKind.None
+                && (v.Radix == OffsetRadix.Sector || Document.Source.LogicalSectorSize > 1)))
+            {
+                var sectors = new SectionLayout(e.SectorSize, Document.Length);
+                parts.Add(Loc.Format("Status_Sector", sectors.IndexOf(cursor).ToString(Culture)));
+            }
+            else if (v.Separator != SeparatorKind.None && e.SectionLength > 0)
+            {
+                SectionLayout sections = e.Sections;
+                string index = sections.IndexOf(cursor).ToString("N0", Culture);
+                string count = sections.Count.ToString("N0", Culture);
+                parts.Add(Loc.Format(v.Separator == SeparatorKind.Page ? "Status_Page" : "Status_Section", index, count));
+            }
+
+            if (v.RecordView && RecordLayout.For(v) is var records && records.IndexOf(cursor) is { } recordNo && records.WithinOf(cursor) is { } within)
+            {
+                string position = v.Radix == OffsetRadix.Decimal ? within.ToString(Culture)
+                    : "0x" + within.ToString(v.LowercaseHex ? "x2" : "X2", CultureInfo.InvariantCulture);
+                parts.Add(Loc.Format("Status_Record", recordNo.ToString(CultureInfo.InvariantCulture), position));
+            }
+
+            return string.Join("  ", parts);
+        }
+    }
+
+    /// <summary>表示形式 (VIEW-40 の仕様 1): Hex 以外のセルの表示形式のとき <c>int32</c>、<c>float</c> など。Hex なら空。</summary>
+    public string FormatText => CellFormatter.StatusName(Editor.View.CellFormat) ?? string.Empty;
+
+    /// <summary>エンディアン (VIEW-40 の仕様 1): <c>LE</c> / <c>BE</c>。逆順表示中は <c>LE (逆順表示)</c>。</summary>
+    public string EndianText
+    {
+        get
+        {
+            string endian = Editor.View.BigEndian ? "BE" : "LE";
+            return RowFormat.For(Editor.View, Editor.BytesPerRow).Reverse ? Loc.Format("Status_ReversedEndian", endian) : endian;
+        }
+    }
+
     /// <summary>パスを持たない項目をコピーした一時ファイル (ENG-12 の仕様 2)。閉じるときに消す。</summary>
     public string? TemporaryFile { get; set; }
 
@@ -258,6 +335,19 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     /// <summary>閉じる: ドキュメントを解放してから、復旧用データをフォルダごと消す (仕様 5)。</summary>
     public void Dispose()
     {
+        PaneSync?.Dispose();
+
+        // 同じドキュメントのビューがほかに残るなら、ドキュメントは閉じない (VIEW-38 の仕様 6)。
+        if (LeaveShare())
+        {
+            foreach (EditorState pane in Panes)
+            {
+                DetachPane(pane);
+            }
+
+            return;
+        }
+
         Document.Dispose();
         Recovery?.Dispose();
         if (TemporaryFile is not null)
