@@ -479,7 +479,37 @@ public sealed partial class MainWindow : Window
                 }
 
                 _clipboard.CompatFormatsEnabled = App.Settings.GetBool(CompatClipboardFormats.SettingKey, true);
+                if (editor.HasMultipleRanges && Vm.Selected is { } multiDoc)
+                {
+                    // マルチ選択・矩形: 要素を連結してコピーする (EDIT-07 の仕様 7、EDIT-17 の仕様 2)。
+                    if (command == EditorCommand.Cut && editor.CheckRectangleRows() is not null)
+                    {
+                        ShowRectangleRowLimit(multiDoc);
+                        return;
+                    }
+
+                    ClipboardPlan plan = await _clipboard.CopyRangesAsync(editor);
+                    if (plan.InAppOnly)
+                    {
+                        ShowNotice(Loc.Get("Clipboard_RangesTooLarge"), InfoBarSeverity.Error, multiDoc);
+                        return;
+                    }
+
+                    RecordClipboardHistory(multiDoc, _clipboard.LastCopiedRanges);
+                    if (command == EditorCommand.Cut)
+                    {
+                        await DeleteSelectedRangesAsync(multiDoc, "切り取り");
+                    }
+
+                    break;
+                }
+
                 ClipboardPlan? copied = await _clipboard.CopyAsync(editor);
+                if (copied is not null && Vm.Selected is { } copiedDoc)
+                {
+                    RecordClipboardHistory(copiedDoc, null);
+                }
+
                 if (copied?.InAppOnly == true)
                 {
                     // 「選択範囲 (12.3 GB) は大きすぎるため…」(EDIT-22 の仕様 5。「ファイルに書き出す」は TOOL-16 (フェーズ 2) の後)。
@@ -587,6 +617,7 @@ public sealed partial class MainWindow : Window
             };
             view.StatusMessageRequested += (_, args) =>
                 ShowNotice(args.Message, InfoBarSeverity.Informational, view.DataContext as DocumentViewModel);
+            AttachSelectionEvents(view);
         }
 
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
@@ -676,6 +707,13 @@ public sealed partial class MainWindow : Window
         {
             // 読み取り専用: データを変えずに「編集を許可する」付きの InfoBar を出す (EDIT-16 の仕様 3)。
             ShowReadOnlyNotice(doc);
+            return;
+        }
+
+        if (result is EditResult.TooManyRows or EditResult.TooManyCarets && doc is not null)
+        {
+            // 矩形の行数・カーソル数の上限 (EDIT-17 の仕様 6、EDIT-08 の仕様 3)。
+            ReportEdit(doc, result);
             return;
         }
 

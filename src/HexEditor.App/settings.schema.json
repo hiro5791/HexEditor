@@ -58,12 +58,24 @@
       "type": "boolean",
       "default": true
     },
+    "clipboard.history.count": {
+      "description": "Clipboard history items",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 20
+    },
     "clipboard.maxSizeMiB": {
       "description": "Maximum clipboard size (MiB)",
       "type": "integer",
       "minimum": 1,
       "maximum": 2048,
       "default": 64
+    },
+    "clipboard.user.persist": {
+      "description": "Keep user clipboards after exit",
+      "type": "boolean",
+      "default": false
     },
     "diagnostics.hexView.overlay": {
       "description": "Show rendering diagnostics in the Hex view",
@@ -98,6 +110,13 @@
       "type": "boolean",
       "default": false
     },
+    "edit.multiSelection.maxElements": {
+      "description": "Maximum ranges in a multi-selection",
+      "type": "integer",
+      "minimum": 1000,
+      "maximum": 10000000,
+      "default": 1000000
+    },
     "edit.overwriteSelectionTyping": {
       "description": "Typing over a selection in overwrite mode",
       "type": "string",
@@ -126,6 +145,27 @@
       "description": "Prefer the last paste format",
       "type": "boolean",
       "default": true
+    },
+    "edit.rectangle.maxRows": {
+      "description": "Maximum rows for rectangle edits that change the length",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000,
+      "default": 1000000
+    },
+    "edit.selectionDragDrop": {
+      "description": "Drag and drop the selection",
+      "type": "boolean",
+      "default": true
+    },
+    "edit.selectionShift.amount": {
+      "description": "Amount for \u0022Shift selection forward / back\u0022",
+      "type": "string",
+      "enum": [
+        "selectionLength",
+        "lastAmount"
+      ],
+      "default": "selectionLength"
     },
     "edit.text.enterKey": {
       "description": "Enter in the text column",

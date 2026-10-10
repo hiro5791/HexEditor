@@ -279,8 +279,11 @@ public sealed partial class FindBar : UserControl
             ScopeSelectionItem.IsEnabled = editor.HasSelection;
             if (editor.HasSelection)
             {
-                _scope = SearchScope.Of(editor.SelectionStart, editor.SelectionLength);
-                if (editor.SelectionLength > 256)
+                // マルチ選択・矩形選択では、すべての要素を対象にする (FIND-11 の仕様 1。要素ごとに検索する)。
+                _scope = editor.HasMultipleRanges
+                    ? SearchScope.Of(editor.SelectedRanges.Select(r => new SearchRange(r.Start, r.Length)))
+                    : SearchScope.Of(editor.SelectionStart, editor.SelectionLength);
+                if (editor.SelectionLength > 256 || editor.HasMultipleRanges)
                 {
                     ScopeChoice.SelectedIndex = 1;
                 }

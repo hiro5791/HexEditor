@@ -91,11 +91,17 @@ public sealed class EditCommandTests
     }
 
     /// <summary>Ctrl+E で開始と長さを入れて選択する。</summary>
-    internal static async Task SelectRangeAsync(AppSession app, string start, string length)
+    internal static async Task SelectRangeAsync(AppSession app, string start, string length, bool add = false)
     {
         await OpenSelectRangeAsync(app);
         await app.UiaSetValueAsync("SelectRange_Start", start);
         await app.UiaSetValueAsync("SelectRange_Length", length);
+        if (add)
+        {
+            // 「現在の選択に追加」(EDIT-04 の仕様 5。マルチ選択)。
+            await app.SendAsync("setChecked", new JsonObject { ["id"] = "SelectRange_ModeAdd", ["value"] = true });
+        }
+
         await PressAsync(app);
     }
 

@@ -136,9 +136,39 @@
                         <MenuFlyoutItem x:Uid="Menu_Edit_Paste" cmd:CommandUi.Id="edit.paste" AutomationProperties.AutomationId="Command_Paste" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_PasteOverwrite" cmd:CommandUi.Id="edit.pasteOverwrite" AutomationProperties.AutomationId="Command_PasteOverwrite" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_PasteSpecial" cmd:CommandUi.Id="edit.pasteSpecial" AutomationProperties.AutomationId="Command_PasteSpecial" />
+                        <!--  ユーザークリップボード (EDIT-28)。番号 1〜9 の項目はコードで作る。  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_Edit_UserClipboard" AutomationProperties.AutomationId="Command_UserClipboardMenu">
+                            <MenuFlyoutSubItem x:Name="UserCopyMenu" x:Uid="Menu_UserClipboard_Copy" AutomationProperties.AutomationId="Command_UserClipboardCopy" />
+                            <MenuFlyoutSubItem x:Name="UserPasteMenu" x:Uid="Menu_UserClipboard_Paste" AutomationProperties.AutomationId="Command_UserClipboardPaste" />
+                            <MenuFlyoutItem x:Uid="Menu_UserClipboard_History" cmd:CommandUi.Id="edit.clipboardHistory.paste" AutomationProperties.AutomationId="Command_ClipboardHistoryPaste" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_SelectAll" cmd:CommandUi.Id="edit.selectAll" AutomationProperties.AutomationId="Command_SelectAll" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_SelectRange" cmd:CommandUi.Id="edit.selectRange" AutomationProperties.AutomationId="Command_SelectRange" />
+                        <!--  選択 (EDIT-05〜EDIT-09、EDIT-17)  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_Edit_Selection" AutomationProperties.AutomationId="Command_SelectionMenu">
+                            <MenuFlyoutItem x:Uid="Menu_Selection_ShiftNext" cmd:CommandUi.Id="edit.selection.shiftNext" AutomationProperties.AutomationId="Command_Selection_ShiftNext" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_ShiftPrevious" cmd:CommandUi.Id="edit.selection.shiftPrevious" AutomationProperties.AutomationId="Command_Selection_ShiftPrevious" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_ShiftBy" cmd:CommandUi.Id="edit.selection.shiftBy" AutomationProperties.AutomationId="Command_Selection_ShiftBy" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_Resize" cmd:CommandUi.Id="edit.selection.resize" AutomationProperties.AutomationId="Command_Selection_Resize" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_SwapEnds" cmd:CommandUi.Id="edit.selection.swapEnds" AutomationProperties.AutomationId="Command_Selection_SwapEnds" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_Invert" cmd:CommandUi.Id="edit.selection.invert" AutomationProperties.AutomationId="Command_Selection_Invert" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_NextElement" cmd:CommandUi.Id="edit.selection.nextElement" AutomationProperties.AutomationId="Command_Selection_NextElement" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_PreviousElement" cmd:CommandUi.Id="edit.selection.previousElement" AutomationProperties.AutomationId="Command_Selection_PreviousElement" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_ToMulti" cmd:CommandUi.Id="edit.selection.toMulti" AutomationProperties.AutomationId="Command_Selection_ToMulti" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_StartRectangle" cmd:CommandUi.Id="edit.selection.startRectangle" AutomationProperties.AutomationId="Command_Selection_StartRectangle" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_InsertRectangle" cmd:CommandUi.Id="edit.insertRectangle" AutomationProperties.AutomationId="Command_Selection_InsertRectangle" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_CaretsAtElements" cmd:CommandUi.Id="edit.caret.atElements" AutomationProperties.AutomationId="Command_Selection_CaretsAtElements" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_AddCaretAbove" cmd:CommandUi.Id="edit.caret.addAbove" AutomationProperties.AutomationId="Command_Selection_AddCaretAbove" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_AddCaretBelow" cmd:CommandUi.Id="edit.caret.addBelow" AutomationProperties.AutomationId="Command_Selection_AddCaretBelow" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_Save" cmd:CommandUi.Id="edit.selection.save" AutomationProperties.AutomationId="Command_Selection_Save" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_Load" cmd:CommandUi.Id="edit.selection.load" AutomationProperties.AutomationId="Command_Selection_Load" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_Export" cmd:CommandUi.Id="edit.selection.export" AutomationProperties.AutomationId="Command_Selection_Export" />
+                            <MenuFlyoutItem x:Uid="Menu_Selection_Import" cmd:CommandUi.Id="edit.selection.import" AutomationProperties.AutomationId="Command_Selection_Import" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Edit_InsertBytes" cmd:CommandUi.Id="edit.insertBytes" AutomationProperties.AutomationId="Command_InsertBytes" />
                         <MenuFlyoutItem x:Uid="Menu_Edit_InsertFile" cmd:CommandUi.Id="edit.insertFile" AutomationProperties.AutomationId="Command_InsertFile" />
@@ -200,6 +230,8 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_BookmarksPanel" cmd:CommandUi.Id="view.panel.bookmarks" AutomationProperties.AutomationId="Command_ToggleBookmarks" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Hash" cmd:CommandUi.Id="view.panel.hash" AutomationProperties.AutomationId="Command_PanelHash" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_HistoryPanel" cmd:CommandUi.Id="view.panel.history" AutomationProperties.AutomationId="Command_ToggleHistory" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_ClipboardPanel" cmd:CommandUi.Id="view.panel.clipboard" AutomationProperties.AutomationId="Command_ToggleClipboard" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />
                         </MenuFlyoutSubItem>

@@ -42,6 +42,7 @@ public sealed partial class EditorState
         }
 
         ApplyBytesPerRow(screenRow);
+        OnLayoutChangedForSelection();
         ActiveColumn before = ActiveColumn;
         ActiveColumn = VisibleColumn(ActiveColumn);
         if (before != ActiveColumn)
@@ -69,6 +70,7 @@ public sealed partial class EditorState
         if (_view.AutoBytesPerRow && BytesPerRow != bytesPerRow)
         {
             ApplyBytesPerRow(screenRow);
+            OnLayoutChangedForSelection();
             RaiseChanged();
         }
     }

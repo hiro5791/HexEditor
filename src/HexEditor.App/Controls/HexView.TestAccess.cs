@@ -256,7 +256,7 @@ public sealed partial class HexView
     // ---- ポインタの注入 (実際のマウス・タッチを使わずに、ポインタのイベントと同じ処理に渡す。座標は描画面の座標) ----
 
     /// <summary>ボタンを押す。右ボタンは、離した後のジェスチャで開く右クリックメニューも開く。</summary>
-    public void InjectPointerDown(Point position, string device, bool right, bool shift)
+    public void InjectPointerDown(Point position, string device, bool right, bool shift, bool ctrl = false, bool alt = false)
     {
         if (device == "touch")
         {
@@ -269,7 +269,7 @@ public sealed partial class HexView
         }
         else
         {
-            LeftButtonPressed(position, shift, pointerId: 1);
+            LeftButtonPressed(position, shift, pointerId: 1, ctrl, alt);
         }
     }
 
@@ -289,13 +289,14 @@ public sealed partial class HexView
         }
     }
 
-    public void InjectPointerUp(Point position)
+    public void InjectPointerUp(Point position, bool ctrl = false, bool shift = false)
     {
         if (_touchActive)
         {
             TouchReleased(position);
         }
 
+        ReleaseWithMode(ctrl, shift);
         EndPointer();
     }
 

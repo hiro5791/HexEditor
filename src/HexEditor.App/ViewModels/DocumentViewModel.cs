@@ -218,11 +218,35 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     }
 
     /// <summary>選択範囲: 「選択: 0x1F00–0x1FFF (長さ 0x100 = 256)」。開始と最後のバイトの閉区間 (VIEW-40 の仕様 3)。</summary>
-    public string SelectionText => Editor.HasSelection
+    public string SelectionText => SpecialSelectionText() ?? (Editor.HasSelection
         ? Loc.Format("Status_SelectionRange", Editor.OffsetFormat.Value(Editor.SelectionStart, Culture),
             Editor.OffsetFormat.Value(Editor.SelectionStart + Editor.SelectionLength - 1, Culture),
             OffsetFormat.Hex(Editor.SelectionLength, Editor.View.LowercaseHex), StatusFormat.Number(Editor.SelectionLength, Culture))
-        : string.Empty;
+        : string.Empty);
+
+    /// <summary>
+    /// マルチ選択「3 個の範囲、計 12 バイト (主要素: 0x30–0x33)」(EDIT-07 の仕様 5)、矩形「矩形 4 行 × 4 バイト (計 16 バイト)」(EDIT-06 の仕様 4)、
+    /// マルチカーソル「4 個のカーソル」(EDIT-08 の仕様 8)。単一の選択なら null。
+    /// </summary>
+    private string? SpecialSelectionText()
+    {
+        if (Editor.HasMultipleCarets)
+        {
+            return Loc.Format("Status_Carets", Editor.CaretCount);
+        }
+
+        switch (Editor.SelectionKind)
+        {
+            case SelectionKind.Rectangle when Editor.Rectangle is { } r:
+                return Loc.Format("Status_Rectangle", StatusFormat.Number(Editor.SelectedRangeCount, Culture), StatusFormat.Number(r.Width, Culture),
+                    StatusFormat.Number(Editor.SelectedByteCount, Culture));
+            case SelectionKind.Multiple when Editor.PrimaryRange is { } p:
+                return Loc.Format("Status_MultiSelection", Editor.SelectedRangeCount, StatusFormat.Number(Editor.SelectedByteCount, Culture),
+                    Editor.OffsetFormat.Value(p.Start, Culture), Editor.OffsetFormat.Value(p.Last, Culture));
+            default:
+                return null;
+        }
+    }
 
     public string SelectionToolTip => Editor.HasSelection
         ? Loc.Format("Status_SelectionTip", Editor.OffsetFormat.Status(Editor.SelectionStart, Culture),

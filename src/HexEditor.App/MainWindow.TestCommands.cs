@@ -36,25 +36,34 @@ public sealed partial class MainWindow
         string device = request["device"]?.GetValue<string>() ?? "mouse";
         bool right = request["button"]?.GetValue<string>() == "right";
         bool shift = request["shift"]?.GetValue<bool>() ?? false;
+
+        // Ctrl・Alt (マルチ選択・矩形選択・マルチカーソル。EDIT-06〜EDIT-08)。ドラッグ中に変えるときは move で ctrl / shift を指定する (EDIT-18)。
+        bool ctrl = request["ctrl"]?.GetValue<bool>() ?? false;
+        bool alt = request["alt"]?.GetValue<bool>() ?? false;
         switch (request["action"]?.GetValue<string>() ?? "click")
         {
             case "down":
-                view.InjectPointerDown(point, device, right, shift);
+                view.InjectPointerDown(point, device, right, shift, ctrl, alt);
                 break;
             case "move":
+                if (request["ctrl"] is not null || request["shift"] is not null)
+                {
+                    view.InjectDropModifiers(ctrl, shift);
+                }
+
                 view.InjectPointerMove(point);
                 break;
             case "up":
-                view.InjectPointerUp(point);
+                view.InjectPointerUp(point, ctrl, shift);
                 break;
             default:
                 int clicks = (int)TestHookSettings.ReadLong(request["clicks"], 1);
                 for (int i = 0; i < clicks; i++)
                 {
-                    view.InjectPointerDown(point, device, right, shift);
+                    view.InjectPointerDown(point, device, right, shift, ctrl, alt);
                     if (!right)
                     {
-                        view.InjectPointerUp(point);
+                        view.InjectPointerUp(point, ctrl, shift);
                     }
                 }
 

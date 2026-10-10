@@ -98,6 +98,41 @@ public static class BuiltInCommands
         },
         new("edit.readOnly", "edit") { Condition = "documentOpen" },
 
+        // 選択 (EDIT-05〜EDIT-09、EDIT-17)。ショートカットは既定なし (カーソルの追加の Ctrl+Alt+↑ / ↓ は Hex ビューが処理する)。
+        new("edit.selection.shiftNext", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.shiftPrevious", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.shiftBy", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.resize", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.swapEnds", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.invert", "edit") { Condition = "documentOpen" },
+        new("edit.selection.nextElement", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.previousElement", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.startRectangle", "edit") { Condition = "documentOpen" },
+        new("edit.selection.toMulti", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.save", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.load", "edit") { Condition = "documentOpen" },
+        new("edit.selection.export", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.import", "edit") { Condition = "documentOpen" },
+        new("edit.caret.addAbove", "edit")
+        {
+            DefaultBindings = [K("Ctrl+Alt+Up", KeyScope.Editor)],
+            NativeScopes = [KeyScope.Editor],
+            Condition = "documentOpen",
+        },
+        new("edit.caret.addBelow", "edit")
+        {
+            DefaultBindings = [K("Ctrl+Alt+Down", KeyScope.Editor)],
+            NativeScopes = [KeyScope.Editor],
+            Condition = "documentOpen",
+        },
+        new("edit.caret.atElements", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.insertRectangle", "edit") { Condition = "documentOpen && !readOnly && canResize" },
+
+        // ユーザークリップボードとクリップボード履歴 (EDIT-28)。
+        .. Enumerable.Range(1, 9).Select(n => new CommandDefinition($"edit.userClipboard.copy{n}", "edit") { Condition = "documentOpen && hasSelection" }),
+        .. Enumerable.Range(1, 9).Select(n => new CommandDefinition($"edit.userClipboard.paste{n}", "edit") { Condition = "documentOpen && !readOnly" }),
+        new("edit.clipboardHistory.paste", "edit") { Condition = "documentOpen && !readOnly" },
+
         // ---- 検索 ----
         new("search.find", "search") { Icon = IconFind, DefaultBindings = [K("Ctrl+F")], Condition = "documentOpen" },
         new("search.findNext", "search") { DefaultBindings = [K("F3")], Condition = "documentOpen" },
@@ -111,6 +146,7 @@ public static class BuiltInCommands
         // すべて置換 (FIND-23)、結果一覧の変換・エクスポート (FIND-21)。ショートカットは既定なし。
         new("search.replaceAll", "search") { Condition = "documentOpen && !readOnly" },
         new("search.results.toBookmarks", "search") { Condition = "searchResults" },
+        new("search.results.toSelection", "search") { Condition = "searchResults" },
         new("search.results.export", "search") { Condition = "searchResults" },
 
         // ---- 移動 ----
@@ -236,6 +272,8 @@ public static class BuiltInCommands
         new("view.panel.hash", "view"),
         new("view.panel.bookmarks", "view"),
         new("view.panel.searchResults", "view"),
+        new("view.panel.history", "view"),
+        new("view.panel.clipboard", "view"),
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
 

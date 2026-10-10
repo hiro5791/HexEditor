@@ -67,6 +67,7 @@ public sealed partial class MainWindow
     {
         EditorState editor = doc.Editor;
         editor.Options = CurrentEditingOptions();
+        ApplySelectionSettings(doc);
         doc.Document.History.CoalesceInterval = EditingSettings.CoalesceInterval(App.Settings.GetInt(EditingSettings.UndoCoalesceSecondsKey, 2));
 
         // 新しく開いたドキュメントのモードは設定「既定の入力モード」に従う (EDIT-10 の仕様 1)。固定長のドキュメントは常に上書き。

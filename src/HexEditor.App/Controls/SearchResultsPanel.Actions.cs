@@ -163,6 +163,7 @@ public sealed partial class SearchResultsPanel
         _listMenu.Items.Add(MenuItem("SearchResults_CopyHex/Text", () => CopyRows(hex: true)));
         _listMenu.Items.Add(MenuItem("SearchResults_CopyText/Text", () => CopyRows(hex: false)));
         _listMenu.Items.Add(new MenuFlyoutSeparator());
+        _listMenu.Items.Add(MenuItem("SearchResults_ToSelection/Text", ToSelection));
         _listMenu.Items.Add(MenuItem("SearchResults_ToBookmarks/Text", () => _ = ToBookmarksAsync()));
         _listMenu.Items.Add(MenuItem("SearchResults_ExportCsv/Text", () => _ = ExportAsync(ExportFormat.Csv)));
         _listMenu.Items.Add(MenuItem("SearchResults_ExportJson/Text", () => _ = ExportAsync(ExportFormat.Json)));

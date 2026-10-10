@@ -117,6 +117,7 @@ public sealed partial class HexView : UserControl
         Loaded += HexView_Loaded;
         Unloaded += HexView_Unloaded;
         InitializeInput();
+        InitializeSelectionVisuals();
         InitializeTextInput();
         InitializeOptions();
     }
@@ -425,6 +426,9 @@ public sealed partial class HexView : UserControl
 
         public bool[] Deleted { get; private set; } = [];
 
+        /// <summary>選択されているバイト (マルチ選択・矩形選択を含む。EDIT-06、EDIT-07)。</summary>
+        public bool[] Selected { get; private set; } = [];
+
         public TextCell[] Text { get; private set; } = [];
 
         public byte[] DecodeBytes { get; private set; } = [];
@@ -441,6 +445,7 @@ public sealed partial class HexView : UserControl
                 Matched = new bool[span];
                 Focus = new bool[span];
                 Deleted = new bool[span];
+                Selected = new bool[span];
                 Text = new TextCell[span];
             }
         }
@@ -596,8 +601,19 @@ public sealed partial class HexView : UserControl
         }
         TextCell[] text = DecodeText(snapshot, view, readStart, lead, span, available);
         var columns = new RowColumns(format);
-        long selStart = _editor.SelectionStart;
-        long selEnd = selStart + _editor.SelectionLength;
+
+        // 選択範囲 (層 2)。マルチ選択・矩形選択は見えている範囲の要素だけを尋ねる (EDIT-06・EDIT-07 の「巨大ファイル」)。
+        bool[] selected = _work.Selected;
+        Array.Clear(selected, 0, span);
+        foreach (Core.Selection.ByteRange r in _editor.SelectedRangesIn(readStart, available - lead))
+        {
+            long from = Math.Max(r.Start, readStart) - firstOffset;
+            long to = Math.Min(r.End, readStart + (available - lead)) - firstOffset;
+            if (from < to)
+            {
+                selected.AsSpan((int)from, (int)(to - from)).Fill(true);
+            }
+        }
         var style = new RowStyle(view.LowercaseHex, view.DimZeros, view.AlternateColumns, view.AlternateTextColumns, view.HighlightModified,
             view.ShowContinuation, _palette.HighContrast, NonPrintableStyle);
         var frame = new RowFrame(columns, _editor.ActiveColumn, _paletteVersion, _editor.TextEncoding, style, _proportional);
@@ -635,7 +651,7 @@ public sealed partial class HexView : UserControl
             bool keep = mode == CellMode.Blank && row.ContentRowStart == rowStart && row.HasContent;
             if (!keep && row.Update(frame, rowStart, rowLead, count, bytes.AsSpan(from, bytesPerRow), rowStates, marks.AsSpan(from, bytesPerRow),
                 matched.AsSpan(from, bytesPerRow), focus.AsSpan(from, bytesPerRow), deleted.AsSpan(from, bytesPerRow), text.AsSpan(from, bytesPerRow),
-                mode, selStart, selEnd,
+                mode, selected.AsSpan(from, bytesPerRow),
                 _editor.TopRow + r == cursorRow, _palette, _cellWidth, _rowHeight, MeasureGlyph))
             {
                 rebuilt++;

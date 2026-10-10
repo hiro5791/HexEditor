@@ -207,6 +207,8 @@ public sealed partial class HexView
         }
 
         bool shift = (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0;
+        bool ctrl = (e.KeyModifiers & VirtualKeyModifiers.Control) != 0;
+        bool alt = (e.KeyModifiers & VirtualKeyModifiers.Menu) != 0;
         if (point.Properties.IsXButton1Pressed || point.Properties.IsXButton2Pressed)
         {
             // マウスの「戻る」「進む」ボタン (VIEW-31)。
@@ -227,7 +229,7 @@ public sealed partial class HexView
             return;
         }
 
-        if (LeftButtonPressed(point.Position, shift, e.Pointer.PointerId))
+        if (LeftButtonPressed(point.Position, shift, e.Pointer.PointerId, ctrl, alt))
         {
             Surface.CapturePointer(e.Pointer);
             e.Handled = true;
@@ -252,16 +254,17 @@ public sealed partial class HexView
             return;
         }
 
-        bool inside = _editor.HasSelection && hit.Offset >= _editor.SelectionStart
-            && hit.Offset < _editor.SelectionStart + _editor.SelectionLength;
+        bool inside = _editor.HasSelection && _editor.IsSelected(hit.Offset);
         if (!inside)
         {
             _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false);
         }
     }
 
-    /// <summary>左ボタンを押した (クリック・Shift+クリック・ダブルクリック・トリプルクリック)。ポインタを捕まえるなら true。</summary>
-    private bool LeftButtonPressed(Point position, bool shift, uint pointerId)
+    /// <summary>
+    /// 左ボタンを押した (クリック・Shift+クリック・ダブルクリック・トリプルクリック、Ctrl・Alt との組み合わせ)。ポインタを捕まえるなら true。
+    /// </summary>
+    private bool LeftButtonPressed(Point position, bool shift, uint pointerId, bool ctrl = false, bool alt = false)
     {
         if (_editor is null || !TryHitTest(position, out HitResult hit))
         {
@@ -274,6 +277,13 @@ public sealed partial class HexView
         _rowDrag = false;
         _pressPoint = _lastPointer = position;
         _pressPointerId = pointerId;
+        _pressHit = hit;
+        _pressMode = PressMode.Normal;
+        if (hit.Region != HitRegion.Offset && PressWithModifiers(hit, count, shift, ctrl, alt))
+        {
+            return true;
+        }
+
         if (shift)
         {
             // アンカーを変えずにクリックした位置までを選ぶ (EDIT-01 の仕様 4)。
@@ -308,6 +318,7 @@ public sealed partial class HexView
     private void Surface_PointerMoved(object sender, PointerRoutedEventArgs e)
     {
         PointerPoint point = e.GetCurrentPoint(Surface);
+        _lastPointerPoint = point;
         if (_touchActive)
         {
             TouchMoved(point.Position);
@@ -347,6 +358,7 @@ public sealed partial class HexView
             }
 
             SetDragging(true);
+            StartModeDrag();
         }
 
         DragToPointer(position);
@@ -361,6 +373,7 @@ public sealed partial class HexView
             TouchReleased(e.GetCurrentPoint(Surface).Position);
         }
 
+        ReleaseWithMode((e.KeyModifiers & VirtualKeyModifiers.Control) != 0, (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0);
         EndPointer();
         Surface.ReleasePointerCapture(e.Pointer);
     }
@@ -380,6 +393,7 @@ public sealed partial class HexView
 
     private void EndPointer()
     {
+        CancelModeDrag();
         _pressed = false;
         SetDragging(false);
         _rowDrag = false;
@@ -516,7 +530,7 @@ public sealed partial class HexView
         {
             SelectRows(_rowDragAnchor, hit.Row);
         }
-        else
+        else if (!DragToPointerWithMode(hit))
         {
             _editor.DragTo(hit.Offset);
         }
@@ -1205,6 +1219,12 @@ public sealed partial class HexView
             return true;
         }
 
+        if (HandleSelectionKey(key, shift, ctrl, alt))
+        {
+            RestartBlink();
+            return true;
+        }
+
         if (alt)
         {
             // Alt を含むキーはアプリのコマンド (Alt+← / Alt+→ など) に渡す。
@@ -1407,9 +1427,15 @@ public sealed partial class HexView
 
     private void Report(EditResult result)
     {
-        if (result is EditResult.FixedLength or EditResult.FixedLengthDelete or EditResult.NotEditable or EditResult.NotEncodable)
+        if (result is EditResult.FixedLength or EditResult.FixedLengthDelete or EditResult.NotEditable or EditResult.NotEncodable
+            or EditResult.TooManyRows or EditResult.TooManyCarets)
         {
             EditRejected?.Invoke(this, result);
+        }
+        else if (result == EditResult.Done && _editor?.TakeCaretFailures() is int failures and > 0)
+        {
+            // 一部のカーソルで入力できなかった (EDIT-08 の「エラー」)。
+            CaretInputFailed?.Invoke(this, failures);
         }
     }
 

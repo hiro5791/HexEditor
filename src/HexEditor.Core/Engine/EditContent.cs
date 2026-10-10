@@ -104,6 +104,27 @@ public sealed class EditContent : IDisposable
         return new EditContent(EditContentKind.Source, length, position: offset, source: source, ownsSource: owns);
     }
 
+    /// <summary>
+    /// [<paramref name="offset"/>, + <paramref name="length"/>) の部分 (マルチ選択の「要素をまたいで続ける」塗りつぶし。EDIT-29 の仕様 4)。
+    /// データソースを持つ内容の部分は同じデータソースを指す (持つ責任も同じ。ドキュメントに渡すと、ドキュメントが 1 回だけ閉じる)。
+    /// </summary>
+    public EditContent Slice(long offset, long length)
+    {
+        if (offset < 0 || length < 0 || offset + length > Length)
+        {
+            throw new ArgumentOutOfRangeException(nameof(offset));
+        }
+
+        return Kind switch
+        {
+            EditContentKind.Pattern => Pattern(Data!, length, Position + offset),
+            EditContentKind.Random => Random(Seed, length, Position + offset),
+            EditContentKind.Bytes => Bytes(Data.AsSpan((int)offset, (int)length).ToArray()),
+            EditContentKind.Original => Original(Position + offset, length),
+            _ => new EditContent(EditContentKind.Source, length, position: Position + offset, source: _source, ownsSource: OwnsSource),
+        };
+    }
+
     /// <summary>先頭 <paramref name="count"/> バイトを読む (プレビュー用)。</summary>
     public byte[] Preview(int count)
     {

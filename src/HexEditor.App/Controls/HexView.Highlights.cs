@@ -9,6 +9,9 @@ namespace HexEditor.App.Controls;
 /// <summary>強調表示の層 (VIEW-17 の仕様 5 の順位。小さいほど手前)。</summary>
 public enum HexHighlightLayer
 {
+    /// <summary>層 2: 選択範囲に伴う印 (マルチ選択の主要素の枠、マルチカーソル、ドロップの位置。EDIT-07・EDIT-08・EDIT-18)。</summary>
+    Selection = 2,
+
     /// <summary>層 3: 注目している範囲 (インスペクタの対象 INSP-18 など)。</summary>
     Focus = 3,
 
@@ -22,7 +25,7 @@ public enum HexHighlightLayer
 /// 提供元の識別 (テスト用の読み出しに出す)。長さ 0 の範囲は位置に細い縦線を描く。
 /// </summary>
 public sealed record HexHighlight(long Offset, long Length, HexHighlightLayer Layer, Brush? Background, Brush? Border,
-    IReadOnlyList<double>? Dash = null, string Tag = "");
+    IReadOnlyList<double>? Dash = null, string Tag = "", double Thickness = 1);
 
 /// <summary>オフセット列の目印 (ブックマークの開始位置。INSP-23 の仕様 8、INSP-25 の仕様 5)。<see cref="Text"/> は番号など。</summary>
 public sealed record HexOffsetMarker(long Offset, Brush Fill, Brush? Border, string Text, Brush? Foreground, string Tag = "");
@@ -210,7 +213,7 @@ public sealed partial class HexView
             Rectangle r = Take(_highlightFront, _frontLayer!, frontUsed++);
             r.Fill = null;
             r.Stroke = h.Border;
-            r.StrokeThickness = 1;
+            r.StrokeThickness = h.Thickness;
             // 破線の模様は変わったときだけ設定する (DoubleCollection を描画のたびに作らない)。
             while (_frontDash.Count <= frontUsed - 1)
             {
