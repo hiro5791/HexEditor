@@ -25,6 +25,10 @@ public sealed partial class MainWindow
 
     private void InitializeViewPhase2Menu(MenuBarItem view, MenuFlyoutSubItem columns, MenuFlyoutSubItem encoding, MenuBarItem go)
     {
+        // 文字表は設定フォルダに保存する (VIEW-23 の仕様 6)。数値の検索のエンディアンの既定はドキュメントのエンディアン (FIND-13 の仕様 4)。
+        TableEncodings.Folder ??= Path.Combine(App.Settings.Folder, TableEncodings.FolderName);
+        FindBar.DocumentBigEndian = e => e.View.BigEndian;
+
         // ---- 列の構成: セルの表示形式・エンディアン・テキスト列 ----
         columns.Items.Add(new MenuFlyoutSeparator());
         MenuFlyoutSubItem formats = Sub("Command_ViewCellFormat", "Menu_View_CellFormat");

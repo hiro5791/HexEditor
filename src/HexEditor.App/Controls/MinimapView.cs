@@ -56,7 +56,7 @@ public sealed partial class MinimapView : Grid
             IsHitTestVisible = false,
         };
         _marks.Children.Add(_viewport);
-        _recompute = DispatcherQueue.GetForCurrentThread().CreateTimer();
+        _recompute = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread().CreateTimer();
         _recompute.IsRepeating = false;
         _recompute.Interval = RecomputeDelay;
         _recompute.Tick += (_, _) => ApplyPendingEdit();

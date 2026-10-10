@@ -479,7 +479,7 @@
                 <Button x:Name="StatusPosition" AutomationProperties.AutomationId="Status_Position" Click="StatusCursor_Click" Content="{x:Bind Vm.Selected.PositionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="position" />
                 <Button x:Name="StatusColumn" AutomationProperties.AutomationId="Status_Column" Click="StatusColumn_Click" Content="{x:Bind Vm.Selected.ColumnText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="column" />
                 <!--  表示形式 (VIEW-10。Hex 以外のときだけ)  -->
-                <Button x:Name="StatusFormat" AutomationProperties.AutomationId="Status_Format" Click="StatusFormat_Click" Content="{x:Bind Vm.Selected.FormatText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="format" />
+                <Button x:Name="StatusCellFormat" AutomationProperties.AutomationId="Status_Format" Click="StatusFormat_Click" Content="{x:Bind Vm.Selected.FormatText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="format" />
                 <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Click="StatusEncoding_Click" Content="{x:Bind Vm.Selected.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
                 <!--  エンディアン (VIEW-11 の仕様 3): クリックで切り替える。  -->
                 <Button x:Name="StatusEndian" AutomationProperties.AutomationId="Status_Endian" Click="StatusEndian_Click" Content="{x:Bind Vm.Selected.EndianText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="endian" />

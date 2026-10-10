@@ -311,7 +311,7 @@ public sealed partial class MainWindow
     private void StatusEndian_Click(object sender, RoutedEventArgs e) => _ = Commands.ExecuteAsync("view.endianToggle");
 
     /// <summary>表示形式のクリック: セルの表示形式のメニュー (UI-06 の仕様 1)。</summary>
-    private void StatusFormat_Click(object sender, RoutedEventArgs e) => ShowSubMenuAt("Command_ViewCellFormat", StatusFormat);
+    private void StatusFormat_Click(object sender, RoutedEventArgs e) => ShowSubMenuAt("Command_ViewCellFormat", StatusCellFormat);
 
     /// <summary>同期のクリック: 同期のモードのメニュー (UI-06 の仕様 1)。</summary>
     private void StatusSync_Click(object sender, RoutedEventArgs e) => ShowSubMenuAt("Command_ViewSyncMenu", StatusSync);
