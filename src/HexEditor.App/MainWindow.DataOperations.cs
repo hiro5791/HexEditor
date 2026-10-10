@@ -72,10 +72,31 @@ public sealed partial class MainWindow
 
     private static string? DataTargetReason(DocumentViewModel doc) => doc.Document.Length > 0 ? null : Loc.Get("Command_EmptyDocument");
 
-    /// <summary>右クリックメニューの「データ演算」(演算の種類のサブメニュー付き。EDIT-31 の「呼び出し」)。</summary>
+    /// <summary>閉じたときにデータ演算の項目を外すようにしたメニュー。</summary>
+    private readonly HashSet<MenuFlyout> _dataMenuCleanup = [];
+
+    /// <summary>
+    /// 右クリックメニューの「データ演算」(演算の種類のサブメニュー付き。EDIT-31 の「呼び出し」)。項目が多いので、メニューを開くたびに作り、
+    /// 閉じたら外す (開いていない間もメニューの項目があると、キーを押すたびのキーボードアクセラレータの探索が遅くなるため)。
+    /// </summary>
     private void ExtendHexViewDataMenu(MenuFlyout menu)
     {
         const string id = "HexViewMenu_DataOperation";
+        if (!menu.IsOpen && !_dataMenuCleanup.Contains(menu))
+        {
+            // Hex ビューの読み込み時の呼び出し (まだ開いていない) では作らない。
+            _dataMenuCleanup.Add(menu);
+            menu.Closed += (_, _) =>
+            {
+                foreach (MenuFlyoutItemBase item in menu.Items.Where(i => AutomationProperties.GetAutomationId(i) is "HexViewMenu_DataOperation"
+                    or "HexViewMenu_data.convertEncoding").ToList())
+                {
+                    menu.Items.Remove(item);
+                }
+            };
+            return;
+        }
+
         if (menu.Items.FirstOrDefault(i => AutomationProperties.GetAutomationId(i) == id) is not MenuFlyoutSubItem sub)
         {
             sub = new MenuFlyoutSubItem { Text = Loc.Get("HexViewMenu_DataOperation") };
