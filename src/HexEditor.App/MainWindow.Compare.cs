@@ -454,6 +454,31 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         }
     }
 
+    /// <summary>
+    /// Shift を押しながら 2 つのファイルをドロップした (ANA-01 の仕様 10): 2 つを開き、その 2 つを左右に選んだ比較ダイアログを開く。
+    /// 2 つのファイルでなければ false (通常のドロップとして扱う)。
+    /// </summary>
+    internal async Task<bool> TryDropCompareAsync(IReadOnlyList<Windows.Storage.IStorageItem> items)
+    {
+        var files = items.OfType<Windows.Storage.StorageFile>().ToList();
+        if (files.Count != 2 || items.Count != 2)
+        {
+            return false;
+        }
+
+        DocumentViewModel? Open(string path) => Vm.Documents.FirstOrDefault(d => string.Equals(d.FilePath, Path.GetFullPath(path), StringComparison.OrdinalIgnoreCase))
+            ?? TryOpen(path);
+        DocumentViewModel? left = Open(files[0].Path);
+        DocumentViewModel? right = Open(files[1].Path);
+        if (left is null || right is null)
+        {
+            return true;
+        }
+
+        await ShowCompareDialogAsync(left, right);
+        return true;
+    }
+
     // ---- 比較タブの表示・閉じる ----
 
     public void ShowCompare(CompareSessionViewModel session)

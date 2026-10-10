@@ -194,6 +194,20 @@ public sealed class CompareTests
         await DialogAsync(app, "cancel");
     });
 
+    [Fact]
+    public Task Shift_dropping_two_files_opens_the_compare_dialog_with_both() => UiTestContext.RunAsync(async ctx =>
+    {
+        // ANA-01 の仕様 10: Explorer から 2 つのファイルを Shift を押しながらドロップすると、その 2 つで比較ダイアログを開く。
+        AppSession app = await ctx.StartAsync(new AppOptions { WaitForEditor = false });
+        JsonObject dialog = await app.SendAsync("compareDrop", new JsonObject
+        {
+            ["paths"] = new JsonArray(ctx.TestData("TD-ANA-DIFF3-A"), ctx.TestData("TD-ANA-DIFF3-B")),
+        });
+        Assert.Equal("TD-ANA-DIFF3-A.bin", dialog["left"]!["targetLabel"]!.GetValue<string>());
+        Assert.Equal("TD-ANA-DIFF3-B.bin", dialog["right"]!["targetLabel"]!.GetValue<string>());
+        await DialogAsync(app, "cancel");
+    });
+
     // ---- ANA-03 ----
 
     [Fact]
@@ -363,7 +377,7 @@ public sealed class CompareTests
 
         // 2. 比較結果が古くなった InfoBar と「再比較」。
         await app.WaitUntilAsync(async () => (await StateAsync(app))["stale"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the stale bar");
-        Assert.True(await app.IsShownAsync("Compare_StaleBar"));
+        await app.WaitUntilAsync(() => app.IsShownAsync("Compare_StaleBar"), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the stale bar to be shown");
         await app.WaitForAsync("Compare_StaleRecompare");
 
         // 3. Ctrl+Z: 左の 0x0 が 00 に戻る。

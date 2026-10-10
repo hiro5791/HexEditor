@@ -323,6 +323,10 @@ public sealed partial class CompareView : UserControl
             {
                 CommandState state = _host.StateOf(id);
                 button.IsEnabled = state.Enabled;
+
+                // 使えない理由をツールチップに出す (「右側は読み取り専用です」。ANA-07 の「エラー」)。
+                string name = AutomationProperties.GetName(button);
+                ToolTipService.SetToolTip(button, state.Enabled || state.Reason is null ? name : Loc.Format("Compare_DisabledToolTip", name, state.Reason));
             }
             else if (element is AppBarToggleButton { Tag: string toggleId } toggle)
             {

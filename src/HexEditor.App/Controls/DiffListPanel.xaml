@@ -110,7 +110,14 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+                    <!--  区間の数 (64〜4,096、既定 512。ANA-06 の仕様 7)  -->
+                    <ComboBox
+                        x:Name="BucketsBox"
+                        Grid.Column="2"
+                        AutomationProperties.AutomationId="DiffList_Buckets"
+                        SelectionChanged="BucketsBox_SelectionChanged" />
                     <TextBlock x:Uid="Compare_GraphHeading" VerticalAlignment="Center" Style="{ThemeResource BodyStrongTextBlockStyle}" />
                     <ToggleButton
                         x:Name="TableToggle"

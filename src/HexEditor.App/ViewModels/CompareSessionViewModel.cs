@@ -311,6 +311,21 @@ public sealed partial class CompareSessionViewModel : ObservableObject, IDisposa
         }
     }
 
+    /// <summary>グラフの区間の数を変えて分布を計算し直す (64〜4,096。ANA-06 の仕様 7)。</summary>
+    public async Task SetBucketsAsync(int buckets)
+    {
+        Buckets = Math.Clamp(buckets, DiffDistribution.MinBuckets, DiffDistribution.MaxBuckets);
+        if (Result is { State: not CompareState.Running } r)
+        {
+            DiffDistribution distribution = await Task.Run(() => DiffDistribution.Compute(r, Buckets));
+            if (ReferenceEquals(Result, r))
+            {
+                Distribution = distribution;
+                RaiseResultChanged();
+            }
+        }
+    }
+
     /// <summary>実行中の比較を中止する (結果は中止した位置まで残る)。</summary>
     public void Cancel() => _running?.Cancel();
 

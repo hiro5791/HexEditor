@@ -2939,4 +2939,7 @@ Details were written to:
   <data name="SchemeElement_DiffChanged" xml:space="preserve"><value>Differences: changed</value></data>
   <data name="SchemeElement_DiffAdded" xml:space="preserve"><value>Differences: inserted (right only)</value></data>
   <data name="SchemeElement_DiffRemoved" xml:space="preserve"><value>Differences: deleted (left only)</value></data>
+  <data name="Compare_DisabledToolTip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Compare_Graph_Buckets" xml:space="preserve"><value>{0} intervals</value></data>
+  <data name="Compare_Graph_BucketsName" xml:space="preserve"><value>Number of intervals</value></data>
 </root>

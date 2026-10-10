@@ -76,6 +76,13 @@ public sealed partial class DiffListPanel : UserControl
         ExportButton.Content = Loc.Get("Compare_List_Export");
         AutomationProperties.SetName(ListHost, Loc.Get("Compare_List_Name"));
         AutomationProperties.SetName(Graph, Loc.Get("Compare_Graph_Title"));
+        foreach (int n in BucketChoices)
+        {
+            BucketsBox.Items.Add(Loc.Format("Compare_Graph_Buckets", n.ToString("N0", CultureInfo.CurrentCulture)));
+        }
+
+        BucketsBox.SelectedIndex = Array.IndexOf(BucketChoices, DiffDistribution.DefaultBuckets);
+        AutomationProperties.SetName(BucketsBox, Loc.Get("Compare_Graph_BucketsName"));
         AddExportItem("csv", "Compare_Export_Csv");
         AddExportItem("json", "Compare_Export_Json");
         AddExportItem("report", "Compare_Export_Report");
@@ -116,6 +123,7 @@ public sealed partial class DiffListPanel : UserControl
                 FilterUnreadable.IsChecked = _session.KindFilter.HasFlag(DiffKindFilter.Unreadable);
                 MinLengthBox.Text = _session.MinLength > 0 ? _session.MinLength.ToString(CultureInfo.InvariantCulture) : string.Empty;
                 SortBox.SelectedIndex = (int)_session.SortOrder;
+                BucketsBox.SelectedIndex = Array.IndexOf(BucketChoices, _session.Buckets);
                 _updatingFilters = false;
             }
 
@@ -631,6 +639,17 @@ public sealed partial class DiffListPanel : UserControl
     }
 
     private void Graph_SizeChanged(object sender, SizeChangedEventArgs e) => RenderGraph();
+
+    /// <summary>グラフの区間の数の選択肢。</summary>
+    private static readonly int[] BucketChoices = [64, 128, 256, 512, 1024, 2048, 4096];
+
+    private async void BucketsBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_session is not null && BucketsBox.SelectedIndex >= 0 && BucketChoices[BucketsBox.SelectedIndex] != _session.Buckets)
+        {
+            await _session.SetBucketsAsync(BucketChoices[BucketsBox.SelectedIndex]);
+        }
+    }
 
     private void TableToggle_Click(object sender, RoutedEventArgs e) => RenderGraph();
 

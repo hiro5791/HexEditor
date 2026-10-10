@@ -208,7 +208,8 @@ public sealed partial class TabTests
         JsonArray items = (await app.SendAsync("tabMenuItems", new JsonObject { ["index"] = 0 }))["items"]!.AsArray();
         Assert.Equal(
             ["TabMenu_Close", "TabMenu_CloseOthers", "TabMenu_CloseRight", "TabMenu_CloseSaved", "TabMenu_CloseAll", "TabMenu_Pin",
-                "TabMenu_MoveToNewWindow", "TabMenu_MoveToWindow", "TabMenu_CopyPath", "TabMenu_RevealInExplorer", "TabMenu_ReadOnly"],
+                "TabMenu_MoveToNewWindow", "TabMenu_MoveToWindow", "TabMenu_CopyPath", "TabMenu_RevealInExplorer", "TabMenu_ReadOnly",
+                "TabMenu_CompareSelectLeft", "TabMenu_CompareWithLeft", "TabMenu_CompareSaved"],
             items.Select(i => i!["id"]!.GetValue<string>()));
 
         // パスをコピー (アプリ内のクリップボードの代わりに入る)。

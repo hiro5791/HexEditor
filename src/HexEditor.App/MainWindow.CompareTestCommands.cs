@@ -38,7 +38,11 @@ public sealed partial class MainWindow
                 {
                     var watch = System.Diagnostics.Stopwatch.StartNew();
                     TimeSpan limit = TimeSpan.FromSeconds(TestHookSettings.ReadLong(request["timeoutSeconds"], 60));
-                    while ((waiting.IsRunning || waiting.Result is null || (waiting.Result.State == CompareState.Completed && waiting.Distribution is null))
+                    // 比較が終わり、分布を計算し、左右の Hex ビューが表示されて行数が決まるまで待つ。
+                    bool Laid(CompareView v) => v.LeftView.IsLoaded && v.RightView.IsLoaded && v.LeftView.ActualHeight > 0 && v.RightView.ActualHeight > 0
+                        && waiting.Left.Editor.VisibleRows > 1 && waiting.Right.Editor.VisibleRows > 1;
+                    while ((waiting.IsRunning || waiting.Result is null || (waiting.Result.State == CompareState.Completed && waiting.Distribution is null)
+                        || (_compareViews.TryGetValue(waiting, out CompareView? laidOut) && ReferenceEquals(ActiveCompare, waiting) && !Laid(laidOut)))
                         && watch.Elapsed < limit)
                     {
                         await Task.Delay(20);
@@ -57,6 +61,22 @@ public sealed partial class MainWindow
                 }
 
                 return TestCompareState(request);
+            case "compareDrop":
+                // Shift を押しながらのドロップと同じ処理 (ダイアログの答えは待たない)。
+                var dropped = new List<Windows.Storage.IStorageItem>();
+                foreach (JsonNode? p in request["paths"]!.AsArray())
+                {
+                    dropped.Add(await Windows.Storage.StorageFile.GetFileFromPathAsync(p!.GetValue<string>()));
+                }
+
+                _ = TryDropCompareAsync(dropped);
+                var shown = System.Diagnostics.Stopwatch.StartNew();
+                while ((_compareDialog is null || !_compareDialog.IsLoaded) && shown.Elapsed < TimeSpan.FromSeconds(10))
+                {
+                    await Task.Delay(20);
+                }
+
+                return _compareDialog?.State() ?? new JsonObject { ["open"] = false };
             case "compareMethodBox":
                 if (ActiveCompare is { } methodSession && _compareViews.TryGetValue(methodSession, out CompareView? methodView))
                 {

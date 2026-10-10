@@ -2939,4 +2939,7 @@
   <data name="SchemeElement_DiffChanged" xml:space="preserve"><value>差分: 変更</value></data>
   <data name="SchemeElement_DiffAdded" xml:space="preserve"><value>差分: 挿入 (右のみ)</value></data>
   <data name="SchemeElement_DiffRemoved" xml:space="preserve"><value>差分: 削除 (左のみ)</value></data>
+  <data name="Compare_DisabledToolTip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Compare_Graph_Buckets" xml:space="preserve"><value>区間 {0} 個</value></data>
+  <data name="Compare_Graph_BucketsName" xml:space="preserve"><value>区間の数</value></data>
 </root>
