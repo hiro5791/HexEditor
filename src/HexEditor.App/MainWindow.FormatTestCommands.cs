@@ -190,9 +190,21 @@ public sealed partial class MainWindow
             s.Format.SelectedIndex = Array.IndexOf(OpenFormats, format);
         }
 
+        if (request["readOnly"]?.GetValue<bool>() is { } readOnly)
+        {
+            s.ReadOnly.IsChecked = readOnly;
+        }
+
+        if (request["denyWrites"]?.GetValue<bool>() is { } denyWrites)
+        {
+            s.DenyWrites.IsChecked = denyWrites;
+        }
+
         s.Validate();
         return new JsonObject
         {
+            ["formatError"] = s.FormatError.Text,
+            ["denyWritesEnabled"] = s.DenyWrites.IsEnabled,
             ["startResult"] = s.StartResult.Text,
             ["lengthResult"] = s.LengthResult.Text,
             ["canOpen"] = s.Dialog.IsPrimaryButtonEnabled,

@@ -90,6 +90,9 @@ public sealed record RecoveryRecord
 
     /// <summary>デコードしたときの元のファイルの値 (変わっていたら読み取り専用で開く)。</summary>
     public FileStamp? EncodedStamp { get; init; }
+
+    /// <summary>デコードしたときの隙間の塗りつぶしの値 (ENG-38 の仕様 3)。null は既定の FF。</summary>
+    public int? EncodedGapFill { get; init; }
 }
 
 /// <summary>
@@ -127,7 +130,7 @@ public sealed class DocumentRecovery : IDisposable
     /// null (前回の復旧用データを残す)。
     /// </summary>
     public static RecoveryCapture? Capture(Document document, long cursor, long selectionStart, long selectionLength,
-        (string Path, string Format, FileStamp? Stamp)? encoded = null)
+        (string Path, string Format, FileStamp? Stamp)? encoded = null, byte gapFill = Formats.EncodedFile.DefaultGapFill)
     {
         if (!document.CurrentUsesLatestSource)
         {
@@ -140,7 +143,7 @@ public sealed class DocumentRecovery : IDisposable
         (long, long, bool)? range = document.Source is FileByteSource { IsRange: true } r ? (r.RangeStart, r.Length, r.RangeResizable) : null;
         (string, string?, long)? device = document.Source is Devices.DeviceByteSource d ? (d.Path, d.Info.SerialNumber, d.Info.RangeStart) : null;
         return new RecoveryCapture(document, snapshot, document.Id, document.Source.DisplayName, path, stamp, document.AddBuffer.Length,
-            cursor, selectionStart, selectionLength, range, device, encoded);
+            cursor, selectionStart, selectionLength, range, device, encoded) { EncodedGapFill = gapFill };
     }
 
     /// <summary>
@@ -202,6 +205,7 @@ public sealed class DocumentRecovery : IDisposable
                 EncodedPath = capture.Encoded?.Path,
                 EncodedFormat = capture.Encoded?.Format,
                 EncodedStamp = capture.Encoded?.Stamp,
+                EncodedGapFill = capture.Encoded is null || capture.EncodedGapFill == Formats.EncodedFile.DefaultGapFill ? null : capture.EncodedGapFill,
             };
 
             string temp = StatePath + ".tmp";
@@ -322,4 +326,8 @@ public sealed record RecoveryCapture(
     long SelectionLength,
     (long Start, long Length, bool Resizable)? Range = null,
     (string Path, string? Serial, long RangeStart)? Device = null,
-    (string Path, string Format, FileStamp? Stamp)? Encoded = null);
+    (string Path, string Format, FileStamp? Stamp)? Encoded = null)
+{
+    /// <summary>デコードしたときの隙間の塗りつぶしの値 (ENG-38 の仕様 3)。</summary>
+    public byte EncodedGapFill { get; init; } = Formats.EncodedFile.DefaultGapFill;
+}

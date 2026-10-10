@@ -63,17 +63,19 @@ public sealed class RecoveryTests : IDisposable
         access.Dispose();
     }
 
-    [Fact]
-    public void Decoded_document_is_recovered_by_decoding_the_original_file_again()
+    [Theory]
+    [InlineData((byte)0xFF)]
+    [InlineData((byte)0x00)]
+    public void Decoded_document_is_recovered_by_decoding_the_original_file_again(byte gapFill)
     {
         // ENG-27・ENG-38: デコードして開いたドキュメントは、元のファイルをデコードし直して変更を戻す (デコードの一時ファイルは消えている)。
         string path = TestDataCatalog.Generate("TD-IHEX", _dir);
-        using Core.Formats.ImportResult decoded = Core.Formats.Importer.DecodeFile(path, Core.Formats.EncodedFile.OpenOptions(Core.Formats.FormatIds.IntelHex), Root);
+        using Core.Formats.ImportResult decoded = Core.Formats.Importer.DecodeFile(path, Core.Formats.EncodedFile.OpenOptions(Core.Formats.FormatIds.IntelHex, gapFill), Root);
         Document doc = Core.Formats.EncodedFile.CreateDocument(decoded, Core.Formats.FormatIds.IntelHex, Options());
         var recovery = new DocumentRecovery(Root, doc.Id);
         doc.Overwrite(4, [0xEE]);
         byte[] expected = Read(doc.Current, 0, (int)doc.Length);
-        recovery.Write(DocumentRecovery.Capture(doc, 4, 4, 0, (path, Core.Formats.FormatIds.IntelHex, FileStamp.FromPath(path)))!);
+        recovery.Write(DocumentRecovery.Capture(doc, 4, 4, 0, (path, Core.Formats.FormatIds.IntelHex, FileStamp.FromPath(path)), gapFill)!);
         SimulateCrash(doc, recovery);
 
         RecoveryEntry entry = Assert.Single(RecoveryStore.Scan(Root));

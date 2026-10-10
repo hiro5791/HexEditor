@@ -99,7 +99,24 @@ public sealed partial class MainViewModel
     /// <summary>外部変更の監視を始める (ファイルのドキュメントだけ)。</summary>
     public void StartWatching(DocumentViewModel vm)
     {
-        if (ExternalChanges is null || vm.Watch is not null || vm.FilePath is not { } path || vm.Document.Source is not FileByteSource file)
+        if (ExternalChanges is null || vm.Watch is not null || vm.FilePath is not { } path)
+        {
+            return;
+        }
+
+        // デコードして開いたドキュメント (ENG-38): 元のテキストファイルを見張る。ハンドルは持たないため、パスの値だけで比べる。
+        // 基準はデコードしたときの値 (その後の変更も検知する)。
+        if (vm.Encoded is not null)
+        {
+            if ((vm.EncodedStamp ?? FileStamp.FromPath(path)) is { } stamp)
+            {
+                vm.Watch = ExternalChanges.Track(vm, path, stamp, () => FileStamp.FromPath(path));
+            }
+
+            return;
+        }
+
+        if (vm.Document.Source is not FileByteSource file)
         {
             return;
         }
@@ -122,7 +139,21 @@ public sealed partial class MainViewModel
     /// </summary>
     public void RebaseWatch(DocumentViewModel vm)
     {
-        if (vm.Watch is { } watch && vm.Document.Source is FileByteSource file)
+        if (vm.Encoded is not null && vm.FilePath is { } encodedPath)
+        {
+            // デコードしたドキュメント: 保存・デコードし直した後の元のファイルの値を基準にする。
+            vm.EncodedStamp = FileStamp.FromPath(encodedPath) ?? vm.EncodedStamp;
+            if (vm.Watch is { } encodedWatch && string.Equals(encodedWatch.Path, encodedPath, StringComparison.OrdinalIgnoreCase) && vm.EncodedStamp is { } stamp)
+            {
+                ExternalChanges?.Rebase(encodedWatch, stamp, () => FileStamp.FromPath(encodedPath));
+            }
+            else
+            {
+                StopWatching(vm);
+                StartWatching(vm);
+            }
+        }
+        else if (vm.Watch is { } watch && vm.Document.Source is FileByteSource file)
         {
             if (!string.Equals(watch.Path, file.Path, StringComparison.OrdinalIgnoreCase))
             {

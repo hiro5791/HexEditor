@@ -523,6 +523,7 @@
   <data name="External_Close" xml:space="preserve"><value>閉じる</value></data>
   <data name="External_OverwriteBody" xml:space="preserve"><value>{0} は外部で変更されています。保存すると外部で変更されたファイルを上書きします。</value></data>
   <data name="External_RecreateBody" xml:space="preserve"><value>{0} は削除または移動されています。保存すると元の場所にファイルを作り直します。</value></data>
+  <data name="External_DecodedReloadBody" xml:space="preserve"><value>保存していない変更を破棄して、ディスク上の {0} をデコードし直しますか? この操作は元に戻せません。</value></data>
   <data name="Discard_Title" xml:space="preserve"><value>{0} の変更を破棄しますか?</value></data>
   <data name="Discard_Body" xml:space="preserve"><value>{0} か所、{1} バイトの変更を破棄して、ファイルを読み直します。</value></data>
   <data name="Discard_Undoable" xml:space="preserve"><value>破棄した後も Ctrl+Z で元に戻せます。</value></data>
@@ -3794,6 +3795,8 @@
   <data name="OpenAdv_ReadOnly" xml:space="preserve"><value>読み取り専用で開く</value></data>
   <data name="OpenAdv_DiskImage" xml:space="preserve"><value>ディスクイメージとして開く (次にセクタサイズを選ぶ)</value></data>
   <data name="OpenAdv_DenyWrites" xml:space="preserve"><value>他のアプリの書き込みを禁止する</value></data>
+  <data name="OpenAdv_DenyWritesDecoded" xml:space="preserve"><value>デコードして開く場合は使えません (元のファイルはデコードの後に閉じます)。</value></data>
+  <data name="OpenAdv_RangeFormatConflict" xml:space="preserve"><value>範囲を指定すると、ファイルのバイトをそのまま開きます。範囲を指定して開く場合は、形式を「自動」または「バイナリのまま」にしてください。</value></data>
   <data name="OpenAdv_Range" xml:space="preserve"><value>範囲を指定して開く</value></data>
   <data name="OpenAdv_Start" xml:space="preserve"><value>開始</value></data>
   <data name="OpenAdv_LengthKind" xml:space="preserve"><value>範囲の指定</value></data>
@@ -4026,6 +4029,8 @@
   <data name="Operations_CannotCancel" xml:space="preserve"><value>書き込みを始めたため、キャンセルできません。途中で止めるとファイルが壊れます。</value></data>
   <data name="Set_save_shiftInPlace" xml:space="preserve"><value>長さが変わる場合もその場で書く</value></data>
   <data name="SetDesc_save_shiftInPlace" xml:space="preserve"><value>一時ファイルを作らず、元のファイルの中でデータをずらしながら書きます。空き容量はほとんど要りませんが、途中で止まるとファイルが壊れます。実行のたびに確認します。</value></data>
+  <data name="Set_formats_gapFill" xml:space="preserve"><value>Intel HEX・S-record の隙間の塗りつぶしの値</value></data>
+  <data name="SetDesc_formats_gapFill" xml:space="preserve"><value>デコードしたファイルのデータのないアドレスに使うバイトの値 (FF、00 などの 16 進数)。この後に開くファイルから使われます。</value></data>
   <data name="Find_Kind_RegexText.Content" xml:space="preserve"><value>正規表現 (テキスト)</value></data>
   <data name="Find_Kind_RegexBytes.Content" xml:space="preserve"><value>正規表現 (バイト列)</value></data>
   <data name="Find_KindName_RegexText" xml:space="preserve"><value>正規表現</value></data>

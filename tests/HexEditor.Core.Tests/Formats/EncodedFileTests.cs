@@ -72,6 +72,38 @@ public sealed class EncodedFileTests
         }
     }
 
+    [Theory]
+    [InlineData("FF", 0xFF)]
+    [InlineData("00", 0x00)]
+    [InlineData(" 0x5a ", 0x5A)]
+    [InlineData("A", 0x0A)]
+    [InlineData("", 0xFF)]
+    [InlineData("100", 0xFF)]
+    [InlineData("zz", 0xFF)]
+    [InlineData(null, 0xFF)]
+    public void Gap_fill_setting_is_parsed_as_hex(string? text, int expected) =>
+        Assert.Equal((byte)expected, EncodedFile.ParseGapFill(text));
+
+    [Fact]
+    public void Gaps_return_the_configured_fill_value_and_save_the_same()
+    {
+        // ENG-38 の仕様 3: 隙間の値は塗りつぶしの値 (既定 FF、設定可能)。値を変えても隙間は「データなし」で、保存には出ない。
+        string path = Path.Combine(TempDirectory, Guid.NewGuid().ToString("N") + ".hex");
+        Directory.CreateDirectory(TempDirectory);
+        File.Copy(TestDataCatalog.Get("TD-IHEX"), path);
+        using ImportResult result = ImportFile(FormatIds.IntelHex, path, EncodedFile.OpenOptions(FormatIds.IntelHex, 0x00));
+        EncodedFileSettings settings = result.Settings!;
+        long baseAddress = result.BaseAddress;
+        using Document doc = EncodedFile.CreateDocument(result, FormatIds.IntelHex, Options());
+        (byte[] bytes, ByteState[] states) = ReadForDisplayWhenLoaded(doc.Current, 0x1F0, 0x20);
+        Assert.All(states[0x10..], s => Assert.Equal(ByteState.NoData, s));
+        Assert.All(bytes[0x10..], b => Assert.Equal(0x00, b));
+
+        string saved = path + ".out";
+        EncodedFile.Save(doc.Current, baseAddress, settings, saved);
+        Assert.Equal(File.ReadAllText(path), File.ReadAllText(saved));
+    }
+
     [Fact]
     public void Gaps_are_no_data_and_are_not_written()
     {

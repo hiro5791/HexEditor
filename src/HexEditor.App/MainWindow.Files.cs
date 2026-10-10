@@ -84,10 +84,11 @@ public sealed partial class MainWindow
             return OpenProject(path, insertAt);
         }
 
-        // デコードして開く (ENG-38): 小さいファイルはすぐに開き、大きいファイルはデコードの長時間処理の後に開く。
-        if (decode && !readOnly && AutoDecodeFormat(path) is { } encoded && File.Exists(path))
+        // デコードして開く (ENG-38): 小さいファイルはすぐに開き、大きいファイルはデコードの長時間処理の後に開く。読み取り専用で開く場合も
+        // 形式「自動」ではデコードし、結果を読み取り専用にする (ENG-11 の仕様 2)。
+        if (decode && AutoDecodeFormat(path) is { } encoded && File.Exists(path))
         {
-            Task<DocumentViewModel?> decoding = OpenEncodedAsync(path, encoded, insertAt);
+            Task<DocumentViewModel?> decoding = OpenEncodedAsync(path, encoded, insertAt, readOnly);
             return decoding.IsCompleted ? decoding.Result : null;
         }
 

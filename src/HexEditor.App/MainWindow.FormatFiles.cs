@@ -100,6 +100,12 @@ public sealed partial class MainWindow
 
         public required ComboBox Format { get; init; }
 
+        public required TextBlock FormatError { get; init; }
+
+        public required CheckBox DenyWrites { get; init; }
+
+        public required CheckBox ReadOnly { get; init; }
+
         /// <summary>入力の確認と解釈結果の表示を今すぐ行う (テスト用。TextChanged は後から届くため)。</summary>
         public Action Validate { get; set; } = () => { };
     }
@@ -141,8 +147,10 @@ public sealed partial class MainWindow
 
         ComboBox format = DialogParts.Combo("OpenAdv_Format", Loc.Get("OpenAdv_Format"),
             OpenFormats.Select(f => Loc.Get("OpenAdv_Format_" + f.Replace("-", string.Empty))), 0);
+        TextBlock formatError = DialogParts.Caption("OpenAdv_FormatError");
+        TextBlock denyWritesReason = DialogParts.Caption("OpenAdv_DenyWritesReason");
         var body = new StackPanel { Spacing = 8, MinWidth = 420 };
-        foreach (UIElement e in new UIElement[] { pathRow, readOnly, range, rangePanel, format, denyWrites, diskImage })
+        foreach (UIElement e in new UIElement[] { pathRow, readOnly, range, rangePanel, format, formatError, denyWrites, denyWritesReason, diskImage })
         {
             body.Children.Add(e);
         }
@@ -152,7 +160,8 @@ public sealed partial class MainWindow
         OpenAdvancedForTest = new OpenAdvancedState
         {
             Dialog = dialog, Path = path, Range = range, Start = start, Length = length, StartResult = startResult,
-            LengthResult = lengthResult, Format = format,
+            LengthResult = lengthResult, Format = format, FormatError = formatError, DenyWrites = denyWrites,
+            ReadOnly = readOnly,
         };
 
         long startValue = 0, lengthValue = 0;
@@ -194,6 +203,28 @@ public sealed partial class MainWindow
                 ok &= startOk && lengthOk;
             }
 
+            // 範囲とデコードする形式は組み合わせられない (範囲は元のファイルのバイトを開く。ENG-13)。黙って無視せず、理由を示して開けなくする。
+            string chosen = OpenFormats[Math.Max(0, format.SelectedIndex)];
+            bool encodedFormat = chosen is FormatIds.IntelHex or FormatIds.SRecord or FormatIds.Base64;
+            bool conflict = !image && range.IsChecked == true && encodedFormat;
+            formatError.Text = conflict ? Loc.Get("OpenAdv_RangeFormatConflict") : string.Empty;
+            formatError.Visibility = conflict ? Visibility.Visible : Visibility.Collapsed;
+            DialogParts.MarkInvalid(format, conflict);
+            ok &= !conflict;
+
+            // デコードして開くドキュメントは元のファイルをデコードの後に閉じるため、書き込みの禁止 (ENG-15) は効かない。理由を示して無効にする。
+            bool decodes = !image && range.IsChecked != true
+                && (encodedFormat || chosen == "auto" && exists && AutoDecodeFormat(path.Text) is not null);
+            denyWrites.IsEnabled = !decodes;
+            if (decodes)
+            {
+                denyWrites.IsChecked = false;
+            }
+
+            denyWritesReason.Text = decodes ? Loc.Get("OpenAdv_DenyWritesDecoded") : string.Empty;
+            denyWritesReason.Visibility = decodes ? Visibility.Visible : Visibility.Collapsed;
+            ToolTipService.SetToolTip(denyWrites, decodes ? denyWritesReason.Text : null);
+
             DialogParts.MarkInvalid(path, path.Text.Length > 0 && !exists);
             dialog.IsPrimaryButtonEnabled = ok;
         }
@@ -210,6 +241,7 @@ public sealed partial class MainWindow
         diskImage.Checked += (_, _) => Validate();
         diskImage.Unchecked += (_, _) => Validate();
         lengthKind.SelectionChanged += (_, _) => Validate();
+        format.SelectionChanged += (_, _) => Validate();
         browse.Click += async (_, _) =>
         {
             if (await PickOneFileAsync("HexEditor.OpenAdvanced") is { } chosen)
@@ -248,14 +280,14 @@ public sealed partial class MainWindow
         }
         else if (chosenFormat is FormatIds.IntelHex or FormatIds.SRecord or FormatIds.Base64)
         {
-            opened = await OpenEncodedAsync(file, chosenFormat, null);
+            opened = await OpenEncodedAsync(file, chosenFormat, null, readOnly.IsChecked == true);
         }
         else
         {
             opened = TryOpen(file, readOnly: readOnly.IsChecked == true, decode: chosenFormat == "auto");
         }
 
-        if (opened is not null && denyWrites.IsChecked == true)
+        if (opened is not null && opened.Encoded is null && denyWrites.IsChecked == true)
         {
             opened.Document.LockPolicy = Core.Engine.FileLockPolicy.Always;
         }
@@ -348,7 +380,8 @@ public sealed partial class MainWindow
     /// デコードして開く (ENG-38 の仕様 2)。小さいファイルはすぐに、大きいファイルは長時間処理としてデコードする。形式として全く読めなければ
     /// 「Intel HEX として読めませんでした (最初の誤り: 行 N)」と「バイナリのまま開く」を示す。
     /// </summary>
-    private async Task<DocumentViewModel?> OpenEncodedAsync(string path, string format, int? insertAt)
+    /// <param name="readOnly">「読み取り専用で開く」(ENG-11 の仕様 2、ENG-14)。デコードした結果を読み取り専用のドキュメントにする。</param>
+    private async Task<DocumentViewModel?> OpenEncodedAsync(string path, string format, int? insertAt, bool readOnly = false)
     {
         string full = Path.GetFullPath(path);
         if (Vm.Documents.FirstOrDefault(d => d.Encoded is not null && string.Equals(d.FilePath, full, StringComparison.OrdinalIgnoreCase)) is { } open)
@@ -359,11 +392,14 @@ public sealed partial class MainWindow
 
         ImportResult result;
         DocumentViewModel? preview = null;
+
+        // 隙間の塗りつぶしの値 (ENG-38 の仕様 3。設定「隙間の塗りつぶしの値」、既定 FF)。
+        byte gapFill = EncodedFile.ParseGapFill(App.Settings.GetString(EncodedFile.GapFillKey, "FF"));
         Microsoft.UI.Dispatching.DispatcherQueueTimer? previewTimer = null;
         try
         {
             long size = new FileInfo(full).Length;
-            ImportOptions options = EncodedFile.OpenOptions(format);
+            ImportOptions options = EncodedFile.OpenOptions(format, gapFill);
             string temp = Vm.DocumentOptions.TempDirectory;
             if (size <= SyncDecodeLimit)
             {
@@ -450,6 +486,7 @@ public sealed partial class MainWindow
         bool hasErrors = result.HasErrors;
         int errorLines = result.Issues.Items.Where(i => !i.IsWarning).Select(i => i.Line).Distinct().Count();
         DocumentViewModel vm = Vm.AddDecoded(result, full, format);
+        vm.Encoded = vm.Encoded! with { GapFill = gapFill };
         ViewOptions.Attach(App.Settings, vm);
         if (insertAt is int at)
         {
@@ -484,6 +521,13 @@ public sealed partial class MainWindow
                     UpdateCommandStates();
                 }),
             ]);
+        }
+        else if (readOnly)
+        {
+            // 読み取り専用で開く: 元のテキストファイルはデコードの後に閉じているため、デコードした結果のドキュメントを読み取り専用にする
+            // (編集 > 読み取り専用で解除できる)。
+            vm.Document.SetReadOnly(Core.Engine.ReadOnlyReason.User);
+            UpdateCommandStates();
         }
 
         AppLog.Info($"Decoded {Path.GetFileName(full)} as {format}: {vm.Document.Length} bytes, {vm.FormatIssues.Count} issue(s)");

@@ -308,6 +308,82 @@ public sealed class FormatFileTests
         Assert.False(parent["modified"]!.GetValue<bool>());
     });
 
+    /// <summary>
+    /// ENG-11 の仕様 2: 「詳細を指定して開く」の項目の組み合わせ。形式を指定しても読み取り専用が効く、形式「自動」+ 読み取り専用でも
+    /// デコードする、範囲とデコードする形式は組み合わせられない (理由を示す)、デコードする場合は書き込みの禁止を理由付きで無効にする。
+    /// </summary>
+    [Fact]
+    public Task Open_advanced_combines_read_only_range_and_format() => UiTestContext.RunAsync(async ctx =>
+    {
+        string hex = ctx.CopyTestData("TD-IHEX", "fw.hex");
+        string text = ctx.CopyTestData("TD-IHEX", "fw.txt");
+        AppSession app = await ctx.StartAsync();
+
+        async Task<JsonObject> OpenDialogAsync(JsonObject set)
+        {
+            await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openAdvanced" });
+            await app.WaitForDialogAsync("OpenAdvancedDialog");
+            return await app.SendAsync("openAdvancedSet", set);
+        }
+
+        // 範囲 + Intel HEX: 理由を示して開けない。
+        JsonObject state = await OpenDialogAsync(new JsonObject { ["path"] = text, ["range"] = true, ["start"] = "0", ["length"] = "16", ["format"] = "ihex" });
+        Assert.False(state["canOpen"]!.GetValue<bool>());
+        Assert.Contains("Binary as is", state["formatError"]!.GetValue<string>());
+        state = await app.SendAsync("openAdvancedSet", new JsonObject { ["format"] = "bin" });
+        Assert.True(state["canOpen"]!.GetValue<bool>());
+        Assert.Equal(string.Empty, state["formatError"]!.GetValue<string>());
+        Assert.True(state["denyWritesEnabled"]!.GetValue<bool>());
+
+        // 形式を指定 (Intel HEX) + 読み取り専用: デコードした読み取り専用のドキュメント。書き込みの禁止は無効。
+        state = await app.SendAsync("openAdvancedSet", new JsonObject { ["range"] = false, ["format"] = "ihex", ["readOnly"] = true, ["denyWrites"] = true });
+        Assert.False(state["denyWritesEnabled"]!.GetValue<bool>());
+        await app.InvokeDialogButtonAsync("Open");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["format"]?.GetValue<string>() == "ihex", UiTest.Scaled(TimeSpan.FromSeconds(10)), "the decoded tab");
+        JsonObject doc = await DocAsync(app);
+        Assert.True(doc["readOnly"]!.GetValue<bool>());
+
+        // 形式「自動」+ 読み取り専用 + .hex: デコードして読み取り専用。
+        state = await OpenDialogAsync(new JsonObject { ["path"] = hex, ["format"] = "auto", ["readOnly"] = true });
+        Assert.False(state["denyWritesEnabled"]!.GetValue<bool>());
+        await app.InvokeDialogButtonAsync("Open");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["tabs"]!.GetValue<int>() == 2, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the second tab");
+        doc = await DocAsync(app);
+        Assert.Equal("ihex", doc["format"]?.GetValue<string>());
+        Assert.True(doc["readOnly"]!.GetValue<bool>());
+    });
+
+    /// <summary>ENG-38・ENG-19: デコードして開いたドキュメントの元のテキストファイルが外部で変わると、デコードし直す。</summary>
+    [Fact]
+    public Task Decoded_document_follows_external_changes_of_the_text_file() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 4 バイトのデータ (11 22 33 44) の Intel HEX。
+        string path = ctx.WriteFile("small.hex", System.Text.Encoding.ASCII.GetBytes(":040000001122334452\r\n:00000001FF\r\n"));
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["format"]?.GetValue<string>() == "ihex", UiTest.Scaled(TimeSpan.FromSeconds(10)), "the decoded tab");
+        Assert.Equal(new byte[] { 0x11, 0x22, 0x33, 0x44 }, await app.BytesAsync(0, 4));
+
+        // 未編集: 自動でデコードし直す。
+        await File.WriteAllTextAsync(path, ":0400000001020304F2\r\n:00000001FF\r\n");
+        await app.WaitForNotificationAsync(m => m.Contains("it was reloaded", StringComparison.Ordinal), "the reloaded notice");
+        Assert.Equal(new byte[] { 1, 2, 3, 4 }, await app.BytesAsync(0, 4));
+        Assert.Equal("ihex", (await DocAsync(app))["format"]?.GetValue<string>());
+
+        // 編集してから外部で変わる: 警告と「再読み込み」(確かめてから、変更を捨ててデコードし直す)。マージは出さない。
+        await app.GoToAsync(0);
+        await app.TypeAsync("EE");
+        await File.WriteAllTextAsync(path, ":04000000A1A2A3A4F2\r\n:00000001FF\r\n".Replace("F2", ChecksumOf(0x04, 0xA1, 0xA2, 0xA3, 0xA4)));
+        await app.WaitForNotificationAsync(m => m.StartsWith("small.hex was changed by another app", StringComparison.Ordinal), "the changed notice");
+        Assert.False((await app.SendAsync("notificationAction", new JsonObject { ["label"] = "Merge" }))["invoked"]!.GetValue<bool>());
+        Assert.True((await app.SendAsync("notificationAction", new JsonObject { ["label"] = "Reload" }))["invoked"]!.GetValue<bool>());
+        await app.WaitForDialogAsync("DecodedReloadDialog");
+        await app.InvokeDialogButtonAsync("Reload");
+        await app.WaitUntilAsync(async () => !(await DocAsync(app))["modified"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the reload");
+        Assert.Equal(new byte[] { 0xA1, 0xA2, 0xA3, 0xA4 }, await app.BytesAsync(0, 4));
+    });
+
+    private static string ChecksumOf(params int[] bytes) => ((0x100 - bytes.Sum() % 0x100) % 0x100).ToString("X2");
+
     /// <summary>ENG-39 の「エラー」: マルチ選択では最初の範囲だけを開くか、範囲ごとにタブを開くかを確かめる (10 個を超えると件数を示す)。</summary>
     [Fact]
     public Task Multi_selection_asks_how_to_open_the_ranges() => UiTestContext.RunAsync(async ctx =>

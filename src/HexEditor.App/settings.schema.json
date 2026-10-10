@@ -276,6 +276,11 @@
       "type": "boolean",
       "default": true
     },
+    "formats.gapFill": {
+      "description": "Fill value for gaps in Intel HEX and S-record files",
+      "type": "string",
+      "default": "FF"
+    },
     "hash.algorithms": {
       "description": "Hash algorithms",
       "type": "string",

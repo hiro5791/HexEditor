@@ -523,6 +523,7 @@ Details were written to:
   <data name="External_Close" xml:space="preserve"><value>Close</value></data>
   <data name="External_OverwriteBody" xml:space="preserve"><value>{0} was changed by another app. Saving overwrites those changes.</value></data>
   <data name="External_RecreateBody" xml:space="preserve"><value>{0} was deleted or moved. Saving creates the file again in its original location.</value></data>
+  <data name="External_DecodedReloadBody" xml:space="preserve"><value>Discard your unsaved changes and decode {0} again from the file on disk? This can't be undone.</value></data>
   <data name="Discard_Title" xml:space="preserve"><value>Discard changes to {0}?</value></data>
   <data name="Discard_Body" xml:space="preserve"><value>{0} places, {1} bytes of changes will be discarded and the file will be read again.</value></data>
   <data name="Discard_Undoable" xml:space="preserve"><value>You can bring the changes back with Ctrl+Z.</value></data>
@@ -3794,6 +3795,8 @@ Details were written to:
   <data name="OpenAdv_ReadOnly" xml:space="preserve"><value>Open read-only</value></data>
   <data name="OpenAdv_DiskImage" xml:space="preserve"><value>Open as a disk image (choose the sector size next)</value></data>
   <data name="OpenAdv_DenyWrites" xml:space="preserve"><value>Don't let other apps write to the file</value></data>
+  <data name="OpenAdv_DenyWritesDecoded" xml:space="preserve"><value>Not available when the file is decoded: the original file is closed after decoding.</value></data>
+  <data name="OpenAdv_RangeFormatConflict" xml:space="preserve"><value>A range opens the bytes of the file as they are. To open a range, choose the format "Automatic" or "Binary as is".</value></data>
   <data name="OpenAdv_Range" xml:space="preserve"><value>Open a range</value></data>
   <data name="OpenAdv_Start" xml:space="preserve"><value>Start</value></data>
   <data name="OpenAdv_LengthKind" xml:space="preserve"><value>Specify the range by</value></data>
@@ -4026,6 +4029,8 @@ Details were written to:
   <data name="Operations_CannotCancel" xml:space="preserve"><value>Writing has started and can't be canceled. Canceling now would damage the file.</value></data>
   <data name="Set_save_shiftInPlace" xml:space="preserve"><value>Save in place even when the length changes</value></data>
   <data name="SetDesc_save_shiftInPlace" xml:space="preserve"><value>Shifts data inside the original file instead of writing a temporary file. Needs little free space, but if saving is interrupted the file is damaged. You're asked every time.</value></data>
+  <data name="Set_formats_gapFill" xml:space="preserve"><value>Fill value for gaps in Intel HEX and S-record files</value></data>
+  <data name="SetDesc_formats_gapFill" xml:space="preserve"><value>The byte value (hexadecimal, such as FF or 00) shown for addresses without data when a file is decoded. Applies to files opened afterward.</value></data>
   <data name="Find_Kind_RegexText.Content" xml:space="preserve"><value>Regular expression (text)</value></data>
   <data name="Find_Kind_RegexBytes.Content" xml:space="preserve"><value>Regular expression (bytes)</value></data>
   <data name="Find_KindName_RegexText" xml:space="preserve"><value>Regex</value></data>
