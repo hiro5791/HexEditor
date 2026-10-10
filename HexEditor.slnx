@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/HexEditor.App/HexEditor.App.csproj" />
     <Project Path="src/HexEditor.Core/HexEditor.Core.csproj" />
+    <Project Path="src/HexEditor.Elevated/HexEditor.Elevated.csproj" />
     <Project Path="src/HexEditor.Platform/HexEditor.Platform.csproj" />
     <Project Path="src/HexEditor.ShellExtension/HexEditor.ShellExtension.csproj" />
   </Folder>
