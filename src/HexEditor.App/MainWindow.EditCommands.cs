@@ -129,9 +129,18 @@ public sealed partial class MainWindow
                 return false;
         }
 
-        ContentDialog dialog = DialogParts.Dialog(Root, "ReadOnlyConfirmDialog", Loc.Get("ReadOnly_Confirm_Title"),
-            new TextBlock { Text = Loc.Get("ReadOnly_Confirm_" + document.ReadOnlyReason), TextWrapping = TextWrapping.Wrap, MaxWidth = 420 },
-            Loc.Get("ReadOnly_AllowEdit"));
+        // ディスク・ボリューム・プロセスメモリは、書き込めるようにすることと対象 (ディスクのモデル名・サイズ、またはプロセス名・PID) を示し、
+        // 「書き込みを許可」「キャンセル」を選ばせる (ENG-14 の仕様 3)。
+        bool device = document.ReadOnlyReason == ReadOnlyReason.Device;
+        var body = new StackPanel { Spacing = 8, MaxWidth = 420 };
+        body.Children.Add(new TextBlock { Text = Loc.Get("ReadOnly_Confirm_" + document.ReadOnlyReason), TextWrapping = TextWrapping.Wrap });
+        if (device)
+        {
+            body.Children.Add(new TextBlock { Text = Loc.Format("ReadOnly_Confirm_Target", document.Source.DisplayName), TextWrapping = TextWrapping.Wrap });
+        }
+
+        ContentDialog dialog = DialogParts.Dialog(Root, "ReadOnlyConfirmDialog", Loc.Get("ReadOnly_Confirm_Title"), body,
+            Loc.Get(device ? "ReadOnly_AllowWriting" : "ReadOnly_AllowEdit"));
         if (await ShowEditDialogAsync(dialog) != ContentDialogResult.Primary)
         {
             return false;

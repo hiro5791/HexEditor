@@ -133,6 +133,18 @@ public sealed record TestHookSettings
     /// <summary>管理者として実行している扱いにする (昇格せずに UI-02 の「(管理者)」を確かめる。TC-UI-02-02)。</summary>
     public bool Elevated { get; init; }
 
+    /// <summary>
+    /// 管理者として実行中のドロップの案内 (UI-34 の仕様 7) をテスト用のビルドでも出す。既定では出さない (CI のランナーは管理者として動くため、
+    /// ほかの通知を確かめるテストの邪魔になる)。TC-UI-34-06 で使う。
+    /// </summary>
+    public bool AdminDropNotice { get; init; }
+
+    /// <summary>
+    /// ディスクの書き込み (ENG-30) で、ボリュームをロックした後・書き込みの直前に止め、このパスに印のファイルを書く (ロックを保持したまま。
+    /// TC-ENG-28-08)。null なら止めない。
+    /// </summary>
+    public string? PauseAfterVolumeLock { get; init; }
+
     /// <summary>インスペクタの「ローカル時刻」に使うタイムゾーンの ID (null ならシステムの設定)。</summary>
     public string? TimeZone { get; init; }
 
@@ -198,6 +210,8 @@ public sealed record TestHookSettings
             AnsiCodePage = root["ansiCodePage"] is { } cp ? (int)ReadLong(cp, 0) : null,
             Culture = root["culture"]?.GetValue<string>(),
             Elevated = root["elevated"]?.GetValue<bool>() ?? false,
+            AdminDropNotice = root["adminDropNotice"]?.GetValue<bool>() ?? false,
+            PauseAfterVolumeLock = root["pauseAfterVolumeLock"]?.GetValue<string>(),
             TimeZone = root["timeZone"]?.GetValue<string>(),
             FakeDevices = root["fakeDevices"]?.GetValue<string>(),
             FakeProcesses = root["fakeProcesses"]?.GetValue<string>(),

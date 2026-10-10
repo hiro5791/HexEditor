@@ -272,6 +272,11 @@ public sealed partial class MainWindow
     /// </summary>
     private Task<bool> ReopenForWritingAsync(DocumentViewModel doc)
     {
+        if (doc.Document.Source is Core.Devices.DeviceByteSource or Core.Processes.ProcessMemoryByteSource)
+        {
+            return Task.FromResult(ReopenDeviceForWriting(doc));
+        }
+
         if (doc.Document.Source is not Core.Sources.FileByteSource file)
         {
             return Task.FromResult(true);
@@ -302,5 +307,37 @@ public sealed partial class MainWindow
 
         ShowNotice(message, InfoBarSeverity.Error, doc);
         return Task.FromResult(false);
+    }
+
+    /// <summary>
+    /// ディスク・ボリューム・プロセスメモリを読み書きのアクセス権で開き直す (ENG-14 の仕様 3。補助プロセス経由のものは補助プロセスの
+    /// OpenDevice / OpenProcess)。開けなければ理由を示して false (読み取り専用のまま)。
+    /// </summary>
+    private bool ReopenDeviceForWriting(DocumentViewModel doc)
+    {
+        try
+        {
+            switch (doc.Document.Source)
+            {
+                case Core.Devices.DeviceByteSource device when !device.Handle.Writable:
+                    device.ReplaceHandle(device.Access.Open(device.Path, writable: true), device.Access);
+                    break;
+                case Core.Processes.ProcessMemoryByteSource process when !process.Memory.Writable:
+                    process.ReplaceMemory(process.Access.Open(process.Pid, writable: true), process.Access);
+                    break;
+            }
+
+            return true;
+        }
+        catch (Core.Devices.DeviceException ex)
+        {
+            ShowNotice(DeviceErrorMessage(ex), InfoBarSeverity.Error, doc);
+        }
+        catch (Exception ex) when (ex is Core.Processes.ProcessAccessException or IOException or UnauthorizedAccessException or InvalidOperationException)
+        {
+            ShowNotice(Loc.Format("ReadOnly_ReopenFailed", ex.Message), InfoBarSeverity.Error, doc);
+        }
+
+        return false;
     }
 }

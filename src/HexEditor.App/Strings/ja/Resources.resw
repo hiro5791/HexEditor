@@ -1426,6 +1426,9 @@
   <data name="ReadOnly_Confirm_AccessDenied" xml:space="preserve"><value>このファイルに書き込む権限がない可能性があります。編集の許可を試しますか?</value></data>
   <data name="ReadOnly_Confirm_SharingViolation" xml:space="preserve"><value>他のアプリがこのファイルを書き込みのために開いています。編集を許可しますか? 他のアプリの変更と競合することがあります。</value></data>
   <data name="ReadOnly_Confirm_Device" xml:space="preserve"><value>このデバイスに書き込めるようにします。保存するまで実際には書き込みません。</value></data>
+  <data name="ReadOnly_Confirm_Target" xml:space="preserve"><value>対象: {0}</value></data>
+  <data name="ReadOnly_AllowWriting" xml:space="preserve"><value>書き込みを許可</value></data>
+  <data name="ReadOnly_ReopenFailed" xml:space="preserve"><value>書き込み用に開けなかったため、読み取り専用のままです: {0}</value></data>
   <data name="ReadOnly_CannotRelease_NoWriteTarget" xml:space="preserve"><value>データソースが書き込みに対応していないため、読み取り専用のままです。</value></data>
   <data name="ReadOnly_CannotRelease_WriteProtectionMode" xml:space="preserve"><value>書き込み保護モードが有効なため、読み取り専用のままです。</value></data>
   <data name="ReadOnly_CannotRelease_ReadOnlyMedia" xml:space="preserve"><value>読み取り専用のメディアにあるため、読み取り専用のままです。</value></data>
@@ -5127,11 +5130,14 @@
   <data name="AdminGuide_Title" xml:space="preserve"><value>管理者権限が必要です</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>物理ディスクや内蔵ディスクのボリュームを直接読むには、Windows の管理者権限が必要です。</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>このプロセスを開くには管理者権限が必要です。</value></data>
-  <data name="AdminGuide_Steps" xml:space="preserve"><value>管理者として実行するには: 1. HexEditor を閉じます。2. スタートメニューまたはエクスプローラーで HexEditor を右クリックします。3.「管理者として実行」を選びます。</value></data>
+  <data name="AdminGuide_Steps" xml:space="preserve"><value>管理者として実行するには: 1. HexEditor を閉じます。2. スタートメニューで HexEditor を右クリックします。3.「その他」&gt;「管理者として実行」を選びます。</value></data>
+  <data name="AdminGuide_StepsPortable" xml:space="preserve"><value>管理者として実行するには: 1. HexEditor を閉じます。2. エクスプローラーで HexEditor.exe を右クリックします。3.「管理者として実行」を選びます。</value></data>
+  <data name="AdminGuide_DownloadLink" xml:space="preserve"><value>インストーラ版・ポータブル版のダウンロード</value></data>
   <data name="AdminGuide_UsbAlternative" xml:space="preserve"><value>取り外し可能な USB ストレージのボリュームは管理者権限なしで開けます。</value></data>
   <data name="AdminGuide_StoreDownload" xml:space="preserve"><value>インストーラ版・ポータブル版は、必要なときだけ管理者権限の確認を出して管理者権限の操作を使えます。</value></data>
   <data name="AdminGuide_Restart" xml:space="preserve"><value>管理者として再起動</value></data>
   <data name="AdminGuide_Declined" xml:space="preserve"><value>管理者権限が得られなかったため、ディスクを開けませんでした。</value></data>
+  <data name="Helper_Tampered" xml:space="preserve"><value>管理者権限の補助プロセス (HexEditor.Elevated.exe) が改ざんされている可能性があるため、起動しませんでした。HexEditor を入れ直してください。</value></data>
   <data name="Status_ImmediateWrite" xml:space="preserve"><value>即時書き込み</value></data>
   <data name="Status_HelperRunning" xml:space="preserve"><value>管理者権限の補助プロセスが実行中</value></data>
   <data name="MemoryMap_RegionsTab" xml:space="preserve"><value>領域</value></data>

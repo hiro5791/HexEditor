@@ -71,6 +71,28 @@ public sealed partial class MemoryMapPanel : UserControl, IPanelContent
 
     public bool FocusContent() => _tab.SelectedIndex == 1 ? _modules.Focus(FocusState.Programmatic) : _regions.Focus(FocusState.Programmatic);
 
+    /// <summary>「領域」タブの行の数 (テスト用。TC-ENG-33-03)。</summary>
+    internal int RegionRowCount => (_regions.ItemsSource as System.Collections.ICollection)?.Count ?? 0;
+
+    /// <summary>
+    /// 「領域」の一覧で 1 ページ下へ移る (テスト用。PageDown のキーと同じく、見えている行の数だけ選択を進めて表示する。TC-ENG-33-03)。
+    /// </summary>
+    internal void PageDownForTest()
+    {
+        int count = RegionRowCount;
+        if (count == 0)
+        {
+            return;
+        }
+
+        _tab.SelectedIndex = 0;
+        _regions.Focus(FocusState.Programmatic);
+        double rowHeight = _regions.ContainerFromIndex(Math.Max(0, _regions.SelectedIndex)) is FrameworkElement row && row.ActualHeight > 0 ? row.ActualHeight : 40;
+        int page = Math.Max(1, (int)(_regions.ActualHeight / rowHeight) - 1);
+        _regions.SelectedIndex = Math.Min(count - 1, Math.Max(0, _regions.SelectedIndex) + page);
+        _regions.ScrollIntoView(_regions.SelectedItem);
+    }
+
     private void UpdateTabVisibility()
     {
         bool regions = _tab.SelectedIndex == 0;

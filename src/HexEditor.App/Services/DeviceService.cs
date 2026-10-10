@@ -37,6 +37,7 @@ public sealed class DeviceService : IAsyncDisposable
     private readonly IProcessAccess? _fakeElevatedProcesses;
     private readonly string _helperPath;
     private HelperSession? _session;
+    private RunAsHelperLauncher? _launcher;
     private bool _fakeHelperActive;
 
     public DeviceService(IAppEnvironment env)
@@ -87,6 +88,15 @@ public sealed class DeviceService : IAsyncDisposable
 
     /// <summary>補助プロセスが動いている (ステータスバーの盾のアイコン。ENG-28 の「画面」)。</summary>
     public bool IsHelperRunning => _fakeHelperActive || _session is { IsConnected: true };
+
+    /// <summary>今の補助プロセスのプロセス ID (テスト用。動いていなければ null)。</summary>
+    public int? HelperPid => _session is { IsConnected: true } s ? s.HelperPid : null;
+
+    /// <summary>今の補助プロセスとのパイプ名 (テスト用。TC-PKG-14-05)。</summary>
+    public string? HelperPipeName => _session is { IsConnected: true } s ? s.PipeName : null;
+
+    /// <summary>補助プロセスを起動した回数 (= 昇格の要求の回数。テスト用)。</summary>
+    public int HelperLaunchCount => _launcher?.LaunchCount ?? 0;
 
     /// <summary>補助プロセスの状態が変わった。</summary>
     public event EventHandler? HelperStateChanged;
@@ -225,11 +235,12 @@ public sealed class DeviceService : IAsyncDisposable
         var session = new HelperSession(new HelperSessionOptions
         {
             HelperPath = _helperPath,
-            Launcher = new RunAsHelperLauncher(),
+            Launcher = _launcher = new RunAsHelperLauncher(),
             AppVersion = _env.AppVersion,
             ExpectedSha256 = HelperSha256,
             IdleMinutes = 10,
             Log = AppLog.Info,
+            LogPath = AppLog.Folder is { } logs ? Path.Combine(logs, "elevated.log") : null,
         });
         session.StateChanged += (_, _) => HelperStateChanged?.Invoke(this, EventArgs.Empty);
         session.Disconnected += (_, _) => HelperDisconnected?.Invoke(this, EventArgs.Empty);

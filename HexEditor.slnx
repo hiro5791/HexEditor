@@ -21,5 +21,6 @@
     </Project>
     <Project Path="tools/TestCoverage/TestCoverage.csproj" />
     <Project Path="tools/TestDataGen/TestDataGen.csproj" />
+    <Project Path="tools/TestTarget/TestTarget.csproj" />
   </Folder>
 </Solution>

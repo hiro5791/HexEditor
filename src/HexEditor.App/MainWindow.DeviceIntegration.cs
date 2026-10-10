@@ -169,6 +169,11 @@ public sealed partial class MainWindow
         {
             ShowNotice(Loc.Get("AdminGuide_Declined"), InfoBarSeverity.Informational);
         }
+        catch (HexEditor.Core.Elevation.HelperTamperedException)
+        {
+            // 補助プロセスのファイルのハッシュが違う: 起動せずに知らせる (PKG-14 の仕様 2・「エラー」)。
+            ShowNotice(Loc.Get("Helper_Tampered"), InfoBarSeverity.Error);
+        }
         catch (DeviceException ex)
         {
             ShowNotice(DeviceErrorMessage(ex), InfoBarSeverity.Error);

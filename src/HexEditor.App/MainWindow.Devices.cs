@@ -107,6 +107,11 @@ public sealed partial class MainWindow
         {
             ShowNotice(Loc.Get("AdminGuide_Declined"), InfoBarSeverity.Informational);
         }
+        catch (HexEditor.Core.Elevation.HelperTamperedException)
+        {
+            // 補助プロセスのファイルのハッシュが違う: 起動せずに知らせる (PKG-14 の仕様 2・「エラー」)。
+            ShowNotice(Loc.Get("Helper_Tampered"), InfoBarSeverity.Error);
+        }
         catch (DeviceException ex)
         {
             ShowNotice(DeviceErrorMessage(ex), InfoBarSeverity.Error);
@@ -181,6 +186,11 @@ public sealed partial class MainWindow
         catch (HexEditor.Core.Elevation.HelperElevationDeclinedException)
         {
             ShowNotice(Loc.Get("AdminGuide_Declined"), InfoBarSeverity.Informational);
+        }
+        catch (HexEditor.Core.Elevation.HelperTamperedException)
+        {
+            // 補助プロセスのファイルのハッシュが違う: 起動せずに知らせる (PKG-14 の仕様 2・「エラー」)。
+            ShowNotice(Loc.Get("Helper_Tampered"), InfoBarSeverity.Error);
         }
         catch (ProcessAccessException ex)
         {
@@ -390,15 +400,25 @@ public sealed partial class MainWindow
 
     private async Task ShowAdminGuidanceAsync(string reason)
     {
+        // 1. 理由、2. 配布形態ごとの起動し直す手順 (番号付き)、3. 管理者として実行中の制限 (UI-34 の仕様 7)、4. 管理者権限なしで使える代わりの方法
+        // (ディスクを開く操作だけ)、5. Store 版ではインストーラ版・ポータブル版の案内とダウンロードページへのリンク (ENG-28 の仕様 12)。
         var panel = new StackPanel { Spacing = 8 };
         panel.Children.Add(new TextBlock { Text = reason, TextWrapping = TextWrapping.Wrap });
-        panel.Children.Add(new TextBlock { Text = Loc.Get("AdminGuide_Steps"), TextWrapping = TextWrapping.Wrap });
-        panel.Children.Add(new TextBlock { Text = Loc.Get("AdminGuide_UsbAlternative"), TextWrapping = TextWrapping.Wrap });
+        bool portable = HexEditor.App.Hosting.Program.Environment.Distribution == HexEditor.Platform.Distribution.Portable;
+        panel.Children.Add(new TextBlock { Text = Loc.Get(portable ? "AdminGuide_StepsPortable" : "AdminGuide_Steps"), TextWrapping = TextWrapping.Wrap });
+        panel.Children.Add(new TextBlock { Text = Loc.Get("Drop_AdminLimited"), TextWrapping = TextWrapping.Wrap });
+        if (reason == Loc.Get("AdminGuide_Disk"))
+        {
+            panel.Children.Add(new TextBlock { Text = Loc.Get("AdminGuide_UsbAlternative"), TextWrapping = TextWrapping.Wrap });
+        }
 
         bool canRestart = DeviceService.HelperSupported;
         if (!canRestart)
         {
             panel.Children.Add(new TextBlock { Text = Loc.Get("AdminGuide_StoreDownload"), TextWrapping = TextWrapping.Wrap });
+            var link = new HyperlinkButton { Content = Loc.Get("AdminGuide_DownloadLink"), NavigateUri = new Uri(AboutInfo.RepositoryUrl + "/releases") };
+            AutomationProperties.SetAutomationId(link, "AdminGuide_DownloadLink");
+            panel.Children.Add(link);
         }
 
         var dialog = new ContentDialog

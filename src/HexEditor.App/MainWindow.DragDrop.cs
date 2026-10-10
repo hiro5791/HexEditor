@@ -17,7 +17,8 @@ public sealed partial class MainWindow
 {
     public const int ConfirmDropCount = 21;
 
-    private bool _adminDropNoticeShown;
+    /// <summary>管理者として実行中のドロップの案内を出した (起動ごとに 1 回。ウィンドウを増やしても出し直さない)。</summary>
+    private static bool _adminDropNoticeShown;
 
     private void InitializeDragDrop()
     {
@@ -39,8 +40,9 @@ public sealed partial class MainWindow
     /// </summary>
     private void ShowAdminDropNoticeOnce()
     {
-        // テスト用の仕組みが有効なとき (CI のランナーは管理者として動く) は出さない。ほかの通知を確かめるテストの邪魔になるため。
-        if (Program.Environment.IsElevated && !_adminDropNoticeShown && !TestHooks.Active)
+        // テスト用の仕組みが有効なとき (CI のランナーは管理者として動く) は、設定 adminDropNotice のときだけ出す。ほかの通知を確かめるテストの
+        // 邪魔になるため。
+        if (Program.Environment.IsElevated && !_adminDropNoticeShown && TestHooks.AllowsAdminDropNotice)
         {
             _adminDropNoticeShown = true;
             ShowNotice(Loc.Get("Drop_AdminLimited"), InfoBarSeverity.Informational);

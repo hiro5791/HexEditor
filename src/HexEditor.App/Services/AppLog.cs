@@ -31,6 +31,9 @@ public static class AppLog
         }
     }
 
+    /// <summary>ログのフォルダ (書けない場合は null)。補助プロセスのログ (elevated.log) もここに置く (ENG-28 の仕様 9)。</summary>
+    public static string? Folder => _folder;
+
     /// <summary>true ならデバッグのログ (ファイルのパスを含む) も残す (設定 log.level = debug)。</summary>
     public static bool DebugEnabled { get; set; }
 

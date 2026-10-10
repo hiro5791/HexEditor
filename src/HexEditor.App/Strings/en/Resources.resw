@@ -1426,6 +1426,9 @@ Details were written to:
   <data name="ReadOnly_Confirm_AccessDenied" xml:space="preserve"><value>You may not have permission to write to this file. Try to allow editing anyway?</value></data>
   <data name="ReadOnly_Confirm_SharingViolation" xml:space="preserve"><value>Another app has this file open for writing. Allow editing? Changes made by the other app may conflict.</value></data>
   <data name="ReadOnly_Confirm_Device" xml:space="preserve"><value>This allows writing to the device. Nothing is written until you save.</value></data>
+  <data name="ReadOnly_Confirm_Target" xml:space="preserve"><value>Target: {0}</value></data>
+  <data name="ReadOnly_AllowWriting" xml:space="preserve"><value>Allow writing</value></data>
+  <data name="ReadOnly_ReopenFailed" xml:space="preserve"><value>Couldn't open it for writing, so it stays read-only: {0}</value></data>
   <data name="ReadOnly_CannotRelease_NoWriteTarget" xml:space="preserve"><value>This data source can't be written to, so it stays read-only.</value></data>
   <data name="ReadOnly_CannotRelease_WriteProtectionMode" xml:space="preserve"><value>Write protection mode is on, so documents stay read-only.</value></data>
   <data name="ReadOnly_CannotRelease_ReadOnlyMedia" xml:space="preserve"><value>The file is on read-only media, so it stays read-only.</value></data>
@@ -5127,11 +5130,14 @@ Details were written to:
   <data name="AdminGuide_Title" xml:space="preserve"><value>Administrator rights are required</value></data>
   <data name="AdminGuide_Disk" xml:space="preserve"><value>Reading a physical disk or an internal disk's volume directly requires Windows administrator rights.</value></data>
   <data name="AdminGuide_Process" xml:space="preserve"><value>This process requires administrator rights to open.</value></data>
-  <data name="AdminGuide_Steps" xml:space="preserve"><value>To run as administrator: 1. Close HexEditor. 2. Right-click HexEditor in the Start menu or Explorer. 3. Choose "Run as administrator".</value></data>
+  <data name="AdminGuide_Steps" xml:space="preserve"><value>To run as administrator: 1. Close HexEditor. 2. Right-click HexEditor in the Start menu. 3. Choose More &gt; "Run as administrator".</value></data>
+  <data name="AdminGuide_StepsPortable" xml:space="preserve"><value>To run as administrator: 1. Close HexEditor. 2. In File Explorer, right-click HexEditor.exe. 3. Choose "Run as administrator".</value></data>
+  <data name="AdminGuide_DownloadLink" xml:space="preserve"><value>Download the installer or portable edition</value></data>
   <data name="AdminGuide_UsbAlternative" xml:space="preserve"><value>Removable USB storage volumes can be opened without administrator rights.</value></data>
   <data name="AdminGuide_StoreDownload" xml:space="preserve"><value>The installer and portable editions can use administrator operations by prompting for rights only when needed.</value></data>
   <data name="AdminGuide_Restart" xml:space="preserve"><value>Restart as administrator</value></data>
   <data name="AdminGuide_Declined" xml:space="preserve"><value>The disk could not be opened because administrator rights were not granted.</value></data>
+  <data name="Helper_Tampered" xml:space="preserve"><value>The administrator helper (HexEditor.Elevated.exe) may have been tampered with, so it was not started. Reinstall HexEditor.</value></data>
   <data name="Status_ImmediateWrite" xml:space="preserve"><value>Immediate write</value></data>
   <data name="Status_HelperRunning" xml:space="preserve"><value>Administrator helper process is running</value></data>
   <data name="MemoryMap_RegionsTab" xml:space="preserve"><value>Regions</value></data>
