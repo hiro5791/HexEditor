@@ -363,6 +363,7 @@ public sealed partial class MainWindow
                 QueueAnnotationPanelsRefresh();
             }
         };
+        RegisterSearchResultAnnotations(annotations);
         annotations.Bookmarks.Changed += bookmarksChanged;
         doc.Document.Changed += documentChanged;
         doc.Document.DataLoaded += dataLoaded;

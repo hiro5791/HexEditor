@@ -109,6 +109,13 @@ public static class BuiltInSettings
         new("bookmarks.richToolTip", SettingCategories.View, SettingKind.Bool, true) { Order = 112 },
         new("annotations.hidden", SettingCategories.View, SettingKind.String, string.Empty) { Order = 113, ShowInPage = false },
         new("annotations.column", SettingCategories.View, SettingKind.Bool, false) { Order = 114 },
+        // 注釈の描き方 (出どころごと。INSP-32 の仕様 4)。
+        new("annotations.style.bookmark", SettingCategories.View, SettingKind.Choice, "background") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.yara", SettingCategories.View, SettingKind.Choice, "border") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.searchResults", SettingCategories.View, SettingKind.Choice, "border") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.template", SettingCategories.View, SettingKind.Choice, "background") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.script", SettingCategories.View, SettingKind.Choice, "border") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.analysis", SettingCategories.View, SettingKind.Choice, "border") { Options = ["background", "border", "underline"], Order = 114 },
         new("coloring.rules", SettingCategories.View, SettingKind.String, string.Empty) { Order = 115, ShowInPage = false },
         new("coloring.highContrastColors", SettingCategories.View, SettingKind.Bool, false) { Order = 116 },
 

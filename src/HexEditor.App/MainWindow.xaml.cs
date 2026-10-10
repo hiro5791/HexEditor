@@ -715,11 +715,11 @@ public sealed partial class MainWindow : Window
     {
         foreach (HexView view in only is null ? _views : [only])
         {
-            // 検索バーが開いていれば検索バーの一致、閉じていても結果一覧が開いていれば一覧の一致 (FIND-20 の仕様 10)。
+            // 検索バーが開いていれば検索バーの一致。すべて検索の結果一覧の一致は、注釈 (出どころ「すべて検索の結果」。INSP-32) として
+            // 注釈の層に描く (FIND-20 の仕様 10。MainWindow.Annotations.cs の SearchResultsAnnotations)。
             bool active = FindBar.IsOpen && view.Editor == FindBar.Editor;
-            bool results = !active && SearchResults.IsOpen && SearchResults.Shows(view.Editor);
             // 一致の強調は設定で無効にできる (FIND-04 の仕様 9)。
-            view.MatchProvider = !MatchHighlightEnabled ? null : active ? FindBar.MatchesInView : results ? SearchResults.MatchesInView : StringsHighlights(view);
+            view.MatchProvider = !MatchHighlightEnabled ? null : active ? FindBar.MatchesInView : StringsHighlights(view);
             view.SetSearchMarkers(active ? FindBar.MarkerOffsets() : null);
         }
     }

@@ -132,6 +132,17 @@ public sealed partial class MainWindow
     private static void LoadAnnotationDisplay()
     {
         AnnotationDisplay display = AnnotationLayer.SharedDisplay;
+
+        // 出どころごとの描き方 (設定 annotations.style.*。設定の画面で変えたらすぐ反映する。INSP-32 の仕様 4)。
+        display.ApplyStyleSettings(key => App.Settings.GetString(key, string.Empty));
+        App.Settings.Changed += keys =>
+        {
+            if (keys.Any(k => k.StartsWith("annotations.style.", StringComparison.Ordinal)))
+            {
+                display.ApplyStyleSettings(key => App.Settings.GetString(key, string.Empty));
+            }
+        };
+
         foreach (string name in App.Settings.GetString(AnnotationsHiddenKey, string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries))
         {
             if (Enum.TryParse(name.Trim(), ignoreCase: true, out AnnotationOrigin origin))
@@ -536,6 +547,7 @@ public sealed partial class MainWindow
                 AnnotationOrigin.Yara => "Yara",
                 AnnotationOrigin.SearchResults => "Search",
                 AnnotationOrigin.Template => "Template",
+                AnnotationOrigin.Analysis => "Analysis",
                 _ => "Script",
             };
             Brush mark = p.Annotation.Rgb is { } rgb && !hc ? AnnotationBrushes.Mark(BookmarkColor.Custom(rgb), view, false)
@@ -550,6 +562,32 @@ public sealed partial class MainWindow
                 AnnotationStyle.Underline => new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null, mark, null, tag, Level: p.Level, Underline: true),
                 _ => new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null, mark, null, tag, Level: p.Level),
             };
+        }
+    }
+
+    /// <summary>注釈の出どころ「すべて検索の結果」の ID。</summary>
+    private const string SearchResultsSourceId = "searchResults";
+
+    /// <summary>
+    /// すべて検索の結果 (FIND-20) を注釈の出どころ「すべて検索の結果」として載せる (INSP-32 の仕様 2・6)。結果は 100 万件を超えることがあるので、
+    /// 注釈の配列にはせず、表示範囲の一致だけを結果一覧に問い合わせる。表示 > 注釈 > すべて検索の結果 で表示 / 非表示を切り替える。
+    /// 結果一覧はウィンドウごとなので、ドキュメントを別のウィンドウに移したら、移した先のウィンドウで登録し直す (同じ ID は置き換え)。
+    /// </summary>
+    private void RegisterSearchResultAnnotations(DocumentAnnotations annotations)
+    {
+        Core.Engine.Document document = annotations.Document.Document;
+        annotations.Layer.Register(new RangeAnnotationSource(SearchResultsSourceId, AnnotationOrigin.SearchResults,
+            (start, end) => !MatchHighlightEnabled || document.IsDisposed ? []
+                : SearchResults.MatchesInDocument(document, document.Current, start, end - start),
+            () => SearchResults.Query.Length > 0 ? SearchResults.Query : Loc.Get("Annotations_Origin_SearchResults")));
+    }
+
+    /// <summary>結果一覧の一致が変わった (検索・一覧を閉じた・設定): 注釈を描き直す。</summary>
+    private void RefreshSearchResultAnnotations()
+    {
+        foreach (DocumentAnnotations a in _annotations.Values)
+        {
+            (a.Layer.Find(SearchResultsSourceId) as RangeAnnotationSource)?.RaiseChanged();
         }
     }
 
@@ -749,25 +787,16 @@ public sealed partial class MainWindow
         return brush;
     }
 
-    /// <summary>枠線の形 (実線・破線・点線・二重線の代わりの一点鎖線)。同じ配列を返す (描画で、変わったときだけ設定し直すため)。</summary>
-    internal static IReadOnlyList<double>? RuleDash(int shape) => (shape % 4) switch
+    /// <summary>枠線の形の破線の模様 (実線・二重線は null)。同じ配列を返す (描画で、変わったときだけ設定し直すため)。</summary>
+    internal static IReadOnlyList<double>? RuleDash(ColoringShape shape) => shape switch
     {
-        1 => DashedPattern,
-        2 => DottedPattern,
-        3 => DashDotPattern,
+        ColoringShape.Dashed => DashedPattern,
+        ColoringShape.Dotted => DottedPattern,
         _ => null,
     };
 
     private static readonly double[] DashedPattern = [4, 2];
     private static readonly double[] DottedPattern = [1, 1.5];
-    private static readonly double[] DashDotPattern = [6, 2, 1, 2];
-
-    private static int ShapeOf(ColoringBorder border) => border switch
-    {
-        ColoringBorder.Dashed => 1,
-        ColoringBorder.Dotted => 2,
-        _ => 0,
-    };
 
     /// <summary>1 フレームの評価の結果 (背景・枠線と文字色の 2 つの問い合わせで使い回す)。</summary>
     private readonly Dictionary<HexView, (DocumentSnapshot Snapshot, long Start, int Count, int Version, ColoringCell[] Hex, ColoringCell[] Text, bool Complete)> _coloringFrames = [];
@@ -832,10 +861,11 @@ public sealed partial class MainWindow
                 Brush? background = colors && cell.Background >= 0 ? RuleBrush(rules.Rules[cell.Background].Rule.Background!.Value) : null;
                 Brush? border = !colors ? systemBorder
                     : cell.Border >= 0 ? RuleBrush(rules.Rules[cell.Border].Rule.Foreground ?? rules.Rules[cell.Border].Rule.Background ?? 0x808080) : null;
-                IReadOnlyList<double>? dash = !colors ? RuleDash(ruleIndex) : cell.Border >= 0 ? RuleDash(ShapeOf(rules.Rules[cell.Border].Rule.Border)) : null;
+                ColoringShape shape = !colors ? ColoringShapes.HighContrast(ruleIndex)
+                    : cell.Border >= 0 ? ColoringShapes.Of(rules.Rules[cell.Border].Rule.Border) : ColoringShape.Solid;
                 // 背景は合成の図形で塗る (乱数のデータではバイトごとに強調になり、1 画面に数千になる。INSP-33 の仕様 5)。
-                yield return new HexHighlight(start + i, j - i, CellLayer.ColoringRule, background, border, dash,
-                    (column == 0 ? "coloring-hex:" : "coloring-text:") + rule.Name, LightBackground: true);
+                yield return new HexHighlight(start + i, j - i, CellLayer.ColoringRule, background, border, border is null ? null : RuleDash(shape),
+                    (column == 0 ? "coloring-hex:" : "coloring-text:") + rule.Name, LightBackground: true, DoubleLine: border is not null && shape == ColoringShape.Double);
                 i = j;
             }
         }

@@ -136,6 +136,26 @@ public sealed class AnnotationDisplay
 
     /// <summary>描き方を変えた出どころ (保存用)。</summary>
     public IReadOnlyDictionary<AnnotationOrigin, AnnotationStyle> Styles => _styles;
+
+    /// <summary>描き方の設定のキー (<c>annotations.style.searchResults</c> など。値は <c>background</c> / <c>border</c> / <c>underline</c>)。</summary>
+    public static string StyleSettingKey(AnnotationOrigin origin)
+    {
+        string name = origin.ToString();
+        return "annotations.style." + char.ToLowerInvariant(name[0]) + name[1..];
+    }
+
+    /// <summary>設定の値の描き方 (読めなければ null)。</summary>
+    public static AnnotationStyle? ParseStyle(string? text) =>
+        Enum.TryParse(text?.Trim(), ignoreCase: true, out AnnotationStyle style) && Enum.IsDefined(style) ? style : null;
+
+    /// <summary>設定の値 (<see cref="StyleSettingKey"/>) から、すべての出どころの描き方を決める。値がない・読めないものは既定の描き方。</summary>
+    public void ApplyStyleSettings(Func<string, string?> read)
+    {
+        foreach (AnnotationOrigin origin in Enum.GetValues<AnnotationOrigin>())
+        {
+            SetStyle(origin, ParseStyle(read(StyleSettingKey(origin))) ?? DefaultStyle(origin));
+        }
+    }
 }
 
 /// <summary>

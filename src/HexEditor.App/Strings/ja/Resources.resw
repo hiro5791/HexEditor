@@ -3601,7 +3601,7 @@
   <data name="Legend_Shape0" xml:space="preserve"><value>実線</value></data>
   <data name="Legend_Shape1" xml:space="preserve"><value>破線</value></data>
   <data name="Legend_Shape2" xml:space="preserve"><value>点線</value></data>
-  <data name="Legend_Shape3" xml:space="preserve"><value>一点鎖線</value></data>
+  <data name="Legend_Shape3" xml:space="preserve"><value>二重線</value></data>
   <data name="Legend_NextName" xml:space="preserve"><value>{0} の次の一致</value></data>
   <data name="Legend_PreviousName" xml:space="preserve"><value>{0} の前の一致</value></data>
   <data name="Legend_NoNext" xml:space="preserve"><value>カーソルより後ろに一致はありません</value></data>
@@ -3700,6 +3700,36 @@
   <data name="SetDesc_annotations_hidden" xml:space="preserve"><value>Hex ビューに表示しない注釈の出どころ。</value></data>
   <data name="Set_annotations_column" xml:space="preserve"><value>注釈の列を表示する</value></data>
   <data name="SetDesc_annotations_column" xml:space="preserve"><value>テキスト列の右に、その行で始まる注釈のラベルを表示します。</value></data>
+  <data name="Set_annotations_style_bookmark" xml:space="preserve"><value>注釈の描き方: ブックマーク</value></data>
+  <data name="SetDesc_annotations_style_bookmark" xml:space="preserve"><value>ブックマークの注釈を Hex ビューにどう描くか。</value></data>
+  <data name="SetOpt_annotations_style_bookmark_background" xml:space="preserve"><value>背景色</value></data>
+  <data name="SetOpt_annotations_style_bookmark_border" xml:space="preserve"><value>枠線</value></data>
+  <data name="SetOpt_annotations_style_bookmark_underline" xml:space="preserve"><value>下線</value></data>
+  <data name="Set_annotations_style_yara" xml:space="preserve"><value>注釈の描き方: YARA の一致</value></data>
+  <data name="SetDesc_annotations_style_yara" xml:space="preserve"><value>YARA の一致の注釈を Hex ビューにどう描くか。</value></data>
+  <data name="SetOpt_annotations_style_yara_background" xml:space="preserve"><value>背景色</value></data>
+  <data name="SetOpt_annotations_style_yara_border" xml:space="preserve"><value>枠線</value></data>
+  <data name="SetOpt_annotations_style_yara_underline" xml:space="preserve"><value>下線</value></data>
+  <data name="Set_annotations_style_searchResults" xml:space="preserve"><value>注釈の描き方: すべて検索の結果</value></data>
+  <data name="SetDesc_annotations_style_searchResults" xml:space="preserve"><value>すべて検索の結果の注釈を Hex ビューにどう描くか。</value></data>
+  <data name="SetOpt_annotations_style_searchResults_background" xml:space="preserve"><value>背景色</value></data>
+  <data name="SetOpt_annotations_style_searchResults_border" xml:space="preserve"><value>枠線</value></data>
+  <data name="SetOpt_annotations_style_searchResults_underline" xml:space="preserve"><value>下線</value></data>
+  <data name="Set_annotations_style_template" xml:space="preserve"><value>注釈の描き方: 構造体テンプレート</value></data>
+  <data name="SetDesc_annotations_style_template" xml:space="preserve"><value>構造体テンプレートの注釈を Hex ビューにどう描くか。</value></data>
+  <data name="SetOpt_annotations_style_template_background" xml:space="preserve"><value>背景色</value></data>
+  <data name="SetOpt_annotations_style_template_border" xml:space="preserve"><value>枠線</value></data>
+  <data name="SetOpt_annotations_style_template_underline" xml:space="preserve"><value>下線</value></data>
+  <data name="Set_annotations_style_script" xml:space="preserve"><value>注釈の描き方: スクリプト・プラグイン</value></data>
+  <data name="SetDesc_annotations_style_script" xml:space="preserve"><value>スクリプト・プラグインの注釈を Hex ビューにどう描くか。</value></data>
+  <data name="SetOpt_annotations_style_script_background" xml:space="preserve"><value>背景色</value></data>
+  <data name="SetOpt_annotations_style_script_border" xml:space="preserve"><value>枠線</value></data>
+  <data name="SetOpt_annotations_style_script_underline" xml:space="preserve"><value>下線</value></data>
+  <data name="Set_annotations_style_analysis" xml:space="preserve"><value>注釈の描き方: 解析の結果</value></data>
+  <data name="SetDesc_annotations_style_analysis" xml:space="preserve"><value>解析の結果の注釈を Hex ビューにどう描くか。</value></data>
+  <data name="SetOpt_annotations_style_analysis_background" xml:space="preserve"><value>背景色</value></data>
+  <data name="SetOpt_annotations_style_analysis_border" xml:space="preserve"><value>枠線</value></data>
+  <data name="SetOpt_annotations_style_analysis_underline" xml:space="preserve"><value>下線</value></data>
   <data name="Set_coloring_rules" xml:space="preserve"><value>全体の色付けルール</value></data>
   <data name="SetDesc_coloring_rules" xml:space="preserve"><value>すべてのドキュメントに適用する色付けルール。「色付けルール」パネルで編集します。</value></data>
   <data name="Set_coloring_highContrastColors" xml:space="preserve"><value>ハイコントラストでも色付けルールの色を使う</value></data>

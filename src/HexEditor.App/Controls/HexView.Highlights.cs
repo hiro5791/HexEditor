@@ -36,7 +36,7 @@ public enum HexMark
 /// </summary>
 public sealed record HexHighlight(long Offset, long Length, CellLayer Layer, Brush? Background, Brush? Border,
     IReadOnlyList<double>? Dash = null, string Tag = "", double Thickness = 1, int Level = 0, bool Underline = false,
-    bool LightBackground = false, HexMark Mark = HexMark.None, Brush? MarkBrush = null);
+    bool LightBackground = false, HexMark Mark = HexMark.None, Brush? MarkBrush = null, bool DoubleLine = false);
 
 /// <summary>オフセット列の目印 (ブックマークの開始位置。INSP-23 の仕様 8、INSP-25 の仕様 5)。<see cref="Text"/> は番号など。</summary>
 public sealed record HexOffsetMarker(long Offset, Brush Fill, Brush? Border, string Text, Brush? Foreground, string Tag = "");
@@ -65,7 +65,7 @@ public sealed partial class HexView
 
     /// <summary>描いた強調 (テスト用の読み出し)。Column は "hex" か "text"。</summary>
     private readonly record struct PlacedHighlight(CellLayer Layer, string Tag, string Column, long First, long Last, Brush? Background,
-        Brush? Border, IReadOnlyList<double>? Dash, int Level, bool Underline, int Order, HexMark Mark);
+        Brush? Border, IReadOnlyList<double>? Dash, int Level, bool Underline, int Order, HexMark Mark, bool DoubleLine = false);
 
     // ハイコントラストの判定は IsHighContrast (HexView.Options.cs。テスト用の模擬 ForcedHighContrast を含む) を使う。
 
@@ -278,7 +278,7 @@ public sealed partial class HexView
 
     private void PlaceSegment(HexHighlight h, string column, long first, long last, double x, double y, double width, ref int backUsed, ref int frontUsed)
     {
-        _placed.Add(new PlacedHighlight(h.Layer, h.Tag, column, first, last, h.Background, h.Border, h.Dash, h.Level, h.Underline, _placed.Count, h.Mark));
+        _placed.Add(new PlacedHighlight(h.Layer, h.Tag, column, first, last, h.Background, h.Border, h.Dash, h.Level, h.Underline, _placed.Count, h.Mark, h.DoubleLine));
         if (h.Background is not null && h.LightBackground)
         {
             // 合成の図形 (SpriteVisual) で塗る: XAML の要素を使わないので、1 画面に数千あっても速い (INSP-33 の仕様 5)。
@@ -330,6 +330,27 @@ public sealed partial class HexView
             }
             double inset = 2 * h.Level;
             SetRect(r, x + inset, y + 0.5 + inset, Math.Max(1, width - 2 * inset), Math.Max(1, _rowHeight - 1 - 2 * inset));
+            if (h.DoubleLine && h.Dash is null)
+            {
+                // 二重線 (ハイコントラストの色付けルールの 4 つ目の形。INSP-34 の仕様 4): 内側に 2 px あけてもう 1 本の実線を描く。
+                Rectangle inner = Take(_highlightFront, _frontLayer!, frontUsed++);
+                inner.Fill = null;
+                inner.Stroke = h.Border;
+                inner.StrokeThickness = h.Thickness;
+                while (_frontDash.Count <= frontUsed - 1)
+                {
+                    _frontDash.Add(null);
+                }
+
+                if (_frontDash[frontUsed - 1] is not null)
+                {
+                    _frontDash[frontUsed - 1] = null;
+                    inner.StrokeDashArray = null;
+                }
+
+                double gap = inset + 2.5;
+                SetRect(inner, x + gap, y + 0.5 + gap, Math.Max(1, width - 2 * gap), Math.Max(1, _rowHeight - 1 - 2 * gap));
+            }
         }
     }
 
@@ -558,6 +579,7 @@ public sealed partial class HexView
                 ["dash"] = p.Dash is null ? null : string.Join(",", p.Dash),
                 ["level"] = p.Level,
                 ["underline"] = p.Underline,
+                ["double"] = p.DoubleLine,
                 ["order"] = p.Order,
                 ["mark"] = p.Mark == HexMark.None ? null : p.Mark.ToString(),
             });

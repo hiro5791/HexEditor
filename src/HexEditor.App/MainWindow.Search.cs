@@ -103,7 +103,11 @@ public sealed partial class MainWindow
         SearchResults.Visibility = Visibility.Collapsed;
         SearchResults.WindowId = AppWindow.Id;
         SearchResults.Operations = Vm.Operations;
-        SearchResults.HighlightsChanged += (_, _) => UpdateMatchHighlights();
+        SearchResults.HighlightsChanged += (_, _) =>
+        {
+            UpdateMatchHighlights();
+            RefreshSearchResultAnnotations();
+        };
         SearchResults.Shown += (_, _) => ShowPanel(SearchResultsPanelId, focus: false);
         SearchResults.Closed += (_, _) =>
         {

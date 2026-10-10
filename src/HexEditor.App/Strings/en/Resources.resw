@@ -3601,7 +3601,7 @@ Details were written to:
   <data name="Legend_Shape0" xml:space="preserve"><value>Solid border</value></data>
   <data name="Legend_Shape1" xml:space="preserve"><value>Dashed border</value></data>
   <data name="Legend_Shape2" xml:space="preserve"><value>Dotted border</value></data>
-  <data name="Legend_Shape3" xml:space="preserve"><value>Dash-dot border</value></data>
+  <data name="Legend_Shape3" xml:space="preserve"><value>Double border</value></data>
   <data name="Legend_NextName" xml:space="preserve"><value>Next match of {0}</value></data>
   <data name="Legend_PreviousName" xml:space="preserve"><value>Previous match of {0}</value></data>
   <data name="Legend_NoNext" xml:space="preserve"><value>No more matches after the cursor</value></data>
@@ -3700,6 +3700,36 @@ Details were written to:
   <data name="SetDesc_annotations_hidden" xml:space="preserve"><value>Annotation sources that aren't shown in the hex view.</value></data>
   <data name="Set_annotations_column" xml:space="preserve"><value>Show the annotation column</value></data>
   <data name="SetDesc_annotations_column" xml:space="preserve"><value>Shows the labels of annotations that start in each row, to the right of the text column.</value></data>
+  <data name="Set_annotations_style_bookmark" xml:space="preserve"><value>Annotation style: Bookmarks</value></data>
+  <data name="SetDesc_annotations_style_bookmark" xml:space="preserve"><value>How annotations from bookmarks are drawn in the hex view.</value></data>
+  <data name="SetOpt_annotations_style_bookmark_background" xml:space="preserve"><value>Background</value></data>
+  <data name="SetOpt_annotations_style_bookmark_border" xml:space="preserve"><value>Border</value></data>
+  <data name="SetOpt_annotations_style_bookmark_underline" xml:space="preserve"><value>Underline</value></data>
+  <data name="Set_annotations_style_yara" xml:space="preserve"><value>Annotation style: YARA matches</value></data>
+  <data name="SetDesc_annotations_style_yara" xml:space="preserve"><value>How annotations from YARA matches are drawn in the hex view.</value></data>
+  <data name="SetOpt_annotations_style_yara_background" xml:space="preserve"><value>Background</value></data>
+  <data name="SetOpt_annotations_style_yara_border" xml:space="preserve"><value>Border</value></data>
+  <data name="SetOpt_annotations_style_yara_underline" xml:space="preserve"><value>Underline</value></data>
+  <data name="Set_annotations_style_searchResults" xml:space="preserve"><value>Annotation style: Find all results</value></data>
+  <data name="SetDesc_annotations_style_searchResults" xml:space="preserve"><value>How annotations from find all results are drawn in the hex view.</value></data>
+  <data name="SetOpt_annotations_style_searchResults_background" xml:space="preserve"><value>Background</value></data>
+  <data name="SetOpt_annotations_style_searchResults_border" xml:space="preserve"><value>Border</value></data>
+  <data name="SetOpt_annotations_style_searchResults_underline" xml:space="preserve"><value>Underline</value></data>
+  <data name="Set_annotations_style_template" xml:space="preserve"><value>Annotation style: Structure templates</value></data>
+  <data name="SetDesc_annotations_style_template" xml:space="preserve"><value>How annotations from structure templates are drawn in the hex view.</value></data>
+  <data name="SetOpt_annotations_style_template_background" xml:space="preserve"><value>Background</value></data>
+  <data name="SetOpt_annotations_style_template_border" xml:space="preserve"><value>Border</value></data>
+  <data name="SetOpt_annotations_style_template_underline" xml:space="preserve"><value>Underline</value></data>
+  <data name="Set_annotations_style_script" xml:space="preserve"><value>Annotation style: Scripts and plugins</value></data>
+  <data name="SetDesc_annotations_style_script" xml:space="preserve"><value>How annotations from scripts and plugins are drawn in the hex view.</value></data>
+  <data name="SetOpt_annotations_style_script_background" xml:space="preserve"><value>Background</value></data>
+  <data name="SetOpt_annotations_style_script_border" xml:space="preserve"><value>Border</value></data>
+  <data name="SetOpt_annotations_style_script_underline" xml:space="preserve"><value>Underline</value></data>
+  <data name="Set_annotations_style_analysis" xml:space="preserve"><value>Annotation style: Analysis results</value></data>
+  <data name="SetDesc_annotations_style_analysis" xml:space="preserve"><value>How annotations from analysis results are drawn in the hex view.</value></data>
+  <data name="SetOpt_annotations_style_analysis_background" xml:space="preserve"><value>Background</value></data>
+  <data name="SetOpt_annotations_style_analysis_border" xml:space="preserve"><value>Border</value></data>
+  <data name="SetOpt_annotations_style_analysis_underline" xml:space="preserve"><value>Underline</value></data>
   <data name="Set_coloring_rules" xml:space="preserve"><value>Coloring rules for all documents</value></data>
   <data name="SetDesc_coloring_rules" xml:space="preserve"><value>Coloring rules applied to every document. Edit them in the Coloring rules panel.</value></data>
   <data name="Set_coloring_highContrastColors" xml:space="preserve"><value>Use coloring rule colors in high contrast</value></data>

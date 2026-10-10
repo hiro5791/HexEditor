@@ -31,6 +31,9 @@ public sealed partial class LegendItem : ObservableObject
 
     public Microsoft.UI.Xaml.Media.Brush? Stroke { get; init; }
 
+    /// <summary>二重線の内側の線 (二重線のときだけ。INSP-34 の仕様 4)。</summary>
+    public Microsoft.UI.Xaml.Media.Brush? InnerStroke { get; init; }
+
     /// <summary>枠線の形 (null は実線)。</summary>
     public Microsoft.UI.Xaml.Media.DoubleCollection? Dash { get; init; }
 
@@ -92,7 +95,7 @@ public sealed partial class LegendViewModel : ObservableObject
         for (int i = 0; i < rules.Count; i++)
         {
             ColoringRule rule = rules[i].Rule;
-            int shape = shapes ? i : rule.Border switch { ColoringBorder.Dashed => 1, ColoringBorder.Dotted => 2, _ => 0 };
+            ColoringShape shape = shapes ? ColoringShapes.HighContrast(i) : ColoringShapes.Of(rule.Border);
             bool hasBorder = shapes || rule.Border != ColoringBorder.None;
             uint? color = rule.Background ?? rule.Foreground;
             items.Add(new LegendItem
@@ -103,7 +106,9 @@ public sealed partial class LegendViewModel : ObservableObject
                 Swatch = !shapes && color is { } c ? MainWindow.RuleBrush(c) : null,
                 Stroke = hasBorder ? (Microsoft.UI.Xaml.Media.Brush)Microsoft.UI.Xaml.Application.Current.Resources["TextFillColorPrimaryBrush"] : null,
                 Dash = MainWindow.RuleDash(shape) is { } dash ? [.. dash] : null,
-                ShapeText = hasBorder ? Loc.Get("Legend_Shape" + (shape % 4)) : string.Empty,
+                InnerStroke = hasBorder && shape == ColoringShape.Double
+                    ? (Microsoft.UI.Xaml.Media.Brush)Microsoft.UI.Xaml.Application.Current.Resources["TextFillColorPrimaryBrush"] : null,
+                ShapeText = hasBorder ? Loc.Get("Legend_Shape" + (int)shape) : string.Empty,
                 CountText = Loc.Format("Legend_Count", ColoringEngine.CountVisible(snapshot, rules[i], start, end)),
             });
         }

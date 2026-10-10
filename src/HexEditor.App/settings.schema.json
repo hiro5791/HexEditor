@@ -78,6 +78,66 @@
       "type": "string",
       "default": ""
     },
+    "annotations.style.analysis": {
+      "description": "Annotation style: Analysis results",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "border"
+    },
+    "annotations.style.bookmark": {
+      "description": "Annotation style: Bookmarks",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "background"
+    },
+    "annotations.style.script": {
+      "description": "Annotation style: Scripts and plugins",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "border"
+    },
+    "annotations.style.searchResults": {
+      "description": "Annotation style: Find all results",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "border"
+    },
+    "annotations.style.template": {
+      "description": "Annotation style: Structure templates",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "background"
+    },
+    "annotations.style.yara": {
+      "description": "Annotation style: YARA matches",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "border"
+    },
     "bookmarks.defaultColor": {
       "description": "Default bookmark color",
       "type": "string",
