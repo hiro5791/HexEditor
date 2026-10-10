@@ -291,32 +291,41 @@ public sealed partial class EntropyChart : UserControl, IChartItems
 
     protected override void OnKeyDown(KeyRoutedEventArgs e)
     {
+        if (HandleKey(e.Key))
+        {
+            e.Handled = true;
+            return;
+        }
+
+        base.OnKeyDown(e);
+    }
+
+    /// <summary>キーの処理 (← / → でブロックを選び、Enter で移動、+ / − で拡大・縮小)。処理したら true。</summary>
+    internal bool HandleKey(VirtualKey key)
+    {
         int count = ItemCount;
-        switch (e.Key)
+
+        // フォーカスを受けた時点で先頭のブロックを選ぶ (まだ選ばれていなければ先頭から動かす)。
+        int current = Math.Max(0, SelectedBlock);
+        switch (key)
         {
             case VirtualKey.Left when count > 0:
-                SelectItem(Math.Max(0, SelectedBlock - 1));
-                e.Handled = true;
-                break;
+                SelectItem(Math.Max(0, current - 1));
+                return true;
             case VirtualKey.Right when count > 0:
-                SelectItem(Math.Min(count - 1, SelectedBlock + 1));
-                e.Handled = true;
-                break;
+                SelectItem(Math.Min(count - 1, current + 1));
+                return true;
             case VirtualKey.Enter when SelectedBlock >= 0:
                 BlockInvoked?.Invoke(this, SelectedBlock);
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Add or (VirtualKey)187:
                 ZoomIn();
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Subtract or (VirtualKey)189:
                 ZoomOut();
-                e.Handled = true;
-                break;
+                return true;
             default:
-                base.OnKeyDown(e);
-                break;
+                return false;
         }
     }
 

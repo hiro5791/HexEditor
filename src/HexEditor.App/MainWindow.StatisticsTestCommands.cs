@@ -52,6 +52,18 @@ public sealed partial class MainWindow
 
                 result["zoom"] = chart.Zoom;
                 break;
+            case "export":
+                await StatsVm.ExportAsync(request["json"]?.GetValue<bool>() ?? true);
+                break;
+            case "graphKey" when _statsPanel?.EntropyChartControl is { } chart:
+                // フォーカスのあるグラフにキーを送る (テスト用のキーの命令は Hex ビューに送るため)。
+                chart.Focus(Microsoft.UI.Xaml.FocusState.Keyboard);
+                for (long i = 0; i < TestHookSettings.ReadLong(request["count"], 1); i++)
+                {
+                    chart.HandleKey(Enum.Parse<Windows.System.VirtualKey>(request["key"]!.GetValue<string>(), ignoreCase: true));
+                }
+
+                break;
             case "flushDetail":
                 await StatsVm.FlushDetailAsync();
                 break;
