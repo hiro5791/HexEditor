@@ -15,7 +15,7 @@ namespace HexEditor.App.Controls;
 /// <summary>
 /// Hex ビューの行の要素 (VIEW-01 の仕様 2・8、VIEW-04 の仕様 3)。1 行を 1 つの TextBlock (色の違う区間ごとの Run) で描き、下線・枠・模様は
 /// 図形で重ねる。重ねる順は VIEW-17 の仕様 5 の表に従う: 奥の層 (層 12〜16: バイトテーマの背景・現在行・レコードの交互色・列の交互色) は
-/// 行の下の面 (<see cref="RowVisual.Under"/>) に四角形で、層 7〜11 (ブックマークなど) はその上の範囲の強調の面 (HexView.Highlights.cs) に、
+/// 行の下の面 (<see cref="RowVisual.Under"/>。合成の図形の層 <see cref="SpriteLayer"/>) に四角形で、層 7〜11 (ブックマークなど) はその上の範囲の強調の面 (HexView.Highlights.cs) に、
 /// 層 2〜5 (選択範囲・検索の一致) は行の文字の TextHighlighter で描く。
 /// </summary>
 public sealed partial class HexView
@@ -135,7 +135,6 @@ public sealed partial class HexView
         private RowFrame _frame;
         private readonly List<Path> _hatches = [];
         private readonly List<Rectangle> _bars = [];
-        private readonly List<Rectangle> _underBars = [];
         private readonly List<Line> _lines = [];
         private readonly List<TextBlock> _glyphs = [];
         private TextBlock? _separatorLabel;
@@ -147,23 +146,17 @@ public sealed partial class HexView
         // オブジェクトの追跡のために GC が増え、1 行のバイト数が多いとフレームが遅れる。VIEW-04 の仕様 3)。
         private readonly List<RunSlot> _runs = [];
         private RunBuilder? _builder;
-        private readonly Rectangle _rowBack;
         private int _barsUsed;
-        private int _underUsed;
         private int _linesUsed;
         private int _glyphsUsed;
 
-        public RowVisual(FontFamily font, double fontSize, double rowHeight, int spacing)
+        public RowVisual(FontFamily font, double fontSize, double rowHeight, int spacing, SpriteLayer under)
         {
             Offset = CreateText();
             Content = CreateText();
-            _rowBack = new Rectangle { IsHitTestVisible = false, Visibility = Visibility.Collapsed };
-            AutomationProperties.SetAccessibilityView(_rowBack, AccessibilityView.Raw);
             Container = new Canvas();
             Container.Children.Add(Content);
-            Under = new Canvas { IsHitTestVisible = false };
-            AutomationProperties.SetAccessibilityView(Under, AccessibilityView.Raw);
-            Under.Children.Add(_rowBack);
+            Under = under;
             ApplyFont(font, fontSize, rowHeight, spacing);
         }
 
@@ -174,8 +167,11 @@ public sealed partial class HexView
         /// <summary>内容の TextBlock と、下線・枠・模様の図形を入れる。</summary>
         public Canvas Container { get; }
 
-        /// <summary>行の下の面 (範囲の強調の面より奥): 層 12〜16 の背景 (バイトテーマ・現在行・レコードの交互色・列の交互色)。</summary>
-        public Canvas Under { get; }
+        /// <summary>
+        /// 行の下の面 (範囲の強調の面より奥): 層 12〜16 の背景 (バイトテーマ・現在行・レコードの交互色・列の交互色)。合成の図形で描く
+        /// (XAML の要素を作らない。VIEW-04)。
+        /// </summary>
+        public SpriteLayer Under { get; }
 
         public long OffsetRowStart { get; private set; } = long.MinValue;
 
@@ -253,7 +249,7 @@ public sealed partial class HexView
                 if (Container.Visibility != v)
                 {
                     Container.Visibility = v;
-                    Under.Visibility = v;
+                    Under.IsVisible = value;
                 }
 
                 if (Offset.Visibility != v)
@@ -303,7 +299,7 @@ public sealed partial class HexView
                 Top = y;
                 Canvas.SetTop(Offset, y);
                 Canvas.SetTop(Container, y);
-                Canvas.SetTop(Under, y);
+                Under.SetTop(y);
             }
         }
 
@@ -399,7 +395,7 @@ public sealed partial class HexView
             }
 
             _barsUsed = 0;
-            _underUsed = 0;
+            Under.Begin();
             _linesUsed = 0;
             _glyphsUsed = 0;
             Lines.Clear();
@@ -1325,14 +1321,7 @@ public sealed partial class HexView
             // 層 14: 現在行 (VIEW-06 の仕様 1)。ハイコントラストでは背景を塗らず、行の上下に 1 px の線を引く。
             if (_currentRow && !hc)
             {
-                _rowBack.Visibility = Visibility.Visible;
-                _rowBack.Fill = palette.CurrentRow;
-                _rowBack.Width = width;
-                _rowBack.Height = rowHeight;
-            }
-            else
-            {
-                _rowBack.Visibility = Visibility.Collapsed;
+                Under.Fill(palette.CurrentRow, 0, 0, width, rowHeight);
             }
 
             if (_currentRow && hc)
@@ -1389,10 +1378,7 @@ public sealed partial class HexView
                 }
             }
 
-            for (int i = _underUsed; i < _underBars.Count; i++)
-            {
-                _underBars[i].Visibility = Visibility.Collapsed;
-            }
+            Under.End();
         }
 
         /// <summary>Hex 列の [c0, c1] を行の下の面に塗る。<paramref name="contiguousCells"/> ならグループの間の空白も塗る。</summary>
@@ -1414,33 +1400,7 @@ public sealed partial class HexView
             UnderFills.Add((layer, column == 0 ? "text" : "text" + (column + 1), c0, c1, brush));
         }
 
-        private void PlaceUnder(double x, double width, double height, Brush brush)
-        {
-            Rectangle bar;
-            if (_underUsed < _underBars.Count)
-            {
-                bar = _underBars[_underUsed];
-            }
-            else
-            {
-                bar = new Rectangle { IsHitTestVisible = false };
-                AutomationProperties.SetAccessibilityView(bar, AccessibilityView.Raw);
-                _underBars.Add(bar);
-                Under.Children.Add(bar);
-            }
-
-            _underUsed++;
-            bar.Visibility = Visibility.Visible;
-            if (!ReferenceEquals(bar.Fill, brush))
-            {
-                bar.Fill = brush;
-            }
-
-            bar.Width = Math.Max(0, width);
-            bar.Height = height;
-            Canvas.SetLeft(bar, x);
-            Canvas.SetTop(bar, 0);
-        }
+        private void PlaceUnder(double x, double width, double height, Brush brush) => Under.Fill(brush, x, 0, width, height);
 
         // ---- 下線・枠・線 ----
 

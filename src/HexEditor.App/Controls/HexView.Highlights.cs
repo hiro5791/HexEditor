@@ -124,7 +124,7 @@ public sealed partial class HexView
     {
         _placed.Clear();
         _placedBands.Clear();
-        _lightUsed = 0;
+        Sprites.Highlights.Begin();
         int bytesPerRow = columns.BytesPerRow;
         long end = firstOffset + (long)rows * bytesPerRow;
         int backUsed = 0;

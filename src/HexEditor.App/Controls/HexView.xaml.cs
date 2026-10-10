@@ -901,6 +901,11 @@ public sealed partial class HexView : UserControl
         }
     }
 
+    private SpriteSurface? _sprites;
+
+    /// <summary>背景の面 (行の下の面と範囲の強調の軽い背景。合成の図形)。</summary>
+    private SpriteSurface Sprites => _sprites ??= new SpriteSurface(UnderLayer);
+
     private readonly Dictionary<long, RowVisual> _reuseByStart = [];
     private readonly List<RowVisual?> _reuseOrdered = [];
     private readonly HashSet<RowVisual> _reuseUsed = [];
@@ -909,11 +914,10 @@ public sealed partial class HexView : UserControl
     {
         while (_rows.Count < count)
         {
-            var row = new RowVisual(_font, _fontSize, _rowHeight, _characterSpacing);
+            var row = new RowVisual(_font, _fontSize, _rowHeight, _characterSpacing, Sprites.CreateRowLayer());
             _rows.Add(row);
             OffsetHost.Children.Add(row.Offset);
             RowsLayer.Children.Add(row.Container);
-            UnderLayer.Children.Add(row.Under);
         }
     }
 
