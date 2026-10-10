@@ -7992,6 +7992,7 @@
       "Hash_ParameterError_KeyLength": "reviewed:ce3e4de05621c982",
       "Hash_ParameterError_None": "reviewed:e3b0c44298fc1c14",
       "Hash_ParameterError_OutputLength": "reviewed:d43f5c8ed4392b98",
+      "Hash_ParameterError_SeedRange": "reviewed:7763a95f6835e4e3",
       "Hash_Range": "reviewed:4ff5cb574e85fefe",
       "Hash_RangeEmpty": "reviewed:9f2c1ae0373e047e",
       "Hash_RangeInvalid": "reviewed:6551e40110070a60",
