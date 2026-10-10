@@ -4222,9 +4222,9 @@ Details were written to:
   <data name="Find_TermSummary" xml:space="preserve"><value>{0} of {1} terms enabled</value></data>
   <data name="Find_TermLoadFailed" xml:space="preserve"><value>Can't load the terms: {0}</value></data>
   <data name="Find_TermSaveFailed" xml:space="preserve"><value>Can't save the terms: {0}</value></data>
-  <data name="Menu_Search_MultiFile.Text" xml:space="preserve"><value>Search in files(M)...</value></data>
+  <data name="Menu_Search_MultiFile.Text" xml:space="preserve"><value>Search in files...</value></data>
   <data name="Menu_Search_MultiFile.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Menu_Search_Strings.Text" xml:space="preserve"><value>Extract strings(S)</value></data>
+  <data name="Menu_Search_Strings.Text" xml:space="preserve"><value>Extract strings</value></data>
   <data name="Menu_Search_Strings.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Panel_Strings_Title" xml:space="preserve"><value>Strings</value></data>
   <data name="Panel_MultiFile_Title" xml:space="preserve"><value>Search in files</value></data>

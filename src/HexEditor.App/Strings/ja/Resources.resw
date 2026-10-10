@@ -3055,9 +3055,9 @@
   <data name="HexView_DropCopy" xml:space="preserve"><value>コピー</value></data>
   <data name="HexView_DropOverwrite" xml:space="preserve"><value>上書き</value></data>
   <data name="Drop_PasteSpecial" xml:space="preserve"><value>形式を選択して貼り付け</value></data>
-  <data name="Menu_View_CellFormatHex.Text" xml:space="preserve"><value>16 進(H)</value></data>
+  <data name="Menu_View_CellFormatHex.Text" xml:space="preserve"><value>Hex(H)</value></data>
   <data name="Menu_View_CellFormatHex.AccessKey" xml:space="preserve"><value>H</value></data>
-  <data name="Cmd_view_cellFormatHex" xml:space="preserve"><value>セルの表示形式: 16 進</value></data>
+  <data name="Cmd_view_cellFormatHex" xml:space="preserve"><value>セルの表示形式: Hex</value></data>
   <data name="CmdAlias_view_cellFormatHex" xml:space="preserve"><value>せるのひょうじけいしき へっくす</value></data>
   <data name="Menu_View_CellFormatDecimal.Text" xml:space="preserve"><value>10 進 (符号なし)(D)</value></data>
   <data name="Menu_View_CellFormatDecimal.AccessKey" xml:space="preserve"><value>D</value></data>
@@ -3608,7 +3608,7 @@
   <data name="Coloring_Border_Dashed" xml:space="preserve"><value>破線</value></data>
   <data name="Coloring_Border_Dotted" xml:space="preserve"><value>点線</value></data>
   <data name="Coloring_Target.Header" xml:space="preserve"><value>適用先</value></data>
-  <data name="Coloring_Target_Both" xml:space="preserve"><value>両方</value></data>
+  <data name="Coloring_Target_Both" xml:space="preserve"><value>Hex とテキストの両方</value></data>
   <data name="Coloring_Target_Hex" xml:space="preserve"><value>Hex 列</value></data>
   <data name="Coloring_Target_Text" xml:space="preserve"><value>テキスト列</value></data>
   <data name="Coloring_RangeStart.Header" xml:space="preserve"><value>適用範囲の開始 (入力式)</value></data>
