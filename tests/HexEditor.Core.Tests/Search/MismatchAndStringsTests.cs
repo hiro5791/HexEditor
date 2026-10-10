@@ -142,6 +142,17 @@ public sealed class MismatchAndStringsTests
         var both = Extract(mixed, new StringExtractionOptions { Encodings = [defaults[0], utf8First[0]] });
         Assert.Equal(("UTF-8", 0L, (long)mixed.Length), (both.Single().Encoding, both.Single().Offset, both.Single().Length));
 
+        // 一覧の絞り込み: 含まれる語 (大文字・小文字を区別しない) と、`/…/` の正規表現 (仕様 4)。
+        using (Document stringsDoc = Doc(data))
+        {
+            using SearchResults found = StringExtractor.CreateResults(stringsDoc.Current, new StringExtractionOptions { Encodings = defaults }, new SearchOptions());
+            SearchEngine.FindAll(found);
+            var factory = new SearchResultRowFactory(found, stringsDoc.Current, Encoding.ASCII);
+            Assert.Equal([1L], SearchResultsOrdering.Build([factory], SearchResultSortKey.Number, false, "WORLD")!);
+            Assert.Equal([0L, 1L], SearchResultsOrdering.Build([factory], SearchResultSortKey.Number, false, "/^(hel|wor)/")!);
+            Assert.Equal([2L], SearchResultsOrdering.Build([factory], SearchResultSortKey.Number, false, "/ファ/")!);
+        }
+
         // 最大の長さを超える文字列も分割しない (長さは全体)。チャンクの境界をまたいでも 1 つ。
         byte[] longText = new byte[20_000];
         Array.Fill(longText, (byte)'A', 100, 10_000);

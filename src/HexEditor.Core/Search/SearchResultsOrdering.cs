@@ -37,6 +37,22 @@ public static class SearchResultsOrdering
 
         string query = (filter ?? string.Empty).Trim();
         string hexQuery = new([.. query.Where(c => !char.IsWhiteSpace(c))]);
+
+        // `/…/` で囲んだ語は、テキストの列に対する正規表現 (大文字・小文字を区別しない。文字列の抽出の絞り込み。FIND-32 の仕様 4)。
+        System.Text.RegularExpressions.Regex? regex = null;
+        if (query.Length >= 2 && query[0] == '/' && query[^1] == '/')
+        {
+            try
+            {
+                regex = new System.Text.RegularExpressions.Regex(query[1..^1],
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant,
+                    TimeSpan.FromMilliseconds(100));
+            }
+            catch (ArgumentException)
+            {
+                regex = null;
+            }
+        }
         bool needsRow = query.Length > 0 || key is SearchResultSortKey.Hex or SearchResultSortKey.Text;
         bool needsTrack = key is SearchResultSortKey.Offset or SearchResultSortKey.Status;
         var indices = new List<long>((int)Math.Min(total, int.MaxValue));
@@ -55,7 +71,7 @@ public static class SearchResultsOrdering
                 SearchResultRow? row = needsRow ? factory.Row(local) : null;
                 TrackedMatch tracked = row is not null ? new TrackedMatch(row.Offset, row.Length, row.Status)
                     : needsTrack ? factory.Track(factory.Results[local]) : default;
-                if (query.Length > 0 && !Matches(row!, query, hexQuery))
+                if (query.Length > 0 && !(regex is not null ? MatchesRegex(row!, regex) : Matches(row!, query, hexQuery)))
                 {
                     continue;
                 }
@@ -98,6 +114,18 @@ public static class SearchResultsOrdering
         }
 
         return order;
+    }
+
+    private static bool MatchesRegex(SearchResultRow row, System.Text.RegularExpressions.Regex regex)
+    {
+        try
+        {
+            return regex.IsMatch(row.Text);
+        }
+        catch (System.Text.RegularExpressions.RegexMatchTimeoutException)
+        {
+            return false;
+        }
     }
 
     private static bool Matches(SearchResultRow row, string query, string hexQuery) =>
