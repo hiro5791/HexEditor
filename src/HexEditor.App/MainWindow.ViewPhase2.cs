@@ -44,10 +44,10 @@ public sealed partial class MainWindow
         columns.Items.Add(formats);
 
         MenuFlyoutSubItem endian = Sub("Command_ViewEndian", "Menu_View_Endian");
-        endian.Items.Add(Radio("Command_ViewEndianLittle", Loc.Get("Menu_View_EndianLittle/Text"), "Endian", () => SetDocumentEndian(false),
-            Loc.Get("Menu_View_EndianLittle/AccessKey"), v => !v.BigEndian));
-        endian.Items.Add(Radio("Command_ViewEndianBig", Loc.Get("Menu_View_EndianBig/Text"), "Endian", () => SetDocumentEndian(true),
-            Loc.Get("Menu_View_EndianBig/AccessKey"), v => v.BigEndian));
+        endian.Items.Add(Radio("Command_ViewEndianLittle", Loc.Get(MenuKey("Menu_View_EndianLittle", "Text")), "Endian", () => SetDocumentEndian(false),
+            Loc.Get(MenuKey("Menu_View_EndianLittle", "AccessKey")), v => !v.BigEndian));
+        endian.Items.Add(Radio("Command_ViewEndianBig", Loc.Get(MenuKey("Menu_View_EndianBig", "Text")), "Endian", () => SetDocumentEndian(true),
+            Loc.Get(MenuKey("Menu_View_EndianBig", "AccessKey")), v => v.BigEndian));
         columns.Items.Add(endian);
         Commands.Register("view.endianToggle", () => SetDocumentEndian(Editor is { } e && !e.View.BigEndian), NeedsDocument);
 
@@ -69,8 +69,8 @@ public sealed partial class MainWindow
         encoding.Items.Add(new MenuFlyoutSeparator());
         var loadTable = new MenuFlyoutItem
         {
-            Text = Loc.Get("Menu_View_LoadTable/Text"),
-            AccessKey = Loc.Get("Menu_View_LoadTable/AccessKey"),
+            Text = Loc.Get(MenuKey("Menu_View_LoadTable", "Text")),
+            AccessKey = Loc.Get(MenuKey("Menu_View_LoadTable", "AccessKey")),
         };
         Commands.Register("view.encoding.loadTable", LoadTableAsync, NeedsDocument);
         CommandUi.SetId(loadTable, "view.encoding.loadTable");
@@ -157,7 +157,7 @@ public sealed partial class MainWindow
         split.Items.Add(Item("Command_ViewSplitRemove", "Menu_View_SplitRemove", UnsplitSelected,
             () => Vm.Selected is { IsSplit: true } ? CommandState.Available : CommandState.Unavailable(Loc.Get("Command_NotSplit"))));
         split.Items.Add(new MenuFlyoutSeparator());
-        split.Items.Add(Bind(new ToggleMenuFlyoutItem { Text = Loc.Get("Menu_View_SplitSync/Text"), AccessKey = Loc.Get("Menu_View_SplitSync/AccessKey") },
+        split.Items.Add(Bind(new ToggleMenuFlyoutItem { Text = Loc.Get(MenuKey("Menu_View_SplitSync", "Text")), AccessKey = Loc.Get(MenuKey("Menu_View_SplitSync", "AccessKey")) },
             "Command_ViewSplitSync", ToggleSplitSync,
             () => Vm.Selected is { IsSplit: true } d ? Toggle(d.PaneSyncEnabled) : new CommandState(false, Loc.Get("Command_NotSplit"), false)));
         split.Items.Add(Item("Command_ViewNextPane", "Menu_View_NextPane", () => FocusNextPane(),
@@ -166,7 +166,7 @@ public sealed partial class MainWindow
 
         MenuFlyoutItem newView = Item("Command_ViewNewView", "Menu_View_NewView", OpenNewView, NewViewState);
 
-        var sideBySide = new MenuFlyoutItem { Text = Loc.Get("Menu_View_SideBySide/Text"), AccessKey = Loc.Get("Menu_View_SideBySide/AccessKey") };
+        var sideBySide = new MenuFlyoutItem { Text = Loc.Get(MenuKey("Menu_View_SideBySide", "Text")), AccessKey = Loc.Get(MenuKey("Menu_View_SideBySide", "AccessKey")) };
         Commands.Register("view.sideBySide", new CommandHandler(argument => ShowSideBySideAsync(argument), SideBySideState));
         CommandUi.SetId(sideBySide, "view.sideBySide");
         AutomationProperties.SetAutomationId(sideBySide, "Command_ViewSideBySide");
@@ -209,6 +209,9 @@ public sealed partial class MainWindow
             () => Editor is { SectionLength: > 0 } ? CommandState.Available : Editor is null ? NeedsDocument() : CommandState.Unavailable(Loc.Get("Command_NoSeparator"))));
         UpdateByteThemeMenu();
     }
+
+    /// <summary>コードで作るメニューの項目のリソース (<c>名前/Text</c>、<c>名前/AccessKey</c>)。</summary>
+    private static string MenuKey(string name, string property) => name + "/" + property;
 
     /// <summary>移動メニューの項目 (コマンド ID を直接指定する)。</summary>
     private MenuFlyoutItem GoItem(string automationId, string key, string command, Action action, Func<CommandState>? state = null)

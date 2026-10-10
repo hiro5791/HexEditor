@@ -3128,4 +3128,5 @@
   <data name="SideBySide_Close" xml:space="preserve"><value>並べて表示を閉じる</value></data>
   <data name="Set_view_minimap_hiddenMarks" xml:space="preserve"><value>ミニマップに表示しない印</value></data>
   <data name="SetDesc_view_minimap_hiddenMarks" xml:space="preserve"><value>ミニマップに表示しない印。</value></data>
+  <data name="CmdArg_view_sideBySide" xml:space="preserve"><value>並べて表示するドキュメントを選んでください。</value></data>
 </root>

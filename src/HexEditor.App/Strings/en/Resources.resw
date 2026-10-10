@@ -3128,4 +3128,5 @@ Details were written to:
   <data name="SideBySide_Close" xml:space="preserve"><value>Close side-by-side view</value></data>
   <data name="Set_view_minimap_hiddenMarks" xml:space="preserve"><value>Hidden minimap marks</value></data>
   <data name="SetDesc_view_minimap_hiddenMarks" xml:space="preserve"><value>Marks not shown on the minimap.</value></data>
+  <data name="CmdArg_view_sideBySide" xml:space="preserve"><value>Choose a document to show side by side.</value></data>
 </root>
