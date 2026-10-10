@@ -603,18 +603,28 @@ public sealed partial class MainWindow
             Vm.ExternalChanges?.Suspend(watch);
         }
 
+        // 安全な保存 (ENG-22) と同じ手順で書く: 属性・ACL・作成日時を引き継ぎ、バックアップ (ENG-26) の設定に従い、一時ファイルを記録する。
+        Core.Saving.BackupSettings? backup = Vm.SkipBackupOnce ? null : Vm.BackupSettings;
+        Vm.SkipBackupOnce = false;
+        string markers = Vm.SaveMarkerDirectory;
         try
         {
             await Vm.Operations.RunAsync(Loc.Format("Operation_Save", Path.GetFileName(path)), Core.Operations.OperationKind.WritesExternal,
                 doc.Document, snapshot.Length, op =>
                 {
-                    EncodedFile.Save(snapshot, doc.EncodedBaseAddress, settings, path, op);
+                    EncodedFile.Save(snapshot, doc.EncodedBaseAddress, settings, path, op, backup, markers);
                     return Task.CompletedTask;
                 }, locked => doc.Document.SetEditLock(locked));
         }
         catch (OperationCanceledException)
         {
             Vm.RebaseWatch(doc);
+            return false;
+        }
+        catch (Core.Saving.BackupFailedException ex)
+        {
+            Vm.RebaseWatch(doc);
+            ShowNotice(Loc.Format("Error_SaveIo", ex.Reason), InfoBarSeverity.Error, doc);
             return false;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -645,9 +655,9 @@ public sealed partial class MainWindow
             (FormatName(settings.Format), FormatIds.Extension(settings.Format), settings.Format),
             (FormatName(FormatIds.Binary), ".bin", FormatIds.Binary),
         };
-        foreach (string f in new[] { FormatIds.IntelHex, FormatIds.SRecord, FormatIds.Base64 })
+        foreach (string f in FormatIds.Exportable)
         {
-            if (f != settings.Format)
+            if (f != settings.Format && f != FormatIds.Binary)
             {
                 list.Add((FormatName(f), FormatIds.Extension(f), f));
             }
@@ -685,6 +695,22 @@ public sealed partial class MainWindow
         string? target = FormatIds.ForOpenExtension(path);
         if (target is null)
         {
+            // Intel HEX・S-record・Base64 以外の形式 (TOOL-04 の形式の一覧): 拡張子の合う形式でエクスポートする (ドキュメントは元の形式のまま)。
+            // 同じ拡張子の形式が複数ある (.txt など) 場合は選ばせる。
+            string extension = Path.GetExtension(path);
+            string[] matches = [.. choices.Where(c => c.Format is not FormatIds.Binary && EncodedFile.IsOpenable(c.Format) == false
+                && string.Equals(c.Extension, extension, StringComparison.OrdinalIgnoreCase)).Select(c => c.Format)];
+            if (matches.Length > 0)
+            {
+                if ((matches.Length == 1 ? matches[0] : await ChooseSaveAsFormatAsync(matches)) is not { } chosen)
+                {
+                    return false;
+                }
+
+                await ExportWholeAsync(doc, chosen, Path.GetFullPath(path));
+                return false; // ドキュメントは保存していない (別の形式の写しを書いた)
+            }
+
             // バイナリとして普通に保存する (選んだ保存先を通常の保存に渡す)。
             _binarySaveAsPath = path;
             return null;
@@ -692,6 +718,26 @@ public sealed partial class MainWindow
 
         EncodedFileSettings use = target == settings.Format ? settings : new EncodedFileSettings { Format = target, NewLine = settings.NewLine };
         return await SaveEncodedAsync(doc, path, use);
+    }
+
+    /// <summary>同じ拡張子の形式が複数あるとき、名前を付けて保存の形式を選ぶ (TOOL-11 の仕様 3)。キャンセルなら null。</summary>
+    private async Task<string?> ChooseSaveAsFormatAsync(IReadOnlyList<string> formats)
+    {
+        ComboBox combo = DialogParts.Combo("SaveAsFormat_Format", Loc.Get("Transfer_Format"), formats.Select(FormatName), 0);
+        ContentDialog dialog = DialogParts.Dialog(Root, "SaveAsFormatDialog", Loc.Get("SaveAsFormat_Title"), combo, Loc.Get("Common_Ok"));
+        return await dialog.ShowQueuedAsync() == ContentDialogResult.Primary && combo.SelectedIndex >= 0 ? formats[combo.SelectedIndex] : null;
+    }
+
+    /// <summary>ドキュメント全体を、その形式の前回の設定でエクスポートする (名前を付けて保存で他の形式を選んだ場合。TOOL-11 の仕様 3)。</summary>
+    private async Task ExportWholeAsync(DocumentViewModel doc, string format, string path)
+    {
+        IReadOnlyList<TransferField> fields = TransferOptions.ExportFields(format, doc.Editor.View,
+            ExportDefaults.From(doc.DisplayName, doc.ImportedValues, doc.Editor.TextEncoding.Id));
+        Dictionary<string, string> values = TransferOptions.Load(AppState.GetString("export.options." + format, "{}"), fields);
+        var context = new Core.View.EditorExpressionContext(doc.Editor);
+        ExportOptions options = TransferOptions.ToExportOptions(format, values,
+            text => DialogParts.TryEvaluate(text, context, out long v, out _) && v >= 0 ? v : null, DumpDefaults(doc));
+        await RunExportAsync(doc, [(0, doc.Document.Length)], options, path);
     }
 
     /// <summary>
@@ -714,6 +760,10 @@ public sealed partial class MainWindow
             s.Format == FormatIds.IntelHex ? Math.Max(0, (int)s.IntelMode - 1) : Math.Max(0, (int)s.SRecordMode - 1));
         TextBox exec = DialogParts.Field("FormatSettings_Exec", Loc.Get("Export_ExecAddress"),
             s.StartAddress is { } a ? $"0x{a:X}" : string.Empty);
+        // 実行開始アドレスのレコード型 (Intel HEX の 03 開始セグメントアドレス / 05 開始リニアアドレス。TOOL-11 の仕様 1)。
+        ComboBox execType = DialogParts.Combo("FormatSettings_ExecType", Loc.Get("Transfer_execType"),
+            [Loc.Get("Transfer_Choice_linear"), Loc.Get("Transfer_Choice_segment")], s.StartIsSegment ? 1 : 0);
+        CheckBox finalNewLine = DialogParts.Check("FormatSettings_FinalNewLine", Loc.Get("FormatSettings_FinalNewLine"), s.FinalNewLine);
         TextBox header = DialogParts.Field("FormatSettings_Header", Loc.Get("Export_Header"), s.Header ?? string.Empty, monospace: false);
         CheckBox count = DialogParts.Check("FormatSettings_Count", Loc.Get("Export_WriteCount"), s.WriteCount);
         CheckBox upper = DialogParts.Check("FormatSettings_Upper", Loc.Get("Export_UpperCase"), s.UpperCase);
@@ -722,8 +772,9 @@ public sealed partial class MainWindow
         CheckBox urlSafe = DialogParts.Check("FormatSettings_UrlSafe", Loc.Get("Export_UrlSafe"), s.UrlSafe);
         CheckBox padding = DialogParts.Check("FormatSettings_Padding", Loc.Get("Export_Padding"), s.Padding);
         UIElement[] fields = s.Format == FormatIds.Base64
-            ? [lineLength, urlSafe, padding, newLine]
-            : s.Format == FormatIds.IntelHex ? [recordLength, mode, exec, upper, newLine] : [recordLength, mode, exec, header, count, upper, newLine];
+            ? [lineLength, urlSafe, padding, newLine, finalNewLine]
+            : s.Format == FormatIds.IntelHex ? [recordLength, mode, exec, execType, upper, newLine, finalNewLine]
+            : [recordLength, mode, exec, header, count, upper, newLine, finalNewLine];
         foreach (UIElement e in fields)
         {
             body.Children.Add(e);
@@ -758,6 +809,8 @@ public sealed partial class MainWindow
         doc.Encoded = s with
         {
             NewLine = newLine.SelectedIndex == 1 ? "\n" : "\r\n",
+            FinalNewLine = finalNewLine.IsChecked == true,
+            StartIsSegment = s.Format == FormatIds.IntelHex ? execType.SelectedIndex == 1 : s.StartIsSegment,
             RecordLength = int.TryParse(recordLength.Text, out int rl) ? rl : s.RecordLength,
             IntelMode = s.Format == FormatIds.IntelHex ? (IntelHexAddressMode)(mode.SelectedIndex + 1) : s.IntelMode,
             SRecordMode = s.Format == FormatIds.SRecord ? (SRecordAddressMode)(mode.SelectedIndex + 1) : s.SRecordMode,

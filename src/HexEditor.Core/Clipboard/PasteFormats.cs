@@ -78,6 +78,12 @@ public sealed record PasteOptions
     /// (ソースコードの配列のインポート。TOOL-09 の仕様 4)。偽なら文字列は無視する (エスケープ文字列の形式で扱う)。
     /// </summary>
     public bool SourceLiterals { get; init; }
+
+    /// <summary>
+    /// 配列表記で、解釈できない文字・数値・範囲外の値を最初の 1 つで止めずに読み飛ばし、位置を <see cref="PasteCandidate.SkippedErrors"/> に
+    /// 集める (ソースコードの配列のインポート。TOOL-09 の「エラー」)。括弧の対応の誤りは従来どおり全体の誤り。
+    /// </summary>
+    public bool CollectErrors { get; init; }
 }
 
 /// <summary>1 つの形式で解釈した結果。</summary>
@@ -115,6 +121,11 @@ public sealed class PasteCandidate
     public int ChecksumErrors { get; }
 
     public bool HasAddresses => Segments is not null;
+
+    /// <summary>
+    /// 読み飛ばした誤り (<see cref="PasteOptions.CollectErrors"/> のとき。数値として解釈できない部分をすべて一覧にする。TOOL-09 の「エラー」)。
+    /// </summary>
+    public IReadOnlyList<PasteError> SkippedErrors { get; init; } = [];
 
     public override string ToString() => IsValid ? $"{Format} ({Length} bytes)" : $"{Format} (error {Error})";
 }

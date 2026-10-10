@@ -420,37 +420,10 @@ public static class Exporter
     // ---- ファイルへの書き出し ----
 
     /// <summary>
-    /// <paramref name="path"/> に書き出す (TOOL-04 の「巨大ファイル」: 同じフォルダの一時ファイルに書いてから置き換える)。失敗・キャンセルしたら
-    /// 一時ファイルを消し、出力先は変えない。
+    /// <paramref name="path"/> に書き出す (TOOL-04 の「巨大ファイル」: 同じフォルダの一時ファイルに書いてから置き換える。置き換えは安全な保存
+    /// (ENG-22) と同じく元のファイルの属性・ACL・作成日時を引き継ぐ)。失敗・キャンセルしたら一時ファイルを消し、出力先は変えない。
     /// </summary>
-    public static void WriteFile(string path, Action<Stream> write)
-    {
-        string full = Path.GetFullPath(path);
-        string folder = Path.GetDirectoryName(full)!;
-        string temp = Path.Combine(folder, $".{Path.GetFileName(full)}.~hex{RandomNumberGenerator.GetHexString(8, lowercase: true)}.tmp");
-        try
-        {
-            using (var stream = new FileStream(temp, FileMode.CreateNew, FileAccess.Write, FileShare.None, 1 << 16, FileOptions.SequentialScan))
-            {
-                write(stream);
-                stream.Flush(flushToDisk: true);
-            }
-
-            File.Move(temp, full, overwrite: true);
-        }
-        catch
-        {
-            try
-            {
-                File.Delete(temp);
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-            }
-
-            throw;
-        }
-    }
+    public static void WriteFile(string path, Action<Stream> write) => Saving.SafeFileWriter.Write(path, write);
 
     /// <summary>出力のおおよそのサイズ (バイト。先頭の最大 4 KiB を変換して見積もる。TOOL-04 の仕様 3 の 3)。</summary>
     public static long EstimateSize(ExportSource source, IReadOnlyList<(long Offset, long Length)> ranges, ExportOptions o)

@@ -284,6 +284,9 @@ public sealed partial class MainViewModel : ObservableObject
     /// <summary>その場保存のジャーナルの置き場所 (ENG-23。復旧用フォルダ。PKG-13)。</summary>
     private string JournalDirectory => _journalDirectory;
 
+    /// <summary>安全な保存の一時ファイルを記録する場所 (ENG-22 の仕様 7。元の形式での保存 (TOOL-11) でも使う)。</summary>
+    public string SaveMarkerDirectory => _journalDirectory;
+
     public void Close(DocumentViewModel vm)
     {
         // 取り除くと TabView の双方向の結び付けで Selected が null になるため、先に選択中かを調べておく。

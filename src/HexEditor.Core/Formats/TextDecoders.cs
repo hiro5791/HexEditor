@@ -493,17 +493,33 @@ public static partial class TextDecoders
         progress?.Report(text.BytesRead);
         int size = options.ValueSize is 1 or 2 or 4 or 8 ? options.ValueSize : InferElementSize(source);
         PasteCandidate parsed = PasteDetector.Parse(PasteFormat.Array, source,
-            new PasteOptions { ElementSize = size, BigEndian = options.BigEndian, SourceLiterals = true });
+            new PasteOptions { ElementSize = size, BigEndian = options.BigEndian, SourceLiterals = true, CollectErrors = true });
         var issues = new ImportIssueList();
         using var builder = new SparseImageBuilder(tempDirectory);
+        string[] lines = source.Split('\n');
+        void AddIssue(PasteError e) => issues.Add(new ImportIssue(e.Line, e.Column, e.Reason switch
+        {
+            "range" => ImportIssueKind.OutOfRange,
+            "char" => ImportIssueKind.InvalidCharacter,
+            _ => ImportIssueKind.Syntax,
+        }, e.Line - 1 < lines.Length ? lines[e.Line - 1].TrimEnd('\r') : string.Empty));
+
         if (parsed.Error is { } error)
         {
-            issues.Add(new ImportIssue(error.Line, error.Column, error.Reason == "range" ? ImportIssueKind.OutOfRange : ImportIssueKind.Syntax,
-                error.Reason));
+            AddIssue(error);
         }
-        else if (parsed.Bytes is { Length: > 0 } bytes)
+        else
         {
-            builder.Add(0, bytes);
+            // 数値として解釈できない部分はすべて位置を一覧にする (TOOL-09 の「エラー」)。「誤りを無視して読み込む」では、その部分を飛ばす。
+            foreach (PasteError skipped in parsed.SkippedErrors.OrderBy(e => e.Line).ThenBy(e => e.Column))
+            {
+                AddIssue(skipped);
+            }
+
+            if (parsed.Bytes is { Length: > 0 } bytes)
+            {
+                builder.Add(0, bytes);
+            }
         }
 
         SparseImage image = builder.BuildContiguous(displayName);

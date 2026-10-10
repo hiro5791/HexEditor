@@ -109,15 +109,19 @@ public sealed class FormatPerformanceTests(ITestOutputHelper output) : IDisposab
     [Trait(TC, "TC-TOOL-16-02")]
     public void Saving_a_50_gb_selection_does_not_grow_memory()
     {
+        // 前提: TD-SPARSE-100G を開き、0 から長さ 50 GiB を選択している。保存は「選択範囲をファイルに保存」と同じ処理 (形式「バイナリ」のエクスポート)。
         using var doc = new Document(FileByteSource.Open(TestDataCatalog.Get("TD-SPARSE-100G")), Options());
         DocumentSnapshot snapshot = doc.Current;
         var source = new ExportSource { Read = (o, d) => snapshot.Read(o, d), Length = snapshot.Length };
         string target = Path.Combine(_folder.Path, "part.bin");
         long baseline = PrivateBytesAfterGc();
         long peak = PeakPrivateBytes(() => Exporter.WriteFile(target, stream =>
-            Exporter.Write(source, [(10 * GiB, 50 * GiB)], new ExportOptions { Format = FormatIds.Binary }, stream)));
-        Assert.True(peak - baseline < 512 * MiB, $"{(peak - baseline) / MiB} MiB");
-        Assert.Equal(50 * GiB, new FileInfo(target).Length);
-        Assert.Equal(TestDataCatalog.Marker(10 * GiB), ReadFile(target, 0, TestDataCatalog.MarkerLength));
+            Exporter.Write(source, [(0, 50 * GiB)], new ExportOptions { Format = FormatIds.Binary }, stream)));
+        output.WriteLine($"Private bytes: baseline {baseline / MiB} MiB, peak {peak / MiB} MiB");
+
+        // 期待結果: 差が 100 MB 未満、出力の長さが 53,687,091,200、2^31 の位置に TD-SPARSE-100G と同じ目印。
+        Assert.True(peak - baseline < 100_000_000, $"{(peak - baseline) / MiB} MiB");
+        Assert.Equal(53_687_091_200, new FileInfo(target).Length);
+        Assert.Equal(TestDataCatalog.Marker(1L << 31), ReadFile(target, 1L << 31, TestDataCatalog.MarkerLength));
     }
 }

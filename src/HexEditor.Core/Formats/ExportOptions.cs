@@ -49,7 +49,10 @@ public enum DumpHighlightKind
     Rule,
 }
 
-/// <summary>ダンプで強調する範囲 (ドキュメント上のオフセット)。<see cref="Name"/> はブックマークの名前 (ツールチップ)。</summary>
+/// <summary>
+/// ダンプで強調する範囲 (ドキュメント上のオフセット)。<see cref="Name"/> はブックマーク・色付けルールの名前 (ツールチップ)。<see cref="Color"/> は
+/// その範囲の色 (<c>#RRGGBB</c>。ブックマークの色・色付けルールの色)。null なら種類ごとの既定の色。
+/// </summary>
 public sealed record DumpHighlight(long Offset, long Length, DumpHighlightKind Kind, string? Name = null, string? Color = null);
 
 /// <summary>ダンプのエクスポートの設定 (TOOL-10 の仕様 1・2)。既定値は画面の表示と同じものを呼び出し側が入れる。</summary>
@@ -95,11 +98,26 @@ public sealed record DumpOptions
 
     public TexEnvironment Tex { get; init; } = TexEnvironment.Verbatim;
 
+    /// <summary>
+    /// TeX を単独で処理できる文書 (<c>\documentclass</c> から <c>\end{document}</c> まで) にする。偽 (既定) なら、利用者の文書に
+    /// <c>\input</c> で読み込む断片 (色付きの <c>alltt</c> は <c>alltt</c>・<c>xcolor</c> パッケージが要る。先頭のコメントに書く)。
+    /// </summary>
+    public bool TexDocument { get; init; }
+
     /// <summary>Markdown を表にする (既定はコードブロック)。</summary>
     public bool MarkdownTable { get; init; }
 
     /// <summary>強調する範囲 (オフセットの昇順)。</summary>
     public IReadOnlyList<DumpHighlight> Highlights { get; init; } = [];
+
+    /// <summary>
+    /// 行ごとに求める強調 (色付けルール。<see cref="Highlights"/> と違い、全体を先に求めない)。引数は行の先頭のオフセットとバイト数。
+    /// <see cref="Highlights"/> の強調 (変更バイト・ブックマーク) が優先する。
+    /// </summary>
+    public Func<long, int, IReadOnlyList<DumpHighlight>>? RowHighlights { get; init; }
+
+    /// <summary><see cref="RowHighlights"/> が使う色 (<c>#RRGGBB</c>。RTF の色の表を先頭に書くため、先に知らせる)。</summary>
+    public IReadOnlyList<string> RuleColors { get; init; } = [];
 
     /// <summary>HTML の title (ファイル名など)。</summary>
     public string Title { get; init; } = "Hex dump";

@@ -5254,7 +5254,7 @@ Details were written to:
   <data name="Export_MultiPerRange" xml:space="preserve"><value>A separate file for each range</value></data>
   <data name="Export_MultiConcatenate" xml:space="preserve"><value>Join into one file</value></data>
   <data name="Export_MultiPattern" xml:space="preserve"><value>File name format</value></data>
-  <data name="Export_MultiPatternHelp" xml:space="preserve"><value>Each range needs its own file name. Use {base}, {ext}, {name}, {index}, {start} (or {offset}) and {length}.</value></data>
+  <data name="Export_MultiPatternHelp" xml:space="preserve"><value>Each range needs its own file name. Use {base}, {ext} and {name} (the document's file name), {index}, {start} (or {offset}) and {length}.</value></data>
   <data name="SaveSelection_MultiTitle" xml:space="preserve"><value>Save Selection to a File</value></data>
   <data name="SaveSelection_Continue" xml:space="preserve"><value>Continue</value></data>
   <data name="Menu_View_SyncMapped.Text" xml:space="preserve"><value>Follow the comparison</value></data>
@@ -5344,4 +5344,26 @@ Details were written to:
   <data name="SetSection_ViewPresets" xml:space="preserve"><value>View presets</value></data>
   <data name="SetSearch_ViewPresets" xml:space="preserve"><value>view presets bytes per row extensions export import</value></data>
   <data name="CmdArg_view_presetApply" xml:space="preserve"><value>Type the name of a preset.</value></data>
+  <data name="Import_UuFile" xml:space="preserve"><value>File to read</value></data>
+  <data name="Import_IssuesHeader" xml:space="preserve"><value>Errors and warnings</value></data>
+  <data name="Import_DropCaption" xml:space="preserve"><value>Import this file</value></data>
+  <data name="Import_InferredSize" xml:space="preserve"><value>Bytes per element: {0} (from the type name; change it in Bytes per element)</value></data>
+  <data name="Import_ChosenSize" xml:space="preserve"><value>Bytes per element: {0}</value></data>
+  <data name="ImportIssue_Warning" xml:space="preserve"><value>Warning:</value></data>
+  <data name="Export_OverwriteTitle" xml:space="preserve"><value>Replace Files</value></data>
+  <data name="Export_OverwriteBody" xml:space="preserve"><value>{0, plural, one {This file already exists. Replace it?} other {These # files already exist. Replace them?}}
+{1}</value></data>
+  <data name="Export_Overwrite" xml:space="preserve"><value>Replace</value></data>
+  <data name="SaveAsFormat_Title" xml:space="preserve"><value>Choose a Format</value></data>
+  <data name="FormatSettings_FinalNewLine" xml:space="preserve"><value>Line break after the last line</value></data>
+  <data name="Transfer_execType" xml:space="preserve"><value>Start address record</value></data>
+  <data name="Transfer_Choice_linear" xml:space="preserve"><value>05 Start linear address</value></data>
+  <data name="Transfer_Choice_segment" xml:space="preserve"><value>03 Start segment address</value></data>
+  <data name="Transfer_modifier" xml:space="preserve"><value>Modifier</value></data>
+  <data name="Transfer_Choice_default" xml:space="preserve"><value>Language default</value></data>
+  <data name="Transfer_Choice_const" xml:space="preserve"><value>const / read-only</value></data>
+  <data name="Transfer_Choice_static" xml:space="preserve"><value>static</value></data>
+  <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static read-only</value></data>
+  <data name="Transfer_textEncoding" xml:space="preserve"><value>Text encoding (ascii, utf-8, cp932, ...)</value></data>
+  <data name="Transfer_texDocument" xml:space="preserve"><value>Complete document (\documentclass ... \end{document})</value></data>
 </root>
