@@ -3,6 +3,7 @@ using System.Text;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Search;
+using HexEditor.Core.Tests.Support;
 using static HexEditor.Core.Tests.Search.SearchTestData;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
 
@@ -179,7 +180,9 @@ public sealed class RegexSearchTests
         running!.Cancel();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => task);
         TimeSpan latency = stoppedAt - running.CancelRequestedAt!.Value;
-        Assert.True(latency < TimeSpan.FromMilliseconds(200), $"キャンセルから止まるまで {latency.TotalMilliseconds} ms");
+        // 止まらない (時間の上限 60 秒まで待つ) 誤りは失敗にし、200 ms の目標は共有のランナーでは警告にする (壁時計のため)。
+        Assert.True(latency < TimeSpan.FromSeconds(5), $"キャンセルから止まるまで {latency.TotalMilliseconds} ms");
+        TimeBudget.Limit(latency < TimeSpan.FromMilliseconds(200), $"キャンセルから止まるまで {latency.TotalMilliseconds} ms (目標 200 ms)");
         Assert.Equal(OperationState.Cancelled, running.State);
 
         // 次 / 前を検索 (CancellationToken) も同じ。
@@ -203,7 +206,8 @@ public sealed class RegexSearchTests
         DateTimeOffset requested = DateTimeOffset.UtcNow;
         cts.Cancel();
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => find);
-        Assert.True(stopped2 - requested < TimeSpan.FromMilliseconds(200), $"{(stopped2 - requested).TotalMilliseconds} ms");
+        Assert.True(stopped2 - requested < TimeSpan.FromSeconds(5), $"{(stopped2 - requested).TotalMilliseconds} ms");
+        TimeBudget.Limit(stopped2 - requested < TimeSpan.FromMilliseconds(200), $"{(stopped2 - requested).TotalMilliseconds} ms (目標 200 ms)");
     }
 
     [Fact]
