@@ -26,7 +26,9 @@ public sealed partial class MainViewModel
         StartWatching(vm);
         if (_files is not null)
         {
-            Recent.Record(full, vm.DisplayName, _files.UtcNow());
+            // 範囲を記録し、最近使ったファイルから同じ範囲を開き直す (ENG-16 の仕様 2・受け入れ基準 4)。
+            Recent.Record(full, vm.DisplayName, _files.UtcNow(), Core.Files.RecentItemKind.File,
+                new Core.Files.RecentOpenOptions { RangeStart = start, RangeLength = source.Length });
         }
 
         return vm;
@@ -55,7 +57,8 @@ public sealed partial class MainViewModel
         vm.FormatIssues = issues;
         if (_files is not null)
         {
-            Recent.Record(full, vm.DisplayName, _files.UtcNow());
+            // デコードした形式を記録し、最近使ったファイルから同じ形式で開き直す (ENG-16 の仕様 2)。
+            Recent.Record(full, vm.DisplayName, _files.UtcNow(), Core.Files.RecentItemKind.File, new Core.Files.RecentOpenOptions { Format = format });
         }
 
         return vm;

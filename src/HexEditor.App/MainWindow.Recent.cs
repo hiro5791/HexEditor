@@ -103,7 +103,7 @@ public sealed partial class MainWindow
     private async void OpenRecent(RecentItem item)
     {
         // ドライブの種類と存在の確認は、応答しないドライブで UI を止めないようにバックグラウンドで行う。
-        bool missing = !RecentFileList.IsNetworkPathSyntax(item.Path) && await Task.Run(() => !item.IsNetworkPath && !File.Exists(item.Path));
+        bool missing = item.Kind != RecentItemKind.Disk && !RecentFileList.IsNetworkPathSyntax(item.Path) && await Task.Run(() => !item.IsNetworkPath && !File.Exists(item.Path));
         if (missing)
         {
             ShowNotice(Loc.Format("Recent_Missing", item.Path), InfoBarSeverity.Warning, actions:
@@ -113,8 +113,73 @@ public sealed partial class MainWindow
             return;
         }
 
-        TryOpen(item.Path);
+        // 開いたときのオプション (ENG-16 の仕様 2): 範囲 (ENG-13)、形式 (ENG-38)、ディスク (ENG-29)・ディスクイメージのセクタサイズ (ENG-31)。
+        switch (item.Kind)
+        {
+            case RecentItemKind.Disk:
+                await OpenRecentDiskAsync(item);
+                break;
+            case RecentItemKind.DiskImage:
+                OpenRecentDiskImage(item);
+                break;
+            default:
+                if (item.Options is { RangeStart: { } start, RangeLength: { } length })
+                {
+                    await OpenRangeAsync(item.Path, start, length, resizable: false, readOnly: false);
+                }
+                else if (item.Options?.Format is { } format && format != Core.Formats.FormatIds.Binary)
+                {
+                    await OpenEncodedAsync(item.Path, format, null);
+                }
+                else
+                {
+                    TryOpen(item.Path);
+                }
+
+                break;
+        }
+
         UpdateTitle();
+    }
+
+    /// <summary>最近使ったディスク・ボリューム: 同じパスのデバイスを開き直す (管理者権限が要るなら先に確かめる)。</summary>
+    private async Task OpenRecentDiskAsync(RecentItem item)
+    {
+        Services.OpenRoute route = DeviceService.RouteForDisk(isRemovableUsbVolume: false);
+        if (route == Services.OpenRoute.GuidanceNeeded)
+        {
+            await ShowAdminGuidanceAsync(Loc.Get("AdminGuide_Disk"));
+            return;
+        }
+
+        try
+        {
+            var info = new Core.Devices.DeviceOpenInfo { Path = item.Path, DisplayName = item.DisplayName };
+            Vm.OpenDevice(await DeviceService.OpenDeviceAsync(info, writable: false, route));
+            RefreshHelperIndicator();
+        }
+        catch (HexEditor.Core.Elevation.HelperElevationDeclinedException)
+        {
+            ShowNotice(Loc.Get("AdminGuide_Declined"), InfoBarSeverity.Informational);
+        }
+        catch (Core.Devices.DeviceException ex)
+        {
+            ShowNotice(DeviceErrorMessage(ex), InfoBarSeverity.Error);
+        }
+    }
+
+    /// <summary>最近使ったディスクイメージ: 記録したセクタサイズで開き直す (ENG-31)。</summary>
+    private void OpenRecentDiskImage(RecentItem item)
+    {
+        try
+        {
+            int sectorSize = item.Options?.SectorSize ?? Core.Devices.DiskImage.DefaultSectorSize(item.Path);
+            Vm.OpenDiskImageSource(Core.Devices.DiskImage.Open(item.Path, new Core.Devices.DiskImageOptions { SectorSize = sectorSize }));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            ShowNotice(Loc.Format("Error_Open", Path.GetFileName(item.Path), ex.Message), InfoBarSeverity.Error);
+        }
     }
 
     /// <summary>「読み取り専用で開く」(ENG-14 の仕様 1)。</summary>

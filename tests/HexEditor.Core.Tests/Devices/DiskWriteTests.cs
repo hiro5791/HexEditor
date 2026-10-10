@@ -44,6 +44,40 @@ public sealed class DiskWriteTests : IDisposable
     };
 
     [Fact]
+    [Trait("TC", "TC-ENG-07-03")]
+    public void Writes_are_aligned_to_whole_sectors()
+    {
+        // 論理セクタ 512 バイト・NeedsAlignment のデータソースで、1 バイトの上書きはそのセクタだけ、境界をまたぐ 2 バイトは 2 セクタだけを書く。
+        (FakeDeviceAccess access, DeviceByteSource source, Document doc) = OpenDisk(Spec(withVolume: false));
+        using (source)
+        {
+            byte[] before = new byte[2048];
+            access.Disk(0).Read(0, before);
+
+            doc.Overwrite(100, [0xFF]);
+            access.ClearCalls();
+            DiskWritePlan plan = DiskWrite.Plan(doc, source, access.Enumerate());
+            doc.CompleteDeviceWrite(source, DiskWrite.Execute(plan, doc.Current, Journals));
+            Assert.Equal([@"Write \\.\PhysicalDrive0 0x0 512"], access.Calls.Where(c => c.StartsWith("Write ", StringComparison.Ordinal)));
+
+            byte[] after = new byte[2048];
+            access.Disk(0).Read(0, after);
+            byte[] expected = (byte[])before.Clone();
+            expected[100] = 0xFF;
+            Assert.Equal(expected, after);
+
+            // セクタ境界 (511〜512) をまたぐ 2 バイト: セクタ 0 と 1 (位置 0・長さ 1,024、または 2 回) だけ。
+            doc.Overwrite(511, [0x11, 0x22]);
+            access.ClearCalls();
+            plan = DiskWrite.Plan(doc, source, access.Enumerate());
+            doc.CompleteDeviceWrite(source, DiskWrite.Execute(plan, doc.Current, Journals));
+            List<string> writes = [.. access.Calls.Where(c => c.StartsWith("Write ", StringComparison.Ordinal))];
+            Assert.True(writes.SequenceEqual([@"Write \\.\PhysicalDrive0 0x0 1024"])
+                || writes.SequenceEqual([@"Write \\.\PhysicalDrive0 0x0 512", @"Write \\.\PhysicalDrive0 0x200 512"]), string.Join(", ", writes));
+        }
+    }
+
+    [Fact]
     [Trait("TC", "TC-ENG-30-01")]
     public void Writing_a_mounted_volume_range_locks_writes_flushes_and_unlocks()
     {

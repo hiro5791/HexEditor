@@ -224,6 +224,30 @@ public sealed class FormatFileTests
     });
 
     [Fact]
+    [Trait(UiTest.TC, "TC-ENG-16-03")]
+    public Task A_range_reopens_from_recent_files_with_the_same_range() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 前提: TD-MARKERS-1G を開始 0x10000000、長さ 16M で範囲を指定して開き、閉じる。
+        string path = ctx.TestData("TD-MARKERS-1G");
+        AppSession app = await ctx.StartAsync();
+        await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openAdvanced" });
+        await app.WaitForDialogAsync("OpenAdvancedDialog");
+        await app.SendAsync("openAdvancedSet", new JsonObject { ["path"] = path, ["range"] = true, ["start"] = "0x10000000", ["length"] = "16M" });
+        await app.InvokeDialogButtonAsync("Open");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["isRange"]?.GetValue<bool>() == true, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the range tab");
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+
+        // 1〜2. 最近使ったファイルの先頭を開くと、同じ範囲 (名前・長さ・ベースアドレス)。
+        await app.SendAsync("openRecentMenuAt", new JsonObject { ["index"] = 0 });
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["isRange"]?.GetValue<bool>() == true, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the range tab");
+        JsonObject doc = await DocAsync(app);
+        Assert.Contains("[0x10000000–0x10FFFFFF]", doc["title"]!.GetValue<string>());
+        Assert.Equal(16_777_216L, doc["length"]!.GetValue<long>());
+        Assert.Equal(0x10000000L, doc["baseAddress"]!.GetValue<long>());
+    });
+
+    [Fact]
     [Trait(UiTest.TC, "TC-ENG-39-02")]
     public Task Linked_view_edits_go_to_the_parent() => UiTestContext.RunAsync(async ctx =>
     {
