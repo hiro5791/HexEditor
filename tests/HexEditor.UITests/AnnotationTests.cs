@@ -93,7 +93,9 @@ public sealed class AnnotationTests
     {
         AppSession app = await StartWithRowsAsync(ctx, "rgba8");
         await GoAsync(app, 0x50);
-        JsonObject row = await RowAsync(app, "rgba8");
+        // 行の値の更新の後で、一覧の要素の色見本が描き直される。
+        JsonObject row = null!;
+        await app.WaitUntilAsync(async () => (row = await RowAsync(app, "rgba8"))["swatch"] is not null, TimeSpan.FromSeconds(5), "the swatch");
         Assert.Contains("#FF8000FF", row["value"]!.GetValue<string>());
         Assert.Equal("#FF8000", row["swatch"]!.GetValue<string>()[..7]);
         Assert.True(row["swatchBorder"]!.GetValue<bool>());

@@ -35,7 +35,7 @@ public enum HexHighlightLayer
 /// </para>
 /// </summary>
 public sealed record HexHighlight(long Offset, long Length, HexHighlightLayer Layer, Brush? Background, Brush? Border,
-    IReadOnlyList<double>? Dash = null, string Tag = "", int Level = 0, bool Underline = false);
+    IReadOnlyList<double>? Dash = null, string Tag = "", int Level = 0, bool Underline = false, bool LightBackground = false);
 
 /// <summary>オフセット列の目印 (ブックマークの開始位置。INSP-23 の仕様 8、INSP-25 の仕様 5)。<see cref="Text"/> は番号など。</summary>
 public sealed record HexOffsetMarker(long Offset, Brush Fill, Brush? Border, string Text, Brush? Foreground, string Tag = "");
@@ -121,6 +121,7 @@ public sealed partial class HexView
     private void RenderHighlights(long firstOffset, int rows, RowColumns columns)
     {
         _placed.Clear();
+        _lightUsed = 0;
         int bytesPerRow = columns.BytesPerRow;
         long end = firstOffset + (long)rows * bytesPerRow;
         int backUsed = 0;
@@ -191,6 +192,7 @@ public sealed partial class HexView
         }
 
         _highlightItems.Clear();
+        HideLightBackgrounds();
         Hide(_highlightBack, backUsed);
         Hide(_highlightFront, frontUsed);
         for (int i = marksUsed; i < _offsetMarks.Count; i++)
@@ -210,7 +212,12 @@ public sealed partial class HexView
     private void PlaceSegment(HexHighlight h, string column, long first, long last, double x, double y, double width, ref int backUsed, ref int frontUsed)
     {
         _placed.Add(new PlacedHighlight(h.Layer, h.Tag, column, first, last, h.Background, h.Border, h.Dash, h.Level, h.Underline, _placed.Count));
-        if (h.Background is not null)
+        if (h.Background is not null && h.LightBackground)
+        {
+            // 合成の図形 (SpriteVisual) で塗る: XAML の要素を使わないので、1 画面に数千あっても速い (INSP-33 の仕様 5)。
+            PlaceLightBackground(h.Background, x, y, width, _rowHeight);
+        }
+        else if (h.Background is not null)
         {
             Rectangle r = Take(_highlightBack, _backLayer!, backUsed++);
             r.Fill = h.Background;

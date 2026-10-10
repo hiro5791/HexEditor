@@ -77,6 +77,71 @@ public sealed partial class HexView
         return source(firstOffset, span, _ruleHexWork, _ruleTextWork);
     }
 
+    // ---- 軽い背景 (HexHighlight.LightBackground) ----
+
+    private Canvas? _lightHost;
+    private Microsoft.UI.Composition.ContainerVisual? _lightRoot;
+    private readonly List<Microsoft.UI.Composition.SpriteVisual> _lightSprites = [];
+    private readonly Dictionary<Windows.UI.Color, Microsoft.UI.Composition.CompositionColorBrush> _lightBrushes = [];
+    private int _lightUsed;
+    private int _lightShown;
+
+    /// <summary>背景を合成の図形で塗る (強調の背景の層の奥。セルごとの強調が多い提供元のため)。</summary>
+    private void PlaceLightBackground(Brush background, double x, double y, double width, double height)
+    {
+        if (_lightRoot is null)
+        {
+            _lightHost = new Canvas { IsHitTestVisible = false };
+            AutomationProperties.SetAccessibilityView(_lightHost, Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+            ContentHost.Children.Insert(Math.Max(0, ContentHost.Children.IndexOf(_backLayer)), _lightHost);
+            _lightRoot = Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.GetElementVisual(_lightHost).Compositor.CreateContainerVisual();
+            Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.SetElementChildVisual(_lightHost, _lightRoot);
+        }
+
+        Microsoft.UI.Composition.Compositor compositor = _lightRoot.Compositor;
+        Windows.UI.Color color = background is SolidColorBrush solid
+            ? Windows.UI.Color.FromArgb((byte)Math.Round(solid.Color.A * Math.Clamp(solid.Opacity, 0, 1)), solid.Color.R, solid.Color.G, solid.Color.B)
+            : default;
+        if (!_lightBrushes.TryGetValue(color, out Microsoft.UI.Composition.CompositionColorBrush? brush))
+        {
+            brush = compositor.CreateColorBrush(color);
+            _lightBrushes[color] = brush;
+        }
+
+        Microsoft.UI.Composition.SpriteVisual sprite;
+        if (_lightUsed < _lightSprites.Count)
+        {
+            sprite = _lightSprites[_lightUsed];
+        }
+        else
+        {
+            sprite = compositor.CreateSpriteVisual();
+            _lightSprites.Add(sprite);
+            _lightRoot.Children.InsertAtTop(sprite);
+        }
+
+        _lightUsed++;
+        if (!ReferenceEquals(sprite.Brush, brush))
+        {
+            sprite.Brush = brush;
+        }
+
+        sprite.Offset = new System.Numerics.Vector3((float)x, (float)y, 0);
+        sprite.Size = new System.Numerics.Vector2((float)width, (float)height);
+        sprite.IsVisible = true;
+    }
+
+    /// <summary>今回の描画で使わなかった図形を隠す。</summary>
+    private void HideLightBackgrounds()
+    {
+        for (int i = _lightUsed; i < _lightShown; i++)
+        {
+            _lightSprites[i].IsVisible = false;
+        }
+
+        _lightShown = _lightUsed;
+    }
+
     /// <summary>注釈の列を描く (Render から呼ぶ)。行ごとに、その行で始まる注釈のラベルを出す。</summary>
     private void RenderAnnotationColumn(long firstOffset, int rows, RowColumns columns)
     {

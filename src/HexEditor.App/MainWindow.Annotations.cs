@@ -798,8 +798,9 @@ public sealed partial class MainWindow
                 Brush? border = !colors ? systemBorder
                     : cell.Border >= 0 ? RuleBrush(rules.Rules[cell.Border].Rule.Foreground ?? rules.Rules[cell.Border].Rule.Background ?? 0x808080) : null;
                 IReadOnlyList<double>? dash = !colors ? RuleDash(ruleIndex) : cell.Border >= 0 ? RuleDash(ShapeOf(rules.Rules[cell.Border].Rule.Border)) : null;
+                // 背景は合成の図形で塗る (乱数のデータではバイトごとに強調になり、1 画面に数千になる。INSP-33 の仕様 5)。
                 yield return new HexHighlight(start + i, j - i, HexHighlightLayer.ColoringRule, background, border, dash,
-                    (column == 0 ? "coloring-hex:" : "coloring-text:") + rule.Name);
+                    (column == 0 ? "coloring-hex:" : "coloring-text:") + rule.Name, LightBackground: true);
                 i = j;
             }
         }
@@ -822,18 +823,22 @@ public sealed partial class MainWindow
         bool any = false;
         for (int i = 0; i < cells.Hex.Length; i++)
         {
-            if (cells.Hex[i].Foreground >= 0)
+            int h = cells.Hex[i].Foreground;
+            if (h >= 0)
             {
-                hex[i + skip] = RuleBrush(rules.Rules[cells.Hex[i].Foreground].Rule.Foreground!.Value);
+                hex[i + skip] = RuleBrush(ColorOf(rules.Rules[h].Rule));
                 any = true;
             }
 
-            if (cells.Text[i].Foreground >= 0)
+            int t = cells.Text[i].Foreground;
+            if (t >= 0)
             {
-                text[i + skip] = RuleBrush(rules.Rules[cells.Text[i].Foreground].Rule.Foreground!.Value);
+                text[i + skip] = RuleBrush(ColorOf(rules.Rules[t].Rule));
                 any = true;
             }
         }
+
+        static uint ColorOf(ColoringRule rule) => rule.Foreground!.Value;
 
         return any;
     }

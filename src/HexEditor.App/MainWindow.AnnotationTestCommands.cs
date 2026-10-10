@@ -290,6 +290,8 @@ public sealed partial class MainWindow
             case "select":
                 vm.Selected = item;
                 break;
+            case "timings":
+                return new JsonObject { ["times"] = new JsonArray([.. (CurrentAnnotations()?.Coloring.TakeEvaluationTimes() ?? []).Select(t => (JsonNode?)t)]) };
             case "key":
                 return new JsonObject { ["handled"] = (ShownPanelContent(ColoringRulesPanelId) as ColoringRulesPanel)?.HandleKey(Enum.Parse<VirtualKey>(Opt(request, "key"), ignoreCase: true)) ?? false };
         }

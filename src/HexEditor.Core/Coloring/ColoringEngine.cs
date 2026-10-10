@@ -159,6 +159,19 @@ public sealed class ColoringEngine
     /// <summary>1 画面分の評価にかかった時間 (ms。性能のテストで読む)。</summary>
     public double LastEvaluationMilliseconds { get; private set; }
 
+    private readonly Queue<double> _evaluationTimes = new();
+
+    /// <summary>これまでのチャンク (4 KiB。1 画面分以上) ごとの評価時間 (ms。新しい 4,096 件まで) を取り出して空にする (INSP-33 の仕様 5 の性能テスト用)。</summary>
+    public IReadOnlyList<double> TakeEvaluationTimes()
+    {
+        lock (_evaluationTimes)
+        {
+            double[] times = [.. _evaluationTimes];
+            _evaluationTimes.Clear();
+            return times;
+        }
+    }
+
     /// <summary>最後の評価の失敗 (診断用)。</summary>
     public Exception? LastError { get; private set; }
 
@@ -169,6 +182,64 @@ public sealed class ColoringEngine
         _cache.Clear();
         _lru.Clear();
         _pending.Clear();
+        lock (_work)
+        {
+            _work.Clear();
+        }
+    }
+
+    /// <summary>まだ評価していないチャンクの待ち行列 (新しい順)。速いスクロールで古くなった分は捨てる。</summary>
+    private readonly LinkedList<((long Chunk, int Version) Key, Action Work)> _work = new();
+    private bool _working;
+
+    /// <summary>同時に待たせるチャンクの数 (超えたら古いものを捨てる。捨てたものはまた見えたときに評価する)。</summary>
+    private const int MaxQueued = 32;
+
+    /// <summary>
+    /// チャンクの評価を待ち行列に入れる (<see cref="_lock"/> の中から呼ぶ)。評価は 1 つの作業で新しい順に進める (チャンクごとに
+    /// スレッドを使うと、速いスクロールで UI のスレッドと CPU を取り合う。INSP-33 の仕様 5)。
+    /// </summary>
+    private void Enqueue((long Chunk, int Version) key, Action work)
+    {
+        lock (_work)
+        {
+            _work.AddFirst((key, work));
+            while (_work.Count > MaxQueued)
+            {
+                _pending.Remove(_work.Last!.Value.Key);
+                _work.RemoveLast();
+            }
+
+            if (_working)
+            {
+                return;
+            }
+
+            _working = true;
+        }
+
+        Schedule(Drain);
+    }
+
+    private void Drain()
+    {
+        while (true)
+        {
+            Action work;
+            lock (_work)
+            {
+                if (_work.Count == 0)
+                {
+                    _working = false;
+                    return;
+                }
+
+                work = _work.First!.Value.Work;
+                _work.RemoveFirst();
+            }
+
+            work();
+        }
     }
 
     /// <summary>
@@ -221,7 +292,7 @@ public sealed class ColoringEngine
                     {
                         DocumentSnapshot current = snapshot;
                         long target = chunk;
-                        Schedule(() => EvaluateChunk(current, rules, target));
+                        Enqueue(key, () => EvaluateChunk(current, rules, target));
                     }
                 }
             }
@@ -239,7 +310,7 @@ public sealed class ColoringEngine
         var text = new ColoringCell[Math.Max(0, length)];
         if (length > 0)
         {
-            long started = System.Diagnostics.Stopwatch.GetTimestamp();
+            long started = 0;
             int margin = rules.MaxMatchLength - 1;
             long dataStart = Math.Max(0, chunkStart - margin);
             long dataEnd = Math.Min(snapshot.Length, chunkStart + length + margin);
@@ -248,6 +319,7 @@ public sealed class ColoringEngine
             {
                 ReadResult read = snapshot.Read(dataStart, data);
                 ByteState[] states = StatesOf(read, dataStart, data.Length);
+                started = System.Diagnostics.Stopwatch.GetTimestamp();
                 rules.Evaluate(data, states, dataStart, chunkStart, hex, text);
             }
             catch (Exception ex) when (ex is ObjectDisposedException or IOException or InvalidOperationException)
@@ -263,6 +335,14 @@ public sealed class ColoringEngine
             }
 
             LastEvaluationMilliseconds = System.Diagnostics.Stopwatch.GetElapsedTime(started).TotalMilliseconds;
+            lock (_evaluationTimes)
+            {
+                _evaluationTimes.Enqueue(LastEvaluationMilliseconds);
+                if (_evaluationTimes.Count > 4096)
+                {
+                    _evaluationTimes.Dequeue();
+                }
+            }
         }
 
         lock (_lock)
