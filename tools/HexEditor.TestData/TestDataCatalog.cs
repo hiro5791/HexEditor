@@ -14,7 +14,7 @@ public sealed record TestDataItem(string Id, long Length, string Description, Ac
 /// テストデータを生成する (テスト方針 7.1)。同じ ID からは常に同じ内容を作る。生成したファイルはキャッシュし、
 /// 2 回目以降はそのまま使う。
 /// </summary>
-public static class TestDataCatalog
+public static partial class TestDataCatalog
 {
     public const long KiB = 1024;
     public const long MiB = 1024 * KiB;
@@ -86,7 +86,7 @@ public static class TestDataCatalog
         new("TD-ANA-ABC", 3, "ASCII の abc", path => WriteAll(path, Encoding.ASCII.GetBytes("abc"))),
         new("TD-ANA-SHA256SUM", Sha256SumLength, "TD-RANDOM-16M の sha256sum の出力 (TD-RANDOM-16M と同じフォルダに置く)", WriteSha256Sum,
             dir => Path.Combine(dir, "TD-RANDOM-16M.sha256")),
-    }.ToDictionary(i => i.Id);
+    }.Concat(CompareItems()).ToDictionary(i => i.Id);
 
     /// <summary>TD-ANA-SHA256SUM の長さ: 64 桁の Hex、空白 2 つ、TD-RANDOM-16M.bin、LF。</summary>
     private const long Sha256SumLength = 64 + 2 + 17 + 1;

@@ -8,11 +8,11 @@ namespace HexEditor.Core.Compare;
 /// W バイト) の中で Myers の差分アルゴリズム (線形空間版、<see cref="MyersDiff"/>) を使って再同期点を探す。
 /// <para>巨大なデータでの方針 (ANA-03 の「巨大ファイル」):</para>
 /// <list type="number">
-/// <item>メモリはウィンドウ 2 つ (各 W バイト)、ハッシュ表 (最大 2^21 項目)、読み込みの塊 (1 MiB) の分だけを使い、データの長さに比例しない。
-/// W = 16 MB で作業用メモリは約 80 MB。</item>
+/// <item>メモリはウィンドウ 2 つ (各 W バイト)、ハッシュ表 (最大 2^19 項目)、読み込みの塊 (1 MiB) の分だけを使い、データの長さに比例しない。
+/// W = 16 MB で作業用メモリは約 50 MB。</item>
 /// <item>Myers は編集距離に上限 (<see cref="MaxEditDistance"/>) を設け、超えたら打ち切る (全く異なるデータで時間が W の 2 乗にならないように)。</item>
 /// <item>Myers で M バイト以上の一致が見つからなければ、M バイト単位のローリングハッシュで左右の共通ブロックを探す。片側のウィンドウを
-/// 索引にし、もう片側をウィンドウの 4 倍 (最大 64 MiB) 先まで流し読みして、最も近い (左右の位置の和が最小の) 共通ブロックを再同期点にする。
+/// 索引にし、もう片側をウィンドウの 4 倍 (最大 4 MiB) 先まで流し読みして、最も近い (左右の位置の和が最小の) 共通ブロックを再同期点にする。
 /// W より長い挿入・削除も、これで再同期できる (仕様 3)。</item>
 /// <item>どちらでも見つからなければ、ウィンドウ全体を「変更」にして進む (仕様 2.5)。1 つのウィンドウに 5 秒以上かかった場合も
 /// ウィンドウ全体を「変更」にし、打ち切ったウィンドウとして数える。</item>
@@ -25,10 +25,11 @@ internal static class InsertDeleteComparer
     public const int MaxEditDistance = 4096;
 
     /// <summary>ローリングハッシュで流し読みする距離の上限。</summary>
-    public const long MaxScanDistance = 64L * 1024 * 1024;
+    public const long MaxScanDistance = 4L * 1024 * 1024;
 
     private const int ChunkSize = 1 << 20;
-    private const int MaxIndexEntries = 1 << 20;
+
+    private const int MaxIndexEntries = 1 << 18;
 
     public static void Run(CompareOptions options, CompareResult result, CancellationToken cancellationToken, Action<long>? progress)
     {
@@ -338,6 +339,7 @@ internal static class InsertDeleteComparer
             ulong h = 0;
             long chunkStart = 0;
             int chunkLength = 0;
+            int slot = 0;
             for (long pos = 0; pos < distance; pos++)
             {
                 long q = pos - m + 1;
@@ -368,7 +370,6 @@ internal static class InsertDeleteComparer
                 }
 
                 byte next = chunk[(int)(pos - chunkStart)];
-                int slot = (int)(pos % m);
                 if (pos >= m)
                 {
                     h -= ring[slot] * power;
@@ -376,13 +377,21 @@ internal static class InsertDeleteComparer
 
                 h = h * Base + next;
                 ring[slot] = next;
-                if (q < 0 || q % _unit != 0)
+                slot = slot + 1 == m ? 0 : slot + 1;
+                if (q < 0 || (_unit > 1 && q % _unit != 0))
                 {
                     continue;
                 }
 
-                foreach (int p in table.Find(h))
+                // ほとんどの位置は表にないので、先に小さなビット表で絞る (大きな表を引くとキャッシュに入らず遅い)。
+                if (!table.MayContain(h))
                 {
+                    continue;
+                }
+
+                for (int entry = table.FirstSlot(h); entry >= 0; entry = table.NextSlot(entry, h))
+                {
+                    int p = table.ValueAt(entry);
                     if (p + q == 0 || p + q >= bestCost || !SameBlock(index, p, ring, q, m))
                     {
                         continue;
@@ -445,8 +454,19 @@ internal static class InsertDeleteComparer
             _mask = capacity - 1;
         }
 
+        private readonly ulong[] _filter = new ulong[1 << 16];
+
+        /// <summary>このハッシュの項目がありうるか (なければ必ず false)。</summary>
+        public bool MayContain(ulong hash)
+        {
+            uint bit = (uint)(hash >> 42);
+            return (_filter[bit >> 6] & (1UL << (int)(bit & 63))) != 0;
+        }
+
         public void Add(ulong hash, int position)
         {
+            uint bit = (uint)(hash >> 42);
+            _filter[bit >> 6] |= 1UL << (int)(bit & 63);
             int slot = (int)(Mix(hash) & (ulong)_mask);
             int same = 0;
             for (int probe = 0; probe <= _mask; probe++)
@@ -467,18 +487,27 @@ internal static class InsertDeleteComparer
             }
         }
 
-        public IEnumerable<int> Find(ulong hash)
+        /// <summary>ハッシュが一致する最初の項目の場所 (なければ -1)。表は半分以上空いているので、探索は空きの場所で止まる。</summary>
+        public int FirstSlot(ulong hash) => Scan((int)(Mix(hash) & (ulong)_mask), hash);
+
+        /// <summary>同じハッシュの次の項目の場所 (なければ -1)。</summary>
+        public int NextSlot(int slot, ulong hash) => Scan((slot + 1) & _mask, hash);
+
+        public int ValueAt(int slot) => _values[slot];
+
+        private int Scan(int slot, ulong hash)
         {
-            int slot = (int)(Mix(hash) & (ulong)_mask);
-            for (int probe = 0; probe <= _mask && _values[slot] >= 0; probe++)
+            while (_values[slot] >= 0)
             {
                 if (_keys[slot] == hash)
                 {
-                    yield return _values[slot];
+                    return slot;
                 }
 
                 slot = (slot + 1) & _mask;
             }
+
+            return -1;
         }
 
         private static ulong Mix(ulong h)
