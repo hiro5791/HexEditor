@@ -5,6 +5,7 @@ using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Saving;
 using HexEditor.Core.Sources;
+using HexEditor.Core.View;
 
 namespace HexEditor.Core.Search;
 
@@ -99,22 +100,34 @@ public enum FileSkipReason
 
     /// <summary>置換できない一致があった (埋めて長さを保つで長すぎるなど)。</summary>
     CannotReplace,
+
+    /// <summary>正規表現の照合が時間の上限に達したため、飛ばした範囲がある (FIND-18 の「エラー」。範囲はメッセージ)。</summary>
+    RegexTimedOut,
 }
 
 /// <summary>飛ばしたファイル (理由と、OS のメッセージ)。</summary>
 public sealed record SkippedFile(string Path, FileSkipReason Reason, string Message);
 
-/// <summary>1 つのファイルの検索の結果 (FIND-30 の仕様 5)。</summary>
+/// <summary>
+/// 1 つのファイルの検索の結果 (FIND-30 の仕様 5)。一致そのものは結果の <see cref="MatchStore"/> に置き (メモリ上は 1,000,000 件まで、
+/// 超える分は一時ファイル)、ここには場所 (番号の区間) だけを持つ。全体の上限で途中まで記録したファイルは、「続ける」で続きの一致を加える。
+/// </summary>
 public sealed class FileSearchResult
 {
-    public FileSearchResult(string path, long size, DateTime lastWriteUtc, IReadOnlyList<SearchMatch> matches, bool limitReached, bool fromOpenDocument)
+    private readonly MultiFileSearchResults _owner;
+
+    /// <summary>一致の区間 (結果の一致の列の番号と件数)。普通は 1 つ。「続ける」で増える。</summary>
+    private readonly List<(long First, int Count)> _segments = [];
+    private int _count;
+
+    internal FileSearchResult(MultiFileSearchResults owner, string path, long size, DateTime lastWriteUtc, bool fromOpenDocument, DocumentSnapshot? snapshot)
     {
+        _owner = owner;
         Path = path;
         Size = size;
         LastWriteUtc = lastWriteUtc;
-        Matches = matches;
-        LimitReached = limitReached;
         FromOpenDocument = fromOpenDocument;
+        Snapshot = snapshot;
     }
 
     public string Path { get; }
@@ -124,17 +137,98 @@ public sealed class FileSearchResult
     /// <summary>検索したときの更新日時 (UTC)。置換の前の確認に使う (FIND-31 の仕様 8)。</summary>
     public DateTime LastWriteUtc { get; }
 
-    /// <summary>一致 (開始の昇順)。1 ファイルあたりの上限 (既定 10,000 件) まで。</summary>
-    public IReadOnlyList<SearchMatch> Matches { get; }
+    /// <summary>結果の中の番号 (<see cref="MultiFileSearchResults.FileAt"/>)。</summary>
+    public int Index { get; internal set; }
 
-    /// <summary>1 ファイルあたりの上限で止めた。</summary>
-    public bool LimitReached { get; }
+    /// <summary>一致の件数 (1 ファイルあたりの上限 (既定 10,000 件) まで)。</summary>
+    public int MatchCount => Volatile.Read(ref _count);
+
+    /// <summary>1 ファイルあたりの上限で止めた (FIND-30 の仕様 8)。</summary>
+    public bool LimitReached { get; internal set; }
+
+    /// <summary>全体の上限で、このファイルの途中までを記録した (「続ける」で続きを探す)。</summary>
+    public bool Incomplete { get; internal set; }
+
+    /// <summary>続きを探す位置 (<see cref="Incomplete"/> のとき)。</summary>
+    internal long ResumeFrom { get; set; }
 
     /// <summary>開いているドキュメントの (未保存の状態を含む) 内容を検索した。</summary>
     public bool FromOpenDocument { get; }
 
-    /// <summary>一致のデータ (Hex・テキストの列) を読むためのスナップショット (検索したもの)。</summary>
-    public DocumentSnapshot? Snapshot { get; init; }
+    /// <summary>一致のデータ (Hex・テキストの列) を読むためのスナップショット (開いているドキュメントを検索したとき)。</summary>
+    public DocumentSnapshot? Snapshot { get; }
+
+    /// <summary>一致 (開始の昇順) の写し。件数が多い場合は <see cref="GetMatches"/> を使う。</summary>
+    public IReadOnlyList<SearchMatch> Matches => GetMatches(0, MatchCount);
+
+    /// <summary><paramref name="index"/> 番目の一致。</summary>
+    public SearchMatch MatchAt(int index)
+    {
+        long at = StoreIndex(index);
+        return _owner.Store[at];
+    }
+
+    /// <summary>[start, start + count) 番目の一致の写し。</summary>
+    public IReadOnlyList<SearchMatch> GetMatches(int start, int count)
+    {
+        var result = new List<SearchMatch>(Math.Max(0, Math.Min(count, MatchCount - start)));
+        (long First, int Count)[] segments;
+        lock (_segments)
+        {
+            segments = [.. _segments];
+        }
+
+        int skip = Math.Max(0, start);
+        int left = count;
+        foreach ((long first, int n) in segments)
+        {
+            if (left <= 0)
+            {
+                break;
+            }
+
+            if (skip >= n)
+            {
+                skip -= n;
+                continue;
+            }
+
+            int take = Math.Min(n - skip, left);
+            result.AddRange(_owner.Store.GetRange(first + skip, take));
+            left -= take;
+            skip = 0;
+        }
+
+        return result;
+    }
+
+    internal void AddSegment(long first, int count)
+    {
+        lock (_segments)
+        {
+            _segments.Add((first, count));
+            Volatile.Write(ref _count, _count + count);
+        }
+    }
+
+    private long StoreIndex(int index)
+    {
+        lock (_segments)
+        {
+            int i = index;
+            foreach ((long first, int n) in _segments)
+            {
+                if (i < n)
+                {
+                    return first + i;
+                }
+
+                i -= n;
+            }
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(index));
+    }
 }
 
 /// <summary>複数ファイル検索の状態。</summary>
@@ -148,12 +242,23 @@ public enum MultiFileSearchState
 
 /// <summary>
 /// 複数ファイル検索の結果 (FIND-30)。検索のスレッドがファイルごとに加え、<see cref="Changed"/> を出す。読み取りはどのスレッドからでもできる。
+/// 一致は <see cref="MatchStore"/> に置く (メモリ上は <see cref="MemoryLimit"/> 件まで。FIND-20 の仕様 7)。件数の上限
+/// (<see cref="Limit"/>) で止めた場合は、<see cref="MultiFileSearch.ContinueAsync"/> で上限を 2 倍にして続きから探せる (FIND-20 の仕様 6)。
+/// 使い終わったら <see cref="Dispose"/> で一時ファイルを消す。
 /// </summary>
-public sealed class MultiFileSearchResults
+public sealed class MultiFileSearchResults : IDisposable
 {
     private readonly object _lock = new();
     private readonly List<FileSearchResult> _files = [];
     private readonly List<SkippedFile> _skipped = [];
+
+    /// <summary>まだ探していないファイル (上限で止めたときの、取り出した後の残りと途中までのファイル)。</summary>
+    private readonly LinkedList<MultiFileSearch.WorkItem> _leftover = new();
+    private MatchStore? _store;
+    private IEnumerator<string>? _enumerator;
+    private bool _enumerated;
+    private bool _started;
+    private long _limit = MultiFileSearch.DefaultTotalLimit;
     private long _matchCount;
     private int _processed;
     private int _found;
@@ -171,6 +276,15 @@ public sealed class MultiFileSearchResults
 
     public MultiFileTargets Targets { get; }
 
+    /// <summary>メモリ上に置く一致の件数の上限 (FIND-20 の仕様 7。テストでは小さくできる)。</summary>
+    public int MemoryLimit { get; init; } = MatchStore.DefaultMemoryLimit;
+
+    /// <summary>上限を超えた一致を書き出す一時ファイルのフォルダ (null なら %TEMP%\HexEditor\search)。</summary>
+    public string? SpillDirectory { get; init; }
+
+    /// <summary>一致しない箇所の検索 (FIND-25) の「最小の繰り返し」。</summary>
+    public int MismatchMinRepeat { get; init; } = MismatchSearch.DefaultMinRepeat;
+
     /// <summary>開いたファイルを記録する (テスト用。除外したファイルを開いていないことの確認)。</summary>
     public bool RecordOpenedFiles { get; init; }
 
@@ -187,9 +301,44 @@ public sealed class MultiFileSearchResults
         }
     }
 
+    /// <summary>一致の置き場所。</summary>
+    internal MatchStore Store
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _store ??= new MatchStore { MemoryLimit = MemoryLimit, SpillDirectory = SpillDirectory };
+            }
+        }
+    }
+
+    /// <summary>メモリ上に置いている一致の件数 (テスト用)。</summary>
+    public int InMemoryMatches => Store.InMemoryCount;
+
+    /// <summary>一時ファイルを作れなかった・書けなかったため、メモリ上の件数で止めた (FIND-20 の「エラー」)。</summary>
+    public bool SpillFailed => _store?.SpillFailed ?? false;
+
+    public string? SpillError => _store?.SpillError;
+
     public MultiFileSearchState State { get; private set; } = MultiFileSearchState.Running;
 
-    /// <summary>一致のあったファイル (見つかった順)。</summary>
+    /// <summary>全体の件数の今の上限 (「続ける」で 2 倍になる)。</summary>
+    public long Limit
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _limit;
+            }
+        }
+    }
+
+    /// <summary>「続ける」で続きを探せるか (上限で止めた。一時ファイルの失敗で止めた場合は続けられない)。</summary>
+    public bool CanContinue => State == MultiFileSearchState.LimitReached && !SpillFailed;
+
+    /// <summary>一致のあったファイル (見つかった順) の写し。件数が多い場合は <see cref="FileAt"/> を使う。</summary>
     public IReadOnlyList<FileSearchResult> Files
     {
         get
@@ -201,7 +350,28 @@ public sealed class MultiFileSearchResults
         }
     }
 
-    /// <summary>読めなかったファイル (理由付き。FIND-30 の仕様 7)。</summary>
+    /// <summary>一致のあったファイルの数。</summary>
+    public int FileCount
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _files.Count;
+            }
+        }
+    }
+
+    /// <summary><paramref name="index"/> 番目の一致のあったファイル。</summary>
+    public FileSearchResult FileAt(int index)
+    {
+        lock (_lock)
+        {
+            return _files[index];
+        }
+    }
+
+    /// <summary>読めなかったファイル (理由付き。FIND-30 の仕様 7) の写し。</summary>
     public IReadOnlyList<SkippedFile> Skipped
     {
         get
@@ -213,16 +383,37 @@ public sealed class MultiFileSearchResults
         }
     }
 
+    /// <summary>読めなかったファイルの数。</summary>
+    public int SkippedCount
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _skipped.Count;
+            }
+        }
+    }
+
+    /// <summary>読めなかったファイルの、先頭から <paramref name="count"/> 件の写し。</summary>
+    public IReadOnlyList<SkippedFile> SkippedHead(int count)
+    {
+        lock (_lock)
+        {
+            return [.. _skipped.Take(count)];
+        }
+    }
+
     /// <summary>一致の合計の件数。</summary>
     public long MatchCount => Interlocked.Read(ref _matchCount);
 
-    /// <summary>処理したファイルの数。</summary>
+    /// <summary>処理したファイルの数 (読めなかったファイルを含む)。</summary>
     public int ProcessedFiles => Volatile.Read(ref _processed);
 
     /// <summary>見つかった (列挙した) ファイルの数。</summary>
     public int FoundFiles => Volatile.Read(ref _found);
 
-    /// <summary>一致がなかったファイルの数。</summary>
+    /// <summary>一致がなかったファイルの数 (読めなかったファイルは数えない)。</summary>
     public int FilesWithoutMatches => Volatile.Read(ref _withoutMatches);
 
     /// <summary>処理したバイト数。</summary>
@@ -234,15 +425,161 @@ public sealed class MultiFileSearchResults
     /// <summary>結果・進捗が変わった (検索のスレッドで呼ぶ)。</summary>
     public event EventHandler? Changed;
 
-    internal void AddFile(FileSearchResult file)
+    public void Dispose()
     {
         lock (_lock)
         {
-            _files.Add(file);
+            _enumerator?.Dispose();
+            _enumerator = null;
+            _store?.Dispose();
+        }
+    }
+
+    /// <summary>最初の検索を始める (上限を決め、ファイルの列挙を用意する)。</summary>
+    internal void Start(long limit)
+    {
+        lock (_lock)
+        {
+            if (_started)
+            {
+                throw new InvalidOperationException("この結果の検索はもう始めました。続きは ContinueAsync で探します。");
+            }
+
+            _started = true;
+            _limit = Math.Max(1, limit);
+            _enumerator = MultiFileSearch.Enumerate(Targets, AddSkipped).GetEnumerator();
         }
 
-        Interlocked.Add(ref _matchCount, file.Matches.Count);
+        State = MultiFileSearchState.Running;
+    }
+
+    /// <summary>「続ける」: 上限を 2 倍にする (FIND-20 の仕様 6)。</summary>
+    internal bool PrepareContinue()
+    {
+        lock (_lock)
+        {
+            if (!CanContinue)
+            {
+                return false;
+            }
+
+            _limit = _limit >= long.MaxValue / 2 ? long.MaxValue : _limit * 2;
+        }
+
+        State = MultiFileSearchState.Running;
         Changed?.Invoke(this, EventArgs.Empty);
+        return true;
+    }
+
+    /// <summary>次に探すファイル (残りを先に、そのあと列挙の続き)。なければ false。</summary>
+    internal bool TryTakeLeftover(out MultiFileSearch.WorkItem item)
+    {
+        lock (_lock)
+        {
+            if (_leftover.First is { } first)
+            {
+                item = first.Value;
+                _leftover.RemoveFirst();
+                return true;
+            }
+        }
+
+        item = default;
+        return false;
+    }
+
+    /// <summary>列挙の続き (列挙のスレッドだけが呼ぶ)。</summary>
+    internal bool TryEnumerate(out string path)
+    {
+        IEnumerator<string>? e;
+        lock (_lock)
+        {
+            e = _enumerated ? null : _enumerator;
+        }
+
+        if (e is not null && e.MoveNext())
+        {
+            path = e.Current;
+            Interlocked.Increment(ref _found);
+            return true;
+        }
+
+        lock (_lock)
+        {
+            _enumerated = true;
+        }
+
+        path = string.Empty;
+        return false;
+    }
+
+    /// <summary>探さなかったファイルを残りに戻す (上限で止めたとき。「続ける」で探す)。</summary>
+    internal void ReturnLeftover(MultiFileSearch.WorkItem item, bool first = false)
+    {
+        lock (_lock)
+        {
+            if (first)
+            {
+                _leftover.AddFirst(item);
+            }
+            else
+            {
+                _leftover.AddLast(item);
+            }
+        }
+    }
+
+    /// <summary>全体の上限に達したか。</summary>
+    internal bool IsFull => Interlocked.Read(ref _matchCount) >= Limit || SpillFailed;
+
+    /// <summary>
+    /// 1 つのファイル (またはその続き) で見つかった一致を記録する。全体の上限の残りの分だけを加え (上限ちょうどで止める)、加えた件数を返す。
+    /// </summary>
+    internal int Record(MultiFileSearch.WorkItem item, long size, DateTime lastWrite, bool open, DocumentSnapshot? snapshot,
+        IReadOnlyList<SearchMatch> matches, bool perFileLimitReached, out FileSearchResult? file)
+    {
+        int added = 0;
+        bool newFile = false;
+        lock (_lock)
+        {
+            file = item.Partial;
+            long room = _limit - _matchCount;
+            int take = (int)Math.Clamp(room, 0, matches.Count);
+            if (take > 0)
+            {
+                added = Store.Append(matches, take, out long first);
+                if (added > 0)
+                {
+                    if (file is null)
+                    {
+                        file = new FileSearchResult(this, item.Path, size, lastWrite, open, snapshot) { Index = _files.Count };
+                        _files.Add(file);
+                        newFile = true;
+                    }
+
+                    file.AddSegment(first, added);
+                    _matchCount += added;
+                }
+            }
+
+            if (file is not null)
+            {
+                bool cut = added < matches.Count;
+                file.Incomplete = cut;
+                file.LimitReached = !cut && perFileLimitReached;
+                if (cut)
+                {
+                    file.ResumeFrom = added > 0 ? matches[added - 1].End : file.ResumeFrom;
+                }
+            }
+        }
+
+        if (newFile || added > 0)
+        {
+            Changed?.Invoke(this, EventArgs.Empty);
+        }
+
+        return added;
     }
 
     internal void AddSkipped(SkippedFile file)
@@ -255,13 +592,12 @@ public sealed class MultiFileSearchResults
         Changed?.Invoke(this, EventArgs.Empty);
     }
 
-    internal void Found() => Interlocked.Increment(ref _found);
-
-    internal void Processed(long bytes, bool matched)
+    /// <summary>ファイルを最後まで処理した。<paramref name="matched"/> が null なら読めなかった (一致がなかったファイルに数えない)。</summary>
+    internal void Processed(long bytes, bool? matched)
     {
         Interlocked.Increment(ref _processed);
         Interlocked.Add(ref _bytes, bytes);
-        if (!matched)
+        if (matched == false)
         {
             Interlocked.Increment(ref _withoutMatches);
         }
@@ -290,6 +626,13 @@ public static class MultiFileSearch
     /// <summary>全体の件数の上限 (FIND-20 と同じ。FIND-30 の仕様 8)。</summary>
     public const long DefaultTotalLimit = 1_000_000;
 
+    /// <summary>全体の件数の上限の設定 (FIND-20 の仕様 6 と同じ設定。1,000〜100,000,000)。</summary>
+    public const string TotalLimitKey = "search.findAll.limit";
+
+    public const long MinTotalLimit = 1_000;
+
+    public const long MaxTotalLimit = 100_000_000;
+
     /// <summary>1 ファイルあたりの件数の上限の既定値 (FIND-30 の仕様 8)。</summary>
     public const int DefaultPerFileLimit = 10_000;
 
@@ -301,6 +644,9 @@ public static class MultiFileSearch
     /// <summary>並列に検索するファイルの数の設定のキー。</summary>
     public const string ParallelismKey = "search.multiFile.parallelism";
 
+    /// <summary>探すファイル (途中まで記録したファイルの続きなら <see cref="Partial"/>)。</summary>
+    internal readonly record struct WorkItem(string Path, FileSearchResult? Partial);
+
     /// <summary>
     /// 対象を確かめる (存在しないフォルダがあれば、その名前を返す。FIND-30 の「エラー」: 検索の前にエラーを表示する)。
     /// </summary>
@@ -309,17 +655,19 @@ public static class MultiFileSearch
 
     /// <summary>
     /// 対象のファイルを列挙する (FIND-30 の仕様 2)。列挙できなかったフォルダは <paramref name="onSkipped"/> に知らせる。
-    /// たどったフォルダは最終的なパスで覚え、同じフォルダは 1 回だけ訪れる (シンボリックリンクのループで終わらなくならない)。
+    /// たどったフォルダは最終的なパス (リンクを解決した先のパスに、その下の名前を付けたもの) で覚え、同じフォルダは 1 回だけ訪れる
+    /// (シンボリックリンクのループで終わらなくならない。リンク先の下のフォルダも 2 回訪れない)。
     /// </summary>
     public static IEnumerable<string> Enumerate(MultiFileTargets targets, Action<SkippedFile>? onSkipped = null, CancellationToken cancellationToken = default)
     {
         string[] include = Masks(targets.IncludeMasks, "*");
         string[] exclude = Masks(targets.ExcludeMasks, null);
         var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var stack = new Stack<(string Path, int Depth)>();
+        var stack = new Stack<(string Path, string Key, int Depth)>();
         foreach (string folder in targets.Folders.Reverse())
         {
-            stack.Push((Path.GetFullPath(folder), 0));
+            string full = Path.GetFullPath(folder);
+            stack.Push((full, FinalPath(full), 0));
         }
 
         var options = new EnumerationOptions
@@ -333,8 +681,7 @@ public static class MultiFileSearch
         while (stack.Count > 0)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            (string dir, int depth) = stack.Pop();
-            string key = FinalPath(dir);
+            (string dir, string key, int depth) = stack.Pop();
             if (!visited.Add(key))
             {
                 continue;
@@ -351,7 +698,7 @@ public static class MultiFileSearch
                 continue;
             }
 
-            var subfolders = new List<string>();
+            var subfolders = new List<(string Path, string Key)>();
             foreach (FileSystemInfo entry in entries.OrderBy(e => e.Name, StringComparer.OrdinalIgnoreCase))
             {
                 FileAttributes attributes;
@@ -385,7 +732,8 @@ public static class MultiFileSearch
 
                     if (targets.IncludeSubfolders && (targets.MaxDepth is null || depth < targets.MaxDepth))
                     {
-                        subfolders.Add(entry.FullName);
+                        // リンクはたどった先のパス、そうでなければ親の最終的なパスに名前を付けたもの。
+                        subfolders.Add((entry.FullName, link ? FinalPath(entry.FullName) : Path.Combine(key, entry.Name)));
                     }
 
                     continue;
@@ -415,7 +763,7 @@ public static class MultiFileSearch
 
             for (int i = subfolders.Count - 1; i >= 0; i--)
             {
-                stack.Push((subfolders[i], depth + 1));
+                stack.Push((subfolders[i].Path, subfolders[i].Key, depth + 1));
             }
         }
     }
@@ -423,98 +771,163 @@ public static class MultiFileSearch
     /// <summary>
     /// 検索する (FIND-30)。ファイルの列挙と検索を並行して行い、ファイルごとの結果を <paramref name="results"/> に加える。
     /// <paramref name="openDocument"/> は、そのパスのファイルを開いているドキュメントがあればその今の状態を返す (仕様 2 の
-    /// 「開いているドキュメントを含める」)。件数の上限 (全体・ファイルごと) に達したら止める。キャンセルされた場合は
-    /// <see cref="OperationCanceledException"/>。
+    /// 「開いているドキュメントを含める」)。件数の上限 (全体・ファイルごと) に達したら止める。全体の上限では、並列数に関係なく
+    /// 上限の件数ちょうどで止め (<see cref="MultiFileSearchState.LimitReached"/>)、<see cref="ContinueAsync"/> で続きから探せる。
+    /// キャンセルされた場合は <see cref="OperationCanceledException"/>。
     /// </summary>
-    public static async Task RunAsync(MultiFileSearchResults results, SearchOptions options, Func<string, OpenDocumentSnapshot?>? openDocument,
+    public static Task RunAsync(MultiFileSearchResults results, SearchOptions options, Func<string, OpenDocumentSnapshot?>? openDocument,
         int parallelism = DefaultParallelism, int perFileLimit = DefaultPerFileLimit, long totalLimit = DefaultTotalLimit,
         LongRunningOperation? operation = null, CancellationToken cancellationToken = default, string? tempDirectory = null)
     {
+        results.Start(totalLimit);
+        return RunCoreAsync(results, options, openDocument, parallelism, perFileLimit, operation, cancellationToken, tempDirectory);
+    }
+
+    /// <summary>
+    /// 上限で止めた検索を続ける (「続ける」。FIND-20 の仕様 6、FIND-30 の仕様 8)。上限を 2 倍にし、途中まで記録したファイルの続きと、
+    /// まだ探していないファイルを探す。重複も取りこぼしもない。続けられなければ何もしない。
+    /// </summary>
+    public static Task ContinueAsync(MultiFileSearchResults results, SearchOptions options, Func<string, OpenDocumentSnapshot?>? openDocument,
+        int parallelism = DefaultParallelism, int perFileLimit = DefaultPerFileLimit,
+        LongRunningOperation? operation = null, CancellationToken cancellationToken = default, string? tempDirectory = null) =>
+        results.PrepareContinue()
+            ? RunCoreAsync(results, options, openDocument, parallelism, perFileLimit, operation, cancellationToken, tempDirectory)
+            : Task.CompletedTask;
+
+    private static async Task RunCoreAsync(MultiFileSearchResults results, SearchOptions options, Func<string, OpenDocumentSnapshot?>? openDocument,
+        int parallelism, int perFileLimit, LongRunningOperation? operation, CancellationToken cancellationToken, string? tempDirectory)
+    {
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, operation?.CancellationToken ?? default);
         CancellationToken token = linked.Token;
-        var queue = new BlockingCollection<string>(boundedCapacity: 1024);
-        var remaining = new Remaining { Value = totalLimit };
-        bool limited = false;
+        var queue = new BlockingCollection<WorkItem>(boundedCapacity: 1024);
+        int limited = 0;
         int workers = Math.Clamp(parallelism, 1, MaxParallelism);
 
+        void Limit()
+        {
+            Volatile.Write(ref limited, 1);
+            linked.Cancel();
+        }
+
+        // 列挙: 前回の残り (途中までのファイルが先) のあとに、列挙の続き。止めたときに取り出していたファイルは残りに戻す。
         Task producer = Task.Run(() =>
         {
             try
             {
-                foreach (string path in Enumerate(results.Targets, results.AddSkipped, token))
+                while (!token.IsCancellationRequested)
                 {
-                    results.Found();
-                    queue.Add(path, token);
+                    if (!results.TryTakeLeftover(out WorkItem item))
+                    {
+                        if (!results.TryEnumerate(out string path))
+                        {
+                            break;
+                        }
+
+                        item = new WorkItem(path, null);
+                    }
+
+                    try
+                    {
+                        queue.Add(item, token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        results.ReturnLeftover(item, item.Partial is not null);
+                        throw;
+                    }
                 }
             }
             finally
             {
                 queue.CompleteAdding();
             }
-        }, token);
+        }, CancellationToken.None);
 
         async Task Worker()
         {
             await Task.Yield();
-            foreach (string path in queue.GetConsumingEnumerable(token))
+            while (!token.IsCancellationRequested && queue.TryTake(out WorkItem item, Timeout.Infinite, token))
             {
-                token.ThrowIfCancellationRequested();
-                if (Interlocked.Read(ref remaining.Value) <= 0)
+                if (results.IsFull)
                 {
-                    limited = true;
-                    linked.Cancel();
+                    results.ReturnLeftover(item, item.Partial is not null);
+                    Limit();
                     break;
                 }
 
-                results.SetCurrent(path);
-                SearchOneFile(results, path, options, openDocument, perFileLimit, remaining, operation, token, tempDirectory);
+                results.SetCurrent(item.Path);
+                bool more;
+                try
+                {
+                    more = SearchOneFile(results, item, options, openDocument, perFileLimit, token, tempDirectory);
+                }
+                catch (OperationCanceledException) when (Volatile.Read(ref limited) == 1 && !cancellationToken.IsCancellationRequested
+                    && !(operation?.CancellationToken.IsCancellationRequested ?? false))
+                {
+                    // 上限で止めた: 探しかけのファイルは残りに戻す (「続ける」で最初から、または続きから探す)。
+                    results.ReturnLeftover(item, item.Partial is not null);
+                    break;
+                }
+
                 operation?.Report(results.ProcessedBytes);
+                if (!more)
+                {
+                    Limit();
+                    break;
+                }
             }
         }
 
-        Task[] tasks = [.. Enumerable.Range(0, workers).Select(_ => Task.Run(Worker, token))];
+        Task[] tasks = [.. Enumerable.Range(0, workers).Select(_ => Task.Run(Worker, CancellationToken.None))];
+        bool userCancelled = false;
         try
         {
             await Task.WhenAll([producer, .. tasks]).ConfigureAwait(false);
         }
-        catch (OperationCanceledException) when (limited || Interlocked.Read(ref remaining.Value) <= 0)
-        {
-            limited = true;
-        }
         catch (OperationCanceledException)
         {
-            results.SetCurrent(null);
-            results.SetState(MultiFileSearchState.Cancelled);
-            throw;
+            userCancelled = Volatile.Read(ref limited) == 0 || cancellationToken.IsCancellationRequested || (operation?.CancellationToken.IsCancellationRequested ?? false);
+        }
+
+        // 取り出していないファイルを残りに戻す (列挙の順を保つ)。
+        while (queue.TryTake(out WorkItem rest))
+        {
+            results.ReturnLeftover(rest);
         }
 
         results.SetCurrent(null);
-        results.SetState(limited || Interlocked.Read(ref remaining.Value) <= 0 ? MultiFileSearchState.LimitReached : MultiFileSearchState.Completed);
-    }
-
-    private static void SearchOneFile(MultiFileSearchResults results, string path, SearchOptions options, Func<string, OpenDocumentSnapshot?>? openDocument,
-        int perFileLimit, Remaining remaining, LongRunningOperation? operation, CancellationToken token, string? tempDirectory)
-    {
-        long cap = Math.Min(perFileLimit, Interlocked.Read(ref remaining.Value));
-        if (cap <= 0)
+        if (userCancelled)
         {
-            return;
+            results.SetState(MultiFileSearchState.Cancelled);
+            throw new OperationCanceledException(cancellationToken);
         }
 
+        results.SetState(Volatile.Read(ref limited) == 1 || results.SpillFailed ? MultiFileSearchState.LimitReached : MultiFileSearchState.Completed);
+    }
+
+    /// <summary>1 つのファイル (またはその続き) を検索する。全体の上限に達して記録しきれなかったら false (残りに戻してある)。</summary>
+    private static bool SearchOneFile(MultiFileSearchResults results, WorkItem item, SearchOptions options, Func<string, OpenDocumentSnapshot?>? openDocument,
+        int perFileLimit, CancellationToken token, string? tempDirectory)
+    {
+        string path = item.Path;
+        int already = item.Partial?.MatchCount ?? 0;
+        long cap = Math.Max(1, perFileLimit - already);
+        long startFrom = item.Partial?.ResumeFrom ?? long.MinValue;
         SearchOptions fileOptions = options with
         {
             MaxDegreeOfParallelism = 1,
             MaxMatches = cap,
             IncludeOverlapping = false,
             OnUnreadable = null,
+            OnTimeout = null,
         };
         try
         {
             if (results.Targets.IncludeOpenDocuments && openDocument?.Invoke(path) is { } open)
             {
-                using SearchResults found = SearchEngine.FindAll(open.Snapshot, results.Pattern, fileOptions, null, token);
-                Record(results, path, open.Length, open.LastWriteUtc, found, true, open.Snapshot, remaining);
-                return;
+                using SearchResults found = NewResults(results, open.Snapshot, fileOptions);
+                SearchEngine.FindAllFrom(found, startFrom, null, token);
+                return Record(results, item, open.Length, open.LastWriteUtc, found, true, open.Snapshot);
             }
 
             FileByteSource source = FileByteSource.Open(path); // ドキュメントが閉じる
@@ -525,13 +938,9 @@ public static class MultiFileSearch
                 CacheCapacity = 16L * 1024 * 1024,
                 TempDirectory = tempDirectory ?? Path.Combine(Path.GetTempPath(), "HexEditor", "multifile"),
             });
-            DocumentSnapshot snapshot = document.Current;
-            using SearchResults matches = SearchEngine.FindAll(snapshot, results.Pattern, fileOptions, null, token);
-            Record(results, path, source.Length, source.Stamp.LastWriteTimeUtc, matches, false, null, remaining);
-            if (matches.SkippedRanges.Count > 0)
-            {
-                results.AddSkipped(new SkippedFile(path, FileSkipReason.Unreadable, string.Empty));
-            }
+            using SearchResults matches = NewResults(results, document.Current, fileOptions);
+            SearchEngine.FindAllFrom(matches, startFrom, null, token);
+            return Record(results, item, source.Length, source.Stamp.LastWriteTimeUtc, matches, false, null);
         }
         catch (OperationCanceledException)
         {
@@ -540,28 +949,53 @@ public static class MultiFileSearch
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException or ArgumentException
             or NotSupportedException)
         {
+            if (item.Partial is { } partial)
+            {
+                partial.Incomplete = false;
+            }
+
             results.AddSkipped(new SkippedFile(path, Reason(ex), ex.Message));
-            results.Processed(0, false);
+            results.Processed(0, null);
+            return true;
         }
     }
 
-    private static void Record(MultiFileSearchResults results, string path, long size, DateTime lastWrite, SearchResults found, bool open,
-        DocumentSnapshot? snapshot, Remaining remaining)
+    /// <summary>1 つのファイルの検索の結果 (一致しない箇所の検索は専用の処理で探す。FIND-25 の仕様 4)。</summary>
+    private static SearchResults NewResults(MultiFileSearchResults results, DocumentSnapshot snapshot, SearchOptions options) =>
+        results.Pattern.IsMismatch
+            ? MismatchSearch.CreateResults(snapshot, results.Pattern, options, results.MismatchMinRepeat)
+            : new SearchResults(snapshot, results.Pattern, options);
+
+    private static bool Record(MultiFileSearchResults results, WorkItem item, long size, DateTime lastWrite, SearchResults found, bool open,
+        DocumentSnapshot? snapshot)
     {
         IReadOnlyList<SearchMatch> matches = found.Matches;
-        if (matches.Count > 0)
+        int added = results.Record(item, size, lastWrite, open, snapshot, matches, found.LimitReached, out FileSearchResult? file);
+        bool cut = added < matches.Count;
+        long until = cut ? (file?.ResumeFrom ?? long.MinValue) : long.MaxValue;
+
+        // 読めなかった範囲と、正規表現の時間の上限で飛ばしたチャンクを記録する (記録した一致の範囲の分だけ。FIND-01、FIND-18 の「エラー」)。
+        if (found.SkippedRanges.Any(r => r.Offset < until))
         {
-            Interlocked.Add(ref remaining.Value, -matches.Count);
-            results.AddFile(new FileSearchResult(path, size, lastWrite, [.. matches], found.LimitReached, open) { Snapshot = snapshot });
+            results.AddSkipped(new SkippedFile(item.Path, FileSkipReason.Unreadable, string.Empty));
         }
 
-        results.Processed(size, matches.Count > 0);
-    }
+        SearchRange[] timedOut = [.. found.TimedOutRanges.Where(r => r.Offset < until)];
+        if (timedOut.Length > 0)
+        {
+            results.AddSkipped(new SkippedFile(item.Path, FileSkipReason.RegexTimedOut,
+                string.Join(", ", timedOut.Take(8).Select(r => $"0x{r.Offset:X}–0x{r.End - 1:X}")) + (timedOut.Length > 8 ? ", …" : string.Empty)));
+        }
 
-    /// <summary>全体の件数の上限までの残り。</summary>
-    private sealed class Remaining
-    {
-        public long Value;
+        if (cut)
+        {
+            // 全体の上限: 記録しきれなかった続きは「続ける」で探す。
+            results.ReturnLeftover(new WorkItem(item.Path, file), first: true);
+            return false;
+        }
+
+        results.Processed(size, (file?.MatchCount ?? 0) > 0);
+        return true;
     }
 
     /// <summary>例外から飛ばした理由を決める。</summary>
@@ -621,6 +1055,48 @@ public static class MultiFileSearch
                 return candidate;
             }
         }
+    }
+
+    /// <summary>
+    /// 開いているドキュメントでの置換 (FIND-31 の仕様 6。UI のスレッドで呼ぶ。1 ファイルで 1 回の Undo)。置換できない一致 (長さを保てないなど)
+    /// があれば、ファイルへの置換 (<see cref="ReplaceInFile"/>) と同じく、そのドキュメントは置換せずに理由を記録する (黙って捨てない)。
+    /// </summary>
+    public static FileReplaceOutcome ReplaceInEditor(EditorState editor, string path, IReadOnlyList<SearchMatch> matches, SearchPattern pattern,
+        MultiFileReplaceOptions options, string historyName)
+    {
+        Document doc = editor.Document;
+        if (doc.IsReadOnly || editor.ReadOnly)
+        {
+            return new FileReplaceOutcome(path, FileReplaceStatus.Skipped, 0, FileSkipReason.ReadOnly, string.Empty);
+        }
+
+        DocumentSnapshot current = doc.Current;
+        var edits = new List<ReplacementEdit>();
+        long previousEnd = 0;
+        foreach (SearchMatch m in matches.OrderBy(m => m.Offset))
+        {
+            if (m.Offset < previousEnd || !Replacer.TryVerify(current, pattern, m.Offset, out int length, out int variant))
+            {
+                continue;
+            }
+
+            ReplaceIssue issue = Replacer.Plan(options.Template, m.Offset, length, variant, options.ReplaceOptions, current.Length, doc.CanResize,
+                out ReplacementEdit? edit, current);
+            if (issue != ReplaceIssue.None)
+            {
+                return new FileReplaceOutcome(path, FileReplaceStatus.Skipped, 0, FileSkipReason.CannotReplace, issue.ToString());
+            }
+
+            previousEnd = edit!.Offset + edit.RemoveLength;
+            edits.Add(edit);
+        }
+
+        if (edits.Count > 0)
+        {
+            doc.ApplyReplacements(edits, historyName);
+        }
+
+        return new FileReplaceOutcome(path, FileReplaceStatus.ReplacedInEditor, edits.Count, null, string.Empty);
     }
 
     /// <summary>

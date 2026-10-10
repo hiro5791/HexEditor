@@ -72,6 +72,7 @@ public sealed partial class MainWindow
             .Where(d => d.Editor.Document.Source is FileByteSource)
             .Select(d => new OpenFileDocument(((FileByteSource)d.Editor.Document.Source).Path, d.Editor))];
         MultiFileSearch.DefaultFolder = () => (Editor?.Document.Source as FileByteSource)?.Path is { } path ? Path.GetDirectoryName(path) : null;
+        MultiFileSearch.FindBarQuery = () => FindBar.CaptureQuery();
         MultiFileSearch.OpenRequested += (_, e) => OpenMultiFileResult(e.Path, e.Offset, e.Length);
         MultiFileSearch.NoticeRequested += (_, n) => ShowNotice(n.Message, n.Severity);
     }
@@ -117,6 +118,16 @@ public sealed partial class MainWindow
     {
         ShowPanel(MultiFilePanelId);
         MultiFileSearch.PrepareToShow(replace);
+    }
+
+    /// <summary>
+    /// フォルダを対象にして複数ファイル検索を開く (Explorer からフォルダをドロップしたときの InfoBar の「複数ファイル検索」ボタン。
+    /// FIND-30 の「呼び出し」、UI-34 の仕様 4)。
+    /// </summary>
+    internal void OpenMultiFileFor(IReadOnlyList<string> folders)
+    {
+        MultiFileSearch.SetFolders(folders);
+        OpenMultiFile(replace: false);
     }
 
     /// <summary>表示中の範囲の、文字列の抽出の結果 (検索バーと結果一覧の強調がないとき)。</summary>

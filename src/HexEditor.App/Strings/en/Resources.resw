@@ -229,7 +229,8 @@ Length: {2} ({3} bytes)</value></data>
   <data name="Drop_Open" xml:space="preserve"><value>Open</value></data>
   <data name="Drop_OpenButton" xml:space="preserve"><value>Open</value></data>
   <data name="Drop_ConfirmMany" xml:space="preserve"><value>Open {0} files?</value></data>
-  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Folders can't be opened ({0} skipped).</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>Folders can't be opened ({0} skipped). To search inside folders, use Search in files.</value></data>
+  <data name="Drop_MultiFileSearch" xml:space="preserve"><value>Search in files</value></data>
   <data name="Drop_AdminLimited" xml:space="preserve"><value>While running as administrator, you can't open files by dragging them from File Explorer. Use File > Open instead.</value></data>
   <data name="Operation_Copy" xml:space="preserve"><value>Copying {0}</value></data>
   <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>Save all</value></data>
@@ -4210,6 +4211,11 @@ Details were written to:
   <data name="MultiFile_Backup.Content" xml:space="preserve"><value>Make a backup (.bak) before replacing</value></data>
   <data name="MultiFile_ClearReadOnly.Content" xml:space="preserve"><value>Replace read-only files too (clear the attribute)</value></data>
   <data name="MultiFile_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
+  <data name="MultiFile_Continue.Content" xml:space="preserve"><value>Continue</value></data>
+  <data name="MultiFile_UseFindBar.Content" xml:space="preserve"><value>Use the find bar's search</value></data>
+  <data name="MultiFile_ClearExtras.Content" xml:space="preserve"><value>Clear</value></data>
+  <data name="MultiFile_Extras_Terms" xml:space="preserve"><value>Multiple terms from the find bar ({0})</value></data>
+  <data name="MultiFile_Extras_Encodings" xml:space="preserve"><value>Encodings from the find bar: {0}</value></data>
   <data name="MultiFile_Search.Content" xml:space="preserve"><value>Search</value></data>
   <data name="MultiFile_RunReplace.Content" xml:space="preserve"><value>Replace</value></data>
   <data name="MultiFile_Confirm_Title" xml:space="preserve"><value>Replace in files?</value></data>
@@ -4223,6 +4229,8 @@ Details were written to:
   <data name="MultiFile_Exclude.PlaceholderText" xml:space="preserve"><value>Exclude (e.g. .git;node_modules)</value></data>
   <data name="MultiFile_Include.PlaceholderText" xml:space="preserve"><value>Include (e.g. *.bin;*.dat)</value></data>
   <data name="MultiFile_FileRow" xml:space="preserve"><value>{0}  —  {1} matches · {2} bytes · {3}</value></data>
+  <data name="MultiFile_FileLimit" xml:space="preserve"><value>(stopped at the limit of {0} matches per file)</value></data>
+  <data name="MultiFile_FileIncomplete" xml:space="preserve"><value>(more matches: choose Continue)</value></data>
   <data name="MultiFile_MatchRow" xml:space="preserve"><value>{0}  {1}  {2}  {3}</value></data>
   <data name="MultiFile_FolderInput.PlaceholderText" xml:space="preserve"><value>Folder path</value></data>
   <data name="MultiFile_FolderMissing" xml:space="preserve"><value>This folder doesn't exist: {0}</value></data>
@@ -4255,6 +4263,8 @@ Details were written to:
   <data name="MultiFile_Skipped" xml:space="preserve"><value>Skipped files ({0})</value></data>
   <data name="MultiFile_SkippedItem" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="MultiFile_State_Limit" xml:space="preserve"><value>stopped at the limit</value></data>
+  <data name="MultiFile_LimitNote" xml:space="preserve"><value>Stopped at the limit ({0} matches). Choose Continue to search further.</value></data>
+  <data name="MultiFile_SpillFailed" xml:space="preserve"><value>The search stopped because the temporary file for the results couldn't be written ({0}).</value></data>
   <data name="MultiFile_Outcome_Replaced" xml:space="preserve"><value>replaced {0}</value></data>
   <data name="MultiFile_Outcome_InEditor" xml:space="preserve"><value>replaced in the editor (unsaved, {0})</value></data>
   <data name="MultiFile_Outcome_Skipped" xml:space="preserve"><value>skipped: {0}</value></data>
@@ -4269,6 +4279,10 @@ Details were written to:
   <data name="MultiFile_Reason_ReadOnly" xml:space="preserve"><value>read-only</value></data>
   <data name="MultiFile_Reason_ChangedSinceSearch" xml:space="preserve"><value>changed after the search</value></data>
   <data name="MultiFile_Reason_CannotReplace" xml:space="preserve"><value>can't be replaced with this length setting</value></data>
+  <data name="MultiFile_Reason_RegexTimedOut" xml:space="preserve"><value>the regular expression hit the time limit; some ranges were skipped</value></data>
+  <data name="MultiFile_Issue_TooLong" xml:space="preserve"><value>the replacement is longer than the match</value></data>
+  <data name="MultiFile_Issue_ExceedsEnd" xml:space="preserve"><value>the replacement goes past the end of the file</value></data>
+  <data name="MultiFile_Issue_CannotResize" xml:space="preserve"><value>the length can't be changed</value></data>
   <data name="Operation_MultiFileSearch" xml:space="preserve"><value>Search in files</value></data>
   <data name="Operation_MultiFileReplace" xml:space="preserve"><value>Replace in files</value></data>
   <data name="SearchResults_Column_Encoding" xml:space="preserve"><value>Encoding</value></data>

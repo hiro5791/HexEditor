@@ -169,7 +169,7 @@ public static class SearchEngine
         FindAllFrom(results, from ?? long.MinValue, operation, cancellationToken);
     }
 
-    private static void FindAllFrom(SearchResults results, long startFrom, LongRunningOperation? operation, CancellationToken cancellationToken)
+    internal static void FindAllFrom(SearchResults results, long startFrom, LongRunningOperation? operation, CancellationToken cancellationToken)
     {
         var scan = new Scan(results.Snapshot, results.Pattern, results.Options, operation, cancellationToken, results.TotalBytes);
         try

@@ -229,7 +229,8 @@
   <data name="Drop_Open" xml:space="preserve"><value>開く</value></data>
   <data name="Drop_OpenButton" xml:space="preserve"><value>開く</value></data>
   <data name="Drop_ConfirmMany" xml:space="preserve"><value>{0} 個のファイルを開きますか?</value></data>
-  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>フォルダは開けません ({0} 個をスキップしました)。</value></data>
+  <data name="Drop_FoldersSkipped" xml:space="preserve"><value>フォルダは開けません ({0} 個をスキップしました)。フォルダ内を検索するには複数ファイル検索を使ってください。</value></data>
+  <data name="Drop_MultiFileSearch" xml:space="preserve"><value>複数ファイル検索</value></data>
   <data name="Drop_AdminLimited" xml:space="preserve"><value>管理者として実行中は、エクスプローラーからのドラッグ &amp; ドロップで開けません。ファイル > 開く を使ってください。</value></data>
   <data name="Operation_Copy" xml:space="preserve"><value>{0} をコピー</value></data>
   <data name="Menu_File_SaveAll.Text" xml:space="preserve"><value>すべて保存(L)</value></data>
@@ -4210,6 +4211,11 @@
   <data name="MultiFile_Backup.Content" xml:space="preserve"><value>置換の前にバックアップ (.bak) を作る</value></data>
   <data name="MultiFile_ClearReadOnly.Content" xml:space="preserve"><value>読み取り専用属性を外して置換する</value></data>
   <data name="MultiFile_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="MultiFile_Continue.Content" xml:space="preserve"><value>続ける</value></data>
+  <data name="MultiFile_UseFindBar.Content" xml:space="preserve"><value>検索バーの条件を使う</value></data>
+  <data name="MultiFile_ClearExtras.Content" xml:space="preserve"><value>解除</value></data>
+  <data name="MultiFile_Extras_Terms" xml:space="preserve"><value>検索バーの複数の語 ({0} 語)</value></data>
+  <data name="MultiFile_Extras_Encodings" xml:space="preserve"><value>検索バーの複数の文字コード: {0}</value></data>
   <data name="MultiFile_Search.Content" xml:space="preserve"><value>検索</value></data>
   <data name="MultiFile_RunReplace.Content" xml:space="preserve"><value>置換を実行</value></data>
   <data name="MultiFile_Confirm_Title" xml:space="preserve"><value>ファイルを置換しますか?</value></data>
@@ -4223,6 +4229,8 @@
   <data name="MultiFile_Exclude.PlaceholderText" xml:space="preserve"><value>除外するマスク (例: .git;node_modules)</value></data>
   <data name="MultiFile_Include.PlaceholderText" xml:space="preserve"><value>含めるマスク (例: *.bin;*.dat)</value></data>
   <data name="MultiFile_FileRow" xml:space="preserve"><value>{0}  —  {1} 件 · {2} バイト · {3}</value></data>
+  <data name="MultiFile_FileLimit" xml:space="preserve"><value>(1 ファイルあたりの上限 {0} 件で停止)</value></data>
+  <data name="MultiFile_FileIncomplete" xml:space="preserve"><value>(続きあり: 「続ける」で探します)</value></data>
   <data name="MultiFile_MatchRow" xml:space="preserve"><value>{0}  {1}  {2}  {3}</value></data>
   <data name="MultiFile_FolderInput.PlaceholderText" xml:space="preserve"><value>フォルダのパス</value></data>
   <data name="MultiFile_FolderMissing" xml:space="preserve"><value>フォルダがありません: {0}</value></data>
@@ -4255,6 +4263,8 @@
   <data name="MultiFile_Skipped" xml:space="preserve"><value>スキップしたファイル ({0})</value></data>
   <data name="MultiFile_SkippedItem" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="MultiFile_State_Limit" xml:space="preserve"><value>上限で停止</value></data>
+  <data name="MultiFile_LimitNote" xml:space="preserve"><value>上限 ({0} 件) に達したため停止しました。「続ける」で続きを探します。</value></data>
+  <data name="MultiFile_SpillFailed" xml:space="preserve"><value>結果の一時ファイルに書き込めないため停止しました ({0})。</value></data>
   <data name="MultiFile_Outcome_Replaced" xml:space="preserve"><value>置換済み ({0} 件)</value></data>
   <data name="MultiFile_Outcome_InEditor" xml:space="preserve"><value>エディタで置換 (未保存、{0} 件)</value></data>
   <data name="MultiFile_Outcome_Skipped" xml:space="preserve"><value>スキップ: {0}</value></data>
@@ -4269,6 +4279,10 @@
   <data name="MultiFile_Reason_ReadOnly" xml:space="preserve"><value>読み取り専用</value></data>
   <data name="MultiFile_Reason_ChangedSinceSearch" xml:space="preserve"><value>検索後に変更されました</value></data>
   <data name="MultiFile_Reason_CannotReplace" xml:space="preserve"><value>長さの扱いの設定で置換できません</value></data>
+  <data name="MultiFile_Reason_RegexTimedOut" xml:space="preserve"><value>正規表現の時間の上限に達したため、飛ばした範囲があります</value></data>
+  <data name="MultiFile_Issue_TooLong" xml:space="preserve"><value>置換語が一致より長いため、長さを保てません</value></data>
+  <data name="MultiFile_Issue_ExceedsEnd" xml:space="preserve"><value>置換語がファイルの末尾を超えます</value></data>
+  <data name="MultiFile_Issue_CannotResize" xml:space="preserve"><value>長さを変えられません</value></data>
   <data name="Operation_MultiFileSearch" xml:space="preserve"><value>複数ファイル検索</value></data>
   <data name="Operation_MultiFileReplace" xml:space="preserve"><value>複数ファイル置換</value></data>
   <data name="SearchResults_Column_Encoding" xml:space="preserve"><value>文字コード</value></data>
