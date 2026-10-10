@@ -152,8 +152,8 @@ public sealed partial class MainWindow
 
         // 画面分割 (VIEW-37)・新しいビュー (VIEW-38)・並べて表示 (VIEW-39)。
         MenuFlyoutSubItem split = Sub("Command_ViewSplitMenu", "Menu_View_SplitMenu");
-        split.Items.Add(Item("Command_ViewSplitHorizontal", "Menu_View_SplitHorizontal", () => SplitSelected(Orientation.Vertical), SplitState));
-        split.Items.Add(Item("Command_ViewSplitVertical", "Menu_View_SplitVertical", () => SplitSelected(Orientation.Horizontal), SplitState));
+        split.Items.Add(Item("Command_ViewSplitHorizontal", "Menu_View_SplitHorizontal", () => SplitSelected(Orientation.Vertical), () => SplitState(Orientation.Vertical)));
+        split.Items.Add(Item("Command_ViewSplitVertical", "Menu_View_SplitVertical", () => SplitSelected(Orientation.Horizontal), () => SplitState(Orientation.Horizontal)));
         split.Items.Add(Item("Command_ViewSplitRemove", "Menu_View_SplitRemove", UnsplitSelected,
             () => Vm.Selected is { IsSplit: true } ? CommandState.Available : CommandState.Unavailable(Loc.Get("Command_NotSplit"))));
         split.Items.Add(new MenuFlyoutSeparator());

@@ -4010,6 +4010,8 @@ Details were written to:
   <data name="Clipboard_WriteToFile" xml:space="preserve"><value>Write to a file</value></data>
   <data name="Bookmarks_MenuOpenInNewTab.Text" xml:space="preserve"><value>Open in a new tab</value></data>
   <data name="Tab_FormatSettings" xml:space="preserve"><value>Format settings...</value></data>
+  <data name="Tab_NewView" xml:space="preserve"><value>Open in new view</value></data>
+  <data name="Tab_ShowToRight" xml:space="preserve"><value>Show to the right</value></data>
   <data name="SaveSpace_Shift" xml:space="preserve"><value>Save in place by shifting data</value></data>
   <data name="Shift_Title" xml:space="preserve"><value>Save in place</value></data>
   <data name="Shift_Body" xml:space="preserve"><value>{0} will be rewritten in place. If the app or PC stops while saving, the file will be damaged and can't be restored. Amount to rewrite: {1}. Temporary space needed: {2}.</value></data>

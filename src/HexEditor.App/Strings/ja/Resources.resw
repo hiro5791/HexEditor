@@ -4010,6 +4010,8 @@
   <data name="Clipboard_WriteToFile" xml:space="preserve"><value>ファイルに書き出す</value></data>
   <data name="Bookmarks_MenuOpenInNewTab.Text" xml:space="preserve"><value>新しいタブで開く</value></data>
   <data name="Tab_FormatSettings" xml:space="preserve"><value>形式の設定...</value></data>
+  <data name="Tab_NewView" xml:space="preserve"><value>新しいビューで開く</value></data>
+  <data name="Tab_ShowToRight" xml:space="preserve"><value>右に並べて表示</value></data>
   <data name="SaveSpace_Shift" xml:space="preserve"><value>その場でずらしながら保存</value></data>
   <data name="Shift_Title" xml:space="preserve"><value>その場で保存</value></data>
   <data name="Shift_Body" xml:space="preserve"><value>{0} をその場で書き換えます。保存中にアプリや PC が停止すると、ファイルが壊れて元に戻せなくなります。書き換える量: {1}、一時的に必要な容量: {2}</value></data>
