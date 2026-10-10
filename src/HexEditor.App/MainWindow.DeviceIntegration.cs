@@ -95,6 +95,14 @@ public sealed partial class MainWindow
                 DeviceRoute.Elevated => OpenRoute.SameProcess,
                 _ => OpenRoute.Direct,
             };
+            // 同じシリアル番号のデバイスだけに付け替える (ENG-29 の仕様 11。別のディスクが同じ番号で接続された場合は開かない)。
+            if (device.Info.SerialNumber is { Length: > 0 } serial
+                && DeviceService.EnumerateDevices().FindDisk(device.Path) is { SerialNumber: { Length: > 0 } now }
+                && !string.Equals(serial.Trim(), now.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DeviceException(Win32Errors.NoSuchDevice, Loc.Get("Device_NotSameDevice"));
+            }
+
             IDeviceAccess access = await DeviceService.DeviceAccessForAsync(route);
             IDeviceHandle handle = access.Open(device.Path, device.Handle.Writable);
             device.ReplaceHandle(handle, access);

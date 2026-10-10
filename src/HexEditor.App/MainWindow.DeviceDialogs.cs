@@ -492,7 +492,11 @@ public sealed partial class MainWindow
         {
             bool isCustom = combo.SelectedItem is not int;
             custom.Visibility = isCustom ? Visibility.Visible : Visibility.Collapsed;
-            dialog.IsPrimaryButtonEnabled = DiskImage.IsValidSectorSize(Chosen());
+            bool valid = DiskImage.IsValidSectorSize(Chosen());
+            dialog.IsPrimaryButtonEnabled = valid;
+
+            // 範囲外・2 の累乗でないセクタサイズは入力欄を赤枠にする (ENG-31 の「エラー」)。
+            DialogParts.MarkInvalid(custom, isCustom && !valid);
         }
 
         combo.SelectionChanged += (_, _) => Validate();

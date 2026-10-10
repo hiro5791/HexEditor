@@ -247,6 +247,22 @@ public sealed class DeviceTests
     });
 
     [Fact]
+    public Task Opening_an_img_file_normally_suggests_opening_it_as_a_disk_image() => UiTestContext.RunAsync(async ctx =>
+    {
+        // ENG-31 の仕様 6: .img などを通常の「開く」で開くと、ディスクイメージとして開き直すかを InfoBar で提案する。
+        var hooks = Hooks(ctx);
+        hooks["suggestDiskImage"] = true;
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = hooks });
+        string image = ctx.WriteFile("card.img", new byte[8192]);
+        string other = ctx.WriteFile("notes.dat", new byte[8192]);
+        await app.SendAsync("uiOpen", new JsonObject { ["path"] = other });
+        await app.SendAsync("uiOpen", new JsonObject { ["path"] = image });
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["notifications"]!.AsArray()
+            .Any(n => n!["message"]!.GetValue<string>().Contains("disk image", StringComparison.Ordinal)), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the suggestion");
+        Assert.Single((await app.StateAsync())["notifications"]!.AsArray(), n => n!["message"]!.GetValue<string>().Contains("disk image", StringComparison.Ordinal));
+    });
+
+    [Fact]
     [Trait("TC", "TC-ENG-33-01")]
     public Task Opening_a_process_shows_the_memory_map_with_modules() => UiTestContext.RunAsync(async ctx =>
     {

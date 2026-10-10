@@ -102,6 +102,7 @@ public sealed partial class MainWindow
         {
             DocumentViewModel doc = Vm.Open(path, insertAt, readOnly, restorePosition);
             AppLog.Debug($"Opened {path}");
+            SuggestDiskImage(doc);
             if (decode && !readOnly)
             {
                 _ = SuggestDecodingAsync(doc);

@@ -105,6 +105,12 @@ public sealed record TestHookSettings
 {
     public bool NoActivate { get; init; } = true;
 
+    /// <summary>
+    /// .img・.bin などを開いたときの「ディスクイメージとして開き直す」の提案 (ENG-31 の仕様 6) を出す。テストのデータの多くが .bin のため、
+    /// 既定では出さない (提案そのもののテストだけが有効にする)。
+    /// </summary>
+    public bool SuggestDiskImage { get; init; }
+
     public TimeSpan? RecoveryInterval { get; init; }
 
     public DateTimeOffset? FrozenTime { get; init; }
@@ -180,6 +186,7 @@ public sealed record TestHookSettings
         var settings = new TestHookSettings
         {
             NoActivate = root["noActivate"]?.GetValue<bool>() ?? true,
+            SuggestDiskImage = root["suggestDiskImage"]?.GetValue<bool>() ?? false,
             RecoveryInterval = root["recoveryIntervalSeconds"] is { } s ? TimeSpan.FromSeconds(ReadDouble(s)) : null,
             FrozenTime = root["frozenTime"] is { } t ? DateTimeOffset.Parse(t.GetValue<string>(), CultureInfo.InvariantCulture) : null,
             FileSources = root["fileSources"]?.AsArray().Select(n => new FileSourceSpec(

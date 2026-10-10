@@ -3255,6 +3255,7 @@ Details were written to:
   <data name="Status_Record" xml:space="preserve"><value>Record #{0} +{1}</value></data>
   <data name="Status_Page" xml:space="preserve"><value>Page {0} / {1}</value></data>
   <data name="Status_Sector" xml:space="preserve"><value>Sector {0}</value></data>
+  <data name="Status_SectorWithSize" xml:space="preserve"><value>Sector {0} ({1} B/sector)</value></data>
   <data name="Status_Section" xml:space="preserve"><value>Section {0} / {1}</value></data>
   <data name="Status_Sync" xml:space="preserve"><value>Sync</value></data>
   <data name="Status_ReversedEndian" xml:space="preserve"><value>{0} (reversed)</value></data>
@@ -4023,6 +4024,8 @@ Details were written to:
   <data name="Operations_CannotCancel" xml:space="preserve"><value>Writing has started and can't be canceled. Canceling now would damage the file.</value></data>
   <data name="Set_save_shiftInPlace" xml:space="preserve"><value>Save in place even when the length changes</value></data>
   <data name="SetDesc_save_shiftInPlace" xml:space="preserve"><value>Shifts data inside the original file instead of writing a temporary file. Needs little free space, but if saving is interrupted the file is damaged. You're asked every time.</value></data>
+  <data name="SetDesc_diskImage_suggest" xml:space="preserve"><value>When a .img, .dd, .raw, .iso or .bin file is opened normally, offer to open it again as a disk image with a sector size.</value></data>
+  <data name="Set_diskImage_suggest" xml:space="preserve"><value>Suggest opening disk images as disk images</value></data>
   <data name="Find_Kind_RegexText.Content" xml:space="preserve"><value>Regular expression (text)</value></data>
   <data name="Find_Kind_RegexBytes.Content" xml:space="preserve"><value>Regular expression (bytes)</value></data>
   <data name="Find_KindName_RegexText" xml:space="preserve"><value>Regex</value></data>
@@ -5165,6 +5168,7 @@ Details were written to:
   <data name="DiskImage_CustomSize" xml:space="preserve"><value>Custom sector size (128-65536, power of two)</value></data>
   <data name="DiskImage_AllowResize" xml:space="preserve"><value>Allow changing the length</value></data>
   <data name="DiskImage_Remainder" xml:space="preserve"><value>The file length is not a multiple of the sector size ({0} bytes left over).</value></data>
+  <data name="DiskImage_Suggest" xml:space="preserve"><value>This file may be a disk image. Open it as a disk image to use sectors.</value></data>
   <data name="DiskWrite_Title" xml:space="preserve"><value>Write to disk</value></data>
   <data name="DiskWrite_Body" xml:space="preserve"><value>Write to {0}: {1} place(s), {2} bytes. Affected volumes: {3}. This may damage the disk's data or file system. If the write is interrupted, it may not be reversible.</value></data>
   <data name="DiskWrite_NoVolumes" xml:space="preserve"><value>none</value></data>
@@ -5275,6 +5279,7 @@ Details were written to:
   <data name="Process_Unallocated" xml:space="preserve"><value>This range is not allocated, so it can't be edited.</value></data>
   <data name="Device_Reconnect" xml:space="preserve"><value>Reconnect</value></data>
   <data name="Device_ReconnectFailed" xml:space="preserve"><value>Could not reconnect: {0}</value></data>
+  <data name="Device_NotSameDevice" xml:space="preserve"><value>A different device is connected under the same name.</value></data>
   <data name="Device_Reconnected" xml:space="preserve"><value>Reconnected.</value></data>
   <data name="Tab_ImmediateWrite" xml:space="preserve"><value>Immediate Write</value></data>
   <data name="Tab_AutoRefresh" xml:space="preserve"><value>Auto Refresh</value></data>

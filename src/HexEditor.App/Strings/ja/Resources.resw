@@ -3255,6 +3255,7 @@
   <data name="Status_Record" xml:space="preserve"><value>レコード #{0} +{1}</value></data>
   <data name="Status_Page" xml:space="preserve"><value>ページ {0} / {1}</value></data>
   <data name="Status_Sector" xml:space="preserve"><value>セクタ {0}</value></data>
+  <data name="Status_SectorWithSize" xml:space="preserve"><value>セクタ {0} ({1} バイト/セクタ)</value></data>
   <data name="Status_Section" xml:space="preserve"><value>区切り {0} / {1}</value></data>
   <data name="Status_Sync" xml:space="preserve"><value>同期</value></data>
   <data name="Status_ReversedEndian" xml:space="preserve"><value>{0} (逆順表示)</value></data>
@@ -4023,6 +4024,8 @@
   <data name="Operations_CannotCancel" xml:space="preserve"><value>書き込みを始めたため、キャンセルできません。途中で止めるとファイルが壊れます。</value></data>
   <data name="Set_save_shiftInPlace" xml:space="preserve"><value>長さが変わる場合もその場で書く</value></data>
   <data name="SetDesc_save_shiftInPlace" xml:space="preserve"><value>一時ファイルを作らず、元のファイルの中でデータをずらしながら書きます。空き容量はほとんど要りませんが、途中で止まるとファイルが壊れます。実行のたびに確認します。</value></data>
+  <data name="SetDesc_diskImage_suggest" xml:space="preserve"><value>.img・.dd・.raw・.iso・.bin のファイルを通常の方法で開いたとき、セクタサイズを指定したディスクイメージとして開き直すことを提案します。</value></data>
+  <data name="Set_diskImage_suggest" xml:space="preserve"><value>ディスクイメージとして開くことを提案する</value></data>
   <data name="Find_Kind_RegexText.Content" xml:space="preserve"><value>正規表現 (テキスト)</value></data>
   <data name="Find_Kind_RegexBytes.Content" xml:space="preserve"><value>正規表現 (バイト列)</value></data>
   <data name="Find_KindName_RegexText" xml:space="preserve"><value>正規表現</value></data>
@@ -5165,6 +5168,7 @@
   <data name="DiskImage_CustomSize" xml:space="preserve"><value>任意のセクタサイズ (128〜65,536 の 2 の累乗)</value></data>
   <data name="DiskImage_AllowResize" xml:space="preserve"><value>長さの変更を許可する</value></data>
   <data name="DiskImage_Remainder" xml:space="preserve"><value>ファイルの長さがセクタサイズの倍数ではありません (端数 {0} バイト)。</value></data>
+  <data name="DiskImage_Suggest" xml:space="preserve"><value>このファイルはディスクイメージかもしれません。ディスクイメージとして開くと、セクタ単位で扱えます。</value></data>
   <data name="DiskWrite_Title" xml:space="preserve"><value>ディスクに書き込む</value></data>
   <data name="DiskWrite_Body" xml:space="preserve"><value>{0} に書き込みます: {1} か所、{2} バイト。影響するボリューム: {3}。この操作で、ディスクのデータやファイルシステムが壊れる可能性があります。書き込みの途中で止まると、元に戻せない場合があります。</value></data>
   <data name="DiskWrite_NoVolumes" xml:space="preserve"><value>なし</value></data>
@@ -5275,6 +5279,7 @@
   <data name="Process_Unallocated" xml:space="preserve"><value>この範囲は割り当てられていないため編集できません。</value></data>
   <data name="Device_Reconnect" xml:space="preserve"><value>再接続</value></data>
   <data name="Device_ReconnectFailed" xml:space="preserve"><value>再接続できませんでした: {0}</value></data>
+  <data name="Device_NotSameDevice" xml:space="preserve"><value>同じ名前で別のデバイスが接続されています。</value></data>
   <data name="Device_Reconnected" xml:space="preserve"><value>再接続しました。</value></data>
   <data name="Tab_ImmediateWrite" xml:space="preserve"><value>即時書き込み</value></data>
   <data name="Tab_AutoRefresh" xml:space="preserve"><value>自動更新</value></data>

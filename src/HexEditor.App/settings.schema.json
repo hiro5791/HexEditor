@@ -173,6 +173,11 @@
       "type": "boolean",
       "default": false
     },
+    "diskImage.suggest": {
+      "description": "Suggest opening disk images as disk images",
+      "type": "boolean",
+      "default": true
+    },
     "edit.backspaceInOverwrite": {
       "description": "Backspace in overwrite mode",
       "type": "string",

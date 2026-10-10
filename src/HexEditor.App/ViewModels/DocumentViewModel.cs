@@ -338,7 +338,12 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
                 && (v.Radix == OffsetRadix.Sector || Document.Source.LogicalSectorSize > 1)))
             {
                 var sectors = new SectionLayout(e.SectorSize, Document.Length);
-                parts.Add(Loc.Format("Status_Sector", sectors.IndexOf(cursor).ToString(Culture)));
+                string index = sectors.IndexOf(cursor).ToString(Culture);
+
+                // ディスク・ディスクイメージはセクタサイズも示す (ENG-31 の「画面」)。
+                parts.Add(Document.Source.LogicalSectorSize > 1
+                    ? Loc.Format("Status_SectorWithSize", index, Document.Source.LogicalSectorSize.ToString("N0", Culture))
+                    : Loc.Format("Status_Sector", index));
             }
             else if (v.Separator != SeparatorKind.None && e.SectionLength > 0)
             {

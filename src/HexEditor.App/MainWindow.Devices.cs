@@ -6,6 +6,7 @@ using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
 using HexEditor.Core.Processes;
 using HexEditor.Core.Saving;
+using HexEditor.Core.Settings;
 using HexEditor.Platform;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
@@ -375,6 +376,31 @@ public sealed partial class MainWindow
             ShowNotice(Loc.Format("Error_Open", Path.GetFileName(path), ex.Message), InfoBarSeverity.Error);
         }
         UpdateTitle();
+    }
+
+    /// <summary>
+    /// 拡張子 .img .dd .raw .iso .bin のファイルを通常の「開く」で開いたら、ディスクイメージとして開き直すかを InfoBar で提案する
+    /// (ENG-31 の仕様 6。設定でオフにできる)。
+    /// </summary>
+    private void SuggestDiskImage(DocumentViewModel doc)
+    {
+        if (doc.FilePath is not { } path || !DiskImage.LooksLikeImage(path) || TestHooks.SuppressDiskImageSuggestion
+            || !App.Settings.GetBool(DeviceSettings.SuggestDiskImageKey, true))
+        {
+            return;
+        }
+
+        ShowNotice(Loc.Get("DiskImage_Suggest"), InfoBarSeverity.Informational, doc, actions:
+        [
+            new Core.Notifications.NotificationAction(Loc.Get("DiskImage_Title"), () =>
+            {
+                if (Vm.Documents.Contains(doc) && !doc.Document.IsModified)
+                {
+                    Vm.Close(doc);
+                    _ = OpenDiskImageAsync(path);
+                }
+            }),
+        ]);
     }
 
     // ---- 読み取り専用の解除 (ENG-14 の仕様 3) ----

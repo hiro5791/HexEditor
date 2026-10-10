@@ -16,4 +16,7 @@ public static class DeviceSettings
 
     /// <summary>メモリマップの一覧の更新の間隔 (秒。1〜60、既定 5。0 はオフ。ENG-33 の仕様 6)。</summary>
     public const string MemoryMapRefreshKey = "memoryMap.refreshSeconds";
+
+    /// <summary>.img などを通常の「開く」で開いたら、ディスクイメージとして開き直すかを提案する (ENG-31 の仕様 6)。</summary>
+    public const string SuggestDiskImageKey = "diskImage.suggest";
 }
