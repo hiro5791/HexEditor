@@ -2765,4 +2765,302 @@
   <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>コピーする Hex 文字列の 1 行のバイト数</value></data>
   <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>このバイト数ごとに改行を入れます。0 は改行を入れません。</value></data>
   <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>選択範囲 ({0}) は大きすぎるため、他のアプリには渡せません。HexEditor 内では貼り付けられます。</value></data>
+  <data name="Menu_File_OpenAdvanced.Text" xml:space="preserve"><value>詳細を指定して開く(V)...</value></data>
+  <data name="Menu_File_OpenAdvanced.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_File_OpenSelection.Text" xml:space="preserve"><value>選択範囲を新しいタブで開く(B)</value></data>
+  <data name="Menu_File_OpenSelection.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_File_OpenSelectionLinked.Text" xml:space="preserve"><value>連動ビュー(L)</value></data>
+  <data name="Menu_File_OpenSelectionLinked.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_OpenSelectionCopy.Text" xml:space="preserve"><value>コピーとして(C)</value></data>
+  <data name="Menu_File_OpenSelectionCopy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_File_Import.Text" xml:space="preserve"><value>インポート(I)...</value></data>
+  <data name="Menu_File_Import.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_File_Export.Text" xml:space="preserve"><value>エクスポート(P)</value></data>
+  <data name="Menu_File_Export.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_File_ExportDialog.Text" xml:space="preserve"><value>エクスポート(E)...</value></data>
+  <data name="Menu_File_ExportDialog.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_File_ExportSelection.Text" xml:space="preserve"><value>選択範囲をエクスポート(S)...</value></data>
+  <data name="Menu_File_ExportSelection.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_SaveSelection.Text" xml:space="preserve"><value>選択範囲をバイナリで保存(B)...</value></data>
+  <data name="Menu_File_SaveSelection.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_File_Workspace.Text" xml:space="preserve"><value>ワークスペース(K)</value></data>
+  <data name="Menu_File_Workspace.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_File_WorkspaceSave.Text" xml:space="preserve"><value>保存(S)...</value></data>
+  <data name="Menu_File_WorkspaceSave.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_WorkspaceOpen.Text" xml:space="preserve"><value>開く(O)...</value></data>
+  <data name="Menu_File_WorkspaceOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Cmd_file_openAdvanced" xml:space="preserve"><value>詳細を指定して開く</value></data>
+  <data name="CmdAlias_file_openAdvanced" xml:space="preserve"><value>しょうさいをしていしてひらく</value></data>
+  <data name="Cmd_file_openRange" xml:space="preserve"><value>範囲を指定して開く</value></data>
+  <data name="CmdAlias_file_openRange" xml:space="preserve"><value>はんいをしていしてひらく</value></data>
+  <data name="Cmd_file_openAsIntelHex" xml:space="preserve"><value>Intel HEX として開く</value></data>
+  <data name="CmdAlias_file_openAsIntelHex" xml:space="preserve"><value>いんてるへっくすとしてひらく</value></data>
+  <data name="Cmd_file_openAsSRecord" xml:space="preserve"><value>S-record として開く</value></data>
+  <data name="CmdAlias_file_openAsSRecord" xml:space="preserve"><value>えすれこーどとしてひらく</value></data>
+  <data name="Cmd_file_openAsBase64" xml:space="preserve"><value>Base64 として開く</value></data>
+  <data name="CmdAlias_file_openAsBase64" xml:space="preserve"><value>べーすろくじゅうよんとしてひらく</value></data>
+  <data name="Cmd_file_openSelectionInNewTab" xml:space="preserve"><value>選択範囲を新しいタブで開く</value></data>
+  <data name="CmdAlias_file_openSelectionInNewTab" xml:space="preserve"><value>せんたくはんいをあたらしいたぶでひらく</value></data>
+  <data name="Cmd_file_openSelectionAsCopy" xml:space="preserve"><value>選択範囲をコピーとして新しいタブで開く</value></data>
+  <data name="CmdAlias_file_openSelectionAsCopy" xml:space="preserve"><value>せんたくはんいをこぴーとしてひらく</value></data>
+  <data name="Cmd_file_formatSettings" xml:space="preserve"><value>形式の設定</value></data>
+  <data name="CmdAlias_file_formatSettings" xml:space="preserve"><value>けいしきのせってい</value></data>
+  <data name="Cmd_file_import" xml:space="preserve"><value>インポート</value></data>
+  <data name="CmdAlias_file_import" xml:space="preserve"><value>いんぽーと</value></data>
+  <data name="Cmd_file_export" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="CmdAlias_file_export" xml:space="preserve"><value>えくすぽーと</value></data>
+  <data name="Cmd_file_exportSelection" xml:space="preserve"><value>選択範囲をエクスポート</value></data>
+  <data name="CmdAlias_file_exportSelection" xml:space="preserve"><value>せんたくはんいをえくすぽーと</value></data>
+  <data name="Cmd_file_saveSelection" xml:space="preserve"><value>選択範囲をファイルに保存</value></data>
+  <data name="CmdAlias_file_saveSelection" xml:space="preserve"><value>せんたくはんいをふぁいるにほぞん</value></data>
+  <data name="Cmd_workspace_save" xml:space="preserve"><value>ワークスペース: 保存</value></data>
+  <data name="CmdAlias_workspace_save" xml:space="preserve"><value>わーくすぺーすをほぞん</value></data>
+  <data name="Cmd_workspace_open" xml:space="preserve"><value>ワークスペース: 開く</value></data>
+  <data name="CmdAlias_workspace_open" xml:space="preserve"><value>わーくすぺーすをひらく</value></data>
+  <data name="Cmd_view_panel_formatIssues" xml:space="preserve"><value>形式の誤りの一覧の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_formatIssues" xml:space="preserve"><value>けいしきのあやまり</value></data>
+  <data name="Formats_NotEncoded" xml:space="preserve"><value>このドキュメントは Intel HEX・S-record・Base64 をデコードして開いたものではありません。</value></data>
+  <data name="Format_ihex" xml:space="preserve"><value>Intel HEX</value></data>
+  <data name="Format_srec" xml:space="preserve"><value>Motorola S-record</value></data>
+  <data name="Format_base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="Format_base32" xml:space="preserve"><value>Base32</value></data>
+  <data name="Format_ascii85" xml:space="preserve"><value>Ascii85</value></data>
+  <data name="Format_uu" xml:space="preserve"><value>UUEncode</value></data>
+  <data name="Format_qp" xml:space="preserve"><value>Quoted-Printable</value></data>
+  <data name="Format_url" xml:space="preserve"><value>URL エンコード</value></data>
+  <data name="Format_hextext" xml:space="preserve"><value>Hex テキスト</value></data>
+  <data name="Format_dectext" xml:space="preserve"><value>10 進テキスト</value></data>
+  <data name="Format_c" xml:space="preserve"><value>ソースコード: C</value></data>
+  <data name="Format_cpp" xml:space="preserve"><value>ソースコード: C++</value></data>
+  <data name="Format_csharp" xml:space="preserve"><value>ソースコード: C#</value></data>
+  <data name="Format_java" xml:space="preserve"><value>ソースコード: Java</value></data>
+  <data name="Format_js" xml:space="preserve"><value>ソースコード: JavaScript</value></data>
+  <data name="Format_python" xml:space="preserve"><value>ソースコード: Python</value></data>
+  <data name="Format_rust" xml:space="preserve"><value>ソースコード: Rust</value></data>
+  <data name="Format_go" xml:space="preserve"><value>ソースコード: Go</value></data>
+  <data name="Format_pascal" xml:space="preserve"><value>ソースコード: Pascal</value></data>
+  <data name="Format_vbnet" xml:space="preserve"><value>ソースコード: VB.NET</value></data>
+  <data name="Format_dumptext" xml:space="preserve"><value>ダンプ: テキスト</value></data>
+  <data name="Format_html" xml:space="preserve"><value>ダンプ: HTML</value></data>
+  <data name="Format_rtf" xml:space="preserve"><value>ダンプ: RTF</value></data>
+  <data name="Format_tex" xml:space="preserve"><value>ダンプ: TeX</value></data>
+  <data name="Format_markdown" xml:space="preserve"><value>ダンプ: Markdown</value></data>
+  <data name="Format_ips" xml:space="preserve"><value>IPS パッチ</value></data>
+  <data name="Format_ips32" xml:space="preserve"><value>IPS32 パッチ</value></data>
+  <data name="Format_bin" xml:space="preserve"><value>バイナリ</value></data>
+  <data name="OpenAdv_Title" xml:space="preserve"><value>詳細を指定して開く</value></data>
+  <data name="OpenAdv_Path" xml:space="preserve"><value>ファイル</value></data>
+  <data name="OpenAdv_Browse" xml:space="preserve"><value>参照...</value></data>
+  <data name="OpenAdv_ReadOnly" xml:space="preserve"><value>読み取り専用で開く</value></data>
+  <data name="OpenAdv_DenyWrites" xml:space="preserve"><value>他のアプリの書き込みを禁止する</value></data>
+  <data name="OpenAdv_Range" xml:space="preserve"><value>範囲を指定して開く</value></data>
+  <data name="OpenAdv_Start" xml:space="preserve"><value>開始</value></data>
+  <data name="OpenAdv_LengthKind" xml:space="preserve"><value>範囲の指定</value></data>
+  <data name="OpenAdv_ByLength" xml:space="preserve"><value>長さ</value></data>
+  <data name="OpenAdv_ByEnd" xml:space="preserve"><value>終了 (その位置を含む)</value></data>
+  <data name="OpenAdv_Length" xml:space="preserve"><value>長さ / 終了</value></data>
+  <data name="OpenAdv_Resizable" xml:space="preserve"><value>長さの変更を許可する (挿入・削除)</value></data>
+  <data name="OpenAdv_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="OpenAdv_Format_auto" xml:space="preserve"><value>自動</value></data>
+  <data name="OpenAdv_Format_bin" xml:space="preserve"><value>バイナリのまま</value></data>
+  <data name="OpenAdv_Format_ihex" xml:space="preserve"><value>Intel HEX</value></data>
+  <data name="OpenAdv_Format_srec" xml:space="preserve"><value>S-record</value></data>
+  <data name="OpenAdv_Format_base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="OpenAdv_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="Range_StartOutside" xml:space="preserve"><value>開始はファイルの中の位置にしてください。</value></data>
+  <data name="Range_LengthInvalid" xml:space="preserve"><value>長さは 1 以上にしてください。</value></data>
+  <data name="Range_Truncated" xml:space="preserve"><value>範囲がファイルの末尾を超えています。{0} に切り詰めます。</value></data>
+  <data name="Range_OverlapTitle" xml:space="preserve"><value>同じデータが開いています</value></data>
+  <data name="Range_OverlapBody" xml:space="preserve"><value>同じデータが別のタブで開いています。同じデータを 2 つのタブで編集すると、後から保存した方が優先されます。</value></data>
+  <data name="Range_OpenReadOnly" xml:space="preserve"><value>読み取り専用で開く</value></data>
+  <data name="Range_OpenAnyway" xml:space="preserve"><value>そのまま開く</value></data>
+  <data name="Encoded_Decoding" xml:space="preserve"><value>{0} をデコード中 ({1})</value></data>
+  <data name="Encoded_Decoded" xml:space="preserve"><value>{0} をデコードして表示しています。</value></data>
+  <data name="Encoded_OpenAsText" xml:space="preserve"><value>テキストのまま開く</value></data>
+  <data name="Encoded_OpenBinary" xml:space="preserve"><value>バイナリのまま開く</value></data>
+  <data name="Encoded_Unreadable" xml:space="preserve"><value>{0} として読めませんでした (最初の誤り: 行 {1})。</value></data>
+  <data name="Encoded_ErrorLines" xml:space="preserve"><value>{0, plural, other {# 行に誤りがあります。}}ドキュメントは読み取り専用です。</value></data>
+  <data name="Encoded_AllowEdit" xml:space="preserve"><value>編集を許可</value></data>
+  <data name="Encoded_Suggest" xml:space="preserve"><value>このファイルは {0} のようです。</value></data>
+  <data name="Encoded_Reopen" xml:space="preserve"><value>{0} として開き直す</value></data>
+  <data name="Encoded_LossTitle" xml:space="preserve"><value>失われる行があります</value></data>
+  <data name="Encoded_LossBody" xml:space="preserve"><value>{0} にはデータとして読めない行 (コメント行や未知のレコード型) があります。保存するとそれらの行は出力されず失われます。</value></data>
+  <data name="Encoded_LossSave" xml:space="preserve"><value>保存する</value></data>
+  <data name="Encoded_TooLarge" xml:space="preserve"><value>{0} では書けません。アドレスが {1} を超えます。「名前を付けて保存」で他の形式を選んでください。</value></data>
+  <data name="FormatSettings_Title" xml:space="preserve"><value>形式の設定 ({0})</value></data>
+  <data name="FormatIssues_Title" xml:space="preserve"><value>形式の誤り</value></data>
+  <data name="FormatIssues_None" xml:space="preserve"><value>誤りはありません。</value></data>
+  <data name="Linked_ToolTip" xml:space="preserve"><value>連動: {0}</value></data>
+  <data name="Linked_Disconnected" xml:space="preserve"><value>元の範囲が削除されました。</value></data>
+  <data name="Transfer_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Transfer_Preview" xml:space="preserve"><value>プレビュー</value></data>
+  <data name="Import_Title" xml:space="preserve"><value>インポート</value></data>
+  <data name="Import_File" xml:space="preserve"><value>インポートするファイル</value></data>
+  <data name="Import_Target" xml:space="preserve"><value>読み込み先</value></data>
+  <data name="Import_ToNew" xml:space="preserve"><value>新しいドキュメント</value></data>
+  <data name="Import_ToInsert" xml:space="preserve"><value>カーソル位置に挿入</value></data>
+  <data name="Import_ToOverwrite" xml:space="preserve"><value>カーソル位置から上書き</value></data>
+  <data name="Import_Run" xml:space="preserve"><value>インポート</value></data>
+  <data name="Import_Operation" xml:space="preserve"><value>{0} をインポート中</value></data>
+  <data name="Import_Size" xml:space="preserve"><value>変換後のサイズ: {0} バイト</value></data>
+  <data name="Import_AddressRange" xml:space="preserve"><value>アドレス範囲: {0}〜{1}、データ {2} バイト、ギャップ {3} バイト</value></data>
+  <data name="Import_StartAddress" xml:space="preserve"><value>開始アドレス: {0}</value></data>
+  <data name="Import_Header" xml:space="preserve"><value>ヘッダ (S0): {0}</value></data>
+  <data name="Import_IssueCounts" xml:space="preserve"><value>警告: {0} 件、誤り: {1} 件</value></data>
+  <data name="Import_PartialPreview" xml:space="preserve"><value>ファイルが大きいため、プレビューは先頭だけです。</value></data>
+  <data name="Import_IpsSummary" xml:space="preserve"><value>{0} 個のレコード ({1})。今のドキュメントにパッチを当てます。</value></data>
+  <data name="Import_ApplyPatch" xml:space="preserve"><value>パッチの適用</value></data>
+  <data name="Import_BrokenPatch" xml:space="preserve"><value>パッチが壊れています (レコード {0}、ファイル内の位置 {1})。</value></data>
+  <data name="Import_PatchChangesLength" xml:space="preserve"><value>このドキュメントは長さ固定のため、長さが変わるパッチは当てられません。</value></data>
+  <data name="Import_GapBookmark" xml:space="preserve"><value>ギャップ {0}</value></data>
+  <data name="ImportErrors_Title" xml:space="preserve"><value>誤りがあります</value></data>
+  <data name="ImportErrors_Body" xml:space="preserve"><value>{0, plural, other {# 件の誤りが見つかりました。}}</value></data>
+  <data name="ImportErrors_More" xml:space="preserve"><value>{0} 件のうち最初の 1,000 件を表示しています。</value></data>
+  <data name="ImportErrors_Ignore" xml:space="preserve"><value>誤りを無視して読み込む</value></data>
+  <data name="ImportIssue_Line" xml:space="preserve"><value>行 {0}、列 {1}: {2}</value></data>
+  <data name="ImportIssue_Values" xml:space="preserve"><value>(期待値 {0}、実際 {1})</value></data>
+  <data name="ImportIssue_Syntax" xml:space="preserve"><value>形式の誤り (レコードの始まりではない)</value></data>
+  <data name="ImportIssue_Checksum" xml:space="preserve"><value>チェックサムの不一致</value></data>
+  <data name="ImportIssue_UnknownRecord" xml:space="preserve"><value>未知のレコード型</value></data>
+  <data name="ImportIssue_OddDigits" xml:space="preserve"><value>16 進の桁が奇数</value></data>
+  <data name="ImportIssue_InvalidCharacter" xml:space="preserve"><value>不正な文字</value></data>
+  <data name="ImportIssue_OutOfRange" xml:space="preserve"><value>値が範囲外</value></data>
+  <data name="ImportIssue_Overlap" xml:space="preserve"><value>アドレスの重なり (後のデータを使います)</value></data>
+  <data name="ImportIssue_AddressOverflow" xml:space="preserve"><value>アドレスが 4 GiB を超える</value></data>
+  <data name="ImportIssue_LengthMismatch" xml:space="preserve"><value>バイト数とデータの長さが合わない</value></data>
+  <data name="ImportIssue_InvalidLength" xml:space="preserve"><value>長さ・パディングの誤り</value></data>
+  <data name="ImportIssue_UnrecognizedLine" xml:space="preserve"><value>ダンプの行として判別できない</value></data>
+  <data name="ImportIssue_CountMismatch" xml:space="preserve"><value>レコード数 (S5 / S6) が合わない</value></data>
+  <data name="ImportIssue_MissingEnd" xml:space="preserve"><value>ファイルの終わりのレコードがない</value></data>
+  <data name="ImportIssue_DataAfterEnd" xml:space="preserve"><value>ファイルの終わりのレコードの後にデータがある</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="Export_SelectionTitle" xml:space="preserve"><value>選択範囲をエクスポート</value></data>
+  <data name="Export_Target" xml:space="preserve"><value>対象</value></data>
+  <data name="Export_Whole" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="Export_Selection" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Export_Range" xml:space="preserve"><value>オフセットの範囲</value></data>
+  <data name="Export_File" xml:space="preserve"><value>保存先</value></data>
+  <data name="Export_Run" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="Export_Operation" xml:space="preserve"><value>{0} にエクスポート中</value></data>
+  <data name="Export_EstimatedSize" xml:space="preserve"><value>出力のおおよそのサイズ: {0}</value></data>
+  <data name="Export_Done" xml:space="preserve"><value>{0} にエクスポートしました。</value></data>
+  <data name="Export_Failed" xml:space="preserve"><value>エクスポートできませんでした: {0}</value></data>
+  <data name="Export_IpsLimit" xml:space="preserve"><value>{0} の位置の変更は {1} で表せません。</value></data>
+  <data name="Export_LargeTitle" xml:space="preserve"><value>出力が大きくなります</value></data>
+  <data name="Export_LargeText" xml:space="preserve"><value>出力はおよそ {0} になります。テキスト形式は元のデータの 2〜5 倍の大きさになります。</value></data>
+  <data name="Export_LargeSource" xml:space="preserve"><value>出力はおよそ {0} になります。この大きさのソースファイルはコンパイラで扱いにくいことがあります。</value></data>
+  <data name="Export_LargeDocument" xml:space="preserve"><value>出力はおよそ {0} になります。この大きさのファイルはブラウザやワープロで開けないことがあります。</value></data>
+  <data name="Export_NewLine" xml:space="preserve"><value>改行</value></data>
+  <data name="Export_RecordLength" xml:space="preserve"><value>1 レコードのデータ長</value></data>
+  <data name="Export_AddressMode" xml:space="preserve"><value>アドレスの形式</value></data>
+  <data name="Export_ExecAddress" xml:space="preserve"><value>実行開始アドレス</value></data>
+  <data name="Export_Header" xml:space="preserve"><value>ヘッダ (S0)</value></data>
+  <data name="Export_WriteCount" xml:space="preserve"><value>レコード数 (S5 / S6) を出力する</value></data>
+  <data name="Export_UpperCase" xml:space="preserve"><value>16 進を大文字にする</value></data>
+  <data name="Export_LineLength" xml:space="preserve"><value>1 行の文字数 (0 は改行なし)</value></data>
+  <data name="Export_UrlSafe" xml:space="preserve"><value>URL セーフ</value></data>
+  <data name="Export_Padding" xml:space="preserve"><value>パディング (=)</value></data>
+  <data name="Workspace_FileType" xml:space="preserve"><value>HexEditor ワークスペース</value></data>
+  <data name="Workspace_Saved" xml:space="preserve"><value>ワークスペース {0} を保存しました。</value></data>
+  <data name="Workspace_SaveFailed" xml:space="preserve"><value>ワークスペースを保存できませんでした: {0}</value></data>
+  <data name="Workspace_OpenFailed" xml:space="preserve"><value>ワークスペース {0} を開けませんでした: {1}</value></data>
+  <data name="Workspace_OpenTitle" xml:space="preserve"><value>ワークスペースを開く</value></data>
+  <data name="Workspace_OpenBody" xml:space="preserve"><value>{0} の {1, plural, other {# 個のタブ}}を開きます。</value></data>
+  <data name="Workspace_NewWindow" xml:space="preserve"><value>新しいウィンドウで開く</value></data>
+  <data name="Workspace_ThisWindow" xml:space="preserve"><value>このウィンドウに追加</value></data>
+  <data name="Transfer_recordLength" xml:space="preserve"><value>1 レコードのデータ長</value></data>
+  <data name="Transfer_intelMode" xml:space="preserve"><value>アドレスの形式</value></data>
+  <data name="Transfer_srecMode" xml:space="preserve"><value>アドレスの形式</value></data>
+  <data name="Transfer_startAddress" xml:space="preserve"><value>開始アドレス (空欄: 表示上のアドレス)</value></data>
+  <data name="Transfer_execAddress" xml:space="preserve"><value>実行開始アドレス (空欄: なし、またはインポート時の値)</value></data>
+  <data name="Transfer_omitGaps" xml:space="preserve"><value>ギャップの値の連続を省略する</value></data>
+  <data name="Transfer_gapValue" xml:space="preserve"><value>ギャップの値 (16 進)</value></data>
+  <data name="Transfer_gapRun" xml:space="preserve"><value>省略する最小の長さ (バイト)</value></data>
+  <data name="Transfer_upperCase" xml:space="preserve"><value>16 進を大文字にする</value></data>
+  <data name="Transfer_header" xml:space="preserve"><value>ヘッダ (S0)</value></data>
+  <data name="Transfer_writeCount" xml:space="preserve"><value>レコード数 (S5 / S6) を出力する</value></data>
+  <data name="Transfer_urlSafe" xml:space="preserve"><value>URL セーフ</value></data>
+  <data name="Transfer_lineLength" xml:space="preserve"><value>1 行の文字数 (0 は改行なし)</value></data>
+  <data name="Transfer_padding" xml:space="preserve"><value>パディング (=)</value></data>
+  <data name="Transfer_delimiters" xml:space="preserve"><value>&lt;~ と ~&gt; を付ける</value></data>
+  <data name="Transfer_uuName" xml:space="preserve"><value>begin 行のファイル名</value></data>
+  <data name="Transfer_uuMode" xml:space="preserve"><value>begin 行のモード</value></data>
+  <data name="Transfer_keepUnreserved" xml:space="preserve"><value>非予約文字 (RFC 3986) は変換しない</value></data>
+  <data name="Transfer_bytesPerLine" xml:space="preserve"><value>1 行のバイト数 (0 は改行なし)</value></data>
+  <data name="Transfer_separator" xml:space="preserve"><value>区切り</value></data>
+  <data name="Transfer_customSeparator" xml:space="preserve"><value>任意の区切り</value></data>
+  <data name="Transfer_prefix" xml:space="preserve"><value>接頭辞</value></data>
+  <data name="Transfer_customPrefix" xml:space="preserve"><value>任意の接頭辞</value></data>
+  <data name="Transfer_offsets" xml:space="preserve"><value>行頭にオフセットを付ける</value></data>
+  <data name="Transfer_valueSize" xml:space="preserve"><value>1 つの値のサイズ</value></data>
+  <data name="Transfer_signed" xml:space="preserve"><value>符号あり</value></data>
+  <data name="Transfer_bigEndian" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="Transfer_perLine" xml:space="preserve"><value>1 行の値の数</value></data>
+  <data name="Transfer_decSeparator" xml:space="preserve"><value>区切り</value></data>
+  <data name="Transfer_ipsFormat" xml:space="preserve"><value>パッチの形式</value></data>
+  <data name="Transfer_rle" xml:space="preserve"><value>RLE を使う</value></data>
+  <data name="Transfer_elementSize" xml:space="preserve"><value>要素のサイズ</value></data>
+  <data name="Transfer_decimal" xml:space="preserve"><value>10 進で書く</value></data>
+  <data name="Transfer_variableName" xml:space="preserve"><value>変数名</value></data>
+  <data name="Transfer_headerFile" xml:space="preserve"><value>ヘッダファイルとして出す (インクルードガード付き)</value></data>
+  <data name="Transfer_lengthConstant" xml:space="preserve"><value>長さの定数を付ける</value></data>
+  <data name="Transfer_comment" xml:space="preserve"><value>元のファイル名・範囲・作成日時のコメントを付ける</value></data>
+  <data name="Transfer_bytesPerRow" xml:space="preserve"><value>1 行のバイト数</value></data>
+  <data name="Transfer_groupSize" xml:space="preserve"><value>グループ化 (0 はなし)</value></data>
+  <data name="Transfer_showOffset" xml:space="preserve"><value>オフセットの列</value></data>
+  <data name="Transfer_showHex" xml:space="preserve"><value>Hex の列</value></data>
+  <data name="Transfer_showText" xml:space="preserve"><value>テキストの列</value></data>
+  <data name="Transfer_radix" xml:space="preserve"><value>オフセットの基数</value></data>
+  <data name="Transfer_columnSeparator" xml:space="preserve"><value>列の区切り</value></data>
+  <data name="Transfer_colors" xml:space="preserve"><value>色を付ける (変更バイト・ブックマーク)</value></data>
+  <data name="Transfer_dark" xml:space="preserve"><value>ダークの配色</value></data>
+  <data name="Transfer_tooltips" xml:space="preserve"><value>ブックマークの名前をツールチップに入れる</value></data>
+  <data name="Transfer_rtfFont" xml:space="preserve"><value>フォント</value></data>
+  <data name="Transfer_rtfSize" xml:space="preserve"><value>フォントの大きさ (ポイント)</value></data>
+  <data name="Transfer_texEnv" xml:space="preserve"><value>環境</value></data>
+  <data name="Transfer_table" xml:space="preserve"><value>コードブロックではなく表にする</value></data>
+  <data name="Transfer_newLine" xml:space="preserve"><value>改行</value></data>
+  <data name="Transfer_encoding" xml:space="preserve"><value>文字コード</value></data>
+  <data name="Transfer_placement" xml:space="preserve"><value>アドレスの配置</value></data>
+  <data name="Transfer_gapFill" xml:space="preserve"><value>ギャップを埋める値 (16 進)</value></data>
+  <data name="Transfer_preferLater" xml:space="preserve"><value>重複したアドレスは後のデータを優先する</value></data>
+  <data name="Transfer_gapBookmarks" xml:space="preserve"><value>ギャップにブックマークを付ける</value></data>
+  <data name="Transfer_ignoreWhitespace" xml:space="preserve"><value>空白・改行を無視する</value></data>
+  <data name="Transfer_allowMissingPadding" xml:space="preserve"><value>パディングなしを許す</value></data>
+  <data name="Transfer_plusAsSpace" xml:space="preserve"><value>+ を空白として扱う</value></data>
+  <data name="Transfer_uuIndex" xml:space="preserve"><value>読むファイルの番号</value></data>
+  <data name="Transfer_dumpAuto" xml:space="preserve"><value>ダンプから読み取る (オフセットとテキストの列を取り除く)</value></data>
+  <data name="Transfer_Choice_auto" xml:space="preserve"><value>自動</value></data>
+  <data name="Transfer_Choice_i8" xml:space="preserve"><value>I8HEX (16 bit)</value></data>
+  <data name="Transfer_Choice_i16" xml:space="preserve"><value>I16HEX (セグメント)</value></data>
+  <data name="Transfer_Choice_i32" xml:space="preserve"><value>I32HEX (リニア)</value></data>
+  <data name="Transfer_Choice_s1" xml:space="preserve"><value>S1 (16 bit)</value></data>
+  <data name="Transfer_Choice_s2" xml:space="preserve"><value>S2 (24 bit)</value></data>
+  <data name="Transfer_Choice_s3" xml:space="preserve"><value>S3 (32 bit)</value></data>
+  <data name="Transfer_Choice_space" xml:space="preserve"><value>空白</value></data>
+  <data name="Transfer_Choice_commaSpace" xml:space="preserve"><value>カンマと空白</value></data>
+  <data name="Transfer_Choice_none" xml:space="preserve"><value>なし</value></data>
+  <data name="Transfer_Choice_custom" xml:space="preserve"><value>任意</value></data>
+  <data name="Transfer_Choice_0x" xml:space="preserve"><value>0x</value></data>
+  <data name="Transfer_Choice_backslashX" xml:space="preserve"><value>\x</value></data>
+  <data name="Transfer_Choice_dollar" xml:space="preserve"><value>$</value></data>
+  <data name="Transfer_Choice_1" xml:space="preserve"><value>1 バイト</value></data>
+  <data name="Transfer_Choice_2" xml:space="preserve"><value>2 バイト</value></data>
+  <data name="Transfer_Choice_4" xml:space="preserve"><value>4 バイト</value></data>
+  <data name="Transfer_Choice_8" xml:space="preserve"><value>8 バイト</value></data>
+  <data name="Transfer_Choice_ips" xml:space="preserve"><value>IPS</value></data>
+  <data name="Transfer_Choice_ips32" xml:space="preserve"><value>IPS32</value></data>
+  <data name="Transfer_Choice_hex" xml:space="preserve"><value>16 進</value></data>
+  <data name="Transfer_Choice_dec" xml:space="preserve"><value>10 進</value></data>
+  <data name="Transfer_Choice_oct" xml:space="preserve"><value>8 進</value></data>
+  <data name="Transfer_Choice_bar" xml:space="preserve"><value>縦線</value></data>
+  <data name="Transfer_Choice_verbatim" xml:space="preserve"><value>verbatim</value></data>
+  <data name="Transfer_Choice_alltt" xml:space="preserve"><value>色付きの alltt (xcolor)</value></data>
+  <data name="Transfer_Choice_crlf" xml:space="preserve"><value>CRLF</value></data>
+  <data name="Transfer_Choice_lf" xml:space="preserve"><value>LF</value></data>
+  <data name="Transfer_Choice_utf8" xml:space="preserve"><value>UTF-8 (BOM なし)</value></data>
+  <data name="Transfer_Choice_utf8bom" xml:space="preserve"><value>UTF-8 (BOM あり)</value></data>
+  <data name="Transfer_Choice_ascii" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Transfer_Choice_lowest" xml:space="preserve"><value>最小アドレスを先頭にする</value></data>
+  <data name="Transfer_Choice_absolute" xml:space="preserve"><value>アドレスをそのままオフセットにする</value></data>
 </root>

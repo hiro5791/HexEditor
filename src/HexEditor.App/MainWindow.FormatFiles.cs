@@ -631,7 +631,7 @@ public sealed partial class MainWindow
         }
 
         ContentDialog dialog = DialogParts.Dialog(Root, "FormatSettingsDialog", Loc.Format("FormatSettings_Title", FormatName(s.Format)), body,
-            Loc.Get("Common_OK"));
+            Loc.Get("Common_Ok"));
         void Validate()
         {
             bool recordOk = int.TryParse(recordLength.Text, out int r) && r is >= 1 and <= 255;

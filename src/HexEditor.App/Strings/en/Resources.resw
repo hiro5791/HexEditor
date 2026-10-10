@@ -2765,4 +2765,302 @@ Details were written to:
   <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Bytes per line in copied hex</value></data>
   <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Inserts a line break after this many bytes. 0 doesn't add line breaks.</value></data>
   <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>The selection ({0}) is too large to give to other apps. You can paste it inside HexEditor.</value></data>
+  <data name="Menu_File_OpenAdvanced.Text" xml:space="preserve"><value>Open with options...</value></data>
+  <data name="Menu_File_OpenAdvanced.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_File_OpenSelection.Text" xml:space="preserve"><value>Open selection in a new tab</value></data>
+  <data name="Menu_File_OpenSelection.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_File_OpenSelectionLinked.Text" xml:space="preserve"><value>Linked view</value></data>
+  <data name="Menu_File_OpenSelectionLinked.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_File_OpenSelectionCopy.Text" xml:space="preserve"><value>As a copy</value></data>
+  <data name="Menu_File_OpenSelectionCopy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_File_Import.Text" xml:space="preserve"><value>Import...</value></data>
+  <data name="Menu_File_Import.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_File_Export.Text" xml:space="preserve"><value>Export</value></data>
+  <data name="Menu_File_Export.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_File_ExportDialog.Text" xml:space="preserve"><value>Export...</value></data>
+  <data name="Menu_File_ExportDialog.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_File_ExportSelection.Text" xml:space="preserve"><value>Export selection...</value></data>
+  <data name="Menu_File_ExportSelection.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_SaveSelection.Text" xml:space="preserve"><value>Save selection as binary...</value></data>
+  <data name="Menu_File_SaveSelection.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_File_Workspace.Text" xml:space="preserve"><value>Workspace</value></data>
+  <data name="Menu_File_Workspace.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_File_WorkspaceSave.Text" xml:space="preserve"><value>Save workspace...</value></data>
+  <data name="Menu_File_WorkspaceSave.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_File_WorkspaceOpen.Text" xml:space="preserve"><value>Open workspace...</value></data>
+  <data name="Menu_File_WorkspaceOpen.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Cmd_file_openAdvanced" xml:space="preserve"><value>Open with options</value></data>
+  <data name="CmdAlias_file_openAdvanced" xml:space="preserve"><value>advanced options range format lock</value></data>
+  <data name="Cmd_file_openRange" xml:space="preserve"><value>Open a range</value></data>
+  <data name="CmdAlias_file_openRange" xml:space="preserve"><value>partial part offset</value></data>
+  <data name="Cmd_file_openAsIntelHex" xml:space="preserve"><value>Open as Intel HEX</value></data>
+  <data name="CmdAlias_file_openAsIntelHex" xml:space="preserve"><value>ihex hex firmware decode</value></data>
+  <data name="Cmd_file_openAsSRecord" xml:space="preserve"><value>Open as S-record</value></data>
+  <data name="CmdAlias_file_openAsSRecord" xml:space="preserve"><value>srec motorola s19 s28 s37 decode</value></data>
+  <data name="Cmd_file_openAsBase64" xml:space="preserve"><value>Open as Base64</value></data>
+  <data name="CmdAlias_file_openAsBase64" xml:space="preserve"><value>b64 pem decode</value></data>
+  <data name="Cmd_file_openSelectionInNewTab" xml:space="preserve"><value>Open selection in a new tab</value></data>
+  <data name="CmdAlias_file_openSelectionInNewTab" xml:space="preserve"><value>linked view range tab</value></data>
+  <data name="Cmd_file_openSelectionAsCopy" xml:space="preserve"><value>Open selection as a copy in a new tab</value></data>
+  <data name="CmdAlias_file_openSelectionAsCopy" xml:space="preserve"><value>copy duplicate range tab</value></data>
+  <data name="Cmd_file_formatSettings" xml:space="preserve"><value>Format settings</value></data>
+  <data name="CmdAlias_file_formatSettings" xml:space="preserve"><value>intel hex s-record base64 record length line</value></data>
+  <data name="Cmd_file_import" xml:space="preserve"><value>Import</value></data>
+  <data name="CmdAlias_file_import" xml:space="preserve"><value>intel hex s-record base64 decode load</value></data>
+  <data name="Cmd_file_export" xml:space="preserve"><value>Export</value></data>
+  <data name="CmdAlias_file_export" xml:space="preserve"><value>intel hex s-record base64 html rtf dump save</value></data>
+  <data name="Cmd_file_exportSelection" xml:space="preserve"><value>Export selection</value></data>
+  <data name="CmdAlias_file_exportSelection" xml:space="preserve"><value>range dump save</value></data>
+  <data name="Cmd_file_saveSelection" xml:space="preserve"><value>Save selection to a file</value></data>
+  <data name="CmdAlias_file_saveSelection" xml:space="preserve"><value>extract binary cut save range</value></data>
+  <data name="Cmd_workspace_save" xml:space="preserve"><value>Workspace: Save</value></data>
+  <data name="CmdAlias_workspace_save" xml:space="preserve"><value>tabs layout project</value></data>
+  <data name="Cmd_workspace_open" xml:space="preserve"><value>Workspace: Open</value></data>
+  <data name="CmdAlias_workspace_open" xml:space="preserve"><value>tabs layout project</value></data>
+  <data name="Cmd_view_panel_formatIssues" xml:space="preserve"><value>Show or hide the format errors</value></data>
+  <data name="CmdAlias_view_panel_formatIssues" xml:space="preserve"><value>intel hex s-record errors checksum</value></data>
+  <data name="Formats_NotEncoded" xml:space="preserve"><value>This document wasn't decoded from Intel HEX, S-record, or Base64.</value></data>
+  <data name="Format_ihex" xml:space="preserve"><value>Intel HEX</value></data>
+  <data name="Format_srec" xml:space="preserve"><value>Motorola S-record</value></data>
+  <data name="Format_base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="Format_base32" xml:space="preserve"><value>Base32</value></data>
+  <data name="Format_ascii85" xml:space="preserve"><value>Ascii85</value></data>
+  <data name="Format_uu" xml:space="preserve"><value>UUEncode</value></data>
+  <data name="Format_qp" xml:space="preserve"><value>Quoted-Printable</value></data>
+  <data name="Format_url" xml:space="preserve"><value>URL encoding</value></data>
+  <data name="Format_hextext" xml:space="preserve"><value>Hex text</value></data>
+  <data name="Format_dectext" xml:space="preserve"><value>Decimal text</value></data>
+  <data name="Format_c" xml:space="preserve"><value>Source code: C</value></data>
+  <data name="Format_cpp" xml:space="preserve"><value>Source code: C++</value></data>
+  <data name="Format_csharp" xml:space="preserve"><value>Source code: C#</value></data>
+  <data name="Format_java" xml:space="preserve"><value>Source code: Java</value></data>
+  <data name="Format_js" xml:space="preserve"><value>Source code: JavaScript</value></data>
+  <data name="Format_python" xml:space="preserve"><value>Source code: Python</value></data>
+  <data name="Format_rust" xml:space="preserve"><value>Source code: Rust</value></data>
+  <data name="Format_go" xml:space="preserve"><value>Source code: Go</value></data>
+  <data name="Format_pascal" xml:space="preserve"><value>Source code: Pascal</value></data>
+  <data name="Format_vbnet" xml:space="preserve"><value>Source code: VB.NET</value></data>
+  <data name="Format_dumptext" xml:space="preserve"><value>Dump: text</value></data>
+  <data name="Format_html" xml:space="preserve"><value>Dump: HTML</value></data>
+  <data name="Format_rtf" xml:space="preserve"><value>Dump: RTF</value></data>
+  <data name="Format_tex" xml:space="preserve"><value>Dump: TeX</value></data>
+  <data name="Format_markdown" xml:space="preserve"><value>Dump: Markdown</value></data>
+  <data name="Format_ips" xml:space="preserve"><value>IPS patch</value></data>
+  <data name="Format_ips32" xml:space="preserve"><value>IPS32 patch</value></data>
+  <data name="Format_bin" xml:space="preserve"><value>Binary</value></data>
+  <data name="OpenAdv_Title" xml:space="preserve"><value>Open with options</value></data>
+  <data name="OpenAdv_Path" xml:space="preserve"><value>File</value></data>
+  <data name="OpenAdv_Browse" xml:space="preserve"><value>Browse...</value></data>
+  <data name="OpenAdv_ReadOnly" xml:space="preserve"><value>Open read-only</value></data>
+  <data name="OpenAdv_DenyWrites" xml:space="preserve"><value>Don't let other apps write to the file</value></data>
+  <data name="OpenAdv_Range" xml:space="preserve"><value>Open a range</value></data>
+  <data name="OpenAdv_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="OpenAdv_LengthKind" xml:space="preserve"><value>Specify the range by</value></data>
+  <data name="OpenAdv_ByLength" xml:space="preserve"><value>Length</value></data>
+  <data name="OpenAdv_ByEnd" xml:space="preserve"><value>End (inclusive)</value></data>
+  <data name="OpenAdv_Length" xml:space="preserve"><value>Length or end</value></data>
+  <data name="OpenAdv_Resizable" xml:space="preserve"><value>Allow changing the length (insert and delete)</value></data>
+  <data name="OpenAdv_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="OpenAdv_Format_auto" xml:space="preserve"><value>Automatic</value></data>
+  <data name="OpenAdv_Format_bin" xml:space="preserve"><value>Binary as is</value></data>
+  <data name="OpenAdv_Format_ihex" xml:space="preserve"><value>Intel HEX</value></data>
+  <data name="OpenAdv_Format_srec" xml:space="preserve"><value>S-record</value></data>
+  <data name="OpenAdv_Format_base64" xml:space="preserve"><value>Base64</value></data>
+  <data name="OpenAdv_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Range_StartOutside" xml:space="preserve"><value>The start must be inside the file.</value></data>
+  <data name="Range_LengthInvalid" xml:space="preserve"><value>The length must be 1 or more.</value></data>
+  <data name="Range_Truncated" xml:space="preserve"><value>The range goes past the end of the file. It will be shortened to {0}.</value></data>
+  <data name="Range_OverlapTitle" xml:space="preserve"><value>This data is already open</value></data>
+  <data name="Range_OverlapBody" xml:space="preserve"><value>The same data is open in another tab. If you edit the same data in two tabs, the tab you save last wins.</value></data>
+  <data name="Range_OpenReadOnly" xml:space="preserve"><value>Open read-only</value></data>
+  <data name="Range_OpenAnyway" xml:space="preserve"><value>Open anyway</value></data>
+  <data name="Encoded_Decoding" xml:space="preserve"><value>Decoding {0} ({1})</value></data>
+  <data name="Encoded_Decoded" xml:space="preserve"><value>Showing the decoded {0} data.</value></data>
+  <data name="Encoded_OpenAsText" xml:space="preserve"><value>Open as text</value></data>
+  <data name="Encoded_OpenBinary" xml:space="preserve"><value>Open as binary</value></data>
+  <data name="Encoded_Unreadable" xml:space="preserve"><value>Couldn't read the file as {0} (first error: line {1}).</value></data>
+  <data name="Encoded_ErrorLines" xml:space="preserve"><value>{0, plural, one {# line has an error.} other {# lines have errors.}} The document is read-only.</value></data>
+  <data name="Encoded_AllowEdit" xml:space="preserve"><value>Allow editing</value></data>
+  <data name="Encoded_Suggest" xml:space="preserve"><value>This file looks like {0}.</value></data>
+  <data name="Encoded_Reopen" xml:space="preserve"><value>Reopen as {0}</value></data>
+  <data name="Encoded_LossTitle" xml:space="preserve"><value>Some lines will be lost</value></data>
+  <data name="Encoded_LossBody" xml:space="preserve"><value>{0} has lines that aren't data (comments or unknown records). They won't be written when you save.</value></data>
+  <data name="Encoded_LossSave" xml:space="preserve"><value>Save</value></data>
+  <data name="Encoded_TooLarge" xml:space="preserve"><value>The data can't be written as {0}: addresses go beyond {1}. Use Save as to choose another format.</value></data>
+  <data name="FormatSettings_Title" xml:space="preserve"><value>Format settings ({0})</value></data>
+  <data name="FormatIssues_Title" xml:space="preserve"><value>Format errors</value></data>
+  <data name="FormatIssues_None" xml:space="preserve"><value>No errors.</value></data>
+  <data name="Linked_ToolTip" xml:space="preserve"><value>Linked to {0}</value></data>
+  <data name="Linked_Disconnected" xml:space="preserve"><value>The original range was deleted.</value></data>
+  <data name="Transfer_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Transfer_Preview" xml:space="preserve"><value>Preview</value></data>
+  <data name="Import_Title" xml:space="preserve"><value>Import</value></data>
+  <data name="Import_File" xml:space="preserve"><value>File to import</value></data>
+  <data name="Import_Target" xml:space="preserve"><value>Import into</value></data>
+  <data name="Import_ToNew" xml:space="preserve"><value>A new document</value></data>
+  <data name="Import_ToInsert" xml:space="preserve"><value>Insert at the cursor</value></data>
+  <data name="Import_ToOverwrite" xml:space="preserve"><value>Overwrite from the cursor</value></data>
+  <data name="Import_Run" xml:space="preserve"><value>Import</value></data>
+  <data name="Import_Operation" xml:space="preserve"><value>Importing {0}</value></data>
+  <data name="Import_Size" xml:space="preserve"><value>Size after conversion: {0} bytes</value></data>
+  <data name="Import_AddressRange" xml:space="preserve"><value>Address range: {0}–{1}, data {2} bytes, gaps {3} bytes</value></data>
+  <data name="Import_StartAddress" xml:space="preserve"><value>Start address: {0}</value></data>
+  <data name="Import_Header" xml:space="preserve"><value>Header (S0): {0}</value></data>
+  <data name="Import_IssueCounts" xml:space="preserve"><value>Warnings: {0}, errors: {1}</value></data>
+  <data name="Import_PartialPreview" xml:space="preserve"><value>The file is large, so the preview shows only its start.</value></data>
+  <data name="Import_IpsSummary" xml:space="preserve"><value>{0} records ({1}). The patch is applied to the current document.</value></data>
+  <data name="Import_ApplyPatch" xml:space="preserve"><value>Apply patch</value></data>
+  <data name="Import_BrokenPatch" xml:space="preserve"><value>The patch is broken (record {0}, at {1} in the file).</value></data>
+  <data name="Import_PatchChangesLength" xml:space="preserve"><value>This document has a fixed length, so a patch that changes the length can't be applied.</value></data>
+  <data name="Import_GapBookmark" xml:space="preserve"><value>Gap {0}</value></data>
+  <data name="ImportErrors_Title" xml:space="preserve"><value>The file has errors</value></data>
+  <data name="ImportErrors_Body" xml:space="preserve"><value>{0, plural, one {# error was found.} other {# errors were found.}}</value></data>
+  <data name="ImportErrors_More" xml:space="preserve"><value>Only the first 1,000 of {0} are listed.</value></data>
+  <data name="ImportErrors_Ignore" xml:space="preserve"><value>Ignore errors and import</value></data>
+  <data name="ImportIssue_Line" xml:space="preserve"><value>Line {0}, column {1}: {2}</value></data>
+  <data name="ImportIssue_Values" xml:space="preserve"><value>(expected {0}, actual {1})</value></data>
+  <data name="ImportIssue_Syntax" xml:space="preserve"><value>Not a record (wrong start of line)</value></data>
+  <data name="ImportIssue_Checksum" xml:space="preserve"><value>Checksum mismatch</value></data>
+  <data name="ImportIssue_UnknownRecord" xml:space="preserve"><value>Unknown record type</value></data>
+  <data name="ImportIssue_OddDigits" xml:space="preserve"><value>Odd number of hex digits</value></data>
+  <data name="ImportIssue_InvalidCharacter" xml:space="preserve"><value>Invalid character</value></data>
+  <data name="ImportIssue_OutOfRange" xml:space="preserve"><value>Value out of range</value></data>
+  <data name="ImportIssue_Overlap" xml:space="preserve"><value>Overlapping addresses (the later data is used)</value></data>
+  <data name="ImportIssue_AddressOverflow" xml:space="preserve"><value>Address beyond 4 GiB</value></data>
+  <data name="ImportIssue_LengthMismatch" xml:space="preserve"><value>Byte count doesn't match the data</value></data>
+  <data name="ImportIssue_InvalidLength" xml:space="preserve"><value>Invalid length or padding</value></data>
+  <data name="ImportIssue_UnrecognizedLine" xml:space="preserve"><value>Not a dump line</value></data>
+  <data name="ImportIssue_CountMismatch" xml:space="preserve"><value>Record count (S5/S6) doesn't match</value></data>
+  <data name="ImportIssue_MissingEnd" xml:space="preserve"><value>No end-of-file record</value></data>
+  <data name="ImportIssue_DataAfterEnd" xml:space="preserve"><value>Data after the end-of-file record</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>Export</value></data>
+  <data name="Export_SelectionTitle" xml:space="preserve"><value>Export selection</value></data>
+  <data name="Export_Target" xml:space="preserve"><value>Export</value></data>
+  <data name="Export_Whole" xml:space="preserve"><value>Whole document</value></data>
+  <data name="Export_Selection" xml:space="preserve"><value>Selection</value></data>
+  <data name="Export_Range" xml:space="preserve"><value>Offset range</value></data>
+  <data name="Export_File" xml:space="preserve"><value>Save to</value></data>
+  <data name="Export_Run" xml:space="preserve"><value>Export</value></data>
+  <data name="Export_Operation" xml:space="preserve"><value>Exporting {0}</value></data>
+  <data name="Export_EstimatedSize" xml:space="preserve"><value>Estimated output size: {0}</value></data>
+  <data name="Export_Done" xml:space="preserve"><value>Exported to {0}.</value></data>
+  <data name="Export_Failed" xml:space="preserve"><value>Couldn't export: {0}</value></data>
+  <data name="Export_IpsLimit" xml:space="preserve"><value>A change at {0} can't be written as {1}.</value></data>
+  <data name="Export_LargeTitle" xml:space="preserve"><value>The output is large</value></data>
+  <data name="Export_LargeText" xml:space="preserve"><value>The output will be about {0}. Text formats are 2 to 5 times larger than the data.</value></data>
+  <data name="Export_LargeSource" xml:space="preserve"><value>The output will be about {0}. Compilers may have trouble with source files this large.</value></data>
+  <data name="Export_LargeDocument" xml:space="preserve"><value>The output will be about {0}. Browsers and word processors may not open files this large.</value></data>
+  <data name="Export_NewLine" xml:space="preserve"><value>Line break</value></data>
+  <data name="Export_RecordLength" xml:space="preserve"><value>Bytes per record</value></data>
+  <data name="Export_AddressMode" xml:space="preserve"><value>Address format</value></data>
+  <data name="Export_ExecAddress" xml:space="preserve"><value>Execution start address</value></data>
+  <data name="Export_Header" xml:space="preserve"><value>Header (S0)</value></data>
+  <data name="Export_WriteCount" xml:space="preserve"><value>Write the record count (S5/S6)</value></data>
+  <data name="Export_UpperCase" xml:space="preserve"><value>Uppercase hex</value></data>
+  <data name="Export_LineLength" xml:space="preserve"><value>Characters per line (0: no line breaks)</value></data>
+  <data name="Export_UrlSafe" xml:space="preserve"><value>URL-safe</value></data>
+  <data name="Export_Padding" xml:space="preserve"><value>Padding (=)</value></data>
+  <data name="Workspace_FileType" xml:space="preserve"><value>HexEditor workspace</value></data>
+  <data name="Workspace_Saved" xml:space="preserve"><value>Saved the workspace {0}.</value></data>
+  <data name="Workspace_SaveFailed" xml:space="preserve"><value>Couldn't save the workspace: {0}</value></data>
+  <data name="Workspace_OpenFailed" xml:space="preserve"><value>Couldn't open the workspace {0}: {1}</value></data>
+  <data name="Workspace_OpenTitle" xml:space="preserve"><value>Open workspace</value></data>
+  <data name="Workspace_OpenBody" xml:space="preserve"><value>Open the {1, plural, one {# tab} other {# tabs}} of {0}.</value></data>
+  <data name="Workspace_NewWindow" xml:space="preserve"><value>In a new window</value></data>
+  <data name="Workspace_ThisWindow" xml:space="preserve"><value>In this window</value></data>
+  <data name="Transfer_recordLength" xml:space="preserve"><value>Bytes per record</value></data>
+  <data name="Transfer_intelMode" xml:space="preserve"><value>Address format</value></data>
+  <data name="Transfer_srecMode" xml:space="preserve"><value>Address format</value></data>
+  <data name="Transfer_startAddress" xml:space="preserve"><value>Start address (empty: the displayed address)</value></data>
+  <data name="Transfer_execAddress" xml:space="preserve"><value>Execution start address (empty: none or the imported value)</value></data>
+  <data name="Transfer_omitGaps" xml:space="preserve"><value>Omit runs of the gap value</value></data>
+  <data name="Transfer_gapValue" xml:space="preserve"><value>Gap value (hex)</value></data>
+  <data name="Transfer_gapRun" xml:space="preserve"><value>Minimum run to omit (bytes)</value></data>
+  <data name="Transfer_upperCase" xml:space="preserve"><value>Uppercase hex</value></data>
+  <data name="Transfer_header" xml:space="preserve"><value>Header (S0)</value></data>
+  <data name="Transfer_writeCount" xml:space="preserve"><value>Write the record count (S5/S6)</value></data>
+  <data name="Transfer_urlSafe" xml:space="preserve"><value>URL-safe alphabet</value></data>
+  <data name="Transfer_lineLength" xml:space="preserve"><value>Characters per line (0: no line breaks)</value></data>
+  <data name="Transfer_padding" xml:space="preserve"><value>Padding (=)</value></data>
+  <data name="Transfer_delimiters" xml:space="preserve"><value>Add &lt;~ and ~&gt;</value></data>
+  <data name="Transfer_uuName" xml:space="preserve"><value>File name in the begin line</value></data>
+  <data name="Transfer_uuMode" xml:space="preserve"><value>Mode in the begin line</value></data>
+  <data name="Transfer_keepUnreserved" xml:space="preserve"><value>Keep unreserved characters (RFC 3986)</value></data>
+  <data name="Transfer_bytesPerLine" xml:space="preserve"><value>Bytes per line (0: no line breaks)</value></data>
+  <data name="Transfer_separator" xml:space="preserve"><value>Separator</value></data>
+  <data name="Transfer_customSeparator" xml:space="preserve"><value>Custom separator</value></data>
+  <data name="Transfer_prefix" xml:space="preserve"><value>Prefix</value></data>
+  <data name="Transfer_customPrefix" xml:space="preserve"><value>Custom prefix</value></data>
+  <data name="Transfer_offsets" xml:space="preserve"><value>Offset at the start of each line</value></data>
+  <data name="Transfer_valueSize" xml:space="preserve"><value>Bytes per value</value></data>
+  <data name="Transfer_signed" xml:space="preserve"><value>Signed</value></data>
+  <data name="Transfer_bigEndian" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="Transfer_perLine" xml:space="preserve"><value>Values per line</value></data>
+  <data name="Transfer_decSeparator" xml:space="preserve"><value>Separator</value></data>
+  <data name="Transfer_ipsFormat" xml:space="preserve"><value>Patch format</value></data>
+  <data name="Transfer_rle" xml:space="preserve"><value>Use RLE records</value></data>
+  <data name="Transfer_elementSize" xml:space="preserve"><value>Bytes per element</value></data>
+  <data name="Transfer_decimal" xml:space="preserve"><value>Decimal values</value></data>
+  <data name="Transfer_variableName" xml:space="preserve"><value>Variable name</value></data>
+  <data name="Transfer_headerFile" xml:space="preserve"><value>Header file with include guard</value></data>
+  <data name="Transfer_lengthConstant" xml:space="preserve"><value>Add a length constant</value></data>
+  <data name="Transfer_comment" xml:space="preserve"><value>Comment with the file name, range, and date</value></data>
+  <data name="Transfer_bytesPerRow" xml:space="preserve"><value>Bytes per row</value></data>
+  <data name="Transfer_groupSize" xml:space="preserve"><value>Group size (0: none)</value></data>
+  <data name="Transfer_showOffset" xml:space="preserve"><value>Offset column</value></data>
+  <data name="Transfer_showHex" xml:space="preserve"><value>Hex column</value></data>
+  <data name="Transfer_showText" xml:space="preserve"><value>Text column</value></data>
+  <data name="Transfer_radix" xml:space="preserve"><value>Offset radix</value></data>
+  <data name="Transfer_columnSeparator" xml:space="preserve"><value>Column separator</value></data>
+  <data name="Transfer_colors" xml:space="preserve"><value>Colors (modified bytes, bookmarks)</value></data>
+  <data name="Transfer_dark" xml:space="preserve"><value>Dark color scheme</value></data>
+  <data name="Transfer_tooltips" xml:space="preserve"><value>Bookmark names as tooltips</value></data>
+  <data name="Transfer_rtfFont" xml:space="preserve"><value>Font</value></data>
+  <data name="Transfer_rtfSize" xml:space="preserve"><value>Font size (points)</value></data>
+  <data name="Transfer_texEnv" xml:space="preserve"><value>Environment</value></data>
+  <data name="Transfer_table" xml:space="preserve"><value>Table instead of a code block</value></data>
+  <data name="Transfer_newLine" xml:space="preserve"><value>Line break</value></data>
+  <data name="Transfer_encoding" xml:space="preserve"><value>Text encoding</value></data>
+  <data name="Transfer_placement" xml:space="preserve"><value>Address placement</value></data>
+  <data name="Transfer_gapFill" xml:space="preserve"><value>Gap fill value (hex)</value></data>
+  <data name="Transfer_preferLater" xml:space="preserve"><value>Use the later data for duplicate addresses</value></data>
+  <data name="Transfer_gapBookmarks" xml:space="preserve"><value>Add bookmarks to gaps</value></data>
+  <data name="Transfer_ignoreWhitespace" xml:space="preserve"><value>Ignore spaces and line breaks</value></data>
+  <data name="Transfer_allowMissingPadding" xml:space="preserve"><value>Allow missing padding</value></data>
+  <data name="Transfer_plusAsSpace" xml:space="preserve"><value>Treat + as a space</value></data>
+  <data name="Transfer_uuIndex" xml:space="preserve"><value>File number to read</value></data>
+  <data name="Transfer_dumpAuto" xml:space="preserve"><value>Read dumps (remove offset and text columns)</value></data>
+  <data name="Transfer_Choice_auto" xml:space="preserve"><value>Automatic</value></data>
+  <data name="Transfer_Choice_i8" xml:space="preserve"><value>I8HEX (16-bit)</value></data>
+  <data name="Transfer_Choice_i16" xml:space="preserve"><value>I16HEX (segment)</value></data>
+  <data name="Transfer_Choice_i32" xml:space="preserve"><value>I32HEX (linear)</value></data>
+  <data name="Transfer_Choice_s1" xml:space="preserve"><value>S1 (16-bit)</value></data>
+  <data name="Transfer_Choice_s2" xml:space="preserve"><value>S2 (24-bit)</value></data>
+  <data name="Transfer_Choice_s3" xml:space="preserve"><value>S3 (32-bit)</value></data>
+  <data name="Transfer_Choice_space" xml:space="preserve"><value>Space</value></data>
+  <data name="Transfer_Choice_commaSpace" xml:space="preserve"><value>Comma and space</value></data>
+  <data name="Transfer_Choice_none" xml:space="preserve"><value>None</value></data>
+  <data name="Transfer_Choice_custom" xml:space="preserve"><value>Custom</value></data>
+  <data name="Transfer_Choice_0x" xml:space="preserve"><value>0x</value></data>
+  <data name="Transfer_Choice_backslashX" xml:space="preserve"><value>\x</value></data>
+  <data name="Transfer_Choice_dollar" xml:space="preserve"><value>$</value></data>
+  <data name="Transfer_Choice_1" xml:space="preserve"><value>1 byte</value></data>
+  <data name="Transfer_Choice_2" xml:space="preserve"><value>2 bytes</value></data>
+  <data name="Transfer_Choice_4" xml:space="preserve"><value>4 bytes</value></data>
+  <data name="Transfer_Choice_8" xml:space="preserve"><value>8 bytes</value></data>
+  <data name="Transfer_Choice_ips" xml:space="preserve"><value>IPS</value></data>
+  <data name="Transfer_Choice_ips32" xml:space="preserve"><value>IPS32</value></data>
+  <data name="Transfer_Choice_hex" xml:space="preserve"><value>Hexadecimal</value></data>
+  <data name="Transfer_Choice_dec" xml:space="preserve"><value>Decimal</value></data>
+  <data name="Transfer_Choice_oct" xml:space="preserve"><value>Octal</value></data>
+  <data name="Transfer_Choice_bar" xml:space="preserve"><value>Vertical bar</value></data>
+  <data name="Transfer_Choice_verbatim" xml:space="preserve"><value>verbatim</value></data>
+  <data name="Transfer_Choice_alltt" xml:space="preserve"><value>alltt with colors (xcolor)</value></data>
+  <data name="Transfer_Choice_crlf" xml:space="preserve"><value>CRLF</value></data>
+  <data name="Transfer_Choice_lf" xml:space="preserve"><value>LF</value></data>
+  <data name="Transfer_Choice_utf8" xml:space="preserve"><value>UTF-8 (no BOM)</value></data>
+  <data name="Transfer_Choice_utf8bom" xml:space="preserve"><value>UTF-8 (with BOM)</value></data>
+  <data name="Transfer_Choice_ascii" xml:space="preserve"><value>ASCII</value></data>
+  <data name="Transfer_Choice_lowest" xml:space="preserve"><value>Lowest address at offset 0</value></data>
+  <data name="Transfer_Choice_absolute" xml:space="preserve"><value>Address as offset</value></data>
 </root>
