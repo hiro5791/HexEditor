@@ -153,12 +153,9 @@ public sealed class DataOperationRunner
 
                 processor.StartRange();
                 EditContent content = spec.Kind == DataOperationKind.ReverseRange
-                    ? Generate(range.Length, (dest, position) => ReverseRead(snapshot, range, position, dest, stats), operation, ref done)
-                    : Generate(range.Length, (dest, position) =>
-                    {
-                        Read(snapshot, range.Offset + position, dest);
-                        processor.Process(dest, range.Offset + position);
-                    }, operation, ref done);
+                    ? Generate(range.Length, (dest, position) => ReverseRead(snapshot, range, position, dest, stats), null, operation, ref done)
+                    : Generate(range.Length, (dest, position) => Read(snapshot, range.Offset + position, dest),
+                        (dest, position) => processor.Process(dest, range.Offset + position), operation, ref done);
                 results.Add(new RangeReplacement(range, content));
                 stats.TrailingBytes += spec.IsElementWise ? range.Length % spec.EffectiveSize : 0;
             }
@@ -238,40 +235,74 @@ public sealed class DataOperationRunner
 
     // ---- 内部 ----
 
-    /// <summary>範囲の長さの内容を、1 MiB ずつ <paramref name="fill"/> で作る (位置は範囲の先頭からのバイト数)。</summary>
-    private EditContent Generate(long length, Action<Span<byte>, long> fill, LongRunningOperation? operation, ref long done)
+    /// <summary>
+    /// 範囲の長さの内容を、1 MiB ずつ <paramref name="read"/> で読み、<paramref name="process"/> で変換して作る (位置は範囲の先頭からのバイト数)。
+    /// 一時ファイルに書く大きな範囲では、2 つのバッファを交互に使い、今のチャンクを変換・書き込みしている間に次のチャンクを別のスレッドで
+    /// 先読みする (ハッシュの計算 (HashEngine) と同じ。読み込みの待ち時間を演算と重ねる)。読み込みは同時に 1 つだけ。
+    /// </summary>
+    private EditContent Generate(long length, Action<Span<byte>, long> read, Action<Span<byte>, long>? process,
+        LongRunningOperation? operation, ref long done)
     {
         if (length <= InMemoryLimit)
         {
             operation?.CancellationToken.ThrowIfCancellationRequested();
             byte[] data = new byte[length];
-            fill(data, 0);
+            read(data, 0);
+            process?.Invoke(data, 0);
             done += length;
             operation?.Report(done);
             return EditContent.Bytes(data);
         }
 
+        CancellationToken token = operation?.CancellationToken ?? CancellationToken.None;
         var writer = new TempContentWriter(_tempDirectory, length, "dataop");
+        Task? pending = null;
         try
         {
-            byte[] buffer = new byte[ChunkSize];
+            byte[] current = new byte[ChunkSize];
+            byte[] next = new byte[ChunkSize];
+            Task StartRead(byte[] buffer, long position) =>
+                Task.Run(() => read(buffer.AsSpan(0, (int)Math.Min(ChunkSize, length - position)), position), token);
+
             long position = 0;
+            pending = StartRead(current, 0);
             while (position < length)
             {
-                operation?.CancellationToken.ThrowIfCancellationRequested();
+                token.ThrowIfCancellationRequested();
+                pending!.GetAwaiter().GetResult();
+                pending = null;
                 int n = (int)Math.Min(ChunkSize, length - position);
-                Span<byte> chunk = buffer.AsSpan(0, n);
-                fill(chunk, position);
+                long following = position + n;
+                if (following < length)
+                {
+                    pending = StartRead(next, following);
+                }
+
+                Span<byte> chunk = current.AsSpan(0, n);
+                process?.Invoke(chunk, position);
                 writer.Write(chunk);
-                position += n;
+                position = following;
                 done += n;
                 operation?.Report(done);
+                (current, next) = (next, current);
             }
 
             return writer.Complete();
         }
         finally
         {
+            // 先読み中の読み込みを待ってから一時ファイルを片付ける (例外は捨てる。最初の例外はすでに伝わっている)。
+            if (pending is not null)
+            {
+                try
+                {
+                    pending.Wait(CancellationToken.None);
+                }
+                catch (Exception)
+                {
+                }
+            }
+
             writer.Dispose();
         }
     }

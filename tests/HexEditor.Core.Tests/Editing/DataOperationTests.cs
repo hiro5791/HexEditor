@@ -430,6 +430,97 @@ public sealed class DataOperationTests
         Assert.Equal(before, Read(doc.Current, 0x40, 1)[0]);
     }
 
+    [Fact]
+    [Trait(TC, "TC-EDIT-31-03")]
+    public async Task Large_ranges_read_the_next_chunk_ahead_while_the_current_one_is_processed()
+    {
+        // 2 つのバッファで先読みする: 最初のチャンクの進捗を報告する時点で、次のチャンクの読み込みがもう始まっている。
+        int chunk = DataOperationRunner.ChunkSize;
+        var source = new OffsetRecordingSource(new VirtualByteSource(3L * chunk + 24)) { HoldFrom = chunk };
+        source.Hold.Reset();
+        using var doc = new Document(source, Options());
+        DataOperationRunner runner = DataOperationRunner.For(doc);
+        var spec = new DataOperationSpec { Kind = DataOperationKind.Add, Size = 8, Operand = 3, Increment = 1 };
+        TargetRange[] range = [new(0, doc.Length)];
+        bool readAheadSeen = false;
+        var center = new OperationCenter();
+        DataOperationResult result = await center.RunAsync("加算", OperationKind.ModifiesDocument, doc, range[0].Length, op =>
+        {
+            op.ProgressChanged += (_, _) =>
+            {
+                if (!source.Hold.IsSet)
+                {
+                    readAheadSeen = source.MaxRequestedEnd > chunk;
+                    source.Hold.Set();
+                }
+            };
+            return Task.Run(() => runner.Run(doc.Current, range, spec, op));
+        });
+        Assert.True(readAheadSeen);
+
+        // 結果はチャンクの境界をまたいでも、メモリ上で 1 度に計算したものと同じ。
+        byte[] original = ReadAll(doc.Current);
+        TransformApplier.Apply(doc, result.Replacements, "加算");
+        byte[] expected = (byte[])original.Clone();
+        var reference = new DataOperationStats();
+        var processor = new ElementProcessor(spec, reference);
+        processor.StartRange();
+        processor.Process(expected, 0);
+        Assert.True(ReadAll(doc.Current).AsSpan().SequenceEqual(expected));
+    }
+
+    [Fact]
+    [Trait(TC, "TC-EDIT-31-03")]
+    public void A_read_error_in_a_chunk_read_ahead_stops_the_operation_and_removes_the_temporary_file()
+    {
+        int chunk = DataOperationRunner.ChunkSize;
+        var faulty = new FaultyByteSource(new VirtualByteSource(4L * chunk));
+        faulty.AddReadError(2L * chunk + 100, 4);
+        using var doc = new Document(faulty, Options());
+        DataOperationRunner runner = DataOperationRunner.For(doc);
+        var spec = new DataOperationSpec { Kind = DataOperationKind.Xor, Operand = 0x5A };
+        DataReadException e = Assert.Throws<DataReadException>(() => runner.Run(doc.Current, [new TargetRange(0, doc.Length)], spec));
+        Assert.Equal(2L * chunk + 100, e.Offset);
+        Assert.Equal(1, doc.History.Count);
+        Assert.Empty(Directory.Exists(TempFolder(doc)) ? Directory.GetFiles(TempFolder(doc), "dataop-*") : []);
+    }
+
+    /// <summary>読み込みの位置を記録し、<see cref="HoldFrom"/> より後ろの読み込みを <see cref="Hold"/> が開くまで待たせる。</summary>
+    private sealed class OffsetRecordingSource(IByteSource inner) : ByteSourceBase
+    {
+        private long _maxEnd;
+
+        public ManualResetEventSlim Hold { get; } = new(initialState: true);
+
+        public long HoldFrom { get; init; } = long.MaxValue;
+
+        public long MaxRequestedEnd => Interlocked.Read(ref _maxEnd);
+
+        public override string DisplayName => inner.DisplayName;
+
+        public override string Identity => inner.Identity;
+
+        public override long Length => inner.Length;
+
+        public override SourceCapabilities Capabilities => inner.Capabilities;
+
+        public override ReadResult Read(long offset, Span<byte> buffer)
+        {
+            long end = offset + buffer.Length;
+            long seen;
+            while ((seen = Interlocked.Read(ref _maxEnd)) < end && Interlocked.CompareExchange(ref _maxEnd, end, seen) != seen)
+            {
+            }
+
+            if (end > HoldFrom)
+            {
+                Hold.Wait();
+            }
+
+            return inner.Read(offset, buffer);
+        }
+    }
+
     private static string TempFolder(Document doc) => Path.Combine(doc.Options.TempDirectory, doc.Id.ToString("N"));
 
     [Fact]
