@@ -180,6 +180,11 @@ public sealed partial class MainWindow
     {
         string cmd = request["cmd"]?.GetValue<string>() ?? string.Empty;
         await WhenContentLoadedAsync();
+        if (cmd is not ("ping" or "state" or "exit"))
+        {
+            await WhenCurrentViewReadyAsync();
+        }
+
         JsonObject result = cmd switch
         {
             "ping" => new JsonObject { ["pid"] = Environment.ProcessId, ["hooks"] = TestHooks.SettingsPath },
@@ -300,6 +305,20 @@ public sealed partial class MainWindow
     }
 
     private HexView? CurrentView() => _views.FirstOrDefault(v => v.Editor == Editor);
+
+    /// <summary>
+    /// 選んだタブの Hex ビューができるまで待つ (タブを切り替えた直後の命令が、ビューを作る前に届いて失敗しないように)。ビューを
+    /// 作らないタブ (開けなかったファイルなど) もあるので、少し待っても無ければそのまま続ける。
+    /// </summary>
+    private async Task WhenCurrentViewReadyAsync()
+    {
+        long start = System.Diagnostics.Stopwatch.GetTimestamp();
+        while (Vm.Selected is not null && Editor is not null && CurrentView() is null
+            && System.Diagnostics.Stopwatch.GetElapsedTime(start) < TimeSpan.FromSeconds(2))
+        {
+            await Task.Delay(15);
+        }
+    }
 
     private JsonObject TestState()
     {
