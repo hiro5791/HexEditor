@@ -2785,4 +2785,69 @@ Details were written to:
   <data name="Set_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Bytes per line in copied hex</value></data>
   <data name="SetDesc_clipboard_hex_bytesPerLine" xml:space="preserve"><value>Inserts a line break after this many bytes. 0 doesn't add line breaks.</value></data>
   <data name="Clipboard_InAppOnlySize" xml:space="preserve"><value>The selection ({0}) is too large to give to other apps. You can paste it inside HexEditor.</value></data>
+  <data name="Common_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Common_Go" xml:space="preserve"><value>Go</value></data>
+  <data name="Common_Unknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="Command_ProcessOnly" xml:space="preserve"><value>This command is only available for process memory.</value></data>
+  <data name="Panel_MemoryMap_Title" xml:space="preserve"><value>Memory map</value></data>
+  <data name="OpenDevice_ReadOnly" xml:space="preserve"><value>Open read-only</value></data>
+  <data name="OpenDisk_Title" xml:space="preserve"><value>Open disk</value></data>
+  <data name="OpenDisk_DiskName" xml:space="preserve"><value>Disk {0} ({1}, {2})</value></data>
+  <data name="OpenDisk_VolumeName" xml:space="preserve"><value>Volume {0} ({1})</value></data>
+  <data name="OpenDisk_NoLabel" xml:space="preserve"><value>no label</value></data>
+  <data name="OpenDisk_EnumError" xml:space="preserve"><value>The disk list could not be read ({0}).</value></data>
+  <data name="OpenDisk_Error" xml:space="preserve"><value>The device could not be opened ({0}).</value></data>
+  <data name="OpenDisk_AccessDenied" xml:space="preserve"><value>The device is in use and could not be opened.</value></data>
+  <data name="OpenDisk_NoMedia" xml:space="preserve"><value>No media is inserted.</value></data>
+  <data name="OpenDisk_BitLocker" xml:space="preserve"><value>This volume is locked by BitLocker. Unlock it before opening.</value></data>
+  <data name="OpenProcess_Title" xml:space="preserve"><value>Open process memory</value></data>
+  <data name="OpenProcess_Name" xml:space="preserve"><value>{0} (PID {1})</value></data>
+  <data name="OpenProcess_EnumError" xml:space="preserve"><value>The process list could not be read ({0}).</value></data>
+  <data name="OpenProcess_Error" xml:space="preserve"><value>The process could not be opened ({0}).</value></data>
+  <data name="OpenProcess_Protected" xml:space="preserve"><value>This process is protected by Windows and cannot be opened.</value></data>
+  <data name="OpenProcess_NeedsAdmin" xml:space="preserve"><value>This process requires administrator rights to open.</value></data>
+  <data name="OpenProcess_OpenElevated" xml:space="preserve"><value>Open with administrator rights</value></data>
+  <data name="DiskImage_Title" xml:space="preserve"><value>Open as disk image</value></data>
+  <data name="DiskImage_SectorSize" xml:space="preserve"><value>Sector size</value></data>
+  <data name="DiskImage_Custom" xml:space="preserve"><value>Custom</value></data>
+  <data name="DiskImage_CustomSize" xml:space="preserve"><value>Custom sector size (128-65536, power of two)</value></data>
+  <data name="DiskImage_AllowResize" xml:space="preserve"><value>Allow changing the length</value></data>
+  <data name="DiskImage_Remainder" xml:space="preserve"><value>The file length is not a multiple of the sector size ({0} bytes left over).</value></data>
+  <data name="DiskWrite_Title" xml:space="preserve"><value>Write to disk</value></data>
+  <data name="DiskWrite_Body" xml:space="preserve"><value>Write to {0}: {1} place(s), {2} bytes. Affected volumes: {3}. This may damage the disk's data or file system. If the write is interrupted, it may not be reversible.</value></data>
+  <data name="DiskWrite_NoVolumes" xml:space="preserve"><value>none</value></data>
+  <data name="DiskWrite_Write" xml:space="preserve"><value>Write to disk</value></data>
+  <data name="DiskWrite_Done" xml:space="preserve"><value>Wrote {0} bytes to the disk.</value></data>
+  <data name="DiskWrite_SystemVolume" xml:space="preserve"><value>Cannot write to the volume {0} because Windows is using it.</value></data>
+  <data name="DiskWrite_Dismount" xml:space="preserve"><value>The volume {0} is in use and cannot be locked. Forcibly dismounting it may lose data in open files.</value></data>
+  <data name="DiskWrite_DismountConfirm" xml:space="preserve"><value>Dismount and write</value></data>
+  <data name="DiskWrite_LockFailed" xml:space="preserve"><value>The write was cancelled because the volume {0} could not be locked.</value></data>
+  <data name="DiskWrite_RolledBack" xml:space="preserve"><value>An error occurred during the write, so the disk was restored to its state before the write ({0}).</value></data>
+  <data name="DiskWrite_Partial" xml:space="preserve"><value>Part of the disk has been overwritten. It can be recovered on the next launch ({0}).</value></data>
+  <data name="ProcessWrite_Title" xml:space="preserve"><value>Write to process memory</value></data>
+  <data name="ProcessWrite_Body" xml:space="preserve"><value>Write {2} bytes to the memory of process {0} (PID {1}). The process may crash.</value></data>
+  <data name="ProcessWrite_Write" xml:space="preserve"><value>Write</value></data>
+  <data name="ProcessWrite_Protected" xml:space="preserve"><value>The target page is read-only ({0}). Make it temporarily writable and write?</value></data>
+  <data name="ProcessWrite_ChangeProtect" xml:space="preserve"><value>Change protection temporarily and write</value></data>
+  <data name="ProcessWrite_Failed" xml:space="preserve"><value>{0} range(s) could not be written.</value></data>
+  <data name="ProcessWrite_ImmediateOn" xml:space="preserve"><value>Immediate write is on.</value></data>
+  <data name="ProcessWrite_ImmediateOff" xml:space="preserve"><value>Immediate write is off.</value></data>
+  <data name="GoToSector_Title" xml:space="preserve"><value>Go to sector</value></data>
+  <data name="GoToSector_Label" xml:space="preserve"><value>Sector number</value></data>
+  <data name="AdminGuide_Title" xml:space="preserve"><value>Administrator rights are required</value></data>
+  <data name="AdminGuide_Disk" xml:space="preserve"><value>Reading a physical disk or an internal disk's volume directly requires Windows administrator rights.</value></data>
+  <data name="AdminGuide_Process" xml:space="preserve"><value>This process requires administrator rights to open.</value></data>
+  <data name="AdminGuide_Steps" xml:space="preserve"><value>To run as administrator: 1. Close HexEditor. 2. Right-click HexEditor in the Start menu or Explorer. 3. Choose "Run as administrator".</value></data>
+  <data name="AdminGuide_UsbAlternative" xml:space="preserve"><value>Removable USB storage volumes can be opened without administrator rights.</value></data>
+  <data name="AdminGuide_StoreDownload" xml:space="preserve"><value>The installer and portable editions can use administrator operations by prompting for rights only when needed.</value></data>
+  <data name="AdminGuide_Restart" xml:space="preserve"><value>Restart as administrator</value></data>
+  <data name="AdminGuide_Declined" xml:space="preserve"><value>The disk could not be opened because administrator rights were not granted.</value></data>
+  <data name="Status_Sector" xml:space="preserve"><value>Sector {0}</value></data>
+  <data name="Status_ImmediateWrite" xml:space="preserve"><value>Immediate write</value></data>
+  <data name="Status_HelperRunning" xml:space="preserve"><value>Administrator helper process is running</value></data>
+  <data name="MemoryMap_RegionsTab" xml:space="preserve"><value>Regions</value></data>
+  <data name="MemoryMap_ModulesTab" xml:space="preserve"><value>Modules</value></data>
+  <data name="MemoryMap_NoProcess" xml:space="preserve"><value>Open a process to see its memory map.</value></data>
+  <data name="MemoryMap_NoAccess" xml:space="preserve"><value>No access</value></data>
+  <data name="MemoryMap_Unallocated" xml:space="preserve"><value>Unallocated</value></data>
 </root>

@@ -132,6 +132,7 @@ public sealed partial class MainWindow
         Commands.Register("file.exit", () => Exit_Click(this, e));
         RegisterFilesCommands();
         RegisterTabCommands();
+        RegisterDeviceCommands();
 
         // ---- 編集 ----
         Commands.Register("edit.undo", () => Undo_Click(this, e),

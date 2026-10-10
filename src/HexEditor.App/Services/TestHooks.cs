@@ -169,6 +169,14 @@ public static class TestHooks
             Core.Saving.SystemVolumeInfoProvider.Instance.GetVolume(folder) is { } volume ? volume with { AvailableFreeSpace = free } : null;
     }
 
+    /// <summary>偽のディスク (ENG-29 の UI テスト)。直接の経路は管理者権限なしを再現し、昇格の経路は管理者権限ありを再現する。</summary>
+    public static FakeDeviceAccessPair? FakeDevices =>
+        Active && Settings.FakeDevices is { Length: > 0 } path ? FakeDeviceAccessPair.Load(path) : null;
+
+    /// <summary>偽のプロセス (ENG-32 の UI テスト)。</summary>
+    public static FakeProcessAccessPair? FakeProcesses =>
+        Active && Settings.FakeProcesses is { Length: > 0 } path ? FakeProcessAccessPair.Load(path) : null;
+
     /// <summary>
     /// 単一インスタンスのキー (UI-15)。--test-profile を指定したときは、設定フォルダごとに別のインスタンスにする
     /// (同じ実行ファイルの普段使いのインスタンスや、並行して走るほかのテストに転送しないため)。
@@ -543,6 +551,85 @@ public static class TestHooks
 
 /// <summary>テスト用に起こした例外。</summary>
 public sealed class TestHookException(string place) : Exception($"Unhandled exception raised by the test hooks ({place}).");
+
+/// <summary>偽のディスクの「直接」(管理者権限なし) と「昇格」(管理者権限あり) の 2 つのアクセス手段。同じディスクの内容を共有する。</summary>
+public sealed class FakeDeviceAccessPair
+{
+    private static readonly Dictionary<string, FakeDeviceAccessPair> Cache = [];
+
+    private FakeDeviceAccessPair(Core.Devices.FakeDeviceAccess shared)
+    {
+        Elevated = shared;
+        Direct = new NonAdminDevices(shared);
+    }
+
+    public Core.Devices.IDeviceAccess Direct { get; }
+
+    public Core.Devices.IDeviceAccess Elevated { get; }
+
+    public static FakeDeviceAccessPair Load(string path)
+    {
+        lock (Cache)
+        {
+            if (!Cache.TryGetValue(path, out FakeDeviceAccessPair? pair))
+            {
+                var spec = Core.Devices.FakeDeviceSpec.Parse(File.ReadAllText(path));
+                pair = new FakeDeviceAccessPair(new Core.Devices.FakeDeviceAccess(spec, elevated: true));
+                Cache[path] = pair;
+            }
+
+            return pair;
+        }
+    }
+
+    /// <summary>管理者権限なしの経路: 管理者権限が要るデバイスはアクセス拒否にし、それ以外は共有のアクセスに委ねる。</summary>
+    private sealed class NonAdminDevices(Core.Devices.FakeDeviceAccess shared) : Core.Devices.IDeviceAccess
+    {
+        public Core.Devices.DeviceCatalog Enumerate() => shared.Enumerate();
+
+        public Core.Devices.IDeviceHandle Open(string path, bool writable)
+        {
+            bool requiresAdmin = shared.Spec.Disks.Any(d => string.Equals(Core.Devices.DevicePath.PhysicalDrive(d.Number), path, StringComparison.OrdinalIgnoreCase) && d.RequiresAdmin)
+                || shared.Spec.Volumes.Any(v => string.Equals(v.Path, path, StringComparison.OrdinalIgnoreCase) && v.RequiresAdmin);
+            if (requiresAdmin)
+            {
+                throw Core.Devices.DeviceException.FromError(Core.Devices.Win32Errors.AccessDenied, path);
+            }
+
+            return shared.Open(path, writable);
+        }
+    }
+}
+
+/// <summary>偽のプロセスの「直接」と「昇格」の 2 つのアクセス手段。</summary>
+public sealed class FakeProcessAccessPair
+{
+    private static readonly Dictionary<string, FakeProcessAccessPair> Cache = [];
+
+    private FakeProcessAccessPair(Core.Processes.FakeProcessListSpec spec)
+    {
+        Direct = new Core.Processes.FakeProcessAccess(spec, elevated: false);
+        Elevated = new Core.Processes.FakeProcessAccess(spec, elevated: true);
+    }
+
+    public Core.Processes.IProcessAccess Direct { get; }
+
+    public Core.Processes.IProcessAccess Elevated { get; }
+
+    public static FakeProcessAccessPair Load(string path)
+    {
+        lock (Cache)
+        {
+            if (!Cache.TryGetValue(path, out FakeProcessAccessPair? pair))
+            {
+                pair = new FakeProcessAccessPair(Core.Processes.FakeProcessListSpec.Parse(File.ReadAllText(path)));
+                Cache[path] = pair;
+            }
+
+            return pair;
+        }
+    }
+}
 
 #else
 

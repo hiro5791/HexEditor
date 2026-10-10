@@ -466,6 +466,8 @@
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.Selected.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.Selected.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <Button x:Name="StatusSize" AutomationProperties.AutomationId="Status_Size" Click="StatusSize_Click" Content="{x:Bind Vm.Selected.SizeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="size" />
+                <Button x:Name="StatusSector" AutomationProperties.AutomationId="Status_Sector" Content="{x:Bind Vm.Selected.SectorText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="sector" />
+                <Button x:Name="StatusImmediate" AutomationProperties.AutomationId="Status_ImmediateWrite" Content="{x:Bind Vm.Selected.ImmediateWriteText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="immediate" />
                 <Button x:Name="StatusOperations" AutomationProperties.AutomationId="Status_Operations" Style="{StaticResource StatusItemStyle}" Tag="operations">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock x:Name="StatusOperationsText" VerticalAlignment="Center" />
@@ -476,6 +478,15 @@
                             <controls:ProcessingCenter x:Name="ProcessingCenter" Width="420" />
                         </Flyout>
                     </Button.Flyout>
+                </Button>
+                <Button
+                    x:Name="StatusHelperShield"
+                    AutomationProperties.AutomationId="Status_HelperShield"
+                    IsTabStop="False"
+                    Style="{StaticResource StatusItemStyle}"
+                    Tag="helper"
+                    Visibility="Collapsed">
+                    <FontIcon FontSize="14" Glyph="&#xE1A7;" />
                 </Button>
                 <Button
                     x:Name="NotificationHistoryButton"

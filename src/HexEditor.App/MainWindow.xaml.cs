@@ -291,6 +291,17 @@ public sealed partial class MainWindow : Window
     /// <summary>保存する。保存しなかった (キャンセル・失敗) 場合は false。</summary>
     private async Task<bool> SaveAsync(DocumentViewModel doc, bool saveAs)
     {
+        // ディスク・プロセスメモリへの書き込みは専用の経路 (ENG-30、ENG-34)。「名前を付けて保存」はデバイスには出さない。
+        if (!saveAs && doc.IsDevice)
+        {
+            return await SaveDeviceAsync(doc);
+        }
+
+        if (!saveAs && doc.IsProcessMemory)
+        {
+            return await SaveProcessAsync(doc);
+        }
+
         string? path = doc.FilePath;
 
         // 変更のない文書を同じファイルに保存しても、ファイルには触れない (ENG-20。更新日時を変えない)。

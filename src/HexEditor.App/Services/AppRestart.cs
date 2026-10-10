@@ -74,6 +74,38 @@ public static class AppRestart
         return false;
     }
 
+    /// <summary>
+    /// 管理者として起動し直す (ENG-28 の仕様 12 の 7)。<c>HexEditor.exe</c> を <c>runas</c> で起動する。UAC で拒否されると
+    /// <see cref="System.ComponentModel.Win32Exception"/> になる (呼び出し側は終了せず続ける)。起動できたら true。
+    /// </summary>
+    public static bool RestartAsAdministrator()
+    {
+        string exe = Environment.ProcessPath ?? throw new InvalidOperationException("The executable path is unknown.");
+        IReadOnlyList<string> args = SessionArguments(Environment.GetCommandLineArgs().Skip(1).ToList());
+        var info = new System.Diagnostics.ProcessStartInfo(exe)
+        {
+            UseShellExecute = true,
+            Verb = "runas",
+            WorkingDirectory = AppContext.BaseDirectory,
+        };
+        foreach (string a in args)
+        {
+            info.ArgumentList.Add(a);
+        }
+
+        App.Settings.Flush();
+        Microsoft.Windows.AppLifecycle.AppInstance.GetCurrent().UnregisterKey();
+        try
+        {
+            return System.Diagnostics.Process.Start(info) is not null;
+        }
+        catch
+        {
+            // 失敗したら単一インスタンスのキーを登録し直さないが、このプロセスは続く。
+            throw;
+        }
+    }
+
     private static bool IsValueOption(string a) => a is "--ui-lang" or "--test-profile" or "--test-hooks" or "--offset" or "-g" or "--select" or "--encoding"
         or "--template" or "--disk" or "--volume" or "--process" or "--run" or "--plugin-dev" or "--pseudo-locale";
 
