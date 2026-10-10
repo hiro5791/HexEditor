@@ -631,4 +631,63 @@ public sealed class ViewPhase2Tests
             Assert.InRange(top, page, page + 4096 - render["visibleRows"]!.GetValue<int>() * 16);
         }
     });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-33-03")]
+    public Task Page_view_scroll_bar_moves_in_page_units() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-33 の仕様 4: スクロールバーは区切り単位で動き、区切りの行数が表示行数より多ければその中でスクロールする。
+        AppSession app = await OpenAsync(ctx, "TD-SEQ-1M");
+        await MenuAsync(app, "Command_ViewSeparatorPage");
+        await MenuAsync(app, "Command_ViewPageView");
+        int v = (await app.DocumentAsync())["visibleRows"]!.GetValue<int>();
+        long steps = Math.Max(1, 256 - v + 1);
+        FlaUI.Core.Patterns.IRangeValuePattern bar = (await app.WaitForAsync("HexViewVerticalScrollBar")).Patterns.RangeValue.Pattern;
+        Assert.Equal(256 * steps - 1, (long)bar.Maximum.Value);
+
+        await app.SendAsync("scrollBar", new JsonObject { ["type"] = "ThumbTrack", ["value"] = 3 * steps });
+        await app.SendAsync("scrollBar", new JsonObject { ["type"] = "EndScroll", ["value"] = 3 * steps });
+        await app.IdleAsync();
+        Assert.Equal(3 * 256, await TopRowAsync(app));
+        long[] starts = [.. (await app.RenderAsync())["rows"]!.AsArray().Select(r => r!["rowStart"]!.GetValue<long>())];
+        Assert.All(starts, s => Assert.Equal(3, s / 4096));
+        Assert.Equal(3 * steps, (long)bar.Value.Value);
+
+        // ホイールも区切りの中でスクロールする (区切りの外の行を出さない)。
+        await WheelAsync(app, -120, count: 200);
+        await app.IdleAsync();
+        long top = await TopRowAsync(app);
+        starts = [.. (await app.RenderAsync())["rows"]!.AsArray().Select(r => r!["rowStart"]!.GetValue<long>())];
+        Assert.Single(starts.Select(s => s / 4096).Distinct());
+        Assert.True(top > 3 * 256);
+    });
+
+    // ---- VIEW-32 ----
+
+    [Fact]
+    public Task Go_to_sector_opens_the_go_to_bar_in_sectors() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-32 の仕様 4・5: 「セクタへ移動」は単位「セクタ」の移動バーを開き、セクタの先頭行を一番上に表示する。
+        AppSession app = await OpenAsync(ctx, "TD-SEQ-1M");
+        await ExecuteAsync(app, "go.toSector");
+        Assert.True((await app.StateAsync())["goToBarVisible"]!.GetValue<bool>());
+        await app.UiaSetValueAsync("GoTo_Input", "3");
+        Assert.Equal("= 0x600 (1,536)", await app.UiaNameAsync("GoTo_Interpretation"));
+        await app.SendAsync("goToKey", new JsonObject { ["key"] = "Enter" });
+        await app.IdleAsync();
+        Assert.Equal(0x600, await CursorAsync(app));
+        Assert.Equal(0x60, await TopRowAsync(app));
+    });
+
+    [Fact]
+    public Task Sector_number_is_shown_with_the_page_part() => UiTestContext.RunAsync(async ctx =>
+    {
+        // VIEW-32 の仕様 6: オフセットの形式がセクタなら、区切り線 (ページ) の表示とは別にセクタ番号を出す (VIEW-40)。
+        AppSession app = await OpenAsync(ctx, "TD-SEQ-1M");
+        await MenuAsync(app, "Command_ViewSeparatorPage");
+        await MenuAsync(app, "Command_ViewRadixSector");
+        await app.GoToAsync(0x2FF0);
+        await app.IdleAsync();
+        Assert.Equal("Sector 23  Page 2 / 256", await app.UiaNameAsync("Status_Position"));
+    });
 }

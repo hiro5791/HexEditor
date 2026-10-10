@@ -672,9 +672,28 @@ public sealed partial class HexView
             // 1 ノッチで Windows の設定の行数 (仕様 1)。120 未満の入力はピクセルとして蓄積する (仕様 2)。
             uint lines = WheelScrollLines();
             double rowsPerNotch = lines == WheelPageScroll ? Math.Max(1, _editor.VisibleRows - 1) : lines;
+            if (_editor.VisibleSectionRows is not null)
+            {
+                // ページ単位で表示: 区切りの中でスクロールし、端でさらに回すと隣の区切りへ移る (VIEW-33 の仕様 4)。行内のずれは使わず、
+                // 1 行に満たない入力は蓄積する。
+                _subRowOffset = 0;
+                _pageWheelRows += -delta / 120.0 * rowsPerNotch;
+                long rows = (long)Math.Truncate(_pageWheelRows);
+                if (rows != 0)
+                {
+                    _pageWheelRows -= rows;
+                    _editor.ScrollRows(rows);
+                }
+
+                return;
+            }
+
             ScrollByPixels(-delta / 120.0 * rowsPerNotch * _rowHeight);
         }
     }
+
+    /// <summary>ページ単位で表示しているときの、1 行に満たないホイールの入力の蓄積 (行)。</summary>
+    private double _pageWheelRows;
 
     /// <summary>ピクセル単位で縦にスクロールする。一番上の行 (long) と行内のずれを分けて持つ (VIEW-28 の仕様 2)。</summary>
     private void ScrollByPixels(double pixels)
@@ -823,8 +842,15 @@ public sealed partial class HexView
 
     private void ScrollToBarValue(double newValue)
     {
-        long maxTop = _editor!.Layout.MaxTopRow(_editor.VisibleRows);
         long value = (long)Math.Round(newValue);
+        if (_editor!.PageScrollPosition is { } page)
+        {
+            // ページ単位で表示: 区切り単位の位置 (VIEW-33 の仕様 4)。
+            _editor.ScrollToPagePosition(value >= ScrollMapping.Scale(page.MaxPosition) ? page.MaxPosition : ScrollMapping.ToRow(value, page.MaxPosition));
+            return;
+        }
+
+        long maxTop = _editor.Layout.MaxTopRow(_editor.VisibleRows);
         long row = value >= ScrollMapping.Scale(maxTop) ? maxTop : ScrollMapping.ToRow(value, maxTop);
         _editor.ScrollToRow(row);
     }

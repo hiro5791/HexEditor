@@ -121,6 +121,9 @@ public sealed class MinimapComputer : IDisposable
     // 実行中の「正確に計算」(同じドキュメントの古い内容の計算は、新しく始めるときに止める)。
     private (DocumentSnapshot Snapshot, long First, long RowBytes, int Count, CancellationTokenSource Cts)? _exactRunning;
 
+    // 利用者がキャンセルした「正確に計算」の割り当て (同じ内容・割り当てでは自動で始め直さない)。
+    private (DocumentSnapshot Snapshot, long First, long RowBytes, int Count)? _exactDeclined;
+
     // 表示内容「バイトテーマ」のときの、ピクセル行ごとのバイト (「周辺」で 1 ピクセル行 = 1 行。ピクセル行の数 × 1 行のバイト数だけ)。
     private byte[]? _bytes;
     private bool _keepBytes;
@@ -199,7 +202,9 @@ public sealed class MinimapComputer : IDisposable
             {
                 return _snapshot is not null && _rows.Length > 0 && !IsExact && _rowBytes > SampleSize
                     && !(_exactRunning is { } r && ReferenceEquals(r.Snapshot, _snapshot) && r.First == _first && r.RowBytes == _rowBytes
-                        && r.Count == _rows.Length);
+                        && r.Count == _rows.Length)
+                    && !(_exactDeclined is { } d && ReferenceEquals(d.Snapshot, _snapshot) && d.First == _first && d.RowBytes == _rowBytes
+                        && d.Count == _rows.Length);
             }
         }
     }
@@ -408,6 +413,16 @@ public sealed class MinimapComputer : IDisposable
 
                 return Task.CompletedTask;
             }).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (!cts.IsCancellationRequested)
+        {
+            // 利用者のキャンセル: 同じ内容・割り当てでは自動で始め直さない (処理センターでのキャンセルを尊重する)。
+            lock (_gate)
+            {
+                _exactDeclined = (snapshot, first, rowBytes, count);
+            }
+
+            throw;
         }
         finally
         {
