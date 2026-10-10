@@ -16,59 +16,66 @@ internal static class SimpleComparer
 
     public static void Run(CompareOptions options, CompareResult result, CancellationToken cancellationToken, Action<long>? progress, int chunkSize = ChunkSize)
     {
-        CompareRange left = result.Left;
-        CompareRange right = result.Right;
         var sink = new DiffSink(result, options.MergeGap);
-        int unit = options.Unit;
-        long common = Math.Min(left.Length, right.Length);
-        chunkSize = (int)Math.Max(8, Math.Min(chunkSize, (common + 7) / 8 * 8));
-        byte[] a = new byte[chunkSize];
-        byte[] b = new byte[chunkSize];
-        long pos = 0;
         try
         {
-            while (pos < common)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                int n = (int)Math.Min(chunkSize, common - pos);
-                long at = pos;
-                (ReadResult ra, ReadResult rb) = ReadBoth(left, left.Start + at, a, right, right.Start + at, b, n);
-
-                // 読めなかった範囲 (左右の和。この塊の中の相対位置)。短く返った分も読めなかった扱いにする。
-                List<(int Start, int End)> bad = Unreadable(ra, left.Start + at, n);
-                bad.AddRange(Unreadable(rb, right.Start + at, n));
-                bad = Normalize(bad);
-
-                int s = 0;
-                foreach ((int bs, int be) in bad)
-                {
-                    CompareSegment(a, b, s, bs, pos, unit, left, right, sink, result);
-                    sink.Add(new DiffRange(DiffKind.Unreadable, left.Start + pos + bs, be - bs, right.Start + pos + bs, be - bs), 0);
-                    s = be;
-                }
-
-                CompareSegment(a, b, s, n, pos, unit, left, right, sink, result);
-                pos += n;
-                result.ReportPosition(pos, pos);
-                progress?.Invoke(pos);
-            }
-
-            // 長さが違う場合、短い方の末尾より後ろを 1 つの差分にする (仕様 4)。
-            if (left.Length > common)
-            {
-                sink.Add(new DiffRange(DiffKind.Deleted, left.Start + common, left.Length - common, right.Start + common, 0), left.Length - common, mergeable: false);
-            }
-            else if (right.Length > common)
-            {
-                sink.Add(new DiffRange(DiffKind.Inserted, left.Start + common, 0, right.Start + common, right.Length - common), right.Length - common, mergeable: false);
-            }
-
-            result.ReportPosition(left.Length, right.Length);
+            RunRange(result.Left, result.Right, options.Unit, sink, result, cancellationToken, progress, result.ReportPosition, chunkSize);
         }
         finally
         {
             sink.Flush();
         }
+    }
+
+    /// <summary>
+    /// <paramref name="left"/> と <paramref name="right"/> の範囲を同じ相対位置どうしで比べ、差分を <paramref name="sink"/> に加える。
+    /// 長さが違えば、短い方の末尾より後ろを 1 つの差分 (左のみ / 右のみ) にする。<paramref name="position"/> は比べ終えた相対位置。
+    /// </summary>
+    internal static void RunRange(CompareRange left, CompareRange right, int unit, DiffSink sink, CompareResult result, CancellationToken cancellationToken,
+        Action<long>? progress, Action<long, long>? position, int chunkSize = ChunkSize)
+    {
+        long common = Math.Min(left.Length, right.Length);
+        chunkSize = (int)Math.Max(8, Math.Min(chunkSize, (common + 7) / 8 * 8));
+        byte[] a = new byte[chunkSize];
+        byte[] b = new byte[chunkSize];
+        long pos = 0;
+        while (pos < common)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            int n = (int)Math.Min(chunkSize, common - pos);
+            long at = pos;
+            (ReadResult ra, ReadResult rb) = ReadBoth(left, left.Start + at, a, right, right.Start + at, b, n);
+
+            // 読めなかった範囲 (左右の和。この塊の中の相対位置)。短く返った分も読めなかった扱いにする。
+            List<(int Start, int End)> bad = Unreadable(ra, left.Start + at, n);
+            bad.AddRange(Unreadable(rb, right.Start + at, n));
+            bad = Normalize(bad);
+
+            int s = 0;
+            foreach ((int bs, int be) in bad)
+            {
+                CompareSegment(a, b, s, bs, pos, unit, left, right, sink, result);
+                sink.Add(new DiffRange(DiffKind.Unreadable, left.Start + pos + bs, be - bs, right.Start + pos + bs, be - bs), 0);
+                s = be;
+            }
+
+            CompareSegment(a, b, s, n, pos, unit, left, right, sink, result);
+            pos += n;
+            position?.Invoke(pos, pos);
+            progress?.Invoke(pos);
+        }
+
+        // 長さが違う場合、短い方の末尾より後ろを 1 つの差分にする (仕様 4)。
+        if (left.Length > common)
+        {
+            sink.Add(new DiffRange(DiffKind.Deleted, left.Start + common, left.Length - common, right.Start + common, 0), left.Length - common, mergeable: false);
+        }
+        else if (right.Length > common)
+        {
+            sink.Add(new DiffRange(DiffKind.Inserted, left.Start + common, 0, right.Start + common, right.Length - common), right.Length - common, mergeable: false);
+        }
+
+        position?.Invoke(left.Length, right.Length);
     }
 
     /// <summary>塊の中の [from, to) を比べる。</summary>

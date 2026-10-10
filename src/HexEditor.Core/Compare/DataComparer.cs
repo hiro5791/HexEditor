@@ -20,7 +20,12 @@ public static class DataComparer
         long started = Stopwatch.GetTimestamp();
         try
         {
-            if (options.Method == CompareMethod.Simple)
+            if (RegionComparer.CanCompare(result))
+            {
+                // プロセスメモリのスナップショットどうし・スナップショットと現在のメモリ (ANA-09 の仕様 5・6)。
+                RegionComparer.Run(options, result, cancellationToken, progress);
+            }
+            else if (options.Method == CompareMethod.Simple)
             {
                 SimpleComparer.Run(options, result, cancellationToken, progress);
             }

@@ -316,6 +316,12 @@ public sealed partial class MainWindow : Window
             return await SaveProcessAsync(doc);
         }
 
+        // プロセスのスナップショットのタブは .hexsnap を書き出す (アドレス空間全体をバイト列にしない。ANA-09 の仕様 1)。
+        if (doc.Snapshot is { } snapshot)
+        {
+            return await SaveSnapshotAsAsync(doc, snapshot);
+        }
+
         // 連動ビューの保存は親のドキュメントを保存する (ENG-39 の仕様 1)。
         if (doc.LinkParent is { } linkParent)
         {

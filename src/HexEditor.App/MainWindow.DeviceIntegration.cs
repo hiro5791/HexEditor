@@ -224,6 +224,13 @@ public sealed partial class MainWindow
         if (doc.IsProcessMemory)
         {
             yield return null;
+
+            // 「スナップショットを作成」(ANA-09 の「呼び出し」)。
+            yield return new TabMenuEntry("TabMenu_CreateSnapshot", Loc.Get("Tab_CreateSnapshot"), !doc.Document.IsDisposed, () =>
+            {
+                Vm.Selected = doc;
+                _ = Commands.ExecuteAsync("compare.createSnapshot");
+            });
             yield return new TabMenuEntry("TabMenu_ImmediateWrite", Loc.Get("Tab_ImmediateWrite"), !doc.Document.IsDisposed, () =>
             {
                 Vm.Selected = doc;

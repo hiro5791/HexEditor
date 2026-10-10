@@ -216,13 +216,17 @@ public sealed partial class DiffListPanel : UserControl
             DiffRange d = r.Diffs[index];
             Grid visual = TakeRow(used++);
             Canvas.SetTop(visual, i * RowHeight);
+            // 領域ごとの比較 (ANA-09 の仕様 5・7): 片方にしかない領域は「領域の追加」「領域の削除」、位置には領域名を添える。
+            string kind = r.ByRegion && RegionComparer.ChangeOf(r, d) is { } change
+                ? Loc.Get(change == RegionChange.Added ? "Compare_Kind_RegionAdded" : "Compare_Kind_RegionRemoved")
+                : CompareSessionViewModel.KindName(d.Kind);
             string[] cells =
             [
                 (index + 1).ToString("N0", CultureInfo.CurrentCulture),
-                CompareSessionViewModel.KindName(d.Kind),
-                Hex(d.LeftOffset),
+                kind,
+                WithRegion(r, left: true, d.LeftOffset),
                 d.LeftLength.ToString("N0", CultureInfo.CurrentCulture),
-                Hex(d.RightOffset),
+                WithRegion(r, left: false, d.RightOffset),
                 d.RightLength.ToString("N0", CultureInfo.CurrentCulture),
                 DiffExport.PreviewHex(r.Left, d.LeftOffset, d.LeftLength),
                 DiffExport.PreviewHex(r.Right, d.RightOffset, d.RightLength),
@@ -676,5 +680,18 @@ public sealed partial class DiffListPanel : UserControl
         Grid.SetRow(SideArea, narrow ? 1 : 0);
         SideArea.BorderThickness = narrow ? new Thickness(0, 1, 0, 0) : new Thickness(1, 0, 0, 0);
         SideArea.MaxHeight = narrow ? 200 : double.PositiveInfinity;
+    }
+
+    /// <summary>位置の表記。領域ごとの比較では「仮想アドレス 領域名」(ANA-09 の仕様 7)。</summary>
+    private static string WithRegion(CompareResult r, bool left, long offset)
+    {
+        if (!r.ByRegion)
+        {
+            return Hex(offset);
+        }
+
+        ICompareData data = left ? r.Left.Data : r.Right.Data;
+        string name = CompareData.RegionsOf(data) is { } regions ? RegionComparer.RegionName(regions, offset, RegionComparer.ModulesOf(data)) : string.Empty;
+        return name.Length == 0 ? Hex(offset) : Hex(offset) + " " + name;
     }
 }

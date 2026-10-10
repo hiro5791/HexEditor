@@ -5184,4 +5184,24 @@
   <data name="Session_DiskHelperBody" xml:space="preserve"><value>「{0}」を開き直すには管理者権限の補助プロセスが必要です。Windows が許可を求めます。</value></data>
   <data name="Session_DiskHelperOpen" xml:space="preserve"><value>開く</value></data>
   <data name="Encoded_DecodingTab" xml:space="preserve"><value>{0} (デコード中...)</value></data>
+  <data name="Menu_Analysis_CreateSnapshot.Text" xml:space="preserve"><value>プロセスのスナップショットを作成(P)...</value></data>
+  <data name="Menu_Analysis_CreateSnapshot.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Analysis_CompareSnapshots.Text" xml:space="preserve"><value>スナップショットを比較(N)...</value></data>
+  <data name="Menu_Analysis_CompareSnapshots.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Cmd_compare_createSnapshot" xml:space="preserve"><value>比較: スナップショットを作成</value></data>
+  <data name="CmdAlias_compare_createSnapshot" xml:space="preserve"><value>ひかく すなっぷしょっとをさくせい ぷろせす</value></data>
+  <data name="Cmd_compare_snapshots" xml:space="preserve"><value>比較: スナップショットを比較</value></data>
+  <data name="CmdAlias_compare_snapshots" xml:space="preserve"><value>ひかく すなっぷしょっとをひかく ぷろせす</value></data>
+  <data name="Snapshot_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Snapshot_CreateTitle" xml:space="preserve"><value>プロセスのスナップショットを作成</value></data>
+  <data name="Snapshot_Create" xml:space="preserve"><value>作成</value></data>
+  <data name="Snapshot_Creating" xml:space="preserve"><value>スナップショット {0} を作成</value></data>
+  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} ページ ({1}) を読めなかったため、スナップショットに含まれていません。</value></data>
+  <data name="Snapshot_Error" xml:space="preserve"><value>スナップショットを作成・保存できませんでした ({0})。</value></data>
+  <data name="Snapshot_Saved" xml:space="preserve"><value>{0} を保存しました。</value></data>
+  <data name="Snapshot_NoneToCompare" xml:space="preserve"><value>先にスナップショットを作成してください (解析 > 比較 > プロセスのスナップショットを作成)。</value></data>
+  <data name="FileType_Snapshot" xml:space="preserve"><value>プロセスのスナップショット</value></data>
+  <data name="Tab_CreateSnapshot" xml:space="preserve"><value>スナップショットを作成</value></data>
+  <data name="Compare_Kind_RegionAdded" xml:space="preserve"><value>領域の追加</value></data>
+  <data name="Compare_Kind_RegionRemoved" xml:space="preserve"><value>領域の削除</value></data>
 </root>

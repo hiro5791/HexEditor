@@ -27,6 +27,20 @@ public static class CompareData
     /// <summary>スナップショットのデータならそのスナップショット (マージで大きな範囲を参照として挿入するため)。</summary>
     public static DocumentSnapshot? SnapshotOf(ICompareData data) => (data as SnapshotData)?.Snapshot;
 
+    /// <summary>
+    /// データの領域の一覧 (プロセスメモリ・プロセスのスナップショット。ENG-33)。領域を持たないデータなら null。位置はデータ上の位置
+    /// (仮想アドレス)。長さの変わらないデータソースなので、編集しても位置は変わらない。
+    /// </summary>
+    public static IReadOnlyList<SourceRegion>? RegionsOf(ICompareData data) => SourceOf(data) is IRegionMapSource map ? map.Regions : null;
+
+    /// <summary>データの元のデータソース (ドキュメントのスナップショットならドキュメントのデータソース)。</summary>
+    public static IByteSource? SourceOf(ICompareData data) => data switch
+    {
+        SnapshotData s => s.Snapshot.Storage.Owner.Source,
+        SourceData d => d.Source,
+        _ => null,
+    };
+
     private sealed class SnapshotData(DocumentSnapshot snapshot) : ICompareData
     {
         public DocumentSnapshot Snapshot => snapshot;
@@ -38,6 +52,8 @@ public static class CompareData
 
     private sealed class SourceData(IByteSource source) : ICompareData
     {
+        public IByteSource Source => source;
+
         public long Length => source.Length;
 
         public ReadResult Read(long offset, Span<byte> destination) => source.Read(offset, destination);

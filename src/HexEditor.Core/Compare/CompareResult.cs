@@ -101,7 +101,13 @@ public sealed class CompareResult : IDisposable
     }
 
     /// <summary>比較したバイト数 (左右の長い方。一致率の分母)。</summary>
-    public long ComparedBytes => Math.Max(Left.Length, Right.Length);
+    public long ComparedBytes => ComparedOverride ?? Math.Max(Left.Length, Right.Length);
+
+    /// <summary>領域ごとの比較 (ANA-09) で比べたバイト数 (左右の領域の長い方の合計)。それ以外は null。</summary>
+    internal long? ComparedOverride { get; set; }
+
+    /// <summary>領域ごとの比較 (ANA-09 の仕様 5) の結果か。差分の一覧に領域名を出す。</summary>
+    public bool ByRegion { get; internal set; }
 
     /// <summary>一致率 (一致バイト数 / 比較したバイト数)。比較するバイトがなければ 1。</summary>
     public double MatchRate => ComparedBytes == 0 ? 1 : (double)MatchedBytes / ComparedBytes;

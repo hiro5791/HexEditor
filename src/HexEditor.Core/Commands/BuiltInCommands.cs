@@ -425,6 +425,10 @@ public static class BuiltInCommands
         new("compare.showDiffList", "compare"),
         new("compare.saveReport", "compare"),
 
+        // プロセスのスナップショットと比較 (ANA-09)。既定のキーはなし。
+        new("compare.createSnapshot", "compare") { Condition = "documentOpen" },
+        new("compare.snapshots", "compare"),
+
         // 統計 (ANA-10〜ANA-16) とファイル形式の判定 (ANA-17)。ショートカットは既定なし。
         new("analysis.statistics", "analysis") { Condition = "documentOpen" },
         new("analysis.descriptive", "analysis") { Condition = "documentOpen" },

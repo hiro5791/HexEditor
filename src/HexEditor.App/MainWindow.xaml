@@ -321,6 +321,10 @@
                         <MenuFlyoutSubItem x:Uid="Menu_Analysis_Compare" AutomationProperties.AutomationId="Command_CompareMenu">
                             <MenuFlyoutItem x:Uid="Menu_Analysis_CompareFiles" cmd:CommandUi.Id="analysis.compare" AutomationProperties.AutomationId="Command_Compare" />
                             <MenuFlyoutItem x:Uid="Menu_Analysis_CompareSaved" cmd:CommandUi.Id="analysis.compareSaved" AutomationProperties.AutomationId="Command_CompareSaved" />
+                            <!--  プロセスのスナップショット (ANA-09)  -->
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Analysis_CreateSnapshot" cmd:CommandUi.Id="compare.createSnapshot" AutomationProperties.AutomationId="Command_CreateSnapshot" />
+                            <MenuFlyoutItem x:Uid="Menu_Analysis_CompareSnapshots" cmd:CommandUi.Id="compare.snapshots" AutomationProperties.AutomationId="Command_CompareSnapshots" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Hash" cmd:CommandUi.Id="analysis.hash" AutomationProperties.AutomationId="Command_Hash" />
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Statistics" cmd:CommandUi.Id="analysis.statistics" AutomationProperties.AutomationId="Command_Statistics" />

@@ -260,6 +260,8 @@ public static partial class WindowManager
             w.CloseForExit();
         }
 
+        // この入口から一時フォルダに作ったプロセスのスナップショットを削除する (ANA-09 の仕様 9)。
+        MainWindow.DeleteTemporarySnapshots();
         return true;
     }
 

@@ -5184,4 +5184,24 @@ Details were written to:
   <data name="Session_DiskHelperBody" xml:space="preserve"><value>Opening "{0}" again needs the administrator helper process. Windows will ask for permission.</value></data>
   <data name="Session_DiskHelperOpen" xml:space="preserve"><value>Open</value></data>
   <data name="Encoded_DecodingTab" xml:space="preserve"><value>{0} (decoding...)</value></data>
+  <data name="Menu_Analysis_CreateSnapshot.Text" xml:space="preserve"><value>Create Process Snapshot...</value></data>
+  <data name="Menu_Analysis_CreateSnapshot.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Analysis_CompareSnapshots.Text" xml:space="preserve"><value>Compare Snapshots...</value></data>
+  <data name="Menu_Analysis_CompareSnapshots.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Cmd_compare_createSnapshot" xml:space="preserve"><value>Compare: Create snapshot</value></data>
+  <data name="CmdAlias_compare_createSnapshot" xml:space="preserve"><value>process memory snapshot</value></data>
+  <data name="Cmd_compare_snapshots" xml:space="preserve"><value>Compare: Compare snapshots</value></data>
+  <data name="CmdAlias_compare_snapshots" xml:space="preserve"><value>process memory snapshot</value></data>
+  <data name="Snapshot_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Snapshot_CreateTitle" xml:space="preserve"><value>Create a process snapshot</value></data>
+  <data name="Snapshot_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Snapshot_Creating" xml:space="preserve"><value>Creating snapshot {0}</value></data>
+  <data name="Snapshot_Unreadable" xml:space="preserve"><value>{0} pages ({1}) could not be read and are not in the snapshot.</value></data>
+  <data name="Snapshot_Error" xml:space="preserve"><value>The snapshot could not be created or saved ({0}).</value></data>
+  <data name="Snapshot_Saved" xml:space="preserve"><value>Saved {0}.</value></data>
+  <data name="Snapshot_NoneToCompare" xml:space="preserve"><value>Create a snapshot first (Analysis > Compare > Create Process Snapshot).</value></data>
+  <data name="FileType_Snapshot" xml:space="preserve"><value>Process snapshot</value></data>
+  <data name="Tab_CreateSnapshot" xml:space="preserve"><value>Create Snapshot</value></data>
+  <data name="Compare_Kind_RegionAdded" xml:space="preserve"><value>Region added</value></data>
+  <data name="Compare_Kind_RegionRemoved" xml:space="preserve"><value>Region removed</value></data>
 </root>

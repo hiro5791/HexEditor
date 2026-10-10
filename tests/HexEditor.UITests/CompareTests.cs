@@ -622,6 +622,9 @@ public sealed class CompareTests
         JsonObject state = await StateAsync(app);
         long length = L(state["right"]!["length"]);
         Assert.Equal(original.Length, length);
+
+        // B のタブ (2 つ目) の内容を読む (比較タブを開く前に選んでいたタブとは限らない)。
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = 1 });
         Assert.Equal(SHA256.HashData(original), SHA256.HashData(await app.BytesAsync(0, length)));
     });
 
