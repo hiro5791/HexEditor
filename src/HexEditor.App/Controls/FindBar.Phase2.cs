@@ -40,6 +40,9 @@ public sealed partial class FindBar
     /// <summary>複数の文字コードで、符号化できずに除いた文字コード (警告。FIND-08 の仕様 6)。</summary>
     private IReadOnlyList<string> _excludedEncodings = [];
 
+    /// <summary>検索欄の既定の説明 (XAML の x:Uid で入れたもの)。</summary>
+    private string _queryPlaceholder = string.Empty;
+
     private bool _positionChosen;
     private bool _positionAutomatic;
     private bool _settingPosition;
@@ -93,6 +96,7 @@ public sealed partial class FindBar
     /// <summary>コンストラクターから呼ぶ。</summary>
     private void InitializePhase2()
     {
+        _queryPlaceholder = Query.PlaceholderText;
         EncodingChoice.Items.Insert(1, new ComboBoxItem { Content = Loc.Get("Find_Encoding_Multi"), Tag = MultiEncodingId });
         AutomationProperties.SetName(MultiTermToggle, Loc.Get("Find_MultiTerm_Name"));
         ToolTipService.SetToolTip(MultiTermToggle, Loc.Get("Find_MultiTerm_Name"));
@@ -235,8 +239,9 @@ public sealed partial class FindBar
 
         Brush critical = (Brush)Application.Current.Resources["SystemFillColorCriticalBrush"];
         var context = new EditorExpressionContext(editor);
-        bool xOk = ExpressionEvaluator.TryEvaluate(PositionModulus.Text, context, out long x, out _) && x >= 1 && x <= PositionCondition.MaxModulus;
-        bool yOk = ExpressionEvaluator.TryEvaluate(PositionRemainder.Text.Length == 0 ? "0" : PositionRemainder.Text, context, out long y, out _)
+        // 周期と余りは数 (接頭辞のない数値は 10 進。`0x200`、`sector` なども書ける)。
+        bool xOk = ExpressionEvaluator.TryEvaluate(PositionModulus.Text, context, out long x, out _, DefaultRadix.Decimal) && x >= 1 && x <= PositionCondition.MaxModulus;
+        bool yOk = ExpressionEvaluator.TryEvaluate(PositionRemainder.Text.Length == 0 ? "0" : PositionRemainder.Text, context, out long y, out _, DefaultRadix.Decimal)
             && y >= 0 && (!xOk || y < x);
         if (!xOk || !yOk)
         {
@@ -316,7 +321,7 @@ public sealed partial class FindBar
         AutomationProperties.SetName(Query, label);
         Query.PlaceholderText = IsMismatch ? Loc.Get("Find_Query_Repeat")
             : IsMask && MaskModeChoice.SelectedIndex == 1 ? Loc.Get("Find_Query_Bits")
-            : regex ? Loc.Get("Find_Query_Regex") : Loc.Get("Find_Query.PlaceholderText");
+            : regex ? Loc.Get("Find_Query_Regex") : _queryPlaceholder;
         RegexNote.Text = regex
             ? Loc.Format("Find_RegexNote", MaxMatchLength.ToString("N0", CultureInfo.CurrentCulture))
               + (_pattern is { IsRegex: true } p && !RegexSearch.IsNonBacktracking(p) ? " " + Loc.Get("Find_RegexBacktracking") : string.Empty)

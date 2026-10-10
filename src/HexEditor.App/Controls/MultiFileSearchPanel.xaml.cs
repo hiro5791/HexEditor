@@ -355,13 +355,23 @@ public sealed partial class MultiFileSearchPanel : UserControl
         int parallelism = Math.Clamp(App.Settings?.GetInt(MultiFileSearch.ParallelismKey, MultiFileSearch.DefaultParallelism) ?? MultiFileSearch.DefaultParallelism,
             1, MultiFileSearch.MaxParallelism);
         int added = 0;
+        var flushLock = new object();
         void Flush()
         {
-            IReadOnlyList<FileSearchResult> files = results.Files;
+            // 検索のスレッドは並列に動くため、行を作るのは 1 つずつ (同じファイルの行を 2 回作らない)。
             var rows = new List<MultiFileRow>();
-            for (; added < files.Count; added++)
+            lock (flushLock)
             {
-                rows.AddRange(BuildRows(files[added]));
+                IReadOnlyList<FileSearchResult> files = results.Files;
+                for (; added < files.Count; added++)
+                {
+                    rows.AddRange(BuildRows(files[added]));
+                }
+            }
+
+            if (rows.Count == 0)
+            {
+                return;
             }
 
             DispatcherQueue.TryEnqueue(() =>
@@ -393,7 +403,8 @@ public sealed partial class MultiFileSearchPanel : UserControl
                 results.Changed += (_, _) =>
                 {
                     op?.ReportMatches(results.MatchCount);
-                    op?.ReportDetail(Loc.Format("MultiFile_Progress", results.ProcessedFiles, results.FoundFiles, results.CurrentFile ?? string.Empty));
+                    op?.ReportDetail(Loc.Format("MultiFile_Progress", results.ProcessedFiles.ToString("N0", CultureInfo.CurrentCulture),
+                        results.FoundFiles.ToString("N0", CultureInfo.CurrentCulture), results.CurrentFile ?? string.Empty));
                     if (results.Files.Count > added)
                     {
                         Flush();
@@ -401,7 +412,8 @@ public sealed partial class MultiFileSearchPanel : UserControl
                 };
                 await MultiFileSearch.RunAsync(results, new SearchOptions { ChunkSize = FindBar.ChunkSizeSetting }, path => open.TryGetValue(path, out var s) ? s : null,
                     parallelism, MultiFileSearch.DefaultPerFileLimit, MultiFileSearch.DefaultTotalLimit, op, token);
-                op?.ReportDetail(Loc.Format("MultiFile_Progress", results.ProcessedFiles, results.FoundFiles, string.Empty));
+                op?.ReportDetail(Loc.Format("MultiFile_Progress", results.ProcessedFiles.ToString("N0", CultureInfo.CurrentCulture),
+                    results.FoundFiles.ToString("N0", CultureInfo.CurrentCulture), string.Empty));
             }
 
             if (Operations is null)

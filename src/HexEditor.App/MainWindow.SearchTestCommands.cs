@@ -106,7 +106,7 @@ public sealed partial class MainWindow
                 SearchResults.CopyRows(request["hex"]?.GetValue<bool>() ?? true);
                 return new JsonObject();
             default:
-                return null;
+                return await HandleSearchPanelTestCommandsAsync(cmd, request);
         }
     }
 
