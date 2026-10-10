@@ -248,17 +248,30 @@ public sealed class ViewPanesTests
         await app.SendAsync("settingSet", new JsonObject { ["key"] = "view.minimap.exact", ["value"] = true });
         await app.OpenAsync(ctx.TestData("TD-VIEW-ENTROPY"));
         await app.WaitForTabsAsync(2);
-        await app.WaitUntilAsync(async () => (await app.SendAsync("minimap"))["exact"]!.GetValue<bool>(),
-            UiTest.Scaled(TimeSpan.FromSeconds(60)), "the exact minimap");
+        await app.IdleAsync();
+        await WaitForExactAsync(app, TimeSpan.FromSeconds(60));
 
         // 別のタブに切り替えて戻っても、計算し直さずに正確な値を使う。
         await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
         await app.IdleAsync();
         await app.SendAsync("selectTab", new JsonObject { ["index"] = 1 });
         await app.IdleAsync();
-        JsonObject state = await MinimapAsync(app);
-        Assert.True(state["exact"]!.GetValue<bool>());
+        await WaitForExactAsync(app, TimeSpan.FromSeconds(5));
     });
+
+    /// <summary>選択中のタブのミニマップが正確な値になるまで待つ (タブを開いた・切り替えた直後は Hex ビューの読み込みを待つ)。</summary>
+    private static Task WaitForExactAsync(AppSession app, TimeSpan timeout) => app.WaitUntilAsync(async () =>
+    {
+        try
+        {
+            return (await app.SendAsync("minimap"))["exact"]!.GetValue<bool>();
+        }
+        catch (InvalidOperationException)
+        {
+            // 新しいタブの Hex ビューがまだ読み込まれていない。
+            return false;
+        }
+    }, UiTest.Scaled(timeout), "the exact minimap");
 
     // ---- VIEW-37 ----
 
