@@ -326,6 +326,7 @@ public sealed partial class MainWindow
     /// <summary>表示設定・配色を、選択中のタブに合わせてメニューに出す (UI-03 の仕様 3)。</summary>
     private void UpdateViewMenu()
     {
+        UpdateByteThemeMenu();
         EditorState? editor = Editor;
         if (!ReferenceEquals(editor, _viewMenuEditor))
         {
@@ -347,6 +348,14 @@ public sealed partial class MainWindow
         foreach (MenuFlyoutSubItem sub in _viewItems.Values.OfType<MenuFlyoutSubItem>())
         {
             sub.IsEnabled = editor is not null;
+        }
+
+        // 1 行に 1 レコード (VIEW-18 の仕様 3) の間は、1 行のバイト数はレコード長に従う。
+        if (_viewItems.TryGetValue("Command_ViewBytesPerRow", out MenuFlyoutItemBase? bytesPerRow))
+        {
+            bool fixedByRecords = editor?.View.RecordRowsActive == true;
+            bytesPerRow.IsEnabled &= !fixedByRecords;
+            ToolTipService.SetToolTip(bytesPerRow, fixedByRecords ? Loc.Get("Command_RecordPerRowFixed") : null);
         }
 
         RefreshCommandUi();

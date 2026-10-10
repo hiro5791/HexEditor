@@ -2942,6 +2942,7 @@ Details were written to:
   <data name="Command_NoTextColumn" xml:space="preserve"><value>The text column is hidden.</value></data>
   <data name="Command_NotSideBySide" xml:space="preserve"><value>No documents are shown side by side.</value></data>
   <data name="Command_NotSplit" xml:space="preserve"><value>The view is not split.</value></data>
+  <data name="Command_RecordPerRowFixed" xml:space="preserve"><value>The row length follows the record length (one record per row).</value></data>
   <data name="Command_RecordTooLong" xml:space="preserve"><value>Only available when the record length is {0} bytes or less.</value></data>
   <data name="Command_ReverseNeedsGroup" xml:space="preserve"><value>Available when bytes are grouped (2 or more) in hex format.</value></data>
   <data name="Command_TextColumnLimit" xml:space="preserve"><value>Up to 5 text columns can be shown.</value></data>

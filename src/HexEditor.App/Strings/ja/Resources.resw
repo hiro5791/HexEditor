@@ -2942,6 +2942,7 @@
   <data name="Command_NoTextColumn" xml:space="preserve"><value>テキスト列が表示されていません。</value></data>
   <data name="Command_NotSideBySide" xml:space="preserve"><value>並べて表示していません。</value></data>
   <data name="Command_NotSplit" xml:space="preserve"><value>画面を分割していません。</value></data>
+  <data name="Command_RecordPerRowFixed" xml:space="preserve"><value>1 行に 1 レコードを表示しているため、レコード長に合わせています。</value></data>
   <data name="Command_RecordTooLong" xml:space="preserve"><value>レコード長が {0} バイト以下のときだけ選べます。</value></data>
   <data name="Command_ReverseNeedsGroup" xml:space="preserve"><value>Hex 形式でグループ化が 2 以上のときだけ選べます。</value></data>
   <data name="Command_TextColumnLimit" xml:space="preserve"><value>テキスト列は 5 列まで表示できます。</value></data>

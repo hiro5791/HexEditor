@@ -89,6 +89,12 @@ public sealed partial class MainWindow
 
     private static string EncodingName(EncodingEntry entry)
     {
+        // 文字表 (tbl:ファイル名) はリソースに名前がない (ID にリソース名に使えない文字が入る)。
+        if (entry.Id.StartsWith(TableEncodings.IdPrefix, StringComparison.Ordinal))
+        {
+            return entry.EnglishName;
+        }
+
         string key = "Encoding_Name_" + entry.Id;
         string text = Loc.Get(key);
         if (string.IsNullOrEmpty(text) || text == key)
