@@ -589,6 +589,16 @@
   <data name="CmdAlias_go_start" xml:space="preserve"><value>ふぁいるのせんとう</value></data>
   <data name="Cmd_go_end" xml:space="preserve"><value>ファイルの末尾</value></data>
   <data name="CmdAlias_go_end" xml:space="preserve"><value>ふぁいるのまつび</value></data>
+  <data name="Cmd_go_nextSector" xml:space="preserve"><value>次のセクタ</value></data>
+  <data name="CmdAlias_go_nextSector" xml:space="preserve"><value>つぎのせくた</value></data>
+  <data name="Cmd_go_previousSector" xml:space="preserve"><value>前のセクタ</value></data>
+  <data name="CmdAlias_go_previousSector" xml:space="preserve"><value>まえのせくた</value></data>
+  <data name="Cmd_go_toSector" xml:space="preserve"><value>セクタへ移動...</value></data>
+  <data name="CmdAlias_go_toSector" xml:space="preserve"><value>せくたへいどう</value></data>
+  <data name="Cmd_go_nextMemoryRegion" xml:space="preserve"><value>次のメモリ領域</value></data>
+  <data name="CmdAlias_go_nextMemoryRegion" xml:space="preserve"><value>つぎのめもりりょういき</value></data>
+  <data name="Cmd_go_previousMemoryRegion" xml:space="preserve"><value>前のメモリ領域</value></data>
+  <data name="CmdAlias_go_previousMemoryRegion" xml:space="preserve"><value>まえのめもりりょういき</value></data>
   <data name="Cmd_view_encoding_ascii" xml:space="preserve"><value>文字コード: ASCII</value></data>
   <data name="CmdAlias_view_encoding_ascii" xml:space="preserve"><value>もじこーど</value></data>
   <data name="Cmd_view_encoding_ansi" xml:space="preserve"><value>文字コード: ANSI</value></data>
@@ -915,6 +925,14 @@
   <data name="SetDesc_diagnostics_writeMiniDump" xml:space="preserve"><value>異常終了したとき、原因を調べるための小さなメモリダンプを保存します。</value></data>
   <data name="Cmd_file_openReadOnly" xml:space="preserve"><value>読み取り専用で開く</value></data>
   <data name="CmdAlias_file_openReadOnly" xml:space="preserve"><value>よみとりせんようでひらく</value></data>
+  <data name="Cmd_file_openDisk" xml:space="preserve"><value>ディスクを開く...</value></data>
+  <data name="CmdAlias_file_openDisk" xml:space="preserve"><value>でぃすくぼりゅーむぶつりどらいぶをひらく</value></data>
+  <data name="Cmd_file_openProcess" xml:space="preserve"><value>プロセスのメモリを開く...</value></data>
+  <data name="CmdAlias_file_openProcess" xml:space="preserve"><value>ぷろせすめもりをひらく</value></data>
+  <data name="Cmd_file_openDiskImage" xml:space="preserve"><value>ディスクイメージとして開く...</value></data>
+  <data name="CmdAlias_file_openDiskImage" xml:space="preserve"><value>でぃすくいめーじせくたさいず</value></data>
+  <data name="Cmd_file_toggleImmediateWrite" xml:space="preserve"><value>即時書き込みの切り替え</value></data>
+  <data name="CmdAlias_file_toggleImmediateWrite" xml:space="preserve"><value>そくじかきこみきりかえ</value></data>
   <data name="Cmd_file_reload" xml:space="preserve"><value>再読み込み</value></data>
   <data name="CmdAlias_file_reload" xml:space="preserve"><value>さいよみこみ よみなおす</value></data>
   <data name="Cmd_file_discardReload" xml:space="preserve"><value>変更を破棄して再読み込み</value></data>
@@ -1832,6 +1850,8 @@
   <data name="CmdAlias_search_clearHistory" xml:space="preserve"><value>けんさくりれきをしょうきょ</value></data>
   <data name="Cmd_view_panel_searchResults" xml:space="preserve"><value>検索結果の表示切り替え</value></data>
   <data name="CmdAlias_view_panel_searchResults" xml:space="preserve"><value>けんさくけっかのひょうじきりかえ</value></data>
+  <data name="Cmd_view_panel_memoryMap" xml:space="preserve"><value>メモリマップの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_memoryMap" xml:space="preserve"><value>めもりまっぷりょういきもじゅーる</value></data>
   <data name="Set_search_maxMatchLength" xml:space="preserve"><value>一致の最大の長さ</value></data>
   <data name="SetDesc_search_maxMatchLength" xml:space="preserve"><value>「*」などのワイルドカードが一致できる最大のバイト数。</value></data>
   <data name="Set_search_findAll_limit" xml:space="preserve"><value>すべて検索: 件数の上限</value></data>

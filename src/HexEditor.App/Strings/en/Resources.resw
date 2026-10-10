@@ -589,6 +589,16 @@ Details were written to:
   <data name="CmdAlias_go_start" xml:space="preserve"><value>beginning top</value></data>
   <data name="Cmd_go_end" xml:space="preserve"><value>End of file</value></data>
   <data name="CmdAlias_go_end" xml:space="preserve"><value>bottom last</value></data>
+  <data name="Cmd_go_nextSector" xml:space="preserve"><value>Next sector</value></data>
+  <data name="CmdAlias_go_nextSector" xml:space="preserve"><value>sector forward disk</value></data>
+  <data name="Cmd_go_previousSector" xml:space="preserve"><value>Previous sector</value></data>
+  <data name="CmdAlias_go_previousSector" xml:space="preserve"><value>sector back disk</value></data>
+  <data name="Cmd_go_toSector" xml:space="preserve"><value>Go to sector...</value></data>
+  <data name="CmdAlias_go_toSector" xml:space="preserve"><value>sector lba jump disk</value></data>
+  <data name="Cmd_go_nextMemoryRegion" xml:space="preserve"><value>Next memory region</value></data>
+  <data name="CmdAlias_go_nextMemoryRegion" xml:space="preserve"><value>memory region next process</value></data>
+  <data name="Cmd_go_previousMemoryRegion" xml:space="preserve"><value>Previous memory region</value></data>
+  <data name="CmdAlias_go_previousMemoryRegion" xml:space="preserve"><value>memory region previous process</value></data>
   <data name="Cmd_view_encoding_ascii" xml:space="preserve"><value>Text encoding: ASCII</value></data>
   <data name="CmdAlias_view_encoding_ascii" xml:space="preserve"><value>charset</value></data>
   <data name="Cmd_view_encoding_ansi" xml:space="preserve"><value>Text encoding: ANSI</value></data>
@@ -915,6 +925,14 @@ Details were written to:
   <data name="SetDesc_diagnostics_writeMiniDump" xml:space="preserve"><value>Saves a small memory dump for troubleshooting when HexEditor crashes.</value></data>
   <data name="Cmd_file_openReadOnly" xml:space="preserve"><value>Open read-only</value></data>
   <data name="CmdAlias_file_openReadOnly" xml:space="preserve"><value>view only protect</value></data>
+  <data name="Cmd_file_openDisk" xml:space="preserve"><value>Open disk...</value></data>
+  <data name="CmdAlias_file_openDisk" xml:space="preserve"><value>physical drive volume device</value></data>
+  <data name="Cmd_file_openProcess" xml:space="preserve"><value>Open process memory...</value></data>
+  <data name="CmdAlias_file_openProcess" xml:space="preserve"><value>process memory ram</value></data>
+  <data name="Cmd_file_openDiskImage" xml:space="preserve"><value>Open as disk image...</value></data>
+  <data name="CmdAlias_file_openDiskImage" xml:space="preserve"><value>raw iso img sector size</value></data>
+  <data name="Cmd_file_toggleImmediateWrite" xml:space="preserve"><value>Toggle immediate write</value></data>
+  <data name="CmdAlias_file_toggleImmediateWrite" xml:space="preserve"><value>process memory live write</value></data>
   <data name="Cmd_file_reload" xml:space="preserve"><value>Reload</value></data>
   <data name="CmdAlias_file_reload" xml:space="preserve"><value>refresh revert</value></data>
   <data name="Cmd_file_discardReload" xml:space="preserve"><value>Discard changes and reload</value></data>
@@ -1832,6 +1850,8 @@ Details were written to:
   <data name="CmdAlias_search_clearHistory" xml:space="preserve"><value>delete forget</value></data>
   <data name="Cmd_view_panel_searchResults" xml:space="preserve"><value>Toggle search results</value></data>
   <data name="CmdAlias_view_panel_searchResults" xml:space="preserve"><value>find all list panel</value></data>
+  <data name="Cmd_view_panel_memoryMap" xml:space="preserve"><value>Toggle memory map</value></data>
+  <data name="CmdAlias_view_panel_memoryMap" xml:space="preserve"><value>memory map regions modules panel</value></data>
   <data name="Set_search_maxMatchLength" xml:space="preserve"><value>Maximum match length</value></data>
   <data name="SetDesc_search_maxMatchLength" xml:space="preserve"><value>Longest match (in bytes) that wildcards such as "*" can cover.</value></data>
   <data name="Set_search_findAll_limit" xml:space="preserve"><value>Find all: result limit</value></data>
