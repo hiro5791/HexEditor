@@ -115,6 +115,28 @@ public sealed class DeviceTests
     });
 
     [Fact]
+    [Trait("TC", "TC-ENG-18-03")]
+    public Task Process_memory_auto_refresh_shows_new_values_within_a_second() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx) });
+        await app.SendAsync("openProcess", new JsonObject { ["pid"] = 4321 });
+        await app.GoToAsync(0x10010);
+        Assert.Equal(new byte[8], await app.BytesAsync(0x10010, 8));
+
+        // 1. 自動更新を 1 秒にする。2. 変数を書き換える。
+        await app.SendAsync("autoRefresh", new JsonObject { ["ms"] = 1000 });
+        double written = (await app.SendAsync("processWrite", new JsonObject { ["pid"] = 4321, ["address"] = 0x10010, ["hex"] = "8877665544332211" }))["at"]!.GetValue<double>();
+
+        // 3. 新しい値が表示される。読み直しは書き換えから 1 秒以内 (アプリの中の時刻で比べる)。
+        byte[] expected = [0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11];
+        await app.WaitUntilAsync(async () => (await app.BytesAsync(0x10010, 8)).SequenceEqual(expected), UiTest.Scaled(TimeSpan.FromSeconds(5)), "the new value");
+        double[] refreshes = [.. (await app.SendAsync("autoRefresh"))["refreshes"]!.AsArray().Select(t => t!.GetValue<double>())];
+        double first = refreshes.First(t => t >= written);
+        // 間隔 1 秒のタイマーの誤差 (数十 ms) は許す。
+        Assert.True(first - written <= (1000 + 100) * UiTest.TimeoutScale, $"{first - written:F0} ms");
+    });
+
+    [Fact]
     [Trait("TC", "TC-ENG-33-01")]
     public Task Opening_a_process_shows_the_memory_map_with_modules() => UiTestContext.RunAsync(async ctx =>
     {

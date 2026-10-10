@@ -97,6 +97,35 @@ public sealed partial class MainWindow
                 return new JsonObject { ["route"] = route.ToString(), ["modules"] = source.Modules.Count };
             }
 
+            case "processWrite":
+            {
+                // 偽のプロセスのメモリを書き換える (TestTarget に値を書き換えさせる代わり)。アプリの時計の時刻を返す。
+                int pid = (int)TestHookSettings.ReadLong(request["pid"], 0);
+                byte[] data = Convert.FromHexString(request["hex"]!.GetValue<string>());
+                if (TestHooks.FakeProcesses?.Direct is FakeProcessAccess direct)
+                {
+                    direct.Process(pid).WriteRaw(TestHookSettings.ReadLong(request["address"], 0), data);
+                }
+
+                return new JsonObject { ["at"] = System.Diagnostics.Stopwatch.GetTimestamp() * 1000.0 / System.Diagnostics.Stopwatch.Frequency };
+            }
+
+            case "autoRefresh":
+            {
+                // タブの右クリックメニューの「自動更新」と同じ設定。ms を省くと状態 (再読み込みした時刻) だけを返す。
+                if (Vm.Selected is { } doc && request["ms"] is { } ms)
+                {
+                    long value = TestHookSettings.ReadLong(ms, 0);
+                    SetAutoRefresh(doc, value > 0 ? TimeSpan.FromMilliseconds(value) : null);
+                }
+
+                return new JsonObject
+                {
+                    ["interval"] = Vm.Selected?.AutoRefreshInterval?.TotalMilliseconds,
+                    ["refreshes"] = new JsonArray([.. AutoRefreshTimes.Select(t => (JsonNode?)t)]),
+                };
+            }
+
             case "memoryMap":
             {
                 if (Vm.Selected?.ProcessMemory is not { } mem)

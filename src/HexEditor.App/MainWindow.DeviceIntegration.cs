@@ -22,6 +22,11 @@ public sealed partial class MainWindow
 
     private readonly Dictionary<DocumentViewModel, DispatcherQueueTimer> _autoRefresh = [];
 
+#if HEX_TEST_HOOKS
+    /// <summary>自動更新で読み直した時刻 (アプリの時計の ms。テスト用)。</summary>
+    private List<double> AutoRefreshTimes { get; } = [];
+#endif
+
     /// <summary>ウィンドウを作るときに 1 回呼ぶ。</summary>
     private void HookDeviceIntegration()
     {
@@ -208,6 +213,9 @@ public sealed partial class MainWindow
             if (!doc.Document.IsEditLocked)
             {
                 doc.Document.RefreshFromSource();
+#if HEX_TEST_HOOKS
+                AutoRefreshTimes.Add(System.Diagnostics.Stopwatch.GetTimestamp() * 1000.0 / System.Diagnostics.Stopwatch.Frequency);
+#endif
             }
         };
         _autoRefresh[doc] = timer;
