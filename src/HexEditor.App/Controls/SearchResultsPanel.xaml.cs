@@ -210,7 +210,21 @@ public sealed partial class SearchResultsPanel : UserControl
             return [];
         }
 
-        SearchResults results = _groups[0].Results;
+        return MatchesOf(_groups[0].Results, snapshot, offset, length);
+    }
+
+    /// <summary>
+    /// ドキュメント <paramref name="document"/> の結果のうち [offset, offset + length) と重なる一致 (注釈の出どころ「すべて検索の結果」。
+    /// INSP-32)。表示範囲だけを求め、結果の全件は読まない。
+    /// </summary>
+    internal IReadOnlyList<(long Offset, long Length)> MatchesInDocument(Document document, DocumentSnapshot snapshot, long offset, long length) =>
+        IsOpen && _groups.FirstOrDefault(g => g.Editor.Document == document) is { } group ? MatchesOf(group.Results, snapshot, offset, length) : [];
+
+    /// <summary>注釈のラベルにする検索語。</summary>
+    internal string Query => _query;
+
+    private static IReadOnlyList<(long Offset, long Length)> MatchesOf(SearchResults results, DocumentSnapshot snapshot, long offset, long length)
+    {
         if (results.HighlightFromResults)
         {
             // 一致しない箇所・文字列の抽出: 結果の範囲そのものを強調する (検索の後に編集していなければ)。

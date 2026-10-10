@@ -17,6 +17,13 @@ public sealed record InspectorGroupResult(InspectorGroup Group, IReadOnlyList<In
 /// </summary>
 public static class DataInspector
 {
+    /// <summary>
+    /// 解釈の起点 (INSP-01 の仕様 1): 選択範囲がなければ (または <paramref name="useCursorWithSelection"/> なら) カーソル位置、あれば選択範囲の先頭。
+    /// マルチ選択・矩形選択では主要素 (最後に置いた要素。隣の要素と結合していれば結合後の範囲) の先頭を使う。
+    /// </summary>
+    public static long OriginOf(View.EditorState editor, bool useCursorWithSelection) =>
+        !editor.HasSelection || useCursorWithSelection ? editor.Cursor : editor.PrimaryRange?.Start ?? editor.SelectionStart;
+
     public static IReadOnlyList<InspectorGroupResult> Evaluate(DocumentSnapshot snapshot, long origin, InspectorLayout layout,
         Endianness endian, InspectorOptions options)
     {

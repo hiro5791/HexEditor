@@ -211,4 +211,16 @@ public sealed class ColoringRuleTests
         Assert.Equal(5001, ColoringEngine.FindNext(doc.Current, byteRule, 11, forward: true));
         Assert.Equal(11, ColoringEngine.FindNext(doc.Current, byteRule, 5001, forward: false));
     }
+
+    [Fact]
+    [Trait(TC, "TC-INSP-34-05")]
+    public void High_contrast_shapes_are_solid_dashed_dotted_and_double_in_rule_order()
+    {
+        Assert.Equal(
+            [ColoringShape.Solid, ColoringShape.Dashed, ColoringShape.Dotted, ColoringShape.Double, ColoringShape.Solid],
+            Enumerable.Range(0, 5).Select(ColoringShapes.HighContrast));
+        Assert.Equal(ColoringShape.Dashed, ColoringShapes.Of(ColoringBorder.Dashed));
+        Assert.Equal(ColoringShape.Dotted, ColoringShapes.Of(ColoringBorder.Dotted));
+        Assert.Equal(ColoringShape.Solid, ColoringShapes.Of(ColoringBorder.Solid));
+    }
 }

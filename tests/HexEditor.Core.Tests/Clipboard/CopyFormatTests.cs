@@ -1,4 +1,7 @@
 using HexEditor.Core.Clipboard;
+using HexEditor.Core.Coloring;
+using HexEditor.Core.Engine;
+using HexEditor.Core.Sources;
 using HexEditor.TestData;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
 
@@ -290,5 +293,46 @@ public sealed class CopyFormatTests
 
         // 既定 (グループ化 1、Hex) はこれまでと同じ。
         Assert.Equal("00000000  DE AD BE EF" + new string(' ', 36) + "  ....", F(CopyFormat.ScreenDump));
+    }
+
+    [Fact]
+    public void Html_and_rtf_include_coloring_rule_colors()
+    {
+        // 色付けルール (INSP-33 の仕様 8): 00 の文字色を赤、FF の背景色を緑。変更されたバイト (5) は変更の色が文字色より優先。
+        byte[] data = [0x00, 0x41, 0xFF, 0x42, 0x00, 0x00, 0x43, 0x44];
+        using var doc = new Document(new MemoryByteSource(data), Options());
+        ColoringRuleSet rules = ColoringRuleSet.Compile(
+            [
+                new ColoringRule { Name = "zero", Pattern = "00", Foreground = 0xFF0000 },
+                new ColoringRule { Name = "ff", Pattern = "FF", Background = 0x00FF00, Target = ColoringTarget.Hex },
+            ], [], null);
+        var options = new CopyOptions
+        {
+            IncludeColors = true,
+            ModifiedRanges = [(5, 1)],
+            ModifiedColor = "#C42B1C",
+            Coloring = rules.ForCopy(doc.Current),
+        };
+
+        string html = CopyFormatter.Format(CopyFormat.Html, data, 0, options, out _);
+        Assert.Contains("<span style=\"color: #FF0000;\">00</span> 41 <span style=\"background-color: #00FF00;\">FF</span>", html);
+        Assert.Contains("<span style=\"color: #C42B1C; font-weight: bold;\">00</span>", html);
+        // テキストの列: 00 は文字色、FF のルールは Hex 列だけ。
+        Assert.Contains("<span style=\"color: #FF0000;\">.</span>A.B", html);
+
+        string rtf = CopyFormatter.Format(CopyFormat.Rtf, data, 0, options, out _);
+        Assert.Contains("{\\colortbl ;\\red196\\green43\\blue28;\\red255\\green0\\blue0;\\red0\\green255\\blue0;}", rtf);
+        Assert.Contains("{\\cf2 00} 41 {\\chcbpat3 FF}", rtf);
+        Assert.Contains("{\\cf1\\b 00}", rtf);
+
+        // 「色を含める」がオフなら色を書かない。
+        string plain = CopyFormatter.Format(CopyFormat.Html, data, 0, options with { IncludeColors = false }, out _);
+        Assert.DoesNotContain("<span", plain);
+
+        // パターンが行の境界をまたいでも色が付く (前後を読む)。
+        ColoringRuleSet pattern = ColoringRuleSet.Compile([new ColoringRule { Kind = ColoringConditionKind.HexPattern, Pattern = "42 00 00", Background = 0x0000FF }], [], null);
+        string rows = CopyFormatter.Format(CopyFormat.Html, data, 0, new CopyOptions { ScreenBytesPerRow = 4, Coloring = pattern.ForCopy(doc.Current) }, out _);
+        Assert.Contains("<span style=\"background-color: #0000FF;\">42</span>", rows);
+        Assert.Contains("<span style=\"background-color: #0000FF;\">00</span> <span style=\"background-color: #0000FF;\">00</span> 43", rows);
     }
 }

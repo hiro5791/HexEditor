@@ -627,4 +627,43 @@ public sealed class AnnotationTests
         h = await WaitColoringAsync(app, x => Layer10(x).Any(s => Covers(s, 0x05) && s["background"] is not null));
         Assert.Equal("#FFFF0000", Layer10(h).First(s => Covers(s, 0x05))["background"]!.GetValue<string>(), ignoreCase: true);
     });
+
+    /// <summary>
+    /// INSP-32 の仕様 2・4、FIND-20 の仕様 10: すべて検索の結果は注釈 (出どころ「すべて検索の結果」、既定は枠線) として描き、
+    /// 表示 > 注釈 > すべて検索の結果 で消せる。描き方は設定 (annotations.style.searchResults) で変えられる。
+    /// </summary>
+    [Fact]
+    public Task Find_all_results_are_annotations_that_follow_the_origin_toggle_and_style() => UiTestContext.RunAsync(async ctx =>
+    {
+        byte[] data = new byte[0x200];
+        for (int i = 0; i < data.Length; i += 0x20)
+        {
+            data[i] = 0xAB;
+            data[i + 1] = 0xCD;
+        }
+
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("hits.bin", data)] });
+        await SearchResultsTests.OpenFindAsync(app, 0, "AB CD", incremental: false);
+        await SearchResultsTests.FindAllAsync(app);
+        await SearchResultsTests.WaitForResultsAsync(app, r => r["state"]?.GetValue<string>() == "Completed" && !r["running"]!.GetValue<bool>(), "the results");
+
+        static IEnumerable<JsonObject> Results(JsonObject h) =>
+            h["segments"]!.AsArray().Select(s => s!.AsObject()).Where(s => s["tag"]!.GetValue<string>().StartsWith("annotation:SearchResults:", StringComparison.Ordinal));
+        JsonObject? last = null;
+        await app.WaitUntilAsync(async () => Results(last = await app.SendAsync("highlights")).Any(s => Covers(s, 0x20)), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the result annotations");
+        JsonObject first = Results(last!).First(s => Covers(s, 0x20));
+        Assert.Equal("annotation:SearchResults:AB CD", first["tag"]!.GetValue<string>());
+        Assert.NotNull(first["border"]);
+        Assert.False(first["underline"]!.GetValue<bool>());
+
+        // 出どころを非表示にすると消える。
+        await app.CommandAsync("Command_AnnotationsSearchResults");
+        await app.WaitUntilAsync(async () => !Results(await app.SendAsync("highlights")).Any(), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the annotations to disappear");
+        await app.CommandAsync("Command_AnnotationsSearchResults");
+        await app.WaitUntilAsync(async () => Results(await app.SendAsync("highlights")).Any(), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the annotations to come back");
+
+        // 描き方を下線にする。
+        await app.SendAsync("settingSet", new JsonObject { ["key"] = "annotations.style.searchResults", ["value"] = "underline" });
+        await app.WaitUntilAsync(async () => Results(await app.SendAsync("highlights")).Any(s => s["underline"]!.GetValue<bool>()), UiTest.Scaled(TimeSpan.FromSeconds(10)), "underlined annotations");
+    });
 }

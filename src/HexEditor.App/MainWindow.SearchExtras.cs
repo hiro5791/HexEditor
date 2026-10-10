@@ -21,7 +21,11 @@ public sealed partial class MainWindow
         {
             if (keys.Contains(SearchSettings.HighlightKey))
             {
-                DispatcherQueue.TryEnqueue(() => UpdateMatchHighlights());
+                DispatcherQueue.TryEnqueue(() =>
+                {
+                    UpdateMatchHighlights();
+                    RefreshSearchResultAnnotations();
+                });
             }
         };
         App.Settings.Changed += settingsChanged;

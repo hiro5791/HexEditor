@@ -66,6 +66,10 @@
             <SolidColorBrush x:Key="AnnotationScriptBackgroundBrush" Color="{StaticResource AnnotationScriptBackgroundColor}" />
             <Color x:Key="AnnotationTemplateBackgroundColor">#FFC8EEF0</Color>
             <SolidColorBrush x:Key="AnnotationTemplateBackgroundBrush" Color="{StaticResource AnnotationTemplateBackgroundColor}" />
+            <Color x:Key="AnnotationAnalysisColor">#FF498205</Color>
+            <SolidColorBrush x:Key="AnnotationAnalysisBrush" Color="{StaticResource AnnotationAnalysisColor}" />
+            <Color x:Key="AnnotationAnalysisBackgroundColor">#FFDFF6DD</Color>
+            <SolidColorBrush x:Key="AnnotationAnalysisBackgroundBrush" Color="{StaticResource AnnotationAnalysisBackgroundColor}" />
             <StaticResource x:Key="AnnotationColumnTextBrush" ResourceKey="TextFillColorSecondaryBrush" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
@@ -125,6 +129,10 @@
             <SolidColorBrush x:Key="AnnotationScriptBackgroundBrush" Color="{StaticResource AnnotationScriptBackgroundColor}" />
             <Color x:Key="AnnotationTemplateBackgroundColor">#FF13444A</Color>
             <SolidColorBrush x:Key="AnnotationTemplateBackgroundBrush" Color="{StaticResource AnnotationTemplateBackgroundColor}" />
+            <Color x:Key="AnnotationAnalysisColor">#FF6CCB5F</Color>
+            <SolidColorBrush x:Key="AnnotationAnalysisBrush" Color="{StaticResource AnnotationAnalysisColor}" />
+            <Color x:Key="AnnotationAnalysisBackgroundColor">#FF1E3A1A</Color>
+            <SolidColorBrush x:Key="AnnotationAnalysisBackgroundBrush" Color="{StaticResource AnnotationAnalysisBackgroundColor}" />
             <StaticResource x:Key="AnnotationColumnTextBrush" ResourceKey="TextFillColorSecondaryBrush" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
@@ -158,6 +166,8 @@
             <SolidColorBrush x:Key="AnnotationSearchBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
             <SolidColorBrush x:Key="AnnotationScriptBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
             <SolidColorBrush x:Key="AnnotationTemplateBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            <SolidColorBrush x:Key="AnnotationAnalysisBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="AnnotationAnalysisBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
             <SolidColorBrush x:Key="AnnotationColumnTextBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>

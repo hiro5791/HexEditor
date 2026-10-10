@@ -113,4 +113,73 @@ public sealed class AnnotationLayerTests
 
         Assert.True(watch.Elapsed.TotalMilliseconds / 100 < 2 * 10, $"{watch.Elapsed.TotalMilliseconds / 100} ms");
     }
+
+    [Fact]
+    public void Style_settings_set_the_drawing_style_per_origin()
+    {
+        foreach (AnnotationOrigin origin in Enum.GetValues<AnnotationOrigin>())
+        {
+            // 設定の定義があり、既定値は既定の描き方 (ブックマークとテンプレートが背景色、それ以外は枠線)。
+            string key = AnnotationDisplay.StyleSettingKey(origin);
+            Assert.Equal(AnnotationDisplay.DefaultStyle(origin), AnnotationDisplay.ParseStyle(Core.Settings.BuiltInSettings.DefaultOf(key)?.GetValue<string>()));
+        }
+
+        Assert.Equal("annotations.style.searchResults", AnnotationDisplay.StyleSettingKey(AnnotationOrigin.SearchResults));
+        var display = new AnnotationDisplay();
+        int changes = 0;
+        display.Changed += (_, _) => changes++;
+        var values = new Dictionary<string, string>
+        {
+            ["annotations.style.yara"] = "underline",
+            ["annotations.style.bookmark"] = "border",
+            ["annotations.style.template"] = "nonsense",
+        };
+        display.ApplyStyleSettings(values.GetValueOrDefault);
+        Assert.Equal(AnnotationStyle.Underline, display.StyleOf(AnnotationOrigin.Yara));
+        Assert.Equal(AnnotationStyle.Border, display.StyleOf(AnnotationOrigin.Bookmark));
+        Assert.Equal(AnnotationStyle.Background, display.StyleOf(AnnotationOrigin.Template));
+        Assert.Equal(AnnotationStyle.Border, display.StyleOf(AnnotationOrigin.Analysis));
+        Assert.Equal(2, changes);
+
+        // 設定を消すと既定の描き方に戻る。
+        display.ApplyStyleSettings(_ => null);
+        Assert.Equal(AnnotationStyle.Border, display.StyleOf(AnnotationOrigin.Yara));
+        Assert.Equal(AnnotationStyle.Background, display.StyleOf(AnnotationOrigin.Bookmark));
+    }
+
+    [Fact]
+    public void Find_all_results_are_queried_only_for_the_visible_range_and_follow_the_origin_toggle()
+    {
+        // 1 TB のドキュメントの 16 バイトごとの一致 (実際の件数は 600 億を超える): 注釈の配列は作らず、表示範囲だけを問い合わせる。
+        var asked = new List<(long, long)>();
+        IEnumerable<(long, long)> Matches(long start, long end)
+        {
+            asked.Add((start, end));
+            for (long at = (start + 15) / 16 * 16; at < end; at += 16)
+            {
+                yield return (at, 4);
+            }
+        }
+
+        var display = new AnnotationDisplay();
+        var layer = new AnnotationLayer(display);
+        var source = new RangeAnnotationSource("searchResults", AnnotationOrigin.SearchResults, Matches, () => "DE AD BE EF");
+        layer.Register(source);
+        IReadOnlyList<PlacedAnnotation> placed = layer.QueryVisible(1L << 39, (1L << 39) + 64);
+        Assert.Equal(4, placed.Count);
+        Assert.All(placed, p => Assert.Equal("DE AD BE EF", p.Annotation.Label));
+        Assert.Equal([(1L << 39, (1L << 39) + 64)], asked);
+        Assert.Equal(AnnotationStyle.Border, display.StyleOf(AnnotationOrigin.SearchResults));
+
+        // 表示 > 注釈 > すべて検索の結果 をオフにすると、問い合わせもしない。
+        int changes = 0;
+        layer.Changed += (_, _) => changes++;
+        display.SetVisible(AnnotationOrigin.SearchResults, false);
+        asked.Clear();
+        Assert.Empty(layer.QueryVisible(0, 64));
+        Assert.Empty(layer.At(0));
+        Assert.Empty(asked);
+        source.RaiseChanged();
+        Assert.Equal(2, changes);
+    }
 }

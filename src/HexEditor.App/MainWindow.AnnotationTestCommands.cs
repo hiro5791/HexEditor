@@ -110,7 +110,7 @@ public sealed partial class MainWindow
                 break;
             case "toSelection":
                 IReadOnlyList<Bookmark> selected = BookmarkListView?.SelectedBookmarks ?? [];
-                BookmarksToSelection(selected);
+                _ = BookmarksToSelectionAsync(selected);
                 break;
         }
 

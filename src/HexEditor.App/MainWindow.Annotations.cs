@@ -11,6 +11,7 @@ using HexEditor.Core.Engine;
 using HexEditor.Core.Expressions;
 using HexEditor.Core.Files;
 using HexEditor.Core.Notifications;
+using HexEditor.Core.Operations;
 using HexEditor.Core.Panels;
 using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
@@ -132,6 +133,17 @@ public sealed partial class MainWindow
     private static void LoadAnnotationDisplay()
     {
         AnnotationDisplay display = AnnotationLayer.SharedDisplay;
+
+        // 出どころごとの描き方 (設定 annotations.style.*。設定の画面で変えたらすぐ反映する。INSP-32 の仕様 4)。
+        display.ApplyStyleSettings(key => App.Settings.GetString(key, string.Empty));
+        App.Settings.Changed += keys =>
+        {
+            if (keys.Any(k => k.StartsWith("annotations.style.", StringComparison.Ordinal)))
+            {
+                display.ApplyStyleSettings(key => App.Settings.GetString(key, string.Empty));
+            }
+        };
+
         foreach (string name in App.Settings.GetString(AnnotationsHiddenKey, string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries))
         {
             if (Enum.TryParse(name.Trim(), ignoreCase: true, out AnnotationOrigin origin))
@@ -156,12 +168,12 @@ public sealed partial class MainWindow
     private void RegisterAnnotationCommands()
     {
         CommandState NeedsEditor() => Editor is null ? CommandState.Unavailable(Loc.Get("Command_NoDocument")) : CommandState.Available;
-        Commands.Register("edit.selectionToBookmarks", SelectionToBookmarks, () => Editor is null ? CommandState.Unavailable(Loc.Get("Command_NoDocument"))
+        Commands.Register("edit.selectionToBookmarks", SelectionToBookmarksAsync, () => Editor is null ? CommandState.Unavailable(Loc.Get("Command_NoDocument"))
             : MultiSelectionBridge.RangesOf(Editor).Count == 0 ? CommandState.Unavailable(Loc.Get("Command_NoSelection")) : CommandState.Available);
         Commands.Register("go.bookmark.toSelection", () =>
         {
             IReadOnlyList<Bookmark> selected = BookmarkListView?.SelectedBookmarks ?? [];
-            BookmarksToSelection(selected.Count > 0 ? selected : CurrentAnnotations()?.Bookmarks.Ordered ?? []);
+            return BookmarksToSelectionAsync(selected.Count > 0 ? selected : CurrentAnnotations()?.Bookmarks.Ordered ?? []);
         }, NeedsEditor);
         Commands.Register("go.bookmark.showDescription", ShowDescriptionAtCursor, NeedsEditor);
         Commands.Register("file.importBookmarks", () => ImportBookmarksAsync(null), NeedsEditor);
@@ -200,7 +212,7 @@ public sealed partial class MainWindow
         list.GroupTooDeep += (_, _) => ShowNotice(Loc.Format("Bookmarks_GroupTooDeep", BookmarkGroups.MaxDepth), InfoBarSeverity.Warning, Vm.Selected);
         list.ImportRequested += (_, _) => _ = ImportBookmarksAsync(null);
         list.ExportRequested += (_, e) => _ = ExportBookmarksAsync(e.Bookmarks, e.Group);
-        list.ToSelectionRequested += (_, items) => BookmarksToSelection(items);
+        list.ToSelectionRequested += (_, items) => _ = BookmarksToSelectionAsync(items);
     }
 
     /// <summary>ブックマーク一覧の色見本 (グループの色を使っているときはその色。INSP-27 の仕様 2)。</summary>
@@ -217,8 +229,85 @@ public sealed partial class MainWindow
 
     // ---- 選択範囲との相互変換 (INSP-28) ----
 
+    /// <summary>反映の 1 回分の件数 (UI スレッドを一度に長く止めない)。</summary>
+    private const int BookmarkCommitChunk = 20_000;
+
+    /// <summary>
+    /// ブックマークの変換・インポート・エクスポートを行う (INSP-28・INSP-30 の「巨大ファイル・長時間処理」)。<paramref name="count"/> が 10 万件を
+    /// 超えるときは長時間処理として進捗とキャンセルを出す: 準備 (<paramref name="prepare"/>) は別のスレッドで行い (キャンセルできる)、
+    /// ブックマークへの反映 (<paramref name="commit"/>) は UI スレッドで少しずつ行う。反映を始めたら最後まで行う (一部だけを加えないため)。
+    /// それ以下の件数はその場で行う。キャンセルしたら null。
+    /// </summary>
+    private async Task<T?> RunBookmarkWorkAsync<T>(string nameKey, object? target, long count, Func<CancellationToken, Action<long>, T> prepare,
+        Func<T, IEnumerable<int>>? commit = null)
+        where T : class
+    {
+        if (count <= BookmarkConversions.LongRunningThreshold)
+        {
+            T small = prepare(CancellationToken.None, _ => { });
+            if (commit is not null)
+            {
+                foreach (int _ in commit(small))
+                {
+                }
+            }
+
+            return small;
+        }
+
+        long total = commit is null ? count : count * 2;
+        try
+        {
+            return await Vm.Operations.RunAsync(Loc.Get(nameKey), OperationKind.ReadOnly, target, total, async op =>
+            {
+                T prepared = prepare(op.CancellationToken, n => op.Report(n));
+                if (commit is not null)
+                {
+                    op.Report(count);
+                    using IEnumerator<int> steps = commit(prepared).GetEnumerator();
+                    while (await OnUiAsync(steps.MoveNext))
+                    {
+                        // 反映中はキャンセルを受け付けない (進捗だけ出す)。
+                        if (!op.CancellationToken.IsCancellationRequested)
+                        {
+                            op.Report(count + steps.Current);
+                        }
+                    }
+                }
+
+                return prepared;
+            });
+        }
+        catch (OperationCanceledException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>UI スレッドで実行する。</summary>
+    private Task<TResult> OnUiAsync<TResult>(Func<TResult> action)
+    {
+        var tcs = new TaskCompletionSource<TResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        if (!DispatcherQueue.TryEnqueue(() =>
+        {
+            try
+            {
+                tcs.SetResult(action());
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        }))
+        {
+            tcs.SetCanceled();
+        }
+
+        return tcs.Task;
+    }
+
     /// <summary>「選択範囲をブックマークに」: 各選択範囲を 1 件のブックマークにする。2 つ以上ならグループ「選択範囲 &lt;日時&gt;」を作る。</summary>
-    private void SelectionToBookmarks()
+    private async Task SelectionToBookmarksAsync()
     {
         if (CurrentAnnotations() is not { } a || Editor is not { } editor)
         {
@@ -233,11 +322,19 @@ public sealed partial class MainWindow
 
         DateTime now = (TestHooks.Time ?? TimeProvider.System).GetLocalNow().DateTime;
         string group = Loc.Format("Bookmarks_SelectionGroup", now.ToString("G", CultureInfo.CurrentCulture));
+
+        // 名前は別のスレッドで作るので、書式の文字列と書式の言語は先に取る (リソースは UI スレッドで読む)。
+        string pattern = Loc.Get("Bookmarks_SelectionName");
+        CultureInfo culture = CultureInfo.CurrentCulture;
+        string language = CultureInfo.CurrentUICulture.Name;
+        BookmarkColor color = DefaultBookmarkColor;
         try
         {
-            SelectionBookmarksResult result = BookmarkConversions.FromRanges(a.Bookmarks, ranges, n => Loc.Format("Bookmarks_SelectionName", n), group,
-                DefaultBookmarkColor);
-            if (result.Truncated)
+            PreparedSelectionBookmarks? prepared = await RunBookmarkWorkAsync("Bookmarks_OperationConvert", a.Document.Document, ranges.Count,
+                (token, progress) => BookmarkConversions.PrepareFromRanges(ranges, n => Core.Text.MessageFormat.Format(pattern, culture, language, n), group,
+                    color, token, progress),
+                p => p.CommitInSteps(a.Bookmarks, BookmarkCommitChunk));
+            if (prepared?.Result is { Truncated: true })
             {
                 ShowNotice(Loc.Format("Bookmarks_Limit", BookmarkCollection.MaxCount.ToString("N0", CultureInfo.CurrentCulture)), InfoBarSeverity.Warning, Vm.Selected);
             }
@@ -249,14 +346,28 @@ public sealed partial class MainWindow
     }
 
     /// <summary>「選択範囲にする」: ブックマークの範囲を選択する (2 件以上ならマルチ選択。長さ 0 のものは除く)。</summary>
-    private void BookmarksToSelection(IReadOnlyList<Bookmark> bookmarks)
+    private async Task BookmarksToSelectionAsync(IReadOnlyList<Bookmark> bookmarks)
     {
         if (Editor is not { } editor || bookmarks.Count == 0)
         {
             return;
         }
 
-        BookmarkSelectionResult result = BookmarkConversions.ToRanges(bookmarks, editor.Document.Length);
+        // ブックマークの位置は UI スレッドで写す (並べ替えなどは別のスレッドで行う)。
+        SelectedRange[] positions = new SelectedRange[bookmarks.Count];
+        for (int i = 0; i < positions.Length; i++)
+        {
+            positions[i] = new SelectedRange(bookmarks[i].Start, bookmarks[i].Length);
+        }
+
+        long length = editor.Document.Length;
+        BookmarkSelectionResult? result = await RunBookmarkWorkAsync("Bookmarks_OperationConvert", editor.Document, positions.Length,
+            (token, progress) => BookmarkConversions.ToRanges(positions, length, token, progress));
+        if (result is null || Editor != editor)
+        {
+            return;
+        }
+
         if (result.Ranges.Count > 0)
         {
             MultiSelectionBridge.Select(editor, result.Ranges);
@@ -383,7 +494,7 @@ public sealed partial class MainWindow
             string where = ex.Line is { } line
                 ? ex.Position is { } pos ? Loc.Format("Bookmarks_ImportErrorAt", line, pos) : Loc.Format("Bookmarks_ImportErrorLine", line)
                 : string.Empty;
-            LastImportError = Loc.Format("Bookmarks_ImportError", Path.GetFileName(path), where, ex.Reason);
+            LastImportError = Loc.Format("Bookmarks_ImportError", Path.GetFileName(path), where, FormatErrorText(ex));
             ShowNotice(LastImportError, InfoBarSeverity.Error, Vm.Selected);
             return;
         }
@@ -395,7 +506,18 @@ public sealed partial class MainWindow
         }
 
         LastImportError = null;
-        BookmarkImportReport report = BookmarkExchange.Apply(a.Bookmarks, data, mode, shift, a.Document.Document.Length);
+
+        // 10 万件を超える読み込みは長時間処理 (準備は別のスレッド、反映は UI スレッドで少しずつ。INSP-30)。
+        long documentLength = a.Document.Document.Length;
+        int existing = mode == BookmarkImportMode.Replace ? 0 : a.Bookmarks.Count;
+        PreparedBookmarkImport? prepared = await RunBookmarkWorkAsync("Bookmarks_OperationImport", a.Document.Document, data.Items.Count,
+            (token, progress) => BookmarkExchange.Prepare(data, mode, shift, documentLength, existing, token, progress),
+            p => p.CommitInSteps(a.Bookmarks, BookmarkCommitChunk));
+        if (prepared?.Report is not { } report)
+        {
+            return;
+        }
+
         string message = Loc.Format("Bookmarks_Imported", report.Imported, report.SkippedOutOfRange + report.SkippedLimit);
         if (report.NumbersMoved.Count > 0 || report.NumbersDropped > 0)
         {
@@ -419,7 +541,8 @@ public sealed partial class MainWindow
         }
         catch (Exception ex) when (ex is BookmarkFormatException or IOException or UnauthorizedAccessException)
         {
-            ShowNotice(Loc.Format("Bookmarks_ImportError", Path.GetFileName(path), string.Empty, ex.Message), InfoBarSeverity.Error);
+            ShowNotice(Loc.Format("Bookmarks_ImportError", Path.GetFileName(path), string.Empty,
+                ex is BookmarkFormatException format ? FormatErrorText(format) : ex.Message), InfoBarSeverity.Error);
             return null;
         }
 
@@ -444,6 +567,9 @@ public sealed partial class MainWindow
 
         return doc;
     }
+
+    /// <summary>形式の誤りの理由の文 (Core の誤りの種類を表示言語の文にする。INSP-30 の「エラー」)。</summary>
+    private static string FormatErrorText(BookmarkFormatException ex) => Loc.Format("Bookmarks_FormatError_" + ex.Error, ex.Detail);
 
     /// <summary>最後のインポートの結果・誤りの文 (テスト用)。</summary>
     internal string? LastImportReport { get; private set; }
@@ -473,10 +599,29 @@ public sealed partial class MainWindow
         try
         {
             BookmarkFileFormat format = BookmarkExchange.FormatFromPath(path) ?? BookmarkFileFormat.Json;
-            byte[] content = format == BookmarkFileFormat.Project
-                ? HexProject.Write(path, a.Document.FilePath, bookmarks, a.ColoringRules, a.InspectorEndian == Core.Inspector.InspectorEndianMode.Document ? null
-                    : a.InspectorEndian.ToString().ToLowerInvariant())
-                : BookmarkExchange.Export(format, bookmarks, items, fileName: a.Document.FilePath is { } f ? Path.GetFileName(f) : null);
+            byte[]? content;
+            if (format == BookmarkFileFormat.Project)
+            {
+                content = HexProject.Write(path, a.Document.FilePath, bookmarks, a.ColoringRules, a.InspectorEndian == Core.Inspector.InspectorEndianMode.Document ? null
+                    : a.InspectorEndian.ToString().ToLowerInvariant());
+            }
+            else
+            {
+                // 値は UI スレッドで写し、ファイルの中身は別のスレッドで作る (10 万件を超える書き出しは長時間処理。INSP-30)。
+                IReadOnlyList<BookmarkExportItem> captured = BookmarkExchange.Capture(bookmarks, items);
+                IReadOnlyList<BookmarkGroupRecord> groups = BookmarkExchange.GroupsOf(bookmarks, items);
+                string? fileName = a.Document.FilePath is { } f ? Path.GetFileName(f) : null;
+                content = items.Count <= BookmarkConversions.LongRunningThreshold
+                    ? BookmarkExchange.Export(format, captured, groups, fileName)
+                    : await RunBookmarkWorkAsync("Bookmarks_OperationExport", null, captured.Count,
+                        (token, progress) => BookmarkExchange.Export(format, captured, groups, fileName, token, progress));
+            }
+
+            if (content is null)
+            {
+                return;
+            }
+
             await File.WriteAllBytesAsync(path, content);
             ShowNotice(Loc.Format("Bookmarks_Exported", items.Count, Path.GetFileName(path)), InfoBarSeverity.Success, Vm.Selected);
         }
@@ -536,6 +681,7 @@ public sealed partial class MainWindow
                 AnnotationOrigin.Yara => "Yara",
                 AnnotationOrigin.SearchResults => "Search",
                 AnnotationOrigin.Template => "Template",
+                AnnotationOrigin.Analysis => "Analysis",
                 _ => "Script",
             };
             Brush mark = p.Annotation.Rgb is { } rgb && !hc ? AnnotationBrushes.Mark(BookmarkColor.Custom(rgb), view, false)
@@ -550,6 +696,32 @@ public sealed partial class MainWindow
                 AnnotationStyle.Underline => new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null, mark, null, tag, Level: p.Level, Underline: true),
                 _ => new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null, mark, null, tag, Level: p.Level),
             };
+        }
+    }
+
+    /// <summary>注釈の出どころ「すべて検索の結果」の ID。</summary>
+    private const string SearchResultsSourceId = "searchResults";
+
+    /// <summary>
+    /// すべて検索の結果 (FIND-20) を注釈の出どころ「すべて検索の結果」として載せる (INSP-32 の仕様 2・6)。結果は 100 万件を超えることがあるので、
+    /// 注釈の配列にはせず、表示範囲の一致だけを結果一覧に問い合わせる。表示 > 注釈 > すべて検索の結果 で表示 / 非表示を切り替える。
+    /// 結果一覧はウィンドウごとなので、ドキュメントを別のウィンドウに移したら、移した先のウィンドウで登録し直す (同じ ID は置き換え)。
+    /// </summary>
+    private void RegisterSearchResultAnnotations(DocumentAnnotations annotations)
+    {
+        Core.Engine.Document document = annotations.Document.Document;
+        annotations.Layer.Register(new RangeAnnotationSource(SearchResultsSourceId, AnnotationOrigin.SearchResults,
+            (start, end) => !MatchHighlightEnabled || document.IsDisposed ? []
+                : SearchResults.MatchesInDocument(document, document.Current, start, end - start),
+            () => SearchResults.Query.Length > 0 ? SearchResults.Query : Loc.Get("Annotations_Origin_SearchResults")));
+    }
+
+    /// <summary>結果一覧の一致が変わった (検索・一覧を閉じた・設定): 注釈を描き直す。</summary>
+    private void RefreshSearchResultAnnotations()
+    {
+        foreach (DocumentAnnotations a in _annotations.Values)
+        {
+            (a.Layer.Find(SearchResultsSourceId) as RangeAnnotationSource)?.RaiseChanged();
         }
     }
 
@@ -774,25 +946,16 @@ public sealed partial class MainWindow
         return brush;
     }
 
-    /// <summary>枠線の形 (実線・破線・点線・二重線の代わりの一点鎖線)。同じ配列を返す (描画で、変わったときだけ設定し直すため)。</summary>
-    internal static IReadOnlyList<double>? RuleDash(int shape) => (shape % 4) switch
+    /// <summary>枠線の形の破線の模様 (実線・二重線は null)。同じ配列を返す (描画で、変わったときだけ設定し直すため)。</summary>
+    internal static IReadOnlyList<double>? RuleDash(ColoringShape shape) => shape switch
     {
-        1 => DashedPattern,
-        2 => DottedPattern,
-        3 => DashDotPattern,
+        ColoringShape.Dashed => DashedPattern,
+        ColoringShape.Dotted => DottedPattern,
         _ => null,
     };
 
     private static readonly double[] DashedPattern = [4, 2];
     private static readonly double[] DottedPattern = [1, 1.5];
-    private static readonly double[] DashDotPattern = [6, 2, 1, 2];
-
-    private static int ShapeOf(ColoringBorder border) => border switch
-    {
-        ColoringBorder.Dashed => 1,
-        ColoringBorder.Dotted => 2,
-        _ => 0,
-    };
 
     /// <summary>1 フレームの評価の結果 (背景・枠線と文字色の 2 つの問い合わせで使い回す)。</summary>
     private readonly Dictionary<HexView, (DocumentSnapshot Snapshot, long Start, int Count, int Version, ColoringCell[] Hex, ColoringCell[] Text, bool Complete)> _coloringFrames = [];
@@ -857,10 +1020,11 @@ public sealed partial class MainWindow
                 Brush? background = colors && cell.Background >= 0 ? RuleBrush(rules.Rules[cell.Background].Rule.Background!.Value) : null;
                 Brush? border = !colors ? systemBorder
                     : cell.Border >= 0 ? RuleBrush(rules.Rules[cell.Border].Rule.Foreground ?? rules.Rules[cell.Border].Rule.Background ?? 0x808080) : null;
-                IReadOnlyList<double>? dash = !colors ? RuleDash(ruleIndex) : cell.Border >= 0 ? RuleDash(ShapeOf(rules.Rules[cell.Border].Rule.Border)) : null;
+                ColoringShape shape = !colors ? ColoringShapes.HighContrast(ruleIndex)
+                    : cell.Border >= 0 ? ColoringShapes.Of(rules.Rules[cell.Border].Rule.Border) : ColoringShape.Solid;
                 // 背景は合成の図形で塗る (乱数のデータではバイトごとに強調になり、1 画面に数千になる。INSP-33 の仕様 5)。
-                yield return new HexHighlight(start + i, j - i, CellLayer.ColoringRule, background, border, dash,
-                    (column == 0 ? "coloring-hex:" : "coloring-text:") + rule.Name, LightBackground: true);
+                yield return new HexHighlight(start + i, j - i, CellLayer.ColoringRule, background, border, border is null ? null : RuleDash(shape),
+                    (column == 0 ? "coloring-hex:" : "coloring-text:") + rule.Name, LightBackground: true, DoubleLine: border is not null && shape == ColoringShape.Double);
                 i = j;
             }
         }

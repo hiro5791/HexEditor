@@ -250,6 +250,11 @@ public sealed record CopyOptions
     /// <summary>変更されたバイトの色 (HTML・RTF に書く。`#RRGGBB`)。</summary>
     public string ModifiedColor { get; init; } = "#C42B1C";
 
+    /// <summary>
+    /// 色付けルールの色 (INSP-33 の仕様 8。HTML・RTF で <see cref="IncludeColors"/> のとき書く)。null なら変更されたバイトの強調だけ。
+    /// </summary>
+    public CopyColoring? Coloring { get; init; }
+
     // 画面表示どおり (現在の表示設定。EDIT-25 の仕様 6、VIEW-11 の仕様 5)
     public int ScreenBytesPerRow { get; init; } = 16;
 
@@ -301,4 +306,21 @@ public sealed record CopyOptions
 
     /// <summary>位置の形式の「(256 バイト)」の書式。{0} にバイト数 (区切り付き) が入る。UI の言語のリソースを呼び出し側が入れる。</summary>
     public string PositionLengthFormat { get; init; } = "({0} bytes)";
+}
+
+/// <summary>1 バイトの色 (0xRRGGBB。null は色なし)。</summary>
+public readonly record struct CopyCellColor(uint? Foreground, uint? Background)
+{
+    public bool IsEmpty => Foreground is null && Background is null;
+}
+
+/// <summary>
+/// コピーに含める色付け (INSP-33 の仕様 8、03 の「文書」の HTML・RTF)。<paramref name="cells"/> は [offset, offset + count) の各バイトの
+/// Hex 列とテキスト列の色を返す。<paramref name="palette"/> は返しうる色の一覧 (RTF の色の表に使う)。
+/// </summary>
+public sealed class CopyColoring(IReadOnlyList<uint> palette, Func<long, int, (CopyCellColor[] Hex, CopyCellColor[] Text)> cells)
+{
+    public IReadOnlyList<uint> Palette { get; } = palette;
+
+    public (CopyCellColor[] Hex, CopyCellColor[] Text) Cells(long offset, int count) => cells(offset, count);
 }

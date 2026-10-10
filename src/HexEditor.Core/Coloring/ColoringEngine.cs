@@ -111,6 +111,63 @@ public sealed class ColoringRuleSet
         }
     }
 
+    /// <summary>
+    /// ドキュメントの [start, start + hex.Length) の結果をその場で求める (エクスポート・コピー用。表示はキャッシュのある <see cref="ColoringEngine"/>)。
+    /// パターンが範囲の境界をまたいでも同じ色になるよう、前後に一致の最大長の分を足して読む。
+    /// </summary>
+    public void EvaluateRange(DocumentSnapshot snapshot, long start, Span<ColoringCell> hex, Span<ColoringCell> text)
+    {
+        hex.Fill(ColoringCell.None);
+        text.Fill(ColoringCell.None);
+        long end = Math.Min(start + hex.Length, snapshot.Length);
+        if (IsEmpty || end <= start)
+        {
+            return;
+        }
+
+        int margin = MaxMatchLength - 1;
+        long dataStart = Math.Max(0, start - margin);
+        long dataEnd = Math.Min(snapshot.Length, end + margin);
+        byte[] data = new byte[dataEnd - dataStart];
+        ReadResult read = snapshot.Read(dataStart, data);
+        int count = (int)(end - start);
+        Evaluate(data, ColoringEngine.StatesOf(read, dataStart, data.Length), dataStart, start, hex[..count], text[..count]);
+    }
+
+    /// <summary>
+    /// コピー (HTML・RTF の「色を含める」) に使う色付け (INSP-33 の仕様 8)。文字色・背景色を指定しているルールの色を返す。ルールがなければ null。
+    /// </summary>
+    public Clipboard.CopyColoring? ForCopy(DocumentSnapshot snapshot)
+    {
+        if (IsEmpty)
+        {
+            return null;
+        }
+
+        List<uint> palette = [.. Rules.SelectMany(r => new[] { r.Rule.Foreground, r.Rule.Background }).OfType<uint>().Select(c => c & 0xFFFFFF).Distinct()];
+        return new Clipboard.CopyColoring(palette, (offset, count) =>
+        {
+            var hex = new ColoringCell[count];
+            var text = new ColoringCell[count];
+            EvaluateRange(snapshot, offset, hex, text);
+            return (Convert(hex), Convert(text));
+        });
+
+        Clipboard.CopyCellColor[] Convert(ColoringCell[] cells)
+        {
+            var result = new Clipboard.CopyCellColor[cells.Length];
+            for (int i = 0; i < cells.Length; i++)
+            {
+                ColoringCell c = cells[i];
+                result[i] = new Clipboard.CopyCellColor(
+                    c.Foreground >= 0 ? Rules[c.Foreground].Rule.Foreground & 0xFFFFFF : null,
+                    c.Background >= 0 ? Rules[c.Background].Rule.Background & 0xFFFFFF : null);
+            }
+
+            return result;
+        }
+    }
+
     /// <summary>まだ決まっていない種類 (文字色・背景色・枠線) だけ、このルールのものにする (上のルールほど優先)。</summary>
     private static ColoringCell Merge(ColoringCell cell, ColoringRule rule, short id) => new(
         cell.Foreground < 0 && rule.Foreground is not null ? id : cell.Foreground,

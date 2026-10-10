@@ -249,6 +249,25 @@ public sealed class InspectorExtendedTests
         Assert.Equal("The original string has no terminator, so its length is unknown", Encode(InspectorTypes.CStringUtf8, "x", Hex("41 42")).Error);
     }
 
+    [Fact]
+    [Trait(TC, "TC-INSP-10-02")]
+    public void Pascal_string_past_the_data_end_is_written_within_the_remaining_bytes()
+    {
+        // 長さ 5 だがデータは末尾まで 2 バイトしかない: 元の長さは末尾まで (3 バイト) とみなす。
+        byte[] cut = Hex("05 48 65");
+        Assert.Equal("014800", HexOf(Encode(InspectorTypes.PString8Utf8, "H", cut).Bytes));
+        Assert.Equal("Longer than the original length (3 bytes)", Encode(InspectorTypes.PString8Utf8, "Hey", cut).Error);
+
+        // 長さが読む範囲 (4 KB) を越える: 書き込みと 00 埋めは読んだ範囲まで (長さの値の大きさの配列を作らない)。
+        byte[] huge = new byte[InspectorDecoder.MaxReadLength];
+        huge[0] = huge[1] = huge[2] = huge[3] = 0xFF;
+        InspectorEncodeResult result = Encode(InspectorTypes.PString32Utf8, "Hi", huge);
+        Assert.Null(result.Error);
+        Assert.Equal(InspectorDecoder.MaxReadLength, result.Bytes!.Length);
+        Assert.Equal("020000004869", HexOf(result.Bytes[..6]));
+        Assert.All(result.Bytes[6..], b => Assert.Equal(0, b));
+    }
+
     // ---- INSP-12 ----
 
     [Fact]

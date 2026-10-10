@@ -50,6 +50,11 @@
                                 Stroke="{x:Bind Stroke}"
                                 StrokeDashArray="{x:Bind Dash}"
                                 StrokeThickness="1.5" />
+                            <!--  二重線の内側の線 (ハイコントラストの 4 つ目の形。INSP-34 の仕様 4)  -->
+                            <Rectangle
+                                Margin="3.5"
+                                Stroke="{x:Bind InnerStroke}"
+                                StrokeThickness="1" />
                         </Grid>
                         <StackPanel Grid.Column="1">
                             <TextBlock Text="{x:Bind Name}" TextTrimming="CharacterEllipsis" />

@@ -125,7 +125,7 @@ public sealed partial class BookmarkCollection
 
         group.Visible = visible;
         _hiddenGroups += visible ? -1 : 1;
-        RaiseChanged(BookmarkChangeKind.Groups, []);
+        RaiseVisibilityChanged();
     }
 
     /// <summary>グループが表示されるか (自身と祖先がすべて表示)。グループなし (null) は常に表示。</summary>

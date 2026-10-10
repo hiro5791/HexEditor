@@ -38,6 +38,33 @@ public enum ColoringBorder
     Dotted,
 }
 
+/// <summary>描く枠線の形。ハイコントラストでは色の代わりに、ルールの順にこの 4 つを割り当てる (INSP-34 の仕様 4)。</summary>
+public enum ColoringShape
+{
+    Solid,
+    Dashed,
+    Dotted,
+    Double,
+}
+
+/// <summary>枠線の形の決め方 (表示と凡例で共通)。</summary>
+public static class ColoringShapes
+{
+    /// <summary>ルールの枠線の設定の形 (枠線なしは実線として扱う)。</summary>
+    public static ColoringShape Of(ColoringBorder border) => border switch
+    {
+        ColoringBorder.Dashed => ColoringShape.Dashed,
+        ColoringBorder.Dotted => ColoringShape.Dotted,
+        _ => ColoringShape.Solid,
+    };
+
+    /// <summary>
+    /// ハイコントラストで <paramref name="ruleIndex"/> 番目 (0 から。ドキュメントのルール、全体のルールの順) のルールに割り当てる形
+    /// (実線・破線・点線・二重線の順。5 件目からは同じ順に繰り返す)。
+    /// </summary>
+    public static ColoringShape HighContrast(int ruleIndex) => (ColoringShape)(Math.Abs(ruleIndex) % 4);
+}
+
 /// <summary>色を付ける列 (INSP-33 の仕様 1。既定は両方)。</summary>
 public enum ColoringTarget
 {

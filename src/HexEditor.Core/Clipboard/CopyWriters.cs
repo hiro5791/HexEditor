@@ -525,6 +525,9 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
     private int _rowIndex;
     private int _modifiedIndex;
 
+    // RTF の色の表の番号 (色付けルールの色。0xRRGGBB → 番号)。
+    private readonly Dictionary<uint, int> _rtfColors = [];
+
     private int RowBytes => _row.Length;
 
     private bool Colors => O.IncludeColors && format is CopyFormat.Html or CopyFormat.Rtf;
@@ -555,7 +558,21 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
                 break;
             case CopyFormat.Rtf:
                 (int r, int g, int b) = ParseColor(O.ModifiedColor);
-                W.Write($"{{\\rtf1\\ansi\\deff0{{\\fonttbl{{\\f0\\fmodern Consolas;}}}}{{\\colortbl ;\\red{r}\\green{g}\\blue{b};}}\\f0\\fs20 ");
+                // 色の表: 1 は変更されたバイト、2 から色付けルールの色 (INSP-33 の仕様 8)。
+                var table = new StringBuilder($"\\red{r}\\green{g}\\blue{b};");
+                if (Colors && O.Coloring is { } coloring)
+                {
+                    foreach (uint rgb in coloring.Palette)
+                    {
+                        if (!_rtfColors.ContainsKey(rgb))
+                        {
+                            _rtfColors[rgb] = _rtfColors.Count + 2;
+                            table.Append(CultureInfo.InvariantCulture, $"\\red{(rgb >> 16) & 0xFF}\\green{(rgb >> 8) & 0xFF}\\blue{rgb & 0xFF};");
+                        }
+                    }
+                }
+
+                W.Write($"{{\\rtf1\\ansi\\deff0{{\\fonttbl{{\\f0\\fmodern Consolas;}}}}{{\\colortbl ;{table}}}\\f0\\fs20 ");
                 break;
             case CopyFormat.Markdown when Table:
                 W.Write($"| Offset | Hex | Text |{NL}| --- | --- | --- |{NL}");
@@ -619,24 +636,29 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
         var hex = new StringBuilder();
         var plain = new StringBuilder();
         int position = 0;
-        foreach ((int start, string cell, bool modified) in Cells())
+
+        // 色付けルールの色 (「色を含める」のとき。INSP-33 の仕様 8)。
+        (CopyCellColor[] Hex, CopyCellColor[] Text)? ruleColors = Colors && O.Coloring is { } coloring ? coloring.Cells(_rowOffset, _count) : null;
+        foreach ((int start, string cell, bool modified, int firstByte) in Cells())
         {
             hex.Append(' ', start - position);
             plain.Append(' ', start - position);
             plain.Append(cell);
-            hex.Append(Colors && modified ? Highlight(cell) : cell);
+            CopyCellColor color = ruleColors is { } rc && firstByte < rc.Hex.Length ? rc.Hex[firstByte] : default;
+            hex.Append(modified || !color.IsEmpty ? Highlight(cell, modified, color) : cell);
             position = start + cell.Length;
         }
 
         // 最後の行は Hex の列を空白で埋めて、テキストの列の位置をそろえる。
         int pad = Math.Max(0, _layout.HexWidth - position);
         string text = Text();
+        string? coloredText = ruleColors is { } colors ? ColoredText(colors.Text) : null;
 
         bool first = _rowIndex == 0;
         switch (format)
         {
             case CopyFormat.Html when Table:
-                W.Write($"<tr><td>{offsetText}</td><td>{hex}</td><td>{HtmlEscape(text)}</td></tr>{NL}");
+                W.Write($"<tr><td>{offsetText}</td><td>{hex}</td><td>{coloredText ?? HtmlEscape(text)}</td></tr>{NL}");
                 break;
             case CopyFormat.Markdown when Table:
                 W.Write($"| {offsetText} | {plain} | `{text.Replace("`", "'")}` |{NL}");
@@ -650,7 +672,7 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
                     W.Write(format == CopyFormat.Rtf ? "\\par" + NL : NL);
                 }
 
-                string textColumn = format switch
+                string textColumn = coloredText ?? format switch
                 {
                     CopyFormat.Html => HtmlEscape(text),
                     CopyFormat.Rtf => RtfEscape(text),
@@ -668,18 +690,18 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
     /// <summary>
     /// 行の Hex 列のセル (表示の位置の順)。画面と同じ配置 (<see cref="RowFormat"/>): グループ化 (VIEW-09) の間と中央区切りの空白、
     /// セルの表示形式 (VIEW-10。単位に満たない端数は 1 バイトずつ Hex)、グループ内の逆順表示 (VIEW-11 の仕様 4・5・7)。
-    /// <c>Modified</c> はセルのどれかのバイトが変更されているか。
+    /// <c>Modified</c> はセルのどれかのバイトが変更されているか。<c>First</c> はセルの最初のバイトの行内の位置 (色付けルールの色に使う)。
     /// </summary>
-    private List<(int Start, string Text, bool Modified)> Cells()
+    private List<(int Start, string Text, bool Modified, int First)> Cells()
     {
-        var cells = new List<(int Start, string Text, bool Modified)>(_count);
+        var cells = new List<(int Start, string Text, bool Modified, int First)>(_count);
 
         // 変更の判定は位置の昇順に行う (IsModified は前に進むだけ)。
         if (_layout.IsHexBytes)
         {
             for (int i = 0; i < _count; i++)
             {
-                cells.Add((_layout.ByteSpan(i, _count).Start, CopyFormatter.Hex(_row[i], 2, O), Colors && IsModified(_rowOffset + i)));
+                cells.Add((_layout.ByteSpan(i, _count).Start, CopyFormatter.Hex(_row[i], 2, O), Colors && IsModified(_rowOffset + i), i));
             }
         }
         else
@@ -697,13 +719,13 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
                     }
 
                     string cell = CellFormatter.Format(O.ScreenCellFormat, _row.AsSpan(first, unit), O.ScreenBigEndian, O.ScreenSpacePadding, !O.UpperCase);
-                    cells.Add((_layout.CellStart(k), cell, modified));
+                    cells.Add((_layout.CellStart(k), cell, modified, first));
                     continue;
                 }
 
                 for (int i = first; i < _count; i++)
                 {
-                    cells.Add((_layout.ByteSpan(i, _count).Start, CopyFormatter.Hex(_row[i], 2, O), Colors && IsModified(_rowOffset + i)));
+                    cells.Add((_layout.ByteSpan(i, _count).Start, CopyFormatter.Hex(_row[i], 2, O), Colors && IsModified(_rowOffset + i), i));
                 }
             }
         }
@@ -744,9 +766,64 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
         return sb.ToString();
     }
 
-    private string Highlight(string cell) => format == CopyFormat.Rtf
-        ? $"{{\\cf1\\b {cell}}}"
-        : $"<span style=\"color: {O.ModifiedColor}; font-weight: bold;\">{cell}</span>";
+    /// <summary>
+    /// 色付けしたセル。変更されたバイトは変更の色の太字 (文字色はルールより優先)。ルールの文字色・背景色はそのまま書く
+    /// (HTML は style 属性、RTF は cf と chcbpat)。
+    /// </summary>
+    private string Highlight(string cell, bool modified, CopyCellColor color)
+    {
+        if (format == CopyFormat.Rtf)
+        {
+            var codes = new StringBuilder();
+            if (modified)
+            {
+                codes.Append("\\cf1\\b");
+            }
+            else if (color.Foreground is { } fg && _rtfColors.TryGetValue(fg, out int f))
+            {
+                codes.Append(CultureInfo.InvariantCulture, $"\\cf{f}");
+            }
+
+            if (color.Background is { } rtfBack && _rtfColors.TryGetValue(rtfBack, out int b))
+            {
+                codes.Append(CultureInfo.InvariantCulture, $"\\chcbpat{b}");
+            }
+
+            return codes.Length == 0 ? cell : $"{{{codes} {cell}}}";
+        }
+
+        var style = new StringBuilder();
+        if (modified)
+        {
+            style.Append(CultureInfo.InvariantCulture, $"color: {O.ModifiedColor}; font-weight: bold;");
+        }
+        else if (color.Foreground is { } fg)
+        {
+            style.Append(CultureInfo.InvariantCulture, $"color: #{fg:X6};");
+        }
+
+        if (color.Background is { } bg)
+        {
+            style.Append(style.Length > 0 ? " " : string.Empty).Append(CultureInfo.InvariantCulture, $"background-color: #{bg:X6};");
+        }
+
+        return $"<span style=\"{style}\">{cell}</span>";
+    }
+
+    /// <summary>テキストの列を、色付けルールの色を付けて書く (色のない文字はそのまま。HTML・RTF)。</summary>
+    private string ColoredText(CopyCellColor[] colors)
+    {
+        var sb = new StringBuilder();
+        for (int i = 0; i < _count; i++)
+        {
+            string ch = O.Encoding.DisplayChar(_row[i]).ToString();
+            string escaped = format == CopyFormat.Rtf ? RtfEscape(ch) : HtmlEscape(ch);
+            CopyCellColor color = i < colors.Length ? colors[i] : default;
+            sb.Append(color.IsEmpty ? escaped : Highlight(escaped, modified: false, color));
+        }
+
+        return sb.ToString();
+    }
 
     private bool IsModified(long position)
     {
