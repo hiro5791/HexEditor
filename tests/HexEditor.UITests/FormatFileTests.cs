@@ -22,6 +22,13 @@ public sealed class FormatFileTests
         return await app.SendAsync("formatDoc", args);
     }
 
+    private static async Task SelectTabAsync(AppSession app, int index)
+    {
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = index });
+        await app.IdleAsync();
+        await app.RenderAsync();
+    }
+
     private static async Task<(byte[] Bytes, string[] States)> StatesAsync(AppSession app, long offset, int length)
     {
         JsonObject r = await app.SendAsync("byteStates", new JsonObject { ["offset"] = offset, ["length"] = length });
@@ -87,7 +94,7 @@ public sealed class FormatFileTests
         Assert.Equal(5, row["line"]!.GetValue<int>());
         Assert.Equal("Checksum", row["kind"]!.GetValue<string>());
         Assert.True(issues["shown"]!.GetValue<bool>());
-        Assert.True(await HasNotificationAsync(app, "1 line has errors", "Allow editing"));
+        Assert.True(await HasNotificationAsync(app, "1 line has an error", "Allow editing"));
         Assert.True((await DocAsync(app))["readOnly"]!.GetValue<bool>());
     });
 
@@ -115,7 +122,8 @@ public sealed class FormatFileTests
             }
 
             Assert.Equal(File.ReadAllBytes(TestDataCatalog.Get(id)).Contains((byte)'\r'), File.ReadAllBytes(path).Contains((byte)'\r'));
-            await app.DisposeAsync();
+            await app.SendAsync("exit");
+            await app.WaitForExitAsync(TimeSpan.FromSeconds(30));
         }
     });
 
@@ -207,7 +215,7 @@ public sealed class FormatFileTests
 
         // 3〜4. 開くと、アドレスは開始位置から始まる。
         await app.InvokeDialogButtonAsync("Open");
-        await app.WaitUntilAsync(async () => (await DocAsync(app))["isRange"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the range tab");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["isRange"]?.GetValue<bool>() == true, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the range tab");
         JsonObject doc = await DocAsync(app);
         Assert.Equal(0x140000000L, doc["baseAddress"]!.GetValue<long>());
         Assert.Equal(1_048_576L, doc["length"]!.GetValue<long>());
@@ -223,6 +231,8 @@ public sealed class FormatFileTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
         await app.SelectAsync(0x1000, 0x1000);
         await app.SendAsync("execute", new JsonObject { ["id"] = "file.openSelectionInNewTab" });
+        await app.IdleAsync();
+        await app.RenderAsync();
         JsonObject child = await DocAsync(app);
         Assert.True(child["linked"]!.GetValue<bool>());
         Assert.Equal(0x1000L, child["baseAddress"]!.GetValue<long>());
@@ -230,20 +240,20 @@ public sealed class FormatFileTests
         // 1〜2. 子の 0x10 を AA にすると、親の 0x1010 が変わる。
         await app.GoToAsync(0x10);
         await app.TypeAsync("AA");
-        await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
+        await SelectTabAsync(app, 0);
         Assert.Equal(0xAA, (await app.BytesAsync(0x1010, 1))[0]);
 
         // 3. 親で Ctrl+Z を押すと、子も戻る。
         await app.KeyAsync("Z", ctrl: true);
-        await app.SendAsync("selectTab", new JsonObject { ["index"] = 1 });
+        await SelectTabAsync(app, 1);
         Assert.Equal(0x10, (await app.BytesAsync(0x10, 1))[0]);
 
         // 4〜5. 親で範囲より前に 100 バイト挿入しても、子の内容は変わらない (範囲が追従する)。
-        await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
+        await SelectTabAsync(app, 0);
         await app.GoToAsync(0x100);
         await app.KeyAsync("Insert");
         await app.TypeAsync(string.Concat(Enumerable.Repeat("EE", 100)));
-        await app.SendAsync("selectTab", new JsonObject { ["index"] = 1 });
+        await SelectTabAsync(app, 1);
         byte[] expected = new byte[0x1000];
         TestDataCatalog.Sequence(0x1000, expected);
         Assert.Equal(expected, await app.BytesAsync(0, 0x1000));
@@ -261,6 +271,8 @@ public sealed class FormatFileTests
         string parentHash = (await DocAsync(app, hash: true))["sha256"]!.GetValue<string>();
         await app.SelectAsync(0x1000, 0x1000);
         await app.SendAsync("execute", new JsonObject { ["id"] = "file.openSelectionAsCopy" });
+        await app.IdleAsync();
+        await app.RenderAsync();
         JsonObject copy = await DocAsync(app);
         Assert.Equal((0L, 0x1000L), (copy["baseAddress"]!.GetValue<long>(), copy["length"]!.GetValue<long>()));
         await app.GoToAsync(0);

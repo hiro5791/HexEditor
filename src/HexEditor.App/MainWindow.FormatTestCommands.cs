@@ -69,11 +69,16 @@ public sealed partial class MainWindow
 
     private JsonObject TestFormatDocument(JsonObject request)
     {
-        DocumentViewModel doc = request["index"] is { } i ? Vm.Documents[(int)TestHookSettings.ReadLong(i, 0)]
-            : Vm.Selected ?? throw new InvalidOperationException("No document.");
+        DocumentViewModel? selected = request["index"] is { } i ? Vm.Documents[(int)TestHookSettings.ReadLong(i, 0)] : Vm.Selected;
+        if (selected is not { } doc)
+        {
+            return new JsonObject { ["open"] = false, ["tabs"] = Vm.Documents.Count, ["length"] = -1 };
+        }
+
         Document d = doc.Document;
         return new JsonObject
         {
+            ["open"] = true,
             ["name"] = doc.DisplayName,
             ["title"] = doc.TabTitle,
             ["header"] = doc.Header,
@@ -184,6 +189,7 @@ public sealed partial class MainWindow
             s.Format.SelectedIndex = Array.IndexOf(OpenFormats, format);
         }
 
+        s.Validate();
         return new JsonObject
         {
             ["startResult"] = s.StartResult.Text,
@@ -200,6 +206,12 @@ public sealed partial class MainWindow
     private async Task<JsonObject> TestTransferAsync(JsonObject request)
     {
         TransferDialogState s = TransferForTest ?? throw new InvalidOperationException("The dialog is not open.");
+        if (request["close"]?.GetValue<bool>() == true)
+        {
+            s.Dialog.Hide();
+            return new JsonObject();
+        }
+
         if (request["format"]?.GetValue<string>() is { } format)
         {
             s.Format.SelectedIndex = s.Formats.ToList().IndexOf(format);
@@ -235,12 +247,13 @@ public sealed partial class MainWindow
             }
         }
 
-        // 入力の変更でプレビューを作り直す処理の完了を待つ。
-        for (int i = 0; i < 3; i++)
+        // 入力の変更でプレビューを作り直す (TextChanged は後から届くため、ここで直接呼ぶ) 処理の完了を待つ。
+        if (s.Refreshed is { } refresh)
         {
-            await Task.Yield();
-            await s.Pending;
+            await refresh();
         }
+
+        await s.Pending;
 
         return new JsonObject
         {

@@ -292,6 +292,7 @@ public sealed partial class MainWindow
             Rebuild();
             state.Pending = RefreshPreviewAsync();
         };
+        state.Refreshed = () => state.Pending = Detect();
         pathBox.TextChanged += (_, _) => state.Pending = Detect();
         browse.Click += async (_, _) =>
         {
@@ -309,7 +310,10 @@ public sealed partial class MainWindow
         }
         finally
         {
-            TransferForTest = null;
+            if (TransferForTest == state)
+            {
+                TransferForTest = null;
+            }
         }
 
         previewResult?.Dispose();
@@ -699,6 +703,11 @@ public sealed partial class MainWindow
         }
 
         format.SelectionChanged += (_, _) => Rebuild();
+        state.Refreshed = () =>
+        {
+            Refresh();
+            return Task.CompletedTask;
+        };
         foreach (RadioButton r in new[] { whole, selection, range })
         {
             r.Checked += (_, _) => Refresh();
@@ -736,7 +745,10 @@ public sealed partial class MainWindow
         }
         finally
         {
-            TransferForTest = null;
+            if (TransferForTest == state)
+            {
+                TransferForTest = null;
+            }
         }
 
         if (answer != ContentDialogResult.Primary)

@@ -99,6 +99,9 @@ public sealed partial class MainWindow
         public required TextBlock LengthResult { get; init; }
 
         public required ComboBox Format { get; init; }
+
+        /// <summary>入力の確認と解釈結果の表示を今すぐ行う (テスト用。TextChanged は後から届くため)。</summary>
+        public Action Validate { get; set; } = () => { };
     }
 
     private static readonly string[] OpenFormats = ["auto", FormatIds.Binary, FormatIds.IntelHex, FormatIds.SRecord, FormatIds.Base64];
@@ -191,6 +194,8 @@ public sealed partial class MainWindow
             box.TextChanged += (_, _) => Validate();
         }
 
+        OpenAdvancedForTest.Validate = Validate;
+
         range.Checked += (_, _) => Validate();
         range.Unchecked += (_, _) => Validate();
         lengthKind.SelectionChanged += (_, _) => Validate();
@@ -211,7 +216,10 @@ public sealed partial class MainWindow
         }
         finally
         {
-            OpenAdvancedForTest = null;
+            if (OpenAdvancedForTest?.Dialog == dialog)
+            {
+                OpenAdvancedForTest = null;
+            }
         }
 
         string file = Path.GetFullPath(path.Text);

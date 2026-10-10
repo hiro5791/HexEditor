@@ -20,7 +20,23 @@ public sealed class TransferTests
     {
         await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.import" });
         await app.WaitForDialogAsync("ImportDialog");
+        string last = string.Empty;
+        await app.WaitUntilAsync(async () =>
+        {
+            try
+            {
+                await TransferAsync(app, []);
+                return true;
+            }
+            catch (InvalidOperationException ex)
+            {
+                last = ex.Message;
+                return false;
+            }
+        }, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the import dialog " + last);
     }
+
+    private static async Task<long> LengthAsync(AppSession app) => (await app.SendAsync("formatDoc"))["length"]!.GetValue<long>();
 
     private static Task<JsonObject> TransferAsync(AppSession app, JsonObject args) => app.SendAsync("transfer", args);
 
@@ -56,7 +72,8 @@ public sealed class TransferTests
                 Assert.StartsWith(Convert.ToHexString(RandomHead(16)), state["preview"]!.GetValue<string>().Replace(" ", string.Empty));
             }
 
-            await app.InvokeDialogButtonAsync("Cancel");
+            await TransferAsync(app, new JsonObject { ["close"] = true });
+            await app.IdleAsync();
         }
     });
 
@@ -141,7 +158,7 @@ public sealed class TransferTests
         Assert.Contains("Warnings: 1, errors: 0", state["summary"]!.GetValue<string>());
         Assert.Contains("Record count (S5/S6) doesn't match", state["summary"]!.GetValue<string>());
         await app.InvokeDialogButtonAsync("Import");
-        await app.WaitUntilAsync(async () => (await app.DocumentAsync())?["length"]?.GetValue<long>() == 4096, UiTest.Scaled(TimeSpan.FromSeconds(30)),
+        await app.WaitUntilAsync(async () => await LengthAsync(app) == 4096, UiTest.Scaled(TimeSpan.FromSeconds(30)),
             "the new document");
         Assert.Equal(RandomHead(4096), await app.BytesAsync(0, 4096));
     });
@@ -161,7 +178,7 @@ public sealed class TransferTests
         Assert.Contains("Warnings: 0, errors: 0", state["summary"]!.GetValue<string>());
         await app.InvokeDialogButtonAsync("Import");
         byte[] der = TestDataCatalog.PemDer();
-        await app.WaitUntilAsync(async () => (await app.DocumentAsync())?["length"]?.GetValue<long>() == der.Length, UiTest.Scaled(TimeSpan.FromSeconds(30)),
+        await app.WaitUntilAsync(async () => await LengthAsync(app) == der.Length, UiTest.Scaled(TimeSpan.FromSeconds(30)),
             "the new document");
         Assert.Equal(Convert.ToHexString(SHA256.HashData(der)),
             (await app.SendAsync("formatDoc", new JsonObject { ["hash"] = true }))["sha256"]!.GetValue<string>());
@@ -200,7 +217,8 @@ public sealed class TransferTests
         await app.SendAsync("execute", new JsonObject { ["id"] = "workspace.save" });
         await app.WaitUntilAsync(() => Task.FromResult(File.Exists(workspace)), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the workspace file");
         Assert.True((await app.SendAsync("panels"))["panels"]!["hash"]!["shown"]!.GetValue<bool>());
-        await app.DisposeAsync();
+        await app.SendAsync("exit");
+        await app.WaitForExitAsync(TimeSpan.FromSeconds(30));
 
         string moved = Path.Combine(ctx.Root, "moved");
         Directory.Move(folder, moved);
