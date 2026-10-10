@@ -425,8 +425,17 @@ public sealed partial class MainWindow
             }
         }
 
+        // 形式を判定したファイル (同じファイルでは、利用者の選んだ形式を判定で変えない)。
+        string? detectedFor = null;
         async Task Detect()
         {
+            if (detectedFor == pathBox.Text)
+            {
+                await RefreshPreviewAsync();
+                return;
+            }
+
+            detectedFor = pathBox.Text;
             if (File.Exists(pathBox.Text))
             {
                 string file = pathBox.Text;

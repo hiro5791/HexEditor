@@ -156,6 +156,15 @@ public sealed class TransferOptionsTests : IDisposable
     }
 
     [Fact]
+    public void Inferred_element_size_is_reported_with_errors()
+    {
+        using ImportResult result = Import(FormatIds.C, "uint16_t a[] = {\r\n  0x0102, @,\r\n  0x0304, 0xG1\r\n};\r\n", new ImportOptions { ValueSize = 0 });
+        Assert.Equal(2, result.InferredValueSize);
+        Assert.Equal([(2, 11), (3, 11)], result.Issues.Items.Select(i => (i.Line, i.Column)));
+        Assert.Equal(new byte[] { 0x02, 0x01, 0x04, 0x03 }, Bytes(result));
+    }
+
+    [Fact]
     public void Paste_still_stops_at_the_first_array_error()
     {
         PasteCandidate parsed = PasteDetector.Parse(PasteFormat.Array, "{ 0x01, @, 0x02 }");

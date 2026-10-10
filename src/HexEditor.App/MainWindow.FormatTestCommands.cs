@@ -87,6 +87,7 @@ public sealed partial class MainWindow
             ["header"] = doc.Header,
             ["toolTip"] = doc.ToolTip,
             ["path"] = doc.FilePath,
+            ["pendingPath"] = doc.PendingRecord?.Path, // 遅延して開くタブ (UI-31) のパス
             ["length"] = d.Length,
             ["baseAddress"] = (long)doc.Editor.View.BaseAddress,
             ["format"] = doc.Encoded?.Format,
