@@ -598,6 +598,69 @@ public sealed class ViewPhase2Tests
         Assert.Equal("UTF-16 BE (odd)", columns[1]!["name"]!.GetValue<string>());
     });
 
+    /// <summary>
+    /// VIEW-24 の仕様 3 をキーボードから: 操作中のテキスト列を左右に移すコマンドと、テキスト列にカーソルがあるときの右クリックメニュー
+    /// (Shift+F10 と同じメニュー) の「テキスト列」。
+    /// </summary>
+    [Fact]
+    public Task Text_column_can_be_moved_and_changed_from_commands() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await OpenAsync(ctx, "TD-SEQ-1M");
+        await AddTextColumnAsync(app, "cp37");
+        await app.SendAsync("refreshMenus");
+        Assert.False((await MenuItemAsync(app, "Command_ViewMoveTextColumnRight"))["enabled"]!.GetValue<bool>());
+        await ExecuteAsync(app, "view.moveTextColumnLeft");
+        JsonArray columns = (await app.RenderAsync())["textColumns"]!.AsArray();
+        Assert.Equal(["cp37", "ascii"], columns.Select(c => c!["encoding"]!.GetValue<string>()));
+
+        // 移した列が操作中の列のまま (ステータスバーの文字コード)。
+        Assert.Equal("037", await app.UiaNameAsync("Status_Encoding"));
+        await app.SendAsync("refreshMenus");
+        Assert.False((await MenuItemAsync(app, "Command_ViewMoveTextColumnLeft"))["enabled"]!.GetValue<bool>());
+        Assert.True((await MenuItemAsync(app, "Command_ViewMoveTextColumnRight"))["enabled"]!.GetValue<bool>());
+
+        // 「テキスト列の文字コード...」は操作中の列の文字コードを変える。
+        await ExecuteAsync(app, "view.textColumnEncoding");
+        await app.SendAsync("encodingList", new JsonObject { ["choose"] = "utf-8" });
+        await app.IdleAsync();
+        columns = (await app.RenderAsync())["textColumns"]!.AsArray();
+        Assert.Equal(["utf-8", "ascii"], columns.Select(c => c!["encoding"]!.GetValue<string>()));
+
+        // 右クリックメニュー: テキスト列の上では「テキスト列」があり、Hex 列の上ではない。
+        JsonObject render = await app.RenderAsync();
+        await RightClickAsync(app, CellPoint(render, 0x10, text: true));
+        await app.WaitForAsync("HexViewMenu_TextColumn");
+        await app.SendAsync("hideContextMenu");
+        await RightClickAsync(app, CellPoint(render, 0x10));
+        await app.WaitForAsync("HexViewMenu_Copy");
+        Assert.False(await app.IsShownAsync("HexViewMenu_TextColumn"));
+        await app.SendAsync("hideContextMenu");
+    });
+
+    /// <summary>VIEW-23 の仕様 4・VIEW-24: セルのツールチップの文字は、マウスを合わせたテキスト列の文字コードで示す。</summary>
+    [Fact]
+    public Task Tool_tip_uses_the_hovered_text_column() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await OpenAsync(ctx, "TD-SEQ-1M");
+        await AddTextColumnAsync(app, "cp37");
+        JsonObject render = await GoAndRenderAsync(app, 0xC1);
+
+        // 0xC1 は EBCDIC (037) の「A」。2 列目の上では 037 の文字で示す。
+        JsonObject cell = Cell(render, 0xC1);
+        double left = cell["texts"]![1]!["left"]!.GetValue<double>();
+        double cellWidth = render["cellWidth"]!.GetValue<double>();
+        (double x, double y) = CellPoint(render, 0xC1, text: true);
+        x = render["contentLeft"]!.GetValue<double>() + left + 0.5 * cellWidth - render["horizontalOffset"]!.GetValue<double>();
+        await PointerAsync(app, "move", (x, y));
+        await app.WaitUntilAsync(async () => (await app.RenderAsync())["toolTip"]!["open"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(5)), "the tooltip");
+        string text = (await app.RenderAsync())["toolTip"]!["text"]!.GetValue<string>();
+        Assert.Contains("A U+0041 (037", text);
+
+        // 命令でも同じ (列を指定する)。
+        Assert.Contains("A U+0041 (037", (await app.SendAsync("bookmarkToolTip", new JsonObject { ["offset"] = 0xC1, ["textColumn"] = 1 }))["text"]!.GetValue<string>());
+        Assert.DoesNotContain("(037", (await app.SendAsync("bookmarkToolTip", new JsonObject { ["offset"] = 0xC1, ["textColumn"] = 0 }))["text"]!.GetValue<string>());
+    });
+
     // ---- VIEW-33 ----
 
     [Fact]

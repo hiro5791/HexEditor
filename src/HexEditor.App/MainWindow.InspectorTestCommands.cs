@@ -46,7 +46,8 @@ public sealed partial class MainWindow
         "appSubscriptions" => TestAppSubscriptions(),
         "bookmarkToolTip" => new JsonObject
         {
-            ["text"] = (CurrentView() ?? throw new InvalidOperationException("No hex view.")).CellToolTipText(TestHookSettings.ReadLong(request["offset"], 0), null),
+            ["text"] = (CurrentView() ?? throw new InvalidOperationException("No hex view.")).CellToolTipText(TestHookSettings.ReadLong(request["offset"], 0), null,
+                textColumn: (int)TestHookSettings.ReadLong(request["textColumn"], 0)),
         },
         "inspectorPreset" => new JsonObject
         {

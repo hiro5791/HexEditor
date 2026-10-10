@@ -274,6 +274,7 @@
   <data name="HexView_HelpText" xml:space="preserve"><value>Tab で Hex 列とテキスト列を切り替え。F6 で次の領域へ移動します。</value></data>
   <data name="HexView_Menu_Delete" xml:space="preserve"><value>削除</value></data>
   <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>選択の解除</value></data>
+  <data name="HexView_Menu_TextColumn" xml:space="preserve"><value>テキスト列</value></data>
   <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>読み取れない範囲があります</value></data>
   <data name="HexView_Unreadable" xml:space="preserve"><value>読み取れません</value></data>
   <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>読み取れません: デバイスの I/O エラー ({0})</value></data>
@@ -3113,6 +3114,12 @@
   <data name="Menu_View_AddTextColumn.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="Menu_View_RemoveTextColumn.Text" xml:space="preserve"><value>テキスト列を削除(K)</value></data>
   <data name="Menu_View_RemoveTextColumn.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.Text" xml:space="preserve"><value>テキスト列を左へ移動(J)</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_MoveTextColumnRight.Text" xml:space="preserve"><value>テキスト列を右へ移動(I)</value></data>
+  <data name="Menu_View_MoveTextColumnRight.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TextColumnEncoding.Text" xml:space="preserve"><value>テキスト列の文字コード(U)...</value></data>
+  <data name="Menu_View_TextColumnEncoding.AccessKey" xml:space="preserve"><value>U</value></data>
   <data name="Menu_View_LoadTable.Text" xml:space="preserve"><value>文字表ファイルを読み込む(T)...</value></data>
   <data name="Menu_View_LoadTable.AccessKey" xml:space="preserve"><value>T</value></data>
   <data name="Menu_View_ByteTheme.Text" xml:space="preserve"><value>バイトテーマ(B)</value></data>
@@ -3205,6 +3212,7 @@
   <data name="Menu_Go_PreviousPage.Text" xml:space="preserve"><value>前のページ(V)</value></data>
   <data name="Menu_Go_PreviousPage.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Command_LastTextColumn" xml:space="preserve"><value>テキスト列は 1 列以上必要です。</value></data>
+  <data name="Command_TextColumnAtEdge" xml:space="preserve"><value>テキスト列はその方向にはこれ以上移動できません。</value></data>
   <data name="Command_MinimapThemeNeedsAround" xml:space="preserve"><value>ミニマップの範囲が「周辺」のときだけ選べます。</value></data>
   <data name="Command_NoSeparator" xml:space="preserve"><value>区切り線を選んでください。</value></data>
   <data name="Command_NoTextColumn" xml:space="preserve"><value>テキスト列が表示されていません。</value></data>
@@ -3297,6 +3305,12 @@
   <data name="CmdAlias_view_addTextColumn" xml:space="preserve"><value>てきすとれつをついか</value></data>
   <data name="Cmd_view_removeTextColumn" xml:space="preserve"><value>テキスト列を削除</value></data>
   <data name="CmdAlias_view_removeTextColumn" xml:space="preserve"><value>てきすとれつをさくじょ</value></data>
+  <data name="Cmd_view_moveTextColumnLeft" xml:space="preserve"><value>テキスト列を左へ移動</value></data>
+  <data name="CmdAlias_view_moveTextColumnLeft" xml:space="preserve"><value>てきすとれつをひだりへいどう</value></data>
+  <data name="Cmd_view_moveTextColumnRight" xml:space="preserve"><value>テキスト列を右へ移動</value></data>
+  <data name="CmdAlias_view_moveTextColumnRight" xml:space="preserve"><value>てきすとれつをみぎへいどう</value></data>
+  <data name="Cmd_view_textColumnEncoding" xml:space="preserve"><value>テキスト列の文字コードを変更</value></data>
+  <data name="CmdAlias_view_textColumnEncoding" xml:space="preserve"><value>てきすとれつのもじこーどをへんこう</value></data>
   <data name="Cmd_view_byteThemeNone" xml:space="preserve"><value>バイトテーマ: なし</value></data>
   <data name="CmdAlias_view_byteThemeNone" xml:space="preserve"><value>ばいとてーま なし</value></data>
   <data name="Cmd_view_byteThemeCategory" xml:space="preserve"><value>バイトテーマ: 種類別</value></data>

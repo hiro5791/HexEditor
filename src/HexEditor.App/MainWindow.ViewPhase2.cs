@@ -64,6 +64,11 @@ public sealed partial class MainWindow
         columns.Items.Add(Item("Command_ViewRemoveTextColumn", "Menu_View_RemoveTextColumn", RemoveTextColumn,
             () => Editor is not { } e ? NeedsDocument()
                 : e.View.TextColumnCount <= 1 ? CommandState.Unavailable(Loc.Get("Command_LastTextColumn")) : CommandState.Available));
+        columns.Items.Add(Item("Command_ViewMoveTextColumnLeft", "Menu_View_MoveTextColumnLeft", () => MoveTextColumn(-1), () => MoveTextColumnState(-1)));
+        columns.Items.Add(Item("Command_ViewMoveTextColumnRight", "Menu_View_MoveTextColumnRight", () => MoveTextColumn(+1), () => MoveTextColumnState(+1)));
+        columns.Items.Add(Item("Command_ViewTextColumnEncoding", "Menu_View_TextColumnEncoding", () => ShowEncodingList(null),
+            () => Editor is not { } e ? NeedsDocument()
+                : !e.View.ShowTextColumn ? CommandState.Unavailable(Loc.Get("Command_NoTextColumn")) : CommandState.Available));
 
         // ---- 文字コード: 文字表ファイル (VIEW-23) ----
         encoding.Items.Add(new MenuFlyoutSeparator());
@@ -345,6 +350,27 @@ public sealed partial class MainWindow
         int index = editor.ActiveColumn == ActiveColumn.Text ? editor.TextColumn : columns.Count - 1;
         columns.RemoveAt(Math.Clamp(index, 0, columns.Count - 1));
         editor.ApplyView(editor.View.WithTextColumns(columns));
+        UpdateViewMenu();
+        QueueStatusBarLayout();
+    }
+
+    /// <summary>「テキスト列を左へ / 右へ移動」の状態: 操作中のテキスト列が端なら無効。</summary>
+    private CommandState MoveTextColumnState(int delta) => Editor is not { } e ? NeedsDocument()
+        : !e.View.ShowTextColumn ? CommandState.Unavailable(Loc.Get("Command_NoTextColumn"))
+        : e.View.WithTextColumnMoved(e.TextColumn, delta) is null ? CommandState.Unavailable(Loc.Get("Command_TextColumnAtEdge"))
+        : CommandState.Available;
+
+    /// <summary>「テキスト列を左へ / 右へ移動」(VIEW-24 の仕様 3): 操作中のテキスト列を隣と入れ替え、移した先を操作中の列にする。</summary>
+    private void MoveTextColumn(int delta)
+    {
+        if (Editor is not { } editor || editor.View.WithTextColumnMoved(editor.TextColumn, delta) is not { } next)
+        {
+            return;
+        }
+
+        int target = editor.TextColumn + Math.Sign(delta);
+        editor.ApplyView(next);
+        editor.SetTextColumn(target);
         UpdateViewMenu();
         QueueStatusBarLayout();
     }

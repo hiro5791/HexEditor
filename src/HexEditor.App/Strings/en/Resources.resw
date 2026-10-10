@@ -274,6 +274,7 @@ Length: {2} ({3} bytes)</value></data>
   <data name="HexView_HelpText" xml:space="preserve"><value>Tab switches between the Hex and text columns. F6 moves to the next area.</value></data>
   <data name="HexView_Menu_Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Clear selection</value></data>
+  <data name="HexView_Menu_TextColumn" xml:space="preserve"><value>Text column</value></data>
   <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Some ranges cannot be read.</value></data>
   <data name="HexView_Unreadable" xml:space="preserve"><value>Cannot be read</value></data>
   <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Cannot be read: device I/O error ({0})</value></data>
@@ -3113,6 +3114,12 @@ Details were written to:
   <data name="Menu_View_AddTextColumn.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="Menu_View_RemoveTextColumn.Text" xml:space="preserve"><value>Remove text column</value></data>
   <data name="Menu_View_RemoveTextColumn.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.Text" xml:space="preserve"><value>Move text column left</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_MoveTextColumnRight.Text" xml:space="preserve"><value>Move text column right</value></data>
+  <data name="Menu_View_MoveTextColumnRight.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TextColumnEncoding.Text" xml:space="preserve"><value>Text column encoding...</value></data>
+  <data name="Menu_View_TextColumnEncoding.AccessKey" xml:space="preserve"><value>U</value></data>
   <data name="Menu_View_LoadTable.Text" xml:space="preserve"><value>Load character table file...</value></data>
   <data name="Menu_View_LoadTable.AccessKey" xml:space="preserve"><value>T</value></data>
   <data name="Menu_View_ByteTheme.Text" xml:space="preserve"><value>Byte theme</value></data>
@@ -3205,6 +3212,7 @@ Details were written to:
   <data name="Menu_Go_PreviousPage.Text" xml:space="preserve"><value>Previous page</value></data>
   <data name="Menu_Go_PreviousPage.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Command_LastTextColumn" xml:space="preserve"><value>At least one text column is shown.</value></data>
+  <data name="Command_TextColumnAtEdge" xml:space="preserve"><value>The text column can't move further in that direction.</value></data>
   <data name="Command_MinimapThemeNeedsAround" xml:space="preserve"><value>Only available when the minimap range is "Around the view".</value></data>
   <data name="Command_NoSeparator" xml:space="preserve"><value>Choose separator lines first.</value></data>
   <data name="Command_NoTextColumn" xml:space="preserve"><value>The text column is hidden.</value></data>
@@ -3297,6 +3305,12 @@ Details were written to:
   <data name="CmdAlias_view_addTextColumn" xml:space="preserve"><value>encoding columns</value></data>
   <data name="Cmd_view_removeTextColumn" xml:space="preserve"><value>Remove text column</value></data>
   <data name="CmdAlias_view_removeTextColumn" xml:space="preserve"><value>encoding columns</value></data>
+  <data name="Cmd_view_moveTextColumnLeft" xml:space="preserve"><value>Move text column left</value></data>
+  <data name="CmdAlias_view_moveTextColumnLeft" xml:space="preserve"><value>reorder swap</value></data>
+  <data name="Cmd_view_moveTextColumnRight" xml:space="preserve"><value>Move text column right</value></data>
+  <data name="CmdAlias_view_moveTextColumnRight" xml:space="preserve"><value>reorder swap</value></data>
+  <data name="Cmd_view_textColumnEncoding" xml:space="preserve"><value>Change encoding of the text column</value></data>
+  <data name="CmdAlias_view_textColumnEncoding" xml:space="preserve"><value>charset</value></data>
   <data name="Cmd_view_byteThemeNone" xml:space="preserve"><value>Byte theme: None</value></data>
   <data name="CmdAlias_view_byteThemeNone" xml:space="preserve"><value>colors</value></data>
   <data name="Cmd_view_byteThemeCategory" xml:space="preserve"><value>Byte theme: By kind</value></data>

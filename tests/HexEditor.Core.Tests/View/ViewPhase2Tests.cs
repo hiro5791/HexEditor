@@ -226,6 +226,25 @@ public sealed class ViewPhase2Tests
         }
     }
 
+    /// <summary>VIEW-24 の仕様 3: テキスト列を左右に移す・削除する。端の列は移せず、最後の 1 列は消せない。</summary>
+    [Fact]
+    public void Text_columns_move_left_and_right_and_are_removed()
+    {
+        ViewSettings view = ViewSettings.Default.WithTextColumns([new("ascii"), new("utf-16le", 1), new("cp932")]);
+        ViewSettings right = view.WithTextColumnMoved(0, +1)!;
+        Assert.Equal(["utf-16le", "ascii", "cp932"], right.TextColumns.Select(c => c.Encoding));
+        Assert.Equal(1, right.Utf16Phase);
+        ViewSettings left = view.WithTextColumnMoved(2, -1)!;
+        Assert.Equal(["ascii", "cp932", "utf-16le"], left.TextColumns.Select(c => c.Encoding));
+        Assert.Equal(1, left.TextColumns[2].Utf16Phase);
+        Assert.Null(view.WithTextColumnMoved(0, -1));
+        Assert.Null(view.WithTextColumnMoved(2, +1));
+        Assert.Null(view.WithTextColumnMoved(5, -1));
+
+        Assert.Equal(["ascii", "cp932"], view.WithoutTextColumn(1)!.TextColumns.Select(c => c.Encoding));
+        Assert.Null(ViewSettings.Default.WithoutTextColumn(0));
+    }
+
     // ---- VIEW-37・VIEW-38 ----
 
     [Fact]
