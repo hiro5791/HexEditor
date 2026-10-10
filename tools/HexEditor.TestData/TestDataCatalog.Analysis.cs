@@ -14,6 +14,7 @@ public static partial class TestDataCatalog
 
     private static IEnumerable<TestDataItem> AnalysisItems() =>
     [
+        new("TD-ANA-10G-A", 10 * GiB, "固定の種の乱数 (スパースにしない。性能計測用)", path => WriteGenerated(path, 10 * GiB, (o, s) => Random(Ana10GSeed, o, s))),
         new("TD-ANA-41-1M", MiB, "すべて 41", path => WriteGenerated(path, MiB, (_, s) => s.Fill(0x41))),
         new("TD-ANA-CRYPT-10M", 10 * MiB, "AES-CTR の鍵ストリーム", path => WriteGenerated(path, 10 * MiB, (o, s) => AesCtr(CryptKey, o, s))),
         new("TD-ANA-DEADBEEF", 16_000, "DE AD BE EF と乱数 12 バイトのレコード 1,000 個", path => WriteAll(path, DeadBeef())),
@@ -41,6 +42,9 @@ public static partial class TestDataCatalog
         new("TD-ANA-MAGIC-BAD", Encoding.UTF8.GetByteCount(MagicBadJson), "3 行目に構文エラーがある JSON (broken.json)",
             path => File.WriteAllText(path, MagicBadJson, new UTF8Encoding(false)), dir => Path.Combine(dir, "TD-ANA-MAGIC", "broken.json")),
     ];
+
+    /// <summary>TD-ANA-10G-A の乱数の種。</summary>
+    public const ulong Ana10GSeed = 0x10A;
 
     /// <summary>TD-ANA-CRYPT-10M の AES の鍵 (SHA-256("TD-ANA-CRYPT-10M"))。</summary>
     public static readonly byte[] CryptKey = SHA256.HashData("TD-ANA-CRYPT-10M"u8);
