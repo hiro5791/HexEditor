@@ -248,6 +248,8 @@ Length: {2} ({3} bytes)</value></data>
   <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Start_Open.Content" xml:space="preserve"><value>Open...</value></data>
+  <data name="Start_OpenDisk.Content" xml:space="preserve"><value>Open Disk...</value></data>
+  <data name="Start_OpenProcess.Content" xml:space="preserve"><value>Open Process...</value></data>
   <data name="Start_New.Content" xml:space="preserve"><value>New</value></data>
   <data name="Start_DropHint.Text" xml:space="preserve"><value>You can also drop files here to open them.</value></data>
   <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>New with size...</value></data>
@@ -1323,6 +1325,7 @@ Details were written to:
   <data name="JumpList_Pinned" xml:space="preserve"><value>Pinned</value></data>
   <data name="JumpList_Recent" xml:space="preserve"><value>Recent</value></data>
   <data name="JumpList_Task_NewWindow" xml:space="preserve"><value>New window</value></data>
+  <data name="JumpList_Task_OpenDisk" xml:space="preserve"><value>Open disk</value></data>
   <data name="JumpList_Task_NewDocument" xml:space="preserve"><value>New file</value></data>
   <data name="Shell_OpenWith" xml:space="preserve"><value>Open with HexEditor</value></data>
   <data name="Shell_ProjectType" xml:space="preserve"><value>HexEditor project</value></data>
@@ -3194,9 +3197,9 @@ Details were written to:
   <data name="Menu_View_SyncDifferences.Text" xml:space="preserve"><value>Highlight differences</value></data>
   <data name="Menu_View_SyncDifferences.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="Menu_Go_NextRecord.Text" xml:space="preserve"><value>Next record</value></data>
-  <data name="Menu_Go_NextRecord.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_NextRecord.AccessKey" xml:space="preserve"><value>O</value></data>
   <data name="Menu_Go_PreviousRecord.Text" xml:space="preserve"><value>Previous record</value></data>
-  <data name="Menu_Go_PreviousRecord.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_PreviousRecord.AccessKey" xml:space="preserve"><value>C</value></data>
   <data name="Menu_Go_NextPage.Text" xml:space="preserve"><value>Next page</value></data>
   <data name="Menu_Go_NextPage.AccessKey" xml:space="preserve"><value>X</value></data>
   <data name="Menu_Go_PreviousPage.Text" xml:space="preserve"><value>Previous page</value></data>
@@ -3603,14 +3606,14 @@ Details were written to:
   <data name="Legend_PreviousName" xml:space="preserve"><value>Previous match of {0}</value></data>
   <data name="Legend_NoNext" xml:space="preserve"><value>No more matches after the cursor</value></data>
   <data name="Legend_NoPrevious" xml:space="preserve"><value>No more matches before the cursor</value></data>
-  <data name="Menu_File_ImportExport.Text" xml:space="preserve"><value>Import / Export</value></data>
-  <data name="Menu_File_ImportExport.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_File_ImportExport.Text" xml:space="preserve"><value>Import / Export Bookmarks</value></data>
+  <data name="Menu_File_ImportExport.AccessKey" xml:space="preserve"><value>G</value></data>
   <data name="Menu_File_ImportBookmarks.Text" xml:space="preserve"><value>Import Bookmarks…</value></data>
   <data name="Menu_File_ImportBookmarks.AccessKey" xml:space="preserve"><value>I</value></data>
   <data name="Menu_File_ExportBookmarks.Text" xml:space="preserve"><value>Export Bookmarks…</value></data>
   <data name="Menu_File_ExportBookmarks.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Menu_Edit_SelectionToBookmarks.Text" xml:space="preserve"><value>Selection to Bookmarks</value></data>
-  <data name="Menu_Edit_SelectionToBookmarks.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Edit_SelectionToBookmarks.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Menu_Go_PositionManager.Text" xml:space="preserve"><value>Position Manager</value></data>
   <data name="Menu_Go_PositionManager.AccessKey" xml:space="preserve"><value>M</value></data>
   <data name="Menu_Go_ShowDescription.Text" xml:space="preserve"><value>Show Description at Cursor</value></data>
@@ -3644,7 +3647,7 @@ Details were written to:
   <data name="Menu_View_PositionManagerPanel.Text" xml:space="preserve"><value>Position Manager</value></data>
   <data name="Menu_View_PositionManagerPanel.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_ColoringRulesPanel.Text" xml:space="preserve"><value>Coloring Rules</value></data>
-  <data name="Menu_View_ColoringRulesPanel.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_ColoringRulesPanel.AccessKey" xml:space="preserve"><value>N</value></data>
   <data name="Menu_View_LegendPanel.Text" xml:space="preserve"><value>Legend</value></data>
   <data name="Menu_View_LegendPanel.AccessKey" xml:space="preserve"><value>G</value></data>
   <data name="PositionManager_PanelName" xml:space="preserve"><value>Position manager</value></data>
@@ -3721,7 +3724,7 @@ Details were written to:
   <data name="Menu_File_SaveSelection.Text" xml:space="preserve"><value>Save selection as binary...</value></data>
   <data name="Menu_File_SaveSelection.AccessKey" xml:space="preserve"><value>B</value></data>
   <data name="Menu_File_Workspace.Text" xml:space="preserve"><value>Workspace</value></data>
-  <data name="Menu_File_Workspace.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_File_Workspace.AccessKey" xml:space="preserve"><value>J</value></data>
   <data name="Menu_File_WorkspaceSave.Text" xml:space="preserve"><value>Save workspace...</value></data>
   <data name="Menu_File_WorkspaceSave.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_File_WorkspaceOpen.Text" xml:space="preserve"><value>Open workspace...</value></data>
@@ -4256,11 +4259,11 @@ Details were written to:
   <data name="Menu_Analysis_CompareSaved.Text" xml:space="preserve"><value>Compare with saved content</value></data>
   <data name="Menu_Analysis_CompareSaved.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_Go_NextDiff.Text" xml:space="preserve"><value>Next difference</value></data>
-  <data name="Menu_Go_NextDiff.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_NextDiff.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="Menu_Go_PreviousDiff.Text" xml:space="preserve"><value>Previous difference</value></data>
-  <data name="Menu_Go_PreviousDiff.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_PreviousDiff.AccessKey" xml:space="preserve"><value>I</value></data>
   <data name="Menu_View_CompareStacked.Text" xml:space="preserve"><value>Stack comparison views</value></data>
-  <data name="Menu_View_CompareStacked.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_CompareStacked.AccessKey" xml:space="preserve"><value>X</value></data>
   <data name="Menu_View_Diffs.Text" xml:space="preserve"><value>Differences</value></data>
   <data name="Menu_View_Diffs.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="CmdCategory_compare" xml:space="preserve"><value>Compare</value></data>
@@ -4348,7 +4351,6 @@ Details were written to:
   <data name="Compare_LeftReadOnly" xml:space="preserve"><value>The left side is read-only.</value></data>
   <data name="Compare_RightReadOnly" xml:space="preserve"><value>The right side is read-only.</value></data>
   <data name="Compare_SkippedLengthChange" xml:space="preserve"><value>{0} differences that change the length were not copied.</value></data>
-  <data name="Compare_MultiSelectionUnavailable" xml:space="preserve"><value>Multiple selections are not available in this version.</value></data>
   <data name="Compare_BookmarkName" xml:space="preserve"><value>Difference {0} ({1})</value></data>
   <data name="Compare_BookmarksAdded" xml:space="preserve"><value>Added {0} bookmarks.</value></data>
   <data name="Compare_Exported" xml:space="preserve"><value>Exported to {0}.</value></data>
@@ -4455,7 +4457,7 @@ Details were written to:
   <data name="Menu_Analysis_Statistics.Text" xml:space="preserve"><value>Statistics...</value></data>
   <data name="Menu_Analysis_Statistics.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_Analysis_Classify.Text" xml:space="preserve"><value>Detect Encrypted/Compressed Data</value></data>
-  <data name="Menu_Analysis_Classify.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Analysis_Classify.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Menu_Analysis_FileType.Text" xml:space="preserve"><value>Detect File Type</value></data>
   <data name="Menu_Analysis_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
   <data name="Menu_View_Statistics.Text" xml:space="preserve"><value>Statistics</value></data>
@@ -4828,7 +4830,7 @@ Details were written to:
   <data name="Menu_Data_CaseSwap.Text" xml:space="preserve"><value>Swap case</value></data>
   <data name="Menu_Data_CaseSwap.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_Analysis_CustomCrc.Text" xml:space="preserve"><value>Define custom CRC...</value></data>
-  <data name="Menu_Analysis_CustomCrc.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Analysis_CustomCrc.AccessKey" xml:space="preserve"><value>R</value></data>
   <data name="HexViewMenu_DataOperation" xml:space="preserve"><value>Data operation</value></data>
   <data name="DataOp_Title" xml:space="preserve"><value>Data operations</value></data>
   <data name="DataOp_Run" xml:space="preserve"><value>Run</value></data>
@@ -5136,4 +5138,43 @@ Details were written to:
   <data name="MemoryMap_NoProcess" xml:space="preserve"><value>Open a process to see its memory map.</value></data>
   <data name="MemoryMap_NoAccess" xml:space="preserve"><value>No access</value></data>
   <data name="MemoryMap_Unallocated" xml:space="preserve"><value>Unallocated</value></data>
+  <data name="Annotations_Origin_Analysis" xml:space="preserve"><value>Analysis</value></data>
+  <data name="Menu_View_AnnotationsAnalysis.Text" xml:space="preserve"><value>Analysis Results</value></data>
+  <data name="Menu_View_AnnotationsAnalysis.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Cmd_view_annotations_analysis" xml:space="preserve"><value>Annotations: analysis results</value></data>
+  <data name="CmdAlias_view_annotations_analysis" xml:space="preserve"><value>annotation source statistics file type</value></data>
+  <data name="Export_MultiMode" xml:space="preserve"><value>Multiple selection</value></data>
+  <data name="Export_MultiPerRange" xml:space="preserve"><value>A separate file for each range</value></data>
+  <data name="Export_MultiConcatenate" xml:space="preserve"><value>Join into one file</value></data>
+  <data name="Export_MultiPattern" xml:space="preserve"><value>File name format</value></data>
+  <data name="Export_MultiPatternHelp" xml:space="preserve"><value>Each range needs its own file name. Use {base}, {ext}, {name}, {index}, {start} (or {offset}) and {length}.</value></data>
+  <data name="SaveSelection_MultiTitle" xml:space="preserve"><value>Save Selection to a File</value></data>
+  <data name="SaveSelection_Continue" xml:space="preserve"><value>Continue</value></data>
+  <data name="Menu_View_SyncMapped.Text" xml:space="preserve"><value>Follow the comparison</value></data>
+  <data name="Menu_View_SyncMapped.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Cmd_view_syncMapped" xml:space="preserve"><value>Synchronized scrolling: Follow the comparison</value></data>
+  <data name="CmdAlias_view_syncMapped" xml:space="preserve"><value>sync compare</value></data>
+  <data name="Command_NoCompareResult" xml:space="preserve"><value>Compare these two documents first (Analysis > Compare).</value></data>
+  <data name="Menu_File_OpenDisk.Text" xml:space="preserve"><value>Open Disk...</value></data>
+  <data name="Menu_File_OpenDisk.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_File_OpenProcess.Text" xml:space="preserve"><value>Open Process...</value></data>
+  <data name="Menu_File_OpenProcess.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Go_NextSector.Text" xml:space="preserve"><value>Next Sector</value></data>
+  <data name="Menu_Go_NextSector.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Go_PreviousSector.Text" xml:space="preserve"><value>Previous Sector</value></data>
+  <data name="Menu_Go_PreviousSector.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Go_ToSector.Text" xml:space="preserve"><value>Go to Sector...</value></data>
+  <data name="Menu_Go_ToSector.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Project_FileMissing" xml:space="preserve"><value>The project {0} refers to a file that was not found: {1}</value></data>
+  <data name="Device_Disconnected" xml:space="preserve"><value>The device was removed. Unsaved changes are kept.</value></data>
+  <data name="Device_HelperExited" xml:space="preserve"><value>The administrator helper process has exited. Unsaved changes are kept.</value></data>
+  <data name="Process_Exited" xml:space="preserve"><value>The process has exited. Data already read is still shown; the document is now read-only.</value></data>
+  <data name="Device_Reconnect" xml:space="preserve"><value>Reconnect</value></data>
+  <data name="Device_ReconnectFailed" xml:space="preserve"><value>Could not reconnect: {0}</value></data>
+  <data name="Device_Reconnected" xml:space="preserve"><value>Reconnected.</value></data>
+  <data name="Tab_ImmediateWrite" xml:space="preserve"><value>Immediate Write</value></data>
+  <data name="Tab_AutoRefresh" xml:space="preserve"><value>Auto Refresh</value></data>
+  <data name="Tab_AutoRefreshOff" xml:space="preserve"><value>Off</value></data>
+  <data name="Tab_AutoRefreshMilliseconds" xml:space="preserve"><value>Every {0} ms</value></data>
+  <data name="Tab_AutoRefreshSeconds" xml:space="preserve"><value>Every {0} s</value></data>
 </root>

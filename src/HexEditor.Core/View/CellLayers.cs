@@ -31,7 +31,7 @@ public enum CellLayer
     Template = 9,
 
     /// <summary>色付けルール (INSP-33)。</summary>
-    ColorRule = 10,
+    ColoringRule = 10,
 
     /// <summary>差分 (ANA-02〜ANA-04、VIEW-39 の「違いを強調」)。</summary>
     Difference = 11,
@@ -100,7 +100,7 @@ public sealed record CellAppearance(SchemeColor? Background, CellLayer? Backgrou
 public static class CellLayers
 {
     /// <summary>背景が隠れたときに下端の帯として残す層 (層 7〜10)。</summary>
-    public static bool KeepsBand(CellLayer layer) => layer is >= CellLayer.Bookmark and <= CellLayer.ColorRule;
+    public static bool KeepsBand(CellLayer layer) => layer is >= CellLayer.Bookmark and <= CellLayer.ColoringRule;
 
     /// <summary>帯を残す原因になる、手前の背景の層 (層 2〜5)。</summary>
     public static bool HidesWithBand(CellLayer layer) => layer is >= CellLayer.Selection and <= CellLayer.Match;

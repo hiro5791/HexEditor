@@ -406,6 +406,45 @@ public sealed partial class MainWindow
         ShowNotice(message, InfoBarSeverity.Success, Vm.Selected);
     }
 
+    /// <summary>
+    /// プロジェクトファイル (<c>.hexproj</c>) を開く: ファイル本体を開き (開いていればそのタブ)、プロジェクトのブックマークで置き換え、
+    /// 色付けルールとインスペクタのエンディアンを戻す。本体が見つからなければ理由を知らせて null。
+    /// </summary>
+    private DocumentViewModel? OpenProject(string path, int? insertAt)
+    {
+        HexProject project;
+        try
+        {
+            project = HexProject.Read(path, File.ReadAllBytes(path));
+        }
+        catch (Exception ex) when (ex is BookmarkFormatException or IOException or UnauthorizedAccessException)
+        {
+            ShowNotice(Loc.Format("Bookmarks_ImportError", Path.GetFileName(path), string.Empty, ex.Message), InfoBarSeverity.Error);
+            return null;
+        }
+
+        if (project.FilePath is not { } file || !File.Exists(file))
+        {
+            ShowNotice(Loc.Format("Project_FileMissing", Path.GetFileName(path), project.FilePath ?? string.Empty), InfoBarSeverity.Error);
+            return null;
+        }
+
+        if (TryOpen(file, insertAt) is not { } doc)
+        {
+            return null;
+        }
+
+        DocumentAnnotations a = AnnotationsFor(doc);
+        BookmarkExchange.Apply(a.Bookmarks, project.Bookmarks, BookmarkImportMode.Replace, 0, doc.Document.Length);
+        a.SetColoringRules(project.ColoringRules);
+        if (Enum.TryParse(project.InspectorEndian, ignoreCase: true, out Core.Inspector.InspectorEndianMode endian))
+        {
+            a.InspectorEndian = endian;
+        }
+
+        return doc;
+    }
+
     /// <summary>最後のインポートの結果・誤りの文 (テスト用)。</summary>
     internal string? LastImportReport { get; private set; }
 
@@ -491,7 +530,7 @@ public sealed partial class MainWindow
         {
             AnnotationOrigin origin = p.Source.Origin;
             AnnotationStyle style = display.StyleOf(origin);
-            HexHighlightLayer layer = origin == AnnotationOrigin.Template ? HexHighlightLayer.Template : HexHighlightLayer.Annotation;
+            CellLayer layer = origin == AnnotationOrigin.Template ? CellLayer.Template : CellLayer.Annotation;
             string name = origin switch
             {
                 AnnotationOrigin.Yara => "Yara",
@@ -507,9 +546,9 @@ public sealed partial class MainWindow
                 // ハイコントラストでは背景を塗らず、システム色の枠線で示す。
                 AnnotationStyle.Background when !hc => new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer,
                     p.Annotation.Rgb is { } back ? AnnotationBrushes.Background(BookmarkColor.Custom(back), view, false) : AnnotationBrushes.Get($"Annotation{name}BackgroundBrush", view, false),
-                    null, null, tag, p.Level),
-                AnnotationStyle.Underline => new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null, mark, null, tag, p.Level, Underline: true),
-                _ => new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null, mark, null, tag, p.Level),
+                    null, null, tag, Level: p.Level),
+                AnnotationStyle.Underline => new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null, mark, null, tag, Level: p.Level, Underline: true),
+                _ => new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null, mark, null, tag, Level: p.Level),
             };
         }
     }
@@ -795,7 +834,7 @@ public sealed partial class MainWindow
                     : cell.Border >= 0 ? RuleBrush(rules.Rules[cell.Border].Rule.Foreground ?? rules.Rules[cell.Border].Rule.Background ?? 0x808080) : null;
                 IReadOnlyList<double>? dash = !colors ? RuleDash(ruleIndex) : cell.Border >= 0 ? RuleDash(ShapeOf(rules.Rules[cell.Border].Rule.Border)) : null;
                 // 背景は合成の図形で塗る (乱数のデータではバイトごとに強調になり、1 画面に数千になる。INSP-33 の仕様 5)。
-                yield return new HexHighlight(start + i, j - i, HexHighlightLayer.ColoringRule, background, border, dash,
+                yield return new HexHighlight(start + i, j - i, CellLayer.ColoringRule, background, border, dash,
                     (column == 0 ? "coloring-hex:" : "coloring-text:") + rule.Name, LightBackground: true);
                 i = j;
             }

@@ -248,6 +248,8 @@
   <data name="Menu_File_SaveAll.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_File_CloseAll.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Start_Open.Content" xml:space="preserve"><value>開く...</value></data>
+  <data name="Start_OpenDisk.Content" xml:space="preserve"><value>ディスクを開く...</value></data>
+  <data name="Start_OpenProcess.Content" xml:space="preserve"><value>プロセスを開く...</value></data>
   <data name="Start_New.Content" xml:space="preserve"><value>新規作成</value></data>
   <data name="Start_DropHint.Text" xml:space="preserve"><value>ここにファイルをドロップしても開けます。</value></data>
   <data name="Menu_File_NewWithSize.Text" xml:space="preserve"><value>サイズを指定して新規作成(Z)...</value></data>
@@ -1323,6 +1325,7 @@
   <data name="JumpList_Pinned" xml:space="preserve"><value>固定済み</value></data>
   <data name="JumpList_Recent" xml:space="preserve"><value>最近使ったもの</value></data>
   <data name="JumpList_Task_NewWindow" xml:space="preserve"><value>新しいウィンドウ</value></data>
+  <data name="JumpList_Task_OpenDisk" xml:space="preserve"><value>ディスクを開く</value></data>
   <data name="JumpList_Task_NewDocument" xml:space="preserve"><value>新規作成</value></data>
   <data name="Shell_OpenWith" xml:space="preserve"><value>HexEditor で開く</value></data>
   <data name="Shell_ProjectType" xml:space="preserve"><value>HexEditor プロジェクト</value></data>
@@ -3167,8 +3170,8 @@
   <data name="Menu_View_MinimapAround.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Menu_View_MinimapExact.Text" xml:space="preserve"><value>正確に計算(X)</value></data>
   <data name="Menu_View_MinimapExact.AccessKey" xml:space="preserve"><value>X</value></data>
-  <data name="Menu_View_SplitMenu.Text" xml:space="preserve"><value>画面分割(Q)</value></data>
-  <data name="Menu_View_SplitMenu.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_SplitMenu.Text" xml:space="preserve"><value>画面分割(P)</value></data>
+  <data name="Menu_View_SplitMenu.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_SplitHorizontal.Text" xml:space="preserve"><value>上下に分割(H)</value></data>
   <data name="Menu_View_SplitHorizontal.AccessKey" xml:space="preserve"><value>H</value></data>
   <data name="Menu_View_SplitVertical.Text" xml:space="preserve"><value>左右に分割(V)</value></data>
@@ -3193,10 +3196,10 @@
   <data name="Menu_View_SyncKeepDifference.AccessKey" xml:space="preserve"><value>K</value></data>
   <data name="Menu_View_SyncDifferences.Text" xml:space="preserve"><value>違いを強調(D)</value></data>
   <data name="Menu_View_SyncDifferences.AccessKey" xml:space="preserve"><value>D</value></data>
-  <data name="Menu_Go_NextRecord.Text" xml:space="preserve"><value>次のレコード(N)</value></data>
-  <data name="Menu_Go_NextRecord.AccessKey" xml:space="preserve"><value>N</value></data>
-  <data name="Menu_Go_PreviousRecord.Text" xml:space="preserve"><value>前のレコード(P)</value></data>
-  <data name="Menu_Go_PreviousRecord.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Go_NextRecord.Text" xml:space="preserve"><value>次のレコード(O)</value></data>
+  <data name="Menu_Go_NextRecord.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Go_PreviousRecord.Text" xml:space="preserve"><value>前のレコード(C)</value></data>
+  <data name="Menu_Go_PreviousRecord.AccessKey" xml:space="preserve"><value>C</value></data>
   <data name="Menu_Go_NextPage.Text" xml:space="preserve"><value>次のページ(X)</value></data>
   <data name="Menu_Go_NextPage.AccessKey" xml:space="preserve"><value>X</value></data>
   <data name="Menu_Go_PreviousPage.Text" xml:space="preserve"><value>前のページ(V)</value></data>
@@ -3603,14 +3606,14 @@
   <data name="Legend_PreviousName" xml:space="preserve"><value>{0} の前の一致</value></data>
   <data name="Legend_NoNext" xml:space="preserve"><value>カーソルより後ろに一致はありません</value></data>
   <data name="Legend_NoPrevious" xml:space="preserve"><value>カーソルより前に一致はありません</value></data>
-  <data name="Menu_File_ImportExport.Text" xml:space="preserve"><value>インポート / エクスポート</value></data>
-  <data name="Menu_File_ImportExport.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_File_ImportExport.Text" xml:space="preserve"><value>ブックマークのインポート / エクスポート(G)</value></data>
+  <data name="Menu_File_ImportExport.AccessKey" xml:space="preserve"><value>G</value></data>
   <data name="Menu_File_ImportBookmarks.Text" xml:space="preserve"><value>ブックマークをインポート…</value></data>
   <data name="Menu_File_ImportBookmarks.AccessKey" xml:space="preserve"><value>I</value></data>
   <data name="Menu_File_ExportBookmarks.Text" xml:space="preserve"><value>ブックマークをエクスポート…</value></data>
   <data name="Menu_File_ExportBookmarks.AccessKey" xml:space="preserve"><value>E</value></data>
-  <data name="Menu_Edit_SelectionToBookmarks.Text" xml:space="preserve"><value>選択範囲をブックマークに</value></data>
-  <data name="Menu_Edit_SelectionToBookmarks.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Edit_SelectionToBookmarks.Text" xml:space="preserve"><value>選択範囲をブックマークに(E)</value></data>
+  <data name="Menu_Edit_SelectionToBookmarks.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Menu_Go_PositionManager.Text" xml:space="preserve"><value>位置マネージャ</value></data>
   <data name="Menu_Go_PositionManager.AccessKey" xml:space="preserve"><value>M</value></data>
   <data name="Menu_Go_ShowDescription.Text" xml:space="preserve"><value>カーソル位置の説明を表示</value></data>
@@ -3643,8 +3646,8 @@
   <data name="Menu_View_Legend.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_View_PositionManagerPanel.Text" xml:space="preserve"><value>位置マネージャ</value></data>
   <data name="Menu_View_PositionManagerPanel.AccessKey" xml:space="preserve"><value>P</value></data>
-  <data name="Menu_View_ColoringRulesPanel.Text" xml:space="preserve"><value>色付けルール</value></data>
-  <data name="Menu_View_ColoringRulesPanel.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_ColoringRulesPanel.Text" xml:space="preserve"><value>色付けルール(N)</value></data>
+  <data name="Menu_View_ColoringRulesPanel.AccessKey" xml:space="preserve"><value>N</value></data>
   <data name="Menu_View_LegendPanel.Text" xml:space="preserve"><value>凡例</value></data>
   <data name="Menu_View_LegendPanel.AccessKey" xml:space="preserve"><value>G</value></data>
   <data name="PositionManager_PanelName" xml:space="preserve"><value>位置マネージャ</value></data>
@@ -3720,8 +3723,8 @@
   <data name="Menu_File_ExportSelection.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_File_SaveSelection.Text" xml:space="preserve"><value>選択範囲をバイナリで保存(B)...</value></data>
   <data name="Menu_File_SaveSelection.AccessKey" xml:space="preserve"><value>B</value></data>
-  <data name="Menu_File_Workspace.Text" xml:space="preserve"><value>ワークスペース(K)</value></data>
-  <data name="Menu_File_Workspace.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_File_Workspace.Text" xml:space="preserve"><value>ワークスペース(J)</value></data>
+  <data name="Menu_File_Workspace.AccessKey" xml:space="preserve"><value>J</value></data>
   <data name="Menu_File_WorkspaceSave.Text" xml:space="preserve"><value>保存(S)...</value></data>
   <data name="Menu_File_WorkspaceSave.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_File_WorkspaceOpen.Text" xml:space="preserve"><value>開く(O)...</value></data>
@@ -4255,12 +4258,12 @@
   <data name="Menu_Analysis_CompareFiles.AccessKey" xml:space="preserve"><value>F</value></data>
   <data name="Menu_Analysis_CompareSaved.Text" xml:space="preserve"><value>保存済みの内容と比較(S)</value></data>
   <data name="Menu_Analysis_CompareSaved.AccessKey" xml:space="preserve"><value>S</value></data>
-  <data name="Menu_Go_NextDiff.Text" xml:space="preserve"><value>次の差分(N)</value></data>
-  <data name="Menu_Go_NextDiff.AccessKey" xml:space="preserve"><value>N</value></data>
-  <data name="Menu_Go_PreviousDiff.Text" xml:space="preserve"><value>前の差分(P)</value></data>
-  <data name="Menu_Go_PreviousDiff.AccessKey" xml:space="preserve"><value>P</value></data>
-  <data name="Menu_View_CompareStacked.Text" xml:space="preserve"><value>比較を上下に並べる(Q)</value></data>
-  <data name="Menu_View_CompareStacked.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_Go_NextDiff.Text" xml:space="preserve"><value>次の差分(D)</value></data>
+  <data name="Menu_Go_NextDiff.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Go_PreviousDiff.Text" xml:space="preserve"><value>前の差分(I)</value></data>
+  <data name="Menu_Go_PreviousDiff.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_CompareStacked.Text" xml:space="preserve"><value>比較を上下に並べる(X)</value></data>
+  <data name="Menu_View_CompareStacked.AccessKey" xml:space="preserve"><value>X</value></data>
   <data name="Menu_View_Diffs.Text" xml:space="preserve"><value>差分(D)</value></data>
   <data name="Menu_View_Diffs.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="CmdCategory_compare" xml:space="preserve"><value>比較</value></data>
@@ -4348,7 +4351,6 @@
   <data name="Compare_LeftReadOnly" xml:space="preserve"><value>左側は読み取り専用です。</value></data>
   <data name="Compare_RightReadOnly" xml:space="preserve"><value>右側は読み取り専用です。</value></data>
   <data name="Compare_SkippedLengthChange" xml:space="preserve"><value>長さが変わる差分 {0} 件はコピーしませんでした。</value></data>
-  <data name="Compare_MultiSelectionUnavailable" xml:space="preserve"><value>この版ではマルチ選択を使えません。</value></data>
   <data name="Compare_BookmarkName" xml:space="preserve"><value>差分 {0} ({1})</value></data>
   <data name="Compare_BookmarksAdded" xml:space="preserve"><value>ブックマークを {0} 件追加しました。</value></data>
   <data name="Compare_Exported" xml:space="preserve"><value>{0} に書き出しました。</value></data>
@@ -4454,8 +4456,8 @@
   <data name="CmdAlias_view_panel_fileType" xml:space="preserve"><value>ふぁいるけいしきぱねる</value></data>
   <data name="Menu_Analysis_Statistics.Text" xml:space="preserve"><value>統計...</value></data>
   <data name="Menu_Analysis_Statistics.AccessKey" xml:space="preserve"><value>S</value></data>
-  <data name="Menu_Analysis_Classify.Text" xml:space="preserve"><value>暗号化・圧縮データの検出</value></data>
-  <data name="Menu_Analysis_Classify.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Analysis_Classify.Text" xml:space="preserve"><value>暗号化・圧縮データの検出(E)</value></data>
+  <data name="Menu_Analysis_Classify.AccessKey" xml:space="preserve"><value>E</value></data>
   <data name="Menu_Analysis_FileType.Text" xml:space="preserve"><value>ファイル形式の判定</value></data>
   <data name="Menu_Analysis_FileType.AccessKey" xml:space="preserve"><value>F</value></data>
   <data name="Menu_View_Statistics.Text" xml:space="preserve"><value>統計</value></data>
@@ -4827,8 +4829,8 @@
   <data name="Menu_Data_CaseLower.AccessKey" xml:space="preserve"><value>L</value></data>
   <data name="Menu_Data_CaseSwap.Text" xml:space="preserve"><value>大文字と小文字を入れ替える(S)</value></data>
   <data name="Menu_Data_CaseSwap.AccessKey" xml:space="preserve"><value>S</value></data>
-  <data name="Menu_Analysis_CustomCrc.Text" xml:space="preserve"><value>カスタム CRC を定義(C)...</value></data>
-  <data name="Menu_Analysis_CustomCrc.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Analysis_CustomCrc.Text" xml:space="preserve"><value>カスタム CRC を定義(R)...</value></data>
+  <data name="Menu_Analysis_CustomCrc.AccessKey" xml:space="preserve"><value>R</value></data>
   <data name="HexViewMenu_DataOperation" xml:space="preserve"><value>データ演算</value></data>
   <data name="DataOp_Title" xml:space="preserve"><value>データ演算</value></data>
   <data name="DataOp_Run" xml:space="preserve"><value>実行</value></data>
@@ -5136,4 +5138,43 @@
   <data name="MemoryMap_NoProcess" xml:space="preserve"><value>プロセスを開くとメモリマップが表示されます。</value></data>
   <data name="MemoryMap_NoAccess" xml:space="preserve"><value>アクセス不可</value></data>
   <data name="MemoryMap_Unallocated" xml:space="preserve"><value>未割り当て</value></data>
+  <data name="Annotations_Origin_Analysis" xml:space="preserve"><value>解析</value></data>
+  <data name="Menu_View_AnnotationsAnalysis.Text" xml:space="preserve"><value>解析の結果</value></data>
+  <data name="Menu_View_AnnotationsAnalysis.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Cmd_view_annotations_analysis" xml:space="preserve"><value>注釈: 解析の結果</value></data>
+  <data name="CmdAlias_view_annotations_analysis" xml:space="preserve"><value>ちゅうしゃく かいせき とうけい ふぁいるけいしき</value></data>
+  <data name="Export_MultiMode" xml:space="preserve"><value>マルチ選択</value></data>
+  <data name="Export_MultiPerRange" xml:space="preserve"><value>範囲ごとに別ファイル</value></data>
+  <data name="Export_MultiConcatenate" xml:space="preserve"><value>つなげて 1 つのファイル</value></data>
+  <data name="Export_MultiPattern" xml:space="preserve"><value>ファイル名の形式</value></data>
+  <data name="Export_MultiPatternHelp" xml:space="preserve"><value>範囲ごとに違うファイル名にしてください。{base}、{ext}、{name}、{index}、{start} ({offset})、{length} を使えます。</value></data>
+  <data name="SaveSelection_MultiTitle" xml:space="preserve"><value>選択範囲をファイルに保存</value></data>
+  <data name="SaveSelection_Continue" xml:space="preserve"><value>続ける</value></data>
+  <data name="Menu_View_SyncMapped.Text" xml:space="preserve"><value>比較に従う(C)</value></data>
+  <data name="Menu_View_SyncMapped.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Cmd_view_syncMapped" xml:space="preserve"><value>同期スクロール: 比較に従う</value></data>
+  <data name="CmdAlias_view_syncMapped" xml:space="preserve"><value>どうきすくろーる ひかくにしたがう</value></data>
+  <data name="Command_NoCompareResult" xml:space="preserve"><value>先にこの 2 つのドキュメントを比較してください (解析 > 比較)。</value></data>
+  <data name="Menu_File_OpenDisk.Text" xml:space="preserve"><value>ディスクを開く(K)...</value></data>
+  <data name="Menu_File_OpenDisk.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_File_OpenProcess.Text" xml:space="preserve"><value>プロセスを開く(M)...</value></data>
+  <data name="Menu_File_OpenProcess.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Go_NextSector.Text" xml:space="preserve"><value>次のセクタ(T)</value></data>
+  <data name="Menu_Go_NextSector.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Go_PreviousSector.Text" xml:space="preserve"><value>前のセクタ(U)</value></data>
+  <data name="Menu_Go_PreviousSector.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Go_ToSector.Text" xml:space="preserve"><value>セクタへ移動(K)...</value></data>
+  <data name="Menu_Go_ToSector.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Project_FileMissing" xml:space="preserve"><value>プロジェクト {0} のファイルが見つかりません: {1}</value></data>
+  <data name="Device_Disconnected" xml:space="preserve"><value>デバイスが取り外されました。未保存の変更は残っています。</value></data>
+  <data name="Device_HelperExited" xml:space="preserve"><value>管理者権限の補助プロセスが終了しました。未保存の変更は残っています。</value></data>
+  <data name="Process_Exited" xml:space="preserve"><value>プロセスが終了しました。読み込み済みのデータは表示できます。ドキュメントは読み取り専用になりました。</value></data>
+  <data name="Device_Reconnect" xml:space="preserve"><value>再接続</value></data>
+  <data name="Device_ReconnectFailed" xml:space="preserve"><value>再接続できませんでした: {0}</value></data>
+  <data name="Device_Reconnected" xml:space="preserve"><value>再接続しました。</value></data>
+  <data name="Tab_ImmediateWrite" xml:space="preserve"><value>即時書き込み</value></data>
+  <data name="Tab_AutoRefresh" xml:space="preserve"><value>自動更新</value></data>
+  <data name="Tab_AutoRefreshOff" xml:space="preserve"><value>オフ</value></data>
+  <data name="Tab_AutoRefreshMilliseconds" xml:space="preserve"><value>{0} ミリ秒ごと</value></data>
+  <data name="Tab_AutoRefreshSeconds" xml:space="preserve"><value>{0} 秒ごと</value></data>
 </root>

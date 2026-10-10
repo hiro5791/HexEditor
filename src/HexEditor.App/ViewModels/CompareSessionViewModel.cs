@@ -20,10 +20,23 @@ public enum CompareSourceKind
 
     /// <summary>開いているドキュメントの、ディスク上に保存されている内容 (ANA-08)。</summary>
     Saved,
+
+    /// <summary>
+    /// 比較タブの中だけで読み取り専用で開く内容 (<see cref="CompareTargetSpec.Open"/> が作る)。履歴パネルの「2 つの時点を比較」(EDIT-20 の仕様 5)、
+    /// プロセスのスナップショット (ANA-09) など。
+    /// </summary>
+    Content,
 }
 
 /// <summary>比較の片側の指定 (ANA-01 の仕様 1・2)。<see cref="Length"/> が null なら末尾まで。再比較 (仕様 8) に使う。</summary>
-public sealed record CompareTargetSpec(CompareSourceKind Kind, DocumentViewModel? Document, string? Path, long Start, long? Length);
+public sealed record CompareTargetSpec(CompareSourceKind Kind, DocumentViewModel? Document, string? Path, long Start, long? Length)
+{
+    /// <summary><see cref="CompareSourceKind.Content"/> の内容を開く (比較タブを閉じるときに閉じる)。</summary>
+    public Func<HexEditor.Core.Engine.Document>? Open { get; init; }
+
+    /// <summary><see cref="CompareSourceKind.Content"/> の表示名 (「時点 3」など)。</summary>
+    public string? Name { get; init; }
+}
 
 /// <summary>
 /// 比較タブの片側。比較タブの Hex ビューは、通常のタブとは別のカーソル・スクロール位置 (<see cref="EditorState"/>) で同じドキュメントを
@@ -66,6 +79,11 @@ public sealed class CompareSideViewModel : IDisposable
         if (OwnsDocument)
         {
             View.Dispose();
+        }
+        else
+        {
+            // 開いているドキュメントを表示していた側: ドキュメントは閉じず、比較タブのビューの購読だけを外す (外さないとドキュメントを閉じるまで残る)。
+            View.DetachFromDocument();
         }
     }
 }

@@ -166,6 +166,57 @@ public sealed class EntropyCache
     /// <summary>ドキュメントのキャッシュ (なければ作る)。</summary>
     public static EntropyCache For(Document document) => Caches.GetValue(document, d => new EntropyCache(d));
 
+    /// <summary>ドキュメントのキャッシュ (作らない)。</summary>
+    public static EntropyCache? Find(Document document) => Caches.TryGetValue(document, out EntropyCache? cache) ? cache : null;
+
+    /// <summary>
+    /// [start, start + length) の計算済みのエントロピー (範囲に重なるブロックがすべて計算済みのときだけ。ブロックの長さで重み付けした平均)。
+    /// ミニマップ (VIEW-35) が、統計パネル (ANA-13) で計算した値を読み込みなしで使う。範囲より大きいブロックの値は使わない。
+    /// </summary>
+    public double? CachedEntropy(DocumentSnapshot snapshot, long start, long length)
+    {
+        if (length <= 0)
+        {
+            return null;
+        }
+
+        lock (_lock)
+        {
+            if (!ReferenceEquals(snapshot, _document.Current))
+            {
+                return null;
+            }
+
+            foreach (EntropyBlocks blocks in _entries.Values.Where(e => e.Length == snapshot.Length && e.BlockSize <= length).OrderBy(e => e.BlockSize))
+            {
+                int first = blocks.BlockOf(start);
+                int last = blocks.BlockOf(start + length - 1);
+                double sum = 0;
+                long weight = 0;
+                bool complete = true;
+                for (int i = first; i <= last; i++)
+                {
+                    if (blocks.State[i] != BlockState.Valid)
+                    {
+                        complete = false;
+                        break;
+                    }
+
+                    long w = blocks.BlockLength(i);
+                    sum += blocks.Entropy[i] * w;
+                    weight += w;
+                }
+
+                if (complete && weight > 0)
+                {
+                    return sum / weight;
+                }
+            }
+        }
+
+        return null;
+    }
+
     /// <summary>計算のために読んだ範囲 (ドキュメント上。テストの確認用。TC-ANA-13-03、TC-ANA-13-04)。</summary>
     public IReadOnlyList<(long BlockSize, long Offset, long Length)> ComputeLog
     {

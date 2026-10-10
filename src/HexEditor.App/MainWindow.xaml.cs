@@ -183,6 +183,12 @@ public sealed partial class MainWindow : Window
             Vm.NewDocument();
         }
 
+        // ジャンプリストの「ディスクを開く」(--open-disk。UI-35)。
+        if (commandLine.OpenDisk)
+        {
+            DispatcherQueue.TryEnqueue(() => _ = Commands.ExecuteAsync("file.openDisk"));
+        }
+
         if (commandLine.Offset is { } offset && Editor is { } editor
             && Core.Expressions.ExpressionEvaluator.TryEvaluate(offset, new Core.View.EditorExpressionContext(editor), out long target, out _))
         {
@@ -276,7 +282,7 @@ public sealed partial class MainWindow : Window
 
     private async void Save_Click(object sender, RoutedEventArgs e)
     {
-        if (Vm.Selected is { } doc)
+        if (SaveTarget() is { } doc)
         {
             await SaveAsync(doc, saveAs: false);
         }
@@ -284,11 +290,17 @@ public sealed partial class MainWindow : Window
 
     private async void SaveAs_Click(object sender, RoutedEventArgs e)
     {
-        if (Vm.Selected is { } doc)
+        if (SaveTarget() is { } doc)
         {
             await SaveAsync(doc, saveAs: true);
         }
     }
+
+    /// <summary>
+    /// 保存の対象。比較タブの表示中は、フォーカスのある側が表示している開いているドキュメント (ANA-04 の仕様 2。比較タブの前に選んでいた
+    /// タブではない)。ディスク上のファイル・保存済みの内容・時点の側は比較タブの中だけで読み取り専用で開いたものなので、保存の対象にしない。
+    /// </summary>
+    private DocumentViewModel? SaveTarget() => ActiveCompare is { } compare ? compare.Focused.Owner : Vm.Selected;
 
     /// <summary>保存する。保存しなかった (キャンセル・失敗) 場合は false。</summary>
     private async Task<bool> SaveAsync(DocumentViewModel doc, bool saveAs)

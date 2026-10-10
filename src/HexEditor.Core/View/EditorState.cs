@@ -100,8 +100,23 @@ public sealed partial class EditorState
         Document = document;
         BytesPerRow = Math.Clamp(bytesPerRow, 1, ViewSettings.MaxBytesPerRow);
         _view = ViewSettings.Default with { BytesPerRow = BytesPerRow };
-        Document.Changed += (_, e) => OnDocumentChanged(e);
-        Document.ReadOnlyChanged += (_, _) => RaiseChanged();
+        _documentChanged = (_, e) => OnDocumentChanged(e);
+        _readOnlyChanged = (_, _) => RaiseChanged();
+        Document.Changed += _documentChanged;
+        Document.ReadOnlyChanged += _readOnlyChanged;
+    }
+
+    private readonly EventHandler<DocumentChangedEventArgs> _documentChanged;
+    private readonly EventHandler _readOnlyChanged;
+
+    /// <summary>
+    /// ドキュメントのイベントの購読を外す (このビューだけを閉じ、ドキュメントは開いたままにするとき: 比較タブ、分割したペイン、新しいビュー)。
+    /// 外さないと、ドキュメントを閉じるまでこのビューが解放されない。
+    /// </summary>
+    public void Detach()
+    {
+        Document.Changed -= _documentChanged;
+        Document.ReadOnlyChanged -= _readOnlyChanged;
     }
 
     public Document Document { get; }

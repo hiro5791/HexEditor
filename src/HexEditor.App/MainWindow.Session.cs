@@ -354,6 +354,7 @@ public sealed partial class MainWindow
         TrackNormalBounds();
         StartPage.OpenRequested += (_, _) => Open_Click(this, new RoutedEventArgs());
         StartPage.NewRequested += (_, _) => New_Click(this, new RoutedEventArgs());
+        StartPage.CommandRequested += (_, id) => _ = Commands.ExecuteAsync(id);
         StartPage.RestoreSessionRequested += (_, _) => RestorePreviousSession();
         StartPage.ShowAllRequested += (_, _) => ShowAllRecent_Click(this, new RoutedEventArgs());
         StartPage.RecentRequested += (_, entry) => OpenRecent(entry.Item);

@@ -111,8 +111,9 @@ public sealed partial class MainWindow
         Commands.Register("file.newWithSize", () => NewWithSize_Click(this, e));
         Commands.Register("file.open", () => Open_Click(this, e));
         Commands.Register("file.save", () => Save_Click(this, e),
-            () => NeedsDocument(d => d.Document.IsReadOnly ? Loc.Get("Command_ReadOnly") : null));
-        Commands.Register("file.saveAs", () => SaveAs_Click(this, e), NeedsDocument);
+            () => NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
+        Commands.Register("file.saveAs", () => SaveAs_Click(this, e),
+            () => NeedsDocument(_ => SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAll", () => SaveAll_Click(this, e), NeedsDocument);
         Commands.Register("file.close", () => Close_Click(this, e), NeedsDocument);
         Commands.Register("file.closeAll", () => CloseAll_Click(this, e), NeedsDocument);

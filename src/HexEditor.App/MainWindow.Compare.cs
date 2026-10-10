@@ -51,12 +51,6 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
     /// <summary>タブの右クリックメニュー「比較の左側に選択」で選んだタブ (ANA-01 の「呼び出し」)。</summary>
     private DocumentViewModel? _compareLeftCandidate;
 
-    /// <summary>
-    /// 差分をマルチ選択に変換する処理 (ANA-06 の仕様 5)。マルチ選択 (EDIT-07、F2-12) の担当が設定する。設定されていなければ、範囲が 1 つなら
-    /// 通常の選択にし、2 つ以上なら選択の担当の機能がないことを知らせる。テスト用のビルドでは、渡した範囲を記録する。
-    /// </summary>
-    public static Func<MainWindow, DocumentViewModel, IReadOnlyList<(long Offset, long Length)>, bool>? ApplyMultiSelection { get; set; }
-
     /// <summary>パネルの一覧に登録し、外部変更の通知の「比較」(ENG-19 の仕様 5) をつなぐ (アプリの起動時、ウィンドウを作る前に 1 度呼ぶ)。</summary>
     public static void RegisterComparePanel()
     {
@@ -70,6 +64,26 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         }
 
         CompareWithDisk = (window, doc) => window.CompareWithSavedAsync(doc, external: true);
+
+        // 履歴パネルの「2 つの時点を比較」(EDIT-20 の仕様 5): 2 つの時点の内容を読み取り専用のコピーとして比較タブで比べる。
+        HistoryPanelViewModel.CompareSnapshots = (doc, first, second, firstName, secondName) =>
+            WindowManager.OwnerOf(doc) is { } window ? window.CompareSnapshotsAsync(doc, first, second, firstName, secondName) : Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// 同じドキュメントの 2 つの時点 (編集履歴のスナップショット) を比べる。内容はピースの参照で作るので、ファイルの大きさによらずすぐに開く。
+    /// </summary>
+    internal async Task CompareSnapshotsAsync(DocumentViewModel doc, DocumentSnapshot first, DocumentSnapshot second, string firstName,
+        string secondName)
+    {
+        CompareTargetSpec Spec(DocumentSnapshot snapshot, string name) => new(CompareSourceKind.Content, doc, null, 0, null)
+        {
+            Open = () => Document.CreateCopy(snapshot, 0, snapshot.Length, $"{doc.DisplayName} ({name})", Vm.DocumentOptions),
+            Name = $"{doc.DisplayName} ({name})",
+        };
+
+        CompareOptions options = CompareOptions.FromJson(CommandService.State?.Get(CompareOptionsKey));
+        await OpenCompareAsync(Spec(first, firstName), Spec(second, secondName), options);
     }
 
     private DiffListPanel DiffPanel => _diffPanel ??= new DiffListPanel { Host = this };
@@ -383,6 +397,7 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
         return session;
 
         static bool Same(CompareTargetSpec a, CompareTargetSpec b) => a.Kind == b.Kind && ReferenceEquals(a.Document, b.Document)
+            && string.Equals(a.Name, b.Name, StringComparison.Ordinal)
             && string.Equals(a.Path, b.Path, StringComparison.OrdinalIgnoreCase) && a.Start == b.Start && a.Length == b.Length;
     }
 
@@ -400,6 +415,18 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
                 view.Editor.TextEncoding = owner.Editor.TextEncoding;
                 EditorSettings.Apply(App.Settings, view);
                 return new CompareSideViewModel(right, view, owner, ownsDocument: false, owner.DisplayName);
+            case CompareSourceKind.Content:
+                Document content = spec.Open!();
+                content.SetReadOnly(ReadOnlyReason.OpenedReadOnly);
+                string contentName = spec.Name ?? content.Source.DisplayName;
+                var contentView = new DocumentViewModel(content, null, contentName) { Notifications = Vm.Notifications };
+                if (spec.Document is { } from)
+                {
+                    contentView.Editor.ApplyView(from.Editor.View);
+                }
+
+                EditorSettings.Apply(App.Settings, contentView);
+                return new CompareSideViewModel(right, contentView, null, ownsDocument: true, contentName);
             default:
                 string path = spec.Path ?? spec.Document?.FilePath ?? throw new IOException(Loc.Get("Compare_Dialog_NoPath"));
                 var document = new Document(FileByteSource.Open(path), Vm.DocumentOptions);
@@ -680,18 +707,16 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
 #if HEX_TEST_HOOKS
         _lastMultiSelection = (doc, ranges);
 #endif
-        if (ApplyMultiSelection is { } apply && apply(this, doc, ranges))
-        {
-            return;
-        }
-
         if (ranges.Count == 1)
         {
             doc.Editor.Select(ranges[0].Offset, ranges[0].Length);
         }
-        else
+        else if (ranges.Count > 1
+            && doc.Editor.SetSelections(ranges.Select(x => new Core.Selection.ByteRange(x.Offset, x.Length))) == SelectionResult.Truncated)
         {
-            ShowNotice(Loc.Get("Compare_MultiSelectionUnavailable"), InfoBarSeverity.Informational);
+            // 要素の上限 (EDIT-07) を超えた分は選ばない。
+            ShowNotice(Loc.Format("Notice_SelectionTruncated", doc.Editor.MaxSelectionElements.ToString("N0", CultureInfo.CurrentCulture)),
+                InfoBarSeverity.Informational);
         }
     }
 

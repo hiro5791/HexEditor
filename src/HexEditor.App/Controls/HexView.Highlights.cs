@@ -7,31 +7,6 @@ using Microsoft.UI.Xaml.Shapes;
 
 namespace HexEditor.App.Controls;
 
-/// <summary>強調表示の層 (VIEW-17 の仕様 5 の順位。小さいほど手前)。</summary>
-public enum HexHighlightLayer
-{
-    /// <summary>層 2: 選択範囲に伴う印 (マルチ選択の主要素の枠、マルチカーソル、ドロップの位置。EDIT-07・EDIT-08・EDIT-18)。</summary>
-    Selection = 2,
-
-    /// <summary>層 3: 注目している範囲 (インスペクタの対象 INSP-18 など)。</summary>
-    Focus = 3,
-
-    /// <summary>層 7: ブックマーク (INSP-23)。</summary>
-    Bookmark = 7,
-
-    /// <summary>層 8: 注釈 (ブックマーク・テンプレート以外の出どころ。INSP-32)。</summary>
-    Annotation = 8,
-
-    /// <summary>層 9: テンプレートの範囲の色分け (TPL-23。注釈の出どころ「テンプレート」もここに描く)。</summary>
-    Template = 9,
-
-    /// <summary>層 10: 色付けルール (INSP-33、INSP-34)。</summary>
-    ColoringRule = 10,
-
-    /// <summary>層 11: 差分 (比較 ANA-02〜ANA-04、並列表示の「違いを強調」VIEW-39)。</summary>
-    Difference = 11,
-}
-
 /// <summary>
 /// 色以外の印 (色だけに頼らないため。00-overview 11.5)。差分の種類ごとの模様 (ANA-04 の仕様 3) に使う。下線は変更されたバイトの印
 /// (VIEW-17 の層 6) に使うため、ここには含めない。
@@ -59,7 +34,7 @@ public enum HexMark
 /// 後の (内側の) 項目ほど上に描く。<see cref="Underline"/> なら枠線の代わりにセルの下端に線を引く (<see cref="Border"/> の色)。
 /// </para>
 /// </summary>
-public sealed record HexHighlight(long Offset, long Length, HexHighlightLayer Layer, Brush? Background, Brush? Border,
+public sealed record HexHighlight(long Offset, long Length, CellLayer Layer, Brush? Background, Brush? Border,
     IReadOnlyList<double>? Dash = null, string Tag = "", double Thickness = 1, int Level = 0, bool Underline = false,
     bool LightBackground = false, HexMark Mark = HexMark.None, Brush? MarkBrush = null);
 
@@ -89,7 +64,7 @@ public sealed partial class HexView
     private Action<MenuFlyout>? _contextMenuOpening;
 
     /// <summary>描いた強調 (テスト用の読み出し)。Column は "hex" か "text"。</summary>
-    private readonly record struct PlacedHighlight(HexHighlightLayer Layer, string Tag, string Column, long First, long Last, Brush? Background,
+    private readonly record struct PlacedHighlight(CellLayer Layer, string Tag, string Column, long First, long Last, Brush? Background,
         Brush? Border, IReadOnlyList<double>? Dash, int Level, bool Underline, int Order, HexMark Mark);
 
     // ハイコントラストの判定は IsHighContrast (HexView.Options.cs。テスト用の模擬 ForcedHighContrast を含む) を使う。
@@ -184,7 +159,7 @@ public sealed partial class HexView
                     continue;
                 }
 
-                bool band = h.Background is not null && (int)h.Layer >= (int)HexHighlightLayer.Bookmark && (int)h.Layer <= (int)HexHighlightLayer.ColoringRule;
+                bool band = h.Background is not null && CellLayers.KeepsBand(h.Layer);
                 for (long rowStart = firstOffset + (from - firstOffset) / bytesPerRow * bytesPerRow; rowStart < to; rowStart += bytesPerRow)
                 {
                     int c0 = (int)(Math.Max(from, rowStart) - rowStart);
@@ -362,7 +337,7 @@ public sealed partial class HexView
     private const double BandHeight = 2;
 
     /// <summary>描いた帯 (テスト用の読み出し): 層・提供元・列・最初と最後のバイト・色・高さ。</summary>
-    private readonly List<(HexHighlightLayer Layer, string Tag, string Column, long First, long Last, Brush Brush)> _placedBands = [];
+    private readonly List<(CellLayer Layer, string Tag, string Column, long First, long Last, Brush Brush)> _placedBands = [];
 
     /// <summary>
     /// 選択範囲・検索の一致・注目している範囲に隠れるバイトに、強調の背景の色の帯をセルの下端 (変更の下線のすぐ上) に描く。
@@ -601,7 +576,7 @@ public sealed partial class HexView
         }
 
         var bands = new System.Text.Json.Nodes.JsonArray();
-        foreach ((HexHighlightLayer layer, string tag, string column, long first, long last, Brush brush) in _placedBands)
+        foreach ((CellLayer layer, string tag, string column, long first, long last, Brush brush) in _placedBands)
         {
             bands.Add(new System.Text.Json.Nodes.JsonObject
             {

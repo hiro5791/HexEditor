@@ -372,6 +372,8 @@ Ayrıntılar şuraya yazıldı:
   <data name="Find_Cancel.Content" xml:space="preserve"><value>İptal</value></data>
   <data name="Operations_Matches" xml:space="preserve"><value>{0, plural, one {# eşleşme} other {# eşleşme}}</value></data>
   <data name="Menu_Analysis.Title" xml:space="preserve"><value>Analiz</value></data>
+  <data name="Menu_Data.Title" xml:space="preserve"><value>Veri</value></data>
+  <data name="Menu_Data.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Menu_Analysis.AccessKey" xml:space="preserve"><value>N</value></data>
   <data name="Menu_Analysis_Hash.Text" xml:space="preserve"><value>Karma...</value></data>
   <data name="Menu_Analysis_Hash.AccessKey" xml:space="preserve"><value>K</value></data>

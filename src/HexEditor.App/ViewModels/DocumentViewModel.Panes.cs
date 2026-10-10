@@ -162,11 +162,13 @@ public sealed partial class DocumentViewModel
         {
             // 操作中の 2 つ目のペインを残す: 1 つ目にする。
             DetachPane(PrimaryEditor);
+            PrimaryEditor.Detach();
             PrimaryEditor = second;
         }
         else
         {
             DetachPane(second);
+            second.Detach();
         }
 
         SecondaryEditor = null;

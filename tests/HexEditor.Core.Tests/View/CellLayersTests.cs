@@ -80,9 +80,9 @@ public sealed class CellLayersTests
         CellAppearance result = CellLayers.Resolve(
         [
             new(CellLayer.Modified, Foreground: C(6, 2), Decoration: CellDecorationKind.Underline),
-            new(CellLayer.ColorRule, C(10, 1), C(10, 2), CellDecorationKind.Frame, C(10, 3), ValueDependent: true),
+            new(CellLayer.ColoringRule, C(10, 1), C(10, 2), CellDecorationKind.Frame, C(10, 3), ValueDependent: true),
         ]);
-        Assert.Contains(result.Decorations, d => d.Kind == CellDecorationKind.Frame && d.Layer == CellLayer.ColorRule);
+        Assert.Contains(result.Decorations, d => d.Kind == CellDecorationKind.Frame && d.Layer == CellLayer.ColoringRule);
         Assert.Contains(result.Decorations, d => d.Kind == CellDecorationKind.Underline);
         Assert.Equal(C(6, 2), result.Foreground);
     }

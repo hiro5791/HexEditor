@@ -29,23 +29,8 @@ public sealed partial class MainWindow
     private FileTypeViewModel? _fileTypeVm;
     private FileTypePanel? _fileTypePanel;
 
-    /// <summary>
-    /// 「この長さでレコード表示」(ANA-15) の行き先 (02 の VIEW-18、F2-16 の担当がつなぐ)。null ならメニューの項目を無効にする。
-    /// 引数はウィンドウとレコード長。
-    /// </summary>
-    public static Action<MainWindow, long>? RecordViewHook { get; set; }
-
     /// <summary>「ここから展開...」(ANA-16 の仕様 5) の行き先 (03 の展開機能 F4-04、フェーズ 4)。null なら無効。</summary>
     public static Func<MainWindow, long, string, Task>? DecompressHook { get; set; }
-
-    /// <summary>マルチ選択 (03 の EDIT-07) の範囲。選択の担当がつなぐ。null ならマルチ選択はない。</summary>
-    public static Func<Core.View.EditorState, IReadOnlyList<HashRange>>? MultiSelectionHook { get; set; }
-
-    /// <summary>ドキュメントのエンディアン (02 の VIEW-11)。表示の担当がつなぐ。</summary>
-    public static Func<Core.View.EditorState, bool>? DocumentBigEndianHook { get; set; }
-
-    /// <summary>共通の注釈レイヤー (05 の INSP-32)。インスペクタの担当がつなぐ。null なら注釈を出さない。</summary>
-    public static Func<MainWindow, Core.Statistics.IAnnotationSink?>? AnnotationSinkHook { get; set; }
 
     public bool IsStatisticsPanelOpen => IsPanelShown(StatisticsPanelId);
 
@@ -76,7 +61,7 @@ public sealed partial class MainWindow
     private FileTypeViewModel FileTypeVm => _fileTypeVm ??= new FileTypeViewModel(Vm.Operations)
     {
         GoTo = GoToFromAnalysis,
-        Annotations = AnnotationSinkHook?.Invoke(this),
+        Annotations = AnalysisAnnotations,
     };
 
     private StatisticsViewModel CreateStatisticsViewModel() => new(Vm.Operations, App.Settings)
@@ -96,12 +81,38 @@ public sealed partial class MainWindow
         },
         SearchNext = SearchBytesAsync,
         FindAll = FindAllBytesAsync,
-        ShowRecordView = RecordViewHook is { } records ? length => records(this, length) : null,
+        ShowRecordView = ShowRecordViewOfLength,
         OpenDecompress = DecompressHook is { } decompress ? (offset, format) => decompress(this, offset, format) : null,
-        MultiSelectionOf = MultiSelectionHook,
-        DocumentBigEndian = DocumentBigEndianHook is { } endian ? doc => endian(doc.Editor) : null,
-        Annotations = AnnotationSinkHook?.Invoke(this),
+
+        // マルチ選択 (EDIT-07) の要素、ドキュメントのエンディアン (VIEW-11)、共通の注釈レイヤー (INSP-32)。
+        MultiSelectionOf = editor => editor.HasMultipleRanges
+            ? [.. editor.SelectedRanges.Where(r => r.Length > 0).Select(r => new HashRange(r.Start, r.Length))]
+            : [],
+        DocumentBigEndian = doc => doc.Editor.View.BigEndian,
+        Annotations = AnalysisAnnotations,
     };
+
+    /// <summary>解析の注釈 (分類・埋め込まれた形式) を共通の注釈レイヤー (INSP-32) に載せる口。</summary>
+    private static readonly Core.Statistics.IAnnotationSink AnalysisAnnotations = new Core.Statistics.AnnotationLayerSink();
+
+    /// <summary>「この長さでレコード表示」(ANA-15 の仕様 4): レコード表示 (VIEW-18) を、見つかった周期のレコード長でオンにする。</summary>
+    private void ShowRecordViewOfLength(long length)
+    {
+        if (Editor is not { } editor || length < 1 || length > int.MaxValue)
+        {
+            return;
+        }
+
+        editor.ApplyView(editor.View with
+        {
+            RecordView = true,
+            RecordLength = (int)length,
+            RecordPerRow = length <= Core.View.ViewSettings.MaxBytesPerRow,
+        });
+        UpdateViewMenu();
+        QueueStatusBarLayout();
+        FocusEditor();
+    }
 
     private StatisticsPanel CreateStatisticsPanel()
     {

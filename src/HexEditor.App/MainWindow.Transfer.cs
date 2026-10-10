@@ -602,6 +602,10 @@ public sealed partial class MainWindow
         RadioButton selection = DialogParts.Radio("Export_Selection", Loc.Get("Export_Selection"), "ExportTarget", editor.HasSelection);
         RadioButton range = DialogParts.Radio("Export_Range", Loc.Get("Export_Range"), "ExportTarget", false);
         selection.IsEnabled = editor.HasSelection;
+
+        // マルチ選択は「範囲ごとに別ファイル」/「つなげて 1 つのファイル」を選ぶ (仕様 1)。
+        bool multi = editor.HasMultipleRanges;
+        (ComboBox multiMode, TextBox multiPattern) = MultiRangeControls("Export");
         TextBox rangeStart = DialogParts.Field("Export_RangeStart", Loc.Get("OpenAdv_Start"), "0");
         TextBox rangeLength = DialogParts.Field("Export_RangeLength", Loc.Get("OpenAdv_Length"), "end");
         var optionsHost = new ContentControl { HorizontalContentAlignment = HorizontalAlignment.Stretch };
@@ -612,7 +616,8 @@ public sealed partial class MainWindow
         var body = new StackPanel { Spacing = 8, MinWidth = 460 };
         foreach (UIElement e in new UIElement[]
         {
-            new TextBlock { Text = Loc.Get("Export_Target") }, whole, selection, range, rangeStart, rangeLength, format, optionsHost,
+            new TextBlock { Text = Loc.Get("Export_Target") }, whole, selection, multiMode, multiPattern, range, rangeStart, rangeLength, format,
+            optionsHost,
             PathRow(pathBox, browse), preview, summary,
         })
         {
@@ -634,7 +639,7 @@ public sealed partial class MainWindow
         {
             if (selection.IsChecked == true && editor.HasSelection)
             {
-                return [(editor.SelectionStart, editor.SelectionLength)];
+                return SelectionRangeList(editor);
             }
 
             if (range.IsChecked == true && Evaluate(rangeStart.Text) is { } s && Evaluate(rangeLength.Text) is { } l)
@@ -667,6 +672,13 @@ public sealed partial class MainWindow
         {
             bool rangeOk = range.IsChecked != true || Evaluate(rangeStart.Text) is not null && Evaluate(rangeLength.Text) is not null;
             rangeStart.Visibility = rangeLength.Visibility = range.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            bool multiShown = multi && selection.IsChecked == true;
+            bool perRange = multiShown && multiMode.SelectedIndex == 0;
+            multiMode.Visibility = multiShown ? Visibility.Visible : Visibility.Collapsed;
+            multiPattern.Visibility = perRange ? Visibility.Visible : Visibility.Collapsed;
+            bool patternOk = !perRange || RangeFileNames.ExpandAll(multiPattern.Text, Path.GetFileName(pathBox.Text.Trim()), Ranges()) is not null;
+            DialogParts.MarkInvalid(multiPattern, !patternOk);
+            rangeOk &= patternOk;
             DialogParts.MarkInvalid(rangeStart, !rangeOk);
             IReadOnlyList<string> bad = TransferOptions.Validate(current, values, Evaluate);
             foreach ((string key, Control control) in state.Fields)
@@ -716,6 +728,8 @@ public sealed partial class MainWindow
         rangeStart.TextChanged += (_, _) => Refresh();
         rangeLength.TextChanged += (_, _) => Refresh();
         pathBox.TextChanged += (_, _) => Refresh();
+        multiMode.SelectionChanged += (_, _) => Refresh();
+        multiPattern.TextChanged += (_, _) => Refresh();
         browse.Click += async (_, _) =>
         {
             string suggested = Path.GetFileNameWithoutExtension(doc.DisplayName) + FormatIds.Extension(current);
@@ -758,7 +772,53 @@ public sealed partial class MainWindow
 
         TransferOptions.Save("export.options." + current, values);
         AppState.SetString("export.format", current);
+        if (multi && selection.IsChecked == true && multiMode.SelectedIndex == 0)
+        {
+            await RunPerRangeExportAsync(doc, Ranges(), Options(), Path.GetFullPath(pathBox.Text), multiPattern.Text);
+            return;
+        }
+
         await RunExportAsync(doc, Ranges(), Options(), Path.GetFullPath(pathBox.Text));
+    }
+
+    /// <summary>選択範囲の一覧 (マルチ選択・矩形選択なら各要素。オフセット順)。</summary>
+    private static IReadOnlyList<(long Offset, long Length)> SelectionRangeList(EditorState editor) => editor.HasMultipleRanges
+        ? [.. editor.SelectedRanges.Where(r => r.Length > 0).Select(r => (r.Start, r.Length))]
+        : [(editor.SelectionStart, editor.SelectionLength)];
+
+    /// <summary>マルチ選択の書き出し方 (範囲ごとに別ファイル / つなげて 1 つのファイル) と、別ファイルのときのファイル名の形式。</summary>
+    private static (ComboBox Mode, TextBox Pattern) MultiRangeControls(string prefix)
+    {
+        ComboBox mode = DialogParts.Combo(prefix + "_MultiMode", Loc.Get("Export_MultiMode"),
+            [Loc.Get("Export_MultiPerRange"), Loc.Get("Export_MultiConcatenate")], 1);
+        TextBox pattern = DialogParts.Field(prefix + "_MultiPattern", Loc.Get("Export_MultiPattern"), RangeFileNames.DefaultPattern, monospace: false);
+        ToolTipService.SetToolTip(pattern, Loc.Get("Export_MultiPatternHelp"));
+        return (mode, pattern);
+    }
+
+    /// <summary>
+    /// マルチ選択を範囲ごとに別ファイルに書き出す (TOOL-04・TOOL-16 の仕様 1)。<paramref name="path"/> のフォルダに、形式で作った名前で書く。
+    /// 1 つが失敗・キャンセルされたら、残りは書かない。
+    /// </summary>
+    private async Task<bool> RunPerRangeExportAsync(DocumentViewModel doc, IReadOnlyList<(long Offset, long Length)> ranges, ExportOptions options,
+        string path, string pattern)
+    {
+        string folder = Path.GetDirectoryName(path) ?? string.Empty;
+        if (RangeFileNames.ExpandAll(pattern, Path.GetFileName(path), ranges) is not { } names)
+        {
+            ShowNotice(Loc.Get("Export_MultiPatternHelp"), InfoBarSeverity.Warning, doc);
+            return false;
+        }
+
+        for (int i = 0; i < ranges.Count; i++)
+        {
+            if (!await RunExportAsync(doc, [ranges[i]], options, Path.Combine(folder, names[i])))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -853,6 +913,26 @@ public sealed partial class MainWindow
             return;
         }
 
+        // マルチ選択: 範囲ごとに別ファイルか、つなげて 1 つのファイルかを先に選ぶ (仕様 1。選択肢を含む小さなダイアログ)。
+        IReadOnlyList<(long Offset, long Length)> ranges = SelectionRangeList(doc.Editor);
+        string? perRangePattern = null;
+        if (ranges.Count > 1)
+        {
+            (ComboBox mode, TextBox pattern) = MultiRangeControls("SaveSelection");
+            pattern.Visibility = Visibility.Collapsed;
+            mode.SelectionChanged += (_, _) => pattern.Visibility = mode.SelectedIndex == 0 ? Visibility.Visible : Visibility.Collapsed;
+            var body = new StackPanel { Spacing = 8, MinWidth = 380 };
+            body.Children.Add(mode);
+            body.Children.Add(pattern);
+            ContentDialog choice = DialogParts.Dialog(Root, "SaveSelectionDialog", Loc.Get("SaveSelection_MultiTitle"), body, Loc.Get("SaveSelection_Continue"));
+            if (await choice.ShowQueuedAsync() != ContentDialogResult.Primary)
+            {
+                return;
+            }
+
+            perRangePattern = mode.SelectedIndex == 0 ? pattern.Text : null;
+        }
+
         string suggested = Path.GetFileNameWithoutExtension(doc.DisplayName)
             + $"_{doc.Editor.SelectionStart:X}-{doc.Editor.SelectionStart + doc.Editor.SelectionLength - 1:X}.bin";
         string? path;
@@ -868,8 +948,14 @@ public sealed partial class MainWindow
             return;
         }
 
-        await RunExportAsync(doc, [(doc.Editor.SelectionStart, doc.Editor.SelectionLength)], new ExportOptions { Format = FormatIds.Binary },
-            Path.GetFullPath(path));
+        var binary = new ExportOptions { Format = FormatIds.Binary };
+        if (perRangePattern is not null)
+        {
+            await RunPerRangeExportAsync(doc, ranges, binary, Path.GetFullPath(path), perRangePattern);
+            return;
+        }
+
+        await RunExportAsync(doc, ranges, binary, Path.GetFullPath(path));
     }
 }
 

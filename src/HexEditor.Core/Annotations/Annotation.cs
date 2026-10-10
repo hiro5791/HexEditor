@@ -14,6 +14,9 @@ public enum AnnotationOrigin
     SearchResults,
     Template,
     Script,
+
+    /// <summary>解析の結果 (統計の分類 ANA-16、ファイル形式の判定で見つけた埋め込まれた形式 ANA-17)。層 8 に描く。</summary>
+    Analysis,
 }
 
 /// <summary>注釈の描き方 (INSP-32 の仕様 4)。</summary>

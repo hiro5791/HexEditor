@@ -42,10 +42,19 @@ public sealed partial class MainWindow
         /// <summary>同期するビュー (左が先頭)。</summary>
         public IEnumerable<EditorState> Editors => [Left.Editor, .. Partners.Select(p => p.PrimaryEditor)];
 
+        /// <summary>「比較に従う」の対応位置 (2 つを並べ、その 2 つの比較の結果があるときだけ。VIEW-39 の仕様 2)。</summary>
+        public IOffsetMapper? Mapper { get; set; }
+
         public void Resync(SyncMode mode, bool selection)
         {
+            // 比較の結果がなくなった (並べたドキュメントが変わった) ら「同じオフセット」に戻す。
+            if (mode == SyncMode.Mapped && (Mapper is null || Partners.Count != 1))
+            {
+                mode = SyncMode.SameOffset;
+            }
+
             Sync?.Dispose();
-            Sync = new ViewSync(Editors, mode) { SyncSelection = selection };
+            Sync = new ViewSync(Editors, mode) { SyncSelection = selection, Mapper = Mapper };
             if (mode == SyncMode.SameOffset)
             {
                 // 並べた時点・同期を有効にした時点で、左に合わせる。
@@ -388,10 +397,67 @@ public sealed partial class MainWindow
             return;
         }
 
+        group.Mapper = mode == SyncMode.Mapped ? CompareMapperFor(group) : null;
         group.Resync(mode, App.Settings.GetBool("view.sync.selection", false));
+        if (mode == SyncMode.Mapped)
+        {
+            group.Sync?.SyncFrom(group.Left.Editor);
+        }
+
         ShowSideBySide();
         UpdateSyncStatus();
         RefreshCommandUi();
+    }
+
+    /// <summary>
+    /// 「比較に従う」の対応位置 (VIEW-39 の仕様 2)。並べた 2 つのドキュメントを比べた比較タブ (ANA-01) があり、結果があるときだけ。
+    /// 対応の求め方は比較の同期スクロールと同じ (<see cref="Core.Compare.DiffNavigation.Map"/>)。
+    /// </summary>
+    internal IOffsetMapper? CompareMapperFor(SideBySideGroup group)
+    {
+        if (group.Partners.Count != 1)
+        {
+            return null;
+        }
+
+        Document left = group.Left.Document;
+        Document right = group.Partners[0].Document;
+        foreach (CompareSessionViewModel session in Compares)
+        {
+            if (session.Result is null)
+            {
+                continue;
+            }
+
+            Document? a = session.Left.Owner?.Document;
+            Document? b = session.Right.Owner?.Document;
+            if (ReferenceEquals(a, left) && ReferenceEquals(b, right))
+            {
+                return new CompareOffsetMapper(session, firstIsRight: false);
+            }
+
+            if (ReferenceEquals(a, right) && ReferenceEquals(b, left))
+            {
+                return new CompareOffsetMapper(session, firstIsRight: true);
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>比較の結果による対応位置。ビューの 0 番目 (左) が比較のどちら側かを持つ。比較し直したら新しい結果を使う。</summary>
+    private sealed class CompareOffsetMapper(CompareSessionViewModel session, bool firstIsRight) : IOffsetMapper
+    {
+        public long Map(long offset, int from, int to)
+        {
+            if (from == to || session.Result is not { } result)
+            {
+                return offset;
+            }
+
+            bool fromRight = from == 0 ? firstIsRight : !firstIsRight;
+            return Math.Max(0, Core.Compare.DiffNavigation.Map(result, fromRight, offset));
+        }
     }
 
     /// <summary>「表示: 同期スクロールの切り替え」: オフと「同じオフセット」を切り替える。</summary>
@@ -542,7 +608,7 @@ public sealed partial class MainWindow
             }
 
             // 層 11 の背景と、差分の種類 (変更) の模様 (破線の枠)。
-            yield return new HexHighlight(start + i, last - i + 1, HexHighlightLayer.Difference, view.IsHighContrast ? null : brush, brush, dash, "difference");
+            yield return new HexHighlight(start + i, last - i + 1, CellLayer.Difference, view.IsHighContrast ? null : brush, brush, dash, "difference");
             i = last;
         }
     }

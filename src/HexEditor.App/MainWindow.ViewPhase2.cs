@@ -173,7 +173,10 @@ public sealed partial class MainWindow
         _viewItems["Command_ViewSideBySide"] = sideBySide;
 
         MenuFlyoutSubItem sync = Sub("Command_ViewSyncMenu", "Menu_View_SyncMenu");
-        foreach ((SyncMode mode, string id) in new[] { (SyncMode.Off, "Off"), (SyncMode.SameOffset, "SameOffset"), (SyncMode.KeepDifference, "KeepDifference") })
+        foreach ((SyncMode mode, string id) in new[]
+        {
+            (SyncMode.Off, "Off"), (SyncMode.SameOffset, "SameOffset"), (SyncMode.KeepDifference, "KeepDifference"), (SyncMode.Mapped, "Mapped"),
+        })
         {
             SyncMode m = mode;
             sync.Items.Add(Bind(new RadioMenuFlyoutItem
@@ -181,8 +184,12 @@ public sealed partial class MainWindow
                 Text = Loc.Get("Menu_View_Sync" + id + "/Text"),
                 AccessKey = Loc.Get("Menu_View_Sync" + id + "/AccessKey"),
                 GroupName = "ViewSync",
-            }, "Command_ViewSync" + id, () => SetSyncMode(m), () => SideBySideOf(Vm.Selected) is { } group ? Toggle(group.Mode == m)
-                : new CommandState(false, Loc.Get("Command_NotSideBySide"), false)));
+            }, "Command_ViewSync" + id, () => SetSyncMode(m), () => SideBySideOf(Vm.Selected) is not { } group
+                ? new CommandState(false, Loc.Get("Command_NotSideBySide"), false)
+
+                // 「比較に従う」は、並べた 2 つの比較の結果がある場合だけ選べる (VIEW-39 の仕様 2)。
+                : m == SyncMode.Mapped && CompareMapperFor(group) is null ? new CommandState(false, Loc.Get("Command_NoCompareResult"), false)
+                : Toggle(group.Mode == m)));
         }
 
         sync.Items.Add(new MenuFlyoutSeparator());

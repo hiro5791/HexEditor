@@ -526,7 +526,7 @@ public sealed partial class MainWindow
         }
 
         bool hc = view.IsHighContrast;
-        yield return new HexHighlight(range.Offset, range.Length, HexHighlightLayer.Focus,
+        yield return new HexHighlight(range.Offset, range.Length, CellLayer.Focus,
             hc ? null : AnnotationBrushes.Get("InspectorTargetBrush", view, hc),
             AnnotationBrushes.Get("InspectorTargetBorderBrush", view, hc), null, "inspector");
     }
@@ -558,9 +558,9 @@ public sealed partial class MainWindow
 
             BookmarkColor color = bookmarks.EffectiveColor(b);
             yield return hc || style != Core.Annotations.AnnotationStyle.Background
-                ? new HexHighlight(b.Start, b.Length, HexHighlightLayer.Bookmark, null, AnnotationBrushes.Mark(color, view, hc),
+                ? new HexHighlight(b.Start, b.Length, CellLayer.Bookmark, null, AnnotationBrushes.Mark(color, view, hc),
                     hc ? AnnotationBrushes.Dash(color) : null, "bookmark:" + b.Name, Underline: style == Core.Annotations.AnnotationStyle.Underline)
-                : new HexHighlight(b.Start, b.Length, HexHighlightLayer.Bookmark, AnnotationBrushes.Background(color, view, false), null,
+                : new HexHighlight(b.Start, b.Length, CellLayer.Bookmark, AnnotationBrushes.Background(color, view, false), null,
                     null, "bookmark:" + b.Name);
         }
     }

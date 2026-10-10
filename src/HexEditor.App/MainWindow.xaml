@@ -100,6 +100,9 @@
                         <MenuFlyoutItem x:Uid="Menu_File_OpenReadOnly" cmd:CommandUi.Id="file.openReadOnly" AutomationProperties.AutomationId="Command_OpenReadOnly" />
                         <!--  詳細を指定して開く (ENG-11 の仕様 2)、選択範囲を新しいタブで開く (ENG-39)  -->
                         <MenuFlyoutItem x:Uid="Menu_File_OpenAdvanced" cmd:CommandUi.Id="file.openAdvanced" AutomationProperties.AutomationId="Command_OpenAdvanced" />
+                        <!--  ディスク・プロセスを開く (ENG-29、ENG-32)  -->
+                        <MenuFlyoutItem x:Uid="Menu_File_OpenDisk" cmd:CommandUi.Id="file.openDisk" AutomationProperties.AutomationId="Command_OpenDisk" />
+                        <MenuFlyoutItem x:Uid="Menu_File_OpenProcess" cmd:CommandUi.Id="file.openProcess" AutomationProperties.AutomationId="Command_OpenProcess" />
                         <MenuFlyoutSubItem x:Uid="Menu_File_OpenSelection" AutomationProperties.AutomationId="Command_OpenSelection">
                             <MenuFlyoutItem x:Uid="Menu_File_OpenSelectionLinked" cmd:CommandUi.Id="file.openSelectionInNewTab" AutomationProperties.AutomationId="Command_OpenSelectionInNewTab" />
                             <MenuFlyoutItem x:Uid="Menu_File_OpenSelectionCopy" cmd:CommandUi.Id="file.openSelectionAsCopy" AutomationProperties.AutomationId="Command_OpenSelectionAsCopy" />
@@ -241,6 +244,11 @@
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Go_Start" cmd:CommandUi.Id="go.start" AutomationProperties.AutomationId="Command_GoStart" />
                         <MenuFlyoutItem x:Uid="Menu_Go_End" cmd:CommandUi.Id="go.end" AutomationProperties.AutomationId="Command_GoEnd" />
+                        <!--  セクタ単位の移動 (VIEW-32)  -->
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Go_NextSector" cmd:CommandUi.Id="go.nextSector" AutomationProperties.AutomationId="Command_GoNextSector" />
+                        <MenuFlyoutItem x:Uid="Menu_Go_PreviousSector" cmd:CommandUi.Id="go.previousSector" AutomationProperties.AutomationId="Command_GoPreviousSector" />
+                        <MenuFlyoutItem x:Uid="Menu_Go_ToSector" cmd:CommandUi.Id="go.toSector" AutomationProperties.AutomationId="Command_GoToSector" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_View">
                         <MenuFlyoutSubItem x:Uid="Menu_View_Theme" AutomationProperties.AutomationId="Command_Theme">
@@ -262,6 +270,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsSearch" cmd:CommandUi.Id="view.annotations.searchResults" AutomationProperties.AutomationId="Command_AnnotationsSearchResults" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsTemplate" cmd:CommandUi.Id="view.annotations.template" AutomationProperties.AutomationId="Command_AnnotationsTemplate" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsScript" cmd:CommandUi.Id="view.annotations.script" AutomationProperties.AutomationId="Command_AnnotationsScript" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_AnnotationsAnalysis" cmd:CommandUi.Id="view.annotations.analysis" AutomationProperties.AutomationId="Command_AnnotationsAnalysis" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSubItem x:Uid="Menu_View_Coloring" AutomationProperties.AutomationId="Command_Coloring">
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ColoringRules" cmd:CommandUi.Id="view.panel.coloringRules" AutomationProperties.AutomationId="Command_ColoringRules" />

@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Media;
+using HexEditor.Core.View;
 
 namespace HexEditor.App.Controls;
 
@@ -355,7 +356,7 @@ public sealed partial class CompareView : UserControl
             if (length == 0)
             {
                 // 挿入・削除の相手側: 揃えるための空白の位置に斜線の模様を描く (ANA-03 の「画面」)。
-                yield return new HexHighlight(offset, 0, HexHighlightLayer.Difference, CompareBrushes.Padding(view, highContrast), null, null,
+                yield return new HexHighlight(offset, 0, CellLayer.Difference, CompareBrushes.Padding(view, highContrast), null, null,
                     "diff-padding:" + CompareBrushes.PaddingKey, Mark: HexMark.Hatch, MarkBrush: CompareBrushes.PaddingMark(view, highContrast));
                 continue;
             }
@@ -364,8 +365,8 @@ public sealed partial class CompareView : UserControl
             Brush mark = CompareBrushes.Mark(d.Kind, view, highContrast);
             string tag = "diff-" + DiffExport.KindName(d.Kind) + ":" + CompareBrushes.BackgroundKey(d.Kind);
             yield return d.Kind == DiffKind.Changed
-                ? new HexHighlight(offset, length, HexHighlightLayer.Difference, background, mark, CompareBrushes.ChangedDash, tag)
-                : new HexHighlight(offset, length, HexHighlightLayer.Difference, background, null, null, tag, Mark: CompareBrushes.MarkOf(d.Kind), MarkBrush: mark);
+                ? new HexHighlight(offset, length, CellLayer.Difference, background, mark, CompareBrushes.ChangedDash, tag)
+                : new HexHighlight(offset, length, CellLayer.Difference, background, null, null, tag, Mark: CompareBrushes.MarkOf(d.Kind), MarkBrush: mark);
         }
     }
 

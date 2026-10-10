@@ -3,6 +3,7 @@ using HexEditor.App.Controls;
 using HexEditor.App.Services;
 using HexEditor.Core.Search;
 using Microsoft.UI.Xaml.Media;
+using HexEditor.Core.View;
 
 namespace HexEditor.App;
 
@@ -97,7 +98,7 @@ public sealed partial class MainWindow
         foreach (SearchRange r in FindBar.OutlinedScope.Where(r => r.Offset < end && r.End > start))
         {
             Brush border = hc ? AnnotationBrushes.Get("InspectorTargetBorderBrush", view, true) : AnnotationBrushes.Get("TextFillColorTertiaryBrush", view, false);
-            yield return new HexHighlight(r.Offset, r.Length, HexHighlightLayer.Bookmark, null, border, hc ? [1, 2] : null, "searchScope");
+            yield return new HexHighlight(r.Offset, r.Length, CellLayer.Bookmark, null, border, hc ? [1, 2] : null, "searchScope");
         }
     }
 }

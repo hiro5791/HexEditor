@@ -1,3 +1,6 @@
+using HexEditor.Core.Annotations;
+using HexEditor.Core.Engine;
+
 namespace HexEditor.Core.Statistics;
 
 /// <summary>
@@ -24,4 +27,31 @@ public static class AnalysisAnnotationSources
 
     /// <summary>埋め込まれた形式 (ANA-17 の仕様 6)。</summary>
     public const string EmbeddedFormats = "fileType.embedded";
+}
+
+/// <summary>
+/// 解析の注釈を共通の注釈レイヤー (<see cref="AnnotationLayer"/>、INSP-32) に載せる <see cref="IAnnotationSink"/>。出どころごとに
+/// 1 つの <see cref="AnnotationSet"/> (出どころの種類は <see cref="AnnotationOrigin.Analysis"/>) を登録し、置き換える。空なら登録を外す。
+/// 描画・表示 / 非表示・ツールチップは注釈レイヤーの共通の処理に任せる (解析の機能は Hex ビューの強調を直接使わない)。
+/// </summary>
+public sealed class AnnotationLayerSink : IAnnotationSink
+{
+    public void SetAnnotations(object document, string source, IReadOnlyList<AnalysisAnnotation> annotations)
+    {
+        if (document is not Document doc || doc.IsDisposed)
+        {
+            return;
+        }
+
+        AnnotationLayer layer = AnnotationLayer.For(doc);
+        if (annotations.Count == 0)
+        {
+            layer.Unregister(source);
+            return;
+        }
+
+        var set = new AnnotationSet(source, AnnotationOrigin.Analysis);
+        set.AddRange(annotations.Select(a => new Annotation(a.Offset, a.Length, a.Label, null, a.Description ?? string.Empty) { Tag = a.Kind }.Normalized()));
+        layer.Register(set);
+    }
 }

@@ -17,8 +17,10 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         FilePath = filePath;
         DisplayName = displayName;
         // ステータスバー・タブの見出しをまとめて更新する (空の名前は全プロパティの変更)。
-        Document.Changed += (_, _) => OnPropertyChanged(string.Empty);
-        Document.ReadOnlyChanged += (_, _) => OnPropertyChanged(string.Empty);
+        _documentChanged = (_, _) => OnPropertyChanged(string.Empty);
+        _readOnlyChanged = (_, _) => OnPropertyChanged(string.Empty);
+        Document.Changed += _documentChanged;
+        Document.ReadOnlyChanged += _readOnlyChanged;
 
         // カーソルの値は、読み込みが終わってから表示する (読み込みの通知はスレッドプールから来る)。
         var queue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
@@ -33,7 +35,28 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         }
 
         AttachPane(PrimaryEditor);
-        Document.DataLoaded += (_, _) => queue?.TryEnqueue(() => OnPropertyChanged(nameof(ValueText)));
+        _dataLoaded = (_, _) => queue?.TryEnqueue(() => OnPropertyChanged(nameof(ValueText)));
+        Document.DataLoaded += _dataLoaded;
+    }
+
+    private readonly EventHandler<Core.Engine.DocumentChangedEventArgs> _documentChanged;
+    private readonly EventHandler _readOnlyChanged;
+    private readonly EventHandler _dataLoaded;
+
+    /// <summary>
+    /// ドキュメントを閉じずに、このビュー (とペイン) のドキュメントのイベントの購読を外す (比較タブの片側、同じドキュメントのほかのビューが残るとき)。
+    /// </summary>
+    public void DetachFromDocument()
+    {
+        Document.Changed -= _documentChanged;
+        Document.ReadOnlyChanged -= _readOnlyChanged;
+        Document.DataLoaded -= _dataLoaded;
+        _statusTimer?.Stop();
+        foreach (EditorState pane in Panes)
+        {
+            DetachPane(pane);
+            pane.Detach();
+        }
     }
 
     /// <summary>ペインのビューの変化でステータスバーを更新し、<see cref="EditorChanged"/> を出す。</summary>
@@ -365,11 +388,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         // 同じドキュメントのビューがほかに残るなら、ドキュメントは閉じない (VIEW-38 の仕様 6)。
         if (LeaveShare())
         {
-            foreach (EditorState pane in Panes)
-            {
-                DetachPane(pane);
-            }
-
+            DetachFromDocument();
             return;
         }
 

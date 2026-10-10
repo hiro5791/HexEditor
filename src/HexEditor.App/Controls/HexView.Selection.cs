@@ -118,7 +118,7 @@ public sealed partial class HexView
         Brush border = _palette.Caret;
         if (_editor.SelectionKind == SelectionKind.Multiple && _editor.PrimaryRange is { } primary && primary.Start < end && primary.End > start)
         {
-            yield return new HexHighlight(primary.Start, primary.Length, HexHighlightLayer.Selection, null, border, Tag: "primary", Thickness: 2);
+            yield return new HexHighlight(primary.Start, primary.Length, CellLayer.Selection, null, border, Tag: "primary", Thickness: 2);
         }
 
         if (_editor.HasMultipleCarets)
@@ -127,14 +127,14 @@ public sealed partial class HexView
             {
                 if (caret.Offset != _editor.Cursor && caret.Offset >= start && caret.Offset < end)
                 {
-                    yield return new HexHighlight(caret.Offset, 0, HexHighlightLayer.Selection, null, border, Tag: "caret");
+                    yield return new HexHighlight(caret.Offset, 0, CellLayer.Selection, null, border, Tag: "caret");
                 }
             }
         }
 
         if (_pressMode == PressMode.SelectionDrag && _dropTarget >= start && _dropTarget < end)
         {
-            yield return new HexHighlight(_dropTarget, 0, HexHighlightLayer.Selection, null, border, Tag: "drop");
+            yield return new HexHighlight(_dropTarget, 0, CellLayer.Selection, null, border, Tag: "drop");
         }
     }
 

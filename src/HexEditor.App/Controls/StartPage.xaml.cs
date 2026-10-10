@@ -22,6 +22,9 @@ public sealed partial class StartPage : UserControl
 
     public event EventHandler? NewRequested;
 
+    /// <summary>コマンドを実行してほしい (「ディスクを開く」「プロセスを開く」。引数はコマンド ID)。</summary>
+    public event EventHandler<string>? CommandRequested;
+
     public event EventHandler? RestoreSessionRequested;
 
     public event EventHandler? ShowAllRequested;
@@ -105,6 +108,10 @@ public sealed partial class StartPage : UserControl
     private void Open_Click(object sender, RoutedEventArgs e) => OpenRequested?.Invoke(this, EventArgs.Empty);
 
     private void New_Click(object sender, RoutedEventArgs e) => NewRequested?.Invoke(this, EventArgs.Empty);
+
+    private void OpenDisk_Click(object sender, RoutedEventArgs e) => CommandRequested?.Invoke(this, "file.openDisk");
+
+    private void OpenProcess_Click(object sender, RoutedEventArgs e) => CommandRequested?.Invoke(this, "file.openProcess");
 
     private void RestoreSession_Click(object sender, RoutedEventArgs e) => RestoreSessionRequested?.Invoke(this, EventArgs.Empty);
 

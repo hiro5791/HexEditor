@@ -21,6 +21,7 @@ public sealed partial class MainWindow
 
     private void RegisterDeviceCommands()
     {
+        HookDeviceIntegration();
         var e = new RoutedEventArgs();
         Commands.Register("file.openDisk", () => OpenDisk_Click(this, e));
         Commands.Register("file.openProcess", () => OpenProcess_Click(this, e));

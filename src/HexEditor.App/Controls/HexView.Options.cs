@@ -260,8 +260,8 @@ public sealed partial class HexView
         SetHighlightSource("focus:" + source, (start, end) => ranges
             .Where(r => r.Offset < end && r.Offset + r.Length > start)
             .Select(r => _palette.HighContrast
-                ? new HexHighlight(r.Offset, r.Length, HexHighlightLayer.Focus, null, _palette.Text, null, source)
-                : new HexHighlight(r.Offset, r.Length, HexHighlightLayer.Focus, _palette.FocusRange, null, null, source)));
+                ? new HexHighlight(r.Offset, r.Length, CellLayer.Focus, null, _palette.Text, null, source)
+                : new HexHighlight(r.Offset, r.Length, CellLayer.Focus, _palette.FocusRange, null, null, source)));
     }
 
     // ---- ズーム (VIEW-43) ----

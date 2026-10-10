@@ -362,6 +362,12 @@ public sealed class MinimapComputer : IDisposable
             {
                 ReadResult read = snapshot.Read(sampleStart, buffer.AsSpan(0, sampleLength));
                 stats = MinimapStats.From(buffer.AsSpan(0, sampleLength), !read.IsComplete);
+
+                // 統計パネル (ANA-13) で範囲全体のエントロピーを計算済みなら、標本の概算の代わりにその値を使う (キャッシュの共有。ANA-13 の仕様 8)。
+                if (Statistics.EntropyCache.Find(snapshot.Storage.Owner)?.CachedEntropy(snapshot, start, length) is { } exact)
+                {
+                    stats = stats with { Entropy = exact };
+                }
             }
             catch (Exception ex) when (ex is ObjectDisposedException or IOException or InvalidOperationException)
             {

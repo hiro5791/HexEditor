@@ -24,9 +24,6 @@ public sealed partial class MainWindow
     /// <summary>最後に実行したデータ演算 (「前回のデータ演算を繰り返す」。アプリ全体で 1 つ。EDIT-31 の仕様 11)。</summary>
     private static DataOperationRequest? s_lastDataOperation;
 
-    /// <summary>ドキュメントのエンディアン (VIEW-11 の担当が設定する。ビッグなら true)。null ならリトルエンディアン。</summary>
-    public Func<DocumentViewModel, bool>? DocumentBigEndian { get; set; }
-
     /// <summary>選択範囲 (マルチ選択なら各範囲。選択がなければ空)。</summary>
     private IReadOnlyList<TargetRange> SelectionRangesOf(DocumentViewModel doc)
     {
@@ -147,7 +144,7 @@ public sealed partial class MainWindow
     private async Task<DataOperationRequest?> ShowDataOperationDialogAsync(DocumentViewModel doc, IReadOnlyList<TargetRange> selection,
         DataOperationKind? kind)
     {
-        var panel = new DataOperationPanel(doc.Editor, selection, kind, DocumentBigEndian?.Invoke(doc) ?? false);
+        var panel = new DataOperationPanel(doc.Editor, selection, kind, doc.Editor.View.BigEndian);
         ContentDialog dialog = DialogParts.Dialog(Root, "DataOperationDialog", Loc.Get("DataOp_Title"),
             new ScrollViewer { Content = panel, MaxHeight = 560, Padding = new Thickness(0, 0, 16, 0) }, Loc.Get("DataOp_Run"));
         DataOperationRequest? request = null;

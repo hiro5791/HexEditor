@@ -380,6 +380,7 @@ public static class BuiltInCommands
         new("view.syncOff", "view") { Condition = "documentOpen" },
         new("view.syncSameOffset", "view") { Condition = "documentOpen" },
         new("view.syncKeepDifference", "view") { Condition = "documentOpen" },
+        new("view.syncMapped", "view") { Condition = "documentOpen" },
         new("view.syncToggle", "view") { Condition = "documentOpen" },
         new("view.syncDifferences", "view") { Condition = "documentOpen" },
         // ---- データ (EDIT-31〜EDIT-39)。ショートカットは既定なし ----
@@ -460,6 +461,7 @@ public static class BuiltInCommands
         new("view.annotations.searchResults", "view"),
         new("view.annotations.template", "view"),
         new("view.annotations.script", "view"),
+        new("view.annotations.analysis", "view"),
         new("view.coloring.fromSelection", "view") { Condition = "documentOpen" },
 
         // ---- タブ (UI-09〜UI-11) ----

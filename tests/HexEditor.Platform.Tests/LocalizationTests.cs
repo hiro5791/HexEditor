@@ -144,7 +144,7 @@ public sealed class LocalizationTests
         Assert.Equal(10, recent.Count);
         Assert.Equal(@"C:\f1.bin", recent[0].FilePath);
         Assert.Equal("\"C:\\f1.bin\"", recent[0].Arguments);
-        Assert.Equal(["--new-window", "--new-document"], items.Where(i => i.Category == JumpListCategory.Tasks).Select(i => i.Arguments));
+        Assert.Equal(["--new-window", "--new-document", "--open-disk"], items.Where(i => i.Category == JumpListCategory.Tasks).Select(i => i.Arguments));
         Assert.Equal("T:NewWindow", items.First(i => i.Category == JumpListCategory.Tasks).Title);
     }
 
@@ -154,6 +154,7 @@ public sealed class LocalizationTests
         Assert.Equal([@"C:\a b\x.bin"], CommandLine.ParseString(JumpListPlan.Quote(@"C:\a b\x.bin")).Files);
         Assert.True(CommandLine.ParseString("--new-window").NewWindow);
         Assert.True(CommandLine.ParseString("--new-document").NewDocument);
+        Assert.True(CommandLine.ParseString("--open-disk").OpenDisk);
     }
 
     // ---- UI-58 ネットワークを使う機能の管理 ----

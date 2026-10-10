@@ -215,7 +215,7 @@ public sealed partial class MainWindow
             _testHighlights.Add(new HexHighlight(
                 request["offset"]!.GetValue<long>(),
                 request["length"]?.GetValue<long>() ?? 1,
-                (HexHighlightLayer)(int)(request["layer"]?.GetValue<long>() ?? 10),
+                (CellLayer)(int)(request["layer"]?.GetValue<long>() ?? 10),
                 BrushOf(request["background"]?.GetValue<string>()),
                 BrushOf(request["border"]?.GetValue<string>()),
                 null,

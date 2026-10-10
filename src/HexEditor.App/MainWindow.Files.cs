@@ -77,6 +77,13 @@ public sealed partial class MainWindow
             return null;
         }
 
+        // プロジェクトファイル (00-overview 10 章、INSP-30): ファイル本体を開き、ブックマーク・色付けルール・インスペクタのエンディアンを戻す。
+        // ワークスペース (UI-33) はタブとパネルの配置だけを持ち、付随データはこちら (UI-33 の仕様 3)。
+        if (string.Equals(Path.GetExtension(path), Core.Files.HexProject.Extension, StringComparison.OrdinalIgnoreCase) && File.Exists(path))
+        {
+            return OpenProject(path, insertAt);
+        }
+
         // デコードして開く (ENG-38): 小さいファイルはすぐに開き、大きいファイルはデコードの長時間処理の後に開く。
         if (decode && !readOnly && AutoDecodeFormat(path) is { } encoded && File.Exists(path))
         {
