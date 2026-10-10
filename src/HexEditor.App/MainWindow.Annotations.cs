@@ -636,10 +636,32 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(scroll, "Annotations_DescriptionFlyout");
         AutomationProperties.SetName(scroll, Loc.Get("Annotations_DescriptionName"));
         var flyout = new Flyout { Content = scroll, Placement = FlyoutPlacementMode.Bottom };
-        flyout.Opened += (_, _) => scroll.Focus(FocusState.Keyboard);
+        // フライアウトは開いた直後に自分の Popup にフォーカスを置くことがある (遅い環境で Opened の後)。説明の領域に置けるまで、
+        // 読み込み・次の描画の後にも置き直す (Esc・PageDown をすぐに受けられるように)。
+        void FocusScroll()
+        {
+            if (!flyout.IsOpen)
+            {
+                return;
+            }
+
+            scroll.Focus(FocusState.Keyboard);
+            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
+            {
+                if (flyout.IsOpen && scroll.FocusState == FocusState.Unfocused)
+                {
+                    scroll.Focus(FocusState.Keyboard);
+                }
+            });
+        }
+
+        flyout.Opened += (_, _) => FocusScroll();
+        scroll.Loaded += (_, _) => FocusScroll();
+        scroll.GotFocus += (_, _) => _descriptionFocused = true;
         scroll.KeyDown += (_, e) => e.Handled = HandleDescriptionKey(e.Key);
         flyout.Closed += (_, _) => view.Focus(FocusState.Keyboard);
         _descriptionFlyout = flyout;
+        _descriptionFocused = false;
         if (view.TryGetCellRect(editor.Cursor, out Windows.Foundation.Rect rect, editor.ActiveColumn))
         {
             flyout.ShowAt(view, new FlyoutShowOptions { Position = new Windows.Foundation.Point(rect.X, rect.Y + rect.Height), ShowMode = FlyoutShowMode.Standard });
@@ -651,6 +673,9 @@ public sealed partial class MainWindow
     }
 
     private Flyout? _descriptionFlyout;
+
+    /// <summary>説明のフライアウトの領域にフォーカスが入った (テスト用の状態)。</summary>
+    private bool _descriptionFocused;
 
     /// <summary>説明のフライアウトのキー: PageDown / PageUp でスクロール、Esc で閉じる (実際のキー入力とテスト用の命令の通り道から呼ぶ)。</summary>
     internal bool HandleDescriptionKey(Windows.System.VirtualKey key)

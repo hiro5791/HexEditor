@@ -190,6 +190,7 @@ public sealed partial class MainWindow
         return new JsonObject
         {
             ["open"] = open,
+            ["focused"] = open && _descriptionFocused && scroll?.FocusState != Microsoft.UI.Xaml.FocusState.Unfocused,
             ["runs"] = open ? HexView.RichToolTipRuns(scroll) : null,
             ["verticalOffset"] = scroll?.VerticalOffset,
             ["scrollableHeight"] = scroll?.ScrollableHeight,
