@@ -171,60 +171,15 @@ public sealed partial class FindBar
 
     // ---- パターンの作成 ----
 
-    /// <summary>フェーズ 2 の種類・オプションのパターン。該当しなければ null (従来の作り方)。</summary>
+    /// <summary>
+    /// 複数語のパターン (FIND-26。行ごとの誤りを示す)。複数語でなければ null (<see cref="BuildPattern"/> で、複数ファイル検索と共通の
+    /// <see cref="SearchQueryBuilder"/> で作る)。
+    /// </summary>
     private SearchPattern? BuildPhase2Pattern(SearchKind kind)
     {
         _variantEncodings = null;
         _excludedEncodings = [];
-        if (IsMultiTerm)
-        {
-            return BuildMultiTerm();
-        }
-
-        switch (kind)
-        {
-            case SearchKind.RegexText:
-                return RegexSearch.Text(Query.Text, SearchEncoding, CurrentRegexOptions());
-            case SearchKind.RegexBytes:
-                return RegexSearch.Bytes(Query.Text, CurrentRegexOptions());
-            case SearchKind.Hex when IsMismatch:
-                return SearchPattern.Mismatch(Query.Text, MismatchAlignChoice.IsChecked == true);
-            case SearchKind.Hex when IsMask:
-                return MaskModeChoice.SelectedIndex == 1
-                    ? SearchPattern.FromBitPattern(Query.Text)
-                    : SearchPattern.FromValueAndMask(Query.Text, MaskQuery.Text);
-            case SearchKind.Integer when IsRange:
-                return NumericRange.Integer(Query.Text, new IntegerSearchOptions
-                {
-                    Bits = SelectedBits,
-                    Sign = (IntegerSign)Math.Max(0, SignChoice.SelectedIndex),
-                    Endian = (SearchEndian)Math.Max(0, EndianChoice.SelectedIndex),
-                }, RangeExcludeChoice.IsChecked == true, Editor is { } editor ? new EditorExpressionContext(editor) : null);
-            case SearchKind.Float when IsRange:
-                return NumericRange.Float(Query.Text, new FloatSearchOptions
-                {
-                    Format = (FloatFormat)Math.Max(0, FloatChoice.SelectedIndex),
-                    Endian = (SearchEndian)Math.Max(0, EndianChoice.SelectedIndex),
-                }, RangeExcludeChoice.IsChecked == true);
-            case SearchKind.Text when IsMultiEncoding:
-                var encodings = new List<(string Name, Encoding Encoding)>();
-                foreach (string id in _multiEncodings)
-                {
-                    if (TextEncodings.FromCatalogId(id) is { } e)
-                    {
-                        encodings.Add((EncodingCatalog.Find(id) is { } entry ? MainWindow.EncodingDisplayText(entry) : id, e));
-                    }
-                }
-
-                SearchPattern pattern = SearchPattern.FromTextEncodings(Query.Text, encodings, CurrentTextOptions(), out IReadOnlyList<string> excluded);
-                _excludedEncodings = excluded;
-
-                // 種類 (まとめた名前の最初の文字コード) ごとの文字コード。
-                _variantEncodings = [.. pattern.Variants.Select(v => encodings.First(e => v.StartsWith(e.Name, StringComparison.Ordinal)).Encoding)];
-                return pattern;
-            default:
-                return null;
-        }
+        return IsMultiTerm ? BuildMultiTerm() : null;
     }
 
     private TextSearchOptions CurrentTextOptions() => new()
@@ -233,17 +188,6 @@ public sealed partial class FindBar
         UseEscapes = EscapeChoice.IsChecked == true,
         AlignToCharacters = AlignChoice.IsChecked == true,
         WholeWord = WordChoice.IsChecked == true,
-    };
-
-    /// <summary>正規表現の条件 (フラグ、一致の最大長、時間の上限)。</summary>
-    private RegexSearchOptions CurrentRegexOptions() => new()
-    {
-        IgnoreCase = RegexIgnoreCase.IsChecked == true,
-        Multiline = RegexMultiline.IsChecked == true,
-        Singleline = RegexSingleline.IsChecked == true,
-        MaxMatchLength = MaxMatchLength,
-        TimeLimit = TimeSpan.FromSeconds(Math.Clamp(App.Settings?.GetDouble(RegexTimeLimitKey, 2) ?? 2, 0.1, 60)),
-        AlignToCharacters = AlignChoice.IsChecked == true && Kind == SearchKind.RegexText,
     };
 
     /// <summary>「一致の最大長」の設定 (FIND-01 の仕様 3)。</summary>

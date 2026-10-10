@@ -724,10 +724,18 @@ public sealed partial class FindBar : UserControl
 
     private static Visibility Show(bool visible) => visible ? Visibility.Visible : Visibility.Collapsed;
 
-    /// <summary>今の種類と条件で検索語のパターンを作る。誤りは <see cref="PatternException"/>。</summary>
-    private SearchPattern BuildPattern(SearchKind kind) => SearchQueryBuilder.Build(
-        CaptureQuery() with { Kind = kind, Encodings = [], Mask = false, Mismatch = false, Position = null, Terms = null, TermLabels = null },
-        QueryEnvironment(Editor is { } editor ? new EditorExpressionContext(editor) : null)).Pattern;
+    /// <summary>
+    /// 今の種類と条件で検索語のパターンを作る。誤りは <see cref="PatternException"/>。種類・オプション (正規表現、ビットマスク、一致しない
+    /// 箇所、範囲、複数の文字コードなど) は複数ファイル検索と共通の <see cref="SearchQueryBuilder"/> で作る。位置の条件は呼び出し側で付ける。
+    /// </summary>
+    private SearchPattern BuildPattern(SearchKind kind)
+    {
+        BuiltSearchPattern built = SearchQueryBuilder.Build(CaptureQuery() with { Kind = kind, Position = null, Terms = null, TermLabels = null },
+            QueryEnvironment(Editor is { } editor ? new EditorExpressionContext(editor) : null));
+        _variantEncodings = built.VariantEncodings;
+        _excludedEncodings = built.ExcludedEncodings;
+        return built.Pattern;
+    }
 
     private int SelectedBits => IntBitsChoice.SelectedItem is ComboBoxItem { Tag: int bits } ? bits : 32;
 
