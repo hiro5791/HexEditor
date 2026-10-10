@@ -547,8 +547,8 @@ public sealed partial class HexView
         // ---- 文字 ----
 
         /// <summary>
-        /// 文字色を、セルの背景に対して読める色にする (VIEW-17 の仕様 9)。背景は手前の層 (7〜11) の背景と、行の下の面の層 (12 バイトテーマ、
-        /// 14 現在行、15 レコードの交互色、16 列の交互色) を重ねたもの。選択範囲・検索の一致は、その層の文字色を使う (Highlight)。
+        /// 文字色を、セルの背景に対して読める色にする (VIEW-17 の仕様 9)。色を付ける層の背景 (手前の層 7〜11、バイトテーマの背景) があるセルが
+        /// 対象で、背景はそれと行の下の面の層 (14 現在行、15 レコードの交互色、16 列の交互色) を重ねたもの。選択範囲は Highlight で同じ規則を使う。
         /// </summary>
         private Brush ReadableFore(Brush fore, int c, bool text, in RowFrame frame, Palette palette)
         {
@@ -563,6 +563,12 @@ public sealed partial class HexView
                 && KindAt(c) is CellKind.Normal or CellKind.Modified && theme.Back[_bytes[c]] is { } themeBack)
             {
                 under = themeBack;
+            }
+            else if (top is null)
+            {
+                // 色を付ける層の背景がなければ (通常の背景・現在行・交互色は配色で文字色と組にして決めた色)、置き換えない。薄く表示する文字
+                // (ゼロのグレー表示、読み込み中の仮表示、色付けルールの「ゼロを薄く」) は、わざと薄くしているため。
+                return fore;
             }
             else if (_currentRow)
             {
