@@ -689,7 +689,7 @@ public sealed partial class MainWindow : Window
             bool active = FindBar.IsOpen && view.Editor == FindBar.Editor;
             bool results = !active && SearchResults.IsOpen && SearchResults.Shows(view.Editor);
             // 一致の強調は設定で無効にできる (FIND-04 の仕様 9)。
-            view.MatchProvider = !MatchHighlightEnabled ? null : active ? FindBar.MatchesInView : results ? SearchResults.MatchesInView : null;
+            view.MatchProvider = !MatchHighlightEnabled ? null : active ? FindBar.MatchesInView : results ? SearchResults.MatchesInView : StringsHighlights(view);
             view.SetSearchMarkers(active ? FindBar.MarkerOffsets() : null);
         }
     }

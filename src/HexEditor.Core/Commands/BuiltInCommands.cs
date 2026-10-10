@@ -163,6 +163,13 @@ public static class BuiltInCommands
         new("search.results.toSelection", "search") { Condition = "searchResults" },
         new("search.results.export", "search") { Condition = "searchResults" },
 
+        // フェーズ 2 の検索 (FIND-08〜FIND-32)。複数ファイル検索は 00-overview 8.2 の Ctrl+Shift+F。
+        new("search.multiFile", "search") { DefaultBindings = [K("Ctrl+Shift+F")] },
+        new("search.multiFileReplace", "search"),
+        new("search.strings", "search") { Condition = "documentOpen" },
+        new("search.multiTerm", "search") { Condition = "documentOpen" },
+        new("search.mismatch", "search") { Condition = "documentOpen" },
+
         // ---- 移動 ----
         new("go.goTo", "go") { Icon = IconGoTo, DefaultBindings = [K("Ctrl+G")], Condition = "documentOpen" },
         new("go.nextNibble", "go") { Condition = "documentOpen" },
@@ -289,6 +296,8 @@ public static class BuiltInCommands
         new("view.panel.history", "view"),
         new("view.panel.clipboard", "view"),
         new("view.panel.formatIssues", "view"),
+        new("view.panel.strings", "view"),
+        new("view.panel.multiFileSearch", "view"),
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
 

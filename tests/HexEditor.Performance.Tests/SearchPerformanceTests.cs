@@ -121,6 +121,63 @@ public sealed class SearchPerformanceTests(ITestOutputHelper output)
     }
 
     /// <summary>
+    /// TC-FIND-01-05: 種類ごとの検索 (大文字・小文字を区別しないテキスト、整数、許容誤差のある浮動小数点、後戻りしない正規表現) の速度を、
+    /// OS のキャッシュにない TD-FIND-RANDOM-10G の次を検索で測る。それぞれ FIND-01 の表の値と読み込み速度の 80% の小さい方以上。
+    /// 性能テスト用の計測機でだけ実行する。
+    /// </summary>
+    [PerfMachineFact]
+    [Trait(TC, "TC-FIND-01-05")]
+    public void EachKindOfSearchMeetsItsSpeedTarget()
+    {
+        string path = TestDataCatalog.Get("TD-FIND-RANDOM-10G");
+        long length = new FileInfo(path).Length;
+
+        // 手順 3: 読み込み速度 R (4 MiB ずつ順に読む)。
+        FileCache.Purge();
+        double read;
+        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 0, FileOptions.SequentialScan))
+        {
+            byte[] buffer = new byte[4 * MiB];
+            var watch = Stopwatch.StartNew();
+            while (stream.Read(buffer) > 0)
+            {
+            }
+
+            read = length / (double)MiB / watch.Elapsed.TotalSeconds;
+        }
+
+        (string Name, SearchPattern Pattern, double Target)[] kinds =
+        [
+            ("text (ignore case)", SearchPattern.FromText("hexend!!", Encoding.ASCII, new TextSearchOptions { CaseSensitive = false }), 500),
+            ("int64", NumericSearch.Integer("0x2121444E45584548", new IntegerSearchOptions { Bits = 64, Endian = SearchEndian.Little }), 300),
+            ("double ±1e-300", NumericSearch.Float("1.5e300", new FloatSearchOptions
+            {
+                Format = FloatFormat.Double,
+                Tolerance = ToleranceKind.Absolute,
+                ToleranceValue = 1e-300,
+            }), 300),
+            ("regex (bytes)", RegexSearch.Bytes("HEX[A-Z]{3}!!", new RegexSearchOptions { Singleline = true }), 100),
+        ];
+        foreach ((string name, SearchPattern pattern, double target) in kinds)
+        {
+            // 手順 1〜2: キャッシュを空にしてから、ファイル全体の次を検索。3 回測って最も遅い値で比べる。
+            double slowest = double.MaxValue;
+            for (int i = 0; i < 3; i++)
+            {
+                FileCache.Purge();
+                using var doc = new Document(FileByteSource.Open(path), Options());
+                var watch = Stopwatch.StartNew();
+                SearchEngine.Find(doc.Current, pattern, 0, forward: true, wrap: false);
+                slowest = Math.Min(slowest, length / (double)MiB / watch.Elapsed.TotalSeconds);
+            }
+
+            double goal = Math.Min(target, read * 0.8);
+            output.WriteLine($"{name}: {slowest:F0} MiB/s (目標 {goal:F0} MiB/s、読み込み {read:F0} MiB/s)");
+            TimeLimit(slowest >= goal, $"{name}: {slowest:F0} MiB/s < {goal:F0} MiB/s");
+        }
+    }
+
+    /// <summary>
     /// 種類ごとの検索の速度の目安 (TC-FIND-01-05 はフェーズ 2 で、固定の計測機で行う)。ここではメモリ上の 1 GiB 相当のデータで、
     /// CPU の処理だけの速度が FIND-01 の表の値を下回らないことを確かめる (読み込みの速度は含まない)。
     /// </summary>

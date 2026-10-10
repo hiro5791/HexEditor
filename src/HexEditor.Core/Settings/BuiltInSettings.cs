@@ -178,6 +178,22 @@ public static class BuiltInSettings
         new(Search.SearchSettings.HighlightKey, SettingCategories.Search, SettingKind.Bool, true) { Order = 90 },
         new(Search.SearchSettings.NewTabKey, SettingCategories.Search, SettingKind.Bool, false) { Order = 100 },
 
+        // 正規表現の時間の上限 (秒。FIND-18 の仕様 6)、一致しない箇所の最小の繰り返し回数 (FIND-25 の仕様 4)、
+        // 複数ファイル検索の並列数 (FIND-30 の仕様 3)。
+        new("search.regex.timeLimit", SettingCategories.Search, SettingKind.Number, 2.0) { Min = 0.1, Max = 60, Step = 0.1, Order = 110 },
+        new(Search.MismatchSearch.MinRepeatKey, SettingCategories.Search, SettingKind.Int, Search.MismatchSearch.DefaultMinRepeat)
+        {
+            Min = 1,
+            Max = Search.MismatchSearch.MaxMinRepeat,
+            Order = 120,
+        },
+        new(Search.MultiFileSearch.ParallelismKey, SettingCategories.Search, SettingKind.Int, Search.MultiFileSearch.DefaultParallelism)
+        {
+            Min = 1,
+            Max = Search.MultiFileSearch.MaxParallelism,
+            Order = 130,
+        },
+
         // ---- ファイルと保存 ----
         new("recent.maxItems", SettingCategories.Files, SettingKind.Int, RecentFileList.DefaultMaxItems) { Min = 0, Max = RecentFileList.MaxItemsLimit, Order = 1 },
         new("recent.restorePosition", SettingCategories.Files, SettingKind.Bool, true) { Order = 2 },

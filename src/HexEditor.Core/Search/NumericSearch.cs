@@ -83,6 +83,9 @@ public sealed record FloatSearchOptions
 /// </summary>
 public sealed record NumericSearchInfo(bool IsFloat, int Bits, IntegerSign Sign, FloatFormat Format, IReadOnlyList<bool> VariantBigEndian)
 {
+    /// <summary>範囲の検索 (FIND-15) の条件。範囲の検索でなければ null。</summary>
+    public NumericRangeInfo? Range { get; init; }
+
     /// <summary>値のバイト数。</summary>
     public int ByteLength => IsFloat ? NumericSearch.ByteLength(Format) : Bits / 8;
 

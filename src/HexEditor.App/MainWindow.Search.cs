@@ -34,6 +34,8 @@ public sealed partial class MainWindow
                 ctx => ((MainWindow)ctx.Window).SearchResults)
             { CanFloat = false });
         }
+
+        RegisterSearchPanels();
     }
 
     /// <summary>検索履歴のキー (FIND-28。設定ではなくアプリの状態 state.json に置く)。</summary>
@@ -92,8 +94,11 @@ public sealed partial class MainWindow
         FindBar.ReplaceAllCompleted += FindBar_ReplaceAllCompleted;
         FindBar.ReplaceFailed += (_, message) => ShowNotice(message, InfoBarSeverity.Error, Vm.Selected);
         FindBar.AskUnreadable = AskUnreadableAsync;
+        FindBar.AskTimeout = AskRegexTimeoutAsync;
+        FindBar.SettingsRequested += (_, e) => OpenSettingsPage(e.Category, e.Key);
         FindBar.ResultReported += (_, message) => ShowStatusMessage(message);
         InitializeSearchExtras();
+        InitializeSearchPanels();
         AutomationProperties.SetAutomationId(SearchResults, "SearchResults");
         SearchResults.Visibility = Visibility.Collapsed;
         SearchResults.WindowId = AppWindow.Id;
@@ -157,6 +162,7 @@ public sealed partial class MainWindow
         }, NeedsDocument);
         Commands.Register("search.clearHistory", () => FindBar.ClearHistory());
         RegisterSearchExtraCommands();
+        RegisterSearchPanelCommands();
     }
 
     /// <summary>

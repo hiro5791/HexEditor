@@ -174,6 +174,17 @@ public sealed class LongRunningOperation
     /// <summary>これまでに見つかった一致の数を報告する (検索の処理だけが呼ぶ)。</summary>
     public void ReportMatches(long count) => Interlocked.Exchange(ref _matches, Math.Max(0, count));
 
+    /// <summary>
+    /// 処理の詳細 (表示用の文言。複数ファイル検索の「処理済みのファイル数 / 見つかったファイル数」と今のファイル名など。FIND-30)。
+    /// なければ null。
+    /// </summary>
+    public string? Detail => Volatile.Read(ref _detail);
+
+    private string? _detail;
+
+    /// <summary>処理の詳細を報告する。</summary>
+    public void ReportDetail(string? detail) => Volatile.Write(ref _detail, detail);
+
     /// <summary>キャンセルできるか (ずらしながらのその場保存は書き込みを始めたらキャンセルできない。ENG-24 の仕様 5)。</summary>
     public bool CanCancel { get; private set; } = true;
 

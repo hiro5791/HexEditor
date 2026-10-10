@@ -307,7 +307,7 @@ public sealed partial class CommandRegistryTests
         ["検索"] = ["search.find"],
         ["次を検索 / 前を検索"] = ["search.findNext", "search.findPrevious"],
         ["置換"] = ["search.replace"],
-        ["複数ファイル検索"] = ["-F2-17 (フェーズ 2)"],
+        ["複数ファイル検索"] = ["search.multiFile"],
         ["オフセットへ移動"] = ["go.goTo"],
         ["戻る / 進む"] = ["go.back", "go.forward"],
         ["ブックマークの設定 / 解除"] = ["go.bookmark.toggle"],

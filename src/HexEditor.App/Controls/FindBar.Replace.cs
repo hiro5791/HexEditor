@@ -156,7 +156,12 @@ public sealed partial class FindBar
         {
             try
             {
-                _template = Kind switch
+                if (ReplaceUnavailableReason() is { } unavailable)
+                {
+                    reason = unavailable;
+                }
+
+                _template = BuildPhase2Template() ?? Kind switch
                 {
                     SearchKind.Text => ReplacementTemplate.FromText(ReplaceQuery.Text, SearchEncoding, EscapeChoice.IsChecked == true),
                     SearchKind.Integer or SearchKind.Float when _pattern?.Numeric is { } numeric =>
@@ -177,7 +182,7 @@ public sealed partial class FindBar
 
         // 置換語と一致の長さが違うときは「長さが違う場合」を強調し、「埋めて長さを保つ」で長い場合は置換できない。
         PolicyHighlighted = false;
-        if (_template is { } t && _pattern is { } p && p.MinMatchLength == p.MaxMatchLength)
+        if (_template is { IsDynamic: false } t && _pattern is { } p && p.MinMatchLength == p.MaxMatchLength)
         {
             int n = t.LengthFor(0);
             int m = p.MinMatchLength;

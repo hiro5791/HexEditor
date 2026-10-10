@@ -71,15 +71,54 @@ public sealed class ReplacementTemplate
 {
     private readonly (byte Value, bool Keep)[][] _byVariant;
 
+    /// <summary>一致ごとに置換語のバイト列を作る関数 (正規表現のグループの参照。FIND-18 の仕様 8、FIND-19 の仕様 7)。</summary>
+    private readonly Func<DocumentSnapshot, long, long, byte[]?>? _dynamic;
+
+    private readonly bool _dynamicEmpty;
+
     private ReplacementTemplate((byte, bool)[][] byVariant) => _byVariant = byVariant;
 
+    private ReplacementTemplate(Func<DocumentSnapshot, long, long, byte[]?> dynamic, bool empty)
+    {
+        _byVariant = [[]];
+        _dynamic = dynamic;
+        _dynamicEmpty = empty;
+    }
+
     /// <summary>置換語が空 (一致を削除する。FIND-22 の仕様 8)。</summary>
-    public bool IsEmpty => _byVariant.All(v => v.Length == 0);
+    public bool IsEmpty => _dynamic is null ? _byVariant.All(v => v.Length == 0) : _dynamicEmpty;
+
+    /// <summary>一致ごとに内容が決まる (正規表現のグループの参照)。長さは一致を見るまでわからない。</summary>
+    public bool IsDynamic => _dynamic is not null;
+
+    /// <summary>一致ごとに内容が決まる置換語の、今の状態の一致 (<paramref name="offset"/>、長さ <paramref name="length"/>) での内容。一致しなければ null。</summary>
+    public ReplacementTemplate? ForMatch(DocumentSnapshot current, long offset, long length) =>
+        _dynamic is null ? this : _dynamic(current, offset, length) is { } bytes ? FromBytes(bytes) : null;
+
+    /// <summary>
+    /// 正規表現の置換語 (FIND-18 の仕様 8、FIND-19 の仕様 7)。テキストでは `$1` `$&lt;name&gt;` `$&amp;` `$$` を使え、同じ文字コードで
+    /// 符号化する。バイト列では Hex とグループの参照を並べて書く (`$2 00 $1`)。書き方の誤りは <see cref="PatternException"/>。
+    /// </summary>
+    public static ReplacementTemplate FromRegex(SearchPattern pattern, string text)
+    {
+        RegexMatcher regex = pattern.Regex ?? throw new ArgumentException("正規表現のパターンではありません。", nameof(pattern));
+        if (regex.IsBytes)
+        {
+            RegexSearch.ValidateByteReplacement(text);
+        }
+
+        return new ReplacementTemplate((snapshot, offset, length) =>
+            regex.MatchAt(snapshot, offset, length, out _) is { } match ? regex.Replace(match, text) : null, text.Trim().Length == 0);
+    }
+
+    /// <summary>種類 (一致した文字コードなど) ごとに違う置換語 (複数の文字コードの検索の置換。FIND-08)。</summary>
+    public static ReplacementTemplate PerVariant(IReadOnlyList<byte[]> bytes) =>
+        new([.. bytes.Select(b => b.Select(x => (x, false)).ToArray())]);
 
     /// <summary>種類 <paramref name="variant"/> の置換語の長さ。</summary>
     public int LengthFor(int variant) => Bytes(variant).Length;
 
-    /// <summary>種類 0 の置換語の変換結果 (置換欄の横の Hex 表示)。`??` は「??」。</summary>
+    /// <summary>種類 0 の置換語の変換結果 (置換欄の横の Hex 表示)。`??` は「??」。一致ごとに決まる置換語では空。</summary>
     public string Preview(int maxBytes = 32) =>
         string.Join(' ', Bytes(0).Take(maxBytes).Select(b => b.Keep ? "??" : b.Value.ToString("X2")));
 
@@ -170,9 +209,20 @@ public static class Replacer
     /// 一致 1 件の置換の内容を決める (FIND-24 の規則)。置換できない場合は理由を返す (<paramref name="edit"/> は null)。
     /// </summary>
     public static ReplaceIssue Plan(ReplacementTemplate template, long offset, long matchLength, int variant, ReplaceOptions options,
-        long documentLength, bool canResize, out ReplacementEdit? edit)
+        long documentLength, bool canResize, out ReplacementEdit? edit, DocumentSnapshot? current = null)
     {
         edit = null;
+        if (template.IsDynamic)
+        {
+            // 一致ごとに内容が決まる置換語 (正規表現のグループの参照。FIND-18 の仕様 8): 今の状態の一致から作る。
+            if (current is null || template.ForMatch(current, offset, matchLength) is not { } dynamic)
+            {
+                return ReplaceIssue.NoLongerMatches;
+            }
+
+            return Plan(dynamic, offset, matchLength, 0, options, documentLength, canResize, out edit);
+        }
+
         (byte Value, bool Keep)[] bytes = template.Bytes(variant);
         long n = bytes.Length;
         long m = matchLength;
@@ -254,7 +304,7 @@ public static class Replacer
             return new ReplaceOneResult(ReplaceIssue.NoLongerMatches, offset, 0);
         }
 
-        ReplaceIssue issue = Plan(template, offset, length, variant, options, current.Length, document.CanResize, out ReplacementEdit? edit);
+        ReplaceIssue issue = Plan(template, offset, length, variant, options, current.Length, document.CanResize, out ReplacementEdit? edit, current);
         if (issue != ReplaceIssue.None)
         {
             return new ReplaceOneResult(issue, offset, 0);
@@ -322,10 +372,15 @@ public static class Replacer
                     continue;
                 }
 
-                ReplaceIssue issue = Plan(template, offset, length, variant, options, current.Length, canResize, out ReplacementEdit? edit);
+                ReplaceIssue issue = Plan(template, offset, length, variant, options, current.Length, canResize, out ReplacementEdit? edit, current);
+                if (issue == ReplaceIssue.NoLongerMatches)
+                {
+                    continue;
+                }
+
                 if (issue != ReplaceIssue.None)
                 {
-                    throw new ReplaceException(issue, offset, length, template.LengthFor(variant));
+                    throw new ReplaceException(issue, offset, length, template.ForMatch(current, offset, length)?.LengthFor(variant) ?? 0);
                 }
 
                 previousEnd = edit!.Offset + edit.RemoveLength;
@@ -339,16 +394,17 @@ public static class Replacer
     /// 最初に見つかった理由を返す。
     /// </summary>
     public static (ReplaceIssue Issue, long Offset) Check(SearchResults results, ReplacementTemplate template, ReplaceOptions options,
-        long documentLength, bool canResize)
+        long documentLength, bool canResize, DocumentSnapshot? current = null)
     {
+        current ??= results.Snapshot;
         long total = results.LongCount;
         const int Batch = 65536;
         for (long start = 0; start < total; start += Batch)
         {
             foreach (SearchMatch m in results.GetRange(start, (int)Math.Min(Batch, total - start)))
             {
-                ReplaceIssue issue = Plan(template, m.Offset, m.Length, m.Variant, options, documentLength, canResize, out _);
-                if (issue != ReplaceIssue.None)
+                ReplaceIssue issue = Plan(template, m.Offset, m.Length, m.Variant, options, documentLength, canResize, out _, results.Snapshot);
+                if (issue is not (ReplaceIssue.None or ReplaceIssue.NoLongerMatches))
                 {
                     return (issue, m.Offset);
                 }
@@ -368,6 +424,12 @@ public static class Replacer
             return false;
         }
 
+        if (pattern.Regex is { } regex)
+        {
+            length = regex.LengthAt(snapshot, offset, 0, snapshot.Length);
+            return length > 0;
+        }
+
         int max = (int)Math.Min(pattern.MaxMatchLength, snapshot.Length - offset);
         byte[] buffer = new byte[max];
         if (!snapshot.Read(offset, buffer).IsComplete)
@@ -375,7 +437,7 @@ public static class Replacer
             return false;
         }
 
-        length = pattern.MatchLength(buffer);
+        length = pattern.MatchLengthAt(buffer, offset);
         if (length < 0)
         {
             return false;

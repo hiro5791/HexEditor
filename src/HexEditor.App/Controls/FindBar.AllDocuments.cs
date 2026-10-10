@@ -141,9 +141,9 @@ public sealed partial class FindBar
     {
         if (!SearchesAllDocuments || OpenDocuments!() is not { Count: > 0 } docs)
         {
-            return [new SearchTarget(editor, string.Empty, new SearchResults(editor.Document.Current, pattern, options))];
+            return [new SearchTarget(editor, string.Empty, NewResults(editor.Document.Current, pattern, options))];
         }
 
-        return [.. docs.Select(d => new SearchTarget(d.Editor, d.Name, new SearchResults(d.Editor.Document.Current, pattern, options)))];
+        return [.. docs.Select(d => new SearchTarget(d.Editor, d.Name, NewResults(d.Editor.Document.Current, pattern, options)))];
     }
 }

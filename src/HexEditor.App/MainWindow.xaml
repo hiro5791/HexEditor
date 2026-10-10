@@ -209,6 +209,9 @@
                         <MenuFlyoutItem x:Uid="Menu_Search_Previous" cmd:CommandUi.Id="search.findPrevious" AutomationProperties.AutomationId="Command_FindPrevious" />
                         <MenuFlyoutItem x:Uid="Menu_Search_Replace" cmd:CommandUi.Id="search.replace" AutomationProperties.AutomationId="Command_Replace" />
                         <MenuFlyoutSeparator />
+                        <MenuFlyoutItem x:Uid="Menu_Search_MultiFile" cmd:CommandUi.Id="search.multiFile" AutomationProperties.AutomationId="Command_MultiFileSearch" />
+                        <MenuFlyoutItem x:Uid="Menu_Search_Strings" cmd:CommandUi.Id="search.strings" AutomationProperties.AutomationId="Command_Strings" />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Search_ClearHistory" cmd:CommandUi.Id="search.clearHistory" AutomationProperties.AutomationId="Command_ClearSearchHistory" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Go">

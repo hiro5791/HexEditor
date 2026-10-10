@@ -420,6 +420,20 @@
       "maximum": 1048576,
       "default": 4096
     },
+    "search.mismatch.minRepeat": {
+      "description": "Repetitions that end a non-matching range",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 65536,
+      "default": 16
+    },
+    "search.multiFile.parallelism": {
+      "description": "Files searched at the same time",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 16,
+      "default": 4
+    },
     "search.readErrors": {
       "description": "When data can\u0027t be read while searching",
       "type": "string",
@@ -429,6 +443,13 @@
         "abort"
       ],
       "default": "ask"
+    },
+    "search.regex.timeLimit": {
+      "description": "Regular expression time limit (seconds)",
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 60,
+      "default": 2
     },
     "search.results.f3Repeats": {
       "description": "F3 searches again",

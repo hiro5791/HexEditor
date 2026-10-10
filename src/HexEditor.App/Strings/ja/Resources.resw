@@ -3997,4 +3997,236 @@
   <data name="Operations_CannotCancel" xml:space="preserve"><value>書き込みを始めたため、キャンセルできません。途中で止めるとファイルが壊れます。</value></data>
   <data name="Set_save_shiftInPlace" xml:space="preserve"><value>長さが変わる場合もその場で書く</value></data>
   <data name="SetDesc_save_shiftInPlace" xml:space="preserve"><value>一時ファイルを作らず、元のファイルの中でデータをずらしながら書きます。空き容量はほとんど要りませんが、途中で止まるとファイルが壊れます。実行のたびに確認します。</value></data>
+  <data name="Find_Kind_RegexText.Content" xml:space="preserve"><value>正規表現 (テキスト)</value></data>
+  <data name="Find_Kind_RegexBytes.Content" xml:space="preserve"><value>正規表現 (バイト列)</value></data>
+  <data name="Find_KindName_RegexText" xml:space="preserve"><value>正規表現</value></data>
+  <data name="Find_KindName_RegexBytes" xml:space="preserve"><value>バイト列の正規表現</value></data>
+  <data name="Find_KindName_MultiTerm" xml:space="preserve"><value>複数語</value></data>
+  <data name="Find_KindName_Mismatch" xml:space="preserve"><value>一致しない箇所</value></data>
+  <data name="Find_EncodingSetName.PlaceholderText" xml:space="preserve"><value>この組み合わせの名前</value></data>
+  <data name="Find_EncodingSetSave.Content" xml:space="preserve"><value>保存</value></data>
+  <data name="Find_EncodingSet_Default" xml:space="preserve"><value>既定 (ASCII、UTF-8、UTF-16LE、UTF-16BE)</value></data>
+  <data name="Find_EncodingSet_Name" xml:space="preserve"><value>保存した組み合わせ</value></data>
+  <data name="Find_Encoding_Multi" xml:space="preserve"><value>複数</value></data>
+  <data name="Find_EncodingsExcluded" xml:space="preserve"><value>符号化できないため除外: {0}</value></data>
+  <data name="Find_Error_PositionModulus" xml:space="preserve"><value>周期 x は 1〜{0} で指定してください。</value></data>
+  <data name="Find_Error_PositionRemainder" xml:space="preserve"><value>余り y は 0〜{0} で指定してください。</value></data>
+  <data name="Find_Error_MaskLengthMismatch" xml:space="preserve"><value>値 ({0} バイト) とマスク ({1} バイト) の長さが違います。</value></data>
+  <data name="Find_Error_MaskTooLong" xml:space="preserve"><value>マスクは {0} バイトまでです。</value></data>
+  <data name="Find_Error_MaskAllZero" xml:space="preserve"><value>マスクがすべて 0 です。比べるビットがありません。</value></data>
+  <data name="Find_Error_BitPatternLength" xml:space="preserve"><value>ビットパターンは 8 文字で 1 バイトです (今は {0} 文字)。</value></data>
+  <data name="Find_Error_InvalidBit" xml:space="preserve"><value>ビットパターンに使えるのは 0、1、x だけです: {0}</value></data>
+  <data name="Find_Error_RangeOrder" xml:space="preserve"><value>最小 ({0}) が最大 ({1}) より大きくなっています。</value></data>
+  <data name="Find_Error_RegexSyntax" xml:space="preserve"><value>正規表現の誤り: {0}</value></data>
+  <data name="Find_Error_RegexUnicodeProperty" xml:space="preserve"><value>バイト列の正規表現では Unicode プロパティは使えません。</value></data>
+  <data name="Find_Error_RegexUnicodeEscape" xml:space="preserve"><value>バイト列の正規表現では \u は使えません。バイトは \xHH で書いてください。</value></data>
+  <data name="Find_Error_RegexNonByteCharacter" xml:space="preserve"><value>1 バイトに収まらない文字です: {0}</value></data>
+  <data name="Find_Error_NoEncoding" xml:space="preserve"><value>文字列を符号化できる文字コードを 1 つ以上選んでください。</value></data>
+  <data name="Find_Error_TooManyTerms" xml:space="preserve"><value>同時に検索できる語は {0} 個までです。</value></data>
+  <data name="Find_RegexError_InsufficientClosingParentheses" xml:space="preserve"><value>閉じ括弧がありません</value></data>
+  <data name="Find_RegexError_InsufficientOpeningParentheses" xml:space="preserve"><value>閉じ括弧が多すぎます</value></data>
+  <data name="Find_RegexError_UnterminatedBracket" xml:space="preserve"><value>[ が閉じていません</value></data>
+  <data name="Find_RegexError_QuantifierAfterNothing" xml:space="preserve"><value>量指定子の前に繰り返すものがありません</value></data>
+  <data name="Find_RegexError_NestedQuantifiersNotParenthesized" xml:space="preserve"><value>量指定子が括弧なしで続いています</value></data>
+  <data name="Find_RegexError_ReversedCharacterRange" xml:space="preserve"><value>文字の範囲が逆です</value></data>
+  <data name="Find_RegexError_ReversedQuantifierRange" xml:space="preserve"><value>繰り返しの範囲が逆です</value></data>
+  <data name="Find_RegexError_UnescapedEndingBackslash" xml:space="preserve"><value>末尾に \ があります</value></data>
+  <data name="Find_RegexError_InvalidGroupingConstruct" xml:space="preserve"><value>グループの書き方が正しくありません</value></data>
+  <data name="Find_RegexError_UndefinedNumberedReference" xml:space="preserve"><value>参照しているグループがありません</value></data>
+  <data name="Find_RegexError_UndefinedNamedReference" xml:space="preserve"><value>参照しているグループの名前がありません</value></data>
+  <data name="Find_RegexError_InsufficientOrInvalidHexDigits" xml:space="preserve"><value>\x の後には Hex を 2 桁書いてください</value></data>
+  <data name="Find_RegexError_UnrecognizedEscape" xml:space="preserve"><value>知らないエスケープです</value></data>
+  <data name="Find_RegexError_Other" xml:space="preserve"><value>解釈できません</value></data>
+  <data name="Find_Mask.Content" xml:space="preserve"><value>ビットマスク</value></data>
+  <data name="Find_MaskError" xml:space="preserve"><value>マスク: {0}</value></data>
+  <data name="Find_MaskMode_Bits.Content" xml:space="preserve"><value>ビットパターン (0 1 x)</value></data>
+  <data name="Find_MaskMode_ValueMask.Content" xml:space="preserve"><value>値とマスク</value></data>
+  <data name="Find_MaskMode_Name" xml:space="preserve"><value>マスクの入力方法</value></data>
+  <data name="Find_MaskQuery.PlaceholderText" xml:space="preserve"><value>マスク (Hex。例: F0 0F)</value></data>
+  <data name="Find_Mismatch.Content" xml:space="preserve"><value>一致しない箇所を探す</value></data>
+  <data name="Find_MismatchAlign.Content" xml:space="preserve"><value>起点を P の長さの倍数のオフセットに揃える</value></data>
+  <data name="Find_MismatchPreview" xml:space="preserve"><value>{0} の繰り返しと違うバイト</value></data>
+  <data name="Find_MultiEncoding_Button" xml:space="preserve"><value>文字コード ({0})</value></data>
+  <data name="Find_MultiEncoding_Hint" xml:space="preserve"><value>最大 {0} 種類まで選べます。同じ文字列をすべての文字コードで一度に検索します。</value></data>
+  <data name="Find_MultiEncoding_Name" xml:space="preserve"><value>検索する文字コード</value></data>
+  <data name="Find_MultiTerm_Name" xml:space="preserve"><value>複数語</value></data>
+  <data name="Find_PartsMore" xml:space="preserve"><value>{0} … (全 {1} 種類)</value></data>
+  <data name="Find_PositionBase_Address.Content" xml:space="preserve"><value>表示上のアドレス</value></data>
+  <data name="Find_PositionBase_Offset.Content" xml:space="preserve"><value>ドキュメントのオフセット</value></data>
+  <data name="Find_PositionBase_Name" xml:space="preserve"><value>位置の条件の基準</value></data>
+  <data name="Find_PositionInfo" xml:space="preserve"><value>位置: mod {0} = {1}</value></data>
+  <data name="Find_PositionInfo_Multiple" xml:space="preserve"><value>位置: {0} の倍数</value></data>
+  <data name="Find_PositionModulus.PlaceholderText" xml:space="preserve"><value>x (周期)</value></data>
+  <data name="Find_PositionRemainder.PlaceholderText" xml:space="preserve"><value>y (余り)</value></data>
+  <data name="Find_PositionPreset2.Content" xml:space="preserve"><value>2 の倍数</value></data>
+  <data name="Find_PositionPreset4.Content" xml:space="preserve"><value>4 の倍数</value></data>
+  <data name="Find_PositionPreset8.Content" xml:space="preserve"><value>8 の倍数</value></data>
+  <data name="Find_PositionPreset16.Content" xml:space="preserve"><value>16 の倍数</value></data>
+  <data name="Find_PositionPresetSector.Content" xml:space="preserve"><value>セクタの先頭</value></data>
+  <data name="Find_Position_Custom.Content" xml:space="preserve"><value>指定する (オフセット mod x = y)</value></data>
+  <data name="Find_Position_None.Content" xml:space="preserve"><value>位置の条件なし</value></data>
+  <data name="Find_Position_Name" xml:space="preserve"><value>位置の条件</value></data>
+  <data name="Find_Query_Bits" xml:space="preserve"><value>ビットパターン (例: 1xx0 0001)</value></data>
+  <data name="Find_Query_Regex" xml:space="preserve"><value>正規表現</value></data>
+  <data name="Find_Query_Repeat" xml:space="preserve"><value>繰り返しのパターン</value></data>
+  <data name="Find_Query_Name" xml:space="preserve"><value>検索する値</value></data>
+  <data name="Find_RangeExclude.Content" xml:space="preserve"><value>除外</value></data>
+  <data name="Find_RangeType" xml:space="preserve"><value>{0} bit {1}</value></data>
+  <data name="Find_Sign_Signed_Short" xml:space="preserve"><value>符号あり</value></data>
+  <data name="Find_Sign_Unsigned_Short" xml:space="preserve"><value>符号なし</value></data>
+  <data name="Find_Sign_Either_Short" xml:space="preserve"><value>符号あり・なし</value></data>
+  <data name="Find_RangePreview" xml:space="preserve"><value>範囲: {0}〜{1} ({2}, {3})</value></data>
+  <data name="Find_RangePreviewExclude" xml:space="preserve"><value>範囲外: {0}〜{1} ({2}, {3})</value></data>
+  <data name="Find_RegexBacktracking" xml:space="preserve"><value>後方参照・先読み・後読みを使うため、チャンクごとの時間の上限付きで照合します。</value></data>
+  <data name="Find_RegexIgnoreCase.Content" xml:space="preserve"><value>i (大文字・小文字を区別しない)</value></data>
+  <data name="Find_RegexMultiline.Content" xml:space="preserve"><value>m (^ $ を行頭・行末に)</value></data>
+  <data name="Find_RegexSingleline.Content" xml:space="preserve"><value>s (. を改行に一致)</value></data>
+  <data name="Find_RegexNote" xml:space="preserve"><value>一致の最大長: {0} バイト。これより長い一致は見つかりません。</value></data>
+  <data name="Find_RegexSettings.Content" xml:space="preserve"><value>変更</value></data>
+  <data name="Find_RegexMode_Linear" xml:space="preserve"><value>正規表現 (後戻りしない方式)</value></data>
+  <data name="Find_RegexMode_Backtracking" xml:space="preserve"><value>正規表現 (後戻りする方式、時間の上限付き)</value></data>
+  <data name="Find_RegexTimedOut" xml:space="preserve"><value>正規表現の時間の上限に達したため中止しました。</value></data>
+  <data name="Find_RegexTimeout_Ask" xml:space="preserve"><value>{0} からの {1} バイトの照合が時間の上限に達しました。この部分を飛ばして続けますか?</value></data>
+  <data name="Find_RegexTimeout_Skip" xml:space="preserve"><value>飛ばして続ける</value></data>
+  <data name="Find_MatchedEncoding" xml:space="preserve"><value>一致した文字コード: {0}</value></data>
+  <data name="Find_MatchedTerm" xml:space="preserve"><value>一致した語: {0}</value></data>
+  <data name="Find_ReplaceUnsupported" xml:space="preserve"><value>この検索では置換できません。</value></data>
+  <data name="Find_TermAdd.Content" xml:space="preserve"><value>追加</value></data>
+  <data name="Find_TermRemove.Content" xml:space="preserve"><value>削除</value></data>
+  <data name="Find_TermUp.Content" xml:space="preserve"><value>上へ</value></data>
+  <data name="Find_TermDown.Content" xml:space="preserve"><value>下へ</value></data>
+  <data name="Find_TermImport.Content" xml:space="preserve"><value>ファイルから読み込み</value></data>
+  <data name="Find_TermSave.Content" xml:space="preserve"><value>保存</value></data>
+  <data name="Find_TermLoad.Content" xml:space="preserve"><value>保存した一覧を開く</value></data>
+  <data name="Find_TermEnabled_Name" xml:space="preserve"><value>この語を検索する</value></data>
+  <data name="Find_TermText_Name" xml:space="preserve"><value>検索語</value></data>
+  <data name="Find_TermOption_Name" xml:space="preserve"><value>文字コード・サイズ</value></data>
+  <data name="Find_TermList_Name" xml:space="preserve"><value>検索語の一覧</value></data>
+  <data name="Find_TermSummary" xml:space="preserve"><value>{1} 語のうち {0} 語が有効</value></data>
+  <data name="Find_TermLoadFailed" xml:space="preserve"><value>語の一覧を読み込めません: {0}</value></data>
+  <data name="Find_TermSaveFailed" xml:space="preserve"><value>語の一覧を保存できません: {0}</value></data>
+  <data name="Menu_Search_MultiFile.Text" xml:space="preserve"><value>複数ファイル検索(M)...</value></data>
+  <data name="Menu_Search_MultiFile.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Search_Strings.Text" xml:space="preserve"><value>文字列の抽出(S)</value></data>
+  <data name="Menu_Search_Strings.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Panel_Strings_Title" xml:space="preserve"><value>文字列の抽出</value></data>
+  <data name="Panel_MultiFile_Title" xml:space="preserve"><value>複数ファイル検索</value></data>
+  <data name="Cmd_search_multiFile" xml:space="preserve"><value>複数ファイル検索</value></data>
+  <data name="CmdAlias_search_multiFile" xml:space="preserve"><value>ふくすうふぁいるけんさく</value></data>
+  <data name="Cmd_search_multiFileReplace" xml:space="preserve"><value>複数ファイル置換</value></data>
+  <data name="CmdAlias_search_multiFileReplace" xml:space="preserve"><value>ふくすうふぁいるちかん</value></data>
+  <data name="Cmd_search_strings" xml:space="preserve"><value>文字列の抽出</value></data>
+  <data name="CmdAlias_search_strings" xml:space="preserve"><value>もじれつのちゅうしゅつ</value></data>
+  <data name="Cmd_search_multiTerm" xml:space="preserve"><value>複数の語を検索</value></data>
+  <data name="CmdAlias_search_multiTerm" xml:space="preserve"><value>ふくすうのごをけんさく</value></data>
+  <data name="Cmd_search_mismatch" xml:space="preserve"><value>一致しない箇所を検索</value></data>
+  <data name="CmdAlias_search_mismatch" xml:space="preserve"><value>いっちしないかしょをけんさく</value></data>
+  <data name="Cmd_view_panel_strings" xml:space="preserve"><value>文字列の抽出の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_strings" xml:space="preserve"><value>もじれつのちゅうしゅつのひょうじきりかえ</value></data>
+  <data name="Cmd_view_panel_multiFileSearch" xml:space="preserve"><value>複数ファイル検索の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_multiFileSearch" xml:space="preserve"><value>ふくすうふぁいるけんさくのひょうじきりかえ</value></data>
+  <data name="Set_search_regex_timeLimit" xml:space="preserve"><value>正規表現の時間の上限 (秒)</value></data>
+  <data name="SetDesc_search_regex_timeLimit" xml:space="preserve"><value>後方参照・先読み・後読みを使う正規表現の、チャンクごとの時間の上限。0.1〜60 秒。</value></data>
+  <data name="Set_search_mismatch_minRepeat" xml:space="preserve"><value>一致しない範囲を終える繰り返しの回数</value></data>
+  <data name="SetDesc_search_mismatch_minRepeat" xml:space="preserve"><value>「一致しない箇所を探す」のすべて検索で、パターンがこの回数以上続く位置で範囲を終えます。1〜65,536。</value></data>
+  <data name="Set_search_multiFile_parallelism" xml:space="preserve"><value>同時に検索するファイルの数</value></data>
+  <data name="SetDesc_search_multiFile_parallelism" xml:space="preserve"><value>複数ファイル検索で並列に読むファイルの数。HDD では 1 をおすすめします。1〜16。</value></data>
+  <data name="MultiFile_AddFolder.Content" xml:space="preserve"><value>追加</value></data>
+  <data name="MultiFile_BrowseFolder.Content" xml:space="preserve"><value>参照...</value></data>
+  <data name="MultiFile_RemoveFolder.Content" xml:space="preserve"><value>削除</value></data>
+  <data name="MultiFile_Backup.Content" xml:space="preserve"><value>置換の前にバックアップ (.bak) を作る</value></data>
+  <data name="MultiFile_ClearReadOnly.Content" xml:space="preserve"><value>読み取り専用属性を外して置換する</value></data>
+  <data name="MultiFile_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="MultiFile_Search.Content" xml:space="preserve"><value>検索</value></data>
+  <data name="MultiFile_RunReplace.Content" xml:space="preserve"><value>置換を実行</value></data>
+  <data name="MultiFile_Confirm_Title" xml:space="preserve"><value>ファイルを置換しますか?</value></data>
+  <data name="MultiFile_Confirm_Body" xml:space="preserve"><value>{0} ファイルの {1} 件を置換し、ファイルを直接書き換えて保存します。{2} この操作は元に戻せません (タブで開いているファイルはエディタ上で置換し、そこで元に戻せます)。</value></data>
+  <data name="MultiFile_Confirm_Backup" xml:space="preserve"><value>各ファイルのバックアップ (.bak) を先に作ります。</value></data>
+  <data name="MultiFile_Confirm_NoBackup" xml:space="preserve"><value>バックアップは作りません。</value></data>
+  <data name="MultiFile_Confirm_Replace" xml:space="preserve"><value>置換して保存する</value></data>
+  <data name="MultiFile_Confirm_Cancel" xml:space="preserve"><value>やめる</value></data>
+  <data name="MultiFile_Depth.PlaceholderText" xml:space="preserve"><value>深さ (制限なし)</value></data>
+  <data name="MultiFile_DepthInvalid" xml:space="preserve"><value>深さは整数で入力してください。</value></data>
+  <data name="MultiFile_Exclude.PlaceholderText" xml:space="preserve"><value>除外するマスク (例: .git;node_modules)</value></data>
+  <data name="MultiFile_Include.PlaceholderText" xml:space="preserve"><value>含めるマスク (例: *.bin;*.dat)</value></data>
+  <data name="MultiFile_FileRow" xml:space="preserve"><value>{0}  —  {1} 件 · {2} バイト · {3}</value></data>
+  <data name="MultiFile_MatchRow" xml:space="preserve"><value>{0}  {1}  {2}  {3}</value></data>
+  <data name="MultiFile_FolderInput.PlaceholderText" xml:space="preserve"><value>フォルダのパス</value></data>
+  <data name="MultiFile_FolderMissing" xml:space="preserve"><value>フォルダがありません: {0}</value></data>
+  <data name="MultiFile_Folders_Name" xml:space="preserve"><value>検索するフォルダ</value></data>
+  <data name="MultiFile_Hidden.Content" xml:space="preserve"><value>隠しファイル・システムファイルを含める</value></data>
+  <data name="MultiFile_Links.Content" xml:space="preserve"><value>シンボリックリンク・ジャンクションをたどる</value></data>
+  <data name="MultiFile_Streams.Content" xml:space="preserve"><value>代替データストリームを含める (まだ使えません)</value></data>
+  <data name="MultiFile_OpenDocuments.Content" xml:space="preserve"><value>開いているドキュメントを含める (未保存の編集も検索)</value></data>
+  <data name="MultiFile_MaxSize.PlaceholderText" xml:space="preserve"><value>最大サイズ</value></data>
+  <data name="MultiFile_MinSize.PlaceholderText" xml:space="preserve"><value>最小サイズ</value></data>
+  <data name="MultiFile_SizeInvalid" xml:space="preserve"><value>ファイルサイズは数値で入力してください (例: 1M、0x1000)。</value></data>
+  <data name="MultiFile_Subfolders.Content" xml:space="preserve"><value>サブフォルダを含める</value></data>
+  <data name="MultiFile_Mode_Name" xml:space="preserve"><value>モード</value></data>
+  <data name="MultiFile_Mode_Search.Content" xml:space="preserve"><value>検索</value></data>
+  <data name="MultiFile_Mode_Replace.Content" xml:space="preserve"><value>置換</value></data>
+  <data name="MultiFile_Query.PlaceholderText" xml:space="preserve"><value>検索する値</value></data>
+  <data name="MultiFile_QueryInvalid" xml:space="preserve"><value>検索語が正しくありません ({0})。</value></data>
+  <data name="MultiFile_ReplaceQuery.PlaceholderText" xml:space="preserve"><value>置換語</value></data>
+  <data name="MultiFile_ReplaceInvalid" xml:space="preserve"><value>置換語が正しくありません ({0})。</value></data>
+  <data name="MultiFile_Results_Name" xml:space="preserve"><value>ファイルごとの結果</value></data>
+  <data name="MultiFile_TargetSetName.PlaceholderText" xml:space="preserve"><value>この対象の指定の名前</value></data>
+  <data name="MultiFile_TargetSetSave.Content" xml:space="preserve"><value>保存</value></data>
+  <data name="MultiFile_TargetSet_Name" xml:space="preserve"><value>保存した対象の指定</value></data>
+  <data name="MultiFile_TargetSet_Placeholder" xml:space="preserve"><value>保存した対象</value></data>
+  <data name="MultiFile_TargetsHeader.Text" xml:space="preserve"><value>対象</value></data>
+  <data name="MultiFile_Progress" xml:space="preserve"><value>{0} / {1} ファイル {2}</value></data>
+  <data name="MultiFile_ReplaceProgress" xml:space="preserve"><value>{0} / {1} ファイル {2}</value></data>
+  <data name="MultiFile_Summary" xml:space="preserve"><value>{0} ファイル、{1} 件 ({3})。一致がなかったファイル: {2}。</value></data>
+  <data name="MultiFile_ReplaceSummary" xml:space="preserve"><value>{0} ファイルの {1} 件を置換しました。スキップ: {2} ファイル。未処理: {3} ファイル。</value></data>
+  <data name="MultiFile_Skipped" xml:space="preserve"><value>スキップしたファイル ({0})</value></data>
+  <data name="MultiFile_SkippedItem" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="MultiFile_State_Limit" xml:space="preserve"><value>上限で停止</value></data>
+  <data name="MultiFile_Outcome_Replaced" xml:space="preserve"><value>置換済み ({0} 件)</value></data>
+  <data name="MultiFile_Outcome_InEditor" xml:space="preserve"><value>エディタで置換 (未保存、{0} 件)</value></data>
+  <data name="MultiFile_Outcome_Skipped" xml:space="preserve"><value>スキップ: {0}</value></data>
+  <data name="MultiFile_Outcome_Failed" xml:space="preserve"><value>失敗: {0}</value></data>
+  <data name="MultiFile_Outcome_NotProcessed" xml:space="preserve"><value>未処理</value></data>
+  <data name="MultiFile_Reason_AccessDenied" xml:space="preserve"><value>アクセスが拒否されました</value></data>
+  <data name="MultiFile_Reason_InUse" xml:space="preserve"><value>別のアプリが使用中です</value></data>
+  <data name="MultiFile_Reason_PathTooLong" xml:space="preserve"><value>パスが長すぎます</value></data>
+  <data name="MultiFile_Reason_NotFound" xml:space="preserve"><value>見つかりません</value></data>
+  <data name="MultiFile_Reason_IoError" xml:space="preserve"><value>読み込みエラー</value></data>
+  <data name="MultiFile_Reason_Unreadable" xml:space="preserve"><value>読めない範囲がありました</value></data>
+  <data name="MultiFile_Reason_ReadOnly" xml:space="preserve"><value>読み取り専用</value></data>
+  <data name="MultiFile_Reason_ChangedSinceSearch" xml:space="preserve"><value>検索後に変更されました</value></data>
+  <data name="MultiFile_Reason_CannotReplace" xml:space="preserve"><value>長さの扱いの設定で置換できません</value></data>
+  <data name="Operation_MultiFileSearch" xml:space="preserve"><value>複数ファイル検索</value></data>
+  <data name="Operation_MultiFileReplace" xml:space="preserve"><value>複数ファイル置換</value></data>
+  <data name="SearchResults_Column_Encoding" xml:space="preserve"><value>文字コード</value></data>
+  <data name="SearchResults_Column_Interpretation" xml:space="preserve"><value>解釈</value></data>
+  <data name="SearchResults_Column_String" xml:space="preserve"><value>文字列</value></data>
+  <data name="SearchResults_Column_Term" xml:space="preserve"><value>検索語</value></data>
+  <data name="SearchResults_Column_Chars" xml:space="preserve"><value>文字数</value></data>
+  <data name="SearchResults_ExportText.Text" xml:space="preserve"><value>テキストにエクスポート (1 行 1 文字列)...</value></data>
+  <data name="SearchResults_FileType_Text" xml:space="preserve"><value>テキスト</value></data>
+  <data name="SearchResults_TimedOut" xml:space="preserve"><value>正規表現の時間の上限</value></data>
+  <data name="SearchResults_VariantCount" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="SearchResults_TermCounts" xml:space="preserve"><value>語ごとの件数</value></data>
+  <data name="SearchResults_EncodingCounts" xml:space="preserve"><value>文字コードごとの件数</value></data>
+  <data name="Search_Label_Signed" xml:space="preserve"><value>符号あり</value></data>
+  <data name="Search_Label_SignedAndUnsigned" xml:space="preserve"><value>符号あり・なし両方</value></data>
+  <data name="Search_Label_Unsigned" xml:space="preserve"><value>符号なし</value></data>
+  <data name="Strings_CharKind" xml:space="preserve"><value>文字の種類</value></data>
+  <data name="Strings_CharKind_Newlines" xml:space="preserve"><value>印字可能な文字と改行</value></data>
+  <data name="Strings_CharKind_Printable" xml:space="preserve"><value>印字可能な文字</value></data>
+  <data name="Strings_Encodings" xml:space="preserve"><value>文字コード</value></data>
+  <data name="Strings_Extract" xml:space="preserve"><value>抽出</value></data>
+  <data name="Strings_KindName" xml:space="preserve"><value>文字列</value></data>
+  <data name="Strings_MinLength" xml:space="preserve"><value>最小の長さ</value></data>
+  <data name="Strings_MinLengthInvalid" xml:space="preserve"><value>最小の長さは 1〜{0} で指定してください。</value></data>
+  <data name="Strings_NoEncoding" xml:space="preserve"><value>文字コードを選んでください</value></data>
+  <data name="Strings_NoSelection" xml:space="preserve"><value>選択範囲がありません。</value></data>
+  <data name="Strings_NulOnly" xml:space="preserve"><value>NUL で終わるものだけ</value></data>
+  <data name="Strings_RangeEnd" xml:space="preserve"><value>終了 (このバイトを含む)</value></data>
+  <data name="Strings_RangeStart" xml:space="preserve"><value>開始</value></data>
+  <data name="Strings_Scope" xml:space="preserve"><value>範囲</value></data>
+  <data name="Strings_Scope_Document" xml:space="preserve"><value>ドキュメント全体</value></data>
+  <data name="Strings_Scope_Range" xml:space="preserve"><value>オフセット範囲</value></data>
+  <data name="Strings_Scope_Selection" xml:space="preserve"><value>選択範囲</value></data>
 </root>
