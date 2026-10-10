@@ -116,6 +116,8 @@ public sealed partial class MainWindow
                 ["collapsed"] = item.IsCollapsed,
                 ["expanded"] = item.IsExpanded,
                 ["bits"] = item.IsBinary ? string.Concat(item.Bits.Select(b => b.Text)) : null,
+                ["swatch"] = TestSwatch(item) is { } swatch ? Color(swatch.Background) : null,
+                ["swatchBorder"] = TestSwatch(item) is { } framed && framed.BorderBrush is not null && framed.BorderThickness.Left > 0,
             });
         }
 
@@ -152,6 +154,36 @@ public sealed partial class MainWindow
     }
 
     /// <summary>一覧の項目の UI オートメーションの名前 (コンテナに付けたもの)。表示されていなければ null。</summary>
+    /// <summary>色の行の色見本 (枠線付きの四角。INSP-12)。表示されていなければ null。</summary>
+    private Microsoft.UI.Xaml.Controls.Border? TestSwatch(InspectorItemViewModel item)
+    {
+        var list = (Microsoft.UI.Xaml.Controls.ListView?)FindElement("Inspector_List");
+        if (!item.HasSwatch || list?.ContainerFromItem(item) is not DependencyObject container)
+        {
+            return null;
+        }
+
+        var stack = new Stack<DependencyObject>([container]);
+        while (stack.Count > 0)
+        {
+            DependencyObject node = stack.Pop();
+            if (node is FrameworkElement { Visibility: Visibility.Visible } e && AutomationProperties.GetAutomationId(e) == "Inspector_Swatch" && e is Microsoft.UI.Xaml.Controls.Grid g)
+            {
+                return g.Children.OfType<Microsoft.UI.Xaml.Controls.Border>().FirstOrDefault();
+            }
+
+            for (int i = 0; i < Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(node); i++)
+            {
+                stack.Push(Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(node, i));
+            }
+        }
+
+        return null;
+    }
+
+    private static string? Color(Microsoft.UI.Xaml.Media.Brush? brush) =>
+        brush is Microsoft.UI.Xaml.Media.SolidColorBrush s ? $"#{s.Color.R:X2}{s.Color.G:X2}{s.Color.B:X2}{s.Color.A:X2}" : null;
+
     private string? TestContainerName(InspectorItemViewModel item)
     {
         var list = (Microsoft.UI.Xaml.Controls.ListView?)FindElement("Inspector_List");

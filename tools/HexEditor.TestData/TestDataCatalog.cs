@@ -64,6 +64,11 @@ public static class TestDataCatalog
 
         // ---- cases/05-inspector-and-annotations.md の表 ----
         new("TD-INSP-VALUES", 256, "インスペクタの解釈の確認用の値 (0x00 に int32 の 12,345 など)", path => WriteAll(path, InspectorValues())),
+        new("TD-INSP-EDGE", 64 * KiB, "0xFFC〜0x1003 が DE AD BE EF CA FE BA BE、それ以外は 00",
+            path => WriteAll(path, [.. new byte[0xFFC], 0xDE, 0xAD, 0xBE, 0xEF, 0xCA, 0xFE, 0xBA, 0xBE, .. new byte[64 * 1024 - 0x1004]])),
+
+        // ---- test-data.md の共通の表 ----
+        new("TD-ZIP", ZipSample().Length, "テキストファイル 3 つを入れた ZIP (無圧縮。50 4B 03 04 は 3 か所)", path => WriteAll(path, ZipSample())),
 
         // ---- テキスト (test-data.md の共通の表) ----
         new("TD-TEXT-ASCII", 4 * KiB, "英文の ASCII テキスト (改行は CRLF)", path => WriteAll(path, Text(AsciiLines, Encoding.ASCII, 4 * KiB, bom: false))),
@@ -290,6 +295,86 @@ public static class TestDataCatalog
     private static void WriteAll(string path, byte[] data) => File.WriteAllBytes(path, data);
 
     /// <summary>TD-INSP-VALUES: 下記以外はすべて 00 の 256 バイト。</summary>
+    /// <summary>
+    /// TD-ZIP: 無圧縮 (stored) で 3 つのテキストファイルを入れた ZIP。日時と内容を固定して、いつも同じバイト列にする。
+    /// ローカルファイルヘッダ (50 4B 03 04) は 3 か所 (内容の文字列には現れない)。
+    /// </summary>
+    public static byte[] ZipSample()
+    {
+        string[] names = ["readme.txt", "notes.txt", "data.txt"];
+        var body = new MemoryStream();
+        var central = new MemoryStream();
+        var w = new BinaryWriter(body);
+        var c = new BinaryWriter(central);
+        for (int i = 0; i < names.Length; i++)
+        {
+            byte[] name = Encoding.ASCII.GetBytes(names[i]);
+            byte[] content = Encoding.ASCII.GetBytes(string.Concat(Enumerable.Repeat($"Line of sample text {i} for the zip test data.\r\n", 10)));
+            uint crc = Crc32(content);
+            uint offset = (uint)body.Position;
+            w.Write(0x04034B50u);
+            w.Write((ushort)20);
+            w.Write((ushort)0);
+            w.Write((ushort)0);
+            w.Write((ushort)0x6000);
+            w.Write((ushort)0x5B47);
+            w.Write(crc);
+            w.Write((uint)content.Length);
+            w.Write((uint)content.Length);
+            w.Write((ushort)name.Length);
+            w.Write((ushort)0);
+            w.Write(name);
+            w.Write(content);
+            c.Write(0x02014B50u);
+            c.Write((ushort)20);
+            c.Write((ushort)20);
+            c.Write((ushort)0);
+            c.Write((ushort)0);
+            c.Write((ushort)0x6000);
+            c.Write((ushort)0x5B47);
+            c.Write(crc);
+            c.Write((uint)content.Length);
+            c.Write((uint)content.Length);
+            c.Write((ushort)name.Length);
+            c.Write((ushort)0);
+            c.Write((ushort)0);
+            c.Write((ushort)0);
+            c.Write((ushort)0);
+            c.Write(0u);
+            c.Write(offset);
+            c.Write(name);
+        }
+
+        uint centralOffset = (uint)body.Position;
+        c.Flush();
+        w.Write(central.ToArray());
+        w.Write(0x06054B50u);
+        w.Write((ushort)0);
+        w.Write((ushort)0);
+        w.Write((ushort)names.Length);
+        w.Write((ushort)names.Length);
+        w.Write((uint)central.Length);
+        w.Write(centralOffset);
+        w.Write((ushort)0);
+        w.Flush();
+        return body.ToArray();
+
+        static uint Crc32(byte[] data)
+        {
+            uint crc = 0xFFFFFFFF;
+            foreach (byte b in data)
+            {
+                crc ^= b;
+                for (int k = 0; k < 8; k++)
+                {
+                    crc = (crc & 1) != 0 ? (crc >> 1) ^ 0xEDB88320 : crc >> 1;
+                }
+            }
+
+            return ~crc;
+        }
+    }
+
     public static byte[] InspectorValues()
     {
         byte[] data = new byte[256];
