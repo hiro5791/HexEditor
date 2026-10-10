@@ -274,6 +274,7 @@ Length: {2} ({3} bytes)</value></data>
   <data name="HexView_HelpText" xml:space="preserve"><value>Tab switches between the Hex and text columns. F6 moves to the next area.</value></data>
   <data name="HexView_Menu_Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="HexView_Menu_ClearSelection" xml:space="preserve"><value>Clear selection</value></data>
+  <data name="HexView_Menu_TextColumn" xml:space="preserve"><value>Text column</value></data>
   <data name="HexView_Status_UnreadableFound" xml:space="preserve"><value>Some ranges cannot be read.</value></data>
   <data name="HexView_Unreadable" xml:space="preserve"><value>Cannot be read</value></data>
   <data name="HexView_Unreadable_IoError" xml:space="preserve"><value>Cannot be read: device I/O error ({0})</value></data>
@@ -3128,6 +3129,12 @@ Details were written to:
   <data name="Menu_View_AddTextColumn.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="Menu_View_RemoveTextColumn.Text" xml:space="preserve"><value>Remove text column</value></data>
   <data name="Menu_View_RemoveTextColumn.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.Text" xml:space="preserve"><value>Move text column left</value></data>
+  <data name="Menu_View_MoveTextColumnLeft.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_MoveTextColumnRight.Text" xml:space="preserve"><value>Move text column right</value></data>
+  <data name="Menu_View_MoveTextColumnRight.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_View_TextColumnEncoding.Text" xml:space="preserve"><value>Text column encoding...</value></data>
+  <data name="Menu_View_TextColumnEncoding.AccessKey" xml:space="preserve"><value>U</value></data>
   <data name="Menu_View_LoadTable.Text" xml:space="preserve"><value>Load character table file...</value></data>
   <data name="Menu_View_LoadTable.AccessKey" xml:space="preserve"><value>T</value></data>
   <data name="Menu_View_ByteTheme.Text" xml:space="preserve"><value>Byte theme</value></data>
@@ -3220,6 +3227,7 @@ Details were written to:
   <data name="Menu_Go_PreviousPage.Text" xml:space="preserve"><value>Previous page</value></data>
   <data name="Menu_Go_PreviousPage.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Command_LastTextColumn" xml:space="preserve"><value>At least one text column is shown.</value></data>
+  <data name="Command_TextColumnAtEdge" xml:space="preserve"><value>The text column can't move further in that direction.</value></data>
   <data name="Command_MinimapThemeNeedsAround" xml:space="preserve"><value>Only available when the minimap range is "Around the view".</value></data>
   <data name="Command_NoSeparator" xml:space="preserve"><value>Choose separator lines first.</value></data>
   <data name="Command_NoTextColumn" xml:space="preserve"><value>The text column is hidden.</value></data>
@@ -3312,6 +3320,12 @@ Details were written to:
   <data name="CmdAlias_view_addTextColumn" xml:space="preserve"><value>encoding columns</value></data>
   <data name="Cmd_view_removeTextColumn" xml:space="preserve"><value>Remove text column</value></data>
   <data name="CmdAlias_view_removeTextColumn" xml:space="preserve"><value>encoding columns</value></data>
+  <data name="Cmd_view_moveTextColumnLeft" xml:space="preserve"><value>Move text column left</value></data>
+  <data name="CmdAlias_view_moveTextColumnLeft" xml:space="preserve"><value>reorder swap</value></data>
+  <data name="Cmd_view_moveTextColumnRight" xml:space="preserve"><value>Move text column right</value></data>
+  <data name="CmdAlias_view_moveTextColumnRight" xml:space="preserve"><value>reorder swap</value></data>
+  <data name="Cmd_view_textColumnEncoding" xml:space="preserve"><value>Change encoding of the text column</value></data>
+  <data name="CmdAlias_view_textColumnEncoding" xml:space="preserve"><value>charset</value></data>
   <data name="Cmd_view_byteThemeNone" xml:space="preserve"><value>Byte theme: None</value></data>
   <data name="CmdAlias_view_byteThemeNone" xml:space="preserve"><value>colors</value></data>
   <data name="Cmd_view_byteThemeCategory" xml:space="preserve"><value>Byte theme: By kind</value></data>
@@ -4026,6 +4040,8 @@ Details were written to:
   <data name="Clipboard_WriteToFile" xml:space="preserve"><value>Write to a file</value></data>
   <data name="Bookmarks_MenuOpenInNewTab.Text" xml:space="preserve"><value>Open in a new tab</value></data>
   <data name="Tab_FormatSettings" xml:space="preserve"><value>Format settings...</value></data>
+  <data name="Tab_NewView" xml:space="preserve"><value>Open in new view</value></data>
+  <data name="Tab_ShowToRight" xml:space="preserve"><value>Show to the right</value></data>
   <data name="SaveSpace_Shift" xml:space="preserve"><value>Save in place by shifting data</value></data>
   <data name="Shift_Title" xml:space="preserve"><value>Save in place</value></data>
   <data name="Shift_Body" xml:space="preserve"><value>{0} will be rewritten in place. If the app or PC stops while saving, the file will be damaged and can't be restored. Amount to rewrite: {1}. Temporary space needed: {2}.</value></data>
@@ -5245,8 +5261,13 @@ Details were written to:
   <data name="Preset_Imported" xml:space="preserve"><value>Imported {0, plural, one {# preset} other {# presets}}.</value></data>
   <data name="Preset_ImportError" xml:space="preserve"><value>The presets in {0} could not be imported: {1}</value></data>
   <data name="Preset_ImportErrorLine" xml:space="preserve"><value>The presets in {0} could not be imported (line {1}): {2}</value></data>
+  <data name="Preset_ImportTooMany" xml:space="preserve"><value>The presets in {0} were not imported: there would be {1} presets, but up to {2} can be kept. Delete some presets first.</value></data>
   <data name="Preset_ExportError" xml:space="preserve"><value>The presets could not be exported ({0}).</value></data>
   <data name="Preset_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Preset_Edit" xml:space="preserve"><value>Edit...</value></data>
+  <data name="Preset_EditTitle" xml:space="preserve"><value>Edit the preset</value></data>
+  <data name="Preset_NameInUse" xml:space="preserve"><value>A preset named {0} already exists.</value></data>
+  <data name="Preset_Edited" xml:space="preserve"><value>Updated the preset {0}.</value></data>
   <data name="Preset_Export" xml:space="preserve"><value>Export...</value></data>
   <data name="Preset_Import" xml:space="preserve"><value>Import...</value></data>
   <data name="Preset_SectionHelp" xml:space="preserve"><value>Presets are named sets of view settings. A preset with extensions is applied the first time a matching file is opened.</value></data>

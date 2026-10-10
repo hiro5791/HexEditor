@@ -153,36 +153,65 @@ public static class ViewOptions
 
         Attached.Add(doc, new object());
         var store = new ViewSettingsStore(settings, Documents);
-        EditorState editor = doc.Editor;
 
         // データソースの種類ごとの既定値 (VIEW-42 の仕様 2 の 3)。ファイルにはない (ディスクなどのデータソースが示す)。
         System.Text.Json.Nodes.JsonObject? sourceDefaults = (doc.Document.Source as IViewDefaultsSource)?.ViewDefaults;
+        ViewSettings initial;
+        long? reference = null;
         if (doc.FilePath is { } path)
         {
-            (ViewSettings view, long? reference) = store.Load(path, sourceDefaults);
+            (initial, reference) = store.Load(path, sourceDefaults);
 
             // 拡張子で自動適用するプリセット (VIEW-42 の仕様 2 の 4・仕様 6): 初めて開いたときだけ。
             if (store.TakeAutoPreset(path) is { } preset)
             {
-                view = preset.ApplyTo(view);
+                initial = preset.ApplyTo(initial);
                 AppLog.Info($"View preset applied: {preset.Name}");
             }
-
-            editor.ApplyView(view);
-            editor.SetReferencePoint(reference);
         }
         else
         {
-            editor.ApplyView(store.DefaultsFor(sourceDefaults));
+            initial = store.DefaultsFor(sourceDefaults);
         }
 
-        editor.ViewChanged += (_, _) =>
+        // 分割を先に戻している (VIEW-37 の仕様 10) 場合は、どのペインにも同じ設定を使う。
+        foreach (EditorState pane in doc.Panes)
         {
-            if (doc.FilePath is { } p && !doc.Document.IsDisposed)
+            pane.ApplyView(initial);
+            if (doc.FilePath is not null)
             {
-                store.Save(p, editor.View, editor.ReferencePoint, sourceDefaults);
+                pane.SetReferencePoint(reference);
             }
-        };
+        }
+
+        // 表示設定を変えたら、操作中のペインの設定をドキュメントごとの設定として保存する (VIEW-42 の仕様 3)。分割した 2 つ目のペインや、
+        // 2 つ目のペインを残して分割を解除した後のペインも対象にするため、ペインが替わるたびにつなぎ直す。
+        var hooked = new List<EditorState>();
+        void Changed(object? sender, EventArgs e)
+        {
+            if (ReferenceEquals(sender, doc.Editor) && doc.FilePath is { } p && !doc.Document.IsDisposed)
+            {
+                store.Save(p, doc.Editor.View, doc.Editor.ReferencePoint, sourceDefaults);
+            }
+        }
+
+        void Rehook()
+        {
+            foreach (EditorState gone in hooked.Where(e => !doc.Panes.Contains(e)).ToList())
+            {
+                gone.ViewChanged -= Changed;
+                hooked.Remove(gone);
+            }
+
+            foreach (EditorState pane in doc.Panes.Where(e => !hooked.Contains(e)))
+            {
+                pane.ViewChanged += Changed;
+                hooked.Add(pane);
+            }
+        }
+
+        Rehook();
+        doc.PanesChanged += (_, _) => Rehook();
     }
 
     /// <summary>「既定として保存」(VIEW-42 の仕様 4)。</summary>

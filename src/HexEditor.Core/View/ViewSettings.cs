@@ -187,6 +187,36 @@ public sealed record ViewSettings
         };
     }
 
+    /// <summary>
+    /// テキスト列を左右に移す (VIEW-24 の仕様 3)。<paramref name="column"/> の列と、<paramref name="delta"/> (-1 で左、+1 で右) の隣の列を入れ替える。
+    /// 移せない (端の列・範囲外) 場合は null。
+    /// </summary>
+    public ViewSettings? WithTextColumnMoved(int column, int delta)
+    {
+        List<TextColumnSpec> columns = [.. TextColumns];
+        int target = column + Math.Sign(delta);
+        if (delta == 0 || column < 0 || column >= columns.Count || target < 0 || target >= columns.Count)
+        {
+            return null;
+        }
+
+        (columns[target], columns[column]) = (columns[column], columns[target]);
+        return WithTextColumns(columns);
+    }
+
+    /// <summary>テキスト列を削除する (VIEW-24)。最後の 1 列・範囲外は null。</summary>
+    public ViewSettings? WithoutTextColumn(int column)
+    {
+        List<TextColumnSpec> columns = [.. TextColumns];
+        if (columns.Count <= 1 || column < 0 || column >= columns.Count)
+        {
+            return null;
+        }
+
+        columns.RemoveAt(column);
+        return WithTextColumns(columns);
+    }
+
     /// <summary>セルの単位 (VIEW-10 の仕様 1)。</summary>
     [System.Text.Json.Serialization.JsonIgnore]
     public int CellUnit => CellFormatter.Unit(CellFormat);

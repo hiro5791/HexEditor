@@ -100,6 +100,41 @@ public static class ViewPresets
         return [.. byName.Take(MaxPresets)];
     }
 
+    /// <summary>
+    /// 既存のプリセットの名前と自動適用の条件を変える (VIEW-42 の仕様 6。表示設定は変えない)。<paramref name="extensions"/> は「.nes;.gba」の形。
+    /// 新しい名前が空、ほかのプリセットと同じ (大文字・小文字を区別しない)、または <paramref name="oldName"/> がない場合は null。
+    /// </summary>
+    public static IReadOnlyList<ViewPreset>? Edit(IReadOnlyList<ViewPreset> presets, string oldName, string newName, string extensions)
+    {
+        string name = newName.Trim();
+        int index = presets.ToList().FindIndex(p => string.Equals(p.Name, oldName, StringComparison.OrdinalIgnoreCase));
+        if (index < 0 || name.Length == 0
+            || presets.Where((p, i) => i != index).Any(p => string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase)))
+        {
+            return null;
+        }
+
+        var list = presets.ToList();
+        list[index] = list[index] with { Name = name, Extensions = ParseExtensions(extensions) };
+        return list;
+    }
+
+    /// <summary>
+    /// インポートしたプリセットを今の一覧に加えた結果 (同じ名前は置き換える)。上限 (<see cref="MaxPresets"/>) を超える場合は切り捨てずに null を返し、
+    /// <paramref name="total"/> に加えた場合の数を入れる (VIEW-42 の仕様 6・7。呼び出し側が InfoBar で知らせ、一覧を変えない)。
+    /// </summary>
+    public static IReadOnlyList<ViewPreset>? Merge(IReadOnlyList<ViewPreset> existing, IReadOnlyList<ViewPreset> imported, out int total)
+    {
+        var names = new HashSet<string>(existing.Select(p => p.Name), StringComparer.OrdinalIgnoreCase);
+        foreach (ViewPreset p in imported)
+        {
+            names.Add(p.Name);
+        }
+
+        total = names.Count;
+        return total > MaxPresets ? null : Normalize([.. existing, .. imported]);
+    }
+
     /// <summary>自動適用するプリセット (条件に合う最初のもの)。なければ null。</summary>
     public static ViewPreset? ForPath(IReadOnlyList<ViewPreset> presets, string path) => presets.FirstOrDefault(p => p.Matches(path));
 

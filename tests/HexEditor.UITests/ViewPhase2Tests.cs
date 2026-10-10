@@ -286,6 +286,38 @@ public sealed class ViewPhase2Tests
         Assert.Equal("#FF0050A0", Cell(render, 0x42)["foreground"]!.GetValue<string>());
     });
 
+    /// <summary>
+    /// VIEW-17 の仕様 9 はすべての層に: 色付けルール (層 10) の濃い背景の上のバイトテーマの文字色も、読める色 (4.5:1 以上) に置き換える。
+    /// ルールの背景がないバイトは指定どおりの色のまま。
+    /// </summary>
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-17-08")]
+    public Task Low_contrast_text_on_a_rule_background_is_replaced() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await OpenAsync(ctx, "TD-BYTES-256");
+        await MenuAsync(app, "Command_ThemeLight");
+        await app.KeyAsync("End", ctrl: true);
+        await app.SendAsync("openPickerPath", new JsonObject { ["path"] = ctx.TestData("TD-VIEW-THEME-LOWCONTRAST") });
+        await MenuAsync(app, "Command_ViewByteThemeCustom");
+
+        // 0x42 の文字 #0050A0 と同じ色の背景 (色付けルールの層)。
+        await app.SendAsync("addHighlight", new JsonObject { ["offset"] = 0x42, ["length"] = 1, ["layer"] = 10, ["background"] = "#FF0050A0" });
+        await app.IdleAsync();
+        JsonObject render = await app.RenderAsync();
+        string fore = Cell(render, 0x42)["foreground"]!.GetValue<string>();
+        Assert.NotEqual("#FF0050A0", fore);
+        Assert.True(Contrast(fore, "#FF0050A0") >= 4.5, $"{fore} on #FF0050A0");
+
+        // テキスト列も同じ。
+        string text = Cell(render, 0x42)["textForeground"]!.GetValue<string>();
+        Assert.True(Contrast(text, "#FF0050A0") >= 4.5, $"{text} on #FF0050A0");
+
+        // ルールの背景を外すと、指定どおりの色に戻る。
+        await app.SendAsync("addHighlight", new JsonObject { ["clear"] = true });
+        await app.IdleAsync();
+        Assert.Equal("#FF0050A0", Cell(await app.RenderAsync(), 0x42)["foreground"]!.GetValue<string>());
+    });
+
     /// <summary>WCAG 2 のコントラスト比 (#AARRGGBB)。</summary>
     internal static double Contrast(string a, string b)
     {
@@ -416,6 +448,30 @@ public sealed class ViewPhase2Tests
         Assert.Equal("Record #2 +0x05", await app.UiaNameAsync("Status_Position"));
         await MenuAsync(app, "Command_ViewRecords");
         Assert.False(await app.IsShownAsync("Status_Position"));
+    });
+
+    /// <summary>VIEW-18 の「画面」: フライアウトの入力はその場で反映する (OK を押さなくてよい)。仕様 7: 位置は 8 進にも従う。</summary>
+    [Fact]
+    [Trait(UiTest.TC, "TC-VIEW-18-05")]
+    public Task Record_settings_apply_while_typing_and_status_follows_octal() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await OpenAsync(ctx, "TD-SEQ-1M");
+        JsonObject state = await app.SendAsync("recordSettings", new JsonObject { ["open"] = true, ["length"] = "100", ["start"] = "0x40" });
+        Assert.True(state["open"]!.GetValue<bool>());
+        await app.IdleAsync();
+        JsonObject view = (await app.SendAsync("viewSettings"))["view"]!.AsObject();
+        Assert.True(view["recordView"]!.GetValue<bool>());
+        Assert.Equal(100, view["recordLength"]!.GetValue<int>());
+        Assert.Equal(0x40, view["recordStart"]!.GetValue<long>());
+
+        // 不正な値は反映しない。
+        await app.SendAsync("recordSettings", new JsonObject { ["length"] = "0" });
+        Assert.Equal(100, (await app.SendAsync("viewSettings"))["view"]!["recordLength"]!.GetValue<int>());
+        await app.SendAsync("recordSettings", new JsonObject { ["length"] = "100", ["commit"] = true });
+
+        await GoToAsync(app, "0x10D");
+        await ExecuteAsync(app, "view.radixOctal");
+        Assert.Equal("Record #2 +0o5", await app.UiaNameAsync("Status_Position"));
     });
 
     // ---- VIEW-23 ----
@@ -572,6 +628,69 @@ public sealed class ViewPhase2Tests
         JsonArray columns = (await app.RenderAsync())["textColumns"]!.AsArray();
         Assert.Equal(["cp1252", "utf-16be", "cp932"], columns.Select(c => c!["encoding"]!.GetValue<string>()));
         Assert.Equal("UTF-16 BE (odd)", columns[1]!["name"]!.GetValue<string>());
+    });
+
+    /// <summary>
+    /// VIEW-24 の仕様 3 をキーボードから: 操作中のテキスト列を左右に移すコマンドと、テキスト列にカーソルがあるときの右クリックメニュー
+    /// (Shift+F10 と同じメニュー) の「テキスト列」。
+    /// </summary>
+    [Fact]
+    public Task Text_column_can_be_moved_and_changed_from_commands() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await OpenAsync(ctx, "TD-SEQ-1M");
+        await AddTextColumnAsync(app, "cp37");
+        await app.SendAsync("refreshMenus");
+        Assert.False((await MenuItemAsync(app, "Command_ViewMoveTextColumnRight"))["enabled"]!.GetValue<bool>());
+        await ExecuteAsync(app, "view.moveTextColumnLeft");
+        JsonArray columns = (await app.RenderAsync())["textColumns"]!.AsArray();
+        Assert.Equal(["cp37", "ascii"], columns.Select(c => c!["encoding"]!.GetValue<string>()));
+
+        // 移した列が操作中の列のまま (ステータスバーの文字コード)。
+        Assert.Equal("037", await app.UiaNameAsync("Status_Encoding"));
+        await app.SendAsync("refreshMenus");
+        Assert.False((await MenuItemAsync(app, "Command_ViewMoveTextColumnLeft"))["enabled"]!.GetValue<bool>());
+        Assert.True((await MenuItemAsync(app, "Command_ViewMoveTextColumnRight"))["enabled"]!.GetValue<bool>());
+
+        // 「テキスト列の文字コード...」は操作中の列の文字コードを変える。
+        await ExecuteAsync(app, "view.textColumnEncoding");
+        await app.SendAsync("encodingList", new JsonObject { ["choose"] = "utf-8" });
+        await app.IdleAsync();
+        columns = (await app.RenderAsync())["textColumns"]!.AsArray();
+        Assert.Equal(["utf-8", "ascii"], columns.Select(c => c!["encoding"]!.GetValue<string>()));
+
+        // 右クリックメニュー: テキスト列の上では「テキスト列」があり、Hex 列の上ではない。
+        JsonObject render = await app.RenderAsync();
+        await RightClickAsync(app, CellPoint(render, 0x10, text: true));
+        await app.WaitForAsync("HexViewMenu_TextColumn");
+        await app.SendAsync("hideContextMenu");
+        await RightClickAsync(app, CellPoint(render, 0x10));
+        await app.WaitForAsync("HexViewMenu_Copy");
+        Assert.False(await app.IsShownAsync("HexViewMenu_TextColumn"));
+        await app.SendAsync("hideContextMenu");
+    });
+
+    /// <summary>VIEW-23 の仕様 4・VIEW-24: セルのツールチップの文字は、マウスを合わせたテキスト列の文字コードで示す。</summary>
+    [Fact]
+    public Task Tool_tip_uses_the_hovered_text_column() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await OpenAsync(ctx, "TD-SEQ-1M");
+        await AddTextColumnAsync(app, "cp37");
+        JsonObject render = await GoAndRenderAsync(app, 0xC1);
+
+        // 0xC1 は EBCDIC (037) の「A」。2 列目の上では 037 の文字で示す。
+        JsonObject cell = Cell(render, 0xC1);
+        double left = cell["texts"]![1]!["left"]!.GetValue<double>();
+        double cellWidth = render["cellWidth"]!.GetValue<double>();
+        (double x, double y) = CellPoint(render, 0xC1, text: true);
+        x = render["contentLeft"]!.GetValue<double>() + left + 0.5 * cellWidth - render["horizontalOffset"]!.GetValue<double>();
+        await PointerAsync(app, "move", (x, y));
+        await app.WaitUntilAsync(async () => (await app.RenderAsync())["toolTip"]!["open"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(5)), "the tooltip");
+        string text = (await app.RenderAsync())["toolTip"]!["text"]!.GetValue<string>();
+        Assert.Contains("A U+0041 (037", text);
+
+        // 命令でも同じ (列を指定する)。
+        Assert.Contains("A U+0041 (037", (await app.SendAsync("bookmarkToolTip", new JsonObject { ["offset"] = 0xC1, ["textColumn"] = 1 }))["text"]!.GetValue<string>());
+        Assert.DoesNotContain("(037", (await app.SendAsync("bookmarkToolTip", new JsonObject { ["offset"] = 0xC1, ["textColumn"] = 0 }))["text"]!.GetValue<string>());
     });
 
     // ---- VIEW-33 ----

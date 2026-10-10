@@ -147,4 +147,50 @@ public sealed class CellLayersTests
         var blue = new SchemeColor(0xFF, 0x00, 0x50, 0xA0);
         Assert.Equal(blue, ByteTheme.ReadableText(blue, white, normal));
     }
+
+    /// <summary>
+    /// VIEW-17 の仕様 9 をすべての層に: ブックマーク・色付けルールなどの背景の上でも、3:1 未満の文字色を置き換え、置き換えた色は 4.5:1 以上になる
+    /// (通常の文字色で足りなければ黒か白)。
+    /// </summary>
+    [Fact]
+    public void Low_contrast_text_on_any_layer_background_is_replaced_and_reaches_4_5()
+    {
+        var white = new SchemeColor(0xFF, 0xFF, 0xFF, 0xFF);
+        var normal = new SchemeColor(0xFF, 0x1A, 0x1A, 0x1A);
+        var blue = new SchemeColor(0xFF, 0x00, 0x50, 0xA0);
+
+        // 色付けルールの濃い青の背景の上の青い文字: 通常の文字色 (濃い灰色) でも 4.5:1 に届かないので白にする。
+        SchemeColor back = CellContrast.Flatten(white, lightTheme: true, top: blue);
+        SchemeColor replaced = CellContrast.Replacement(blue, back, normal)!.Value;
+        Assert.Equal(white, replaced);
+        Assert.True(SchemeColor.ContrastRatio(replaced, back) >= CellContrast.ReplacementContrast);
+
+        // 薄いブックマークの背景 (半透明の黄色) の上の薄い灰色: 通常の文字色にする。
+        var yellow = new SchemeColor(0x60, 0xFF, 0xE0, 0x00);
+        back = CellContrast.Flatten(white, lightTheme: true, top: yellow);
+        Assert.Equal(normal, CellContrast.Replacement(new SchemeColor(0xFF, 0xE8, 0xE8, 0xE8), back, normal));
+        Assert.True(SchemeColor.ContrastRatio(normal, back) >= CellContrast.ReplacementContrast);
+
+        // 読める組み合わせは変えない。現在行 (行の下の面) とルールの背景を重ねた色で判断する。
+        Assert.Null(CellContrast.Replacement(normal, CellContrast.Flatten(white, true, new SchemeColor(0x10, 0, 0, 0), yellow), normal));
+
+        // 半透明の文字色は背景に重ねてから比べる。
+        Assert.NotNull(CellContrast.Replacement(new SchemeColor(0x20, 0, 0, 0), white, normal));
+
+        // ダークテーマで透明な通常の背景は黒の上に置く。
+        Assert.Equal(new SchemeColor(0xFF, 0, 0, 0), CellContrast.Flatten(default, lightTheme: false));
+    }
+
+    [Property]
+    public Property Replacement_always_reaches_the_minimum_contrast() => Prop.ForAll(
+        Gen.Choose(0, 0xFFFFFF).Select(v => new SchemeColor(0xFF, (byte)(v >> 16), (byte)(v >> 8), (byte)v)).ToArbitrary(),
+        Gen.Choose(0, 0xFFFFFF).Select(v => new SchemeColor(0xFF, (byte)(v >> 16), (byte)(v >> 8), (byte)v)).ToArbitrary(),
+        (text, background) =>
+        {
+            var normal = new SchemeColor(0xFF, 0x1A, 0x1A, 0x1A);
+            SchemeColor shown = CellContrast.Replacement(text, background, normal) ?? text;
+            double ratio = SchemeColor.ContrastRatio(shown, background);
+            return shown == text ? ratio >= CellContrast.MinimumContrast : ratio >= CellContrast.ReplacementContrast || ratio >= Math.Max(
+                SchemeColor.ContrastRatio(new SchemeColor(0xFF, 0, 0, 0), background), SchemeColor.ContrastRatio(new SchemeColor(0xFF, 0xFF, 0xFF, 0xFF), background)) - 1e-9;
+        });
 }

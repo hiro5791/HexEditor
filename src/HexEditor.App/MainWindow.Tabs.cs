@@ -428,7 +428,17 @@ public sealed partial class MainWindow
             null,
             new("TabMenu_Pin", Loc.Get(doc.IsPinned ? "Tab_Unpin" : "Tab_Pin"), true, () => Vm.SetPinned(doc, !doc.IsPinned)),
             null,
-            new("TabMenu_MoveToNewWindow", Loc.Get("Tab_MoveToNewWindow"), Vm.Documents.Count > 1, () => MoveTabToNewWindow(doc, null)),
+            // 同じドキュメントの新しいビュー (VIEW-38) と、操作中のタブの右への並べて表示 (VIEW-39)。
+            new("TabMenu_NewView", Loc.Get("Tab_NewView"), NewViewState(doc).Enabled, () => OpenNewView(doc)),
+            new("TabMenu_ShowToRight", Loc.Get("Tab_ShowToRight"), CanShowToRight(doc), () =>
+            {
+                if (Vm.Selected is { } left && CanShowToRight(doc))
+                {
+                    AddSideBySide(left, doc);
+                }
+            }),
+            null,
+            new("TabMenu_MoveToNewWindow",Loc.Get("Tab_MoveToNewWindow"), Vm.Documents.Count > 1, () => MoveTabToNewWindow(doc, null)),
             new("TabMenu_MoveToWindow", Loc.Get("Tab_MoveToWindow"), windows.Count > 0, null, Children:
             [
                 .. windows.Select(w => new TabMenuEntry(

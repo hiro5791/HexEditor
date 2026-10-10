@@ -425,6 +425,73 @@ public sealed class ViewPanesTests
         Assert.Equal(0x4000, views[1]!["cursor"]!.GetValue<long>());
     });
 
+    /// <summary>VIEW-42 の仕様 3: 分割した 2 つ目のペインで変えた表示設定も、ドキュメントごとの設定として保存する (分割を解除した後も)。</summary>
+    [Fact]
+    public Task View_settings_changed_in_the_second_pane_are_saved() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        await SplitAsync(app);
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 1 });
+        await ExecuteAsync(app, "view.bytesPerRow32");
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+        await app.OpenAsync(path);
+        await app.WaitForTabsAsync(1);
+        await app.IdleAsync();
+        Assert.Equal(32, (await ViewAsync(app, "pane2"))["bytesPerRow"]!.GetValue<int>());
+
+        // 2 つ目のペインを残して分割を解除し、残ったペインで変える。
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 1 });
+        await ExecuteAsync(app, "view.splitRemove");
+        await ExecuteAsync(app, "view.bytesPerRow8");
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+        await app.OpenAsync(path);
+        await app.WaitForTabsAsync(1);
+        await app.IdleAsync();
+        Assert.Equal(8, (await ViewAsync(app, "active"))["bytesPerRow"]!.GetValue<int>());
+    });
+
+    /// <summary>VIEW-37 の仕様 3: 付随データから戻した分割でも、「分割したペインの表示設定をそろえる」が効く。</summary>
+    [Fact]
+    public Task Restored_split_keeps_pane_settings_in_sync() => UiTestContext.RunAsync(async ctx =>
+    {
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.split.syncSettings"] = true });
+        string path = ctx.CopyTestData("TD-SEQ-1M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [path] });
+        await SplitAsync(app);
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+        await app.OpenAsync(path);
+        await app.WaitForTabsAsync(1);
+        await app.IdleAsync();
+        Assert.True((await PanesAsync(app))["split"]!.GetValue<bool>());
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 0 });
+        await ExecuteAsync(app, "view.bytesPerRow32");
+        Assert.Equal(32, (await ViewAsync(app, "pane2"))["bytesPerRow"]!.GetValue<int>());
+    });
+
+    /// <summary>VIEW-37 の「エラー」: 2 ペインの最小の大きさを確保できない向きの分割だけを無効にする。</summary>
+    [Fact]
+    public Task Split_is_disabled_per_orientation_when_the_window_is_too_small() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 大きな文字 (30 pt) と低いウィンドウで、上下の 2 ペイン (各 5 行分) が入らないようにする。左右は入る。
+        string profile = ctx.NewProfile();
+        WriteSettings(profile, new JsonObject { ["view.font.size"] = 30 });
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SendAsync("resize", new JsonObject { ["width"] = 1000, ["height"] = 420 });
+        await app.IdleAsync();
+        await app.SendAsync("refreshMenus");
+        JsonArray commands = (await app.SendAsync("commands"))["items"]!.AsArray();
+        bool Enabled(string id) => commands.Single(c => c!["id"]!.GetValue<string>() == id)!["enabled"]!.GetValue<bool>();
+        Assert.False(Enabled("view.splitHorizontal"));
+        Assert.True(Enabled("view.splitVertical"));
+        await ExecuteAsync(app, "view.splitVertical");
+        Assert.True((await PanesAsync(app))["split"]!.GetValue<bool>());
+    });
+
     // ---- VIEW-38 ----
 
     [Fact]
@@ -440,6 +507,22 @@ public sealed class ViewPanesTests
         await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
         await app.IdleAsync();
         Assert.Equal("Offset: 0x00000000", await StatusOffsetAsync(app));
+    });
+
+    /// <summary>VIEW-38 の「呼び出し」: タブの右クリックメニュー「新しいビューで開く」。</summary>
+    [Fact]
+    public Task New_view_from_the_tab_menu() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await app.SendAsync("tabMenu", new JsonObject { ["index"] = 0, ["item"] = "TabMenu_NewView" });
+        await app.IdleAsync();
+        JsonArray tabs = (await app.SendAsync("tabs"))["tabs"]!.AsArray();
+        Assert.Equal(2, tabs.Count);
+        Assert.EndsWith(": 2", tabs[1]!["title"]!.GetValue<string>());
+
+        // 同じドキュメントのタブには「右に並べて表示」を使えない (別のドキュメントだけ)。
+        JsonArray items = (await app.SendAsync("tabMenuItems", new JsonObject { ["index"] = 0 }))["items"]!.AsArray();
+        Assert.False(items.Single(i => i!["id"]!.GetValue<string>() == "TabMenu_ShowToRight")!["enabled"]!.GetValue<bool>());
     });
 
     [Fact]
@@ -628,5 +711,67 @@ public sealed class ViewPanesTests
         await app.KeyAsync("Home", ctrl: true);
         await app.IdleAsync();
         Assert.Equal(0, (await ViewAsync(app, "side1"))["cursor"]!.GetValue<long>());
+    });
+
+    /// <summary>VIEW-39 の「呼び出し」: タブの右クリックメニュー「右に並べて表示」は、操作中のタブの右にそのタブを並べる。</summary>
+    [Fact]
+    public Task Show_to_the_right_from_the_tab_menu() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M"), ctx.TestData("TD-VIEW-SEQ-MOD")] });
+        await app.WaitForTabsAsync(2);
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = 0 });
+        JsonArray items = (await app.SendAsync("tabMenuItems", new JsonObject { ["index"] = 0 }))["items"]!.AsArray();
+        Assert.False(items.Single(i => i!["id"]!.GetValue<string>() == "TabMenu_ShowToRight")!["enabled"]!.GetValue<bool>());
+        await app.SendAsync("tabMenu", new JsonObject { ["index"] = 1, ["item"] = "TabMenu_ShowToRight" });
+        await app.IdleAsync();
+        JsonObject state = await app.SendAsync("sideBySide");
+        Assert.True(state["active"]!.GetValue<bool>());
+        Assert.Single(state["partners"]!.AsArray());
+        Assert.Equal("SameOffset", state["mode"]!.GetValue<string>());
+    });
+
+    /// <summary>VIEW-39 の「画面」: 鎖のボタンは同期のモードを示し、押すとモードを選べる。</summary>
+    [Fact]
+    public Task Chain_button_shows_and_selects_the_sync_mode() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await SideBySideAsync(ctx);
+        Assert.Equal("Same offset", await app.UiaNameAsync("SideBySide_SyncMode1"));
+        (await app.WaitForAsync("SideBySide_Sync1")).Patterns.ExpandCollapse.Pattern.Expand();
+        await app.WaitForAsync("SideBySide_Sync1_KeepDifference");
+        FlaUI.Core.AutomationElements.AutomationElement item = await app.WaitForAsync("SideBySide_Sync1_KeepDifference");
+        if (item.Patterns.Invoke.IsSupported)
+        {
+            item.Patterns.Invoke.Pattern.Invoke();
+        }
+        else if (item.Patterns.SelectionItem.IsSupported)
+        {
+            item.Patterns.SelectionItem.Pattern.Select();
+        }
+        else
+        {
+            item.Patterns.Toggle.Pattern.Toggle();
+        }
+
+        await app.IdleAsync();
+        Assert.Equal("KeepDifference", (await app.SendAsync("sideBySide"))["mode"]!.GetValue<string>());
+        Assert.Equal("Keep the difference", await app.UiaNameAsync("SideBySide_SyncMode1"));
+    });
+
+    /// <summary>VIEW-39: 左のドキュメントを分割したら、同期は操作中のペインに従う。</summary>
+    [Fact]
+    public Task Sync_follows_the_active_pane_of_the_left_document() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await SideBySideAsync(ctx);
+        await ExecuteAsync(app, "view.splitHorizontal");
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 1 });
+        await app.IdleAsync();
+        await app.SendAsync("goto", new JsonObject { ["offset"] = 0x5000 });
+        await app.IdleAsync();
+        Assert.Equal(0x5000, (await ViewAsync(app, "side1"))["cursor"]!.GetValue<long>());
+        await app.SendAsync("focusPane", new JsonObject { ["pane"] = 0 });
+        await app.IdleAsync();
+        await app.SendAsync("goto", new JsonObject { ["offset"] = 0x300 });
+        await app.IdleAsync();
+        Assert.Equal(0x300, (await ViewAsync(app, "side1"))["cursor"]!.GetValue<long>());
     });
 }

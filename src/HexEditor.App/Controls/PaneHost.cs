@@ -17,6 +17,9 @@ public sealed partial class PaneHost : Grid
     /// <summary>分割バーの幅 (VIEW-37 の「画面」)。</summary>
     public const double SplitterSize = 4;
 
+    /// <summary>左右に分割したときの各ペインの最小幅 (VIEW-37 の仕様 5)。</summary>
+    public const double MinPaneWidth = 120;
+
     private readonly Border _splitter;
     private readonly Rectangle _activeFrame;
     private HexView? _second;
@@ -153,9 +156,9 @@ public sealed partial class PaneHost : Grid
         var b = new GridLength(1 - _ratio, GridUnitType.Star);
         if (_sideBySide)
         {
-            ColumnDefinitions.Add(new ColumnDefinition { Width = a, MinWidth = 120 });
+            ColumnDefinitions.Add(new ColumnDefinition { Width = a, MinWidth = MinPaneWidth });
             ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(SplitterSize) });
-            ColumnDefinitions.Add(new ColumnDefinition { Width = b, MinWidth = 120 });
+            ColumnDefinitions.Add(new ColumnDefinition { Width = b, MinWidth = MinPaneWidth });
             Place(first, 0, 0);
             Place(_splitter, 0, 1);
             Place(_second!, 0, 2);

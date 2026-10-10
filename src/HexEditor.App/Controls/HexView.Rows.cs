@@ -121,6 +121,9 @@ public sealed partial class HexView
         private Brush?[] _ruleHex = [];
         private Brush?[] _ruleText = [];
 
+        /// <summary>セルごとの手前の層 (7〜11) の背景 (文字色のコントラストの規則に使う。VIEW-17 の仕様 9)。</summary>
+        private Brush?[] _layerBack = [];
+
         // そのバイトの後ろ (右) に削除によって詰まった境界がある (VIEW-15 の仕様 5)。
         private bool[] _deleted = [];
 
@@ -324,7 +327,8 @@ public sealed partial class HexView
         public bool Update(in RowFrame frame, long rowStart, int lead, int count, ReadOnlySpan<byte> bytes, ReadOnlySpan<ByteState> states,
             ReadOnlySpan<ChangeMark> marks, ReadOnlySpan<bool> matched, ReadOnlySpan<bool> focus, ReadOnlySpan<bool> deleted, TextCell[][] texts,
             int textFrom, CellMode mode, ReadOnlySpan<bool> selected, bool currentRow, RowDecor decor, Palette palette, double cellWidth,
-            double rowHeight, Func<string, double> measure, ReadOnlySpan<Brush?> ruleHex = default, ReadOnlySpan<Brush?> ruleText = default)
+            double rowHeight, Func<string, double> measure, ReadOnlySpan<Brush?> ruleHex = default, ReadOnlySpan<Brush?> ruleText = default,
+            ReadOnlySpan<Brush?> layerBack = default)
         {
             int columns = Math.Max(1, frame.Columns.Format.ShownTextColumns);
             if (_count == count && _lead == lead && ContentRowStart == rowStart && _mode == mode && _frame == frame
@@ -332,7 +336,7 @@ public sealed partial class HexView
                 && bytes[..count].SequenceEqual(_bytes.AsSpan(0, count)) && states[..count].SequenceEqual(_states.AsSpan(0, count))
                 && marks[..count].SequenceEqual(_marks.AsSpan(0, count)) && matched[..count].SequenceEqual(_matched.AsSpan(0, count))
                 && focus[..count].SequenceEqual(_focus.AsSpan(0, count)) && deleted[..count].SequenceEqual(_deleted.AsSpan(0, count))
-                && SameRule(ruleHex, _ruleHex, count) && SameRule(ruleText, _ruleText, count)
+                && SameRule(ruleHex, _ruleHex, count) && SameRule(ruleText, _ruleText, count) && SameRule(layerBack, _layerBack, count)
                 && SameText(texts, textFrom, count, columns))
             {
                 return false;
@@ -374,10 +378,12 @@ public sealed partial class HexView
             {
                 _ruleHex = new Brush?[b];
                 _ruleText = new Brush?[b];
+                _layerBack = new Brush?[b];
             }
 
             CopyRule(ruleHex, _ruleHex, count);
             CopyRule(ruleText, _ruleText, count);
+            CopyRule(layerBack, _layerBack, count);
 
             bytes[..count].CopyTo(_bytes);
             states[..count].CopyTo(_states);
@@ -539,6 +545,46 @@ public sealed partial class HexView
         }
 
         // ---- 文字 ----
+
+        /// <summary>
+        /// 文字色を、セルの背景に対して読める色にする (VIEW-17 の仕様 9)。色を付ける層の背景 (手前の層 7〜11、バイトテーマの背景) があるセルが
+        /// 対象で、背景はそれと行の下の面の層 (14 現在行、15 レコードの交互色、16 列の交互色) を重ねたもの。選択範囲は Highlight で同じ規則を使う。
+        /// </summary>
+        private Brush ReadableFore(Brush fore, int c, bool text, in RowFrame frame, Palette palette)
+        {
+            if (palette.HighContrast)
+            {
+                return fore;
+            }
+
+            Brush? top = c < _layerBack.Length ? _layerBack[c] : null;
+            Brush? under = null;
+            if (frame.Theme is { AnyBackground: true } theme && frame.Columns.Format.IsHexBytes && c < Count
+                && KindAt(c) is CellKind.Normal or CellKind.Modified && theme.Back[_bytes[c]] is { } themeBack)
+            {
+                under = themeBack;
+            }
+            else if (top is null)
+            {
+                // 色を付ける層の背景がなければ (通常の背景・現在行・交互色は配色で文字色と組にして決めた色)、置き換えない。薄く表示する文字
+                // (ゼロのグレー表示、読み込み中の仮表示、色付けルールの「ゼロを薄く」) は、わざと薄くしているため。
+                return fore;
+            }
+            else if (_currentRow)
+            {
+                under = palette.CurrentRow;
+            }
+            else if (frame.Records is { } records && c >= _lead && records.IsOdd(ContentRowStart + c))
+            {
+                under = palette.RecordAlternate;
+            }
+            else if (frame.Style.AlternateColumns && (!text || frame.Style.AlternateText) && frame.Columns.Format.GroupOf(c) % 2 == 1)
+            {
+                under = palette.Alternate;
+            }
+
+            return palette.Readable(fore, under, top, text ? palette.TextText : palette.HexText);
+        }
 
         /// <summary>バイトテーマの文字色 (層 12。値で決まる層なので、読めるバイトだけ。VIEW-17 の仕様 7)。</summary>
         private Brush? ThemeFore(int c) => _frame.Theme is { } theme && c < Count ? theme.Fore[_bytes[c]] : null;
@@ -721,7 +767,7 @@ public sealed partial class HexView
             {
                 int c = format.ByteOfSlot(s, valid);
                 string cell = HexCellText(c);
-                Brush fore = HexForeground(c, palette);
+                Brush fore = ReadableFore(HexForeground(c, palette), c, text: false, frame, palette);
                 if (frame.Proportional)
                 {
                     // 等幅でないフォント: 1 文字ずつセルの中央に描き、行には空白を入れる (UI-29 の仕様 2)。
@@ -782,7 +828,7 @@ public sealed partial class HexView
                 {
                     string text = CellFormatter.Format(format.CellFormat, _bytes.AsSpan(first, unit), format.BigEndian, frame.Style.SpacePad,
                         frame.Style.Lowercase);
-                    Brush fore = CellForeground(first, unit, palette);
+                    Brush fore = ReadableFore(CellForeground(first, unit, palette), first, text: false, frame, palette);
                     AppendCellText(frame, text, fore, startChar, cellWidth, rowHeight, measure, builder, first);
                     for (int c = first; c <= last; c++)
                     {
@@ -808,7 +854,7 @@ public sealed partial class HexView
                     for (int c = first; c <= last; c++)
                     {
                         string text = HexCellText(c);
-                        Brush fore = HexForeground(c, palette);
+                        Brush fore = ReadableFore(HexForeground(c, palette), c, text: false, frame, palette);
                         AppendCellText(frame, text, fore, startChar + used, cellWidth, rowHeight, measure, builder, c);
                         used += RowFormat.HexCellChars;
                         bool partial = c >= _lead && c < valid;
@@ -862,7 +908,7 @@ public sealed partial class HexView
             for (int c = 0; c < count; c++)
             {
                 string cell = TextCellText(column, c);
-                Brush fore = TextForeground(column, c, palette);
+                Brush fore = ReadableFore(TextForeground(column, c, palette), c, text: true, frame, palette);
                 TextCell decoded = TextAt(column, c);
                 double left = format.TextIndex(column, c) * cellWidth;
 
@@ -1086,7 +1132,7 @@ public sealed partial class HexView
             {
                 bool hexActive = frame.Active == ActiveColumn.Hex;
                 Brush hexBack = hexActive ? palette.Selection : palette.SelectionInactive;
-                Brush hexFore = hexActive ? palette.SelectionText : palette.SelectionInactiveText;
+                Brush hexFore = palette.Readable(hexActive ? palette.SelectionText : palette.SelectionInactiveText, null, hexBack, palette.HexText);
                 TextHighlighter? hex = columns.ShowHex ? TakeHighlighter(hexBack, hexFore) : null;
                 for (int first = firstSelected; first < Count; first++)
                 {
@@ -1123,7 +1169,7 @@ public sealed partial class HexView
                 {
                     bool active = !hexActive && t == frame.ActiveText;
                     Brush textBack = active ? palette.Selection : palette.SelectionInactive;
-                    Brush textFore = active ? palette.SelectionText : palette.SelectionInactiveText;
+                    Brush textFore = palette.Readable(active ? palette.SelectionText : palette.SelectionInactiveText, null, textBack, palette.TextText);
                     TextHighlighter text = TakeHighlighter(textBack, textFore);
                     for (int first = firstSelected; first < Count; first++)
                     {

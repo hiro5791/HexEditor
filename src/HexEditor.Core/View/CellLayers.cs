@@ -146,3 +146,79 @@ public static class CellLayers
         return new CellAppearance(back?.Background, back?.Layer, fore?.Foreground, fore?.Layer, decorations);
     }
 }
+
+/// <summary>
+/// 文字色と背景色のコントラストの規則 (VIEW-17 の仕様 9)。どの層の背景 (ブックマーク・注釈・テンプレート・色付けルール・差分・バイトテーマ・
+/// 現在行・レコード・列の交互色・選択範囲) の上でも、文字色と、重ねた結果の背景色の比が 3:1 未満なら、通常の文字色に置き換える。通常の文字色でも
+/// 4.5:1 に届かない背景では、黒か白の比の高い方にする。
+/// </summary>
+public static class CellContrast
+{
+    /// <summary>置き換えるかどうかの基準 (3:1)。</summary>
+    public const double MinimumContrast = 3.0;
+
+    /// <summary>置き換えた文字色が満たす比 (4.5:1)。</summary>
+    public const double ReplacementContrast = 4.5;
+
+    private static readonly SchemeColor Black = new(0xFF, 0x00, 0x00, 0x00);
+    private static readonly SchemeColor White = new(0xFF, 0xFF, 0xFF, 0xFF);
+
+    /// <summary><paramref name="top"/> を <paramref name="bottom"/> の上に重ねた色 (不透明度による合成)。</summary>
+    public static SchemeColor Over(SchemeColor top, SchemeColor bottom)
+    {
+        if (top.A == 0xFF)
+        {
+            return top;
+        }
+
+        double a = top.A / 255.0;
+        double b = bottom.A / 255.0 * (1 - a);
+        double alpha = a + b;
+        if (alpha <= 0)
+        {
+            return default;
+        }
+
+        byte Mix(byte t, byte u) => (byte)Math.Round((t * a + u * b) / alpha);
+        return new SchemeColor((byte)Math.Round(alpha * 255), Mix(top.R, bottom.R), Mix(top.G, bottom.G), Mix(top.B, bottom.B));
+    }
+
+    /// <summary>
+    /// セルの背景を奥から順に重ねた不透明な色。<paramref name="normalBackground"/> (層 17) が透明なら、<paramref name="lightTheme"/> に合わせて
+    /// 白か黒の上に置く。<paramref name="under"/> は行の下の面の層 (12〜16)、<paramref name="top"/> は手前の層 (2〜11) の背景。
+    /// </summary>
+    public static SchemeColor Flatten(SchemeColor normalBackground, bool lightTheme, SchemeColor? under = null, SchemeColor? top = null)
+    {
+        SchemeColor color = Over(normalBackground, lightTheme ? White : Black);
+        if (under is { } u)
+        {
+            color = Over(u, color);
+        }
+
+        if (top is { } t)
+        {
+            color = Over(t, color);
+        }
+
+        return color;
+    }
+
+    /// <summary>
+    /// 不透明な背景 <paramref name="background"/> の上の文字色 <paramref name="text"/> が読めなければ、置き換える色を返す (読めるなら null)。
+    /// 置き換えは <paramref name="normal"/> (通常の文字色)。それでも 4.5:1 に届かなければ黒か白 (比の高い方)。
+    /// </summary>
+    public static SchemeColor? Replacement(SchemeColor text, SchemeColor background, SchemeColor normal)
+    {
+        if (SchemeColor.ContrastRatio(Over(text, background), background) >= MinimumContrast)
+        {
+            return null;
+        }
+
+        if (SchemeColor.ContrastRatio(Over(normal, background), background) >= ReplacementContrast)
+        {
+            return normal;
+        }
+
+        return SchemeColor.ContrastRatio(Black, background) >= SchemeColor.ContrastRatio(White, background) ? Black : White;
+    }
+}

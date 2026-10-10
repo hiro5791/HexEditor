@@ -40,4 +40,40 @@ public sealed class ViewPresetTests
         Assert.Equal(32, Assert.Single(list).ApplyTo(ViewSettings.Default).BytesPerRow);
         Assert.Equal(ViewPresets.MaxPresets, ViewPresets.Normalize(Enumerable.Range(0, 150).Select(i => ViewPresets.FromView("P" + i, string.Empty, ViewSettings.Default))).Count);
     }
+
+    [Fact]
+    public void Editing_changes_the_name_and_extensions_but_keeps_the_view()
+    {
+        ViewPreset a = ViewPresets.FromView("A", ".a", ViewSettings.Default with { BytesPerRow = 8 });
+        ViewPreset b = ViewPresets.FromView("B", string.Empty, ViewSettings.Default);
+        IReadOnlyList<ViewPreset> edited = ViewPresets.Edit([a, b], "a", " NES ", ".nes; gb")!;
+        Assert.Equal(["NES", "B"], edited.Select(p => p.Name));
+        Assert.Equal([".nes", ".gb"], edited[0].Extensions);
+        Assert.Equal(8, edited[0].ApplyTo(ViewSettings.Default).BytesPerRow);
+
+        // 名前を変えずに条件だけ変える (大文字・小文字の違いは同じ名前)。
+        Assert.Equal("a", ViewPresets.Edit([a, b], "A", "a", string.Empty)![0].Name);
+
+        // ほかのプリセットと同じ名前・空の名前・ない名前は変えない。
+        Assert.Null(ViewPresets.Edit([a, b], "A", "b", string.Empty));
+        Assert.Null(ViewPresets.Edit([a, b], "A", "  ", string.Empty));
+        Assert.Null(ViewPresets.Edit([a, b], "C", "D", string.Empty));
+    }
+
+    [Fact]
+    public void Import_over_the_limit_is_refused_instead_of_truncated()
+    {
+        ViewPreset[] existing = [.. Enumerable.Range(0, 98).Select(i => ViewPresets.FromView("P" + i, string.Empty, ViewSettings.Default))];
+
+        // 同じ名前の置き換えは数に入れない: 98 + 新しい 2 = 100 は読み込める。
+        ViewPreset[] fits = [ViewPresets.FromView("p0", string.Empty, ViewSettings.Default), .. new[] { "X", "Y" }.Select(n => ViewPresets.FromView(n, string.Empty, ViewSettings.Default))];
+        IReadOnlyList<ViewPreset>? merged = ViewPresets.Merge(existing, fits, out int total);
+        Assert.Equal(100, total);
+        Assert.Equal(100, merged!.Count);
+
+        // 101 個になる場合は null (一覧を変えない)。
+        ViewPreset[] over = [.. new[] { "X", "Y", "Z" }.Select(n => ViewPresets.FromView(n, string.Empty, ViewSettings.Default))];
+        Assert.Null(ViewPresets.Merge(existing, over, out total));
+        Assert.Equal(101, total);
+    }
 }

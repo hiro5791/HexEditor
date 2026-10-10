@@ -64,6 +64,11 @@ public sealed partial class MainWindow
         columns.Items.Add(Item("Command_ViewRemoveTextColumn", "Menu_View_RemoveTextColumn", RemoveTextColumn,
             () => Editor is not { } e ? NeedsDocument()
                 : e.View.TextColumnCount <= 1 ? CommandState.Unavailable(Loc.Get("Command_LastTextColumn")) : CommandState.Available));
+        columns.Items.Add(Item("Command_ViewMoveTextColumnLeft", "Menu_View_MoveTextColumnLeft", () => MoveTextColumn(-1), () => MoveTextColumnState(-1)));
+        columns.Items.Add(Item("Command_ViewMoveTextColumnRight", "Menu_View_MoveTextColumnRight", () => MoveTextColumn(+1), () => MoveTextColumnState(+1)));
+        columns.Items.Add(Item("Command_ViewTextColumnEncoding", "Menu_View_TextColumnEncoding", () => ShowEncodingList(null),
+            () => Editor is not { } e ? NeedsDocument()
+                : !e.View.ShowTextColumn ? CommandState.Unavailable(Loc.Get("Command_NoTextColumn")) : CommandState.Available));
 
         // ---- 文字コード: 文字表ファイル (VIEW-23) ----
         encoding.Items.Add(new MenuFlyoutSeparator());
@@ -152,8 +157,8 @@ public sealed partial class MainWindow
 
         // 画面分割 (VIEW-37)・新しいビュー (VIEW-38)・並べて表示 (VIEW-39)。
         MenuFlyoutSubItem split = Sub("Command_ViewSplitMenu", "Menu_View_SplitMenu");
-        split.Items.Add(Item("Command_ViewSplitHorizontal", "Menu_View_SplitHorizontal", () => SplitSelected(Orientation.Vertical), SplitState));
-        split.Items.Add(Item("Command_ViewSplitVertical", "Menu_View_SplitVertical", () => SplitSelected(Orientation.Horizontal), SplitState));
+        split.Items.Add(Item("Command_ViewSplitHorizontal", "Menu_View_SplitHorizontal", () => SplitSelected(Orientation.Vertical), () => SplitState(Orientation.Vertical)));
+        split.Items.Add(Item("Command_ViewSplitVertical", "Menu_View_SplitVertical", () => SplitSelected(Orientation.Horizontal), () => SplitState(Orientation.Horizontal)));
         split.Items.Add(Item("Command_ViewSplitRemove", "Menu_View_SplitRemove", UnsplitSelected,
             () => Vm.Selected is { IsSplit: true } ? CommandState.Available : CommandState.Unavailable(Loc.Get("Command_NotSplit"))));
         split.Items.Add(new MenuFlyoutSeparator());
@@ -349,6 +354,27 @@ public sealed partial class MainWindow
         QueueStatusBarLayout();
     }
 
+    /// <summary>「テキスト列を左へ / 右へ移動」の状態: 操作中のテキスト列が端なら無効。</summary>
+    private CommandState MoveTextColumnState(int delta) => Editor is not { } e ? NeedsDocument()
+        : !e.View.ShowTextColumn ? CommandState.Unavailable(Loc.Get("Command_NoTextColumn"))
+        : e.View.WithTextColumnMoved(e.TextColumn, delta) is null ? CommandState.Unavailable(Loc.Get("Command_TextColumnAtEdge"))
+        : CommandState.Available;
+
+    /// <summary>「テキスト列を左へ / 右へ移動」(VIEW-24 の仕様 3): 操作中のテキスト列を隣と入れ替え、移した先を操作中の列にする。</summary>
+    private void MoveTextColumn(int delta)
+    {
+        if (Editor is not { } editor || editor.View.WithTextColumnMoved(editor.TextColumn, delta) is not { } next)
+        {
+            return;
+        }
+
+        int target = editor.TextColumn + Math.Sign(delta);
+        editor.ApplyView(next);
+        editor.SetTextColumn(target);
+        UpdateViewMenu();
+        QueueStatusBarLayout();
+    }
+
     /// <summary>テキスト列の見出しのメニューの「文字コードを変更…」(VIEW-24 の仕様 3)。</summary>
     private void HexView_TextColumnEncodingRequested(object? sender, int column)
     {
@@ -492,8 +518,14 @@ public sealed partial class MainWindow
     private Button? _recordOk;
 
     /// <summary>
+    /// フライアウトを開いたときの入力 (レコード長、開始、1 行 1 レコード、番号)。入力の変化の通知は後から届くため、開いたときのままの入力では
+    /// 反映しない (開いただけでレコード表示をオンにしない)。
+    /// </summary>
+    private (long Length, long Start, bool PerRow, bool Numbers)? _recordOpened;
+
+    /// <summary>
     /// 「レコード表示…」(VIEW-18 の仕様 1): レコード長・開始オフセット (入力式)・1 行を 1 レコード・レコード番号の表示を、モーダルでない
-    /// フライアウトで設定する。確定するとレコード表示をオンにする。不正な値は赤枠と説明文。
+    /// フライアウトで設定する。入力を変えるとその場で反映し (VIEW-18 の「画面」)、レコード表示をオンにする。不正な値は赤枠と説明文で、反映しない。
     /// </summary>
     private void ShowRecordSettings()
     {
@@ -523,10 +555,12 @@ public sealed partial class MainWindow
             _recordOk = new Button { Content = Loc.Get("Common_Ok"), Style = (Style)Application.Current.Resources["AccentButtonStyle"] };
             AutomationProperties.SetAutomationId(_recordOk, "RecordSettings_Ok");
             _recordOk.Click += (_, _) => CommitRecordSettings();
-            _recordLength.TextChanged += (_, _) => ValidateRecordSettings();
-            _recordStart.TextChanged += (_, _) => ValidateRecordSettings();
-            _recordPerRow.Checked += (_, _) => ValidateRecordSettings();
-            _recordPerRow.Unchecked += (_, _) => ValidateRecordSettings();
+            _recordLength.TextChanged += (_, _) => ApplyRecordSettings(force: false);
+            _recordStart.TextChanged += (_, _) => ApplyRecordSettings(force: false);
+            _recordPerRow.Checked += (_, _) => ApplyRecordSettings(force: false);
+            _recordPerRow.Unchecked += (_, _) => ApplyRecordSettings(force: false);
+            _recordNumbers.Checked += (_, _) => ApplyRecordSettings(force: false);
+            _recordNumbers.Unchecked += (_, _) => ApplyRecordSettings(force: false);
             var panel = new StackPanel { Spacing = 8 };
             panel.Children.Add(new TextBlock { Text = Loc.Get("RecordSettings_Title"), Style = (Style)Application.Current.Resources["BodyStrongTextBlockStyle"] });
             foreach (UIElement e in (UIElement[])[_recordLength, _recordStart, _recordPerRow, _recordNumbers, _recordError, _recordOk])
@@ -540,6 +574,7 @@ public sealed partial class MainWindow
         }
 
         ViewSettings v = editor.View;
+        _recordOpened = (v.RecordLength, v.RecordStart, v.RecordPerRow, v.RecordNumbers);
         _recordLength!.Text = v.RecordLength.ToString(CultureInfo.InvariantCulture);
         _recordStart!.Text = "0x" + v.RecordStart.ToString("X", CultureInfo.InvariantCulture);
         _recordPerRow!.IsChecked = v.RecordPerRow;
@@ -582,25 +617,52 @@ public sealed partial class MainWindow
         return error is null ? (length, start) : null;
     }
 
+    /// <summary>OK: 入力を反映して閉じる。</summary>
     private void CommitRecordSettings()
+    {
+        if (ApplyRecordSettings(force: true))
+        {
+            _recordFlyout?.Hide();
+        }
+    }
+
+    /// <summary>
+    /// 入力が正しければ、その場でレコード表示に反映する (VIEW-18 の「画面」)。<paramref name="force"/> が false (入力の変化) なら、開いたときの
+    /// 入力のままでは反映しない。正しい入力なら true。
+    /// </summary>
+    private bool ApplyRecordSettings(bool force)
     {
         if (Editor is not { } editor || ValidateRecordSettings() is not { } values)
         {
-            return;
+            return false;
         }
 
         bool perRow = _recordPerRow!.IsChecked == true && values.Length <= ViewSettings.MaxBytesPerRow;
-        editor.ApplyView(editor.View with
+        bool numbers = _recordNumbers!.IsChecked == true;
+        if (!force && _recordOpened == (values.Length, values.Start, _recordPerRow.IsChecked == true, numbers))
+        {
+            return true;
+        }
+
+        // 一度反映したら、開いたときの入力に戻したときも反映する。
+        _recordOpened = null;
+
+        ViewSettings next = editor.View with
         {
             RecordView = true,
             RecordLength = (int)values.Length,
             RecordStart = values.Start,
             RecordPerRow = perRow,
-            RecordNumbers = _recordNumbers!.IsChecked == true,
-        });
-        _recordFlyout?.Hide();
-        UpdateViewMenu();
-        QueueStatusBarLayout();
+            RecordNumbers = numbers,
+        };
+        if (next != editor.View)
+        {
+            editor.ApplyView(next);
+            UpdateViewMenu();
+            QueueStatusBarLayout();
+        }
+
+        return true;
     }
 
     // ---- VIEW-33 ----

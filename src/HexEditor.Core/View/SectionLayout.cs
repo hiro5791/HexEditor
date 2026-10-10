@@ -123,4 +123,23 @@ public readonly record struct RecordLayout(long Start, long Length)
 
     /// <summary>「前のレコード」(仕様 6)。移動先がなければ null。</summary>
     public long? Previous(long cursor) => cursor - Length >= Start ? cursor - Length : null;
+
+    /// <summary>
+    /// レコード内の位置の数字 (仕様 5・7): オフセットの基数 (10 進・8 進・16 進。セクタは 16 進) に従い、<paramref name="digits"/> 桁まで 0 で埋める。
+    /// 接頭辞は付けない。
+    /// </summary>
+    public static string WithinDigits(long within, OffsetRadix radix, bool lowercase, int digits) => radix switch
+    {
+        OffsetRadix.Decimal => within.ToString(System.Globalization.CultureInfo.InvariantCulture).PadLeft(digits, '0'),
+        OffsetRadix.Octal => Convert.ToString(within, 8).PadLeft(digits, '0'),
+        _ => within.ToString(lowercase ? "x" : "X", System.Globalization.CultureInfo.InvariantCulture).PadLeft(digits, '0'),
+    };
+
+    /// <summary>ステータスバーのレコード内の位置 (仕様 7): 10 進はそのまま、8 進は <c>0o</c>、16 進は <c>0x</c> と 2 桁以上。</summary>
+    public static string WithinText(long within, OffsetRadix radix, bool lowercase) => radix switch
+    {
+        OffsetRadix.Decimal => WithinDigits(within, radix, lowercase, 1),
+        OffsetRadix.Octal => "0o" + WithinDigits(within, radix, lowercase, 1),
+        _ => "0x" + WithinDigits(within, radix, lowercase, 2),
+    };
 }

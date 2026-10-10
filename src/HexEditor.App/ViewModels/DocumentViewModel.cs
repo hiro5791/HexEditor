@@ -350,8 +350,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
             if (v.RecordView && RecordLayout.For(v) is var records && records.IndexOf(cursor) is { } recordNo && records.WithinOf(cursor) is { } within)
             {
-                string position = v.Radix == OffsetRadix.Decimal ? within.ToString(Culture)
-                    : "0x" + within.ToString(v.LowercaseHex ? "x2" : "X2", CultureInfo.InvariantCulture);
+                string position = RecordLayout.WithinText(within, v.Radix, v.LowercaseHex);
                 parts.Add(Loc.Format("Status_Record", recordNo.ToString(CultureInfo.InvariantCulture), position));
             }
 

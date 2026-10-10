@@ -83,6 +83,14 @@ public sealed partial class MainWindow
             : CommandState.Available;
 
     /// <summary>
+    /// タブの右クリックメニュー「右に並べて表示」(VIEW-39 の「呼び出し」): 操作中のタブの右に <paramref name="partner"/> を並べられるか。
+    /// 操作中のタブ自身・同じドキュメントのビュー・すでに並べたもの・上限に達した組では無効。
+    /// </summary>
+    private bool CanShowToRight(DocumentViewModel partner) =>
+        Vm.Selected is { } left && SideBySideState().Enabled && !partner.IsPending && !partner.IsMissing
+        && !ReferenceEquals(left.Document, partner.Document) && SideBySideOf(left)?.Partners.Contains(partner) != true;
+
+    /// <summary>
     /// 「並べて表示…」(VIEW-39 の仕様 1)。引数にタブの番号 (0 始まり) か表示名を渡すとそのドキュメントを、なければ一覧のメニューを出す。
     /// </summary>
     private Task ShowSideBySideAsync(string? argument)
@@ -143,6 +151,7 @@ public sealed partial class MainWindow
         {
             var g = new SideBySideGroup(l);
             _sideBySide.Add(g);
+            l.ActivePaneChanged += SideBySideLeft_ActivePaneChanged;
             return g;
         }
     }
@@ -279,8 +288,21 @@ public sealed partial class MainWindow
         };
     }
 
+    /// <summary>
+    /// 左のドキュメントの操作中のペインが替わった (分割・ペインの切り替え・分割の解除): 同期の対象を、操作中のペインのビューに付け替える。
+    /// </summary>
+    private void SideBySideLeft_ActivePaneChanged(object? sender, EventArgs e)
+    {
+        if (sender is DocumentViewModel left && _sideBySide.FirstOrDefault(g => g.Left == left) is { } group)
+        {
+            group.Resync(group.Mode, App.Settings.GetBool("view.sync.selection", false));
+            UpdateDifferenceSources(group);
+        }
+    }
+
     private void RemoveGroup(SideBySideGroup group)
     {
+        group.Left.ActivePaneChanged -= SideBySideLeft_ActivePaneChanged;
         group.Dispose();
         _sideBySide.Remove(group);
         foreach (HexView view in group.Views)
@@ -330,17 +352,7 @@ public sealed partial class MainWindow
             var name = new TextBlock { Text = partner.DisplayName, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
             AutomationProperties.SetAutomationId(name, "SideBySide_Name" + (i + 1));
             header.Children.Add(name);
-            var chain = new ToggleButton
-            {
-                Content = new FontIcon { Glyph = "", FontSize = 14 },
-                IsChecked = group.Mode != SyncMode.Off,
-                Padding = new Thickness(6, 2, 6, 2),
-            };
-            string chainName = Loc.Get("SideBySide_Sync");
-            AutomationProperties.SetName(chain, chainName);
-            AutomationProperties.SetAutomationId(chain, "SideBySide_Sync" + (i + 1));
-            ToolTipService.SetToolTip(chain, chainName);
-            chain.Click += (_, _) => ToggleSync();
+            DropDownButton chain = CreateSyncButton(group, i + 1);
             Grid.SetColumn(chain, 1);
             header.Children.Add(chain);
             var close = new Button { Content = new FontIcon { Glyph = "", FontSize = 12 }, Padding = new Thickness(6, 2, 6, 2) };
@@ -370,6 +382,45 @@ public sealed partial class MainWindow
         SideBySideColumn.Width = new GridLength(group.Partners.Count, GridUnitType.Star);
         SideBySideHost.Visibility = Visibility.Visible;
         UpdateDifferenceSources(group);
+    }
+
+    /// <summary>同期のモードの表示名 (表示メニューの項目と同じ)。</summary>
+    private static string SyncModeName(SyncMode mode) => Loc.Get("Menu_View_Sync" + mode + "/Text");
+
+    /// <summary>
+    /// 各グループの上部の同期のボタン (鎖の図柄。VIEW-39 の「画面」): 今の同期のモードを表示し、押すとモードを選ぶメニューを出す。
+    /// 「比較に従う」は比較の結果がある場合だけ選べる (仕様 2)。
+    /// </summary>
+    private DropDownButton CreateSyncButton(SideBySideGroup group, int number)
+    {
+        var label = new TextBlock { Text = SyncModeName(group.Mode), VerticalAlignment = VerticalAlignment.Center };
+        AutomationProperties.SetAutomationId(label, "SideBySide_SyncMode" + number);
+        var content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 4 };
+        content.Children.Add(new FontIcon { Glyph = "\uE71B", FontSize = 14, Opacity = group.Mode == SyncMode.Off ? 0.5 : 1 });
+        content.Children.Add(label);
+        var menu = new MenuFlyout();
+        bool mappable = CompareMapperFor(group) is not null;
+        foreach (SyncMode mode in (SyncMode[])[SyncMode.Off, SyncMode.SameOffset, SyncMode.KeepDifference, SyncMode.Mapped])
+        {
+            SyncMode m = mode;
+            var item = new RadioMenuFlyoutItem
+            {
+                Text = SyncModeName(m),
+                GroupName = "SideBySideSync" + number,
+                IsChecked = group.Mode == m,
+                IsEnabled = m != SyncMode.Mapped || mappable,
+            };
+            AutomationProperties.SetAutomationId(item, "SideBySide_Sync" + number + "_" + m);
+            item.Click += (_, _) => SetSyncMode(m);
+            menu.Items.Add(item);
+        }
+
+        var chain = new DropDownButton { Content = content, Flyout = menu, Padding = new Thickness(6, 2, 6, 2) };
+        string chainName = Loc.Get("SideBySide_Sync") + ": " + SyncModeName(group.Mode);
+        AutomationProperties.SetName(chain, chainName);
+        AutomationProperties.SetAutomationId(chain, "SideBySide_Sync" + number);
+        ToolTipService.SetToolTip(chain, chainName);
+        return chain;
     }
 
     private void RemoveSideBySide(SideBySideGroup group, DocumentViewModel partner)

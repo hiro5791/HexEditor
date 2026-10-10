@@ -350,6 +350,11 @@ public static class BuiltInCommands
         new("view.reverseGroups", "view") { Condition = "documentOpen" },
         new("view.addTextColumn", "view") { Condition = "documentOpen" },
         new("view.removeTextColumn", "view") { Condition = "documentOpen" },
+
+        // 操作中のテキスト列の移動と文字コードの変更 (VIEW-24 の仕様 3 をキーボード・コマンドパレットから)。
+        new("view.moveTextColumnLeft", "view") { Condition = "documentOpen" },
+        new("view.moveTextColumnRight", "view") { Condition = "documentOpen" },
+        new("view.textColumnEncoding", "view") { Condition = "documentOpen" },
         new("view.byteThemeNone", "view"),
         new("view.byteThemeCategory", "view"),
         new("view.byteThemeGradient", "view"),

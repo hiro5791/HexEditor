@@ -303,21 +303,7 @@ public sealed partial class HexView
 
         _textColumnMenuColumn = column;
         _textColumnMenu ??= CreateTextColumnMenu();
-        int count = _editor.View.TextColumnCount;
-        foreach (MenuFlyoutItemBase item in _textColumnMenu.Items)
-        {
-            if (item is MenuFlyoutItem m)
-            {
-                m.IsEnabled = (string)m.Tag switch
-                {
-                    "Remove" => count > 1,
-                    "Left" => column > 0,
-                    "Right" => column < count - 1,
-                    _ => true,
-                };
-            }
-        }
-
+        UpdateTextColumnItems(_textColumnMenu.Items, column);
         _textColumnMenu.ShowAt(this, new Microsoft.UI.Xaml.Controls.Primitives.FlyoutShowOptions
         {
             Position = position ?? new Windows.Foundation.Point(ContentLeft, _rowHeight),
@@ -328,7 +314,7 @@ public sealed partial class HexView
     internal void ChooseTextColumnMenu(int column, string action)
     {
         _textColumnMenuColumn = column;
-        RunTextColumnAction(action);
+        RunTextColumnAction(action, column);
         _textColumnMenu?.Hide();
     }
 
@@ -336,6 +322,22 @@ public sealed partial class HexView
     {
         var menu = new MenuFlyout();
         AutomationProperties.SetAutomationId(menu, "HexView_TextColumnMenu");
+        foreach (MenuFlyoutItem item in CreateTextColumnItems("HexView_TextColumn", () => _textColumnMenuColumn))
+        {
+            menu.Items.Add(item);
+        }
+
+        menu.Closed += (_, _) => Focus(FocusState.Programmatic);
+        return menu;
+    }
+
+    /// <summary>
+    /// テキスト列のメニューの項目 (文字コードの変更・削除・左へ移動・右へ移動。VIEW-24 の仕様 3)。見出しのメニューと、Hex ビューの右クリックメニュー
+    /// (Shift+F10・アプリケーションキーで開ける) の「テキスト列」で使う。<paramref name="column"/> が対象の列を返す。
+    /// </summary>
+    private List<MenuFlyoutItem> CreateTextColumnItems(string idPrefix, Func<int> column)
+    {
+        var items = new List<MenuFlyoutItem>();
         foreach ((string tag, string key) in new[]
         {
             ("Encoding", "HexView_TextColumn_ChangeEncoding"),
@@ -345,48 +347,67 @@ public sealed partial class HexView
         })
         {
             var item = new MenuFlyoutItem { Text = Loc.Get(key), Tag = tag };
-            AutomationProperties.SetAutomationId(item, "HexView_TextColumn" + tag);
-            item.Click += (_, _) => RunTextColumnAction(tag);
-            menu.Items.Add(item);
+            AutomationProperties.SetAutomationId(item, idPrefix + tag);
+            item.Click += (_, _) => RunTextColumnAction(tag, column());
+            items.Add(item);
         }
 
-        menu.Closed += (_, _) => Focus(FocusState.Programmatic);
-        return menu;
+        return items;
     }
 
-    private void RunTextColumnAction(string action)
+    /// <summary>テキスト列のメニューの項目を、<paramref name="column"/> の列に対して使えるかで有効・無効にする。</summary>
+    private void UpdateTextColumnItems(IEnumerable<MenuFlyoutItemBase> items, int column)
     {
-        if (_editor is null)
+        int count = _editor?.View.TextColumnCount ?? 1;
+        foreach (MenuFlyoutItemBase item in items)
+        {
+            if (item is MenuFlyoutItem { Tag: string tag } m)
+            {
+                m.IsEnabled = tag switch
+                {
+                    "Remove" => count > 1,
+                    "Left" => column > 0,
+                    "Right" => column < count - 1,
+                    _ => true,
+                };
+            }
+        }
+    }
+
+    private void RunTextColumnAction(string action, int column)
+    {
+        if (_editor is null || column < 0 || column >= _editor.View.TextColumnCount)
         {
             return;
         }
 
-        int column = _textColumnMenuColumn;
-        List<TextColumnSpec> columns = [.. _editor.View.TextColumns];
-        if (column < 0 || column >= columns.Count)
+        ViewSettings? next = action switch
+        {
+            "Remove" => _editor.View.WithoutTextColumn(column),
+            "Left" => _editor.View.WithTextColumnMoved(column, -1),
+            "Right" => _editor.View.WithTextColumnMoved(column, +1),
+            _ => null,
+        };
+        if (action == "Encoding")
+        {
+            TextColumnEncodingRequested?.Invoke(this, column);
+            return;
+        }
+
+        if (next is null)
         {
             return;
         }
 
-        switch (action)
+        bool wasActive = _editor.TextColumn == column;
+        _editor.ApplyView(next);
+
+        // 移した列が操作中の列なら、移した先を操作中の列にする。
+        if (wasActive && action is "Left" or "Right")
         {
-            case "Encoding":
-                TextColumnEncodingRequested?.Invoke(this, column);
-                return;
-            case "Remove" when columns.Count > 1:
-                columns.RemoveAt(column);
-                break;
-            case "Left" when column > 0:
-                (columns[column - 1], columns[column]) = (columns[column], columns[column - 1]);
-                break;
-            case "Right" when column < columns.Count - 1:
-                (columns[column + 1], columns[column]) = (columns[column], columns[column + 1]);
-                break;
-            default:
-                return;
+            _editor.SetTextColumn(column + (action == "Left" ? -1 : 1));
         }
 
-        _editor.ApplyView(_editor.View.WithTextColumns(columns));
         RaiseViewSettingsChanged();
     }
 

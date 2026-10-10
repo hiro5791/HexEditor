@@ -182,7 +182,9 @@ public sealed partial class MainWindow
             _recordNumbers!.IsChecked = numbers;
         }
 
-        ValidateRecordSettings();
+        // 入力欄の変化の通知 (TextChanged など) と同じ処理: 入力をその場で反映する (VIEW-18 の「画面」)。通知は欄が読み込まれる前には届かないため、
+        // ここで呼ぶ。
+        ApplyRecordSettings(force: false);
         if (request["commit"]?.GetValue<bool>() == true)
         {
             CommitRecordSettings();
