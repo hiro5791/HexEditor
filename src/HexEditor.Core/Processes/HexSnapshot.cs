@@ -78,7 +78,21 @@ public static class HexSnapshot
         var gaps = new List<SnapshotGap>();
         byte[] buffer = new byte[ProcessMemoryByteSource.MaxTransfer];
         long done = 0;
+        bool denied = false;
 
+        try
+        {
+            return Write();
+        }
+        catch
+        {
+            // 途中で失敗した (キャンセル・権限不足・書き込みの失敗): 作りかけのファイルを残さない。
+            TryDelete(path);
+            throw;
+        }
+
+        SnapshotMetadata Write()
+        {
         using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
         {
             // メタデータの長さは後で書くため、まず仮のヘッダ分を空ける。領域のデータは 4 KiB 境界から始める。
@@ -113,6 +127,7 @@ public static class HexSnapshot
                     {
                         // 読めなかったページはデータに含めず、メタデータに記録する。
                         gaps.Add(new SnapshotGap(region.BaseAddress + pos, n));
+                        denied |= read.Unreadable.Any(u => u.Reason == UnreadableReason.AccessDenied || u.ErrorCode == Devices.Win32Errors.AccessDenied);
                         stream.Position += n;
                     }
 
@@ -124,6 +139,13 @@ public static class HexSnapshot
                 {
                     written.Add(new SnapshotRegion(region.BaseAddress, region.Size, region.Protect, region.Type, region.MappedName, fileOffset));
                 }
+            }
+
+            // どのページも読めず、権限不足で読めなかったページがある: プロセスを読む権限がない (ANA-09 の「エラー」。呼び出し側が昇格した
+            // 補助プロセスでの再試行を提案する)。
+            if (written.Count == 0 && denied)
+            {
+                throw new ProcessAccessException(ProcessOpenFailure.AccessDenied, Devices.Win32Errors.AccessDenied, "Access denied.");
             }
 
             var metadata = new SnapshotMetadata
@@ -149,6 +171,33 @@ public static class HexSnapshot
             stream.Write(size);
             stream.Write(json);
             return metadata;
+        }
+        }
+    }
+
+    /// <summary>`.hexsnap` か (先頭のマジックで判断する。比較の「ファイルを選択...」でスナップショットを領域ごとに比べるため。ANA-09 の仕様 3)。</summary>
+    public static bool IsSnapshotFile(string path)
+    {
+        try
+        {
+            using FileStream stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+            Span<byte> magic = stackalloc byte[8];
+            return stream.ReadAtLeast(magic, magic.Length, throwOnEndOfStream: false) == magic.Length && magic.SequenceEqual(Magic);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
+        {
+            return false;
+        }
+    }
+
+    private static void TryDelete(string path)
+    {
+        try
+        {
+            File.Delete(path);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
         }
     }
 
