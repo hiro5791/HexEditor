@@ -111,7 +111,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Uid="Compare_Graph_Title" VerticalAlignment="Center" Style="{ThemeResource BodyStrongTextBlockStyle}" />
+                    <TextBlock x:Uid="Compare_GraphHeading" VerticalAlignment="Center" Style="{ThemeResource BodyStrongTextBlockStyle}" />
                     <ToggleButton
                         x:Name="TableToggle"
                         x:Uid="Compare_Graph_AsTable"
