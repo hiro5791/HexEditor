@@ -235,6 +235,20 @@ public sealed class TextFormatTests
     }
 
     [Fact]
+    [Trait(TC, "TC-TOOL-09-02")]
+    public void Export_matches_copy_as_with_the_same_options()
+    {
+        // エクスポートとコピー (形式を選択してコピー) は同じ変換部品を使う。UI のダイアログを通さず、両者の入口の出力を比べる。
+        var copy = new CopyOptions { ElementSize = 2, BigEndian = true, BytesPerLine = 16, VariableName = "data" };
+        foreach (string format in FormatIds.SourceArrays)
+        {
+            string exported = Export(Bytes256, new ExportOptions { Format = format, Copy = copy, SourceComment = false });
+            string copied = CopyFormatter.Format(Exporter.CopyFormatOf(format)!.Value, Bytes256, 0, copy, out _);
+            Assert.Equal(copied.ReplaceLineEndings("\n").TrimEnd(), exported.ReplaceLineEndings("\n").TrimEnd());
+        }
+    }
+
+    [Fact]
     public void C_header_file_has_guard_and_length()
     {
         var options = new ExportOptions { Format = FormatIds.C, HeaderFile = true, LengthConstant = true, SourceComment = false };
