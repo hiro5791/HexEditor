@@ -84,6 +84,10 @@ public sealed partial class MainWindow
             LoadAnnotationDisplay();
         }
 
+#if HEX_TEST_HOOKS
+        // マルチ選択 (選択範囲の担当) がまだなければ、テスト用の代わりを入れる。
+        TestMultiSelection.InstallIfMissing();
+#endif
         _positionVm = new PositionManagerViewModel(App.Settings);
         _coloringVm = new ColoringRulesViewModel();
         _legendVm = new LegendViewModel();

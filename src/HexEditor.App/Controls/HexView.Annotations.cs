@@ -133,6 +133,66 @@ public sealed partial class HexView
     }
 
 #if HEX_TEST_HOOKS
+    /// <summary>
+    /// 注釈の説明の要素の文字列と書式 (テスト用): TextBlock は {text, bold}、RichTextBlock は段落の文字ごとに {text, bold, size}。
+    /// </summary>
+    internal static System.Text.Json.Nodes.JsonArray? RichToolTipRuns(FrameworkElement? root)
+    {
+        if (root is null)
+        {
+            return null;
+        }
+
+        var runs = new System.Text.Json.Nodes.JsonArray();
+        void Walk(DependencyObject node)
+        {
+            switch (node)
+            {
+                case TextBlock t:
+                    runs.Add(new System.Text.Json.Nodes.JsonObject { ["text"] = t.Text, ["bold"] = t.FontWeight.Weight >= 600, ["size"] = t.FontSize });
+                    return;
+                case RichTextBlock r:
+                    foreach (Microsoft.UI.Xaml.Documents.Block block in r.Blocks)
+                    {
+                        if (block is Microsoft.UI.Xaml.Documents.Paragraph p)
+                        {
+                            AddInlines(p.Inlines, p.FontWeight.Weight >= 600, p.FontSize);
+                        }
+                    }
+
+                    return;
+                case Panel panel:
+                    foreach (UIElement child in panel.Children)
+                    {
+                        Walk(child);
+                    }
+
+                    return;
+                case ScrollViewer { Content: DependencyObject content }:
+                    Walk(content);
+                    return;
+            }
+        }
+
+        void AddInlines(Microsoft.UI.Xaml.Documents.InlineCollection inlines, bool bold, double size)
+        {
+            foreach (Microsoft.UI.Xaml.Documents.Inline inline in inlines)
+            {
+                if (inline is Microsoft.UI.Xaml.Documents.Run run)
+                {
+                    runs.Add(new System.Text.Json.Nodes.JsonObject { ["text"] = run.Text, ["bold"] = bold || run.FontWeight.Weight >= 600, ["size"] = size });
+                }
+                else if (inline is Microsoft.UI.Xaml.Documents.Span span)
+                {
+                    AddInlines(span.Inlines, bold || span is Microsoft.UI.Xaml.Documents.Bold || span.FontWeight.Weight >= 600, size);
+                }
+            }
+        }
+
+        Walk(root);
+        return runs;
+    }
+
     /// <summary>注釈の列の描画内容 (テスト用): 列の x 座標、テキスト列の x 座標、行ごとの文字列。</summary>
     internal System.Text.Json.Nodes.JsonObject ReadAnnotationColumn()
     {
