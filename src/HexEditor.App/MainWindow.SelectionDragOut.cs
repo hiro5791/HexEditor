@@ -6,7 +6,6 @@ using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Storage.Streams;
 
 namespace HexEditor.App;
 
