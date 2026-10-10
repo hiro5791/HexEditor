@@ -73,6 +73,12 @@
     <Using Include="HexEditor.Platform" />
   </ItemGroup>
 
+  <!-- 補助プロセス (PKG-14 の仕様 2) の SHA-256。リリースのビルドで publish.ps1 が先にビルドした exe のハッシュを渡す。
+       空のビルド (開発中) ではハッシュを照合しない。 -->
+  <ItemGroup Condition="'$(HexHelperSha256)' != ''">
+    <AssemblyMetadata Include="HelperSha256" Value="$(HexHelperSha256)" />
+  </ItemGroup>
+
   <!--
     MSIX のマニフェストの版は PKG-28 の対応表で SemVer から作る (PKG-03 の仕様 4)。手で書かない。
     Package.appxmanifest をひな形として obj にコピーし、Identity の Version を書き換えたものを使う。

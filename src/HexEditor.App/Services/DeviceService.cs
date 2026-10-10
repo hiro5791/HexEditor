@@ -73,6 +73,12 @@ public sealed class DeviceService : IAsyncDisposable
     /// <summary>アプリ全体が管理者として動いている (どの配布形態でも。ENG-28 の仕様 10)。</summary>
     public bool IsElevated => TestHooks.SimulatesElevation || (OperatingSystem.IsWindows() && Win32ProcessAccess.IsCurrentProcessElevated);
 
+    /// <summary>本体に埋め込んだ補助プロセスの SHA-256 (PKG-14 の仕様 2)。開発中のビルドでは空 (照合しない)。</summary>
+    private static string? HelperSha256 =>
+        typeof(DeviceService).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyMetadataAttribute), false)
+            .OfType<System.Reflection.AssemblyMetadataAttribute>()
+            .FirstOrDefault(a => a.Key == "HelperSha256")?.Value is { Length: > 0 } hash ? hash : null;
+
     /// <summary>補助プロセスを起動できる配布形態 (インストーラ・ポータブル)。</summary>
     public bool HelperSupported => _env.Distribution is Distribution.Installer or Distribution.Portable or Distribution.Development;
 
@@ -221,6 +227,7 @@ public sealed class DeviceService : IAsyncDisposable
             HelperPath = _helperPath,
             Launcher = new RunAsHelperLauncher(),
             AppVersion = _env.AppVersion,
+            ExpectedSha256 = HelperSha256,
             IdleMinutes = 10,
             Log = AppLog.Info,
         });
