@@ -3,8 +3,8 @@ namespace HexEditor.TestData;
 /// <summary>比較 (ANA-01〜ANA-08) のテストデータ (cases/06-analysis.md の末尾の表)。</summary>
 public static partial class TestDataCatalog
 {
-    /// <summary>TD-ANA-10G-A の乱数の種。</summary>
-    public const ulong Compare10GSeed = 0xA0A0_1010;
+    /// <summary>TD-ANA-10G-A の乱数の種 (TD-ANA-10G-A は統計と共用。TestDataCatalog.Analysis.cs で定義する)。</summary>
+    public const ulong Compare10GSeed = Ana10GSeed;
 
     private static IEnumerable<TestDataItem> CompareItems() =>
     [
@@ -22,7 +22,6 @@ public static partial class TestDataCatalog
         new("TD-ANA-ALT2M-B", 2_000_000, "偶数のオフセットは 00、奇数のオフセットは FF", path => WriteGenerated(path, 2_000_000, Alternating)),
         new("TD-ANA-ALT20M-A", 20_000_000, "すべて 00", path => WriteGenerated(path, 20_000_000, (_, s) => s.Clear())),
         new("TD-ANA-ALT20M-B", 20_000_000, "偶数のオフセットは 00、奇数のオフセットは FF", path => WriteGenerated(path, 20_000_000, Alternating)),
-        new("TD-ANA-10G-A", 10 * GiB, "固定の種の乱数 (スパースにしない。性能計測用)", path => WriteGenerated(path, 10 * GiB, (o, s) => Random(Compare10GSeed, o, s))),
         new("TD-ANA-10G-B", 10 * GiB, "TD-ANA-10G-A の 0x140000000 から 16 バイトを FF と XOR", path => WriteGenerated(path, 10 * GiB, (o, s) =>
         {
             Random(Compare10GSeed, o, s);

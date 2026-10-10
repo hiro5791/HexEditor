@@ -100,7 +100,7 @@ public sealed partial class HexView
 
         Microsoft.UI.Composition.Compositor compositor = _lightRoot.Compositor;
         Windows.UI.Color color = background is SolidColorBrush solid
-            ? Windows.UI.Color.FromArgb((byte)Math.Round(solid.Color.A * Math.Clamp(solid.Opacity, 0, 1)), solid.Color.R, solid.Color.G, solid.Color.B)
+            ? solid.Color with { A = (byte)Math.Round(solid.Color.A * Math.Clamp(solid.Opacity, 0, 1)) }
             : default;
         if (!_lightBrushes.TryGetValue(color, out Microsoft.UI.Composition.CompositionColorBrush? brush))
         {

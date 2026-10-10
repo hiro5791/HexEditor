@@ -32,7 +32,6 @@ public static partial class TestDataCatalog
             dir => Path.Combine(dir, "TD-ANA-PNG-AS-JPG.jpg")),
         new("TD-ANA-JPEG", Jpeg16().Length, "16×16 のベースライン JPEG (JFIF)", path => WriteAll(path, Jpeg16())),
         new("TD-ANA-PDF", Pdf().Length, "1 ページの PDF 1.7", path => WriteAll(path, Pdf())),
-        new("TD-ZIP", Zip3().Length, "テキストファイル 3 つを入れた ZIP", path => WriteAll(path, Zip3())),
         new("TD-PE-X64", PeX64().Length, "小さな Windows 実行ファイル (x64)", path => WriteAll(path, PeX64())),
         new("TD-ELF-X64", ElfX64().Length, "小さな Linux 実行ファイル (x64)", path => WriteAll(path, ElfX64())),
         new("TD-ANA-PE-PNG", PePng().Length, "TD-PE-X64 の 0x2000 から TD-PNG を埋め込んだもの", path => WriteAll(path, PePng())),
