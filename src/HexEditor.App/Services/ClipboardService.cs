@@ -30,6 +30,11 @@ public enum PasteOutcome
 
     /// <summary>エクスプローラーでコピーしたファイルがある (EDIT-23 の仕様 1 の 4)。<see cref="ClipboardService.LastFiles"/> の内容を挿入する。</summary>
     Files,
+
+    /// <summary>
+    /// 矩形の挿入の貼り付けで、行数 (<see cref="ClipboardService.LastRectangleInsertRows"/>) が上限を超える (EDIT-17 の仕様 6)。何もしていない。
+    /// </summary>
+    TooManyRows,
 }
 
 /// <summary>「形式を選択して貼り付け」で使うクリップボードの内容 (EDIT-26)。</summary>
@@ -89,10 +94,22 @@ public sealed partial class ClipboardService
 
         long offset = editor.SelectionStart;
         long length = editor.SelectionLength;
-        DocumentSnapshot snapshot = editor.Document.Current;
         long serial = InApp.Copy(editor.Document, offset, length).Serial;
-
         var package = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
+        ClipboardPlan plan = await FillCopyFormatsAsync(package, editor, offset, length, serial);
+        SetContentWithRetry(package);
+        return plan;
+    }
+
+    /// <summary>
+    /// コピー (EDIT-22 の仕様 2) と同じ形式を <paramref name="package"/> に入れる: `HexEditor.Meta`、上限以内なら `HexEditor.Binary`・
+    /// 他のエディタ互換の形式 (EDIT-27)・テキスト、上限を超えればテキストの 1 行だけ (仕様 5)。テキスト形式だけが上限を超えればテキストを省く
+    /// (仕様 6)。コピーと、他のアプリへのドラッグ (EDIT-18 の仕様 5。大きさの上限も同じ) で使う。
+    /// </summary>
+    /// <param name="serial">アプリ内クリップボードの通し番号 (ドラッグでは 0。どのコピーとも一致しない)。</param>
+    public async Task<ClipboardPlan> FillCopyFormatsAsync(DataPackage package, EditorState editor, long offset, long length, long serial)
+    {
+        DocumentSnapshot snapshot = editor.Document.Current;
         string meta = JsonSerializer.Serialize(new { instance = InstanceId, serial, offset, length, name = editor.Document.Source.DisplayName });
         package.SetData(MetaFormat, meta);
         // 上限以内なら実データを読む (読み込みを待つことがあるため UI スレッドでは読まない)。
@@ -123,7 +140,6 @@ public sealed partial class ClipboardService
             package.SetText(Loc.Format("Clipboard_TooLarge", length.ToString("N0")));
         }
 
-        SetContentWithRetry(package);
         return plan;
     }
 
@@ -142,6 +158,7 @@ public sealed partial class ClipboardService
     public async Task<PasteOutcome> PasteAsync(EditorState editor, bool overwrite, Func<long, Task<bool>>? confirmTruncate = null)
     {
         LastTruncatedBytes = 0;
+        LastRectangleInsertRows = 0;
         DataPackageView view = SystemClipboard.GetContent();
 
         // マルチ選択・矩形からコピーした内容 (要素ごと・行ごとに貼る。EDIT-07 の仕様 7、EDIT-17 の仕様 3)。
@@ -157,7 +174,10 @@ public sealed partial class ClipboardService
             if (json.RootElement.GetProperty("instance").GetString() == InstanceId
                 && InApp.Match(json.RootElement.GetProperty("serial").GetInt64()) is { } clip)
             {
-                return Map(await TruncateAsync(editor, clip.Range.Length, confirmTruncate, allow => editor.Paste(clip.Range, overwrite, allow)));
+                // マルチ選択・矩形からの大きなコピーは、要素を連結して貼る (EDIT-22 の仕様 5・8)。
+                return Map(await TruncateAsync(editor, clip.Length, confirmTruncate, allow => clip.Parts is { } parts
+                    ? editor.Paste(clip.Range, parts, overwrite, allow)
+                    : editor.Paste(clip.Range, overwrite, allow)));
             }
         }
         else
@@ -244,7 +264,7 @@ public sealed partial class ClipboardService
             using JsonDocument json = JsonDocument.Parse(meta);
             if (json.RootElement.GetProperty("instance").GetString() == InstanceId && json.RootElement.GetProperty("serial").GetInt64() == clip.Serial)
             {
-                return (null, clip.Range);
+                return (null, clip.Source);
             }
         }
 
@@ -370,6 +390,7 @@ public sealed partial class ClipboardService
         EditResult.Truncated => PasteOutcome.Truncated,
         EditResult.FixedLength => PasteOutcome.FixedLength,
         EditResult.NotEditable => PasteOutcome.NotEditable,
+        EditResult.TooManyRows => PasteOutcome.TooManyRows,
         EditResult.NeedsTruncateConfirmation => PasteOutcome.Nothing,
         _ => PasteOutcome.Nothing,
     };

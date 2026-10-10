@@ -6,7 +6,6 @@ using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Storage.Streams;
 
 namespace HexEditor.App;
 
@@ -23,9 +22,6 @@ public sealed partial class MainWindow
     private static ClipboardEntry? s_draggedSelection;
     private static long s_dragSerial;
 
-    /// <summary>上限以内なら、ドラッグを始めるときに実データを読んで渡す (読み込みを待つため大きな範囲は読まない)。</summary>
-    private const long DragDataLimit = 16L * 1024 * 1024;
-
     private void InitializeSelectionDrop()
     {
         Root.DragOver += SelectionDrop_DragOver;
@@ -34,8 +30,12 @@ public sealed partial class MainWindow
         Tabs.TabStripDrop += async (_, e) => await SelectionDropOnTabAsync(e);
     }
 
-    /// <summary>他のアプリ・タブへのドラッグを始めた: コピー (EDIT-22) と同じ形式をデータとして渡す (EDIT-18 の仕様 5)。</summary>
-    private void FillSelectionDragData(SelectionDragStartingEventArgs e)
+    /// <summary>
+    /// 他のアプリ・タブへのドラッグを始めた: コピー (EDIT-22) と同じ形式 (Meta、バイナリ、他のエディタ互換の形式、テキスト) を、コピーと同じ
+    /// 大きさの上限でデータとして渡す (EDIT-18 の仕様 5)。データはコピーと同じ部品 (<see cref="ClipboardService.FillCopyFormatsAsync"/>) で作る。
+    /// システムのクリップボードは変えない。
+    /// </summary>
+    private async void FillSelectionDragData(SelectionDragStartingEventArgs e)
     {
         EditorState editor = e.Editor;
         if (!editor.HasSelection || editor.HasMultipleRanges)
@@ -47,35 +47,19 @@ public sealed partial class MainWindow
         s_draggedSelection = ClipboardEntry.Capture(editor.Document, start, length);
         e.Data.RequestedOperation = DataPackageOperation.Copy;
         e.Data.SetData(SelectionDragFormat, (++s_dragSerial).ToString(System.Globalization.CultureInfo.InvariantCulture));
-        if (length <= Math.Min(DragDataLimit, ClipboardService.SystemLimit))
+        DragOperationDeferral? deferral = e.GetDeferral();
+        try
         {
-            byte[] bytes = new byte[length];
-            editor.Document.Current.Read(start, bytes);
-            e.Data.SetText(editor.FormatForClipboard(bytes));
-            e.Data.SetDataProvider(ClipboardPlan.BinaryFormat, async request =>
-            {
-                DataProviderDeferral deferral = request.GetDeferral();
-                try
-                {
-                    var stream = new InMemoryRandomAccessStream();
-                    using (var writer = new DataWriter(stream.GetOutputStreamAt(0)))
-                    {
-                        writer.WriteBytes(bytes);
-                        await writer.StoreAsync();
-                        await writer.FlushAsync();
-                    }
-
-                    request.SetData(stream);
-                }
-                finally
-                {
-                    deferral.Complete();
-                }
-            });
+            _clipboard.CompatFormatsEnabled = App.Settings.GetBool(CompatClipboardFormats.SettingKey, true);
+            await _clipboard.FillCopyFormatsAsync(e.Data, editor, start, length, serial: 0);
         }
-        else
+        catch (Exception ex) when (ex is IOException or OutOfMemoryException or System.Runtime.InteropServices.COMException)
         {
-            e.Data.SetText(Loc.Format("Clipboard_TooLarge", length.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)));
+            AppLog.Warning($"ドラッグのデータを作れません: {ex.Message}");
+        }
+        finally
+        {
+            deferral?.Complete();
         }
     }
 

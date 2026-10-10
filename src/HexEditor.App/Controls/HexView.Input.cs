@@ -1315,6 +1315,15 @@ public sealed partial class HexView
             case VirtualKey.Insert when !ctrl && !shift:
                 Report(_editor.ToggleInsertMode());
                 break;
+            case VirtualKey.Delete when !shift && LongRangeDeleteRequested is { } longDelete
+                && _editor.LongRangeDeleteAction(backspace: false) is var action && action != RangeDeleteAction.None:
+                // 要素数の多いマルチ選択・矩形の削除は長時間処理にする (EDIT-07・EDIT-17 の「巨大ファイル・長時間処理」)。
+                longDelete(this, action);
+                break;
+            case VirtualKey.Back when LongRangeDeleteRequested is { } longBack
+                && _editor.LongRangeDeleteAction(backspace: true) is var backAction && backAction != RangeDeleteAction.None:
+                longBack(this, backAction);
+                break;
             case VirtualKey.Delete when !shift:
                 DeleteWithAnnouncement(_editor.Delete);
                 break;

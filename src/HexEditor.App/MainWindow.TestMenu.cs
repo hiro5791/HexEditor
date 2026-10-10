@@ -238,7 +238,8 @@ public sealed partial class MainWindow
             "insertBytes" => TestInsertBytes(request),
             "exit" => Run(() =>
             {
-                // 確認を出さずにすべてのウィンドウを閉じる (複数ウィンドウ。UI-14)。
+                // 確認を出さずにすべてのウィンドウを閉じる (複数ウィンドウ。UI-14)。間引いて待っている保存は先に書く。
+                FlushBackgroundSaves();
                 foreach (MainWindow w in WindowManager.Windows.ToList())
                 {
                     w.CloseForExit();

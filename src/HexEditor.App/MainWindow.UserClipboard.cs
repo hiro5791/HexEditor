@@ -67,7 +67,11 @@ public sealed partial class MainWindow
         }
     }
 
-    /// <summary>終了後も残す内容を書く (番号・名前を変えたとき。設定がオフなら保存を消す)。</summary>
+    /// <summary>ユーザークリップボードの保存 (UI スレッドの外で、間引いて書く。最大 16 MiB × 9 個を読んで書くため)。</summary>
+    private static readonly Core.Files.DebouncedWriter s_userClipboardWriter =
+        new(TimeSpan.FromMilliseconds(300), ex => AppLog.Warning($"ユーザークリップボードを保存できません: {ex.Message}"));
+
+    /// <summary>終了後も残す内容を書く (番号・名前を変えたとき。設定がオフなら保存を消す)。今の内容を写し、書くのはスレッドプールで行う。</summary>
     internal static void SaveUserClipboards()
     {
         if (s_userClipboards is not { } clipboards)
@@ -75,13 +79,28 @@ public sealed partial class MainWindow
             return;
         }
 
+        s_userClipboardWriter.Request(clipboards.CaptureSave(Hosting.Program.Environment.Locations.Settings));
+    }
+
+    /// <summary>
+    /// 間引いて待っている保存 (ユーザークリップボード、選択セット) をすぐに書き、終わるのを待つ (終了・再起動の前。文書を閉じる前に呼ぶ)。
+    /// </summary>
+    internal static void FlushBackgroundSaves()
+    {
+        var pending = new List<Task> { s_userClipboardWriter.FlushAsync() };
+        foreach (KeyValuePair<Core.Selection.SelectionSetCollection, Core.Files.DebouncedWriter> writer in s_selectionSetWriters)
+        {
+            pending.Add(writer.Value.FlushAsync());
+        }
+
         try
         {
-            clipboards.Save(Hosting.Program.Environment.Locations.Settings);
+            // 書き込みは UI スレッドを使わないので、ここで待っても止まらない。
+            Task.WaitAll([.. pending], TimeSpan.FromSeconds(10));
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (AggregateException ex)
         {
-            AppLog.Warning($"ユーザークリップボードを保存できません: {ex.Message}");
+            AppLog.Warning($"保存を終えられません: {ex.InnerException?.Message}");
         }
     }
 

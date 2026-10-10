@@ -161,6 +161,43 @@ public sealed class InAppClipboardTests : IDisposable
         restored.Recovery.Dispose();
     }
 
+    [Fact]
+    public void Multiple_ranges_over_the_limit_are_kept_as_parts_and_pasted_concatenated()
+    {
+        // EDIT-22 の仕様 5・8: マルチ選択の大きなコピーは要素を参照で持ち、貼り付けでは要素を連結する (データはコピーしない)。
+        using var clipboard = new InAppClipboard();
+        using Document source = Huge(Opts());
+        using var target = new Document(MemoryByteSource.CreateEmpty("無題 1"), Opts());
+        var editor = new EditorState(target) { VisibleRows = 10 };
+        editor.ToggleInsertMode();
+        long gib = TestDataCatalog.GiB;
+        Core.Selection.ByteRange[] ranges = [new(gib, 16), new(10 * gib, 40 * gib), new(90 * gib, 8)];
+        InAppClip clip = clipboard.CopyRanges(source, ranges);
+        Assert.Equal(16 + 40 * gib + 8, clip.Length);
+        Assert.NotNull(clip.Parts);
+
+        Assert.Equal(EditResult.Done, editor.Paste(clip.Range, clip.Parts!, overwrite: false));
+        Assert.Equal(clip.Length, target.Length);
+        Assert.Equal(0, target.AddBuffer.Length);
+        Assert.Equal(3, target.Current.Tree.PieceCount);
+        byte[] expected = new byte[16];
+        TestDataCatalog.Sequence(gib, expected);
+        Assert.Equal(expected, Read(target.Current, 0, 16));
+        TestDataCatalog.Sequence(90 * gib, expected.AsSpan(0, 8));
+        Assert.Equal(expected.AsSpan(0, 8).ToArray(), Read(target.Current, target.Length - 8, 8));
+
+        // 塗りつぶしの内容などに使うデータソースも要素を連結して見せる (要素の境目をまたいで読める)。
+        Sources.IByteSource joined = clip.Source;
+        Assert.Equal(clip.Length, joined.Length);
+        byte[] across = new byte[24];
+        Assert.Equal(16, joined.Read(clip.Length - 16, across).BytesReturned);
+        byte[] tail = new byte[8];
+        TestDataCatalog.Sequence(50 * gib - 8, tail);
+        Assert.Equal(tail, across.AsSpan(0, 8).ToArray());
+        TestDataCatalog.Sequence(90 * gib, tail);
+        Assert.Equal(tail, across.AsSpan(8, 8).ToArray());
+    }
+
     public void Dispose()
     {
         try

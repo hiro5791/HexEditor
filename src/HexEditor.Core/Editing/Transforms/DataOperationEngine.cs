@@ -84,8 +84,11 @@ public sealed class DataOperationRunner
     /// <summary>対象範囲の合計の長さ (進捗の全体量)。</summary>
     public static long TotalBytes(IReadOnlyList<TargetRange> ranges) => ranges.Sum(r => r.Length);
 
-    /// <summary>長時間処理として実行するか。</summary>
-    public static bool IsLongRunning(IReadOnlyList<TargetRange> ranges) => TotalBytes(ranges) > InPlaceLimit;
+    /// <summary>範囲の数がこれを超える演算は長時間処理にする (マルチ選択・矩形。EDIT-07・EDIT-17 の「巨大ファイル・長時間処理」)。</summary>
+    public const int LongRunningRanges = 10_000;
+
+    /// <summary>長時間処理として実行するか (対象が 4 MiB を超える、または範囲が 10,000 個を超える)。</summary>
+    public static bool IsLongRunning(IReadOnlyList<TargetRange> ranges) => ranges.Count > LongRunningRanges || TotalBytes(ranges) > InPlaceLimit;
 
     /// <summary>要素に満たないため変えない末尾のバイト数の合計 (EDIT-31 の仕様 8)。</summary>
     public static long TrailingBytes(IReadOnlyList<TargetRange> ranges, DataOperationSpec spec) =>

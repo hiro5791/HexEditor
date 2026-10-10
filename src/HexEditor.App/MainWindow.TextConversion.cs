@@ -60,6 +60,11 @@ public sealed partial class MainWindow
             return;
         }
 
+        if (!RangeListAllowed(doc, changesLength: true))
+        {
+            return;
+        }
+
         IReadOnlyList<TargetRange> ranges = TextTargetOf(doc);
         if (await ShowConvertEncodingDialogAsync(doc, ranges) is not { } options)
         {
@@ -265,6 +270,11 @@ public sealed partial class MainWindow
 
         CaseConversionMode method = mode ?? (App.Settings.GetString(CaseConversionKey, "ascii") == "encoding"
             ? CaseConversionMode.EncodingAware : CaseConversionMode.AsciiOnly);
+        if (!RangeListAllowed(doc, changesLength: true))
+        {
+            return;
+        }
+
         IReadOnlyList<TargetRange> ranges = TextTargetOf(doc);
         Document document = doc.Document;
         DocumentSnapshot snapshot = document.Current;
@@ -292,7 +302,7 @@ public sealed partial class MainWindow
     {
         try
         {
-            return await RunTransformAsync(doc, name, TextTransforms.TotalLength(ranges), TextTransforms.IsLongRunning(TextTransforms.TotalLength(ranges)), work);
+            return await RunTransformAsync(doc, name, TextTransforms.TotalLength(ranges), TextTransforms.IsLongRunning(ranges), work);
         }
         catch (CharsetConversionException e)
         {
