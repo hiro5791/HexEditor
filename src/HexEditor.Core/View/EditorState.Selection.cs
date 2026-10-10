@@ -439,16 +439,96 @@ public sealed partial class EditorState
     /// <summary>「選択を反転」(EDIT-07 の仕様 4): ドキュメント全体のうち選択されていない範囲を選ぶ。</summary>
     public SelectionResult InvertSelection()
     {
-        CollapseCarets();
-        long length = Layout.Length;
-        var current = new RangeSet(SelectedRanges);
-        RangeSet inverted = current.Invert(length);
-        if (inverted.Count > MaxSelectionElements)
+        if (CheckInvertLimit() is { } tooMany)
         {
-            return SelectionResult.TooManyElements;
+            return tooMany;
         }
 
-        return SetSelections(inverted);
+        RangeSet? inverted = ComputeInversion(CaptureSelection(), MaxSelectionElements);
+        return inverted is null ? SelectionResult.TooManyElements : SetSelectionSet(inverted);
+    }
+
+    /// <summary>
+    /// 「選択を反転」の結果が要素数の上限を超えることが要素を数え上げる前に分かる場合は <see cref="SelectionResult.TooManyElements"/>
+    /// (100 GB にわたる矩形でも要素の一覧を作らない)。重ならない要素の間はすべて反転後の要素になるので、要素数 − 1 が上限を超えれば超える。
+    /// </summary>
+    public SelectionResult? CheckInvertLimit()
+    {
+        long count = SelectedRangeCount;
+        bool contiguousRows = _rect is { } r && r.Width >= r.BytesPerRow;
+        return !contiguousRows && count - 1 > MaxSelectionElements ? SelectionResult.TooManyElements : null;
+    }
+
+    /// <summary>「選択を反転」を長時間処理で行うか (要素数が <see cref="LongRunningElements"/> を超える。EDIT-07 の「巨大ファイル・長時間処理」)。</summary>
+    public bool InvertIsLongRunning => SelectedRangeCount > LongRunningElements;
+
+    /// <summary>
+    /// 選択の写しを反転した要素の集合を作る (ドキュメントの状態は変えないので、バックグラウンドで呼べる)。上限を超えたら null。
+    /// </summary>
+    public static RangeSet? ComputeInversion(SelectionSnapshot selection, int maxElements, CancellationToken cancellationToken = default)
+    {
+        long length = selection.DocumentLength;
+        var result = new RangeSet();
+        long position = 0;
+        int n = 0;
+        foreach (ByteRange r in selection.Ranges)
+        {
+            if ((++n & 0xFFF) == 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            if (r.Start > position)
+            {
+                if (result.Count >= maxElements)
+                {
+                    return null;
+                }
+
+                result.Add(new ByteRange(position, r.Start - position));
+            }
+
+            position = Math.Max(position, r.End);
+        }
+
+        if (position < length)
+        {
+            if (result.Count >= maxElements)
+            {
+                return null;
+            }
+
+            result.Add(new ByteRange(position, length - position));
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 作り終えた要素の集合をそのまま選択にする (要素はドキュメントの範囲内で、上限以内であること。<paramref name="set"/> はこの後変えないこと)。
+    /// 長時間処理で作った集合を UI スレッドで要素の数に比例する処理なしに入れる。
+    /// </summary>
+    public SelectionResult SetSelectionSet(RangeSet set)
+    {
+        CollapseCarets();
+        if (set.Count == 0)
+        {
+            _rect = null;
+            _others = null;
+            ClearSelectionAnchor();
+            RaiseChanged();
+            return SelectionResult.NoSelection;
+        }
+
+        ByteRange primary = set.Last;
+        set.Remove(primary);
+        _rect = null;
+        _others = set.Count > 0 ? set : null;
+        _previousPrimary = null;
+        SetPrimaryElement(primary, keepOthers: true);
+        EnsureCursorVisible();
+        RaiseChanged();
+        return SelectionResult.Done;
     }
 
     /// <summary>「次の要素へ」(EDIT-07 の仕様 6): 主要素を次の要素に切り替え、その位置へスクロールする。最後の要素からは最初へ戻る。</summary>

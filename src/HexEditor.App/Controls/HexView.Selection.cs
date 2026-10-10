@@ -48,6 +48,12 @@ public sealed partial class HexView
     /// <summary>マルチカーソルへの入力で、一部のカーソルに入力できなかった (引数はその数。EDIT-08 の「エラー」)。</summary>
     public event EventHandler<int>? CaretInputFailed;
 
+    /// <summary>
+    /// 要素数の多いマルチ選択・矩形への Delete / Backspace (EDIT-07 の「巨大ファイル・長時間処理」)。キーではその場で処理せず、
+    /// ウィンドウが長時間処理 (進捗とキャンセル) として行う。
+    /// </summary>
+    public event EventHandler<RangeDeleteAction>? LongRangeDeleteRequested;
+
     /// <summary>設定「選択範囲のドラッグ &amp; ドロップを有効にする」(EDIT-18。既定オン)。</summary>
     public bool SelectionDragDropEnabled { get; set; } = true;
 

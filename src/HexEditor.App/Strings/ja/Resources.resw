@@ -1498,6 +1498,7 @@
   <data name="RangeEdit_Error_ReadOnly" xml:space="preserve"><value>この文書は読み取り専用です。</value></data>
   <data name="InsertBytes_Title" xml:space="preserve"><value>バイトの挿入</value></data>
   <data name="InsertBytes_Position" xml:space="preserve"><value>挿入する位置</value></data>
+  <data name="InsertBytes_RectangleRows" xml:space="preserve"><value>{0} 行に挿入します (矩形の各行の左端)。</value></data>
   <data name="InsertBytes_Count" xml:space="preserve"><value>バイト数</value></data>
   <data name="InsertBytes_SelectInserted" xml:space="preserve"><value>挿入後に挿入した範囲を選択する</value></data>
   <data name="InsertBytes_Insert" xml:space="preserve"><value>挿入</value></data>
@@ -2938,12 +2939,15 @@
   <data name="Status_Rectangle" xml:space="preserve"><value>矩形 {0} 行 × {1} バイト (計 {2} バイト)</value></data>
   <data name="Status_Carets" xml:space="preserve"><value>{0} 個のカーソル</value></data>
   <data name="Notice_SelectionOutOfRange" xml:space="preserve"><value>これ以上ずらせません。</value></data>
+  <data name="Notice_ResizeOutOfRange" xml:space="preserve"><value>選択範囲をそこまで広げる・狭めることはできません (先頭より前・末尾より後ろになるか、長さが 0 になります)。</value></data>
   <data name="Notice_TooManyElements" xml:space="preserve"><value>マルチ選択の要素数の上限 ({0}) を超えるため、追加しませんでした。</value></data>
   <data name="Notice_SelectionTruncated" xml:space="preserve"><value>マルチ選択の上限のため、先頭から {0} 個の範囲だけを選択しました。</value></data>
   <data name="Notice_TooManyCarets" xml:space="preserve"><value>カーソルは {0} 個までです。</value></data>
   <data name="Notice_CaretInputFailed" xml:space="preserve"><value>{0} 個のカーソルで入力できませんでした。</value></data>
   <data name="Notice_RectangleTooManyRows" xml:space="preserve"><value>矩形の行数 ({0} 行) がマルチ選択の上限 ({1}) を超えるため変換できません。選択を解除しました。</value></data>
+  <data name="Notice_RectangleToMultiLimit" xml:space="preserve"><value>矩形の行数 ({0} 行) がマルチ選択の上限 ({1}) を超えるため変換できません。</value></data>
   <data name="Notice_RectangleRowLimit" xml:space="preserve"><value>矩形が {0} 行あり、上限 {1} 行を超えています。上書きの操作は使えます。</value></data>
+  <data name="Notice_RectanglePasteInserted" xml:space="preserve"><value>{0} 行に挿入しました。挿入モードで行ごとに挿入したため、後ろの行の配置はずれています。</value></data>
   <data name="Command_NoRectangle" xml:space="preserve"><value>矩形選択がありません。</value></data>
   <data name="Command_UserClipboardEmpty" xml:space="preserve"><value>このユーザークリップボードは空です。</value></data>
   <data name="Command_ClipboardHistoryEmpty" xml:space="preserve"><value>クリップボード履歴は空です。</value></data>
@@ -2960,6 +2964,8 @@
   <data name="Fill_ContinueAcross" xml:space="preserve"><value>要素をまたいで続ける (オフのときは要素ごとに先頭から)</value></data>
   <data name="Fill_RangesInfo" xml:space="preserve"><value>{0} 個の範囲、計 {1} バイト</value></data>
   <data name="Operation_DeleteRanges" xml:space="preserve"><value>範囲の削除</value></data>
+  <data name="Operation_InvertSelection" xml:space="preserve"><value>選択の反転</value></data>
+  <data name="Operation_PasteRectangle" xml:space="preserve"><value>矩形の貼り付け</value></data>
   <data name="Operation_ExportSelection" xml:space="preserve"><value>選択範囲のエクスポート</value></data>
   <data name="SelectionSets_None" xml:space="preserve"><value>保存した選択範囲はありません。</value></data>
   <data name="SelectionSets_TooMany" xml:space="preserve"><value>選択範囲は 1 ドキュメントあたり {0} 個まで保存できます。</value></data>
@@ -2979,6 +2985,8 @@
   <data name="LoadSelection_Delete" xml:space="preserve"><value>削除</value></data>
   <data name="LoadSelection_Rename" xml:space="preserve"><value>名前を変更</value></data>
   <data name="LoadSelection_NewName" xml:space="preserve"><value>新しい名前</value></data>
+  <data name="LoadSelection_RenameInvalid" xml:space="preserve"><value>名前は 1〜{0} 文字で入力してください。</value></data>
+  <data name="LoadSelection_RenameDuplicate" xml:space="preserve"><value>「{0}」という名前の選択セットは既にあります。</value></data>
   <data name="LoadSelection_Note" xml:space="preserve"><value>保存した選択範囲のオフセットは、データの挿入・削除でずれても調整しません (ブックマークとは異なります)。</value></data>
   <data name="LoadSelection_Load" xml:space="preserve"><value>読み込む</value></data>
   <data name="SelectionFile_Csv" xml:space="preserve"><value>CSV</value></data>

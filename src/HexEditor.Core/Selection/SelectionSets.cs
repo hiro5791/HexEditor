@@ -42,6 +42,21 @@ public enum SelectionSetSaveResult
     Empty,
 }
 
+/// <summary>選択セットの名前の変更の結果 (EDIT-09 の「画面」の名前変更)。</summary>
+public enum SelectionSetRenameResult
+{
+    Renamed,
+
+    /// <summary>変える選択セットがない。</summary>
+    NotFound,
+
+    /// <summary>新しい名前が 1〜100 文字でない。</summary>
+    InvalidName,
+
+    /// <summary>新しい名前の選択セットが既にある (名前はドキュメント内で一意。仕様 1)。</summary>
+    Duplicate,
+}
+
 /// <summary>
 /// 1 つのドキュメントの選択セット (EDIT-09)。保存先はドキュメントに付随するデータ (<see cref="DocumentDataStore"/> の
 /// <see cref="Kind"/>)。編集でデータがずれても、保存した選択セットのオフセットは調整しない (仕様 5)。
@@ -123,18 +138,28 @@ public sealed class SelectionSetCollection
         return removed;
     }
 
-    /// <summary>名前を変える。新しい名前が正しくない・既にある場合は false。</summary>
-    public bool Rename(string name, string newName)
+    /// <summary>名前を変える。新しい名前が正しくない・既にある場合は変えずに理由を返す (UI はそれを示す)。</summary>
+    public SelectionSetRenameResult Rename(string name, string newName)
     {
         int index = _sets.FindIndex(s => string.Equals(s.Name, name, StringComparison.Ordinal));
-        if (index < 0 || !IsValidName(newName) || (newName.Trim() != name && Find(newName.Trim()) is not null))
+        if (index < 0)
         {
-            return false;
+            return SelectionSetRenameResult.NotFound;
+        }
+
+        if (!IsValidName(newName))
+        {
+            return SelectionSetRenameResult.InvalidName;
+        }
+
+        if (newName.Trim() != name && Find(newName.Trim()) is not null)
+        {
+            return SelectionSetRenameResult.Duplicate;
         }
 
         _sets[index] = _sets[index] with { Name = newName.Trim() };
         Changed?.Invoke(this, EventArgs.Empty);
-        return true;
+        return SelectionSetRenameResult.Renamed;
     }
 
     /// <summary>

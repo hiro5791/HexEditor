@@ -1498,6 +1498,7 @@ Details were written to:
   <data name="RangeEdit_Error_ReadOnly" xml:space="preserve"><value>This document is read-only.</value></data>
   <data name="InsertBytes_Title" xml:space="preserve"><value>Insert Bytes</value></data>
   <data name="InsertBytes_Position" xml:space="preserve"><value>Position</value></data>
+  <data name="InsertBytes_RectangleRows" xml:space="preserve"><value>{0, plural, one {Inserts into # row} other {Inserts into # rows}} (at the left edge of each row of the rectangle).</value></data>
   <data name="InsertBytes_Count" xml:space="preserve"><value>Number of bytes</value></data>
   <data name="InsertBytes_SelectInserted" xml:space="preserve"><value>Select the inserted range</value></data>
   <data name="InsertBytes_Insert" xml:space="preserve"><value>Insert</value></data>
@@ -2938,12 +2939,15 @@ Details were written to:
   <data name="Status_Rectangle" xml:space="preserve"><value>Rectangle {0} rows × {1} bytes ({2} bytes total)</value></data>
   <data name="Status_Carets" xml:space="preserve"><value>{0, plural, one {# cursor} other {# cursors}}</value></data>
   <data name="Notice_SelectionOutOfRange" xml:space="preserve"><value>The selection can't be shifted any further.</value></data>
+  <data name="Notice_ResizeOutOfRange" xml:space="preserve"><value>The selection can't be extended or shrunk that far (it would go past the start or end of the document, or become empty).</value></data>
   <data name="Notice_TooManyElements" xml:space="preserve"><value>A multi-selection can have up to {0} ranges. No range was added.</value></data>
   <data name="Notice_SelectionTruncated" xml:space="preserve"><value>Only the first {0} ranges were selected (the multi-selection limit).</value></data>
   <data name="Notice_TooManyCarets" xml:space="preserve"><value>You can have up to {0} cursors.</value></data>
   <data name="Notice_CaretInputFailed" xml:space="preserve"><value>{0, plural, one {# cursor couldn't take the input.} other {# cursors couldn't take the input.}}</value></data>
   <data name="Notice_RectangleTooManyRows" xml:space="preserve"><value>The rectangle has {0} rows, more than the multi-selection limit ({1}), so it can't be converted. The selection was cleared.</value></data>
+  <data name="Notice_RectangleToMultiLimit" xml:space="preserve"><value>The rectangle has {0} rows, which exceeds the multi-selection limit ({1}), so it can't be converted.</value></data>
   <data name="Notice_RectangleRowLimit" xml:space="preserve"><value>The rectangle has {0} rows, more than the limit of {1} rows. Overwrite operations are still available.</value></data>
+  <data name="Notice_RectanglePasteInserted" xml:space="preserve"><value>{0, plural, one {Inserted into # row.} other {Inserted into # rows.}} Because each row was inserted in insert mode, the rows after it have shifted.</value></data>
   <data name="Command_NoRectangle" xml:space="preserve"><value>There's no rectangle selection.</value></data>
   <data name="Command_UserClipboardEmpty" xml:space="preserve"><value>This user clipboard is empty.</value></data>
   <data name="Command_ClipboardHistoryEmpty" xml:space="preserve"><value>The clipboard history is empty.</value></data>
@@ -2960,6 +2964,8 @@ Details were written to:
   <data name="Fill_ContinueAcross" xml:space="preserve"><value>Continue the content across ranges (instead of restarting in each range)</value></data>
   <data name="Fill_RangesInfo" xml:space="preserve"><value>{0, plural, one {# range} other {# ranges}}, {1} bytes total</value></data>
   <data name="Operation_DeleteRanges" xml:space="preserve"><value>Deleting ranges</value></data>
+  <data name="Operation_InvertSelection" xml:space="preserve"><value>Inverting the selection</value></data>
+  <data name="Operation_PasteRectangle" xml:space="preserve"><value>Pasting the rectangle</value></data>
   <data name="Operation_ExportSelection" xml:space="preserve"><value>Exporting selection</value></data>
   <data name="SelectionSets_None" xml:space="preserve"><value>There are no saved selections.</value></data>
   <data name="SelectionSets_TooMany" xml:space="preserve"><value>A document can have up to {0} saved selections.</value></data>
@@ -2979,6 +2985,8 @@ Details were written to:
   <data name="LoadSelection_Delete" xml:space="preserve"><value>Delete</value></data>
   <data name="LoadSelection_Rename" xml:space="preserve"><value>Rename</value></data>
   <data name="LoadSelection_NewName" xml:space="preserve"><value>New name</value></data>
+  <data name="LoadSelection_RenameInvalid" xml:space="preserve"><value>Enter a name of 1 to {0} characters.</value></data>
+  <data name="LoadSelection_RenameDuplicate" xml:space="preserve"><value>A selection set named "{0}" already exists.</value></data>
   <data name="LoadSelection_Note" xml:space="preserve"><value>Saved selections keep their offsets. Unlike bookmarks, they don't move when you insert or delete data.</value></data>
   <data name="LoadSelection_Load" xml:space="preserve"><value>Load</value></data>
   <data name="SelectionFile_Csv" xml:space="preserve"><value>CSV</value></data>

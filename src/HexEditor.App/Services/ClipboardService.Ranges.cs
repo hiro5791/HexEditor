@@ -156,6 +156,31 @@ public sealed partial class ClipboardService
         }
 
         // 矩形の貼り付け: 上書き貼り付け (Ctrl+B) は各行を上書き、通常の貼り付けは入力モードに従う。
-        return editor.PasteRectangle(pieces, overwrite || !editor.InsertMode);
+        bool rowsOverwrite = overwrite || !editor.InsertMode;
+        if (editor.RectanglePasteInserts(rowsOverwrite))
+        {
+            // 挿入は長さが変わる操作: 行数の上限 (EDIT-17 の仕様 6) を超えれば行わず、10,000 行を超えれば長時間処理にする。
+            LastRectangleInsertRows = pieces.Count;
+            if (pieces.Count > editor.MaxRectangleRows)
+            {
+                return EditResult.TooManyRows;
+            }
+
+            if (pieces.Count > EditorState.LongRunningElements && LongRectangleInsert is { } longInsert)
+            {
+                return await longInsert(editor, pieces);
+            }
+        }
+
+        return editor.PasteRectangle(pieces, rowsOverwrite);
     }
+
+    /// <summary>直前の貼り付けで、矩形の各行に挿入した (しようとした) 行数。挿入していなければ 0 (UI は行数と注記を示す。EDIT-17 の「画面」)。</summary>
+    public long LastRectangleInsertRows { get; private set; }
+
+    /// <summary>
+    /// 行数の多い (10,000 行を超える) 矩形の挿入の貼り付けを長時間処理で行う (EDIT-17 の「巨大ファイル・長時間処理」)。ウィンドウが設定する。
+    /// 引数は貼り付け先と各行の内容。
+    /// </summary>
+    public Func<EditorState, IReadOnlyList<byte[]>, Task<EditResult>>? LongRectangleInsert { get; set; }
 }

@@ -30,6 +30,11 @@ public enum PasteOutcome
 
     /// <summary>エクスプローラーでコピーしたファイルがある (EDIT-23 の仕様 1 の 4)。<see cref="ClipboardService.LastFiles"/> の内容を挿入する。</summary>
     Files,
+
+    /// <summary>
+    /// 矩形の挿入の貼り付けで、行数 (<see cref="ClipboardService.LastRectangleInsertRows"/>) が上限を超える (EDIT-17 の仕様 6)。何もしていない。
+    /// </summary>
+    TooManyRows,
 }
 
 /// <summary>「形式を選択して貼り付け」で使うクリップボードの内容 (EDIT-26)。</summary>
@@ -142,6 +147,7 @@ public sealed partial class ClipboardService
     public async Task<PasteOutcome> PasteAsync(EditorState editor, bool overwrite, Func<long, Task<bool>>? confirmTruncate = null)
     {
         LastTruncatedBytes = 0;
+        LastRectangleInsertRows = 0;
         DataPackageView view = SystemClipboard.GetContent();
 
         // マルチ選択・矩形からコピーした内容 (要素ごと・行ごとに貼る。EDIT-07 の仕様 7、EDIT-17 の仕様 3)。
@@ -370,6 +376,7 @@ public sealed partial class ClipboardService
         EditResult.Truncated => PasteOutcome.Truncated,
         EditResult.FixedLength => PasteOutcome.FixedLength,
         EditResult.NotEditable => PasteOutcome.NotEditable,
+        EditResult.TooManyRows => PasteOutcome.TooManyRows,
         EditResult.NeedsTruncateConfirmation => PasteOutcome.Nothing,
         _ => PasteOutcome.Nothing,
     };

@@ -189,7 +189,11 @@ public sealed partial class MainWindow
 
     // ---- バイトの挿入 (EDIT-14) ----
 
-    private async Task<InsertBytesRequest?> ShowInsertBytesDialogAsync(DocumentViewModel doc)
+    /// <param name="rectangleRows">
+    /// 矩形挿入 (EDIT-17 の仕様 4) なら矩形の行数。位置の欄 (各行の左端に挿入するので意味がない) と「挿入した範囲を選択する」を隠し、
+    /// 「N 行に挿入します」と示す (EDIT-17 の「画面」)。
+    /// </param>
+    private async Task<InsertBytesRequest?> ShowInsertBytesDialogAsync(DocumentViewModel doc, long? rectangleRows = null)
     {
         EditorState editor = doc.Editor;
         var context = new EditorExpressionContext(editor);
@@ -207,16 +211,26 @@ public sealed partial class MainWindow
             body.Children.Add(e);
         }
 
+        if (rectangleRows is { } rows)
+        {
+            position.Visibility = Visibility.Collapsed;
+            select.Visibility = Visibility.Collapsed;
+            positionResult.Text = Loc.Format("InsertBytes_RectangleRows", rows);
+        }
+
         ContentDialog dialog = DialogParts.Dialog(Root, "InsertBytesDialog", Loc.Get("InsertBytes_Title"), new ScrollViewer { Content = body },
             Loc.Get("InsertBytes_Insert"));
         InsertBytesRequest? request = null;
         void Validate()
         {
             request = null;
-            bool posOk = DialogParts.TryEvaluate(position.Text, context, out long pos, out ExpressionException? posError);
+            long pos = at;
+            ExpressionException? posError = null;
+            bool posOk = rectangleRows is not null || DialogParts.TryEvaluate(position.Text, context, out pos, out posError);
             bool countOk = DialogParts.TryEvaluate(count.Text, context, out long n, out ExpressionException? countError);
             RangeEditError? error = posOk && countOk ? EditCommands.ValidateInsert(doc.Document, pos, n) : null;
-            positionResult.Text = !posOk ? DialogParts.ExpressionError(posError!)
+            positionResult.Text = rectangleRows is { } rowCount ? Loc.Format("InsertBytes_RectangleRows", rowCount)
+                : !posOk ? DialogParts.ExpressionError(posError!)
                 : error == RangeEditError.PositionOutOfRange ? Loc.Get("RangeEdit_Error_PositionOutOfRange") : DialogParts.Interpretation(pos);
             countResult.Text = !countOk ? DialogParts.ExpressionError(countError!)
                 : error is RangeEditError.CountTooLarge or RangeEditError.CountTooSmall

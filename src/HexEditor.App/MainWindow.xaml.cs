@@ -610,6 +610,22 @@ public sealed partial class MainWindow : Window
 
                 _clipboard.PasteDetectedWithoutConfirmation = App.Settings.GetBool(PasteWithoutConfirmationKey, false);
                 PasteOutcome outcome = await _clipboard.PasteAsync(editor, command == EditorCommand.PasteOverwrite, ConfirmTruncateAsync);
+                if (_clipboard.LastRectangleInsertRows > 0 && Vm.Selected is { } rectDoc)
+                {
+                    // 矩形の各行への挿入: 行数の上限を超えたら知らせ、挿入したら行数と後ろの行がずれた注記を示す (EDIT-17 の仕様 3・6)。
+                    if (outcome == PasteOutcome.TooManyRows)
+                    {
+                        ShowNotice(Loc.Format("Notice_RectangleRowLimit", _clipboard.LastRectangleInsertRows.ToString("N0", System.Globalization.CultureInfo.CurrentCulture),
+                            editor.MaxRectangleRows.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)), InfoBarSeverity.Error, rectDoc);
+                        break;
+                    }
+
+                    if (outcome == PasteOutcome.Done)
+                    {
+                        ShowRectangleInsertNote(rectDoc, _clipboard.LastRectangleInsertRows);
+                    }
+                }
+
                 if (outcome == PasteOutcome.NeedsSpecialPaste && Vm.Selected is { } special)
                 {
                     // Hex 列で Hex として読めず、他の形式に当てはまる: 形式を選択して貼り付けを開く (EDIT-23 の仕様 2、EDIT-26)。

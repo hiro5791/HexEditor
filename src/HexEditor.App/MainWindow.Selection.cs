@@ -26,7 +26,7 @@ public sealed partial class MainWindow
     private const string ShiftAmountKey = "edit.selectionShift.last";
 
     /// <summary>要素数がこれを超える塗りつぶし・削除は長時間処理として行う (EDIT-07 の「巨大ファイル・長時間処理」)。</summary>
-    private const int ManyElements = 10_000;
+    private const int ManyElements = EditorState.LongRunningElements;
 
     /// <summary>ドキュメントごとの選択セット (EDIT-09)。初めて使うときに付随データから読む。</summary>
     private static readonly ConditionalWeakTable<Document, SelectionSetCollection> s_selectionSets = [];
@@ -35,6 +35,7 @@ public sealed partial class MainWindow
     {
         string noSelection = Loc.Get("Command_NoSelection");
         InitializeSelectionDrop();
+        _clipboard.LongRectangleInsert = PasteRectangleRowsAsync;
         CommandState NeedsSelection() => NeedsDocument(d => d.Editor.HasSelection ? null : noSelection);
 
         // ---- ずらす・広げる (EDIT-05) ----
@@ -45,7 +46,7 @@ public sealed partial class MainWindow
         Commands.Register("edit.selection.swapEnds", () => ReportSelection(Editor?.SwapAnchorAndCursor()), NeedsSelection);
 
         // ---- マルチ選択・矩形・マルチカーソル (EDIT-06〜EDIT-08) ----
-        Commands.Register("edit.selection.invert", () => ReportSelection(Editor?.InvertSelection()),
+        Commands.Register("edit.selection.invert", InvertSelectionAsync,
             () => NeedsDocument(d => d.Document.Length > 0 ? null : Loc.Get("Command_EmptyDocument")));
         Commands.Register("edit.selection.nextElement", () => ReportSelection(Editor?.NextElement()), NeedsSelection);
         Commands.Register("edit.selection.previousElement", () => ReportSelection(Editor?.PreviousElement()), NeedsSelection);
@@ -59,7 +60,7 @@ public sealed partial class MainWindow
                 FocusEditor();
             }
         }, NeedsDocument);
-        Commands.Register("edit.selection.toMulti", () => ReportSelection(Editor?.ConvertRectangleToMulti()),
+        Commands.Register("edit.selection.toMulti", ConvertRectangleToMulti,
             () => NeedsDocument(d => d.Editor.SelectionKind == SelectionKind.Rectangle ? null : Loc.Get("Command_NoRectangle")));
         Commands.Register("edit.caret.addAbove", () => ReportSelection(Editor?.AddCaretAbove()), NeedsDocument);
         Commands.Register("edit.caret.addBelow", () => ReportSelection(Editor?.AddCaretBelow()), NeedsDocument);
@@ -86,8 +87,75 @@ public sealed partial class MainWindow
         };
     }
 
+    /// <summary>
+    /// 「選択を反転」(EDIT-07 の仕様 4)。上限を超えることが先に分かる場合は要素を数え上げずに知らせ、要素数が 10,000 を超える場合は
+    /// 長時間処理で反転した集合を作ってから選択にする (「巨大ファイル・長時間処理」)。
+    /// </summary>
+    private async Task InvertSelectionAsync()
+    {
+        if (Vm.Selected is not { } doc)
+        {
+            return;
+        }
+
+        EditorState editor = doc.Editor;
+        if (editor.CheckInvertLimit() is { } tooMany)
+        {
+            ReportSelection(tooMany);
+            return;
+        }
+
+        if (!editor.InvertIsLongRunning)
+        {
+            ReportSelection(editor.InvertSelection());
+            return;
+        }
+
+        SelectionSnapshot selection = editor.CaptureSelection();
+        int max = editor.MaxSelectionElements;
+        try
+        {
+            RangeSet? inverted = await Vm.Operations.RunAsync(Loc.Get("Operation_InvertSelection"), OperationKind.ReadOnly, doc.Document, null,
+                op => Task.Run(() => EditorState.ComputeInversion(selection, max, op.CancellationToken)));
+            if (doc.Document.Length != selection.DocumentLength)
+            {
+                // 処理の間に長さが変わった (反転した範囲は古い)。
+                return;
+            }
+
+            ReportSelection(inverted is null ? SelectionResult.TooManyElements : editor.SetSelectionSet(inverted));
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
+    /// <summary>
+    /// 「マルチ選択に変換」(EDIT-06 の仕様 7)。上限を超える場合は「矩形の行数 (N 行) がマルチ選択の上限 (M) を超えるため変換できません」
+    /// (EDIT-06 の「エラー」)。
+    /// </summary>
+    private void ConvertRectangleToMulti()
+    {
+        if (Vm.Selected is not { } doc)
+        {
+            return;
+        }
+
+        EditorState editor = doc.Editor;
+        long rows = editor.SelectedRangeCount;
+        SelectionResult result = editor.ConvertRectangleToMulti();
+        if (result == SelectionResult.TooManyElements)
+        {
+            ShowNotice(Loc.Format("Notice_RectangleToMultiLimit", rows.ToString("N0", CultureInfo.CurrentCulture),
+                editor.MaxSelectionElements.ToString("N0", CultureInfo.CurrentCulture)), InfoBarSeverity.Warning, doc);
+            return;
+        }
+
+        ReportSelection(result);
+    }
+
     /// <summary>選択の操作の結果を InfoBar で知らせる (上限超過・範囲外)。</summary>
-    private void ReportSelection(SelectionResult? result)
+    private void ReportSelection(SelectionResult? result, string outOfRangeKey = "Notice_SelectionOutOfRange")
     {
         if (result is not { } r || Vm.Selected is not { } doc)
         {
@@ -97,7 +165,7 @@ public sealed partial class MainWindow
         EditorState editor = doc.Editor;
         string? message = r switch
         {
-            SelectionResult.OutOfRange => Loc.Get("Notice_SelectionOutOfRange"),
+            SelectionResult.OutOfRange => Loc.Get(outOfRangeKey),
             SelectionResult.TooManyElements => Loc.Format("Notice_TooManyElements", editor.MaxSelectionElements.ToString("N0", CultureInfo.CurrentCulture)),
             SelectionResult.Truncated => Loc.Format("Notice_SelectionTruncated", editor.MaxSelectionElements.ToString("N0", CultureInfo.CurrentCulture)),
             SelectionResult.TooManyCarets => Loc.Format("Notice_TooManyCarets", EditorState.MaxCarets.ToString("N0", CultureInfo.CurrentCulture)),
@@ -116,6 +184,27 @@ public sealed partial class MainWindow
         view.SelectionDragStarting += (_, e) => FillSelectionDragData(e);
         view.CaretInputFailed += (_, count) =>
             ShowNotice(Loc.Format("Notice_CaretInputFailed", count), InfoBarSeverity.Warning, Vm.Selected);
+        view.LongRangeDeleteRequested += (_, action) => _ = DeleteManyRangesAsync(action);
+    }
+
+    /// <summary>
+    /// 要素数の多いマルチ選択・矩形への Delete / Backspace を長時間処理として行う (EDIT-07・EDIT-17 の「巨大ファイル・長時間処理」)。
+    /// </summary>
+    private async Task DeleteManyRangesAsync(RangeDeleteAction action)
+    {
+        if (Vm.Selected is not { } doc)
+        {
+            return;
+        }
+
+        if (action == RangeDeleteAction.ZeroFill)
+        {
+            await FillSelectedRangesAsync(doc, FillSpec.Zero, continueAcross: false, description: "削除");
+        }
+        else
+        {
+            await DeleteSelectedRangesAsync(doc, "削除");
+        }
     }
 
     /// <summary>ドキュメントごとの選択の設定と、表示設定の変更での矩形の変換の通知 (EDIT-06 の仕様 5)。</summary>
@@ -232,7 +321,8 @@ public sealed partial class MainWindow
         Validate();
         if (await ShowEditDialogAsync(dialog) == ContentDialogResult.Primary)
         {
-            ReportSelection(editor.ResizeSelection(start, end));
+            // 広げる・狭めるの範囲外は「ずらせません」とは別の文で知らせる (EDIT-05 の仕様 4)。
+            ReportSelection(editor.ResizeSelection(start, end), "Notice_ResizeOutOfRange");
             FocusEditor();
         }
     }
@@ -272,6 +362,39 @@ public sealed partial class MainWindow
         }
     }
 
+    /// <summary>
+    /// 行数の多い矩形の挿入の貼り付け (EDIT-17 の仕様 3、「巨大ファイル・長時間処理」)。行ごとの挿入を長時間処理で 1 つの木にしてから 1 回で入れる。
+    /// </summary>
+    private async Task<EditResult> PasteRectangleRowsAsync(EditorState editor, IReadOnlyList<byte[]> rows)
+    {
+        if (Vm.Selected is not { } doc || doc.Document != editor.Document)
+        {
+            return editor.PasteRectangle(rows, overwrite: false);
+        }
+
+        long origin = editor.RectanglePasteOrigin;
+        int bytesPerRow = editor.BytesPerRow;
+        long total = rows.Sum(r => (long)r.Length);
+        try
+        {
+            PreparedReplacement prepared = await Vm.Operations.RunAsync(Loc.Get("Operation_PasteRectangle"), OperationKind.ModifiesDocument, doc.Document,
+                total, op => Task.Run(() => EditorState.PrepareRectangleRowsInsert(doc.Document, rows, origin, bytesPerRow, op, ignoreEditLock: true,
+                    op.CancellationToken)), locked => doc.Document.SetEditLock(locked));
+            editor.CommitRectangleRowsInsert(prepared, origin);
+            return EditResult.Done;
+        }
+        catch (OperationCanceledException)
+        {
+            return EditResult.Ignored;
+        }
+    }
+
+    /// <summary>
+    /// 矩形を挿入モードで貼り付けた後の注記: 影響した行数と、後ろの行の配置がずれたこと (EDIT-17 の仕様 3・「画面」)。
+    /// </summary>
+    private void ShowRectangleInsertNote(DocumentViewModel doc, long rows) =>
+        ShowNotice(Loc.Format("Notice_RectanglePasteInserted", rows.ToString("N0", CultureInfo.CurrentCulture)), InfoBarSeverity.Informational, doc);
+
     /// <summary>「矩形が N 行あり、上限 M 行を超えています。上書きの操作は使えます」(EDIT-17 の「エラー」)。</summary>
     private void ShowRectangleRowLimit(DocumentViewModel doc) =>
         ShowNotice(Loc.Format("Notice_RectangleRowLimit", doc.Editor.SelectedRangeCount.ToString("N0", CultureInfo.CurrentCulture),
@@ -301,7 +424,7 @@ public sealed partial class MainWindow
     /// マルチ選択・矩形の各要素を塗りつぶす (EDIT-29 の仕様 4)。<paramref name="continueAcross"/> なら内容を要素をまたいで続け、
     /// そうでなければ要素ごとに先頭から始める。要素数が 10,000 を超える場合と実データを作る場合は長時間処理にする。
     /// </summary>
-    private async Task FillSelectedRangesAsync(DocumentViewModel doc, FillSpec spec, bool continueAcross)
+    private async Task FillSelectedRangesAsync(DocumentViewModel doc, FillSpec spec, bool continueAcross, string description = "塗りつぶし")
     {
         EditorState editor = doc.Editor;
         SelectionSnapshot selection = editor.CaptureSelection();
@@ -332,7 +455,7 @@ public sealed partial class MainWindow
                 ? Prepare(null)
                 : await Vm.Operations.RunAsync(Loc.Get("Operation_Fill"), OperationKind.ModifiesDocument, doc.Document, total,
                     op => Task.Run(() => Prepare(op)), locked => doc.Document.SetEditLock(locked));
-            doc.Document.CommitReplacements(prepared, "塗りつぶし");
+            doc.Document.CommitReplacements(prepared, description);
         }
         catch (OperationCanceledException)
         {
@@ -377,7 +500,7 @@ public sealed partial class MainWindow
             return;
         }
 
-        if (await ShowInsertBytesDialogAsync(doc) is not { } request)
+        if (await ShowInsertBytesDialogAsync(doc, doc.Editor.SelectedRangeCount) is not { } request)
         {
             return;
         }
@@ -530,6 +653,9 @@ public sealed partial class MainWindow
         AutomationProperties.SetAutomationId(rename, "LoadSelection_Rename");
         TextBox newName = DialogParts.Field("LoadSelection_NewName", Loc.Get("LoadSelection_NewName"), string.Empty, monospace: false);
         newName.MaxLength = SelectionSetCollection.MaxNameLength;
+        // 名前の変更に失敗した (名前が正しくない・同じ名前がある) ときは、名前の欄の下に理由を示す。
+        TextBlock renameError = DialogParts.Caption("LoadSelection_RenameError");
+        renameError.TextWrapping = TextWrapping.Wrap;
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
         buttons.Children.Add(delete);
         buttons.Children.Add(rename);
@@ -539,7 +665,7 @@ public sealed partial class MainWindow
         note.Text = Loc.Get("LoadSelection_Note");
         note.TextWrapping = TextWrapping.Wrap;
         var body = new StackPanel { Spacing = 8, MinWidth = 420 };
-        foreach (UIElement e in new UIElement[] { list, newName, buttons, replace, add, note })
+        foreach (UIElement e in new UIElement[] { list, newName, renameError, buttons, replace, add, note })
         {
             body.Children.Add(e);
         }
@@ -558,9 +684,27 @@ public sealed partial class MainWindow
                 Update();
             }
         };
+        newName.TextChanged += (_, _) =>
+        {
+            renameError.Text = string.Empty;
+            DialogParts.MarkInvalid(newName, false);
+        };
         rename.Click += (_, _) =>
         {
-            if (Selected() is { } n && sets.Rename(n, newName.Text))
+            if (Selected() is not { } n)
+            {
+                return;
+            }
+
+            SelectionSetRenameResult renamed = sets.Rename(n, newName.Text);
+            renameError.Text = renamed switch
+            {
+                SelectionSetRenameResult.InvalidName => Loc.Format("LoadSelection_RenameInvalid", SelectionSetCollection.MaxNameLength),
+                SelectionSetRenameResult.Duplicate => Loc.Format("LoadSelection_RenameDuplicate", newName.Text.Trim()),
+                _ => string.Empty,
+            };
+            DialogParts.MarkInvalid(newName, renameError.Text.Length > 0);
+            if (renamed == SelectionSetRenameResult.Renamed)
             {
                 Fill();
                 Update();
