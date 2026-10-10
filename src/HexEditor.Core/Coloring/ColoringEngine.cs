@@ -159,6 +159,9 @@ public sealed class ColoringEngine
     /// <summary>1 画面分の評価にかかった時間 (ms。性能のテストで読む)。</summary>
     public double LastEvaluationMilliseconds { get; private set; }
 
+    /// <summary>最後の評価の失敗 (診断用)。</summary>
+    public Exception? LastError { get; private set; }
+
     private sealed record Entry(ColoringCell[] Hex, ColoringCell[] Text);
 
     private void Clear()
@@ -217,7 +220,8 @@ public sealed class ColoringEngine
                     if (_pending.Add(key))
                     {
                         DocumentSnapshot current = snapshot;
-                        Schedule(() => EvaluateChunk(current, rules, chunk));
+                        long target = chunk;
+                        Schedule(() => EvaluateChunk(current, rules, target));
                     }
                 }
             }
@@ -240,9 +244,24 @@ public sealed class ColoringEngine
             long dataStart = Math.Max(0, chunkStart - margin);
             long dataEnd = Math.Min(snapshot.Length, chunkStart + length + margin);
             byte[] data = new byte[dataEnd - dataStart];
-            ReadResult read = snapshot.Read(dataStart, data);
-            ByteState[] states = StatesOf(read, dataStart, data.Length);
-            rules.Evaluate(data, states, dataStart, chunkStart, hex, text);
+            try
+            {
+                ReadResult read = snapshot.Read(dataStart, data);
+                ByteState[] states = StatesOf(read, dataStart, data.Length);
+                rules.Evaluate(data, states, dataStart, chunkStart, hex, text);
+            }
+            catch (Exception ex) when (ex is ObjectDisposedException or IOException or InvalidOperationException)
+            {
+                // ドキュメントを閉じた後など: このチャンクは色を付けない (次の問い合わせで評価し直す)。
+                LastError = ex;
+                lock (_lock)
+                {
+                    _pending.Remove((chunk, rules.Version));
+                }
+
+                return;
+            }
+
             LastEvaluationMilliseconds = System.Diagnostics.Stopwatch.GetElapsedTime(started).TotalMilliseconds;
         }
 

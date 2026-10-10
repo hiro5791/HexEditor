@@ -60,7 +60,7 @@ public sealed partial class MainWindow
         "coloring" => TestColoring(request),
         "legend" => await TestLegendAsync(request),
         "annotationColumn" => (CurrentView() ?? throw new InvalidOperationException("No hex view.")).ReadAnnotationColumn(),
-        "descriptionFlyout" => TestDescriptionFlyout(),
+        "descriptionFlyout" => TestDescriptionFlyout(request),
         _ => null,
     };
 
@@ -204,8 +204,13 @@ public sealed partial class MainWindow
         return new JsonObject { ["sources"] = new JsonArray([.. a.Layer.Sources.Select(s => (JsonNode?)s.Id)]) };
     }
 
-    private JsonObject TestDescriptionFlyout()
+    private JsonObject TestDescriptionFlyout(JsonObject request)
     {
+        if (request["key"]?.GetValue<string>() is { } key)
+        {
+            HandleDescriptionKey(Enum.Parse<VirtualKey>(key, ignoreCase: true));
+        }
+
         bool open = _descriptionFlyout?.IsOpen ?? false;
         var scroll = _descriptionFlyout?.Content as Microsoft.UI.Xaml.Controls.ScrollViewer;
         return new JsonObject

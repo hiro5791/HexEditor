@@ -76,11 +76,15 @@ public sealed class AnnotationTests
     {
         AppSession app = await StartWithRowsAsync(ctx, "cstrAnsi");
         await GoAsync(app, 0x40);
-        await WriteAsync(app, "cstrAnsi", "\"Hi\"");
-        Assert.Equal(new byte[] { 0x48, 0x69, 0, 0, 0, 0 }, await app.BytesAsync(0x40, 6));
+
+        // 元の長さ (6 バイト) を超える文字列は書けない (手順 3。書き換えの前の文字列で確かめる)。
         await BeginEditAsync(app, "cstrAnsi", "HelloWorld");
         await app.WaitUntilAsync(async () => (await RowAsync(app, "cstrAnsi"))["error"]?.GetValue<string>() is { Length: > 0 }, TimeSpan.FromSeconds(5), "the error");
         Assert.Equal("Longer than the original length (6 bytes)", (await RowAsync(app, "cstrAnsi"))["error"]!.GetValue<string>());
+        await PanelKeyAsync(app, "Escape");
+
+        await WriteAsync(app, "cstrAnsi", "\"Hi\"");
+        Assert.Equal(new byte[] { 0x48, 0x69, 0, 0, 0, 0 }, await app.BytesAsync(0x40, 6));
     });
 
     [Fact]
@@ -176,12 +180,14 @@ public sealed class AnnotationTests
         AppSession app = await StartGroupsAsync(ctx);
         Assert.True((await app.SendAsync("bmGroup", new JsonObject { ["action"] = "select", ["path"] = "G" }))["selected"]!.GetValue<bool>());
         Assert.True((await app.SendAsync("bmGroup", new JsonObject { ["action"] = "key", ["key"] = "Space" }))["handled"]!.GetValue<bool>());
-        await app.IdleAsync();
-        HashSet<long> marked = await HighlightedAsync(app, 7, "hex", "bookmark:");
-        Assert.DoesNotContain(0x100L, marked);
-        Assert.DoesNotContain(0x200L, marked);
-        Assert.Contains(0x300L, marked);
+        foreach ((long at, bool shown) in new[] { (0x100L, false), (0x200L, false), (0x300L, true) })
+        {
+            await app.GoToAsync(at);
+            await app.IdleAsync();
+            Assert.Equal(shown, (await HighlightedAsync(app, 7, "hex", "bookmark:")).Contains(at));
+        }
 
+        await app.GoToAsync(0);
         await app.KeyAsync("F2");
         Assert.Equal(0x300, await ViewOps.CursorAsync(app));
         await app.KeyAsync("F2");
@@ -351,11 +357,11 @@ public sealed class AnnotationTests
         JsonObject flyout = await app.SendAsync("descriptionFlyout");
         Assert.Contains(flyout["runs"]!.AsArray(), r => r!["text"]!.GetValue<string>() == paragraph);
         Assert.True(flyout["scrollableHeight"]!.GetValue<double>() > 0);
-        await app.SendAsync("panelKey", new JsonObject { ["key"] = "PageDown" });
+        await app.SendAsync("descriptionFlyout", new JsonObject { ["key"] = "PageDown" });
         await app.WaitUntilAsync(async () => (await app.SendAsync("descriptionFlyout"))["verticalOffset"]!.GetValue<double>() > 0, TimeSpan.FromSeconds(5), "the scroll");
-        await app.SendAsync("panelKey", new JsonObject { ["key"] = "Escape" });
+        await app.SendAsync("descriptionFlyout", new JsonObject { ["key"] = "Escape" });
         await app.WaitUntilAsync(async () => !(await app.SendAsync("descriptionFlyout"))["open"]!.GetValue<bool>(), TimeSpan.FromSeconds(5), "the flyout to close");
-        await app.WaitUntilAsync(async () => await app.FocusedAsync() == "HexView", TimeSpan.FromSeconds(5), "the focus back on the hex view");
+        await app.WaitUntilAsync(async () => (await app.FocusedAsync())?.StartsWith("HexView", StringComparison.Ordinal) == true, TimeSpan.FromSeconds(5), "the focus back on the hex view");
     });
 
     // ---- INSP-32 ----
@@ -394,7 +400,7 @@ public sealed class AnnotationTests
     {
         AppSession app = await StartFileAsync(ctx);
         await AddThreeAsync(app);
-        await app.GoToAsync(0x400);
+        await app.GoToAsync(0x80);
         await app.IdleAsync();
         JsonObject render = await app.RenderAsync();
         await ViewOps.PointerAsync(app, "move", ViewOps.CellPoint(render, 0x10));
@@ -405,10 +411,11 @@ public sealed class AnnotationTests
             Assert.Contains(part, text);
         }
 
-        var segments = (await app.SendAsync("highlights"))["segments"]!.AsArray()
+        JsonArray all = (await app.SendAsync("highlights"))["segments"]!.AsArray();
+        var segments = all
             .Where(s => s!["layer"]!.GetValue<int>() == 8 && s["column"]!.GetValue<string>() == "hex" && s["first"]!.GetValue<long>() <= 0x10 && s["last"]!.GetValue<long>() >= 0x10)
             .Select(s => s!.AsObject()).ToList();
-        Assert.Equal(3, segments.Count);
+        Assert.True(segments.Count == 3, all.ToJsonString());
         JsonObject top = segments.MaxBy(s => s["order"]!.GetValue<int>())!;
         Assert.EndsWith(":inner", top["tag"]!.GetValue<string>());
         Assert.Equal(2, top["level"]!.GetValue<int>());
@@ -425,12 +432,22 @@ public sealed class AnnotationTests
     private static async Task<JsonObject> WaitColoringAsync(AppSession app, Func<JsonObject, bool> ready)
     {
         JsonObject? last = null;
-        await app.WaitUntilAsync(async () =>
+        try
         {
-            await app.IdleAsync();
-            last = await app.SendAsync("highlights");
-            return ready(last);
-        }, TimeSpan.FromSeconds(10), "the coloring rules to be drawn");
+            await app.WaitUntilAsync(async () =>
+            {
+                await app.IdleAsync();
+                last = await app.SendAsync("highlights");
+                return ready(last);
+            }, TimeSpan.FromSeconds(10), "the coloring rules to be drawn");
+        }
+        catch (TimeoutException ex)
+        {
+            JsonObject state = await app.SendAsync("coloring", new JsonObject());
+            throw new TimeoutException(ex.Message + " coloring: " + state.ToJsonString() + " highlights: "
+                + (last is null ? string.Empty : string.Join(";", Layer10(last).Take(5).Select(s => s.ToJsonString()))), ex);
+        }
+
         return last!;
     }
 

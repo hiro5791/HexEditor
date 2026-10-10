@@ -602,6 +602,7 @@ public sealed partial class MainWindow
         AutomationProperties.SetName(scroll, Loc.Get("Annotations_DescriptionName"));
         var flyout = new Flyout { Content = scroll, Placement = FlyoutPlacementMode.Bottom };
         flyout.Opened += (_, _) => scroll.Focus(FocusState.Keyboard);
+        scroll.KeyDown += (_, e) => e.Handled = HandleDescriptionKey(e.Key);
         flyout.Closed += (_, _) => view.Focus(FocusState.Keyboard);
         _descriptionFlyout = flyout;
         if (view.TryGetCellRect(editor.Cursor, out Windows.Foundation.Rect rect, editor.ActiveColumn))
@@ -615,6 +616,29 @@ public sealed partial class MainWindow
     }
 
     private Flyout? _descriptionFlyout;
+
+    /// <summary>説明のフライアウトのキー: PageDown / PageUp でスクロール、Esc で閉じる (実際のキー入力とテスト用の命令の通り道から呼ぶ)。</summary>
+    internal bool HandleDescriptionKey(Windows.System.VirtualKey key)
+    {
+        if (_descriptionFlyout?.Content is not ScrollViewer scroll)
+        {
+            return false;
+        }
+
+        switch (key)
+        {
+            case Windows.System.VirtualKey.PageDown:
+            case Windows.System.VirtualKey.PageUp:
+                double page = Math.Max(16, scroll.ViewportHeight - 16);
+                scroll.ChangeView(null, Math.Clamp(scroll.VerticalOffset + (key == Windows.System.VirtualKey.PageDown ? page : -page), 0, scroll.ScrollableHeight), null, true);
+                return true;
+            case Windows.System.VirtualKey.Escape:
+                _descriptionFlyout.Hide();
+                return true;
+            default:
+                return false;
+        }
+    }
 
     // ---- 色付けルール (INSP-33、INSP-34) ----
 
@@ -635,6 +659,14 @@ public sealed partial class MainWindow
                 {
                     SelectedView()?.RefreshHighlights();
                     _legendVm?.Refresh();
+                }
+            });
+            // 出どころの登録・注釈の変更 (YARA・テンプレート・スクリプトなど) で描き直す (INSP-32)。
+            a.Layer.Changed += (_, _) => DispatcherQueue.TryEnqueue(() =>
+            {
+                if (a.Document == Vm.Selected)
+                {
+                    RefreshAnnotationViews();
                 }
             });
             a.Document.Editor.Changed += (_, _) =>
