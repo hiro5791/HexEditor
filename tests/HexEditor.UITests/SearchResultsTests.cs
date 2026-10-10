@@ -68,13 +68,13 @@ public sealed class SearchResultsTests
             Assert.Equal("AB CD", rows[k]!["hex"]!.GetValue<string>());
         }
 
-        // 3. 見えている一致が強調表示されている (検索バーを閉じても一覧の強調が残る)。
+        // 3. 見えている一致が強調表示されている (検索バーを閉じても一覧の強調が残る。一覧の一致は注釈「すべて検索の結果」として描く。INSP-32)。
         await app.UiaInvokeAsync("Find_Close");
-        Assert.True(MatchedAt(await app.RenderAsync(), 0x20));
+        await app.WaitUntilAsync(() => ResultAnnotatedAtAsync(app, 0x20), TimeSpan.FromSeconds(10), "the highlights");
 
         // 4. 一覧 (下のパネル) を閉じると強調表示が消える。
         await app.CommandAsync("Command_ToggleSearchResults");
-        await app.WaitUntilAsync(async () => !MatchedAt(await app.RenderAsync(), 0x20), TimeSpan.FromSeconds(10), "the highlights to disappear");
+        await app.WaitUntilAsync(async () => !await ResultAnnotatedAtAsync(app, 0x20), TimeSpan.FromSeconds(10), "the highlights to disappear");
         Assert.False((await ResultsAsync(app))["visible"]!.GetValue<bool>());
     });
 
@@ -478,6 +478,12 @@ public sealed class SearchResultsTests
         (await ResultsAsync(app, index, 1))["rows"]![0]!["statusKind"]!.GetValue<string>();
 
     /// <summary>描画内容で、オフセット <paramref name="offset"/> のバイトが一致として強調されているか。</summary>
+    /// <summary>すべて検索の結果の一致として、注釈の層 (INSP-32 の出どころ「すべて検索の結果」) に描いているか。</summary>
+    internal static async Task<bool> ResultAnnotatedAtAsync(AppSession app, long offset) =>
+        (await app.SendAsync("highlights"))["segments"]!.AsArray().Any(s =>
+            s!["tag"]!.GetValue<string>().StartsWith("annotation:SearchResults:", StringComparison.Ordinal)
+            && s["first"]!.GetValue<long>() <= offset && s["last"]!.GetValue<long>() >= offset);
+
     internal static bool MatchedAt(JsonObject render, long offset)
     {
         long rowStart = offset / 16 * 16;
