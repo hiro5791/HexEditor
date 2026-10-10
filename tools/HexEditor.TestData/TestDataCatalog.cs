@@ -8,13 +8,19 @@ namespace HexEditor.TestData;
 /// テストデータ 1 件の定義 (docs/test/test-data.md と各テストケースのファイルの末尾の表)。<paramref name="PathIn"/> は、
 /// ファイル名・置き場所が決まっているもの (長いパス・絵文字の名前など) の出力先のパスを返す。null なら <c>&lt;ID&gt;.bin</c>。
 /// </summary>
-public sealed record TestDataItem(string Id, long Length, string Description, Action<string> Generate, Func<string, string>? PathIn = null);
+public sealed record TestDataItem(string Id, long Length, string Description, Action<string> Generate, Func<string, string>? PathIn = null)
+{
+    /// <summary>長さを内容から求めるもの (圧縮したデータを含むなど、事前に決まらないもの)。設定すると <see cref="Length"/> より優先する。</summary>
+    public Func<long>? ComputeLength { get; init; }
+
+    public long ExpectedLength => ComputeLength?.Invoke() ?? Length;
+}
 
 /// <summary>
 /// テストデータを生成する (テスト方針 7.1)。同じ ID からは常に同じ内容を作る。生成したファイルはキャッシュし、
 /// 2 回目以降はそのまま使う。
 /// </summary>
-public static class TestDataCatalog
+public static partial class TestDataCatalog
 {
     public const long KiB = 1024;
     public const long MiB = 1024 * KiB;
@@ -86,7 +92,7 @@ public static class TestDataCatalog
         new("TD-ANA-ABC", 3, "ASCII の abc", path => WriteAll(path, Encoding.ASCII.GetBytes("abc"))),
         new("TD-ANA-SHA256SUM", Sha256SumLength, "TD-RANDOM-16M の sha256sum の出力 (TD-RANDOM-16M と同じフォルダに置く)", WriteSha256Sum,
             dir => Path.Combine(dir, "TD-RANDOM-16M.sha256")),
-    }.ToDictionary(i => i.Id);
+    }.Concat(AnalysisItems()).ToDictionary(i => i.Id);
 
     /// <summary>TD-ANA-SHA256SUM の長さ: 64 桁の Hex、空白 2 つ、TD-RANDOM-16M.bin、LF。</summary>
     private const long Sha256SumLength = 64 + 2 + 17 + 1;
@@ -193,7 +199,7 @@ public static class TestDataCatalog
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         lock (Items)
         {
-            if (File.Exists(path) && new FileInfo(path).Length == item.Length)
+            if (File.Exists(path) && new FileInfo(path).Length == item.ExpectedLength)
             {
                 return path;
             }
