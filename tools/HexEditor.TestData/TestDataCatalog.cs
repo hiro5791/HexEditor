@@ -75,6 +75,28 @@ public static class TestDataCatalog
 
         // ---- cases/02-view-and-navigation.md の表 ----
         new("TD-VIEW-PATTERNS", 512, "表示形式・文字コードの確認用の決まったバイト列", path => WriteAll(path, ViewPatterns())),
+        new("TD-VIEW-LEN10", 10, "00, 01, …, 09", path => WriteAll(path, [.. Enumerable.Range(0, 10).Select(i => (byte)i)])),
+        new("TD-VIEW-LEN100", 100, "オフセット n の値が n", path => WriteAll(path, [.. Enumerable.Range(0, 100).Select(i => (byte)i)])),
+        new("TD-VIEW-SEQ-MOD", MiB, "TD-SEQ-1M の 0x10・0x25・0x3F を FF にしたもの", path => WriteGenerated(path, MiB, (o, s) =>
+        {
+            Sequence(o, s);
+            foreach (long at in new long[] { 0x10, 0x25, 0x3F })
+            {
+                if (at >= o && at < o + s.Length)
+                {
+                    s[(int)(at - o)] = 0xFF;
+                }
+            }
+        })),
+        new("TD-VIEW-ENTROPY", 64 * MiB, "先頭 32 MiB は種 20261007 の乱数、後半 32 MiB はすべて 00", WriteViewEntropy),
+        new("TD-VIEW-TBL", ViewTable.Length, "文字表 (UTF-8、CRLF)。有効なエントリ 4、不正な行は 5〜7 行目", path => WriteAll(path, ViewTable),
+            dir => Path.Combine(dir, "TD-VIEW-TBL.tbl")),
+        new("TD-VIEW-TBL-DATA", 4, "41 42 41 43", path => WriteAll(path, [0x41, 0x42, 0x41, 0x43])),
+        new("TD-VIEW-THEME-OK", ThemeOk.Length, "独自のバイトテーマの JSON", path => WriteAll(path, ThemeOk), dir => Path.Combine(dir, "TD-VIEW-THEME-OK.json")),
+        new("TD-VIEW-THEME-BAD", ThemeBad.Length, "4 行目のキーが Hex でないバイトテーマの JSON", path => WriteAll(path, ThemeBad),
+            dir => Path.Combine(dir, "TD-VIEW-THEME-BAD.json")),
+        new("TD-VIEW-THEME-LOWCONTRAST", ThemeLow.Length, "コントラストの低い文字色を含むバイトテーマの JSON", path => WriteAll(path, ThemeLow),
+            dir => Path.Combine(dir, "TD-VIEW-THEME-LOWCONTRAST.json")),
 
         // ---- cases/09-ui-and-settings.md の表 ----
         new("TD-UI-SECRET", 4 * KiB, "secret-content.bin: HEXEDITOR-SECRET-7F3A の繰り返し",
@@ -395,6 +417,36 @@ public static class TestDataCatalog
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         return Encoding.GetEncoding(932);
+    }
+
+    /// <summary>TD-VIEW-TBL (cases/02-view-and-navigation.md の表)。</summary>
+    private static byte[] ViewTable => Encoding.UTF8.GetBytes(
+        "# test table\r\n41=A\r\n4142=あ\r\nFF=<END>\r\nXYZ\r\n4G=B\r\n123=C\r\n\r\n/00=<EOS>\r\n");
+
+    private static byte[] ThemeOk => Encoding.UTF8.GetBytes(
+        """{"name": "OK", "light": {"00": "#808080", "FF": "#C00000", "20-7E": "#0050A0", "0A": {"text": "#000000", "background": "#FFE080"}}}""");
+
+    private static byte[] ThemeBad => Encoding.UTF8.GetBytes("{\n  \"name\": \"Bad\",\n  \"light\": {\n    \"G0\": \"#808080\"\n  }\n}\n");
+
+    private static byte[] ThemeLow => Encoding.UTF8.GetBytes("""{"name": "Low", "light": {"41": "#F0F0F0", "42": "#0050A0"}}""");
+
+    /// <summary>TD-VIEW-ENTROPY: 先頭 32 MiB は種 20261007 の乱数、後半 32 MiB は 00 (スパースにしない)。</summary>
+    private static void WriteViewEntropy(string path)
+    {
+        var random = new Random(20261007);
+        byte[] block = new byte[MiB];
+        using var file = new FileStream(path, FileMode.Create, FileAccess.Write);
+        for (int i = 0; i < 32; i++)
+        {
+            random.NextBytes(block);
+            file.Write(block);
+        }
+
+        Array.Clear(block);
+        for (int i = 0; i < 32; i++)
+        {
+            file.Write(block);
+        }
     }
 
     /// <summary>TD-VIEW-PATTERNS (cases/02-view-and-navigation.md の表)。</summary>

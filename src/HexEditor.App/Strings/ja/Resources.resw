@@ -2902,8 +2902,8 @@
   <data name="Menu_View_MinimapAround.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Menu_View_MinimapExact.Text" xml:space="preserve"><value>正確に計算(X)</value></data>
   <data name="Menu_View_MinimapExact.AccessKey" xml:space="preserve"><value>X</value></data>
-  <data name="Menu_View_SplitMenu.Text" xml:space="preserve"><value>画面分割(P)</value></data>
-  <data name="Menu_View_SplitMenu.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_SplitMenu.Text" xml:space="preserve"><value>画面分割(Q)</value></data>
+  <data name="Menu_View_SplitMenu.AccessKey" xml:space="preserve"><value>Q</value></data>
   <data name="Menu_View_SplitHorizontal.Text" xml:space="preserve"><value>上下に分割(H)</value></data>
   <data name="Menu_View_SplitHorizontal.AccessKey" xml:space="preserve"><value>H</value></data>
   <data name="Menu_View_SplitVertical.Text" xml:space="preserve"><value>左右に分割(V)</value></data>

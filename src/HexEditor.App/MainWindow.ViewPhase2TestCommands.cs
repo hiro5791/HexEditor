@@ -26,6 +26,7 @@ public sealed partial class MainWindow
             "viewKey" => TestViewKey(request),
             "viewState" => ViewStateOf(TargetView(request)),
             "panes" => TestPanes(),
+            "refreshMenus" => Run(RefreshCommandUi),
             "focusPane" => Run(() => FocusPane((int)(request["pane"]?.GetValue<long>() ?? 0))),
             "minimap" => TestMinimap(request),
             "recordSettings" => TestRecordSettings(request),
