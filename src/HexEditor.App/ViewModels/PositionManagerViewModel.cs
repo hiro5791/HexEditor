@@ -194,6 +194,12 @@ public sealed partial class PositionManagerViewModel : ObservableObject
             return;
         }
 
+        if (e.VisibilityOnly)
+        {
+            // グループの表示 / 非表示は位置マネージャの並びを変えない (INSP-27)。
+            return;
+        }
+
         if (e.Kind is BookmarkChangeKind.Modified or BookmarkChangeKind.Positions && !OnlyWithComments)
         {
             Rows.UpdateRows();

@@ -19,6 +19,26 @@ public sealed class BookmarkGroupTests
     // ---- INSP-27 ----
 
     [Fact]
+    public void Visibility_change_is_announced_as_visibility_only_and_keeps_the_order()
+    {
+        (Document doc, BookmarkCollection bm) = Create();
+        using Document _ = doc;
+        bm.SetGroup(bm.Add(0x100, 1, "a"), "G");
+        IReadOnlyList<Bookmark> ordered = bm.Ordered;
+        var events = new List<BookmarksChangedEventArgs>();
+        bm.Changed += (_, e) => events.Add(e);
+        BookmarkGroup group = bm.FindGroup("G")!;
+        bm.SetGroupVisible(group, false);
+        Assert.True(events.Single().VisibilityOnly);
+        Assert.Equal(BookmarkChangeKind.Groups, events[0].Kind);
+        Assert.Same(ordered, bm.Ordered);
+
+        // 色の変更は表示 / 非表示だけの変更ではない。
+        bm.SetGroupColor(group, BookmarkColor.Palette(2));
+        Assert.False(events[1].VisibilityOnly);
+    }
+
+    [Fact]
     public void Hidden_group_is_skipped_by_f2_and_not_visible()
     {
         (Document doc, BookmarkCollection bm) = Create();
@@ -312,5 +332,104 @@ public sealed class BookmarkGroupTests
         string html = PositionNotes.ToHtml(bm.Ordered, "Notes", "{0}–{1} ({2} bytes)");
         Assert.Contains("<strong>magic</strong> bytes", html);
         Assert.Contains("<h2>magic — 0x10–0x13 (4 bytes)</h2>", html);
+    }
+
+    [Fact]
+    [Trait(TC, "TC-INSP-30-05")]
+    public void Format_errors_carry_a_kind_and_detail_for_the_app_to_localize()
+    {
+        BookmarkFormatException Fail(BookmarkFileFormat format, string text) =>
+            Assert.Throws<BookmarkFormatException>(() => BookmarkExchange.Parse(format, Encoding.UTF8.GetBytes(text)));
+
+        BookmarkFormatException start = Fail(BookmarkFileFormat.Csv, "start,length\r\nxyz,1\r\n");
+        Assert.Equal((BookmarkFormatError.InvalidStart, "xyz", 2), (start.Error, start.Detail, start.Line!.Value));
+        Assert.Equal("Invalid start offset \"xyz\"", start.Reason);
+        Assert.Equal(BookmarkFormatError.InvalidLength, Fail(BookmarkFileFormat.Csv, "start,length\r\n0x10,-1\r\n").Error);
+        Assert.Equal(BookmarkFormatError.InvalidColor, Fail(BookmarkFileFormat.Csv, "start,color\r\n0x10,red\r\n").Error);
+        Assert.Equal(BookmarkFormatError.UnterminatedQuote, Fail(BookmarkFileFormat.Csv, "start,name\r\n0x10,\"abc\r\n").Error);
+        Assert.Equal(BookmarkFormatError.MissingBookmarks, Fail(BookmarkFileFormat.Json, "{\"version\": 1}").Error);
+        BookmarkFormatException version = Fail(BookmarkFileFormat.Json, "{\"version\": 9, \"bookmarks\": []}");
+        Assert.Equal((BookmarkFormatError.UnsupportedVersion, "9"), (version.Error, version.Detail));
+        BookmarkFormatException missing = Fail(BookmarkFileFormat.Json, "{\"bookmarks\": [{\"start\": 1}, {\"length\": 2}]}");
+        Assert.Equal((BookmarkFormatError.MissingStart, "2"), (missing.Error, missing.Detail));
+        Assert.Equal(BookmarkFormatError.Syntax, Fail(BookmarkFileFormat.Json, "{,}").Error);
+        Assert.Equal(BookmarkFormatError.Syntax, Fail(BookmarkFileFormat.WxHexEditor, "<a><b></a>").Error);
+        Assert.Equal(BookmarkFormatError.InvalidTagOffsets,
+            Fail(BookmarkFileFormat.WxHexEditor, "<wxHexEditor_XML_TAG><filename><TAG id=\"0\"><start_offset>9</start_offset><end_offset>2</end_offset></TAG></filename></wxHexEditor_XML_TAG>").Error);
+    }
+
+    [Fact]
+    public void Large_import_is_prepared_off_the_collection_with_progress_and_cancel_then_committed_in_steps()
+    {
+        (Document doc, BookmarkCollection bm) = Create();
+        using Document _ = doc;
+        bm.Add(0x10, 1, "existing");
+        var items = Enumerable.Range(0, 50_000).Select(i => new BookmarkImportItem(i * 16L, 4, "b" + i, null, i % 2 == 0 ? "Even" : null, i == 7 ? 3 : i == 9 ? 42 : 0, string.Empty)).ToList();
+        var data = new BookmarkImportData(items, []);
+
+        // キャンセル: 何も加えない。
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+        Assert.Throws<OperationCanceledException>(() => BookmarkExchange.Prepare(data, BookmarkImportMode.Append, 0x100, doc.Length, bm.Count, cts.Token));
+        Assert.Equal(1, bm.Count);
+
+        var progress = new List<long>();
+        PreparedBookmarkImport prepared = BookmarkExchange.Prepare(data, BookmarkImportMode.Append, 0x100, doc.Length, bm.Count, default, progress.Add);
+        Assert.Equal(1, bm.Count);
+        Assert.Equal(data.Items.Count, progress[^1]);
+        Assert.True(progress.Count > 2);
+        Assert.Equal(1, prepared.NumbersDropped);
+
+        int notices = 0;
+        bm.Changed += (_, _) => notices++;
+        var steps = prepared.CommitInSteps(bm, 20_000).ToList();
+        Assert.Equal([20_000, 40_000, 50_000], steps);
+        Assert.Equal(1, notices);
+        Assert.Equal((50_000, 0, 0, 1), (prepared.Report!.Imported, prepared.Report.SkippedOutOfRange, prepared.Report.SkippedLimit, prepared.Report.NumbersDropped));
+        Assert.Equal(50_001, bm.Count);
+        Assert.Equal(0x100 + 7 * 16, bm.WithNumber(3)!.Start);
+        Assert.Equal("Even", bm.StartingAt(0x100)!.Group);
+    }
+
+    [Fact]
+    public void Export_from_captured_values_matches_and_can_be_cancelled()
+    {
+        (Document doc, BookmarkCollection bm) = Create();
+        using Document _ = doc;
+        AddSet(bm);
+        IReadOnlyList<BookmarkExportItem> captured = BookmarkExchange.Capture(bm, bm.Ordered);
+        IReadOnlyList<BookmarkGroupRecord> groups = BookmarkExchange.GroupsOf(bm, bm.Ordered);
+        foreach (BookmarkFileFormat format in new[] { BookmarkFileFormat.Json, BookmarkFileFormat.Csv, BookmarkFileFormat.WxHexEditor })
+        {
+            Assert.Equal(BookmarkExchange.Export(format, bm, bm.Ordered, fileName: "seq.bin"), BookmarkExchange.Export(format, captured, groups, "seq.bin"));
+        }
+
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+        Assert.Throws<OperationCanceledException>(() => BookmarkExchange.Export(BookmarkFileFormat.Csv, captured, groups, null, cts.Token));
+    }
+
+    [Fact]
+    [Trait(TC, "TC-INSP-28-01")]
+    public void Selection_to_bookmarks_is_prepared_then_committed_in_steps()
+    {
+        (Document doc, BookmarkCollection bm) = Create();
+        using Document _ = doc;
+        SelectedRange[] ranges = [.. Enumerable.Range(0, 5).Select(i => new SelectedRange(i * 0x100L, 4))];
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+        Assert.Throws<OperationCanceledException>(() => BookmarkConversions.PrepareFromRanges(ranges, n => "s" + n, "G", null, cts.Token));
+        Assert.Equal(0, bm.Count);
+
+        PreparedSelectionBookmarks prepared = BookmarkConversions.PrepareFromRanges(ranges, n => "Selection " + n, "Selection group");
+        Assert.Equal([2, 4, 5], prepared.CommitInSteps(bm, 2).ToList());
+        Assert.Equal(5, prepared.Result!.Added.Count);
+        Assert.Equal("Selection group", prepared.Result.Group!.Path);
+        Assert.Equal(["Selection 1", "Selection 5"], new[] { bm.Ordered[0].Name, bm.Ordered[4].Name });
+
+        // 範囲 (写したもの) から選択範囲へ: 開始位置の順、長さ 0 を除く。
+        BookmarkSelectionResult back = BookmarkConversions.ToRanges([new SelectedRange(0x300, 4), new SelectedRange(0x100, 0), new SelectedRange(0x10, 2)], doc.Length);
+        Assert.Equal([new SelectedRange(0x10, 2), new SelectedRange(0x300, 4)], back.Ranges);
+        Assert.Equal(1, back.Excluded);
     }
 }

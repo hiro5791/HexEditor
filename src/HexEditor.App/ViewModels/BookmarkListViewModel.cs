@@ -237,6 +237,15 @@ public sealed class BookmarkRowList : IList, IReadOnlyList<object>, INotifyColle
         }
     }
 
+    /// <summary>作ったグループの行の表示 (目のアイコン・状態の文字・薄く表示) を更新する。</summary>
+    public void UpdateGroupRows()
+    {
+        foreach (BookmarkGroupRowViewModel row in _groupRows.Values)
+        {
+            row.Update();
+        }
+    }
+
     public int IndexOf(Bookmark b) => Array.IndexOf(_entries, b);
 
     public int IndexOf(BookmarkGroup g) => Array.FindIndex(_entries, e => e is BookmarkGroupEntry entry && entry.Group == g);
@@ -402,6 +411,14 @@ public sealed partial class BookmarkListViewModel : ObservableObject
         if (e.Kind == BookmarkChangeKind.Modified && SortColumn == BookmarkSortColumn.Start && Filter.Length == 0 && !AllDocuments)
         {
             Rows.UpdateRows(e.Items);
+            return;
+        }
+
+        if (e.VisibilityOnly)
+        {
+            // グループの表示 / 非表示 (INSP-27 の仕様 3): 並びは変わらないので作り直さず、作った行の表示だけを直す (100 万件でも 200 ms 以内)。
+            Rows.UpdateRows();
+            Rows.UpdateGroupRows();
             return;
         }
 

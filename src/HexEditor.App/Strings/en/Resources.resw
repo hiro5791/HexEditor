@@ -3512,6 +3512,18 @@ Details were written to:
   <data name="Bookmarks_ImportError" xml:space="preserve"><value>Couldn't import {0}{1}: {2}</value></data>
   <data name="Bookmarks_ImportErrorAt" xml:space="preserve"><value> (line {0}, position {1})</value></data>
   <data name="Bookmarks_ImportErrorLine" xml:space="preserve"><value> (line {0})</value></data>
+  <data name="Bookmarks_OperationConvert" xml:space="preserve"><value>Converting bookmarks</value></data>
+  <data name="Bookmarks_OperationImport" xml:space="preserve"><value>Importing bookmarks</value></data>
+  <data name="Bookmarks_OperationExport" xml:space="preserve"><value>Exporting bookmarks</value></data>
+  <data name="Bookmarks_FormatError_Syntax" xml:space="preserve"><value>The file's syntax isn't valid</value></data>
+  <data name="Bookmarks_FormatError_MissingBookmarks" xml:space="preserve"><value>The "bookmarks" list is missing</value></data>
+  <data name="Bookmarks_FormatError_UnsupportedVersion" xml:space="preserve"><value>Unsupported format version {0}</value></data>
+  <data name="Bookmarks_FormatError_MissingStart" xml:space="preserve"><value>Bookmark {0} has no "start"</value></data>
+  <data name="Bookmarks_FormatError_InvalidStart" xml:space="preserve"><value>Invalid start offset "{0}"</value></data>
+  <data name="Bookmarks_FormatError_InvalidLength" xml:space="preserve"><value>Invalid length "{0}"</value></data>
+  <data name="Bookmarks_FormatError_InvalidColor" xml:space="preserve"><value>Invalid color "{0}"</value></data>
+  <data name="Bookmarks_FormatError_UnterminatedQuote" xml:space="preserve"><value>A quoted value isn't closed</value></data>
+  <data name="Bookmarks_FormatError_InvalidTagOffsets" xml:space="preserve"><value>Invalid start_offset or end_offset</value></data>
   <data name="Bookmarks_Imported" xml:space="preserve"><value>Imported {0, plural, one {# bookmark} other {# bookmarks}}. Skipped {1}.</value></data>
   <data name="Bookmarks_ImportedNumbers" xml:space="preserve"><value>Numbers moved from existing bookmarks: {0}. Numbers removed: {1}.</value></data>
   <data name="Bookmarks_SelectionGroup" xml:space="preserve"><value>Selections {0}</value></data>

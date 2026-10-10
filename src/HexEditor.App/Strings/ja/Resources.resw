@@ -3512,6 +3512,18 @@
   <data name="Bookmarks_ImportError" xml:space="preserve"><value>{0} を読み込めませんでした{1}: {2}</value></data>
   <data name="Bookmarks_ImportErrorAt" xml:space="preserve"><value> ({0} 行目、{1} 文字目)</value></data>
   <data name="Bookmarks_ImportErrorLine" xml:space="preserve"><value> ({0} 行目)</value></data>
+  <data name="Bookmarks_OperationConvert" xml:space="preserve"><value>ブックマークの変換</value></data>
+  <data name="Bookmarks_OperationImport" xml:space="preserve"><value>ブックマークのインポート</value></data>
+  <data name="Bookmarks_OperationExport" xml:space="preserve"><value>ブックマークのエクスポート</value></data>
+  <data name="Bookmarks_FormatError_Syntax" xml:space="preserve"><value>ファイルの構文が正しくありません</value></data>
+  <data name="Bookmarks_FormatError_MissingBookmarks" xml:space="preserve"><value>"bookmarks" の一覧がありません</value></data>
+  <data name="Bookmarks_FormatError_UnsupportedVersion" xml:space="preserve"><value>対応していない形式の版です ({0})</value></data>
+  <data name="Bookmarks_FormatError_MissingStart" xml:space="preserve"><value>{0} 件目のブックマークに "start" がありません</value></data>
+  <data name="Bookmarks_FormatError_InvalidStart" xml:space="preserve"><value>開始オフセット "{0}" が正しくありません</value></data>
+  <data name="Bookmarks_FormatError_InvalidLength" xml:space="preserve"><value>長さ "{0}" が正しくありません</value></data>
+  <data name="Bookmarks_FormatError_InvalidColor" xml:space="preserve"><value>色 "{0}" が正しくありません</value></data>
+  <data name="Bookmarks_FormatError_UnterminatedQuote" xml:space="preserve"><value>引用符で囲んだ値が閉じていません</value></data>
+  <data name="Bookmarks_FormatError_InvalidTagOffsets" xml:space="preserve"><value>start_offset または end_offset が正しくありません</value></data>
   <data name="Bookmarks_Imported" xml:space="preserve"><value>{0} 件のブックマークを読み込みました。{1} 件を飛ばしました。</value></data>
   <data name="Bookmarks_ImportedNumbers" xml:space="preserve"><value>既存のブックマークから移した番号: {0}。外した番号: {1} 件。</value></data>
   <data name="Bookmarks_SelectionGroup" xml:space="preserve"><value>選択範囲 {0}</value></data>

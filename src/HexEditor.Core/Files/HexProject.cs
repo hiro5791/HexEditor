@@ -77,7 +77,7 @@ public sealed record HexProject(string? FilePath, BookmarkImportData Bookmarks, 
         }
         catch (JsonException ex)
         {
-            throw new BookmarkFormatException(ex.Message, ex.LineNumber is { } line ? (int)line + 1 : null,
+            throw new BookmarkFormatException(BookmarkFormatError.Syntax, ex.Message, ex.LineNumber is { } line ? (int)line + 1 : null,
                 ex.BytePositionInLine is { } pos ? (int)pos + 1 : null);
         }
     }

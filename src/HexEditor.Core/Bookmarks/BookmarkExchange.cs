@@ -41,17 +41,73 @@ public sealed record BookmarkImportItem(long Start, long Length, string Name, Bo
 /// <summary>読み込んだ内容。</summary>
 public sealed record BookmarkImportData(IReadOnlyList<BookmarkImportItem> Items, IReadOnlyList<BookmarkGroupRecord> Groups);
 
+/// <summary>形式の誤りの種類 (アプリが表示言語の文に直す。リソース <c>Bookmarks_FormatError_&lt;種類&gt;</c>)。</summary>
+public enum BookmarkFormatError
+{
+    /// <summary>JSON・XML の構文の誤り。</summary>
+    Syntax,
+
+    /// <summary>JSON に <c>"bookmarks"</c> の配列がない。</summary>
+    MissingBookmarks,
+
+    /// <summary>対応していない形式の版 (<see cref="BookmarkFormatException.Detail"/> は版)。</summary>
+    UnsupportedVersion,
+
+    /// <summary>ブックマークに <c>"start"</c> がない (<see cref="BookmarkFormatException.Detail"/> は何件目か)。</summary>
+    MissingStart,
+
+    /// <summary>開始オフセットが不正 (<see cref="BookmarkFormatException.Detail"/> は値)。</summary>
+    InvalidStart,
+
+    /// <summary>長さが不正 (<see cref="BookmarkFormatException.Detail"/> は値)。</summary>
+    InvalidLength,
+
+    /// <summary>色が不正 (<see cref="BookmarkFormatException.Detail"/> は値)。</summary>
+    InvalidColor,
+
+    /// <summary>CSV の引用符で囲んだ値が閉じていない。</summary>
+    UnterminatedQuote,
+
+    /// <summary>wxHexEditor のタグの <c>start_offset</c> / <c>end_offset</c> が不正。</summary>
+    InvalidTagOffsets,
+}
+
 /// <summary>
 /// 形式が不正なファイル (INSP-30 の「エラー」)。<see cref="Line"/> は行番号 (1 から)、<see cref="Position"/> は行の中の位置 (1 から)。
+/// 理由は <see cref="Error"/> と <see cref="Detail"/> で表し、表示の文はアプリが作る (Core は UI の文字列を持たない)。
+/// <see cref="Reason"/> は英語の説明 (ログ用)。
 /// </summary>
-public sealed class BookmarkFormatException(string reason, int? line, int? position) : FormatException(reason)
+public sealed class BookmarkFormatException(BookmarkFormatError error, string detail, int? line, int? position)
+    : FormatException(Describe(error, detail))
 {
-    public string Reason { get; } = reason;
+    public BookmarkFormatError Error { get; } = error;
+
+    /// <summary>理由に入れる値 (不正な値、版、何件目か)。なければ空。</summary>
+    public string Detail { get; } = detail;
+
+    public string Reason => Message;
 
     public int? Line { get; } = line;
 
     public int? Position { get; } = position;
+
+    private static string Describe(BookmarkFormatError error, string detail) => error switch
+    {
+        BookmarkFormatError.MissingBookmarks => "\"bookmarks\" array is missing",
+        BookmarkFormatError.UnsupportedVersion => $"Unsupported version {detail}",
+        BookmarkFormatError.MissingStart => $"Bookmark {detail}: \"start\" is missing",
+        BookmarkFormatError.InvalidStart => $"Invalid start offset \"{detail}\"",
+        BookmarkFormatError.InvalidLength => $"Invalid length \"{detail}\"",
+        BookmarkFormatError.InvalidColor => $"Invalid color \"{detail}\"",
+        BookmarkFormatError.UnterminatedQuote => "Unterminated quoted value",
+        BookmarkFormatError.InvalidTagOffsets => "Invalid start_offset or end_offset",
+        _ => detail.Length > 0 ? detail : "Syntax error",
+    };
 }
+
+/// <summary>書き出す 1 件の値 (<see cref="BookmarkExchange.Capture"/> で写したもの。<see cref="EffectiveColor"/> はグループの色を含めた表示の色)。</summary>
+public sealed record BookmarkExportItem(long Start, long Length, string Name, BookmarkColor Color, BookmarkColor EffectiveColor, bool ColorSet, string? Group,
+    int Number, string Comment);
 
 /// <summary>インポートの結果 (InfoBar に出す件数。INSP-30 の仕様 3・4)。</summary>
 public sealed record BookmarkImportReport(int Imported, int SkippedOutOfRange, int SkippedLimit, IReadOnlyList<int> NumbersMoved, int NumbersDropped);
@@ -91,15 +147,52 @@ public static class BookmarkExchange
 
     /// <summary>書き出すファイルの中身 (CSV は BOM 付き UTF-8、ほかは BOM なしの UTF-8)。</summary>
     public static byte[] Export(BookmarkFileFormat format, BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items,
-        IReadOnlyList<BookmarkGroupRecord>? groups = null, string? fileName = null)
+        IReadOnlyList<BookmarkGroupRecord>? groups = null, string? fileName = null) =>
+        Export(format, Capture(bookmarks, items), groups ?? GroupsOf(bookmarks, items), fileName);
+
+    /// <summary>
+    /// 書き出す値を写す (UI スレッドで。件数に比例するが 1 件あたりは軽い)。写したものは別のスレッドで <see cref="Export(BookmarkFileFormat, IReadOnlyList{BookmarkExportItem}, IReadOnlyList{BookmarkGroupRecord}, string?, CancellationToken, Action{long}?)"/>
+    /// に渡せる (10 万件を超える書き出しは長時間処理。INSP-30 の「巨大ファイル・長時間処理」)。
+    /// </summary>
+    public static IReadOnlyList<BookmarkExportItem> Capture(BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items)
     {
-        groups ??= GroupsOf(bookmarks, items);
+        var result = new BookmarkExportItem[items.Count];
+        for (int i = 0; i < items.Count; i++)
+        {
+            Bookmark b = items[i];
+            result[i] = new BookmarkExportItem(b.Start, b.Length, b.Name, b.Color, bookmarks.EffectiveColor(b), b.ColorSet, b.Group, b.Number, b.Comment);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 写した値からファイルの中身を作る (ブックマークに触れないので別のスレッドで行える)。<paramref name="progress"/> には書いた件数を渡す。
+    /// キャンセルは 4,096 件ごとに確かめる。
+    /// </summary>
+    public static byte[] Export(BookmarkFileFormat format, IReadOnlyList<BookmarkExportItem> items, IReadOnlyList<BookmarkGroupRecord> groups,
+        string? fileName, CancellationToken cancellationToken = default, Action<long>? progress = null)
+    {
+        var step = new ExportStep(cancellationToken, progress);
         return format switch
         {
-            BookmarkFileFormat.Csv => [.. Encoding.UTF8.GetPreamble(), .. Encoding.UTF8.GetBytes(ExportCsv(bookmarks, items))],
-            BookmarkFileFormat.WxHexEditor => new UTF8Encoding(false).GetBytes(ExportWx(bookmarks, items, fileName)),
-            _ => new UTF8Encoding(false).GetBytes(ExportJson(bookmarks, items, groups)),
+            BookmarkFileFormat.Csv => [.. Encoding.UTF8.GetPreamble(), .. Encoding.UTF8.GetBytes(ExportCsv(items, step))],
+            BookmarkFileFormat.WxHexEditor => new UTF8Encoding(false).GetBytes(ExportWx(items, fileName, step)),
+            _ => new UTF8Encoding(false).GetBytes(ExportJson(items, groups, step)),
         };
+    }
+
+    /// <summary>書き出しの進捗とキャンセルの確認。</summary>
+    private readonly struct ExportStep(CancellationToken cancellationToken, Action<long>? progress)
+    {
+        public void At(int index)
+        {
+            if ((index & 4095) == 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                progress?.Invoke(index);
+            }
+        }
     }
 
     /// <summary>書き出すブックマークが使うグループ (祖先を含む)。</summary>
@@ -117,13 +210,16 @@ public static class BookmarkExchange
         return [.. bookmarks.GroupRecords().Where(r => paths.Contains(r.Path))];
     }
 
-    public static string ExportJson(BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items, IReadOnlyList<BookmarkGroupRecord> groups)
+    public static string ExportJson(BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items, IReadOnlyList<BookmarkGroupRecord> groups) =>
+        ExportJson(Capture(bookmarks, items), groups, default);
+
+    private static string ExportJson(IReadOnlyList<BookmarkExportItem> items, IReadOnlyList<BookmarkGroupRecord> groups, ExportStep step)
     {
         using var stream = new MemoryStream();
         using (var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping }))
         {
             writer.WriteStartObject();
-            WriteJsonBody(writer, bookmarks, items, groups);
+            WriteJsonBody(writer, items, groups, step);
             writer.WriteEndObject();
         }
 
@@ -131,14 +227,19 @@ public static class BookmarkExchange
     }
 
     /// <summary>JSON の中身 (先頭に形式の版)。プロジェクトファイルの中にも同じ形で書く。</summary>
-    internal static void WriteJsonBody(Utf8JsonWriter writer, BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items, IReadOnlyList<BookmarkGroupRecord> groups)
+    internal static void WriteJsonBody(Utf8JsonWriter writer, BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items, IReadOnlyList<BookmarkGroupRecord> groups) =>
+        WriteJsonBody(writer, Capture(bookmarks, items), groups, default);
+
+    private static void WriteJsonBody(Utf8JsonWriter writer, IReadOnlyList<BookmarkExportItem> items, IReadOnlyList<BookmarkGroupRecord> groups, ExportStep step)
     {
         writer.WriteNumber("version", Version);
         writer.WriteString("format", JsonKind);
         BookmarkStore.WriteGroups(writer, groups);
         writer.WriteStartArray("bookmarks");
-        foreach (Bookmark b in items)
+        for (int i = 0; i < items.Count; i++)
         {
+            step.At(i);
+            BookmarkExportItem b = items[i];
             writer.WriteStartObject();
             writer.WriteNumber("start", b.Start);
             writer.WriteNumber("length", b.Length);
@@ -169,15 +270,19 @@ public static class BookmarkExchange
         writer.WriteEndArray();
     }
 
-    public static string ExportCsv(BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items)
+    public static string ExportCsv(BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items) => ExportCsv(Capture(bookmarks, items), default);
+
+    private static string ExportCsv(IReadOnlyList<BookmarkExportItem> items, ExportStep step)
     {
         var text = new StringBuilder("start,length,name,color,group,comment\r\n");
-        foreach (Bookmark b in items)
+        for (int i = 0; i < items.Count; i++)
         {
+            step.At(i);
+            BookmarkExportItem b = items[i];
             text.Append("0x").Append(b.Start.ToString("X", CultureInfo.InvariantCulture)).Append(',')
                 .Append(b.Length.ToString(CultureInfo.InvariantCulture)).Append(',')
                 .Append(CsvField(b.Name)).Append(',')
-                .Append(bookmarks.EffectiveColor(b).HexText).Append(',')
+                .Append(b.EffectiveColor.HexText).Append(',')
                 .Append(CsvField(b.Group ?? string.Empty)).Append(',')
                 .Append(CsvField(b.Comment)).Append("\r\n");
         }
@@ -188,19 +293,22 @@ public static class BookmarkExchange
     private static string CsvField(string value) =>
         value.IndexOfAny([',', '"', '\r', '\n']) >= 0 ? "\"" + value.Replace("\"", "\"\"", StringComparison.Ordinal) + "\"" : value;
 
-    public static string ExportWx(BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items, string? fileName)
+    public static string ExportWx(BookmarkCollection bookmarks, IReadOnlyList<Bookmark> items, string? fileName) =>
+        ExportWx(Capture(bookmarks, items), fileName, default);
+
+    private static string ExportWx(IReadOnlyList<BookmarkExportItem> items, string? fileName, ExportStep step)
     {
         var file = new XElement("filename", new XAttribute("path", fileName ?? string.Empty));
-        int id = 0;
-        foreach (Bookmark b in items)
+        for (int id = 0; id < items.Count; id++)
         {
-            BookmarkColor color = bookmarks.EffectiveColor(b);
-            file.Add(new XElement("TAG", new XAttribute("id", id++),
+            step.At(id);
+            BookmarkExportItem b = items[id];
+            file.Add(new XElement("TAG", new XAttribute("id", id),
                 new XElement("start_offset", b.Start.ToString(CultureInfo.InvariantCulture)),
                 new XElement("end_offset", (b.Start + Math.Max(1, b.Length) - 1).ToString(CultureInfo.InvariantCulture)),
                 new XElement("tag_text", b.Comment.Length > 0 ? b.Name + "\n" + b.Comment : b.Name),
                 new XElement("font_colour", "#000000"),
-                new XElement("note_colour", color.HexText)));
+                new XElement("note_colour", b.EffectiveColor.HexText)));
         }
 
         var doc = new XDocument(new XDeclaration("1.0", "UTF-8", null), new XElement("wxHexEditor_XML_TAG", file));
@@ -250,7 +358,7 @@ public static class BookmarkExchange
         }
         catch (JsonException ex)
         {
-            throw new BookmarkFormatException(ex.Message, ex.LineNumber is { } line ? (int)line + 1 : null,
+            throw new BookmarkFormatException(BookmarkFormatError.Syntax, ex.Message, ex.LineNumber is { } line ? (int)line + 1 : null,
                 ex.BytePositionInLine is { } pos ? (int)pos + 1 : null);
         }
     }
@@ -259,12 +367,12 @@ public static class BookmarkExchange
     {
         if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("bookmarks", out JsonElement list) || list.ValueKind != JsonValueKind.Array)
         {
-            throw new BookmarkFormatException("\"bookmarks\" array is missing", null, null);
+            throw new BookmarkFormatException(BookmarkFormatError.MissingBookmarks, string.Empty, null, null);
         }
 
         if (root.TryGetProperty("version", out JsonElement version) && (version.ValueKind != JsonValueKind.Number || version.GetInt32() > Version))
         {
-            throw new BookmarkFormatException($"Unsupported version {version}", null, null);
+            throw new BookmarkFormatException(BookmarkFormatError.UnsupportedVersion, version.ToString(), null, null);
         }
 
         var items = new List<BookmarkImportItem>();
@@ -274,7 +382,7 @@ public static class BookmarkExchange
             index++;
             if (e.ValueKind != JsonValueKind.Object || !e.TryGetProperty("start", out JsonElement start) || start.ValueKind != JsonValueKind.Number)
             {
-                throw new BookmarkFormatException($"Bookmark {index}: \"start\" is missing", null, null);
+                throw new BookmarkFormatException(BookmarkFormatError.MissingStart, index.ToString(CultureInfo.InvariantCulture), null, null);
             }
 
             long length = e.TryGetProperty("length", out JsonElement l) && l.ValueKind == JsonValueKind.Number ? l.GetInt64() : 1;
@@ -322,21 +430,21 @@ public static class BookmarkExchange
             string Field(string name) => Col(name) is int i and >= 0 && i < fields.Count ? fields[i] : string.Empty;
             if (!TryParseNumber(Field("start"), out long start) || start < 0)
             {
-                throw new BookmarkFormatException($"Invalid start offset \"{Field("start")}\"", line, Col("start") + 1);
+                throw new BookmarkFormatException(BookmarkFormatError.InvalidStart, Field("start"), line, Col("start") + 1);
             }
 
             string lengthText = Field("length");
             long length = 1;
             if (lengthText.Length > 0 && (!TryParseNumber(lengthText, out length) || length < 0))
             {
-                throw new BookmarkFormatException($"Invalid length \"{lengthText}\"", line, Col("length") + 1);
+                throw new BookmarkFormatException(BookmarkFormatError.InvalidLength, lengthText, line, Col("length") + 1);
             }
 
             string colorText = Field("color").Trim();
             BookmarkColor? color = null;
             if (colorText.Length > 0 && (color = BookmarkColor.ParseHex(colorText)) is null)
             {
-                throw new BookmarkFormatException($"Invalid color \"{colorText}\"", line, Col("color") + 1);
+                throw new BookmarkFormatException(BookmarkFormatError.InvalidColor, colorText, line, Col("color") + 1);
             }
 
             string group = Field("group").Trim();
@@ -430,7 +538,7 @@ public static class BookmarkExchange
 
         if (quoted)
         {
-            throw new BookmarkFormatException("Unterminated quoted value", rowLine, null);
+            throw new BookmarkFormatException(BookmarkFormatError.UnterminatedQuote, string.Empty, rowLine, null);
         }
 
         if (field.Length > 0 || fields.Count > 0)
@@ -451,7 +559,7 @@ public static class BookmarkExchange
         }
         catch (XmlException ex)
         {
-            throw new BookmarkFormatException(ex.Message, ex.LineNumber, ex.LinePosition);
+            throw new BookmarkFormatException(BookmarkFormatError.Syntax, ex.Message, ex.LineNumber, ex.LinePosition);
         }
 
         var items = new List<BookmarkImportItem>();
@@ -461,7 +569,7 @@ public static class BookmarkExchange
             if (!long.TryParse(tag.Element("start_offset")?.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long start)
                 || !long.TryParse(tag.Element("end_offset")?.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long end) || end < start)
             {
-                throw new BookmarkFormatException("Invalid start_offset or end_offset", info.LineNumber, info.LinePosition);
+                throw new BookmarkFormatException(BookmarkFormatError.InvalidTagOffsets, string.Empty, info.LineNumber, info.LinePosition);
             }
 
             string tagText = tag.Element("tag_text")?.Value ?? string.Empty;
@@ -489,7 +597,7 @@ public static class BookmarkExchange
         }
         catch (JsonException ex)
         {
-            throw new BookmarkFormatException(ex.Message, ex.LineNumber is { } line ? (int)line + 1 : null,
+            throw new BookmarkFormatException(BookmarkFormatError.Syntax, ex.Message, ex.LineNumber is { } line ? (int)line + 1 : null,
                 ex.BytePositionInLine is { } pos ? (int)pos + 1 : null);
         }
     }
@@ -500,25 +608,30 @@ public static class BookmarkExchange
     /// 読み込んだブックマークを加える (INSP-30 の仕様 2〜4)。<paramref name="shift"/> はオフセットのずれ。ドキュメントの範囲外になるものは
     /// 読み込まない。番号が衝突したらインポートする方を優先し、既存のものから外す。1〜9 以外の番号は外す。
     /// </summary>
-    public static BookmarkImportReport Apply(BookmarkCollection bookmarks, BookmarkImportData data, BookmarkImportMode mode, long shift, long documentLength)
+    public static BookmarkImportReport Apply(BookmarkCollection bookmarks, BookmarkImportData data, BookmarkImportMode mode, long shift, long documentLength) =>
+        Prepare(data, mode, shift, documentLength, mode == BookmarkImportMode.Replace ? 0 : bookmarks.Count).Commit(bookmarks);
+
+    /// <summary>
+    /// 加える準備 (ブックマークに触れないので別のスレッドで行える。10 万件を超える読み込みは長時間処理。INSP-30 の「巨大ファイル・長時間処理」):
+    /// ずれを足し、範囲外・上限を超える分を除き、グループ・コメント・番号を整える。<paramref name="existingCount"/> は今の件数 (置き換えなら 0)。
+    /// <paramref name="progress"/> には処理した件数を渡す。キャンセルは 4,096 件ごとに確かめる。
+    /// </summary>
+    public static PreparedBookmarkImport Prepare(BookmarkImportData data, BookmarkImportMode mode, long shift, long documentLength, int existingCount,
+        CancellationToken cancellationToken = default, Action<long>? progress = null)
     {
-        if (mode == BookmarkImportMode.Replace)
-        {
-            bookmarks.Clear();
-        }
-
-        foreach (BookmarkGroupRecord g in data.Groups)
-        {
-            bookmarks.RestoreGroup(g);
-        }
-
         int outOfRange = 0;
         int limit = 0;
         int dropped = 0;
-        var moved = new List<int>();
-        var added = new List<Bookmark>();
-        foreach (BookmarkImportItem item in data.Items)
+        var kept = new List<BookmarkImportItem>(Math.Min(data.Items.Count, BookmarkCollection.MaxCount));
+        for (int i = 0; i < data.Items.Count; i++)
         {
+            if ((i & 4095) == 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                progress?.Invoke(i);
+            }
+
+            BookmarkImportItem item = data.Items[i];
             long start = item.Start + shift;
             if (start < 0 || start > documentLength || start + item.Length > documentLength)
             {
@@ -526,7 +639,7 @@ public static class BookmarkExchange
                 continue;
             }
 
-            if (bookmarks.Count >= BookmarkCollection.MaxCount)
+            if (existingCount + kept.Count >= BookmarkCollection.MaxCount)
             {
                 limit++;
                 continue;
@@ -538,10 +651,107 @@ public static class BookmarkExchange
                 group = string.Join(BookmarkGroups.Separator, group.Split(BookmarkGroups.Separator).Take(BookmarkGroups.MaxDepth));
             }
 
-            Bookmark b = bookmarks.AddQuiet(start, item.Length, item.Name, item.Color ?? BookmarkColor.Default, group, colorSet: item.Color is not null);
+            int number = item.Number;
+            if (number is not (0 or (>= 1 and <= 9)))
+            {
+                dropped++;
+                number = 0;
+            }
+
+            kept.Add(item with
+            {
+                Start = start,
+                Group = group,
+                Number = number,
+                Comment = item.Comment.Length <= BookmarkCollection.MaxCommentLength ? item.Comment : item.Comment[..BookmarkCollection.MaxCommentLength],
+            });
+        }
+
+        progress?.Invoke(data.Items.Count);
+        return new PreparedBookmarkImport(mode, data.Groups, kept, outOfRange, limit, dropped);
+    }
+}
+
+/// <summary>
+/// 加える準備のできたインポート (<see cref="BookmarkExchange.Prepare"/>)。<see cref="CommitInSteps"/> は UI スレッドで少しずつ加える
+/// (10 万件を超えても一度に長く止めない)。加え始めたら最後まで進めること (途中でやめると一部だけが加わる)。
+/// </summary>
+public sealed class PreparedBookmarkImport
+{
+    internal PreparedBookmarkImport(BookmarkImportMode mode, IReadOnlyList<BookmarkGroupRecord> groups, IReadOnlyList<BookmarkImportItem> items,
+        int skippedOutOfRange, int skippedLimit, int numbersDropped)
+    {
+        Mode = mode;
+        Groups = groups;
+        Items = items;
+        SkippedOutOfRange = skippedOutOfRange;
+        SkippedLimit = skippedLimit;
+        NumbersDropped = numbersDropped;
+    }
+
+    public BookmarkImportMode Mode { get; }
+
+    public IReadOnlyList<BookmarkGroupRecord> Groups { get; }
+
+    /// <summary>加えるもの (位置はずれを足したもの)。</summary>
+    public IReadOnlyList<BookmarkImportItem> Items { get; }
+
+    public int SkippedOutOfRange { get; }
+
+    public int SkippedLimit { get; }
+
+    public int NumbersDropped { get; }
+
+    /// <summary>加え終えた結果 (<see cref="CommitInSteps"/> を最後まで進めたら決まる)。</summary>
+    public BookmarkImportReport? Report { get; private set; }
+
+    /// <summary>まとめて加える。</summary>
+    public BookmarkImportReport Commit(BookmarkCollection bookmarks)
+    {
+        foreach (int _ in CommitInSteps(bookmarks, int.MaxValue))
+        {
+        }
+
+        return Report!;
+    }
+
+    /// <summary>
+    /// <paramref name="chunk"/> 件ずつ加え、そのたびに加えた件数を返す。通知 (一覧の作り直しなど) は最後に 1 回だけ出す。
+    /// </summary>
+    public IEnumerable<int> CommitInSteps(BookmarkCollection bookmarks, int chunk)
+    {
+        if (Mode == BookmarkImportMode.Replace)
+        {
+            bookmarks.Clear();
+        }
+
+        foreach (BookmarkGroupRecord g in Groups)
+        {
+            bookmarks.RestoreGroup(g);
+        }
+
+        int limit = SkippedLimit;
+        var moved = new List<int>();
+        var added = new List<Bookmark>(Items.Count);
+        for (int i = 0; i < Items.Count; i++)
+        {
+            if (i > 0 && i % Math.Max(1, chunk) == 0)
+            {
+                yield return i;
+            }
+
+            BookmarkImportItem item = Items[i];
+            if (bookmarks.Count >= BookmarkCollection.MaxCount)
+            {
+                // 準備の後に別の操作で増えた分。
+                limit++;
+                continue;
+            }
+
+            Bookmark b = bookmarks.AddQuiet(item.Start, item.Length, item.Name, item.Color ?? BookmarkColor.Default, item.Group, colorSet: item.Color is not null);
             if (item.Comment.Length > 0)
             {
-                b.Comment = item.Comment.Length <= BookmarkCollection.MaxCommentLength ? item.Comment : item.Comment[..BookmarkCollection.MaxCommentLength];
+                b.Comment = item.Comment;
                 b.IsCustomized = true;
             }
 
@@ -554,15 +764,11 @@ public static class BookmarkExchange
 
                 bookmarks.SetNumberQuiet(b, item.Number);
             }
-            else if (item.Number != 0)
-            {
-                dropped++;
-            }
 
             added.Add(b);
         }
 
-        if (mode == BookmarkImportMode.Replace)
+        if (Mode == BookmarkImportMode.Replace)
         {
             bookmarks.RaiseReset();
         }
@@ -571,6 +777,7 @@ public static class BookmarkExchange
             bookmarks.RaiseAdded(added);
         }
 
-        return new BookmarkImportReport(added.Count, outOfRange, limit, moved, dropped);
+        Report = new BookmarkImportReport(added.Count, SkippedOutOfRange, limit, moved, NumbersDropped);
+        yield return Items.Count;
     }
 }

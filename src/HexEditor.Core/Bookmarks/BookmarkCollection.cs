@@ -27,6 +27,12 @@ public sealed class BookmarksChangedEventArgs(BookmarkChangeKind kind, IReadOnly
     public BookmarkChangeKind Kind { get; } = kind;
 
     public IReadOnlyList<Bookmark> Items { get; } = items;
+
+    /// <summary>
+    /// グループの表示 / 非表示だけが変わった (<see cref="BookmarkChangeKind.Groups"/>。INSP-27 の仕様 3)。並び・件数は変わらないので、
+    /// 一覧は作り直さずに行の表示 (薄く表示) だけを直せばよい (100 万件でも 200 ms 以内に反映する)。
+    /// </summary>
+    public bool VisibilityOnly { get; init; }
 }
 
 /// <summary>ブックマーク 1 件の位置の記録 (保存・Undo・削除の取り消しに使う)。</summary>
@@ -828,6 +834,10 @@ public sealed partial class BookmarkCollection
         _ordered = null;
         Changed?.Invoke(this, new BookmarksChangedEventArgs(kind, items));
     }
+
+    /// <summary>グループの表示 / 非表示の変更を知らせる (並びは変わらないので、並べた配列は捨てない)。</summary>
+    private void RaiseVisibilityChanged() =>
+        Changed?.Invoke(this, new BookmarksChangedEventArgs(BookmarkChangeKind.Groups, []) { VisibilityOnly = true });
 
     private Bookmark[]? _ordered;
 
