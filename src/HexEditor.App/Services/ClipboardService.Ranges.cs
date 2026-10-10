@@ -23,16 +23,36 @@ public sealed partial class ClipboardService
     public byte[]? LastCopiedRanges { get; private set; }
 
     /// <summary>
-    /// マルチ選択・矩形をコピーする。上限 (既定 64 MiB) を超える場合はアプリ内でだけ貼れる参照を作れないため、何も入れずに
-    /// <see cref="ClipboardPlan.InAppOnly"/> を返す (呼び出し側は大きすぎる旨を知らせる)。
+    /// マルチ選択・矩形をコピーする。上限 (既定 64 MiB) を超える場合は、要素を参照で持つアプリ内クリップボード (EDIT-24) に入れ、システムの
+    /// クリップボードには `HexEditor.Meta` とテキストの 1 行だけを入れて <see cref="ClipboardPlan.InAppOnly"/> を返す (EDIT-22 の仕様 5・8。
+    /// 呼び出し側は InfoBar と「ファイルに書き出す」を出す)。矩形の行数がマルチ選択の要素数の上限を超える場合は要素の一覧を作らずに何もせず null。
     /// </summary>
-    public async Task<ClipboardPlan> CopyRangesAsync(EditorState editor)
+    public async Task<ClipboardPlan?> CopyRangesAsync(EditorState editor)
     {
         SelectionSnapshot selection = editor.CaptureSelection();
         long total = selection.TotalLength;
         LastCopiedRanges = null;
+        if (selection.Rectangle is not null && selection.Count > editor.MaxSelectionElements)
+        {
+            return null;
+        }
+
         if (total > SystemLimit)
         {
+            List<ByteRange> parts = [.. selection.Ranges];
+            InAppClip clip = InApp.CopyRanges(editor.Document, parts);
+            var inAppMeta = new JsonObject
+            {
+                ["instance"] = InstanceId,
+                ["serial"] = clip.Serial,
+                ["offset"] = selection.Bounds.Start,
+                ["length"] = total,
+                ["name"] = editor.Document.Source.DisplayName,
+            };
+            var inAppPackage = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
+            inAppPackage.SetData(MetaFormat, inAppMeta.ToJsonString());
+            inAppPackage.SetText(Loc.Format("Clipboard_TooLarge", total.ToString("N0")));
+            SetContentWithRetry(inAppPackage);
             return new ClipboardPlan(false, ClipboardTextKind.TooLargeLine);
         }
 

@@ -174,7 +174,10 @@ public sealed partial class ClipboardService
             if (json.RootElement.GetProperty("instance").GetString() == InstanceId
                 && InApp.Match(json.RootElement.GetProperty("serial").GetInt64()) is { } clip)
             {
-                return Map(await TruncateAsync(editor, clip.Range.Length, confirmTruncate, allow => editor.Paste(clip.Range, overwrite, allow)));
+                // マルチ選択・矩形からの大きなコピーは、要素を連結して貼る (EDIT-22 の仕様 5・8)。
+                return Map(await TruncateAsync(editor, clip.Length, confirmTruncate, allow => clip.Parts is { } parts
+                    ? editor.Paste(clip.Range, parts, overwrite, allow)
+                    : editor.Paste(clip.Range, overwrite, allow)));
             }
         }
         else
@@ -261,7 +264,7 @@ public sealed partial class ClipboardService
             using JsonDocument json = JsonDocument.Parse(meta);
             if (json.RootElement.GetProperty("instance").GetString() == InstanceId && json.RootElement.GetProperty("serial").GetInt64() == clip.Serial)
             {
-                return (null, clip.Range);
+                return (null, clip.Source);
             }
         }
 
