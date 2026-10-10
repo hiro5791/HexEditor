@@ -233,8 +233,24 @@ public sealed class ImportResult : IDisposable
 /// <summary>読み込みのたびの進捗とキャンセル (長時間処理。ENG-09)。</summary>
 public sealed class ImportProgress(CancellationToken cancellationToken = default, Action<long>? report = null)
 {
+    private volatile SparseImageBuilder? _builder;
+
     public CancellationToken CancellationToken { get; } = cancellationToken;
 
     /// <summary>入力を読んだバイト数を知らせる。</summary>
     public void Report(long bytes) => report?.Invoke(bytes);
+
+    /// <summary>
+    /// 連続したデータを出すデコーダ (Base64 など) が、書き出し先を知らせる (デコード中の表示。ENG-38 の仕様 2・TC-ENG-38-03)。
+    /// </summary>
+    public void Attach(SparseImageBuilder builder) => _builder = builder;
+
+    /// <summary>作り終えた (以後はデコードの結果を使う)。</summary>
+    public void Detach() => _builder = null;
+
+    /// <summary>
+    /// デコードが終わった先頭の部分 (一時ファイルに書き終えた分) の読み取り専用のデータソース。一時ファイルは結果のデータソースが持ち、
+    /// これは閉じない。まだ何も書いていない・連続していない・デコードを始めていなければ null。
+    /// </summary>
+    public SparseImage? Preview(string displayName) => _builder?.Preview(displayName);
 }

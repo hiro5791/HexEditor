@@ -361,6 +361,11 @@ public sealed partial class MainViewModel : ObservableObject
         RecoveryRecord record = restored.Record;
         string name = record.Path is null ? record.DisplayName : Path.GetFileName(record.Path);
         var vm = new DocumentViewModel(restored.Document, record.Path, name) { Recovery = restored.Recovery, Notifications = Notifications };
+        if (record.RangeStart is { } rangeStart)
+        {
+            vm.RangeLabel = DocumentViewModel.FormatRange(rangeStart, record.RangeLength ?? 0);
+        }
+
         vm.Editor.ReadOnly = restored.SourceChanged;
         long length = restored.Document.Length;
         if (record.SelectionLength > 0 && record.SelectionStart + record.SelectionLength <= length)

@@ -22,9 +22,11 @@ public sealed class SparseImage : ByteSourceBase, IGapSource, View.IViewDefaults
     private readonly SafeFileHandle? _data;
     private readonly ImageSegment[] _segments;
     private readonly long _length;
+    private readonly bool _ownsData = true;
 
-    internal SparseImage(SafeFileHandle? data, ImageSegment[] segments, long origin, long length, byte fill, string displayName)
+    internal SparseImage(SafeFileHandle? data, ImageSegment[] segments, long origin, long length, byte fill, string displayName, bool ownsData = true)
     {
+        _ownsData = ownsData;
         _data = data;
         _segments = segments;
         Origin = origin;
@@ -71,7 +73,15 @@ public sealed class SparseImage : ByteSourceBase, IGapSource, View.IViewDefaults
             long from = Math.Max(s.Address, address);
             long to = Math.Min(s.End, address + count);
             Span<byte> dst = target.Slice((int)(from - address), (int)(to - from));
-            ReadData(s.DataPosition + (from - s.Address), dst);
+            try
+            {
+                ReadData(s.DataPosition + (from - s.Address), dst);
+            }
+            catch (ObjectDisposedException) when (!_ownsData)
+            {
+                // デコード中の表示 (Preview) で、デコードを取り消して一時ファイルが閉じられた。読めない範囲にする。
+                return new ReadResult(count, [new UnreadableRange(offset, count, UnreadableReason.IoError)]);
+            }
         }
 
         return new ReadResult(count);
@@ -145,7 +155,7 @@ public sealed class SparseImage : ByteSourceBase, IGapSource, View.IViewDefaults
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
+        if (disposing && _ownsData)
         {
             _data?.Dispose();
         }
@@ -193,6 +203,16 @@ public sealed class SparseImageBuilder : IDisposable
         {
             return false;
         }
+
+        // デコード中の表示 (Preview) が別のスレッドから範囲の一覧を読むため、一覧の変更は排他にする (競合はほぼないので軽い)。
+        lock (_previewLock)
+        {
+            return AddCore(address, data);
+        }
+    }
+
+    private bool AddCore(long address, ReadOnlySpan<byte> data)
+    {
 
         long position = AddedBytes;
         Append(data);
@@ -304,6 +324,14 @@ public sealed class SparseImageBuilder : IDisposable
     /// </summary>
     public SparseImage Build(bool alignLowest, byte fill, string displayName)
     {
+        lock (_previewLock)
+        {
+            return BuildCore(alignLowest, fill, displayName);
+        }
+    }
+
+    private SparseImage BuildCore(bool alignLowest, byte fill, string displayName)
+    {
         FlushBuffer();
         long origin = alignLowest && _segments.Count > 0 ? _segments[0].Address : 0;
         long length = _segments.Count > 0 ? _segments[^1].End - origin : 0;
@@ -311,6 +339,28 @@ public sealed class SparseImageBuilder : IDisposable
         _file = null;
         return new SparseImage(file, [.. _segments], origin, length, fill, displayName);
     }
+
+    /// <summary>
+    /// 書き終えた先頭の部分 (アドレス 0 から連続し、一時ファイルに書いた分) を、一時ファイルを閉じないデータソースとして返す
+    /// (デコード中の表示。ENG-38 の仕様 2)。連続していない (アドレスが 0 からでない・隙間がある) ・まだ何も書いていなければ null。
+    /// <see cref="Add"/> と別のスレッドから呼んでよい。
+    /// </summary>
+    public SparseImage? Preview(string displayName)
+    {
+        lock (_previewLock)
+        {
+            if (_file is not { } file || _segments.Count != 1 || _segments[0].Address != 0)
+            {
+                return null;
+            }
+
+            ImageSegment first = _segments[0];
+            long written = Math.Clamp(Volatile.Read(ref _written) - first.DataPosition, 0, first.Length);
+            return written <= 0 ? null : new SparseImage(file, [first with { Length = written }], 0, written, 0, displayName, ownsData: false);
+        }
+    }
+
+    private readonly object _previewLock = new();
 
     /// <summary>連続したデータ (Base64 など。アドレス 0 から順に加えたもの) として作り終える。</summary>
     public SparseImage BuildContiguous(string displayName) => Build(alignLowest: false, 0, displayName);

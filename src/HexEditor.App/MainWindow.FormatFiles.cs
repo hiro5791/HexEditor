@@ -358,26 +358,82 @@ public sealed partial class MainWindow
         }
 
         ImportResult result;
+        DocumentViewModel? preview = null;
+        Microsoft.UI.Dispatching.DispatcherQueueTimer? previewTimer = null;
         try
         {
             long size = new FileInfo(full).Length;
             ImportOptions options = EncodedFile.OpenOptions(format);
             string temp = Vm.DocumentOptions.TempDirectory;
-            result = size <= SyncDecodeLimit
-                ? Importer.DecodeFile(full, options, temp)
-                : await Vm.Operations.RunAsync(Loc.Format("Encoded_Decoding", Path.GetFileName(full), FormatName(format)),
+            if (size <= SyncDecodeLimit)
+            {
+                result = Importer.DecodeFile(full, options, temp);
+            }
+            else
+            {
+                // デコード中も、書き終えた先頭から読み取り専用のタブで表示する (ENG-38 の仕様 2・受け入れ基準 3)。表示は 0.5 秒ごとに伸ばす。
+                ImportProgress? live = null;
+                string previewName = Loc.Format("Encoded_DecodingTab", Path.GetFileName(full));
+                previewTimer = DispatcherQueue.CreateTimer();
+                previewTimer.Interval = TimeSpan.FromMilliseconds(500);
+                previewTimer.Tick += (_, _) =>
+                {
+                    if (live?.Preview(previewName) is not { } image)
+                    {
+                        return;
+                    }
+
+                    if (preview is null)
+                    {
+                        preview = Vm.AddDecodingPreview(image, previewName);
+                        DecodingPreviewForTest = preview;
+                        if (insertAt is int at)
+                        {
+                            Vm.MoveDocument(preview, Math.Min(at, Vm.Documents.Count - 1));
+                        }
+                    }
+                    else if (!preview.Document.IsDisposed && Vm.Documents.Contains(preview) && image.Length > preview.Document.Length)
+                    {
+                        long cursor = preview.Editor.Cursor;
+                        long top = preview.Editor.TopRow;
+                        preview.Document.ReplaceSource(image);
+                        preview.RestorePosition(cursor, 0, 0, top);
+                    }
+                    else
+                    {
+                        image.Dispose();
+                    }
+                };
+                previewTimer.Start();
+                result = await Vm.Operations.RunAsync(Loc.Format("Encoded_Decoding", Path.GetFileName(full), FormatName(format)),
                     Core.Operations.OperationKind.ReadOnly, null, size,
-                    op => Task.FromResult(Importer.DecodeFile(full, options, temp,
-                        new ImportProgress(op.CancellationToken, op.Report))));
+                    op =>
+                    {
+                        live = new ImportProgress(op.CancellationToken, op.Report);
+                        return Task.FromResult(Importer.DecodeFile(full, options, temp, live));
+                    });
+            }
         }
         catch (OperationCanceledException)
         {
+            CloseDecodingPreview(previewTimer, preview);
             return null;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
+            CloseDecodingPreview(previewTimer, preview);
             ShowNotice(Loc.Format("Error_Open", Path.GetFileName(full), ex.Message), InfoBarSeverity.Error);
             return null;
+        }
+
+        // デコード中の表示のタブは、同じ位置・同じカーソルのデコードの結果のタブに置き換える (完了後は編集できる)。
+        previewTimer?.Stop();
+        (long Cursor, long Top)? previewPosition = null;
+        if (preview is not null && Vm.Documents.IndexOf(preview) is var previewIndex and >= 0)
+        {
+            previewPosition = (preview.Editor.Cursor, preview.Editor.TopRow);
+            insertAt = previewIndex;
+            Vm.Close(preview);
         }
 
         if (result.DataBytes == 0 && result.HasErrors)
@@ -398,6 +454,11 @@ public sealed partial class MainWindow
         if (insertAt is int at)
         {
             Vm.MoveDocument(vm, Math.Min(at, Vm.Documents.Count - 1));
+        }
+
+        if (previewPosition is { } position)
+        {
+            vm.RestorePosition(position.Cursor, 0, 0, position.Top);
         }
 
         Vm.StartWatching(vm);
@@ -427,6 +488,18 @@ public sealed partial class MainWindow
 
         AppLog.Info($"Decoded {Path.GetFileName(full)} as {format}: {vm.Document.Length} bytes, {vm.FormatIssues.Count} issue(s)");
         return vm;
+    }
+
+    /// <summary>デコード中の表示のタブ (テスト用。TC-ENG-38-03)。</summary>
+    internal DocumentViewModel? DecodingPreviewForTest { get; private set; }
+
+    private void CloseDecodingPreview(Microsoft.UI.Dispatching.DispatcherQueueTimer? timer, DocumentViewModel? preview)
+    {
+        timer?.Stop();
+        if (preview is not null && Vm.Documents.Contains(preview))
+        {
+            Vm.Close(preview);
+        }
     }
 
     /// <summary>「テキストのまま開く」: デコードしたタブを閉じ、同じファイルをバイナリのまま開く。</summary>

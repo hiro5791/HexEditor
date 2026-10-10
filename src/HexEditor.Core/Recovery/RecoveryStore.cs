@@ -76,7 +76,10 @@ public static class RecoveryStore
         }
         else
         {
-            var file = FileByteSource.Open(record.Path);
+            // 範囲を開いたドキュメントは同じ範囲を開き直す (元データのピースの位置は範囲の中の位置)。
+            FileByteSource file = record.RangeStart is { } rangeStart
+                ? FileByteSource.OpenRange(record.Path, rangeStart, record.RangeLength ?? 0, record.RangeResizable, allowEmpty: true)
+                : FileByteSource.Open(record.Path);
             source = file;
             sourceChanged = record.SourceStamp is null || file.Stamp != record.SourceStamp;
         }

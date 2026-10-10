@@ -259,7 +259,7 @@ public sealed partial class MainViewModel
     /// セッションのタブを開く (UI-31 の仕様 5〜7)。アクティブなタブだけをすぐに開き、他のタブは見出しだけを出して初めて表示したときに開く
     /// (仕様 6。<see cref="AddPending"/>)。
     /// </summary>
-    public void RestoreTabs(SessionWindow window, Func<string, bool, DocumentViewModel?> open, Action<DocumentViewModel> changed)
+    public void RestoreTabs(SessionWindow window, Func<SessionTab, DocumentViewModel?> open, Action<DocumentViewModel> changed)
     {
         DocumentViewModel? active = null;
         for (int i = 0; i < window.Tabs.Count; i++)
@@ -291,10 +291,10 @@ public sealed partial class MainViewModel
     /// セッションのタブ 1 つを開く (UI-31 の仕様 5・7)。見つからないファイルはタブを残して「ファイルが見つかりません」を表示する。前回の
     /// 終了後にサイズや更新日時が変わっていたら、カーソル位置を長さの範囲に収め、<paramref name="changed"/> で知らせる。
     /// </summary>
-    public DocumentViewModel? OpenRestored(SessionTab tab, Func<string, bool, DocumentViewModel?> open, Action<DocumentViewModel> changed, int? insertAt)
+    public DocumentViewModel? OpenRestored(SessionTab tab, Func<SessionTab, DocumentViewModel?> open, Action<DocumentViewModel> changed, int? insertAt)
     {
         DocumentViewModel? vm = tab.Kind == SessionTabKind.Disk ? AddMissing(tab, insertAt)
-            : File.Exists(tab.Path) ? open(tab.Path!, tab.ReadOnly) : AddMissing(tab, insertAt);
+            : File.Exists(tab.Path) ? open(tab) : AddMissing(tab, insertAt);
         if (vm is null)
         {
             return null;

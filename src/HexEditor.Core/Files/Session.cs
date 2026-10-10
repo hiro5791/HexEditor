@@ -47,6 +47,18 @@ public sealed record SessionTab
 
     /// <summary>タブごとの Hex 表示の倍率 (百分率。UI-08 の仕様 2 の 4。適用範囲が「今のタブだけ」のときだけ。それ以外は null)。</summary>
     public int? Zoom { get; init; }
+
+    /// <summary>範囲を開いたタブ (ENG-13) の範囲の開始位置。ファイル全体なら null。</summary>
+    public long? RangeStart { get; init; }
+
+    /// <summary>範囲の長さ。</summary>
+    public long? RangeLength { get; init; }
+
+    /// <summary>範囲の長さを変えられるか。</summary>
+    public bool RangeResizable { get; init; }
+
+    /// <summary>デコードして開いたタブ (ENG-38) の形式 (<c>ihex</c> など)。バイナリなら null。</summary>
+    public string? EncodedFormat { get; init; }
 }
 
 /// <summary>ウィンドウ 1 つの記録 (UI-31 の仕様 1 のウィンドウの単位)。位置と大きさは物理ピクセル。</summary>

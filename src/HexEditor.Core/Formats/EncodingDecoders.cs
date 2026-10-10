@@ -128,6 +128,9 @@ public static class EncodingDecoders
         using var text = new TextInput(input, leaveOpen: true);
         var output = new Output(builder);
         var r = new Reader(text, progress);
+
+        // デコード中も、書き終えた先頭から表示できるようにする (ENG-38 の仕様 2)。
+        progress?.Attach(builder);
         int bits = 0, quantum = 0;
         bool urlSafe = false, padded = false, sawData = false;
         int firstLineLength = 0, lineLength = 0, dataLines = 0;

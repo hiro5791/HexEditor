@@ -107,6 +107,10 @@ public sealed partial class DocumentViewModel
             Length = stamp?.Length ?? Document.Length,
             LastWriteTimeUtc = stamp?.LastWriteTimeUtc ?? default,
             Zoom = HexZoom,
+            RangeStart = RangeSource?.RangeStart,
+            RangeLength = RangeSource?.Length,
+            RangeResizable = RangeSource?.RangeResizable ?? false,
+            EncodedFormat = Encoded?.Format,
         };
     }
 }

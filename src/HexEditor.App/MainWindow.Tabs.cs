@@ -135,9 +135,15 @@ public sealed partial class MainWindow
             Vm.RemovePending(pending);
             DocumentViewModel? opened = Vm.OpenRestored(
                 tab,
-                (path, readOnly) => TryOpen(path, index, readOnly, restorePosition: false),
+                t => OpenSessionTab(t, index),
                 vm => ShowNotice(Loc.Get("Session_FileChanged"), InfoBarSeverity.Informational, vm),
                 index);
+            if (opened is null && _sessionTabDecoding)
+            {
+                // 大きいファイルのデコード中 (終わったら同じ位置にタブを開く)。
+                return;
+            }
+
             opened ??= Vm.AddMissing(tab, index);
             _mru.Replace(pending, opened);
             Vm.Selected = opened;

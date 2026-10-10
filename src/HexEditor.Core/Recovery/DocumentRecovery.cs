@@ -63,6 +63,15 @@ public sealed record RecoveryRecord
 
     /// <summary>変更の量: 元データ以外から来たバイト数 (入力・貼り付け・生成)。</summary>
     public long ChangedBytes { get; init; }
+
+    /// <summary>範囲を開いたドキュメント (ENG-13) の範囲の開始位置。ファイル全体なら null (ENG-27 の仕様 2 の「範囲」)。</summary>
+    public long? RangeStart { get; init; }
+
+    /// <summary>範囲の長さ (開いたときの元データの長さ)。</summary>
+    public long? RangeLength { get; init; }
+
+    /// <summary>範囲の長さを変えられるか。</summary>
+    public bool RangeResizable { get; init; }
 }
 
 /// <summary>
@@ -109,8 +118,9 @@ public sealed class DocumentRecovery : IDisposable
         DocumentSnapshot snapshot = document.Current;
         string? path = (document.Source as FileByteSource)?.Path;
         FileStamp? stamp = (document.Source as FileByteSource)?.Stamp;
+        (long, long, bool)? range = document.Source is FileByteSource { IsRange: true } r ? (r.RangeStart, r.Length, r.RangeResizable) : null;
         return new RecoveryCapture(document, snapshot, document.Id, document.Source.DisplayName, path, stamp, document.AddBuffer.Length,
-            cursor, selectionStart, selectionLength);
+            cursor, selectionStart, selectionLength, range);
     }
 
     /// <summary>
@@ -163,6 +173,9 @@ public sealed class DocumentRecovery : IDisposable
                 SelectionLength = capture.SelectionLength,
                 SavedAtUtc = DateTime.UtcNow,
                 ChangedBytes = changed,
+                RangeStart = capture.Range?.Start,
+                RangeLength = capture.Range?.Length,
+                RangeResizable = capture.Range?.Resizable ?? false,
             };
 
             string temp = StatePath + ".tmp";
@@ -280,4 +293,5 @@ public sealed record RecoveryCapture(
     long AddBufferLength,
     long Cursor,
     long SelectionStart,
-    long SelectionLength);
+    long SelectionLength,
+    (long Start, long Length, bool Resizable)? Range = null);

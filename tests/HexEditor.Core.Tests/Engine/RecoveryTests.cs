@@ -25,6 +25,33 @@ public sealed class RecoveryTests : IDisposable
     }
 
     [Fact]
+    public void Range_document_is_recovered_with_the_same_range()
+    {
+        // ENG-27 の仕様 2 (範囲 ENG-13): 範囲を開いたドキュメントは、同じ範囲を開き直して変更を戻す。
+        string path = TestDataCatalog.Generate("TD-SEQ-1M", _dir);
+        var doc = new Document(FileByteSource.OpenRange(path, 0x1000, 0x800, resizable: false), Options());
+        var recovery = new DocumentRecovery(Root, doc.Id);
+        doc.Overwrite(0x10, [0xAA, 0xBB]);
+        byte[] expected = Read(doc.Current, 0, (int)doc.Length);
+        recovery.Write(DocumentRecovery.Capture(doc, 0x10, 0x10, 0)!);
+        SimulateCrash(doc, recovery);
+
+        RecoveryEntry entry = Assert.Single(RecoveryStore.Scan(Root));
+        Assert.Equal(0x1000, entry.Record.RangeStart);
+        Assert.Equal(0x800, entry.Record.RangeLength);
+        RestoredDocument restored = RecoveryStore.Restore(entry, Options());
+        using (Document again = restored.Document)
+        {
+            Assert.False(restored.SourceChanged);
+            Assert.Equal(0x800, again.Length);
+            Assert.Equal(expected, Read(again.Current, 0, (int)again.Length));
+            Assert.Equal(0x1000, ((FileByteSource)again.Source).RangeStart);
+        }
+
+        restored.Recovery.Dispose();
+    }
+
+    [Fact]
     [Trait(TC, "TC-ENG-27-01")]
     public void RestoresContentAsModifiedWithCursorAndNoUndo()
     {

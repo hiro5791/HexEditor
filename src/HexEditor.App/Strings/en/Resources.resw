@@ -5183,4 +5183,5 @@ Details were written to:
   <data name="Session_DiskHelperTitle" xml:space="preserve"><value>Open the disk from the last session?</value></data>
   <data name="Session_DiskHelperBody" xml:space="preserve"><value>Opening "{0}" again needs the administrator helper process. Windows will ask for permission.</value></data>
   <data name="Session_DiskHelperOpen" xml:space="preserve"><value>Open</value></data>
+  <data name="Encoded_DecodingTab" xml:space="preserve"><value>{0} (decoding...)</value></data>
 </root>

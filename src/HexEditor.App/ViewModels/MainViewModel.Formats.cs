@@ -19,7 +19,7 @@ public sealed partial class MainViewModel
         string full = Path.GetFullPath(path);
         FileByteSource source = FileByteSource.OpenRange(full, start, length, resizable);
         var doc = new Document(source, _options);
-        DocumentViewModel vm = Add(doc, full, Path.GetFileName(full), recovery: false);
+        DocumentViewModel vm = Add(doc, full, Path.GetFileName(full));
         vm.RangeLabel = DocumentViewModel.FormatRange(start, source.Length);
         doc.SetReadOnly(readOnly ? ReadOnlyReason.OpenedReadOnly
             : FileWriteProbe.Probe(full, source.HasReadOnlyAttribute, TestHooks.Volumes ?? Core.Saving.SystemVolumeInfoProvider.Instance, TestHooks.OpenForWrite));
@@ -59,6 +59,17 @@ public sealed partial class MainViewModel
         }
 
         return vm;
+    }
+
+    /// <summary>
+    /// デコード中の表示 (ENG-38 の仕様 2): デコードが終わった先頭の部分を、読み取り専用のタブで見せる。デコードが終わったら呼び出し側が
+    /// デコードの結果のタブに置き換える。保存の対象にしない (パスを持たず、書き込み先がない)。
+    /// </summary>
+    public DocumentViewModel AddDecodingPreview(SparseImage preview, string name)
+    {
+        var doc = new Document(preview, _options);
+        doc.SetReadOnly(ReadOnlyReason.NoWriteTarget);
+        return Add(doc, null, name, recovery: false);
     }
 
     /// <summary>インポートした内容を新しい (無題の) ドキュメントにする (TOOL-04 の仕様 2 の 4)。長さを変えられる。</summary>
