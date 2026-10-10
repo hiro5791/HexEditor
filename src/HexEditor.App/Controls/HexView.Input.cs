@@ -318,6 +318,7 @@ public sealed partial class HexView
     private void Surface_PointerMoved(object sender, PointerRoutedEventArgs e)
     {
         PointerPoint point = e.GetCurrentPoint(Surface);
+        _lastPointerPoint = point;
         if (_touchActive)
         {
             TouchMoved(point.Position);

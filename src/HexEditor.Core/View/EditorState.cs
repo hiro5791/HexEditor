@@ -760,7 +760,12 @@ public sealed partial class EditorState
         if (!_caretLoop && (HasMultipleRanges || HasMultipleCarets))
         {
             // マルチ選択・矩形・マルチカーソルへの入力 (EDIT-07 の仕様 7、EDIT-08 の仕様 4・6)。
-            return PrepareCaretsForInput(keepSelections: true) ? ForEachCaret(() => TypeHexDigit(c), "入力", TypingKey) : EditResult.TooManyCarets;
+            if (!PrepareCaretsForInput(keepSelections: true))
+            {
+                return EditResult.TooManyCarets;
+            }
+
+            return TypeHexDigitAtCarets(digit) ?? ForEachCaret(() => TypeHexDigit(c), "入力", TypingKey);
         }
 
         long at = HasSelection ? _selectionStart : _cursor;

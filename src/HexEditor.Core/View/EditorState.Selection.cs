@@ -1159,16 +1159,10 @@ public sealed partial class EditorState
             return;
         }
 
-        if (_caretLoop && _loopCarets is { } loop)
+        if (_caretLoop && _loopCarets is not null)
         {
-            for (int i = 0; i < loop.Length; i++)
-            {
-                if (i != _loopIndex)
-                {
-                    loop[i] = ShiftCaret(loop[i], e);
-                }
-            }
-
+            // 処理済みのカーソル (後ろのカーソル) は、処理の最後にまとめて動かす (ForEachCaret)。
+            _loopDelta += e.InsertedLength - e.RemovedLength;
             return;
         }
 

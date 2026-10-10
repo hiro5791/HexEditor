@@ -60,7 +60,49 @@ public sealed partial class HexView
             _ => "move",
         };
 
-    private void InitializeSelectionVisuals() => SetHighlightSource("selection", SelectionHighlights);
+    private void InitializeSelectionVisuals()
+    {
+        SetHighlightSource("selection", SelectionHighlights);
+        Surface.DragStarting += (_, e) =>
+        {
+            if (_editor is not null)
+            {
+                SelectionDragStarting?.Invoke(this, new SelectionDragStartingEventArgs(_editor, e.Data));
+            }
+        };
+    }
+
+    // 最後のポインタの位置 (他のアプリへのドラッグを始めるのに使う)。
+    private Microsoft.UI.Input.PointerPoint? _lastPointerPoint;
+
+    /// <summary>
+    /// 選択範囲を Hex ビューの外へドラッグし始めた (EDIT-18 の仕様 4・5)。受け取る側は <see cref="SelectionDragStartingEventArgs.Data"/> に
+    /// コピーと同じ形式 (EDIT-22) を入れる。
+    /// </summary>
+    public event EventHandler<SelectionDragStartingEventArgs>? SelectionDragStarting;
+
+    /// <summary>ビューの中のドラッグをやめ、システムのドラッグ &amp; ドロップに切り替える。</summary>
+    private async void StartDragOut()
+    {
+        if (_lastPointerPoint is not { } point)
+        {
+            return;
+        }
+
+        ResetDrop();
+        _pressMode = PressMode.Normal;
+        _pressed = false;
+        SetDragging(false);
+        _autoScrollTimer.Stop();
+        try
+        {
+            await Surface.StartDragAsync(point);
+        }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or System.Runtime.InteropServices.COMException)
+        {
+            Services.AppLog.Warning($"HexView: ドラッグを始められません ({ex.HResult:X8})");
+        }
+    }
 
     /// <summary>
     /// 選択に伴う印: マルチ選択の主要素の太い枠 (EDIT-07 の「画面」。色だけで区別しない)、主カーソル以外の細いカーソル (EDIT-08 の「画面」)、
@@ -180,6 +222,13 @@ public sealed partial class HexView
                 editor.RectangleTo(hit.Offset);
                 return true;
             case PressMode.SelectionDrag:
+                if (_lastPointer.X < 0 || _lastPointer.X > Surface.ActualWidth)
+                {
+                    // Hex ビューの左右の外へ出た: 他のタブ・他のアプリへのドラッグにする (EDIT-18 の仕様 4・5)。
+                    StartDragOut();
+                    return true;
+                }
+
                 UpdateDropTarget(hit.Offset);
                 return true;
             default:
@@ -352,4 +401,12 @@ public sealed partial class HexView
 
     private static bool IsKeyDown(VirtualKey key) =>
         InputKeyboardSource.GetKeyStateForCurrentThread(key).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
+}
+
+/// <summary>選択範囲を Hex ビューの外へドラッグし始めた (EDIT-18 の仕様 4・5)。</summary>
+public sealed class SelectionDragStartingEventArgs(EditorState editor, Windows.ApplicationModel.DataTransfer.DataPackage data) : EventArgs
+{
+    public EditorState Editor { get; } = editor;
+
+    public Windows.ApplicationModel.DataTransfer.DataPackage Data { get; } = data;
 }

@@ -55,6 +55,15 @@ public static class TestDataCatalog
             dir => Path.Combine(dir, "TD-ENG-ADS", "ads.bin")),
 
         // ---- cases/03-editing.md の表 ----
+        new("TD-EDIT-REC100K", 1_600_000, "16 バイトのレコードを 100,000 件並べたもの。各レコードは CA FE の後に 11 を 14 バイト",
+            path => WriteGenerated(path, 1_600_000, (o, s) =>
+            {
+                for (int i = 0; i < s.Length; i++)
+                {
+                    long column = (o + i) % 16;
+                    s[i] = column == 0 ? (byte)0xCA : column == 1 ? (byte)0xFE : (byte)0x11;
+                }
+            })),
         new("TD-EDIT-SEQ-1K", KiB, "オフセット n の値は n mod 256 (読み取り専用属性は付けない)", path => WriteGenerated(path, KiB, (o, s) => Sequence(o, s))),
         new("TD-EDIT-IHEX-SMALL", 79, "隙間のある 3 行の Intel HEX (CRLF)", path => WriteAll(path, Encoding.ASCII.GetBytes(IhexSmall))),
         new("TD-EDIT-SPARSE-10G", 10 * GiB, "先頭・末尾・1 GiB ごとの目印 (スパース)", path => WriteMarkers(path, 10 * GiB, MarkersEvery(10 * GiB, GiB))),

@@ -26,6 +26,11 @@ public sealed partial class EditorState
     private Caret[]? _loopCarets;
     private int _loopIndex;
 
+    // マルチカーソルの処理の間の長さの変化の合計と、各カーソルを処理し終えたときの値。処理はオフセットの大きいカーソルから行うので、
+    // 後の編集で動くのは処理済みのカーソルだけで、動く量はその後の長さの変化の合計になる (カーソル 10,000 個でも編集ごとに全部を動かさない)。
+    private long _loopDelta;
+    private long[]? _loopStoredDelta;
+
     /// <summary>
     /// 直前のマルチカーソルへの入力で、入力できなかったカーソルの数 (EDIT-08 の「エラー」: 「N 個のカーソルで入力できませんでした」)。
     /// </summary>
@@ -61,6 +66,8 @@ public sealed partial class EditorState
         all.Sort((a, b) => b.Caret.Offset.CompareTo(a.Caret.Offset));
         _loopCarets = all.Select(a => a.Caret).ToArray();
         int[] orders = all.Select(a => a.Order).ToArray();
+        _loopDelta = 0;
+        _loopStoredDelta = new long[_loopCarets.Length];
         int failures = 0;
         EditResult combined = EditResult.Ignored;
         EditResult failure = EditResult.Ignored;
@@ -84,6 +91,7 @@ public sealed partial class EditorState
                 }
 
                 _loopCarets[i] = new Caret(_cursor, _selectionLength > 0 ? _anchor : -1, LowNibble);
+                _loopStoredDelta[i] = _loopDelta;
             }
         }
         finally
@@ -91,6 +99,23 @@ public sealed partial class EditorState
             _caretLoop = false;
             group?.Dispose();
         }
+
+        // 処理した後の編集で後ろへずれた分を足す (EDIT-08 の仕様 5)。
+        for (int i = 0; i < _loopCarets.Length; i++)
+        {
+            long shift = _loopDelta - _loopStoredDelta[i];
+            if (shift != 0)
+            {
+                Caret c = _loopCarets[i];
+                _loopCarets[i] = c with
+                {
+                    Offset = Math.Clamp(c.Offset + shift, 0, Layout.MaxCursor),
+                    Anchor = c.Anchor < 0 ? -1 : Math.Clamp(c.Anchor + shift, 0, Layout.Length),
+                };
+            }
+        }
+
+        _loopStoredDelta = null;
 
         // 重なったカーソルは 1 つにまとめる (後から追加したものを残す)。
         var merged = new Dictionary<long, (Caret Caret, int Order)>();
@@ -116,6 +141,107 @@ public sealed partial class EditorState
         }
 
         return combined;
+    }
+
+    /// <summary>
+    /// 選択のないマルチカーソルへの Hex 列の 1 桁の入力を、新しい木を一度に作って 1 回で入れる (カーソル 10,000 個で 50 ms 以内。
+    /// EDIT-08 の「巨大ファイル・長時間処理」)。どれかのカーソルが選択を持つ場合は null (カーソルごとの処理にする)。
+    /// </summary>
+    private EditResult? TypeHexDigitAtCarets(int digit)
+    {
+        if (_carets is null || _selectionLength > 0 || _carets.Any(c => c.Selection.Length > 0))
+        {
+            return null;
+        }
+
+        var all = new List<(Caret Caret, int Order)>(CaretCount);
+        for (int i = 0; i < _carets.Count; i++)
+        {
+            all.Add((_carets[i], i));
+        }
+
+        all.Add((PrimaryCaret, int.MaxValue));
+        all.Sort((a, b) => a.Caret.Offset.CompareTo(b.Caret.Offset));
+        DocumentSnapshot snapshot = Document.Current;
+        long length = snapshot.Length;
+        var edits = new List<ContentEdit>(all.Count);
+        var results = new Caret[all.Count];
+        int failures = 0;
+        long shift = 0, previous = -1;
+        Span<byte> one = stackalloc byte[1];
+        for (int i = 0; i < all.Count; i++)
+        {
+            Caret c = all[i].Caret;
+            bool atEnd = c.Offset >= length;
+            if (c.Offset == previous || (atEnd && !Document.CanResize))
+            {
+                // 同じ位置のカーソルはまとめる (仕様 7)。長さを変えられないドキュメントの末尾位置には入力できない (「エラー」)。
+                failures += c.Offset == previous ? 0 : 1;
+                results[i] = c with { Offset = c.Offset + shift };
+                continue;
+            }
+
+            previous = c.Offset;
+            byte current = 0;
+            if (!atEnd)
+            {
+                snapshot.Read(c.Offset, one);
+                current = one[0];
+            }
+
+            if (!c.LowNibble && (InsertMode || atEnd))
+            {
+                edits.Add(new ContentEdit(c.Offset, 0, EditContent.Bytes([(byte)(digit << 4)])));
+                results[i] = new Caret(c.Offset + shift, -1, LowNibble: true);
+                shift++;
+            }
+            else if (!c.LowNibble)
+            {
+                edits.Add(new ContentEdit(c.Offset, 1, EditContent.Bytes([(byte)((current & 0x0F) | (digit << 4))])));
+                results[i] = new Caret(c.Offset + shift, -1, LowNibble: true);
+            }
+            else
+            {
+                edits.Add(new ContentEdit(c.Offset, 1, EditContent.Bytes([(byte)((current & 0xF0) | digit)])));
+                results[i] = new Caret(c.Offset + shift + 1, -1, LowNibble: false);
+            }
+        }
+
+        if (edits.Count > 0)
+        {
+            PreparedReplacement prepared = Document.PrepareContentEdits(edits);
+            using (Document.BeginCoalescingGroup("入力", TypingKey))
+            {
+                _caretLoop = true;
+                try
+                {
+                    Document.CommitReplacements(prepared, "入力");
+                }
+                finally
+                {
+                    _caretLoop = false;
+                }
+            }
+        }
+
+        // 主カーソルは最後に追加したもの。重なったカーソルはまとめる。
+        var merged = new Dictionary<long, (Caret Caret, int Order)>();
+        for (int i = 0; i < all.Count; i++)
+        {
+            Caret c = results[i] with { Offset = Math.Clamp(results[i].Offset, 0, Layout.MaxCursor) };
+            if (!merged.TryGetValue(c.Offset, out var existing) || existing.Order < all[i].Order)
+            {
+                merged[c.Offset] = (c, all[i].Order);
+            }
+        }
+
+        var ordered = merged.Values.OrderBy(v => v.Order).ToList();
+        LoadCaret(ordered[^1].Caret);
+        _carets = ordered.Count > 1 ? ordered.Take(ordered.Count - 1).Select(v => v.Caret).ToList() : null;
+        LastCaretFailures = failures;
+        EnsureCursorVisible();
+        RaiseChanged();
+        return edits.Count > 0 ? EditResult.Done : EditResult.FixedLength;
     }
 
     /// <summary>移動キーをすべてのカーソルに適用する (EDIT-08 の仕様 4)。各カーソルが自分の選択範囲を持つ。</summary>

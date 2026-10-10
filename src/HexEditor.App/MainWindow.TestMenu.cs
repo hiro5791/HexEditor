@@ -686,6 +686,10 @@ public sealed partial class MainWindow
             KillAt = settings.ContainsKey("killAt") ? parsed.KillAt : s.KillAt,
             UnhandledException = settings.ContainsKey("unhandledException") ? parsed.UnhandledException : s.UnhandledException,
             FileSources = settings.ContainsKey("fileSources") ? parsed.FileSources : s.FileSources,
+
+            // ファイルのダイアログの代わりの結果 (選択範囲のエクスポート・インポートを続けて確かめる。EDIT-09)。
+            OpenPicker = settings.ContainsKey("openPicker") ? parsed.OpenPicker : s.OpenPicker,
+            SavePicker = settings.ContainsKey("savePicker") ? parsed.SavePicker : s.SavePicker,
         });
         return new JsonObject();
     }
