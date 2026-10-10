@@ -50,4 +50,34 @@ public sealed class HashExclusionTests
             Assert.Equal(HashEngine.ComputeBytes(row.Algorithm, removed), row.Value);
         }
     }
+
+    [Fact]
+    [Trait(TC, "TC-ANA-18-03")]
+    public async Task Progress_reaches_the_total_when_exclusions_are_skipped_or_replaced()
+    {
+        // 進捗の全体量は「飛ばす」除外範囲の分を含めず、「置き換える」分を含める (除外があっても 100% に届く)。
+        using var doc = new Document(new MemoryByteSource(new byte[100_000]), Options());
+        foreach (HashExclusionMode mode in new[] { HashExclusionMode.Skip, HashExclusionMode.Replace })
+        {
+            var request = new HashRequest
+            {
+                Algorithms = [new(HashCatalog.Get("crc32"))],
+                Ranges = [new HashRange(0, 60_000)],
+                Exclusions = [new HashRange(10_000, 5_000), new HashRange(50_000, 20_000)],
+                ExclusionMode = mode,
+                ChunkSize = 4096,
+            };
+            long total = HashEngine.TotalBytes(doc.Current, request);
+            Assert.Equal(mode == HashExclusionMode.Skip ? 60_000 - 5_000 - 10_000 : 60_000, total);
+            var center = new HexEditor.Core.Operations.OperationCenter();
+            long processed = 0;
+            await center.RunAsync("hash", HexEditor.Core.Operations.OperationKind.ReadOnly, doc, total, op =>
+            {
+                HashEngine.Compute(doc.Current, request, op);
+                processed = op.ProcessedBytes;
+                return Task.CompletedTask;
+            });
+            Assert.Equal(total, processed);
+        }
+    }
 }

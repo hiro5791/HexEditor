@@ -102,6 +102,12 @@ public sealed class HashPanelPhase2Tests
         await HashAsync(app, "rangeMode", new JsonObject { ["index"] = 0 });
         rows = await ComputeAsync(app, 1);
         Assert.Equal(Crc32([.. all]).ToString("X8"), ValueOf(rows, "crc32"));
+
+        // 3. 対象範囲の「選択範囲」(06 の 0.1) はマルチ選択の主要素 (最後に加えた範囲) 1 つだけ。
+        await HashAsync(app, "target", new JsonObject { ["kind"] = "Selection" });
+        Assert.False((await HashAsync(app))["multiRange"]!.GetValue<bool>());
+        rows = await ComputeAsync(app, 1);
+        Assert.Equal(Crc32(await app.BytesAsync(ranges[^1].Start, ranges[^1].Length)).ToString("X8"), ValueOf(rows, "crc32"));
     });
 
     // ---- ANA-19 ----

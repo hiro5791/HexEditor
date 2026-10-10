@@ -343,6 +343,21 @@ public sealed partial class HashPanel : UserControl
 
     private async void FindAlgorithm_Click(object sender, RoutedEventArgs e) => await ViewModel.FindMatchingAlgorithmsAsync();
 
+    /// <summary>読み取り専用のドキュメントでは「カーソル位置に書き込む」を無効にする (ANA-22 の「エラー」)。</summary>
+    private void RowMenu_Opening(object? sender, object e)
+    {
+        if (sender is MenuFlyout menu)
+        {
+            foreach (MenuFlyoutItem item in menu.Items.OfType<MenuFlyoutItem>())
+            {
+                if (AutomationProperties.GetAutomationId(item) == "Hash_WriteAtCursor")
+                {
+                    item.IsEnabled = ViewModel.CanWriteAtCursor?.Invoke() ?? true;
+                }
+            }
+        }
+    }
+
     private async void WriteAtCursor_Click(object sender, RoutedEventArgs e)
     {
         if (RowOf(sender) is { } row && ViewModel.WriteAtCursor is { } write)

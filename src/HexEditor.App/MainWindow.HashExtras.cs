@@ -47,6 +47,7 @@ public sealed partial class MainWindow
     private void ConfigureHashVm(HashPanelViewModel vm)
     {
         vm.WriteAtCursor = row => WriteHashAtCursorAsync(row);
+        vm.CanWriteAtCursor = () => NeedsEditable().Enabled;
         vm.AddCustomCrc = () => ShowCustomCrcDialogAsync(null);
         vm.ExportCustomCrc = ExportCustomCrcAsync;
         vm.ImportCustomCrc = ImportCustomCrcAsync;
@@ -126,7 +127,7 @@ public sealed partial class MainWindow
         void Update()
         {
             HashRowViewModel selected = choice is null ? row : rows[Math.Max(0, choice.SelectedIndex)];
-            bool numeric = selected.Row.Algorithm.IsNumeric;
+            bool numeric = selected.Row.IsNumeric;
             big.IsEnabled = little.IsEnabled = numeric;
             bytes = HashWriteBack.Bytes(selected.Row, numeric && little.IsChecked == true);
             long shortage = HashWriteBack.Shortage(offset, bytes.Length, doc.Document.Length);

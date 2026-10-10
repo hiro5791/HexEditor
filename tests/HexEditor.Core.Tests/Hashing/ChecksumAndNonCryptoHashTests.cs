@@ -23,7 +23,7 @@ public sealed class ChecksumAndNonCryptoHashTests
     /// <summary>
     /// 空のデータ、<c>abc</c>、<c>123456789</c> の値。出典: FNV-1a は draft-eastlake-fnv-30 のテストプログラムの値 (空のデータの値は
     /// offset_basis)、Fletcher は定義 (Wikipedia の Fletcher's checksum の例と同じ定義) から求めた値、加算・XOR・インターネットチェックサムは
-    /// 仕様 1 の定義から求めた値。FNV-1 は定義から求めた値 (draft にテストベクタがないため)。いずれも C# とは独立した Python の参照実装で求めた。
+    /// 仕様 1 の定義から求めた値。FNV-1 の 32 / 64 bit は定義から求めた値 (作者のテストプログラムの値は FnvMatchesTheAuthorsTestProgram で確かめる。128 bit は公式の値がない)。いずれも C# とは独立した Python の参照実装で求めた。
     /// </summary>
     public static TheoryData<string, string, string, string> Vectors() => new()
     {
@@ -355,6 +355,116 @@ public sealed class ChecksumAndNonCryptoHashTests
 
         static string Reverse(string hex) => Convert.ToHexString([.. Convert.FromHexString(hex).Reverse()]);
     }
+
+    [Fact]
+    [Trait(TC, "TC-ANA-19-05")]
+    public void SipHash13With128BitOutputMatchesTheReferenceImplementation()
+    {
+        // 参照実装 (veorq/SipHash の siphash.c を cROUNDS=1、dROUNDS=3、outlen=16 で動かしたもの) の値。値のバイト列は参照実装の出力順。
+        using JsonDocument doc = Load("siphash-vectors.json");
+        string[] sip13Wide = [.. doc.RootElement.GetProperty("siphash13_128").EnumerateArray().Select(e => e.GetString()!)];
+        var key = new HashParameters { KeyHex = "000102030405060708090A0B0C0D0E0F", OutputBits = 128 };
+        byte[] input = [.. Enumerable.Range(0, 64).Select(i => (byte)i)];
+        Assert.Equal(64, sip13Wide.Length);
+        for (int n = 0; n < 64; n++)
+        {
+            Assert.Equal(sip13Wide[n], Hash("siphash-1-3", input[..n], key));
+            Assert.Equal(sip13Wide[n], HashPieces("siphash-1-3", input[..n], n, key));
+        }
+
+        // 128 bit の値は数値として扱わない (バイト順の選択・10 進表示をしない)。64 bit の値は数値。
+        HashAlgorithmInfo sip = HashCatalog.Get("siphash-1-3");
+        Assert.False(new HashResultRow(new HashAlgorithmChoice(sip, key), new byte[16], []).IsNumeric);
+        Assert.True(new HashResultRow(new HashAlgorithmChoice(sip, key with { OutputBits = 0 }), new byte[8], []).IsNumeric);
+    }
+
+    private static readonly string[] FnvInputs = ["", "a", "b", "c", "d", "e", "f", "fo", "foo", "foob", "fooba", "foobar"];
+
+    public static TheoryData<string, int, string> FnvReferenceVectors()
+    {
+        // FNV の作者のテストプログラム (lcn2/fnv の test_fnv.c) の fnv1_32_vector、fnv1a_32_vector、fnv1_64_vector、fnv1a_64_vector の
+        // 先頭 12 件 (入力は FnvInputs)。
+        var data = new TheoryData<string, int, string>();
+        void Add(string id, params string[] values)
+        {
+            for (int i = 0; i < values.Length; i++)
+            {
+                data.Add(id, i, values[i]);
+            }
+        }
+
+        Add("fnv1-32", "811C9DC5", "050C5D7E", "050C5D7D", "050C5D7C", "050C5D7B", "050C5D7A", "050C5D79", "6B772514", "408F5E13", "B4B1178B",
+            "FDC80FB0", "31F0B262");
+        Add("fnv1a-32", "811C9DC5", "E40C292C", "E70C2DE5", "E60C2C52", "E10C2473", "E00C22E0", "E30C2799", "6222E842", "A9F37ED7", "3F5076EF",
+            "39AAA18A", "BF9CF968");
+        Add("fnv1-64", "CBF29CE484222325", "AF63BD4C8601B7BE", "AF63BD4C8601B7BD", "AF63BD4C8601B7BC", "AF63BD4C8601B7BB", "AF63BD4C8601B7BA",
+            "AF63BD4C8601B7B9", "08326207B4EB2F34", "D8CBC7186BA13533", "0378817EE2ED65CB", "D329D59B9963F790", "340D8765A4DDA9C2");
+        Add("fnv1a-64", "CBF29CE484222325", "AF63DC4C8601EC8C", "AF63DF4C8601F1A5", "AF63DE4C8601EFF2", "AF63D94C8601E773", "AF63D84C8601E5C0",
+            "AF63DB4C8601EAD9", "08985907B541D342", "DCB27518FED9D577", "DD120E790C2512AF", "CAC165AFA2FEF40A", "85944171F73967E8");
+        return data;
+    }
+
+    [Theory]
+    [Trait(TC, "TC-ANA-19-05")]
+    [MemberData(nameof(FnvReferenceVectors))]
+    public void FnvMatchesTheAuthorsTestProgram(string id, int index, string expected) =>
+        Assert.Equal(expected, Hash(id, Encoding.ASCII.GetBytes(FnvInputs[index])));
+
+    public static TheoryData<ulong, int, string> XxHash64WideSeeds() => new()
+    {
+        // 公式の sanity_test_vectors.h の XXH64 はシード 0 と 0x9E3779B1 (32 bit に収まる値) だけなので、上位 32 bit を使うシードの値を補う。
+        // 値は doc/xxhash_spec.md から書いた独立の Python 実装で求めた (同じ実装が sanity_test_vectors.h の XXH64 の 1,274 件と一致する)。
+        // 入力は sanity_test_vectors.h と同じ XSUM_fillTestBuffer の先頭。
+        { 0x1234, 0, "6E01C0317D5C53D0" },
+        { 0x1234, 32, "4CD53573A83EECAE" },
+        { 0x1234, 255, "B6EBBCB12A578F0A" },
+        { 0x9E3779B185EBCA8D, 0, "0B303D920EC349DF" },
+        { 0x9E3779B185EBCA8D, 1, "9C6678669FCD2E6D" },
+        { 0x9E3779B185EBCA8D, 4, "CCFE4EAD7E01983C" },
+        { 0x9E3779B185EBCA8D, 8, "768161B4E5A58DFA" },
+        { 0x9E3779B185EBCA8D, 31, "51AAF1A336575F00" },
+        { 0x9E3779B185EBCA8D, 32, "21D817283F4B6283" },
+        { 0x9E3779B185EBCA8D, 100, "38F1D4AABFD12D0F" },
+        { 0x9E3779B185EBCA8D, 255, "03D699D52E8CD292" },
+        { 0xFFFFFFFFFFFFFFFF, 0, "298F4C84B24F5380" },
+        { 0xFFFFFFFFFFFFFFFF, 31, "6ED1061F61C686E5" },
+        { 0xFFFFFFFFFFFFFFFF, 100, "2FE1B1460F4666C4" },
+        { 0x0123456789ABCDEF, 8, "33812B1E73B94CC4" },
+        { 0x0123456789ABCDEF, 255, "7D2FDF1DB543C7FD" },
+    };
+
+    [Theory]
+    [Trait(TC, "TC-ANA-19-05")]
+    [MemberData(nameof(XxHash64WideSeeds))]
+    public void XxHash64UsesAllSixtyFourSeedBits(ulong seed, int length, string expected)
+    {
+        byte[] data = XxHashSanityBuffer(length);
+        var p = new HashParameters { Seed = seed };
+        Assert.Equal(expected, Hash("xxh64", data, p));
+        Assert.Equal(expected, HashPieces("xxh64", data, length, p));
+    }
+
+    [Theory]
+    [InlineData("xxh32")]
+    [InlineData("murmur3-x86-32")]
+    [InlineData("murmur3-x86-128")]
+    [InlineData("murmur3-x64-128")]
+    [InlineData("murmur2")]
+    public void ThirtyTwoBitSeedsOutOfRangeAreParameterErrors(string id)
+    {
+        // 参照実装のシードが 32 bit のアルゴリズムは、32 bit を超えるシードを黙って切り詰めず、パラメータの誤りにする (ANA-19 の仕様 3)。
+        HashAlgorithmInfo algorithm = HashCatalog.Get(id);
+        Assert.Equal(HashParameterError.None, algorithm.Validate(new HashParameters { Seed = uint.MaxValue }));
+        Assert.Equal(HashParameterError.SeedRange, algorithm.Validate(new HashParameters { Seed = 1UL << 32 }));
+    }
+
+    [Theory]
+    [InlineData("xxh64")]
+    [InlineData("xxh3-64")]
+    [InlineData("xxh3-128")]
+    [InlineData("murmur64a")]
+    public void SixtyFourBitSeedsAreAccepted(string id) =>
+        Assert.Equal(HashParameterError.None, HashCatalog.Get(id).Validate(new HashParameters { Seed = ulong.MaxValue }));
 
     [Fact]
     public void SipHashParameters()

@@ -22,6 +22,7 @@
                         AutomationProperties.AutomationId="Hash_Target"
                         SelectionChanged="TargetChoice_SelectionChanged">
                         <ComboBoxItem x:Uid="Hash_Target_Selection" />
+                        <ComboBoxItem x:Uid="Hash_Target_Multi" />
                         <ComboBoxItem x:Uid="Hash_Target_Whole" />
                         <ComboBoxItem x:Uid="Hash_Target_Custom" />
                     </ComboBox>
@@ -399,7 +400,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.ContextFlyout>
-                                        <MenuFlyout>
+                                        <MenuFlyout Opening="RowMenu_Opening">
                                             <MenuFlyoutItem x:Uid="Hash_CopyValue" Click="CopyValue_Click" Tag="{x:Bind}" />
                                             <MenuFlyoutItem x:Uid="Hash_CopyNameValue" Click="CopyNameValue_Click" Tag="{x:Bind}" />
                                             <MenuFlyoutItem x:Uid="Hash_CopyChecksum" Click="CopyChecksum_Click" Tag="{x:Bind}" />

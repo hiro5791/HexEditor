@@ -67,6 +67,9 @@ public sealed record HashResultRow(HashAlgorithmChoice Choice, byte[] Value, IRe
 {
     public HashAlgorithmInfo Algorithm => Choice.Algorithm;
 
+    /// <summary>値が 64 bit 以下の数値か (10 進表示・バイト順の選択ができる。出力長のパラメータを考える)。</summary>
+    public bool IsNumeric => Algorithm.IsNumericFor(Choice.Parameters);
+
     /// <summary>範囲の先頭 (連結した場合は最初の範囲の先頭)。</summary>
     public long Start => Ranges.Count == 0 ? 0 : Ranges[0].Offset;
 
@@ -136,9 +139,19 @@ public static class HashEngine
     public static IReadOnlyList<HashRange> ExclusionsOutside(IReadOnlyList<HashRange> targets, IReadOnlyList<HashRange> exclusions) =>
         [.. exclusions.Where(e => e.Length <= 0 || !targets.Any(t => t.Offset < e.End && e.Offset < t.End))];
 
-    /// <summary>計算で読むバイト数 (進捗の全体量)。</summary>
-    public static long TotalBytes(DocumentSnapshot snapshot, HashRequest request) =>
-        Normalize(request.Ranges, snapshot.Length, request.RangeMode == HashRangeMode.Concatenate).Sum(r => r.Length);
+    /// <summary>計算で扱うバイト数 (進捗の全体量。「飛ばす」除外範囲の分は含めず、「置き換える」分は含める)。</summary>
+    public static long TotalBytes(DocumentSnapshot snapshot, HashRequest request)
+    {
+        IReadOnlyList<HashRange> ranges = Normalize(request.Ranges, snapshot.Length, request.RangeMode == HashRangeMode.Concatenate);
+        long total = ranges.Sum(r => r.Length);
+        if (request.ExclusionMode == HashExclusionMode.Replace || request.Exclusions.Count == 0)
+        {
+            return total;
+        }
+
+        IReadOnlyList<HashRange> exclusions = Normalize([.. request.Exclusions.Where(e => e.Length > 0)], snapshot.Length, mergeAdjacent: true);
+        return total - ranges.Sum(r => exclusions.Sum(e => Math.Max(0, Math.Min(e.End, r.End) - Math.Max(e.Offset, r.Offset))));
+    }
 
     /// <summary>
     /// 計算する。<paramref name="operation"/> があれば進捗を報告し、キャンセルされれば <see cref="OperationCanceledException"/> を投げる
@@ -200,6 +213,9 @@ public static class HashEngine
         private byte[]? _fill;
 
         public long BytesRead { get; private set; }
+
+        /// <summary>計算に渡したバイト数 (読んだ分と、置き換えた分。進捗に使う)。</summary>
+        public long BytesProcessed { get; private set; }
 
         public void Feed(IReadOnlyList<HashRange> ranges, IReadOnlyList<HashRange> exclusions, HashRequest request, IHasher[] hashers)
         {
@@ -271,7 +287,8 @@ public static class HashEngine
                     BytesRead += p.Length;
                 }
 
-                operation?.Report(BytesRead);
+                BytesProcessed += p.Length;
+                operation?.Report(BytesProcessed);
                 if (next is { Replace: false })
                 {
                     (_current, _next) = (_next, _current);

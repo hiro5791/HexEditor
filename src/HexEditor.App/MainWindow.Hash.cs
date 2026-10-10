@@ -215,6 +215,10 @@ public sealed partial class MainWindow
                 }
 
                 break;
+            case "target":
+                // {kind: "Selection" / "MultiSelection" / "WholeDocument" / "Custom"}: 対象範囲の選択欄を選ぶ (06 の 0.1)。
+                HashVm.ChooseTarget(Enum.Parse<ViewModels.HashTargetKind>(request["kind"]!.GetValue<string>(), ignoreCase: true));
+                break;
             case "rangeMode":
                 HashVm.RangeModeIndex = (int)TestHookSettings.ReadLong(request["index"], 0);
                 break;

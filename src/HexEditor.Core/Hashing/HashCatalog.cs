@@ -36,6 +36,9 @@ public enum HashParameterError
 
     /// <summary>出力長が範囲外。</summary>
     OutputLength,
+
+    /// <summary>シードがアルゴリズムのシードの幅 (32 bit) を超える (黙って切り詰めない)。</summary>
+    SeedRange,
 }
 
 /// <summary>ハッシュパネルで選べるアルゴリズム 1 つ (ANA-19)。</summary>
@@ -110,6 +113,9 @@ public sealed class HashAlgorithmInfo
 
     /// <summary>64 bit 以下の値 (10 進表示とバイト順の選択ができる。ANA-18 の仕様 5・6)。</summary>
     public bool IsNumeric => Bits <= 64 && Group is HashGroup.Checksum or HashGroup.Crc or HashGroup.NonCryptographic;
+
+    /// <summary>このパラメータでの値が 64 bit 以下の数値か (SipHash の 128 bit 版は数値として扱わない)。</summary>
+    public bool IsNumericFor(HashParameters? parameters) => IsNumeric && BitsFor(parameters) <= 64;
 
     public IHasher CreateHasher(HashParameters? parameters = null)
     {

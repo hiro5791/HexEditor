@@ -31,7 +31,7 @@ public sealed class AlgorithmFinderTests
         foreach (AlgorithmMatch m in result.Matches)
         {
             byte[] value = Compute(m.Choice.Algorithm, Check9, m.Choice.Parameters);
-            Assert.Equal(16, m.Choice.Algorithm.BitsFor(m.Choice.Parameters));
+            Assert.Equal(16, (m.Choice.Algorithm.BitsFor(m.Choice.Parameters) + 7) / 8 * 8);
             Assert.Equal(m.Match == HashMatch.Match ? "29B1" : "B129", Convert.ToHexString(value));
         }
 
@@ -55,7 +55,11 @@ public sealed class AlgorithmFinderTests
         IReadOnlyList<HashAlgorithmChoice> candidates = AlgorithmFinder.Candidates(32);
         Assert.Equal(10 + 1, candidates.Count(c => c.Algorithm.Group == HashGroup.Crc));
         Assert.Equal(3, candidates.Count(c => c.Algorithm.Id == "sum32"));
-        Assert.Equal(3 * 2 * 2, candidates.Count(c => c.Algorithm.Id == "sum32w"));
+        Assert.Equal(3 * 2, candidates.Count(c => c.Algorithm.Id == "sum32w"));
+
+        // 「符号あり」は値のビット列が同じなので組み合わせに含めない (同じ結果が 2 回並ばない)。
+        Assert.DoesNotContain(candidates, c => c.Parameters.Signed);
+        Assert.Equal(candidates.Count, candidates.Select(c => (c.Algorithm.Id, c.Parameters)).Distinct().Count());
         Assert.Equal(2, candidates.Count(c => c.Algorithm.Id == "xor32"));
         Assert.Equal(2, candidates.Count(c => c.Algorithm.Id == "fletcher32"));
         foreach (string id in new[] { "adler32", "fnv1-32", "fnv1a-32", "xxh32", "murmur3-x86-32", "murmur2" })
@@ -111,5 +115,25 @@ public sealed class AlgorithmFinderTests
         using var doc = new Document(new MemoryByteSource(new byte[100_000]), Options());
         Assert.ThrowsAny<OperationCanceledException>(() =>
             AlgorithmFinder.Find(doc.Current, Expected("00000000"), cancellationToken: new CancellationToken(canceled: true)));
+    }
+
+    [Fact]
+    [Trait(TC, "TC-ANA-21-04")]
+    public void CustomCrcWhoseWidthIsNotAMultipleOfEightIsACandidate()
+    {
+        // 幅 5 の CRC の値は 1 バイト (19)。期待値 0x19 (8 bit) の候補に入り、一致する。
+        HashAlgorithmInfo crc5 = new CustomCrcDefinition("Finder CRC-5/USB", 5, 0x05, 0x1F, true, true, 0x1F).ToAlgorithm();
+        HashCatalog.SetCustom([crc5]);
+        try
+        {
+            Assert.Contains(AlgorithmFinder.Candidates(8), c => c.Algorithm == crc5);
+            using var doc = new Document(new MemoryByteSource(Check9), Options());
+            AlgorithmSearchResult result = AlgorithmFinder.Find(doc.Current, Expected("0x19"));
+            Assert.Contains(result.Matches, m => m.Choice.Algorithm == crc5 && m.Match == HashMatch.Match);
+        }
+        finally
+        {
+            HashCatalog.SetCustom([]);
+        }
     }
 }

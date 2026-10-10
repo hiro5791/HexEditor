@@ -22,7 +22,7 @@ public static class AlgorithmFinder
     private static readonly HashComplement[] Complements = [HashComplement.None, HashComplement.Ones, HashComplement.Twos];
 
     /// <summary>
-    /// 出力が <paramref name="bits"/> ビットになる、試す組み合わせの一覧 (一覧の順。<see cref="HashCatalog.All"/> から作るため、
+    /// 値のバイト列が <paramref name="bits"/> ビット (幅が 8 の倍数でない CRC などは、バイト単位に切り上げた長さ) になる、試す組み合わせの一覧 (一覧の順。<see cref="HashCatalog.All"/> から作るため、
     /// カスタム CRC や後から加わったアルゴリズムも含む)。この環境で使えないアルゴリズムは含めない。
     /// </summary>
     public static IReadOnlyList<HashAlgorithmChoice> Candidates(int bits)
@@ -42,7 +42,7 @@ public static class AlgorithmFinder
 
             foreach (HashParameters p in ParameterCombinations(algorithm, bits))
             {
-                if (algorithm.Validate(p) == HashParameterError.None && algorithm.BitsFor(p) == bits)
+                if (algorithm.Validate(p) == HashParameterError.None && (algorithm.BitsFor(p) + 7) / 8 * 8 == bits)
                 {
                     result.Add(new HashAlgorithmChoice(algorithm, p));
                 }
@@ -76,7 +76,7 @@ public static class AlgorithmFinder
         var matches = new List<AlgorithmMatch>();
         foreach (HashResultRow row in computation.Rows)
         {
-            HashMatch match = expected.Compare(row.Value, row.Algorithm.IsNumeric && row.Value.Length <= 8);
+            HashMatch match = expected.Compare(row.Value, row.IsNumeric && row.Value.Length <= 8);
             if (match != HashMatch.None)
             {
                 matches.Add(new AlgorithmMatch(row.Choice, match, row.Value));
@@ -86,22 +86,21 @@ public static class AlgorithmFinder
         return new AlgorithmSearchResult(matches, candidates.Count, computation.BytesRead);
     }
 
-    /// <summary>試すパラメータの組み合わせ (補数 × エンディアン × 符号。出力長を選べるものは期待値の長さ)。</summary>
+    /// <summary>
+    /// 試すパラメータの組み合わせ (補数 × エンディアン。出力長を選べるものは期待値の長さ)。「符号あり」は表示だけが変わり値のビット列は
+    /// 同じなので試さない (同じ結果が 2 回並び、試した数が水増しされるため)。
+    /// </summary>
     private static IEnumerable<HashParameters> ParameterCombinations(HashAlgorithmInfo algorithm, int bits)
     {
         HashParameterKinds kinds = algorithm.Parameters;
         HashComplement[] complements = kinds.HasFlag(HashParameterKinds.Complement) ? Complements : [HashComplement.None];
         bool?[] endians = kinds.HasFlag(HashParameterKinds.Endian) ? [false, true] : [null];
-        bool[] signs = kinds.HasFlag(HashParameterKinds.Signed) ? [false, true] : [false];
         int outputBits = kinds.HasFlag(HashParameterKinds.OutputLength) && bits != algorithm.Bits ? bits : 0;
         foreach (HashComplement complement in complements)
         {
             foreach (bool? endian in endians)
             {
-                foreach (bool signed in signs)
-                {
-                    yield return new HashParameters { Complement = complement, BigEndian = endian, Signed = signed, OutputBits = outputBits };
-                }
+                yield return new HashParameters { Complement = complement, BigEndian = endian, OutputBits = outputBits };
             }
         }
     }
