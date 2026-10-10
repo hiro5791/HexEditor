@@ -75,11 +75,14 @@ public sealed partial class MainWindow
                 case TransferFieldKind.Check:
                 {
                     CheckBox box = DialogParts.Check(id, label, values[field.Key] == "true");
-                    box.Click += (_, _) =>
+                    void Toggled(object sender, RoutedEventArgs e)
                     {
                         values[field.Key] = box.IsChecked == true ? "true" : "false";
                         changed();
-                    };
+                    }
+
+                    box.Checked += Toggled;
+                    box.Unchecked += Toggled;
                     control = box;
                     break;
                 }
@@ -698,7 +701,7 @@ public sealed partial class MainWindow
         format.SelectionChanged += (_, _) => Rebuild();
         foreach (RadioButton r in new[] { whole, selection, range })
         {
-            r.Click += (_, _) => Refresh();
+            r.Checked += (_, _) => Refresh();
         }
 
         rangeStart.TextChanged += (_, _) => Refresh();

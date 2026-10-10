@@ -191,7 +191,8 @@ public sealed partial class MainWindow
             box.TextChanged += (_, _) => Validate();
         }
 
-        range.Click += (_, _) => Validate();
+        range.Checked += (_, _) => Validate();
+        range.Unchecked += (_, _) => Validate();
         lengthKind.SelectionChanged += (_, _) => Validate();
         browse.Click += async (_, _) =>
         {
