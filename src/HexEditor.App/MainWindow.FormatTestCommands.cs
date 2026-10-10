@@ -18,6 +18,13 @@ public sealed partial class MainWindow
     {
         switch (cmd)
         {
+            case "startCommand":
+                // ダイアログを開くコマンドを、閉じるのを待たずに始める。
+                _ = Commands.ExecuteAsync(request["id"]!.GetValue<string>());
+                return new JsonObject();
+            case "selectTab":
+                Vm.Selected = Vm.Documents[(int)TestHookSettings.ReadLong(request["index"], 0)];
+                return new JsonObject();
             case "formatDoc":
                 return TestFormatDocument(request);
             case "byteStates":
