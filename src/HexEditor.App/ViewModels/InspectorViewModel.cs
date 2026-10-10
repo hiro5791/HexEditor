@@ -411,8 +411,7 @@ public sealed partial class InspectorViewModel : ObservableObject
         }
 
         EditorState editor = doc.Editor;
-        bool useCursor = !editor.HasSelection || _settings.GetBool(CursorWithSelectionKey, false);
-        Origin = useCursor ? editor.Cursor : editor.SelectionStart;
+        Origin = DataInspector.OriginOf(editor, _settings.GetBool(CursorWithSelectionKey, false));
         OriginText = Loc.Format("Inspector_Origin", Origin.ToString(Origin > uint.MaxValue ? "X16" : "X8", CultureInfo.InvariantCulture));
 
         DocumentSnapshot snapshot = doc.Document.Current;

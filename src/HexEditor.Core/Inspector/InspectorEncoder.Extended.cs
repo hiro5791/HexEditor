@@ -455,7 +455,14 @@ public static partial class InspectorEncoder
             return InspectorEncodeResult.Fail(o.Text.ErrorNotTerminated);
         }
 
-        int limit = original.Status == InspectorStatus.Ok ? original.ByteCount : int.MaxValue;
+        // 元の文字列がデータの末尾 (長さの部分が末尾を越える) または読んだ範囲 (4 KB) を越える場合は、読んだ範囲の末尾までを元の長さとみなす
+        // (書き込みと 00 埋めをその範囲に収める。INSP-10 の仕様 5)。
+        int limit = original.Status switch
+        {
+            InspectorStatus.Ok => Math.Min(original.ByteCount, current.Length),
+            InspectorStatus.NotEnoughData => current.Length,
+            _ => int.MaxValue,
+        };
         byte[] encoded;
         if (type.Id.StartsWith("cstr", StringComparison.Ordinal))
         {
