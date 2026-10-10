@@ -439,6 +439,7 @@ public sealed partial class MainWindow
                 Vm.Selected = doc;
                 _ = Commands.ExecuteAsync("edit.readOnly");
             }, Checked: doc.Editor.ReadOnly),
+            .. CompareTabMenuEntries(doc),
         ];
     }
 }

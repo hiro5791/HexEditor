@@ -48,7 +48,8 @@ public sealed partial class MainWindow
             ?? HandleInspectorTestCommand(cmd, request) ?? await HandlePackagingTestCommandsAsync(cmd, request)
             ?? HandleEditTestCommand(cmd, request) ?? await HandleSearchTestCommandsAsync(cmd, request)
             ?? await HandleViewTestCommandsAsync(cmd, request) ?? await HandleTabsTestCommandsAsync(cmd, request)
-            ?? await HandleShellTestCommandsAsync(cmd, request) ?? HandleAccessibilityTestCommand(cmd, request),
+            ?? await HandleShellTestCommandsAsync(cmd, request) ?? HandleAccessibilityTestCommand(cmd, request)
+            ?? await HandleCompareTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>

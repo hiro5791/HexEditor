@@ -61,6 +61,7 @@ public static class BuiltInSettings
         new("view.scrollBar.searchMarks", SettingCategories.View, SettingKind.Bool, true) { Order = 58 },
         new("view.scrollBar.selectionMark", SettingCategories.View, SettingKind.Bool, false) { Order = 59 },
         new("view.scrollBar.bookmarkMarks", SettingCategories.View, SettingKind.Bool, false) { Order = 59 },
+        new("view.scrollBar.diffMarks", SettingCategories.View, SettingKind.Bool, false) { Order = 59 },
         new("view.text.invalidSymbol", SettingCategories.View, SettingKind.Choice, "dot") { Options = ["dot", "replacement"], Order = 56 },
         new("view.modified.keepAfterSave", SettingCategories.View, SettingKind.Bool, false) { Order = 60 },
         new("view.modified.showDeletions", SettingCategories.View, SettingKind.Bool, false) { Order = 61 },

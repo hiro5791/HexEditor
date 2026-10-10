@@ -236,6 +236,7 @@ public static class BuiltInCommands
         new("view.panel.hash", "view"),
         new("view.panel.bookmarks", "view"),
         new("view.panel.searchResults", "view"),
+        new("view.panel.diffs", "view"),
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
 
@@ -260,6 +261,21 @@ public static class BuiltInCommands
         new("analysis.hash.verify", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.verifyFile", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.copy", "analysis") { Condition = "documentOpen" },
+
+        // ---- 比較 (ANA-01〜ANA-08)。次 / 前の差分は 00-overview.md 8.2 のグローバルのキー ----
+        new("analysis.compare", "compare"),
+        new("analysis.compareSaved", "compare") { Condition = "documentOpen" },
+        new("compare.nextDiff", "compare") { DefaultBindings = [K("Alt+F5")] },
+        new("compare.previousDiff", "compare") { DefaultBindings = [K("Shift+Alt+F5")] },
+        new("compare.recompare", "compare"),
+        new("compare.syncScroll", "compare"),
+        new("compare.layout", "compare"),
+        new("compare.copyRight", "compare"),
+        new("compare.copyLeft", "compare"),
+        new("compare.copyAllRight", "compare"),
+        new("compare.copyAllLeft", "compare"),
+        new("compare.showDiffList", "compare"),
+        new("compare.saveReport", "compare"),
 
         // ---- データインスペクタ (INSP-02 の「呼び出し」: インスペクタ: エンディアンの切り替え) ----
         new("inspector.toggleEndian", "inspector") { Condition = "documentOpen" },

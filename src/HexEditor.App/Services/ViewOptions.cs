@@ -125,6 +125,7 @@ public static class ViewOptions
         view.ShowSearchMarkers = settings.GetBool("view.scrollBar.searchMarks", true);
         view.ShowSelectionMarker = settings.GetBool("view.scrollBar.selectionMark", false);
         view.ShowBookmarkMarkers = settings.GetBool("view.scrollBar.bookmarkMarks", false);
+        view.ShowDiffMarkers = settings.GetBool("view.scrollBar.diffMarks", false);
         view.RefreshMarkers();
         view.InvalidSymbol = settings.GetString(InvalidSymbolKey, "dot") == "replacement"
             ? TextCellDecoder.ReplacementInvalidSymbol

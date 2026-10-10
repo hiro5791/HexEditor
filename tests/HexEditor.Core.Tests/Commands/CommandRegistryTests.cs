@@ -314,7 +314,7 @@ public sealed partial class CommandRegistryTests
         ["次 / 前のブックマーク"] = ["go.bookmark.next", "go.bookmark.previous"],
         ["番号付きブックマークの設定"] = [.. Enumerable.Range(1, 9).Select(n => $"go.bookmark.set{n}")],
         ["番号付きブックマークへ移動"] = [.. Enumerable.Range(1, 9).Select(n => $"go.bookmark.goto{n}")],
-        ["次 / 前の差分"] = ["-F2-01 (フェーズ 2)"],
+        ["次 / 前の差分"] = ["compare.nextDiff", "compare.previousDiff"],
         ["定義へ移動 (テンプレート) / 分岐先へ移動 (逆アセンブル)"] = ["-F3-01 / F4-01"],
         ["コマンドパレット"] = ["help.commandPalette"],
         ["設定"] = ["settings.open"],

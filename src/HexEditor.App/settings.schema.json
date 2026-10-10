@@ -602,6 +602,11 @@
       "type": "boolean",
       "default": true
     },
+    "view.scrollBar.diffMarks": {
+      "description": "Show differences on the scroll bar",
+      "type": "boolean",
+      "default": false
+    },
     "view.scrollBar.searchMarks": {
       "description": "Show search results on the scroll bar",
       "type": "boolean",
