@@ -54,8 +54,6 @@ public sealed class SelectionTests
 
     private static async Task<string> StatusSelectionAsync(AppSession app) => await app.UiaNameAsync("Status_Selection");
 
-    private static async Task<string> ClipboardBinaryAsync(AppSession app) => (await app.SendAsync("clipboard"))["binary"]!.GetValue<string>();
-
     // ---- EDIT-03 / EDIT-07 ----
 
     [Fact]
@@ -254,8 +252,8 @@ public sealed class SelectionTests
 
         // 4〜5. Ctrl+C: 行順に連結した 16 バイト。
         await app.KeyAsync("C", ctrl: true);
-        await app.IdleAsync();
-        Assert.Equal("04050607141516172425262734353637", await ClipboardBinaryAsync(app));
+        await app.WaitUntilAsync(async () => (await app.SendAsync("clipboard"))["binary"]?.GetValue<string>() == "04050607141516172425262734353637",
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the rectangle in the clipboard");
     });
 
     [Fact]
@@ -493,7 +491,9 @@ public sealed class SelectionTests
         await app.IdleAsync();
 
         // 2. テキスト形式は行ごとに改行した Hex。
-        Assert.Equal("04 05\r\n14 15\r\n24 25\r\n34 35", (await app.SendAsync("clipboard"))["text"]!.GetValue<string>());
+        // コピーは非同期に読むので、クリップボードに入るまで待つ。
+        await app.WaitUntilAsync(async () => (await app.SendAsync("clipboard"))["text"]?.GetValue<string>() == "04 05\r\n14 15\r\n24 25\r\n34 35",
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the rectangle in the clipboard");
 
         // 3〜4. 0x48 で Ctrl+B: 4 行の列 8〜9 に上書きされ、長さは変わらない。
         await ClickAtAsync(app, 0x48);
@@ -624,7 +624,7 @@ public sealed class SelectionTests
         // 3. Ctrl+C: AB CD を 100 回連結した 200 バイト。
         await app.SendAsync("focus", new JsonObject { ["target"] = "editor" });
         await app.KeyAsync("C", ctrl: true);
-        await app.IdleAsync();
-        Assert.Equal(string.Concat(Enumerable.Repeat("ABCD", 100)), await ClipboardBinaryAsync(app));
+        await app.WaitUntilAsync(async () => (await app.SendAsync("clipboard"))["binary"]?.GetValue<string>() == string.Concat(Enumerable.Repeat("ABCD", 100)),
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the ranges in the clipboard");
     });
 }

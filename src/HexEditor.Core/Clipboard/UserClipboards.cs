@@ -124,6 +124,15 @@ public sealed class UserClipboards : IDisposable
     /// <summary>番号・名前・履歴が変わった。</summary>
     public event EventHandler? Changed;
 
+    /// <summary>番号の内容・名前が変わった (終了後も残す設定のとき、保存し直す)。履歴の変化では出さない。</summary>
+    public event EventHandler? SlotsChanged;
+
+    private void RaiseSlotsChanged()
+    {
+        Changed?.Invoke(this, EventArgs.Empty);
+        SlotsChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     /// <summary>クリップボード履歴の件数 (設定 <c>clipboard.history.count</c>。0〜100)。</summary>
     public int HistoryLimit
     {
@@ -154,7 +163,7 @@ public sealed class UserClipboards : IDisposable
         entry.AddReference();
         _slots[i]?.ReleaseReference();
         _slots[i] = entry;
-        Changed?.Invoke(this, EventArgs.Empty);
+        RaiseSlotsChanged();
     }
 
     /// <summary>番号を空にする (パネルの「消去」)。</summary>
@@ -165,7 +174,7 @@ public sealed class UserClipboards : IDisposable
         {
             _slots[i] = null;
             old.ReleaseReference();
-            Changed?.Invoke(this, EventArgs.Empty);
+            RaiseSlotsChanged();
         }
     }
 
@@ -179,7 +188,7 @@ public sealed class UserClipboards : IDisposable
         }
 
         _names[Index(number)] = name;
-        Changed?.Invoke(this, EventArgs.Empty);
+        RaiseSlotsChanged();
         return true;
     }
 

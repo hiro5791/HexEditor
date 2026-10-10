@@ -43,6 +43,15 @@ public sealed partial class MainWindow
                     s_userClipboards.Load(Hosting.Program.Environment.Locations.Settings);
                 }
 
+                // 番号の内容・名前を変えたら保存し直す (設定がオンのとき。仕様 6)。
+                s_userClipboards.SlotsChanged += (_, _) =>
+                {
+                    if (s_userClipboards.Persist)
+                    {
+                        SaveUserClipboards();
+                    }
+                };
+
                 App.Settings.Changed += keys =>
                 {
                     if (keys.Contains(EditingSettings.ClipboardHistoryCountKey) || keys.Contains(EditingSettings.UserClipboardPersistKey))
@@ -196,7 +205,6 @@ public sealed partial class MainWindow
         if (EntryForSelection(doc) is { } entry)
         {
             UserClipboards.Set(number, entry);
-            SaveUserClipboards();
         }
     }
 
