@@ -42,6 +42,7 @@ public sealed partial class MainWindow
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
         "hash" => await TestHashAsync(request),
+        "viewPresets" => TestViewPresets(request),
         "stats" => await TestStatisticsAsync(request),
         "fileType" => await TestFileTypeAsync(request),
 

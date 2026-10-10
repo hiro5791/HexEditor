@@ -5206,4 +5206,33 @@
   <data name="Compare_Kind_RegionRemoved" xml:space="preserve"><value>領域の削除</value></data>
   <data name="Recovery_DeviceMissing" xml:space="preserve"><value>この復旧用データのデバイス {0} が接続されていません。</value></data>
   <data name="Recovery_DeviceSerialMismatch" xml:space="preserve"><value>{0} のデバイスは同じデバイスではありません (シリアル番号が違います)。変更は復旧していません。</value></data>
+  <data name="Menu_View_Presets.Text" xml:space="preserve"><value>プリセット(P)</value></data>
+  <data name="Menu_View_Presets.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_PresetSave.Text" xml:space="preserve"><value>現在の設定をプリセットとして保存(S)...</value></data>
+  <data name="Menu_View_PresetSave.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_PresetManage.Text" xml:space="preserve"><value>プリセットの管理(M)...</value></data>
+  <data name="Menu_View_PresetManage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_view_presetApply" xml:space="preserve"><value>表示: プリセットを適用</value></data>
+  <data name="CmdAlias_view_presetApply" xml:space="preserve"><value>ひょうじ ぷりせっとをてきよう</value></data>
+  <data name="Cmd_view_presetSave" xml:space="preserve"><value>表示: 現在の設定をプリセットとして保存</value></data>
+  <data name="CmdAlias_view_presetSave" xml:space="preserve"><value>ひょうじ ぷりせっとをほぞん</value></data>
+  <data name="Cmd_view_presetManage" xml:space="preserve"><value>表示: プリセットの管理</value></data>
+  <data name="CmdAlias_view_presetManage" xml:space="preserve"><value>ひょうじ ぷりせっとのかんり</value></data>
+  <data name="Preset_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Preset_Extensions" xml:space="preserve"><value>自動で適用する拡張子 (省略可)</value></data>
+  <data name="Preset_SaveTitle" xml:space="preserve"><value>表示設定をプリセットとして保存</value></data>
+  <data name="Preset_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="Preset_Saved" xml:space="preserve"><value>プリセット {0} を保存しました。</value></data>
+  <data name="Preset_Applied" xml:space="preserve"><value>プリセット {0} を適用しました。</value></data>
+  <data name="Preset_TooMany" xml:space="preserve"><value>プリセットは {0} 個までです。先にどれかを削除してください。</value></data>
+  <data name="Preset_Imported" xml:space="preserve"><value>{0} 個のプリセットをインポートしました。</value></data>
+  <data name="Preset_ImportError" xml:space="preserve"><value>{0} のプリセットをインポートできませんでした: {1}</value></data>
+  <data name="Preset_ImportErrorLine" xml:space="preserve"><value>{0} のプリセットをインポートできませんでした ({1} 行目): {2}</value></data>
+  <data name="Preset_ExportError" xml:space="preserve"><value>プリセットをエクスポートできませんでした ({0})。</value></data>
+  <data name="Preset_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="Preset_Export" xml:space="preserve"><value>エクスポート...</value></data>
+  <data name="Preset_Import" xml:space="preserve"><value>インポート...</value></data>
+  <data name="Preset_SectionHelp" xml:space="preserve"><value>プリセットは名前を付けた表示設定の組です。拡張子を指定したプリセットは、その拡張子のファイルを初めて開いたときに適用します。</value></data>
+  <data name="SetSection_ViewPresets" xml:space="preserve"><value>表示プリセット</value></data>
+  <data name="SetSearch_ViewPresets" xml:space="preserve"><value>ひょうじ ぷりせっと 1 行のバイト数 拡張子 エクスポート インポート</value></data>
 </root>

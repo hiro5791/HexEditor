@@ -5206,4 +5206,33 @@ Details were written to:
   <data name="Compare_Kind_RegionRemoved" xml:space="preserve"><value>Region removed</value></data>
   <data name="Recovery_DeviceMissing" xml:space="preserve"><value>The device {0} of this recovery data is not connected.</value></data>
   <data name="Recovery_DeviceSerialMismatch" xml:space="preserve"><value>The device at {0} is not the same device (the serial number differs). The changes were not recovered.</value></data>
+  <data name="Menu_View_Presets.Text" xml:space="preserve"><value>Presets</value></data>
+  <data name="Menu_View_Presets.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_PresetSave.Text" xml:space="preserve"><value>Save Current Settings as Preset...</value></data>
+  <data name="Menu_View_PresetSave.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_View_PresetManage.Text" xml:space="preserve"><value>Manage Presets...</value></data>
+  <data name="Menu_View_PresetManage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_view_presetApply" xml:space="preserve"><value>View: Apply preset</value></data>
+  <data name="CmdAlias_view_presetApply" xml:space="preserve"><value>view settings preset</value></data>
+  <data name="Cmd_view_presetSave" xml:space="preserve"><value>View: Save current settings as preset</value></data>
+  <data name="CmdAlias_view_presetSave" xml:space="preserve"><value>view settings preset</value></data>
+  <data name="Cmd_view_presetManage" xml:space="preserve"><value>View: Manage presets</value></data>
+  <data name="CmdAlias_view_presetManage" xml:space="preserve"><value>view settings preset</value></data>
+  <data name="Preset_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Preset_Extensions" xml:space="preserve"><value>Apply automatically to these extensions (optional)</value></data>
+  <data name="Preset_SaveTitle" xml:space="preserve"><value>Save view settings as a preset</value></data>
+  <data name="Preset_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Preset_Saved" xml:space="preserve"><value>Saved the preset {0}.</value></data>
+  <data name="Preset_Applied" xml:space="preserve"><value>Applied the preset {0}.</value></data>
+  <data name="Preset_TooMany" xml:space="preserve"><value>You can have up to {0} presets. Delete one first.</value></data>
+  <data name="Preset_Imported" xml:space="preserve"><value>Imported {0, plural, one {# preset} other {# presets}}.</value></data>
+  <data name="Preset_ImportError" xml:space="preserve"><value>The presets in {0} could not be imported: {1}</value></data>
+  <data name="Preset_ImportErrorLine" xml:space="preserve"><value>The presets in {0} could not be imported (line {1}): {2}</value></data>
+  <data name="Preset_ExportError" xml:space="preserve"><value>The presets could not be exported ({0}).</value></data>
+  <data name="Preset_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Preset_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="Preset_Import" xml:space="preserve"><value>Import...</value></data>
+  <data name="Preset_SectionHelp" xml:space="preserve"><value>Presets are named sets of view settings. A preset with extensions is applied the first time a matching file is opened.</value></data>
+  <data name="SetSection_ViewPresets" xml:space="preserve"><value>View presets</value></data>
+  <data name="SetSearch_ViewPresets" xml:space="preserve"><value>view presets bytes per row extensions export import</value></data>
 </root>

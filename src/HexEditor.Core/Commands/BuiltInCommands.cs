@@ -286,6 +286,11 @@ public static class BuiltInCommands
         new("view.clearReference", "view") { Condition = "documentOpen" },
         new("view.saveDefault", "view") { Condition = "documentOpen" },
         new("view.resetDefault", "view") { Condition = "documentOpen" },
+
+        // 表示プリセット (VIEW-42 の仕様 6・7)。「表示: プリセットを適用」は引数にプリセットの名前。
+        new("view.presetApply", "view") { Condition = "documentOpen", Argument = new() },
+        new("view.presetSave", "view") { Condition = "documentOpen" },
+        new("view.presetManage", "view"),
         new("view.announcePosition", "accessibility") { Condition = "documentOpen" },
         new("view.utf16Odd", "view") { Condition = "documentOpen" },
         .. Enumerable.Range(0, 4).Select(p => new CommandDefinition($"view.utf32Phase{p}", "view") { Condition = "documentOpen" }),

@@ -147,6 +147,9 @@ public sealed partial class MainWindow
             }
         }));
 
+        // プリセット (VIEW-42 の仕様 6・7)
+        AddPresetMenu(settings);
+
         foreach (MenuFlyoutItemBase item in (MenuFlyoutItemBase[])[columns, bytesPerRow, group, radix, _schemeMenu, settings])
         {
             view.Items.Insert(at++, item);

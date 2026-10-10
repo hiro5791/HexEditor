@@ -95,6 +95,10 @@ public static partial class TestDataCatalog
 
         // ---- cases/02-view-and-navigation.md の表 ----
         new("TD-VIEW-PATTERNS", 512, "表示形式・文字コードの確認用の決まったバイト列", path => WriteAll(path, ViewPatterns())),
+        new("TD-VIEW-NES", 40_976, "iNES のヘッダ 16 バイトの後に n mod 256 の列 (拡張子は使う側で付ける)",
+            path => WriteAll(path, [0x4E, 0x45, 0x53, 0x1A, 0x02, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, .. Enumerable.Range(16, 40_976 - 16).Select(i => (byte)i)])),
+        new("TD-VIEW-PRESET-FUTURE", ViewPresetFutureJson.Length, "表示プリセットの JSON (名前 Future、1 行 16 バイト、このバージョンが知らない項目を含む)",
+            path => File.WriteAllText(path, ViewPresetFutureJson)),
         new("TD-VIEW-LEN10", 10, "00, 01, …, 09", path => WriteAll(path, [.. Enumerable.Range(0, 10).Select(i => (byte)i)])),
         new("TD-VIEW-LEN100", 100, "オフセット n の値が n", path => WriteAll(path, [.. Enumerable.Range(0, 100).Select(i => (byte)i)])),
         new("TD-VIEW-SEQ-MOD", MiB, "TD-SEQ-1M の 0x10・0x25・0x3F を FF にしたもの", path => WriteGenerated(path, MiB, (o, s) =>
@@ -331,7 +335,22 @@ public static partial class TestDataCatalog
 
     private static void WriteAll(string path, byte[] data) => File.WriteAllBytes(path, data);
 
-    /// <summary>TD-INSP-VALUES: 下記以外はすべて 00 の 256 バイト。</summary>
+    /// <summary>TD-VIEW-PRESET-FUTURE の内容 (ASCII のみ)。</summary>
+    public const string ViewPresetFutureJson = """
+        {
+          "version": 2,
+          "format": "hexeditor-view-presets",
+          "presets": [
+            {
+              "name": "Future",
+              "extensions": [],
+              "view": { "bytesPerRow": 16, "futureOption": { "x": 1 } },
+              "futureField": true
+            }
+          ]
+        }
+        """;
+
     /// <summary>
     /// TD-ZIP: 無圧縮 (stored) で 3 つのテキストファイルを入れた ZIP。日時と内容を固定して、いつも同じバイト列にする。
     /// ローカルファイルヘッダ (50 4B 03 04) は 3 か所 (内容の文字列には現れない)。
@@ -412,6 +431,7 @@ public static partial class TestDataCatalog
         }
     }
 
+    /// <summary>TD-INSP-VALUES: 下記以外はすべて 00 の 256 バイト。</summary>
     public static byte[] InspectorValues()
     {
         byte[] data = new byte[256];

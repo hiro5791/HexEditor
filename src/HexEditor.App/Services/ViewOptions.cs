@@ -160,6 +160,14 @@ public static class ViewOptions
         if (doc.FilePath is { } path)
         {
             (ViewSettings view, long? reference) = store.Load(path, sourceDefaults);
+
+            // 拡張子で自動適用するプリセット (VIEW-42 の仕様 2 の 4・仕様 6): 初めて開いたときだけ。
+            if (store.TakeAutoPreset(path) is { } preset)
+            {
+                view = preset.ApplyTo(view);
+                AppLog.Info($"View preset applied: {preset.Name}");
+            }
+
             editor.ApplyView(view);
             editor.SetReferencePoint(reference);
         }
