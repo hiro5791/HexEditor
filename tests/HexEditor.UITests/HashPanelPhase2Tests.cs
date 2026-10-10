@@ -23,14 +23,25 @@ public sealed class HashPanelPhase2Tests
 
     private static async Task<JsonArray> ComputeAsync(AppSession app, int count)
     {
+        // パネルを開いたときの自動の計算が終わってから計算する (後から始まった自動の計算に結果を置き換えられないように)。
+        await app.IdleAsync();
         await HashAsync(app, "compute");
         JsonArray rows = [];
-        await app.WaitUntilAsync(async () =>
+        JsonObject? last = null;
+        try
         {
-            JsonObject state = await HashAsync(app);
-            rows = state["rows"]!.AsArray();
-            return !state["computing"]!.GetValue<bool>() && rows.Count == count;
-        }, UiTest.Scaled(TimeSpan.FromSeconds(30)), $"{count} hash results");
+            await app.WaitUntilAsync(async () =>
+            {
+                JsonObject state = last = await HashAsync(app);
+                rows = state["rows"]!.AsArray();
+                return !state["computing"]!.GetValue<bool>() && rows.Count == count;
+            }, UiTest.Scaled(TimeSpan.FromSeconds(30)), $"{count} hash results");
+        }
+        catch (TimeoutException ex)
+        {
+            throw new TimeoutException($"{ex.Message} Last state: {last?.ToJsonString()}", ex);
+        }
+
         return rows;
     }
 
