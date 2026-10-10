@@ -484,6 +484,7 @@ public sealed partial class MainWindow
         }
 
         ViewOptions.ApplyTo(view, App.Settings);
+        view.SelectionDragDropEnabled = App.Settings.GetBool(Core.View.EditingSettings.SelectionDragDropKey, true);
         view.ViewSettingsChanged -= HexView_ViewSettingsChanged;
         view.ViewSettingsChanged += HexView_ViewSettingsChanged;
     }

@@ -2779,4 +2779,228 @@ Details were written to:
   <data name="SetDesc_clipboard_history_count" xml:space="preserve"><value>Number of recent copies kept in the Clipboard panel. 0 keeps no history.</value></data>
   <data name="Set_clipboard_user_persist" xml:space="preserve"><value>Keep user clipboards after exit</value></data>
   <data name="SetDesc_clipboard_user_persist" xml:space="preserve"><value>Saves user clipboards up to 16 MiB each in the settings folder. Clipboard history isn't saved.</value></data>
+  <data name="Cmd_edit_selection_shiftNext" xml:space="preserve"><value>Shift selection forward</value></data>
+  <data name="CmdAlias_edit_selection_shiftNext" xml:space="preserve"><value>move record next</value></data>
+  <data name="Cmd_edit_selection_shiftPrevious" xml:space="preserve"><value>Shift selection back</value></data>
+  <data name="CmdAlias_edit_selection_shiftPrevious" xml:space="preserve"><value>move record previous</value></data>
+  <data name="Cmd_edit_selection_shiftBy" xml:space="preserve"><value>Shift selection by N bytes...</value></data>
+  <data name="CmdAlias_edit_selection_shiftBy" xml:space="preserve"><value>move offset</value></data>
+  <data name="Cmd_edit_selection_resize" xml:space="preserve"><value>Grow / shrink selection...</value></data>
+  <data name="CmdAlias_edit_selection_resize" xml:space="preserve"><value>extend expand narrow</value></data>
+  <data name="Cmd_edit_selection_swapEnds" xml:space="preserve"><value>Swap anchor and cursor</value></data>
+  <data name="CmdAlias_edit_selection_swapEnds" xml:space="preserve"><value>other end</value></data>
+  <data name="Cmd_edit_selection_invert" xml:space="preserve"><value>Invert selection</value></data>
+  <data name="CmdAlias_edit_selection_invert" xml:space="preserve"><value>inverse</value></data>
+  <data name="Cmd_edit_selection_nextElement" xml:space="preserve"><value>Next range</value></data>
+  <data name="CmdAlias_edit_selection_nextElement" xml:space="preserve"><value>multi selection</value></data>
+  <data name="Cmd_edit_selection_previousElement" xml:space="preserve"><value>Previous range</value></data>
+  <data name="CmdAlias_edit_selection_previousElement" xml:space="preserve"><value>multi selection</value></data>
+  <data name="Cmd_edit_selection_startRectangle" xml:space="preserve"><value>Start rectangle selection</value></data>
+  <data name="CmdAlias_edit_selection_startRectangle" xml:space="preserve"><value>column block box</value></data>
+  <data name="Cmd_edit_selection_toMulti" xml:space="preserve"><value>Convert to multi-selection</value></data>
+  <data name="CmdAlias_edit_selection_toMulti" xml:space="preserve"><value>rectangle rows</value></data>
+  <data name="Cmd_edit_selection_save" xml:space="preserve"><value>Save selection...</value></data>
+  <data name="CmdAlias_edit_selection_save" xml:space="preserve"><value>selection set</value></data>
+  <data name="Cmd_edit_selection_load" xml:space="preserve"><value>Load saved selection...</value></data>
+  <data name="CmdAlias_edit_selection_load" xml:space="preserve"><value>selection set</value></data>
+  <data name="Cmd_edit_selection_export" xml:space="preserve"><value>Export selection...</value></data>
+  <data name="CmdAlias_edit_selection_export" xml:space="preserve"><value>csv json</value></data>
+  <data name="Cmd_edit_selection_import" xml:space="preserve"><value>Import selection...</value></data>
+  <data name="CmdAlias_edit_selection_import" xml:space="preserve"><value>csv json</value></data>
+  <data name="Cmd_edit_caret_addAbove" xml:space="preserve"><value>Add cursor above</value></data>
+  <data name="CmdAlias_edit_caret_addAbove" xml:space="preserve"><value>multi cursor caret</value></data>
+  <data name="Cmd_edit_caret_addBelow" xml:space="preserve"><value>Add cursor below</value></data>
+  <data name="CmdAlias_edit_caret_addBelow" xml:space="preserve"><value>multi cursor caret</value></data>
+  <data name="Cmd_edit_caret_atElements" xml:space="preserve"><value>Put a cursor at each range</value></data>
+  <data name="CmdAlias_edit_caret_atElements" xml:space="preserve"><value>multi cursor caret</value></data>
+  <data name="Cmd_edit_insertRectangle" xml:space="preserve"><value>Insert into rectangle...</value></data>
+  <data name="CmdAlias_edit_insertRectangle" xml:space="preserve"><value>column block</value></data>
+  <data name="Cmd_edit_clipboardHistory_paste" xml:space="preserve"><value>Paste from clipboard history</value></data>
+  <data name="CmdAlias_edit_clipboardHistory_paste" xml:space="preserve"><value>recent copies</value></data>
+  <data name="Cmd_view_panel_history" xml:space="preserve"><value>Show history panel</value></data>
+  <data name="CmdAlias_view_panel_history" xml:space="preserve"><value>undo list</value></data>
+  <data name="Cmd_view_panel_clipboard" xml:space="preserve"><value>Toggle clipboard panel</value></data>
+  <data name="CmdAlias_view_panel_clipboard" xml:space="preserve"><value>user clipboard</value></data>
+  <data name="Cmd_search_results_toSelection" xml:space="preserve"><value>Convert search results to selection</value></data>
+  <data name="CmdAlias_search_results_toSelection" xml:space="preserve"><value>multi selection</value></data>
+  <data name="Cmd_edit_userClipboard_copy1" xml:space="preserve"><value>Copy to user clipboard 1</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy1" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_paste1" xml:space="preserve"><value>Paste from user clipboard 1</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste1" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_copy2" xml:space="preserve"><value>Copy to user clipboard 2</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy2" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_paste2" xml:space="preserve"><value>Paste from user clipboard 2</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste2" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_copy3" xml:space="preserve"><value>Copy to user clipboard 3</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy3" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_paste3" xml:space="preserve"><value>Paste from user clipboard 3</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste3" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_copy4" xml:space="preserve"><value>Copy to user clipboard 4</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy4" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_paste4" xml:space="preserve"><value>Paste from user clipboard 4</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste4" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_copy5" xml:space="preserve"><value>Copy to user clipboard 5</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy5" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_paste5" xml:space="preserve"><value>Paste from user clipboard 5</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste5" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_copy6" xml:space="preserve"><value>Copy to user clipboard 6</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy6" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_paste6" xml:space="preserve"><value>Paste from user clipboard 6</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste6" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_copy7" xml:space="preserve"><value>Copy to user clipboard 7</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy7" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_paste7" xml:space="preserve"><value>Paste from user clipboard 7</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste7" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_copy8" xml:space="preserve"><value>Copy to user clipboard 8</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy8" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_paste8" xml:space="preserve"><value>Paste from user clipboard 8</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste8" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_copy9" xml:space="preserve"><value>Copy to user clipboard 9</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy9" xml:space="preserve"><value>register</value></data>
+  <data name="Cmd_edit_userClipboard_paste9" xml:space="preserve"><value>Paste from user clipboard 9</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste9" xml:space="preserve"><value>register</value></data>
+  <data name="Menu_Edit_Selection.Text" xml:space="preserve"><value>Selection</value></data>
+  <data name="Menu_Edit_Selection.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Edit_UserClipboard.Text" xml:space="preserve"><value>User Clipboards</value></data>
+  <data name="Menu_Edit_UserClipboard.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_UserClipboard_Copy.Text" xml:space="preserve"><value>Copy To</value></data>
+  <data name="Menu_UserClipboard_Copy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_UserClipboard_Paste.Text" xml:space="preserve"><value>Paste From</value></data>
+  <data name="Menu_UserClipboard_Paste.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_UserClipboard_History.Text" xml:space="preserve"><value>Paste from Clipboard History</value></data>
+  <data name="Menu_UserClipboard_History.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Selection_ShiftNext.Text" xml:space="preserve"><value>Shift Forward</value></data>
+  <data name="Menu_Selection_ShiftNext.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Selection_ShiftPrevious.Text" xml:space="preserve"><value>Shift Back</value></data>
+  <data name="Menu_Selection_ShiftPrevious.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Selection_ShiftBy.Text" xml:space="preserve"><value>Shift by N Bytes...</value></data>
+  <data name="Menu_Selection_ShiftBy.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Selection_Resize.Text" xml:space="preserve"><value>Grow / Shrink...</value></data>
+  <data name="Menu_Selection_Resize.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Selection_SwapEnds.Text" xml:space="preserve"><value>Swap Anchor and Cursor</value></data>
+  <data name="Menu_Selection_SwapEnds.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Selection_Invert.Text" xml:space="preserve"><value>Invert Selection</value></data>
+  <data name="Menu_Selection_Invert.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Selection_NextElement.Text" xml:space="preserve"><value>Next Range</value></data>
+  <data name="Menu_Selection_NextElement.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Selection_PreviousElement.Text" xml:space="preserve"><value>Previous Range</value></data>
+  <data name="Menu_Selection_PreviousElement.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Selection_ToMulti.Text" xml:space="preserve"><value>Convert to Multi-Selection</value></data>
+  <data name="Menu_Selection_ToMulti.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Selection_StartRectangle.Text" xml:space="preserve"><value>Start Rectangle Selection</value></data>
+  <data name="Menu_Selection_StartRectangle.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Selection_InsertRectangle.Text" xml:space="preserve"><value>Insert into Rectangle...</value></data>
+  <data name="Menu_Selection_InsertRectangle.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Selection_CaretsAtElements.Text" xml:space="preserve"><value>Cursor at Each Range</value></data>
+  <data name="Menu_Selection_CaretsAtElements.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Selection_AddCaretAbove.Text" xml:space="preserve"><value>Add Cursor Above</value></data>
+  <data name="Menu_Selection_AddCaretAbove.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Selection_AddCaretBelow.Text" xml:space="preserve"><value>Add Cursor Below</value></data>
+  <data name="Menu_Selection_AddCaretBelow.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Selection_Save.Text" xml:space="preserve"><value>Save Selection...</value></data>
+  <data name="Menu_Selection_Save.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Selection_Load.Text" xml:space="preserve"><value>Load Saved Selection...</value></data>
+  <data name="Menu_Selection_Load.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Selection_Export.Text" xml:space="preserve"><value>Export Selection...</value></data>
+  <data name="Menu_Selection_Export.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Selection_Import.Text" xml:space="preserve"><value>Import Selection...</value></data>
+  <data name="Menu_Selection_Import.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_HistoryPanel.Text" xml:space="preserve"><value>History</value></data>
+  <data name="Menu_View_HistoryPanel.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_View_ClipboardPanel.Text" xml:space="preserve"><value>Clipboard</value></data>
+  <data name="Menu_View_ClipboardPanel.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_UserClipboard_CopyN" xml:space="preserve"><value>User Clipboard {0}</value></data>
+  <data name="Menu_UserClipboard_PasteN" xml:space="preserve"><value>User Clipboard {0}</value></data>
+  <data name="Status_MultiSelection" xml:space="preserve"><value>{0, plural, one {# range} other {# ranges}}, {1} bytes total (main: {2}–{3})</value></data>
+  <data name="Status_Rectangle" xml:space="preserve"><value>Rectangle {0} rows × {1} bytes ({2} bytes total)</value></data>
+  <data name="Status_Carets" xml:space="preserve"><value>{0, plural, one {# cursor} other {# cursors}}</value></data>
+  <data name="Notice_SelectionOutOfRange" xml:space="preserve"><value>The selection can't be shifted any further.</value></data>
+  <data name="Notice_TooManyElements" xml:space="preserve"><value>A multi-selection can have up to {0} ranges. No range was added.</value></data>
+  <data name="Notice_SelectionTruncated" xml:space="preserve"><value>Only the first {0} ranges were selected (the multi-selection limit).</value></data>
+  <data name="Notice_TooManyCarets" xml:space="preserve"><value>You can have up to {0} cursors.</value></data>
+  <data name="Notice_CaretInputFailed" xml:space="preserve"><value>{0, plural, one {# cursor couldn't take the input.} other {# cursors couldn't take the input.}}</value></data>
+  <data name="Notice_RectangleTooManyRows" xml:space="preserve"><value>The rectangle has {0} rows, more than the multi-selection limit ({1}), so it can't be converted. The selection was cleared.</value></data>
+  <data name="Notice_RectangleRowLimit" xml:space="preserve"><value>The rectangle has {0} rows, more than the limit of {1} rows. Overwrite operations are still available.</value></data>
+  <data name="Command_NoRectangle" xml:space="preserve"><value>There's no rectangle selection.</value></data>
+  <data name="Command_UserClipboardEmpty" xml:space="preserve"><value>This user clipboard is empty.</value></data>
+  <data name="Command_ClipboardHistoryEmpty" xml:space="preserve"><value>The clipboard history is empty.</value></data>
+  <data name="Clipboard_RangesTooLarge" xml:space="preserve"><value>The selected ranges are too large to copy.</value></data>
+  <data name="ShiftSelection_Title" xml:space="preserve"><value>Shift Selection</value></data>
+  <data name="ShiftSelection_Amount" xml:space="preserve"><value>Amount (negative shifts back)</value></data>
+  <data name="ShiftSelection_Shift" xml:space="preserve"><value>Shift</value></data>
+  <data name="ResizeSelection_Title" xml:space="preserve"><value>Grow / Shrink Selection</value></data>
+  <data name="ResizeSelection_Start" xml:space="preserve"><value>Move the start back by (negative shrinks)</value></data>
+  <data name="ResizeSelection_End" xml:space="preserve"><value>Move the end forward by (negative shrinks)</value></data>
+  <data name="ResizeSelection_Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="SelectRange_ModeAdd" xml:space="preserve"><value>Add to the current selection</value></data>
+  <data name="SelectRange_Rectangle" xml:space="preserve"><value>Select as a rectangle</value></data>
+  <data name="Fill_ContinueAcross" xml:space="preserve"><value>Continue the content across ranges (instead of restarting in each range)</value></data>
+  <data name="Fill_RangesInfo" xml:space="preserve"><value>{0, plural, one {# range} other {# ranges}}, {1} bytes total</value></data>
+  <data name="Operation_DeleteRanges" xml:space="preserve"><value>Deleting ranges</value></data>
+  <data name="Operation_ExportSelection" xml:space="preserve"><value>Exporting selection</value></data>
+  <data name="SelectionSets_None" xml:space="preserve"><value>There are no saved selections.</value></data>
+  <data name="SelectionSets_TooMany" xml:space="preserve"><value>A document can have up to {0} saved selections.</value></data>
+  <data name="SelectionSets_Saved" xml:space="preserve"><value>Saved the selection as "{0}".</value></data>
+  <data name="SelectionSets_Clipped" xml:space="preserve"><value>{0, plural, one {# range was beyond the end of the file and was shortened or left out.} other {# ranges were beyond the end of the file and were shortened or left out.}}</value></data>
+  <data name="SaveSelection_Title" xml:space="preserve"><value>Save Selection</value></data>
+  <data name="SaveSelection_Name" xml:space="preserve"><value>Name (1 to 100 characters)</value></data>
+  <data name="SaveSelection_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="SaveSelection_Exists" xml:space="preserve"><value>A selection with this name exists. Saving replaces it.</value></data>
+  <data name="SaveSelection_OverwriteBody" xml:space="preserve"><value>Replace the saved selection "{0}"?</value></data>
+  <data name="SaveSelection_Overwrite" xml:space="preserve"><value>Replace</value></data>
+  <data name="LoadSelection_Title" xml:space="preserve"><value>Load Saved Selection</value></data>
+  <data name="LoadSelection_ListName" xml:space="preserve"><value>Saved selections</value></data>
+  <data name="LoadSelection_Item" xml:space="preserve"><value>{0} — {1} ranges, {2} bytes, {3}</value></data>
+  <data name="LoadSelection_Replace" xml:space="preserve"><value>Replace the selection</value></data>
+  <data name="LoadSelection_Add" xml:space="preserve"><value>Add to the current selection</value></data>
+  <data name="LoadSelection_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="LoadSelection_Rename" xml:space="preserve"><value>Rename</value></data>
+  <data name="LoadSelection_NewName" xml:space="preserve"><value>New name</value></data>
+  <data name="LoadSelection_Note" xml:space="preserve"><value>Saved selections keep their offsets. Unlike bookmarks, they don't move when you insert or delete data.</value></data>
+  <data name="LoadSelection_Load" xml:space="preserve"><value>Load</value></data>
+  <data name="SelectionFile_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="SelectionFile_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="SelectionFile_Exported" xml:space="preserve"><value>Exported the selection to {0}.</value></data>
+  <data name="SelectionFile_WriteError" xml:space="preserve"><value>Can't write the file: {0}</value></data>
+  <data name="SelectionFile_ReadError" xml:space="preserve"><value>Can't read the file: {0}</value></data>
+  <data name="SelectionFile_ImportError" xml:space="preserve"><value>Line {0}: {1}</value></data>
+  <data name="SelectionFile_Error_StartNotNumber" xml:space="preserve"><value>The start isn't a number.</value></data>
+  <data name="SelectionFile_Error_LengthNotNumber" xml:space="preserve"><value>The length isn't a number.</value></data>
+  <data name="SelectionFile_Error_EndNotNumber" xml:space="preserve"><value>The end isn't a number.</value></data>
+  <data name="SelectionFile_Error_EmptyRange" xml:space="preserve"><value>The range is empty (the end is before the start, or the length is 0).</value></data>
+  <data name="SelectionFile_Error_BadLine" xml:space="preserve"><value>The line can't be read. Use "start length" or "start-end".</value></data>
+  <data name="SelectionFile_Error_BadJson" xml:space="preserve"><value>The JSON can't be read.</value></data>
+  <data name="Panel_History_Title" xml:space="preserve"><value>History</value></data>
+  <data name="Panel_Clipboard_Title" xml:space="preserve"><value>Clipboard</value></data>
+  <data name="History_Undo" xml:space="preserve"><value>Undo</value></data>
+  <data name="History_Redo" xml:space="preserve"><value>Redo</value></data>
+  <data name="History_Compare" xml:space="preserve"><value>Compare two points</value></data>
+  <data name="History_GoToState.Text" xml:space="preserve"><value>Go to This Point</value></data>
+  <data name="History_SelectRange.Text" xml:space="preserve"><value>Go to This Range</value></data>
+  <data name="History_CompareMenu.Text" xml:space="preserve"><value>Compare Two Points</value></data>
+  <data name="History_SavedMark" xml:space="preserve"><value>Saved</value></data>
+  <data name="History_CurrentState" xml:space="preserve"><value>current state</value></data>
+  <data name="History_RedoState" xml:space="preserve"><value>can be redone</value></data>
+  <data name="History_Range" xml:space="preserve"><value>{0} ({1} bytes)</value></data>
+  <data name="History_PointName" xml:space="preserve"><value>History {0}</value></data>
+  <data name="EditOp_Move" xml:space="preserve"><value>Move</value></data>
+  <data name="EditOp_Copy" xml:space="preserve"><value>Copy</value></data>
+  <data name="EditOp_Cut" xml:space="preserve"><value>Cut</value></data>
+  <data name="EditOp_InsertRectangle" xml:space="preserve"><value>Insert into rectangle</value></data>
+  <data name="EditOp_FillZero" xml:space="preserve"><value>Fill with 00</value></data>
+  <data name="ClipboardPanel_Slot" xml:space="preserve"><value>User clipboard {0}</value></data>
+  <data name="ClipboardPanel_SlotNamed" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="ClipboardPanel_Empty" xml:space="preserve"><value>(empty)</value></data>
+  <data name="ClipboardPanel_LostOnExit" xml:space="preserve"><value>Cleared on exit</value></data>
+  <data name="ClipboardPanel_Detail" xml:space="preserve"><value>{0} bytes · {1} · {2} · {3} @ {4}</value></data>
+  <data name="ClipboardPanel_PasteButton" xml:space="preserve"><value>Paste</value></data>
+  <data name="ClipboardPanel_PasteOverwriteButton" xml:space="preserve"><value>Overwrite paste</value></data>
+  <data name="ClipboardPanel_ClearButton" xml:space="preserve"><value>Clear</value></data>
+  <data name="ClipboardPanel_RenameButton" xml:space="preserve"><value>Name</value></data>
+  <data name="ClipboardPanel_MoveButton" xml:space="preserve"><value>Move to a user clipboard</value></data>
+  <data name="ClipboardPanel_NameOk" xml:space="preserve"><value>OK</value></data>
+  <data name="ClipboardPanel_NameBox" xml:space="preserve"><value>Name (up to 50 characters)</value></data>
+  <data name="ClipboardPanel_SlotsHeader" xml:space="preserve"><value>User clipboards</value></data>
+  <data name="ClipboardPanel_HistoryHeader" xml:space="preserve"><value>Clipboard history</value></data>
+  <data name="SearchResults_ToSelection.Text" xml:space="preserve"><value>To Selection</value></data>
 </root>

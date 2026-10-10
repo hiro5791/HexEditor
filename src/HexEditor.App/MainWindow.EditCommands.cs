@@ -283,6 +283,27 @@ public sealed partial class MainWindow
             return;
         }
 
+        // マルチカーソルは各カーソル位置に同じ内容を挿入し、矩形選択は矩形挿入にする (EDIT-14 の仕様 4)。
+        if (doc.Editor.HasMultipleCarets)
+        {
+            InsertAtCarets(doc, request.Spec, request.Count);
+            FocusEditor();
+            return;
+        }
+
+        if (doc.Editor.SelectionKind == SelectionKind.Rectangle)
+        {
+            if (doc.Editor.CheckRectangleRows() is not null)
+            {
+                ShowRectangleRowLimit(doc);
+                return;
+            }
+
+            await InsertIntoRectangleAsync(doc, request.Spec, request.Count);
+            FocusEditor();
+            return;
+        }
+
         if (await BuildContentAsync(doc, Loc.Get("Operation_InsertBytes"), request.Spec, request.Position, request.Count) is { } content)
         {
             ApplyEdit(doc, () => EditCommands.Insert(doc.Editor, request.Position, content, request.SelectInserted, "バイトの挿入"));
@@ -316,6 +337,14 @@ public sealed partial class MainWindow
             }
 
             spec = spec with { Pattern = bytes, ClipboardSource = source };
+        }
+
+        if (request.UseSelection && doc.Editor.HasMultipleRanges)
+        {
+            // マルチ選択・矩形は要素ごとに塗る (EDIT-29 の仕様 4)。1 つの編集グループ。
+            await FillSelectedRangesAsync(doc, spec, request.ContinueAcross);
+            FocusEditor();
+            return;
         }
 
         if (await BuildContentAsync(doc, Loc.Get("Operation_Fill"), spec, request.Start, request.Length) is { } content)

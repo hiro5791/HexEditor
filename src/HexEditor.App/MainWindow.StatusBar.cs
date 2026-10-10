@@ -214,7 +214,7 @@ public sealed partial class MainWindow
         {
             ["cursor"] = doc is not null,
             ["value"] = doc is not null && doc.ValueText.Length > 0,
-            ["selection"] = doc is not null && doc.Editor.HasSelection,
+            ["selection"] = doc is not null && (doc.Editor.HasSelection || doc.Editor.HasMultipleCarets),
             ["column"] = doc is not null,
             ["encoding"] = doc is not null,
             ["mode"] = doc is not null,

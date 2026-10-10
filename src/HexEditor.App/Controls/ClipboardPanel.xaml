@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.ClipboardPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:HexEditor.App.ViewModels"
+    AutomationProperties.AutomationId="ClipboardPanel"
+    AutomationProperties.LandmarkType="Custom">
+    <!--
+        クリップボードパネル (EDIT-28)。ユーザークリップボード 1〜9 とクリップボード履歴 (新しい順)。上部に「貼り付け」「上書き貼り付け」
+        「消去」「名前を付ける」、履歴には「ユーザークリップボードに移す」。各項目は番号または日時、名前、大きさ、先頭 16 バイト、コピー元。
+    -->
+    <Grid RowSpacing="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Padding="8,6,8,0" Orientation="Horizontal" Spacing="4">
+            <Button x:Name="PasteButton" AutomationProperties.AutomationId="ClipboardPanel_Paste" Click="Paste_Click">
+                <FontIcon FontSize="14" Glyph="&#xE77F;" />
+            </Button>
+            <Button x:Name="PasteOverwriteButton" AutomationProperties.AutomationId="ClipboardPanel_PasteOverwrite" Click="PasteOverwrite_Click">
+                <FontIcon FontSize="14" Glyph="&#xE7C3;" />
+            </Button>
+            <Button x:Name="ClearButton" AutomationProperties.AutomationId="ClipboardPanel_Clear" Click="Clear_Click">
+                <FontIcon FontSize="14" Glyph="&#xE74D;" />
+            </Button>
+            <Button x:Name="RenameButton" AutomationProperties.AutomationId="ClipboardPanel_Rename">
+                <FontIcon FontSize="14" Glyph="&#xE8AC;" />
+                <Button.Flyout>
+                    <Flyout x:Name="RenameFlyout" Opening="RenameFlyout_Opening">
+                        <StackPanel MinWidth="240" Spacing="8">
+                            <TextBox x:Name="NameBox" AutomationProperties.AutomationId="ClipboardPanel_NameBox" MaxLength="50" />
+                            <Button x:Name="NameOk" AutomationProperties.AutomationId="ClipboardPanel_NameOk" Click="NameOk_Click" />
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+            <Button x:Name="MoveButton" AutomationProperties.AutomationId="ClipboardPanel_MoveToSlot">
+                <FontIcon FontSize="14" Glyph="&#xE8C8;" />
+                <Button.Flyout>
+                    <MenuFlyout x:Name="MoveMenu" Opening="MoveMenu_Opening" />
+                </Button.Flyout>
+            </Button>
+        </StackPanel>
+        <TextBlock x:Name="SlotsHeader" Grid.Row="1" Margin="12,4,8,0" Style="{ThemeResource BodyStrongTextBlockStyle}" />
+        <ListView
+            x:Name="SlotList"
+            Grid.Row="2"
+            AutomationProperties.AutomationId="ClipboardPanel_Slots"
+            DoubleTapped="List_DoubleTapped"
+            ItemsSource="{x:Bind Vm.Slots}"
+            KeyDown="List_KeyDown"
+            SelectionChanged="SlotList_SelectionChanged"
+            SelectionMode="Single">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:ClipboardItemRow">
+                    <StackPanel Padding="0,2" AutomationProperties.Name="{x:Bind AccessibleName}">
+                        <TextBlock Text="{x:Bind Title}" TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            FontFamily="Cascadia Mono, Consolas"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind Detail}"
+                            TextTrimming="CharacterEllipsis" />
+                        <TextBlock Foreground="{ThemeResource SystemFillColorCautionBrush}" Text="{x:Bind Note}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <TextBlock x:Name="HistoryHeader" Grid.Row="3" Margin="12,4,8,0" Style="{ThemeResource BodyStrongTextBlockStyle}" />
+        <ListView
+            x:Name="HistoryList"
+            Grid.Row="4"
+            AutomationProperties.AutomationId="ClipboardPanel_History"
+            DoubleTapped="List_DoubleTapped"
+            ItemsSource="{x:Bind Vm.History}"
+            KeyDown="List_KeyDown"
+            SelectionChanged="HistoryList_SelectionChanged"
+            SelectionMode="Single">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:ClipboardItemRow">
+                    <StackPanel Padding="0,2" AutomationProperties.Name="{x:Bind AccessibleName}">
+                        <TextBlock Text="{x:Bind Title}" />
+                        <TextBlock
+                            FontFamily="Cascadia Mono, Consolas"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind Detail}"
+                            TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</UserControl>

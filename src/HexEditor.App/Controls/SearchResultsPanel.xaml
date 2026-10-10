@@ -120,6 +120,11 @@
                             GroupName="ConvertTarget" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem
+                            x:Name="ToSelectionItem"
+                            x:Uid="SearchResults_ToSelection"
+                            AutomationProperties.AutomationId="SearchResults_ToSelection"
+                            Click="ToSelection_Click" />
+                        <MenuFlyoutItem
                             x:Name="ToBookmarksItem"
                             x:Uid="SearchResults_ToBookmarks"
                             AutomationProperties.AutomationId="SearchResults_ToBookmarks"

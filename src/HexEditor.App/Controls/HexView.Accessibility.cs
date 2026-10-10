@@ -315,7 +315,7 @@ public sealed partial class HexView
                 }
             }
 
-            if (_editor.HasSelection && offset >= _editor.SelectionStart && offset < _editor.SelectionStart + _editor.SelectionLength)
+            if (_editor.HasSelection && _editor.IsSelected(offset))
             {
                 states.Add(Loc.Get("HexView_State_Selected"));
             }
@@ -540,8 +540,7 @@ public sealed partial class HexView
 
         long offset = row.ContentRowStart + byteIndex;
         CellKind kind = row.KindAt(byteIndex);
-        bool selected = _editor.HasSelection && offset >= _editor.SelectionStart && offset < _editor.SelectionStart + _editor.SelectionLength
-            && kind != CellKind.Empty;
+        bool selected = _editor.HasSelection && _editor.IsSelected(offset) && kind != CellKind.Empty;
         bool cursor = offset == _editor.Cursor;
         bool activeColumn = hex == (_editor.ActiveColumn == ActiveColumn.Hex);
         string text = hex ? row.HexCellText(byteIndex) : row.TextCellText(byteIndex);

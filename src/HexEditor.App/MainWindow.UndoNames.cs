@@ -33,6 +33,11 @@ public sealed partial class MainWindow
         ["ファイルサイズの変更"] = "EditOp_Resize",
         ["カーソル位置で切り詰める"] = "EditOp_Truncate",
         ["レコードのアドレスに書く"] = "EditOp_WriteRecordAddress",
+        ["移動"] = "EditOp_Move",
+        ["コピー"] = "EditOp_Copy",
+        ["切り取り"] = "EditOp_Cut",
+        ["矩形挿入"] = "EditOp_InsertRectangle",
+        ["00 で塗りつぶし"] = "EditOp_FillZero",
         [Document.DiscardDescription] = "EditOp_Discard",
         [Document.MergeDescription] = "EditOp_Merge",
     };

@@ -42,7 +42,7 @@ public sealed record SpecialClipboard(string? Text, byte[]? Binary, IReadOnlyLis
 /// システムのクリップボードとアプリ内クリップボード (EDIT-22〜EDIT-24)。システムのクリップボードには上限 (既定 64 MiB) までの
 /// 実データと、どのコピーかを示す `HexEditor.Meta` を入れる。上限を超える範囲はアプリ内クリップボードの参照だけで貼り付ける。
 /// </summary>
-public sealed class ClipboardService
+public sealed partial class ClipboardService
 {
     /// <summary>システムのクリップボードに入れる最大サイズ (EDIT-22 の仕様 4。設定「クリップボードに入れる最大サイズ」、既定 64 MiB)。</summary>
     public static long SystemLimit => App.Settings is { } settings
@@ -143,6 +143,12 @@ public sealed class ClipboardService
     {
         LastTruncatedBytes = 0;
         DataPackageView view = SystemClipboard.GetContent();
+
+        // マルチ選択・矩形からコピーした内容 (要素ごと・行ごとに貼る。EDIT-07 の仕様 7、EDIT-17 の仕様 3)。
+        if (await PasteRangesAsync(view, editor, overwrite) is { } ranges)
+        {
+            return Map(ranges);
+        }
 
         // (1) アプリ内クリップボード: Meta が今のアプリの最後のコピーと一致すれば、範囲の参照で貼る (一致しなければ破棄する)。
         if (view.Contains(MetaFormat) && InApp.Current is not null && await view.GetDataAsync(MetaFormat) is string meta)

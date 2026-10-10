@@ -99,8 +99,7 @@ public sealed partial class HexView
         private int _count = -1;
         private int _lead;
         private CellMode _mode;
-        private long _selFrom;
-        private long _selTo;
+        private bool[] _selected = [];
         private bool _currentRow;
         private RowFrame _frame;
         private readonly List<Path> _hatches = [];
@@ -267,17 +266,10 @@ public sealed partial class HexView
         public bool Update(in RowFrame frame, long rowStart, int lead, int count, ReadOnlySpan<byte> bytes, ReadOnlySpan<ByteState> states,
             ReadOnlySpan<ChangeMark> marks, ReadOnlySpan<bool> matched, ReadOnlySpan<bool> focus, ReadOnlySpan<bool> deleted, ReadOnlySpan<TextCell> text,
             CellMode mode,
-            long selStart, long selEnd, bool currentRow, Palette palette, double cellWidth, double rowHeight, Func<string, double> measure)
+            ReadOnlySpan<bool> selected, bool currentRow, Palette palette, double cellWidth, double rowHeight, Func<string, double> measure)
         {
-            long selFrom = Math.Max(selStart, rowStart + lead) - rowStart;
-            long selTo = Math.Min(selEnd, rowStart + count) - rowStart;
-            if (selFrom >= selTo)
-            {
-                selFrom = selTo = 0;
-            }
-
-            if (_count == count && _lead == lead && ContentRowStart == rowStart && _mode == mode && _frame == frame && _selFrom == selFrom
-                && _selTo == selTo && _currentRow == currentRow
+            if (_count == count && _lead == lead && ContentRowStart == rowStart && _mode == mode && _frame == frame
+                && selected[..count].SequenceEqual(_selected.AsSpan(0, count)) && _currentRow == currentRow
                 && bytes[..count].SequenceEqual(_bytes.AsSpan(0, count)) && states[..count].SequenceEqual(_states.AsSpan(0, count))
                 && marks[..count].SequenceEqual(_marks.AsSpan(0, count)) && matched[..count].SequenceEqual(_matched.AsSpan(0, count))
                 && focus[..count].SequenceEqual(_focus.AsSpan(0, count)) && deleted[..count].SequenceEqual(_deleted.AsSpan(0, count))
@@ -291,8 +283,6 @@ public sealed partial class HexView
             _lead = lead;
             _mode = mode;
             _frame = frame;
-            _selFrom = selFrom;
-            _selTo = selTo;
             _currentRow = currentRow;
             int b = frame.Columns.BytesPerRow;
             if (_bytes.Length < b)
@@ -303,8 +293,13 @@ public sealed partial class HexView
                 _matched = new bool[b];
                 _focus = new bool[b];
                 _deleted = new bool[b];
+                _selected = new bool[b];
                 _text = new TextCell[b];
             }
+
+            // 作り直す行の先頭のずれ (lead) より前のセルは選択しない。
+            _selected.AsSpan().Clear();
+            selected[lead..count].CopyTo(_selected.AsSpan(lead));
 
             bytes[..count].CopyTo(_bytes);
             states[..count].CopyTo(_states);
@@ -756,35 +751,54 @@ public sealed partial class HexView
             // 層 4・5: 検索の一致。
             AddRanges(columns, _matched, palette.Match, palette.MatchText, "match");
 
-            // 層 2: 選択範囲。操作中でない列の選択は薄い色で塗る (EDIT-01 の画面)。
-            if (_selFrom < _selTo)
+            // 層 2: 選択範囲 (マルチ選択・矩形選択では行の中に複数の範囲がある)。操作中でない列の選択は薄い色で塗る (EDIT-01 の画面)。
+            int firstSelected = _selected.AsSpan(0, Count).IndexOf(true);
+            if (firstSelected >= 0)
             {
-                int first = (int)_selFrom;
-                int last = (int)_selTo - 1;
                 bool hexActive = frame.Active == ActiveColumn.Hex;
                 Brush hexBack = hexActive ? palette.Selection : palette.SelectionInactive;
                 Brush hexFore = hexActive ? palette.SelectionText : palette.SelectionInactiveText;
                 Brush textBack = hexActive ? palette.SelectionInactive : palette.Selection;
                 Brush textFore = hexActive ? palette.SelectionInactiveText : palette.SelectionText;
-                if (columns.ShowHex)
+                TextHighlighter? hex = columns.ShowHex ? TakeHighlighter(hexBack, hexFore) : null;
+                TextHighlighter? text = columns.ShowText ? TakeHighlighter(textBack, textFore) : null;
+                for (int first = firstSelected; first < Count; first++)
                 {
-                    TextHighlighter hex = TakeHighlighter(hexBack, hexFore);
-                    int hexStart = columns.HexIndex(first);
-                    hex.Ranges.Add(new TextRange { StartIndex = hexStart, Length = columns.HexIndex(last) + 2 - hexStart });
+                    if (!_selected[first])
+                    {
+                        continue;
+                    }
+
+                    int last = first;
+                    while (last + 1 < Count && _selected[last + 1])
+                    {
+                        last++;
+                    }
+
+                    if (hex is not null)
+                    {
+                        int hexStart = columns.HexIndex(first);
+                        hex.Ranges.Add(new TextRange { StartIndex = hexStart, Length = columns.HexIndex(last) + 2 - hexStart });
+                    }
+
+                    text?.Ranges.Add(new TextRange { StartIndex = columns.TextIndex(first), Length = last - first + 1 });
+                    for (int i = first; i <= last; i++)
+                    {
+                        HexPaint[i] = HexPaint[i] with { Background = hexBack, Foreground = hexFore, Layer = "selection" };
+                        TextPaint[i] = TextPaint[i] with { Background = textBack, Foreground = textFore, Layer = "selection" };
+                    }
+
+                    first = last;
+                }
+
+                if (hex is not null)
+                {
                     ShowHighlighter(hex);
                 }
 
-                if (columns.ShowText)
+                if (text is not null)
                 {
-                    TextHighlighter text = TakeHighlighter(textBack, textFore);
-                    text.Ranges.Add(new TextRange { StartIndex = columns.TextIndex(first), Length = last - first + 1 });
                     ShowHighlighter(text);
-                }
-
-                for (int i = first; i <= last; i++)
-                {
-                    HexPaint[i] = HexPaint[i] with { Background = hexBack, Foreground = hexFore, Layer = "selection" };
-                    TextPaint[i] = TextPaint[i] with { Background = textBack, Foreground = textFore, Layer = "selection" };
                 }
             }
         }

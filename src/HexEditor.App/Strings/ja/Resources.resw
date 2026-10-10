@@ -2779,4 +2779,228 @@
   <data name="SetDesc_clipboard_history_count" xml:space="preserve"><value>クリップボードパネルに残す直近のコピーの件数。0 は履歴を残しません。</value></data>
   <data name="Set_clipboard_user_persist" xml:space="preserve"><value>ユーザークリップボードを終了後も残す</value></data>
   <data name="SetDesc_clipboard_user_persist" xml:space="preserve"><value>1 個あたり 16 MiB 以下のユーザークリップボードを設定フォルダに保存します。クリップボード履歴は保存しません。</value></data>
+  <data name="Cmd_edit_selection_shiftNext" xml:space="preserve"><value>選択範囲を次へずらす</value></data>
+  <data name="CmdAlias_edit_selection_shiftNext" xml:space="preserve"><value>せんたくはんいをつぎへずらす</value></data>
+  <data name="Cmd_edit_selection_shiftPrevious" xml:space="preserve"><value>選択範囲を前へずらす</value></data>
+  <data name="CmdAlias_edit_selection_shiftPrevious" xml:space="preserve"><value>せんたくはんいをまえへずらす</value></data>
+  <data name="Cmd_edit_selection_shiftBy" xml:space="preserve"><value>選択範囲を N バイトずらす...</value></data>
+  <data name="CmdAlias_edit_selection_shiftBy" xml:space="preserve"><value>せんたくはんいをずらす</value></data>
+  <data name="Cmd_edit_selection_resize" xml:space="preserve"><value>選択範囲を広げる / 狭める...</value></data>
+  <data name="CmdAlias_edit_selection_resize" xml:space="preserve"><value>せんたくはんいをひろげるせばめる</value></data>
+  <data name="Cmd_edit_selection_swapEnds" xml:space="preserve"><value>アンカーとカーソルを入れ替える</value></data>
+  <data name="CmdAlias_edit_selection_swapEnds" xml:space="preserve"><value>あんかーとかーそるをいれかえる</value></data>
+  <data name="Cmd_edit_selection_invert" xml:space="preserve"><value>選択を反転</value></data>
+  <data name="CmdAlias_edit_selection_invert" xml:space="preserve"><value>せんたくをはんてん</value></data>
+  <data name="Cmd_edit_selection_nextElement" xml:space="preserve"><value>次の要素へ</value></data>
+  <data name="CmdAlias_edit_selection_nextElement" xml:space="preserve"><value>つぎのようそへ</value></data>
+  <data name="Cmd_edit_selection_previousElement" xml:space="preserve"><value>前の要素へ</value></data>
+  <data name="CmdAlias_edit_selection_previousElement" xml:space="preserve"><value>まえのようそへ</value></data>
+  <data name="Cmd_edit_selection_startRectangle" xml:space="preserve"><value>矩形選択を開始</value></data>
+  <data name="CmdAlias_edit_selection_startRectangle" xml:space="preserve"><value>くけいせんたくをかいし</value></data>
+  <data name="Cmd_edit_selection_toMulti" xml:space="preserve"><value>マルチ選択に変換</value></data>
+  <data name="CmdAlias_edit_selection_toMulti" xml:space="preserve"><value>まるちせんたくにへんかん</value></data>
+  <data name="Cmd_edit_selection_save" xml:space="preserve"><value>選択範囲を保存...</value></data>
+  <data name="CmdAlias_edit_selection_save" xml:space="preserve"><value>せんたくはんいをほぞん</value></data>
+  <data name="Cmd_edit_selection_load" xml:space="preserve"><value>保存した選択範囲を読み込む...</value></data>
+  <data name="CmdAlias_edit_selection_load" xml:space="preserve"><value>ほぞんしたせんたくはんいをよみこむ</value></data>
+  <data name="Cmd_edit_selection_export" xml:space="preserve"><value>選択範囲をエクスポート...</value></data>
+  <data name="CmdAlias_edit_selection_export" xml:space="preserve"><value>せんたくはんいをえくすぽーと</value></data>
+  <data name="Cmd_edit_selection_import" xml:space="preserve"><value>選択範囲をインポート...</value></data>
+  <data name="CmdAlias_edit_selection_import" xml:space="preserve"><value>せんたくはんいをいんぽーと</value></data>
+  <data name="Cmd_edit_caret_addAbove" xml:space="preserve"><value>カーソルを上の行に追加</value></data>
+  <data name="CmdAlias_edit_caret_addAbove" xml:space="preserve"><value>かーそるをうえのぎょうについか</value></data>
+  <data name="Cmd_edit_caret_addBelow" xml:space="preserve"><value>カーソルを下の行に追加</value></data>
+  <data name="CmdAlias_edit_caret_addBelow" xml:space="preserve"><value>かーそるをしたのぎょうについか</value></data>
+  <data name="Cmd_edit_caret_atElements" xml:space="preserve"><value>選択範囲の各要素にカーソルを置く</value></data>
+  <data name="CmdAlias_edit_caret_atElements" xml:space="preserve"><value>せんたくはんいのかくようそにかーそるをおく</value></data>
+  <data name="Cmd_edit_insertRectangle" xml:space="preserve"><value>矩形挿入...</value></data>
+  <data name="CmdAlias_edit_insertRectangle" xml:space="preserve"><value>くけいそうにゅう</value></data>
+  <data name="Cmd_edit_clipboardHistory_paste" xml:space="preserve"><value>クリップボード履歴から貼り付け</value></data>
+  <data name="CmdAlias_edit_clipboardHistory_paste" xml:space="preserve"><value>くりっぷぼーどりれきからはりつけ</value></data>
+  <data name="Cmd_view_panel_history" xml:space="preserve"><value>履歴パネルを表示</value></data>
+  <data name="CmdAlias_view_panel_history" xml:space="preserve"><value>りれきぱねるをひょうじ</value></data>
+  <data name="Cmd_view_panel_clipboard" xml:space="preserve"><value>クリップボードパネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_clipboard" xml:space="preserve"><value>くりっぷぼーどぱねるのひょうじきりかえ</value></data>
+  <data name="Cmd_search_results_toSelection" xml:space="preserve"><value>検索結果を選択範囲に変換</value></data>
+  <data name="CmdAlias_search_results_toSelection" xml:space="preserve"><value>けんさくけっかをせんたくはんいにへんかん</value></data>
+  <data name="Cmd_edit_userClipboard_copy1" xml:space="preserve"><value>ユーザークリップボード 1 にコピー</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy1" xml:space="preserve"><value>ゆーざーくりっぷぼーどにこぴー</value></data>
+  <data name="Cmd_edit_userClipboard_paste1" xml:space="preserve"><value>ユーザークリップボード 1 から貼り付け</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste1" xml:space="preserve"><value>ゆーざーくりっぷぼーどからはりつけ</value></data>
+  <data name="Cmd_edit_userClipboard_copy2" xml:space="preserve"><value>ユーザークリップボード 2 にコピー</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy2" xml:space="preserve"><value>ゆーざーくりっぷぼーどにこぴー</value></data>
+  <data name="Cmd_edit_userClipboard_paste2" xml:space="preserve"><value>ユーザークリップボード 2 から貼り付け</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste2" xml:space="preserve"><value>ゆーざーくりっぷぼーどからはりつけ</value></data>
+  <data name="Cmd_edit_userClipboard_copy3" xml:space="preserve"><value>ユーザークリップボード 3 にコピー</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy3" xml:space="preserve"><value>ゆーざーくりっぷぼーどにこぴー</value></data>
+  <data name="Cmd_edit_userClipboard_paste3" xml:space="preserve"><value>ユーザークリップボード 3 から貼り付け</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste3" xml:space="preserve"><value>ゆーざーくりっぷぼーどからはりつけ</value></data>
+  <data name="Cmd_edit_userClipboard_copy4" xml:space="preserve"><value>ユーザークリップボード 4 にコピー</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy4" xml:space="preserve"><value>ゆーざーくりっぷぼーどにこぴー</value></data>
+  <data name="Cmd_edit_userClipboard_paste4" xml:space="preserve"><value>ユーザークリップボード 4 から貼り付け</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste4" xml:space="preserve"><value>ゆーざーくりっぷぼーどからはりつけ</value></data>
+  <data name="Cmd_edit_userClipboard_copy5" xml:space="preserve"><value>ユーザークリップボード 5 にコピー</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy5" xml:space="preserve"><value>ゆーざーくりっぷぼーどにこぴー</value></data>
+  <data name="Cmd_edit_userClipboard_paste5" xml:space="preserve"><value>ユーザークリップボード 5 から貼り付け</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste5" xml:space="preserve"><value>ゆーざーくりっぷぼーどからはりつけ</value></data>
+  <data name="Cmd_edit_userClipboard_copy6" xml:space="preserve"><value>ユーザークリップボード 6 にコピー</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy6" xml:space="preserve"><value>ゆーざーくりっぷぼーどにこぴー</value></data>
+  <data name="Cmd_edit_userClipboard_paste6" xml:space="preserve"><value>ユーザークリップボード 6 から貼り付け</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste6" xml:space="preserve"><value>ゆーざーくりっぷぼーどからはりつけ</value></data>
+  <data name="Cmd_edit_userClipboard_copy7" xml:space="preserve"><value>ユーザークリップボード 7 にコピー</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy7" xml:space="preserve"><value>ゆーざーくりっぷぼーどにこぴー</value></data>
+  <data name="Cmd_edit_userClipboard_paste7" xml:space="preserve"><value>ユーザークリップボード 7 から貼り付け</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste7" xml:space="preserve"><value>ゆーざーくりっぷぼーどからはりつけ</value></data>
+  <data name="Cmd_edit_userClipboard_copy8" xml:space="preserve"><value>ユーザークリップボード 8 にコピー</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy8" xml:space="preserve"><value>ゆーざーくりっぷぼーどにこぴー</value></data>
+  <data name="Cmd_edit_userClipboard_paste8" xml:space="preserve"><value>ユーザークリップボード 8 から貼り付け</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste8" xml:space="preserve"><value>ゆーざーくりっぷぼーどからはりつけ</value></data>
+  <data name="Cmd_edit_userClipboard_copy9" xml:space="preserve"><value>ユーザークリップボード 9 にコピー</value></data>
+  <data name="CmdAlias_edit_userClipboard_copy9" xml:space="preserve"><value>ゆーざーくりっぷぼーどにこぴー</value></data>
+  <data name="Cmd_edit_userClipboard_paste9" xml:space="preserve"><value>ユーザークリップボード 9 から貼り付け</value></data>
+  <data name="CmdAlias_edit_userClipboard_paste9" xml:space="preserve"><value>ゆーざーくりっぷぼーどからはりつけ</value></data>
+  <data name="Menu_Edit_Selection.Text" xml:space="preserve"><value>選択(K)</value></data>
+  <data name="Menu_Edit_Selection.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Edit_UserClipboard.Text" xml:space="preserve"><value>ユーザークリップボード(Q)</value></data>
+  <data name="Menu_Edit_UserClipboard.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_UserClipboard_Copy.Text" xml:space="preserve"><value>コピー(C)</value></data>
+  <data name="Menu_UserClipboard_Copy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_UserClipboard_Paste.Text" xml:space="preserve"><value>貼り付け(P)</value></data>
+  <data name="Menu_UserClipboard_Paste.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_UserClipboard_History.Text" xml:space="preserve"><value>クリップボード履歴から貼り付け(H)</value></data>
+  <data name="Menu_UserClipboard_History.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Selection_ShiftNext.Text" xml:space="preserve"><value>次へずらす(N)</value></data>
+  <data name="Menu_Selection_ShiftNext.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Selection_ShiftPrevious.Text" xml:space="preserve"><value>前へずらす(B)</value></data>
+  <data name="Menu_Selection_ShiftPrevious.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Selection_ShiftBy.Text" xml:space="preserve"><value>N バイトずらす(Y)...</value></data>
+  <data name="Menu_Selection_ShiftBy.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Selection_Resize.Text" xml:space="preserve"><value>広げる / 狭める(G)...</value></data>
+  <data name="Menu_Selection_Resize.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Selection_SwapEnds.Text" xml:space="preserve"><value>アンカーとカーソルを入れ替える(W)</value></data>
+  <data name="Menu_Selection_SwapEnds.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Selection_Invert.Text" xml:space="preserve"><value>選択を反転(I)</value></data>
+  <data name="Menu_Selection_Invert.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Selection_NextElement.Text" xml:space="preserve"><value>次の要素へ(X)</value></data>
+  <data name="Menu_Selection_NextElement.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Selection_PreviousElement.Text" xml:space="preserve"><value>前の要素へ(V)</value></data>
+  <data name="Menu_Selection_PreviousElement.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Selection_ToMulti.Text" xml:space="preserve"><value>マルチ選択に変換(M)</value></data>
+  <data name="Menu_Selection_ToMulti.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Selection_StartRectangle.Text" xml:space="preserve"><value>矩形選択を開始(R)</value></data>
+  <data name="Menu_Selection_StartRectangle.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Selection_InsertRectangle.Text" xml:space="preserve"><value>矩形挿入(T)...</value></data>
+  <data name="Menu_Selection_InsertRectangle.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Selection_CaretsAtElements.Text" xml:space="preserve"><value>各要素にカーソルを置く(C)</value></data>
+  <data name="Menu_Selection_CaretsAtElements.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Selection_AddCaretAbove.Text" xml:space="preserve"><value>カーソルを上の行に追加(A)</value></data>
+  <data name="Menu_Selection_AddCaretAbove.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Selection_AddCaretBelow.Text" xml:space="preserve"><value>カーソルを下の行に追加(D)</value></data>
+  <data name="Menu_Selection_AddCaretBelow.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Selection_Save.Text" xml:space="preserve"><value>選択範囲を保存(S)...</value></data>
+  <data name="Menu_Selection_Save.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Selection_Load.Text" xml:space="preserve"><value>保存した選択範囲を読み込む(L)...</value></data>
+  <data name="Menu_Selection_Load.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Selection_Export.Text" xml:space="preserve"><value>選択範囲をエクスポート(E)...</value></data>
+  <data name="Menu_Selection_Export.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Selection_Import.Text" xml:space="preserve"><value>選択範囲をインポート(O)...</value></data>
+  <data name="Menu_Selection_Import.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_HistoryPanel.Text" xml:space="preserve"><value>履歴(Y)</value></data>
+  <data name="Menu_View_HistoryPanel.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_View_ClipboardPanel.Text" xml:space="preserve"><value>クリップボード(C)</value></data>
+  <data name="Menu_View_ClipboardPanel.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_UserClipboard_CopyN" xml:space="preserve"><value>ユーザークリップボード {0}</value></data>
+  <data name="Menu_UserClipboard_PasteN" xml:space="preserve"><value>ユーザークリップボード {0}</value></data>
+  <data name="Status_MultiSelection" xml:space="preserve"><value>{0} 個の範囲、計 {1} バイト (主要素: {2}–{3})</value></data>
+  <data name="Status_Rectangle" xml:space="preserve"><value>矩形 {0} 行 × {1} バイト (計 {2} バイト)</value></data>
+  <data name="Status_Carets" xml:space="preserve"><value>{0} 個のカーソル</value></data>
+  <data name="Notice_SelectionOutOfRange" xml:space="preserve"><value>これ以上ずらせません。</value></data>
+  <data name="Notice_TooManyElements" xml:space="preserve"><value>マルチ選択の要素数の上限 ({0}) を超えるため、追加しませんでした。</value></data>
+  <data name="Notice_SelectionTruncated" xml:space="preserve"><value>マルチ選択の上限のため、先頭から {0} 個の範囲だけを選択しました。</value></data>
+  <data name="Notice_TooManyCarets" xml:space="preserve"><value>カーソルは {0} 個までです。</value></data>
+  <data name="Notice_CaretInputFailed" xml:space="preserve"><value>{0} 個のカーソルで入力できませんでした。</value></data>
+  <data name="Notice_RectangleTooManyRows" xml:space="preserve"><value>矩形の行数 ({0} 行) がマルチ選択の上限 ({1}) を超えるため変換できません。選択を解除しました。</value></data>
+  <data name="Notice_RectangleRowLimit" xml:space="preserve"><value>矩形が {0} 行あり、上限 {1} 行を超えています。上書きの操作は使えます。</value></data>
+  <data name="Command_NoRectangle" xml:space="preserve"><value>矩形選択がありません。</value></data>
+  <data name="Command_UserClipboardEmpty" xml:space="preserve"><value>このユーザークリップボードは空です。</value></data>
+  <data name="Command_ClipboardHistoryEmpty" xml:space="preserve"><value>クリップボード履歴は空です。</value></data>
+  <data name="Clipboard_RangesTooLarge" xml:space="preserve"><value>選択している範囲が大きすぎるため、コピーできません。</value></data>
+  <data name="ShiftSelection_Title" xml:space="preserve"><value>選択範囲をずらす</value></data>
+  <data name="ShiftSelection_Amount" xml:space="preserve"><value>ずらす量 (負の値で前へ)</value></data>
+  <data name="ShiftSelection_Shift" xml:space="preserve"><value>ずらす</value></data>
+  <data name="ResizeSelection_Title" xml:space="preserve"><value>選択範囲を広げる / 狭める</value></data>
+  <data name="ResizeSelection_Start" xml:space="preserve"><value>開始側を前へ広げる量 (負の値で狭める)</value></data>
+  <data name="ResizeSelection_End" xml:space="preserve"><value>終了側を後ろへ広げる量 (負の値で狭める)</value></data>
+  <data name="ResizeSelection_Apply" xml:space="preserve"><value>適用</value></data>
+  <data name="SelectRange_ModeAdd" xml:space="preserve"><value>現在の選択に追加</value></data>
+  <data name="SelectRange_Rectangle" xml:space="preserve"><value>矩形として選択</value></data>
+  <data name="Fill_ContinueAcross" xml:space="preserve"><value>要素をまたいで続ける (オフのときは要素ごとに先頭から)</value></data>
+  <data name="Fill_RangesInfo" xml:space="preserve"><value>{0} 個の範囲、計 {1} バイト</value></data>
+  <data name="Operation_DeleteRanges" xml:space="preserve"><value>範囲の削除</value></data>
+  <data name="Operation_ExportSelection" xml:space="preserve"><value>選択範囲のエクスポート</value></data>
+  <data name="SelectionSets_None" xml:space="preserve"><value>保存した選択範囲はありません。</value></data>
+  <data name="SelectionSets_TooMany" xml:space="preserve"><value>選択範囲は 1 ドキュメントあたり {0} 個まで保存できます。</value></data>
+  <data name="SelectionSets_Saved" xml:space="preserve"><value>選択範囲を「{0}」として保存しました。</value></data>
+  <data name="SelectionSets_Clipped" xml:space="preserve"><value>ファイルの末尾を越える {0} 個の範囲を切り詰めるか除外しました。</value></data>
+  <data name="SaveSelection_Title" xml:space="preserve"><value>選択範囲を保存</value></data>
+  <data name="SaveSelection_Name" xml:space="preserve"><value>名前 (1〜100 文字)</value></data>
+  <data name="SaveSelection_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="SaveSelection_Exists" xml:space="preserve"><value>同じ名前の選択範囲があります。保存すると置き換えます。</value></data>
+  <data name="SaveSelection_OverwriteBody" xml:space="preserve"><value>保存した選択範囲「{0}」を置き換えますか?</value></data>
+  <data name="SaveSelection_Overwrite" xml:space="preserve"><value>置き換える</value></data>
+  <data name="LoadSelection_Title" xml:space="preserve"><value>保存した選択範囲を読み込む</value></data>
+  <data name="LoadSelection_ListName" xml:space="preserve"><value>保存した選択範囲</value></data>
+  <data name="LoadSelection_Item" xml:space="preserve"><value>{0} — {1} 個の範囲、{2} バイト、{3}</value></data>
+  <data name="LoadSelection_Replace" xml:space="preserve"><value>置き換える</value></data>
+  <data name="LoadSelection_Add" xml:space="preserve"><value>現在の選択に追加</value></data>
+  <data name="LoadSelection_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="LoadSelection_Rename" xml:space="preserve"><value>名前を変更</value></data>
+  <data name="LoadSelection_NewName" xml:space="preserve"><value>新しい名前</value></data>
+  <data name="LoadSelection_Note" xml:space="preserve"><value>保存した選択範囲のオフセットは、データの挿入・削除でずれても調整しません (ブックマークとは異なります)。</value></data>
+  <data name="LoadSelection_Load" xml:space="preserve"><value>読み込む</value></data>
+  <data name="SelectionFile_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="SelectionFile_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="SelectionFile_Exported" xml:space="preserve"><value>選択範囲を {0} にエクスポートしました。</value></data>
+  <data name="SelectionFile_WriteError" xml:space="preserve"><value>ファイルに書き込めません: {0}</value></data>
+  <data name="SelectionFile_ReadError" xml:space="preserve"><value>ファイルを読めません: {0}</value></data>
+  <data name="SelectionFile_ImportError" xml:space="preserve"><value>{0} 行目: {1}</value></data>
+  <data name="SelectionFile_Error_StartNotNumber" xml:space="preserve"><value>開始が数値ではありません</value></data>
+  <data name="SelectionFile_Error_LengthNotNumber" xml:space="preserve"><value>長さが数値ではありません</value></data>
+  <data name="SelectionFile_Error_EndNotNumber" xml:space="preserve"><value>終了が数値ではありません</value></data>
+  <data name="SelectionFile_Error_EmptyRange" xml:space="preserve"><value>範囲が空です (終了が開始より前、または長さが 0)</value></data>
+  <data name="SelectionFile_Error_BadLine" xml:space="preserve"><value>行を読めません。「開始 長さ」または「開始-終了」で書いてください</value></data>
+  <data name="SelectionFile_Error_BadJson" xml:space="preserve"><value>JSON を読めません</value></data>
+  <data name="Panel_History_Title" xml:space="preserve"><value>履歴</value></data>
+  <data name="Panel_Clipboard_Title" xml:space="preserve"><value>クリップボード</value></data>
+  <data name="History_Undo" xml:space="preserve"><value>元に戻す</value></data>
+  <data name="History_Redo" xml:space="preserve"><value>やり直し</value></data>
+  <data name="History_Compare" xml:space="preserve"><value>2 つの時点を比較</value></data>
+  <data name="History_GoToState.Text" xml:space="preserve"><value>この時点に移る</value></data>
+  <data name="History_SelectRange.Text" xml:space="preserve"><value>この範囲へ移動</value></data>
+  <data name="History_CompareMenu.Text" xml:space="preserve"><value>2 つの時点を比較</value></data>
+  <data name="History_SavedMark" xml:space="preserve"><value>保存</value></data>
+  <data name="History_CurrentState" xml:space="preserve"><value>現在の状態</value></data>
+  <data name="History_RedoState" xml:space="preserve"><value>やり直し可能</value></data>
+  <data name="History_Range" xml:space="preserve"><value>{0} ({1} バイト)</value></data>
+  <data name="History_PointName" xml:space="preserve"><value>履歴 {0}</value></data>
+  <data name="EditOp_Move" xml:space="preserve"><value>移動</value></data>
+  <data name="EditOp_Copy" xml:space="preserve"><value>コピー</value></data>
+  <data name="EditOp_Cut" xml:space="preserve"><value>切り取り</value></data>
+  <data name="EditOp_InsertRectangle" xml:space="preserve"><value>矩形挿入</value></data>
+  <data name="EditOp_FillZero" xml:space="preserve"><value>00 で塗りつぶし</value></data>
+  <data name="ClipboardPanel_Slot" xml:space="preserve"><value>ユーザークリップボード {0}</value></data>
+  <data name="ClipboardPanel_SlotNamed" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="ClipboardPanel_Empty" xml:space="preserve"><value>(空)</value></data>
+  <data name="ClipboardPanel_LostOnExit" xml:space="preserve"><value>終了時に消えます</value></data>
+  <data name="ClipboardPanel_Detail" xml:space="preserve"><value>{0} バイト · {1} · {2} · {3} @ {4}</value></data>
+  <data name="ClipboardPanel_PasteButton" xml:space="preserve"><value>貼り付け</value></data>
+  <data name="ClipboardPanel_PasteOverwriteButton" xml:space="preserve"><value>上書き貼り付け</value></data>
+  <data name="ClipboardPanel_ClearButton" xml:space="preserve"><value>消去</value></data>
+  <data name="ClipboardPanel_RenameButton" xml:space="preserve"><value>名前を付ける</value></data>
+  <data name="ClipboardPanel_MoveButton" xml:space="preserve"><value>ユーザークリップボードに移す</value></data>
+  <data name="ClipboardPanel_NameOk" xml:space="preserve"><value>OK</value></data>
+  <data name="ClipboardPanel_NameBox" xml:space="preserve"><value>名前 (50 文字まで)</value></data>
+  <data name="ClipboardPanel_SlotsHeader" xml:space="preserve"><value>ユーザークリップボード</value></data>
+  <data name="ClipboardPanel_HistoryHeader" xml:space="preserve"><value>クリップボード履歴</value></data>
+  <data name="SearchResults_ToSelection.Text" xml:space="preserve"><value>選択範囲に</value></data>
 </root>

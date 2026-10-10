@@ -379,6 +379,7 @@ public sealed partial class MainWindow
                 ["canGoForward"] = e.CanGoForward,
                 ["sourceType"] = d.Source.GetType().Name,
             };
+            AddSelectionState((JsonObject)state["document"]!, e);
         }
 
         return state;

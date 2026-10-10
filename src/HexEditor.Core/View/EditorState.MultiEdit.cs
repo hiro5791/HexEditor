@@ -3,6 +3,19 @@ using HexEditor.Core.Selection;
 
 namespace HexEditor.Core.View;
 
+/// <summary>選択範囲のドロップの種類 (EDIT-18 の仕様 2)。</summary>
+public enum SelectionDropKind
+{
+    /// <summary>移動 (既定)。</summary>
+    Move,
+
+    /// <summary>コピー (Ctrl を押しながらドロップ)。</summary>
+    Copy,
+
+    /// <summary>ドロップ位置から上書き (上書きモードで Shift を押しながらドロップ)。</summary>
+    Overwrite,
+}
+
 /// <summary>
 /// マルチ選択・矩形選択・マルチカーソルへの編集 (EDIT-07 の仕様 7・8、EDIT-08 の仕様 4〜7、EDIT-17)。
 /// </summary>
@@ -17,6 +30,14 @@ public sealed partial class EditorState
     /// 直前のマルチカーソルへの入力で、入力できなかったカーソルの数 (EDIT-08 の「エラー」: 「N 個のカーソルで入力できませんでした」)。
     /// </summary>
     public int LastCaretFailures { get; private set; }
+
+    /// <summary><see cref="LastCaretFailures"/> を読んで 0 に戻す (InfoBar を 1 回だけ出すため)。</summary>
+    public int TakeCaretFailures()
+    {
+        int failures = LastCaretFailures;
+        LastCaretFailures = 0;
+        return failures;
+    }
 
     /// <summary>マルチ選択・矩形選択か (要素ごとの処理が要る形)。</summary>
     public bool HasMultipleRanges => _rect is not null || SelectionKind == SelectionKind.Multiple;
@@ -247,6 +268,85 @@ public sealed partial class EditorState
         return EditResult.Done;
     }
 
+    // ---- 選択範囲のドラッグ & ドロップ (EDIT-18) ----
+
+    /// <summary>
+    /// 選択範囲を <paramref name="target"/> (そのバイトの前) にドロップできるか (EDIT-18 の仕様 3・7、「エラー」)。単一の選択だけを
+    /// ドラッグできる。選択範囲の内側にはドロップできない。
+    /// </summary>
+    public bool CanDropSelectionAt(long target, SelectionDropKind kind)
+    {
+        if (!CanEdit() || SelectionKind != SelectionKind.Single || target < 0 || target > Document.Length)
+        {
+            return false;
+        }
+
+        if (target > _selectionStart && target < _selectionStart + _selectionLength)
+        {
+            return false;
+        }
+
+        // 長さを変えられないドキュメントでは、Shift による上書きだけを受け付ける (仕様 7)。
+        return kind == SelectionDropKind.Overwrite ? target < Document.Length : Document.CanResize;
+    }
+
+    /// <summary>
+    /// 選択範囲をドロップする (EDIT-18 の仕様 2・3)。移動は「削除と挿入」を 1 つの編集グループにする。データはピースの参照で動かすので、
+    /// 量に関係なく一定時間で終わる。ドロップした後は、動かした (書いた) 範囲を選択する。
+    /// </summary>
+    public EditResult DropSelection(long target, SelectionDropKind kind)
+    {
+        if (!CanEdit())
+        {
+            return EditResult.NotEditable;
+        }
+
+        if (!CanDropSelectionAt(target, kind))
+        {
+            return kind != SelectionDropKind.Overwrite && !Document.CanResize ? EditResult.FixedLength : EditResult.Ignored;
+        }
+
+        long start = _selectionStart, length = _selectionLength;
+        long placed;
+        switch (kind)
+        {
+            case SelectionDropKind.Copy:
+                Document.InsertCopy(target, start, length, "コピー");
+                placed = target;
+                break;
+            case SelectionDropKind.Overwrite:
+                length = Document.CanResize ? length : Math.Min(length, Document.Length - target);
+                Document.OverwriteFrom(target, Document.Current, start, length, "上書き");
+                placed = target;
+                break;
+            default:
+                if (target == start || target == start + length)
+                {
+                    return EditResult.Ignored;
+                }
+
+                using (Document.BeginGroup("移動"))
+                {
+                    Document.InsertCopy(target, start, length, "移動");
+                    if (target < start)
+                    {
+                        Document.Delete(start + length, length, "移動");
+                        placed = target;
+                    }
+                    else
+                    {
+                        Document.Delete(start, length, "移動");
+                        placed = target - length;
+                    }
+                }
+
+                break;
+        }
+
+        Select(placed, length);
+        return EditResult.Done;
+    }
+
     // ---- 矩形の挿入・貼り付け (EDIT-17 の仕様 3・4) ----
 
     /// <summary>
@@ -274,10 +374,10 @@ public sealed partial class EditorState
 
     /// <summary>
     /// 矩形の貼り付け (EDIT-17 の仕様 3): クリップボードの矩形の各行を、主カーソルの列を左端として 1 行ずつ下の行に貼る。
-    /// <paramref name="overwrite"/> (上書き貼り付け、または上書きモード) なら各行の該当バイトを上書きし、そうでなければ各行の位置に挿入する。
-    /// 行はクリップボードの行の内容 (<paramref name="rowSource"/> の行 k のバイト列) を参照で渡す。
+    /// <paramref name="overwrite"/> (上書き貼り付け、または上書きモード) なら各行の該当バイトを上書きし、そうでなければ各行の位置に挿入する
+    /// (後ろの行の配置はずれる)。全体を 1 つの編集グループにする。
     /// </summary>
-    public EditResult PasteRectangle(IReadOnlyList<(SnapshotRange Range, long Offset, long Length)> rows, bool overwrite)
+    public EditResult PasteRectangle(IReadOnlyList<byte[]> rows, bool overwrite)
     {
         if (!CanEdit())
         {
@@ -296,7 +396,7 @@ public sealed partial class EditorState
         }
 
         CollapseCarets();
-        long start = HasSelection && _rect is { } rect ? rect.RowLeft(rect.FirstRow) : _cursor;
+        long start = _rect is { } rect ? rect.RowLeft(rect.FirstRow) : _selectionLength > 0 ? _selectionStart : _cursor;
         ClearSelectionAnchor();
         long length = Document.Length;
         EditResult result = EditResult.Done;
@@ -305,29 +405,28 @@ public sealed partial class EditorState
             // 下の行から順に貼る (挿入で上の行の位置がずれないように)。
             for (int k = rows.Count - 1; k >= 0; k--)
             {
-                (SnapshotRange range, long offset, long n) = rows[k];
+                byte[] row = rows[k];
                 long at = start + (long)k * BytesPerRow;
-                if (at > length)
+                if (at > length || row.Length == 0)
                 {
                     continue;
                 }
 
-                if (!insert)
+                if (insert)
                 {
-                    long available = Document.CanResize ? n : Math.Max(0, Math.Min(n, Document.Length - at));
-                    if (available < n)
-                    {
-                        result = EditResult.Truncated;
-                    }
-
-                    if (available > 0)
-                    {
-                        Document.OverwriteFrom(at, range, offset, available);
-                    }
+                    Document.Insert(at, row, "貼り付け");
+                    continue;
                 }
-                else
+
+                long available = Document.CanResize ? row.Length : Math.Max(0, Math.Min(row.Length, Document.Length - at));
+                if (available < row.Length)
                 {
-                    Document.InsertFrom(at, range, offset, n);
+                    result = EditResult.Truncated;
+                }
+
+                if (available > 0)
+                {
+                    Document.Overwrite(at, row.AsSpan(0, (int)available), "上書き貼り付け");
                 }
             }
         }

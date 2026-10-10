@@ -17,7 +17,9 @@ public sealed partial class MainWindow
 {
     private sealed record InsertBytesRequest(long Position, long Count, FillSpec Spec, bool SelectInserted);
 
-    private sealed record FillRequest(long Start, long Length, FillSpec Spec);
+    /// <param name="UseSelection">対象が「選択範囲」(マルチ選択・矩形では要素ごとに塗る。EDIT-29 の仕様 4)。</param>
+    /// <param name="ContinueAcross">マルチ選択で内容を「要素をまたいで続ける」(既定は要素ごとに先頭から)。</param>
+    private sealed record FillRequest(long Start, long Length, FillSpec Spec, bool UseSelection = false, bool ContinueAcross = false);
 
     private sealed record ResizeRequest(long NewLength, FillSpec Spec);
 
@@ -63,6 +65,20 @@ public sealed partial class MainWindow
         RadioButton modeNew = DialogParts.Radio("SelectRange_ModeNew", Loc.Get("SelectRange_ModeNew"), "SelectRangeMode", true);
         RadioButton modeExtend = DialogParts.Radio("SelectRange_ModeExtend", Loc.Get("SelectRange_ModeExtend"), "SelectRangeMode", false);
         modeExtend.IsEnabled = editor.HasSelection;
+
+        // 「現在の選択に追加」(マルチ選択) と「矩形として選択」(EDIT-04 の仕様 5。フェーズ 2)。矩形のときの選択モードは「新しい選択」だけ。
+        RadioButton modeAdd = DialogParts.Radio("SelectRange_ModeAdd", Loc.Get("SelectRange_ModeAdd"), "SelectRangeMode", false);
+        CheckBox rectangle = DialogParts.Check("SelectRange_Rectangle", Loc.Get("SelectRange_Rectangle"), false);
+        rectangle.Checked += (_, _) =>
+        {
+            modeNew.IsChecked = true;
+            modeExtend.IsEnabled = modeAdd.IsEnabled = false;
+        };
+        rectangle.Unchecked += (_, _) =>
+        {
+            modeExtend.IsEnabled = editor.HasSelection;
+            modeAdd.IsEnabled = true;
+        };
         CheckBox scroll = DialogParts.Check("SelectRange_ScrollToStart", Loc.Get("SelectRange_ScrollToStart"), true);
 
         var body = new StackPanel { Spacing = 8, MinWidth = 380 };
@@ -75,7 +91,9 @@ public sealed partial class MainWindow
 
         body.Children.Add(clamp);
         body.Children.Add(modeNew);
+        body.Children.Add(modeAdd);
         body.Children.Add(modeExtend);
+        body.Children.Add(rectangle);
         body.Children.Add(scroll);
         ContentDialog dialog = DialogParts.Dialog(Root, "SelectRangeDialog", Loc.Get("SelectRange_Title"), new ScrollViewer { Content = body },
             Loc.Get("SelectRange_Select"));
@@ -147,7 +165,20 @@ public sealed partial class MainWindow
 
         // 確定: アンカーを開始、カーソルを終了の次に置く (仕様 7)。選択後に開始位置へ移動 (仕様 6)。
         editor.RecordJump();
-        editor.Select(start, length);
+        if (rectangle.IsChecked == true)
+        {
+            // 開始のバイトと終了のバイトを対角とする矩形 (列は左右を入れ替えて揃える)。
+            editor.SelectRectangle(start, start + length - 1);
+        }
+        else if (modeAdd.IsChecked == true)
+        {
+            ReportSelection(editor.AddSelection(start, length));
+        }
+        else
+        {
+            editor.Select(start, length);
+        }
+
         if (scroll.IsChecked == true)
         {
             editor.ScrollToRow(start / editor.BytesPerRow);
@@ -260,8 +291,13 @@ public sealed partial class MainWindow
         var content = new FillContentPanel(editor, "edit.fill.content", allowRepeatOptions: true);
         TextBlock before = DialogParts.Caption("Fill_PreviewBefore", monospace: true);
         TextBlock after = DialogParts.Caption("Fill_PreviewAfter", monospace: true);
+
+        // マルチ選択・矩形: 「要素ごとに先頭から」(既定) / 「要素をまたいで続ける」(EDIT-29 の仕様 4)。
+        bool multiple = editor.HasMultipleRanges;
+        CheckBox across = DialogParts.Check("Fill_ContinueAcross", Loc.Get("Fill_ContinueAcross"), false);
+        across.Visibility = multiple ? Visibility.Visible : Visibility.Collapsed;
         var body = new StackPanel { Spacing = 8, MinWidth = 420 };
-        foreach (UIElement e in new UIElement[] { targetSelection, targetRange, start, length, rangeResult, content, before, after })
+        foreach (UIElement e in new UIElement[] { targetSelection, targetRange, start, length, rangeResult, across, content, before, after })
         {
             body.Children.Add(e);
         }
@@ -295,7 +331,9 @@ public sealed partial class MainWindow
                 DialogParts.MarkInvalid(length, false);
             }
 
-            rangeResult.Text = rangeError ?? Loc.Format("Fill_RangeInfo", StatusFormat.Hex(s), StatusFormat.Number(n, Culture));
+            rangeResult.Text = rangeError ?? (useSelection && multiple
+                ? Loc.Format("Fill_RangesInfo", editor.SelectedRangeCount, StatusFormat.Number(editor.SelectedByteCount, Culture))
+                : Loc.Format("Fill_RangeInfo", StatusFormat.Hex(s), StatusFormat.Number(n, Culture)));
             FillSpec? spec = content.TryGetSpec();
             bool ok = rangeError is null && spec is not null;
             if (ok)
@@ -306,7 +344,7 @@ public sealed partial class MainWindow
                 doc.Document.Current.Read(s, current);
                 before.Text = Loc.Format("Fill_PreviewBefore", DialogParts.Hex(current));
                 after.Text = Loc.Format("Fill_PreviewAfter", PreviewOf(doc, spec!, s, n));
-                request = new FillRequest(s, n, spec!);
+                request = new FillRequest(s, n, spec!, useSelection, across.IsChecked == true);
             }
             else
             {

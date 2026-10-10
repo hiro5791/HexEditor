@@ -178,9 +178,7 @@ public sealed class MultiCursorTests
         (Document doc, EditorState s) = MultiSelectionTests.Create(0x100);
         using (doc)
         {
-            DocumentSnapshot snapshot = doc.Current;
-            SnapshotRange range = doc.CreateRange(snapshot, 0, 0x100);
-            var rows = new[] { (range, 0x04L, 2L), (range, 0x14L, 2L), (range, 0x24L, 2L), (range, 0x34L, 2L) };
+            byte[][] rows = [[0x04, 0x05], [0x14, 0x15], [0x24, 0x25], [0x34, 0x35]];
             s.ToggleInsertMode();
             s.Click(0x48, ActiveColumn.Hex, false, false);
             Assert.Equal(EditResult.Done, s.PasteRectangle(rows, overwrite: true));
