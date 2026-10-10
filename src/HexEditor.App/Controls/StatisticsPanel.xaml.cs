@@ -225,11 +225,10 @@ public sealed partial class StatisticsPanel : UserControl, IPanelContent
 
     private void BlockTable_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
     {
-        if (BlockTable.SelectedItem is EntropyBlockRowViewModel row && ViewModel.Ranges is { } r)
+        if (BlockTable.SelectedItem is EntropyBlockRowViewModel row)
         {
             // 行のオフセットはドキュメントの位置 (16 進)。
             ViewModel.GoTo?.Invoke(long.Parse(row.Offset[2..], System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture));
-            _ = r;
         }
     }
 

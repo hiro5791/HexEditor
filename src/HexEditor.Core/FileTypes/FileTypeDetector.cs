@@ -93,8 +93,9 @@ public sealed class HeadTailMagicData : IMagicData
             return n;
         }
 
-        if (offset >= _tailStart)
+        if (offset >= _tailStart && offset - _tailStart < _tail.Length)
         {
+            // 末尾に読めない部分があると、読んだ末尾は短い。
             int n = (int)Math.Min(destination.Length, _tail.Length - (offset - _tailStart));
             _tail.AsSpan((int)(offset - _tailStart), n).CopyTo(destination);
             return n;

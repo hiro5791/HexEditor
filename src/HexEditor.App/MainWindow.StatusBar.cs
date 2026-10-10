@@ -18,7 +18,7 @@ public sealed partial class MainWindow
         ["cursor", "value", "selection", "column", "encoding", "fileType", "mode", "modified", "size", "zoom", "operations", "notifications"];
 
     /// <summary>幅が足りないときに隠す順 (UI-06 の仕様 5)。カーソル位置・選択範囲・入力モード・変更の有無・処理センターは隠さない。</summary>
-    private static readonly string[] CollapseOrder = ["zoom", "fileType", "column", "value", "size-short", "encoding", "size", "notifications"];
+    private static readonly string[] CollapseOrder = ["zoom", "column", "value", "size-short", "encoding", "fileType", "size", "notifications"];
 
     private Microsoft.UI.Dispatching.DispatcherQueueTimer? _operationsTimer;
     private TaskbarProgress? _taskbar;

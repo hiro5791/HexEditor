@@ -101,7 +101,7 @@ public sealed partial class FileTypeViewModel(OperationCenter operations) : Obse
                 Reports.AddOrUpdate(document, report);
                 Detected?.Invoke(null, document);
             }
-            catch (Exception e) when (e is IOException or ObjectDisposedException or InvalidOperationException)
+            catch (Exception e) when (e is not OutOfMemoryException)
             {
                 AppLog.Warning("File type detection failed: " + e.Message);
             }

@@ -75,6 +75,19 @@ public sealed class FileTypeTests
         Assert.True(source.Reads.Sum(r => (long)r.Length) <= 128 * KiB);
     }
 
+    /// <summary>末尾に読めない範囲があっても、開いたときの自動判定は失敗しない (読めた部分だけで判定する)。</summary>
+    [Fact]
+    public void UnreadableTailDoesNotBreakDetection()
+    {
+        var source = Virtual(256 * KiB, (o, s) => s.Clear());
+        source.BadRanges.Add(new HexEditor.Core.Sources.UnreadableRange(200 * KiB, 4096, HexEditor.Core.Sources.UnreadableReason.IoError));
+        using var doc = Doc(source);
+        var data = new HeadTailMagicData(doc.Current);
+        Detector.Detect(data, ".vhd");
+        Span<byte> b = stackalloc byte[16];
+        Assert.Equal(0, data.Read(256 * KiB - 8, b));
+    }
+
     [Fact]
     [Trait(TC, "TC-ANA-17-04")]
     public void EmbeddedPngInAnExecutable()
