@@ -113,8 +113,17 @@ public sealed class MinimapComputer : IDisposable
     private int _computed;
     private DocumentSnapshot? _snapshot;
 
-    // 「正確に計算」の結果 (ドキュメントの内容が変わらない限り再利用する)。
-    private (DocumentSnapshot Snapshot, long First, long RowBytes, int Count, MinimapStats?[] Rows)? _exact;
+    // 「正確に計算」の結果。ドキュメントごとに持ち (仕様の「巨大ファイル」)、内容が変わらない限り、どのビュー・どのタブの切り替えでも再利用する。
+    private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<Document, ExactResult> ExactCache = new();
+
+    private sealed record ExactResult(DocumentSnapshot Snapshot, long First, long RowBytes, int Count, MinimapStats?[] Rows);
+
+    // 実行中の「正確に計算」(同じドキュメントの古い内容の計算は、新しく始めるときに止める)。
+    private (DocumentSnapshot Snapshot, long First, long RowBytes, int Count, CancellationTokenSource Cts)? _exactRunning;
+
+    // 表示内容「バイトテーマ」のときの、ピクセル行ごとのバイト (「周辺」で 1 ピクセル行 = 1 行。ピクセル行の数 × 1 行のバイト数だけ)。
+    private byte[]? _bytes;
+    private bool _keepBytes;
 
     /// <summary>計算が進んだ (スレッドプールから呼ぶ)。</summary>
     public event EventHandler? Progress;
@@ -136,6 +145,64 @@ public sealed class MinimapComputer : IDisposable
 
     /// <summary>ピクセル行の値 (計算前は null)。</summary>
     public MinimapStats? Row(int index) => index >= 0 && index < _rows.Length ? Volatile.Read(ref _rows[index]) : null;
+
+    /// <summary>
+    /// 各ピクセル行のバイトを残すか (表示内容「バイトテーマ」。仕様 3)。1 ピクセル行の範囲が標本の大きさ以下のときだけ残す
+    /// (「周辺」では 1 行分)。変えたら <see cref="Start"/> で計算し直す。
+    /// </summary>
+    public bool KeepBytes
+    {
+        get => _keepBytes;
+        set => _keepBytes = value;
+    }
+
+    /// <summary>
+    /// ピクセル行のバイト (<see cref="KeepBytes"/> のときだけ。計算前・残していなければ空)。<see cref="Row"/> が null でないことを
+    /// 確かめてから読む。
+    /// </summary>
+    public ReadOnlySpan<byte> RowBytesOf(int index)
+    {
+        byte[]? bytes = _bytes;
+        if (bytes is null || index < 0 || index >= _rows.Length || Row(index) is null)
+        {
+            return [];
+        }
+
+        long start = index * _rowBytes;
+        int length = (int)RangeOf(index).Length;
+        return start + length <= bytes.Length ? bytes.AsSpan((int)start, length) : [];
+    }
+
+    /// <summary>
+    /// 表示内容「バイトテーマ」の 1 バイトの色 (仕様 3): テーマの背景色、なければ文字色。テーマが「なし」か色の指定がない値は、
+    /// 「種類別」の色。
+    /// </summary>
+    public static SchemeColor ByteColor(ByteTheme? theme, byte value, bool dark)
+    {
+        if (theme?.ColorOf(value, dark) is { } color && (color.Background ?? color.Text) is { } c)
+        {
+            return c;
+        }
+
+        return ByteTheme.CategoryColor(ByteTheme.Classify(value), dark);
+    }
+
+    /// <summary>
+    /// 「正確に計算」が必要か (仕様 5): 設定がオンのとき、今の割り当てがまだ正確でなく、実行中でもないなら真。1 ピクセル行の範囲が標本の大きさ
+    /// 以下なら概算が範囲全体を読んでいるので要らない。
+    /// </summary>
+    public bool NeedsExact
+    {
+        get
+        {
+            lock (_gate)
+            {
+                return _snapshot is not null && _rows.Length > 0 && !IsExact && _rowBytes > SampleSize
+                    && !(_exactRunning is { } r && ReferenceEquals(r.Snapshot, _snapshot) && r.First == _first && r.RowBytes == _rowBytes
+                        && r.Count == _rows.Length);
+            }
+        }
+    }
 
     /// <summary>ピクセル行が表す範囲。</summary>
     public (long Start, long Length) RangeOf(int index)
@@ -186,7 +253,9 @@ public sealed class MinimapComputer : IDisposable
     {
         lock (_gate)
         {
-            if (!force && ReferenceEquals(snapshot, _snapshot) && first == _first && rowBytes == _rowBytes && count == _rows.Length)
+            bool keepBytes = _keepBytes && Math.Max(1, rowBytes) <= SampleSize;
+            if (!force && ReferenceEquals(snapshot, _snapshot) && first == _first && rowBytes == _rowBytes && count == _rows.Length
+                && keepBytes == _bytes is not null)
             {
                 return;
             }
@@ -196,14 +265,24 @@ public sealed class MinimapComputer : IDisposable
             _first = first;
             _rowBytes = Math.Max(1, rowBytes);
             _length = snapshot.Length;
-            if (_exact is { } cached && ReferenceEquals(cached.Snapshot, snapshot) && cached.First == first && cached.RowBytes == _rowBytes
-                && cached.Count == count)
+            if (keepBytes)
             {
-                _rows = (MinimapStats?[])cached.Rows.Clone();
-                _computed = count;
-                IsExact = true;
-                Progress?.Invoke(this, EventArgs.Empty);
-                return;
+                // バイトを残すとき (バイトテーマ) は概算が範囲全体を読むので、正確な値のキャッシュは使わずに読む。
+                // 止めた前の計算が書き込むことがあるので、ピクセル行の値の配列と同じく毎回作る (ピクセル行の数 × 1 行分で小さい)。
+                _bytes = new byte[count * _rowBytes];
+            }
+            else
+            {
+                _bytes = null;
+                if (ExactCache.TryGetValue(snapshot.Storage.Owner, out ExactResult? cached) && ReferenceEquals(cached.Snapshot, snapshot)
+                    && cached.First == first && cached.RowBytes == _rowBytes && cached.Count == count)
+                {
+                    _rows = (MinimapStats?[])cached.Rows.Clone();
+                    _computed = count;
+                    IsExact = true;
+                    Progress?.Invoke(this, EventArgs.Empty);
+                    return;
+                }
             }
 
             IsExact = false;
@@ -212,7 +291,8 @@ public sealed class MinimapComputer : IDisposable
             var cts = new CancellationTokenSource();
             _cts = cts;
             MinimapStats?[] rows = _rows;
-            _ = Task.Run(() => Compute(snapshot, first, _rowBytes, rows, cts.Token, 0, count));
+            byte[]? bytes = _bytes;
+            _ = Task.Run(() => Compute(snapshot, first, _rowBytes, rows, bytes, cts.Token, 0, count));
         }
     }
 
@@ -244,13 +324,14 @@ public sealed class MinimapComputer : IDisposable
             _computed = rows.Count(r => r is not null);
             var cts = new CancellationTokenSource();
             _cts = cts;
-            _ = Task.Run(() => Compute(snapshot, _first, _rowBytes, rows, cts.Token, 0, rows.Length));
+            byte[]? bytes = _bytes;
+            _ = Task.Run(() => Compute(snapshot, _first, _rowBytes, rows, bytes, cts.Token, 0, rows.Length));
         }
     }
 
     /// <summary>
-    /// 「正確に計算」(仕様 5): 各ピクセル行の範囲全体を読む長時間処理。処理センターに出してキャンセルできる。結果はドキュメントの内容が
-    /// 変わらない限り再利用する。
+    /// 「正確に計算」(仕様 5): 各ピクセル行の範囲全体を読む長時間処理。処理センターに出してキャンセルできる。結果はドキュメントごとに
+    /// キャッシュし、内容が変わらない限り再利用する (仕様の「巨大ファイル」)。同じドキュメントの古い内容に対して実行中の計算は止める。
     /// </summary>
     public async Task ComputeExactAsync(OperationCenter operations, string name, object? target)
     {
@@ -258,58 +339,92 @@ public sealed class MinimapComputer : IDisposable
         long first;
         long rowBytes;
         int count;
+        CancellationTokenSource cts;
         lock (_gate)
         {
             snapshot = _snapshot;
             first = _first;
             rowBytes = _rowBytes;
             count = _rows.Length;
-        }
+            if (snapshot is null || count == 0)
+            {
+                return;
+            }
 
-        if (snapshot is null || count == 0)
-        {
-            return;
+            if (_exactRunning is { } running)
+            {
+                if (ReferenceEquals(running.Snapshot, snapshot) && running.First == first && running.RowBytes == rowBytes && running.Count == count)
+                {
+                    // 同じ割り当てで実行中。
+                    return;
+                }
+
+                if (ReferenceEquals(running.Snapshot.Storage.Owner, snapshot.Storage.Owner))
+                {
+                    // 同じドキュメントの古い内容・古い割り当ての計算は要らない。別のドキュメントの計算は、そのドキュメントのキャッシュになるので続ける。
+                    running.Cts.Cancel();
+                }
+            }
+
+            cts = new CancellationTokenSource();
+            _exactRunning = (snapshot, first, rowBytes, count, cts);
         }
 
         long total = Math.Max(0, Math.Min(snapshot.Length - first, rowBytes * count));
         MinimapStats?[] exact = new MinimapStats?[count];
-        await operations.RunAsync(name, OperationKind.ReadOnly, target, total, op =>
+        try
         {
-            byte[] buffer = new byte[1 << 20];
-            long[] histogram = new long[256];
-            long done = 0;
-            for (int i = 0; i < count; i++)
+            await operations.RunAsync(name, OperationKind.ReadOnly, target, total, op =>
             {
-                op.CancellationToken.ThrowIfCancellationRequested();
-                long start = first + i * rowBytes;
-                long end = Math.Min(snapshot.Length, start + rowBytes);
-                Array.Clear(histogram);
-                bool unreadable = false;
-                for (long at = start; at < end;)
+                using CancellationTokenRegistration registration = cts.Token.Register(op.Cancel);
+                byte[] buffer = new byte[1 << 20];
+                long[] histogram = new long[256];
+                long done = 0;
+                for (int i = 0; i < count; i++)
                 {
                     op.CancellationToken.ThrowIfCancellationRequested();
-                    int n = (int)Math.Min(buffer.Length, end - at);
-                    ReadResult read = snapshot.Read(at, buffer.AsSpan(0, n));
-                    unreadable |= !read.IsComplete;
-                    for (int k = 0; k < n; k++)
+                    long start = first + i * rowBytes;
+                    long end = Math.Min(snapshot.Length, start + rowBytes);
+                    Array.Clear(histogram);
+                    bool unreadable = false;
+                    for (long at = start; at < end;)
                     {
-                        histogram[buffer[k]]++;
+                        op.CancellationToken.ThrowIfCancellationRequested();
+                        int n = (int)Math.Min(buffer.Length, end - at);
+                        ReadResult read = snapshot.Read(at, buffer.AsSpan(0, n));
+                        unreadable |= !read.IsComplete;
+                        for (int k = 0; k < n; k++)
+                        {
+                            histogram[buffer[k]]++;
+                        }
+
+                        at += n;
+                        done += n;
+                        op.Report(done);
                     }
 
-                    at += n;
-                    done += n;
-                    op.Report(done);
+                    exact[i] = MinimapStats.FromHistogram(histogram, Math.Max(0, end - start), unreadable);
                 }
 
-                exact[i] = MinimapStats.FromHistogram(histogram, Math.Max(0, end - start), unreadable);
+                return Task.CompletedTask;
+            }).ConfigureAwait(false);
+        }
+        finally
+        {
+            lock (_gate)
+            {
+                if (_exactRunning is { } r && ReferenceEquals(r.Cts, cts))
+                {
+                    _exactRunning = null;
+                }
             }
 
-            return Task.CompletedTask;
-        }).ConfigureAwait(false);
+            cts.Dispose();
+        }
 
         lock (_gate)
         {
-            _exact = (snapshot, first, rowBytes, count, exact);
+            ExactCache.AddOrUpdate(snapshot.Storage.Owner, new ExactResult(snapshot, first, rowBytes, count, exact));
             if (ReferenceEquals(_snapshot, snapshot) && _first == first && _rowBytes == rowBytes && _rows.Length == count)
             {
                 _cts?.Cancel();
@@ -334,7 +449,7 @@ public sealed class MinimapComputer : IDisposable
 
     public void Dispose() => Stop();
 
-    private void Compute(DocumentSnapshot snapshot, long first, long rowBytes, MinimapStats?[] rows, CancellationToken token, int from, int to)
+    private void Compute(DocumentSnapshot snapshot, long first, long rowBytes, MinimapStats?[] rows, byte[]? bytes, CancellationToken token, int from, int to)
     {
         byte[] buffer = new byte[SampleSize];
         int reported = 0;
@@ -362,6 +477,12 @@ public sealed class MinimapComputer : IDisposable
             {
                 ReadResult read = snapshot.Read(sampleStart, buffer.AsSpan(0, sampleLength));
                 stats = MinimapStats.From(buffer.AsSpan(0, sampleLength), !read.IsComplete);
+
+                // バイトテーマ (仕様 3): 範囲全体 (標本と同じ) のバイトを残す。値を書く前に写すので、値が見えればバイトも読める。
+                if (bytes is not null && (long)(i + 1) * rowBytes <= bytes.Length)
+                {
+                    buffer.AsSpan(0, sampleLength).CopyTo(bytes.AsSpan((int)(i * rowBytes), sampleLength));
+                }
 
                 // 統計パネル (ANA-13) で範囲全体のエントロピーを計算済みなら、標本の概算の代わりにその値を使う (キャッシュの共有。ANA-13 の仕様 8)。
                 if (Statistics.EntropyCache.Find(snapshot.Storage.Owner)?.CachedEntropy(snapshot, start, length) is { } exact)
