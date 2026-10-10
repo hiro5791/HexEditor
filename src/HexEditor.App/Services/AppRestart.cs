@@ -94,14 +94,21 @@ public static class AppRestart
         }
 
         App.Settings.Flush();
-        Microsoft.Windows.AppLifecycle.AppInstance.GetCurrent().UnregisterKey();
+        Microsoft.Windows.AppLifecycle.AppInstance current = Microsoft.Windows.AppLifecycle.AppInstance.GetCurrent();
+        string key = current.Key;
+        current.UnregisterKey();
         try
         {
             return System.Diagnostics.Process.Start(info) is not null;
         }
         catch
         {
-            // 失敗したら単一インスタンスのキーを登録し直さないが、このプロセスは続く。
+            // UAC で拒否された・起動できなかった: このプロセスがそのまま続くため、単一インスタンスのキーを登録し直す (ENG-28 の仕様 12 の 7)。
+            if (!string.IsNullOrEmpty(key))
+            {
+                Microsoft.Windows.AppLifecycle.AppInstance.FindOrRegisterForKey(key);
+            }
+
             throw;
         }
     }

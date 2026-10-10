@@ -15,8 +15,11 @@ public sealed partial class MainViewModel
     private DocumentViewModel? FindSameSource(string identity) =>
         Documents.FirstOrDefault(d => d.Document.Source.Identity == identity);
 
-    /// <summary>ディスク・ボリュームのタブを開く (ENG-29)。既定で読み取り専用 (ENG-14)。</summary>
-    public DocumentViewModel OpenDevice(DeviceByteSource source)
+    /// <summary>
+    /// ディスク・ボリュームのタブを開く (ENG-29)。既定で読み取り専用 (ENG-14 の仕様 1)。<paramref name="readOnly"/> が偽なら、読み書きで開いた
+    /// データソースをそのまま編集できる状態にする (ダイアログの「読み取り専用で開く」をオフにした場合)。
+    /// </summary>
+    public DocumentViewModel OpenDevice(DeviceByteSource source, bool readOnly = true)
     {
         if (FindSameSource(source.Identity) is { } existing)
         {
@@ -27,7 +30,7 @@ public sealed partial class MainViewModel
 
         var doc = new Document(source, _options);
         DocumentViewModel vm = Add(doc, null, source.DisplayName);
-        doc.SetReadOnly(ReadOnlyReason.Device);
+        doc.SetReadOnly(readOnly || !source.Handle.Writable ? ReadOnlyReason.Device : ReadOnlyReason.None);
         WatchDisconnect(vm, source);
 
         // 開いたディスク・ボリュームを最近使ったファイルに記録する (ENG-29 の仕様 12、ENG-16、UI-32)。

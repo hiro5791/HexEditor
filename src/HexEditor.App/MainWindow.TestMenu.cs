@@ -298,7 +298,6 @@ public sealed partial class MainWindow
         }
     }
 
-    private HexView? CurrentView() => _views.FirstOrDefault(v => v.Editor == Editor);
 
     private JsonObject TestState()
     {

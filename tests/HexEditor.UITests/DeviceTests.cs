@@ -137,6 +137,132 @@ public sealed class DeviceTests
     });
 
     [Fact]
+    [Trait("TC", "TC-ENG-14-02")]
+    public Task A_disk_opens_read_only_and_allowing_writes_asks_with_the_model_and_size() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx) });
+
+        // 1・2. 既定 (「読み取り専用で開く」がオン) で物理ディスクを開くと読み取り専用。
+        JsonObject opened = await app.SendAsync("openDisk", new JsonObject { ["path"] = @"\\.\PhysicalDrive0" });
+        Assert.True(opened["readOnly"]!.GetValue<bool>());
+        Assert.False(opened["writable"]!.GetValue<bool>());
+        byte[] before = await app.BytesAsync(0, 512);
+
+        // 3・4. 「編集を許可する」(編集 > 読み取り専用) → 確認ダイアログ: 本文にモデル名とサイズ、ボタンは「書き込みを許可」「キャンセル」。
+        await app.CommandAsync("Command_ReadOnly");
+        await app.WaitForAsync("DeviceWriteConfirmDialog");
+        string body = await app.UiaNameAsync("DeviceWriteConfirm_Body");
+        Assert.Contains("Fake Disk", body, StringComparison.Ordinal);
+        Assert.Contains("64", body, StringComparison.Ordinal);
+        Assert.Contains("Nothing is written until you save", body, StringComparison.Ordinal);
+        Assert.Equal("Allow writing", await app.UiaNameAsync("PrimaryButton"));
+        Assert.Equal("Cancel", await app.UiaNameAsync("CloseButton"));
+
+        // 5. 「書き込みを許可」: 読み取り専用が解除され、読み書きで開き直す。ディスクの内容は変わらない。
+        await app.SendAsync("dialogButton", new JsonObject { ["name"] = "PrimaryButton" });
+        await app.WaitUntilAsync(async () => (await app.DocumentAsync())["readOnly"]?.GetValue<bool>() == false, UiTest.Scaled(TimeSpan.FromSeconds(10)),
+            "the document to become editable");
+        Assert.Equal(before, await app.BytesAsync(0, 512));
+    });
+
+    [Fact]
+    public Task A_disk_opened_with_read_only_off_is_editable_and_a_range_can_be_given_in_sectors() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx) });
+
+        // 「読み取り専用で開く」をオフにすると読み書きで開く (ENG-14 の仕様 1、ENG-29 の仕様 2)。範囲はセクタ数で指定できる。
+        JsonObject opened = await app.SendAsync("openDisk", new JsonObject
+        {
+            ["path"] = @"\\.\PhysicalDrive0",
+            ["readOnly"] = false,
+            ["range"] = new JsonObject { ["start"] = "8", ["length"] = "0x10", ["sectors"] = true },
+        });
+        Assert.False(opened["readOnly"]!.GetValue<bool>());
+        Assert.True(opened["writable"]!.GetValue<bool>());
+        Assert.Equal(4096, opened["rangeStart"]!.GetValue<long>());
+        Assert.Equal(16 * 512, opened["length"]!.GetValue<long>());
+    });
+
+    [Fact]
+    public Task A_module_of_a_process_opens_on_its_own_with_the_module_in_the_name() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx) });
+
+        // モジュールを選んで開く (ENG-32 の仕様 2・6・8): オフセット 0 がベースアドレス、表示名「… - TestTarget.exe」。
+        JsonObject opened = await app.SendAsync("openProcess", new JsonObject { ["pid"] = 4321, ["module"] = "TestTarget.exe" });
+        Assert.Equal(0x10000, opened["baseAddress"]!.GetValue<long>());
+        Assert.Equal(0x1000, opened["length"]!.GetValue<long>());
+        Assert.EndsWith(" - TestTarget.exe", opened["name"]!.GetValue<string>(), StringComparison.Ordinal);
+        Assert.Equal([0x4D, 0x5A], await app.BytesAsync(0, 2));
+    });
+
+    [Fact]
+    [Trait("TC", "TC-ENG-34-03")]
+    public Task Immediate_write_reaches_the_process_and_undo_writes_the_old_value_back() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx) });
+        JsonObject opened = await app.SendAsync("openProcess", new JsonObject { ["pid"] = 4321, ["readOnly"] = false });
+        Assert.False(opened["readOnly"]!.GetValue<bool>());
+        await app.SendAsync("immediateWrite", new JsonObject { ["on"] = true });
+        await app.IdleAsync();
+
+        // 保存しなくても、入力した値が対象のプロセスに届く。
+        await app.GoToAsync(0x10004);
+        await app.TypeAsync("AB");
+        await app.WaitUntilAsync(async () => (await app.SendAsync("processRead", new JsonObject { ["pid"] = 4321, ["address"] = 0x10004, ["length"] = 1 }))["hex"]!
+            .GetValue<string>() == "AB", UiTest.Scaled(TimeSpan.FromSeconds(10)), "the immediate write");
+
+        // Undo すると元の値 (00) が書き戻される。
+        await app.KeyAsync("Z", ctrl: true);
+        await app.WaitUntilAsync(async () => (await app.SendAsync("processRead", new JsonObject { ["pid"] = 4321, ["address"] = 0x10004, ["length"] = 1 }))["hex"]!
+            .GetValue<string>() == "00", UiTest.Scaled(TimeSpan.FromSeconds(10)), "the undo to be written");
+    });
+
+    [Fact]
+    public Task Memory_map_rows_show_protection_and_the_context_menu_selects_or_opens_a_region() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = Hooks(ctx) });
+        await app.SendAsync("openProcess", new JsonObject { ["pid"] = 4321 });
+        JsonObject panel = null!;
+        await app.WaitUntilAsync(async () => (panel = await app.SendAsync("memoryMapPanel"))["rows"] is JsonArray { Count: > 0 },
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the memory map rows");
+
+        // 行に開始・終了・状態・保護属性・種類・モジュール名 (ENG-33 の仕様 1)。「空き」は既定で隠す (仕様 2)。
+        string row = panel["rows"]!.AsArray().Select(r => r!.GetValue<string>()).Single(r => r.StartsWith("000000010000-00000001", StringComparison.Ordinal));
+        Assert.Contains("RW", row, StringComparison.Ordinal);
+        Assert.Contains("TestTarget.exe", row, StringComparison.Ordinal);
+        Assert.DoesNotContain(panel["rows"]!.AsArray(), r => r!.GetValue<string>().Contains("Free", StringComparison.Ordinal));
+
+        // カーソルのある領域をステータスバーにも出す (仕様 4)。
+        await app.GoToAsync(0x10010);
+        await app.WaitUntilAsync(async () => (await app.SendAsync("memoryMapPanel"))["position"]?.GetValue<string>()?.Contains("TestTarget.exe+0x10", StringComparison.Ordinal) == true,
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the region in the status bar");
+
+        // 右クリックメニュー (仕様 3): 「領域を選択」「この領域を新しいタブで開く」。
+        JsonObject selected = await app.SendAsync("memoryMapPanel", new JsonObject { ["select"] = 0x10000, ["action"] = "selectRegion" });
+        Assert.Equal([0x10000L, 0x1000L], selected["selection"]!.AsArray().Select(v => v!.GetValue<long>()));
+        int tabs = (await app.TabNamesAsync()).Count;
+        await app.SendAsync("memoryMapPanel", new JsonObject { ["select"] = 0x10000, ["action"] = "openInNewTab" });
+        await app.WaitUntilAsync(async () => (await app.TabNamesAsync()).Count == tabs + 1, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the region tab");
+    });
+
+    [Fact]
+    public Task Opening_an_img_file_normally_suggests_opening_it_as_a_disk_image() => UiTestContext.RunAsync(async ctx =>
+    {
+        // ENG-31 の仕様 6: .img などを通常の「開く」で開くと、ディスクイメージとして開き直すかを InfoBar で提案する。
+        var hooks = Hooks(ctx);
+        hooks["suggestDiskImage"] = true;
+        AppSession app = await ctx.StartAsync(new AppOptions { Hooks = hooks });
+        string image = ctx.WriteFile("card.img", new byte[8192]);
+        string other = ctx.WriteFile("notes.dat", new byte[8192]);
+        await app.SendAsync("uiOpen", new JsonObject { ["path"] = other });
+        await app.SendAsync("uiOpen", new JsonObject { ["path"] = image });
+        await app.WaitUntilAsync(async () => (await app.StateAsync())["notifications"]!.AsArray()
+            .Any(n => n!["message"]!.GetValue<string>().Contains("disk image", StringComparison.Ordinal)), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the suggestion");
+        Assert.Single((await app.StateAsync())["notifications"]!.AsArray(), n => n!["message"]!.GetValue<string>().Contains("disk image", StringComparison.Ordinal));
+    });
+
+    [Fact]
     [Trait("TC", "TC-ENG-33-01")]
     public Task Opening_a_process_shows_the_memory_map_with_modules() => UiTestContext.RunAsync(async ctx =>
     {

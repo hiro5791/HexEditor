@@ -119,12 +119,19 @@ public static class DiskWrite
     }
 
     /// <summary>
-    /// 計画を実行する (ENG-30 の仕様 4): 旧内容をジャーナルに退避し、ボリュームをロックし、セクタ単位で書き込み、ディスクに反映し、
-    /// ロックを解除してジャーナルを消す。途中で失敗したらジャーナルから書き戻す。書き込んだ範囲と旧内容を退避した位置を返す
-    /// (Undo のため。ENG-30 の仕様 5)。
+    /// 計画を実行する (ENG-30 の仕様 3・4)。手順: ボリュームをロックする → 旧内容をジャーナルと追加バッファに退避する → セクタ単位で書き込む →
+    /// ディスクに反映する → ロックを解除してジャーナルを消す。
+    /// ロックを先に取るのは、ジャーナルに記録する旧内容が、書き込む直前のデバイスの内容と同じであることを保証するため
+    /// (ロックの前に読むと、その間にファイルシステムが書いた内容を古い内容で書き戻してしまう)。
+    /// ボリュームのドキュメントでは、開いているハンドルそのものでロックする (Windows ではロックしたハンドルからしか読み書きできない)。
+    /// 物理ディスクのドキュメントでは、重なるボリュームを別のハンドルでロックし、ディスクのハンドルで書く。
+    /// 書き込みの途中で失敗・キャンセルしたらジャーナルから書き戻す (仕様 6)。書き込んだ範囲と旧内容を退避した位置を返す (Undo のため。仕様 5)。
     /// </summary>
+    /// <param name="journal">false なら旧内容をジャーナルに記録しない (上限を超えて利用者が「保護なしで書き込む」を選んだ。ENG-23 の仕様 3)。
+    /// 旧内容は Undo のため追加バッファには退避する。</param>
+    /// <exception cref="OperationCanceledException">キャンセルされた。デバイスは書き込み前の状態 (書き戻した)。</exception>
     public static IReadOnlyList<Saving.SavedRange> Execute(DiskWritePlan plan, DocumentSnapshot snapshot, string journalDirectory,
-        Func<VolumeDeviceInfo, bool>? confirmDismount = null, LongRunningOperation? operation = null)
+        Func<VolumeDeviceInfo, bool>? confirmDismount = null, LongRunningOperation? operation = null, bool journal = true)
     {
         if (plan.IsBlocked)
         {
@@ -133,76 +140,102 @@ public static class DiskWrite
 
         DeviceByteSource source = plan.Source;
         operation?.SetTotal(plan.TotalBytes * 2);
+        operation?.CancellationToken.ThrowIfCancellationRequested();
 
-        Directory.CreateDirectory(journalDirectory);
-        string journalPath = Path.Combine(journalDirectory, $"disk-{Guid.NewGuid():N}.bin");
-        var saved = new List<Saving.SavedRange>(plan.Ranges.Count);
-        AddBuffer addBuffer = snapshot.Storage.AddBuffer;
-        byte[] buffer = new byte[DeviceByteSource.MaxTransfer];
-        long done = 0;
-
-        // 1. 旧内容をジャーナルと追加バッファに退避する。
-        using (var journal = new FileStream(journalPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 0, FileOptions.WriteThrough))
-        {
-            WriteJournalHeader(journal, source);
-            byte[] record = new byte[16];
-            foreach ((long offset, long length) in plan.Ranges)
-            {
-                BinaryPrimitives.WriteInt64LittleEndian(record, offset);
-                BinaryPrimitives.WriteInt64LittleEndian(record.AsSpan(8), length);
-                journal.Write(record);
-                long firstAt = -1;
-                for (long pos = 0; pos < length; pos += buffer.Length)
-                {
-                    operation?.CancellationToken.ThrowIfCancellationRequested();
-                    int n = (int)Math.Min(buffer.Length, length - pos);
-                    ReadResult read = source.Read(offset + pos, buffer.AsSpan(0, n));
-                    if (!read.IsComplete)
-                    {
-                        throw new Saving.UnreadableDataException(read.Unreadable);
-                    }
-
-                    journal.Write(buffer, 0, n);
-                    long at = addBuffer.Append(buffer.AsSpan(0, n));
-                    firstAt = firstAt < 0 ? at : firstAt;
-                    done += n;
-                    operation?.Report(done);
-                }
-
-                saved.Add(new Saving.SavedRange(offset, length, firstAt));
-            }
-
-            BinaryPrimitives.WriteInt64LittleEndian(record, -1);
-            BinaryPrimitives.WriteInt64LittleEndian(record.AsSpan(8), 0);
-            journal.Write(record);
-            journal.Flush(flushToDisk: true);
-        }
-
-        // 2. ボリュームをロックする。ロックの失敗はデバイスを変えていないため、ジャーナルを消して中止する (書き戻しは不要)。
-        var locks = new List<IDeviceHandle>();
+        // 1. ボリュームをロックする (仕様 3)。ロックの失敗はデバイスを変えていないため、そのまま中止する。
+        var locks = new List<VolumeLock>();
         try
         {
             foreach (VolumeDeviceInfo volume in plan.VolumesToLock)
             {
-                locks.Add(LockVolume(source.Access, volume, confirmDismount));
+                locks.Add(LockVolume(source, volume, confirmDismount));
             }
         }
         catch
         {
             UnlockAll(locks);
-            TryDelete(journalPath);
+            throw;
+        }
+
+        string? journalPath = null;
+        var saved = new List<Saving.SavedRange>(plan.Ranges.Count);
+        AddBuffer addBuffer = snapshot.Storage.AddBuffer;
+        byte[] buffer = new byte[DeviceByteSource.MaxTransfer];
+        long done = 0;
+        try
+        {
+            AfterLock?.Invoke();
+
+            // 2. 旧内容をジャーナルと追加バッファに退避する (ENG-23 の手順 2・3)。まだ何も書いていないため、失敗したらジャーナルを消して中止する。
+            if (journal)
+            {
+                Directory.CreateDirectory(journalDirectory);
+                journalPath = Path.Combine(journalDirectory, $"disk-{Guid.NewGuid():N}.bin");
+            }
+
+            using (FileStream? stream = journalPath is null ? null
+                : new FileStream(journalPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 0, FileOptions.WriteThrough))
+            {
+                if (stream is not null)
+                {
+                    WriteJournalHeader(stream, source);
+                }
+
+                byte[] record = new byte[16];
+                foreach ((long offset, long length) in plan.Ranges)
+                {
+                    BinaryPrimitives.WriteInt64LittleEndian(record, offset);
+                    BinaryPrimitives.WriteInt64LittleEndian(record.AsSpan(8), length);
+                    stream?.Write(record);
+                    long firstAt = -1;
+                    for (long pos = 0; pos < length; pos += buffer.Length)
+                    {
+                        operation?.CancellationToken.ThrowIfCancellationRequested();
+                        int n = (int)Math.Min(buffer.Length, length - pos);
+                        ReadResult read = source.Read(offset + pos, buffer.AsSpan(0, n));
+                        if (!read.IsComplete)
+                        {
+                            throw new Saving.UnreadableDataException(read.Unreadable);
+                        }
+
+                        stream?.Write(buffer, 0, n);
+                        long at = addBuffer.Append(buffer.AsSpan(0, n));
+                        firstAt = firstAt < 0 ? at : firstAt;
+                        done += n;
+                        operation?.Report(done);
+                    }
+
+                    saved.Add(new Saving.SavedRange(offset, length, firstAt));
+                }
+
+                if (stream is not null)
+                {
+                    BinaryPrimitives.WriteInt64LittleEndian(record, -1);
+                    BinaryPrimitives.WriteInt64LittleEndian(record.AsSpan(8), 0);
+                    stream.Write(record);
+                    stream.Flush(flushToDisk: true);
+                }
+            }
+        }
+        catch
+        {
+            UnlockAll(locks);
+            if (journalPath is not null)
+            {
+                TryDelete(journalPath);
+            }
+
             throw;
         }
 
         try
         {
-            AfterLock?.Invoke();
-
             // 3. 新しい内容をセクタ単位で書き、ディスクへの反映を待つ (ここからはジャーナルで戻せる)。
             foreach ((long offset, long length) in plan.Ranges)
             {
                 for (long pos = 0; pos < length; pos += buffer.Length)
                 {
+                    operation?.CancellationToken.ThrowIfCancellationRequested();
                     int n = (int)Math.Min(buffer.Length, length - pos);
                     ReadResult read = snapshot.Read(offset + pos, buffer.AsSpan(0, n));
                     if (!read.IsComplete)
@@ -218,14 +251,20 @@ public static class DiskWrite
 
             source.Flush();
         }
-        catch (Exception ex) when (ex is not OperationCanceledException)
+        catch (Exception ex)
         {
-            // 書き込みの途中で失敗: ジャーナルから書き戻す (仕様 6)。
+            // 書き込みの途中で失敗・キャンセル: ジャーナルから書き戻す (仕様 6)。ロックはまだ持っている (書き戻しもロックしたまま行う)。
+            if (journalPath is null)
+            {
+                UnlockAll(locks);
+                throw new DiskWritePartiallyWrittenException(null, ex);
+            }
+
             try
             {
                 RollbackFromJournal(journalPath, source);
             }
-            catch (Exception rollback) when (rollback is IOException or DeviceException or InvalidDataException)
+            catch (Exception rollback) when (rollback is IOException or DeviceException or InvalidDataException or ArgumentException)
             {
                 // 書き戻しにも失敗: ジャーナルを残す (次回起動時に復旧。仕様「エラー」)。
                 UnlockAll(locks);
@@ -234,56 +273,79 @@ public static class DiskWrite
 
             UnlockAll(locks);
             TryDelete(journalPath);
+            if (ex is OperationCanceledException)
+            {
+                throw;
+            }
+
             throw new DiskWriteRolledBackException(ex);
         }
 
         // 4. ロックを解除し、ジャーナルを消す。
         UnlockAll(locks);
-        TryDelete(journalPath);
+        if (journalPath is not null)
+        {
+            TryDelete(journalPath);
+        }
+
         return saved;
     }
 
-    private static IDeviceHandle LockVolume(IDeviceAccess access, VolumeDeviceInfo volume, Func<VolumeDeviceInfo, bool>? confirmDismount)
+    /// <summary>ロックしたボリューム。<see cref="Owned"/> なら、ロックのために開いたハンドル (解除の後に閉じる)。</summary>
+    private readonly record struct VolumeLock(IDeviceHandle Handle, bool Owned);
+
+    private static VolumeLock LockVolume(DeviceByteSource source, VolumeDeviceInfo volume, Func<VolumeDeviceInfo, bool>? confirmDismount)
     {
-        IDeviceHandle handle = access.Open(volume.Path, writable: true);
+        // ボリュームのドキュメント自身のボリューム: そのハンドルでロックする (仕様 3。ロックしたハンドルからしか書けない)。
+        bool own = string.Equals(volume.Path, source.Path, StringComparison.OrdinalIgnoreCase);
+        IDeviceHandle handle = own ? source.Handle : source.Access.Open(volume.Path, writable: true);
+        var result = new VolumeLock(handle, !own);
         try
         {
             if (handle.LockVolume() == 0)
             {
-                return handle;
+                return result;
             }
 
-            // ロックできない (開いているファイルがある。仕様 3 の 2): ディスマウントの確認を取る。ディスマウントできれば
-            // ボリュームは排他状態になる (OS が再マウントするまでロックは不要)。
-            if (confirmDismount?.Invoke(volume) == true && handle.DismountVolume() == 0)
+            // ロックできない (開いているファイルがある。仕様 3 の 2): 承認されたら強制的にディスマウントし、改めてロックする
+            // (ディスマウントでファイルが閉じられるためロックできる。ロックせずに書くと OS が再マウントしうる)。
+            if (confirmDismount?.Invoke(volume) == true && handle.DismountVolume() == 0 && handle.LockVolume() == 0)
             {
-                return handle;
+                return result;
             }
 
-            handle.Dispose();
             throw new VolumeLockException(volume.Name);
         }
         catch
         {
-            handle.Dispose();
+            if (result.Owned)
+            {
+                handle.Dispose();
+            }
+
             throw;
         }
     }
 
-    private static void UnlockAll(List<IDeviceHandle> locks)
+    private static void UnlockAll(List<VolumeLock> locks)
     {
-        foreach (IDeviceHandle handle in locks)
+        foreach (VolumeLock held in locks)
         {
             try
             {
-                handle.UnlockVolume();
+                held.Handle.UnlockVolume();
             }
             catch (Exception ex) when (ex is IOException or DeviceException)
             {
             }
 
-            handle.Dispose();
+            if (held.Owned)
+            {
+                held.Handle.Dispose();
+            }
         }
+
+        locks.Clear();
     }
 
     private static void WriteJournalHeader(Stream stream, DeviceByteSource source)
@@ -410,8 +472,9 @@ public sealed class DiskWriteRolledBackException(Exception inner)
     : IOException($"An error occurred while writing; the device was restored to its state before the write. {inner.Message}", inner);
 
 /// <summary>書き込みに失敗し、書き戻しにも失敗した (ENG-30 の「エラー」)。ジャーナルを残す。</summary>
-public sealed class DiskWritePartiallyWrittenException(string journalPath, Exception inner)
+public sealed class DiskWritePartiallyWrittenException(string? journalPath, Exception inner)
     : IOException($"Part of the device has been overwritten. It can be recovered on the next launch. {inner.Message}", inner)
 {
-    public string JournalPath { get; } = journalPath;
+    /// <summary>残したジャーナル。保護なしで書いた (ジャーナルがない) 場合は null。</summary>
+    public string? JournalPath { get; } = journalPath;
 }

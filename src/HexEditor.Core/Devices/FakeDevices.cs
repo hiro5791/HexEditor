@@ -287,6 +287,15 @@ public sealed class FakeDeviceAccess : IDeviceAccess, IDisposable
     /// <summary>ロック中のボリューム。</summary>
     public HashSet<string> LockedVolumes { get; } = new(StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>
+    /// ボリュームをロックしたハンドル (Windows と同じく、ロックしたボリュームはロックしたハンドルからしか読み書きできない)。
+    /// <see cref="LockedVolumes"/> と同じロックで守る。
+    /// </summary>
+    private readonly Dictionary<string, object> _lockOwners = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>強制的にディスマウントしたボリューム (開いているファイルがなくなり、ロックできる。ロックの解除で再マウントされる)。</summary>
+    private readonly HashSet<string> _dismounted = new(StringComparer.OrdinalIgnoreCase);
+
     public int WriteCount => _writes;
 
     internal void Log(string call)
@@ -431,12 +440,31 @@ public sealed class FakeDeviceAccess : IDeviceAccess, IDisposable
             return 0;
         }
 
+        /// <summary>このボリュームを別のハンドルがロックしている (このハンドルからは読み書きできない)。</summary>
+        private bool LockedByOther()
+        {
+            if (volume is null)
+            {
+                return false;
+            }
+
+            lock (owner.LockedVolumes)
+            {
+                return owner._lockOwners.TryGetValue(volume.Path, out object? holder) && !ReferenceEquals(holder, this);
+            }
+        }
+
         public int ReadSectors(long offset, Span<byte> buffer)
         {
             int error = Check(offset, buffer.Length);
             if (error != 0)
             {
                 return error;
+            }
+
+            if (LockedByOther())
+            {
+                return Win32Errors.AccessDenied;
             }
 
             long at = start + offset;
@@ -468,6 +496,11 @@ public sealed class FakeDeviceAccess : IDeviceAccess, IDisposable
             if (disk.Spec.WriteProtected)
             {
                 return Win32Errors.WriteProtect;
+            }
+
+            if (LockedByOther())
+            {
+                return Win32Errors.AccessDenied;
             }
 
             // マウント中のボリュームの範囲への直接の書き込みは、ロックしていなければ OS が拒否する (ENG-30 の仕様 2)。
@@ -508,15 +541,19 @@ public sealed class FakeDeviceAccess : IDeviceAccess, IDisposable
             }
 
             owner.Log($"Lock {Path}");
-            if (volume.Lock != FakeLockBehavior.Ok)
-            {
-                return Win32Errors.AccessDenied;
-            }
-
-            _locked = true;
             lock (owner.LockedVolumes)
             {
+                // 別のハンドルがロック中、開いているファイルがある (ディスマウントしていない)、ロックできないボリューム。
+                bool heldByOther = owner._lockOwners.TryGetValue(volume.Path, out object? holder) && !ReferenceEquals(holder, this);
+                bool inUse = volume.Lock == FakeLockBehavior.InUse && !owner._dismounted.Contains(volume.Path);
+                if (heldByOther || inUse || volume.Lock == FakeLockBehavior.Refuse)
+                {
+                    return Win32Errors.AccessDenied;
+                }
+
+                _locked = true;
                 owner.LockedVolumes.Add(volume.Path);
+                owner._lockOwners[volume.Path] = this;
             }
 
             owner.AfterLock?.Invoke(volume.Path);
@@ -542,10 +579,10 @@ public sealed class FakeDeviceAccess : IDeviceAccess, IDisposable
                 return Win32Errors.AccessDenied;
             }
 
-            _locked = true;
+            // 強制的なディスマウント: 開いているファイルは閉じられる。ロックはしない (書き込む前に改めてロックする)。
             lock (owner.LockedVolumes)
             {
-                owner.LockedVolumes.Add(volume.Path);
+                owner._dismounted.Add(volume.Path);
             }
 
             return 0;
@@ -559,10 +596,17 @@ public sealed class FakeDeviceAccess : IDeviceAccess, IDisposable
             }
 
             owner.Log($"Unlock {Path}");
-            _locked = false;
             lock (owner.LockedVolumes)
             {
+                if (!_locked)
+                {
+                    return Win32Errors.NotLocked;
+                }
+
+                _locked = false;
                 owner.LockedVolumes.Remove(volume.Path);
+                owner._lockOwners.Remove(volume.Path);
+                owner._dismounted.Remove(volume.Path);
             }
 
             return 0;

@@ -22,6 +22,9 @@ namespace HexEditor.App;
 /// </summary>
 public sealed partial class MainWindow
 {
+    /// <summary>今の編集位置を表示している Hex ビュー (分割表示ではアクティブなペイン)。</summary>
+    private HexView? CurrentView() => _views.FirstOrDefault(v => v.Editor == Editor);
+
     /// <summary>「N バイトずらす」で最後に指定した量 (EDIT-05 の仕様 2。アプリの状態)。</summary>
     private const string ShiftAmountKey = "edit.selectionShift.last";
 

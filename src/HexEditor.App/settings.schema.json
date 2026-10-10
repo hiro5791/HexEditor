@@ -149,6 +149,20 @@
       "type": "string",
       "default": ""
     },
+    "devices.helperIdleMinutes": {
+      "description": "Close the administrator helper after (minutes)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60,
+      "default": 10
+    },
+    "devices.helperTimeoutSeconds": {
+      "description": "Administrator helper request time limit (seconds)",
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 300,
+      "default": 30
+    },
     "diagnostics.hexView.overlay": {
       "description": "Show rendering diagnostics in the Hex view",
       "type": "boolean",
@@ -158,6 +172,11 @@
       "description": "Save a memory dump on crash",
       "type": "boolean",
       "default": false
+    },
+    "diskImage.suggest": {
+      "description": "Suggest opening disk images as disk images",
+      "type": "boolean",
+      "default": true
     },
     "edit.backspaceInOverwrite": {
       "description": "Backspace in overwrite mode",
@@ -373,6 +392,13 @@
       ],
       "default": "info"
     },
+    "memoryMap.refreshSeconds": {
+      "description": "Memory map refresh interval (seconds)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60,
+      "default": 5
+    },
     "network.downloads.enabled": {
       "description": "Allow downloads",
       "type": "boolean",
@@ -390,6 +416,11 @@
     },
     "positionManager.followCursor": {
       "description": "Position manager follows the cursor",
+      "type": "boolean",
+      "default": true
+    },
+    "process.openReadOnly": {
+      "description": "Open processes read-only by default",
       "type": "boolean",
       "default": true
     },

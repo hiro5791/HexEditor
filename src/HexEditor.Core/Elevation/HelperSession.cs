@@ -18,6 +18,44 @@ public sealed class HelperNotFoundException(string path) : FileNotFoundException
 /// <summary>補助プロセスのファイルのハッシュが本体に埋め込んだ値と違う (PKG-14 の仕様 2)。起動しない。</summary>
 public sealed class HelperTamperedException(string path) : IOException($"The elevated helper may have been tampered with: {path}");
 
+/// <summary>
+/// 補助プロセスのファイルのハッシュ (PKG-14 の仕様 2)。補助プロセスは本体と同じフォルダに、自分のファイル (実行ファイル・本体の dll・
+/// deps.json・runtimeconfig.json) を置き、.NET ランタイムは本体のものを共有する。この 4 つを <see cref="Files"/> の順につないだ内容の
+/// SHA-256 (ないファイルは飛ばす) を、リリースのビルドで本体に埋め込む (build/publish.ps1 も同じ計算をする)。
+/// </summary>
+public static class HelperIntegrity
+{
+    /// <summary>ハッシュに含めるファイル (実行ファイルと同じフォルダ)。</summary>
+    public static readonly string[] Files =
+        ["HexEditor.Elevated.exe", "HexEditor.Elevated.dll", "HexEditor.Elevated.deps.json", "HexEditor.Elevated.runtimeconfig.json"];
+
+    /// <summary>実行ファイルのパスから、補助プロセスのファイルのハッシュ (16 進の大文字) を計算する。</summary>
+    public static string ComputeHash(string exePath)
+    {
+        string folder = Path.GetDirectoryName(Path.GetFullPath(exePath)) ?? string.Empty;
+        using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        byte[] buffer = new byte[81920];
+        foreach (string name in Files)
+        {
+            // 実行ファイルは渡されたパスのもの (テストでは名前が違うことがある)。
+            string file = name == Files[0] ? exePath : Path.Combine(folder, name);
+            if (!File.Exists(file))
+            {
+                continue;
+            }
+
+            using FileStream stream = File.OpenRead(file);
+            int n;
+            while ((n = stream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                hash.AppendData(buffer, 0, n);
+            }
+        }
+
+        return Convert.ToHexString(hash.GetHashAndReset());
+    }
+}
+
 /// <summary>起動した補助プロセス。</summary>
 public interface IHelperProcess : IDisposable
 {
@@ -249,8 +287,7 @@ public sealed class HelperSession : IAsyncDisposable
             return;
         }
 
-        using FileStream stream = File.OpenRead(path);
-        string actual = Convert.ToHexString(SHA256.HashData(stream));
+        string actual = HelperIntegrity.ComputeHash(path);
         if (!string.Equals(actual, expected, StringComparison.OrdinalIgnoreCase))
         {
             Log($"Helper hash mismatch: {actual}");

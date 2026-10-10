@@ -226,6 +226,97 @@ public sealed class DiskWriteTests : IDisposable
         }
     }
 
+    [Fact]
+    public void A_volume_document_is_locked_through_its_own_handle()
+    {
+        // Windows ではロックしたボリュームはロックしたハンドルからしか読み書きできない。ボリュームのドキュメントは自分のハンドルでロックする。
+        var access = new FakeDeviceAccess(Spec());
+        IDeviceHandle handle = access.Open(@"\\.\X:", writable: true);
+        VolumeDeviceInfo volume = access.Enumerate().Volumes[0];
+        var source = new DeviceByteSource(handle, access, new DeviceOpenInfo
+        {
+            Path = handle.Path, DisplayName = "Volume X:", Volume = volume, Route = DeviceRoute.Elevated,
+        });
+        using (source)
+        {
+            var doc = new Document(source);
+            doc.Overwrite(4096, Enumerable.Repeat((byte)0x5A, 16).ToArray());
+            access.ClearCalls();
+            doc.CompleteDeviceWrite(source, DiskWrite.Execute(DiskWrite.Plan(doc, source, access.Enumerate()), doc.Current, Journals));
+
+            byte[] read = new byte[16];
+            access.Disk(0).Read(1024 * 1024 + 4096, read);
+            Assert.All(read, b => Assert.Equal(0x5A, b));
+
+            // 別のハンドルを開いていない (自分のハンドルでロック → 書き込み → 解除)。
+            Assert.DoesNotContain(access.Calls, c => c.StartsWith("Open ", StringComparison.Ordinal));
+            Assert.Empty(access.LockedVolumes);
+
+            // ロック中は、別のハンドルからは読み書きできない (偽のデバイスも Windows と同じ約束)。
+            Assert.Equal(0, handle.LockVolume());
+            using IDeviceHandle other = access.Open(@"\\.\X:", writable: true);
+            Assert.Equal(Win32Errors.AccessDenied, other.ReadSectors(0, new byte[512]));
+            Assert.Equal(Win32Errors.AccessDenied, other.LockVolume());
+            Assert.Equal(0, handle.UnlockVolume());
+            Assert.Equal(0, other.ReadSectors(0, new byte[512]));
+        }
+    }
+
+    [Fact]
+    public void Old_content_is_journaled_after_the_lock_and_cancelling_the_write_rolls_back()
+    {
+        (FakeDeviceAccess access, DeviceByteSource source, Document doc) = OpenDisk(Spec());
+        using (source)
+        {
+            long at = 1024 * 1024 + 8192;
+            byte[] original = new byte[4096];
+            access.Disk(0).Read(at, original);
+            doc.Overwrite(at, Enumerable.Repeat((byte)0x77, 4096).ToArray());
+            DiskWritePlan plan = DiskWrite.Plan(doc, source, access.Enumerate());
+
+            // 1 回目の書き込みの後にキャンセルする。
+            var operation = new HexEditor.Core.Operations.LongRunningOperation("save", HexEditor.Core.Operations.OperationKind.WritesExternal, doc, null, TimeProvider.System);
+            access.AfterWrite = n =>
+            {
+                if (n == 1)
+                {
+                    operation.Cancel();
+                }
+            };
+            access.ClearCalls();
+            Assert.ThrowsAny<OperationCanceledException>(() => DiskWrite.Execute(plan, doc.Current, Journals, operation: operation));
+            access.AfterWrite = null;
+
+            // 書き戻され、ロックは解除され、ジャーナルは残らない。ロックはジャーナルを読む (旧内容を記録する) 前。
+            byte[] after = new byte[4096];
+            access.Disk(0).Read(at, after);
+            Assert.Equal(original, after);
+            Assert.Empty(access.LockedVolumes);
+            Assert.Empty(DiskWrite.FindJournals(Journals));
+            int lockIndex = access.Calls.ToList().FindIndex(c => c.StartsWith(@"Lock \\.\X:", StringComparison.Ordinal));
+            Assert.Equal(0, access.Calls.ToList().FindIndex(c => c.StartsWith("Open ", StringComparison.Ordinal)));
+            Assert.True(lockIndex > 0, string.Join(",", access.Calls));
+            Assert.True(doc.IsModified);
+        }
+    }
+
+    [Fact]
+    public void A_failure_while_journaling_leaves_no_journal_and_releases_the_lock()
+    {
+        (FakeDeviceAccess access, DeviceByteSource source, Document doc) = OpenDisk(Spec());
+        using (source)
+        {
+            long at = 1024 * 1024 + 512;
+            doc.Overwrite(at, new byte[] { 9 });
+            DiskWritePlan plan = DiskWrite.Plan(doc, source, access.Enumerate());
+            access.Disk(0).BadRanges.Add((at, 512));
+            Assert.Throws<UnreadableDataException>(() => DiskWrite.Execute(plan, doc.Current, Journals));
+            Assert.Empty(DiskWrite.FindJournals(Journals));
+            Assert.Empty(access.LockedVolumes);
+            Assert.Equal(0, access.WriteCount);
+        }
+    }
+
     public void Dispose()
     {
         try

@@ -42,6 +42,9 @@ public static class TestHooks
     /// <summary>true ならウィンドウをアクティブにしない (起動時・転送された起動のどちらも)。</summary>
     public static bool SuppressActivation => Active && Settings.NoActivate;
 
+    /// <summary>テストではディスクイメージの提案 (ENG-31 の仕様 6) を、有効にしたテスト以外では出さない。</summary>
+    public static bool SuppressDiskImageSuggestion => Active && !Settings.SuggestDiskImage;
+
     /// <summary>時刻の固定 (7.2)。固定しないときは null (既定の時計)。</summary>
     public static TimeProvider? Time => Settings.FrozenTime is { } t ? new FrozenTimeProvider(t) : null;
 
@@ -648,6 +651,8 @@ public static class TestHooks
     public static bool SimulatesElevation => false;
 
     public static bool SuppressActivation => false;
+
+    public static bool SuppressDiskImageSuggestion => false;
 
     public static TimeProvider? Time => null;
 

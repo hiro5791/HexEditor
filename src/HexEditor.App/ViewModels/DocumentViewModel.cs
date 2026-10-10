@@ -338,7 +338,12 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
                 && (v.Radix == OffsetRadix.Sector || Document.Source.LogicalSectorSize > 1)))
             {
                 var sectors = new SectionLayout(e.SectorSize, Document.Length);
-                parts.Add(Loc.Format("Status_Sector", sectors.IndexOf(cursor).ToString(Culture)));
+                string index = sectors.IndexOf(cursor).ToString(Culture);
+
+                // ディスク・ディスクイメージはセクタサイズも示す (ENG-31 の「画面」)。
+                parts.Add(Document.Source.LogicalSectorSize > 1
+                    ? Loc.Format("Status_SectorWithSize", index, Document.Source.LogicalSectorSize.ToString("N0", Culture))
+                    : Loc.Format("Status_Sector", index));
             }
             else if (v.Separator != SeparatorKind.None && e.SectionLength > 0)
             {
@@ -353,6 +358,12 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
                 string position = v.Radix == OffsetRadix.Decimal ? within.ToString(Culture)
                     : "0x" + within.ToString(v.LowercaseHex ? "x2" : "X2", CultureInfo.InvariantCulture);
                 parts.Add(Loc.Format("Status_Record", recordNo.ToString(CultureInfo.InvariantCulture), position));
+            }
+
+            // プロセスメモリ: カーソルのある領域 (ENG-33 の仕様 4)。例: kernel32.dll+0x1A2B0 (RX)。
+            if (ProcessMemory is { } process && process.DescribeAddress(process.BaseAddress + cursor) is { Length: > 0 } region)
+            {
+                parts.Add(region);
             }
 
             return string.Join("  ", parts);

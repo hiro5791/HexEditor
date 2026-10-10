@@ -64,11 +64,25 @@ public sealed class HelperServer(Stream stream, PrivilegedOperations operations,
                 {
                     try
                     {
-                        (uint status, byte[] response) = operations.Execute(command, flags, body);
-                        await SendAsync(HelperProtocol.Response(id, status, response), stop.Token).ConfigureAwait(false);
+                        (uint status, byte[] response) result;
+                        try
+                        {
+                            result = operations.Execute(command, flags, body);
+                        }
+                        catch (Exception ex) when (ex is not HelperProtocolException and not OperationCanceledException)
+                        {
+                            // 想定外の失敗 (OS の呼び出しの例外など): 要求を失敗として答え、補助プロセスは動き続ける
+                            // (応答しないと UI のプロセスは要求の上限時間まで待ち続ける)。
+                            _log($"{(HelperCommand)command} failed: {ex.GetType().Name}: {ex.Message}");
+                            result = ((uint)(ex.HResult is var hr && (hr & 0xFFFF0000) == 0x80070000 && (hr & 0xFFFF) != 0 ? hr & 0xFFFF : 31), []);
+                        }
+
+                        await SendAsync(HelperProtocol.Response(id, result.status, result.response), stop.Token).ConfigureAwait(false);
                     }
-                    catch (HelperProtocolException)
+                    catch (HelperProtocolException ex)
                     {
+                        // 不正なメッセージ・許可リストにない値: 切断して終了する (ENG-28 の「エラー」)。
+                        _log("Rejected: " + ex.Message);
                         exit = HelperServerExit.Rejected;
                         await stop.CancelAsync().ConfigureAwait(false);
                     }

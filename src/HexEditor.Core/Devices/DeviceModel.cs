@@ -185,11 +185,13 @@ public static class Win32Errors
     public const int NotReady = 21;
     public const int WriteProtect = 19;
     public const int SectorNotFound = 27;
+    public const int GenFailure = 31;
     public const int SharingViolation = 32;
     public const int LockViolation = 33;
     public const int NotSupported = 50;
     public const int InvalidParameter = 87;
     public const int BrokenPipe = 109;
+    public const int NotLocked = 158;
     public const int PartialCopy = 299;
     public const int NoSuchDevice = 433;
     public const int NoAccess = 998;

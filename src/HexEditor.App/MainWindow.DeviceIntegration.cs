@@ -38,6 +38,12 @@ public sealed partial class MainWindow
             {
                 SetAutoRefresh(gone, null);
             }
+
+            // 閉じたドキュメントの即時書き込みの購読を外す (ENG-34 の仕様 2)。
+            foreach (DocumentViewModel gone in _immediateWriters.Keys.Where(d => !Vm.Documents.Contains(d)).ToList())
+            {
+                SetImmediateWrite(gone, false);
+            }
         };
         Closed += (_, _) =>
         {
@@ -89,6 +95,14 @@ public sealed partial class MainWindow
                 DeviceRoute.Elevated => OpenRoute.SameProcess,
                 _ => OpenRoute.Direct,
             };
+            // 同じシリアル番号のデバイスだけに付け替える (ENG-29 の仕様 11。別のディスクが同じ番号で接続された場合は開かない)。
+            if (device.Info.SerialNumber is { Length: > 0 } serial
+                && DeviceService.EnumerateDevices().FindDisk(device.Path) is { SerialNumber: { Length: > 0 } now }
+                && !string.Equals(serial.Trim(), now.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                throw new DeviceException(Win32Errors.NoSuchDevice, Loc.Get("Device_NotSameDevice"));
+            }
+
             IDeviceAccess access = await DeviceService.DeviceAccessForAsync(route);
             IDeviceHandle handle = access.Open(device.Path, device.Handle.Writable);
             device.ReplaceHandle(handle, access);
@@ -136,7 +150,7 @@ public sealed partial class MainWindow
         OpenRoute route = DeviceService.RouteForDisk(isRemovableUsbVolume: false);
         if (route == OpenRoute.GuidanceNeeded)
         {
-            await ShowAdminGuidanceAsync(Loc.Get("AdminGuide_Disk"));
+            await ShowAdminGuidanceAsync(Loc.Get("AdminGuide_Disk"), forDisk: true);
             return;
         }
 
@@ -165,13 +179,13 @@ public sealed partial class MainWindow
             Vm.Selected = opened;
             RefreshHelperIndicator();
         }
-        catch (HexEditor.Core.Elevation.HelperElevationDeclinedException)
+        catch (Exception ex)
         {
-            ShowNotice(Loc.Get("AdminGuide_Declined"), InfoBarSeverity.Informational);
-        }
-        catch (DeviceException ex)
-        {
-            ShowNotice(DeviceErrorMessage(ex), InfoBarSeverity.Error);
+            // UAC の拒否・補助プロセスの改ざん・起動の失敗・デバイスのエラー (ENG-28、PKG-14)。
+            if (!await HandleElevatedOpenFailureAsync(ex, forDisk: true))
+            {
+                throw;
+            }
         }
 
         UpdateTitle();
@@ -242,7 +256,7 @@ public sealed partial class MainWindow
             yield return new TabMenuEntry("TabMenu_ImmediateWrite", Loc.Get("Tab_ImmediateWrite"), !doc.Document.IsDisposed, () =>
             {
                 Vm.Selected = doc;
-                ToggleImmediateWrite();
+                _ = ToggleImmediateWriteAsync();
             }, Checked: doc.ImmediateWrite);
         }
 

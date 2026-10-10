@@ -787,6 +787,13 @@ public sealed partial class MainWindow : Window
         }
 
         DocumentViewModel? doc = Vm.Selected;
+        if (result == EditResult.Unallocated)
+        {
+            // プロセスメモリの割り当てられていない範囲 (ENG-34 の仕様 7)。
+            ShowNotice(Loc.Get("Process_Unallocated"), InfoBarSeverity.Warning, doc);
+            return;
+        }
+
         IReadOnlyList<LongRunningOperation> busy = doc is null ? [] : Vm.Operations.ActiveFor(doc.Document);
         if (result == EditResult.NotEditable && doc is { Editor.ReadOnly: true } && busy.Count == 0)
         {

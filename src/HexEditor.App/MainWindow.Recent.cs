@@ -158,13 +158,13 @@ public sealed partial class MainWindow
             Vm.OpenDevice(await DeviceService.OpenDeviceAsync(info, writable: false, route));
             RefreshHelperIndicator();
         }
-        catch (HexEditor.Core.Elevation.HelperElevationDeclinedException)
+        catch (Exception ex)
         {
-            ShowNotice(Loc.Get("AdminGuide_Declined"), InfoBarSeverity.Informational);
-        }
-        catch (Core.Devices.DeviceException ex)
-        {
-            ShowNotice(DeviceErrorMessage(ex), InfoBarSeverity.Error);
+            // UAC の拒否・補助プロセスの改ざん・起動の失敗・デバイスのエラー (ENG-28、PKG-14)。
+            if (!await HandleElevatedOpenFailureAsync(ex, forDisk: true))
+            {
+                throw;
+            }
         }
     }
 

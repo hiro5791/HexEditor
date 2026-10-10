@@ -256,7 +256,7 @@ public sealed unsafe class Win32ProcessAccess : IProcessAccess
     {
         private readonly SafeProcessHandle _handle;
         private readonly RegisteredWaitHandle? _wait;
-        private readonly ManualResetEvent _exitEvent;
+        private readonly ProcessWaitHandle _exitEvent;
         private volatile bool _exited;
 
         public Memory(int pid, SafeProcessHandle handle, bool writable)
@@ -267,7 +267,7 @@ public sealed unsafe class Win32ProcessAccess : IProcessAccess
             Name = ImagePathOf(handle) is { } image ? Path.GetFileName(image) : $"PID {pid}";
             Architecture = ArchitectureOf(handle);
             AddressLimit = ComputeAddressLimit();
-            _exitEvent = new ManualResetEvent(false) { SafeWaitHandle = new SafeWaitHandle(handle.DangerousGetHandle(), ownsHandle: false) };
+            _exitEvent = new ProcessWaitHandle(new SafeWaitHandle(handle.DangerousGetHandle(), ownsHandle: false));
             _wait = ThreadPool.RegisterWaitForSingleObject(_exitEvent, (_, _) =>
             {
                 _exited = true;
@@ -407,18 +407,80 @@ public sealed unsafe class Win32ProcessAccess : IProcessAccess
             return list;
         }
 
-        public int Read(long address, Span<byte> buffer, out int read)
+        /// <summary>
+        /// [address, address + length) の先頭から、<paramref name="accept"/> を満たすページが続くバイト数 (VirtualQueryEx で今の保護属性を見る)。
+        /// 領域の一覧は古いことがあるため、読み書きの直前に確かめる。
+        /// </summary>
+        private long Allowed(long address, long length, Func<uint, uint, bool> accept)
         {
-            fixed (byte* p = buffer)
+            MemoryBasicInformation info;
+            long at = address, end = address + length;
+            while (at < end)
             {
-                bool ok = ReadProcessMemory(_handle, (IntPtr)address, p, (IntPtr)buffer.Length, out IntPtr done);
-                read = (int)done;
-                return ok ? 0 : Error();
+                if (VirtualQueryEx(_handle, (IntPtr)at, &info, sizeof(MemoryBasicInformation)) == 0 || !accept(info.State, info.Protect))
+                {
+                    break;
+                }
+
+                long regionEnd = (long)info.BaseAddress + (long)info.RegionSize;
+                if (regionEnd <= at)
+                {
+                    break;
+                }
+
+                at = regionEnd;
             }
+
+            return Math.Min(at, end) - address;
         }
 
+        /// <summary>
+        /// 読む。ガードページ・アクセス不可・未コミットのページの手前で止める (ENG-32 の仕様 10: ガードページを読むと対象のプロセスで
+        /// 例外が起き、ガードが外れてスタックの伸長が壊れる)。偽のプロセスと同じく、止めたら ERROR_PARTIAL_COPY。
+        /// </summary>
+        public int Read(long address, Span<byte> buffer, out int read)
+        {
+            read = 0;
+            if (buffer.IsEmpty)
+            {
+                return 0;
+            }
+
+            int allowed = (int)Allowed(address, buffer.Length,
+                static (state, protect) => state == 0x1000 && PageProtection.IsReadable(protect));
+            if (allowed > 0)
+            {
+                fixed (byte* p = buffer)
+                {
+                    bool ok = ReadProcessMemory(_handle, (IntPtr)address, p, (IntPtr)allowed, out IntPtr done);
+                    read = (int)done;
+                    if (!ok)
+                    {
+                        return Error();
+                    }
+                }
+            }
+
+            return allowed == buffer.Length ? 0 : _exited ? Win32Errors.ProcessAborted : Win32Errors.PartialCopy;
+        }
+
+        /// <summary>
+        /// 書く。書き込みできないページを含む場合は何も書かずに ERROR_NOACCESS (偽のプロセスと同じ)。<c>WriteProcessMemory</c> は
+        /// 読み取り専用のページの保護を自分で変えて書いてしまうため、確認 (ENG-34 の仕様 3) を経ずに書かないよう先に確かめる。
+        /// </summary>
         public int Write(long address, ReadOnlySpan<byte> data, out int written)
         {
+            written = 0;
+            if (data.IsEmpty)
+            {
+                return 0;
+            }
+
+            if (Allowed(address, data.Length, static (state, protect) => state == 0x1000 && PageProtection.IsWritable(protect)) < data.Length)
+            {
+                return _exited ? Win32Errors.ProcessAborted : Win32Errors.NoAccess;
+            }
+
             fixed (byte* p = data)
             {
                 bool ok = WriteProcessMemory(_handle, (IntPtr)address, p, (IntPtr)data.Length, out IntPtr done);
@@ -441,6 +503,15 @@ public sealed unsafe class Win32ProcessAccess : IProcessAccess
             _wait?.Unregister(null);
             _exitEvent.Dispose();
             _handle.Dispose();
+        }
+    }
+
+    /// <summary>プロセスのハンドルを待つための WaitHandle (イベントを作らない。ハンドルは持たない)。</summary>
+    private sealed class ProcessWaitHandle : WaitHandle
+    {
+        public ProcessWaitHandle(SafeWaitHandle handle)
+        {
+            SafeWaitHandle = handle;
         }
     }
 

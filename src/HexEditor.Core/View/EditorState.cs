@@ -57,6 +57,12 @@ public enum EditResult
     /// データインスペクタを使ってください」と出す (VIEW-10 の仕様 7)。
     /// </summary>
     CellFormatNotEditable,
+
+    /// <summary>
+    /// プロセスメモリの割り当てられていない範囲 (空き・予約) に入力した。何もしていない。UI は「この範囲は割り当てられていないため
+    /// 編集できません」と示す (ENG-34 の仕様 7)。
+    /// </summary>
+    Unallocated,
 }
 
 /// <summary>ジャンプ先の表示位置 (VIEW-34 の仕様 2。設定 <c>view.jump.position</c>)。</summary>
@@ -869,6 +875,11 @@ public sealed partial class EditorState
             return EditResult.CellFormatNotEditable;
         }
 
+        if (IsUnallocated(HasSelection ? _selectionStart : _cursor, 1))
+        {
+            return EditResult.Unallocated;
+        }
+
         if (!_caretLoop && (HasMultipleRanges || HasMultipleCarets))
         {
             // マルチ選択・矩形・マルチカーソルへの入力 (EDIT-07 の仕様 7、EDIT-08 の仕様 4・6)。
@@ -962,6 +973,11 @@ public sealed partial class EditorState
         if (!_caretLoop && (HasMultipleRanges || HasMultipleCarets))
         {
             return PrepareCaretsForInput(keepSelections: true) ? ForEachCaret(() => TypeText(text), "入力", TypingKey) : EditResult.TooManyCarets;
+        }
+
+        if (IsUnallocated(HasSelection ? _selectionStart : _cursor, bytes.Length))
+        {
+            return EditResult.Unallocated;
         }
 
         long at = HasSelection ? _selectionStart : _cursor;
