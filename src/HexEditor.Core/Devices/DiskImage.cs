@@ -55,8 +55,11 @@ public static class DiskImage
 /// ディスクイメージとして開いたファイル (ENG-31 の仕様 2・3): 論理セクタサイズを指定値にし、既定では長さを固定する
 /// (<see cref="SourceCapabilities.CanResize"/> を外す)。読み書きは元のファイルと同じ (仕様 4)。
 /// </summary>
-public sealed class DiskImageByteSource : ByteSourceBase
+public sealed class DiskImageByteSource : ByteSourceBase, View.IViewDefaultsSource
 {
+    /// <summary>データソースの種類ごとの表示の既定値 (VIEW-42 の仕様 2 の 3): ディスクと同じく区切り線「セクタ」。</summary>
+    public System.Text.Json.Nodes.JsonObject? ViewDefaults => new() { ["separator"] = "sector" };
+
     private readonly FileByteSource _file;
     private readonly bool _allowResize;
 

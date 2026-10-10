@@ -685,8 +685,8 @@
   <data name="KeyScope_findBar" xml:space="preserve"><value>検索バー</value></data>
   <data name="KeyScope_codeEditor" xml:space="preserve"><value>コードエディタ</value></data>
   <data name="KeyScope_panel" xml:space="preserve"><value>パネル</value></data>
-  <data name="Menu_View_Panels.Text" xml:space="preserve"><value>パネルの表示切り替え(P)</value></data>
-  <data name="Menu_View_Panels.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_Panels.Text" xml:space="preserve"><value>パネルの表示切り替え(N)</value></data>
+  <data name="Menu_View_Panels.AccessKey" xml:space="preserve"><value>N</value></data>
   <data name="Menu_View_Toolbar.Text" xml:space="preserve"><value>ツールバー(T)</value></data>
   <data name="Menu_View_Toolbar.AccessKey" xml:space="preserve"><value>T</value></data>
   <data name="Menu_View_LeftPanel.Text" xml:space="preserve"><value>左パネル(L)</value></data>

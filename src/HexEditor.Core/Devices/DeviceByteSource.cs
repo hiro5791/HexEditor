@@ -47,8 +47,15 @@ public sealed record DeviceOpenInfo
 /// <see cref="SourceCapabilities.NeedsAlignment"/>。読み込みは常にセクタ境界に揃えて行う (仕様 6)。デバイスがなくなったら
 /// 「切断」を通知し、以後の読み込みは <see cref="UnreadableReason.Disconnected"/> になる (仕様 11)。
 /// </summary>
-public sealed class DeviceByteSource : ByteSourceBase
+public sealed class DeviceByteSource : ByteSourceBase, View.IViewDefaultsSource
 {
+    /// <summary>
+    /// データソースの種類ごとの表示の既定値 (VIEW-42 の仕様 2 の 3): 区切り線「セクタ」。範囲を指定して開いたら、その開始位置をベースアドレスにする。
+    /// </summary>
+    public System.Text.Json.Nodes.JsonObject? ViewDefaults => Info.RangeStart != 0
+        ? new() { ["separator"] = "sector", ["baseAddress"] = (ulong)Info.RangeStart }
+        : new() { ["separator"] = "sector" };
+
     /// <summary>1 回の読み書きの最大 (補助プロセスの 1 要求の上限と同じ。ENG-28 の仕様 4)。</summary>
     public const int MaxTransfer = 1024 * 1024;
 
