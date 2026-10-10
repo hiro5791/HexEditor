@@ -131,6 +131,63 @@ public sealed class DataOperationUiTests
         Assert.Equal(TestDataCatalog.Marker(0x80000000), await app.BytesAsync(0x80000000, 17));
     }, TimeSpan.FromMinutes(30));
 
+    /// <summary>
+    /// 符号なし 8 バイトのオペランド (2^63 以上) を入力できる。浮動小数点を選ぶと要素の大きさが 4 になり、float で表せない値は入力欄のエラー
+    /// (EDIT-31 の仕様 3・5)。
+    /// </summary>
+    [Fact]
+    public Task Unsigned_eight_byte_operand_and_float_range_in_the_dialog() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await EditCommandTests.SelectRangeAsync(app, "0x10", "8");
+        await OpenDialogAsync(app);
+        await EditCommandTests.SelectItemAsync(app, "DataOp_Category", "Bitwise");
+        await EditCommandTests.SelectItemAsync(app, "DataOp_Kind", "XOR");
+        await EditCommandTests.SelectItemAsync(app, "DataOp_Type", "Unsigned integer");
+        await EditCommandTests.SelectItemAsync(app, "DataOp_Size", "8");
+        await app.UiaSetValueAsync("DataOp_Operand", "0xFFFFFFFFFFFFFFFF");
+        await app.UiaSetValueAsync("DataOp_Increment", "0");
+        await app.UiaSetValueAsync("DataOp_Process", "1");
+        await app.UiaSetValueAsync("DataOp_Skip", "0");
+        await app.IdleAsync();
+        Assert.Equal(string.Empty, await TextAsync(app, "DataOp_Error"));
+        await EditCommandTests.PressAsync(app);
+        Assert.Equal(new byte[] { 0xEF, 0xEE, 0xED, 0xEC, 0xEB, 0xEA, 0xE9, 0xE8 }, await app.BytesAsync(0x10, 8));
+
+        // 浮動小数点を選ぶと大きさが 4 バイトになる。1e39 は float で表せない。
+        await OpenDialogAsync(app);
+        await EditCommandTests.SelectItemAsync(app, "DataOp_Category", "Arithmetic");
+        await EditCommandTests.SelectItemAsync(app, "DataOp_Kind", "Add");
+        await EditCommandTests.SelectItemAsync(app, "DataOp_Size", "1");
+        await EditCommandTests.SelectItemAsync(app, "DataOp_Type", "Floating point");
+        await app.IdleAsync();
+        Assert.Equal(2, (await ElementAsync(app, "DataOp_Size"))["selectedIndex"]!.GetValue<int>());
+        await app.UiaSetValueAsync("DataOp_Operand", "1e39");
+        await app.IdleAsync();
+        Assert.Contains("cannot be represented", await TextAsync(app, "DataOp_Error"), StringComparison.Ordinal);
+        Assert.True((await ElementAsync(app, "DataOp_Operand"))["errorBorder"]!.GetValue<bool>());
+    });
+
+    /// <summary>「ASCII の英字だけ」の大文字・小文字の変換で何も変わらないときは、編集履歴を増やさずに知らせる (EDIT-39)。</summary>
+    [Fact]
+    public Task Ascii_case_conversion_that_changes_nothing_adds_no_undo_step() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-SEQ-1M")] });
+        await EditCommandTests.SelectRangeAsync(app, "0x30", "10");
+        int history = await HistoryCountAsync(app);
+        await app.SendAsync("execute", new JsonObject { ["id"] = "data.case.upper.ascii" });
+        await app.IdleAsync();
+        Assert.Contains(await NoticesAsync(app), n => n.Contains("does not change", StringComparison.Ordinal));
+        Assert.Equal(history, await HistoryCountAsync(app));
+
+        // 英字があれば変換する (0x61〜0x6A は a〜j)。
+        await app.SelectAsync(0x61, 10);
+        await app.SendAsync("execute", new JsonObject { ["id"] = "data.case.upper.ascii" });
+        await app.IdleAsync();
+        Assert.Equal("ABCDEFGHIJ"u8.ToArray(), await app.BytesAsync(0x61, 10));
+        Assert.Equal(history + 1, await HistoryCountAsync(app));
+    });
+
     /// <summary>処理センターの進捗が <paramref name="fraction"/> 以上になったら処理をキャンセルし、終わるまで待つ。</summary>
     private static async Task CancelWhenProgressAsync(AppSession app, double fraction)
     {
