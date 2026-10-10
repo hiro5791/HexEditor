@@ -173,6 +173,23 @@ public sealed partial class MainWindow
                 return new JsonObject { ["at"] = System.Diagnostics.Stopwatch.GetTimestamp() * 1000.0 / System.Diagnostics.Stopwatch.Frequency };
             }
 
+            case "adminGuidance":
+            {
+                // 管理者権限の案内 (ENG-28 の仕様 12) の本文とボタン。ダイアログは出さない (配布のテストが中身を確かめる)。
+                bool forDisk = request["kind"]?.GetValue<string>() != "process";
+                (List<string> texts, bool canRestart) = AdminGuidanceContent(Loc.Get(forDisk ? "AdminGuide_Disk" : "AdminGuide_Process"), forDisk);
+                return new JsonObject
+                {
+                    ["texts"] = new JsonArray([.. texts.Select(t => (JsonNode?)t)]),
+                    ["restartButton"] = canRestart,
+                    ["downloadLink"] = canRestart ? null : DownloadPageUrl,
+                    ["elevated"] = App.Devices.IsElevated,
+                    ["helperAvailable"] = App.Devices.HelperAvailable,
+                    ["helperRunning"] = App.Devices.IsHelperRunning,
+                    ["distribution"] = App.Devices.Distribution.ToString(),
+                };
+            }
+
             case "processRead":
             {
                 // 偽のプロセスのメモリの今の内容 (書き込みが届いたかを確かめる)。

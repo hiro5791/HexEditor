@@ -762,23 +762,7 @@ public sealed partial class MainWindow
     /// </summary>
     private async Task ShowAdminGuidanceAsync(string reason, bool forDisk = true)
     {
-        Distribution distribution = DeviceService.Distribution;
-        bool canRestart = DeviceService.HelperSupported;
-        var texts = new List<string>
-        {
-            reason,
-            Loc.Get(distribution is Distribution.Portable or Distribution.Development ? "AdminGuide_StepsPortable" : "AdminGuide_StepsStart"),
-            Loc.Get("AdminGuide_DragDropLimit"),
-        };
-        if (forDisk)
-        {
-            texts.Add(Loc.Get("AdminGuide_UsbAlternative"));
-        }
-
-        if (!canRestart)
-        {
-            texts.Add(Loc.Get("AdminGuide_StoreDownload"));
-        }
+        (List<string> texts, bool canRestart) = AdminGuidanceContent(reason, forDisk);
 
         var panel = new StackPanel { Spacing = 8, MaxWidth = 480 };
         foreach (string text in texts)
@@ -815,6 +799,30 @@ public sealed partial class MainWindow
         {
             await RestartElevatedAsync();
         }
+    }
+
+    /// <summary>管理者権限の案内の本文 (段落) と、「管理者として再起動」を出すか (ENG-28 の仕様 12)。</summary>
+    internal (List<string> Texts, bool CanRestart) AdminGuidanceContent(string reason, bool forDisk)
+    {
+        Distribution distribution = DeviceService.Distribution;
+        bool canRestart = DeviceService.HelperSupported;
+        var texts = new List<string>
+        {
+            reason,
+            Loc.Get(distribution is Distribution.Portable or Distribution.Development ? "AdminGuide_StepsPortable" : "AdminGuide_StepsStart"),
+            Loc.Get("AdminGuide_DragDropLimit"),
+        };
+        if (forDisk)
+        {
+            texts.Add(Loc.Get("AdminGuide_UsbAlternative"));
+        }
+
+        if (!canRestart)
+        {
+            texts.Add(Loc.Get("AdminGuide_StoreDownload"));
+        }
+
+        return (texts, canRestart);
     }
 
     private async Task RestartElevatedAsync()
