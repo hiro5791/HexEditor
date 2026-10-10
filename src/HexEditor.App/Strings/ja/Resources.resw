@@ -380,6 +380,7 @@
   <data name="Operation_Hash" xml:space="preserve"><value>ハッシュの計算</value></data>
   <data name="Hash_Target.Header" xml:space="preserve"><value>対象範囲</value></data>
   <data name="Hash_Target_Selection.Content" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Hash_Target_Multi.Content" xml:space="preserve"><value>マルチ選択</value></data>
   <data name="Hash_Target_Whole.Content" xml:space="preserve"><value>ドキュメント全体</value></data>
   <data name="Hash_Target_Custom.Content" xml:space="preserve"><value>範囲を指定</value></data>
   <data name="Hash_CustomStart.Header" xml:space="preserve"><value>開始</value></data>

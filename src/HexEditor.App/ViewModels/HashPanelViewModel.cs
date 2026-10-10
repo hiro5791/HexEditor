@@ -16,7 +16,12 @@ namespace HexEditor.App.ViewModels;
 /// <summary>対象範囲の選択欄 (06 の 0.1)。</summary>
 public enum HashTargetKind
 {
+    /// <summary>現在の選択範囲 1 つ (マルチ選択では主要素)。</summary>
     Selection,
+
+    /// <summary>マルチ選択のすべての範囲 (EDIT-07)。</summary>
+    MultiSelection,
+
     WholeDocument,
     Custom,
 }
@@ -535,12 +540,16 @@ public sealed partial class HashPanelViewModel : ObservableObject
         long length = doc.Document.Length;
         switch (TargetKind)
         {
-            case HashTargetKind.Selection when editor.HasMultipleRanges:
+            case HashTargetKind.MultiSelection when editor.HasMultipleRanges:
                 // マルチ選択・矩形選択: すべての要素 (オフセットの小さい順。ANA-18 の仕様 1)。
                 return [.. editor.SelectedRanges.Select(r => new HashRange(r.Start, r.Length))];
-            case HashTargetKind.Selection when editor.HasSelection:
+            case HashTargetKind.Selection when editor.HasMultipleRanges && editor.PrimaryRange is { } primary:
+                // 「選択範囲」は現在の選択範囲 1 つ (マルチ選択では主要素。06 の 0.1)。
+                return [new HashRange(primary.Start, primary.Length)];
+            case HashTargetKind.Selection or HashTargetKind.MultiSelection when editor.HasSelection:
                 return [new HashRange(editor.SelectionStart, editor.SelectionLength)];
             case HashTargetKind.Selection:
+            case HashTargetKind.MultiSelection:
             case HashTargetKind.WholeDocument:
                 return [new HashRange(0, length)];
             default:
@@ -1135,8 +1144,8 @@ public sealed partial class HashPanelViewModel : ObservableObject
         // 選択範囲の有無で既定を切り替える (0.1 の「既定になる条件」)。利用者が選んだ後は変えない。
         if (!_targetChosen && TargetKind != HashTargetKind.Custom)
         {
-            bool selected = doc.Editor.HasSelection || doc.Editor.HasMultipleRanges;
-            HashTargetKind auto = selected ? HashTargetKind.Selection : HashTargetKind.WholeDocument;
+            HashTargetKind auto = doc.Editor.HasMultipleRanges ? HashTargetKind.MultiSelection
+                : doc.Editor.HasSelection ? HashTargetKind.Selection : HashTargetKind.WholeDocument;
             if (TargetKind != auto)
             {
                 TargetKind = auto;
@@ -1146,7 +1155,7 @@ public sealed partial class HashPanelViewModel : ObservableObject
 
         // 要素の多いマルチ選択・矩形 (100 GB の全体にわたる矩形など) は、要素を並べずに数だけを示し、自動では計算しない
         // (要素は「計算」を押したときに作る)。
-        if (TargetKind == HashTargetKind.Selection && doc.Editor.HasMultipleRanges && doc.Editor.SelectedRangeCount > AutoRangeLimit)
+        if (TargetKind == HashTargetKind.MultiSelection && doc.Editor.HasMultipleRanges && doc.Editor.SelectedRangeCount > AutoRangeLimit)
         {
             IsMultiRange = true;
             IsRangeError = false;

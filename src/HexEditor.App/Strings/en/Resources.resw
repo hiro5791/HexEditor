@@ -380,6 +380,7 @@ Details were written to:
   <data name="Operation_Hash" xml:space="preserve"><value>Hash</value></data>
   <data name="Hash_Target.Header" xml:space="preserve"><value>Range</value></data>
   <data name="Hash_Target_Selection.Content" xml:space="preserve"><value>Selection</value></data>
+  <data name="Hash_Target_Multi.Content" xml:space="preserve"><value>Multiple selection</value></data>
   <data name="Hash_Target_Whole.Content" xml:space="preserve"><value>Whole document</value></data>
   <data name="Hash_Target_Custom.Content" xml:space="preserve"><value>Specify range</value></data>
   <data name="Hash_CustomStart.Header" xml:space="preserve"><value>Start</value></data>
