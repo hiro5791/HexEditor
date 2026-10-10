@@ -84,6 +84,9 @@ public sealed record EncodedFileSettings
 
     public bool Padding { get; init; } = true;
 
+    /// <summary>デコードしたときの隙間の塗りつぶしの値 (ENG-38 の仕様 3。保存には使わない。復旧でデコードし直すときに使う)。</summary>
+    public byte GapFill { get; init; } = EncodedFile.DefaultGapFill;
+
     /// <summary>形式の表示名のキー (ステータスバー。「Intel HEX」など)。</summary>
     public string DisplayName => Format switch
     {

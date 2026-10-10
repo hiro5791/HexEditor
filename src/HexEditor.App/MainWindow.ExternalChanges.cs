@@ -81,6 +81,13 @@ public sealed partial class MainWindow
             return;
         }
 
+        // デコードして開いたドキュメント (ENG-38) は元のテキストファイルを見張っている。デコードし直して扱う。
+        if (doc.Encoded is not null)
+        {
+            OnDecodedExternalChange(doc, kind);
+            return;
+        }
+
         // そのファイルのブロックキャッシュを捨てる (仕様 10)。
         doc.Document.Cache.Invalidate();
         ExternalChangePrompt prompt = ExternalChangeRules.Decide(kind, doc.Document.IsModified, FileSettings.AutoReload(App.Settings),

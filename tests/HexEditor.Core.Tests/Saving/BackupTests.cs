@@ -141,6 +141,57 @@ public sealed class BackupTests : IDisposable
         Assert.True(SavePlanner.CopyBackup(plan).CanExecute);
     }
 
+    [Fact]
+    public void ShiftSaveCreatesTheBackupBeforeWriting()
+    {
+        // ずらしながらのその場保存 (ENG-24) もその場保存なので、書き込む前にファイル全体をコピーしてバックアップにする (ENG-26 の仕様 5)。
+        string path = Path.Combine(_dir, "shift.bin");
+        File.Copy(TestDataCatalog.Generate("TD-BYTES-256", _dir), path);
+        byte[] original = File.ReadAllBytes(path);
+        using var doc = new Document(FileByteSource.Open(path), Options());
+        doc.Insert(0, [0xAA, 0xBB]);
+
+        SavePlan plan = SavePlanner.UseShiftInPlace(SavePlanner.Plan(doc, null, Settings(new BackupSettings())));
+        Assert.Equal(SaveIssue.ConfirmShift, plan.Issue);
+        plan = SavePlanner.ConfirmShift(plan);
+        Assert.True(plan.CanExecute, $"{plan.Method} {plan.Issue}");
+        SaveResult result = SavePlanner.Execute(plan);
+        SavePlanner.Complete(plan, result);
+
+        Assert.NotNull(result.Shift);
+        Assert.Equal(path + ".bak", result.BackupPath);
+        Assert.Equal(original, File.ReadAllBytes(path + ".bak"));
+        Assert.Equal([0xAA, 0xBB, .. original], File.ReadAllBytes(path));
+    }
+
+    [Fact]
+    public void LargeShiftSaveBackupsAskBeforeCopying()
+    {
+        // 1 GiB を超えるファイルのずらしながらのその場保存も、確認 (毎回) の後にコピーの確認を出す (ENG-26 の仕様 5)。スパースなので書き込まない。
+        string path = Path.Combine(_dir, "bigshift.bin");
+        using (var stream = new FileStream(path, FileMode.Create))
+        {
+            SparseFiles.TryMakeSparse(stream.SafeFileHandle);
+            stream.SetLength(BackupSettings.CopyConfirmBytes + 1);
+        }
+
+        using var doc = new Document(FileByteSource.Open(path), Options());
+        doc.Insert(0, [0x01]);
+        SavePlan plan = SavePlanner.UseShiftInPlace(SavePlanner.Plan(doc, null, Settings(new BackupSettings())));
+        Assert.Equal(SaveIssue.ConfirmShift, plan.Issue);
+        plan = SavePlanner.ConfirmShift(plan);
+        Assert.Equal(SaveIssue.BackupCopy, plan.Issue);
+        Assert.Equal(BackupSettings.CopyConfirmBytes + 1, plan.BackupCopyBytes);
+        Assert.False(plan.CanExecute);
+
+        SavePlan copy = SavePlanner.CopyBackup(plan);
+        Assert.True(copy.CanExecute);
+        Assert.Equal(SaveMethod.ShiftInPlace, copy.Method);
+        SavePlan without = SavePlanner.WithoutBackup(plan);
+        Assert.True(without.CanExecute);
+        Assert.Null(without.Backup);
+    }
+
     /// <summary>計画を作り、取り消した長時間処理として実行する (書き出しの途中のキャンセル)。</summary>
     private static void SaveCancelled(Document doc, SaveSettings settings)
     {

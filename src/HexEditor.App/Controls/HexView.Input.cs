@@ -1175,12 +1175,17 @@ public sealed partial class HexView
 
             if (item is MenuFlyoutItem m)
             {
+                // 長さを変えられないドキュメントでは、長さを変える操作 (切り取り・削除・挿入モード) を無効にする (ENG-07 の仕様 4・「エラー」)。
+                // 貼り付けは上書きモードだけのため上書きで貼り付ける。上書きモードの Delete を 00 にする設定 (EDIT-13 の仕様 4) なら削除できる。
+                bool resizable = editor.Document.CanResize;
                 m.IsEnabled = (string)m.Tag switch
                 {
-                    "Cut" => editor.HasSelection && editable,
+                    "Cut" => editor.HasSelection && editable && resizable,
                     "Copy" => editor.HasSelection,
                     "Paste" or "PasteOverwrite" => editable,
-                    "Delete" => editable && (editor.HasSelection || editor.Cursor < editor.Layout.Length),
+                    "Delete" => editable && (editor.HasSelection || editor.Cursor < editor.Layout.Length)
+                        && (resizable || (!editor.InsertMode && editor.Options.DeleteKeepsLengthInOverwrite)),
+                    "ToggleInsert" => editable && resizable,
                     "SelectAll" => editor.Layout.Length > 0,
                     "ClearSelection" => editor.HasSelection,
                     _ => true,

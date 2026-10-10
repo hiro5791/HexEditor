@@ -89,7 +89,8 @@ public static class RecoveryStore
         {
             // デコードして開いたドキュメント: 元のファイルをデコードし直し、その内容に変更を戻す (デコードの結果の一時ファイルは
             // 異常終了で消えているため)。元のファイルが変わっていたら読み取り専用で開く。
-            using Formats.ImportResult decoded = Formats.Importer.DecodeFile(encodedPath, Formats.EncodedFile.OpenOptions(encodedFormat), options.TempDirectory);
+            using Formats.ImportResult decoded = Formats.Importer.DecodeFile(encodedPath,
+                Formats.EncodedFile.OpenOptions(encodedFormat, (byte)(record.EncodedGapFill ?? Formats.EncodedFile.DefaultGapFill)), options.TempDirectory);
             encodedSettings = decoded.Settings ?? new Formats.EncodedFileSettings { Format = encodedFormat };
             encodedBase = decoded.BaseAddress;
             Formats.SparseImage image = decoded.TakeImage();

@@ -82,12 +82,26 @@ public sealed class ShiftSaveTests
         }
 
         await app.WaitForExitAsync(TimeSpan.FromMinutes(5));
+
+        // 強制終了した時点のファイルの内容 (SHA-256)・長さ・更新日時。
+        static byte[] Hash(string file)
+        {
+            using FileStream stream = File.OpenRead(file);
+            return SHA256.HashData(stream);
+        }
+
         long lengthAfterKill = new FileInfo(path).Length;
+        DateTime writtenAfterKill = File.GetLastWriteTimeUtc(path);
+        byte[] hashAfterKill = Hash(path);
 
         // 3〜4. 起動すると、復旧の画面に中断の警告が出る。ファイルは自動では直さない。
         AppSession again = await ctx.StartAsync(new AppOptions { Profile = profile, WaitForEditor = false });
         var dialog = await again.WaitForDialogAsync("RecoveryDialog");
         await again.WaitForDialogTextAsync(dialog, "Saving markers.bin in place was interrupted last time", "may be damaged");
+
+        // 自動の修復はしない: ファイルは強制終了した時点のまま (内容・長さ・更新日時)。
         Assert.Equal(lengthAfterKill, new FileInfo(path).Length);
+        Assert.Equal(writtenAfterKill, File.GetLastWriteTimeUtc(path));
+        Assert.Equal(hashAfterKill, Hash(path));
     });
 }

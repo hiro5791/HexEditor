@@ -13,8 +13,30 @@ public static class EncodedFile
     /// <summary>「開く」でデコードする形式か (ENG-38 の仕様 1・8)。</summary>
     public static bool IsOpenable(string format) => format is FormatIds.IntelHex or FormatIds.SRecord or FormatIds.Base64;
 
+    /// <summary>隙間の塗りつぶしの値の設定 (ENG-38 の仕様 3)。16 進数 (既定 FF)。</summary>
+    public const string GapFillKey = "formats.gapFill";
+
+    /// <summary>隙間の塗りつぶしの値の既定 (ENG-38 の仕様 3)。</summary>
+    public const byte DefaultGapFill = 0xFF;
+
+    /// <summary>
+    /// 設定の値 (16 進数の 1〜2 桁。前後の空白と <c>0x</c> は許す) を塗りつぶしの値にする。読めなければ既定の FF。
+    /// </summary>
+    public static byte ParseGapFill(string? text)
+    {
+        string t = (text ?? string.Empty).Trim();
+        if (t.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+        {
+            t = t[2..];
+        }
+
+        return t.Length is >= 1 and <= 2 && byte.TryParse(t, System.Globalization.NumberStyles.AllowHexSpecifier, null, out byte value)
+            ? value
+            : DefaultGapFill;
+    }
+
     /// <summary>デコードして開くための設定 (ENG-38 の仕様 3: 最小のアドレスをベースアドレスにし、隙間は塗りつぶしの値)。</summary>
-    public static ImportOptions OpenOptions(string format, byte gapFill = 0xFF) => new()
+    public static ImportOptions OpenOptions(string format, byte gapFill = DefaultGapFill) => new()
     {
         Format = format,
         Placement = AddressPlacement.Lowest,

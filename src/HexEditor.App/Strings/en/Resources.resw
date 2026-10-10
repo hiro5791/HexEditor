@@ -523,6 +523,7 @@ Details were written to:
   <data name="External_Close" xml:space="preserve"><value>Close</value></data>
   <data name="External_OverwriteBody" xml:space="preserve"><value>{0} was changed by another app. Saving overwrites those changes.</value></data>
   <data name="External_RecreateBody" xml:space="preserve"><value>{0} was deleted or moved. Saving creates the file again in its original location.</value></data>
+  <data name="External_DecodedReloadBody" xml:space="preserve"><value>Discard your unsaved changes and decode {0} again from the file on disk? This can't be undone.</value></data>
   <data name="Discard_Title" xml:space="preserve"><value>Discard changes to {0}?</value></data>
   <data name="Discard_Body" xml:space="preserve"><value>{0} places, {1} bytes of changes will be discarded and the file will be read again.</value></data>
   <data name="Discard_Undoable" xml:space="preserve"><value>You can bring the changes back with Ctrl+Z.</value></data>
@@ -3797,6 +3798,8 @@ Details were written to:
   <data name="OpenAdv_ReadOnly" xml:space="preserve"><value>Open read-only</value></data>
   <data name="OpenAdv_DiskImage" xml:space="preserve"><value>Open as a disk image (choose the sector size next)</value></data>
   <data name="OpenAdv_DenyWrites" xml:space="preserve"><value>Don't let other apps write to the file</value></data>
+  <data name="OpenAdv_DenyWritesDecoded" xml:space="preserve"><value>Not available when the file is decoded: the original file is closed after decoding.</value></data>
+  <data name="OpenAdv_RangeFormatConflict" xml:space="preserve"><value>A range opens the bytes of the file as they are. To open a range, choose the format "Automatic" or "Binary as is".</value></data>
   <data name="OpenAdv_Range" xml:space="preserve"><value>Open a range</value></data>
   <data name="OpenAdv_Start" xml:space="preserve"><value>Start</value></data>
   <data name="OpenAdv_LengthKind" xml:space="preserve"><value>Specify the range by</value></data>
@@ -3836,6 +3839,11 @@ Details were written to:
   <data name="FormatIssues_None" xml:space="preserve"><value>No errors.</value></data>
   <data name="Linked_ToolTip" xml:space="preserve"><value>Linked to {0}</value></data>
   <data name="Linked_Disconnected" xml:space="preserve"><value>The original range was deleted.</value></data>
+  <data name="LinkedMulti_Title" xml:space="preserve"><value>Open selection in a new tab</value></data>
+  <data name="LinkedMulti_Body" xml:space="preserve"><value>The selection has {0} ranges. Open only the first range, or open each range in its own tab?</value></data>
+  <data name="LinkedMulti_ManyTabs" xml:space="preserve"><value>Opening each range opens {0} tabs.</value></data>
+  <data name="LinkedMulti_First" xml:space="preserve"><value>Open the first range</value></data>
+  <data name="LinkedMulti_Each" xml:space="preserve"><value>Open each range</value></data>
   <data name="Transfer_Format" xml:space="preserve"><value>Format</value></data>
   <data name="Transfer_Preview" xml:space="preserve"><value>Preview</value></data>
   <data name="Import_Title" xml:space="preserve"><value>Import</value></data>
@@ -4026,6 +4034,8 @@ Details were written to:
   <data name="SetDesc_save_shiftInPlace" xml:space="preserve"><value>Shifts data inside the original file instead of writing a temporary file. Needs little free space, but if saving is interrupted the file is damaged. You're asked every time.</value></data>
   <data name="SetDesc_diskImage_suggest" xml:space="preserve"><value>When a .img, .dd, .raw, .iso or .bin file is opened normally, offer to open it again as a disk image with a sector size.</value></data>
   <data name="Set_diskImage_suggest" xml:space="preserve"><value>Suggest opening disk images as disk images</value></data>
+  <data name="Set_formats_gapFill" xml:space="preserve"><value>Fill value for gaps in Intel HEX and S-record files</value></data>
+  <data name="SetDesc_formats_gapFill" xml:space="preserve"><value>The byte value (hexadecimal, such as FF or 00) shown for addresses without data when a file is decoded. Applies to files opened afterward.</value></data>
   <data name="Find_Kind_RegexText.Content" xml:space="preserve"><value>Regular expression (text)</value></data>
   <data name="Find_Kind_RegexBytes.Content" xml:space="preserve"><value>Regular expression (bytes)</value></data>
   <data name="Find_KindName_RegexText" xml:space="preserve"><value>Regex</value></data>

@@ -143,7 +143,8 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         }
 
         (string, string, Core.Sources.FileStamp?)? encoded = Encoded is { } e && FilePath is { } encodedPath ? (encodedPath, e.Format, EncodedStamp) : null;
-        RecoveryCapture? capture = DocumentRecovery.Capture(Document, Editor.Cursor, Editor.SelectionStart, Editor.SelectionLength, encoded);
+        RecoveryCapture? capture = DocumentRecovery.Capture(Document, Editor.Cursor, Editor.SelectionStart, Editor.SelectionLength, encoded,
+            Encoded?.GapFill ?? Core.Formats.EncodedFile.DefaultGapFill);
         _lastRecorded = capture?.Snapshot ?? _lastRecorded;
         return capture;
     }

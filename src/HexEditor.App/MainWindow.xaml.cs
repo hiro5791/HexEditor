@@ -333,7 +333,8 @@ public sealed partial class MainWindow : Window
         {
             if (!saveAs)
             {
-                return !doc.Document.IsModified || await SaveEncodedAsync(doc, encodedPath, encoded);
+                // 元のファイルが外部で変更・削除されていたら、上書き・作り直しを確かめる (ENG-19 の仕様 5・8)。
+                return !doc.Document.IsModified || (await ConfirmExternalSaveAsync(doc) && await SaveEncodedAsync(doc, encodedPath, encoded));
             }
 
             if (await SaveEncodedAsAsync(doc, encoded) is { } done)

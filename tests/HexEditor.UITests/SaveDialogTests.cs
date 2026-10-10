@@ -61,14 +61,15 @@ public sealed partial class SaveDialogTests
     public Task Not_enough_free_space_dialog_and_save_elsewhere() => UiTestContext.RunAsync(async ctx =>
     {
         // 空き容量 1 GiB の仮想ディスク (TD-ENG-VHDX-3G。管理者の権限が要る) の代わりに、異常を再現する仕組みで保存先の
-        // 空き容量を 1 MiB にし、1 MiB のファイルに 1 バイト挿入して保存する (必要: 1 MiB + 1 バイト + 16 MiB)。
+        // 空き容量を 16.5 MiB にし、1 MiB のファイルに 1 バイト挿入して保存する (必要: 1 MiB + 1 バイト + 16 MiB)。ずらしながらの
+        // 保存 (伸びる 1 バイト + 16 MiB) は入るため、「その場でずらしながら保存」も出る (ENG-25 の仕様 4)。
         string path = ctx.CopyTestData("TD-SEQ-1M", "data.bin");
         DateTime written = File.GetLastWriteTimeUtc(path);
         string before = Convert.ToHexString(SHA256.HashData(await File.ReadAllBytesAsync(path)));
         AppSession app = await ctx.StartAsync(new AppOptions
         {
             Files = [path],
-            Hooks = new JsonObject { ["freeSpace"] = 1L << 20, ["savePicker"] = string.Empty },
+            Hooks = new JsonObject { ["freeSpace"] = (16L << 20) + (512L << 10), ["savePicker"] = string.Empty },
         });
         await app.KeyAsync("Insert");
         await app.TypeAsync("00");
@@ -76,11 +77,11 @@ public sealed partial class SaveDialogTests
         // 1〜2. ダイアログの本文 (ドライブ・必要量・空き容量を単位付きで) とボタン (「その場でずらしながら保存」は ENG-24)。
         await app.KeyAsync("S", ctrl: true);
         var dialog = await app.WaitForDialogAsync("SaveDialog");
-        string text = await app.WaitForDialogTextAsync(dialog, "Available: 1.00 MB (1,048,576 bytes)");
+        string text = await app.WaitForDialogTextAsync(dialog, "Available: 16.50 MB (17,301,504 bytes)");
         string drive = Path.GetPathRoot(path)!.TrimEnd('\\');
         Assert.Contains($"There isn't enough free space on the destination drive ({drive}", text, StringComparison.Ordinal);
         Assert.Contains("Required: 17.00 MB (17,825,793 bytes)", text, StringComparison.Ordinal);
-        Assert.Contains("Available: 1.00 MB (1,048,576 bytes)", text, StringComparison.Ordinal);
+        Assert.Contains("Available: 16.50 MB (17,301,504 bytes)", text, StringComparison.Ordinal);
         Assert.NotNull(app.Button("Save to another location"));
         Assert.NotNull(app.Button("Save in place by shifting data"));
         Assert.NotNull(app.Button("Cancel"));
