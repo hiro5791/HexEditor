@@ -42,7 +42,7 @@ public enum SaveIssue
 
     /// <summary>
     /// 保存先の空き容量が足りない (<see cref="SavePlan.Space"/>)。UI は「別の場所に保存」「キャンセル」のダイアログを出す (ENG-25 の仕様 4。
-    /// 「その場でずらしながら保存」は ENG-24 の実装後)。
+    /// 「その場でずらしながら保存」は <see cref="SavePlan.CanShift"/> のときだけ)。
     /// </summary>
     InsufficientSpace,
 
@@ -253,7 +253,11 @@ public static class SavePlanner
             return UseShiftInPlace(plan);
         }
 
-        return CheckSafe(plan with { Method = SaveMethod.Safe, CanShift = canShift });
+        // 空き容量不足のダイアログの「その場でずらしながら保存」は、伸びる分と退避の量が収まる場合だけ出す (ENG-25 の仕様 1・4)。
+        SavePlan safe = CheckSafe(plan with { Method = SaveMethod.Safe });
+        return safe.Issue == SaveIssue.InsufficientSpace && canShift && ShiftShortage(safe, out _) is null
+            ? safe with { CanShift = true }
+            : safe;
     }
 
     /// <summary>ハードリンクの確認で「安全に保存 (リンクを切る)」を選んだ。空き容量などの確認を続ける。</summary>
@@ -274,30 +278,48 @@ public static class SavePlanner
     /// </summary>
     public static SavePlan UseShiftInPlace(SavePlan plan)
     {
-        string spill = plan.Settings.SpillDirectory ?? plan.Settings.JournalDirectory;
-        long? temporary = plan.Settings.Volumes.GetVolume(ExistingFolder(spill))?.AvailableFreeSpace;
-        ShiftPlan shift = ShiftSaver.Plan(plan.Snapshot, temporary);
-        long growth = shift.FinalLength - shift.OriginalLength;
-        VolumeInfo? volume = plan.Settings.Volumes.GetVolume(ExistingFolder(Path.GetDirectoryName(plan.TargetPath!)!));
-        if (growth > 0 && volume?.AvailableFreeSpace is long available && available < growth + DocumentSaver.FreeSpaceMargin)
+        if (ShiftShortage(plan, out ShiftPlan shift) is { } shortage)
         {
-            return plan with
-            {
-                Method = SaveMethod.Safe,
-                Issue = SaveIssue.InsufficientSpace,
-                Space = new SpaceShortage(volume.Name, growth + DocumentSaver.FreeSpaceMargin, available),
-                CanShift = false,
-            };
+            return plan with { Method = SaveMethod.Safe, Issue = SaveIssue.InsufficientSpace, Space = shortage, CanShift = false };
         }
 
         return plan with { Method = SaveMethod.ShiftInPlace, Issue = SaveIssue.ConfirmShift, Shift = shift, Space = null, CanShift = true };
     }
 
-    /// <summary>ずらしながらのその場保存の確認ダイアログで「その場で保存」を選んだ。</summary>
+    /// <summary>
+    /// ずらしながらのその場保存の確認ダイアログで「その場で保存」を選んだ。バックアップを作る場合は、その場保存 (ENG-23) と同じく
+    /// 1 GiB を超えるコピーを確かめる (ENG-26 の仕様 5)。
+    /// </summary>
     public static SavePlan ConfirmShift(SavePlan plan) =>
         plan.Method == SaveMethod.ShiftInPlace && plan.Shift is not null
-            ? plan with { Issue = SaveIssue.None }
+            ? CheckBackupCopy(plan with { Issue = SaveIssue.None })
             : throw new InvalidOperationException("ずらしながらのその場保存の計画ではありません。");
+
+    /// <summary>
+    /// ずらしながらのその場保存の空き容量 (ENG-25 の仕様 1): 保存先は伸びる分 + 16 MiB、退避ファイルの置き場所は退避の量 + 16 MiB。
+    /// 足りなければ不足の内容を返す (書き始めてから失敗しないよう、書き込みの前に止める)。<paramref name="shift"/> は書き込み計画。
+    /// </summary>
+    private static SpaceShortage? ShiftShortage(SavePlan plan, out ShiftPlan shift)
+    {
+        string spill = plan.Settings.SpillDirectory ?? plan.Settings.JournalDirectory;
+        VolumeInfo? spillVolume = plan.Settings.Volumes.GetVolume(ExistingFolder(spill));
+        shift = ShiftSaver.Plan(plan.Snapshot, spillVolume?.AvailableFreeSpace);
+        long growth = shift.FinalLength - shift.OriginalLength;
+        VolumeInfo? volume = plan.Settings.Volumes.GetVolume(ExistingFolder(Path.GetDirectoryName(plan.TargetPath!)!));
+        if (growth > 0 && volume?.AvailableFreeSpace is long available && available < growth + DocumentSaver.FreeSpaceMargin)
+        {
+            return new SpaceShortage(volume.Name, growth + DocumentSaver.FreeSpaceMargin, available);
+        }
+
+        // 循環する依存関係を切る退避ファイル。Undo 用の退避は、収まらなければ履歴を破棄する計画になる (ENG-24 の仕様 7) ため数えない。
+        if (shift.SpillBytes > 0 && spillVolume?.AvailableFreeSpace is long spillFree
+            && spillFree < shift.SpillBytes + DocumentSaver.FreeSpaceMargin)
+        {
+            return new SpaceShortage(spillVolume.Name, shift.SpillBytes + DocumentSaver.FreeSpaceMargin, spillFree);
+        }
+
+        return null;
+    }
 
     /// <summary>ジャーナルの確認で「安全な保存を使う」を選んだ。安全な保存の確認 (空き容量など) をやり直す。</summary>
     public static SavePlan UseSafeSave(SavePlan plan) =>
@@ -328,14 +350,6 @@ public static class SavePlanner
             throw new InvalidOperationException($"この計画は実行できません ({plan.Method}, {plan.Issue})。");
         }
 
-        if (plan.Method == SaveMethod.ShiftInPlace)
-        {
-            // 書き込みを始めたらキャンセルできない (ENG-24 の仕様 5)。
-            ShiftSaveResult shift = ShiftSaver.Save(plan.Snapshot, plan.Shift!, plan.Settings.JournalDirectory,
-                plan.Settings.SpillDirectory ?? plan.Settings.JournalDirectory, operation, () => operation?.DisallowCancel());
-            return new SaveResult(null, null) { Shift = shift };
-        }
-
         if (plan.Method == SaveMethod.Safe)
         {
             FileByteSource saved = DocumentSaver.Save(plan.Snapshot, plan.TargetPath!, operation, plan.Settings.Volumes, plan.Backup,
@@ -343,7 +357,7 @@ public static class SavePlanner
             return new SaveResult(saved, null) { BackupTime = backup?.Time, BackupPath = backup?.Path };
         }
 
-        // その場保存では、書き込む前にファイル全体をコピーしてバックアップにする (ENG-26 の仕様 5)。作れるか (権限・空き容量) を先に
+        // その場保存 (ENG-23・ENG-24) では、書き込む前にファイル全体をコピーしてバックアップにする (ENG-26 の仕様 5)。作れるか (権限・空き容量) を先に
         // 確かめ、コピーが終わってから世代をずらす (コピーに失敗・キャンセルしても前のバックアップは残る)。
         string? backupPath = null;
         TimeSpan? backupTime = null;
@@ -351,6 +365,14 @@ public static class SavePlanner
         {
             Backup.Prepare(plan.TargetPath!, settings, plan.Settings.Volumes, new FileInfo(plan.TargetPath!).Length);
             backupTime = Backup.Measure(() => backupPath = Backup.CreateByCopy(plan.TargetPath!, settings, operation));
+        }
+
+        if (plan.Method == SaveMethod.ShiftInPlace)
+        {
+            // 書き込みを始めたらキャンセルできない (ENG-24 の仕様 5)。バックアップのコピー中はまだキャンセルできる。
+            ShiftSaveResult shift = ShiftSaver.Save(plan.Snapshot, plan.Shift!, plan.Settings.JournalDirectory,
+                plan.Settings.SpillDirectory ?? plan.Settings.JournalDirectory, operation, () => operation?.DisallowCancel());
+            return new SaveResult(null, null) { Shift = shift, BackupTime = backupTime, BackupPath = backupPath };
         }
 
         InPlaceSaveResult inPlace = InPlaceSaver.Save(plan.Snapshot, plan.Settings.JournalDirectory, plan.Settings.JournalLimit, operation,
@@ -388,15 +410,21 @@ public static class SavePlanner
     private static SavePlan CheckInPlace(SavePlan plan)
     {
         SavePlan checkedPlan = CheckJournal(plan);
-        if (checkedPlan.Issue != SaveIssue.None || checkedPlan.Backup is null || checkedPlan.BackupCopyConfirmed)
+        return checkedPlan.Issue != SaveIssue.None ? checkedPlan : CheckBackupCopy(checkedPlan);
+    }
+
+    /// <summary>その場保存のバックアップでコピーする量が 1 GiB を超えるなら確かめる (ENG-26 の仕様 5)。</summary>
+    private static SavePlan CheckBackupCopy(SavePlan plan)
+    {
+        if (plan.Backup is null || plan.BackupCopyConfirmed)
         {
-            return checkedPlan;
+            return plan;
         }
 
-        long length = checkedPlan.Snapshot.Storage.Source.Length;
+        long length = plan.Snapshot.Storage.Source.Length;
         return length > BackupSettings.CopyConfirmBytes
-            ? checkedPlan with { Issue = SaveIssue.BackupCopy, BackupCopyBytes = length }
-            : checkedPlan;
+            ? plan with { Issue = SaveIssue.BackupCopy, BackupCopyBytes = length }
+            : plan;
     }
 
     private static SavePlan CheckJournal(SavePlan plan)

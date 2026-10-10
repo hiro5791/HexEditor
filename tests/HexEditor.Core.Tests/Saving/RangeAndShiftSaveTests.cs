@@ -162,22 +162,74 @@ public sealed class RangeAndShiftSaveTests : IDisposable
     }
 
     [Fact]
+    public void Shift_option_is_offered_only_when_the_growth_fits()
+    {
+        // 空き容量不足のダイアログの「その場でずらしながら保存」は、伸びる分 + 16 MiB の空きがある場合だけ出す (ENG-25 の仕様 1・4)。
+        string path = Path.Combine(_dir, "seq.bin");
+        File.Copy(TestDataCatalog.Get("TD-SEQ-1M"), path);
+        using var doc = new Document(FileByteSource.Open(path), Options());
+        doc.InsertPattern(0, 1024, [0x5A]);
+
+        var volumes = new FakeVolumes(4L << 20);
+        SavePlan plan = SavePlanner.Plan(doc, null, Settings(volumes));
+        Assert.Equal(SaveIssue.InsufficientSpace, plan.Issue);
+        Assert.False(plan.CanShift);
+
+        // 安全な保存 (1 MiB + 1 KiB + 16 MiB) は入らないが、伸びる分 (1 KiB + 16 MiB) は入る。
+        volumes.Free = (16L << 20) + (512 << 10);
+        plan = SavePlanner.Plan(doc, null, Settings(volumes));
+        Assert.Equal(SaveIssue.InsufficientSpace, plan.Issue);
+        Assert.True(plan.CanShift);
+    }
+
+    [Fact]
+    public void Shift_save_checks_the_spill_space_before_writing()
+    {
+        // 退避ファイルの置き場所には、退避の量 + 16 MiB が要る (ENG-25 の仕様 1)。足りなければ書き始める前に空き容量不足にする。
+        string path = Path.Combine(_dir, "seq.bin");
+        File.Copy(TestDataCatalog.Get("TD-SEQ-1M"), path);
+        byte[] original = File.ReadAllBytes(path);
+        string spill = Directory.CreateDirectory(Path.Combine(_dir, "spill")).FullName;
+        using var doc = new Document(FileByteSource.Open(path), Options());
+        doc.InsertCopy(0, 0x80000, 0x80000);
+        doc.Delete(0x100000, 0x80000);
+        doc.Delete(0x10, 0x20);
+
+        var volumes = new FakeVolumes(1L << 40) { SpillFolder = spill, SpillFree = 16L << 20 };
+        SavePlan plan = SavePlanner.UseShiftInPlace(SavePlanner.Plan(doc, null, Settings(volumes)));
+        Assert.Equal(SaveIssue.InsufficientSpace, plan.Issue);
+        Assert.False(plan.CanShift);
+        Assert.True(plan.Space!.Required > 16L << 20);
+        Assert.Equal(16L << 20, plan.Space.Available);
+        Assert.Equal(original, File.ReadAllBytes(path));
+
+        // 保存先の空きも足りない場合は、ダイアログに「その場でずらしながら保存」を出さない。
+        volumes.Free = 16L << 20;
+        Assert.False(SavePlanner.Plan(doc, null, Settings(volumes)).CanShift);
+
+        volumes.SpillFree = 64L << 20;
+        Assert.True(SavePlanner.Plan(doc, null, Settings(volumes)).CanShift);
+    }
+
+    [Fact]
     [Trait(TC, "TC-ENG-24-01")]
     public void Shift_save_works_when_free_space_is_smaller_than_the_file()
     {
-        // 空き容量がファイルサイズより小さいドライブ (仮想ディスク) の代わりに、ボリュームの情報を差し替えて空き容量を 4 MiB にする。
+        // 空き容量がファイルサイズより小さいドライブ (仮想ディスク) の代わりに、ボリュームの情報を差し替えて、空き容量を 32 MiB の
+        // ファイルより小さい 20 MiB にする。安全な保存 (32 MiB + 16 MiB) は入らないが、ずらしながらの保存 (伸びる 1 KiB + 16 MiB) は入る。
         string path = Path.Combine(_dir, "big.bin");
         TestDataCatalog.Generate("TD-RANDOM-16M", _dir);
-        File.Copy(Path.Combine(_dir, "TD-RANDOM-16M.bin"), path);
-        byte[] original = File.ReadAllBytes(path);
-        var volumes = new FakeVolumes(4L << 20);
+        byte[] half = File.ReadAllBytes(Path.Combine(_dir, "TD-RANDOM-16M.bin"));
+        byte[] original = [.. half, .. half];
+        File.WriteAllBytes(path, original);
+        var volumes = new FakeVolumes(20L << 20);
         using var doc = new Document(FileByteSource.Open(path), Options());
         doc.InsertPattern(0, 1024, [0x5A]);
 
         SavePlan plan = SavePlanner.Plan(doc, null, Settings(volumes));
         Assert.Equal(SaveIssue.InsufficientSpace, plan.Issue);
+        Assert.True(original.Length > volumes.Free);
         Assert.True(plan.CanShift);
-        volumes.Free = 64L << 20; // 伸びる分と退避の分はある
         plan = SavePlanner.UseShiftInPlace(plan);
         Assert.Equal(SaveIssue.ConfirmShift, plan.Issue);
         Assert.Equal(original.Length + 1024, plan.Shift!.WriteBytes);
@@ -335,7 +387,18 @@ public sealed class RangeAndShiftSaveTests : IDisposable
     {
         public long Free { get; set; } = free;
 
+        /// <summary>このフォルダ (退避ファイルの置き場所) だけ空き容量を <see cref="SpillFree"/> にする。</summary>
+        public string? SpillFolder { get; init; }
+
+        public long SpillFree { get; set; }
+
         public VolumeInfo? GetVolume(string folder) =>
-            SystemVolumeInfoProvider.Instance.GetVolume(folder) is { } real ? real with { AvailableFreeSpace = Free } : null;
+            SystemVolumeInfoProvider.Instance.GetVolume(folder) is { } real
+                ? real with
+                {
+                    AvailableFreeSpace = SpillFolder is not null && folder.StartsWith(SpillFolder, StringComparison.OrdinalIgnoreCase)
+                        ? SpillFree : Free,
+                }
+                : null;
     }
 }
