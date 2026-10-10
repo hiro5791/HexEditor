@@ -6,8 +6,11 @@ namespace HexEditor.Core.Sources;
 /// ファイルのデータソース。読み込みは <see cref="RandomAccess"/> を使い、スレッドセーフに位置を指定して読む
 /// (ENG-01 の仕様 5)。<c>MemoryMappedFile</c> は使わない。
 /// </summary>
-public sealed class FileByteSource : ByteSourceBase
+public sealed class FileByteSource : ByteSourceBase, View.IViewDefaultsSource
 {
+    /// <summary>表示の既定値: 範囲を指定して開いた場合は、ベースアドレスを開始位置にする (ENG-13 の仕様 2)。</summary>
+    public System.Text.Json.Nodes.JsonObject? ViewDefaults => IsRange && _rangeStart != 0 ? new() { ["baseAddress"] = (ulong)_rangeStart } : null;
+
     /// <summary>読み込みエラーのときに分けて読み直す単位 (ENG-06 の仕様 8)。</summary>
     internal const int ErrorSplitSize = 4096;
 

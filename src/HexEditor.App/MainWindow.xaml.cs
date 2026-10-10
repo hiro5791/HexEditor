@@ -291,6 +291,29 @@ public sealed partial class MainWindow : Window
     /// <summary>保存する。保存しなかった (キャンセル・失敗) 場合は false。</summary>
     private async Task<bool> SaveAsync(DocumentViewModel doc, bool saveAs)
     {
+        // 連動ビューの保存は親のドキュメントを保存する (ENG-39 の仕様 1)。
+        if (doc.LinkParent is { } linkParent)
+        {
+            return await SaveAsync(linkParent, saveAs);
+        }
+
+        // デコードして開いたドキュメントは元の形式で保存する (TOOL-11 の仕様 2・3)。
+        if (doc.Encoded is { } encoded && doc.FilePath is { } encodedPath)
+        {
+            if (!saveAs)
+            {
+                return !doc.Document.IsModified || await SaveEncodedAsync(doc, encodedPath, encoded);
+            }
+
+            if (await SaveEncodedAsAsync(doc, encoded) is { } done)
+            {
+                return done;
+            }
+
+            // バイナリとして保存する: 以後はバイナリのドキュメント。
+            doc.Encoded = null;
+        }
+
         string? path = doc.FilePath;
 
         // 変更のない文書を同じファイルに保存しても、ファイルには触れない (ENG-20。更新日時を変えない)。
@@ -305,7 +328,13 @@ public sealed partial class MainWindow : Window
         {
             // 初期フォルダは元のファイルのフォルダ、無題なら前回保存したフォルダ (ENG-21 の仕様 1)。
             string suggestedName = doc.IsUntitled ? doc.DisplayName + ".bin" : doc.DisplayName;
-            if (TestHooks.TrySavePicker(suggestedName, out string? chosen))
+            if (_binarySaveAsPath is { } binaryPath)
+            {
+                // デコードしたドキュメントの「名前を付けて保存」でバイナリの保存先を選んだ (TOOL-11 の仕様 3)。
+                path = binaryPath;
+                _binarySaveAsPath = null;
+            }
+            else if (TestHooks.TrySavePicker(suggestedName, out string? chosen))
             {
                 path = chosen;
             }

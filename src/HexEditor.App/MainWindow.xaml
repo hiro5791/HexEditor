@@ -98,6 +98,12 @@
                         <MenuFlyoutItem x:Uid="Menu_File_Open" cmd:CommandUi.Id="file.open" AutomationProperties.AutomationId="Command_Open" />
                         <!--  読み取り専用で開く (ENG-14 の仕様 1)。標準のダイアログにチェックボックスを置けないため、別の項目にする。  -->
                         <MenuFlyoutItem x:Uid="Menu_File_OpenReadOnly" cmd:CommandUi.Id="file.openReadOnly" AutomationProperties.AutomationId="Command_OpenReadOnly" />
+                        <!--  詳細を指定して開く (ENG-11 の仕様 2)、選択範囲を新しいタブで開く (ENG-39)  -->
+                        <MenuFlyoutItem x:Uid="Menu_File_OpenAdvanced" cmd:CommandUi.Id="file.openAdvanced" AutomationProperties.AutomationId="Command_OpenAdvanced" />
+                        <MenuFlyoutSubItem x:Uid="Menu_File_OpenSelection" AutomationProperties.AutomationId="Command_OpenSelection">
+                            <MenuFlyoutItem x:Uid="Menu_File_OpenSelectionLinked" cmd:CommandUi.Id="file.openSelectionInNewTab" AutomationProperties.AutomationId="Command_OpenSelectionInNewTab" />
+                            <MenuFlyoutItem x:Uid="Menu_File_OpenSelectionCopy" cmd:CommandUi.Id="file.openSelectionAsCopy" AutomationProperties.AutomationId="Command_OpenSelectionAsCopy" />
+                        </MenuFlyoutSubItem>
                         <!--  新しいウィンドウ (UI-14)  -->
                         <MenuFlyoutItem x:Uid="Menu_File_NewWindow" cmd:CommandUi.Id="window.new" AutomationProperties.AutomationId="Command_NewWindow" />
                         <MenuFlyoutSeparator />
@@ -105,6 +111,17 @@
                         <MenuFlyoutItem x:Uid="Menu_File_SaveAs" cmd:CommandUi.Id="file.saveAs" AutomationProperties.AutomationId="Command_SaveAs" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_File_SaveAll" cmd:CommandUi.Id="file.saveAll" AutomationProperties.AutomationId="Command_SaveAll" />
+                        <!--  インポート / エクスポート (TOOL-04)、範囲の切り出しと保存 (TOOL-16)、ワークスペース (UI-33)  -->
+                        <MenuFlyoutItem x:Uid="Menu_File_Import" cmd:CommandUi.Id="file.import" AutomationProperties.AutomationId="Command_Import" />
+                        <MenuFlyoutSubItem x:Uid="Menu_File_Export" AutomationProperties.AutomationId="Command_ExportMenu">
+                            <MenuFlyoutItem x:Uid="Menu_File_ExportDialog" cmd:CommandUi.Id="file.export" AutomationProperties.AutomationId="Command_Export" />
+                            <MenuFlyoutItem x:Uid="Menu_File_ExportSelection" cmd:CommandUi.Id="file.exportSelection" AutomationProperties.AutomationId="Command_ExportSelection" />
+                            <MenuFlyoutItem x:Uid="Menu_File_SaveSelection" cmd:CommandUi.Id="file.saveSelection" AutomationProperties.AutomationId="Command_SaveSelection" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_File_Workspace" AutomationProperties.AutomationId="Command_WorkspaceMenu">
+                            <MenuFlyoutItem x:Uid="Menu_File_WorkspaceSave" cmd:CommandUi.Id="workspace.save" AutomationProperties.AutomationId="Command_WorkspaceSave" />
+                            <MenuFlyoutItem x:Uid="Menu_File_WorkspaceOpen" cmd:CommandUi.Id="workspace.open" AutomationProperties.AutomationId="Command_WorkspaceOpen" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <!--  再読み込みと変更の破棄 (ENG-18)  -->
                         <MenuFlyoutItem x:Uid="Menu_File_Reload" cmd:CommandUi.Id="file.reload" AutomationProperties.AutomationId="Command_Reload" />

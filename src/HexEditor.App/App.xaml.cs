@@ -131,6 +131,7 @@ public partial class App : Application
         MainWindow.RegisterHashPanel();
         MainWindow.RegisterAnnotationPanels();
         MainWindow.RegisterSearchResultsPanel();
+        MainWindow.RegisterFormatIssuesPanel();
         var window = new MainWindow(vm);
         Window = window;
 

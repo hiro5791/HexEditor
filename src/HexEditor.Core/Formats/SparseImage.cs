@@ -14,8 +14,11 @@ public readonly record struct ImageSegment(long Address, long Length, long DataP
 /// 一時ファイル (閉じると消える) に置き、メモリには範囲の一覧だけを持つ。データのないアドレス (隙間) は塗りつぶしの値として読み、
 /// <see cref="IGapSource"/> で隙間を示す。オフセット 0 は <see cref="Origin"/> のアドレス。
 /// </summary>
-public sealed class SparseImage : ByteSourceBase, IGapSource
+public sealed class SparseImage : ByteSourceBase, IGapSource, View.IViewDefaultsSource
 {
+    /// <summary>表示の既定値: ベースアドレスを最小のアドレスにする (ENG-38 の仕様 3)。</summary>
+    public System.Text.Json.Nodes.JsonObject? ViewDefaults => Origin == 0 ? null : new() { ["baseAddress"] = (ulong)Origin };
+
     private readonly SafeFileHandle? _data;
     private readonly ImageSegment[] _segments;
     private readonly long _length;

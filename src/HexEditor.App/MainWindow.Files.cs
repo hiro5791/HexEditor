@@ -40,7 +40,10 @@ public sealed partial class MainWindow
     /// </summary>
     /// <param name="readOnly">「読み取り専用で開く」(ENG-14)。</param>
     /// <param name="restorePosition">前回の位置を戻す (ENG-16 の仕様 5)。</param>
-    private DocumentViewModel? TryOpen(string path, int? insertAt = null, bool readOnly = false, bool restorePosition = true)
+    /// <param name="decode">
+    /// 拡張子が Intel HEX・S-record・Base64 のファイルをデコードして開く (ENG-38 の仕様 1 の形式「自動」)。偽ならバイナリのまま開く。
+    /// </param>
+    private DocumentViewModel? TryOpen(string path, int? insertAt = null, bool readOnly = false, bool restorePosition = true, bool decode = true)
     {
         string name = Path.GetFileName(path.TrimEnd('\\', '/'));
         if (path.StartsWith(@"\\.\", StringComparison.Ordinal))
@@ -67,10 +70,36 @@ public sealed partial class MainWindow
             return elsewhere.Document.IsPending ? elsewhere.Window.Vm.Selected ?? elsewhere.Document : elsewhere.Document;
         }
 
+        // ワークスペース (UI-33 の仕様 4・UI-34): 開いて、タブとパネルの配置を戻す。
+        if (string.Equals(Path.GetExtension(path), Core.Files.WorkspaceFile.Extension, StringComparison.OrdinalIgnoreCase) && File.Exists(path))
+        {
+            _ = OpenWorkspaceAsync(path);
+            return null;
+        }
+
+        // デコードして開く (ENG-38): 小さいファイルはすぐに開き、大きいファイルはデコードの長時間処理の後に開く。
+        if (decode && !readOnly && AutoDecodeFormat(path) is { } encoded && File.Exists(path))
+        {
+            Task<DocumentViewModel?> decoding = OpenEncodedAsync(path, encoded, insertAt);
+            return decoding.IsCompleted ? decoding.Result : null;
+        }
+
+        // 同じファイルの範囲を開いている: 「同じデータを 2 つのタブで編集すると、後から保存した方が優先されます」と確かめる (ENG-13 の仕様 6)。
+        if (File.Exists(path) && Vm.FindSameFile(Path.GetFullPath(path)) is null && Vm.TabsOfFile(path).Any(d => d.IsRangeDocument))
+        {
+            _ = OpenAfterOverlapConfirmAsync(path, insertAt, readOnly);
+            return null;
+        }
+
         try
         {
             DocumentViewModel doc = Vm.Open(path, insertAt, readOnly, restorePosition);
             AppLog.Debug($"Opened {path}");
+            if (decode && !readOnly)
+            {
+                _ = SuggestDecodingAsync(doc);
+            }
+
             if (OpenedReadOnlyNoticeKey(doc.Document.ReadOnlyReason) is { } key)
             {
                 // 書き込めないため読み取り専用で開いた: 理由と、解除できる場合は「編集を許可する」を出す (ENG-14 の仕様 1、ENG-11 の「エラー」、
@@ -103,6 +132,25 @@ public sealed partial class MainWindow
         }
 
         return null;
+    }
+
+    private async Task OpenAfterOverlapConfirmAsync(string path, int? insertAt, bool readOnly)
+    {
+        OverlapChoice choice = await ConfirmOverlapAsync();
+        if (choice == OverlapChoice.Cancel)
+        {
+            return;
+        }
+
+        try
+        {
+            Vm.Open(path, insertAt, readOnly || choice == OverlapChoice.ReadOnly);
+            UpdateTitle();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            ShowNotice(Loc.Format("Error_Open", Path.GetFileName(path), ex.Message), InfoBarSeverity.Error);
+        }
     }
 
     /// <summary>書き込めないため読み取り専用で開いたときの InfoBar の文言のキー。理由を示す必要がなければ null。</summary>

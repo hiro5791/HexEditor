@@ -270,6 +270,13 @@ public sealed partial class MainViewModel : ObservableObject
     {
         // 取り除くと TabView の双方向の結び付けで Selected が null になるため、先に選択中かを調べておく。
         bool wasSelected = Selected == vm;
+
+        // 親のタブを閉じると連動ビューのタブも閉じる (ENG-39 の仕様 1)。
+        foreach (DocumentViewModel child in LinkedTabsOf(vm))
+        {
+            (child.Owner ?? this).Close(child);
+        }
+
         BeforeClose(vm, Documents.IndexOf(vm));
         Documents.Remove(vm);
         Notifications.DismissOwnedBy(vm);
@@ -402,12 +409,15 @@ public sealed partial class MainViewModel : ObservableObject
         all.Wait(timeout);
     }
 
-    private DocumentViewModel Add(Document doc, string? path, string name, int? insertAt = null)
+    /// <param name="recovery">
+    /// 復旧用データを作るか。範囲を指定して開いた (ENG-13)・デコードして開いた (ENG-38) ドキュメントは、元データをファイルとして開き直せないため作らない。
+    /// </param>
+    private DocumentViewModel Add(Document doc, string? path, string name, int? insertAt = null, bool recovery = true)
     {
-        DocumentRecovery? recovery = null;
+        DocumentRecovery? recoveryData = null;
         try
         {
-            recovery = new DocumentRecovery(RecoveryRoot, doc.Id);
+            recoveryData = recovery ? new DocumentRecovery(RecoveryRoot, doc.Id) : null;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -415,7 +425,7 @@ public sealed partial class MainViewModel : ObservableObject
             AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
         }
 
-        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recovery, Notifications = Notifications }, insertAt);
+        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recoveryData, Notifications = Notifications }, insertAt);
     }
 
     /// <summary>
@@ -434,7 +444,12 @@ public sealed partial class MainViewModel : ObservableObject
                 owner.LockFailed?.Invoke(owner, vm);
             }
         };
-        Memory.Register(doc);
+        if (doc.LinkedParent is null)
+        {
+            // 連動ビューは親とデータを共有するため、メモリの使用量を二重に数えない。
+            Memory.Register(doc);
+        }
+
         vm.Owner = this;
         InsertDocument(vm, insertAt);
         Selected = vm;

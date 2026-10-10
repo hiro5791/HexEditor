@@ -35,6 +35,9 @@ public sealed class DocumentSnapshot
 
     internal DocumentStorage Storage => _storage;
 
+    /// <summary>このスナップショットの元データ (保存されている内容。パッチの差分の元。TOOL-12 の仕様 5)。</summary>
+    public IByteSource OriginalSource => _storage.Source;
+
     /// <summary>
     /// 表示用の読み込み。ブロックしない。キャッシュにない元データは読み込みを始めて <see cref="ByteState.Loading"/> にする。
     /// <paramref name="states"/> は <paramref name="destination"/> と同じ長さ。末尾を越えた部分は書き換えない。
