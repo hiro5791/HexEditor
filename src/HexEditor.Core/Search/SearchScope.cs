@@ -153,6 +153,13 @@ public sealed record SearchOptions
     /// </summary>
     public Func<UnreadableRange, UnreadableAction>? OnUnreadable { get; init; }
 
+    /// <summary>
+    /// 正規表現の照合がチャンクの時間の上限に達したときに呼ぶ (FIND-18 の「エラー」。検索のスレッドから)。<see cref="UnreadableAction.Skip"/> なら
+    /// そのチャンクを飛ばして続け (結果一覧に記録する)、<see cref="UnreadableAction.Abort"/> なら <see cref="SearchTimedOutException"/> で中止する。
+    /// null なら飛ばす。
+    /// </summary>
+    public Func<SearchRange, UnreadableAction>? OnTimeout { get; init; }
+
     /// <summary>すべて検索で重なる一致を含める (FIND-20 の仕様 5。既定オフ)。次 / 前を検索と件数の数え上げは常に重なる一致を含める。</summary>
     public bool IncludeOverlapping { get; init; }
 
