@@ -165,7 +165,18 @@ public sealed class DocumentSnapshot
     /// <summary>
     /// バックグラウンド用の読み込み。必要ならデータソースを待つ。読めなかった範囲はドキュメント上の位置で返す。
     /// </summary>
-    public ReadResult Read(long offset, Span<byte> destination)
+    public ReadResult Read(long offset, Span<byte> destination) => Read(offset, destination, throughCache: false);
+
+    /// <summary>
+    /// 元データを表示用のキャッシュに入れながら読む (<see cref="BlockCache.ReadThrough"/>)。近い位置を何度も少しずつ読む UI の操作
+    /// (マルチカーソルの位置のバイト) に使う。
+    /// </summary>
+    public ReadResult ReadThroughCache(long offset, Span<byte> destination) => Read(offset, destination, throughCache: true);
+
+    /// <summary>元データの読み込みの単位 (キャッシュのブロックの大きさ)。</summary>
+    public int CacheBlockSize => _storage.Cache.BlockSize;
+
+    private ReadResult Read(long offset, Span<byte> destination, bool throughCache)
     {
         int count = CountWithinLength(offset, destination.Length);
         List<UnreadableRange>? bad = null;
@@ -174,7 +185,7 @@ public sealed class DocumentSnapshot
             Span<byte> dst = destination.Slice((int)(docOffset - offset), (int)piece.Length);
             if (piece.Kind == PieceKind.Original)
             {
-                ReadResult r = _storage.Cache.ReadDirect(piece.Offset, dst);
+                ReadResult r = throughCache ? _storage.Cache.ReadThrough(piece.Offset, dst) : _storage.Cache.ReadDirect(piece.Offset, dst);
                 foreach (UnreadableRange u in r.Unreadable)
                 {
                     (bad ??= []).Add(u with { Offset = u.Offset - piece.Offset + docOffset });

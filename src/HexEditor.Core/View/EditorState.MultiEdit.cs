@@ -168,7 +168,7 @@ public sealed partial class EditorState
         var results = new Caret[all.Count];
         int failures = 0;
         long shift = 0, previous = -1;
-        Span<byte> one = stackalloc byte[1];
+        byte[] currents = ReadBytesUnderCarets(snapshot, all, InsertMode);
         for (int i = 0; i < all.Count; i++)
         {
             Caret c = all[i].Caret;
@@ -182,12 +182,7 @@ public sealed partial class EditorState
             }
 
             previous = c.Offset;
-            byte current = 0;
-            if (!atEnd)
-            {
-                snapshot.Read(c.Offset, one);
-                current = one[0];
-            }
+            byte current = currents[i];
 
             if (!c.LowNibble && (InsertMode || atEnd))
             {
@@ -242,6 +237,48 @@ public sealed partial class EditorState
         EnsureCursorVisible();
         RaiseChanged();
         return edits.Count > 0 ? EditResult.Done : EditResult.FixedLength;
+    }
+
+    /// <summary>
+    /// 各カーソルの位置のバイトを読む (上位ニブルへの挿入・末尾では読まない)。カーソルは位置の昇順に並んでいること。
+    /// 元データの読み込みは 1 回ごとにファイルの読み込みになる (同じファイルへの読み込みは並列にしても OS の中で順番になる)。
+    /// カーソルが密にある (キャッシュの 1 ブロックに平均 4 個以上) 場合は、ブロックごと表示用のキャッシュに入れて読み、読み込みの回数を
+    /// 減らす (次の入力ではキャッシュから読める。カーソル 10,000 個で 50 ms 以内。EDIT-08 の「巨大ファイル・長時間処理」)。
+    /// まばらな場合は 1 バイトずつ直接読む (キャッシュを追い出さない)。
+    /// </summary>
+    private static byte[] ReadBytesUnderCarets(DocumentSnapshot snapshot, List<(Caret Caret, int Order)> carets, bool insertMode)
+    {
+        var bytes = new byte[carets.Count];
+        long length = snapshot.Length;
+        int blockSize = snapshot.CacheBlockSize;
+        int needed = 0, blocks = 0;
+        long lastBlock = -1;
+        foreach ((Caret c, _) in carets)
+        {
+            if (c.Offset < length && (c.LowNibble || !insertMode))
+            {
+                needed++;
+                if (c.Offset / blockSize != lastBlock)
+                {
+                    lastBlock = c.Offset / blockSize;
+                    blocks++;
+                }
+            }
+        }
+
+        bool throughCache = needed >= 64 && needed >= blocks * 4L;
+        Span<byte> one = stackalloc byte[1];
+        for (int i = 0; i < carets.Count; i++)
+        {
+            Caret c = carets[i].Caret;
+            if (c.Offset < length && (c.LowNibble || !insertMode))
+            {
+                _ = throughCache ? snapshot.ReadThroughCache(c.Offset, one) : snapshot.Read(c.Offset, one);
+                bytes[i] = one[0];
+            }
+        }
+
+        return bytes;
     }
 
     /// <summary>移動キーをすべてのカーソルに適用する (EDIT-08 の仕様 4)。各カーソルが自分の選択範囲を持つ。</summary>

@@ -79,7 +79,8 @@ public sealed partial class Document
 
         PieceTree before = Current.Tree;
         long length = before.Length;
-        var pieces = new List<Piece>();
+        var pieces = new List<Piece>((int)Math.Min(before.PieceCount + 16, 1 << 20));
+        var walker = new PieceTree.Walker(before);
         var appended = new Dictionary<byte[], long>(ReferenceEqualityComparer.Instance);
         long cursor = 0;
         long count = 0;
@@ -98,7 +99,7 @@ public sealed partial class Document
                 operation?.CancellationToken.ThrowIfCancellationRequested();
             }
 
-            AddRange(before, cursor, edit.Offset - cursor, pieces);
+            walker.CopyTo(edit.Offset, pieces);
             foreach (ReplacementPart part in edit.Parts)
             {
                 if (part.Length == 0)
@@ -146,6 +147,7 @@ public sealed partial class Document
             }
 
             cursor = edit.Offset + edit.RemoveLength;
+            walker.SkipTo(cursor);
             lastEnd = cursor;
             count++;
             operation?.Report(edit.Offset);
@@ -156,7 +158,7 @@ public sealed partial class Document
             return new PreparedReplacement(before, before, 0, 0, 0, 0);
         }
 
-        AddRange(before, cursor, length - cursor, pieces);
+        walker.CopyTo(length, pieces);
         PieceTree tree = PieceTree.Build(pieces);
         if (tree.Length != length && !CanResize)
         {
