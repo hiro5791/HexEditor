@@ -13,20 +13,48 @@ public sealed class FileByteSource : ByteSourceBase
 
     private readonly SafeFileHandle _handle;
     private readonly long _length;
+    private readonly long _rangeStart;
+    private readonly bool _rangeResizable;
     private readonly object _denyLock = new();
     private SafeFileHandle? _denyHandle;
     private bool _disposed;
 
-    private FileByteSource(string path, SafeFileHandle handle, bool readOnlyAttribute, bool sparse)
+    private FileByteSource(string path, SafeFileHandle handle, bool readOnlyAttribute, bool sparse, (long Start, long Length, bool Resizable)? range = null)
     {
         Path = path;
         IsSparse = sparse;
         _handle = handle;
-        _length = RandomAccess.GetLength(handle);
+        FileLength = RandomAccess.GetLength(handle);
+        _length = FileLength;
         Identity = "file:" + path.ToUpperInvariant();
+        if (range is { } r)
+        {
+            // 範囲を指定して開く (ENG-13): オフセット 0 は開始位置。終了がファイルの長さを超える分は切り詰める。
+            IsRange = true;
+            _rangeStart = r.Start;
+            _length = Math.Max(0, Math.Min(r.Length, FileLength - r.Start));
+            _rangeResizable = r.Resizable;
+            Identity += $"#range:{r.Start:X}+{_length:X}";
+        }
+
         Stamp = FileStamp.FromHandle(handle);
         HasReadOnlyAttribute = readOnlyAttribute;
     }
+
+    /// <summary>範囲を指定して開いたか (ENG-13)。</summary>
+    public bool IsRange { get; }
+
+    /// <summary>範囲の開始位置 (ファイル上のオフセット)。範囲でなければ 0。</summary>
+    public long RangeStart => _rangeStart;
+
+    /// <summary>範囲で「長さの変更を許可する」を選んだ (ENG-13 の仕様 4)。</summary>
+    public bool RangeResizable => _rangeResizable;
+
+    /// <summary>開いた時点のファイル全体の長さ (範囲でなければ <see cref="Length"/> と同じ)。</summary>
+    public long FileLength { get; }
+
+    /// <summary>オフセット 0 のアドレス (範囲なら開始位置。ENG-13 の仕様 2)。</summary>
+    public override long BaseAddress => _rangeStart;
 
     /// <summary>開いた時点で読み取り専用属性があったか (ENG-14 の仕様 1)。</summary>
     public bool HasReadOnlyAttribute { get; }
@@ -50,7 +78,7 @@ public sealed class FileByteSource : ByteSourceBase
     public override long Length => _length;
 
     public override SourceCapabilities Capabilities =>
-        SourceCapabilities.CanResize | SourceCapabilities.CanReplace
+        (IsRange && !_rangeResizable ? SourceCapabilities.None : SourceCapabilities.CanResize | SourceCapabilities.CanReplace)
         | (HasReadOnlyAttribute && !WriteApproved ? SourceCapabilities.None : SourceCapabilities.CanWrite);
 
     /// <summary>スパースファイルか (開いた時点の属性)。安全な保存で一時ファイルもスパースにする (ENG-22 の仕様 5)。</summary>
@@ -63,7 +91,33 @@ public sealed class FileByteSource : ByteSourceBase
     public IReadOnlyList<(long Offset, long Length)> AllocatedRanges(long offset, long length)
     {
         length = Math.Min(length, Math.Max(0, _length - offset));
-        return !IsSparse ? (length > 0 ? [(offset, length)] : []) : SparseFiles.AllocatedRanges(_handle, offset, length);
+        if (!IsSparse)
+        {
+            return length > 0 ? [(offset, length)] : [];
+        }
+
+        IReadOnlyList<(long Offset, long Length)> ranges = SparseFiles.AllocatedRanges(_handle, _rangeStart + offset, length);
+        return _rangeStart == 0 ? ranges : [.. ranges.Select(r => (r.Offset - _rangeStart, r.Length))];
+    }
+
+    /// <summary>ファイル全体の中で割り当てられている範囲 (ファイル上のオフセット。範囲の外を書き出すとき)。</summary>
+    internal IReadOnlyList<(long Offset, long Length)> AllocatedFileRanges(long offset, long length) =>
+        !IsSparse ? (length > 0 ? [(offset, length)] : []) : SparseFiles.AllocatedRanges(_handle, offset, length);
+
+    /// <summary>ファイル上の位置を指定して読む (範囲の外。範囲を指定して開いたドキュメントの保存で前後を書き出す)。</summary>
+    internal void ReadFile(long fileOffset, Span<byte> destination)
+    {
+        int done = 0;
+        while (done < destination.Length)
+        {
+            int n = RandomAccess.Read(_handle, destination[done..], fileOffset + done);
+            if (n == 0)
+            {
+                throw new EndOfStreamException();
+            }
+
+            done += n;
+        }
     }
 
     /// <summary>開いた時点の長さ・最終更新日時・ファイル ID (復旧用データで、元のファイルが変わっていないかを調べる。ENG-27)。</summary>
@@ -98,6 +152,42 @@ public sealed class FileByteSource : ByteSourceBase
             FileOptions.RandomAccess);
         FileAttributes attributes = File.GetAttributes(fullPath);
         return new FileByteSource(fullPath, handle, attributes.HasFlag(FileAttributes.ReadOnly), attributes.HasFlag(FileAttributes.SparseFile));
+    }
+
+    /// <summary>
+    /// ファイルの一部の範囲 [<paramref name="start"/>, + <paramref name="length"/>) を開く (ENG-13)。終了がファイルの長さを超える分は切り詰める。
+    /// <paramref name="resizable"/> が偽なら長さ固定 (上書きのみ。ENG-07 と同じ制約)。開始位置がファイルの長さ以上、または長さが 0 以下なら例外。
+    /// </summary>
+    public static FileByteSource OpenRange(string path, long start, long length, bool resizable) => OpenRange(path, start, length, resizable, allowEmpty: false);
+
+    /// <summary><paramref name="allowEmpty"/>: 保存の後に長さ 0 になった範囲 (範囲の中をすべて削除して保存した) も開く。</summary>
+    internal static FileByteSource OpenRange(string path, long start, long length, bool resizable, bool allowEmpty)
+    {
+        string fullPath = System.IO.Path.GetFullPath(path);
+        SafeFileHandle handle = File.OpenHandle(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, FileOptions.RandomAccess);
+        long fileLength = RandomAccess.GetLength(handle);
+        if (start < 0 || (allowEmpty ? start > fileLength || length < 0 : start >= fileLength || length <= 0))
+        {
+            handle.Dispose();
+            throw new ArgumentOutOfRangeException(nameof(start), "範囲がファイルの外です。");
+        }
+
+        FileAttributes attributes = File.GetAttributes(fullPath);
+        return new FileByteSource(fullPath, handle, attributes.HasFlag(FileAttributes.ReadOnly), attributes.HasFlag(FileAttributes.SparseFile),
+            (start, length, resizable));
+    }
+
+    /// <summary>同じ開き方 (範囲を含む) でもう一度開く (再読み込み・保存の後。ENG-18、ENG-19)。範囲の長さは今のファイルの長さに収める。</summary>
+    public FileByteSource Reopen(long? rangeLength = null)
+    {
+        if (!IsRange)
+        {
+            return Open(Path);
+        }
+
+        long fileLength = new FileInfo(Path).Length;
+        long length = Math.Min(rangeLength ?? _length, Math.Max(1, fileLength - _rangeStart));
+        return OpenRange(Path, Math.Min(_rangeStart, Math.Max(0, fileLength - 1)), length, _rangeResizable);
     }
 
     /// <summary>他のアプリの書き込みを禁止するハンドルを開いているか (ENG-15 の仕様 2)。</summary>
@@ -180,7 +270,7 @@ public sealed class FileByteSource : ByteSourceBase
             int done = 0;
             while (done < count)
             {
-                int n = await RandomAccess.ReadAsync(_handle, target[done..], offset + done, cancellationToken).ConfigureAwait(false);
+                int n = await RandomAccess.ReadAsync(_handle, target[done..], _rangeStart + offset + done, cancellationToken).ConfigureAwait(false);
                 if (n == 0)
                 {
                     // 開いた後にファイルが短くなった。残りは読めない範囲として扱う。
@@ -204,7 +294,7 @@ public sealed class FileByteSource : ByteSourceBase
         int done = 0;
         while (done < target.Length)
         {
-            int n = RandomAccess.Read(_handle, target[done..], offset + done);
+            int n = RandomAccess.Read(_handle, target[done..], _rangeStart + offset + done);
             if (n == 0)
             {
                 throw new EndOfStreamException();

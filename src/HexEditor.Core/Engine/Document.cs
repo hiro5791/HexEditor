@@ -851,7 +851,70 @@ public sealed partial class Document : IDisposable
         Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true, DocumentChangeKind.Saved));
     }
 
-    private Saving.OverlayByteSource? _lastOverlay;
+    private Saving.IRebasableOverlay? _lastOverlay;
+
+    /// <summary>
+    /// ずらしながらのその場保存の完了 (ENG-24)。保存前の版が読む元データを「今のファイル + 退避した旧内容」の重ね合わせに差し替え、現在の版は
+    /// 書き換えたファイルを指す新しい元データにする。Undo 履歴を破棄する計画だった場合は、履歴を消して今の状態だけを残す (仕様 7)。
+    /// </summary>
+    public void CompleteShiftSave(Saving.ShiftSaveResult result)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (result.Source.Length != Length)
+        {
+            throw new InvalidOperationException("保存したファイルの長さがドキュメントと違います。");
+        }
+
+        DocumentStorage before = _storage;
+        if (!result.DiscardedHistory)
+        {
+            InstallShiftOverlay(before, result);
+        }
+
+        _storage = CreateStorage(result.Source, before.AddBuffer);
+        PieceTree tree = result.Source.Length > 0 ? PieceTree.FromPiece(Piece.Original(0, result.Source.Length)) : PieceTree.Empty;
+        var snapshot = new DocumentSnapshot(_storage, tree);
+        if (result.DiscardedHistory)
+        {
+            History.Reset(snapshot);
+        }
+        else
+        {
+            History.ReplaceCurrent(snapshot);
+        }
+
+        History.MarkSaved();
+        ResumeLock();
+        Changed?.Invoke(this, new DocumentChangedEventArgs(0, 0, 0, isWholeDocument: true, DocumentChangeKind.Saved));
+    }
+
+    /// <summary>
+    /// ずらしながらのその場保存が途中で失敗した (ENG-24 の「エラー」): 退避した旧内容があれば、今のドキュメントの内容 (保存前の元データを指す) を
+    /// 退避から読むようにして保つ。
+    /// </summary>
+    public void RecoverAfterShiftFailure(Saving.ShiftSaveResult? recovered)
+    {
+        if (recovered is not null && !_disposed)
+        {
+            InstallShiftOverlay(_storage, recovered);
+        }
+
+        ResumeLock();
+    }
+
+    private void InstallShiftOverlay(DocumentStorage before, Saving.ShiftSaveResult result)
+    {
+        var overlay = new Saving.ShiftOverlaySource(before.Source, before.AddBuffer, result.Backups, result.OriginalLength);
+        if (_lastOverlay is { } previous)
+        {
+            previous.Inner = overlay;
+        }
+
+        _lastOverlay = overlay;
+        before.Source = overlay;
+        before.Cache.Dispose();
+        before.Cache = NewCache(overlay);
+    }
 
     /// <summary>
     /// 元に戻す・やり直しの履歴を消し、今の状態だけを残す (EDIT-19 の仕様 9 の設定「保存時に履歴を消す」。保存の直後に呼ぶ)。

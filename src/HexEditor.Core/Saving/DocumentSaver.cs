@@ -76,9 +76,14 @@ public static class DocumentSaver
         string target = ResolveTarget(Path.GetFullPath(targetPath));
         string folder = Path.GetDirectoryName(target)!;
         VolumeInfo? volume = (volumes ?? SystemVolumeInfoProvider.Instance).GetVolume(folder);
-        CheckFileSizeLimit(volume, snapshot.Length);
-        IReadOnlyList<(long Offset, long Length)>? sparse = SparseDataRanges(snapshot);
-        CheckFreeSpace(volume, sparse?.Sum(r => r.Length) ?? snapshot.Length);
+
+        // 範囲を指定して開いたドキュメントを元のファイルに保存する場合は、範囲外はそのまま、範囲内は編集後の内容にしたファイル全体を書く
+        // (ENG-13 の仕様 4)。
+        FileByteSource? range = RangeOf(snapshot, target);
+        long outputLength = OutputLength(snapshot, target);
+        CheckFileSizeLimit(volume, outputLength);
+        IReadOnlyList<(long Offset, long Length)>? sparse = range is null ? SparseDataRanges(snapshot) : null;
+        CheckFreeSpace(volume, sparse?.Sum(r => r.Length) ?? outputLength);
 
         // バックアップを作れるかを先に確かめる。作れなければ書き始めない (ENG-26 の「エラー」)。別のボリュームに置く場合はコピーになるため、
         // 置き場所の空き容量も確かめる。既存のバックアップの世代をずらすのは、一時ファイルを書き終えて置き換える直前 (書き出しに失敗・
@@ -94,7 +99,14 @@ public static class DocumentSaver
         SaveTempMarker marker = SaveTempMarker.Record(markerDirectory, temp, target);
         try
         {
-            WriteTemp(snapshot, temp, sparse, operation);
+            if (range is not null)
+            {
+                WriteComposed(range, snapshot, temp, operation);
+            }
+            else
+            {
+                WriteTemp(snapshot, temp, sparse, operation);
+            }
 
             // 手順 7: 自分の書き込み禁止のハンドル (ENG-15) を閉じる。保存の完了で元の方針に戻す。
             snapshot.Storage.Owner.SuspendLock();
@@ -144,7 +156,79 @@ public static class DocumentSaver
         }
 
         marker.Dispose();
-        return FileByteSource.Open(target);
+        return range is null ? FileByteSource.Open(target)
+            : FileByteSource.OpenRange(target, range.RangeStart, snapshot.Length, range.RangeResizable, allowEmpty: true);
+    }
+
+    /// <summary>範囲を指定して開いたドキュメントの、元のファイルへの保存か (その範囲のデータソース)。</summary>
+    internal static FileByteSource? RangeOf(DocumentSnapshot snapshot, string target) =>
+        snapshot.Storage.Source is FileByteSource { IsRange: true } range
+        && string.Equals(Path.GetFullPath(target), range.Path, StringComparison.OrdinalIgnoreCase) ? range : null;
+
+    /// <summary>書き出すファイルの長さ (範囲を指定して開いたドキュメントの元のファイルへの保存では、範囲の前後を含めたファイル全体)。</summary>
+    public static long OutputLength(DocumentSnapshot snapshot, string target) =>
+        RangeOf(snapshot, target) is { } range
+            ? range.RangeStart + snapshot.Length + Math.Max(0, range.FileLength - range.RangeStart - range.Length)
+            : snapshot.Length;
+
+    /// <summary>
+    /// 範囲の前 (ファイルの [0, 開始))、編集後の範囲、範囲の後を一時ファイルに書く (ENG-13 の仕様 4)。元のファイルがスパースなら、範囲の外は
+    /// 割り当てられている部分だけを写し、一時ファイルもスパースにする。
+    /// </summary>
+    private static void WriteComposed(FileByteSource range, DocumentSnapshot snapshot, string temp, LongRunningOperation? operation)
+    {
+        using var stream = new FileStream(temp, FileMode.CreateNew, FileAccess.Write, FileShare.None, bufferSize: 0, FileOptions.SequentialScan);
+        File.SetAttributes(temp, File.GetAttributes(temp) | FileAttributes.Hidden);
+        bool sparse = range.IsSparse && SparseFiles.TryMakeSparse(stream.SafeFileHandle);
+        long tailStart = range.RangeStart + range.Length;
+        long tailLength = Math.Max(0, range.FileLength - tailStart);
+        long total = range.RangeStart + snapshot.Length + tailLength;
+        stream.SetLength(total);
+        byte[] buffer = new byte[BufferSize];
+        long done = 0;
+
+        void CopyFile(long from, long length, long to)
+        {
+            IReadOnlyList<(long Offset, long Length)> parts = sparse ? range.AllocatedFileRanges(from, length) : [(from, length)];
+            foreach ((long offset, long partLength) in parts)
+            {
+                for (long pos = 0; pos < partLength; pos += BufferSize)
+                {
+                    operation?.CancellationToken.ThrowIfCancellationRequested();
+                    int n = (int)Math.Min(BufferSize, partLength - pos);
+                    range.ReadFile(offset + pos, buffer.AsSpan(0, n));
+                    RandomAccess.Write(stream.SafeFileHandle, buffer.AsSpan(0, n), to + (offset - from) + pos);
+                    operation?.Report(done + (offset - from) + pos + n);
+                }
+            }
+
+            done += length;
+        }
+
+        CopyFile(0, range.RangeStart, 0);
+        for (long offset = 0; offset < snapshot.Length; offset += BufferSize)
+        {
+            operation?.CancellationToken.ThrowIfCancellationRequested();
+            int n = (int)Math.Min(BufferSize, snapshot.Length - offset);
+            ReadResult read = snapshot.Read(offset, buffer.AsSpan(0, n));
+            if (!read.IsComplete)
+            {
+                throw new UnreadableDataException(read.Unreadable);
+            }
+
+            if (!sparse || buffer.AsSpan(0, n).ContainsAnyExcept((byte)0))
+            {
+                RandomAccess.Write(stream.SafeFileHandle, buffer.AsSpan(0, n), range.RangeStart + offset);
+            }
+
+            operation?.Report(done + offset + n);
+        }
+
+        done += snapshot.Length;
+        CopyFile(tailStart, tailLength, range.RangeStart + snapshot.Length);
+        stream.Flush(flushToDisk: true);
+        stream.Close();
+        File.SetAttributes(temp, File.GetAttributes(temp) & ~FileAttributes.Hidden);
     }
 
     /// <summary>

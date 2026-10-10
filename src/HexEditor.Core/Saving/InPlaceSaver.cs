@@ -143,7 +143,8 @@ public static class InPlaceSaver
 
             foreach ((long offset, long length) in ranges)
             {
-                BinaryPrimitives.WriteInt64LittleEndian(record, offset);
+                // ジャーナルにはファイル上の位置を書く (範囲を指定して開いた場合は開始位置を足す。ENG-13 の仕様 3)。
+                BinaryPrimitives.WriteInt64LittleEndian(record, file.RangeStart + offset);
                 BinaryPrimitives.WriteInt64LittleEndian(record.AsSpan(8), length);
                 stream?.Write(record);
                 long firstAt = -1;
@@ -209,7 +210,7 @@ public static class InPlaceSaver
                         throw new UnreadableDataException(read.Unreadable);
                     }
 
-                    RandomAccess.Write(handle, buffer.AsSpan(0, n), offset + pos);
+                    RandomAccess.Write(handle, buffer.AsSpan(0, n), file.RangeStart + offset + pos);
                     done += n;
                     operation?.Report(done);
                 }
@@ -405,12 +406,18 @@ public static class InPlaceSaver
     }
 }
 
+/// <summary>保存前の内容の重ね合わせ。後の保存で同じファイルが書き換わったら、内側をその保存の重ね合わせに付け替える。</summary>
+internal interface IRebasableOverlay
+{
+    IByteSource Inner { get; set; }
+}
+
 /// <summary>
 /// その場保存の前の内容を読むためのデータソース (ENG-05 の仕様 5): 現在のファイルに、上書きした範囲の旧内容
 /// (追加バッファに退避したもの) を重ねて返す。後の保存で同じファイルがさらに書き換わったときは、
 /// <see cref="Inner"/> をその保存の重ね合わせに付け替えて、つねに「この保存の直後の内容」を元にする。
 /// </summary>
-internal sealed class OverlayByteSource(IByteSource inner, AddBuffer addBuffer, IReadOnlyList<SavedRange> ranges) : ByteSourceBase
+internal sealed class OverlayByteSource(IByteSource inner, AddBuffer addBuffer, IReadOnlyList<SavedRange> ranges) : ByteSourceBase, IRebasableOverlay
 {
     public IByteSource Inner { get; set; } = inner;
 
