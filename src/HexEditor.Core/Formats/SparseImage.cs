@@ -51,7 +51,10 @@ public sealed class SparseImage : ByteSourceBase, IGapSource
     /// <summary>表示上のアドレスを持たせる (ドキュメントのベースアドレスは開く側が決める)。</summary>
     public override long BaseAddress => Origin;
 
-    public override SourceCapabilities Capabilities => SourceCapabilities.None;
+    /// <summary>長さを変えられる (Base64 をデコードして開いた内容。ENG-38 の仕様 4)。</summary>
+    public bool Resizable { get; set; }
+
+    public override SourceCapabilities Capabilities => Resizable ? SourceCapabilities.CanResize : SourceCapabilities.None;
 
     public override ReadResult Read(long offset, Span<byte> buffer)
     {
