@@ -3041,6 +3041,9 @@
   <data name="Hash_Ranges" xml:space="preserve"><value>{0} 個の範囲、計 {1} バイト</value></data>
   <data name="CopyAs_SeparateRanges" xml:space="preserve"><value>要素ごとに分ける (オフのときは連結する)</value></data>
   <data name="Drop_InsertCopy" xml:space="preserve"><value>コピーを挿入</value></data>
+  <data name="HexView_DropMove" xml:space="preserve"><value>移動</value></data>
+  <data name="HexView_DropCopy" xml:space="preserve"><value>コピー</value></data>
+  <data name="HexView_DropOverwrite" xml:space="preserve"><value>上書き</value></data>
   <data name="Drop_PasteSpecial" xml:space="preserve"><value>形式を選択して貼り付け</value></data>
   <data name="Menu_View_CellFormatHex.Text" xml:space="preserve"><value>16 進(H)</value></data>
   <data name="Menu_View_CellFormatHex.AccessKey" xml:space="preserve"><value>H</value></data>

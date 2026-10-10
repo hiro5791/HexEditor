@@ -57,6 +57,9 @@ public sealed partial class HexView
     /// <summary>設定「選択範囲のドラッグ &amp; ドロップを有効にする」(EDIT-18。既定オン)。</summary>
     public bool SelectionDragDropEnabled { get; set; } = true;
 
+    /// <summary>挿入位置の近くに出している効果の文字 (EDIT-18 の「画面」)。出していなければ null (テスト用)。</summary>
+    internal string? DropLabelShown => DropLabel.Visibility == Microsoft.UI.Xaml.Visibility.Visible ? DropLabelText.Text : null;
+
     /// <summary>選択範囲をドラッグしているときのドロップの効果 ("move" / "copy" / "overwrite" / "none")。ドラッグしていなければ null (テスト用)。</summary>
     internal string? DropEffect => _pressMode != PressMode.SelectionDrag ? null
         : !_dropAllowed ? "none" : DropKind() switch
@@ -73,7 +76,7 @@ public sealed partial class HexView
         {
             if (_editor is not null)
             {
-                SelectionDragStarting?.Invoke(this, new SelectionDragStartingEventArgs(_editor, e.Data));
+                SelectionDragStarting?.Invoke(this, new SelectionDragStartingEventArgs(_editor, e.Data, e.GetDeferral));
             }
         };
     }
@@ -251,7 +254,37 @@ public sealed partial class HexView
         _dropAllowed = _editor!.CanDropSelectionAt(offset, DropKind());
         ProtectedCursor = InputSystemCursor.Create(!_dropAllowed ? InputSystemCursorShape.UniversalNo
             : DropKind() == SelectionDropKind.Copy ? InputSystemCursorShape.Hand : InputSystemCursorShape.SizeAll);
+        UpdateDropLabel();
         QueueRender();
+    }
+
+    /// <summary>
+    /// 挿入位置の縦線の近く (その行の下) に効果の文字 (「移動」「コピー」「上書き」) を出す (EDIT-18 の「画面」。ポインタの形だけで区別しない)。
+    /// ドロップできない位置では出さない (ポインタは禁止の形)。
+    /// </summary>
+    private void UpdateDropLabel()
+    {
+        if (_pressMode != PressMode.SelectionDrag || !_dropAllowed || _dropTarget < 0 || _editor is null
+            || !TryGetCellRect(Math.Min(_dropTarget, _editor.Layout.MaxCursor), out Windows.Foundation.Rect rect, _editor.ActiveColumn))
+        {
+            DropLabel.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            return;
+        }
+
+        DropLabelText.Text = Services.Loc.Get(DropKind() switch
+        {
+            SelectionDropKind.Copy => "HexView_DropCopy",
+            SelectionDropKind.Overwrite => "HexView_DropOverwrite",
+            _ => "HexView_DropMove",
+        });
+        DropLabel.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+        DropLabel.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+        double width = DropLabel.DesiredSize.Width, height = DropLabel.DesiredSize.Height;
+
+        // 行の下に出す。下に入らなければ行の上に出す。横は面の中に収める。
+        double y = rect.Bottom + 2 + height <= Surface.ActualHeight ? rect.Bottom + 2 : Math.Max(0, rect.Top - height - 2);
+        DropLabelShift.X = Math.Clamp(rect.Left, 0, Math.Max(0, Surface.ActualWidth - width));
+        DropLabelShift.Y = y;
     }
 
     private SelectionDropKind DropKind() =>
@@ -324,6 +357,7 @@ public sealed partial class HexView
         _dropAllowed = false;
         _injectedModifiers = false;
         ProtectedCursor = null;
+        DropLabel.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
         QueueRender();
     }
 
@@ -410,9 +444,13 @@ public sealed partial class HexView
 }
 
 /// <summary>選択範囲を Hex ビューの外へドラッグし始めた (EDIT-18 の仕様 4・5)。</summary>
-public sealed class SelectionDragStartingEventArgs(EditorState editor, Windows.ApplicationModel.DataTransfer.DataPackage data) : EventArgs
+public sealed class SelectionDragStartingEventArgs(EditorState editor, Windows.ApplicationModel.DataTransfer.DataPackage data,
+    Func<Microsoft.UI.Xaml.DragOperationDeferral>? getDeferral = null) : EventArgs
 {
     public EditorState Editor { get; } = editor;
 
     public Windows.ApplicationModel.DataTransfer.DataPackage Data { get; } = data;
+
+    /// <summary>データを非同期に入れる間、ドラッグの開始を待たせる (読み込みを UI スレッドで待たない)。</summary>
+    public Microsoft.UI.Xaml.DragOperationDeferral? GetDeferral() => getDeferral?.Invoke();
 }

@@ -94,10 +94,22 @@ public sealed partial class ClipboardService
 
         long offset = editor.SelectionStart;
         long length = editor.SelectionLength;
-        DocumentSnapshot snapshot = editor.Document.Current;
         long serial = InApp.Copy(editor.Document, offset, length).Serial;
-
         var package = new DataPackage { RequestedOperation = DataPackageOperation.Copy };
+        ClipboardPlan plan = await FillCopyFormatsAsync(package, editor, offset, length, serial);
+        SetContentWithRetry(package);
+        return plan;
+    }
+
+    /// <summary>
+    /// コピー (EDIT-22 の仕様 2) と同じ形式を <paramref name="package"/> に入れる: `HexEditor.Meta`、上限以内なら `HexEditor.Binary`・
+    /// 他のエディタ互換の形式 (EDIT-27)・テキスト、上限を超えればテキストの 1 行だけ (仕様 5)。テキスト形式だけが上限を超えればテキストを省く
+    /// (仕様 6)。コピーと、他のアプリへのドラッグ (EDIT-18 の仕様 5。大きさの上限も同じ) で使う。
+    /// </summary>
+    /// <param name="serial">アプリ内クリップボードの通し番号 (ドラッグでは 0。どのコピーとも一致しない)。</param>
+    public async Task<ClipboardPlan> FillCopyFormatsAsync(DataPackage package, EditorState editor, long offset, long length, long serial)
+    {
+        DocumentSnapshot snapshot = editor.Document.Current;
         string meta = JsonSerializer.Serialize(new { instance = InstanceId, serial, offset, length, name = editor.Document.Source.DisplayName });
         package.SetData(MetaFormat, meta);
         // 上限以内なら実データを読む (読み込みを待つことがあるため UI スレッドでは読まない)。
@@ -128,7 +140,6 @@ public sealed partial class ClipboardService
             package.SetText(Loc.Format("Clipboard_TooLarge", length.ToString("N0")));
         }
 
-        SetContentWithRetry(package);
         return plan;
     }
 

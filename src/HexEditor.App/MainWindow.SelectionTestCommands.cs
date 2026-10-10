@@ -52,6 +52,7 @@ public sealed partial class MainWindow
         }
 
         document["dropEffect"] = CurrentView()?.DropEffect;
+        document["dropLabel"] = CurrentView()?.DropLabelShown;
         document["selectionSets"] = Vm.Selected is { } doc
             ? new JsonArray([.. SetsOf(doc).Sets.Select(s => (JsonNode?)new JsonObject
             {

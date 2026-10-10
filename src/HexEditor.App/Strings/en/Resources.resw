@@ -3041,6 +3041,9 @@ Details were written to:
   <data name="Hash_Ranges" xml:space="preserve"><value>{0, plural, one {# range} other {# ranges}}, {1} bytes total</value></data>
   <data name="CopyAs_SeparateRanges" xml:space="preserve"><value>Separate each range (instead of concatenating)</value></data>
   <data name="Drop_InsertCopy" xml:space="preserve"><value>Insert a copy</value></data>
+  <data name="HexView_DropMove" xml:space="preserve"><value>Move</value></data>
+  <data name="HexView_DropCopy" xml:space="preserve"><value>Copy</value></data>
+  <data name="HexView_DropOverwrite" xml:space="preserve"><value>Overwrite</value></data>
   <data name="Drop_PasteSpecial" xml:space="preserve"><value>Paste Special</value></data>
   <data name="Menu_View_CellFormatHex.Text" xml:space="preserve"><value>Hex</value></data>
   <data name="Menu_View_CellFormatHex.AccessKey" xml:space="preserve"><value>H</value></data>
