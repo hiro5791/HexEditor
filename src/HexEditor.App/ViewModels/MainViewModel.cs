@@ -359,8 +359,17 @@ public sealed partial class MainViewModel : ObservableObject
     public DocumentViewModel AddRestored(RestoredDocument restored)
     {
         RecoveryRecord record = restored.Record;
-        string name = record.Path is null ? record.DisplayName : Path.GetFileName(record.Path);
-        var vm = new DocumentViewModel(restored.Document, record.Path, name) { Recovery = restored.Recovery, Notifications = Notifications };
+        string? path = record.Path ?? record.EncodedPath;
+        string name = path is null ? record.DisplayName : Path.GetFileName(path);
+        var vm = new DocumentViewModel(restored.Document, path, name) { Recovery = restored.Recovery, Notifications = Notifications };
+        if (restored.Encoded is { } encoded)
+        {
+            // デコードし直したドキュメント: 元の形式で保存する (ENG-38)。
+            vm.Encoded = encoded;
+            vm.EncodedBaseAddress = restored.EncodedBaseAddress;
+            vm.EncodedStamp = record.EncodedStamp;
+        }
+
         if (record.RangeStart is { } rangeStart)
         {
             vm.RangeLabel = DocumentViewModel.FormatRange(rangeStart, record.RangeLength ?? 0);

@@ -9,7 +9,14 @@ namespace HexEditor.Core.Recovery;
 public sealed record RecoveryEntry(string Folder, RecoveryRecord Record);
 
 /// <summary>復旧した結果。<see cref="SourceChanged"/> なら元のファイルが記録と違う (読み取り専用で開く。ENG-27 の仕様 6)。</summary>
-public sealed record RestoredDocument(Document Document, DocumentRecovery Recovery, RecoveryRecord Record, bool SourceChanged);
+public sealed record RestoredDocument(Document Document, DocumentRecovery Recovery, RecoveryRecord Record, bool SourceChanged)
+{
+    /// <summary>デコードし直したドキュメント (ENG-38) の、元の形式で保存するための設定。それ以外は null。</summary>
+    public Formats.EncodedFileSettings? Encoded { get; init; }
+
+    /// <summary>デコードした内容の最小のアドレス (元の形式で保存するときに使う)。</summary>
+    public long EncodedBaseAddress { get; init; }
+}
 
 /// <summary>復旧用データの一覧・復旧・破棄 (ENG-27 の仕様 6、PKG-30 の仕様 2)。</summary>
 public static class RecoveryStore
@@ -76,7 +83,21 @@ public static class RecoveryStore
         RecoveryRecord record = entry.Record;
         bool sourceChanged = false;
         IByteSource source;
-        if (record.DevicePath is not null)
+        Formats.EncodedFileSettings? encodedSettings = null;
+        long encodedBase = 0;
+        if (record.EncodedPath is { } encodedPath && record.EncodedFormat is { } encodedFormat)
+        {
+            // デコードして開いたドキュメント: 元のファイルをデコードし直し、その内容に変更を戻す (デコードの結果の一時ファイルは
+            // 異常終了で消えているため)。元のファイルが変わっていたら読み取り専用で開く。
+            using Formats.ImportResult decoded = Formats.Importer.DecodeFile(encodedPath, Formats.EncodedFile.OpenOptions(encodedFormat), options.TempDirectory);
+            encodedSettings = decoded.Settings ?? new Formats.EncodedFileSettings { Format = encodedFormat };
+            encodedBase = decoded.BaseAddress;
+            Formats.SparseImage image = decoded.TakeImage();
+            image.Resizable = encodedFormat == Formats.FormatIds.Base64;
+            source = image;
+            sourceChanged = record.EncodedStamp is null || FileStamp.FromPath(encodedPath) != record.EncodedStamp;
+        }
+        else if (record.DevicePath is not null)
         {
             source = device ?? throw new InvalidDataException("The device of this recovery data is not open.");
             // デバイスは更新日時を持たない。記録した元データの範囲より短くなっていたら「変わった」とし、範囲外の部分を除く。
@@ -127,7 +148,7 @@ public static class RecoveryStore
             }
 
             Document document = Document.Restore(record.DocumentId, source, addBuffer, pieces, options, externals);
-            return new RestoredDocument(document, recovery, record, sourceChanged);
+            return new RestoredDocument(document, recovery, record, sourceChanged) { Encoded = encodedSettings, EncodedBaseAddress = encodedBase };
         }
         catch
         {

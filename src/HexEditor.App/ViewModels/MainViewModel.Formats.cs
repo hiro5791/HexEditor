@@ -51,7 +51,10 @@ public sealed partial class MainViewModel
         long baseAddress = result.BaseAddress;
         IReadOnlyList<ImportIssue> issues = result.Issues.Items;
         Document doc = EncodedFile.CreateDocument(result, format, _options);
-        DocumentViewModel vm = Add(doc, full, Path.GetFileName(full), recovery: false);
+
+        // 復旧用データは、元のファイルをデコードし直して変更を戻す (ENG-27。デコードの結果の一時ファイルは異常終了で消えるため)。
+        DocumentViewModel vm = Add(doc, full, Path.GetFileName(full));
+        vm.EncodedStamp = Core.Sources.FileStamp.FromPath(full);
         vm.Encoded = settings;
         vm.EncodedBaseAddress = baseAddress;
         vm.FormatIssues = issues;

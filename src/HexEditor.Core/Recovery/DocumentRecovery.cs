@@ -81,6 +81,15 @@ public sealed record RecoveryRecord
 
     /// <summary>範囲を指定して開いたデバイスの開始位置。</summary>
     public long DeviceRangeStart { get; init; }
+
+    /// <summary>デコードして開いたドキュメント (ENG-38) の元のファイル。デコードし直して変更を戻す。ファイルなら null。</summary>
+    public string? EncodedPath { get; init; }
+
+    /// <summary>デコードした形式 (<c>ihex</c> など)。</summary>
+    public string? EncodedFormat { get; init; }
+
+    /// <summary>デコードしたときの元のファイルの値 (変わっていたら読み取り専用で開く)。</summary>
+    public FileStamp? EncodedStamp { get; init; }
 }
 
 /// <summary>
@@ -117,7 +126,8 @@ public sealed class DocumentRecovery : IDisposable
     /// UI スレッドで、現在の内容を書き出す準備をする。現在の内容が今の元データで表せない場合 (保存前の版に Undo した直後) は
     /// null (前回の復旧用データを残す)。
     /// </summary>
-    public static RecoveryCapture? Capture(Document document, long cursor, long selectionStart, long selectionLength)
+    public static RecoveryCapture? Capture(Document document, long cursor, long selectionStart, long selectionLength,
+        (string Path, string Format, FileStamp? Stamp)? encoded = null)
     {
         if (!document.CurrentUsesLatestSource)
         {
@@ -130,7 +140,7 @@ public sealed class DocumentRecovery : IDisposable
         (long, long, bool)? range = document.Source is FileByteSource { IsRange: true } r ? (r.RangeStart, r.Length, r.RangeResizable) : null;
         (string, string?, long)? device = document.Source is Devices.DeviceByteSource d ? (d.Path, d.Info.SerialNumber, d.Info.RangeStart) : null;
         return new RecoveryCapture(document, snapshot, document.Id, document.Source.DisplayName, path, stamp, document.AddBuffer.Length,
-            cursor, selectionStart, selectionLength, range, device);
+            cursor, selectionStart, selectionLength, range, device, encoded);
     }
 
     /// <summary>
@@ -189,6 +199,9 @@ public sealed class DocumentRecovery : IDisposable
                 DevicePath = capture.Device?.Path,
                 DeviceSerial = capture.Device?.Serial,
                 DeviceRangeStart = capture.Device?.RangeStart ?? 0,
+                EncodedPath = capture.Encoded?.Path,
+                EncodedFormat = capture.Encoded?.Format,
+                EncodedStamp = capture.Encoded?.Stamp,
             };
 
             string temp = StatePath + ".tmp";
@@ -308,4 +321,5 @@ public sealed record RecoveryCapture(
     long SelectionStart,
     long SelectionLength,
     (long Start, long Length, bool Resizable)? Range = null,
-    (string Path, string? Serial, long RangeStart)? Device = null);
+    (string Path, string? Serial, long RangeStart)? Device = null,
+    (string Path, string Format, FileStamp? Stamp)? Encoded = null);

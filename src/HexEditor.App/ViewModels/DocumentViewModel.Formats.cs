@@ -40,6 +40,9 @@ public sealed partial class DocumentViewModel
     /// <summary>デコードして開いた形式の、元の形式で保存するための設定。デコードしていなければ null。</summary>
     public EncodedFileSettings? Encoded { get; set; }
 
+    /// <summary>デコードしたときの元のファイルの値 (復旧用データに記録し、復旧のときに変わったかを調べる)。</summary>
+    public FileStamp? EncodedStamp { get; set; }
+
     /// <summary>ステータスバーに出す形式 (「Intel HEX」など。ENG-38 の画面)。</summary>
     public string FileFormatText => Encoded?.DisplayName ?? string.Empty;
 

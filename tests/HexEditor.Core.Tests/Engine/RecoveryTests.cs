@@ -64,6 +64,33 @@ public sealed class RecoveryTests : IDisposable
     }
 
     [Fact]
+    public void Decoded_document_is_recovered_by_decoding_the_original_file_again()
+    {
+        // ENG-27・ENG-38: デコードして開いたドキュメントは、元のファイルをデコードし直して変更を戻す (デコードの一時ファイルは消えている)。
+        string path = TestDataCatalog.Generate("TD-IHEX", _dir);
+        using Core.Formats.ImportResult decoded = Core.Formats.Importer.DecodeFile(path, Core.Formats.EncodedFile.OpenOptions(Core.Formats.FormatIds.IntelHex), Root);
+        Document doc = Core.Formats.EncodedFile.CreateDocument(decoded, Core.Formats.FormatIds.IntelHex, Options());
+        var recovery = new DocumentRecovery(Root, doc.Id);
+        doc.Overwrite(4, [0xEE]);
+        byte[] expected = Read(doc.Current, 0, (int)doc.Length);
+        recovery.Write(DocumentRecovery.Capture(doc, 4, 4, 0, (path, Core.Formats.FormatIds.IntelHex, FileStamp.FromPath(path)))!);
+        SimulateCrash(doc, recovery);
+
+        RecoveryEntry entry = Assert.Single(RecoveryStore.Scan(Root));
+        Assert.Equal(path, entry.Record.EncodedPath);
+        RestoredDocument restored = RecoveryStore.Restore(entry, Options());
+        using (Document again = restored.Document)
+        {
+            Assert.False(restored.SourceChanged);
+            Assert.Equal(Core.Formats.FormatIds.IntelHex, restored.Encoded?.Format);
+            Assert.Equal(expected, Read(again.Current, 0, (int)again.Length));
+            Assert.True(again.IsModified);
+        }
+
+        restored.Recovery.Dispose();
+    }
+
+    [Fact]
     public void Range_document_is_recovered_with_the_same_range()
     {
         // ENG-27 の仕様 2 (範囲 ENG-13): 範囲を開いたドキュメントは、同じ範囲を開き直して変更を戻す。
