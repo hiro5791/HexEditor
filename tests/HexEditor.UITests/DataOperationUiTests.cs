@@ -73,7 +73,7 @@ public sealed class DataOperationUiTests
     {
         string source = TestDataCatalog.Generate("TD-SPARSE-100G", ctx.Root);
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [source], Hooks = new JsonObject { ["freeSpace"] = 1L << 40 } });
-        await EditCommandTests.SelectRangeAsync(app, "0", "10G");
+        await EditCommandTests.SelectRangeAsync(app, "0", "0x280000000");
         await OpenDialogAsync(app);
         await EditCommandTests.SelectItemAsync(app, "DataOp_Category", "Bitwise");
         await EditCommandTests.SelectItemAsync(app, "DataOp_Kind", "XOR");
@@ -96,7 +96,7 @@ public sealed class DataOperationUiTests
         Assert.Equal(0xBF, (await app.BytesAsync(0, 1))[0]);
         Assert.Equal(0xBF, (await app.BytesAsync(0x40000000, 1))[0]);
         Assert.Equal(0xFF, (await app.BytesAsync(0x27FFFFFFF, 1))[0]);
-        Assert.Equal(0x00, (await app.BytesAsync(0x280000000, 1))[0]);
+        Assert.Equal(TestDataCatalog.Marker(0x280000000), await app.BytesAsync(0x280000000, 17));
         await app.KeyAsync("Z", ctrl: true);
         await app.IdleAsync();
         Assert.Equal(TestDataCatalog.Marker(0), await app.BytesAsync(0, 17));
