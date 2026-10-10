@@ -253,7 +253,7 @@ public sealed class DeviceService : IAsyncDisposable
             process.Exited += (_, _) => onExit();
             return process;
         }
-        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException)
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or System.ComponentModel.Win32Exception)
         {
             return null;
         }

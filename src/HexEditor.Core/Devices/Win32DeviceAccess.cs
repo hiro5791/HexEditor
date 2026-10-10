@@ -58,16 +58,20 @@ public sealed unsafe class Win32DeviceAccess : IDeviceAccess
         }
 
         DiskPartitionStyle style = DiskPartitionStyle.Unknown;
-        byte* layout = stackalloc byte[4096];
-        if (DeviceIoControl(handle, IoctlDiskGetDriveLayoutEx, null, 0, layout, 4096, out _, IntPtr.Zero))
+        // パーティションが多い GPT ディスクでも収まる大きさ (足りないと ERROR_INSUFFICIENT_BUFFER で形式が「不明」になる)。
+        byte[] layoutBuffer = new byte[64 * 1024];
+        fixed (byte* layout = layoutBuffer)
         {
-            style = *(int*)layout switch
+            if (DeviceIoControl(handle, IoctlDiskGetDriveLayoutEx, null, 0, layout, layoutBuffer.Length, out _, IntPtr.Zero))
             {
-                0 => DiskPartitionStyle.Mbr,
-                1 => DiskPartitionStyle.Gpt,
-                2 => DiskPartitionStyle.Raw,
-                _ => DiskPartitionStyle.Unknown,
-            };
+                style = *(int*)layout switch
+                {
+                    0 => DiskPartitionStyle.Mbr,
+                    1 => DiskPartitionStyle.Gpt,
+                    2 => DiskPartitionStyle.Raw,
+                    _ => DiskPartitionStyle.Unknown,
+                };
+            }
         }
 
         return new DiskInfo
@@ -350,9 +354,17 @@ public sealed unsafe class Win32DeviceAccess : IDeviceAccess
         }
     }
 
+    /// <summary>
+    /// 開いたデバイスのハンドル。偽のデバイス (FakeDeviceAccess) と同じ約束を守る: 閉じた後は ERROR_INVALID_HANDLE、
+    /// セクタ境界に揃っていない・範囲外の読み書きは ERROR_INVALID_PARAMETER (OS に渡さない)、読み取りのみで開いたハンドルへの書き込みは
+    /// ERROR_ACCESS_DENIED、ボリューム以外のロックは ERROR_INVALID_PARAMETER、閉じるときはロックを解除する。
+    /// </summary>
     private sealed class Handle(string path, SafeFileHandle handle, bool writable, DeviceGeometry geometry) : IDeviceHandle
     {
         private const int Alignment = 4096;
+        private readonly bool _isVolume = DevicePath.IsVolume(path);
+        private volatile bool _closed;
+        private volatile bool _locked;
 
         public string Path { get; } = path;
 
@@ -360,10 +372,37 @@ public sealed unsafe class Win32DeviceAccess : IDeviceAccess
 
         public DeviceGeometry Geometry { get; } = geometry;
 
+        private int Check(long offset, int count)
+        {
+            if (_closed)
+            {
+                return Win32Errors.InvalidHandle;
+            }
+
+            int sector = Geometry.LogicalSectorSize;
+            if (offset < 0 || offset % sector != 0 || count % sector != 0 || offset > Geometry.Length - count)
+            {
+                return Win32Errors.InvalidParameter;
+            }
+
+            return 0;
+        }
+
         public int ReadSectors(long offset, Span<byte> buffer)
         {
+            int check = Check(offset, buffer.Length);
+            if (check != 0)
+            {
+                return check;
+            }
+
+            if (buffer.IsEmpty)
+            {
+                return 0;
+            }
+
             // デバイスによってはバッファの境界も揃える必要があるため、揃えた一時領域を通す。
-            void* aligned = NativeMemory.AlignedAlloc((nuint)Math.Max(buffer.Length, 1), Alignment);
+            void* aligned = NativeMemory.AlignedAlloc((nuint)buffer.Length, Alignment);
             try
             {
                 var span = new Span<byte>(aligned, buffer.Length);
@@ -382,13 +421,9 @@ public sealed unsafe class Win32DeviceAccess : IDeviceAccess
                 span.CopyTo(buffer);
                 return 0;
             }
-            catch (IOException ex)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ObjectDisposedException or NotSupportedException)
             {
-                return ex.HResult & 0xFFFF;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Win32Errors.AccessDenied;
+                return ErrorOf(ex);
             }
             finally
             {
@@ -398,7 +433,23 @@ public sealed unsafe class Win32DeviceAccess : IDeviceAccess
 
         public int WriteSectors(long offset, ReadOnlySpan<byte> data)
         {
-            void* aligned = NativeMemory.AlignedAlloc((nuint)Math.Max(data.Length, 1), Alignment);
+            if (!Writable)
+            {
+                return Win32Errors.AccessDenied;
+            }
+
+            int check = Check(offset, data.Length);
+            if (check != 0)
+            {
+                return check;
+            }
+
+            if (data.IsEmpty)
+            {
+                return 0;
+            }
+
+            void* aligned = NativeMemory.AlignedAlloc((nuint)data.Length, Alignment);
             try
             {
                 var span = new Span<byte>(aligned, data.Length);
@@ -406,13 +457,9 @@ public sealed unsafe class Win32DeviceAccess : IDeviceAccess
                 RandomAccess.Write(handle, span, offset);
                 return 0;
             }
-            catch (IOException ex)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ObjectDisposedException or NotSupportedException)
             {
-                return ex.HResult & 0xFFFF;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Win32Errors.AccessDenied;
+                return ErrorOf(ex);
             }
             finally
             {
@@ -420,18 +467,101 @@ public sealed unsafe class Win32DeviceAccess : IDeviceAccess
             }
         }
 
-        public int LockVolume() => Control(FsctlLockVolume);
+        public int LockVolume()
+        {
+            int error = VolumeControl(FsctlLockVolume);
+            if (error == 0)
+            {
+                _locked = true;
+            }
 
-        public int DismountVolume() => Control(FsctlDismountVolume);
+            return error;
+        }
 
-        public int UnlockVolume() => Control(FsctlUnlockVolume);
+        public int DismountVolume() => VolumeControl(FsctlDismountVolume);
 
-        public int Flush() => FlushFileBuffers(handle) ? 0 : Marshal.GetLastPInvokeError();
+        public int UnlockVolume()
+        {
+            int error = VolumeControl(FsctlUnlockVolume);
+            if (error == 0)
+            {
+                _locked = false;
+            }
 
-        private int Control(uint code) => DeviceIoControl(handle, code, null, 0, null, 0, out _, IntPtr.Zero) ? 0 : Marshal.GetLastPInvokeError();
+            return error;
+        }
 
-        public void Dispose() => handle.Dispose();
+        public int Flush()
+        {
+            if (_closed)
+            {
+                return Win32Errors.InvalidHandle;
+            }
+
+            try
+            {
+                return FlushFileBuffers(handle) ? 0 : NonZero(Marshal.GetLastPInvokeError());
+            }
+            catch (ObjectDisposedException)
+            {
+                return Win32Errors.InvalidHandle;
+            }
+        }
+
+        /// <summary>ボリュームのロック・ディスマウント・ロック解除 (<c>FSCTL_*</c>)。ボリューム以外のハンドルは受け付けない。</summary>
+        private int VolumeControl(uint code)
+        {
+            if (_closed)
+            {
+                return Win32Errors.InvalidHandle;
+            }
+
+            if (!_isVolume)
+            {
+                return Win32Errors.InvalidParameter;
+            }
+
+            try
+            {
+                return DeviceIoControl(handle, code, null, 0, null, 0, out _, IntPtr.Zero) ? 0 : NonZero(Marshal.GetLastPInvokeError());
+            }
+            catch (ObjectDisposedException)
+            {
+                return Win32Errors.InvalidHandle;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_closed)
+            {
+                return;
+            }
+
+            // ハンドルを閉じれば OS もロックを解除するが、偽のデバイスと同じく明示的に解除してから閉じる。
+            if (_locked)
+            {
+                UnlockVolume();
+            }
+
+            _closed = true;
+            handle.Dispose();
+        }
     }
+
+    /// <summary>
+    /// 例外を Win32 のエラーコードにする。HRESULT が Win32 のエラー (0x8007xxxx) ならその番号、それ以外 (BitLocker の
+    /// <c>FVE_E_LOCKED_VOLUME</c> など) は HRESULT そのもの。0 (成功) には決してしない。
+    /// </summary>
+    internal static int ErrorOf(Exception ex) => ex switch
+    {
+        ObjectDisposedException => Win32Errors.InvalidHandle,
+        UnauthorizedAccessException => Win32Errors.AccessDenied,
+        NotSupportedException => Win32Errors.NotSupported,
+        _ => (ex.HResult & 0xFFFF0000) == 0x80070000 ? NonZero(ex.HResult & 0xFFFF) : NonZero(ex.HResult),
+    };
+
+    private static int NonZero(int error) => error == 0 ? Win32Errors.GenFailure : error;
 
     // ---- Win32 ----
 
