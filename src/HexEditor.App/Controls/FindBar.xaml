@@ -416,8 +416,8 @@
                 x:Name="RegexSingleline"
                 x:Uid="Find_RegexSingleline"
                 AutomationProperties.AutomationId="Find_RegexSingleline"
-                Checked="Check_Changed"
-                Unchecked="Check_Changed" />
+                Checked="RegexSingleline_Changed"
+                Unchecked="RegexSingleline_Changed" />
             <TextBlock
                 x:Name="RegexNote"
                 MaxWidth="420"

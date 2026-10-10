@@ -108,8 +108,63 @@ public sealed partial class FindBar
         AutomationProperties.SetName(TermList, Loc.Get("Find_TermList_Name"));
         MultiEncodingHint.Text = Loc.Format("Find_MultiEncoding_Hint", SearchPattern.MaxEncodings);
         Terms.CollectionChanged += (_, _) => Validate();
-        RegexSingleline.IsChecked = false;
+        SyncSinglelineToKind();
     }
+
+    // ---- `s` フラグの既定 (FIND-18 の仕様 2、FIND-19 の仕様 3) ----
+
+    /// <summary>テキストの正規表現の `s` フラグ (既定オフ)。利用者が切り替えたらこのウィンドウの間は覚えておく。</summary>
+    private bool _singlelineText;
+
+    /// <summary>バイト列の正規表現の `s` フラグ (既定オン: `.` は 0A を含む任意のバイトに一致する)。</summary>
+    private bool _singlelineBytes = true;
+
+    /// <summary>チェックボックスが今どちらの種類の値を表しているか。</summary>
+    private SearchKind? _singlelineKind;
+
+    private bool _settingSingleline;
+
+    /// <summary>種類が正規表現に変わったら、`s` のチェックボックスをその種類の値 (既定または利用者が選んだ値) にする。</summary>
+    private void SyncSinglelineToKind()
+    {
+        SearchKind kind = Kind;
+        if (kind is not (SearchKind.RegexText or SearchKind.RegexBytes) || kind == _singlelineKind)
+        {
+            return;
+        }
+
+        _singlelineKind = kind;
+        _settingSingleline = true;
+        try
+        {
+            RegexSingleline.IsChecked = kind == SearchKind.RegexBytes ? _singlelineBytes : _singlelineText;
+        }
+        finally
+        {
+            _settingSingleline = false;
+        }
+    }
+
+    private void RegexSingleline_Changed(object sender, RoutedEventArgs e)
+    {
+        if (!_settingSingleline && _singlelineKind is { } kind)
+        {
+            bool value = RegexSingleline.IsChecked == true;
+            if (kind == SearchKind.RegexBytes)
+            {
+                _singlelineBytes = value;
+            }
+            else
+            {
+                _singlelineText = value;
+            }
+        }
+
+        Validate();
+    }
+
+    /// <summary>テスト用: `s` フラグのチェックボックスの状態。</summary>
+    internal bool RegexSinglelineChecked => RegexSingleline.IsChecked == true;
 
     // ---- パターンの作成 ----
 

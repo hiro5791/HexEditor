@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
+using HexEditor.Core.Selection;
 using HexEditor.Core.Sources;
 
 namespace HexEditor.Core.Search;
@@ -430,6 +431,55 @@ public static class SearchResultsConversion
     /// <summary>マルチ選択に変換する範囲の上限 (FIND-21 の仕様 2)。</summary>
     public const int MaxSelectionRanges = 1_000_000;
 
+    /// <summary>これより多い結果のマルチ選択への変換は、長時間処理 (進捗とキャンセル) としてバックグラウンドで行う。</summary>
+    public const int SelectionBackgroundThreshold = 100_000;
+
+    /// <summary>
+    /// 結果をマルチ選択の範囲にする (FIND-21 の仕様 2)。<paramref name="indices"/> の順に <paramref name="locate"/> で対象 (ドキュメント) と
+    /// 範囲を求め、長さ 0 の範囲は除く。範囲が <paramref name="limit"/> 個になったらそれ以降は数え上げず (結果の数に比例して読まない)、
+    /// 打ち切ったことを返す。<paramref name="operation"/> には数え上げた結果の数を進捗として報告する。
+    /// </summary>
+    public static SelectionConversion<TKey> ToSelectionRanges<TKey>(IEnumerable<long> indices, Func<long, (TKey Key, ByteRange Range)?> locate,
+        int limit, LongRunningOperation? operation = null, CancellationToken cancellationToken = default)
+        where TKey : notnull
+    {
+        var byKey = new Dictionary<TKey, List<ByteRange>>();
+        long count = 0;
+        long seen = 0;
+        bool truncated = false;
+        foreach (long index in indices)
+        {
+            if ((++seen & 0xFFF) == 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                operation?.CancellationToken.ThrowIfCancellationRequested();
+                operation?.Report(seen);
+            }
+
+            if (locate(index) is not { } hit || hit.Range.Length <= 0)
+            {
+                continue;
+            }
+
+            if (count >= limit)
+            {
+                truncated = true;
+                break;
+            }
+
+            if (!byKey.TryGetValue(hit.Key, out List<ByteRange>? ranges))
+            {
+                byKey[hit.Key] = ranges = [];
+            }
+
+            ranges.Add(hit.Range);
+            count++;
+        }
+
+        operation?.Report(seen);
+        return new SelectionConversion<TKey>(byKey, truncated);
+    }
+
     /// <summary>ブックマークの名前の形「<paramref name="prefix"/>: <paramref name="summary"/> #番号」(prefix は「検索」の訳)。</summary>
     public static string BookmarkName(string prefix, string summary, long number) =>
         string.Create(CultureInfo.CurrentCulture, $"{prefix}: {summary} #{number}");
@@ -438,3 +488,7 @@ public static class SearchResultsConversion
     public static string BookmarkGroup(string prefix, DateTimeOffset time) =>
         string.Create(CultureInfo.CurrentCulture, $"{prefix} {time.LocalDateTime:g}");
 }
+
+/// <summary>マルチ選択への変換の結果 (FIND-21 の仕様 2): 対象ごとの範囲 (結果の順) と、上限で打ち切ったか。</summary>
+public sealed record SelectionConversion<TKey>(IReadOnlyDictionary<TKey, List<ByteRange>> Ranges, bool Truncated)
+    where TKey : notnull;

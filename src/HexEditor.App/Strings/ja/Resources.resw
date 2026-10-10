@@ -1796,6 +1796,7 @@
   <data name="Operation_ReplaceAll" xml:space="preserve"><value>置換を適用しています</value></data>
   <data name="Operation_FindAll" xml:space="preserve"><value>すべて検索</value></data>
   <data name="Operation_ExportResults" xml:space="preserve"><value>検索結果のエクスポート</value></data>
+  <data name="Operation_ResultsToSelection" xml:space="preserve"><value>検索結果の選択範囲への変換</value></data>
   <data name="SearchResults_Continue.Content" xml:space="preserve"><value>続ける</value></data>
   <data name="SearchResults_Cancel.Content" xml:space="preserve"><value>キャンセル</value></data>
   <data name="SearchResults_Convert.Content" xml:space="preserve"><value>変換</value></data>

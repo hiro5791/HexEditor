@@ -961,6 +961,11 @@ public sealed partial class FindBar : UserControl
             _kindChosen = true;
         }
 
+        if (ReferenceEquals(sender, KindChoice) && RegexSingleline is not null)
+        {
+            SyncSinglelineToKind();
+        }
+
         if (ReferenceEquals(sender, EndianChoice) && IsLoaded && !_settingEndian)
         {
             _endianChosen = true;

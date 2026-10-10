@@ -177,6 +177,34 @@ public sealed class SearchPhase2Tests
             UiTest.Scaled(TimeSpan.FromSeconds(15)), "the search to stop");
     });
 
+    [Fact]
+    public Task Byte_regex_turns_the_s_flag_on_by_default() => UiTestContext.RunAsync(async ctx =>
+    {
+        // FIND-19 の仕様 3: 種類「正規表現 (バイト列)」では `s` フラグを既定でオンにする (テキストは既定オフ。FIND-18 の仕様 2)。
+        // 利用者が切り替えた値は、種類ごとにこのウィンドウの間は覚えておく。
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.WriteFile("small.bin", new byte[256])] });
+        await OpenFindAsync(app, 4, "a", incremental: false);
+        await ShowOptionsAsync(app);
+        async Task<bool> SinglelineAsync() => (await Phase2Async(app))["regexSingleline"]!.GetValue<bool>();
+        Task KindAsync(int kind) => app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = kind });
+        Task CheckAsync(bool value) => app.SendAsync("setChecked", new JsonObject { ["id"] = "Find_RegexSingleline", ["value"] = value });
+
+        Assert.False(await SinglelineAsync());
+        await KindAsync(5);
+        Assert.True(await SinglelineAsync());
+
+        // バイト列でオフにし、テキストでオンにする。種類を戻すとそれぞれの値に戻る。
+        await CheckAsync(false);
+        await KindAsync(4);
+        Assert.False(await SinglelineAsync());
+        await CheckAsync(true);
+        await KindAsync(0);
+        await KindAsync(5);
+        Assert.False(await SinglelineAsync());
+        await KindAsync(4);
+        Assert.True(await SinglelineAsync());
+    });
+
     /// <summary>TD-FIND-GAPS。</summary>
     private static byte[] Gaps()
     {
