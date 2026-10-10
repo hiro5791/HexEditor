@@ -661,7 +661,9 @@ public sealed class ViewPhase2Tests
         // 右クリックメニュー: テキスト列の上では「テキスト列」があり、Hex 列の上ではない。
         JsonObject render = await app.RenderAsync();
         await RightClickAsync(app, CellPoint(render, 0x10, text: true));
-        await app.WaitForAsync("HexViewMenu_TextColumn");
+
+        // メニューの中を探すのはアプリの中で (項目が多いメニューは、UI オートメーションの木に出るまで時間がかかることがある)。
+        await app.WaitUntilAsync(() => app.IsShownAsync("HexViewMenu_TextColumn"), UiTest.Scaled(TimeSpan.FromSeconds(15)), "text column submenu");
         await app.SendAsync("hideContextMenu");
         await RightClickAsync(app, CellPoint(render, 0x10));
         await app.WaitForAsync("HexViewMenu_Copy");
