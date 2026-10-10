@@ -94,7 +94,7 @@
                                 VerticalAlignment="Center"
                                 FontFamily="Cascadia Mono, Consolas"
                                 Foreground="{x:Bind ForegroundSwatch, Mode=OneWay}"
-                                Text="Ab" />
+                                x:Uid="Coloring_Sample" />
                         </Border>
                         <StackPanel Grid.Column="2">
                             <TextBlock Text="{x:Bind Name, Mode=OneWay}" TextTrimming="CharacterEllipsis" />

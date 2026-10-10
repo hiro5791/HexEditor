@@ -3071,4 +3071,5 @@ Details were written to:
   <data name="SetDesc_coloring_rules" xml:space="preserve"><value>Coloring rules applied to every document. Edit them in the Coloring rules panel.</value></data>
   <data name="Set_coloring_highContrastColors" xml:space="preserve"><value>Use coloring rule colors in high contrast</value></data>
   <data name="SetDesc_coloring_highContrastColors" xml:space="preserve"><value>In high contrast themes, coloring rules are shown with border shapes instead of colors unless this is on.</value></data>
+  <data name="Coloring_Sample.Text" xml:space="preserve"><value>Ab</value></data>
 </root>

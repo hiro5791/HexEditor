@@ -3071,4 +3071,5 @@
   <data name="SetDesc_coloring_rules" xml:space="preserve"><value>すべてのドキュメントに適用する色付けルール。「色付けルール」パネルで編集します。</value></data>
   <data name="Set_coloring_highContrastColors" xml:space="preserve"><value>ハイコントラストでも色付けルールの色を使う</value></data>
   <data name="SetDesc_coloring_highContrastColors" xml:space="preserve"><value>オフのときは、ハイコントラストでは色付けルールの色を使わず、枠線の形で区別します。</value></data>
+  <data name="Coloring_Sample.Text" xml:space="preserve"><value>Ab</value></data>
 </root>

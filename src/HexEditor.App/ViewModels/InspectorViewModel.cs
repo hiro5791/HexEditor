@@ -459,7 +459,7 @@ public sealed partial class InspectorViewModel : ObservableObject
                 if (row.Rgba != r.Value.Rgba || (r.Value.Rgba is not null) != row.HasSwatch)
                 {
                     row.Rgba = r.Value.Rgba;
-                    row.Swatch = r.Value.Rgba is { } rgba ? new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb((byte)rgba, (byte)(rgba >> 24), (byte)(rgba >> 16), (byte)(rgba >> 8))) : null;
+                    row.Swatch = r.Value.Rgba is { } rgba ? new Microsoft.UI.Xaml.Media.SolidColorBrush(Services.AnnotationBrushes.FromRgba(rgba)) : null;
                 }
                 if (row.IsBinary)
                 {

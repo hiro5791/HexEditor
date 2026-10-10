@@ -466,7 +466,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         Vm.Selected = item;
         var picker = new ColorPicker
         {
-            Color = Windows.UI.Color.FromArgb((byte)rgba, (byte)(rgba >> 24), (byte)(rgba >> 16), (byte)(rgba >> 8)),
+            Color = Services.AnnotationBrushes.FromRgba(rgba),
             IsAlphaEnabled = item.TypeId is Core.Inspector.InspectorTypes.Rgba8 or Core.Inspector.InspectorTypes.Bgra8,
             IsMoreButtonVisible = true,
         };
