@@ -31,6 +31,14 @@ public static class BuiltInCommands
         new("file.openAsBase64", "file"),
         new("file.openSelectionInNewTab", "file") { Condition = "documentOpen" },
         new("file.openSelectionAsCopy", "file") { Condition = "documentOpen" },
+
+        // ディスク・プロセスを開く (ENG-29、ENG-32)。管理者権限がないことだけが理由では無効にしない (UI-13 の仕様 3)。
+        new("file.openDisk", "file") { DefaultBindings = [K("Ctrl+Shift+D")] },
+        new("file.openProcess", "file") { DefaultBindings = [K("Ctrl+Shift+M")] },
+
+        // ディスクイメージとして開く (ENG-31)、プロセスメモリの即時書き込みの切り替え (ENG-34)。既定のキーはなし。
+        new("file.openDiskImage", "file"),
+        new("file.toggleImmediateWrite", "file") { Condition = "documentOpen" },
         new("file.save", "file") { Icon = IconSave, DefaultBindings = [K("Ctrl+S")], Condition = "documentOpen && !readOnly" },
         new("file.saveAs", "file") { Icon = IconSaveAs, DefaultBindings = [K("Ctrl+Shift+S")], Condition = "documentOpen" },
         new("file.saveAll", "file") { Condition = "documentOpen" },
@@ -213,6 +221,13 @@ public static class BuiltInCommands
         new("go.start", "go") { Condition = "documentOpen" },
         new("go.end", "go") { Condition = "documentOpen" },
 
+        // セクタ単位の移動 (VIEW-32)、メモリ領域の移動 (ENG-33)。既定のキーはなし。
+        new("go.nextSector", "go") { Condition = "documentOpen" },
+        new("go.previousSector", "go") { Condition = "documentOpen" },
+        new("go.toSector", "go") { Condition = "documentOpen" },
+        new("go.nextMemoryRegion", "go") { Condition = "documentOpen" },
+        new("go.previousMemoryRegion", "go") { Condition = "documentOpen" },
+
         // ブックマーク (INSP-23〜INSP-26)。番号付きは数字キーの段 (テンキーも KeyDispatcher が同じに扱う。00-overview.md 8.7)。
         new("go.bookmark.toggle", "go") { DefaultBindings = [K("Ctrl+F2")], Condition = "documentOpen" },
         new("go.bookmark.next", "go") { DefaultBindings = [K("F2")], Condition = "documentOpen" },
@@ -301,6 +316,9 @@ public static class BuiltInCommands
         new("view.panel.strings", "view"),
         new("view.panel.multiFileSearch", "view"),
         new("view.panel.diffs", "view"),
+
+        // メモリマップのパネル (ENG-33)。プロセスメモリのドキュメントで自動表示する。既定のキーはなし。
+        new("view.panel.memoryMap", "view") { Condition = "documentOpen" },
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
 

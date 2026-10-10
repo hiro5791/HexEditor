@@ -136,6 +136,12 @@ public sealed record TestHookSettings
     /// <summary>インスペクタの「ローカル時刻」に使うタイムゾーンの ID (null ならシステムの設定)。</summary>
     public string? TimeZone { get; init; }
 
+    /// <summary>偽のディスク・ボリュームの定義ファイル (JSON。ENG-29 の UI テスト用)。null なら本物のデバイス。</summary>
+    public string? FakeDevices { get; init; }
+
+    /// <summary>偽のプロセスの定義ファイル (JSON。ENG-32 の UI テスト用)。null なら本物のプロセス。</summary>
+    public string? FakeProcesses { get; init; }
+
     /// <summary>「開く」のダイアログの代わりに返すファイル。null なら本物のダイアログを出す。</summary>
     public IReadOnlyList<string>? OpenPicker { get; init; }
 
@@ -193,6 +199,8 @@ public sealed record TestHookSettings
             Culture = root["culture"]?.GetValue<string>(),
             Elevated = root["elevated"]?.GetValue<bool>() ?? false,
             TimeZone = root["timeZone"]?.GetValue<string>(),
+            FakeDevices = root["fakeDevices"]?.GetValue<string>(),
+            FakeProcesses = root["fakeProcesses"]?.GetValue<string>(),
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),
             FreeSpace = root["freeSpace"] is { } free ? ReadLong(free, 0) : null,

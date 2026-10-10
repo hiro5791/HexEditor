@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    管理者権限の補助プロセス HexEditor.Elevated.exe (ENG-28、PKG-14)。UI を持たない (コンソールも出さない) プログラム。
+    本体が UAC の確認 (runas) で起動する。マニフェストは asInvoker のまま (昇格は起動する側が決める。テストでは昇格せずに起動する)。
+    本体と同じフォルダに置き、本体と同じアーキテクチャ・同じランタイムで動く (PKG-14 の仕様 1・7)。
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>HexEditor.Elevated</AssemblyName>
+    <RootNamespace>HexEditor.Elevated</RootNamespace>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HexEditor.Core\HexEditor.Core.csproj" />
+  </ItemGroup>
+
+</Project>

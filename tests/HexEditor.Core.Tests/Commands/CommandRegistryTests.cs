@@ -289,8 +289,8 @@ public sealed partial class CommandRegistryTests
     {
         ["新規作成"] = ["file.new"],
         ["開く"] = ["file.open"],
-        ["ディスクを開く"] = ["-F2-09 (フェーズ 2)"],
-        ["プロセスのメモリを開く"] = ["-F2-10 (フェーズ 2)"],
+        ["ディスクを開く"] = ["file.openDisk"],
+        ["プロセスのメモリを開く"] = ["file.openProcess"],
         ["新しいウィンドウ"] = ["window.new"],
         ["保存"] = ["file.save"],
         ["名前を付けて保存"] = ["file.saveAs"],

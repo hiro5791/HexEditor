@@ -596,6 +596,8 @@
                 <!--  エンディアン (VIEW-11 の仕様 3): クリックで切り替える。  -->
                 <Button x:Name="StatusEndian" AutomationProperties.AutomationId="Status_Endian" Click="StatusEndian_Click" Content="{x:Bind Vm.StatusDocument.EndianText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="endian" />
                 <Button x:Name="StatusFileType" AutomationProperties.AutomationId="Status_FileType" Click="StatusFileType_Click" Style="{StaticResource StatusItemStyle}" Tag="fileType" />
+                <!--  プロセスメモリの即時書き込み (ENG-34 の「画面」)。セクタ番号は StatusPosition (VIEW-40) が出す。  -->
+                <Button x:Name="StatusImmediate" AutomationProperties.AutomationId="Status_ImmediateWrite" Content="{x:Bind Vm.StatusDocument.ImmediateWriteText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="immediate" />
                 <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.StatusDocument.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.StatusDocument.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <!--  比較タブの表示中: 「差分 12 / 340」、異なるバイト数、一致率 (ANA-04 の仕様 6)。  -->
@@ -613,6 +615,15 @@
                             <controls:ProcessingCenter x:Name="ProcessingCenter" Width="420" />
                         </Flyout>
                     </Button.Flyout>
+                </Button>
+                <Button
+                    x:Name="StatusHelperShield"
+                    AutomationProperties.AutomationId="Status_HelperShield"
+                    IsTabStop="False"
+                    Style="{StaticResource StatusItemStyle}"
+                    Tag="helper"
+                    Visibility="Collapsed">
+                    <FontIcon FontSize="14" Glyph="&#xE1A7;" />
                 </Button>
                 <Button
                     x:Name="NotificationHistoryButton"

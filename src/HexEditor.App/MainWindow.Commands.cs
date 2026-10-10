@@ -134,6 +134,7 @@ public sealed partial class MainWindow
         RegisterFilesCommands();
         RegisterFormatCommands();
         RegisterTabCommands();
+        RegisterDeviceCommands();
 
         // ---- 編集 ----
         Commands.Register("edit.undo", () => Undo_Click(this, e),

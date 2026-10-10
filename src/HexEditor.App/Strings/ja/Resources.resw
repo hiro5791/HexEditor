@@ -589,6 +589,16 @@
   <data name="CmdAlias_go_start" xml:space="preserve"><value>ふぁいるのせんとう</value></data>
   <data name="Cmd_go_end" xml:space="preserve"><value>ファイルの末尾</value></data>
   <data name="CmdAlias_go_end" xml:space="preserve"><value>ふぁいるのまつび</value></data>
+  <data name="Cmd_go_nextSector" xml:space="preserve"><value>次のセクタ</value></data>
+  <data name="CmdAlias_go_nextSector" xml:space="preserve"><value>つぎのせくた</value></data>
+  <data name="Cmd_go_previousSector" xml:space="preserve"><value>前のセクタ</value></data>
+  <data name="CmdAlias_go_previousSector" xml:space="preserve"><value>まえのせくた</value></data>
+  <data name="Cmd_go_toSector" xml:space="preserve"><value>セクタへ移動...</value></data>
+  <data name="CmdAlias_go_toSector" xml:space="preserve"><value>せくたへいどう</value></data>
+  <data name="Cmd_go_nextMemoryRegion" xml:space="preserve"><value>次のメモリ領域</value></data>
+  <data name="CmdAlias_go_nextMemoryRegion" xml:space="preserve"><value>つぎのめもりりょういき</value></data>
+  <data name="Cmd_go_previousMemoryRegion" xml:space="preserve"><value>前のメモリ領域</value></data>
+  <data name="CmdAlias_go_previousMemoryRegion" xml:space="preserve"><value>まえのめもりりょういき</value></data>
   <data name="Cmd_view_encoding_ascii" xml:space="preserve"><value>文字コード: ASCII</value></data>
   <data name="CmdAlias_view_encoding_ascii" xml:space="preserve"><value>もじこーど</value></data>
   <data name="Cmd_view_encoding_ansi" xml:space="preserve"><value>文字コード: ANSI</value></data>
@@ -915,6 +925,14 @@
   <data name="SetDesc_diagnostics_writeMiniDump" xml:space="preserve"><value>異常終了したとき、原因を調べるための小さなメモリダンプを保存します。</value></data>
   <data name="Cmd_file_openReadOnly" xml:space="preserve"><value>読み取り専用で開く</value></data>
   <data name="CmdAlias_file_openReadOnly" xml:space="preserve"><value>よみとりせんようでひらく</value></data>
+  <data name="Cmd_file_openDisk" xml:space="preserve"><value>ディスクを開く...</value></data>
+  <data name="CmdAlias_file_openDisk" xml:space="preserve"><value>でぃすくぼりゅーむぶつりどらいぶをひらく</value></data>
+  <data name="Cmd_file_openProcess" xml:space="preserve"><value>プロセスのメモリを開く...</value></data>
+  <data name="CmdAlias_file_openProcess" xml:space="preserve"><value>ぷろせすめもりをひらく</value></data>
+  <data name="Cmd_file_openDiskImage" xml:space="preserve"><value>ディスクイメージとして開く...</value></data>
+  <data name="CmdAlias_file_openDiskImage" xml:space="preserve"><value>でぃすくいめーじせくたさいず</value></data>
+  <data name="Cmd_file_toggleImmediateWrite" xml:space="preserve"><value>即時書き込みの切り替え</value></data>
+  <data name="CmdAlias_file_toggleImmediateWrite" xml:space="preserve"><value>そくじかきこみきりかえ</value></data>
   <data name="Cmd_file_reload" xml:space="preserve"><value>再読み込み</value></data>
   <data name="CmdAlias_file_reload" xml:space="preserve"><value>さいよみこみ よみなおす</value></data>
   <data name="Cmd_file_discardReload" xml:space="preserve"><value>変更を破棄して再読み込み</value></data>
@@ -1832,6 +1850,8 @@
   <data name="CmdAlias_search_clearHistory" xml:space="preserve"><value>けんさくりれきをしょうきょ</value></data>
   <data name="Cmd_view_panel_searchResults" xml:space="preserve"><value>検索結果の表示切り替え</value></data>
   <data name="CmdAlias_view_panel_searchResults" xml:space="preserve"><value>けんさくけっかのひょうじきりかえ</value></data>
+  <data name="Cmd_view_panel_memoryMap" xml:space="preserve"><value>メモリマップの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_memoryMap" xml:space="preserve"><value>めもりまっぷりょういきもじゅーる</value></data>
   <data name="Set_search_maxMatchLength" xml:space="preserve"><value>一致の最大の長さ</value></data>
   <data name="SetDesc_search_maxMatchLength" xml:space="preserve"><value>「*」などのワイルドカードが一致できる最大のバイト数。</value></data>
   <data name="Set_search_findAll_limit" xml:space="preserve"><value>すべて検索: 件数の上限</value></data>
@@ -5052,4 +5072,68 @@
   <data name="Hash_Alg_xor16" xml:space="preserve"><value>XOR 16 bit</value></data>
   <data name="Hash_Alg_xor32" xml:space="preserve"><value>XOR 32 bit</value></data>
   <data name="Hash_Alg_xor64" xml:space="preserve"><value>XOR 64 bit</value></data>
+  <data name="Common_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="Common_Go" xml:space="preserve"><value>移動</value></data>
+  <data name="Common_Unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="Command_ProcessOnly" xml:space="preserve"><value>このコマンドはプロセスメモリでのみ使えます。</value></data>
+  <data name="Panel_MemoryMap_Title" xml:space="preserve"><value>メモリマップ</value></data>
+  <data name="OpenDevice_ReadOnly" xml:space="preserve"><value>読み取り専用で開く</value></data>
+  <data name="OpenDisk_Title" xml:space="preserve"><value>ディスクを開く</value></data>
+  <data name="OpenDisk_DiskName" xml:space="preserve"><value>ディスク {0} ({1}, {2})</value></data>
+  <data name="OpenDisk_VolumeName" xml:space="preserve"><value>ボリューム {0} ({1})</value></data>
+  <data name="OpenDisk_NoLabel" xml:space="preserve"><value>ラベルなし</value></data>
+  <data name="OpenDisk_EnumError" xml:space="preserve"><value>ディスクの一覧を取得できませんでした ({0})。</value></data>
+  <data name="OpenDisk_Error" xml:space="preserve"><value>デバイスを開けませんでした ({0})。</value></data>
+  <data name="OpenDisk_AccessDenied" xml:space="preserve"><value>デバイスが使用中で開けませんでした。</value></data>
+  <data name="OpenDisk_NoMedia" xml:space="preserve"><value>メディアが入っていません。</value></data>
+  <data name="OpenDisk_BitLocker" xml:space="preserve"><value>このボリュームは BitLocker でロックされています。ロックを解除してから開いてください。</value></data>
+  <data name="OpenProcess_Title" xml:space="preserve"><value>プロセスのメモリを開く</value></data>
+  <data name="OpenProcess_Name" xml:space="preserve"><value>{0} (PID {1})</value></data>
+  <data name="OpenProcess_EnumError" xml:space="preserve"><value>プロセスの一覧を取得できませんでした ({0})。</value></data>
+  <data name="OpenProcess_Error" xml:space="preserve"><value>プロセスを開けませんでした ({0})。</value></data>
+  <data name="OpenProcess_Protected" xml:space="preserve"><value>このプロセスは Windows によって保護されているため開けません。</value></data>
+  <data name="OpenProcess_NeedsAdmin" xml:space="preserve"><value>このプロセスを開くには管理者権限が必要です。</value></data>
+  <data name="OpenProcess_OpenElevated" xml:space="preserve"><value>管理者権限で開く</value></data>
+  <data name="DiskImage_Title" xml:space="preserve"><value>ディスクイメージとして開く</value></data>
+  <data name="DiskImage_SectorSize" xml:space="preserve"><value>セクタサイズ</value></data>
+  <data name="DiskImage_Custom" xml:space="preserve"><value>任意</value></data>
+  <data name="DiskImage_CustomSize" xml:space="preserve"><value>任意のセクタサイズ (128〜65,536 の 2 の累乗)</value></data>
+  <data name="DiskImage_AllowResize" xml:space="preserve"><value>長さの変更を許可する</value></data>
+  <data name="DiskImage_Remainder" xml:space="preserve"><value>ファイルの長さがセクタサイズの倍数ではありません (端数 {0} バイト)。</value></data>
+  <data name="DiskWrite_Title" xml:space="preserve"><value>ディスクに書き込む</value></data>
+  <data name="DiskWrite_Body" xml:space="preserve"><value>{0} に書き込みます: {1} か所、{2} バイト。影響するボリューム: {3}。この操作で、ディスクのデータやファイルシステムが壊れる可能性があります。書き込みの途中で止まると、元に戻せない場合があります。</value></data>
+  <data name="DiskWrite_NoVolumes" xml:space="preserve"><value>なし</value></data>
+  <data name="DiskWrite_Write" xml:space="preserve"><value>ディスクに書き込む</value></data>
+  <data name="DiskWrite_Done" xml:space="preserve"><value>ディスクに {0} バイト書き込みました。</value></data>
+  <data name="DiskWrite_SystemVolume" xml:space="preserve"><value>Windows が使用中のボリューム {0} には書き込めません。</value></data>
+  <data name="DiskWrite_Dismount" xml:space="preserve"><value>ボリューム {0} は使用中のためロックできません。強制的にディスマウントすると、開いているファイルのデータが失われる可能性があります。</value></data>
+  <data name="DiskWrite_DismountConfirm" xml:space="preserve"><value>強制的にディスマウントして書き込む</value></data>
+  <data name="DiskWrite_LockFailed" xml:space="preserve"><value>ボリューム {0} をロックできないため書き込みを中止しました。</value></data>
+  <data name="DiskWrite_RolledBack" xml:space="preserve"><value>書き込み中にエラーが発生したため、書き込み前の状態に戻しました ({0})。</value></data>
+  <data name="DiskWrite_Partial" xml:space="preserve"><value>ディスクの一部だけが書き換わっています。次回起動時に復旧できます ({0})。</value></data>
+  <data name="ProcessWrite_Title" xml:space="preserve"><value>プロセスメモリに書き込む</value></data>
+  <data name="ProcessWrite_Body" xml:space="preserve"><value>プロセス {0} (PID {1}) のメモリに {2} バイト書き込みます。プロセスが異常終了する可能性があります。</value></data>
+  <data name="ProcessWrite_Write" xml:space="preserve"><value>書き込む</value></data>
+  <data name="ProcessWrite_Protected" xml:space="preserve"><value>書き込み先のページが読み取り専用です ({0})。一時的に書き込み可能にして書き込みますか。</value></data>
+  <data name="ProcessWrite_ChangeProtect" xml:space="preserve"><value>保護を一時的に変更して書き込む</value></data>
+  <data name="ProcessWrite_Failed" xml:space="preserve"><value>{0} か所の範囲を書き込めませんでした。</value></data>
+  <data name="ProcessWrite_ImmediateOn" xml:space="preserve"><value>即時書き込みを有効にしました。</value></data>
+  <data name="ProcessWrite_ImmediateOff" xml:space="preserve"><value>即時書き込みを無効にしました。</value></data>
+  <data name="GoToSector_Title" xml:space="preserve"><value>セクタへ移動</value></data>
+  <data name="GoToSector_Label" xml:space="preserve"><value>セクタ番号</value></data>
+  <data name="AdminGuide_Title" xml:space="preserve"><value>管理者権限が必要です</value></data>
+  <data name="AdminGuide_Disk" xml:space="preserve"><value>物理ディスクや内蔵ディスクのボリュームを直接読むには、Windows の管理者権限が必要です。</value></data>
+  <data name="AdminGuide_Process" xml:space="preserve"><value>このプロセスを開くには管理者権限が必要です。</value></data>
+  <data name="AdminGuide_Steps" xml:space="preserve"><value>管理者として実行するには: 1. HexEditor を閉じます。2. スタートメニューまたはエクスプローラーで HexEditor を右クリックします。3.「管理者として実行」を選びます。</value></data>
+  <data name="AdminGuide_UsbAlternative" xml:space="preserve"><value>取り外し可能な USB ストレージのボリュームは管理者権限なしで開けます。</value></data>
+  <data name="AdminGuide_StoreDownload" xml:space="preserve"><value>インストーラ版・ポータブル版は、必要なときだけ管理者権限の確認を出して管理者権限の操作を使えます。</value></data>
+  <data name="AdminGuide_Restart" xml:space="preserve"><value>管理者として再起動</value></data>
+  <data name="AdminGuide_Declined" xml:space="preserve"><value>管理者権限が得られなかったため、ディスクを開けませんでした。</value></data>
+  <data name="Status_ImmediateWrite" xml:space="preserve"><value>即時書き込み</value></data>
+  <data name="Status_HelperRunning" xml:space="preserve"><value>管理者権限の補助プロセスが実行中</value></data>
+  <data name="MemoryMap_RegionsTab" xml:space="preserve"><value>領域</value></data>
+  <data name="MemoryMap_ModulesTab" xml:space="preserve"><value>モジュール</value></data>
+  <data name="MemoryMap_NoProcess" xml:space="preserve"><value>プロセスを開くとメモリマップが表示されます。</value></data>
+  <data name="MemoryMap_NoAccess" xml:space="preserve"><value>アクセス不可</value></data>
+  <data name="MemoryMap_Unallocated" xml:space="preserve"><value>未割り当て</value></data>
 </root>
