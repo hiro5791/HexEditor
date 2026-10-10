@@ -449,6 +449,7 @@ public sealed partial class MainWindow
                     _ = Commands.ExecuteAsync("file.formatSettings");
                 }),
             ],
+            .. CompareTabMenuEntries(doc),
         ];
     }
 }

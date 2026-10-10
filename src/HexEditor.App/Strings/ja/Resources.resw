@@ -4229,4 +4229,181 @@
   <data name="Strings_Scope_Document" xml:space="preserve"><value>ドキュメント全体</value></data>
   <data name="Strings_Scope_Range" xml:space="preserve"><value>オフセット範囲</value></data>
   <data name="Strings_Scope_Selection" xml:space="preserve"><value>選択範囲</value></data>
+  <data name="Menu_Analysis_Compare.Text" xml:space="preserve"><value>比較(C)</value></data>
+  <data name="Menu_Analysis_Compare.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Analysis_CompareFiles.Text" xml:space="preserve"><value>ファイルを比較(F)...</value></data>
+  <data name="Menu_Analysis_CompareFiles.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Analysis_CompareSaved.Text" xml:space="preserve"><value>保存済みの内容と比較(S)</value></data>
+  <data name="Menu_Analysis_CompareSaved.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Go_NextDiff.Text" xml:space="preserve"><value>次の差分(N)</value></data>
+  <data name="Menu_Go_NextDiff.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Go_PreviousDiff.Text" xml:space="preserve"><value>前の差分(P)</value></data>
+  <data name="Menu_Go_PreviousDiff.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_View_CompareStacked.Text" xml:space="preserve"><value>比較を上下に並べる(Q)</value></data>
+  <data name="Menu_View_CompareStacked.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_Diffs.Text" xml:space="preserve"><value>差分(D)</value></data>
+  <data name="Menu_View_Diffs.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="CmdCategory_compare" xml:space="preserve"><value>比較</value></data>
+  <data name="Cmd_analysis_compare" xml:space="preserve"><value>ファイルを比較</value></data>
+  <data name="CmdAlias_analysis_compare" xml:space="preserve"><value>ふぁいるをひかく さぶん</value></data>
+  <data name="Cmd_analysis_compareSaved" xml:space="preserve"><value>保存済みの内容と比較</value></data>
+  <data name="CmdAlias_analysis_compareSaved" xml:space="preserve"><value>ほぞんずみのないようとひかく</value></data>
+  <data name="Cmd_compare_nextDiff" xml:space="preserve"><value>次の差分</value></data>
+  <data name="CmdAlias_compare_nextDiff" xml:space="preserve"><value>つぎのさぶん</value></data>
+  <data name="Cmd_compare_previousDiff" xml:space="preserve"><value>前の差分</value></data>
+  <data name="CmdAlias_compare_previousDiff" xml:space="preserve"><value>まえのさぶん</value></data>
+  <data name="Cmd_compare_recompare" xml:space="preserve"><value>再比較</value></data>
+  <data name="CmdAlias_compare_recompare" xml:space="preserve"><value>さいひかく</value></data>
+  <data name="Cmd_compare_syncScroll" xml:space="preserve"><value>同期スクロール</value></data>
+  <data name="CmdAlias_compare_syncScroll" xml:space="preserve"><value>どうきすくろーる</value></data>
+  <data name="Cmd_compare_layout" xml:space="preserve"><value>比較を上下に並べる</value></data>
+  <data name="CmdAlias_compare_layout" xml:space="preserve"><value>ひかくのれいあうと うえした</value></data>
+  <data name="Cmd_compare_copyRight" xml:space="preserve"><value>差分を右へコピー</value></data>
+  <data name="CmdAlias_compare_copyRight" xml:space="preserve"><value>さぶんをみぎへこぴー まーじ</value></data>
+  <data name="Cmd_compare_copyLeft" xml:space="preserve"><value>差分を左へコピー</value></data>
+  <data name="CmdAlias_compare_copyLeft" xml:space="preserve"><value>さぶんをひだりへこぴー まーじ</value></data>
+  <data name="Cmd_compare_copyAllRight" xml:space="preserve"><value>すべての差分を右へコピー</value></data>
+  <data name="CmdAlias_compare_copyAllRight" xml:space="preserve"><value>すべてのさぶんをみぎへこぴー</value></data>
+  <data name="Cmd_compare_copyAllLeft" xml:space="preserve"><value>すべての差分を左へコピー</value></data>
+  <data name="CmdAlias_compare_copyAllLeft" xml:space="preserve"><value>すべてのさぶんをひだりへこぴー</value></data>
+  <data name="Cmd_compare_showDiffList" xml:space="preserve"><value>差分の一覧を表示</value></data>
+  <data name="CmdAlias_compare_showDiffList" xml:space="preserve"><value>さぶんのいちらんをひょうじ</value></data>
+  <data name="Cmd_compare_saveReport" xml:space="preserve"><value>レポートを保存...</value></data>
+  <data name="CmdAlias_compare_saveReport" xml:space="preserve"><value>れぽーとをほぞん</value></data>
+  <data name="Cmd_view_panel_diffs" xml:space="preserve"><value>差分の表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_diffs" xml:space="preserve"><value>さぶんのひょうじきりかえ</value></data>
+  <data name="Set_view_scrollBar_diffMarks" xml:space="preserve"><value>スクロールバーに差分を表示</value></data>
+  <data name="SetDesc_view_scrollBar_diffMarks" xml:space="preserve"><value>比較のときに、縦のスクロールバーの差分のある位置に、差分の種類の色で細い印を表示します。</value></data>
+  <data name="Status_Item_Compare" xml:space="preserve"><value>比較</value></data>
+  <data name="EditOp_CopyDiffRight" xml:space="preserve"><value>差分を右へコピー</value></data>
+  <data name="EditOp_CopyDiffLeft" xml:space="preserve"><value>差分を左へコピー</value></data>
+  <data name="Compare_Panel_Title" xml:space="preserve"><value>差分</value></data>
+  <data name="Compare_StaleBar.Message" xml:space="preserve"><value>内容が変更されました。比較結果は古くなっています。</value></data>
+  <data name="Compare_StaleRecompare.Content" xml:space="preserve"><value>再比較</value></data>
+  <data name="Compare_List_Empty.Text" xml:space="preserve"><value>比較結果はありません。解析 &gt; 比較 &gt; ファイルを比較 で比較できます。</value></data>
+  <data name="Compare_List_MinLength.PlaceholderText" xml:space="preserve"><value>最小の長さ</value></data>
+  <data name="Compare_GraphHeading.Text" xml:space="preserve"><value>差分の分布</value></data>
+  <data name="Compare_Graph_AsTable.Content" xml:space="preserve"><value>表で表示</value></data>
+  <data name="Compare_Graph_Title" xml:space="preserve"><value>差分の分布</value></data>
+  <data name="Compare_Graph_Summary" xml:space="preserve"><value>差分の分布、区間 {0} 個、最大 {1}%、オフセット {2}</value></data>
+  <data name="Compare_Graph_TableRow" xml:space="preserve"><value>{0}  {1}%</value></data>
+  <data name="Compare_OperationName" xml:space="preserve"><value>比較</value></data>
+  <data name="Compare_MergeOperationName" xml:space="preserve"><value>差分のコピー</value></data>
+  <data name="Compare_ExportOperationName" xml:space="preserve"><value>差分のエクスポート</value></data>
+  <data name="Compare_LeftClosed" xml:space="preserve"><value>左側のドキュメントが閉じられたため比較を中止しました。</value></data>
+  <data name="Compare_RightClosed" xml:space="preserve"><value>右側のドキュメントが閉じられたため比較を中止しました。</value></data>
+  <data name="Compare_StoppedAt" xml:space="preserve"><value>{0} まで比較して中止しました。</value></data>
+  <data name="Compare_TempFull" xml:space="preserve"><value>一時フォルダの空き容量が不足しています。それまでの結果は残しています。</value></data>
+  <data name="Compare_Failed" xml:space="preserve"><value>比較できませんでした: {0}</value></data>
+  <data name="Compare_Status_Position" xml:space="preserve"><value>差分 {0} / {1}</value></data>
+  <data name="Compare_Status_Count" xml:space="preserve"><value>差分 {0} 件</value></data>
+  <data name="Compare_Status" xml:space="preserve"><value>{0}、異なるバイト {1}、一致率 {2}%</value></data>
+  <data name="Compare_Kind_Changed" xml:space="preserve"><value>変更</value></data>
+  <data name="Compare_Kind_Inserted" xml:space="preserve"><value>挿入 (右のみ)</value></data>
+  <data name="Compare_Kind_Deleted" xml:space="preserve"><value>削除 (左のみ)</value></data>
+  <data name="Compare_Kind_Unreadable" xml:space="preserve"><value>読み込み不可</value></data>
+  <data name="Compare_Kind_Same" xml:space="preserve"><value>一致</value></data>
+  <data name="Compare_State_Kind" xml:space="preserve"><value>差分: {0}</value></data>
+  <data name="Compare_State_Other" xml:space="preserve"><value>相手側の値 {0}</value></data>
+  <data name="Compare_Method_Simple" xml:space="preserve"><value>単純比較</value></data>
+  <data name="Compare_Method_InsertDelete" xml:space="preserve"><value>挿入・削除を考慮した比較</value></data>
+  <data name="Compare_Method_InsertDeleteApprox" xml:space="preserve"><value>挿入・削除を考慮 (近似)</value></data>
+  <data name="Compare_Method_Name" xml:space="preserve"><value>比較方式</value></data>
+  <data name="Compare_Summary_Method" xml:space="preserve"><value>比較方式</value></data>
+  <data name="Compare_Summary_Bytes" xml:space="preserve"><value>比較したバイト数</value></data>
+  <data name="Compare_Summary_BytesValue" xml:space="preserve"><value>左 {0}、右 {1}</value></data>
+  <data name="Compare_Summary_Counts" xml:space="preserve"><value>差分の件数</value></data>
+  <data name="Compare_Summary_CountsValue" xml:space="preserve"><value>変更 {0}、挿入 {1}、削除 {2}、読み込み不可 {3}</value></data>
+  <data name="Compare_Summary_Different" xml:space="preserve"><value>異なるバイト数</value></data>
+  <data name="Compare_Summary_MatchRate" xml:space="preserve"><value>一致率</value></data>
+  <data name="Compare_Summary_Elapsed" xml:space="preserve"><value>時間 (秒)</value></data>
+  <data name="Compare_Summary_Running" xml:space="preserve"><value>比較中...</value></data>
+  <data name="Compare_Summary_Aborted" xml:space="preserve"><value>打ち切ったウィンドウ</value></data>
+  <data name="Compare_Summary_Row" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Compare_NoResult" xml:space="preserve"><value>比較結果がありません。</value></data>
+  <data name="Compare_NoTab" xml:space="preserve"><value>比較タブを表示していません。</value></data>
+  <data name="Compare_NoDiffs" xml:space="preserve"><value>差分はありません。</value></data>
+  <data name="Compare_WrappedToFirst" xml:space="preserve"><value>先頭の差分に戻りました。</value></data>
+  <data name="Compare_WrappedToLast" xml:space="preserve"><value>末尾の差分に戻りました。</value></data>
+  <data name="Compare_LeftReadOnly" xml:space="preserve"><value>左側は読み取り専用です。</value></data>
+  <data name="Compare_RightReadOnly" xml:space="preserve"><value>右側は読み取り専用です。</value></data>
+  <data name="Compare_SkippedLengthChange" xml:space="preserve"><value>長さが変わる差分 {0} 件はコピーしませんでした。</value></data>
+  <data name="Compare_MultiSelectionUnavailable" xml:space="preserve"><value>この版ではマルチ選択を使えません。</value></data>
+  <data name="Compare_BookmarkName" xml:space="preserve"><value>差分 {0} ({1})</value></data>
+  <data name="Compare_BookmarksAdded" xml:space="preserve"><value>ブックマークを {0} 件追加しました。</value></data>
+  <data name="Compare_Exported" xml:space="preserve"><value>{0} に書き出しました。</value></data>
+  <data name="Compare_ExportFailed" xml:space="preserve"><value>書き出せませんでした: {0}</value></data>
+  <data name="Compare_Untitled" xml:space="preserve"><value>一度も保存していない新規のドキュメントは、保存済みの内容と比較できません。</value></data>
+  <data name="Compare_SameAsSaved" xml:space="preserve"><value>保存済みの内容と同じです。</value></data>
+  <data name="Compare_SavedMissing" xml:space="preserve"><value>保存済みのファイルを開けません: {0}</value></data>
+  <data name="Compare_SavedName" xml:space="preserve"><value>{0} (保存済み)</value></data>
+  <data name="Compare_CannotOpen" xml:space="preserve"><value>比較対象を開けません: {0}</value></data>
+  <data name="Compare_Range" xml:space="preserve"><value>{0}〜{1} ({2} バイト)</value></data>
+  <data name="Compare_LeftMap_Name" xml:space="preserve"><value>差分マップ (左)</value></data>
+  <data name="Compare_RightMap_Name" xml:space="preserve"><value>差分マップ (右)</value></data>
+  <data name="Compare_Tab_SelectLeft" xml:space="preserve"><value>比較の左側に選択</value></data>
+  <data name="Compare_Tab_WithLeft" xml:space="preserve"><value>{0} と比較</value></data>
+  <data name="Compare_Tab_WithLeftNone" xml:space="preserve"><value>選択した左側と比較</value></data>
+  <data name="Compare_Tab_Saved" xml:space="preserve"><value>保存済みの内容と比較</value></data>
+  <data name="Compare_Column_Number" xml:space="preserve"><value>番号</value></data>
+  <data name="Compare_Column_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="Compare_Column_LeftOffset" xml:space="preserve"><value>左オフセット</value></data>
+  <data name="Compare_Column_LeftLength" xml:space="preserve"><value>左の長さ</value></data>
+  <data name="Compare_Column_RightOffset" xml:space="preserve"><value>右オフセット</value></data>
+  <data name="Compare_Column_RightLength" xml:space="preserve"><value>右の長さ</value></data>
+  <data name="Compare_Column_LeftBytes" xml:space="preserve"><value>左のバイト</value></data>
+  <data name="Compare_Column_RightBytes" xml:space="preserve"><value>右のバイト</value></data>
+  <data name="Compare_List_Name" xml:space="preserve"><value>差分の一覧</value></data>
+  <data name="Compare_List_Sort" xml:space="preserve"><value>並べ替え</value></data>
+  <data name="Compare_List_Sorting" xml:space="preserve"><value>並べ替え中...</value></data>
+  <data name="Compare_List_Selected" xml:space="preserve"><value>選択</value></data>
+  <data name="Compare_List_Export" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="Compare_List_ToMultiSelection" xml:space="preserve"><value>マルチ選択に変換</value></data>
+  <data name="Compare_List_ToBookmarks" xml:space="preserve"><value>ブックマークに変換</value></data>
+  <data name="Compare_Side_Left" xml:space="preserve"><value>左</value></data>
+  <data name="Compare_Side_Right" xml:space="preserve"><value>右</value></data>
+  <data name="Compare_Sort_Number" xml:space="preserve"><value>番号</value></data>
+  <data name="Compare_Sort_LengthDescending" xml:space="preserve"><value>長さ (長い順)</value></data>
+  <data name="Compare_Sort_LengthAscending" xml:space="preserve"><value>長さ (短い順)</value></data>
+  <data name="Compare_Export_Csv" xml:space="preserve"><value>CSV</value></data>
+  <data name="Compare_Export_Json" xml:space="preserve"><value>JSON</value></data>
+  <data name="Compare_Export_Report" xml:space="preserve"><value>テキストのレポート</value></data>
+  <data name="Compare_Export_SelectedCsv" xml:space="preserve"><value>選んだ行を CSV に出力</value></data>
+  <data name="Compare_Dialog_Title" xml:space="preserve"><value>ファイルを比較</value></data>
+  <data name="Compare_Dialog_Compare" xml:space="preserve"><value>比較</value></data>
+  <data name="Compare_Dialog_Left" xml:space="preserve"><value>左</value></data>
+  <data name="Compare_Dialog_Right" xml:space="preserve"><value>右</value></data>
+  <data name="Compare_Dialog_Swap" xml:space="preserve"><value>左右を入れ替え</value></data>
+  <data name="Compare_Dialog_Method" xml:space="preserve"><value>比較方式</value></data>
+  <data name="Compare_Dialog_Options" xml:space="preserve"><value>オプション</value></data>
+  <data name="Compare_Dialog_Target" xml:space="preserve"><value>対象</value></data>
+  <data name="Compare_Dialog_ChooseFile" xml:space="preserve"><value>ファイルを選択...</value></data>
+  <data name="Compare_Dialog_Path" xml:space="preserve"><value>ファイルのパス</value></data>
+  <data name="Compare_Dialog_Browse" xml:space="preserve"><value>参照...</value></data>
+  <data name="Compare_Dialog_Start" xml:space="preserve"><value>開始オフセット</value></data>
+  <data name="Compare_Dialog_Length" xml:space="preserve"><value>長さ</value></data>
+  <data name="Compare_Dialog_ToEnd" xml:space="preserve"><value>末尾まで</value></data>
+  <data name="Compare_Dialog_ToEndInfo" xml:space="preserve"><value>データの末尾まで</value></data>
+  <data name="Compare_Dialog_NoTarget" xml:space="preserve"><value>比較対象を選んでください。</value></data>
+  <data name="Compare_Dialog_NoPath" xml:space="preserve"><value>ファイルのパスを入力してください。</value></data>
+  <data name="Compare_Dialog_NotFound" xml:space="preserve"><value>ファイルが存在しません。</value></data>
+  <data name="Compare_Dialog_AccessDenied" xml:space="preserve"><value>ファイルへのアクセスが拒否されました。</value></data>
+  <data name="Compare_Dialog_CannotOpen" xml:space="preserve"><value>ファイルを開けません: {0}</value></data>
+  <data name="Compare_Dialog_StartBeyond" xml:space="preserve"><value>開始オフセットが長さ ({0}) を超えています。</value></data>
+  <data name="Compare_Dialog_LengthBeyond" xml:space="preserve"><value>長さが残り ({0}) を超えています。</value></data>
+  <data name="Compare_Dialog_SameRange" xml:space="preserve"><value>同じ範囲どうしの比較です。</value></data>
+  <data name="Compare_Option_Unit" xml:space="preserve"><value>比較の単位</value></data>
+  <data name="Compare_Option_UnitValue" xml:space="preserve"><value>{0} バイト</value></data>
+  <data name="Compare_Option_MergeGap" xml:space="preserve"><value>近い差分をまとめる (バイト)</value></data>
+  <data name="Compare_Option_Window" xml:space="preserve"><value>再同期ウィンドウ (バイト)</value></data>
+  <data name="Compare_Option_MinMatch" xml:space="preserve"><value>最小一致長 (バイト)</value></data>
+  <data name="Compare_Option_MergeGapError" xml:space="preserve"><value>{0}〜{1} の値を入力してください。</value></data>
+  <data name="Compare_Option_WindowError" xml:space="preserve"><value>ウィンドウは {0}〜{1} バイトで入力してください。</value></data>
+  <data name="Compare_Option_MinMatchError" xml:space="preserve"><value>最小一致長は {0}〜{1} バイトで入力してください。</value></data>
+  <data name="SchemeElement_DiffChanged" xml:space="preserve"><value>差分: 変更</value></data>
+  <data name="SchemeElement_DiffAdded" xml:space="preserve"><value>差分: 挿入 (右のみ)</value></data>
+  <data name="SchemeElement_DiffRemoved" xml:space="preserve"><value>差分: 削除 (左のみ)</value></data>
+  <data name="Compare_DisabledToolTip" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Compare_Graph_Buckets" xml:space="preserve"><value>区間 {0} 個</value></data>
+  <data name="Compare_Graph_BucketsName" xml:space="preserve"><value>区間の数</value></data>
 </root>

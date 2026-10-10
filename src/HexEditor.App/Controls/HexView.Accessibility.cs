@@ -325,6 +325,12 @@ public sealed partial class HexView
             {
                 states.AddRange(names.Select(n => Loc.Format("HexView_State_Bookmark", n)));
             }
+
+            // 比較ビューの差分の種類と相手側の値 (ANA-04 の仕様 8)。
+            if (CellStates?.Invoke(offset) is { Count: > 0 } extra)
+            {
+                states.AddRange(extra);
+            }
         }
 
         return Loc.Format("HexView_Announce_WithStates", main, string.Join(Loc.Get("HexView_Announce_ListSeparator"), states));

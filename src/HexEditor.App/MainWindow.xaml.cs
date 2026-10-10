@@ -446,7 +446,8 @@ public sealed partial class MainWindow : Window
 
     // ---- 編集・移動 ----
 
-    private EditorState? Editor => Vm.Selected?.Editor;
+    /// <summary>コマンドの対象のビュー。比較タブの表示中はフォーカスのある側 (ANA-04 の仕様 7。MainWindow.Compare.cs)。</summary>
+    private EditorState? Editor => CompareEditor ?? Vm.Selected?.Editor;
 
     private void Undo_Click(object sender, RoutedEventArgs e) => Editor?.Undo();
 

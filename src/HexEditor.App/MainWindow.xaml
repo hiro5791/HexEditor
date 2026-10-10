@@ -235,6 +235,10 @@
                             <MenuFlyoutSubItem x:Name="NumberedGoMenu" x:Uid="Menu_Go_NumberedGo" AutomationProperties.AutomationId="Command_NumberedGo" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
+                        <!--  次 / 前の差分 (ANA-05)  -->
+                        <MenuFlyoutItem x:Uid="Menu_Go_NextDiff" cmd:CommandUi.Id="compare.nextDiff" AutomationProperties.AutomationId="Command_NextDiff" />
+                        <MenuFlyoutItem x:Uid="Menu_Go_PreviousDiff" cmd:CommandUi.Id="compare.previousDiff" AutomationProperties.AutomationId="Command_PreviousDiff" />
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Go_Start" cmd:CommandUi.Id="go.start" AutomationProperties.AutomationId="Command_GoStart" />
                         <MenuFlyoutItem x:Uid="Menu_Go_End" cmd:CommandUi.Id="go.end" AutomationProperties.AutomationId="Command_GoEnd" />
                     </MenuBarItem>
@@ -264,6 +268,8 @@
                             <MenuFlyoutItem x:Uid="Menu_View_ColoringFromSelection" cmd:CommandUi.Id="view.coloring.fromSelection" AutomationProperties.AutomationId="Command_ColoringFromSelection" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Legend" cmd:CommandUi.Id="view.panel.legend" AutomationProperties.AutomationId="Command_Legend" />
                         </MenuFlyoutSubItem>
+                        <!--  比較のレイアウト (左右 / 上下。ANA-04 の「呼び出し」)  -->
+                        <ToggleMenuFlyoutItem x:Uid="Menu_View_CompareStacked" cmd:CommandUi.Id="compare.layout" AutomationProperties.AutomationId="Command_CompareLayout" />
                         <MenuFlyoutSeparator />
                         <!--  パネルの表示切り替え (UI-01 の仕様 6、UI-04、UI-05)。  -->
                         <MenuFlyoutSubItem x:Uid="Menu_View_Panels" AutomationProperties.AutomationId="Command_Panels">
@@ -282,11 +288,17 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_PositionManagerPanel" cmd:CommandUi.Id="view.panel.positionManager" AutomationProperties.AutomationId="Command_TogglePositionManager" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ColoringRulesPanel" cmd:CommandUi.Id="view.panel.coloringRules" AutomationProperties.AutomationId="Command_ToggleColoringRules" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_LegendPanel" cmd:CommandUi.Id="view.panel.legend" AutomationProperties.AutomationId="Command_ToggleLegend" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_Diffs" cmd:CommandUi.Id="view.panel.diffs" AutomationProperties.AutomationId="Command_ToggleDiffs" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />
                         </MenuFlyoutSubItem>
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Analysis">
+                        <!--  比較 (ANA-01、ANA-08)  -->
+                        <MenuFlyoutSubItem x:Uid="Menu_Analysis_Compare" AutomationProperties.AutomationId="Command_CompareMenu">
+                            <MenuFlyoutItem x:Uid="Menu_Analysis_CompareFiles" cmd:CommandUi.Id="analysis.compare" AutomationProperties.AutomationId="Command_Compare" />
+                            <MenuFlyoutItem x:Uid="Menu_Analysis_CompareSaved" cmd:CommandUi.Id="analysis.compareSaved" AutomationProperties.AutomationId="Command_CompareSaved" />
+                        </MenuFlyoutSubItem>
                         <MenuFlyoutItem x:Uid="Menu_Analysis_Hash" cmd:CommandUi.Id="analysis.hash" AutomationProperties.AutomationId="Command_Hash" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Tools">
@@ -554,20 +566,22 @@
                 Orientation="Horizontal"
                 TabFocusNavigation="Once"
                 XYFocusKeyboardNavigation="Enabled">
-                <Button x:Name="StatusCursor" AutomationProperties.AutomationId="Status_Offset" Click="StatusCursor_Click" Content="{x:Bind Vm.Selected.CursorText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="cursor" />
-                <Button x:Name="StatusValue" AutomationProperties.AutomationId="Status_Value" Content="{x:Bind Vm.Selected.ValueText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="value" />
-                <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Click="StatusSelection_Click" Content="{x:Bind Vm.Selected.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.Selected.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
+                <Button x:Name="StatusCursor" AutomationProperties.AutomationId="Status_Offset" Click="StatusCursor_Click" Content="{x:Bind Vm.StatusDocument.CursorText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="cursor" />
+                <Button x:Name="StatusValue" AutomationProperties.AutomationId="Status_Value" Content="{x:Bind Vm.StatusDocument.ValueText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="value" />
+                <Button x:Name="StatusSelection" AutomationProperties.AutomationId="Status_Selection" Click="StatusSelection_Click" Content="{x:Bind Vm.StatusDocument.SelectionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="selection" ToolTipService.ToolTip="{x:Bind Vm.StatusDocument.SelectionToolTip, Mode=OneWay, FallbackValue=''}" />
                 <!--  セクタ / ページ / レコード (VIEW-40、VIEW-18、VIEW-33)。有効なときだけ表示する。  -->
-                <Button x:Name="StatusPosition" AutomationProperties.AutomationId="Status_Position" Click="StatusCursor_Click" Content="{x:Bind Vm.Selected.PositionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="position" />
-                <Button x:Name="StatusColumn" AutomationProperties.AutomationId="Status_Column" Click="StatusColumn_Click" Content="{x:Bind Vm.Selected.ColumnText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="column" />
+                <Button x:Name="StatusPosition" AutomationProperties.AutomationId="Status_Position" Click="StatusCursor_Click" Content="{x:Bind Vm.StatusDocument.PositionText, Mode=OneWay, FallbackValue=''}" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="position" />
+                <Button x:Name="StatusColumn" AutomationProperties.AutomationId="Status_Column" Click="StatusColumn_Click" Content="{x:Bind Vm.StatusDocument.ColumnText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="column" />
                 <!--  表示形式 (VIEW-10。Hex 以外のときだけ)  -->
-                <Button x:Name="StatusCellFormat" AutomationProperties.AutomationId="Status_Format" Click="StatusFormat_Click" Content="{x:Bind Vm.Selected.FormatText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="format" />
-                <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Click="StatusEncoding_Click" Content="{x:Bind Vm.Selected.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
+                <Button x:Name="StatusCellFormat" AutomationProperties.AutomationId="Status_Format" Click="StatusFormat_Click" Content="{x:Bind Vm.StatusDocument.FormatText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="format" />
+                <Button x:Name="StatusEncoding" AutomationProperties.AutomationId="Status_Encoding" Click="StatusEncoding_Click" Content="{x:Bind Vm.StatusDocument.EncodingText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="encoding" />
                 <!--  エンディアン (VIEW-11 の仕様 3): クリックで切り替える。  -->
-                <Button x:Name="StatusEndian" AutomationProperties.AutomationId="Status_Endian" Click="StatusEndian_Click" Content="{x:Bind Vm.Selected.EndianText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="endian" />
-                <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.Selected.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
-                <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.Selected.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
-                <Button x:Name="StatusSize" AutomationProperties.AutomationId="Status_Size" Click="StatusSize_Click" Content="{x:Bind Vm.Selected.SizeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="size" />
+                <Button x:Name="StatusEndian" AutomationProperties.AutomationId="Status_Endian" Click="StatusEndian_Click" Content="{x:Bind Vm.StatusDocument.EndianText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="endian" />
+                <Button x:Name="StatusMode" AutomationProperties.AutomationId="Status_Mode" Click="StatusMode_Click" Content="{x:Bind Vm.StatusDocument.ModeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="mode" />
+                <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.StatusDocument.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
+                <!--  比較タブの表示中: 「差分 12 / 340」、異なるバイト数、一致率 (ANA-04 の仕様 6)。  -->
+                <Button x:Name="StatusCompare" AutomationProperties.AutomationId="Status_Compare" Click="StatusCompare_Click" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="compare" Visibility="Collapsed" />
+                <Button x:Name="StatusSize" AutomationProperties.AutomationId="Status_Size" Click="StatusSize_Click" Content="{x:Bind Vm.StatusDocument.SizeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="size" />
                 <!--  同期 (VIEW-39 の仕様 6): 同期スクロール中だけ表示する。クリックで同期のモードのメニュー。  -->
                 <Button x:Name="StatusSync" AutomationProperties.AutomationId="Status_Sync" Click="StatusSync_Click" Style="{StaticResource StatusItemStyle}" Tag="sync" />
                 <Button x:Name="StatusOperations" AutomationProperties.AutomationId="Status_Operations" Style="{StaticResource StatusItemStyle}" Tag="operations">

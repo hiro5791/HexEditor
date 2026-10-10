@@ -33,6 +33,24 @@ public enum HexHighlightLayer
 }
 
 /// <summary>
+/// 色以外の印 (色だけに頼らないため。00-overview 11.5)。差分の種類ごとの模様 (ANA-04 の仕様 3) に使う。下線は変更されたバイトの印
+/// (VIEW-17 の層 6) に使うため、ここには含めない。
+/// </summary>
+public enum HexMark
+{
+    None,
+
+    /// <summary>各セルの左端の縦線 (挿入)。</summary>
+    LeftBar,
+
+    /// <summary>取り消し線 (削除)。</summary>
+    Strike,
+
+    /// <summary>斜線の模様 (揃えるための空白・読み込み不可)。</summary>
+    Hatch,
+}
+
+/// <summary>
 /// Hex 列とテキスト列に重ねる範囲の強調 1 つ。<see cref="Background"/> は背景 (null なら塗らない)、<see cref="Border"/> は枠線
 /// (null なら描かない)、<see cref="Dash"/> は枠線の破線の模様 (ハイコントラストで形を変えて区別する)。<see cref="Tag"/> は
 /// 提供元の識別 (テスト用の読み出しに出す)。長さ 0 の範囲は位置に細い縦線を描く。
@@ -43,7 +61,7 @@ public enum HexHighlightLayer
 /// </summary>
 public sealed record HexHighlight(long Offset, long Length, HexHighlightLayer Layer, Brush? Background, Brush? Border,
     IReadOnlyList<double>? Dash = null, string Tag = "", double Thickness = 1, int Level = 0, bool Underline = false,
-    bool LightBackground = false);
+    bool LightBackground = false, HexMark Mark = HexMark.None, Brush? MarkBrush = null);
 
 /// <summary>オフセット列の目印 (ブックマークの開始位置。INSP-23 の仕様 8、INSP-25 の仕様 5)。<see cref="Text"/> は番号など。</summary>
 public sealed record HexOffsetMarker(long Offset, Brush Fill, Brush? Border, string Text, Brush? Foreground, string Tag = "");
@@ -59,6 +77,7 @@ public sealed partial class HexView
     private readonly Dictionary<string, Func<long, long, IEnumerable<HexOffsetMarker>>> _markerSources = [];
     private readonly List<Rectangle> _highlightBack = [];
     private readonly List<Rectangle> _highlightFront = [];
+    private readonly List<Microsoft.UI.Xaml.Shapes.Path> _highlightMarks = [];
     private readonly List<Border> _offsetMarks = [];
     private readonly List<PlacedHighlight> _placed = [];
     private readonly List<(HexHighlight Item, int Order)> _highlightItems = [];
@@ -71,7 +90,7 @@ public sealed partial class HexView
 
     /// <summary>描いた強調 (テスト用の読み出し)。Column は "hex" か "text"。</summary>
     private readonly record struct PlacedHighlight(HexHighlightLayer Layer, string Tag, string Column, long First, long Last, Brush? Background,
-        Brush? Border, IReadOnlyList<double>? Dash, int Level, bool Underline, int Order);
+        Brush? Border, IReadOnlyList<double>? Dash, int Level, bool Underline, int Order, HexMark Mark);
 
     // ハイコントラストの判定は IsHighContrast (HexView.Options.cs。テスト用の模擬 ForcedHighContrast を含む) を使う。
 
@@ -136,6 +155,7 @@ public sealed partial class HexView
         int backUsed = 0;
         int frontUsed = 0;
         int marksUsed = 0;
+        int patternsUsed = 0;
         if (_highlightSources.Count > 0)
         {
             EnsureHighlightLayers();
@@ -196,6 +216,38 @@ public sealed partial class HexView
                         double textWidth = h.Length == 0 ? 2 : (c1 - c0 + 1) * _cellWidth;
                         PlaceSegment(h, t == 0 ? "text" : "text" + (t + 1), rowStart + c0, rowStart + c1, textLeft, y, textWidth,
                             ref backUsed, ref frontUsed);
+                        if (h.Mark != HexMark.None && h.MarkBrush is { } textMark)
+                        {
+                            PlaceMark(h.Mark, textMark, textLeft, y, textWidth, h.Length == 0 ? 0 : c1 - c0 + 1, i => i * _cellWidth, ref patternsUsed);
+                        }
+                    }
+
+                    if (format.ShowHex && h.Mark != HexMark.None && h.MarkBrush is { } hexMark)
+                    {
+                        // 色以外の印 (ANA-04 の仕様 3)。左端の縦線はセルごとに引く (Hex 列はグループの間隔・逆順表示があるため、セルの位置を列から求める)。
+                        int n = h.Length == 0 ? 0 : format.HexSpans(c0, c1, valid, spans);
+                        if (n == 0)
+                        {
+                            double left = format.ByteSpan(c0, valid).Start * _cellWidth;
+                            PlaceMark(h.Mark, hexMark, left, y, 2, 0, _ => 0, ref patternsUsed);
+                        }
+
+                        for (int i = 0; i < n; i++)
+                        {
+                            double left = spans[i].Start * _cellWidth;
+                            double right = left + spans[i].Length * _cellWidth;
+                            List<double> cellLefts = [];
+                            for (int c = c0; c <= c1; c++)
+                            {
+                                double at = format.ByteSpan(c, valid).Start * _cellWidth;
+                                if (at >= left && at < right)
+                                {
+                                    cellLefts.Add(at - left);
+                                }
+                            }
+
+                            PlaceMark(h.Mark, hexMark, left, y, right - left, cellLefts.Count, k => cellLefts[k], ref patternsUsed);
+                        }
                     }
 
                     // 層 7〜10 の背景が、選択範囲・検索の一致 (層 2〜5) に隠れるセルでは、下端に高さ 2 px の帯として残す (VIEW-17 の仕様 6)。
@@ -231,6 +283,10 @@ public sealed partial class HexView
         HideLightBackgrounds();
         Hide(_highlightBack, backUsed);
         Hide(_highlightFront, frontUsed);
+        for (int i = patternsUsed; i < _highlightMarks.Count; i++)
+        {
+            _highlightMarks[i].Visibility = Visibility.Collapsed;
+        }
         for (int i = marksUsed; i < _offsetMarks.Count; i++)
         {
             _offsetMarks[i].Visibility = Visibility.Collapsed;
@@ -247,7 +303,7 @@ public sealed partial class HexView
 
     private void PlaceSegment(HexHighlight h, string column, long first, long last, double x, double y, double width, ref int backUsed, ref int frontUsed)
     {
-        _placed.Add(new PlacedHighlight(h.Layer, h.Tag, column, first, last, h.Background, h.Border, h.Dash, h.Level, h.Underline, _placed.Count));
+        _placed.Add(new PlacedHighlight(h.Layer, h.Tag, column, first, last, h.Background, h.Border, h.Dash, h.Level, h.Underline, _placed.Count, h.Mark));
         if (h.Background is not null && h.LightBackground)
         {
             // 合成の図形 (SpriteVisual) で塗る: XAML の要素を使わないので、1 画面に数千あっても速い (INSP-33 の仕様 5)。
@@ -378,6 +434,61 @@ public sealed partial class HexView
         SetRect(r, x, y, Math.Max(1, width), BandHeight);
     }
 
+    /// <summary>色以外の印 (縦線・取り消し線・斜線) を 1 つの Path に描く。<paramref name="cells"/> は縦線を引くセルの数。</summary>
+    private void PlaceMark(HexMark mark, Brush brush, double x, double y, double width, int cells, Func<int, double> cellLeft, ref int used)
+    {
+        if (used >= _highlightMarks.Count)
+        {
+            var created = new Microsoft.UI.Xaml.Shapes.Path { StrokeThickness = 1, IsHitTestVisible = false };
+            AutomationProperties.SetAccessibilityView(created, Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+            _highlightMarks.Add(created);
+            _frontLayer!.Children.Add(created);
+        }
+
+        Microsoft.UI.Xaml.Shapes.Path p = _highlightMarks[used++];
+        p.Visibility = Visibility.Visible;
+        p.Stroke = brush;
+        double height = _rowHeight;
+        width = Math.Max(mark == HexMark.Hatch ? 6 : 2, width);
+        Canvas.SetLeft(p, x);
+        Canvas.SetTop(p, y);
+        p.Width = width;
+        p.Height = height;
+        p.Clip = new RectangleGeometry { Rect = new Windows.Foundation.Rect(0, 0, width, height) };
+        var group = new GeometryGroup();
+        switch (mark)
+        {
+            case HexMark.LeftBar:
+                p.StrokeThickness = 2;
+                for (int i = 0; i < Math.Max(1, cells); i++)
+                {
+                    double at = cells == 0 ? 1 : cellLeft(i) + 1;
+                    group.Children.Add(new LineGeometry { StartPoint = new Windows.Foundation.Point(at, 1), EndPoint = new Windows.Foundation.Point(at, height - 1) });
+                }
+
+                break;
+            case HexMark.Strike:
+                p.StrokeThickness = 1.5;
+                group.Children.Add(new LineGeometry { StartPoint = new Windows.Foundation.Point(0, height / 2), EndPoint = new Windows.Foundation.Point(width, height / 2) });
+                break;
+            default:
+                p.StrokeThickness = 1;
+                const double step = 6;
+                for (double i = -height; i < width; i += step)
+                {
+                    group.Children.Add(new LineGeometry
+                    {
+                        StartPoint = new Windows.Foundation.Point(i, height),
+                        EndPoint = new Windows.Foundation.Point(i + height, 0),
+                    });
+                }
+
+                break;
+        }
+
+        p.Data = group;
+    }
+
     private static Rectangle Take(List<Rectangle> pool, Canvas layer, int index)
     {
         if (index >= pool.Count)
@@ -473,6 +584,7 @@ public sealed partial class HexView
                 ["level"] = p.Level,
                 ["underline"] = p.Underline,
                 ["order"] = p.Order,
+                ["mark"] = p.Mark == HexMark.None ? null : p.Mark.ToString(),
             });
         }
 

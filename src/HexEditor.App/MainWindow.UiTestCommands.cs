@@ -52,7 +52,8 @@ public sealed partial class MainWindow
             ?? HandleSelectionTestCommand(cmd, request)
             ?? await HandleViewPhase2TestCommandsAsync(cmd, request)
             ?? await HandleAnnotationTestCommandsAsync(cmd, request)
-            ?? await HandleFormatTestCommandAsync(cmd, request),
+            ?? await HandleFormatTestCommandAsync(cmd, request)
+            ?? await HandleCompareTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>

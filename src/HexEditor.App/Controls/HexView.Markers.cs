@@ -88,6 +88,9 @@ public sealed partial class HexView
                 }
             }
 
+            // 差分 (VIEW-02 の仕様 9。HexView.Compare.cs)。
+            used = PlaceDiffMarkers(used, height, totalRows);
+
             if (ShowSearchMarkers && _searchMarkers.Count > 0)
             {
                 // 同じピクセルの印はまとめる (作業用の集合は使い回す)。

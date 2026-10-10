@@ -15,8 +15,8 @@ public sealed partial class MainWindow
 
     /// <summary>項目の ID (設定 ui.statusBar.items と右クリックメニューに使う)。</summary>
     private static readonly string[] StatusItemIds =
-        ["cursor", "value", "selection", "position", "column", "format", "encoding", "endian", "mode", "modified", "size", "sync", "zoom", "operations",
-            "notifications"];
+        ["cursor", "value", "selection", "position", "column", "format", "encoding", "endian", "mode", "modified", "compare", "size", "sync", "zoom",
+            "operations", "notifications"];
 
     /// <summary>幅が足りないときに隠す順 (UI-06 の仕様 5)。カーソル位置・選択範囲・入力モード・変更の有無・処理センターは隠さない。</summary>
     private static readonly string[] CollapseOrder =
@@ -204,7 +204,7 @@ public sealed partial class MainWindow
     /// </summary>
     private void UpdateStatusBarLayout()
     {
-        DocumentViewModel? doc = Vm.Selected;
+        DocumentViewModel? doc = Vm.StatusDocument;
         var shownOperations = Vm.Operations.Active.Where(op => op.ShouldShow).ToList();
         bool operations = shownOperations.Count > 0;
         if (operations)
@@ -224,6 +224,7 @@ public sealed partial class MainWindow
             ["endian"] = doc is not null,
             ["mode"] = doc is not null,
             ["modified"] = doc is not null && doc.Document.IsModified,
+            ["compare"] = ActiveCompare is not null,
             ["size"] = doc is not null,
             ["sync"] = SyncStatusText().Length > 0,
             ["zoom"] = true,

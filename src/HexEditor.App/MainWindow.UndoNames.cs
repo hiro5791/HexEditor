@@ -40,6 +40,8 @@ public sealed partial class MainWindow
         ["00 で塗りつぶし"] = "EditOp_FillZero",
         [Document.DiscardDescription] = "EditOp_Discard",
         [Document.MergeDescription] = "EditOp_Merge",
+        [Core.Compare.DiffMerger.CopyRightDescription] = "EditOp_CopyDiffRight",
+        [Core.Compare.DiffMerger.CopyLeftDescription] = "EditOp_CopyDiffLeft",
     };
 
     private Document? _undoNamesSource;

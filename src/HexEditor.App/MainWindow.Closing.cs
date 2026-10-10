@@ -18,6 +18,13 @@ public sealed partial class MainWindow
 
     private async void Close_Click(object sender, RoutedEventArgs e)
     {
+        // 比較タブの表示中は比較タブを閉じる (ANA-04。比較の左右のドキュメントは閉じない)。
+        if (ActiveCompare is { } compare)
+        {
+            CloseToolPage(compare.Id);
+            return;
+        }
+
         if (Vm.Selected is { } doc)
         {
             await CloseAsync([doc]);

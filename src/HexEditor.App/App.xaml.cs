@@ -134,6 +134,7 @@ public partial class App : Application
         MainWindow.RegisterSearchResultsPanel();
         MainWindow.RegisterSelectionPanels();
         MainWindow.RegisterFormatIssuesPanel();
+        MainWindow.RegisterComparePanel();
         var window = new MainWindow(vm);
         Window = window;
 

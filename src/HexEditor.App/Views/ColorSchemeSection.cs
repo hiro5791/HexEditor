@@ -16,7 +16,7 @@ namespace HexEditor.App.Views;
 public sealed class ColorSchemeSection
 {
     /// <summary>
-    /// 編集できる要素 (仕様 1)。差分・レコードの交互色はその機能 (フェーズ 2 以降) が描くまで、ブックマークは色がブックマークごとに決まる
+    /// 編集できる要素 (仕様 1)。差分は比較 (ANA-04) が描く背景。レコードの交互色はその機能 (フェーズ 2 以降) が描くまで、ブックマークは色がブックマークごとに決まる
     /// (05 の INSP) ため、編集の一覧には出さない (配色ファイルにあれば保存する)。
     /// </summary>
     public static readonly SchemeElement[] EditableElements =
@@ -35,6 +35,9 @@ public sealed class ColorSchemeSection
         SchemeElement.SelectionText,
         SchemeElement.Caret,
         SchemeElement.Match,
+        SchemeElement.DiffChanged,
+        SchemeElement.DiffAdded,
+        SchemeElement.DiffRemoved,
         SchemeElement.Separator,
     ];
 

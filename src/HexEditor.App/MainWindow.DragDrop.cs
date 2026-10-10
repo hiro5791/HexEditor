@@ -97,6 +97,12 @@ public sealed partial class MainWindow
             deferral.Complete();
         }
 
+        // Shift を押しながら 2 つのファイルをドロップ: その 2 つで比較ダイアログを開く (ANA-01 の仕様 10。MainWindow.Compare.cs)。
+        if ((e.Modifiers & Windows.ApplicationModel.DataTransfer.DragDrop.DragDropModifiers.Shift) != 0 && await TryDropCompareAsync(items))
+        {
+            return;
+        }
+
         if (insertOffset is { } offset)
         {
             await InsertDroppedFileAsync(items, offset);
