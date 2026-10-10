@@ -107,6 +107,71 @@ public sealed partial class MainWindow
         return true;
     }
 
+    // ---- セッションのディスクのタブ (UI-31 の仕様 5) ----
+
+    private void MissingOpenDisk_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        if (TabOf(sender) is { IsMissingDisk: true } doc)
+        {
+            _ = OpenRestoredDiskAsync(doc, confirm: false);
+        }
+    }
+
+    /// <summary>
+    /// セッションのディスクのタブを開き直す。管理者権限 (補助プロセス) が要り、まだ起動していなければ、<paramref name="confirm"/> なら先に確かめる
+    /// (取り消したら「開けません」のタブのまま「開く」ボタンを出す)。開けたら同じ位置のタブにする。
+    /// </summary>
+    internal async Task OpenRestoredDiskAsync(DocumentViewModel missing, bool confirm)
+    {
+        if (missing.MissingRecord is not { Path: { } path } record)
+        {
+            return;
+        }
+
+        OpenRoute route = DeviceService.RouteForDisk(isRemovableUsbVolume: false);
+        if (route == OpenRoute.GuidanceNeeded)
+        {
+            await ShowAdminGuidanceAsync(Loc.Get("AdminGuide_Disk"));
+            return;
+        }
+
+        if (confirm && route == OpenRoute.Helper && !DeviceService.IsHelperRunning
+            && !await ConfirmAsync(Loc.Get("Session_DiskHelperTitle"), Loc.Format("Session_DiskHelperBody", record.DisplayName),
+                Loc.Get("Session_DiskHelperOpen"), "SessionDiskHelperDialog"))
+        {
+            return;
+        }
+
+        try
+        {
+            var info = new DeviceOpenInfo { Path = path, DisplayName = record.DisplayName };
+            DeviceByteSource source = await DeviceService.OpenDeviceAsync(info, writable: false, route);
+            int index = Vm.Documents.IndexOf(missing);
+            if (index < 0)
+            {
+                source.Dispose();
+                return;
+            }
+
+            Vm.Close(missing);
+            DocumentViewModel opened = Vm.OpenDevice(source);
+            Vm.MoveDocument(opened, Math.Min(index, Vm.Documents.Count - 1));
+            opened.RestorePosition(record.Cursor, record.SelectionStart, record.SelectionLength, record.TopRow);
+            Vm.Selected = opened;
+            RefreshHelperIndicator();
+        }
+        catch (HexEditor.Core.Elevation.HelperElevationDeclinedException)
+        {
+            ShowNotice(Loc.Get("AdminGuide_Declined"), InfoBarSeverity.Informational);
+        }
+        catch (DeviceException ex)
+        {
+            ShowNotice(DeviceErrorMessage(ex), InfoBarSeverity.Error);
+        }
+
+        UpdateTitle();
+    }
+
     // ---- 自動更新 (ENG-18 の仕様 2) ----
 
     /// <summary>変わりうるデータソース (ディスク・プロセスメモリ) か。自動更新を選べる。</summary>

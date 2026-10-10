@@ -3792,6 +3792,7 @@
   <data name="OpenAdv_Path" xml:space="preserve"><value>ファイル</value></data>
   <data name="OpenAdv_Browse" xml:space="preserve"><value>参照...</value></data>
   <data name="OpenAdv_ReadOnly" xml:space="preserve"><value>読み取り専用で開く</value></data>
+  <data name="OpenAdv_DiskImage" xml:space="preserve"><value>ディスクイメージとして開く (次にセクタサイズを選ぶ)</value></data>
   <data name="OpenAdv_DenyWrites" xml:space="preserve"><value>他のアプリの書き込みを禁止する</value></data>
   <data name="OpenAdv_Range" xml:space="preserve"><value>範囲を指定して開く</value></data>
   <data name="OpenAdv_Start" xml:space="preserve"><value>開始</value></data>
@@ -5177,4 +5178,9 @@
   <data name="Tab_AutoRefreshOff" xml:space="preserve"><value>オフ</value></data>
   <data name="Tab_AutoRefreshMilliseconds" xml:space="preserve"><value>{0} ミリ秒ごと</value></data>
   <data name="Tab_AutoRefreshSeconds" xml:space="preserve"><value>{0} 秒ごと</value></data>
+  <data name="Session_DiskNotOpened" xml:space="preserve"><value>このディスクのタブは開いていません: {0}</value></data>
+  <data name="Session_OpenDisk.Content" xml:space="preserve"><value>開く</value></data>
+  <data name="Session_DiskHelperTitle" xml:space="preserve"><value>前回のセッションのディスクを開きますか?</value></data>
+  <data name="Session_DiskHelperBody" xml:space="preserve"><value>「{0}」を開き直すには管理者権限の補助プロセスが必要です。Windows が許可を求めます。</value></data>
+  <data name="Session_DiskHelperOpen" xml:space="preserve"><value>開く</value></data>
 </root>

@@ -293,7 +293,8 @@ public sealed partial class MainViewModel
     /// </summary>
     public DocumentViewModel? OpenRestored(SessionTab tab, Func<string, bool, DocumentViewModel?> open, Action<DocumentViewModel> changed, int? insertAt)
     {
-        DocumentViewModel? vm = File.Exists(tab.Path) ? open(tab.Path!, tab.ReadOnly) : AddMissing(tab, insertAt);
+        DocumentViewModel? vm = tab.Kind == SessionTabKind.Disk ? AddMissing(tab, insertAt)
+            : File.Exists(tab.Path) ? open(tab.Path!, tab.ReadOnly) : AddMissing(tab, insertAt);
         if (vm is null)
         {
             return null;

@@ -108,7 +108,7 @@ public sealed partial class MainWindow
 
     /// <summary>
     /// 「詳細を指定して開く」(ENG-11 の仕様 2): パス、読み取り専用、範囲 (ENG-13)、形式 (ENG-38)、他のアプリの書き込みを禁止 (ENG-15)。
-    /// 既定値のまま「開く」を押せば通常の「開く」と同じ。ディスクイメージとして開く (ENG-31) はディスクの機能が加える。
+    /// 既定値のまま「開く」を押せば通常の「開く」と同じ。「ディスクイメージとして開く」(ENG-31) は、セクタサイズを選ぶダイアログに進む。
     /// </summary>
     private async Task ShowOpenAdvancedAsync(bool rangeFirst)
     {
@@ -124,6 +124,7 @@ public sealed partial class MainWindow
 
         CheckBox readOnly = DialogParts.Check("OpenAdv_ReadOnly", Loc.Get("OpenAdv_ReadOnly"), false);
         CheckBox denyWrites = DialogParts.Check("OpenAdv_DenyWrites", Loc.Get("OpenAdv_DenyWrites"), false);
+        CheckBox diskImage = DialogParts.Check("OpenAdv_DiskImage", Loc.Get("OpenAdv_DiskImage"), false);
         CheckBox range = DialogParts.Check("OpenAdv_Range", Loc.Get("OpenAdv_Range"), rangeFirst);
         TextBox start = DialogParts.Field("OpenAdv_Start", Loc.Get("OpenAdv_Start"), "0");
         TextBlock startResult = DialogParts.Caption("OpenAdv_StartResult", monospace: true);
@@ -141,7 +142,7 @@ public sealed partial class MainWindow
         ComboBox format = DialogParts.Combo("OpenAdv_Format", Loc.Get("OpenAdv_Format"),
             OpenFormats.Select(f => Loc.Get("OpenAdv_Format_" + f.Replace("-", string.Empty))), 0);
         var body = new StackPanel { Spacing = 8, MinWidth = 420 };
-        foreach (UIElement e in new UIElement[] { pathRow, readOnly, range, rangePanel, format, denyWrites })
+        foreach (UIElement e in new UIElement[] { pathRow, readOnly, range, rangePanel, format, denyWrites, diskImage })
         {
             body.Children.Add(e);
         }
@@ -157,6 +158,14 @@ public sealed partial class MainWindow
         long startValue = 0, lengthValue = 0;
         void Validate()
         {
+            // ディスクイメージとして開く場合は、範囲・形式は使わない (セクタサイズは次のダイアログで選ぶ)。
+            bool image = diskImage.IsChecked == true;
+            range.IsEnabled = format.IsEnabled = !image;
+            if (image)
+            {
+                range.IsChecked = false;
+            }
+
             rangePanel.Visibility = range.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
             bool exists = File.Exists(path.Text);
             bool ok = exists;
@@ -198,6 +207,8 @@ public sealed partial class MainWindow
 
         range.Checked += (_, _) => Validate();
         range.Unchecked += (_, _) => Validate();
+        diskImage.Checked += (_, _) => Validate();
+        diskImage.Unchecked += (_, _) => Validate();
         lengthKind.SelectionChanged += (_, _) => Validate();
         browse.Click += async (_, _) =>
         {
@@ -225,6 +236,12 @@ public sealed partial class MainWindow
         string file = Path.GetFullPath(path.Text);
         string chosenFormat = OpenFormats[Math.Max(0, format.SelectedIndex)];
         DocumentViewModel? opened;
+        if (diskImage.IsChecked == true)
+        {
+            await OpenDiskImageAsync(file);
+            return;
+        }
+
         if (range.IsChecked == true)
         {
             opened = await OpenRangeAsync(file, startValue, lengthValue, resizable.IsChecked == true, readOnly.IsChecked == true);

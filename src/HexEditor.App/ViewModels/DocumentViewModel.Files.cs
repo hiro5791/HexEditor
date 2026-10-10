@@ -47,7 +47,15 @@ public sealed partial class DocumentViewModel
     public bool IsMissing => MissingPath is not null;
 
     /// <summary>見つからないタブの文言「ファイルが見つかりません: &lt;パス&gt;」。</summary>
-    public string MissingText => MissingPath is null ? string.Empty : Services.Loc.Format("Session_Missing", MissingPath);
+    public string MissingText => MissingPath is null ? string.Empty
+        : IsMissingDisk ? Services.Loc.Format("Session_DiskNotOpened", MissingPath)
+        : Services.Loc.Format("Session_Missing", MissingPath);
+
+    /// <summary>セッションのディスクのタブで、まだ開いていない (権限の確認を取り消した。UI-31 の仕様 5)。「開く」ボタンを出す。</summary>
+    public bool IsMissingDisk => MissingRecord?.Kind == SessionTabKind.Disk;
+
+    /// <summary>見つからないファイルのタブ (「場所を探す」を出す)。</summary>
+    public bool IsMissingFile => IsMissing && !IsMissingDisk;
 
     /// <summary>セッションの記録 (見つからないタブは、見つかるまで元の記録をそのまま残す)。</summary>
     public SessionTab? MissingRecord { get; init; }
@@ -82,10 +90,13 @@ public sealed partial class DocumentViewModel
         }
 
         FileStamp? stamp = OpenedStamp;
+        Core.Devices.DeviceByteSource? device = Device;
         return new SessionTab
         {
-            Kind = FilePath is null ? SessionTabKind.Untitled : SessionTabKind.File,
-            Path = FilePath,
+            // ディスク・ボリュームのタブも記録する (UI-31 の仕様 5。開き直すときに権限を確かめる)。プロセスメモリは無題と同じく記録しない。
+            Kind = device is not null ? SessionTabKind.Disk : IsProcessMemory ? SessionTabKind.Process
+                : FilePath is null ? SessionTabKind.Untitled : SessionTabKind.File,
+            Path = device?.Path ?? FilePath,
             DisplayName = DisplayName,
             Pinned = IsPinned,
             ReadOnly = Document.ReadOnlyReason is ReadOnlyReason.User or ReadOnlyReason.OpenedReadOnly,

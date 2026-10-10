@@ -149,6 +149,11 @@ public sealed partial class MainWindow
         }
 
         UpdateTitle();
+        if (tab.Kind == SessionTabKind.Disk && Vm.Selected is { IsMissingDisk: true } disk)
+        {
+            // ディスクのタブは、初めて表示したときに開き直す (管理者権限が要るなら先に確かめる。UI-31 の仕様 5)。
+            DispatcherQueue.TryEnqueue(() => _ = OpenRestoredDiskAsync(disk, confirm: true));
+        }
     }
 
     // ---- コマンド ----

@@ -3792,6 +3792,7 @@ Details were written to:
   <data name="OpenAdv_Path" xml:space="preserve"><value>File</value></data>
   <data name="OpenAdv_Browse" xml:space="preserve"><value>Browse...</value></data>
   <data name="OpenAdv_ReadOnly" xml:space="preserve"><value>Open read-only</value></data>
+  <data name="OpenAdv_DiskImage" xml:space="preserve"><value>Open as a disk image (choose the sector size next)</value></data>
   <data name="OpenAdv_DenyWrites" xml:space="preserve"><value>Don't let other apps write to the file</value></data>
   <data name="OpenAdv_Range" xml:space="preserve"><value>Open a range</value></data>
   <data name="OpenAdv_Start" xml:space="preserve"><value>Start</value></data>
@@ -5177,4 +5178,9 @@ Details were written to:
   <data name="Tab_AutoRefreshOff" xml:space="preserve"><value>Off</value></data>
   <data name="Tab_AutoRefreshMilliseconds" xml:space="preserve"><value>Every {0} ms</value></data>
   <data name="Tab_AutoRefreshSeconds" xml:space="preserve"><value>Every {0} s</value></data>
+  <data name="Session_DiskNotOpened" xml:space="preserve"><value>This disk tab was not opened: {0}</value></data>
+  <data name="Session_OpenDisk.Content" xml:space="preserve"><value>Open</value></data>
+  <data name="Session_DiskHelperTitle" xml:space="preserve"><value>Open the disk from the last session?</value></data>
+  <data name="Session_DiskHelperBody" xml:space="preserve"><value>Opening "{0}" again needs the administrator helper process. Windows will ask for permission.</value></data>
+  <data name="Session_DiskHelperOpen" xml:space="preserve"><value>Open</value></data>
 </root>

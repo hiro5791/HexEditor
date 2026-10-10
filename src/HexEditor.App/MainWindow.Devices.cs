@@ -206,6 +206,12 @@ public sealed partial class MainWindow
             return;
         }
 
+        await OpenDiskImageAsync(path);
+    }
+
+    /// <summary>ファイルをディスクイメージとして開く (ENG-31): セクタサイズを選んで開く。「詳細を指定して開く」からも呼ぶ。</summary>
+    private async Task OpenDiskImageAsync(string path)
+    {
         int sectorSize = DiskImage.DefaultSectorSize(path);
         var (ok, chosenSize, allowResize) = await ShowDiskImageDialogAsync(path, sectorSize);
         if (!ok)
