@@ -74,6 +74,20 @@ public sealed class MismatchAndStringsTests
         SearchEngine.FindAll(r2);
         Assert.Equal([new SearchMatch(10, 11), new SearchMatch(60, 1)], r2.Matches);
 
+        // 位置の条件 (FIND-17 の仕様 3): 範囲は条件を満たす位置の違うバイトから始める (次を検索と同じ)。mod 512 = 0 では 0 と 1024 から
+        // (0x100 の 1 は条件を満たさないので範囲を始めない。1024 の範囲は途中の 1030 の違うバイトまで)。
+        byte[] sectors = new byte[2048];
+        sectors[0] = 1;
+        sectors[0x100] = 1;
+        sectors[1024] = 1;
+        sectors[1030] = 1;
+        using Document sectorDoc = Doc(sectors);
+        SearchPattern bySector = SearchPattern.Mismatch("00", aligned: true).WithPosition(PositionCondition.Create(512, 0));
+        using SearchResults r3 = MismatchSearch.CreateResults(sectorDoc.Current, bySector, new SearchOptions());
+        SearchEngine.FindAll(r3);
+        Assert.Equal([new SearchMatch(0, 1), new SearchMatch(1024, 7)], r3.Matches);
+        Assert.Equal(1024, SearchEngine.Find(sectorDoc.Current, bySector, 1, forward: true, wrap: false)!.Value.Offset);
+
         // 件数の上限で止めて、続けると重複も取りこぼしもない (FIND-20 の仕様 6)。
         byte[] many = new byte[100_000];
         for (int i = 0; i < many.Length; i += 50)

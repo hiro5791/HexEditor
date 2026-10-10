@@ -76,6 +76,15 @@ public sealed class RangeMaskPositionTests
         Assert.Equal([0L], FindAll(floats, f).Select(m => m.Offset));
         Assert.Equal([8L], FindAll(floats, Aligned(NumericRange.Float("0..1", new FloatSearchOptions(), exclude: true), 4)).Select(m => m.Offset));
 
+        // 端が形式の範囲を超えるとエラー (仕様の「エラー」): half の最大は 65504。無限大の端は受け付ける。
+        var half = new FloatSearchOptions { Format = FloatFormat.Half };
+        Assert.Equal(PatternError.FloatOverflow, Assert.Throws<PatternException>(() => NumericRange.Float("0..70000", half)).Error);
+        Assert.Equal(PatternError.FloatOverflow, Assert.Throws<PatternException>(() => NumericRange.Float("-70000..", half)).Error);
+        Assert.Equal(PatternError.FloatOverflow, Assert.Throws<PatternException>(() => NumericRange.Float("..1e39", new FloatSearchOptions())).Error);
+        Assert.NotNull(NumericRange.Float("0..65504", half));
+        Assert.NotNull(NumericRange.Float("-inf..inf", half));
+        Assert.NotNull(NumericRange.Float("0..1e39", new FloatSearchOptions { Format = FloatFormat.Double }));
+
         // 範囲の表示 (「範囲: 100〜200」) の材料。
         Assert.NotNull(NumericRange.Integer("100..200", u16).Numeric!.Range);
         Assert.True(NumericRange.IsRange("100..200"));

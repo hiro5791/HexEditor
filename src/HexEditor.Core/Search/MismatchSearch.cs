@@ -7,6 +7,7 @@ namespace HexEditor.Core.Search;
 /// <summary>
 /// 一致しない箇所のすべて検索 (FIND-25 の仕様 4)。P の繰り返しで「ない」範囲を、開始の昇順に一覧にする。各範囲は最初に違うバイトから、
 /// 次に P の繰り返しが「P の長さ × N」バイト以上続く位置まで (範囲の最後は違うバイト)。範囲の端・読めない範囲でも区切る。
+/// 位置の条件 (FIND-17) があれば、範囲は条件を満たす位置の違うバイトから始める (範囲の途中の違うバイトは位置を問わない)。
 /// 先頭から順に 1 スレッドで読み、違うバイトは SIMD で探す。メモリ使用量はチャンク 1 つ分。
 /// </summary>
 public static class MismatchSearch
@@ -52,6 +53,7 @@ public static class MismatchSearch
         SearchPattern pattern = results.Pattern.ForStart(ranges[0].Offset);
         MismatchMatcher matcher = pattern.MismatchSpec!;
         long run = (long)matcher.Length * minRepeat;
+        bool positional = pattern.Position is { IsNone: false } || pattern.Alignment > 1;
         int chunkSize = Math.Max(4096, results.Options.ChunkSize);
         byte[] buffer = GC.AllocateUninitializedArray<byte>(chunkSize);
         var pending = new List<SearchMatch>();
@@ -164,6 +166,13 @@ public static class MismatchSearch
                                 if (found < 0)
                                 {
                                     break;
+                                }
+
+                                if (positional && !pattern.Accepts(baseOffset + found))
+                                {
+                                    // 位置の条件 (FIND-17 の仕様 3): 範囲は、条件を満たす位置の違うバイトから始める (次を検索と同じ)。
+                                    i = found + 1;
+                                    continue;
                                 }
 
                                 inRange = true;
