@@ -187,15 +187,16 @@ public sealed class StatisticsPanelTests
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ANA-REC64")] });
         await ShowAndWaitAsync(app, "Pattern");
 
-        // レコード表示 (VIEW-18) がつながっていないビルドでは、要求を記録する行き先で代わりにする。
-        await StatsAsync(app, "recordProbe");
         await StatsAsync(app, "patterns");
         await StatsAsync(app, "set", new JsonObject { ["patternView"] = 1 });
         JsonObject state = await StatsAsync(app);
         Assert.Equal(64, state["periods"]!.AsArray()[0]!.GetValue<int>());
         JsonObject menu = await StatsAsync(app, "periodMenu", new JsonObject { ["row"] = 0 });
         Assert.True(menu["enabled"]!.GetValue<bool>());
-        Assert.Contains(64L, menu["recordViewRequests"]!.AsArray().Select(n => n!.GetValue<long>()));
+        // 「この長さでレコード表示」で、レコード表示 (VIEW-18) がレコード長 64 でオンになる。
+        JsonObject view = (await app.SendAsync("viewSettings"))["view"]!.AsObject();
+        Assert.True(view["recordView"]!.GetValue<bool>());
+        Assert.Equal(64, view["recordLength"]!.GetValue<int>());
     });
 
     [Fact]
