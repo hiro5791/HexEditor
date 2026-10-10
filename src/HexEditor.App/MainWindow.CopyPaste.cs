@@ -95,7 +95,7 @@ public sealed partial class MainWindow
     }
 
     /// <summary>記憶した設定と、ドキュメントの状態 (文字コード・変更されたバイト・1 行のバイト数) から変換の設定を作る。</summary>
-    private static CopyOptions OptionsOf(CopyAsState s, DocumentViewModel doc)
+    private CopyOptions OptionsOf(CopyAsState s, DocumentViewModel doc)
     {
         EditorState editor = doc.Editor;
         long start = editor.HasSelection ? editor.SelectionStart : editor.Cursor;
@@ -125,6 +125,10 @@ public sealed partial class MainWindow
             IncludeColors = s.Colors,
             ModifiedRanges = length > 0 ? [.. doc.Document.Current.EnumerateModifiedRanges(start, length)] : [],
             ModifiedColor = color,
+
+            // 色付けルールの色も含める (INSP-33 の仕様 8)。
+            Coloring = s.Colors && _annotations.TryGetValue(doc, out DocumentAnnotations? annotations)
+                ? annotations.Coloring.Rules.ForCopy(doc.Document.Current) : null,
             ScreenBytesPerRow = editor.BytesPerRow,
             Encoding = editor.TextEncoding,
             RecordBytes = s.RecordBytes,
