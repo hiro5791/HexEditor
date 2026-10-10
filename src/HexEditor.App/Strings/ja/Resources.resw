@@ -2775,8 +2775,8 @@
   <data name="Menu_Go_NextDiff.AccessKey" xml:space="preserve"><value>N</value></data>
   <data name="Menu_Go_PreviousDiff.Text" xml:space="preserve"><value>前の差分(P)</value></data>
   <data name="Menu_Go_PreviousDiff.AccessKey" xml:space="preserve"><value>P</value></data>
-  <data name="Menu_View_CompareStacked.Text" xml:space="preserve"><value>比較を上下に並べる(C)</value></data>
-  <data name="Menu_View_CompareStacked.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_CompareStacked.Text" xml:space="preserve"><value>比較を上下に並べる(Q)</value></data>
+  <data name="Menu_View_CompareStacked.AccessKey" xml:space="preserve"><value>Q</value></data>
   <data name="Menu_View_Diffs.Text" xml:space="preserve"><value>差分(D)</value></data>
   <data name="Menu_View_Diffs.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="CmdCategory_compare" xml:space="preserve"><value>比較</value></data>

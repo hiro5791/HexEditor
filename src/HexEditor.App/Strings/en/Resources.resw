@@ -2776,7 +2776,7 @@ Details were written to:
   <data name="Menu_Go_PreviousDiff.Text" xml:space="preserve"><value>Previous difference</value></data>
   <data name="Menu_Go_PreviousDiff.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_View_CompareStacked.Text" xml:space="preserve"><value>Stack comparison views</value></data>
-  <data name="Menu_View_CompareStacked.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_CompareStacked.AccessKey" xml:space="preserve"><value>Q</value></data>
   <data name="Menu_View_Diffs.Text" xml:space="preserve"><value>Differences</value></data>
   <data name="Menu_View_Diffs.AccessKey" xml:space="preserve"><value>D</value></data>
   <data name="CmdCategory_compare" xml:space="preserve"><value>Compare</value></data>
