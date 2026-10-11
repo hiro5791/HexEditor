@@ -29,6 +29,28 @@ public sealed class CiPrivilegedFactAttribute : FactAttribute
             Skip = $"{string.Join(" / ", distributions)} のビルドで実行する (このジョブは {CiPrivileged.Distribution})。";
         }
     }
+
+    /// <summary>
+    /// true なら、一般ユーザーのアプリが <c>runas</c> で補助プロセス・新しいプロセスを管理者にする必要がある。GitHub のホストランナーのトークンは
+    /// 分割されておらず (TokenElevationType=Default)、制限付きのトークン (SAFER) のアプリが <c>runas</c> しても、起動したプロセスは
+    /// 制限付きのトークンを引き継いで管理者のグループが拒否専用のまま (診断: admin group=False, TokenElevation=1) で、昇格にならない。
+    /// 昇格を代行する仕組みを製品に入れることはしないため、ホストランナーではスキップする (実機・仮想マシンの UAC で確認する。テストケースの備考)。
+    /// </summary>
+    public bool NeedsRunAsFromStandardUser
+    {
+        get => _needsRunAs;
+        init
+        {
+            _needsRunAs = value;
+            if (value && Skip is null)
+            {
+                Skip = "GitHub のホストランナーでは、一般ユーザー (制限付きのトークン) のアプリの runas が管理者への昇格にならない (トークンが分割されていないため。"
+                    + "起動したプロセスは admin group=False のまま)。UAC のある実機・仮想マシンで確認する (テストケースの備考)。";
+            }
+        }
+    }
+
+    private readonly bool _needsRunAs;
 }
 
 /// <summary>CI の ui-privileged のジョブが用意する環境 (build/tests/Mount-TestVhd.ps1、Install-TestBuild.ps1)。</summary>

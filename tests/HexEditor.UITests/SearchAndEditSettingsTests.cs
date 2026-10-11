@@ -61,7 +61,8 @@ public sealed class SearchAndEditSettingsTests
         JsonArray skipped = r["skipped"]!.AsArray();
         Assert.Single(skipped);
         Assert.Equal((0x1000L, 0x200L), (skipped[0]!["offset"]!.GetValue<long>(), skipped[0]!["length"]!.GetValue<long>()));
-        Assert.True(await app.IsShownAsync("SearchResults_Skipped"));
+        // ボタンの表示はレイアウト後に確定するので、状態を待つ。
+        await app.WaitUntilAsync(() => app.IsShownAsync("SearchResults_Skipped"), TimeSpan.FromSeconds(15), "the skipped-ranges button to be shown");
         Assert.DoesNotContain(await ViewOps.NoticesAsync(app), m => m.Contains("Can't read", StringComparison.Ordinal));
     });
 

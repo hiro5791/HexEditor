@@ -450,7 +450,8 @@ public sealed class DataOperationTests
             {
                 if (!source.Hold.IsSet)
                 {
-                    readAheadSeen = source.MaxRequestedEnd > chunk;
+                    // 先読みはスレッドプールで始まるので、負荷の高い環境では遅れる。タイミングではなく到達を待つ。
+                    readAheadSeen = SpinWait.SpinUntil(() => source.MaxRequestedEnd > chunk, TimeSpan.FromSeconds(30));
                     source.Hold.Set();
                 }
             };

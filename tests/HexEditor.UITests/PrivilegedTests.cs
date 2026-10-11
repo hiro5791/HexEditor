@@ -54,6 +54,13 @@ public sealed class PrivilegedTests
                 .Replace("{0}", number.ToString(System.Globalization.CultureInfo.InvariantCulture), StringComparison.Ordinal);
         }
 
+        // プロセスの一覧: ランナーにはプロセスが多く、ListView は仮想化されるため、PID で絞り込んでから探す。
+        if (text.StartsWith("(PID ", StringComparison.Ordinal) && dialog.FindFirstDescendant(cf => cf.ByAutomationId("OpenProcess_Filter")) is { } filterBox)
+        {
+            filterBox.Patterns.Value.Pattern.SetValue(text["(PID ".Length..].TrimEnd(')'));
+            await app.IdleAsync();
+        }
+
         AutomationElement? item = null;
         await app.WaitUntilAsync(() => Task.FromResult((item = dialog.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.ListItem))
             .FirstOrDefault(i => AppSession.NameOf(i).Contains(text, StringComparison.Ordinal))) is not null), TimeSpan.FromSeconds(15), $"the list item '{text}'");
@@ -248,7 +255,7 @@ public sealed class PrivilegedTests
 
     // ---- ENG-32: 管理者として動いているプロセスを開く (補助プロセス経由) ----
 
-    [CiPrivilegedFact("Installer", "Portable")]
+    [CiPrivilegedFact("Installer", "Portable", NeedsRunAsFromStandardUser = true)]
     [Trait(UiTest.TC, "TC-ENG-32-02")]
     public Task Elevated_process_opens_through_the_helper_after_confirmation() => UiTestContext.RunAsync(async ctx =>
     {
@@ -278,7 +285,7 @@ public sealed class PrivilegedTests
 
     // ---- ENG-28: 補助プロセスがないときの「管理者として再起動」 ----
 
-    [CiPrivilegedFact("Installer")]
+    [CiPrivilegedFact("Installer", NeedsRunAsFromStandardUser = true)]
     [Trait(UiTest.TC, "TC-ENG-28-05")]
     public Task Without_the_helper_restart_as_administrator_restores_the_tabs() => UiTestContext.RunAsync(async ctx =>
     {
@@ -342,7 +349,7 @@ public sealed class PrivilegedTests
 
     // ---- ENG-28: UI のプロセスの強制終了で補助プロセスも終了し、ロックが解除される ----
 
-    [CiPrivilegedFact("Portable")]
+    [CiPrivilegedFact("Portable", NeedsRunAsFromStandardUser = true)]
     [Trait(UiTest.TC, "TC-ENG-28-08")]
     public Task Killing_the_app_ends_the_helper_and_releases_the_volume_lock() => UiTestContext.RunAsync(async ctx =>
     {
@@ -385,7 +392,7 @@ public sealed class PrivilegedTests
 
     // ---- PKG-14: 別のプロセスからのパイプへの接続の拒否 ----
 
-    [CiPrivilegedFact("Installer")]
+    [CiPrivilegedFact("Installer", NeedsRunAsFromStandardUser = true)]
     [Trait(UiTest.TC, "TC-PKG-14-05")]
     public Task Other_processes_cannot_use_the_helper_pipe() => UiTestContext.RunAsync(async ctx =>
     {
