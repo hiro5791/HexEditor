@@ -73,7 +73,7 @@ public sealed class DeviceService : IAsyncDisposable
     }
 
     /// <summary>アプリ全体が管理者として動いている (どの配布形態でも。ENG-28 の仕様 10)。</summary>
-    public bool IsElevated => TestHooks.SimulatesElevation || (OperatingSystem.IsWindows() && Win32ProcessAccess.IsCurrentProcessElevated);
+    public bool IsElevated => TestHooks.ElevationOverride ?? (OperatingSystem.IsWindows() && Win32ProcessAccess.IsCurrentProcessElevated);
 
     /// <summary>本体に埋め込んだ補助プロセスの SHA-256 (PKG-14 の仕様 2)。開発中のビルドでは空 (照合しない)。</summary>
     private static string? HelperSha256 =>

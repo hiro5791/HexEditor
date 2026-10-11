@@ -115,8 +115,10 @@ public sealed class StatisticsPerformanceTests(ITestOutputHelper output)
         }
 
         long small = PeakDuring(() => Run(16 * MiB));
+        long allocated = GC.GetTotalAllocatedBytes();
         long large = PeakDuring(() => Run(10 * GiB));
-        output.WriteLine($"16 MiB: {small / MiB} MiB、10 GiB: {large / MiB} MiB");
+        allocated = GC.GetTotalAllocatedBytes() - allocated;
+        output.WriteLine($"16 MiB: {small / MiB} MiB、10 GiB: {large / MiB} MiB (10 GiB の計算中の割り当て {allocated / MiB} MiB)");
         Assert.True(large - small <= 32 * MiB, $"差 {(large - small) / MiB} MiB");
     }
 

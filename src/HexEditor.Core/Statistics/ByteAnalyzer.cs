@@ -20,6 +20,10 @@ internal sealed class ByteAnalyzer
     private int _previous = -1;
     private long _end;
 
+    // スレッドごとの集計の表 (ダイグラムは 256 KiB)。読み込みの 1 回分ごとに作り直すと、大きなファイルでは
+    // ラージオブジェクトヒープのごみが溜まってメモリ使用量が対象の大きさに応じて増えるため、使い回す。
+    private Local[] _locals = [];
+
     public ByteAnalyzer(long length, EntropyBlocks? blocks, bool digram, bool positions)
     {
         _length = length;
@@ -61,19 +65,37 @@ internal sealed class ByteAnalyzer
             bounds[w] = (int)((long)n * w / workers);
         }
 
-        var locals = new Local[workers];
+        if (_locals.Length < workers)
+        {
+            Array.Resize(ref _locals, workers);
+        }
+
+        Local[] locals = _locals;
+        for (int w = 0; w < workers; w++)
+        {
+            if (locals[w] is { } existing)
+            {
+                existing.Clear();
+            }
+            else
+            {
+                locals[w] = new Local { Digram = _digram ? new int[65536] : null };
+            }
+        }
+
         byte[] buffer = chunk.Buffer;
         if (workers == 1)
         {
-            locals[0] = ProcessSegment(chunk, buffer, 0, n);
+            ProcessSegment(locals[0], chunk, buffer, 0, n);
         }
         else
         {
-            Parallel.For(0, workers, w => locals[w] = ProcessSegment(chunk, buffer, bounds[w], bounds[w + 1]));
+            Parallel.For(0, workers, w => ProcessSegment(locals[w], chunk, buffer, bounds[w], bounds[w + 1]));
         }
 
-        foreach (Local local in locals)
+        for (int w = 0; w < workers; w++)
         {
+            Local local = locals[w];
             for (int b = 0; b < 256; b++)
             {
                 Histogram[b] += local.Histogram[b];
@@ -136,6 +158,15 @@ internal sealed class ByteAnalyzer
     {
         public readonly long[] Histogram = new long[256];
         public int[]? Digram;
+
+        public void Clear()
+        {
+            Array.Clear(Histogram);
+            if (Digram is not null)
+            {
+                Array.Clear(Digram);
+            }
+        }
     }
 
     private sealed class BlockAccumulator
@@ -145,9 +176,8 @@ internal sealed class ByteAnalyzer
         public long Bad;
     }
 
-    private Local ProcessSegment(ScanChunk chunk, byte[] buffer, int start, int end)
+    private void ProcessSegment(Local local, ScanChunk chunk, byte[] buffer, int start, int end)
     {
-        var local = new Local { Digram = _digram ? new int[65536] : null };
         Span<int> counts = stackalloc int[256];
         foreach ((int gs, int gl) in chunk.GoodParts())
         {
@@ -235,8 +265,6 @@ internal sealed class ByteAnalyzer
                 at = stop;
             }
         }
-
-        return local;
     }
 
     /// <summary>4 つの表に分けて数える (同じ値が続くときの書き込みの衝突を減らす)。</summary>

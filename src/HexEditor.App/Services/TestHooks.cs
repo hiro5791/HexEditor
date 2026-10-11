@@ -30,8 +30,11 @@ public static class TestHooks
 
     public static TestHookSettings Settings { get; private set; } = new();
 
-    /// <summary>管理者として実行している扱い (テスト用の設定 elevated。TC-UI-02-02)。</summary>
-    public static bool SimulatesElevation => Active && Settings.Elevated;
+    /// <summary>管理者として実行している扱い (テスト用の設定 elevated が true。TC-UI-02-02)。</summary>
+    public static bool SimulatesElevation => ElevationOverride == true;
+
+    /// <summary>テスト用の設定 elevated による管理者の扱いの上書き (null なら実際の権限)。</summary>
+    public static bool? ElevationOverride => Active ? Settings.Elevated : null;
 
     /// <summary>管理者として実行中のドロップの案内を出してよい (テスト用のビルドでは設定 adminDropNotice のときだけ。UI-34 の仕様 7)。</summary>
     public static bool AllowsAdminDropNotice => !Active || Settings.AdminDropNotice;
@@ -664,6 +667,8 @@ public static class TestHooks
     public static bool Active => false;
 
     public static bool SimulatesElevation => false;
+
+    public static bool? ElevationOverride => null;
 
     public static bool AllowsAdminDropNotice => true;
 

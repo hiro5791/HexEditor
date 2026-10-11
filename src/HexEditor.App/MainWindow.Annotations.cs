@@ -169,7 +169,8 @@ public sealed partial class MainWindow
     {
         CommandState NeedsEditor() => Editor is null ? CommandState.Unavailable(Loc.Get("Command_NoDocument")) : CommandState.Available;
         Commands.Register("edit.selectionToBookmarks", SelectionToBookmarksAsync, () => Editor is null ? CommandState.Unavailable(Loc.Get("Command_NoDocument"))
-            : MultiSelectionBridge.RangesOf(Editor).Count == 0 ? CommandState.Unavailable(Loc.Get("Command_NoSelection")) : CommandState.Available);
+            // 選択のバイト数で判定する (要素を並べない。100 GB にわたる矩形でも、コマンドの状態の更新でメモリを使わない)。
+            : Editor.SelectedByteCount == 0 ? CommandState.Unavailable(Loc.Get("Command_NoSelection")) : CommandState.Available);
         Commands.Register("go.bookmark.toSelection", () =>
         {
             IReadOnlyList<Bookmark> selected = BookmarkListView?.SelectedBookmarks ?? [];

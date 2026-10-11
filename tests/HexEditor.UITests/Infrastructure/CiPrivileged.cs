@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using Microsoft.Win32.SafeHandles;
 
 namespace HexEditor.UITests.Infrastructure;
@@ -111,21 +112,52 @@ public static class CiPrivileged
         return true;
     }
 
-    /// <summary>プロセスが管理者として動いているか (トークンの昇格。TokenElevation)。</summary>
+    /// <summary>
+    /// プロセスが管理者として動いているか (トークンの Administrators のグループが有効。アプリの判定 (Win32ProcessAccess.IsCurrentProcessElevated の
+    /// IsInRole) と同じ)。TokenElevation では判定しない: 制限付きのトークン (SAFER の一般ユーザー) は Administrators を拒否専用にするが、
+    /// 昇格したトークンから作ると TokenElevation が 1 のままになる。
+    /// </summary>
     public static bool IsElevated(int pid)
     {
         using Process process = Process.GetProcessById(pid);
-        if (!Native.OpenProcessToken(process.Handle, Native.TokenQuery, out SafeAccessTokenHandle token))
+        if (!Native.OpenProcessToken(process.Handle, Native.TokenQuery | Native.TokenDuplicate, out SafeAccessTokenHandle token))
         {
             throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 
         using (token)
         {
-            return Native.GetTokenInformation(token, Native.TokenElevation, out int elevated, sizeof(int), out _) ? elevated != 0
-                : throw new Win32Exception(Marshal.GetLastWin32Error());
+            using var identity = new WindowsIdentity(token.DangerousGetHandle());
+            return new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
         }
     }
+
+    /// <summary>プロセスのトークンの説明 (失敗の原因を調べるため: 管理者のグループ、TokenElevation、TokenElevationType、起動の経路)。</summary>
+    public static string Describe(int pid)
+    {
+        try
+        {
+            using Process process = Process.GetProcessById(pid);
+            if (!Native.OpenProcessToken(process.Handle, Native.TokenQuery, out SafeAccessTokenHandle token))
+            {
+                return $"OpenProcessToken failed ({Marshal.GetLastWin32Error()})";
+            }
+
+            using (token)
+            {
+                Native.GetTokenInformation(token, Native.TokenElevation, out int elevation, sizeof(int), out _);
+                Native.GetTokenInformation(token, Native.TokenElevationTypeClass, out int type, sizeof(int), out _);
+                return $"admin group={IsElevated(pid)}, TokenElevation={elevation}, TokenElevationType={type}, launch={LastRestrictedLaunch ?? "normal"}";
+            }
+        }
+        catch (Exception ex) when (ex is Win32Exception or ArgumentException or InvalidOperationException)
+        {
+            return ex.Message;
+        }
+    }
+
+    /// <summary>最後の <see cref="StartRestricted"/> が使ったトークン (失敗の説明用)。</summary>
+    public static string? LastRestrictedLaunch { get; private set; }
 
     // ---- 一般ユーザーの権限での起動 ----
 
@@ -140,22 +172,31 @@ public static class CiPrivileged
         EnsureEnabled();
         uint flags = Native.CreateUnicodeEnvironment | (noWindow ? Native.CreateNoWindow : 0);
         string commandLine = string.Join(' ', new[] { exe }.Concat(arguments).Select(Quote));
-        if (ExplorerToken() is { } explorer)
+        if (LimitedToken() is ({ } limited, { } source))
         {
-            using (explorer)
+            using (limited)
             {
-                if (Native.DuplicateTokenEx(explorer, Native.TokenAllAccess, 0, 2 /* SecurityImpersonation */, 1 /* TokenPrimary */, out SafeAccessTokenHandle primary))
+                if (Native.DuplicateTokenEx(limited, Native.TokenAllAccess, 0, 2 /* SecurityImpersonation */, 1 /* TokenPrimary */, out SafeAccessTokenHandle primary))
                 {
                     using (primary)
                     {
                         var si = new Native.StartupInfo { cb = Marshal.SizeOf<Native.StartupInfo>() };
                         if (Native.CreateProcessWithTokenW(primary, 0, null, commandLine, flags, 0, workingDirectory, ref si, out Native.ProcessInformation pi))
                         {
+                            LastRestrictedLaunch = "limited token of " + source;
                             return Started(pi);
                         }
+
+                        source += $" (CreateProcessWithTokenW failed: {Marshal.GetLastWin32Error()})";
                     }
                 }
             }
+
+            LastRestrictedLaunch = "SAFER normal user after " + source;
+        }
+        else
+        {
+            LastRestrictedLaunch = "SAFER normal user (no limited token in the session)";
         }
 
         return StartSafer(commandLine, workingDirectory, flags);
@@ -206,31 +247,60 @@ public static class CiPrivileged
         }
     }
 
-    /// <summary>同じセッションの、昇格していないエクスプローラーのトークン (なければ null)。</summary>
-    private static SafeAccessTokenHandle? ExplorerToken()
+    /// <summary>
+    /// 同じセッション・同じユーザーの、UAC の分割されたトークンのうち制限付きのもの (TokenElevationTypeLimited) を持つプロセスのトークンと、
+    /// そのプロセスの説明。エクスプローラーを先に探し、なければほかのプロセス (sihost、taskhostw など) から探す。なければ null。
+    /// </summary>
+    private static (SafeAccessTokenHandle Token, string Source)? LimitedToken()
     {
-        int session = Process.GetCurrentProcess().SessionId;
-        foreach (Process p in Process.GetProcessesByName("explorer"))
+        int session;
+        using (Process current = Process.GetCurrentProcess())
         {
-            using (p)
+            session = current.SessionId;
+        }
+
+        string? user;
+        using (WindowsIdentity me = WindowsIdentity.GetCurrent())
+        {
+            user = me.User?.Value;
+        }
+
+        Process[] all = Process.GetProcesses();
+        try
+        {
+            foreach (Process p in all.OrderBy(p => string.Equals(p.ProcessName, "explorer", StringComparison.OrdinalIgnoreCase) ? 0 : 1))
             {
                 try
                 {
-                    if (p.SessionId != session || !Native.OpenProcessToken(p.Handle, Native.TokenDuplicate | Native.TokenQuery | Native.TokenAssignPrimary, out SafeAccessTokenHandle token))
+                    if (p.Id is 0 or 4 || p.SessionId != session
+                        || !Native.OpenProcessToken(p.Handle, Native.TokenDuplicate | Native.TokenQuery | Native.TokenAssignPrimary, out SafeAccessTokenHandle token))
                     {
                         continue;
                     }
 
-                    if (Native.GetTokenInformation(token, Native.TokenElevation, out int elevated, sizeof(int), out _) && elevated == 0)
+                    bool limited = Native.GetTokenInformation(token, Native.TokenElevationTypeClass, out int type, sizeof(int), out _) && type == 3 /* Limited */
+                        && Native.GetTokenInformation(token, Native.TokenElevation, out int elevated, sizeof(int), out _) && elevated == 0;
+                    if (limited)
                     {
-                        return token;
+                        using var identity = new WindowsIdentity(token.DangerousGetHandle());
+                        if (identity.User?.Value == user)
+                        {
+                            return (token, $"{p.ProcessName} ({p.Id})");
+                        }
                     }
 
                     token.Dispose();
                 }
-                catch (Exception ex) when (ex is Win32Exception or InvalidOperationException)
+                catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or UnauthorizedAccessException or System.Security.SecurityException)
                 {
                 }
+            }
+        }
+        finally
+        {
+            foreach (Process p in all)
+            {
+                p.Dispose();
             }
         }
 
@@ -274,6 +344,7 @@ public static class CiPrivileged
         public const uint TokenDuplicate = 0x0002;
         public const uint TokenQuery = 0x0008;
         public const uint TokenAllAccess = 0xF01FF;
+        public const int TokenElevationTypeClass = 18;
         public const int TokenElevation = 20;
         public const uint CreateUnicodeEnvironment = 0x00000400;
         public const uint CreateNoWindow = 0x08000000;
@@ -377,7 +448,9 @@ public sealed class ProcessWatch : IAsyncDisposable
     {
         CiPrivileged.EnsureEnabled();
         _before = [.. Names.SelectMany(Process.GetProcessesByName).Select(p => { using (p) { return p.Id; } })];
-        _trace = new ManagementEventWatcher(new WqlEventQuery("SELECT ProcessID, ProcessName FROM Win32_ProcessStartTrace"));
+        // WqlEventQuery の文字列の引数は「select * 」で始まる問い合わせか、イベントのクラス名だけを受け付ける (列を並べた問い合わせは
+        // クラス名として解釈されて Invalid parameter になる)。クラス名を渡す (select * from Win32_ProcessStartTrace になる)。
+        _trace = new ManagementEventWatcher(new WqlEventQuery("Win32_ProcessStartTrace"));
         _trace.EventArrived += OnProcessStarted;
         _trace.Start();
         WaitForSentinel();

@@ -27,8 +27,9 @@ public sealed class PrivilegedTests
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Restricted = !elevated, Hooks = hooks, Files = files ?? [] });
         JsonObject info = await app.SendAsync("helperInfo");
-        Assert.True(info["elevated"]!.GetValue<bool>() == elevated, $"The app should run {(elevated ? "as administrator" : "without administrator rights")}.");
-        Assert.Equal(elevated, CiPrivileged.IsElevated(app.Pid));
+        string expected = $"The app should run {(elevated ? "as administrator" : "without administrator rights")}";
+        Assert.True(info["elevated"]!.GetValue<bool>() == elevated, $"{expected} (the app's own check; {CiPrivileged.Describe(app.Pid)}).");
+        Assert.True(CiPrivileged.IsElevated(app.Pid) == elevated, $"{expected} ({CiPrivileged.Describe(app.Pid)}).");
         return app;
     }
 
@@ -39,9 +40,20 @@ public sealed class PrivilegedTests
         return await app.WaitForDialogAsync("OpenDiskDialog");
     }
 
-    /// <summary>ディスク・プロセスの一覧のダイアログで、文字に <paramref name="text"/> を含む行を選び、「開く」を押す。</summary>
+    /// <summary>
+    /// ディスク・プロセスの一覧のダイアログで、文字に <paramref name="text"/> を含む行を選び、「開く」を押す。物理ディスクのパス
+    /// (\\.\PhysicalDriveN) は、一覧に出る名前 (「Disk N (モデル, 大きさ)」の「Disk N (」まで) で探す (一覧はパスを示さない)。
+    /// </summary>
     private static async Task ChooseAndOpenAsync(AppSession app, AutomationElement dialog, string text, bool idle = true)
     {
+        const string DrivePrefix = @"\\.\PhysicalDrive";
+        if (text.StartsWith(DrivePrefix, StringComparison.OrdinalIgnoreCase) && int.TryParse(text.AsSpan(DrivePrefix.Length), out int number))
+        {
+            string format = R("OpenDisk_DiskName");
+            text = format[..format.IndexOf("{1}", StringComparison.Ordinal)]
+                .Replace("{0}", number.ToString(System.Globalization.CultureInfo.InvariantCulture), StringComparison.Ordinal);
+        }
+
         AutomationElement? item = null;
         await app.WaitUntilAsync(() => Task.FromResult((item = dialog.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.ListItem))
             .FirstOrDefault(i => AppSession.NameOf(i).Contains(text, StringComparison.Ordinal))) is not null), TimeSpan.FromSeconds(15), $"the list item '{text}'");

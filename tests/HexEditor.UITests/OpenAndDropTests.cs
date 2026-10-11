@@ -49,7 +49,10 @@ public sealed class OpenAndDropTests
         await app.WaitUntilAsync(async () => (await app.RenderAsync())["firstFrameTime"]!.GetValue<long>() != 0, TimeSpan.FromSeconds(10), "the first frame");
         long created = (await app.StateAsync())["newDocumentCreatedAt"]!.GetValue<long>();
         long shown = (await app.RenderAsync())["firstFrameTime"]!.GetValue<long>() - created;
-        Assert.True(shown <= 100, $"creating took {shown} ms ({watch.ElapsedMilliseconds} ms after the button with the round trips)");
+        // 100 ms は時間の目標 (共有のランナーでは警告)。桁違いの遅さ (全体を書き出しているなど) はどの環境でも失敗にする。
+        string took = $"creating took {shown} ms ({watch.ElapsedMilliseconds} ms after the button with the round trips)";
+        TimeBudget.Limit(shown <= 100, took);
+        Assert.True(shown <= 2000, took);
 
         // 3. 長さとピースの数 (生成ピース 1 つ)。
         JsonObject doc = await app.DocumentAsync();

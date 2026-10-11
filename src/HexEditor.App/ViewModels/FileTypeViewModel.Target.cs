@@ -96,12 +96,22 @@ public sealed partial class FileTypeViewModel
 
         if (!_embeddedTargetChosen && EmbeddedTargetIndex != (int)AnalysisTargetKind.Custom)
         {
-            int auto = (int)AnalysisTarget.DefaultKind(doc.Editor.HasSelection, MultiSelectionOf?.Invoke(doc.Editor).Count ?? 0);
+            // 要素の数は数えるだけにする (要素を並べると、100 GB にわたる矩形では選択が変わるたびに数 GB を使う)。
+            int multiCount = doc.Editor.HasMultipleRanges ? (int)Math.Min(doc.Editor.SelectedRangeCount, int.MaxValue) : 0;
+            int auto = (int)AnalysisTarget.DefaultKind(doc.Editor.HasSelection, multiCount);
             if (auto != EmbeddedTargetIndex)
             {
                 EmbeddedTargetIndex = auto;
                 return;
             }
+        }
+
+        // 要素の多いマルチ選択・矩形は、要素を並べずに数だけを示す (要素は探すときに作る)。
+        if (EmbeddedTargetIndex == (int)AnalysisTargetKind.MultiSelection && doc.Editor.HasMultipleRanges && doc.Editor.SelectedRangeCount > 100_000)
+        {
+            EmbeddedRangeText = Loc.Format("Hash_Ranges", doc.Editor.SelectedRangeCount,
+                doc.Editor.SelectedByteCount.ToString("N0", CultureInfo.CurrentCulture));
+            return;
         }
 
         if (ResolveEmbeddedRanges() is not { } ranges)

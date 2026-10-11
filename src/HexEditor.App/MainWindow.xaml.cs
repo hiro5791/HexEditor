@@ -211,7 +211,7 @@ public sealed partial class MainWindow : Window
         IAppEnvironment env = Program.Environment;
         string app = env.Channel == ReleaseChannel.Preview ? "HexEditor Preview" : "HexEditor";
         string title = Vm.Selected is { } d ? $"{(d.Document.IsModified ? "● " : string.Empty)}{d.DisplayName} - {app}" : app;
-        if (env.IsElevated || TestHooks.SimulatesElevation)
+        if (TestHooks.ElevationOverride ?? env.IsElevated)
         {
             title += " " + Loc.Get("Title_Administrator");
         }

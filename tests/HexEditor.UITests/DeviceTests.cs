@@ -68,7 +68,8 @@ public sealed class DeviceTests
         };
         string devicePath = ctx.WriteFile("fake-devices.json", Encoding.UTF8.GetBytes(devices.ToJsonString()));
         string processPath = ctx.WriteFile("fake-processes.json", Encoding.UTF8.GetBytes(processes.ToJsonString()));
-        return new JsonObject { ["fakeDevices"] = devicePath, ["fakeProcesses"] = processPath };
+        // 管理者でない扱いにする (CI のランナーは管理者として動くため、実際の権限によらず補助プロセスの経路を確かめる)。
+        return new JsonObject { ["fakeDevices"] = devicePath, ["fakeProcesses"] = processPath, ["elevated"] = false };
     }
 
     [Fact]

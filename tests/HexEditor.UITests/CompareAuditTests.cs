@@ -52,7 +52,12 @@ public sealed class CompareAuditTests
                 }),
             }),
         };
-        return new JsonObject { ["fakeProcesses"] = ctx.WriteFile("fake-processes.json", Encoding.UTF8.GetBytes(processes.ToJsonString())) };
+        // 管理者でない扱いにする (CI のランナーは管理者として動くため、実際の権限によらず補助プロセスでの再試行を確かめる)。
+        return new JsonObject
+        {
+            ["fakeProcesses"] = ctx.WriteFile("fake-processes.json", Encoding.UTF8.GetBytes(processes.ToJsonString())),
+            ["elevated"] = false,
+        };
     }
 
     /// <summary>スナップショットを作り (名前を決めた後の処理)、できたスナップショットのパスを返す。</summary>

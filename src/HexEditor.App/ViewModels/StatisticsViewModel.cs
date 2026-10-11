@@ -580,6 +580,9 @@ public sealed partial class StatisticsViewModel : ObservableObject
     /// <summary>カーソル位置 (計算した対象の論理位置。範囲外なら null)。エントロピーグラフの縦線 (ANA-13 の仕様 6)。</summary>
     public long? CursorLogical => _target is { } doc ? Ranges?.ToLogical(doc.Editor.Cursor) : null;
 
+    /// <summary>要素を並べずに数だけを示すマルチ選択の要素数 (これを超えるとき)。</summary>
+    private const long LargeMultiSelection = 100_000;
+
     /// <summary>対象範囲の表示を更新し、範囲が変わったら自動で計算する準備をする。</summary>
     private void UpdateTarget(bool scheduleAuto)
     {
@@ -592,13 +595,27 @@ public sealed partial class StatisticsViewModel : ObservableObject
         // 選択範囲の有無で既定を切り替える (0.1 の「既定になる条件」)。利用者が選んだ後は変えない。
         if (!_targetChosen && TargetKind != StatsTargetKind.Custom)
         {
-            StatsTargetKind auto = MultiSelectionOf?.Invoke(doc.Editor) is { Count: >= 2 } ? StatsTargetKind.MultiSelection
+            // 要素の数は数えるだけにする (要素を並べると、100 GB にわたる矩形では選択が変わるたびに数 GB を使う)。
+            StatsTargetKind auto = doc.Editor.HasMultipleRanges && doc.Editor.SelectedRangeCount >= 2 ? StatsTargetKind.MultiSelection
                 : doc.Editor.HasSelection ? StatsTargetKind.Selection : StatsTargetKind.WholeDocument;
             if (TargetKind != auto)
             {
                 TargetKind = auto;
                 return;
             }
+        }
+
+        // 要素の多いマルチ選択・矩形 (100 GB の全体にわたる矩形など) は、要素を並べずに数だけを示し、自動では計算しない
+        // (要素は「再計算」を押したときに作る。ハッシュのパネルと同じ)。
+        if (TargetKind == StatsTargetKind.MultiSelection && doc.Editor.HasMultipleRanges && doc.Editor.SelectedRangeCount > LargeMultiSelection)
+        {
+            IsRangeError = false;
+            RangeText = Loc.Format("Hash_Ranges", doc.Editor.SelectedRangeCount,
+                doc.Editor.SelectedByteCount.ToString("N0", CultureInfo.CurrentCulture));
+            _timer?.Stop();
+            _requestedRanges = [];
+            ComputeHighlighted = true;
+            return;
         }
 
         IReadOnlyList<HashRange>? ranges = ResolveRanges();
