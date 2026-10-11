@@ -144,6 +144,15 @@ public sealed class BlockCache : IDisposable
         return false;
     }
 
+    /// <summary>読み込みの状態 (テストの失敗の診断用): 動いているワーカー、待っている要求、読み込み中のブロック、キャッシュのブロック数。</summary>
+    public string DescribeState()
+    {
+        lock (_lock)
+        {
+            return $"running={_running}, pending={_pendingPriority.Count}, inFlight={_inFlight.Count}, cached={_map.Count}, capacity={_capacityBytes / 1024 / 1024} MiB, disposed={_disposed}";
+        }
+    }
+
     /// <summary>使い回しに取ってある領域の数 (テストと診断用)。</summary>
     public int FreeBlockCount
     {
@@ -361,7 +370,14 @@ public sealed class BlockCache : IDisposable
 
             if (block is not null)
             {
-                BlockLoaded?.Invoke(index * BlockSize, block.Length);
+                try
+                {
+                    BlockLoaded?.Invoke(index * BlockSize, block.Length);
+                }
+                catch (Exception ex) when (ex is not OutOfMemoryException)
+                {
+                    // 通知先の例外でワーカーを止めない (止まると _running が減らず、以後の読み込みが始まらない)。
+                }
             }
         }
     }

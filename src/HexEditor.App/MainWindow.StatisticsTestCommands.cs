@@ -156,6 +156,9 @@ public sealed partial class MainWindow
             result["blocks"] = b.Count;
         }
 
+        // 拡大の診断 (グラフの幅が 0 のままだと 1 ブロックが 4 ピクセルにならず、細かいブロックは計算されない)。
+        result["chartWidth"] = _statsPanel?.EntropyChartControl?.ActualWidth ?? 0;
+        result["chartZoom"] = _statsPanel?.EntropyChartControl?.Zoom ?? 0;
         result["detailLog"] = new JsonArray([.. vm.DetailLog.Select(d => (JsonNode?)new JsonObject { ["blockSize"] = d.BlockSize, ["from"] = d.From, ["to"] = d.To })]);
         result["blockRows"] = new JsonArray([.. vm.BlockRows.Select(r => (JsonNode?)new JsonObject { ["offset"] = r.Offset, ["blockSize"] = r.BlockSize, ["entropy"] = r.Entropy })]);
         result["ngrams"] = new JsonArray([.. vm.NGramRows.Select(r => (JsonNode?)new JsonObject { ["hex"] = r.Hex, ["count"] = r.Row.Count, ["first"] = r.Row.FirstOffset })]);

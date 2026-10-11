@@ -118,9 +118,13 @@ public sealed class StatisticsPanelTests
 
         // 1 ブロックが 4 ピクセル以上になるまで拡大する。パネルの幅は画面・ランナーで変わる (狭いと 8 倍では 1 ブロックが 4 px に満たない) ため、
         // 幅 128 px まで足りる 32 倍にする。
+        // グラフが配置されて幅を持つのを待ってから拡大する (幅が 0 だと 1 ブロックが 4 ピクセルにならず、細かいブロックは計算されない)。
+        await app.WaitUntilAsync(async () => (await StatsAsync(app))["chartWidth"]!.GetValue<double>() >= 100, Wait, "the entropy chart to have a width");
         await StatsAsync(app, "zoomIn", new JsonObject { ["times"] = 5 });
         await StatsAsync(app, "flushDetail");
-        await app.WaitUntilAsync(async () => (await StatsAsync(app))["detailLog"]!.AsArray().Count > 0, Wait, "the detail blocks");
+        JsonObject last = await StatsAsync(app);
+        await app.WaitUntilAsync(async () => (last = await StatsAsync(app))["detailLog"]!.AsArray().Count > 0, Wait,
+            "the detail blocks (a chart width of 100 or more is needed)");
         JsonObject log = (await StatsAsync(app))["detailLog"]!.AsArray()[0]!.AsObject();
         long size = log["blockSize"]!.GetValue<long>();
         Assert.InRange(size, 256, 16 * 1024 - 1);
