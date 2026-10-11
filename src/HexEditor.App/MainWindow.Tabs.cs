@@ -135,9 +135,15 @@ public sealed partial class MainWindow
             Vm.RemovePending(pending);
             DocumentViewModel? opened = Vm.OpenRestored(
                 tab,
-                (path, readOnly) => TryOpen(path, index, readOnly, restorePosition: false),
+                t => OpenSessionTab(t, index),
                 vm => ShowNotice(Loc.Get("Session_FileChanged"), InfoBarSeverity.Informational, vm),
                 index);
+            if (opened is null && _sessionTabDecoding)
+            {
+                // 大きいファイルのデコード中 (終わったら同じ位置にタブを開く)。
+                return;
+            }
+
             opened ??= Vm.AddMissing(tab, index);
             _mru.Replace(pending, opened);
             Vm.Selected = opened;
@@ -149,6 +155,11 @@ public sealed partial class MainWindow
         }
 
         UpdateTitle();
+        if (tab.Kind == SessionTabKind.Disk && Vm.Selected is { IsMissingDisk: true } disk)
+        {
+            // ディスクのタブは、初めて表示したときに開き直す (管理者権限が要るなら先に確かめる。UI-31 の仕様 5)。
+            DispatcherQueue.TryEnqueue(() => _ = OpenRestoredDiskAsync(disk, confirm: true));
+        }
     }
 
     // ---- コマンド ----
@@ -417,7 +428,17 @@ public sealed partial class MainWindow
             null,
             new("TabMenu_Pin", Loc.Get(doc.IsPinned ? "Tab_Unpin" : "Tab_Pin"), true, () => Vm.SetPinned(doc, !doc.IsPinned)),
             null,
-            new("TabMenu_MoveToNewWindow", Loc.Get("Tab_MoveToNewWindow"), Vm.Documents.Count > 1, () => MoveTabToNewWindow(doc, null)),
+            // 同じドキュメントの新しいビュー (VIEW-38) と、操作中のタブの右への並べて表示 (VIEW-39)。
+            new("TabMenu_NewView", Loc.Get("Tab_NewView"), NewViewState(doc).Enabled, () => OpenNewView(doc)),
+            new("TabMenu_ShowToRight", Loc.Get("Tab_ShowToRight"), CanShowToRight(doc), () =>
+            {
+                if (Vm.Selected is { } left && CanShowToRight(doc))
+                {
+                    AddSideBySide(left, doc);
+                }
+            }),
+            null,
+            new("TabMenu_MoveToNewWindow",Loc.Get("Tab_MoveToNewWindow"), Vm.Documents.Count > 1, () => MoveTabToNewWindow(doc, null)),
             new("TabMenu_MoveToWindow", Loc.Get("Tab_MoveToWindow"), windows.Count > 0, null, Children:
             [
                 .. windows.Select(w => new TabMenuEntry(
@@ -439,6 +460,18 @@ public sealed partial class MainWindow
                 Vm.Selected = doc;
                 _ = Commands.ExecuteAsync("edit.readOnly");
             }, Checked: doc.Editor.ReadOnly),
+
+            // デコードして開いたドキュメントの「形式の設定...」(TOOL-11 の仕様 2)。
+            .. doc.Encoded is null ? Array.Empty<TabMenuEntry?>() :
+            [
+                new("TabMenu_FormatSettings", Loc.Get("Tab_FormatSettings"), true, () =>
+                {
+                    Vm.Selected = doc;
+                    _ = Commands.ExecuteAsync("file.formatSettings");
+                }),
+            ],
+            .. CompareTabMenuEntries(doc),
+            .. DeviceTabMenuEntries(doc),
         ];
     }
 }

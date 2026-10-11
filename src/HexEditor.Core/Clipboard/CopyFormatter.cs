@@ -148,7 +148,8 @@ public static partial class CopyFormatter
         CopyFormat.HexPlain => HexList(o, w, length, e => Hex(e, 2, o), "", ""),
         CopyFormat.HexCommaPrefixed => HexList(o, w, length, e => "0x" + Hex(e, 2, o), ", ", ","),
         CopyFormat.HexEscaped => HexList(o, w, length, e => "\\x" + Hex(e, 2, o), "", ""),
-        CopyFormat.HexUrl => new ListWriter(w, o, length, 1, int.MaxValue, e => "%" + Hex(e, 2, o)) { Separator = "" },
+        CopyFormat.HexUrl => new ListWriter(w, o, length, 1, int.MaxValue,
+            e => o.UrlKeepUnreserved && IsUrlUnreserved((byte)e) ? ((char)e).ToString() : "%" + Hex(e, 2, o)) { Separator = "" },
         CopyFormat.HexCustom => HexList(o, w, length, e => o.CustomPrefix + Hex(e, 2, o) + o.CustomSuffix, o.CustomSeparator, ""),
         CopyFormat.Decimal => HexList(o, w, length, e => e.ToString(CultureInfo.InvariantCulture), " ", ""),
         CopyFormat.Octal => HexList(o, w, length, e => Convert.ToString((long)e, 8), " ", ""),
@@ -170,6 +171,10 @@ public static partial class CopyFormatter
         _ => new PositionWriter(w, o, offset, length),
     };
 
+    /// <summary>RFC 3986 の非予約文字 (英数字と <c>-._~</c>)。</summary>
+    private static bool IsUrlUnreserved(byte b) => b is >= (byte)'A' and <= (byte)'Z' or >= (byte)'a' and <= (byte)'z' or >= (byte)'0' and <= (byte)'9'
+        or (byte)'-' or (byte)'.' or (byte)'_' or (byte)'~';
+
     private static ListWriter HexList(CopyOptions o, TextWriter w, long length, Func<ulong, string> element, string separator, string lineEnd) =>
         new(w, o, length, 1, o.BytesPerLine, element) { Separator = separator, LineEnd = lineEnd };
 
@@ -186,9 +191,23 @@ public static partial class CopyFormatter
         string name = o.VariableName;
         string nl = o.NewLine;
         string N = count.ToString(CultureInfo.InvariantCulture);
-        string hx(ulong v) => "0x" + Hex(v, digits, o);
         int idx = e switch { 1 => 0, 2 => 1, 4 => 2, _ => 3 };
+
+        // 10 進 (TOOL-09 の仕様 2 の「16 進 / 10 進」)。C / C++ の 4・8 バイトは符号なしの接尾辞を付ける。
+        string dec(ulong v) => v.ToString(CultureInfo.InvariantCulture)
+            + (format is CopyFormat.ArrayC or CopyFormat.ArrayCpp ? (e == 8 ? "ULL" : e == 4 ? "U" : string.Empty) : string.Empty);
+        string hx(ulong v) => o.ArrayDecimal ? dec(v) : "0x" + Hex(v, digits, o);
         string pick(string a, string b, string c, string d) => idx switch { 0 => a, 1 => b, 2 => c, _ => d };
+
+        // 修飾 (TOOL-09 の仕様 2)。言語ごとの書き方: 既定は従来の形。
+        string mod(string none, string constant, string statik, string both, string dflt) => o.Modifier switch
+        {
+            ArrayModifier.None => none,
+            ArrayModifier.Const => constant,
+            ArrayModifier.Static => statik,
+            ArrayModifier.StaticConst => both,
+            _ => dflt,
+        };
 
         ListWriter list(Func<ulong, string> element, string singleOpen, string singleClose, string multiOpen, string multiClose,
             string separator = ", ", string lastLineEnd = "") =>
@@ -208,39 +227,43 @@ public static partial class CopyFormatter
         {
             case CopyFormat.ArrayC:
             {
-                string type = pick("unsigned char", "uint16_t", "uint32_t", "uint64_t");
+                string type = mod(string.Empty, "const ", "static ", "static const ", string.Empty) + pick("unsigned char", "uint16_t", "uint32_t", "uint64_t");
                 return list(hx, $"{type} {name}[{N}] = {{ ", " };", $"{type} {name}[{N}] = {{", "};");
             }
 
             case CopyFormat.ArrayCpp:
             {
                 string type = pick("std::uint8_t", "std::uint16_t", "std::uint32_t", "std::uint64_t");
-                string head = $"constexpr std::array<{type}, {N}> {name} = {{";
+                string head = mod(string.Empty, "const ", "static ", "static constexpr ", "constexpr ") + $"std::array<{type}, {N}> {name} = {{";
                 return list(hx, head + " ", " };", head, "};");
             }
 
             case CopyFormat.ArrayCSharp when o.CSharpSpan:
             {
                 string type = pick("byte", "ushort", "uint", "ulong");
-                string head = $"ReadOnlySpan<{type}> {name} => [";
+                string head = mod(string.Empty, string.Empty, "static ", "static ", string.Empty) + $"ReadOnlySpan<{type}> {name} => [";
                 return list(hx, head, "];", head, "];");
             }
 
             case CopyFormat.ArrayCSharp:
             {
-                string type = pick("byte", "ushort", "uint", "ulong");
+                string type = mod(string.Empty, "readonly ", "static ", "static readonly ", string.Empty) + pick("byte", "ushort", "uint", "ulong");
                 return list(hx, $"{type}[] {name} = {{ ", " };", $"{type}[] {name} = {{", "};");
             }
 
             case CopyFormat.ArrayJava:
             {
-                string type = pick("byte", "short", "int", "long");
+                string type = mod(string.Empty, "final ", "static ", "static final ", string.Empty) + pick("byte", "short", "int", "long");
+                // Java の 10 進のリテラルは符号付きの範囲だけ (int・long は 2 の補数の値で書く)。
+                string jv(ulong v) => !o.ArrayDecimal ? hx(v)
+                    : idx == 2 ? unchecked((int)(uint)v).ToString(CultureInfo.InvariantCulture)
+                    : idx == 3 ? unchecked((long)v).ToString(CultureInfo.InvariantCulture) : v.ToString(CultureInfo.InvariantCulture);
                 string elem(ulong v) => idx switch
                 {
-                    0 => "(byte) " + hx(v),
-                    1 => "(short) " + hx(v),
-                    2 => hx(v),
-                    _ => hx(v) + "L",
+                    0 => "(byte) " + jv(v),
+                    1 => "(short) " + jv(v),
+                    2 => jv(v),
+                    _ => jv(v) + "L",
                 };
                 return list(elem, $"{type}[] {name} = {{ ", " };", $"{type}[] {name} = {{", "};");
             }
@@ -249,7 +272,7 @@ public static partial class CopyFormatter
             {
                 string type = pick("Uint8Array", "Uint16Array", "Uint32Array", "BigUint64Array");
                 string elem(ulong v) => idx == 3 ? hx(v) + "n" : hx(v);
-                string head = $"const {name} = new {type}([";
+                string head = mod("let ", "const ", "let ", "const ", "const ") + $"{name} = new {type}([";
                 return list(elem, head, "]);", head, "]);");
             }
 
@@ -261,30 +284,30 @@ public static partial class CopyFormatter
             case CopyFormat.ArrayRust:
             {
                 string type = pick("u8", "u16", "u32", "u64");
-                string head = $"let {name}: [{type}; {N}] = [";
+                string head = mod("let ", "const ", "static ", "static ", "let ") + $"{name}: [{type}; {N}] = [";
                 return list(hx, head, "];", head, "];");
             }
 
             case CopyFormat.ArrayGo:
             {
                 string type = pick("byte", "uint16", "uint32", "uint64");
-                string head = $"{name} := []{type}{{";
+                string head = o.Modifier is ArrayModifier.Default or ArrayModifier.None ? $"{name} := []{type}{{" : $"var {name} = []{type}{{";
                 return list(hx, head, "}", head, "}", lastLineEnd: ",");
             }
 
             case CopyFormat.ArrayPascal:
             {
                 string type = pick("Byte", "Word", "LongWord", "UInt64");
-                string head = $"const {name}: array[0..{count - 1}] of {type} = (";
-                return list(v => "$" + Hex(v, digits, o), head, ");", head, ");");
+                string head = mod("var ", "const ", "var ", "const ", "const ") + $"{name}: array[0..{count - 1}] of {type} = (";
+                return list(v => o.ArrayDecimal ? dec(v) : "$" + Hex(v, digits, o), head, ");", head, ");");
             }
 
             case CopyFormat.ArrayVisualBasic:
             {
                 string type = pick("Byte", "UShort", "UInteger", "ULong");
                 string suffix = pick(string.Empty, "US", "UI", "UL");
-                string head = $"Dim {name} As {type}() = {{";
-                return list(v => "&H" + Hex(v, digits, o) + suffix, head, "}", head, "}");
+                string head = mod("Dim ", "ReadOnly ", "Static ", "Shared ReadOnly ", "Dim ") + $"{name} As {type}() = {{";
+                return list(v => (o.ArrayDecimal ? dec(v) : "&H" + Hex(v, digits, o)) + suffix, head, "}", head, "}");
             }
 
             case CopyFormat.ArrayPureBasic:

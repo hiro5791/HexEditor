@@ -142,4 +142,98 @@ public sealed class InspectorPerformanceTests(ITestOutputHelper output)
         output.WriteLine($"名前順 {byName:F0} ms、開始順 {byStart:F0} ms、絞り込み {filter:F0} ms");
         Assert.All(new[] { byName, byStart, filter }, t => Assert.True(t <= 1000, $"{t:F0} ms"));
     });
+
+    /// <summary>
+    /// TD-INSP-RULES-64 と同じ 64 件のドキュメントのルール (バイト値 16、Hex パターン 16、テキスト 16、正規表現 8、数値 8)。
+    /// Hex パターンは TD-RANDOM-16M の先頭から 4 KiB ごとに取った 4 バイト。
+    /// </summary>
+    internal static List<JsonObject> Rules64(string randomFile)
+    {
+        var rules = new List<JsonObject>();
+        for (int i = 0; i < 16; i++)
+        {
+            rules.Add(new JsonObject { ["name"] = $"byte{i}", ["kind"] = "ByteValues", ["pattern"] = $"{i * 16:X2}-{i * 16 + 15:X2}", ["background"] = $"#{(i * 16) % 256:X2}8080" });
+        }
+
+        using (FileStream stream = File.OpenRead(randomFile))
+        {
+            byte[] four = new byte[4];
+            for (int i = 0; i < 16; i++)
+            {
+                stream.Position = i * 4096L;
+                stream.ReadExactly(four);
+                rules.Add(new JsonObject { ["name"] = $"hex{i}", ["kind"] = "HexPattern", ["pattern"] = Convert.ToHexString(four), ["border"] = "Solid", ["foreground"] = "#FF0000" });
+            }
+        }
+
+        string[] texts = ["PK", "MZ", "EL", "GI", "BM", "ID", "OG", "RI", "FF", "WA", "AV", "PN", "JF", "EX", "IF", "7z"];
+        foreach (string t in texts)
+        {
+            rules.Add(new JsonObject { ["name"] = "text" + t, ["kind"] = "Text", ["pattern"] = t, ["background"] = "#00FF00" });
+        }
+
+        string[] regexes = [@"[\x00-\x1F]{4,}", @"[\x20-\x7E]{8,}", @"\xFF{3,}", @"\x00{3,}", @"[\x80-\xFF]{6,}", @"PK..", @"[A-Z]{4}", @"[0-9]{3,}"];
+        for (int i = 0; i < regexes.Length; i++)
+        {
+            rules.Add(new JsonObject { ["name"] = $"regex{i}", ["kind"] = "Regex", ["pattern"] = regexes[i], ["border"] = "Dashed" });
+        }
+
+        for (int i = 0; i < 8; i++)
+        {
+            rules.Add(new JsonObject { ["name"] = $"number{i}", ["kind"] = "Number", ["numberType"] = "uint32", ["pattern"] = $"0x{i * 0x100:X}..0x{i * 0x100 + 0xFF:X}", ["modulus"] = 4, ["background"] = "#0000FF" });
+        }
+
+        return rules;
+    }
+
+    [PerfEnvironmentFact]
+    [Trait(UiTest.TC, "TC-INSP-33-05")]
+    public Task Scrolling_with_sixty_four_rules_keeps_sixty_fps() => UiTestContext.RunAsync(async ctx =>
+    {
+        string file = ctx.TestData("TD-RANDOM-16M");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [file] });
+        await app.CommandAsync("Command_ToggleColoringRules");
+        // TD-INSP-RULES-64 の付随データの代わりに、同じ 64 件をテスト用の命令の通り道で付ける。
+        foreach (JsonObject rule in Rules64(file))
+        {
+            await app.SendAsync("coloring", new JsonObject { ["scope"] = "document", ["action"] = "add", ["rule"] = rule });
+        }
+
+        JsonObject state = await app.SendAsync("coloring", new JsonObject());
+        Assert.All(state["items"]!.AsArray(), i => Assert.True(i!["enabled"]!.GetValue<bool>() && string.IsNullOrEmpty(i["error"]?.GetValue<string>()), i.ToJsonString()));
+        Assert.Equal(64, state["compiled"]!.GetValue<int>());
+        await app.IdleAsync();
+        await app.SendAsync("coloring", new JsonObject { ["action"] = "timings" });
+
+        string log = Path.Combine(ctx.Root, "diagnostics.csv");
+        await app.SendAsync("diagnostics", new JsonObject { ["enabled"] = true, ["logPath"] = log });
+        var watch = Stopwatch.StartNew();
+        long next = 0;
+        while (watch.Elapsed < TimeSpan.FromSeconds(10))
+        {
+            await app.SendAsync("keyMeasured", new JsonObject { ["key"] = "PageDown" });
+            next += 33;
+            int wait = (int)(next - watch.ElapsedMilliseconds);
+            if (wait > 0)
+            {
+                await Task.Delay(wait);
+            }
+        }
+
+        await app.IdleAsync();
+        await app.SendAsync("diagnostics", new JsonObject { ["enabled"] = false });
+        FrameLog frames = FrameLog.Read(log);
+        IReadOnlyList<double> intervals = [.. frames.Frames.Select(f => f.Interval)];
+        foreach (FrameLog.Render r in frames.Renders.OrderByDescending(r => r.Milliseconds).Take(5))
+        {
+            output.WriteLine($"  描画 {r.Time:F0} ms: {r.Milliseconds:F1} ms");
+        }
+
+        List<double> evaluations = [.. (await app.SendAsync("coloring", new JsonObject { ["action"] = "timings" }))["times"]!.AsArray().Select(t => t!.GetValue<double>())];
+        output.WriteLine(FrameLog.Describe(intervals));
+        output.WriteLine($"評価 {evaluations.Count} 回: 99% {FrameLog.Percentile(evaluations, 0.99):F2} ms、最大 {evaluations.DefaultIfEmpty().Max():F2} ms (評価 {string.Join(" ", evaluations.Select(e => e.ToString("F1")))})");
+        Assert.NotEmpty(evaluations);
+        Assert.True(FrameLog.Percentile(intervals, 0.99) <= 16.7, FrameLog.Describe(intervals));
+        Assert.True(FrameLog.Percentile(evaluations, 0.99) <= 4, $"{FrameLog.Percentile(evaluations, 0.99):F2} ms");
+    });
 }

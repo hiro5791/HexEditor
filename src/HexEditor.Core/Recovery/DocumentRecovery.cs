@@ -63,6 +63,41 @@ public sealed record RecoveryRecord
 
     /// <summary>変更の量: 元データ以外から来たバイト数 (入力・貼り付け・生成)。</summary>
     public long ChangedBytes { get; init; }
+
+    /// <summary>範囲を開いたドキュメント (ENG-13) の範囲の開始位置。ファイル全体なら null (ENG-27 の仕様 2 の「範囲」)。</summary>
+    public long? RangeStart { get; init; }
+
+    /// <summary>範囲の長さ (開いたときの元データの長さ)。</summary>
+    public long? RangeLength { get; init; }
+
+    /// <summary>範囲の長さを変えられるか。</summary>
+    public bool RangeResizable { get; init; }
+
+    /// <summary>ディスク・ボリュームのドキュメント (ENG-29) のデバイスのパス。ファイルなら null (ENG-27 の仕様 6: 変更範囲マップを復旧する)。</summary>
+    public string? DevicePath { get; init; }
+
+    /// <summary>デバイスのシリアル番号 (一致しなければ復旧しない)。</summary>
+    public string? DeviceSerial { get; init; }
+
+    /// <summary>範囲を指定して開いたデバイスの開始位置。</summary>
+    public long DeviceRangeStart { get; init; }
+
+    /// <summary>デコードして開いたドキュメント (ENG-38) の元のファイル。デコードし直して変更を戻す。ファイルなら null。</summary>
+    public string? EncodedPath { get; init; }
+
+    /// <summary>デコードした形式 (<c>ihex</c> など)。</summary>
+    public string? EncodedFormat { get; init; }
+
+    /// <summary>デコードしたときの元のファイルの値 (変わっていたら読み取り専用で開く)。</summary>
+    public FileStamp? EncodedStamp { get; init; }
+
+    /// <summary>デコードしたときの隙間の塗りつぶしの値 (ENG-38 の仕様 3)。null は既定の FF。</summary>
+    public int? EncodedGapFill { get; init; }
+
+    /// <summary>
+    /// インポートしたドキュメント (TOOL-05〜07) の付随データ (実行開始アドレス・S0 の文字列など。エクスポートの既定値)。それ以外は null。
+    /// </summary>
+    public Formats.EncodedFileSettings? ImportedSettings { get; init; }
 }
 
 /// <summary>
@@ -99,7 +134,8 @@ public sealed class DocumentRecovery : IDisposable
     /// UI スレッドで、現在の内容を書き出す準備をする。現在の内容が今の元データで表せない場合 (保存前の版に Undo した直後) は
     /// null (前回の復旧用データを残す)。
     /// </summary>
-    public static RecoveryCapture? Capture(Document document, long cursor, long selectionStart, long selectionLength)
+    public static RecoveryCapture? Capture(Document document, long cursor, long selectionStart, long selectionLength,
+        (string Path, string Format, FileStamp? Stamp)? encoded = null, byte gapFill = Formats.EncodedFile.DefaultGapFill)
     {
         if (!document.CurrentUsesLatestSource)
         {
@@ -109,8 +145,10 @@ public sealed class DocumentRecovery : IDisposable
         DocumentSnapshot snapshot = document.Current;
         string? path = (document.Source as FileByteSource)?.Path;
         FileStamp? stamp = (document.Source as FileByteSource)?.Stamp;
+        (long, long, bool)? range = document.Source is FileByteSource { IsRange: true } r ? (r.RangeStart, r.Length, r.RangeResizable) : null;
+        (string, string?, long)? device = document.Source is Devices.DeviceByteSource d ? (d.Path, d.Info.SerialNumber, d.Info.RangeStart) : null;
         return new RecoveryCapture(document, snapshot, document.Id, document.Source.DisplayName, path, stamp, document.AddBuffer.Length,
-            cursor, selectionStart, selectionLength);
+            cursor, selectionStart, selectionLength, range, device, encoded) { EncodedGapFill = gapFill };
     }
 
     /// <summary>
@@ -163,6 +201,17 @@ public sealed class DocumentRecovery : IDisposable
                 SelectionLength = capture.SelectionLength,
                 SavedAtUtc = DateTime.UtcNow,
                 ChangedBytes = changed,
+                RangeStart = capture.Range?.Start,
+                RangeLength = capture.Range?.Length,
+                RangeResizable = capture.Range?.Resizable ?? false,
+                DevicePath = capture.Device?.Path,
+                DeviceSerial = capture.Device?.Serial,
+                DeviceRangeStart = capture.Device?.RangeStart ?? 0,
+                EncodedPath = capture.Encoded?.Path,
+                EncodedFormat = capture.Encoded?.Format,
+                EncodedStamp = capture.Encoded?.Stamp,
+                EncodedGapFill = capture.Encoded is null || capture.EncodedGapFill == Formats.EncodedFile.DefaultGapFill ? null : capture.EncodedGapFill,
+                ImportedSettings = capture.ImportedSettings,
             };
 
             string temp = StatePath + ".tmp";
@@ -280,4 +329,14 @@ public sealed record RecoveryCapture(
     long AddBufferLength,
     long Cursor,
     long SelectionStart,
-    long SelectionLength);
+    long SelectionLength,
+    (long Start, long Length, bool Resizable)? Range = null,
+    (string Path, string? Serial, long RangeStart)? Device = null,
+    (string Path, string Format, FileStamp? Stamp)? Encoded = null)
+{
+    /// <summary>デコードしたときの隙間の塗りつぶしの値 (ENG-38 の仕様 3)。</summary>
+    public byte EncodedGapFill { get; init; } = Formats.EncodedFile.DefaultGapFill;
+
+    /// <summary>インポートしたドキュメントの付随データ (<see cref="RecoveryRecord.ImportedSettings"/>)。</summary>
+    public Formats.EncodedFileSettings? ImportedSettings { get; init; }
+}

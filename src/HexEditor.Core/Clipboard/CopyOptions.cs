@@ -137,6 +137,19 @@ public enum CopyOptionError
 /// <summary>
 /// 「形式を選択してコピー」の設定 (EDIT-25 の仕様 3〜5 と形式ごとの設定)。既定値は仕様の既定値。
 /// </summary>
+/// <summary>
+/// 配列の定義の修飾 (TOOL-09 の仕様 2 の「<c>const</c> / <c>static</c> などの修飾」)。<see cref="Default"/> は言語ごとの従来の形
+/// (C++ の <c>constexpr</c>、JavaScript の <c>const</c>、Rust の <c>let</c> など)。表せない組み合わせは、その言語で近い形にする。
+/// </summary>
+public enum ArrayModifier
+{
+    Default,
+    None,
+    Const,
+    Static,
+    StaticConst,
+}
+
 public sealed record CopyOptions
 {
     /// <summary>改行 (CRLF が既定。仕様 3)。</summary>
@@ -156,6 +169,12 @@ public sealed record CopyOptions
 
     /// <summary>配列の要素の大きさ (1 / 2 / 4 / 8。仕様 5)。</summary>
     public int ElementSize { get; init; } = 1;
+
+    /// <summary>配列の要素を 10 進で書く (既定は 16 進。TOOL-09 の仕様 2)。</summary>
+    public bool ArrayDecimal { get; init; }
+
+    /// <summary>配列の定義の修飾 (既定は言語ごとの従来の形)。</summary>
+    public ArrayModifier Modifier { get; init; }
 
     /// <summary>配列の要素のエンディアン (既定はリトルエンディアン。ドキュメントの既定エンディアンを呼び出し側が入れる)。</summary>
     public bool BigEndian { get; init; }
@@ -194,6 +213,32 @@ public sealed record CopyOptions
     /// <summary>UUEncode / XXEncode の begin 行のファイル名。</summary>
     public string EncodedFileName { get; init; } = "data.bin";
 
+    // ---- ファイルへのエクスポートで選べる設定 (TOOL-07 の仕様 1)。既定値は Copy As の出力と同じになる ----
+
+    /// <summary>Base64 の 1 行の文字数 (0 は改行なし)。null なら <see cref="Base64Wrap"/> に従う (76 または改行なし)。</summary>
+    public int? Base64LineLength { get; init; }
+
+    /// <summary>Base64 のパディング (<c>=</c>) を付ける (既定)。</summary>
+    public bool Base64Padding { get; init; } = true;
+
+    /// <summary>Base32 の 1 行の文字数 (0 は改行なし。既定)。</summary>
+    public int Base32LineLength { get; init; }
+
+    /// <summary>Base32 のパディングを付ける (既定)。</summary>
+    public bool Base32Padding { get; init; } = true;
+
+    /// <summary>Ascii85 の 1 行の文字数 (0 は改行なし。既定)。<c>&lt;~</c> <c>~&gt;</c> も数える。</summary>
+    public int Ascii85LineLength { get; init; }
+
+    /// <summary>UUEncode の begin 行のモード (既定 644)。</summary>
+    public string EncodedFileMode { get; init; } = "644";
+
+    /// <summary>Quoted-Printable の 1 行の文字数 (ソフト改行の <c>=</c> を含む。既定 76)。</summary>
+    public int QuotedPrintableLineLength { get; init; } = 76;
+
+    /// <summary>URL エンコードで RFC 3986 の非予約文字 (英数字と <c>-._~</c>) を変換しない。偽ならすべて <c>%XX</c> にする (Copy As の既定)。</summary>
+    public bool UrlKeepUnreserved { get; init; }
+
     public DocumentLayout Layout { get; init; } = DocumentLayout.Dump;
 
     /// <summary>HTML・RTF に現在の色付け (変更されたバイトの強調) を含める。</summary>
@@ -205,8 +250,31 @@ public sealed record CopyOptions
     /// <summary>変更されたバイトの色 (HTML・RTF に書く。`#RRGGBB`)。</summary>
     public string ModifiedColor { get; init; } = "#C42B1C";
 
-    // 画面表示どおり (現在の表示設定)
+    /// <summary>
+    /// 色付けルールの色 (INSP-33 の仕様 8。HTML・RTF で <see cref="IncludeColors"/> のとき書く)。null なら変更されたバイトの強調だけ。
+    /// </summary>
+    public CopyColoring? Coloring { get; init; }
+
+    // 画面表示どおり (現在の表示設定。EDIT-25 の仕様 6、VIEW-11 の仕様 5)
     public int ScreenBytesPerRow { get; init; } = 16;
+
+    /// <summary>グループ化のバイト数 (VIEW-09。既定 1)。</summary>
+    public int ScreenGroupSize { get; init; } = 1;
+
+    /// <summary>中央区切り (VIEW-09 の仕様 3。<see cref="ViewSettings.EffectiveMiddleSeparator"/> の値)。</summary>
+    public bool ScreenMiddleSeparator { get; init; }
+
+    /// <summary>セルの表示形式 (VIEW-10)。</summary>
+    public CellFormat ScreenCellFormat { get; init; } = CellFormat.Hex;
+
+    /// <summary>グループ内のバイトを逆順に表示 (VIEW-11 の仕様 4。Hex 形式でグループ化が 2 以上のときだけ効く)。</summary>
+    public bool ScreenReverseGroups { get; init; }
+
+    /// <summary>2 バイト以上のセルの値のエンディアン (ドキュメントのエンディアン。VIEW-11)。</summary>
+    public bool ScreenBigEndian { get; init; }
+
+    /// <summary>10 進・8 進のセルを 0 ではなく空白で埋める (VIEW-10 の仕様 2)。</summary>
+    public bool ScreenSpacePadding { get; init; }
 
     public bool ShowOffset { get; init; } = true;
 
@@ -238,4 +306,21 @@ public sealed record CopyOptions
 
     /// <summary>位置の形式の「(256 バイト)」の書式。{0} にバイト数 (区切り付き) が入る。UI の言語のリソースを呼び出し側が入れる。</summary>
     public string PositionLengthFormat { get; init; } = "({0} bytes)";
+}
+
+/// <summary>1 バイトの色 (0xRRGGBB。null は色なし)。</summary>
+public readonly record struct CopyCellColor(uint? Foreground, uint? Background)
+{
+    public bool IsEmpty => Foreground is null && Background is null;
+}
+
+/// <summary>
+/// コピーに含める色付け (INSP-33 の仕様 8、03 の「文書」の HTML・RTF)。<paramref name="cells"/> は [offset, offset + count) の各バイトの
+/// Hex 列とテキスト列の色を返す。<paramref name="palette"/> は返しうる色の一覧 (RTF の色の表に使う)。
+/// </summary>
+public sealed class CopyColoring(IReadOnlyList<uint> palette, Func<long, int, (CopyCellColor[] Hex, CopyCellColor[] Text)> cells)
+{
+    public IReadOnlyList<uint> Palette { get; } = palette;
+
+    public (CopyCellColor[] Hex, CopyCellColor[] Text) Cells(long offset, int count) => cells(offset, count);
 }

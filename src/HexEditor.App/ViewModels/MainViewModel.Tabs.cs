@@ -34,16 +34,17 @@ public sealed partial class MainViewModel
     /// </summary>
     public DocumentViewModel? FindSameFile(string fullPath)
     {
-        DocumentViewModel? byPath = Documents.FirstOrDefault(d =>
+        // 範囲を指定して開いたタブは同じファイルとしない (重なりの確認は開く側で行う。ENG-13 の仕様 6)。
+        DocumentViewModel? byPath = Documents.FirstOrDefault(d => !d.IsRangeDocument && (
             string.Equals(d.FilePath, fullPath, StringComparison.OrdinalIgnoreCase)
-            || string.Equals(d.PendingRecord?.Path, fullPath, StringComparison.OrdinalIgnoreCase));
+            || string.Equals(d.PendingRecord?.Path, fullPath, StringComparison.OrdinalIgnoreCase)));
         if (byPath is not null)
         {
             return byPath;
         }
 
         string? id = FileStamp.FromPath(fullPath)?.FileId;
-        return string.IsNullOrEmpty(id) ? null : Documents.FirstOrDefault(d => d.OpenedStamp?.FileId == id);
+        return string.IsNullOrEmpty(id) ? null : Documents.FirstOrDefault(d => !d.IsRangeDocument && d.OpenedStamp?.FileId == id);
     }
 
     /// <summary>タブを動かす (UI-10 の仕様 1)。ピン留めの規則に収める。動いたら true。</summary>

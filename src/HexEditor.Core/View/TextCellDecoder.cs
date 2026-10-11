@@ -53,8 +53,16 @@ public static class TextCellDecoder
         TextEncodingKind.Utf8 => 3,
         TextEncodingKind.Utf16 => 3,
         TextEncodingKind.Utf32 => 7,
-        TextEncodingKind.DoubleByte or TextEncodingKind.Gb18030 => MaxLookback,
+        TextEncodingKind.DoubleByte or TextEncodingKind.Gb18030 or TextEncodingKind.Table => MaxLookback,
         _ => 0,
+    };
+
+    /// <summary>この文字コードで、表示範囲の後ろに読む必要のあるバイト数 (文字表は最も長い左辺 − 1。VIEW-23)。</summary>
+    public static int LookaheadFor(TextEncoding encoding) => encoding.Kind switch
+    {
+        TextEncodingKind.SingleByte => 0,
+        TextEncodingKind.Table => Math.Max(0, (encoding.Table?.LongestKey ?? 1) - 1),
+        _ => Lookahead,
     };
 
     /// <summary>
@@ -90,6 +98,9 @@ public static class TextCellDecoder
             case TextEncodingKind.DoubleByte:
             case TextEncodingKind.Gb18030:
                 DecodeDoubleByte(ref ctx);
+                break;
+            case TextEncodingKind.Table:
+                DecodeTable(ref ctx);
                 break;
             default:
                 DecodeSingleByte(ref ctx);
@@ -379,6 +390,52 @@ public static class TextCellDecoder
     }
 
     // ---- 2 バイトの CJK 文字コードと GB18030 (仕様 4 の 4・5 つ目) ----
+
+    // ---- 独自の文字表 (VIEW-23) ----
+
+    /// <summary>
+    /// 文字表の最長一致で解読する (VIEW-23 の仕様 3)。同期点は、表示範囲の先頭から 4 KiB 以内の、オフセットが 4,096 の倍数の位置
+    /// (仕様 5)。どれにも一致しないバイトは <c>.</c>。
+    /// </summary>
+    private static void DecodeTable(ref Context ctx)
+    {
+        TableFile? table = ctx.Encoding.Table;
+        if (table is null)
+        {
+            DecodeSingleByte(ref ctx);
+            return;
+        }
+
+        long at = Math.Max(ctx.DataStart, ctx.WindowStart / MaxLookback * MaxLookback);
+        Span<byte> key = stackalloc byte[TableFile.MaxKeyBytes];
+        while (at < ctx.WindowEnd)
+        {
+            if (!ctx.Has(at))
+            {
+                at++;
+                continue;
+            }
+
+            // 読めているバイトだけで照合する。
+            int n = 0;
+            while (n < table.LongestKey && ctx.Has(at + n))
+            {
+                key[n] = ctx.At(at + n);
+                n++;
+            }
+
+            (int length, string? text) = table.Match(key[..n]);
+            if (length == 0)
+            {
+                ctx.Put(at, 1, TextCellKind.NonPrintable, TextEncoding.NonPrintable.ToString(), false);
+                at++;
+                continue;
+            }
+
+            ctx.Put(at, length, TextCellKind.Char, text!, false);
+            at += length;
+        }
+    }
 
     private static void DecodeDoubleByte(ref Context ctx)
     {

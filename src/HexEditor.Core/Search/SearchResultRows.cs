@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using HexEditor.Core.Engine;
 using HexEditor.Core.Operations;
+using HexEditor.Core.Selection;
 using HexEditor.Core.Sources;
 
 namespace HexEditor.Core.Search;
@@ -21,7 +22,8 @@ public sealed record SearchResultRow(
     string Before,
     string After,
     string? Variant,
-    string? Value);
+    string? Value,
+    long? Chars = null);
 
 /// <summary>結果一覧の行を作る (表示とエクスポートで共通)。</summary>
 public sealed class SearchResultRowFactory
@@ -84,8 +86,27 @@ public sealed class SearchResultRowFactory
         }
 
         SearchPattern pattern = _results.Pattern;
-        string? variant = pattern.Variants.Count > 1 && match.Variant < pattern.Variants.Count ? pattern.Variants[match.Variant] : null;
+        IReadOnlyList<string> names = _results.VariantNames ?? pattern.Variants;
+        string? variant = (names.Count > 1 || _results.VariantNames is not null) && match.Variant >= 0 && match.Variant < names.Count ? names[match.Variant] : null;
         string? value = null;
+        string text;
+        long? chars = null;
+        if (_results.VariantEncodings is { } encodings && match.Variant >= 0 && match.Variant < encodings.Count)
+        {
+            // 文字列の抽出: 一致した文字コードで、最初の 4,096 文字まで (FIND-32 の仕様 1・3)。
+            byte[]? whole = Read(t.Offset, Math.Min(length, StringExtractionOptions.DefaultMaxLength * 4L), nonBlocking);
+            if (whole is null)
+            {
+                return null;
+            }
+
+            text = StringExtractor.Text(whole, encodings[match.Variant], StringExtractionOptions.DefaultMaxLength);
+            chars = match.Extra;
+        }
+        else
+        {
+            text = TextOf(data);
+        }
         if (pattern.Numeric is { } numeric && t.Status != MatchStatus.Deleted)
         {
             byte[]? valueBytes = data.Length >= numeric.ByteLength ? data : Read(t.Offset, numeric.ByteLength, nonBlocking);
@@ -105,11 +126,12 @@ public sealed class SearchResultRowFactory
             match.Offset,
             t.Status,
             HexOf(data),
-            TextOf(data),
+            text,
             HexOf(before),
             HexOf(after),
             variant,
-            value);
+            value,
+            chars);
     }
 
     /// <summary>今の状態の範囲を読む。<paramref name="nonBlocking"/> なら表示用の読み込みで、読み込み中のバイトがあれば null。</summary>
@@ -160,6 +182,9 @@ public enum ExportFormat
     /// <summary>UTF-8 (BOM 付き)、区切りはカンマ。</summary>
     Csv,
     Json,
+
+    /// <summary>テキスト (UTF-8、1 行に 1 件の「テキスト」の列。文字列の抽出の 1 行 1 文字列。FIND-32 の仕様 5)。</summary>
+    Text,
 }
 
 /// <summary>エクスポートの列の見出しと状態の文言 (表示言語の文字列を UI から渡す)。</summary>
@@ -215,8 +240,9 @@ public static class SearchResultsExporter
         CancellationToken cancellationToken = default)
     {
         labels ??= new ExportLabels();
-        SearchPattern pattern = groups[0].Rows.Results.Pattern;
-        bool numeric = pattern.Numeric is not null || pattern.Variants.Count > 1;
+        SearchResults first = groups[0].Rows.Results;
+        SearchPattern pattern = first.Pattern;
+        bool numeric = pattern.Numeric is not null || pattern.Variants.Count > 1 || first.VariantNames is not null;
         bool documents = groups.Any(g => g.Document is not null);
         long total = indices?.Count ?? groups.Sum(g => g.Rows.Results.LongCount);
         operation?.SetTotal(total);
@@ -287,6 +313,15 @@ public static class SearchResultsExporter
         {
             WriteCsv(stream, Enumerate(), labels, numeric, documents);
         }
+        else if (format == ExportFormat.Text)
+        {
+            using var writer = new StreamWriter(stream, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false), 65536, leaveOpen: true);
+            foreach ((string? _, SearchResultRow r) in Enumerate())
+            {
+                writer.Write(r.Text.Replace("\r", " ", StringComparison.Ordinal).Replace("\n", " ", StringComparison.Ordinal));
+                writer.Write("\r\n");
+            }
+        }
         else
         {
             WriteJson(stream, Enumerate(), numeric, documents);
@@ -333,7 +368,7 @@ public static class SearchResultsExporter
             if (numeric)
             {
                 fields.Add(r.Variant ?? string.Empty);
-                fields.Add(r.Value ?? string.Empty);
+                fields.Add(r.Value ?? r.Chars?.ToString(CultureInfo.InvariantCulture) ?? string.Empty);
             }
 
             writer.Write(string.Join(',', fields.Select(Csv)));
@@ -369,6 +404,11 @@ public static class SearchResultsExporter
                 writer.WriteString("value", r.Value ?? string.Empty);
             }
 
+            if (r.Chars is long chars)
+            {
+                writer.WriteNumber("chars", chars);
+            }
+
             writer.WriteEndObject();
         }
 
@@ -391,6 +431,55 @@ public static class SearchResultsConversion
     /// <summary>マルチ選択に変換する範囲の上限 (FIND-21 の仕様 2)。</summary>
     public const int MaxSelectionRanges = 1_000_000;
 
+    /// <summary>これより多い結果のマルチ選択への変換は、長時間処理 (進捗とキャンセル) としてバックグラウンドで行う。</summary>
+    public const int SelectionBackgroundThreshold = 100_000;
+
+    /// <summary>
+    /// 結果をマルチ選択の範囲にする (FIND-21 の仕様 2)。<paramref name="indices"/> の順に <paramref name="locate"/> で対象 (ドキュメント) と
+    /// 範囲を求め、長さ 0 の範囲は除く。範囲が <paramref name="limit"/> 個になったらそれ以降は数え上げず (結果の数に比例して読まない)、
+    /// 打ち切ったことを返す。<paramref name="operation"/> には数え上げた結果の数を進捗として報告する。
+    /// </summary>
+    public static SelectionConversion<TKey> ToSelectionRanges<TKey>(IEnumerable<long> indices, Func<long, (TKey Key, ByteRange Range)?> locate,
+        int limit, LongRunningOperation? operation = null, CancellationToken cancellationToken = default)
+        where TKey : notnull
+    {
+        var byKey = new Dictionary<TKey, List<ByteRange>>();
+        long count = 0;
+        long seen = 0;
+        bool truncated = false;
+        foreach (long index in indices)
+        {
+            if ((++seen & 0xFFF) == 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                operation?.CancellationToken.ThrowIfCancellationRequested();
+                operation?.Report(seen);
+            }
+
+            if (locate(index) is not { } hit || hit.Range.Length <= 0)
+            {
+                continue;
+            }
+
+            if (count >= limit)
+            {
+                truncated = true;
+                break;
+            }
+
+            if (!byKey.TryGetValue(hit.Key, out List<ByteRange>? ranges))
+            {
+                byKey[hit.Key] = ranges = [];
+            }
+
+            ranges.Add(hit.Range);
+            count++;
+        }
+
+        operation?.Report(seen);
+        return new SelectionConversion<TKey>(byKey, truncated);
+    }
+
     /// <summary>ブックマークの名前の形「<paramref name="prefix"/>: <paramref name="summary"/> #番号」(prefix は「検索」の訳)。</summary>
     public static string BookmarkName(string prefix, string summary, long number) =>
         string.Create(CultureInfo.CurrentCulture, $"{prefix}: {summary} #{number}");
@@ -399,3 +488,7 @@ public static class SearchResultsConversion
     public static string BookmarkGroup(string prefix, DateTimeOffset time) =>
         string.Create(CultureInfo.CurrentCulture, $"{prefix} {time.LocalDateTime:g}");
 }
+
+/// <summary>マルチ選択への変換の結果 (FIND-21 の仕様 2): 対象ごとの範囲 (結果の順) と、上限で打ち切ったか。</summary>
+public sealed record SelectionConversion<TKey>(IReadOnlyDictionary<TKey, List<ByteRange>> Ranges, bool Truncated)
+    where TKey : notnull;

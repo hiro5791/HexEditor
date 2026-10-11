@@ -1,0 +1,42 @@
+{
+  "source": "Tiger official page (R. Anderson, E. Biham), test vectors (Tiger and Tiger2).",
+  "vectors": [
+    {
+      "algorithm": "tiger",
+      "ascii": "",
+      "expected": "3293AC630C13F0245F92BBB1766E16167A4E58492DDE73F3"
+    },
+    {
+      "algorithm": "tiger",
+      "ascii": "abc",
+      "expected": "2AAB1484E8C158F2BFB8C5FF41B57A525129131C957B5F93"
+    },
+    {
+      "algorithm": "tiger",
+      "ascii": "abc",
+      "outputBits": 160,
+      "expected": "2AAB1484E8C158F2BFB8C5FF41B57A525129131C"
+    },
+    {
+      "algorithm": "tiger",
+      "ascii": "abc",
+      "outputBits": 128,
+      "expected": "2AAB1484E8C158F2BFB8C5FF41B57A52"
+    },
+    {
+      "algorithm": "tiger",
+      "ascii": "Tiger",
+      "expected": "DD00230799F5009FEC6DEBC838BB6A27DF2B9D6F110C7937"
+    },
+    {
+      "algorithm": "tiger2",
+      "ascii": "",
+      "expected": "4441BE75F6018773C206C22745374B924AA8313FEF919F41"
+    },
+    {
+      "algorithm": "tiger2",
+      "ascii": "abc",
+      "expected": "F68D7BC5AF4B43A06E048D7829560D4A9415658BB0B1F3BF"
+    }
+  ]
+}

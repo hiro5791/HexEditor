@@ -12,15 +12,22 @@ public sealed record InspectorRowResult(string TypeId, bool Opposite, Endianness
 public sealed record InspectorGroupResult(InspectorGroup Group, IReadOnlyList<InspectorRowResult> Rows);
 
 /// <summary>
-/// 起点のデータを、行の構成に従ってすべての行で解釈する (INSP-01)。起点から最大 128 バイトだけを、ブロックキャッシュから
+/// 起点のデータを、行の構成に従ってすべての行で解釈する (INSP-01)。起点から最大 128 バイト (文字列の行があれば 4 KB) だけを、ブロックキャッシュから
 /// 待たずに読む (キャッシュにないバイトは「…」。仕様 3・4)。ファイルサイズに依存しない。
 /// </summary>
 public static class DataInspector
 {
+    /// <summary>
+    /// 解釈の起点 (INSP-01 の仕様 1): 選択範囲がなければ (または <paramref name="useCursorWithSelection"/> なら) カーソル位置、あれば選択範囲の先頭。
+    /// マルチ選択・矩形選択では主要素 (最後に置いた要素。隣の要素と結合していれば結合後の範囲) の先頭を使う。
+    /// </summary>
+    public static long OriginOf(View.EditorState editor, bool useCursorWithSelection) =>
+        !editor.HasSelection || useCursorWithSelection ? editor.Cursor : editor.PrimaryRange?.Start ?? editor.SelectionStart;
+
     public static IReadOnlyList<InspectorGroupResult> Evaluate(DocumentSnapshot snapshot, long origin, InspectorLayout layout,
         Endianness endian, InspectorOptions options)
     {
-        int count = (int)Math.Clamp(snapshot.Length - origin, 0, InspectorDecoder.ReadLength);
+        int count = (int)Math.Clamp(snapshot.Length - origin, 0, layout.ReadLength);
         byte[] data = new byte[count];
         var states = new ByteState[count];
         if (count > 0)

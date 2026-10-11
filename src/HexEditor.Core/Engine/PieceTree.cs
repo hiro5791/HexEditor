@@ -418,6 +418,75 @@ public sealed class PieceTree
     }
 
     /// <summary>不変のノード。部分木の合計の長さ・ピースの数・高さを持つ。</summary>
+    /// <summary>
+    /// ピースを先頭から順にたどり、位置を進めながらコピー・読み飛ばしをする (まとめて行う編集で木を作り直すため)。
+    /// 編集ごとに根から下りる代わりに 1 回の走査で済むので、ピースの数と編集の数の和に比例した時間で終わる
+    /// (マルチカーソル 10,000 個への入力。EDIT-08 の「巨大ファイル・長時間処理」)。
+    /// </summary>
+    internal sealed class Walker
+    {
+        private readonly Stack<(Node Node, long Start)> _stack = new();
+        private Node? _current;
+        private long _currentStart;
+        private long _position;
+
+        public Walker(PieceTree tree)
+        {
+            Descend(tree._root, 0);
+            Advance();
+        }
+
+        /// <summary>今の位置から <paramref name="offset"/> の手前までのピースを (切り詰めて) <paramref name="sink"/> に加える。</summary>
+        public void CopyTo(long offset, List<Piece> sink) => Move(offset, sink);
+
+        /// <summary>今の位置から <paramref name="offset"/> の手前までを読み飛ばす。</summary>
+        public void SkipTo(long offset) => Move(offset, null);
+
+        private void Move(long offset, List<Piece>? sink)
+        {
+            while (_position < offset && _current is not null)
+            {
+                long pieceEnd = _currentStart + _current.Piece.Length;
+                long to = Math.Min(offset, pieceEnd);
+                if (sink is not null)
+                {
+                    sink.Add(_position == _currentStart && to == pieceEnd
+                        ? _current.Piece
+                        : _current.Piece.WithRange(_position - _currentStart, to - _position));
+                }
+
+                _position = to;
+                if (to == pieceEnd)
+                {
+                    Advance();
+                }
+            }
+        }
+
+        private void Descend(Node? node, long start)
+        {
+            while (node is not null)
+            {
+                _stack.Push((node, start));
+                node = node.Left;
+            }
+        }
+
+        private void Advance()
+        {
+            if (_stack.Count == 0)
+            {
+                _current = null;
+                return;
+            }
+
+            (Node node, long start) = _stack.Pop();
+            _current = node;
+            _currentStart = start + Len(node.Left);
+            Descend(node.Right, _currentStart + node.Piece.Length);
+        }
+    }
+
     private sealed class Node
     {
         public Node(Node? left, Piece piece, Node? right)

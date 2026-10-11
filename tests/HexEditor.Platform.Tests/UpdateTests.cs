@@ -120,12 +120,11 @@ public sealed class UpdateTests : IDisposable
         Assert.Equal(TimeSpan.FromSeconds(15), NetworkClient.DefaultTimeout);
         _feed.Hang = true;
         UpdateService service = Service("0.9.0");
-        var watch = Stopwatch.StartNew();
         UpdateCheckResult result = await service.CheckAsync(manual: true);
-        watch.Stop();
         Assert.Equal(UpdateCheckOutcome.Failed, result.Outcome);
         Assert.Equal(UpdateFailure.NoConnection, result.Failure);
-        Assert.InRange(watch.Elapsed, TimeSpan.FromSeconds(14), TimeSpan.FromSeconds(16));
+        // 15 秒は要求が届いてから取り消されるまでで測る (遅い環境の起動の時間を含めない)。
+        Assert.InRange(_feed.HangDuration, TimeSpan.FromSeconds(14), TimeSpan.FromSeconds(16));
         UpdateMessage message = UpdatePresentation.ForCheck(result, service.Current, service.Kind)!;
         Assert.Equal("Update_Failed", message.MessageKey);
         Assert.Equal(["Update_Reason_NoConnection"], message.Arguments);

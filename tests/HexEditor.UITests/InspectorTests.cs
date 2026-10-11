@@ -262,6 +262,53 @@ public sealed class InspectorTests
         Assert.Equal("LE", (await StateAsync(again))["endian"]!.GetValue<string>());
     });
 
+    [Fact]
+    [Trait(UiTest.TC, "TC-INSP-02-02")]
+    public Task Following_the_document_switches_with_the_status_bar() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await StartAsync(ctx);
+        await GoAsync(app, 0x10);
+
+        // 1. ステータスバー・インスペクタとも LE、uint32 は 67,305,985 (01 02 03 04)。
+        Assert.Equal("LE", await app.UiaNameAsync("Status_Endian"));
+        Assert.Equal("LE", (await StateAsync(app))["endian"]!.GetValue<string>());
+        Assert.Equal("67,305,985", await ValueAsync(app, "uint32"));
+
+        // 2〜3. ステータスバーのエンディアン表示を押すと、ドキュメントに従うインスペクタも BE になる。
+        await app.UiaInvokeAsync("Status_Endian");
+        await app.IdleAsync();
+        await WaitForRowsAsync(app);
+        Assert.Equal("BE", await app.UiaNameAsync("Status_Endian"));
+        Assert.Equal("BE", (await StateAsync(app))["endian"]!.GetValue<string>());
+        Assert.Equal("16,909,060", await ValueAsync(app, "uint32"));
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-INSP-02-03")]
+    public Task Inspector_only_big_endian_ignores_the_document_endianness() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await StartAsync(ctx);
+        await app.CommandAsync("Command_ViewCellFormatInt16Hex");
+        await app.IdleAsync();
+        await GoAsync(app, 0x10);
+
+        // 1〜2. インスペクタだけ BE: ステータスバーは LE、uint32 は BE の値、セルは LE のまま (0201)。
+        await ChooseEndianAsync(app, "Inspector_EndianBig");
+        Assert.Equal("LE", await app.UiaNameAsync("Status_Endian"));
+        Assert.Equal("BE (inspector only)", (await StateAsync(app))["endian"]!.GetValue<string>());
+        Assert.Equal("16,909,060", await ValueAsync(app, "uint32"));
+        Assert.Equal("0201", ViewOps.CellOf(await app.RenderAsync(), 0x10)!["hex"]!.GetValue<string>());
+
+        // 3〜4. ステータスバーを押すと、セルは BE (0102) になり、インスペクタは BE (インスペクタのみ) のまま。
+        await app.UiaInvokeAsync("Status_Endian");
+        await app.IdleAsync();
+        await WaitForRowsAsync(app);
+        Assert.Equal("BE", await app.UiaNameAsync("Status_Endian"));
+        Assert.Equal("0102", ViewOps.CellOf(await app.RenderAsync(), 0x10)!["hex"]!.GetValue<string>());
+        Assert.Equal("BE (inspector only)", (await StateAsync(app))["endian"]!.GetValue<string>());
+        Assert.Equal("16,909,060", await ValueAsync(app, "uint32"));
+    });
+
     // ---- INSP-03 ----
 
     [Fact]

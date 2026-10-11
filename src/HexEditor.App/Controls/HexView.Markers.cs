@@ -41,10 +41,15 @@ public sealed partial class HexView
     {
         _searchMarkers = offsets ?? [];
         UpdateMarkers();
+        _minimap?.Restart();
     }
 
-    /// <summary>印の表示の設定が変わったので描き直す。</summary>
-    public void RefreshMarkers() => UpdateMarkers();
+    /// <summary>印の表示の設定や印の元 (比較の差分など) が変わったので描き直す (ミニマップの印の帯も)。</summary>
+    public void RefreshMarkers()
+    {
+        UpdateMarkers();
+        _minimap?.RefreshMarks();
+    }
 
     private void UpdateMarkers()
     {
@@ -86,6 +91,9 @@ public sealed partial class HexView
                     }
                 }
             }
+
+            // 差分 (VIEW-02 の仕様 9。HexView.Compare.cs)。
+            used = PlaceDiffMarkers(used, height, totalRows);
 
             if (ShowSearchMarkers && _searchMarkers.Count > 0)
             {

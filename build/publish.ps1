@@ -68,21 +68,65 @@ if ($isStable) { $common += '-p:HexPseudoLocales=false' }
 # Velopack channel (PKG-21 spec 3). The app checks the same name (VelopackChannels in HexEditor.Platform).
 $channel = "win-$Arch-" + $(if ($isStable) { 'stable' } else { 'preview' })
 
+# The elevated helper (ENG-28, PKG-14): installer and portable bundle HexEditor.Elevated.exe. It is published self-contained
+# for the same runtime identifier as the app, and only its own files (exe, dll, deps.json, runtimeconfig.json) are copied
+# next to HexEditor.exe: the .NET runtime files in the app folder are the same ones (the app is self-contained too), so the
+# helper runs on PCs without an installed .NET runtime. The helper is signed first (PKG-25), then the SHA-256 of its files
+# (concatenated in the order of $HelperFiles, missing ones skipped; HelperIntegrity in Core computes the same) is embedded
+# in the app body (PKG-24 step 2), and the exact same files are copied after the app folder has been signed.
+# The Store (Msix) build does not bundle it (PKG-14 spec 6).
+$HelperFiles = @('HexEditor.Elevated.exe', 'HexEditor.Elevated.dll', 'HexEditor.Elevated.deps.json', 'HexEditor.Elevated.runtimeconfig.json')
+
+function Build-ElevatedHelper {
+    $helperStaging = Join-Path $staging 'Elevated'
+    $helperArgs = @('publish', (Join-Path $root 'src/HexEditor.Elevated/HexEditor.Elevated.csproj'),
+        '-c', $Configuration, '-r', $rid, "-p:HexVersion=$Version", '--self-contained', 'true', '-nologo', '-o', $helperStaging)
+    if ($TestHooks) { $helperArgs += '-p:HexTestHooks=true' }
+    Invoke-Checked 'dotnet' $helperArgs
+    $helperExe = Join-Path $helperStaging 'HexEditor.Elevated.exe'
+    if (-not (Test-Path $helperExe)) { throw 'HexEditor.Elevated.exe was not produced (PKG-14).' }
+    foreach ($name in $HelperFiles) {
+        $file = Join-Path $helperStaging $name
+        if (Test-Path $file) { & $sign -Path $file }
+    }
+
+    $buffer = New-Object System.IO.MemoryStream
+    $paths = @()
+    foreach ($name in $HelperFiles) {
+        $file = Join-Path $helperStaging $name
+        if (Test-Path $file) {
+            $bytes = [System.IO.File]::ReadAllBytes($file)
+            $buffer.Write($bytes, 0, $bytes.Length)
+            $paths += $file
+        }
+    }
+
+    $buffer.Position = 0
+    $hash = (Get-FileHash -Algorithm SHA256 -InputStream $buffer).Hash
+    return [pscustomobject]@{ Path = $helperExe; Files = $paths; Hash = $hash }
+}
+
+function Copy-ElevatedHelper($helper, $destination) {
+    foreach ($file in $helper.Files) { Copy-Item $file (Join-Path $destination (Split-Path -Leaf $file)) -Force }
+}
+
 # Code signing (PKG-25): a no-op unless HEX_SIGNING_ENABLED is true.
 $sign = Join-Path $PSScriptRoot 'sign.ps1'
 
 switch ($Distro) {
     'Portable' {
-        Invoke-Checked 'dotnet' (@('publish') + $common + @('-o', $publishDir))
+        $helper = Build-ElevatedHelper
+        Invoke-Checked 'dotnet' (@('publish') + $common + @("-p:HexHelperSha256=$($helper.Hash)", '-o', $publishDir))
         if (Get-ChildItem $publishDir -Filter 'Velopack*.dll') { throw 'Portable output must not contain Velopack (PKG-10).' }
         & $sign -Path $publishDir
+        Copy-ElevatedHelper $helper $publishDir
 
         # The marker tells the app to keep its data next to the exe (PKG-05, PKG-12, PKG-13).
         Set-Content -Path (Join-Path $publishDir 'portable.marker') -Value '' -Encoding ascii -NoNewline
         Copy-Item (Join-Path $PSScriptRoot 'portable/README.txt') $publishDir
         Copy-Item (Join-Path $root 'LICENSE') (Join-Path $publishDir 'LICENSE.txt')
-        foreach ($required in 'HexEditor.exe', 'portable.marker', 'README.txt', 'THIRD-PARTY-NOTICES.txt') {
-            if (-not (Test-Path (Join-Path $publishDir $required))) { throw "Portable output is missing $required (PKG-05)." }
+        foreach ($required in 'HexEditor.exe', 'HexEditor.Elevated.exe', 'portable.marker', 'README.txt', 'THIRD-PARTY-NOTICES.txt') {
+            if (-not (Test-Path (Join-Path $publishDir $required))) { throw "Portable output is missing $required (PKG-05, PKG-14)." }
         }
 
         $zip = Join-Path $out "HexEditor-$Version-$Arch-portable.zip"
@@ -101,9 +145,11 @@ switch ($Distro) {
         Write-Host "Created $zip"
     }
     'Installer' {
-        Invoke-Checked 'dotnet' (@('publish') + $common + @('-o', $publishDir))
+        $helper = Build-ElevatedHelper
+        Invoke-Checked 'dotnet' (@('publish') + $common + @("-p:HexHelperSha256=$($helper.Hash)", '-o', $publishDir))
         if (-not (Get-ChildItem $publishDir -Filter 'Velopack*.dll')) { throw 'Installer output must contain Velopack (PKG-10).' }
         & $sign -Path $publishDir
+        Copy-ElevatedHelper $helper $publishDir
         Push-Location $root
         try {
             Invoke-Checked 'dotnet' @('tool', 'restore')

@@ -13,7 +13,8 @@ public sealed record CommandLine(
     bool SafeMode,
     string? PseudoLocale = null,
     bool NewDocument = false,
-    bool Unregister = false)
+    bool Unregister = false,
+    bool OpenDisk = false)
 {
     private static readonly HashSet<string> OptionsWithValue =
     [
@@ -56,7 +57,8 @@ public sealed record CommandLine(
             flags.Contains("--safe-mode"),
             values.GetValueOrDefault("--pseudo-locale"),
             flags.Contains("--new-document"),
-            flags.Contains("--unregister"));
+            flags.Contains("--unregister"),
+            flags.Contains("--open-disk"));
     }
 
     /// <summary>

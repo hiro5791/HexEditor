@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using HexEditor.Core.View;
 
 namespace HexEditor.Core.Clipboard;
 
@@ -228,9 +229,13 @@ internal sealed class Base64Writer(TextWriter writer, CopyOptions options, bool 
     {
         if (_carryCount > 0)
         {
-            Put(Convert.ToBase64String(_carry.AsSpan(0, _carryCount)));
+            string last = Convert.ToBase64String(_carry.AsSpan(0, _carryCount));
+            Put(O.Base64Padding ? last : last.TrimEnd('='));
         }
     }
+
+    /// <summary>1 行の文字数 (0 は改行なし)。</summary>
+    private int LineLength => !wrap ? 0 : O.Base64LineLength ?? (O.Base64Wrap ? 76 : 0);
 
     private void Put(string text)
     {
@@ -239,7 +244,8 @@ internal sealed class Base64Writer(TextWriter writer, CopyOptions options, bool 
             text = text.Replace('+', '-').Replace('/', '_');
         }
 
-        if (!wrap || !O.Base64Wrap)
+        int lineLength = LineLength;
+        if (lineLength <= 0)
         {
             W.Write(text);
             return;
@@ -247,7 +253,7 @@ internal sealed class Base64Writer(TextWriter writer, CopyOptions options, bool 
 
         foreach (char c in text)
         {
-            if (_column == 76)
+            if (_column == lineLength)
             {
                 W.Write(NL);
                 _column = 0;
@@ -259,6 +265,32 @@ internal sealed class Base64Writer(TextWriter writer, CopyOptions options, bool 
     }
 }
 
+/// <summary>決まった文字数で改行しながら書く (Base32・Ascii85 の 1 行の文字数。TOOL-07)。</summary>
+internal sealed class WrappingWriter(TextWriter inner, int lineLength, string newLine)
+{
+    private int _column;
+
+    public void Write(char c)
+    {
+        if (lineLength > 0 && _column == lineLength)
+        {
+            inner.Write(newLine);
+            _column = 0;
+        }
+
+        inner.Write(c);
+        _column++;
+    }
+
+    public void Write(ReadOnlySpan<char> text)
+    {
+        foreach (char c in text)
+        {
+            Write(c);
+        }
+    }
+}
+
 /// <summary>Base32 (RFC 4648)、Base32hex。</summary>
 internal sealed class Base32Writer(TextWriter writer, CopyOptions options) : FormatWriter(writer, options)
 {
@@ -266,6 +298,7 @@ internal sealed class Base32Writer(TextWriter writer, CopyOptions options) : For
     public const string HexAlphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
 
     private readonly byte[] _carry = new byte[5];
+    private readonly WrappingWriter _out = new(writer, options.Base32LineLength, options.NewLine);
     private int _carryCount;
 
     private string Alphabet => O.Base32Hex ? HexAlphabet : Standard;
@@ -304,7 +337,14 @@ internal sealed class Base32Writer(TextWriter writer, CopyOptions options) : For
         string alphabet = Alphabet;
         for (int i = 0; i < 8; i++)
         {
-            W.Write(i < chars ? alphabet[(int)((v >> (35 - i * 5)) & 31)] : '=');
+            if (i < chars)
+            {
+                _out.Write(alphabet[(int)((v >> (35 - i * 5)) & 31)]);
+            }
+            else if (O.Base32Padding)
+            {
+                _out.Write('=');
+            }
         }
     }
 }
@@ -315,6 +355,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
     public const string Z85Alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-:+=^!/*?&<>()[]{}@%$#";
 
     private readonly byte[] _carry = new byte[4];
+    private readonly WrappingWriter _out = new(writer, options.Ascii85LineLength, options.NewLine);
     private int _carryCount;
 
     private bool Z85 => O.Ascii85 == Ascii85Variant.Z85;
@@ -323,7 +364,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
     {
         if (!Z85 && O.Ascii85Delimiters)
         {
-            W.Write("<~");
+            _out.Write("<~");
         }
     }
 
@@ -350,7 +391,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
 
         if (!Z85 && O.Ascii85Delimiters)
         {
-            W.Write("~>");
+            _out.Write("~>");
         }
     }
 
@@ -359,7 +400,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
         uint v = (uint)(_carry[0] << 24 | _carry[1] << 16 | _carry[2] << 8 | _carry[3]);
         if (!Z85 && bytes == 4 && v == 0)
         {
-            W.Write('z');
+            _out.Write('z');
             return;
         }
 
@@ -371,7 +412,7 @@ internal sealed class Ascii85Writer(TextWriter writer, CopyOptions options) : Fo
             chars[i] = Z85 ? Z85Alphabet[(int)digit] : (char)(digit + 33);
         }
 
-        W.Write(chars[..(bytes + 1)]);
+        _out.Write(chars[..(bytes + 1)]);
     }
 }
 
@@ -384,7 +425,7 @@ internal sealed class UuWriter(TextWriter writer, CopyOptions options, bool xx) 
     private readonly byte[] _line = new byte[LineBytes];
     private int _count;
 
-    public override void Begin() => W.Write($"begin 644 {O.EncodedFileName}{NL}");
+    public override void Begin() => W.Write($"begin {O.EncodedFileMode} {O.EncodedFileName}{NL}");
 
     public override void Write(ReadOnlySpan<byte> data, long at)
     {
@@ -443,7 +484,7 @@ internal sealed class QuotedPrintableWriter(TextWriter writer, CopyOptions optio
         {
             bool literal = b is >= 33 and <= 126 && b != '=';
             int width = literal ? 1 : 3;
-            if (_column + width > 75)
+            if (_column + width > Math.Max(4, O.QuotedPrintableLineLength) - 1)
             {
                 W.Write('=');
                 W.Write(NL);
@@ -468,16 +509,24 @@ internal sealed class QuotedPrintableWriter(TextWriter writer, CopyOptions optio
 /// <summary>
 /// 画面表示どおりのダンプ (オフセット・Hex・テキストの 3 列) と、それを使う文書形式 (HTML・RTF・Markdown・TeX)。
 /// 行は選択範囲の先頭から <see cref="CopyOptions.ScreenBytesPerRow"/> バイトずつ。最後の行の Hex の列は空白で埋めてテキストの列をそろえる。
+/// Hex の列はグループ化・中央区切り・セルの表示形式・グループ内の逆順表示も画面と同じにする (EDIT-25 の仕様 6、VIEW-11 の仕様 5)。
 /// </summary>
 internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFormat format, long offset, long length) : FormatWriter(writer, options)
 {
     private readonly byte[] _row = new byte[Math.Max(1, options.ScreenBytesPerRow)];
+    private readonly RowFormat _layout = new(Math.Max(1, options.ScreenBytesPerRow), Math.Max(1, options.ScreenGroupSize),
+        options.ScreenMiddleSeparator, CellFormat: options.ScreenCellFormat,
+        Reverse: options.ScreenReverseGroups && options.ScreenCellFormat == CellFormat.Hex && options.ScreenGroupSize > 1,
+        BigEndian: options.ScreenBigEndian);
     private int _count;
     private readonly long _start = offset;
     private readonly long _length = length;
     private long _rowOffset = offset;
     private int _rowIndex;
     private int _modifiedIndex;
+
+    // RTF の色の表の番号 (色付けルールの色。0xRRGGBB → 番号)。
+    private readonly Dictionary<uint, int> _rtfColors = [];
 
     private int RowBytes => _row.Length;
 
@@ -509,7 +558,21 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
                 break;
             case CopyFormat.Rtf:
                 (int r, int g, int b) = ParseColor(O.ModifiedColor);
-                W.Write($"{{\\rtf1\\ansi\\deff0{{\\fonttbl{{\\f0\\fmodern Consolas;}}}}{{\\colortbl ;\\red{r}\\green{g}\\blue{b};}}\\f0\\fs20 ");
+                // 色の表: 1 は変更されたバイト、2 から色付けルールの色 (INSP-33 の仕様 8)。
+                var table = new StringBuilder($"\\red{r}\\green{g}\\blue{b};");
+                if (Colors && O.Coloring is { } coloring)
+                {
+                    foreach (uint rgb in coloring.Palette)
+                    {
+                        if (!_rtfColors.ContainsKey(rgb))
+                        {
+                            _rtfColors[rgb] = _rtfColors.Count + 2;
+                            table.Append(CultureInfo.InvariantCulture, $"\\red{(rgb >> 16) & 0xFF}\\green{(rgb >> 8) & 0xFF}\\blue{rgb & 0xFF};");
+                        }
+                    }
+                }
+
+                W.Write($"{{\\rtf1\\ansi\\deff0{{\\fonttbl{{\\f0\\fmodern Consolas;}}}}{{\\colortbl ;{table}}}\\f0\\fs20 ");
                 break;
             case CopyFormat.Markdown when Table:
                 W.Write($"| Offset | Hex | Text |{NL}| --- | --- | --- |{NL}");
@@ -572,28 +635,30 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
             : _rowOffset.ToString(O.UpperCase ? "X" : "x", CultureInfo.InvariantCulture).PadLeft(OffsetDigits, '0');
         var hex = new StringBuilder();
         var plain = new StringBuilder();
-        for (int i = 0; i < _count; i++)
-        {
-            string cell = CopyFormatter.Hex(_row[i], 2, O);
-            if (i > 0)
-            {
-                hex.Append(' ');
-                plain.Append(' ');
-            }
+        int position = 0;
 
+        // 色付けルールの色 (「色を含める」のとき。INSP-33 の仕様 8)。
+        (CopyCellColor[] Hex, CopyCellColor[] Text)? ruleColors = Colors && O.Coloring is { } coloring ? coloring.Cells(_rowOffset, _count) : null;
+        foreach ((int start, string cell, bool modified, int firstByte) in Cells())
+        {
+            hex.Append(' ', start - position);
+            plain.Append(' ', start - position);
             plain.Append(cell);
-            hex.Append(Colors && IsModified(_rowOffset + i) ? Highlight(cell) : cell);
+            CopyCellColor color = ruleColors is { } rc && firstByte < rc.Hex.Length ? rc.Hex[firstByte] : default;
+            hex.Append(modified || !color.IsEmpty ? Highlight(cell, modified, color) : cell);
+            position = start + cell.Length;
         }
 
         // 最後の行は Hex の列を空白で埋めて、テキストの列の位置をそろえる。
-        int pad = (RowBytes - _count) * 3;
+        int pad = Math.Max(0, _layout.HexWidth - position);
         string text = Text();
+        string? coloredText = ruleColors is { } colors ? ColoredText(colors.Text) : null;
 
         bool first = _rowIndex == 0;
         switch (format)
         {
             case CopyFormat.Html when Table:
-                W.Write($"<tr><td>{offsetText}</td><td>{hex}</td><td>{HtmlEscape(text)}</td></tr>{NL}");
+                W.Write($"<tr><td>{offsetText}</td><td>{hex}</td><td>{coloredText ?? HtmlEscape(text)}</td></tr>{NL}");
                 break;
             case CopyFormat.Markdown when Table:
                 W.Write($"| {offsetText} | {plain} | `{text.Replace("`", "'")}` |{NL}");
@@ -607,7 +672,7 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
                     W.Write(format == CopyFormat.Rtf ? "\\par" + NL : NL);
                 }
 
-                string textColumn = format switch
+                string textColumn = coloredText ?? format switch
                 {
                     CopyFormat.Html => HtmlEscape(text),
                     CopyFormat.Rtf => RtfEscape(text),
@@ -620,6 +685,53 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
         _rowOffset += _count;
         _count = 0;
         _rowIndex++;
+    }
+
+    /// <summary>
+    /// 行の Hex 列のセル (表示の位置の順)。画面と同じ配置 (<see cref="RowFormat"/>): グループ化 (VIEW-09) の間と中央区切りの空白、
+    /// セルの表示形式 (VIEW-10。単位に満たない端数は 1 バイトずつ Hex)、グループ内の逆順表示 (VIEW-11 の仕様 4・5・7)。
+    /// <c>Modified</c> はセルのどれかのバイトが変更されているか。<c>First</c> はセルの最初のバイトの行内の位置 (色付けルールの色に使う)。
+    /// </summary>
+    private List<(int Start, string Text, bool Modified, int First)> Cells()
+    {
+        var cells = new List<(int Start, string Text, bool Modified, int First)>(_count);
+
+        // 変更の判定は位置の昇順に行う (IsModified は前に進むだけ)。
+        if (_layout.IsHexBytes)
+        {
+            for (int i = 0; i < _count; i++)
+            {
+                cells.Add((_layout.ByteSpan(i, _count).Start, CopyFormatter.Hex(_row[i], 2, O), Colors && IsModified(_rowOffset + i), i));
+            }
+        }
+        else
+        {
+            int unit = _layout.Unit;
+            for (int k = 0; k * unit < _count; k++)
+            {
+                int first = k * unit;
+                if (_layout.IsCompleteCell(k, _count))
+                {
+                    bool modified = false;
+                    for (int i = first; i < first + unit; i++)
+                    {
+                        modified |= Colors && IsModified(_rowOffset + i);
+                    }
+
+                    string cell = CellFormatter.Format(O.ScreenCellFormat, _row.AsSpan(first, unit), O.ScreenBigEndian, O.ScreenSpacePadding, !O.UpperCase);
+                    cells.Add((_layout.CellStart(k), cell, modified, first));
+                    continue;
+                }
+
+                for (int i = first; i < _count; i++)
+                {
+                    cells.Add((_layout.ByteSpan(i, _count).Start, CopyFormatter.Hex(_row[i], 2, O), Colors && IsModified(_rowOffset + i), i));
+                }
+            }
+        }
+
+        cells.Sort(static (a, b) => a.Start.CompareTo(b.Start));
+        return cells;
     }
 
     private string Columns(string offsetText, string hex, string text)
@@ -654,9 +766,64 @@ internal sealed class DumpWriter(TextWriter writer, CopyOptions options, CopyFor
         return sb.ToString();
     }
 
-    private string Highlight(string cell) => format == CopyFormat.Rtf
-        ? $"{{\\cf1\\b {cell}}}"
-        : $"<span style=\"color: {O.ModifiedColor}; font-weight: bold;\">{cell}</span>";
+    /// <summary>
+    /// 色付けしたセル。変更されたバイトは変更の色の太字 (文字色はルールより優先)。ルールの文字色・背景色はそのまま書く
+    /// (HTML は style 属性、RTF は cf と chcbpat)。
+    /// </summary>
+    private string Highlight(string cell, bool modified, CopyCellColor color)
+    {
+        if (format == CopyFormat.Rtf)
+        {
+            var codes = new StringBuilder();
+            if (modified)
+            {
+                codes.Append("\\cf1\\b");
+            }
+            else if (color.Foreground is { } fg && _rtfColors.TryGetValue(fg, out int f))
+            {
+                codes.Append(CultureInfo.InvariantCulture, $"\\cf{f}");
+            }
+
+            if (color.Background is { } rtfBack && _rtfColors.TryGetValue(rtfBack, out int b))
+            {
+                codes.Append(CultureInfo.InvariantCulture, $"\\chcbpat{b}");
+            }
+
+            return codes.Length == 0 ? cell : $"{{{codes} {cell}}}";
+        }
+
+        var style = new StringBuilder();
+        if (modified)
+        {
+            style.Append(CultureInfo.InvariantCulture, $"color: {O.ModifiedColor}; font-weight: bold;");
+        }
+        else if (color.Foreground is { } fg)
+        {
+            style.Append(CultureInfo.InvariantCulture, $"color: #{fg:X6};");
+        }
+
+        if (color.Background is { } bg)
+        {
+            style.Append(style.Length > 0 ? " " : string.Empty).Append(CultureInfo.InvariantCulture, $"background-color: #{bg:X6};");
+        }
+
+        return $"<span style=\"{style}\">{cell}</span>";
+    }
+
+    /// <summary>テキストの列を、色付けルールの色を付けて書く (色のない文字はそのまま。HTML・RTF)。</summary>
+    private string ColoredText(CopyCellColor[] colors)
+    {
+        var sb = new StringBuilder();
+        for (int i = 0; i < _count; i++)
+        {
+            string ch = O.Encoding.DisplayChar(_row[i]).ToString();
+            string escaped = format == CopyFormat.Rtf ? RtfEscape(ch) : HtmlEscape(ch);
+            CopyCellColor color = i < colors.Length ? colors[i] : default;
+            sb.Append(color.IsEmpty ? escaped : Highlight(escaped, modified: false, color));
+        }
+
+        return sb.ToString();
+    }
 
     private bool IsModified(long position)
     {
@@ -729,169 +896,61 @@ internal sealed class TextFormatWriter(TextWriter writer, CopyOptions options) :
     public override void Write(ReadOnlySpan<byte> data, long at) => W.Write(O.Encoding.Decode(data));
 }
 
-/// <summary>Intel HEX。アドレス拡張は最大のアドレスで自動に選ぶ (0xFFFF 以下はなし、0xFFFFF 以下はレコード型 02、それ以上は 04)。</summary>
+/// <summary>
+/// Intel HEX。アドレス拡張は最大のアドレスで自動に選ぶ (0xFFFF 以下はなし、0xFFFFF 以下はレコード型 02、それ以上は 04)。レコードの書き方は
+/// エクスポート (TOOL-05) と共通 (<see cref="Formats.RecordExporter"/>)。
+/// </summary>
 internal sealed class IntelHexWriter : FormatWriter
 {
-    private readonly byte[] _record;
-    private readonly long _first;
-    private readonly int _mode; // 0: 拡張なし、2: 型 02、4: 型 04
-    private int _count;
-    private long _recordAddress;
-    private long _upper;
+    private readonly Formats.IntelHexSink _sink;
+    private readonly long _base;
 
     public IntelHexWriter(TextWriter writer, CopyOptions options, long offset, long length) : base(writer, options)
     {
-        _record = new byte[Math.Clamp(options.RecordBytes, 1, 255)];
-        _first = offset + options.BaseAddress;
-        long last = _first + Math.Max(0, length - 1);
-        _mode = last <= 0xFFFF ? 0 : last <= 0xFFFFF ? 2 : 4;
-        _recordAddress = _first;
+        _base = options.BaseAddress;
+        long last = offset + options.BaseAddress + Math.Max(0, length - 1);
+        Formats.IntelHexAddressMode mode = last <= 0xFFFF ? Formats.IntelHexAddressMode.I8Hex
+            : last <= 0xFFFFF ? Formats.IntelHexAddressMode.I16Hex : Formats.IntelHexAddressMode.I32Hex;
+        _sink = new Formats.IntelHexSink(writer, new Formats.RecordExportOptions { RecordLength = options.RecordBytes }, mode, options.NewLine);
     }
 
-    public override void Write(ReadOnlySpan<byte> data, long at)
-    {
-        foreach (byte b in data)
-        {
-            long address = _recordAddress + _count;
-            // レコードは 64 KiB の境界をまたがない。
-            if (_count > 0 && (address & 0xFFFF) == 0)
-            {
-                Flush();
-            }
+    public override void Write(ReadOnlySpan<byte> data, long at) => _sink.Put(at + _base, data);
 
-            _record[_count++] = b;
-            if (_count == _record.Length)
-            {
-                Flush();
-            }
-        }
-    }
-
-    public override void End()
-    {
-        if (_count > 0)
-        {
-            Flush();
-        }
-
-        W.Write(":00000001FF");
-        W.Write(NL);
-    }
-
-    private void Flush()
-    {
-        long address = _recordAddress;
-        long upper = _mode switch { 2 => (address & 0xF0000) >> 4, 4 => address >> 16, _ => 0 };
-        if (upper != _upper)
-        {
-            Line(0, (byte)(_mode == 2 ? 2 : 4), [(byte)(upper >> 8), (byte)upper]);
-            _upper = upper;
-        }
-
-        Line((int)(address & 0xFFFF), 0, _record.AsSpan(0, _count));
-        _recordAddress += _count;
-        _count = 0;
-    }
-
-    private void Line(int address, byte type, ReadOnlySpan<byte> data)
-    {
-        var sb = new StringBuilder(":");
-        int sum = data.Length + (address >> 8) + (address & 0xFF) + type;
-        sb.Append(data.Length.ToString("X2", CultureInfo.InvariantCulture));
-        sb.Append(address.ToString("X4", CultureInfo.InvariantCulture));
-        sb.Append(type.ToString("X2", CultureInfo.InvariantCulture));
-        foreach (byte b in data)
-        {
-            sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-            sum += b;
-        }
-
-        sb.Append(((byte)(-sum)).ToString("X2", CultureInfo.InvariantCulture));
-        W.Write(sb);
-        W.Write(NL);
-    }
+    public override void End() => _sink.End(null, false, finalNewLine: true);
 }
 
-/// <summary>Motorola S-record。アドレスの大きさで S19 / S28 / S37 を自動で選ぶ (指定も可)。</summary>
+/// <summary>
+/// Motorola S-record。アドレスの大きさで S19 / S28 / S37 を自動で選ぶ (指定も可)。レコード数 (S5) は出さない。レコードの書き方は
+/// エクスポート (TOOL-06) と共通。
+/// </summary>
 internal sealed class SRecordWriter : FormatWriter
 {
-    private readonly byte[] _record;
+    private readonly Formats.SRecordSink _sink;
     private readonly long _first;
-    private readonly int _addressBytes;
-    private int _count;
-    private long _recordAddress;
+    private readonly long _base;
 
     public SRecordWriter(TextWriter writer, CopyOptions options, long offset, long length) : base(writer, options)
     {
-        _record = new byte[Math.Clamp(options.RecordBytes, 1, 250)];
+        _base = options.BaseAddress;
         _first = offset + options.BaseAddress;
         long last = _first + Math.Max(0, length - 1);
-        _addressBytes = options.SRecordKind switch
+        int addressBytes = options.SRecordKind switch
         {
             SRecordKind.S19 => 2,
             SRecordKind.S28 => 3,
             SRecordKind.S37 => 4,
             _ => last <= 0xFFFF ? 2 : last <= 0xFFFFFF ? 3 : 4,
         };
-        _recordAddress = _first;
+        _sink = new Formats.SRecordSink(writer, new Formats.RecordExportOptions { RecordLength = Math.Min(options.RecordBytes, 250) },
+            addressBytes, options.NewLine);
     }
 
-    public override void Begin() => Line(0, 0, Encoding.ASCII.GetBytes(O.SRecordHeader), addressBytes: 2);
+    public override void Begin() => _sink.WriteHeader(O.SRecordHeader);
 
-    public override void Write(ReadOnlySpan<byte> data, long at)
-    {
-        foreach (byte b in data)
-        {
-            _record[_count++] = b;
-            if (_count == _record.Length)
-            {
-                Flush();
-            }
-        }
-    }
+    public override void Write(ReadOnlySpan<byte> data, long at) => _sink.Put(at + _base, data);
 
-    public override void End()
-    {
-        if (_count > 0)
-        {
-            Flush();
-        }
-
-        // 終わりのレコード (S9 / S8 / S7)。開始アドレスは先頭のアドレス。
-        Line(11 - _addressBytes, _first, [], _addressBytes);
-    }
-
-    private void Flush()
-    {
-        Line(_addressBytes - 1, _recordAddress, _record.AsSpan(0, _count), _addressBytes);
-        _recordAddress += _count;
-        _count = 0;
-    }
-
-    private void Line(int type, long address, ReadOnlySpan<byte> data, int addressBytes)
-    {
-        var sb = new StringBuilder("S");
-        sb.Append(type.ToString(CultureInfo.InvariantCulture));
-        int count = addressBytes + data.Length + 1;
-        int sum = count;
-        sb.Append(count.ToString("X2", CultureInfo.InvariantCulture));
-        for (int i = addressBytes - 1; i >= 0; i--)
-        {
-            int b = (int)((address >> (i * 8)) & 0xFF);
-            sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-            sum += b;
-        }
-
-        foreach (byte b in data)
-        {
-            sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-            sum += b;
-        }
-
-        sb.Append(((byte)~sum).ToString("X2", CultureInfo.InvariantCulture));
-        W.Write(sb);
-        W.Write(NL);
-    }
+    // 終わりのレコード (S9 / S8 / S7)。開始アドレスは先頭のアドレス。
+    public override void End() => _sink.End(writeCount: false, _first, finalNewLine: true);
 }
 
 /// <summary>JSON (<c>{"offset": 256, "length": 4, "data": "3q2+7w=="}</c>)。data は Base64 / Hex 文字列 / 数値の配列。</summary>

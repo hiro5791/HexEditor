@@ -110,7 +110,7 @@ public sealed partial class HexView
         BelowEnd,
     }
 
-    internal readonly record struct HitResult(long Offset, ActiveColumn Column, bool LowNibble, HitRegion Region, long Row);
+    internal readonly record struct HitResult(long Offset, ActiveColumn Column, bool LowNibble, HitRegion Region, long Row, int TextColumn = 0);
 
     /// <summary>Surface の座標から、セルを求める (VIEW-25 の仕様 6)。y が表示領域の外でも、その延長の行を返す。</summary>
     internal bool TryHitTest(Point point, out HitResult hit)
@@ -146,10 +146,19 @@ public sealed partial class HexView
         long offset;
         ActiveColumn column = ActiveColumn.Hex;
         bool low = false;
+        int textColumn = 0;
+        RowFormat format = columns.Format;
         if (!columns.ShowHex || (columns.ShowText && ch >= columns.TextIndex(0) - 1))
         {
+            // テキスト列が複数あるときは、その位置のテキスト列 (列の前の空白は右の列に含める。VIEW-24)。
             column = ActiveColumn.Text;
-            int rel = ch - columns.TextIndex(0);
+            int texts = Math.Max(1, format.ShownTextColumns);
+            while (textColumn + 1 < texts && ch >= format.TextColumnStart(textColumn + 1) - 1)
+            {
+                textColumn++;
+            }
+
+            int rel = ch - columns.TextIndex(textColumn, 0);
             offset = Math.Max(firstInRow, rowStart + Math.Clamp(rel, 0, b - 1));
 
             // 最終行の最後のバイトの右側は末尾位置 (EDIT-01 の仕様 11)。
@@ -160,13 +169,11 @@ public sealed partial class HexView
         }
         else
         {
-            int c = 0;
-            while (c < b - 1 && ch >= columns.HexIndex(c + 1) - 1)
-            {
-                c++;
-            }
-
-            low = ch - columns.HexIndex(c) >= 1;
+            // セルの前の空白は右のセルに含める。逆順表示・セルの表示形式でも、その位置にあるバイト (VIEW-10・VIEW-11)。
+            int valid = (int)Math.Clamp(layout.Length - rowStart, 0, b);
+            int c = format.ByteAtPointer(Math.Max(0, ch), valid);
+            (int start, _) = format.ByteSpan(c, valid);
+            low = format.IsHexBytes && ch - start >= 1;
             offset = rowStart + c;
             if (offset < firstInRow)
             {
@@ -181,7 +188,7 @@ public sealed partial class HexView
             low = false;
         }
 
-        hit = new HitResult(offset, column, low, column == ActiveColumn.Hex ? HitRegion.Hex : HitRegion.Text, row);
+        hit = new HitResult(offset, column, low, column == ActiveColumn.Hex ? HitRegion.Hex : HitRegion.Text, row, textColumn);
         return true;
     }
 
@@ -207,6 +214,8 @@ public sealed partial class HexView
         }
 
         bool shift = (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0;
+        bool ctrl = (e.KeyModifiers & VirtualKeyModifiers.Control) != 0;
+        bool alt = (e.KeyModifiers & VirtualKeyModifiers.Menu) != 0;
         if (point.Properties.IsXButton1Pressed || point.Properties.IsXButton2Pressed)
         {
             // マウスの「戻る」「進む」ボタン (VIEW-31)。
@@ -227,7 +236,7 @@ public sealed partial class HexView
             return;
         }
 
-        if (LeftButtonPressed(point.Position, shift, e.Pointer.PointerId))
+        if (LeftButtonPressed(point.Position, shift, e.Pointer.PointerId, ctrl, alt))
         {
             Surface.CapturePointer(e.Pointer);
             e.Handled = true;
@@ -252,16 +261,17 @@ public sealed partial class HexView
             return;
         }
 
-        bool inside = _editor.HasSelection && hit.Offset >= _editor.SelectionStart
-            && hit.Offset < _editor.SelectionStart + _editor.SelectionLength;
+        bool inside = _editor.HasSelection && _editor.IsSelected(hit.Offset);
         if (!inside)
         {
-            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false);
+            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false, hit.TextColumn);
         }
     }
 
-    /// <summary>左ボタンを押した (クリック・Shift+クリック・ダブルクリック・トリプルクリック)。ポインタを捕まえるなら true。</summary>
-    private bool LeftButtonPressed(Point position, bool shift, uint pointerId)
+    /// <summary>
+    /// 左ボタンを押した (クリック・Shift+クリック・ダブルクリック・トリプルクリック、Ctrl・Alt との組み合わせ)。ポインタを捕まえるなら true。
+    /// </summary>
+    private bool LeftButtonPressed(Point position, bool shift, uint pointerId, bool ctrl = false, bool alt = false)
     {
         if (_editor is null || !TryHitTest(position, out HitResult hit))
         {
@@ -274,10 +284,17 @@ public sealed partial class HexView
         _rowDrag = false;
         _pressPoint = _lastPointer = position;
         _pressPointerId = pointerId;
+        _pressHit = hit;
+        _pressMode = PressMode.Normal;
+        if (hit.Region != HitRegion.Offset && PressWithModifiers(hit, count, shift, ctrl, alt))
+        {
+            return true;
+        }
+
         if (shift)
         {
             // アンカーを変えずにクリックした位置までを選ぶ (EDIT-01 の仕様 4)。
-            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, true);
+            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, true, hit.TextColumn);
         }
         else if (hit.Region == HitRegion.Offset)
         {
@@ -299,7 +316,7 @@ public sealed partial class HexView
         }
         else
         {
-            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false);
+            _editor.Click(hit.Offset, hit.Column, hit.LowNibble, false, hit.TextColumn);
         }
 
         return true;
@@ -308,6 +325,7 @@ public sealed partial class HexView
     private void Surface_PointerMoved(object sender, PointerRoutedEventArgs e)
     {
         PointerPoint point = e.GetCurrentPoint(Surface);
+        _lastPointerPoint = point;
         if (_touchActive)
         {
             TouchMoved(point.Position);
@@ -347,6 +365,7 @@ public sealed partial class HexView
             }
 
             SetDragging(true);
+            StartModeDrag();
         }
 
         DragToPointer(position);
@@ -361,6 +380,7 @@ public sealed partial class HexView
             TouchReleased(e.GetCurrentPoint(Surface).Position);
         }
 
+        ReleaseWithMode((e.KeyModifiers & VirtualKeyModifiers.Control) != 0, (e.KeyModifiers & VirtualKeyModifiers.Shift) != 0);
         EndPointer();
         Surface.ReleasePointerCapture(e.Pointer);
     }
@@ -380,6 +400,7 @@ public sealed partial class HexView
 
     private void EndPointer()
     {
+        CancelModeDrag();
         _pressed = false;
         SetDragging(false);
         _rowDrag = false;
@@ -444,7 +465,7 @@ public sealed partial class HexView
             return;
         }
 
-        editor.Click(hit.Offset, ActiveColumn.Text, false, false);
+        editor.Click(hit.Offset, ActiveColumn.Text, false, false, hit.TextColumn);
         DocumentSnapshot snapshot = editor.Document.Current;
         long offset = hit.Offset;
 
@@ -516,7 +537,7 @@ public sealed partial class HexView
         {
             SelectRows(_rowDragAnchor, hit.Row);
         }
-        else
+        else if (!DragToPointerWithMode(hit))
         {
             _editor.DragTo(hit.Offset);
         }
@@ -651,9 +672,28 @@ public sealed partial class HexView
             // 1 ノッチで Windows の設定の行数 (仕様 1)。120 未満の入力はピクセルとして蓄積する (仕様 2)。
             uint lines = WheelScrollLines();
             double rowsPerNotch = lines == WheelPageScroll ? Math.Max(1, _editor.VisibleRows - 1) : lines;
+            if (_editor.VisibleSectionRows is not null)
+            {
+                // ページ単位で表示: 区切りの中でスクロールし、端でさらに回すと隣の区切りへ移る (VIEW-33 の仕様 4)。行内のずれは使わず、
+                // 1 行に満たない入力は蓄積する。
+                _subRowOffset = 0;
+                _pageWheelRows += -delta / 120.0 * rowsPerNotch;
+                long rows = (long)Math.Truncate(_pageWheelRows);
+                if (rows != 0)
+                {
+                    _pageWheelRows -= rows;
+                    _editor.ScrollRows(rows);
+                }
+
+                return;
+            }
+
             ScrollByPixels(-delta / 120.0 * rowsPerNotch * _rowHeight);
         }
     }
+
+    /// <summary>ページ単位で表示しているときの、1 行に満たないホイールの入力の蓄積 (行)。</summary>
+    private double _pageWheelRows;
 
     /// <summary>ピクセル単位で縦にスクロールする。一番上の行 (long) と行内のずれを分けて持つ (VIEW-28 の仕様 2)。</summary>
     private void ScrollByPixels(double pixels)
@@ -732,7 +772,7 @@ public sealed partial class HexView
             // タップ: クリックと同じ。
             if (TryHitTest(position, out HitResult hit))
             {
-                _editor?.Click(hit.Offset, hit.Column, hit.LowNibble, false);
+                _editor?.Click(hit.Offset, hit.Column, hit.LowNibble, false, hit.TextColumn);
             }
 
             return;
@@ -802,8 +842,15 @@ public sealed partial class HexView
 
     private void ScrollToBarValue(double newValue)
     {
-        long maxTop = _editor!.Layout.MaxTopRow(_editor.VisibleRows);
         long value = (long)Math.Round(newValue);
+        if (_editor!.PageScrollPosition is { } page)
+        {
+            // ページ単位で表示: 区切り単位の位置 (VIEW-33 の仕様 4)。
+            _editor.ScrollToPagePosition(value >= ScrollMapping.Scale(page.MaxPosition) ? page.MaxPosition : ScrollMapping.ToRow(value, page.MaxPosition));
+            return;
+        }
+
+        long maxTop = _editor.Layout.MaxTopRow(_editor.VisibleRows);
         long row = value >= ScrollMapping.Scale(maxTop) ? maxTop : ScrollMapping.ToRow(value, maxTop);
         _editor.ScrollToRow(row);
     }
@@ -890,20 +937,23 @@ public sealed partial class HexView
     {
         long offset = -1;
         HitRegion region = HitRegion.Hex;
+        int textColumn = 0;
         if (_editor is not null && TryHitTest(position, out HitResult hit) && hit.Region is HitRegion.Hex or HitRegion.Text or HitRegion.Offset
             && (ShowToolTips || IsUnreadableShown(hit.Offset)) && (hit.Region == HitRegion.Offset || hit.Offset < _editor.Layout.Length))
         {
             offset = hit.Region == HitRegion.Offset ? -2 - hit.Row : hit.Offset;
             region = hit.Region;
+            textColumn = hit.Region == HitRegion.Text ? hit.TextColumn : 0;
         }
 
-        if (offset == _hoverOffset && region == _hoverRegion)
+        if (offset == _hoverOffset && region == _hoverRegion && textColumn == _hoverTextColumn)
         {
             return;
         }
 
         _hoverOffset = offset;
         _hoverRegion = region;
+        _hoverTextColumn = textColumn;
         HideCellToolTip();
         _hoverTimer.Stop();
         if (offset != -1)
@@ -913,6 +963,9 @@ public sealed partial class HexView
     }
 
     private HitRegion _hoverRegion;
+
+    /// <summary>マウスを合わせているテキスト列 (VIEW-24。ツールチップの文字をこの列の文字コードで示す)。Hex 列では 0。</summary>
+    private int _hoverTextColumn;
 
     private bool IsUnreadableShown(long offset)
     {
@@ -951,11 +1004,13 @@ public sealed partial class HexView
         ActiveColumn column = _hoverRegion == HitRegion.Text ? ActiveColumn.Text : ActiveColumn.Hex;
         if (!IsUnreadableShown(offset))
         {
-            OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, null) : string.Empty, (offset, column));
+            FrameworkElement? rich = ShowToolTips ? RichToolTipContent?.Invoke(offset) : null;
+            OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, null, rich is null, _hoverTextColumn) : string.Empty, (offset, column), rich);
             return;
         }
 
         DocumentSnapshot snapshot = _editor.Document.Current;
+        int textColumn = _hoverTextColumn;
         _ = Task.Run(() =>
         {
             // 読めない理由はデータソースに尋ねる (キャッシュ済みならすぐ返る)。
@@ -967,13 +1022,13 @@ public sealed partial class HexView
             {
                 if (_hoverOffset == hover)
                 {
-                    OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, reason) : reason, (offset, column));
+                    OpenCellToolTip(hover, ShowToolTips ? CellToolTipText(offset, reason, textColumn: textColumn) : reason, (offset, column));
                 }
             });
         });
     }
 
-    private void OpenCellToolTip(long hover, string text, (long Offset, ActiveColumn Column)? cell)
+    private void OpenCellToolTip(long hover, string text, (long Offset, ActiveColumn Column)? cell, FrameworkElement? rich = null)
     {
         if (_hoverOffset != hover || string.IsNullOrEmpty(text))
         {
@@ -982,7 +1037,9 @@ public sealed partial class HexView
 
         _cellToolTip ??= new ToolTip();
         AutomationProperties.SetAutomationId(_cellToolTip, "HexViewCellToolTip");
-        _cellToolTip.Content = text;
+        // 注釈の説明 (Markdown を描いたもの。INSP-31 の仕様 4、INSP-32 の仕様 5) は文字列の下に並べる。
+        _cellToolTip.Content = rich is null ? text : new StackPanel { Spacing = 6, MaxWidth = 480, Children = { new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap }, rich } };
+        LastRichToolTip = rich;
         ToolTipService.SetToolTip(Surface, _cellToolTip);
         if (cell is { } c && TryGetCellRect(c.Offset, out Rect rect, c.Column))
         {
@@ -996,12 +1053,16 @@ public sealed partial class HexView
     /// <summary>最後に出したツールチップの文字列 (テスト用)。閉じたら null。</summary>
     internal string? LastToolTip { get; private set; }
 
+    /// <summary>最後に出したツールチップの注釈の部分 (テスト用)。</summary>
+    internal FrameworkElement? LastRichToolTip { get; private set; }
+
     /// <summary>ツールチップが開いているか。</summary>
     internal bool CellToolTipOpen => _cellToolTip?.IsOpen ?? false;
 
     private void HideCellToolTip()
     {
         LastToolTip = null;
+        LastRichToolTip = null;
         if (_cellToolTip is not null)
         {
             _cellToolTip.IsOpen = false;
@@ -1044,9 +1105,10 @@ public sealed partial class HexView
 
         RowColumns columns = Columns;
         int c = layout.ColumnOf(offset);
-        double x = column == ActiveColumn.Hex && columns.ShowHex ? columns.HexIndex(c) : columns.TextIndex(c);
-        double width = column == ActiveColumn.Hex ? 2 : 1;
-        rect = new Rect(ContentLeft + x * _cellWidth - _horizontalOffset, r * _rowHeight - _subRowOffset, width * _cellWidth, _rowHeight);
+        (double x, double width) = column == ActiveColumn.Hex && columns.ShowHex
+            ? HexCellRange(layout, columns, offset)
+            : (columns.TextIndex(Math.Clamp(_editor.TextColumn, 0, Math.Max(0, columns.Format.ShownTextColumns - 1)), c) * _cellWidth, _cellWidth);
+        rect = new Rect(ContentLeft + x - _horizontalOffset, r * _rowHeight - _subRowOffset, width, _rowHeight);
         return true;
     }
 
@@ -1108,6 +1170,19 @@ public sealed partial class HexView
                 Report(_editor.ToggleInsertMode());
             }
         }));
+
+        // カーソルがテキスト列にあるときの「テキスト列」(VIEW-24 の仕様 3 を、Shift+F10・アプリケーションキーからも使えるようにする)。
+        var textColumn = new MenuFlyoutSubItem { Text = Loc.Get("HexView_Menu_TextColumn"), Tag = "TextColumn" };
+        AutomationProperties.SetAutomationId(textColumn, "HexViewMenu_TextColumn");
+        foreach (MenuFlyoutItem item in CreateTextColumnItems("HexViewMenu_TextColumn", () => _editor?.TextColumn ?? 0))
+        {
+            textColumn.Items.Add(item);
+        }
+
+        _contextTextColumnSeparator = new MenuFlyoutSeparator();
+        menu.Items.Add(_contextTextColumnSeparator);
+        menu.Items.Add(textColumn);
+        _contextTextColumnMenu = textColumn;
         menu.Closed += (_, _) => Focus(FocusState.Programmatic);
         return menu;
 
@@ -1122,6 +1197,9 @@ public sealed partial class HexView
             return item;
         }
     }
+
+    private MenuFlyoutSubItem? _contextTextColumnMenu;
+    private MenuFlyoutSeparator? _contextTextColumnSeparator;
 
     /// <summary>右クリックメニューの項目のショートカット (コマンド ID、または「key:」とキーの名前)。</summary>
     private readonly Dictionary<MenuFlyoutItem, string> _contextMenuShortcuts = [];
@@ -1146,17 +1224,30 @@ public sealed partial class HexView
 
             if (item is MenuFlyoutItem m)
             {
+                // 長さを変えられないドキュメントでは、長さを変える操作 (切り取り・削除・挿入モード) を無効にする (ENG-07 の仕様 4・「エラー」)。
+                // 貼り付けは上書きモードだけのため上書きで貼り付ける。上書きモードの Delete を 00 にする設定 (EDIT-13 の仕様 4) なら削除できる。
+                bool resizable = editor.Document.CanResize;
                 m.IsEnabled = (string)m.Tag switch
                 {
-                    "Cut" => editor.HasSelection && editable,
+                    "Cut" => editor.HasSelection && editable && resizable,
                     "Copy" => editor.HasSelection,
                     "Paste" or "PasteOverwrite" => editable,
-                    "Delete" => editable && (editor.HasSelection || editor.Cursor < editor.Layout.Length),
+                    "Delete" => editable && (editor.HasSelection || editor.Cursor < editor.Layout.Length)
+                        && (resizable || (!editor.InsertMode && editor.Options.DeleteKeepsLengthInOverwrite)),
+                    "ToggleInsert" => editable && resizable,
                     "SelectAll" => editor.Layout.Length > 0,
                     "ClearSelection" => editor.HasSelection,
                     _ => true,
                 };
             }
+        }
+
+        // 「テキスト列」はカーソルがテキスト列にあるときだけ出す。
+        if (_contextTextColumnMenu is { } textColumn)
+        {
+            bool onText = editor.ActiveColumn == ActiveColumn.Text && editor.View.ShowTextColumn;
+            textColumn.Visibility = _contextTextColumnSeparator!.Visibility = onText ? Visibility.Visible : Visibility.Collapsed;
+            UpdateTextColumnItems(textColumn.Items, editor.TextColumn);
         }
     }
 
@@ -1202,6 +1293,12 @@ public sealed partial class HexView
         {
             // Hex ビューから他の領域へ移る (VIEW-27 の仕様 4、UI-52)。Tab は列の切り替えに使うため、F6 が出口になる。
             MoveFocusToRegion(!shift);
+            return true;
+        }
+
+        if (HandleSelectionKey(key, shift, ctrl, alt))
+        {
+            RestartBlink();
             return true;
         }
 
@@ -1274,11 +1371,20 @@ public sealed partial class HexView
                 _editor.PageDown(shift);
                 break;
             case VirtualKey.Tab when !ctrl:
-                // Tab / Shift+Tab で列を切り替える (VIEW-27 の仕様 1。列が 2 つなので順と逆は同じ)。
-                _editor.ToggleColumn();
+                // Tab / Shift+Tab で列を切り替える (VIEW-27 の仕様 1)。テキスト列が複数あれば順に移る (VIEW-24 の仕様 4)。
+                _editor.ToggleColumn(backward: shift);
                 break;
             case VirtualKey.Insert when !ctrl && !shift:
                 Report(_editor.ToggleInsertMode());
+                break;
+            case VirtualKey.Delete when !shift && LongRangeDeleteRequested is { } longDelete
+                && _editor.LongRangeDeleteAction(backspace: false) is var action && action != RangeDeleteAction.None:
+                // 要素数の多いマルチ選択・矩形の削除は長時間処理にする (EDIT-07・EDIT-17 の「巨大ファイル・長時間処理」)。
+                longDelete(this, action);
+                break;
+            case VirtualKey.Back when LongRangeDeleteRequested is { } longBack
+                && _editor.LongRangeDeleteAction(backspace: true) is var backAction && backAction != RangeDeleteAction.None:
+                longBack(this, backAction);
                 break;
             case VirtualKey.Delete when !shift:
                 DeleteWithAnnouncement(_editor.Delete);
@@ -1385,7 +1491,7 @@ public sealed partial class HexView
             {
                 EditResult r = _editor.TypeHexDigit(ch);
                 Report(r);
-                if (r is EditResult.FixedLength or EditResult.NotEditable)
+                if (r is EditResult.FixedLength or EditResult.NotEditable or EditResult.CellFormatNotEditable)
                 {
                     break;
                 }
@@ -1407,9 +1513,16 @@ public sealed partial class HexView
 
     private void Report(EditResult result)
     {
-        if (result is EditResult.FixedLength or EditResult.FixedLengthDelete or EditResult.NotEditable or EditResult.NotEncodable)
+        // Hex 以外のセルの表示形式での入力 (CellFormatNotEditable) は、ウィンドウがステータスバーに文を出す (VIEW-10 の仕様 7)。
+        if (result is EditResult.FixedLength or EditResult.FixedLengthDelete or EditResult.NotEditable or EditResult.NotEncodable
+            or EditResult.TooManyRows or EditResult.TooManyCarets or EditResult.CellFormatNotEditable)
         {
             EditRejected?.Invoke(this, result);
+        }
+        else if (result == EditResult.Done && _editor?.TakeCaretFailures() is int failures and > 0)
+        {
+            // 一部のカーソルで入力できなかった (EDIT-08 の「エラー」)。
+            CaretInputFailed?.Invoke(this, failures);
         }
     }
 

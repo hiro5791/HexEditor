@@ -19,7 +19,7 @@ public sealed class ToolPageTab(string id, string title, string glyph)
 
     public string Glyph { get; } = glyph;
 
-    public string AutomationId => "ToolPageTab_" + Id;
+    public string AutomationId => "ToolPageTab_" + Id.Replace(':', '_');
 }
 
 /// <summary>文書のタブとページのタブの見出しの形を選ぶ。</summary>
@@ -164,14 +164,16 @@ public sealed partial class MainWindow
     }
 
     /// <summary>ページのタブを加える (なければ) か前に出す。</summary>
-    private void AddToolTab(string id)
+    private void AddToolTab(string id, string? title = null, string? glyph = null)
     {
         if (_toolTabs.Any(t => t.Id == id))
         {
             return;
         }
 
-        var tab = id == "settings"
+        var tab = title is not null
+            ? new ToolPageTab(id, title, glyph ?? string.Empty)
+            : id == "settings"
             ? new ToolPageTab(id, Loc.Get("ToolPage_Settings"), "")
             : new ToolPageTab(id, Loc.Get("ToolPage_Shortcuts"), "");
         _toolTabs.Add(tab);

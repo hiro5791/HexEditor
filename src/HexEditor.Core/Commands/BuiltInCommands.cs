@@ -24,9 +24,31 @@ public static class BuiltInCommands
         new("file.newWithSize", "file"),
         new("file.open", "file") { Icon = IconOpen, DefaultBindings = [K("Ctrl+O")] },
         new("file.openReadOnly", "file"),
+        new("file.openAdvanced", "file"),
+        new("file.openRange", "file"),
+        new("file.openAsIntelHex", "file"),
+        new("file.openAsSRecord", "file"),
+        new("file.openAsBase64", "file"),
+        new("file.openSelectionInNewTab", "file") { Condition = "documentOpen" },
+        new("file.openSelectionAsCopy", "file") { Condition = "documentOpen" },
+
+        // ディスク・プロセスを開く (ENG-29、ENG-32)。管理者権限がないことだけが理由では無効にしない (UI-13 の仕様 3)。
+        new("file.openDisk", "file") { DefaultBindings = [K("Ctrl+Shift+D")] },
+        new("file.openProcess", "file") { DefaultBindings = [K("Ctrl+Shift+M")] },
+
+        // ディスクイメージとして開く (ENG-31)、プロセスメモリの即時書き込みの切り替え (ENG-34)。既定のキーはなし。
+        new("file.openDiskImage", "file"),
+        new("file.toggleImmediateWrite", "file") { Condition = "documentOpen" },
         new("file.save", "file") { Icon = IconSave, DefaultBindings = [K("Ctrl+S")], Condition = "documentOpen && !readOnly" },
         new("file.saveAs", "file") { Icon = IconSaveAs, DefaultBindings = [K("Ctrl+Shift+S")], Condition = "documentOpen" },
         new("file.saveAll", "file") { Condition = "documentOpen" },
+        new("file.formatSettings", "file") { Condition = "documentOpen" },
+        new("file.import", "file"),
+        new("file.export", "file") { Condition = "documentOpen" },
+        new("file.exportSelection", "file") { Condition = "documentOpen" },
+        new("file.saveSelection", "file") { Condition = "documentOpen" },
+        new("workspace.save", "file") { Condition = "documentOpen" },
+        new("workspace.open", "file"),
         new("file.reload", "file") { DefaultBindings = [K("Ctrl+R")], Condition = "documentOpen" },
         new("file.discardReload", "file") { Condition = "documentOpen" },
         new("file.reopenClosed", "file") { DefaultBindings = [K("Ctrl+Shift+T")] },
@@ -98,6 +120,41 @@ public static class BuiltInCommands
         },
         new("edit.readOnly", "edit") { Condition = "documentOpen" },
 
+        // 選択 (EDIT-05〜EDIT-09、EDIT-17)。ショートカットは既定なし (カーソルの追加の Ctrl+Alt+↑ / ↓ は Hex ビューが処理する)。
+        new("edit.selection.shiftNext", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.shiftPrevious", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.shiftBy", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.resize", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.swapEnds", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.invert", "edit") { Condition = "documentOpen" },
+        new("edit.selection.nextElement", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.previousElement", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.startRectangle", "edit") { Condition = "documentOpen" },
+        new("edit.selection.toMulti", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.save", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.load", "edit") { Condition = "documentOpen" },
+        new("edit.selection.export", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.selection.import", "edit") { Condition = "documentOpen" },
+        new("edit.caret.addAbove", "edit")
+        {
+            DefaultBindings = [K("Ctrl+Alt+Up", KeyScope.Editor)],
+            NativeScopes = [KeyScope.Editor],
+            Condition = "documentOpen",
+        },
+        new("edit.caret.addBelow", "edit")
+        {
+            DefaultBindings = [K("Ctrl+Alt+Down", KeyScope.Editor)],
+            NativeScopes = [KeyScope.Editor],
+            Condition = "documentOpen",
+        },
+        new("edit.caret.atElements", "edit") { Condition = "documentOpen && hasSelection" },
+        new("edit.insertRectangle", "edit") { Condition = "documentOpen && !readOnly && canResize" },
+
+        // ユーザークリップボードとクリップボード履歴 (EDIT-28)。
+        .. Enumerable.Range(1, 9).Select(n => new CommandDefinition($"edit.userClipboard.copy{n}", "edit") { Condition = "documentOpen && hasSelection" }),
+        .. Enumerable.Range(1, 9).Select(n => new CommandDefinition($"edit.userClipboard.paste{n}", "edit") { Condition = "documentOpen && !readOnly" }),
+        new("edit.clipboardHistory.paste", "edit") { Condition = "documentOpen && !readOnly" },
+
         // ---- 検索 ----
         new("search.find", "search") { Icon = IconFind, DefaultBindings = [K("Ctrl+F")], Condition = "documentOpen" },
         new("search.findNext", "search") { DefaultBindings = [K("F3")], Condition = "documentOpen" },
@@ -111,7 +168,15 @@ public static class BuiltInCommands
         // すべて置換 (FIND-23)、結果一覧の変換・エクスポート (FIND-21)。ショートカットは既定なし。
         new("search.replaceAll", "search") { Condition = "documentOpen && !readOnly" },
         new("search.results.toBookmarks", "search") { Condition = "searchResults" },
+        new("search.results.toSelection", "search") { Condition = "searchResults" },
         new("search.results.export", "search") { Condition = "searchResults" },
+
+        // フェーズ 2 の検索 (FIND-08〜FIND-32)。複数ファイル検索は 00-overview 8.2 の Ctrl+Shift+F。
+        new("search.multiFile", "search") { DefaultBindings = [K("Ctrl+Shift+F")] },
+        new("search.multiFileReplace", "search"),
+        new("search.strings", "search") { Condition = "documentOpen" },
+        new("search.multiTerm", "search") { Condition = "documentOpen" },
+        new("search.mismatch", "search") { Condition = "documentOpen" },
 
         // ---- 移動 ----
         new("go.goTo", "go") { Icon = IconGoTo, DefaultBindings = [K("Ctrl+G")], Condition = "documentOpen" },
@@ -155,6 +220,13 @@ public static class BuiltInCommands
         new("go.history", "go") { Condition = "documentOpen && canGoBack" },
         new("go.start", "go") { Condition = "documentOpen" },
         new("go.end", "go") { Condition = "documentOpen" },
+
+        // セクタ単位の移動 (VIEW-32)、メモリ領域の移動 (ENG-33)。既定のキーはなし。
+        new("go.nextSector", "go") { Condition = "documentOpen" },
+        new("go.previousSector", "go") { Condition = "documentOpen" },
+        new("go.toSector", "go") { Condition = "documentOpen" },
+        new("go.nextMemoryRegion", "go") { Condition = "documentOpen" },
+        new("go.previousMemoryRegion", "go") { Condition = "documentOpen" },
 
         // ブックマーク (INSP-23〜INSP-26)。番号付きは数字キーの段 (テンキーも KeyDispatcher が同じに扱う。00-overview.md 8.7)。
         new("go.bookmark.toggle", "go") { DefaultBindings = [K("Ctrl+F2")], Condition = "documentOpen" },
@@ -214,6 +286,11 @@ public static class BuiltInCommands
         new("view.clearReference", "view") { Condition = "documentOpen" },
         new("view.saveDefault", "view") { Condition = "documentOpen" },
         new("view.resetDefault", "view") { Condition = "documentOpen" },
+
+        // 表示プリセット (VIEW-42 の仕様 6・7)。「表示: プリセットを適用」は引数にプリセットの名前。
+        new("view.presetApply", "view") { Condition = "documentOpen", Argument = new() },
+        new("view.presetSave", "view") { Condition = "documentOpen" },
+        new("view.presetManage", "view"),
         new("view.announcePosition", "accessibility") { Condition = "documentOpen" },
         new("view.utf16Odd", "view") { Condition = "documentOpen" },
         .. Enumerable.Range(0, 4).Select(p => new CommandDefinition($"view.utf32Phase{p}", "view") { Condition = "documentOpen" }),
@@ -234,8 +311,19 @@ public static class BuiltInCommands
         new("view.customizeToolbar", "view"),
         new("view.panel.inspector", "view") { Icon = IconInspector, DefaultBindings = [K("Ctrl+Shift+I")] },
         new("view.panel.hash", "view"),
+        new("view.panel.statistics", "view"),
+        new("view.panel.fileType", "view"),
         new("view.panel.bookmarks", "view"),
         new("view.panel.searchResults", "view"),
+        new("view.panel.history", "view"),
+        new("view.panel.clipboard", "view"),
+        new("view.panel.formatIssues", "view"),
+        new("view.panel.strings", "view"),
+        new("view.panel.multiFileSearch", "view"),
+        new("view.panel.diffs", "view"),
+
+        // メモリマップのパネル (ENG-33)。プロセスメモリのドキュメントで自動表示する。既定のキーはなし。
+        new("view.panel.memoryMap", "view") { Condition = "documentOpen" },
         new("view.nextRegion", "view") { DefaultBindings = [K("F6")], NativeScopes = [KeyScope.Editor] },
         new("view.previousRegion", "view") { DefaultBindings = [K("Shift+F6")], NativeScopes = [KeyScope.Editor] },
 
@@ -253,16 +341,142 @@ public static class BuiltInCommands
         new("view.theme.light", "view"),
         new("view.theme.dark", "view"),
 
+        // ---- 表示 (フェーズ 2: VIEW-10・VIEW-11・VIEW-17・VIEW-18・VIEW-23・VIEW-24・VIEW-33・VIEW-35・VIEW-37〜VIEW-39) ----
+        .. Enum.GetNames<View.CellFormat>().Select(f => new CommandDefinition($"view.cellFormat{f}", "view") { Condition = "documentOpen" }),
+        new("view.spacePadding", "view") { Condition = "documentOpen" },
+        new("view.endianLittle", "view") { Condition = "documentOpen" },
+        new("view.endianBig", "view") { Condition = "documentOpen" },
+        new("view.endianToggle", "view") { Condition = "documentOpen" },
+        new("view.reverseGroups", "view") { Condition = "documentOpen" },
+        new("view.addTextColumn", "view") { Condition = "documentOpen" },
+        new("view.removeTextColumn", "view") { Condition = "documentOpen" },
+
+        // 操作中のテキスト列の移動と文字コードの変更 (VIEW-24 の仕様 3 をキーボード・コマンドパレットから)。
+        new("view.moveTextColumnLeft", "view") { Condition = "documentOpen" },
+        new("view.moveTextColumnRight", "view") { Condition = "documentOpen" },
+        new("view.textColumnEncoding", "view") { Condition = "documentOpen" },
+        new("view.byteThemeNone", "view"),
+        new("view.byteThemeCategory", "view"),
+        new("view.byteThemeGradient", "view"),
+        new("view.byteThemeCustom", "view"),
+        new("view.encoding.loadTable", "view") { Condition = "documentOpen" },
+        new("view.records", "view") { Condition = "documentOpen" },
+        new("view.recordSettings", "view") { Condition = "documentOpen" },
+        new("view.recordPerRow", "view") { Condition = "documentOpen" },
+        new("view.recordNumbers", "view") { Condition = "documentOpen" },
+        new("go.nextRecord", "go") { Condition = "documentOpen" },
+        new("go.previousRecord", "go") { Condition = "documentOpen" },
+        new("view.separatorNone", "view") { Condition = "documentOpen" },
+        new("view.separatorSector", "view") { Condition = "documentOpen" },
+        new("view.separatorPage", "view") { Condition = "documentOpen" },
+        new("view.separatorCustom", "view") { Condition = "documentOpen" },
+        new("view.separatorLabels", "view") { Condition = "documentOpen" },
+        new("view.pageView", "view") { Condition = "documentOpen" },
+        new("go.nextPage", "go") { Condition = "documentOpen" },
+        new("go.previousPage", "go") { Condition = "documentOpen" },
+        new("view.minimap", "view"),
+        .. Enum.GetNames<View.MinimapContent>().Select(c => new CommandDefinition($"view.minimap{c}", "view")),
+        new("view.minimapWhole", "view"),
+        new("view.minimapAround", "view"),
+        new("view.minimapExact", "view") { Condition = "documentOpen" },
+        new("view.split", "view") { DefaultBindings = [K("Ctrl+Oem5")], Condition = "documentOpen" },
+        new("view.splitHorizontal", "view") { Condition = "documentOpen" },
+        new("view.splitVertical", "view") { Condition = "documentOpen" },
+        new("view.splitRemove", "view") { Condition = "documentOpen" },
+        new("view.splitSync", "view") { Condition = "documentOpen" },
+        new("view.nextPane", "view") { Condition = "documentOpen" },
+        new("view.newView", "view") { Condition = "documentOpen" },
+        new("view.sideBySide", "view") { Condition = "documentOpen", Argument = new() },
+        new("view.syncOff", "view") { Condition = "documentOpen" },
+        new("view.syncSameOffset", "view") { Condition = "documentOpen" },
+        new("view.syncKeepDifference", "view") { Condition = "documentOpen" },
+        new("view.syncMapped", "view") { Condition = "documentOpen" },
+        new("view.syncToggle", "view") { Condition = "documentOpen" },
+        new("view.syncDifferences", "view") { Condition = "documentOpen" },
+        // ---- データ (EDIT-31〜EDIT-39)。ショートカットは既定なし ----
+        new("data.operation", "data") { Condition = "documentOpen && !readOnly" },
+        new("data.repeatOperation", "data") { Condition = "documentOpen && !readOnly" },
+
+        // コマンドパレット「データ演算: <演算名>」(EDIT-31 の「呼び出し」)。ID は data.op.<演算名の先頭を小文字にしたもの>。
+        .. Enum.GetValues<Editing.Transforms.DataOperationKind>().Select(k =>
+            new CommandDefinition("data.op." + char.ToLowerInvariant(k.ToString()[0]) + k.ToString()[1..], "dataOperation")
+            {
+                Condition = "documentOpen && !readOnly",
+            }),
+        new("data.convertEncoding", "data") { Condition = "documentOpen && !readOnly" },
+        new("data.case.upper", "data") { Condition = "documentOpen && !readOnly" },
+        new("data.case.lower", "data") { Condition = "documentOpen && !readOnly" },
+        new("data.case.swap", "data") { Condition = "documentOpen && !readOnly" },
+
+        // 変換方法ごとのコマンド (EDIT-39 の「画面」)。
+        .. new[] { "upper", "lower", "swap" }.SelectMany(op => new[] { "ascii", "text" }.Select(method =>
+            new CommandDefinition($"data.case.{op}.{method}", "data") { Condition = "documentOpen && !readOnly" })),
+
         // ---- 解析 ----
         new("analysis.hash", "analysis") { Condition = "documentOpen" },
 
-        // ハッシュパネルの照合とコピー (ANA-21、ANA-22 の「呼び出し」)。「一致するアルゴリズムを探す」と「カーソル位置に書き込む」はフェーズ 2 (F2-14)。
+        // ハッシュパネルの照合とコピー (ANA-21、ANA-22 の「呼び出し」)。
         new("analysis.hash.verify", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.verifyFile", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.copy", "analysis") { Condition = "documentOpen" },
 
+        // ---- 比較 (ANA-01〜ANA-08)。次 / 前の差分は 00-overview.md 8.2 のグローバルのキー ----
+        new("analysis.compare", "compare"),
+        new("analysis.compareSaved", "compare") { Condition = "documentOpen" },
+        new("compare.nextDiff", "compare") { DefaultBindings = [K("Alt+F5")] },
+        new("compare.previousDiff", "compare") { DefaultBindings = [K("Shift+Alt+F5")] },
+        new("compare.recompare", "compare"),
+        new("compare.syncScroll", "compare"),
+        new("compare.layout", "compare"),
+        new("compare.copyRight", "compare"),
+        new("compare.copyLeft", "compare"),
+        new("compare.copyAllRight", "compare"),
+        new("compare.copyAllLeft", "compare"),
+        new("compare.showDiffList", "compare"),
+        new("compare.saveReport", "compare"),
+
+        // プロセスのスナップショットと比較 (ANA-09)。既定のキーはなし。
+        new("compare.createSnapshot", "compare") { Condition = "documentOpen" },
+        new("compare.snapshots", "compare"),
+
+        // 統計 (ANA-10〜ANA-16) とファイル形式の判定 (ANA-17)。ショートカットは既定なし。
+        new("analysis.statistics", "analysis") { Condition = "documentOpen" },
+        new("analysis.descriptive", "analysis") { Condition = "documentOpen" },
+        new("analysis.entropy", "analysis") { Condition = "documentOpen" },
+        new("analysis.entropyGraph", "analysis") { Condition = "documentOpen" },
+        new("analysis.digram", "analysis") { Condition = "documentOpen" },
+        new("analysis.byteDistribution", "analysis") { Condition = "documentOpen" },
+        new("analysis.patterns", "analysis") { Condition = "documentOpen" },
+        new("analysis.classify", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileType", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileType.here", "analysis") { Condition = "documentOpen" },
+        new("analysis.fileType.embedded", "analysis") { Condition = "documentOpen" },
+        // カスタム CRC (ANA-20)、一致するアルゴリズムを探す (ANA-21 の仕様 5)、カーソル位置に書き込む (ANA-22 の仕様 3)。
+        new("analysis.hash.customCrc", "analysis"),
+        new("analysis.hash.findAlgorithm", "analysis") { Condition = "documentOpen" },
+        new("analysis.hash.writeAtCursor", "analysis") { Condition = "documentOpen && !readOnly" },
+
         // ---- データインスペクタ (INSP-02 の「呼び出し」: インスペクタ: エンディアンの切り替え) ----
         new("inspector.toggleEndian", "inspector") { Condition = "documentOpen" },
+
+        // ---- ブックマークのグループ・変換・インポート / エクスポート、位置マネージャ、注釈、色付けルール (INSP-27〜INSP-34) ----
+        new("edit.selectionToBookmarks", "edit") { Condition = "documentOpen" },
+        new("go.bookmark.toSelection", "go") { Condition = "documentOpen" },
+        new("go.bookmark.showDescription", "go") { Condition = "documentOpen" },
+        new("file.importBookmarks", "file") { Condition = "documentOpen" },
+        new("file.exportBookmarks", "file") { Condition = "documentOpen" },
+        new("view.panel.positionManager", "view"),
+        new("view.panel.coloringRules", "view"),
+        new("view.panel.legend", "view"),
+        new("view.annotations.toggle", "view"),
+        new("view.annotations.column", "view"),
+        new("view.annotations.bookmark", "view"),
+        new("view.annotations.yara", "view"),
+        new("view.annotations.searchResults", "view"),
+        new("view.annotations.template", "view"),
+        new("view.annotations.script", "view"),
+        new("view.annotations.analysis", "view"),
+        new("view.coloring.fromSelection", "view") { Condition = "documentOpen" },
 
         // ---- タブ (UI-09〜UI-11) ----
         new("tab.next", "tab") { DefaultBindings = [K("Ctrl+Tab")] },

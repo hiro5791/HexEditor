@@ -2,22 +2,6 @@ using HexEditor.Core.Engine;
 
 namespace HexEditor.Core.Compare;
 
-/// <summary>差分の種類 (ANA-08 の仕様 4)。</summary>
-public enum DiffKind
-{
-    /// <summary>上書きした範囲 (左右で同じ長さ)。</summary>
-    Changed,
-
-    /// <summary>挿入した範囲 (右のみ。左の長さは 0)。</summary>
-    Inserted,
-
-    /// <summary>削除した範囲 (左のみ。右の長さは 0)。</summary>
-    Deleted,
-}
-
-/// <summary>差分 1 件。左は保存済みの内容 (ディスク上)、右は編集中のドキュメント。</summary>
-public readonly record struct DiffRange(DiffKind Kind, long LeftOffset, long LeftLength, long RightOffset, long RightLength);
-
 /// <summary>
 /// 保存済みの内容との比較 (ANA-08 の仕様 2・4)。ディスク上のファイルが開いた (または最後に保存した) 後に変更されていない場合に使う。
 /// ピースツリーだけから差分を求め、ファイルは読まない。時間はピースの数に比例し、ファイルサイズに依存しない。

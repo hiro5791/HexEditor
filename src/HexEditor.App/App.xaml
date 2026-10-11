@@ -11,6 +11,8 @@
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
                 <!--  ブックマークの色とインスペクタの対象の強調 (INSP-18、INSP-24)  -->
                 <ResourceDictionary Source="ms-appx:///Themes/AnnotationPalette.xaml" />
+                <!--  比較の差分の配色 (ANA-04 の仕様 3)  -->
+                <ResourceDictionary Source="ms-appx:///Themes/ComparePalette.xaml" />
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!--  画面全体のズーム (UI-08 の仕様 3): ダイアログもウィンドウの中身と同じ倍率で拡大する  -->

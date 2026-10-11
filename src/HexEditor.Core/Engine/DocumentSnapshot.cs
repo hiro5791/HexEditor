@@ -8,6 +8,11 @@ public enum ByteState : byte
     Valid,
     Loading,
     Unreadable,
+
+    /// <summary>
+    /// データのないアドレス (Intel HEX・S-record の隙間。ENG-38 の仕様 3)。値は塗りつぶしの値として読めるが、表示では区別する。
+    /// </summary>
+    NoData,
 }
 
 /// <summary>
@@ -29,6 +34,9 @@ public sealed class DocumentSnapshot
     public long Length => Tree.Length;
 
     internal DocumentStorage Storage => _storage;
+
+    /// <summary>このスナップショットの元データ (保存されている内容。パッチの差分の元。TOOL-12 の仕様 5)。</summary>
+    public IByteSource OriginalSource => _storage.Source;
 
     /// <summary>
     /// 表示用の読み込み。ブロックしない。キャッシュにない元データは読み込みを始めて <see cref="ByteState.Loading"/> にする。
@@ -52,10 +60,12 @@ public sealed class DocumentSnapshot
             if (piece.Kind == PieceKind.Original)
             {
                 ReadOriginalForDisplay(piece.Offset, dst, st);
+                MarkGaps(_storage.Source, piece.Offset, st);
             }
             else if (piece.Kind == PieceKind.External)
             {
                 ReadExternalForDisplay(piece, dst, st);
+                MarkGaps(_storage.Externals[piece.ExternalIndex], piece.Offset, st);
             }
             else
             {
@@ -67,10 +77,106 @@ public sealed class DocumentSnapshot
         return count;
     }
 
+    /// <summary>隙間を持つデータソース (ENG-38) の隙間を「データなし」にする (読めたバイトだけ)。</summary>
+    private static void MarkGaps(IByteSource source, long sourceOffset, Span<ByteState> states)
+    {
+        if (source is not IGapSource gaps)
+        {
+            return;
+        }
+
+        foreach ((long offset, long length) in gaps.GapsIn(sourceOffset, states.Length))
+        {
+            int from = (int)Math.Max(0, offset - sourceOffset);
+            int to = (int)Math.Min(states.Length, offset + length - sourceOffset);
+            for (int i = from; i < to; i++)
+            {
+                if (states[i] == ByteState.Valid)
+                {
+                    states[i] = ByteState.NoData;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// [offset, offset + length) の中の、データのある範囲 (隙間を持つデータソースの隙間を除いた範囲。ENG-38、TOOL-11 の仕様 2) を
+    /// オフセットの昇順に返す。隣り合う範囲はまとめる。隙間を持たないドキュメントでは範囲全体。
+    /// </summary>
+    public IEnumerable<(long Offset, long Length)> DataRanges(long offset, long length)
+    {
+        length = Math.Min(length, Math.Max(0, Length - offset));
+        long start = -1, end = -1;
+        foreach ((long docOffset, Piece piece) in Tree.Enumerate(offset, length))
+        {
+            IByteSource? source = piece.Kind switch
+            {
+                PieceKind.Original => _storage.Source,
+                PieceKind.External => _storage.Externals[piece.ExternalIndex],
+                _ => null,
+            };
+            IEnumerable<(long Offset, long Length)> parts = source is IGapSource gaps
+                ? Subtract(piece.Offset, piece.Length, gaps.GapsIn(piece.Offset, piece.Length))
+                : [(piece.Offset, piece.Length)];
+            foreach ((long o, long l) in parts)
+            {
+                long from = docOffset + (o - piece.Offset);
+                if (start >= 0 && from == end)
+                {
+                    end += l;
+                    continue;
+                }
+
+                if (start >= 0)
+                {
+                    yield return (start, end - start);
+                }
+
+                start = from;
+                end = from + l;
+            }
+        }
+
+        if (start >= 0)
+        {
+            yield return (start, end - start);
+        }
+
+        static IEnumerable<(long, long)> Subtract(long offset, long length, IEnumerable<(long Offset, long Length)> gaps)
+        {
+            long at = offset;
+            foreach ((long g, long gl) in gaps)
+            {
+                if (g > at)
+                {
+                    yield return (at, g - at);
+                }
+
+                at = Math.Max(at, g + gl);
+            }
+
+            if (at < offset + length)
+            {
+                yield return (at, offset + length - at);
+            }
+        }
+    }
+
     /// <summary>
     /// バックグラウンド用の読み込み。必要ならデータソースを待つ。読めなかった範囲はドキュメント上の位置で返す。
     /// </summary>
-    public ReadResult Read(long offset, Span<byte> destination)
+    public ReadResult Read(long offset, Span<byte> destination) => Read(offset, destination, throughCache: false);
+
+    /// <summary>
+    /// 元データを表示用のキャッシュに入れながら読む (<see cref="BlockCache.ReadThrough"/>)。近い位置を何度も少しずつ読む UI の操作
+    /// (マルチカーソルの位置のバイト) に使う。
+    /// </summary>
+    public ReadResult ReadThroughCache(long offset, Span<byte> destination) => Read(offset, destination, throughCache: true);
+
+    /// <summary>元データの読み込みの単位 (キャッシュのブロックの大きさ)。</summary>
+    public int CacheBlockSize => _storage.Cache.BlockSize;
+
+    private ReadResult Read(long offset, Span<byte> destination, bool throughCache)
     {
         int count = CountWithinLength(offset, destination.Length);
         List<UnreadableRange>? bad = null;
@@ -79,7 +185,7 @@ public sealed class DocumentSnapshot
             Span<byte> dst = destination.Slice((int)(docOffset - offset), (int)piece.Length);
             if (piece.Kind == PieceKind.Original)
             {
-                ReadResult r = _storage.Cache.ReadDirect(piece.Offset, dst);
+                ReadResult r = throughCache ? _storage.Cache.ReadThrough(piece.Offset, dst) : _storage.Cache.ReadDirect(piece.Offset, dst);
                 foreach (UnreadableRange u in r.Unreadable)
                 {
                     (bad ??= []).Add(u with { Offset = u.Offset - piece.Offset + docOffset });

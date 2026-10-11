@@ -46,6 +46,23 @@ public enum EditResult
     /// UI は InfoBar で「Hex として解釈できないため、テキストとして貼り付けました」と「元に戻す」ボタンを示す。
     /// </summary>
     PastedAsText,
+
+    /// <summary>矩形の行数が、長さが変わる操作の上限を超える (EDIT-17 の仕様 6)。何もしていない。</summary>
+    TooManyRows,
+
+    /// <summary>マルチ選択・矩形をカーソルにすると、カーソル数の上限 (10,000) を超える (EDIT-08 の仕様 3)。何もしていない。</summary>
+    TooManyCarets,
+    /// <summary>
+    /// Hex 以外のセルの表示形式 (VIEW-10) で Hex 列に入力した。何もしていない。UI はステータスバーに「この表示形式では直接編集できません。
+    /// データインスペクタを使ってください」と出す (VIEW-10 の仕様 7)。
+    /// </summary>
+    CellFormatNotEditable,
+
+    /// <summary>
+    /// プロセスメモリの割り当てられていない範囲 (空き・予約) に入力した。何もしていない。UI は「この範囲は割り当てられていないため
+    /// 編集できません」と示す (ENG-34 の仕様 7)。
+    /// </summary>
+    Unallocated,
 }
 
 /// <summary>ジャンプ先の表示位置 (VIEW-34 の仕様 2。設定 <c>view.jump.position</c>)。</summary>
@@ -89,8 +106,23 @@ public sealed partial class EditorState
         Document = document;
         BytesPerRow = Math.Clamp(bytesPerRow, 1, ViewSettings.MaxBytesPerRow);
         _view = ViewSettings.Default with { BytesPerRow = BytesPerRow };
-        Document.Changed += (_, e) => OnDocumentChanged(e);
-        Document.ReadOnlyChanged += (_, _) => RaiseChanged();
+        _documentChanged = (_, e) => OnDocumentChanged(e);
+        _readOnlyChanged = (_, _) => RaiseChanged();
+        Document.Changed += _documentChanged;
+        Document.ReadOnlyChanged += _readOnlyChanged;
+    }
+
+    private readonly EventHandler<DocumentChangedEventArgs> _documentChanged;
+    private readonly EventHandler _readOnlyChanged;
+
+    /// <summary>
+    /// ドキュメントのイベントの購読を外す (このビューだけを閉じ、ドキュメントは開いたままにするとき: 比較タブ、分割したペイン、新しいビュー)。
+    /// 外さないと、ドキュメントを閉じるまでこのビューが解放されない。
+    /// </summary>
+    public void Detach()
+    {
+        Document.Changed -= _documentChanged;
+        Document.ReadOnlyChanged -= _readOnlyChanged;
     }
 
     public Document Document { get; }
@@ -129,9 +161,25 @@ public sealed partial class EditorState
     /// </summary>
     public TextEncoding TextEncoding
     {
-        get => _textEncoding;
+        get => TextColumn == 0 ? _textEncoding : TextEncodingOf(TextColumn);
         set
         {
+            int column = TextColumn;
+            if (column > 0)
+            {
+                // 2 列目以降のテキスト列 (VIEW-24): その列の文字コードだけを変える。
+                List<TextColumnSpec> columns = [.. _view.TextColumns];
+                if (column < columns.Count && !string.Equals(columns[column].Encoding, value.Id, StringComparison.OrdinalIgnoreCase))
+                {
+                    columns[column] = columns[column] with { Encoding = value.Id };
+                    _view = _view.WithTextColumns(columns);
+                    ViewChanged?.Invoke(this, EventArgs.Empty);
+                    RaiseChanged();
+                }
+
+                return;
+            }
+
             if (!ReferenceEquals(_textEncoding, value))
             {
                 _textEncoding = value;
@@ -142,13 +190,26 @@ public sealed partial class EditorState
         }
     }
 
+    /// <summary>テキスト列 <paramref name="column"/> の文字コード (VIEW-24)。</summary>
+    public TextEncoding TextEncodingOf(int column)
+    {
+        if (column <= 0)
+        {
+            return _textEncoding;
+        }
+
+        IReadOnlyList<TextColumnSpec> columns = _view.TextColumns;
+        return column < columns.Count ? TextEncoding.FromId(columns[column].Encoding) : _textEncoding;
+    }
+
     private TextEncoding _textEncoding = TextEncoding.Ascii;
 
     public long SelectionStart => _selectionStart;
 
     public long SelectionLength => _selectionLength;
 
-    public bool HasSelection => _selectionLength > 0;
+    /// <summary>選択があるか (単一・マルチ・矩形のどれか)。</summary>
+    public bool HasSelection => _selectionLength > 0 || _rect is not null || _others is { Count: > 0 };
 
     /// <summary>一番上に表示している行。</summary>
     public long TopRow => _topRow;
@@ -212,25 +273,35 @@ public sealed partial class EditorState
     /// <summary>←。選択範囲がある場合 (Shift なし) は選択範囲の先頭に移るだけ (EDIT-02 の仕様 3)。</summary>
     public void MoveLeft(bool extend = false)
     {
+        if (MoveCarets(() => MoveLeft(extend)))
+        {
+            return;
+        }
+
         if (UsesNibbleArrows(extend))
         {
             PreviousNibble();
             return;
         }
 
-        MoveTo(!extend && HasSelection ? _selectionStart : _cursor - 1, extend);
+        MoveTo(!extend && HasSelection ? _selectionStart : HorizontalTarget(forward: false), extend);
     }
 
     /// <summary>→。選択範囲がある場合 (Shift なし) は選択範囲の末尾 (最後のバイトの次) に移るだけ。</summary>
     public void MoveRight(bool extend = false)
     {
+        if (MoveCarets(() => MoveRight(extend)))
+        {
+            return;
+        }
+
         if (UsesNibbleArrows(extend))
         {
             NextNibble();
             return;
         }
 
-        MoveTo(!extend && HasSelection ? _selectionStart + _selectionLength : SaturatingAdd(_cursor, 1), extend);
+        MoveTo(!extend && HasSelection ? _selectionStart + _selectionLength : HorizontalTarget(forward: true), extend);
     }
 
     /// <summary>
@@ -268,7 +339,8 @@ public sealed partial class EditorState
         }
     }
 
-    private bool UsesNibbleArrows(bool extend) => NibbleArrowKeys && ActiveColumn == ActiveColumn.Hex && !extend && !HasSelection;
+    private bool UsesNibbleArrows(bool extend) => NibbleArrowKeys && ActiveColumn == ActiveColumn.Hex && !extend && !HasSelection
+        && View.CellFormat == CellFormat.Hex;
 
     private void AfterNibbleMove()
     {
@@ -279,6 +351,11 @@ public sealed partial class EditorState
 
     public void MoveUp(bool extend = false)
     {
+        if (MoveCarets(() => MoveUp(extend)))
+        {
+            return;
+        }
+
         if (Layout.RowOf(_cursor) > 0)
         {
             MoveTo(_cursor - BytesPerRow, extend, keepNibble: true);
@@ -287,6 +364,11 @@ public sealed partial class EditorState
 
     public void MoveDown(bool extend = false)
     {
+        if (MoveCarets(() => MoveDown(extend)))
+        {
+            return;
+        }
+
         HexLayout layout = Layout;
         // long を越える移動先は、最大値を越えたものとして扱う。
         bool beyond = _cursor > long.MaxValue - BytesPerRow;
@@ -307,6 +389,11 @@ public sealed partial class EditorState
     /// </summary>
     public void MovePreviousGroup(bool extend = false)
     {
+        if (MoveCarets(() => MovePreviousGroup(extend)))
+        {
+            return;
+        }
+
         int group = Math.Max(1, View.GroupSize);
         if (group == 1)
         {
@@ -322,6 +409,11 @@ public sealed partial class EditorState
     /// <summary>「移動: 次のグループへ」(Ctrl+→。VIEW-25 の仕様 8): 次のグループの先頭へ。最大値を超える場合は最大値へ。</summary>
     public void MoveNextGroup(bool extend = false)
     {
+        if (MoveCarets(() => MoveNextGroup(extend)))
+        {
+            return;
+        }
+
         int group = Math.Max(1, View.GroupSize);
         if (group == 1)
         {
@@ -334,10 +426,21 @@ public sealed partial class EditorState
         MoveTo(Math.Min(target, Layout.MaxCursor), extend);
     }
 
-    public void MoveHome(bool extend = false) => MoveTo(Layout.RowStart(Layout.RowOf(_cursor)), extend);
+    public void MoveHome(bool extend = false)
+    {
+        if (!MoveCarets(() => MoveHome(extend)))
+        {
+            MoveTo(Layout.RowStart(Layout.RowOf(_cursor)), extend);
+        }
+    }
 
     public void MoveEnd(bool extend = false)
     {
+        if (MoveCarets(() => MoveEnd(extend)))
+        {
+            return;
+        }
+
         HexLayout layout = Layout;
         long rowEnd = SaturatingAdd(layout.RowStart(layout.RowOf(_cursor)), BytesPerRow - 1);
         MoveTo(Math.Min(rowEnd, layout.MaxCursor), extend);
@@ -345,6 +448,11 @@ public sealed partial class EditorState
 
     public void PageUp(bool extend = false)
     {
+        if (MoveCarets(() => PageUp(extend)))
+        {
+            return;
+        }
+
         long page = Math.Max(1, _visibleRows - 1);
         long rows = Math.Min(page, Layout.RowOf(_cursor));
         SetTopRow(_topRow - page);
@@ -354,6 +462,11 @@ public sealed partial class EditorState
 
     public void PageDown(bool extend = false)
     {
+        if (MoveCarets(() => PageDown(extend)))
+        {
+            return;
+        }
+
         long page = Math.Max(1, _visibleRows - 1);
         long target = _cursor > long.MaxValue - page * BytesPerRow ? Layout.MaxCursor : _cursor + page * BytesPerRow;
         SetTopRow(_topRow + page);
@@ -367,6 +480,7 @@ public sealed partial class EditorState
     /// </summary>
     public void MoveToStart(bool extend = false)
     {
+        CollapseCarets();
         RecordJump();
         MoveTo(0, extend, scroll: false);
         SetTopRow(0);
@@ -376,6 +490,7 @@ public sealed partial class EditorState
     /// <summary>ファイルの末尾へ (Ctrl+End)。移動前の位置を記録し、最終行が表示領域の一番下に来るようにする。</summary>
     public void MoveToEnd(bool extend = false)
     {
+        CollapseCarets();
         RecordJump();
         MoveTo(Layout.MaxCursor, extend, scroll: false);
         SetTopRow(Layout.MaxTopRow(_visibleRows));
@@ -422,6 +537,9 @@ public sealed partial class EditorState
     /// </summary>
     public void GoTo(long offset, bool extendSelection = false)
     {
+        CollapseCarets();
+        _others = null;
+        _rect = null;
         RecordJump();
         if (extendSelection)
         {
@@ -447,6 +565,9 @@ public sealed partial class EditorState
     /// </summary>
     public void SelectMatch(long offset, long length)
     {
+        CollapseCarets();
+        _others = null;
+        _rect = null;
         RecordJump();
         _anchor = offset;
         SetSelection(offset, length);
@@ -515,6 +636,7 @@ public sealed partial class EditorState
 
     private void JumpTo(JumpPoint point)
     {
+        CollapseCarets();
         ClearSelectionAnchor();
 
         // 移動先がドキュメントの最大値を超えている場合は最大値に移す (仕様 7)。
@@ -531,7 +653,11 @@ public sealed partial class EditorState
     /// <summary>カーソルを動かさずに表示だけを動かす (Ctrl+↑ / Ctrl+↓、ホイール)。</summary>
     public void ScrollRows(long rows)
     {
-        SetTopRow(_topRow + rows);
+        if (!ScrollWithinSection(rows))
+        {
+            SetTopRow(_topRow + rows);
+        }
+
         RaiseChanged();
     }
 
@@ -543,9 +669,16 @@ public sealed partial class EditorState
     }
 
     /// <summary>マウスのクリック (VIEW-25 の仕様 6)。<paramref name="extend"/> は Shift+クリック (EDIT-01 の仕様 4: 両端を含む)。</summary>
-    public void Click(long offset, ActiveColumn column, bool lowNibble, bool extend)
+    /// <remarks><paramref name="textColumn"/> はテキスト列をクリックしたときのテキスト列の番号 (VIEW-24。-1 なら変えない)。</remarks>
+    public void Click(long offset, ActiveColumn column, bool lowNibble, bool extend, int textColumn = -1)
     {
         offset = Math.Clamp(offset, 0, Layout.MaxCursor);
+        CollapseCarets();
+        _rect = null;
+        if (column == ActiveColumn.Text && textColumn >= 0)
+        {
+            _textColumn = Math.Clamp(textColumn, 0, Math.Max(0, View.TextColumnCount - 1));
+        }
 
         // 元の位置から 1 画面分 (b × V バイト) 以上離れたクリックはジャンプ履歴に記録する (VIEW-31 の仕様 1)。
         if (!extend && Math.Abs((decimal)offset - _cursor) >= (decimal)BytesPerRow * _visibleRows)
@@ -554,6 +687,13 @@ public sealed partial class EditorState
         }
 
         ActiveColumn = VisibleColumn(column);
+
+        // 2 バイト以上のセルの表示形式の Hex 列では、カーソルはセルの先頭に置く (VIEW-10 の仕様 6)。
+        if (ActiveColumn == ActiveColumn.Hex && View.CellUnit > 1 && offset < Layout.Length)
+        {
+            offset = CellStartOf(offset);
+        }
+
         if (extend)
         {
             long anchor = _anchor >= 0 ? _anchor : _cursor;
@@ -580,6 +720,7 @@ public sealed partial class EditorState
     public void DragTo(long offset)
     {
         offset = Math.Clamp(offset, 0, Layout.MaxCursor);
+        _rect = null;
         if (_anchor < 0)
         {
             _anchor = _cursor;
@@ -594,19 +735,60 @@ public sealed partial class EditorState
         RaiseChanged();
     }
 
-    /// <summary>Tab / Shift+Tab で列を切り替える (VIEW-27)。</summary>
-    public void ToggleColumn()
+    /// <summary>
+    /// Tab / Shift+Tab で列を切り替える (VIEW-27)。テキスト列が複数あるときは Hex 列 → テキスト列 1 → テキスト列 2 … → Hex 列の順に移る
+    /// (VIEW-24 の仕様 4)。<paramref name="backward"/> は Shift+Tab (逆順)。
+    /// </summary>
+    public void ToggleColumn(bool backward = false)
     {
         // 表示されている列の間だけを移る。表示されている列が 1 つのときは何もしない (VIEW-16 の仕様 5)。
-        if (!View.ShowHexColumn || !View.ShowTextColumn)
+        int texts = View.ShowTextColumn ? Math.Clamp(View.TextColumnCount, 1, ViewSettings.MaxTextColumns) : 0;
+        int positions = (View.ShowHexColumn ? 1 : 0) + texts;
+        if (positions <= 1)
         {
             return;
         }
 
-        ActiveColumn = ActiveColumn == ActiveColumn.Hex ? ActiveColumn.Text : ActiveColumn.Hex;
+        // 位置の番号: Hex 列が 0、テキスト列 i が i + 1 (Hex 列がなければテキスト列 i が i)。
+        int hexSlots = View.ShowHexColumn ? 1 : 0;
+        int current = ActiveColumn == ActiveColumn.Hex ? 0 : hexSlots + Math.Clamp(TextColumn, 0, texts - 1);
+        int next = (current + (backward ? positions - 1 : 1)) % positions;
+        if (hexSlots == 1 && next == 0)
+        {
+            ActiveColumn = ActiveColumn.Hex;
+        }
+        else
+        {
+            ActiveColumn = ActiveColumn.Text;
+            TextColumn = next - hexSlots;
+        }
+
         LowNibble = false;
         Document.History.BreakCoalescing();
         RaiseChanged();
+    }
+
+    /// <summary>
+    /// 操作中のテキスト列 (VIEW-24。0 始まり)。カーソルが Hex 列にあるときは最後に操作したテキスト列。入力・コピー・ステータスバーの
+    /// 文字コードは、このテキスト列の文字コードを使う (VIEW-24 の仕様 5・6)。
+    /// </summary>
+    public int TextColumn
+    {
+        get => Math.Clamp(_textColumn, 0, Math.Max(0, View.TextColumnCount - 1));
+        private set => _textColumn = value;
+    }
+
+    private int _textColumn;
+
+    /// <summary>テキスト列をクリックした (VIEW-24)。その列を操作中のテキスト列にする。</summary>
+    public void SetTextColumn(int column)
+    {
+        int clamped = Math.Clamp(column, 0, Math.Max(0, View.TextColumnCount - 1));
+        if (clamped != _textColumn)
+        {
+            _textColumn = clamped;
+            RaiseChanged();
+        }
     }
 
     /// <summary>
@@ -621,6 +803,10 @@ public sealed partial class EditorState
             return;
         }
 
+        // マルチ選択・矩形選択・マルチカーソルは単一の選択に戻してから全体を選ぶ (EDIT-03 の仕様 3)。
+        CollapseCarets();
+        _others = null;
+        _rect = null;
         _anchor = 0;
         SetSelection(0, layout.Length);
         _cursor = layout.MaxCursor;
@@ -629,12 +815,8 @@ public sealed partial class EditorState
         RaiseChanged();
     }
 
-    /// <summary>選択を解除する (Esc)。</summary>
-    public void ClearSelection()
-    {
-        ClearSelectionAnchor();
-        RaiseChanged();
-    }
+    /// <summary>選択を解除する (Esc)。マルチカーソル・マルチ選択では主カーソルだけを残す (EDIT-03 の仕様 4)。</summary>
+    public void ClearSelection() => CollapseToPrimary();
 
     /// <summary>
     /// 範囲を選択する (Ctrl+E。EDIT-04)。<paramref name="length"/> は選択するバイト数。カーソルは範囲の末尾 (最後のバイトの次) に置く。
@@ -642,6 +824,9 @@ public sealed partial class EditorState
     /// </summary>
     public void Select(long start, long length, bool cursorAtStart = false)
     {
+        CollapseCarets();
+        _others = null;
+        _rect = null;
         start = Math.Clamp(start, 0, Layout.Length);
         length = Math.Clamp(length, 0, Layout.Length - start);
         _anchor = cursorAtStart ? start + length : start;
@@ -682,6 +867,28 @@ public sealed partial class EditorState
         if (!CanEdit())
         {
             return EditResult.NotEditable;
+        }
+
+        // Hex 以外のセルの表示形式では、セルに直接入力しない (VIEW-10 の仕様 7。データインスペクタを使う)。
+        if (View.CellFormat != CellFormat.Hex)
+        {
+            return EditResult.CellFormatNotEditable;
+        }
+
+        if (IsUnallocated(HasSelection ? _selectionStart : _cursor, 1))
+        {
+            return EditResult.Unallocated;
+        }
+
+        if (!_caretLoop && (HasMultipleRanges || HasMultipleCarets))
+        {
+            // マルチ選択・矩形・マルチカーソルへの入力 (EDIT-07 の仕様 7、EDIT-08 の仕様 4・6)。
+            if (!PrepareCaretsForInput(keepSelections: true))
+            {
+                return EditResult.TooManyCarets;
+            }
+
+            return TypeHexDigitAtCarets(digit) ?? ForEachCaret(() => TypeHexDigit(c), "入力", TypingKey);
         }
 
         long at = HasSelection ? _selectionStart : _cursor;
@@ -763,6 +970,16 @@ public sealed partial class EditorState
             return EditResult.NotEncodable;
         }
 
+        if (!_caretLoop && (HasMultipleRanges || HasMultipleCarets))
+        {
+            return PrepareCaretsForInput(keepSelections: true) ? ForEachCaret(() => TypeText(text), "入力", TypingKey) : EditResult.TooManyCarets;
+        }
+
+        if (IsUnallocated(HasSelection ? _selectionStart : _cursor, bytes.Length))
+        {
+            return EditResult.Unallocated;
+        }
+
         long at = HasSelection ? _selectionStart : _cursor;
         if (!Document.CanResize && bytes.Length > Document.Length - at)
         {
@@ -814,9 +1031,20 @@ public sealed partial class EditorState
             return EditResult.NotEditable;
         }
 
+        if (!_caretLoop && HasMultipleCarets && !HasMultipleRanges)
+        {
+            return ForEachCaret(Delete, "削除", DeleteKey);
+        }
+
         if (!InsertMode && Options.DeleteKeepsLengthInOverwrite)
         {
             return ZeroForDelete();
+        }
+
+        if (!_caretLoop && HasMultipleRanges)
+        {
+            // マルチ選択・矩形のすべての要素を削除する (EDIT-07 の仕様 7、EDIT-17 の仕様 1)。
+            return DeleteSelectedRanges();
         }
 
         if (!Document.CanResize)
@@ -844,6 +1072,11 @@ public sealed partial class EditorState
     /// <summary>上書きモードの Delete で 00 にする (EDIT-13 の仕様 4)。選択範囲は先頭にカーソルを置き、1 バイトなら次のバイトへ進む。</summary>
     private EditResult ZeroForDelete()
     {
+        if (!_caretLoop && HasMultipleRanges)
+        {
+            return FillSelectedRangesWithZero("削除");
+        }
+
         if (HasSelection)
         {
             long start = _selectionStart;
@@ -877,6 +1110,11 @@ public sealed partial class EditorState
             return EditResult.NotEditable;
         }
 
+        if (HasMultipleRanges)
+        {
+            return FillSelectedRangesWithZero("00 で塗りつぶし");
+        }
+
         long start = HasSelection ? _selectionStart : _cursor;
         long length = HasSelection ? _selectionLength : _cursor < Document.Length ? 1 : 0;
         if (length == 0)
@@ -895,6 +1133,16 @@ public sealed partial class EditorState
         if (!CanEdit())
         {
             return EditResult.NotEditable;
+        }
+
+        if (!_caretLoop && HasMultipleCarets && !HasMultipleRanges)
+        {
+            return ForEachCaret(Backspace, "削除", BackspaceKey);
+        }
+
+        if (!_caretLoop && HasMultipleRanges)
+        {
+            return Document.CanResize ? DeleteSelectedRanges() : EditResult.FixedLength;
         }
 
         if (HasSelection)
@@ -1003,6 +1251,35 @@ public sealed partial class EditorState
             }
         });
 
+    /// <summary>
+    /// アプリ内クリップボードの範囲の参照の中の要素を連結して貼る (マルチ選択・矩形からの大きなコピー。EDIT-22 の仕様 5・8、EDIT-24)。
+    /// 要素ごとに範囲の参照から挿入・上書きするので、データをコピーしない。<paramref name="parts"/> の位置は <paramref name="range"/> の先頭から。
+    /// </summary>
+    public EditResult Paste(SnapshotRange range, IReadOnlyList<Selection.ByteRange> parts, bool overwrite, bool allowTruncate = false) =>
+        PasteCore(parts.Sum(p => p.Length), overwrite, allowTruncate, (insert, at, n) =>
+        {
+            long written = 0;
+            foreach (Selection.ByteRange part in parts)
+            {
+                long k = Math.Min(part.Length, n - written);
+                if (k <= 0)
+                {
+                    break;
+                }
+
+                if (insert)
+                {
+                    Document.InsertFrom(at + written, range, part.Start, k);
+                }
+                else
+                {
+                    Document.OverwriteFrom(at + written, range, part.Start, k);
+                }
+
+                written += k;
+            }
+        });
+
     /// <summary>バイト列の貼り付け (システムのクリップボードから)。</summary>
     public EditResult Paste(byte[] data, bool overwrite, bool allowTruncate = false) =>
         PasteCore(data.Length, overwrite, allowTruncate, (insert, at, n) =>
@@ -1060,6 +1337,14 @@ public sealed partial class EditorState
         if (!CanEdit())
         {
             return EditResult.NotEditable;
+        }
+
+        if (!_caretLoop && (HasMultipleRanges || HasMultipleCarets))
+        {
+            // 各要素・各カーソルに同じ内容を貼る (EDIT-07 の仕様 7、EDIT-08 の仕様 4)。
+            return PrepareCaretsForInput(keepSelections: true)
+                ? ForEachCaret(() => PasteCore(length, overwrite, allowTruncate, write), overwrite || !InsertMode ? "上書き貼り付け" : "貼り付け")
+                : EditResult.TooManyCarets;
         }
 
         long at = HasSelection ? _selectionStart : _cursor;
@@ -1129,6 +1414,11 @@ public sealed partial class EditorState
         if (!Document.CanResize)
         {
             return EditResult.FixedLength;
+        }
+
+        if (HasMultipleRanges)
+        {
+            return DeleteSelectedRanges("切り取り");
         }
 
         return HasSelection ? DeleteSelection() : EditResult.Ignored;
@@ -1245,17 +1535,38 @@ public sealed partial class EditorState
     {
         long row = Layout.RowOf(_cursor);
         int margin = Math.Min(_cursorMargin, (_visibleRows - 1) / 2);
+        if (PageSection() is { } section && !SameSection(section, row, _topRow))
+        {
+            // ページ単位で表示: カーソルが別の区切りに移ったら、その区切りを表示する (VIEW-33 の仕様 4)。
+            SetTopRow(row < _topRow ? row - margin : row - _visibleRows + 1 + margin, row);
+            return;
+        }
+
         if (row < _topRow + margin)
         {
-            SetTopRow(row - margin);
+            SetTopRow(row - margin, row);
         }
         else if (row >= _topRow + _visibleRows - margin)
         {
-            SetTopRow(row - _visibleRows + 1 + margin);
+            SetTopRow(row - _visibleRows + 1 + margin, row);
         }
     }
 
-    private void SetTopRow(long row) => _topRow = Math.Clamp(row, 0, Layout.MaxTopRow(_visibleRows));
+    /// <summary>
+    /// 一番上の行を決める。ページ単位で表示 (VIEW-33 の仕様 4) のときは、<paramref name="anchorRow"/> (省略時は <paramref name="row"/>) の
+    /// ある区切りの中に収める。
+    /// </summary>
+    private void SetTopRow(long row, long? anchorRow = null)
+    {
+        long top = Math.Clamp(row, 0, Layout.MaxTopRow(_visibleRows));
+        if (PageSection() is { } section)
+        {
+            (long first, long last) = SectionRows(section, anchorRow ?? top);
+            top = Math.Clamp(top, first, Math.Max(first, last - _visibleRows + 1));
+        }
+
+        _topRow = top;
+    }
 
     private void SetSelection(long start, long length)
     {
@@ -1265,6 +1576,8 @@ public sealed partial class EditorState
 
     private void ClearSelectionAnchor()
     {
+        _others = null;
+        _rect = null;
         _anchor = -1;
         _selectionLength = 0;
         _selectionStart = _cursor;
@@ -1272,8 +1585,21 @@ public sealed partial class EditorState
 
     private void OnDocumentChanged(DocumentChangedEventArgs e)
     {
+        ShiftSelectionsForEdit(e);
         _jumps.Adjust(e);
         OnDocumentChangedForView(e);
+        if (FollowsEdits)
+        {
+            // 操作中でないビュー: 表示中のデータが動かないようにずらす。Undo の範囲の選択はしない (VIEW-37 の仕様 4、VIEW-38 の仕様 5)。
+            FollowEdit(e);
+            _knownLength = Document.Length;
+            _cursor = Math.Min(_cursor, Layout.MaxCursor);
+            SetTopRow(_topRow);
+            RaiseChanged();
+            return;
+        }
+
+        _knownLength = Document.Length;
         if (e.Selection is { } range)
         {
             // 元に戻す・やり直しの後は、その編集グループの範囲を選択して見える位置に出す (EDIT-19 の仕様 10)。
@@ -1299,6 +1625,9 @@ public sealed partial class EditorState
 
     private void SelectEditedRange(long offset, long length)
     {
+        CollapseCarets();
+        _others = null;
+        _rect = null;
         HexLayout layout = Layout;
         offset = Math.Clamp(offset, 0, layout.MaxCursor);
         length = Math.Clamp(length, 0, layout.Length - offset);
@@ -1332,7 +1661,16 @@ public sealed partial class EditorState
         RaiseChanged();
     }
 
-    private void RaiseChanged() => Changed?.Invoke(this, EventArgs.Empty);
+    private void RaiseChanged()
+    {
+        if (_caretLoop)
+        {
+            // マルチカーソルの処理の間はまとめて 1 回にする (EDIT-08 の「巨大ファイル・長時間処理」)。
+            return;
+        }
+
+        Changed?.Invoke(this, EventArgs.Empty);
+    }
 
     /// <summary>long を越えない足し算 (2^63 − 1 の近くのカーソル移動)。</summary>
     private static long SaturatingAdd(long a, long b) => a > long.MaxValue - b ? long.MaxValue : a + b;

@@ -32,6 +32,9 @@ public sealed class FakeReleaseFeed : HttpMessageHandler
     /// <summary>true なら応答しない (接続できない状態。取り消されるまで待つ)。</summary>
     public bool Hang { get; set; }
 
+    /// <summary>応答しなかった要求が取り消されるまでの時間 (最後の要求)。</summary>
+    public TimeSpan HangDuration { get; private set; }
+
     /// <summary>指定すればその状態コードを返す (利用制限など)。</summary>
     public HttpStatusCode? Status { get; set; }
 
@@ -51,7 +54,16 @@ public sealed class FakeReleaseFeed : HttpMessageHandler
 
         if (Hang)
         {
-            await Task.Delay(Timeout.Infinite, cancellationToken);
+            // 要求が届いてから取り消されるまでを測る (起動・JIT の遅い環境の時間を含めない)。
+            var wait = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                await Task.Delay(Timeout.Infinite, cancellationToken);
+            }
+            finally
+            {
+                HangDuration = wait.Elapsed;
+            }
         }
 
         if (Status is { } status)

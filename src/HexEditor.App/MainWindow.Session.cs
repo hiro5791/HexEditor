@@ -148,12 +148,60 @@ public sealed partial class MainWindow
             RestorePanelLayout(System.Text.Json.Nodes.JsonNode.Parse(panels.GetRawText()));
         }
 
+        int first = Vm.Documents.Count;
         Vm.RestoreTabs(
             tabs,
-            (path, readOnly) => TryOpen(path, readOnly: readOnly, restorePosition: false),
+            tab => OpenSessionTab(tab, null),
             vm => ShowNotice(Loc.Get("Session_FileChanged"), InfoBarSeverity.Informational, vm));
+        RestoreSideBySide(tabs, first);
         AppLog.Info($"Session restored: {Vm.Documents.Count} tab(s)");
         UpdateTitle();
+    }
+
+    /// <summary>デコードに時間がかかるため、セッションのタブをあとで開く (見つからないタブにしない)。</summary>
+    private bool _sessionTabDecoding;
+
+    /// <summary>
+    /// セッションのタブ 1 つを開く (UI-31): 範囲を開いたタブ (ENG-13) は同じ範囲、デコードしたタブ (ENG-38) は同じ形式で開き直す。
+    /// 大きいファイルのデコードは長時間処理として続け、終わったら開く (それまでは null)。
+    /// </summary>
+    private DocumentViewModel? OpenSessionTab(SessionTab tab, int? index)
+    {
+        _sessionTabDecoding = false;
+        string path = tab.Path!;
+        if (tab.RangeStart is { } start && tab.RangeLength is { } length)
+        {
+            try
+            {
+                DocumentViewModel vm = Vm.OpenRange(path, start, length, tab.RangeResizable, tab.ReadOnly);
+                ApplyLinkedOrRangeView(vm);
+                if (index is int at)
+                {
+                    Vm.MoveDocument(vm, Math.Min(at, Vm.Documents.Count - 1));
+                }
+
+                return vm;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentOutOfRangeException)
+            {
+                ShowNotice(Loc.Format("Error_Open", Path.GetFileName(path), ex.Message), InfoBarSeverity.Error);
+                return null;
+            }
+        }
+
+        if (tab.EncodedFormat is { } format)
+        {
+            Task<DocumentViewModel?> decoding = OpenEncodedAsync(path, format, index);
+            if (decoding.IsCompleted)
+            {
+                return decoding.Result;
+            }
+
+            _sessionTabDecoding = true;
+            return null;
+        }
+
+        return TryOpen(path, index, tab.ReadOnly, restorePosition: false);
     }
 
     /// <summary>「前回のセッションを復元」(スタートページ、UI-30 の ask。コマンドパレット「ウィンドウ: 前回のセッションを復元」)。</summary>
@@ -256,7 +304,7 @@ public sealed partial class MainWindow
     private static extern bool GetMonitorInfo(nint monitor, ref MonitorInfoEx info);
 
     /// <summary>セッションに書くこのウィンドウの記録 (位置・大きさ・パネル・タブ)。</summary>
-    public SessionWindow CaptureSessionWindow() => Vm.CaptureWindow(CurrentBounds());
+    public SessionWindow CaptureSessionWindow() => Vm.CaptureWindow(CurrentBounds()) with { SideBySide = CaptureSideBySide() };
 
     /// <summary>
     /// 前回の位置と大きさに戻す。画面の外になる場合と、記録したモニターがない場合 (外したモニターにあったなど) は、主モニターの中央に既定の
@@ -352,6 +400,7 @@ public sealed partial class MainWindow
         TrackNormalBounds();
         StartPage.OpenRequested += (_, _) => Open_Click(this, new RoutedEventArgs());
         StartPage.NewRequested += (_, _) => New_Click(this, new RoutedEventArgs());
+        StartPage.CommandRequested += (_, id) => _ = Commands.ExecuteAsync(id);
         StartPage.RestoreSessionRequested += (_, _) => RestorePreviousSession();
         StartPage.ShowAllRequested += (_, _) => ShowAllRecent_Click(this, new RoutedEventArgs());
         StartPage.RecentRequested += (_, entry) => OpenRecent(entry.Item);

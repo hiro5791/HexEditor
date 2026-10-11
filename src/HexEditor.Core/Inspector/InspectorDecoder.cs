@@ -28,18 +28,23 @@ public sealed record InspectorComponent(string Id, string Name, string Value, in
 
 /// <summary>
 /// 1 行の解釈の結果。<see cref="ByteCount"/> はその型が使うバイト数 (可変長の型は実際に使った数。強調の範囲 INSP-18)。
+/// <see cref="FullText"/> は表示を省いた値の全体 (文字列の行の「値をコピー」とツールチップ。INSP-10 の仕様 2)。
+/// <see cref="Rgba"/> は色の行の色 (0xRRGGBBAA。色見本に使う。INSP-12 の仕様 2)。
 /// </summary>
 public sealed record InspectorValue(InspectorStatus Status, string Text, int ByteCount, string? ToolTip = null,
-    IReadOnlyList<InspectorComponent>? Components = null);
+    IReadOnlyList<InspectorComponent>? Components = null, string? FullText = null, uint? Rgba = null);
 
 /// <summary>
 /// バイト列を型で解釈して表示の文字列にする (INSP-03、INSP-05、INSP-08、INSP-09、INSP-11、INSP-13)。
 /// <c>data</c> は起点から末尾まで (最大 128 バイト) のバイト、<c>states</c> は各バイトの読み込みの状態 (空ならすべて読めている)。
 /// </summary>
-public static class InspectorDecoder
+public static partial class InspectorDecoder
 {
     /// <summary>1 回の更新で読むバイト数 (標準の型だけの場合。INSP-01 の仕様 4)。</summary>
     public const int ReadLength = 128;
+
+    /// <summary>文字列 (INSP-10) の行を表示しているときに読むバイト数 (INSP-01 の仕様 4)。</summary>
+    public const int MaxReadLength = 4096;
 
     private static readonly string[] ControlNames =
     [
@@ -69,12 +74,23 @@ public static class InspectorDecoder
                 return DecodeUtf16(data, states, endian, o);
         }
 
+        // 可変長の型 (INSP-07 可変長整数、INSP-10 文字列、INSP-14 の 10 進の数字の日時) は、使った長さを自分で決める。
+        if (DecodeVariable(type, data, states, endian, o) is { } variable)
+        {
+            return variable;
+        }
+
         if (Check(type.Size, data, states, o) is { } problem)
         {
             return problem;
         }
 
         ReadOnlySpan<byte> bytes = data[..type.Size];
+        if (DecodeExtended(type, bytes, endian, o) is { } extended)
+        {
+            return extended;
+        }
+
         return type.Id switch
         {
             InspectorTypes.Int8 or InspectorTypes.Int16 or InspectorTypes.Int32 or InspectorTypes.Int64 => Integer(bytes, endian, signed: true, o),
@@ -110,12 +126,29 @@ public static class InspectorDecoder
             IntegerBase = o.IntegerBase,
             FloatFormat = o.FloatFormat == FloatFormat.HexFloat ? FloatFormat.HexFloat : FloatFormat.Shortest,
             DateTimeStyle = DateTimeStyle.Iso8601,
-            Text = o.Text with { NoTimeZone = string.Empty, Denormal = "{0}" },
+            Text = o.Text with { NoTimeZone = string.Empty, Denormal = "{0}", KindLocal = string.Empty, KindUnspecified = string.Empty },
         };
         InspectorValue value = Decode(type, data, states, endian, plain);
         if (value.Status != InspectorStatus.Ok)
         {
             return string.Empty;
+        }
+
+        // フェーズ 2 の型: 値の後ろの注記 (バイト数・形式) を除く。
+        if (InspectorTypes.IsString(type.Id))
+        {
+            return QuoteString(value.FullText ?? string.Empty);
+        }
+
+        if (type.Group == InspectorGroup.VarInt || type.Id == InspectorTypes.DigitsDateTime)
+        {
+            int note = value.Text.LastIndexOf(" (", StringComparison.Ordinal);
+            return (note > 0 ? value.Text[..note] : value.Text).Trim();
+        }
+
+        if (InspectorTypes.IsColor(type.Id))
+        {
+            return value.Text.Split(' ', 2)[0];
         }
 
         switch (type.Group)

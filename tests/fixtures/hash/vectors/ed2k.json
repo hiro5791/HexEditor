@@ -1,0 +1,53 @@
+{
+  "source": "ed2k values of all-zero data computed with the eMule implementation (red = old method, blue = new method).",
+  "vectors": [
+    {
+      "algorithm": "ed2k",
+      "ascii": "",
+      "ed2k": "blue",
+      "expected": "31D6CFE0D16AE931B73C59D7E0C089C0"
+    },
+    {
+      "algorithm": "ed2k",
+      "ascii": "",
+      "ed2k": "red",
+      "expected": "31D6CFE0D16AE931B73C59D7E0C089C0"
+    },
+    {
+      "algorithm": "ed2k",
+      "repeat": {
+        "byte": 0,
+        "count": 9728000
+      },
+      "ed2k": "blue",
+      "expected": "D7DEF262A127CD79096A108E7A9FC138"
+    },
+    {
+      "algorithm": "ed2k",
+      "repeat": {
+        "byte": 0,
+        "count": 9728000
+      },
+      "ed2k": "red",
+      "expected": "FC21D9AF828F92A8DF64BEAC3357425D"
+    },
+    {
+      "algorithm": "ed2k",
+      "repeat": {
+        "byte": 0,
+        "count": 19456000
+      },
+      "ed2k": "blue",
+      "expected": "194EE9E4FA79B2EE9F8829284C466051"
+    },
+    {
+      "algorithm": "ed2k",
+      "repeat": {
+        "byte": 0,
+        "count": 19456000
+      },
+      "ed2k": "red",
+      "expected": "114B21C63A74B6CA922291A11177DD5C"
+    }
+  ]
+}

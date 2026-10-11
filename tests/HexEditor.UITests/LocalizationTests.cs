@@ -83,7 +83,7 @@ public sealed class LocalizationTests
         var menus = app.Window.FindFirstDescendant(cf => cf.ByAutomationId("MainMenu"))!.FindAllChildren()
             .Where(m => AppSession.NameOf(m) != "Test").ToList();
         Dictionary<string, string> ar = UiHelpers.LoadResw("ar"), en = UiHelpers.LoadResw("en");
-        string[] order = ["Menu_File", "Menu_Edit", "Menu_Search", "Menu_Go", "Menu_View", "Menu_Analysis", "Menu_Tools", "Menu_Help"];
+        string[] order = ["Menu_File", "Menu_Edit", "Menu_Search", "Menu_Go", "Menu_View", "Menu_Data", "Menu_Analysis", "Menu_Tools", "Menu_Help"];
 
         // 未翻訳のメニュー (機械翻訳の前の新しいもの) は英語で表示される。
         Assert.Equal(order.Select(k => ar.GetValueOrDefault(k + ".Title") ?? en[k + ".Title"]), menus.Select(AppSession.NameOf));

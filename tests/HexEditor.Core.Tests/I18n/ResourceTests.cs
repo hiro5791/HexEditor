@@ -39,7 +39,10 @@ public sealed class ResourceTests
     {
         var errors = ResourceChecker.UnusedKeys(
             Load("en").Keys,
-            AppFiles("*.cs").Concat(AppFiles("*.appxmanifest")).Select(File.ReadAllText),
+            AppFiles("*.cs").Concat(AppFiles("*.appxmanifest"))
+
+                // インポート / エクスポートの欄の規則は Core にある (見出しは Transfer_<欄のキー>、選択肢は Transfer_Choice_<値>)。
+                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/Formats/TransferOptions.cs")).Select(File.ReadAllText),
             AppFiles("*.xaml").Select(File.ReadAllText)).ToList();
         Assert.True(errors.Count == 0, string.Join(Environment.NewLine, errors));
     }

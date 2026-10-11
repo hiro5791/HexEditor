@@ -46,6 +46,24 @@ public static class EditingSettings
 
     public const string HexBytesPerLineKey = "clipboard.hex.bytesPerLine";
 
+    /// <summary>マルチ選択の要素数の上限 (EDIT-07 の仕様 3。既定 1,000,000、1,000〜10,000,000)。</summary>
+    public const string MaxSelectionElementsKey = "edit.multiSelection.maxElements";
+
+    /// <summary>長さが変わる矩形の操作の行数の上限 (EDIT-17 の仕様 6。既定 1,000,000、上限 10,000,000)。</summary>
+    public const string MaxRectangleRowsKey = "edit.rectangle.maxRows";
+
+    /// <summary>「次へずらす」「前へずらす」の量 (EDIT-05 の仕様 2): <c>selectionLength</c> (既定) / <c>lastAmount</c>。</summary>
+    public const string SelectionShiftAmountKey = "edit.selectionShift.amount";
+
+    /// <summary>選択範囲のドラッグ &amp; ドロップを有効にする (EDIT-18。既定オン)。</summary>
+    public const string SelectionDragDropKey = "edit.selectionDragDrop";
+
+    /// <summary>クリップボード履歴の件数 (EDIT-28 の仕様 4。既定 20、0〜100)。</summary>
+    public const string ClipboardHistoryCountKey = "clipboard.history.count";
+
+    /// <summary>ユーザークリップボードを終了後も残す (EDIT-28 の仕様 6。既定オフ)。</summary>
+    public const string UserClipboardPersistKey = "clipboard.user.persist";
+
     /// <summary>設定の値 (<paramref name="getString"/>・<paramref name="getBool"/>・<paramref name="getInt"/> で読む) から編集の設定を作る。</summary>
     public static EditingOptions Read(Func<string, string, string> getString, Func<string, bool, bool> getBool, Func<string, int, int> getInt) => new()
     {

@@ -626,7 +626,7 @@ public sealed class ViewMiscTests
         ["general", "appearance", "view", "editing", "search", "files", "keyboard", "language", "accessibility", "automation", "update", "privacy", "explorer", "advanced"];
 
     /// <summary>表示中の操作できる要素のうち、名前 (AutomationProperties.Name) のないもの。</summary>
-    private static IEnumerable<string> UnnamedInteractiveElements(AppSession app, string where)
+    internal static IEnumerable<string> UnnamedInteractiveElements(AppSession app, string where)
     {
         ControlType[] interactive =
         [

@@ -78,26 +78,50 @@ public static class BookmarkActions
         return created;
     }
 
-    /// <summary>F2: カーソル位置より後ろで開始位置が最も近いもの。末尾まで行ったら先頭に戻る。</summary>
+    /// <summary>
+    /// F2: カーソル位置より後ろで開始位置が最も近いもの。末尾まで行ったら先頭に戻る。非表示のグループのものは飛ばす (INSP-27 の仕様 3)。
+    /// </summary>
     public static BookmarkJump Next(BookmarkCollection bookmarks, long cursor)
     {
-        if (bookmarks.After(cursor) is { } next)
+        for (Bookmark? b = bookmarks.After(cursor); b is not null; b = bookmarks.After(b.Start))
         {
-            return new BookmarkJump(next, false);
+            if (bookmarks.IsVisible(b))
+            {
+                return new BookmarkJump(b, false);
+            }
         }
 
-        return new BookmarkJump(bookmarks.First, bookmarks.First is not null);
+        for (Bookmark? b = bookmarks.First; b is not null && b.Start <= cursor; b = bookmarks.After(b.Start))
+        {
+            if (bookmarks.IsVisible(b))
+            {
+                return new BookmarkJump(b, true);
+            }
+        }
+
+        return new BookmarkJump(null, false);
     }
 
-    /// <summary>Shift+F2: カーソル位置より前で開始位置が最も近いもの。先頭まで行ったら末尾に戻る。</summary>
+    /// <summary>Shift+F2: カーソル位置より前で開始位置が最も近いもの。先頭まで行ったら末尾に戻る。非表示のグループのものは飛ばす。</summary>
     public static BookmarkJump Previous(BookmarkCollection bookmarks, long cursor)
     {
-        if (bookmarks.Before(cursor) is { } previous)
+        for (Bookmark? b = bookmarks.Before(cursor); b is not null; b = bookmarks.Before(b.Start))
         {
-            return new BookmarkJump(previous, false);
+            if (bookmarks.IsVisible(b))
+            {
+                return new BookmarkJump(b, false);
+            }
         }
 
-        return new BookmarkJump(bookmarks.Last, bookmarks.Last is not null);
+        for (Bookmark? b = bookmarks.Last; b is not null && b.Start >= cursor; b = bookmarks.Before(b.Start))
+        {
+            if (bookmarks.IsVisible(b))
+            {
+                return new BookmarkJump(b, true);
+            }
+        }
+
+        return new BookmarkJump(null, false);
     }
 
     /// <summary>ブックマークへ移動して範囲を選択する (ジャンプ履歴に記録する。INSP-26 の仕様 4・7)。</summary>

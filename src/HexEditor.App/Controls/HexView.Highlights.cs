@@ -1,3 +1,4 @@
+using HexEditor.Core.View;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
@@ -6,23 +7,36 @@ using Microsoft.UI.Xaml.Shapes;
 
 namespace HexEditor.App.Controls;
 
-/// <summary>強調表示の層 (VIEW-17 の仕様 5 の順位。小さいほど手前)。</summary>
-public enum HexHighlightLayer
+/// <summary>
+/// 色以外の印 (色だけに頼らないため。00-overview 11.5)。差分の種類ごとの模様 (ANA-04 の仕様 3) に使う。下線は変更されたバイトの印
+/// (VIEW-17 の層 6) に使うため、ここには含めない。
+/// </summary>
+public enum HexMark
 {
-    /// <summary>層 3: 注目している範囲 (インスペクタの対象 INSP-18 など)。</summary>
-    Focus = 3,
+    None,
 
-    /// <summary>層 7: ブックマーク (INSP-23)。</summary>
-    Bookmark = 7,
+    /// <summary>各セルの左端の縦線 (挿入)。</summary>
+    LeftBar,
+
+    /// <summary>取り消し線 (削除)。</summary>
+    Strike,
+
+    /// <summary>斜線の模様 (揃えるための空白・読み込み不可)。</summary>
+    Hatch,
 }
 
 /// <summary>
 /// Hex 列とテキスト列に重ねる範囲の強調 1 つ。<see cref="Background"/> は背景 (null なら塗らない)、<see cref="Border"/> は枠線
 /// (null なら描かない)、<see cref="Dash"/> は枠線の破線の模様 (ハイコントラストで形を変えて区別する)。<see cref="Tag"/> は
 /// 提供元の識別 (テスト用の読み出しに出す)。長さ 0 の範囲は位置に細い縦線を描く。
+/// <para>
+/// <see cref="Level"/> は同じ層の中の重なりの段 (0 が外側。注釈の入れ子 INSP-32 の仕様 4): 枠線・下線を段ごとに 2 px ずつ内側に描き、
+/// 後の (内側の) 項目ほど上に描く。<see cref="Underline"/> なら枠線の代わりにセルの下端に線を引く (<see cref="Border"/> の色)。
+/// </para>
 /// </summary>
-public sealed record HexHighlight(long Offset, long Length, HexHighlightLayer Layer, Brush? Background, Brush? Border,
-    IReadOnlyList<double>? Dash = null, string Tag = "");
+public sealed record HexHighlight(long Offset, long Length, CellLayer Layer, Brush? Background, Brush? Border,
+    IReadOnlyList<double>? Dash = null, string Tag = "", double Thickness = 1, int Level = 0, bool Underline = false,
+    bool LightBackground = false, HexMark Mark = HexMark.None, Brush? MarkBrush = null, bool DoubleLine = false);
 
 /// <summary>オフセット列の目印 (ブックマークの開始位置。INSP-23 の仕様 8、INSP-25 の仕様 5)。<see cref="Text"/> は番号など。</summary>
 public sealed record HexOffsetMarker(long Offset, Brush Fill, Brush? Border, string Text, Brush? Foreground, string Tag = "");
@@ -38,6 +52,7 @@ public sealed partial class HexView
     private readonly Dictionary<string, Func<long, long, IEnumerable<HexOffsetMarker>>> _markerSources = [];
     private readonly List<Rectangle> _highlightBack = [];
     private readonly List<Rectangle> _highlightFront = [];
+    private readonly List<Microsoft.UI.Xaml.Shapes.Path> _highlightMarks = [];
     private readonly List<Border> _offsetMarks = [];
     private readonly List<PlacedHighlight> _placed = [];
     private readonly List<(HexHighlight Item, int Order)> _highlightItems = [];
@@ -49,8 +64,8 @@ public sealed partial class HexView
     private Action<MenuFlyout>? _contextMenuOpening;
 
     /// <summary>描いた強調 (テスト用の読み出し)。Column は "hex" か "text"。</summary>
-    private readonly record struct PlacedHighlight(HexHighlightLayer Layer, string Tag, string Column, long First, long Last, Brush? Background,
-        Brush? Border, IReadOnlyList<double>? Dash);
+    private readonly record struct PlacedHighlight(CellLayer Layer, string Tag, string Column, long First, long Last, Brush? Background,
+        Brush? Border, IReadOnlyList<double>? Dash, int Level, bool Underline, int Order, HexMark Mark, bool DoubleLine = false);
 
     // ハイコントラストの判定は IsHighContrast (HexView.Options.cs。テスト用の模擬 ForcedHighContrast を含む) を使う。
 
@@ -104,30 +119,83 @@ public sealed partial class HexView
         }
     }
 
-    /// <summary>描画の最後に、表示中の範囲の強調と目印を置く (Render から呼ぶ)。</summary>
+    /// <summary>セルごとの、手前の層 (7〜11) の最も手前の背景 (文字色のコントラストの規則 VIEW-17 の仕様 9 に使う)。使い回す。</summary>
+    private Brush?[] _layerBackWork = [];
+
+    /// <summary>
+    /// 表示中の範囲の強調を提供元から集め、奥の層から並べる (行を描く前に呼ぶ)。あわせて、セルごとの手前の層の背景を
+    /// <see cref="_layerBackWork"/> に入れる。背景のあるセルが 1 つでもあれば true。
+    /// </summary>
+    private bool GatherHighlights(long firstOffset, int span)
+    {
+        List<(HexHighlight Item, int Order)> items = _highlightItems;
+        items.Clear();
+        if (_layerBackWork.Length < span)
+        {
+            _layerBackWork = new Brush?[span];
+        }
+        else
+        {
+            Array.Clear(_layerBackWork, 0, span);
+        }
+
+        if (_highlightSources.Count == 0)
+        {
+            return false;
+        }
+
+        long end = firstOffset + span;
+        foreach (Func<long, long, IEnumerable<HexHighlight>> source in _highlightSources.Values)
+        {
+            foreach (HexHighlight h in source(firstOffset, end))
+            {
+                items.Add((h, items.Count));
+            }
+        }
+
+        // 奥の層から描く (同じ層は与えた順)。作業用の一覧は使い回す (描画のたびに作らない。VIEW-04 の仕様 3)。
+        items.Sort(static (a, b) => a.Item.Layer != b.Item.Layer ? b.Item.Layer.CompareTo(a.Item.Layer) : a.Order.CompareTo(b.Order));
+        bool any = false;
+        foreach ((HexHighlight h, _) in items)
+        {
+            if (h.Background is null || h.Length <= 0 || h.Layer is < CellLayer.Bookmark or > CellLayer.Difference)
+            {
+                continue;
+            }
+
+            // 奥から順に上書きするので、最後に残るのが最も手前の背景。
+            long from = Math.Max(h.Offset, firstOffset);
+            long to = Math.Min(h.Offset + h.Length, end);
+            if (from < to)
+            {
+                _layerBackWork.AsSpan((int)(from - firstOffset), (int)(to - from)).Fill(h.Background);
+                any = true;
+            }
+        }
+
+        return any;
+    }
+
+    /// <summary>描画の最後に、表示中の範囲の強調と目印を置く (Render から呼ぶ。強調は先に <see cref="GatherHighlights"/> で集めておく)。</summary>
     private void RenderHighlights(long firstOffset, int rows, RowColumns columns)
     {
         _placed.Clear();
+        _placedBands.Clear();
+        Sprites.Highlights.Begin();
         int bytesPerRow = columns.BytesPerRow;
         long end = firstOffset + (long)rows * bytesPerRow;
         int backUsed = 0;
         int frontUsed = 0;
         int marksUsed = 0;
-        if (_highlightSources.Count > 0)
+        int patternsUsed = 0;
+        if (_highlightItems.Count > 0)
         {
             EnsureHighlightLayers();
             List<(HexHighlight Item, int Order)> items = _highlightItems;
-            items.Clear();
-            foreach (Func<long, long, IEnumerable<HexHighlight>> source in _highlightSources.Values)
-            {
-                foreach (HexHighlight h in source(firstOffset, end))
-                {
-                    items.Add((h, items.Count));
-                }
-            }
-
-            // 奥の層から描く (同じ層は与えた順)。作業用の一覧は使い回す (描画のたびに作らない。VIEW-04 の仕様 3)。
-            items.Sort(static (a, b) => a.Item.Layer != b.Item.Layer ? b.Item.Layer.CompareTo(a.Item.Layer) : a.Order.CompareTo(b.Order));
+            RowFormat format = columns.Format;
+            int texts = format.ShowText ? Math.Max(1, format.ShownTextColumns) : 0;
+            long length = _editor?.Layout.Length ?? 0;
+            Span<(int Start, int Length)> spans = stackalloc (int, int)[8];
             foreach ((HexHighlight h, _) in items)
             {
                 long from = Math.Max(h.Offset, firstOffset);
@@ -137,22 +205,77 @@ public sealed partial class HexView
                     continue;
                 }
 
+                bool band = h.Background is not null && CellLayers.KeepsBand(h.Layer);
                 for (long rowStart = firstOffset + (from - firstOffset) / bytesPerRow * bytesPerRow; rowStart < to; rowStart += bytesPerRow)
                 {
                     int c0 = (int)(Math.Max(from, rowStart) - rowStart);
                     int c1 = (int)(Math.Min(to, rowStart + bytesPerRow) - rowStart) - 1;
                     double y = (rowStart - firstOffset) / bytesPerRow * _rowHeight - _subRowOffset;
-                    double hexLeft = columns.HexIndex(c0) * _cellWidth;
-                    double hexWidth = (columns.HexIndex(c1) + 2) * _cellWidth - hexLeft;
-                    double textLeft = columns.TextIndex(c0) * _cellWidth;
-                    double textWidth = (c1 - c0 + 1) * _cellWidth;
-                    if (h.Length == 0)
+                    int valid = (int)Math.Clamp(length - rowStart, 0, bytesPerRow);
+                    if (format.ShowHex)
                     {
-                        hexWidth = textWidth = 2;
+                        if (h.Length == 0)
+                        {
+                            PlaceSegment(h, "hex", rowStart + c0, rowStart + c1, format.ByteSpan(c0, valid).Start * _cellWidth, y, 2,
+                                ref backUsed, ref frontUsed);
+                        }
+                        else
+                        {
+                            // 逆順表示などで表示が分かれる範囲は、分けて描く (VIEW-11)。
+                            int n = format.HexSpans(c0, c1, valid, spans);
+                            for (int i = 0; i < n; i++)
+                            {
+                                PlaceSegment(h, "hex", rowStart + c0, rowStart + c1, spans[i].Start * _cellWidth, y, spans[i].Length * _cellWidth,
+                                    ref backUsed, ref frontUsed);
+                            }
+                        }
                     }
 
-                    PlaceSegment(h, "hex", rowStart + c0, rowStart + c1, hexLeft, y, hexWidth, ref backUsed, ref frontUsed);
-                    PlaceSegment(h, "text", rowStart + c0, rowStart + c1, textLeft, y, textWidth, ref backUsed, ref frontUsed);
+                    for (int t = 0; t < texts; t++)
+                    {
+                        double textLeft = format.TextIndex(t, c0) * _cellWidth;
+                        double textWidth = h.Length == 0 ? 2 : (c1 - c0 + 1) * _cellWidth;
+                        PlaceSegment(h, t == 0 ? "text" : "text" + (t + 1), rowStart + c0, rowStart + c1, textLeft, y, textWidth,
+                            ref backUsed, ref frontUsed);
+                        if (h.Mark != HexMark.None && h.MarkBrush is { } textMark)
+                        {
+                            PlaceMark(h.Mark, textMark, textLeft, y, textWidth, h.Length == 0 ? 0 : c1 - c0 + 1, i => i * _cellWidth, ref patternsUsed);
+                        }
+                    }
+
+                    if (format.ShowHex && h.Mark != HexMark.None && h.MarkBrush is { } hexMark)
+                    {
+                        // 色以外の印 (ANA-04 の仕様 3)。左端の縦線はセルごとに引く (Hex 列はグループの間隔・逆順表示があるため、セルの位置を列から求める)。
+                        int n = h.Length == 0 ? 0 : format.HexSpans(c0, c1, valid, spans);
+                        if (n == 0)
+                        {
+                            double left = format.ByteSpan(c0, valid).Start * _cellWidth;
+                            PlaceMark(h.Mark, hexMark, left, y, 2, 0, _ => 0, ref patternsUsed);
+                        }
+
+                        for (int i = 0; i < n; i++)
+                        {
+                            double left = spans[i].Start * _cellWidth;
+                            double right = left + spans[i].Length * _cellWidth;
+                            List<double> cellLefts = [];
+                            for (int c = c0; c <= c1; c++)
+                            {
+                                double at = format.ByteSpan(c, valid).Start * _cellWidth;
+                                if (at >= left && at < right)
+                                {
+                                    cellLefts.Add(at - left);
+                                }
+                            }
+
+                            PlaceMark(h.Mark, hexMark, left, y, right - left, cellLefts.Count, k => cellLefts[k], ref patternsUsed);
+                        }
+                    }
+
+                    // 層 7〜10 の背景が、選択範囲・検索の一致 (層 2〜5) に隠れるセルでは、下端に高さ 2 px の帯として残す (VIEW-17 の仕様 6)。
+                    if (band && h.Length > 0)
+                    {
+                        PlaceBands(h, format, firstOffset, rowStart, c0, c1, valid, texts, y, ref frontUsed);
+                    }
                 }
             }
         }
@@ -178,8 +301,13 @@ public sealed partial class HexView
         }
 
         _highlightItems.Clear();
+        HideLightBackgrounds();
         Hide(_highlightBack, backUsed);
         Hide(_highlightFront, frontUsed);
+        for (int i = patternsUsed; i < _highlightMarks.Count; i++)
+        {
+            _highlightMarks[i].Visibility = Visibility.Collapsed;
+        }
         for (int i = marksUsed; i < _offsetMarks.Count; i++)
         {
             _offsetMarks[i].Visibility = Visibility.Collapsed;
@@ -196,8 +324,13 @@ public sealed partial class HexView
 
     private void PlaceSegment(HexHighlight h, string column, long first, long last, double x, double y, double width, ref int backUsed, ref int frontUsed)
     {
-        _placed.Add(new PlacedHighlight(h.Layer, h.Tag, column, first, last, h.Background, h.Border, h.Dash));
-        if (h.Background is not null)
+        _placed.Add(new PlacedHighlight(h.Layer, h.Tag, column, first, last, h.Background, h.Border, h.Dash, h.Level, h.Underline, _placed.Count, h.Mark, h.DoubleLine));
+        if (h.Background is not null && h.LightBackground)
+        {
+            // 合成の図形 (SpriteVisual) で塗る: XAML の要素を使わないので、1 画面に数千あっても速い (INSP-33 の仕様 5)。
+            PlaceLightBackground(h.Background, x, y, width, _rowHeight);
+        }
+        else if (h.Background is not null)
         {
             Rectangle r = Take(_highlightBack, _backLayer!, backUsed++);
             r.Fill = h.Background;
@@ -205,12 +338,31 @@ public sealed partial class HexView
             SetRect(r, x, y, width, _rowHeight);
         }
 
-        if (h.Border is not null)
+        if (h.Border is not null && h.Underline)
+        {
+            // 下線 (段ごとに 2 px ずつ上へ)。
+            Rectangle line = Take(_highlightFront, _frontLayer!, frontUsed++);
+            line.Fill = h.Border;
+            line.Stroke = null;
+            while (_frontDash.Count <= frontUsed - 1)
+            {
+                _frontDash.Add(null);
+            }
+
+            if (_frontDash[frontUsed - 1] is not null)
+            {
+                _frontDash[frontUsed - 1] = null;
+                line.StrokeDashArray = null;
+            }
+
+            SetRect(line, x, y + _rowHeight - 2 - 2 * h.Level, Math.Max(1, width), 1.5);
+        }
+        else if (h.Border is not null)
         {
             Rectangle r = Take(_highlightFront, _frontLayer!, frontUsed++);
             r.Fill = null;
             r.Stroke = h.Border;
-            r.StrokeThickness = 1;
+            r.StrokeThickness = h.Thickness;
             // 破線の模様は変わったときだけ設定する (DoubleCollection を描画のたびに作らない)。
             while (_frontDash.Count <= frontUsed - 1)
             {
@@ -222,8 +374,161 @@ public sealed partial class HexView
                 _frontDash[frontUsed - 1] = h.Dash;
                 r.StrokeDashArray = h.Dash is null ? null : [.. h.Dash];
             }
-            SetRect(r, x, y + 0.5, Math.Max(1, width), Math.Max(1, _rowHeight - 1));
+            double inset = 2 * h.Level;
+            SetRect(r, x + inset, y + 0.5 + inset, Math.Max(1, width - 2 * inset), Math.Max(1, _rowHeight - 1 - 2 * inset));
+            if (h.DoubleLine && h.Dash is null)
+            {
+                // 二重線 (ハイコントラストの色付けルールの 4 つ目の形。INSP-34 の仕様 4): 内側に 2 px あけてもう 1 本の実線を描く。
+                Rectangle inner = Take(_highlightFront, _frontLayer!, frontUsed++);
+                inner.Fill = null;
+                inner.Stroke = h.Border;
+                inner.StrokeThickness = h.Thickness;
+                while (_frontDash.Count <= frontUsed - 1)
+                {
+                    _frontDash.Add(null);
+                }
+
+                if (_frontDash[frontUsed - 1] is not null)
+                {
+                    _frontDash[frontUsed - 1] = null;
+                    inner.StrokeDashArray = null;
+                }
+
+                double gap = inset + 2.5;
+                SetRect(inner, x + gap, y + 0.5 + gap, Math.Max(1, width - 2 * gap), Math.Max(1, _rowHeight - 1 - 2 * gap));
+            }
         }
+    }
+
+    /// <summary>帯の高さ (VIEW-17 の仕様 6)。</summary>
+    private const double BandHeight = 2;
+
+    /// <summary>描いた帯 (テスト用の読み出し): 層・提供元・列・最初と最後のバイト・色・高さ。</summary>
+    private readonly List<(CellLayer Layer, string Tag, string Column, long First, long Last, Brush Brush)> _placedBands = [];
+
+    /// <summary>
+    /// 選択範囲・検索の一致・注目している範囲に隠れるバイトに、強調の背景の色の帯をセルの下端 (変更の下線のすぐ上) に描く。
+    /// </summary>
+    private void PlaceBands(HexHighlight h, RowFormat format, long firstOffset, long rowStart, int c0, int c1, int valid, int texts, double y,
+        ref int frontUsed)
+    {
+        // 選択範囲はマルチ選択・矩形選択を含む (描画用に見えている範囲だけ求めたもの)。
+        bool[] selected = _work.Selected;
+        bool[] matched = _work.Matched;
+        bool Hidden(int c)
+        {
+            long index = rowStart + c - firstOffset;
+            return index >= 0 && ((index < selected.Length && selected[index]) || (index < matched.Length && matched[index]));
+        }
+
+        Span<(int Start, int Length)> spans = stackalloc (int, int)[8];
+        for (int c = c0; c <= c1; c++)
+        {
+            if (!Hidden(c))
+            {
+                continue;
+            }
+
+            int last = c;
+            while (last + 1 <= c1 && Hidden(last + 1))
+            {
+                last++;
+            }
+
+            double top = y + _rowHeight - 3 - BandHeight;
+            if (format.ShowHex)
+            {
+                int n = format.HexSpans(c, last, valid, spans);
+                for (int i = 0; i < n; i++)
+                {
+                    PlaceBand(h.Background!, spans[i].Start * _cellWidth, top, spans[i].Length * _cellWidth, ref frontUsed);
+                }
+
+                _placedBands.Add((h.Layer, h.Tag, "hex", rowStart + c, rowStart + last, h.Background!));
+            }
+
+            for (int t = 0; t < texts; t++)
+            {
+                PlaceBand(h.Background!, format.TextIndex(t, c) * _cellWidth, top, (last - c + 1) * _cellWidth, ref frontUsed);
+                _placedBands.Add((h.Layer, h.Tag, t == 0 ? "text" : "text" + (t + 1), rowStart + c, rowStart + last, h.Background!));
+            }
+
+            c = last;
+        }
+    }
+
+    private void PlaceBand(Brush brush, double x, double y, double width, ref int frontUsed)
+    {
+        Rectangle r = Take(_highlightFront, _frontLayer!, frontUsed++);
+        while (_frontDash.Count <= frontUsed - 1)
+        {
+            _frontDash.Add(null);
+        }
+
+        if (_frontDash[frontUsed - 1] is not null)
+        {
+            _frontDash[frontUsed - 1] = null;
+            r.StrokeDashArray = null;
+        }
+
+        r.Fill = brush;
+        r.Stroke = null;
+        SetRect(r, x, y, Math.Max(1, width), BandHeight);
+    }
+
+    /// <summary>色以外の印 (縦線・取り消し線・斜線) を 1 つの Path に描く。<paramref name="cells"/> は縦線を引くセルの数。</summary>
+    private void PlaceMark(HexMark mark, Brush brush, double x, double y, double width, int cells, Func<int, double> cellLeft, ref int used)
+    {
+        if (used >= _highlightMarks.Count)
+        {
+            var created = new Microsoft.UI.Xaml.Shapes.Path { StrokeThickness = 1, IsHitTestVisible = false };
+            AutomationProperties.SetAccessibilityView(created, Microsoft.UI.Xaml.Automation.Peers.AccessibilityView.Raw);
+            _highlightMarks.Add(created);
+            _frontLayer!.Children.Add(created);
+        }
+
+        Microsoft.UI.Xaml.Shapes.Path p = _highlightMarks[used++];
+        p.Visibility = Visibility.Visible;
+        p.Stroke = brush;
+        double height = _rowHeight;
+        width = Math.Max(mark == HexMark.Hatch ? 6 : 2, width);
+        Canvas.SetLeft(p, x);
+        Canvas.SetTop(p, y);
+        p.Width = width;
+        p.Height = height;
+        p.Clip = new RectangleGeometry { Rect = new Windows.Foundation.Rect(0, 0, width, height) };
+        var group = new GeometryGroup();
+        switch (mark)
+        {
+            case HexMark.LeftBar:
+                p.StrokeThickness = 2;
+                for (int i = 0; i < Math.Max(1, cells); i++)
+                {
+                    double at = cells == 0 ? 1 : cellLeft(i) + 1;
+                    group.Children.Add(new LineGeometry { StartPoint = new Windows.Foundation.Point(at, 1), EndPoint = new Windows.Foundation.Point(at, height - 1) });
+                }
+
+                break;
+            case HexMark.Strike:
+                p.StrokeThickness = 1.5;
+                group.Children.Add(new LineGeometry { StartPoint = new Windows.Foundation.Point(0, height / 2), EndPoint = new Windows.Foundation.Point(width, height / 2) });
+                break;
+            default:
+                p.StrokeThickness = 1;
+                const double step = 6;
+                for (double i = -height; i < width; i += step)
+                {
+                    group.Children.Add(new LineGeometry
+                    {
+                        StartPoint = new Windows.Foundation.Point(i, height),
+                        EndPoint = new Windows.Foundation.Point(i + height, 0),
+                    });
+                }
+
+                break;
+        }
+
+        p.Data = group;
     }
 
     private static Rectangle Take(List<Rectangle> pool, Canvas layer, int index)
@@ -318,6 +623,11 @@ public sealed partial class HexView
                 ["background"] = MaybeColor(p.Background),
                 ["border"] = MaybeColor(p.Border),
                 ["dash"] = p.Dash is null ? null : string.Join(",", p.Dash),
+                ["level"] = p.Level,
+                ["underline"] = p.Underline,
+                ["double"] = p.DoubleLine,
+                ["order"] = p.Order,
+                ["mark"] = p.Mark == HexMark.None ? null : p.Mark.ToString(),
             });
         }
 
@@ -333,9 +643,25 @@ public sealed partial class HexView
             });
         }
 
+        var bands = new System.Text.Json.Nodes.JsonArray();
+        foreach ((CellLayer layer, string tag, string column, long first, long last, Brush brush) in _placedBands)
+        {
+            bands.Add(new System.Text.Json.Nodes.JsonObject
+            {
+                ["layer"] = (int)layer,
+                ["tag"] = tag,
+                ["column"] = column,
+                ["first"] = first,
+                ["last"] = last,
+                ["color"] = ColorOf(brush),
+                ["height"] = BandHeight,
+            });
+        }
+
         return new System.Text.Json.Nodes.JsonObject
         {
             ["segments"] = segments,
+            ["bands"] = bands,
             ["marks"] = marks,
             ["highContrast"] = IsHighContrast,
             ["rowHeight"] = _rowHeight,

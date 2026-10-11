@@ -62,6 +62,12 @@ public static partial class WindowManager
             LastActive = s_windows.LastOrDefault();
         }
 
+        if (s_windows.Count == 0)
+        {
+            // 最後のウィンドウを閉じた: 間引いて待っている保存を書いてから終わる。
+            MainWindow.FlushBackgroundSaves();
+        }
+
         Changed?.Invoke();
     }
 
@@ -254,12 +260,15 @@ public static partial class WindowManager
         from.SaveSession(session);
         App.Settings.Flush();
         Commands.CommandService.Flush();
+        MainWindow.FlushBackgroundSaves();
         AppLog.Info("Exited");
         foreach (MainWindow w in s_windows.ToList())
         {
             w.CloseForExit();
         }
 
+        // この入口から一時フォルダに作ったプロセスのスナップショットを削除する (ANA-09 の仕様 9)。
+        MainWindow.DeleteTemporarySnapshots();
         return true;
     }
 
@@ -295,6 +304,7 @@ public static partial class WindowManager
         SaveSessionForRestart(session);
         App.Settings.Flush();
         Commands.CommandService.Flush();
+        MainWindow.FlushBackgroundSaves();
         AppLog.Info("Restarting with the session");
         LastRestartFailed = false;
         if (AppRestart.Restart())

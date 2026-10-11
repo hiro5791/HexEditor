@@ -32,6 +32,9 @@ public partial class App : Application
     /// <summary>設定 (UI-23)。</summary>
     public static SettingsStore Settings { get; private set; } = null!;
 
+    /// <summary>ディスク・プロセスを開く経路の決定と補助プロセス (ENG-28、ENG-29、ENG-32)。</summary>
+    public static Services.DeviceService Devices { get; private set; } = null!;
+
     /// <summary>
     /// 復旧用データの保存間隔のテスト用の上書き (ENG-27 の仕様 1。--test-hooks の recoveryIntervalSeconds)。null なら設定
     /// <c>save.recoveryIntervalMinutes</c> (既定 1 分、0 は無効) に従う。
@@ -105,6 +108,7 @@ public partial class App : Application
         };
         // コマンド・キー割り当て・状態 (UI-16〜UI-21、UI-23 の state.json)。
         Commands.CommandService.Initialize(env.Locations.Settings);
+        Devices = new Services.DeviceService(env);
         var vm = new MainViewModel(new OperationCenter(TestHooks.Time), new EngineMemory(), options, env.Locations.Recovery);
 
         // 最近使ったファイル・前回の位置・セッション・初回起動の状態 (ENG-16、UI-31、UI-38)。ポータブル版では exe と同じドライブの
@@ -123,14 +127,21 @@ public partial class App : Application
         vm.InitializeFiles(files, FileSettings.RecentMaxItems(Settings));
         ViewOptions.Documents = files.Documents;
         vm.BackupSettings = FileSettings.Backup(Settings);
+        vm.ShiftWhenLengthChanges = Settings.GetBool(Core.Saving.SavePlanner.ShiftInPlaceKey, false);
 
         // コマンドパレットの「ファイル」モードの候補 (UI-17 の仕様 2、UI-32)。
         MainWindow.PaletteRecentFiles = () => vm.Recent.Items.Select(i => new PaletteRecentFile(i.DisplayName, i.Path));
 
         // パネル (UI-05) の登録。ウィンドウを作る前に行う。
         MainWindow.RegisterHashPanel();
+        MainWindow.RegisterStatisticsPanels(env.Locations.Settings);
+        MainWindow.LoadCustomCrcs();
         MainWindow.RegisterAnnotationPanels();
         MainWindow.RegisterSearchResultsPanel();
+        MainWindow.RegisterSelectionPanels();
+        MainWindow.RegisterFormatIssuesPanel();
+        MainWindow.RegisterComparePanel();
+        MainWindow.RegisterMemoryMapPanel();
         var window = new MainWindow(vm);
         Window = window;
 
@@ -151,6 +162,7 @@ public partial class App : Application
         {
             vm.Recent.MaxItems = FileSettings.RecentMaxItems(Settings);
             vm.BackupSettings = FileSettings.Backup(Settings);
+            vm.ShiftWhenLengthChanges = Settings.GetBool(Core.Saving.SavePlanner.ShiftInPlaceKey, false);
             ApplyRecoveryInterval();
             AppLog.DebugEnabled = Settings.GetString("log.level", "info") == "debug";
             CrashReporter.WriteMiniDump = Settings.GetBool(CrashReporter.MiniDumpKey, false);

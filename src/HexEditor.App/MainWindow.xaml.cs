@@ -54,6 +54,7 @@ public sealed partial class MainWindow : Window
         FindBar.MatchesChanged += (_, _) => UpdateMatchHighlights();
         InitializeSearch();
         InitializeEditingSettings();
+        InitializeMinimapSettings();
         Vm.MaterializeFailed += (_, ex) => DispatcherQueue.TryEnqueue(() => OnMaterializeFailed(this, ex));
         InitializeRegions();
         InitializeExternalChanges();
@@ -183,6 +184,12 @@ public sealed partial class MainWindow : Window
             Vm.NewDocument();
         }
 
+        // ジャンプリストの「ディスクを開く」(--open-disk。UI-35)。
+        if (commandLine.OpenDisk)
+        {
+            DispatcherQueue.TryEnqueue(() => _ = Commands.ExecuteAsync("file.openDisk"));
+        }
+
         if (commandLine.Offset is { } offset && Editor is { } editor
             && Core.Expressions.ExpressionEvaluator.TryEvaluate(offset, new Core.View.EditorExpressionContext(editor), out long target, out _))
         {
@@ -204,7 +211,7 @@ public sealed partial class MainWindow : Window
         IAppEnvironment env = Program.Environment;
         string app = env.Channel == ReleaseChannel.Preview ? "HexEditor Preview" : "HexEditor";
         string title = Vm.Selected is { } d ? $"{(d.Document.IsModified ? "● " : string.Empty)}{d.DisplayName} - {app}" : app;
-        if (env.IsElevated || TestHooks.SimulatesElevation)
+        if (TestHooks.ElevationOverride ?? env.IsElevated)
         {
             title += " " + Loc.Get("Title_Administrator");
         }
@@ -242,9 +249,11 @@ public sealed partial class MainWindow : Window
         }
 
         ApplyEditorSettings();
+        UpdateSelectedViews();
         UpdateTitle();
         UpdateCommandStates();
         UpdateEncodingMenu();
+        UpdateSyncStatus();
         QueueStatusBarLayout();
     }
 
@@ -274,7 +283,7 @@ public sealed partial class MainWindow : Window
 
     private async void Save_Click(object sender, RoutedEventArgs e)
     {
-        if (Vm.Selected is { } doc)
+        if (SaveTarget() is { } doc)
         {
             await SaveAsync(doc, saveAs: false);
         }
@@ -282,15 +291,62 @@ public sealed partial class MainWindow : Window
 
     private async void SaveAs_Click(object sender, RoutedEventArgs e)
     {
-        if (Vm.Selected is { } doc)
+        if (SaveTarget() is { } doc)
         {
             await SaveAsync(doc, saveAs: true);
         }
     }
 
+    /// <summary>
+    /// 保存の対象。比較タブの表示中は、フォーカスのある側が表示している開いているドキュメント (ANA-04 の仕様 2。比較タブの前に選んでいた
+    /// タブではない)。ディスク上のファイル・保存済みの内容・時点の側は比較タブの中だけで読み取り専用で開いたものなので、保存の対象にしない。
+    /// </summary>
+    private DocumentViewModel? SaveTarget() => ActiveCompare is { } compare ? compare.Focused.Owner : Vm.Selected;
+
     /// <summary>保存する。保存しなかった (キャンセル・失敗) 場合は false。</summary>
     private async Task<bool> SaveAsync(DocumentViewModel doc, bool saveAs)
     {
+        // ディスク・プロセスメモリへの書き込みは専用の経路 (ENG-30、ENG-34)。「名前を付けて保存」はデバイスには出さない。
+        if (!saveAs && doc.IsDevice)
+        {
+            return await SaveDeviceAsync(doc);
+        }
+
+        if (!saveAs && doc.IsProcessMemory)
+        {
+            return await SaveProcessAsync(doc);
+        }
+
+        // プロセスのスナップショットのタブは .hexsnap を書き出す (アドレス空間全体をバイト列にしない。ANA-09 の仕様 1)。
+        if (doc.Snapshot is { } snapshot)
+        {
+            return await SaveSnapshotAsAsync(doc, snapshot);
+        }
+
+        // 連動ビューの保存は親のドキュメントを保存する (ENG-39 の仕様 1)。
+        if (doc.LinkParent is { } linkParent)
+        {
+            return await SaveAsync(linkParent, saveAs);
+        }
+
+        // デコードして開いたドキュメントは元の形式で保存する (TOOL-11 の仕様 2・3)。
+        if (doc.Encoded is { } encoded && doc.FilePath is { } encodedPath)
+        {
+            if (!saveAs)
+            {
+                // 元のファイルが外部で変更・削除されていたら、上書き・作り直しを確かめる (ENG-19 の仕様 5・8)。
+                return !doc.Document.IsModified || (await ConfirmExternalSaveAsync(doc) && await SaveEncodedAsync(doc, encodedPath, encoded));
+            }
+
+            if (await SaveEncodedAsAsync(doc, encoded) is { } done)
+            {
+                return done;
+            }
+
+            // バイナリとして保存する: 以後はバイナリのドキュメント。
+            doc.Encoded = null;
+        }
+
         string? path = doc.FilePath;
 
         // 変更のない文書を同じファイルに保存しても、ファイルには触れない (ENG-20。更新日時を変えない)。
@@ -305,7 +361,13 @@ public sealed partial class MainWindow : Window
         {
             // 初期フォルダは元のファイルのフォルダ、無題なら前回保存したフォルダ (ENG-21 の仕様 1)。
             string suggestedName = doc.IsUntitled ? doc.DisplayName + ".bin" : doc.DisplayName;
-            if (TestHooks.TrySavePicker(suggestedName, out string? chosen))
+            if (_binarySaveAsPath is { } binaryPath)
+            {
+                // デコードしたドキュメントの「名前を付けて保存」でバイナリの保存先を選んだ (TOOL-11 の仕様 3)。
+                path = binaryPath;
+                _binarySaveAsPath = null;
+            }
+            else if (TestHooks.TrySavePicker(suggestedName, out string? chosen))
             {
                 path = chosen;
             }
@@ -331,7 +393,7 @@ public sealed partial class MainWindow : Window
             }
 
             // 別のウィンドウで開いているファイルにも保存しない (UI-14)。
-            if (Vm.Documents.Any(d => d != doc && string.Equals(d.FilePath, path, StringComparison.OrdinalIgnoreCase))
+            if (Vm.Documents.Any(d => !ReferenceEquals(d.Document, doc.Document) && string.Equals(d.FilePath, path, StringComparison.OrdinalIgnoreCase))
                 || WindowManager.FindOpenElsewhere(this, path) is not null)
             {
                 ShowNotice(Loc.Get("Error_SaveOpenElsewhere"), InfoBarSeverity.Error, doc);
@@ -364,6 +426,14 @@ public sealed partial class MainWindow : Window
         catch (InsufficientSpaceException ex)
         {
             ShowNotice(Loc.Format("Error_NoSpace", ex.Drive, ex.Required.ToString("N0"), ex.Available.ToString("N0")), InfoBarSeverity.Error, doc);
+        }
+        catch (ShiftSaveFailedException)
+        {
+            // ずらしながらのその場保存の途中のエラー (ENG-24 の「エラー」)。内容はこのタブに残っているので、別の場所に保存してもらう。
+            ShowNotice(Loc.Get("Shift_Failed"), InfoBarSeverity.Error, doc, actions:
+            [
+                new NotificationAction(Loc.Get("Menu_File_SaveAs/Text").TrimEnd('.', '…'), () => _ = SaveAsync(doc, saveAs: true)),
+            ]);
         }
         catch (InPlaceSaveRolledBackException)
         {
@@ -407,7 +477,8 @@ public sealed partial class MainWindow : Window
 
     // ---- 編集・移動 ----
 
-    private EditorState? Editor => Vm.Selected?.Editor;
+    /// <summary>コマンドの対象のビュー。比較タブの表示中はフォーカスのある側 (ANA-04 の仕様 7。MainWindow.Compare.cs)。</summary>
+    private EditorState? Editor => CompareEditor ?? Vm.Selected?.Editor;
 
     private void Undo_Click(object sender, RoutedEventArgs e) => Editor?.Undo();
 
@@ -479,13 +550,49 @@ public sealed partial class MainWindow : Window
                 }
 
                 _clipboard.CompatFormatsEnabled = App.Settings.GetBool(CompatClipboardFormats.SettingKey, true);
-                ClipboardPlan? copied = await _clipboard.CopyAsync(editor);
-                if (copied?.InAppOnly == true)
+                if (editor.HasMultipleRanges && Vm.Selected is { } multiDoc)
                 {
-                    // 「選択範囲 (12.3 GB) は大きすぎるため…」(EDIT-22 の仕様 5。「ファイルに書き出す」は TOOL-16 (フェーズ 2) の後)。
-                    string size = StatusFormat.ShortSize(editor.SelectionLength, System.Globalization.CultureInfo.CurrentCulture)
-                        ?? editor.SelectionLength.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                    ShowNotice(Loc.Format("Clipboard_InAppOnlySize", size), InfoBarSeverity.Informational, Vm.Selected);
+                    // マルチ選択・矩形: 要素を連結してコピーする (EDIT-07 の仕様 7、EDIT-17 の仕様 2)。
+                    if (command == EditorCommand.Cut && editor.CheckRectangleRows() is not null)
+                    {
+                        ShowRectangleRowLimit(multiDoc);
+                        return;
+                    }
+
+                    long copiedBytes = editor.SelectedByteCount;
+                    if (await _clipboard.CopyRangesAsync(editor) is not { } plan)
+                    {
+                        // 矩形の行数が要素数の上限を超える: 要素の一覧を作らずに知らせる。
+                        ShowNotice(Loc.Get("Clipboard_RangesTooLarge"), InfoBarSeverity.Error, multiDoc);
+                        return;
+                    }
+
+                    if (plan.InAppOnly)
+                    {
+                        // 上限を超える: アプリ内クリップボードに入れ、単一の範囲と同じ InfoBar と「ファイルに書き出す」(EDIT-22 の仕様 5・8)。
+                        ShowInAppOnlyNotice(multiDoc, copiedBytes);
+                    }
+                    else
+                    {
+                        RecordClipboardHistory(multiDoc, _clipboard.LastCopiedRanges);
+                    }
+                    if (command == EditorCommand.Cut)
+                    {
+                        await DeleteSelectedRangesAsync(multiDoc, "切り取り");
+                    }
+
+                    break;
+                }
+
+                ClipboardPlan? copied = await _clipboard.CopyAsync(editor);
+                if (copied is not null && Vm.Selected is { } copiedDoc)
+                {
+                    RecordClipboardHistory(copiedDoc, null);
+                }
+
+                if (copied?.InAppOnly == true && Vm.Selected is { } inAppDoc)
+                {
+                    ShowInAppOnlyNotice(inAppDoc, editor.SelectionLength);
                 }
                 else if (copied?.TextOmitted == true)
                 {
@@ -508,6 +615,22 @@ public sealed partial class MainWindow : Window
 
                 _clipboard.PasteDetectedWithoutConfirmation = App.Settings.GetBool(PasteWithoutConfirmationKey, false);
                 PasteOutcome outcome = await _clipboard.PasteAsync(editor, command == EditorCommand.PasteOverwrite, ConfirmTruncateAsync);
+                if (_clipboard.LastRectangleInsertRows > 0 && Vm.Selected is { } rectDoc)
+                {
+                    // 矩形の各行への挿入: 行数の上限を超えたら知らせ、挿入したら行数と後ろの行がずれた注記を示す (EDIT-17 の仕様 3・6)。
+                    if (outcome == PasteOutcome.TooManyRows)
+                    {
+                        ShowNotice(Loc.Format("Notice_RectangleRowLimit", _clipboard.LastRectangleInsertRows.ToString("N0", System.Globalization.CultureInfo.CurrentCulture),
+                            editor.MaxRectangleRows.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)), InfoBarSeverity.Error, rectDoc);
+                        break;
+                    }
+
+                    if (outcome == PasteOutcome.Done)
+                    {
+                        ShowRectangleInsertNote(rectDoc, _clipboard.LastRectangleInsertRows);
+                    }
+                }
+
                 if (outcome == PasteOutcome.NeedsSpecialPaste && Vm.Selected is { } special)
                 {
                     // Hex 列で Hex として読めず、他の形式に当てはまる: 形式を選択して貼り付けを開く (EDIT-23 の仕様 2、EDIT-26)。
@@ -546,6 +669,17 @@ public sealed partial class MainWindow : Window
 
                 break;
         }
+    }
+
+    /// <summary>「選択範囲 (12.3 GB) は大きすぎるため…」と「ファイルに書き出す」(EDIT-22 の仕様 5、TOOL-16)。</summary>
+    private void ShowInAppOnlyNotice(DocumentViewModel doc, long bytes)
+    {
+        string size = StatusFormat.ShortSize(bytes, System.Globalization.CultureInfo.CurrentCulture)
+            ?? bytes.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+        ShowNotice(Loc.Format("Clipboard_InAppOnlySize", size), InfoBarSeverity.Informational, doc, actions:
+        [
+            new NotificationAction(Loc.Get("Clipboard_WriteToFile"), () => _ = Commands.ExecuteAsync("file.saveSelection")),
+        ]);
     }
 
     private void ToggleInsert_Click(object sender, RoutedEventArgs e)
@@ -587,7 +721,14 @@ public sealed partial class MainWindow : Window
             };
             view.StatusMessageRequested += (_, args) =>
                 ShowNotice(args.Message, InfoBarSeverity.Informational, view.DataContext as DocumentViewModel);
+            AttachSelectionEvents(view);
+            view.TextColumnEncodingRequested += HexView_TextColumnEncodingRequested;
         }
+
+        // 画面分割 (VIEW-37)・バイトテーマ (VIEW-17)・ミニマップ (VIEW-35)。
+        HookPanes(view);
+        view.ByteTheme = new ByteThemeStore(App.Settings.Folder).Resolve(App.Settings.GetString(ByteThemeKey, "none"));
+        AttachMinimap(view);
 
         // スクリーンリーダーが読む名前は文書名 (VIEW-41)。
         TrackDocumentName(view);
@@ -606,11 +747,11 @@ public sealed partial class MainWindow : Window
     {
         foreach (HexView view in only is null ? _views : [only])
         {
-            // 検索バーが開いていれば検索バーの一致、閉じていても結果一覧が開いていれば一覧の一致 (FIND-20 の仕様 10)。
+            // 検索バーが開いていれば検索バーの一致。すべて検索の結果一覧の一致は、注釈 (出どころ「すべて検索の結果」。INSP-32) として
+            // 注釈の層に描く (FIND-20 の仕様 10。MainWindow.Annotations.cs の SearchResultsAnnotations)。
             bool active = FindBar.IsOpen && view.Editor == FindBar.Editor;
-            bool results = !active && SearchResults.IsOpen && SearchResults.Shows(view.Editor);
             // 一致の強調は設定で無効にできる (FIND-04 の仕様 9)。
-            view.MatchProvider = !MatchHighlightEnabled ? null : active ? FindBar.MatchesInView : results ? SearchResults.MatchesInView : null;
+            view.MatchProvider = !MatchHighlightEnabled ? null : active ? FindBar.MatchesInView : StringsHighlights(view);
             view.SetSearchMarkers(active ? FindBar.MarkerOffsets() : null);
         }
     }
@@ -618,7 +759,10 @@ public sealed partial class MainWindow : Window
     /// <summary>選択中のタブの Hex ビューにフォーカスを戻す。</summary>
     private void FocusEditor() => _views.FirstOrDefault(v => v.Editor == Editor)?.Focus(FocusState.Programmatic);
 
-    private void GoTo_Click(object sender, RoutedEventArgs e)
+    private void GoTo_Click(object sender, RoutedEventArgs e) => OpenGoToBar();
+
+    /// <summary>移動バーを開く。<paramref name="unit"/> を指定するとその単位の状態で開く (「セクタへ移動」。VIEW-32 の仕様 4)。</summary>
+    private void OpenGoToBar(Core.View.GoToUnit? unit = null)
     {
         if (Editor is null)
         {
@@ -628,7 +772,7 @@ public sealed partial class MainWindow : Window
         // 移動バーは検索バーと同じ場所に出す (VIEW-29 の仕様 1)。
         FindBar.Visibility = Visibility.Collapsed;
         GoToBar.Editor = Editor;
-        GoToBar.Open();
+        GoToBar.Open(unit);
     }
 
     private void Bar_Closed(object? sender, EventArgs e) => FocusEditor();
@@ -670,12 +814,33 @@ public sealed partial class MainWindow : Window
 
     private void HexView_EditRejected(object? sender, EditResult result)
     {
+        if (result == EditResult.CellFormatNotEditable)
+        {
+            // Hex 以外のセルの表示形式では直接編集しない (VIEW-10 の仕様 7)。ステータスバーの一時的な文で知らせる。
+            ShowStatusMessage(Loc.Get("HexView_Status_CellFormatReadOnly"));
+            return;
+        }
+
         DocumentViewModel? doc = Vm.Selected;
+        if (result == EditResult.Unallocated)
+        {
+            // プロセスメモリの割り当てられていない範囲 (ENG-34 の仕様 7)。
+            ShowNotice(Loc.Get("Process_Unallocated"), InfoBarSeverity.Warning, doc);
+            return;
+        }
+
         IReadOnlyList<LongRunningOperation> busy = doc is null ? [] : Vm.Operations.ActiveFor(doc.Document);
         if (result == EditResult.NotEditable && doc is { Editor.ReadOnly: true } && busy.Count == 0)
         {
             // 読み取り専用: データを変えずに「編集を許可する」付きの InfoBar を出す (EDIT-16 の仕様 3)。
             ShowReadOnlyNotice(doc);
+            return;
+        }
+
+        if (result is EditResult.TooManyRows or EditResult.TooManyCarets && doc is not null)
+        {
+            // 矩形の行数・カーソル数の上限 (EDIT-17 の仕様 6、EDIT-08 の仕様 3)。
+            ReportEdit(doc, result);
             return;
         }
 

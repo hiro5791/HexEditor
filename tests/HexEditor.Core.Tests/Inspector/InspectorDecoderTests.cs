@@ -16,6 +16,7 @@ public sealed class InspectorDecoderTests
     {
         IntegerBase = radix,
         Culture = EnUs,
+        Language = "en-US",
         TimeZoneMode = zone,
         DateTimeStyle = style,
         AnsiEncoding = ansi,

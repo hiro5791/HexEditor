@@ -171,9 +171,14 @@ public static class UiHelpers
     /// </summary>
     public static async Task InvokeDialogButtonAsync(this AppSession app, string name, bool idle = true)
     {
+        // タイトルバーのボタン (AutomationId が Close / Minimize / Maximize。木の先頭にある) は除く。除かないと、「閉じる」(Close) の
+        // ダイアログのボタンの代わりにウィンドウの閉じるボタンを押して、アプリを終了してしまう。
         FlaUI.Core.AutomationElements.AutomationElement? button = null;
-        await app.WaitUntilAsync(() => Task.FromResult((button = app.Window.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.Button))
-            .FirstOrDefault(b => AppSession.NameOf(b) == name)) is not null), TimeSpan.FromSeconds(15), $"the button '{name}'");
+        FlaUI.Core.AutomationElements.AutomationElement? Find() =>
+            app.Window.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.Button))
+                .FirstOrDefault(b => AppSession.NameOf(b) == name
+                    && b.Properties.AutomationId.ValueOrDefault is not ("Close" or "Minimize" or "Maximize" or "Minimize-Restore" or "Maximize-Restore"));
+        await app.WaitUntilAsync(() => Task.FromResult((button = Find()) is not null), TimeSpan.FromSeconds(15), $"the button '{name}'");
         button!.Patterns.Invoke.Pattern.Invoke();
         if (idle)
         {
@@ -206,7 +211,8 @@ public static class UiHelpers
 
     /// <summary>ウィンドウ (ダイアログを含む) の中の、表示名が <paramref name="name"/> のボタン。なければ null。</summary>
     public static FlaUI.Core.AutomationElements.AutomationElement? Button(this AppSession app, string name) =>
-        app.Window.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.Button)).FirstOrDefault(b => AppSession.NameOf(b) == name);
+        app.Window.FindAllDescendants(cf => cf.ByControlType(FlaUI.Core.Definitions.ControlType.Button)).FirstOrDefault(b => AppSession.NameOf(b) == name
+            && b.Properties.AutomationId.ValueOrDefault is not ("Close" or "Minimize" or "Maximize" or "Minimize-Restore" or "Maximize-Restore"));
 
     /// <summary>ダイアログのボタンの表示名の一覧。</summary>
     public static IReadOnlyList<string> DialogButtons(FlaUI.Core.AutomationElements.AutomationElement dialog) =>

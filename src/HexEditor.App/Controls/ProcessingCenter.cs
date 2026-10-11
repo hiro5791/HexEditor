@@ -101,7 +101,12 @@ public sealed partial class ProcessingCenter : UserControl
             var cancel = new Button { Content = Loc.Get("Common_Cancel"), VerticalAlignment = VerticalAlignment.Center };
             AutomationProperties.SetAutomationId(cancel, "Operations_Cancel");
             AutomationProperties.SetName(cancel, $"{Loc.Get("Common_Cancel")}: {op.Name}");
-            cancel.IsEnabled = op.State != OperationState.Cancelling;
+            cancel.IsEnabled = op.State != OperationState.Cancelling && op.CanCancel;
+            if (!op.CanCancel)
+            {
+                // 書き込みを始めたずらしながらのその場保存はキャンセルできない (ENG-24 の仕様 5)。理由をツールチップで示す。
+                ToolTipService.SetToolTip(cancel, Loc.Get("Operations_CannotCancel"));
+            }
             cancel.Click += (_, _) => op.Cancel();
             Grid.SetColumn(cancel, 1);
             row.Children.Add(cancel);
@@ -173,6 +178,12 @@ public static class OperationText
         if (op.Matches is long matches)
         {
             parts.Add(Loc.Format("Operations_Matches", matches));
+        }
+
+        // 処理の詳細 (複数ファイル検索のファイル数・今のファイル。FIND-30 の「巨大ファイル・長時間処理」)。
+        if (op.Detail is { Length: > 0 } detail)
+        {
+            parts.Add(detail);
         }
 
         parts.Add(Loc.Format("Operations_Elapsed",op.Elapsed.ToString(op.Elapsed.TotalHours >= 1 ? @"h\:mm\:ss" : @"m\:ss")));

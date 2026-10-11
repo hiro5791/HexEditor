@@ -250,8 +250,30 @@ public sealed class CrashAndRecoveryTests
         Assert.False((await app.DocumentAsync())["insertMode"]!.GetValue<bool>());
     }
 
+    /// <summary>
+    /// <see cref="EditAsync"/> の 2 つの編集 (4 バイトの挿入と 1 バイトの上書き) をすべて含む復旧用データが書かれるまで待つ。
+    /// 書き出しは 2 秒ごとなので、編集の途中 (挿入だけ) の書き出しがあっても、それでは待ち終えない (混んだランナーでは編集に数秒かかる)。
+    /// </summary>
     private static Task WaitForRecoveryDataAsync(AppSession app) =>
-        app.WaitUntilAsync(() => Task.FromResult(RecoveryStates(app.RecoveryFolder).Any()), TimeSpan.FromSeconds(20), "the recovery data");
+        app.WaitUntilAsync(() => Task.FromResult(RecoveryStates(app.RecoveryFolder).Any(s => ChangedBytes(s) >= 5)), TimeSpan.FromSeconds(20), "the recovery data");
+
+    /// <summary>state.json の変更の量 (ChangedBytes。読めなければ -1。書き換えの途中のことがある)。</summary>
+    private static long ChangedBytes(string statePath)
+    {
+        try
+        {
+            if (JsonNode.Parse(File.ReadAllText(statePath)) is JsonObject state
+                && state.FirstOrDefault(p => string.Equals(p.Key, "ChangedBytes", StringComparison.OrdinalIgnoreCase)).Value is { } value)
+            {
+                return value.GetValue<long>();
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+        {
+        }
+
+        return -1;
+    }
 
     private static async Task<AutomationElement> WaitForRecoveryDialogAsync(AppSession app)
     {

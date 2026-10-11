@@ -86,6 +86,42 @@ public sealed class ViewSettingsStore(SettingsStore settings, DocumentDataStore 
         }
     }
 
+    /// <summary>プリセットの自動適用の記録の付随データの種類 (初めて開いたときだけ適用するため)。</summary>
+    public const string PresetKind = "viewPreset";
+
+    /// <summary>表示プリセット (VIEW-42 の仕様 6)。</summary>
+    public IReadOnlyList<ViewPreset> Presets => ViewPresets.FromNode(settings.GetNode(ViewPresets.SettingsKey));
+
+    /// <summary>プリセットを書く (上限・同じ名前は <see cref="ViewPresets.Normalize"/>)。</summary>
+    public void SavePresets(IEnumerable<ViewPreset> presets) => settings.SetNode(ViewPresets.SettingsKey, ViewPresets.ToNode(ViewPresets.Normalize(presets)));
+
+    /// <summary>
+    /// 初めて開いたファイルなら、条件に合うプリセット (VIEW-42 の仕様 6) を返し、適用したことを記録する (2 回目からはドキュメントごとの設定が優先)。
+    /// 前に開いたことがある (表示設定・適用の記録がある) か、条件に合うプリセットがなければ null。
+    /// </summary>
+    public ViewPreset? TakeAutoPreset(string documentPath)
+    {
+        try
+        {
+            if (documents.ReadObject(documentPath, Kind) is not null || documents.ReadObject(documentPath, PresetKind) is not null)
+            {
+                return null;
+            }
+
+            if (ViewPresets.ForPath(Presets, documentPath) is not { } preset)
+            {
+                return null;
+            }
+
+            documents.WriteObject(documentPath, PresetKind, null, new JsonObject { ["applied"] = preset.Name });
+            return preset;
+        }
+        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException or InvalidOperationException or FormatException)
+        {
+            return null;
+        }
+    }
+
     /// <summary>「既定に戻す」(VIEW-42 の仕様 5): ドキュメントごとの設定を消す。</summary>
     public void Remove(string documentPath)
     {

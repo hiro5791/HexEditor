@@ -9,7 +9,7 @@ namespace HexEditor.Core.Search;
 /// すべて検索・件数の数え上げで見つかった一致 1 件。<see cref="Variant"/> は一致した種類 (<see cref="SearchPattern.Variants"/> の添字。
 /// エンディアン「両方」の LE / BE など)。
 /// </summary>
-public readonly record struct SearchMatch(long Offset, long Length, int Variant = 0)
+public readonly record struct SearchMatch(long Offset, long Length, int Variant = 0, int Extra = 0)
 {
     public long End => Offset + Length;
 }
@@ -53,6 +53,8 @@ public sealed class SearchResults : IDisposable
     private readonly object _lock = new();
     private readonly List<SearchMatch> _matches = [];
     private readonly List<UnreadableRange> _skipped = [];
+    private readonly List<SearchRange> _timedOut = [];
+    private long _maxLength;
     private readonly List<SearchMatch> _pending = [];
     private SafeFileHandle? _spill;
     private string? _spillPath;
@@ -166,6 +168,64 @@ public sealed class SearchResults : IDisposable
         }
     }
 
+    /// <summary>正規表現の時間の上限に達して飛ばしたチャンク (結果一覧に記録する。FIND-18 の「エラー」)。</summary>
+    public IReadOnlyList<SearchRange> TimedOutRanges
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return [.. _timedOut];
+            }
+        }
+    }
+
+    /// <summary>
+    /// 種類ごとの文字コード (文字列の抽出 (FIND-32) の「文字列」の列。種類の番号の順)。null なら一覧のテキストの列は表示中の文字コード。
+    /// </summary>
+    public IReadOnlyList<System.Text.Encoding>? VariantEncodings { get; init; }
+
+    /// <summary>
+    /// 表示中の一致の強調に、検索語を照合し直さず結果そのものを使う (一致しない箇所の検索、文字列の抽出)。
+    /// </summary>
+    public bool HighlightFromResults { get; init; }
+
+    /// <summary>種類の列の名前 (null ならパターンの <see cref="SearchPattern.Variants"/>)。</summary>
+    public IReadOnlyList<string>? VariantNames { get; init; }
+
+    /// <summary>種類の列の見出し (null ならパターンのもの)。</summary>
+    public VariantColumn? VariantColumnOverride { get; init; }
+
+    /// <summary>
+    /// 検索エンジンの代わりにすべて検索を行う処理 (一致しない箇所 (FIND-25)・文字列の抽出 (FIND-32))。引数は結果、続きを探す開始位置
+    /// (最初からなら long.MinValue)、長時間処理、キャンセル。件数の上限で止めたら true を返す。
+    /// </summary>
+    public Func<SearchResults, long, Operations.LongRunningOperation?, CancellationToken, bool>? CustomFindAll { get; init; }
+
+    /// <summary>同じ条件で、別のスナップショットを探す新しい結果 (再検索。FIND-03 の「エラー」の再検索ボタン)。</summary>
+    public SearchResults Renew(DocumentSnapshot snapshot) => new(snapshot, Pattern, Options)
+    {
+        VariantEncodings = VariantEncodings,
+        HighlightFromResults = HighlightFromResults,
+        VariantNames = VariantNames,
+        VariantColumnOverride = VariantColumnOverride,
+        CustomFindAll = CustomFindAll,
+        MemoryLimit = MemoryLimit,
+        SpillDirectory = SpillDirectory,
+    };
+
+    /// <summary>これまでに見つかった一致の最長の長さ (表示中の範囲と重なる一致を探すときに使う)。</summary>
+    public long MaxLength
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _maxLength;
+            }
+        }
+    }
+
     /// <summary>一致が追加された (検索のスレッドで呼ぶ)。引数は追加後の件数。</summary>
     public event EventHandler<int>? MatchesAdded;
 
@@ -247,7 +307,7 @@ public sealed class SearchResults : IDisposable
         lock (_lock)
         {
             // 開始が offset − 最長の一致 + 1 以上のものだけが重なりうる。
-            long i = LowerBound(offset - Pattern.MaxMatchLength + 1);
+            long i = LowerBound(offset - Math.Max(Pattern.MaxMatchLength, _maxLength) + 1);
             var result = new List<SearchMatch>();
             long total = TotalCountUnlocked;
             for (; i < total; i++)
@@ -298,6 +358,7 @@ public sealed class SearchResults : IDisposable
         {
             foreach (SearchMatch m in matches)
             {
+                _maxLength = Math.Max(_maxLength, m.Length);
                 if (_spilled == 0 && _pending.Count == 0 && _matches.Count < MemoryLimit)
                 {
                     _matches.Add(m);
@@ -324,6 +385,17 @@ public sealed class SearchResults : IDisposable
 
     /// <summary>上限 (または一時ファイルの失敗) で、これ以上加えられないか。</summary>
     internal bool IsFull(long count) => count >= Limit || SpillFailed;
+
+    internal void AddTimedOut(SearchRange range)
+    {
+        lock (_lock)
+        {
+            _timedOut.Add(range);
+        }
+    }
+
+    /// <summary>一致を加える (検索エンジンの外で一致を作る処理: 一致しない箇所のすべて検索、文字列の抽出)。</summary>
+    internal void AddMatches(List<SearchMatch> matches) => Add(matches);
 
     internal void AddSkipped(UnreadableRange range)
     {
@@ -432,7 +504,8 @@ public sealed class SearchResults : IDisposable
                 sink.Add(new SearchMatch(
                     BinaryPrimitives.ReadInt64LittleEndian(rec),
                     BinaryPrimitives.ReadInt64LittleEndian(rec[8..]),
-                    BinaryPrimitives.ReadInt32LittleEndian(rec[16..])));
+                    BinaryPrimitives.ReadInt32LittleEndian(rec[16..]),
+                    BinaryPrimitives.ReadInt32LittleEndian(rec[20..])));
             }
 
             at += n;
@@ -462,6 +535,7 @@ public sealed class SearchResults : IDisposable
                 BinaryPrimitives.WriteInt64LittleEndian(rec, _pending[k].Offset);
                 BinaryPrimitives.WriteInt64LittleEndian(rec[8..], _pending[k].Length);
                 BinaryPrimitives.WriteInt32LittleEndian(rec[16..], _pending[k].Variant);
+                BinaryPrimitives.WriteInt32LittleEndian(rec[20..], _pending[k].Extra);
             }
 
             RandomAccess.Write(_spill!, buffer, _spilled * RecordSize);

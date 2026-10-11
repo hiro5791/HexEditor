@@ -17,6 +17,9 @@ public static class AppLog
 
     private static string? _folder;
 
+    /// <summary>ログのフォルダ (書けない場合は null)。管理者権限の補助プロセスのログもここに置く (ENG-28 の仕様 9)。</summary>
+    public static string? Folder => _folder;
+
     /// <summary>ログのファイルを書き始める。書けない場合はメモリだけに残す。</summary>
     public static void Initialize(string logsFolder)
     {

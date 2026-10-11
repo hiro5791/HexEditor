@@ -28,6 +28,12 @@ public sealed record AppOptions
 
     /// <summary>true なら、選択中のタブの Hex ビューが表示されるまで待つ。</summary>
     public bool WaitForEditor { get; init; } = true;
+
+    /// <summary>
+    /// true なら一般ユーザーの権限 (昇格していないトークン) で起動する。CI の特権のテスト (<see cref="CiPrivilegedFactAttribute"/>) でだけ使う
+    /// (テストのプロセスが管理者として動くランナーで、アプリを「一般ユーザー (CI)」として動かす。テスト方針 6.5)。
+    /// </summary>
+    public bool Restricted { get; init; }
 }
 
 /// <summary>
@@ -157,6 +163,12 @@ public sealed class AppSession : IAsyncDisposable
         foreach (string file in options.Files)
         {
             info.ArgumentList.Add(file);
+        }
+
+        if (options.Restricted)
+        {
+            // 一般ユーザーの権限で起動する (標準入出力は受け継がない)。
+            return CiPrivileged.StartRestricted(AppLocator.ExePath, [.. info.ArgumentList], info.WorkingDirectory);
         }
 
         Process process = Process.Start(info) ?? throw new InvalidOperationException("HexEditor を起動できません。");

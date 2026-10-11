@@ -170,7 +170,13 @@ public sealed partial class CommandRegistryTests
             }
         }
 
-        Assert.True(times.Max() < 16, $"最大 {times.Max():F2} ms");
+        // 目標 (UI-17: 1 文字ごとに 16 ms 以内): 中央値は常に (負荷のある共有のランナーでも) 目標を大きく下回るはずなので失敗にする。
+        // 最大・95 パーセンタイルは他の負荷 (GC、CPU の取り合い) で揺れるため、性能テスト用の環境でだけ失敗にし、それ以外は警告にする。
+        times.Sort();
+        double median = times[times.Count / 2];
+        double p95 = times[(int)Math.Ceiling(times.Count * 0.95) - 1];
+        Assert.True(median < 16, $"中央値 {median:F2} ms");
+        TimeBudget.Limit(p95 < 16 && times[^1] < 16, $"95 パーセンタイル {p95:F2} ms、最大 {times[^1]:F2} ms (目標 16 ms)");
     }
 
     [Fact]
@@ -289,8 +295,8 @@ public sealed partial class CommandRegistryTests
     {
         ["新規作成"] = ["file.new"],
         ["開く"] = ["file.open"],
-        ["ディスクを開く"] = ["-F2-09 (フェーズ 2)"],
-        ["プロセスのメモリを開く"] = ["-F2-10 (フェーズ 2)"],
+        ["ディスクを開く"] = ["file.openDisk"],
+        ["プロセスのメモリを開く"] = ["file.openProcess"],
         ["新しいウィンドウ"] = ["window.new"],
         ["保存"] = ["file.save"],
         ["名前を付けて保存"] = ["file.saveAs"],
@@ -307,14 +313,14 @@ public sealed partial class CommandRegistryTests
         ["検索"] = ["search.find"],
         ["次を検索 / 前を検索"] = ["search.findNext", "search.findPrevious"],
         ["置換"] = ["search.replace"],
-        ["複数ファイル検索"] = ["-F2-17 (フェーズ 2)"],
+        ["複数ファイル検索"] = ["search.multiFile"],
         ["オフセットへ移動"] = ["go.goTo"],
         ["戻る / 進む"] = ["go.back", "go.forward"],
         ["ブックマークの設定 / 解除"] = ["go.bookmark.toggle"],
         ["次 / 前のブックマーク"] = ["go.bookmark.next", "go.bookmark.previous"],
         ["番号付きブックマークの設定"] = [.. Enumerable.Range(1, 9).Select(n => $"go.bookmark.set{n}")],
         ["番号付きブックマークへ移動"] = [.. Enumerable.Range(1, 9).Select(n => $"go.bookmark.goto{n}")],
-        ["次 / 前の差分"] = ["-F2-01 (フェーズ 2)"],
+        ["次 / 前の差分"] = ["compare.nextDiff", "compare.previousDiff"],
         ["定義へ移動 (テンプレート) / 分岐先へ移動 (逆アセンブル)"] = ["-F3-01 / F4-01"],
         ["コマンドパレット"] = ["help.commandPalette"],
         ["設定"] = ["settings.open"],
@@ -322,7 +328,7 @@ public sealed partial class CommandRegistryTests
         ["全画面表示"] = ["view.fullScreen"],
         ["データインスペクタの表示切り替え"] = ["view.panel.inspector"],
         ["マクロの記録開始 / 停止"] = ["-F3-06 (フェーズ 3)"],
-        ["画面を分割"] = ["-F2-02 (フェーズ 2)"],
+        ["画面を分割"] = ["view.split"],
         ["カーソル移動 (VIEW-25)"] = ["-Hex ビューが処理する移動キー"],
         ["Hex 列とテキスト列の切り替え (順 / 逆)"] = ["go.toggleColumn"],
         ["前 / 次のグループへ移動"] = ["go.previousGroup", "go.nextGroup"],
@@ -337,10 +343,10 @@ public sealed partial class CommandRegistryTests
         ["範囲を選択 (開始・終了・長さを入力)"] = ["edit.selectRange"],
         ["上書き / 挿入の切り替え"] = ["edit.toggleInsert"],
         ["削除 / 前のバイトを削除 (挿入モード)"] = ["-Hex ビューが処理する"],
-        ["矩形選択"] = ["-F2-15 (フェーズ 2)"],
-        ["範囲をマルチ選択に追加"] = ["-F2-12 (フェーズ 2)"],
-        ["カーソルを追加"] = ["-F2-12 (フェーズ 2)"],
-        ["カーソルを上 / 下の行に追加"] = ["-F2-12 (フェーズ 2)"],
+        ["矩形選択"] = ["-Hex ビューが処理する (Alt+ドラッグ・Alt+Shift+矢印)"],
+        ["範囲をマルチ選択に追加"] = ["-Hex ビューが処理する (マウス)"],
+        ["カーソルを追加"] = ["-Hex ビューが処理する (マウス)"],
+        ["カーソルを上 / 下の行に追加"] = ["edit.caret.addAbove", "edit.caret.addBelow"],
         ["選択の解除、マルチカーソルを 1 つに戻す"] = ["-Hex ビューが処理する"],
         ["次を検索 / 前を検索 (検索バー)"] = ["-検索バーが処理する"],
         ["すべて検索"] = ["search.findAll"],

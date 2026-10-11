@@ -1,0 +1,35 @@
+{
+  "source": "THEX (Tree Hash EXchange format) specification examples (Tiger Tree Hash, 1024-byte leaves); values in Base32.",
+  "vectors": [
+    {
+      "algorithm": "tth",
+      "ascii": "",
+      "format": "base32",
+      "expected": "LWPNACQDBZRYXW3VHJVCJ64QBZNGHOHHHZWCLNQ"
+    },
+    {
+      "algorithm": "tth",
+      "hex": "00",
+      "format": "base32",
+      "expected": "VK54ZIEEVTWNAUI5D5RDFIL37LX2IQNSTAXFKSA"
+    },
+    {
+      "algorithm": "tth",
+      "repeat": {
+        "byte": 65,
+        "count": 1024
+      },
+      "format": "base32",
+      "expected": "L66Q4YVNAFWVS23X2HJIRA5ZJ7WXR3F26RSASFA"
+    },
+    {
+      "algorithm": "tth",
+      "repeat": {
+        "byte": 65,
+        "count": 1025
+      },
+      "format": "base32",
+      "expected": "PZMRYHGY6LTBEH63ZWAHDORHSYTLO4LEFUIKHWY"
+    }
+  ]
+}

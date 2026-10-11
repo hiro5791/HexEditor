@@ -1,4 +1,7 @@
 using HexEditor.Core.Clipboard;
+using HexEditor.Core.Coloring;
+using HexEditor.Core.Engine;
+using HexEditor.Core.Sources;
 using HexEditor.TestData;
 using static HexEditor.Core.Tests.Support.DocumentAssert;
 
@@ -253,5 +256,83 @@ public sealed class CopyFormatTests
         string text = CopyFormatter.Format(CopyFormat.ScreenDump, data, 0, options, out _);
         Assert.Equal(2, text.Split("\r\n").Length);
         Assert.StartsWith("00000000  00 01 02 03 04 FF 06", text);
+    }
+
+    /// <summary>
+    /// 画面表示どおりは、グループ化・中央区切り・グループ内の逆順表示・セルの表示形式も画面に合わせる (EDIT-25 の仕様 6、VIEW-11 の仕様 5)。
+    /// </summary>
+    [Fact]
+    [Trait(TC, "TC-EDIT-25-01")]
+    public void Screen_dump_follows_grouping_reversal_and_cell_format()
+    {
+        byte[] data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        var hexOnly = new CopyOptions { ScreenBytesPerRow = 8, ShowText = false };
+
+        // グループ化 4 (グループの間に空白)。
+        CopyOptions grouped = hexOnly with { ScreenGroupSize = 4 };
+        Assert.Equal("00000000  01020304 05060708\r\n00000008  090A", F(CopyFormat.ScreenDump, grouped, data));
+
+        // グループ内の逆順表示。末尾の不完全なグループは逆にしない (VIEW-11 の仕様 7)。テキスト列は逆にしない (仕様 8)。
+        Assert.Equal("00000000  04030201 08070605\r\n00000008  090A", F(CopyFormat.ScreenDump, grouped with { ScreenReverseGroups = true }, data));
+        Assert.Equal("00000000  04030201  ....",
+            F(CopyFormat.ScreenDump, new CopyOptions { ScreenBytesPerRow = 4, ScreenGroupSize = 4, ScreenReverseGroups = true }, [1, 2, 3, 4]));
+
+        // グループ化 1 では逆順表示は効かない (VIEW-11 の仕様 10)。
+        Assert.Equal("00000000  01 02 03 04", F(CopyFormat.ScreenDump, hexOnly with { ScreenReverseGroups = true }, [1, 2, 3, 4]));
+
+        // 中央区切り (8 バイトごとにもう 1 文字)。
+        Assert.Equal("00000000  01 02 03 04 05 06 07 08  09 0A",
+            F(CopyFormat.ScreenDump, new CopyOptions { ScreenMiddleSeparator = true, ShowText = false }, data));
+
+        // セルの表示形式 (16 bit の 10 進と Hex。単位に満たない端数は 1 バイトずつ Hex。VIEW-10 の仕様 5)。
+        CopyOptions int16 = hexOnly with { ScreenCellFormat = Core.View.CellFormat.Int16Decimal };
+        Assert.Equal("00000000  00513 01027 02", F(CopyFormat.ScreenDump, int16, [1, 2, 3, 4, 2]));
+        Assert.Equal("00000000  3412", F(CopyFormat.ScreenDump, hexOnly with { ScreenCellFormat = Core.View.CellFormat.Int16Hex }, [0x12, 0x34]));
+        Assert.Equal("00000000  1234",
+            F(CopyFormat.ScreenDump, hexOnly with { ScreenCellFormat = Core.View.CellFormat.Int16Hex, ScreenBigEndian = true }, [0x12, 0x34]));
+
+        // 既定 (グループ化 1、Hex) はこれまでと同じ。
+        Assert.Equal("00000000  DE AD BE EF" + new string(' ', 36) + "  ....", F(CopyFormat.ScreenDump));
+    }
+
+    [Fact]
+    public void Html_and_rtf_include_coloring_rule_colors()
+    {
+        // 色付けルール (INSP-33 の仕様 8): 00 の文字色を赤、FF の背景色を緑。変更されたバイト (5) は変更の色が文字色より優先。
+        byte[] data = [0x00, 0x41, 0xFF, 0x42, 0x00, 0x00, 0x43, 0x44];
+        using var doc = new Document(new MemoryByteSource(data), Options());
+        ColoringRuleSet rules = ColoringRuleSet.Compile(
+            [
+                new ColoringRule { Name = "zero", Pattern = "00", Foreground = 0xFF0000 },
+                new ColoringRule { Name = "ff", Pattern = "FF", Background = 0x00FF00, Target = ColoringTarget.Hex },
+            ], [], null);
+        var options = new CopyOptions
+        {
+            IncludeColors = true,
+            ModifiedRanges = [(5, 1)],
+            ModifiedColor = "#C42B1C",
+            Coloring = rules.ForCopy(doc.Current),
+        };
+
+        string html = CopyFormatter.Format(CopyFormat.Html, data, 0, options, out _);
+        Assert.Contains("<span style=\"color: #FF0000;\">00</span> 41 <span style=\"background-color: #00FF00;\">FF</span>", html);
+        Assert.Contains("<span style=\"color: #C42B1C; font-weight: bold;\">00</span>", html);
+        // テキストの列: 00 は文字色、FF のルールは Hex 列だけ。
+        Assert.Contains("<span style=\"color: #FF0000;\">.</span>A.B", html);
+
+        string rtf = CopyFormatter.Format(CopyFormat.Rtf, data, 0, options, out _);
+        Assert.Contains("{\\colortbl ;\\red196\\green43\\blue28;\\red255\\green0\\blue0;\\red0\\green255\\blue0;}", rtf);
+        Assert.Contains("{\\cf2 00} 41 {\\chcbpat3 FF}", rtf);
+        Assert.Contains("{\\cf1\\b 00}", rtf);
+
+        // 「色を含める」がオフなら色を書かない。
+        string plain = CopyFormatter.Format(CopyFormat.Html, data, 0, options with { IncludeColors = false }, out _);
+        Assert.DoesNotContain("<span", plain);
+
+        // パターンが行の境界をまたいでも色が付く (前後を読む)。
+        ColoringRuleSet pattern = ColoringRuleSet.Compile([new ColoringRule { Kind = ColoringConditionKind.HexPattern, Pattern = "42 00 00", Background = 0x0000FF }], [], null);
+        string rows = CopyFormatter.Format(CopyFormat.Html, data, 0, new CopyOptions { ScreenBytesPerRow = 4, Coloring = pattern.ForCopy(doc.Current) }, out _);
+        Assert.Contains("<span style=\"background-color: #0000FF;\">42</span>", rows);
+        Assert.Contains("<span style=\"background-color: #0000FF;\">00</span> <span style=\"background-color: #0000FF;\">00</span> 43", rows);
     }
 }

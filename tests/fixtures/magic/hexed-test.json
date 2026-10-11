@@ -1,0 +1,11 @@
+{
+  "formats": [
+    {
+      "id": "hexed-test",
+      "name": "HexEditor Test Format",
+      "mime": "application/x-hexed-test",
+      "extensions": ["hxtest"],
+      "match": { "offset": 0, "bytes": "48 58 54 45 53 54 4D 41 47 49 43" }
+    }
+  ]
+}

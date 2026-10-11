@@ -233,4 +233,57 @@ public sealed class PieceTreeTests
         Assert.Equal(100_000, tree.PieceCount);
         Assert.True(tree.Height <= 25, $"高さ: {tree.Height}");
     }
+
+    /// <summary>
+    /// まとめて行う編集 (ピースを先頭から 1 回たどって木を作り直す) は、同じ編集を後ろから 1 つずつ行った結果と同じ
+    /// (ピースが細かく分かれた木でも)。
+    /// </summary>
+    [Fact]
+    public void BatchContentEditsMatchSequentialEdits()
+    {
+        var random = new Random(1234);
+        byte[] initial = new byte[64 * 1024];
+        random.NextBytes(initial);
+        using var batch = new Document(new MemoryByteSource((byte[])initial.Clone()), Options());
+        using var sequential = new Document(new MemoryByteSource((byte[])initial.Clone()), Options());
+        for (int round = 0; round < 20; round++)
+        {
+            var edits = new List<(long Offset, long Remove, byte[] Data)>();
+            long at = random.Next(0, 100);
+            while (at < batch.Length)
+            {
+                long remove = Math.Min(random.Next(0, 4), batch.Length - at);
+                byte[] data = new byte[random.Next(0, 3)];
+                random.NextBytes(data);
+                edits.Add((at, remove, data));
+                at += remove + random.Next(1, 3000);
+            }
+
+            batch.CommitReplacements(batch.PrepareContentEdits(edits.Select(e =>
+                new ContentEdit(e.Offset, e.Remove, e.Data.Length == 0 ? null : EditContent.Bytes(e.Data)))), "batch");
+            for (int k = edits.Count - 1; k >= 0; k--)
+            {
+                (long offset, long remove, byte[] data) = edits[k];
+                if (remove > 0)
+                {
+                    sequential.Delete(offset, remove);
+                }
+
+                if (data.Length > 0)
+                {
+                    sequential.Insert(offset, data);
+                }
+            }
+
+            Assert.Equal(sequential.Length, batch.Length);
+            Assert.Equal(ReadAll(sequential), ReadAll(batch));
+        }
+
+        static byte[] ReadAll(Document d)
+        {
+            byte[] bytes = new byte[d.Length];
+            d.Current.Read(0, bytes);
+            return bytes;
+        }
+    }
 }

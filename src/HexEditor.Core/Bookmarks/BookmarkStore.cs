@@ -6,11 +6,15 @@ using HexEditor.Core.Sources;
 namespace HexEditor.Core.Bookmarks;
 
 /// <summary>読み込んだブックマーク (適用する前に、ファイルが変わっていないかを確かめる)。</summary>
-public sealed record LoadedBookmarks(DocumentDataHeader Header, int NextAutoNumber, IReadOnlyList<BookmarkRecord> Items);
+public sealed record LoadedBookmarks(DocumentDataHeader Header, int NextAutoNumber, IReadOnlyList<BookmarkRecord> Items)
+{
+    /// <summary>グループ (INSP-27)。</summary>
+    public IReadOnlyList<BookmarkGroupRecord> Groups { get; init; } = [];
+}
 
 /// <summary>保存したブックマーク 1 件 (値の型。100 万件の写しでオブジェクトを 1 件ずつ作らない)。</summary>
 public readonly record struct BookmarkRecord(long Start, long Length, string Name, BookmarkColor Color, string Comment, int Number, string? Group,
-    DateTime Created, DateTime Updated, bool RangeDeleted, bool CreatedForNumber, bool EditedByUser, bool Customized);
+    DateTime Created, DateTime Updated, bool RangeDeleted, bool CreatedForNumber, bool EditedByUser, bool Customized, bool ColorSet = false);
 
 /// <summary>
 /// ブックマークの保存と読み込み (INSP-23 の仕様 7)。ファイル本体には書かず、付随データ (00-overview 10 章) の
@@ -44,7 +48,10 @@ public static class BookmarkStore
     {
         BookmarkRecord[] buffer = bookmarks.Count == 0 ? [] : ArrayPool<BookmarkRecord>.Shared.Rent(bookmarks.Count);
         int count = bookmarks.CaptureRecords(buffer);
-        return new LoadedBookmarks(new DocumentDataHeader(string.Empty, null, null), bookmarks.NextAutoNumber, new PooledRecords(buffer, count));
+        return new LoadedBookmarks(new DocumentDataHeader(string.Empty, null, null), bookmarks.NextAutoNumber, new PooledRecords(buffer, count))
+        {
+            Groups = bookmarks.GroupRecords(),
+        };
     }
 
     /// <summary><see cref="Capture"/> の写しの領域を返す (この後は写しを使わない)。</summary>
@@ -92,7 +99,7 @@ public static class BookmarkStore
     /// <summary>写し取った内容を書く (どのスレッドからでもよい)。ブックマークがなければ付随データを消す。</summary>
     public static void Write(DocumentDataStore store, string documentPath, FileStamp? stamp, LoadedBookmarks snapshot)
     {
-        if (snapshot.Items.Count == 0 && snapshot.NextAutoNumber <= 1)
+        if (snapshot.Items.Count == 0 && snapshot.NextAutoNumber <= 1 && snapshot.Groups.Count == 0)
         {
             store.Delete(documentPath, Kind);
             return;
@@ -102,6 +109,7 @@ public static class BookmarkStore
         {
             writer.WriteNumber("version", Version);
             writer.WriteNumber("nextNumber", snapshot.NextAutoNumber);
+            WriteGroups(writer, snapshot.Groups);
             writer.WriteStartArray("bookmarks");
             foreach (BookmarkRecord b in snapshot.Items)
             {
@@ -147,6 +155,11 @@ public static class BookmarkStore
                     writer.WriteBoolean("customized", true);
                 }
 
+                if (b.ColorSet)
+                {
+                    writer.WriteBoolean("colorSet", true);
+                }
+
                 writer.WriteEndObject();
             }
 
@@ -190,11 +203,12 @@ public static class BookmarkStore
                     e.TryGetProperty("rangeDeleted", out JsonElement deleted) && deleted.GetBoolean(),
                     e.TryGetProperty("createdForNumber", out JsonElement auto) && auto.GetBoolean(),
                     e.TryGetProperty("edited", out JsonElement edited) && edited.GetBoolean(),
-                    e.TryGetProperty("customized", out JsonElement customized) && customized.GetBoolean()));
+                    e.TryGetProperty("customized", out JsonElement customized) && customized.GetBoolean(),
+                    ColorSetOf(e)));
             }
         }
 
-        return new LoadedBookmarks(read.Header, Math.Max(1, next), items);
+        return new LoadedBookmarks(read.Header, Math.Max(1, next), items) { Groups = ReadGroups(root) };
     }
 
     /// <summary>読み込んだブックマークをドキュメントの長さの中に収めて加える (それまでのものは消す)。</summary>
@@ -202,14 +216,76 @@ public static class BookmarkStore
     {
         bookmarks.Clear();
         bookmarks.NextAutoNumber = loaded.NextAutoNumber;
+        foreach (BookmarkGroupRecord g in loaded.Groups)
+        {
+            bookmarks.RestoreGroup(g);
+        }
+
         foreach (BookmarkRecord r in loaded.Items.Take(BookmarkCollection.MaxCount))
         {
             long start = Math.Min(r.Start, documentLength);
             long length = Math.Min(r.Length, documentLength - start);
             bookmarks.Restore(start, length, r.Name, r.Color, r.Comment, r.Number, r.Group, r.Created, r.Updated, r.RangeDeleted,
-                r.CreatedForNumber, r.EditedByUser, r.Customized);
+                r.CreatedForNumber, r.EditedByUser, r.Customized, r.ColorSet);
         }
 
         bookmarks.RaiseReset();
     }
+
+    /// <summary>グループを書く (INSP-27): パス、色 (あれば)、非表示 (非表示のときだけ)。</summary>
+    internal static void WriteGroups(Utf8JsonWriter writer, IReadOnlyList<BookmarkGroupRecord> groups)
+    {
+        if (groups.Count == 0)
+        {
+            return;
+        }
+
+        writer.WriteStartArray("groups");
+        foreach (BookmarkGroupRecord g in groups)
+        {
+            writer.WriteStartObject();
+            writer.WriteString("path", g.Path);
+            if (g.Color is { } color)
+            {
+                writer.WriteString("color", color.ToString());
+            }
+
+            if (!g.Visible)
+            {
+                writer.WriteBoolean("hidden", true);
+            }
+
+            writer.WriteEndObject();
+        }
+
+        writer.WriteEndArray();
+    }
+
+    internal static IReadOnlyList<BookmarkGroupRecord> ReadGroups(JsonElement root)
+    {
+        if (!root.TryGetProperty("groups", out JsonElement list) || list.ValueKind != JsonValueKind.Array)
+        {
+            return [];
+        }
+
+        var groups = new List<BookmarkGroupRecord>();
+        foreach (JsonElement g in list.EnumerateArray())
+        {
+            if (g.TryGetProperty("path", out JsonElement path) && BookmarkGroups.Normalize(path.GetString()) is { } p)
+            {
+                BookmarkColor? color = g.TryGetProperty("color", out JsonElement c) ? BookmarkColor.Parse(c.ToString()) : null;
+                groups.Add(new BookmarkGroupRecord(p, color, !(g.TryGetProperty("hidden", out JsonElement h) && h.GetBoolean())));
+            }
+        }
+
+        return groups;
+    }
+
+    /// <summary>
+    /// 色を個別に設定したか。記録がない (フェーズ 1 で保存した) ものは、既定の色 (色の一覧の 1 番目) 以外なら個別に設定したとみなす。
+    /// </summary>
+    private static bool ColorSetOf(JsonElement e) =>
+        e.TryGetProperty("colorSet", out JsonElement set)
+            ? set.GetBoolean()
+            : BookmarkColor.Parse(e.TryGetProperty("color", out JsonElement color) ? color.ToString() : null) != BookmarkColor.Default;
 }

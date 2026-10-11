@@ -154,6 +154,10 @@ public sealed partial class MainViewModel : ObservableObject
             // 外部で変更されたファイルの上書き・削除されたファイルの作り直しは、全体を書く (ENG-19 の仕様 5・8)。
             AlwaysSafeSave = vm.OverwritesExternalChange || vm.SourceDeleted,
             Backup = SkipBackupOnce ? null : BackupSettings,
+
+            // ずらしながらのその場保存 (ENG-24): 設定と、退避ファイルの置き場所 (追加バッファの一時ファイルと同じ場所)。
+            ShiftWhenLengthChanges = ShiftWhenLengthChanges,
+            SpillDirectory = Path.Combine(_options.TempDirectory, doc.Id.ToString("N")),
         });
         SkipBackupOnce = false;
         if (plan.Method == SaveMethod.NoChanges)
@@ -212,6 +216,17 @@ public sealed partial class MainViewModel : ObservableObject
                 op => Task.FromResult(SavePlanner.Execute(plan, op)),
                 locked => doc.SetEditLock(locked));
         }
+        catch (ShiftSaveFailedException ex)
+        {
+            // ずらしながらのその場保存の途中で失敗: 退避した旧内容でドキュメントの内容を保つ (ENG-24 の「エラー」)。ファイルは壊れている可能性がある。
+            doc.RecoverAfterShiftFailure(ex.Recovered);
+            if (vm.Watch is { } failed)
+            {
+                ExternalChanges?.Rebase(failed, failed.Baseline);
+            }
+
+            throw;
+        }
         catch
         {
             SavePlanner.Abort(plan);
@@ -260,21 +275,44 @@ public sealed partial class MainViewModel : ObservableObject
         set => _app.Backup = value;
     }
 
+    /// <summary>設定「長さが変わる場合もその場で書く」(ENG-24)。</summary>
+    public bool ShiftWhenLengthChanges { get; set; }
+
     /// <summary>次の保存 1 回だけバックアップを作らない (「バックアップなしで保存」。ENG-26 の「エラー」)。</summary>
     public bool SkipBackupOnce { get; set; }
 
     /// <summary>その場保存のジャーナルの置き場所 (ENG-23。復旧用フォルダ。PKG-13)。</summary>
     private string JournalDirectory => _journalDirectory;
 
+    /// <summary>安全な保存の一時ファイルを記録する場所 (ENG-22 の仕様 7。元の形式での保存 (TOOL-11) でも使う)。</summary>
+    public string SaveMarkerDirectory => _journalDirectory;
+
     public void Close(DocumentViewModel vm)
     {
         // 取り除くと TabView の双方向の結び付けで Selected が null になるため、先に選択中かを調べておく。
         bool wasSelected = Selected == vm;
-        BeforeClose(vm, Documents.IndexOf(vm));
+
+        // 同じドキュメントのビューがほかに残るときは、ドキュメントを閉じる処理をしない (VIEW-38 の仕様 6)。
+        bool otherViews = vm.HasOtherViews;
+        if (!otherViews)
+        {
+            // 親のタブを閉じると連動ビューのタブも閉じる (ENG-39 の仕様 1)。
+            foreach (DocumentViewModel child in LinkedTabsOf(vm))
+            {
+                (child.Owner ?? this).Close(child);
+            }
+
+            BeforeClose(vm, Documents.IndexOf(vm));
+        }
+
         Documents.Remove(vm);
         Notifications.DismissOwnedBy(vm);
-        Memory.Unregister(vm.Document);
-        _ = MaterializeReferencesAsync(vm.Document);
+        if (!otherViews)
+        {
+            Memory.Unregister(vm.Document);
+            _ = MaterializeReferencesAsync(vm.Document);
+        }
+
         vm.Dispose();
         if (wasSelected || Selected == vm || Selected is null)
         {
@@ -324,8 +362,25 @@ public sealed partial class MainViewModel : ObservableObject
     public DocumentViewModel AddRestored(RestoredDocument restored)
     {
         RecoveryRecord record = restored.Record;
-        string name = record.Path is null ? record.DisplayName : Path.GetFileName(record.Path);
-        var vm = new DocumentViewModel(restored.Document, record.Path, name) { Recovery = restored.Recovery, Notifications = Notifications };
+        string? path = record.Path ?? record.EncodedPath;
+        string name = path is null ? record.DisplayName : Path.GetFileName(path);
+        var vm = new DocumentViewModel(restored.Document, path, name) { Recovery = restored.Recovery, Notifications = Notifications };
+        if (restored.Encoded is { } encoded)
+        {
+            // デコードし直したドキュメント: 元の形式で保存する (ENG-38)。
+            vm.Encoded = encoded;
+            vm.EncodedBaseAddress = restored.EncodedBaseAddress;
+            vm.EncodedStamp = record.EncodedStamp;
+        }
+
+        // インポートしたドキュメントの付随データ (エクスポートの既定値。TOOL-05・06 の仕様 2)。
+        vm.ImportedSettings = record.ImportedSettings;
+
+        if (record.RangeStart is { } rangeStart)
+        {
+            vm.RangeLabel = DocumentViewModel.FormatRange(rangeStart, record.RangeLength ?? 0);
+        }
+
         vm.Editor.ReadOnly = restored.SourceChanged;
         long length = restored.Document.Length;
         if (record.SelectionLength > 0 && record.SelectionStart + record.SelectionLength <= length)
@@ -402,12 +457,15 @@ public sealed partial class MainViewModel : ObservableObject
         all.Wait(timeout);
     }
 
-    private DocumentViewModel Add(Document doc, string? path, string name, int? insertAt = null)
+    /// <param name="recovery">
+    /// 復旧用データを作るか。範囲を指定して開いた (ENG-13)・デコードして開いた (ENG-38) ドキュメントは、元データをファイルとして開き直せないため作らない。
+    /// </param>
+    private DocumentViewModel Add(Document doc, string? path, string name, int? insertAt = null, bool recovery = true)
     {
-        DocumentRecovery? recovery = null;
+        DocumentRecovery? recoveryData = null;
         try
         {
-            recovery = new DocumentRecovery(RecoveryRoot, doc.Id);
+            recoveryData = recovery ? new DocumentRecovery(RecoveryRoot, doc.Id) : null;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -415,7 +473,7 @@ public sealed partial class MainViewModel : ObservableObject
             AppLog.Warning($"Recovery folder unavailable: {ex.Message}");
         }
 
-        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recovery, Notifications = Notifications }, insertAt);
+        return AddViewModel(new DocumentViewModel(doc, path, name) { Recovery = recoveryData, Notifications = Notifications }, insertAt);
     }
 
     /// <summary>
@@ -434,7 +492,12 @@ public sealed partial class MainViewModel : ObservableObject
                 owner.LockFailed?.Invoke(owner, vm);
             }
         };
-        Memory.Register(doc);
+        if (doc.LinkedParent is null)
+        {
+            // 連動ビューは親とデータを共有するため、メモリの使用量を二重に数えない。
+            Memory.Register(doc);
+        }
+
         vm.Owner = this;
         InsertDocument(vm, insertAt);
         Selected = vm;

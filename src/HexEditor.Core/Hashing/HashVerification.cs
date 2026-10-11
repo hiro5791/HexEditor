@@ -116,7 +116,7 @@ public sealed record ExpectedHash(byte[] Value, string? FileName = null, string?
     }
 
     /// <summary>結果の行と比べる。</summary>
-    public HashMatch Compare(HashResultRow row) => Compare(row.Value, row.Algorithm.IsNumeric);
+    public HashMatch Compare(HashResultRow row) => Compare(row.Value, row.IsNumeric);
 }
 
 /// <summary>チェックサムファイルの 1 行 (ANA-21 の仕様 4)。</summary>

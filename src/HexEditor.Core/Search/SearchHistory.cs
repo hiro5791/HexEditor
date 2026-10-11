@@ -4,13 +4,19 @@ using System.Text.Json.Nodes;
 
 namespace HexEditor.Core.Search;
 
-/// <summary>検索の種類 (FIND-04 の仕様 3。正規表現はフェーズ 2)。</summary>
+/// <summary>検索の種類 (FIND-04 の仕様 3)。検索バーの種類のドロップダウンの順。</summary>
 public enum SearchKind
 {
     Hex,
     Text,
     Integer,
     Float,
+
+    /// <summary>正規表現 (テキスト)。FIND-18。</summary>
+    RegexText,
+
+    /// <summary>正規表現 (バイト列)。FIND-19。</summary>
+    RegexBytes,
 }
 
 /// <summary>検索の条件 (種類とオプション)。履歴の項目に保存し、↑ / ↓ で呼び出したときに検索バーへ戻す (FIND-28 の仕様 1・3)。</summary>

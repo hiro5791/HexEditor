@@ -96,7 +96,10 @@ public sealed class EditorExpressionContext(EditorState editor) : IExpressionCon
 
     public long? ClusterSize => null;
 
-    public long? RecordLength => null;
+    /// <summary>レコード長 (VIEW-18 の仕様 8。レコード表示がオフでも最後に設定した値を使う)。</summary>
+    public long? RecordLength => editor.View.RecordLength;
+
+    public long RecordStart => editor.View.RecordStart;
 
     /// <summary>名前付きブックマーク (<c>bm.名前</c>。INSP-24 の仕様 2) の開始位置。</summary>
     public long? Bookmark(string name) => Bookmarks.BookmarkCollection.For(editor.Document)?.FindByName(name)?.Start;

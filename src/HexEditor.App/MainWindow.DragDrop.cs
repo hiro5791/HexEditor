@@ -1,5 +1,6 @@
 using HexEditor.App.Hosting;
 using HexEditor.App.Services;
+using HexEditor.Core.Notifications;
 using HexEditor.Core.Operations;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -11,13 +12,14 @@ namespace HexEditor.App;
 
 /// <summary>
 /// ファイルのドロップで開く (UI-34、ENG-12)。エディタ領域・空のウィンドウへのドロップは末尾に、タブ列へのドロップは
-/// ドロップした位置にタブを開く。フォルダは開かない。21 個以上は確認する。
+/// ドロップした位置にタブを開く。フォルダは開かない (複数ファイル検索の対象にするボタンを出す)。21 個以上は確認する。
 /// </summary>
 public sealed partial class MainWindow
 {
     public const int ConfirmDropCount = 21;
 
-    private bool _adminDropNoticeShown;
+    /// <summary>管理者として実行中のドロップの案内を出した (起動ごとに 1 回。ウィンドウを増やしても出し直さない)。</summary>
+    private static bool _adminDropNoticeShown;
 
     private void InitializeDragDrop()
     {
@@ -39,8 +41,9 @@ public sealed partial class MainWindow
     /// </summary>
     private void ShowAdminDropNoticeOnce()
     {
-        // テスト用の仕組みが有効なとき (CI のランナーは管理者として動く) は出さない。ほかの通知を確かめるテストの邪魔になるため。
-        if (Program.Environment.IsElevated && !_adminDropNoticeShown && !TestHooks.Active)
+        // テスト用の仕組みが有効なとき (CI のランナーは管理者として動く) は、設定 adminDropNotice のときだけ出す。ほかの通知を確かめるテストの
+        // 邪魔になるため。
+        if ((TestHooks.ElevationOverride ?? Program.Environment.IsElevated) && !_adminDropNoticeShown && TestHooks.AllowsAdminDropNotice)
         {
             _adminDropNoticeShown = true;
             ShowNotice(Loc.Get("Drop_AdminLimited"), InfoBarSeverity.Informational);
@@ -97,6 +100,12 @@ public sealed partial class MainWindow
             deferral.Complete();
         }
 
+        // Shift を押しながら 2 つのファイルをドロップ: その 2 つで比較ダイアログを開く (ANA-01 の仕様 10。MainWindow.Compare.cs)。
+        if ((e.Modifiers & Windows.ApplicationModel.DataTransfer.DragDrop.DragDropModifiers.Shift) != 0 && await TryDropCompareAsync(items))
+        {
+            return;
+        }
+
         if (insertOffset is { } offset)
         {
             await InsertDroppedFileAsync(items, offset);
@@ -113,11 +122,15 @@ public sealed partial class MainWindow
     internal async Task DropItemsAsync(IReadOnlyList<IStorageItem> items, int? insertAt)
     {
         var files = items.OfType<StorageFile>().ToList();
-        int folders = items.Count - files.Count;
-        if (folders > 0)
+        List<string> folders = [.. items.OfType<StorageFolder>().Select(f => f.Path).Where(p => !string.IsNullOrEmpty(p))];
+        int skipped = items.Count - files.Count;
+        if (skipped > 0)
         {
-            // フォルダは開かない (UI-34 の仕様 4)。複数ファイル検索 (フェーズ 2) ができたらボタンを付ける。
-            ShowNotice(Loc.Format("Drop_FoldersSkipped", folders), InfoBarSeverity.Warning);
+            // フォルダは開かない (UI-34 の仕様 4)。「複数ファイル検索」ボタンで、ドロップしたフォルダを対象にした複数ファイル検索を開く (FIND-30)。
+            NotificationAction[]? search = folders.Count > 0
+                ? [new NotificationAction(Loc.Get("Drop_MultiFileSearch"), () => OpenMultiFileFor(folders))]
+                : null;
+            ShowNotice(Loc.Format("Drop_FoldersSkipped", skipped), InfoBarSeverity.Warning, actions: search);
         }
 
         if (files.Count >= ConfirmDropCount && !await ConfirmOpenManyAsync(files.Count))

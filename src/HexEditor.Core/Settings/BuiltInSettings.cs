@@ -61,9 +61,29 @@ public static class BuiltInSettings
         new("view.scrollBar.searchMarks", SettingCategories.View, SettingKind.Bool, true) { Order = 58 },
         new("view.scrollBar.selectionMark", SettingCategories.View, SettingKind.Bool, false) { Order = 59 },
         new("view.scrollBar.bookmarkMarks", SettingCategories.View, SettingKind.Bool, false) { Order = 59 },
+        new("view.scrollBar.diffMarks", SettingCategories.View, SettingKind.Bool, false) { Order = 59 },
         new("view.text.invalidSymbol", SettingCategories.View, SettingKind.Choice, "dot") { Options = ["dot", "replacement"], Order = 56 },
         new("view.modified.keepAfterSave", SettingCategories.View, SettingKind.Bool, false) { Order = 60 },
         new("view.modified.showDeletions", SettingCategories.View, SettingKind.Bool, false) { Order = 61 },
+
+        // バイトテーマ (VIEW-17)。表示メニューで選ぶ (none / category / gradient / custom:ファイル名)。
+        new("view.byteTheme", SettingCategories.View, SettingKind.String, "none") { Order = 62, ShowInPage = false },
+
+        // ミニマップ (VIEW-35 の仕様 9。全ドキュメント共通)。表示内容・範囲は表示メニューとミニマップの右クリックメニューで変える。
+        new("view.minimap.visible", SettingCategories.View, SettingKind.Bool, false) { Order = 63 },
+        new("view.minimap.width", SettingCategories.View, SettingKind.Int, 80) { Min = 40, Max = 200, Order = 64 },
+        new("view.minimap.content", SettingCategories.View, SettingKind.Choice, "entropy")
+        {
+            Options = ["entropy", "byteKinds", "byteValue", "zero", "byteTheme"],
+            Order = 65,
+        },
+        new("view.minimap.range", SettingCategories.View, SettingKind.Choice, "whole") { Options = ["whole", "around"], Order = 66 },
+        new("view.minimap.exact", SettingCategories.View, SettingKind.Bool, false) { Order = 67 },
+        new("view.minimap.hiddenMarks", SettingCategories.View, SettingKind.String, string.Empty) { Order = 67, ShowInPage = false },
+
+        // 画面分割・並列表示 (VIEW-37 の仕様 3、VIEW-39 の仕様 3)。
+        new("view.split.syncSettings", SettingCategories.View, SettingKind.Bool, false) { Order = 68 },
+        new("view.sync.selection", SettingCategories.View, SettingKind.Bool, false) { Order = 69 },
 
         // ズーム (UI-08 の仕様 2・3)。全タブ共通の Hex 表示の倍率はズームの操作で変わるので、設定画面には出さない。
         new(ZoomSettings.HexScopeKey, SettingCategories.View, SettingKind.Choice, ZoomSettings.ScopeAll) { Options = [ZoomSettings.ScopeAll, ZoomSettings.ScopeTab], Order = 70 },
@@ -84,10 +104,28 @@ public static class BuiltInSettings
         // ブックマーク (INSP-23 の仕様 2): Ctrl+F2 で付けるときの色 (色の一覧の番号)。
         new(Bookmarks.BookmarkColor.DefaultColorKey, SettingCategories.View, SettingKind.Choice, "1") { Options = ["1", "2", "3", "4", "5", "6", "7", "8"], Order = 110 },
 
+        // 位置マネージャとツールチップ (INSP-31 の仕様 2・4)、注釈の表示 (INSP-32)、色付けルール (INSP-33、INSP-34)。
+        new("positionManager.followCursor", SettingCategories.View, SettingKind.Bool, true) { Order = 111 },
+        new("bookmarks.richToolTip", SettingCategories.View, SettingKind.Bool, true) { Order = 112 },
+        new("annotations.hidden", SettingCategories.View, SettingKind.String, string.Empty) { Order = 113, ShowInPage = false },
+        new("annotations.column", SettingCategories.View, SettingKind.Bool, false) { Order = 114 },
+        // 注釈の描き方 (出どころごと。INSP-32 の仕様 4)。
+        new("annotations.style.bookmark", SettingCategories.View, SettingKind.Choice, "background") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.yara", SettingCategories.View, SettingKind.Choice, "border") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.searchResults", SettingCategories.View, SettingKind.Choice, "border") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.template", SettingCategories.View, SettingKind.Choice, "background") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.script", SettingCategories.View, SettingKind.Choice, "border") { Options = ["background", "border", "underline"], Order = 114 },
+        new("annotations.style.analysis", SettingCategories.View, SettingKind.Choice, "border") { Options = ["background", "border", "underline"], Order = 114 },
+        new("coloring.rules", SettingCategories.View, SettingKind.String, string.Empty) { Order = 115, ShowInPage = false },
+        new("coloring.highContrastColors", SettingCategories.View, SettingKind.Bool, false) { Order = 116 },
+
         // ---- 編集 (EDIT-23、EDIT-26、EDIT-27) ----
         new("clipboard.compatFormats", SettingCategories.Editing, SettingKind.Bool, true) { Order = 10 },
         new("edit.pasteSpecial.preferLast", SettingCategories.Editing, SettingKind.Bool, true) { Order = 20 },
         new("edit.paste.detectWithoutConfirmation", SettingCategories.Editing, SettingKind.Bool, false) { Order = 30 },
+
+        // 大文字・小文字の変換の方法 (EDIT-39 の仕様 1。既定は ASCII の英字だけ)。
+        new("edit.caseConversion", SettingCategories.Editing, SettingKind.Choice, "ascii") { Options = ["ascii", "encoding"], Order = 40 },
 
         // 入力・削除・Undo・貼り付け・コピーの設定 (EDIT-10〜EDIT-13、EDIT-19、EDIT-22、EDIT-23)。キーと解釈は View.EditingSettings。
         new(View.EditingSettings.DefaultInputModeKey, SettingCategories.Editing, SettingKind.Choice, "overwrite") { Options = ["overwrite", "insert"], Order = 1 },
@@ -109,6 +147,28 @@ public static class BuiltInSettings
         new(View.EditingSettings.HexUpperCaseKey, SettingCategories.Editing, SettingKind.Bool, true) { Order = 42 },
         new(View.EditingSettings.HexBytesPerLineKey, SettingCategories.Editing, SettingKind.Int, 0) { Min = 0, Max = 1024, Order = 43 },
 
+        // 選択 (EDIT-05〜EDIT-07、EDIT-17、EDIT-18) とユーザークリップボード (EDIT-28)。
+        new(View.EditingSettings.MaxSelectionElementsKey, SettingCategories.Editing, SettingKind.Int, View.EditorState.DefaultMaxSelectionElements)
+        {
+            Min = 1_000,
+            Max = 10_000_000,
+            Order = 50,
+        },
+        new(View.EditingSettings.MaxRectangleRowsKey, SettingCategories.Editing, SettingKind.Int, View.EditorState.DefaultMaxRectangleRows)
+        {
+            Min = 1,
+            Max = 10_000_000,
+            Order = 51,
+        },
+        new(View.EditingSettings.SelectionShiftAmountKey, SettingCategories.Editing, SettingKind.Choice, "selectionLength")
+        {
+            Options = ["selectionLength", "lastAmount"],
+            Order = 52,
+        },
+        new(View.EditingSettings.SelectionDragDropKey, SettingCategories.Editing, SettingKind.Bool, true) { Order = 53 },
+        new(View.EditingSettings.ClipboardHistoryCountKey, SettingCategories.Editing, SettingKind.Int, 20) { Min = 0, Max = 100, Order = 54 },
+        new(View.EditingSettings.UserClipboardPersistKey, SettingCategories.Editing, SettingKind.Bool, false) { Order = 55 },
+
         // ---- 検索 (FIND-02、FIND-20、FIND-28) ----
         new("search.maxMatchLength", SettingCategories.Search, SettingKind.Int, Search.SearchPattern.DefaultMaxMatchLength) { Min = 1, Max = Search.SearchPattern.MaxMaxMatchLength, Order = 10 },
         new("search.findAll.limit", SettingCategories.Search, SettingKind.Int, 1_000_000) { Min = 1_000, Max = 100_000_000, Order = 20 },
@@ -129,6 +189,22 @@ public static class BuiltInSettings
         new(Search.SearchSettings.HighlightKey, SettingCategories.Search, SettingKind.Bool, true) { Order = 90 },
         new(Search.SearchSettings.NewTabKey, SettingCategories.Search, SettingKind.Bool, false) { Order = 100 },
 
+        // 正規表現の時間の上限 (秒。FIND-18 の仕様 6)、一致しない箇所の最小の繰り返し回数 (FIND-25 の仕様 4)、
+        // 複数ファイル検索の並列数 (FIND-30 の仕様 3)。
+        new("search.regex.timeLimit", SettingCategories.Search, SettingKind.Number, 2.0) { Min = 0.1, Max = 60, Step = 0.1, Order = 110 },
+        new(Search.MismatchSearch.MinRepeatKey, SettingCategories.Search, SettingKind.Int, Search.MismatchSearch.DefaultMinRepeat)
+        {
+            Min = 1,
+            Max = Search.MismatchSearch.MaxMinRepeat,
+            Order = 120,
+        },
+        new(Search.MultiFileSearch.ParallelismKey, SettingCategories.Search, SettingKind.Int, Search.MultiFileSearch.DefaultParallelism)
+        {
+            Min = 1,
+            Max = Search.MultiFileSearch.MaxParallelism,
+            Order = 130,
+        },
+
         // ---- ファイルと保存 ----
         new("recent.maxItems", SettingCategories.Files, SettingKind.Int, RecentFileList.DefaultMaxItems) { Min = 0, Max = RecentFileList.MaxItemsLimit, Order = 1 },
         new("recent.restorePosition", SettingCategories.Files, SettingKind.Bool, true) { Order = 2 },
@@ -138,12 +214,41 @@ public static class BuiltInSettings
         new(BackupSettings.FolderKey, SettingCategories.Files, SettingKind.String, string.Empty) { Exportable = false, Order = 6 },
         new(BackupSettings.GenerationsKey, SettingCategories.Files, SettingKind.Int, 1) { Min = 1, Max = BackupSettings.MaxGenerations, Order = 7 },
         new("save.recoveryIntervalMinutes", SettingCategories.Files, SettingKind.Int, 1) { Min = 0, Max = 60, Order = 8 },
+        new(Saving.SavePlanner.ShiftInPlaceKey, SettingCategories.Files, SettingKind.Bool, false) { Order = 9 },
+        new(Formats.EncodedFile.GapFillKey, SettingCategories.Files, SettingKind.String, "FF") { Order = 9 },
         new("storage.tempDirectory", SettingCategories.Files, SettingKind.String, string.Empty) { Exportable = false, RequiresRestart = true, Order = 10 },
 
         // ---- 解析 (ハッシュパネル ANA-18。パネルの中で変える項目なので設定画面には出さない) ----
         new("hash.autoRecompute", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 100, ShowInPage = false },
         new("hash.algorithms", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 101, ShowInPage = false },
         new("hash.sets", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 102, ShowInPage = false },
+
+        // 統計 (ANA-10) の「自動で再計算」、ファイル形式の自動判定 (ANA-17 の仕様 4)、分類のしきい値 (ANA-16 の仕様 6)。
+        new("statistics.autoRecompute", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 110, ShowInPage = false },
+        new("analysis.fileType.autoDetect", SettingCategories.Advanced, SettingKind.Bool, true) { Order = 111, Group = "analysis" },
+        new("analysis.classify.constantShare", SettingCategories.Advanced, SettingKind.Number, 0.99) { Min = 0.5, Max = 1, Step = 0.01, Order = 112, Group = "analysis" },
+        new("analysis.classify.textShare", SettingCategories.Advanced, SettingKind.Number, 0.95) { Min = 0.5, Max = 1, Step = 0.01, Order = 113, Group = "analysis" },
+        new("analysis.classify.encryptedEntropy", SettingCategories.Advanced, SettingKind.Number, 7.9) { Min = 0, Max = 8, Step = 0.05, Order = 114, Group = "analysis" },
+        new("analysis.classify.pValueLow", SettingCategories.Advanced, SettingKind.Number, 0.01) { Min = 0, Max = 0.5, Step = 0.01, Order = 115, Group = "analysis" },
+        new("analysis.classify.pValueHigh", SettingCategories.Advanced, SettingKind.Number, 0.99) { Min = 0.5, Max = 1, Step = 0.01, Order = 116, Group = "analysis" },
+        new("analysis.classify.compressedEntropy", SettingCategories.Advanced, SettingKind.Number, 7.2) { Min = 0, Max = 8, Step = 0.05, Order = 117, Group = "analysis" },
+        // ディスク・プロセス (ENG-28 の仕様 5・6、ENG-32 の仕様 3、ENG-33 の仕様 6)。
+        new(DeviceSettings.HelperTimeoutKey, SettingCategories.Advanced, SettingKind.Int, 30)
+        {
+            Min = 5, Max = 300, Order = 120, Group = "devices",
+            Distributions = [SettingDistributions.Installer, SettingDistributions.Portable, SettingDistributions.Development],
+        },
+        new(DeviceSettings.HelperIdleKey, SettingCategories.Advanced, SettingKind.Int, 10)
+        {
+            Min = 0, Max = 60, Order = 121, Group = "devices",
+            Distributions = [SettingDistributions.Installer, SettingDistributions.Portable, SettingDistributions.Development],
+        },
+        new(DeviceSettings.ProcessReadOnlyKey, SettingCategories.Advanced, SettingKind.Bool, true) { Order = 122, Group = "devices" },
+        new(DeviceSettings.MemoryMapRefreshKey, SettingCategories.Advanced, SettingKind.Int, 5) { Min = 0, Max = 60, Order = 123, Group = "devices" },
+        new(DeviceSettings.SuggestDiskImageKey, SettingCategories.Files, SettingKind.Bool, true) { Order = 11 },
+
+        // カスタム CRC (ANA-20 の仕様 5)。CRC カタログの項目名の JSON。
+        new("hash.customCrc", SettingCategories.Advanced, SettingKind.String, string.Empty) { Order = 103, ShowInPage = false },
 
         // ---- 言語 ----
         new("ui.language", SettingCategories.Language, SettingKind.Choice, "system") { Options = Languages, RequiresRestart = true, Order = 10 },

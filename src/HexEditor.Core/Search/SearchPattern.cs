@@ -44,6 +44,48 @@ public enum PatternError
 
     /// <summary>置換語の `?` (ニブルのワイルドカード) と `*` は使えない (`??` だけが使える。FIND-22 の仕様 2)。</summary>
     InvalidReplacementWildcard,
+
+    /// <summary>位置の条件の周期 x が 1〜2^32 でない (FIND-17 の仕様 1)。引数は上限。</summary>
+    PositionModulus,
+
+    /// <summary>位置の条件の余り y が 0〜x − 1 でない (FIND-17 の「エラー」)。引数は上限 (x − 1)。</summary>
+    PositionRemainder,
+
+    /// <summary>値とマスクの長さが違う (FIND-16 の「エラー」)。引数は値とマスクのバイト数。</summary>
+    MaskLengthMismatch,
+
+    /// <summary>マスクが長すぎる (1〜256 バイト。FIND-16 の仕様 2)。引数は上限。</summary>
+    MaskTooLong,
+
+    /// <summary>マスクがすべて 0 (FIND-16 の仕様 3)。</summary>
+    MaskAllZero,
+
+    /// <summary>ビットパターンの文字数が 8 の倍数でない (FIND-16 の「エラー」)。引数は文字数。</summary>
+    BitPatternLength,
+
+    /// <summary>ビットパターンに `0` `1` `x` 以外の文字がある。</summary>
+    InvalidBit,
+
+    /// <summary>範囲の最小が最大より大きい (FIND-15 の仕様 2)。引数は最小と最大。</summary>
+    RangeOrder,
+
+    /// <summary>正規表現の構文の誤り (FIND-18 の「エラー」)。<see cref="PatternException.Detail"/> は理由 (RegexParseError の名前)。</summary>
+    RegexSyntax,
+
+    /// <summary>バイト列の正規表現で Unicode プロパティ `\p{...}` を使った (FIND-19 の仕様 5)。</summary>
+    RegexUnicodeProperty,
+
+    /// <summary>バイト列の正規表現で `\u` を使った (FIND-19 の仕様 5)。</summary>
+    RegexUnicodeEscape,
+
+    /// <summary>バイト列の正規表現で U+00FF を超える文字を使った (バイトに当たらない。FIND-19 の仕様 2)。</summary>
+    RegexNonByteCharacter,
+
+    /// <summary>複数の文字コードを 1 つも選んでいない、またはどれでも符号化できない (FIND-08 の「エラー」)。</summary>
+    NoEncoding,
+
+    /// <summary>語が多すぎる (FIND-26 の仕様 2)。引数は上限。</summary>
+    TooManyTerms,
 }
 
 /// <summary>検索語の警告 (検索はできる)。</summary>
@@ -85,6 +127,9 @@ public sealed class PatternException : Exception
 
     /// <summary>説明文に入れる値 (範囲の数値など。地域設定で書式化済み)。空なら <see cref="Detail"/> を使う。</summary>
     public IReadOnlyList<string> Arguments { get; }
+
+    /// <summary>ビットマスクの検索 (FIND-16) で、誤りが検索欄ではなくマスクの入力欄にある。</summary>
+    public bool InMask { get; init; }
 }
 
 /// <summary>テキストの検索語の解釈のしかた (FIND-07、FIND-10)。</summary>
@@ -120,7 +165,7 @@ public sealed record HexSearchOptions
 /// <item>値の比較: 各位置で値を復号して比べる (許容誤差のある浮動小数点、NaN。FIND-14)。</item>
 /// </list>
 /// </summary>
-public sealed class SearchPattern
+public sealed partial class SearchPattern
 {
     /// <summary>検索語の最大の長さ (FIND-05 の仕様 3)。</summary>
     public const int MaxLength = 1024 * 1024;
@@ -148,6 +193,14 @@ public sealed class SearchPattern
 
     private readonly bool _caseInsensitive;
 
+    /// <summary>
+    /// ワイルドカード・ビットマスクで、ワイルドカードでないバイトがないときに候補を絞り込む位置と、その位置で一致しうるバイトの値
+    /// (FIND-16 の「巨大ファイル」: 先頭バイトのマスク結果で候補を絞り込む。ニブルのワイルドカードも同じ。FIND-16 の仕様 5)。
+    /// </summary>
+    private readonly int _probeOffset = -1;
+
+    private readonly SearchValues<byte>? _probeValues;
+
     private SearchPattern(byte[] bytes, byte[]? mask, byte[][][]? slots, int alignment, bool caseInsensitive = false)
     {
         Bytes = bytes;
@@ -156,6 +209,11 @@ public sealed class SearchPattern
         _caseInsensitive = caseInsensitive;
         Alignment = Math.Max(1, alignment);
         (AnchorOffset, AnchorLength) = FindAnchor(mask, bytes.Length);
+        if (mask is not null && AnchorLength == 0)
+        {
+            (_probeOffset, _probeValues) = FindProbe(bytes, mask);
+        }
+
         if (slots is null)
         {
             MinMatchLength = MaxMatchLength = bytes.Length;
@@ -200,7 +258,7 @@ public sealed class SearchPattern
     public int Length => Bytes.Length;
 
     /// <summary>ワイルドカードも文字ごとの候補もない (SIMD の IndexOf でそのまま探せる。FIND-01 の仕様 5)。</summary>
-    public bool IsLiteral => Mask is null && _slots is null && _parts is null && _matcher is null;
+    public bool IsLiteral => Mask is null && _slots is null && _parts is null && _matcher is null && _multi is null && _mismatch is null;
 
     /// <summary>大文字・小文字を区別しない (文字ごとの候補を持つ)。</summary>
     public bool IsCaseInsensitive => _caseInsensitive;
@@ -209,10 +267,13 @@ public sealed class SearchPattern
     public bool HasVariableGap => _parts is not null;
 
     /// <summary>一致の最短の長さ。</summary>
-    public int MinMatchLength { get; }
+    public int MinMatchLength { get => _minMatchLength; private set => _minMatchLength = value; }
 
     /// <summary>一致の最長の長さ。チャンクの重なり幅は これ − 1 (FIND-01 の仕様 3)。</summary>
-    public int MaxMatchLength { get; }
+    public int MaxMatchLength { get => _maxMatchLength; private set => _maxMatchLength = value; }
+
+    private int _minMatchLength;
+    private int _maxMatchLength;
 
     /// <summary>一致の開始オフセットが満たすべき倍数 (文字の境界に揃える。FIND-07 の仕様 5)。1 なら制限なし。</summary>
     public int Alignment { get; }
@@ -530,8 +591,24 @@ public sealed class SearchPattern
     public bool MatchesAt(ReadOnlySpan<byte> data) => MatchLength(data) >= 0;
 
     /// <summary><paramref name="data"/> の先頭で一致する長さ。一致しなければ −1。</summary>
-    public int MatchLength(ReadOnlySpan<byte> data)
+    public int MatchLength(ReadOnlySpan<byte> data) => MatchLengthAt(data, 0);
+
+    /// <summary>
+    /// <paramref name="data"/> の先頭 (ドキュメント上の位置 <paramref name="baseOffset"/>) で一致する長さ。一致しなければ −1。
+    /// 一致しない箇所の検索 (FIND-25) は位置で比べるバイトが決まるため、位置を渡す。位置の条件は調べない。
+    /// </summary>
+    public int MatchLengthAt(ReadOnlySpan<byte> data, long baseOffset)
     {
+        if (_mismatch is { } mismatch)
+        {
+            return data.Length > 0 && mismatch.IndexOf(data[..1], 0, baseOffset) == 0 ? 1 : -1;
+        }
+
+        if (_multi is not null)
+        {
+            return _multi.MatchLength(data, baseOffset, out _);
+        }
+
         if (_parts is not null)
         {
             int end = MatchParts(data, 0, 0);
@@ -579,6 +656,11 @@ public sealed class SearchPattern
             return 0;
         }
 
+        if (_multi is not null)
+        {
+            return _multi.MatchLength(data, 0, out int variant) >= 0 ? variant : 0;
+        }
+
         if (_matcher is not null)
         {
             return data.Length >= _matcher.Length ? Math.Max(0, _matcher.Match(data)) : 0;
@@ -608,8 +690,21 @@ public sealed class SearchPattern
         int from = 0;
         while (true)
         {
-            int found = IndexOfUnaligned(data, from, out length);
-            if (found < 0 || Alignment == 1 || (baseOffset + found) % Alignment == 0)
+            if (Position is { IsNone: false } position)
+            {
+                // 位置の条件を満たさない位置は一致になりえないので、満たす位置まで飛ばす (FIND-17)。
+                long next = position.NextAccepted(baseOffset + from) - baseOffset;
+                if (next > data.Length)
+                {
+                    length = 0;
+                    return -1;
+                }
+
+                from = (int)next;
+            }
+
+            int found = IndexOfUnaligned(data, from, baseOffset, out length);
+            if (found < 0 || Accepts(baseOffset + found))
             {
                 return found;
             }
@@ -626,8 +721,20 @@ public sealed class SearchPattern
         int end = Math.Min(startLimit, data.Length); // 一致の開始は end 未満
         while (true)
         {
-            int found = LastIndexOfUnaligned(data, end, out length);
-            if (found < 0 || Alignment == 1 || (baseOffset + found) % Alignment == 0)
+            if (Position is { IsNone: false } position && end > 0)
+            {
+                long previous = position.PreviousAccepted(baseOffset + end - 1) - baseOffset;
+                if (previous < 0)
+                {
+                    length = 0;
+                    return -1;
+                }
+
+                end = (int)previous + 1;
+            }
+
+            int found = LastIndexOfUnaligned(data, end, baseOffset, out length);
+            if (found < 0 || Accepts(baseOffset + found))
             {
                 return found;
             }
@@ -636,10 +743,28 @@ public sealed class SearchPattern
         }
     }
 
+    /// <summary>
+    /// ドキュメント上の位置 <paramref name="offset"/> を一致の開始として認めるか (文字の境界に揃える (FIND-07 の仕様 5) と
+    /// 位置の条件 (FIND-17))。
+    /// </summary>
+    public bool Accepts(long offset) =>
+        (Alignment == 1 || offset % Alignment == 0) && (Position is null || Position.Accepts(offset));
+
     /// <summary>開始が <paramref name="from"/> 以上の最初の一致。</summary>
-    private int IndexOfUnaligned(ReadOnlySpan<byte> data, int from, out int length)
+    private int IndexOfUnaligned(ReadOnlySpan<byte> data, int from, long baseOffset, out int length)
     {
         length = 0;
+        if (_mismatch is { } mismatch)
+        {
+            length = 1;
+            return mismatch.IndexOf(data, from, baseOffset);
+        }
+
+        if (_multi is not null)
+        {
+            return _multi.IndexOf(data, from, baseOffset, out length);
+        }
+
         if (data.Length - from < MinMatchLength)
         {
             return -1;
@@ -651,7 +776,7 @@ public sealed class SearchPattern
             SearchPattern first = _parts[0];
             while (true)
             {
-                int candidate = first.IndexOfUnaligned(data, from, out _);
+                int candidate = first.IndexOfUnaligned(data, from, baseOffset, out _);
                 if (candidate < 0)
                 {
                     return -1;
@@ -670,13 +795,16 @@ public sealed class SearchPattern
 
         if (_matcher is not null)
         {
+            // 位置の条件があれば、条件を満たす位置だけを復号する (FIND-17 の「巨大ファイル」)。
             int n = _matcher.Length;
-            for (int i = from; i + n <= data.Length; i++)
+            long step = Position is { IsNone: false } p ? p.Modulus : 1;
+            long first = step > 1 ? Position!.NextAccepted(baseOffset + from) - baseOffset : from;
+            for (long i = first; i + n <= data.Length; i += step)
             {
-                if (_matcher.Match(data[i..]) >= 0)
+                if (_matcher.Match(data[(int)i..]) >= 0)
                 {
                     length = n;
-                    return i;
+                    return (int)i;
                 }
             }
 
@@ -717,6 +845,31 @@ public sealed class SearchPattern
 
         if (AnchorLength == 0)
         {
+            if (_probeValues is not null)
+            {
+                // ワイルドカードでないバイトがない (ニブル・ビットマスク): 最も絞り込める位置のバイトの値の候補で探す (FIND-16)。
+                int probeFrom = from + _probeOffset;
+                int probeLimit = data.Length - Bytes.Length + _probeOffset + 1; // 候補の位置の終わり (この位置を含まない)
+                while (probeFrom < probeLimit)
+                {
+                    int found = data[probeFrom..probeLimit].IndexOfAny(_probeValues);
+                    if (found < 0)
+                    {
+                        return -1;
+                    }
+
+                    int candidate = probeFrom + found - _probeOffset;
+                    if (MatchLength(data[candidate..]) >= 0)
+                    {
+                        return candidate;
+                    }
+
+                    probeFrom += found + 1;
+                }
+
+                return -1;
+            }
+
             // すべてワイルドカード (可変長の間の `??` など): 先頭から順に照合する。
             for (int i = from; i + Bytes.Length <= data.Length; i++)
             {
@@ -754,16 +907,27 @@ public sealed class SearchPattern
     }
 
     /// <summary>開始が <paramref name="end"/> 未満の最後の一致。</summary>
-    private int LastIndexOfUnaligned(ReadOnlySpan<byte> data, int end, out int length)
+    private int LastIndexOfUnaligned(ReadOnlySpan<byte> data, int end, long baseOffset, out int length)
     {
         length = 0;
+        if (_mismatch is { } mismatch)
+        {
+            length = 1;
+            return mismatch.LastIndexOf(data, end, baseOffset);
+        }
+
+        if (_multi is not null)
+        {
+            return _multi.LastIndexOf(data, end, baseOffset, out length);
+        }
+
         if (_parts is not null)
         {
             SearchPattern first = _parts[0];
             int limit = Math.Min(end, data.Length);
             while (limit > 0)
             {
-                int candidate = first.LastIndexOfUnaligned(data, limit, out _);
+                int candidate = first.LastIndexOfUnaligned(data, limit, baseOffset, out _);
                 if (candidate < 0)
                 {
                     return -1;
@@ -785,12 +949,19 @@ public sealed class SearchPattern
         if (_matcher is not null)
         {
             int n = _matcher.Length;
-            for (int i = Math.Min(end - 1, data.Length - n); i >= 0; i--)
+            long step = Position is { IsNone: false } p ? p.Modulus : 1;
+            long last = Math.Min(end - 1, data.Length - n);
+            if (step > 1 && last >= 0)
             {
-                if (_matcher.Match(data[i..]) >= 0)
+                last = Position!.PreviousAccepted(baseOffset + last) - baseOffset;
+            }
+
+            for (long i = last; i >= 0; i -= step)
+            {
+                if (_matcher.Match(data[(int)i..]) >= 0)
                 {
                     length = n;
-                    return i;
+                    return (int)i;
                 }
             }
 
@@ -834,6 +1005,28 @@ public sealed class SearchPattern
 
         if (AnchorLength == 0)
         {
+            if (_probeValues is not null)
+            {
+                int probeEnd = lastStart + _probeOffset + 1; // 候補の位置の終わり (この位置を含まない)
+                while (probeEnd > _probeOffset)
+                {
+                    int found = data[_probeOffset..probeEnd].LastIndexOfAny(_probeValues);
+                    if (found < 0)
+                    {
+                        return -1;
+                    }
+
+                    if (MatchLength(data[found..]) >= 0)
+                    {
+                        return found;
+                    }
+
+                    probeEnd = _probeOffset + found;
+                }
+
+                return -1;
+            }
+
             for (int i = lastStart; i >= 0; i--)
             {
                 if (MatchLength(data[i..]) >= 0)
@@ -900,7 +1093,7 @@ public sealed class SearchPattern
         int from = (int)lo;
         while (from <= hi)
         {
-            int candidate = next.IndexOfUnaligned(window, from, out _);
+            int candidate = next.IndexOfUnaligned(window, from, 0, out _);
             if (candidate < 0 || candidate > hi)
             {
                 return -1;
@@ -1284,6 +1477,42 @@ public sealed class SearchPattern
     private static string Snippet(string text, int start, int length) => text.Substring(start, Math.Min(length, text.Length - start));
 
     private static (int Value, int Mask) Nibble(char c) => c == '?' ? (0, 0) : (Convert.ToInt32(c.ToString(), 16), 0xF);
+
+    /// <summary>
+    /// 候補の絞り込みに使う位置: マスクが 0 でないバイトのうち、一致しうる値の数 (2^(8 − マスクのビット数)) が最も少ないもの。
+    /// </summary>
+    private static (int Offset, SearchValues<byte>? Values) FindProbe(byte[] bytes, byte[] mask)
+    {
+        int best = -1;
+        int bestBits = 0;
+        for (int i = 0; i < mask.Length; i++)
+        {
+            int bits = System.Numerics.BitOperations.PopCount(mask[i]);
+            if (bits > bestBits)
+            {
+                best = i;
+                bestBits = bits;
+            }
+        }
+
+        if (best < 0)
+        {
+            return (-1, null);
+        }
+
+        byte m = mask[best];
+        byte v = (byte)(bytes[best] & m);
+        var values = new List<byte>(256 >> bestBits);
+        for (int b = 0; b < 256; b++)
+        {
+            if ((b & m) == v)
+            {
+                values.Add((byte)b);
+            }
+        }
+
+        return (best, SearchValues.Create([.. values]));
+    }
 
     private static (int Offset, int Length) FindAnchor(byte[]? mask, int length)
     {

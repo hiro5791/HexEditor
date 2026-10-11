@@ -1,0 +1,40 @@
+{
+  "source": "MD2: RFC 1319 appendix A.5. MD4: RFC 1320 appendix A.5.",
+  "vectors": [
+    {
+      "algorithm": "md2",
+      "ascii": "",
+      "expected": "8350E5A3E24C153DF2275C9F80692773"
+    },
+    {
+      "algorithm": "md2",
+      "ascii": "abc",
+      "expected": "DA853B0D3F88D99B30283A69E6DED6BB"
+    },
+    {
+      "algorithm": "md2",
+      "ascii": "abcdefghijklmnopqrstuvwxyz",
+      "expected": "4E8DDFF3650292AB5A4108C3AA47940B"
+    },
+    {
+      "algorithm": "md2",
+      "ascii": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+      "expected": "DA33DEF2A42DF13975352846C30338CD"
+    },
+    {
+      "algorithm": "md4",
+      "ascii": "",
+      "expected": "31D6CFE0D16AE931B73C59D7E0C089C0"
+    },
+    {
+      "algorithm": "md4",
+      "ascii": "abc",
+      "expected": "A448017AAF21D8525FC10AE87AA6729D"
+    },
+    {
+      "algorithm": "md4",
+      "ascii": "abcdefghijklmnopqrstuvwxyz",
+      "expected": "D79E1C308AA5BBCDEEA8ED63DF412DA9"
+    }
+  ]
+}

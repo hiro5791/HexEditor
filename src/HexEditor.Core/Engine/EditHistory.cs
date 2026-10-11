@@ -50,6 +50,9 @@ public sealed record HistoryEntry(DocumentSnapshot Snapshot, string Description,
 
     /// <summary>最後に入力をまとめた時刻 (<see cref="TimeProvider.GetTimestamp"/>)。</summary>
     public long LastEditTimestamp { get; init; }
+
+    /// <summary>この項目の編集をした日時 (履歴パネルの「日時」。EDIT-20 の仕様 1)。</summary>
+    public DateTimeOffset Time { get; init; }
 }
 
 /// <summary>
@@ -71,6 +74,7 @@ public sealed class EditHistory
     private bool _groupStarted;
     private string _groupDescription = string.Empty;
     private string? _groupCoalesceKey;
+    private bool _groupMergeWithPrevious;
 
     internal EditHistory(DocumentSnapshot initial, TimeProvider? time = null, TimeSpan? coalesceInterval = null)
     {
@@ -103,6 +107,15 @@ public sealed class EditHistory
     /// <summary>現在の項目 (直前の編集グループ)。</summary>
     public HistoryEntry CurrentEntry => _entries[_current];
 
+    /// <summary>すべての項目 (0 は開いた時点。履歴パネル EDIT-20)。</summary>
+    public IReadOnlyList<HistoryEntry> Entries => _entries;
+
+    /// <summary>保存した時点の項目の番号 (保存した時点が履歴にない場合は −1。EDIT-20 の仕様 1 の「保存」の印)。</summary>
+    public int SavedIndex => _savedIndex;
+
+    /// <summary>項目が増えた・減った・現在の位置が変わった (履歴パネルの更新)。</summary>
+    public event EventHandler? Changed;
+
     /// <summary>1 つのコマンドの編集をまとめているところか (EDIT-19 の仕様 6)。</summary>
     public bool IsInGroup => _groupDepth > 0;
 
@@ -134,6 +147,7 @@ public sealed class EditHistory
                 {
                     Snapshot = snapshot,
                     Range = last.Range?.Then(offset, removed, inserted) ?? new EditRange(offset, removed, inserted),
+                    CoalescedBytes = last.CoalescedBytes + (_groupMergeWithPrevious ? bytes : 0),
                     LastEditTimestamp = now,
                 };
                 return;
@@ -142,6 +156,24 @@ public sealed class EditHistory
             _groupStarted = true;
             description = _groupDescription;
             coalesceKey = _groupCoalesceKey;
+
+            // マルチカーソルへの入力 (EDIT-08 の仕様 6): グループごと直前の入力にまとめる。バイト数は入力したバイトの合計で数える。
+            if (_groupMergeWithPrevious && coalesceKey is not null && _current > 0 && _current != _savedIndex
+                && last.CoalesceKey == coalesceKey
+                && CoalesceInterval > TimeSpan.Zero
+                && _time.GetElapsedTime(last.LastEditTimestamp, now) < CoalesceInterval
+                && last.CoalescedBytes + bytes <= CoalesceLimitBytes)
+            {
+                _entries[_current] = last with
+                {
+                    Snapshot = snapshot,
+                    Range = last.Range?.Then(offset, removed, inserted) ?? new EditRange(offset, removed, inserted),
+                    CoalescedBytes = last.CoalescedBytes + bytes,
+                    LastEditTimestamp = now,
+                };
+                Changed?.Invoke(this, EventArgs.Empty);
+                return;
+            }
         }
         else if (coalesceKey is not null && _current > 0 && _current != _savedIndex
             && last.CoalesceKey == coalesceKey
@@ -160,6 +192,7 @@ public sealed class EditHistory
                     CoalescedBytes = size,
                     LastEditTimestamp = now,
                 };
+                Changed?.Invoke(this, EventArgs.Empty);
                 return;
             }
         }
@@ -169,8 +202,10 @@ public sealed class EditHistory
             Range = new EditRange(offset, removed, inserted),
             CoalescedBytes = bytes,
             LastEditTimestamp = now,
+            Time = _time.GetUtcNow(),
         });
         _current = _entries.Count - 1;
+        Changed?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>以降の入力を直前の項目とまとめないようにする (カーソル移動などで呼ぶ)。</summary>
@@ -187,13 +222,14 @@ public sealed class EditHistory
     /// グループを始める。入れ子にでき、一番外側の <see cref="EndGroup"/> で閉じる。<paramref name="coalesceKey"/> を指定すると、
     /// グループの後に続く同じ種類の入力をこのグループにまとめる (選択範囲を置き換える入力の続き)。
     /// </summary>
-    internal void BeginGroup(string description, string? coalesceKey = null)
+    internal void BeginGroup(string description, string? coalesceKey = null, bool mergeWithPrevious = false)
     {
         if (_groupDepth++ == 0)
         {
             _groupStarted = false;
             _groupDescription = description;
             _groupCoalesceKey = coalesceKey;
+            _groupMergeWithPrevious = mergeWithPrevious;
         }
     }
 
@@ -220,7 +256,18 @@ public sealed class EditHistory
 
         HistoryEntry undone = _entries[_current];
         _current--;
+        Changed?.Invoke(this, EventArgs.Empty);
         return undone;
+    }
+
+    /// <summary><paramref name="index"/> 番目の項目に移り、その項目を返す (履歴パネルの任意の時点への移動。EDIT-20 の仕様 3)。</summary>
+    internal HistoryEntry MoveTo(int index)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _entries.Count);
+        _current = index;
+        Changed?.Invoke(this, EventArgs.Empty);
+        return _entries[index];
     }
 
     /// <summary>やり直す項目を返して 1 つ進む。</summary>
@@ -232,6 +279,7 @@ public sealed class EditHistory
         }
 
         _current++;
+        Changed?.Invoke(this, EventArgs.Empty);
         return _entries[_current];
     }
 
@@ -240,7 +288,11 @@ public sealed class EditHistory
         _entries[_current] = _entries[_current] with { Snapshot = snapshot, CoalesceKey = null };
 
     /// <summary>現在の状態を「保存した時点」にする。</summary>
-    internal void MarkSaved() => _savedIndex = _current;
+    internal void MarkSaved()
+    {
+        _savedIndex = _current;
+        Changed?.Invoke(this, EventArgs.Empty);
+    }
 
     /// <summary>履歴を消去して <paramref name="initial"/> だけにし、その状態を「保存した時点」にする (外部で変更された元データの再読み込み。ENG-18)。</summary>
     internal void Reset(DocumentSnapshot initial)
@@ -251,6 +303,7 @@ public sealed class EditHistory
         _savedIndex = 0;
         _groupDepth = 0;
         _groupStarted = false;
+        Changed?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>保存した時点を履歴の外にする (復旧したドキュメントは最初から「変更あり」。ENG-27 の仕様 6)。</summary>

@@ -110,14 +110,14 @@ public sealed partial class MainWindow
     private void RefreshShortcutsPage() => _shortcutsPage?.Refresh();
 
     /// <summary>ページを開いて前に出す。ページはタブ列のタブにする (UI-22 の仕様 1。MainWindow.TabItems.cs)。</summary>
-    private void ShowToolPage(string id, FrameworkElement page)
+    private void ShowToolPage(string id, FrameworkElement page, string? title = null, string? glyph = null)
     {
         if (_toolPages.All(p => p.Id != id))
         {
             _toolPages.Add((id, page));
         }
 
-        AddToolTab(id);
+        AddToolTab(id, title, glyph);
         ShowToolPageTab(id);
     }
 
@@ -131,6 +131,7 @@ public sealed partial class MainWindow
 
     public void CloseToolPage(string id)
     {
+        OnToolPageClosing(id);
         _toolPages.RemoveAll(p => p.Id == id);
         if (id == "settings")
         {
@@ -151,6 +152,12 @@ public sealed partial class MainWindow
         }
     }
 
+    /// <summary>ページを閉じる直前 (比較タブの後始末。MainWindow.Compare.cs)。</summary>
+    partial void OnToolPageClosing(string id);
+
+    /// <summary>表示するページが変わった (比較タブの表示中はコマンドの対象を比較の側にする。MainWindow.Compare.cs)。</summary>
+    partial void OnActiveToolPageChanged();
+
     /// <summary>文書のタブに切り替えたらページを隠す (ページは開いたまま)。</summary>
     private void HideToolPages()
     {
@@ -169,6 +176,7 @@ public sealed partial class MainWindow
 
     private void UpdateToolPages()
     {
+        OnActiveToolPageChanged();
         ToolPageHost.Children.Clear();
         if (_activeToolPage is null || _toolPages.FirstOrDefault(p => p.Id == _activeToolPage).Page is not { } page)
         {

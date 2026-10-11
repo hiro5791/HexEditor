@@ -54,7 +54,8 @@ public static class JumpListPlan
         // 新規作成 (AUTO-37 の --new-document)。
         ("NewDocument", "--new-document"),
 
-        // ディスクを開く (F2-09) はその機能を作るときに加える。
+        // ディスクを開く (F2-09、ENG-29。AUTO-37 の --open-disk: 「ディスクを開く」のダイアログを出す)。
+        ("OpenDisk", "--open-disk"),
     ];
 
     /// <summary>パスを 1 つの引数にする (空白を含むパスを引用符で囲む。ファイル名の " は Windows では使えない)。</summary>

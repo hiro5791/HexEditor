@@ -1,0 +1,527 @@
+using System.Security.Cryptography;
+using System.Text.Json.Nodes;
+using HexEditor.TestData;
+using HexEditor.UITests.Infrastructure;
+
+namespace HexEditor.UITests;
+
+/// <summary>
+/// エンコード形式のファイルを開く (ENG-38)・元の形式で保存する (TOOL-11)、範囲を指定して開く (ENG-13)、選択範囲を新しいタブで開く (ENG-39)。
+/// </summary>
+[Trait(UiTest.Category, UiTest.UI)]
+public sealed class FormatFileTests
+{
+    private static async Task<JsonObject> DocAsync(AppSession app, int? index = null, bool hash = false)
+    {
+        var args = new JsonObject { ["hash"] = hash };
+        if (index is int i)
+        {
+            args["index"] = i;
+        }
+
+        return await app.SendAsync("formatDoc", args);
+    }
+
+    private static async Task SelectTabAsync(AppSession app, int index)
+    {
+        await app.SendAsync("selectTab", new JsonObject { ["index"] = index });
+        await app.IdleAsync();
+        await app.RenderAsync();
+    }
+
+    private static async Task<(byte[] Bytes, string[] States)> StatesAsync(AppSession app, long offset, int length)
+    {
+        JsonObject r = await app.SendAsync("byteStates", new JsonObject { ["offset"] = offset, ["length"] = length });
+        return (Convert.FromHexString(r["hex"]!.GetValue<string>()), [.. r["states"]!.AsArray().Select(s => s!.GetValue<string>())]);
+    }
+
+    private static async Task<bool> HasNotificationAsync(AppSession app, string text, string? action = null) =>
+        (await app.NotificationsAsync()).Any(n => n["message"]!.GetValue<string>().Contains(text, StringComparison.Ordinal)
+            && (action is null || n["actions"]!.AsArray().Any(a => a!.GetValue<string>() == action)));
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-38-01")]
+    public Task Intel_hex_and_s_record_are_decoded_with_gaps() => UiTestContext.RunAsync(async ctx =>
+    {
+        string hex = ctx.CopyTestData("TD-IHEX", "fw.hex");
+        string s37 = ctx.CopyTestData("TD-SREC", "fw.s37");
+        IReadOnlyList<(long Address, byte[] Data)> segments = TestDataCatalog.FirmwareData();
+        long min = segments.Min(s => s.Address);
+        long end = segments.Max(s => s.Address + s.Data.Length);
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [hex] });
+        foreach ((string path, string format) in new[] { (hex, "Intel HEX"), (s37, "S-record") })
+        {
+            if (path == s37)
+            {
+                await app.SendAsync("uiOpen", new JsonObject { ["path"] = path });
+            }
+
+            // 1〜2. InfoBar とステータスバーの形式。
+            await app.WaitUntilAsync(() => HasNotificationAsync(app, "decoded", "Open as text"), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the decoded notice");
+            JsonObject doc = await DocAsync(app);
+            Assert.Contains(format, doc["modeText"]!.GetValue<string>());
+
+            // 3. ベースアドレス・長さ・値と状態。
+            Assert.Equal(min, doc["baseAddress"]!.GetValue<long>());
+            Assert.Equal(end - min, doc["length"]!.GetValue<long>());
+            (byte[] bytes, string[] states) = await StatesAsync(app, 0, (int)(end - min));
+            var expected = Enumerable.Repeat((byte)0xFF, (int)(end - min)).ToArray();
+            var data = new bool[expected.Length];
+            foreach ((long address, byte[] d) in segments)
+            {
+                d.CopyTo(expected, address - min);
+                data.AsSpan((int)(address - min), d.Length).Fill(true);
+            }
+
+            Assert.Equal(expected, bytes);
+            for (int i = 0; i < states.Length; i++)
+            {
+                Assert.Equal(data[i] ? "Valid" : "NoData", states[i]);
+            }
+        }
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-38-02")]
+    public Task Checksum_errors_are_listed_and_the_document_is_read_only() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-ENG-IHEX-BADSUM", "bad.hex");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        await app.WaitUntilAsync(async () => (await app.SendAsync("formatIssues"))["rows"]!.AsArray().Count > 0, UiTest.Scaled(TimeSpan.FromSeconds(10)),
+            "the error list");
+        JsonObject issues = await app.SendAsync("formatIssues");
+        JsonNode row = Assert.Single(issues["rows"]!.AsArray())!;
+        Assert.Equal(5, row["line"]!.GetValue<int>());
+        Assert.Equal("Checksum", row["kind"]!.GetValue<string>());
+        Assert.True(issues["shown"]!.GetValue<bool>());
+        Assert.True(await HasNotificationAsync(app, "1 line has an error", "Allow editing"));
+        Assert.True((await DocAsync(app))["readOnly"]!.GetValue<bool>());
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-TOOL-11-01")]
+    public Task Editing_one_byte_keeps_the_other_lines() => UiTestContext.RunAsync(async ctx =>
+    {
+        foreach ((string id, string name, long offset) in new[] { ("TD-IHEX", "fw.hex", 2L), ("TD-SREC", "fw.s37", 2L), ("TD-BASE64", "data.b64", 0L) })
+        {
+            string path = ctx.CopyTestData(id, name);
+            string[] before = File.ReadAllLines(path);
+            AppSession app = await ctx.StartAsync(new AppOptions { Profile = ctx.NewProfile(), Files = [path] });
+            byte old = (await app.BytesAsync(offset, 1))[0];
+            await app.GoToAsync(offset);
+            await app.TypeAsync(old == 0x5A ? "A5" : "5A");
+            await app.KeyAsync("S", ctrl: true);
+            await app.WaitUntilAsync(async () => !(await DocAsync(app))["modified"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(30)), "the save");
+            string[] after = File.ReadAllLines(path);
+            Assert.Equal(before.Length, after.Length);
+            int changed = Assert.Single(Enumerable.Range(0, before.Length), i => before[i] != after[i]);
+            Assert.Equal(before[changed].Length, after[changed].Length);
+            if (id == "TD-BASE64")
+            {
+                Assert.Equal(0, changed);
+            }
+
+            Assert.Equal(File.ReadAllBytes(TestDataCatalog.Get(id)).Contains((byte)'\r'), File.ReadAllBytes(path).Contains((byte)'\r'));
+            await app.SendAsync("exit");
+            await app.WaitForExitAsync(TimeSpan.FromSeconds(30));
+        }
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-TOOL-11-02")]
+    public Task Save_as_binary() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-IHEX", "fw.hex");
+        string bin = Path.Combine(ctx.Root, "fw.bin");
+        byte[] original = File.ReadAllBytes(path);
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path], Hooks = new JsonObject { ["savePicker"] = bin } });
+        JsonObject decoded = await DocAsync(app, hash: true);
+        await app.KeyAsync("S", ctrl: true, shift: true);
+        await app.WaitUntilAsync(() => Task.FromResult(File.Exists(bin)), UiTest.Scaled(TimeSpan.FromSeconds(30)), "fw.bin");
+        await app.IdleAsync();
+
+        // 1. 選択肢 (元の形式・バイナリ・他の形式)。
+        string choices = (await app.WaitForLogAsync(l => l.Contains("Save as choices:", StringComparison.Ordinal), "the choices"));
+        Assert.Contains("Intel HEX", choices);
+        Assert.Contains("Binary", choices);
+        Assert.Contains("S-record", choices);
+
+        // 3. 内容はデコードした結果と一致し、fw.hex は変わらない。4. タブはバイナリのドキュメント。
+        Assert.Equal(decoded["sha256"]!.GetValue<string>(), Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(bin))));
+        Assert.Equal(original, File.ReadAllBytes(path));
+        JsonObject doc = await DocAsync(app);
+        Assert.Equal("fw.bin", doc["name"]!.GetValue<string>());
+        Assert.Equal(string.Empty, doc["formatText"]!.GetValue<string>());
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-TOOL-11-03")]
+    public Task Comment_lines_are_confirmed_on_the_first_save() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-TOOL-IHEX-COMMENT", "c.hex");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+
+        // 1. コメント行が形式の誤りとして出て、「編集を許可」を押す。
+        await app.WaitUntilAsync(async () => (await app.SendAsync("formatIssues"))["rows"]!.AsArray().Count > 0, UiTest.Scaled(TimeSpan.FromSeconds(10)),
+            "the error list");
+        JsonNode row = (await app.SendAsync("formatIssues"))["rows"]!.AsArray()[0]!;
+        Assert.Equal((1, "Syntax"), (row["line"]!.GetValue<int>(), row["kind"]!.GetValue<string>()));
+        Assert.True((await app.SendAsync("notificationAction", new JsonObject { ["label"] = "Allow editing" }))["invoked"]!.GetValue<bool>());
+
+        // 2〜3. 編集して保存すると、失われる旨の確認が出る。
+        await app.GoToAsync(0);
+        await app.TypeAsync("00");
+        await app.KeyAsync("S", ctrl: true);
+        var dialog = await app.WaitForDialogAsync("EncodedLossDialog");
+        await app.WaitForDialogTextAsync(dialog, "won't be written");
+        Assert.NotNull(app.Button("Save"));
+        Assert.NotNull(app.Button("Save As"));
+        Assert.NotNull(app.Button("Cancel"));
+        await app.InvokeDialogButtonAsync("Save");
+        await app.WaitUntilAsync(async () => !(await DocAsync(app))["modified"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(30)), "the save");
+
+        // 4. 2 回目は確認しない。5. コメント行がなく、データが編集を反映している。
+        await app.GoToAsync(1);
+        await app.TypeAsync("11");
+        await app.KeyAsync("S", ctrl: true);
+        await app.WaitUntilAsync(async () => !(await DocAsync(app))["modified"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(30)), "the second save");
+        string[] lines = File.ReadAllLines(path);
+        Assert.DoesNotContain(lines, l => l.StartsWith(';'));
+        Assert.Contains(lines, l => l.StartsWith(":1000000000", StringComparison.Ordinal) && l[11..13] == "11");
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-13-01")]
+    public Task Range_open_shows_the_file_addresses() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.TestData("TD-ENG-SPARSE-10G");
+        AppSession app = await ctx.StartAsync();
+
+        // 1〜2. 範囲を指定して開く: 開始 5G、長さ 1M と解釈結果。
+        await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openAdvanced" });
+        await app.WaitForDialogAsync("OpenAdvancedDialog");
+        JsonObject state = await app.SendAsync("openAdvancedSet", new JsonObject { ["path"] = path, ["range"] = true, ["start"] = "5G", ["length"] = "1M" });
+        Assert.Contains("5,368,709,120 (0x140000000)", state["startResult"]!.GetValue<string>());
+        Assert.True(state["canOpen"]!.GetValue<bool>());
+
+        // 5. 開始がファイルの長さ、長さ 0 は開けない。
+        state = await app.SendAsync("openAdvancedSet", new JsonObject { ["start"] = "10G" });
+        Assert.False(state["canOpen"]!.GetValue<bool>());
+        Assert.True(state["startInvalid"]!.GetValue<bool>());
+        state = await app.SendAsync("openAdvancedSet", new JsonObject { ["start"] = "5G", ["length"] = "0" });
+        Assert.False(state["canOpen"]!.GetValue<bool>());
+        Assert.True(state["lengthInvalid"]!.GetValue<bool>());
+        state = await app.SendAsync("openAdvancedSet", new JsonObject { ["length"] = "1M" });
+
+        // 3〜4. 開くと、アドレスは開始位置から始まる。
+        await app.InvokeDialogButtonAsync("Open");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["isRange"]?.GetValue<bool>() == true, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the range tab");
+        JsonObject doc = await DocAsync(app);
+        Assert.Equal(0x140000000L, doc["baseAddress"]!.GetValue<long>());
+        Assert.Equal(1_048_576L, doc["length"]!.GetValue<long>());
+        Assert.Contains("[0x140000000–0x1400FFFFF]", doc["title"]!.GetValue<string>());
+        Assert.Equal(TestDataCatalog.Marker(0x140000000), await app.BytesAsync(0, 17));
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-16-03")]
+    public Task A_range_reopens_from_recent_files_with_the_same_range() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 前提: TD-MARKERS-1G を開始 0x10000000、長さ 16M で範囲を指定して開き、閉じる。
+        string path = ctx.TestData("TD-MARKERS-1G");
+        AppSession app = await ctx.StartAsync();
+        await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openAdvanced" });
+        await app.WaitForDialogAsync("OpenAdvancedDialog");
+        await app.SendAsync("openAdvancedSet", new JsonObject { ["path"] = path, ["range"] = true, ["start"] = "0x10000000", ["length"] = "16M" });
+        await app.InvokeDialogButtonAsync("Open");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["isRange"]?.GetValue<bool>() == true, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the range tab");
+        await app.KeyAsync("W", ctrl: true);
+        await app.WaitForTabsAsync(0);
+
+        // 1〜2. 最近使ったファイルの先頭を開くと、同じ範囲 (名前・長さ・ベースアドレス)。
+        await app.SendAsync("openRecentMenuAt", new JsonObject { ["index"] = 0 });
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["isRange"]?.GetValue<bool>() == true, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the range tab");
+        JsonObject doc = await DocAsync(app);
+        Assert.Contains("[0x10000000–0x10FFFFFF]", doc["title"]!.GetValue<string>());
+        Assert.Equal(16_777_216L, doc["length"]!.GetValue<long>());
+        Assert.Equal(0x10000000L, doc["baseAddress"]!.GetValue<long>());
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-39-02")]
+    public Task Linked_view_edits_go_to_the_parent() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        await app.SelectAsync(0x1000, 0x1000);
+        await app.SendAsync("execute", new JsonObject { ["id"] = "file.openSelectionInNewTab" });
+        await app.IdleAsync();
+        await app.RenderAsync();
+        JsonObject child = await DocAsync(app);
+        Assert.True(child["linked"]!.GetValue<bool>());
+        Assert.Equal(0x1000L, child["baseAddress"]!.GetValue<long>());
+
+        // 1〜2. 子の 0x10 を AA にすると、親の 0x1010 が変わる。
+        await app.GoToAsync(0x10);
+        await app.TypeAsync("AA");
+        await SelectTabAsync(app, 0);
+        Assert.Equal(0xAA, (await app.BytesAsync(0x1010, 1))[0]);
+
+        // 3. 親で Ctrl+Z を押すと、子も戻る。
+        await app.KeyAsync("Z", ctrl: true);
+        await SelectTabAsync(app, 1);
+        Assert.Equal(0x10, (await app.BytesAsync(0x10, 1))[0]);
+
+        // 4〜5. 親で範囲より前に 100 バイト挿入しても、子の内容は変わらない (範囲が追従する)。
+        await SelectTabAsync(app, 0);
+        await app.GoToAsync(0x100);
+        await app.KeyAsync("Insert");
+        await app.TypeAsync(string.Concat(Enumerable.Repeat("EE", 100)));
+        await SelectTabAsync(app, 1);
+        byte[] expected = new byte[0x1000];
+        TestDataCatalog.Sequence(0x1000, expected);
+        Assert.Equal(expected, await app.BytesAsync(0, 0x1000));
+        JsonObject moved = await DocAsync(app);
+        Assert.Equal(0x1064L, moved["linkStart"]!.GetValue<long>());
+        Assert.Contains("[0x1064–0x2063]", moved["title"]!.GetValue<string>());
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-39-03")]
+    public Task Copy_in_a_new_tab_is_independent() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        string parentHash = (await DocAsync(app, hash: true))["sha256"]!.GetValue<string>();
+        await app.SelectAsync(0x1000, 0x1000);
+        await app.SendAsync("execute", new JsonObject { ["id"] = "file.openSelectionAsCopy" });
+        await app.IdleAsync();
+        await app.RenderAsync();
+        JsonObject copy = await DocAsync(app);
+        Assert.Equal((0L, 0x1000L), (copy["baseAddress"]!.GetValue<long>(), copy["length"]!.GetValue<long>()));
+        await app.GoToAsync(0);
+        await app.KeyAsync("Insert");
+        await app.TypeAsync(string.Concat(Enumerable.Repeat("00", 16)));
+        Assert.Equal(0x1010L, (await DocAsync(app))["length"]!.GetValue<long>());
+        JsonObject parent = await DocAsync(app, 0, hash: true);
+        Assert.Equal(parentHash, parent["sha256"]!.GetValue<string>());
+        Assert.False(parent["modified"]!.GetValue<bool>());
+    });
+
+    /// <summary>
+    /// ENG-11 の仕様 2: 「詳細を指定して開く」の項目の組み合わせ。形式を指定しても読み取り専用が効く、形式「自動」+ 読み取り専用でも
+    /// デコードする、範囲とデコードする形式は組み合わせられない (理由を示す)、デコードする場合は書き込みの禁止を理由付きで無効にする。
+    /// </summary>
+    [Fact]
+    public Task Open_advanced_combines_read_only_range_and_format() => UiTestContext.RunAsync(async ctx =>
+    {
+        string hex = ctx.CopyTestData("TD-IHEX", "fw.hex");
+        string text = ctx.CopyTestData("TD-IHEX", "fw.txt");
+        AppSession app = await ctx.StartAsync();
+
+        async Task<JsonObject> OpenDialogAsync(JsonObject set)
+        {
+            await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openAdvanced" });
+            await app.WaitForDialogAsync("OpenAdvancedDialog");
+            return await app.SendAsync("openAdvancedSet", set);
+        }
+
+        // 範囲 + Intel HEX: 理由を示して開けない。
+        JsonObject state = await OpenDialogAsync(new JsonObject { ["path"] = text, ["range"] = true, ["start"] = "0", ["length"] = "16", ["format"] = "ihex" });
+        Assert.False(state["canOpen"]!.GetValue<bool>());
+        Assert.Contains("Binary as is", state["formatError"]!.GetValue<string>());
+        state = await app.SendAsync("openAdvancedSet", new JsonObject { ["format"] = "bin" });
+        Assert.True(state["canOpen"]!.GetValue<bool>());
+        Assert.Equal(string.Empty, state["formatError"]!.GetValue<string>());
+        Assert.True(state["denyWritesEnabled"]!.GetValue<bool>());
+
+        // 形式を指定 (Intel HEX) + 読み取り専用: デコードした読み取り専用のドキュメント。書き込みの禁止は無効。
+        state = await app.SendAsync("openAdvancedSet", new JsonObject { ["range"] = false, ["format"] = "ihex", ["readOnly"] = true, ["denyWrites"] = true });
+        Assert.False(state["denyWritesEnabled"]!.GetValue<bool>());
+        await app.InvokeDialogButtonAsync("Open");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["format"]?.GetValue<string>() == "ihex", UiTest.Scaled(TimeSpan.FromSeconds(10)), "the decoded tab");
+        JsonObject doc = await DocAsync(app);
+        Assert.True(doc["readOnly"]!.GetValue<bool>());
+
+        // 形式「自動」+ 読み取り専用 + .hex: デコードして読み取り専用。
+        state = await OpenDialogAsync(new JsonObject { ["path"] = hex, ["format"] = "auto", ["readOnly"] = true });
+        Assert.False(state["denyWritesEnabled"]!.GetValue<bool>());
+        await app.InvokeDialogButtonAsync("Open");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["tabs"]!.GetValue<int>() == 2, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the second tab");
+        doc = await DocAsync(app);
+        Assert.Equal("ihex", doc["format"]?.GetValue<string>());
+        Assert.True(doc["readOnly"]!.GetValue<bool>());
+    });
+
+    /// <summary>ENG-38・ENG-19: デコードして開いたドキュメントの元のテキストファイルが外部で変わると、デコードし直す。</summary>
+    [Fact]
+    public Task Decoded_document_follows_external_changes_of_the_text_file() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 4 バイトのデータ (11 22 33 44) の Intel HEX。
+        string path = ctx.WriteFile("small.hex", System.Text.Encoding.ASCII.GetBytes(":040000001122334452\r\n:00000001FF\r\n"));
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["format"]?.GetValue<string>() == "ihex", UiTest.Scaled(TimeSpan.FromSeconds(10)), "the decoded tab");
+        Assert.Equal(new byte[] { 0x11, 0x22, 0x33, 0x44 }, await app.BytesAsync(0, 4));
+
+        // 未編集: 自動でデコードし直す。
+        await File.WriteAllTextAsync(path, ":0400000001020304F2\r\n:00000001FF\r\n");
+        await app.WaitForNotificationAsync(m => m.Contains("it was reloaded", StringComparison.Ordinal), "the reloaded notice");
+        Assert.Equal(new byte[] { 1, 2, 3, 4 }, await app.BytesAsync(0, 4));
+        Assert.Equal("ihex", (await DocAsync(app))["format"]?.GetValue<string>());
+
+        // 編集してから外部で変わる: 警告と「再読み込み」(確かめてから、変更を捨ててデコードし直す)。マージは出さない。
+        await app.GoToAsync(0);
+        await app.TypeAsync("EE");
+        await File.WriteAllTextAsync(path, ":04000000A1A2A3A4F2\r\n:00000001FF\r\n".Replace("F2", ChecksumOf(0x04, 0xA1, 0xA2, 0xA3, 0xA4)));
+        await app.WaitForNotificationAsync(m => m.StartsWith("small.hex was changed by another app", StringComparison.Ordinal), "the changed notice");
+        Assert.False((await app.SendAsync("notificationAction", new JsonObject { ["label"] = "Merge" }))["invoked"]!.GetValue<bool>());
+        Assert.True((await app.SendAsync("notificationAction", new JsonObject { ["label"] = "Reload" }))["invoked"]!.GetValue<bool>());
+        await app.WaitForDialogAsync("DecodedReloadDialog");
+        await app.InvokeDialogButtonAsync("Reload");
+        await app.WaitUntilAsync(async () => !(await DocAsync(app))["modified"]!.GetValue<bool>(), UiTest.Scaled(TimeSpan.FromSeconds(10)), "the reload");
+        Assert.Equal(new byte[] { 0xA1, 0xA2, 0xA3, 0xA4 }, await app.BytesAsync(0, 4));
+    });
+
+    /// <summary>
+    /// TC-ENG-07-01: 長さを変えられないドキュメントでは、長さを変える操作がメニュー・コマンドパレット・右クリックメニューで無効になり、
+    /// Insert キーでは InfoBar を出して上書きモードのまま。物理ディスク (管理者の権限と仮想ディスクが要る) の代わりに、同じ長さ固定
+    /// (ENG-07) のドキュメントになる「範囲を指定して開く」(ENG-13。長さの変更を許さない既定) を使う。
+    /// </summary>
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-07-01")]
+    public Task Fixed_length_document_disables_length_changing_operations() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
+        AppSession app = await ctx.StartAsync();
+        await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openAdvanced" });
+        await app.WaitForDialogAsync("OpenAdvancedDialog");
+        await app.SendAsync("openAdvancedSet", new JsonObject { ["path"] = path, ["range"] = true, ["start"] = "0x1000", ["length"] = "0x1000" });
+        await app.InvokeDialogButtonAsync("Open");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["isRange"]?.GetValue<bool>() == true, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the range tab");
+        Assert.False((await DocAsync(app))["canResize"]!.GetValue<bool>());
+        await app.SelectAsync(0x10, 0x10);
+        await app.IdleAsync();
+
+        // 1. メニュー (コマンドの状態がメニューの項目の有効・無効になる): 長さを変える操作は無効、上書き貼り付けは有効。
+        string[] lengthChanging = ["edit.cut", "edit.insertBytes", "edit.toggleInsert", "edit.resize", "edit.truncate", "edit.insertRectangle"];
+        List<JsonObject> commands = [.. (await app.SendAsync("commands"))["items"]!.AsArray().Select(n => n!.AsObject())];
+        JsonObject Command(string id) => commands.Single(c => c["id"]!.GetValue<string>() == id);
+        foreach (string id in lengthChanging)
+        {
+            Assert.False(Command(id)["enabled"]!.GetValue<bool>(), id);
+        }
+
+        Assert.True(Command("edit.pasteOverwrite")["enabled"]!.GetValue<bool>());
+        Assert.NotNull(Command("edit.cut")["menu"]);
+
+        // 2. コマンドパレット: 同じコマンドは理由付きの無効表示。
+        foreach (string id in new[] { "edit.cut", "edit.insertBytes", "edit.toggleInsert", "edit.pasteOverwrite" })
+        {
+            JsonObject palette = await app.SendAsync("palette", new JsonObject { ["text"] = ">" + Command(id)["title"]!.GetValue<string>() });
+            JsonObject entry = palette["entries"]!.AsArray().Select(e => e!.AsObject()).First(e => e["key"]!.GetValue<string>() == "command:" + id);
+            string reason = entry["reason"]?.GetValue<string>() ?? string.Empty;
+            if (id == "edit.pasteOverwrite")
+            {
+                Assert.Equal(string.Empty, reason);
+            }
+            else
+            {
+                Assert.Contains("can't change length", reason, StringComparison.Ordinal);
+            }
+        }
+
+        await app.SendAsync("paletteClose");
+
+        // 3. 右クリックメニュー: 切り取り・削除・挿入モードの切り替えは無効、上書き貼り付けは有効。
+        JsonObject render = await app.RenderAsync();
+        await ViewOps.RightClickAsync(app, ViewOps.CellPoint(render, 0x14));
+        await app.WaitForAsync("HexViewMenu_Cut");
+        foreach (string item in new[] { "HexViewMenu_Cut", "HexViewMenu_Delete", "HexViewMenu_ToggleInsert" })
+        {
+            Assert.False((await app.WaitForAsync(item)).IsEnabled, item);
+        }
+
+        Assert.True((await app.WaitForAsync("HexViewMenu_PasteOverwrite")).IsEnabled);
+        Assert.True((await app.WaitForAsync("HexViewMenu_Copy")).IsEnabled);
+        await app.SendAsync("hideContextMenu");
+
+        // 4. Insert キー: 上書きモードのまま InfoBar を出す。ステータスバーのモードは「上書き (固定長)」。
+        await app.KeyAsync("Insert");
+        await app.WaitForNotificationAsync(m => m.Contains("only overwrite mode is available", StringComparison.Ordinal), "the fixed-length notice");
+        Assert.Equal("Overwrite (fixed length)", (await DocAsync(app))["modeText"]!.GetValue<string>());
+        Assert.Equal(0x1000L, (await DocAsync(app))["length"]!.GetValue<long>());
+    });
+
+    private static string ChecksumOf(params int[] bytes) => ((0x100 - bytes.Sum() % 0x100) % 0x100).ToString("X2");
+
+    /// <summary>ENG-39 の「エラー」: マルチ選択では最初の範囲だけを開くか、範囲ごとにタブを開くかを確かめる (10 個を超えると件数を示す)。</summary>
+    [Fact]
+    public Task Multi_selection_asks_how_to_open_the_ranges() => UiTestContext.RunAsync(async ctx =>
+    {
+        string path = ctx.CopyTestData("TD-SEQ-1M", "seq.bin");
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [path] });
+        static JsonArray Ranges(int count) => new([.. Enumerable.Range(0, count).Select(i => (JsonNode?)new JsonArray(0x1000 + i * 0x100, 0x10))]);
+
+        // 3 個: 範囲ごとに開く → 3 つの連動ビュー。本文に件数の注意はない。
+        await app.SendAsync("multiSelection", new JsonObject { ["ranges"] = Ranges(3) });
+        await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openSelectionInNewTab" });
+        var dialog = await app.WaitForDialogAsync("OpenSelectionRangesDialog");
+        string text = await app.WaitForDialogTextAsync(dialog, "The selection has 3 ranges");
+        Assert.DoesNotContain("tabs.", text, StringComparison.Ordinal);
+        Assert.NotNull(app.Button("Open the first range"));
+        Assert.NotNull(app.Button("Open each range"));
+        await app.InvokeDialogButtonAsync("Open each range");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["tabs"]!.GetValue<int>() == 4, UiTest.Scaled(TimeSpan.FromSeconds(10)), "3 linked tabs");
+        for (int i = 1; i <= 3; i++)
+        {
+            JsonObject child = await DocAsync(app, i);
+            Assert.True(child["linked"]!.GetValue<bool>());
+            Assert.Equal((0x1000L + (i - 1) * 0x100, 0x10L), (child["linkStart"]!.GetValue<long>(), child["length"]!.GetValue<long>()));
+        }
+
+        // 12 個: 件数を示す。最初の範囲だけを開く → 1 つ増える。
+        await SelectTabAsync(app, 0);
+        await app.SendAsync("multiSelection", new JsonObject { ["ranges"] = Ranges(12) });
+        await app.SendAsync("startCommand", new JsonObject { ["id"] = "file.openSelectionAsCopy" });
+        dialog = await app.WaitForDialogAsync("OpenSelectionRangesDialog");
+        await app.WaitForDialogTextAsync(dialog, "The selection has 12 ranges", "opens 12 tabs");
+        await app.InvokeDialogButtonAsync("Open the first range");
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["tabs"]!.GetValue<int>() == 5, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the copy tab");
+        JsonObject copy = await DocAsync(app);
+        Assert.False(copy["linked"]!.GetValue<bool>());
+        Assert.Equal(0x10L, copy["length"]!.GetValue<long>());
+        byte[] expected = new byte[0x10];
+        TestDataCatalog.Sequence(0x1000, expected);
+        Assert.Equal(expected, await app.BytesAsync(0, 0x10));
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-ENG-39-01")]
+    [Trait("Category", "Nightly")]
+    public Task Linked_view_of_5_gib_opens_fast() => UiTestContext.RunAsync(async ctx =>
+    {
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-ENG-SPARSE-10G")] });
+        const long start = 2L << 30, length = 5L << 30;
+        await app.SelectAsync(start, length);
+        await app.IdleAsync();
+
+        // 1. 選択範囲の中 (表示中の行) を右クリックし、メニューの「新しいタブで開く」を選ぶ。開いて表示するまでの時間はアプリの中で計る。
+        JsonObject render = await app.RenderAsync();
+        long rowStart = render["rows"]!.AsArray().Select(r => r!["rowStart"]!.GetValue<long>())
+            .First(o => o >= start && o < start + length - 16);
+        await ViewOps.RightClickAsync(app, ViewOps.CellPoint(render, rowStart + 1));
+        string item = "HexViewMenu_file.openSelectionInNewTab";
+        await app.WaitUntilAsync(async () => (await app.WaitForAsync(item)).IsEnabled, UiTest.Scaled(TimeSpan.FromSeconds(5)), "the menu item");
+        await app.UiaInvokeAsync(item);
+        await app.WaitUntilAsync(async () => (await DocAsync(app))["linkedOpenMs"] is not null, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the linked tab");
+        JsonObject doc = await DocAsync(app);
+        Assert.True(doc["linked"]!.GetValue<bool>());
+        double ms = doc["linkedOpenMs"]!.GetValue<double>();
+        Assert.True(ms < 100 || !PerfEnvironmentFactAttribute.IsPerfMachine, $"{ms} ms");
+
+        // 2〜3. 先頭のアドレス・長さ・内容と、親の 4 GiB の位置。
+        Assert.Equal((0x80000000L, 5L << 30), (doc["baseAddress"]!.GetValue<long>(), doc["length"]!.GetValue<long>()));
+        Assert.Equal(TestDataCatalog.Marker(0x80000000), await app.BytesAsync(0, 17));
+        Assert.Equal(TestDataCatalog.Marker(0x100000000), await app.BytesAsync(0x100000000 - 0x80000000, 17));
+    });
+}

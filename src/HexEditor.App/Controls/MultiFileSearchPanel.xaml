@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.MultiFileSearchPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HexEditor.App.Controls">
+    <!--
+        「複数ファイル検索」パネル (FIND-30、FIND-31 の画面)。上部に検索条件、その下に対象の指定 (フォルダの一覧と追加ボタン、マスク、
+        オプション)、「検索」「キャンセル」(置換モードでは置換欄と「置換を実行」)。下にファイルごとにまとめた結果 (チェックボックス付き)。
+    -->
+    <Grid Background="{ThemeResource LayerFillColorDefaultBrush}" RowSpacing="6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MaxHeight="420" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Padding="12,6,12,0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="6">
+                <ComboBox
+                    x:Name="ModeChoice"
+                    AutomationProperties.AutomationId="MultiFile_Mode"
+                    SelectedIndex="0"
+                    SelectionChanged="Option_Changed">
+                    <ComboBoxItem x:Uid="MultiFile_Mode_Search" />
+                    <ComboBoxItem x:Uid="MultiFile_Mode_Replace" />
+                </ComboBox>
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <ComboBox
+                        x:Name="KindChoice"
+                        AutomationProperties.AutomationId="MultiFile_Kind"
+                        SelectedIndex="0"
+                        SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Uid="Find_Kind_Hex" />
+                        <ComboBoxItem x:Uid="Find_Kind_Text" />
+                        <ComboBoxItem x:Uid="Find_Kind_Integer" />
+                        <ComboBoxItem x:Uid="Find_Kind_Float" />
+                        <ComboBoxItem x:Uid="Find_Kind_RegexText" />
+                        <ComboBoxItem x:Uid="Find_Kind_RegexBytes" />
+                    </ComboBox>
+                    <TextBox
+                        x:Name="Query"
+                        x:Uid="MultiFile_Query"
+                        Width="220"
+                        AutomationProperties.AutomationId="MultiFile_Query"
+                        FlowDirection="LeftToRight"
+                        FontFamily="Cascadia Mono, Consolas"
+                        TextChanged="Text_Changed" />
+                </StackPanel>
+                <!--  検索バーと同じ種類・オプション (FIND-30 の仕様 1)。種類に応じて表示を切り替える。  -->
+                <local:WrapPanel>
+                    <ComboBox
+                        x:Name="EncodingChoice"
+                        AutomationProperties.AutomationId="MultiFile_Encoding"
+                        SelectionChanged="Option_Changed" />
+                    <CheckBox
+                        x:Name="CaseChoice"
+                        x:Uid="Find_CaseSensitive"
+                        AutomationProperties.AutomationId="MultiFile_CaseSensitive"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <CheckBox
+                        x:Name="WordChoice"
+                        x:Uid="Find_WholeWord"
+                        AutomationProperties.AutomationId="MultiFile_WholeWord"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <CheckBox
+                        x:Name="EscapeChoice"
+                        x:Uid="Find_Escapes"
+                        AutomationProperties.AutomationId="MultiFile_Escapes"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <CheckBox
+                        x:Name="AlignChoice"
+                        x:Uid="Find_Align"
+                        AutomationProperties.AutomationId="MultiFile_Align"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <ComboBox
+                        x:Name="IntBitsChoice"
+                        AutomationProperties.AutomationId="MultiFile_IntBits"
+                        SelectionChanged="Option_Changed" />
+                    <ComboBox
+                        x:Name="SignChoice"
+                        AutomationProperties.AutomationId="MultiFile_Sign"
+                        SelectedIndex="0"
+                        SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Uid="Find_Sign_Either" />
+                        <ComboBoxItem x:Uid="Find_Sign_Signed" />
+                        <ComboBoxItem x:Uid="Find_Sign_Unsigned" />
+                    </ComboBox>
+                    <ComboBox
+                        x:Name="FloatChoice"
+                        AutomationProperties.AutomationId="MultiFile_FloatFormat"
+                        SelectedIndex="1"
+                        SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Uid="Find_Float_Half" />
+                        <ComboBoxItem x:Uid="Find_Float_Single" />
+                        <ComboBoxItem x:Uid="Find_Float_Double" />
+                    </ComboBox>
+                    <ComboBox
+                        x:Name="EndianChoice"
+                        AutomationProperties.AutomationId="MultiFile_Endian"
+                        SelectedIndex="0"
+                        SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Uid="Find_Endian_Little" />
+                        <ComboBoxItem x:Uid="Find_Endian_Big" />
+                        <ComboBoxItem x:Uid="Find_Endian_Both" />
+                    </ComboBox>
+                    <ComboBox
+                        x:Name="ToleranceChoice"
+                        AutomationProperties.AutomationId="MultiFile_Tolerance"
+                        SelectedIndex="0"
+                        SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Uid="Find_Tolerance_None" />
+                        <ComboBoxItem x:Uid="Find_Tolerance_Absolute" />
+                        <ComboBoxItem x:Uid="Find_Tolerance_Relative" />
+                        <ComboBoxItem x:Uid="Find_Tolerance_Ulp" />
+                    </ComboBox>
+                    <TextBox
+                        x:Name="ToleranceValue"
+                        x:Uid="Find_ToleranceValue"
+                        Width="120"
+                        AutomationProperties.AutomationId="MultiFile_ToleranceValue"
+                        FlowDirection="LeftToRight"
+                        FontFamily="Cascadia Mono, Consolas"
+                        TextChanged="Text_Changed" />
+                    <CheckBox
+                        x:Name="RangeExcludeChoice"
+                        x:Uid="Find_RangeExclude"
+                        AutomationProperties.AutomationId="MultiFile_RangeExclude"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <CheckBox
+                        x:Name="RegexIgnoreCase"
+                        x:Uid="Find_RegexIgnoreCase"
+                        AutomationProperties.AutomationId="MultiFile_RegexIgnoreCase"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <CheckBox
+                        x:Name="RegexMultiline"
+                        x:Uid="Find_RegexMultiline"
+                        AutomationProperties.AutomationId="MultiFile_RegexMultiline"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <CheckBox
+                        x:Name="RegexSingleline"
+                        x:Uid="Find_RegexSingleline"
+                        AutomationProperties.AutomationId="MultiFile_RegexSingleline"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <CheckBox
+                        x:Name="MaskChoice"
+                        x:Uid="Find_Mask"
+                        AutomationProperties.AutomationId="MultiFile_Mask"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <ComboBox
+                        x:Name="MaskModeChoice"
+                        AutomationProperties.AutomationId="MultiFile_MaskMode"
+                        SelectedIndex="0"
+                        SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Uid="Find_MaskMode_ValueMask" />
+                        <ComboBoxItem x:Uid="Find_MaskMode_Bits" />
+                    </ComboBox>
+                    <TextBox
+                        x:Name="MaskQuery"
+                        x:Uid="Find_MaskQuery"
+                        Width="200"
+                        AutomationProperties.AutomationId="MultiFile_MaskQuery"
+                        FlowDirection="LeftToRight"
+                        FontFamily="Cascadia Mono, Consolas"
+                        TextChanged="Text_Changed" />
+                    <CheckBox
+                        x:Name="MismatchChoice"
+                        x:Uid="Find_Mismatch"
+                        AutomationProperties.AutomationId="MultiFile_Mismatch"
+                        Checked="Check_Changed"
+                        Unchecked="Check_Changed" />
+                    <CheckBox
+                        x:Name="MismatchAlignChoice"
+                        x:Uid="Find_MismatchAlign"
+                        AutomationProperties.AutomationId="MultiFile_MismatchAlign"
+                        Checked="Check_Changed"
+                        IsChecked="True"
+                        Unchecked="Check_Changed" />
+                    <!--  位置の条件 (FIND-17)。周期が空なら条件なし。  -->
+                    <TextBox
+                        x:Name="PositionModulus"
+                        x:Uid="Find_PositionModulus"
+                        Width="110"
+                        AutomationProperties.AutomationId="MultiFile_PositionModulus"
+                        FlowDirection="LeftToRight"
+                        FontFamily="Cascadia Mono, Consolas"
+                        TextChanged="Text_Changed" />
+                    <TextBox
+                        x:Name="PositionRemainder"
+                        x:Uid="Find_PositionRemainder"
+                        Width="110"
+                        AutomationProperties.AutomationId="MultiFile_PositionRemainder"
+                        FlowDirection="LeftToRight"
+                        FontFamily="Cascadia Mono, Consolas"
+                        TextChanged="Text_Changed" />
+                </local:WrapPanel>
+                <!--  検索バーの条件 (複数の文字コード・複数の語を含む) を取り込む。  -->
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Button x:Uid="MultiFile_UseFindBar" AutomationProperties.AutomationId="MultiFile_UseFindBar" Click="UseFindBar_Click" />
+                    <TextBlock
+                        x:Name="ExtrasText"
+                        VerticalAlignment="Center"
+                        AutomationProperties.AutomationId="MultiFile_Extras"
+                        TextWrapping="Wrap" />
+                    <Button
+                        x:Name="ClearExtrasButton"
+                        x:Uid="MultiFile_ClearExtras"
+                        AutomationProperties.AutomationId="MultiFile_ClearExtras"
+                        Click="ClearExtras_Click"
+                        Visibility="Collapsed" />
+                </StackPanel>
+                <StackPanel x:Name="ReplaceRow" Spacing="6" Visibility="Collapsed">
+                    <TextBox
+                        x:Name="ReplaceQuery"
+                        x:Uid="MultiFile_ReplaceQuery"
+                        AutomationProperties.AutomationId="MultiFile_ReplaceQuery"
+                        FlowDirection="LeftToRight"
+                        FontFamily="Cascadia Mono, Consolas"
+                        TextChanged="Text_Changed" />
+                    <ComboBox
+                        x:Name="LengthPolicyChoice"
+                        AutomationProperties.AutomationId="MultiFile_LengthPolicy"
+                        SelectedIndex="0"
+                        SelectionChanged="Option_Changed">
+                        <ComboBoxItem x:Uid="Find_Policy_Change" />
+                        <ComboBoxItem x:Uid="Find_Policy_Pad" />
+                        <ComboBoxItem x:Uid="Find_Policy_Overwrite" />
+                    </ComboBox>
+                    <!--  埋め草 (FIND-24 の仕様 3)。「埋めて長さを保つ」のときだけ表示する。  -->
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <ComboBox
+                            x:Name="FillerChoice"
+                            AutomationProperties.AutomationId="MultiFile_Filler"
+                            SelectedIndex="0"
+                            SelectionChanged="Option_Changed">
+                            <ComboBoxItem x:Uid="Find_Filler_Zero" />
+                            <ComboBoxItem x:Uid="Find_Filler_FF" />
+                            <ComboBoxItem x:Uid="Find_Filler_Space" />
+                            <ComboBoxItem x:Uid="Find_Filler_Custom" />
+                        </ComboBox>
+                        <TextBox
+                            x:Name="FillerCustom"
+                            x:Uid="Find_FillerCustom"
+                            Width="120"
+                            AutomationProperties.AutomationId="MultiFile_FillerCustom"
+                            FlowDirection="LeftToRight"
+                            FontFamily="Cascadia Mono, Consolas"
+                            TextChanged="Text_Changed"
+                            Visibility="Collapsed" />
+                    </StackPanel>
+                    <CheckBox
+                        x:Name="BackupChoice"
+                        x:Uid="MultiFile_Backup"
+                        AutomationProperties.AutomationId="MultiFile_Backup"
+                        IsChecked="True" />
+                    <CheckBox
+                        x:Name="ClearReadOnlyChoice"
+                        x:Uid="MultiFile_ClearReadOnly"
+                        AutomationProperties.AutomationId="MultiFile_ClearReadOnly" />
+                </StackPanel>
+                <TextBlock x:Uid="MultiFile_TargetsHeader" Style="{ThemeResource BodyStrongTextBlockStyle}" />
+                <ListView
+                    x:Name="FolderList"
+                    MaxHeight="120"
+                    AutomationProperties.AutomationId="MultiFile_Folders"
+                    ItemsSource="{x:Bind Folders}"
+                    SelectionMode="Single" />
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBox
+                        x:Name="FolderInput"
+                        x:Uid="MultiFile_FolderInput"
+                        Width="200"
+                        AutomationProperties.AutomationId="MultiFile_FolderInput" />
+                    <Button x:Uid="MultiFile_AddFolder" AutomationProperties.AutomationId="MultiFile_AddFolder" Click="AddFolder_Click" />
+                    <Button x:Uid="MultiFile_BrowseFolder" AutomationProperties.AutomationId="MultiFile_BrowseFolder" Click="BrowseFolder_Click" />
+                    <Button x:Uid="MultiFile_RemoveFolder" AutomationProperties.AutomationId="MultiFile_RemoveFolder" Click="RemoveFolder_Click" />
+                </StackPanel>
+                <local:WrapPanel>
+                    <CheckBox
+                        x:Name="SubfoldersChoice"
+                        x:Uid="MultiFile_Subfolders"
+                        AutomationProperties.AutomationId="MultiFile_Subfolders"
+                        IsChecked="True" />
+                    <TextBox
+                        x:Name="DepthInput"
+                        x:Uid="MultiFile_Depth"
+                        Width="110"
+                        AutomationProperties.AutomationId="MultiFile_Depth" />
+                    <TextBox
+                        x:Name="IncludeInput"
+                        x:Uid="MultiFile_Include"
+                        Width="160"
+                        AutomationProperties.AutomationId="MultiFile_Include"
+                        Text="*" />
+                    <TextBox
+                        x:Name="ExcludeInput"
+                        x:Uid="MultiFile_Exclude"
+                        Width="160"
+                        AutomationProperties.AutomationId="MultiFile_Exclude" />
+                    <TextBox
+                        x:Name="MinSizeInput"
+                        x:Uid="MultiFile_MinSize"
+                        Width="110"
+                        AutomationProperties.AutomationId="MultiFile_MinSize" />
+                    <TextBox
+                        x:Name="MaxSizeInput"
+                        x:Uid="MultiFile_MaxSize"
+                        Width="110"
+                        AutomationProperties.AutomationId="MultiFile_MaxSize" />
+                    <CheckBox x:Name="HiddenChoice" x:Uid="MultiFile_Hidden" AutomationProperties.AutomationId="MultiFile_Hidden" />
+                    <CheckBox x:Name="LinksChoice" x:Uid="MultiFile_Links" AutomationProperties.AutomationId="MultiFile_Links" />
+                    <CheckBox
+                        x:Name="StreamsChoice"
+                        x:Uid="MultiFile_Streams"
+                        AutomationProperties.AutomationId="MultiFile_Streams"
+                        IsEnabled="False" />
+                    <CheckBox
+                        x:Name="OpenDocsChoice"
+                        x:Uid="MultiFile_OpenDocuments"
+                        AutomationProperties.AutomationId="MultiFile_OpenDocuments"
+                        IsChecked="True" />
+                </local:WrapPanel>
+                <!--  対象の指定を名前を付けて保存する (FIND-30 の仕様 9)。  -->
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <ComboBox
+                        x:Name="TargetSetChoice"
+                        Width="160"
+                        AutomationProperties.AutomationId="MultiFile_TargetSet"
+                        SelectionChanged="TargetSet_Changed" />
+                    <TextBox
+                        x:Name="TargetSetName"
+                        x:Uid="MultiFile_TargetSetName"
+                        Width="140"
+                        AutomationProperties.AutomationId="MultiFile_TargetSetName" />
+                    <Button x:Uid="MultiFile_TargetSetSave" AutomationProperties.AutomationId="MultiFile_TargetSetSave" Click="TargetSetSave_Click" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <StackPanel
+            Grid.Row="1"
+            Padding="12,0"
+            Spacing="4">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <Button
+                    x:Name="SearchButton"
+                    x:Uid="MultiFile_Search"
+                    AutomationProperties.AutomationId="MultiFile_Search"
+                    Click="Search_Click"
+                    Style="{StaticResource AccentButtonStyle}" />
+                <Button
+                    x:Name="CancelButton"
+                    x:Uid="MultiFile_Cancel"
+                    AutomationProperties.AutomationId="MultiFile_Cancel"
+                    Click="Cancel_Click"
+                    IsEnabled="False" />
+                <Button
+                    x:Name="ReplaceButton"
+                    x:Uid="MultiFile_RunReplace"
+                    AutomationProperties.AutomationId="MultiFile_RunReplace"
+                    Click="Replace_Click"
+                    IsEnabled="False"
+                    Visibility="Collapsed" />
+                <!--  上限で止めたとき: 上限を 2 倍にして続きから探す (FIND-20 の仕様 6)。  -->
+                <Button
+                    x:Name="ContinueButton"
+                    x:Uid="MultiFile_Continue"
+                    AutomationProperties.AutomationId="MultiFile_Continue"
+                    Click="Continue_Click"
+                    Visibility="Collapsed" />
+                <DropDownButton
+                    x:Name="SkippedButton"
+                    AutomationProperties.AutomationId="MultiFile_Skipped"
+                    Visibility="Collapsed">
+                    <DropDownButton.Flyout>
+                        <MenuFlyout x:Name="SkippedMenu" Opening="SkippedMenu_Opening" Placement="BottomEdgeAlignedLeft" />
+                    </DropDownButton.Flyout>
+                </DropDownButton>
+            </StackPanel>
+            <TextBlock
+                x:Name="Error"
+                AutomationProperties.AutomationId="MultiFile_Error"
+                AutomationProperties.LiveSetting="Assertive"
+                Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                TextWrapping="Wrap" />
+            <TextBlock
+                x:Name="Summary"
+                AutomationProperties.AutomationId="MultiFile_Summary"
+                AutomationProperties.LiveSetting="Polite"
+                TextWrapping="Wrap" />
+        </StackPanel>
+        <ListView
+            x:Name="ResultList"
+            Grid.Row="2"
+            AutomationProperties.AutomationId="MultiFile_Results"
+            DoubleTapped="ResultList_DoubleTapped"
+            IsItemClickEnabled="False"
+            ItemsSource="{x:Bind Rows, Mode=OneTime}"
+            KeyDown="ResultList_KeyDown"
+            SelectionMode="Single">
+            <ListView.ItemTemplate>
+                <!--  行は見えている分だけ作る (MultiFileRowList)。チェックは MultiFileResultView に持つ。  -->
+                <DataTemplate x:DataType="local:MultiFileRow">
+                    <StackPanel Margin="{x:Bind Indent, Mode=OneTime}" Orientation="Horizontal" Spacing="6">
+                        <CheckBox
+                            MinWidth="0"
+                            AutomationProperties.Name="{x:Bind Title, Mode=OneWay}"
+                            IsChecked="{x:Bind Checked, Mode=TwoWay}"
+                            Visibility="{x:Bind CheckVisibility, Mode=OneWay}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontFamily="{x:Bind Font, Mode=OneTime}"
+                            Text="{x:Bind Title, Mode=OneWay}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</UserControl>

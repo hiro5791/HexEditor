@@ -17,6 +17,9 @@ public enum BookmarkChangeKind
 
     /// <summary>読み込みなどで全体が変わった。</summary>
     Reset,
+
+    /// <summary>グループ (INSP-27) の追加・削除・色・表示の変更。ブックマークのグループの付け替えも含む。</summary>
+    Groups,
 }
 
 public sealed class BookmarksChangedEventArgs(BookmarkChangeKind kind, IReadOnlyList<Bookmark> items) : EventArgs
@@ -24,6 +27,12 @@ public sealed class BookmarksChangedEventArgs(BookmarkChangeKind kind, IReadOnly
     public BookmarkChangeKind Kind { get; } = kind;
 
     public IReadOnlyList<Bookmark> Items { get; } = items;
+
+    /// <summary>
+    /// グループの表示 / 非表示だけが変わった (<see cref="BookmarkChangeKind.Groups"/>。INSP-27 の仕様 3)。並び・件数は変わらないので、
+    /// 一覧は作り直さずに行の表示 (薄く表示) だけを直せばよい (100 万件でも 200 ms 以内に反映する)。
+    /// </summary>
+    public bool VisibilityOnly { get; init; }
 }
 
 /// <summary>ブックマーク 1 件の位置の記録 (保存・Undo・削除の取り消しに使う)。</summary>
@@ -37,7 +46,7 @@ public sealed class BookmarkLimitException() : InvalidOperationException("ブッ
 /// (INSP-23 の仕様 4)。ブックマーク自体の追加・削除・変更はデータの Undo 履歴に入れず、ドキュメントを「変更あり」にしない (仕様 5)。
 /// データの Undo / Redo では位置も元に戻す。UI スレッドから使う。
 /// </summary>
-public sealed class BookmarkCollection
+public sealed partial class BookmarkCollection
 {
     /// <summary>1 つのドキュメントのブックマークの上限 (INSP-23 の仕様 6)。</summary>
     public const int MaxCount = 1_000_000;
@@ -347,8 +356,14 @@ public sealed class BookmarkCollection
 
     /// <summary>読み込み用: 記録された値のまま加える (通知は呼び出し側でまとめて出す)。</summary>
     internal Bookmark Restore(long start, long length, string name, BookmarkColor color, string comment, int number, string? group,
-        DateTime created, DateTime updated, bool rangeDeleted, bool createdForNumber, bool editedByUser, bool customized)
+        DateTime created, DateTime updated, bool rangeDeleted, bool createdForNumber, bool editedByUser, bool customized, bool colorSet = false)
     {
+        group = BookmarkGroups.Normalize(group);
+        if (group is not null)
+        {
+            EnsureGroupQuiet(group);
+        }
+
         var b = new Bookmark(_nextId++, Truncate(name, MaxNameLength), color, created)
         {
             Length = length,
@@ -359,6 +374,7 @@ public sealed class BookmarkCollection
             CreatedForNumber = createdForNumber,
             EditedByUser = editedByUser,
             IsCustomized = customized,
+            ColorSet = colorSet,
         };
         Attach(b, start);
         if (number is >= 1 and <= 9 && _numbers[number] is null)
@@ -473,6 +489,8 @@ public sealed class BookmarkCollection
         _tree.Clear();
         _byName.Clear();
         Array.Clear(_numbers);
+        _groups.Clear();
+        _hiddenGroups = 0;
         RaiseChanged(BookmarkChangeKind.Reset, []);
     }
 
@@ -506,12 +524,13 @@ public sealed class BookmarkCollection
 
     public void SetColor(Bookmark b, BookmarkColor color)
     {
-        if (b.Color == color)
+        if (b.Color == color && b.ColorSet)
         {
             return;
         }
 
         b.Color = color;
+        b.ColorSet = true;
         Touch(b, customized: b.IsCustomized);
     }
 
@@ -532,11 +551,24 @@ public sealed class BookmarkCollection
         Touch(b, customized: b.IsCustomized);
     }
 
-    /// <summary>グループを変える (INSP-27 はフェーズ 2。保存の項目だけ)。</summary>
+    /// <summary>グループを変える (INSP-27)。グループがなければ作る (9 階層目なら <see cref="BookmarkGroupDepthException"/>)。</summary>
     public void SetGroup(Bookmark b, string? group)
     {
-        b.Group = string.IsNullOrWhiteSpace(group) ? null : group;
-        Touch(b, customized: b.IsCustomized);
+        group = BookmarkGroups.Normalize(group);
+        if (group is not null)
+        {
+            EnsureGroup(group);
+        }
+
+        if (b.Group == group)
+        {
+            return;
+        }
+
+        b.Group = group;
+        b.EditedByUser = true;
+        b.Updated = _time.GetUtcNow().UtcDateTime;
+        RaiseChanged(BookmarkChangeKind.Groups, [b]);
     }
 
     /// <summary>
@@ -714,7 +746,7 @@ public sealed class BookmarkCollection
         {
             b.Scratch = n;
             buffer[n++] = new BookmarkRecord(start, b.Length, b.Name, b.Color, b.Comment, b.Number, b.Group, b.Created, b.Updated,
-                b.RangeDeleted, b.CreatedForNumber, b.EditedByUser, b.IsCustomized);
+                b.RangeDeleted, b.CreatedForNumber, b.EditedByUser, b.IsCustomized, b.ColorSet);
         }
 
         if (_document is null || _savedIndex < 0 || _savedIndex == _appliedIndex || n == 0)
@@ -802,6 +834,10 @@ public sealed class BookmarkCollection
         _ordered = null;
         Changed?.Invoke(this, new BookmarksChangedEventArgs(kind, items));
     }
+
+    /// <summary>グループの表示 / 非表示の変更を知らせる (並びは変わらないので、並べた配列は捨てない)。</summary>
+    private void RaiseVisibilityChanged() =>
+        Changed?.Invoke(this, new BookmarksChangedEventArgs(BookmarkChangeKind.Groups, []) { VisibilityOnly = true });
 
     private Bookmark[]? _ordered;
 

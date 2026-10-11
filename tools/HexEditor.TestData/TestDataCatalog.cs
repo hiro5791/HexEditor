@@ -8,13 +8,19 @@ namespace HexEditor.TestData;
 /// テストデータ 1 件の定義 (docs/test/test-data.md と各テストケースのファイルの末尾の表)。<paramref name="PathIn"/> は、
 /// ファイル名・置き場所が決まっているもの (長いパス・絵文字の名前など) の出力先のパスを返す。null なら <c>&lt;ID&gt;.bin</c>。
 /// </summary>
-public sealed record TestDataItem(string Id, long Length, string Description, Action<string> Generate, Func<string, string>? PathIn = null);
+public sealed record TestDataItem(string Id, long Length, string Description, Action<string> Generate, Func<string, string>? PathIn = null)
+{
+    /// <summary>長さを内容から求めるもの (圧縮したデータを含むなど、事前に決まらないもの)。設定すると <see cref="Length"/> より優先する。</summary>
+    public Func<long>? ComputeLength { get; init; }
+
+    public long ExpectedLength => ComputeLength?.Invoke() ?? Length;
+}
 
 /// <summary>
 /// テストデータを生成する (テスト方針 7.1)。同じ ID からは常に同じ内容を作る。生成したファイルはキャッシュし、
 /// 2 回目以降はそのまま使う。
 /// </summary>
-public static class TestDataCatalog
+public static partial class TestDataCatalog
 {
     public const long KiB = 1024;
     public const long MiB = 1024 * KiB;
@@ -55,6 +61,15 @@ public static class TestDataCatalog
             dir => Path.Combine(dir, "TD-ENG-ADS", "ads.bin")),
 
         // ---- cases/03-editing.md の表 ----
+        new("TD-EDIT-REC100K", 1_600_000, "16 バイトのレコードを 100,000 件並べたもの。各レコードは CA FE の後に 11 を 14 バイト",
+            path => WriteGenerated(path, 1_600_000, (o, s) =>
+            {
+                for (int i = 0; i < s.Length; i++)
+                {
+                    long column = (o + i) % 16;
+                    s[i] = column == 0 ? (byte)0xCA : column == 1 ? (byte)0xFE : (byte)0x11;
+                }
+            })),
         new("TD-EDIT-SEQ-1K", KiB, "オフセット n の値は n mod 256 (読み取り専用属性は付けない)", path => WriteGenerated(path, KiB, (o, s) => Sequence(o, s))),
         new("TD-EDIT-IHEX-SMALL", 79, "隙間のある 3 行の Intel HEX (CRLF)", path => WriteAll(path, Encoding.ASCII.GetBytes(IhexSmall))),
         new("TD-EDIT-SPARSE-10G", 10 * GiB, "先頭・末尾・1 GiB ごとの目印 (スパース)", path => WriteMarkers(path, 10 * GiB, MarkersEvery(10 * GiB, GiB))),
@@ -64,6 +79,11 @@ public static class TestDataCatalog
 
         // ---- cases/05-inspector-and-annotations.md の表 ----
         new("TD-INSP-VALUES", 256, "インスペクタの解釈の確認用の値 (0x00 に int32 の 12,345 など)", path => WriteAll(path, InspectorValues())),
+        new("TD-INSP-EDGE", 64 * KiB, "0xFFC〜0x1003 が DE AD BE EF CA FE BA BE、それ以外は 00",
+            path => WriteAll(path, [.. new byte[0xFFC], 0xDE, 0xAD, 0xBE, 0xEF, 0xCA, 0xFE, 0xBA, 0xBE, .. new byte[64 * 1024 - 0x1004]])),
+
+        // ---- test-data.md の共通の表 ----
+        new("TD-ZIP", ZipSample().Length, "テキストファイル 3 つを入れた ZIP (無圧縮。50 4B 03 04 は 3 か所)", path => WriteAll(path, ZipSample())),
 
         // ---- テキスト (test-data.md の共通の表) ----
         new("TD-TEXT-ASCII", 4 * KiB, "英文の ASCII テキスト (改行は CRLF)", path => WriteAll(path, Text(AsciiLines, Encoding.ASCII, 4 * KiB, bom: false))),
@@ -75,6 +95,32 @@ public static class TestDataCatalog
 
         // ---- cases/02-view-and-navigation.md の表 ----
         new("TD-VIEW-PATTERNS", 512, "表示形式・文字コードの確認用の決まったバイト列", path => WriteAll(path, ViewPatterns())),
+        new("TD-VIEW-NES", 40_976, "iNES のヘッダ 16 バイトの後に n mod 256 の列 (拡張子は使う側で付ける)",
+            path => WriteAll(path, [0x4E, 0x45, 0x53, 0x1A, 0x02, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, .. Enumerable.Range(16, 40_976 - 16).Select(i => (byte)i)])),
+        new("TD-VIEW-PRESET-FUTURE", ViewPresetFutureJson.Length, "表示プリセットの JSON (名前 Future、1 行 16 バイト、このバージョンが知らない項目を含む)",
+            path => File.WriteAllText(path, ViewPresetFutureJson)),
+        new("TD-VIEW-LEN10", 10, "00, 01, …, 09", path => WriteAll(path, [.. Enumerable.Range(0, 10).Select(i => (byte)i)])),
+        new("TD-VIEW-LEN100", 100, "オフセット n の値が n", path => WriteAll(path, [.. Enumerable.Range(0, 100).Select(i => (byte)i)])),
+        new("TD-VIEW-SEQ-MOD", MiB, "TD-SEQ-1M の 0x10・0x25・0x3F を FF にしたもの", path => WriteGenerated(path, MiB, (o, s) =>
+        {
+            Sequence(o, s);
+            foreach (long at in new long[] { 0x10, 0x25, 0x3F })
+            {
+                if (at >= o && at < o + s.Length)
+                {
+                    s[(int)(at - o)] = 0xFF;
+                }
+            }
+        })),
+        new("TD-VIEW-ENTROPY", 64 * MiB, "先頭 32 MiB は種 20261007 の乱数、後半 32 MiB はすべて 00", WriteViewEntropy),
+        new("TD-VIEW-TBL", ViewTable.Length, "文字表 (UTF-8、CRLF)。有効なエントリ 4、不正な行は 5〜7 行目", path => WriteAll(path, ViewTable),
+            dir => Path.Combine(dir, "TD-VIEW-TBL.tbl")),
+        new("TD-VIEW-TBL-DATA", 4, "41 42 41 43", path => WriteAll(path, [0x41, 0x42, 0x41, 0x43])),
+        new("TD-VIEW-THEME-OK", ThemeOk.Length, "独自のバイトテーマの JSON", path => WriteAll(path, ThemeOk), dir => Path.Combine(dir, "TD-VIEW-THEME-OK.json")),
+        new("TD-VIEW-THEME-BAD", ThemeBad.Length, "4 行目のキーが Hex でないバイトテーマの JSON", path => WriteAll(path, ThemeBad),
+            dir => Path.Combine(dir, "TD-VIEW-THEME-BAD.json")),
+        new("TD-VIEW-THEME-LOWCONTRAST", ThemeLow.Length, "コントラストの低い文字色を含むバイトテーマの JSON", path => WriteAll(path, ThemeLow),
+            dir => Path.Combine(dir, "TD-VIEW-THEME-LOWCONTRAST.json")),
 
         // ---- cases/09-ui-and-settings.md の表 ----
         new("TD-UI-SECRET", 4 * KiB, "secret-content.bin: HEXEDITOR-SECRET-7F3A の繰り返し",
@@ -86,7 +132,7 @@ public static class TestDataCatalog
         new("TD-ANA-ABC", 3, "ASCII の abc", path => WriteAll(path, Encoding.ASCII.GetBytes("abc"))),
         new("TD-ANA-SHA256SUM", Sha256SumLength, "TD-RANDOM-16M の sha256sum の出力 (TD-RANDOM-16M と同じフォルダに置く)", WriteSha256Sum,
             dir => Path.Combine(dir, "TD-RANDOM-16M.sha256")),
-    }.ToDictionary(i => i.Id);
+    }.Concat(FormatItems()).Concat(CompareItems()).Concat(AnalysisItems()).ToDictionary(i => i.Id);
 
     /// <summary>TD-ANA-SHA256SUM の長さ: 64 桁の Hex、空白 2 つ、TD-RANDOM-16M.bin、LF。</summary>
     private const long Sha256SumLength = 64 + 2 + 17 + 1;
@@ -193,7 +239,7 @@ public static class TestDataCatalog
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         lock (Items)
         {
-            if (File.Exists(path) && new FileInfo(path).Length == item.Length)
+            if (File.Exists(path) && new FileInfo(path).Length == item.ExpectedLength)
             {
                 return path;
             }
@@ -288,6 +334,102 @@ public static class TestDataCatalog
     private static IEnumerable<long> Around(long p) => [p - MarkerLength, p];
 
     private static void WriteAll(string path, byte[] data) => File.WriteAllBytes(path, data);
+
+    /// <summary>TD-VIEW-PRESET-FUTURE の内容 (ASCII のみ)。</summary>
+    public const string ViewPresetFutureJson = """
+        {
+          "version": 2,
+          "format": "hexeditor-view-presets",
+          "presets": [
+            {
+              "name": "Future",
+              "extensions": [],
+              "view": { "bytesPerRow": 16, "futureOption": { "x": 1 } },
+              "futureField": true
+            }
+          ]
+        }
+        """;
+
+    /// <summary>
+    /// TD-ZIP: 無圧縮 (stored) で 3 つのテキストファイルを入れた ZIP。日時と内容を固定して、いつも同じバイト列にする。
+    /// ローカルファイルヘッダ (50 4B 03 04) は 3 か所 (内容の文字列には現れない)。
+    /// </summary>
+    public static byte[] ZipSample()
+    {
+        string[] names = ["readme.txt", "notes.txt", "data.txt"];
+        var body = new MemoryStream();
+        var central = new MemoryStream();
+        var w = new BinaryWriter(body);
+        var c = new BinaryWriter(central);
+        for (int i = 0; i < names.Length; i++)
+        {
+            byte[] name = Encoding.ASCII.GetBytes(names[i]);
+            byte[] content = Encoding.ASCII.GetBytes(string.Concat(Enumerable.Repeat($"Line of sample text {i} for the zip test data.\r\n", 10)));
+            uint crc = Crc32(content);
+            uint offset = (uint)body.Position;
+            w.Write(0x04034B50u);
+            w.Write((ushort)20);
+            w.Write((ushort)0);
+            w.Write((ushort)0);
+            w.Write((ushort)0x6000);
+            w.Write((ushort)0x5B47);
+            w.Write(crc);
+            w.Write((uint)content.Length);
+            w.Write((uint)content.Length);
+            w.Write((ushort)name.Length);
+            w.Write((ushort)0);
+            w.Write(name);
+            w.Write(content);
+            c.Write(0x02014B50u);
+            c.Write((ushort)20);
+            c.Write((ushort)20);
+            c.Write((ushort)0);
+            c.Write((ushort)0);
+            c.Write((ushort)0x6000);
+            c.Write((ushort)0x5B47);
+            c.Write(crc);
+            c.Write((uint)content.Length);
+            c.Write((uint)content.Length);
+            c.Write((ushort)name.Length);
+            c.Write((ushort)0);
+            c.Write((ushort)0);
+            c.Write((ushort)0);
+            c.Write((ushort)0);
+            c.Write(0u);
+            c.Write(offset);
+            c.Write(name);
+        }
+
+        uint centralOffset = (uint)body.Position;
+        c.Flush();
+        w.Write(central.ToArray());
+        w.Write(0x06054B50u);
+        w.Write((ushort)0);
+        w.Write((ushort)0);
+        w.Write((ushort)names.Length);
+        w.Write((ushort)names.Length);
+        w.Write((uint)central.Length);
+        w.Write(centralOffset);
+        w.Write((ushort)0);
+        w.Flush();
+        return body.ToArray();
+
+        static uint Crc32(byte[] data)
+        {
+            uint crc = 0xFFFFFFFF;
+            foreach (byte b in data)
+            {
+                crc ^= b;
+                for (int k = 0; k < 8; k++)
+                {
+                    crc = (crc & 1) != 0 ? (crc >> 1) ^ 0xEDB88320 : crc >> 1;
+                }
+            }
+
+            return ~crc;
+        }
+    }
 
     /// <summary>TD-INSP-VALUES: 下記以外はすべて 00 の 256 バイト。</summary>
     public static byte[] InspectorValues()
@@ -395,6 +537,36 @@ public static class TestDataCatalog
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         return Encoding.GetEncoding(932);
+    }
+
+    /// <summary>TD-VIEW-TBL (cases/02-view-and-navigation.md の表)。</summary>
+    private static byte[] ViewTable => Encoding.UTF8.GetBytes(
+        "# test table\r\n41=A\r\n4142=あ\r\nFF=<END>\r\nXYZ\r\n4G=B\r\n123=C\r\n\r\n/00=<EOS>\r\n");
+
+    private static byte[] ThemeOk => Encoding.UTF8.GetBytes(
+        """{"name": "OK", "light": {"00": "#808080", "FF": "#C00000", "20-7E": "#0050A0", "0A": {"text": "#000000", "background": "#FFE080"}}}""");
+
+    private static byte[] ThemeBad => Encoding.UTF8.GetBytes("{\n  \"name\": \"Bad\",\n  \"light\": {\n    \"G0\": \"#808080\"\n  }\n}\n");
+
+    private static byte[] ThemeLow => Encoding.UTF8.GetBytes("""{"name": "Low", "light": {"41": "#F0F0F0", "42": "#0050A0"}}""");
+
+    /// <summary>TD-VIEW-ENTROPY: 先頭 32 MiB は種 20261007 の乱数、後半 32 MiB は 00 (スパースにしない)。</summary>
+    private static void WriteViewEntropy(string path)
+    {
+        var random = new Random(20261007);
+        byte[] block = new byte[MiB];
+        using var file = new FileStream(path, FileMode.Create, FileAccess.Write);
+        for (int i = 0; i < 32; i++)
+        {
+            random.NextBytes(block);
+            file.Write(block);
+        }
+
+        Array.Clear(block);
+        for (int i = 0; i < 32; i++)
+        {
+            file.Write(block);
+        }
     }
 
     /// <summary>TD-VIEW-PATTERNS (cases/02-view-and-navigation.md の表)。</summary>

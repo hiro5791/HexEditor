@@ -443,6 +443,45 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         }
     }
 
+    // ---- 色の選択 (INSP-12 の仕様 4) ----
+
+    private void PickColor_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button)
+        {
+            AutomationProperties.SetName(button, Loc.Get("Inspector_PickColorName"));
+            ToolTipService.SetToolTip(button, Loc.Get("Inspector_PickColorName"));
+            button.IsEnabled = !Vm.ReadOnly;
+        }
+    }
+
+    /// <summary>色の選択のフライアウト (WinUI の ColorPicker) を開き、「書き込む」で選んだ色を書き込む。</summary>
+    private void PickColor_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button { Tag: InspectorItemViewModel item } button || item.Rgba is not { } rgba)
+        {
+            return;
+        }
+
+        Vm.Selected = item;
+        var picker = new ColorPicker
+        {
+            Color = Services.AnnotationBrushes.FromRgba(rgba),
+            IsAlphaEnabled = item.TypeId is Core.Inspector.InspectorTypes.Rgba8 or Core.Inspector.InspectorTypes.Bgra8,
+            IsMoreButtonVisible = true,
+        };
+        AutomationProperties.SetAutomationId(picker, "Inspector_ColorPicker");
+        var write = new Button { Content = Loc.Get("Inspector_WriteColor"), HorizontalAlignment = HorizontalAlignment.Right };
+        AutomationProperties.SetAutomationId(write, "Inspector_WriteColor");
+        var flyout = new Flyout { Content = new StackPanel { Spacing = 8, Children = { picker, write } } };
+        write.Click += (_, _) =>
+        {
+            Vm.WriteColor(item, picker.Color);
+            flyout.Hide();
+        };
+        flyout.ShowAt(button);
+    }
+
     // ---- 2 進のビット (INSP-08) ----
 
     private void Bit_Click(object sender, RoutedEventArgs e)

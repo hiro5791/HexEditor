@@ -13,12 +13,14 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     public DocumentViewModel(Document document, string? filePath, string displayName)
     {
         Document = document;
-        Editor = new EditorState(document);
+        PrimaryEditor = new EditorState(document);
         FilePath = filePath;
         DisplayName = displayName;
         // ステータスバー・タブの見出しをまとめて更新する (空の名前は全プロパティの変更)。
-        Document.Changed += (_, _) => OnPropertyChanged(string.Empty);
-        Document.ReadOnlyChanged += (_, _) => OnPropertyChanged(string.Empty);
+        _documentChanged = (_, _) => OnPropertyChanged(string.Empty);
+        _readOnlyChanged = (_, _) => OnPropertyChanged(string.Empty);
+        Document.Changed += _documentChanged;
+        Document.ReadOnlyChanged += _readOnlyChanged;
 
         // カーソルの値は、読み込みが終わってから表示する (読み込みの通知はスレッドプールから来る)。
         var queue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
@@ -32,23 +34,64 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
             _statusTimer.Tick += (_, _) => RaiseStatus();
         }
 
-        Editor.Changed += (_, _) =>
-        {
-            if (Editor.PointerDragging && _statusTimer is not null
-                && System.Diagnostics.Stopwatch.GetElapsedTime(_lastStatus) < StatusInterval)
-            {
-                if (!_statusTimer.IsRunning)
-                {
-                    _statusTimer.Start();
-                }
+        AttachPane(PrimaryEditor);
+        _dataLoaded = (_, _) => queue?.TryEnqueue(() => OnPropertyChanged(nameof(ValueText)));
+        Document.DataLoaded += _dataLoaded;
+    }
 
-                return;
+    private readonly EventHandler<Core.Engine.DocumentChangedEventArgs> _documentChanged;
+    private readonly EventHandler _readOnlyChanged;
+    private readonly EventHandler _dataLoaded;
+
+    /// <summary>
+    /// ドキュメントを閉じずに、このビュー (とペイン) のドキュメントのイベントの購読を外す (比較タブの片側、同じドキュメントのほかのビューが残るとき)。
+    /// </summary>
+    public void DetachFromDocument()
+    {
+        Document.Changed -= _documentChanged;
+        Document.ReadOnlyChanged -= _readOnlyChanged;
+        Document.DataLoaded -= _dataLoaded;
+        _statusTimer?.Stop();
+        foreach (EditorState pane in Panes)
+        {
+            DetachPane(pane);
+            pane.Detach();
+        }
+    }
+
+    /// <summary>ペインのビューの変化でステータスバーを更新し、<see cref="EditorChanged"/> を出す。</summary>
+    private void AttachPane(EditorState editor) => editor.Changed += Pane_Changed;
+
+    private void DetachPane(EditorState editor) => editor.Changed -= Pane_Changed;
+
+    private void Pane_Changed(object? sender, EventArgs e)
+    {
+        EditorChanged?.Invoke(this, EventArgs.Empty);
+        if (!ReferenceEquals(sender, Editor))
+        {
+            // 操作中でないペインの変化はステータスバーに関係しない。
+            return;
+        }
+
+        if (Editor.PointerDragging && _statusTimer is not null
+            && System.Diagnostics.Stopwatch.GetElapsedTime(_lastStatus) < StatusInterval)
+        {
+            if (!_statusTimer.IsRunning)
+            {
+                _statusTimer.Start();
             }
 
-            RaiseStatus();
-        };
-        Document.DataLoaded += (_, _) => queue?.TryEnqueue(() => OnPropertyChanged(nameof(ValueText)));
+            return;
+        }
+
+        RaiseStatus();
     }
+
+    /// <summary>
+    /// どちらかのペインのビュー (カーソル・選択範囲・スクロール位置・表示設定) が変わった、または操作中のペインが替わった
+    /// (インスペクタ・ハッシュのパネルが購読する。VIEW-37)。
+    /// </summary>
+    public event EventHandler? EditorChanged;
 
     public Document Document { get; }
 
@@ -68,7 +111,7 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     public Core.Notifications.NotificationCenter? Notifications { get; set; }
 
     /// <summary>このドキュメントの復旧用データ (ENG-27)。作れなかった場合は null (編集は続けられる)。</summary>
-    public DocumentRecovery? Recovery { get; init; }
+    public DocumentRecovery? Recovery { get; set; }
 
     private DocumentSnapshot? _lastRecorded;
 
@@ -99,7 +142,15 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
             return null;
         }
 
-        RecoveryCapture? capture = DocumentRecovery.Capture(Document, Editor.Cursor, Editor.SelectionStart, Editor.SelectionLength);
+        (string, string, Core.Sources.FileStamp?)? encoded = Encoded is { } e && FilePath is { } encodedPath ? (encodedPath, e.Format, EncodedStamp) : null;
+        RecoveryCapture? capture = DocumentRecovery.Capture(Document, Editor.Cursor, Editor.SelectionStart, Editor.SelectionLength, encoded,
+            Encoded?.GapFill ?? Core.Formats.EncodedFile.DefaultGapFill);
+        if (capture is not null && ImportedSettings is { } imported)
+        {
+            // インポートの付随データ (実行開始アドレス・S0 の文字列。TOOL-05・06 の仕様 2) も復旧で戻す。
+            capture = capture with { ImportedSettings = imported };
+        }
+
         _lastRecorded = capture?.Snapshot ?? _lastRecorded;
         return capture;
     }
@@ -114,7 +165,8 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
         _lastRecorded = null;
     }
 
-    public EditorState Editor { get; }
+    /// <summary>操作中のペインのビュー (分割していなければ <see cref="PrimaryEditor"/>。VIEW-37 の仕様 6)。</summary>
+    public EditorState Editor => ActivePane == 1 && SecondaryEditor is { } second ? second : PrimaryEditor;
 
     /// <summary>保存先のパス。無題のドキュメントでは null。</summary>
     public string? FilePath { get; private set; }
@@ -218,11 +270,35 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     }
 
     /// <summary>選択範囲: 「選択: 0x1F00–0x1FFF (長さ 0x100 = 256)」。開始と最後のバイトの閉区間 (VIEW-40 の仕様 3)。</summary>
-    public string SelectionText => Editor.HasSelection
+    public string SelectionText => SpecialSelectionText() ?? (Editor.HasSelection
         ? Loc.Format("Status_SelectionRange", Editor.OffsetFormat.Value(Editor.SelectionStart, Culture),
             Editor.OffsetFormat.Value(Editor.SelectionStart + Editor.SelectionLength - 1, Culture),
             OffsetFormat.Hex(Editor.SelectionLength, Editor.View.LowercaseHex), StatusFormat.Number(Editor.SelectionLength, Culture))
-        : string.Empty;
+        : string.Empty);
+
+    /// <summary>
+    /// マルチ選択「3 個の範囲、計 12 バイト (主要素: 0x30–0x33)」(EDIT-07 の仕様 5)、矩形「矩形 4 行 × 4 バイト (計 16 バイト)」(EDIT-06 の仕様 4)、
+    /// マルチカーソル「4 個のカーソル」(EDIT-08 の仕様 8)。単一の選択なら null。
+    /// </summary>
+    private string? SpecialSelectionText()
+    {
+        if (Editor.HasMultipleCarets)
+        {
+            return Loc.Format("Status_Carets", Editor.CaretCount);
+        }
+
+        switch (Editor.SelectionKind)
+        {
+            case SelectionKind.Rectangle when Editor.Rectangle is { } r:
+                return Loc.Format("Status_Rectangle", StatusFormat.Number(Editor.SelectedRangeCount, Culture), StatusFormat.Number(r.Width, Culture),
+                    StatusFormat.Number(Editor.SelectedByteCount, Culture));
+            case SelectionKind.Multiple when Editor.PrimaryRange is { } p:
+                return Loc.Format("Status_MultiSelection", Editor.SelectedRangeCount, StatusFormat.Number(Editor.SelectedByteCount, Culture),
+                    Editor.OffsetFormat.Value(p.Start, Culture), Editor.OffsetFormat.Value(p.Last, Culture));
+            default:
+                return null;
+        }
+    }
 
     public string SelectionToolTip => Editor.HasSelection
         ? Loc.Format("Status_SelectionTip", Editor.OffsetFormat.Status(Editor.SelectionStart, Culture),
@@ -230,9 +306,10 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
             OffsetFormat.Hex(Editor.SelectionLength, Editor.View.LowercaseHex), StatusFormat.Number(Editor.SelectionLength, Culture))
         : string.Empty;
 
-    public string ModeText => Editor.ReadOnly ? LockGlyph + " " + Loc.Get("Status_ReadOnly")
+    /// <summary>モード。デコードして開いたドキュメントは形式 (「Intel HEX」など。ENG-38 の画面) を前に付ける。</summary>
+    public string ModeText => (FileFormatText.Length > 0 ? FileFormatText + " · " : string.Empty) + (Editor.ReadOnly ? LockGlyph + " " + Loc.Get("Status_ReadOnly")
         : !Document.CanResize ? Loc.Get("Status_OverwriteFixed")
-        : Editor.InsertMode ? Loc.Get("Status_Insert") : Loc.Get("Status_Overwrite");
+        : Editor.InsertMode ? Loc.Get("Status_Insert") : Loc.Get("Status_Overwrite"));
 
     public string ColumnText => Editor.ActiveColumn == ActiveColumn.Hex ? Loc.Get("Status_ColumnHex") : Loc.Get("Status_ColumnText");
 
@@ -246,6 +323,72 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
 
     public string ModifiedText => Document.IsModified ? "● " + Loc.Get("Status_Modified") : string.Empty;
 
+    /// <summary>
+    /// セクタ / ページ / レコード (VIEW-40 の仕様 1): 「セクタ 15」(ディスク・セクタ形式・区切り線がセクタのとき。VIEW-32 の仕様 6)、
+    /// 「ページ 3 / 25,600」(区切り線があるとき。VIEW-33 の仕様 6)、「レコード #1024 +0x04」(レコード表示がオンのとき。VIEW-18 の仕様 7)。
+    /// 該当しなければ空 (表示しない)。
+    /// </summary>
+    public string PositionText
+    {
+        get
+        {
+            if (Document.IsDisposed)
+            {
+                return string.Empty;
+            }
+
+            EditorState e = Editor;
+            ViewSettings v = e.View;
+            var parts = new List<string>();
+            long cursor = e.Cursor;
+            // セクタ番号 (VIEW-32 の仕様 6) と区切りの番号 (VIEW-33 の仕様 6) は別々に決める。区切り線がセクタなら区切りはセクタ番号で示す。
+            if (e.ShowsSectorInStatus)
+            {
+                string index = e.CursorSector.ToString(Culture);
+
+                // ディスク・ディスクイメージはセクタサイズも示す (ENG-31 の「画面」)。
+                parts.Add(Document.Source.LogicalSectorSize > 1
+                    ? Loc.Format("Status_SectorWithSize", index, Document.Source.LogicalSectorSize.ToString("N0", Culture))
+                    : Loc.Format("Status_Sector", index));
+            }
+
+            if (v.Separator is not (SeparatorKind.None or SeparatorKind.Sector) && e.SectionLength > 0)
+            {
+                SectionLayout sections = e.Sections;
+                string index = sections.IndexOf(cursor).ToString("N0", Culture);
+                string count = sections.Count.ToString("N0", Culture);
+                parts.Add(Loc.Format(v.Separator == SeparatorKind.Page ? "Status_Page" : "Status_Section", index, count));
+            }
+
+            if (v.RecordView && RecordLayout.For(v) is var records && records.IndexOf(cursor) is { } recordNo && records.WithinOf(cursor) is { } within)
+            {
+                string position = RecordLayout.WithinText(within, v.Radix, v.LowercaseHex);
+                parts.Add(Loc.Format("Status_Record", recordNo.ToString(CultureInfo.InvariantCulture), position));
+            }
+
+            // プロセスメモリ: カーソルのある領域 (ENG-33 の仕様 4)。例: kernel32.dll+0x1A2B0 (RX)。
+            if (ProcessMemory is { } process && process.DescribeAddress(process.BaseAddress + cursor) is { Length: > 0 } region)
+            {
+                parts.Add(region);
+            }
+
+            return string.Join("  ", parts);
+        }
+    }
+
+    /// <summary>表示形式 (VIEW-40 の仕様 1): Hex 以外のセルの表示形式のとき <c>int32</c>、<c>float</c> など。Hex なら空。</summary>
+    public string FormatText => CellFormatter.StatusName(Editor.View.CellFormat) ?? string.Empty;
+
+    /// <summary>エンディアン (VIEW-40 の仕様 1): <c>LE</c> / <c>BE</c>。逆順表示中は <c>LE (逆順表示)</c>。</summary>
+    public string EndianText
+    {
+        get
+        {
+            string endian = Editor.View.BigEndian ? "BE" : "LE";
+            return RowFormat.For(Editor.View, Editor.BytesPerRow).Reverse ? Loc.Format("Status_ReversedEndian", endian) : endian;
+        }
+    }
+
     /// <summary>パスを持たない項目をコピーした一時ファイル (ENG-12 の仕様 2)。閉じるときに消す。</summary>
     public string? TemporaryFile { get; set; }
 
@@ -258,6 +401,15 @@ public sealed partial class DocumentViewModel : ObservableObject, IDisposable
     /// <summary>閉じる: ドキュメントを解放してから、復旧用データをフォルダごと消す (仕様 5)。</summary>
     public void Dispose()
     {
+        PaneSync?.Dispose();
+
+        // 同じドキュメントのビューがほかに残るなら、ドキュメントは閉じない (VIEW-38 の仕様 6)。
+        if (LeaveShare())
+        {
+            DetachFromDocument();
+            return;
+        }
+
         Document.Dispose();
         Recovery?.Dispose();
         if (TemporaryFile is not null)

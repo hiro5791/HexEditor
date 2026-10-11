@@ -94,6 +94,15 @@
                     x:Uid="Start_New"
                     AutomationProperties.AutomationId="Start_New"
                     Click="New_Click" />
+                <!--  ディスク・プロセスを開く (UI-38 の仕様 1。ENG-29、ENG-32)  -->
+                <Button
+                    x:Uid="Start_OpenDisk"
+                    AutomationProperties.AutomationId="Start_OpenDisk"
+                    Click="OpenDisk_Click" />
+                <Button
+                    x:Uid="Start_OpenProcess"
+                    AutomationProperties.AutomationId="Start_OpenProcess"
+                    Click="OpenProcess_Click" />
                 <Button
                     x:Uid="Start_RestoreSession"
                     AutomationProperties.AutomationId="Start_RestoreSession"

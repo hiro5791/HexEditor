@@ -26,7 +26,32 @@ public static class NumberFormat
         }
     }
 
-    private static string ToOctal(ulong value)
+    /// <summary>128 bit の整数の表示 (INSP-04 の仕様 2。10 進では最大 39 桁)。<paramref name="bits"/> は 2 の補数の表現。</summary>
+    public static string Integer128(BigInteger value, UInt128 bits, IntegerBase radix, bool grouping, CultureInfo culture)
+    {
+        switch (radix)
+        {
+            case IntegerBase.Hexadecimal:
+                return "0x" + bits.ToString("X32", CultureInfo.InvariantCulture);
+            case IntegerBase.Octal:
+                if (bits == UInt128.Zero)
+                {
+                    return "0o0";
+                }
+
+                var text = new StringBuilder();
+                for (UInt128 v = bits; v != UInt128.Zero; v >>= 3)
+                {
+                    text.Insert(0, (char)('0' + (int)(v & 7)));
+                }
+
+                return "0o" + text;
+            default:
+                return grouping ? value.ToString("N0", culture) : value.ToString(culture);
+        }
+    }
+
+    internal static string ToOctal(ulong value)
     {
         if (value == 0)
         {
@@ -101,11 +126,15 @@ public static class NumberFormat
     }
 
     /// <summary>16 進浮動小数点 (<c>0x1.8p+1</c>)。非正規化数は <c>0x0.…p-126</c> の形。</summary>
-    public static string HexFloat(ulong bits, bool isFloat)
+    public static string HexFloat(ulong bits, bool isFloat) => HexFloatBits(bits, isFloat ? 23 : 52, isFloat ? 8 : 11);
+
+    /// <summary>
+    /// IEEE 754 の形式 (仮数 <paramref name="mantissaBits"/> bit、指数 <paramref name="exponentBits"/> bit) の 16 進浮動小数点
+    /// (half、bfloat16 にも使う。INSP-06)。
+    /// </summary>
+    public static string HexFloatBits(ulong bits, int mantissaBits, int exponentBits)
     {
-        int mantissaBits = isFloat ? 23 : 52;
-        int exponentBits = isFloat ? 8 : 11;
-        int bias = isFloat ? 127 : 1023;
+        int bias = (1 << (exponentBits - 1)) - 1;
         bool negative = (bits >> (mantissaBits + exponentBits) & 1) != 0;
         long exponent = (long)(bits >> mantissaBits) & ((1L << exponentBits) - 1);
         ulong mantissa = bits & ((1UL << mantissaBits) - 1);
@@ -189,7 +218,7 @@ public static class NumberFormat
         return d;
     }
 
-    private static bool IsDecimalLiteral(string body)
+    internal static bool IsDecimalLiteral(string body)
     {
         int i = 0;
         int digits = 0;
@@ -372,7 +401,7 @@ public static class NumberFormat
     }
 
     /// <summary>入力の正確な値 = num × 10^pow10 × 2^pow2 (10 進は pow2 = 0、16 進浮動小数点は pow10 = 0)。</summary>
-    private static bool TryExact(string body, out BigInteger num, out int pow10, out long pow2)
+    internal static bool TryExact(string body, out BigInteger num, out int pow10, out long pow2)
     {
         num = 0;
         pow10 = 0;

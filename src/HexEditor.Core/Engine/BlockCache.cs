@@ -144,6 +144,15 @@ public sealed class BlockCache : IDisposable
         return false;
     }
 
+    /// <summary>読み込みの状態 (テストの失敗の診断用): 動いているワーカー、待っている要求、読み込み中のブロック、キャッシュのブロック数。</summary>
+    public string DescribeState()
+    {
+        lock (_lock)
+        {
+            return $"running={_running}, pending={_pendingPriority.Count}, inFlight={_inFlight.Count}, cached={_map.Count}, capacity={_capacityBytes / 1024 / 1024} MiB, disposed={_disposed}";
+        }
+    }
+
     /// <summary>使い回しに取ってある領域の数 (テストと診断用)。</summary>
     public int FreeBlockCount
     {
@@ -225,6 +234,67 @@ public sealed class BlockCache : IDisposable
         return new ReadResult(count, bad);
     }
 
+    /// <summary>
+    /// 読み込んだブロックをキャッシュに入れながら読む (呼んだスレッドで待つ)。同じブロックを何度も少しずつ読む場合に使う
+    /// (マルチカーソルの位置のバイト。EDIT-08 の「巨大ファイル・長時間処理」)。1 回ずつ直接読むとファイルの読み込みの回数が増える。
+    /// </summary>
+    public ReadResult ReadThrough(long sourceOffset, Span<byte> destination)
+    {
+        int count = (int)Math.Min(destination.Length, Math.Max(0, _source.Length - sourceOffset));
+        List<UnreadableRange>? bad = null;
+        int done = 0;
+        while (done < count)
+        {
+            long pos = sourceOffset + done;
+            long index = pos / BlockSize;
+            int inBlock = (int)(pos % BlockSize);
+            if (!TryCopy(index, inBlock, destination[done..count], out int blockLength, out IReadOnlyList<UnreadableRange> blockBad))
+            {
+                long offset = index * BlockSize;
+                int length = (int)Math.Min(BlockSize, _source.Length - offset);
+                byte[] data = RentBlock();
+                int generation;
+                lock (_lock)
+                {
+                    generation = _generation;
+                }
+
+                ReadResult r = ReadWithRetry(offset, data.AsSpan(0, length));
+                var block = new CachedBlock(index, data, r.BytesReturned, r.Unreadable);
+                blockLength = block.Length;
+                blockBad = block.Unreadable;
+                block.Data.AsSpan(inBlock, Math.Clamp(blockLength - inBlock, 0, count - done)).CopyTo(destination[done..count]);
+                lock (_lock)
+                {
+                    if (!_disposed && generation == _generation && !_map.ContainsKey(index))
+                    {
+                        _map[index] = _lru.AddFirst(block);
+                        EvictIfNeeded();
+                    }
+                    else
+                    {
+                        Recycle(block);
+                    }
+                }
+            }
+
+            int n = Math.Min(Math.Max(blockLength - inBlock, 0), count - done);
+            if (n == 0)
+            {
+                break;
+            }
+
+            if (blockBad.Count > 0)
+            {
+                Clip(blockBad, pos, n, bad ??= []);
+            }
+
+            done += n;
+        }
+
+        return new ReadResult(count, bad);
+    }
+
     /// <summary>キャッシュをすべて捨てる (外部変更、表示の更新。ENG-06 の仕様 9・10)。</summary>
     public void Invalidate()
     {
@@ -300,7 +370,14 @@ public sealed class BlockCache : IDisposable
 
             if (block is not null)
             {
-                BlockLoaded?.Invoke(index * BlockSize, block.Length);
+                try
+                {
+                    BlockLoaded?.Invoke(index * BlockSize, block.Length);
+                }
+                catch (Exception ex) when (ex is not OutOfMemoryException)
+                {
+                    // 通知先の例外でワーカーを止めない (止まると _running が減らず、以後の読み込みが始まらない)。
+                }
             }
         }
     }

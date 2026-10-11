@@ -67,6 +67,11 @@ public sealed partial class MainViewModel
             {
                 owner.ExternalChangeDetected?.Invoke(vm, kind);
             }
+            else if (file.Owner is CompareSideViewModel side)
+            {
+                // 比較タブが自分で開いたファイル (ANA-04 の「エラー」): 比較タブに「再比較」を出す。
+                side.RaiseExternalChange();
+            }
         };
     }
 
@@ -85,13 +90,38 @@ public sealed partial class MainViewModel
             vm.RestorePosition(fitted.Cursor, fitted.SelectionStart, fitted.SelectionLength, fitted.TopRow);
         }
 
+        // 分割の状態 (VIEW-37 の仕様 10)。ファイルが記録したときから変わっていれば戻さない。
+        if (restorePosition && _files.RestorePosition()
+            && _files.Documents.ReadObject(path, DocumentViewModel.SplitDataKind) is { } split
+            && split.Header.Matches(vm.OpenedStamp))
+        {
+            vm.RestoreSplit(split.Value);
+        }
+
         StartWatching(vm);
     }
 
     /// <summary>外部変更の監視を始める (ファイルのドキュメントだけ)。</summary>
     public void StartWatching(DocumentViewModel vm)
     {
-        if (ExternalChanges is null || vm.Watch is not null || vm.FilePath is not { } path || vm.Document.Source is not FileByteSource file)
+        if (ExternalChanges is null || vm.Watch is not null || vm.FilePath is not { } path)
+        {
+            return;
+        }
+
+        // デコードして開いたドキュメント (ENG-38): 元のテキストファイルを見張る。ハンドルは持たないため、パスの値だけで比べる。
+        // 基準はデコードしたときの値 (その後の変更も検知する)。
+        if (vm.Encoded is not null)
+        {
+            if ((vm.EncodedStamp ?? FileStamp.FromPath(path)) is { } stamp)
+            {
+                vm.Watch = ExternalChanges.Track(vm, path, stamp, () => FileStamp.FromPath(path));
+            }
+
+            return;
+        }
+
+        if (vm.Document.Source is not FileByteSource file)
         {
             return;
         }
@@ -114,7 +144,21 @@ public sealed partial class MainViewModel
     /// </summary>
     public void RebaseWatch(DocumentViewModel vm)
     {
-        if (vm.Watch is { } watch && vm.Document.Source is FileByteSource file)
+        if (vm.Encoded is not null && vm.FilePath is { } encodedPath)
+        {
+            // デコードしたドキュメント: 保存・デコードし直した後の元のファイルの値を基準にする。
+            vm.EncodedStamp = FileStamp.FromPath(encodedPath) ?? vm.EncodedStamp;
+            if (vm.Watch is { } encodedWatch && string.Equals(encodedWatch.Path, encodedPath, StringComparison.OrdinalIgnoreCase) && vm.EncodedStamp is { } stamp)
+            {
+                ExternalChanges?.Rebase(encodedWatch, stamp, () => FileStamp.FromPath(encodedPath));
+            }
+            else
+            {
+                StopWatching(vm);
+                StartWatching(vm);
+            }
+        }
+        else if (vm.Watch is { } watch && vm.Document.Source is FileByteSource file)
         {
             if (!string.Equals(watch.Path, file.Path, StringComparison.OrdinalIgnoreCase))
             {
@@ -160,6 +204,22 @@ public sealed partial class MainViewModel
             if (error is not null)
             {
                 AppLog.Warning($"The position was not saved: {error}");
+            }
+
+            try
+            {
+                if (vm.SplitState() is { } split)
+                {
+                    _files.Documents.WriteObject(path, DocumentViewModel.SplitDataKind, stamp, split);
+                }
+                else
+                {
+                    _files.Documents.Delete(path, DocumentViewModel.SplitDataKind);
+                }
+            }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+            {
+                AppLog.Warning($"The split state was not saved: {e.Message}");
             }
 
             Recent.Record(path, vm.DisplayName, _files.UtcNow());
@@ -235,7 +295,7 @@ public sealed partial class MainViewModel
     /// セッションのタブを開く (UI-31 の仕様 5〜7)。アクティブなタブだけをすぐに開き、他のタブは見出しだけを出して初めて表示したときに開く
     /// (仕様 6。<see cref="AddPending"/>)。
     /// </summary>
-    public void RestoreTabs(SessionWindow window, Func<string, bool, DocumentViewModel?> open, Action<DocumentViewModel> changed)
+    public void RestoreTabs(SessionWindow window, Func<SessionTab, DocumentViewModel?> open, Action<DocumentViewModel> changed)
     {
         DocumentViewModel? active = null;
         for (int i = 0; i < window.Tabs.Count; i++)
@@ -267,9 +327,10 @@ public sealed partial class MainViewModel
     /// セッションのタブ 1 つを開く (UI-31 の仕様 5・7)。見つからないファイルはタブを残して「ファイルが見つかりません」を表示する。前回の
     /// 終了後にサイズや更新日時が変わっていたら、カーソル位置を長さの範囲に収め、<paramref name="changed"/> で知らせる。
     /// </summary>
-    public DocumentViewModel? OpenRestored(SessionTab tab, Func<string, bool, DocumentViewModel?> open, Action<DocumentViewModel> changed, int? insertAt)
+    public DocumentViewModel? OpenRestored(SessionTab tab, Func<SessionTab, DocumentViewModel?> open, Action<DocumentViewModel> changed, int? insertAt)
     {
-        DocumentViewModel? vm = File.Exists(tab.Path) ? open(tab.Path!, tab.ReadOnly) : AddMissing(tab, insertAt);
+        DocumentViewModel? vm = tab.Kind == SessionTabKind.Disk ? AddMissing(tab, insertAt)
+            : File.Exists(tab.Path) ? open(tab) : AddMissing(tab, insertAt);
         if (vm is null)
         {
             return null;

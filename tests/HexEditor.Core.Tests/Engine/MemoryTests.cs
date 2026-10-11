@@ -78,11 +78,15 @@ public sealed class MemoryTests
         var memory = new EngineMemory();
         using Document doc = Big();
         memory.Register(doc);
+        // キャッシュを埋める読み込みは同期で行う (表示用の読み込みはスレッドプールで読み込むため、並列に動くほかのテストで混んだ
+        // CI のランナーでは 600 ブロックの読み込みが待ち時間を超えることがある)。
+        byte[] buffer = new byte[16];
         for (long block = 0; block < 600; block++)
         {
-            ReadForDisplayWhenLoaded(doc.Current, block * doc.Cache.BlockSize, 16);
+            doc.Current.ReadThroughCache(block * doc.Cache.BlockSize, buffer);
         }
 
+        Assert.True(memory.CacheBytes > EngineMemory.LowMemoryCacheBytes, $"{memory.CacheBytes} bytes cached");
         using var monitor = new MemoryMonitor(memory, TimeSpan.FromHours(1));
         int notified = 0;
         monitor.LowMemory += (_, _) => notified++;

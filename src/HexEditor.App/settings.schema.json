@@ -21,6 +21,123 @@
       ],
       "default": "full"
     },
+    "analysis.classify.compressedEntropy": {
+      "description": "Classification: compressed entropy",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 8,
+      "default": 7.2
+    },
+    "analysis.classify.constantShare": {
+      "description": "Classification: constant threshold",
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1,
+      "default": 0.99
+    },
+    "analysis.classify.encryptedEntropy": {
+      "description": "Classification: encrypted entropy",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 8,
+      "default": 7.9
+    },
+    "analysis.classify.pValueHigh": {
+      "description": "Classification: highest p-value",
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1,
+      "default": 0.99
+    },
+    "analysis.classify.pValueLow": {
+      "description": "Classification: lowest p-value",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 0.5,
+      "default": 0.01
+    },
+    "analysis.classify.textShare": {
+      "description": "Classification: text threshold",
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 1,
+      "default": 0.95
+    },
+    "analysis.fileType.autoDetect": {
+      "description": "Detect the file type when opening",
+      "type": "boolean",
+      "default": true
+    },
+    "annotations.column": {
+      "description": "Show the annotation column",
+      "type": "boolean",
+      "default": false
+    },
+    "annotations.hidden": {
+      "description": "Hidden annotation sources",
+      "type": "string",
+      "default": ""
+    },
+    "annotations.style.analysis": {
+      "description": "Annotation style: Analysis results",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "border"
+    },
+    "annotations.style.bookmark": {
+      "description": "Annotation style: Bookmarks",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "background"
+    },
+    "annotations.style.script": {
+      "description": "Annotation style: Scripts and plugins",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "border"
+    },
+    "annotations.style.searchResults": {
+      "description": "Annotation style: Find all results",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "border"
+    },
+    "annotations.style.template": {
+      "description": "Annotation style: Structure templates",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "background"
+    },
+    "annotations.style.yara": {
+      "description": "Annotation style: YARA matches",
+      "type": "string",
+      "enum": [
+        "background",
+        "border",
+        "underline"
+      ],
+      "default": "border"
+    },
     "bookmarks.defaultColor": {
       "description": "Default bookmark color",
       "type": "string",
@@ -35,6 +152,11 @@
         "8"
       ],
       "default": "1"
+    },
+    "bookmarks.richToolTip": {
+      "description": "Show bookmark descriptions in tooltips",
+      "type": "boolean",
+      "default": true
     },
     "clipboard.compatFormats": {
       "description": "Copy in formats other hex editors read",
@@ -58,12 +180,48 @@
       "type": "boolean",
       "default": true
     },
+    "clipboard.history.count": {
+      "description": "Clipboard history items",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 20
+    },
     "clipboard.maxSizeMiB": {
       "description": "Maximum clipboard size (MiB)",
       "type": "integer",
       "minimum": 1,
       "maximum": 2048,
       "default": 64
+    },
+    "clipboard.user.persist": {
+      "description": "Keep user clipboards after exit",
+      "type": "boolean",
+      "default": false
+    },
+    "coloring.highContrastColors": {
+      "description": "Use coloring rule colors in high contrast",
+      "type": "boolean",
+      "default": false
+    },
+    "coloring.rules": {
+      "description": "Coloring rules for all documents",
+      "type": "string",
+      "default": ""
+    },
+    "devices.helperIdleMinutes": {
+      "description": "Close the administrator helper after (minutes)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60,
+      "default": 10
+    },
+    "devices.helperTimeoutSeconds": {
+      "description": "Administrator helper request time limit (seconds)",
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 300,
+      "default": 30
     },
     "diagnostics.hexView.overlay": {
       "description": "Show rendering diagnostics in the Hex view",
@@ -75,6 +233,11 @@
       "type": "boolean",
       "default": false
     },
+    "diskImage.suggest": {
+      "description": "Suggest opening disk images as disk images",
+      "type": "boolean",
+      "default": true
+    },
     "edit.backspaceInOverwrite": {
       "description": "Backspace in overwrite mode",
       "type": "string",
@@ -83,6 +246,15 @@
         "zeroAndMove"
       ],
       "default": "moveCursor"
+    },
+    "edit.caseConversion": {
+      "description": "Case conversion method",
+      "type": "string",
+      "enum": [
+        "ascii",
+        "encoding"
+      ],
+      "default": "ascii"
     },
     "edit.defaultInputMode": {
       "description": "Input mode for newly opened files",
@@ -97,6 +269,13 @@
       "description": "Delete keeps the length in overwrite mode",
       "type": "boolean",
       "default": false
+    },
+    "edit.multiSelection.maxElements": {
+      "description": "Maximum ranges in a multi-selection",
+      "type": "integer",
+      "minimum": 1000,
+      "maximum": 10000000,
+      "default": 1000000
     },
     "edit.overwriteSelectionTyping": {
       "description": "Typing over a selection in overwrite mode",
@@ -127,6 +306,27 @@
       "type": "boolean",
       "default": true
     },
+    "edit.rectangle.maxRows": {
+      "description": "Maximum rows for rectangle edits that change the length",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10000000,
+      "default": 1000000
+    },
+    "edit.selectionDragDrop": {
+      "description": "Drag and drop the selection",
+      "type": "boolean",
+      "default": true
+    },
+    "edit.selectionShift.amount": {
+      "description": "Amount for \u0022Shift selection forward / back\u0022",
+      "type": "string",
+      "enum": [
+        "selectionLength",
+        "lastAmount"
+      ],
+      "default": "selectionLength"
+    },
     "edit.text.enterKey": {
       "description": "Enter in the text column",
       "type": "string",
@@ -155,6 +355,11 @@
       "type": "boolean",
       "default": true
     },
+    "formats.gapFill": {
+      "description": "Fill value for gaps in Intel HEX and S-record files",
+      "type": "string",
+      "default": "FF"
+    },
     "hash.algorithms": {
       "description": "Hash algorithms",
       "type": "string",
@@ -164,6 +369,11 @@
       "description": "Recalculate hashes automatically",
       "type": "boolean",
       "default": true
+    },
+    "hash.customCrc": {
+      "description": "Custom CRCs",
+      "type": "string",
+      "default": ""
     },
     "hash.sets": {
       "description": "Hash algorithm sets",
@@ -247,6 +457,13 @@
       ],
       "default": "info"
     },
+    "memoryMap.refreshSeconds": {
+      "description": "Memory map refresh interval (seconds)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 60,
+      "default": 5
+    },
     "network.downloads.enabled": {
       "description": "Allow downloads",
       "type": "boolean",
@@ -259,6 +476,16 @@
     },
     "network.translationReport.enabled": {
       "description": "Allow translation reports",
+      "type": "boolean",
+      "default": true
+    },
+    "positionManager.followCursor": {
+      "description": "Position manager follows the cursor",
+      "type": "boolean",
+      "default": true
+    },
+    "process.openReadOnly": {
+      "description": "Open processes read-only by default",
       "type": "boolean",
       "default": true
     },
@@ -307,6 +534,11 @@
       "maximum": 60,
       "default": 1
     },
+    "save.shiftInPlace": {
+      "description": "Save in place even when the length changes",
+      "type": "boolean",
+      "default": false
+    },
     "search.chunkSize": {
       "description": "Search chunk size (KiB)",
       "type": "integer",
@@ -345,6 +577,20 @@
       "maximum": 1048576,
       "default": 4096
     },
+    "search.mismatch.minRepeat": {
+      "description": "Repetitions that end a non-matching range",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 65536,
+      "default": 16
+    },
+    "search.multiFile.parallelism": {
+      "description": "Files searched at the same time",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 16,
+      "default": 4
+    },
     "search.readErrors": {
       "description": "When data can\u0027t be read while searching",
       "type": "string",
@@ -354,6 +600,13 @@
         "abort"
       ],
       "default": "ask"
+    },
+    "search.regex.timeLimit": {
+      "description": "Regular expression time limit (seconds)",
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 60,
+      "default": 2
     },
     "search.results.f3Repeats": {
       "description": "F3 searches again",
@@ -394,6 +647,11 @@
       "description": "\u0022Open with\u0022 extensions",
       "type": "string",
       "default": ""
+    },
+    "statistics.autoRecompute": {
+      "description": "Recalculate statistics automatically",
+      "type": "boolean",
+      "default": true
     },
     "storage.tempDirectory": {
       "description": "Folder for temporary data",
@@ -521,6 +779,11 @@
       "type": "string",
       "default": ""
     },
+    "view.byteTheme": {
+      "description": "Byte theme",
+      "type": "string",
+      "default": "none"
+    },
     "view.colorScheme": {
       "description": "Color scheme",
       "type": "string",
@@ -570,6 +833,49 @@
       ],
       "default": "third"
     },
+    "view.minimap.content": {
+      "description": "Minimap content",
+      "type": "string",
+      "enum": [
+        "entropy",
+        "byteKinds",
+        "byteValue",
+        "zero",
+        "byteTheme"
+      ],
+      "default": "entropy"
+    },
+    "view.minimap.exact": {
+      "description": "Calculate the minimap exactly",
+      "type": "boolean",
+      "default": false
+    },
+    "view.minimap.hiddenMarks": {
+      "description": "Hidden minimap marks",
+      "type": "string",
+      "default": ""
+    },
+    "view.minimap.range": {
+      "description": "Minimap range",
+      "type": "string",
+      "enum": [
+        "whole",
+        "around"
+      ],
+      "default": "whole"
+    },
+    "view.minimap.visible": {
+      "description": "Show minimap",
+      "type": "boolean",
+      "default": false
+    },
+    "view.minimap.width": {
+      "description": "Minimap width",
+      "type": "integer",
+      "minimum": 40,
+      "maximum": 200,
+      "default": 80
+    },
     "view.modified.keepAfterSave": {
       "description": "Keep change marks after saving",
       "type": "boolean",
@@ -602,6 +908,11 @@
       "type": "boolean",
       "default": true
     },
+    "view.scrollBar.diffMarks": {
+      "description": "Show differences on the scroll bar",
+      "type": "boolean",
+      "default": false
+    },
     "view.scrollBar.searchMarks": {
       "description": "Show search results on the scroll bar",
       "type": "boolean",
@@ -612,8 +923,18 @@
       "type": "boolean",
       "default": false
     },
+    "view.split.syncSettings": {
+      "description": "Keep split pane display settings the same",
+      "type": "boolean",
+      "default": false
+    },
     "view.statusBar.showNibble": {
       "description": "Show nibble position",
+      "type": "boolean",
+      "default": false
+    },
+    "view.sync.selection": {
+      "description": "Synchronize selection too",
       "type": "boolean",
       "default": false
     },

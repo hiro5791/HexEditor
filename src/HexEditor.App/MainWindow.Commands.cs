@@ -75,12 +75,13 @@ public sealed partial class MainWindow
     }
 
     /// <summary>使えない理由 (UI-16 の「エラー」、UI-17 の仕様 5)。</summary>
+    /// <remarks>比較タブの表示中は、フォーカスのある側の表示 (<see cref="MainViewModel.StatusDocument"/>) で状態を決める。</remarks>
     private CommandState NeedsDocument() =>
-        Vm.Selected is null ? CommandState.Unavailable(Loc.Get("Command_NoDocument")) : CommandState.Available;
+        Vm.StatusDocument is null ? CommandState.Unavailable(Loc.Get("Command_NoDocument")) : CommandState.Available;
 
     private CommandState NeedsEditable(Func<DocumentViewModel, string?>? more = null)
     {
-        if (Vm.Selected is not { } doc)
+        if (Vm.StatusDocument is not { } doc)
         {
             return CommandState.Unavailable(Loc.Get("Command_NoDocument"));
         }
@@ -94,7 +95,7 @@ public sealed partial class MainWindow
     }
 
     private CommandState NeedsDocument(Func<DocumentViewModel, string?> more) =>
-        Vm.Selected is not { } doc ? CommandState.Unavailable(Loc.Get("Command_NoDocument"))
+        Vm.StatusDocument is not { } doc ? CommandState.Unavailable(Loc.Get("Command_NoDocument"))
         : more(doc) is { } reason ? CommandState.Unavailable(reason) : CommandState.Available;
 
     private static CommandState Toggle(bool on) => new(true, null, on);
@@ -110,8 +111,9 @@ public sealed partial class MainWindow
         Commands.Register("file.newWithSize", () => NewWithSize_Click(this, e));
         Commands.Register("file.open", () => Open_Click(this, e));
         Commands.Register("file.save", () => Save_Click(this, e),
-            () => NeedsDocument(d => d.Document.IsReadOnly ? Loc.Get("Command_ReadOnly") : null));
-        Commands.Register("file.saveAs", () => SaveAs_Click(this, e), NeedsDocument);
+            () => NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
+        Commands.Register("file.saveAs", () => SaveAs_Click(this, e),
+            () => NeedsDocument(_ => SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAll", () => SaveAll_Click(this, e), NeedsDocument);
         Commands.Register("file.close", () => Close_Click(this, e), NeedsDocument);
         Commands.Register("file.closeAll", () => CloseAll_Click(this, e), NeedsDocument);
@@ -131,7 +133,9 @@ public sealed partial class MainWindow
         }, NeedsDocument);
         Commands.Register("file.exit", () => Exit_Click(this, e));
         RegisterFilesCommands();
+        RegisterFormatCommands();
         RegisterTabCommands();
+        RegisterDeviceCommands();
 
         // ---- 編集 ----
         Commands.Register("edit.undo", () => Undo_Click(this, e),
@@ -148,6 +152,9 @@ public sealed partial class MainWindow
         Commands.Register("edit.toggleInsert", () => ToggleInsert_Click(this, e),
             () => NeedsEditable(d => d.Document.CanResize ? null : Loc.Get("Notice_FixedLength")));
         RegisterEditCommands();
+        RegisterSelectionCommands();
+        RegisterUserClipboardCommands();
+        RegisterDataCommands();
 
         // ---- 検索・移動 ----
         Commands.Register("search.find", () => Find_Click(this, e), NeedsDocument);
@@ -203,6 +210,8 @@ public sealed partial class MainWindow
 
         // ---- 解析 ----
         RegisterHashCommands();
+        RegisterCompareCommands();
+        RegisterStatisticsCommands();
 
         // ---- 設定・ヘルプ ----
         RegisterSettingsCommands();

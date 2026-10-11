@@ -25,6 +25,125 @@ public sealed class RecoveryTests : IDisposable
     }
 
     [Fact]
+    public void Disk_document_records_the_device_and_is_recovered_onto_the_reopened_device()
+    {
+        // ENG-27 の仕様 6: ディスク・ボリュームは変更範囲マップを復旧する (開き直したデバイスに戻す)。
+        var access = new Core.Devices.FakeDeviceAccess(new Core.Devices.FakeDeviceSpec
+        {
+            Elevated = true,
+            Disks = [new Core.Devices.FakeDiskSpec { Number = 1, SectorSize = 512, Size = 1024 * 1024, Serial = "SER1" }],
+        });
+        Core.Devices.IDeviceHandle handle = access.Open(Core.Devices.DevicePath.PhysicalDrive(1), writable: false);
+        var device = new Core.Devices.DeviceByteSource(handle, access,
+            new Core.Devices.DeviceOpenInfo { Path = handle.Path, DisplayName = "Disk 1", SerialNumber = "SER1" });
+        var doc = new Document(device, Options());
+        var recovery = new DocumentRecovery(Root, doc.Id);
+        doc.Overwrite(0x200, [1, 2, 3]);
+        byte[] expected = Read(doc.Current, 0, 0x400);
+        recovery.Write(DocumentRecovery.Capture(doc, 0x200, 0x200, 0)!);
+        SimulateCrash(doc, recovery);
+
+        RecoveryEntry entry = Assert.Single(RecoveryStore.Scan(Root));
+        Assert.Equal(handle.Path, entry.Record.DevicePath);
+        Assert.Equal("SER1", entry.Record.DeviceSerial);
+        Assert.Null(entry.Record.Path);
+        Assert.Throws<InvalidDataException>(() => RecoveryStore.Restore(entry, Options()));
+
+        Core.Devices.IDeviceHandle again = access.Open(Core.Devices.DevicePath.PhysicalDrive(1), writable: false);
+        var reopened = new Core.Devices.DeviceByteSource(again, access, new Core.Devices.DeviceOpenInfo { Path = again.Path, DisplayName = "Disk 1" });
+        RestoredDocument restored = RecoveryStore.Restore(Assert.Single(RecoveryStore.Scan(Root)), Options(), reopened);
+        using (Document doc2 = restored.Document)
+        {
+            Assert.False(restored.SourceChanged);
+            Assert.True(doc2.IsModified);
+            Assert.Equal(expected, Read(doc2.Current, 0, 0x400));
+        }
+
+        restored.Recovery.Dispose();
+        access.Dispose();
+    }
+
+    [Theory]
+    [InlineData((byte)0xFF)]
+    [InlineData((byte)0x00)]
+    public void Decoded_document_is_recovered_by_decoding_the_original_file_again(byte gapFill)
+    {
+        // ENG-27・ENG-38: デコードして開いたドキュメントは、元のファイルをデコードし直して変更を戻す (デコードの一時ファイルは消えている)。
+        string path = TestDataCatalog.Generate("TD-IHEX", _dir);
+        using Core.Formats.ImportResult decoded = Core.Formats.Importer.DecodeFile(path, Core.Formats.EncodedFile.OpenOptions(Core.Formats.FormatIds.IntelHex, gapFill), Root);
+        Document doc = Core.Formats.EncodedFile.CreateDocument(decoded, Core.Formats.FormatIds.IntelHex, Options());
+        var recovery = new DocumentRecovery(Root, doc.Id);
+        doc.Overwrite(4, [0xEE]);
+        byte[] expected = Read(doc.Current, 0, (int)doc.Length);
+        recovery.Write(DocumentRecovery.Capture(doc, 4, 4, 0, (path, Core.Formats.FormatIds.IntelHex, FileStamp.FromPath(path)), gapFill)!);
+        SimulateCrash(doc, recovery);
+
+        RecoveryEntry entry = Assert.Single(RecoveryStore.Scan(Root));
+        Assert.Equal(path, entry.Record.EncodedPath);
+        RestoredDocument restored = RecoveryStore.Restore(entry, Options());
+        using (Document again = restored.Document)
+        {
+            Assert.False(restored.SourceChanged);
+            Assert.Equal(Core.Formats.FormatIds.IntelHex, restored.Encoded?.Format);
+            Assert.Equal(expected, Read(again.Current, 0, (int)again.Length));
+            Assert.True(again.IsModified);
+        }
+
+        restored.Recovery.Dispose();
+    }
+
+    [Fact]
+    public void Imported_settings_are_recovered_with_an_untitled_document()
+    {
+        // インポートしたドキュメント (TOOL-05・06 の仕様 2) の実行開始アドレス・S0 の文字列は、エクスポートの既定値として復旧でも戻す。
+        var doc = new Document(MemoryByteSource.CreateEmpty("image.hex"), Options());
+        var recovery = new DocumentRecovery(Root, doc.Id);
+        doc.Insert(0, [1, 2, 3, 4]);
+        var imported = new Core.Formats.EncodedFileSettings { Format = Core.Formats.FormatIds.SRecord, StartAddress = 0x8000, Header = "boot" };
+        recovery.Write(DocumentRecovery.Capture(doc, 0, 0, 0)! with { ImportedSettings = imported });
+        SimulateCrash(doc, recovery);
+
+        RecoveryEntry entry = Assert.Single(RecoveryStore.Scan(Root));
+        Assert.Equal(imported, entry.Record.ImportedSettings);
+        RestoredDocument restored = RecoveryStore.Restore(entry, Options());
+        using (Document again = restored.Document)
+        {
+            Assert.Equal([1, 2, 3, 4], Read(again.Current, 0, 4));
+            Assert.Equal(0x8000, restored.Record.ImportedSettings!.StartAddress);
+            Assert.Equal("boot", restored.Record.ImportedSettings.Header);
+        }
+
+        restored.Recovery.Dispose();
+    }
+
+    [Fact]
+    public void Range_document_is_recovered_with_the_same_range()
+    {
+        // ENG-27 の仕様 2 (範囲 ENG-13): 範囲を開いたドキュメントは、同じ範囲を開き直して変更を戻す。
+        string path = TestDataCatalog.Generate("TD-SEQ-1M", _dir);
+        var doc = new Document(FileByteSource.OpenRange(path, 0x1000, 0x800, resizable: false), Options());
+        var recovery = new DocumentRecovery(Root, doc.Id);
+        doc.Overwrite(0x10, [0xAA, 0xBB]);
+        byte[] expected = Read(doc.Current, 0, (int)doc.Length);
+        recovery.Write(DocumentRecovery.Capture(doc, 0x10, 0x10, 0)!);
+        SimulateCrash(doc, recovery);
+
+        RecoveryEntry entry = Assert.Single(RecoveryStore.Scan(Root));
+        Assert.Equal(0x1000, entry.Record.RangeStart);
+        Assert.Equal(0x800, entry.Record.RangeLength);
+        RestoredDocument restored = RecoveryStore.Restore(entry, Options());
+        using (Document again = restored.Document)
+        {
+            Assert.False(restored.SourceChanged);
+            Assert.Equal(0x800, again.Length);
+            Assert.Equal(expected, Read(again.Current, 0, (int)again.Length));
+            Assert.Equal(0x1000, ((FileByteSource)again.Source).RangeStart);
+        }
+
+        restored.Recovery.Dispose();
+    }
+
+    [Fact]
     [Trait(TC, "TC-ENG-27-01")]
     public void RestoresContentAsModifiedWithCursorAndNoUndo()
     {

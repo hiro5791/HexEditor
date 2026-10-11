@@ -14,11 +14,16 @@ namespace HexEditor.App.Views;
 /// </summary>
 public static class ViewSections
 {
-    public static void Register() =>
+    public static void Register()
+    {
         SettingsSections.Register(new SettingsSection(SettingCategories.Appearance, "hexFont", "SetSection_HexFont", HexFont, 5)
         {
             SearchKeys = ["SetSearch_HexFont", "Set_view_font_family", "Set_view_colorScheme"],
         });
+
+        // 表示プリセットの管理 (VIEW-42 の仕様 6・7)。
+        MainWindow.RegisterPresetSection();
+    }
 
     private static FrameworkElement HexFont(MainWindow window)
     {

@@ -121,6 +121,35 @@ public sealed class CrcHasher : IHasher
         return (register ^ p.XorOut) & p.Mask;
     }
 
+    /// <summary>カタログの check (ASCII の <c>123456789</c> の CRC) をパラメータから求める。</summary>
+    public static ulong ComputeCheck(CrcParameters p) => Reference(p, "123456789"u8);
+
+    /// <summary>
+    /// カタログの residue (誤りのない符号語を読んだ後のレジスタ。最終 XOR はかけない) をパラメータから求める。カタログの定義の
+    /// 「レジスタを xorout で初期化し、refout なら反転し、幅と同じ数の 0 のビットを読み、refin なら反転した値」で計算する。
+    /// </summary>
+    public static ulong ComputeResidue(CrcParameters p)
+    {
+        ulong register = p.XorOut & p.Mask;
+        if (p.RefOut)
+        {
+            register = Reflect(register, p.Width);
+        }
+
+        ulong top = 1UL << (p.Width - 1);
+        for (int i = 0; i < p.Width; i++)
+        {
+            bool feedback = (register & top) != 0;
+            register = (register << 1) & p.Mask;
+            if (feedback)
+            {
+                register ^= p.Poly & p.Mask;
+            }
+        }
+
+        return p.RefIn ? Reflect(register, p.Width) : register;
+    }
+
     /// <summary>下位 <paramref name="width"/> ビットの順序を反転する。</summary>
     public static ulong Reflect(ulong value, int width)
     {
@@ -245,5 +274,37 @@ public sealed class CrcHasher : IHasher
         }
 
         return c32;
+    }
+}
+
+/// <summary>
+/// POSIX の <c>cksum</c> と同じ計算 (ANA-19 の仕様 2 の「cksum (長さ付き)」)。CRC-32/CKSUM で、データの後にデータ長を
+/// 下位バイトから順に、0 でない上位バイトがなくなるまで加えて計算する (空のデータは長さのバイトを加えない)。
+/// </summary>
+public sealed class CksumHasher : IHasher
+{
+    /// <summary>CRC-32/CKSUM のパラメータ。</summary>
+    public static readonly CrcParameters Crc32Cksum = new(32, 0x04C11DB7, 0, false, false, 0xFFFFFFFF, 0x765E7680);
+
+    private readonly CrcHasher _crc = new(Crc32Cksum);
+    private ulong _length;
+
+    public void Append(ReadOnlySpan<byte> data)
+    {
+        _crc.Append(data);
+        _length += (ulong)data.Length;
+    }
+
+    public byte[] Finish()
+    {
+        Span<byte> lengthBytes = stackalloc byte[8];
+        int n = 0;
+        for (ulong l = _length; l != 0; l >>= 8)
+        {
+            lengthBytes[n++] = (byte)l;
+        }
+
+        _crc.Append(lengthBytes[..n]);
+        return _crc.Finish();
     }
 }

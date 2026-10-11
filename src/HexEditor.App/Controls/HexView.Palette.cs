@@ -44,8 +44,13 @@ public sealed partial class HexView
         Brush FocusRange,
         Brush Separator,
         Brush SecondaryCaret,
+        Brush RecordAlternate,
+        Brush Difference,
         bool HighContrast)
     {
+        /// <summary>文字色の置き換え (VIEW-17 の仕様 9) の結果。色の組ごとに 1 回だけ計算する。</summary>
+        public ContrastCache Contrast { get; } = new();
+
         /// <summary>テーマのリソースから作り、配色の値のある要素を置き換える。</summary>
         public static Palette Load(HexView view, ColorScheme? scheme, bool highContrast)
         {
@@ -86,6 +91,8 @@ public sealed partial class HexView
                 view.ProbeFocusRange.Fill,
                 view.ProbeSeparator.Fill,
                 view.ProbeSecondaryCaret.Fill,
+                view.ProbeRecordAlternate.Fill,
+                view.ProbeDifference.Fill,
                 highContrast);
             if (highContrast || scheme is null)
             {
@@ -116,6 +123,8 @@ public sealed partial class HexView
                 CurrentRow = Pick(SchemeElement.CurrentRowBackground, p.CurrentRow),
                 Match = Pick(SchemeElement.Match, p.Match),
                 Separator = Pick(SchemeElement.Separator, p.Separator),
+                RecordAlternate = Pick(SchemeElement.RecordAlternate, p.RecordAlternate),
+                Difference = Pick(SchemeElement.DiffChanged, p.Difference),
             };
         }
 
@@ -135,14 +144,101 @@ public sealed partial class HexView
             return new Palette(
                 text, text, hot, gray, highlight, highlightText, highlight, highlightText, text, gray, window, highlight, hot, hot, window,
                 text, text, gray, text, text, text, gray, window, window, highlight, text, highlight, highlightText, window, text, gray,
-                HighContrast: true);
+                window, hot, HighContrast: true);
         }
+
+        /// <summary>
+        /// 背景 <paramref name="under"/> (行の下の面の層。null なら通常の背景) と <paramref name="top"/> (手前の層の背景) の上の文字色
+        /// <paramref name="fore"/> を、コントラストの規則 (VIEW-17 の仕様 9) で読める色にする。<paramref name="normal"/> は通常の文字色。
+        /// ハイコントラストでは置き換えない (システム色だけを使う)。
+        /// </summary>
+        public Brush Readable(Brush fore, Brush? under, Brush? top, Brush normal) =>
+            HighContrast || (under is null && top is null && (ReferenceEquals(fore, normal) || ReferenceEquals(fore, Text)))
+                ? fore
+                : Contrast.Readable(fore, under, top, normal, Background);
 
         public Brush For(CellKind kind) => kind switch
         {
             CellKind.Modified => Modified,
-            CellKind.Loading or CellKind.Empty => Dim,
+            CellKind.Loading or CellKind.Empty or CellKind.NoData => Dim,
             _ => Text,
         };
+    }
+
+    /// <summary>
+    /// 文字色の置き換え (VIEW-17 の仕様 9) のキャッシュ。ブラシの組 (参照) ごとに結果を持ち、描画のたびに色を計算しない
+    /// (VIEW-04 の仕様 3)。同じ組が続くことが多いので、直前の結果も持つ。
+    /// </summary>
+    internal sealed class ContrastCache
+    {
+        /// <summary>覚える組の数の上限 (提供元が毎回ブラシを作っても増え続けないように)。</summary>
+        private const int MaxEntries = 4096;
+
+        private readonly Dictionary<(Brush Fore, Brush? Under, Brush? Top, Brush Normal), Brush> _map = new(KeyComparer.Instance);
+        private (Brush Fore, Brush? Under, Brush? Top, Brush Normal) _lastKey;
+        private Brush? _last;
+
+        public Brush Readable(Brush fore, Brush? under, Brush? top, Brush normal, Brush background)
+        {
+            var key = (fore, under, top, normal);
+            if (_last is not null && KeyComparer.Instance.Equals(key, _lastKey))
+            {
+                return _last;
+            }
+
+            if (!_map.TryGetValue(key, out Brush? result))
+            {
+                result = Compute(fore, under, top, normal, background);
+                if (_map.Count >= MaxEntries)
+                {
+                    _map.Clear();
+                }
+
+                _map[key] = result;
+            }
+
+            _lastKey = key;
+            _last = result;
+            return result;
+        }
+
+        private static Brush Compute(Brush fore, Brush? under, Brush? top, Brush normal, Brush background)
+        {
+            if (fore is not SolidColorBrush f || normal is not SolidColorBrush n || background is not SolidColorBrush b)
+            {
+                return fore;
+            }
+
+            SchemeColor normalColor = ToScheme(n.Color);
+
+            // 通常の背景が透明なら、通常の文字色が暗ければ明るいテーマ (白の上)、明るければ暗いテーマ (黒の上) とみなす。
+            SchemeColor back = CellContrast.Flatten(ToScheme(b.Color), normalColor.Luminance() < 0.5,
+                (under as SolidColorBrush)?.Color is { } u ? ToScheme(u) : null, (top as SolidColorBrush)?.Color is { } t ? ToScheme(t) : null);
+            if (CellContrast.Replacement(ToScheme(f.Color), back, normalColor) is not { } replacement)
+            {
+                return fore;
+            }
+
+            // 置き換えの色は通常の文字色 (テーマのリソース) か、それでも読めない背景のときだけ計算で求めた黒・白。
+            return replacement == normalColor ? normal
+                : new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(replacement.A, replacement.R, replacement.G, replacement.B));
+        }
+
+        private static SchemeColor ToScheme(Color c) => new(c.A, c.R, c.G, c.B);
+
+        /// <summary>ブラシは参照で比べる (色を読まない)。</summary>
+        private sealed class KeyComparer : IEqualityComparer<(Brush Fore, Brush? Under, Brush? Top, Brush Normal)>
+        {
+            public static readonly KeyComparer Instance = new();
+
+            public bool Equals((Brush Fore, Brush? Under, Brush? Top, Brush Normal) x, (Brush Fore, Brush? Under, Brush? Top, Brush Normal) y) =>
+                ReferenceEquals(x.Fore, y.Fore) && ReferenceEquals(x.Under, y.Under) && ReferenceEquals(x.Top, y.Top) && ReferenceEquals(x.Normal, y.Normal);
+
+            public int GetHashCode((Brush Fore, Brush? Under, Brush? Top, Brush Normal) k) => HashCode.Combine(
+                System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(k.Fore),
+                k.Under is null ? 0 : System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(k.Under),
+                k.Top is null ? 0 : System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(k.Top),
+                System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(k.Normal));
+        }
     }
 }

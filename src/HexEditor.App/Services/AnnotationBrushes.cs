@@ -82,4 +82,7 @@ public static class AnnotationBrushes
     public static uint ToRgb(Windows.UI.Color color) => (uint)(color.R << 16 | color.G << 8 | color.B);
 
     public static Windows.UI.Color FromRgb(uint rgb) => new() { A = 255, R = (byte)(rgb >> 16), G = (byte)(rgb >> 8), B = (byte)rgb };
+
+    /// <summary>データの色 (0xRRGGBBAA。インスペクタの色の行 INSP-12) の色。利用者のデータなのでテーマの色ではない。</summary>
+    public static Windows.UI.Color FromRgba(uint rgba) => new() { A = (byte)rgba, R = (byte)(rgba >> 24), G = (byte)(rgba >> 16), B = (byte)(rgba >> 8) };
 }

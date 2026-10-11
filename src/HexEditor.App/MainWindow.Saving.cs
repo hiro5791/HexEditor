@@ -35,14 +35,42 @@ public sealed partial class MainWindow
                     Loc.Get("SaveSpace_Title"),
                     Loc.Format("SaveSpace_Body", space.Drive, Size(space.Required), Size(space.Available)));
                 dialog.PrimaryButtonText = Loc.Get("SaveSpace_SaveElsewhere");
-                dialog.CloseButtonText = Loc.Get("Common_Cancel");
-                dialog.DefaultButton = ContentDialogButton.Primary;
-                if (await dialog.ShowQueuedAsync() == ContentDialogResult.Primary)
+
+                // 一時ファイルを作らずに元のファイルの中でずらしながら書ける (ENG-24)。
+                if (plan.CanShift)
                 {
-                    _saveElsewhereRequested = true;
+                    dialog.SecondaryButtonText = Loc.Get("SaveSpace_Shift");
                 }
 
-                return null;
+                dialog.CloseButtonText = Loc.Get("Common_Cancel");
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                switch (await dialog.ShowQueuedAsync())
+                {
+                    case ContentDialogResult.Primary:
+                        _saveElsewhereRequested = true;
+                        return null;
+                    case ContentDialogResult.Secondary:
+                        return SavePlanner.UseShiftInPlace(plan);
+                    default:
+                        return null;
+                }
+            }
+
+            case SaveIssue.ConfirmShift when plan.Shift is { } shift:
+            {
+                // 実行のたびに確かめる (ENG-24 の仕様 3。確認を省略する設定は設けない)。
+                string body = Loc.Format("Shift_Body", Path.GetFileName(plan.TargetPath ?? doc.DisplayName), Size(shift.WriteBytes), Size(shift.TemporaryBytes));
+                if (shift.DiscardHistory)
+                {
+                    body += Environment.NewLine + Environment.NewLine + Loc.Get("Shift_DiscardHistory");
+                }
+
+                ContentDialog dialog = SaveDialog(Loc.Get("Shift_Title"), body);
+                AutomationProperties.SetAutomationId(dialog, "ShiftSaveDialog");
+                dialog.PrimaryButtonText = Loc.Get("Shift_Save");
+                dialog.CloseButtonText = Loc.Get("Common_Cancel");
+                dialog.DefaultButton = ContentDialogButton.Close;
+                return await dialog.ShowQueuedAsync() == ContentDialogResult.Primary ? SavePlanner.ConfirmShift(plan) : null;
             }
 
             case SaveIssue.JournalTooLarge when plan.Journal is { } journal:
@@ -64,8 +92,8 @@ public sealed partial class MainWindow
 
             case SaveIssue.HardLinks when plan.LinkCount is { } links:
             {
-                // 安全な保存ではハードリンクが切れる (ENG-22 の仕様 4)。長さが変わる場合のその場保存 (ENG-24) はフェーズ 2 のため、
-                // 「その場で保存」は長さが同じときだけ出す。
+                // 安全な保存ではハードリンクが切れる (ENG-22 の仕様 4)。長さが変わる場合はずらしながらのその場保存 (ENG-24) になる。
+                // 「その場で保存」はその場で書ける (書き込めるファイル) ときに出す。
                 ContentDialog dialog = SaveDialog(Loc.Get("SaveLinks_Title"), Loc.Format("SaveLinks_Body", links));
                 dialog.PrimaryButtonText = Loc.Get("SaveLinks_Safe");
                 if (plan.CanKeepLinks)

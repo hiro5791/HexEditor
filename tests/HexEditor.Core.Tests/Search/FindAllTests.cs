@@ -72,8 +72,27 @@ public sealed class FindAllTests
             }
         }
 
-        // 手順 2: Hex、ワイルドカード、大文字・小文字を区別しないテキスト。正規表現 (バイト列) は FIND-19 (フェーズ 1) で加える。
+        // 手順 2: Hex、ワイルドカード、大文字・小文字を区別しないテキスト、正規表現 (バイト列)。
         using Document random = Doc(RandomData16M);
+        SearchPattern regex = RegexSearch.Bytes(@"\x00[\x80-\xFF]{2}", new RegexSearchOptions { Singleline = true });
+        foreach (bool overlapping in new[] { false, true })
+        {
+            // 基準: データ全体を 1 つの文字列にして .NET の正規表現で探す (長さが固定なので重なる一致は開始 + 1 から探し直す)。
+            var expected = new List<SearchMatch>();
+            var whole = new System.Text.RegularExpressions.Regex(@"\x00[\u0080-ÿ]{2}");
+            string text = Encoding.Latin1.GetString(RandomData16M);
+            for (System.Text.RegularExpressions.Match m = whole.Match(text); m.Success; m = whole.Match(text, m.Index + (overlapping ? 1 : m.Length)))
+            {
+                expected.Add(new SearchMatch(m.Index, m.Length));
+            }
+
+            foreach (int size in chunkSizes)
+            {
+                var options = new SearchOptions { ChunkSize = size, IncludeOverlapping = overlapping };
+                Assert.Equal(expected, SearchEngine.FindAll(random.Current, regex, options).Matches);
+            }
+        }
+
         SearchPattern[] patterns =
         [
             SearchPattern.FromHex("00 00"),

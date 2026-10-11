@@ -11,6 +11,7 @@ namespace HexEditor.App.Commands;
 public sealed class MenuBinder(CommandHost host)
 {
     private readonly List<(MenuFlyoutItem Item, string Id)> _items = [];
+    private readonly Dictionary<MenuFlyoutItem, string> _reasons = [];
 
     /// <summary>メニュー (サブメニューを含む) の項目をつなぐ。</summary>
     public void Bind(IEnumerable<MenuFlyoutItemBase> items)
@@ -58,6 +59,25 @@ public sealed class MenuBinder(CommandHost host)
         {
             CommandState state = host.StateOf(id);
             item.IsEnabled = state.Enabled;
+
+            // 使えない理由はツールチップと説明文で示す (VIEW-33 の受け入れ基準 2 など)。前に付けた理由は、使えるようになったら外す。
+            string? reason = state.Enabled ? null : state.Reason;
+            if (reason is not null || _reasons.ContainsKey(item))
+            {
+                if (reason is null)
+                {
+                    _reasons.Remove(item);
+                    ToolTipService.SetToolTip(item, null);
+                    Microsoft.UI.Xaml.Automation.AutomationProperties.SetHelpText(item, string.Empty);
+                }
+                else if (!_reasons.TryGetValue(item, out string? shown) || shown != reason)
+                {
+                    _reasons[item] = reason;
+                    ToolTipService.SetToolTip(item, reason);
+                    Microsoft.UI.Xaml.Automation.AutomationProperties.SetHelpText(item, reason);
+                }
+            }
+
             if (state.Checked is bool on)
             {
                 if (item is ToggleMenuFlyoutItem toggle)

@@ -23,6 +23,9 @@ public enum KillPoint
     /// <summary>その場保存 (ENG-23) で、ジャーナルを書いた後、ファイルに書き込む前。</summary>
     InPlaceAfterJournal,
 
+    /// <summary>ずらしながらのその場保存 (ENG-24) で、<see cref="TestHookSettings.KillAtBytes"/> バイトを書いた時点。</summary>
+    ShiftWrite,
+
     /// <summary>設定ファイルの書き込み (UI-23 の仕様 5) で、一時ファイルに半分まで書いた時点 (TD-UI-HOOK-KILL-SETTINGS-TEMP)。</summary>
     SettingsTemp,
 
@@ -86,7 +89,8 @@ public sealed record VirtualSourceSpec(
 ///   "killAt": "saveWrite" | "saveBeforeReplace" | "saveAfterReplace" | "inPlaceAfterJournal",
 ///   "unhandledException": "uiThread" | "background" | "unobservedTask" | "save",
 ///   "unhandledExceptionDelayMs": 0,
-///   "elevated": true,                           // 管理者として実行している扱い (タイトルの「(管理者)」。昇格はしない)
+///   "elevated": true,                           // 管理者として実行している扱い (タイトルの「(管理者)」。昇格はしない)。false なら
+///                                               // 管理者として動いていても管理者でない扱い (CI のランナーは管理者として動く)。省略なら実際の権限
 ///   "culture": "de-DE",                         // 地域設定の上書き (OS の設定を変えずに CultureInfo.CurrentCulture を変える)
 ///   "timeZone": "Tokyo Standard Time",          // インスペクタの「ローカル時刻」のタイムゾーン (OS の設定を変えない。INSP-15)
 ///   "openPicker": [ "C:\a.bin" ],               // 「開く」のダイアログの代わりに返すファイル ([] はキャンセル)
@@ -102,6 +106,12 @@ public sealed record TestHookSettings
 {
     public bool NoActivate { get; init; } = true;
 
+    /// <summary>
+    /// .img・.bin などを開いたときの「ディスクイメージとして開き直す」の提案 (ENG-31 の仕様 6) を出す。テストのデータの多くが .bin のため、
+    /// 既定では出さない (提案そのもののテストだけが有効にする)。
+    /// </summary>
+    public bool SuggestDiskImage { get; init; }
+
     public TimeSpan? RecoveryInterval { get; init; }
 
     public DateTimeOffset? FrozenTime { get; init; }
@@ -114,6 +124,9 @@ public sealed record TestHookSettings
 
     public KillPoint KillAt { get; init; }
 
+    /// <summary>ずらしながらのその場保存で強制終了する書き込み量 (既定 512 MiB。TC-ENG-24-03)。</summary>
+    public long KillAtBytes { get; init; } = 512L * 1024 * 1024;
+
     public ExceptionPlace? UnhandledException { get; init; }
 
     public int UnhandledExceptionDelayMs { get; init; }
@@ -124,11 +137,32 @@ public sealed record TestHookSettings
     /// <summary>地域設定 (数値・サイズの書式。null ならシステムの既定)。表示言語は --ui-lang で変える。</summary>
     public string? Culture { get; init; }
 
-    /// <summary>管理者として実行している扱いにする (昇格せずに UI-02 の「(管理者)」を確かめる。TC-UI-02-02)。</summary>
-    public bool Elevated { get; init; }
+    /// <summary>
+    /// 管理者として実行している扱いにする (true。昇格せずに UI-02 の「(管理者)」を確かめる。TC-UI-02-02)、管理者でない扱いにする (false。
+    /// 管理者として動く CI のランナーでも、補助プロセスの経路などを確かめられるようにする)。null なら実際の権限。
+    /// </summary>
+    public bool? Elevated { get; init; }
+
+    /// <summary>
+    /// 管理者として実行中のドロップの案内 (UI-34 の仕様 7) をテスト用のビルドでも出す。既定では出さない (CI のランナーは管理者として動くため、
+    /// ほかの通知を確かめるテストの邪魔になる)。TC-UI-34-06 で使う。
+    /// </summary>
+    public bool AdminDropNotice { get; init; }
+
+    /// <summary>
+    /// ディスクの書き込み (ENG-30) で、ボリュームをロックした後・書き込みの直前に止め、このパスに印のファイルを書く (ロックを保持したまま。
+    /// TC-ENG-28-08)。null なら止めない。
+    /// </summary>
+    public string? PauseAfterVolumeLock { get; init; }
 
     /// <summary>インスペクタの「ローカル時刻」に使うタイムゾーンの ID (null ならシステムの設定)。</summary>
     public string? TimeZone { get; init; }
+
+    /// <summary>偽のディスク・ボリュームの定義ファイル (JSON。ENG-29 の UI テスト用)。null なら本物のデバイス。</summary>
+    public string? FakeDevices { get; init; }
+
+    /// <summary>偽のプロセスの定義ファイル (JSON。ENG-32 の UI テスト用)。null なら本物のプロセス。</summary>
+    public string? FakeProcesses { get; init; }
 
     /// <summary>「開く」のダイアログの代わりに返すファイル。null なら本物のダイアログを出す。</summary>
     public IReadOnlyList<string>? OpenPicker { get; init; }
@@ -168,6 +202,7 @@ public sealed record TestHookSettings
         var settings = new TestHookSettings
         {
             NoActivate = root["noActivate"]?.GetValue<bool>() ?? true,
+            SuggestDiskImage = root["suggestDiskImage"]?.GetValue<bool>() ?? false,
             RecoveryInterval = root["recoveryIntervalSeconds"] is { } s ? TimeSpan.FromSeconds(ReadDouble(s)) : null,
             FrozenTime = root["frozenTime"] is { } t ? DateTimeOffset.Parse(t.GetValue<string>(), CultureInfo.InvariantCulture) : null,
             FileSources = root["fileSources"]?.AsArray().Select(n => new FileSourceSpec(
@@ -180,12 +215,17 @@ public sealed record TestHookSettings
                 ? new SaveFault(ReadLong(f["atByte"], 0), ParseEnum<SaveFaultKind>(f["kind"], SaveFaultKind.Io), f["once"]?.GetValue<bool>() ?? false)
                 : null,
             KillAt = ParseEnum(root["killAt"], KillPoint.None),
+            KillAtBytes = ReadLong(root["killAtBytes"], 512L * 1024 * 1024),
             UnhandledException = root["unhandledException"] is { } e ? ParseEnum(e, ExceptionPlace.UiThread) : null,
             UnhandledExceptionDelayMs = (int)ReadLong(root["unhandledExceptionDelayMs"], 0),
             AnsiCodePage = root["ansiCodePage"] is { } cp ? (int)ReadLong(cp, 0) : null,
             Culture = root["culture"]?.GetValue<string>(),
-            Elevated = root["elevated"]?.GetValue<bool>() ?? false,
+            Elevated = root["elevated"]?.GetValue<bool>(),
+            AdminDropNotice = root["adminDropNotice"]?.GetValue<bool>() ?? false,
+            PauseAfterVolumeLock = root["pauseAfterVolumeLock"]?.GetValue<string>(),
             TimeZone = root["timeZone"]?.GetValue<string>(),
+            FakeDevices = root["fakeDevices"]?.GetValue<string>(),
+            FakeProcesses = root["fakeProcesses"]?.GetValue<string>(),
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),
             FreeSpace = root["freeSpace"] is { } free ? ReadLong(free, 0) : null,

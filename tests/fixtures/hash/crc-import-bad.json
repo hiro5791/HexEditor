@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Import CRC-8",
+    "width": 8,
+    "poly": "0x07",
+    "init": "0x00",
+    "refin": false,
+    "refout": false,
+    "xorout": "0x00",
+    "check": "0xF4"
+  },
+  {
+    "name": "Broken CRC",
+    "width": 65,
+    "poly": "0x1",
+    "init": "0x0",
+    "refin": false,
+    "refout": false,
+    "xorout": "0x0",
+    "check": "0x0"
+  },
+  {
+    "name": "Import CRC-32",
+    "width": 32,
+    "poly": "0x04C11DB7",
+    "init": "0xFFFFFFFF",
+    "refin": false,
+    "refout": false,
+    "xorout": "0xFFFFFFFF",
+    "check": "0xFC891918"
+  }
+]

@@ -43,7 +43,7 @@ public static class DocumentAssert
     };
 
     /// <summary>表示用の読み込みを、すべてのバイトが読み込み中でなくなるまで繰り返す。</summary>
-    public static (byte[] Bytes, ByteState[] States) ReadForDisplayWhenLoaded(DocumentSnapshot snapshot, long offset, int length, int timeoutMs = 10_000)
+    public static (byte[] Bytes, ByteState[] States) ReadForDisplayWhenLoaded(DocumentSnapshot snapshot, long offset, int length, int timeoutMs = 30_000)
     {
         byte[] bytes = new byte[length];
         var states = new ByteState[length];

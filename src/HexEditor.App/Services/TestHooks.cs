@@ -30,8 +30,14 @@ public static class TestHooks
 
     public static TestHookSettings Settings { get; private set; } = new();
 
-    /// <summary>管理者として実行している扱い (テスト用の設定 elevated。TC-UI-02-02)。</summary>
-    public static bool SimulatesElevation => Active && Settings.Elevated;
+    /// <summary>管理者として実行している扱い (テスト用の設定 elevated が true。TC-UI-02-02)。</summary>
+    public static bool SimulatesElevation => ElevationOverride == true;
+
+    /// <summary>テスト用の設定 elevated による管理者の扱いの上書き (null なら実際の権限)。</summary>
+    public static bool? ElevationOverride => Active ? Settings.Elevated : null;
+
+    /// <summary>管理者として実行中のドロップの案内を出してよい (テスト用のビルドでは設定 adminDropNotice のときだけ。UI-34 の仕様 7)。</summary>
+    public static bool AllowsAdminDropNotice => !Active || Settings.AdminDropNotice;
 
     /// <summary>設定ファイルのパス (--test-hooks の値)。</summary>
     public static string? SettingsPath { get; private set; }
@@ -41,6 +47,9 @@ public static class TestHooks
 
     /// <summary>true ならウィンドウをアクティブにしない (起動時・転送された起動のどちらも)。</summary>
     public static bool SuppressActivation => Active && Settings.NoActivate;
+
+    /// <summary>テストではディスクイメージの提案 (ENG-31 の仕様 6) を、有効にしたテスト以外では出さない。</summary>
+    public static bool SuppressDiskImageSuggestion => Active && !Settings.SuggestDiskImage;
 
     /// <summary>時刻の固定 (7.2)。固定しないときは null (既定の時計)。</summary>
     public static TimeProvider? Time => Settings.FrozenTime is { } t ? new FrozenTimeProvider(t) : null;
@@ -91,6 +100,18 @@ public static class TestHooks
             System.Globalization.CultureInfo.DefaultThreadCurrentCulture = info;
             System.Globalization.CultureInfo.CurrentCulture = info;
             AppLog.Info($"Test hooks: culture {culture}");
+        }
+
+        // ディスクの書き込みで、ボリュームをロックした後・書き込みの直前に止める (ロックを保持したまま。TC-ENG-28-08)。止まったことを
+        // 印のファイルで知らせ、このプロセスが終了させられるまで待つ。
+        if (Settings.PauseAfterVolumeLock is { Length: > 0 } marker)
+        {
+            Core.Devices.DiskWrite.AfterLock = () =>
+            {
+                AppLog.Info("Test hooks: paused after the volume lock");
+                File.WriteAllText(marker, Environment.ProcessId.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                Thread.Sleep(Timeout.Infinite);
+            };
         }
     }
 
@@ -168,6 +189,14 @@ public static class TestHooks
         public Core.Saving.VolumeInfo? GetVolume(string folder) =>
             Core.Saving.SystemVolumeInfoProvider.Instance.GetVolume(folder) is { } volume ? volume with { AvailableFreeSpace = free } : null;
     }
+
+    /// <summary>偽のディスク (ENG-29 の UI テスト)。直接の経路は管理者権限なしを再現し、昇格の経路は管理者権限ありを再現する。</summary>
+    public static FakeDeviceAccessPair? FakeDevices =>
+        Active && Settings.FakeDevices is { Length: > 0 } path ? FakeDeviceAccessPair.Load(path) : null;
+
+    /// <summary>偽のプロセス (ENG-32 の UI テスト)。</summary>
+    public static FakeProcessAccessPair? FakeProcesses =>
+        Active && Settings.FakeProcesses is { Length: > 0 } path ? FakeProcessAccessPair.Load(path) : null;
 
     /// <summary>
     /// 単一インスタンスのキー (UI-15)。--test-profile を指定したときは、設定フォルダごとに別のインスタンスにする
@@ -282,6 +311,13 @@ public static class TestHooks
             if (Settings.KillAt == KillPoint.InPlaceAfterJournal)
             {
                 Kill("in-place save after journal");
+            }
+        };
+        TestSavePoints.AfterShiftBytesWritten = written =>
+        {
+            if (Settings.KillAt == KillPoint.ShiftWrite && written >= Settings.KillAtBytes)
+            {
+                Kill("shift save after " + written + " bytes");
             }
         };
 
@@ -544,6 +580,85 @@ public static class TestHooks
 /// <summary>テスト用に起こした例外。</summary>
 public sealed class TestHookException(string place) : Exception($"Unhandled exception raised by the test hooks ({place}).");
 
+/// <summary>偽のディスクの「直接」(管理者権限なし) と「昇格」(管理者権限あり) の 2 つのアクセス手段。同じディスクの内容を共有する。</summary>
+public sealed class FakeDeviceAccessPair
+{
+    private static readonly Dictionary<string, FakeDeviceAccessPair> Cache = [];
+
+    private FakeDeviceAccessPair(Core.Devices.FakeDeviceAccess shared)
+    {
+        Elevated = shared;
+        Direct = new NonAdminDevices(shared);
+    }
+
+    public Core.Devices.IDeviceAccess Direct { get; }
+
+    public Core.Devices.IDeviceAccess Elevated { get; }
+
+    public static FakeDeviceAccessPair Load(string path)
+    {
+        lock (Cache)
+        {
+            if (!Cache.TryGetValue(path, out FakeDeviceAccessPair? pair))
+            {
+                var spec = Core.Devices.FakeDeviceSpec.Parse(File.ReadAllText(path));
+                pair = new FakeDeviceAccessPair(new Core.Devices.FakeDeviceAccess(spec, elevated: true));
+                Cache[path] = pair;
+            }
+
+            return pair;
+        }
+    }
+
+    /// <summary>管理者権限なしの経路: 管理者権限が要るデバイスはアクセス拒否にし、それ以外は共有のアクセスに委ねる。</summary>
+    private sealed class NonAdminDevices(Core.Devices.FakeDeviceAccess shared) : Core.Devices.IDeviceAccess
+    {
+        public Core.Devices.DeviceCatalog Enumerate() => shared.Enumerate();
+
+        public Core.Devices.IDeviceHandle Open(string path, bool writable)
+        {
+            bool requiresAdmin = shared.Spec.Disks.Any(d => string.Equals(Core.Devices.DevicePath.PhysicalDrive(d.Number), path, StringComparison.OrdinalIgnoreCase) && d.RequiresAdmin)
+                || shared.Spec.Volumes.Any(v => string.Equals(v.Path, path, StringComparison.OrdinalIgnoreCase) && v.RequiresAdmin);
+            if (requiresAdmin)
+            {
+                throw Core.Devices.DeviceException.FromError(Core.Devices.Win32Errors.AccessDenied, path);
+            }
+
+            return shared.Open(path, writable);
+        }
+    }
+}
+
+/// <summary>偽のプロセスの「直接」と「昇格」の 2 つのアクセス手段。</summary>
+public sealed class FakeProcessAccessPair
+{
+    private static readonly Dictionary<string, FakeProcessAccessPair> Cache = [];
+
+    private FakeProcessAccessPair(Core.Processes.FakeProcessListSpec spec)
+    {
+        Direct = new Core.Processes.FakeProcessAccess(spec, elevated: false);
+        Elevated = new Core.Processes.FakeProcessAccess(spec, elevated: true);
+    }
+
+    public Core.Processes.IProcessAccess Direct { get; }
+
+    public Core.Processes.IProcessAccess Elevated { get; }
+
+    public static FakeProcessAccessPair Load(string path)
+    {
+        lock (Cache)
+        {
+            if (!Cache.TryGetValue(path, out FakeProcessAccessPair? pair))
+            {
+                pair = new FakeProcessAccessPair(Core.Processes.FakeProcessListSpec.Parse(File.ReadAllText(path)));
+                Cache[path] = pair;
+            }
+
+            return pair;
+        }
+    }
+}
+
 #else
 
 /// <summary>製品版では何もしない (異常を再現する仕組みはテスト用のビルドだけ。テスト方針 7.2)。</summary>
@@ -553,7 +668,13 @@ public static class TestHooks
 
     public static bool SimulatesElevation => false;
 
+    public static bool? ElevationOverride => null;
+
+    public static bool AllowsAdminDropNotice => true;
+
     public static bool SuppressActivation => false;
+
+    public static bool SuppressDiskImageSuggestion => false;
 
     public static TimeProvider? Time => null;
 

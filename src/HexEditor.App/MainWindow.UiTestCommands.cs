@@ -42,13 +42,22 @@ public sealed partial class MainWindow
         "addProbe" => TestAddProbe(request),
         "nonClientRegions" => TestNonClientRegions(),
         "hash" => await TestHashAsync(request),
+        "viewPresets" => TestViewPresets(request),
+        "stats" => await TestStatisticsAsync(request),
+        "fileType" => await TestFileTypeAsync(request),
 
         // ファイル・セッションの命令 (MainWindow.FilesTestCommands.cs)、コマンド・パネル・設定の命令 (MainWindow.FrameworkTestCommands.cs)。
         _ => await HandleFilesTestCommandAsync(cmd, request) ?? await HandleFrameworkTestCommandAsync(cmd, request)
             ?? HandleInspectorTestCommand(cmd, request) ?? await HandlePackagingTestCommandsAsync(cmd, request)
             ?? HandleEditTestCommand(cmd, request) ?? await HandleSearchTestCommandsAsync(cmd, request)
             ?? await HandleViewTestCommandsAsync(cmd, request) ?? await HandleTabsTestCommandsAsync(cmd, request)
-            ?? await HandleShellTestCommandsAsync(cmd, request) ?? HandleAccessibilityTestCommand(cmd, request),
+            ?? await HandleShellTestCommandsAsync(cmd, request) ?? HandleAccessibilityTestCommand(cmd, request)
+            ?? HandleSelectionTestCommand(cmd, request)
+            ?? await HandleViewPhase2TestCommandsAsync(cmd, request)
+            ?? await HandleAnnotationTestCommandsAsync(cmd, request)
+            ?? await HandleFormatTestCommandAsync(cmd, request)
+            ?? await HandleCompareTestCommandsAsync(cmd, request)
+            ?? await HandleDeviceTestCommandsAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>

@@ -39,7 +39,8 @@ public sealed partial class FindBar
     private void ScheduleIncremental()
     {
         if (!IsOpen || IncrementalChoice.IsChecked != true
-            || Kind is not (SearchKind.Hex or SearchKind.Text) || _composing || _incrementalTimer is null)
+            || Kind is not (SearchKind.Hex or SearchKind.Text or SearchKind.RegexText or SearchKind.RegexBytes) || IsMultiTerm || _composing
+            || _incrementalTimer is null)
         {
             return;
         }

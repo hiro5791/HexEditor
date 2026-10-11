@@ -59,9 +59,12 @@ public sealed partial class MainWindow
 
         // 異常終了で残った安全な保存の一時ファイル (ENG-22 の仕様 7)。記録は保存のジャーナルと同じフォルダにある。
         IReadOnlyList<LeftoverTempFile> leftovers = SaveTempMarker.Find(defaultRoot);
-        if (entries.Count > 0 || journals.Count > 0 || leftovers.Count > 0)
+
+        // 中断したずらしながらのその場保存 (ENG-24 の仕様 6)。自動の修復はせず、ファイルが壊れている可能性を示すだけ。
+        IReadOnlyList<ShiftInterruption> shifts = ShiftSaver.FindInterrupted(defaultRoot);
+        if (entries.Count > 0 || journals.Count > 0 || leftovers.Count > 0 || shifts.Count > 0)
         {
-            await ShowRecoveryDialogAsync(entries, journals, leftovers);
+            await ShowRecoveryDialogAsync(entries, journals, leftovers, shifts);
         }
 
         // 復旧の提案の後にセッションを復元する (UI-30 の仕様 3)。
@@ -126,8 +129,9 @@ public sealed partial class MainWindow
     /// 一時ファイル (ENG-22 の仕様 7) は「削除」だけを出す (ENG-27 の仕様 7)。
     /// </summary>
     private async Task ShowRecoveryDialogAsync(IReadOnlyList<RecoveryEntry> entries, IReadOnlyList<string> journals,
-        IReadOnlyList<LeftoverTempFile> leftovers)
+        IReadOnlyList<LeftoverTempFile> leftovers, IReadOnlyList<ShiftInterruption>? shifts = null)
     {
+        shifts ??= [];
         var list = new StackPanel { Spacing = 12 };
         var dialog = new ContentDialog
         {
@@ -138,7 +142,7 @@ public sealed partial class MainWindow
             FlowDirection = Root.FlowDirection,
         };
         AutomationProperties.SetAutomationId(dialog, "RecoveryDialog");
-        int remaining = entries.Count + journals.Count + leftovers.Count;
+        int remaining = entries.Count + journals.Count + leftovers.Count + shifts.Count;
 
         void Done(FrameworkElement row)
         {
@@ -244,6 +248,25 @@ public sealed partial class MainWindow
             list.Children.Add(row);
         }
 
+        foreach (ShiftInterruption shift in shifts)
+        {
+            FrameworkElement? row = null;
+            row = RecoveryRow(
+                Path.GetFileName(shift.TargetPath),
+                shift.TargetPath,
+                Loc.Format("Recovery_ShiftDetails", Path.GetFileName(shift.TargetPath), shift.StartedUtc.ToLocalTime().ToString("g")),
+                restoreText: null,
+                restore: null,
+                () =>
+                {
+                    ShiftSaver.Dismiss(shift);
+                    Done(row!);
+                },
+                discardText: Loc.Get("Recovery_ShiftDismiss"),
+                discardId: "Recovery_ShiftDismiss");
+            list.Children.Add(row);
+        }
+
         if (remaining == 0)
         {
             return;
@@ -297,6 +320,12 @@ public sealed partial class MainWindow
 
     private void RestoreEntry(RecoveryEntry entry)
     {
+        if (entry.Record.DevicePath is not null)
+        {
+            _ = RestoreDeviceEntryAsync(entry);
+            return;
+        }
+
         RestoredDocument restored;
         try
         {
@@ -316,6 +345,94 @@ public sealed partial class MainWindow
             ShowNotice(Loc.Get("Recovery_SourceChanged"), InfoBarSeverity.Warning, vm);
         }
 
+        UpdateTitle();
+    }
+
+    /// <summary>
+    /// ディスク・ボリュームの復旧 (ENG-27 の仕様 6): 同じデバイスを開き直し (管理者権限が要るなら先に確かめる)、シリアル番号が記録と一致すれば
+    /// 変更範囲マップを戻す。一致しなければ復旧しない (復旧用データは残す)。
+    /// </summary>
+    private async Task RestoreDeviceEntryAsync(RecoveryEntry entry)
+    {
+        RecoveryRecord record = entry.Record;
+        string path = record.DevicePath!;
+        Core.Devices.DiskInfo? disk = null;
+        Core.Devices.VolumeDeviceInfo? volume = null;
+        try
+        {
+            Core.Devices.DeviceCatalog catalog = DeviceService.EnumerateDevices();
+            disk = catalog.Disks.FirstOrDefault(d => string.Equals(d.Path, path, StringComparison.OrdinalIgnoreCase));
+            volume = catalog.Volumes.FirstOrDefault(v => string.Equals(v.Path, path, StringComparison.OrdinalIgnoreCase));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+        {
+            ShowNotice(Loc.Format("Recovery_Failed", ex.Message), InfoBarSeverity.Error);
+            return;
+        }
+
+        if (disk is null && volume is null)
+        {
+            ShowNotice(Loc.Format("Recovery_DeviceMissing", path), InfoBarSeverity.Error);
+            return;
+        }
+
+        string? serial = disk?.SerialNumber;
+        if (record.DeviceSerial is { Length: > 0 } recorded && !string.Equals(recorded.Trim(), serial?.Trim(), StringComparison.OrdinalIgnoreCase))
+        {
+            ShowNotice(Loc.Format("Recovery_DeviceSerialMismatch", path), InfoBarSeverity.Error);
+            return;
+        }
+
+        Services.OpenRoute route = DeviceService.RouteForDisk(volume?.IsRemovableUsb == true);
+        if (route == Services.OpenRoute.GuidanceNeeded)
+        {
+            await ShowAdminGuidanceAsync(Loc.Get("AdminGuide_Disk"));
+            return;
+        }
+
+        if (route == Services.OpenRoute.Helper && !DeviceService.IsHelperRunning
+            && !await ConfirmAsync(Loc.Get("Session_DiskHelperTitle"), Loc.Format("Session_DiskHelperBody", record.DisplayName),
+                Loc.Get("Session_DiskHelperOpen"), "RecoveryDiskHelperDialog"))
+        {
+            return;
+        }
+
+        Core.Devices.DeviceByteSource source;
+        try
+        {
+            var info = new Core.Devices.DeviceOpenInfo
+            {
+                Path = path, DisplayName = record.DisplayName, SerialNumber = serial, Disk = disk, Volume = volume, RangeStart = record.DeviceRangeStart,
+            };
+            source = await DeviceService.OpenDeviceAsync(info, writable: false, route);
+        }
+        catch (Exception ex)
+        {
+            // UAC の拒否・補助プロセスの改ざん・起動の失敗・デバイスのエラー (ENG-28、PKG-14)。
+            if (!await HandleElevatedOpenFailureAsync(ex, forDisk: true))
+            {
+                throw;
+            }
+
+            return;
+        }
+
+        RestoredDocument restored;
+        try
+        {
+            restored = RecoveryStore.Restore(entry, Vm.DocumentOptions, source);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidDataException or ArgumentException)
+        {
+            source.Dispose();
+            ShowNotice(Loc.Format("Recovery_Failed", ex.Message), InfoBarSeverity.Error);
+            return;
+        }
+
+        DocumentViewModel vm = Vm.AddRestored(restored);
+        Vm.WatchRestoredDevice(vm);
+        RefreshHelperIndicator();
+        AppLog.Info("Recovered a device document");
         UpdateTitle();
     }
 }

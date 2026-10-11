@@ -1,0 +1,66 @@
+{
+  "source": "RIPEMD official page (A. Bosselaers), test vectors.",
+  "note": "RIPEMD-160 also cross-checked with CPython hashlib.",
+  "vectors": [
+    {
+      "algorithm": "ripemd128",
+      "ascii": "",
+      "expected": "CDF26213A150DC3ECB610F18F6B38B46"
+    },
+    {
+      "algorithm": "ripemd128",
+      "ascii": "abc",
+      "expected": "C14A12199C66E4BA84636B0F69144C77"
+    },
+    {
+      "algorithm": "ripemd128",
+      "ascii": "a",
+      "expected": "86BE7AFA339D0FC7CFC785E72F578D33"
+    },
+    {
+      "algorithm": "ripemd160",
+      "ascii": "",
+      "expected": "9C1185A5C5E9FC54612808977EE8F548B2258D31"
+    },
+    {
+      "algorithm": "ripemd160",
+      "ascii": "abc",
+      "expected": "8EB208F7E05D987A9B044A8E98C6B087F15A0BFC"
+    },
+    {
+      "algorithm": "ripemd160",
+      "ascii": "a",
+      "expected": "0BDC9D2D256B3EE9DAAE347BE6F4DC835A467FFE"
+    },
+    {
+      "algorithm": "ripemd256",
+      "ascii": "",
+      "expected": "02BA4C4E5F8ECD1877FC52D64D30E37A2D9774FB1E5D026380AE0168E3C5522D"
+    },
+    {
+      "algorithm": "ripemd256",
+      "ascii": "abc",
+      "expected": "AFBD6E228B9D8CBBCEF5CA2D03E6DBA10AC0BC7DCBE4680E1E42D2E975459B65"
+    },
+    {
+      "algorithm": "ripemd256",
+      "ascii": "a",
+      "expected": "F9333E45D857F5D90A91BAB70A1EBA0CFB1BE4B0783C9ACFCD883A9134692925"
+    },
+    {
+      "algorithm": "ripemd320",
+      "ascii": "",
+      "expected": "22D65D5661536CDC75C1FDF5C6DE7B41B9F27325EBC61E8557177D705A0EC880151C3A32A00899B8"
+    },
+    {
+      "algorithm": "ripemd320",
+      "ascii": "abc",
+      "expected": "DE4C01B3054F8930A79D09AE738E92301E5A17085BEFFDC1B8D116713E74F82FA942D64CDBC4682D"
+    },
+    {
+      "algorithm": "ripemd320",
+      "ascii": "a",
+      "expected": "CE78850638F92658A5A585097579926DDA667A5716562CFCF6FBE77F63542F99B04705D6970DFF5D"
+    }
+  ]
+}
