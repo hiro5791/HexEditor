@@ -146,4 +146,16 @@ public sealed class HelperProtocolTests
             return _inner.Open(path, writable);
         }
     }
+
+    /// <summary>
+    /// 補助プロセスが Hello で返す版は、本体が送る版 (SemVer。ビルドのメタデータ「+コミット」なし) と同じ形にする
+    /// (InformationalVersion をそのまま返すと、同じビルドでも「版が違う」と判定されて起動できなかった)。
+    /// </summary>
+    [Theory]
+    [InlineData("0.0.0-local+1a2b3c4", "0.0.0-local")]
+    [InlineData("1.2.3-preview.4+abcdef0", "1.2.3-preview.4")]
+    [InlineData("1.2.3", "1.2.3")]
+    [InlineData(null, "")]
+    public void HelperVersionIsTheSemVerPart(string? informational, string expected) =>
+        Assert.Equal(expected, HelperVersion.SemVerPart(informational));
 }

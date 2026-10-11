@@ -308,7 +308,7 @@ public sealed class PrivilegedTests
             AppSession again = await ctx.AttachAsync(restarted!, app.Profile);
 
             // 4. 新しいプロセスは管理者として動き、TD-SEQ-1M のタブが復元されている。
-            Assert.True(CiPrivileged.IsElevated(again.Pid));
+            Assert.True(CiPrivileged.IsElevated(again.Pid), $"The restarted app should run as administrator ({CiPrivileged.Describe(again.Pid)}).");
             await again.WaitForTabsAsync(1);
             Assert.Equal([Path.GetFileName(seq)], await again.TabNamesAsync());
         }
@@ -393,7 +393,9 @@ public sealed class PrivilegedTests
         JsonObject opened = await app.SendAsync("openDisk", new JsonObject { ["path"] = CiPrivileged.VhdDiskPath });
         Assert.Equal("Helper", opened["route"]!.GetValue<string>());
         // パイプ名は補助プロセスのコマンドラインの代わりに、アプリのテスト用の命令から取る (同じ値)。
-        string pipe = (await app.SendAsync("helperInfo"))["pipe"]!.GetValue<string>();
+        JsonObject helperInfo = await app.SendAsync("helperInfo");
+        string pipe = helperInfo["pipe"]?.GetValue<string>()
+            ?? throw new Xunit.Sdk.XunitException($"The helper is not connected: {helperInfo.ToJsonString()}; opened: {opened.ToJsonString()}");
 
         // ReadSectors の形の要求 (長さ 12、要求 ID 1、コマンド・フラグ、ハンドル 1・オフセット 0)。合言葉は知らない。
         const string Request = "0C000000010000000700000001000000" + "0000000000000000";

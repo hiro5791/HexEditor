@@ -413,7 +413,7 @@ public sealed partial class MainWindow
     {
         string target = doc.Device is { } device
             ? device.Info.Disk is { } disk ? DiskDisplayName(disk) : device.DisplayName
-            : doc.ProcessMemory is { } process ? Loc.Format("OpenProcess_Name", process.ProcessName, process.Pid) : doc.DisplayName;
+            : doc.ProcessMemory is { } process ? Loc.Format("OpenProcess_Name", process.ProcessName, PidText(process.Pid)) : doc.DisplayName;
         var body = new TextBlock { Text = Loc.Format("ReadOnly_Confirm_DeviceTarget", target), TextWrapping = TextWrapping.Wrap, MaxWidth = 420 };
         AutomationProperties.SetAutomationId(body, "DeviceWriteConfirm_Body");
         return await ConfirmAsync(Loc.Get("ReadOnly_Confirm_Title"), body, Loc.Get("ReadOnly_AllowWrite"), "DeviceWriteConfirmDialog");
@@ -606,7 +606,7 @@ public sealed partial class MainWindow
         if (!doc.ProcessWriteConfirmed)
         {
             long bytes = doc.Document.Current.EnumerateModifiedRanges().Sum(r => r.Length);
-            if (!await ConfirmAsync(Loc.Get("ProcessWrite_Title"), Loc.Format("ProcessWrite_Body", source.ProcessName, source.Pid, bytes),
+            if (!await ConfirmAsync(Loc.Get("ProcessWrite_Title"), Loc.Format("ProcessWrite_Body", source.ProcessName, PidText(source.Pid), bytes),
                 Loc.Get("ProcessWrite_Write"), "ProcessWriteConfirmDialog"))
             {
                 return false;
@@ -683,7 +683,7 @@ public sealed partial class MainWindow
 
         if (!doc.ImmediateWrite)
         {
-            if (!await ConfirmAsync(Loc.Get("ProcessWrite_Title"), Loc.Format("ProcessWrite_ImmediateConfirm", source.ProcessName, source.Pid),
+            if (!await ConfirmAsync(Loc.Get("ProcessWrite_Title"), Loc.Format("ProcessWrite_ImmediateConfirm", source.ProcessName, PidText(source.Pid)),
                 Loc.Get("ProcessWrite_ImmediateEnable"), "ImmediateWriteConfirmDialog"))
             {
                 return;

@@ -565,7 +565,10 @@ public sealed partial class MainWindow
         return Loc.Format("OpenDisk_VolumeDetail", Unknown(volume.FileSystem), size, disk, Loc.Get("OpenDisk_BitLocker_" + volume.BitLocker));
     }
 
-    private static string ProcessDisplayName(ProcessEntry entry) => Loc.Format("OpenProcess_Name", entry.Name, entry.Pid);
+    /// <summary>プロセス ID の表示 (識別子なので桁区切りを付けない。Loc.Format は整数に桁区切りを付けるため文字列で渡す)。</summary>
+    internal static string PidText(int pid) => pid.ToString(CultureInfo.InvariantCulture);
+
+    private static string ProcessDisplayName(ProcessEntry entry) => Loc.Format("OpenProcess_Name", entry.Name, PidText(entry.Pid));
 
     private static string DeviceErrorMessage(DeviceException ex) => ex.ErrorCode switch
     {

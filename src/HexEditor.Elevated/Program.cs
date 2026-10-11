@@ -162,9 +162,13 @@ internal static class Program
         return (Win32DeviceAccess.Instance, Win32ProcessAccess.Instance);
     }
 
-    private static string AppVersion() =>
+    /// <summary>
+    /// 本体と照合する版 (Hello)。本体は SemVer の部分 (AppEnvironment.AppVersion。ビルドのメタデータ「+コミット」を含めない) を送るため、
+    /// 同じ形にする (InformationalVersion には SDK がコミットのハッシュを付けることがあり、そのまま比べると同じビルドでも一致しない)。
+    /// </summary>
+    private static string AppVersion() => HelperVersion.SemVerPart(
         typeof(Program).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyInformationalVersionAttribute), false)
-            .OfType<System.Reflection.AssemblyInformationalVersionAttribute>().FirstOrDefault()?.InformationalVersion ?? string.Empty;
+            .OfType<System.Reflection.AssemblyInformationalVersionAttribute>().FirstOrDefault()?.InformationalVersion);
 
     private static void Log(string message)
     {
