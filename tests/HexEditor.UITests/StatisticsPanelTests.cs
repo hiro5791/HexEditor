@@ -116,8 +116,9 @@ public sealed class StatisticsPanelTests
         JsonObject state = await ShowAndWaitAsync(app, "Entropy");
         Assert.Equal(16 * 1024, state["blockSize"]!.GetValue<long>());
 
-        // 1 ブロックが 4 ピクセル以上になるまで拡大する (1,024 ブロックを 1,024 px 未満の幅に描くので 8 倍で足りる)。
-        await StatsAsync(app, "zoomIn", new JsonObject { ["times"] = 3 });
+        // 1 ブロックが 4 ピクセル以上になるまで拡大する。パネルの幅は画面・ランナーで変わる (狭いと 8 倍では 1 ブロックが 4 px に満たない) ため、
+        // 幅 128 px まで足りる 32 倍にする。
+        await StatsAsync(app, "zoomIn", new JsonObject { ["times"] = 5 });
         await StatsAsync(app, "flushDetail");
         await app.WaitUntilAsync(async () => (await StatsAsync(app))["detailLog"]!.AsArray().Count > 0, Wait, "the detail blocks");
         JsonObject log = (await StatsAsync(app))["detailLog"]!.AsArray()[0]!.AsObject();

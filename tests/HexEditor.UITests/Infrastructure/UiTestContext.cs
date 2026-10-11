@@ -36,7 +36,10 @@ public sealed class UiTestContext : IAsyncDisposable
             : Path.Combine(AppLocator.RepositoryRoot, "TestResults", "ui-artifacts");
 
     /// <summary>1 件のテストの上限の既定値 (<see cref="UiTest.TimeoutScale"/> を掛ける)。</summary>
-    public static readonly TimeSpan DefaultLimit = TimeSpan.FromMinutes(10);
+    public static readonly TimeSpan DefaultLimit = Environment.GetEnvironmentVariable("HEXEDITOR_UITEST_DEFAULT_LIMIT_MINUTES") is { } m
+        && double.TryParse(m, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double minutes) && minutes > 0
+        ? TimeSpan.FromMinutes(minutes)
+        : TimeSpan.FromMinutes(10);
 
     /// <summary>
     /// テストの本体を実行する。失敗したら成果物を保存してから例外を投げ直す。<paramref name="limit"/> (既定 10 分。待ちの倍率を掛ける) を
@@ -51,7 +54,9 @@ public sealed class UiTestContext : IAsyncDisposable
         {
             var timeout = new TimeoutException(
                 $"The test did not finish within {hard.TotalMinutes:0.#} min (the hard limit of the UI test harness); the apps it started were stopped.");
-            await Task.WhenAny(context.SaveArtifactsAsync(timeout), Task.Delay(TimeSpan.FromMinutes(1)));
+            // 先に止まったアプリを終了する (UIA の呼び出しの中で止まっていると、成果物の保存も止まりうる)。成果物の保存は別のスレッドで、時間を区切って行う。
+            context.KillAll();
+            await Task.WhenAny(Task.Run(() => context.SaveArtifactsAsync(timeout)), Task.Delay(TimeSpan.FromSeconds(30)));
             context.KillAll();
             throw timeout;
         }
@@ -215,9 +220,10 @@ public sealed class UiTestContext : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
+        // 止まった呼び出しがあっても、後始末で止まらないよう時間を区切る (テストの上限が効かなくなるのを防ぐ)。
         foreach (AppSession session in _sessions)
         {
-            await session.DisposeAsync();
+            await Task.WhenAny(Task.Run(() => session.DisposeAsync().AsTask()), Task.Delay(TimeSpan.FromSeconds(30)));
         }
 
         // 復旧用データのロックなどが外れるのを待ってから消す。

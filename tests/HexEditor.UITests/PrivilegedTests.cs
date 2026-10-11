@@ -242,6 +242,8 @@ public sealed class PrivilegedTests
         Assert.Empty(watch.Seen);
 
         // 2. UTF-16 LE のテキストを検索して 1 件以上一致する (文字列を置いたページの手前から探す)。
+        // 文字列のページの手前は確保されていないページのことがあり、既定の設定「読めないデータ: 尋ねる」では検索が確認待ちで止まる。飛ばす設定にする。
+        await app.SendAsync("settingSet", new JsonObject { ["key"] = "search.readErrors", ["value"] = "skip" });
         await app.GoToAsync(target.TextAddress!.Value - 0x100);
         await GoToAndFindTests.OpenFindAsync(app);
         await app.SendAsync("setSelectedIndex", new JsonObject { ["id"] = "Find_Kind", ["index"] = 1 });
