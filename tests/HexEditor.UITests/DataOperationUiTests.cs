@@ -114,8 +114,9 @@ public sealed class DataOperationUiTests
         for (int round = 0; round < 2; round++)
         {
             await app.SendAsync("palette", new JsonObject { ["text"] = ">Reverse byte order" });
-            Assert.True((await app.SendAsync("paletteEnter"))["invoked"]!.GetValue<bool>());
-            await app.WaitUntilAsync(async () => (await app.StateAsync())["operations"]!.AsArray().Count > 0, TimeSpan.FromMinutes(1), "the progress");
+            // 処理の完了を待たずに命令を返し (detach)、状態を見て待つ。命令の通り道を 3 GB の処理の間ふさがない。
+            Assert.True((await app.SendAsync("paletteEnter", new JsonObject { ["detach"] = true }))["invoked"]!.GetValue<bool>());
+            await app.WaitUntilAsync(async () => (await app.StateAsync())["activeOperations"]!.GetValue<int>() > 0, TimeSpan.FromMinutes(2), "the reverse to start");
             await app.WaitUntilAsync(async () => (await app.StateAsync())["activeOperations"]!.GetValue<int>() == 0, TimeSpan.FromMinutes(30), "the reverse");
             await app.IdleAsync();
             if (round == 0)

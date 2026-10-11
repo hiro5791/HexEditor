@@ -58,6 +58,16 @@ public sealed partial class MainWindow
 
                 return PaletteState();
             case "paletteEnter":
+                // detach: 長い処理のコマンド (数 GB の逆順など) の完了を待たずに答える。待つと、この命令の通り道が処理の間ふさがり、
+                // 進捗の確認や命令のタイムアウトに引っかかる。
+                if (request["detach"]?.GetValue<bool>() == true)
+                {
+                    Task<bool> started = Palette.InvokeSelectedAsync();
+                    _ = started.ContinueWith(t => AppLog.Warning($"Detached palette command failed: {t.Exception?.GetBaseException().Message}"),
+                        CancellationToken.None, TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
+                    return new JsonObject { ["invoked"] = true };
+                }
+
                 return new JsonObject { ["invoked"] = await Palette.InvokeSelectedAsync() };
             case "paletteClose":
                 Palette.Close();
