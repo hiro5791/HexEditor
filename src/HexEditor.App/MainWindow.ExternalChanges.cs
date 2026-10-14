@@ -100,7 +100,15 @@ public sealed partial class MainWindow
         {
             if (ReloadFromDisk(doc))
             {
+                _externalRetries.Remove(doc);
                 ShowNotice(Loc.Get("External_Reloaded"), InfoBarSeverity.Informational, doc);
+            }
+            else if (doc.Watch is { } failed)
+            {
+                // 開き直せなかった (他のアプリがまだ書いている・ウイルス対策ソフトが調べているなど)。知らせた変更を忘れさせ、
+                // 少し待ってから確かめ直す。そのままだと、同じ変更は二度と知らされず再読み込みされない。
+                Vm.ExternalChanges?.Forget(failed);
+                RetryExternalChangeLater(doc);
             }
 
             return;
@@ -409,6 +417,33 @@ public sealed partial class MainWindow
 
             timer.Stop();
             _deferredExternalChanges.Remove(doc);
+            if (Vm.Documents.Contains(doc) && doc.Watch is { } target && Vm.ExternalChanges is { } monitor)
+            {
+                _ = Task.Run(() => monitor.CheckNow(target));
+            }
+        };
+        timer.Start();
+    }
+
+    /// <summary>自動の再読み込みに失敗したドキュメントの再試行の回数 (成功するか、上限に達したら消す)。</summary>
+    private readonly Dictionary<DocumentViewModel, int> _externalRetries = [];
+
+    /// <summary>自動の再読み込みに失敗したあと、1 秒待って確かめ直す (最大 10 回)。</summary>
+    private void RetryExternalChangeLater(DocumentViewModel doc)
+    {
+        int tries = _externalRetries.GetValueOrDefault(doc);
+        if (tries >= 10)
+        {
+            _externalRetries.Remove(doc);
+            return;
+        }
+
+        _externalRetries[doc] = tries + 1;
+        Microsoft.UI.Dispatching.DispatcherQueueTimer timer = DispatcherQueue.CreateTimer();
+        timer.Interval = TimeSpan.FromSeconds(1);
+        timer.IsRepeating = false;
+        timer.Tick += (_, _) =>
+        {
             if (Vm.Documents.Contains(doc) && doc.Watch is { } target && Vm.ExternalChanges is { } monitor)
             {
                 _ = Task.Run(() => monitor.CheckNow(target));
