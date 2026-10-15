@@ -1,0 +1,91 @@
+// HexEditor 標準テンプレート (TPL-34): FLAC 音声
+// ライセンス: MIT。
+// シグネチャと、メタデータブロック (STREAMINFO、VORBIS_COMMENT、SEEKTABLE、PICTURE など) を最後のブロックまで読む。音声フレームは中身を読まない。
+#pragma name "FLAC audio"
+#pragma name.ja "FLAC 音声"
+#pragma description "FLAC audio: stream signature, metadata blocks (STREAMINFO, SEEKTABLE, VORBIS_COMMENT, PICTURE, ...) and the audio frames."
+#pragma description.ja "FLAC 音声: ストリームのシグネチャ、メタデータブロック (STREAMINFO、SEEKTABLE、VORBIS_COMMENT、PICTURE など)、音声フレーム。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "66 4C 61 43"
+#pragma mime "audio/flac"
+#pragma extensions "flac"
+#pragma endian big
+
+enum BlockType : u8 {
+    StreamInfo = 0, Padding = 1, Application = 2, SeekTable = 3, VorbisComment = 4, CueSheet = 5, Picture = 6, Invalid = 127,
+};
+
+/// ブロックの先頭の 1 バイト (最上位ビットが「最後のブロック」)
+bitfield BlockHeaderByte : u8 {
+    is_last : 1;
+    type    : 7;
+} [[bit_order(msb_first)]];
+
+/// STREAMINFO の詰め込み欄 (64 bit)
+bitfield StreamParameters : u64 {
+    sample_rate             : 20;
+    channels_minus_one      : 3;
+    bits_per_sample_minus_one : 5;
+    total_samples           : 36;
+} [[bit_order(msb_first)]];
+
+struct StreamInfo {
+    u16  min_block_size;
+    u16  max_block_size;
+    u24  min_frame_size;
+    u24  max_frame_size;
+    StreamParameters parameters;
+    u8   md5_signature[16];
+};
+
+struct SeekPoint {
+    u64 sample_number;
+    u64 offset;
+    u16 samples;
+};
+
+/// Vorbis コメントの文字列 (長さはリトルエンディアン)
+struct VorbisString {
+    le u32 length;
+    char   text[length] [[encoding("utf-8")]];
+};
+
+struct VorbisComment {
+    VorbisString vendor;
+    le u32       count;
+    VorbisString comments[count];
+};
+
+struct Picture {
+    u32  picture_type;
+    u32  mime_length;
+    char mime_type[mime_length];
+    u32  description_length;
+    char description[description_length] [[encoding("utf-8")]];
+    u32  width;
+    u32  height;
+    u32  color_depth;
+    u32  indexed_colors;
+    u32  data_length;
+    u8   data[data_length] [[lazy]];
+};
+
+struct Block {
+    BlockHeaderByte header;
+    u24 length;
+    switch (header.type) {
+        case 0: StreamInfo stream_info;
+        case 3: SeekPoint seek_points[length / 18];
+        case 4: VorbisComment vorbis_comment;
+        case 6: Picture picture;
+        default: u8 data[length] [[lazy]];
+    }
+} [[size(4 + length)]];
+
+char signature[4] [[expect(signature == "fLaC", "fLaC ではありません")]];
+Block blocks[until(last.header.is_last == 1 || std::eof())];
+if (std::core::size() > $) {
+    u8 audio_frames[std::core::size() - $] [[lazy]];
+}

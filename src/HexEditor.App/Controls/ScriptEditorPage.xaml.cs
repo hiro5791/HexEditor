@@ -1,4 +1,5 @@
 using System.Text;
+using HexEditor.App.Commands;
 using HexEditor.App.Services;
 using HexEditor.App.Services.Scripting;
 using HexEditor.App.ViewModels;
@@ -42,7 +43,7 @@ internal interface IScriptEditorHost : IScriptPanelHost
 /// スクリプトエディタ (AUTO-20) の画面と操作。実行・デバッグは <see cref="ScriptEditorSession"/>、構文のチェックは
 /// <see cref="ScriptSyntaxChecker"/>。コードのエディタ部品は <see cref="IScriptCodeEditor"/> (WebView2 の Monaco、なければ等幅の入力欄)。
 /// </summary>
-public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
+public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent, ICodeEditorHost
 {
     /// <summary>スクリプトファイルの上限 (AUTO-20 の「巨大ファイル」: 10 MB。超える場合は外部のエディタで編集するよう案内する)。</summary>
     public const long MaxFileBytes = 10 * 1024 * 1024;
@@ -506,6 +507,30 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
     }
 
     public void PauseRun() => _session.PauseNow();
+
+    // ---- コードエディタのコマンド (codeEditor.*。MainWindow.CodeEditor.cs が振り分ける。00-overview 8.5) ----
+
+    public CommandState GetCodeEditorCommandState(string commandId) => commandId switch
+    {
+        CodeEditorCommands.Run or CodeEditorCommands.Stop or CodeEditorCommands.ToggleBreakpoint or CodeEditorCommands.StepOver
+            or CodeEditorCommands.StepInto or CodeEditorCommands.StepOut or CodeEditorCommands.AddWatch => CommandState.Available,
+        _ => CodeEditorCommands.NotSupported, // 定義へ移動・補完などは Monaco を同梱するときに加える (AUTO-20 の実装の注記)
+    };
+
+    public Task ExecuteCodeEditorCommandAsync(string commandId)
+    {
+        switch (commandId)
+        {
+            case CodeEditorCommands.Run: RunOrContinue(); break;
+            case CodeEditorCommands.Stop: StopRun(); break;
+            case CodeEditorCommands.ToggleBreakpoint: ToggleBreakpoint(); break;
+            case CodeEditorCommands.StepOver: StepOver(); break;
+            case CodeEditorCommands.StepInto: StepIn(); break;
+            case CodeEditorCommands.StepOut: StepOut(); break;
+        }
+
+        return Task.CompletedTask;
+    }
 
     private void Run_Click(object sender, RoutedEventArgs e) => RunOrContinue();
 

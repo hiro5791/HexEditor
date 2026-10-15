@@ -1,0 +1,2878 @@
+{
+  "name": "NTFS ブートセクタと MFT",
+  "type": "application",
+  "offset": 0,
+  "size": 512,
+  "children": [
+    {
+      "name": "boot_sector",
+      "path": "boot_sector",
+      "type": "BootSector",
+      "offset": 0,
+      "size": 512,
+      "display": "BootSector (28)",
+      "children": [
+        {
+          "name": "jump",
+          "path": "boot_sector.jump",
+          "type": "u8[3]",
+          "offset": 0,
+          "size": 3,
+          "value": "EB5290",
+          "display": "EB 52 90"
+        },
+        {
+          "name": "oem_id",
+          "path": "boot_sector.oem_id",
+          "type": "char[8]",
+          "offset": 3,
+          "size": 8,
+          "value": "NTFS    ",
+          "display": "NTFS    "
+        },
+        {
+          "name": "bytes_per_sector",
+          "path": "boot_sector.bytes_per_sector",
+          "type": "u16",
+          "offset": 11,
+          "size": 2,
+          "value": 512,
+          "display": "512"
+        },
+        {
+          "name": "sectors_per_cluster",
+          "path": "boot_sector.sectors_per_cluster",
+          "type": "u8",
+          "offset": 13,
+          "size": 1,
+          "value": 8,
+          "display": "8"
+        },
+        {
+          "name": "reserved_sectors",
+          "path": "boot_sector.reserved_sectors",
+          "type": "u16",
+          "offset": 14,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "zero1",
+          "path": "boot_sector.zero1",
+          "type": "u8[3]",
+          "offset": 16,
+          "size": 3,
+          "value": "000000",
+          "display": "00 00 00"
+        },
+        {
+          "name": "unused1",
+          "path": "boot_sector.unused1",
+          "type": "u16",
+          "offset": 19,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "media",
+          "path": "boot_sector.media",
+          "type": "u8",
+          "offset": 21,
+          "size": 1,
+          "value": 248,
+          "display": "0xF8"
+        },
+        {
+          "name": "zero2",
+          "path": "boot_sector.zero2",
+          "type": "u16",
+          "offset": 22,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "sectors_per_track",
+          "path": "boot_sector.sectors_per_track",
+          "type": "u16",
+          "offset": 24,
+          "size": 2,
+          "value": 63,
+          "display": "63"
+        },
+        {
+          "name": "number_of_heads",
+          "path": "boot_sector.number_of_heads",
+          "type": "u16",
+          "offset": 26,
+          "size": 2,
+          "value": 255,
+          "display": "255"
+        },
+        {
+          "name": "hidden_sectors",
+          "path": "boot_sector.hidden_sectors",
+          "type": "u32",
+          "offset": 28,
+          "size": 4,
+          "value": 2048,
+          "display": "2048"
+        },
+        {
+          "name": "unused2",
+          "path": "boot_sector.unused2",
+          "type": "u32",
+          "offset": 32,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "unused3",
+          "path": "boot_sector.unused3",
+          "type": "u32",
+          "offset": 36,
+          "size": 4,
+          "value": 2147516416,
+          "display": "0x80008000"
+        },
+        {
+          "name": "total_sectors",
+          "path": "boot_sector.total_sectors",
+          "type": "u64",
+          "offset": 40,
+          "size": 8,
+          "value": 8192,
+          "display": "8192"
+        },
+        {
+          "name": "mft_cluster",
+          "path": "boot_sector.mft_cluster",
+          "type": "u64",
+          "offset": 48,
+          "size": 8,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "mft_mirror_cluster",
+          "path": "boot_sector.mft_mirror_cluster",
+          "type": "u64",
+          "offset": 56,
+          "size": 8,
+          "value": 256,
+          "display": "256"
+        },
+        {
+          "name": "clusters_per_file_record",
+          "path": "boot_sector.clusters_per_file_record",
+          "type": "s8",
+          "offset": 64,
+          "size": 1,
+          "value": -10,
+          "display": "-10",
+          "comment": "負の値のときは 2 の (-値) 乗バイト"
+        },
+        {
+          "name": "unused4",
+          "path": "boot_sector.unused4",
+          "type": "u8[3]",
+          "offset": 65,
+          "size": 3,
+          "value": "000000",
+          "display": "00 00 00"
+        },
+        {
+          "name": "clusters_per_index_buffer",
+          "path": "boot_sector.clusters_per_index_buffer",
+          "type": "s8",
+          "offset": 68,
+          "size": 1,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "unused5",
+          "path": "boot_sector.unused5",
+          "type": "u8[3]",
+          "offset": 69,
+          "size": 3,
+          "value": "000000",
+          "display": "00 00 00"
+        },
+        {
+          "name": "volume_serial_number",
+          "path": "boot_sector.volume_serial_number",
+          "type": "u64",
+          "offset": 72,
+          "size": 8,
+          "value": 1234605616436508552,
+          "display": "0x1122334455667788"
+        },
+        {
+          "name": "checksum",
+          "path": "boot_sector.checksum",
+          "type": "u32",
+          "offset": 80,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "boot_code",
+          "path": "boot_sector.boot_code",
+          "type": "u8[426]",
+          "offset": 84,
+          "size": 426,
+          "value": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+        },
+        {
+          "name": "boot_signature",
+          "path": "boot_sector.boot_signature",
+          "type": "u8[2]",
+          "offset": 510,
+          "size": 2,
+          "value": "55AA",
+          "display": "55 AA"
+        },
+        {
+          "name": "cluster_size",
+          "path": "boot_sector.cluster_size",
+          "type": "u64",
+          "offset": 512,
+          "size": 0,
+          "value": 4096,
+          "display": "4096"
+        },
+        {
+          "name": "record_size",
+          "path": "boot_sector.record_size",
+          "type": "u64",
+          "offset": 512,
+          "size": 0,
+          "value": 1024,
+          "display": "1024"
+        },
+        {
+          "name": "mft_offset",
+          "path": "boot_sector.mft_offset",
+          "type": "u64",
+          "offset": 512,
+          "size": 0,
+          "value": 4096,
+          "display": "0x1000"
+        }
+      ]
+    },
+    {
+      "name": "mft_records",
+      "path": "mft_records",
+      "type": "MftRecord[8]",
+      "offset": 4096,
+      "size": 8192,
+      "display": "[8]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "mft_records[0]",
+          "type": "MftRecord",
+          "offset": 4096,
+          "size": 1024,
+          "display": "MftRecord (15)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "mft_records[0].signature",
+              "type": "char[4]",
+              "offset": 4096,
+              "size": 4,
+              "value": "FILE",
+              "display": "FILE"
+            },
+            {
+              "name": "update_sequence_offset",
+              "path": "mft_records[0].update_sequence_offset",
+              "type": "u16",
+              "offset": 4100,
+              "size": 2,
+              "value": 48,
+              "display": "48"
+            },
+            {
+              "name": "update_sequence_count",
+              "path": "mft_records[0].update_sequence_count",
+              "type": "u16",
+              "offset": 4102,
+              "size": 2,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "log_sequence_number",
+              "path": "mft_records[0].log_sequence_number",
+              "type": "u64",
+              "offset": 4104,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sequence_number",
+              "path": "mft_records[0].sequence_number",
+              "type": "u16",
+              "offset": 4112,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "hard_link_count",
+              "path": "mft_records[0].hard_link_count",
+              "type": "u16",
+              "offset": 4114,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "first_attribute_offset",
+              "path": "mft_records[0].first_attribute_offset",
+              "type": "u16",
+              "offset": 4116,
+              "size": 2,
+              "value": 56,
+              "display": "56"
+            },
+            {
+              "name": "record_flags",
+              "path": "mft_records[0].record_flags",
+              "type": "RecordFlags",
+              "offset": 4118,
+              "size": 2,
+              "value": 1,
+              "display": "InUse"
+            },
+            {
+              "name": "bytes_in_use",
+              "path": "mft_records[0].bytes_in_use",
+              "type": "u32",
+              "offset": 4120,
+              "size": 4,
+              "value": 312,
+              "display": "312"
+            },
+            {
+              "name": "bytes_allocated",
+              "path": "mft_records[0].bytes_allocated",
+              "type": "u32",
+              "offset": 4124,
+              "size": 4,
+              "value": 1024,
+              "display": "1024"
+            },
+            {
+              "name": "base_record",
+              "path": "mft_records[0].base_record",
+              "type": "u64",
+              "offset": 4128,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "next_attribute_id",
+              "path": "mft_records[0].next_attribute_id",
+              "type": "u16",
+              "offset": 4136,
+              "size": 2,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "padding_word",
+              "path": "mft_records[0].padding_word",
+              "type": "u16",
+              "offset": 4138,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "record_number",
+              "path": "mft_records[0].record_number",
+              "type": "u32",
+              "offset": 4140,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "attributes",
+              "path": "mft_records[0].attributes",
+              "type": "Attribute[4]",
+              "offset": 4152,
+              "size": 252,
+              "display": "[4]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "mft_records[0].attributes[0]",
+                  "type": "Attribute",
+                  "offset": 4152,
+                  "size": 72,
+                  "display": "Attribute (12)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[0].attributes[0].type",
+                      "type": "AttributeType",
+                      "offset": 4152,
+                      "size": 4,
+                      "value": 16,
+                      "display": "StandardInformation (0x10)"
+                    },
+                    {
+                      "name": "length",
+                      "path": "mft_records[0].attributes[0].length",
+                      "type": "u32",
+                      "offset": 4156,
+                      "size": 4,
+                      "value": 72,
+                      "display": "72"
+                    },
+                    {
+                      "name": "non_resident",
+                      "path": "mft_records[0].attributes[0].non_resident",
+                      "type": "u8",
+                      "offset": 4160,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_length",
+                      "path": "mft_records[0].attributes[0].name_length",
+                      "type": "u8",
+                      "offset": 4161,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_offset",
+                      "path": "mft_records[0].attributes[0].name_offset",
+                      "type": "u16",
+                      "offset": 4162,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "attribute_flags",
+                      "path": "mft_records[0].attributes[0].attribute_flags",
+                      "type": "u16",
+                      "offset": 4164,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "attribute_id",
+                      "path": "mft_records[0].attributes[0].attribute_id",
+                      "type": "u16",
+                      "offset": 4166,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "mft_records[0].attributes[0].value_length",
+                      "type": "u32",
+                      "offset": 4168,
+                      "size": 4,
+                      "value": 48,
+                      "display": "48"
+                    },
+                    {
+                      "name": "value_offset",
+                      "path": "mft_records[0].attributes[0].value_offset",
+                      "type": "u16",
+                      "offset": 4172,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "indexed",
+                      "path": "mft_records[0].attributes[0].indexed",
+                      "type": "u8",
+                      "offset": 4174,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "padding_byte",
+                      "path": "mft_records[0].attributes[0].padding_byte",
+                      "type": "u8",
+                      "offset": 4175,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "standard_information",
+                      "path": "mft_records[0].attributes[0].standard_information",
+                      "type": "StandardInformation",
+                      "offset": 4176,
+                      "size": 48,
+                      "display": "StandardInformation (8)",
+                      "children": [
+                        {
+                          "name": "created",
+                          "path": "mft_records[0].attributes[0].standard_information.created",
+                          "type": "filetime",
+                          "offset": 4176,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "modified",
+                          "path": "mft_records[0].attributes[0].standard_information.modified",
+                          "type": "filetime",
+                          "offset": 4184,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "mft_modified",
+                          "path": "mft_records[0].attributes[0].standard_information.mft_modified",
+                          "type": "filetime",
+                          "offset": 4192,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "accessed",
+                          "path": "mft_records[0].attributes[0].standard_information.accessed",
+                          "type": "filetime",
+                          "offset": 4200,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "file_attributes",
+                          "path": "mft_records[0].attributes[0].standard_information.file_attributes",
+                          "type": "FileAttributes",
+                          "offset": 4208,
+                          "size": 4,
+                          "value": 6,
+                          "display": "Hidden | System"
+                        },
+                        {
+                          "name": "max_versions",
+                          "path": "mft_records[0].attributes[0].standard_information.max_versions",
+                          "type": "u32",
+                          "offset": 4212,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "version",
+                          "path": "mft_records[0].attributes[0].standard_information.version",
+                          "type": "u32",
+                          "offset": 4216,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "class_id",
+                          "path": "mft_records[0].attributes[0].standard_information.class_id",
+                          "type": "u32",
+                          "offset": 4220,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[1]",
+                  "path": "mft_records[0].attributes[1]",
+                  "type": "Attribute",
+                  "offset": 4224,
+                  "size": 104,
+                  "display": "Attribute (12)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[0].attributes[1].type",
+                      "type": "AttributeType",
+                      "offset": 4224,
+                      "size": 4,
+                      "value": 48,
+                      "display": "FileName (0x30)"
+                    },
+                    {
+                      "name": "length",
+                      "path": "mft_records[0].attributes[1].length",
+                      "type": "u32",
+                      "offset": 4228,
+                      "size": 4,
+                      "value": 104,
+                      "display": "104"
+                    },
+                    {
+                      "name": "non_resident",
+                      "path": "mft_records[0].attributes[1].non_resident",
+                      "type": "u8",
+                      "offset": 4232,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_length",
+                      "path": "mft_records[0].attributes[1].name_length",
+                      "type": "u8",
+                      "offset": 4233,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_offset",
+                      "path": "mft_records[0].attributes[1].name_offset",
+                      "type": "u16",
+                      "offset": 4234,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "attribute_flags",
+                      "path": "mft_records[0].attributes[1].attribute_flags",
+                      "type": "u16",
+                      "offset": 4236,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "attribute_id",
+                      "path": "mft_records[0].attributes[1].attribute_id",
+                      "type": "u16",
+                      "offset": 4238,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "mft_records[0].attributes[1].value_length",
+                      "type": "u32",
+                      "offset": 4240,
+                      "size": 4,
+                      "value": 74,
+                      "display": "74"
+                    },
+                    {
+                      "name": "value_offset",
+                      "path": "mft_records[0].attributes[1].value_offset",
+                      "type": "u16",
+                      "offset": 4244,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "indexed",
+                      "path": "mft_records[0].attributes[1].indexed",
+                      "type": "u8",
+                      "offset": 4246,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "padding_byte",
+                      "path": "mft_records[0].attributes[1].padding_byte",
+                      "type": "u8",
+                      "offset": 4247,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "file_name",
+                      "path": "mft_records[0].attributes[1].file_name",
+                      "type": "FileNameAttribute",
+                      "offset": 4248,
+                      "size": 74,
+                      "display": "FileNameAttribute (12)",
+                      "children": [
+                        {
+                          "name": "parent_reference",
+                          "path": "mft_records[0].attributes[1].file_name.parent_reference",
+                          "type": "u64",
+                          "offset": 4248,
+                          "size": 8,
+                          "value": 1407374883553285,
+                          "display": "0x5000000000005",
+                          "comment": "下位 48 bit が親の MFT レコード番号、上位 16 bit が順序番号"
+                        },
+                        {
+                          "name": "created",
+                          "path": "mft_records[0].attributes[1].file_name.created",
+                          "type": "filetime",
+                          "offset": 4256,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "modified",
+                          "path": "mft_records[0].attributes[1].file_name.modified",
+                          "type": "filetime",
+                          "offset": 4264,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "mft_modified",
+                          "path": "mft_records[0].attributes[1].file_name.mft_modified",
+                          "type": "filetime",
+                          "offset": 4272,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "accessed",
+                          "path": "mft_records[0].attributes[1].file_name.accessed",
+                          "type": "filetime",
+                          "offset": 4280,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "allocated_size",
+                          "path": "mft_records[0].attributes[1].file_name.allocated_size",
+                          "type": "u64",
+                          "offset": 4288,
+                          "size": 8,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "real_size",
+                          "path": "mft_records[0].attributes[1].file_name.real_size",
+                          "type": "u64",
+                          "offset": 4296,
+                          "size": 8,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "file_attributes",
+                          "path": "mft_records[0].attributes[1].file_name.file_attributes",
+                          "type": "u32",
+                          "offset": 4304,
+                          "size": 4,
+                          "value": 6,
+                          "display": "0x6"
+                        },
+                        {
+                          "name": "reparse_or_ea",
+                          "path": "mft_records[0].attributes[1].file_name.reparse_or_ea",
+                          "type": "u32",
+                          "offset": 4308,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "name_length",
+                          "path": "mft_records[0].attributes[1].file_name.name_length",
+                          "type": "u8",
+                          "offset": 4312,
+                          "size": 1,
+                          "value": 4,
+                          "display": "4"
+                        },
+                        {
+                          "name": "name_space",
+                          "path": "mft_records[0].attributes[1].file_name.name_space",
+                          "type": "u8",
+                          "offset": 4313,
+                          "size": 1,
+                          "value": 3,
+                          "display": "3",
+                          "comment": "0: POSIX、1: Win32、2: DOS、3: Win32 と DOS"
+                        },
+                        {
+                          "name": "name",
+                          "path": "mft_records[0].attributes[1].file_name.name",
+                          "type": "char16[4]",
+                          "offset": 4314,
+                          "size": 8,
+                          "value": "$MFT",
+                          "display": "$MFT"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[2]",
+                  "path": "mft_records[0].attributes[2]",
+                  "type": "Attribute",
+                  "offset": 4328,
+                  "size": 72,
+                  "display": "Attribute (15)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[0].attributes[2].type",
+                      "type": "AttributeType",
+                      "offset": 4328,
+                      "size": 4,
+                      "value": 128,
+                      "display": "Data (0x80)"
+                    },
+                    {
+                      "name": "length",
+                      "path": "mft_records[0].attributes[2].length",
+                      "type": "u32",
+                      "offset": 4332,
+                      "size": 4,
+                      "value": 72,
+                      "display": "72"
+                    },
+                    {
+                      "name": "non_resident",
+                      "path": "mft_records[0].attributes[2].non_resident",
+                      "type": "u8",
+                      "offset": 4336,
+                      "size": 1,
+                      "value": 1,
+                      "display": "1"
+                    },
+                    {
+                      "name": "name_length",
+                      "path": "mft_records[0].attributes[2].name_length",
+                      "type": "u8",
+                      "offset": 4337,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_offset",
+                      "path": "mft_records[0].attributes[2].name_offset",
+                      "type": "u16",
+                      "offset": 4338,
+                      "size": 2,
+                      "value": 64,
+                      "display": "64"
+                    },
+                    {
+                      "name": "attribute_flags",
+                      "path": "mft_records[0].attributes[2].attribute_flags",
+                      "type": "u16",
+                      "offset": 4340,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "attribute_id",
+                      "path": "mft_records[0].attributes[2].attribute_id",
+                      "type": "u16",
+                      "offset": 4342,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "start_vcn",
+                      "path": "mft_records[0].attributes[2].start_vcn",
+                      "type": "u64",
+                      "offset": 4344,
+                      "size": 8,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "last_vcn",
+                      "path": "mft_records[0].attributes[2].last_vcn",
+                      "type": "u64",
+                      "offset": 4352,
+                      "size": 8,
+                      "value": 31,
+                      "display": "31"
+                    },
+                    {
+                      "name": "runlist_offset",
+                      "path": "mft_records[0].attributes[2].runlist_offset",
+                      "type": "u16",
+                      "offset": 4360,
+                      "size": 2,
+                      "value": 64,
+                      "display": "64"
+                    },
+                    {
+                      "name": "compression_unit",
+                      "path": "mft_records[0].attributes[2].compression_unit",
+                      "type": "u16",
+                      "offset": 4362,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "padding_dword",
+                      "path": "mft_records[0].attributes[2].padding_dword",
+                      "type": "u32",
+                      "offset": 4364,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "allocated_size",
+                      "path": "mft_records[0].attributes[2].allocated_size",
+                      "type": "u64",
+                      "offset": 4368,
+                      "size": 8,
+                      "value": 131072,
+                      "display": "131072"
+                    },
+                    {
+                      "name": "real_size",
+                      "path": "mft_records[0].attributes[2].real_size",
+                      "type": "u64",
+                      "offset": 4376,
+                      "size": 8,
+                      "value": 131072,
+                      "display": "131072"
+                    },
+                    {
+                      "name": "initialized_size",
+                      "path": "mft_records[0].attributes[2].initialized_size",
+                      "type": "u64",
+                      "offset": 4384,
+                      "size": 8,
+                      "value": 131072,
+                      "display": "131072"
+                    }
+                  ]
+                },
+                {
+                  "name": "[3]",
+                  "path": "mft_records[0].attributes[3]",
+                  "type": "Attribute",
+                  "offset": 4400,
+                  "size": 4,
+                  "display": "Attribute (1)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[0].attributes[3].type",
+                      "type": "AttributeType",
+                      "offset": 4400,
+                      "size": 4,
+                      "value": 4294967295,
+                      "display": "End (0xFFFFFFFF)"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "mft_records[1]",
+          "type": "MftRecord",
+          "offset": 5120,
+          "size": 1024,
+          "display": "MftRecord (15)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "mft_records[1].signature",
+              "type": "char[4]",
+              "offset": 5120,
+              "size": 4,
+              "value": "FILE",
+              "display": "FILE"
+            },
+            {
+              "name": "update_sequence_offset",
+              "path": "mft_records[1].update_sequence_offset",
+              "type": "u16",
+              "offset": 5124,
+              "size": 2,
+              "value": 48,
+              "display": "48"
+            },
+            {
+              "name": "update_sequence_count",
+              "path": "mft_records[1].update_sequence_count",
+              "type": "u16",
+              "offset": 5126,
+              "size": 2,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "log_sequence_number",
+              "path": "mft_records[1].log_sequence_number",
+              "type": "u64",
+              "offset": 5128,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sequence_number",
+              "path": "mft_records[1].sequence_number",
+              "type": "u16",
+              "offset": 5136,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "hard_link_count",
+              "path": "mft_records[1].hard_link_count",
+              "type": "u16",
+              "offset": 5138,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "first_attribute_offset",
+              "path": "mft_records[1].first_attribute_offset",
+              "type": "u16",
+              "offset": 5140,
+              "size": 2,
+              "value": 56,
+              "display": "56"
+            },
+            {
+              "name": "record_flags",
+              "path": "mft_records[1].record_flags",
+              "type": "RecordFlags",
+              "offset": 5142,
+              "size": 2,
+              "value": 1,
+              "display": "InUse"
+            },
+            {
+              "name": "bytes_in_use",
+              "path": "mft_records[1].bytes_in_use",
+              "type": "u32",
+              "offset": 5144,
+              "size": 4,
+              "value": 248,
+              "display": "248"
+            },
+            {
+              "name": "bytes_allocated",
+              "path": "mft_records[1].bytes_allocated",
+              "type": "u32",
+              "offset": 5148,
+              "size": 4,
+              "value": 1024,
+              "display": "1024"
+            },
+            {
+              "name": "base_record",
+              "path": "mft_records[1].base_record",
+              "type": "u64",
+              "offset": 5152,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "next_attribute_id",
+              "path": "mft_records[1].next_attribute_id",
+              "type": "u16",
+              "offset": 5160,
+              "size": 2,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "padding_word",
+              "path": "mft_records[1].padding_word",
+              "type": "u16",
+              "offset": 5162,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "record_number",
+              "path": "mft_records[1].record_number",
+              "type": "u32",
+              "offset": 5164,
+              "size": 4,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "attributes",
+              "path": "mft_records[1].attributes",
+              "type": "Attribute[3]",
+              "offset": 5176,
+              "size": 188,
+              "display": "[3]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "mft_records[1].attributes[0]",
+                  "type": "Attribute",
+                  "offset": 5176,
+                  "size": 72,
+                  "display": "Attribute (12)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[1].attributes[0].type",
+                      "type": "AttributeType",
+                      "offset": 5176,
+                      "size": 4,
+                      "value": 16,
+                      "display": "StandardInformation (0x10)"
+                    },
+                    {
+                      "name": "length",
+                      "path": "mft_records[1].attributes[0].length",
+                      "type": "u32",
+                      "offset": 5180,
+                      "size": 4,
+                      "value": 72,
+                      "display": "72"
+                    },
+                    {
+                      "name": "non_resident",
+                      "path": "mft_records[1].attributes[0].non_resident",
+                      "type": "u8",
+                      "offset": 5184,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_length",
+                      "path": "mft_records[1].attributes[0].name_length",
+                      "type": "u8",
+                      "offset": 5185,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_offset",
+                      "path": "mft_records[1].attributes[0].name_offset",
+                      "type": "u16",
+                      "offset": 5186,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "attribute_flags",
+                      "path": "mft_records[1].attributes[0].attribute_flags",
+                      "type": "u16",
+                      "offset": 5188,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "attribute_id",
+                      "path": "mft_records[1].attributes[0].attribute_id",
+                      "type": "u16",
+                      "offset": 5190,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "mft_records[1].attributes[0].value_length",
+                      "type": "u32",
+                      "offset": 5192,
+                      "size": 4,
+                      "value": 48,
+                      "display": "48"
+                    },
+                    {
+                      "name": "value_offset",
+                      "path": "mft_records[1].attributes[0].value_offset",
+                      "type": "u16",
+                      "offset": 5196,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "indexed",
+                      "path": "mft_records[1].attributes[0].indexed",
+                      "type": "u8",
+                      "offset": 5198,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "padding_byte",
+                      "path": "mft_records[1].attributes[0].padding_byte",
+                      "type": "u8",
+                      "offset": 5199,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "standard_information",
+                      "path": "mft_records[1].attributes[0].standard_information",
+                      "type": "StandardInformation",
+                      "offset": 5200,
+                      "size": 48,
+                      "display": "StandardInformation (8)",
+                      "children": [
+                        {
+                          "name": "created",
+                          "path": "mft_records[1].attributes[0].standard_information.created",
+                          "type": "filetime",
+                          "offset": 5200,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "modified",
+                          "path": "mft_records[1].attributes[0].standard_information.modified",
+                          "type": "filetime",
+                          "offset": 5208,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "mft_modified",
+                          "path": "mft_records[1].attributes[0].standard_information.mft_modified",
+                          "type": "filetime",
+                          "offset": 5216,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "accessed",
+                          "path": "mft_records[1].attributes[0].standard_information.accessed",
+                          "type": "filetime",
+                          "offset": 5224,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "file_attributes",
+                          "path": "mft_records[1].attributes[0].standard_information.file_attributes",
+                          "type": "FileAttributes",
+                          "offset": 5232,
+                          "size": 4,
+                          "value": 6,
+                          "display": "Hidden | System"
+                        },
+                        {
+                          "name": "max_versions",
+                          "path": "mft_records[1].attributes[0].standard_information.max_versions",
+                          "type": "u32",
+                          "offset": 5236,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "version",
+                          "path": "mft_records[1].attributes[0].standard_information.version",
+                          "type": "u32",
+                          "offset": 5240,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "class_id",
+                          "path": "mft_records[1].attributes[0].standard_information.class_id",
+                          "type": "u32",
+                          "offset": 5244,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[1]",
+                  "path": "mft_records[1].attributes[1]",
+                  "type": "Attribute",
+                  "offset": 5248,
+                  "size": 112,
+                  "display": "Attribute (12)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[1].attributes[1].type",
+                      "type": "AttributeType",
+                      "offset": 5248,
+                      "size": 4,
+                      "value": 48,
+                      "display": "FileName (0x30)"
+                    },
+                    {
+                      "name": "length",
+                      "path": "mft_records[1].attributes[1].length",
+                      "type": "u32",
+                      "offset": 5252,
+                      "size": 4,
+                      "value": 112,
+                      "display": "112"
+                    },
+                    {
+                      "name": "non_resident",
+                      "path": "mft_records[1].attributes[1].non_resident",
+                      "type": "u8",
+                      "offset": 5256,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_length",
+                      "path": "mft_records[1].attributes[1].name_length",
+                      "type": "u8",
+                      "offset": 5257,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_offset",
+                      "path": "mft_records[1].attributes[1].name_offset",
+                      "type": "u16",
+                      "offset": 5258,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "attribute_flags",
+                      "path": "mft_records[1].attributes[1].attribute_flags",
+                      "type": "u16",
+                      "offset": 5260,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "attribute_id",
+                      "path": "mft_records[1].attributes[1].attribute_id",
+                      "type": "u16",
+                      "offset": 5262,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "mft_records[1].attributes[1].value_length",
+                      "type": "u32",
+                      "offset": 5264,
+                      "size": 4,
+                      "value": 82,
+                      "display": "82"
+                    },
+                    {
+                      "name": "value_offset",
+                      "path": "mft_records[1].attributes[1].value_offset",
+                      "type": "u16",
+                      "offset": 5268,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "indexed",
+                      "path": "mft_records[1].attributes[1].indexed",
+                      "type": "u8",
+                      "offset": 5270,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "padding_byte",
+                      "path": "mft_records[1].attributes[1].padding_byte",
+                      "type": "u8",
+                      "offset": 5271,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "file_name",
+                      "path": "mft_records[1].attributes[1].file_name",
+                      "type": "FileNameAttribute",
+                      "offset": 5272,
+                      "size": 82,
+                      "display": "FileNameAttribute (12)",
+                      "children": [
+                        {
+                          "name": "parent_reference",
+                          "path": "mft_records[1].attributes[1].file_name.parent_reference",
+                          "type": "u64",
+                          "offset": 5272,
+                          "size": 8,
+                          "value": 1407374883553285,
+                          "display": "0x5000000000005",
+                          "comment": "下位 48 bit が親の MFT レコード番号、上位 16 bit が順序番号"
+                        },
+                        {
+                          "name": "created",
+                          "path": "mft_records[1].attributes[1].file_name.created",
+                          "type": "filetime",
+                          "offset": 5280,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "modified",
+                          "path": "mft_records[1].attributes[1].file_name.modified",
+                          "type": "filetime",
+                          "offset": 5288,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "mft_modified",
+                          "path": "mft_records[1].attributes[1].file_name.mft_modified",
+                          "type": "filetime",
+                          "offset": 5296,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "accessed",
+                          "path": "mft_records[1].attributes[1].file_name.accessed",
+                          "type": "filetime",
+                          "offset": 5304,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "allocated_size",
+                          "path": "mft_records[1].attributes[1].file_name.allocated_size",
+                          "type": "u64",
+                          "offset": 5312,
+                          "size": 8,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "real_size",
+                          "path": "mft_records[1].attributes[1].file_name.real_size",
+                          "type": "u64",
+                          "offset": 5320,
+                          "size": 8,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "file_attributes",
+                          "path": "mft_records[1].attributes[1].file_name.file_attributes",
+                          "type": "u32",
+                          "offset": 5328,
+                          "size": 4,
+                          "value": 6,
+                          "display": "0x6"
+                        },
+                        {
+                          "name": "reparse_or_ea",
+                          "path": "mft_records[1].attributes[1].file_name.reparse_or_ea",
+                          "type": "u32",
+                          "offset": 5332,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "name_length",
+                          "path": "mft_records[1].attributes[1].file_name.name_length",
+                          "type": "u8",
+                          "offset": 5336,
+                          "size": 1,
+                          "value": 8,
+                          "display": "8"
+                        },
+                        {
+                          "name": "name_space",
+                          "path": "mft_records[1].attributes[1].file_name.name_space",
+                          "type": "u8",
+                          "offset": 5337,
+                          "size": 1,
+                          "value": 3,
+                          "display": "3",
+                          "comment": "0: POSIX、1: Win32、2: DOS、3: Win32 と DOS"
+                        },
+                        {
+                          "name": "name",
+                          "path": "mft_records[1].attributes[1].file_name.name",
+                          "type": "char16[8]",
+                          "offset": 5338,
+                          "size": 16,
+                          "value": "$MFTMirr",
+                          "display": "$MFTMirr"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[2]",
+                  "path": "mft_records[1].attributes[2]",
+                  "type": "Attribute",
+                  "offset": 5360,
+                  "size": 4,
+                  "display": "Attribute (1)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[1].attributes[2].type",
+                      "type": "AttributeType",
+                      "offset": 5360,
+                      "size": 4,
+                      "value": 4294967295,
+                      "display": "End (0xFFFFFFFF)"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "mft_records[2]",
+          "type": "MftRecord",
+          "offset": 6144,
+          "size": 1024,
+          "display": "MftRecord (15)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "mft_records[2].signature",
+              "type": "char[4]",
+              "offset": 6144,
+              "size": 4,
+              "value": "FILE",
+              "display": "FILE"
+            },
+            {
+              "name": "update_sequence_offset",
+              "path": "mft_records[2].update_sequence_offset",
+              "type": "u16",
+              "offset": 6148,
+              "size": 2,
+              "value": 48,
+              "display": "48"
+            },
+            {
+              "name": "update_sequence_count",
+              "path": "mft_records[2].update_sequence_count",
+              "type": "u16",
+              "offset": 6150,
+              "size": 2,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "log_sequence_number",
+              "path": "mft_records[2].log_sequence_number",
+              "type": "u64",
+              "offset": 6152,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sequence_number",
+              "path": "mft_records[2].sequence_number",
+              "type": "u16",
+              "offset": 6160,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "hard_link_count",
+              "path": "mft_records[2].hard_link_count",
+              "type": "u16",
+              "offset": 6162,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "first_attribute_offset",
+              "path": "mft_records[2].first_attribute_offset",
+              "type": "u16",
+              "offset": 6164,
+              "size": 2,
+              "value": 56,
+              "display": "56"
+            },
+            {
+              "name": "record_flags",
+              "path": "mft_records[2].record_flags",
+              "type": "RecordFlags",
+              "offset": 6166,
+              "size": 2,
+              "value": 1,
+              "display": "InUse"
+            },
+            {
+              "name": "bytes_in_use",
+              "path": "mft_records[2].bytes_in_use",
+              "type": "u32",
+              "offset": 6168,
+              "size": 4,
+              "value": 248,
+              "display": "248"
+            },
+            {
+              "name": "bytes_allocated",
+              "path": "mft_records[2].bytes_allocated",
+              "type": "u32",
+              "offset": 6172,
+              "size": 4,
+              "value": 1024,
+              "display": "1024"
+            },
+            {
+              "name": "base_record",
+              "path": "mft_records[2].base_record",
+              "type": "u64",
+              "offset": 6176,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "next_attribute_id",
+              "path": "mft_records[2].next_attribute_id",
+              "type": "u16",
+              "offset": 6184,
+              "size": 2,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "padding_word",
+              "path": "mft_records[2].padding_word",
+              "type": "u16",
+              "offset": 6186,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "record_number",
+              "path": "mft_records[2].record_number",
+              "type": "u32",
+              "offset": 6188,
+              "size": 4,
+              "value": 2,
+              "display": "2"
+            },
+            {
+              "name": "attributes",
+              "path": "mft_records[2].attributes",
+              "type": "Attribute[3]",
+              "offset": 6200,
+              "size": 188,
+              "display": "[3]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "mft_records[2].attributes[0]",
+                  "type": "Attribute",
+                  "offset": 6200,
+                  "size": 72,
+                  "display": "Attribute (12)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[2].attributes[0].type",
+                      "type": "AttributeType",
+                      "offset": 6200,
+                      "size": 4,
+                      "value": 16,
+                      "display": "StandardInformation (0x10)"
+                    },
+                    {
+                      "name": "length",
+                      "path": "mft_records[2].attributes[0].length",
+                      "type": "u32",
+                      "offset": 6204,
+                      "size": 4,
+                      "value": 72,
+                      "display": "72"
+                    },
+                    {
+                      "name": "non_resident",
+                      "path": "mft_records[2].attributes[0].non_resident",
+                      "type": "u8",
+                      "offset": 6208,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_length",
+                      "path": "mft_records[2].attributes[0].name_length",
+                      "type": "u8",
+                      "offset": 6209,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_offset",
+                      "path": "mft_records[2].attributes[0].name_offset",
+                      "type": "u16",
+                      "offset": 6210,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "attribute_flags",
+                      "path": "mft_records[2].attributes[0].attribute_flags",
+                      "type": "u16",
+                      "offset": 6212,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "attribute_id",
+                      "path": "mft_records[2].attributes[0].attribute_id",
+                      "type": "u16",
+                      "offset": 6214,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "mft_records[2].attributes[0].value_length",
+                      "type": "u32",
+                      "offset": 6216,
+                      "size": 4,
+                      "value": 48,
+                      "display": "48"
+                    },
+                    {
+                      "name": "value_offset",
+                      "path": "mft_records[2].attributes[0].value_offset",
+                      "type": "u16",
+                      "offset": 6220,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "indexed",
+                      "path": "mft_records[2].attributes[0].indexed",
+                      "type": "u8",
+                      "offset": 6222,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "padding_byte",
+                      "path": "mft_records[2].attributes[0].padding_byte",
+                      "type": "u8",
+                      "offset": 6223,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "standard_information",
+                      "path": "mft_records[2].attributes[0].standard_information",
+                      "type": "StandardInformation",
+                      "offset": 6224,
+                      "size": 48,
+                      "display": "StandardInformation (8)",
+                      "children": [
+                        {
+                          "name": "created",
+                          "path": "mft_records[2].attributes[0].standard_information.created",
+                          "type": "filetime",
+                          "offset": 6224,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "modified",
+                          "path": "mft_records[2].attributes[0].standard_information.modified",
+                          "type": "filetime",
+                          "offset": 6232,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "mft_modified",
+                          "path": "mft_records[2].attributes[0].standard_information.mft_modified",
+                          "type": "filetime",
+                          "offset": 6240,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "accessed",
+                          "path": "mft_records[2].attributes[0].standard_information.accessed",
+                          "type": "filetime",
+                          "offset": 6248,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "file_attributes",
+                          "path": "mft_records[2].attributes[0].standard_information.file_attributes",
+                          "type": "FileAttributes",
+                          "offset": 6256,
+                          "size": 4,
+                          "value": 6,
+                          "display": "Hidden | System"
+                        },
+                        {
+                          "name": "max_versions",
+                          "path": "mft_records[2].attributes[0].standard_information.max_versions",
+                          "type": "u32",
+                          "offset": 6260,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "version",
+                          "path": "mft_records[2].attributes[0].standard_information.version",
+                          "type": "u32",
+                          "offset": 6264,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "class_id",
+                          "path": "mft_records[2].attributes[0].standard_information.class_id",
+                          "type": "u32",
+                          "offset": 6268,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[1]",
+                  "path": "mft_records[2].attributes[1]",
+                  "type": "Attribute",
+                  "offset": 6272,
+                  "size": 112,
+                  "display": "Attribute (12)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[2].attributes[1].type",
+                      "type": "AttributeType",
+                      "offset": 6272,
+                      "size": 4,
+                      "value": 48,
+                      "display": "FileName (0x30)"
+                    },
+                    {
+                      "name": "length",
+                      "path": "mft_records[2].attributes[1].length",
+                      "type": "u32",
+                      "offset": 6276,
+                      "size": 4,
+                      "value": 112,
+                      "display": "112"
+                    },
+                    {
+                      "name": "non_resident",
+                      "path": "mft_records[2].attributes[1].non_resident",
+                      "type": "u8",
+                      "offset": 6280,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_length",
+                      "path": "mft_records[2].attributes[1].name_length",
+                      "type": "u8",
+                      "offset": 6281,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_offset",
+                      "path": "mft_records[2].attributes[1].name_offset",
+                      "type": "u16",
+                      "offset": 6282,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "attribute_flags",
+                      "path": "mft_records[2].attributes[1].attribute_flags",
+                      "type": "u16",
+                      "offset": 6284,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "attribute_id",
+                      "path": "mft_records[2].attributes[1].attribute_id",
+                      "type": "u16",
+                      "offset": 6286,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "mft_records[2].attributes[1].value_length",
+                      "type": "u32",
+                      "offset": 6288,
+                      "size": 4,
+                      "value": 82,
+                      "display": "82"
+                    },
+                    {
+                      "name": "value_offset",
+                      "path": "mft_records[2].attributes[1].value_offset",
+                      "type": "u16",
+                      "offset": 6292,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "indexed",
+                      "path": "mft_records[2].attributes[1].indexed",
+                      "type": "u8",
+                      "offset": 6294,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "padding_byte",
+                      "path": "mft_records[2].attributes[1].padding_byte",
+                      "type": "u8",
+                      "offset": 6295,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "file_name",
+                      "path": "mft_records[2].attributes[1].file_name",
+                      "type": "FileNameAttribute",
+                      "offset": 6296,
+                      "size": 82,
+                      "display": "FileNameAttribute (12)",
+                      "children": [
+                        {
+                          "name": "parent_reference",
+                          "path": "mft_records[2].attributes[1].file_name.parent_reference",
+                          "type": "u64",
+                          "offset": 6296,
+                          "size": 8,
+                          "value": 1407374883553285,
+                          "display": "0x5000000000005",
+                          "comment": "下位 48 bit が親の MFT レコード番号、上位 16 bit が順序番号"
+                        },
+                        {
+                          "name": "created",
+                          "path": "mft_records[2].attributes[1].file_name.created",
+                          "type": "filetime",
+                          "offset": 6304,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "modified",
+                          "path": "mft_records[2].attributes[1].file_name.modified",
+                          "type": "filetime",
+                          "offset": 6312,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "mft_modified",
+                          "path": "mft_records[2].attributes[1].file_name.mft_modified",
+                          "type": "filetime",
+                          "offset": 6320,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "accessed",
+                          "path": "mft_records[2].attributes[1].file_name.accessed",
+                          "type": "filetime",
+                          "offset": 6328,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "allocated_size",
+                          "path": "mft_records[2].attributes[1].file_name.allocated_size",
+                          "type": "u64",
+                          "offset": 6336,
+                          "size": 8,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "real_size",
+                          "path": "mft_records[2].attributes[1].file_name.real_size",
+                          "type": "u64",
+                          "offset": 6344,
+                          "size": 8,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "file_attributes",
+                          "path": "mft_records[2].attributes[1].file_name.file_attributes",
+                          "type": "u32",
+                          "offset": 6352,
+                          "size": 4,
+                          "value": 6,
+                          "display": "0x6"
+                        },
+                        {
+                          "name": "reparse_or_ea",
+                          "path": "mft_records[2].attributes[1].file_name.reparse_or_ea",
+                          "type": "u32",
+                          "offset": 6356,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "name_length",
+                          "path": "mft_records[2].attributes[1].file_name.name_length",
+                          "type": "u8",
+                          "offset": 6360,
+                          "size": 1,
+                          "value": 8,
+                          "display": "8"
+                        },
+                        {
+                          "name": "name_space",
+                          "path": "mft_records[2].attributes[1].file_name.name_space",
+                          "type": "u8",
+                          "offset": 6361,
+                          "size": 1,
+                          "value": 3,
+                          "display": "3",
+                          "comment": "0: POSIX、1: Win32、2: DOS、3: Win32 と DOS"
+                        },
+                        {
+                          "name": "name",
+                          "path": "mft_records[2].attributes[1].file_name.name",
+                          "type": "char16[8]",
+                          "offset": 6362,
+                          "size": 16,
+                          "value": "$LogFile",
+                          "display": "$LogFile"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[2]",
+                  "path": "mft_records[2].attributes[2]",
+                  "type": "Attribute",
+                  "offset": 6384,
+                  "size": 4,
+                  "display": "Attribute (1)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[2].attributes[2].type",
+                      "type": "AttributeType",
+                      "offset": 6384,
+                      "size": 4,
+                      "value": 4294967295,
+                      "display": "End (0xFFFFFFFF)"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[3]",
+          "path": "mft_records[3]",
+          "type": "MftRecord",
+          "offset": 7168,
+          "size": 1024,
+          "display": "MftRecord (15)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "mft_records[3].signature",
+              "type": "char[4]",
+              "offset": 7168,
+              "size": 4,
+              "value": "FILE",
+              "display": "FILE"
+            },
+            {
+              "name": "update_sequence_offset",
+              "path": "mft_records[3].update_sequence_offset",
+              "type": "u16",
+              "offset": 7172,
+              "size": 2,
+              "value": 48,
+              "display": "48"
+            },
+            {
+              "name": "update_sequence_count",
+              "path": "mft_records[3].update_sequence_count",
+              "type": "u16",
+              "offset": 7174,
+              "size": 2,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "log_sequence_number",
+              "path": "mft_records[3].log_sequence_number",
+              "type": "u64",
+              "offset": 7176,
+              "size": 8,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "sequence_number",
+              "path": "mft_records[3].sequence_number",
+              "type": "u16",
+              "offset": 7184,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "hard_link_count",
+              "path": "mft_records[3].hard_link_count",
+              "type": "u16",
+              "offset": 7186,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "first_attribute_offset",
+              "path": "mft_records[3].first_attribute_offset",
+              "type": "u16",
+              "offset": 7188,
+              "size": 2,
+              "value": 56,
+              "display": "56"
+            },
+            {
+              "name": "record_flags",
+              "path": "mft_records[3].record_flags",
+              "type": "RecordFlags",
+              "offset": 7190,
+              "size": 2,
+              "value": 1,
+              "display": "InUse"
+            },
+            {
+              "name": "bytes_in_use",
+              "path": "mft_records[3].bytes_in_use",
+              "type": "u32",
+              "offset": 7192,
+              "size": 4,
+              "value": 240,
+              "display": "240"
+            },
+            {
+              "name": "bytes_allocated",
+              "path": "mft_records[3].bytes_allocated",
+              "type": "u32",
+              "offset": 7196,
+              "size": 4,
+              "value": 1024,
+              "display": "1024"
+            },
+            {
+              "name": "base_record",
+              "path": "mft_records[3].base_record",
+              "type": "u64",
+              "offset": 7200,
+              "size": 8,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "next_attribute_id",
+              "path": "mft_records[3].next_attribute_id",
+              "type": "u16",
+              "offset": 7208,
+              "size": 2,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "padding_word",
+              "path": "mft_records[3].padding_word",
+              "type": "u16",
+              "offset": 7210,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "record_number",
+              "path": "mft_records[3].record_number",
+              "type": "u32",
+              "offset": 7212,
+              "size": 4,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "attributes",
+              "path": "mft_records[3].attributes",
+              "type": "Attribute[3]",
+              "offset": 7224,
+              "size": 180,
+              "display": "[3]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "mft_records[3].attributes[0]",
+                  "type": "Attribute",
+                  "offset": 7224,
+                  "size": 72,
+                  "display": "Attribute (12)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[3].attributes[0].type",
+                      "type": "AttributeType",
+                      "offset": 7224,
+                      "size": 4,
+                      "value": 16,
+                      "display": "StandardInformation (0x10)"
+                    },
+                    {
+                      "name": "length",
+                      "path": "mft_records[3].attributes[0].length",
+                      "type": "u32",
+                      "offset": 7228,
+                      "size": 4,
+                      "value": 72,
+                      "display": "72"
+                    },
+                    {
+                      "name": "non_resident",
+                      "path": "mft_records[3].attributes[0].non_resident",
+                      "type": "u8",
+                      "offset": 7232,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_length",
+                      "path": "mft_records[3].attributes[0].name_length",
+                      "type": "u8",
+                      "offset": 7233,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_offset",
+                      "path": "mft_records[3].attributes[0].name_offset",
+                      "type": "u16",
+                      "offset": 7234,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "attribute_flags",
+                      "path": "mft_records[3].attributes[0].attribute_flags",
+                      "type": "u16",
+                      "offset": 7236,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "attribute_id",
+                      "path": "mft_records[3].attributes[0].attribute_id",
+                      "type": "u16",
+                      "offset": 7238,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "mft_records[3].attributes[0].value_length",
+                      "type": "u32",
+                      "offset": 7240,
+                      "size": 4,
+                      "value": 48,
+                      "display": "48"
+                    },
+                    {
+                      "name": "value_offset",
+                      "path": "mft_records[3].attributes[0].value_offset",
+                      "type": "u16",
+                      "offset": 7244,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "indexed",
+                      "path": "mft_records[3].attributes[0].indexed",
+                      "type": "u8",
+                      "offset": 7246,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "padding_byte",
+                      "path": "mft_records[3].attributes[0].padding_byte",
+                      "type": "u8",
+                      "offset": 7247,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "standard_information",
+                      "path": "mft_records[3].attributes[0].standard_information",
+                      "type": "StandardInformation",
+                      "offset": 7248,
+                      "size": 48,
+                      "display": "StandardInformation (8)",
+                      "children": [
+                        {
+                          "name": "created",
+                          "path": "mft_records[3].attributes[0].standard_information.created",
+                          "type": "filetime",
+                          "offset": 7248,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "modified",
+                          "path": "mft_records[3].attributes[0].standard_information.modified",
+                          "type": "filetime",
+                          "offset": 7256,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "mft_modified",
+                          "path": "mft_records[3].attributes[0].standard_information.mft_modified",
+                          "type": "filetime",
+                          "offset": 7264,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "accessed",
+                          "path": "mft_records[3].attributes[0].standard_information.accessed",
+                          "type": "filetime",
+                          "offset": 7272,
+                          "size": 8,
+                          "value": 133137663984140288,
+                          "display": "11/24/2022 12:26:38 PM"
+                        },
+                        {
+                          "name": "file_attributes",
+                          "path": "mft_records[3].attributes[0].standard_information.file_attributes",
+                          "type": "FileAttributes",
+                          "offset": 7280,
+                          "size": 4,
+                          "value": 6,
+                          "display": "Hidden | System"
+                        },
+                        {
+                          "name": "max_versions",
+                          "path": "mft_records[3].attributes[0].standard_information.max_versions",
+                          "type": "u32",
+                          "offset": 7284,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "version",
+                          "path": "mft_records[3].attributes[0].standard_information.version",
+                          "type": "u32",
+                          "offset": 7288,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "class_id",
+                          "path": "mft_records[3].attributes[0].standard_information.class_id",
+                          "type": "u32",
+                          "offset": 7292,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[1]",
+                  "path": "mft_records[3].attributes[1]",
+                  "type": "Attribute",
+                  "offset": 7296,
+                  "size": 104,
+                  "display": "Attribute (12)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[3].attributes[1].type",
+                      "type": "AttributeType",
+                      "offset": 7296,
+                      "size": 4,
+                      "value": 48,
+                      "display": "FileName (0x30)"
+                    },
+                    {
+                      "name": "length",
+                      "path": "mft_records[3].attributes[1].length",
+                      "type": "u32",
+                      "offset": 7300,
+                      "size": 4,
+                      "value": 104,
+                      "display": "104"
+                    },
+                    {
+                      "name": "non_resident",
+                      "path": "mft_records[3].attributes[1].non_resident",
+                      "type": "u8",
+                      "offset": 7304,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_length",
+                      "path": "mft_records[3].attributes[1].name_length",
+                      "type": "u8",
+                      "offset": 7305,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "name_offset",
+                      "path": "mft_records[3].attributes[1].name_offset",
+                      "type": "u16",
+                      "offset": 7306,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "attribute_flags",
+                      "path": "mft_records[3].attributes[1].attribute_flags",
+                      "type": "u16",
+                      "offset": 7308,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "attribute_id",
+                      "path": "mft_records[3].attributes[1].attribute_id",
+                      "type": "u16",
+                      "offset": 7310,
+                      "size": 2,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "value_length",
+                      "path": "mft_records[3].attributes[1].value_length",
+                      "type": "u32",
+                      "offset": 7312,
+                      "size": 4,
+                      "value": 80,
+                      "display": "80"
+                    },
+                    {
+                      "name": "value_offset",
+                      "path": "mft_records[3].attributes[1].value_offset",
+                      "type": "u16",
+                      "offset": 7316,
+                      "size": 2,
+                      "value": 24,
+                      "display": "24"
+                    },
+                    {
+                      "name": "indexed",
+                      "path": "mft_records[3].attributes[1].indexed",
+                      "type": "u8",
+                      "offset": 7318,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "padding_byte",
+                      "path": "mft_records[3].attributes[1].padding_byte",
+                      "type": "u8",
+                      "offset": 7319,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "file_name",
+                      "path": "mft_records[3].attributes[1].file_name",
+                      "type": "FileNameAttribute",
+                      "offset": 7320,
+                      "size": 80,
+                      "display": "FileNameAttribute (12)",
+                      "children": [
+                        {
+                          "name": "parent_reference",
+                          "path": "mft_records[3].attributes[1].file_name.parent_reference",
+                          "type": "u64",
+                          "offset": 7320,
+                          "size": 8,
+                          "value": 1407374883553285,
+                          "display": "0x5000000000005",
+                          "comment": "下位 48 bit が親の MFT レコード番号、上位 16 bit が順序番号"
+                        },
+                        {
+                          "name": "created",
+                          "path": "mft_records[3].attributes[1].file_name.created",
+                          "type": "filetime",
+                          "offset": 7328,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "modified",
+                          "path": "mft_records[3].attributes[1].file_name.modified",
+                          "type": "filetime",
+                          "offset": 7336,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "mft_modified",
+                          "path": "mft_records[3].attributes[1].file_name.mft_modified",
+                          "type": "filetime",
+                          "offset": 7344,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "accessed",
+                          "path": "mft_records[3].attributes[1].file_name.accessed",
+                          "type": "filetime",
+                          "offset": 7352,
+                          "size": 8,
+                          "value": 0,
+                          "display": "1/1/1601 12:00:00 AM"
+                        },
+                        {
+                          "name": "allocated_size",
+                          "path": "mft_records[3].attributes[1].file_name.allocated_size",
+                          "type": "u64",
+                          "offset": 7360,
+                          "size": 8,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "real_size",
+                          "path": "mft_records[3].attributes[1].file_name.real_size",
+                          "type": "u64",
+                          "offset": 7368,
+                          "size": 8,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "file_attributes",
+                          "path": "mft_records[3].attributes[1].file_name.file_attributes",
+                          "type": "u32",
+                          "offset": 7376,
+                          "size": 4,
+                          "value": 6,
+                          "display": "0x6"
+                        },
+                        {
+                          "name": "reparse_or_ea",
+                          "path": "mft_records[3].attributes[1].file_name.reparse_or_ea",
+                          "type": "u32",
+                          "offset": 7380,
+                          "size": 4,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "name_length",
+                          "path": "mft_records[3].attributes[1].file_name.name_length",
+                          "type": "u8",
+                          "offset": 7384,
+                          "size": 1,
+                          "value": 7,
+                          "display": "7"
+                        },
+                        {
+                          "name": "name_space",
+                          "path": "mft_records[3].attributes[1].file_name.name_space",
+                          "type": "u8",
+                          "offset": 7385,
+                          "size": 1,
+                          "value": 3,
+                          "display": "3",
+                          "comment": "0: POSIX、1: Win32、2: DOS、3: Win32 と DOS"
+                        },
+                        {
+                          "name": "name",
+                          "path": "mft_records[3].attributes[1].file_name.name",
+                          "type": "char16[7]",
+                          "offset": 7386,
+                          "size": 14,
+                          "value": "$Volume",
+                          "display": "$Volume"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[2]",
+                  "path": "mft_records[3].attributes[2]",
+                  "type": "Attribute",
+                  "offset": 7400,
+                  "size": 4,
+                  "display": "Attribute (1)",
+                  "children": [
+                    {
+                      "name": "type",
+                      "path": "mft_records[3].attributes[2].type",
+                      "type": "AttributeType",
+                      "offset": 7400,
+                      "size": 4,
+                      "value": 4294967295,
+                      "display": "End (0xFFFFFFFF)"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[4]",
+          "path": "mft_records[4]",
+          "type": "MftRecord",
+          "offset": 8192,
+          "size": 1024,
+          "display": "MftRecord (2)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "mft_records[4].signature",
+              "type": "char[4]",
+              "offset": 8192,
+              "size": 4,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "data",
+              "path": "mft_records[4].data",
+              "type": "u8[1020]",
+              "offset": 8196,
+              "size": 1020,
+              "value": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+            }
+          ]
+        },
+        {
+          "name": "[5]",
+          "path": "mft_records[5]",
+          "type": "MftRecord",
+          "offset": 9216,
+          "size": 1024,
+          "display": "MftRecord (2)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "mft_records[5].signature",
+              "type": "char[4]",
+              "offset": 9216,
+              "size": 4,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "data",
+              "path": "mft_records[5].data",
+              "type": "u8[1020]",
+              "offset": 9220,
+              "size": 1020,
+              "value": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+            }
+          ]
+        },
+        {
+          "name": "[6]",
+          "path": "mft_records[6]",
+          "type": "MftRecord",
+          "offset": 10240,
+          "size": 1024,
+          "display": "MftRecord (2)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "mft_records[6].signature",
+              "type": "char[4]",
+              "offset": 10240,
+              "size": 4,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "data",
+              "path": "mft_records[6].data",
+              "type": "u8[1020]",
+              "offset": 10244,
+              "size": 1020,
+              "value": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+            }
+          ]
+        },
+        {
+          "name": "[7]",
+          "path": "mft_records[7]",
+          "type": "MftRecord",
+          "offset": 11264,
+          "size": 1024,
+          "display": "MftRecord (2)",
+          "children": [
+            {
+              "name": "signature",
+              "path": "mft_records[7].signature",
+              "type": "char[4]",
+              "offset": 11264,
+              "size": 4,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "data",
+              "path": "mft_records[7].data",
+              "type": "u8[1020]",
+              "offset": 11268,
+              "size": 1020,
+              "value": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

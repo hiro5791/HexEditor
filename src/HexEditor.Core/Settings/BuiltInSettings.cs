@@ -293,6 +293,15 @@ public static class BuiltInSettings
         new("plugins.signedOnly", SettingCategories.Automation, SettingKind.Bool, false) { Order = 100, Group = "plugins", RequiresRestart = true },
         // 開発用のフォルダ (AUTO-33。ビルドの出力先)。プラグインマネージャで編集する。
         new("plugins.devFolders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 110, ShowInPage = false, Exportable = false },
+        // ---- 構造体テンプレート (07 の TPL-20、TPL-23、TPL-29、TPL-30、TPL-35) ----
+        new("templates.autoApply", SettingCategories.Templates, SettingKind.Choice, "suggest") { Options = ["suggest", "always", "none"], Order = 10 },
+        new("templates.autoReevaluate", SettingCategories.Templates, SettingKind.Bool, true) { Order = 20 },
+        new("templates.coloring", SettingCategories.Templates, SettingKind.Bool, true) { Order = 30 },
+        new("templates.coloringOpacity", SettingCategories.Templates, SettingKind.Int, 35) { Min = 5, Max = 100, Order = 40 },
+        // 利用者のテンプレートのフォルダ (既定の templates/ の後に探す)・インスペクタ用テンプレート・テンプレートごとの選択は管理画面で変える。
+        new("templates.folders", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 50, ShowInPage = false },
+        new("templates.inspector", SettingCategories.Templates, SettingKind.List, new JsonArray()) { Order = 60, ShowInPage = false },
+        new("templates.preferences", SettingCategories.Templates, SettingKind.String, string.Empty) { Order = 70, ShowInPage = false },
 
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },

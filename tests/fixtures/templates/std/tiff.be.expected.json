@@ -1,0 +1,944 @@
+{
+  "name": "TIFF 画像",
+  "type": "application",
+  "offset": 0,
+  "size": 8,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "Header",
+      "offset": 0,
+      "size": 8,
+      "display": "Header (3)",
+      "children": [
+        {
+          "name": "order",
+          "path": "header.order",
+          "type": "char[2]",
+          "offset": 0,
+          "size": 2,
+          "value": "MM",
+          "display": "MM"
+        },
+        {
+          "name": "magic",
+          "path": "header.magic",
+          "type": "u16",
+          "offset": 2,
+          "size": 2,
+          "value": 42,
+          "display": "42"
+        },
+        {
+          "name": "ifd0_offset",
+          "path": "header.ifd0_offset",
+          "type": "u32",
+          "offset": 4,
+          "size": 4,
+          "value": 8,
+          "display": "0x8"
+        }
+      ]
+    },
+    {
+      "name": "ifd",
+      "path": "ifd",
+      "type": "Ifd",
+      "offset": 8,
+      "size": 138,
+      "display": "Ifd (4)",
+      "children": [
+        {
+          "name": "count",
+          "path": "ifd.count",
+          "type": "u16",
+          "offset": 8,
+          "size": 2,
+          "value": 11,
+          "display": "11"
+        },
+        {
+          "name": "entries",
+          "path": "ifd.entries",
+          "type": "Entry[11]",
+          "offset": 10,
+          "size": 132,
+          "display": "[11]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "ifd.entries[0]",
+              "type": "Entry",
+              "offset": 10,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[0].tag",
+                  "type": "Tag",
+                  "offset": 10,
+                  "size": 2,
+                  "value": 256,
+                  "display": "ImageWidth (0x100)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[0].type",
+                  "type": "FieldType",
+                  "offset": 12,
+                  "size": 2,
+                  "value": 3,
+                  "display": "Short (0x3)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[0].count",
+                  "type": "u32",
+                  "offset": 14,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[0].value_or_offset",
+                  "type": "u32",
+                  "offset": 18,
+                  "size": 4,
+                  "value": 262144,
+                  "display": "0x40000"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[0].size_in_bytes",
+                  "type": "u64",
+                  "offset": 22,
+                  "size": 0,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "number",
+                  "path": "ifd.entries[0].number",
+                  "type": "u64",
+                  "offset": 22,
+                  "size": 0,
+                  "value": 4,
+                  "display": "4"
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "ifd.entries[1]",
+              "type": "Entry",
+              "offset": 22,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[1].tag",
+                  "type": "Tag",
+                  "offset": 22,
+                  "size": 2,
+                  "value": 257,
+                  "display": "ImageLength (0x101)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[1].type",
+                  "type": "FieldType",
+                  "offset": 24,
+                  "size": 2,
+                  "value": 3,
+                  "display": "Short (0x3)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[1].count",
+                  "type": "u32",
+                  "offset": 26,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[1].value_or_offset",
+                  "type": "u32",
+                  "offset": 30,
+                  "size": 4,
+                  "value": 262144,
+                  "display": "0x40000"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[1].size_in_bytes",
+                  "type": "u64",
+                  "offset": 34,
+                  "size": 0,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "number",
+                  "path": "ifd.entries[1].number",
+                  "type": "u64",
+                  "offset": 34,
+                  "size": 0,
+                  "value": 4,
+                  "display": "4"
+                }
+              ]
+            },
+            {
+              "name": "[2]",
+              "path": "ifd.entries[2]",
+              "type": "Entry",
+              "offset": 34,
+              "size": 12,
+              "display": "Entry (5)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[2].tag",
+                  "type": "Tag",
+                  "offset": 34,
+                  "size": 2,
+                  "value": 258,
+                  "display": "BitsPerSample (0x102)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[2].type",
+                  "type": "FieldType",
+                  "offset": 36,
+                  "size": 2,
+                  "value": 3,
+                  "display": "Short (0x3)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[2].count",
+                  "type": "u32",
+                  "offset": 38,
+                  "size": 4,
+                  "value": 3,
+                  "display": "3"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[2].value_or_offset",
+                  "type": "u32",
+                  "offset": 42,
+                  "size": 4,
+                  "value": 146,
+                  "display": "0x92"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[2].size_in_bytes",
+                  "type": "u64",
+                  "offset": 46,
+                  "size": 0,
+                  "value": 6,
+                  "display": "6"
+                }
+              ]
+            },
+            {
+              "name": "[3]",
+              "path": "ifd.entries[3]",
+              "type": "Entry",
+              "offset": 46,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[3].tag",
+                  "type": "Tag",
+                  "offset": 46,
+                  "size": 2,
+                  "value": 259,
+                  "display": "Compression (0x103)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[3].type",
+                  "type": "FieldType",
+                  "offset": 48,
+                  "size": 2,
+                  "value": 3,
+                  "display": "Short (0x3)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[3].count",
+                  "type": "u32",
+                  "offset": 50,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[3].value_or_offset",
+                  "type": "u32",
+                  "offset": 54,
+                  "size": 4,
+                  "value": 65536,
+                  "display": "0x10000"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[3].size_in_bytes",
+                  "type": "u64",
+                  "offset": 58,
+                  "size": 0,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "number",
+                  "path": "ifd.entries[3].number",
+                  "type": "u64",
+                  "offset": 58,
+                  "size": 0,
+                  "value": 1,
+                  "display": "1"
+                }
+              ]
+            },
+            {
+              "name": "[4]",
+              "path": "ifd.entries[4]",
+              "type": "Entry",
+              "offset": 58,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[4].tag",
+                  "type": "Tag",
+                  "offset": 58,
+                  "size": 2,
+                  "value": 262,
+                  "display": "PhotometricInterpretation (0x106)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[4].type",
+                  "type": "FieldType",
+                  "offset": 60,
+                  "size": 2,
+                  "value": 3,
+                  "display": "Short (0x3)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[4].count",
+                  "type": "u32",
+                  "offset": 62,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[4].value_or_offset",
+                  "type": "u32",
+                  "offset": 66,
+                  "size": 4,
+                  "value": 131072,
+                  "display": "0x20000"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[4].size_in_bytes",
+                  "type": "u64",
+                  "offset": 70,
+                  "size": 0,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "number",
+                  "path": "ifd.entries[4].number",
+                  "type": "u64",
+                  "offset": 70,
+                  "size": 0,
+                  "value": 2,
+                  "display": "2"
+                }
+              ]
+            },
+            {
+              "name": "[5]",
+              "path": "ifd.entries[5]",
+              "type": "Entry",
+              "offset": 70,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[5].tag",
+                  "type": "Tag",
+                  "offset": 70,
+                  "size": 2,
+                  "value": 273,
+                  "display": "StripOffsets (0x111)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[5].type",
+                  "type": "FieldType",
+                  "offset": 72,
+                  "size": 2,
+                  "value": 4,
+                  "display": "Long (0x4)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[5].count",
+                  "type": "u32",
+                  "offset": 74,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[5].value_or_offset",
+                  "type": "u32",
+                  "offset": 78,
+                  "size": 4,
+                  "value": 206,
+                  "display": "0xCE"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[5].size_in_bytes",
+                  "type": "u64",
+                  "offset": 82,
+                  "size": 0,
+                  "value": 4,
+                  "display": "4"
+                },
+                {
+                  "name": "number",
+                  "path": "ifd.entries[5].number",
+                  "type": "u64",
+                  "offset": 82,
+                  "size": 0,
+                  "value": 206,
+                  "display": "206"
+                }
+              ]
+            },
+            {
+              "name": "[6]",
+              "path": "ifd.entries[6]",
+              "type": "Entry",
+              "offset": 82,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[6].tag",
+                  "type": "Tag",
+                  "offset": 82,
+                  "size": 2,
+                  "value": 277,
+                  "display": "SamplesPerPixel (0x115)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[6].type",
+                  "type": "FieldType",
+                  "offset": 84,
+                  "size": 2,
+                  "value": 3,
+                  "display": "Short (0x3)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[6].count",
+                  "type": "u32",
+                  "offset": 86,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[6].value_or_offset",
+                  "type": "u32",
+                  "offset": 90,
+                  "size": 4,
+                  "value": 196608,
+                  "display": "0x30000"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[6].size_in_bytes",
+                  "type": "u64",
+                  "offset": 94,
+                  "size": 0,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "number",
+                  "path": "ifd.entries[6].number",
+                  "type": "u64",
+                  "offset": 94,
+                  "size": 0,
+                  "value": 3,
+                  "display": "3"
+                }
+              ]
+            },
+            {
+              "name": "[7]",
+              "path": "ifd.entries[7]",
+              "type": "Entry",
+              "offset": 94,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[7].tag",
+                  "type": "Tag",
+                  "offset": 94,
+                  "size": 2,
+                  "value": 278,
+                  "display": "RowsPerStrip (0x116)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[7].type",
+                  "type": "FieldType",
+                  "offset": 96,
+                  "size": 2,
+                  "value": 3,
+                  "display": "Short (0x3)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[7].count",
+                  "type": "u32",
+                  "offset": 98,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[7].value_or_offset",
+                  "type": "u32",
+                  "offset": 102,
+                  "size": 4,
+                  "value": 262144,
+                  "display": "0x40000"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[7].size_in_bytes",
+                  "type": "u64",
+                  "offset": 106,
+                  "size": 0,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "number",
+                  "path": "ifd.entries[7].number",
+                  "type": "u64",
+                  "offset": 106,
+                  "size": 0,
+                  "value": 4,
+                  "display": "4"
+                }
+              ]
+            },
+            {
+              "name": "[8]",
+              "path": "ifd.entries[8]",
+              "type": "Entry",
+              "offset": 106,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[8].tag",
+                  "type": "Tag",
+                  "offset": 106,
+                  "size": 2,
+                  "value": 279,
+                  "display": "StripByteCounts (0x117)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[8].type",
+                  "type": "FieldType",
+                  "offset": 108,
+                  "size": 2,
+                  "value": 4,
+                  "display": "Long (0x4)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[8].count",
+                  "type": "u32",
+                  "offset": 110,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[8].value_or_offset",
+                  "type": "u32",
+                  "offset": 114,
+                  "size": 4,
+                  "value": 48,
+                  "display": "0x30"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[8].size_in_bytes",
+                  "type": "u64",
+                  "offset": 118,
+                  "size": 0,
+                  "value": 4,
+                  "display": "4"
+                },
+                {
+                  "name": "number",
+                  "path": "ifd.entries[8].number",
+                  "type": "u64",
+                  "offset": 118,
+                  "size": 0,
+                  "value": 48,
+                  "display": "48"
+                }
+              ]
+            },
+            {
+              "name": "[9]",
+              "path": "ifd.entries[9]",
+              "type": "Entry",
+              "offset": 118,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[9].tag",
+                  "type": "Tag",
+                  "offset": 118,
+                  "size": 2,
+                  "value": 305,
+                  "display": "Software (0x131)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[9].type",
+                  "type": "FieldType",
+                  "offset": 120,
+                  "size": 2,
+                  "value": 2,
+                  "display": "Ascii (0x2)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[9].count",
+                  "type": "u32",
+                  "offset": 122,
+                  "size": 4,
+                  "value": 14,
+                  "display": "14"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[9].value_or_offset",
+                  "type": "u32",
+                  "offset": 126,
+                  "size": 4,
+                  "value": 152,
+                  "display": "0x98"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[9].size_in_bytes",
+                  "type": "u64",
+                  "offset": 130,
+                  "size": 0,
+                  "value": 14,
+                  "display": "14"
+                },
+                {
+                  "name": "text",
+                  "path": "ifd.entries[9].text",
+                  "type": "string",
+                  "offset": 130,
+                  "size": 0,
+                  "value": "HexEditor 1.0",
+                  "display": "HexEditor 1.0"
+                }
+              ]
+            },
+            {
+              "name": "[10]",
+              "path": "ifd.entries[10]",
+              "type": "Entry",
+              "offset": 130,
+              "size": 12,
+              "display": "Entry (6)",
+              "children": [
+                {
+                  "name": "tag",
+                  "path": "ifd.entries[10].tag",
+                  "type": "Tag",
+                  "offset": 130,
+                  "size": 2,
+                  "value": 34665,
+                  "display": "ExifIfd (0x8769)"
+                },
+                {
+                  "name": "type",
+                  "path": "ifd.entries[10].type",
+                  "type": "FieldType",
+                  "offset": 132,
+                  "size": 2,
+                  "value": 4,
+                  "display": "Long (0x4)"
+                },
+                {
+                  "name": "count",
+                  "path": "ifd.entries[10].count",
+                  "type": "u32",
+                  "offset": 134,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "value_or_offset",
+                  "path": "ifd.entries[10].value_or_offset",
+                  "type": "u32",
+                  "offset": 138,
+                  "size": 4,
+                  "value": 168,
+                  "display": "0xA8"
+                },
+                {
+                  "name": "size_in_bytes",
+                  "path": "ifd.entries[10].size_in_bytes",
+                  "type": "u64",
+                  "offset": 142,
+                  "size": 0,
+                  "value": 4,
+                  "display": "4"
+                },
+                {
+                  "name": "number",
+                  "path": "ifd.entries[10].number",
+                  "type": "u64",
+                  "offset": 142,
+                  "size": 0,
+                  "value": 168,
+                  "display": "168"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "next_ifd",
+          "path": "ifd.next_ifd",
+          "type": "u32",
+          "offset": 142,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "sub_ifd",
+          "path": "ifd.sub_ifd",
+          "type": "Ifd",
+          "offset": 168,
+          "size": 30,
+          "display": "Ifd (3)",
+          "children": [
+            {
+              "name": "count",
+              "path": "ifd.sub_ifd.count",
+              "type": "u16",
+              "offset": 168,
+              "size": 2,
+              "value": 2,
+              "display": "2"
+            },
+            {
+              "name": "entries",
+              "path": "ifd.sub_ifd.entries",
+              "type": "Entry[2]",
+              "offset": 170,
+              "size": 24,
+              "display": "[2]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "ifd.sub_ifd.entries[0]",
+                  "type": "Entry",
+                  "offset": 170,
+                  "size": 12,
+                  "display": "Entry (6)",
+                  "children": [
+                    {
+                      "name": "tag",
+                      "path": "ifd.sub_ifd.entries[0].tag",
+                      "type": "Tag",
+                      "offset": 170,
+                      "size": 2,
+                      "value": 33434,
+                      "display": "ExposureTime (0x829A)"
+                    },
+                    {
+                      "name": "type",
+                      "path": "ifd.sub_ifd.entries[0].type",
+                      "type": "FieldType",
+                      "offset": 172,
+                      "size": 2,
+                      "value": 5,
+                      "display": "Rational (0x5)"
+                    },
+                    {
+                      "name": "count",
+                      "path": "ifd.sub_ifd.entries[0].count",
+                      "type": "u32",
+                      "offset": 174,
+                      "size": 4,
+                      "value": 1,
+                      "display": "1"
+                    },
+                    {
+                      "name": "value_or_offset",
+                      "path": "ifd.sub_ifd.entries[0].value_or_offset",
+                      "type": "u32",
+                      "offset": 178,
+                      "size": 4,
+                      "value": 198,
+                      "display": "0xC6"
+                    },
+                    {
+                      "name": "size_in_bytes",
+                      "path": "ifd.sub_ifd.entries[0].size_in_bytes",
+                      "type": "u64",
+                      "offset": 182,
+                      "size": 0,
+                      "value": 8,
+                      "display": "8"
+                    },
+                    {
+                      "name": "ratio",
+                      "path": "ifd.sub_ifd.entries[0].ratio",
+                      "type": "string",
+                      "offset": 182,
+                      "size": 0,
+                      "value": "1/250",
+                      "display": "1/250"
+                    }
+                  ]
+                },
+                {
+                  "name": "[1]",
+                  "path": "ifd.sub_ifd.entries[1]",
+                  "type": "Entry",
+                  "offset": 182,
+                  "size": 12,
+                  "display": "Entry (6)",
+                  "children": [
+                    {
+                      "name": "tag",
+                      "path": "ifd.sub_ifd.entries[1].tag",
+                      "type": "Tag",
+                      "offset": 182,
+                      "size": 2,
+                      "value": 40962,
+                      "display": "PixelXDimension (0xA002)"
+                    },
+                    {
+                      "name": "type",
+                      "path": "ifd.sub_ifd.entries[1].type",
+                      "type": "FieldType",
+                      "offset": 184,
+                      "size": 2,
+                      "value": 3,
+                      "display": "Short (0x3)"
+                    },
+                    {
+                      "name": "count",
+                      "path": "ifd.sub_ifd.entries[1].count",
+                      "type": "u32",
+                      "offset": 186,
+                      "size": 4,
+                      "value": 1,
+                      "display": "1"
+                    },
+                    {
+                      "name": "value_or_offset",
+                      "path": "ifd.sub_ifd.entries[1].value_or_offset",
+                      "type": "u32",
+                      "offset": 190,
+                      "size": 4,
+                      "value": 262144,
+                      "display": "0x40000"
+                    },
+                    {
+                      "name": "size_in_bytes",
+                      "path": "ifd.sub_ifd.entries[1].size_in_bytes",
+                      "type": "u64",
+                      "offset": 194,
+                      "size": 0,
+                      "value": 2,
+                      "display": "2"
+                    },
+                    {
+                      "name": "number",
+                      "path": "ifd.sub_ifd.entries[1].number",
+                      "type": "u64",
+                      "offset": 194,
+                      "size": 0,
+                      "value": 4,
+                      "display": "4"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "next_ifd",
+              "path": "ifd.sub_ifd.next_ifd",
+              "type": "u32",
+              "offset": 194,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

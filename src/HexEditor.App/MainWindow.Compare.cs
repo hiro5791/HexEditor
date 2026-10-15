@@ -604,7 +604,6 @@ public sealed partial class MainWindow : ICompareViewHost, IDiffListHost
 
     partial void OnToolPageClosing(string id)
     {
-        OnScriptEditorClosing(id);
         if (_compares.FirstOrDefault(c => c.Id == id) is not { } session)
         {
             return;

@@ -1,0 +1,41 @@
+// HexEditor 標準テンプレート (TPL-34): MBR (マスターブートレコードとパーティションテーブル)
+// ライセンス: MIT。型は標準ライブラリ std.disk (TPL-18) にある。
+// 100 GiB 以上のディスクイメージでも使える。読むのは LBA 0 と、拡張パーティションの EBR (たどれた分だけ。最大 128 個) だけである。
+// セクタの大きさは 512 バイトとする。
+#pragma name "MBR partition table"
+#pragma name.ja "MBR パーティションテーブル"
+#pragma description "Master boot record: boot code, disk signature, four partition entries, boot signature 55 AA, and the chain of extended boot records."
+#pragma description.ja "マスターブートレコード: ブートコード、ディスクシグネチャ、4 つのパーティション項目、ブートシグネチャ 55 AA、拡張ブートレコードの連鎖。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 510 "55 AA"
+#pragma mime "application/x-raw-disk-image"
+#pragma extensions "mbr;img;raw;dd;vhd"
+#pragma endian little
+
+import std.disk;
+
+std::disk::Mbr mbr;
+
+// 拡張パーティション (0x05、0x0F、0x85) の EBR の連鎖。次の EBR の位置は、2 番目の項目の LBA (拡張パーティションの先頭からの相対値)。
+for (local u32 i = 0; i < 4; i += 1) {
+    local u8 type = mbr.partitions[i].type;
+    if (type == 0x05 || type == 0x0F || type == 0x85) {
+        local u64 extended_start = mbr.partitions[i].lba_first;
+        local u64 relative = 0;
+        local u32 n = 0;
+        while (n < 128) {
+            local u64 at = (extended_start + relative) * 512;
+            if (at + 512 > std::core::size()) {
+                break;
+            }
+            std::disk::Mbr ebr @ at;
+            n += 1;
+            if (std::mem::read_u8(at + 446 + 16 + 4, little) == 0) {
+                break;
+            }
+            relative = std::mem::read_u32(at + 446 + 16 + 8, little);
+        }
+    }
+}

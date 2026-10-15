@@ -5659,18 +5659,6 @@
   <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>いちじていし</value></data>
   <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>出力をクリア</value></data>
   <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>しゅつりょく くりあ</value></data>
-  <data name="Cmd_scripting_editor_run" xml:space="preserve"><value>実行 / 続行 (スクリプトエディタ)</value></data>
-  <data name="CmdAlias_scripting_editor_run" xml:space="preserve"><value>じっこう ぞっこう</value></data>
-  <data name="Cmd_scripting_editor_stop" xml:space="preserve"><value>停止 (スクリプトエディタ)</value></data>
-  <data name="CmdAlias_scripting_editor_stop" xml:space="preserve"><value>ていし</value></data>
-  <data name="Cmd_scripting_editor_toggleBreakpoint" xml:space="preserve"><value>ブレークポイントの設定 / 解除</value></data>
-  <data name="CmdAlias_scripting_editor_toggleBreakpoint" xml:space="preserve"><value>ぶれーくぽいんと</value></data>
-  <data name="Cmd_scripting_editor_stepOver" xml:space="preserve"><value>ステップオーバー</value></data>
-  <data name="CmdAlias_scripting_editor_stepOver" xml:space="preserve"><value>すてっぷおーばー</value></data>
-  <data name="Cmd_scripting_editor_stepIn" xml:space="preserve"><value>ステップイン</value></data>
-  <data name="CmdAlias_scripting_editor_stepIn" xml:space="preserve"><value>すてっぷいん</value></data>
-  <data name="Cmd_scripting_editor_stepOut" xml:space="preserve"><value>ステップアウト</value></data>
-  <data name="CmdAlias_scripting_editor_stepOut" xml:space="preserve"><value>すてっぷあうと</value></data>
   <data name="Cmd_macro_record" xml:space="preserve"><value>記録の開始 / 停止</value></data>
   <data name="CmdAlias_macro_record" xml:space="preserve"><value>きろく ますこ まくろ</value></data>
   <data name="Cmd_macro_playLast" xml:space="preserve"><value>直前のマクロを再生</value></data>
@@ -6078,4 +6066,384 @@
   <data name="Inspector_Group_Plugin" xml:space="preserve"><value>プラグイン</value></data>
   <data name="Inspector_PluginStopped" xml:space="preserve"><value>(停止中)</value></data>
   <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>このプラグインの型はこの値に書き換えられません。</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>構造体</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>テンプレートの出力</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>構造体テンプレート(T)</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>テンプレートを適用(A)...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>ここからテンプレートを適用(H)...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>カーソル位置で型を表示(Y)...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Kaitai Struct を適用(K)...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>合うテンプレートを探す(F)</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>再実行(R)</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>適用を解除(V)</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>結果をエクスポート(X)...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>新しいテンプレート(N)</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>テンプレートを開く(O)...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>テンプレートを編集(E)</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>.ksy を HXT に変換(C)...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>テンプレートの管理(M)</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>構造体の色分け(K)</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>構造体(A)</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>テンプレートの出力(W)</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>構造体の解析結果(T)...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>ここからテンプレートを適用...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>ここを読むときに止める</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>テンプレート</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>コードエディタ</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>テンプレート: 適用</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>てんぷれーと;てきよう;構造体</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>テンプレート: ここから適用</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>てんぷれーと;かーそる</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>テンプレート: カーソル位置で型を表示</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>ついじゅう;かた</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>テンプレート: Kaitai Struct を適用</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>かいたい</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>テンプレート: 再実行</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>さいじっこう</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>テンプレート: 適用を解除</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>かいじょ</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>テンプレート: 評価を中止</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>ちゅうし</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>テンプレート: 結果ツリーを表示</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>けっか;つりー</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>テンプレート: 出力を表示</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>しゅつりょく;えらー</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>テンプレート: 値を編集</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>あたい;へんしゅう</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>テンプレート: 定義へ移動</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>ていぎ</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>テンプレート: 指す先へ移動</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>ぽいんた;さすさき</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>テンプレート: 値をコピー</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>こぴー</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>テンプレート: ブックマークに追加</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>ぶっくまーく</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>テンプレート: 結果をエクスポート</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>えくすぽーと</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>テンプレート: 色分けの表示切り替え</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>いろわけ</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>テンプレート: 合うテンプレートを探す</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>さがす;こうほ</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>テンプレート: 新規作成</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>しんき</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>テンプレート: 開く</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>ひらく</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>テンプレート: 編集</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>へんしゅう</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>テンプレート: 管理</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>かんり</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>テンプレート: .ksy を HXT に変換</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>へんかん</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>テンプレート: 試しに実行</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>ためしに</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>テンプレート: ここを読むときに止める</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>ぶれーく</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>表示: 構造体パネル</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>こうぞうたい;ぱねる</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>表示: テンプレートの出力パネル</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>しゅつりょく</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>コードエディタ: デバッグ開始 / 続行</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>じっこう;でばっぐ</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>コードエディタ: デバッグを停止</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>ていし</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>コードエディタ: ブレークポイントの切り替え</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>ぶれーくぽいんと</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>コードエディタ: ステップオーバー</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>すてっぷ</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>コードエディタ: ステップイン</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>すてっぷいん</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>コードエディタ: ステップアウト</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>すてっぷあうと</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>コードエディタ: ここまで実行</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>ここまで</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>コードエディタ: ウォッチ式を追加</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>うぉっち;テンプレート: ウォッチ式を追加</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>コードエディタ: 定義へ移動</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>ていぎ</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>コードエディタ: 参照の検索</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>さんしょう</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>コードエディタ: 書式の整形</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>せいけい</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>コードエディタ: コメントの切り替え</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>こめんと</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>コードエディタ: 補完の候補を表示</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>ほかん</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>テンプレート</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>自動適用</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>開いたファイルにテンプレートが合うとき (マジックナンバー・MIME・拡張子) の動作。</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>提案する</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>常に適用する</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>何もしない</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>編集後に自動で再評価</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>最後の編集から 500 ms 後に、適用中のテンプレートを評価し直す。オフにすると結果ツリーの「再実行」で評価する。</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>構造体の色分け</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>テンプレートのパターンの範囲を Hex ビューで色分けする。</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>色分けの不透明度 (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Hex ビューの背景に重ねる色分けの不透明度。</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>テンプレートのフォルダ</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>利用者のテンプレートを探す追加のフォルダ。</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>インスペクタ用テンプレート</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>[[inspector]] の型をデータインスペクタに出すテンプレート。</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>テンプレートごとの設定</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>無効にしたテンプレート、自動適用から外したテンプレート、今後表示しない提案。</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>テンプレートの管理</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>テンプレートのフォルダ</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>テンプレートの一覧</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>インスペクタ用テンプレート</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>フォルダを追加...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>外す</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>このフォルダにアクセスできません。</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>名前で絞り込む</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>インポート...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>新しいテンプレート</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>有効</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>自動適用</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>編集</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>エクスポート...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>ほかのテンプレートに隠れています。</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>今後表示しない提案</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>なし</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>元に戻す</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>インスペクタ用テンプレートを追加...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>固定長ではない</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>このテンプレートのインスペクタ用の型に、固定長でないもの、または 4 KB を超えるものがあります。4 KB 以下の固定長の型を推奨します。</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>{0} 個のテンプレートのファイルを取り込みました。</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>取り込めませんでした: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>{0} 個のファイルを {1} に書き出しました。</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>書き出せませんでした: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>標準テンプレートはアプリに含まれています。複製して編集した複製をエクスポートしてください。</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>テンプレートを適用</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>テンプレートを適用</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>再実行</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>再実行</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>評価を中止</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>評価を中止</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>エクスポート</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>表示する列</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>表示する列</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>カーソルに追従</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>カーソルに追従</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>名前・値・型で絞り込む</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>絞り込み</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>結果ツリー</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>パス (例: chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>パス</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>すべて評価して検索</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>{0} 件</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>パス「{0}」は見つかりません。</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>値</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>型</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>オフセット</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>コメント</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>終わり</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>色</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>列の順序</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>{0} を左へ</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>{0} を右へ</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>列を元に戻す</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>評価中…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>評価済み: {0} パターン</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>エラー {0} 件、警告 {1} 件</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>パターン数が上限 ({0}) に達しました。途中までの結果を表示しています。</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>上限を上げて再実行</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} 要素</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} bit</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>ビット {0}〜{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / 地域の時刻: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>定義されていない値</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>未定義</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>追従</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>指す先: {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>オフセット {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>サイズ {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(未保存)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(テンプレートのファイルが見つかりません)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>テンプレートを適用していません。</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>評価中ではありません。</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>結果ツリーのノードを選んでください。</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>選んだノードはポインタではありません。</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>指す先が null か、データの範囲外です。</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>テンプレート「{0}」が見つかりません。</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>1 つのドキュメントに適用できるテンプレートは {0} 個までです。</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>テンプレートのファイル「{0}」が見つかりません。</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>テンプレート {0} の評価</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>JSON が 64 MB を超えます。ファイルに保存してください。</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>ファイルに保存...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>テンプレート: {0}
+開始オフセット: {1}
+種類: {2}
+エンディアン: {3}
+型: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>標準</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>利用者</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>最近使った</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>スクリプトを使用</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>詳細</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>データへ移動</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>指す先へ移動</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>定義へ移動</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>値を編集</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>値をコピー</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>名前と値をコピー</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>バイト列をコピー</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>オフセットをコピー</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>部分木を JSON でコピー</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>ブックマークに追加</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>選択範囲をマルチ選択に追加</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>セクションを新しいタブで開く</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>ここからテンプレートを適用...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>ここを読むときに止める</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>固定 / 追従を切り替え</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>固定に変換</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>適用の設定</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>エクスポート...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>再実行</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>適用を解除</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>値</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>確定</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>このパターンには read の変換しかないため、生の値を編集します。</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>数値で入力</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>真</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>残りを 0 で埋める</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>地域の時刻</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>時刻の種類</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>0〜{1} の値を入力してください ({0} ビット)。</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>型の範囲外の値です。</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>文字列が範囲 ({0} バイト) より長いです。</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>write の変換に失敗しました: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>値を読み取れません。</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>セクションの中のパターンは編集できません。</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>このパターンは読み取り専用です。</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>計算値は編集できません。</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>エラーのノードは編集できません。</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>このノードには編集できる値がありません。</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>テンプレートの値の編集</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>テンプレートを適用</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Kaitai Struct を適用</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>テンプレートを検索</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>名前・説明・拡張子・MIME</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>テンプレートの一覧</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>開始オフセット</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>ドキュメントの範囲のオフセットを入力してください。</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>既定のエンディアン</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>ドキュメントの設定</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>ドキュメントの設定 (リトル)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>ドキュメントの設定 (ビッグ)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>リトルエンディアン</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>ビッグエンディアン</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>固定</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>追従</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>型 (追従)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>適用</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>版 {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>ライセンス: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>合うテンプレート</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} — {1} (点数 {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>マジック</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>拡張子</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>このドキュメントに合うテンプレートはありません。</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>このファイルは {0} のようです。テンプレート "{0}" を適用しますか?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(スクリプトを使用)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>適用</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>ほかの候補...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>この形式では今後表示しない</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>テンプレート "{0}" の適用中にエラーが起きました。</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>構造体の解析結果をエクスポート</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>対象</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>適用の全体</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>選んだノードの部分木 ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>配列の要素の最大数</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>階層の最大の深さ</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>制限なし</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>hidden のパターンを含める</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>オフセットを 16 進の文字列で書く</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>保存...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>構造体の解析結果のエクスポート</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>{0} ノード</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>{0} に書き出しました。</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>{0} に書き出せませんでした: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>ディスクの空き容量が足りません。</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>消去</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>消去</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>テンプレートの出力</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>ソースへ</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>データへ</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>{0} のヘルプ</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>試しに実行</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>対象のドキュメント</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>対象のドキュメント</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>デバッグ開始 / 続行</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>ステップオーバー</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>ステップイン</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>ステップアウト</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>デバッグ中は遅延評価しない</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>書式の整形</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>コメントの切り替え</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>テンプレートのソース</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>補完の候補</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>変数</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>ウォッチ</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>呼び出し履歴</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>ブレークポイント</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>変数</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>ウォッチ</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>呼び出し履歴</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>ブレークポイント</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>ウォッチ式を追加</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>追加</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>式 (例: c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>問題</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>参照: {0} 行 {1} 列</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>新しいテンプレート</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>テンプレートエディタを開いていません。</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>デバッグ中ではありません。</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>テンプレートを適用するドキュメントを開いてください。</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>テンプレート {0} を開けませんでした: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>テンプレートを保存できませんでした: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>標準テンプレートは直接保存できません。「複製して編集」で利用者のフォルダに複製を作ってください。</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>複製して編集</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>デバッグの前に構文エラーを直してください。</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>デバッグ中は遅延評価をしません。巨大な配列では評価に時間がかかることがあります。</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>データのブレークポイント</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>{0} を含むパターンを作るときにデバッガが止まります。</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>{0} を HXT に変換できませんでした。</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>評価済み: {0} パターン ({1}の上限のため途中まで表示しています)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>ステップ数</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>パターン数</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>メモリ</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>時間</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>行へ移動</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>行番号 (1〜{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>コードエディタ (テンプレート・スクリプト) が表示されていません。</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>このエディタでは使えないコマンドです。</value></data>
 </root>

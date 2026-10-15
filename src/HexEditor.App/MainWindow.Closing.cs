@@ -76,10 +76,11 @@ public sealed partial class MainWindow
 
         args.Handled = true;
 
-        // 未保存のスクリプトエディタ (AUTO-20) は、保存するか尋ねる。キャンセルされたら閉じない。
-        foreach (string id in _scriptEditors.Where(e => e.Value.IsDirty).Select(e => e.Key).ToList())
+        // 未保存のスクリプトエディタ (AUTO-20)・テンプレートエディタ (TPL-31) は、保存するか尋ねる。キャンセルされたら閉じない。
+        foreach (string id in _scriptEditors.Where(e => e.Value.IsDirty).Select(e => e.Key)
+            .Concat(_templateEditors.Where(e => e.Value.IsDirty).Select(e => e.Key)).ToList())
         {
-            if (!await ConfirmCloseScriptEditorAsync(id))
+            if (!await ConfirmCloseCodeEditorAsync(id))
             {
                 return;
             }

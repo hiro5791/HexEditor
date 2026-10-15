@@ -1,0 +1,118 @@
+// HexEditor 標準テンプレート (TPL-34): Android の DEX (Dalvik 実行ファイル)
+// ライセンス: MIT。
+// ヘッダ (112 バイト、Adler-32 のチェックサムを確かめる) と、ヘッダが指す ID の表 (文字列、型、プロトタイプ、フィールド、メソッド、クラス定義)
+// とマップリストを読む。文字列は文字列 ID から指す (遅延評価)。コードの中身は読まない。
+#pragma name "Android DEX"
+#pragma name.ja "Android DEX"
+#pragma description "Android Dalvik executable (DEX): header with checksum, string / type / proto / field / method ID tables, class definitions and the map list."
+#pragma description.ja "Android の Dalvik 実行ファイル (DEX): チェックサムを持つヘッダ、文字列・型・プロトタイプ・フィールド・メソッドの ID の表、クラス定義、マップリスト。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "64 65 78 0A 30"
+#pragma mime "application/vnd.android.dex"
+#pragma extensions "dex"
+#pragma endian little
+
+enum MapItemType : u16 {
+    HeaderItem = 0x0000, StringIdItem = 0x0001, TypeIdItem = 0x0002, ProtoIdItem = 0x0003, FieldIdItem = 0x0004, MethodIdItem = 0x0005,
+    ClassDefItem = 0x0006, CallSiteIdItem = 0x0007, MethodHandleItem = 0x0008, MapList = 0x1000, TypeList = 0x1001,
+    AnnotationSetRefList = 0x1002, AnnotationSetItem = 0x1003, ClassDataItem = 0x2000, CodeItem = 0x2001, StringDataItem = 0x2002,
+    DebugInfoItem = 0x2003, AnnotationItem = 0x2004, EncodedArrayItem = 0x2005, AnnotationsDirectoryItem = 0x2006,
+};
+
+struct Header {
+    char magic[8] [[expect(std::string::starts_with(magic, "dex"), "dex のマジックではありません")]];
+    u32  checksum [[format("hex"), expect(std::core::size() > 268435456 || checksum == std::hash::adler32(12, std::core::size() - 12), "チェックサム (Adler-32) が一致しません")]];
+    u8   signature[20] [[comment("SHA-1 (32 バイト目以降)")]];
+    u32  file_size;
+    u32  header_size [[expect(header_size == 0x70, "ヘッダの大きさが 0x70 ではありません")]];
+    u32  endian_tag [[format("hex"), expect(endian_tag == 0x12345678, "リトルエンディアンの印 12345678 ではありません")]];
+    u32  link_size;
+    u32  link_offset [[format("hex")]];
+    u32  map_offset [[format("hex")]];
+    u32  string_ids_size;
+    u32  string_ids_offset [[format("hex")]];
+    u32  type_ids_size;
+    u32  type_ids_offset [[format("hex")]];
+    u32  proto_ids_size;
+    u32  proto_ids_offset [[format("hex")]];
+    u32  field_ids_size;
+    u32  field_ids_offset [[format("hex")]];
+    u32  method_ids_size;
+    u32  method_ids_offset [[format("hex")]];
+    u32  class_defs_size;
+    u32  class_defs_offset [[format("hex")]];
+    u32  data_size;
+    u32  data_offset [[format("hex")]];
+};
+
+/// 文字列のデータ: UTF-16 の符号単位数 (ULEB128) と、0 で終わる MUTF-8 の文字列
+struct StringData {
+    uleb128 utf16_size;
+    string  text [[encoding("utf-8")]];
+};
+
+struct ProtoId {
+    u32 shorty_index;
+    u32 return_type_index;
+    u32 parameters_offset [[format("hex")]];
+};
+
+struct FieldId {
+    u16 class_index;
+    u16 type_index;
+    u32 name_index;
+};
+
+struct MethodId {
+    u16 class_index;
+    u16 proto_index;
+    u32 name_index;
+};
+
+struct ClassDef {
+    u32 class_index;
+    u32 access_flags [[format("hex")]];
+    u32 superclass_index [[comment("0xFFFFFFFF は親なし")]];
+    u32 interfaces_offset [[format("hex")]];
+    u32 source_file_index;
+    u32 annotations_offset [[format("hex")]];
+    u32 class_data_offset [[format("hex")]];
+    u32 static_values_offset [[format("hex")]];
+};
+
+struct MapItem {
+    MapItemType type;
+    u16         unused;
+    u32         size;
+    u32         offset [[format("hex")]];
+};
+
+struct MapList {
+    u32     size;
+    MapItem list[size];
+};
+
+Header header;
+if (header.string_ids_size > 0) {
+    StringData *string_ids[header.string_ids_size] : u32 @ header.string_ids_offset;
+}
+if (header.type_ids_size > 0) {
+    u32 type_ids[header.type_ids_size] @ header.type_ids_offset;
+}
+if (header.proto_ids_size > 0) {
+    ProtoId proto_ids[header.proto_ids_size] @ header.proto_ids_offset;
+}
+if (header.field_ids_size > 0) {
+    FieldId field_ids[header.field_ids_size] @ header.field_ids_offset;
+}
+if (header.method_ids_size > 0) {
+    MethodId method_ids[header.method_ids_size] @ header.method_ids_offset;
+}
+if (header.class_defs_size > 0) {
+    ClassDef class_defs[header.class_defs_size] @ header.class_defs_offset;
+}
+if (header.map_offset != 0) {
+    MapList map_list @ header.map_offset;
+}

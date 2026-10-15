@@ -1,0 +1,61 @@
+// HexEditor 標準テンプレート (TPL-34): XZ 圧縮データ (ヘッダ)
+// ライセンス: MIT。
+// ストリームヘッダ (12 バイト)、末尾のストリームフッター (12 バイト) と、それが指す索引 (レコード) を読む。ブロックの中身は読まない。
+#pragma name "XZ compressed data"
+#pragma name.ja "XZ 圧縮データ"
+#pragma description "XZ compressed data (header level): stream header with check type, block data as raw, index records and the stream footer."
+#pragma description.ja "XZ 圧縮データ (ヘッダのみ): チェックの種類を持つストリームヘッダ、ブロック (生のデータ)、索引のレコード、ストリームフッター。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "FD 37 7A 58 5A 00"
+#pragma mime "application/x-xz"
+#pragma extensions "xz;txz"
+#pragma endian little
+
+enum CheckType : u8 { None = 0, Crc32 = 1, Crc64 = 4, Sha256 = 10 };
+
+struct StreamFlags {
+    u8        reserved;
+    CheckType check_type;
+};
+
+struct StreamHeader {
+    u8          magic[6] [[expect(magic == x"FD 37 7A 58 5A 00", "XZ のマジックではありません")]];
+    StreamFlags flags;
+    u32         crc32 [[format("hex"), expect(crc32 == std::hash::crc32(6, 2), "ヘッダの CRC が一致しません")]];
+};
+
+struct StreamFooter {
+    u32         crc32 [[format("hex")]];
+    u32         backward_size [[comment("索引の大きさ = (この値 + 1) x 4 バイト")]];
+    StreamFlags flags;
+    u8          magic[2] [[expect(magic == x"59 5A", "YZ ではありません")]];
+};
+
+struct IndexRecord {
+    uleb128 unpadded_size;
+    uleb128 uncompressed_size;
+};
+
+struct Index {
+    u8      indicator [[expect(indicator == 0, "索引の指示子が 0 ではありません")]];
+    uleb128 number_of_records;
+    IndexRecord records[number_of_records];
+    if (($ - addressof(indicator)) % 4 != 0) {
+        padding[4 - (($ - addressof(indicator)) % 4)];
+    }
+    u32     crc32 [[format("hex")]];
+};
+
+StreamHeader header;
+local u64 size = std::core::size();
+if (size >= 24) {
+    StreamFooter footer @ size - 12;
+    local u64 index_size = (footer.backward_size + 1) * 4;
+    if (index_size + 24 <= size) {
+        Index index @ size - 12 - index_size;
+        // ヘッダと索引の間がブロック (圧縮データ)
+        u8 blocks[size - 12 - index_size - 12] @ 12 [[lazy]];
+    }
+}

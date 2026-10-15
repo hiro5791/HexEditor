@@ -110,18 +110,23 @@ public sealed partial class MainWindow
         Commands.Register("file.new", () => New_Click(this, e));
         Commands.Register("file.newWithSize", () => NewWithSize_Click(this, e));
         Commands.Register("file.open", () => Open_Click(this, e));
-        Commands.Register("file.save", () =>
+        Commands.Register("file.save", async () =>
         {
-            // スクリプトエディタの表示中は、そのスクリプトを保存する (AUTO-20 の仕様 6)。
+            // スクリプトエディタ・テンプレートエディタのタブでは、そのファイルを保存する (AUTO-20 の仕様 6、TPL-31)
             if (ActiveScriptEditor is { } scriptEditor)
             {
                 scriptEditor.Save();
+                return;
             }
-            else
+
+            if (ActiveTemplateEditor is { } templateEditor)
             {
-                Save_Click(this, e);
+                await templateEditor.SaveAsync();
+                return;
             }
-        }, () => ActiveScriptEditor is not null ? CommandState.Available
+
+            Save_Click(this, e);
+        }, () => ActiveScriptEditor is not null || ActiveTemplateEditor is not null ? CommandState.Available
             : NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAs", () => SaveAs_Click(this, e),
             () => NeedsDocument(_ => SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
@@ -234,11 +239,13 @@ public sealed partial class MainWindow
         RegisterHashCommands();
         RegisterCompareCommands();
         RegisterStatisticsCommands();
+        RegisterTemplateCommands();
 
         // ---- 設定・ヘルプ ----
         RegisterSettingsCommands();
         RegisterScriptCommands();
         RegisterScriptUiCommands();
+        RegisterCodeEditorCommands();
         RegisterPluginCommands();
         Commands.Register("help.commandPalette", () => OpenPalette(">"));
         Commands.Register("help.shortcuts", OpenShortcutsPage);
@@ -283,6 +290,14 @@ public sealed partial class MainWindow
     {
         for (DependencyObject? node = focused; node is not null; node = VisualTreeHelper.GetParent(node))
         {
+            // コードエディタの標準の編集キー (Ctrl+G など) はグローバルの同じキーより優先する (00-overview 8.1)
+            if (node is Controls.ICodeEditorKeys editor
+                && editor.HandleEditorKey((VirtualKey)key, modifiers.HasFlag(KeyModifiers.Ctrl), modifiers.HasFlag(KeyModifiers.Shift), modifiers.HasFlag(KeyModifiers.Alt)))
+            {
+                _keys.Reset();
+                return new DispatchResult(true);
+            }
+
             if (node is IKeyCaptureHost host)
             {
                 if (host.IsCapturingKeys && host.TryCaptureKey(new KeyStroke(modifiers, key)))
@@ -323,13 +338,13 @@ public sealed partial class MainWindow
                     return new KeyContext(KeyScope.Editor, view.Editor?.ActiveColumn == ActiveColumn.Text);
                 case Controls.FindBar or Controls.GoToBar:
                     return new KeyContext(KeyScope.FindBar, text);
-                case Controls.ScriptEditorPage:
-                    // スクリプトエディタ: コードエディタの有効範囲 (F5 などはアプリが処理する。00-overview.md 8.5)。文字を入力できる場所。
-                    return new KeyContext(KeyScope.CodeEditor, true);
                 case Controls.PanelDockArea:
                     return new KeyContext(KeyScope.Panel, text);
                 case Controls.CommandPalette:
                     return new KeyContext(KeyScope.Global, true);
+                case Controls.ICodeEditorHost:
+                    // テンプレートエディタ・スクリプトエディタ (00-overview 8.5)
+                    return new KeyContext(KeyScope.CodeEditor, true);
             }
         }
 

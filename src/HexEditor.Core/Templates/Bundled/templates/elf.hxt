@@ -1,0 +1,69 @@
+// HexEditor 標準テンプレート (TPL-34): ELF (Linux などの実行形式・共有ライブラリ・オブジェクト)
+// ライセンス: MIT。型と補助関数は標準ライブラリ std.elf (TPL-18) にある。
+// ELF ヘッダの e_ident から、32 / 64 bit とエンディアンを決める。プログラムヘッダ表・セクションヘッダ表・シンボル表・動的セクションは
+// 固定の位置を指すだけで、ファイル全体は走査しない。
+#pragma name "ELF executable"
+#pragma name.ja "ELF 実行形式"
+#pragma description "ELF (32 / 64 bit, little / big endian): ELF header, program headers, section headers, symbol tables (.symtab, .dynsym) and the dynamic section."
+#pragma description.ja "ELF (32 / 64 bit、リトル / ビッグエンディアン): ELF ヘッダ、プログラムヘッダ、セクションヘッダ、シンボル表 (.symtab、.dynsym)、動的セクション。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "7F 45 4C 46"
+#pragma mime "application/x-elf"
+#pragma mime "application/x-sharedlib"
+#pragma mime "application/x-object"
+#pragma extensions "elf;so;o;ko;axf;out;prx"
+#pragma endian little
+
+import std.elf;
+
+std::elf::Header header;
+
+// ヘッダの後ろも、e_ident のエンディアンで読む
+if (header.ident.data == std::elf::Data::BigEndian) {
+    std::core::set_endian(big);
+} else {
+    std::core::set_endian(little);
+}
+
+if (header.e_phoff != 0 && header.e_phnum != 0) {
+    if (header.ident.class == std::elf::Class::Elf64) {
+        std::elf::ProgramHeader64 program_headers[header.e_phnum] @ header.e_phoff;
+    } else {
+        std::elf::ProgramHeader32 program_headers[header.e_phnum] @ header.e_phoff;
+    }
+}
+
+if (header.e_shoff != 0 && header.e_shnum != 0) {
+    if (header.ident.class == std::elf::Class::Elf64) {
+        std::elf::SectionHeader64(std::elf::names_offset()) section_headers[header.e_shnum] @ header.e_shoff;
+    } else {
+        std::elf::SectionHeader32(std::elf::names_offset()) section_headers[header.e_shnum] @ header.e_shoff;
+    }
+
+    // シンボル表 (.symtab と .dynsym)。名前は sh_link が指す文字列表から引く。
+    if (std::elf::find_section_by_type(2) >= 0) {
+        if (header.ident.class == std::elf::Class::Elf64) {
+            std::elf::Symbol64(std::elf::table_strings(2)) symtab[std::elf::table_count(2, 24)] @ std::elf::table_offset(2);
+        } else {
+            std::elf::Symbol32(std::elf::table_strings(2)) symtab[std::elf::table_count(2, 16)] @ std::elf::table_offset(2);
+        }
+    }
+    if (std::elf::find_section_by_type(11) >= 0) {
+        if (header.ident.class == std::elf::Class::Elf64) {
+            std::elf::Symbol64(std::elf::table_strings(11)) dynsym[std::elf::table_count(11, 24)] @ std::elf::table_offset(11);
+        } else {
+            std::elf::Symbol32(std::elf::table_strings(11)) dynsym[std::elf::table_count(11, 16)] @ std::elf::table_offset(11);
+        }
+    }
+
+    // 動的セクション
+    if (std::elf::find_section_by_type(6) >= 0) {
+        if (header.ident.class == std::elf::Class::Elf64) {
+            std::elf::Dynamic64 dynamic[std::elf::table_count(6, 16)] @ std::elf::table_offset(6);
+        } else {
+            std::elf::Dynamic32 dynamic[std::elf::table_count(6, 8)] @ std::elf::table_offset(6);
+        }
+    }
+}

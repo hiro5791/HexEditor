@@ -59,19 +59,43 @@ public sealed class TemplateCatalog
     public TemplateLoadOptions LoadOptions { get; }
 
     /// <summary>一覧 (利用者のフォルダの順、標準テンプレートは最後)。同じ名前は先にあるものだけを残す (TPL-35 の仕様 4)。</summary>
-    public IReadOnlyList<TemplateCatalogEntry> Entries
+    /// <summary>
+    /// 有効な一覧 (無効にしたもの (<see cref="IsEnabled"/>) と、ほかのテンプレートに隠れたものを除く。TPL-35 の仕様 3・4)。
+    /// </summary>
+    public IReadOnlyList<TemplateCatalogEntry> Entries =>
+        [.. AllEntries.Where(e => !e.Shadowed && (IsEnabled?.Invoke(e.Entry) ?? true)).Select(e => e.Entry)];
+
+    /// <summary>テンプレートごとの有効・無効 (TPL-35 の仕様 3。null はすべて有効)。</summary>
+    public Func<TemplateCatalogEntry, bool>? IsEnabled { get; set; }
+
+    /// <summary>テンプレートごとの「自動適用の対象にする」(TPL-35 の仕様 3。null はすべて対象)。</summary>
+    public Func<TemplateCatalogEntry, bool>? IsAutoApplyEnabled { get; set; }
+
+    /// <summary>
+    /// 管理画面の一覧 (無効なもの・隠れたものを含む。TPL-35 の仕様 2・4)。同じ名前 (ファイル名、または表示名) のテンプレートが複数ある場合は、
+    /// 検索パスの順で先にあるものを使い、後のものを <c>Shadowed</c> にする。
+    /// </summary>
+    public IReadOnlyList<(TemplateCatalogEntry Entry, bool Shadowed)> AllEntries
     {
         get
         {
-            var result = new List<TemplateCatalogEntry>();
+            var result = new List<(TemplateCatalogEntry, bool)>();
             var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var displayNames = new HashSet<string>(StringComparer.Ordinal);
+            void Add(TemplateCatalogEntry entry)
+            {
+                bool first = names.Add(entry.Name);
+                bool firstDisplay = entry.Metadata.Name is not { Length: > 0 } dn || displayNames.Add(dn);
+                result.Add((entry, !(first && firstDisplay)));
+            }
+
             foreach (string folder in UserFolders)
             {
                 foreach (string file in EnumerateFolder(folder))
                 {
-                    if (Describe(file, TemplateOrigin.User) is { } entry && names.Add(entry.Name))
+                    if (Describe(file, TemplateOrigin.User) is { } entry)
                     {
-                        result.Add(entry);
+                        Add(entry);
                     }
                 }
             }
@@ -80,14 +104,35 @@ public sealed class TemplateCatalog
             {
                 foreach (string name in BundledTemplates.Names.Where(n => n.StartsWith(StandardFolder, StringComparison.OrdinalIgnoreCase)).Order(StringComparer.Ordinal))
                 {
-                    if (Describe(BundledTemplates.Root + name, TemplateOrigin.Standard) is { } entry && names.Add(entry.Name))
+                    if (Describe(BundledTemplates.Root + name, TemplateOrigin.Standard) is { } entry)
                     {
-                        result.Add(entry);
+                        Add(entry);
                     }
                 }
             }
 
             return result;
+        }
+    }
+
+    /// <summary>アクセスできない利用者のフォルダ (一覧にその旨を表示する。TPL-35 の「エラー」)。</summary>
+    public IReadOnlyList<string> InaccessibleFolders => [.. UserFolders.Where(f => !CanRead(f))];
+
+    private static bool CanRead(string folder)
+    {
+        try
+        {
+            if (!Directory.Exists(folder))
+            {
+                return true; // まだ作っていないフォルダは空の扱い
+            }
+
+            _ = Directory.GetFiles(folder);
+            return true;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return false;
         }
     }
 
@@ -123,7 +168,24 @@ public sealed class TemplateCatalog
     /// <summary>テンプレートを読み込む (評価はしない)。読み込みのエラーは <see cref="TemplateProgram.Diagnostics"/>。</summary>
     public TemplateProgram Load(TemplateCatalogEntry entry) => Load(entry.Path);
 
-    private TemplateProgram Load(string path)
+    /// <summary>標準テンプレート (読み取り専用。TPL-34 の仕様 5) のパスか。</summary>
+    public static bool IsStandardPath(string path) => path.StartsWith(BundledTemplates.Root, StringComparison.Ordinal);
+
+    /// <summary>テンプレートのソースの文字列 (標準テンプレートは同梱のもの)。読めなければ例外。</summary>
+    public static string ReadSource(string path)
+    {
+        if (IsStandardPath(path))
+        {
+            return BundledTemplates.TryGet(path[BundledTemplates.Root.Length..], out byte[] bytes)
+                ? System.Text.Encoding.UTF8.GetString(bytes).TrimStart('﻿')
+                : throw new FileNotFoundException(path);
+        }
+
+        return File.ReadAllText(path);
+    }
+
+    /// <summary>パスのテンプレートを読み込む (標準テンプレートは同梱のものから)。</summary>
+    public TemplateProgram Load(string path)
     {
         if (path.StartsWith(BundledTemplates.Root, StringComparison.Ordinal))
         {
@@ -146,7 +208,7 @@ public sealed class TemplateCatalog
     /// </summary>
     public IReadOnlyList<TemplateCandidate> Detect(TemplateMatchInput input) =>
         [.. Entries
-            .Where(e => e.Metadata.AutoApply)
+            .Where(e => e.Metadata.AutoApply && (IsAutoApplyEnabled?.Invoke(e) ?? true))
             .Select(e => e.Metadata.Match(input) is { } m ? new TemplateCandidate(e, m) : null)
             .OfType<TemplateCandidate>()
             .OrderByDescending(c => c.Match.Score)
@@ -163,24 +225,43 @@ public sealed class TemplateCatalog
     public static TemplateMatchInput MatchInputOf(DocumentSnapshot snapshot, string? path)
     {
         long length = snapshot.Length;
-        int headLength = (int)Math.Min(length, TemplateMatchInput.WindowBytes);
-        byte[] head = new byte[headLength];
-        snapshot.Read(0, head);
-        int tailLength = (int)Math.Min(length, TemplateMatchInput.WindowBytes);
-        byte[] tail = new byte[tailLength];
-        snapshot.Read(length - tailLength, tail);
         string? extension = path is null ? null : System.IO.Path.GetExtension(path).TrimStart('.');
+        int headLength = (int)Math.Min(length, TemplateMatchInput.WindowBytes);
+        int tailLength = (int)Math.Min(length, TemplateMatchInput.WindowBytes);
+        byte[] head = new byte[headLength];
+        byte[] tail = new byte[tailLength];
         string? mime = null;
         try
         {
-            mime = new FileTypeDetector(FileTypeDatabase.BuiltIn).Detect(new HeadTailMagicData(snapshot), extension).Best?.Mime;
+            // 先頭と末尾は 1 度だけ読み、ファイル形式の判定と自動適用の条件の両方に使う (読むのは合わせて 128 KB まで。TC-TPL-30-05)
+            var data = new HeadTailMagicData(snapshot);
+            ReadAll(data, 0, head);
+            ReadAll(data, length - tailLength, tail);
+            mime = new FileTypeDetector(FileTypeDatabase.BuiltIn).Detect(data, extension).Best?.Mime;
         }
         catch (IOException)
         {
             // 読めない部分があれば MIME は使わない (マジックと拡張子だけで判定する)。
+            snapshot.Read(0, head);
+            snapshot.Read(length - tailLength, tail);
         }
 
         return new TemplateMatchInput(length, head, tail, string.IsNullOrEmpty(extension) ? null : extension, mime);
+    }
+
+    private static void ReadAll(HeadTailMagicData data, long offset, Span<byte> destination)
+    {
+        int done = 0;
+        while (done < destination.Length)
+        {
+            int n = data.Read(offset + done, destination[done..]);
+            if (n <= 0)
+            {
+                break;
+            }
+
+            done += n;
+        }
     }
 
     private static bool LooksLikePath(string text) =>

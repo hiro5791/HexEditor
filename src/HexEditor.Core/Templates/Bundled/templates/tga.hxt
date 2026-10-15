@@ -1,0 +1,67 @@
+// HexEditor 標準テンプレート (TPL-34): TGA 画像 (Truevision TGA)
+// ライセンス: MIT。
+// TGA の先頭にはマジックがないため、TGA 2.0 の末尾のフッター (TRUEVISION-XFILE.) か、拡張子で見分ける。
+// ヘッダ、画像 ID、カラーマップ、画素データ (中身は読まない)、フッターを置く。
+#pragma name "TGA image"
+#pragma name.ja "TGA 画像"
+#pragma description "Truevision TGA image: header, image ID, color map, pixel data and the TGA 2.0 footer."
+#pragma description.ja "Truevision の TGA 画像: ヘッダ、画像 ID、カラーマップ、画素データ、TGA 2.0 のフッター。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic -18 "54 52 55 45 56 49 53 49 4F 4E 2D 58 46 49 4C 45 2E 00"
+#pragma extensions "tga;icb;vda;vst"
+#pragma endian little
+
+enum ImageType : u8 {
+    NoImage = 0, ColorMapped = 1, TrueColor = 2, Grayscale = 3, RleColorMapped = 9, RleTrueColor = 10, RleGrayscale = 11,
+};
+
+bitfield Descriptor : u8 {
+    alpha_bits   : 4;
+    right_to_left : 1;
+    top_to_bottom : 1;
+    interleave    : 2;
+};
+
+struct Header {
+    u8          id_length;
+    u8          color_map_type;
+    ImageType   image_type;
+    u16         color_map_first_entry;
+    u16         color_map_length;
+    u8          color_map_entry_size;
+    u16         x_origin;
+    u16         y_origin;
+    u16         width;
+    u16         height;
+    u8          pixel_depth;
+    Descriptor  descriptor;
+};
+
+struct Footer {
+    u32  extension_area_offset [[format("hex")]];
+    u32  developer_directory_offset [[format("hex")]];
+    char signature[18];
+};
+
+Header header;
+if (header.id_length > 0) {
+    char image_id[header.id_length];
+}
+
+local u64 map_bytes = header.color_map_type == 1 ? header.color_map_length * ((header.color_map_entry_size + 7) / 8) : 0;
+if (map_bytes > 0) {
+    u8 color_map[map_bytes] [[lazy]];
+}
+
+// 画素データ (圧縮の有無にかかわらず、フッターの前までを 1 つの塊にする)
+local bool has_footer = std::core::size() >= 26 + $ && std::mem::compare(std::core::size() - 18, x"54 52 55 45 56 49 53 49 4F 4E 2D 58 46 49 4C 45 2E 00");
+local u64 footer_size = has_footer ? 26 : 0;
+if (std::core::size() - $ > footer_size) {
+    u8 image_data[std::core::size() - $ - footer_size] [[lazy]];
+}
+
+if (has_footer) {
+    Footer footer;
+}

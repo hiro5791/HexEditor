@@ -353,6 +353,13 @@ public sealed class TemplateNode
     public TemplateEditResult EncodeValue(string input, bool raw = false) =>
         Result.Run(() => Result.Evaluator.EncodeEdit(this, input, raw));
 
+    /// <summary>
+    /// <see cref="EncodeValue(string, bool)"/> と同じ。文字列が範囲より短い場合に、残りを 0 で埋めるか (<paramref name="padWithZeros"/>)、
+    /// 入力の分だけを書く (残りは元のまま) かを選べる (TPL-22 の仕様 3)。
+    /// </summary>
+    public TemplateEditResult EncodeValue(string input, bool raw, bool padWithZeros) =>
+        Result.Run(() => Result.Evaluator.EncodeEdit(this, input, raw, padWithZeros));
+
     public override string ToString() => $"{Path} : {TypeName} @0x{Offset:X} ({Size})";
 
     // ───────────── 内部 ─────────────
@@ -468,11 +475,34 @@ public sealed class TemplateNode
     }
 }
 
+/// <summary>値の書き込みの失敗の種類 (画面の文言を選ぶ。TPL-22 の「エラー」)。</summary>
+public enum TemplateEditError
+{
+    None,
+
+    /// <summary>入力を読めない。</summary>
+    Invalid,
+
+    /// <summary>型の範囲外。</summary>
+    OutOfRange,
+
+    /// <summary>文字列が範囲より長い (TPL-22 の仕様 3)。</summary>
+    TooLong,
+
+    /// <summary>編集できないパターン (<see cref="TemplateEditBlock"/>)。</summary>
+    Blocked,
+
+    /// <summary><c>write</c> の変換の関数がエラーになった。</summary>
+    WriteFunctionFailed,
+}
+
 /// <summary>値の書き込みの結果 (TPL-22)。</summary>
 public sealed record TemplateEditResult(byte[]? Bytes, string? Error)
 {
     /// <summary>書き込む位置 (ビットフィールドの要素は、そのビットを含むまとまりの先頭)。</summary>
     public long Offset { get; init; }
+
+    public TemplateEditError Code { get; init; }
 
     public bool Success => Bytes is not null;
 }

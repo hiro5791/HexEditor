@@ -21,7 +21,7 @@ public static class MainScreens
 
     /// <summary>設定画面のカテゴリ (Core の SettingCategories.All と同じ順)。</summary>
     public static readonly string[] SettingsCategories =
-        ["general", "appearance", "view", "editing", "search", "files", "keyboard", "language", "accessibility", "automation", "update", "privacy", "explorer", "advanced"];
+        ["general", "appearance", "view", "editing", "search", "files", "keyboard", "language", "accessibility", "automation", "templates", "update", "privacy", "explorer", "advanced"];
 
     /// <summary>フェーズ 0 からある画面 (疑似翻訳の切れの検査 TC-UI-46-02 が調べる画面)。</summary>
     public static readonly string[] Names = ["start", "document", "findBar", "goToBar", "newSizeDialog", "aboutDialog", "closeDialog"];

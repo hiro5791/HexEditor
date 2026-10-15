@@ -1,0 +1,68 @@
+// HexEditor 標準テンプレート (TPL-34): VHDX (Virtual Hard Disk v2) のヘッダ
+// ライセンス: MIT。
+// ファイルタイプ識別子 (先頭 64 KiB)、2 つのヘッダ (64 KiB と 128 KiB の位置)、2 つのリージョンテーブル (192 KiB と 256 KiB の位置) を読む。
+// メタデータ領域・BAT・ログは位置を示すだけで、読まない (100 GiB 以上のディスクでも、読むのは先頭の 320 KiB だけである)。
+#pragma name "VHDX virtual disk"
+#pragma name.ja "VHDX 仮想ディスク"
+#pragma description "Virtual Hard Disk v2 (VHDX): file type identifier, the two headers (sequence numbers, GUIDs, log location) and the two region tables."
+#pragma description.ja "仮想ハードディスク v2 (VHDX): ファイルタイプ識別子、2 つのヘッダ (シーケンス番号、GUID、ログの位置)、2 つのリージョンテーブル。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "76 68 64 78 66 69 6C 65"
+#pragma mime "application/x-vhdx"
+#pragma extensions "vhdx;avhdx"
+#pragma endian little
+
+struct FileTypeIdentifier {
+    char   signature[8] [[expect(signature == "vhdxfile", "vhdxfile ではありません")]];
+    char16 creator[256] [[encoding("utf-16le")]];
+};
+
+struct Header {
+    char   signature[4] [[expect(signature == "head", "head ではありません")]];
+    u32    checksum [[format("hex")]];
+    u64    sequence_number;
+    guid   file_write_guid;
+    guid   data_write_guid;
+    guid   log_guid;
+    u16    log_version;
+    u16    version [[comment("1 であること")]];
+    u32    log_length;
+    u64    log_offset [[format("hex")]];
+    u8     reserved[4016] [[lazy]];
+};
+
+/// リージョンの種類を示す GUID の名前
+fn region_name(u64 offset) -> string {
+    local u32 a = std::mem::read_u32(offset, little);
+    if (a == 0x2DC27766) {
+        return "BAT";
+    }
+    if (a == 0x8B7CA206) {
+        return "Metadata";
+    }
+    return "Unknown";
+}
+
+struct RegionTableEntry {
+    guid   region_guid;
+    u64    file_offset [[format("hex")]];
+    u32    length;
+    u32    required;
+    local string name = region_name(addressof(region_guid)) [[show]];
+};
+
+struct RegionTable {
+    char   signature[4] [[expect(signature == "regi", "regi ではありません")]];
+    u32    checksum [[format("hex")]];
+    u32    entry_count;
+    u32    reserved;
+    RegionTableEntry entries[std::math::min(entry_count, 2047)];
+};
+
+FileTypeIdentifier file_type_identifier;
+Header header1 @ 0x10000;
+Header header2 @ 0x20000;
+RegionTable region_table1 @ 0x30000;
+RegionTable region_table2 @ 0x40000;

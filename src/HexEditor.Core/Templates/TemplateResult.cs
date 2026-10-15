@@ -38,6 +38,9 @@ public sealed record TemplateApplyOptions
     /// <summary>拡張関数 (TPL-19)。null なら拡張関数の呼び出しはすべて「登録されていません」になる。</summary>
     public ITemplateExtensionHost? Extensions { get; init; }
 
+    /// <summary>テンプレートデバッガ (TPL-32)。null ならデバッグしない。</summary>
+    public Debugging.TemplateDebugger? Debugger { get; init; }
+
     /// <summary>セクションの一時ファイルを置くフォルダ (アプリの一時フォルダ)。</summary>
     public string TempDirectory { get; init; } = Path.Combine(Path.GetTempPath(), "HexEditor", "templates");
 
@@ -223,6 +226,9 @@ public sealed class TemplateResult : IDisposable
     public Task<T> InvokeAsync<T>(Func<T> body) => TemplateThreads.RunAsync(() => Run(body));
 
     public T Invoke<T>(Func<T> body) => Run(body);
+
+    /// <summary>デバッガで止まっている文脈で式を評価する (ウォッチ式。TPL-32 の仕様 3)。</summary>
+    public string EvaluateInPausedFrame(string expression) => Run(() => Evaluator.EvaluateInPausedFrame(expression));
 
     public void Dispose()
     {

@@ -1,0 +1,38 @@
+// HexEditor 標準テンプレート (TPL-34): RTF (リッチテキスト、ヘッダのみ)
+// ライセンス: MIT。
+// 先頭の {\rtf と版、続く文字セットなどの宣言 (最初の行、最大 256 バイト) だけを置く。本文は解釈しない。
+#pragma name "Rich Text Format"
+#pragma name.ja "リッチテキスト (RTF)"
+#pragma description "Rich Text Format (header only): the signature, version and the character set declarations at the start of the file."
+#pragma description.ja "リッチテキスト形式 (ヘッダのみ): シグネチャ、版、ファイルの先頭にある文字セットなどの宣言。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "7B 5C 72 74 66"
+#pragma mime "application/rtf"
+#pragma extensions "rtf"
+#pragma endian little
+
+/// ヘッダの宣言の長さ。最初の改行まで、なければ 256 バイトまで。
+fn declaration_length() -> u64 {
+    local u64 size = std::core::size();
+    local u64 limit = std::math::min(size, 256);
+    local s64 eol = std::mem::find(x"0A", 0, limit);
+    if (eol < 0) {
+        return limit;
+    }
+    return eol;
+}
+
+struct Signature {
+    char magic[5] [[expect(magic == "{\\rtf", "RTF のシグネチャではありません")]];
+    char version[1] [[comment("通常は 1")]];
+};
+
+Signature signature;
+if (declaration_length() > 6) {
+    char declarations[declaration_length() - 6] [[encoding("latin1")]];
+}
+if (std::core::size() > $) {
+    u8 body[std::core::size() - $] [[lazy]];
+}

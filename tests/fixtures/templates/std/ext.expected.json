@@ -1,0 +1,823 @@
+{
+  "name": "ext2 / ext3 / ext4 スーパーブロック",
+  "type": "application",
+  "offset": 0,
+  "size": 0,
+  "children": [
+    {
+      "name": "superblock",
+      "path": "superblock",
+      "type": "Superblock",
+      "offset": 1024,
+      "size": 1024,
+      "display": "Superblock (68)",
+      "children": [
+        {
+          "name": "inodes_count",
+          "path": "superblock.inodes_count",
+          "type": "u32",
+          "offset": 1024,
+          "size": 4,
+          "value": 128,
+          "display": "128"
+        },
+        {
+          "name": "blocks_count_lo",
+          "path": "superblock.blocks_count_lo",
+          "type": "u32",
+          "offset": 1028,
+          "size": 4,
+          "value": 256,
+          "display": "256"
+        },
+        {
+          "name": "reserved_blocks_count_lo",
+          "path": "superblock.reserved_blocks_count_lo",
+          "type": "u32",
+          "offset": 1032,
+          "size": 4,
+          "value": 12,
+          "display": "12"
+        },
+        {
+          "name": "free_blocks_count_lo",
+          "path": "superblock.free_blocks_count_lo",
+          "type": "u32",
+          "offset": 1036,
+          "size": 4,
+          "value": 200,
+          "display": "200"
+        },
+        {
+          "name": "free_inodes_count",
+          "path": "superblock.free_inodes_count",
+          "type": "u32",
+          "offset": 1040,
+          "size": 4,
+          "value": 100,
+          "display": "100"
+        },
+        {
+          "name": "first_data_block",
+          "path": "superblock.first_data_block",
+          "type": "u32",
+          "offset": 1044,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "log_block_size",
+          "path": "superblock.log_block_size",
+          "type": "u32",
+          "offset": 1048,
+          "size": 4,
+          "value": 0,
+          "display": "0",
+          "comment": "ブロックの大きさ = 1024 << この値"
+        },
+        {
+          "name": "log_cluster_size",
+          "path": "superblock.log_cluster_size",
+          "type": "u32",
+          "offset": 1052,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "blocks_per_group",
+          "path": "superblock.blocks_per_group",
+          "type": "u32",
+          "offset": 1056,
+          "size": 4,
+          "value": 8192,
+          "display": "8192"
+        },
+        {
+          "name": "clusters_per_group",
+          "path": "superblock.clusters_per_group",
+          "type": "u32",
+          "offset": 1060,
+          "size": 4,
+          "value": 8192,
+          "display": "8192"
+        },
+        {
+          "name": "inodes_per_group",
+          "path": "superblock.inodes_per_group",
+          "type": "u32",
+          "offset": 1064,
+          "size": 4,
+          "value": 128,
+          "display": "128"
+        },
+        {
+          "name": "mount_time",
+          "path": "superblock.mount_time",
+          "type": "time32_t",
+          "offset": 1068,
+          "size": 4,
+          "value": 1593835520,
+          "display": "7/4/2020 4:05:20 AM"
+        },
+        {
+          "name": "write_time",
+          "path": "superblock.write_time",
+          "type": "time32_t",
+          "offset": 1072,
+          "size": 4,
+          "value": 1593835776,
+          "display": "7/4/2020 4:09:36 AM"
+        },
+        {
+          "name": "mount_count",
+          "path": "superblock.mount_count",
+          "type": "u16",
+          "offset": 1076,
+          "size": 2,
+          "value": 3,
+          "display": "3"
+        },
+        {
+          "name": "max_mount_count",
+          "path": "superblock.max_mount_count",
+          "type": "s16",
+          "offset": 1078,
+          "size": 2,
+          "value": -1,
+          "display": "-1"
+        },
+        {
+          "name": "magic",
+          "path": "superblock.magic",
+          "type": "u16",
+          "offset": 1080,
+          "size": 2,
+          "value": 61267,
+          "display": "0xEF53"
+        },
+        {
+          "name": "state",
+          "path": "superblock.state",
+          "type": "State",
+          "offset": 1082,
+          "size": 2,
+          "value": 1,
+          "display": "CleanlyUnmounted"
+        },
+        {
+          "name": "errors",
+          "path": "superblock.errors",
+          "type": "u16",
+          "offset": 1084,
+          "size": 2,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "minor_revision_level",
+          "path": "superblock.minor_revision_level",
+          "type": "u16",
+          "offset": 1086,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "last_check_time",
+          "path": "superblock.last_check_time",
+          "type": "time32_t",
+          "offset": 1088,
+          "size": 4,
+          "value": 1593835520,
+          "display": "7/4/2020 4:05:20 AM"
+        },
+        {
+          "name": "check_interval",
+          "path": "superblock.check_interval",
+          "type": "u32",
+          "offset": 1092,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "creator_os",
+          "path": "superblock.creator_os",
+          "type": "CreatorOs",
+          "offset": 1096,
+          "size": 4,
+          "value": 0,
+          "display": "Linux (0x0)"
+        },
+        {
+          "name": "revision_level",
+          "path": "superblock.revision_level",
+          "type": "u32",
+          "offset": 1100,
+          "size": 4,
+          "value": 1,
+          "display": "1",
+          "comment": "0: 古い形式、1: 動的な inode の大きさ"
+        },
+        {
+          "name": "default_reserved_uid",
+          "path": "superblock.default_reserved_uid",
+          "type": "u16",
+          "offset": 1104,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "default_reserved_gid",
+          "path": "superblock.default_reserved_gid",
+          "type": "u16",
+          "offset": 1106,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "first_inode",
+          "path": "superblock.first_inode",
+          "type": "u32",
+          "offset": 1108,
+          "size": 4,
+          "value": 11,
+          "display": "11"
+        },
+        {
+          "name": "inode_size",
+          "path": "superblock.inode_size",
+          "type": "u16",
+          "offset": 1112,
+          "size": 2,
+          "value": 256,
+          "display": "256"
+        },
+        {
+          "name": "block_group_number",
+          "path": "superblock.block_group_number",
+          "type": "u16",
+          "offset": 1114,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "feature_compatible",
+          "path": "superblock.feature_compatible",
+          "type": "CompatibleFeatures",
+          "offset": 1116,
+          "size": 4,
+          "value": 60,
+          "display": "HasJournal | ExtAttr | ResizeInode | DirIndex"
+        },
+        {
+          "name": "feature_incompatible",
+          "path": "superblock.feature_incompatible",
+          "type": "IncompatibleFeatures",
+          "offset": 1120,
+          "size": 4,
+          "value": 706,
+          "display": "Filetype | Extents | Is64Bit | FlexBg"
+        },
+        {
+          "name": "feature_read_only_compatible",
+          "path": "superblock.feature_read_only_compatible",
+          "type": "ReadOnlyCompatibleFeatures",
+          "offset": 1124,
+          "size": 4,
+          "value": 107,
+          "display": "SparseSuper | LargeFile | HugeFile | DirNlink | ExtraIsize"
+        },
+        {
+          "name": "volume_uuid",
+          "path": "superblock.volume_uuid",
+          "type": "uuid",
+          "offset": 1128,
+          "size": 16,
+          "value": "404142434445464748494A4B4C4D4E4F",
+          "display": "40414243-4445-4647-4849-4a4b4c4d4e4f"
+        },
+        {
+          "name": "volume_name",
+          "path": "superblock.volume_name",
+          "type": "char[16]",
+          "offset": 1144,
+          "size": 16,
+          "value": "HXTEST-EXT4",
+          "display": "HXTEST-EXT4"
+        },
+        {
+          "name": "last_mounted",
+          "path": "superblock.last_mounted",
+          "type": "char[64]",
+          "offset": 1160,
+          "size": 64,
+          "value": "/mnt",
+          "display": "/mnt"
+        },
+        {
+          "name": "algorithm_usage_bitmap",
+          "path": "superblock.algorithm_usage_bitmap",
+          "type": "u32",
+          "offset": 1224,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "preallocate_blocks",
+          "path": "superblock.preallocate_blocks",
+          "type": "u8",
+          "offset": 1228,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "preallocate_directory_blocks",
+          "path": "superblock.preallocate_directory_blocks",
+          "type": "u8",
+          "offset": 1229,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "reserved_gdt_blocks",
+          "path": "superblock.reserved_gdt_blocks",
+          "type": "u16",
+          "offset": 1230,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "journal_uuid",
+          "path": "superblock.journal_uuid",
+          "type": "uuid",
+          "offset": 1232,
+          "size": 16,
+          "value": "00000000000000000000000000000000",
+          "display": "00000000-0000-0000-0000-000000000000"
+        },
+        {
+          "name": "journal_inode_number",
+          "path": "superblock.journal_inode_number",
+          "type": "u32",
+          "offset": 1248,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "journal_device",
+          "path": "superblock.journal_device",
+          "type": "u32",
+          "offset": 1252,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "last_orphan",
+          "path": "superblock.last_orphan",
+          "type": "u32",
+          "offset": 1256,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "hash_seed",
+          "path": "superblock.hash_seed",
+          "type": "u32[4]",
+          "offset": 1260,
+          "size": 16,
+          "display": "[4]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "superblock.hash_seed[0]",
+              "type": "u32",
+              "offset": 1260,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[1]",
+              "path": "superblock.hash_seed[1]",
+              "type": "u32",
+              "offset": 1264,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[2]",
+              "path": "superblock.hash_seed[2]",
+              "type": "u32",
+              "offset": 1268,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[3]",
+              "path": "superblock.hash_seed[3]",
+              "type": "u32",
+              "offset": 1272,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "default_hash_version",
+          "path": "superblock.default_hash_version",
+          "type": "u8",
+          "offset": 1276,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "journal_backup_type",
+          "path": "superblock.journal_backup_type",
+          "type": "u8",
+          "offset": 1277,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "group_descriptor_size",
+          "path": "superblock.group_descriptor_size",
+          "type": "u16",
+          "offset": 1278,
+          "size": 2,
+          "value": 64,
+          "display": "64"
+        },
+        {
+          "name": "default_mount_options",
+          "path": "superblock.default_mount_options",
+          "type": "u32",
+          "offset": 1280,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "first_meta_block_group",
+          "path": "superblock.first_meta_block_group",
+          "type": "u32",
+          "offset": 1284,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "mkfs_time",
+          "path": "superblock.mkfs_time",
+          "type": "time32_t",
+          "offset": 1288,
+          "size": 4,
+          "value": 1593836032,
+          "display": "7/4/2020 4:13:52 AM"
+        },
+        {
+          "name": "journal_blocks",
+          "path": "superblock.journal_blocks",
+          "type": "u32[17]",
+          "offset": 1292,
+          "size": 68,
+          "display": "[17]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "superblock.journal_blocks[0]",
+              "type": "u32",
+              "offset": 1292,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[1]",
+              "path": "superblock.journal_blocks[1]",
+              "type": "u32",
+              "offset": 1296,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[2]",
+              "path": "superblock.journal_blocks[2]",
+              "type": "u32",
+              "offset": 1300,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[3]",
+              "path": "superblock.journal_blocks[3]",
+              "type": "u32",
+              "offset": 1304,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[4]",
+              "path": "superblock.journal_blocks[4]",
+              "type": "u32",
+              "offset": 1308,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[5]",
+              "path": "superblock.journal_blocks[5]",
+              "type": "u32",
+              "offset": 1312,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[6]",
+              "path": "superblock.journal_blocks[6]",
+              "type": "u32",
+              "offset": 1316,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[7]",
+              "path": "superblock.journal_blocks[7]",
+              "type": "u32",
+              "offset": 1320,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[8]",
+              "path": "superblock.journal_blocks[8]",
+              "type": "u32",
+              "offset": 1324,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[9]",
+              "path": "superblock.journal_blocks[9]",
+              "type": "u32",
+              "offset": 1328,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[10]",
+              "path": "superblock.journal_blocks[10]",
+              "type": "u32",
+              "offset": 1332,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[11]",
+              "path": "superblock.journal_blocks[11]",
+              "type": "u32",
+              "offset": 1336,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[12]",
+              "path": "superblock.journal_blocks[12]",
+              "type": "u32",
+              "offset": 1340,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[13]",
+              "path": "superblock.journal_blocks[13]",
+              "type": "u32",
+              "offset": 1344,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[14]",
+              "path": "superblock.journal_blocks[14]",
+              "type": "u32",
+              "offset": 1348,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[15]",
+              "path": "superblock.journal_blocks[15]",
+              "type": "u32",
+              "offset": 1352,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[16]",
+              "path": "superblock.journal_blocks[16]",
+              "type": "u32",
+              "offset": 1356,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "blocks_count_hi",
+          "path": "superblock.blocks_count_hi",
+          "type": "u32",
+          "offset": 1360,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "reserved_blocks_count_hi",
+          "path": "superblock.reserved_blocks_count_hi",
+          "type": "u32",
+          "offset": 1364,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "free_blocks_count_hi",
+          "path": "superblock.free_blocks_count_hi",
+          "type": "u32",
+          "offset": 1368,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "min_extra_inode_size",
+          "path": "superblock.min_extra_inode_size",
+          "type": "u16",
+          "offset": 1372,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "want_extra_inode_size",
+          "path": "superblock.want_extra_inode_size",
+          "type": "u16",
+          "offset": 1374,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "superblock_flags",
+          "path": "superblock.superblock_flags",
+          "type": "u32",
+          "offset": 1376,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "raid_stride",
+          "path": "superblock.raid_stride",
+          "type": "u16",
+          "offset": 1380,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "mmp_interval",
+          "path": "superblock.mmp_interval",
+          "type": "u16",
+          "offset": 1382,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "mmp_block",
+          "path": "superblock.mmp_block",
+          "type": "u64",
+          "offset": 1384,
+          "size": 8,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "raid_stripe_width",
+          "path": "superblock.raid_stripe_width",
+          "type": "u32",
+          "offset": 1392,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "log_groups_per_flex",
+          "path": "superblock.log_groups_per_flex",
+          "type": "u8",
+          "offset": 1396,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "checksum_type",
+          "path": "superblock.checksum_type",
+          "type": "u8",
+          "offset": 1397,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "reserved_pad",
+          "path": "superblock.reserved_pad",
+          "type": "u16",
+          "offset": 1398,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "kilobytes_written",
+          "path": "superblock.kilobytes_written",
+          "type": "u64",
+          "offset": 1400,
+          "size": 8,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "rest",
+          "path": "superblock.rest",
+          "type": "u8[636]",
+          "offset": 1408,
+          "size": 636,
+          "value": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+        },
+        {
+          "name": "checksum",
+          "path": "superblock.checksum",
+          "type": "u32",
+          "offset": 2044,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "block_size",
+          "path": "superblock.block_size",
+          "type": "u64",
+          "offset": 2048,
+          "size": 0,
+          "value": 1024,
+          "display": "1024"
+        },
+        {
+          "name": "blocks_count",
+          "path": "superblock.blocks_count",
+          "type": "u64",
+          "offset": 2048,
+          "size": 0,
+          "value": 256,
+          "display": "256"
+        }
+      ]
+    }
+  ]
+}

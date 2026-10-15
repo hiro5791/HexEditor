@@ -288,7 +288,7 @@ internal static class MacroHooks
     };
 
     /// <summary>画面の表示・設定・ヘルプなど、データの操作ではないもの (記録しない。記録できない操作の表示も出さない)。</summary>
-    private static readonly string[] Silent = ["macro.", "view.", "settings.", "help.", "scripting.editor.", "scripting.show", "window.", "workspace."];
+    private static readonly string[] Silent = ["macro.", "view.", "settings.", "help.", "codeEditor.", "scripting.show", "window.", "workspace."];
 
     private static void Finish(string id)
     {

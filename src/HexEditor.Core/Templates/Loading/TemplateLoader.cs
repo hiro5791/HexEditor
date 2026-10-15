@@ -276,7 +276,7 @@ public static class TemplateLoader
         }
     }
 
-    private static readonly HashSet<string> KnownPragmas =
+    internal static readonly HashSet<string> KnownPragmas =
     [
         "name", "description", "author", "version", "license", "min_app_version", "endian", "bitfield_order", "encoding", "magic",
         "magic_all", "mime", "extensions", "priority", "auto_apply",

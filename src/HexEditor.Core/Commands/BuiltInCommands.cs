@@ -456,6 +456,49 @@ public static class BuiltInCommands
         new("analysis.hash.findAlgorithm", "analysis") { Condition = "documentOpen" },
         new("analysis.hash.writeAtCursor", "analysis") { Condition = "documentOpen && !readOnly" },
 
+        // ---- 構造体テンプレート (07 の TPL-20〜TPL-35)。F12 は定義へ移動 (00-overview 8.2) ----
+        new("templates.apply", "templates") { Condition = "documentOpen" },
+        new("templates.applyHere", "templates") { Condition = "documentOpen" },
+        new("templates.followType", "templates") { Condition = "documentOpen" },
+        new("templates.applyKaitai", "templates") { Condition = "documentOpen" },
+        new("templates.rerun", "templates") { Condition = "documentOpen" },
+        new("templates.remove", "templates") { Condition = "documentOpen" },
+        new("templates.stop", "templates") { Condition = "documentOpen" },
+        new("templates.showResults", "templates"),
+        new("templates.showOutput", "templates"),
+        new("templates.editValue", "templates") { Condition = "documentOpen" },
+        new("templates.goToDefinition", "templates") { DefaultBindings = [K("F12")] },
+        new("templates.goToTarget", "templates") { Condition = "documentOpen" },
+        new("templates.copyValue", "templates") { Condition = "documentOpen" },
+        new("templates.addBookmark", "templates") { Condition = "documentOpen" },
+        new("templates.export", "templates") { Condition = "documentOpen" },
+        new("templates.toggleColoring", "templates"),
+        new("templates.findCandidates", "templates") { Condition = "documentOpen" },
+        new("templates.new", "templates"),
+        new("templates.open", "templates"),
+        new("templates.edit", "templates"),
+        new("templates.manage", "templates"),
+        new("templates.convertKsy", "templates"),
+        new("templates.tryRun", "templates"),
+        new("templates.breakOnRead", "templates") { Condition = "documentOpen" },
+        new("view.panel.templates", "view"),
+        new("view.panel.templateOutput", "view"),
+
+        // ---- コードエディタ (00-overview 8.5)。テンプレートエディタ (TPL-31・TPL-32) とスクリプトエディタ (AUTO-20・AUTO-21) が同じコマンドを使う ----
+        new("codeEditor.run", "codeEditor") { DefaultBindings = [K("F5", KeyScope.CodeEditor)] },
+        new("codeEditor.stop", "codeEditor") { DefaultBindings = [K("Shift+F5", KeyScope.CodeEditor)] },
+        new("codeEditor.toggleBreakpoint", "codeEditor") { DefaultBindings = [K("F9", KeyScope.CodeEditor)] },
+        new("codeEditor.stepOver", "codeEditor") { DefaultBindings = [K("F10", KeyScope.CodeEditor)] },
+        new("codeEditor.stepInto", "codeEditor") { DefaultBindings = [K("F11", KeyScope.CodeEditor)] },
+        new("codeEditor.stepOut", "codeEditor") { DefaultBindings = [K("Shift+F11", KeyScope.CodeEditor)] },
+        new("codeEditor.runToCursor", "codeEditor"),
+        new("codeEditor.addWatch", "codeEditor"),
+        new("codeEditor.goToDefinition", "codeEditor") { DefaultBindings = [K("F12", KeyScope.CodeEditor)] },
+        new("codeEditor.findReferences", "codeEditor"),
+        new("codeEditor.format", "codeEditor"),
+        new("codeEditor.toggleComment", "codeEditor"),
+        new("codeEditor.complete", "codeEditor"),
+
         // ---- データインスペクタ (INSP-02 の「呼び出し」: インスペクタ: エンディアンの切り替え) ----
         new("inspector.toggleEndian", "inspector") { Condition = "documentOpen" },
 
@@ -514,14 +557,6 @@ public static class BuiltInCommands
         new("scripting.debug", "scripting") { Condition = "scriptEditor" },
         new("scripting.pause", "scripting") { Condition = "scriptEditor" },
         new("scripting.clearOutput", "scripting"),
-
-        // コードエディタの有効範囲のキー (00 の 8.5)。スクリプトエディタにフォーカスがあるとき、F5 は実行 / 続行、F11 は全画面表示より優先する。
-        new("scripting.editor.run", "scripting") { DefaultBindings = [K("F5", KeyScope.CodeEditor)], Condition = "scriptEditor" },
-        new("scripting.editor.stop", "scripting") { DefaultBindings = [K("Shift+F5", KeyScope.CodeEditor)], Condition = "scriptEditor" },
-        new("scripting.editor.toggleBreakpoint", "scripting") { DefaultBindings = [K("F9", KeyScope.CodeEditor)], Condition = "scriptEditor" },
-        new("scripting.editor.stepOver", "scripting") { DefaultBindings = [K("F10", KeyScope.CodeEditor)], Condition = "scriptEditor" },
-        new("scripting.editor.stepIn", "scripting") { DefaultBindings = [K("F11", KeyScope.CodeEditor)], Condition = "scriptEditor" },
-        new("scripting.editor.stepOut", "scripting") { DefaultBindings = [K("Shift+F11", KeyScope.CodeEditor)], Condition = "scriptEditor" },
 
         // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
         new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },

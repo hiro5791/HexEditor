@@ -389,10 +389,6 @@ public sealed class RunAndTemplateTests
         Assert.Equal(2, Hexed.RunInProcess(dir.Path, new CliServices(), ["template", pe, "--auto"]).ExitCode);
     }
 
-    [Fact(Skip = "needs the template panel (TPL-21, wave B): the JSON of 'hexed template' equals the template panel of the GUI (TC-AUTO-42-01, UI test).")]
-    [Trait("TC", "TC-AUTO-42-01")]
-    public void Real_engine_json_equals_the_template_panel() { }
-
     /// <summary>JSON の葉 (子のないノード) のパス。</summary>
     private static List<string> LeafPaths(JsonNode node)
     {

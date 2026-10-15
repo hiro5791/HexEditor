@@ -5659,18 +5659,6 @@ Details were written to:
   <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>break debugger</value></data>
   <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>Clear output</value></data>
   <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>clear log output</value></data>
-  <data name="Cmd_scripting_editor_run" xml:space="preserve"><value>Run / continue (script editor)</value></data>
-  <data name="CmdAlias_scripting_editor_run" xml:space="preserve"><value>run continue f5 debug</value></data>
-  <data name="Cmd_scripting_editor_stop" xml:space="preserve"><value>Stop (script editor)</value></data>
-  <data name="CmdAlias_scripting_editor_stop" xml:space="preserve"><value>stop debug shift f5</value></data>
-  <data name="Cmd_scripting_editor_toggleBreakpoint" xml:space="preserve"><value>Toggle breakpoint</value></data>
-  <data name="CmdAlias_scripting_editor_toggleBreakpoint" xml:space="preserve"><value>breakpoint f9</value></data>
-  <data name="Cmd_scripting_editor_stepOver" xml:space="preserve"><value>Step over</value></data>
-  <data name="CmdAlias_scripting_editor_stepOver" xml:space="preserve"><value>debug f10</value></data>
-  <data name="Cmd_scripting_editor_stepIn" xml:space="preserve"><value>Step into</value></data>
-  <data name="CmdAlias_scripting_editor_stepIn" xml:space="preserve"><value>debug f11</value></data>
-  <data name="Cmd_scripting_editor_stepOut" xml:space="preserve"><value>Step out</value></data>
-  <data name="CmdAlias_scripting_editor_stepOut" xml:space="preserve"><value>debug shift f11</value></data>
   <data name="Cmd_macro_record" xml:space="preserve"><value>Start / stop recording</value></data>
   <data name="CmdAlias_macro_record" xml:space="preserve"><value>record macro</value></data>
   <data name="Cmd_macro_playLast" xml:space="preserve"><value>Play last macro</value></data>
@@ -6078,4 +6066,384 @@ Downloaded from: {2}</value></data>
   <data name="Inspector_Group_Plugin" xml:space="preserve"><value>Plugins</value></data>
   <data name="Inspector_PluginStopped" xml:space="preserve"><value>(stopped)</value></data>
   <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>This plugin type cannot be edited with this value.</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>Structure</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>Template output</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>Structure templates</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>Apply template...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>Apply template from here...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>Show type at cursor...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>Y</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Apply Kaitai Struct...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>Find matching templates</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>Run again</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>Remove application</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>Export results...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>New template</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>Open template...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>Edit template</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>Convert .ksy to HXT...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>Manage templates</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>Structure coloring</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>Structure</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>Template output</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>Structure results...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>Apply template from here...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>Break when reading here</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>Template</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>Code editor</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>Template: Apply</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>structure;parse</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>Template: Apply from here</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>cursor</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>Template: Show type at cursor</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>follow</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Template: Apply Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>Template: Run again</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>reevaluate</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>Template: Remove application</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>unapply</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>Template: Stop evaluation</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>cancel</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>Template: Show result tree</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>tree</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>Template: Show output</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>errors</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>Template: Edit value</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>change</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>Template: Go to definition</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>declaration</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>Template: Go to pointer target</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>pointer</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>Template: Copy value</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>clipboard</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>Template: Add to bookmarks</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>bookmark</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>Template: Export results</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>Template: Toggle coloring</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>highlight</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>Template: Find matching templates</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>detect</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>Template: New</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>create</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>Template: Open</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>file</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>Template: Edit</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>Template: Manage</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>library</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Template: Convert .ksy to HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Template: Try run</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;unsaved</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Template: Break when reading here</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>data breakpoint</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>View: Structure panel</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>template results</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>View: Template output panel</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>errors</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>Code editor: Start debugging / continue</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>run;debug</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>Code editor: Stop debugging</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>end</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>Code editor: Toggle breakpoint</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>break</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>Code editor: Step over</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>next</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>Code editor: Step into</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>enter</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>Code editor: Step out</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>return</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>Code editor: Run to cursor</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>cursor</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>Code editor: Add watch expression</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>watch</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>Code editor: Go to definition</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>declaration</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>Code editor: Find references</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>usages</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>Code editor: Format document</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>indent</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>Code editor: Toggle comment</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>comment</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Code editor: Show completions</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>intellisense</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>Templates</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Auto-apply</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>What to do when a template matches a file you open (magic number, MIME type or extension).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Suggest</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Always apply</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>Do nothing</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Re-evaluate after editing</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Evaluate applied templates again 500 ms after the last edit. When off, use Run again in the result tree.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Structure coloring</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>Color the ranges of template patterns in the hex view.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Coloring opacity (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Opacity of the structure coloring over the hex view background.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Template folders</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>Additional folders searched for user templates.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Inspector templates</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Templates whose [[inspector]] types are shown in the data inspector.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Template preferences</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Disabled templates, templates excluded from auto-apply, and suppressed suggestions.</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>Manage templates</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Template folders</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>Templates</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>Inspector templates</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>Add folder...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>Remove</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>Cannot access this folder.</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>Filter by name</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>Import...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>New template</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>Enabled</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>Auto-apply</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>Hidden by another template with the same name.</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>Suggestions turned off</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>None</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>Show again</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>Add inspector template...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>not fixed size</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>This template has inspector types that are not fixed-size or larger than 4 KB. Fixed-size types of 4 KB or less are recommended.</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>Imported {0} template file(s).</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>Could not import: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>Exported {0} file(s) to {1}.</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>Could not export: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>Standard templates are part of the app. Use Duplicate and edit to export a copy.</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>Apply template</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>Apply template</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>Run again</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>Run again</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>Stop evaluation</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>Stop evaluation</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>Export</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>Export</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>Columns</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Columns</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>Follow cursor</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>Follow cursor</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>Filter by name, value or type</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filter</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>Result tree</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>Path (e.g. chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>Path</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>Evaluate all and search</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>{0} match(es)</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>The path '{0}' was not found.</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>Value</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>Offset</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>Size</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>Comment</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>Endian</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>End</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>Color</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>Column order</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>Move {0} left</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>Move {0} right</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>Reset columns</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>Evaluating…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>Evaluated: {0} patterns</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>{0} error(s), {1} warning(s)</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>The pattern count reached the limit ({0}). Showing partial results.</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>Raise the limit and run again</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} elements</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} bit</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>Bits {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / Local: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>Undefined value</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>Undefined</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>Follow</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>Points to {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>offset {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>size {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(unsaved)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(template file not found)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>No template is applied.</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>No evaluation is running.</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>Select a node in the result tree.</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>The selected node is not a pointer.</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>The pointer target is null or outside the data.</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>The template '{0}' was not found.</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>A document can have up to {0} template applications.</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>The template file '{0}' was not found.</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>Evaluating template {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>The JSON is larger than 64 MB. Save it to a file instead.</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>Save to file...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>Template: {0}
+Start offset: {1}
+Kind: {2}
+Endianness: {3}
+Type: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>Standard</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>User</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>Recent</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>Uses scripts</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>Details</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>Go to data</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>Go to pointer target</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>Go to definition</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>Edit value</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>Copy value</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>Copy name and value</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>Copy path</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>Copy bytes</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>Copy offset</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>Copy subtree as JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>Add to bookmarks</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>Add ranges to multi-selection</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>Open section in new tab</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>Apply template from here...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>Break when reading here</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>Switch fixed / follow</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>Convert to fixed</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>Application settings</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>Export...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>Run again</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>Remove application</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>Value</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>OK</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>This pattern has only a read conversion, so you are editing the raw value.</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>Enter a number</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>True</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>Fill the rest with zeros</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>Local time</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>Time zone</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>Enter a value from 0 to {1} ({0} bits).</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>The value is out of range for the type.</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>The text is longer than the field ({0} bytes).</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>The write conversion failed: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>The value cannot be read.</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>Patterns inside a section cannot be edited.</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>This pattern is read-only.</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>Computed values cannot be edited.</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>Error nodes cannot be edited.</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>This node has no value to edit.</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>Edit template value</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>Apply template</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Apply Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>Search templates</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>Name, description, extension or MIME type</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>Templates</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>Start offset</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>Enter an offset inside the document.</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>Default endianness</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>Document setting</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>Document setting (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>Document setting (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>Little endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>Big endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>Kind</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>Fixed</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>Follow cursor</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>Type (follow)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>License: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>Matching templates</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} — {1} (score {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>magic</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>extension</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>No template matches this document.</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>This file looks like {0}. Apply the template "{0}"?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(uses scripts)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>Apply</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>Other candidates...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>Don't show for this format</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>An error occurred while applying the template "{0}".</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>Export structure results</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>Target</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>The whole application</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>The selected subtree ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>Maximum array elements</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>Maximum depth</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>Unlimited</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>Include hidden patterns</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>Write offsets as hexadecimal strings</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>Save...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>Exporting structure results</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>{0} nodes</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>Exported to {0}.</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>Could not export to {0}: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>There is not enough space on the disk.</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>Clear</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>Clear</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>Template output</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>Go to source</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>Go to data</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>Help for {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>Try run</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>Target document</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>Target document</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>Start debugging / continue</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>Step over</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>Step into</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>Step out</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>Evaluate in order while debugging</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>Format document</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>Toggle comment</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>Template source</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>Completions</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>Variables</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>Watch</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>Call stack</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>Breakpoints</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>Variables</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>Watch</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>Call stack</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>Breakpoints</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>Add watch expression</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>Add</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>Expression (e.g. c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>Problems</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>Reference at line {0}, column {1}</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>New template</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>No template editor is open.</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>Not debugging.</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>Open a document to run the template on.</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>Could not open the template {0}: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>Could not save the template: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>Standard templates cannot be saved directly. Use Duplicate and edit to save a copy in your template folder.</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>Duplicate and edit</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>Fix the syntax errors before debugging.</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>Lazy evaluation is off while debugging. Large arrays may take a long time.</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Data breakpoint</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>The debugger stops when a pattern containing {0} is created.</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>Could not convert {0} to HXT.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Evaluated: {0} patterns (stopped at the {1} limit; showing partial results)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>step</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>pattern</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>memory</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>time</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Go to line</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Line number (1-{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>No code editor (template or script) is shown.</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>This editor does not support this command.</value></data>
 </root>

@@ -1,0 +1,279 @@
+{
+  "name": "WAV 音声",
+  "type": "application",
+  "offset": 0,
+  "size": 106,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "RiffHeader",
+      "offset": 0,
+      "size": 12,
+      "display": "RiffHeader (3)",
+      "children": [
+        {
+          "name": "riff",
+          "path": "header.riff",
+          "type": "char[4]",
+          "offset": 0,
+          "size": 4,
+          "value": "RIFF",
+          "display": "RIFF"
+        },
+        {
+          "name": "size",
+          "path": "header.size",
+          "type": "u32",
+          "offset": 4,
+          "size": 4,
+          "value": 98,
+          "display": "98",
+          "comment": "この欄の後ろの大きさ"
+        },
+        {
+          "name": "form",
+          "path": "header.form",
+          "type": "char[4]",
+          "offset": 8,
+          "size": 4,
+          "value": "WAVE",
+          "display": "WAVE"
+        }
+      ]
+    },
+    {
+      "name": "chunks",
+      "path": "chunks",
+      "type": "Chunk[3]",
+      "offset": 12,
+      "size": 94,
+      "display": "[3]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "chunks[0]",
+          "type": "Chunk",
+          "offset": 12,
+          "size": 24,
+          "display": "Chunk (3)",
+          "children": [
+            {
+              "name": "id",
+              "path": "chunks[0].id",
+              "type": "char[4]",
+              "offset": 12,
+              "size": 4,
+              "value": "fmt ",
+              "display": "fmt "
+            },
+            {
+              "name": "size",
+              "path": "chunks[0].size",
+              "type": "u32",
+              "offset": 16,
+              "size": 4,
+              "value": 16,
+              "display": "16"
+            },
+            {
+              "name": "format",
+              "path": "chunks[0].format",
+              "type": "Format",
+              "offset": 20,
+              "size": 16,
+              "display": "Format (6)",
+              "children": [
+                {
+                  "name": "format_tag",
+                  "path": "chunks[0].format.format_tag",
+                  "type": "WaveFormat",
+                  "offset": 20,
+                  "size": 2,
+                  "value": 1,
+                  "display": "Pcm (0x1)"
+                },
+                {
+                  "name": "channels",
+                  "path": "chunks[0].format.channels",
+                  "type": "u16",
+                  "offset": 22,
+                  "size": 2,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "samples_per_second",
+                  "path": "chunks[0].format.samples_per_second",
+                  "type": "u32",
+                  "offset": 24,
+                  "size": 4,
+                  "value": 8000,
+                  "display": "8000"
+                },
+                {
+                  "name": "average_bytes_per_second",
+                  "path": "chunks[0].format.average_bytes_per_second",
+                  "type": "u32",
+                  "offset": 28,
+                  "size": 4,
+                  "value": 16000,
+                  "display": "16000"
+                },
+                {
+                  "name": "block_align",
+                  "path": "chunks[0].format.block_align",
+                  "type": "u16",
+                  "offset": 32,
+                  "size": 2,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "bits_per_sample",
+                  "path": "chunks[0].format.bits_per_sample",
+                  "type": "u16",
+                  "offset": 34,
+                  "size": 2,
+                  "value": 16,
+                  "display": "16"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "chunks[1]",
+          "type": "Chunk",
+          "offset": 36,
+          "size": 40,
+          "display": "Chunk (3)",
+          "children": [
+            {
+              "name": "id",
+              "path": "chunks[1].id",
+              "type": "char[4]",
+              "offset": 36,
+              "size": 4,
+              "value": "data",
+              "display": "data"
+            },
+            {
+              "name": "size",
+              "path": "chunks[1].size",
+              "type": "u32",
+              "offset": 40,
+              "size": 4,
+              "value": 32,
+              "display": "32"
+            },
+            {
+              "name": "data",
+              "path": "chunks[1].data",
+              "type": "u8[32]",
+              "offset": 44,
+              "size": 32,
+              "value": "0000D007A00F7017401F1027E02EB036803E5046204EF055C05D9065606D3075",
+              "display": "00 00 D0 07 A0 0F 70 17 40 1F 10 27 E0 2E B0 36 …"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "chunks[2]",
+          "type": "Chunk",
+          "offset": 76,
+          "size": 30,
+          "display": "Chunk (3)",
+          "children": [
+            {
+              "name": "id",
+              "path": "chunks[2].id",
+              "type": "char[4]",
+              "offset": 76,
+              "size": 4,
+              "value": "LIST",
+              "display": "LIST"
+            },
+            {
+              "name": "size",
+              "path": "chunks[2].size",
+              "type": "u32",
+              "offset": 80,
+              "size": 4,
+              "value": 22,
+              "display": "22"
+            },
+            {
+              "name": "list",
+              "path": "chunks[2].list",
+              "type": "InfoList",
+              "offset": 84,
+              "size": 22,
+              "display": "InfoList (2)",
+              "children": [
+                {
+                  "name": "list_type",
+                  "path": "chunks[2].list.list_type",
+                  "type": "char[4]",
+                  "offset": 84,
+                  "size": 4,
+                  "value": "INFO",
+                  "display": "INFO"
+                },
+                {
+                  "name": "entries",
+                  "path": "chunks[2].list.entries",
+                  "type": "InfoEntry[1]",
+                  "offset": 88,
+                  "size": 18,
+                  "display": "[1]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "chunks[2].list.entries[0]",
+                      "type": "InfoEntry",
+                      "offset": 88,
+                      "size": 18,
+                      "display": "InfoEntry (3)",
+                      "children": [
+                        {
+                          "name": "id",
+                          "path": "chunks[2].list.entries[0].id",
+                          "type": "char[4]",
+                          "offset": 88,
+                          "size": 4,
+                          "value": "ISFT",
+                          "display": "ISFT"
+                        },
+                        {
+                          "name": "size",
+                          "path": "chunks[2].list.entries[0].size",
+                          "type": "u32",
+                          "offset": 92,
+                          "size": 4,
+                          "value": 10,
+                          "display": "10"
+                        },
+                        {
+                          "name": "text",
+                          "path": "chunks[2].list.entries[0].text",
+                          "type": "char[10]",
+                          "offset": 96,
+                          "size": 10,
+                          "value": "HexEditor",
+                          "display": "HexEditor"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -688,6 +688,19 @@ public sealed partial class MainWindow
             Brush mark = p.Annotation.Rgb is { } rgb && !hc ? AnnotationBrushes.Mark(BookmarkColor.Custom(rgb), view, false)
                 : AnnotationBrushes.Get($"Annotation{name}Brush", view, hc);
             string tag = $"annotation:{origin}:{p.Annotation.Label}";
+            if (p.Annotation.Tag is Templates.TemplatePaintTag paint)
+            {
+                // テンプレートの色分け (TPL-23 の仕様 1〜4): 設定の不透明度で重ねた色。ハイコントラストでは塗らずに境目の線をシステム色で描く。
+                yield return hc || style == AnnotationStyle.Border
+                    ? new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null,
+                        hc ? Templates.TemplateBrushes.Line("TemplateBoundaryBrush", view, true) : Templates.TemplateBrushes.Swatch(paint.Color, view), null, tag)
+                    : style == AnnotationStyle.Underline
+                    ? new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer, null, Templates.TemplateBrushes.Swatch(paint.Color, view), null, tag, Underline: true)
+                    : new HexHighlight(p.Annotation.Start, p.Annotation.Length, layer,
+                        Templates.TemplateBrushes.Background(paint.Color, view, Templates.TemplateService.Opacity), null, null, tag);
+                continue;
+            }
+
             yield return style switch
             {
                 // ハイコントラストでは背景を塗らず、システム色の枠線で示す。

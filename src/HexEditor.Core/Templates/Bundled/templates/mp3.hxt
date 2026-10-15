@@ -1,0 +1,155 @@
+// HexEditor 標準テンプレート (TPL-34): MP3 音声 (ID3v2、フレーム、ID3v1)
+// ライセンス: MIT。
+// 先頭の ID3v2 タグ、MPEG オーディオのフレームのヘッダ (長さをたどる。同期が外れたところで止める)、末尾の ID3v1 を置く。フレームの中身は読まない。
+#pragma name "MP3 audio"
+#pragma name.ja "MP3 音声"
+#pragma description "MP3 / MPEG audio: ID3v2 tag with frames, MPEG audio frame headers (bitrate, sampling rate, channel mode) and the ID3v1 tag."
+#pragma description.ja "MP3 / MPEG オーディオ: フレームを持つ ID3v2 タグ、MPEG オーディオのフレームヘッダ (ビットレート、サンプリング周波数、チャンネルモード)、ID3v1 タグ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "49 44 33"
+#pragma magic 0 "FF FB"
+#pragma magic 0 "FF FA"
+#pragma magic 0 "FF F3"
+#pragma magic 0 "FF F2"
+#pragma magic 0 "FF E3"
+#pragma magic 0 "FF E2"
+#pragma mime "audio/mpeg"
+#pragma extensions "mp3;mp2;mpga"
+#pragma endian big
+
+enum MpegVersion : u8 { Mpeg25 = 0, Reserved = 1, Mpeg2 = 2, Mpeg1 = 3 };
+enum Layer : u8 { Reserved = 0, Layer3 = 1, Layer2 = 2, Layer1 = 3 };
+enum ChannelMode : u8 { Stereo = 0, JointStereo = 1, DualChannel = 2, Mono = 3 };
+
+/// フレームヘッダ (4 バイト。上位ビットから)
+bitfield FrameHeader : u32 {
+    sync               : 11;
+    version            : 2;
+    layer              : 2;
+    protection_absent  : 1;
+    bitrate_index      : 4;
+    sampling_rate_index : 2;
+    padding_bit        : 1;
+    private_bit        : 1;
+    channel_mode       : 2;
+    mode_extension     : 2;
+    copyright          : 1;
+    original           : 1;
+    emphasis           : 2;
+} [[bit_order(msb_first)]];
+
+/// ビットレート (kbps)。0 は自由形式または不正。
+fn bitrate_kbps(u32 version, u32 layer, u32 index) -> u32 {
+    if (index == 0 || index >= 15) {
+        return 0;
+    }
+    local string table = "";
+    if (version == 3) {
+        if (layer == 3) {
+            table = "0,32,64,96,128,160,192,224,256,288,320,352,384,416,448";
+        } else if (layer == 2) {
+            table = "0,32,48,56,64,80,96,112,128,160,192,224,256,320,384";
+        } else {
+            table = "0,32,40,48,56,64,80,96,112,128,160,192,224,256,320";
+        }
+    } else {
+        if (layer == 3) {
+            table = "0,32,48,56,64,80,96,112,128,144,160,176,192,224,256";
+        } else {
+            table = "0,8,16,24,32,40,48,56,64,80,96,112,128,144,160";
+        }
+    }
+    return std::string::parse_int(std::string::split(table, ",")[index], 10);
+}
+
+/// サンプリング周波数 (Hz)
+fn sampling_rate(u32 version, u32 index) -> u32 {
+    if (index >= 3) {
+        return 0;
+    }
+    local string table = version == 3 ? "44100,48000,32000" : (version == 2 ? "22050,24000,16000" : "11025,12000,8000");
+    return std::string::parse_int(std::string::split(table, ",")[index], 10);
+}
+
+/// フレームの大きさ (バイト)
+fn frame_size(u32 version, u32 layer, u32 bitrate_index, u32 rate_index, u32 padding) -> u32 {
+    local u32 bitrate = bitrate_kbps(version, layer, bitrate_index) * 1000;
+    local u32 rate = sampling_rate(version, rate_index);
+    if (bitrate == 0 || rate == 0) {
+        return 4;
+    }
+    if (layer == 3) {
+        return (12 * bitrate / rate + padding) * 4;
+    }
+    if (layer == 1 && version != 3) {
+        return 72 * bitrate / rate + padding;
+    }
+    return 144 * bitrate / rate + padding;
+}
+
+fn syncsafe(u32 a, u32 b, u32 c, u32 d) -> u32 {
+    return (a << 21) | (b << 14) | (c << 7) | d;
+}
+
+/// ID3v2 のフレーム。版 2.4 ではサイズが同期安全な整数、2.3 では通常の整数。
+struct Id3Frame(u8 major) {
+    char id[4] [[color("accent1")]];
+    u8   size_bytes[4];
+    local u32 size = major >= 4 ? syncsafe(size_bytes[0], size_bytes[1], size_bytes[2], size_bytes[3])
+                                : (size_bytes[0] << 24) | (size_bytes[1] << 16) | (size_bytes[2] << 8) | size_bytes[3] [[show]];
+    u16  flags [[format("hex")]];
+    if (id[0] == 'T' && size >= 1) {
+        u8   text_encoding;
+        char text[size - 1] [[encoding("utf-8")]];
+    } else {
+        u8   data[size] [[lazy]];
+    }
+};
+
+struct Id3v2 {
+    char id[3] [[expect(id == "ID3", "ID3 ではありません")]];
+    u8   major_version;
+    u8   revision;
+    u8   flags [[format("hex")]];
+    u8   size_bytes[4];
+    local u32 size = syncsafe(size_bytes[0], size_bytes[1], size_bytes[2], size_bytes[3]) [[show]];
+    local u64 end = addressof(size_bytes) + 4 + size;
+    Id3Frame(major_version) frames[while($ + 10 <= end && std::mem::read_u8($, big) != 0)];
+    if ($ < end) {
+        padding[end - $];
+    }
+};
+
+struct Frame {
+    FrameHeader header;
+    local u32 length = frame_size(header.version, header.layer, header.bitrate_index, header.sampling_rate_index, header.padding_bit) [[show]];
+    local u32 bitrate = bitrate_kbps(header.version, header.layer, header.bitrate_index) [[show]];
+    local u32 rate = sampling_rate(header.version, header.sampling_rate_index) [[show]];
+    u8 data[length - 4] [[lazy]];
+} [[size(length)]];
+
+struct Id3v1 {
+    char tag[3] [[expect(tag == "TAG", "TAG ではありません")]];
+    char title[30] [[encoding("latin1")]];
+    char artist[30] [[encoding("latin1")]];
+    char album[30] [[encoding("latin1")]];
+    char year[4];
+    char comment[30] [[encoding("latin1")]];
+    u8   genre;
+};
+
+local u64 size = std::core::size();
+local bool has_v1 = size >= 128 && std::mem::compare(size - 128, x"54 41 47");
+local u64 audio_end = has_v1 ? size - 128 : size;
+
+if (std::mem::compare(0, x"49 44 33")) {
+    Id3v2 id3v2;
+}
+
+Frame frames[while($ + 4 <= audio_end && std::mem::read_u8($, big) == 0xFF && (std::mem::read_u8($ + 1, big) & 0xE0) == 0xE0)];
+
+if (has_v1) {
+    Id3v1 id3v1 @ size - 128;
+}

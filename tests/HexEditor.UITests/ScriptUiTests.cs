@@ -156,7 +156,7 @@ public sealed class ScriptUiTests
         await app.InvokeDialogButtonAsync("Cancel");
 
         // 2. F10 で、アプリ内ではステップ実行できない旨がステータスバーに出る。
-        await app.SendAsync("execute", new JsonObject { ["id"] = "scripting.editor.stepOver" });
+        await app.SendAsync("execute", new JsonObject { ["id"] = "codeEditor.stepOver" });
         await app.WaitUntilAsync(async () => (await UiAsync(app, "status"))["text"]!.GetValue<string>().Contains("cannot be stepped", StringComparison.OrdinalIgnoreCase),
             UiTest.Scaled(TimeSpan.FromSeconds(10)), "the status message");
 

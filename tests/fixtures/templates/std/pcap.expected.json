@@ -1,0 +1,203 @@
+{
+  "name": "PCAP パケットキャプチャ",
+  "type": "application",
+  "offset": 0,
+  "size": 96,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "GlobalHeader",
+      "offset": 0,
+      "size": 24,
+      "display": "GlobalHeader (7)",
+      "children": [
+        {
+          "name": "magic",
+          "path": "header.magic",
+          "type": "u32",
+          "offset": 0,
+          "size": 4,
+          "value": 2712847316,
+          "display": "0xA1B2C3D4"
+        },
+        {
+          "name": "version_major",
+          "path": "header.version_major",
+          "type": "u16",
+          "offset": 4,
+          "size": 2,
+          "value": 2,
+          "display": "2"
+        },
+        {
+          "name": "version_minor",
+          "path": "header.version_minor",
+          "type": "u16",
+          "offset": 6,
+          "size": 2,
+          "value": 4,
+          "display": "4"
+        },
+        {
+          "name": "thiszone",
+          "path": "header.thiszone",
+          "type": "s32",
+          "offset": 8,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "sigfigs",
+          "path": "header.sigfigs",
+          "type": "u32",
+          "offset": 12,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "snaplen",
+          "path": "header.snaplen",
+          "type": "u32",
+          "offset": 16,
+          "size": 4,
+          "value": 65535,
+          "display": "65535"
+        },
+        {
+          "name": "network",
+          "path": "header.network",
+          "type": "LinkType",
+          "offset": 20,
+          "size": 4,
+          "value": 1,
+          "display": "Ethernet (0x1)"
+        }
+      ]
+    },
+    {
+      "name": "packets",
+      "path": "packets",
+      "type": "PacketRecord[2]",
+      "offset": 24,
+      "size": 72,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "packets[0]",
+          "type": "PacketRecord",
+          "offset": 24,
+          "size": 36,
+          "display": "PacketRecord (5)",
+          "children": [
+            {
+              "name": "timestamp_seconds",
+              "path": "packets[0].timestamp_seconds",
+              "type": "u32",
+              "offset": 24,
+              "size": 4,
+              "value": 1593835520,
+              "display": "1593835520"
+            },
+            {
+              "name": "timestamp_fraction",
+              "path": "packets[0].timestamp_fraction",
+              "type": "u32",
+              "offset": 28,
+              "size": 4,
+              "value": 123456,
+              "display": "123456",
+              "comment": "マイクロ秒 (マジックがナノ秒形式ならナノ秒)"
+            },
+            {
+              "name": "captured_length",
+              "path": "packets[0].captured_length",
+              "type": "u32",
+              "offset": 32,
+              "size": 4,
+              "value": 20,
+              "display": "20"
+            },
+            {
+              "name": "original_length",
+              "path": "packets[0].original_length",
+              "type": "u32",
+              "offset": 36,
+              "size": 4,
+              "value": 60,
+              "display": "60"
+            },
+            {
+              "name": "data",
+              "path": "packets[0].data",
+              "type": "u8[20]",
+              "offset": 40,
+              "size": 20,
+              "value": "FFFFFFFFFFFF0011223344550800450000140000",
+              "display": "FF FF FF FF FF FF 00 11 22 33 44 55 08 00 45 00 …"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "packets[1]",
+          "type": "PacketRecord",
+          "offset": 60,
+          "size": 36,
+          "display": "PacketRecord (5)",
+          "children": [
+            {
+              "name": "timestamp_seconds",
+              "path": "packets[1].timestamp_seconds",
+              "type": "u32",
+              "offset": 60,
+              "size": 4,
+              "value": 1593835521,
+              "display": "1593835521"
+            },
+            {
+              "name": "timestamp_fraction",
+              "path": "packets[1].timestamp_fraction",
+              "type": "u32",
+              "offset": 64,
+              "size": 4,
+              "value": 123456,
+              "display": "123456",
+              "comment": "マイクロ秒 (マジックがナノ秒形式ならナノ秒)"
+            },
+            {
+              "name": "captured_length",
+              "path": "packets[1].captured_length",
+              "type": "u32",
+              "offset": 68,
+              "size": 4,
+              "value": 20,
+              "display": "20"
+            },
+            {
+              "name": "original_length",
+              "path": "packets[1].original_length",
+              "type": "u32",
+              "offset": 72,
+              "size": 4,
+              "value": 60,
+              "display": "60"
+            },
+            {
+              "name": "data",
+              "path": "packets[1].data",
+              "type": "u8[20]",
+              "offset": 76,
+              "size": 20,
+              "value": "FFFFFFFFFFFF0011223344550800450000140000",
+              "display": "FF FF FF FF FF FF 00 11 22 33 44 55 08 00 45 00 …"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

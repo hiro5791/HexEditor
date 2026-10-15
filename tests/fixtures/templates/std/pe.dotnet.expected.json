@@ -1,0 +1,1816 @@
+{
+  "name": "PE 実行形式",
+  "type": "application",
+  "offset": 0,
+  "size": 64,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "DosHeader",
+      "offset": 0,
+      "size": 64,
+      "display": "DosHeader (19)",
+      "children": [
+        {
+          "name": "e_magic",
+          "path": "header.e_magic",
+          "type": "u16",
+          "offset": 0,
+          "size": 2,
+          "value": 23117,
+          "display": "MZ (0x5A4D)"
+        },
+        {
+          "name": "e_cblp",
+          "path": "header.e_cblp",
+          "type": "u16",
+          "offset": 2,
+          "size": 2,
+          "value": 144,
+          "display": "144"
+        },
+        {
+          "name": "e_cp",
+          "path": "header.e_cp",
+          "type": "u16",
+          "offset": 4,
+          "size": 2,
+          "value": 3,
+          "display": "3"
+        },
+        {
+          "name": "e_crlc",
+          "path": "header.e_crlc",
+          "type": "u16",
+          "offset": 6,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_cparhdr",
+          "path": "header.e_cparhdr",
+          "type": "u16",
+          "offset": 8,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_minalloc",
+          "path": "header.e_minalloc",
+          "type": "u16",
+          "offset": 10,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_maxalloc",
+          "path": "header.e_maxalloc",
+          "type": "u16",
+          "offset": 12,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_ss",
+          "path": "header.e_ss",
+          "type": "u16",
+          "offset": 14,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_sp",
+          "path": "header.e_sp",
+          "type": "u16",
+          "offset": 16,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_csum",
+          "path": "header.e_csum",
+          "type": "u16",
+          "offset": 18,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_ip",
+          "path": "header.e_ip",
+          "type": "u16",
+          "offset": 20,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_cs",
+          "path": "header.e_cs",
+          "type": "u16",
+          "offset": 22,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_lfarlc",
+          "path": "header.e_lfarlc",
+          "type": "u16",
+          "offset": 24,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_ovno",
+          "path": "header.e_ovno",
+          "type": "u16",
+          "offset": 26,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_res",
+          "path": "header.e_res",
+          "type": "u16[4]",
+          "offset": 28,
+          "size": 8,
+          "display": "[4]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "header.e_res[0]",
+              "type": "u16",
+              "offset": 28,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[1]",
+              "path": "header.e_res[1]",
+              "type": "u16",
+              "offset": 30,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[2]",
+              "path": "header.e_res[2]",
+              "type": "u16",
+              "offset": 32,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[3]",
+              "path": "header.e_res[3]",
+              "type": "u16",
+              "offset": 34,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "e_oemid",
+          "path": "header.e_oemid",
+          "type": "u16",
+          "offset": 36,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_oeminfo",
+          "path": "header.e_oeminfo",
+          "type": "u16",
+          "offset": 38,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "e_res2",
+          "path": "header.e_res2",
+          "type": "u16[10]",
+          "offset": 40,
+          "size": 20,
+          "display": "[10]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "header.e_res2[0]",
+              "type": "u16",
+              "offset": 40,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[1]",
+              "path": "header.e_res2[1]",
+              "type": "u16",
+              "offset": 42,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[2]",
+              "path": "header.e_res2[2]",
+              "type": "u16",
+              "offset": 44,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[3]",
+              "path": "header.e_res2[3]",
+              "type": "u16",
+              "offset": 46,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[4]",
+              "path": "header.e_res2[4]",
+              "type": "u16",
+              "offset": 48,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[5]",
+              "path": "header.e_res2[5]",
+              "type": "u16",
+              "offset": 50,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[6]",
+              "path": "header.e_res2[6]",
+              "type": "u16",
+              "offset": 52,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[7]",
+              "path": "header.e_res2[7]",
+              "type": "u16",
+              "offset": 54,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[8]",
+              "path": "header.e_res2[8]",
+              "type": "u16",
+              "offset": 56,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "[9]",
+              "path": "header.e_res2[9]",
+              "type": "u16",
+              "offset": 58,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "e_lfanew",
+          "path": "header.e_lfanew",
+          "type": "u32",
+          "offset": 60,
+          "size": 4,
+          "value": 128,
+          "display": "0x80"
+        }
+      ]
+    },
+    {
+      "name": "nt",
+      "path": "nt",
+      "type": "NtHeaders",
+      "offset": 128,
+      "size": 248,
+      "display": "NtHeaders (3)",
+      "children": [
+        {
+          "name": "Signature",
+          "path": "nt.Signature",
+          "type": "u32",
+          "offset": 128,
+          "size": 4,
+          "value": 17744,
+          "display": "PE\\0\\0 (0x00004550)"
+        },
+        {
+          "name": "FileHeader",
+          "path": "nt.FileHeader",
+          "type": "FileHeader",
+          "offset": 132,
+          "size": 20,
+          "display": "FileHeader (7)",
+          "children": [
+            {
+              "name": "Machine",
+              "path": "nt.FileHeader.Machine",
+              "type": "Machine",
+              "offset": 132,
+              "size": 2,
+              "value": 332,
+              "display": "I386 (0x14C)"
+            },
+            {
+              "name": "NumberOfSections",
+              "path": "nt.FileHeader.NumberOfSections",
+              "type": "u16",
+              "offset": 134,
+              "size": 2,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "TimeDateStamp",
+              "path": "nt.FileHeader.TimeDateStamp",
+              "type": "time32_t",
+              "offset": 136,
+              "size": 4,
+              "value": 1593835520,
+              "display": "7/4/2020 4:05:20 AM"
+            },
+            {
+              "name": "PointerToSymbolTable",
+              "path": "nt.FileHeader.PointerToSymbolTable",
+              "type": "u32",
+              "offset": 140,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "NumberOfSymbols",
+              "path": "nt.FileHeader.NumberOfSymbols",
+              "type": "u32",
+              "offset": 144,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "SizeOfOptionalHeader",
+              "path": "nt.FileHeader.SizeOfOptionalHeader",
+              "type": "u16",
+              "offset": 148,
+              "size": 2,
+              "value": 224,
+              "display": "224"
+            },
+            {
+              "name": "Characteristics",
+              "path": "nt.FileHeader.Characteristics",
+              "type": "Characteristics",
+              "offset": 150,
+              "size": 2,
+              "value": 8450,
+              "display": "Executable | Machine32Bit | Dll"
+            }
+          ]
+        },
+        {
+          "name": "OptionalHeader",
+          "path": "nt.OptionalHeader",
+          "type": "OptionalHeader",
+          "offset": 152,
+          "size": 224,
+          "display": "OptionalHeader (31)",
+          "children": [
+            {
+              "name": "Magic",
+              "path": "nt.OptionalHeader.Magic",
+              "type": "u16",
+              "offset": 152,
+              "size": 2,
+              "value": 267,
+              "display": "0x10B"
+            },
+            {
+              "name": "MajorLinkerVersion",
+              "path": "nt.OptionalHeader.MajorLinkerVersion",
+              "type": "u8",
+              "offset": 154,
+              "size": 1,
+              "value": 11,
+              "display": "11"
+            },
+            {
+              "name": "MinorLinkerVersion",
+              "path": "nt.OptionalHeader.MinorLinkerVersion",
+              "type": "u8",
+              "offset": 155,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "SizeOfCode",
+              "path": "nt.OptionalHeader.SizeOfCode",
+              "type": "u32",
+              "offset": 156,
+              "size": 4,
+              "value": 512,
+              "display": "512"
+            },
+            {
+              "name": "SizeOfInitializedData",
+              "path": "nt.OptionalHeader.SizeOfInitializedData",
+              "type": "u32",
+              "offset": 160,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "SizeOfUninitializedData",
+              "path": "nt.OptionalHeader.SizeOfUninitializedData",
+              "type": "u32",
+              "offset": 164,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "AddressOfEntryPoint",
+              "path": "nt.OptionalHeader.AddressOfEntryPoint",
+              "type": "u32",
+              "offset": 168,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "BaseOfCode",
+              "path": "nt.OptionalHeader.BaseOfCode",
+              "type": "u32",
+              "offset": 172,
+              "size": 4,
+              "value": 8192,
+              "display": "0x2000"
+            },
+            {
+              "name": "BaseOfData",
+              "path": "nt.OptionalHeader.BaseOfData",
+              "type": "u32",
+              "offset": 176,
+              "size": 4,
+              "value": 16384,
+              "display": "0x4000"
+            },
+            {
+              "name": "ImageBase",
+              "path": "nt.OptionalHeader.ImageBase",
+              "type": "u32",
+              "offset": 180,
+              "size": 4,
+              "value": 4194304,
+              "display": "0x400000"
+            },
+            {
+              "name": "SectionAlignment",
+              "path": "nt.OptionalHeader.SectionAlignment",
+              "type": "u32",
+              "offset": 184,
+              "size": 4,
+              "value": 8192,
+              "display": "8192"
+            },
+            {
+              "name": "FileAlignment",
+              "path": "nt.OptionalHeader.FileAlignment",
+              "type": "u32",
+              "offset": 188,
+              "size": 4,
+              "value": 512,
+              "display": "512"
+            },
+            {
+              "name": "MajorOperatingSystemVersion",
+              "path": "nt.OptionalHeader.MajorOperatingSystemVersion",
+              "type": "u16",
+              "offset": 192,
+              "size": 2,
+              "value": 4,
+              "display": "4"
+            },
+            {
+              "name": "MinorOperatingSystemVersion",
+              "path": "nt.OptionalHeader.MinorOperatingSystemVersion",
+              "type": "u16",
+              "offset": 194,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "MajorImageVersion",
+              "path": "nt.OptionalHeader.MajorImageVersion",
+              "type": "u16",
+              "offset": 196,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "MinorImageVersion",
+              "path": "nt.OptionalHeader.MinorImageVersion",
+              "type": "u16",
+              "offset": 198,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "MajorSubsystemVersion",
+              "path": "nt.OptionalHeader.MajorSubsystemVersion",
+              "type": "u16",
+              "offset": 200,
+              "size": 2,
+              "value": 4,
+              "display": "4"
+            },
+            {
+              "name": "MinorSubsystemVersion",
+              "path": "nt.OptionalHeader.MinorSubsystemVersion",
+              "type": "u16",
+              "offset": 202,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "Win32VersionValue",
+              "path": "nt.OptionalHeader.Win32VersionValue",
+              "type": "u32",
+              "offset": 204,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "SizeOfImage",
+              "path": "nt.OptionalHeader.SizeOfImage",
+              "type": "u32",
+              "offset": 208,
+              "size": 4,
+              "value": 16384,
+              "display": "16384"
+            },
+            {
+              "name": "SizeOfHeaders",
+              "path": "nt.OptionalHeader.SizeOfHeaders",
+              "type": "u32",
+              "offset": 212,
+              "size": 4,
+              "value": 512,
+              "display": "512"
+            },
+            {
+              "name": "CheckSum",
+              "path": "nt.OptionalHeader.CheckSum",
+              "type": "u32",
+              "offset": 216,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "Subsystem",
+              "path": "nt.OptionalHeader.Subsystem",
+              "type": "Subsystem",
+              "offset": 220,
+              "size": 2,
+              "value": 3,
+              "display": "WindowsCui (0x3)"
+            },
+            {
+              "name": "DllCharacteristics",
+              "path": "nt.OptionalHeader.DllCharacteristics",
+              "type": "u16",
+              "offset": 222,
+              "size": 2,
+              "value": 34112,
+              "display": "0x8540"
+            },
+            {
+              "name": "SizeOfStackReserve",
+              "path": "nt.OptionalHeader.SizeOfStackReserve",
+              "type": "u32",
+              "offset": 224,
+              "size": 4,
+              "value": 1048576,
+              "display": "1048576"
+            },
+            {
+              "name": "SizeOfStackCommit",
+              "path": "nt.OptionalHeader.SizeOfStackCommit",
+              "type": "u32",
+              "offset": 228,
+              "size": 4,
+              "value": 4096,
+              "display": "4096"
+            },
+            {
+              "name": "SizeOfHeapReserve",
+              "path": "nt.OptionalHeader.SizeOfHeapReserve",
+              "type": "u32",
+              "offset": 232,
+              "size": 4,
+              "value": 1048576,
+              "display": "1048576"
+            },
+            {
+              "name": "SizeOfHeapCommit",
+              "path": "nt.OptionalHeader.SizeOfHeapCommit",
+              "type": "u32",
+              "offset": 236,
+              "size": 4,
+              "value": 4096,
+              "display": "4096"
+            },
+            {
+              "name": "LoaderFlags",
+              "path": "nt.OptionalHeader.LoaderFlags",
+              "type": "u32",
+              "offset": 240,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "NumberOfRvaAndSizes",
+              "path": "nt.OptionalHeader.NumberOfRvaAndSizes",
+              "type": "u32",
+              "offset": 244,
+              "size": 4,
+              "value": 16,
+              "display": "16"
+            },
+            {
+              "name": "DataDirectories",
+              "path": "nt.OptionalHeader.DataDirectories",
+              "type": "DataDirectory[16]",
+              "offset": 248,
+              "size": 128,
+              "display": "[16]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "nt.OptionalHeader.DataDirectories[0]",
+                  "type": "DataDirectory",
+                  "offset": 248,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[0].VirtualAddress",
+                      "type": "u32",
+                      "offset": 248,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[0].Size",
+                      "type": "u32",
+                      "offset": 252,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[1]",
+                  "path": "nt.OptionalHeader.DataDirectories[1]",
+                  "type": "DataDirectory",
+                  "offset": 256,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[1].VirtualAddress",
+                      "type": "u32",
+                      "offset": 256,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[1].Size",
+                      "type": "u32",
+                      "offset": 260,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[2]",
+                  "path": "nt.OptionalHeader.DataDirectories[2]",
+                  "type": "DataDirectory",
+                  "offset": 264,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[2].VirtualAddress",
+                      "type": "u32",
+                      "offset": 264,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[2].Size",
+                      "type": "u32",
+                      "offset": 268,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[3]",
+                  "path": "nt.OptionalHeader.DataDirectories[3]",
+                  "type": "DataDirectory",
+                  "offset": 272,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[3].VirtualAddress",
+                      "type": "u32",
+                      "offset": 272,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[3].Size",
+                      "type": "u32",
+                      "offset": 276,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[4]",
+                  "path": "nt.OptionalHeader.DataDirectories[4]",
+                  "type": "DataDirectory",
+                  "offset": 280,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[4].VirtualAddress",
+                      "type": "u32",
+                      "offset": 280,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[4].Size",
+                      "type": "u32",
+                      "offset": 284,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[5]",
+                  "path": "nt.OptionalHeader.DataDirectories[5]",
+                  "type": "DataDirectory",
+                  "offset": 288,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[5].VirtualAddress",
+                      "type": "u32",
+                      "offset": 288,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[5].Size",
+                      "type": "u32",
+                      "offset": 292,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[6]",
+                  "path": "nt.OptionalHeader.DataDirectories[6]",
+                  "type": "DataDirectory",
+                  "offset": 296,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[6].VirtualAddress",
+                      "type": "u32",
+                      "offset": 296,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[6].Size",
+                      "type": "u32",
+                      "offset": 300,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[7]",
+                  "path": "nt.OptionalHeader.DataDirectories[7]",
+                  "type": "DataDirectory",
+                  "offset": 304,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[7].VirtualAddress",
+                      "type": "u32",
+                      "offset": 304,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[7].Size",
+                      "type": "u32",
+                      "offset": 308,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[8]",
+                  "path": "nt.OptionalHeader.DataDirectories[8]",
+                  "type": "DataDirectory",
+                  "offset": 312,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[8].VirtualAddress",
+                      "type": "u32",
+                      "offset": 312,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[8].Size",
+                      "type": "u32",
+                      "offset": 316,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[9]",
+                  "path": "nt.OptionalHeader.DataDirectories[9]",
+                  "type": "DataDirectory",
+                  "offset": 320,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[9].VirtualAddress",
+                      "type": "u32",
+                      "offset": 320,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[9].Size",
+                      "type": "u32",
+                      "offset": 324,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[10]",
+                  "path": "nt.OptionalHeader.DataDirectories[10]",
+                  "type": "DataDirectory",
+                  "offset": 328,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[10].VirtualAddress",
+                      "type": "u32",
+                      "offset": 328,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[10].Size",
+                      "type": "u32",
+                      "offset": 332,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[11]",
+                  "path": "nt.OptionalHeader.DataDirectories[11]",
+                  "type": "DataDirectory",
+                  "offset": 336,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[11].VirtualAddress",
+                      "type": "u32",
+                      "offset": 336,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[11].Size",
+                      "type": "u32",
+                      "offset": 340,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[12]",
+                  "path": "nt.OptionalHeader.DataDirectories[12]",
+                  "type": "DataDirectory",
+                  "offset": 344,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[12].VirtualAddress",
+                      "type": "u32",
+                      "offset": 344,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[12].Size",
+                      "type": "u32",
+                      "offset": 348,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[13]",
+                  "path": "nt.OptionalHeader.DataDirectories[13]",
+                  "type": "DataDirectory",
+                  "offset": 352,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[13].VirtualAddress",
+                      "type": "u32",
+                      "offset": 352,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[13].Size",
+                      "type": "u32",
+                      "offset": 356,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "[14]",
+                  "path": "nt.OptionalHeader.DataDirectories[14]",
+                  "type": "DataDirectory",
+                  "offset": 360,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[14].VirtualAddress",
+                      "type": "u32",
+                      "offset": 360,
+                      "size": 4,
+                      "value": 8192,
+                      "display": "0x2000"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[14].Size",
+                      "type": "u32",
+                      "offset": 364,
+                      "size": 4,
+                      "value": 72,
+                      "display": "72"
+                    }
+                  ]
+                },
+                {
+                  "name": "[15]",
+                  "path": "nt.OptionalHeader.DataDirectories[15]",
+                  "type": "DataDirectory",
+                  "offset": 368,
+                  "size": 8,
+                  "display": "DataDirectory (2)",
+                  "children": [
+                    {
+                      "name": "VirtualAddress",
+                      "path": "nt.OptionalHeader.DataDirectories[15].VirtualAddress",
+                      "type": "u32",
+                      "offset": 368,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0x0"
+                    },
+                    {
+                      "name": "Size",
+                      "path": "nt.OptionalHeader.DataDirectories[15].Size",
+                      "type": "u32",
+                      "offset": 372,
+                      "size": 4,
+                      "value": 0,
+                      "display": "0"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sections",
+      "path": "sections",
+      "type": "SectionHeader[1]",
+      "offset": 376,
+      "size": 40,
+      "display": "[1]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "sections[0]",
+          "type": "SectionHeader",
+          "offset": 376,
+          "size": 40,
+          "display": "SectionHeader (10)",
+          "children": [
+            {
+              "name": "Name",
+              "path": "sections[0].Name",
+              "type": "char[8]",
+              "offset": 376,
+              "size": 8,
+              "value": ".text",
+              "display": ".text"
+            },
+            {
+              "name": "VirtualSize",
+              "path": "sections[0].VirtualSize",
+              "type": "u32",
+              "offset": 384,
+              "size": 4,
+              "value": 1024,
+              "display": "1024"
+            },
+            {
+              "name": "VirtualAddress",
+              "path": "sections[0].VirtualAddress",
+              "type": "u32",
+              "offset": 388,
+              "size": 4,
+              "value": 8192,
+              "display": "0x2000"
+            },
+            {
+              "name": "SizeOfRawData",
+              "path": "sections[0].SizeOfRawData",
+              "type": "u32",
+              "offset": 392,
+              "size": 4,
+              "value": 1024,
+              "display": "1024"
+            },
+            {
+              "name": "PointerToRawData",
+              "path": "sections[0].PointerToRawData",
+              "type": "u32",
+              "offset": 396,
+              "size": 4,
+              "value": 512,
+              "display": "0x200"
+            },
+            {
+              "name": "PointerToRelocations",
+              "path": "sections[0].PointerToRelocations",
+              "type": "u32",
+              "offset": 400,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "PointerToLinenumbers",
+              "path": "sections[0].PointerToLinenumbers",
+              "type": "u32",
+              "offset": 404,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "NumberOfRelocations",
+              "path": "sections[0].NumberOfRelocations",
+              "type": "u16",
+              "offset": 408,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "NumberOfLinenumbers",
+              "path": "sections[0].NumberOfLinenumbers",
+              "type": "u16",
+              "offset": 410,
+              "size": 2,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "Characteristics",
+              "path": "sections[0].Characteristics",
+              "type": "SectionFlags",
+              "offset": 412,
+              "size": 4,
+              "value": 1610612768,
+              "display": "Code | Execute | Read"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cli",
+      "path": "cli",
+      "type": "Cor20Header",
+      "offset": 512,
+      "size": 72,
+      "display": "Cor20Header (12)",
+      "children": [
+        {
+          "name": "cb",
+          "path": "cli.cb",
+          "type": "u32",
+          "offset": 512,
+          "size": 4,
+          "value": 72,
+          "display": "72"
+        },
+        {
+          "name": "MajorRuntimeVersion",
+          "path": "cli.MajorRuntimeVersion",
+          "type": "u16",
+          "offset": 516,
+          "size": 2,
+          "value": 2,
+          "display": "2"
+        },
+        {
+          "name": "MinorRuntimeVersion",
+          "path": "cli.MinorRuntimeVersion",
+          "type": "u16",
+          "offset": 518,
+          "size": 2,
+          "value": 5,
+          "display": "5"
+        },
+        {
+          "name": "MetaData",
+          "path": "cli.MetaData",
+          "type": "DataDirectory",
+          "offset": 520,
+          "size": 8,
+          "display": "DataDirectory (2)",
+          "children": [
+            {
+              "name": "VirtualAddress",
+              "path": "cli.MetaData.VirtualAddress",
+              "type": "u32",
+              "offset": 520,
+              "size": 4,
+              "value": 8264,
+              "display": "0x2048"
+            },
+            {
+              "name": "Size",
+              "path": "cli.MetaData.Size",
+              "type": "u32",
+              "offset": 524,
+              "size": 4,
+              "value": 112,
+              "display": "112"
+            }
+          ]
+        },
+        {
+          "name": "Flags",
+          "path": "cli.Flags",
+          "type": "ComImageFlags",
+          "offset": 528,
+          "size": 4,
+          "value": 1,
+          "display": "ILOnly"
+        },
+        {
+          "name": "EntryPointToken",
+          "path": "cli.EntryPointToken",
+          "type": "u32",
+          "offset": 532,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "Resources",
+          "path": "cli.Resources",
+          "type": "DataDirectory",
+          "offset": 536,
+          "size": 8,
+          "display": "DataDirectory (2)",
+          "children": [
+            {
+              "name": "VirtualAddress",
+              "path": "cli.Resources.VirtualAddress",
+              "type": "u32",
+              "offset": 536,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "Size",
+              "path": "cli.Resources.Size",
+              "type": "u32",
+              "offset": 540,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "StrongNameSignature",
+          "path": "cli.StrongNameSignature",
+          "type": "DataDirectory",
+          "offset": 544,
+          "size": 8,
+          "display": "DataDirectory (2)",
+          "children": [
+            {
+              "name": "VirtualAddress",
+              "path": "cli.StrongNameSignature.VirtualAddress",
+              "type": "u32",
+              "offset": 544,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "Size",
+              "path": "cli.StrongNameSignature.Size",
+              "type": "u32",
+              "offset": 548,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "CodeManagerTable",
+          "path": "cli.CodeManagerTable",
+          "type": "DataDirectory",
+          "offset": 552,
+          "size": 8,
+          "display": "DataDirectory (2)",
+          "children": [
+            {
+              "name": "VirtualAddress",
+              "path": "cli.CodeManagerTable.VirtualAddress",
+              "type": "u32",
+              "offset": 552,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "Size",
+              "path": "cli.CodeManagerTable.Size",
+              "type": "u32",
+              "offset": 556,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "VTableFixups",
+          "path": "cli.VTableFixups",
+          "type": "DataDirectory",
+          "offset": 560,
+          "size": 8,
+          "display": "DataDirectory (2)",
+          "children": [
+            {
+              "name": "VirtualAddress",
+              "path": "cli.VTableFixups.VirtualAddress",
+              "type": "u32",
+              "offset": 560,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "Size",
+              "path": "cli.VTableFixups.Size",
+              "type": "u32",
+              "offset": 564,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "ExportAddressTableJumps",
+          "path": "cli.ExportAddressTableJumps",
+          "type": "DataDirectory",
+          "offset": 568,
+          "size": 8,
+          "display": "DataDirectory (2)",
+          "children": [
+            {
+              "name": "VirtualAddress",
+              "path": "cli.ExportAddressTableJumps.VirtualAddress",
+              "type": "u32",
+              "offset": 568,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "Size",
+              "path": "cli.ExportAddressTableJumps.Size",
+              "type": "u32",
+              "offset": 572,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "ManagedNativeHeader",
+          "path": "cli.ManagedNativeHeader",
+          "type": "DataDirectory",
+          "offset": 576,
+          "size": 8,
+          "display": "DataDirectory (2)",
+          "children": [
+            {
+              "name": "VirtualAddress",
+              "path": "cli.ManagedNativeHeader.VirtualAddress",
+              "type": "u32",
+              "offset": 576,
+              "size": 4,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "Size",
+              "path": "cli.ManagedNativeHeader.Size",
+              "type": "u32",
+              "offset": 580,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "metadata",
+      "path": "metadata",
+      "type": "MetadataRoot",
+      "offset": 584,
+      "size": 80,
+      "display": "MetadataRoot (9)",
+      "children": [
+        {
+          "name": "Signature",
+          "path": "metadata.Signature",
+          "type": "u32",
+          "offset": 584,
+          "size": 4,
+          "value": 1112167234,
+          "display": "0x424A5342"
+        },
+        {
+          "name": "MajorVersion",
+          "path": "metadata.MajorVersion",
+          "type": "u16",
+          "offset": 588,
+          "size": 2,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "MinorVersion",
+          "path": "metadata.MinorVersion",
+          "type": "u16",
+          "offset": 590,
+          "size": 2,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "Reserved",
+          "path": "metadata.Reserved",
+          "type": "u32",
+          "offset": 592,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "Length",
+          "path": "metadata.Length",
+          "type": "u32",
+          "offset": 596,
+          "size": 4,
+          "value": 12,
+          "display": "12"
+        },
+        {
+          "name": "Version",
+          "path": "metadata.Version",
+          "type": "char[12]",
+          "offset": 600,
+          "size": 12,
+          "value": "v4.0.30319",
+          "display": "v4.0.30319"
+        },
+        {
+          "name": "Flags",
+          "path": "metadata.Flags",
+          "type": "u16",
+          "offset": 612,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "Streams",
+          "path": "metadata.Streams",
+          "type": "u16",
+          "offset": 614,
+          "size": 2,
+          "value": 3,
+          "display": "3"
+        },
+        {
+          "name": "StreamHeaders",
+          "path": "metadata.StreamHeaders",
+          "type": "MetadataStreamHeader[3]",
+          "offset": 616,
+          "size": 48,
+          "display": "[3]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "metadata.StreamHeaders[0]",
+              "type": "MetadataStreamHeader",
+              "offset": 616,
+              "size": 12,
+              "display": "MetadataStreamHeader (5)",
+              "children": [
+                {
+                  "name": "Offset",
+                  "path": "metadata.StreamHeaders[0].Offset",
+                  "type": "u32",
+                  "offset": 616,
+                  "size": 4,
+                  "value": 96,
+                  "display": "0x60"
+                },
+                {
+                  "name": "Size",
+                  "path": "metadata.StreamHeaders[0].Size",
+                  "type": "u32",
+                  "offset": 620,
+                  "size": 4,
+                  "value": 16,
+                  "display": "16"
+                },
+                {
+                  "name": "Name",
+                  "path": "metadata.StreamHeaders[0].Name",
+                  "type": "string",
+                  "offset": 624,
+                  "size": 3,
+                  "value": "#~",
+                  "display": "#~"
+                },
+                {
+                  "name": "padding",
+                  "path": "metadata.StreamHeaders[0].padding",
+                  "type": "padding[1]",
+                  "offset": 627,
+                  "size": 1,
+                  "display": "(padding 1 bytes)",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "metadata.StreamHeaders[0].padding[0]",
+                      "type": "padding",
+                      "offset": 627,
+                      "size": 1,
+                      "display": "(padding 1 bytes)"
+                    }
+                  ]
+                },
+                {
+                  "name": "Data",
+                  "path": "metadata.StreamHeaders[0].Data",
+                  "type": "u8[16]",
+                  "offset": 680,
+                  "size": 16,
+                  "value": "00000000000000000000000000000000",
+                  "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "metadata.StreamHeaders[1]",
+              "type": "MetadataStreamHeader",
+              "offset": 628,
+              "size": 20,
+              "display": "MetadataStreamHeader (5)",
+              "children": [
+                {
+                  "name": "Offset",
+                  "path": "metadata.StreamHeaders[1].Offset",
+                  "type": "u32",
+                  "offset": 628,
+                  "size": 4,
+                  "value": 112,
+                  "display": "0x70"
+                },
+                {
+                  "name": "Size",
+                  "path": "metadata.StreamHeaders[1].Size",
+                  "type": "u32",
+                  "offset": 632,
+                  "size": 4,
+                  "value": 16,
+                  "display": "16"
+                },
+                {
+                  "name": "Name",
+                  "path": "metadata.StreamHeaders[1].Name",
+                  "type": "string",
+                  "offset": 636,
+                  "size": 9,
+                  "value": "#Strings",
+                  "display": "#Strings"
+                },
+                {
+                  "name": "padding",
+                  "path": "metadata.StreamHeaders[1].padding",
+                  "type": "padding[3]",
+                  "offset": 645,
+                  "size": 3,
+                  "display": "(padding 3 bytes)",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "metadata.StreamHeaders[1].padding[0]",
+                      "type": "padding",
+                      "offset": 645,
+                      "size": 1,
+                      "display": "(padding 1 bytes)"
+                    },
+                    {
+                      "name": "[1]",
+                      "path": "metadata.StreamHeaders[1].padding[1]",
+                      "type": "padding",
+                      "offset": 646,
+                      "size": 1,
+                      "display": "(padding 1 bytes)"
+                    },
+                    {
+                      "name": "[2]",
+                      "path": "metadata.StreamHeaders[1].padding[2]",
+                      "type": "padding",
+                      "offset": 647,
+                      "size": 1,
+                      "display": "(padding 1 bytes)"
+                    }
+                  ]
+                },
+                {
+                  "name": "Data",
+                  "path": "metadata.StreamHeaders[1].Data",
+                  "type": "u8[16]",
+                  "offset": 696,
+                  "size": 16,
+                  "value": "003C4D6F64756C653E004D61696E0000",
+                  "display": "00 3C 4D 6F 64 75 6C 65 3E 00 4D 61 69 6E 00 00"
+                }
+              ]
+            },
+            {
+              "name": "[2]",
+              "path": "metadata.StreamHeaders[2]",
+              "type": "MetadataStreamHeader",
+              "offset": 648,
+              "size": 16,
+              "display": "MetadataStreamHeader (5)",
+              "children": [
+                {
+                  "name": "Offset",
+                  "path": "metadata.StreamHeaders[2].Offset",
+                  "type": "u32",
+                  "offset": 648,
+                  "size": 4,
+                  "value": 128,
+                  "display": "0x80"
+                },
+                {
+                  "name": "Size",
+                  "path": "metadata.StreamHeaders[2].Size",
+                  "type": "u32",
+                  "offset": 652,
+                  "size": 4,
+                  "value": 16,
+                  "display": "16"
+                },
+                {
+                  "name": "Name",
+                  "path": "metadata.StreamHeaders[2].Name",
+                  "type": "string",
+                  "offset": 656,
+                  "size": 6,
+                  "value": "#GUID",
+                  "display": "#GUID"
+                },
+                {
+                  "name": "padding",
+                  "path": "metadata.StreamHeaders[2].padding",
+                  "type": "padding[2]",
+                  "offset": 662,
+                  "size": 2,
+                  "display": "(padding 2 bytes)",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "metadata.StreamHeaders[2].padding[0]",
+                      "type": "padding",
+                      "offset": 662,
+                      "size": 1,
+                      "display": "(padding 1 bytes)"
+                    },
+                    {
+                      "name": "[1]",
+                      "path": "metadata.StreamHeaders[2].padding[1]",
+                      "type": "padding",
+                      "offset": 663,
+                      "size": 1,
+                      "display": "(padding 1 bytes)"
+                    }
+                  ]
+                },
+                {
+                  "name": "Data",
+                  "path": "metadata.StreamHeaders[2].Data",
+                  "type": "u8[16]",
+                  "offset": 712,
+                  "size": 16,
+                  "value": "00000000000000000000000000000000",
+                  "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

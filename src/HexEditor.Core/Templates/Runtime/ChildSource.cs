@@ -110,6 +110,9 @@ internal sealed class OnDemandChildren : ChildSource
     }
 
     public int CachedCount => _cache.Count;
+
+    /// <summary>作ってある (評価済みの) 要素 (添字の順。結果ツリーの絞り込み。TPL-21 の仕様 5)。</summary>
+    public IReadOnlyList<TemplateNode> Cached => [.. _cache.OrderBy(p => p.Key).Select(p => p.Value)];
 }
 
 /// <summary>順に評価した要素 (可変長の要素の配列、while / until の配列)。</summary>

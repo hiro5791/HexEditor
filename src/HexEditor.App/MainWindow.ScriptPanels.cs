@@ -95,12 +95,6 @@ public sealed partial class MainWindow : IScriptListHost, IScriptEditorHost
         Commands.Register("scripting.clearOutput", () => OutputVm.Clear());
         Commands.Register("scripting.debug", () => ActiveScriptEditor?.DebugRun(), EditorCommandState);
         Commands.Register("scripting.pause", () => ActiveScriptEditor?.PauseRun(), EditorCommandState);
-        Commands.Register("scripting.editor.run", () => ActiveScriptEditor?.RunOrContinue(), EditorCommandState);
-        Commands.Register("scripting.editor.stop", () => ActiveScriptEditor?.StopRun(), EditorCommandState);
-        Commands.Register("scripting.editor.toggleBreakpoint", () => ActiveScriptEditor?.ToggleBreakpoint(), EditorCommandState);
-        Commands.Register("scripting.editor.stepOver", () => ActiveScriptEditor?.StepOver(), EditorCommandState);
-        Commands.Register("scripting.editor.stepIn", () => ActiveScriptEditor?.StepIn(), EditorCommandState);
-        Commands.Register("scripting.editor.stepOut", () => ActiveScriptEditor?.StepOut(), EditorCommandState);
         RegisterMacroCommands();
         BuildSamplesMenu();
 
@@ -231,7 +225,7 @@ public sealed partial class MainWindow : IScriptListHost, IScriptEditorHost
         UpdateCommandStates();
     }
 
-    /// <summary>ページのタブを閉じる直前: エディタの後始末 (比較タブの後始末と同じ口。MainWindow.Compare.cs)。</summary>
+    /// <summary>ページのタブを閉じる直前: エディタの後始末 (CloseToolPage から)。</summary>
     private void OnScriptEditorClosing(string id)
     {
         if (_scriptEditors.Remove(id, out ScriptEditorPage? page))
@@ -241,17 +235,31 @@ public sealed partial class MainWindow : IScriptListHost, IScriptEditorHost
     }
 
     /// <summary>
-    /// スクリプトエディタのタブを閉じる要求: 未保存の変更があれば「保存する」「保存しない」「キャンセル」を尋ねる。
-    /// 閉じた (または閉じなくてよい) なら true。
+    /// コードエディタ (スクリプト・テンプレート) のタブを閉じる要求: 未保存の変更があれば「保存する」「保存しない」「キャンセル」を尋ねる。
+    /// 閉じた (または閉じなくてよい) なら true。ほかのページは常に true。
     /// </summary>
-    internal async Task<bool> ConfirmCloseScriptEditorAsync(string id)
+    internal async Task<bool> ConfirmCloseCodeEditorAsync(string id)
     {
-        if (!_scriptEditors.TryGetValue(id, out ScriptEditorPage? page) || !page.IsDirty)
+        string? path = null;
+        Func<Task<bool>>? save = null;
+        if (_scriptEditors.TryGetValue(id, out ScriptEditorPage? script) && script.IsDirty)
+        {
+            path = script.Path;
+            save = () => Task.FromResult(script.Save());
+        }
+        else if (_templateEditors.TryGetValue(id, out TemplateEditorPage? template) && template.IsDirty)
+        {
+            path = template.Path;
+            save = template.SaveAsync;
+        }
+
+        if (path is null || save is null)
         {
             return true;
         }
 
-        ContentDialog dialog = NewDialog(Path.GetFileName(page.Path), Loc.Format("ScriptEditor_UnsavedBody", Path.GetFileName(page.Path)));
+        string name = Path.GetFileName(path);
+        ContentDialog dialog = NewDialog(name, Loc.Format("ScriptEditor_UnsavedBody", name));
         dialog.PrimaryButtonText = Loc.Get("ScriptEditor_UnsavedSave");
         dialog.SecondaryButtonText = Loc.Get("ScriptEditor_UnsavedDiscard");
         dialog.CloseButtonText = Loc.Get("Common_Cancel");
@@ -260,7 +268,7 @@ public sealed partial class MainWindow : IScriptListHost, IScriptEditorHost
         ContentDialogResult result = await dialog.ShowQueuedAsync();
         return result switch
         {
-            ContentDialogResult.Primary => page.Save(),
+            ContentDialogResult.Primary => await save(),
             ContentDialogResult.Secondary => true,
             _ => false,
         };

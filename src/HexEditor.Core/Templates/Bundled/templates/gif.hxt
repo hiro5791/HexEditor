@@ -1,0 +1,105 @@
+// HexEditor 標準テンプレート (TPL-34): GIF 画像 (87a / 89a)
+// ライセンス: MIT。
+// ヘッダ、論理画面記述子、カラーテーブル、ブロック (拡張、画像) をトレーラ (3B) まで順に読む。LZW の画素データは中身を見ずにサブブロックの長さだけをたどる。
+#pragma name "GIF image"
+#pragma name.ja "GIF 画像"
+#pragma description "GIF image (87a / 89a): header, logical screen descriptor, color tables, extensions (graphic control, comment, application) and image blocks."
+#pragma description.ja "GIF 画像 (87a / 89a): ヘッダ、論理画面記述子、カラーテーブル、拡張 (グラフィックコントロール、コメント、アプリケーション)、画像ブロック。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "47 49 46 38 37 61"
+#pragma magic 0 "47 49 46 38 39 61"
+#pragma mime "image/gif"
+#pragma extensions "gif"
+#pragma endian little
+
+enum DisposalMethod : u8 { Unspecified = 0, DoNotDispose = 1, RestoreToBackground = 2, RestoreToPrevious = 3 };
+
+/// 論理画面記述子の詰め込み欄 (上位ビットから)
+bitfield ScreenFlags : u8 {
+    global_color_table : 1;
+    color_resolution   : 3;
+    sort               : 1;
+    table_size         : 3;
+} [[bit_order(msb_first)]];
+
+/// 画像記述子の詰め込み欄 (上位ビットから)
+bitfield ImageFlags : u8 {
+    local_color_table : 1;
+    interlace         : 1;
+    sort              : 1;
+    reserved          : 2;
+    table_size        : 3;
+} [[bit_order(msb_first)]];
+
+/// グラフィックコントロール拡張の詰め込み欄 (上位ビットから)
+bitfield GraphicControlFlags : u8 {
+    reserved          : 3;
+    disposal_method   : 3;
+    user_input        : 1;
+    transparent_color : 1;
+} [[bit_order(msb_first)]];
+
+struct Header {
+    char signature[3] [[expect(signature == "GIF", "GIF ではありません")]];
+    char version[3];
+};
+
+struct LogicalScreenDescriptor {
+    u16         width;
+    u16         height;
+    ScreenFlags packed;
+    u8          background_color_index;
+    u8          pixel_aspect_ratio;
+};
+
+/// サブブロック (長さ 1 バイト + データ)。長さ 0 で終わる。
+struct SubBlock {
+    u8 size;
+    u8 data[size] [[lazy]];
+};
+
+struct GraphicControl {
+    u8                  block_size;
+    GraphicControlFlags packed;
+    u16                 delay_time [[comment("1/100 秒")]];
+    u8                  transparent_color_index;
+    u8                  terminator;
+};
+
+struct Extension {
+    u8 label [[format("hex")]];
+    switch (label) {
+        case 0xF9: GraphicControl graphic_control;
+        default:   SubBlock blocks[until(last.size == 0)];
+    }
+};
+
+struct ImageDescriptor {
+    u16        left;
+    u16        top;
+    u16        width;
+    u16        height;
+    ImageFlags packed;
+    if (packed.local_color_table == 1) {
+        rgb8 local_color_table[1 << (packed.table_size + 1)];
+    }
+    u8         lzw_minimum_code_size;
+    SubBlock   data_blocks[until(last.size == 0)];
+};
+
+struct Block {
+    u8 introducer [[format("hex"), color("accent1")]];
+    switch (introducer) {
+        case 0x21: Extension extension;
+        case 0x2C: ImageDescriptor image;
+    }
+};
+
+Header header;
+LogicalScreenDescriptor screen;
+if (screen.packed.global_color_table == 1) {
+    rgb8 global_color_table[1 << (screen.packed.table_size + 1)];
+}
+Block blocks[until(last.introducer == 0x3B || std::eof())];

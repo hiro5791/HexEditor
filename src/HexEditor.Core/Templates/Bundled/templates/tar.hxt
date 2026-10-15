@@ -1,0 +1,73 @@
+// HexEditor 標準テンプレート (TPL-34): TAR アーカイブ (ustar)
+// ライセンス: MIT。
+// 512 バイトのヘッダとデータ (512 バイトに切り上げ) の並びを、終端の 0 のブロックまで読む。データの中身は読まない。
+// 数値は ASCII の 8 進数である (サイズや更新時刻は、8 進数を読んだ値を計算値として示す)。
+#pragma name "TAR archive"
+#pragma name.ja "TAR アーカイブ"
+#pragma description "TAR archive (ustar): 512-byte entry headers (name, mode, size, mtime, checksum, type, owner, prefix) and data blocks."
+#pragma description.ja "TAR アーカイブ (ustar): 512 バイトの項目ヘッダ (名前、モード、サイズ、更新時刻、チェックサム、種類、所有者、接頭辞) とデータのブロック。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 257 "75 73 74 61 72"
+#pragma mime "application/x-tar"
+#pragma extensions "tar"
+#pragma endian little
+
+/// 8 進数の ASCII 文字列 (空白と 0 で終わる) を整数にする。
+fn octal(string text) -> u64 {
+    local string t = std::string::trim(text);
+    if (std::string::length(t) == 0) {
+        return 0;
+    }
+    return std::string::parse_int(t, 8);
+}
+
+fn round_up_512(u64 n) -> u64 {
+    return (n + 511) / 512 * 512;
+}
+
+enum TypeFlag : u8 {
+    File = '0', FileOld = 0, HardLink = '1', SymbolicLink = '2', CharacterDevice = '3', BlockDevice = '4', Directory = '5', Fifo = '6',
+    Contiguous = '7', GlobalExtendedHeader = 'g', ExtendedHeader = 'x',
+};
+
+struct Header {
+    char     name[100] [[encoding("utf-8")]];
+    char     mode[8];
+    char     uid[8];
+    char     gid[8];
+    char     size[12];
+    char     mtime[12];
+    char     checksum[8];
+    TypeFlag typeflag;
+    char     linkname[100] [[encoding("utf-8")]];
+    char     magic[6];
+    char     version[2];
+    char     uname[32];
+    char     gname[32];
+    char     devmajor[8];
+    char     devminor[8];
+    char     prefix[155] [[encoding("utf-8")]];
+    padding[12];
+    local u64 size_value = octal(size) [[show]];
+    local u64 mtime_value = octal(mtime) [[show]];
+};
+
+/// 1 つの項目。名前が空のブロックは終端 (0 のブロック)。
+struct Entry {
+    Header header;
+    if (header.size_value > 0) {
+        u8 data[header.size_value] [[lazy]];
+        if (round_up_512(header.size_value) != header.size_value) {
+            padding[round_up_512(header.size_value) - header.size_value];
+        }
+    }
+};
+
+Entry entries[until(last.header.name == "" || std::eof())];
+
+// 終端の 0 のブロックの残り (通常は 2 つ目のブロックとパディング)
+if (std::core::size() > $) {
+    u8 end_of_archive[std::core::size() - $] [[lazy]];
+}

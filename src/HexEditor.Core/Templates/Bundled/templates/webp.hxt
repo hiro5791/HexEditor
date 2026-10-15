@@ -1,0 +1,98 @@
+// HexEditor 標準テンプレート (TPL-34): WebP 画像
+// ライセンス: MIT。
+// RIFF コンテナの WebP: VP8 (不可逆)、VP8L (可逆)、VP8X (拡張)、ANIM / ANMF (アニメーション)、ICCP、EXIF、XMP のチャンクを読む。
+// 画素のデータは読まない。
+#pragma name "WebP image"
+#pragma name.ja "WebP 画像"
+#pragma description "WebP image (RIFF container): VP8 / VP8L / VP8X chunks, animation chunks and metadata chunks (ICCP, EXIF, XMP)."
+#pragma description.ja "WebP 画像 (RIFF コンテナ): VP8 / VP8L / VP8X チャンク、アニメーションのチャンク、メタデータのチャンク (ICCP、EXIF、XMP)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic_all 0 "52 49 46 46"
+#pragma magic_all 8 "57 45 42 50"
+#pragma mime "image/webp"
+#pragma extensions "webp"
+#pragma endian little
+
+struct RiffHeader {
+    char riff[4] [[expect(riff == "RIFF", "RIFF ではありません")]];
+    u32  size [[comment("この欄の後ろの大きさ")]];
+    char form[4] [[expect(form == "WEBP", "WEBP ではありません")]];
+};
+
+/// VP8X (拡張ヘッダ)。詰め込み欄は上位ビットから。
+bitfield Vp8xFlags : u8 {
+    reserved1 : 2;
+    icc       : 1;
+    alpha     : 1;
+    exif      : 1;
+    xmp       : 1;
+    animation : 1;
+    reserved2 : 1;
+} [[bit_order(msb_first)]];
+
+struct Vp8x {
+    Vp8xFlags packed;
+    u24       reserved;
+    u24       canvas_width_minus_one;
+    u24       canvas_height_minus_one;
+    local u32 canvas_width = canvas_width_minus_one + 1 [[show]];
+    local u32 canvas_height = canvas_height_minus_one + 1 [[show]];
+};
+
+bitfield Vp8Scale : u16 {
+    size  : 14;
+    scale : 2;
+};
+
+/// VP8 (不可逆) のフレームヘッダ
+struct Vp8 {
+    u8        frame_tag[3] [[comment("キーフレーム、版、表示、最初のパーティションの大きさ")]];
+    u8        start_code[3] [[expect(start_code == x"9D 01 2A", "開始コードではありません")]];
+    Vp8Scale  width;
+    Vp8Scale  height;
+};
+
+/// VP8L (可逆) のヘッダ
+bitfield Vp8lSize : u32 {
+    width_minus_one  : 14;
+    height_minus_one : 14;
+    alpha_is_used    : 1;
+    version          : 3;
+};
+
+struct Vp8l {
+    u8        signature [[expect(signature == 0x2F, "VP8L のシグネチャではありません")]];
+    Vp8lSize  info;
+};
+
+struct Anim {
+    bgra8 background_color;
+    u16   loop_count;
+};
+
+struct Anmf {
+    u24 frame_x;
+    u24 frame_y;
+    u24 frame_width_minus_one;
+    u24 frame_height_minus_one;
+    u24 duration;
+    u8  flags [[format("hex")]];
+};
+
+struct Chunk {
+    char id[4] [[color("accent1")]];
+    u32  size;
+    switch (id) {
+        case "VP8X": Vp8x vp8x;
+        case "VP8 ": Vp8 vp8;
+        case "VP8L": Vp8l vp8l;
+        case "ANIM": Anim anim;
+        case "ANMF": Anmf anmf;
+        default:     u8 data[size] [[lazy]];
+    }
+} [[size(8 + size + (size & 1))]];
+
+RiffHeader header;
+Chunk chunks[until(endof(last) >= 8 + header.size || std::eof())];

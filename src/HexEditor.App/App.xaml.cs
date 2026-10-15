@@ -149,6 +149,8 @@ public partial class App : Application
 
         // プラグイン (08 の AUTO-30)。ここでは準備だけで、読み込みは最初のウィンドウを表示した後 (起動を遅らせない)。
         Services.Plugins.PluginService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
+        // 構造体テンプレート (07) のパネルと、コマンドライン・スクリプトのつなぎ目 (スクリプトの用意の後)。
+        MainWindow.RegisterTemplatePanels();
         var window = new MainWindow(vm);
         Window = window;
 

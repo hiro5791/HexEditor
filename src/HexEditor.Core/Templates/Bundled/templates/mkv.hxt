@@ -1,0 +1,209 @@
+// HexEditor 標準テンプレート (TPL-34): Matroska / WebM (EBML)
+// ライセンス: MIT。
+// EBML の要素 (ID、可変長のサイズ、データ) を入れ子で読む。知っているマスター要素 (Segment、Info、Tracks、TrackEntry、Cluster、Cues など) は
+// 子を置き、数値・文字列・浮動小数点の要素は値を示す。それ以外 (ブロックのデータなど) は中身を読まない。サイズが「不明」の要素は
+// ファイルの末尾までとする。
+#pragma name "Matroska / WebM"
+#pragma name.ja "Matroska / WebM"
+#pragma description "Matroska / WebM (EBML): nested elements with variable-length IDs and sizes (EBML header, Segment, SeekHead, Info, Tracks, Cluster, Cues, Tags)."
+#pragma description.ja "Matroska / WebM (EBML): 可変長の ID とサイズを持つ入れ子の要素 (EBML ヘッダ、Segment、SeekHead、Info、Tracks、Cluster、Cues、Tags)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "1A 45 DF A3"
+#pragma mime "video/x-matroska"
+#pragma mime "video/webm"
+#pragma mime "application/x-ebml"
+#pragma extensions "mkv;mka;mks;mk3d;webm"
+#pragma endian big
+
+/// 先頭のバイトから、可変長の整数の長さ (1〜8) を求める。上位の 0 の数 + 1。
+fn vint_length(u8 first) -> u32 {
+    if ((first & 0x80) != 0) { return 1; }
+    if ((first & 0x40) != 0) { return 2; }
+    if ((first & 0x20) != 0) { return 3; }
+    if ((first & 0x10) != 0) { return 4; }
+    if ((first & 0x08) != 0) { return 5; }
+    if ((first & 0x04) != 0) { return 6; }
+    if ((first & 0x02) != 0) { return 7; }
+    return 8;
+}
+
+/// 要素の種類: 1 マスター (子を持つ)、2 符号なし整数、3 文字列、4 浮動小数点、0 それ以外 (バイナリ)
+fn element_kind(u64 id) -> u32 {
+    switch (id) {
+        case 0x1A45DFA3: return 1;
+        case 0x18538067: return 1;
+        case 0x114D9B74: return 1;
+        case 0x4DBB: return 1;
+        case 0x1549A966: return 1;
+        case 0x1654AE6B: return 1;
+        case 0xAE: return 1;
+        case 0xE0: return 1;
+        case 0xE1: return 1;
+        case 0x1F43B675: return 1;
+        case 0xA0: return 1;
+        case 0x1C53BB6B: return 1;
+        case 0xBB: return 1;
+        case 0xB7: return 1;
+        case 0x1254C367: return 1;
+        case 0x7373: return 1;
+        case 0x63C0: return 1;
+        case 0x67C8: return 1;
+        case 0x1043A770: return 1;
+        case 0x1941A469: return 1;
+        case 0x4286: return 2;
+        case 0x42F7: return 2;
+        case 0x42F2: return 2;
+        case 0x42F3: return 2;
+        case 0x4287: return 2;
+        case 0x4285: return 2;
+        case 0x2AD7B1: return 2;
+        case 0xD7: return 2;
+        case 0x73C5: return 2;
+        case 0x83: return 2;
+        case 0x9C: return 2;
+        case 0xB0: return 2;
+        case 0xBA: return 2;
+        case 0xE7: return 2;
+        case 0xF7: return 2;
+        case 0xF1: return 2;
+        case 0xB3: return 2;
+        case 0x53AB: return 2;
+        case 0x53AC: return 2;
+        case 0x23E383: return 2;
+        case 0x4282: return 3;
+        case 0x4D80: return 3;
+        case 0x5741: return 3;
+        case 0x86: return 3;
+        case 0x22B59C: return 3;
+        case 0x536E: return 3;
+        case 0x7BA9: return 3;
+        case 0x4489: return 4;
+        case 0xB5: return 4;
+        default: return 0;
+    }
+}
+
+fn element_name(u64 id) -> string {
+    switch (id) {
+        case 0x1A45DFA3: return "EBML";
+        case 0x4286: return "EBMLVersion";
+        case 0x42F7: return "EBMLReadVersion";
+        case 0x42F2: return "EBMLMaxIDLength";
+        case 0x42F3: return "EBMLMaxSizeLength";
+        case 0x4282: return "DocType";
+        case 0x4287: return "DocTypeVersion";
+        case 0x4285: return "DocTypeReadVersion";
+        case 0x18538067: return "Segment";
+        case 0x114D9B74: return "SeekHead";
+        case 0x4DBB: return "Seek";
+        case 0x53AB: return "SeekID";
+        case 0x53AC: return "SeekPosition";
+        case 0x1549A966: return "Info";
+        case 0x2AD7B1: return "TimecodeScale";
+        case 0x4489: return "Duration";
+        case 0x4D80: return "MuxingApp";
+        case 0x5741: return "WritingApp";
+        case 0x7BA9: return "Title";
+        case 0x1654AE6B: return "Tracks";
+        case 0xAE: return "TrackEntry";
+        case 0xD7: return "TrackNumber";
+        case 0x73C5: return "TrackUID";
+        case 0x83: return "TrackType";
+        case 0x9C: return "FlagLacing";
+        case 0x86: return "CodecID";
+        case 0x22B59C: return "Language";
+        case 0xE0: return "Video";
+        case 0xB0: return "PixelWidth";
+        case 0xBA: return "PixelHeight";
+        case 0xE1: return "Audio";
+        case 0xB5: return "SamplingFrequency";
+        case 0x1F43B675: return "Cluster";
+        case 0xE7: return "Timecode";
+        case 0xA3: return "SimpleBlock";
+        case 0xA0: return "BlockGroup";
+        case 0xA1: return "Block";
+        case 0x1C53BB6B: return "Cues";
+        case 0xBB: return "CuePoint";
+        case 0xB3: return "CueTime";
+        case 0xB7: return "CueTrackPositions";
+        case 0x1254C367: return "Tags";
+        case 0x1043A770: return "Chapters";
+        case 0x1941A469: return "Attachments";
+        case 0xEC: return "Void";
+        case 0xBF: return "CRC-32";
+        default: return "";
+    }
+}
+
+/// at から length バイトをビッグエンディアンの整数として読む
+fn raw_value(u64 at, u32 length) -> u64 {
+    local u64 value = 0;
+    for (local u32 i = 0; i < length; i += 1) {
+        value = (value << 8) | std::mem::read_u8(at + i, big);
+    }
+    return value;
+}
+
+/// サイズの値 (先頭のバイトからマーカーのビットを除く)
+fn size_value(u64 at, u32 length) -> u64 {
+    local u64 value = std::mem::read_u8(at, big) & (0xFF >> length);
+    for (local u32 i = 1; i < length; i += 1) {
+        value = (value << 8) | std::mem::read_u8(at + i, big);
+    }
+    return value;
+}
+
+/// サイズの値のビットがすべて 1 なら「不明」
+fn size_unknown(u64 at, u32 length) -> bool {
+    return size_value(at, length) == (1 << (7 * length)) - 1;
+}
+
+/// 要素の ID (マーカーのビットを含めた 1〜4 バイト)
+struct ElementId {
+    u8 bytes[vint_length(std::mem::read_u8($, big))];
+    local u64 value = raw_value(addressof(bytes), std::len(bytes)) [[show, format("hex")]];
+};
+
+/// 要素のサイズ (マーカーのビットを除いた 1〜8 バイトの値。全ビットが 1 なら「不明」)
+struct ElementSize {
+    u8 bytes[vint_length(std::mem::read_u8($, big))];
+    local u64 value = size_value(addressof(bytes), std::len(bytes)) [[show]];
+    local bool unknown = size_unknown(addressof(bytes), std::len(bytes)) [[show]];
+};
+
+struct UInt(u64 size) {
+    u8 bytes[size];
+    local u64 number = raw_value(addressof(bytes), size) [[show]];
+};
+
+struct Float(u64 size) {
+    if (size == 4) {
+        f32 number;
+    } else {
+        f64 number;
+    }
+};
+
+struct Element(u32 depth) {
+    ElementId   id [[color("accent1")]];
+    ElementSize size;
+    local string name = element_name(id.value) [[show]];
+    local u64 data_size = size.unknown ? std::core::size() - $ : size.value;
+    local u64 data_end = $ + data_size;
+    local u32 kind = element_kind(id.value);
+    if (kind == 1 && depth < 8) {
+        Element(depth + 1) children[while($ < data_end && $ < std::core::size())];
+    } else if (kind == 2 && data_size <= 8) {
+        UInt(data_size) value;
+    } else if (kind == 3) {
+        char value[data_size] [[encoding("utf-8")]];
+    } else if (kind == 4 && (data_size == 4 || data_size == 8)) {
+        Float(data_size) value;
+    } else {
+        u8 data[data_size] [[lazy]];
+    }
+} [[size(data_end - addressof(this))]];
+
+Element(0) elements[until(std::eof())];

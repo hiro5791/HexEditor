@@ -1,0 +1,634 @@
+{
+  "name": "ISO 9660 ボリューム記述子",
+  "type": "application",
+  "offset": 0,
+  "size": 36864,
+  "children": [
+    {
+      "name": "descriptors",
+      "path": "descriptors",
+      "type": "VolumeDescriptor[2]",
+      "offset": 32768,
+      "size": 4096,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "descriptors[0]",
+          "type": "VolumeDescriptor",
+          "offset": 32768,
+          "size": 2048,
+          "display": "VolumeDescriptor (4)",
+          "children": [
+            {
+              "name": "type",
+              "path": "descriptors[0].type",
+              "type": "DescriptorType",
+              "offset": 32768,
+              "size": 1,
+              "value": 1,
+              "display": "Primary (0x1)"
+            },
+            {
+              "name": "identifier",
+              "path": "descriptors[0].identifier",
+              "type": "char[5]",
+              "offset": 32769,
+              "size": 5,
+              "value": "CD001",
+              "display": "CD001"
+            },
+            {
+              "name": "version",
+              "path": "descriptors[0].version",
+              "type": "u8",
+              "offset": 32774,
+              "size": 1,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "primary",
+              "path": "descriptors[0].primary",
+              "type": "PrimaryVolumeDescriptor",
+              "offset": 32775,
+              "size": 2041,
+              "display": "PrimaryVolumeDescriptor (30)",
+              "children": [
+                {
+                  "name": "unused1",
+                  "path": "descriptors[0].primary.unused1",
+                  "type": "u8",
+                  "offset": 32775,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "system_identifier",
+                  "path": "descriptors[0].primary.system_identifier",
+                  "type": "char[32]",
+                  "offset": 32776,
+                  "size": 32,
+                  "value": "HEXEDITOR                       ",
+                  "display": "HEXEDITOR                       "
+                },
+                {
+                  "name": "volume_identifier",
+                  "path": "descriptors[0].primary.volume_identifier",
+                  "type": "char[32]",
+                  "offset": 32808,
+                  "size": 32,
+                  "value": "HXTEST_ISO                      ",
+                  "display": "HXTEST_ISO                      "
+                },
+                {
+                  "name": "unused2",
+                  "path": "descriptors[0].primary.unused2",
+                  "type": "u8[8]",
+                  "offset": 32840,
+                  "size": 8,
+                  "value": "0000000000000000",
+                  "display": "00 00 00 00 00 00 00 00"
+                },
+                {
+                  "name": "volume_space_size",
+                  "path": "descriptors[0].primary.volume_space_size",
+                  "type": "Both32",
+                  "offset": 32848,
+                  "size": 8,
+                  "display": "Both32 (2)",
+                  "comment": "論理ブロック数",
+                  "children": [
+                    {
+                      "name": "little_endian",
+                      "path": "descriptors[0].primary.volume_space_size.little_endian",
+                      "type": "u32",
+                      "offset": 32848,
+                      "size": 4,
+                      "value": 18,
+                      "display": "18"
+                    },
+                    {
+                      "name": "big_endian",
+                      "path": "descriptors[0].primary.volume_space_size.big_endian",
+                      "type": "u32",
+                      "offset": 32852,
+                      "size": 4,
+                      "value": 18,
+                      "display": "18"
+                    }
+                  ]
+                },
+                {
+                  "name": "unused3",
+                  "path": "descriptors[0].primary.unused3",
+                  "type": "u8[32]",
+                  "offset": 32856,
+                  "size": 32,
+                  "value": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+                },
+                {
+                  "name": "volume_set_size",
+                  "path": "descriptors[0].primary.volume_set_size",
+                  "type": "Both16",
+                  "offset": 32888,
+                  "size": 4,
+                  "display": "Both16 (2)",
+                  "children": [
+                    {
+                      "name": "little_endian",
+                      "path": "descriptors[0].primary.volume_set_size.little_endian",
+                      "type": "u16",
+                      "offset": 32888,
+                      "size": 2,
+                      "value": 1,
+                      "display": "1"
+                    },
+                    {
+                      "name": "big_endian",
+                      "path": "descriptors[0].primary.volume_set_size.big_endian",
+                      "type": "u16",
+                      "offset": 32890,
+                      "size": 2,
+                      "value": 1,
+                      "display": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "volume_sequence_number",
+                  "path": "descriptors[0].primary.volume_sequence_number",
+                  "type": "Both16",
+                  "offset": 32892,
+                  "size": 4,
+                  "display": "Both16 (2)",
+                  "children": [
+                    {
+                      "name": "little_endian",
+                      "path": "descriptors[0].primary.volume_sequence_number.little_endian",
+                      "type": "u16",
+                      "offset": 32892,
+                      "size": 2,
+                      "value": 1,
+                      "display": "1"
+                    },
+                    {
+                      "name": "big_endian",
+                      "path": "descriptors[0].primary.volume_sequence_number.big_endian",
+                      "type": "u16",
+                      "offset": 32894,
+                      "size": 2,
+                      "value": 1,
+                      "display": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "logical_block_size",
+                  "path": "descriptors[0].primary.logical_block_size",
+                  "type": "Both16",
+                  "offset": 32896,
+                  "size": 4,
+                  "display": "Both16 (2)",
+                  "children": [
+                    {
+                      "name": "little_endian",
+                      "path": "descriptors[0].primary.logical_block_size.little_endian",
+                      "type": "u16",
+                      "offset": 32896,
+                      "size": 2,
+                      "value": 2048,
+                      "display": "2048"
+                    },
+                    {
+                      "name": "big_endian",
+                      "path": "descriptors[0].primary.logical_block_size.big_endian",
+                      "type": "u16",
+                      "offset": 32898,
+                      "size": 2,
+                      "value": 2048,
+                      "display": "2048"
+                    }
+                  ]
+                },
+                {
+                  "name": "path_table_size",
+                  "path": "descriptors[0].primary.path_table_size",
+                  "type": "Both32",
+                  "offset": 32900,
+                  "size": 8,
+                  "display": "Both32 (2)",
+                  "children": [
+                    {
+                      "name": "little_endian",
+                      "path": "descriptors[0].primary.path_table_size.little_endian",
+                      "type": "u32",
+                      "offset": 32900,
+                      "size": 4,
+                      "value": 10,
+                      "display": "10"
+                    },
+                    {
+                      "name": "big_endian",
+                      "path": "descriptors[0].primary.path_table_size.big_endian",
+                      "type": "u32",
+                      "offset": 32904,
+                      "size": 4,
+                      "value": 10,
+                      "display": "10"
+                    }
+                  ]
+                },
+                {
+                  "name": "type_l_path_table_location",
+                  "path": "descriptors[0].primary.type_l_path_table_location",
+                  "type": "u32",
+                  "offset": 32908,
+                  "size": 4,
+                  "value": 19,
+                  "display": "19"
+                },
+                {
+                  "name": "optional_type_l_path_table_location",
+                  "path": "descriptors[0].primary.optional_type_l_path_table_location",
+                  "type": "u32",
+                  "offset": 32912,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "type_m_path_table_location",
+                  "path": "descriptors[0].primary.type_m_path_table_location",
+                  "type": "u32",
+                  "offset": 32916,
+                  "size": 4,
+                  "value": 20,
+                  "display": "20"
+                },
+                {
+                  "name": "optional_type_m_path_table_location",
+                  "path": "descriptors[0].primary.optional_type_m_path_table_location",
+                  "type": "u32",
+                  "offset": 32920,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "root_directory_record",
+                  "path": "descriptors[0].primary.root_directory_record",
+                  "type": "DirectoryRecord",
+                  "offset": 32924,
+                  "size": 34,
+                  "display": "DirectoryRecord (11)",
+                  "children": [
+                    {
+                      "name": "length",
+                      "path": "descriptors[0].primary.root_directory_record.length",
+                      "type": "u8",
+                      "offset": 32924,
+                      "size": 1,
+                      "value": 34,
+                      "display": "34"
+                    },
+                    {
+                      "name": "extended_attribute_length",
+                      "path": "descriptors[0].primary.root_directory_record.extended_attribute_length",
+                      "type": "u8",
+                      "offset": 32925,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "extent_location",
+                      "path": "descriptors[0].primary.root_directory_record.extent_location",
+                      "type": "Both32",
+                      "offset": 32926,
+                      "size": 8,
+                      "display": "Both32 (2)",
+                      "children": [
+                        {
+                          "name": "little_endian",
+                          "path": "descriptors[0].primary.root_directory_record.extent_location.little_endian",
+                          "type": "u32",
+                          "offset": 32926,
+                          "size": 4,
+                          "value": 21,
+                          "display": "21"
+                        },
+                        {
+                          "name": "big_endian",
+                          "path": "descriptors[0].primary.root_directory_record.extent_location.big_endian",
+                          "type": "u32",
+                          "offset": 32930,
+                          "size": 4,
+                          "value": 21,
+                          "display": "21"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "data_length",
+                      "path": "descriptors[0].primary.root_directory_record.data_length",
+                      "type": "Both32",
+                      "offset": 32934,
+                      "size": 8,
+                      "display": "Both32 (2)",
+                      "children": [
+                        {
+                          "name": "little_endian",
+                          "path": "descriptors[0].primary.root_directory_record.data_length.little_endian",
+                          "type": "u32",
+                          "offset": 32934,
+                          "size": 4,
+                          "value": 2048,
+                          "display": "2048"
+                        },
+                        {
+                          "name": "big_endian",
+                          "path": "descriptors[0].primary.root_directory_record.data_length.big_endian",
+                          "type": "u32",
+                          "offset": 32938,
+                          "size": 4,
+                          "value": 2048,
+                          "display": "2048"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "recording_date",
+                      "path": "descriptors[0].primary.root_directory_record.recording_date",
+                      "type": "u8[7]",
+                      "offset": 32942,
+                      "size": 7,
+                      "value": "7E0A100C223800",
+                      "display": "7E 0A 10 0C 22 38 00"
+                    },
+                    {
+                      "name": "file_flags",
+                      "path": "descriptors[0].primary.root_directory_record.file_flags",
+                      "type": "u8",
+                      "offset": 32949,
+                      "size": 1,
+                      "value": 2,
+                      "display": "0x2"
+                    },
+                    {
+                      "name": "file_unit_size",
+                      "path": "descriptors[0].primary.root_directory_record.file_unit_size",
+                      "type": "u8",
+                      "offset": 32950,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "interleave_gap_size",
+                      "path": "descriptors[0].primary.root_directory_record.interleave_gap_size",
+                      "type": "u8",
+                      "offset": 32951,
+                      "size": 1,
+                      "value": 0,
+                      "display": "0"
+                    },
+                    {
+                      "name": "volume_sequence_number",
+                      "path": "descriptors[0].primary.root_directory_record.volume_sequence_number",
+                      "type": "Both16",
+                      "offset": 32952,
+                      "size": 4,
+                      "display": "Both16 (2)",
+                      "children": [
+                        {
+                          "name": "little_endian",
+                          "path": "descriptors[0].primary.root_directory_record.volume_sequence_number.little_endian",
+                          "type": "u16",
+                          "offset": 32952,
+                          "size": 2,
+                          "value": 1,
+                          "display": "1"
+                        },
+                        {
+                          "name": "big_endian",
+                          "path": "descriptors[0].primary.root_directory_record.volume_sequence_number.big_endian",
+                          "type": "u16",
+                          "offset": 32954,
+                          "size": 2,
+                          "value": 1,
+                          "display": "1"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "file_identifier_length",
+                      "path": "descriptors[0].primary.root_directory_record.file_identifier_length",
+                      "type": "u8",
+                      "offset": 32956,
+                      "size": 1,
+                      "value": 1,
+                      "display": "1"
+                    },
+                    {
+                      "name": "file_identifier",
+                      "path": "descriptors[0].primary.root_directory_record.file_identifier",
+                      "type": "char[1]",
+                      "offset": 32957,
+                      "size": 1,
+                      "value": "",
+                      "display": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "volume_set_identifier",
+                  "path": "descriptors[0].primary.volume_set_identifier",
+                  "type": "char[128]",
+                  "offset": 32958,
+                  "size": 128,
+                  "value": "                                                                                                                                ",
+                  "display": "                                                                                                                                "
+                },
+                {
+                  "name": "publisher_identifier",
+                  "path": "descriptors[0].primary.publisher_identifier",
+                  "type": "char[128]",
+                  "offset": 33086,
+                  "size": 128,
+                  "value": "HexEditor                                                                                                                       ",
+                  "display": "HexEditor                                                                                                                       "
+                },
+                {
+                  "name": "data_preparer_identifier",
+                  "path": "descriptors[0].primary.data_preparer_identifier",
+                  "type": "char[128]",
+                  "offset": 33214,
+                  "size": 128,
+                  "value": "                                                                                                                                ",
+                  "display": "                                                                                                                                "
+                },
+                {
+                  "name": "application_identifier",
+                  "path": "descriptors[0].primary.application_identifier",
+                  "type": "char[128]",
+                  "offset": 33342,
+                  "size": 128,
+                  "value": "HexEditor                                                                                                                       ",
+                  "display": "HexEditor                                                                                                                       "
+                },
+                {
+                  "name": "copyright_file_identifier",
+                  "path": "descriptors[0].primary.copyright_file_identifier",
+                  "type": "char[37]",
+                  "offset": 33470,
+                  "size": 37,
+                  "value": "                                     ",
+                  "display": "                                     "
+                },
+                {
+                  "name": "abstract_file_identifier",
+                  "path": "descriptors[0].primary.abstract_file_identifier",
+                  "type": "char[37]",
+                  "offset": 33507,
+                  "size": 37,
+                  "value": "                                     ",
+                  "display": "                                     "
+                },
+                {
+                  "name": "bibliographic_file_identifier",
+                  "path": "descriptors[0].primary.bibliographic_file_identifier",
+                  "type": "char[37]",
+                  "offset": 33544,
+                  "size": 37,
+                  "value": "                                     ",
+                  "display": "                                     "
+                },
+                {
+                  "name": "creation_date",
+                  "path": "descriptors[0].primary.creation_date",
+                  "type": "char[17]",
+                  "offset": 33581,
+                  "size": 17,
+                  "value": "2026101612345600",
+                  "display": "2026101612345600"
+                },
+                {
+                  "name": "modification_date",
+                  "path": "descriptors[0].primary.modification_date",
+                  "type": "char[17]",
+                  "offset": 33598,
+                  "size": 17,
+                  "value": "2026101612345600",
+                  "display": "2026101612345600"
+                },
+                {
+                  "name": "expiration_date",
+                  "path": "descriptors[0].primary.expiration_date",
+                  "type": "char[17]",
+                  "offset": 33615,
+                  "size": 17,
+                  "value": "0000000000000000",
+                  "display": "0000000000000000"
+                },
+                {
+                  "name": "effective_date",
+                  "path": "descriptors[0].primary.effective_date",
+                  "type": "char[17]",
+                  "offset": 33632,
+                  "size": 17,
+                  "value": "2026101612345600",
+                  "display": "2026101612345600"
+                },
+                {
+                  "name": "file_structure_version",
+                  "path": "descriptors[0].primary.file_structure_version",
+                  "type": "u8",
+                  "offset": 33649,
+                  "size": 1,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "reserved1",
+                  "path": "descriptors[0].primary.reserved1",
+                  "type": "u8",
+                  "offset": 33650,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "application_use",
+                  "path": "descriptors[0].primary.application_use",
+                  "type": "u8[512]",
+                  "offset": 33651,
+                  "size": 512,
+                  "value": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                  "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+                },
+                {
+                  "name": "reserved2",
+                  "path": "descriptors[0].primary.reserved2",
+                  "type": "u8[653]",
+                  "offset": 34163,
+                  "size": 653,
+                  "value": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+                  "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "descriptors[1]",
+          "type": "VolumeDescriptor",
+          "offset": 34816,
+          "size": 2048,
+          "display": "VolumeDescriptor (4)",
+          "children": [
+            {
+              "name": "type",
+              "path": "descriptors[1].type",
+              "type": "DescriptorType",
+              "offset": 34816,
+              "size": 1,
+              "value": 255,
+              "display": "Terminator (0xFF)"
+            },
+            {
+              "name": "identifier",
+              "path": "descriptors[1].identifier",
+              "type": "char[5]",
+              "offset": 34817,
+              "size": 5,
+              "value": "CD001",
+              "display": "CD001"
+            },
+            {
+              "name": "version",
+              "path": "descriptors[1].version",
+              "type": "u8",
+              "offset": 34822,
+              "size": 1,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "data",
+              "path": "descriptors[1].data",
+              "type": "u8[2041]",
+              "offset": 34823,
+              "size": 2041,
+              "value": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "display": "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

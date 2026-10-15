@@ -16,7 +16,7 @@ public sealed class CommandLineTests
     private static readonly TimeSpan Wait = TimeSpan.FromSeconds(30);
 
     /// <summary>テスト用のビルドの hexed.exe (環境変数 HEXED_PATH、なければ src/HexEditor.Cli/bin の下で最も新しいもの)。</summary>
-    private static string HexedPath()
+    internal static string HexedPath()
     {
         if (Environment.GetEnvironmentVariable("HEXED_PATH") is { Length: > 0 } configured)
         {
@@ -30,7 +30,7 @@ public sealed class CommandLineTests
     }
 
     /// <summary>hexed を実行して終了を待つ。GUI は起動するだけで待たない (--wait を付けた場合は閉じるまで)。</summary>
-    private static async Task<(int ExitCode, string Out, string Err)> RunHexedAsync(string workingDirectory, IEnumerable<string> args)
+    internal static async Task<(int ExitCode, string Out, string Err)> RunHexedAsync(string workingDirectory, IEnumerable<string> args)
     {
         Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "HexEditor"));
         string marker = Path.Combine(Path.GetTempPath(), "HexEditor", "dev-no-activate");

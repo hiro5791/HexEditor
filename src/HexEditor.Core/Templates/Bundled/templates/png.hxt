@@ -2,10 +2,10 @@
 // ライセンス: MIT。
 #pragma name "PNG image"
 #pragma name.ja "PNG 画像"
-#pragma description "PNG image: signature and chunks (IHDR, tEXt, others as raw data) with CRC check."
-#pragma description.ja "PNG 画像: シグネチャとチャンク (IHDR、tEXt、その他は生のデータ)。CRC を確かめる。"
+#pragma description "PNG image: signature and chunks (IHDR, PLTE, gAMA, sRGB, pHYs, tIME, tEXt, others as raw data) with CRC check."
+#pragma description.ja "PNG 画像: シグネチャとチャンク (IHDR、PLTE、gAMA、sRGB、pHYs、tIME、tEXt、その他は生のデータ)。CRC を確かめる。"
 #pragma author "HexEditor"
-#pragma version "1.0.0"
+#pragma version "1.1.0"
 #pragma license "MIT"
 #pragma magic 0 "89 50 4E 47 0D 0A 1A 0A"
 #pragma mime "image/png"
@@ -33,11 +33,31 @@ struct IHDR {
     u8        interlace;
 };
 
+struct PHYS {
+    u32 pixels_per_unit_x;
+    u32 pixels_per_unit_y;
+    u8  unit;
+};
+
+struct TIME {
+    u16 year;
+    u8  month;
+    u8  day;
+    u8  hour;
+    u8  minute;
+    u8  second;
+};
+
 struct Chunk {
     u32     length;
     char    type[4]                 [[color("accent1")]];
     switch (type) {
         case "IHDR": IHDR header;
+        case "PLTE": rgb8 palette[length / 3];
+        case "gAMA": u32 gamma [[comment("gamma x 100000")]];
+        case "sRGB": u8 rendering_intent;
+        case "pHYs": PHYS physical;
+        case "tIME": TIME modified;
         case "tEXt": char text[length] [[encoding("latin1")]];
         default:     u8 data[length] [[lazy]];
     }
