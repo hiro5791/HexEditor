@@ -66,7 +66,7 @@ Invoke-TestCase 'TC-PKG-10-01' '6 builds and Velopack DLL' {
 Invoke-TestCase 'PKG-05-1' 'portable zip layout' {
     foreach ($arch in 'x64', 'arm64') {
         $entries = Get-ZipEntries (Join-Path $ArtifactsDir "Portable/$arch/HexEditor-$Version-$arch-portable.zip")
-        foreach ($required in 'HexEditor/HexEditor.exe', 'HexEditor/portable.marker', 'HexEditor/README.txt', 'HexEditor/THIRD-PARTY-NOTICES.txt') {
+        foreach ($required in 'HexEditor/HexEditor.exe', 'HexEditor/hexed.exe', 'HexEditor/hexed.dll', 'HexEditor/hexed.runtimeconfig.json', 'HexEditor/portable.marker', 'HexEditor/README.txt', 'HexEditor/THIRD-PARTY-NOTICES.txt') {
             Assert-True ($entries -contains $required) "$required missing ($arch)"
         }
         Assert-True (-not ($entries | Where-Object { -not $_.StartsWith('HexEditor/') })) "entries outside the HexEditor/ root folder ($arch)"
@@ -113,6 +113,26 @@ Invoke-TestCase 'TC-AUTO-03-01' 'no Roslyn (C# script component) in the distribu
             Assert-True ($roslyn.Count -eq 0) "C# script component files in ${f}: $($roslyn -join ', ')"
             Assert-True (-not (@(Get-ZipEntries $f) | Where-Object { $_ -match '(^|/)components/csharp/' })) "components/csharp/ in $f"
         }
+    }
+}
+
+Invoke-TestCase 'PKG-03-5' 'MSIX: hexed.exe is packaged and declared as an App Execution Alias (console)' {
+    foreach ($arch in 'x64', 'arm64') {
+        $path = Join-Path $ArtifactsDir "Msix/$arch/HexEditor-$Version-$arch.msix"
+        $zip = [System.IO.Compression.ZipFile]::OpenRead($path)
+        try {
+            $s = $zip.GetEntry('AppxManifest.xml').Open(); $r = New-Object System.IO.StreamReader($s)
+            try { $text = $r.ReadToEnd() } finally { $r.Dispose() }
+            $names = @($zip.Entries | ForEach-Object { $_.FullName })
+        } finally { $zip.Dispose() }
+        foreach ($file in 'hexed.exe', 'hexed.dll', 'hexed.deps.json', 'hexed.runtimeconfig.json') {
+            Assert-True ($names -contains $file) "$arch msix does not contain $file"
+        }
+        [xml]$manifest = $text
+        $aliases = @($manifest.SelectNodes("//*[local-name()='ExecutionAlias']") | ForEach-Object { $_.GetAttribute('Alias') })
+        Assert-True ($aliases -contains 'hexed.exe') "$arch msix has no alias hexed.exe ($($aliases -join ', '))"
+        Assert-True ($aliases -contains 'hexeditor.exe') "$arch msix has no alias hexeditor.exe ($($aliases -join ', '))"
+        Assert-True ($text -match 'Subsystem="console"') "$arch msix does not declare the console subsystem for hexed.exe"
     }
 }
 

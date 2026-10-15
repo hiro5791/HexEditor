@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\tools\HexEditor.TestData\HexEditor.TestData.csproj" />
+    <!-- コマンドライン hexed (AUTO-37 のテストが起動する)。ビルドの順序のためだけの参照で、DLL は参照しない。 -->
+    <ProjectReference Include="..\..\src\HexEditor.Cli\HexEditor.Cli.csproj" ReferenceOutputAssembly="false" SkipGetTargetFrameworkProperties="true" />
   </ItemGroup>
 
 </Project>

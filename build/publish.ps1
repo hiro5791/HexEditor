@@ -113,6 +113,31 @@ function Copy-ElevatedHelper($helper, $destination) {
 # Code signing (PKG-25): a no-op unless HEX_SIGNING_ENABLED is true.
 $sign = Join-Path $PSScriptRoot 'sign.ps1'
 
+# The command line hexed.exe (AUTO-36, PKG-03, PKG-05, PKG-08): a small console program that uses HexEditor.Core and
+# HexEditor.Platform only (no WinUI). Like the elevated helper it is published self-contained for the same runtime identifier,
+# signed, and only its own four files are copied next to HexEditor.exe (the runtime files and HexEditor.Core.dll / HexEditor.Platform.dll
+# in the app folder are the same ones). The Msix build gets the files through -p:HexCliDir (the manifest declares the alias hexed.exe).
+$CliFiles = @('hexed.exe', 'hexed.dll', 'hexed.deps.json', 'hexed.runtimeconfig.json')
+
+function Build-Cli {
+    $cliStaging = Join-Path $staging 'Cli'
+    $cliArgs = @('publish', (Join-Path $root 'src/HexEditor.Cli/HexEditor.Cli.csproj'),
+        '-c', $Configuration, '-r', $rid, "-p:HexDistro=$Distro", "-p:HexVersion=$Version", '--self-contained', 'true', '-nologo', '-o', $cliStaging)
+    if ($Commit) { $cliArgs += "-p:HexCommit=$Commit" }
+    if ($TestHooks) { $cliArgs += '-p:HexTestHooks=true' }
+    Invoke-Checked 'dotnet' $cliArgs
+    if (-not (Test-Path (Join-Path $cliStaging 'hexed.exe'))) { throw 'hexed.exe was not produced (AUTO-36).' }
+    foreach ($name in $CliFiles) {
+        $file = Join-Path $cliStaging $name
+        if (Test-Path $file) { & $sign -Path $file }
+    }
+    $script:CliDir = $cliStaging
+}
+
+function Copy-Cli($cliDir, $destination) {
+    foreach ($name in $CliFiles) { Copy-Item (Join-Path $cliDir $name) (Join-Path $destination $name) -Force }
+}
+
 switch ($Distro) {
     'Portable' {
         $helper = Build-ElevatedHelper
@@ -120,13 +145,15 @@ switch ($Distro) {
         if (Get-ChildItem $publishDir -Filter 'Velopack*.dll') { throw 'Portable output must not contain Velopack (PKG-10).' }
         & $sign -Path $publishDir
         Copy-ElevatedHelper $helper $publishDir
+        Build-Cli | Out-Null
+        Copy-Cli $script:CliDir $publishDir
 
         # The marker tells the app to keep its data next to the exe (PKG-05, PKG-12, PKG-13).
         Set-Content -Path (Join-Path $publishDir 'portable.marker') -Value '' -Encoding ascii -NoNewline
         Copy-Item (Join-Path $PSScriptRoot 'portable/README.txt') $publishDir
         Copy-Item (Join-Path $root 'LICENSE') (Join-Path $publishDir 'LICENSE.txt')
-        foreach ($required in 'HexEditor.exe', 'HexEditor.Elevated.exe', 'portable.marker', 'README.txt', 'THIRD-PARTY-NOTICES.txt') {
-            if (-not (Test-Path (Join-Path $publishDir $required))) { throw "Portable output is missing $required (PKG-05, PKG-14)." }
+        foreach ($required in 'HexEditor.exe', 'HexEditor.Elevated.exe', 'hexed.exe', 'hexed.dll', 'portable.marker', 'README.txt', 'THIRD-PARTY-NOTICES.txt') {
+            if (-not (Test-Path (Join-Path $publishDir $required))) { throw "Portable output is missing $required (PKG-05, PKG-14, AUTO-36)." }
         }
 
         $zip = Join-Path $out "HexEditor-$Version-$Arch-portable.zip"
@@ -150,6 +177,8 @@ switch ($Distro) {
         if (-not (Get-ChildItem $publishDir -Filter 'Velopack*.dll')) { throw 'Installer output must contain Velopack (PKG-10).' }
         & $sign -Path $publishDir
         Copy-ElevatedHelper $helper $publishDir
+        Build-Cli | Out-Null
+        Copy-Cli $script:CliDir $publishDir
         Push-Location $root
         try {
             Invoke-Checked 'dotnet' @('tool', 'restore')
@@ -207,6 +236,9 @@ switch ($Distro) {
         }
         # Store-only and unsigned: the Store signs it on submission (PKG-02, PKG-04).
         $msixExtra = if ($shellExtension) { @("-p:HexShellExtensionDir=$shellExtension") } else { @() }
+        # hexed.exe (AUTO-36): the manifest declares it as the second application with the execution alias hexed.exe.
+        Build-Cli | Out-Null
+        $msixExtra += "-p:HexCliDir=$script:CliDir"
         Invoke-Checked 'dotnet' (@('publish') + $common + $msixExtra + @(
             '-p:GenerateAppxPackageOnBuild=true',
             '-p:AppxPackageSigningEnabled=false',

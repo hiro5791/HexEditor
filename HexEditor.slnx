@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/HexEditor.App/HexEditor.App.csproj" />
+    <Project Path="src/HexEditor.Cli/HexEditor.Cli.csproj" />
     <Project Path="src/HexEditor.Core/HexEditor.Core.csproj" />
     <Project Path="src/HexEditor.Elevated/HexEditor.Elevated.csproj" />
     <Project Path="src/HexEditor.Platform/HexEditor.Platform.csproj" />
@@ -9,6 +10,7 @@
     <Project Path="src/HexEditor.ShellExtension/HexEditor.ShellExtension.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/HexEditor.Cli.Tests/HexEditor.Cli.Tests.csproj" />
     <Project Path="tests/HexEditor.Core.Tests/HexEditor.Core.Tests.csproj" />
     <Project Path="tests/HexEditor.Performance.Tests/HexEditor.Performance.Tests.csproj" />
     <Project Path="tests/HexEditor.Platform.Tests/HexEditor.Platform.Tests.csproj" />

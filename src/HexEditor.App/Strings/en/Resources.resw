@@ -5656,4 +5656,12 @@ Downloaded from: {2}</value></data>
   <data name="CSharpComponent_Installed" xml:space="preserve"><value>The C# script component was added.</value></data>
   <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>The C# script component could not be added: {0} You can add it by hand: download the component zip from the release page and extract it into the data folder's components\csharp\&lt;version&gt;\ folder.</value></data>
   <data name="CSharpComponent_Failed" xml:space="preserve"><value>The C# script component could not be added: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>Unknown character encoding "{0}". The text column was not changed.</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>Cannot use {0} "{1}" (the expression cannot be read at position {2}).</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0} "{1}" is outside the file (length {2}).</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>{0} is not available in this version.</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>No disk matches "{0}".</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>No volume matches "{0}".</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>No process matches "{0}".</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>"{0}" matches {1} processes. Specify the process ID with --process.</value></data>
 </root>

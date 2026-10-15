@@ -115,6 +115,22 @@
     <Warning Text="HexShellExtensionDir が指定されていないため、HexEditor.ShellExtension.dll をパッケージに入れません (Windows 11 の新しい右クリックメニューが出ません。UI-55)。" />
   </Target>
 
+  <!--
+    コマンドライン hexed.exe (08 の AUTO-36)。MSIX 版はマニフェストの 2 つ目の Application (App Execution Alias hexed.exe) が指すため、
+    hexed.exe とその 3 つのファイルをパッケージに入れる。build/publish.ps1 が HexEditor.Cli を発行して HexCliDir で渡す。
+    .NET の実行環境は HexEditor.exe のものを使う (補助プロセスと同じ。同じバージョンで自己完結型に発行する)。
+  -->
+  <ItemGroup Condition="'$(WindowsPackageType)' == 'MSIX' and '$(HexCliDir)' != ''">
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.exe" Link="hexed.exe" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.dll" Link="hexed.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.deps.json" Link="hexed.deps.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="$([MSBuild]::EnsureTrailingSlash('$(HexCliDir)'))hexed.runtimeconfig.json" Link="hexed.runtimeconfig.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="HexWarnMissingCli" BeforeTargets="BeforeBuild"
+          Condition="'$(WindowsPackageType)' == 'MSIX' and '$(HexCliDir)' == ''">
+    <Warning Text="HexCliDir が指定されていないため、hexed.exe をパッケージに入れません (マニフェストの Application 'Hexed' が指す実行ファイルがないため、MSIX を作れません。build/publish.ps1 を使ってください)。" />
+  </Target>
+
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>

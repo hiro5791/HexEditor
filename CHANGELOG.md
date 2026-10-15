@@ -13,3 +13,4 @@ The release workflow uses the section for the tagged version as the release note
 - Recovery of unsaved changes after a crash, and local crash reports.
 - Three distributions from one code base: installer (Velopack), portable zip and Microsoft Store (MSIX).
 - UI in 23 languages.
+- Command line `hexed` (open, hash, dump, compare, find, convert, patch, template, run): results on standard output, exit codes, JSON output, `--wait`, `--unregister`.

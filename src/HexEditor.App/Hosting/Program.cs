@@ -63,6 +63,9 @@ public static class Program
             return 1;
         }
 
+        // hexed open --wait の合図 (AUTO-37): アプリが終わるときは、開いたドキュメントが残っていても待っている hexed を終わらせる。
+        AppDomain.CurrentDomain.ProcessExit += (_, _) => WaitSignals.SignalAll();
+
         PrepareSession();
 
         // 6. 表示言語 (最初のウィンドウを作る前。UI-43): --ui-lang、設定 ui.language、Windows の表示言語の順。
