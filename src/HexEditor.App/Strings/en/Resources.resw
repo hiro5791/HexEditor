@@ -5664,4 +5664,85 @@ Downloaded from: {2}</value></data>
   <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>No volume matches "{0}".</value></data>
   <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>No process matches "{0}".</value></data>
   <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>"{0}" matches {1} processes. Specify the process ID with --process.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Follow as pointer</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>pointer offset address jump inspector</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Follow as pointer</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Absolute (offset)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Absolute (address)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>Relative to the cursor</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Relative to the end of the value</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Relative to a base…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>Base (expression)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Go</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>The target {0} is outside the document (length {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>This row has no value to use as a position</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Enter the base as an expression, such as 0x400000 or bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Select an integer row in the data inspector</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Move as an array of this type</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Previous element</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Next element</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Exit array mode</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Element number</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Element size</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(not on an element boundary)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>Element {0} is outside the document</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Value</value></data>
+  <data name="Bookmarks_ShowColumnValue" xml:space="preserve"><value>Value</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Expr</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Circular reference between bookmarks</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>bm.name references are nested more than {0} levels</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>The position {0} is outside the document</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Position expression error: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Value</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Edit bookmark value</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(no type)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Type</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Endianness</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Document</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Position expression</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>e.g. u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>View: Image view panel</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizer bitmap pixels picture image</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Image view</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Image view</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>1-bit black and white</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>2-bit gray</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>4-bit gray</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>8-bit gray</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8-bit (byte theme colors)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Follow the cursor</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>Start of the selection</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Fixed</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>Top to bottom</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>Bottom to top (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Auto</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Pixel format</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Width (pixels)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Bytes per row</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Auto</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Start position</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Fixed start position</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Row order</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Zoom</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>More options</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Image</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Scroll rows</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Save as image…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>The view range is too large; only the first 64 MB is drawn</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Enter the fixed start position as an expression</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>There is no image to save</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>Saved the image to {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>Could not save {0}: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>PNG image</value></data>
 </root>

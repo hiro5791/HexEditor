@@ -143,7 +143,21 @@ public sealed class Bookmark
     /// <summary>名前を変えた・コメントを書いた (削除したときに「元に戻す」付きの通知を出す。INSP-23 の仕様 2)。</summary>
     public bool IsCustomized { get; internal set; }
 
-    public long Start => Owner?.StartOf(this) ?? _detachedStart;
+    // ---- 型付きブックマークと位置の式 (INSP-29) ----
+
+    /// <summary>型 (インスペクタの型の ID。INSP-29 の仕様 1)。型なしは null。</summary>
+    public string? TypeId { get; internal set; }
+
+    /// <summary>型の解釈に使うエンディアン (INSP-29 の仕様 2)。null はドキュメントのエンディアン。</summary>
+    public Inspector.Endianness? TypeEndian { get; internal set; }
+
+    /// <summary>開始オフセットを決める位置の式 (INSP-29 の仕様 5)。なければ null (固定のオフセット)。</summary>
+    public string? PositionExpression { get; internal set; }
+
+    /// <summary>位置の式の最後の評価のエラー (INSP-29 の「エラー」)。なければ null。</summary>
+    public BookmarkExpressionError? ExpressionError { get; internal set; }
+
+        public long Start => Owner?.StartOf(this) ?? _detachedStart;
 
     public long Length { get; internal set; }
 

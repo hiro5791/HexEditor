@@ -19,7 +19,7 @@
                 AutomationProperties.AccessibilityView="Raw"
                 ColumnSpacing="4"
                 Opacity="{x:Bind RowOpacity, Mode=OneWay}"
-                ToolTipService.ToolTip="{x:Bind CommentLine, Mode=OneWay}">
+                ToolTipService.ToolTip="{x:Bind RowToolTip, Mode=OneWay}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{x:Bind Layout.Width0, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind Layout.Width1, Mode=OneWay}" />
@@ -29,6 +29,7 @@
                     <ColumnDefinition Width="{x:Bind Layout.Width5, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind Layout.Width6, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind Layout.Width7, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Layout.Width8, Mode=OneWay}" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -88,6 +89,34 @@
                     Text="{x:Bind CommentLine, Mode=OneWay}"
                     TextTrimming="CharacterEllipsis"
                     Visibility="{x:Bind Layout.CommentVisibility, Mode=OneWay}" />
+                <!--
+                    型付きブックマークの値 (INSP-29 の仕様 2・4)。ダブルクリック (または F2 の後の Tab) で入力欄にし、Enter で書き換える。
+                -->
+                <Grid
+                    Grid.Column="{x:Bind Layout.ValueColumn, Mode=OneWay}"
+                    Background="Transparent"
+                    DoubleTapped="Value_DoubleTapped"
+                    Visibility="{x:Bind Layout.ValueVisibility, Mode=OneWay}">
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FlowDirection="LeftToRight"
+                        FontFamily="Cascadia Mono, Consolas"
+                        Text="{x:Bind ValueText, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis"
+                        Visibility="{x:Bind IsNotEditingValue, Mode=OneWay}" />
+                    <TextBox
+                        x:Name="ValueEditor"
+                        MinWidth="0"
+                        Padding="2,0"
+                        AutomationProperties.AutomationId="Bookmarks_ValueEdit"
+                        FlowDirection="LeftToRight"
+                        FontFamily="Cascadia Mono, Consolas"
+                        KeyDown="ValueEditor_KeyDown"
+                        Loaded="ValueEditor_Loaded"
+                        LostFocus="ValueEditor_LostFocus"
+                        Text="{x:Bind EditValueText, Mode=OneWay}"
+                        x:Load="{x:Bind IsEditingValue, Mode=OneWay}" />
+                </Grid>
                 <StackPanel
                     Grid.Row="1"
                     Grid.Column="{x:Bind Layout.NameColumn, Mode=OneWay}"
@@ -103,6 +132,25 @@
                         Style="{ThemeResource CaptionTextBlockStyle}"
                         Text="{x:Bind DeletedText, Mode=OneWay}"
                         Visibility="{x:Bind RangeDeleted, Mode=OneWay}" />
+                    <!--  位置の式の印と、式のエラーの警告 (INSP-29 の仕様 8、「エラー」)  -->
+                    <StackPanel Orientation="Horizontal" Spacing="4" Visibility="{x:Bind HasExpression, Mode=OneWay}">
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{x:Bind ExpressionMark, Mode=OneWay}" />
+                        <FontIcon
+                            AutomationProperties.AccessibilityView="Raw"
+                            FontSize="12"
+                            Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                            Glyph="&#xE7BA;"
+                            Visibility="{x:Bind HasExpressionError, Mode=OneWay}" />
+                        <TextBlock
+                            Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{x:Bind ExpressionErrorText, Mode=OneWay}"
+                            TextTrimming="CharacterEllipsis"
+                            Visibility="{x:Bind HasExpressionError, Mode=OneWay}" />
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </DataTemplate>

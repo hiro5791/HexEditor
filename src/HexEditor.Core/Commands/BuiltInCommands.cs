@@ -458,6 +458,8 @@ public static class BuiltInCommands
 
         // ---- データインスペクタ (INSP-02 の「呼び出し」: インスペクタ: エンディアンの切り替え) ----
         new("inspector.toggleEndian", "inspector") { Condition = "documentOpen" },
+        // ポインタとして移動 (INSP-20 の「呼び出し」。ショートカットは既定なし)。
+        new("inspector.followPointer", "inspector") { Condition = "documentOpen" },
 
         // ---- ブックマークのグループ・変換・インポート / エクスポート、位置マネージャ、注釈、色付けルール (INSP-27〜INSP-34) ----
         new("edit.selectionToBookmarks", "edit") { Condition = "documentOpen" },
@@ -468,6 +470,8 @@ public static class BuiltInCommands
         new("view.panel.positionManager", "view"),
         new("view.panel.coloringRules", "view"),
         new("view.panel.legend", "view"),
+        // 画像表示 (VIEW-36。ショートカットは既定なし)。
+        new("view.panel.visualizer", "view"),
         new("view.annotations.toggle", "view"),
         new("view.annotations.column", "view"),
         new("view.annotations.bookmark", "view"),

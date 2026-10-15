@@ -146,6 +146,10 @@ public sealed partial class InspectorItemViewModel : ObservableObject
 
     public bool HasError => Error.Length > 0;
 
+    /// <summary>配列モードで選んだ型の行 (強調する。INSP-21 の仕様 5)。</summary>
+    [ObservableProperty]
+    public partial bool IsArrayType { get; set; }
+
     /// <summary>読み上げ用の名前: 「int32, 12,345」(INSP-01 の受け入れ基準 5)。</summary>
     public string AutomationName => IsGroup ? Name : $"{Name}, {Value}";
 
@@ -366,6 +370,11 @@ public sealed partial class InspectorViewModel : ObservableObject
     public void Attach(DocumentViewModel? document, DocumentAnnotations? annotations)
     {
         CancelEdit();
+        if (document != _document)
+        {
+            ExitArrayMode();
+        }
+
         _document = document;
         _annotations = annotations;
         StoredText = string.Empty;
@@ -466,6 +475,7 @@ public sealed partial class InspectorViewModel : ObservableObject
                     row.UpdateBits(valid ? InspectorDecoder.ReadBits(_data.AsSpan(0, row.BitCount / 8), r.Endian) : 0, valid);
                 }
 
+                row.IsArrayType = r.TypeId == ArrayTypeId && !r.Opposite;
                 row.CanExpand = r.Value.Components is { Count: > 0 };
                 row.IsExpanded = _expanded.Contains(row.Key);
                 wanted.Add(row);
@@ -485,6 +495,7 @@ public sealed partial class InspectorViewModel : ObservableObject
         }
 
         Sync(wanted);
+        UpdateArrayState();
         HighlightChanged?.Invoke(this, EventArgs.Empty);
         Refreshed?.Invoke(this, EventArgs.Empty);
     }

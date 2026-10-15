@@ -292,6 +292,7 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_BookmarksPanel" cmd:CommandUi.Id="view.panel.bookmarks" AutomationProperties.AutomationId="Command_ToggleBookmarks" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Hash" cmd:CommandUi.Id="view.panel.hash" AutomationProperties.AutomationId="Command_PanelHash" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Statistics" cmd:CommandUi.Id="view.panel.statistics" AutomationProperties.AutomationId="Command_PanelStatistics" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_VisualizerPanel" cmd:CommandUi.Id="view.panel.visualizer" AutomationProperties.AutomationId="Command_ToggleVisualizer" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_FileType" cmd:CommandUi.Id="view.panel.fileType" AutomationProperties.AutomationId="Command_PanelFileType" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_SearchResults" cmd:CommandUi.Id="view.panel.searchResults" AutomationProperties.AutomationId="Command_ToggleSearchResults" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_HistoryPanel" cmd:CommandUi.Id="view.panel.history" AutomationProperties.AutomationId="Command_ToggleHistory" />

@@ -57,7 +57,7 @@ public sealed partial class MainWindow
         {
             ["moved"] = InspectorView?.DragRowSetting(request["item"]!.GetValue<string>(), request["to"]!.GetValue<int>()) ?? false,
         },
-        _ => null,
+        _ => HandleInspectorPhase3TestCommand(cmd, request),
     };
 
     /// <summary>
