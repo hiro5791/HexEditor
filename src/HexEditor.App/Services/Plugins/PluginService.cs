@@ -95,7 +95,13 @@ internal static class PluginService
             _manager = manager;
             PluginManager.Current = manager;
             PluginIntegration.Attach(manager);
-            manager.Changed += (_, _) => Post(RaiseChanged);
+            manager.Changed += (_, _) =>
+            {
+                if (manager.Plugins.Count > 0)
+                {
+                    Post(RaiseChanged);
+                }
+            };
             manager.Registry.Changed += (_, _) => Post(OnRegistryChanged);
             manager.Suspended += (_, p) => Post(() => Suspended?.Invoke(null, p));
             return manager;
@@ -132,8 +138,10 @@ internal static class PluginService
             try
             {
                 CrashSuspect = m.TakeCrashSuspect();
-                m.Discover();
-                Post(RaiseChanged);
+                if (m.Discover().Count > 0)
+                {
+                    Post(RaiseChanged);
+                }
                 await m.LoadAllAsync().ConfigureAwait(false);
             }
             catch (Exception ex) when (ex is not OutOfMemoryException)
@@ -144,6 +152,12 @@ internal static class PluginService
             {
                 Post(() =>
                 {
+                    // プラグインが 1 つもなければ、ウィンドウの一覧・メニューを作り直さない (起動の直後の UI スレッドの仕事を増やさない)。
+                    if (m.Plugins.Count == 0 && m.Registry.All.Count == 0)
+                    {
+                        return;
+                    }
+
                     OnRegistryChanged();
                     RaiseChanged();
                     if (CrashSuspect is not null && WindowManager.Windows.Count > 0)

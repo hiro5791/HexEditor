@@ -605,11 +605,25 @@ public sealed partial class MainWindow : IPluginManagerHost
     /// <summary>Hex ビューの右クリックメニュー: 「プラグイン」(IMenuContribution の ContextMenu) と、「形式を選択してコピー」のプラグインの形式。</summary>
     private void ExtendHexViewPluginMenu(MenuFlyout menu)
     {
-        RemoveTagged(menu.Items);
-        if (PluginService.Manager is not { } m)
+        try
+        {
+            ExtendHexViewPluginMenuCore(menu);
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            AppLog.Warning($"Plugin context menu: {ex}");
+        }
+    }
+
+    private void ExtendHexViewPluginMenuCore(MenuFlyout menu)
+    {
+        // プラグインの拡張ポイントがなければメニューに触らない (右クリックメニューの表示を遅らせない)。
+        if (PluginService.Manager is not { } m || m.Registry.All.Count == 0)
         {
             return;
         }
+
+        RemoveTagged(menu.Items);
 
         var contributions = m.Registry.Usable<IMenuContribution>()
             .Where(x => x.Registration.Guard.Invoke("Location", () => x.Extension.Location, MenuLocation.ToolsPlugins) == MenuLocation.ContextMenu).ToList();
