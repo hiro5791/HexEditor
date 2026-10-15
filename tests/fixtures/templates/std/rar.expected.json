@@ -1,0 +1,296 @@
+{
+  "name": "RAR 5 アーカイブ",
+  "type": "application",
+  "offset": 0,
+  "size": 48,
+  "children": [
+    {
+      "name": "signature",
+      "path": "signature",
+      "type": "u8[8]",
+      "offset": 0,
+      "size": 8,
+      "value": "526172211A070100",
+      "display": "52 61 72 21 1A 07 01 00"
+    },
+    {
+      "name": "blocks",
+      "path": "blocks",
+      "type": "Block[3]",
+      "offset": 8,
+      "size": 40,
+      "display": "[3]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "blocks[0]",
+          "type": "Block",
+          "offset": 8,
+          "size": 8,
+          "display": "Block (5)",
+          "children": [
+            {
+              "name": "header_crc",
+              "path": "blocks[0].header_crc",
+              "type": "u32",
+              "offset": 8,
+              "size": 4,
+              "value": 842209989,
+              "display": "0x32331AC5"
+            },
+            {
+              "name": "header_size",
+              "path": "blocks[0].header_size",
+              "type": "uleb128",
+              "offset": 12,
+              "size": 1,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "header_type",
+              "path": "blocks[0].header_type",
+              "type": "uleb128",
+              "offset": 13,
+              "size": 1,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "header_flags",
+              "path": "blocks[0].header_flags",
+              "type": "uleb128",
+              "offset": 14,
+              "size": 1,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "main",
+              "path": "blocks[0].main",
+              "type": "MainBody",
+              "offset": 15,
+              "size": 1,
+              "display": "MainBody (1)",
+              "children": [
+                {
+                  "name": "archive_flags",
+                  "path": "blocks[0].main.archive_flags",
+                  "type": "uleb128",
+                  "offset": 15,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x0",
+                  "comment": "1: 複数ボリューム、2: ボリューム番号あり、4: 固めた形式、8: リカバリ記録あり、16: ロック"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "blocks[1]",
+          "type": "Block",
+          "offset": 16,
+          "size": 24,
+          "display": "Block (7)",
+          "children": [
+            {
+              "name": "header_crc",
+              "path": "blocks[1].header_crc",
+              "type": "u32",
+              "offset": 16,
+              "size": 4,
+              "value": 3063598627,
+              "display": "0xB69ACE23"
+            },
+            {
+              "name": "header_size",
+              "path": "blocks[1].header_size",
+              "type": "uleb128",
+              "offset": 20,
+              "size": 1,
+              "value": 14,
+              "display": "14"
+            },
+            {
+              "name": "header_type",
+              "path": "blocks[1].header_type",
+              "type": "uleb128",
+              "offset": 21,
+              "size": 1,
+              "value": 2,
+              "display": "2"
+            },
+            {
+              "name": "header_flags",
+              "path": "blocks[1].header_flags",
+              "type": "uleb128",
+              "offset": 22,
+              "size": 1,
+              "value": 2,
+              "display": "0x2"
+            },
+            {
+              "name": "data_area_size",
+              "path": "blocks[1].data_area_size",
+              "type": "uleb128",
+              "offset": 23,
+              "size": 1,
+              "value": 5,
+              "display": "5"
+            },
+            {
+              "name": "file",
+              "path": "blocks[1].file",
+              "type": "FileBody",
+              "offset": 24,
+              "size": 11,
+              "display": "FileBody (7)",
+              "children": [
+                {
+                  "name": "file_flags",
+                  "path": "blocks[1].file.file_flags",
+                  "type": "uleb128",
+                  "offset": 24,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x0",
+                  "comment": "1: ディレクトリ、2: 更新時刻あり、4: データの CRC32 あり、8: 展開後の大きさ不明"
+                },
+                {
+                  "name": "unpacked_size",
+                  "path": "blocks[1].file.unpacked_size",
+                  "type": "uleb128",
+                  "offset": 25,
+                  "size": 1,
+                  "value": 5,
+                  "display": "5"
+                },
+                {
+                  "name": "attributes",
+                  "path": "blocks[1].file.attributes",
+                  "type": "uleb128",
+                  "offset": 26,
+                  "size": 1,
+                  "value": 32,
+                  "display": "0x20"
+                },
+                {
+                  "name": "compression_info",
+                  "path": "blocks[1].file.compression_info",
+                  "type": "uleb128",
+                  "offset": 27,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x0"
+                },
+                {
+                  "name": "host_os",
+                  "path": "blocks[1].file.host_os",
+                  "type": "uleb128",
+                  "offset": 28,
+                  "size": 1,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "name_length",
+                  "path": "blocks[1].file.name_length",
+                  "type": "uleb128",
+                  "offset": 29,
+                  "size": 1,
+                  "value": 5,
+                  "display": "5"
+                },
+                {
+                  "name": "name",
+                  "path": "blocks[1].file.name",
+                  "type": "char[5]",
+                  "offset": 30,
+                  "size": 5,
+                  "value": "a.txt",
+                  "display": "a.txt"
+                }
+              ]
+            },
+            {
+              "name": "data",
+              "path": "blocks[1].data",
+              "type": "u8[5]",
+              "offset": 35,
+              "size": 5,
+              "value": "68656C6C6F",
+              "display": "68 65 6C 6C 6F"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "blocks[2]",
+          "type": "Block",
+          "offset": 40,
+          "size": 8,
+          "display": "Block (5)",
+          "children": [
+            {
+              "name": "header_crc",
+              "path": "blocks[2].header_crc",
+              "type": "u32",
+              "offset": 40,
+              "size": 4,
+              "value": 893039129,
+              "display": "0x353AB219"
+            },
+            {
+              "name": "header_size",
+              "path": "blocks[2].header_size",
+              "type": "uleb128",
+              "offset": 44,
+              "size": 1,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "header_type",
+              "path": "blocks[2].header_type",
+              "type": "uleb128",
+              "offset": 45,
+              "size": 1,
+              "value": 5,
+              "display": "5"
+            },
+            {
+              "name": "header_flags",
+              "path": "blocks[2].header_flags",
+              "type": "uleb128",
+              "offset": 46,
+              "size": 1,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "end",
+              "path": "blocks[2].end",
+              "type": "EndBody",
+              "offset": 47,
+              "size": 1,
+              "display": "EndBody (1)",
+              "children": [
+                {
+                  "name": "end_flags",
+                  "path": "blocks[2].end.end_flags",
+                  "type": "uleb128",
+                  "offset": 47,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0x0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

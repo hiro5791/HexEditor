@@ -1,0 +1,454 @@
+{
+  "name": "Windows のショートカット (LNK)",
+  "type": "application",
+  "offset": 0,
+  "size": 200,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "ShellLinkHeader",
+      "offset": 0,
+      "size": 76,
+      "display": "ShellLinkHeader (14)",
+      "children": [
+        {
+          "name": "header_size",
+          "path": "header.header_size",
+          "type": "u32",
+          "offset": 0,
+          "size": 4,
+          "value": 76,
+          "display": "76"
+        },
+        {
+          "name": "link_clsid",
+          "path": "header.link_clsid",
+          "type": "guid",
+          "offset": 4,
+          "size": 16,
+          "value": "0114020000000000C000000000000046",
+          "display": "{00021401-0000-0000-C000-000000000046}"
+        },
+        {
+          "name": "link_flags",
+          "path": "header.link_flags",
+          "type": "LinkFlags",
+          "offset": 20,
+          "size": 4,
+          "value": 143,
+          "display": "HasLinkTargetIdList | HasLinkInfo | HasName | HasRelativePath | IsUnicode"
+        },
+        {
+          "name": "file_attributes",
+          "path": "header.file_attributes",
+          "type": "u32",
+          "offset": 24,
+          "size": 4,
+          "value": 32,
+          "display": "0x20"
+        },
+        {
+          "name": "creation_time",
+          "path": "header.creation_time",
+          "type": "filetime",
+          "offset": 28,
+          "size": 8,
+          "value": 133137663984140288,
+          "display": "11/24/2022 12:26:38 PM"
+        },
+        {
+          "name": "access_time",
+          "path": "header.access_time",
+          "type": "filetime",
+          "offset": 36,
+          "size": 8,
+          "value": 133137663984140288,
+          "display": "11/24/2022 12:26:38 PM"
+        },
+        {
+          "name": "write_time",
+          "path": "header.write_time",
+          "type": "filetime",
+          "offset": 44,
+          "size": 8,
+          "value": 133137663984140288,
+          "display": "11/24/2022 12:26:38 PM"
+        },
+        {
+          "name": "file_size",
+          "path": "header.file_size",
+          "type": "u32",
+          "offset": 52,
+          "size": 4,
+          "value": 14,
+          "display": "14"
+        },
+        {
+          "name": "icon_index",
+          "path": "header.icon_index",
+          "type": "s32",
+          "offset": 56,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "show_command",
+          "path": "header.show_command",
+          "type": "ShowCommand",
+          "offset": 60,
+          "size": 4,
+          "value": 1,
+          "display": "Normal (0x1)"
+        },
+        {
+          "name": "hot_key",
+          "path": "header.hot_key",
+          "type": "u16",
+          "offset": 64,
+          "size": 2,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "reserved1",
+          "path": "header.reserved1",
+          "type": "u16",
+          "offset": 66,
+          "size": 2,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "reserved2",
+          "path": "header.reserved2",
+          "type": "u32",
+          "offset": 68,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "reserved3",
+          "path": "header.reserved3",
+          "type": "u32",
+          "offset": 72,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        }
+      ]
+    },
+    {
+      "name": "link_target_id_list",
+      "path": "link_target_id_list",
+      "type": "IdList",
+      "offset": 76,
+      "size": 24,
+      "display": "IdList (2)",
+      "children": [
+        {
+          "name": "id_list_size",
+          "path": "link_target_id_list.id_list_size",
+          "type": "u16",
+          "offset": 76,
+          "size": 2,
+          "value": 22,
+          "display": "22"
+        },
+        {
+          "name": "items",
+          "path": "link_target_id_list.items",
+          "type": "IdListItem[2]",
+          "offset": 78,
+          "size": 22,
+          "display": "[2]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "link_target_id_list.items[0]",
+              "type": "IdListItem",
+              "offset": 78,
+              "size": 20,
+              "display": "IdListItem (2)",
+              "children": [
+                {
+                  "name": "item_size",
+                  "path": "link_target_id_list.items[0].item_size",
+                  "type": "u16",
+                  "offset": 78,
+                  "size": 2,
+                  "value": 20,
+                  "display": "20",
+                  "comment": "この欄の 2 バイトを含む。0 なら終端"
+                },
+                {
+                  "name": "data",
+                  "path": "link_target_id_list.items[0].data",
+                  "type": "u8[18]",
+                  "offset": 80,
+                  "size": 18,
+                  "value": "101112131415161718191A1B1C1D1E1F2021",
+                  "display": "10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F …"
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "link_target_id_list.items[1]",
+              "type": "IdListItem",
+              "offset": 98,
+              "size": 2,
+              "display": "IdListItem (1)",
+              "children": [
+                {
+                  "name": "item_size",
+                  "path": "link_target_id_list.items[1].item_size",
+                  "type": "u16",
+                  "offset": 98,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0",
+                  "comment": "この欄の 2 バイトを含む。0 なら終端"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "link_info",
+      "path": "link_info",
+      "type": "LinkInfo",
+      "offset": 100,
+      "size": 60,
+      "display": "LinkInfo (10)",
+      "children": [
+        {
+          "name": "link_info_size",
+          "path": "link_info.link_info_size",
+          "type": "u32",
+          "offset": 100,
+          "size": 4,
+          "value": 60,
+          "display": "60"
+        },
+        {
+          "name": "link_info_header_size",
+          "path": "link_info.link_info_header_size",
+          "type": "u32",
+          "offset": 104,
+          "size": 4,
+          "value": 28,
+          "display": "28"
+        },
+        {
+          "name": "link_info_flags",
+          "path": "link_info.link_info_flags",
+          "type": "u32",
+          "offset": 108,
+          "size": 4,
+          "value": 1,
+          "display": "0x1",
+          "comment": "1: ローカルのボリュームとパスあり、2: ネットワーク共有あり"
+        },
+        {
+          "name": "volume_id_offset",
+          "path": "link_info.volume_id_offset",
+          "type": "u32",
+          "offset": 112,
+          "size": 4,
+          "value": 28,
+          "display": "28"
+        },
+        {
+          "name": "local_base_path_offset",
+          "path": "link_info.local_base_path_offset",
+          "type": "u32",
+          "offset": 116,
+          "size": 4,
+          "value": 45,
+          "display": "45"
+        },
+        {
+          "name": "common_network_relative_link_offset",
+          "path": "link_info.common_network_relative_link_offset",
+          "type": "u32",
+          "offset": 120,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "common_path_suffix_offset",
+          "path": "link_info.common_path_suffix_offset",
+          "type": "u32",
+          "offset": 124,
+          "size": 4,
+          "value": 59,
+          "display": "59"
+        },
+        {
+          "name": "volume_id",
+          "path": "link_info.volume_id",
+          "type": "VolumeId",
+          "offset": 128,
+          "size": 17,
+          "display": "VolumeId (5)",
+          "children": [
+            {
+              "name": "size",
+              "path": "link_info.volume_id.size",
+              "type": "u32",
+              "offset": 128,
+              "size": 4,
+              "value": 17,
+              "display": "17"
+            },
+            {
+              "name": "drive_type",
+              "path": "link_info.volume_id.drive_type",
+              "type": "u32",
+              "offset": 132,
+              "size": 4,
+              "value": 3,
+              "display": "3"
+            },
+            {
+              "name": "drive_serial_number",
+              "path": "link_info.volume_id.drive_serial_number",
+              "type": "u32",
+              "offset": 136,
+              "size": 4,
+              "value": 2712847316,
+              "display": "0xA1B2C3D4"
+            },
+            {
+              "name": "volume_label_offset",
+              "path": "link_info.volume_id.volume_label_offset",
+              "type": "u32",
+              "offset": 140,
+              "size": 4,
+              "value": 16,
+              "display": "16"
+            },
+            {
+              "name": "volume_label",
+              "path": "link_info.volume_id.volume_label",
+              "type": "string",
+              "offset": 144,
+              "size": 1,
+              "value": "",
+              "display": ""
+            }
+          ]
+        },
+        {
+          "name": "local_base_path",
+          "path": "link_info.local_base_path",
+          "type": "string",
+          "offset": 145,
+          "size": 14,
+          "value": "C:\\Test\\a.txt",
+          "display": "C:\\Test\\a.txt"
+        },
+        {
+          "name": "common_path_suffix",
+          "path": "link_info.common_path_suffix",
+          "type": "string",
+          "offset": 159,
+          "size": 1,
+          "value": "",
+          "display": ""
+        }
+      ]
+    },
+    {
+      "name": "name_string",
+      "path": "name_string",
+      "type": "StringData",
+      "offset": 160,
+      "size": 20,
+      "display": "StringData (2)",
+      "children": [
+        {
+          "name": "count_characters",
+          "path": "name_string.count_characters",
+          "type": "u16",
+          "offset": 160,
+          "size": 2,
+          "value": 9,
+          "display": "9"
+        },
+        {
+          "name": "text",
+          "path": "name_string.text",
+          "type": "char16[9]",
+          "offset": 162,
+          "size": 18,
+          "value": "HexEditor",
+          "display": "HexEditor"
+        }
+      ]
+    },
+    {
+      "name": "relative_path",
+      "path": "relative_path",
+      "type": "StringData",
+      "offset": 180,
+      "size": 16,
+      "display": "StringData (2)",
+      "children": [
+        {
+          "name": "count_characters",
+          "path": "relative_path.count_characters",
+          "type": "u16",
+          "offset": 180,
+          "size": 2,
+          "value": 7,
+          "display": "7"
+        },
+        {
+          "name": "text",
+          "path": "relative_path.text",
+          "type": "char16[7]",
+          "offset": 182,
+          "size": 14,
+          "value": ".\\a.txt",
+          "display": ".\\a.txt"
+        }
+      ]
+    },
+    {
+      "name": "extra_data",
+      "path": "extra_data",
+      "type": "ExtraDataBlock[1]",
+      "offset": 196,
+      "size": 4,
+      "display": "[1]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "extra_data[0]",
+          "type": "ExtraDataBlock",
+          "offset": 196,
+          "size": 4,
+          "display": "ExtraDataBlock (1)",
+          "children": [
+            {
+              "name": "block_size",
+              "path": "extra_data[0].block_size",
+              "type": "u32",
+              "offset": 196,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

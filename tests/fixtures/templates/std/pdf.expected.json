@@ -1,0 +1,421 @@
+{
+  "name": "PDF 文書",
+  "type": "application",
+  "offset": 0,
+  "size": 0,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "Header",
+      "offset": 0,
+      "size": 8,
+      "display": "Header (2)",
+      "children": [
+        {
+          "name": "magic",
+          "path": "header.magic",
+          "type": "char[5]",
+          "offset": 0,
+          "size": 5,
+          "value": "%PDF-",
+          "display": "%PDF-"
+        },
+        {
+          "name": "version",
+          "path": "header.version",
+          "type": "char[3]",
+          "offset": 5,
+          "size": 3,
+          "value": "1.4",
+          "display": "1.4",
+          "comment": "例: 1.7"
+        }
+      ]
+    },
+    {
+      "name": "startxref",
+      "path": "startxref",
+      "type": "StartXref",
+      "offset": 315,
+      "size": 9,
+      "display": "StartXref (2)",
+      "children": [
+        {
+          "name": "keyword",
+          "path": "startxref.keyword",
+          "type": "char[9]",
+          "offset": 315,
+          "size": 9,
+          "value": "startxref",
+          "display": "startxref"
+        },
+        {
+          "name": "xref_offset",
+          "path": "startxref.xref_offset",
+          "type": "u64",
+          "offset": 324,
+          "size": 0,
+          "value": 192,
+          "display": "0xC0"
+        }
+      ]
+    },
+    {
+      "name": "xref_keyword",
+      "path": "xref_keyword",
+      "type": "char[4]",
+      "offset": 192,
+      "size": 4,
+      "value": "xref",
+      "display": "xref"
+    },
+    {
+      "name": "xref_entries",
+      "path": "xref_entries",
+      "type": "XrefEntry[4]",
+      "offset": 201,
+      "size": 80,
+      "display": "[4]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "xref_entries[0]",
+          "type": "XrefEntry",
+          "offset": 201,
+          "size": 20,
+          "display": "XrefEntry (8)",
+          "children": [
+            {
+              "name": "offset",
+              "path": "xref_entries[0].offset",
+              "type": "char[10]",
+              "offset": 201,
+              "size": 10,
+              "value": "0000000000",
+              "display": "0000000000"
+            },
+            {
+              "name": "sp1",
+              "path": "xref_entries[0].sp1",
+              "type": "char[1]",
+              "offset": 211,
+              "size": 1,
+              "value": " ",
+              "display": " "
+            },
+            {
+              "name": "generation",
+              "path": "xref_entries[0].generation",
+              "type": "char[5]",
+              "offset": 212,
+              "size": 5,
+              "value": "65535",
+              "display": "65535"
+            },
+            {
+              "name": "sp2",
+              "path": "xref_entries[0].sp2",
+              "type": "char[1]",
+              "offset": 217,
+              "size": 1,
+              "value": " ",
+              "display": " "
+            },
+            {
+              "name": "type",
+              "path": "xref_entries[0].type",
+              "type": "char[1]",
+              "offset": 218,
+              "size": 1,
+              "value": "f",
+              "display": "f"
+            },
+            {
+              "name": "eol",
+              "path": "xref_entries[0].eol",
+              "type": "char[2]",
+              "offset": 219,
+              "size": 2,
+              "value": " \n",
+              "display": " \n"
+            },
+            {
+              "name": "object_offset",
+              "path": "xref_entries[0].object_offset",
+              "type": "u64",
+              "offset": 221,
+              "size": 0,
+              "value": 0,
+              "display": "0x0"
+            },
+            {
+              "name": "generation_number",
+              "path": "xref_entries[0].generation_number",
+              "type": "u64",
+              "offset": 221,
+              "size": 0,
+              "value": 65535,
+              "display": "65535"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "xref_entries[1]",
+          "type": "XrefEntry",
+          "offset": 221,
+          "size": 20,
+          "display": "XrefEntry (8)",
+          "children": [
+            {
+              "name": "offset",
+              "path": "xref_entries[1].offset",
+              "type": "char[10]",
+              "offset": 221,
+              "size": 10,
+              "value": "0000000015",
+              "display": "0000000015"
+            },
+            {
+              "name": "sp1",
+              "path": "xref_entries[1].sp1",
+              "type": "char[1]",
+              "offset": 231,
+              "size": 1,
+              "value": " ",
+              "display": " "
+            },
+            {
+              "name": "generation",
+              "path": "xref_entries[1].generation",
+              "type": "char[5]",
+              "offset": 232,
+              "size": 5,
+              "value": "00000",
+              "display": "00000"
+            },
+            {
+              "name": "sp2",
+              "path": "xref_entries[1].sp2",
+              "type": "char[1]",
+              "offset": 237,
+              "size": 1,
+              "value": " ",
+              "display": " "
+            },
+            {
+              "name": "type",
+              "path": "xref_entries[1].type",
+              "type": "char[1]",
+              "offset": 238,
+              "size": 1,
+              "value": "n",
+              "display": "n"
+            },
+            {
+              "name": "eol",
+              "path": "xref_entries[1].eol",
+              "type": "char[2]",
+              "offset": 239,
+              "size": 2,
+              "value": " \n",
+              "display": " \n"
+            },
+            {
+              "name": "object_offset",
+              "path": "xref_entries[1].object_offset",
+              "type": "u64",
+              "offset": 241,
+              "size": 0,
+              "value": 15,
+              "display": "0xF"
+            },
+            {
+              "name": "generation_number",
+              "path": "xref_entries[1].generation_number",
+              "type": "u64",
+              "offset": 241,
+              "size": 0,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "xref_entries[2]",
+          "type": "XrefEntry",
+          "offset": 241,
+          "size": 20,
+          "display": "XrefEntry (8)",
+          "children": [
+            {
+              "name": "offset",
+              "path": "xref_entries[2].offset",
+              "type": "char[10]",
+              "offset": 241,
+              "size": 10,
+              "value": "0000000064",
+              "display": "0000000064"
+            },
+            {
+              "name": "sp1",
+              "path": "xref_entries[2].sp1",
+              "type": "char[1]",
+              "offset": 251,
+              "size": 1,
+              "value": " ",
+              "display": " "
+            },
+            {
+              "name": "generation",
+              "path": "xref_entries[2].generation",
+              "type": "char[5]",
+              "offset": 252,
+              "size": 5,
+              "value": "00000",
+              "display": "00000"
+            },
+            {
+              "name": "sp2",
+              "path": "xref_entries[2].sp2",
+              "type": "char[1]",
+              "offset": 257,
+              "size": 1,
+              "value": " ",
+              "display": " "
+            },
+            {
+              "name": "type",
+              "path": "xref_entries[2].type",
+              "type": "char[1]",
+              "offset": 258,
+              "size": 1,
+              "value": "n",
+              "display": "n"
+            },
+            {
+              "name": "eol",
+              "path": "xref_entries[2].eol",
+              "type": "char[2]",
+              "offset": 259,
+              "size": 2,
+              "value": " \n",
+              "display": " \n"
+            },
+            {
+              "name": "object_offset",
+              "path": "xref_entries[2].object_offset",
+              "type": "u64",
+              "offset": 261,
+              "size": 0,
+              "value": 64,
+              "display": "0x40"
+            },
+            {
+              "name": "generation_number",
+              "path": "xref_entries[2].generation_number",
+              "type": "u64",
+              "offset": 261,
+              "size": 0,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        },
+        {
+          "name": "[3]",
+          "path": "xref_entries[3]",
+          "type": "XrefEntry",
+          "offset": 261,
+          "size": 20,
+          "display": "XrefEntry (8)",
+          "children": [
+            {
+              "name": "offset",
+              "path": "xref_entries[3].offset",
+              "type": "char[10]",
+              "offset": 261,
+              "size": 10,
+              "value": "0000000121",
+              "display": "0000000121"
+            },
+            {
+              "name": "sp1",
+              "path": "xref_entries[3].sp1",
+              "type": "char[1]",
+              "offset": 271,
+              "size": 1,
+              "value": " ",
+              "display": " "
+            },
+            {
+              "name": "generation",
+              "path": "xref_entries[3].generation",
+              "type": "char[5]",
+              "offset": 272,
+              "size": 5,
+              "value": "00000",
+              "display": "00000"
+            },
+            {
+              "name": "sp2",
+              "path": "xref_entries[3].sp2",
+              "type": "char[1]",
+              "offset": 277,
+              "size": 1,
+              "value": " ",
+              "display": " "
+            },
+            {
+              "name": "type",
+              "path": "xref_entries[3].type",
+              "type": "char[1]",
+              "offset": 278,
+              "size": 1,
+              "value": "n",
+              "display": "n"
+            },
+            {
+              "name": "eol",
+              "path": "xref_entries[3].eol",
+              "type": "char[2]",
+              "offset": 279,
+              "size": 2,
+              "value": " \n",
+              "display": " \n"
+            },
+            {
+              "name": "object_offset",
+              "path": "xref_entries[3].object_offset",
+              "type": "u64",
+              "offset": 281,
+              "size": 0,
+              "value": 121,
+              "display": "0x79"
+            },
+            {
+              "name": "generation_number",
+              "path": "xref_entries[3].generation_number",
+              "type": "u64",
+              "offset": 281,
+              "size": 0,
+              "value": 0,
+              "display": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "trailer",
+      "path": "trailer",
+      "type": "char[34]",
+      "offset": 281,
+      "size": 34,
+      "value": "trailer\n<< /Size 4 /Root 1 0 R >>\n",
+      "display": "trailer\n<< /Size 4 /Root 1 0 R >>\n"
+    }
+  ]
+}

@@ -1,0 +1,626 @@
+{
+  "name": "PNG 画像",
+  "type": "application",
+  "offset": 0,
+  "size": 210,
+  "children": [
+    {
+      "name": "signature",
+      "path": "signature",
+      "type": "u8[8]",
+      "offset": 0,
+      "size": 8,
+      "value": "89504E470D0A1A0A",
+      "display": "89 50 4E 47 0D 0A 1A 0A"
+    },
+    {
+      "name": "chunks",
+      "path": "chunks",
+      "type": "Chunk[9]",
+      "offset": 8,
+      "size": 202,
+      "display": "[9]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "chunks[0]",
+          "type": "Chunk",
+          "offset": 8,
+          "size": 25,
+          "display": "Chunk (4)",
+          "children": [
+            {
+              "name": "length",
+              "path": "chunks[0].length",
+              "type": "u32",
+              "offset": 8,
+              "size": 4,
+              "value": 13,
+              "display": "13"
+            },
+            {
+              "name": "type",
+              "path": "chunks[0].type",
+              "type": "char[4]",
+              "offset": 12,
+              "size": 4,
+              "value": "IHDR",
+              "display": "IHDR"
+            },
+            {
+              "name": "header",
+              "path": "chunks[0].header",
+              "type": "IHDR",
+              "offset": 16,
+              "size": 13,
+              "display": "IHDR (7)",
+              "children": [
+                {
+                  "name": "width",
+                  "path": "chunks[0].header.width",
+                  "type": "u32",
+                  "offset": 16,
+                  "size": 4,
+                  "value": 4,
+                  "display": "4"
+                },
+                {
+                  "name": "height",
+                  "path": "chunks[0].header.height",
+                  "type": "u32",
+                  "offset": 20,
+                  "size": 4,
+                  "value": 4,
+                  "display": "4"
+                },
+                {
+                  "name": "bit_depth",
+                  "path": "chunks[0].header.bit_depth",
+                  "type": "u8",
+                  "offset": 24,
+                  "size": 1,
+                  "value": 8,
+                  "display": "8"
+                },
+                {
+                  "name": "color_type",
+                  "path": "chunks[0].header.color_type",
+                  "type": "ColorType",
+                  "offset": 25,
+                  "size": 1,
+                  "value": 3,
+                  "display": "Indexed (0x3)"
+                },
+                {
+                  "name": "compression",
+                  "path": "chunks[0].header.compression",
+                  "type": "u8",
+                  "offset": 26,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "filter",
+                  "path": "chunks[0].header.filter",
+                  "type": "u8",
+                  "offset": 27,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "interlace",
+                  "path": "chunks[0].header.interlace",
+                  "type": "u8",
+                  "offset": 28,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0"
+                }
+              ]
+            },
+            {
+              "name": "crc",
+              "path": "chunks[0].crc",
+              "type": "u32",
+              "offset": 29,
+              "size": 4,
+              "value": 2653908556,
+              "display": "0x9E2F6E4C"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "chunks[1]",
+          "type": "Chunk",
+          "offset": 33,
+          "size": 16,
+          "display": "Chunk (4)",
+          "children": [
+            {
+              "name": "length",
+              "path": "chunks[1].length",
+              "type": "u32",
+              "offset": 33,
+              "size": 4,
+              "value": 4,
+              "display": "4"
+            },
+            {
+              "name": "type",
+              "path": "chunks[1].type",
+              "type": "char[4]",
+              "offset": 37,
+              "size": 4,
+              "value": "gAMA",
+              "display": "gAMA"
+            },
+            {
+              "name": "gamma",
+              "path": "chunks[1].gamma",
+              "type": "u32",
+              "offset": 41,
+              "size": 4,
+              "value": 45455,
+              "display": "45455",
+              "comment": "gamma x 100000"
+            },
+            {
+              "name": "crc",
+              "path": "chunks[1].crc",
+              "type": "u32",
+              "offset": 45,
+              "size": 4,
+              "value": 201089285,
+              "display": "0xBFC6105"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "chunks[2]",
+          "type": "Chunk",
+          "offset": 49,
+          "size": 13,
+          "display": "Chunk (4)",
+          "children": [
+            {
+              "name": "length",
+              "path": "chunks[2].length",
+              "type": "u32",
+              "offset": 49,
+              "size": 4,
+              "value": 1,
+              "display": "1"
+            },
+            {
+              "name": "type",
+              "path": "chunks[2].type",
+              "type": "char[4]",
+              "offset": 53,
+              "size": 4,
+              "value": "sRGB",
+              "display": "sRGB"
+            },
+            {
+              "name": "rendering_intent",
+              "path": "chunks[2].rendering_intent",
+              "type": "u8",
+              "offset": 57,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "crc",
+              "path": "chunks[2].crc",
+              "type": "u32",
+              "offset": 58,
+              "size": 4,
+              "value": 2932743401,
+              "display": "0xAECE1CE9"
+            }
+          ]
+        },
+        {
+          "name": "[3]",
+          "path": "chunks[3]",
+          "type": "Chunk",
+          "offset": 62,
+          "size": 24,
+          "display": "Chunk (4)",
+          "children": [
+            {
+              "name": "length",
+              "path": "chunks[3].length",
+              "type": "u32",
+              "offset": 62,
+              "size": 4,
+              "value": 12,
+              "display": "12"
+            },
+            {
+              "name": "type",
+              "path": "chunks[3].type",
+              "type": "char[4]",
+              "offset": 66,
+              "size": 4,
+              "value": "PLTE",
+              "display": "PLTE"
+            },
+            {
+              "name": "palette",
+              "path": "chunks[3].palette",
+              "type": "rgb8[4]",
+              "offset": 70,
+              "size": 12,
+              "display": "[4]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "chunks[3].palette[0]",
+                  "type": "rgb8",
+                  "offset": 70,
+                  "size": 3,
+                  "value": "FF0000",
+                  "display": "#FF0000"
+                },
+                {
+                  "name": "[1]",
+                  "path": "chunks[3].palette[1]",
+                  "type": "rgb8",
+                  "offset": 73,
+                  "size": 3,
+                  "value": "00FF00",
+                  "display": "#00FF00"
+                },
+                {
+                  "name": "[2]",
+                  "path": "chunks[3].palette[2]",
+                  "type": "rgb8",
+                  "offset": 76,
+                  "size": 3,
+                  "value": "0000FF",
+                  "display": "#0000FF"
+                },
+                {
+                  "name": "[3]",
+                  "path": "chunks[3].palette[3]",
+                  "type": "rgb8",
+                  "offset": 79,
+                  "size": 3,
+                  "value": "FFFFFF",
+                  "display": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "name": "crc",
+              "path": "chunks[3].crc",
+              "type": "u32",
+              "offset": 82,
+              "size": 4,
+              "value": 4211106038,
+              "display": "0xFB0060F6"
+            }
+          ]
+        },
+        {
+          "name": "[4]",
+          "path": "chunks[4]",
+          "type": "Chunk",
+          "offset": 86,
+          "size": 21,
+          "display": "Chunk (4)",
+          "children": [
+            {
+              "name": "length",
+              "path": "chunks[4].length",
+              "type": "u32",
+              "offset": 86,
+              "size": 4,
+              "value": 9,
+              "display": "9"
+            },
+            {
+              "name": "type",
+              "path": "chunks[4].type",
+              "type": "char[4]",
+              "offset": 90,
+              "size": 4,
+              "value": "pHYs",
+              "display": "pHYs"
+            },
+            {
+              "name": "physical",
+              "path": "chunks[4].physical",
+              "type": "PHYS",
+              "offset": 94,
+              "size": 9,
+              "display": "PHYS (3)",
+              "children": [
+                {
+                  "name": "pixels_per_unit_x",
+                  "path": "chunks[4].physical.pixels_per_unit_x",
+                  "type": "u32",
+                  "offset": 94,
+                  "size": 4,
+                  "value": 2835,
+                  "display": "2835"
+                },
+                {
+                  "name": "pixels_per_unit_y",
+                  "path": "chunks[4].physical.pixels_per_unit_y",
+                  "type": "u32",
+                  "offset": 98,
+                  "size": 4,
+                  "value": 2835,
+                  "display": "2835"
+                },
+                {
+                  "name": "unit",
+                  "path": "chunks[4].physical.unit",
+                  "type": "u8",
+                  "offset": 102,
+                  "size": 1,
+                  "value": 1,
+                  "display": "1"
+                }
+              ]
+            },
+            {
+              "name": "crc",
+              "path": "chunks[4].crc",
+              "type": "u32",
+              "offset": 103,
+              "size": 4,
+              "value": 10132504,
+              "display": "0x9A9C18"
+            }
+          ]
+        },
+        {
+          "name": "[5]",
+          "path": "chunks[5]",
+          "type": "Chunk",
+          "offset": 107,
+          "size": 19,
+          "display": "Chunk (4)",
+          "children": [
+            {
+              "name": "length",
+              "path": "chunks[5].length",
+              "type": "u32",
+              "offset": 107,
+              "size": 4,
+              "value": 7,
+              "display": "7"
+            },
+            {
+              "name": "type",
+              "path": "chunks[5].type",
+              "type": "char[4]",
+              "offset": 111,
+              "size": 4,
+              "value": "tIME",
+              "display": "tIME"
+            },
+            {
+              "name": "modified",
+              "path": "chunks[5].modified",
+              "type": "TIME",
+              "offset": 115,
+              "size": 7,
+              "display": "TIME (6)",
+              "children": [
+                {
+                  "name": "year",
+                  "path": "chunks[5].modified.year",
+                  "type": "u16",
+                  "offset": 115,
+                  "size": 2,
+                  "value": 2026,
+                  "display": "2026"
+                },
+                {
+                  "name": "month",
+                  "path": "chunks[5].modified.month",
+                  "type": "u8",
+                  "offset": 117,
+                  "size": 1,
+                  "value": 10,
+                  "display": "10"
+                },
+                {
+                  "name": "day",
+                  "path": "chunks[5].modified.day",
+                  "type": "u8",
+                  "offset": 118,
+                  "size": 1,
+                  "value": 16,
+                  "display": "16"
+                },
+                {
+                  "name": "hour",
+                  "path": "chunks[5].modified.hour",
+                  "type": "u8",
+                  "offset": 119,
+                  "size": 1,
+                  "value": 12,
+                  "display": "12"
+                },
+                {
+                  "name": "minute",
+                  "path": "chunks[5].modified.minute",
+                  "type": "u8",
+                  "offset": 120,
+                  "size": 1,
+                  "value": 34,
+                  "display": "34"
+                },
+                {
+                  "name": "second",
+                  "path": "chunks[5].modified.second",
+                  "type": "u8",
+                  "offset": 121,
+                  "size": 1,
+                  "value": 56,
+                  "display": "56"
+                }
+              ]
+            },
+            {
+              "name": "crc",
+              "path": "chunks[5].crc",
+              "type": "u32",
+              "offset": 122,
+              "size": 4,
+              "value": 3876117152,
+              "display": "0xE708DAA0"
+            }
+          ]
+        },
+        {
+          "name": "[6]",
+          "path": "chunks[6]",
+          "type": "Chunk",
+          "offset": 126,
+          "size": 40,
+          "display": "Chunk (4)",
+          "children": [
+            {
+              "name": "length",
+              "path": "chunks[6].length",
+              "type": "u32",
+              "offset": 126,
+              "size": 4,
+              "value": 28,
+              "display": "28"
+            },
+            {
+              "name": "type",
+              "path": "chunks[6].type",
+              "type": "char[4]",
+              "offset": 130,
+              "size": 4,
+              "value": "tEXt",
+              "display": "tEXt"
+            },
+            {
+              "name": "text",
+              "path": "chunks[6].text",
+              "type": "char[28]",
+              "offset": 134,
+              "size": 28,
+              "value": "Comment",
+              "display": "Comment"
+            },
+            {
+              "name": "crc",
+              "path": "chunks[6].crc",
+              "type": "u32",
+              "offset": 162,
+              "size": 4,
+              "value": 548158718,
+              "display": "0x20AC3CFE"
+            }
+          ]
+        },
+        {
+          "name": "[7]",
+          "path": "chunks[7]",
+          "type": "Chunk",
+          "offset": 166,
+          "size": 32,
+          "display": "Chunk (4)",
+          "children": [
+            {
+              "name": "length",
+              "path": "chunks[7].length",
+              "type": "u32",
+              "offset": 166,
+              "size": 4,
+              "value": 20,
+              "display": "20"
+            },
+            {
+              "name": "type",
+              "path": "chunks[7].type",
+              "type": "char[4]",
+              "offset": 170,
+              "size": 4,
+              "value": "IDAT",
+              "display": "IDAT"
+            },
+            {
+              "name": "data",
+              "path": "chunks[7].data",
+              "type": "u8[20]",
+              "offset": 174,
+              "size": 20,
+              "value": "78DA636060646206630610CD0062030001040019",
+              "display": "78 DA 63 60 60 64 62 06 63 06 10 CD 00 62 03 00 …"
+            },
+            {
+              "name": "crc",
+              "path": "chunks[7].crc",
+              "type": "u32",
+              "offset": 194,
+              "size": 4,
+              "value": 2460972727,
+              "display": "0x92AF76B7"
+            }
+          ]
+        },
+        {
+          "name": "[8]",
+          "path": "chunks[8]",
+          "type": "Chunk",
+          "offset": 198,
+          "size": 12,
+          "display": "Chunk (4)",
+          "children": [
+            {
+              "name": "length",
+              "path": "chunks[8].length",
+              "type": "u32",
+              "offset": 198,
+              "size": 4,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "type",
+              "path": "chunks[8].type",
+              "type": "char[4]",
+              "offset": 202,
+              "size": 4,
+              "value": "IEND",
+              "display": "IEND"
+            },
+            {
+              "name": "data",
+              "path": "chunks[8].data",
+              "type": "u8[0]",
+              "offset": 206,
+              "size": 0,
+              "value": "",
+              "display": ""
+            },
+            {
+              "name": "crc",
+              "path": "chunks[8].crc",
+              "type": "u32",
+              "offset": 206,
+              "size": 4,
+              "value": 2923585666,
+              "display": "0xAE426082"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

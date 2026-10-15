@@ -1,5 +1,6 @@
 // HexEditor 標準ライブラリ (TPL-18): std.macho
 // Mach-O の型と補助関数。標準テンプレート (TPL-34) で使う。
+// 32 / 64 bit、リトル / ビッグエンディアン、fat (ユニバーサル) バイナリに対応する。エンディアンはマジックで決める。
 
 namespace std::macho {
 
@@ -13,7 +14,48 @@ namespace std::macho {
         KextBundle = 11, FileSet = 12,
     };
 
-    /// 64 bit の Mach-O ヘッダ (mach_header_64)
+    flags HeaderFlags : u32 {
+        NoUndefs = 0x1, IncrLink = 0x2, DyldLink = 0x4, BindAtLoad = 0x8, Prebound = 0x10, SplitSegs = 0x20, TwoLevel = 0x80,
+        ForceFlat = 0x100, NoMultiDefs = 0x200, NoFixPrebinding = 0x400, Prebindable = 0x800, AllModsBound = 0x1000,
+        SubsectionsViaSymbols = 0x2000, Canonical = 0x4000, WeakDefines = 0x8000, BindsToWeak = 0x10000, AllowStackExecution = 0x20000,
+        RootSafe = 0x40000, SetuidSafe = 0x80000, NoReexportedDylibs = 0x100000, Pie = 0x200000, DeadStrippableDylib = 0x400000,
+        HasTlvDescriptors = 0x800000, NoHeapExecution = 0x1000000, AppExtensionSafe = 0x2000000,
+    };
+
+    flags VmProt : s32 { Read = 1, Write = 2, Execute = 4 };
+
+    enum LoadCommandType : u32 {
+        Segment = 0x1, SymTab = 0x2, SymSeg = 0x3, Thread = 0x4, UnixThread = 0x5, LoadFvmLib = 0x6, IdFvmLib = 0x7, Ident = 0x8,
+        FvmFile = 0x9, PrePage = 0xA, DySymTab = 0xB, LoadDylib = 0xC, IdDylib = 0xD, LoadDylinker = 0xE, IdDylinker = 0xF,
+        PreboundDylib = 0x10, Routines = 0x11, SubFramework = 0x12, SubUmbrella = 0x13, SubClient = 0x14, SubLibrary = 0x15,
+        TwoLevelHints = 0x16, PrebindCksum = 0x17, LoadWeakDylib = 0x80000018, Segment64 = 0x19, Routines64 = 0x1A, Uuid = 0x1B,
+        Rpath = 0x8000001C, CodeSignature = 0x1D, SegmentSplitInfo = 0x1E, ReexportDylib = 0x8000001F, LazyLoadDylib = 0x20,
+        EncryptionInfo = 0x21, DyldInfo = 0x22, DyldInfoOnly = 0x80000022, LoadUpwardDylib = 0x80000023, VersionMinMacosx = 0x24,
+        VersionMinIphoneos = 0x25, FunctionStarts = 0x26, DyldEnvironment = 0x27, Main = 0x80000028, DataInCode = 0x29,
+        SourceVersion = 0x2A, DylibCodeSignDrs = 0x2B, EncryptionInfo64 = 0x2C, LinkerOption = 0x2D, LinkerOptimizationHint = 0x2E,
+        VersionMinTvos = 0x2F, VersionMinWatchos = 0x30, Note = 0x31, BuildVersion = 0x32, DyldExportsTrie = 0x80000033,
+        DyldChainedFixups = 0x80000034, FileSetEntry = 0x80000035,
+    };
+
+    fn fmt_version(ref u32 v) -> string {
+        return std::format("{}.{}.{}", v >> 16, (v >> 8) & 0xFF, v & 0xFF);
+    }
+
+    /// Mach-O ヘッダ (mach_header / mach_header_64)。64 bit のときだけ reserved を持つ。
+    struct Header(bool is64) {
+        u32      magic [[format("hex")]];
+        CpuType  cputype;
+        s32      cpusubtype [[format("hex")]];
+        FileType filetype;
+        u32      ncmds;
+        u32      sizeofcmds;
+        HeaderFlags flags;
+        if (is64) {
+            u32  reserved;
+        }
+    };
+
+    /// 64 bit の Mach-O ヘッダ (mach_header_64。リトルエンディアン固定)
     struct Header64 {
         le u32      magic [[format("hex"), expect(magic == 0xFEEDFACF, "64 bit の Mach-O ではありません")]];
         le CpuType  cputype;
@@ -25,14 +67,228 @@ namespace std::macho {
         le u32      reserved;
     };
 
-    /// ロードコマンドの先頭
-    struct LoadCommand {
-        le u32 cmd [[format("hex")]];
-        le u32 cmdsize;
-        u8 body[cmdsize - 8] [[lazy]];
+    struct Section64 {
+        char sectname[16];
+        char segname[16];
+        u64  addr [[format("hex")]];
+        u64  size;
+        u32  offset [[format("hex")]];
+        u32  align;
+        u32  reloff [[format("hex")]];
+        u32  nreloc;
+        u32  flags [[format("hex")]];
+        u32  reserved1;
+        u32  reserved2;
+        u32  reserved3;
     };
 
-    /// 仮想アドレスをファイルの位置に変換する (LC_SEGMENT_64 を探す。見つからない場合は -1)
+    struct Section32 {
+        char sectname[16];
+        char segname[16];
+        u32  addr [[format("hex")]];
+        u32  size;
+        u32  offset [[format("hex")]];
+        u32  align;
+        u32  reloff [[format("hex")]];
+        u32  nreloc;
+        u32  flags [[format("hex")]];
+        u32  reserved1;
+        u32  reserved2;
+    };
+
+    struct Segment64 {
+        char   segname[16];
+        u64    vmaddr [[format("hex")]];
+        u64    vmsize [[format("hex")]];
+        u64    fileoff [[format("hex")]];
+        u64    filesize;
+        VmProt maxprot;
+        VmProt initprot;
+        u32    nsects;
+        u32    flags [[format("hex")]];
+        Section64 sections[nsects];
+    };
+
+    struct Segment32 {
+        char   segname[16];
+        u32    vmaddr [[format("hex")]];
+        u32    vmsize [[format("hex")]];
+        u32    fileoff [[format("hex")]];
+        u32    filesize;
+        VmProt maxprot;
+        VmProt initprot;
+        u32    nsects;
+        u32    flags [[format("hex")]];
+        Section32 sections[nsects];
+    };
+
+    struct SymtabCommand {
+        u32 symoff [[format("hex")]];
+        u32 nsyms;
+        u32 stroff [[format("hex")]];
+        u32 strsize;
+    };
+
+    struct DysymtabCommand {
+        u32 ilocalsym;
+        u32 nlocalsym;
+        u32 iextdefsym;
+        u32 nextdefsym;
+        u32 iundefsym;
+        u32 nundefsym;
+        u32 tocoff [[format("hex")]];
+        u32 ntoc;
+        u32 modtaboff [[format("hex")]];
+        u32 nmodtab;
+        u32 extrefsymoff [[format("hex")]];
+        u32 nextrefsyms;
+        u32 indirectsymoff [[format("hex")]];
+        u32 nindirectsyms;
+        u32 extreloff [[format("hex")]];
+        u32 nextrel;
+        u32 locreloff [[format("hex")]];
+        u32 nlocrel;
+    };
+
+    /// 依存するライブラリ (dylib_command)。cmdsize は全体の大きさ。
+    struct DylibCommand(u32 cmdsize) {
+        u32 name_offset;
+        u32 timestamp;
+        u32 current_version [[format(fmt_version)]];
+        u32 compatibility_version [[format(fmt_version)]];
+        string name;
+        padding[cmdsize - 8 - 16 - sizeof(name)];
+    };
+
+    /// 文字列 1 つだけを持つコマンド (dylinker_command、rpath_command)
+    struct PathCommand(u32 cmdsize) {
+        u32 path_offset;
+        string path;
+        padding[cmdsize - 8 - 4 - sizeof(path)];
+    };
+
+    struct UuidCommand {
+        uuid uuid;
+    };
+
+    struct EntryPointCommand {
+        u64 entryoff [[format("hex")]];
+        u64 stacksize;
+    };
+
+    struct SourceVersionCommand {
+        u64 version [[format("hex")]];
+    };
+
+    struct BuildToolVersion {
+        u32 tool;
+        u32 version [[format(fmt_version)]];
+    };
+
+    struct BuildVersionCommand {
+        u32 platform;
+        u32 minos [[format(fmt_version)]];
+        u32 sdk [[format(fmt_version)]];
+        u32 ntools;
+        BuildToolVersion tools[ntools];
+    };
+
+    struct VersionMinCommand {
+        u32 version [[format(fmt_version)]];
+        u32 sdk [[format(fmt_version)]];
+    };
+
+    struct DyldInfoCommand {
+        u32 rebase_off [[format("hex")]];
+        u32 rebase_size;
+        u32 bind_off [[format("hex")]];
+        u32 bind_size;
+        u32 weak_bind_off [[format("hex")]];
+        u32 weak_bind_size;
+        u32 lazy_bind_off [[format("hex")]];
+        u32 lazy_bind_size;
+        u32 export_off [[format("hex")]];
+        u32 export_size;
+    };
+
+    /// linkedit_data_command (関数の開始位置、コード署名など)
+    struct LinkeditDataCommand {
+        u32 dataoff [[format("hex")]];
+        u32 datasize;
+    };
+
+    /// ロードコマンド。種類ごとに中身を解釈し、それ以外は生のデータ。大きさは cmdsize で決まる。
+    struct LoadCommand(bool is64) {
+        LoadCommandType cmd;
+        u32 cmdsize;
+        switch (cmd) {
+            case LoadCommandType::Segment64: Segment64 segment;
+            case LoadCommandType::Segment: Segment32 segment;
+            case LoadCommandType::SymTab: SymtabCommand symtab;
+            case LoadCommandType::DySymTab: DysymtabCommand dysymtab;
+            case LoadCommandType::LoadDylib: DylibCommand(cmdsize) dylib;
+            case LoadCommandType::IdDylib: DylibCommand(cmdsize) dylib;
+            case LoadCommandType::LoadWeakDylib: DylibCommand(cmdsize) dylib;
+            case LoadCommandType::ReexportDylib: DylibCommand(cmdsize) dylib;
+            case LoadCommandType::LoadDylinker: PathCommand(cmdsize) dylinker;
+            case LoadCommandType::Rpath: PathCommand(cmdsize) rpath;
+            case LoadCommandType::Uuid: UuidCommand uuid;
+            case LoadCommandType::Main: EntryPointCommand entry_point;
+            case LoadCommandType::SourceVersion: SourceVersionCommand source_version;
+            case LoadCommandType::BuildVersion: BuildVersionCommand build_version;
+            case LoadCommandType::VersionMinMacosx: VersionMinCommand version_min;
+            case LoadCommandType::VersionMinIphoneos: VersionMinCommand version_min;
+            case LoadCommandType::DyldInfo: DyldInfoCommand dyld_info;
+            case LoadCommandType::DyldInfoOnly: DyldInfoCommand dyld_info;
+            case LoadCommandType::CodeSignature: LinkeditDataCommand linkedit_data;
+            case LoadCommandType::FunctionStarts: LinkeditDataCommand linkedit_data;
+            case LoadCommandType::DataInCode: LinkeditDataCommand linkedit_data;
+            case LoadCommandType::SegmentSplitInfo: LinkeditDataCommand linkedit_data;
+            case LoadCommandType::DyldExportsTrie: LinkeditDataCommand linkedit_data;
+            case LoadCommandType::DyldChainedFixups: LinkeditDataCommand linkedit_data;
+            default: u8 data[cmdsize - 8] [[lazy]];
+        }
+    } [[size(cmdsize)]];
+
+    /// 1 つの Mach-O イメージ (fat の中の 1 つのスライスも、薄いファイルも同じ)。base はイメージの先頭のオフセット。
+    struct MachO(u64 base) {
+        // マジックのバイト列から、64 bit か、ビッグエンディアンかを決める (CF FA ED FE: 64 bit LE、FE ED FA CF: 64 bit BE、
+        // CE FA ED FE: 32 bit LE、FE ED FA CE: 32 bit BE)
+        local u32 peek = std::mem::read_u32(base, little);
+        local bool is64 = peek == 0xFEEDFACF || peek == 0xCFFAEDFE;
+        local bool is_big = peek == 0xCEFAEDFE || peek == 0xCFFAEDFE;
+        if (is_big) std::core::set_endian(big);
+        else     std::core::set_endian(little);
+        Header(is64) header;
+        LoadCommand(is64) commands[header.ncmds];
+    };
+
+    /// fat ヘッダ (fat_header。常にビッグエンディアン)
+    struct FatHeader {
+        be u32 magic [[format("hex")]];
+        be u32 nfat_arch;
+    };
+
+    /// fat のアーキテクチャ項目 (fat_arch。マジックが CAFEBABE のとき)
+    struct FatArch {
+        be CpuType cputype;
+        be s32 cpusubtype [[format("hex")]];
+        be u32 offset [[format("hex")]];
+        be u32 size;
+        be u32 align;
+    };
+
+    /// fat のアーキテクチャ項目 (fat_arch_64。マジックが CAFEBABF のとき)
+    struct FatArch64 {
+        be CpuType cputype;
+        be s32 cpusubtype [[format("hex")]];
+        be u64 offset [[format("hex")]];
+        be u64 size;
+        be u32 align;
+        be u32 reserved;
+    };
+
+    /// 仮想アドレスをファイルの位置に変換する (薄い 64 bit リトルエンディアンの LC_SEGMENT_64 を探す。見つからない場合は -1)
     fn va_to_offset(u64 va) -> s64 {
         local u64 ncmds = std::mem::read_u32(16, little);
         local u64 p = 32;

@@ -1,0 +1,110 @@
+// HexEditor 標準テンプレート (TPL-34): ext2 / ext3 / ext4 のスーパーブロック
+// ライセンス: MIT。
+// ボリューム先頭から 1024 バイトの位置にあるスーパーブロックだけを読む。100 GiB 以上のイメージでも使える。
+// ブロックグループ記述子や inode は読まない。
+#pragma name "ext2 / ext3 / ext4 superblock"
+#pragma name.ja "ext2 / ext3 / ext4 スーパーブロック"
+#pragma description "ext2 / ext3 / ext4 file system: superblock with geometry, feature flags, UUID, volume name, journal and 64-bit fields."
+#pragma description.ja "ext2 / ext3 / ext4 ファイルシステム: ジオメトリ、機能フラグ、UUID、ボリューム名、ジャーナル、64 bit の欄を持つスーパーブロック。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 1080 "53 EF"
+#pragma mime "application/x-ext4"
+#pragma extensions "img;ext2;ext3;ext4"
+#pragma endian little
+
+flags State : u16 { CleanlyUnmounted = 0x1, ErrorsDetected = 0x2, OrphansBeingRecovered = 0x4 };
+
+flags CompatibleFeatures : u32 {
+    DirPrealloc = 0x1, ImagicInodes = 0x2, HasJournal = 0x4, ExtAttr = 0x8, ResizeInode = 0x10, DirIndex = 0x20, SparseSuper2 = 0x200,
+    FastCommit = 0x400, StableInodes = 0x800,
+};
+
+flags IncompatibleFeatures : u32 {
+    Compression = 0x1, Filetype = 0x2, Recover = 0x4, JournalDev = 0x8, MetaBg = 0x10, Extents = 0x40, Is64Bit = 0x80, Mmp = 0x100,
+    FlexBg = 0x200, EaInode = 0x400, Dirdata = 0x1000, CsumSeed = 0x2000, LargeDir = 0x4000, InlineData = 0x8000, Encrypt = 0x10000,
+    Casefold = 0x20000,
+};
+
+flags ReadOnlyCompatibleFeatures : u32 {
+    SparseSuper = 0x1, LargeFile = 0x2, BtreeDir = 0x4, HugeFile = 0x8, GdtCsum = 0x10, DirNlink = 0x20, ExtraIsize = 0x40,
+    Quota = 0x100, Bigalloc = 0x200, MetadataCsum = 0x400, ReadOnly = 0x1000, Project = 0x2000, Verity = 0x8000,
+};
+
+enum CreatorOs : u32 { Linux = 0, Hurd = 1, Masix = 2, FreeBsd = 3, Lites = 4 };
+
+struct Superblock {
+    u32  inodes_count;
+    u32  blocks_count_lo;
+    u32  reserved_blocks_count_lo;
+    u32  free_blocks_count_lo;
+    u32  free_inodes_count;
+    u32  first_data_block;
+    u32  log_block_size [[comment("ブロックの大きさ = 1024 << この値")]];
+    u32  log_cluster_size;
+    u32  blocks_per_group;
+    u32  clusters_per_group;
+    u32  inodes_per_group;
+    time32_t mount_time;
+    time32_t write_time;
+    u16  mount_count;
+    s16  max_mount_count;
+    u16  magic [[format("hex"), expect(magic == 0xEF53, "ext のマジック EF53 ではありません")]];
+    State state;
+    u16  errors;
+    u16  minor_revision_level;
+    time32_t last_check_time;
+    u32  check_interval;
+    CreatorOs creator_os;
+    u32  revision_level [[comment("0: 古い形式、1: 動的な inode の大きさ")]];
+    u16  default_reserved_uid;
+    u16  default_reserved_gid;
+    // 以下は revision_level が 1 以上のときの欄
+    u32  first_inode;
+    u16  inode_size;
+    u16  block_group_number;
+    CompatibleFeatures feature_compatible;
+    IncompatibleFeatures feature_incompatible;
+    ReadOnlyCompatibleFeatures feature_read_only_compatible;
+    uuid volume_uuid;
+    char volume_name[16] [[encoding("utf-8")]];
+    char last_mounted[64] [[encoding("utf-8")]];
+    u32  algorithm_usage_bitmap;
+    u8   preallocate_blocks;
+    u8   preallocate_directory_blocks;
+    u16  reserved_gdt_blocks;
+    uuid journal_uuid;
+    u32  journal_inode_number;
+    u32  journal_device;
+    u32  last_orphan;
+    u32  hash_seed[4];
+    u8   default_hash_version;
+    u8   journal_backup_type;
+    u16  group_descriptor_size;
+    u32  default_mount_options [[format("hex")]];
+    u32  first_meta_block_group;
+    time32_t mkfs_time;
+    u32  journal_blocks[17] [[lazy]];
+    // 64 bit の欄
+    u32  blocks_count_hi;
+    u32  reserved_blocks_count_hi;
+    u32  free_blocks_count_hi;
+    u16  min_extra_inode_size;
+    u16  want_extra_inode_size;
+    u32  superblock_flags [[format("hex")]];
+    u16  raid_stride;
+    u16  mmp_interval;
+    u64  mmp_block;
+    u32  raid_stripe_width;
+    u8   log_groups_per_flex;
+    u8   checksum_type;
+    u16  reserved_pad;
+    u64  kilobytes_written;
+    u8   rest[0x3FC - ($ - addressof(this))] [[lazy]];
+    u32  checksum [[format("hex")]];
+    local u64 block_size = 1024 << log_block_size [[show]];
+    local u64 blocks_count = ((feature_incompatible & IncompatibleFeatures::Is64Bit) != 0 ? blocks_count_hi : 0) * 4294967296 + blocks_count_lo [[show]];
+} [[size(1024)]];
+
+Superblock superblock @ 1024;

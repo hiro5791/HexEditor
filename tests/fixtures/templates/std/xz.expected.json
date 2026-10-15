@@ -1,0 +1,214 @@
+{
+  "name": "XZ 圧縮データ",
+  "type": "application",
+  "offset": 0,
+  "size": 12,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "StreamHeader",
+      "offset": 0,
+      "size": 12,
+      "display": "StreamHeader (3)",
+      "children": [
+        {
+          "name": "magic",
+          "path": "header.magic",
+          "type": "u8[6]",
+          "offset": 0,
+          "size": 6,
+          "value": "FD377A585A00",
+          "display": "FD 37 7A 58 5A 00"
+        },
+        {
+          "name": "flags",
+          "path": "header.flags",
+          "type": "StreamFlags",
+          "offset": 6,
+          "size": 2,
+          "display": "StreamFlags (2)",
+          "children": [
+            {
+              "name": "reserved",
+              "path": "header.flags.reserved",
+              "type": "u8",
+              "offset": 6,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "check_type",
+              "path": "header.flags.check_type",
+              "type": "CheckType",
+              "offset": 7,
+              "size": 1,
+              "value": 1,
+              "display": "Crc32 (0x1)"
+            }
+          ]
+        },
+        {
+          "name": "crc32",
+          "path": "header.crc32",
+          "type": "u32",
+          "offset": 8,
+          "size": 4,
+          "value": 920527465,
+          "display": "0x36DE2269"
+        }
+      ]
+    },
+    {
+      "name": "footer",
+      "path": "footer",
+      "type": "StreamFooter",
+      "offset": 36,
+      "size": 12,
+      "display": "StreamFooter (4)",
+      "children": [
+        {
+          "name": "crc32",
+          "path": "footer.crc32",
+          "type": "u32",
+          "offset": 36,
+          "size": 4,
+          "value": 228147856,
+          "display": "0xD994290"
+        },
+        {
+          "name": "backward_size",
+          "path": "footer.backward_size",
+          "type": "u32",
+          "offset": 40,
+          "size": 4,
+          "value": 1,
+          "display": "1",
+          "comment": "索引の大きさ = (この値 + 1) x 4 バイト"
+        },
+        {
+          "name": "flags",
+          "path": "footer.flags",
+          "type": "StreamFlags",
+          "offset": 44,
+          "size": 2,
+          "display": "StreamFlags (2)",
+          "children": [
+            {
+              "name": "reserved",
+              "path": "footer.flags.reserved",
+              "type": "u8",
+              "offset": 44,
+              "size": 1,
+              "value": 0,
+              "display": "0"
+            },
+            {
+              "name": "check_type",
+              "path": "footer.flags.check_type",
+              "type": "CheckType",
+              "offset": 45,
+              "size": 1,
+              "value": 1,
+              "display": "Crc32 (0x1)"
+            }
+          ]
+        },
+        {
+          "name": "magic",
+          "path": "footer.magic",
+          "type": "u8[2]",
+          "offset": 46,
+          "size": 2,
+          "value": "595A",
+          "display": "59 5A"
+        }
+      ]
+    },
+    {
+      "name": "index",
+      "path": "index",
+      "type": "Index",
+      "offset": 28,
+      "size": 8,
+      "display": "Index (4)",
+      "children": [
+        {
+          "name": "indicator",
+          "path": "index.indicator",
+          "type": "u8",
+          "offset": 28,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "number_of_records",
+          "path": "index.number_of_records",
+          "type": "uleb128",
+          "offset": 29,
+          "size": 1,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "records",
+          "path": "index.records",
+          "type": "IndexRecord[1]",
+          "offset": 30,
+          "size": 2,
+          "display": "[1]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "index.records[0]",
+              "type": "IndexRecord",
+              "offset": 30,
+              "size": 2,
+              "display": "IndexRecord (2)",
+              "children": [
+                {
+                  "name": "unpadded_size",
+                  "path": "index.records[0].unpadded_size",
+                  "type": "uleb128",
+                  "offset": 30,
+                  "size": 1,
+                  "value": 32,
+                  "display": "32"
+                },
+                {
+                  "name": "uncompressed_size",
+                  "path": "index.records[0].uncompressed_size",
+                  "type": "uleb128",
+                  "offset": 31,
+                  "size": 1,
+                  "value": 22,
+                  "display": "22"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "crc32",
+          "path": "index.crc32",
+          "type": "u32",
+          "offset": 32,
+          "size": 4,
+          "value": 1104553176,
+          "display": "0x41D624D8"
+        }
+      ]
+    },
+    {
+      "name": "blocks",
+      "path": "blocks",
+      "type": "u8[16]",
+      "offset": 12,
+      "size": 16,
+      "value": "C0C1C2C3C4C5C6C7C8C9CACBCCCDCECF",
+      "display": "C0 C1 C2 C3 C4 C5 C6 C7 C8 C9 CA CB CC CD CE CF"
+    }
+  ]
+}

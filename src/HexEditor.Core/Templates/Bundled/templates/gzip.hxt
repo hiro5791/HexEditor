@@ -1,0 +1,70 @@
+// HexEditor 標準テンプレート (TPL-34): GZIP 圧縮データ
+// ライセンス: MIT。
+// 最初のメンバーのヘッダ (拡張欄、ファイル名、コメント、ヘッダ CRC)、圧縮データ (中身は読まない)、末尾のトレーラ (CRC-32 と元の大きさ) を置く。
+// 複数のメンバーを連結したファイルは、先頭のメンバーのヘッダと、末尾のトレーラだけを見る (メンバーの境界は圧縮データを展開しないと分からない)。
+#pragma name "GZIP archive"
+#pragma name.ja "GZIP 圧縮データ"
+#pragma description "GZIP compressed data: member header (flags, modification time, extra field, file name, comment), the deflate stream and the trailer (CRC-32, uncompressed size)."
+#pragma description.ja "GZIP 圧縮データ: メンバーのヘッダ (フラグ、更新時刻、拡張欄、ファイル名、コメント)、deflate のストリーム、トレーラ (CRC-32、元の大きさ)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "1F 8B 08"
+#pragma mime "application/gzip"
+#pragma extensions "gz;tgz;gzip"
+#pragma endian little
+
+enum CompressionMethod : u8 { Deflate = 8 };
+
+enum OperatingSystem : u8 {
+    Fat = 0, Amiga = 1, Vms = 2, Unix = 3, VmCms = 4, AtariTos = 5, Hpfs = 6, Macintosh = 7, ZSystem = 8, Cpm = 9, Tops20 = 10, Ntfs = 11,
+    Qdos = 12, AcornRiscos = 13, Unknown = 255,
+};
+
+bitfield MemberFlags : u8 {
+    text        : 1;
+    header_crc  : 1;
+    extra       : 1;
+    name        : 1;
+    comment     : 1;
+    reserved    : 3;
+};
+
+struct ExtraSubfield {
+    char id[2];
+    u16  length;
+    u8   data[length] [[lazy]];
+} [[size(4 + length)]];
+
+struct MemberHeader {
+    u8                id[2] [[expect(id == x"1F 8B", "GZIP のマジックではありません")]];
+    CompressionMethod method;
+    MemberFlags       packed;
+    time32_t          modification_time;
+    u8                extra_flags;
+    OperatingSystem   operating_system;
+    if (packed.extra == 1) {
+        u16           extra_length;
+        ExtraSubfield extra_fields[while($ < addressof(extra_length) + 2 + extra_length)];
+    }
+    if (packed.name == 1) {
+        string        file_name [[encoding("latin1")]];
+    }
+    if (packed.comment == 1) {
+        string        comment [[encoding("latin1")]];
+    }
+    if (packed.header_crc == 1) {
+        u16           header_crc16 [[format("hex")]];
+    }
+};
+
+struct Trailer {
+    u32 crc32 [[format("hex")]];
+    u32 uncompressed_size_mod_2_32;
+};
+
+MemberHeader header;
+if (std::core::size() >= $ + 8) {
+    u8 compressed_data[std::core::size() - $ - 8] [[lazy]];
+    Trailer trailer;
+}

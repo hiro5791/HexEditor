@@ -1,0 +1,126 @@
+// HexEditor 標準テンプレート (TPL-34): DER / X.509 証明書 (ASN.1 の TLV)
+// ライセンス: MIT。
+// ASN.1 の TLV (タグ、長さ、値) を入れ子で読む (最大 16 段)。構造を持つ型 (SEQUENCE、SET、[n]) は子を置き、OID は点区切りの表記と
+// 既知の名前で、文字列と日時はその文字列で示す。X.509 証明書は、SEQUENCE { tbsCertificate, signatureAlgorithm, signature } として現れる。
+#pragma name "DER / X.509 certificate"
+#pragma name.ja "DER / X.509 証明書"
+#pragma description "DER encoded ASN.1 (X.509 certificates, keys, CRLs): nested TLV elements with tag class, OIDs, strings and times."
+#pragma description.ja "DER 形式の ASN.1 (X.509 証明書、鍵、CRL): タグのクラス、OID、文字列、日時を持つ入れ子の TLV。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "30 82 ?? ?? 30 82"
+#pragma magic 0 "30 82 ?? ?? 30 81"
+#pragma magic 0 "30 82 ?? ?? 02 01 00 30"
+#pragma mime "application/pkix-cert"
+#pragma extensions "der;cer;crt;p7b;p7c;key"
+#pragma endian big
+
+enum TagClass : u8 { Universal = 0, Application = 1, ContextSpecific = 2, Private = 3 };
+
+/// 先頭バイトの構成 (上位ビットから: クラス 2 bit、構造 1 bit、番号 5 bit)
+bitfield TagByte : u8 {
+    tag_class   : 2;
+    constructed : 1;
+    tag_number  : 5;
+} [[bit_order(msb_first)]];
+
+/// 長さ: 128 未満ならそのまま 1 バイト、それ以上は先頭が 0x80 + 後続のバイト数。
+struct Length {
+    u8 first;
+    if ((first & 0x80) != 0 && (first & 0x7F) > 0) {
+        u8 extra[first & 0x7F];
+    }
+};
+
+fn length_value(u64 at) -> u64 {
+    local u64 first = std::mem::read_u8(at, big);
+    if ((first & 0x80) == 0) {
+        return first;
+    }
+    local u64 count = first & 0x7F;
+    local u64 value = 0;
+    for (local u64 i = 0; i < count && i < 8; i += 1) {
+        value = (value << 8) | std::mem::read_u8(at + 1 + i, big);
+    }
+    return value;
+}
+
+/// OID を点区切りの文字列にする (先頭の 1 バイトは 40 * 第 1 要素 + 第 2 要素)
+fn oid_text(u64 at, u64 length) -> string {
+    if (length == 0) {
+        return "";
+    }
+    local u64 first = std::mem::read_u8(at, big);
+    local string text = std::format("{}.{}", first / 40, first % 40);
+    local u64 value = 0;
+    for (local u64 i = 1; i < length; i += 1) {
+        local u64 b = std::mem::read_u8(at + i, big);
+        value = (value << 7) | (b & 0x7F);
+        if ((b & 0x80) == 0) {
+            text = text + "." + std::format("{}", value);
+            value = 0;
+        }
+    }
+    return text;
+}
+
+/// よく使う OID の名前 (知らないものは空)
+fn oid_name(string oid) -> string {
+    switch (oid) {
+        case "2.5.4.3": return "commonName";
+        case "2.5.4.6": return "countryName";
+        case "2.5.4.7": return "localityName";
+        case "2.5.4.8": return "stateOrProvinceName";
+        case "2.5.4.10": return "organizationName";
+        case "2.5.4.11": return "organizationalUnitName";
+        case "2.5.29.14": return "subjectKeyIdentifier";
+        case "2.5.29.15": return "keyUsage";
+        case "2.5.29.17": return "subjectAltName";
+        case "2.5.29.19": return "basicConstraints";
+        case "2.5.29.35": return "authorityKeyIdentifier";
+        case "1.2.840.113549.1.1.1": return "rsaEncryption";
+        case "1.2.840.113549.1.1.5": return "sha1WithRSAEncryption";
+        case "1.2.840.113549.1.1.11": return "sha256WithRSAEncryption";
+        case "1.2.840.113549.1.1.12": return "sha384WithRSAEncryption";
+        case "1.2.840.113549.1.1.13": return "sha512WithRSAEncryption";
+        case "1.2.840.10045.2.1": return "ecPublicKey";
+        case "1.2.840.10045.3.1.7": return "prime256v1";
+        case "1.2.840.10045.4.3.2": return "ecdsa-with-SHA256";
+        case "1.3.101.112": return "Ed25519";
+        case "2.16.840.1.101.3.4.2.1": return "sha256";
+        default: return "";
+    }
+}
+
+/// ASN.1 の要素 (TLV)。深さは 16 段まで。
+struct Element(u32 depth) {
+    TagByte tag [[color("accent1")]];
+    Length  length;
+    local u64 value_length = length_value(addressof(length)) [[show]];
+    local u64 value_end = $ + value_length;
+    local u8 raw_tag = std::mem::read_u8(addressof(tag), big);
+    if (tag.constructed == 1 && depth < 16) {
+        Element(depth + 1) children[while($ < value_end)];
+    } else if (tag.tag_class == 0) {
+        switch (tag.tag_number) {
+            case 1: u8 boolean_value;
+            case 2: u8 integer_bytes[value_length] [[lazy]];
+            case 6: u8 oid_bytes[value_length] [[lazy]];
+            case 12: char utf8_string[value_length] [[encoding("utf-8")]];
+            case 19: char printable_string[value_length];
+            case 22: char ia5_string[value_length];
+            case 23: char utc_time[value_length];
+            case 24: char generalized_time[value_length];
+            default: u8 data[value_length] [[lazy]];
+        }
+        if (tag.tag_number == 6) {
+            local string oid = oid_text(addressof(oid_bytes), value_length) [[show]];
+            local string oid_description = oid_name(oid) [[show]];
+        }
+    } else {
+        u8 data[value_length] [[lazy]];
+    }
+} [[size(1 + sizeof(length) + value_length)]];
+
+Element(0) elements[until(std::eof())];

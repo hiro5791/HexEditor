@@ -1,0 +1,49 @@
+// HexEditor 標準テンプレート (TPL-34): ICO / CUR (アイコンとカーソル)
+// ライセンス: MIT。
+// ディレクトリ (ICONDIR) と項目 (ICONDIRENTRY) を読み、各画像 (DIB または PNG) をその位置に置く。画像の中身は先頭を見分けるだけで、読み込まない。
+#pragma name "Windows icon / cursor"
+#pragma name.ja "Windows のアイコン / カーソル"
+#pragma description "Windows icon (ICO) and cursor (CUR): directory, entries (size, color depth, hotspot) and the DIB or PNG images they point to."
+#pragma description.ja "Windows のアイコン (ICO) とカーソル (CUR): ディレクトリ、項目 (大きさ、色数、ホットスポット)、各項目が指す DIB または PNG の画像。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "00 00 01 00 ?? 00"
+#pragma magic 0 "00 00 02 00 ?? 00"
+#pragma mime "image/vnd.microsoft.icon"
+#pragma mime "image/x-win-bitmap"
+#pragma extensions "ico;cur"
+#pragma endian little
+
+enum ResourceType : u16 { Icon = 1, Cursor = 2 };
+
+struct Directory {
+    u16          reserved [[expect(reserved == 0, "予約の欄が 0 ではありません")]];
+    ResourceType type;
+    u16          count;
+};
+
+/// 項目。アイコンでは planes と bit_count、カーソルではホットスポットの座標を持つ。
+struct Entry(ResourceType type) {
+    u8  width [[comment("0 は 256")]];
+    u8  height [[comment("0 は 256")]];
+    u8  color_count;
+    u8  reserved;
+    if (type == ResourceType::Cursor) {
+        u16 hotspot_x;
+        u16 hotspot_y;
+    } else {
+        u16 planes;
+        u16 bit_count;
+    }
+    u32 size_in_bytes;
+    u32 image_offset [[format("hex")]];
+    if (image_offset + 8 <= std::core::size()) {
+        // 先頭が PNG のシグネチャなら PNG、そうでなければ DIB (BITMAPINFOHEADER)
+        local bool is_png = std::mem::compare(image_offset, x"89 50 4E 47 0D 0A 1A 0A") [[show]];
+        u8 image[size_in_bytes] @ image_offset [[lazy]];
+    }
+};
+
+Directory directory;
+Entry(directory.type) entries[directory.count];

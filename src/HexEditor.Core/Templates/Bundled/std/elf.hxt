@@ -1,5 +1,6 @@
 // HexEditor 標準ライブラリ (TPL-18): std.elf
 // ELF の型と補助関数。標準テンプレート (TPL-34) で使う。
+// 32 bit / 64 bit、リトル / ビッグエンディアンの両方に対応する。エンディアンは e_ident の値で決め、補助関数は毎回それを見て読む。
 
 namespace std::elf {
 
@@ -16,6 +17,33 @@ namespace std::elf {
     enum SegmentType : u32 {
         Null = 0, Load = 1, Dynamic = 2, Interp = 3, Note = 4, Shlib = 5, Phdr = 6, Tls = 7,
         GnuEhFrame = 0x6474E550, GnuStack = 0x6474E551, GnuRelro = 0x6474E552, GnuProperty = 0x6474E553,
+    };
+
+    flags SegmentFlags : u32 { X = 1, W = 2, R = 4 };
+
+    enum SectionType : u32 {
+        Null = 0, ProgBits = 1, SymTab = 2, StrTab = 3, Rela = 4, Hash = 5, Dynamic = 6, Note = 7, NoBits = 8, Rel = 9, ShLib = 10,
+        DynSym = 11, InitArray = 14, FiniArray = 15, PreInitArray = 16, Group = 17, SymTabShndx = 18,
+        GnuHash = 0x6FFFFFF6, GnuVerDef = 0x6FFFFFFD, GnuVerNeed = 0x6FFFFFFE, GnuVerSym = 0x6FFFFFFF,
+    };
+
+    flags SectionFlags32 : u32 {
+        Write = 0x1, Alloc = 0x2, ExecInstr = 0x4, Merge = 0x10, Strings = 0x20, InfoLink = 0x40, LinkOrder = 0x80,
+        OsNonConforming = 0x100, Group = 0x200, Tls = 0x400, Compressed = 0x800,
+    };
+
+    flags SectionFlags64 : u64 {
+        Write = 0x1, Alloc = 0x2, ExecInstr = 0x4, Merge = 0x10, Strings = 0x20, InfoLink = 0x40, LinkOrder = 0x80,
+        OsNonConforming = 0x100, Group = 0x200, Tls = 0x400, Compressed = 0x800,
+    };
+
+    enum SymbolBinding : u8 { Local = 0, Global = 1, Weak = 2, GnuUnique = 10 };
+
+    enum SymbolType : u8 { NoType = 0, Object = 1, Func = 2, Section = 3, File = 4, Common = 5, Tls = 6, GnuIFunc = 10 };
+
+    bitfield SymbolInfo : u8 {
+        type : 4;
+        bind : 4;
     };
 
     /// e_ident (16 バイト)
@@ -57,7 +85,7 @@ namespace std::elf {
 
     struct ProgramHeader64 {
         SegmentType p_type;
-        u32 p_flags [[format("hex")]];
+        SegmentFlags p_flags;
         u64 p_offset [[format("hex")]];
         u64 p_vaddr [[format("hex")]];
         u64 p_paddr [[format("hex")]];
@@ -73,22 +101,223 @@ namespace std::elf {
         u32 p_paddr [[format("hex")]];
         u32 p_filesz;
         u32 p_memsz;
-        u32 p_flags [[format("hex")]];
+        SegmentFlags p_flags;
         u32 p_align;
     };
 
-    /// 仮想アドレスをファイルの位置に変換する (64 bit・リトルエンディアンの PT_LOAD を探す。見つからない場合は -1)
+    /// セクションヘッダ (64 bit)。名前は .shstrtab (セクション名の文字列表) から引く。
+    struct SectionHeader64(u64 names) {
+        u32 sh_name;
+        SectionType sh_type;
+        SectionFlags64 sh_flags;
+        u64 sh_addr [[format("hex")]];
+        u64 sh_offset [[format("hex")]];
+        u64 sh_size;
+        u32 sh_link;
+        u32 sh_info;
+        u64 sh_addralign;
+        u64 sh_entsize;
+        local string name = std::mem::read_string(names + sh_name, 256, "utf-8") [[show]];
+    };
+
+    /// セクションヘッダ (32 bit)
+    struct SectionHeader32(u64 names) {
+        u32 sh_name;
+        SectionType sh_type;
+        SectionFlags32 sh_flags;
+        u32 sh_addr [[format("hex")]];
+        u32 sh_offset [[format("hex")]];
+        u32 sh_size;
+        u32 sh_link;
+        u32 sh_info;
+        u32 sh_addralign;
+        u32 sh_entsize;
+        local string name = std::mem::read_string(names + sh_name, 256, "utf-8") [[show]];
+    };
+
+    /// シンボル (64 bit)。名前は文字列表から引く。
+    struct Symbol64(u64 strings) {
+        u32 st_name;
+        SymbolInfo st_info;
+        u8 st_other;
+        u16 st_shndx;
+        u64 st_value [[format("hex")]];
+        u64 st_size;
+        local string name = std::mem::read_string(strings + st_name, 256, "utf-8") [[show]];
+    };
+
+    /// シンボル (32 bit)
+    struct Symbol32(u64 strings) {
+        u32 st_name;
+        u32 st_value [[format("hex")]];
+        u32 st_size;
+        SymbolInfo st_info;
+        u8 st_other;
+        u16 st_shndx;
+        local string name = std::mem::read_string(strings + st_name, 256, "utf-8") [[show]];
+    };
+
+    /// 動的セクションのタグの名前
+    fn dyn_tag_name(u64 tag) -> string {
+        switch (tag) {
+            case 0: return "DT_NULL";
+            case 1: return "DT_NEEDED";
+            case 2: return "DT_PLTRELSZ";
+            case 3: return "DT_PLTGOT";
+            case 4: return "DT_HASH";
+            case 5: return "DT_STRTAB";
+            case 6: return "DT_SYMTAB";
+            case 7: return "DT_RELA";
+            case 8: return "DT_RELASZ";
+            case 9: return "DT_RELAENT";
+            case 10: return "DT_STRSZ";
+            case 11: return "DT_SYMENT";
+            case 12: return "DT_INIT";
+            case 13: return "DT_FINI";
+            case 14: return "DT_SONAME";
+            case 15: return "DT_RPATH";
+            case 16: return "DT_SYMBOLIC";
+            case 17: return "DT_REL";
+            case 18: return "DT_RELSZ";
+            case 19: return "DT_RELENT";
+            case 20: return "DT_PLTREL";
+            case 21: return "DT_DEBUG";
+            case 22: return "DT_TEXTREL";
+            case 23: return "DT_JMPREL";
+            case 24: return "DT_BIND_NOW";
+            case 25: return "DT_INIT_ARRAY";
+            case 26: return "DT_FINI_ARRAY";
+            case 27: return "DT_INIT_ARRAYSZ";
+            case 28: return "DT_FINI_ARRAYSZ";
+            case 29: return "DT_RUNPATH";
+            case 30: return "DT_FLAGS";
+            case 0x6FFFFEF5: return "DT_GNU_HASH";
+            case 0x6FFFFFF0: return "DT_VERSYM";
+            case 0x6FFFFFFE: return "DT_VERNEED";
+            case 0x6FFFFFFF: return "DT_VERNEEDNUM";
+            default: return std::format("0x{:X}", tag);
+        }
+    }
+
+    fn fmt_dyn_tag(ref u64 tag) -> string {
+        return std::format("{} ({})", dyn_tag_name(tag), tag);
+    }
+
+    fn fmt_dyn_tag32(ref u32 tag) -> string {
+        return std::format("{} ({})", dyn_tag_name(tag), tag);
+    }
+
+    /// 動的セクションの項目 (64 bit)
+    struct Dynamic64 {
+        u64 d_tag [[format(fmt_dyn_tag)]];
+        u64 d_val [[format("hex")]];
+    };
+
+    /// 動的セクションの項目 (32 bit)
+    struct Dynamic32 {
+        u32 d_tag [[format(fmt_dyn_tag32)]];
+        u32 d_val [[format("hex")]];
+    };
+
+    // ---- 補助関数。ファイルの先頭の e_ident を見て、幅とエンディアンを決めて読む ----
+
+    fn is64() -> bool {
+        return std::mem::read_u8(4, little) == 2;
+    }
+
+    fn is_big() -> bool {
+        return std::mem::read_u8(5, little) == 2;
+    }
+
+    fn endian() -> string {
+        return is_big() ? "big" : "little";
+    }
+
+    fn rd16(u64 offset) -> u64 {
+        return std::mem::read_u16(offset, endian());
+    }
+
+    fn rd32(u64 offset) -> u64 {
+        return std::mem::read_u32(offset, endian());
+    }
+
+    fn rd64(u64 offset) -> u64 {
+        return std::mem::read_u64(offset, endian());
+    }
+
+    /// アドレスやオフセットの幅 (64 bit なら 8、32 bit なら 4) で読む
+    fn rdw(u64 offset) -> u64 {
+        return is64() ? rd64(offset) : rd32(offset);
+    }
+
+    fn phoff() -> u64 { return is64() ? rd64(32) : rd32(28); }
+    fn shoff() -> u64 { return is64() ? rd64(40) : rd32(32); }
+    fn phentsize() -> u64 { return is64() ? rd16(54) : rd16(42); }
+    fn phnum() -> u64 { return is64() ? rd16(56) : rd16(44); }
+    fn shentsize() -> u64 { return is64() ? rd16(58) : rd16(46); }
+    fn shnum() -> u64 { return is64() ? rd16(60) : rd16(48); }
+    fn shstrndx() -> u64 { return is64() ? rd16(62) : rd16(50); }
+
+    /// セクションヘッダ i の位置
+    fn section_header(u64 i) -> u64 {
+        return shoff() + i * shentsize();
+    }
+
+    /// セクション i の sh_type
+    fn section_type(u64 i) -> u64 { return rd32(section_header(i) + 4); }
+
+    /// セクション i の内容のファイル内の位置 (sh_offset)
+    fn section_offset(u64 i) -> u64 { return is64() ? rd64(section_header(i) + 24) : rd32(section_header(i) + 16); }
+
+    /// セクション i の大きさ (sh_size)
+    fn section_size(u64 i) -> u64 { return is64() ? rd64(section_header(i) + 32) : rd32(section_header(i) + 20); }
+
+    /// セクション i の sh_link
+    fn section_link(u64 i) -> u64 { return rd32(section_header(i) + (is64() ? 40 : 24)); }
+
+    /// セクション i の sh_entsize
+    fn section_entsize(u64 i) -> u64 { return is64() ? rd64(section_header(i) + 56) : rd32(section_header(i) + 36); }
+
+    /// セクション名の文字列表 (.shstrtab) の位置
+    fn names_offset() -> u64 {
+        if (shstrndx() >= shnum()) {
+            return 0;
+        }
+        return section_offset(shstrndx());
+    }
+
+    /// 種類が type の最初のセクションの番号 (なければ -1。セクションヘッダ表の中だけを見る)
+    fn find_section_by_type(u64 type) -> s64 {
+        local u64 n = std::math::min(shnum(), 65535);
+        for (local u64 i = 0; i < n; i += 1) {
+            if (section_type(i) == type) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /// 種類が type の最初のセクションの内容の位置
+    fn table_offset(u64 type) -> u64 { return section_offset(find_section_by_type(type)); }
+
+    /// 種類が type の最初のセクションの項目の数 (項目の大きさ size で割る)
+    fn table_count(u64 type, u64 size) -> u64 { return section_size(find_section_by_type(type)) / size; }
+
+    /// 種類が type の最初のセクション (シンボル表) の文字列表の位置 (sh_link)
+    fn table_strings(u64 type) -> u64 { return section_offset(section_link(find_section_by_type(type))); }
+
+    /// 仮想アドレスをファイルの位置に変換する (PT_LOAD を探す。見つからない場合は -1)
     fn va_to_offset(u64 va) -> s64 {
-        local u64 phoff = std::mem::read_u64(32, little);
-        local u64 phentsize = std::mem::read_u16(54, little);
-        local u64 phnum = std::mem::read_u16(56, little);
-        for (local u64 i = 0; i < phnum; i += 1) {
-            local u64 p = phoff + i * phentsize;
-            if (std::mem::read_u32(p, little) == 1) {
-                local u64 vaddr = std::mem::read_u64(p + 16, little);
-                local u64 filesz = std::mem::read_u64(p + 32, little);
+        local u64 off = phoff();
+        local u64 entsize = phentsize();
+        local u64 n = phnum();
+        for (local u64 i = 0; i < n; i += 1) {
+            local u64 p = off + i * entsize;
+            if (rd32(p) == 1) {
+                local u64 vaddr = is64() ? rd64(p + 16) : rd32(p + 8);
+                local u64 filesz = is64() ? rd64(p + 32) : rd32(p + 16);
                 if (va >= vaddr && va < vaddr + filesz) {
-                    return va - vaddr + std::mem::read_u64(p + 8, little);
+                    return va - vaddr + (is64() ? rd64(p + 8) : rd32(p + 4));
                 }
             }
         }

@@ -1,0 +1,91 @@
+// HexEditor 標準テンプレート (TPL-34): OLE 複合文書 (Compound File Binary、CFB)
+// ライセンス: MIT。
+// ヘッダ (512 バイト、DIFAT の先頭 109 個を含む)、最初の FAT セクタ、ディレクトリの最初のセクタ、ミニ FAT の最初のセクタを読む。
+// セクタの連鎖 (FAT をたどる) と、ストリームの中身は読まない。
+#pragma name "OLE compound document"
+#pragma name.ja "OLE 複合文書 (CFB)"
+#pragma description "OLE compound file (CFB, .doc / .xls / .ppt / .msi / .msg): header with DIFAT, first FAT sector, first directory sector and first mini FAT sector."
+#pragma description.ja "OLE 複合ファイル (CFB。.doc / .xls / .ppt / .msi / .msg): DIFAT を含むヘッダ、最初の FAT セクタ、ディレクトリの最初のセクタ、ミニ FAT の最初のセクタ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "D0 CF 11 E0 A1 B1 1A E1"
+#pragma mime "application/x-ole-storage"
+#pragma mime "application/msword"
+#pragma mime "application/vnd.ms-excel"
+#pragma mime "application/vnd.ms-powerpoint"
+#pragma mime "application/x-msi"
+#pragma mime "application/vnd.ms-outlook"
+#pragma extensions "doc;xls;ppt;msi;msg;msp;vsd;pub;suo;db"
+#pragma endian little
+
+enum ObjectType : u8 { Unknown = 0, Storage = 1, Stream = 2, RootStorage = 5 };
+
+enum Color : u8 { Red = 0, Black = 1 };
+
+/// 特別なセクタ番号の表示
+fn fmt_sector(ref u32 v) -> string {
+    switch (v) {
+        case 0xFFFFFFFC: return "DIFSECT (0xFFFFFFFC)";
+        case 0xFFFFFFFD: return "FATSECT (0xFFFFFFFD)";
+        case 0xFFFFFFFE: return "ENDOFCHAIN (0xFFFFFFFE)";
+        case 0xFFFFFFFF: return "FREESECT (0xFFFFFFFF)";
+        default: return std::format("{}", v);
+    }
+}
+
+struct Header {
+    u8     signature[8] [[expect(signature == x"D0 CF 11 E0 A1 B1 1A E1", "CFB のシグネチャではありません")]];
+    guid   clsid;
+    u16    minor_version;
+    u16    major_version [[comment("3: 512 バイトのセクタ、4: 4096 バイトのセクタ")]];
+    u16    byte_order [[format("hex"), expect(byte_order == 0xFFFE, "バイトオーダーが FFFE ではありません")]];
+    u16    sector_shift [[comment("セクタの大きさ = 2 の sector_shift 乗")]];
+    u16    mini_sector_shift;
+    u8     reserved[6];
+    u32    directory_sector_count;
+    u32    fat_sector_count;
+    u32    first_directory_sector [[format(fmt_sector)]];
+    u32    transaction_signature;
+    u32    mini_stream_cutoff;
+    u32    first_mini_fat_sector [[format(fmt_sector)]];
+    u32    mini_fat_sector_count;
+    u32    first_difat_sector [[format(fmt_sector)]];
+    u32    difat_sector_count;
+    u32    difat[109] [[format_entries(fmt_sector)]];
+};
+
+/// ディレクトリの項目 (128 バイト)
+struct DirectoryEntry {
+    char16     name[32] [[encoding("utf-16le")]];
+    u16        name_length [[comment("終端の 0 を含むバイト数")]];
+    ObjectType object_type;
+    Color      color;
+    u32        left_sibling [[format(fmt_sector)]];
+    u32        right_sibling [[format(fmt_sector)]];
+    u32        child [[format(fmt_sector)]];
+    guid       clsid;
+    u32        state_bits;
+    filetime   creation_time;
+    filetime   modified_time;
+    u32        starting_sector [[format(fmt_sector)]];
+    u64        stream_size;
+};
+
+Header header;
+local u64 sector_size = 1 << header.sector_shift;
+
+// 最初の FAT セクタ (DIFAT の先頭が指す)
+if (header.fat_sector_count > 0 && header.difat[0] < 0xFFFFFFF0) {
+    u32 first_fat_sector[sector_size / 4] @ (header.difat[0] + 1) * sector_size [[format_entries(fmt_sector)]];
+}
+
+// ディレクトリの最初のセクタ
+if (header.first_directory_sector < 0xFFFFFFF0) {
+    DirectoryEntry directory[sector_size / 128] @ (header.first_directory_sector + 1) * sector_size;
+}
+
+// ミニ FAT の最初のセクタ
+if (header.first_mini_fat_sector < 0xFFFFFFF0) {
+    u32 first_mini_fat_sector_data[sector_size / 4] @ (header.first_mini_fat_sector + 1) * sector_size [[format_entries(fmt_sector)]];
+}

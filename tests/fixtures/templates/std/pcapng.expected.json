@@ -1,0 +1,376 @@
+{
+  "name": "PCAPNG パケットキャプチャ",
+  "type": "application",
+  "offset": 0,
+  "size": 120,
+  "children": [
+    {
+      "name": "blocks",
+      "path": "blocks",
+      "type": "Block[3]",
+      "offset": 0,
+      "size": 120,
+      "display": "[3]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "blocks[0]",
+          "type": "Block",
+          "offset": 0,
+          "size": 48,
+          "display": "Block (6)",
+          "children": [
+            {
+              "name": "block_type",
+              "path": "blocks[0].block_type",
+              "type": "BlockType",
+              "offset": 0,
+              "size": 4,
+              "value": 168627466,
+              "display": "SectionHeader (0xA0D0D0A)"
+            },
+            {
+              "name": "total_length",
+              "path": "blocks[0].total_length",
+              "type": "u32",
+              "offset": 4,
+              "size": 4,
+              "value": 48,
+              "display": "48"
+            },
+            {
+              "name": "section_header",
+              "path": "blocks[0].section_header",
+              "type": "SectionHeader",
+              "offset": 8,
+              "size": 16,
+              "display": "SectionHeader (4)",
+              "children": [
+                {
+                  "name": "byte_order_magic",
+                  "path": "blocks[0].section_header.byte_order_magic",
+                  "type": "u32",
+                  "offset": 8,
+                  "size": 4,
+                  "value": 439041101,
+                  "display": "0x1A2B3C4D"
+                },
+                {
+                  "name": "major_version",
+                  "path": "blocks[0].section_header.major_version",
+                  "type": "u16",
+                  "offset": 12,
+                  "size": 2,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "minor_version",
+                  "path": "blocks[0].section_header.minor_version",
+                  "type": "u16",
+                  "offset": 14,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "section_length",
+                  "path": "blocks[0].section_header.section_length",
+                  "type": "s64",
+                  "offset": 16,
+                  "size": 8,
+                  "value": -1,
+                  "display": "-1",
+                  "comment": "-1 は不明"
+                }
+              ]
+            },
+            {
+              "name": "options",
+              "path": "blocks[0].options",
+              "type": "Option[1]",
+              "offset": 24,
+              "size": 16,
+              "display": "[1]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "blocks[0].options[0]",
+                  "type": "Option",
+                  "offset": 24,
+                  "size": 16,
+                  "display": "Option (4)",
+                  "children": [
+                    {
+                      "name": "code",
+                      "path": "blocks[0].options[0].code",
+                      "type": "u16",
+                      "offset": 24,
+                      "size": 2,
+                      "value": 4,
+                      "display": "4"
+                    },
+                    {
+                      "name": "length",
+                      "path": "blocks[0].options[0].length",
+                      "type": "u16",
+                      "offset": 26,
+                      "size": 2,
+                      "value": 9,
+                      "display": "9"
+                    },
+                    {
+                      "name": "value",
+                      "path": "blocks[0].options[0].value",
+                      "type": "u8[9]",
+                      "offset": 28,
+                      "size": 9,
+                      "value": "486578456469746F72",
+                      "display": "48 65 78 45 64 69 74 6F 72"
+                    },
+                    {
+                      "name": "padding",
+                      "path": "blocks[0].options[0].padding",
+                      "type": "padding[3]",
+                      "offset": 37,
+                      "size": 3,
+                      "display": "(padding 3 bytes)",
+                      "children": [
+                        {
+                          "name": "[0]",
+                          "path": "blocks[0].options[0].padding[0]",
+                          "type": "padding",
+                          "offset": 37,
+                          "size": 1,
+                          "display": "(padding 1 bytes)"
+                        },
+                        {
+                          "name": "[1]",
+                          "path": "blocks[0].options[0].padding[1]",
+                          "type": "padding",
+                          "offset": 38,
+                          "size": 1,
+                          "display": "(padding 1 bytes)"
+                        },
+                        {
+                          "name": "[2]",
+                          "path": "blocks[0].options[0].padding[2]",
+                          "type": "padding",
+                          "offset": 39,
+                          "size": 1,
+                          "display": "(padding 1 bytes)"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "rest",
+              "path": "blocks[0].rest",
+              "type": "u8[4]",
+              "offset": 40,
+              "size": 4,
+              "value": "00000000",
+              "display": "00 00 00 00"
+            },
+            {
+              "name": "total_length_copy",
+              "path": "blocks[0].total_length_copy",
+              "type": "u32",
+              "offset": 44,
+              "size": 4,
+              "value": 48,
+              "display": "48"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "blocks[1]",
+          "type": "Block",
+          "offset": 48,
+          "size": 20,
+          "display": "Block (5)",
+          "children": [
+            {
+              "name": "block_type",
+              "path": "blocks[1].block_type",
+              "type": "BlockType",
+              "offset": 48,
+              "size": 4,
+              "value": 1,
+              "display": "InterfaceDescription (0x1)"
+            },
+            {
+              "name": "total_length",
+              "path": "blocks[1].total_length",
+              "type": "u32",
+              "offset": 52,
+              "size": 4,
+              "value": 20,
+              "display": "20"
+            },
+            {
+              "name": "interface_description",
+              "path": "blocks[1].interface_description",
+              "type": "InterfaceDescription",
+              "offset": 56,
+              "size": 8,
+              "display": "InterfaceDescription (3)",
+              "children": [
+                {
+                  "name": "link_type",
+                  "path": "blocks[1].interface_description.link_type",
+                  "type": "u16",
+                  "offset": 56,
+                  "size": 2,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "reserved",
+                  "path": "blocks[1].interface_description.reserved",
+                  "type": "u16",
+                  "offset": 58,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "snap_length",
+                  "path": "blocks[1].interface_description.snap_length",
+                  "type": "u32",
+                  "offset": 60,
+                  "size": 4,
+                  "value": 65535,
+                  "display": "65535"
+                }
+              ]
+            },
+            {
+              "name": "options",
+              "path": "blocks[1].options",
+              "type": "Option[0]",
+              "offset": 64,
+              "size": 0,
+              "display": "[0]",
+              "children": []
+            },
+            {
+              "name": "total_length_copy",
+              "path": "blocks[1].total_length_copy",
+              "type": "u32",
+              "offset": 64,
+              "size": 4,
+              "value": 20,
+              "display": "20"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "blocks[2]",
+          "type": "Block",
+          "offset": 68,
+          "size": 52,
+          "display": "Block (4)",
+          "children": [
+            {
+              "name": "block_type",
+              "path": "blocks[2].block_type",
+              "type": "BlockType",
+              "offset": 68,
+              "size": 4,
+              "value": 6,
+              "display": "EnhancedPacket (0x6)"
+            },
+            {
+              "name": "total_length",
+              "path": "blocks[2].total_length",
+              "type": "u32",
+              "offset": 72,
+              "size": 4,
+              "value": 52,
+              "display": "52"
+            },
+            {
+              "name": "enhanced_packet",
+              "path": "blocks[2].enhanced_packet",
+              "type": "EnhancedPacket",
+              "offset": 76,
+              "size": 40,
+              "display": "EnhancedPacket (6)",
+              "children": [
+                {
+                  "name": "interface_id",
+                  "path": "blocks[2].enhanced_packet.interface_id",
+                  "type": "u32",
+                  "offset": 76,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "timestamp_high",
+                  "path": "blocks[2].enhanced_packet.timestamp_high",
+                  "type": "u32",
+                  "offset": 80,
+                  "size": 4,
+                  "value": 389120,
+                  "display": "389120"
+                },
+                {
+                  "name": "timestamp_low",
+                  "path": "blocks[2].enhanced_packet.timestamp_low",
+                  "type": "u32",
+                  "offset": 84,
+                  "size": 4,
+                  "value": 305419896,
+                  "display": "305419896"
+                },
+                {
+                  "name": "captured_length",
+                  "path": "blocks[2].enhanced_packet.captured_length",
+                  "type": "u32",
+                  "offset": 88,
+                  "size": 4,
+                  "value": 20,
+                  "display": "20"
+                },
+                {
+                  "name": "original_length",
+                  "path": "blocks[2].enhanced_packet.original_length",
+                  "type": "u32",
+                  "offset": 92,
+                  "size": 4,
+                  "value": 60,
+                  "display": "60"
+                },
+                {
+                  "name": "packet_data",
+                  "path": "blocks[2].enhanced_packet.packet_data",
+                  "type": "u8[20]",
+                  "offset": 96,
+                  "size": 20,
+                  "value": "FFFFFFFFFFFF0011223344550800450000140000",
+                  "display": "FF FF FF FF FF FF 00 11 22 33 44 55 08 00 45 00 …"
+                }
+              ]
+            },
+            {
+              "name": "total_length_copy",
+              "path": "blocks[2].total_length_copy",
+              "type": "u32",
+              "offset": 116,
+              "size": 4,
+              "value": 52,
+              "display": "52"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

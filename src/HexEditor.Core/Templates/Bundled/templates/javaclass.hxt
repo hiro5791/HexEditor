@@ -1,0 +1,131 @@
+// HexEditor 標準テンプレート (TPL-34): Java クラスファイル
+// ライセンス: MIT。
+// マジックと版、定数プール (種類ごとの項目。long / double は 2 つ分の番号を使う)、アクセスフラグ、クラス・親クラス、インターフェース、
+// フィールド、メソッド、クラスの属性を読む。属性の中身 (Code など) は読まない。値はすべてビッグエンディアン。
+#pragma name "Java class file"
+#pragma name.ja "Java クラスファイル"
+#pragma description "Java class file: version, constant pool, access flags, this / super class, interfaces, fields, methods and attributes."
+#pragma description.ja "Java クラスファイル: 版、定数プール、アクセスフラグ、クラス・親クラス、インターフェース、フィールド、メソッド、属性。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "CA FE BA BE ?? ?? 00 2?"
+#pragma magic 0 "CA FE BA BE ?? ?? 00 3?"
+#pragma magic 0 "CA FE BA BE ?? ?? 00 4?"
+#pragma mime "application/java-vm"
+#pragma extensions "class"
+#pragma endian big
+
+enum ConstantTag : u8 {
+    Utf8 = 1, Integer = 3, Float = 4, Long = 5, Double = 6, Class = 7, String = 8, Fieldref = 9, Methodref = 10, InterfaceMethodref = 11,
+    NameAndType = 12, MethodHandle = 15, MethodType = 16, Dynamic = 17, InvokeDynamic = 18, Module = 19, Package = 20,
+};
+
+flags ClassAccess : u16 {
+    Public = 0x1, Final = 0x10, Super = 0x20, Interface = 0x200, Abstract = 0x400, Synthetic = 0x1000, Annotation = 0x2000,
+    Enum = 0x4000, Module = 0x8000,
+};
+
+flags MemberAccess : u16 {
+    Public = 0x1, Private = 0x2, Protected = 0x4, Static = 0x8, Final = 0x10, Synchronized = 0x20, Volatile = 0x40,
+    Transient = 0x80, Native = 0x100, Abstract = 0x400, Strict = 0x800, Synthetic = 0x1000, Enum = 0x4000,
+};
+
+/// 定数プールの 1 項目の大きさ (タグを含むバイト数) と、使う番号の数 (long / double は 2)
+fn entry_size(u64 at) -> u64 {
+    local u64 tag = std::mem::read_u8(at, big);
+    switch (tag) {
+        case 1: return 3 + std::mem::read_u16(at + 1, big);
+        case 3: return 5;
+        case 4: return 5;
+        case 5: return 9;
+        case 6: return 9;
+        case 7: return 3;
+        case 8: return 3;
+        case 9: return 5;
+        case 10: return 5;
+        case 11: return 5;
+        case 12: return 5;
+        case 15: return 4;
+        case 16: return 3;
+        case 17: return 5;
+        case 18: return 5;
+        case 19: return 3;
+        case 20: return 3;
+        default: return 1;
+    }
+}
+
+/// 定数プールの項目の数 (番号 1 〜 count-1 を埋める項目。long / double は番号を 2 つ使う)
+fn pool_entry_count(u64 slots) -> u64 {
+    local u64 at = 10;
+    local u64 slot = 1;
+    local u64 entries = 0;
+    while (slot < slots && entries < 65535) {
+        local u64 tag = std::mem::read_u8(at, big);
+        at += entry_size(at);
+        slot += (tag == 5 || tag == 6) ? 2 : 1;
+        entries += 1;
+    }
+    return entries;
+}
+
+struct Utf8Info {
+    u16  length;
+    char text[length] [[encoding("utf-8")]];
+};
+
+struct ConstantPoolEntry {
+    ConstantTag tag [[color("accent1")]];
+    switch (tag) {
+        case ConstantTag::Utf8: Utf8Info utf8;
+        case ConstantTag::Integer: s32 integer_value;
+        case ConstantTag::Float: f32 float_value;
+        case ConstantTag::Long: s64 long_value;
+        case ConstantTag::Double: f64 double_value;
+        case ConstantTag::Class: u16 name_index;
+        case ConstantTag::String: u16 string_index;
+        case ConstantTag::Fieldref: u16 refs[2];
+        case ConstantTag::Methodref: u16 refs[2];
+        case ConstantTag::InterfaceMethodref: u16 refs[2];
+        case ConstantTag::NameAndType: u16 refs[2];
+        case ConstantTag::MethodHandle: u8 reference_kind;
+        case ConstantTag::MethodType: u16 descriptor_index;
+        case ConstantTag::Dynamic: u16 refs[2];
+        case ConstantTag::InvokeDynamic: u16 refs[2];
+        case ConstantTag::Module: u16 name_index;
+        case ConstantTag::Package: u16 name_index;
+    }
+} [[size(entry_size(addressof(this)))]];
+
+struct Attribute {
+    u16 name_index;
+    u32 length;
+    u8  info[length] [[lazy]];
+} [[size(6 + length)]];
+
+/// フィールドまたはメソッド
+struct Member {
+    MemberAccess access_flags;
+    u16          name_index;
+    u16          descriptor_index;
+    u16          attributes_count;
+    Attribute    attributes[attributes_count];
+};
+
+u8  magic[4] [[expect(magic == x"CA FE BA BE", "Java クラスファイルのマジックではありません")]];
+u16 minor_version;
+u16 major_version [[comment("45: Java 1.1、52: Java 8、61: Java 17、65: Java 21")]];
+u16 constant_pool_count [[comment("項目の数 + 1。long / double は番号を 2 つ使う")]];
+ConstantPoolEntry constant_pool[pool_entry_count(constant_pool_count)];
+ClassAccess access_flags;
+u16 this_class;
+u16 super_class;
+u16 interfaces_count;
+u16 interfaces[interfaces_count];
+u16 fields_count;
+Member fields[fields_count];
+u16 methods_count;
+Member methods[methods_count];
+u16 attributes_count;
+Attribute attributes[attributes_count];

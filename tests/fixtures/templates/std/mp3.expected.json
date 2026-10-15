@@ -1,0 +1,980 @@
+{
+  "name": "MP3 音声",
+  "type": "application",
+  "offset": 0,
+  "size": 1310,
+  "children": [
+    {
+      "name": "id3v2",
+      "path": "id3v2",
+      "type": "Id3v2",
+      "offset": 0,
+      "size": 59,
+      "display": "Id3v2 (8)",
+      "children": [
+        {
+          "name": "id",
+          "path": "id3v2.id",
+          "type": "char[3]",
+          "offset": 0,
+          "size": 3,
+          "value": "ID3",
+          "display": "ID3"
+        },
+        {
+          "name": "major_version",
+          "path": "id3v2.major_version",
+          "type": "u8",
+          "offset": 3,
+          "size": 1,
+          "value": 3,
+          "display": "3"
+        },
+        {
+          "name": "revision",
+          "path": "id3v2.revision",
+          "type": "u8",
+          "offset": 4,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "flags",
+          "path": "id3v2.flags",
+          "type": "u8",
+          "offset": 5,
+          "size": 1,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "size_bytes",
+          "path": "id3v2.size_bytes",
+          "type": "u8[4]",
+          "offset": 6,
+          "size": 4,
+          "value": "00000031",
+          "display": "00 00 00 31"
+        },
+        {
+          "name": "size",
+          "path": "id3v2.size",
+          "type": "u32",
+          "offset": 10,
+          "size": 0,
+          "value": 49,
+          "display": "49"
+        },
+        {
+          "name": "frames",
+          "path": "id3v2.frames",
+          "type": "Id3Frame[2]",
+          "offset": 10,
+          "size": 39,
+          "display": "[2]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "id3v2.frames[0]",
+              "type": "Id3Frame",
+              "offset": 10,
+              "size": 19,
+              "display": "Id3Frame (6)",
+              "children": [
+                {
+                  "name": "id",
+                  "path": "id3v2.frames[0].id",
+                  "type": "char[4]",
+                  "offset": 10,
+                  "size": 4,
+                  "value": "TIT2",
+                  "display": "TIT2"
+                },
+                {
+                  "name": "size_bytes",
+                  "path": "id3v2.frames[0].size_bytes",
+                  "type": "u8[4]",
+                  "offset": 14,
+                  "size": 4,
+                  "value": "00000009",
+                  "display": "00 00 00 09"
+                },
+                {
+                  "name": "size",
+                  "path": "id3v2.frames[0].size",
+                  "type": "u32",
+                  "offset": 18,
+                  "size": 0,
+                  "value": 9,
+                  "display": "9"
+                },
+                {
+                  "name": "flags",
+                  "path": "id3v2.frames[0].flags",
+                  "type": "u16",
+                  "offset": 18,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0x0"
+                },
+                {
+                  "name": "text_encoding",
+                  "path": "id3v2.frames[0].text_encoding",
+                  "type": "u8",
+                  "offset": 20,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "text",
+                  "path": "id3v2.frames[0].text",
+                  "type": "char[8]",
+                  "offset": 21,
+                  "size": 8,
+                  "value": "HexTitle",
+                  "display": "HexTitle"
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "id3v2.frames[1]",
+              "type": "Id3Frame",
+              "offset": 29,
+              "size": 20,
+              "display": "Id3Frame (6)",
+              "children": [
+                {
+                  "name": "id",
+                  "path": "id3v2.frames[1].id",
+                  "type": "char[4]",
+                  "offset": 29,
+                  "size": 4,
+                  "value": "TPE1",
+                  "display": "TPE1"
+                },
+                {
+                  "name": "size_bytes",
+                  "path": "id3v2.frames[1].size_bytes",
+                  "type": "u8[4]",
+                  "offset": 33,
+                  "size": 4,
+                  "value": "0000000A",
+                  "display": "00 00 00 0A"
+                },
+                {
+                  "name": "size",
+                  "path": "id3v2.frames[1].size",
+                  "type": "u32",
+                  "offset": 37,
+                  "size": 0,
+                  "value": 10,
+                  "display": "10"
+                },
+                {
+                  "name": "flags",
+                  "path": "id3v2.frames[1].flags",
+                  "type": "u16",
+                  "offset": 37,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0x0"
+                },
+                {
+                  "name": "text_encoding",
+                  "path": "id3v2.frames[1].text_encoding",
+                  "type": "u8",
+                  "offset": 39,
+                  "size": 1,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "text",
+                  "path": "id3v2.frames[1].text",
+                  "type": "char[9]",
+                  "offset": 40,
+                  "size": 9,
+                  "value": "HexArtist",
+                  "display": "HexArtist"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "padding",
+          "path": "id3v2.padding",
+          "type": "padding[10]",
+          "offset": 49,
+          "size": 10,
+          "display": "(padding 10 bytes)",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "id3v2.padding[0]",
+              "type": "padding",
+              "offset": 49,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            },
+            {
+              "name": "[1]",
+              "path": "id3v2.padding[1]",
+              "type": "padding",
+              "offset": 50,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            },
+            {
+              "name": "[2]",
+              "path": "id3v2.padding[2]",
+              "type": "padding",
+              "offset": 51,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            },
+            {
+              "name": "[3]",
+              "path": "id3v2.padding[3]",
+              "type": "padding",
+              "offset": 52,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            },
+            {
+              "name": "[4]",
+              "path": "id3v2.padding[4]",
+              "type": "padding",
+              "offset": 53,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            },
+            {
+              "name": "[5]",
+              "path": "id3v2.padding[5]",
+              "type": "padding",
+              "offset": 54,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            },
+            {
+              "name": "[6]",
+              "path": "id3v2.padding[6]",
+              "type": "padding",
+              "offset": 55,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            },
+            {
+              "name": "[7]",
+              "path": "id3v2.padding[7]",
+              "type": "padding",
+              "offset": 56,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            },
+            {
+              "name": "[8]",
+              "path": "id3v2.padding[8]",
+              "type": "padding",
+              "offset": 57,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            },
+            {
+              "name": "[9]",
+              "path": "id3v2.padding[9]",
+              "type": "padding",
+              "offset": 58,
+              "size": 1,
+              "display": "(padding 1 bytes)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "frames",
+      "path": "frames",
+      "type": "Frame[3]",
+      "offset": 59,
+      "size": 1251,
+      "display": "[3]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "frames[0]",
+          "type": "Frame",
+          "offset": 59,
+          "size": 417,
+          "display": "Frame (5)",
+          "children": [
+            {
+              "name": "header",
+              "path": "frames[0].header",
+              "type": "FrameHeader",
+              "offset": 59,
+              "size": 4,
+              "display": "FrameHeader (13)",
+              "children": [
+                {
+                  "name": "sync",
+                  "path": "frames[0].header.sync",
+                  "type": "11 bit",
+                  "offset": 59,
+                  "size": 2,
+                  "bit_offset": 5,
+                  "bit_size": 11,
+                  "value": 2047,
+                  "display": "2047 (0b11111111111)"
+                },
+                {
+                  "name": "version",
+                  "path": "frames[0].header.version",
+                  "type": "2 bit",
+                  "offset": 60,
+                  "size": 1,
+                  "bit_offset": 3,
+                  "bit_size": 2,
+                  "value": 3,
+                  "display": "3 (0b11)"
+                },
+                {
+                  "name": "layer",
+                  "path": "frames[0].header.layer",
+                  "type": "2 bit",
+                  "offset": 60,
+                  "size": 1,
+                  "bit_offset": 1,
+                  "bit_size": 2,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "protection_absent",
+                  "path": "frames[0].header.protection_absent",
+                  "type": "1 bit",
+                  "offset": 60,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 1,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "bitrate_index",
+                  "path": "frames[0].header.bitrate_index",
+                  "type": "4 bit",
+                  "offset": 61,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 4,
+                  "value": 9,
+                  "display": "9 (0b1001)"
+                },
+                {
+                  "name": "sampling_rate_index",
+                  "path": "frames[0].header.sampling_rate_index",
+                  "type": "2 bit",
+                  "offset": 61,
+                  "size": 1,
+                  "bit_offset": 2,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "padding_bit",
+                  "path": "frames[0].header.padding_bit",
+                  "type": "1 bit",
+                  "offset": 61,
+                  "size": 1,
+                  "bit_offset": 1,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "private_bit",
+                  "path": "frames[0].header.private_bit",
+                  "type": "1 bit",
+                  "offset": 61,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "channel_mode",
+                  "path": "frames[0].header.channel_mode",
+                  "type": "2 bit",
+                  "offset": 62,
+                  "size": 1,
+                  "bit_offset": 6,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "mode_extension",
+                  "path": "frames[0].header.mode_extension",
+                  "type": "2 bit",
+                  "offset": 62,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "copyright",
+                  "path": "frames[0].header.copyright",
+                  "type": "1 bit",
+                  "offset": 62,
+                  "size": 1,
+                  "bit_offset": 3,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "original",
+                  "path": "frames[0].header.original",
+                  "type": "1 bit",
+                  "offset": 62,
+                  "size": 1,
+                  "bit_offset": 2,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "emphasis",
+                  "path": "frames[0].header.emphasis",
+                  "type": "2 bit",
+                  "offset": 62,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                }
+              ]
+            },
+            {
+              "name": "length",
+              "path": "frames[0].length",
+              "type": "u32",
+              "offset": 63,
+              "size": 0,
+              "value": 417,
+              "display": "417"
+            },
+            {
+              "name": "bitrate",
+              "path": "frames[0].bitrate",
+              "type": "u32",
+              "offset": 63,
+              "size": 0,
+              "value": 128,
+              "display": "128"
+            },
+            {
+              "name": "rate",
+              "path": "frames[0].rate",
+              "type": "u32",
+              "offset": 63,
+              "size": 0,
+              "value": 44100,
+              "display": "44100"
+            },
+            {
+              "name": "data",
+              "path": "frames[0].data",
+              "type": "u8[413]",
+              "offset": 63,
+              "size": 413,
+              "value": "0100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "display": "01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "frames[1]",
+          "type": "Frame",
+          "offset": 476,
+          "size": 417,
+          "display": "Frame (5)",
+          "children": [
+            {
+              "name": "header",
+              "path": "frames[1].header",
+              "type": "FrameHeader",
+              "offset": 476,
+              "size": 4,
+              "display": "FrameHeader (13)",
+              "children": [
+                {
+                  "name": "sync",
+                  "path": "frames[1].header.sync",
+                  "type": "11 bit",
+                  "offset": 476,
+                  "size": 2,
+                  "bit_offset": 5,
+                  "bit_size": 11,
+                  "value": 2047,
+                  "display": "2047 (0b11111111111)"
+                },
+                {
+                  "name": "version",
+                  "path": "frames[1].header.version",
+                  "type": "2 bit",
+                  "offset": 477,
+                  "size": 1,
+                  "bit_offset": 3,
+                  "bit_size": 2,
+                  "value": 3,
+                  "display": "3 (0b11)"
+                },
+                {
+                  "name": "layer",
+                  "path": "frames[1].header.layer",
+                  "type": "2 bit",
+                  "offset": 477,
+                  "size": 1,
+                  "bit_offset": 1,
+                  "bit_size": 2,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "protection_absent",
+                  "path": "frames[1].header.protection_absent",
+                  "type": "1 bit",
+                  "offset": 477,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 1,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "bitrate_index",
+                  "path": "frames[1].header.bitrate_index",
+                  "type": "4 bit",
+                  "offset": 478,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 4,
+                  "value": 9,
+                  "display": "9 (0b1001)"
+                },
+                {
+                  "name": "sampling_rate_index",
+                  "path": "frames[1].header.sampling_rate_index",
+                  "type": "2 bit",
+                  "offset": 478,
+                  "size": 1,
+                  "bit_offset": 2,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "padding_bit",
+                  "path": "frames[1].header.padding_bit",
+                  "type": "1 bit",
+                  "offset": 478,
+                  "size": 1,
+                  "bit_offset": 1,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "private_bit",
+                  "path": "frames[1].header.private_bit",
+                  "type": "1 bit",
+                  "offset": 478,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "channel_mode",
+                  "path": "frames[1].header.channel_mode",
+                  "type": "2 bit",
+                  "offset": 479,
+                  "size": 1,
+                  "bit_offset": 6,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "mode_extension",
+                  "path": "frames[1].header.mode_extension",
+                  "type": "2 bit",
+                  "offset": 479,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "copyright",
+                  "path": "frames[1].header.copyright",
+                  "type": "1 bit",
+                  "offset": 479,
+                  "size": 1,
+                  "bit_offset": 3,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "original",
+                  "path": "frames[1].header.original",
+                  "type": "1 bit",
+                  "offset": 479,
+                  "size": 1,
+                  "bit_offset": 2,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "emphasis",
+                  "path": "frames[1].header.emphasis",
+                  "type": "2 bit",
+                  "offset": 479,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                }
+              ]
+            },
+            {
+              "name": "length",
+              "path": "frames[1].length",
+              "type": "u32",
+              "offset": 480,
+              "size": 0,
+              "value": 417,
+              "display": "417"
+            },
+            {
+              "name": "bitrate",
+              "path": "frames[1].bitrate",
+              "type": "u32",
+              "offset": 480,
+              "size": 0,
+              "value": 128,
+              "display": "128"
+            },
+            {
+              "name": "rate",
+              "path": "frames[1].rate",
+              "type": "u32",
+              "offset": 480,
+              "size": 0,
+              "value": 44100,
+              "display": "44100"
+            },
+            {
+              "name": "data",
+              "path": "frames[1].data",
+              "type": "u8[413]",
+              "offset": 480,
+              "size": 413,
+              "value": "0200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "display": "02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "frames[2]",
+          "type": "Frame",
+          "offset": 893,
+          "size": 417,
+          "display": "Frame (5)",
+          "children": [
+            {
+              "name": "header",
+              "path": "frames[2].header",
+              "type": "FrameHeader",
+              "offset": 893,
+              "size": 4,
+              "display": "FrameHeader (13)",
+              "children": [
+                {
+                  "name": "sync",
+                  "path": "frames[2].header.sync",
+                  "type": "11 bit",
+                  "offset": 893,
+                  "size": 2,
+                  "bit_offset": 5,
+                  "bit_size": 11,
+                  "value": 2047,
+                  "display": "2047 (0b11111111111)"
+                },
+                {
+                  "name": "version",
+                  "path": "frames[2].header.version",
+                  "type": "2 bit",
+                  "offset": 894,
+                  "size": 1,
+                  "bit_offset": 3,
+                  "bit_size": 2,
+                  "value": 3,
+                  "display": "3 (0b11)"
+                },
+                {
+                  "name": "layer",
+                  "path": "frames[2].header.layer",
+                  "type": "2 bit",
+                  "offset": 894,
+                  "size": 1,
+                  "bit_offset": 1,
+                  "bit_size": 2,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "protection_absent",
+                  "path": "frames[2].header.protection_absent",
+                  "type": "1 bit",
+                  "offset": 894,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 1,
+                  "value": 1,
+                  "display": "1 (0b1)"
+                },
+                {
+                  "name": "bitrate_index",
+                  "path": "frames[2].header.bitrate_index",
+                  "type": "4 bit",
+                  "offset": 895,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 4,
+                  "value": 9,
+                  "display": "9 (0b1001)"
+                },
+                {
+                  "name": "sampling_rate_index",
+                  "path": "frames[2].header.sampling_rate_index",
+                  "type": "2 bit",
+                  "offset": 895,
+                  "size": 1,
+                  "bit_offset": 2,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "padding_bit",
+                  "path": "frames[2].header.padding_bit",
+                  "type": "1 bit",
+                  "offset": 895,
+                  "size": 1,
+                  "bit_offset": 1,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "private_bit",
+                  "path": "frames[2].header.private_bit",
+                  "type": "1 bit",
+                  "offset": 895,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "channel_mode",
+                  "path": "frames[2].header.channel_mode",
+                  "type": "2 bit",
+                  "offset": 896,
+                  "size": 1,
+                  "bit_offset": 6,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "mode_extension",
+                  "path": "frames[2].header.mode_extension",
+                  "type": "2 bit",
+                  "offset": 896,
+                  "size": 1,
+                  "bit_offset": 4,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "copyright",
+                  "path": "frames[2].header.copyright",
+                  "type": "1 bit",
+                  "offset": 896,
+                  "size": 1,
+                  "bit_offset": 3,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "original",
+                  "path": "frames[2].header.original",
+                  "type": "1 bit",
+                  "offset": 896,
+                  "size": 1,
+                  "bit_offset": 2,
+                  "bit_size": 1,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                },
+                {
+                  "name": "emphasis",
+                  "path": "frames[2].header.emphasis",
+                  "type": "2 bit",
+                  "offset": 896,
+                  "size": 1,
+                  "bit_offset": 0,
+                  "bit_size": 2,
+                  "value": 0,
+                  "display": "0 (0b0)"
+                }
+              ]
+            },
+            {
+              "name": "length",
+              "path": "frames[2].length",
+              "type": "u32",
+              "offset": 897,
+              "size": 0,
+              "value": 417,
+              "display": "417"
+            },
+            {
+              "name": "bitrate",
+              "path": "frames[2].bitrate",
+              "type": "u32",
+              "offset": 897,
+              "size": 0,
+              "value": 128,
+              "display": "128"
+            },
+            {
+              "name": "rate",
+              "path": "frames[2].rate",
+              "type": "u32",
+              "offset": 897,
+              "size": 0,
+              "value": 44100,
+              "display": "44100"
+            },
+            {
+              "name": "data",
+              "path": "frames[2].data",
+              "type": "u8[413]",
+              "offset": 897,
+              "size": 413,
+              "value": "0300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "display": "03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 …"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "id3v1",
+      "path": "id3v1",
+      "type": "Id3v1",
+      "offset": 1310,
+      "size": 128,
+      "display": "Id3v1 (7)",
+      "children": [
+        {
+          "name": "tag",
+          "path": "id3v1.tag",
+          "type": "char[3]",
+          "offset": 1310,
+          "size": 3,
+          "value": "TAG",
+          "display": "TAG"
+        },
+        {
+          "name": "title",
+          "path": "id3v1.title",
+          "type": "char[30]",
+          "offset": 1313,
+          "size": 30,
+          "value": "HexTitle",
+          "display": "HexTitle"
+        },
+        {
+          "name": "artist",
+          "path": "id3v1.artist",
+          "type": "char[30]",
+          "offset": 1343,
+          "size": 30,
+          "value": "HexArtist",
+          "display": "HexArtist"
+        },
+        {
+          "name": "album",
+          "path": "id3v1.album",
+          "type": "char[30]",
+          "offset": 1373,
+          "size": 30,
+          "value": "HexAlbum",
+          "display": "HexAlbum"
+        },
+        {
+          "name": "year",
+          "path": "id3v1.year",
+          "type": "char[4]",
+          "offset": 1403,
+          "size": 4,
+          "value": "2026",
+          "display": "2026"
+        },
+        {
+          "name": "comment",
+          "path": "id3v1.comment",
+          "type": "char[30]",
+          "offset": 1407,
+          "size": 30,
+          "value": "test",
+          "display": "test"
+        },
+        {
+          "name": "genre",
+          "path": "id3v1.genre",
+          "type": "u8",
+          "offset": 1437,
+          "size": 1,
+          "value": 12,
+          "display": "12"
+        }
+      ]
+    }
+  ]
+}

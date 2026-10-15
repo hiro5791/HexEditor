@@ -1,0 +1,85 @@
+// HexEditor 標準テンプレート (TPL-34): FAT12 / FAT16 / FAT32 のブートセクタと FSInfo
+// ライセンス: MIT。
+// 100 GiB 以上のディスクイメージ (先頭がボリュームのもの) でも使える。読むのはブートセクタ (BPB) と、FAT32 の FSInfo だけである。
+// どのファイルシステムにも 55 AA があるため、priority を MBR より高くしてある。
+#pragma name "FAT boot sector"
+#pragma name.ja "FAT ブートセクタ"
+#pragma description "FAT12 / FAT16 / FAT32 volume: boot sector with BIOS parameter block, extended boot signature, and the FAT32 FSInfo sector."
+#pragma description.ja "FAT12 / FAT16 / FAT32 のボリューム: BIOS パラメータブロックを持つブートセクタ、拡張ブートシグネチャ、FAT32 の FSInfo セクタ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 54 "46 41 54"
+#pragma magic 82 "46 41 54 33 32"
+#pragma mime "application/x-fat"
+#pragma extensions "img;ima;vfat;fat"
+#pragma priority 10
+#pragma endian little
+
+struct Bpb {
+    u8     jump[3];
+    char   oem_name[8];
+    u16    bytes_per_sector;
+    u8     sectors_per_cluster;
+    u16    reserved_sectors;
+    u8     number_of_fats;
+    u16    root_entries [[comment("FAT12 / FAT16 のルートディレクトリの項目数。FAT32 では 0")]];
+    u16    total_sectors16;
+    u8     media [[format("hex")]];
+    u16    fat_size16 [[comment("FAT32 では 0")]];
+    u16    sectors_per_track;
+    u16    number_of_heads;
+    u32    hidden_sectors;
+    u32    total_sectors32;
+};
+
+/// FAT12 / FAT16 の拡張ブートレコード
+struct ExtendedBootRecord16 {
+    u8   drive_number [[format("hex")]];
+    u8   reserved;
+    u8   boot_signature [[format("hex"), comment("0x29 なら、以降の 3 つの欄がある")]];
+    u32  volume_id [[format("hex")]];
+    char volume_label[11];
+    char file_system_type[8];
+};
+
+/// FAT32 の拡張部分
+struct Fat32Extension {
+    u32  fat_size32;
+    u16  extended_flags [[format("hex")]];
+    u16  file_system_version;
+    u32  root_cluster;
+    u16  fs_info_sector;
+    u16  backup_boot_sector;
+    u8   reserved[12];
+    u8   drive_number [[format("hex")]];
+    u8   reserved1;
+    u8   boot_signature [[format("hex")]];
+    u32  volume_id [[format("hex")]];
+    char volume_label[11];
+    char file_system_type[8];
+};
+
+struct FsInfo {
+    u32 lead_signature [[format("hex"), expect(lead_signature == 0x41615252, "FSInfo の先頭のシグネチャ (RRaA) ではありません")]];
+    u8  reserved1[480] [[lazy]];
+    u32 structure_signature [[format("hex"), expect(structure_signature == 0x61417272, "FSInfo の構造のシグネチャ (rrAa) ではありません")]];
+    u32 free_cluster_count [[comment("0xFFFFFFFF は不明")]];
+    u32 next_free_cluster [[comment("0xFFFFFFFF は不明")]];
+    u8  reserved2[12];
+    u32 trail_signature [[format("hex"), expect(trail_signature == 0xAA550000, "FSInfo の末尾のシグネチャではありません")]];
+};
+
+Bpb bpb;
+local bool is_fat32 = bpb.fat_size16 == 0 && bpb.root_entries == 0;
+if (is_fat32) {
+    Fat32Extension fat32;
+} else {
+    ExtendedBootRecord16 extended;
+}
+u8 boot_code[510 - $] [[lazy]];
+u8 boot_sector_signature[2] [[expect(boot_sector_signature == x"55 AA", "ブートセクタのシグネチャ 55 AA がありません")]];
+
+if (is_fat32 && fat32.fs_info_sector != 0 && fat32.fs_info_sector != 0xFFFF) {
+    FsInfo fs_info @ fat32.fs_info_sector * bpb.bytes_per_sector;
+}

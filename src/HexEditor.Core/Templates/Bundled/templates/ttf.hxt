@@ -1,0 +1,99 @@
+// HexEditor 標準テンプレート (TPL-34): TrueType / OpenType フォント (テーブルディレクトリ)
+// ライセンス: MIT。
+// オフセットテーブルとテーブルレコード (タグ、チェックサム、位置、長さ) を読み、head と maxp は中身も読む。
+// TrueType コレクション (ttcf) は、ヘッダと最初のフォントのテーブルディレクトリを読む。値はすべてビッグエンディアン。
+#pragma name "TrueType / OpenType font"
+#pragma name.ja "TrueType / OpenType フォント"
+#pragma description "TrueType / OpenType font (sfnt): offset table, table directory, and the head and maxp tables. TrueType collections show the first font."
+#pragma description.ja "TrueType / OpenType フォント (sfnt): オフセットテーブル、テーブルディレクトリ、head と maxp のテーブル。TrueType コレクションは最初のフォントを表示する。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "00 01 00 00 00"
+#pragma magic 0 "4F 54 54 4F 00"
+#pragma magic 0 "74 72 75 65 00"
+#pragma magic 0 "74 74 63 66 00"
+#pragma mime "font/ttf"
+#pragma mime "font/otf"
+#pragma mime "font/collection"
+#pragma extensions "ttf;otf;ttc;otc"
+#pragma endian big
+
+enum SfntVersion : u32 { TrueType = 0x00010000, OpenTypeCff = 0x4F54544F, AppleTrueType = 0x74727565, Collection = 0x74746366 };
+
+struct OffsetTable {
+    SfntVersion sfnt_version;
+    u16         num_tables;
+    u16         search_range;
+    u16         entry_selector;
+    u16         range_shift;
+};
+
+struct TableRecord {
+    char tag[4] [[color("accent1")]];
+    u32  checksum [[format("hex")]];
+    u32  offset [[format("hex")]];
+    u32  length;
+};
+
+struct TtcHeader {
+    char tag[4] [[expect(tag == "ttcf", "ttcf ではありません")]];
+    u16  major_version;
+    u16  minor_version;
+    u32  num_fonts;
+    u32  table_directory_offsets[num_fonts] [[format("hex")]];
+};
+
+struct Head {
+    u16  major_version;
+    u16  minor_version;
+    s32  font_revision [[comment("16.16 固定小数点")]];
+    u32  checksum_adjustment [[format("hex")]];
+    u32  magic_number [[format("hex"), expect(magic_number == 0x5F0F3CF5, "head の magic が 5F0F3CF5 ではありません")]];
+    u16  head_flags [[format("hex")]];
+    u16  units_per_em;
+    s64  created [[comment("1904-01-01 からの秒数")]];
+    s64  modified;
+    s16  x_min;
+    s16  y_min;
+    s16  x_max;
+    s16  y_max;
+    u16  mac_style [[format("hex")]];
+    u16  lowest_rec_ppem;
+    s16  font_direction_hint;
+    s16  index_to_loc_format;
+    s16  glyph_data_format;
+};
+
+struct Maxp {
+    s32  version [[comment("16.16 固定小数点。0x00005000 は CFF、0x00010000 は TrueType")]];
+    u16  num_glyphs;
+};
+
+/// 名前がタグのテーブルレコードの位置 (なければ 0)
+fn find_record(u64 directory, u64 count, string tag) -> u64 {
+    for (local u64 i = 0; i < count && i < 4096; i += 1) {
+        local u64 p = directory + 12 + i * 16;
+        if (std::mem::read_string(p, 4, "latin1") == tag) {
+            return p;
+        }
+    }
+    return 0;
+}
+
+local u64 directory = 0;
+if (std::mem::compare(0, x"74 74 63 66")) {
+    TtcHeader collection;
+    directory = collection.table_directory_offsets[0];
+}
+OffsetTable offset_table @ directory;
+TableRecord tables[offset_table.num_tables] @ directory + 12;
+
+local u64 head_record = find_record(directory, offset_table.num_tables, "head");
+if (head_record != 0) {
+    Head head @ std::mem::read_u32(head_record + 8, big);
+}
+local u64 maxp_record = find_record(directory, offset_table.num_tables, "maxp");
+if (maxp_record != 0) {
+    Maxp maxp @ std::mem::read_u32(maxp_record + 8, big);
+}

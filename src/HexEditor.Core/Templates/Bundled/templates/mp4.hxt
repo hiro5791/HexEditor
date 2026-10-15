@@ -1,0 +1,154 @@
+// HexEditor 標準テンプレート (TPL-34): MP4 / ISO BMFF (ボックス)
+// ライセンス: MIT。
+// ボックスを入れ子で読む (moov、trak、mdia、minf、stbl などのコンテナは子を置く)。ftyp、mvhd、tkhd、mdhd、hdlr は中身を解釈し、
+// mdat などの大きなボックスは中身を読まない (全体を走査しない)。サイズ 1 (64 bit のサイズ) と 0 (ファイルの末尾まで) に対応する。
+#pragma name "MP4 / ISO base media"
+#pragma name.ja "MP4 / ISO 基本メディア"
+#pragma description "MP4 / ISO base media file format: nested boxes (ftyp, moov, trak, mdia, ..., mdat) with movie, track and media headers."
+#pragma description.ja "MP4 / ISO 基本メディアファイル形式: 入れ子のボックス (ftyp、moov、trak、mdia、…、mdat) と、ムービー・トラック・メディアのヘッダ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 4 "66 74 79 70"
+#pragma mime "video/mp4"
+#pragma mime "video/quicktime"
+#pragma mime "audio/mp4"
+#pragma mime "video/x-m4v"
+#pragma mime "video/3gpp"
+#pragma extensions "mp4;m4a;m4v;mov;3gp;3g2;heic;heif;avif"
+#pragma endian big
+
+/// ボックスの大きさ。32 bit の値が 1 なら後ろの 64 bit、0 なら親の終わりまで (ここでは最後のボックスとしてファイルの末尾まで)。
+fn box_size(u64 at) -> u64 {
+    local u64 size = std::mem::read_u32(at, big);
+    if (size == 1) {
+        return std::mem::read_u64(at + 8, big);
+    }
+    if (size == 0) {
+        return std::core::size() - at;
+    }
+    return size;
+}
+
+struct Brand {
+    char name[4];
+};
+
+struct FileType(u64 body_size) {
+    char   major_brand[4];
+    u32    minor_version;
+    Brand  compatible_brands[(body_size - 8) / 4];
+};
+
+struct MovieHeader {
+    u8   version;
+    u24  flags;
+    if (version == 1) {
+        u64 creation_time;
+        u64 modification_time;
+        u32 timescale;
+        u64 duration;
+    } else {
+        u32 creation_time;
+        u32 modification_time;
+        u32 timescale;
+        u32 duration;
+    }
+    s32  rate [[comment("16.16 固定小数点 (0x00010000 が等速)")]];
+    s16  volume;
+    u16  reserved1;
+    u32  reserved2[2];
+    s32  matrix[9];
+    u32  pre_defined[6];
+    u32  next_track_id;
+};
+
+struct TrackHeader {
+    u8   version;
+    u24  flags;
+    if (version == 1) {
+        u64 creation_time;
+        u64 modification_time;
+        u32 track_id;
+        u32 reserved;
+        u64 duration;
+    } else {
+        u32 creation_time;
+        u32 modification_time;
+        u32 track_id;
+        u32 reserved;
+        u32 duration;
+    }
+    u32  reserved2[2];
+    s16  layer;
+    s16  alternate_group;
+    s16  volume;
+    u16  reserved3;
+    s32  matrix[9];
+    u32  width [[comment("16.16 固定小数点")]];
+    u32  height [[comment("16.16 固定小数点")]];
+};
+
+struct MediaHeader {
+    u8   version;
+    u24  flags;
+    if (version == 1) {
+        u64 creation_time;
+        u64 modification_time;
+        u32 timescale;
+        u64 duration;
+    } else {
+        u32 creation_time;
+        u32 modification_time;
+        u32 timescale;
+        u32 duration;
+    }
+    u16  language [[format("hex"), comment("パックした ISO 639-2 の言語コード")]];
+    u16  pre_defined;
+};
+
+struct HandlerReference(u64 body_size) {
+    u8   version;
+    u24  flags;
+    u32  pre_defined;
+    char handler_type[4] [[comment("vide: 映像、soun: 音声、text: 文字")]];
+    u32  reserved[3];
+    char name[body_size - 24] [[encoding("utf-8")]];
+};
+
+/// ボックス。大きさの欄が 1 のときは 64 bit の大きさ、type が uuid のときは 16 バイトの拡張の型を持つ。
+struct Box(u32 depth) {
+    u32  size;
+    char type[4] [[color("accent1")]];
+    local u64 total = box_size(addressof(this)) [[show]];
+    local u64 header_size = 8;
+    if (size == 1) {
+        u64 large_size;
+        header_size = 16;
+    }
+    if (type == "uuid") {
+        guid extended_type;
+        header_size += 16;
+    }
+    local u64 body_size = total - header_size;
+    switch (type) {
+        case "ftyp": FileType(body_size) file_type;
+        case "mvhd": MovieHeader movie_header;
+        case "tkhd": TrackHeader track_header;
+        case "mdhd": MediaHeader media_header;
+        case "hdlr": HandlerReference(body_size) handler;
+        case "moov": Box(depth + 1) children[while($ < addressof(this) + total)];
+        case "trak": Box(depth + 1) children[while($ < addressof(this) + total)];
+        case "mdia": Box(depth + 1) children[while($ < addressof(this) + total)];
+        case "minf": Box(depth + 1) children[while($ < addressof(this) + total)];
+        case "stbl": Box(depth + 1) children[while($ < addressof(this) + total)];
+        case "dinf": Box(depth + 1) children[while($ < addressof(this) + total)];
+        case "edts": Box(depth + 1) children[while($ < addressof(this) + total)];
+        case "udta": Box(depth + 1) children[while($ < addressof(this) + total)];
+        case "moof": Box(depth + 1) children[while($ < addressof(this) + total)];
+        case "traf": Box(depth + 1) children[while($ < addressof(this) + total)];
+        default: u8 data[body_size] [[lazy]];
+    }
+} [[size(total)]];
+
+Box(0) boxes[until(std::eof())];

@@ -1,0 +1,112 @@
+// HexEditor 標準テンプレート (TPL-34): Windows のレジストリハイブ (ヘッダと hbin)
+// ライセンス: MIT。
+// ベースブロック (先頭 4096 バイト)、hbin (4096 バイトの倍数の塊) の列、各 hbin のセル (キーノード nk、値 vk など) を読む。
+// hbin の列とセルは開いたときに評価する (遅延評価。ハイブ全体の走査はしない)。
+#pragma name "Windows registry hive"
+#pragma name.ja "Windows レジストリハイブ"
+#pragma description "Windows registry hive (regf): base block with root cell offset, hive bins (hbin) and their cells (key nodes nk, key values vk, security sk, subkey lists)."
+#pragma description.ja "Windows のレジストリハイブ (regf): ルートセルの位置を持つベースブロック、ハイブビン (hbin)、そのセル (キーノード nk、キーの値 vk、セキュリティ sk、サブキーのリスト)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "72 65 67 66"
+#pragma mime "application/x-ms-registry"
+#pragma extensions "dat;hve;reg;sam;software;system;security;default;ntuser"
+#pragma endian little
+
+enum HiveType : u32 { Primary = 0, Log = 1 };
+
+flags KeyFlags : u16 {
+    Volatile = 0x1, HiveExit = 0x2, HiveEntry = 0x4, NoDelete = 0x8, SymbolicLink = 0x10, CompressedName = 0x20, PredefinedHandle = 0x40,
+};
+
+enum ValueType : u32 {
+    None = 0, String = 1, ExpandString = 2, Binary = 3, Dword = 4, DwordBigEndian = 5, Link = 6, MultiString = 7, ResourceList = 8,
+    Qword = 11,
+};
+
+struct BaseBlock {
+    char     signature[4] [[expect(signature == "regf", "regf ではありません")]];
+    u32      primary_sequence_number;
+    u32      secondary_sequence_number;
+    filetime last_written;
+    u32      major_version;
+    u32      minor_version;
+    HiveType file_type;
+    u32      file_format;
+    u32      root_cell_offset [[format("hex"), comment("最初の hbin (オフセット 0x1000) からの相対位置")]];
+    u32      hive_bins_data_size;
+    u32      clustering_factor;
+    char16   file_name[32] [[encoding("utf-16le")]];
+    u8       reserved[396] [[lazy]];
+    u32      checksum [[format("hex"), comment("先頭の 508 バイト (127 個の u32) の XOR")]];
+    u8       reserved2[3584] [[lazy, export(false)]];
+};
+
+/// キーノード (nk)
+struct KeyNode {
+    char     signature[2];
+    KeyFlags key_flags;
+    filetime last_written;
+    u32      access_bits;
+    u32      parent [[format("hex")]];
+    u32      subkey_count;
+    u32      volatile_subkey_count;
+    u32      subkey_list_offset [[format("hex")]];
+    u32      volatile_subkey_list_offset [[format("hex")]];
+    u32      value_count;
+    u32      value_list_offset [[format("hex")]];
+    u32      security_offset [[format("hex")]];
+    u32      class_name_offset [[format("hex")]];
+    u32      max_subkey_name_length;
+    u32      max_subkey_class_length;
+    u32      max_value_name_length;
+    u32      max_value_data_length;
+    u32      work_var;
+    u16      name_length;
+    u16      class_name_length;
+    char     name[name_length] [[encoding("latin1")]];
+};
+
+/// キーの値 (vk)
+struct KeyValue {
+    char      signature[2];
+    u16       name_length;
+    u32       data_length [[comment("最上位ビットが立っていればデータはこの欄に入っている")]];
+    u32       data_offset [[format("hex")]];
+    ValueType value_type;
+    u16       value_flags [[format("hex"), comment("1: 名前は ASCII")]];
+    u16       spare;
+    char      name[name_length] [[encoding("latin1")]];
+};
+
+/// セル。大きさは符号付き (負なら使用中)。署名で種類が決まる。
+struct Cell {
+    s32 size;
+    local u64 cell_size = size < 0 ? 0 - size : size [[show]];
+    local bool allocated = size < 0 [[show]];
+    if (allocated && cell_size >= 6) {
+        local string kind = std::mem::read_string(addressof(this) + 4, 2, "latin1") [[show]];
+        switch (kind) {
+            case "nk": KeyNode key_node;
+            case "vk": KeyValue key_value;
+            default: u8 data[cell_size - 4] [[lazy]];
+        }
+    } else if (cell_size > 4) {
+        u8 data[cell_size - 4] [[lazy]];
+    }
+} [[size(cell_size < 8 ? 8 : cell_size)]];
+
+/// ハイブビン (hbin)。4096 バイトの倍数の大きさで、セルが詰まっている。
+struct HiveBin {
+    char     signature[4] [[expect(signature == "hbin", "hbin ではありません")]];
+    u32      offset [[format("hex"), comment("最初の hbin からの相対位置")]];
+    u32      size;
+    u8       reserved[8];
+    filetime timestamp;
+    u32      spare;
+    Cell     cells[while($ < addressof(this) + size)];
+} [[size(size)]];
+
+BaseBlock base_block;
+HiveBin hive_bins[until(endof(last) >= 4096 + base_block.hive_bins_data_size || std::eof() || last.size == 0)];
