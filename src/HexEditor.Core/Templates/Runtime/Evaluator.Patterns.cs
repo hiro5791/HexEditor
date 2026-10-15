@@ -237,6 +237,31 @@ internal sealed partial class Evaluator
         }
     }
 
+    private readonly Dictionary<StructDecl, bool> _hasPointers = [];
+
+    private bool HasPointers(StructDecl decl)
+    {
+        if (_hasPointers.TryGetValue(decl, out bool has))
+        {
+            return has;
+        }
+
+        static bool Scan(IEnumerable<Stmt> body) => body.Any(s => s switch
+        {
+            PatternDeclStmt p => p.Declarators.Any(d => d.IsPointer),
+            BlockStmt b => Scan(b.Body),
+            IfStmt i => Scan([i.Then]) || (i.Else is not null && Scan([i.Else])),
+            SwitchStmt sw => sw.Cases.Any(c => Scan(c.Body)),
+            ForStmt f => Scan([f.Body]),
+            WhileStmt w => Scan([w.Body]),
+            _ => false,
+        });
+
+        has = Scan(decl.Body);
+        _hasPointers[decl] = has;
+        return has;
+    }
+
     private static bool IsZeroSized(RtType type, Declarator d) =>
         d.Array is ArrayKind.Eof or ArrayKind.While || (d.Array == ArrayKind.Count && d.ArrayExpr is LiteralExpr { Value: Int128 n } && n == 0);
 
@@ -431,7 +456,11 @@ internal sealed partial class Evaluator
                 });
                 node.Children0 = lc;
                 node.Kind = st.Decl.IsUnion ? TemplateNodeKind.Union : TemplateNodeKind.Struct;
-                _seen.TryAdd((space, offset, st.Identity), node);
+                if (HasPointers(st.Decl))
+                {
+                    // ポインタでつながる構造の型だけを記録する (同じ位置・同じ型を指すポインタの共有。TPL-08 の仕様 4)
+                    _seen.TryAdd((space, offset, st.Identity), node);
+                }
                 long? fixedSize = st.Decl.Params.Count == 0 || !UsesParams(st.Decl) ? StaticSize(st) : null;
                 if (Attr(attrs, "substream") is not null)
                 {
@@ -692,6 +721,7 @@ internal sealed partial class Evaluator
             {
                 Count = count,
                 Factory = i => CreateElementLazy(elem, node, i, offset + (i * es), space, f, big, elemAttrs, args),
+                Evicted = ReleaseElements,
             };
             attach(node);
             return node;
@@ -1333,6 +1363,7 @@ internal sealed partial class Evaluator
             {
                 Count = count,
                 Factory = i => MakePointer($"[{i}]", target, ptrType, d, attrs, f, offset + (i * ptrType.Size), space, big, args, array, i),
+                Evicted = ReleaseElements,
             };
             attach(array);
             return array;

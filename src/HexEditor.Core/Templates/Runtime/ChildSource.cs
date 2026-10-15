@@ -84,6 +84,9 @@ internal sealed class OnDemandChildren : ChildSource
 
     public required Func<long, TemplateNode> Factory { get; init; }
 
+    /// <summary>キャッシュから捨てた要素 (評価済みのパターンの数とメモリの見積もりから引く)。</summary>
+    public Action<IEnumerable<TemplateNode>>? Evicted { get; init; }
+
     public override long? KnownCount => Count;
 
     public override bool IsMaterialized => true;
@@ -97,6 +100,7 @@ internal sealed class OnDemandChildren : ChildSource
 
         if (_cache.Count >= CacheLimit)
         {
+            Evicted?.Invoke(_cache.Values);
             _cache.Clear(); // 要素の数に比例してメモリを使わない
         }
 

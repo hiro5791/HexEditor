@@ -527,6 +527,17 @@ internal sealed partial class Evaluator
         }
     }
 
+    /// <summary>オンデマンド配列のキャッシュから捨てた要素の分を、パターン数とメモリの見積もりから引く。</summary>
+    private void ReleaseElements(IEnumerable<TemplateNode> nodes)
+    {
+        foreach (TemplateNode n in nodes)
+        {
+            UnlinkSubtree(n);
+            PatternCounter--;
+            MemoryCounter -= NodeCost;
+        }
+    }
+
     private void UnlinkSubtree(TemplateNode node)
     {
         if (node.Children0 is LazyChildren { Items: not null } lc)

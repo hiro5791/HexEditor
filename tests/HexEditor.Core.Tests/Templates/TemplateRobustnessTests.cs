@@ -175,6 +175,29 @@ public sealed class TemplateRobustnessTests
         Assert.True(max <= 256L * 1024 * 1024, $"評価器のメモリ {max}");
     }
 
+    [Fact]
+    [Trait(TC, "TC-TPL-28-02")]
+    public void VisitingManyStructElementsDoesNotAccumulatePatterns()
+    {
+        var source = new HexEditor.Core.Sources.VirtualByteSource(1L << 30, HexEditor.Core.Sources.VirtualContent.OffsetLowByte);
+        TemplateResult r = Run(Load("#pragma limit.patterns 20000\nstruct P { u8 a; u8 b; }; P p[100000000];"), TemplateDataSource.FromByteSource(source));
+        TemplateNode p = Node(r, "p");
+        long sum = 0;
+        r.Invoke(() =>
+        {
+            for (long i = 0; i < 200_000; i++)
+            {
+                sum += Convert.ToInt64(p.GetChild(i * 37).FindChild("b")!.Value, System.Globalization.CultureInfo.InvariantCulture);
+            }
+
+            return 0;
+        });
+        Assert.True(sum > 0);
+        Assert.Equal(TemplateRunState.Completed, r.State);
+        Assert.True(r.PatternCount < 20_000, $"評価済み {r.PatternCount}");
+        Assert.DoesNotContain(r.Diagnostics, d => d.Code == TemplateMessages.PatternLimit);
+    }
+
     [Theory]
     [Trait(TC, "TC-TPL-28-03")]
     [InlineData("while (true) {}", false)]
