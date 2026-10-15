@@ -286,6 +286,85 @@ public sealed class TemplateToolUiTests(ITestOutputHelper output)
         }
     });
 
+    // ───────────── AUTO-42 ─────────────
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-AUTO-42-01")]
+    public Task Hexed_template_json_equals_the_template_panel() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 1. hexed template … --template pe --format json
+        string pe = ctx.TestData("TD-PE-X64");
+        (int exit, string json, string err) = await CommandLineTests.RunHexedAsync(ctx.Root, ["template", pe, "--template", "pe", "--format", "json"]);
+        Assert.True(exit == 0, err);
+        var expected = new List<JsonObject>();
+        void Walk(JsonNode node)
+        {
+            if (node["path"] is not null)
+            {
+                expected.Add(node.AsObject());
+            }
+
+            foreach (JsonNode? child in node["children"]?.AsArray() ?? [])
+            {
+                Walk(child!);
+            }
+        }
+
+        JsonNode root = JsonNode.Parse(json)!;
+        Walk(root is JsonArray roots ? roots[0]! : root);
+        Assert.NotEmpty(expected);
+
+        // 2〜3. GUI で同じテンプレートを適用し、ツリーを全展開して読む
+        AppSession app = await ctx.StartAsync(new AppOptions { Files = [pe] });
+        await TemplateAsync(app, "removeAll");
+        await TemplateAsync(app, "apply", new JsonObject { ["template"] = "pe" });
+        await WaitTemplatesAsync(app);
+        await TemplateAsync(app, "expandAll", new JsonObject { ["path"] = "@app", ["load"] = true });
+        JsonArray rows = (await TemplateAsync(app, "state", new JsonObject { ["rows"] = 100_000 }))["rows"]!.AsArray();
+        var actual = rows.Select(r => r!.AsObject()).Where(r => r["kind"]!.GetValue<string>() == "Node").ToList();
+
+        // 4. 数・並び・名前・型・開始・長さ・表示値
+        var differences = new List<string>();
+        for (int i = 0; i < Math.Max(expected.Count, actual.Count) && differences.Count < 20; i++)
+        {
+            if (i >= expected.Count || i >= actual.Count)
+            {
+                differences.Add($"#{i}: only in {(i >= expected.Count ? "GUI " + actual[i]["path"] : "JSON " + expected[i]["path"])}");
+                continue;
+            }
+
+            JsonObject e = expected[i];
+            JsonObject a = actual[i];
+            string Text(JsonNode? n) => n?.ToString() ?? string.Empty;
+            (string, string, string)[] fields =
+            [
+                ("path", Text(e["path"]), Text(a["path"])),
+                ("name", Text(e["name"]), Text(a["name"])),
+                ("type", Text(e["type"]), Text(a["type"])),
+                ("offset", Text(e["offset"]), Text(a["start"])),
+                ("size", Text(e["size"]), Text(a["length"])),
+                ("display", Text(e["display"]), Text(a["value"])),
+            ];
+            foreach ((string field, string want, string got) in fields.Where(f => f.Item2 != f.Item3 && !SameInstant(f.Item1, e, f.Item3)))
+            {
+                differences.Add($"#{i} {e["path"]} {field}: JSON '{want}' / GUI '{got}'");
+            }
+        }
+
+        Assert.True(differences.Count == 0, $"{expected.Count} JSON nodes, {actual.Count} GUI rows\n" + string.Join("\n", differences));
+    });
+
+    /// <summary>
+    /// 日時の表示値: hexed は en-US・UTC で、GUI は利用者の地域の書式・現地時刻で表示する (TPL-03 の仕様 3)。同じ時刻を指していれば一致とみなす
+    /// (テストのプロセスとアプリは同じ PC の地域設定で動く)。
+    /// </summary>
+    private static bool SameInstant(string field, JsonObject json, string gui) =>
+        field == "display"
+        && json["display"]?.ToString() is { } text
+        && DateTimeOffset.TryParse(text, System.Globalization.CultureInfo.GetCultureInfo("en-US"), System.Globalization.DateTimeStyles.AssumeUniversal, out DateTimeOffset instant)
+        && DateTime.TryParse(gui, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.AssumeLocal, out DateTime shown)
+        && new DateTimeOffset(shown).ToUniversalTime() == instant.ToUniversalTime();
+
     // ───────────── TPL-17 ─────────────
 
     [Theory]

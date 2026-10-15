@@ -123,6 +123,12 @@ public sealed partial class MainWindow
                     i++;
                 }
 
+                if (request["load"]?.GetValue<bool>() == true)
+                {
+                    // すべての行の内容を読み込む (状態の "rows" で比べるため)
+                    await model.LoadRowDataAsync([.. Enumerable.Range(0, model.RowCount).Select(model.ItemAt)]);
+                }
+
                 return new JsonObject { ["rowCount"] = model.RowCount };
             }
 
@@ -637,6 +643,8 @@ public sealed partial class MainWindow
                 ["tooltip"] = row.ToolTipText,
                 ["accessibleName"] = row.AccessibleName,
                 ["loaded"] = item.Data is not null,
+                ["start"] = item.Data?.Offset,
+                ["length"] = item.Data?.Size,
                 ["valueSwatch"] = item.Data?.ValueArgb is { } argb ? "#" + (argb & 0xFFFFFF).ToString("X6", CultureInfo.InvariantCulture) : null,
             });
         }
