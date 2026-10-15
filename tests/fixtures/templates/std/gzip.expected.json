@@ -1,0 +1,194 @@
+{
+  "name": "GZIP 圧縮データ",
+  "type": "application",
+  "offset": 0,
+  "size": 58,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "MemberHeader",
+      "offset": 0,
+      "size": 30,
+      "display": "MemberHeader (8)",
+      "children": [
+        {
+          "name": "id",
+          "path": "header.id",
+          "type": "u8[2]",
+          "offset": 0,
+          "size": 2,
+          "value": "1F8B",
+          "display": "1F 8B"
+        },
+        {
+          "name": "method",
+          "path": "header.method",
+          "type": "CompressionMethod",
+          "offset": 2,
+          "size": 1,
+          "value": 8,
+          "display": "Deflate (0x8)"
+        },
+        {
+          "name": "packed",
+          "path": "header.packed",
+          "type": "MemberFlags",
+          "offset": 3,
+          "size": 1,
+          "display": "MemberFlags (6)",
+          "children": [
+            {
+              "name": "text",
+              "path": "header.packed.text",
+              "type": "1 bit",
+              "offset": 3,
+              "size": 1,
+              "bit_offset": 0,
+              "bit_size": 1,
+              "value": 0,
+              "display": "0 (0b0)"
+            },
+            {
+              "name": "header_crc",
+              "path": "header.packed.header_crc",
+              "type": "1 bit",
+              "offset": 3,
+              "size": 1,
+              "bit_offset": 1,
+              "bit_size": 1,
+              "value": 0,
+              "display": "0 (0b0)"
+            },
+            {
+              "name": "extra",
+              "path": "header.packed.extra",
+              "type": "1 bit",
+              "offset": 3,
+              "size": 1,
+              "bit_offset": 2,
+              "bit_size": 1,
+              "value": 0,
+              "display": "0 (0b0)"
+            },
+            {
+              "name": "name",
+              "path": "header.packed.name",
+              "type": "1 bit",
+              "offset": 3,
+              "size": 1,
+              "bit_offset": 3,
+              "bit_size": 1,
+              "value": 1,
+              "display": "1 (0b1)"
+            },
+            {
+              "name": "comment",
+              "path": "header.packed.comment",
+              "type": "1 bit",
+              "offset": 3,
+              "size": 1,
+              "bit_offset": 4,
+              "bit_size": 1,
+              "value": 1,
+              "display": "1 (0b1)"
+            },
+            {
+              "name": "reserved",
+              "path": "header.packed.reserved",
+              "type": "3 bit",
+              "offset": 3,
+              "size": 1,
+              "bit_offset": 5,
+              "bit_size": 3,
+              "value": 0,
+              "display": "0 (0b0)"
+            }
+          ]
+        },
+        {
+          "name": "modification_time",
+          "path": "header.modification_time",
+          "type": "time32_t",
+          "offset": 4,
+          "size": 4,
+          "value": 1593835520,
+          "display": "7/4/2020 4:05:20 AM"
+        },
+        {
+          "name": "extra_flags",
+          "path": "header.extra_flags",
+          "type": "u8",
+          "offset": 8,
+          "size": 1,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "operating_system",
+          "path": "header.operating_system",
+          "type": "OperatingSystem",
+          "offset": 9,
+          "size": 1,
+          "value": 3,
+          "display": "Unix (0x3)"
+        },
+        {
+          "name": "file_name",
+          "path": "header.file_name",
+          "type": "string",
+          "offset": 10,
+          "size": 10,
+          "value": "hello.txt",
+          "display": "hello.txt"
+        },
+        {
+          "name": "comment",
+          "path": "header.comment",
+          "type": "string",
+          "offset": 20,
+          "size": 10,
+          "value": "HexEditor",
+          "display": "HexEditor"
+        }
+      ]
+    },
+    {
+      "name": "compressed_data",
+      "path": "compressed_data",
+      "type": "u8[20]",
+      "offset": 30,
+      "size": 20,
+      "value": "F348CDC9C9D751F048AD704DC92CC92F52E40200",
+      "display": "F3 48 CD C9 C9 D7 51 F0 48 AD 70 4D C9 2C C9 2F …"
+    },
+    {
+      "name": "trailer",
+      "path": "trailer",
+      "type": "Trailer",
+      "offset": 50,
+      "size": 8,
+      "display": "Trailer (2)",
+      "children": [
+        {
+          "name": "crc32",
+          "path": "trailer.crc32",
+          "type": "u32",
+          "offset": 50,
+          "size": 4,
+          "value": 1257326565,
+          "display": "0x4AF147E5"
+        },
+        {
+          "name": "uncompressed_size_mod_2_32",
+          "path": "trailer.uncompressed_size_mod_2_32",
+          "type": "u32",
+          "offset": 54,
+          "size": 4,
+          "value": 18,
+          "display": "18"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+// HexEditor 標準テンプレート (TPL-34): SQLite データベース (ヘッダとページヘッダ)
+// ライセンス: MIT。
+// 先頭の 100 バイトのデータベースヘッダと、1 ページ目 (sqlite_schema) の B-tree ページヘッダ、セルポインタ配列、各セルのヘッダを読む。
+// 2 ページ目以降は読まない (ページの大きさと数はヘッダから分かる)。
+#pragma name "SQLite database"
+#pragma name.ja "SQLite データベース"
+#pragma description "SQLite 3 database: 100-byte database header, the B-tree page header, cell pointer array and cells of page 1 (sqlite_schema)."
+#pragma description.ja "SQLite 3 データベース: 100 バイトのデータベースヘッダ、1 ページ目 (sqlite_schema) の B-tree ページヘッダ、セルポインタ配列、各セル。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00"
+#pragma mime "application/vnd.sqlite3"
+#pragma extensions "sqlite;sqlite3;db;db3;s3db"
+#pragma endian big
+
+enum TextEncoding : u32 { Utf8 = 1, Utf16le = 2, Utf16be = 3 };
+
+enum PageType : u8 { InteriorIndex = 2, InteriorTable = 5, LeafIndex = 10, LeafTable = 13 };
+
+struct DatabaseHeader {
+    char         magic[16] [[expect(magic == "SQLite format 3", "SQLite のヘッダではありません")]];
+    u16          page_size [[comment("1 は 65536 バイト")]];
+    u8           write_version [[comment("1: ロールバックジャーナル、2: WAL")]];
+    u8           read_version;
+    u8           reserved_space_per_page;
+    u8           max_embedded_payload_fraction;
+    u8           min_embedded_payload_fraction;
+    u8           leaf_payload_fraction;
+    u32          file_change_counter;
+    u32          database_size_in_pages;
+    u32          first_freelist_trunk_page;
+    u32          freelist_page_count;
+    u32          schema_cookie;
+    u32          schema_format;
+    u32          default_page_cache_size;
+    u32          largest_root_btree_page;
+    TextEncoding text_encoding;
+    u32          user_version;
+    u32          incremental_vacuum_mode;
+    u32          application_id [[format("hex")]];
+    u8           reserved[20] [[lazy]];
+    u32          version_valid_for;
+    u32          sqlite_version_number;
+    local u32 actual_page_size = page_size == 1 ? 65536 : page_size [[show]];
+};
+
+/// B-tree ページのヘッダ。内部ページ (2、5) だけ、右端の子のページ番号を持つ。
+struct PageHeader {
+    PageType page_type;
+    u16      first_freeblock;
+    u16      cell_count;
+    u16      cell_content_start [[comment("0 は 65536")]];
+    u8       fragmented_free_bytes;
+    if (page_type == PageType::InteriorIndex || page_type == PageType::InteriorTable) {
+        u32  rightmost_pointer;
+    }
+};
+
+/// レコードのヘッダ (ヘッダの大きさと、列の型を示す可変長整数の並び)
+struct RecordHeader {
+    sqlite_varint header_size;
+    sqlite_varint serial_types[while($ < addressof(header_size) + header_size)];
+};
+
+/// テーブルのリーフ (種類 13) のセル: ペイロードの大きさ、行番号 (rowid)、レコード
+struct TableLeafCell {
+    sqlite_varint payload_size;
+    sqlite_varint rowid;
+    RecordHeader  record_header;
+    u8            record_body[payload_size - sizeof(record_header)] [[lazy]];
+};
+
+DatabaseHeader header;
+// 1 ページ目では、B-tree ページヘッダは 100 バイトの位置にある
+PageHeader page_header;
+u16 cell_pointers[page_header.cell_count];
+if (page_header.page_type == PageType::LeafTable) {
+    for (local u32 i = 0; i < page_header.cell_count && i < 1000; i += 1) {
+        TableLeafCell cells @ cell_pointers[i];
+    }
+}

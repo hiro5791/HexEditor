@@ -1,0 +1,1193 @@
+{
+  "name": "MP4 / ISO 基本メディア",
+  "type": "application",
+  "offset": 0,
+  "size": 345,
+  "children": [
+    {
+      "name": "boxes",
+      "path": "boxes",
+      "type": "Box[3]",
+      "offset": 0,
+      "size": 345,
+      "display": "[3]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "boxes[0]",
+          "type": "Box",
+          "offset": 0,
+          "size": 28,
+          "display": "Box (4)",
+          "children": [
+            {
+              "name": "size",
+              "path": "boxes[0].size",
+              "type": "u32",
+              "offset": 0,
+              "size": 4,
+              "value": 28,
+              "display": "28"
+            },
+            {
+              "name": "type",
+              "path": "boxes[0].type",
+              "type": "char[4]",
+              "offset": 4,
+              "size": 4,
+              "value": "ftyp",
+              "display": "ftyp"
+            },
+            {
+              "name": "total",
+              "path": "boxes[0].total",
+              "type": "u64",
+              "offset": 8,
+              "size": 0,
+              "value": 28,
+              "display": "28"
+            },
+            {
+              "name": "file_type",
+              "path": "boxes[0].file_type",
+              "type": "FileType",
+              "offset": 8,
+              "size": 20,
+              "display": "FileType (3)",
+              "children": [
+                {
+                  "name": "major_brand",
+                  "path": "boxes[0].file_type.major_brand",
+                  "type": "char[4]",
+                  "offset": 8,
+                  "size": 4,
+                  "value": "isom",
+                  "display": "isom"
+                },
+                {
+                  "name": "minor_version",
+                  "path": "boxes[0].file_type.minor_version",
+                  "type": "u32",
+                  "offset": 12,
+                  "size": 4,
+                  "value": 512,
+                  "display": "512"
+                },
+                {
+                  "name": "compatible_brands",
+                  "path": "boxes[0].file_type.compatible_brands",
+                  "type": "Brand[3]",
+                  "offset": 16,
+                  "size": 12,
+                  "display": "[3]",
+                  "children": [
+                    {
+                      "name": "[0]",
+                      "path": "boxes[0].file_type.compatible_brands[0]",
+                      "type": "Brand",
+                      "offset": 16,
+                      "size": 4,
+                      "display": "Brand (1)",
+                      "children": [
+                        {
+                          "name": "name",
+                          "path": "boxes[0].file_type.compatible_brands[0].name",
+                          "type": "char[4]",
+                          "offset": 16,
+                          "size": 4,
+                          "value": "isom",
+                          "display": "isom"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "[1]",
+                      "path": "boxes[0].file_type.compatible_brands[1]",
+                      "type": "Brand",
+                      "offset": 20,
+                      "size": 4,
+                      "display": "Brand (1)",
+                      "children": [
+                        {
+                          "name": "name",
+                          "path": "boxes[0].file_type.compatible_brands[1].name",
+                          "type": "char[4]",
+                          "offset": 20,
+                          "size": 4,
+                          "value": "iso2",
+                          "display": "iso2"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "[2]",
+                      "path": "boxes[0].file_type.compatible_brands[2]",
+                      "type": "Brand",
+                      "offset": 24,
+                      "size": 4,
+                      "display": "Brand (1)",
+                      "children": [
+                        {
+                          "name": "name",
+                          "path": "boxes[0].file_type.compatible_brands[2].name",
+                          "type": "char[4]",
+                          "offset": 24,
+                          "size": 4,
+                          "value": "mp41",
+                          "display": "mp41"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "boxes[1]",
+          "type": "Box",
+          "offset": 28,
+          "size": 301,
+          "display": "Box (4)",
+          "children": [
+            {
+              "name": "size",
+              "path": "boxes[1].size",
+              "type": "u32",
+              "offset": 28,
+              "size": 4,
+              "value": 301,
+              "display": "301"
+            },
+            {
+              "name": "type",
+              "path": "boxes[1].type",
+              "type": "char[4]",
+              "offset": 32,
+              "size": 4,
+              "value": "moov",
+              "display": "moov"
+            },
+            {
+              "name": "total",
+              "path": "boxes[1].total",
+              "type": "u64",
+              "offset": 36,
+              "size": 0,
+              "value": 301,
+              "display": "301"
+            },
+            {
+              "name": "children",
+              "path": "boxes[1].children",
+              "type": "Box[2]",
+              "offset": 36,
+              "size": 293,
+              "display": "[2]",
+              "children": [
+                {
+                  "name": "[0]",
+                  "path": "boxes[1].children[0]",
+                  "type": "Box",
+                  "offset": 36,
+                  "size": 108,
+                  "display": "Box (4)",
+                  "children": [
+                    {
+                      "name": "size",
+                      "path": "boxes[1].children[0].size",
+                      "type": "u32",
+                      "offset": 36,
+                      "size": 4,
+                      "value": 108,
+                      "display": "108"
+                    },
+                    {
+                      "name": "type",
+                      "path": "boxes[1].children[0].type",
+                      "type": "char[4]",
+                      "offset": 40,
+                      "size": 4,
+                      "value": "mvhd",
+                      "display": "mvhd"
+                    },
+                    {
+                      "name": "total",
+                      "path": "boxes[1].children[0].total",
+                      "type": "u64",
+                      "offset": 44,
+                      "size": 0,
+                      "value": 108,
+                      "display": "108"
+                    },
+                    {
+                      "name": "movie_header",
+                      "path": "boxes[1].children[0].movie_header",
+                      "type": "MovieHeader",
+                      "offset": 44,
+                      "size": 100,
+                      "display": "MovieHeader (13)",
+                      "children": [
+                        {
+                          "name": "version",
+                          "path": "boxes[1].children[0].movie_header.version",
+                          "type": "u8",
+                          "offset": 44,
+                          "size": 1,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "flags",
+                          "path": "boxes[1].children[0].movie_header.flags",
+                          "type": "u24",
+                          "offset": 45,
+                          "size": 3,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "creation_time",
+                          "path": "boxes[1].children[0].movie_header.creation_time",
+                          "type": "u32",
+                          "offset": 48,
+                          "size": 4,
+                          "value": 3758096384,
+                          "display": "3758096384"
+                        },
+                        {
+                          "name": "modification_time",
+                          "path": "boxes[1].children[0].movie_header.modification_time",
+                          "type": "u32",
+                          "offset": 52,
+                          "size": 4,
+                          "value": 3758096384,
+                          "display": "3758096384"
+                        },
+                        {
+                          "name": "timescale",
+                          "path": "boxes[1].children[0].movie_header.timescale",
+                          "type": "u32",
+                          "offset": 56,
+                          "size": 4,
+                          "value": 1000,
+                          "display": "1000"
+                        },
+                        {
+                          "name": "duration",
+                          "path": "boxes[1].children[0].movie_header.duration",
+                          "type": "u32",
+                          "offset": 60,
+                          "size": 4,
+                          "value": 2000,
+                          "display": "2000"
+                        },
+                        {
+                          "name": "rate",
+                          "path": "boxes[1].children[0].movie_header.rate",
+                          "type": "s32",
+                          "offset": 64,
+                          "size": 4,
+                          "value": 65536,
+                          "display": "65536",
+                          "comment": "16.16 固定小数点 (0x00010000 が等速)"
+                        },
+                        {
+                          "name": "volume",
+                          "path": "boxes[1].children[0].movie_header.volume",
+                          "type": "s16",
+                          "offset": 68,
+                          "size": 2,
+                          "value": 256,
+                          "display": "256"
+                        },
+                        {
+                          "name": "reserved1",
+                          "path": "boxes[1].children[0].movie_header.reserved1",
+                          "type": "u16",
+                          "offset": 70,
+                          "size": 2,
+                          "value": 0,
+                          "display": "0"
+                        },
+                        {
+                          "name": "reserved2",
+                          "path": "boxes[1].children[0].movie_header.reserved2",
+                          "type": "u32[2]",
+                          "offset": 72,
+                          "size": 8,
+                          "display": "[2]",
+                          "children": [
+                            {
+                              "name": "[0]",
+                              "path": "boxes[1].children[0].movie_header.reserved2[0]",
+                              "type": "u32",
+                              "offset": 72,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[1]",
+                              "path": "boxes[1].children[0].movie_header.reserved2[1]",
+                              "type": "u32",
+                              "offset": 76,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "matrix",
+                          "path": "boxes[1].children[0].movie_header.matrix",
+                          "type": "s32[9]",
+                          "offset": 80,
+                          "size": 36,
+                          "display": "[9]",
+                          "children": [
+                            {
+                              "name": "[0]",
+                              "path": "boxes[1].children[0].movie_header.matrix[0]",
+                              "type": "s32",
+                              "offset": 80,
+                              "size": 4,
+                              "value": 65536,
+                              "display": "65536"
+                            },
+                            {
+                              "name": "[1]",
+                              "path": "boxes[1].children[0].movie_header.matrix[1]",
+                              "type": "s32",
+                              "offset": 84,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[2]",
+                              "path": "boxes[1].children[0].movie_header.matrix[2]",
+                              "type": "s32",
+                              "offset": 88,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[3]",
+                              "path": "boxes[1].children[0].movie_header.matrix[3]",
+                              "type": "s32",
+                              "offset": 92,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[4]",
+                              "path": "boxes[1].children[0].movie_header.matrix[4]",
+                              "type": "s32",
+                              "offset": 96,
+                              "size": 4,
+                              "value": 65536,
+                              "display": "65536"
+                            },
+                            {
+                              "name": "[5]",
+                              "path": "boxes[1].children[0].movie_header.matrix[5]",
+                              "type": "s32",
+                              "offset": 100,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[6]",
+                              "path": "boxes[1].children[0].movie_header.matrix[6]",
+                              "type": "s32",
+                              "offset": 104,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[7]",
+                              "path": "boxes[1].children[0].movie_header.matrix[7]",
+                              "type": "s32",
+                              "offset": 108,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[8]",
+                              "path": "boxes[1].children[0].movie_header.matrix[8]",
+                              "type": "s32",
+                              "offset": 112,
+                              "size": 4,
+                              "value": 1073741824,
+                              "display": "1073741824"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "pre_defined",
+                          "path": "boxes[1].children[0].movie_header.pre_defined",
+                          "type": "u32[6]",
+                          "offset": 116,
+                          "size": 24,
+                          "display": "[6]",
+                          "children": [
+                            {
+                              "name": "[0]",
+                              "path": "boxes[1].children[0].movie_header.pre_defined[0]",
+                              "type": "u32",
+                              "offset": 116,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[1]",
+                              "path": "boxes[1].children[0].movie_header.pre_defined[1]",
+                              "type": "u32",
+                              "offset": 120,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[2]",
+                              "path": "boxes[1].children[0].movie_header.pre_defined[2]",
+                              "type": "u32",
+                              "offset": 124,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[3]",
+                              "path": "boxes[1].children[0].movie_header.pre_defined[3]",
+                              "type": "u32",
+                              "offset": 128,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[4]",
+                              "path": "boxes[1].children[0].movie_header.pre_defined[4]",
+                              "type": "u32",
+                              "offset": 132,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            },
+                            {
+                              "name": "[5]",
+                              "path": "boxes[1].children[0].movie_header.pre_defined[5]",
+                              "type": "u32",
+                              "offset": 136,
+                              "size": 4,
+                              "value": 0,
+                              "display": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "name": "next_track_id",
+                          "path": "boxes[1].children[0].movie_header.next_track_id",
+                          "type": "u32",
+                          "offset": 140,
+                          "size": 4,
+                          "value": 2,
+                          "display": "2"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "[1]",
+                  "path": "boxes[1].children[1]",
+                  "type": "Box",
+                  "offset": 144,
+                  "size": 185,
+                  "display": "Box (4)",
+                  "children": [
+                    {
+                      "name": "size",
+                      "path": "boxes[1].children[1].size",
+                      "type": "u32",
+                      "offset": 144,
+                      "size": 4,
+                      "value": 185,
+                      "display": "185"
+                    },
+                    {
+                      "name": "type",
+                      "path": "boxes[1].children[1].type",
+                      "type": "char[4]",
+                      "offset": 148,
+                      "size": 4,
+                      "value": "trak",
+                      "display": "trak"
+                    },
+                    {
+                      "name": "total",
+                      "path": "boxes[1].children[1].total",
+                      "type": "u64",
+                      "offset": 152,
+                      "size": 0,
+                      "value": 185,
+                      "display": "185"
+                    },
+                    {
+                      "name": "children",
+                      "path": "boxes[1].children[1].children",
+                      "type": "Box[2]",
+                      "offset": 152,
+                      "size": 177,
+                      "display": "[2]",
+                      "children": [
+                        {
+                          "name": "[0]",
+                          "path": "boxes[1].children[1].children[0]",
+                          "type": "Box",
+                          "offset": 152,
+                          "size": 92,
+                          "display": "Box (4)",
+                          "children": [
+                            {
+                              "name": "size",
+                              "path": "boxes[1].children[1].children[0].size",
+                              "type": "u32",
+                              "offset": 152,
+                              "size": 4,
+                              "value": 92,
+                              "display": "92"
+                            },
+                            {
+                              "name": "type",
+                              "path": "boxes[1].children[1].children[0].type",
+                              "type": "char[4]",
+                              "offset": 156,
+                              "size": 4,
+                              "value": "tkhd",
+                              "display": "tkhd"
+                            },
+                            {
+                              "name": "total",
+                              "path": "boxes[1].children[1].children[0].total",
+                              "type": "u64",
+                              "offset": 160,
+                              "size": 0,
+                              "value": 92,
+                              "display": "92"
+                            },
+                            {
+                              "name": "track_header",
+                              "path": "boxes[1].children[1].children[0].track_header",
+                              "type": "TrackHeader",
+                              "offset": 160,
+                              "size": 84,
+                              "display": "TrackHeader (15)",
+                              "children": [
+                                {
+                                  "name": "version",
+                                  "path": "boxes[1].children[1].children[0].track_header.version",
+                                  "type": "u8",
+                                  "offset": 160,
+                                  "size": 1,
+                                  "value": 0,
+                                  "display": "0"
+                                },
+                                {
+                                  "name": "flags",
+                                  "path": "boxes[1].children[1].children[0].track_header.flags",
+                                  "type": "u24",
+                                  "offset": 161,
+                                  "size": 3,
+                                  "value": 3,
+                                  "display": "3"
+                                },
+                                {
+                                  "name": "creation_time",
+                                  "path": "boxes[1].children[1].children[0].track_header.creation_time",
+                                  "type": "u32",
+                                  "offset": 164,
+                                  "size": 4,
+                                  "value": 3758096384,
+                                  "display": "3758096384"
+                                },
+                                {
+                                  "name": "modification_time",
+                                  "path": "boxes[1].children[1].children[0].track_header.modification_time",
+                                  "type": "u32",
+                                  "offset": 168,
+                                  "size": 4,
+                                  "value": 3758096384,
+                                  "display": "3758096384"
+                                },
+                                {
+                                  "name": "track_id",
+                                  "path": "boxes[1].children[1].children[0].track_header.track_id",
+                                  "type": "u32",
+                                  "offset": 172,
+                                  "size": 4,
+                                  "value": 1,
+                                  "display": "1"
+                                },
+                                {
+                                  "name": "reserved",
+                                  "path": "boxes[1].children[1].children[0].track_header.reserved",
+                                  "type": "u32",
+                                  "offset": 176,
+                                  "size": 4,
+                                  "value": 0,
+                                  "display": "0"
+                                },
+                                {
+                                  "name": "duration",
+                                  "path": "boxes[1].children[1].children[0].track_header.duration",
+                                  "type": "u32",
+                                  "offset": 180,
+                                  "size": 4,
+                                  "value": 2000,
+                                  "display": "2000"
+                                },
+                                {
+                                  "name": "reserved2",
+                                  "path": "boxes[1].children[1].children[0].track_header.reserved2",
+                                  "type": "u32[2]",
+                                  "offset": 184,
+                                  "size": 8,
+                                  "display": "[2]",
+                                  "children": [
+                                    {
+                                      "name": "[0]",
+                                      "path": "boxes[1].children[1].children[0].track_header.reserved2[0]",
+                                      "type": "u32",
+                                      "offset": 184,
+                                      "size": 4,
+                                      "value": 0,
+                                      "display": "0"
+                                    },
+                                    {
+                                      "name": "[1]",
+                                      "path": "boxes[1].children[1].children[0].track_header.reserved2[1]",
+                                      "type": "u32",
+                                      "offset": 188,
+                                      "size": 4,
+                                      "value": 0,
+                                      "display": "0"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "layer",
+                                  "path": "boxes[1].children[1].children[0].track_header.layer",
+                                  "type": "s16",
+                                  "offset": 192,
+                                  "size": 2,
+                                  "value": 0,
+                                  "display": "0"
+                                },
+                                {
+                                  "name": "alternate_group",
+                                  "path": "boxes[1].children[1].children[0].track_header.alternate_group",
+                                  "type": "s16",
+                                  "offset": 194,
+                                  "size": 2,
+                                  "value": 0,
+                                  "display": "0"
+                                },
+                                {
+                                  "name": "volume",
+                                  "path": "boxes[1].children[1].children[0].track_header.volume",
+                                  "type": "s16",
+                                  "offset": 196,
+                                  "size": 2,
+                                  "value": 0,
+                                  "display": "0"
+                                },
+                                {
+                                  "name": "reserved3",
+                                  "path": "boxes[1].children[1].children[0].track_header.reserved3",
+                                  "type": "u16",
+                                  "offset": 198,
+                                  "size": 2,
+                                  "value": 0,
+                                  "display": "0"
+                                },
+                                {
+                                  "name": "matrix",
+                                  "path": "boxes[1].children[1].children[0].track_header.matrix",
+                                  "type": "s32[9]",
+                                  "offset": 200,
+                                  "size": 36,
+                                  "display": "[9]",
+                                  "children": [
+                                    {
+                                      "name": "[0]",
+                                      "path": "boxes[1].children[1].children[0].track_header.matrix[0]",
+                                      "type": "s32",
+                                      "offset": 200,
+                                      "size": 4,
+                                      "value": 65536,
+                                      "display": "65536"
+                                    },
+                                    {
+                                      "name": "[1]",
+                                      "path": "boxes[1].children[1].children[0].track_header.matrix[1]",
+                                      "type": "s32",
+                                      "offset": 204,
+                                      "size": 4,
+                                      "value": 0,
+                                      "display": "0"
+                                    },
+                                    {
+                                      "name": "[2]",
+                                      "path": "boxes[1].children[1].children[0].track_header.matrix[2]",
+                                      "type": "s32",
+                                      "offset": 208,
+                                      "size": 4,
+                                      "value": 0,
+                                      "display": "0"
+                                    },
+                                    {
+                                      "name": "[3]",
+                                      "path": "boxes[1].children[1].children[0].track_header.matrix[3]",
+                                      "type": "s32",
+                                      "offset": 212,
+                                      "size": 4,
+                                      "value": 0,
+                                      "display": "0"
+                                    },
+                                    {
+                                      "name": "[4]",
+                                      "path": "boxes[1].children[1].children[0].track_header.matrix[4]",
+                                      "type": "s32",
+                                      "offset": 216,
+                                      "size": 4,
+                                      "value": 65536,
+                                      "display": "65536"
+                                    },
+                                    {
+                                      "name": "[5]",
+                                      "path": "boxes[1].children[1].children[0].track_header.matrix[5]",
+                                      "type": "s32",
+                                      "offset": 220,
+                                      "size": 4,
+                                      "value": 0,
+                                      "display": "0"
+                                    },
+                                    {
+                                      "name": "[6]",
+                                      "path": "boxes[1].children[1].children[0].track_header.matrix[6]",
+                                      "type": "s32",
+                                      "offset": 224,
+                                      "size": 4,
+                                      "value": 0,
+                                      "display": "0"
+                                    },
+                                    {
+                                      "name": "[7]",
+                                      "path": "boxes[1].children[1].children[0].track_header.matrix[7]",
+                                      "type": "s32",
+                                      "offset": 228,
+                                      "size": 4,
+                                      "value": 0,
+                                      "display": "0"
+                                    },
+                                    {
+                                      "name": "[8]",
+                                      "path": "boxes[1].children[1].children[0].track_header.matrix[8]",
+                                      "type": "s32",
+                                      "offset": 232,
+                                      "size": 4,
+                                      "value": 1073741824,
+                                      "display": "1073741824"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "width",
+                                  "path": "boxes[1].children[1].children[0].track_header.width",
+                                  "type": "u32",
+                                  "offset": 236,
+                                  "size": 4,
+                                  "value": 1048576,
+                                  "display": "1048576",
+                                  "comment": "16.16 固定小数点"
+                                },
+                                {
+                                  "name": "height",
+                                  "path": "boxes[1].children[1].children[0].track_header.height",
+                                  "type": "u32",
+                                  "offset": 240,
+                                  "size": 4,
+                                  "value": 1048576,
+                                  "display": "1048576",
+                                  "comment": "16.16 固定小数点"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "[1]",
+                          "path": "boxes[1].children[1].children[1]",
+                          "type": "Box",
+                          "offset": 244,
+                          "size": 85,
+                          "display": "Box (4)",
+                          "children": [
+                            {
+                              "name": "size",
+                              "path": "boxes[1].children[1].children[1].size",
+                              "type": "u32",
+                              "offset": 244,
+                              "size": 4,
+                              "value": 85,
+                              "display": "85"
+                            },
+                            {
+                              "name": "type",
+                              "path": "boxes[1].children[1].children[1].type",
+                              "type": "char[4]",
+                              "offset": 248,
+                              "size": 4,
+                              "value": "mdia",
+                              "display": "mdia"
+                            },
+                            {
+                              "name": "total",
+                              "path": "boxes[1].children[1].children[1].total",
+                              "type": "u64",
+                              "offset": 252,
+                              "size": 0,
+                              "value": 85,
+                              "display": "85"
+                            },
+                            {
+                              "name": "children",
+                              "path": "boxes[1].children[1].children[1].children",
+                              "type": "Box[2]",
+                              "offset": 252,
+                              "size": 77,
+                              "display": "[2]",
+                              "children": [
+                                {
+                                  "name": "[0]",
+                                  "path": "boxes[1].children[1].children[1].children[0]",
+                                  "type": "Box",
+                                  "offset": 252,
+                                  "size": 32,
+                                  "display": "Box (4)",
+                                  "children": [
+                                    {
+                                      "name": "size",
+                                      "path": "boxes[1].children[1].children[1].children[0].size",
+                                      "type": "u32",
+                                      "offset": 252,
+                                      "size": 4,
+                                      "value": 32,
+                                      "display": "32"
+                                    },
+                                    {
+                                      "name": "type",
+                                      "path": "boxes[1].children[1].children[1].children[0].type",
+                                      "type": "char[4]",
+                                      "offset": 256,
+                                      "size": 4,
+                                      "value": "mdhd",
+                                      "display": "mdhd"
+                                    },
+                                    {
+                                      "name": "total",
+                                      "path": "boxes[1].children[1].children[1].children[0].total",
+                                      "type": "u64",
+                                      "offset": 260,
+                                      "size": 0,
+                                      "value": 32,
+                                      "display": "32"
+                                    },
+                                    {
+                                      "name": "media_header",
+                                      "path": "boxes[1].children[1].children[1].children[0].media_header",
+                                      "type": "MediaHeader",
+                                      "offset": 260,
+                                      "size": 24,
+                                      "display": "MediaHeader (8)",
+                                      "children": [
+                                        {
+                                          "name": "version",
+                                          "path": "boxes[1].children[1].children[1].children[0].media_header.version",
+                                          "type": "u8",
+                                          "offset": 260,
+                                          "size": 1,
+                                          "value": 0,
+                                          "display": "0"
+                                        },
+                                        {
+                                          "name": "flags",
+                                          "path": "boxes[1].children[1].children[1].children[0].media_header.flags",
+                                          "type": "u24",
+                                          "offset": 261,
+                                          "size": 3,
+                                          "value": 0,
+                                          "display": "0"
+                                        },
+                                        {
+                                          "name": "creation_time",
+                                          "path": "boxes[1].children[1].children[1].children[0].media_header.creation_time",
+                                          "type": "u32",
+                                          "offset": 264,
+                                          "size": 4,
+                                          "value": 3758096384,
+                                          "display": "3758096384"
+                                        },
+                                        {
+                                          "name": "modification_time",
+                                          "path": "boxes[1].children[1].children[1].children[0].media_header.modification_time",
+                                          "type": "u32",
+                                          "offset": 268,
+                                          "size": 4,
+                                          "value": 3758096384,
+                                          "display": "3758096384"
+                                        },
+                                        {
+                                          "name": "timescale",
+                                          "path": "boxes[1].children[1].children[1].children[0].media_header.timescale",
+                                          "type": "u32",
+                                          "offset": 272,
+                                          "size": 4,
+                                          "value": 12800,
+                                          "display": "12800"
+                                        },
+                                        {
+                                          "name": "duration",
+                                          "path": "boxes[1].children[1].children[1].children[0].media_header.duration",
+                                          "type": "u32",
+                                          "offset": 276,
+                                          "size": 4,
+                                          "value": 25600,
+                                          "display": "25600"
+                                        },
+                                        {
+                                          "name": "language",
+                                          "path": "boxes[1].children[1].children[1].children[0].media_header.language",
+                                          "type": "u16",
+                                          "offset": 280,
+                                          "size": 2,
+                                          "value": 21956,
+                                          "display": "0x55C4",
+                                          "comment": "パックした ISO 639-2 の言語コード"
+                                        },
+                                        {
+                                          "name": "pre_defined",
+                                          "path": "boxes[1].children[1].children[1].children[0].media_header.pre_defined",
+                                          "type": "u16",
+                                          "offset": 282,
+                                          "size": 2,
+                                          "value": 0,
+                                          "display": "0"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "[1]",
+                                  "path": "boxes[1].children[1].children[1].children[1]",
+                                  "type": "Box",
+                                  "offset": 284,
+                                  "size": 45,
+                                  "display": "Box (4)",
+                                  "children": [
+                                    {
+                                      "name": "size",
+                                      "path": "boxes[1].children[1].children[1].children[1].size",
+                                      "type": "u32",
+                                      "offset": 284,
+                                      "size": 4,
+                                      "value": 45,
+                                      "display": "45"
+                                    },
+                                    {
+                                      "name": "type",
+                                      "path": "boxes[1].children[1].children[1].children[1].type",
+                                      "type": "char[4]",
+                                      "offset": 288,
+                                      "size": 4,
+                                      "value": "hdlr",
+                                      "display": "hdlr"
+                                    },
+                                    {
+                                      "name": "total",
+                                      "path": "boxes[1].children[1].children[1].children[1].total",
+                                      "type": "u64",
+                                      "offset": 292,
+                                      "size": 0,
+                                      "value": 45,
+                                      "display": "45"
+                                    },
+                                    {
+                                      "name": "handler",
+                                      "path": "boxes[1].children[1].children[1].children[1].handler",
+                                      "type": "HandlerReference",
+                                      "offset": 292,
+                                      "size": 37,
+                                      "display": "HandlerReference (6)",
+                                      "children": [
+                                        {
+                                          "name": "version",
+                                          "path": "boxes[1].children[1].children[1].children[1].handler.version",
+                                          "type": "u8",
+                                          "offset": 292,
+                                          "size": 1,
+                                          "value": 0,
+                                          "display": "0"
+                                        },
+                                        {
+                                          "name": "flags",
+                                          "path": "boxes[1].children[1].children[1].children[1].handler.flags",
+                                          "type": "u24",
+                                          "offset": 293,
+                                          "size": 3,
+                                          "value": 0,
+                                          "display": "0"
+                                        },
+                                        {
+                                          "name": "pre_defined",
+                                          "path": "boxes[1].children[1].children[1].children[1].handler.pre_defined",
+                                          "type": "u32",
+                                          "offset": 296,
+                                          "size": 4,
+                                          "value": 0,
+                                          "display": "0"
+                                        },
+                                        {
+                                          "name": "handler_type",
+                                          "path": "boxes[1].children[1].children[1].children[1].handler.handler_type",
+                                          "type": "char[4]",
+                                          "offset": 300,
+                                          "size": 4,
+                                          "value": "vide",
+                                          "display": "vide",
+                                          "comment": "vide: 映像、soun: 音声、text: 文字"
+                                        },
+                                        {
+                                          "name": "reserved",
+                                          "path": "boxes[1].children[1].children[1].children[1].handler.reserved",
+                                          "type": "u32[3]",
+                                          "offset": 304,
+                                          "size": 12,
+                                          "display": "[3]",
+                                          "children": [
+                                            {
+                                              "name": "[0]",
+                                              "path": "boxes[1].children[1].children[1].children[1].handler.reserved[0]",
+                                              "type": "u32",
+                                              "offset": 304,
+                                              "size": 4,
+                                              "value": 0,
+                                              "display": "0"
+                                            },
+                                            {
+                                              "name": "[1]",
+                                              "path": "boxes[1].children[1].children[1].children[1].handler.reserved[1]",
+                                              "type": "u32",
+                                              "offset": 308,
+                                              "size": 4,
+                                              "value": 0,
+                                              "display": "0"
+                                            },
+                                            {
+                                              "name": "[2]",
+                                              "path": "boxes[1].children[1].children[1].children[1].handler.reserved[2]",
+                                              "type": "u32",
+                                              "offset": 312,
+                                              "size": 4,
+                                              "value": 0,
+                                              "display": "0"
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "name": "name",
+                                          "path": "boxes[1].children[1].children[1].children[1].handler.name",
+                                          "type": "char[13]",
+                                          "offset": 316,
+                                          "size": 13,
+                                          "value": "VideoHandler",
+                                          "display": "VideoHandler"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "[2]",
+          "path": "boxes[2]",
+          "type": "Box",
+          "offset": 329,
+          "size": 16,
+          "display": "Box (4)",
+          "children": [
+            {
+              "name": "size",
+              "path": "boxes[2].size",
+              "type": "u32",
+              "offset": 329,
+              "size": 4,
+              "value": 16,
+              "display": "16"
+            },
+            {
+              "name": "type",
+              "path": "boxes[2].type",
+              "type": "char[4]",
+              "offset": 333,
+              "size": 4,
+              "value": "mdat",
+              "display": "mdat"
+            },
+            {
+              "name": "total",
+              "path": "boxes[2].total",
+              "type": "u64",
+              "offset": 337,
+              "size": 0,
+              "value": 16,
+              "display": "16"
+            },
+            {
+              "name": "data",
+              "path": "boxes[2].data",
+              "type": "u8[8]",
+              "offset": 337,
+              "size": 8,
+              "value": "0102030405060708",
+              "display": "01 02 03 04 05 06 07 08"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

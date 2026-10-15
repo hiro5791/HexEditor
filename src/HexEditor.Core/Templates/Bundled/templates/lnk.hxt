@@ -1,0 +1,115 @@
+// HexEditor 標準テンプレート (TPL-34): Windows のショートカット (LNK、Shell Link)
+// ライセンス: MIT。
+// シェルリンクヘッダ、リンク先 ID リスト、LinkInfo、文字列データ、拡張データのブロックを順に読む。
+#pragma name "Windows shortcut (LNK)"
+#pragma name.ja "Windows のショートカット (LNK)"
+#pragma description "Windows shortcut (Shell Link): header with flags and timestamps, link target ID list, LinkInfo with local base path, string data and extra data blocks."
+#pragma description.ja "Windows のショートカット (シェルリンク): フラグと日時を持つヘッダ、リンク先 ID リスト、ローカルパスを持つ LinkInfo、文字列データ、拡張データのブロック。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "4C 00 00 00 01 14 02 00 00 00 00 00 C0 00 00 00 00 00 00 46"
+#pragma mime "application/x-ms-shortcut"
+#pragma extensions "lnk"
+#pragma endian little
+
+flags LinkFlags : u32 {
+    HasLinkTargetIdList = 0x1, HasLinkInfo = 0x2, HasName = 0x4, HasRelativePath = 0x8, HasWorkingDir = 0x10, HasArguments = 0x20,
+    HasIconLocation = 0x40, IsUnicode = 0x80, ForceNoLinkInfo = 0x100, HasExpString = 0x200, RunInSeparateProcess = 0x400,
+    HasDarwinId = 0x1000, RunAsUser = 0x2000, HasExpIcon = 0x4000, NoPidlAlias = 0x8000, RunWithShimLayer = 0x20000,
+    ForceNoLinkTrack = 0x40000, EnableTargetMetadata = 0x80000, DisableLinkPathTracking = 0x100000, DisableKnownFolderTracking = 0x200000,
+    DisableKnownFolderAlias = 0x400000, AllowLinkToLink = 0x800000, UnaliasOnSave = 0x1000000, PreferEnvironmentPath = 0x2000000,
+    KeepLocalIdListForUncTarget = 0x4000000,
+};
+
+enum ShowCommand : u32 { Normal = 1, Maximized = 3, MinNoActive = 7 };
+
+struct ShellLinkHeader {
+    u32         header_size [[expect(header_size == 0x4C, "ヘッダの大きさが 0x4C ではありません")]];
+    guid        link_clsid;
+    LinkFlags   link_flags;
+    u32         file_attributes [[format("hex")]];
+    filetime    creation_time;
+    filetime    access_time;
+    filetime    write_time;
+    u32         file_size;
+    s32         icon_index;
+    ShowCommand show_command;
+    u16         hot_key [[format("hex")]];
+    u16         reserved1;
+    u32         reserved2;
+    u32         reserved3;
+};
+
+struct IdListItem {
+    u16 item_size [[comment("この欄の 2 バイトを含む。0 なら終端")]];
+    if (item_size > 2) {
+        u8 data[item_size - 2] [[lazy]];
+    }
+};
+
+struct IdList {
+    u16        id_list_size;
+    IdListItem items[until(last.item_size == 0 || $ >= addressof(id_list_size) + 2 + id_list_size)];
+};
+
+struct VolumeId {
+    u32  size;
+    u32  drive_type;
+    u32  drive_serial_number [[format("hex")]];
+    u32  volume_label_offset;
+    string volume_label [[encoding("latin1")]];
+} [[size(size)]];
+
+struct LinkInfo {
+    u32  link_info_size;
+    u32  link_info_header_size;
+    u32  link_info_flags [[format("hex"), comment("1: ローカルのボリュームとパスあり、2: ネットワーク共有あり")]];
+    u32  volume_id_offset;
+    u32  local_base_path_offset;
+    u32  common_network_relative_link_offset;
+    u32  common_path_suffix_offset;
+    if ((link_info_flags & 1) != 0) {
+        VolumeId volume_id @ addressof(link_info_size) + volume_id_offset;
+        string   local_base_path @ addressof(link_info_size) + local_base_path_offset [[encoding("latin1")]];
+    }
+    string       common_path_suffix @ addressof(link_info_size) + common_path_suffix_offset [[encoding("latin1")]];
+} [[size(link_info_size)]];
+
+/// 文字列データ。文字数 (UTF-16 の符号単位) と文字。
+struct StringData {
+    u16    count_characters;
+    char16 text[count_characters] [[encoding("utf-16le")]];
+};
+
+struct ExtraDataBlock {
+    u32 block_size;
+    if (block_size >= 8) {
+        u32 block_signature [[format("hex")]];
+        u8  data[block_size - 8] [[lazy]];
+    }
+} [[size(block_size < 4 ? 4 : block_size)]];
+
+ShellLinkHeader header;
+if ((header.link_flags & LinkFlags::HasLinkTargetIdList) != 0) {
+    IdList link_target_id_list;
+}
+if ((header.link_flags & LinkFlags::HasLinkInfo) != 0 && (header.link_flags & LinkFlags::ForceNoLinkInfo) == 0) {
+    LinkInfo link_info;
+}
+if ((header.link_flags & LinkFlags::HasName) != 0) {
+    StringData name_string;
+}
+if ((header.link_flags & LinkFlags::HasRelativePath) != 0) {
+    StringData relative_path;
+}
+if ((header.link_flags & LinkFlags::HasWorkingDir) != 0) {
+    StringData working_dir;
+}
+if ((header.link_flags & LinkFlags::HasArguments) != 0) {
+    StringData command_line_arguments;
+}
+if ((header.link_flags & LinkFlags::HasIconLocation) != 0) {
+    StringData icon_location;
+}
+ExtraDataBlock extra_data[until(last.block_size < 4 || std::eof())];

@@ -21,7 +21,12 @@ import std.disk;
 std::disk::Mbr protective_mbr;
 local u64 sector = std::disk::sector_size();
 std::disk::GptHeader header @ sector;
-std::disk::GptPartitionEntry(header.size_of_partition_entry) entries[std::math::min(header.num_partition_entries, 65536)] @ header.partition_entry_lba * sector;
+if (header.size_of_partition_entry > 128) {
+    std::disk::GptPartitionEntryLarge(header.size_of_partition_entry) entries[std::math::min(header.num_partition_entries, 65536)] @ header.partition_entry_lba * sector;
+} else {
+    // 通常の 128 バイトのエントリは固定長なので、開いたエントリだけを評価する (遅延評価)
+    std::disk::GptPartitionEntry entries[std::math::min(header.num_partition_entries, 65536)] @ header.partition_entry_lba * sector;
+}
 
 // 予備のヘッダ (ディスクの最後のセクタ)
 if (header.alternate_lba != 0 && (header.alternate_lba + 1) * sector <= std::core::size()) {

@@ -1,0 +1,88 @@
+// HexEditor 標準テンプレート (TPL-34): PCAPNG (パケットキャプチャ、次世代形式)
+// ライセンス: MIT。
+// 最初のセクションヘッダブロックのバイトオーダーマジックでエンディアンを決め、ブロック (SHB、IDB、EPB、SPB、NRB、ISB など) を順に読む。
+// ブロックは先頭の種類と全体の長さだけでたどり、パケットのデータは中身を読まない。
+#pragma name "PCAPNG capture"
+#pragma name.ja "PCAPNG パケットキャプチャ"
+#pragma description "PCAP next generation capture: section header, interface description and packet blocks with options."
+#pragma description.ja "PCAP 次世代形式のキャプチャ: セクションヘッダ、インターフェース記述、パケットのブロックとオプション。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "0A 0D 0D 0A"
+#pragma mime "application/x-pcapng"
+#pragma extensions "pcapng;ntar"
+#pragma endian little
+
+enum BlockType : u32 {
+    InterfaceDescription = 0x00000001, SimplePacket = 0x00000003, NameResolution = 0x00000004, InterfaceStatistics = 0x00000005,
+    EnhancedPacket = 0x00000006, DecryptionSecrets = 0x0000000A, CustomCopyable = 0x00000BAD, SectionHeader = 0x0A0D0D0A,
+    CustomNonCopyable = 0x40000BAD,
+};
+
+/// オプション (コード、長さ、値。値は 4 バイトの倍数に詰める)。コード 0 で終わる。
+struct Option {
+    u16 code;
+    u16 length;
+    u8  value[length] [[lazy]];
+    if (length % 4 != 0) {
+        padding[4 - (length % 4)];
+    }
+};
+
+struct SectionHeader {
+    u32 byte_order_magic [[format("hex"), expect(byte_order_magic == 0x1A2B3C4D, "バイトオーダーマジックが一致しません")]];
+    u16 major_version;
+    u16 minor_version;
+    s64 section_length [[comment("-1 は不明")]];
+};
+
+struct InterfaceDescription {
+    u16 link_type;
+    u16 reserved;
+    u32 snap_length;
+};
+
+struct EnhancedPacket {
+    u32 interface_id;
+    u32 timestamp_high;
+    u32 timestamp_low;
+    u32 captured_length;
+    u32 original_length;
+    u8  packet_data[captured_length] [[lazy]];
+    if (captured_length % 4 != 0) {
+        padding[4 - (captured_length % 4)];
+    }
+};
+
+struct SimplePacket {
+    u32 original_length;
+};
+
+/// ブロック: 種類、全体の長さ、中身、(オプション)、全体の長さ (末尾にも同じ値)
+struct Block {
+    BlockType block_type [[color("accent1")]];
+    u32       total_length;
+    local u64 body_end = addressof(this) + total_length - 4;
+    switch (block_type) {
+        case BlockType::SectionHeader: SectionHeader section_header;
+        case BlockType::InterfaceDescription: InterfaceDescription interface_description;
+        case BlockType::EnhancedPacket: EnhancedPacket enhanced_packet;
+        case BlockType::SimplePacket: SimplePacket simple_packet;
+        default: u8 data[total_length - 12] [[lazy]];
+    }
+    if (block_type == BlockType::SectionHeader || block_type == BlockType::InterfaceDescription) {
+        Option options[while($ + 4 <= body_end && std::mem::read_u16($, little) != 0)];
+    }
+    if ($ < body_end) {
+        u8 rest[body_end - $] [[lazy]];
+    }
+    u32 total_length_copy [[expect(total_length_copy == total_length, "ブロックの末尾の長さが先頭と一致しません")]];
+} [[size(total_length)]];
+
+// 先頭のブロック (SHB) のバイトオーダーマジックでエンディアンを決める
+local u32 order = std::mem::read_u32(8, little);
+if (order == 0x4D3C2B1A) {
+    std::core::set_endian(big);
+}
+Block blocks[until(std::eof())];

@@ -21,6 +21,15 @@ public static partial class TestDataCatalog
         new("TD-TPL-EXT-DATA", 8, "HXEX と 2A 00 00 00", path => WriteAll(path, [.. "HXEX"u8, 0x2A, 0, 0, 0])),
         new("TD-TPL-RGB565-DATA", 8, "00 F8 E0 07 1F 00 FF FF (赤、緑、青、白)", path => WriteAll(path, [0x00, 0xF8, 0xE0, 0x07, 0x1F, 0x00, 0xFF, 0xFF])),
         new("TD-TPL-REPO-DATA", 16, "HXTS の後に 00 を 12 バイト", path => WriteAll(path, [.. "HXTS"u8, .. new byte[12]])),
+        // フォルダ: <キー>.bin のサンプルと、一覧の _samples.txt (Generate の戻り値は一覧のパス。サンプルは同じフォルダにある)
+        new("TD-TPL-STD-SAMPLES", 0,
+            "TPL-34 の標準テンプレートのサンプルファイル (フォルダ。すべて StandardTemplateSamples で組み立てた自作のもの)。期待する結果の JSON は tests/fixtures/templates/std/",
+            path =>
+            {
+                StandardTemplateSamples.WriteAll(Path.GetDirectoryName(path)!);
+                File.WriteAllText(path, StandardTemplateSamples.Manifest());
+            },
+            dir => Path.Combine(dir, "TD-TPL-STD-SAMPLES", "_samples.txt")) { ComputeLength = () => StandardTemplateSamples.Manifest().Length },
     ];
 
     /// <summary>TD-TPL-PNG-IDAT: 16×16、ビット深度 8、Truecolor。行 i のフィルタの種類は i mod 5、画素は固定の種の乱数。</summary>

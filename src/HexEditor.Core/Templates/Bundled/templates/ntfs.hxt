@@ -1,0 +1,151 @@
+// HexEditor 標準テンプレート (TPL-34): NTFS のブートセクタと MFT レコード
+// ライセンス: MIT。
+// ブートセクタ (BPB) と、$MFT の先頭にある MFT レコード (システムファイルの最初の 32 個まで) を読む。
+// MFT のレコードは固定長の遅延評価の配列で、100 GiB 以上のボリュームでも、読むのはブートセクタと MFT の先頭だけである。
+// 各レコードは FILE のシグネチャがあるときだけ、属性 (STANDARD_INFORMATION、FILE_NAME、DATA など) のヘッダをたどる。
+#pragma name "NTFS boot sector and MFT"
+#pragma name.ja "NTFS ブートセクタと MFT"
+#pragma description "NTFS volume: boot sector with BIOS parameter block, and the first MFT records (system files) with attribute headers, $STANDARD_INFORMATION and $FILE_NAME."
+#pragma description.ja "NTFS のボリューム: BIOS パラメータブロックを持つブートセクタと、MFT の先頭のレコード (システムファイル)。属性のヘッダ、$STANDARD_INFORMATION、$FILE_NAME を含む。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 3 "4E 54 46 53 20 20 20 20"
+#pragma mime "application/x-ntfs"
+#pragma extensions "img;ntfs"
+#pragma priority 10
+#pragma endian little
+
+flags RecordFlags : u16 { InUse = 0x1, Directory = 0x2 };
+
+enum AttributeType : u32 {
+    StandardInformation = 0x10, AttributeList = 0x20, FileName = 0x30, ObjectId = 0x40, SecurityDescriptor = 0x50, VolumeName = 0x60,
+    VolumeInformation = 0x70, Data = 0x80, IndexRoot = 0x90, IndexAllocation = 0xA0, Bitmap = 0xB0, ReparsePoint = 0xC0,
+    EaInformation = 0xD0, Ea = 0xE0, LoggedUtilityStream = 0x100, End = 0xFFFFFFFF,
+};
+
+flags FileAttributes : u32 {
+    ReadOnly = 0x1, Hidden = 0x2, System = 0x4, Archive = 0x20, Device = 0x40, Normal = 0x80, Temporary = 0x100, Sparse = 0x200,
+    ReparsePoint = 0x400, Compressed = 0x800, Offline = 0x1000, NotContentIndexed = 0x2000, Encrypted = 0x4000,
+};
+
+struct BootSector {
+    u8   jump[3];
+    char oem_id[8] [[expect(oem_id == "NTFS    ", "NTFS ではありません")]];
+    u16  bytes_per_sector;
+    u8   sectors_per_cluster;
+    u16  reserved_sectors;
+    u8   zero1[3];
+    u16  unused1;
+    u8   media [[format("hex")]];
+    u16  zero2;
+    u16  sectors_per_track;
+    u16  number_of_heads;
+    u32  hidden_sectors;
+    u32  unused2;
+    u32  unused3 [[format("hex")]];
+    u64  total_sectors;
+    u64  mft_cluster;
+    u64  mft_mirror_cluster;
+    s8   clusters_per_file_record [[comment("負の値のときは 2 の (-値) 乗バイト")]];
+    u8   unused4[3];
+    s8   clusters_per_index_buffer;
+    u8   unused5[3];
+    u64  volume_serial_number [[format("hex")]];
+    u32  checksum [[format("hex")]];
+    u8   boot_code[426] [[lazy]];
+    u8   boot_signature[2] [[expect(boot_signature == x"55 AA", "ブートシグネチャ 55 AA がありません")]];
+    local u64 cluster_size = bytes_per_sector * sectors_per_cluster [[show]];
+    local u64 record_size = clusters_per_file_record < 0 ? 1 << (0 - clusters_per_file_record) : clusters_per_file_record * bytes_per_sector * sectors_per_cluster [[show]];
+    local u64 mft_offset = mft_cluster * bytes_per_sector * sectors_per_cluster [[show, format("hex")]];
+};
+
+/// $STANDARD_INFORMATION の中身 (常駐)
+struct StandardInformation {
+    filetime       created;
+    filetime       modified;
+    filetime       mft_modified;
+    filetime       accessed;
+    FileAttributes file_attributes;
+    u32            max_versions;
+    u32            version;
+    u32            class_id;
+};
+
+/// $FILE_NAME の中身 (常駐)
+struct FileNameAttribute {
+    u64      parent_reference [[format("hex"), comment("下位 48 bit が親の MFT レコード番号、上位 16 bit が順序番号")]];
+    filetime created;
+    filetime modified;
+    filetime mft_modified;
+    filetime accessed;
+    u64      allocated_size;
+    u64      real_size;
+    u32      file_attributes [[format("hex")]];
+    u32      reparse_or_ea;
+    u8       name_length;
+    u8       name_space [[comment("0: POSIX、1: Win32、2: DOS、3: Win32 と DOS")]];
+    char16   name[name_length] [[encoding("utf-16le")]];
+};
+
+/// 属性のヘッダ。常駐なら中身の位置と大きさ、非常駐ならデータランの情報を持つ。
+struct Attribute {
+    AttributeType type;
+    if (type != AttributeType::End) {
+        u32 length;
+        u8  non_resident;
+        u8  name_length;
+        u16 name_offset;
+        u16 attribute_flags [[format("hex")]];
+        u16 attribute_id;
+        if (non_resident == 0) {
+            u32 value_length;
+            u16 value_offset;
+            u8  indexed;
+            u8  padding_byte;
+            if (type == AttributeType::StandardInformation && value_length >= 48) {
+                StandardInformation standard_information @ addressof(this) + value_offset;
+            } else if (type == AttributeType::FileName && value_length >= 66) {
+                FileNameAttribute file_name @ addressof(this) + value_offset;
+            }
+        } else {
+            u64 start_vcn;
+            u64 last_vcn;
+            u16 runlist_offset;
+            u16 compression_unit;
+            u32 padding_dword;
+            u64 allocated_size;
+            u64 real_size;
+            u64 initialized_size;
+        }
+    }
+} [[size(type == AttributeType::End ? 4 : length)]];
+
+/// MFT のレコード。シグネチャが FILE のときだけ、ヘッダと属性を読む。
+struct MftRecord(u64 record_size) {
+    char signature[4] [[color("accent1")]];
+    if (signature == "FILE") {
+        u16         update_sequence_offset;
+        u16         update_sequence_count;
+        u64         log_sequence_number;
+        u16         sequence_number;
+        u16         hard_link_count;
+        u16         first_attribute_offset;
+        RecordFlags record_flags;
+        u32         bytes_in_use;
+        u32         bytes_allocated;
+        u64         base_record [[format("hex")]];
+        u16         next_attribute_id;
+        u16         padding_word;
+        u32         record_number;
+        Attribute   attributes[until(last.type == AttributeType::End || endof(last) >= addressof(this) + bytes_in_use)] @ addressof(this) + first_attribute_offset;
+    } else {
+        u8 data[record_size - 4] [[lazy]];
+    }
+} [[size(record_size)]];
+
+BootSector boot_sector;
+local u64 mft_count = std::math::min(32, (std::core::size() - boot_sector.mft_offset) / boot_sector.record_size);
+if (boot_sector.mft_offset + boot_sector.record_size <= std::core::size()) {
+    MftRecord(boot_sector.record_size) mft_records[mft_count] @ boot_sector.mft_offset;
+}

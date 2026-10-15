@@ -85,7 +85,7 @@ namespace std::disk {
     }
 
     /// GPT のパーティションエントリ (通常 128 バイト)
-    struct GptPartitionEntry(u32 entry_size) {
+    struct GptPartitionEntry {
         guid      type_guid;
         guid      unique_guid;
         le u64    first_lba;
@@ -93,10 +93,13 @@ namespace std::disk {
         le GptAttributes attributes;
         char16    name[36] [[encoding("utf-16le")]];
         local string type_name = gpt_type_name(addressof(type_guid)) [[show]];
-        if (entry_size > 128) {
-            padding[entry_size - 128];
-        }
-    };
+    } [[size(128)]];
+
+    /// 128 バイトより大きいパーティションエントリ (大きさは 128 x 2 の累乗)。先頭の 128 バイトは通常のエントリと同じ。
+    struct GptPartitionEntryLarge(u32 entry_size) {
+        GptPartitionEntry entry;
+        padding[entry_size - 128];
+    } [[size(entry_size)]];
 
     /// パーティションエントリの配列の CRC32 を確かめる。配列が 16 MiB を超える、またはデータの外にあるときは確かめずに真とする。
     fn entries_crc_ok(u64 lba, u64 count, u64 size, u64 crc) -> bool {

@@ -1,0 +1,570 @@
+{
+  "name": "Android DEX",
+  "type": "application",
+  "offset": 0,
+  "size": 112,
+  "children": [
+    {
+      "name": "header",
+      "path": "header",
+      "type": "Header",
+      "offset": 0,
+      "size": 112,
+      "display": "Header (23)",
+      "children": [
+        {
+          "name": "magic",
+          "path": "header.magic",
+          "type": "char[8]",
+          "offset": 0,
+          "size": 8,
+          "value": "dex\n035",
+          "display": "dex\n035"
+        },
+        {
+          "name": "checksum",
+          "path": "header.checksum",
+          "type": "u32",
+          "offset": 8,
+          "size": 4,
+          "value": 2176718751,
+          "display": "0x81BE179F"
+        },
+        {
+          "name": "signature",
+          "path": "header.signature",
+          "type": "u8[20]",
+          "offset": 12,
+          "size": 20,
+          "value": "FC09ADB17F47418FCEB479DC8CAF0D4E7E67ED41",
+          "display": "FC 09 AD B1 7F 47 41 8F CE B4 79 DC 8C AF 0D 4E …",
+          "comment": "SHA-1 (32 バイト目以降)"
+        },
+        {
+          "name": "file_size",
+          "path": "header.file_size",
+          "type": "u32",
+          "offset": 32,
+          "size": 4,
+          "value": 208,
+          "display": "208"
+        },
+        {
+          "name": "header_size",
+          "path": "header.header_size",
+          "type": "u32",
+          "offset": 36,
+          "size": 4,
+          "value": 112,
+          "display": "112"
+        },
+        {
+          "name": "endian_tag",
+          "path": "header.endian_tag",
+          "type": "u32",
+          "offset": 40,
+          "size": 4,
+          "value": 305419896,
+          "display": "0x12345678"
+        },
+        {
+          "name": "link_size",
+          "path": "header.link_size",
+          "type": "u32",
+          "offset": 44,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "link_offset",
+          "path": "header.link_offset",
+          "type": "u32",
+          "offset": 48,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "map_offset",
+          "path": "header.map_offset",
+          "type": "u32",
+          "offset": 52,
+          "size": 4,
+          "value": 144,
+          "display": "0x90"
+        },
+        {
+          "name": "string_ids_size",
+          "path": "header.string_ids_size",
+          "type": "u32",
+          "offset": 56,
+          "size": 4,
+          "value": 2,
+          "display": "2"
+        },
+        {
+          "name": "string_ids_offset",
+          "path": "header.string_ids_offset",
+          "type": "u32",
+          "offset": 60,
+          "size": 4,
+          "value": 112,
+          "display": "0x70"
+        },
+        {
+          "name": "type_ids_size",
+          "path": "header.type_ids_size",
+          "type": "u32",
+          "offset": 64,
+          "size": 4,
+          "value": 1,
+          "display": "1"
+        },
+        {
+          "name": "type_ids_offset",
+          "path": "header.type_ids_offset",
+          "type": "u32",
+          "offset": 68,
+          "size": 4,
+          "value": 120,
+          "display": "0x78"
+        },
+        {
+          "name": "proto_ids_size",
+          "path": "header.proto_ids_size",
+          "type": "u32",
+          "offset": 72,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "proto_ids_offset",
+          "path": "header.proto_ids_offset",
+          "type": "u32",
+          "offset": 76,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "field_ids_size",
+          "path": "header.field_ids_size",
+          "type": "u32",
+          "offset": 80,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "field_ids_offset",
+          "path": "header.field_ids_offset",
+          "type": "u32",
+          "offset": 84,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "method_ids_size",
+          "path": "header.method_ids_size",
+          "type": "u32",
+          "offset": 88,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "method_ids_offset",
+          "path": "header.method_ids_offset",
+          "type": "u32",
+          "offset": 92,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "class_defs_size",
+          "path": "header.class_defs_size",
+          "type": "u32",
+          "offset": 96,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        },
+        {
+          "name": "class_defs_offset",
+          "path": "header.class_defs_offset",
+          "type": "u32",
+          "offset": 100,
+          "size": 4,
+          "value": 0,
+          "display": "0x0"
+        },
+        {
+          "name": "data_size",
+          "path": "header.data_size",
+          "type": "u32",
+          "offset": 104,
+          "size": 4,
+          "value": 84,
+          "display": "84"
+        },
+        {
+          "name": "data_offset",
+          "path": "header.data_offset",
+          "type": "u32",
+          "offset": 108,
+          "size": 4,
+          "value": 124,
+          "display": "0x7C"
+        }
+      ]
+    },
+    {
+      "name": "string_ids",
+      "path": "string_ids",
+      "type": "StringData*[2]",
+      "offset": 112,
+      "size": 8,
+      "display": "[2]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "string_ids[0]",
+          "type": "StringData*",
+          "offset": 112,
+          "size": 4,
+          "display": "→ 0x7C (StringData)",
+          "children": [
+            {
+              "name": "utf16_size",
+              "path": "string_ids[0].*[0].utf16_size",
+              "type": "uleb128",
+              "offset": 124,
+              "size": 1,
+              "value": 9,
+              "display": "9"
+            },
+            {
+              "name": "text",
+              "path": "string_ids[0].*[0].text",
+              "type": "string",
+              "offset": 125,
+              "size": 10,
+              "value": "LHexTest;",
+              "display": "LHexTest;"
+            }
+          ]
+        },
+        {
+          "name": "[1]",
+          "path": "string_ids[1]",
+          "type": "StringData*",
+          "offset": 116,
+          "size": 4,
+          "display": "→ 0x87 (StringData)",
+          "children": [
+            {
+              "name": "utf16_size",
+              "path": "string_ids[1].*[1].utf16_size",
+              "type": "uleb128",
+              "offset": 135,
+              "size": 1,
+              "value": 5,
+              "display": "5"
+            },
+            {
+              "name": "text",
+              "path": "string_ids[1].*[1].text",
+              "type": "string",
+              "offset": 136,
+              "size": 6,
+              "value": "Hello",
+              "display": "Hello"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "type_ids",
+      "path": "type_ids",
+      "type": "u32[1]",
+      "offset": 120,
+      "size": 4,
+      "display": "[1]",
+      "children": [
+        {
+          "name": "[0]",
+          "path": "type_ids[0]",
+          "type": "u32",
+          "offset": 120,
+          "size": 4,
+          "value": 0,
+          "display": "0"
+        }
+      ]
+    },
+    {
+      "name": "map_list",
+      "path": "map_list",
+      "type": "MapList",
+      "offset": 144,
+      "size": 64,
+      "display": "MapList (2)",
+      "children": [
+        {
+          "name": "size",
+          "path": "map_list.size",
+          "type": "u32",
+          "offset": 144,
+          "size": 4,
+          "value": 5,
+          "display": "5"
+        },
+        {
+          "name": "list",
+          "path": "map_list.list",
+          "type": "MapItem[5]",
+          "offset": 148,
+          "size": 60,
+          "display": "[5]",
+          "children": [
+            {
+              "name": "[0]",
+              "path": "map_list.list[0]",
+              "type": "MapItem",
+              "offset": 148,
+              "size": 12,
+              "display": "MapItem (4)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "map_list.list[0].type",
+                  "type": "MapItemType",
+                  "offset": 148,
+                  "size": 2,
+                  "value": 0,
+                  "display": "HeaderItem (0x0)"
+                },
+                {
+                  "name": "unused",
+                  "path": "map_list.list[0].unused",
+                  "type": "u16",
+                  "offset": 150,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "size",
+                  "path": "map_list.list[0].size",
+                  "type": "u32",
+                  "offset": 152,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "offset",
+                  "path": "map_list.list[0].offset",
+                  "type": "u32",
+                  "offset": 156,
+                  "size": 4,
+                  "value": 0,
+                  "display": "0x0"
+                }
+              ]
+            },
+            {
+              "name": "[1]",
+              "path": "map_list.list[1]",
+              "type": "MapItem",
+              "offset": 160,
+              "size": 12,
+              "display": "MapItem (4)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "map_list.list[1].type",
+                  "type": "MapItemType",
+                  "offset": 160,
+                  "size": 2,
+                  "value": 1,
+                  "display": "StringIdItem (0x1)"
+                },
+                {
+                  "name": "unused",
+                  "path": "map_list.list[1].unused",
+                  "type": "u16",
+                  "offset": 162,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "size",
+                  "path": "map_list.list[1].size",
+                  "type": "u32",
+                  "offset": 164,
+                  "size": 4,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "offset",
+                  "path": "map_list.list[1].offset",
+                  "type": "u32",
+                  "offset": 168,
+                  "size": 4,
+                  "value": 112,
+                  "display": "0x70"
+                }
+              ]
+            },
+            {
+              "name": "[2]",
+              "path": "map_list.list[2]",
+              "type": "MapItem",
+              "offset": 172,
+              "size": 12,
+              "display": "MapItem (4)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "map_list.list[2].type",
+                  "type": "MapItemType",
+                  "offset": 172,
+                  "size": 2,
+                  "value": 2,
+                  "display": "TypeIdItem (0x2)"
+                },
+                {
+                  "name": "unused",
+                  "path": "map_list.list[2].unused",
+                  "type": "u16",
+                  "offset": 174,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "size",
+                  "path": "map_list.list[2].size",
+                  "type": "u32",
+                  "offset": 176,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "offset",
+                  "path": "map_list.list[2].offset",
+                  "type": "u32",
+                  "offset": 180,
+                  "size": 4,
+                  "value": 120,
+                  "display": "0x78"
+                }
+              ]
+            },
+            {
+              "name": "[3]",
+              "path": "map_list.list[3]",
+              "type": "MapItem",
+              "offset": 184,
+              "size": 12,
+              "display": "MapItem (4)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "map_list.list[3].type",
+                  "type": "MapItemType",
+                  "offset": 184,
+                  "size": 2,
+                  "value": 8194,
+                  "display": "StringDataItem (0x2002)"
+                },
+                {
+                  "name": "unused",
+                  "path": "map_list.list[3].unused",
+                  "type": "u16",
+                  "offset": 186,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "size",
+                  "path": "map_list.list[3].size",
+                  "type": "u32",
+                  "offset": 188,
+                  "size": 4,
+                  "value": 2,
+                  "display": "2"
+                },
+                {
+                  "name": "offset",
+                  "path": "map_list.list[3].offset",
+                  "type": "u32",
+                  "offset": 192,
+                  "size": 4,
+                  "value": 124,
+                  "display": "0x7C"
+                }
+              ]
+            },
+            {
+              "name": "[4]",
+              "path": "map_list.list[4]",
+              "type": "MapItem",
+              "offset": 196,
+              "size": 12,
+              "display": "MapItem (4)",
+              "children": [
+                {
+                  "name": "type",
+                  "path": "map_list.list[4].type",
+                  "type": "MapItemType",
+                  "offset": 196,
+                  "size": 2,
+                  "value": 4096,
+                  "display": "MapList (0x1000)"
+                },
+                {
+                  "name": "unused",
+                  "path": "map_list.list[4].unused",
+                  "type": "u16",
+                  "offset": 198,
+                  "size": 2,
+                  "value": 0,
+                  "display": "0"
+                },
+                {
+                  "name": "size",
+                  "path": "map_list.list[4].size",
+                  "type": "u32",
+                  "offset": 200,
+                  "size": 4,
+                  "value": 1,
+                  "display": "1"
+                },
+                {
+                  "name": "offset",
+                  "path": "map_list.list[4].offset",
+                  "type": "u32",
+                  "offset": 204,
+                  "size": 4,
+                  "value": 144,
+                  "display": "0x90"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
