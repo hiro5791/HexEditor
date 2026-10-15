@@ -372,7 +372,7 @@ public sealed class ScriptTrustTests
         List<ScriptOutputLine> lines = [.. t.OutputLines.Where(l => l.Channel == run.Channel)];
         Assert.Equal("hello from js", lines[0].Text);
         Assert.Single(lines, l => l.Text.StartsWith("成功", StringComparison.Ordinal));
-        Assert.Equal(0, t.Env.RunningScripts);
+        await JsRuntimeTests.WaitUntilAsync(() => t.Env.RunningScripts == 0);
     }
 
     [Fact]

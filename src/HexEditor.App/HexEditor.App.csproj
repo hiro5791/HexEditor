@@ -61,6 +61,12 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <!-- 第三者のライセンス表示はすべての配布形態に入れる (PKG-05 の仕様 1、UI-40)。 -->
     <Content Include="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!--
+      C# スクリプト コンポーネントの検証用の一覧 (08 の AUTO-03 の仕様 3: アプリ本体に埋め込む SHA-256 の一覧)。
+      build/Build-CSharpComponent.ps1 が作り、-p:HexCSharpComponentManifest=<パス> で渡す。渡さないビルドでは埋め込まない (追加できない)。
+    -->
+    <EmbeddedResource Include="$(HexCSharpComponentManifest)" LogicalName="HexEditor.CSharpComponent.json"
+      Condition="'$(HexCSharpComponentManifest)' != '' and Exists('$(HexCSharpComponentManifest)')" />
     <!-- settings.json の JSON スキーマ (UI-23 の仕様 8)。設定項目の登録から作る (Core のテスト SettingsSchemaIsUpToDate)。 -->
     <!-- 英語の文字列 (表示言語に関係なく英語名で検索するため。Loc.English)。 -->
     <EmbeddedResource Include="Strings\en\Resources.resw" LogicalName="HexEditor.Strings.en.resw" />

@@ -42,7 +42,11 @@ public sealed class ResourceTests
             AppFiles("*.cs").Concat(AppFiles("*.appxmanifest"))
 
                 // インポート / エクスポートの欄の規則は Core にある (見出しは Transfer_<欄のキー>、選択肢は Transfer_Choice_<値>)。
-                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/Formats/TransferOptions.cs")).Select(File.ReadAllText),
+                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/Formats/TransferOptions.cs"))
+
+                // スクリプトの処理センター・Undo の名前 (ScriptTexts) と許可の説明 (Script_Permission_<許可>) のキーは Core にある。
+                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/Scripting/ScriptEnvironment.cs"))
+                .Append(SourceTests.FindRepoFile("src/HexEditor.Core/Scripting/ScriptPermissions.cs")).Select(File.ReadAllText),
             AppFiles("*.xaml").Select(File.ReadAllText)).ToList();
         Assert.True(errors.Count == 0, string.Join(Environment.NewLine, errors));
     }

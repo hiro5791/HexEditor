@@ -57,7 +57,8 @@ public sealed partial class MainWindow
             ?? await HandleAnnotationTestCommandsAsync(cmd, request)
             ?? await HandleFormatTestCommandAsync(cmd, request)
             ?? await HandleCompareTestCommandsAsync(cmd, request)
-            ?? await HandleDeviceTestCommandsAsync(cmd, request),
+            ?? await HandleDeviceTestCommandsAsync(cmd, request)
+            ?? HandleScriptTestCommand(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>
