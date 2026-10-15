@@ -41,8 +41,6 @@ public sealed record TemplateApplyOptions
     /// <summary>セクションの一時ファイルを置くフォルダ (アプリの一時フォルダ)。</summary>
     public string TempDirectory { get; init; } = Path.Combine(Path.GetTempPath(), "HexEditor", "templates");
 
-    /// <summary>テスト用の時計 (時間の上限の測定)。</summary>
-    public TimeProvider TimeProvider { get; init; } = TimeProvider.System;
 }
 
 /// <summary>評価の状態 (TPL-21 の「画面」の状態表示)。</summary>
