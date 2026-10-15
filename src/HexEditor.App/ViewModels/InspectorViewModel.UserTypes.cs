@@ -156,8 +156,10 @@ public sealed partial class InspectorViewModel
                 if (key == _userKey)
                 {
                     _userValues[type.Key] = value;
-                    Refresh();
                 }
+
+                // 起点が変わっていたら、待っている間に始められなかった今の起点の解釈を始める (行を「…」のままにしない)。
+                Refresh();
 
                 UserTypesEvaluated?.Invoke(this, EventArgs.Empty);
             });

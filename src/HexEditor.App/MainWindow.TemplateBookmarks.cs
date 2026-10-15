@@ -12,7 +12,7 @@ namespace HexEditor.App;
 
 /// <summary>
 /// 型付きブックマーク (05 の INSP-29 の仕様 1・3・4) のうち、構造体テンプレートの型 (<c>tpl:パス|型名</c>) とユーザー定義型 (INSP-22。
-/// <c>user:鍵</c>) の型。値と長さはブックマークの位置で型を評価して作り (追従と同じ上限)、書き換えは TPL-22 の規則 (プラグインの型は変換)。
+/// <c>user:鍵</c>。テンプレートで定義した型だけ) の型。値と長さはブックマークの位置で型を評価して作り (追従と同じ上限)、書き換えは TPL-22 の規則。
 /// 構造体テンプレートの型のブックマークを選ぶと、テンプレート結果パネルにその位置の構造体を出す (仕様 3)。
 /// </summary>
 public sealed partial class MainWindow
@@ -30,7 +30,8 @@ public sealed partial class MainWindow
     private IReadOnlyList<(string Name, string Id)> ExtraBookmarkTypes()
     {
         var list = new List<(string, string)>();
-        foreach (InspectorUserType t in InspectorUserTypeService.Instance.Types)
+        // プラグインの型は出さない (一覧の値の列は UI スレッドで作るため、戻らないプラグインの呼び出しで UI を止めない)
+        foreach (InspectorUserType t in InspectorUserTypeService.Instance.Types.Where(t => t.Plugin is null))
         {
             list.Add((Loc.Format("Bookmark_TypeUser", t.DisplayName), UserBookmarkTypePrefix + t.Key));
         }
@@ -125,12 +126,6 @@ public sealed partial class MainWindow
     /// <summary>値の列の文字列 (評価に失敗したら空)。</summary>
     private string ExtraBookmarkValue(Bookmark b, DocumentViewModel doc, Endianness endian)
     {
-        if (UserTypeOf(b.TypeId!) is { Plugin: { } plugin })
-        {
-            byte[] data = BookmarkData(b.Start, doc);
-            return plugin.Decode(data, endian == Endianness.Big, uiThread: true) ?? string.Empty;
-        }
-
         using TemplateResult? r = EvaluateBookmarkType(b.TypeId!, b.Start, doc, endian);
         return r is not null && FirstNode(r) is { } node ? r.Invoke(() => node.HasError ? string.Empty : node.GetDisplay(TemplateDisplayContext.Current)) : string.Empty;
     }
@@ -143,11 +138,6 @@ public sealed partial class MainWindow
             return null;
         }
 
-        if (UserTypeOf(typeId) is { Plugin: { } plugin })
-        {
-            return Math.Max(1, plugin.Size);
-        }
-
         using TemplateResult? r = EvaluateBookmarkType(typeId, b.Start, doc, b.TypeEndian ?? (doc.Editor.View.BigEndian ? Endianness.Big : Endianness.Little));
         return r is not null && FirstNode(r) is { } node && node.Size > 0 ? node.Size : null;
     }
@@ -155,18 +145,6 @@ public sealed partial class MainWindow
     /// <summary>値の列の書き換え。書き込めなければ理由。</summary>
     private string? CommitExtraBookmarkValue(Bookmark b, DocumentViewModel doc, Endianness endian, string text)
     {
-        if (UserTypeOf(b.TypeId!) is { Plugin: not null } pluginType)
-        {
-            byte[]? bytes = InspectorUserTypes.EncodePlugin(pluginType, text, endian);
-            if (bytes is null || bytes.Length > doc.Document.Length - b.Start)
-            {
-                return Loc.Get("Inspector_PluginNotWritable");
-            }
-
-            doc.Document.Overwrite(b.Start, bytes, Loc.Get("Bookmarks_ValueUndo"));
-            return null;
-        }
-
         using TemplateResult? r = EvaluateBookmarkType(b.TypeId!, b.Start, doc, endian);
         if (r is null || FirstNode(r) is not { } node)
         {

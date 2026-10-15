@@ -74,8 +74,9 @@ public sealed class TemplateValueSearchUiTests
         Assert.Equal(first["offset"]!.GetValue<long>(), doc["selectionStart"]!.GetValue<long>());
         Assert.Equal(first["length"]!.GetValue<long>(), doc["selectionLength"]!.GetValue<long>());
 
-        // 5: 構文エラーは位置を示す。
-        JsonObject bad = await TemplateAsync(app, "filter", new JsonObject { ["text"] = "name:*Characteristics* value>" });
-        Assert.Contains("29", bad["message"]!.GetValue<string>(), StringComparison.Ordinal);
+        // 5: 構文エラーは位置を示す (演算子の後の値がない位置。1 から数えた文字の位置)。
+        const string Bad = "name:*Characteristics* value>";
+        JsonObject bad = await TemplateAsync(app, "filter", new JsonObject { ["text"] = Bad });
+        Assert.Contains($"character {Bad.Length + 1}", bad["message"]!.GetValue<string>(), StringComparison.Ordinal);
     });
 }

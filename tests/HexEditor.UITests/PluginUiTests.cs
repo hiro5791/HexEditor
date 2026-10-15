@@ -203,7 +203,8 @@ public sealed class PluginUiTests
         await app.GoToAsync(0x12);
         JsonObject row = null!;
         await app.WaitUntilAsync(async () => (row = (await app.SendAsync("inspector"))["items"]!.AsArray().Select(i => i!.AsObject())
-            .FirstOrDefault(i => i["name"]?.GetValue<string>() == "nibble-swap8")!) is not null, UiTest.Scaled(TimeSpan.FromSeconds(10)), "the plugin row");
+            .FirstOrDefault(i => i["name"]?.GetValue<string>() == "nibble-swap8")!) is not null && row["status"]?.GetValue<string>() != "Loading",
+            UiTest.Scaled(TimeSpan.FromSeconds(10)), "the plugin row");
         Assert.Equal("21", row["value"]!.GetValue<string>());
         Assert.Contains("Sample Plugin", row["toolTip"]!.GetValue<string>(), StringComparison.Ordinal);
 

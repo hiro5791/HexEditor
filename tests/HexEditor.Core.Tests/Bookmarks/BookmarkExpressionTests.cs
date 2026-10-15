@@ -12,6 +12,9 @@ namespace HexEditor.Core.Tests.Bookmarks;
 /// <summary>型付きブックマークと位置の式 (INSP-29) の Core の部分。画面の操作は UI テスト (TC-INSP-29-xx)。</summary>
 public sealed class BookmarkExpressionTests
 {
+    /// <summary>再評価の時間の目安で残りを次に回さない (結果がマシンの負荷に左右されないようにする)。</summary>
+    private static readonly TimeSpan Unlimited = TimeSpan.MaxValue;
+
     private static (Document Doc, EditorState Editor, BookmarkCollection Bookmarks) Create(byte[] data)
     {
         var doc = new Document(new MemoryByteSource(data), Options());
@@ -28,20 +31,20 @@ public sealed class BookmarkExpressionTests
         {
             Bookmark pe = bookmarks.Add(0, 1, "pe");
             bookmarks.SetPositionExpression(pe, "u32le(0x3C)");
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Equal(0x80, pe.Start);
             Assert.Null(pe.ExpressionError);
 
             // 参照先の値を書き換えると、再評価で位置が変わる。位置の式を持つブックマークは編集で位置を調整しない (仕様 6)。
             doc.Overwrite(0x3C, [0x00, 0x01, 0x00, 0x00]);
             Assert.Equal(0x80, pe.Start);
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Equal(0x100, pe.Start);
 
             // bm.名前 と align。
             Bookmark next = bookmarks.Add(0, 1, "next");
             bookmarks.SetPositionExpression(next, "align(bm.pe + 3, 8)");
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Equal(0x108, next.Start);
         }
     }
@@ -55,11 +58,11 @@ public sealed class BookmarkExpressionTests
             Bookmark a = bookmarks.Add(0x100, 1, "a");
             Bookmark b = bookmarks.Add(0x200, 1, "b");
             bookmarks.SetPositionExpression(a, "bm.b + 4");
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Equal(0x204, a.Start);
 
             bookmarks.SetPositionExpression(b, "bm.a + 4");
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Equal(BookmarkExpressionErrorKind.Cycle, a.ExpressionError?.Kind);
             Assert.Equal(BookmarkExpressionErrorKind.Cycle, b.ExpressionError?.Kind);
             Assert.Equal(0x204, a.Start);
@@ -67,7 +70,7 @@ public sealed class BookmarkExpressionTests
 
             // 輪を外すと両方とも直る。
             bookmarks.SetPositionExpression(b, "0x300");
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Null(a.ExpressionError);
             Assert.Equal(0x304, a.Start);
             Assert.Equal(0x300, b.Start);
@@ -82,17 +85,17 @@ public sealed class BookmarkExpressionTests
         {
             Bookmark x = bookmarks.Add(0x10, 1, "x");
             bookmarks.SetPositionExpression(x, "u32le(");
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Equal(BookmarkExpressionErrorKind.Expression, x.ExpressionError?.Kind);
             Assert.Equal(0x10, x.Start);
 
             bookmarks.SetPositionExpression(x, "0x1000");
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Equal(BookmarkExpressionErrorKind.OutOfRange, x.ExpressionError?.Kind);
             Assert.Equal(0x10, x.Start);
 
             bookmarks.SetPositionExpression(x, "u32le(0xFE)");
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Equal(ExpressionError.Unreadable, x.ExpressionError?.Detail?.Error);
         }
     }
@@ -110,7 +113,7 @@ public sealed class BookmarkExpressionTests
             }
 
             bookmarks.SetPositionExpression(chain[0], "0");
-            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length);
+            BookmarkExpressions.Reevaluate(bookmarks, new EditorExpressionContext(editor), doc.Length, Unlimited);
             Assert.Null(chain[31].ExpressionError);
             Assert.Equal(BookmarkExpressionErrorKind.TooDeep, chain[39].ExpressionError?.Kind);
         }

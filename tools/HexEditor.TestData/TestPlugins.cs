@@ -54,13 +54,13 @@ public static class TestPlugins
 
     /// <summary>
     /// TD-INSP-PLUGIN-TYPES (05 のテストデータ): インスペクタの型 <c>Loop</c> (サイズ 4。変換から戻らない)、<c>Throw</c> (サイズ 4。
-    /// <c>InvalidOperationException("test failure")</c>)、<c>Echo</c> (サイズ 4。4 バイトを空白区切りの Hex にする)。
+    /// 起点の先頭のバイトが 01 のとき <c>InvalidOperationException("test failure")</c>。ほかの位置では投げない)、<c>Echo</c> (サイズ 4。4 バイトを空白区切りの Hex にする)。
     /// </summary>
     public static Definition InspectorTypes { get; } = Generic("insptypes", new JsonObject
     {
         ["inspectorTypes"] = new JsonArray(
             new JsonObject { ["id"] = "insptypes.loop", ["name"] = "Loop", ["size"] = 4, ["hang"] = true },
-            new JsonObject { ["id"] = "insptypes.throw", ["name"] = "Throw", ["size"] = 4, ["throw"] = true, ["message"] = "test failure" },
+            new JsonObject { ["id"] = "insptypes.throw", ["name"] = "Throw", ["size"] = 4, ["throw"] = true, ["throwWhenFirst"] = 1, ["message"] = "test failure" },
             new JsonObject { ["id"] = "insptypes.echo", ["name"] = "Echo", ["size"] = 4, ["echo"] = true }),
     });
 
