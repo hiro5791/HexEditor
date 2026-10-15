@@ -31,6 +31,7 @@ public sealed partial class MainWindow
             ["handled"] = VisualizerView?.HandleImageKey(Enum.Parse<Windows.System.VirtualKey>(request["key"]!.GetValue<string>(), ignoreCase: true)) ?? false,
             ["hover"] = VisualizerVm().HoverText,
         },
+        "csharpComponent" => TestCSharpComponent(request),
         _ => null,
     };
 

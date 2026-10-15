@@ -56,6 +56,9 @@ public static class Program
             {
                 return 0;
             }
+
+            // Shift キーを押しながらの起動はセーフモード (09 の UI-30 の仕様 4)。既存のインスタンスに転送する起動では判定しない。
+            CommandLine = SafeModeStartup.Apply(CommandLine);
         }
         catch (Exception ex)
         {

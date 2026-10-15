@@ -5750,4 +5750,7 @@ Downloaded from: {2}</value></data>
   <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>The type took longer than {0} ms; it runs again when the start position changes</value></data>
   <data name="Inspector_UserError" xml:space="preserve"><value>Error: {0}</value></data>
   <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Inspector type file {0}, line {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Offline mode is on (or downloads are turned off), so the component is not downloaded. To add it by hand, get {0} from the release page of this version (on another PC if needed) and extract it into {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Started in safe mode. Plug-ins and automatically run scripts are not loaded.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Restart normally</value></data>
 </root>

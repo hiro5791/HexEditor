@@ -5750,4 +5750,7 @@
   <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>型の解釈が {0} ms を超えました。起点が変わると再実行します</value></data>
   <data name="Inspector_UserError" xml:space="preserve"><value>エラー: {0}</value></data>
   <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>インスペクタの型の定義ファイル {0} の {1} 行目: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>オフラインモードが有効 (またはダウンロードが無効) なため、コンポーネントはダウンロードしません。手動で入れるには、この版のリリースのページから {0} を (必要なら別の PC で) 入手し、{1} に展開してください。</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>セーフモードで起動しました。プラグインと自動実行のスクリプトは読み込まれていません。</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>通常どおり再起動</value></data>
 </root>

@@ -170,6 +170,9 @@ public sealed record TestHookSettings
     /// <summary>「名前を付けて保存」のダイアログの代わりに返すパス (空文字列はキャンセル)。null なら本物のダイアログを出す。</summary>
     public string? SavePicker { get; init; }
 
+    /// <summary>起動時に Shift キーが押されているとみなす (セーフモード。09 の UI-30 の仕様 4)。実際のキーの状態は読まない。</summary>
+    public bool? SafeModeShift { get; init; }
+
     /// <summary>ボリュームの空き容量の上書き (バイト数)。null なら OS の値。</summary>
     public long? FreeSpace { get; init; }
 
@@ -228,6 +231,7 @@ public sealed record TestHookSettings
             FakeProcesses = root["fakeProcesses"]?.GetValue<string>(),
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),
+            SafeModeShift = root["safeModeShift"]?.GetValue<bool>(),
             FreeSpace = root["freeSpace"] is { } free ? ReadLong(free, 0) : null,
             WriteErrors = root["writeErrors"]?.AsArray().Select(n => new WriteErrorSpec(
                 n!["match"]?.GetValue<string>() ?? "*",

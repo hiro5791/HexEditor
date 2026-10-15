@@ -11,6 +11,8 @@
     TC-PKG-17-02  manual check on the newest stable: "up to date (0.9.1)", no buttons, closes after 8 s
     TC-PKG-17-03  nothing in the first 30 s, one check between 30 and 60 s
     TC-PKG-17-04  no connection (firewall rule / 192.0.2.1): "could not check" within 15 s
+    TC-PKG-17-05  preview channel: adding the C# script component downloads the 0.9.2-preview.1 component
+    TC-PKG-17-06  0.9.0 -> 0.9.1: the component is updated at the first start; only 0.9.1 remains
     TC-PKG-18-01  installer 0.9.0 -> 0.9.1 downloads only the delta package
     TC-PKG-18-02  "Restart to update" starts 0.9.1 with the tabs and shows "Updated to version 0.9.1"
     TC-PKG-18-03  "Later", exit, start: 0.9.1
@@ -169,6 +171,71 @@ Invoke-TestCase 'TC-PKG-17-04' 'no connection: could not check within 15 s' {
             Assert-True ($sw.Elapsed.TotalSeconds -le 16 -and $s.messageKey -eq 'Update_Failed') "firewall: $($s.message) after $($sw.Elapsed.TotalSeconds) s"
         } finally { Stop-TestApp $b }
     } finally { Remove-NetFirewallRule -DisplayName $rule }
+}
+
+function Assert-ComponentInFeed([string[]]$Versions) {
+    foreach ($v in $Versions) {
+        try { [void](Get-FeedAsset $v "HexEditor-$v-$Arch-csharp.zip") }
+        catch { Skip-TestCase "the feed has no C# script component zip for $v (the release workflow must build it with the test builds)." }
+    }
+}
+
+function Get-Component($App) { Send-TestCommand $App 'csharpComponent' }
+
+function Wait-Component($App, [string]$What) {
+    Wait-Until { $c = Get-Component $App; (-not $c.busy) -and ($c.installed -or $c.error) } 300 $What
+    $c = Get-Component $App
+    Assert-True ($c.installed) "the component was not installed: $($c.error)"
+    $c
+}
+
+Invoke-TestCase 'TC-PKG-17-05' 'preview channel: the component of the same preview version' {
+    Assert-Feed
+    Assert-ComponentInFeed @('0.9.2-preview.1')
+    Install-Version '0.9.2-preview.1' @{ 'update.channel' = 'preview' }
+    $a = Start-TestApp -Exe $installedExe
+    try {
+        # 1. Add the C# script component (the "Download" button of the confirmation dialog).
+        [void](Send-TestCommand $a 'csharpComponent' @{ action = 'install' })
+        $c = Wait-Component $a 'the component download'
+        # 2. components\ holds the component of this version.
+        $folder = Join-Path $installerData 'components\csharp\0.9.2-preview.1'
+        Assert-True (Test-Path (Join-Path $folder 'HexEditor.Scripting.CSharp.dll')) "no component in $folder (versions: $($c.versions -join ', '))"
+        # 3. The download was the zip of the 0.9.2-preview.1 release.
+        $paths = @((Send-TestCommand $a 'networkLog').requests | ForEach-Object { $_.path })
+        $zip = "HexEditor-0.9.2-preview.1-$Arch-csharp.zip"
+        Assert-True (@($paths | Where-Object { $_ -like "*/v0.9.2-preview.1/*$zip" -or $_ -like "*$zip" }).Count -ge 1) "downloads: $($paths -join ', ')"
+        Assert-True (@($paths | Where-Object { $_ -like '*-csharp.zip' -and $_ -notlike "*$zip" }).Count -eq 0) "another component was downloaded: $($paths -join ', ')"
+    } finally { Stop-TestApp $a }
+}
+
+Invoke-TestCase 'TC-PKG-17-06' 'the component is updated with the app' {
+    Assert-Feed
+    Assert-ComponentInFeed @('0.9.0', '0.9.1')
+    Install-Version '0.9.0'
+    $a = Start-TestApp -Exe $installedExe
+    $oldPid = $a.Id
+    [void](Send-TestCommand $a 'csharpComponent' @{ action = 'install' })
+    [void](Wait-Component $a 'the 0.9.0 component')
+    Assert-True (Test-Path (Join-Path $installerData 'components\csharp\0.9.0')) 'no 0.9.0 component'
+    # 1. Update to 0.9.1 and "Restart to update".
+    [void](Send-TestCommand $a 'updateCheck' @{ manual = $true } -TimeoutSeconds 120)
+    Wait-Until { (Get-Update $a).messageKey -eq 'Update_Ready' } 300 'the download'
+    [void](Send-TestCommand $a 'updateButton' @{ button = 'RestartToUpdate' })
+    Close-TestChannel $a
+    $find = { Get-Process HexEditor -ErrorAction SilentlyContinue | Where-Object { $_.Id -ne $oldPid -and $_.Path -ieq $installedExe } | Select-Object -First 1 }
+    Wait-Until { $null -ne (& $find) } 120 'the updated app'
+    $new = & $find
+    Wait-Until { ($null -ne ($script:ch = Connect-TestChannel $new.Id 1000)) } 60 'the test channel of the updated app'
+    $b = [pscustomobject]@{ Process = $new; Id = $new.Id; Pipe = $script:ch.Pipe; Reader = $script:ch.Reader; Writer = $script:ch.Writer }
+    try {
+        # 2. The updated app downloads the 0.9.1 component at its first start.
+        $c = Wait-Component $b 'the 0.9.1 component'
+        # 3. Only the 0.9.1 component remains.
+        Assert-True ($c.version -eq '0.9.1') "component version: $($c.version)"
+        $versions = @(Get-ChildItem (Join-Path $installerData 'components\csharp') -Directory | Where-Object { -not $_.Name.StartsWith('.') } | ForEach-Object { $_.Name })
+        Assert-True (($versions.Count -eq 1) -and ($versions[0] -eq '0.9.1')) "components: $($versions -join ', ')"
+    } finally { Stop-TestApp $b }
 }
 
 Invoke-TestCase 'TC-PKG-18-01' 'only the delta package is downloaded' {

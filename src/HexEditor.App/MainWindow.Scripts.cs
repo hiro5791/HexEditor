@@ -594,6 +594,11 @@ public sealed partial class MainWindow
     /// </summary>
     private async Task<bool> InstallCSharpComponentAsync()
     {
+        if (await ShowOfflineComponentInstructionsAsync())
+        {
+            return false;
+        }
+
         CSharpComponentManager components = ScriptingService.Components;
         (long size, string destination, string host) = components.DownloadInfo;
         ContentDialog confirm = NewDialog(Loc.Get("CSharpComponent_Title"),
