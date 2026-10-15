@@ -40,6 +40,16 @@ internal sealed partial class Evaluator
         }
 
         list.Add(node);
+
+        // ループの中で宣言したパターンは配列のように name[0]、name[1] と表示する (TPL-11 の仕様 2)
+        if (list.Count == 2)
+        {
+            list[0].BaseName = list[0].Name;
+            list[0].Name = list[0].Name + "[0]";
+        }
+
+        node.BaseName = node.Name;
+        node.Name = $"{node.Name}[{list.Count - 1}]";
     }
 
     private void DeclareOne(PatternDeclStmt s, Declarator d, Frame f)

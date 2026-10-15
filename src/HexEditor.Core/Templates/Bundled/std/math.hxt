@@ -1,0 +1,3 @@
+// HexEditor 標準ライブラリ (TPL-18)
+// std.math: min, max, abs, clamp, align_up, align_down, log2, pow, sqrt, floor, ceil, is_nan
+// 関数は組み込み (C#) で、インポートしなくても使える。このファイルはインポートの互換のためにある。

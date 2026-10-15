@@ -306,6 +306,13 @@ internal sealed partial class Evaluator
         return neg ? -v : v;
     }
 
+    internal byte[] ArrayBytes(TemplateNode n)
+    {
+        byte[] buf = new byte[n.Size];
+        SpaceOfNode(n).Read(n.Offset, buf, this, n.Name);
+        return buf;
+    }
+
     internal Int128 RawInt(TemplateNode n)
     {
         Val v = n.ValueCached && n.ValueCache is Val c ? c : ReadPrim(n);
@@ -1157,11 +1164,10 @@ internal sealed partial class Evaluator
             }
             else
             {
-                next = FindChild(current, name);
-                if (next is null && end < path.Length && path[end] == '[')
+                next = null;
+                if (end < path.Length && path[end] == '[' && path.IndexOf(']', end) is int close and > 0)
                 {
                     // ループで宣言した同じ名前のパターン (r[3])
-                    int close = path.IndexOf(']', end);
                     string full = path[i..(close + 1)];
                     next = DisplayChildren(current).FirstOrDefault(c => c.Name == full);
                     if (next is not null)
@@ -1169,6 +1175,8 @@ internal sealed partial class Evaluator
                         end = close + 1;
                     }
                 }
+
+                next ??= FindChild(current, name);
             }
 
             if (next is null)

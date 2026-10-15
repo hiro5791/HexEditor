@@ -1,0 +1,56 @@
+// HexEditor 標準ライブラリ (TPL-18): std.macho
+// Mach-O の型と補助関数。標準テンプレート (TPL-34) で使う。
+
+namespace std::macho {
+
+    enum CpuType : s32 {
+        Any = -1, Vax = 1, MC680x0 = 6, X86 = 7, X86_64 = 0x01000007, Arm = 12, Arm64 = 0x0100000C, Arm64_32 = 0x0200000C,
+        PowerPC = 18, PowerPC64 = 0x01000012,
+    };
+
+    enum FileType : u32 {
+        Object = 1, Execute = 2, FvmLib = 3, Core = 4, Preload = 5, Dylib = 6, Dylinker = 7, Bundle = 8, DylibStub = 9, Dsym = 10,
+        KextBundle = 11, FileSet = 12,
+    };
+
+    /// 64 bit の Mach-O ヘッダ (mach_header_64)
+    struct Header64 {
+        le u32      magic [[format("hex"), expect(magic == 0xFEEDFACF, "64 bit の Mach-O ではありません")]];
+        le CpuType  cputype;
+        le s32      cpusubtype;
+        le FileType filetype;
+        le u32      ncmds;
+        le u32      sizeofcmds;
+        le u32      flags [[format("hex")]];
+        le u32      reserved;
+    };
+
+    /// ロードコマンドの先頭
+    struct LoadCommand {
+        le u32 cmd [[format("hex")]];
+        le u32 cmdsize;
+        u8 body[cmdsize - 8] [[lazy]];
+    };
+
+    /// 仮想アドレスをファイルの位置に変換する (LC_SEGMENT_64 を探す。見つからない場合は -1)
+    fn va_to_offset(u64 va) -> s64 {
+        local u64 ncmds = std::mem::read_u32(16, little);
+        local u64 p = 32;
+        for (local u64 i = 0; i < ncmds; i += 1) {
+            local u64 cmd = std::mem::read_u32(p, little);
+            local u64 size = std::mem::read_u32(p + 4, little);
+            if (cmd == 0x19) {
+                local u64 vmaddr = std::mem::read_u64(p + 24, little);
+                local u64 vmsize = std::mem::read_u64(p + 32, little);
+                if (va >= vmaddr && va < vmaddr + vmsize) {
+                    return va - vmaddr + std::mem::read_u64(p + 40, little);
+                }
+            }
+            if (size == 0) {
+                break;
+            }
+            p += size;
+        }
+        return -1;
+    }
+};

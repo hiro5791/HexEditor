@@ -1,0 +1,1 @@
+namespace liba { struct Rec { u8 x; }; }

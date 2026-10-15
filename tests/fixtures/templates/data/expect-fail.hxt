@@ -1,0 +1,1 @@
+u8 signature[8]; be u32 length [[expect(length == 0, "長さは 0 のはず")]];

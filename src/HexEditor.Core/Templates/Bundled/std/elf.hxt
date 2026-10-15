@@ -1,0 +1,97 @@
+// HexEditor 標準ライブラリ (TPL-18): std.elf
+// ELF の型と補助関数。標準テンプレート (TPL-34) で使う。
+
+namespace std::elf {
+
+    enum Class : u8 { None = 0, Elf32 = 1, Elf64 = 2 };
+    enum Data : u8 { None = 0, LittleEndian = 1, BigEndian = 2 };
+
+    enum Type : u16 { None = 0, Rel = 1, Exec = 2, Dyn = 3, Core = 4 };
+
+    enum Machine : u16 {
+        None = 0, Sparc = 2, X86 = 3, Mips = 8, PowerPC = 20, PowerPC64 = 21, S390 = 22, Arm = 40, SuperH = 42, IA64 = 50,
+        X86_64 = 62, AArch64 = 183, RiscV = 243, LoongArch = 258,
+    };
+
+    enum SegmentType : u32 {
+        Null = 0, Load = 1, Dynamic = 2, Interp = 3, Note = 4, Shlib = 5, Phdr = 6, Tls = 7,
+        GnuEhFrame = 0x6474E550, GnuStack = 0x6474E551, GnuRelro = 0x6474E552, GnuProperty = 0x6474E553,
+    };
+
+    /// e_ident (16 バイト)
+    struct Ident {
+        u8    magic[4] [[expect(magic == x"7F 45 4C 46", "ELF のマジックではありません")]];
+        Class class;
+        Data  data;
+        u8    version;
+        u8    os_abi;
+        u8    abi_version;
+        padding[7];
+    };
+
+    /// ELF ヘッダ (32 bit と 64 bit の両方。e_ident の値でエンディアンと幅を決める)
+    struct Header {
+        Ident ident;
+        if (ident.data == Data::BigEndian) std::core::set_endian(big);
+        else                               std::core::set_endian(little);
+        Type    e_type;
+        Machine e_machine;
+        u32     e_version;
+        if (ident.class == Class::Elf64) {
+            u64 e_entry [[format("hex")]];
+            u64 e_phoff [[format("hex")]];
+            u64 e_shoff [[format("hex")]];
+        } else {
+            u32 e_entry [[format("hex")]];
+            u32 e_phoff [[format("hex")]];
+            u32 e_shoff [[format("hex")]];
+        }
+        u32 e_flags [[format("hex")]];
+        u16 e_ehsize;
+        u16 e_phentsize;
+        u16 e_phnum;
+        u16 e_shentsize;
+        u16 e_shnum;
+        u16 e_shstrndx;
+    };
+
+    struct ProgramHeader64 {
+        SegmentType p_type;
+        u32 p_flags [[format("hex")]];
+        u64 p_offset [[format("hex")]];
+        u64 p_vaddr [[format("hex")]];
+        u64 p_paddr [[format("hex")]];
+        u64 p_filesz;
+        u64 p_memsz;
+        u64 p_align;
+    };
+
+    struct ProgramHeader32 {
+        SegmentType p_type;
+        u32 p_offset [[format("hex")]];
+        u32 p_vaddr [[format("hex")]];
+        u32 p_paddr [[format("hex")]];
+        u32 p_filesz;
+        u32 p_memsz;
+        u32 p_flags [[format("hex")]];
+        u32 p_align;
+    };
+
+    /// 仮想アドレスをファイルの位置に変換する (64 bit・リトルエンディアンの PT_LOAD を探す。見つからない場合は -1)
+    fn va_to_offset(u64 va) -> s64 {
+        local u64 phoff = std::mem::read_u64(32, little);
+        local u64 phentsize = std::mem::read_u16(54, little);
+        local u64 phnum = std::mem::read_u16(56, little);
+        for (local u64 i = 0; i < phnum; i += 1) {
+            local u64 p = phoff + i * phentsize;
+            if (std::mem::read_u32(p, little) == 1) {
+                local u64 vaddr = std::mem::read_u64(p + 16, little);
+                local u64 filesz = std::mem::read_u64(p + 32, little);
+                if (va >= vaddr && va < vaddr + filesz) {
+                    return va - vaddr + std::mem::read_u64(p + 8, little);
+                }
+            }
+        }
+        return -1;
+    }
+};

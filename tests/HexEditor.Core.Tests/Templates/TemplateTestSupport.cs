@@ -28,6 +28,8 @@ internal static class TemplateTestSupport
         return result;
     }
 
+    public static bool Wait(Task task, TimeSpan timeout) => task.Wait(timeout);
+
     /// <summary>エラーのないことを確かめる。</summary>
     public static TemplateResult RunOk(string template, byte[] data, TemplateApplyOptions? options = null)
     {

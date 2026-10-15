@@ -157,8 +157,21 @@ public sealed class TemplateNode
 
     public TemplateNodeKind Kind { get; internal set; }
 
-    /// <summary>識別子 (配列の要素は <c>[3]</c>)。</summary>
-    public string Name { get; }
+    /// <summary>識別子 (配列の要素は <c>[3]</c>。ループで宣言した同じ名前のパターンは <c>section[1]</c>)。</summary>
+    public string Name
+    {
+        get => _name;
+        internal set
+        {
+            _name = value;
+            _path = null;
+        }
+    }
+
+    private string _name = string.Empty;
+
+    /// <summary>ループで宣言して名前に添字を付けたパターンの元の名前。</summary>
+    internal string? BaseName { get; set; }
 
     /// <summary>結果ツリーに出す名前 (<c>name("…")</c> 属性があればそれ)。</summary>
     public string DisplayName => DisplayNameAttr ?? Name;
@@ -255,6 +268,10 @@ public sealed class TemplateNode
             return path;
         }
     }
+
+    /// <summary>`u8` / `char` の配列 (結果ツリーで要素を展開せず、値の列に Hex または文字列を表示する。TPL-07 の仕様 6)。</summary>
+    public bool IsByteOrCharArray => Kind == TemplateNodeKind.Array && Type is Runtime.PrimType { Size: 1 or 2 or 4 } p
+        && (p.IsChar || (p.Size == 1 && p.Kind is Runtime.PrimKind.UInt or Runtime.PrimKind.SInt));
 
     /// <summary>子を持つ (構造体・共用体・配列・ポインタ・ビットフィールド・セクション)。評価はしない。</summary>
     public bool HasChildren => Children0 is not null && (Kind != TemplateNodeKind.Pointer || (Pointer is { IsNull: false, OutOfRange: false }));

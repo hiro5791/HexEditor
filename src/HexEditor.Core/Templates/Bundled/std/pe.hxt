@@ -1,0 +1,202 @@
+// HexEditor 標準ライブラリ (TPL-18): std.pe
+// Windows の実行形式 (PE/COFF) の型と補助関数。標準テンプレート (TPL-34) で使う。
+
+namespace std::pe {
+
+    enum Machine : u16 {
+        Unknown = 0x0000,
+        I386    = 0x014C,
+        R4000   = 0x0166,
+        ARM     = 0x01C0,
+        ARMNT   = 0x01C4,
+        IA64    = 0x0200,
+        EBC     = 0x0EBC,
+        AMD64   = 0x8664,
+        ARM64   = 0xAA64,
+        RISCV64 = 0x5064,
+    };
+
+    flags Characteristics : u16 {
+        RelocsStripped       = 0x0001,
+        Executable           = 0x0002,
+        LineNumsStripped     = 0x0004,
+        LocalSymsStripped    = 0x0008,
+        AggressiveWsTrim     = 0x0010,
+        LargeAddressAware    = 0x0020,
+        BytesReversedLo      = 0x0080,
+        Machine32Bit         = 0x0100,
+        DebugStripped        = 0x0200,
+        RemovableRunFromSwap = 0x0400,
+        NetRunFromSwap       = 0x0800,
+        System               = 0x1000,
+        Dll                  = 0x2000,
+        UpSystemOnly         = 0x4000,
+        BytesReversedHi      = 0x8000,
+    };
+
+    enum Subsystem : u16 {
+        Unknown = 0, Native = 1, WindowsGui = 2, WindowsCui = 3, Os2Cui = 5, PosixCui = 7, WindowsCeGui = 9,
+        EfiApplication = 10, EfiBootServiceDriver = 11, EfiRuntimeDriver = 12, EfiRom = 13, Xbox = 14, WindowsBootApplication = 16,
+    };
+
+    fn fmt_mz(ref u16 v) -> string {
+        return std::format("{:c}{:c} (0x{:X})", v & 0xFF, v >> 8, v);
+    }
+
+    fn fmt_pe(ref u32 v) -> string {
+        return std::format("PE\\0\\0 (0x{:08X})", v);
+    }
+
+    /// MS-DOS のヘッダ (IMAGE_DOS_HEADER)
+    struct DosHeader {
+        le u16 e_magic [[format(fmt_mz), expect(e_magic == 0x5A4D, "MZ ではありません")]];
+        le u16 e_cblp;
+        le u16 e_cp;
+        le u16 e_crlc;
+        le u16 e_cparhdr;
+        le u16 e_minalloc;
+        le u16 e_maxalloc;
+        le u16 e_ss;
+        le u16 e_sp;
+        le u16 e_csum;
+        le u16 e_ip;
+        le u16 e_cs;
+        le u16 e_lfarlc;
+        le u16 e_ovno;
+        le u16 e_res[4];
+        le u16 e_oemid;
+        le u16 e_oeminfo;
+        le u16 e_res2[10];
+        le u32 e_lfanew [[format("hex")]];
+    };
+
+    /// COFF ファイルヘッダ (IMAGE_FILE_HEADER)
+    struct FileHeader {
+        le Machine         Machine;
+        le u16             NumberOfSections;
+        le time32_t        TimeDateStamp;
+        le u32             PointerToSymbolTable [[format("hex")]];
+        le u32             NumberOfSymbols;
+        le u16             SizeOfOptionalHeader;
+        le Characteristics Characteristics;
+    };
+
+    struct DataDirectory {
+        le u32 VirtualAddress [[format("hex")]];
+        le u32 Size;
+    };
+
+    /// オプションヘッダ (IMAGE_OPTIONAL_HEADER32 / 64)
+    struct OptionalHeader {
+        le u16 Magic [[format("hex")]];
+        u8     MajorLinkerVersion;
+        u8     MinorLinkerVersion;
+        le u32 SizeOfCode;
+        le u32 SizeOfInitializedData;
+        le u32 SizeOfUninitializedData;
+        le u32 AddressOfEntryPoint [[format("hex")]];
+        le u32 BaseOfCode [[format("hex")]];
+        if (Magic == 0x10B) {
+            le u32 BaseOfData [[format("hex")]];
+            le u32 ImageBase [[format("hex")]];
+        } else {
+            le u64 ImageBase [[format("hex")]];
+        }
+        le u32 SectionAlignment;
+        le u32 FileAlignment;
+        le u16 MajorOperatingSystemVersion;
+        le u16 MinorOperatingSystemVersion;
+        le u16 MajorImageVersion;
+        le u16 MinorImageVersion;
+        le u16 MajorSubsystemVersion;
+        le u16 MinorSubsystemVersion;
+        le u32 Win32VersionValue;
+        le u32 SizeOfImage;
+        le u32 SizeOfHeaders;
+        le u32 CheckSum [[format("hex")]];
+        le Subsystem Subsystem;
+        le u16 DllCharacteristics [[format("hex")]];
+        if (Magic == 0x10B) {
+            le u32 SizeOfStackReserve;
+            le u32 SizeOfStackCommit;
+            le u32 SizeOfHeapReserve;
+            le u32 SizeOfHeapCommit;
+        } else {
+            le u64 SizeOfStackReserve;
+            le u64 SizeOfStackCommit;
+            le u64 SizeOfHeapReserve;
+            le u64 SizeOfHeapCommit;
+        }
+        le u32 LoaderFlags;
+        le u32 NumberOfRvaAndSizes;
+        DataDirectory DataDirectories[std::math::min(NumberOfRvaAndSizes, 16)];
+    };
+
+    /// セクションヘッダ (IMAGE_SECTION_HEADER)
+    struct SectionHeader {
+        char   Name[8];
+        le u32 VirtualSize;
+        le u32 VirtualAddress [[format("hex")]];
+        le u32 SizeOfRawData;
+        le u32 PointerToRawData [[format("hex")]];
+        le u32 PointerToRelocations [[format("hex")]];
+        le u32 PointerToLinenumbers [[format("hex")]];
+        le u16 NumberOfRelocations;
+        le u16 NumberOfLinenumbers;
+        le u32 Characteristics [[format("hex")]];
+    };
+
+    /// NT ヘッダ (IMAGE_NT_HEADERS)
+    struct NtHeaders {
+        le u32         Signature [[format(fmt_pe), expect(Signature == 0x00004550, "PE シグネチャではありません")]];
+        FileHeader     FileHeader;
+        OptionalHeader OptionalHeader;
+    };
+
+    /// e_lfanew の位置
+    fn nt_offset() -> u64 {
+        return std::mem::read_u32(0x3C, little);
+    }
+
+    /// セクション表の先頭のオフセット
+    fn section_table_offset() -> u64 {
+        local u64 nt = nt_offset();
+        return nt + 24 + std::mem::read_u16(nt + 20, little);
+    }
+
+    /// RVA をファイルの位置に変換する (見つからない場合は RVA のまま)
+    fn rva_to_offset(u64 rva) -> u64 {
+        local u64 nt = nt_offset();
+        local u64 count = std::mem::read_u16(nt + 6, little);
+        local u64 table = section_table_offset();
+        for (local u64 i = 0; i < count; i += 1) {
+            local u64 s = table + i * 40;
+            local u64 va = std::mem::read_u32(s + 12, little);
+            local u64 vsize = std::math::max(std::mem::read_u32(s + 8, little), std::mem::read_u32(s + 16, little));
+            if (rva >= va && rva < va + vsize) {
+                return rva - va + std::mem::read_u32(s + 20, little);
+            }
+        }
+        return rva;
+    }
+
+    /// VA (イメージベースを含むアドレス) をファイルの位置に変換する
+    fn va_to_offset(u64 va) -> u64 {
+        local u64 nt = nt_offset();
+        local u64 magic = std::mem::read_u16(nt + 24, little);
+        local u64 base = magic == 0x10B ? std::mem::read_u32(nt + 24 + 28, little) : std::mem::read_u64(nt + 24 + 24, little);
+        return rva_to_offset(va - base);
+    }
+
+    /// 名前でセクションを探す (セクションヘッダのオフセット。なければ -1)
+    fn find_section(string name) -> s64 {
+        local u64 count = std::mem::read_u16(nt_offset() + 6, little);
+        local u64 table = section_table_offset();
+        for (local u64 i = 0; i < count; i += 1) {
+            if (std::mem::read_string(table + i * 40, 8, "latin1") == name) {
+                return table + i * 40;
+            }
+        }
+        return -1;
+    }
+};

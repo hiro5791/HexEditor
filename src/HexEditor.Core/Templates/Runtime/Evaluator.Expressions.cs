@@ -720,6 +720,14 @@ internal sealed partial class Evaluator
             }
         }
 
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            if (items[i].BaseName == name)
+            {
+                return items[i];
+            }
+        }
+
         foreach (TemplateNode n in items)
         {
             if (n.Attributes.Inline && MemberOf(n, name) is { } inner)

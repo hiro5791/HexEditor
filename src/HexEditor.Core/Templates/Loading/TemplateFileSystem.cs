@@ -86,7 +86,7 @@ internal static class BundledTemplates
             // 例: HexEditor.Templates.Bundled.std.pe.hxt → std/pe.hxt
             string rest = name[prefix.Length..];
             string ext = Path.GetExtension(rest);
-            string stem = rest[..^ext.Length].Replace('.', '/');
+            string stem = rest[..^ext.Length].Replace('\\', '/').Replace('.', '/');
             using Stream s = asm.GetManifestResourceStream(name)!;
             using var ms = new MemoryStream();
             s.CopyTo(ms);
