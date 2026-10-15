@@ -161,7 +161,7 @@ public static class TemplateMessages
         [DuplicateEnumValue] = "Value {0} has more than one name ('{1}' is used)",
         [LimitClamped] = "{0} {1} exceeds the maximum; {2} is used",
         [TemplatesTooLarge] = "The templates including imports are too large (limit 32 MB)",
-        [Undefined] = "'{0}' is not defined{1}",
+        [Undefined] = "'{0}' is not defined",
         [DivisionByZero] = "Division by zero",
         [TypeMismatch] = "Type mismatch: {0}",
         [RecursionTooDeep] = "Recursion is too deep (limit {0})",
@@ -238,7 +238,15 @@ public static class TemplateMessages
 
         try
         {
-            return string.Format(CultureInfo.InvariantCulture, format, args.Cast<object>().ToArray());
+            string text = string.Format(CultureInfo.InvariantCulture, format, args.Cast<object>().ToArray());
+
+            // 未定義の名前の候補 (「もしかして」。画面ではリソース TplDiag_HXT2001_Suggestion)
+            if (code == Undefined && args.Count > 1 && args[1].Length > 0)
+            {
+                text += $" (did you mean '{args[1]}'?)";
+            }
+
+            return text;
         }
         catch (FormatException)
         {

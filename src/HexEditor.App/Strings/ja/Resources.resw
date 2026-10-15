@@ -5481,4 +5481,94 @@
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const (static の読み取り専用)</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>文字コード (ascii、utf-8、cp932 など)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>単独で処理できる文書にする (\documentclass から \end{document} まで)</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>予期しない文字 `{0}`</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>`{0}` がありません</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>予期しない `{0}`</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>不正な数値 `{0}`</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>文字列が閉じていません</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>不正なエスケープ `{0}`</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>コメントが閉じていません</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>入れ子が深すぎます (上限 {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>不正なバイト列 `{0}`</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>テンプレートが UTF-8 として不正です</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>テンプレートが大きすぎます (上限 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>エラーが多すぎるため、最初の {0} 件だけを表示しています</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>プラグマ `{0}` の値 `{1}` が不正です</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>不明なプラグマ `{0}` を無視しました</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>`{0}` は {1} で定義済みです</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>`{0}` が見つかりません (検索したフォルダ: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>テンプレートはこの操作を行えません: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>このテンプレートには版 {0} 以降のアプリが必要です</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>不明な属性 `{0}` を無視しました</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} は {1} に収まりません</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>値 {0} に複数の名前があります (`{1}` を使います)</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} の {1} は最大値を超えているため、{2} を使います</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>インポートを含めたテンプレートが大きすぎます (上限 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>`{0}` は定義されていません</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>0 で除算しました</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>型が一致しません: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>再帰が深すぎます (上限 {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>文の実行回数が上限 ({0}) に達しました</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>パターン数が上限 ({0}) に達しました</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>評価のメモリが上限 ({0}) に達しました</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>評価の時間が上限 ({0} 秒) に達しました</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>配置先 0x{0} はデータの範囲外です</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) はデータの範囲外です</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>`{0}` (0x{1}、{2} バイト) はデータの範囲外です</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>位置に負の値は使えません ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>要素のサイズが 0 のため配列を終了できません</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>データの末尾に達したため配列を終了しました</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>配列を上限 ({0} 要素) で打ち切りました</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>末尾の途中までの要素 ({0} バイト) を含めませんでした</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>文字列の終端が見つかりません</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 が 10 バイトを超えています (オフセット 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>構造体の中身 ({0} バイト) が指定のサイズ ({1} バイト) を超えています</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>ポインタの型は整数型でなければなりません</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>範囲外 (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>関数の中ではパターンを宣言できません</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>アサーションが失敗しました: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>拡張関数 `{0}` が登録されていません</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>拡張関数 `{0}` が失敗しました: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>拡張関数 `{0}` の実行が許可されていません</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>添字 {0} は範囲外です (0〜{1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>型のサイズが決まらないため sizeof({0}) は使えません</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>ビットフィールドの合計 ({0} bit) が {1} を超えています</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>ビットフィールドは 64 bit を超えられません ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>{0} の展開に失敗しました: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>展開後のデータが上限 ({0}) に達したため打ち切りました</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>{0} はこの版では使えません</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>長さ ({0}) が 1 回の呼び出しの上限 256 MB を超えています</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>`{0}` には代入できません</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>0x{0} のデータを読めません</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>評価をキャンセルしました</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} は {1} に収まりません</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>`{0}` は関数ではありません</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>`{0}` の引数は {1} 個です</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>Kaitai Struct の機能 `{0}` には対応していません</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>内容が期待するバイト列と一致しません</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>検証に失敗しました: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>出力が多すぎるため省略しました</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>セクションの合計が上限 ({0}) に達しました</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>`{0}` はパターンではありません</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>`{0}` にメンバー `{1}` はありません</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>`{0}` の引数が不正です: {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>データがマジック {0} と一致しません</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>一時ファイルに書き込めません: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>YAML の構文エラー: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>YAML の型の指定は使えません ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>YAML の別名の展開が多すぎます</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>キー `{0}` が重複しています</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>インデントにタブ文字は使えません</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>.ksy が不正です: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>YAML の入れ子が深すぎます</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>テンプレートの評価器の内部エラー: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>もしかして: `{0}`</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>情報</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>警告</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>エラー</value></data>
 </root>

@@ -52,8 +52,8 @@ public sealed class KaitaiTests
         }
     }
 
+    /// <summary>TC-TPL-33-01 の代わり (kaitai_struct_formats の取り込みまで)。</summary>
     [Fact]
-    [Trait(TC, "TC-TPL-33-01")]
     public void PngKsyMatchesTheData()
     {
         // kaitai_struct_formats の png.ksy と公式のコンパイラの期待値はリポジトリに取り込んでいないため (取り込みにはダウンロードと

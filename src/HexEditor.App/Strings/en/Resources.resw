@@ -5481,4 +5481,94 @@ Details were written to:
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static read-only</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Text encoding (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Complete document (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>Unexpected character '{0}'</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>'{0}' expected</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>Unexpected '{0}'</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>Invalid number '{0}'</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>String literal is not terminated</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>Invalid escape sequence '{0}'</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>Comment is not terminated</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>Nesting is too deep (limit {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>Invalid byte string '{0}'</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>The template is not valid UTF-8</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>The template is too large (limit 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>Too many errors; only the first {0} are shown</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>Invalid value '{1}' for pragma '{0}'</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>Unknown pragma '{0}' was ignored</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>'{0}' is already defined at {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>'{0}' was not found (searched: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>Templates cannot perform this operation: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>This template requires app version {0} or later</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>Unknown attribute '{0}' was ignored</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} does not fit in {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>Value {0} has more than one name ('{1}' is used)</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} {1} exceeds the maximum; {2} is used</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>The templates including imports are too large (limit 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>'{0}' is not defined</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>Division by zero</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>Type mismatch: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>Recursion is too deep (limit {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>The number of executed statements reached the limit ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>The number of patterns reached the limit ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>The evaluation memory reached the limit ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>The evaluation time reached the limit ({0} s)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>Placement 0x{0} is outside the data</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) is outside the data</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>'{0}' (0x{1}, {2} bytes) is outside the data</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>The position cannot be negative ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>The array cannot end because the element size is 0</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>The array ended because the end of the data was reached</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>The array was truncated at the limit ({0} elements)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>The incomplete last element ({0} bytes) was not included</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>The string terminator was not found</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 is longer than 10 bytes (offset 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>The content of the structure ({0} bytes) exceeds the specified size ({1} bytes)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>The pointer type must be an integer type</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>Out of range (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>Patterns cannot be declared inside functions</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>Assertion failed: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>Extension function '{0}' is not registered</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>Extension function '{0}' failed: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>Extension function '{0}' is not permitted to run</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>Index {0} is out of range (0 to {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>sizeof({0}) cannot be used because the size of the type is not fixed</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>The bit field total ({0} bit) exceeds {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>A bit field cannot be wider than 64 bits ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>{0} decompression failed: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>Decompression stopped because the data reached the limit ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>{0} is not supported in this version</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>The length ({0}) exceeds the limit of 256 MB per call</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>Cannot assign to '{0}'</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>The data at 0x{0} cannot be read</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>The evaluation was cancelled</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} does not fit in {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>'{0}' is not a function</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>'{0}' takes {1} argument(s)</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>Kaitai Struct feature '{0}' is not supported</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>The contents do not match the expected bytes</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>Validation failed: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>The output was truncated because it is too long</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>The sections reached the total limit ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>'{0}' is not a pattern</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>'{0}' has no member '{1}'</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>Invalid argument for '{0}': {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>The data does not match the magic {0}</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>The temporary file could not be written: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>YAML syntax error: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>YAML tags are not allowed ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>Too many YAML alias expansions</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>Duplicate key '{0}'</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>Tab characters cannot be used for indentation</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>Invalid .ksy: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>The YAML nesting is too deep</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>Internal error in the template evaluator: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>did you mean '{0}'?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>Info</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>Error</value></data>
 </root>

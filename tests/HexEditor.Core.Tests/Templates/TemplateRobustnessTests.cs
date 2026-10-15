@@ -67,12 +67,19 @@ public sealed class TemplateRobustnessTests
         Assert.Equal(1L, Long(r, "h.n"));
     }
 
+    /// <summary>TC-TPL-27-04 (UI: ヘルプを開く) の前提: すべてのエラーにコードがある。</summary>
     [Fact]
-    [Trait(TC, "TC-TPL-27-04")]
     public void EveryErrorHasACode()
     {
         // ヘルプの説明ページはコードに対応させる (リソースの検査は UI の作業で行う)
         Assert.All(TemplateMessages.AllCodes, c => Assert.Matches("^HXT[0-9]{4}$", c));
+        string app = Path.GetDirectoryName(Core.Tests.Engine.SourceTests.FindRepoFile("src/HexEditor.App/HexEditor.App.csproj"))!;
+        foreach (string language in new[] { "en", "ja" })
+        {
+            Dictionary<string, string> strings = I18n.ResourceChecker.LoadResw(Path.Combine(app, "Strings", language, "Resources.resw"));
+            Assert.All(TemplateMessages.AllCodes, c => Assert.True(strings.ContainsKey("TplDiag_" + c), $"{language}: TplDiag_{c}"));
+        }
+
         TemplateResult r = Run(File.ReadAllText(Data("runtime-err.hxt")), Enumerable.Range(0, 256).Select(i => (byte)i).ToArray());
         TemplateDiagnostic e = Assert.Single(r.Diagnostics, d => d.Severity == TemplateSeverity.Error);
         Assert.Equal(TemplateMessages.AssertFailed, e.Code);

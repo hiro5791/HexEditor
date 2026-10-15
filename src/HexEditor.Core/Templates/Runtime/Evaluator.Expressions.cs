@@ -210,7 +210,7 @@ internal sealed partial class Evaluator
             }
         }
 
-        return ErrorAt(at, TemplateMessages.Undefined, name, best is null ? string.Empty : $" (did you mean '{best}'?)");
+        return ErrorAt(at, TemplateMessages.Undefined, name, best ?? string.Empty);
     }
 
     private static int Levenshtein(string a, string b)
