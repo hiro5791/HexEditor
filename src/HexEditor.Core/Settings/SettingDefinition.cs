@@ -128,11 +128,12 @@ public static class SettingCategories
     public const string Language = "language";
     public const string Accessibility = "accessibility";
     public const string Automation = "automation";
+    public const string Templates = "templates";
     public const string Update = "update";
     public const string Privacy = "privacy";
     public const string Explorer = "explorer";
     public const string Advanced = "advanced";
 
     public static readonly string[] All =
-        [General, Appearance, View, Editing, Search, Files, Keyboard, Language, Accessibility, Automation, Update, Privacy, Explorer, Advanced];
+        [General, Appearance, View, Editing, Search, Files, Keyboard, Language, Accessibility, Automation, Templates, Update, Privacy, Explorer, Advanced];
 }

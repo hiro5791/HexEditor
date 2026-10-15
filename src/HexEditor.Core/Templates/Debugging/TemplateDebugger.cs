@@ -342,7 +342,7 @@ public sealed class TemplateDebugger
     }
 
     /// <summary>止まった後、次の操作のための状態を初期化する (「続行」と同じ)。</summary>
-    internal void ResetHits()
+    public void ResetHits()
     {
         lock (_lock)
         {

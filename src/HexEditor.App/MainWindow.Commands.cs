@@ -110,8 +110,18 @@ public sealed partial class MainWindow
         Commands.Register("file.new", () => New_Click(this, e));
         Commands.Register("file.newWithSize", () => NewWithSize_Click(this, e));
         Commands.Register("file.open", () => Open_Click(this, e));
-        Commands.Register("file.save", () => Save_Click(this, e),
-            () => NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
+        Commands.Register("file.save", async () =>
+        {
+            // テンプレートエディタのタブではテンプレートを保存する (TPL-31)
+            if (ActiveTemplateEditor is { } templateEditor)
+            {
+                await templateEditor.SaveAsync();
+                return;
+            }
+
+            Save_Click(this, e);
+        }, () => ActiveTemplateEditor is not null ? CommandState.Available
+            : NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAs", () => SaveAs_Click(this, e),
             () => NeedsDocument(_ => SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAll", () => SaveAll_Click(this, e), NeedsDocument);
@@ -212,6 +222,7 @@ public sealed partial class MainWindow
         RegisterHashCommands();
         RegisterCompareCommands();
         RegisterStatisticsCommands();
+        RegisterTemplateCommands();
 
         // ---- 設定・ヘルプ ----
         RegisterSettingsCommands();
@@ -303,6 +314,9 @@ public sealed partial class MainWindow
                     return new KeyContext(KeyScope.Panel, text);
                 case Controls.CommandPalette:
                     return new KeyContext(KeyScope.Global, true);
+                case Controls.ICodeEditorHost:
+                    // テンプレートエディタ・スクリプトエディタ (00-overview 8.5)
+                    return new KeyContext(KeyScope.CodeEditor, true);
             }
         }
 

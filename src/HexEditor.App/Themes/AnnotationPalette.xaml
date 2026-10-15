@@ -70,6 +70,31 @@
             <SolidColorBrush x:Key="AnnotationAnalysisBrush" Color="{StaticResource AnnotationAnalysisColor}" />
             <Color x:Key="AnnotationAnalysisBackgroundColor">#FFDFF6DD</Color>
             <SolidColorBrush x:Key="AnnotationAnalysisBackgroundBrush" Color="{StaticResource AnnotationAnalysisBackgroundColor}" />
+            <!--  テンプレートの色分け (TPL-23 の仕様 2・3、TPL-13 の color 属性)。不透明度 (既定 35%) で Hex ビューの背景に重ねて塗る。  -->
+            <SolidColorBrush x:Key="TemplateFollowBorderBrush" Color="#FF0078D4" />
+            <SolidColorBrush x:Key="TemplateDebugMarkerBrush" Color="#FFC50F1F" />
+            <SolidColorBrush x:Key="TemplateBoundaryBrush" Color="#FF605E5C" />
+            <Color x:Key="TemplateAccent1Color">#FF0078D4</Color>
+            <Color x:Key="TemplateAccent2Color">#FFE74856</Color>
+            <Color x:Key="TemplateAccent3Color">#FF00B294</Color>
+            <Color x:Key="TemplateAccent4Color">#FFFFB900</Color>
+            <Color x:Key="TemplateAccent5Color">#FF8764B8</Color>
+            <Color x:Key="TemplateAccent6Color">#FF10893E</Color>
+            <Color x:Key="TemplateAccent7Color">#FFF7630C</Color>
+            <Color x:Key="TemplateAccent8Color">#FF0099BC</Color>
+            <Color x:Key="TemplateAccent9Color">#FFE3008C</Color>
+            <Color x:Key="TemplateAccent10Color">#FF7A7574</Color>
+            <Color x:Key="TemplateAccent11Color">#FF498205</Color>
+            <Color x:Key="TemplateAccent12Color">#FF4F6BED</Color>
+            <Color x:Key="TemplateRedColor">#FFD13438</Color>
+            <Color x:Key="TemplateOrangeColor">#FFCA5010</Color>
+            <Color x:Key="TemplateYellowColor">#FFFFB900</Color>
+            <Color x:Key="TemplateGreenColor">#FF107C10</Color>
+            <Color x:Key="TemplateTealColor">#FF038387</Color>
+            <Color x:Key="TemplateBlueColor">#FF0063B1</Color>
+            <Color x:Key="TemplatePurpleColor">#FF8764B8</Color>
+            <Color x:Key="TemplatePinkColor">#FFE3008C</Color>
+            <Color x:Key="TemplateGrayColor">#FF7A7574</Color>
             <StaticResource x:Key="AnnotationColumnTextBrush" ResourceKey="TextFillColorSecondaryBrush" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
@@ -133,6 +158,31 @@
             <SolidColorBrush x:Key="AnnotationAnalysisBrush" Color="{StaticResource AnnotationAnalysisColor}" />
             <Color x:Key="AnnotationAnalysisBackgroundColor">#FF1E3A1A</Color>
             <SolidColorBrush x:Key="AnnotationAnalysisBackgroundBrush" Color="{StaticResource AnnotationAnalysisBackgroundColor}" />
+            <!--  テンプレートの色分け (TPL-23 の仕様 2・3、TPL-13 の color 属性)。不透明度 (既定 35%) で Hex ビューの背景に重ねて塗る。  -->
+            <SolidColorBrush x:Key="TemplateFollowBorderBrush" Color="#FF4CC2FF" />
+            <SolidColorBrush x:Key="TemplateDebugMarkerBrush" Color="#FFFF99A4" />
+            <SolidColorBrush x:Key="TemplateBoundaryBrush" Color="#FFC8C6C4" />
+            <Color x:Key="TemplateAccent1Color">#FF4CC2FF</Color>
+            <Color x:Key="TemplateAccent2Color">#FFFF99A4</Color>
+            <Color x:Key="TemplateAccent3Color">#FF00E5C7</Color>
+            <Color x:Key="TemplateAccent4Color">#FFFFD335</Color>
+            <Color x:Key="TemplateAccent5Color">#FFC7A4F5</Color>
+            <Color x:Key="TemplateAccent6Color">#FF6CCB5F</Color>
+            <Color x:Key="TemplateAccent7Color">#FFFFAA44</Color>
+            <Color x:Key="TemplateAccent8Color">#FF5FD3F0</Color>
+            <Color x:Key="TemplateAccent9Color">#FFFF7AD9</Color>
+            <Color x:Key="TemplateAccent10Color">#FFB8B2AF</Color>
+            <Color x:Key="TemplateAccent11Color">#FF9AD86E</Color>
+            <Color x:Key="TemplateAccent12Color">#FF8EA4FF</Color>
+            <Color x:Key="TemplateRedColor">#FFFF6B6B</Color>
+            <Color x:Key="TemplateOrangeColor">#FFFFA066</Color>
+            <Color x:Key="TemplateYellowColor">#FFFFD335</Color>
+            <Color x:Key="TemplateGreenColor">#FF6CCB5F</Color>
+            <Color x:Key="TemplateTealColor">#FF4FD1D5</Color>
+            <Color x:Key="TemplateBlueColor">#FF60AEFF</Color>
+            <Color x:Key="TemplatePurpleColor">#FFC7A4F5</Color>
+            <Color x:Key="TemplatePinkColor">#FFFF7AD9</Color>
+            <Color x:Key="TemplateGrayColor">#FFB8B2AF</Color>
             <StaticResource x:Key="AnnotationColumnTextBrush" ResourceKey="TextFillColorSecondaryBrush" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
@@ -169,6 +219,10 @@
             <SolidColorBrush x:Key="AnnotationAnalysisBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
             <SolidColorBrush x:Key="AnnotationAnalysisBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
             <SolidColorBrush x:Key="AnnotationColumnTextBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <!--  ハイコントラストではテンプレートの塗りをやめ、パターンの境目に線を描く (TPL-23 の仕様 4)。  -->
+            <SolidColorBrush x:Key="TemplateBoundaryBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
+            <SolidColorBrush x:Key="TemplateFollowBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="TemplateDebugMarkerBrush" Color="{ThemeResource SystemColorHotlightColor}" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

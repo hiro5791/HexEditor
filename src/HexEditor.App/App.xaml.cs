@@ -145,6 +145,9 @@ public partial class App : Application
 
         // スクリプト (08 の AUTO-01)。ウィンドウのコマンドの登録より先に用意する。
         Services.Scripting.ScriptingService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
+
+        // 構造体テンプレート (07) のパネルと、コマンドライン・スクリプトのつなぎ目 (スクリプトの用意の後)。
+        MainWindow.RegisterTemplatePanels();
         var window = new MainWindow(vm);
         Window = window;
 

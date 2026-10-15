@@ -484,6 +484,7 @@ public sealed partial class MainWindow
 
         view.SetHighlightSource("inspector", (start, end) => InspectorHighlights(view, start, end));
         view.SetHighlightSource("bookmarks", (start, end) => BookmarkHighlights(view, start, end));
+        AttachTemplates(view);
         view.SetOffsetMarkerSource("bookmarks", (start, end) => BookmarkMarks(view, start, end));
 
         // スクロールバーの印 (VIEW-02 の仕様 9。設定でオン): その範囲から始まる最初のブックマークの色。木を引くので件数によらない。
@@ -514,6 +515,7 @@ public sealed partial class MainWindow
             ExtendHexViewDataMenu(menu);
             ExtendHexViewMenu(view, menu);
             ExtendHexViewStatisticsMenu(menu);
+            ExtendHexViewTemplateMenu(menu);
             ExtendHexViewReferenceMenu(menu);
             ExtendHexViewFilesMenu(menu);
         });

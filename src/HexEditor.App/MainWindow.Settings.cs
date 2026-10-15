@@ -132,6 +132,7 @@ public sealed partial class MainWindow
     public void CloseToolPage(string id)
     {
         OnToolPageClosing(id);
+        TemplateEditorClosed(id);
         _toolPages.RemoveAll(p => p.Id == id);
         if (id == "settings")
         {
