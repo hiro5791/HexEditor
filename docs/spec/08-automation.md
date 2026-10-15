@@ -300,7 +300,7 @@
    | `language` | UI の表示言語のタグ (例: `ja`)。スクリプトが自分のメッセージを訳し分けるのに使う |
    | `documents` | 開いているドキュメントの一覧 (読み取り専用の配列) |
    | `activeDocument` | アクティブなドキュメント。ない場合は `null`。代入するとそのタブをアクティブにする |
-   | `open(path, options)` | ファイルを開く。`options`: `readOnly`、`offset`、`select`、`encoding`、`background` (タブをアクティブにしない) |
+   | `open(path, options)` | ファイルを開く。`options`: `readOnly`、`offset`、`select`、`encoding`、`background` (タブをアクティブにしない)。まだ開いていないファイルを開くのは任意のファイルの読み取りに当たるため、AUTO-18 の `fs` と同じく許可 `file-read` が要る (利用者が選んだパス・スクリプトのフォルダ以下は不要)。こうして開いたファイルへの保存 (`save()`、`file.save` などのコマンド) には `file-write` が要る (AUTO-34 の仕様 3) |
    | `openDisk(id, options)` / `openProcess(pid, options)` | ディスク・プロセスメモリを開く (許可 `disk` が必要、AUTO-34) |
    | `newDocument(options)` | 新規ドキュメント。`options.length` と `options.fill` で初期内容を指定できる |
    | `commands.execute(id, args)` | アプリのコマンドを ID で実行する (例: `"edit.fill"`)。メニューやコマンドパレットにある全コマンドを呼べる |
@@ -1579,6 +1579,7 @@ await app.commands.execute("edit.fill", { range: "sel", pattern: "00" });
    | 10 | 内部エラー (想定外の例外。詳細はログ) |
 
 8. ヘッドレスのサブコマンドは GUI のインスタンスの有無に関係なく、そのプロセスの中で完結する。設定 (ハッシュの既定のアルゴリズムなど) は GUI と同じ設定ファイルを読み取り専用で読む。
+   - 実装の注記: `run` は組織の設定 `scripts.policy` (AUTO-34 の仕様 9)、スクリプトの上限 `scripts.js.*` (AUTO-02 の仕様 4)、「署名されたプラグインだけ」(AUTO-35 の仕様 2) を設定ファイルから読む。プラグインの署名の失効の確認は、`hexed` からは通信せずキャッシュだけを使う (AUTO-35 の仕様 5 の `network.offline` と同じ扱い)。
 9. `--unregister`: `hexed --unregister` または `HexEditor.exe --unregister`。設定画面「詳細」の「この PC から登録を解除」(10 の PKG-09) と同じく、Explorer 連携の登録 (右クリックメニュー、ファイル関連付け、スパースパッケージ。09 の UI-54〜UI-56)、ジャンプリスト、トースト通知の登録、PATH への追加、`%TEMP%` の一時フォルダを消す。
    - GUI を起動せず、既存のインスタンスにも転送しない。結果 (消した項目と失敗した項目) を `hexed` では標準出力に、`HexEditor.exe` では完了のメッセージボックスで示す。
    - 終了コード: すべて消せたら 0、消せない項目があれば 3。MSIX 版では登録を Windows が管理するため何もせず、その旨を出して 0 で終わる。

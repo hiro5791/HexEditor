@@ -1190,6 +1190,53 @@ public sealed class ScriptApiTests
     }
 
     [Fact]
+    public async Task App_open_does_not_bypass_the_file_permissions()
+    {
+        using var t = new ScriptTestHost();
+        t.Env.Commands = new SaveCommandStub();
+        string outside = Path.Combine(t.Root, "outside", "secret.bin");
+        Directory.CreateDirectory(Path.GetDirectoryName(outside)!);
+        File.WriteAllBytes(outside, [1, 2, 3, 4]);
+        byte[] before = File.ReadAllBytes(outside);
+        string path = t.WriteScript("opener/open.js",
+            "try { await app.open(script.args.file); console.log('opened'); } catch (e) { console.log(e.name + ' ' + e.permission); }");
+
+        // 許可なし: 開いていないファイルは開けない (file-read)。
+        ScriptRunResult r = await t.Host.RunAndWaitAsync(new ScriptRunRequest
+        {
+            Path = path, Headless = true, CommandLineTrust = true,
+            CommandLineArgs = new Dictionary<string, string> { ["file"] = outside },
+        }, t.Env);
+        ScriptTestHost.AssertSucceeded(r);
+        Assert.Equal("PermissionError file-read", t.OutputText[0]);
+
+        // file-read だけ: 開いて読めるが、保存 (save とコマンドの file.save) は file-write がないので PermissionError。ファイルは変わらない。
+        string writer = t.WriteScript("opener/write.js",
+            "const d = await app.open(script.args.file); console.log(d.readBytes(0, 4).length); d.writeBytes(0, new Uint8Array([255]));"
+            + " try { await d.save(); console.log('saved'); } catch (e) { console.log(e.name + ' ' + e.permission); }"
+            + " try { await app.commands.execute('file.save'); console.log('saved'); } catch (e) { console.log(e.name + ' ' + e.permission); }");
+        ScriptTestHost.AssertSucceeded(await t.Host.RunAndWaitAsync(new ScriptRunRequest
+        {
+            Path = writer, Headless = true, CommandLineTrust = true, CommandLineAllow = [ScriptPermissions.FileRead],
+            CommandLineArgs = new Dictionary<string, string> { ["file"] = outside },
+        }, t.Env));
+        // 1 回目の出力 (1 行) と実行結果の行の後。
+        Assert.Equal(["4", "PermissionError file-write", "PermissionError file-write"], t.OutputText.Skip(2).Take(3));
+        Assert.Equal(before, File.ReadAllBytes(outside));
+    }
+
+    /// <summary><c>file.save</c> だけがある偽のコマンド (実行しても何もしない。確認で止まらなければ「saved」になる)。</summary>
+    private sealed class SaveCommandStub : IScriptCommandService
+    {
+        public IReadOnlyList<CommandInfo> List() => [new CommandInfo("file.save", "Save", "file", [])];
+
+        public bool Exists(string id) => id == "file.save";
+
+        public Task<object?> ExecuteAsync(string id, IReadOnlyDictionary<string, object?> args, IScriptDocumentHost? target, bool headless) =>
+            Task.FromResult<object?>(true);
+    }
+
+    [Fact]
     [Trait("TC", "TC-AUTO-18-03")]
     public async Task Process_run_passes_each_argument_unchanged()
     {

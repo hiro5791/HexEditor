@@ -65,6 +65,7 @@ public sealed class ScriptContext : IDisposable
     private readonly HashSet<string> _denied = new(StringComparer.Ordinal);
     private readonly HashSet<string> _pickedRead = new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<string> _pickedWrite = new(StringComparer.OrdinalIgnoreCase);
+    private readonly HashSet<IScriptDocumentHost> _openedByScript = [];
     private readonly TaskCompletionSource _ended = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly IReadOnlyDictionary<string, object?> _args;
     private IReadOnlyDictionary<string, object?>? _realizedArgs;
@@ -310,6 +311,55 @@ public sealed class ScriptContext : IDisposable
         }
 
         RequirePermission(ScriptPermissions.FileWrite, full);
+    }
+
+    /// <summary>
+    /// スクリプトが <c>app.open</c> でパスを指定して開いたドキュメント (開く前から開いていたものは除く) を記録する。
+    /// 利用者が開いたドキュメントの読み書きは許可なしでできるが (AUTO-34 の仕様 3)、スクリプトが開いたファイルへの保存は
+    /// 任意のファイルの書き込みに当たるため、<c>file-write</c> (または書き込み用に選んだパス) を求める。
+    /// </summary>
+    internal void MarkOpenedByScript(IScriptDocumentHost host)
+    {
+        lock (_lock)
+        {
+            _openedByScript.Add(host);
+        }
+    }
+
+    /// <summary>スクリプトが開いたドキュメントへの保存を確かめる (<see cref="MarkOpenedByScript"/>)。それ以外のドキュメントは何もしない。</summary>
+    internal void RequireSaveToOpenedFile(IScriptDocumentHost host)
+    {
+        bool opened;
+        lock (_lock)
+        {
+            opened = _openedByScript.Contains(host);
+        }
+
+        if (opened && host.Path is { } path)
+        {
+            RequireFileWrite(path);
+        }
+    }
+
+    /// <summary>
+    /// 保存するコマンド (<c>file.save</c> など) をスクリプトから実行する前に、スクリプトが開いた未保存のファイルへの書き込みを確かめる
+    /// (コマンドを経由して <c>file-write</c> の確認を迂回しないため)。
+    /// </summary>
+    internal void RequireSaveToOpenedFiles()
+    {
+        IScriptDocumentHost[] opened;
+        lock (_lock)
+        {
+            opened = [.. _openedByScript];
+        }
+
+        foreach (IScriptDocumentHost host in opened)
+        {
+            if (!host.IsClosed)
+            {
+                RequireSaveToOpenedFile(host);
+            }
+        }
     }
 
     private bool IsPicked(string full, bool write)

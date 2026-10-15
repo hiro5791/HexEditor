@@ -317,6 +317,18 @@ public sealed class PluginLoadingTests
             PluginsRoot = o.PluginsRoot, AppVersion = o.AppVersion, Trust = o.Trust, Verifier = o.Verifier, Output = o.Output, IsElevated = true, Prompts = null,
         });
         Assert.All(t.Manager!.Plugins, p => Assert.NotEqual(PluginState.Enabled, p.State));
+
+        // --trust があっても、信頼の記録のないプラグインは読み込まない (--trust は管理者の確認の代わりで、信頼の代わりではない)。
+        t.Install(TestPlugins.Sample with { Id = "untrusted", Name = "untrusted" });
+        await t.StartAsync(o => new PluginHostOptions
+        {
+            PluginsRoot = o.PluginsRoot, AppVersion = o.AppVersion, Trust = o.Trust, Verifier = o.Verifier, Output = o.Output, IsElevated = true, Prompts = null,
+            CommandLineTrust = true,
+        });
+        Assert.Equal(PluginState.Enabled, t.Manager!.Find("test.sample")!.State);
+        PluginRecord untrusted = t.Manager!.Find("untrusted")!;
+        Assert.NotEqual(PluginState.Enabled, untrusted.State);
+        Assert.False(untrusted.AssemblyLoaded);
     }
 
     // ======================== 署名 (AUTO-35) ========================

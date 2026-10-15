@@ -258,6 +258,18 @@ public sealed class CSharpComponentManager
             }
         }
 
+        // 一覧にない実行可能なファイル (後から置かれた DLL など) は読み込まれうるため拒否する (一覧のファイルだけを確かめても防げない)。
+        foreach (string file in Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories))
+        {
+            string relative = Path.GetRelativePath(folder, file).Replace('\\', '/');
+            string ext = Path.GetExtension(file);
+            if ((ext.Equals(".dll", StringComparison.OrdinalIgnoreCase) || ext.Equals(".exe", StringComparison.OrdinalIgnoreCase))
+                && !manifest.Files.ContainsKey(relative))
+            {
+                throw new CSharpComponentException(Msg.T($"コンポーネントに一覧にないファイルがあります (改ざんの可能性): {relative}", $"The component contains a file that is not in the manifest (possible tampering): {relative}"));
+            }
+        }
+
         foreach (string relative in manifest.MicrosoftSigned)
         {
             string path = Path.Combine(folder, relative.Replace('/', Path.DirectorySeparatorChar));

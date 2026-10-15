@@ -258,6 +258,28 @@ public sealed class RunAndTemplateTests
     }
 
     [Fact]
+    public void Real_script_host_follows_the_policy_and_limits_of_the_gui_settings()
+    {
+        // GUI と同じ設定ファイルを読む (AUTO-36 の仕様 8): scripts.policy = disabled なら --trust があっても実行しない (AUTO-34 の仕様 9)。
+        using var dir = new TempDir();
+        string a = dir.Copy("TD-SEQ-1M", "a.bin");
+        string before = Sha256(a);
+        File.WriteAllText(dir.File("xor.js"), XorScript);
+        Directory.CreateDirectory(dir.File("settings"));
+        File.WriteAllText(Path.Combine(dir.File("settings"), "settings.json"), """{ "scripts.policy": "disabled" }""");
+        CliResult denied = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "xor.js", "a.bin", "--arg", "key=5A", "--save", "--trust", "--lang", "en"]);
+        Assert.Equal(5, denied.ExitCode);
+        Assert.Contains("scripts.policy", denied.Err);
+        Assert.Equal(before, Sha256(a));
+
+        // 実行時間の上限 (scripts.js.timeoutSeconds) も設定から読む: 1 秒で終了コード 7。
+        File.WriteAllText(Path.Combine(dir.File("settings"), "settings.json"), """{ "scripts.js.timeoutSeconds": 1 }""");
+        File.WriteAllText(dir.File("loop.js"), "while (true) {}\n");
+        CliResult limited = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "loop.js", "--trust", "--lang", "en"]);
+        Assert.Equal(7, limited.ExitCode);
+    }
+
+    [Fact]
     [Trait("TC", "TC-AUTO-41-04")]
     public void Real_script_host_errors_exit_with_4_and_the_line_number()
     {
