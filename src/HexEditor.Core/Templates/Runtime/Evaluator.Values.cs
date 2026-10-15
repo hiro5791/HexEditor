@@ -634,6 +634,13 @@ internal sealed partial class Evaluator
         }
 
         Val v = NodeValue(node, converted: true);
+        if (Attr(node.AttributeNodes, "ksy_enum") is { Args.Count: > 0 } ke && ke.Args[0] is LiteralExpr { Value: string enumName } && v.Kind == VK.Int
+            && _program.FindType(enumName.Split("::"), []) is EnumDecl ked)
+        {
+            string? n = EnumInfoOf(ked).NameOf(v.I);
+            return n is null ? $"({v.I.ToString(CultureInfo.InvariantCulture)})" : $"{n} ({v.I.ToString(CultureInfo.InvariantCulture)})";
+        }
+
         if (node.Kind is TemplateNodeKind.Enum or TemplateNodeKind.Flags && node.Type is EnumType or null)
         {
             EnumType? et = node.Type as EnumType ?? (node.Context is not null ? null : null);

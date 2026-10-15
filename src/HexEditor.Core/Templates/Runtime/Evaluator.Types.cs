@@ -91,6 +91,9 @@ internal sealed partial class Evaluator
                 return new PrimType { Name = $"magic<\"{hex}\">", Kind = PrimKind.Magic, Size = bytes.Length, MagicBytes = bytes, MagicMask = mask };
             }
 
+            case "__unsupported":
+                throw ErrorAt(t.Location, TemplateMessages.UnsupportedKaitai,
+                    t.TypeArgs.Count > 0 && t.TypeArgs[0].Value is LiteralExpr { Value: string feature } ? feature : "?");
             case "std::type::Size":
             case "std::type::Bitmask":
             {
@@ -644,7 +647,7 @@ internal sealed partial class Evaluator
         "pointer_map", "allow_null", "expect", "require", "show", "show_all", "visualize", "export", "bookmark", "inspector", "docs",
 
         // .ksy の変換で使う (TPL-33)
-        "substream", "ksy_contents", "ksy_valid", "ksy_terminator", "ksy_pad_right", "ksy_enum",
+        "substream", "ksy_enum", "instance",
     ];
 
     internal static AttributeNode? Attr(List<AttributeNode> list, string name)

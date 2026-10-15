@@ -56,7 +56,27 @@ internal sealed partial class Evaluator
     {
         _loc = d.Location;
         CheckUnknownAttributes(d.Attributes);
-        RtType type = ResolveType(s.Type, f);
+        RtType type;
+        try
+        {
+            type = ResolveType(s.Type, f);
+        }
+        catch (TemplateError e) when (d.Placement is not null && !e.IsLimit)
+        {
+            // 配置したパターンの型のエラー (.ksy の対応していない機能など) は、そのパターンだけのエラーにする
+            var errorNode = new TemplateNode(_result, TemplateNodeKind.Error, d.Name ?? "padding", s.Type.Text, _pos, 0)
+            {
+                Owner = f.Node,
+                Declaration = d.Location,
+                Section = _space.Section,
+            };
+            CountPattern();
+            AttachChild(f, errorNode);
+            RegisterMember(f, errorNode);
+            RecordError(e, errorNode);
+            return;
+        }
+
         CheckUnknownAttributes(type.Attributes);
         List<AttributeNode> attrs = type.Attributes.Count == 0 ? d.Attributes : [.. type.Attributes, .. d.Attributes];
         bool big = s.BigEndianKeyword ?? EndianAttr(d.Attributes, f) ?? EndianAttr(type.Attributes, f) ?? f.BigEndian;
@@ -1007,10 +1027,6 @@ internal sealed partial class Evaluator
         }
 
         ExecBlock(decl.Body, frame);
-        foreach (PatternDeclStmt inst in decl.Instances)
-        {
-            DeclareInstance(inst, frame);
-        }
     }
 
     /// <summary>
@@ -1453,13 +1469,12 @@ internal sealed partial class Evaluator
     // ───────────── .ksy の instances (TPL-33) ─────────────
 
     /// <summary>instances: 結果ツリーで開くか、式で参照したときに評価するパターン。</summary>
-    private void DeclareInstance(PatternDeclStmt inst, Frame f)
+    private void DeclareInstance(Stmt inst, string name, Frame f)
     {
-        Declarator d = inst.Declarators[0];
-        var node = new TemplateNode(_result, TemplateNodeKind.Struct, d.Name!, "instance", f.Start, 0)
+        var node = new TemplateNode(_result, TemplateNodeKind.Struct, name, "instance", f.Start, 0)
         {
             Owner = f.Node,
-            Declaration = d.Location,
+            Declaration = inst.Location,
             Context = f,
         };
         node.Children0 = new PointerChildren(() => ResolveInstance(node, inst, f));
@@ -1474,7 +1489,9 @@ internal sealed partial class Evaluator
 
     private readonly HashSet<TemplateNode> _instanceNodes = [];
 
-    private TemplateNode? ResolveInstance(TemplateNode holder, PatternDeclStmt inst, Frame f)
+    private Stmt? _resolvingInstance;
+
+    private TemplateNode? ResolveInstance(TemplateNode holder, Stmt inst, Frame f)
     {
         long savePos = _pos;
         Space saveSpace = _space;
@@ -1516,7 +1533,17 @@ internal sealed partial class Evaluator
                 TypeEvaluations["instance:" + holder.Name] = TypeEvaluations.GetValueOrDefault("instance:" + holder.Name) + 1;
             }
 
-            ExecStatement(inst, frame);
+            Stmt? saveInst = _resolvingInstance;
+            _resolvingInstance = inst;
+            try
+            {
+                ExecStatement(inst, frame);
+            }
+            finally
+            {
+                _resolvingInstance = saveInst;
+            }
+
             TemplateNode? result = scratch.LastOrDefault();
             if (result is not null)
             {

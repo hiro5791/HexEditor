@@ -18,6 +18,12 @@ internal sealed partial class Evaluator
 
         switch (s)
         {
+            case PatternDeclStmt p when !ReferenceEquals(p, _resolvingInstance) && p.Declarators.Count == 1 && Attr(p.Declarators[0].Attributes, "instance") is not null:
+                DeclareInstance(p, p.Declarators[0].Name ?? "instance", f);
+                return Flow.Normal;
+            case LocalDeclStmt l when !ReferenceEquals(l, _resolvingInstance) && Attr(l.Attributes, "instance") is not null:
+                DeclareInstance(l, l.Name, f);
+                return Flow.Normal;
             case PatternDeclStmt p:
                 DeclarePatterns(p, f);
                 return Flow.Normal;

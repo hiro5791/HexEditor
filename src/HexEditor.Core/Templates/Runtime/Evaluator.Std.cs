@@ -38,7 +38,7 @@ internal sealed partial class Evaluator
         "std::section::create", "std::section::copy", "std::section::append", "std::section::size", "std::section::open_in_tab",
         "std::ptr::relative_to", "std::ptr::null_if",
         "std::sys::demangle", "std::sys::file_name", "std::sys::file_extension", "std::sys::detected_mime",
-        "std::ksy::io_size", "std::ksy::io_pos", "std::ksy::io_eof", "std::ksy::bytes_terminate", "std::ksy::bytes_strip_right",
+        "std::ksy::io_size", "std::ksy::io_pos", "std::ksy::io_base", "std::ksy::io_eof", "std::ksy::bytes_terminate", "std::ksy::bytes_strip_right",
         "std::ksy::to_s", "std::ksy::to_i", "std::ksy::reverse", "std::ksy::substring", "std::ksy::index",
     ];
 
@@ -620,6 +620,8 @@ internal sealed partial class Evaluator
             // ── .ksy の式言語の補助 (TPL-33)
             case "std::ksy::io_size":
                 return Val.Int(Math.Min(_space.Length, f.WindowEnd) - f.IoBase);
+            case "std::ksy::io_base":
+                return Val.Int(f.IoBase);
             case "std::ksy::io_pos":
                 return Val.Int(_pos - f.IoBase);
             case "std::ksy::io_eof":

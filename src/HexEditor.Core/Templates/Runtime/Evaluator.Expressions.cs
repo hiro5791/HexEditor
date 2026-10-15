@@ -673,6 +673,21 @@ internal sealed partial class Evaluator
         }
 
         TemplateNode? child = MemberOf(node, name);
+        if (child is null && name == "parent")
+        {
+            // parent.parent (TPL-04 の仕様 9)
+            TemplateNode? owner = node.Owner;
+            while (owner is { Kind: TemplateNodeKind.Array })
+            {
+                owner = owner.Owner;
+            }
+
+            if (owner is not null)
+            {
+                return Val.Node(owner);
+            }
+        }
+
         if (child is null)
         {
             throw ErrorAt(at.Location, TemplateMessages.UnknownMember, node.Path, name);
