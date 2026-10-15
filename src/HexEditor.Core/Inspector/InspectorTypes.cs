@@ -13,6 +13,9 @@ public enum InspectorGroup
     DateTime,
     Other,
     User,
+
+    /// <summary>プラグインが追加した型 (08 の AUTO-31 の IInspectorType)。行の構成 (INSP-19) には含めず、パネルの最後に出す。</summary>
+    Plugin,
 }
 
 /// <summary>バイト順。</summary>

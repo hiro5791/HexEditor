@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using HexEditor.Core.Scripting.Repl;
 using HexEditor.Sdk;
 using Jint;
 using JintEngine = Jint.Engine;
@@ -19,6 +20,11 @@ internal static class JsScriptRunner
 
     public static Task<ScriptExecution> RunAsync(ScriptContext context, string code, ScriptLimits limits)
     {
+        if (context.Request.Repl is { } repl)
+        {
+            return repl.ExecuteAsync(context, code, limits);
+        }
+
         var tcs = new TaskCompletionSource<ScriptExecution>(TaskCreationOptions.RunContinuationsAsynchronously);
         var thread = new Thread(() =>
         {
@@ -79,7 +85,7 @@ internal sealed class JsSession : IScriptThread, IDisposable
         _budget = new ExecutionBudget(limits.Time, limits.MemoryBytes);
     }
 
-    public ScriptContext Context { get; }
+    public ScriptContext Context { get; private set; }
 
     public bool IsCurrent => Thread.CurrentThread == _thread;
 
@@ -244,7 +250,7 @@ internal sealed class JsSession : IScriptThread, IDisposable
         _thread = Thread.CurrentThread;
         string mainKey = Context.Path is not null ? Path.GetFullPath(Context.Path) : "script:" + Context.Name;
         var loader = new ScriptModuleLoader(mainKey, code, Context.ScriptFolder, Context.Host.Folders.Library);
-        if (!Context.Headless)
+        if (!Context.Headless && !Context.Request.StopOnTimeLimit)
         {
             _budget.OnTimeLimit = AskContinue;
         }
@@ -257,17 +263,25 @@ internal sealed class JsSession : IScriptThread, IDisposable
             Post(() => { });
         };
 
+        Debugging.JsDebugSession? debugger = Context.Request.Debugger;
         _engine = new JintEngine(o =>
         {
             o.Interop.Enabled = false;
             o.LimitRecursion(_limits.RecursionDepth);
             o.Constraints.Constraints.Add(_budget);
             o.EnableModules(loader);
+            if (debugger is not null)
+            {
+                o.DebugMode();
+                o.Debugger.InitialStepMode = debugger.InitialStepMode;
+                o.Debugger.StatementHandling = Jint.Runtime.Debugger.DebuggerStatementHandling.Script;
+            }
         });
 
         try
         {
             Setup();
+            debugger?.Attach(Context, _engine, _budget, mainKey, code);
             _budget.Resume();
             var op = _engine.Modules.StartImport(mainKey);
             _engine.Advanced.ProcessTasks();
@@ -305,32 +319,44 @@ internal sealed class JsSession : IScriptThread, IDisposable
 
             return Context.StopRequested && !Context.StopCalled ? ScriptExecution.Stopped() : ScriptExecution.Success;
         }
-        catch (ScriptTerminatedException ex)
+        catch (Exception ex)
         {
-            return ex.Normal || Context.StopCalled ? ScriptExecution.Success : ScriptExecution.Stopped(Msg.T("強制的に中断しました。", "Forcibly interrupted."));
+            return Translate(ex) ?? throw new InvalidOperationException(ex.Message, ex);
         }
-        catch (ScriptLimitExceededException ex)
+        finally
         {
-            return ScriptExecution.Error(ScriptFailure.Limit, ex.Message, [Location(ex.Message)]);
+            debugger?.Detach();
         }
-        catch (RecursionDepthOverflowException)
+    }
+
+    /// <summary>実行中に起きた例外を実行の結果にする。扱わない例外は null。</summary>
+    private ScriptExecution? Translate(Exception exception)
+    {
+        switch (exception)
         {
-            string message = Msg.T($"再帰の深さの上限 {_limits.RecursionDepth} を超えました。", $"The recursion depth limit of {_limits.RecursionDepth} was exceeded.");
-            return ScriptExecution.Error(ScriptFailure.Limit, message, [Location(message)]);
-        }
-        catch (Acornima.ParseErrorException ex)
-        {
-            return ScriptExecution.Error(ScriptFailure.ScriptError, Msg.T("構文エラー: ", "Syntax error: ") + ex.Description,
-                [new ScriptDiagnostic(ex.Description, ex.SourceFile ?? Context.Path, ex.LineNumber, ex.Column, "SyntaxError")]);
-        }
-        catch (JavaScriptException ex)
-        {
-            return FromError(ex.Error, ex);
-        }
-        catch (OutOfMemoryException)
-        {
-            string message = Msg.T($"メモリの上限 {ExecutionBudget.FormatBytes(_limits.MemoryBytes)} を超えました。", $"The memory limit of {ExecutionBudget.FormatBytes(_limits.MemoryBytes)} was exceeded.");
-            return ScriptExecution.Error(ScriptFailure.Limit, message, [Location(message)]);
+            case ScriptTerminatedException ex:
+                return ex.Normal || Context.StopCalled ? ScriptExecution.Success : ScriptExecution.Stopped(Msg.T("強制的に中断しました。", "Forcibly interrupted."));
+            case ScriptLimitExceededException ex:
+                return ScriptExecution.Error(ScriptFailure.Limit, ex.Message, [Location(ex.Message)]);
+            case RecursionDepthOverflowException:
+            {
+                string message = Msg.T($"再帰の深さの上限 {_limits.RecursionDepth} を超えました。", $"The recursion depth limit of {_limits.RecursionDepth} was exceeded.");
+                return ScriptExecution.Error(ScriptFailure.Limit, message, [Location(message)]);
+            }
+
+            case Acornima.ParseErrorException ex:
+                return ScriptExecution.Error(ScriptFailure.ScriptError, Msg.T("構文エラー: ", "Syntax error: ") + ex.Description,
+                    [new ScriptDiagnostic(ex.Description, ex.SourceFile ?? Context.Path, ex.LineNumber, ex.Column, "SyntaxError")]);
+            case JavaScriptException ex:
+                return FromError(ex.Error, ex);
+            case OutOfMemoryException:
+            {
+                string message = Msg.T($"メモリの上限 {ExecutionBudget.FormatBytes(_limits.MemoryBytes)} を超えました。", $"The memory limit of {ExecutionBudget.FormatBytes(_limits.MemoryBytes)} was exceeded.");
+                return ScriptExecution.Error(ScriptFailure.Limit, message, [Location(message)]);
+            }
+
+            default:
+                return null;
         }
     }
 
@@ -385,22 +411,8 @@ internal sealed class JsSession : IScriptThread, IDisposable
         ObjectInstance helpers = _engine.Call(preludeFn, JsValue.Undefined, [host]).AsObject();
         _binder = new JsBinder(_engine, this, helpers);
 
-        // グローバル (AUTO-03 の仕様 2 と同じ名前。AUTO-04 の仕様 1)。
         Api.ScriptApp app = Context.App;
-        JsValue appJs = _binder.Wrap(app, typeof(IApp));
-        Define("app", appJs);
-        Define("doc", _binder.Wrap(app.ActiveDocument, typeof(IDocument)));
-        Define("ui", _binder.Wrap(app.Ui, typeof(IUi)));
-        Define("hash", _binder.Wrap(app.Hash, typeof(IHash)));
-        Define("clipboard", _binder.Wrap(app.Clipboard, typeof(IClipboard)));
-        Define("settings", _binder.Wrap(app.Settings, typeof(ISettings)));
-        Define("script", _binder.Wrap(app.Script, typeof(IScript)));
-        Define("inspector", _binder.Wrap(app.Inspector, typeof(IInspector)));
-        Define("text", _binder.Wrap(app.Text, typeof(IText)));
-        Define("templates", _binder.Wrap(app.Templates, typeof(ITemplates)));
-        Define("fs", _binder.Wrap(app.Fs, typeof(IFileSystem)));
-        Define("net", _binder.Wrap(app.Net, typeof(INet)));
-        Define("process", _binder.Wrap(app.Process, typeof(IProcessRunner)));
+        JsValue appJs = DefineGlobals();
 
         // 組み込みモジュール (AUTO-02 の仕様 3)。
         _engine.Modules.Add(ScriptModuleLoader.BuiltinPrefix + "hash", b =>
@@ -427,8 +439,163 @@ internal sealed class JsSession : IScriptThread, IDisposable
         _engine.Modules.Add(ScriptModuleLoader.BuiltinPrefix + "text", b => b.ExportValue("default", _binder.Wrap(app.Text, typeof(IText))));
     }
 
+    /// <summary>グローバル (AUTO-03 の仕様 2 と同じ名前。AUTO-04 の仕様 1)。コンソールでは入力ごとに今の実行のものに定義し直す。</summary>
+    private JsValue DefineGlobals()
+    {
+        Api.ScriptApp app = Context.App;
+        JsValue appJs = _binder.Wrap(app, typeof(IApp));
+        Define("app", appJs);
+        Define("doc", _binder.Wrap(app.ActiveDocument, typeof(IDocument)));
+        Define("ui", _binder.Wrap(app.Ui, typeof(IUi)));
+        Define("hash", _binder.Wrap(app.Hash, typeof(IHash)));
+        Define("clipboard", _binder.Wrap(app.Clipboard, typeof(IClipboard)));
+        Define("settings", _binder.Wrap(app.Settings, typeof(ISettings)));
+        Define("script", _binder.Wrap(app.Script, typeof(IScript)));
+        Define("inspector", _binder.Wrap(app.Inspector, typeof(IInspector)));
+        Define("text", _binder.Wrap(app.Text, typeof(IText)));
+        Define("templates", _binder.Wrap(app.Templates, typeof(ITemplates)));
+        Define("fs", _binder.Wrap(app.Fs, typeof(IFileSystem)));
+        Define("net", _binder.Wrap(app.Net, typeof(INet)));
+        Define("process", _binder.Wrap(app.Process, typeof(IProcessRunner)));
+        return appJs;
+    }
+
+    private bool _redefinableGlobals;
+
     private void Define(string name, JsValue value) =>
-        _engine.Global.FastSetProperty(name, new Jint.Runtime.Descriptors.PropertyDescriptor(value, writable: false, enumerable: false, configurable: false));
+        _engine.Global.FastSetProperty(name, new Jint.Runtime.Descriptors.PropertyDescriptor(value, writable: false, enumerable: false, configurable: _redefinableGlobals));
+
+    // ---- コンソールのセッション (AUTO-23) ----
+
+    /// <summary>コンソールのセッションを始める (セッションのスレッドで呼ぶ)。変数は入力をまたいで保たれる。</summary>
+    public void InitializeRepl()
+    {
+        _thread = Thread.CurrentThread;
+        _redefinableGlobals = true;
+        var loader = new ScriptModuleLoader("script:console", "", null, Context.Host.Folders.Library);
+        _engine = new JintEngine(o =>
+        {
+            o.Interop.Enabled = false;
+            o.LimitRecursion(_limits.RecursionDepth);
+            o.Constraints.Constraints.Add(_budget);
+            o.EnableModules(loader);
+        });
+        Setup();
+    }
+
+    /// <summary>
+    /// 入力を 1 つ実行する。入力ごとの実行 (<paramref name="context"/>) に付け替え、実行時間・メモリの上限も入力ごとに数える
+    /// (AUTO-23 の仕様 8)。結果が Promise なら、終わるまで待ってその値を返す。
+    /// </summary>
+    public ScriptExecution ExecuteRepl(ScriptContext context, string code, ScriptLimits limits, out ReplValue? result)
+    {
+        Context = context;
+        result = null;
+        _budget.Restart(limits.Time, limits.MemoryBytes);
+        _budget.OnTimeLimit = !context.Headless && !context.Request.StopOnTimeLimit ? AskContinue : null;
+        context.Clock = _budget;
+        context.Thread = this;
+        context.ForceStop = () =>
+        {
+            _budget.RequestForceStop();
+            Post(() => { });
+        };
+        try
+        {
+            DefineGlobals();
+            _budget.Resume();
+            JsValue value = EvaluateInput(code);
+            if (value.IsPromise())
+            {
+                // Promise (一括処理など) は、終わるまでイベントループを回して待ち、その値を結果にする。
+                bool settled = false;
+                bool rejected = false;
+                JsValue settledValue = JsValue.Undefined;
+                ObjectInstance promise = value.AsObject();
+                _engine.Call(promise.Get("then"), promise,
+                [
+                    new ClrFunction(_engine, "resolved", (_, a) =>
+                    {
+                        settled = true;
+                        settledValue = a.Length > 0 ? a[0] : JsValue.Undefined;
+                        return JsValue.Undefined;
+                    }),
+                    new ClrFunction(_engine, "rejected", (_, a) =>
+                    {
+                        settled = true;
+                        rejected = true;
+                        settledValue = a.Length > 0 ? a[0] : JsValue.Undefined;
+                        return JsValue.Undefined;
+                    }),
+                ]);
+                PumpUntil(() => settled);
+                if (rejected)
+                {
+                    throw new JavaScriptException(settledValue);
+                }
+
+                value = settledValue;
+            }
+
+            _budget.Suspend();
+            _budget.CheckMemory();
+            result = JsReplFormatter.Format(value);
+            return context.StopRequested && !context.StopCalled ? ScriptExecution.Stopped() : ScriptExecution.Success;
+        }
+        catch (Exception ex)
+        {
+            return Translate(ex) ?? throw new InvalidOperationException(ex.Message, ex);
+        }
+        finally
+        {
+            _budget.Suspend();
+        }
+    }
+
+    /// <summary>
+    /// 入力を評価する。<c>await</c> を含む入力が構文エラーになる場合は、<c>async</c> の関数に包んで評価し直す
+    /// (式ならその値を返す。文なら値は返さず、そこで宣言した変数は残らない)。
+    /// </summary>
+    private JsValue EvaluateInput(string code)
+    {
+        try
+        {
+            return _engine.Evaluate(code, "console");
+        }
+        catch (Exception ex) when (IsSyntaxError(ex) && code.Contains("await", StringComparison.Ordinal))
+        {
+            try
+            {
+                return _engine.Evaluate("(async () => { return (" + code + "\n); })()", "console");
+            }
+            catch (Exception inner) when (IsSyntaxError(inner))
+            {
+                return _engine.Evaluate("(async () => { " + code + "\n })()", "console");
+            }
+        }
+    }
+
+    private static bool IsSyntaxError(Exception ex) =>
+        ex is Acornima.ParseErrorException || (ex is JavaScriptException js && js.Error is ObjectInstance o && o.Get("name").ToString() == "SyntaxError");
+
+    /// <summary>条件が満たされるまで、イベントループ (一括処理の完了など) を回す。</summary>
+    private void PumpUntil(Func<bool> done)
+    {
+        _engine.Advanced.ProcessTasks();
+        while (!done())
+        {
+            if (_budget.ForceStopRequested)
+            {
+                throw new ScriptTerminatedException(_budget.NormalStop);
+            }
+
+            _budget.Suspend();
+            BlockingCollection<Action>.TakeFromAny([_queue, _extensionQueue], out Action? next);
+            _budget.Resume();
+            next!();
+            _engine.Advanced.ProcessTasks();
+        }
+    }
 
     private ScriptExecution FromError(JsValue error, JavaScriptException? ex = null)
     {

@@ -179,7 +179,7 @@ public sealed class ScriptHost : IDisposable
         Msg.Current = environment.Language;
         string fallbackName = request.DisplayName ?? (request.Path is not null ? Path.GetFileName(request.Path) : "script");
         ScriptLanguage language = request.Language ?? (request.Path is not null ? LanguageOf(request.Path) ?? ScriptLanguage.JavaScript : ScriptLanguage.JavaScript);
-        var run = new ScriptRun(this, fallbackName, request.Path, language, _time);
+        var run = new ScriptRun(this, fallbackName, request.Path, language, _time) { Origin = request.Origin };
         if (request.Origin is ScriptOrigin.File or ScriptOrigin.Editor or ScriptOrigin.BundledSample)
         {
             LastRequest = request;
@@ -227,7 +227,11 @@ public sealed class ScriptHost : IDisposable
 
         run.Context?.Dispose();
         run.ExecutionFinished = true;
-        WriteResultLine(run, result, env);
+        if (!request.Quiet)
+        {
+            WriteResultLine(run, result, env);
+        }
+
         run.Complete(result);
         RaiseRunningChanged(env);
     }
@@ -283,6 +287,12 @@ public sealed class ScriptHost : IDisposable
         if (args is null)
         {
             return Fail(run, ScriptFailure.Canceled, Msg.T("パラメータの入力がキャンセルされました。", "Parameter input was canceled."), started, status: ScriptRunStatus.NotRun);
+        }
+
+        // 信頼の確認とパラメータは元の本文で行った。実行する本文はその後に変換する (マクロの繰り返し再生。AUTO-28)。
+        if (request.CodeWrapper is { } wrap)
+        {
+            code = wrap(code);
         }
 
         string? folder = request.Path is not null ? Path.GetDirectoryName(Path.GetFullPath(request.Path)) : null;

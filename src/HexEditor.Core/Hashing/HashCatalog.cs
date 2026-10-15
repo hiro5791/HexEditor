@@ -100,6 +100,9 @@ public sealed class HashAlgorithmInfo
     /// <summary>利用者が定義したカスタム CRC (ANA-20)。</summary>
     public bool IsCustom { get; init; }
 
+    /// <summary>プラグインが追加したアルゴリズムのプラグイン名 (ツールチップに出す。08 の AUTO-31 の仕様 2)。本体のものは null。</summary>
+    public string? PluginName { get; init; }
+
     public HashParameterKinds Parameters { get; }
 
     /// <summary>安全でないことを行の注記に表示する (MD5、SHA-1)。</summary>
@@ -214,8 +217,25 @@ public static partial class HashCatalog
     public static void SetCustom(IReadOnlyList<HashAlgorithmInfo> custom)
     {
         _custom = [.. custom];
+        Rebuild();
+    }
+
+    private static IReadOnlyList<HashAlgorithmInfo> _plugins = [];
+
+    /// <summary>プラグインが追加したアルゴリズム (08 の AUTO-31。一覧の最後)。</summary>
+    public static IReadOnlyList<HashAlgorithmInfo> Plugins => _plugins;
+
+    /// <summary>プラグインのアルゴリズムの一覧を置き換える (登録簿が変わるたび)。本体の ID と同じものは加えない。</summary>
+    public static void SetPlugins(IReadOnlyList<HashAlgorithmInfo> plugins)
+    {
+        _plugins = [.. plugins.Where(p => !BuiltIn.Any(b => string.Equals(b.Id, p.Id, StringComparison.OrdinalIgnoreCase)))];
+        Rebuild();
+    }
+
+    private static void Rebuild()
+    {
         int lastCrc = BuiltIn.ToList().FindLastIndex(a => a.Group == HashGroup.Crc);
-        All = [.. BuiltIn.Take(lastCrc + 1), .. _custom, .. BuiltIn.Skip(lastCrc + 1)];
+        All = [.. BuiltIn.Take(lastCrc + 1), .. _custom, .. BuiltIn.Skip(lastCrc + 1), .. _plugins];
         CustomChanged?.Invoke(null, EventArgs.Empty);
     }
 

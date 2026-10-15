@@ -95,6 +95,12 @@ internal sealed class JsBinder
         }
 
         Type runtime = value.GetType();
+        if (Api.PluginApiObjects.IsApi(value))
+        {
+            // プラグインがスクリプトに提供するオブジェクト (AUTO-31 の IScriptApiProvider): 公開のメンバーを持つ生きたオブジェクトとして包む。
+            return WrapperFor(value, runtime);
+        }
+
         if (AsyncItemType(runtime) is Type itemType)
         {
             return (JsValue)typeof(JsBinder).GetMethod(nameof(AsyncIterable), BindingFlags.NonPublic | BindingFlags.Instance)!
@@ -630,7 +636,9 @@ internal sealed class JsBinder
 
         if (t == typeof(TransformOperand))
         {
+            // バイト列 (hex のパラメータの値など) は繰り返しのキーとして Hex 文字列と同じに扱う。
             return v.IsString() ? (TransformOperand)v.AsString()
+                : v.IsUint8Array() ? (TransformOperand)Convert.ToHexString(v.AsUint8Array())
                 : v.IsBigInt() ? (TransformOperand)BigOf(v)
                 : (TransformOperand)Integer(v, name, long.MinValue, long.MaxValue);
         }

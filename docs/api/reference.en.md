@@ -124,6 +124,12 @@ Network (permission needed).
 
 External programs (permission needed).
 
+### App.plugins
+
+`readonly plugins: Plugins`
+
+Installed plugins and the objects they provide to scripts (AUTO-31).
+
 ### App.open
 
 `open(path: string, options?: OpenOptions): Promise<Document>`
@@ -805,6 +811,56 @@ Network access of scripts (AUTO-18, permission `network`).
 HTTP(S) GET or POST. The response body is limited to 100 MB.
 
 Permission: `network`
+
+## PluginHandle
+
+One plugin seen from scripts.
+
+### PluginHandle.id
+
+`readonly id: string`
+
+The plugin ID.
+
+### PluginHandle.name
+
+`readonly name: string`
+
+The display name.
+
+### PluginHandle.version
+
+`readonly version: string`
+
+The version.
+
+### PluginHandle.enabled
+
+`readonly enabled: boolean`
+
+True when the plugin is loaded and running.
+
+### PluginHandle.api
+
+`readonly api: any | null`
+
+The object the plugin provides to scripts (`IScriptApiProvider`), or null.
+
+## Plugins
+
+Installed plugins (AUTO-31, AUTO-32).
+
+### Plugins.list
+
+`list(): PluginInfo[]`
+
+All plugins with their state.
+
+### Plugins.get
+
+`get(id: string): PluginHandle | null`
+
+A plugin by ID, or null when it is not installed.
 
 ## ProcessRunner
 
@@ -1916,6 +1972,40 @@ Suggested file name (save dialog).
 
 The dialog title.
 
+## PluginInfo
+
+A plugin and its state.
+
+### PluginInfo.id
+
+`readonly id: string`
+
+Plugin ID.
+
+### PluginInfo.name
+
+`readonly name: string`
+
+Display name.
+
+### PluginInfo.version
+
+`readonly version: string`
+
+Version.
+
+### PluginInfo.state
+
+`readonly state: string`
+
+`enabled`, `disabled`, `failed`, `suspended` or `notLoaded`.
+
+### PluginInfo.reason
+
+`readonly reason: string | null`
+
+Why it is not enabled, or null.
+
 ## ProcessOptions
 
 Options of `run`.
@@ -2192,9 +2282,9 @@ A range argument: either a `ByteRange` or a text in the input expression syntax 
 
 ## TransformOperand
 
-The operand of a data operation: a number (JavaScript: `number` or `bigint`) or a Hex string used as a repeating key.
+The operand of a data operation: a number (JavaScript: `number` or `bigint`) or a repeating key as a Hex string (JavaScript: a `Uint8Array`, such as the value of a `hex` script parameter, is the same key).
 
-`type TransformOperand = number | bigint | string`
+`type TransformOperand = number | bigint | string | Uint8Array`
 
 ## Errors
 

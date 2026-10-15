@@ -912,7 +912,7 @@ public sealed partial class MainWindow
             };
         }
 
-        ColoringRuleSet set = ColoringRuleSet.Compile(a.ColoringRules, GlobalColoringRules.Rules, new EditorExpressionContext(a.Document.Editor));
+        ColoringRuleSet set = ColoringRuleSet.Compile(a.ColoringRules, GlobalColoringRules.Effective, new EditorExpressionContext(a.Document.Editor));
         if (!SameRules(a.Coloring.Rules, set))
         {
             a.Coloring.Rules = set;

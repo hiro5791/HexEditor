@@ -130,10 +130,11 @@ public readonly struct EncodingArg
 }
 
 /// <summary>
-/// The operand of a data operation: a number (JavaScript: <c>number</c> or <c>bigint</c>) or a Hex string used as a repeating key.
-/// <ja>データ演算のオペランド。数値 (JavaScript では <c>number</c> か <c>bigint</c>) か、繰り返しのキーとして使う Hex 文字列。</ja>
+/// The operand of a data operation: a number (JavaScript: <c>number</c> or <c>bigint</c>) or a repeating key as a Hex string
+/// (JavaScript: a <c>Uint8Array</c>, such as the value of a <c>hex</c> script parameter, is the same key).
+/// <ja>データ演算のオペランド。数値 (JavaScript では <c>number</c> か <c>bigint</c>) か、繰り返しのキー (Hex 文字列。JavaScript では <c>hex</c> のパラメータの値などの <c>Uint8Array</c> も同じキーとして使える)。</ja>
 /// </summary>
-[TsType("number | bigint | string")]
+[TsType("number | bigint | string | Uint8Array")]
 public readonly struct TransformOperand
 {
     private TransformOperand(BigInteger? value, string? key)

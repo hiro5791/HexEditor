@@ -273,11 +273,26 @@ public static class BuiltInSettings
         new("scripts.js.memoryMB", SettingCategories.Automation, SettingKind.Int, 512) { Min = 16, Max = 4096, Order = 20, Group = "scriptsJs" },
         new("scripts.js.recursionDepth", SettingCategories.Automation, SettingKind.Int, 1000) { Min = 100, Max = 10000, Order = 30, Group = "scriptsJs" },
         new("scripts.maxConcurrent", SettingCategories.Automation, SettingKind.Int, 4) { Min = 1, Max = 16, Order = 40 },
+        // スクリプトの作成と管理 (AUTO-19、AUTO-21、AUTO-24)。
+        new("scripts.output.maxLines", SettingCategories.Automation, SettingKind.Int, 10_000) { Min = 100, Max = 1_000_000, Order = 50, Group = "scriptsOutput" },
+        new("scripts.output.autoShow", SettingCategories.Automation, SettingKind.Bool, true) { Order = 60, Group = "scriptsOutput" },
+        new("scripts.debug.exceptions", SettingCategories.Automation, SettingKind.Choice, "uncaught")
+        {
+            Options = ["none", "uncaught", "all"], Order = 70, Group = "scriptsEditor",
+        },
+        // スクリプト一覧に加えるフォルダ (複数。チームで共有するフォルダなど。AUTO-19 の仕様 1)。専用の区画で編集する。
+        new("scripts.folders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 80, ShowInPage = false },
         // 組織向けの設定 (AUTO-34 の仕様 9)。設定ファイルに書く。設定画面では変更できない。
         new("scripts.policy", SettingCategories.Automation, SettingKind.Choice, "none")
         {
             Options = ["none", "disabled", "signedPluginsOnly"], Order = 90, ShowInPage = false, Exportable = false,
         },
+
+        // ---- 自動化: プラグイン (08 の AUTO-33、AUTO-35) ----
+        // 署名されたプラグインだけを読み込む (AUTO-35 の仕様 2。既定オフ)。反映は再起動後 (読み込みは起動時だけ)。
+        new("plugins.signedOnly", SettingCategories.Automation, SettingKind.Bool, false) { Order = 100, Group = "plugins", RequiresRestart = true },
+        // 開発用のフォルダ (AUTO-33。ビルドの出力先)。プラグインマネージャで編集する。
+        new("plugins.devFolders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 110, ShowInPage = false, Exportable = false },
 
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },

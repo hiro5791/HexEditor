@@ -91,6 +91,9 @@ public sealed class CommandHost
 
         CommandService.RecordExecuted(id, fromPalette);
         AppLog.Info($"Command: {id}");
+
+        // マクロの記録中は、コマンドの実行を記録する (ダイアログを使うコマンドは、確定した値を処理の中から報告する。AUTO-27)。
+        using IDisposable? recording = Services.Scripting.MacroHooks.BeginCommand(id);
         await _handlers[id].Execute(argument);
         StatesChanged?.Invoke();
         return true;

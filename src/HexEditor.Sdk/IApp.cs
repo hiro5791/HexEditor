@@ -75,6 +75,9 @@ public interface IApp
     /// <summary>External programs (permission needed). <ja>外部プログラム (許可が必要)。</ja></summary>
     IProcessRunner Process { get; }
 
+    /// <summary>Installed plugins and the objects they provide to scripts (AUTO-31). <ja>入っているプラグインと、プラグインがスクリプトに提供するオブジェクト (AUTO-31)。</ja></summary>
+    IPlugins Plugins { get; }
+
     /// <summary>
     /// Subscribes to an event: <c>documentOpened</c>, <c>documentClosed</c>, <c>activeDocumentChanged</c>, <c>beforeSave</c>,
     /// <c>afterSave</c> or <c>selectionChanged</c> (at most every 100 ms). A script with subscriptions keeps running until
@@ -108,4 +111,37 @@ public interface ICommands
 
     /// <summary>All commands (IDs, display names, arguments). <ja>コマンドの一覧 (ID・表示名・引数)。</ja></summary>
     IReadOnlyList<CommandInfo> List();
+}
+
+/// <summary>Installed plugins (AUTO-31, AUTO-32). <ja>入っているプラグイン (AUTO-31、AUTO-32)。</ja></summary>
+public interface IPlugins
+{
+    /// <summary>All plugins with their state. <ja>すべてのプラグインと状態。</ja></summary>
+    IReadOnlyList<PluginInfo> List();
+
+    /// <summary>A plugin by ID, or null when it is not installed. <ja>ID でプラグインを取得する。入っていなければ null。</ja></summary>
+    IPluginHandle? Get(string id);
+}
+
+/// <summary>One plugin seen from scripts. <ja>スクリプトから見たプラグイン 1 つ。</ja></summary>
+public interface IPluginHandle
+{
+    /// <summary>The plugin ID. <ja>プラグイン ID。</ja></summary>
+    string Id { get; }
+
+    /// <summary>The display name. <ja>表示名。</ja></summary>
+    string Name { get; }
+
+    /// <summary>The version. <ja>バージョン。</ja></summary>
+    string Version { get; }
+
+    /// <summary>True when the plugin is loaded and running. <ja>読み込まれて動いているか。</ja></summary>
+    bool Enabled { get; }
+
+    /// <summary>
+    /// The object the plugin provides to scripts (<c>IScriptApiProvider</c>), or null.
+    /// <ja>プラグインがスクリプトに提供するオブジェクト (<c>IScriptApiProvider</c>)。なければ null。</ja>
+    /// </summary>
+    [TsType("any")]
+    object? Api { get; }
 }

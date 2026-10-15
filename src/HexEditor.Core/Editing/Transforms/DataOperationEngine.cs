@@ -174,6 +174,47 @@ public sealed class DataOperationRunner
         return new DataOperationResult(results, stats);
     }
 
+    /// <summary>
+    /// 外から渡した変換 (プラグインのデータ演算。08 の AUTO-31 の <c>IDataTransform</c>) を、本体の演算と同じくチャンクごとにかける。
+    /// <paramref name="transform"/> はチャンク (最大 <see cref="ChunkSize"/>) とその先頭のドキュメントでのオフセットを受け取り、その場で書き換える。長さは変えない。
+    /// </summary>
+    public DataOperationResult RunTransform(DocumentSnapshot snapshot, IReadOnlyList<TargetRange> ranges, Action<Span<byte>, long> transform,
+        LongRunningOperation? operation = null)
+    {
+        ranges = SelectionRanges.Normalize(ranges);
+        foreach (TargetRange r in ranges)
+        {
+            if (r.Offset < 0 || r.End > snapshot.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(ranges), "対象範囲がドキュメントの範囲外です。");
+            }
+        }
+
+        operation?.SetTotal(TotalBytes(ranges));
+        CheckSpace(ranges.Where(r => r.Length > InMemoryLimit).Sum(r => r.Length));
+        var stats = new DataOperationStats();
+        var results = new List<RangeReplacement>();
+        long done = 0;
+        try
+        {
+            foreach (TargetRange range in ranges)
+            {
+                TargetRange current = range;
+                EditContent content = Generate(range.Length, (dest, position) => Read(snapshot, current.Offset + position, dest),
+                    (dest, position) => transform(dest, current.Offset + position), operation, ref done);
+                results.Add(new RangeReplacement(range, content));
+            }
+        }
+        catch
+        {
+            TransformApplier.DisposeAll(results);
+            throw;
+        }
+
+        stats.Changed = true;
+        return new DataOperationResult(results, stats);
+    }
+
     /// <summary>プレビュー (先頭の範囲の先頭 64 バイト)。</summary>
     public static DataOperationPreview Preview(DocumentSnapshot snapshot, IReadOnlyList<TargetRange> ranges, DataOperationSpec spec)
     {

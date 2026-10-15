@@ -1,0 +1,11 @@
+{
+  "id": "hexeditorplugin1",
+  "name": "HexEditorPlugin1",
+  "version": "1.0.0",
+  "publisher": "",
+  "sdk": "1.0",
+  "minAppVersion": "0.0.0",
+  "entry": "HexEditorPlugin1.dll",
+  "permissions": [],
+  "description": "A HexEditor plugin."
+}

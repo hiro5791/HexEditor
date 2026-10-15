@@ -5590,6 +5590,299 @@
   <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>S</value></data>
   <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>C# スクリプト コンポーネントを追加(C)...</value></data>
   <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>自動実行 (フック)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>自動実行 フック 起動 開く 保存 閉じる スクリプト</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>スクリプトのフォルダ</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>スクリプト フォルダ 共有 ライブラリ</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>出力パネル</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>スクリプトエディタ</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>出力パネルに残す最大行数</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>上限を超えると古い行から消えます (100-1000000)。</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>スクリプトが出力したら出力パネルを表示する</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>キーボードフォーカスは奪わずに表示します。</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>デバッグ中に例外で止まる</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>JavaScript のデバッガが例外で一時停止するタイミングを選びます。</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>止まらない</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>捕捉されない例外だけ</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>すべての例外</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>スクリプトを追加するフォルダ</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>スクリプト一覧に加えるフォルダ。</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>ここに登録したスクリプトが自動で実行されます。ここに追加しない限り実行されません。スクリプトは信頼済みである必要があります。</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>セーフモードのため、自動実行は無効です。</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>制限時間 {0} 秒</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>登録されたスクリプトはありません。</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>スクリプトを追加</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>追加</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>ファイルを選ぶ...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>自動で実行するスクリプトを選んでください。</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>「追加」ボタンで「{0}」を追加できます。</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>{0} を有効にする</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>条件</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>上へ</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>下へ</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>条件に合うデータだけで実行します。空欄はすべてに一致します。</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>拡張子 (例 .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>パスのパターン (例 C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>先頭のバイト列 (16 進。例 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>データソース</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>すべて</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>ここに加えたフォルダは、標準のスクリプトフォルダに加えてスクリプト一覧に表示されます。</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>追加したフォルダはありません。</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>フォルダを追加...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>スクリプト</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>マクロ</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>スクリプト</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>カーソル</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>スクリプト一覧パネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>すくりぷといちらん ぱねる</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>出力パネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>しゅつりょく ろぐ ぱねる</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>コンソールパネルの表示切り替え</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>こんそーる ぱねる</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>一覧を表示</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>すくりぷといちらん ひょうじ</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>コンソールを表示</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>こんそーる ひょうじ</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>新しいスクリプト</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>しんき さくせい</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>新しい C# スクリプト</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>しんき さくせい</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>サンプルを開く</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>さんぷる ひらく</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>スクリプトのフォルダを開く</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>ふぉるだ ひらく</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>デバッグ実行</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>でばっぐ じっこう</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>一時停止</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>いちじていし</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>出力をクリア</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>しゅつりょく くりあ</value></data>
+  <data name="Cmd_scripting_editor_run" xml:space="preserve"><value>実行 / 続行 (スクリプトエディタ)</value></data>
+  <data name="CmdAlias_scripting_editor_run" xml:space="preserve"><value>じっこう ぞっこう</value></data>
+  <data name="Cmd_scripting_editor_stop" xml:space="preserve"><value>停止 (スクリプトエディタ)</value></data>
+  <data name="CmdAlias_scripting_editor_stop" xml:space="preserve"><value>ていし</value></data>
+  <data name="Cmd_scripting_editor_toggleBreakpoint" xml:space="preserve"><value>ブレークポイントの設定 / 解除</value></data>
+  <data name="CmdAlias_scripting_editor_toggleBreakpoint" xml:space="preserve"><value>ぶれーくぽいんと</value></data>
+  <data name="Cmd_scripting_editor_stepOver" xml:space="preserve"><value>ステップオーバー</value></data>
+  <data name="CmdAlias_scripting_editor_stepOver" xml:space="preserve"><value>すてっぷおーばー</value></data>
+  <data name="Cmd_scripting_editor_stepIn" xml:space="preserve"><value>ステップイン</value></data>
+  <data name="CmdAlias_scripting_editor_stepIn" xml:space="preserve"><value>すてっぷいん</value></data>
+  <data name="Cmd_scripting_editor_stepOut" xml:space="preserve"><value>ステップアウト</value></data>
+  <data name="CmdAlias_scripting_editor_stepOut" xml:space="preserve"><value>すてっぷあうと</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>記録の開始 / 停止</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>きろく ますこ まくろ</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>直前のマクロを再生</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>まくろ さいせい</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>繰り返し再生</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>まくろ くりかえし</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>カーソル: 左へ</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>かーそる いどう ひだり</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>カーソル: 右へ</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>かーそる いどう みぎ</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>カーソル: 上へ</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>かーそる いどう うえ</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>カーソル: 下へ</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>かーそる いどう した</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>カーソル: 前のページ</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>かーそる いどう ぺーじ</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>カーソル: 次のページ</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>かーそる いどう ぺーじ</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>カーソル: 行頭</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>かーそる いどう ぎょうとう</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>カーソル: 行末</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>かーそる いどう ぎょうまつ</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>カーソル: ファイルの先頭</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>かーそる いどう せんとう</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>カーソル: ファイルの末尾</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>かーそる いどう まつび</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>スクリプトエディタが表示されていません。</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>スクリプト一覧(I)</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>コンソール(O)</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>新しいスクリプト(N)</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>新しい C# スクリプト(W)</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>サンプル(M)</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>スクリプトのフォルダを開く(F)</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>マクロ(M)</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>記録の開始 / 停止(R)</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>直前のマクロを再生(P)</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>繰り返し再生...(T)</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>スクリプト一覧(J)</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>出力(V)</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>コンソール(Z)</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>スクリプト</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>出力</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>コンソール</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>すべて</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>スクリプト: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>プラグイン: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>出力元</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>絞り込み</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>クリア</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>すべてコピー</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>ファイルに保存</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>行の折り返し</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>出力をコピーしました。</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>情報</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>警告</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>エラー</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>スクリプト一覧</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>スクリプトを絞り込み</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>新規作成</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>新しい JavaScript スクリプト</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>新しい C# スクリプト</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>スクリプトのフォルダを開く</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>実行</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>編集</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>コピーを編集用に開く</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>名前の変更...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>新しい名前</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>削除 (ごみ箱へ移動)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>フォルダで表示</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>ショートカットの割り当て...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>自動実行の設定...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>スクリプト</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>マクロ</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>サンプル</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>new-script</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>フォルダが見つかりません</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>常駐</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>自動実行の候補: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>「{0}」をごみ箱へ移動しました。</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>サンプルをコピーできません: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>スクリプトを作成できません: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>名前を変更できません: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>削除できません: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>フォルダを開けません: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>実行</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>デバッグ実行</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>一時停止</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>ステップオーバー</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>ステップイン</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>ステップアウト</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>対象のドキュメント</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(アクティブなドキュメント)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>スクリプトエディタ: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>問題</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>問題 ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>デバッグ</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>呼び出し履歴</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>変数</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>ウォッチ</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>ウォッチ式を追加</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>ローカル</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>クロージャ</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>グローバル</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>スクリプト</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>例外: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>{0} 行 {1} 列</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>変更あり</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>実行中</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>{0} 行目で一時停止</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>成功 ({0} 秒)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>停止しました</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>実行しませんでした</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>失敗</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>「{0}」を保存しました。</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>スクリプトを保存できません: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>スクリプトを読めません: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>「{0}」は 10 MB を超えています。外部のエディタで編集してください。</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>C# スクリプトはアプリ内でステップ実行できません</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>ブレークポイント</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>無効なブレークポイント</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>条件付きブレークポイント</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>「{0}」に未保存の変更があります。閉じる前に保存しますか?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>保存する</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>保存しない</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>C# スクリプトのデバッグ</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>デバッガのアタッチを待っています。プロセス ID: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>C# スクリプトはアプリ内でステップ実行できません。外部のデバッガ (Visual Studio、Visual Studio Code) をこのプロセスにアタッチし、スクリプトの中で System.Diagnostics.Debugger.Break() を呼ぶと止まります。</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>アタッチせずに実行</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>言語</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>リセット</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>クリア</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>式や文を入力 (Enter: 実行、Shift+Enter: 改行)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>コンソールの履歴</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>新しいセッションにしました。</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>停止しました。</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>入力の実行に失敗しました。</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>コンソールで C# を使うには、C# スクリプト コンポーネントを追加してください。</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>起動時</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>ファイルを開いたとき</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>保存の前</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>保存の後</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>閉じる前</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>自動実行のスクリプト「{0}」({1}) でエラー: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>自動実行のスクリプト「{0}」({1}) を停止しました: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>自動実行のスクリプト「{0}」({1}) が 3 回続けて失敗したので無効にしました。</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>設定を開く</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>スクリプト「{0}」が保存を中止しました: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>保存の前のスクリプトが失敗しました</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>スクリプト「{0}」が失敗しました: {1}
+それでも保存しますか?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>保存する</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>保存しない</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>マクロの記録</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>記録を開始</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>マウスで指した位置の記録方式を選びます。</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>カーソルからの相対 (既定)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>絶対オフセット</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>今後は確認しない (この選択を使う)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>記録を始めました。</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>記録中 ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>マクロの記録中、操作 {0} 件。クリックで停止します。</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>記録できない操作: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>キーボードでの選択</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>マルチカーソルでの入力</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>この内容での塗りつぶし</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>オフセットへ移動</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>範囲を選択</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>検索</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>すべて置換</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>見つかりません: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>記録された操作はありません。</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>まだ記録したマクロがありません。</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>先に記録を止めてください。</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>直前のマクロ</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>マクロを読めません: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>マクロが止まりました: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>マクロが {0} 回目の「{1}」で止まりました: {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>マクロを保存 (操作 {0} 件)</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>保存先</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>ショートカット (省略できます)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>例: Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>保存しない</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>名前を入力してください。</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>ショートカットを読めません: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>ここには保存できません: {0}。別の保存先を選んでください。</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>マクロ「{0}」を保存しました。</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>マクロの繰り返し再生</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>マクロ</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>回数を指定</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>回数 (1〜1,000,000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>ファイルの末尾に達するまで</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>検索結果ごと</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>選択範囲の中で</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>再生</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>1 から {0} までの数を入力してください。</value></data>
   <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
   <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>実行時間の上限 (秒)</value></data>
   <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>JavaScript のスクリプトが一時停止して続けるかを尋ねるまでの時間。0 は無制限。一括処理の完了待ちと入力待ちの時間は数えません。</value></data>
@@ -5664,4 +5957,125 @@
   <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>「{0}」に当たるボリュームがありません。</value></data>
   <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>「{0}」に当たるプロセスがありません。</value></data>
   <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>「{0}」に当たるプロセスが {1} 件あります。--process にプロセス ID を指定してください。</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>プラグインのデータソースを開く(U)</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>プラグインのデータ演算(P)</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>プラグイン(P)</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>プラグインの管理(M)...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>管理</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>ぷらぐいん かんり かくちょう きのう</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>署名されたプラグインだけを読み込む</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>有効な署名のないプラグインを読み込みません。再起動後に反映されます。</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>プラグインの開発用のフォルダ</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>ビルドの出力先のフォルダから直接プラグインを読み込みます (プラグインマネージャで編集します)。</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>プラグインは、インスペクタの型・ハッシュ・形式・コマンド・パネルなどを追加します。プラグインはあなたと同じ権限で動きます。信頼できる作成者のものだけを有効にしてください。変更は再起動後に反映されます。</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>セーフモードです。プラグインは読み込まれていません。一覧と設定は変わりません。</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>追加...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>今すぐ再起動</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>プラグインのフォルダを開く</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>プラグインの設定...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>有効</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>有効</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>無効</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>プラグインは入っていません。「追加...」で .hexplugin を選ぶか、一覧にドロップしてください。</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>開発用のフォルダ</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>これらのビルドの出力先から直接プラグインを読み込み、「開発中」と表示します。確認はフォルダごとに 1 回だけです。</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>開発用のフォルダを追加...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>開発用のフォルダを追加しました。再起動すると読み込まれます。</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>信頼済みの発行者</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>これらの発行者が署名したプラグインは、確認なしで有効になります。取り消すと再び確認します。</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>入っているプラグイン</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>.hexplugin をここにドロップすると追加できます。</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>プラグインを追加</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>発行者不明</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>署名あり: {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>署名あり: {0} (失効を確認できませんでした)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>署名が無効</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>署名は未確認</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>署名されていません</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>有効</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>無効</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>読み込めません ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>停止中 ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>読み込んでいません ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>読み込み中...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — 再起動後に変わります</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>開発中</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>拡張ポイントなし</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>追加するもの: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (無効: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>セーフモードではプラグインを追加できません。</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>プラグインを追加できませんでした: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>プラグインの削除</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>「{0}」を削除しますか? 読み込み中のプラグインは再起動後に削除されます。</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>{0} の設定</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>インスペクタの型</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>ハッシュ</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>インポート形式</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>エクスポート形式</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>データソース</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>変換ビュー</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>データ演算</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>コマンド</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>メニューの項目</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>パネル</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>設定画面</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>テンプレートの関数</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>ファイル形式の判定</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>逆アセンブラ</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>色付けルール</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>スクリプト API</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>プラグイン「{0}」を有効にしますか?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (更新)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>発行者: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>開発用のフォルダから読み込みます。</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>このコードはあなたの PC 上で、あなたと同じ権限で何でも実行できます (ファイルの読み書き、ネットワーク通信を含む)。信頼できる作成者のものだけを有効にしてください。</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>プラグインが宣言している許可: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>このプラグインは署名されていません。発行者を確かめられません。</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>この発行者 ({0}) を常に信頼する</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>有効にする</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>有効にしない</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor は管理者として実行中です。このプラグインは管理者権限で動き、PC 全体に影響する操作ができます。</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>管理者としてプラグインを読み込みますか?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor は管理者として実行中です。次のプラグインは管理者権限で動き、PC 全体に影響する操作ができます:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— まだ信頼されていません</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>読み込む</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>読み込まない</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>プラグイン「{0}」でエラーが続いたため停止しました。</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>プラグインを無効にする</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>再起動時にもう一度試す</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>プラグイン「{0}」は再起動後に読み込まれません。</value></data>
+  <data name="Plugin_SafeModeNotice" xml:space="preserve"><value>セーフモードで起動しました。プラグインと自動実行のスクリプトは読み込まれていません。</value></data>
+  <data name="Plugin_RestartNormally" xml:space="preserve"><value>通常どおり再起動</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>プラグインを無効にしますか?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>前回、HexEditor が異常終了しました。プラグイン「{0}」が原因の可能性があります。無効にしますか?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>有効のままにする</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>このプラグインのコマンドは今は実行できません。</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>プラグイン「{1}」のコマンド「{0}」でエラーが起きました。出力パネルを見てください。</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>開く: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>{0} を開けません: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>形式を選択してコピー: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>{0} の形式でコピーしました。</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>データ演算: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>データ演算 {0} に失敗しました: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>プラグイン「{0}」が追加</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>プラグインのパネル</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>プラグインがこのパネルを作れませんでした。</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="Inspector_Group_Plugin" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(停止中)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>このプラグインの型はこの値に書き換えられません。</value></data>
 </root>

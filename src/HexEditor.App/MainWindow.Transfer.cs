@@ -204,7 +204,7 @@ public sealed partial class MainWindow
     private async Task ShowImportAsync(string? path)
     {
         DocumentViewModel? target = Vm.Selected;
-        IReadOnlyList<string> formats = FormatIds.Importable;
+        IReadOnlyList<string> formats = [.. FormatIds.Importable, .. Core.Plugins.PluginIntegration.ImportFormats().Select(f => f.Id)];
         TextBox pathBox = DialogParts.Field("Import_Path", Loc.Get("Import_File"), path ?? string.Empty, monospace: false);
         var browse = new Button { Content = Loc.Get("OpenAdv_Browse") }.WithId("Import_Browse");
         ComboBox format = DialogParts.Combo("Import_Format", Loc.Get("Transfer_Format"), formats.Select(FormatName), 0);
@@ -829,7 +829,7 @@ public sealed partial class MainWindow
         }
 
         EditorState editor = doc.Editor;
-        IReadOnlyList<string> formats = FormatIds.Exportable;
+        IReadOnlyList<string> formats = [.. FormatIds.Exportable, .. Core.Plugins.PluginIntegration.ExportFormats().Select(f => f.Id)];
         string last = AppState.GetString("export.format", FormatIds.IntelHex);
         int initial = Math.Max(0, formats.ToList().IndexOf(last));
         ComboBox format = DialogParts.Combo("Export_Format", Loc.Get("Transfer_Format"), formats.Select(FormatName), initial);

@@ -61,6 +61,8 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <!-- 第三者のライセンス表示はすべての配布形態に入れる (PKG-05 の仕様 1、UI-40)。 -->
     <Content Include="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!-- 同梱のサンプルスクリプト (08 の AUTO-46)。実行時は AppContext.BaseDirectory\Samples\scripts\ から読む (信頼の確認なし。ScriptingService)。 -->
+    <Content Include="..\..\samples\scripts\*" Link="Samples\scripts\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <!--
       C# スクリプト コンポーネントの検証用の一覧 (08 の AUTO-03 の仕様 3: アプリ本体に埋め込む SHA-256 の一覧)。
       build/Build-CSharpComponent.ps1 が作り、-p:HexCSharpComponentManifest=<パス> で渡す。渡さないビルドでは埋め込まない (追加できない)。
@@ -179,6 +181,8 @@
   <ItemGroup>
     <ProjectReference Include="..\HexEditor.Core\HexEditor.Core.csproj" />
     <ProjectReference Include="..\HexEditor.Platform\HexEditor.Platform.csproj" />
+    <!-- プラグイン SDK の UI 部分 (08 の AUTO-29)。プラグインのパネルの型をアプリとプラグインで共有する。 -->
+    <ProjectReference Include="..\HexEditor.Sdk.UI\HexEditor.Sdk.UI.csproj" />
   </ItemGroup>
 
   <!--

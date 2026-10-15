@@ -1,0 +1,14 @@
+<Project>
+  <!--
+    テスト用のプラグイン (08 の AUTO-29〜AUTO-35 のテストデータ TD-AUTO-PLG-*)。リポジトリの共通の設定を引き継ぎ、
+    SDK はアプリのものを共有するため出力に含めない (Private=false。AUTO-29 の仕様 4)。
+  -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  <PropertyGroup>
+    <TargetFramework Condition="'$(TargetFramework)' == ''">net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!-- プラグインのフォルダに .deps.json を置く (依存ライブラリの解決。AUTO-30 の仕様 3 の 4)。 -->
+    <GenerateDependencyFile>true</GenerateDependencyFile>
+  </PropertyGroup>
+</Project>

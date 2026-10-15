@@ -1,0 +1,21 @@
+<Project>
+  <!--
+    テスト用のプラグイン (08 の AUTO-29〜35 のテストデータ TD-AUTO-PLG-*) をビルドし、テストの出力の testplugins\<プロジェクト>\ に写す。
+    テストのプロジェクト (Core・Cli・UI) が Import する。プラグインの DLL は参照しない (プラグインはアプリが実行時に読み込む)。
+  -->
+  <ItemGroup>
+    <_HexTestPlugin Include="TestLib.V1;TestLib.V2;SdkNext;Plugin.Generic;Plugin.DepA;Plugin.DepB;Plugin.Sdk13" Tfm="net10.0" />
+    <_HexTestPlugin Include="Plugin.Sample" Tfm="net10.0-windows10.0.26100.0" />
+    <ProjectReference Include="@(_HexTestPlugin->'$(MSBuildThisFileDirectory)%(Identity)\%(Identity).csproj')" ReferenceOutputAssembly="false" Private="false"
+      SkipGetTargetFrameworkProperties="true" />
+  </ItemGroup>
+
+  <Target Name="HexCopyTestPlugins" AfterTargets="Build">
+    <ItemGroup>
+      <_HexTestPluginFiles Include="$(MSBuildThisFileDirectory)%(_HexTestPlugin.Identity)\bin\$(Configuration)\%(_HexTestPlugin.Tfm)\*.dll;$(MSBuildThisFileDirectory)%(_HexTestPlugin.Identity)\bin\$(Configuration)\%(_HexTestPlugin.Tfm)\*.deps.json">
+        <Plugin>%(_HexTestPlugin.Identity)</Plugin>
+      </_HexTestPluginFiles>
+    </ItemGroup>
+    <Copy SourceFiles="@(_HexTestPluginFiles)" DestinationFiles="@(_HexTestPluginFiles->'$(OutDir)testplugins\%(Plugin)\%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

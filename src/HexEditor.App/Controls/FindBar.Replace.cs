@@ -359,6 +359,11 @@ public sealed partial class FindBar
             }
 
             AppLog.Info($"Replace all: end ({count})");
+            if (count >= 0)
+            {
+                Services.Scripting.MacroHooks.ReplaceAll(CaptureQuery(), ReplaceQuery.Text);
+            }
+
             if (count > 0)
             {
                 _navigator.Reset();

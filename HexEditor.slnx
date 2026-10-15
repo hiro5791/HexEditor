@@ -7,6 +7,9 @@
     <Project Path="src/HexEditor.Platform/HexEditor.Platform.csproj" />
     <Project Path="src/HexEditor.Scripting.CSharp/HexEditor.Scripting.CSharp.csproj" />
     <Project Path="src/HexEditor.Sdk/HexEditor.Sdk.csproj" />
+    <Project Path="src/HexEditor.Sdk.Templates/HexEditor.Sdk.Templates.csproj" />
+    <Project Path="src/HexEditor.Sdk.Testing/HexEditor.Sdk.Testing.csproj" />
+    <Project Path="src/HexEditor.Sdk.UI/HexEditor.Sdk.UI.csproj" />
     <Project Path="src/HexEditor.ShellExtension/HexEditor.ShellExtension.csproj" />
   </Folder>
   <Folder Name="/tests/">
@@ -15,6 +18,16 @@
     <Project Path="tests/HexEditor.Performance.Tests/HexEditor.Performance.Tests.csproj" />
     <Project Path="tests/HexEditor.Platform.Tests/HexEditor.Platform.Tests.csproj" />
     <Project Path="tests/HexEditor.UITests/HexEditor.UITests.csproj" />
+  </Folder>
+  <Folder Name="/tests/plugins/">
+    <Project Path="tests/plugins/Plugin.DepA/Plugin.DepA.csproj" />
+    <Project Path="tests/plugins/Plugin.DepB/Plugin.DepB.csproj" />
+    <Project Path="tests/plugins/Plugin.Generic/Plugin.Generic.csproj" />
+    <Project Path="tests/plugins/Plugin.Sample/Plugin.Sample.csproj" />
+    <Project Path="tests/plugins/Plugin.Sdk13/Plugin.Sdk13.csproj" />
+    <Project Path="tests/plugins/SdkNext/SdkNext.csproj" />
+    <Project Path="tests/plugins/TestLib.V1/TestLib.V1.csproj" />
+    <Project Path="tests/plugins/TestLib.V2/TestLib.V2.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/HexEditor.ManualTests/HexEditor.ManualTests.csproj" />

@@ -124,6 +124,12 @@ UI の表示言語のタグ (例: `ja`)。
 
 外部プログラム (許可が必要)。
 
+### App.plugins
+
+`readonly plugins: Plugins`
+
+入っているプラグインと、プラグインがスクリプトに提供するオブジェクト (AUTO-31)。
+
 ### App.open
 
 `open(path: string, options?: OpenOptions): Promise<Document>`
@@ -805,6 +811,56 @@ Copy As と同じ形式の文字列を、クリップボードに置かずに返
 HTTPS / HTTP の GET・POST。応答の本文は 100 MB まで。
 
 許可: `network`
+
+## PluginHandle
+
+スクリプトから見たプラグイン 1 つ。
+
+### PluginHandle.id
+
+`readonly id: string`
+
+プラグイン ID。
+
+### PluginHandle.name
+
+`readonly name: string`
+
+表示名。
+
+### PluginHandle.version
+
+`readonly version: string`
+
+バージョン。
+
+### PluginHandle.enabled
+
+`readonly enabled: boolean`
+
+読み込まれて動いているか。
+
+### PluginHandle.api
+
+`readonly api: any | null`
+
+プラグインがスクリプトに提供するオブジェクト (`IScriptApiProvider`)。なければ null。
+
+## Plugins
+
+入っているプラグイン (AUTO-31、AUTO-32)。
+
+### Plugins.list
+
+`list(): PluginInfo[]`
+
+すべてのプラグインと状態。
+
+### Plugins.get
+
+`get(id: string): PluginHandle | null`
+
+ID でプラグインを取得する。入っていなければ null。
 
 ## ProcessRunner
 
@@ -1916,6 +1972,40 @@ InfoBar でなくダイアログで表示する。
 
 ダイアログのタイトル。
 
+## PluginInfo
+
+プラグインと状態。
+
+### PluginInfo.id
+
+`readonly id: string`
+
+プラグイン ID。
+
+### PluginInfo.name
+
+`readonly name: string`
+
+表示名。
+
+### PluginInfo.version
+
+`readonly version: string`
+
+バージョン。
+
+### PluginInfo.state
+
+`readonly state: string`
+
+`enabled`・`disabled`・`failed`・`suspended`・`notLoaded`。
+
+### PluginInfo.reason
+
+`readonly reason: string | null`
+
+有効でない理由。なければ null。
+
 ## ProcessOptions
 
 `run` のオプション。
@@ -2192,9 +2282,9 @@ InfoBar でなくダイアログで表示する。
 
 ## TransformOperand
 
-データ演算のオペランド。数値 (JavaScript では `number` か `bigint`) か、繰り返しのキーとして使う Hex 文字列。
+データ演算のオペランド。数値 (JavaScript では `number` か `bigint`) か、繰り返しのキー (Hex 文字列。JavaScript では `hex` のパラメータの値などの `Uint8Array` も同じキーとして使える)。
 
-`type TransformOperand = number | bigint | string`
+`type TransformOperand = number | bigint | string | Uint8Array`
 
 ## 例外
 

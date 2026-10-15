@@ -562,7 +562,13 @@ public sealed partial class MainWindow
     }
 
     /// <summary>形式の表示名。</summary>
-    private static string FormatName(string format) => Loc.Get("Format_" + format.Replace("-", string.Empty));
+    private static string FormatName(string format) => PluginFormatName(format) ?? Loc.Get("Format_" + format.Replace("-", string.Empty));
+
+    /// <summary>プラグインの形式の名前 (「名前 (プラグイン名)」。08 の AUTO-31 の仕様 2)。プラグインの形式でなければ null。</summary>
+    private static string? PluginFormatName(string format) =>
+        Core.Plugins.PluginIntegration.ImportFormats().Where(f => f.Id == format).Select(f => Loc.Format("Plugin_FormatName", f.Name, f.Plugin))
+            .Concat(Core.Plugins.PluginIntegration.ExportFormats().Where(f => f.Id == format).Select(f => Loc.Format("Plugin_FormatName", f.Name, f.Plugin)))
+            .FirstOrDefault();
 
     /// <summary>拡張子が違っても内容から判定できた場合は、「Intel HEX として開き直す」を提案する (ENG-38 の仕様 1)。バックグラウンドで判定する。</summary>
     private async Task SuggestDecodingAsync(DocumentViewModel vm)

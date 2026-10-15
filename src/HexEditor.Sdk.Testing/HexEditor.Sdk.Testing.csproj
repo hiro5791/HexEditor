@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    プラグインの単体テスト用の偽のドキュメント・アプリ (08 の AUTO-29 の仕様 1: HexEditor.Sdk.Testing)。WinUI に依存しない。
+    dotnet new hexeditor-plugin のテストのひな形が使う。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>HexEditor.Sdk.Testing</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <IsPackable>true</IsPackable>
+    <PackageId>HexEditor.Sdk.Testing</PackageId>
+    <PackageVersion>$(HexSdkPackageVersion)</PackageVersion>
+    <Description>Fake plugin context and documents for unit testing HexEditor plugins.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HexEditor.Sdk\HexEditor.Sdk.csproj" />
+  </ItemGroup>
+
+</Project>

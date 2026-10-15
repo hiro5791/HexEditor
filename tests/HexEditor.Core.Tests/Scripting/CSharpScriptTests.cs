@@ -296,6 +296,7 @@ public sealed class CSharpScriptTests(ComponentFeedFixture feed) : IClassFixture
     }
 
     [Fact]
+    [Trait("TC", "TC-AUTO-22-02")]
     public async Task Exception_stack_trace_has_the_csx_line()
     {
         (ScriptTestHost t, _, _) = Create();

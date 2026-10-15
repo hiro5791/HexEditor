@@ -110,8 +110,19 @@ public sealed partial class MainWindow
         Commands.Register("file.new", () => New_Click(this, e));
         Commands.Register("file.newWithSize", () => NewWithSize_Click(this, e));
         Commands.Register("file.open", () => Open_Click(this, e));
-        Commands.Register("file.save", () => Save_Click(this, e),
-            () => NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
+        Commands.Register("file.save", () =>
+        {
+            // スクリプトエディタの表示中は、そのスクリプトを保存する (AUTO-20 の仕様 6)。
+            if (ActiveScriptEditor is { } scriptEditor)
+            {
+                scriptEditor.Save();
+            }
+            else
+            {
+                Save_Click(this, e);
+            }
+        }, () => ActiveScriptEditor is not null ? CommandState.Available
+            : NeedsDocument(d => d.Document.IsReadOnly || SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAs", () => SaveAs_Click(this, e),
             () => NeedsDocument(_ => SaveTarget() is null ? Loc.Get("Command_ReadOnly") : null));
         Commands.Register("file.saveAll", () => SaveAll_Click(this, e), NeedsDocument);
@@ -161,7 +172,18 @@ public sealed partial class MainWindow
         Commands.Register("search.findNext", () => FindNext_Click(this, e), NeedsDocument);
         Commands.Register("search.findPrevious", () => FindPrevious_Click(this, e), NeedsDocument);
         RegisterSearchCommands();
-        Commands.Register("go.goTo", () => GoTo_Click(this, e), NeedsDocument);
+        Commands.Register("go.goTo", () =>
+        {
+            // スクリプト・マクロから offset つきで呼ばれたら、移動バーを出さずに移動する。
+            if (HexEditor.App.Commands.CommandArgs.IsScripted && HexEditor.App.Commands.CommandArgs.Get<string>("offset") is { } offset && Editor is { } target)
+            {
+                target.GoTo(Core.Scripting.ScriptValues.EvaluateNumber(offset, new EditorExpressionContext(target)));
+            }
+            else
+            {
+                GoTo_Click(this, e);
+            }
+        }, NeedsDocument);
         // ニブル単位の移動 (VIEW-26) と列の切り替え (VIEW-27) のコマンドパレットの項目 (ショートカットは既定なし。キーは Hex ビューが処理する)。
         Commands.Register("go.nextNibble", () => Editor?.NextNibble(), NeedsDocument);
         Commands.Register("go.previousNibble", () => Editor?.PreviousNibble(), NeedsDocument);
@@ -216,6 +238,8 @@ public sealed partial class MainWindow
         // ---- 設定・ヘルプ ----
         RegisterSettingsCommands();
         RegisterScriptCommands();
+        RegisterScriptUiCommands();
+        RegisterPluginCommands();
         Commands.Register("help.commandPalette", () => OpenPalette(">"));
         Commands.Register("help.shortcuts", OpenShortcutsPage);
         Commands.Register("help.documentation", () => Documentation_Click(this, e));
@@ -299,6 +323,9 @@ public sealed partial class MainWindow
                     return new KeyContext(KeyScope.Editor, view.Editor?.ActiveColumn == ActiveColumn.Text);
                 case Controls.FindBar or Controls.GoToBar:
                     return new KeyContext(KeyScope.FindBar, text);
+                case Controls.ScriptEditorPage:
+                    // スクリプトエディタ: コードエディタの有効範囲 (F5 などはアプリが処理する。00-overview.md 8.5)。文字を入力できる場所。
+                    return new KeyContext(KeyScope.CodeEditor, true);
                 case Controls.PanelDockArea:
                     return new KeyContext(KeyScope.Panel, text);
                 case Controls.CommandPalette:

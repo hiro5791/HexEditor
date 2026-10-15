@@ -41,6 +41,8 @@ declare namespace HexEditor {
         readonly net: Net;
         /** External programs (permission needed). */
         readonly process: ProcessRunner;
+        /** Installed plugins and the objects they provide to scripts (AUTO-31). */
+        readonly plugins: Plugins;
         /** Opens a file. Returns at once regardless of the file size. */
         open(path: string, options?: OpenOptions): Promise<Document>;
         /** Opens a disk or volume by its ID. */
@@ -290,6 +292,28 @@ declare namespace HexEditor {
     interface Net {
         /** HTTP(S) GET or POST. The response body is limited to 100 MB. */
         fetch(url: string, options?: FetchOptions): Promise<FetchResponse>;
+    }
+    
+    /** One plugin seen from scripts. */
+    interface PluginHandle {
+        /** The plugin ID. */
+        readonly id: string;
+        /** The display name. */
+        readonly name: string;
+        /** The version. */
+        readonly version: string;
+        /** True when the plugin is loaded and running. */
+        readonly enabled: boolean;
+        /** The object the plugin provides to scripts (`IScriptApiProvider`), or null. */
+        readonly api: any | null;
+    }
+    
+    /** Installed plugins (AUTO-31, AUTO-32). */
+    interface Plugins {
+        /** All plugins with their state. */
+        list(): PluginInfo[];
+        /** A plugin by ID, or null when it is not installed. */
+        get(id: string): PluginHandle | null;
     }
     
     /** External programs (AUTO-18, permission `process`). */
@@ -770,6 +794,20 @@ declare namespace HexEditor {
         title?: string | null;
     }
     
+    /** A plugin and its state. */
+    interface PluginInfo {
+        /** Plugin ID. */
+        readonly id: string;
+        /** Display name. */
+        readonly name: string;
+        /** Version. */
+        readonly version: string;
+        /** `enabled`, `disabled`, `failed`, `suspended` or `notLoaded`. */
+        readonly state: string;
+        /** Why it is not enabled, or null. */
+        readonly reason: string | null;
+    }
+    
     /** Options of `run`. */
     interface ProcessOptions {
         /** Time limit in seconds (default 60). */
@@ -892,8 +930,8 @@ declare namespace HexEditor {
     /** A range argument: either a `ByteRange` or a text in the input expression syntax (for example `"sel"`, `"0x100:0x20"` (start:length) or `"0x100..0x120"` (start..end, end exclusive)). */
     type RangeArg = ByteRange | string;
     
-    /** The operand of a data operation: a number (JavaScript: `number` or `bigint`) or a Hex string used as a repeating key. */
-    type TransformOperand = number | bigint | string;
+    /** The operand of a data operation: a number (JavaScript: `number` or `bigint`) or a repeating key as a Hex string (JavaScript: a `Uint8Array`, such as the value of a `hex` script parameter, is the same key). */
+    type TransformOperand = number | bigint | string | Uint8Array;
 }
 
 interface AbortSignal { readonly aborted: boolean; readonly reason: unknown; throwIfAborted(): void; }

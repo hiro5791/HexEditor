@@ -30,4 +30,7 @@
     <ProjectReference Include="..\..\tools\HexEditor.TestData\HexEditor.TestData.csproj" />
   </ItemGroup>
 
+  <!-- テスト用のプラグイン (TC-AUTO-12-02 の TD-AUTO-PLG-SAMPLE)。 -->
+  <Import Project="..\plugins\TestPlugins.targets" />
+
 </Project>

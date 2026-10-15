@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.ConsolePanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:HexEditor.App.ViewModels"
+    AutomationProperties.AutomationId="ConsolePanel"
+    AutomationProperties.LandmarkType="Custom">
+    <!--
+        スクリプトコンソール (AUTO-23)。上部: 言語の切り替え・リセット・クリア。中: 入力と結果の履歴 (結果のオブジェクトは展開できるツリー)。
+        下: 複数行の入力欄 (Enter で実行、Shift+Enter で改行、↑ / ↓ で入力履歴、Esc で実行中の入力を止める)。コードは常に左から右。
+    -->
+    <Grid RowSpacing="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Padding="8,6,8,0" Orientation="Horizontal" Spacing="6">
+            <ComboBox
+                x:Name="LanguageBox"
+                MinWidth="130"
+                AutomationProperties.AutomationId="Console_Language"
+                SelectionChanged="Language_SelectionChanged">
+            </ComboBox>
+            <Button x:Name="ResetButton" AutomationProperties.AutomationId="Console_Reset" Click="Reset_Click">
+                <FontIcon FontSize="14" Glyph="&#xE72C;" />
+            </Button>
+            <Button x:Name="ClearButton" AutomationProperties.AutomationId="Console_Clear" Click="Clear_Click">
+                <FontIcon FontSize="14" Glyph="&#xE74D;" />
+            </Button>
+            <ProgressRing
+                Width="16"
+                Height="16"
+                IsActive="{x:Bind Vm.IsBusy, Mode=OneWay}"
+                Visibility="{x:Bind Vm.IsBusy, Mode=OneWay}" />
+        </StackPanel>
+        <ListView
+            x:Name="List"
+            Grid.Row="1"
+            AutomationProperties.AutomationId="Console_Results"
+            FlowDirection="LeftToRight"
+            ItemsSource="{x:Bind Vm.Entries}"
+            SelectionMode="None">
+            <ListView.ItemContainerStyle>
+                <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem">
+                    <Setter Property="MinHeight" Value="0" />
+                    <Setter Property="Padding" Value="8,1" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:ConsoleEntry">
+                    <Grid
+                        AutomationProperties.AutomationId="Console_Entry"
+                        AutomationProperties.Name="{x:Bind AccessibleName}"
+                        ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            FontFamily="Cascadia Mono, Consolas"
+                            Foreground="{x:Bind Brush}"
+                            Text="{x:Bind Prefix}" />
+                        <StackPanel Grid.Column="1">
+                            <TextBlock
+                                AutomationProperties.AutomationId="Console_Text"
+                                FontFamily="Cascadia Mono, Consolas"
+                                FontSize="13"
+                                Foreground="{x:Bind Brush}"
+                                IsTextSelectionEnabled="True"
+                                Text="{x:Bind Text}"
+                                TextWrapping="Wrap" />
+                            <TreeView
+                                MaxHeight="260"
+                                AutomationProperties.AutomationId="Console_Tree"
+                                ItemsSource="{x:Bind Nodes}"
+                                SelectionMode="None"
+                                Visibility="{x:Bind TreeVisibility}">
+                                <TreeView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:ConsoleNode">
+                                        <TreeViewItem ItemsSource="{x:Bind Children}">
+                                            <TextBlock
+                                                FontFamily="Cascadia Mono, Consolas"
+                                                FontSize="12"
+                                                Text="{x:Bind Title}" />
+                                        </TreeViewItem>
+                                    </DataTemplate>
+                                </TreeView.ItemTemplate>
+                            </TreeView>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <TextBox
+            x:Name="Input"
+            Grid.Row="2"
+            Margin="8,0,8,8"
+            AcceptsReturn="True"
+            AutomationProperties.AutomationId="Console_Input"
+            FlowDirection="LeftToRight"
+            FontFamily="Cascadia Mono, Consolas"
+            IsSpellCheckEnabled="False"
+            IsTextPredictionEnabled="False"
+            MaxHeight="140"
+            PreviewKeyDown="Input_PreviewKeyDown"
+            TextWrapping="NoWrap" />
+    </Grid>
+</UserControl>

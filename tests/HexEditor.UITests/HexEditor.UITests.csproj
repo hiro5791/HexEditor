@@ -31,4 +31,7 @@
     <ProjectReference Include="..\..\src\HexEditor.Cli\HexEditor.Cli.csproj" ReferenceOutputAssembly="false" SkipGetTargetFrameworkProperties="true" />
   </ItemGroup>
 
+  <!-- テスト用のプラグイン (08 の AUTO-29〜35。TD-AUTO-PLG-*)。テストの出力の testplugins\ に置く。 -->
+  <Import Project="..\plugins\TestPlugins.targets" />
+
 </Project>

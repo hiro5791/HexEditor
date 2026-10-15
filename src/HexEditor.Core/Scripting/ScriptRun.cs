@@ -127,6 +127,43 @@ public sealed record ScriptRunRequest
 
     /// <summary>C# スクリプトをデバッグ情報付きでコンパイルする (AUTO-22)。</summary>
     public bool Debug { get; init; }
+
+    /// <summary>
+    /// 実行時間の上限に達したら、「続ける」を尋ねずに停止する (フックなど、利用者が見ていない実行。AUTO-25 の仕様 5)。
+    /// </summary>
+    public bool StopOnTimeLimit { get; init; }
+
+    /// <summary>
+    /// 実行する本文の変換。信頼の確認とパラメータの入力は元の本文で行い、実行の直前にこの変換を適用する
+    /// (マクロの繰り返し再生。AUTO-28)。行番号を変えない変換にする。
+    /// </summary>
+    public Func<string, string>? CodeWrapper { get; init; }
+
+    /// <summary>JavaScript のデバッガ (AUTO-21)。null なら通常の実行。</summary>
+    public Debugging.JsDebugSession? Debugger { get; init; }
+
+    /// <summary>
+    /// 入力をまたいで変数を保持する JavaScript のセッション (コンソール。AUTO-23 の仕様 3)。null なら実行ごとに新しいエンジン。
+    /// </summary>
+    public Repl.JsReplSession? Repl { get; init; }
+
+    /// <summary>実行が終わった後に残す結果の値 (コンソールの結果の表示。AUTO-23 の仕様 2)。</summary>
+    public Action<Repl.ReplValue>? OnReplResult { get; init; }
+
+    /// <summary>
+    /// 実行の結果の行 (「成功 (0.12 s)」「失敗: ...」とエラーの位置) を出力パネルに書かない (コンソール。結果とエラーは
+    /// コンソール自身が見せる。AUTO-23)。<c>console.log</c> などの出力は書く。
+    /// </summary>
+    public bool Quiet { get; init; }
+}
+
+/// <summary>
+/// 実行の部品ができてから作る <c>script.args</c> の値 (フックの <c>event</c> のようにドキュメントの包みが要るもの)。
+/// <see cref="ScriptRunRequest.PresetArgs"/> に入れる。
+/// </summary>
+public sealed class ScriptLazyArg(Func<ScriptContext, object?> create)
+{
+    internal object? Create(ScriptContext context) => create(context);
 }
 
 /// <summary>
@@ -161,6 +198,9 @@ public sealed class ScriptRun
     public string? Path { get; }
 
     public ScriptLanguage Language { get; }
+
+    /// <summary>実行がどこから来たか (フックの実行では出力パネルを自動で表示しない、など)。</summary>
+    public ScriptOrigin Origin { get; internal set; }
 
     public DateTimeOffset StartedAt { get; }
 

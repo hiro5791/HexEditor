@@ -92,6 +92,13 @@ public static class Exporter
             throw new ArgumentException("IPS は IpsPatch で書き出します。", nameof(o));
         }
 
+        // プラグインのエクスポート形式 (08 の AUTO-31)。出力はプラグインが作るバイト列そのもの。
+        if (Plugins.PluginIntegration.FindExport(o.Format) is { } plugin)
+        {
+            Plugins.PluginIntegration.Export(plugin.Registration, plugin.Format, source, ranges, output, cancellationToken, progress);
+            return;
+        }
+
         // 出力の先頭に BOM を書き、それ以降は BOM なしで書く (StreamWriter に任せると Flush のたびに確かめるため)。
         Encoding encoding = EncodingOf(o.Encoding);
         if (o.Encoding == TextFileEncoding.Utf8Bom && output.Position == 0)
@@ -110,6 +117,19 @@ public static class Exporter
     public static void WriteText(ExportSource source, IReadOnlyList<(long Offset, long Length)> ranges, ExportOptions o, TextWriter writer,
         CancellationToken cancellationToken = default, Action<long>? progress = null)
     {
+        // プラグインの形式 (08 の AUTO-31): プレビュー・見積もりもプラグインの出力から作る (テキストの形式だけ。UTF-8 として読む)。
+        if (Plugins.PluginIntegration.FindExport(o.Format) is { } plugin)
+        {
+            using var buffer = new MemoryStream();
+            Plugins.PluginIntegration.Export(plugin.Registration, plugin.Format, source, ranges, buffer, cancellationToken, progress);
+            if (plugin.Registration.Guard.Invoke("IsText", () => plugin.Format.IsText, false))
+            {
+                writer.Write(Encoding.UTF8.GetString(buffer.GetBuffer(), 0, (int)buffer.Length));
+            }
+
+            return;
+        }
+
         string nl = o.NewLine;
         long total = ranges.Sum(r => r.Length);
         switch (o.Format)

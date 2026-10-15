@@ -25,11 +25,14 @@ public sealed class ScriptApp : IApp
         Net = new ScriptNet(context);
         Process = new ScriptProcessRunner(context);
         Events = new ScriptEvents(context);
+        Plugins = new ScriptPlugins();
     }
 
     private IScriptEnvironment Env => _ctx.Environment;
 
     public string Version => Env.AppVersion;
+
+    public IPlugins Plugins { get; }
 
     public string ApiVersion => ApiInfo.Version;
 

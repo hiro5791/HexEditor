@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    TD-AUTO-PLG-SAMPLE (ID test.sample、名前 Sample Plugin): 拡張ポイントを 1 つずつ登録するサンプルプラグイン (TC-AUTO-31-01 ほか)。
+    パネルのために HexEditor.Sdk.UI (WinUI) を参照する。パネルはウィンドウのあるアプリでだけ登録する (ヘッドレス実行・Core のテストでも読み込める)。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
+    <EnableMsixTooling>false</EnableMsixTooling>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\HexEditor.Sdk\HexEditor.Sdk.csproj" Private="false" />
+    <ProjectReference Include="..\..\..\src\HexEditor.Sdk.UI\HexEditor.Sdk.UI.csproj" Private="false" />
+  </ItemGroup>
+
+</Project>

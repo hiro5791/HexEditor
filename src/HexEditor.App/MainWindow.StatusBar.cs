@@ -1,5 +1,6 @@
 using HexEditor.App.Hosting;
 using HexEditor.App.Services;
+using HexEditor.App.Services.Scripting;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Operations;
 using Microsoft.UI.Xaml;
@@ -227,6 +228,9 @@ public sealed partial class MainWindow
             ["modified"] = doc is not null && doc.Document.IsModified,
             ["compare"] = ActiveCompare is not null,
 
+            // マクロの記録中 (AUTO-27 の仕様 4): 隠せない項目。
+            ["recording"] = ScriptWorkspace.Macros.IsRecording,
+
             // プロセスメモリの即時書き込み (ENG-34): オンの間は必ず示す (利用者が隠せる項目にしない)。
             ["immediate"] = doc?.ImmediateWriteText is { Length: > 0 },
 
@@ -242,7 +246,7 @@ public sealed partial class MainWindow
         {
             string id = (string)button.Tag;
             bool want = id == "zoom" ? IsZoomStatusWanted(button) : wanted[id];
-            button.Visibility = want && (id is "immediate" or "helper" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
+            button.Visibility = want && (id is "immediate" or "helper" or "recording" || IsStatusItemVisible(id)) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         StatusSize.Content = doc?.SizeText ?? string.Empty;

@@ -134,6 +134,9 @@ public sealed class FileTypeDetector(FileTypeDatabase database, IEnumerable<IFil
 
     public FileTypeDatabase Database => database;
 
+    /// <summary>プラグインが追加した判定 (08 の AUTO-31 の <c>IFileTypeDetector</c>。プラグインの読み込み後に App・CLI が入れる)。</summary>
+    public static Func<IEnumerable<IFileTypeDetector>>? GlobalDetectors { get; set; }
+
     /// <summary>判定する。<paramref name="extension"/> はドキュメントの拡張子 (「拡張子と内容が一致しません」の判定。ANA-17 の仕様 8)。</summary>
     public FileTypeReport Detect(IMagicData data, string? extension = null)
     {
@@ -149,7 +152,7 @@ public sealed class FileTypeDetector(FileTypeDatabase database, IEnumerable<IFil
             }
         }
 
-        foreach (IFileTypeDetector plugin in _plugins)
+        foreach (IFileTypeDetector plugin in _plugins.Concat(GlobalDetectors?.Invoke() ?? []))
         {
             try
             {
