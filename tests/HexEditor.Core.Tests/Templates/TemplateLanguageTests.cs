@@ -366,6 +366,20 @@ public sealed class TemplateLanguageTests
     }
 
     [Fact]
+    public void NodesInRangeAndDeepestPattern()
+    {
+        TemplateResult r = RunOk("struct P { u8 a; u16 b; }; u8 head; P p[1000000]; u8 tail;", new byte[3_000_002]);
+        var nodes = r.NodesInRange(1 + (3 * 500_000), 3);
+        Assert.Contains(nodes, n => n.Node.Path == "p" && n.Depth == 0);
+        Assert.Contains(nodes, n => n.Node.Path == "p[500000]" && n.Depth == 1);
+        Assert.Contains(nodes, n => n.Node.Path == "p[500000].b" && n.Depth == 2);
+        Assert.DoesNotContain(nodes, n => n.Node.Path == "head");
+        Assert.Equal("p[500000].b", r.DeepestAt(1 + (3 * 500_000) + 2)!.Path);
+        Assert.Equal("tail", r.DeepestAt(3_000_001)!.Path);
+        Assert.True(r.PatternCount < 100);
+    }
+
+    [Fact]
     [Trait(TC, "TC-TPL-11-02")]
     public void InfiniteLoopStopsAtTheStepLimit()
     {

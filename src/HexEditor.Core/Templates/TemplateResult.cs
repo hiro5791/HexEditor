@@ -196,6 +196,31 @@ public sealed class TemplateResult : IDisposable
             return 0;
         });
 
+    /// <summary>
+    /// 範囲に重なるパターンと、その深さ (TPL-23 の色分け)。重なる部分木だけをたどり、固定長の要素の配列は重なる要素だけを作る。
+    /// 親子の関係にあるパターンは子 (深いもの) を上に、親子でないものは後のものを上に描く (TPL-09 の仕様 6)。
+    /// </summary>
+    public IReadOnlyList<(TemplateNode Node, int Depth)> NodesInRange(long offset, long length, TemplateSection? section = null, int maxDepth = 32,
+        int maxNodes = 100_000) => Run(() => Evaluator.NodesInRange(offset, length, section, maxDepth, maxNodes));
+
+    /// <summary>位置を含む最も深いパターン (Hex ビューのカーソルに追従する。TPL-23 の仕様 5)。</summary>
+    public TemplateNode? DeepestAt(long offset, TemplateSection? section = null)
+    {
+        IReadOnlyList<(TemplateNode Node, int Depth)> nodes = NodesInRange(offset, 1, section);
+        TemplateNode? best = null;
+        int bestDepth = -1;
+        foreach ((TemplateNode node, int depth) in nodes)
+        {
+            if (depth >= bestDepth)
+            {
+                best = node;
+                bestDepth = depth;
+            }
+        }
+
+        return best;
+    }
+
     /// <summary>評価器のスレッドで <paramref name="body"/> を実行する (UI スレッドから子・値を読むときに使う)。</summary>
     public Task<T> InvokeAsync<T>(Func<T> body) => TemplateThreads.RunAsync(() => Run(body));
 
