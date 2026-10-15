@@ -143,11 +143,11 @@ public sealed class ScriptReplTests : IDisposable
     [Fact]
     public async Task The_execution_limit_is_counted_per_input()
     {
-        _host.Limits = new ScriptLimits { Time = TimeSpan.FromSeconds(2) };
+        _host.Limits = new ScriptLimits { Time = TimeSpan.FromSeconds(1) };
         for (int i = 0; i < 3; i++)
         {
             // 1 回ごとに 1 秒に満たない計算を 3 回。合計が上限を超えても失敗しない。
-            (ScriptRunResult result, _) = await InputAsync("(() => { let s = 0; for (let i = 0; i < 300000; i++) s += i; return s; })()");
+            (ScriptRunResult result, _) = await InputAsync("(() => { const end = Date.now() + 400; let s = 0; while (Date.now() < end) s++; return s; })()");
             ScriptTestHost.AssertSucceeded(result);
         }
     }

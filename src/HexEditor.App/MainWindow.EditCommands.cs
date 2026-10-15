@@ -40,7 +40,17 @@ public sealed partial class MainWindow
         Commands.Register("edit.insertBytes", () => InsertBytes_Click(this, e),
             () => NeedsEditable(d => d.Document.CanResize ? null : Loc.Get("Notice_FixedLength")));
         Commands.Register("edit.insertFile", () => InsertFile_Click(this, e), () => NeedsEditable());
-        Commands.Register("edit.fill", FillAsync,
+        // スクリプト・マクロからは完了を待てるようにする。画面の操作ではダイアログを閉じるのを待たずに返す (従来どおり)。
+        Commands.Register("edit.fill", () =>
+        {
+            if (HexEditor.App.Commands.CommandArgs.IsScripted)
+            {
+                return FillAsync();
+            }
+
+            Fill_Click(this, e);
+            return Task.CompletedTask;
+        },
             () => NeedsEditable(d => d.Editor.HasSelection || d.Document.Length > 0 ? null : Loc.Get("Command_EmptyDocument")));
         Commands.Register("edit.resize", () => Resize_Click(this, e),
             () => NeedsEditable(d => d.Document.CanResize ? null : Loc.Get("Notice_FixedLength")));

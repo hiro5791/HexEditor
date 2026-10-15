@@ -18,7 +18,7 @@ public sealed class DataOperationUiTests
         return e["text"]?.GetValue<string>() ?? e["content"]?.GetValue<string>() ?? string.Empty;
     }
 
-    private static async Task OpenDialogAsync(AppSession app)
+    internal static async Task OpenDialogAsync(AppSession app)
     {
         await app.CommandAsync("Command_DataOperation");
         await app.WaitForAsync("DataOperationDialog");

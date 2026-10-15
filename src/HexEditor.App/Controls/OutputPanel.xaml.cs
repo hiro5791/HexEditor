@@ -36,7 +36,9 @@ public sealed partial class OutputPanel : UserControl, Panels.IPanelContent
 
     public OutputPanelViewModel Vm { get; }
 
-    bool Panels.IPanelContent.FocusContent() => List.Focus(FocusState.Keyboard);
+    /// <summary>F6 で来たときは行の一覧に置く。行がなければ (空の一覧にはフォーカスが乗らない) 出力元の選択に置く。</summary>
+    bool Panels.IPanelContent.FocusContent() =>
+        (Vm.Rows.Count > 0 && List.Focus(FocusState.Keyboard)) || ChannelBox.Focus(FocusState.Keyboard);
 
     /// <summary>末尾を見ていたら、新しい行に合わせて末尾へ動く (上へスクロールして読んでいるときは動かさない)。</summary>
     private void Vm_Updated(object? sender, int added)

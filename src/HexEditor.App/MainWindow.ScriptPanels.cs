@@ -112,13 +112,26 @@ public sealed partial class MainWindow : IScriptListHost, IScriptEditorHost
             RebuildScriptMenuItems();
         };
         ScriptWorkspace.CommandsChanged += attach;
-        Closed += (_, _) => ScriptWorkspace.CommandsChanged -= attach;
         App.Settings.Changed += OnScriptSettingsChanged;
-        Closed += (_, _) => App.Settings.Changed -= OnScriptSettingsChanged;
+
+        // 閉じる操作が取り消されたときも Closed は来る。実際に閉じるときだけ外す。
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                ScriptWorkspace.CommandsChanged -= attach;
+                App.Settings.Changed -= OnScriptSettingsChanged;
+            }
+        };
     }
 
     private void OnScriptSettingsChanged(IReadOnlyCollection<string> keys)
     {
+        if (keys.Contains("scripts.folders"))
+        {
+            DispatcherQueue.TryEnqueue(ScriptWorkspace.RefreshFoldersIfChanged);
+        }
+
         if (keys.Contains("scripts.output.maxLines") && _outputVm is { } vm)
         {
             DispatcherQueue.TryEnqueue(() => vm.Capacity = App.Settings.GetInt("scripts.output.maxLines", ScriptOutputLog.DefaultCapacity));

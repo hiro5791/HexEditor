@@ -58,7 +58,8 @@ public sealed partial class MainWindow
             ?? await HandleFormatTestCommandAsync(cmd, request)
             ?? await HandleCompareTestCommandsAsync(cmd, request)
             ?? await HandleDeviceTestCommandsAsync(cmd, request)
-            ?? HandleScriptTestCommand(cmd, request),
+            ?? HandleScriptTestCommand(cmd, request)
+            ?? await HandleScriptUiTestCommandAsync(cmd, request),
     };
 
     /// <summary>状態の表示の追加の項目。</summary>
@@ -263,6 +264,12 @@ public sealed partial class MainWindow
         var items = new JsonArray();
         void Add(MenuFlyoutItemBase item, string path)
         {
+            // スクリプトのファイルから作る項目 (サンプル・@menu。名前はファイルのメタデータで、翻訳するリソースではない) は除く。
+            if (AutomationProperties.GetAutomationId(item) is { } scriptItemId && (scriptItemId.StartsWith("Sample_", StringComparison.Ordinal) || scriptItemId.StartsWith("ScriptMenu_", StringComparison.Ordinal)))
+            {
+                return;
+            }
+
             switch (item)
             {
                 case MenuFlyoutSubItem sub:

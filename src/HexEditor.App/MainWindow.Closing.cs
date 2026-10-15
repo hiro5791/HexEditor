@@ -75,6 +75,16 @@ public sealed partial class MainWindow
         }
 
         args.Handled = true;
+
+        // 未保存のスクリプトエディタ (AUTO-20) は、保存するか尋ねる。キャンセルされたら閉じない。
+        foreach (string id in _scriptEditors.Where(e => e.Value.IsDirty).Select(e => e.Key).ToList())
+        {
+            if (!await ConfirmCloseScriptEditorAsync(id))
+            {
+                return;
+            }
+        }
+
         if (WindowManager.Windows.Count > 1 && !WindowManager.IsExiting)
         {
             await CloseThisWindowAsync();

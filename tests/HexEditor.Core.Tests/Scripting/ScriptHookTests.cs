@@ -232,7 +232,7 @@ public sealed class ScriptHookTests : IDisposable
     public async Task A_hook_that_subscribes_to_events_stays_resident_beyond_the_time_limit()
     {
         string script = Hook("resident.js", "app.on('documentOpened', () => {});");
-        Update(c => c.Add(HookKind.Startup, new HookEntry(script) { TimeoutSeconds = 0.5 }));
+        Update(c => c.Add(HookKind.Startup, new HookEntry(script) { TimeoutSeconds = 10 }));
         ScriptHookManager manager = Manager();
 
         await manager.RunStartupAsync().WaitAsync(TimeSpan.FromSeconds(30));

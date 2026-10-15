@@ -29,10 +29,14 @@ public sealed partial class MainWindow
             () => Macro.IsRecording ? CommandState.Unavailable(Loc.Get("Macro_WhileRecording")) : NeedsDocument());
         Macro.Changed += OnMacroStateChanged;
         Macro.Unrecordable += OnMacroUnrecordable;
+        // 閉じる操作が取り消されたときも Closed は来る。実際に閉じるときだけ外す。
         Closed += (_, _) =>
         {
-            Macro.Changed -= OnMacroStateChanged;
-            Macro.Unrecordable -= OnMacroUnrecordable;
+            if (_closingConfirmed)
+            {
+                Macro.Changed -= OnMacroStateChanged;
+                Macro.Unrecordable -= OnMacroUnrecordable;
+            }
         };
         Vm.Documents.CollectionChanged += (_, e) =>
         {

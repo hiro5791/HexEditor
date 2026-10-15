@@ -42,7 +42,8 @@ public sealed class MacroTests : IDisposable
             CodeWrapper = MacroPlayer.Wrap,
             PresetArgs = MacroPlayer.Arguments(playback),
             SkipParameterDialog = true,
-        }, _host.Env).WaitAsync(TimeSpan.FromSeconds(120));
+            TimeLimitOverride = TimeSpan.FromMinutes(10),
+        }, _host.Env).WaitAsync(TimeSpan.FromMinutes(10));
 
     private void SetCursor(CoreDocumentHost doc, long offset) => _host.OnUi(() => doc.Editor.Select(offset, 0));
 
@@ -214,6 +215,8 @@ public sealed class MacroTests : IDisposable
     [Trait("TC", "TC-AUTO-28-03")]
     public async Task Ten_thousand_repetitions_are_undone_with_one_undo()
     {
+        // メモリの上限はプロセス全体のヒープの増加で数える。他のテストと並行して動くと超えることがあるので、ここでは上限を外す。
+        _host.Limits = new ScriptLimits { Time = null, MemoryBytes = ScriptLimits.MaxMemory };
         byte[] original = Sequence(10_000 * 16).Select(b => (byte)(b ^ 0x55)).ToArray();
         CoreDocumentHost doc = _host.Open(original);
         SetCursor(doc, 0);

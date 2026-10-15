@@ -95,19 +95,31 @@ internal static class ScriptWorkspace
 
         LibraryStarted = true;
         _queue = queue;
+        s_foldersSnapshot = string.Join('|', ExtraFolders());
         _ = Task.Run(() =>
         {
             ScriptLibrary library = Library;
             library.Changed += (_, _) => queue.TryEnqueue(SyncCommands);
             library.Start();
-            App.Settings.Changed += keys =>
-            {
-                if (keys.Contains("scripts.folders"))
-                {
-                    queue.TryEnqueue(() => _ = Task.Run(library.Refresh));
-                }
-            };
         });
+    }
+
+    private static string s_foldersSnapshot = string.Empty;
+
+    /// <summary>
+    /// 設定「スクリプトのフォルダ」が変わったら一覧を作り直す。設定の変更の購読はウィンドウごとに持つ (ウィンドウを閉じると外れるように。
+    /// アプリ全体の購読を足すと、ウィンドウを閉じても残る購読になる)。
+    /// </summary>
+    public static void RefreshFoldersIfChanged()
+    {
+        string snapshot = string.Join('|', ExtraFolders());
+        if (!LibraryStarted || snapshot == s_foldersSnapshot)
+        {
+            return;
+        }
+
+        s_foldersSnapshot = snapshot;
+        _ = Task.Run(Library.Refresh);
     }
 
     // ---- スクリプトのコマンド (AUTO-19 の仕様 4、09 の UI-16 の仕様 3) ----
