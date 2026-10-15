@@ -48,7 +48,38 @@ public static class AuthenticodeVerifier
     }
 
     /// <summary>Microsoft の署名があるか (Roslyn のアセンブリの確認)。</summary>
-    public static bool IsMicrosoftSigned(string path, out string? error) => IsSignedBy(path, "Microsoft Corporation", out error);
+    /// <remarks>
+    /// 署名者は "Microsoft Corporation" か ".NET" (.NET 8 以降のランタイムと一部の NuGet パッケージ) で、発行者が Microsoft の CA のもの。
+    /// </remarks>
+    public static bool IsMicrosoftSigned(string path, out string? error)
+    {
+        if (!IsSignedBy(path, string.Empty, out error))
+        {
+            return false;
+        }
+
+        try
+        {
+#pragma warning disable SYSLIB0057 // 署名者の証明書を取り出すだけ (検証は WinVerifyTrust で済んでいる)。
+            using var cert = new X509Certificate2(X509Certificate.CreateFromSignedFile(path));
+#pragma warning restore SYSLIB0057
+            string name = cert.GetNameInfo(X509NameType.SimpleName, forIssuer: false);
+            string issuer = cert.GetNameInfo(X509NameType.SimpleName, forIssuer: true);
+            if (name is not ("Microsoft Corporation" or ".NET") || !issuer.StartsWith("Microsoft ", StringComparison.Ordinal))
+            {
+                error = $"publisher: {name} (issuer: {issuer})";
+                return false;
+            }
+        }
+        catch (Exception ex) when (ex is System.Security.Cryptography.CryptographicException or IOException)
+        {
+            error = ex.Message;
+            return false;
+        }
+
+        error = null;
+        return true;
+    }
 
     private static int Verify(string path)
     {

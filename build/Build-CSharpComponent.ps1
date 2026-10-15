@@ -28,7 +28,7 @@ New-Item -ItemType Directory -Force $publish | Out-Null
 & dotnet publish (Join-Path $root 'src/HexEditor.Scripting.CSharp/HexEditor.Scripting.CSharp.csproj') -c $Configuration -o $publish -nologo "-p:HexVersion=$Version"
 if ($LASTEXITCODE -ne 0) { throw 'dotnet publish failed' }
 
-# アプリと共有するもの (SDK) と、実行に要らないものは入れない。
+# Leave out what the app shares (the SDK) and what is not needed at run time.
 Get-ChildItem $publish -Recurse -File | Where-Object { $_.Name -like 'HexEditor.Sdk.*' -or $_.Extension -in '.pdb', '.xml' } | Remove-Item -Force
 
 $zip = Join-Path $OutDir "hexeditor-csharp-$Version.zip"
