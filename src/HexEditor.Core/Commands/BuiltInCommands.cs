@@ -474,6 +474,7 @@ public static class BuiltInCommands
         new("templates.export", "templates") { Condition = "documentOpen" },
         new("templates.toggleColoring", "templates"),
         new("templates.findCandidates", "templates") { Condition = "documentOpen" },
+        new("templates.findValues", "templates") { Condition = "documentOpen" },
         new("templates.new", "templates"),
         new("templates.open", "templates"),
         new("templates.edit", "templates"),

@@ -41,7 +41,7 @@ internal interface IScriptEditorHost : IScriptPanelHost
 
 /// <summary>
 /// スクリプトエディタ (AUTO-20) の画面と操作。実行・デバッグは <see cref="ScriptEditorSession"/>、構文のチェックは
-/// <see cref="ScriptSyntaxChecker"/>。コードのエディタ部品は <see cref="IScriptCodeEditor"/> (WebView2 の Monaco、なければ等幅の入力欄)。
+/// <see cref="ScriptSyntaxChecker"/>。コードのエディタ部品は <see cref="IScriptCodeEditor"/> (テンプレートエディタと共通。<see cref="CodeEditorFactory"/>)。
 /// </summary>
 public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent, ICodeEditorHost
 {
@@ -98,7 +98,8 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
             return;
         }
 
-        _editor = new PlainCodeEditor();
+        // コードエディタの部品はテンプレートエディタ (07 の TPL-31) と共通 (CodeEditorFactory)。
+        _editor = CodeEditorFactory.Create("ScriptEditor_Text", Loc.Format("ScriptEditor_Name", System.IO.Path.GetFileName(Path)));
         EditorHost.Content = _editor.View;
         AutomationProperties.SetName(_editor.View, Loc.Format("ScriptEditor_Name", System.IO.Path.GetFileName(Path)));
         Load();
@@ -309,7 +310,7 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
     private void ShowProblems(IReadOnlyList<ScriptDiagnostic> diagnostics)
     {
         ProblemsList.ItemsSource = diagnostics.Select(d => new ProblemRow(d)).ToList();
-        _editor?.SetMarkers(diagnostics);
+        _editor?.SetMarkers([.. diagnostics.Where(d => d.Line > 0).Select(d => new CodeMarker(d.Line, Math.Max(1, d.Column), 1, d.IsError, d.Message))]);
         ProblemsTab.Content = diagnostics.Count > 0
             ? Loc.Format("ScriptEditor_ProblemsCount", diagnostics.Count)
             : Loc.Get("ScriptEditor_Problems");

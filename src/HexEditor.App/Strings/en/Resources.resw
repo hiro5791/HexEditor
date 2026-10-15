@@ -6531,4 +6531,19 @@ Type: {4}</value></data>
   <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Offline mode is on (or downloads are turned off), so the component is not downloaded. To add it by hand, get {0} from the release page of this version (on another PC if needed) and extract it into {1}.</value></data>
   <data name="SafeMode_Notice" xml:space="preserve"><value>Started in safe mode. Plug-ins and automatically run scripts are not loaded.</value></data>
   <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Restart normally</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>Template: Find field values</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>search;field;value</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>No template is applied.</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>Syntax error at character {0}: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>the condition is empty</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>a value is missing</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>unknown condition (use name:, type: or value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>unknown comparison (use =, !=, &lt;, &lt;=, &gt;, &gt;= or ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>the quotation is not closed</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>the regular expression is not valid</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>Template values</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Press Enter to search the field values. Results appear in Search results.</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Field</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (user-defined)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (template {1})</value></data>
 </root>

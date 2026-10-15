@@ -6531,4 +6531,19 @@
   <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>オフラインモードが有効 (またはダウンロードが無効) なため、コンポーネントはダウンロードしません。手動で入れるには、この版のリリースのページから {0} を (必要なら別の PC で) 入手し、{1} に展開してください。</value></data>
   <data name="SafeMode_Notice" xml:space="preserve"><value>セーフモードで起動しました。プラグインと自動実行のスクリプトは読み込まれていません。</value></data>
   <data name="SafeMode_RestartNormally" xml:space="preserve"><value>通常どおり再起動</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>テンプレート: テンプレートの値を検索</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>けんさく;あたい;ふぃーるど</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>テンプレートが適用されていません。</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>条件の構文エラー ({0} 文字目): {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>条件が空です</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>値がありません</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>知らない条件です (name:、type:、value を使います)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>比較の演算子が正しくありません (=、!=、&lt;、&lt;=、&gt;、&gt;=、~ を使います)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>引用符が閉じていません</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>正規表現が正しくありません</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>テンプレートの値</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Enter でフィールドの値を検索します。結果は「検索結果」に出ます。</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>フィールド</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (ユーザー定義)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (テンプレート {1})</value></data>
 </root>

@@ -173,6 +173,14 @@ public sealed partial class MainWindow
         {
             if (!string.IsNullOrEmpty(file.Path) && File.Exists(file.Path))
             {
+                if (string.Equals(Path.GetExtension(file.Path), ".hexplugin", StringComparison.OrdinalIgnoreCase))
+                {
+                    // .hexplugin はどこにドロップしてもプラグインの追加 (UI-34 の仕様 1 の表、08 の AUTO-32)。タブは開かない。
+                    // 確認のダイアログを待たずに戻る (ほかのドロップした項目を続ける)。
+                    _ = InstallDroppedPluginAsync(file.Path);
+                    return false;
+                }
+
                 return TryOpen(file.Path, insertAt) is not null;
             }
 

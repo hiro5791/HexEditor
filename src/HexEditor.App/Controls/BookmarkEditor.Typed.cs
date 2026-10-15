@@ -27,6 +27,15 @@ public sealed partial class BookmarkEditor
     /// <summary>型が変わった (持ち主が一覧の値の列を出す)。</summary>
     public event EventHandler<Bookmark>? TypeChanged;
 
+    /// <summary>追加の型 (構造体テンプレートの型・ユーザー定義型。INSP-29 の仕様 1)。開くたびに作り直す。</summary>
+    internal Func<IReadOnlyList<(string Name, string Id)>>? ExtraTypes { get; set; }
+
+    /// <summary>追加の型の長さ (評価した大きさ)。評価できなければ null。</summary>
+    internal Func<Bookmark, string, long?>? ExtraTypeLength { get; set; }
+
+    /// <summary>標準の型の選択肢の数 (先頭の「型なし」を含む)。</summary>
+    private int _standardTypeCount;
+
     private void LoadTyped()
     {
         if (_types.Count == 0)
@@ -42,6 +51,7 @@ public sealed partial class BookmarkEditor
                 TypeChoice.Items.Add(name);
             }
 
+            _standardTypeCount = _types.Count;
             EndianChoice.Items.Add(Loc.Get("Bookmark_EndianDocument"));
             EndianChoice.Items.Add("LE");
             EndianChoice.Items.Add("BE");
@@ -52,6 +62,19 @@ public sealed partial class BookmarkEditor
             AutomationProperties.SetName(TypeChoice, Loc.Get("Bookmark_TypeHeader"));
             AutomationProperties.SetName(EndianChoice, Loc.Get("Bookmark_EndianHeader"));
             AutomationProperties.SetName(ExpressionBox, Loc.Get("Bookmark_ExpressionHeader"));
+        }
+
+        // 追加の型 (ドキュメントの適用・ユーザー定義型で変わる) を作り直す
+        while (_types.Count > _standardTypeCount)
+        {
+            _types.RemoveAt(_types.Count - 1);
+            TypeChoice.Items.RemoveAt(TypeChoice.Items.Count - 1);
+        }
+
+        foreach ((string name, string id) in ExtraTypes?.Invoke() ?? [])
+        {
+            _types.Add((name, id));
+            TypeChoice.Items.Add(name);
         }
 
         Bookmark b = _bookmark!;
@@ -119,6 +142,12 @@ public sealed partial class BookmarkEditor
     /// <summary>型のサイズ (可変長の型は開始位置から解釈した長さ。INSP-29 の仕様 1)。</summary>
     private long TypeLength(string typeId)
     {
+        if (InspectorTypes.Find(typeId) is null)
+        {
+            // 構造体テンプレートの型・ユーザー定義型: 評価した大きさ (できなければ今の長さ)
+            return _bookmark is { } current ? ExtraTypeLength?.Invoke(current, typeId) ?? current.Length : 1;
+        }
+
         InspectorType type = InspectorTypes.Get(typeId);
         if (!type.Variable || _editor is null || _bookmark is null)
         {

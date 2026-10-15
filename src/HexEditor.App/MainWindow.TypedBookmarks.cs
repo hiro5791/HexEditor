@@ -109,6 +109,9 @@ public sealed partial class MainWindow
     /// <summary>編集のフライアウトの型・位置の式の変更をつなぐ (<see cref="EditBookmark"/> から呼ぶ)。</summary>
     private void HookBookmarkEditorTyped(BookmarkEditor editor, DocumentAnnotations annotations)
     {
+        // 型の欄の追加の選択肢 (構造体テンプレートの型・ユーザー定義型。INSP-29 の仕様 1)
+        editor.ExtraTypes = ExtraBookmarkTypes;
+        editor.ExtraTypeLength = ExtraBookmarkTypeLength;
         editor.ExpressionChanged += (_, _) => ReevaluateExpressions(annotations);
         editor.TypeChanged += (_, b) =>
         {
@@ -125,7 +128,8 @@ public sealed partial class MainWindow
     /// <summary>ブックマーク一覧の値の列の書き換えをつなぐ (<see cref="CreateBookmarkListPanel"/> から呼ぶ)。</summary>
     private void HookBookmarkListTyped(BookmarkListPanel list)
     {
-        list.EditValueOf = b => TypedBookmarkData(b) is { } d ? InspectorDecoder.EditText(b.TypeId!, d.Data, d.States, d.Endian, _inspectorVm.Options) : string.Empty;
+        list.EditValueOf = b => IsExtraBookmarkType(b.TypeId) ? TypedBookmarkValue(b)
+            : TypedBookmarkData(b) is { } d ? InspectorDecoder.EditText(b.TypeId!, d.Data, d.States, d.Endian, _inspectorVm.Options) : string.Empty;
         list.CommitValue = CommitTypedBookmarkValue;
     }
 
@@ -148,12 +152,39 @@ public sealed partial class MainWindow
     }
 
     /// <summary>値の列の文字列 (インスペクタと同じ解釈と表示形式。INSP-29 の仕様 2)。</summary>
-    private string TypedBookmarkValue(Bookmark b) =>
-        TypedBookmarkData(b) is { } d ? InspectorDecoder.Decode(b.TypeId!, d.Data, d.States, d.Endian, _inspectorVm.Options).Text : string.Empty;
+    private string TypedBookmarkValue(Bookmark b)
+    {
+        if (IsExtraBookmarkType(b.TypeId))
+        {
+            // 構造体テンプレートの型・ユーザー定義型 (INSP-29 の仕様 1。MainWindow.TemplateBookmarks.cs)
+            return (_bookmarksVm.OwnerOf(b)?.Document ?? Vm.Selected) is { } owner && !owner.Document.IsDisposed
+                ? ExtraBookmarkValue(b, owner, b.TypeEndian ?? (owner.Editor.View.BigEndian ? Endianness.Big : Endianness.Little))
+                : string.Empty;
+        }
+
+        return TypedBookmarkData(b) is { } d ? InspectorDecoder.Decode(b.TypeId!, d.Data, d.States, d.Endian, _inspectorVm.Options).Text : string.Empty;
+    }
 
     /// <summary>一覧の値の列からの書き換え (INSP-17 の規則: 常に上書き、長さを変えない、1 回の Undo)。書き込めなければ理由。</summary>
     private string? CommitTypedBookmarkValue(Bookmark b, string text)
     {
+        if (IsExtraBookmarkType(b.TypeId))
+        {
+            if ((_bookmarksVm.OwnerOf(b)?.Document ?? Vm.Selected) is not { } owner || owner.Document.IsDisposed)
+            {
+                return Loc.Get("Command_NoDocument");
+            }
+
+            if (owner.Editor.ReadOnly || owner.Document.IsEditLocked)
+            {
+                return Loc.Get("Inspector_ReadOnlyTip");
+            }
+
+            string? error = CommitExtraBookmarkValue(b, owner, b.TypeEndian ?? (owner.Editor.View.BigEndian ? Endianness.Big : Endianness.Little), text);
+            _bookmarksVm.Rows.UpdateRows([b]);
+            return error;
+        }
+
         if (TypedBookmarkData(b) is not { } d)
         {
             return Loc.Get("Command_NoDocument");

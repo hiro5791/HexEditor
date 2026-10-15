@@ -63,6 +63,13 @@ public sealed partial class MainWindow : IPluginManagerHost
 
     // ---- プラグインマネージャ (AUTO-32) ----
 
+    /// <summary>ドロップした <c>.hexplugin</c> を追加する (プラグインマネージャを開き、一覧へのドロップと同じ確認をする。UI-34 の仕様 1)。</summary>
+    internal async Task InstallDroppedPluginAsync(string path)
+    {
+        OpenPluginManager();
+        await _pluginManagerVm!.InstallAsync(path);
+    }
+
     /// <summary>「プラグイン: 管理」: プラグインマネージャのページを開き、一覧にフォーカスを置く。</summary>
     public void OpenPluginManager()
     {

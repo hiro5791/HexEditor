@@ -62,15 +62,12 @@ public sealed record TemplateDebugRow(string Name, string Value, string Detail)
 /// テンプレートエディタ (TPL-31) とテンプレートデバッガ (TPL-32) のタブ。テキストは常に左から右 (00 の 5.4)。構文の色分け、
 /// 入力中の構文チェック (300 ms ごと。波線・行の印・ツールチップ)、補完、定義へ移動、書式の整形、コメントの切り替え、
 /// 「試しに実行」、ブレークポイント・ステップ実行・変数・ウォッチ・呼び出し履歴の表示。
-/// エディタの部品は 08 のコードエディタ (Monaco) が入るまで、WinUI の RichEditBox を使う (08 の AUTO-20 の仕様 9 の代替表示と同じ)。
+/// エディタの部品はスクリプトエディタ (08 の AUTO-20) と共通の <see cref="IScriptCodeEditor"/> (<see cref="CodeEditorFactory"/> が作る。TPL-31 の仕様 2)。
 /// </summary>
 public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, ICodeEditorKeys
 {
-    private const int GutterWidth = 44;
-
     private readonly ITemplateEditorHost _host;
-    private readonly RichEditBox _editor;
-    private readonly Canvas _gutter;
+    private readonly IScriptCodeEditor _editor;
     private readonly ComboBox _target;
     private readonly ListView _problems;
     private readonly ListView _variables;
@@ -127,33 +124,13 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         AutomationProperties.SetAutomationId(_info, "TplEd_Message");
 
         // ---- エディタ本体 ----
-        _editor = new RichEditBox
-        {
-            AcceptsReturn = true,
-            TextWrapping = TextWrapping.NoWrap,
-            FontFamily = new FontFamily("Cascadia Mono, Consolas"),
-            FontSize = 14,
-            IsSpellCheckEnabled = false,
-            IsTextPredictionEnabled = false,
-            FlowDirection = FlowDirection.LeftToRight,
-            TextAlignment = TextAlignment.Left,
-            BorderThickness = new Thickness(0),
-            ClipboardCopyFormat = RichEditClipboardFormat.PlainText,
-            DisabledFormattingAccelerators = DisabledFormattingAccelerators.All,
-        };
-        AutomationProperties.SetAutomationId(_editor, "TplEd_Text");
-        AutomationProperties.SetName(_editor, Loc.Get("TplEd_TextName"));
-        ScrollViewer.SetHorizontalScrollBarVisibility(_editor, ScrollBarVisibility.Auto);
+        _editor = CodeEditorFactory.Create("TplEd_Text", Loc.Get("TplEd_TextName"));
         _editor.TextChanged += (_, _) => Editor_TextChanged();
-        _editor.SelectionChanged += (_, _) => UpdateGutter();
-        _editor.PreviewKeyDown += Editor_PreviewKeyDown;
-        _editor.CharacterReceived += Editor_CharacterReceived;
-        _editor.PointerMoved += Editor_PointerMoved;
-        _editor.SizeChanged += (_, _) => UpdateGutter();
-        _editor.Loaded += (_, _) => HookScroll();
-        _gutter = new Canvas { Width = GutterWidth, Background = (Brush)Application.Current.Resources["LayerFillColorDefaultBrush"] };
-        AutomationProperties.SetAutomationId(_gutter, "TplEd_Gutter");
-        _gutter.PointerPressed += Gutter_PointerPressed;
+        _editor.CaretMoved += (_, _) => UpdateDecorations();
+        _editor.PreviewKey = Editor_PreviewKey;
+        _editor.CharacterTyped += Editor_CharacterTyped;
+        _editor.GutterClicked += (_, line) => ToggleBreakpoint(line);
+        _editor.ClassColor = (cls, theme) => TemplateBrushes.ThemeColor("TplSyntax" + cls + "Color", theme);
 
         _completionList = new ListView { MaxHeight = 220, MinWidth = 260, SelectionMode = ListViewSelectionMode.Single };
         AutomationProperties.SetAutomationId(_completionList, "TplEd_Completion");
@@ -222,13 +199,10 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         };
 
         var body = new Grid();
-        body.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(GutterWidth) });
         body.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         body.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        body.Children.Add(_gutter);
-        Grid.SetColumn(_editor, 1);
-        body.Children.Add(_editor);
-        Grid.SetColumn(_debugPane, 2);
+        body.Children.Add(_editor.View);
+        Grid.SetColumn(_debugPane, 1);
         body.Children.Add(_debugPane);
 
         var root = new Grid { Background = (Brush)Application.Current.Resources["SolidBackgroundFillColorBaseBrush"] };
@@ -301,17 +275,14 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         _suppressChange = true;
         try
         {
-            _editor.Document.SetText(TextSetOptions.None, normalized);
+            _editor.Text = normalized;
         }
         finally
         {
             _suppressChange = false;
         }
 
-        // RichEditBox は末尾に段落の区切りを 1 つ足すことがある (読むときに外す)
-        string raw = RawText();
-        _trailingAdded = raw.Length == normalized.Length + 1 && raw.EndsWith('\n') && raw.StartsWith(normalized, StringComparison.Ordinal);
-        _text = ReadText();
+        _text = _editor.Text;
         if (markSaved)
         {
             _savedText = _text;
@@ -321,21 +292,6 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         Check();
     }
 
-    private bool _trailingAdded;
-
-    /// <summary>RichEditBox の改行 (\r) を \n にした内容。</summary>
-    private string ReadText()
-    {
-        string text = RawText();
-        return _trailingAdded && text.EndsWith('\n') ? text[..^1] : text;
-    }
-
-    private string RawText()
-    {
-        _editor.Document.GetText(TextGetOptions.None, out string raw);
-        return raw.Replace("\r\n", "\n", StringComparison.Ordinal).Replace('\r', '\n');
-    }
-
     private void Editor_TextChanged()
     {
         if (_suppressChange)
@@ -343,22 +299,18 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
             return;
         }
 
-        _text = ReadText();
+        _text = _editor.Text;
         TitleChanged?.Invoke(this, EventArgs.Empty);
         _checkTimer.Stop();
         _checkTimer.Start();
-        UpdateGutter();
+        UpdateDecorations();
     }
 
     /// <summary>キャレットの位置 (文字の位置)。</summary>
     public int Caret
     {
-        get => Math.Clamp(_editor.Document.Selection.StartPosition, 0, _text.Length);
-        set
-        {
-            int p = Math.Clamp(value, 0, _text.Length);
-            _editor.Document.Selection.SetRange(p, p);
-        }
+        get => Math.Clamp(_editor.CaretIndex, 0, _text.Length);
+        set => _editor.CaretIndex = Math.Clamp(value, 0, _text.Length);
     }
 
     /// <summary>キャレットの行 (1 から)。</summary>
@@ -398,13 +350,12 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     /// <summary>行・列へキャレットを移す (定義へ移動、エラーの行)。</summary>
     public void MoveCaret(int line, int column)
     {
-        Caret = PositionOf(line, column);
-        _editor.Document.Selection.ScrollIntoView(PointOptions.None);
+        _editor.GoTo(line, column);
         FocusEditor();
-        UpdateGutter();
+        UpdateDecorations();
     }
 
-    public void FocusEditor() => _editor.Focus(FocusState.Programmatic);
+    public void FocusEditor() => _editor.FocusEditor();
 
     // ───────────── 構文チェックと色分け (TPL-31 の仕様 3) ─────────────
 
@@ -420,63 +371,18 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         }
 
         ApplyFormatting();
-        UpdateGutter();
+        UpdateDecorations();
     }
 
-    /// <summary>色分けと波線を付け直す (テーマの色。ハイコントラストではシステム色だけにする)。</summary>
+    /// <summary>色分けと波線・現在の行を付け直す (テーマの色。ハイコントラストではシステム色だけにする。描くのはエディタの部品)。</summary>
     private void ApplyFormatting()
     {
-        if (_text.Length > 1024 * 1024)
-        {
-            return; // 大きなテンプレートは色分けしない (入力の遅れを抑える。TPL-31 の「巨大ファイル」)
-        }
-
-        bool hc = new Windows.UI.ViewManagement.AccessibilitySettings().HighContrast;
-        string theme = AnnotationBrushes.ThemeOf(this, hc);
-        Color fg = ((SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"]).Color;
-        int caretStart = _editor.Document.Selection.StartPosition;
-        int caretEnd = _editor.Document.Selection.EndPosition;
-        _suppressChange = true;
-        _editor.Document.BatchDisplayUpdates();
-        try
-        {
-            ITextRange all = _editor.Document.GetRange(0, _text.Length);
-            all.CharacterFormat.ForegroundColor = fg;
-            all.CharacterFormat.Underline = UnderlineType.None;
-            if (!hc)
-            {
-                foreach (TemplateClassifiedSpan s in TemplateLanguageService.Classify(_text))
-                {
-                    if (TemplateBrushes.ThemeColor("TplSyntax" + s.Class + "Color", theme) is { } c)
-                    {
-                        _editor.Document.GetRange(s.Start, s.Start + s.Length).CharacterFormat.ForegroundColor = c;
-                    }
-                }
-            }
-
-            foreach (TemplateEditorDiagnostic d in Decorations)
-            {
-                int start = PositionOf(d.Line, d.Column);
-                ITextRange r = _editor.Document.GetRange(start, Math.Min(_text.Length, start + Math.Max(1, d.Length)));
-                r.CharacterFormat.Underline = d.Diagnostic.Severity == TemplateSeverity.Error ? UnderlineType.Wave : UnderlineType.Dotted;
-            }
-
-            if (_debugLine is { } line)
-            {
-                int ls = PositionOf(line, 1);
-                int le = _text.IndexOf('\n', ls) is int nl and >= 0 ? nl : _text.Length;
-                if (TemplateBrushes.ThemeColor("TplSyntaxDebugLineColor", theme) is { } back)
-                {
-                    _editor.Document.GetRange(ls, le).CharacterFormat.BackgroundColor = back;
-                }
-            }
-        }
-        finally
-        {
-            _editor.Document.ApplyDisplayUpdates();
-            _editor.Document.Selection.SetRange(caretStart, caretEnd);
-            _suppressChange = false;
-        }
+        // 大きなテンプレートは色分けしない (入力の遅れを抑える。TPL-31 の「巨大ファイル」)
+        _editor.SetClassification(_text.Length > 1024 * 1024 ? []
+            : [.. TemplateLanguageService.Classify(_text).Select(s => new CodeSpan(s.Start, s.Length, s.Class.ToString()))]);
+        _editor.SetMarkers([.. Decorations.Select(d => new CodeMarker(d.Line, d.Column, Math.Max(1, d.Length),
+            d.Diagnostic.Severity == TemplateSeverity.Error, TemplateDiagnosticText.Line(d.Diagnostic)))]);
+        _editor.SetCurrentLine(_debugLine);
     }
 
     /// <summary>位置のエラー・警告の理由 (波線の上のツールチップ)。</summary>
@@ -485,126 +391,19 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
             ? TemplateDiagnosticText.Line(diag)
             : Decorations.FirstOrDefault(d => d.Line == line)?.Diagnostic is { } any ? TemplateDiagnosticText.Line(any) : null;
 
-    private void Editor_PointerMoved(object sender, PointerRoutedEventArgs e)
+    // ───────────── 行の印 (ブレークポイント・現在の行。エラーの印は ApplyFormatting) ─────────────
+
+    private void UpdateDecorations()
     {
-        Windows.Foundation.Point p = e.GetCurrentPoint(_editor).Position;
-        ITextRange range = _editor.Document.GetRangeFromPoint(p, PointOptions.ClientCoordinates);
-        int line = LineOf(range.StartPosition);
-        int column = range.StartPosition - PositionOf(line, 1) + 1;
-        string? tip = ToolTipAt(line, column);
-        ToolTipService.SetToolTip(_editor, tip);
-    }
-
-    // ───────────── 行の印 (エラー・ブレークポイント・現在の行) ─────────────
-
-    private ScrollViewer? _scroll;
-
-    private void HookScroll()
-    {
-        _scroll = FindChild<ScrollViewer>(_editor);
-        if (_scroll is not null)
-        {
-            _scroll.ViewChanged += (_, _) => UpdateGutter();
-        }
-
-        UpdateGutter();
-    }
-
-    private static T? FindChild<T>(DependencyObject root)
-        where T : DependencyObject
-    {
-        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
-        {
-            DependencyObject child = VisualTreeHelper.GetChild(root, i);
-            if (child is T t)
-            {
-                return t;
-            }
-
-            if (FindChild<T>(child) is { } found)
-            {
-                return found;
-            }
-        }
-
-        return null;
-    }
-
-    private void UpdateGutter()
-    {
-        _gutter.Children.Clear();
-        if (_editor.ActualHeight <= 0)
-        {
-            return;
-        }
-
-        var lines = new SortedSet<int>(Decorations.Select(d => d.Line));
-        foreach (TemplateBreakpoint b in Debugger.Breakpoints)
-        {
-            lines.Add(b.Line);
-        }
-
-        if (_debugLine is { } dl)
-        {
-            lines.Add(dl);
-        }
-
-        foreach (int line in lines)
-        {
-            int pos = PositionOf(line, 1);
-            ITextRange r = _editor.Document.GetRange(pos, pos);
-            r.GetRect(PointOptions.ClientCoordinates, out Windows.Foundation.Rect rect, out _);
-            if (rect.Top < -20 || rect.Top > _editor.ActualHeight)
-            {
-                continue;
-            }
-
-            double y = rect.Top + (rect.Height / 2);
-            if (Debugger.Breakpoints.Any(b => b.Line == line))
-            {
-                var dot = new Ellipse { Width = 12, Height = 12, Fill = (Brush)Application.Current.Resources["SystemFillColorCriticalBrush"] };
-                Canvas.SetLeft(dot, 4);
-                Canvas.SetTop(dot, y - 6);
-                _gutter.Children.Add(dot);
-            }
-
-            if (Decorations.FirstOrDefault(d => d.Line == line) is { } d)
-            {
-                var mark = new FontIcon
-                {
-                    Glyph = d.Diagnostic.Severity == TemplateSeverity.Error ? "" : "",
-                    FontSize = 12,
-                    Foreground = (Brush)Application.Current.Resources[d.Diagnostic.Severity == TemplateSeverity.Error ? "SystemFillColorCriticalBrush" : "SystemFillColorCautionBrush"],
-                };
-                ToolTipService.SetToolTip(mark, TemplateDiagnosticText.Line(d.Diagnostic));
-                Canvas.SetLeft(mark, 26);
-                Canvas.SetTop(mark, y - 7);
-                _gutter.Children.Add(mark);
-            }
-
-            if (_debugLine == line)
-            {
-                var arrow = new FontIcon { Glyph = "", FontSize = 12, Foreground = (Brush)Application.Current.Resources["AccentFillColorDefaultBrush"] };
-                Canvas.SetLeft(arrow, 16);
-                Canvas.SetTop(arrow, y - 7);
-                _gutter.Children.Add(arrow);
-            }
-        }
-    }
-
-    private void Gutter_PointerPressed(object sender, PointerRoutedEventArgs e)
-    {
-        Windows.Foundation.Point p = e.GetCurrentPoint(_gutter).Position;
-        ITextRange range = _editor.Document.GetRangeFromPoint(new Windows.Foundation.Point(2, p.Y), PointOptions.ClientCoordinates);
-        ToggleBreakpoint(LineOf(range.StartPosition));
-        e.Handled = true;
+        _editor.SetBreakpoints([.. Debugger.Breakpoints.Select(b => new HexEditor.Core.Scripting.Debugging.Breakpoint(b.Line) { Condition = b.Condition })]);
+        _editor.SetCurrentLine(_debugLine);
     }
 
     // ───────────── 補完 (TPL-31 の仕様 3) ─────────────
 
-    private void Editor_CharacterReceived(UIElement sender, CharacterReceivedRoutedEventArgs args)
+    private void Editor_CharacterTyped(object? sender, char character)
     {
-        if (args.Character is '.' or ':' or '[')
+        if (character is '.' or ':' or '[')
         {
             DispatcherQueue.TryEnqueue(() => ShowCompletion(automatic: true));
         }
@@ -617,7 +416,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     /// <summary>補完の候補を出す (Ctrl+Space、または <c>.</c> の入力の後)。</summary>
     public void ShowCompletion(bool automatic = false)
     {
-        _text = ReadText();
+        _text = _editor.Text;
         TemplateCompletionResult result = TemplateLanguageService.Complete(_text, Caret, Path, TemplateService.LoadOptions);
         _completion = result;
         if (result.Items.Count == 0 || (automatic && result.ReplaceLength == 0 && Caret > 0 && _text[Caret - 1] is not ('.' or ':' or '[')))
@@ -635,10 +434,9 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         }
 
         _completionList.SelectedIndex = 0;
-        _editor.Document.Selection.GetRect(PointOptions.ClientCoordinates, out Windows.Foundation.Rect rect, out _);
-        Windows.Foundation.Point origin = _editor.TransformToVisual(this).TransformPoint(new Windows.Foundation.Point(rect.Left, rect.Bottom));
-        _completionPopup.HorizontalOffset = origin.X;
-        _completionPopup.VerticalOffset = origin.Y + 2;
+        Windows.Foundation.Rect caret = _editor.CaretBounds(this);
+        _completionPopup.HorizontalOffset = caret.Left;
+        _completionPopup.VerticalOffset = caret.Bottom + 2;
         _completionPopup.IsOpen = true;
     }
 
@@ -650,40 +448,36 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
             return;
         }
 
-        int end = c.ReplaceStart + c.ReplaceLength;
-        ITextRange range = _editor.Document.GetRange(c.ReplaceStart, end);
-        range.Text = item.Label;
-        Caret = c.ReplaceStart + item.Label.Length;
+        _editor.Replace(c.ReplaceStart, c.ReplaceLength, item.Label);
         _completionPopup.IsOpen = false;
     }
 
-    private void Editor_PreviewKeyDown(object sender, KeyRoutedEventArgs e)
+    /// <summary>補完の一覧が開いているときのキー (↑ ↓ で選び、Enter・Tab で確定、Esc で閉じる)。処理したら true。</summary>
+    private bool Editor_PreviewKey(VirtualKey key)
     {
         if (!_completionPopup.IsOpen)
         {
-            return;
+            return false;
         }
 
-        switch (e.Key)
+        switch (key)
         {
             case VirtualKey.Down:
                 _completionList.SelectedIndex = Math.Min(_completionList.Items.Count - 1, _completionList.SelectedIndex + 1);
                 _completionList.ScrollIntoView(_completionList.SelectedItem);
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Up:
                 _completionList.SelectedIndex = Math.Max(0, _completionList.SelectedIndex - 1);
                 _completionList.ScrollIntoView(_completionList.SelectedItem);
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Enter or VirtualKey.Tab:
                 AcceptCompletion();
-                e.Handled = true;
-                break;
+                return true;
             case VirtualKey.Escape:
                 _completionPopup.IsOpen = false;
-                e.Handled = true;
-                break;
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -693,7 +487,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     /// </summary>
     public bool HandleEditorKey(VirtualKey key, bool ctrl, bool shift, bool alt)
     {
-        if (_editor.FocusState == FocusState.Unfocused)
+        if (!_editor.HasFocus)
         {
             return false; // ウォッチ式の入力欄など、エディタ以外の部品
         }
@@ -734,11 +528,11 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
                 {
                     flyout.Hide();
                     MoveCaret(Math.Min(line, LineCount), 1);
-                    _editor.Focus(FocusState.Keyboard);
+                    _editor.FocusEditor();
                 }
             }
         };
-        flyout.ShowAt(_editor);
+        flyout.ShowAt(_editor.View);
         box.Focus(FocusState.Programmatic);
     }
 
@@ -749,7 +543,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     /// <summary>F12: キャレットの名前の定義へ (インポート先のファイルは別のタブで開く。TPL-31 の仕様 3)。</summary>
     public async Task GoToDefinitionAsync()
     {
-        _text = ReadText();
+        _text = _editor.Text;
         if (TemplateLanguageService.FindDefinition(_text, Caret, Path, TemplateService.LoadOptions) is { } at)
         {
             await _host.OpenTemplateEditorAtAsync(at.File, at.Line, at.Column);
@@ -765,8 +559,8 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
 
     public void ToggleComment()
     {
-        int first = LineOf(_editor.Document.Selection.StartPosition);
-        int last = LineOf(_editor.Document.Selection.EndPosition);
+        int first = LineOf(_editor.Selection.Start);
+        int last = LineOf(_editor.Selection.End);
         SetText(TemplateLanguageService.ToggleComment(_text, first, last));
         MoveCaret(first, 1);
     }
@@ -795,7 +589,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
 
     public async Task<bool> SaveAsync()
     {
-        _text = ReadText();
+        _text = _editor.Text;
         if (IsStandard)
         {
             // 標準テンプレートは直接保存できない。「複製して編集」を案内する
@@ -896,7 +690,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
 
     private TemplateProgram Compile()
     {
-        _text = ReadText();
+        _text = _editor.Text;
         string? dir = TemplateCatalog.IsStandardPath(Path) ? null : System.IO.Path.GetDirectoryName(Path);
         return TemplateLoader.LoadText(_text, System.IO.Path.GetFileName(Path), dir, TemplateService.LoadOptions);
     }
@@ -1007,7 +801,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         _debugLine = null;
         _host.EndTemplateDebug(entry);
         ApplyFormatting();
-        UpdateGutter();
+        UpdateDecorations();
         DebugEnded?.Invoke(this, EventArgs.Empty);
     }
 
@@ -1023,7 +817,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         {
             _debugLine = null;
             ApplyFormatting();
-            UpdateGutter();
+            UpdateDecorations();
         }
     });
 
@@ -1073,7 +867,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         }
 
         ApplyFormatting();
-        UpdateGutter();
+        UpdateDecorations();
         Paused?.Invoke(this, state);
     }
 
@@ -1085,7 +879,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
     {
         Debugger.ToggleBreakpoint(Path, line ?? CaretLine);
         RefreshBreakpointList();
-        UpdateGutter();
+        UpdateDecorations();
     }
 
     private void RefreshBreakpointList()

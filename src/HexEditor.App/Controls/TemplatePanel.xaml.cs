@@ -34,6 +34,9 @@ public interface ITemplatePanelHost
 
     /// <summary>右クリックメニューの項目を作る (TPL-24 の仕様 1)。</summary>
     void FillTemplateMenu(MenuFlyout menu, IReadOnlyList<TemplateTreeItem> items);
+
+    /// <summary>テンプレートの値の検索 (04 の FIND-29)。結果は共通の結果一覧に出す。誤り (構文エラーの位置など) の文を返す。</summary>
+    Task<string?> FindTemplateValuesAsync(string query, bool evaluateAll);
 }
 
 /// <summary>
@@ -162,14 +165,36 @@ public sealed partial class TemplatePanel : UserControl
 
     private void Counts_Click(object sender, RoutedEventArgs e) => Host.ShowTemplateOutput();
 
-    private async void FilterBox_TextChanged(object sender, TextChangedEventArgs e) => await FilterAsync(evaluateAll: false);
+    private async void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (IsValueQuery(FilterBox.Text))
+        {
+            // 値の検索の条件 (FIND-29) は入力中に絞り込まない (Enter で検索する)
+            if (Vm.FilterActive)
+            {
+                await Vm.FilterAsync(string.Empty, evaluateAll: false);
+            }
+
+            MessageLine.Text = Loc.Get("Tpl_ValueSearchHint");
+            return;
+        }
+
+        await FilterAsync(evaluateAll: false);
+    }
 
     private async void FilterBox_KeyDown(object sender, KeyRoutedEventArgs e)
     {
         if (e.Key == VirtualKey.Enter)
         {
             e.Handled = true;
-            await FilterAsync(evaluateAll: false);
+            if (IsValueQuery(FilterBox.Text))
+            {
+                await SearchValuesAsync(evaluateAll: false);
+            }
+            else
+            {
+                await FilterAsync(evaluateAll: false);
+            }
         }
         else if (e.Key == VirtualKey.Escape && FilterBox.Text.Length > 0)
         {
@@ -178,7 +203,49 @@ public sealed partial class TemplatePanel : UserControl
         }
     }
 
-    private async void SearchAll_Click(object sender, RoutedEventArgs e) => await FilterAsync(evaluateAll: true);
+    private async void SearchAll_Click(object sender, RoutedEventArgs e)
+    {
+        if (IsValueQuery(FilterBox.Text))
+        {
+            await SearchValuesAsync(evaluateAll: true);
+        }
+        else
+        {
+            await FilterAsync(evaluateAll: true);
+        }
+    }
+
+    /// <summary>
+    /// 検索欄の文字列がテンプレートの値の検索の条件か (<c>name:</c>・<c>type:</c>・<c>value</c> と比較の演算子。FIND-29 の仕様 1)。
+    /// それ以外は結果ツリーの絞り込み (TPL-21 の仕様 5)。
+    /// </summary>
+    internal static bool IsValueQuery(string text) =>
+        System.Text.RegularExpressions.Regex.IsMatch(text, @"(^|\s)(name:|type:|value\s*(!=|<=|>=|=|<|>|~))", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+    /// <summary>テンプレートの値の検索 (FIND-29): 結果は共通の結果一覧。構文エラーは位置を検索欄の下に出す。</summary>
+    internal async Task SearchValuesAsync(bool evaluateAll)
+    {
+        MessageLine.Text = string.Empty;
+        string? error = await Host.FindTemplateValuesAsync(FilterBox.Text, evaluateAll);
+        MessageLine.Text = error ?? string.Empty;
+    }
+
+    /// <summary>検索欄にフォーカスを移す (コマンド「テンプレートの値を検索」)。</summary>
+    internal void FocusSearchBox() => FilterBox.Focus(FocusState.Programmatic);
+
+    /// <summary>テスト用: 検索欄に入力して Enter を押したのと同じ。</summary>
+    internal async Task SubmitSearchForTestAsync(string text, bool evaluateAll)
+    {
+        FilterBox.Text = text;
+        if (IsValueQuery(text))
+        {
+            await SearchValuesAsync(evaluateAll);
+        }
+        else
+        {
+            await FilterAsync(evaluateAll);
+        }
+    }
 
     /// <summary>絞り込み (評価済みのノード。「すべて評価して検索」は未評価の部分も評価する。TPL-21 の仕様 5)。</summary>
     internal async Task FilterAsync(bool evaluateAll)

@@ -52,6 +52,21 @@ public static class TestPlugins
         ["inspectorType"] = new JsonObject { ["id"] = "slow.slow-type", ["name"] = "slow-type", ["delayMs"] = 200 },
     });
 
+    /// <summary>
+    /// TD-INSP-PLUGIN-TYPES (05 のテストデータ): インスペクタの型 <c>Loop</c> (サイズ 4。変換から戻らない)、<c>Throw</c> (サイズ 4。
+    /// <c>InvalidOperationException("test failure")</c>)、<c>Echo</c> (サイズ 4。4 バイトを空白区切りの Hex にする)。
+    /// </summary>
+    public static Definition InspectorTypes { get; } = Generic("insptypes", new JsonObject
+    {
+        ["inspectorTypes"] = new JsonArray(
+            new JsonObject { ["id"] = "insptypes.loop", ["name"] = "Loop", ["size"] = 4, ["hang"] = true },
+            new JsonObject { ["id"] = "insptypes.throw", ["name"] = "Throw", ["size"] = 4, ["throw"] = true, ["message"] = "test failure" },
+            new JsonObject { ["id"] = "insptypes.echo", ["name"] = "Echo", ["size"] = 4, ["echo"] = true }),
+    });
+
+    /// <summary>TD-UI-HEXPLUGIN (09 のテストデータ): プラグイン ID <c>test</c>、コマンド <c>plugin.test.hello</c> (出力パネルに Hello) だけ。</summary>
+    public static Definition HexPlugin { get; } = Generic("test", new JsonObject { ["commands"] = new JsonArray(Command("test.hello", "test: hello", "Hello")) });
+
     /// <summary>TD-AUTO-PLG-DUP1: コマンド dup1.cmd。</summary>
     public static Definition Dup1 { get; } = Generic("dup1", new JsonObject { ["commands"] = new JsonArray(Command("dup1.cmd", "dup: cmd", "from dup1")) });
 

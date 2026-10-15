@@ -157,7 +157,11 @@ public sealed partial class MainWindow
     private BookmarkListPanel CreateBookmarkListPanel()
     {
         var list = new BookmarkListPanel(_bookmarksVm);
-        list.GoToRequested += (_, b) => GoToBookmark(b);
+        list.GoToRequested += (_, b) =>
+        {
+            GoToBookmark(b);
+            ShowBookmarkStruct(b);
+        };
         list.OpenInNewTabRequested += (_, b) =>
         {
             if (Vm.Selected is { } doc)

@@ -375,6 +375,79 @@ public static class TemplateValueSearch
     }
 
     /// <summary>
+    /// 共通の結果一覧 (04 の FIND-20) に出す結果を作る (仕様 3)。すべて検索のときに、その時点のテンプレートの結果 (<paramref name="current"/>。
+    /// ドキュメントのすべての適用) から条件に合うフィールドを集め、オフセットの順に並べる。一覧の「フィールド」の列は「パス = 値」。
+    /// 結果を選ぶと <paramref name="jumped"/> を呼ぶ (テンプレートのツリーのノードを選ぶ)。テンプレートの結果が更新されたら
+    /// <see cref="Search.SearchResults.IsOutdated"/> が true になる (「古い結果」と再検索ボタン。仕様 5)。再検索は同じ条件で今の結果を探す。
+    /// </summary>
+    public static Search.SearchResults CreateResults(Engine.DocumentSnapshot snapshot, Func<IReadOnlyList<TemplateResult>> current, TemplateValueQuery query,
+        bool evaluateAll, Action<TemplateValueMatch>? jumped = null)
+    {
+        var names = new List<string>();
+        var found = new List<TemplateValueMatch>();
+        IReadOnlyList<TemplateResult> searched = [];
+        return new Search.SearchResults(snapshot, Search.SearchPattern.Literal([0]), new Search.SearchOptions { MaxMatches = MaxMatches })
+        {
+            VariantNames = names,
+            VariantColumnOverride = Search.VariantColumn.TemplateField,
+            HighlightFromResults = true,
+            CustomFindAll = (results, _, operation, token) =>
+            {
+                IReadOnlyList<TemplateResult> targets = current();
+                var matches = new List<TemplateValueMatch>();
+                foreach (TemplateResult r in targets)
+                {
+                    token.ThrowIfCancellationRequested();
+                    matches.AddRange(r.Invoke(() => Find(r, query, evaluateAll, token)));
+                    if (matches.Count >= MaxMatches)
+                    {
+                        break;
+                    }
+                }
+
+                matches.Sort((a, b) => a.Offset != b.Offset ? a.Offset.CompareTo(b.Offset) : a.Length.CompareTo(b.Length));
+                if (matches.Count > MaxMatches)
+                {
+                    matches.RemoveRange(MaxMatches, matches.Count - MaxMatches);
+                }
+
+                lock (names)
+                {
+                    names.Clear();
+                    found.Clear();
+                    names.AddRange(matches.Select(m => m.Path + " = " + m.Value));
+                    found.AddRange(matches);
+                    searched = targets;
+                }
+
+                results.AddMatches([.. matches.Select((m, i) => new Search.SearchMatch(m.Offset, m.Length, i))]);
+                return matches.Count >= MaxMatches;
+            },
+            MatchJumped = m =>
+            {
+                TemplateValueMatch? match;
+                lock (names)
+                {
+                    match = m.Variant >= 0 && m.Variant < found.Count ? found[m.Variant] : null;
+                }
+
+                if (match is not null)
+                {
+                    jumped?.Invoke(match);
+                }
+            },
+            IsOutdated = () =>
+            {
+                IReadOnlyList<TemplateResult> now = current();
+                lock (names)
+                {
+                    return searched.Count > 0 && !now.SequenceEqual(searched);
+                }
+            },
+        };
+    }
+
+    /// <summary>
     /// 子を、ツリーの順に取り出せるよう逆順に積む。「すべて解析してから検索」でなければ、まだ解析していない子 (遅延して解析される配列など) は
     /// 解析しない (仕様 4)。
     /// </summary>

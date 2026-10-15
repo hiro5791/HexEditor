@@ -202,6 +202,12 @@ public sealed class SearchResults : IDisposable
     /// </summary>
     public Func<SearchResults, long, Operations.LongRunningOperation?, CancellationToken, bool>? CustomFindAll { get; init; }
 
+    /// <summary>一覧で一致を選んで移動した (テンプレートの値の検索がツリーのノードを選ぶ。FIND-29 の仕様 3)。UI スレッドから呼ぶ。</summary>
+    public Action<SearchMatch>? MatchJumped { get; init; }
+
+    /// <summary>元の情報が更新されて古い結果になった (テンプレートの値の検索。FIND-29 の仕様 5)。UI スレッドから呼ぶ。</summary>
+    public Func<bool>? IsOutdated { get; init; }
+
     /// <summary>同じ条件で、別のスナップショットを探す新しい結果 (再検索。FIND-03 の「エラー」の再検索ボタン)。</summary>
     public SearchResults Renew(DocumentSnapshot snapshot) => new(snapshot, Pattern, Options)
     {
@@ -210,6 +216,8 @@ public sealed class SearchResults : IDisposable
         VariantNames = VariantNames,
         VariantColumnOverride = VariantColumnOverride,
         CustomFindAll = CustomFindAll,
+        MatchJumped = MatchJumped,
+        IsOutdated = IsOutdated,
         MemoryLimit = MemoryLimit,
         SpillDirectory = SpillDirectory,
     };

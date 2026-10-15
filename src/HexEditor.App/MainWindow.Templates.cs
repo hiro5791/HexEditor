@@ -141,6 +141,7 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
             RefreshTemplateHighlights();
         }, () => Toggle(TemplateService.ColoringEnabled));
         Commands.Register("templates.findCandidates", FindTemplateCandidatesAsync, NeedsDocument);
+        Commands.Register("templates.findValues", FindTemplateValuesCommand, NeedsDocument);
         Commands.Register("view.panel.templates", () => TogglePanel(TemplatesPanelId), () => Toggle(IsPanelShown(TemplatesPanelId)));
         Commands.Register("view.panel.templateOutput", () => TogglePanel(TemplateOutputPanelId), () => Toggle(IsPanelShown(TemplateOutputPanelId)));
         RegisterTemplateEditorCommands();

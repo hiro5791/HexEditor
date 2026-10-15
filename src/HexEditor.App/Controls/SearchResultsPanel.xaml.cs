@@ -644,6 +644,7 @@ public sealed partial class SearchResultsPanel : UserControl
         VariantColumn.Encoding => Loc.Get("SearchResults_Column_Encoding"),
         VariantColumn.Term => Loc.Get("SearchResults_Column_Term"),
         VariantColumn.Interpretation => Loc.Get("SearchResults_Column_Interpretation"),
+        VariantColumn.TemplateField => Loc.Get("SearchResults_Column_TemplateField"),
         _ => Loc.Get("SearchResults_Column_Endian"),
     };
 
@@ -1069,7 +1070,8 @@ public sealed partial class SearchResultsPanel : UserControl
         }
 
         bool running = _running is not null;
-        bool stale = !running && _groups.Any(g => g.Reloaded || (!g.Editor.Document.IsDisposed && g.Results.IsStale(g.Editor.Document.Current)));
+        bool stale = !running && _groups.Any(g => g.Reloaded || (!g.Editor.Document.IsDisposed && g.Results.IsStale(g.Editor.Document.Current))
+            || g.Results.IsOutdated?.Invoke() == true);
         SearchResults? limited = _groups.Select(g => g.Results).FirstOrDefault(r => r.State == SearchResultsState.LimitReached);
         string state;
         if (running)
@@ -1188,7 +1190,8 @@ public sealed partial class SearchResultsPanel : UserControl
         }
 
         ActivateRequested?.Invoke(this, g.Editor);
-        TrackedMatch t = Factory(g).Track(g.Results[local]);
+        SearchMatch match = g.Results[local];
+        TrackedMatch t = Factory(g).Track(match);
         if (t.Status == MatchStatus.Deleted || t.Length == 0)
         {
             g.Editor.GoTo(t.Offset);
@@ -1197,6 +1200,9 @@ public sealed partial class SearchResultsPanel : UserControl
         {
             g.Editor.SelectMatch(t.Offset, t.Length);
         }
+
+        // テンプレートの値の検索: ツリーのノードも選ぶ (FIND-29 の仕様 3)。
+        g.Results.MatchJumped?.Invoke(match);
     }
 
     /// <summary>↑ / ↓ で行を移したときのプレビュー: エディタをその位置にスクロールする (カーソルは動かさない。FIND-20 の仕様 8)。</summary>

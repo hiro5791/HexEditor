@@ -197,9 +197,9 @@ public sealed partial class MainWindow
             case "filter":
             {
                 TemplatePanel panel = TemplatePanelView ?? throw new InvalidOperationException("No template panel.");
-                panel.FilterInput.Text = request["text"]?.GetValue<string>() ?? string.Empty;
-                await panel.FilterAsync(request["all"]?.GetValue<bool>() ?? false);
-                return new JsonObject();
+                // 値の検索の条件 (FIND-29) なら Enter と同じに値の検索、ほかは結果ツリーの絞り込み (TPL-21)
+                await panel.SubmitSearchForTestAsync(request["text"]?.GetValue<string>() ?? string.Empty, request["all"]?.GetValue<bool>() ?? false);
+                return new JsonObject { ["message"] = panel.Message, ["valueSearch"] = TemplatePanel.IsValueQuery(panel.FilterInput.Text), ["count"] = LastTemplateValueSearchCount };
             }
 
             case "edit":

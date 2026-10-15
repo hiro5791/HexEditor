@@ -408,6 +408,21 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
         return false;
     }
 
+    /// <summary>ノードを選ぶ (テンプレートの値の検索の結果を選んだ。FIND-29 の仕様 3)。見つからなければ false。</summary>
+    public async Task<bool> SelectNodeAsync(TemplateNode node)
+    {
+        foreach (TemplateTreeItem root in _roots.Values.ToList())
+        {
+            if (ReferenceEquals(root.Result, node.Result) && await Model.RevealNodeAsync(root, node) is { } item)
+            {
+                SelectRequested?.Invoke(this, item);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /// <summary>カーソル位置を含む最も深いパターンを選ぶ (TPL-23 の仕様 5)。</summary>
     public async Task FollowAsync(long offset)
     {

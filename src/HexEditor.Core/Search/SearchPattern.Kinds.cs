@@ -18,6 +18,9 @@ public enum VariantColumn
 
     /// <summary>値の解釈 (範囲の検索の符号とエンディアン。FIND-15 の仕様 3)。</summary>
     Interpretation,
+
+    /// <summary>テンプレートのフィールドのパスと値 (FIND-29 の仕様 3)。</summary>
+    TemplateField,
 }
 
 /// <summary>

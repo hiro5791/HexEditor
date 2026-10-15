@@ -194,6 +194,40 @@ public sealed class PluginExtensionTests
     }
 
     [Fact]
+    [Trait("TC", "TC-INSP-22-02")]
+    public async Task Plugin_inspector_types_are_user_defined_types_with_the_time_limit_and_row_errors()
+    {
+        // インスペクタのユーザー定義型 (INSP-22) と同じ経路: Loop は時間切れ、Throw はその行だけのエラー、Echo は値。
+        using var t = new PluginTestHost();
+        t.Trust(t.Install(TestPlugins.InspectorTypes), "insptypes");
+        await t.StartAsync();
+        using var types = new HexEditor.Core.Inspector.InspectorUserTypes(Path.Combine(t.Root, "settings"))
+        {
+            PluginTypes = () => PluginIntegration.InspectorTypes(t.Manager),
+        };
+        types.Load();
+        HexEditor.Core.Inspector.InspectorUserType Type(string name) => types.Types.Single(x => x.DisplayName == name);
+        byte[] data = [0x01, 0x02, 0x03, 0x04, 0x05];
+        Assert.All(types.Types, x => Assert.Equal(HexEditor.Core.Inspector.InspectorUserTypeSource.Plugin, x.Source));
+
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        HexEditor.Core.Inspector.InspectorUserValue loop = await types.EvaluateAsync(Type("Loop"), data, HexEditor.Core.Inspector.Endianness.Little);
+        Assert.True(loop.TimedOut);
+        Assert.True(watch.ElapsedMilliseconds < 2000, $"{watch.ElapsedMilliseconds} ms");
+
+        // 止まったままの呼び出しがある間は、同じ型をもう一度呼ばずにすぐ時間切れにする。
+        watch.Restart();
+        Assert.True((await types.EvaluateAsync(Type("Loop"), data, HexEditor.Core.Inspector.Endianness.Little)).TimedOut);
+        Assert.True(watch.ElapsedMilliseconds < 100, $"{watch.ElapsedMilliseconds} ms");
+
+        Assert.Equal("test failure", (await types.EvaluateAsync(Type("Throw"), data, HexEditor.Core.Inspector.Endianness.Little)).Error);
+        HexEditor.Core.Inspector.InspectorUserValue echo = await types.EvaluateAsync(Type("Echo"), data, HexEditor.Core.Inspector.Endianness.Little);
+        Assert.Null(echo.Error);
+        Assert.Equal("01 02 03 04", echo.Display);
+        Assert.True((await types.EvaluateAsync(Type("Echo"), [0x01], HexEditor.Core.Inspector.Endianness.Little)).NotEnoughData);
+    }
+
+    [Fact]
     public async Task Slow_calls_off_the_ui_thread_are_not_limited()
     {
         using var t = new PluginTestHost();

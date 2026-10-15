@@ -65,7 +65,7 @@ public sealed class InspectorUserTypeTests
     [Trait(UiTest.TC, "TC-INSP-22-02")]
     public Task Infinite_loop_type_times_out_and_other_rows_stay_correct() => UiTestContext.RunAsync(async ctx =>
     {
-        // プラグインの拡張点ができるまでは、テンプレートの Loop (無限ループ) と Throw (4 KB を超えて読むので失敗する) で代用する (テストケースの備考)。
+        // テンプレートで定義した型の時間切れとエラー: Loop (無限ループ) と Throw (4 KB を超えて読むので失敗する)。プラグインの型は次のテスト。
         const string Types = """
             struct Loop { while (true) {} } [[inspector("Loop")]];
             struct Throw { le u32 head; u8 rest[8192]; } [[inspector("Throw")]];
@@ -92,6 +92,42 @@ public sealed class InspectorUserTypeTests
         // 3: Throw は「エラー: …」、int32 は正しい値 (0x10 の 01 02 03 04)。
         await InspectorTests.GoAsync(app, 0x10);
         Assert.StartsWith("Error: ", (await UserRowAsync(app, "Throw"))["value"]!.GetValue<string>(), StringComparison.Ordinal);
+        Assert.Equal("67,305,985", await InspectorTests.ValueAsync(app, "int32"));
+        Assert.Equal("Timed out", (await UserRowAsync(app, "Loop"))["value"]!.GetValue<string>());
+    });
+
+    [Fact]
+    [Trait(UiTest.TC, "TC-INSP-22-02")]
+    public Task Plugin_types_loop_times_out_throw_shows_the_error_and_echo_is_correct() => UiTestContext.RunAsync(async ctx =>
+    {
+        // 前提: TD-INSP-PLUGIN-TYPES を入れて信頼済みにした設定フォルダ (署名の代わりにテスト用の信頼の記録。この PC に証明書を入れない)。
+        string profile = ctx.NewProfile();
+        TestPlugins.Trust(profile, TestPlugins.Install(Path.Combine(profile, "plugins"), TestPlugins.InspectorTypes), TestPlugins.InspectorTypes.Id);
+        AppSession app = await InspectorTests.StartAsync(ctx, profile: profile);
+        await app.SendAsync("plugins", new JsonObject { ["action"] = "waitLoaded" }, TimeSpan.FromSeconds(120));
+        await InspectorTests.GoAsync(app, 0x10);
+
+        // 1: Loop が「時間切れ」。
+        Assert.Equal("Timed out", (await UserRowAsync(app, "Loop"))["value"]!.GetValue<string>());
+
+        // 2: → を 10 回押しても、キー入力からインスペクタの更新までがすべて 50 ms 以内 (止まった呼び出しを待たない)。
+        var times = new List<double>();
+        await app.FocusAsync("editor");
+        for (int i = 0; i < 10; i++)
+        {
+            await app.SendAsync("inspectorKeyLatency", new JsonObject { ["key"] = "Right" });
+            JsonObject? result = null;
+            await app.WaitUntilAsync(async () => (result = await app.SendAsync("inspectorLatencyResult"))["pending"] is null,
+                TimeSpan.FromSeconds(5), "the inspector to update");
+            times.Add(result!["ms"]!.GetValue<double>());
+        }
+
+        TimeBudget.Limit(times.Max() <= 50, $"key to inspector update: max {times.Max():F1} ms ({string.Join(", ", times.Select(t => t.ToString("F1")))})");
+
+        // 3: Throw は「エラー: test failure」、Echo は起点の 4 バイト、int32 は正しい値 (0x10 の 01 02 03 04)。
+        await InspectorTests.GoAsync(app, 0x10);
+        Assert.Equal("Error: test failure", (await UserRowAsync(app, "Throw"))["value"]!.GetValue<string>());
+        Assert.Equal("01 02 03 04", (await UserRowAsync(app, "Echo"))["value"]!.GetValue<string>());
         Assert.Equal("67,305,985", await InspectorTests.ValueAsync(app, "int32"));
         Assert.Equal("Timed out", (await UserRowAsync(app, "Loop"))["value"]!.GetValue<string>());
     });

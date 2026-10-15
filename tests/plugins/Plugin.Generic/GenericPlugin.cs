@@ -8,8 +8,12 @@ namespace Plugin.Generic;
 /// <code>
 /// { "initDelayMs": 200,
 ///   "commands": [ { "id": "dup1.cmd", "title": "dup1: cmd", "output": "from dup1", "throw": false } ],
-///   "inspectorType": { "id": "throw.type", "name": "throw-type", "throw": true, "delayMs": 0 } }
+///   "inspectorType": { "id": "throw.type", "name": "throw-type", "throw": true, "delayMs": 0 },
+///   "inspectorTypes": [ { "id": "x.loop", "name": "Loop", "size": 4, "hang": true },
+///                       { "id": "x.throw", "name": "Throw", "size": 4, "throw": true, "message": "test failure" },
+///                       { "id": "x.echo", "name": "Echo", "size": 4, "echo": true } ] }
 /// </code>
+/// 型の値は既定で先頭の 1 バイトの Hex、<c>echo</c> ならすべてのバイトを空白区切りの Hex にする。<c>hang</c> は戻らない (無限ループの代わり)。
 /// </summary>
 public sealed class GenericPlugin : IPlugin
 {
@@ -40,9 +44,15 @@ public sealed class GenericPlugin : IPlugin
 
         if (root.TryGetProperty("inspectorType", out JsonElement type))
         {
-            context.Register(new InspectorType(type.GetProperty("id").GetString()!, type.GetProperty("name").GetString()!,
-                type.TryGetProperty("throw", out JsonElement t) && t.GetBoolean(),
-                type.TryGetProperty("delayMs", out JsonElement d) ? d.GetInt32() : 0));
+            context.Register(TypeOf(type));
+        }
+
+        if (root.TryGetProperty("inspectorTypes", out JsonElement types))
+        {
+            foreach (JsonElement t in types.EnumerateArray())
+            {
+                context.Register(TypeOf(t));
+            }
         }
 
         context.Log.Info("initialized " + context.Id);
@@ -65,16 +75,32 @@ public sealed class GenericPlugin : IPlugin
         }
     }
 
-    private sealed class InspectorType(string id, string name, bool fail, int delayMs) : IInspectorType
+    private static InspectorType TypeOf(JsonElement type) => new(
+        type.GetProperty("id").GetString()!,
+        type.GetProperty("name").GetString()!,
+        type.TryGetProperty("throw", out JsonElement t) && t.GetBoolean(),
+        type.TryGetProperty("delayMs", out JsonElement d) ? d.GetInt32() : 0,
+        type.TryGetProperty("size", out JsonElement s) ? s.GetInt32() : 1,
+        type.TryGetProperty("hang", out JsonElement h) && h.GetBoolean(),
+        type.TryGetProperty("echo", out JsonElement e) && e.GetBoolean(),
+        type.TryGetProperty("message", out JsonElement m) ? m.GetString()! : "decode failed on purpose");
+
+    private sealed class InspectorType(string id, string name, bool fail, int delayMs, int size, bool hang, bool echo, string message) : IInspectorType
     {
         public string Id => id;
 
         public string DisplayName => name;
 
-        public int Size => 1;
+        public int Size => size;
 
         public string Decode(ReadOnlySpan<byte> data, bool bigEndian)
         {
+            if (hang)
+            {
+                // 戻らない (無限ループする型の代わり。CPU を使い続けない)
+                Thread.Sleep(Timeout.Infinite);
+            }
+
             if (delayMs > 0)
             {
                 Thread.Sleep(delayMs);
@@ -82,10 +108,12 @@ public sealed class GenericPlugin : IPlugin
 
             if (fail)
             {
-                throw new InvalidOperationException("decode failed on purpose");
+                throw new InvalidOperationException(message);
             }
 
-            return data[0].ToString("X2", System.Globalization.CultureInfo.InvariantCulture);
+            return echo
+                ? string.Join(' ', data[..Math.Min(size, data.Length)].ToArray().Select(b => b.ToString("X2", System.Globalization.CultureInfo.InvariantCulture)))
+                : data[0].ToString("X2", System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 }
