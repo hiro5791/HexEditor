@@ -5694,9 +5694,9 @@
   <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>C</value></data>
   <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>テンプレートの管理(M)</value></data>
   <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
-  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>構造体の色分け(U)</value></data>
-  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>U</value></data>
-  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>構造体(T)</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>構造体の色分け(K)</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>構造体(A)</value></data>
   <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>テンプレートの出力(W)</value></data>
   <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>W</value></data>
