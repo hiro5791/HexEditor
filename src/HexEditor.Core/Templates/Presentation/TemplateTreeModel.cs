@@ -727,9 +727,10 @@ public sealed class TemplateTreeModel
         foreach (TemplateTreeItem application in _applications.ToList())
         {
             TemplateResult result = application.Result;
+            // 評価器が終了・破棄済みなら Invoke は既定値 (null) を返す
             List<TemplateNode> found = await Task.Run(() => result.Invoke(() =>
                 Search(result.Root, text.Trim(), evaluateAll, context, MaxSearchResults - items.Count, progress, cancellationToken)), cancellationToken)
-                .ConfigureAwait(true);
+                .ConfigureAwait(true) ?? [];
             foreach (TemplateNode node in found)
             {
                 var item = new TemplateTreeItem(TemplateTreeItemKind.Node, result, node, null, node.Path)

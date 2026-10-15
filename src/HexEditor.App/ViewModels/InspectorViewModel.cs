@@ -484,6 +484,7 @@ public sealed partial class InspectorViewModel : ObservableObject
             }
         }
 
+        AppendTemplateRows(doc, wanted);
         Sync(wanted);
         HighlightChanged?.Invoke(this, EventArgs.Empty);
         Refreshed?.Invoke(this, EventArgs.Empty);
@@ -644,6 +645,11 @@ public sealed partial class InspectorViewModel : ObservableObject
             return false;
         }
 
+        if (IsTemplateRow(item))
+        {
+            return BeginTemplateEdit(item);
+        }
+
         CancelEdit();
         item.EditText = InspectorDecoder.EditText(item.TypeId, _data, _states, item.Endian, Options);
         item.IsEditing = true;
@@ -656,6 +662,12 @@ public sealed partial class InspectorViewModel : ObservableObject
     {
         if (!item.IsEditing || _document is null)
         {
+            return;
+        }
+
+        if (IsTemplateRow(item))
+        {
+            UpdateTemplateEdit(item, text);
             return;
         }
 
@@ -683,6 +695,11 @@ public sealed partial class InspectorViewModel : ObservableObject
         if (!item.IsEditing || _document is not { } doc)
         {
             return false;
+        }
+
+        if (IsTemplateRow(item))
+        {
+            return CommitTemplateEdit(item);
         }
 
         InspectorEncodeResult result = Encode(item, item.EditText);

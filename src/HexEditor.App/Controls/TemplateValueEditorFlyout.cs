@@ -215,7 +215,7 @@ public sealed class TemplateValueEditorFlyout
         return _session.Plan(_text?.Text ?? string.Empty, padWithZeros: _pad?.IsChecked != false, localTime: _zone?.SelectedIndex == 1);
     }
 
-    private void Validate()
+    internal void Validate()
     {
         TemplateEditPlan plan = Plan();
         bool ok = plan.Success;

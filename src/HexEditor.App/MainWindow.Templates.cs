@@ -719,6 +719,8 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
         _templateFollowSuppressed = true;
         try
         {
+            // 移動前の位置を記録する (Alt+← で戻れる)
+            doc.Editor.RecordJump();
             doc.Editor.SelectMatch(target.Offset, Math.Max(0, Math.Min(target.Size, doc.Document.Length - target.Offset)));
         }
         finally

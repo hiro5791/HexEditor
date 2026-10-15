@@ -29,10 +29,13 @@ public sealed partial class MainWindow
         _ => null,
     };
 
+    private int? _templateTestApp;
+
     private async Task<JsonObject> TestTemplateAsync(JsonObject request)
     {
         string action = request["action"]?.GetValue<string>() ?? "state";
         string? path = request["path"]?.GetValue<string>();
+        _templateTestApp = request["app"]?.GetValue<int>();
         switch (action)
         {
             case "state":
@@ -89,12 +92,45 @@ public sealed partial class MainWindow
                     await TemplateVm.Model.ExpandAsync(item);
                 }
 
-                if (action is "select" or "reveal")
+                if (action is "select" || action == "reveal" && request["select"]?.GetValue<bool>() != false)
                 {
                     SelectTemplateItemForTest(item);
                 }
 
                 return new JsonObject();
+            }
+
+            case "swatches":
+            {
+                // 結果ツリーに描画されている色見本 (TPL-03 の仕様 4) の色
+                var list = new JsonArray();
+                var stack = new Stack<DependencyObject>();
+                if (TemplatePanelView is { } view)
+                {
+                    stack.Push(view);
+                }
+
+                while (stack.Count > 0)
+                {
+                    DependencyObject o = stack.Pop();
+                    if (o is TextBlock { Visibility: Visibility.Visible, Foreground: Microsoft.UI.Xaml.Media.SolidColorBrush brush } t
+                        && AutomationProperties.GetAutomationId(t) == "Tpl_ValueSwatch")
+                    {
+                        list.Add(new JsonObject
+                        {
+                            ["name"] = AutomationProperties.GetName(t),
+                            ["color"] = $"#{brush.Color.R:X2}{brush.Color.G:X2}{brush.Color.B:X2}",
+                            ["width"] = t.ActualWidth,
+                        });
+                    }
+
+                    for (int i = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(o) - 1; i >= 0; i--)
+                    {
+                        stack.Push(Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(o, i));
+                    }
+                }
+
+                return new JsonObject { ["swatches"] = list };
             }
 
             case "selectRoot":
@@ -174,6 +210,8 @@ public sealed partial class MainWindow
                     }
                 }
 
+                // TextChanged は後から届くので、ここで検証して状態を返す
+                editor.Validate();
                 return EditorStateForTest();
             }
 
@@ -206,7 +244,7 @@ public sealed partial class MainWindow
             case "menuInvoke":
             {
                 TemplateTreeItem item = await RevealForTestAsync(path!);
-                SelectTemplateItemForTest(item);
+                // 右クリックは選択を変えない (Hex ビューのカーソルも動かさない)
                 var menu = new MenuFlyout();
                 FillTemplateMenu(menu, [item]);
                 string id = request["id"]!.GetValue<string>();
@@ -312,6 +350,8 @@ public sealed partial class MainWindow
                 };
             case "applyDialog":
                 return new JsonObject { ["items"] = new JsonArray([.. (_lastApplyDialog?.Items ?? []).Select(i => (JsonNode?)i.Name)]) };
+            case "inspectorEdit":
+                return new JsonObject { ["ok"] = _inspectorVm.EditForTest(request["name"]!.GetValue<string>(), request["text"]!.GetValue<string>()) };
             case "settingsText":
                 return new JsonObject { ["text"] = LastTemplateSettingsText };
             case "manager":
@@ -363,7 +403,14 @@ public sealed partial class MainWindow
     private async Task<TemplateTreeItem> RevealForTestAsync(string path)
     {
         await WaitTemplatesAsync();
-        foreach (TemplateTreeItem root in TemplateVm.Roots.ToList())
+        IEnumerable<TemplateTreeItem> roots = TemplateVm.Roots.ToList();
+        if (_templateTestApp is int index)
+        {
+            // "app" を指定したらその番号の適用の中だけを探す (同じパスが複数の適用にある場合)
+            roots = roots.Skip(index).Take(1);
+        }
+
+        foreach (TemplateTreeItem root in roots)
         {
             if (path == "@app")
             {
@@ -423,6 +470,7 @@ public sealed partial class MainWindow
             ["error"] = editor.ErrorText,
             ["canCommit"] = editor.CanCommit,
             ["choices"] = new JsonArray([.. editor.Session.Choices.Select(c => (JsonNode?)c.Name)]),
+            ["checked"] = new JsonArray([.. editor.FlagInputs.Where(b => b.IsChecked == true).Select(b => (JsonNode?)(string)b.Tag)]),
         };
     }
 
