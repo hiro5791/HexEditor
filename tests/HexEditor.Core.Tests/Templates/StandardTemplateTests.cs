@@ -303,6 +303,151 @@ public sealed class StandardTemplateTests
         Assert.Equal("HexEditor", Value(Apply("jpeg"), "segments[2].body.exif.ifd0.entries[0].text"));
     }
 
+    [Fact]
+    public void ArchiveAndDocumentFormatsKeyValues()
+    {
+        Assert.Equal("hello.txt", Value(Apply("gzip"), "header.file_name"));
+        Assert.Equal(18L, Long(Apply("gzip"), "trailer.uncompressed_size_mod_2_32"));
+        TemplateResult tar = Apply("tar");
+        Assert.Equal("dir/hello.txt", Value(tar, "entries[1].header.name"));
+        Assert.Equal(13L, Long(tar, "entries[1].header.size_value"));
+        Assert.Equal(0x400L, Node(tar, "entries[1].data").Offset);
+        Assert.Equal(10L, Long(Apply("7z"), "header.next_header_size"));
+        TemplateResult rar = Apply("rar");
+        Assert.Equal("a.txt", Value(rar, "blocks[1].file.name"));
+        Assert.Equal(5L, Long(rar, "blocks[1].data_area_size"));
+        Assert.Equal(22L, Long(Apply("xz"), "index.records[0].uncompressed_size"));
+        TemplateResult cab = Apply("cab");
+        Assert.Equal("a.txt", Value(cab, "files[0].name"));
+        Assert.Equal("b.txt", Value(cab, "files[1].name"));
+        Assert.Equal(0x58L, Node(cab, "first_data_block").Offset);
+
+        TemplateResult pdf = Apply("pdf");
+        Assert.Equal("%PDF-", Value(pdf, "header.magic"));
+        Assert.Equal(0xC0L, Long(pdf, "startxref.xref_offset"));
+        Assert.Equal(4, Node(pdf, "xref_entries").ChildCount);
+        Assert.Equal(0x40L, Long(pdf, "xref_entries[2].object_offset"));
+        TemplateResult cfb = Apply("cfb");
+        Assert.Equal("Root Entry", Value(cfb, "directory[0].name"));
+        Assert.Equal("Stream1", Value(cfb, "directory[1].name"));
+
+        Assert.Equal("1", Value(Apply("rtf"), "signature.version"));
+    }
+
+    [Fact]
+    public void DiskFilesystemAndDatabaseFormatsKeyValues()
+    {
+        TemplateResult fat = Apply("fat");
+        Assert.Equal("HXTESTFAT32", Value(fat, "fat32.volume_label"));
+        Assert.Equal(1L, Long(fat, "fat32.fs_info_sector"));
+        Assert.Equal(16000L, Long(fat, "fs_info.free_cluster_count"));
+        Assert.Equal("HXTESTFAT16", Value(Apply("fat.fat16"), "extended.volume_label"));
+        Assert.Equal(4096L, Long(Apply("exfat"), "boot_sector.bytes_per_cluster"));
+        TemplateResult ntfs = Apply("ntfs");
+        Assert.Equal(0x1000L, Long(ntfs, "boot_sector.mft_offset"));
+        Assert.Equal(1024L, Long(ntfs, "boot_sector.record_size"));
+        Assert.Equal("$MFT", Value(ntfs, "mft_records[0].attributes[1].file_name.name"));
+        Assert.Equal("$Volume", Value(ntfs, "mft_records[3].attributes[1].file_name.name"));
+        Assert.Equal(8, Node(ntfs, "mft_records").ChildCount);
+        TemplateResult iso = Apply("iso9660");
+        Assert.Equal(2, Node(iso, "descriptors").ChildCount);
+        Assert.Equal(2048L, Long(iso, "descriptors[0].primary.logical_block_size.little_endian"));
+        Assert.Equal(21L, Long(iso, "descriptors[0].primary.root_directory_record.extent_location.big_endian"));
+        Assert.Equal(255L, Long(iso, "descriptors[1].type"));
+        TemplateResult vhd = Apply("vhd");
+        Assert.Equal(4096L, Node(vhd, "footer").Offset);
+        Assert.Equal(4096L, Long(vhd, "footer.current_size"));
+        TemplateResult dynamic = Apply("vhd.dynamic");
+        Assert.Equal(0x600L, Long(dynamic, "dynamic_header.table_offset"));
+        Assert.Equal(2, Node(dynamic, "block_allocation_table").ChildCount);
+        TemplateResult vhdx = Apply("vhdx");
+        Assert.Equal(1L, Long(vhdx, "header1.version"));
+        Assert.Equal(2L, Long(vhdx, "header2.sequence_number"));
+        Assert.Equal("BAT", Value(vhdx, "region_table1.entries[0].name"));
+        Assert.Equal("Metadata", Value(vhdx, "region_table2.entries[1].name"));
+        TemplateResult ext = Apply("ext");
+        Assert.Equal(0xEF53L, Long(ext, "superblock.magic"));
+        Assert.Equal("HXTEST-EXT4", Value(ext, "superblock.volume_name"));
+        Assert.Equal(1024L, Long(ext, "superblock.block_size"));
+
+        TemplateResult sqlite = Apply("sqlite");
+        Assert.Equal(512L, Long(sqlite, "header.page_size"));
+        Assert.Equal(13L, Long(sqlite, "page_header.page_type"));
+        Assert.Equal(1L, Long(sqlite, "cells.rowid"));
+        Assert.Equal(479L, Node(sqlite, "cells").Offset);
+        TemplateResult lnk = Apply("lnk");
+        Assert.Equal(@"C:\Test\a.txt", Value(lnk, "link_info.local_base_path"));
+        Assert.Equal("HexEditor", Value(lnk, "name_string.text"));
+        TemplateResult regf = Apply("regf");
+        Assert.Equal("ROOT", Value(regf, "hive_bins[0].cells[0].key_node.name"));
+        Assert.Equal("Value1", Value(regf, "hive_bins[0].cells[1].key_value.name"));
+        Assert.Equal(2, Node(Apply("pcap"), "packets").ChildCount);
+        Assert.Equal(2, Node(Apply("pcap.be"), "packets").ChildCount);
+        Assert.Equal(20L, Long(Apply("pcap.be"), "packets[1].captured_length"));
+        TemplateResult pcapng = Apply("pcapng");
+        Assert.Equal(3, Node(pcapng, "blocks").ChildCount);
+        Assert.Equal(20L, Long(pcapng, "blocks[2].enhanced_packet.captured_length"));
+        TemplateResult ttf = Apply("ttf");
+        Assert.Equal("head", Value(ttf, "tables[0].tag"));
+        Assert.Equal(1000L, Long(ttf, "head.units_per_em"));
+        Assert.Equal(12L, Long(ttf, "maxp.num_glyphs"));
+        TemplateResult der = Apply("der");
+        Assert.Equal("1.2.840.113549.1.1.11", Value(der, "elements[0].children[0].children[2].children[0].oid"));
+        Assert.Equal("HexEditor Test CA", Value(der, "elements[0].children[0].children[3].children[0].children[0].children[1].utf8_string"));
+    }
+
+    [Fact]
+    public void ExecutableAndBytecodeFormatsKeyValues()
+    {
+        TemplateResult java = Apply("javaclass");
+        Assert.Equal(52L, Long(java, "major_version"));
+        Assert.Equal(11L, Long(java, "constant_pool_count"));
+        Assert.Equal(9, Node(java, "constant_pool").ChildCount);
+        Assert.Equal(1L, Long(java, "methods_count"));
+        Assert.Equal(5L, Long(java, "methods[0].name_index"));
+        TemplateResult dex = Apply("dex");
+        Assert.Equal(2L, Long(dex, "header.string_ids_size"));
+        Assert.Equal(144L, Long(dex, "header.map_offset"));
+        Assert.Equal(5L, Long(dex, "map_list.size"));
+        TemplateResult wasm = Apply("wasm");
+        Assert.Equal(["Type (0x1)", "Function (0x3)", "Export (0x7)", "Code (0xA)"], Node(wasm, "sections").Children.Select(s => Display(wasm, s.Path + ".id")));
+        Assert.Equal("add", Value(wasm, "sections[2].export_section.exports[0].name.text"));
+    }
+
+    [Fact]
+    public void ImageAndMediaFormatsMoreKeyValues()
+    {
+        TemplateResult gif = Apply("gif");
+        Assert.Equal("89a", Value(gif, "header.version"));
+        Assert.Equal(4L, Long(gif, "screen.width"));
+        Assert.Equal(4, Node(gif, "global_color_table").ChildCount);
+        Assert.Equal(5, Node(gif, "blocks").ChildCount);
+        Assert.Equal(4L, Long(gif, "blocks[3].image.width"));
+        TemplateResult bmp = Apply("bmp");
+        Assert.Equal(8L, Long(bmp, "dib_header.bits_per_pixel"));
+        Assert.Equal(4, Node(bmp, "color_table").ChildCount);
+        Assert.Equal(16L, Node(bmp, "pixel_data").Size);
+        TemplateResult ico = Apply("ico");
+        Assert.Equal(2L, Long(ico, "directory.count"));
+        Assert.Equal(false, Value(ico, "entries[0].is_png"));
+        Assert.Equal(true, Value(ico, "entries[1].is_png"));
+        TemplateResult tga = Apply("tga");
+        Assert.Equal(4L, Long(tga, "header.width"));
+        Assert.Equal("HexTGA", Value(tga, "image_id"));
+        Assert.Equal("TRUEVISION-XFILE.", Value(tga, "footer.signature"));
+        TemplateResult tiff = Apply("tiff");
+        Assert.Equal(11L, Long(tiff, "ifd.count"));
+        Assert.Equal("HexEditor 1.0", Value(tiff, "ifd.entries[9].text"));
+        Assert.Equal(4L, Long(tiff, "ifd.sub_ifd.entries[1].number"));
+        Assert.Equal(11L, Long(Apply("tiff.be"), "ifd.count"));
+        Assert.Equal(1L, Long(Apply("ogg"), "pages[0].header_type.begin_stream"));
+        Assert.Equal("vorbis", Value(Apply("ogg"), "pages[0].codec_signature"));
+        Assert.Equal(2L, Long(Apply("midi"), "header.tracks"));
+        Assert.Equal("vide", Value(Apply("mp4"), "boxes[1].children[1].children[1].children[1].handler.handler_type"));
+        Assert.Equal(1L, Long(Apply("mkv"), "elements[0].children[0].value.number"));
+        Assert.Equal("INFO", Value(Apply("wav"), "chunks[2].list.list_type"));
+    }
+
     // ---- 巨大ファイル: 全体を走査せず、先頭か末尾の数セクタだけを読む (TPL-28、TPL-34 の「巨大ファイル」) ----
 
     private const long HundredGiB = 100L * 1024 * 1024 * 1024;

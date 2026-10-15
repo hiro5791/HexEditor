@@ -190,7 +190,7 @@
                       "type": "UInt",
                       "offset": 8,
                       "size": 1,
-                      "display": "UInt (1)",
+                      "display": "UInt (2)",
                       "children": [
                         {
                           "name": "bytes",
@@ -200,6 +200,15 @@
                           "size": 1,
                           "value": "01",
                           "display": "01"
+                        },
+                        {
+                          "name": "number",
+                          "path": "elements[0].children[0].value.number",
+                          "type": "u64",
+                          "offset": 9,
+                          "size": 0,
+                          "value": 1,
+                          "display": "1"
                         }
                       ]
                     }
@@ -293,7 +302,7 @@
                       "type": "UInt",
                       "offset": 12,
                       "size": 1,
-                      "display": "UInt (1)",
+                      "display": "UInt (2)",
                       "children": [
                         {
                           "name": "bytes",
@@ -303,6 +312,15 @@
                           "size": 1,
                           "value": "01",
                           "display": "01"
+                        },
+                        {
+                          "name": "number",
+                          "path": "elements[0].children[1].value.number",
+                          "type": "u64",
+                          "offset": 13,
+                          "size": 0,
+                          "value": 1,
+                          "display": "1"
                         }
                       ]
                     }
@@ -396,7 +414,7 @@
                       "type": "UInt",
                       "offset": 16,
                       "size": 1,
-                      "display": "UInt (1)",
+                      "display": "UInt (2)",
                       "children": [
                         {
                           "name": "bytes",
@@ -406,6 +424,15 @@
                           "size": 1,
                           "value": "04",
                           "display": "04"
+                        },
+                        {
+                          "name": "number",
+                          "path": "elements[0].children[2].value.number",
+                          "type": "u64",
+                          "offset": 17,
+                          "size": 0,
+                          "value": 4,
+                          "display": "4"
                         }
                       ]
                     }
@@ -499,7 +526,7 @@
                       "type": "UInt",
                       "offset": 20,
                       "size": 1,
-                      "display": "UInt (1)",
+                      "display": "UInt (2)",
                       "children": [
                         {
                           "name": "bytes",
@@ -509,6 +536,15 @@
                           "size": 1,
                           "value": "08",
                           "display": "08"
+                        },
+                        {
+                          "name": "number",
+                          "path": "elements[0].children[3].value.number",
+                          "type": "u64",
+                          "offset": 21,
+                          "size": 0,
+                          "value": 8,
+                          "display": "8"
                         }
                       ]
                     }
@@ -695,7 +731,7 @@
                       "type": "UInt",
                       "offset": 31,
                       "size": 1,
-                      "display": "UInt (1)",
+                      "display": "UInt (2)",
                       "children": [
                         {
                           "name": "bytes",
@@ -705,6 +741,15 @@
                           "size": 1,
                           "value": "04",
                           "display": "04"
+                        },
+                        {
+                          "name": "number",
+                          "path": "elements[0].children[5].value.number",
+                          "type": "u64",
+                          "offset": 32,
+                          "size": 0,
+                          "value": 4,
+                          "display": "4"
                         }
                       ]
                     }
@@ -798,7 +843,7 @@
                       "type": "UInt",
                       "offset": 35,
                       "size": 1,
-                      "display": "UInt (1)",
+                      "display": "UInt (2)",
                       "children": [
                         {
                           "name": "bytes",
@@ -808,6 +853,15 @@
                           "size": 1,
                           "value": "02",
                           "display": "02"
+                        },
+                        {
+                          "name": "number",
+                          "path": "elements[0].children[6].value.number",
+                          "type": "u64",
+                          "offset": 36,
+                          "size": 0,
+                          "value": 2,
+                          "display": "2"
                         }
                       ]
                     }
@@ -1085,7 +1139,7 @@
                               "type": "UInt",
                               "offset": 57,
                               "size": 3,
-                              "display": "UInt (1)",
+                              "display": "UInt (2)",
                               "children": [
                                 {
                                   "name": "bytes",
@@ -1095,6 +1149,15 @@
                                   "size": 3,
                                   "value": "0F4240",
                                   "display": "0F 42 40"
+                                },
+                                {
+                                  "name": "number",
+                                  "path": "elements[1].children[0].children[0].value.number",
+                                  "type": "u64",
+                                  "offset": 60,
+                                  "size": 0,
+                                  "value": 1000000,
+                                  "display": "1000000"
                                 }
                               ]
                             }
@@ -1661,7 +1724,7 @@
                                       "type": "UInt",
                                       "offset": 100,
                                       "size": 1,
-                                      "display": "UInt (1)",
+                                      "display": "UInt (2)",
                                       "children": [
                                         {
                                           "name": "bytes",
@@ -1671,6 +1734,15 @@
                                           "size": 1,
                                           "value": "01",
                                           "display": "01"
+                                        },
+                                        {
+                                          "name": "number",
+                                          "path": "elements[1].children[1].children[0].children[0].value.number",
+                                          "type": "u64",
+                                          "offset": 101,
+                                          "size": 0,
+                                          "value": 1,
+                                          "display": "1"
                                         }
                                       ]
                                     }
@@ -1764,7 +1836,7 @@
                                       "type": "UInt",
                                       "offset": 104,
                                       "size": 2,
-                                      "display": "UInt (1)",
+                                      "display": "UInt (2)",
                                       "children": [
                                         {
                                           "name": "bytes",
@@ -1774,6 +1846,15 @@
                                           "size": 2,
                                           "value": "1234",
                                           "display": "12 34"
+                                        },
+                                        {
+                                          "name": "number",
+                                          "path": "elements[1].children[1].children[0].children[1].value.number",
+                                          "type": "u64",
+                                          "offset": 106,
+                                          "size": 0,
+                                          "value": 4660,
+                                          "display": "4660"
                                         }
                                       ]
                                     }
@@ -1867,7 +1948,7 @@
                                       "type": "UInt",
                                       "offset": 108,
                                       "size": 1,
-                                      "display": "UInt (1)",
+                                      "display": "UInt (2)",
                                       "children": [
                                         {
                                           "name": "bytes",
@@ -1877,6 +1958,15 @@
                                           "size": 1,
                                           "value": "01",
                                           "display": "01"
+                                        },
+                                        {
+                                          "name": "number",
+                                          "path": "elements[1].children[1].children[0].children[2].value.number",
+                                          "type": "u64",
+                                          "offset": 109,
+                                          "size": 0,
+                                          "value": 1,
+                                          "display": "1"
                                         }
                                       ]
                                     }
@@ -2153,7 +2243,7 @@
                                               "type": "UInt",
                                               "offset": 120,
                                               "size": 1,
-                                              "display": "UInt (1)",
+                                              "display": "UInt (2)",
                                               "children": [
                                                 {
                                                   "name": "bytes",
@@ -2163,6 +2253,15 @@
                                                   "size": 1,
                                                   "value": "10",
                                                   "display": "10"
+                                                },
+                                                {
+                                                  "name": "number",
+                                                  "path": "elements[1].children[1].children[0].children[4].children[0].value.number",
+                                                  "type": "u64",
+                                                  "offset": 121,
+                                                  "size": 0,
+                                                  "value": 16,
+                                                  "display": "16"
                                                 }
                                               ]
                                             }
@@ -2256,7 +2355,7 @@
                                               "type": "UInt",
                                               "offset": 123,
                                               "size": 1,
-                                              "display": "UInt (1)",
+                                              "display": "UInt (2)",
                                               "children": [
                                                 {
                                                   "name": "bytes",
@@ -2266,6 +2365,15 @@
                                                   "size": 1,
                                                   "value": "10",
                                                   "display": "10"
+                                                },
+                                                {
+                                                  "name": "number",
+                                                  "path": "elements[1].children[1].children[0].children[4].children[1].value.number",
+                                                  "type": "u64",
+                                                  "offset": 124,
+                                                  "size": 0,
+                                                  "value": 16,
+                                                  "display": "16"
                                                 }
                                               ]
                                             }
@@ -2461,7 +2569,7 @@
                               "type": "UInt",
                               "offset": 131,
                               "size": 1,
-                              "display": "UInt (1)",
+                              "display": "UInt (2)",
                               "children": [
                                 {
                                   "name": "bytes",
@@ -2471,6 +2579,15 @@
                                   "size": 1,
                                   "value": "00",
                                   "display": "00"
+                                },
+                                {
+                                  "name": "number",
+                                  "path": "elements[1].children[2].children[0].value.number",
+                                  "type": "u64",
+                                  "offset": 132,
+                                  "size": 0,
+                                  "value": 0,
+                                  "display": "0"
                                 }
                               ]
                             }
@@ -2841,7 +2958,7 @@
                                       "type": "UInt",
                                       "offset": 151,
                                       "size": 1,
-                                      "display": "UInt (1)",
+                                      "display": "UInt (2)",
                                       "children": [
                                         {
                                           "name": "bytes",
@@ -2851,6 +2968,15 @@
                                           "size": 1,
                                           "value": "00",
                                           "display": "00"
+                                        },
+                                        {
+                                          "name": "number",
+                                          "path": "elements[1].children[3].children[0].children[0].value.number",
+                                          "type": "u64",
+                                          "offset": 152,
+                                          "size": 0,
+                                          "value": 0,
+                                          "display": "0"
                                         }
                                       ]
                                     }
@@ -3034,7 +3160,7 @@
                                               "type": "UInt",
                                               "offset": 156,
                                               "size": 1,
-                                              "display": "UInt (1)",
+                                              "display": "UInt (2)",
                                               "children": [
                                                 {
                                                   "name": "bytes",
@@ -3044,6 +3170,15 @@
                                                   "size": 1,
                                                   "value": "01",
                                                   "display": "01"
+                                                },
+                                                {
+                                                  "name": "number",
+                                                  "path": "elements[1].children[3].children[0].children[1].children[0].value.number",
+                                                  "type": "u64",
+                                                  "offset": 157,
+                                                  "size": 0,
+                                                  "value": 1,
+                                                  "display": "1"
                                                 }
                                               ]
                                             }

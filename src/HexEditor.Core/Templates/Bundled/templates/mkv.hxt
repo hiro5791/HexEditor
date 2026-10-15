@@ -175,10 +175,7 @@ struct ElementSize {
 
 struct UInt(u64 size) {
     u8 bytes[size];
-    local u64 number = 0;
-    for (local u32 i = 0; i < size && i < 8; i += 1) {
-        number = (number << 8) | bytes[i];
-    }
+    local u64 number = raw_value(addressof(bytes), size) [[show]];
 };
 
 struct Float(u64 size) {
