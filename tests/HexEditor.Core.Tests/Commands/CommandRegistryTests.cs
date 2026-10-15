@@ -309,7 +309,7 @@ public sealed partial class CommandRegistryTests
         ["印刷"] = ["-F4-06 (フェーズ 4)"],
         ["元に戻す"] = ["edit.undo"],
         ["やり直し"] = ["edit.redo"],
-        ["スクリプトを実行"] = ["-F3-05 (フェーズ 3)"],
+        ["スクリプトを実行"] = ["scripting.run"],
         ["検索"] = ["search.find"],
         ["次を検索 / 前を検索"] = ["search.findNext", "search.findPrevious"],
         ["置換"] = ["search.replace"],

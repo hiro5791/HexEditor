@@ -11,6 +11,17 @@
     <InternalsVisibleTo Include="HexEditor.Core.Tests" />
   </ItemGroup>
 
+  <!-- 自動化 API の型 (AUTO-04) と JavaScript の実行環境 Jint (AUTO-02。BSD-2-Clause、依存の Acornima は BSD-3-Clause)。 -->
+  <ItemGroup>
+    <ProjectReference Include="..\HexEditor.Sdk\HexEditor.Sdk.csproj" />
+    <PackageReference Include="Jint" Version="4.16.4" />
+  </ItemGroup>
+
+  <!-- スクリプトの実行環境の前置き (JavaScript の例外の型、console、AbortController など)。 -->
+  <ItemGroup>
+    <EmbeddedResource Include="Scripting\Js\prelude.js" LogicalName="HexEditor.Scripting.prelude.js" />
+  </ItemGroup>
+
   <!-- ショートカットのプリセット (UI-19 の仕様 2)。アプリに同梱する。 -->
   <ItemGroup>
     <EmbeddedResource Include="Commands\Presets\*.json" LogicalName="HexEditor.Presets.%(Filename).json" />

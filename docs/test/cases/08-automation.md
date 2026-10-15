@@ -713,7 +713,7 @@
 **期待結果**:
 
 - 手順 1 のすべてのコマンド ID が手順 2 に含まれる (不足が 0 件)。
-- 手順 2 の各 ID が `領域.動作` の形 (英小文字・数字・`.`・`-`) になっている。
+- 手順 2 の各 ID が `領域.動作` の形 (先頭が英小文字の英数字の語を `.` でつないだもの。例: `edit.selectAll`、`go.goTo`。09 の UI-16 のコマンド ID) になっている。
 
 ### TC-AUTO-06-02 表示言語に関係なく同じコマンド ID で同じ結果になる
 
@@ -731,7 +731,7 @@
 **手順**:
 
 1. `--ui-lang en` と新しいテスト用の設定フォルダで、TD-SEQ-1M のコピーを開いて起動する。
-2. TD-AUTO-JS-CMDS (`app.commands.execute` で `edit.select-all`、`edit.fill` (`00`)、`navigate.goto` (`0x100`)、`file.save` を順に実行するスクリプト) を信頼の確認で「1 回だけ実行する」を選んで実行する。
+2. TD-AUTO-JS-CMDS (`app.commands.execute` で `edit.selectAll`、`edit.fill` (`00`)、`go.goTo` (`0x100`)、`file.save` を順に実行するスクリプト) を信頼の確認で「1 回だけ実行する」を選んで実行する。
 3. 保存したファイルの SHA-256 を記録してアプリを終了する。
 4. `--ui-lang ja`、`--ui-lang ar` で手順 1〜3 を繰り返す。
 
@@ -1605,7 +1605,7 @@
 
 **手順**:
 
-1. `hexed run settingsset.js --trust` を実行する (`--allow` なし。`settings.set("view.bytesPerRow", 32)` を `try` で囲み、例外の名前を出力するスクリプト)。
+1. `hexed run settingsset.js --trust` を実行する (`--allow` なし。`settings.set("view.tooltips", false)` を `try` で囲み、例外の名前を出力するスクリプト)。
 2. 標準出力を取得する。
 3. 設定ファイルの SHA-256 を計算する。
 
@@ -4696,7 +4696,7 @@
 | TD-AUTO-JS-BUSY | 約 10 行 | 30 秒間、整数の計算 1,000,000 回と、アクティブなドキュメントの先頭 1 MiB への `transform` (XOR `01`) を交互に繰り返す |
 | TD-AUTO-JS-PROMISEALL | 約 6 行 | `app.documents` の先頭 2 つに対する `hash.compute(..., ["sha256"])` を `Promise.all` で待ち、2 つの `hex` を出力する |
 | TD-AUTO-JS-CMDLIST | 2 行 | `app.commands.list()` の `id` と表示名を JSON で `console.log` する |
-| TD-AUTO-JS-CMDS | 4 行 | `edit.select-all`、`edit.fill` (`{pattern: "00"}`)、`navigate.goto` (`{offset: "0x100"}`)、`file.save` を `app.commands.execute` で順に実行する |
+| TD-AUTO-JS-CMDS | 4 行 | `edit.selectAll`、`edit.fill` (`{pattern: "00"}`)、`go.goTo` (`{offset: "0x100"}`)、`file.save` を `app.commands.execute` で順に実行する |
 | TD-AUTO-JS-BEFORESAVE | 2 行 | `app.on("beforeSave", e => e.cancel("blocked-by-test-42"))` で常駐する |
 | TD-AUTO-JS-SELCOUNT | 2 行 | `app.on("selectionChanged", () => console.log(Date.now()))` で常駐する |
 | TD-AUTO-JS-UNDOGROUP | 5 行 | `beginUndoGroup("g1")`、0x10・0x20・0x30 に別々の `writeBytes` で `FF`、`endUndoGroup()` |
@@ -4728,7 +4728,7 @@
 | TD-AUTO-JS-SHOWRESULTS | 1 行 | TC-AUTO-16-03 の前提のとおりの `ui.showResults` |
 | TD-AUTO-JS-PROMPTARG | 1 行 | `console.log(await ui.prompt("count", {type: "number"}))` |
 | TD-AUTO-JS-STORAGE | 約 4 行 | `script.args.mode` が `set` なら `script.storage.set("k", {n: 42})`、`get` なら `script.storage.get("k")` を JSON で出力する |
-| TD-AUTO-JS-SETTINGSSET | 3 行 | `settings.set("view.bytesPerRow", 32)` を `try` で囲み、例外の名前とメッセージを出力する |
+| TD-AUTO-JS-SETTINGSSET | 3 行 | `settings.set("view.tooltips", false)` を `try` で囲み、例外の名前とメッセージを出力する |
 | TD-AUTO-JS-NOPERM | 約 6 行 | `fs.readText("C:/Windows/win.ini")` と `net.fetch(script.args.url)` を個別に `try` で囲み、例外の名前とメッセージを出力する |
 | TD-AUTO-JS-PICKREAD | 約 5 行 | `ui.pickFile()` のパスを `fs.readText` で読んで先頭 20 文字を出力し、続けて `fs.readText("C:/Windows/win.ini")` の例外の名前を出力する |
 | TD-AUTO-JS-PROCRUN | 2 行 | `process.run(script.args.exe, ["a b", "x&y", "\"q\"", "%PATH%", "c\|d"])` の標準出力をそのまま出力する |

@@ -29,6 +29,24 @@
     <ProjectReference Include="..\..\tools\HexEditor.TestData\HexEditor.TestData.csproj" />
     <ProjectReference Include="..\..\tools\HexEditor.ManualTests\HexEditor.ManualTests.csproj" />
     <ProjectReference Include="..\..\tools\I18nTool\I18nTool.csproj" />
+    <!-- C# スクリプト コンポーネント (AUTO-03)。参照はせず、ビルドした出力をテストの出力の csharp-component\ に置く (テスト用の配布元の中身)。 -->
+    <ProjectReference Include="..\..\src\HexEditor.Scripting.CSharp\HexEditor.Scripting.CSharp.csproj" ReferenceOutputAssembly="false" Private="false" />
+    <ProjectReference Include="..\..\tools\TestTarget\TestTarget.csproj" ReferenceOutputAssembly="false" Private="false" SkipGetTargetFrameworkProperties="true" SetTargetFramework="TargetFramework=net10.0-windows" />
   </ItemGroup>
+
+  <Target Name="CopyCSharpComponent" AfterTargets="Build">
+    <ItemGroup>
+      <_HexComponentFiles Include="..\..\src\HexEditor.Scripting.CSharp\bin\$(Configuration)\net10.0\*.dll" Exclude="..\..\src\HexEditor.Scripting.CSharp\bin\$(Configuration)\net10.0\HexEditor.Sdk.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_HexComponentFiles)" DestinationFolder="$(OutDir)csharp-component" SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- 引数をそのまま出すテスト用の実行ファイル (TestTarget の echo-args。TC-AUTO-18-03)。 -->
+  <Target Name="CopyEchoArgs" AfterTargets="Build" Condition="'$(OS)' == 'Windows_NT'">
+    <ItemGroup>
+      <_HexTestTargetFiles Include="..\..\tools\TestTarget\bin\$(Configuration)\net10.0-windows\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_HexTestTargetFiles)" DestinationFolder="$(OutDir)testtarget" SkipUnchangedFiles="true" />
+  </Target>
 
 </Project>

@@ -539,6 +539,44 @@
       "type": "boolean",
       "default": false
     },
+    "scripts.js.memoryMB": {
+      "description": "Memory limit (MB)",
+      "type": "integer",
+      "minimum": 16,
+      "maximum": 4096,
+      "default": 512
+    },
+    "scripts.js.recursionDepth": {
+      "description": "Recursion depth limit",
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 10000,
+      "default": 1000
+    },
+    "scripts.js.timeoutSeconds": {
+      "description": "Execution time limit (seconds)",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 86400,
+      "default": 60
+    },
+    "scripts.maxConcurrent": {
+      "description": "Scripts running at the same time",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 16,
+      "default": 4
+    },
+    "scripts.policy": {
+      "description": "Script policy (organization)",
+      "type": "string",
+      "enum": [
+        "none",
+        "disabled",
+        "signedPluginsOnly"
+      ],
+      "default": "none"
+    },
     "search.chunkSize": {
       "description": "Search chunk size (KiB)",
       "type": "integer",

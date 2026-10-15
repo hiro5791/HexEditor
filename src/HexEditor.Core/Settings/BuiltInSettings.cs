@@ -267,6 +267,18 @@ public static class BuiltInSettings
         },
         new("update.skippedVersion", SettingCategories.Update, SettingKind.String, string.Empty) { Order = 40, ShowInPage = false },
 
+        // ---- 自動化: スクリプト (08 の AUTO-01、AUTO-02、AUTO-34) ----
+        // 実行時間の上限 (秒)。0 は無制限 (AUTO-02 の仕様 4)。
+        new("scripts.js.timeoutSeconds", SettingCategories.Automation, SettingKind.Int, 60) { Min = 0, Max = 86400, Order = 10, Group = "scriptsJs" },
+        new("scripts.js.memoryMB", SettingCategories.Automation, SettingKind.Int, 512) { Min = 16, Max = 4096, Order = 20, Group = "scriptsJs" },
+        new("scripts.js.recursionDepth", SettingCategories.Automation, SettingKind.Int, 1000) { Min = 100, Max = 10000, Order = 30, Group = "scriptsJs" },
+        new("scripts.maxConcurrent", SettingCategories.Automation, SettingKind.Int, 4) { Min = 1, Max = 16, Order = 40 },
+        // 組織向けの設定 (AUTO-34 の仕様 9)。設定ファイルに書く。設定画面では変更できない。
+        new("scripts.policy", SettingCategories.Automation, SettingKind.Choice, "none")
+        {
+            Options = ["none", "disabled", "signedPluginsOnly"], Order = 90, ShowInPage = false, Exportable = false,
+        },
+
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },
         // 機能ごとのスイッチは「ネットワークを使う機能」の一覧の各行に置く (UI-58 の画面。PackagingSections)。

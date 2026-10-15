@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    C# スクリプト コンポーネント (08 の AUTO-03)。Roslyn (Microsoft.CodeAnalysis.CSharp.Scripting、MIT) を使う。
+    アプリ本体には含めない (App はこのプロジェクトを参照しない)。build/Build-CSharpComponent.ps1 で zip と検証用の一覧を作り、
+    データフォルダの components\csharp\<バージョン>\ に入れて使う。SDK (HexEditor.Sdk) はアプリのものを共有するため出力に含めない。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsTrimmable>false</IsTrimmable>
+    <!-- 依存のアセンブリを出力のフォルダにまとめる (展開してそのまま読み込む)。 -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HexEditor.Sdk\HexEditor.Sdk.csproj" Private="false" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>
