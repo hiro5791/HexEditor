@@ -484,9 +484,51 @@ public sealed partial class InspectorViewModel : ObservableObject
             }
         }
 
+        AddPluginRows(wanted);
         Sync(wanted);
         HighlightChanged?.Invoke(this, EventArgs.Empty);
         Refreshed?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// プラグインの型 (08 の AUTO-31 の IInspectorType) の行: 本体の型と同じ一覧の最後のグループに出し、ツールチップにプラグイン名を出す。
+    /// 表示の文字列は UI スレッドで作る (10 ms の決まり。遅い・例外を投げ続けるプラグインは止めて、値の代わりに停止の表示にする)。
+    /// </summary>
+    private void AddPluginRows(List<InspectorItemViewModel> wanted)
+    {
+        IReadOnlyList<Core.Plugins.PluginIntegration.InspectorTypeEntry> types = Core.Plugins.PluginIntegration.InspectorTypes(Core.Plugins.PluginManager.Current);
+        if (types.Count == 0)
+        {
+            return;
+        }
+
+        InspectorItemViewModel header = Item(new InspectorItemViewModel(InspectorItemKind.Group, InspectorGroup.Plugin));
+        header.Name = Loc.Get("Inspector_Group_Plugin");
+        header.IsCollapsed = _collapsed.Contains(InspectorGroup.Plugin);
+        wanted.Add(header);
+        if (header.IsCollapsed)
+        {
+            return;
+        }
+
+        foreach (Core.Plugins.PluginIntegration.InspectorTypeEntry type in types)
+        {
+            InspectorItemViewModel row = Item(new InspectorItemViewModel(InspectorItemKind.Row, InspectorGroup.Plugin, type.Id));
+            row.Name = type.Name;
+            row.Endian = Endian;
+            row.ByteOffset = 0;
+            row.ByteCount = Math.Max(0, type.Size);
+            string? value = _data.Length >= Math.Max(1, row.ByteCount) ? type.Decode(_data, Endian == Endianness.Big, uiThread: true) : null;
+            row.Status = value is not null ? InspectorStatus.Ok : _data.Length < Math.Max(1, row.ByteCount) ? InspectorStatus.NotEnoughData : InspectorStatus.Invalid;
+            if (!row.IsEditing)
+            {
+                row.Value = value ?? (type.Registration.Guard.IsStopped ? Loc.Get("Inspector_PluginStopped") : "—");
+            }
+
+            row.ToolTip = Loc.Format("Plugin_ToolTip", type.PluginName);
+            row.FullText = value;
+            wanted.Add(row);
+        }
     }
 
     private InspectorItemViewModel Item(InspectorItemViewModel candidate)
@@ -639,7 +681,7 @@ public sealed partial class InspectorViewModel : ObservableObject
     /// <summary>行の値の入力を始める。書き換えられない行・読み取り専用では始めない。</summary>
     public bool BeginEdit(InspectorItemViewModel item)
     {
-        if (item.Kind != InspectorItemKind.Row || ReadOnly || _document is null)
+        if (item.Kind != InspectorItemKind.Row || item.Group == InspectorGroup.Plugin || ReadOnly || _document is null)
         {
             return false;
         }
@@ -766,7 +808,7 @@ public sealed partial class InspectorViewModel : ObservableObject
 
     public void HideRow(InspectorItemViewModel item)
     {
-        if (item.Kind == InspectorItemKind.Row)
+        if (item.Kind == InspectorItemKind.Row && item.Group != InspectorGroup.Plugin)
         {
             SetLayout(Layout.WithVisible(item.TypeId, false));
         }

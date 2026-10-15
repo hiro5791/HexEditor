@@ -103,6 +103,8 @@
                         <!--  ディスク・プロセスを開く (ENG-29、ENG-32)  -->
                         <MenuFlyoutItem x:Uid="Menu_File_OpenDisk" cmd:CommandUi.Id="file.openDisk" AutomationProperties.AutomationId="Command_OpenDisk" />
                         <MenuFlyoutItem x:Uid="Menu_File_OpenProcess" cmd:CommandUi.Id="file.openProcess" AutomationProperties.AutomationId="Command_OpenProcess" />
+                        <!--  プラグインのデータソース (08 の AUTO-31 の IByteSourceProvider)。項目はプラグインの読み込み後に MainWindow.Plugins.cs が足す  -->
+                        <MenuFlyoutSubItem x:Name="PluginSourcesMenu" x:Uid="Menu_File_OpenPluginSource" AutomationProperties.AutomationId="Menu_File_OpenPluginSource" Visibility="Collapsed" />
                         <MenuFlyoutSubItem x:Uid="Menu_File_OpenSelection" AutomationProperties.AutomationId="Command_OpenSelection">
                             <MenuFlyoutItem x:Uid="Menu_File_OpenSelectionLinked" cmd:CommandUi.Id="file.openSelectionInNewTab" AutomationProperties.AutomationId="Command_OpenSelectionInNewTab" />
                             <MenuFlyoutItem x:Uid="Menu_File_OpenSelectionCopy" cmd:CommandUi.Id="file.openSelectionAsCopy" AutomationProperties.AutomationId="Command_OpenSelectionAsCopy" />
@@ -311,6 +313,8 @@
                     <MenuBarItem x:Uid="Menu_Data">
                         <MenuFlyoutItem x:Uid="Menu_Data_Operation" cmd:CommandUi.Id="data.operation" AutomationProperties.AutomationId="Command_DataOperation" />
                         <MenuFlyoutItem x:Uid="Menu_Data_RepeatOperation" cmd:CommandUi.Id="data.repeatOperation" AutomationProperties.AutomationId="Command_RepeatDataOperation" />
+                        <!--  プラグインのデータ演算 (08 の AUTO-31 の IDataTransform)。項目は MainWindow.Plugins.cs が足す  -->
+                        <MenuFlyoutSubItem x:Name="PluginDataMenu" x:Uid="Menu_Data_Plugins" AutomationProperties.AutomationId="Menu_Data_Plugins" Visibility="Collapsed" />
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Data_ConvertEncoding" cmd:CommandUi.Id="data.convertEncoding" AutomationProperties.AutomationId="Command_ConvertEncoding" />
                         <MenuFlyoutSubItem x:Uid="Menu_Data_Case" AutomationProperties.AutomationId="Command_CaseConversion">
@@ -354,6 +358,10 @@
                             <MenuFlyoutItem x:Uid="Menu_Tools_Macro_Record" cmd:CommandUi.Id="macro.record" AutomationProperties.AutomationId="Command_MacroRecord" />
                             <MenuFlyoutItem x:Uid="Menu_Tools_Macro_PlayLast" cmd:CommandUi.Id="macro.playLast" AutomationProperties.AutomationId="Command_MacroPlayLast" />
                             <MenuFlyoutItem x:Uid="Menu_Tools_Macro_Repeat" cmd:CommandUi.Id="macro.repeat" AutomationProperties.AutomationId="Command_MacroRepeat" />
+                        </MenuFlyoutSubItem>
+                        <!--  プラグイン (08 の AUTO-32)。プラグインのメニューの項目 (IMenuContribution) は MainWindow.Plugins.cs が足す  -->
+                        <MenuFlyoutSubItem x:Name="PluginsMenu" x:Uid="Menu_Tools_Plugins" AutomationProperties.AutomationId="Menu_Tools_Plugins">
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Plugins_Manage" cmd:CommandUi.Id="plugins.manage" AutomationProperties.AutomationId="Command_PluginsManage" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />

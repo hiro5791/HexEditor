@@ -239,6 +239,7 @@ public sealed partial class MainWindow
         RegisterSettingsCommands();
         RegisterScriptCommands();
         RegisterScriptUiCommands();
+        RegisterPluginCommands();
         Commands.Register("help.commandPalette", () => OpenPalette(">"));
         Commands.Register("help.shortcuts", OpenShortcutsPage);
         Commands.Register("help.documentation", () => Documentation_Click(this, e));

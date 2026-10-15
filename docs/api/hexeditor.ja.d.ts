@@ -41,6 +41,8 @@ declare namespace HexEditor {
         readonly net: Net;
         /** 外部プログラム (許可が必要)。 */
         readonly process: ProcessRunner;
+        /** 入っているプラグインと、プラグインがスクリプトに提供するオブジェクト (AUTO-31)。 */
+        readonly plugins: Plugins;
         /** ファイルを開く。サイズに関係なくすぐに戻る。 */
         open(path: string, options?: OpenOptions): Promise<Document>;
         /** ディスク・ボリュームを ID で開く。 */
@@ -290,6 +292,28 @@ declare namespace HexEditor {
     interface Net {
         /** HTTPS / HTTP の GET・POST。応答の本文は 100 MB まで。 */
         fetch(url: string, options?: FetchOptions): Promise<FetchResponse>;
+    }
+    
+    /** スクリプトから見たプラグイン 1 つ。 */
+    interface PluginHandle {
+        /** プラグイン ID。 */
+        readonly id: string;
+        /** 表示名。 */
+        readonly name: string;
+        /** バージョン。 */
+        readonly version: string;
+        /** 読み込まれて動いているか。 */
+        readonly enabled: boolean;
+        /** プラグインがスクリプトに提供するオブジェクト (`IScriptApiProvider`)。なければ null。 */
+        readonly api: any | null;
+    }
+    
+    /** 入っているプラグイン (AUTO-31、AUTO-32)。 */
+    interface Plugins {
+        /** すべてのプラグインと状態。 */
+        list(): PluginInfo[];
+        /** ID でプラグインを取得する。入っていなければ null。 */
+        get(id: string): PluginHandle | null;
     }
     
     /** 外部プログラム (AUTO-18、許可 `process`)。 */
@@ -768,6 +792,20 @@ declare namespace HexEditor {
         suggestedName?: string | null;
         /** ダイアログのタイトル。 */
         title?: string | null;
+    }
+    
+    /** プラグインと状態。 */
+    interface PluginInfo {
+        /** プラグイン ID。 */
+        readonly id: string;
+        /** 表示名。 */
+        readonly name: string;
+        /** バージョン。 */
+        readonly version: string;
+        /** `enabled`・`disabled`・`failed`・`suspended`・`notLoaded`。 */
+        readonly state: string;
+        /** 有効でない理由。なければ null。 */
+        readonly reason: string | null;
     }
     
     /** `run` のオプション。 */

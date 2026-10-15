@@ -288,6 +288,12 @@ public static class BuiltInSettings
             Options = ["none", "disabled", "signedPluginsOnly"], Order = 90, ShowInPage = false, Exportable = false,
         },
 
+        // ---- 自動化: プラグイン (08 の AUTO-33、AUTO-35) ----
+        // 署名されたプラグインだけを読み込む (AUTO-35 の仕様 2。既定オフ)。反映は再起動後 (読み込みは起動時だけ)。
+        new("plugins.signedOnly", SettingCategories.Automation, SettingKind.Bool, false) { Order = 100, Group = "plugins", RequiresRestart = true },
+        // 開発用のフォルダ (AUTO-33。ビルドの出力先)。プラグインマネージャで編集する。
+        new("plugins.devFolders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 110, ShowInPage = false, Exportable = false },
+
         // ---- プライバシー (UI-58) ----
         new("network.offline", SettingCategories.Privacy, SettingKind.Bool, false) { Order = 10 },
         // 機能ごとのスイッチは「ネットワークを使う機能」の一覧の各行に置く (UI-58 の画面。PackagingSections)。

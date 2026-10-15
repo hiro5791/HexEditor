@@ -117,6 +117,19 @@ public static class Exporter
     public static void WriteText(ExportSource source, IReadOnlyList<(long Offset, long Length)> ranges, ExportOptions o, TextWriter writer,
         CancellationToken cancellationToken = default, Action<long>? progress = null)
     {
+        // プラグインの形式 (08 の AUTO-31): プレビュー・見積もりもプラグインの出力から作る (テキストの形式だけ。UTF-8 として読む)。
+        if (Plugins.PluginIntegration.FindExport(o.Format) is { } plugin)
+        {
+            using var buffer = new MemoryStream();
+            Plugins.PluginIntegration.Export(plugin.Registration, plugin.Format, source, ranges, buffer, cancellationToken, progress);
+            if (plugin.Registration.Guard.Invoke("IsText", () => plugin.Format.IsText, false))
+            {
+                writer.Write(Encoding.UTF8.GetString(buffer.GetBuffer(), 0, (int)buffer.Length));
+            }
+
+            return;
+        }
+
         string nl = o.NewLine;
         long total = ranges.Sum(r => r.Length);
         switch (o.Format)

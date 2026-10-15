@@ -198,7 +198,7 @@ public sealed class PluginGuard
     /// <summary>止めた旨の表示。</summary>
     public string Stopped() => Msg.T($"プラグイン「{_owner.NameFor(Msg.Default)}」は停止中です。", $"Plugin \"{_owner.NameFor(Msg.Default)}\" is stopped.");
 
-    internal void Fault(string what, Exception ex)
+    public void Fault(string what, Exception ex)
     {
         bool suspend;
         lock (_lock)

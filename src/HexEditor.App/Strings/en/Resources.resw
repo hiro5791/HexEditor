@@ -5957,4 +5957,124 @@ Downloaded from: {2}</value></data>
   <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>No volume matches "{0}".</value></data>
   <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>No process matches "{0}".</value></data>
   <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>"{0}" matches {1} processes. Specify the process ID with --process.</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>Open Plugin Data Source</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>Plugin Operations</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>Plugins</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>Manage Plugins...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>Manage</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>plugin manager extensions add-ins</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>Load only signed plugins</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>Plugins without a valid signature are not loaded. Takes effect after a restart.</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>Plugin development folders</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>Build output folders loaded directly as plugins (edited in the plugin manager).</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>Plugins</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>Plugins</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>Plugins</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>Plugins add inspector types, hashes, formats, commands and panels. Plugins run with the same rights as you; enable only plugins from authors you trust. Changes take effect after a restart.</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>Safe mode: no plugins are loaded. The list and settings are not changed.</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>Add...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>Restart now</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>Open plugin folder</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>Plugin settings...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>Enabled</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>Enabled</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>Disabled</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>No plugins are installed. Add a .hexplugin file with Add... or drop it on the list.</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>Development folders</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>Plugins are loaded directly from these build output folders and shown as Development. You are asked once per folder.</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>Add development folder...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>Added the development folder. Restart to load it.</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>Trusted publishers</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>Plugins signed by these publishers are enabled without asking. Remove a publisher to ask again.</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>Installed plugins</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>Drop a .hexplugin file here to add it.</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>Add plugin</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>unknown publisher</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>Signed by {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>Signed by {0} (revocation could not be checked)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>Invalid signature</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>Signature not checked yet</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>Not signed</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>Enabled</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>Disabled</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>Cannot be loaded ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>Stopped ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>Not loaded ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>Loading...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — changes after a restart</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>Development</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>No extensions</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>Adds: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (disabled: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>Plugins cannot be added in safe mode.</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>The plugin was not added: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>Remove plugin</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>Remove "{0}"? Loaded plugins are deleted after a restart.</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>Settings of {0}</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>inspector type</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>hash</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>import format</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>export format</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>data source</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>transform view</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>data operation</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>command</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>menu item</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>panel</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>settings page</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>template function</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>file type detection</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>disassembler</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>coloring rules</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>script API</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>unknown</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>Enable plugin "{0}"?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (update)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>Publisher: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>Loaded from a development folder.</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>This code can do anything on your PC with your rights (including reading and writing files and network access). Enable only plugins from authors you trust.</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>The plugin declares: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>This plugin is not signed. Its publisher cannot be verified.</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>Always trust plugins from {0}</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>Enable</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>Don't enable</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor is running as administrator. This plugin runs with administrator rights and can affect the whole PC.</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>Load plugins as administrator?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor is running as administrator. These plugins run with administrator rights and can affect the whole PC:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— not trusted yet</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>Load</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>Don't load</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>Plugin "{0}" was stopped because errors continued.</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>Disable the plugin</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>Try again at restart</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>Plugin "{0}" will not be loaded after a restart.</value></data>
+  <data name="Plugin_SafeModeNotice" xml:space="preserve"><value>Started in safe mode. Plugins and automatic scripts are not loaded.</value></data>
+  <data name="Plugin_RestartNormally" xml:space="preserve"><value>Restart normally</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>Disable the plugin?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>HexEditor ended unexpectedly last time, possibly because of plugin "{0}". Disable it?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Keep enabled</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>This plugin command cannot run now.</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>The command "{0}" of plugin "{1}" failed. See the output panel.</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>Open: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>Cannot open {0}: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>Copy as: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>Copied as {0}.</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>Data operation: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>The data operation {0} failed: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>Added by plugin {0}</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>Plugin panel</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>The plugin could not create this panel.</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Plugins</value></data>
+  <data name="Inspector_Group_Plugin" xml:space="preserve"><value>Plugins</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(stopped)</value></data>
 </root>

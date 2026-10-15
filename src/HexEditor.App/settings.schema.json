@@ -479,6 +479,19 @@
       "type": "boolean",
       "default": true
     },
+    "plugins.devFolders": {
+      "description": "Plugin development folders",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "plugins.signedOnly": {
+      "description": "Load only signed plugins",
+      "type": "boolean",
+      "default": false
+    },
     "positionManager.followCursor": {
       "description": "Position manager follows the cursor",
       "type": "boolean",

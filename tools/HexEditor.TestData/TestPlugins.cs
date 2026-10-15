@@ -146,6 +146,49 @@ public static class TestPlugins
         return brokenPath;
     }
 
+    /// <summary>
+    /// 全ファイルのハッシュ (アプリの PluginManager.ContentHash と同じ計算。Core のテストが一致を確かめる)。UI テストが信頼の記録を置くのに使う。
+    /// </summary>
+    public static string ContentHash(string folder)
+    {
+        var sb = new System.Text.StringBuilder();
+        foreach (string file in Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories)
+            .Select(f => (Full: f, Relative: Path.GetRelativePath(folder, f).Replace('\\', '/')))
+            .OrderBy(f => f.Relative, StringComparer.OrdinalIgnoreCase).Select(f => f.Full))
+        {
+            string relative = Path.GetRelativePath(folder, file).Replace('\\', '/');
+            if (relative == ".motw")
+            {
+                continue;
+            }
+
+            using FileStream stream = File.OpenRead(file);
+            sb.Append(relative.ToUpperInvariant()).Append('\0').Append(Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(stream))).Append('\n');
+        }
+
+        return Convert.ToHexStringLower(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(sb.ToString())));
+    }
+
+    /// <summary>
+    /// 設定フォルダの信頼の記録 (<c>scripts/trust.json</c>) に、プラグインを「有効にする」を選んだ記録を加える (UI テストの「信頼済み」の前提)。
+    /// </summary>
+    public static void Trust(string settingsFolder, string pluginFolder, string id)
+    {
+        string path = Path.Combine(settingsFolder, "scripts", "trust.json");
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        JsonArray records = File.Exists(path) ? JsonNode.Parse(File.ReadAllText(path))!.AsArray() : [];
+        records.Add(new JsonObject
+        {
+            ["kind"] = "plugin",
+            ["key"] = id,
+            ["hash"] = ContentHash(pluginFolder),
+            ["source"] = "userAllowed",
+            ["permissions"] = new JsonArray(),
+            ["time"] = DateTimeOffset.UtcNow.ToString("o", System.Globalization.CultureInfo.InvariantCulture),
+        });
+        File.WriteAllText(path, records.ToJsonString());
+    }
+
     /// <summary>項目のパスを自由に書いた zip (zip-slip などの検証のテスト)。</summary>
     public static string RawPackage(string packagePath, IReadOnlyDictionary<string, byte[]> entries)
     {

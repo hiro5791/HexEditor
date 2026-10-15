@@ -1241,6 +1241,24 @@
       "permission": "network"
     },
     {
+      "method": "plugins.list",
+      "params": [],
+      "result": "PluginInfo[]",
+      "permission": null
+    },
+    {
+      "method": "plugins.get",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "result": "PluginHandle | null",
+      "permission": null
+    },
+    {
       "method": "processRunner.run",
       "params": [
         {

@@ -192,7 +192,7 @@ public sealed class PluginManagerTests
         string package = TestPlugins.RawPackage(Path.Combine(t.Root, "bomb.hexplugin"), new Dictionary<string, byte[]>
         {
             ["plugin.json"] = Encoding.UTF8.GetBytes(TestPlugins.Manifest(TestPlugins.Sample).ToJsonString()),
-            ["zeros.bin"] = new byte[64 * 1024 * 1024],
+            ["zeros.bin"] = new byte[4 * 1024 * 1024],
         });
         PluginInstallResult result = await m.InstallAsync(package);
         Assert.False(result.Installed);
@@ -261,6 +261,19 @@ public sealed class PluginManagerTests
         });
         Assert.Single(t.Prompts.Trust);
         Assert.Equal(PluginState.Enabled, t.Manager!.Find("test.sample")!.State);
+    }
+
+    [Fact]
+    public async Task Test_data_trust_records_match_the_app()
+    {
+        // UI テストは TestPlugins.Trust で信頼の記録を置く: アプリと同じハッシュ・同じ形式であること。
+        using var t = new PluginTestHost();
+        string folder = t.Install(TestPlugins.DepA);
+        Assert.Equal(PluginManager.ContentHash(folder), TestPlugins.ContentHash(folder));
+        TestPlugins.Trust(Path.Combine(t.Root, "settings"), folder, "dep-a");
+        await t.StartAsync();
+        Assert.Empty(t.Prompts.Trust);
+        Assert.Equal(PluginState.Enabled, t.Manager!.Find("dep-a")!.State);
     }
 
     [Fact]

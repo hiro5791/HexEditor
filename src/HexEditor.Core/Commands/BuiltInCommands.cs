@@ -528,6 +528,9 @@ public static class BuiltInCommands
         new("macro.playLast", "macro"),
         new("macro.repeat", "macro"),
 
+        // ---- ツール: プラグイン (08 の AUTO-32)。プラグインが追加するコマンドは plugin.<拡張ポイントの ID> (読み込み後に登録する) ----
+        new("plugins.manage", "plugins"),
+
         // カーソル移動 (マクロの記録・再生に使う。メニュー・パレットには出さない。08 の AUTO-27 の仕様 2)。
         new("cursor.left", "cursor") { Hidden = true, Condition = "documentOpen" },
         new("cursor.right", "cursor") { Hidden = true, Condition = "documentOpen" },

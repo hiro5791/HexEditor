@@ -21,6 +21,26 @@ public static class GlobalColoringRules
 
     public static IReadOnlyList<ColoringRule> Rules => _rules ??= Load(App.Settings);
 
+    private static IReadOnlyList<ColoringRule> _pluginRules = [];
+
+    /// <summary>プラグインが追加した規則 (08 の AUTO-31 の IColorRuleProvider。設定には保存しない。名前にプラグイン名を付ける)。</summary>
+    public static IReadOnlyList<ColoringRule> PluginRules => _pluginRules;
+
+    /// <summary>表示に使う全体の規則 (利用者の規則の後にプラグインの規則)。</summary>
+    public static IReadOnlyList<ColoringRule> Effective => _pluginRules.Count == 0 ? Rules : [.. Rules, .. _pluginRules];
+
+    /// <summary>プラグインの規則を置き換える (登録簿が変わるたび)。</summary>
+    public static void SetPluginRules(IReadOnlyList<ColoringRule> rules)
+    {
+        if (rules.Count == 0 && _pluginRules.Count == 0)
+        {
+            return;
+        }
+
+        _pluginRules = [.. rules.Take(ColoringRule.MaxRules)];
+        Changed?.Invoke(null, EventArgs.Empty);
+    }
+
     /// <summary>プリセットの名前 (表示の言語)。</summary>
     public static string PresetName(string id) => Loc.Get("Coloring_Preset_" + id);
 

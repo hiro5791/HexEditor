@@ -5957,4 +5957,124 @@
   <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>「{0}」に当たるボリュームがありません。</value></data>
   <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>「{0}」に当たるプロセスがありません。</value></data>
   <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>「{0}」に当たるプロセスが {1} 件あります。--process にプロセス ID を指定してください。</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>プラグインのデータソースを開く(U)</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>プラグインのデータ演算(P)</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>プラグイン(P)</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>プラグインの管理(M)...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>管理</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>ぷらぐいん かんり かくちょう きのう</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>署名されたプラグインだけを読み込む</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>有効な署名のないプラグインを読み込みません。再起動後に反映されます。</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>プラグインの開発用のフォルダ</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>ビルドの出力先のフォルダから直接プラグインを読み込みます (プラグインマネージャで編集します)。</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>プラグインは、インスペクタの型・ハッシュ・形式・コマンド・パネルなどを追加します。プラグインはあなたと同じ権限で動きます。信頼できる作成者のものだけを有効にしてください。変更は再起動後に反映されます。</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>セーフモードです。プラグインは読み込まれていません。一覧と設定は変わりません。</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>追加...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>今すぐ再起動</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>プラグインのフォルダを開く</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>プラグインの設定...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>有効</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>有効</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>無効</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>プラグインは入っていません。「追加...」で .hexplugin を選ぶか、一覧にドロップしてください。</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>開発用のフォルダ</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>これらのビルドの出力先から直接プラグインを読み込み、「開発中」と表示します。確認はフォルダごとに 1 回だけです。</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>開発用のフォルダを追加...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>開発用のフォルダを追加しました。再起動すると読み込まれます。</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>信頼済みの発行者</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>これらの発行者が署名したプラグインは、確認なしで有効になります。取り消すと再び確認します。</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>入っているプラグイン</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>.hexplugin をここにドロップすると追加できます。</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>プラグインを追加</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>発行者不明</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>署名あり: {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>署名あり: {0} (失効を確認できませんでした)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>署名が無効</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>署名は未確認</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>署名されていません</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>有効</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>無効</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>読み込めません ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>停止中 ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>読み込んでいません ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>読み込み中...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — 再起動後に変わります</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>開発中</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>拡張ポイントなし</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>追加するもの: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (無効: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>セーフモードではプラグインを追加できません。</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>プラグインを追加できませんでした: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>プラグインの削除</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>「{0}」を削除しますか? 読み込み中のプラグインは再起動後に削除されます。</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>{0} の設定</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>インスペクタの型</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>ハッシュ</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>インポート形式</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>エクスポート形式</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>データソース</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>変換ビュー</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>データ演算</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>コマンド</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>メニューの項目</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>パネル</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>設定画面</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>テンプレートの関数</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>ファイル形式の判定</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>逆アセンブラ</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>色付けルール</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>スクリプト API</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>不明</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>プラグイン「{0}」を有効にしますか?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (更新)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>発行者: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>開発用のフォルダから読み込みます。</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>このコードはあなたの PC 上で、あなたと同じ権限で何でも実行できます (ファイルの読み書き、ネットワーク通信を含む)。信頼できる作成者のものだけを有効にしてください。</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>プラグインが宣言している許可: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>このプラグインは署名されていません。発行者を確かめられません。</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>この発行者 ({0}) を常に信頼する</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>有効にする</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>有効にしない</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor は管理者として実行中です。このプラグインは管理者権限で動き、PC 全体に影響する操作ができます。</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>管理者としてプラグインを読み込みますか?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor は管理者として実行中です。次のプラグインは管理者権限で動き、PC 全体に影響する操作ができます:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— まだ信頼されていません</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>読み込む</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>読み込まない</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>プラグイン「{0}」でエラーが続いたため停止しました。</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>プラグインを無効にする</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>再起動時にもう一度試す</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>プラグイン「{0}」は再起動後に読み込まれません。</value></data>
+  <data name="Plugin_SafeModeNotice" xml:space="preserve"><value>セーフモードで起動しました。プラグインと自動実行のスクリプトは読み込まれていません。</value></data>
+  <data name="Plugin_RestartNormally" xml:space="preserve"><value>通常どおり再起動</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>プラグインを無効にしますか?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>前回、HexEditor が異常終了しました。プラグイン「{0}」が原因の可能性があります。無効にしますか?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>有効のままにする</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>このプラグインのコマンドは今は実行できません。</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>プラグイン「{1}」のコマンド「{0}」でエラーが起きました。出力パネルを見てください。</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>開く: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>{0} を開けません: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>形式を選択してコピー: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>{0} の形式でコピーしました。</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>データ演算: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>データ演算 {0} に失敗しました: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>プラグイン「{0}」が追加</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>プラグインのパネル</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>プラグインがこのパネルを作れませんでした。</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="Inspector_Group_Plugin" xml:space="preserve"><value>プラグイン</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(停止中)</value></data>
 </root>

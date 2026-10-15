@@ -61,6 +61,13 @@ public static partial class CrashReporter
         }
 
         Write(exception);
+
+        // 呼び出し履歴にプラグインのアセンブリがあれば、次の起動でそのプラグインを無効にするか確認する (08 の AUTO-30 の仕様 7)。
+        if (exception is not null)
+        {
+            Plugins.PluginService.RecordCrash(exception);
+        }
+
         if (exit)
         {
             Environment.Exit(1);

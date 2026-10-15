@@ -181,6 +181,8 @@
   <ItemGroup>
     <ProjectReference Include="..\HexEditor.Core\HexEditor.Core.csproj" />
     <ProjectReference Include="..\HexEditor.Platform\HexEditor.Platform.csproj" />
+    <!-- プラグイン SDK の UI 部分 (08 の AUTO-29)。プラグインのパネルの型をアプリとプラグインで共有する。 -->
+    <ProjectReference Include="..\HexEditor.Sdk.UI\HexEditor.Sdk.UI.csproj" />
   </ItemGroup>
 
   <!--

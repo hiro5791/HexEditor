@@ -146,6 +146,9 @@ public partial class App : Application
 
         // スクリプト (08 の AUTO-01)。ウィンドウのコマンドの登録より先に用意する。
         Services.Scripting.ScriptingService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
+
+        // プラグイン (08 の AUTO-30)。ここでは準備だけで、読み込みは最初のウィンドウを表示した後 (起動を遅らせない)。
+        Services.Plugins.PluginService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
         var window = new MainWindow(vm);
         Window = window;
 
@@ -239,5 +242,9 @@ public partial class App : Application
 
         // 前回の異常終了の後始末: 復旧の提案と、クラッシュ情報の通知 (ENG-27 の仕様 6、PKG-30 の仕様 2)。
         window.ShowStartupNoticesWhenLoaded();
+
+        // プラグインの読み込み (AUTO-30 の仕様 4: 最初のウィンドウを表示した後にバックグラウンドで) とセーフモードの案内 (UI-30 の仕様 4)。
+        window.ShowPluginStartupNotices();
+        Services.Plugins.PluginService.StartLoading();
     }
 }
