@@ -213,13 +213,13 @@ public sealed partial class InspectorPanel
             return false;
         }
 
-        if (focused == ArrayIndexBox)
+        if (ReferenceEquals(focused, ArrayIndexBox))
         {
             Vm.GoToElement(ArrayIndexBox.Text);
             return true;
         }
 
-        if (focused == ArrayStrideBox)
+        if (ReferenceEquals(focused, ArrayStrideBox))
         {
             if (!Vm.SetStride(ArrayStrideBox.Text))
             {

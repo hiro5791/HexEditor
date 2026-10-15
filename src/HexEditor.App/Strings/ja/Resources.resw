@@ -5687,7 +5687,6 @@
   <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(要素の境界ではありません)</value></data>
   <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>要素 {0} はドキュメントの範囲外です</value></data>
   <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>値</value></data>
-  <data name="Bookmarks_ShowColumnValue" xml:space="preserve"><value>値</value></data>
   <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>式</value></data>
   <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>ブックマークの参照が循環しています</value></data>

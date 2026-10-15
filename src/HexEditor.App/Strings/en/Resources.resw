@@ -5687,7 +5687,6 @@ Downloaded from: {2}</value></data>
   <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(not on an element boundary)</value></data>
   <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>Element {0} is outside the document</value></data>
   <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Value</value></data>
-  <data name="Bookmarks_ShowColumnValue" xml:space="preserve"><value>Value</value></data>
   <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
   <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Expr</value></data>
   <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Circular reference between bookmarks</value></data>
