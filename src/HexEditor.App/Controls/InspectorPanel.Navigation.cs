@@ -27,7 +27,7 @@ public sealed partial class InspectorPanel
 
     private MenuFlyoutSubItem _pointerMenu = null!;
     private MenuFlyoutItem _arrayMenu = null!;
-    private readonly List<RadioMenuFlyoutItem> _pointerItems = [];
+    private readonly List<MenuFlyoutItem> _pointerItems = [];
     private Flyout? _baseFlyout;
 
     /// <summary>「基準を指定して相対」の最後の基準 (コマンドパレットからの移動にも使う)。</summary>
@@ -40,7 +40,7 @@ public sealed partial class InspectorPanel
         AutomationProperties.SetAutomationId(_pointerMenu, "Inspector_MenuPointer");
         foreach ((PointerMode mode, string id) in PointerModes)
         {
-            var item = new RadioMenuFlyoutItem { Text = Loc.Get("Inspector_Pointer_" + id), GroupName = "InspectorPointerMode", Tag = mode };
+            var item = new MenuFlyoutItem { Text = Loc.Get("Inspector_Pointer_" + id), Tag = mode };
             AutomationProperties.SetAutomationId(item, "Inspector_MenuPointer_" + id);
             item.Click += PointerItem_Click;
             _pointerItems.Add(item);
@@ -66,10 +66,12 @@ public sealed partial class InspectorPanel
             InspectorItemViewModel? target = _menuTarget ?? Vm.Selected;
             _pointerMenu.IsEnabled = InspectorViewModel.CanFollowPointer(target);
             _arrayMenu.IsEnabled = target is { Kind: InspectorItemKind.Row } && InspectorTypes.Find(target.TypeId) is not null;
-            foreach (RadioMenuFlyoutItem item in _pointerItems)
+            foreach (MenuFlyoutItem item in _pointerItems)
             {
-                // 最後に使った方法を既定 (印) にする (INSP-20 の仕様 2)。
-                item.IsChecked = (PointerMode)item.Tag == InspectorViewModel.LastPointerMode;
+                // 最後に使った方法を既定にする (INSP-20 の仕様 2): 印を付け、コマンドパレットの「ポインタとして移動」もこの方法を使う。
+                bool last = (PointerMode)item.Tag == InspectorViewModel.LastPointerMode;
+                item.Icon = last ? new FontIcon { Glyph = "\uE73E" } : null;
+                AutomationProperties.SetItemStatus(item, last ? Loc.Get("Inspector_PointerDefault") : string.Empty);
             }
         };
 

@@ -141,8 +141,24 @@ public sealed partial class VisualizerViewModel : ObservableObject
         return ok;
     }
 
+    /// <summary>最後の描き直しに掛かった時間 (ms。性能のテストで読む)。</summary>
+    public double LastRenderMs { get; private set; }
+
     /// <summary>表示範囲の画素を描き直す (表示中の範囲だけを読む)。</summary>
     public void Render()
+    {
+        long started = System.Diagnostics.Stopwatch.GetTimestamp();
+        try
+        {
+            RenderCore();
+        }
+        finally
+        {
+            LastRenderMs = System.Diagnostics.Stopwatch.GetElapsedTime(started).TotalMilliseconds;
+        }
+    }
+
+    private void RenderCore()
     {
         if (!IsActive || _document is not { } doc || doc.Document.IsDisposed)
         {

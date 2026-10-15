@@ -58,6 +58,7 @@ public sealed partial class MainWindow
             ["status"] = vm.StatusText,
             ["scrollMaximum"] = vm.ScrollMaximum,
             ["frames"] = VisualizerView?.FrameCount ?? 0,
+            ["renderMs"] = vm.LastRenderMs + (VisualizerView?.LastDrawMs ?? 0),
         };
         if (vm.Layout is { } layout)
         {

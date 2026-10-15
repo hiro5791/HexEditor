@@ -194,8 +194,18 @@ public sealed partial class VisualizerPanel : UserControl, Panels.IPanelContent
         Draw();
     }
 
+    /// <summary>最後の画像の作り直しに掛かった時間 (ms。性能のテストで読む)。</summary>
+    internal double LastDrawMs { get; private set; }
+
     /// <summary>画素を拡大率の正方形にして描く (補間なし)。</summary>
     private void Draw()
+    {
+        long started = System.Diagnostics.Stopwatch.GetTimestamp();
+        DrawCore();
+        LastDrawMs = System.Diagnostics.Stopwatch.GetElapsedTime(started).TotalMilliseconds;
+    }
+
+    private void DrawCore()
     {
         _syncing = true;
         RowScroll.Maximum = Vm.ScrollMaximum;

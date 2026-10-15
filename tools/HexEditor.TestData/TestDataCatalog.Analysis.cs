@@ -40,6 +40,9 @@ public static partial class TestDataCatalog
             path => File.WriteAllText(path, MagicJson, new UTF8Encoding(false)), dir => Path.Combine(dir, "TD-ANA-MAGIC", "hexed-test.json")),
         new("TD-ANA-MAGIC-BAD", Encoding.UTF8.GetByteCount(MagicBadJson), "3 行目に構文エラーがある JSON (broken.json)",
             path => File.WriteAllText(path, MagicBadJson, new UTF8Encoding(false)), dir => Path.Combine(dir, "TD-ANA-MAGIC", "broken.json")),
+
+        // フェーズ 3 のインスペクタ・画像表示 (TestDataCatalog.Inspector.cs)。
+        .. InspectorPhase3Items(),
     ];
 
     /// <summary>TD-ANA-10G-A の乱数の種。</summary>

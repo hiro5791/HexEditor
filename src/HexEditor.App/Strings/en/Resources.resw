@@ -5745,4 +5745,5 @@ Downloaded from: {2}</value></data>
   <data name="Visualizer_Saved" xml:space="preserve"><value>Saved the image to {0}</value></data>
   <data name="Visualizer_SaveError" xml:space="preserve"><value>Could not save {0}: {1}</value></data>
   <data name="Visualizer_PngFiles" xml:space="preserve"><value>PNG image</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>Default</value></data>
 </root>
