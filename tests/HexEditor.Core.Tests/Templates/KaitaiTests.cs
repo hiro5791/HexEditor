@@ -52,6 +52,13 @@ public sealed class KaitaiTests
         }
     }
 
+    /// <summary>TC-TPL-33-01 本体。期待値の JSON (TD-TPL-KSY-FORMATS) の取り込みにダウンロードとコンパイラの導入が要るため、まだ実行しない。</summary>
+    [Fact(Skip = "TD-TPL-KSY-FORMATS (kaitai_struct_formats の 5 つの .ksy と公式コンパイラの期待値の JSON) の取り込みにダウンロードとコンパイラの導入が要る。それまでは PngKsyMatchesTheData で代える。")]
+    [Trait(TC, "TC-TPL-33-01")]
+    public void KaitaiStructFormatsRunUnchanged()
+    {
+    }
+
     /// <summary>TC-TPL-33-01 の代わり (kaitai_struct_formats の取り込みまで)。</summary>
     [Fact]
     public void PngKsyMatchesTheData()

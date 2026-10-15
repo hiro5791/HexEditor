@@ -747,7 +747,9 @@ public sealed partial class MainWindow
                 var key = Enum.Parse<VirtualKey>(request["key"]!.GetValue<string>(), ignoreCase: true);
                 KeyModifiers modifiers = (request["ctrl"]?.GetValue<bool>() == true ? KeyModifiers.Ctrl : 0)
                     | (request["shift"]?.GetValue<bool>() == true ? KeyModifiers.Shift : 0);
-                DispatchResult r = _keys.Dispatch((int)key, modifiers, new KeyContext(KeyScope.CodeEditor, true));
+                DispatchResult r = Need(page).HandleEditorKey(key, modifiers.HasFlag(KeyModifiers.Ctrl), modifiers.HasFlag(KeyModifiers.Shift), false)
+                    ? new DispatchResult(true)
+                    : _keys.Dispatch((int)key, modifiers, new KeyContext(KeyScope.CodeEditor, true));
                 await Task.Delay(50);
                 JsonObject state = EditorTestState(page);
                 state["handledBy"] = r.Command;

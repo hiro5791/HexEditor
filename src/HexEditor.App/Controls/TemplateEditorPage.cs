@@ -29,6 +29,15 @@ public interface ICodeEditorHost
 {
 }
 
+/// <summary>
+/// コードエディタの部品が持つ標準の編集キー (Ctrl+G・Ctrl+/ など。00-overview 8.1) をグローバルの割り当てより先に処理する部品。
+/// キーの振り分け (MainWindow.RouteKey) がコマンドより先に呼ぶ。処理したら true。
+/// </summary>
+public interface ICodeEditorKeys
+{
+    bool HandleEditorKey(VirtualKey key, bool ctrl, bool shift, bool alt);
+}
+
 /// <summary>テンプレートエディタが頼む操作 (ウィンドウが実装する)。</summary>
 public interface ITemplateEditorHost
 {
@@ -71,7 +80,7 @@ public sealed record TemplateDebugRow(string Name, string Value, string Detail)
 /// 「試しに実行」、ブレークポイント・ステップ実行・変数・ウォッチ・呼び出し履歴の表示。
 /// エディタの部品は 08 のコードエディタ (Monaco) が入るまで、WinUI の RichEditBox を使う (08 の AUTO-20 の仕様 9 の代替表示と同じ)。
 /// </summary>
-public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost
+public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, ICodeEditorKeys
 {
     private const int GutterWidth = 44;
 
@@ -703,6 +712,63 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost
                 break;
         }
     }
+
+    /// <summary>
+    /// エディタ部品の標準の編集キー (00-overview 8.1: グローバルの同じキーより優先する)。Ctrl+Space で補完、Ctrl+/ でコメントの切り替え、
+    /// Ctrl+G で行へ移動、Shift+Alt+F で整形。処理したら true。
+    /// </summary>
+    public bool HandleEditorKey(VirtualKey key, bool ctrl, bool shift, bool alt)
+    {
+        if (_editor.FocusState == FocusState.Unfocused)
+        {
+            return false; // ウォッチ式の入力欄など、エディタ以外の部品
+        }
+
+        switch (key)
+        {
+            case VirtualKey.Space when ctrl && !shift && !alt:
+                ShowCompletion();
+                return true;
+            case (VirtualKey)191 when ctrl && !alt: // OEM_2 (US 配列の / ?)
+            case VirtualKey.Divide when ctrl && !alt:
+                ToggleComment();
+                return true;
+            case VirtualKey.G when ctrl && !shift && !alt:
+                ShowGoToLine();
+                return true;
+            case VirtualKey.F when shift && alt && !ctrl:
+                FormatDocument();
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>Ctrl+G: 行番号を入力して移動する (エディタの上に小さな入力欄を出す)。</summary>
+    internal void ShowGoToLine()
+    {
+        var box = new TextBox { PlaceholderText = Loc.Format("TplEd_GoToLineRange", LineCount), MinWidth = 200, FlowDirection = FlowDirection.LeftToRight };
+        AutomationProperties.SetAutomationId(box, "TplEd_GoToLineInput");
+        AutomationProperties.SetName(box, Loc.Get("TplEd_GoToLine"));
+        var flyout = new Flyout { Content = box, Placement = FlyoutPlacementMode.Top };
+        box.KeyDown += (_, e) =>
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                e.Handled = true;
+                if (int.TryParse(box.Text.Trim(), NumberStyles.None, CultureInfo.InvariantCulture, out int line) && line >= 1)
+                {
+                    flyout.Hide();
+                    MoveCaret(Math.Min(line, LineCount), 1);
+                    _editor.Focus(FocusState.Keyboard);
+                }
+            }
+        };
+        flyout.ShowAt(_editor);
+        box.Focus(FocusState.Programmatic);
+    }
+
+    private int LineCount => _text.Count(c => c == '\n') + 1;
 
     // ───────────── 定義へ移動・整形・コメント ─────────────
 

@@ -6040,4 +6040,6 @@ Type: {4}</value></data>
   <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>pattern</value></data>
   <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>memory</value></data>
   <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>time</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Go to line</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Line number (1-{0})</value></data>
 </root>

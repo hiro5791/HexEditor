@@ -270,6 +270,14 @@ public sealed partial class MainWindow
     {
         for (DependencyObject? node = focused; node is not null; node = VisualTreeHelper.GetParent(node))
         {
+            // コードエディタの標準の編集キー (Ctrl+G など) はグローバルの同じキーより優先する (00-overview 8.1)
+            if (node is Controls.ICodeEditorKeys editor
+                && editor.HandleEditorKey((VirtualKey)key, modifiers.HasFlag(KeyModifiers.Ctrl), modifiers.HasFlag(KeyModifiers.Shift), modifiers.HasFlag(KeyModifiers.Alt)))
+            {
+                _keys.Reset();
+                return new DispatchResult(true);
+            }
+
             if (node is IKeyCaptureHost host)
             {
                 if (host.IsCapturingKeys && host.TryCaptureKey(new KeyStroke(modifiers, key)))
