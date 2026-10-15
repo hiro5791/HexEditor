@@ -209,14 +209,11 @@ public sealed class TemplateTreeModel
         TemplateTreeItem replacement = NewApplicationItem(result, application.Tag);
         if (index < 0)
         {
-            replacement.IndexInParent = _applications.Count;
-            _applications.Add(replacement);
+            return replacement; // 待っている間に一覧から外れた (作り直した) 行は置き換えない
         }
-        else
-        {
-            replacement.IndexInParent = index;
-            _applications[index] = replacement;
-        }
+
+        replacement.IndexInParent = index;
+        _applications[index] = replacement;
 
         Raise(TemplateTreeChangeAction.Reset, 0, 0);
         await RestoreAsync(replacement, keys).ConfigureAwait(true);
@@ -386,6 +383,11 @@ public sealed class TemplateTreeModel
             if (item.IsExpanded || item.Children is not null)
             {
                 return; // 待っている間に別の要求で開いた
+            }
+
+            if (children.Count == 0 && !result.Completion.IsCompleted && item.Kind == TemplateTreeItemKind.Application)
+            {
+                return; // 評価中でまだ子がない (評価が進んでから開き直す)
             }
 
             item.Children = children;

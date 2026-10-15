@@ -134,6 +134,15 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
 
     private void Rebuild()
     {
+        // 同じ適用の行は、開閉の状態と選択を引き継ぐ (適用を加えた・解除したとき)
+        var keys = new Dictionary<int, HashSet<string>>();
+        foreach ((int id, TemplateTreeItem root) in _roots)
+        {
+            keys[id] = TemplateTreeModel.ExpandedKeys(root);
+        }
+
+        string? selected = SelectedItem is { Kind: TemplateTreeItemKind.Node } s ? s.Node!.Path : null;
+        int? selectedId = SelectedItem is { } si ? EntryOf(si)?.Id : null;
         Model.Clear();
         _roots.Clear();
         foreach (TemplateApplicationEntry entry in _templates?.Entries ?? [])
@@ -146,16 +155,29 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
 
         HasApplications = _roots.Count > 0;
         UpdateStatus();
-        _ = LoadRootsAsync();
+        _ = LoadRootsAsync(keys, selected, selectedId);
         ResultsChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private async Task LoadRootsAsync()
+    private async Task LoadRootsAsync(Dictionary<int, HashSet<string>> keys, string? selected, int? selectedId)
     {
-        foreach (TemplateTreeItem root in _roots.Values.ToList())
+        foreach ((int id, TemplateTreeItem root) in _roots.ToList())
         {
             await Model.LoadRowDataAsync([root]);
+            if (keys.TryGetValue(id, out HashSet<string>? k))
+            {
+                await Model.RestoreAsync(root, k);
+            }
+            else
+            {
+                await Model.ExpandAsync(root);
+            }
+
             await Model.RefreshRowsAsync([root]);
+            if (id == selectedId && selected is not null && await Model.RevealPathAsync(root, selected) is { } item)
+            {
+                SelectRequested?.Invoke(this, item);
+            }
         }
     }
 
@@ -176,12 +198,28 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
                 await Model.ExpandAsync(_roots[entry.Id]);
             }
         }
+        else if (!ReferenceEquals(root.Result, result) && !result.Completion.IsCompleted)
+        {
+            // 再評価の途中: 終わるまで前の結果を出しておく (終わったら開閉の状態を復元して置き換える)
+            _refreshTimer.Start();
+            return;
+        }
         else if (!ReferenceEquals(root.Result, result))
         {
             // 再評価: 開閉の状態と選択をパスで復元する (TPL-20 の仕様 5)
             string? selected = SelectedItem is { Kind: TemplateTreeItemKind.Node } s && ReferenceEquals(s.Result, root.Result) ? s.Node!.Path : null;
             bool selectedRoot = ReferenceEquals(SelectedItem, root);
+            if (!Model.Applications.Contains(root))
+            {
+                return;
+            }
+
             TemplateTreeItem replaced = await Model.ReplaceApplicationAsync(root, result);
+            if (!Model.Applications.Contains(replaced))
+            {
+                return;
+            }
+
             _roots[entry.Id] = replaced;
             await Model.LoadRowDataAsync([replaced], force: true);
             if (selected is not null && await Model.RevealPathAsync(replaced, selected) is { } item)
@@ -195,6 +233,11 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
         }
         else
         {
+            if (root.MaterializedChildren is null && result.Completion.IsCompleted)
+            {
+                await Model.ExpandAsync(root);
+            }
+
             await Model.RefreshRowsAsync([root]);
         }
 
@@ -218,6 +261,11 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
             }
 
             running = true;
+            if (root.MaterializedChildren is null)
+            {
+                await Model.ExpandAsync(root);
+            }
+
             await Model.RefreshRunningAsync(root);
             if (root.Tag is TemplateApplicationEntry entry)
             {

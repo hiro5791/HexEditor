@@ -450,7 +450,13 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
             return Task.CompletedTask;
         }
 
-        DocumentTemplates.For(doc).MarkLoaded();
+        DocumentTemplates templates = DocumentTemplates.For(doc);
+        templates.MarkLoaded();
+        if (templates.Entries.Any(e => string.Equals(e.Info.TemplatePath, entry.Path, StringComparison.OrdinalIgnoreCase) && e.Info.StartOffset == 0))
+        {
+            return Task.CompletedTask; // 同じ起動の引数を 2 度受け取った (既存のインスタンスへの転送など)
+        }
+
         AddTemplateApplication(doc, new TemplateApplicationInfo { TemplatePath = entry.Path });
         return Task.CompletedTask;
     }
@@ -647,8 +653,13 @@ public sealed partial class MainWindow : ITemplatePanelHost, ITemplateOutputHost
         TemplatePanelView?.SelectedItems is { Count: > 0 } items ? items : TemplateVm.SelectedItem is { } one ? [one] : [];
 
     /// <summary>Hex ビューでノードの範囲を選んで表示する (TPL-23 の仕様 6、TPL-24 の「データへ移動」)。</summary>
-    public void GoToTemplateData(TemplateTreeItem item, bool focusEditor)
+    public async void GoToTemplateData(TemplateTreeItem item, bool focusEditor)
     {
+        if (item.Data is null)
+        {
+            await TemplateVm.Model.LoadRowDataAsync([item]);
+        }
+
         if (Vm.Selected is not { } doc || item.Data is not { } data || item.Kind == TemplateTreeItemKind.Application && data.Size == 0)
         {
             return;

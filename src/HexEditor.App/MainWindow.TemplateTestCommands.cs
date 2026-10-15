@@ -37,6 +37,10 @@ public sealed partial class MainWindow
         {
             case "state":
                 return TemplateTestState(request);
+            case "run":
+                // ダイアログを出すコマンドは閉じるまで終わらないので、待たずに返す
+                _ = Commands.ExecuteAsync(request["id"]!.GetValue<string>());
+                return new JsonObject();
             case "apply":
             {
                 DocumentViewModel doc = Vm.Selected ?? throw new InvalidOperationException("No document.");
@@ -463,7 +467,7 @@ public sealed partial class MainWindow
                 ["type"] = row.Type,
                 ["offset"] = row.OffsetText,
                 ["size"] = row.SizeText,
-                ["path"] = item.Node?.Path ?? item.Key,
+                ["path"] = item.Kind == TemplateTreeItemKind.Node ? item.Node!.Path : item.Key,
                 ["kind"] = item.Kind.ToString(),
                 ["depth"] = item.Depth,
                 ["expanded"] = item.IsExpanded,

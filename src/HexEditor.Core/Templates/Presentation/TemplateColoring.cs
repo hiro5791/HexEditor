@@ -98,6 +98,13 @@ public static class TemplateColoring
                 continue;
             }
 
+            // u8 / char の配列は 1 つの範囲として塗る (要素ごとに色を変えない。結果ツリーでも要素を展開しない)
+            if (node.Parent is { IsByteOrCharArray: true })
+            {
+                skipped.Add(node);
+                continue;
+            }
+
             if (node.Attributes.HighlightHidden)
             {
                 skipped.Add(node);
