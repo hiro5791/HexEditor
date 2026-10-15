@@ -83,6 +83,7 @@ public sealed class TemplateUiTests
 
     [Fact]
     [Trait(UiTest.TC, "TC-TPL-20-01")]
+    [Trait(UiTest.Priority, UiTest.High)]
     public Task Applying_png_from_the_dialog_shows_the_result_tree() => UiTestContext.RunAsync(async ctx =>
     {
         AppSession app = await ctx.StartAsync(new AppOptions { Files = [ctx.TestData("TD-PNG")] });

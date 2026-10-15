@@ -696,6 +696,54 @@
       "type": "string",
       "default": ""
     },
+    "templates.autoApply": {
+      "description": "Auto-apply",
+      "type": "string",
+      "enum": [
+        "suggest",
+        "always",
+        "none"
+      ],
+      "default": "suggest"
+    },
+    "templates.autoReevaluate": {
+      "description": "Re-evaluate after editing",
+      "type": "boolean",
+      "default": true
+    },
+    "templates.coloring": {
+      "description": "Structure coloring",
+      "type": "boolean",
+      "default": true
+    },
+    "templates.coloringOpacity": {
+      "description": "Coloring opacity (%)",
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 100,
+      "default": 35
+    },
+    "templates.folders": {
+      "description": "Template folders",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "templates.inspector": {
+      "description": "Inspector templates",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "templates.preferences": {
+      "description": "Template preferences",
+      "type": "string",
+      "default": ""
+    },
     "ui.backdrop": {
       "description": "Window background",
       "type": "string",
