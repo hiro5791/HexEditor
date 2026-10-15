@@ -179,7 +179,7 @@ public sealed class ScriptHost : IDisposable
         Msg.Current = environment.Language;
         string fallbackName = request.DisplayName ?? (request.Path is not null ? Path.GetFileName(request.Path) : "script");
         ScriptLanguage language = request.Language ?? (request.Path is not null ? LanguageOf(request.Path) ?? ScriptLanguage.JavaScript : ScriptLanguage.JavaScript);
-        var run = new ScriptRun(this, fallbackName, request.Path, language, _time);
+        var run = new ScriptRun(this, fallbackName, request.Path, language, _time) { Origin = request.Origin };
         if (request.Origin is ScriptOrigin.File or ScriptOrigin.Editor or ScriptOrigin.BundledSample)
         {
             LastRequest = request;
@@ -227,7 +227,11 @@ public sealed class ScriptHost : IDisposable
 
         run.Context?.Dispose();
         run.ExecutionFinished = true;
-        WriteResultLine(run, result, env);
+        if (!request.Quiet)
+        {
+            WriteResultLine(run, result, env);
+        }
+
         run.Complete(result);
         RaiseRunningChanged(env);
     }

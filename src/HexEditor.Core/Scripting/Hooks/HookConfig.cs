@@ -298,6 +298,46 @@ public interface IHookConfigStore
     void Save(HookConfig config);
 }
 
+/// <summary>
+/// ファイルの保存先 (<c>&lt;設定フォルダ&gt;/scripts/hooks.json</c>)。設定画面「スクリプト &gt; 自動実行」で編集する。
+/// 読めないファイルは空の設定として扱う。保存は一時ファイルに書いてから置き換える。
+/// </summary>
+public sealed class FileHookConfigStore(string path) : IHookConfigStore
+{
+    private readonly Lock _lock = new();
+
+    /// <summary>変わった (保存した)。</summary>
+    public event EventHandler? Changed;
+
+    public HookConfig Load()
+    {
+        lock (_lock)
+        {
+            try
+            {
+                return File.Exists(path) ? HookConfig.FromJson(JsonNode.Parse(File.ReadAllText(path))) : new HookConfig();
+            }
+            catch (Exception ex) when (ex is System.Text.Json.JsonException or IOException or UnauthorizedAccessException)
+            {
+                return new HookConfig();
+            }
+        }
+    }
+
+    public void Save(HookConfig config)
+    {
+        lock (_lock)
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            string temp = path + ".tmp";
+            File.WriteAllText(temp, config.ToJson().ToJsonString(new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+            File.Move(temp, path, overwrite: true);
+        }
+
+        Changed?.Invoke(this, EventArgs.Empty);
+    }
+}
+
 /// <summary>メモリ上の保存先 (テスト・ヘッドレス)。</summary>
 public sealed class MemoryHookConfigStore(HookConfig? initial = null) : IHookConfigStore
 {

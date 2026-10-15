@@ -500,6 +500,46 @@ public static class BuiltInCommands
         new("scripting.stopAll", "scripting"),
         new("scripting.addCSharpComponent", "scripting"),
 
+        // ---- スクリプトの作成と管理 (08 の AUTO-19〜AUTO-24) ----
+        // パネル: スクリプト一覧 (AUTO-19)・出力 (AUTO-24)・コンソール (AUTO-23)。表示切り替えは view.panel.*、「表示する」は scripting.show*。
+        new("view.panel.scripts", "view"),
+        new("view.panel.output", "view"),
+        new("view.panel.console", "view"),
+        new("scripting.showList", "scripting"),
+        new("scripting.showConsole", "scripting"),
+        new("scripting.new", "scripting"),
+        new("scripting.newCSharp", "scripting"),
+        new("scripting.openSample", "scripting"),
+        new("scripting.openFolder", "scripting"),
+        new("scripting.debug", "scripting") { Condition = "scriptEditor" },
+        new("scripting.pause", "scripting") { Condition = "scriptEditor" },
+        new("scripting.clearOutput", "scripting"),
+
+        // コードエディタの有効範囲のキー (00 の 8.5)。スクリプトエディタにフォーカスがあるとき、F5 は実行 / 続行、F11 は全画面表示より優先する。
+        new("scripting.editor.run", "scripting") { DefaultBindings = [K("F5", KeyScope.CodeEditor)], Condition = "scriptEditor" },
+        new("scripting.editor.stop", "scripting") { DefaultBindings = [K("Shift+F5", KeyScope.CodeEditor)], Condition = "scriptEditor" },
+        new("scripting.editor.toggleBreakpoint", "scripting") { DefaultBindings = [K("F9", KeyScope.CodeEditor)], Condition = "scriptEditor" },
+        new("scripting.editor.stepOver", "scripting") { DefaultBindings = [K("F10", KeyScope.CodeEditor)], Condition = "scriptEditor" },
+        new("scripting.editor.stepIn", "scripting") { DefaultBindings = [K("F11", KeyScope.CodeEditor)], Condition = "scriptEditor" },
+        new("scripting.editor.stepOut", "scripting") { DefaultBindings = [K("Shift+F11", KeyScope.CodeEditor)], Condition = "scriptEditor" },
+
+        // ---- ツール: マクロ (08 の AUTO-27、AUTO-28) ----
+        new("macro.record", "macro") { DefaultBindings = [K("Ctrl+Shift+R")] },
+        new("macro.playLast", "macro"),
+        new("macro.repeat", "macro"),
+
+        // カーソル移動 (マクロの記録・再生に使う。メニュー・パレットには出さない。08 の AUTO-27 の仕様 2)。
+        new("cursor.left", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.right", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.up", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.down", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.pageUp", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.pageDown", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.lineStart", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.lineEnd", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.fileStart", "cursor") { Hidden = true, Condition = "documentOpen" },
+        new("cursor.fileEnd", "cursor") { Hidden = true, Condition = "documentOpen" },
+
         // ---- ツール・設定 ----
         new("settings.open", "settings") { Icon = IconSettings, DefaultBindings = [K("Ctrl+OemComma")] },
         new("settings.keyboard", "settings") { Icon = IconKeyboard },

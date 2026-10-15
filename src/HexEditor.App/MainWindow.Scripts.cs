@@ -1,3 +1,4 @@
+using HexEditor.Core.Scripting.Hooks;
 using System.Globalization;
 using System.Text;
 using HexEditor.App.Commands;
@@ -71,6 +72,7 @@ public sealed partial class MainWindow
             {
                 events.RaiseDocumentOpened(ScriptingService.Environment.HostFor(d));
                 d.EditorChanged += OnScriptSelectionChanged;
+                _ = RunOpenHooksAsync(d);
             }
 
             foreach (DocumentViewModel d in e.OldItems?.OfType<DocumentViewModel>() ?? [])
@@ -87,6 +89,22 @@ public sealed partial class MainWindow
                 events.RaiseActiveDocumentChanged();
             }
         };
+    }
+
+    /// <summary>ファイルを開いたときの自動実行 (AUTO-25)。先頭 64 バイトを条件の判定に使う。</summary>
+    private async Task RunOpenHooksAsync(DocumentViewModel d)
+    {
+        try
+        {
+            var head = new byte[(int)Math.Min(64, d.Document.Length)];
+            d.Document.Current.Read(0, head);
+            string name = d.FilePath is { } p ? System.IO.Path.GetFileName(p) : d.DisplayName;
+            await ScriptWorkspace.Hooks.RunOpenAsync(ScriptingService.Environment.HostFor(d), new HookTarget(d.FilePath, name, d.ScriptKind, head));
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            AppLog.Debug($"open hook failed: {ex.Message}");
+        }
     }
 
     private void OnScriptSelectionChanged(object? sender, EventArgs e)
@@ -107,10 +125,21 @@ public sealed partial class MainWindow
             return false;
         }
 
+        // 保存前の自動実行 (AUTO-25)。スクリプトが中止を求めたら保存しない (通知はフック側が出す)。
+        if (!(await ScriptWorkspace.Hooks.RunBeforeSaveAsync(host)).Proceed)
+        {
+            return false;
+        }
+
         bool saved = await SaveCoreAsync(doc, saveAs);
         if (saved)
         {
             ScriptingService.Environment.EventSource.RaiseAfterSave(host);
+            Services.Scripting.MacroHooks.Saved(saveAs ? doc.FilePath : null);
+            if (!Hosting.Program.CommandLine.SafeMode)
+            {
+                _ = ScriptWorkspace.Hooks.RunAfterSaveAsync(host);
+            }
         }
 
         return saved;
@@ -225,6 +254,7 @@ public sealed partial class MainWindow
 
     internal void OnScriptStarted(ScriptRun run)
     {
+        AutoShowOutput(run);
         _ = run.Completion.ContinueWith(t => DispatcherQueue.TryEnqueue(() =>
         {
             ScriptRunResult r = t.Result;

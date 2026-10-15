@@ -62,6 +62,15 @@ public sealed record CommandAction(string Command, IReadOnlyDictionary<string, o
             : $"await app.commands.execute({MacroJs.Quote(Command)}, {MacroJs.Object(Arguments)});";
 }
 
+/// <summary>
+/// API の呼び出し (検索・置換・オフセットへの移動など。検索条件や入力した値をそのまま引数に持つ。AUTO-27 の仕様 2)。
+/// <paramref name="Code"/> は複数行でもよい。
+/// </summary>
+public sealed record ApiAction(string Name, string Code) : MacroAction(Name)
+{
+    public override string ToCode() => Code;
+}
+
 /// <summary>ファイルを開く (パスを引数として記録する)。</summary>
 public sealed record OpenAction(string Path) : MacroAction(Msg.T("ファイルを開く: ", "Open file: ") + System.IO.Path.GetFileName(Path))
 {
@@ -82,7 +91,7 @@ public sealed record SwitchTabAction(int Delta) : MacroAction(Delta > 0 ? Msg.T(
 }
 
 /// <summary>JavaScript の文字列・数値の書き出し。</summary>
-internal static class MacroJs
+public static class MacroJs
 {
     public static string Quote(string s) => JsonSerializer.Serialize(s);
 
@@ -237,6 +246,9 @@ public sealed class MacroRecorder
     /// </summary>
     public void RecordCommand(string command, string name, IReadOnlyDictionary<string, object?>? arguments = null) =>
         Add(new CommandAction(command, arguments ?? new Dictionary<string, object?>(), name));
+
+    /// <summary>API の呼び出しを記録する (<paramref name="name"/> はコメントに使う操作の表示名)。</summary>
+    public void RecordApi(string name, string code) => Add(new ApiAction(name, code));
 
     public void RecordOpen(string path) => Add(new OpenAction(path));
 

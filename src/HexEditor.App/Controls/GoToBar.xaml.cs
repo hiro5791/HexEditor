@@ -252,6 +252,7 @@ public sealed partial class GoToBar : UserControl
         }
 
         Remember(Input.Text.Trim());
+        Services.Scripting.MacroHooks.GoTo(r.Offset, SelectChoice.IsChecked == true);
         if (UnitChoice.SelectedIndex == (int)GoToUnit.Sectors && SelectChoice.IsChecked != true)
         {
             // セクタ単位の移動は、セクタの先頭行を画面の一番上に表示する (VIEW-32 の仕様 5、VIEW-34 の仕様 2)。

@@ -141,6 +141,7 @@ public partial class App : Application
         MainWindow.RegisterSelectionPanels();
         MainWindow.RegisterFormatIssuesPanel();
         MainWindow.RegisterComparePanel();
+        MainWindow.RegisterScriptPanels();
         MainWindow.RegisterMemoryMapPanel();
 
         // スクリプト (08 の AUTO-01)。ウィンドウのコマンドの登録より先に用意する。

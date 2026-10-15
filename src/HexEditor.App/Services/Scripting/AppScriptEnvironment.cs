@@ -207,8 +207,11 @@ internal sealed class AppScriptCommands : IScriptCommandService
     {
         MainWindow window = (target as AppDocumentHost)?.Window ?? WindowManager.Current;
         string? argument = args.TryGetValue("argument", out object? a) ? Convert.ToString(a, System.Globalization.CultureInfo.InvariantCulture) : null;
-        bool done = await window.Commands.ExecuteAsync(id, argument);
-        return done;
+        using (Commands.CommandArgs.Begin(args))
+        {
+            bool done = await window.Commands.ExecuteAsync(id, argument);
+            return done;
+        }
     }
 }
 

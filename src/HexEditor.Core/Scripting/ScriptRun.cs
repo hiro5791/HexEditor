@@ -149,6 +149,12 @@ public sealed record ScriptRunRequest
 
     /// <summary>実行が終わった後に残す結果の値 (コンソールの結果の表示。AUTO-23 の仕様 2)。</summary>
     public Action<Repl.ReplValue>? OnReplResult { get; init; }
+
+    /// <summary>
+    /// 実行の結果の行 (「成功 (0.12 s)」「失敗: ...」とエラーの位置) を出力パネルに書かない (コンソール。結果とエラーは
+    /// コンソール自身が見せる。AUTO-23)。<c>console.log</c> などの出力は書く。
+    /// </summary>
+    public bool Quiet { get; init; }
 }
 
 /// <summary>
@@ -192,6 +198,9 @@ public sealed class ScriptRun
     public string? Path { get; }
 
     public ScriptLanguage Language { get; }
+
+    /// <summary>実行がどこから来たか (フックの実行では出力パネルを自動で表示しない、など)。</summary>
+    public ScriptOrigin Origin { get; internal set; }
 
     public DateTimeOffset StartedAt { get; }
 

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<UserControl
+    x:Class="HexEditor.App.Controls.ScriptEditorPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:HexEditor.App.ViewModels"
+    AutomationProperties.AutomationId="ScriptEditorPage"
+    AutomationProperties.LandmarkType="Custom">
+    <!--
+        スクリプトエディタ (AUTO-20)。タブとして開く。上部のツールバー (実行・デバッグ実行・停止・一時停止・ステップ・対象のドキュメント)、
+        エディタ本体、下部の「問題」の一覧とデバッグ用のパネル (呼び出し履歴・変数・ウォッチ。AUTO-21 の仕様 4)。コードは常に左から右。
+    -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" MinHeight="120" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition x:Name="BottomRow" Height="190" />
+        </Grid.RowDefinitions>
+        <CommandBar
+            x:Name="Bar"
+            Grid.Row="0"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            IsOpen="False">
+            <AppBarButton x:Name="RunButton" AutomationProperties.AutomationId="ScriptEditor_Run" Click="Run_Click">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE768;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="DebugButton" AutomationProperties.AutomationId="ScriptEditor_Debug" Click="Debug_Click">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xEBE8;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="StopButton" AutomationProperties.AutomationId="ScriptEditor_Stop" Click="Stop_Click">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE71A;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="PauseButton" AutomationProperties.AutomationId="ScriptEditor_Pause" Click="Pause_Click">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE769;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton x:Name="StepOverButton" AutomationProperties.AutomationId="ScriptEditor_StepOver" Click="StepOver_Click">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE893;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="StepInButton" AutomationProperties.AutomationId="ScriptEditor_StepIn" Click="StepIn_Click">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE896;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton x:Name="StepOutButton" AutomationProperties.AutomationId="ScriptEditor_StepOut" Click="StepOut_Click">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE898;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <CommandBar.Content>
+                <StackPanel Margin="8,0,0,0" Orientation="Horizontal" Spacing="12">
+                    <ComboBox
+                        x:Name="TargetBox"
+                        MinWidth="180"
+                        VerticalAlignment="Center"
+                        AutomationProperties.AutomationId="ScriptEditor_Target"
+                        DisplayMemberPath="Name"
+                        SelectionChanged="Target_SelectionChanged" />
+                    <TextBlock
+                        x:Name="StatusText"
+                        VerticalAlignment="Center"
+                        AutomationProperties.AutomationId="ScriptEditor_Status"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </CommandBar.Content>
+        </CommandBar>
+        <ContentPresenter
+            x:Name="EditorHost"
+            Grid.Row="1"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch" />
+        <Border
+            Grid.Row="2"
+            Height="1"
+            Background="{ThemeResource CardStrokeColorDefaultBrush}" />
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Padding="8,2" Orientation="Horizontal" Spacing="4">
+                <ToggleButton x:Name="ProblemsTab" AutomationProperties.AutomationId="ScriptEditor_ProblemsTab" Click="ProblemsTab_Click" IsChecked="True" />
+                <ToggleButton x:Name="DebugTab" AutomationProperties.AutomationId="ScriptEditor_DebugTab" Click="DebugTab_Click" />
+            </StackPanel>
+            <ListView
+                x:Name="ProblemsList"
+                Grid.Row="1"
+                AutomationProperties.AutomationId="ScriptEditor_Problems"
+                SelectionChanged="Problems_SelectionChanged"
+                SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ProblemRow">
+                        <Grid
+                            AutomationProperties.AutomationId="ScriptEditor_Problem"
+                            AutomationProperties.Name="{x:Bind AccessibleName}"
+                            ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon
+                                FontSize="13"
+                                Foreground="{x:Bind Brush}"
+                                Glyph="{x:Bind Glyph}" />
+                            <TextBlock Grid.Column="1" Text="{x:Bind Message}" TextTrimming="CharacterEllipsis" />
+                            <TextBlock
+                                Grid.Column="2"
+                                FontFamily="Cascadia Mono, Consolas"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{x:Bind Position}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Grid
+                x:Name="DebugPanel"
+                Grid.Row="1"
+                AutomationProperties.AutomationId="ScriptEditor_DebugPanel"
+                ColumnSpacing="8"
+                Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="CallStackLabel" Margin="8,0" FontWeight="SemiBold" />
+                    <ListView
+                        x:Name="CallStackList"
+                        Grid.Row="1"
+                        AutomationProperties.AutomationId="ScriptEditor_CallStack"
+                        SelectionChanged="CallStack_SelectionChanged"
+                        SelectionMode="Single" />
+                </Grid>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="VariablesLabel" Margin="8,0" FontWeight="SemiBold" />
+                    <TreeView
+                        x:Name="VariablesTree"
+                        Grid.Row="1"
+                        AutomationProperties.AutomationId="ScriptEditor_Variables"
+                        Expanding="Variables_Expanding"
+                        SelectionMode="None" />
+                </Grid>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="WatchLabel" Margin="8,0" FontWeight="SemiBold" />
+                    <TextBox
+                        x:Name="WatchBox"
+                        Grid.Row="1"
+                        AutomationProperties.AutomationId="ScriptEditor_WatchInput"
+                        FlowDirection="LeftToRight"
+                        KeyDown="Watch_KeyDown" />
+                    <ListView
+                        x:Name="WatchList"
+                        Grid.Row="2"
+                        AutomationProperties.AutomationId="ScriptEditor_Watches"
+                        KeyDown="WatchList_KeyDown"
+                        SelectionMode="Single">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:WatchRow">
+                                <StackPanel AutomationProperties.Name="{x:Bind AccessibleName}" Orientation="Horizontal" Spacing="8">
+                                    <TextBlock FontFamily="Cascadia Mono, Consolas" Text="{x:Bind Expression}" />
+                                    <TextBlock
+                                        FontFamily="Cascadia Mono, Consolas"
+                                        Foreground="{x:Bind Brush}"
+                                        Text="{x:Bind ValueText}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

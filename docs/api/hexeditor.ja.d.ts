@@ -892,8 +892,8 @@ declare namespace HexEditor {
     /** 範囲の引数。`ByteRange` か入力式の文字列 (例: `"sel"`、`"0x100:0x20"` (開始:長さ)、`"0x100..0x120"` (開始..終了。終了は含まない))。 */
     type RangeArg = ByteRange | string;
     
-    /** データ演算のオペランド。数値 (JavaScript では `number` か `bigint`) か、繰り返しのキーとして使う Hex 文字列。 */
-    type TransformOperand = number | bigint | string;
+    /** データ演算のオペランド。数値 (JavaScript では `number` か `bigint`) か、繰り返しのキー (Hex 文字列。JavaScript では `hex` のパラメータの値などの `Uint8Array` も同じキーとして使える)。 */
+    type TransformOperand = number | bigint | string | Uint8Array;
 }
 
 interface AbortSignal { readonly aborted: boolean; readonly reason: unknown; throwIfAborted(): void; }

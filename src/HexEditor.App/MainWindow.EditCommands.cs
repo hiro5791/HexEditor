@@ -40,7 +40,7 @@ public sealed partial class MainWindow
         Commands.Register("edit.insertBytes", () => InsertBytes_Click(this, e),
             () => NeedsEditable(d => d.Document.CanResize ? null : Loc.Get("Notice_FixedLength")));
         Commands.Register("edit.insertFile", () => InsertFile_Click(this, e), () => NeedsEditable());
-        Commands.Register("edit.fill", () => Fill_Click(this, e),
+        Commands.Register("edit.fill", FillAsync,
             () => NeedsEditable(d => d.Editor.HasSelection || d.Document.Length > 0 ? null : Loc.Get("Command_EmptyDocument")));
         Commands.Register("edit.resize", () => Resize_Click(this, e),
             () => NeedsEditable(d => d.Document.CanResize ? null : Loc.Get("Notice_FixedLength")));
@@ -327,16 +327,28 @@ public sealed partial class MainWindow
 
     // ---- 塗りつぶし (EDIT-29) ----
 
-    private async void Fill_Click(object sender, RoutedEventArgs e)
+    private async void Fill_Click(object sender, RoutedEventArgs e) => await FillAsync();
+
+    /// <summary>
+    /// 塗りつぶし。スクリプト・マクロから引数 (<c>range</c>、<c>pattern</c>) つきで呼ばれたときはダイアログを出さずにその値で塗る
+    /// (AUTO-06 の仕様 2、AUTO-27 の受け入れ基準 3)。ダイアログで確定した値はマクロの記録に渡す。
+    /// </summary>
+    private async Task FillAsync()
     {
         if (Vm.Selected is not { } doc || !EnsureEditable(doc))
         {
             return;
         }
 
-        if (await ShowFillDialogAsync(doc) is not { } request)
+        FillRequest? scripted = HexEditor.App.Commands.CommandArgs.IsScripted && HexEditor.App.Commands.CommandArgs.Has("pattern") ? FillRequestFromArguments(doc) : null;
+        if ((scripted ?? await ShowFillDialogAsync(doc)) is not { } request)
         {
             return;
+        }
+
+        if (scripted is null)
+        {
+            ReportFillToMacro(request);
         }
 
         FillSpec spec = request.Spec;
@@ -366,6 +378,57 @@ public sealed partial class MainWindow
         }
 
         FocusEditor();
+    }
+
+    /// <summary>引数 (<c>range</c>: <c>sel</c> か <c>開始:長さ</c>、<c>pattern</c>: Hex) から塗りつぶしの要求を作る。</summary>
+    private static FillRequest FillRequestFromArguments(DocumentViewModel doc)
+    {
+        string range = (HexEditor.App.Commands.CommandArgs.Get<string>("range") ?? "sel").Trim();
+        byte[] pattern = Core.Scripting.ScriptValues.ParseHex(HexEditor.App.Commands.CommandArgs.Get<string>("pattern") ?? string.Empty);
+        bool useSelection = range.Equals("sel", StringComparison.OrdinalIgnoreCase);
+        long start;
+        long length;
+        if (useSelection)
+        {
+            if (!doc.Editor.HasSelection)
+            {
+                throw new Sdk.ArgumentError(Core.Scripting.Msg.T("選択範囲がありません。", "There is no selection."));
+            }
+
+            (start, length) = (doc.Editor.SelectionStart, doc.Editor.SelectionLength);
+        }
+        else
+        {
+            Sdk.ByteRange r = Core.Scripting.ScriptValues.EvaluateRange(range, new EditorExpressionContext(doc.Editor));
+            (start, length) = (r.Start, r.Length);
+        }
+
+        return new FillRequest(start, length, new FillSpec { Kind = FillKind.HexPattern, Pattern = pattern }, useSelection);
+    }
+
+    /// <summary>ダイアログで確定した塗りつぶしをマクロに記録する (Hex のパターンだけ。他の種類は記録できない操作)。</summary>
+    private static void ReportFillToMacro(FillRequest request)
+    {
+        if (!Services.Scripting.MacroHooks.IsRecording)
+        {
+            return;
+        }
+
+        FillSpec spec = request.Spec;
+        byte[]? pattern = spec.Kind switch
+        {
+            FillKind.Byte => [spec.Value],
+            FillKind.HexPattern => spec.Pattern,
+            _ => null,
+        };
+        if (pattern is { Length: > 0 } && spec.Repeat && spec.Origin == PatternOrigin.RangeStart && !request.ContinueAcross)
+        {
+            Services.Scripting.MacroHooks.Fill(request.UseSelection, request.Start, request.Length, pattern);
+        }
+        else
+        {
+            Services.Scripting.MacroHooks.Unrecordable(Loc.Get("Macro_Unrecordable_Fill"));
+        }
     }
 
     // ---- ファイルサイズの変更と切り詰め (EDIT-15) ----

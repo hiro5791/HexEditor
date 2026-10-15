@@ -300,6 +300,9 @@
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_ColoringRulesPanel" cmd:CommandUi.Id="view.panel.coloringRules" AutomationProperties.AutomationId="Command_ToggleColoringRules" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_LegendPanel" cmd:CommandUi.Id="view.panel.legend" AutomationProperties.AutomationId="Command_ToggleLegend" />
                             <ToggleMenuFlyoutItem x:Uid="Menu_View_Diffs" cmd:CommandUi.Id="view.panel.diffs" AutomationProperties.AutomationId="Command_ToggleDiffs" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_ScriptsPanel" cmd:CommandUi.Id="view.panel.scripts" AutomationProperties.AutomationId="Command_ToggleScripts" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_OutputPanel" cmd:CommandUi.Id="view.panel.output" AutomationProperties.AutomationId="Command_ToggleOutput" />
+                            <ToggleMenuFlyoutItem x:Uid="Menu_View_ConsolePanel" cmd:CommandUi.Id="view.panel.console" AutomationProperties.AutomationId="Command_ToggleConsole" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_View_ResetPanels" cmd:CommandUi.Id="view.resetPanelLayout" AutomationProperties.AutomationId="Command_ResetPanelLayout" />
                         </MenuFlyoutSubItem>
@@ -333,12 +336,24 @@
                         <MenuFlyoutItem x:Uid="Menu_Analysis_CustomCrc" cmd:CommandUi.Id="analysis.hash.customCrc" AutomationProperties.AutomationId="Command_CustomCrc" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Tools">
-                        <MenuFlyoutSubItem x:Uid="Menu_Tools_Scripts" AutomationProperties.AutomationId="Menu_Tools_Scripts">
+                        <MenuFlyoutSubItem x:Name="ScriptsMenu" x:Uid="Menu_Tools_Scripts" AutomationProperties.AutomationId="Menu_Tools_Scripts">
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_List" cmd:CommandUi.Id="scripting.showList" AutomationProperties.AutomationId="Command_ScriptList" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_Console" cmd:CommandUi.Id="scripting.showConsole" AutomationProperties.AutomationId="Command_ScriptConsole" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_New" cmd:CommandUi.Id="scripting.new" AutomationProperties.AutomationId="Command_ScriptNew" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_NewCSharp" cmd:CommandUi.Id="scripting.newCSharp" AutomationProperties.AutomationId="Command_ScriptNewCSharp" />
+                            <MenuFlyoutSubItem x:Name="ScriptSamplesMenu" x:Uid="Menu_Tools_Scripts_Samples" AutomationProperties.AutomationId="Menu_Tools_Scripts_Samples" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_OpenFolder" cmd:CommandUi.Id="scripting.openFolder" AutomationProperties.AutomationId="Command_ScriptOpenFolder" />
+                            <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_RunFile" cmd:CommandUi.Id="scripting.runFile" AutomationProperties.AutomationId="Command_ScriptRunFile" />
                             <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_Run" cmd:CommandUi.Id="scripting.run" AutomationProperties.AutomationId="Command_ScriptRun" />
                             <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_StopAll" cmd:CommandUi.Id="scripting.stopAll" AutomationProperties.AutomationId="Command_ScriptStopAll" />
                             <MenuFlyoutSeparator />
                             <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_AddCSharp" cmd:CommandUi.Id="scripting.addCSharpComponent" AutomationProperties.AutomationId="Command_ScriptAddCSharp" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSubItem x:Uid="Menu_Tools_Macro" AutomationProperties.AutomationId="Menu_Tools_Macro">
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Macro_Record" cmd:CommandUi.Id="macro.record" AutomationProperties.AutomationId="Command_MacroRecord" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Macro_PlayLast" cmd:CommandUi.Id="macro.playLast" AutomationProperties.AutomationId="Command_MacroPlayLast" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Macro_Repeat" cmd:CommandUi.Id="macro.repeat" AutomationProperties.AutomationId="Command_MacroRepeat" />
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
@@ -625,6 +640,13 @@
                 <Button x:Name="StatusModified" AutomationProperties.AutomationId="Status_Modified" Content="{x:Bind Vm.StatusDocument.ModifiedText, Mode=OneWay, FallbackValue=''}" IsTabStop="False" Style="{StaticResource StatusItemStyle}" Tag="modified" />
                 <!--  比較タブの表示中: 「差分 12 / 340」、異なるバイト数、一致率 (ANA-04 の仕様 6)。  -->
                 <Button x:Name="StatusCompare" AutomationProperties.AutomationId="Status_Compare" Click="StatusCompare_Click" FlowDirection="LeftToRight" Style="{StaticResource StatusItemStyle}" Tag="compare" Visibility="Collapsed" />
+                <!--  マクロの記録中: 赤い丸と「記録中」の文字と操作の数 (AUTO-27 の仕様 4)。クリックで記録を止める。隠せない項目。  -->
+                <Button x:Name="StatusRecording" AutomationProperties.AutomationId="Status_Recording" Click="StatusRecording_Click" Style="{StaticResource StatusItemStyle}" Tag="recording" Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Ellipse Width="10" Height="10" Fill="{ThemeResource SystemFillColorCriticalBrush}" />
+                        <TextBlock x:Name="StatusRecordingText" />
+                    </StackPanel>
+                </Button>
                 <Button x:Name="StatusSize" AutomationProperties.AutomationId="Status_Size" Click="StatusSize_Click" Content="{x:Bind Vm.StatusDocument.SizeText, Mode=OneWay, FallbackValue=''}" Style="{StaticResource StatusItemStyle}" Tag="size" />
                 <!--  同期 (VIEW-39 の仕様 6): 同期スクロール中だけ表示する。クリックで同期のモードのメニュー。  -->
                 <Button x:Name="StatusSync" AutomationProperties.AutomationId="Status_Sync" Click="StatusSync_Click" Style="{StaticResource StatusItemStyle}" Tag="sync" />

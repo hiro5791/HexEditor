@@ -2192,9 +2192,9 @@ InfoBar でなくダイアログで表示する。
 
 ## TransformOperand
 
-データ演算のオペランド。数値 (JavaScript では `number` か `bigint`) か、繰り返しのキーとして使う Hex 文字列。
+データ演算のオペランド。数値 (JavaScript では `number` か `bigint`) か、繰り返しのキー (Hex 文字列。JavaScript では `hex` のパラメータの値などの `Uint8Array` も同じキーとして使える)。
 
-`type TransformOperand = number | bigint | string`
+`type TransformOperand = number | bigint | string | Uint8Array`
 
 ## 例外
 

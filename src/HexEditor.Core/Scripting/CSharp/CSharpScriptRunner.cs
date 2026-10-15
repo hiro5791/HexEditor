@@ -101,6 +101,12 @@ internal static class CSharpScriptRunner
                 var task = (Task)entry.Invoke(null, [new object?[] { globals, null }])!;
                 await task.ConfigureAwait(false);
 
+                // コンソール (AUTO-23): 最後の式の値を結果として見せる。
+                if (request.OnReplResult is { } onResult && task is Task<object> valueTask)
+                {
+                    onResult(Repl.ClrReplFormatter.Format(valueTask.Result));
+                }
+
                 // イベントを購読していれば、停止か購読の終わりまで常駐する (AUTO-06 の仕様 4)。
                 if (ctx.Subscriptions > 0 && !ctx.StopRequested)
                 {

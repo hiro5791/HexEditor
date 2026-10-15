@@ -33,6 +33,9 @@ internal static class ScriptingService
 
     public static AppScriptEnvironment Environment { get; private set; } = null!;
 
+    /// <summary>スクリプトの置き場所 (設定フォルダとデータフォルダ。ファイルは作らない)。</summary>
+    public static ScriptFolders Folders { get; private set; } = null!;
+
     public static TrustStore Trust => Host.Trust;
 
     public static CSharpComponentManager Components => (_components ?? throw new InvalidOperationException("ScriptingService is not initialized.")).Value;
@@ -67,6 +70,7 @@ internal static class ScriptingService
         }
 
         _settingsFolder = env.Locations.Settings;
+        Folders = new ScriptFolders(env.Locations.Settings, env.Locations.Root);
         Environment = new AppScriptEnvironment(queue, env.AppVersion, env.IsElevated);
         Environment.Templates = new LazyTemplateEngine();
         _components = new Lazy<CSharpComponentManager>(() => CreateComponents(env), LazyThreadSafetyMode.ExecutionAndPublication);

@@ -539,6 +539,24 @@
       "type": "boolean",
       "default": false
     },
+    "scripts.debug.exceptions": {
+      "description": "Break on exceptions while debugging",
+      "type": "string",
+      "enum": [
+        "none",
+        "uncaught",
+        "all"
+      ],
+      "default": "uncaught"
+    },
+    "scripts.folders": {
+      "description": "Additional script folders",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
     "scripts.js.memoryMB": {
       "description": "Memory limit (MB)",
       "type": "integer",
@@ -566,6 +584,18 @@
       "minimum": 1,
       "maximum": 16,
       "default": 4
+    },
+    "scripts.output.autoShow": {
+      "description": "Show the output panel when a script writes output",
+      "type": "boolean",
+      "default": true
+    },
+    "scripts.output.maxLines": {
+      "description": "Maximum lines kept in the output panel",
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 1000000,
+      "default": 10000
     },
     "scripts.policy": {
       "description": "Script policy (organization)",

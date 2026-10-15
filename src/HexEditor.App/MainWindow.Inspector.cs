@@ -516,6 +516,7 @@ public sealed partial class MainWindow
             ExtendHexViewStatisticsMenu(menu);
             ExtendHexViewReferenceMenu(menu);
             ExtendHexViewFilesMenu(menu);
+            ExtendHexViewScriptMenu(menu);
         });
     }
 

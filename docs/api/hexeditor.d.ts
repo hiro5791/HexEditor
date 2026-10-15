@@ -892,8 +892,8 @@ declare namespace HexEditor {
     /** A range argument: either a `ByteRange` or a text in the input expression syntax (for example `"sel"`, `"0x100:0x20"` (start:length) or `"0x100..0x120"` (start..end, end exclusive)). */
     type RangeArg = ByteRange | string;
     
-    /** The operand of a data operation: a number (JavaScript: `number` or `bigint`) or a Hex string used as a repeating key. */
-    type TransformOperand = number | bigint | string;
+    /** The operand of a data operation: a number (JavaScript: `number` or `bigint`) or a repeating key as a Hex string (JavaScript: a `Uint8Array`, such as the value of a `hex` script parameter, is the same key). */
+    type TransformOperand = number | bigint | string | Uint8Array;
 }
 
 interface AbortSignal { readonly aborted: boolean; readonly reason: unknown; throwIfAborted(): void; }

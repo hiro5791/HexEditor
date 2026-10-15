@@ -273,6 +273,15 @@ public static class BuiltInSettings
         new("scripts.js.memoryMB", SettingCategories.Automation, SettingKind.Int, 512) { Min = 16, Max = 4096, Order = 20, Group = "scriptsJs" },
         new("scripts.js.recursionDepth", SettingCategories.Automation, SettingKind.Int, 1000) { Min = 100, Max = 10000, Order = 30, Group = "scriptsJs" },
         new("scripts.maxConcurrent", SettingCategories.Automation, SettingKind.Int, 4) { Min = 1, Max = 16, Order = 40 },
+        // スクリプトの作成と管理 (AUTO-19、AUTO-21、AUTO-24)。
+        new("scripts.output.maxLines", SettingCategories.Automation, SettingKind.Int, 10_000) { Min = 100, Max = 1_000_000, Order = 50, Group = "scriptsOutput" },
+        new("scripts.output.autoShow", SettingCategories.Automation, SettingKind.Bool, true) { Order = 60, Group = "scriptsOutput" },
+        new("scripts.debug.exceptions", SettingCategories.Automation, SettingKind.Choice, "uncaught")
+        {
+            Options = ["none", "uncaught", "all"], Order = 70, Group = "scriptsEditor",
+        },
+        // スクリプト一覧に加えるフォルダ (複数。チームで共有するフォルダなど。AUTO-19 の仕様 1)。専用の区画で編集する。
+        new("scripts.folders", SettingCategories.Automation, SettingKind.List, new System.Text.Json.Nodes.JsonArray()) { Order = 80, ShowInPage = false },
         // 組織向けの設定 (AUTO-34 の仕様 9)。設定ファイルに書く。設定画面では変更できない。
         new("scripts.policy", SettingCategories.Automation, SettingKind.Choice, "none")
         {

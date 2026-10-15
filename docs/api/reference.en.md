@@ -2192,9 +2192,9 @@ A range argument: either a `ByteRange` or a text in the input expression syntax 
 
 ## TransformOperand
 
-The operand of a data operation: a number (JavaScript: `number` or `bigint`) or a Hex string used as a repeating key.
+The operand of a data operation: a number (JavaScript: `number` or `bigint`) or a repeating key as a Hex string (JavaScript: a `Uint8Array`, such as the value of a `hex` script parameter, is the same key).
 
-`type TransformOperand = number | bigint | string`
+`type TransformOperand = number | bigint | string | Uint8Array`
 
 ## Errors
 

@@ -1,3 +1,4 @@
+using HexEditor.App.Services.Scripting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Operations;
@@ -120,6 +121,12 @@ public sealed partial class MainWindow
         if (pending > MaterializeConfirmBytes && !await ConfirmMaterializeAsync(pending))
         {
             return false;
+        }
+
+        // 閉じる前の自動実行 (AUTO-25)。中止はできない。
+        foreach (DocumentViewModel doc in docs.Where(Vm.Documents.Contains).ToList())
+        {
+            await ScriptWorkspace.Hooks.RunBeforeCloseAsync(ScriptingService.Environment.HostFor(doc));
         }
 
         foreach (DocumentViewModel doc in docs.Where(Vm.Documents.Contains).ToList())
