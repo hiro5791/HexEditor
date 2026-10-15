@@ -575,6 +575,28 @@ public sealed class TemplateToolingTests : IDisposable
         Assert.NotEqual("PNG image", TemplateAutoApply.Decide(catalog, Snapshot(png), "a.png", TemplateAutoApplyMode.Suggest, suppressed, false).Top?.Entry.Metadata.Name);
     }
 
+    private delegate void DiskImage(long length, long offset, Span<byte> destination);
+
+    [Fact]
+    [Trait(TC, "TC-TPL-34-03")]
+    public void DisksGetThePartitionTableTemplateAndGptOutranksTheProtectiveMbr()
+    {
+        // 物理ディスク (パスなし) の先頭 1 MiB。GPT のディスクには保護 MBR (0x1FE の 55 AA) もある
+        TemplateCatalog catalog = TemplateCatalog.CreateDefault(null);
+        static byte[] Head(DiskImage image)
+        {
+            var data = new byte[1 << 20];
+            image(100L << 30, 0, data);
+            return data;
+        }
+
+        TemplateAutoApplyDecision mbr = TemplateAutoApply.Decide(catalog, Snapshot(Head(TestDataCatalog.MbrImage)), null, TemplateAutoApplyMode.Suggest, null, false);
+        Assert.Equal("MBR partition table", mbr.Top!.Entry.Metadata.Name);
+        TemplateAutoApplyDecision gpt = TemplateAutoApply.Decide(catalog, Snapshot(Head(TestDataCatalog.GptImage)), null, TemplateAutoApplyMode.Suggest, null, false);
+        Assert.Equal("GPT partition table", gpt.Top!.Entry.Metadata.Name);
+        Assert.Contains(gpt.Candidates, c => c.Entry.Metadata.Name == "MBR partition table");
+    }
+
     [Fact]
     [Trait(TC, "TC-TPL-19-03")]
     public void TemplatesUsingExtensionsAreOnlySuggestedEvenWhenAlwaysApplying()

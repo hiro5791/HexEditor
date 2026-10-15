@@ -2929,6 +2929,7 @@
 | フェーズ | 3 |
 | テストデータ | TD-VHDX-MBR、TD-VHDX-GPT |
 | 環境 | 管理者として実行 (CI のランナー) |
+| 備考 | CI で接続する仮想ディスクは TD-VHDX-MBR だけなので、手順 2 は環境変数 `HEXEDITOR_TEST_VHD_GPT_DISK` で GPT のディスクを指定したときだけ行う。GPT が保護 MBR より上位の候補になることは、同じ内容のディスクの先頭を作る Core のテストでも確かめる |
 
 **前提**: TD-VHDX-MBR と TD-VHDX-GPT を接続している。
 
