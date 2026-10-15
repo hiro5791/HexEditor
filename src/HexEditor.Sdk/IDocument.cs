@@ -97,7 +97,7 @@ public interface IDocument
     /// </summary>
     /// <exception cref="LimitError">More than 16 MB. <ja>16 MB を超える。</ja></exception>
     /// <exception cref="IoError">The data cannot be read (for example a disk read error). <ja>読めない (ディスクの読み取りエラーなど)。</ja></exception>
-    byte[] ReadBytes(OffsetArg offset, long length);
+    byte[] ReadBytes(OffsetArg offset, OffsetArg length);
 
     /// <summary>Reads one byte. <ja>1 バイト読む。</ja></summary>
     int ReadByte(OffsetArg offset);
@@ -115,7 +115,7 @@ public interface IDocument
     double ReadFloat(OffsetArg offset, string type, string? endian = null);
 
     /// <summary>Reads a string of at most <paramref name="maxLength"/> bytes. <ja>最大 <paramref name="maxLength"/> バイトを文字列として読む。</ja></summary>
-    string ReadString(OffsetArg offset, long maxLength, EncodingArg? encoding = null, ReadStringOptions? options = null);
+    string ReadString(OffsetArg offset, OffsetArg maxLength, EncodingArg? encoding = null, ReadStringOptions? options = null);
 
     /// <summary>
     /// Overwrites bytes (the length does not change). Data past the end is appended when the document can resize, otherwise <see cref="RangeError"/>.

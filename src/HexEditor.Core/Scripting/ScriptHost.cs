@@ -176,6 +176,7 @@ public sealed class ScriptHost : IDisposable
     /// </summary>
     public ScriptRun Start(ScriptRunRequest request, IScriptEnvironment environment)
     {
+        Msg.Current = environment.Language;
         string fallbackName = request.DisplayName ?? (request.Path is not null ? Path.GetFileName(request.Path) : "script");
         ScriptLanguage language = request.Language ?? (request.Path is not null ? LanguageOf(request.Path) ?? ScriptLanguage.JavaScript : ScriptLanguage.JavaScript);
         var run = new ScriptRun(this, fallbackName, request.Path, language, _time);

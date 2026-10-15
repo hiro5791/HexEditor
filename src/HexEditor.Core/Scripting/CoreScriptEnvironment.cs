@@ -45,9 +45,12 @@ public sealed class SerialDispatcher : SynchronizationContext, IScriptDispatcher
 
     public override void Post(SendOrPostCallback d, object? state)
     {
+        // 呼び出し側の実行の文脈 (メッセージの言語など) を受け継ぐ。
+        ExecutionContext? context = ExecutionContext.Capture();
+        SendOrPostCallback callback = context is null ? d : s => ExecutionContext.Run(context, x => d(x), s);
         try
         {
-            _queue.Add((d, state));
+            _queue.Add((callback, state));
         }
         catch (InvalidOperationException)
         {

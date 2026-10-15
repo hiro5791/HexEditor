@@ -181,6 +181,9 @@ public sealed partial class ScriptDocument : IDocument
     /// <summary>入力式の名前の値 (UI スレッドで読む)。</summary>
     internal IExpressionContext ExpressionContext() => new EditorExpressionContext(Host.Editor);
 
+    /// <summary>接頭辞のない数値の基数 (ビューのオフセットの基数に合わせる。00 の 6.1 の※)。UI スレッドで読む。</summary>
+    internal DefaultRadix ExpressionRadix() => Host.Editor.View.Radix == OffsetRadix.Decimal ? DefaultRadix.Decimal : DefaultRadix.Hexadecimal;
+
     internal long ResolveOffset(OffsetArg offset)
     {
         if (offset.Value is long v)
@@ -189,7 +192,7 @@ public sealed partial class ScriptDocument : IDocument
         }
 
         string text = offset.Expression ?? throw new Sdk.ArgumentError("オフセットを指定してください。");
-        return Ui(() => ScriptValues.EvaluateNumber(text, ExpressionContext()));
+        return Ui(() => ScriptValues.EvaluateNumber(text, ExpressionContext(), ExpressionRadix()));
     }
 
     internal SdkRange ResolveRange(RangeArg range)
@@ -200,7 +203,7 @@ public sealed partial class ScriptDocument : IDocument
         }
 
         string text = range.Expression ?? throw new Sdk.ArgumentError("範囲を指定してください。");
-        return Ui(() => ScriptValues.EvaluateRange(text, ExpressionContext()));
+        return Ui(() => ScriptValues.EvaluateRange(text, ExpressionContext(), ExpressionRadix()));
     }
 
     /// <summary>範囲を解決し、ドキュメントの中にあるか確かめる。</summary>

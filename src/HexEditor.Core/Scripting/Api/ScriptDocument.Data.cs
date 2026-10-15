@@ -21,10 +21,11 @@ public sealed partial class ScriptDocument
         }
     }
 
-    public byte[] ReadBytes(OffsetArg offset, long length) => ScriptErrorMap.Guard(() =>
+    public byte[] ReadBytes(OffsetArg offset, OffsetArg lengthArg) => ScriptErrorMap.Guard(() =>
     {
         ThrowIfClosed();
         long o = ResolveOffset(offset);
+        long length = ResolveOffset(lengthArg);
         if (length < 0)
         {
             throw new Sdk.ArgumentError("length は 0 以上にしてください。");
@@ -126,7 +127,7 @@ public sealed partial class ScriptDocument
     private Encoding EncodingOrDefault(EncodingArg? encoding) =>
         encoding is EncodingArg e ? ScriptText.Resolve(e) : Ui(() => ScriptText.Resolve(Host.Editor.TextEncoding.CodePage));
 
-    public string ReadString(OffsetArg offset, long maxLength, EncodingArg? encoding = null, ReadStringOptions? options = null) => ScriptErrorMap.Guard(() =>
+    public string ReadString(OffsetArg offset, OffsetArg maxLength, EncodingArg? encoding = null, ReadStringOptions? options = null) => ScriptErrorMap.Guard(() =>
     {
         Encoding enc = EncodingOrDefault(encoding);
         byte[] data = ReadBytes(offset, maxLength);

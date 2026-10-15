@@ -599,7 +599,7 @@ internal sealed class JsBinder
 
         if (t == typeof(RangeArg))
         {
-            return v.IsString() ? (RangeArg)v.AsString() : (RangeArg)RangeOf(v, name);
+            return v.IsString() ? (RangeArg)v.AsString() : RangeArgOf(v, name);
         }
 
         if (t == typeof(Sdk.ByteRange))
@@ -699,6 +699,30 @@ internal sealed class JsBinder
         }
 
         return (long)d;
+    }
+
+    /// <summary>
+    /// 範囲のオブジェクト。<c>{ start: 0, length: "50G" }</c> のように欄に入力式の文字列があれば、ドキュメントの文脈で読むよう
+    /// <c>(開始):(長さ)</c> / <c>(開始)..(終了)</c> の入力式にする。
+    /// </summary>
+    private static RangeArg RangeArgOf(JsValue v, string name)
+    {
+        if (v is ObjectInstance o)
+        {
+            JsValue start = o.Get("start");
+            JsValue length = o.Get("length");
+            JsValue end = o.Get("end");
+            if (start.IsString() || length.IsString() || end.IsString())
+            {
+                string Part(JsValue x, string field) => x.IsString() ? "(" + x.AsString() + ")"
+                    : "0x" + Integer(x, name + "." + field, 0, ScriptValues.MaxSafeInteger).ToString("X", CultureInfo.InvariantCulture);
+                return !length.IsUndefined()
+                    ? (RangeArg)(Part(start, "start") + ":" + Part(length, "length"))
+                    : (RangeArg)(Part(start, "start") + ".." + Part(end, "end"));
+            }
+        }
+
+        return RangeOf(v, name);
     }
 
     private static Sdk.ByteRange RangeOf(JsValue v, string name)

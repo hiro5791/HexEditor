@@ -14,11 +14,12 @@ public static class ScriptValues
     /// <summary>2^53 (JavaScript の number で正確に表せる整数の上限。AUTO-02 の仕様 7)。</summary>
     public const long MaxSafeInteger = 9_007_199_254_740_991;
 
-    public static long EvaluateNumber(string text, IExpressionContext context)
+    /// <summary>数値の入力式を読む。接頭辞のない数値は <paramref name="radix"/> (ビューのオフセットの基数。00 の 6.1 の※) で読む。</summary>
+    public static long EvaluateNumber(string text, IExpressionContext context, DefaultRadix radix = DefaultRadix.Decimal)
     {
         try
         {
-            return ExpressionEvaluator.Evaluate(text, context, DefaultRadix.Decimal);
+            return ExpressionEvaluator.Evaluate(text, context, radix);
         }
         catch (ExpressionException ex)
         {
@@ -27,7 +28,7 @@ public static class ScriptValues
     }
 
     /// <summary>範囲の入力式を読む。</summary>
-    public static SdkRange EvaluateRange(string text, IExpressionContext context)
+    public static SdkRange EvaluateRange(string text, IExpressionContext context, DefaultRadix radix = DefaultRadix.Decimal)
     {
         string t = text.Trim();
         if (t.Equals("sel", StringComparison.OrdinalIgnoreCase))
@@ -43,8 +44,8 @@ public static class ScriptValues
         int dots = TopLevelIndexOf(t, "..");
         if (dots > 0)
         {
-            long start = EvaluateNumber(t[..dots], context);
-            long end = EvaluateNumber(t[(dots + 2)..], context);
+            long start = EvaluateNumber(t[..dots], context, radix);
+            long end = EvaluateNumber(t[(dots + 2)..], context, radix);
             if (end < start)
             {
                 throw new ArgumentError($"範囲の終了が開始より前です: {text}");
@@ -56,8 +57,8 @@ public static class ScriptValues
         int colon = TopLevelIndexOf(t, ":");
         if (colon > 0)
         {
-            long start = EvaluateNumber(t[..colon], context);
-            long length = EvaluateNumber(t[(colon + 1)..], context);
+            long start = EvaluateNumber(t[..colon], context, radix);
+            long length = EvaluateNumber(t[(colon + 1)..], context, radix);
             if (length < 0)
             {
                 throw new ArgumentError($"範囲の長さが負です: {text}");
