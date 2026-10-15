@@ -384,14 +384,30 @@ public sealed class CoreScriptEnvironment : IScriptEnvironment, IDisposable
         }
     }
 
+    /// <summary>ヘッドレス実行で使えるコマンド: カーソル移動 (<c>cursor.*</c>。マクロを再生できるように。AUTO-28)。</summary>
     private sealed class NoCommands : IScriptCommandService
     {
-        public IReadOnlyList<CommandInfo> List() => [];
+        public IReadOnlyList<CommandInfo> List() =>
+            [.. Macros.CursorCommands.All.Select(c => new CommandInfo(c.Id, Msg.T(c.Ja, c.En), "cursor", ["count"]))];
 
-        public bool Exists(string id) => false;
+        public bool Exists(string id) => Macros.CursorCommands.Exists(id);
 
-        public Task<object?> ExecuteAsync(string id, IReadOnlyDictionary<string, object?> args, IScriptDocumentHost? target, bool headless) =>
-            throw new Sdk.ArgumentError(Msg.T($"コマンドが見つかりません: {id}", $"Command not found: {id}"));
+        public Task<object?> ExecuteAsync(string id, IReadOnlyDictionary<string, object?> args, IScriptDocumentHost? target, bool headless)
+        {
+            if (!Macros.CursorCommands.Exists(id))
+            {
+                throw new Sdk.ArgumentError(Msg.T($"コマンドが見つかりません: {id}", $"Command not found: {id}"));
+            }
+
+            if (target is null)
+            {
+                throw new Sdk.ArgumentError(Msg.T("ドキュメントが開かれていません。", "No document is open."));
+            }
+
+            int count = args.TryGetValue("count", out object? c) && c is not null ? Convert.ToInt32(c, System.Globalization.CultureInfo.InvariantCulture) : 1;
+            Macros.CursorCommands.Execute(target.Editor, id, count);
+            return Task.FromResult<object?>(true);
+        }
     }
 
     private sealed class NoHttp : IScriptHttp

@@ -285,6 +285,12 @@ public sealed class ScriptHost : IDisposable
             return Fail(run, ScriptFailure.Canceled, Msg.T("パラメータの入力がキャンセルされました。", "Parameter input was canceled."), started, status: ScriptRunStatus.NotRun);
         }
 
+        // 信頼の確認とパラメータは元の本文で行った。実行する本文はその後に変換する (マクロの繰り返し再生。AUTO-28)。
+        if (request.CodeWrapper is { } wrap)
+        {
+            code = wrap(code);
+        }
+
         string? folder = request.Path is not null ? Path.GetDirectoryName(Path.GetFullPath(request.Path)) : null;
         var context = new ScriptContext(this, run, env, request, meta, args, folder);
         context.Grant(trust.Permissions);

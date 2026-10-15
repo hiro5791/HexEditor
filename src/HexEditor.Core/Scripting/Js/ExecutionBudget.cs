@@ -18,8 +18,8 @@ internal sealed class ExecutionBudget : Constraint, IExecutionClock
     private static readonly long MemoryCheckInterval = Stopwatch.Frequency / 20;
 
     private readonly Lock _lock = new();
-    private readonly long _memoryLimit;
-    private readonly long _baseline;
+    private long _memoryLimit;
+    private long _baseline;
     private long _limitTicks;
     private long _usedTicks;
     private long _segmentStart;
@@ -32,7 +32,7 @@ internal sealed class ExecutionBudget : Constraint, IExecutionClock
     public ExecutionBudget(TimeSpan? limit, long memoryLimit)
     {
         _limitTicks = limit is { } l ? (long)(l.TotalSeconds * Stopwatch.Frequency) : long.MaxValue;
-        Period = limit;
+        _period = limit;
         _memoryLimit = memoryLimit;
         // 始める前のゴミを数えないよう、ガベージコレクションをしてから測る。
         _baseline = GC.GetTotalMemory(forceFullCollection: true);
@@ -43,10 +43,34 @@ internal sealed class ExecutionBudget : Constraint, IExecutionClock
     /// </summary>
     public Func<bool>? OnTimeLimit { get; set; }
 
-    /// <summary>実行時間の上限 (設定の値。「続ける」で延ばす長さ)。null は無制限。</summary>
-    public TimeSpan? Limit => Period;
+    /// <summary>文の実行の合間 (制約の確認のたび) にスクリプトのスレッドで呼ぶ (デバッガがブレークポイントの変更を反映する。AUTO-21)。</summary>
+    public Action? OnCheck { get; set; }
 
-    private TimeSpan? Period { get; }
+    /// <summary>
+    /// 入力ごとに数え直す (コンソールのセッション。AUTO-23 の仕様 8: 実行時間の上限は入力 1 回ごと)。
+    /// 上限の時間とメモリを入れ替え、使った時間とメモリの基準を戻す。
+    /// </summary>
+    public void Restart(TimeSpan? limit, long memoryLimit)
+    {
+        lock (_lock)
+        {
+            _usedTicks = 0;
+            _segmentStart = 0;
+            _pauseDepth = 0;
+            _limitTicks = limit is { } l ? (long)(l.TotalSeconds * Stopwatch.Frequency) : long.MaxValue;
+            _period = limit;
+        }
+
+        _forceStop = false;
+        _normalStop = false;
+        _memoryLimit = memoryLimit;
+        _baseline = GC.GetTotalMemory(forceFullCollection: true);
+    }
+
+    /// <summary>実行時間の上限 (設定の値。「続ける」で延ばす長さ)。null は無制限。</summary>
+    public TimeSpan? Limit => _period;
+
+    private TimeSpan? _period;
 
     /// <summary>これまでに数えた実行時間。</summary>
     public TimeSpan Used
@@ -136,6 +160,7 @@ internal sealed class ExecutionBudget : Constraint, IExecutionClock
             throw new ScriptTerminatedException(_normalStop);
         }
 
+        OnCheck?.Invoke();
         long now = Stopwatch.GetTimestamp();
         long used;
         lock (_lock)

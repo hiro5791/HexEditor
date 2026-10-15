@@ -66,6 +66,8 @@ public sealed class ScriptContext : IDisposable
     private readonly HashSet<string> _pickedRead = new(StringComparer.OrdinalIgnoreCase);
     private readonly HashSet<string> _pickedWrite = new(StringComparer.OrdinalIgnoreCase);
     private readonly TaskCompletionSource _ended = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private readonly IReadOnlyDictionary<string, object?> _args;
+    private IReadOnlyDictionary<string, object?>? _realizedArgs;
     private int _subscriptions;
 
     internal ScriptContext(ScriptHost host, ScriptRun run, IScriptEnvironment environment, ScriptRunRequest request, ScriptMetadata metadata,
@@ -76,7 +78,7 @@ public sealed class ScriptContext : IDisposable
         Environment = environment;
         Request = request;
         Metadata = metadata;
-        Args = args;
+        _args = args;
         ScriptFolder = scriptFolder;
     }
 
@@ -101,7 +103,21 @@ public sealed class ScriptContext : IDisposable
     /// <summary>スクリプトのフォルダ (許可なしで読める。AUTO-18 の仕様 1)。</summary>
     public string? ScriptFolder { get; }
 
-    public IReadOnlyDictionary<string, object?> Args { get; }
+    /// <summary>
+    /// <c>script.args</c>。<see cref="ScriptLazyArg"/> は最初に読むときに、この実行の部品 (ドキュメントの包みなど) を使って作る
+    /// (フックの <c>event</c> など。AUTO-25 の仕様 3)。
+    /// </summary>
+    public IReadOnlyDictionary<string, object?> Args => _realizedArgs ??= RealizeArgs(_args);
+
+    private IReadOnlyDictionary<string, object?> RealizeArgs(IReadOnlyDictionary<string, object?> args)
+    {
+        if (!args.Values.Any(v => v is ScriptLazyArg))
+        {
+            return args;
+        }
+
+        return args.ToDictionary(kv => kv.Key, kv => kv.Value is ScriptLazyArg lazy ? lazy.Create(this) : kv.Value, StringComparer.Ordinal);
+    }
 
     /// <summary>スクリプト全体のキャンセル (<c>script.signal</c> / <c>Ct</c>。AUTO-05 の仕様 4)。</summary>
     public CancellationToken Token => _stop.Token;
