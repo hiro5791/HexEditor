@@ -1,0 +1,1 @@
+namespace libb { struct Rec { le u16 y; }; }

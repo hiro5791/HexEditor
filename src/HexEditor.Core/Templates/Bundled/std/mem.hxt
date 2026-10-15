@@ -1,0 +1,3 @@
+// HexEditor 標準ライブラリ (TPL-18)
+// std.mem: read_u8 … read_u64, read_s8 … read_s64, read_f32, read_f64, read_string, read_bytes, find, find_all, compare
+// 関数は組み込み (C#) で、インポートしなくても使える。このファイルはインポートの互換のためにある。

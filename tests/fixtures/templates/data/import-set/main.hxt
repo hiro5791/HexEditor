@@ -1,0 +1,2 @@
+// TD-TPL-IMPORT-SET: main.hxt
+import lib.common; import lib.common; import "lib/common.hxt"; import lib.a; import lib.b; liba::Rec r1; libb::Rec r2;

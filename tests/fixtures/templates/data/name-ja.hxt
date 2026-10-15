@@ -1,0 +1,4 @@
+#pragma name "Test image format"
+#pragma name.ja "テスト用の画像形式"
+#pragma magic 0 "48 58 54 49"
+u32 magic;

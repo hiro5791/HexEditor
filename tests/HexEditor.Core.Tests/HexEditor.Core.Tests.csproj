@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <None Include="..\fixtures\hash\**\*" LinkBase="fixtures\hash" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\fixtures\templates\**\*" LinkBase="fixtures\templates" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

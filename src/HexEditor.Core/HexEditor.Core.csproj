@@ -21,4 +21,9 @@
     <EmbeddedResource Include="FileTypes\magic.json" LogicalName="HexEditor.FileTypes.magic.json" />
   </ItemGroup>
 
+  <!-- 構造体テンプレートの標準ライブラリ (TPL-18 の仕様 5)。検索パスの (4) として読む。 -->
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\Bundled\**\*.hxt" LogicalName="HexEditor.Templates.Bundled.%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
 </Project>
