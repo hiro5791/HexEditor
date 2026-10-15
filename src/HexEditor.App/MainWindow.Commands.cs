@@ -215,6 +215,7 @@ public sealed partial class MainWindow
 
         // ---- 設定・ヘルプ ----
         RegisterSettingsCommands();
+        RegisterScriptCommands();
         Commands.Register("help.commandPalette", () => OpenPalette(">"));
         Commands.Register("help.shortcuts", OpenShortcutsPage);
         Commands.Register("help.documentation", () => Documentation_Click(this, e));

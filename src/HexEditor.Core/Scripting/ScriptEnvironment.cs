@@ -355,6 +355,9 @@ public interface IScriptEventSource
 /// <summary>イベントをまとめて発生させる実装 (App とヘッドレス実行で使う)。</summary>
 public sealed class ScriptEventSource : IScriptEventSource
 {
+    /// <summary>保存の直前のハンドラを待つ上限 (保存の前のフックと同じ 5 秒。AUTO-25 の仕様 1)。</summary>
+    public static readonly TimeSpan BeforeSaveTimeout = TimeSpan.FromSeconds(5);
+
     public event EventHandler<IScriptDocumentHost>? DocumentOpened;
 
     public event EventHandler<IScriptDocumentHost>? DocumentClosed;

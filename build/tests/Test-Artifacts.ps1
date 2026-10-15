@@ -8,6 +8,7 @@
     TC-PKG-10-02  an invalid HexDistro fails the build
     TC-PKG-04-01  the Store package declares runFullTrust, not allowElevation, and has no elevated helper process
     TC-UI-46-03   a stable build contains no pseudo-locale resources (only with -Stable)
+    TC-AUTO-03-01 no Roslyn (C# script component) in the distributions
   Also checks the portable zip layout (PKG-05 spec 1) and the generated MSIX version (PKG-03 spec 4).
 #>
 [CmdletBinding()]
@@ -101,6 +102,17 @@ Invoke-TestCase 'TC-PKG-04-01' 'Store package: runFullTrust, no allowElevation, 
         Assert-True ($text -notmatch 'allowElevation') "$arch AppxManifest.xml mentions allowElevation"
         # The Store version does not include the elevated helper process (PKG-04 spec 1, PKG-14).
         Assert-True (-not ($names | Where-Object { $_ -match '(^|/)HexEditor\.Elevated\.exe$' })) "$arch msix contains HexEditor.Elevated.exe"
+    }
+}
+
+Invoke-TestCase 'TC-AUTO-03-01' 'no Roslyn (C# script component) in the distributions' {
+    foreach ($arch in 'x64', 'arm64') {
+        $full = Get-ChildItem (Join-Path $ArtifactsDir "Installer/$arch") -Filter '*-full.nupkg' | Select-Object -First 1
+        foreach ($f in (Join-Path $ArtifactsDir "Portable/$arch/HexEditor-$Version-$arch-portable.zip"), (Join-Path $ArtifactsDir "Msix/$arch/HexEditor-$Version-$arch.msix"), $full.FullName) {
+            $roslyn = @((Get-ZipEntries $f) | Where-Object { $_ -match '(^|/)Microsoft\.CodeAnalysis[^/]*\.dll$' -or $_ -match '(^|/)HexEditor\.Scripting\.CSharp\.dll$' })
+            Assert-True ($roslyn.Count -eq 0) "C# script component files in ${f}: $($roslyn -join ', ')"
+            Assert-True (-not (@(Get-ZipEntries $f) | Where-Object { $_ -match '(^|/)components/csharp/' })) "components/csharp/ in $f"
+        }
     }
 }
 

@@ -5481,4 +5481,89 @@
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const (static の読み取り専用)</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>文字コード (ascii、utf-8、cp932 など)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>単独で処理できる文書にする (\documentclass から \end{document} まで)</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>スクリプト</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>スクリプト: 実行</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>すくりぷとをじっこう さいじっこう</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>スクリプト: スクリプトを実行...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>すくりぷとふぁいるをじっこう</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>スクリプト: すべて停止</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>すくりぷとをすべてていし</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>スクリプト: C# スクリプト コンポーネントを追加...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>しーしゃーぷ すくりぷと こんぽーねんとをついか</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>スクリプト(R)</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>スクリプトを実行(R)...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>直前のスクリプトを再実行(L)</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>すべてのスクリプトを停止(S)</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>C# スクリプト コンポーネントを追加(C)...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>実行時間の上限 (秒)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>JavaScript のスクリプトが一時停止して続けるかを尋ねるまでの時間。0 は無制限。一括処理の完了待ちと入力待ちの時間は数えません。</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>メモリの上限 (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>JavaScript のスクリプトが使えるメモリ (16〜4096 MB)。</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>再帰の深さの上限</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>関数呼び出しの深さの上限 (100〜10000)。</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>同時に実行できるスクリプトの数</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>それ以上のスクリプトは、どれかが終わるまで待ちます (1〜16)。</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>スクリプトの方針 (組織向け)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>組織が設定ファイルで指定します。スクリプトとプラグインをすべて無効にするか、署名されたプラグインだけを許可します。</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>制限なし</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>スクリプトとプラグインをすべて無効</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>署名されたプラグインだけ</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>スクリプト: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>スクリプト: {0} - {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>スクリプト: {0} (書き込み中)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>スクリプト: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>実行中のスクリプトはありません。</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>C# スクリプト コンポーネントは追加済みです。</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>組織の設定 (scripts.policy) でスクリプトは無効にされています。</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>スクリプトが保存を中止しました: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>スクリプト「{0}」を実行中です。</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>スクリプト「{0}」がエラーで終了しました。</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>詳細</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>スクリプト「{0}」を実行しませんでした: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>スクリプト: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0} 本のスクリプトを実行中</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>スクリプト「{0}」が {1} 秒を超えました。</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>続ける (さらに {0} 秒)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>スクリプト「{0}」を実行しますか?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor は管理者として実行中です。このスクリプトは管理者権限で動き、PC 全体に影響する操作ができます。</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>名前: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>作者: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>このコードはあなたの PC 上で、あなたと同じ権限で何でも実行できます (ファイルの読み書き、ネットワーク通信を含む)。信頼できる作成者のものだけを実行してください。</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>このスクリプトは開いているドキュメントを読み書きできます。それ以外に次の許可を求めています:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>このスクリプトは開いているドキュメントを読み書きできます。それ以外の許可は求めていません。</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>このファイルはインターネットから取得したものです。入手元を信頼できる場合だけ実行してください。</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>実行する</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>実行しない</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>1 回だけ実行する</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>常に許可する</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>任意のファイルの読み取り</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>任意のファイルの作成・書き込み・削除</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>net.fetch による通信</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>外部プログラムの実行</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>ディスク・ボリューム・プロセスメモリを開く</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>クリップボードの読み取り</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>アプリの設定の変更</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>スクリプトが許可「{0}」({1}) を求めています: {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>許可する</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>許可しない</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>C# スクリプト コンポーネント</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>C# スクリプトの実行には C# スクリプト コンポーネント (Roslyn) が必要ですが、追加されていません。追加しますか?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>追加する</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>コンポーネントをダウンロードします。
+サイズ: {0}
+保存先: {1}
+通信先: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>ダウンロードする</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>C# スクリプト コンポーネントの追加</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>C# スクリプト コンポーネントを追加しました。</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>C# スクリプト コンポーネントを追加できませんでした: {0} 手動で入れることもできます: リリースのページからコンポーネントの zip をダウンロードし、データフォルダの components\csharp\&lt;バージョン&gt;\ に展開してください。</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>C# スクリプト コンポーネントを追加できませんでした: {0}</value></data>
 </root>

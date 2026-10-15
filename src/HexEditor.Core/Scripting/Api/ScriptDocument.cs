@@ -238,6 +238,7 @@ public sealed partial class ScriptDocument : IDocument
             throw new ReadOnlyError(Msg.T($"ドキュメント「{Name}」は読み取り専用です。", $"The document \"{Name}\" is read-only."));
         }
 
+        _ctx.ReleaseWrite(this);
         using CancellationTokenSource cts = _ctx.LinkedToken(options?.Signal);
         using (_ctx.Clock.Pause())
         {
@@ -254,6 +255,7 @@ public sealed partial class ScriptDocument : IDocument
         ThrowIfClosed();
         string full = System.IO.Path.GetFullPath(path);
         _ctx.RequireFileWrite(full);
+        _ctx.ReleaseWrite(this);
         using CancellationTokenSource cts = _ctx.LinkedToken(options?.Signal);
         using (_ctx.Clock.Pause())
         {
@@ -272,6 +274,7 @@ public sealed partial class ScriptDocument : IDocument
             return;
         }
 
+        _ctx.ReleaseWrite(this);
         using (_ctx.Clock.Pause())
         {
             await _ctx.Dispatcher.InvokeAsync(() => Host.CloseAsync(options?.Discard ?? false)).ConfigureAwait(false);

@@ -304,7 +304,7 @@ public sealed partial class MainWindow : Window
     private DocumentViewModel? SaveTarget() => ActiveCompare is { } compare ? compare.Focused.Owner : Vm.Selected;
 
     /// <summary>保存する。保存しなかった (キャンセル・失敗) 場合は false。</summary>
-    private async Task<bool> SaveAsync(DocumentViewModel doc, bool saveAs)
+    private async Task<bool> SaveCoreAsync(DocumentViewModel doc, bool saveAs)
     {
         // ディスク・プロセスメモリへの書き込みは専用の経路 (ENG-30、ENG-34)。「名前を付けて保存」はデバイスには出さない。
         if (!saveAs && doc.IsDevice)

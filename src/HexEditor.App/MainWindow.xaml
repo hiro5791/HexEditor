@@ -333,6 +333,14 @@
                         <MenuFlyoutItem x:Uid="Menu_Analysis_CustomCrc" cmd:CommandUi.Id="analysis.hash.customCrc" AutomationProperties.AutomationId="Command_CustomCrc" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Tools">
+                        <MenuFlyoutSubItem x:Uid="Menu_Tools_Scripts" AutomationProperties.AutomationId="Menu_Tools_Scripts">
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_RunFile" cmd:CommandUi.Id="scripting.runFile" AutomationProperties.AutomationId="Command_ScriptRunFile" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_Run" cmd:CommandUi.Id="scripting.run" AutomationProperties.AutomationId="Command_ScriptRun" />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_StopAll" cmd:CommandUi.Id="scripting.stopAll" AutomationProperties.AutomationId="Command_ScriptStopAll" />
+                            <MenuFlyoutSeparator />
+                            <MenuFlyoutItem x:Uid="Menu_Tools_Scripts_AddCSharp" cmd:CommandUi.Id="scripting.addCSharpComponent" AutomationProperties.AutomationId="Command_ScriptAddCSharp" />
+                        </MenuFlyoutSubItem>
+                        <MenuFlyoutSeparator />
                         <MenuFlyoutItem x:Uid="Menu_Tools_Settings" cmd:CommandUi.Id="settings.open" AutomationProperties.AutomationId="Command_Settings" />
                     </MenuBarItem>
                     <MenuBarItem x:Uid="Menu_Help">

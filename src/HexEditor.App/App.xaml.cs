@@ -142,6 +142,9 @@ public partial class App : Application
         MainWindow.RegisterFormatIssuesPanel();
         MainWindow.RegisterComparePanel();
         MainWindow.RegisterMemoryMapPanel();
+
+        // スクリプト (08 の AUTO-01)。ウィンドウのコマンドの登録より先に用意する。
+        Services.Scripting.ScriptingService.Initialize(env, Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread());
         var window = new MainWindow(vm);
         Window = window;
 

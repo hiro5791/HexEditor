@@ -325,6 +325,32 @@ public sealed class ScriptContext : IDisposable
     /// 他のスクリプトや書き換えの処理が使っている間は待つ (待ち時間は実行時間に数えない。AUTO-01 の仕様 6)。排他を取っている間は
     /// 利用者の編集を受け付けず、エディタ上部に InfoBar を出す。
     /// </summary>
+    /// <summary>
+    /// 書き込みの排他を手放す (保存・閉じる前。保存は処理センターの排他を使うため、持ったままだと待ち合わせになる)。次の書き込みで取り直す
+    /// (Undo の単位はそこで区切れる)。変更したことは記録に残す。
+    /// </summary>
+    internal void ReleaseWrite(ScriptDocument doc)
+    {
+        WriteSession? session;
+        lock (_lock)
+        {
+            if (!_writes.TryGetValue(doc.Document, out session))
+            {
+                return;
+            }
+
+            _writes.Remove(doc.Document);
+            if (session.Changed)
+            {
+                _released.Add(session.Document.Name);
+            }
+        }
+
+        Dispatcher.Invoke(session.Release);
+    }
+
+    private readonly HashSet<string> _released = new(StringComparer.Ordinal);
+
     internal WriteSession AcquireWrite(ScriptDocument doc)
     {
         WriteSession? session;
@@ -434,6 +460,10 @@ public sealed class ScriptContext : IDisposable
         }
 
         var modified = new List<string>();
+        lock (_lock)
+        {
+            modified.AddRange(_released);
+        }
         foreach (WriteSession s in sessions)
         {
             try
@@ -441,7 +471,7 @@ public sealed class ScriptContext : IDisposable
                 Dispatcher.Invoke(s.End);
                 if (s.Changed)
                 {
-                    modified.Add(s.Document.Name);
+                    if (!modified.Contains(s.Document.Name)) { modified.Add(s.Document.Name); }
                 }
             }
             catch (Exception ex) when (ex is InvalidOperationException or ObjectDisposedException)
@@ -476,6 +506,14 @@ public sealed class ScriptContext : IDisposable
 internal sealed class WriteSession(ScriptContext context, ScriptDocument document)
 {
     private readonly TaskCompletionSource _acquired = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private readonly TaskCompletionSource _released = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+    /// <summary>排他を手放す (保存の前。保存は処理センターの排他を使うため)。UI スレッドで呼ぶ。</summary>
+    public void Release()
+    {
+        CloseGroup();
+        _released.TrySetResult();
+    }
     private IDisposable? _group;
     private bool _explicitGroup;
 
@@ -499,7 +537,7 @@ internal sealed class WriteSession(ScriptContext context, ScriptDocument documen
             {
                 _acquired.TrySetResult();
                 using CancellationTokenRegistration reg = op.CancellationToken.Register(context.RequestStop);
-                await context.Ended.ConfigureAwait(false);
+                await Task.WhenAny(context.Ended, _released.Task).ConfigureAwait(false);
             }, locked =>
             {
                 // UI スレッドとは限らないので受け渡す。

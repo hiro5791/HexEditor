@@ -5481,4 +5481,89 @@ Details were written to:
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static read-only</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Text encoding (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Complete document (\documentclass ... \end{document})</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>Scripts</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>Script: Run</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>run script again rerun f5</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>Script: Run script file...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>run script file javascript csx</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>Script: Stop all scripts</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>stop cancel scripts</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>Script: Add C# script component...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>csharp roslyn component install</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>Scripts</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>Run script...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>Run last script</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>Stop all scripts</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>Add C# script component...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>Execution time limit (seconds)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>Time a JavaScript script may run before it is paused and you are asked whether to continue. 0 means no limit. Waiting for bulk operations and for your input is not counted.</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>Memory limit (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>Memory a JavaScript script may use (16-4096 MB).</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>Recursion depth limit</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>Maximum depth of function calls (100-10000).</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>Scripts running at the same time</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>Further scripts wait until one ends (1-16).</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>Script policy (organization)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>Set in the settings file by your organization. Disables scripts and plugins, or allows only signed plugins.</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>No restriction</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>Disable all scripts and plugins</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>Signed plugins only</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>Script: {0} - {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>Script: {0} (writing)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>No script is running.</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>The C# script component is already installed.</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>Scripts are disabled by your organization's setting (scripts.policy).</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>A script canceled the save: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>The script "{0}" is running.</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>The script "{0}" ended with an error.</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>Details</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>The script "{0}" was not run: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>Script: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, one {# script is running} other {# scripts are running}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>The script "{0}" has run for more than {1} seconds.</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>Continue ({0} more seconds)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>Run the script "{0}"?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor is running as administrator. This script runs with administrator rights and can do things that affect the whole PC.</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>Name: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>Author: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>This code can do anything on your PC with your rights (including reading and writing files and network communication). Run only code from authors you trust.</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>This script can read and write the open documents. It also asks for these permissions:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>This script can read and write the open documents. It asks for no other permissions.</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>This file came from the internet. Run it only if you trust where it came from.</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>Run</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>Don't run</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>Run once</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>Always allow</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>Read any file</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>Create, write and delete any file</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>Communicate over the network (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>Run external programs</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>Open disks, volumes and process memory</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>Read the clipboard</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>Change application settings</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>The script asks for the permission "{0}" ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>Allow</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>Don't allow</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>C# script component</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>C# scripts need the C# script component (Roslyn), which is not installed. Add it now?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>Add</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>Download the component.
+Size: {0}
+Saved to: {1}
+Downloaded from: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>Download</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>Adding the C# script component</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>The C# script component was added.</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>The C# script component could not be added: {0} You can add it by hand: download the component zip from the release page and extract it into the data folder's components\csharp\&lt;version&gt;\ folder.</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>The C# script component could not be added: {0}</value></data>
 </root>
