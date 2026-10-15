@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (コマンドライン、AUTO-36〜AUTO-44) のメッセージ。キーは Cli_ で始める。結果の書式と JSON のキーは訳さない。
+  {0}、{1}… は値に置き換わる。言語を足すときは Strings\<言語>\Cli.resw (同じキー) を足す。
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>キャンセルしました。</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>使い方は 'hexed --help' (または 'hexed &lt;コマンド&gt; --help') で確認できます。</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: 想定外のエラーが起きました ({0})。詳細は {1} に書きました。</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>使い方: hexed &lt;コマンド&gt; [引数] [オプション]
+        hexed &lt;ファイル&gt; [オプション]      ('hexed open &lt;ファイル&gt;' と同じ)
+
+コマンド:
+  open      ファイル・ディスク・プロセスを HexEditor のウィンドウで開く
+  hash      ハッシュ・チェックサムの計算と検証
+  dump      Hex ダンプの出力
+  compare   2 つのファイルの比較
+  run       スクリプトをウィンドウなしで実行
+  template  構造体テンプレートを適用して結果を出力
+  patch     ファイルに IPS パッチを適用
+  convert   形式の変換 (Intel HEX、S-record、Base64、ソースコードなど)
+  find      ファイルを検索して一致の位置を出力
+
+共通のオプション (すべてのコマンド):
+  -h, --help           使い方を表示 (hexed &lt;コマンド&gt; --help でも可)
+      --version        バージョンを表示
+  -q, --quiet          結果以外を出さない
+      --format &lt;形式&gt;  出力の形式: text (既定) または json
+  -o, --output &lt;パス&gt;  結果を画面の代わりにファイルに出す
+      --lang &lt;言語&gt;    メッセージの言語 (例: en、ja)
+      --no-color       色を付けない
+      --unregister     この PC への登録 (右クリックメニュー、ファイル関連付け、ジャンプリスト、
+                       PATH、一時フォルダ) を解除する
+
+終了コード: 0 成功、1 結果が否定 (差分あり・見つからない・不一致)、2 引数の誤り、
+3 入出力のエラー、4 スクリプト・テンプレートのエラー、5 許可がない、6 キャンセル、
+7 上限を超えた、8 形式のエラー、10 内部エラー。
+
+オフセット・長さ・範囲は入力式を受け付けます。接頭辞のない数値は 10 進です (16 進は 0x を付けます)。
+範囲は 開始:長さ または 開始..終了 (終了は含まない)。end はファイルの長さ (例: end-16:16)。
+PowerShell では $ を含む値を単一引用符で囲んでください (例: '$1F00')。</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>使い方: hexed open [パス...] [オプション]
+
+ファイルを HexEditor のウィンドウで開きます。HexEditor が起動していれば、そのウィンドウのタブとして開きます。
+相対パスは現在のフォルダを基準にします。
+
+オプション:
+  -g, --offset &lt;式&gt;        カーソルをこの位置に置く (例: 0x1000、end-16)
+      --select &lt;範囲&gt;      この範囲を選択する (開始:長さ または 開始..終了)
+  -r, --readonly           読み取り専用で開く
+      --disk &lt;番号|パス&gt;   物理ディスクを開く (--disk 0、--disk \\.\PhysicalDrive1)
+      --volume &lt;ドライブ&gt;  ボリュームを開く (--volume C:)
+      --process &lt;PID|名前&gt; プロセスのメモリを開く
+      --encoding &lt;名前&gt;    テキスト列の文字コード
+      --template &lt;名前|パス&gt;  開いた後にテンプレートを適用する
+      --compare &lt;a&gt; &lt;b&gt;    2 つのファイルを比較の画面で開く
+      --run &lt;スクリプト&gt;   開いた後にスクリプトを実行する
+      --new-window         新しいウィンドウで開く
+      --new-document       新しい空のドキュメントを開く
+      --open-disk          「ディスクを開く」のダイアログを出す
+      --new-instance       起動中のアプリに渡さず、別のプロセスとして起動する
+  -w, --wait               開いたドキュメントがすべて閉じられるまで戻らない
+      --safe-mode          セーフモードで起動する (新しいプロセスのみ)
+      --write-block        アプリ全体を書き込み保護にして起動する
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   疑似翻訳で表示する (プレビュー版)
+      --plugin-dev &lt;フォルダ&gt; 開発中のプラグインを読み込む (新しいプロセスのみ)
+      --ui-lang &lt;言語&gt;     ウィンドウの表示言語 (新しいプロセスのみ)
+      --test-hooks &lt;ファイル&gt; 異常の再現を有効にする (テスト用のビルドのみ)
+
+PowerShell では $ を含む値を単一引用符で囲んでください (例: '$1F00')。</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>使い方: hexed hash [パス...] [オプション]
+        hexed hash --check &lt;チェックサムファイル&gt; [オプション]
+
+ハッシュ・チェックサムを計算します。パスにはワイルドカード (*.bin) とフォルダを指定できます。- は標準入力です。
+複数のアルゴリズムは 1 回の読み込みで同時に計算します。
+
+オプション:
+  -a, --algorithm &lt;ID,...&gt;   アルゴリズムの ID (カンマ区切り。既定 sha256)。
+                             '--algorithm list' で使える ID の一覧を出す
+      --range &lt;範囲&gt;         この範囲だけを計算する (開始:長さ または 開始..終了)
+      --format &lt;形式&gt;        text (既定): アルゴリズム  値  パス
+                             gnu: 値  パス (sha256sum と同じ)
+                             bsd: SHA256 (パス) = 値
+                             json: ファイルごとのオブジェクト
+      --check &lt;ファイル&gt;     チェックサムファイル (.sha256、.md5、SHA256SUMS、.sfv など) の
+                             各ファイルを検証して OK / FAILED / MISSING を出す
+  -r, --recurse              フォルダを指定したときサブフォルダも含める
+
+終了コード: 0 成功、1 --check で不一致、3 読めないファイルがあった。
+PowerShell では $ を含む値を単一引用符で囲んでください (例: '$1F00')。</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>使い方: hexed dump &lt;パス&gt; [オプション]
+
+ファイル (または範囲) の Hex ダンプを標準出力に出します。メモリ使用量はファイルの大きさに関係しません。
+
+オプション:
+      --range &lt;範囲&gt;         出力する範囲 (開始:長さ または 開始..終了。既定: ファイル全体)
+      --width &lt;n&gt;            1 行のバイト数 (既定 16)
+      --group &lt;n&gt;            グループのバイト数 (既定は形式による。0 でグループなし)
+      --encoding &lt;名前&gt;      テキスト列の文字コード (既定 ascii)
+      --base-address &lt;式&gt;    最初のバイトに表示するアドレス (既定 0)
+      --style &lt;形式&gt;         default (オフセット、Hex、|テキスト|)、xxd、hexdump-c、plain、
+                             c、cpp、csharp、java、js、python、rust、go、pascal、vbnet、
+                             base64、base32、ascii85、uu、qp、hextext、dectext
+      --squeeze              直前の行と同じ内容の行を * にまとめる (hexdump -C と同じ)
+
+終了コード: 範囲がファイルの外なら 2。
+PowerShell では $ を含む値を単一引用符で囲んでください (例: '$1F00')。</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>使い方: hexed compare &lt;パス1&gt; &lt;パス2&gt; [オプション]
+
+2 つのファイルを比較して差分を出力します。
+
+オプション:
+      --mode &lt;byte|resync&gt;   byte (既定): 同じオフセットのバイトどうしを比べる
+                             resync: 挿入・削除を考慮して比べる
+      --range1 &lt;範囲&gt;        1 つ目のファイルの範囲 (既定: 全体)
+      --range2 &lt;範囲&gt;        2 つ目のファイルの範囲 (既定: 全体)
+      --max &lt;n&gt;              出力する差分の最大件数 (既定 1000。超えた分は件数だけ数える)
+      --format &lt;text|json&gt;   出力の形式
+      --brief                一致・不一致を 1 行で出し、最初の差分で打ち切る
+
+終了コード: 0 一致、1 違いがある、3 読めないファイルがあった。
+PowerShell では $ を含む値を単一引用符で囲んでください (例: '$1F00')。</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>使い方: hexed run &lt;スクリプト&gt; [ファイル...] [オプション]
+
+ウィンドウを出さずにスクリプトを実行します。ファイルは順に開き (app.documents)、最初のファイルが
+app.activeDocument になります。
+
+オプション:
+      --arg &lt;名前=値&gt;      スクリプトのパラメータ (繰り返し可)。script.args にも入る
+      --trust              信頼されていないスクリプトを確認なしで実行する
+      --allow &lt;許可,...&gt;   与える許可 (例: file-read)
+      --save               終了時に変更のあるドキュメントをすべて保存する
+      --save-as &lt;パス&gt;     最初のドキュメントをこのパスに保存する (元のファイルは変えない)
+      --dry-run            保存を行わず、変更の要約を出す
+      --timeout &lt;秒&gt;       スクリプト全体の実行時間の上限
+  -r, --readonly           ファイルを読み取り専用で開く
+
+既定では、スクリプトが doc.save() を呼んだドキュメントだけを保存します。
+スクリプトの終了コードは app.exit(コード) で指定できます。2〜10 は 'hexed --help' に書いた共通の意味と
+重なるため、独自の意味には 64 以上を使ってください。</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>使い方: hexed template &lt;パス&gt; (--template &lt;名前|パス&gt; | --auto) [オプション]
+
+ファイルに構造体テンプレートを適用して結果を出力します。
+
+オプション:
+      --template &lt;名前|パス&gt;  適用するテンプレート
+      --auto                  テンプレートを自動で選ぶ (合うものがなければ終了コード 1)
+  -g, --offset &lt;式&gt;           構造の開始オフセット (既定 0)
+      --format &lt;形式&gt;         json、csv、text (インデント付きのツリー。既定 text)
+      --depth &lt;n&gt;             出力するツリーの深さの上限
+      --fields &lt;パス,...&gt;     出力するフィールドを絞る (例: header.e_lfanew,sections[*].name)
+
+終了コード: テンプレートのエラーは 4。
+PowerShell では $ を含む値を単一引用符で囲んでください (例: '$1F00')。</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>使い方: hexed patch &lt;対象&gt; &lt;パッチ&gt; (-o &lt;出力パス&gt; | --in-place) [オプション]
+
+ファイルにパッチを適用します。-o と --in-place のどちらかが必要です。この版は IPS と IPS32 のパッチを適用します。
+
+オプション:
+  -o, --output &lt;パス&gt;       適用後のファイルをここに書く (対象は変えない)
+      --in-place            対象を安全に置き換える (一時ファイルに書いてから置き換える)
+      --format &lt;形式&gt;       auto (既定)、ips、ips32
+      --verify-before &lt;a:v&gt; 先に対象のハッシュを確認する (例: sha256:ab12...)。
+                            違えば終了コード 1 で何も書かない
+      --verify-after &lt;a:v&gt;  書く前に、適用後のハッシュを確認する
+      --dry-run             何も適用せず、レコード数と変更されるバイト数を出す
+
+終了コード: 1 検証に失敗、8 パッチが壊れている。</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>使い方: hexed convert &lt;入力&gt; &lt;出力&gt; [オプション]
+
+HexEditor のインポート・エクスポート形式の間で変換します。
+
+オプション:
+      --from &lt;形式&gt;         入力の形式 (既定: 内容と拡張子から判定)
+      --to &lt;形式&gt;           出力の形式 (既定: 出力の拡張子から。わからなければ bin)
+                            bin、ihex、srec、base64、base32、ascii85、uu、qp、url、hextext、
+                            dectext、c、cpp、csharp、java、js、python、rust、go、pascal、vbnet
+      --ignore-checksum     チェックサムが誤っていても Intel HEX / S-record を読み込む
+      --fill &lt;hex&gt;          ギャップを埋めるバイト (既定 FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto、linear、segment、i8、i16、i32。S-record: auto、s1、s2、s3
+
+形式ごとのオプションは、インポート・エクスポートのダイアログの項目の名前を小文字とハイフンで書いたものです。
+例: --record-length 32、--start-address 0x08000000、--bytes-per-line 16、--line-length 64、--url-safe、
+--no-upper-case、--new-line lf、--encoding utf8。
+
+終了コード: 入力のチェックサム・形式の誤りは 8。</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>使い方: hexed find &lt;パス...&gt; (--hex &lt;パターン&gt; | --text &lt;文字列&gt; | --regex &lt;式&gt;) [オプション]
+
+ファイルを検索し、一致ごとに「パス  オフセット  長さ」を出力します。
+
+オプション:
+      --hex &lt;パターン&gt;     バイト列 (例: "DE AD ?? EF"。?? は任意の 1 バイト、? は任意の 1 ニブル)
+      --text &lt;文字列&gt;      テキスト
+      --regex &lt;式&gt;         正規表現 (テキスト)
+      --encoding &lt;名前&gt;    --text と --regex の文字コード (既定 utf-8)
+      --case-sensitive     大文字と小文字を区別する
+      --range &lt;範囲&gt;       各ファイルのこの範囲だけを検索する
+      --max &lt;n&gt;            n 件で止める
+      --format &lt;text|json&gt; 出力の形式
+  -r, --recurse            フォルダを指定したときサブフォルダも含める
+
+終了コード: 0 見つかった、1 見つからない、3 読めないファイルがあった。
+PowerShell では $ を含む値を単一引用符で囲んでください (例: '$1F00')。</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>不明なコマンドまたはファイルです: {0}。コマンド: open、hash、dump、compare、run、template、patch、convert、find。</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>不明な言語です: {0}。23 言語の言語タグのどれかを指定してください (例: en、ja、zh-Hans)。</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>'{1}' に不明なオプション {0} があります。</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>オプション {0} は値を取りません ('{1}')。</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>オプション {0} には値が必要です ('{1}')。</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>パスが存在しません: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>アクセスが拒否されました: {0}。ファイルのアクセス権を確認するか、アクセスできるアカウントで実行してください。</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>{0} を読めません: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>{0} に書けません: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>{0} はフォルダです (ファイルを指定してください)。</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>{0} に合うファイルがありません。</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>{0} の {1} を読めません。</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>{0} の空き容量が足りません (必要 {1} バイト、空き {2} バイト)。</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>{0} のファイルシステム ({1}) には大きすぎるファイルです。</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>出力先 {0} が入力にもなっています。別の出力先を指定してください。</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: 式 "{1}" の {2} 文字目が読めません: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: "{1}" はファイルの外です (長さ {2})。</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: "{1}" は {2}〜{3} の数にしてください。</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>'{1}' は --format {0} に対応していません。使える値: {2}。</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>'{0}' には入力のパスが 1 つ以上必要です。</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>'{0}' の入力のパスは 1 つだけです。</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>'{0}' はこの版では使えません。</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>{0} はこの版では使えません。</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>データが形式 {0} に収まりません (上限 {1})。</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>不明な文字コードです: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>式が空です</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>書式の誤りです</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>括弧が閉じていません</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>不明な名前です (ファイルの長さは end)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>コマンドラインではブックマークを使えません</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>不明な関数です</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>0 で割っています</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>値が大きすぎます</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>数値として読めません</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>ここではデータを読めません</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>コマンドラインでは使えません</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu のアルゴリズムは 1 つだけです。複数のときは --format bsd か text を使ってください。</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>標準入力には --range を使えません。</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>不明なアルゴリズムです: {0}。ID の一覧は 'hexed hash --algorithm list' で確認できます。</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>アルゴリズム {0} はこの PC では使えません。</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>{0} に読めるチェックサムの行がありません。</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>{0} のアルゴリズムが分かりません。--algorithm で指定してください。</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>計算したチェックサムのうち {0} 件が一致しませんでした。</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>一覧のファイルのうち {0} 件が見つかりません。</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>不明な形式です: {0}。'hexed dump --help' を見てください。</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>'compare' にはパスを 2 つ指定してください。</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>不明な方式です: {0}。byte か resync を指定してください。</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>変更</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>挿入</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>削除</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>読み込み不可</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... ほかに {0} 件の差分があります (--max により省略)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>差分 {0} 件、合計 {1} バイト</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>ファイルは一致しています。</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>ファイルは一致しません (最初の差分: {0})。</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>読めなかった範囲が {0} 件あります。</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>--hex、--text、--regex のどれか 1 つだけを指定してください。</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>検索パターンが正しくありません ({0})。</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: 読めない範囲を {1} 件飛ばしました。</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>使い方: hexed convert &lt;入力&gt; &lt;出力&gt; [オプション]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>IPS パッチの適用は 'hexed convert' ではなく 'hexed patch' で行います。</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>値が正しくありません: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>不明な形式です: {0}。形式: {1}。</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: "{1}" は正しくありません。使える値: {2}。</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>{0} は {1} から {2} への変換では使えません。</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  {0} 行 {1} 列: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: {1} 行 {2} 列でチェックサムが誤っています。--ignore-checksum を付けるとそのまま読み込みます。
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: {1} 行 {2} 列に形式の誤りがあります ({3})。
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>チェックサムの誤り {0} 件を無視しました。</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>使い方: hexed patch &lt;対象&gt; &lt;パッチ&gt; (-o &lt;出力パス&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>-o &lt;出力パス&gt; か --in-place を指定してください (誤って元のファイルを変えないため)。</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o と --in-place は同時に指定できません。</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>出力先 {0} が対象またはパッチと同じです。対象を置き換えるときは --in-place を使ってください。</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} はパッチの形式ではありません。auto、ips、ips32 のどれかを指定してください。</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: UPS・BPS・.hexpatch のパッチはこの版では扱えません (IPS と IPS32 は扱えます)。</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} はパッチファイルとして認識できません。</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: パッチのレコード {1} (ファイル内の位置 {2}) が壊れています。</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} は {1} のパッチではありません。</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: "{1}" は アルゴリズム:値 の形で指定してください (例: sha256:ab12...)。</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>{0} のハッシュが期待した値と違います (--verify-before)。何も書きませんでした。</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>適用後の {0} のハッシュが期待した値と違います (--verify-after)。何も書きませんでした。</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>レコード {0} 件を適用しました (変更 {1} バイト、長さの変化 {2})。{3} に書きました。</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>レコード {0} 件、変更されるバイト {1}、長さの変化 {2}、適用後の長さ {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>--template と --auto はどちらか 1 つだけを指定してください。</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>使い方: hexed run &lt;スクリプト&gt; [ファイル...] [オプション]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>--save、--save-as、--dry-run は 1 つだけ指定できます。</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>--readonly は --save・--save-as と同時に指定できません。</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>--arg "{0}" は 名前=値 の形で指定してください。</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>--timeout "{0}" は 0 より大きい秒数にしてください。</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>--save-as には開くファイルが必要です (最初のファイルを新しいパスに保存します)。</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} は開いているファイルです。上書きするには --save を使ってください。</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: {1} バイトが変わりました (保存していません: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>{0} に未保存の変更があります。保存していません (--save か doc.save() を使ってください)。</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>不明な表示言語です: {0}。23 言語の言語タグのどれかを指定してください (例: ar、ja)。</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>不明な疑似翻訳です: {0}。qps-ploc か qps-plocm を指定してください。</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>hexed.exe と同じフォルダに HexEditor.exe が見つかりません。</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>{0} を起動できません: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>ドキュメントが閉じられる前に HexEditor が終了コード {0} で終わりました。</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>登録をすべて解除しました。</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>解除しました: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>解除できませんでした: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>エクスプローラーの右クリックメニュー</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>ファイルの関連付け</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>App Paths の登録</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>hexed の PATH への追加</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>タスクバーのジャンプリスト</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>通知の登録</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>一時フォルダ</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>レジストリの項目</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>この版の登録は Windows が管理しています。何も解除していません。</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>このコピーが登録しているものはありません。何も解除していません。</value></data>
+</root>
