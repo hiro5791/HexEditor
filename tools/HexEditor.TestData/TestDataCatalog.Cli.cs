@@ -7,8 +7,13 @@ namespace HexEditor.TestData;
 /// <summary>コマンドライン (AUTO-36〜AUTO-44) のテストデータ (cases/08-automation.md の「データファイル」の表)。</summary>
 public static partial class TestDataCatalog
 {
+    /// <summary>TD-AUTO-RANDOM-10G の乱数の種。</summary>
+    public const ulong AutoRandom10GSeed = 10;
+
     private static IEnumerable<TestDataItem> CliItems() =>
     [
+        new("TD-AUTO-RANDOM-10G", 10 * GiB, "種 10 の乱数 (スパースにしない。性能テスト用の環境にだけ作る)",
+            path => WriteGenerated(path, 10 * GiB, (o, s) => Random(AutoRandom10GSeed, o, s))),
         new("TD-AUTO-SEQ-1M-DIFF1", MiB, "TD-SEQ-1M のオフセット 0x80000 の値を 00 から FF に変えたもの", path => WriteGenerated(path, MiB, (o, s) =>
         {
             Sequence(o, s);

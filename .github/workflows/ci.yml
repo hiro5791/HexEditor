@@ -91,6 +91,8 @@ jobs:
           # 補助プロセス (テスト用のビルド): 補助プロセスの結合テスト (ENG-28。昇格せず偽のデバイスで起動する) が使う。
           dotnet build src/HexEditor.Elevated -c Release -p:HexTestHooks=true
           dotnet build tests/HexEditor.Platform.Tests -c Release
+          # コマンドライン hexed (AUTO-36〜AUTO-44): テスト用のビルド (--test-send-ctrl-c と --test-hooks を含む)。
+          dotnet build tests/HexEditor.Cli.Tests -c Release -p:HexTestHooks=true
           dotnet build tests/HexEditor.Performance.Tests -c Release -p:HexTestHooks=true
           dotnet build tools/TestDataGen -c Release
       - name: Build app (x64)
@@ -103,7 +105,9 @@ jobs:
           dotnet test tests/HexEditor.Core.Tests -c Release --no-build --filter "Category!=Nightly" --logger "trx;LogFileName=core.trx" --logger "console;verbosity=normal" --results-directory TestResults
           $core = $LASTEXITCODE
           dotnet test tests/HexEditor.Platform.Tests -c Release --no-build --logger "trx;LogFileName=platform.trx" --logger "console;verbosity=normal" --results-directory TestResults
-          if ($core -ne 0 -or $LASTEXITCODE -ne 0) { exit 1 }
+          $platform = $LASTEXITCODE
+          dotnet test tests/HexEditor.Cli.Tests -c Release --no-build --logger "trx;LogFileName=cli.trx" --logger "console;verbosity=normal" --results-directory TestResults
+          if ($core -ne 0 -or $platform -ne 0 -or $LASTEXITCODE -ne 0) { exit 1 }
       # 全規模のテスト (Category=Nightly) だけ。それ以外の Core と Platform のテストは上の手順で毎回動く。
       - name: Nightly tests (full scale)
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -147,7 +151,9 @@ jobs:
           dotnet test tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true --filter "Category!=Nightly" --logger "trx;LogFileName=core-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
           $core = $LASTEXITCODE
           dotnet test tests/HexEditor.Platform.Tests -c Release --logger "trx;LogFileName=platform-arm64.trx" --logger "console;verbosity=normal" --results-directory TestResults
-          if ($core -ne 0 -or $LASTEXITCODE -ne 0) { exit 1 }
+          $platform = $LASTEXITCODE
+          dotnet test tests/HexEditor.Cli.Tests -c Release --no-build --logger "trx;LogFileName=cli.trx" --logger "console;verbosity=normal" --results-directory TestResults
+          if ($core -ne 0 -or $platform -ne 0 -or $LASTEXITCODE -ne 0) { exit 1 }
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4

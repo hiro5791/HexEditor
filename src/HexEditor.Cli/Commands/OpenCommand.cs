@@ -127,8 +127,7 @@ internal sealed class OpenCommand : ISubcommand
         if (select is not null)
         {
             // 範囲の書式だけを確かめる (ファイルの外かどうかは GUI が開いたドキュメントの長さで確かめる)。
-            long length = firstLength;
-            CheckRangeSyntax(ctx, select, length);
+            ctx.ValidateRangeSyntax("--select", select, firstLength);
         }
 
         // GUI に渡す引数を作る (パスは絶対パス)。
@@ -268,25 +267,6 @@ internal sealed class OpenCommand : ISubcommand
         return File.Exists(full) ? full : template;
     }
 
-    private static void CheckRangeSyntax(CommandContext ctx, string text, long length)
-    {
-        int dots = text.IndexOf("..", StringComparison.Ordinal);
-        int colon = text.IndexOf(':', StringComparison.Ordinal);
-        if (dots >= 0)
-        {
-            ctx.Evaluate("--select", text[..dots], length);
-            ctx.Evaluate("--select", text[(dots + 2)..], length);
-        }
-        else if (colon >= 0)
-        {
-            ctx.Evaluate("--select", text[..colon], length);
-            ctx.Evaluate("--select", text[(colon + 1)..], length);
-        }
-        else
-        {
-            ctx.Evaluate("--select", text, length);
-        }
-    }
 }
 
 /// <summary>実行ファイルの版。</summary>

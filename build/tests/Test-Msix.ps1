@@ -6,6 +6,8 @@
     TC-PKG-03-01  file type associations: proj.hexproj opens HexEditor of the package; the default app of .iso is
                   unchanged and HexEditor is among its "Open with" handlers (SHAssocEnumHandlers)
     TC-PKG-03-02  hexeditor.exe (execution alias) in a new command prompt opens the file of the current folder
+    TC-PKG-03-03  hexed (execution alias) in a new command prompt prints the SHA-256 of file.bin to the same console
+                  and exits with 0
     TC-PKG-03-04  resources.pri has the 23 languages; with German as the user's language the Start menu
                   description (AppListEntry.DisplayInfo.Description) is the German one of resources.pri
     TC-UI-55-01   Windows 11: the new context menu has one top-level "Open with HexEditor" without a submenu, and
@@ -146,6 +148,30 @@ Invoke-TestCase 'TC-PKG-03-02' 'hexeditor.exe execution alias' {
         Assert-True ($state.document.path -ieq (Join-Path $work 'file.bin')) "the tab is $($state.document.path)"
         Assert-True ($app.Process.Path -like "$($package.InstallLocation)*") "the alias started $($app.Process.Path)"
     } finally { Stop-TestApp $app }
+}
+
+Invoke-TestCase 'TC-PKG-03-03' 'hexed execution alias and console output' {
+    $work = 'C:\work'
+    New-Item -ItemType Directory -Force $work | Out-Null
+    $file = Copy-TestData $TestDataDir 'TD-SEQ-1M' (Join-Path $work 'file.bin')
+    # 1. cmd.exe in C:\work runs "hexed hash file.bin". The output is read through a pipe, which works only if hexed.exe is a
+    #    console program that writes to the console of the caller (no new window).
+    $info = New-Object System.Diagnostics.ProcessStartInfo $env:ComSpec
+    $info.Arguments = '/c hexed hash file.bin & exit /b %ERRORLEVEL%'
+    $info.WorkingDirectory = $work
+    $info.UseShellExecute = $false
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $info.CreateNoWindow = $true
+    $process = [System.Diagnostics.Process]::Start($info)
+    $stdout = $process.StandardOutput.ReadToEnd().Trim()
+    $stderr = $process.StandardError.ReadToEnd().Trim()
+    $process.WaitForExit()
+    # 2. The hash (the default algorithm of AUTO-38 is SHA-256) equals the value computed by the test, and the exit code is 0.
+    $expected = (Get-FileHash -Algorithm SHA256 -LiteralPath $file).Hash.ToLowerInvariant()
+    Write-Host "hexed hash: exit $($process.ExitCode), '$stdout' $stderr"
+    Assert-True ($process.ExitCode -eq 0) "exit code $($process.ExitCode): $stdout $stderr"
+    Assert-True ($stdout -eq "sha256  $expected  file.bin") "output '$stdout' is not 'sha256  $expected  file.bin'"
 }
 
 Invoke-TestCase 'TC-PKG-03-04' 'Start menu description in German' {

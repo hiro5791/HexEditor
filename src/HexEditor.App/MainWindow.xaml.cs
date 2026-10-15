@@ -170,38 +170,6 @@ public sealed partial class MainWindow : Window
 
     private WindowId WindowId => AppWindow.Id;
 
-    /// <summary>コマンドラインで指定したファイルを開く (起動時、または転送された 2 つ目の起動)。</summary>
-    public void OpenFromCommandLine(CommandLine commandLine, bool activate)
-    {
-        foreach (string file in commandLine.Files)
-        {
-            TryOpen(file);
-        }
-
-        // ジャンプリストの「新規作成」(--new-document。UI-35)。
-        if (commandLine.NewDocument)
-        {
-            Vm.NewDocument();
-        }
-
-        // ジャンプリストの「ディスクを開く」(--open-disk。UI-35)。
-        if (commandLine.OpenDisk)
-        {
-            DispatcherQueue.TryEnqueue(() => _ = Commands.ExecuteAsync("file.openDisk"));
-        }
-
-        if (commandLine.Offset is { } offset && Editor is { } editor
-            && Core.Expressions.ExpressionEvaluator.TryEvaluate(offset, new Core.View.EditorExpressionContext(editor), out long target, out _))
-        {
-            editor.GoTo(target);
-        }
-
-        if (activate)
-        {
-            Activate();
-        }
-    }
-
     /// <summary>
     /// タイトル (UI-02 の仕様 3): 「● 文書名 - HexEditor」。未保存の変更があれば ●、管理者として実行中は「(管理者)」、
     /// セーフモードでは「(セーフモード)」を付ける。プレビュー版は「HexEditor Preview」。

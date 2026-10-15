@@ -16,6 +16,9 @@
                   separate settings (dark / light)
     TC-UI-43-05   installer: switching the display language and restarting does not crash (the portable version is
                   checked in Test-Portable.ps1)
+    TC-AUTO-36-07 installer and MSIX: "hexed --version" works in a new command prompt (the PATH of the registry; the
+                  App Execution Alias) and prints the version of the build (the portable version: Test-Portable.ps1,
+                  TC-AUTO-36-08 runs hexed --unregister)
   -Setup and -Msix install HexEditor and are allowed only on CI runners (GITHUB_ACTIONS). Without them only the
   portable version (and -DevExe) is tested, nothing is installed and the clipboard is not used, so the script can
   run against a local test build: the windows open behind other windows and never take the focus.
@@ -380,6 +383,54 @@ Invoke-TestCase 'TC-UI-43-05' 'installer: display language switch and restart' {
         Assert-True (-not $new.HasExited) "the app exited after restarting in $language"
         Stop-Process -Id $new.Id -Force
         Assert-True (@(Get-CrashReports $crash).Count -eq 0) "crash info after $language"
+    }
+}
+
+# Runs "cmd /c <command>" as a new process whose PATH is the one stored in the registry (a command prompt that was opened
+# after the installation sees the new PATH; the process of this script started before it). Returns the exit code and output.
+function Invoke-NewCommandPrompt([string]$Command, [string]$WorkingDirectory) {
+    $machine = [Environment]::GetEnvironmentVariable('Path', 'Machine')
+    $user = [Environment]::GetEnvironmentVariable('Path', 'User')
+    $info = New-Object System.Diagnostics.ProcessStartInfo $env:ComSpec
+    $info.Arguments = "/c $Command"
+    $info.UseShellExecute = $false
+    $info.RedirectStandardOutput = $true
+    $info.RedirectStandardError = $true
+    $info.CreateNoWindow = $true
+    if ($WorkingDirectory) { $info.WorkingDirectory = $WorkingDirectory }
+    $info.EnvironmentVariables['Path'] = "$machine;$user"
+    $process = [System.Diagnostics.Process]::Start($info)
+    $stdout = $process.StandardOutput.ReadToEnd()
+    $stderr = $process.StandardError.ReadToEnd()
+    $process.WaitForExit()
+    [pscustomobject]@{ ExitCode = $process.ExitCode; Output = $stdout.Trim(); Error = $stderr.Trim() }
+}
+
+Invoke-TestCase 'TC-AUTO-36-07' 'hexed --version works in a new command prompt after the installation' {
+    if (-not $Setup -and -not $Msix) { Skip-TestCase 'needs -Setup or -Msix (CI only).' }
+    if ($Setup) {
+        # Installer: the PATH of the user has the app folder (PKG-08), and "hexed" resolves to hexed.exe next to HexEditor.exe.
+        $installer = $targets | Where-Object Name -eq 'Installer'
+        $folder = Split-Path -Parent $installer.Exe
+        $hexed = Join-Path $folder 'hexed.exe'
+        Assert-True (Test-Path $hexed) "no hexed.exe in $folder"
+        $expected = (Get-Item $hexed).VersionInfo.ProductVersion
+        $result = Invoke-NewCommandPrompt 'hexed --version' $env:USERPROFILE
+        Write-Host "installer: $($result.ExitCode) '$($result.Output)' $($result.Error)"
+        Assert-True ($result.ExitCode -eq 0) "exit code $($result.ExitCode): $($result.Output) $($result.Error)"
+        Assert-True ($result.Output -eq "hexed $expected") "output '$($result.Output)' is not 'hexed $expected'"
+    }
+
+    if ($Msix) {
+        # MSIX: hexed.exe is an App Execution Alias in %LocalAppData%\Microsoft\WindowsApps.
+        $alias = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps\hexed.exe'
+        $result = Invoke-NewCommandPrompt 'hexed --version' $env:USERPROFILE
+        Write-Host "msix: $($result.ExitCode) '$($result.Output)' $($result.Error)"
+        Assert-True ($result.ExitCode -eq 0) "exit code $($result.ExitCode): $($result.Output) $($result.Error)"
+        Assert-True ($result.Output -match '^hexed \d+\.\d+\.\d+') "output '$($result.Output)'"
+        Assert-True (Test-Path $alias) "no App Execution Alias $alias"
+        $where = Invoke-NewCommandPrompt 'where hexed' $env:USERPROFILE
+        Assert-True ($where.Output -match [regex]::Escape($alias)) "hexed is not resolved from the alias: $($where.Output)"
     }
 }
 

@@ -5481,4 +5481,12 @@
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const (static の読み取り専用)</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>文字コード (ascii、utf-8、cp932 など)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>単独で処理できる文書にする (\documentclass から \end{document} まで)</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>不明な文字コード「{0}」です。テキスト列は変えませんでした。</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>{0}「{1}」を使えません (式の {2} 文字目が読めません)。</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0}「{1}」はファイルの外です (長さ {2})。</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>{0} はこの版では使えません。</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>「{0}」に当たるディスクがありません。</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>「{0}」に当たるボリュームがありません。</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>「{0}」に当たるプロセスがありません。</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>「{0}」に当たるプロセスが {1} 件あります。--process にプロセス ID を指定してください。</value></data>
 </root>

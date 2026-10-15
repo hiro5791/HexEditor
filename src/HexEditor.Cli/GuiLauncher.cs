@@ -22,9 +22,11 @@ internal sealed class GuiLauncher : IGuiLauncher
 
     public int Start(string executable, IReadOnlyList<string> arguments, string workingDirectory)
     {
+        // ShellExecute で起動する: ハンドルを受け継がせない。受け継ぐと、hexed の出力をリダイレクトして読んでいる側が、GUI が終わるまで
+        // 読み終わらない (GUI が hexed の標準出力のパイプを持ち続けるため)。
         var info = new ProcessStartInfo(executable)
         {
-            UseShellExecute = false,
+            UseShellExecute = true,
             WorkingDirectory = workingDirectory,
         };
         foreach (string argument in arguments)

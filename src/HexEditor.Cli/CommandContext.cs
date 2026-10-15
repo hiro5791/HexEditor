@@ -130,34 +130,23 @@ public sealed class CommandContext : IDisposable
     /// <summary>範囲 (<c>開始:長さ</c> または <c>開始..終了</c>。終了は含まない) を評価する。ファイルの外なら終了コード 2。</summary>
     public (long Offset, long Length) EvaluateRange(string option, string text, long fileLength)
     {
-        (long start, long length) = ParseRange(option, text, fileLength);
-        if (start < 0 || length < 0 || start > fileLength || start + length > fileLength)
+        if (!RangeExpression.TryEvaluate(text, new CliExpressionContext(fileLength), DefaultRadix.Decimal, out long start, out long length, out ExpressionException? error))
         {
-            throw CliException.Usage("Cli_Error_RangeOutside", option, text, fileLength);
+            throw CliException.Usage("Cli_Error_Expression", option, text, error!.Position + 1, ExpressionMessage(error));
         }
 
-        return (start, length);
+        return RangeExpression.IsInside(start, length, fileLength)
+            ? (start, length)
+            : throw CliException.Usage("Cli_Error_RangeOutside", option, text, fileLength);
     }
 
-    private (long, long) ParseRange(string option, string text, long fileLength)
+    /// <summary>範囲の書式だけを確かめる (ファイルの外かどうかは確かめない)。誤りは終了コード 2。</summary>
+    public void ValidateRangeSyntax(string option, string text, long fileLength)
     {
-        int dots = text.IndexOf("..", StringComparison.Ordinal);
-        if (dots >= 0)
+        if (!RangeExpression.TryEvaluate(text, new CliExpressionContext(fileLength), DefaultRadix.Decimal, out _, out _, out ExpressionException? error))
         {
-            long start = Evaluate(option, text[..dots], fileLength);
-            long end = Evaluate(option, text[(dots + 2)..], fileLength);
-            return (start, end - start);
+            throw CliException.Usage("Cli_Error_Expression", option, text, error!.Position + 1, ExpressionMessage(error));
         }
-
-        int colon = text.IndexOf(':', StringComparison.Ordinal);
-        if (colon >= 0)
-        {
-            return (Evaluate(option, text[..colon], fileLength), Evaluate(option, text[(colon + 1)..], fileLength));
-        }
-
-        // 開始だけを書いたら末尾まで。
-        long only = Evaluate(option, text, fileLength);
-        return (only, fileLength - only);
     }
 
     public void Dispose() => _file?.Dispose();
