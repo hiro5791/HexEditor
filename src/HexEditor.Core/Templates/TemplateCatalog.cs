@@ -225,24 +225,43 @@ public sealed class TemplateCatalog
     public static TemplateMatchInput MatchInputOf(DocumentSnapshot snapshot, string? path)
     {
         long length = snapshot.Length;
-        int headLength = (int)Math.Min(length, TemplateMatchInput.WindowBytes);
-        byte[] head = new byte[headLength];
-        snapshot.Read(0, head);
-        int tailLength = (int)Math.Min(length, TemplateMatchInput.WindowBytes);
-        byte[] tail = new byte[tailLength];
-        snapshot.Read(length - tailLength, tail);
         string? extension = path is null ? null : System.IO.Path.GetExtension(path).TrimStart('.');
+        int headLength = (int)Math.Min(length, TemplateMatchInput.WindowBytes);
+        int tailLength = (int)Math.Min(length, TemplateMatchInput.WindowBytes);
+        byte[] head = new byte[headLength];
+        byte[] tail = new byte[tailLength];
         string? mime = null;
         try
         {
-            mime = new FileTypeDetector(FileTypeDatabase.BuiltIn).Detect(new HeadTailMagicData(snapshot), extension).Best?.Mime;
+            // 先頭と末尾は 1 度だけ読み、ファイル形式の判定と自動適用の条件の両方に使う (読むのは合わせて 128 KB まで。TC-TPL-30-05)
+            var data = new HeadTailMagicData(snapshot);
+            ReadAll(data, 0, head);
+            ReadAll(data, length - tailLength, tail);
+            mime = new FileTypeDetector(FileTypeDatabase.BuiltIn).Detect(data, extension).Best?.Mime;
         }
         catch (IOException)
         {
             // 読めない部分があれば MIME は使わない (マジックと拡張子だけで判定する)。
+            snapshot.Read(0, head);
+            snapshot.Read(length - tailLength, tail);
         }
 
         return new TemplateMatchInput(length, head, tail, string.IsNullOrEmpty(extension) ? null : extension, mime);
+    }
+
+    private static void ReadAll(HeadTailMagicData data, long offset, Span<byte> destination)
+    {
+        int done = 0;
+        while (done < destination.Length)
+        {
+            int n = data.Read(offset + done, destination[done..]);
+            if (n <= 0)
+            {
+                break;
+            }
+
+            done += n;
+        }
     }
 
     private static bool LooksLikePath(string text) =>

@@ -101,6 +101,9 @@ public sealed class TemplateValueEditSession
             TemplateNodeKind.Array => TemplateEditorKind.String,
             TemplateNodeKind.DateTime => TemplateEditorKind.DateTime,
             TemplateNodeKind.Guid or TemplateNodeKind.IpAddress or TemplateNodeKind.MacAddress => TemplateEditorKind.Text,
+
+            // write の変換を持つ構造体: 表示の文字列で入力する (TPL-29 の仕様 3)
+            TemplateNodeKind.Struct or TemplateNodeKind.Union => TemplateEditorKind.Text,
             TemplateNodeKind.BitfieldMember => TemplateEditorKind.Bitfield,
             TemplateNodeKind.Color => TemplateEditorKind.Color,
             TemplateNodeKind.Float => TemplateEditorKind.Float,

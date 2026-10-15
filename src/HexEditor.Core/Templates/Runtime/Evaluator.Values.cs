@@ -1252,6 +1252,12 @@ internal sealed partial class Evaluator
             return TemplateEditBlock.ReadOnlyAttribute;
         }
 
+        // write の変換を持つ構造体 (インスペクタ用の型など。TPL-29 の仕様 3) は、変換した値を構造体の範囲に書く
+        if (node.Kind is TemplateNodeKind.Struct or TemplateNodeKind.Union && Attr(node.AttributeNodes, "write") is not null && node.Size is > 0 and <= 16)
+        {
+            return TemplateEditBlock.None;
+        }
+
         if (node.Kind is TemplateNodeKind.Struct or TemplateNodeKind.Union or TemplateNodeKind.Bitfield or TemplateNodeKind.Application
             or TemplateNodeKind.Padding || (node.Kind == TemplateNodeKind.Array && node.Type is not PrimType { IsChar: true }))
         {
@@ -1332,6 +1338,17 @@ internal sealed partial class Evaluator
             }
 
             rawValue = Deref(Invoke((Callable)fn.O!, [input0], null, f));
+            if (node.Kind is TemplateNodeKind.Struct or TemplateNodeKind.Union)
+            {
+                if (rawValue.Kind is not (VK.Int or VK.Bool))
+                {
+                    throw new FormatException("write must return an integer");
+                }
+
+                byte[] whole = new byte[node.Size];
+                WriteUnsigned(whole, (UInt128)rawValue.I, node.BigEndian);
+                return new TemplateEditResult(whole, null) { Offset = node.Offset };
+            }
         }
         else
         {

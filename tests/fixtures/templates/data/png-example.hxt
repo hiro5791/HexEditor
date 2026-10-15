@@ -1,0 +1,42 @@
+#pragma name "PNG image"
+#pragma magic 0 "89 50 4E 47 0D 0A 1A 0A"
+#pragma extensions "png;apng"
+#pragma mime "image/png"
+#pragma endian big
+
+import std.core;
+import std.hash;
+
+enum ColorType : u8 {
+    Grayscale      = 0,
+    Truecolor      = 2,
+    Indexed        = 3,
+    GrayscaleAlpha = 4,
+    TruecolorAlpha = 6,
+};
+
+struct IHDR {
+    u32       width;
+    u32       height;
+    u8        bit_depth;
+    ColorType color_type;
+    u8        compression;
+    u8        filter;
+    u8        interlace;
+};
+
+struct Chunk {
+    u32     length;
+    char    type[4]                 [[color("accent1")]];
+    switch (type) {
+        case "IHDR": IHDR header;
+        case "tEXt": char text[length] [[encoding("latin1")]];
+        default:     u8 data[length] [[lazy]];
+    }
+    u32     crc                     [[format("hex"),
+                                      expect(crc == std::hash::crc32(addressof(type), length + 4),
+                                             "CRC が一致しません")]];
+};
+
+u8    signature[8] [[comment("PNG シグネチャ")]];
+Chunk chunks[until(last.type == "IEND" || std::eof())];
