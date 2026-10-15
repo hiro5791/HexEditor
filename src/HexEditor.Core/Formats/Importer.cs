@@ -25,6 +25,10 @@ public static class Importer
             FormatIds.Binary => DecodeBinary(input, tempDirectory, displayName, progress),
             _ when FormatIds.Encodings.Contains(format) => EncodingDecoders.Decode(format, input, options, tempDirectory, displayName, progress),
             _ when FormatIds.SourceArrays.Contains(format) => TextDecoders.DecodeSourceArray(input, options, tempDirectory, displayName, progress),
+
+            // プラグインのインポート形式 (08 の AUTO-31)。
+            _ when Plugins.PluginIntegration.FindImport(format) is { } plugin => Plugins.PluginIntegration.Import(plugin.Registration, plugin.Format, input,
+                tempDirectory, displayName, progress),
             _ => throw new ArgumentException($"インポートできない形式です: {format}", nameof(options)),
         };
     }
@@ -76,6 +80,14 @@ public static class Importer
     /// テキストとして判別できない内容は「バイナリ」。判別は「形式を選択して貼り付け」(EDIT-26) の自動判別と共通にする。
     /// </summary>
     public static string Detect(ReadOnlySpan<byte> head, bool complete = true)
+    {
+        string builtIn = DetectBuiltIn(head, complete);
+
+        // 本体の形式に当たらないものは、プラグインのインポート形式 (08 の AUTO-31) に判定させる。
+        return builtIn == FormatIds.Binary && !head.IsEmpty ? Plugins.PluginIntegration.DetectImport(head) ?? builtIn : builtIn;
+    }
+
+    private static string DetectBuiltIn(ReadOnlySpan<byte> head, bool complete)
     {
         if (head.IsEmpty)
         {

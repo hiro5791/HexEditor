@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- TD-AUTO-PLG-DEP-A が依存するライブラリ TestLib 1.0.0 (TC-AUTO-30-01)。V2 と同じアセンブリ名で別のバージョン。 -->
+  <PropertyGroup>
+    <AssemblyName>TestLib</AssemblyName>
+    <RootNamespace>TestLib</RootNamespace>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <DefineConstants>$(DefineConstants);TESTLIB_V1</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\TestLib.V2\TestLibInfo.cs" />
+  </ItemGroup>
+
+</Project>

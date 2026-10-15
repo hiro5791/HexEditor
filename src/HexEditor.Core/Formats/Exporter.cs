@@ -92,6 +92,13 @@ public static class Exporter
             throw new ArgumentException("IPS は IpsPatch で書き出します。", nameof(o));
         }
 
+        // プラグインのエクスポート形式 (08 の AUTO-31)。出力はプラグインが作るバイト列そのもの。
+        if (Plugins.PluginIntegration.FindExport(o.Format) is { } plugin)
+        {
+            Plugins.PluginIntegration.Export(plugin.Registration, plugin.Format, source, ranges, output, cancellationToken, progress);
+            return;
+        }
+
         // 出力の先頭に BOM を書き、それ以降は BOM なしで書く (StreamWriter に任せると Flush のたびに確かめるため)。
         Encoding encoding = EncodingOf(o.Encoding);
         if (o.Encoding == TextFileEncoding.Utf8Bom && output.Position == 0)

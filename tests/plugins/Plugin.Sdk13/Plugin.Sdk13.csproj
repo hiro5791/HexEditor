@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- TD-AUTO-PLG-SDK13: 1 つ新しいマイナーバージョンの SDK (SdkNext) でビルドしたプラグイン (TC-AUTO-29-02)。 -->
+  <ItemGroup>
+    <ProjectReference Include="..\SdkNext\SdkNext.csproj" Private="false" />
+  </ItemGroup>
+
+</Project>

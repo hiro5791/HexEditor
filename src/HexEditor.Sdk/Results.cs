@@ -137,3 +137,11 @@ public interface IEventSubscription
     /// <summary>Stops receiving the event. <ja>イベントの受け取りをやめる。</ja></summary>
     void Off();
 }
+
+/// <summary>A plugin and its state. <ja>プラグインと状態。</ja></summary>
+/// <param name="Id">Plugin ID. <ja>プラグイン ID。</ja></param>
+/// <param name="Name">Display name. <ja>表示名。</ja></param>
+/// <param name="Version">Version. <ja>バージョン。</ja></param>
+/// <param name="State"><c>enabled</c>, <c>disabled</c>, <c>failed</c>, <c>suspended</c> or <c>notLoaded</c>. <ja><c>enabled</c>・<c>disabled</c>・<c>failed</c>・<c>suspended</c>・<c>notLoaded</c>。</ja></param>
+/// <param name="Reason">Why it is not enabled, or null. <ja>有効でない理由。なければ null。</ja></param>
+public sealed record PluginInfo(string Id, string Name, string Version, string State, string? Reason);

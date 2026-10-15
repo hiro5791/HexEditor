@@ -95,6 +95,12 @@ internal sealed class JsBinder
         }
 
         Type runtime = value.GetType();
+        if (Api.PluginApiObjects.IsApi(value))
+        {
+            // プラグインがスクリプトに提供するオブジェクト (AUTO-31 の IScriptApiProvider): 公開のメンバーを持つ生きたオブジェクトとして包む。
+            return WrapperFor(value, runtime);
+        }
+
         if (AsyncItemType(runtime) is Type itemType)
         {
             return (JsValue)typeof(JsBinder).GetMethod(nameof(AsyncIterable), BindingFlags.NonPublic | BindingFlags.Instance)!

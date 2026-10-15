@@ -41,6 +41,9 @@
     <Copy SourceFiles="@(_HexComponentFiles)" DestinationFolder="$(OutDir)csharp-component" SkipUnchangedFiles="true" />
   </Target>
 
+  <!-- テスト用のプラグイン (08 の AUTO-29〜35。TD-AUTO-PLG-*)。参照はせず、出力をテストの出力の testplugins\<プロジェクト>\ に置く。 -->
+  <Import Project="..\plugins\TestPlugins.targets" />
+
   <!-- 引数をそのまま出すテスト用の実行ファイル (TestTarget の echo-args。TC-AUTO-18-03)。 -->
   <Target Name="CopyEchoArgs" AfterTargets="Build" Condition="'$(OS)' == 'Windows_NT'">
     <ItemGroup>

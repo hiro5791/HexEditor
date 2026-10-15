@@ -16,7 +16,12 @@ namespace HexEditor.Core.Scripting.Api;
 internal sealed class ScriptInspector(ScriptContext ctx) : IInspector
 {
     public IReadOnlyList<InspectorTypeInfo> Types =>
-        [.. InspectorTypes.All.Select(t => new InspectorTypeInfo(t.Id, ctx.Environment.Localize("Inspector_Row_" + t.Id), t.Size))];
+        [.. InspectorTypes.All.Select(t => new InspectorTypeInfo(t.Id, ctx.Environment.Localize("Inspector_Row_" + t.Id), t.Size)),
+            .. Plugins.PluginIntegration.InspectorTypes(Plugins.PluginManager.Current).Select(t => new InspectorTypeInfo(t.Id, t.Name, t.Size))];
+
+    /// <summary>プラグインの型 (AUTO-12 の受け入れ基準 2)。</summary>
+    private static Plugins.PluginIntegration.InspectorTypeEntry? PluginType(string typeId) =>
+        InspectorTypes.Find(typeId) is null ? Plugins.PluginIntegration.InspectorTypes(Plugins.PluginManager.Current).FirstOrDefault(t => t.Id == typeId) : null;
 
     private static InspectorType TypeOf(string typeId) =>
         InspectorTypes.Find(typeId) ?? throw new Sdk.ArgumentError(Msg.T($"インスペクタの型が不明です: {typeId} (inspector.types で一覧できます)", $"Unknown inspector type: {typeId} (see inspector.types for the list)"));
@@ -34,6 +39,18 @@ internal sealed class ScriptInspector(ScriptContext ctx) : IInspector
         if (document is not ScriptDocument doc)
         {
             throw new Sdk.ArgumentError(Msg.T("document にはドキュメントを指定してください。", "Specify a document for document."));
+        }
+
+        if (PluginType(typeId) is { } plugin)
+        {
+            // プラグインの型: インスペクタパネルと同じく、型が読むバイト数だけ渡す。読めない・止めたプラグインは値なし。
+            long po = doc.ResolveOffset(offset);
+            doc.CheckOffset(po, allowEnd: true);
+            DocumentSnapshot ps = doc.Snapshot;
+            byte[] pdata = new byte[(int)Math.Clamp(ps.Length - po, 0, Math.Max(0, plugin.Size))];
+            ScriptDocument.ReadExact(ps, po, pdata);
+            string? text = plugin.Decode(pdata, EndianOf(options) == Endianness.Big, uiThread: false);
+            return new SdkInspectorValue(text ?? string.Empty, text);
         }
 
         InspectorType type = TypeOf(typeId);

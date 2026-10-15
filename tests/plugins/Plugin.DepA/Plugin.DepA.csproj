@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- TD-AUTO-PLG-DEP-A: TestLib 1.0.0 に依存するプラグイン (TC-AUTO-30-01)。 -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\HexEditor.Sdk\HexEditor.Sdk.csproj" Private="false" />
+    <ProjectReference Include="..\TestLib.V1\TestLib.V1.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Plugin.DepB\DepPlugin.cs" />
+  </ItemGroup>
+
+</Project>
