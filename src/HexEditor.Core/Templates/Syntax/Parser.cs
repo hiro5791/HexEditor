@@ -17,7 +17,7 @@ internal sealed class Parser
     /// <summary>式・ブロックの入れ子の上限。</summary>
     public const int MaxNesting = 256;
 
-    private static readonly HashSet<string> Reserved =
+    internal static readonly HashSet<string> Reserved =
     [
         "struct", "union", "enum", "flags", "bitfield", "fn", "return", "if", "else", "switch", "case", "default", "for", "while",
         "do", "break", "continue", "local", "const", "import", "namespace", "using", "le", "be", "in", "section", "true", "false",

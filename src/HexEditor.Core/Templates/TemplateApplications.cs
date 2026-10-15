@@ -119,7 +119,8 @@ public sealed class TemplateApplication : IDisposable
     private bool _disposed;
 
     public TemplateApplication(TemplateApplicationInfo info, Func<TemplateDataSource> data, TemplateLoadOptions? loadOptions = null,
-        TemplateApplyOptions? applyOptions = null, TimeProvider? timeProvider = null, bool watchFiles = true)
+        TemplateApplyOptions? applyOptions = null, TimeProvider? timeProvider = null, bool watchFiles = true,
+        Func<string, TemplateProgram>? loader = null)
     {
         Info = info;
         _data = data;
@@ -127,8 +128,62 @@ public sealed class TemplateApplication : IDisposable
         _applyOptions = applyOptions ?? new TemplateApplyOptions();
         _time = timeProvider ?? TimeProvider.System;
         _watchFiles = watchFiles;
+        _loader = loader ?? (path => TemplateLoader.LoadFile(path, _loadOptions));
         _followOffset = info.StartOffset;
     }
+
+    private readonly Func<string, TemplateProgram> _loader;
+    private TemplateProgram? _unsaved;
+    private TemplateLimits? _limitOverride;
+
+    /// <summary>
+    /// 「試しに実行」(TPL-31 の仕様 4): 保存していないテンプレートの内容で評価する (null で解除し、ファイルを読み直す)。結果ツリーに
+    /// 「(未保存)」と表示する。
+    /// </summary>
+    public void SetUnsavedProgram(TemplateProgram? program)
+    {
+        _unsaved = program;
+        if (program is null)
+        {
+            Reevaluate();
+        }
+        else
+        {
+            Program = program;
+            Evaluate();
+        }
+    }
+
+    /// <summary>保存していない内容で評価している (「(未保存)」)。</summary>
+    public bool IsUnsaved => _unsaved is not null;
+
+    /// <summary>「上限を上げて再実行」(TPL-28 の仕様 3): 上限を上書きして評価し直す。</summary>
+    public void ReevaluateWithLimits(TemplateLimits limits)
+    {
+        _limitOverride = limits;
+        Evaluate();
+    }
+
+    /// <summary>今の評価の上限の上書き (「上限を上げて再実行」の後)。</summary>
+    public TemplateLimits? LimitOverride => _limitOverride;
+
+    /// <summary>今のカーソル位置 (追従)。</summary>
+    public long FollowOffset => Interlocked.Read(ref _followOffset);
+
+    /// <summary>適用の設定 (開始オフセット・エンディアン) を変えて評価し直す。</summary>
+    public void Update(TemplateApplicationInfo info)
+    {
+        Info = info;
+        if (info.Kind != TemplateApplyKind.Follow)
+        {
+            Interlocked.Exchange(ref _followOffset, info.StartOffset);
+        }
+
+        Evaluate();
+    }
+
+    /// <summary>評価を始めた (新しい結果)。評価の終わりは <see cref="ResultChanged"/>。</summary>
+    public event EventHandler<TemplateResult>? Started;
 
     public TemplateApplicationInfo Info { get; private set; }
 
@@ -219,8 +274,15 @@ public sealed class TemplateApplication : IDisposable
 
     private void Load()
     {
-        TemplateProgram program = TemplateLoader.LoadFile(Info.TemplatePath, _loadOptions);
-        TemplateMissing = !File.Exists(Info.TemplatePath) && program.HasErrors;
+        if (_unsaved is not null)
+        {
+            Program = _unsaved;
+            return;
+        }
+
+        TemplateProgram program = _loader(Info.TemplatePath);
+        TemplateMissing = !Info.TemplatePath.StartsWith(BundledTemplates.Root, StringComparison.Ordinal) && !File.Exists(Info.TemplatePath)
+            && program.HasErrors;
         Program = program;
         if (_watchFiles)
         {
@@ -241,7 +303,7 @@ public sealed class TemplateApplication : IDisposable
             StartOffset = Info.Kind == TemplateApplyKind.Follow ? Interlocked.Read(ref _followOffset) : Info.StartOffset,
             BigEndian = Info.BigEndian ?? _applyOptions.BigEndian,
             TypeName = Info.Kind == TemplateApplyKind.Follow ? Info.TypeName : null,
-            LimitOverride = Info.Kind == TemplateApplyKind.Follow ? FollowLimits : _applyOptions.LimitOverride,
+            LimitOverride = Info.Kind == TemplateApplyKind.Follow ? FollowLimits : _limitOverride ?? _applyOptions.LimitOverride,
         };
         TemplateResult? old;
         TemplateResult result;
@@ -260,6 +322,7 @@ public sealed class TemplateApplication : IDisposable
         }
 
         old?.Dispose();
+        Started?.Invoke(this, result);
         result.Completion.ContinueWith(_ => ResultChanged?.Invoke(this, EventArgs.Empty), TaskScheduler.Default);
     }
 

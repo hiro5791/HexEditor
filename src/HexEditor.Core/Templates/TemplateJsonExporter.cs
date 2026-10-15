@@ -32,6 +32,9 @@ public sealed record TemplateExportOptions
     /// AUTO-13 の <c>toJSON()</c> と AUTO-42 の出力を同じ形にするため)。
     /// </summary>
     public IReadOnlyList<KeyValuePair<string, string>> RootProperties { get; init; } = [];
+
+    /// <summary>書き出したノードの数の通知 (長時間処理の進捗。4,096 ノードごと)。</summary>
+    public Action<long>? Progress { get; init; }
 }
 
 /// <summary>
@@ -50,17 +53,34 @@ public static class TemplateJsonExporter
     public static void Write(TemplateNode node, Stream output, TemplateExportOptions? options = null, CancellationToken cancellationToken = default)
     {
         options ??= new TemplateExportOptions();
+
+        // 評価器のスレッドの中の例外 (書き込みの失敗・キャンセル) は、評価器に飲み込ませず呼び出し元に伝える
+        Exception? failure = null;
         node.Result.Invoke(() =>
         {
-            using var writer = new Utf8JsonWriter(output, new JsonWriterOptions
+            try
             {
-                Indented = options.Indented,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            });
-            WriteNode(writer, node, options, 0, options.Fields is null ? FieldMatch.All : FieldMatch.Ancestor, cancellationToken);
-            writer.Flush();
+                using var writer = new Utf8JsonWriter(output, new JsonWriterOptions
+                {
+                    Indented = options.Indented,
+                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                });
+                long count = 0;
+                WriteNode(writer, node, options, 0, options.Fields is null ? FieldMatch.All : FieldMatch.Ancestor, cancellationToken, ref count);
+                writer.Flush();
+                options.Progress?.Invoke(count);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
+            {
+                failure = ex;
+            }
+
             return 0;
         });
+        if (failure is not null)
+        {
+            System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw(failure);
+        }
     }
 
     public static string ToJson(TemplateNode node, TemplateExportOptions? options = null)
@@ -72,9 +92,21 @@ public static class TemplateJsonExporter
 
     public static string ToJson(TemplateResult result, TemplateExportOptions? options = null) => ToJson(result.Root, options);
 
-    private static void WriteNode(Utf8JsonWriter w, TemplateNode node, TemplateExportOptions o, int depth, FieldMatch match, CancellationToken ct)
+    private static void WriteNode(Utf8JsonWriter w, TemplateNode node, TemplateExportOptions o, int depth, FieldMatch match, CancellationToken ct,
+        ref long count)
     {
         ct.ThrowIfCancellationRequested();
+
+        // 結果全体をメモリに持たないよう、ためた分をストリームに書き出す (TPL-25 の「巨大ファイル」)
+        if (w.BytesPending > 64 * 1024)
+        {
+            w.Flush();
+        }
+
+        if ((++count & 4095) == 0)
+        {
+            o.Progress?.Invoke(count);
+        }
         w.WriteStartObject();
         if (depth == 0)
         {
@@ -144,12 +176,13 @@ public static class TemplateJsonExporter
 
         if (node.HasChildren && (o.MaxDepth is null || depth < o.MaxDepth) && !node.Attributes.Sealed && !node.IsByteOrCharArray)
         {
-            long count = node.ChildCount;
-            long limit = node.Kind == TemplateNodeKind.Array && o.MaxArrayElements is { } m ? Math.Min(m, count) : count;
+            long childCount = node.ChildCount;
+            IReadOnlyList<TemplateNode> kids = node.Children;
+            long limit = node.Kind == TemplateNodeKind.Array && o.MaxArrayElements is { } m ? Math.Min(m, childCount) : childCount;
             w.WriteStartArray("children");
             for (long i = 0; i < limit; i++)
             {
-                TemplateNode child = node.GetChild(i);
+                TemplateNode child = i < kids.Count ? kids[(int)i] : node.GetChild(i);
                 if (!child.Attributes.Export || (child.Attributes.Hidden && !o.IncludeHidden))
                 {
                     continue;
@@ -161,11 +194,11 @@ public static class TemplateJsonExporter
                     continue;
                 }
 
-                WriteNode(w, child, o, depth + 1, childMatch, ct);
+                WriteNode(w, child, o, depth + 1, childMatch, ct, ref count);
             }
 
             w.WriteEndArray();
-            if (limit < count)
+            if (limit < childCount)
             {
                 w.WriteBoolean("truncated", true);
             }

@@ -11,6 +11,11 @@ internal sealed partial class Evaluator
     {
         Step();
         _loc = s.Location;
+        if (Debugging)
+        {
+            DebugBefore(s, f);
+        }
+
         if (!RuntimeHelpers.TryEnsureSufficientExecutionStack())
         {
             throw Error(TemplateMessages.RecursionTooDeep, Limits.Recursion.ToString(System.Globalization.CultureInfo.InvariantCulture));
@@ -24,6 +29,14 @@ internal sealed partial class Evaluator
             case LocalDeclStmt l when !ReferenceEquals(l, _resolvingInstance) && Attr(l.Attributes, "instance") is not null:
                 DeclareInstance(l, l.Name, f);
                 return Flow.Normal;
+            case PatternDeclStmt p when Debugging:
+            {
+                int before = f.Children?.Count ?? 0;
+                DeclarePatterns(p, f);
+                DebugAfterPatterns(p, f, before);
+                return Flow.Normal;
+            }
+
             case PatternDeclStmt p:
                 DeclarePatterns(p, f);
                 return Flow.Normal;

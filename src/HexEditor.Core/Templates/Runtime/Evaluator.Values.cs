@@ -1264,29 +1264,33 @@ internal sealed partial class Evaluator
     internal bool EditsRawOnly(TemplateNode node) =>
         Attr(node.AttributeNodes, "read") is not null && Attr(node.AttributeNodes, "write") is null;
 
-    internal TemplateEditResult EncodeEdit(TemplateNode node, string input, bool raw)
+    internal TemplateEditResult EncodeEdit(TemplateNode node, string input, bool raw, bool padWithZeros = true)
     {
         TemplateEditBlock block = EditBlockOf(node);
         if (block != TemplateEditBlock.None)
         {
-            return new TemplateEditResult(null, block.ToString());
+            return new TemplateEditResult(null, block.ToString()) { Code = TemplateEditError.Blocked };
         }
 
         try
         {
-            return EncodeEditCore(node, input.Trim(), raw || EditsRawOnly(node));
+            return EncodeEditCore(node, input.Trim(), raw || EditsRawOnly(node), padWithZeros);
         }
         catch (TemplateError e)
         {
-            return new TemplateEditResult(null, e.Diagnostic.Message);
+            return new TemplateEditResult(null, e.Diagnostic.Message) { Code = TemplateEditError.WriteFunctionFailed };
         }
-        catch (Exception ex) when (ex is FormatException or OverflowException or ArgumentException)
+        catch (OverflowException ex)
         {
-            return new TemplateEditResult(null, ex.Message);
+            return new TemplateEditResult(null, ex.Message) { Code = TemplateEditError.OutOfRange };
+        }
+        catch (Exception ex) when (ex is FormatException or ArgumentException)
+        {
+            return new TemplateEditResult(null, ex.Message) { Code = TemplateEditError.Invalid };
         }
     }
 
-    private TemplateEditResult EncodeEditCore(TemplateNode node, string input, bool raw)
+    private TemplateEditResult EncodeEditCore(TemplateNode node, string input, bool raw, bool padWithZeros)
     {
         Frame f = node.Context ?? _root;
         if (node.Type is PrimType { IsChar: true } cp && node.Kind == TemplateNodeKind.Array || node.Kind == TemplateNodeKind.String)
@@ -1296,10 +1300,11 @@ internal sealed partial class Evaluator
             byte[] text = enc.GetBytes(input);
             if (text.Length > node.Size)
             {
-                return new TemplateEditResult(null, "too long");
+                return new TemplateEditResult(null, "too long") { Code = TemplateEditError.TooLong };
             }
 
-            byte[] buf = new byte[node.Size];
+            // 短い場合は残りを 0 で埋めるか、元のまま残す (TPL-22 の仕様 3)
+            byte[] buf = new byte[padWithZeros ? node.Size : text.Length];
             text.CopyTo(buf, 0);
             return new TemplateEditResult(buf, null) { Offset = node.Offset };
         }
@@ -1310,7 +1315,7 @@ internal sealed partial class Evaluator
             int w = node.BitSize!.Value;
             if (value < 0 || value >= (Int128.One << w))
             {
-                return new TemplateEditResult(null, "out of range");
+                return new TemplateEditResult(null, "out of range") { Code = TemplateEditError.OutOfRange };
             }
 
             return EncodeBits(node, (ulong)value);

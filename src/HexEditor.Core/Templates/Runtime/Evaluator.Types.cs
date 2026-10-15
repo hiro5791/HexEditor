@@ -640,7 +640,7 @@ internal sealed partial class Evaluator
 
     // ───────────── 属性 (TPL-13) ─────────────
 
-    private static readonly HashSet<string> KnownAttributes =
+    internal static readonly HashSet<string> KnownAttributes =
     [
         "color", "no_color", "name", "comment", "format", "format_entries", "read", "write", "hidden", "highlight_hidden", "inline",
         "sealed", "readonly", "lazy", "size", "align", "no_advance", "endian", "bit_order", "encoding", "base", "relative",

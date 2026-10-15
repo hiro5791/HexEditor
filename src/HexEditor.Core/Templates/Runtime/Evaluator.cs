@@ -552,6 +552,10 @@ internal sealed partial class Evaluator
     {
         node?.AddDiagnostic(d);
         _result.AddOutput(new TemplateOutputEntry(DateTime.UtcNow, d.Severity, d.Message, d));
+        if (_options.Debugger is not null)
+        {
+            DebugOnError(d);
+        }
     }
 
     public void Warn(TemplateNode? node, string code, params string[] args)
