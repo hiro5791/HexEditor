@@ -263,7 +263,8 @@ public sealed partial record PluginVersion(int Major, int Minor, int Patch, stri
 
     public static PluginVersion Parse(string text) => TryParse(text, out PluginVersion? v) ? v! : throw new FormatException(text);
 
-    [GeneratedRegex(@"^(\d{1,9})\.(\d{1,9})(?:\.(\d{1,9}))?(?:-([0-9A-Za-z.-]{1,64}))?(?:\+[0-9A-Za-z.-]{1,64})?$", RegexOptions.CultureInvariant)]
+    // プレリリース・ビルドの部分は英数字と - の識別子を . でつないだもの (フォルダ名にするため、空の識別子・末尾の . は許さない)。
+    [GeneratedRegex(@"^(\d{1,9})\.(\d{1,9})(?:\.(\d{1,9}))?(?:-([0-9A-Za-z-]{1,32}(?:\.[0-9A-Za-z-]{1,32}){0,7}))?(?:\+[0-9A-Za-z-]{1,32}(?:\.[0-9A-Za-z-]{1,32}){0,7})?$", RegexOptions.CultureInvariant)]
     private static partial Regex Pattern();
 
     public int CompareTo(PluginVersion? other)

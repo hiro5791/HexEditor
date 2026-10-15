@@ -681,13 +681,13 @@ public sealed partial class InspectorViewModel : ObservableObject
     /// <summary>行の値の入力を始める。書き換えられない行・読み取り専用では始めない。</summary>
     public bool BeginEdit(InspectorItemViewModel item)
     {
-        if (item.Kind != InspectorItemKind.Row || item.Group == InspectorGroup.Plugin || ReadOnly || _document is null)
+        if (item.Kind != InspectorItemKind.Row || ReadOnly || _document is null)
         {
             return false;
         }
 
         CancelEdit();
-        item.EditText = InspectorDecoder.EditText(item.TypeId, _data, _states, item.Endian, Options);
+        item.EditText = item.Group == InspectorGroup.Plugin ? item.FullText ?? string.Empty : InspectorDecoder.EditText(item.TypeId, _data, _states, item.Endian, Options);
         item.IsEditing = true;
         UpdateEdit(item, item.EditText);
         return true;
@@ -713,6 +713,16 @@ public sealed partial class InspectorViewModel : ObservableObject
     {
         DocumentViewModel doc = _document!;
         long available = doc.Document.Length - Origin;
+        if (item.Group == InspectorGroup.Plugin)
+        {
+            // プラグインの型 (08 の AUTO-31 の IInspectorType.Encode)。書き換えられない型・不正な値は理由を出す。
+            byte[]? bytes = Core.Plugins.PluginIntegration.InspectorTypes(Core.Plugins.PluginManager.Current).FirstOrDefault(t => t.Id == item.TypeId)?
+                .Encode(text, item.Endian == Endianness.Big);
+            return bytes is null ? InspectorEncodeResult.Fail(Loc.Get("Inspector_PluginNotWritable"))
+                : bytes.Length > available ? InspectorEncodeResult.Fail(Loc.Get("Inspector_NotEnough"))
+                : new InspectorEncodeResult(bytes, null);
+        }
+
         return InspectorEncoder.Encode(item.TypeId, text, item.Endian, Options, available, new EditorExpressionContext(doc.Editor), _data);
     }
 

@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using System.Text.Json.Nodes;
 using HexEditor.Core.Plugins;
 using HexEditor.Core.Scripting;
+using HexEditor.Core.Tests.Scripting;
 using HexEditor.Core.Tests.Support;
 using HexEditor.Sdk.Plugins;
 using HexEditor.TestData;
@@ -72,6 +74,42 @@ public sealed class PluginLoadingTests
         Assert.Equal(["TestLib 1.0.0", "TestLib 1.0.0"], t.OutputOf("dep-a").Where(l => l.StartsWith("TestLib", StringComparison.Ordinal)));
         Assert.Equal(["TestLib 2.0.0"], t.OutputOf("dep-b").Where(l => l.StartsWith("TestLib", StringComparison.Ordinal)));
         Assert.All(t.Manager!.Plugins, p => Assert.Equal(PluginState.Enabled, p.State));
+    }
+
+    [PerfMachineFact]
+    [Trait("TC", "TC-AUTO-30-02")]
+    [Trait("Category", "Performance")]
+    [Trait("Category", "Nightly")]
+    public async Task Ten_plugins_do_not_delay_the_startup()
+    {
+        // 起動の経路で行うのは、一覧を作るところまで (読み込みは最初のウィンドウを表示した後にバックグラウンドで行う。AUTO-30 の仕様 4)。
+        // アプリの起動時間 (00 の 11.1) は起動の性能テスト (TC-UI-xx) が測る。ここでは、プラグインの分が起動の経路を 2 秒以上延ばさないことと、
+        // 10 個すべてが読み込まれることを 10 回確かめる。
+        using var t = new PluginTestHost();
+        for (int i = 0; i < 10; i++)
+        {
+            t.Trust(t.Install(TestPlugins.Init200(i)), $"init{i:00}");
+        }
+
+        var startup = new List<TimeSpan>();
+        for (int round = 0; round < 10; round++)
+        {
+            var manager = new PluginManager(new PluginHostOptions
+            {
+                PluginsRoot = t.PluginsRoot, AppVersion = "1.0.0", Trust = new TrustStore(t.TrustFile), Verifier = new PluginTestHost.TestRootVerifier(t.Certificates.Root),
+                Prompts = t.Prompts, Output = t.Output,
+            });
+            var watch = Stopwatch.StartNew();
+            manager.Discover();
+            Task loading = manager.LoadAllAsync();
+            startup.Add(watch.Elapsed);
+            await loading;
+            Assert.Equal(10, manager.Plugins.Count(p => p.State == PluginState.Enabled));
+            Assert.Equal(10, manager.Registry.All.Count(e => e.Kind == PluginExtensionKinds.Command));
+        }
+
+        TimeSpan median = startup.Order().ElementAt(startup.Count / 2);
+        Assert.True(median < TimeSpan.FromSeconds(2), $"median {median.TotalMilliseconds:0} ms");
     }
 
     [Fact]

@@ -6077,4 +6077,5 @@ Downloaded from: {2}</value></data>
   <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Plugins</value></data>
   <data name="Inspector_Group_Plugin" xml:space="preserve"><value>Plugins</value></data>
   <data name="Inspector_PluginStopped" xml:space="preserve"><value>(stopped)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>This plugin type cannot be edited with this value.</value></data>
 </root>

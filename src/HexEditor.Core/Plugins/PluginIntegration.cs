@@ -94,6 +94,18 @@ public static class PluginIntegration
             bool endian = Registration.Guard.Invoke("HasEndian", () => Type.HasEndian, false) && bigEndian;
             return Registration.Guard.Invoke("Decode", () => Type.Decode(copy, endian), null, uiThread);
         }
+
+        /// <summary>値の文字列からバイト列を作る (書き換え)。書き換えられない型・不正な値・止めたプラグインは null。</summary>
+        public byte[]? Encode(string text, bool bigEndian)
+        {
+            if (Registration.Guard.IsStopped)
+            {
+                return null;
+            }
+
+            bool endian = Registration.Guard.Invoke("HasEndian", () => Type.HasEndian, false) && bigEndian;
+            return Registration.Guard.Invoke("Encode", () => Type.Encode(text, endian), null);
+        }
     }
 
     public static IReadOnlyList<InspectorTypeEntry> InspectorTypes(PluginManager? manager) => manager is null

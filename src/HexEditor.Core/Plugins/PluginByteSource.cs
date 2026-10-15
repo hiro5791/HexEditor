@@ -20,6 +20,9 @@ public sealed class PluginByteSource : ByteSourceBase
         _source = source;
         _capabilities = readOnly ? SourceCapabilities.None : SourceCapabilities.CanWrite;
         DisplayName = registration.Guard.Invoke("DisplayName", () => source.DisplayName, registration.DisplayName);
+
+        // 長さを変えられないデータソースとして扱うため、開いたときの長さに固定する (読み込みのたびにプラグインを呼ばない)。
+        _length = Math.Max(0, registration.Guard.Invoke("Length", () => source.Length, 0L));
         Identity = "plugin:" + registration.Id + ":" + Guid.NewGuid().ToString("N");
     }
 
@@ -36,7 +39,9 @@ public sealed class PluginByteSource : ByteSourceBase
 
     public override string Identity { get; }
 
-    public override long Length => Math.Max(0, _registration.Guard.Invoke("Length", () => _source.Length, 0L));
+    private readonly long _length;
+
+    public override long Length => _length;
 
     public override SourceCapabilities Capabilities => _capabilities;
 

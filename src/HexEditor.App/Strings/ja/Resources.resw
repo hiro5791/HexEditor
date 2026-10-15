@@ -6077,4 +6077,5 @@
   <data name="HexView_Menu_Plugins" xml:space="preserve"><value>プラグイン</value></data>
   <data name="Inspector_Group_Plugin" xml:space="preserve"><value>プラグイン</value></data>
   <data name="Inspector_PluginStopped" xml:space="preserve"><value>(停止中)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>このプラグインの型はこの値に書き換えられません。</value></data>
 </root>

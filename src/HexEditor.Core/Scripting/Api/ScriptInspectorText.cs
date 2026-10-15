@@ -102,6 +102,12 @@ internal sealed class ScriptInspector(ScriptContext ctx) : IInspector
 
     public byte[] Encode(string typeId, string valueText, SdkInspectorOptions? options = null) => ScriptErrorMap.Guard(() =>
     {
+        if (PluginType(typeId) is { } plugin)
+        {
+            return plugin.Encode(valueText, EndianOf(options) == Endianness.Big)
+                ?? throw new Sdk.ArgumentError(Msg.T($"値を変換できません: {valueText} (プラグインの型 {typeId})", $"Cannot convert the value: {valueText} (plugin type {typeId})"));
+        }
+
         _ = TypeOf(typeId);
         Core.Inspector.InspectorOptions panel = ctx.Dispatcher.Invoke(() => ctx.Environment.Inspector.Options);
         InspectorEncodeResult result = InspectorEncoder.Encode(typeId, valueText, EndianOf(options), panel, long.MaxValue);

@@ -552,6 +552,21 @@ public sealed partial class MainWindow : IPluginManagerHost
         }
 
         PluginDataMenu.Visibility = PluginDataMenu.Items.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+        // 表示 > パネル: プラグインのパネル (本体のパネルと同じ場所)。
+        if (MainMenu.Items.SelectMany(m => m.Items).OfType<MenuFlyoutSubItem>().FirstOrDefault(i => AutomationProperties.GetAutomationId(i) == "Command_Panels") is { } panels)
+        {
+            RemoveTagged(panels.Items);
+            var plugins = m.Registry.Usable(PluginExtensionKinds.Panel).ToList();
+            if (plugins.Count > 0)
+            {
+                panels.Items.Add(new MenuFlyoutSeparator { Tag = PluginMenuTag });
+                foreach (RegisteredExtension registration in plugins)
+                {
+                    panels.Items.Add(CommandItem("view.panel." + PluginService.PanelIdOf(registration.Id), registration.DisplayName, registration));
+                }
+            }
+        }
     }
 
     private static void RemoveTagged(IList<MenuFlyoutItemBase> items)

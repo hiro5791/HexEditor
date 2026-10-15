@@ -138,12 +138,14 @@ public sealed class PluginExtensionTests
             const api = app.plugins.get("test.sample").api;
             console.log(api.greeting + " " + api.twice(21));
             console.log(app.plugins.list().map(p => p.id + ":" + p.state).join(","));
+            console.log("encoded=" + Array.from(inspector.encode("test.sample.nibble-swap8", "21")).join(","));
             """);
         ScriptTestHost.AssertSucceeded(r);
         Assert.Contains("found=true", s.OutputText);
         Assert.Contains("21", s.OutputText);
         Assert.Contains("hello from sample 42", s.OutputText);
         Assert.Contains("test.sample:enabled", s.OutputText);
+        Assert.Contains("encoded=18", s.OutputText);
     }
 
     [PerfMachineFact]
