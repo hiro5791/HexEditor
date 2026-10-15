@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "HexEditor (plugin development)": {
+      "commandName": "Executable",
+      "executablePath": "$(HexEditorExe)",
+      "commandLineArgs": "--new-instance --plugin-dev \"$(TargetDir)\""
+    }
+  }
+}

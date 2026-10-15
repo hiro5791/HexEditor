@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="HexEditorPlugin1/HexEditorPlugin1.csproj" />
+  <Project Path="HexEditorPlugin1.Tests/HexEditorPlugin1.Tests.csproj" />
+</Solution>

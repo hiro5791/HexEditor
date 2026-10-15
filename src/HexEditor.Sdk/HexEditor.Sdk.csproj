@@ -18,6 +18,11 @@
       アセンブリのバージョンで「どの SDK でビルドしたか」を判定するため、マイナーバージョンまでをアセンブリのバージョンにする。
     -->
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <!-- NuGet パッケージ HexEditor.Sdk (AUTO-29 の仕様 1)。 -->
+    <IsPackable>true</IsPackable>
+    <PackageId>HexEditor.Sdk</PackageId>
+    <PackageVersion>$(HexSdkPackageVersion)</PackageVersion>
+    <Description>Automation API and plugin extension point interfaces for HexEditor.</Description>
   </PropertyGroup>
 
 </Project>

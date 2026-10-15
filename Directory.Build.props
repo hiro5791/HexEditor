@@ -40,6 +40,13 @@
     <HexMsixVersion>0.0.0.0</HexMsixVersion>
     <HexAssemblyVersion>0.0.0.0</HexAssemblyVersion>
   </PropertyGroup>
+  <!--
+    プラグイン SDK のパッケージの版 (08 の AUTO-29 の仕様 2。HexEditor.Sdk の SdkInfo.Version とアセンブリのバージョンに合わせる)。
+    アプリの版とは別に数える。
+  -->
+  <PropertyGroup>
+    <HexSdkPackageVersion>1.0.0</HexSdkPackageVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <Version>$(HexVersion)</Version>
     <Version Condition="'$(HexVersionValid)' != 'True'">0.0.0</Version>

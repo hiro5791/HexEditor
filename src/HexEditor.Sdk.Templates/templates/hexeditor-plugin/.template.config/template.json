@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "HexEditor",
+  "classifications": [ "HexEditor", "Plugin", "Library" ],
+  "identity": "HexEditor.Plugin.CSharp",
+  "name": "HexEditor plugin",
+  "description": "A HexEditor plugin that registers one command, with its manifest, a unit test project and a launch profile that starts HexEditor with --plugin-dev.",
+  "shortName": "hexeditor-plugin",
+  "sourceName": "HexEditorPlugin1",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "symbols": {
+    "pluginId": {
+      "type": "generated",
+      "generator": "casing",
+      "parameters": {
+        "source": "name",
+        "toLower": true
+      },
+      "replaces": "hexeditorplugin1"
+    }
+  }
+}

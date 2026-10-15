@@ -16,6 +16,10 @@
     <IsTrimmable>false</IsTrimmable>
     <!-- SDK のバージョン (HexEditor.Sdk と同じ。アプリのバージョンとは別に数える)。 -->
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <IsPackable>true</IsPackable>
+    <PackageId>HexEditor.Sdk.UI</PackageId>
+    <PackageVersion>$(HexSdkPackageVersion)</PackageVersion>
+    <Description>WinUI types for HexEditor plugin panels and settings pages.</Description>
   </PropertyGroup>
 
   <ItemGroup>

@@ -7,6 +7,8 @@
     <Project Path="src/HexEditor.Platform/HexEditor.Platform.csproj" />
     <Project Path="src/HexEditor.Scripting.CSharp/HexEditor.Scripting.CSharp.csproj" />
     <Project Path="src/HexEditor.Sdk/HexEditor.Sdk.csproj" />
+    <Project Path="src/HexEditor.Sdk.Templates/HexEditor.Sdk.Templates.csproj" />
+    <Project Path="src/HexEditor.Sdk.Testing/HexEditor.Sdk.Testing.csproj" />
     <Project Path="src/HexEditor.Sdk.UI/HexEditor.Sdk.UI.csproj" />
     <Project Path="src/HexEditor.ShellExtension/HexEditor.ShellExtension.csproj" />
   </Folder>

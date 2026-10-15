@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    dotnet new のテンプレート (08 の AUTO-29 の仕様 1: HexEditor.Sdk.Templates)。dotnet new hexeditor-plugin で、プラグインのひな形
+    (コマンドを 1 つ登録する)、マニフェスト plugin.json、テストのひな形、F5 で開発用のフォルダの指定 (plugin-dev) 付きでアプリを起動する起動設定 (AUTO-33 の仕様 3) を作る。
+    ビルドの出力はなく、templates\ の下をそのままパッケージに入れる。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageType>Template</PackageType>
+    <PackageId>HexEditor.Sdk.Templates</PackageId>
+    <PackageVersion>$(HexSdkPackageVersion)</PackageVersion>
+    <Title>HexEditor plugin templates</Title>
+    <Description>dotnet new templates for HexEditor plugins (hexeditor-plugin).</Description>
+    <PackageTags>dotnet-new;templates;hexeditor;plugin</PackageTags>
+    <IsPackable>true</IsPackable>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="templates\**\*" Exclude="templates\**\bin\**;templates\**\obj\**" />
+  </ItemGroup>
+
+</Project>
