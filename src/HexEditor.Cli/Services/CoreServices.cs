@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using HexEditor.Core.Engine;
+using HexEditor.Core.Plugins;
 using HexEditor.Core.Scripting;
 using HexEditor.Core.Scripting.CSharp;
 using HexEditor.Core.Templates;
@@ -163,6 +164,65 @@ public sealed class CoreScriptRunner(Func<ScriptFolders>? folders = null, Func<C
         };
         env.Ui = new CliScriptUi(env, request.Error);
         env.Templates = new TemplateScriptEngine(TemplateCatalog.CreateDefault(Path.Combine(scriptFolders.Settings, "templates")));
+        PluginManager? previousPlugins = PluginManager.Current;
+        try
+        {
+            LoadPlugins(scriptFolders, trust, env, request);
+            return RunCore(request, cancellationToken, scriptFolders, host, env);
+        }
+        finally
+        {
+            PluginManager.Current = previousPlugins;
+        }
+    }
+
+    /// <summary>
+    /// プラグイン (AUTO-30) を読み込む: アプリで「有効にする」を選んで信頼済みにしたものだけ (確認を出せないため)。管理者として実行中は
+    /// <c>--trust</c> がある場合だけ (AUTO-34 の仕様 8)。署名の失効の確認はキャッシュだけを使い、通信しない。
+    /// </summary>
+    private static void LoadPlugins(ScriptFolders folders, TrustStore trust, CoreScriptEnvironment env, ScriptRunRequest request)
+    {
+        string root = Path.Combine(folders.Settings, "plugins");
+        if (!Directory.Exists(root))
+        {
+            return;
+        }
+
+        var manager = new PluginManager(new PluginHostOptions
+        {
+            PluginsRoot = root,
+            AppVersion = env.AppVersion,
+            Trust = trust,
+            Verifier = new PluginVerifier(),
+            Prompts = null,
+            CommandLineTrust = request.Trust,
+            IsElevated = env.IsElevated,
+            HasUi = false,
+            UiLanguage = request.Language ?? "en",
+            Output = env.Output,
+        });
+        PluginManager.Current = manager;
+        PluginIntegration.Attach(manager);
+        manager.Discover();
+        manager.LoadAllAsync().GetAwaiter().GetResult();
+    }
+
+    private sealed class PluginVerifier : IPluginSignatureVerifier
+    {
+        public FileSignature Verify(string path)
+        {
+            Platform.Security.AuthenticodeVerifier.SignatureResult r = Platform.Security.AuthenticodeVerifier.VerifyPluginFile(path, offline: true);
+            return r.Status switch
+            {
+                Platform.Security.AuthenticodeVerifier.SignatureStatus.Valid => new FileSignature(PluginSignatureState.Valid, r.Publisher, r.Thumbprint, null, r.RevocationUnchecked),
+                Platform.Security.AuthenticodeVerifier.SignatureStatus.Unsigned => FileSignature.Unsigned,
+                _ => new FileSignature(PluginSignatureState.Invalid, Problem: $"0x{r.Code:X8}"),
+            };
+        }
+    }
+
+    private static int RunCore(ScriptRunRequest request, CancellationToken cancellationToken, ScriptFolders scriptFolders, ScriptHost host, CoreScriptEnvironment env)
+    {
 
         // 開いたファイル (仕様 2: 開いた順に app.documents に入り、最初のファイルが app.activeDocument)。
         var originals = new Dictionary<Document, string>();
