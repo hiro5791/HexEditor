@@ -66,7 +66,13 @@ public sealed partial class MainWindow
                 // テストが作ったテンプレートのファイル (一時フォルダ) を適用する
                 DocumentViewModel doc = Vm.Selected ?? throw new InvalidOperationException("No document.");
                 string file = request["file"]!.GetValue<string>();
-                AddTemplateApplication(doc, new TemplateApplicationInfo { TemplatePath = file, StartOffset = TestHookSettings.ReadLong(request["offset"], 0) });
+                AddTemplateApplication(doc, new TemplateApplicationInfo
+                {
+                    TemplatePath = file,
+                    StartOffset = TestHookSettings.ReadLong(request["offset"], 0),
+                    Kind = request["follow"]?.GetValue<bool>() == true ? TemplateApplyKind.Follow : TemplateApplyKind.Fixed,
+                    TypeName = request["type"]?.GetValue<string>(),
+                });
                 return new JsonObject();
             }
 
@@ -100,6 +106,28 @@ public sealed partial class MainWindow
                 return new JsonObject();
             }
 
+            case "expandAll":
+            {
+                // ノードとその子のグループ・要素をすべて開く (TC-TPL-21-02 の前提。開いた行は 100 万行を超える)
+                TemplateTreeItem item = await RevealForTestAsync(path!);
+                TemplateTreeModel model = TemplateVm.Model;
+                await model.ExpandAsync(item);
+                int i = model.IndexOf(item) + 1;
+                while (i < model.RowCount && model.ItemAt(i) is { } row && row.Depth > item.Depth)
+                {
+                    if (row.HasChildren && !row.IsExpanded)
+                    {
+                        await model.ExpandAsync(row);
+                    }
+
+                    i++;
+                }
+
+                return new JsonObject { ["rowCount"] = model.RowCount };
+            }
+
+            case "treeScrollMeasured":
+                return await TreeScrollMeasuredAsync((int)TestHookSettings.ReadLong(request["count"], 200));
             case "swatches":
             {
                 // 結果ツリーに描画されている色見本 (TPL-03 の仕様 4) の色
@@ -414,6 +442,7 @@ public sealed partial class MainWindow
         {
             if (path == "@app")
             {
+                await TemplateVm.Model.LoadRowDataAsync([root], force: true);
                 return root;
             }
 
@@ -451,6 +480,89 @@ public sealed partial class MainWindow
         {
             await Task.Delay(20);
         }
+    }
+
+    /// <summary>
+    /// 結果ツリーを 1 画面ずつ <paramref name="count"/> 回スクロールし (PageDown と同じ量)、フレームの間隔を記録する。続けてスクロールバーを
+    /// 先頭・中央・末尾に移し、それぞれ描画までの時間を計る (TC-TPL-21-02)。
+    /// </summary>
+    private async Task<JsonObject> TreeScrollMeasuredAsync(int count)
+    {
+        TemplatePanel panel = TemplatePanelView ?? throw new InvalidOperationException("No template panel.");
+        ScrollViewer scroller = FindDescendant<ScrollViewer>(panel.TreeList) ?? throw new InvalidOperationException("No scroll viewer.");
+        var intervals = new JsonArray();
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        double last = -1;
+        void OnRendering(object? sender, object e)
+        {
+            double now = watch.Elapsed.TotalMilliseconds;
+            if (last >= 0)
+            {
+                intervals.Add(now - last);
+            }
+
+            last = now;
+        }
+
+        async Task NextFrameAsync()
+        {
+            var done = new TaskCompletionSource();
+            void Once(object? s, object e)
+            {
+                Microsoft.UI.Xaml.Media.CompositionTarget.Rendering -= Once;
+                done.TrySetResult();
+            }
+
+            Microsoft.UI.Xaml.Media.CompositionTarget.Rendering += Once;
+            await done.Task;
+        }
+
+        Microsoft.UI.Xaml.Media.CompositionTarget.Rendering += OnRendering;
+        try
+        {
+            for (int i = 0; i < count; i++)
+            {
+                scroller.ChangeView(null, scroller.VerticalOffset + scroller.ViewportHeight, null, true);
+                await NextFrameAsync();
+            }
+        }
+        finally
+        {
+            Microsoft.UI.Xaml.Media.CompositionTarget.Rendering -= OnRendering;
+        }
+
+        var jumps = new JsonArray();
+        foreach (double fraction in new[] { 0.0, 0.5, 1.0 })
+        {
+            var t = System.Diagnostics.Stopwatch.StartNew();
+            scroller.ChangeView(null, scroller.ScrollableHeight * fraction, null, true);
+            scroller.UpdateLayout();
+            await NextFrameAsync();
+            jumps.Add(t.Elapsed.TotalMilliseconds);
+        }
+
+        return new JsonObject { ["intervals"] = intervals, ["jumps"] = jumps, ["rowCount"] = TemplateVm.Model.RowCount };
+    }
+
+    private static T? FindDescendant<T>(DependencyObject root)
+        where T : DependencyObject
+    {
+        var stack = new Stack<DependencyObject>([root]);
+        while (stack.Count > 0)
+        {
+            DependencyObject o = stack.Pop();
+            if (o is T found)
+            {
+                return found;
+            }
+
+            for (int i = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChildrenCount(o) - 1; i >= 0; i--)
+            {
+                stack.Push(Microsoft.UI.Xaml.Media.VisualTreeHelper.GetChild(o, i));
+            }
+        }
+
+        return null;
     }
 
     private JsonObject EditorStateForTest()
@@ -634,6 +746,13 @@ public sealed partial class MainWindow
                 return state;
             }
 
+            case "showDocument":
+                // ドキュメントのタブに切り替える (エディタのタブは開いたまま)
+                _activeToolPage = null;
+                UpdateToolPages();
+                SyncTabSelection();
+                FocusEditor();
+                break;
             case "breakpoint":
                 Need(page).ToggleBreakpoint((int)TestHookSettings.ReadLong(request["line"], 1));
                 break;

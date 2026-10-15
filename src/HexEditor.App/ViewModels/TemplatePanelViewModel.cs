@@ -296,7 +296,11 @@ public sealed partial class TemplatePanelViewModel : ObservableObject
 
         IsEvaluating = results.Any(r => !r.Completion.IsCompleted);
         long patterns = results.Sum(r => r.PatternCount);
-        StatusText = IsEvaluating ? Loc.Get("Tpl_Evaluating") : Loc.Format("Tpl_Evaluated", patterns.ToString("N0", CultureInfo.CurrentCulture));
+        // 上限で打ち切った結果があれば、途中までの表示であることを示す (TPL-26 の仕様 5、TPL-28)
+        TemplateResult? stopped = IsEvaluating ? null : results.FirstOrDefault(r => r.State == TemplateRunState.LimitReached);
+        StatusText = IsEvaluating ? Loc.Get("Tpl_Evaluating")
+            : stopped is not null ? Loc.Format("Tpl_EvaluatedPartial", patterns.ToString("N0", CultureInfo.CurrentCulture), Loc.Get("Tpl_LimitKind_" + stopped.LimitReached))
+            : Loc.Format("Tpl_Evaluated", patterns.ToString("N0", CultureInfo.CurrentCulture));
         int errors = results.Sum(r => r.ErrorCount);
         int warnings = results.Sum(r => r.WarningCount);
         CountsText = Loc.Format("Tpl_Counts", errors, warnings);

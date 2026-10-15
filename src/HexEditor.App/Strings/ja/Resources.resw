@@ -5785,23 +5785,23 @@
   <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>コードエディタ: 補完の候補を表示</value></data>
   <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>ほかん</value></data>
   <data name="SetCategory_templates" xml:space="preserve"><value>テンプレート</value></data>
-  <data name="Set_templates.autoApply" xml:space="preserve"><value>自動適用</value></data>
-  <data name="SetDesc_templates.autoApply" xml:space="preserve"><value>開いたファイルにテンプレートが合うとき (マジックナンバー・MIME・拡張子) の動作。</value></data>
-  <data name="SetOpt_templates.autoApply_suggest" xml:space="preserve"><value>提案する</value></data>
-  <data name="SetOpt_templates.autoApply_always" xml:space="preserve"><value>常に適用する</value></data>
-  <data name="SetOpt_templates.autoApply_none" xml:space="preserve"><value>何もしない</value></data>
-  <data name="Set_templates.autoReevaluate" xml:space="preserve"><value>編集後に自動で再評価</value></data>
-  <data name="SetDesc_templates.autoReevaluate" xml:space="preserve"><value>最後の編集から 500 ms 後に、適用中のテンプレートを評価し直す。オフにすると結果ツリーの「再実行」で評価する。</value></data>
-  <data name="Set_templates.coloring" xml:space="preserve"><value>構造体の色分け</value></data>
-  <data name="SetDesc_templates.coloring" xml:space="preserve"><value>テンプレートのパターンの範囲を Hex ビューで色分けする。</value></data>
-  <data name="Set_templates.coloringOpacity" xml:space="preserve"><value>色分けの不透明度 (%)</value></data>
-  <data name="SetDesc_templates.coloringOpacity" xml:space="preserve"><value>Hex ビューの背景に重ねる色分けの不透明度。</value></data>
-  <data name="Set_templates.folders" xml:space="preserve"><value>テンプレートのフォルダ</value></data>
-  <data name="SetDesc_templates.folders" xml:space="preserve"><value>利用者のテンプレートを探す追加のフォルダ。</value></data>
-  <data name="Set_templates.inspector" xml:space="preserve"><value>インスペクタ用テンプレート</value></data>
-  <data name="SetDesc_templates.inspector" xml:space="preserve"><value>[[inspector]] の型をデータインスペクタに出すテンプレート。</value></data>
-  <data name="Set_templates.preferences" xml:space="preserve"><value>テンプレートごとの設定</value></data>
-  <data name="SetDesc_templates.preferences" xml:space="preserve"><value>無効にしたテンプレート、自動適用から外したテンプレート、今後表示しない提案。</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>自動適用</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>開いたファイルにテンプレートが合うとき (マジックナンバー・MIME・拡張子) の動作。</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>提案する</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>常に適用する</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>何もしない</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>編集後に自動で再評価</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>最後の編集から 500 ms 後に、適用中のテンプレートを評価し直す。オフにすると結果ツリーの「再実行」で評価する。</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>構造体の色分け</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>テンプレートのパターンの範囲を Hex ビューで色分けする。</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>色分けの不透明度 (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Hex ビューの背景に重ねる色分けの不透明度。</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>テンプレートのフォルダ</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>利用者のテンプレートを探す追加のフォルダ。</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>インスペクタ用テンプレート</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>[[inspector]] の型をデータインスペクタに出すテンプレート。</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>テンプレートごとの設定</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>無効にしたテンプレート、自動適用から外したテンプレート、今後表示しない提案。</value></data>
   <data name="SetSection_TemplateManager" xml:space="preserve"><value>テンプレートの管理</value></data>
   <data name="SetSection_TemplateFolders" xml:space="preserve"><value>テンプレートのフォルダ</value></data>
   <data name="SetSection_TemplateList" xml:space="preserve"><value>テンプレートの一覧</value></data>
@@ -6035,4 +6035,9 @@
   <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>データのブレークポイント</value></data>
   <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>{0} を含むパターンを作るときにデバッガが止まります。</value></data>
   <data name="TplEd_ConvertError" xml:space="preserve"><value>{0} を HXT に変換できませんでした。</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>評価済み: {0} パターン ({1}の上限のため途中まで表示しています)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>ステップ数</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>パターン数</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>メモリ</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>時間</value></data>
 </root>

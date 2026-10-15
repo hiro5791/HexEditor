@@ -123,7 +123,7 @@ public sealed class TemplateEditingUiTests
             return path is not null;
         }, Wait, "the path containing " + part);
         await TemplateAsync(app, "filter", new JsonObject { ["text"] = string.Empty });
-        return path;
+        return path!;
     }
 
     [Fact]

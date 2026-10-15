@@ -44,11 +44,16 @@ public sealed class TemplateUiTests
 
     internal static async Task<JsonObject> RowAsync(AppSession app, string path)
     {
-        await TemplateAsync(app, "reveal", new JsonObject { ["path"] = path });
-        JsonObject row = [];
-        await app.WaitUntilAsync(async () => (row = Row(await TemplateAsync(app, "state", new JsonObject { ["rows"] = 2000 }), path))["loaded"]!.GetValue<bool>(),
-            Wait, "the row " + path);
-        return row;
+        // 再評価で木を作り直している間は行がないことがあるので、見つかるまで開き直す
+        JsonObject? row = null;
+        await app.WaitUntilAsync(async () =>
+        {
+            await TemplateAsync(app, "reveal", new JsonObject { ["path"] = path });
+            JsonObject state = await TemplateAsync(app, "state", new JsonObject { ["rows"] = 2000 });
+            row = state["rows"]!.AsArray().Select(r => r!.AsObject()).FirstOrDefault(r => r["path"]?.GetValue<string>() == path);
+            return row?["loaded"]!.GetValue<bool>() == true;
+        }, Wait, "the row " + path);
+        return row!;
     }
 
     /// <summary>テンプレートのテキストをファイルにして適用する。</summary>

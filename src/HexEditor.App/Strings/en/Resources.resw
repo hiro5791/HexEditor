@@ -5785,23 +5785,23 @@ Downloaded from: {2}</value></data>
   <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Code editor: Show completions</value></data>
   <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>intellisense</value></data>
   <data name="SetCategory_templates" xml:space="preserve"><value>Templates</value></data>
-  <data name="Set_templates.autoApply" xml:space="preserve"><value>Auto-apply</value></data>
-  <data name="SetDesc_templates.autoApply" xml:space="preserve"><value>What to do when a template matches a file you open (magic number, MIME type or extension).</value></data>
-  <data name="SetOpt_templates.autoApply_suggest" xml:space="preserve"><value>Suggest</value></data>
-  <data name="SetOpt_templates.autoApply_always" xml:space="preserve"><value>Always apply</value></data>
-  <data name="SetOpt_templates.autoApply_none" xml:space="preserve"><value>Do nothing</value></data>
-  <data name="Set_templates.autoReevaluate" xml:space="preserve"><value>Re-evaluate after editing</value></data>
-  <data name="SetDesc_templates.autoReevaluate" xml:space="preserve"><value>Evaluate applied templates again 500 ms after the last edit. When off, use Run again in the result tree.</value></data>
-  <data name="Set_templates.coloring" xml:space="preserve"><value>Structure coloring</value></data>
-  <data name="SetDesc_templates.coloring" xml:space="preserve"><value>Color the ranges of template patterns in the hex view.</value></data>
-  <data name="Set_templates.coloringOpacity" xml:space="preserve"><value>Coloring opacity (%)</value></data>
-  <data name="SetDesc_templates.coloringOpacity" xml:space="preserve"><value>Opacity of the structure coloring over the hex view background.</value></data>
-  <data name="Set_templates.folders" xml:space="preserve"><value>Template folders</value></data>
-  <data name="SetDesc_templates.folders" xml:space="preserve"><value>Additional folders searched for user templates.</value></data>
-  <data name="Set_templates.inspector" xml:space="preserve"><value>Inspector templates</value></data>
-  <data name="SetDesc_templates.inspector" xml:space="preserve"><value>Templates whose [[inspector]] types are shown in the data inspector.</value></data>
-  <data name="Set_templates.preferences" xml:space="preserve"><value>Template preferences</value></data>
-  <data name="SetDesc_templates.preferences" xml:space="preserve"><value>Disabled templates, templates excluded from auto-apply, and suppressed suggestions.</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Auto-apply</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>What to do when a template matches a file you open (magic number, MIME type or extension).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Suggest</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Always apply</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>Do nothing</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Re-evaluate after editing</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Evaluate applied templates again 500 ms after the last edit. When off, use Run again in the result tree.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Structure coloring</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>Color the ranges of template patterns in the hex view.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Coloring opacity (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Opacity of the structure coloring over the hex view background.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Template folders</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>Additional folders searched for user templates.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Inspector templates</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Templates whose [[inspector]] types are shown in the data inspector.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Template preferences</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Disabled templates, templates excluded from auto-apply, and suppressed suggestions.</value></data>
   <data name="SetSection_TemplateManager" xml:space="preserve"><value>Manage templates</value></data>
   <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Template folders</value></data>
   <data name="SetSection_TemplateList" xml:space="preserve"><value>Templates</value></data>
@@ -6035,4 +6035,9 @@ Type: {4}</value></data>
   <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Data breakpoint</value></data>
   <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>The debugger stops when a pattern containing {0} is created.</value></data>
   <data name="TplEd_ConvertError" xml:space="preserve"><value>Could not convert {0} to HXT.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Evaluated: {0} patterns (stopped at the {1} limit; showing partial results)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>step</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>pattern</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>memory</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>time</value></data>
 </root>

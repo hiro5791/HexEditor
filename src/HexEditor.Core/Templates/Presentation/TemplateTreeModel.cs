@@ -212,16 +212,31 @@ public sealed class TemplateTreeModel
             return replacement; // 待っている間に一覧から外れた (作り直した) 行は置き換えない
         }
 
+        // 開いていた行を開き直してから差し替える (いったん閉じた木が見えないように)
+        await RestoreCoreAsync(replacement, keys).ConfigureAwait(true);
+        index = _applications.IndexOf(application);
+        if (index < 0)
+        {
+            return replacement;
+        }
+
         replacement.IndexInParent = index;
         _applications[index] = replacement;
-
         Raise(TemplateTreeChangeAction.Reset, 0, 0);
-        await RestoreAsync(replacement, keys).ConfigureAwait(true);
         return replacement;
     }
 
     /// <summary>鍵が <paramref name="keys"/> にある行を開く (浅い順)。</summary>
     public async Task RestoreAsync(TemplateTreeItem item, IReadOnlySet<string> keys)
+    {
+        await RestoreCoreAsync(item, keys).ConfigureAwait(true);
+        if (item.Parent is null)
+        {
+            Raise(TemplateTreeChangeAction.Reset, 0, 0);
+        }
+    }
+
+    private async Task RestoreCoreAsync(TemplateTreeItem item, IReadOnlySet<string> keys)
     {
         if (!keys.Contains(item.Key) || !item.HasChildren)
         {
@@ -231,12 +246,7 @@ public sealed class TemplateTreeModel
         await ExpandAsync(item, raise: false).ConfigureAwait(true);
         foreach (TemplateTreeItem child in item.Children?.ToList() ?? [])
         {
-            await RestoreAsync(child, keys).ConfigureAwait(true);
-        }
-
-        if (item.Parent is null)
-        {
-            Raise(TemplateTreeChangeAction.Reset, 0, 0);
+            await RestoreCoreAsync(child, keys).ConfigureAwait(true);
         }
     }
 
