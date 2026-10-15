@@ -5697,7 +5697,7 @@
   <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>構造体の色分け(U)</value></data>
   <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>U</value></data>
   <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>構造体(T)</value></data>
-  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>テンプレートの出力(W)</value></data>
   <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>W</value></data>
   <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>構造体の解析結果(T)...</value></data>

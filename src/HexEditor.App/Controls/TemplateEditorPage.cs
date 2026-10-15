@@ -448,7 +448,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
         }
 
         bool hc = new Windows.UI.ViewManagement.AccessibilitySettings().HighContrast;
-        bool dark = ActualTheme == ElementTheme.Dark;
+        string theme = AnnotationBrushes.ThemeOf(this, hc);
         Color fg = ((SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"]).Color;
         int caretStart = _editor.Document.Selection.StartPosition;
         int caretEnd = _editor.Document.Selection.EndPosition;
@@ -463,7 +463,7 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
             {
                 foreach (TemplateClassifiedSpan s in TemplateLanguageService.Classify(_text))
                 {
-                    if (ColorOf(s.Class, dark) is { } c)
+                    if (TemplateBrushes.ThemeColor("TplSyntax" + s.Class + "Color", theme) is { } c)
                     {
                         _editor.Document.GetRange(s.Start, s.Start + s.Length).CharacterFormat.ForegroundColor = c;
                     }
@@ -481,7 +481,10 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
             {
                 int ls = PositionOf(line, 1);
                 int le = _text.IndexOf('\n', ls) is int nl and >= 0 ? nl : _text.Length;
-                _editor.Document.GetRange(ls, le).CharacterFormat.BackgroundColor = dark ? Color.FromArgb(255, 0x4D, 0x44, 0x00) : Color.FromArgb(255, 0xFF, 0xF4, 0xB0);
+                if (TemplateBrushes.ThemeColor("TplSyntaxDebugLineColor", theme) is { } back)
+                {
+                    _editor.Document.GetRange(ls, le).CharacterFormat.BackgroundColor = back;
+                }
             }
         }
         finally
@@ -491,19 +494,6 @@ public sealed partial class TemplateEditorPage : UserControl, ICodeEditorHost, I
             _suppressChange = false;
         }
     }
-
-    private static Color? ColorOf(TemplateTokenClass c, bool dark) => c switch
-    {
-        TemplateTokenClass.Keyword => dark ? Color.FromArgb(255, 0x56, 0x9C, 0xD6) : Color.FromArgb(255, 0x00, 0x00, 0xC0),
-        TemplateTokenClass.Type => dark ? Color.FromArgb(255, 0x4E, 0xC9, 0xB0) : Color.FromArgb(255, 0x26, 0x7F, 0x99),
-        TemplateTokenClass.Number => dark ? Color.FromArgb(255, 0xB5, 0xCE, 0xA8) : Color.FromArgb(255, 0x09, 0x86, 0x58),
-        TemplateTokenClass.String => dark ? Color.FromArgb(255, 0xCE, 0x91, 0x78) : Color.FromArgb(255, 0xA3, 0x15, 0x15),
-        TemplateTokenClass.Comment => dark ? Color.FromArgb(255, 0x6A, 0x99, 0x55) : Color.FromArgb(255, 0x00, 0x80, 0x00),
-        TemplateTokenClass.Pragma => dark ? Color.FromArgb(255, 0xC5, 0x86, 0xC0) : Color.FromArgb(255, 0xAF, 0x00, 0xDB),
-        TemplateTokenClass.Attribute => dark ? Color.FromArgb(255, 0x9C, 0xDC, 0xFE) : Color.FromArgb(255, 0x00, 0x10, 0x80),
-        TemplateTokenClass.Function => dark ? Color.FromArgb(255, 0xDC, 0xDC, 0xAA) : Color.FromArgb(255, 0x79, 0x5E, 0x26),
-        _ => null,
-    };
 
     /// <summary>位置のエラー・警告の理由 (波線の上のツールチップ)。</summary>
     public string? ToolTipAt(int line, int column) =>

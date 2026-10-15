@@ -291,7 +291,7 @@ public sealed partial class TemplateRowViewModel : ObservableObject
 
     /// <summary>色の型の値の色見本 (rgb565 など。TC-TPL-03-04)。</summary>
     public Brush? ValueSwatch => Data?.ValueArgb is { } argb
-        ? new SolidColorBrush(Windows.UI.Color.FromArgb(255, (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb)) : null;
+        ? new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb)) : null;
 
     public Visibility ValueSwatchVisibility => ValueSwatch is null ? Visibility.Collapsed : Visibility.Visible;
 

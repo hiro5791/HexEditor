@@ -40,7 +40,7 @@ internal static class TemplateBrushes
             Color fg = Base(color, theme);
             Color bg = BackgroundColor(scope);
             uint rgb = TemplateColoring.Blend((uint)(fg.R << 16 | fg.G << 8 | fg.B), (uint)(bg.R << 16 | bg.G << 8 | bg.B), opacity);
-            return Color.FromArgb(255, (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
+            return Microsoft.UI.ColorHelper.FromArgb(255, (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
         });
     }
 
@@ -63,9 +63,15 @@ internal static class TemplateBrushes
         if (ResourceKey(color) is not { } key)
         {
             uint rgb = color.Rgb;
-            return Color.FromArgb(255, (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
+            return Microsoft.UI.ColorHelper.FromArgb(255, (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
         }
 
+        return ThemeColor(key, theme) ?? ThemeColor("TemplateGrayColor", theme) ?? default;
+    }
+
+    /// <summary>テーマ (<c>Light</c> / <c>Dark</c> / <c>HighContrast</c>) の色のリソース。そのテーマにない色は null。</summary>
+    public static Color? ThemeColor(string key, string theme)
+    {
         foreach (ResourceDictionary dictionary in Application.Current.Resources.MergedDictionaries)
         {
             if (dictionary.ThemeDictionaries.TryGetValue(theme, out object? found) && found is ResourceDictionary themed
@@ -75,10 +81,10 @@ internal static class TemplateBrushes
             }
         }
 
-        return Microsoft.UI.Colors.Gray;
+        return null;
     }
 
     private static Color BackgroundColor(FrameworkElement scope) =>
         AnnotationBrushes.Get("SolidBackgroundFillColorBaseBrush", scope, false) is SolidColorBrush b ? b.Color
-        : scope.ActualTheme == ElementTheme.Dark ? Color.FromArgb(255, 0x20, 0x20, 0x20) : Color.FromArgb(255, 0xF3, 0xF3, 0xF3);
+        : ThemeColor("TplHexBackgroundColor", AnnotationBrushes.ThemeOf(scope, false)) ?? default;
 }

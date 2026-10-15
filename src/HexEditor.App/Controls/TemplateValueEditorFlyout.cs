@@ -110,7 +110,7 @@ public sealed class TemplateValueEditorFlyout
                     var picker = new ColorPicker { IsAlphaEnabled = false, IsMoreButtonVisible = false, ColorSpectrumShape = ColorSpectrumShape.Ring };
                     if (uint.TryParse(session.InitialText.TrimStart('#'), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint rgb))
                     {
-                        picker.Color = Windows.UI.Color.FromArgb(255, (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
+                        picker.Color = Microsoft.UI.ColorHelper.FromArgb(255, (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
                     }
 
                     AutomationProperties.SetAutomationId(picker, "Tpl_EditColor");

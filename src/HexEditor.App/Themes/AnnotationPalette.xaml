@@ -71,9 +71,23 @@
             <Color x:Key="AnnotationAnalysisBackgroundColor">#FFDFF6DD</Color>
             <SolidColorBrush x:Key="AnnotationAnalysisBackgroundBrush" Color="{StaticResource AnnotationAnalysisBackgroundColor}" />
             <!--  テンプレートの色分け (TPL-23 の仕様 2・3、TPL-13 の color 属性)。不透明度 (既定 35%) で Hex ビューの背景に重ねて塗る。  -->
-            <SolidColorBrush x:Key="TemplateFollowBorderBrush" Color="#FF0078D4" />
-            <SolidColorBrush x:Key="TemplateDebugMarkerBrush" Color="#FFC50F1F" />
-            <SolidColorBrush x:Key="TemplateBoundaryBrush" Color="#FF605E5C" />
+            <Color x:Key="TplFollowBorderColor">#FF0078D4</Color>
+            <SolidColorBrush x:Key="TemplateFollowBorderBrush" Color="{StaticResource TplFollowBorderColor}" />
+            <Color x:Key="TplDebugMarkerColor">#FFC50F1F</Color>
+            <SolidColorBrush x:Key="TemplateDebugMarkerBrush" Color="{StaticResource TplDebugMarkerColor}" />
+            <Color x:Key="TplBoundaryColor">#FF605E5C</Color>
+            <SolidColorBrush x:Key="TemplateBoundaryBrush" Color="{StaticResource TplBoundaryColor}" />
+            <!--  テンプレートエディタの構文の色分けとデバッガの現在の行 (TPL-31・TPL-32)。ハイコントラストでは色分けしない。  -->
+            <Color x:Key="TplSyntaxKeywordColor">#FF0000C0</Color>
+            <Color x:Key="TplSyntaxTypeColor">#FF267F99</Color>
+            <Color x:Key="TplSyntaxNumberColor">#FF098658</Color>
+            <Color x:Key="TplSyntaxStringColor">#FFA31515</Color>
+            <Color x:Key="TplSyntaxCommentColor">#FF008000</Color>
+            <Color x:Key="TplSyntaxPragmaColor">#FFAF00DB</Color>
+            <Color x:Key="TplSyntaxAttributeColor">#FF001080</Color>
+            <Color x:Key="TplSyntaxFunctionColor">#FF795E26</Color>
+            <Color x:Key="TplSyntaxDebugLineColor">#FFFFF4B0</Color>
+            <Color x:Key="TplHexBackgroundColor">#FFF3F3F3</Color>
             <Color x:Key="TemplateAccent1Color">#FF0078D4</Color>
             <Color x:Key="TemplateAccent2Color">#FFE74856</Color>
             <Color x:Key="TemplateAccent3Color">#FF00B294</Color>
@@ -159,9 +173,23 @@
             <Color x:Key="AnnotationAnalysisBackgroundColor">#FF1E3A1A</Color>
             <SolidColorBrush x:Key="AnnotationAnalysisBackgroundBrush" Color="{StaticResource AnnotationAnalysisBackgroundColor}" />
             <!--  テンプレートの色分け (TPL-23 の仕様 2・3、TPL-13 の color 属性)。不透明度 (既定 35%) で Hex ビューの背景に重ねて塗る。  -->
-            <SolidColorBrush x:Key="TemplateFollowBorderBrush" Color="#FF4CC2FF" />
-            <SolidColorBrush x:Key="TemplateDebugMarkerBrush" Color="#FFFF99A4" />
-            <SolidColorBrush x:Key="TemplateBoundaryBrush" Color="#FFC8C6C4" />
+            <Color x:Key="TplFollowBorderColor">#FF4CC2FF</Color>
+            <SolidColorBrush x:Key="TemplateFollowBorderBrush" Color="{StaticResource TplFollowBorderColor}" />
+            <Color x:Key="TplDebugMarkerColor">#FFFF99A4</Color>
+            <SolidColorBrush x:Key="TemplateDebugMarkerBrush" Color="{StaticResource TplDebugMarkerColor}" />
+            <Color x:Key="TplBoundaryColor">#FFC8C6C4</Color>
+            <SolidColorBrush x:Key="TemplateBoundaryBrush" Color="{StaticResource TplBoundaryColor}" />
+            <!--  テンプレートエディタの構文の色分けとデバッガの現在の行 (TPL-31・TPL-32)。ハイコントラストでは色分けしない。  -->
+            <Color x:Key="TplSyntaxKeywordColor">#FF569CD6</Color>
+            <Color x:Key="TplSyntaxTypeColor">#FF4EC9B0</Color>
+            <Color x:Key="TplSyntaxNumberColor">#FFB5CEA8</Color>
+            <Color x:Key="TplSyntaxStringColor">#FFCE9178</Color>
+            <Color x:Key="TplSyntaxCommentColor">#FF6A9955</Color>
+            <Color x:Key="TplSyntaxPragmaColor">#FFC586C0</Color>
+            <Color x:Key="TplSyntaxAttributeColor">#FF9CDCFE</Color>
+            <Color x:Key="TplSyntaxFunctionColor">#FFDCDCAA</Color>
+            <Color x:Key="TplSyntaxDebugLineColor">#FF4D4400</Color>
+            <Color x:Key="TplHexBackgroundColor">#FF202020</Color>
             <Color x:Key="TemplateAccent1Color">#FF4CC2FF</Color>
             <Color x:Key="TemplateAccent2Color">#FFFF99A4</Color>
             <Color x:Key="TemplateAccent3Color">#FF00E5C7</Color>
