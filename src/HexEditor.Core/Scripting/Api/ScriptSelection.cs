@@ -61,7 +61,7 @@ internal sealed class ScriptSelection(ScriptDocument doc) : ISelection
         long start = doc.ResolveOffset(startOffset);
         if (rows < 1 || columns < 1)
         {
-            throw new Sdk.ArgumentError("rows と columns は 1 以上にしてください。");
+            throw new Sdk.ArgumentError(Msg.T("rows と columns は 1 以上にしてください。", "rows and columns must be 1 or greater."));
         }
 
         doc.CheckOffset(start, allowEnd: false);
@@ -70,7 +70,7 @@ internal sealed class ScriptSelection(ScriptDocument doc) : ISelection
             long end = start + (rows - 1) * e.BytesPerRow + (columns - 1);
             if (end >= e.Document.Length)
             {
-                throw new Sdk.RangeError("矩形がドキュメントの外に出ます。");
+                throw new Sdk.RangeError(Msg.T("矩形がドキュメントの外に出ます。", "The rectangle extends outside the document."));
             }
 
             e.SelectRectangle(start, end);
@@ -82,7 +82,7 @@ internal sealed class ScriptSelection(ScriptDocument doc) : ISelection
     {
         if (results.Count > MaxResults)
         {
-            throw new LimitError($"マルチ選択にできるのは {MaxResults:N0} 件までです ({results.Count:N0} 件)。") { Limit = "count" };
+            throw new LimitError(Msg.T($"マルチ選択にできるのは {MaxResults:N0} 件までです ({results.Count:N0} 件)。", $"At most {MaxResults:N0} ranges can be selected at once ({results.Count:N0} ranges).")) { Limit = "count" };
         }
 
         long length = doc.Snapshot.Length;
@@ -90,7 +90,7 @@ internal sealed class ScriptSelection(ScriptDocument doc) : ISelection
         {
             if (r.Start < 0 || r.Length < 0 || r.End > length)
             {
-                throw new Sdk.RangeError($"範囲がドキュメントの外です: 0x{r.Start:X}+0x{r.Length:X}");
+                throw new Sdk.RangeError(Msg.T($"範囲がドキュメントの外です: 0x{r.Start:X}+0x{r.Length:X}", $"The range is outside the document: 0x{r.Start:X}+0x{r.Length:X}"));
             }
         }
 
@@ -99,7 +99,7 @@ internal sealed class ScriptSelection(ScriptDocument doc) : ISelection
 
     private static bool Check(SelectionResult result) => result switch
     {
-        SelectionResult.TooManyElements or SelectionResult.Truncated or SelectionResult.TooManyCarets => throw new LimitError("選択できる範囲の数の上限を超えました。") { Limit = "count" },
+        SelectionResult.TooManyElements or SelectionResult.Truncated or SelectionResult.TooManyCarets => throw new LimitError(Msg.T("選択できる範囲の数の上限を超えました。", "The limit on the number of selectable ranges was exceeded.")) { Limit = "count" },
         _ => true,
     };
 }
@@ -166,5 +166,5 @@ public static class ScriptColors
     }
 
     private static Sdk.ArgumentError Unknown(string name) =>
-        new($"色の名前が不明です: {name} ({string.Join(", ", Names)}、または #RRGGBB)");
+        new(Msg.T($"色の名前が不明です: {name} ({string.Join(", ", Names)}、または #RRGGBB)", $"Unknown color name: {name} ({string.Join(", ", Names)}, or #RRGGBB)"));
 }

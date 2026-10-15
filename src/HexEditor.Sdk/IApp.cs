@@ -81,7 +81,7 @@ public interface IApp
     /// <see cref="Stop"/> is called or the user stops it.
     /// <ja>イベントを購読する: <c>documentOpened</c>・<c>documentClosed</c>・<c>activeDocumentChanged</c>・<c>beforeSave</c>・<c>afterSave</c>・<c>selectionChanged</c> (100 ms ごとにまとめる)。購読したスクリプトは <see cref="Stop"/> を呼ぶか停止するまで常駐する。</ja>
     /// </summary>
-    [TsType("IEventSubscription")]
+    [TsType("EventSubscription")]
     IEventSubscription On(string eventName, [TsType("(event: ScriptEventArgs) => void")] Action<ScriptEventArgs> handler);
 
     /// <summary>Ends the running script. <ja>実行中のスクリプト自身を終了する。</ja></summary>

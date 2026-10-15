@@ -153,12 +153,21 @@ public sealed class ScriptContext : IDisposable
     /// <summary>停止の第 1 段階: キャンセルを求める (AUTO-01 の仕様 8)。猶予の後に強制中断する。</summary>
     public void RequestStop()
     {
-        if (_stop.IsCancellationRequested)
+        try
         {
+            if (_stop.IsCancellationRequested)
+            {
+                return;
+            }
+
+            _stop.Cancel();
+        }
+        catch (ObjectDisposedException)
+        {
+            // 実行は終わっている。
             return;
         }
 
-        _stop.Cancel();
         Host.ScheduleForceStop(this);
     }
 
@@ -239,7 +248,7 @@ public sealed class ScriptContext : IDisposable
             }
         }
 
-        throw new PermissionError($"許可「{permission}」がありません: {detail}", permission);
+        throw new PermissionError(Msg.T($"許可「{permission}」がありません: {detail}", $"The permission \"{permission}\" is not granted: {detail}"), permission);
     }
 
     /// <summary>利用者がダイアログで選んだパスを、この実行中に限り扱えるようにする (AUTO-16 の仕様 1、AUTO-18 の仕様 1)。</summary>
@@ -331,7 +340,7 @@ public sealed class ScriptContext : IDisposable
 
         if (doc.Document.IsReadOnly)
         {
-            throw new ReadOnlyError($"ドキュメント「{doc.Name}」は読み取り専用です。");
+            throw new ReadOnlyError(Msg.T($"ドキュメント「{doc.Name}」は読み取り専用です。", $"The document \"{doc.Name}\" is read-only."));
         }
 
         session = new WriteSession(this, doc);
@@ -391,7 +400,7 @@ public sealed class ScriptContext : IDisposable
     {
         if (_stop.IsCancellationRequested)
         {
-            throw new CanceledError("スクリプトは停止されました。");
+            throw new CanceledError(Msg.T("スクリプトは停止されました。", "The script was stopped."));
         }
     }
 
@@ -452,6 +461,7 @@ public sealed class ScriptContext : IDisposable
             }
         }
 
+        Run.IsResident = false;
         _ended.TrySetResult();
         return modified;
     }
@@ -511,7 +521,7 @@ internal sealed class WriteSession(ScriptContext context, ScriptDocument documen
         }
         catch (OperationCanceledException)
         {
-            throw new CanceledError("書き込みの順番を待っている間にスクリプトが停止されました。");
+            throw new CanceledError(Msg.T("書き込みの順番を待っている間にスクリプトが停止されました。", "The script was stopped while waiting for its turn to write."));
         }
 
         // 排他の表示 (InfoBar と編集の排他) が UI スレッドで済むのを待つ。
@@ -523,7 +533,7 @@ internal sealed class WriteSession(ScriptContext context, ScriptDocument documen
     {
         if (Doc.IsDisposed)
         {
-            throw new ArgumentError($"ドキュメント「{Document.Name}」は閉じられています。");
+            throw new ArgumentError(Msg.T($"ドキュメント「{Document.Name}」は閉じられています。", $"The document \"{Document.Name}\" has been closed."));
         }
 
         bool locked = Doc.IsEditLocked;
@@ -554,7 +564,7 @@ internal sealed class WriteSession(ScriptContext context, ScriptDocument documen
         CloseGroup();
         if (Doc.IsDisposed)
         {
-            throw new ArgumentError($"ドキュメント「{Document.Name}」は閉じられています。");
+            throw new ArgumentError(Msg.T($"ドキュメント「{Document.Name}」は閉じられています。", $"The document \"{Document.Name}\" has been closed."));
         }
 
         bool locked = Doc.IsEditLocked;

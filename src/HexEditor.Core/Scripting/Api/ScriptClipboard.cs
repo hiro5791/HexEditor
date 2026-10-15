@@ -62,7 +62,7 @@ internal sealed class ScriptClipboard(ScriptContext ctx) : IClipboard
         byte[] bytes = ScriptDocument.PatternBytes(data, allowRandom: false);
         if (bytes.Length > OutputLimit)
         {
-            throw new LimitError("クリップボードに置ける大きさの上限を超えます。") { Limit = "size" };
+            throw new LimitError(Msg.T("クリップボードに置ける大きさの上限を超えます。", "This exceeds the size limit for the clipboard.")) { Limit = "size" };
         }
 
         ctx.Dispatcher.Invoke(() => ctx.Environment.Clipboard.SetBytes(bytes, HexText.Format(bytes)));
@@ -87,12 +87,12 @@ internal sealed class ScriptClipboard(ScriptContext ctx) : IClipboard
     {
         if (document is not ScriptDocument doc)
         {
-            throw new Sdk.ArgumentError("document にはドキュメントを指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("document にはドキュメントを指定してください。", "Specify a document for document."));
         }
 
         if (!Formats.TryGetValue(formatId, out CopyFormat format))
         {
-            throw new Sdk.ArgumentError($"形式が不明です: {formatId} ({string.Join(", ", Formats.Keys)})");
+            throw new Sdk.ArgumentError(Msg.T($"形式が不明です: {formatId} ({string.Join(", ", Formats.Keys)})", $"Unknown format: {formatId} ({string.Join(", ", Formats.Keys)})"));
         }
 
         SdkRange r = doc.CheckedRange(range);
@@ -109,14 +109,14 @@ internal sealed class ScriptClipboard(ScriptContext ctx) : IClipboard
 
         if (CopyFormatter.Validate(format, copy, r.Start, r.Length) is CopyOptionError error)
         {
-            throw new Sdk.ArgumentError($"Copy As の設定が正しくありません: {error}");
+            throw new Sdk.ArgumentError(Msg.T($"Copy As の設定が正しくありません: {error}", $"Invalid Copy As settings: {error}"));
         }
 
         DocumentSnapshot snapshot = doc.Snapshot;
         void Read(long offset, Span<byte> dest) => ScriptDocument.ReadExact(snapshot, offset, dest);
         if (CopyFormatter.EstimateChars(format, copy, Read, r.Start, r.Length) > OutputLimit)
         {
-            throw new LimitError("Copy As の出力の上限 (64 MiB) を超えます。exportRange でファイルに書き出してください。") { Limit = "size" };
+            throw new LimitError(Msg.T("Copy As の出力の上限 (64 MiB) を超えます。exportRange でファイルに書き出してください。", "This exceeds the Copy As output limit (64 MiB). Write to a file with exportRange.")) { Limit = "size" };
         }
 
         var writer = new StringWriter(CultureInfo.InvariantCulture);

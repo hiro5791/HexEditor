@@ -45,7 +45,7 @@ internal static class JsScriptRunner
     private static string LoadPrelude()
     {
         using Stream stream = typeof(JsScriptRunner).Assembly.GetManifestResourceStream("HexEditor.Scripting.prelude.js")
-            ?? throw new InvalidOperationException("prelude.js がありません。");
+            ?? throw new InvalidOperationException(Msg.T("prelude.js がありません。", "prelude.js is missing."));
         using var reader = new StreamReader(stream);
         return reader.ReadToEnd();
     }
@@ -153,7 +153,7 @@ internal sealed class JsSession : IScriptThread, IDisposable
         }
         catch (OperationCanceledException)
         {
-            throw new CanceledError("スクリプトは停止されました。");
+            throw new CanceledError(Msg.T("スクリプトは停止されました。", "The script was stopped."));
         }
 
         return tcs.Task.GetAwaiter().GetResult();
@@ -234,7 +234,7 @@ internal sealed class JsSession : IScriptThread, IDisposable
         }
         catch (ScriptTerminatedException ex)
         {
-            return ex.Normal || Context.StopCalled ? ScriptExecution.Success : ScriptExecution.Stopped("強制的に中断しました。");
+            return ex.Normal || Context.StopCalled ? ScriptExecution.Success : ScriptExecution.Stopped(Msg.T("強制的に中断しました。", "Forcibly interrupted."));
         }
         catch (ScriptLimitExceededException ex)
         {
@@ -242,12 +242,12 @@ internal sealed class JsSession : IScriptThread, IDisposable
         }
         catch (RecursionDepthOverflowException)
         {
-            string message = $"再帰の深さの上限 {_limits.RecursionDepth} を超えました。";
+            string message = Msg.T($"再帰の深さの上限 {_limits.RecursionDepth} を超えました。", $"The recursion depth limit of {_limits.RecursionDepth} was exceeded.");
             return ScriptExecution.Error(ScriptFailure.Limit, message, [Location(message)]);
         }
         catch (Acornima.ParseErrorException ex)
         {
-            return ScriptExecution.Error(ScriptFailure.ScriptError, "構文エラー: " + ex.Description,
+            return ScriptExecution.Error(ScriptFailure.ScriptError, Msg.T("構文エラー: ", "Syntax error: ") + ex.Description,
                 [new ScriptDiagnostic(ex.Description, ex.SourceFile ?? Context.Path, ex.LineNumber, ex.Column, "SyntaxError")]);
         }
         catch (JavaScriptException ex)
@@ -256,7 +256,7 @@ internal sealed class JsSession : IScriptThread, IDisposable
         }
         catch (OutOfMemoryException)
         {
-            string message = $"メモリの上限 {ExecutionBudget.FormatBytes(_limits.MemoryBytes)} を超えました。";
+            string message = Msg.T($"メモリの上限 {ExecutionBudget.FormatBytes(_limits.MemoryBytes)} を超えました。", $"The memory limit of {ExecutionBudget.FormatBytes(_limits.MemoryBytes)} was exceeded.");
             return ScriptExecution.Error(ScriptFailure.Limit, message, [Location(message)]);
         }
     }

@@ -134,9 +134,9 @@ internal sealed class ScriptParameters(ScriptHost host, IScriptEnvironment env)
         {
             "true" or "1" or "yes" or "on" => true,
             "false" or "0" or "no" or "off" or "" => false,
-            _ => throw new ArgumentError($"true か false を指定してください: {text}"),
+            _ => throw new ArgumentError(Msg.T($"true か false を指定してください: {text}", $"Specify true or false: {text}")),
         },
-        "choice" when choices is { Count: > 0 } && !choices.Contains(text) => throw new ArgumentError($"選択肢にない値です: {text}"),
+        "choice" when choices is { Count: > 0 } && !choices.Contains(text) => throw new ArgumentError(Msg.T($"選択肢にない値です: {text}", $"Not one of the choices: {text}")),
         _ => text,
     };
 }
@@ -178,7 +178,7 @@ public sealed class ScriptStorageStore(string folder)
         string text = values.ToJsonString();
         if (System.Text.Encoding.UTF8.GetByteCount(text) > LimitBytes)
         {
-            throw new LimitError("script.storage の上限 1 MB を超えます。") { Limit = "storage" };
+            throw new LimitError(Msg.T("script.storage の上限 1 MB を超えます。", "This exceeds the script.storage limit of 1 MB.")) { Limit = "storage" };
         }
 
         lock (_lock)

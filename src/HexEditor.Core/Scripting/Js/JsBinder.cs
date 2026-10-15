@@ -230,11 +230,11 @@ internal sealed class JsBinder
         foreach (PropertyInfo p in shape.Properties)
         {
             PropertyInfo prop = p;
-            var getter = new ClrFunction(_engine, "get " + JsName(prop), (_, _) => Call(() => Wrap(prop.GetValue(target), prop.PropertyType)));
+            var getter = new ClrFunction(_engine, "get " + JsName(prop), (_, _) => Call(() => Wrap(prop.GetMethod!.Invoke(target, BindingFlags.DoNotWrapExceptions, null, null, CultureInfo.InvariantCulture), prop.PropertyType)));
             ClrFunction? setter = prop.CanWrite
                 ? new ClrFunction(_engine, "set " + JsName(prop), (_, args) => Call(() =>
                 {
-                    prop.SetValue(target, ToClr(args.Length > 0 ? args[0] : JsValue.Undefined, prop.PropertyType, JsName(prop)));
+                    prop.SetMethod!.Invoke(target, BindingFlags.DoNotWrapExceptions, null, [ToClr(args.Length > 0 ? args[0] : JsValue.Undefined, prop.PropertyType, JsName(prop))], CultureInfo.InvariantCulture);
                     return JsValue.Undefined;
                 }))
                 : null;
@@ -334,7 +334,7 @@ internal sealed class JsBinder
             }
         }
 
-        throw new Sdk.ArgumentError($"{method.Name} の引数 {p.Name} を指定してください。");
+        throw new Sdk.ArgumentError(Msg.T($"{method.Name} の引数 {p.Name} を指定してください。", $"Specify the argument {p.Name} of {method.Name}."));
     }
 
     /// <summary>API の呼び出しを包み、例外を JavaScript の例外にする。実行の制御の例外はそのまま伝える。</summary>
@@ -425,7 +425,7 @@ internal sealed class JsBinder
             }
             else
             {
-                Exception error = t.Exception?.InnerExceptions is { Count: 1 } one ? one[0] : (Exception?)t.Exception ?? new CanceledError("キャンセルされました。");
+                Exception error = t.Exception?.InnerExceptions is { Count: 1 } one ? one[0] : (Exception?)t.Exception ?? new CanceledError(Msg.T("キャンセルされました。", "Canceled."));
                 if (ScriptErrorMap.IsControl(error))
                 {
                     throw error;
@@ -513,7 +513,7 @@ internal sealed class JsBinder
         {
             if (token.IsCancellationRequested)
             {
-                throw new JavaScriptException(ToJsError(new CanceledError("キャンセルされました。")));
+                throw new JavaScriptException(ToJsError(new CanceledError(Msg.T("キャンセルされました。", "Canceled."))));
             }
 
             return JsValue.Undefined;
@@ -553,7 +553,7 @@ internal sealed class JsBinder
                 return null;
             }
 
-            throw new Sdk.ArgumentError($"{name} を指定してください。");
+            throw new Sdk.ArgumentError(Msg.T($"{name} を指定してください。", $"Specify {name}."));
         }
 
         Type t = Nullable.GetUnderlyingType(type) ?? type;
@@ -564,17 +564,23 @@ internal sealed class JsBinder
 
         if (t == typeof(string))
         {
-            return v.IsString() ? v.AsString() : throw Wrong(name, "文字列");
+            return v.IsString() ? v.AsString() : throw Wrong(name, Msg.T("文字列", "a string"));
         }
 
         if (t == typeof(bool))
         {
-            return v.IsBoolean() ? v.AsBoolean() : throw Wrong(name, "true か false");
+            return v.IsBoolean() ? v.AsBoolean() : throw Wrong(name, Msg.T("true か false", "true or false"));
         }
 
         if (t == typeof(int))
         {
             return (int)Integer(v, name, int.MinValue, int.MaxValue);
+        }
+
+        if (t == typeof(ulong))
+        {
+            BigInteger big = v.IsBigInt() ? BigOf(v) : new BigInteger(Integer(v, name, 0, long.MaxValue));
+            return big >= 0 && big <= ulong.MaxValue ? (ulong)big : throw new Sdk.RangeError(Msg.T($"{name} が範囲外です: {big}", $"{name} is out of range: {big}"));
         }
 
         if (t == typeof(long))
@@ -584,7 +590,7 @@ internal sealed class JsBinder
 
         if (t == typeof(double))
         {
-            return v.IsNumber() ? v.AsNumber() : v.IsBigInt() ? (double)BigOf(v) : throw Wrong(name, "数値");
+            return v.IsNumber() ? v.AsNumber() : v.IsBigInt() ? (double)BigOf(v) : throw Wrong(name, Msg.T("数値", "a number"));
         }
 
         if (t == typeof(BigInteger))
@@ -641,7 +647,7 @@ internal sealed class JsBinder
 
         if (typeof(Delegate).IsAssignableFrom(t))
         {
-            return v.IsCallable() ? MakeDelegate(v, t, name) : throw Wrong(name, "関数");
+            return v.IsCallable() ? MakeDelegate(v, t, name) : throw Wrong(name, Msg.T("関数", "a function"));
         }
 
         if (IsLiveApiType(t))
@@ -670,7 +676,7 @@ internal sealed class JsBinder
         throw Wrong(name, t.Name);
     }
 
-    private static Sdk.ArgumentError Wrong(string name, string expected) => new($"{name} には{expected}を指定してください。");
+    private static Sdk.ArgumentError Wrong(string name, string expected) => new(Msg.T($"{name} には{expected}を指定してください。", $"Specify {expected} for {name}."));
 
     private static BigInteger BigOf(JsValue v) => (BigInteger)v.ToObject()!;
 
@@ -679,23 +685,23 @@ internal sealed class JsBinder
         if (v.IsBigInt())
         {
             BigInteger b = BigOf(v);
-            return b >= min && b <= max ? (long)b : throw new Sdk.RangeError($"{name} が範囲外です: {b}");
+            return b >= min && b <= max ? (long)b : throw new Sdk.RangeError(Msg.T($"{name} が範囲外です: {b}", $"{name} is out of range: {b}"));
         }
 
         if (!v.IsNumber())
         {
-            throw Wrong(name, "数値");
+            throw Wrong(name, Msg.T("数値", "a number"));
         }
 
         double d = v.AsNumber();
         if (double.IsNaN(d) || Math.Floor(d) != d)
         {
-            throw new Sdk.ArgumentError($"{name} には整数を指定してください: {d.ToString(CultureInfo.InvariantCulture)}");
+            throw new Sdk.ArgumentError(Msg.T($"{name} には整数を指定してください: {d.ToString(CultureInfo.InvariantCulture)}", $"Specify an integer for {name}: {d.ToString(CultureInfo.InvariantCulture)}"));
         }
 
         if (d < min || d > max || Math.Abs(d) > 9.2233720368547758E18)
         {
-            throw new Sdk.RangeError($"{name} が範囲外です (2^53 を超える値は number で扱えません): {d.ToString(CultureInfo.InvariantCulture)}");
+            throw new Sdk.RangeError(Msg.T($"{name} が範囲外です (2^53 を超える値は number で扱えません): {d.ToString(CultureInfo.InvariantCulture)}", $"{name} is out of range (values beyond 2^53 cannot be represented as a number): {d.ToString(CultureInfo.InvariantCulture)}"));
         }
 
         return (long)d;
@@ -729,7 +735,7 @@ internal sealed class JsBinder
     {
         if (v is not ObjectInstance o)
         {
-            throw Wrong(name, "範囲 ({ start, length } または入力式の文字列)");
+            throw Wrong(name, Msg.T("範囲 ({ start, length } または入力式の文字列)", "a range ({ start, length } or an input expression string)"));
         }
 
         long start = Integer(o.Get("start"), name + ".start", 0, ScriptValues.MaxSafeInteger);
@@ -743,10 +749,10 @@ internal sealed class JsBinder
         if (!end.IsUndefined())
         {
             long e = Integer(end, name + ".end", 0, ScriptValues.MaxSafeInteger);
-            return e >= start ? new Sdk.ByteRange(start, e - start) : throw new Sdk.ArgumentError($"{name} の end が start より前です。");
+            return e >= start ? new Sdk.ByteRange(start, e - start) : throw new Sdk.ArgumentError(Msg.T($"{name} の end が start より前です。", $"The end of {name} is before its start."));
         }
 
-        throw Wrong(name, "範囲 ({ start, length })");
+        throw Wrong(name, Msg.T("範囲 ({ start, length })", "a range ({ start, length })"));
     }
 
     private static byte[] BytesOf(JsValue v, string name)
@@ -778,7 +784,7 @@ internal sealed class JsBinder
             return bytes;
         }
 
-        throw Wrong(name, "バイト列 (Uint8Array、数値の配列、Hex 文字列)");
+        throw Wrong(name, Msg.T("バイト列 (Uint8Array、数値の配列、Hex 文字列)", "a byte array (Uint8Array, an array of numbers, or a hex string)"));
     }
 
     private object ListOf(JsValue v, Type itemType, string name)
@@ -810,7 +816,7 @@ internal sealed class JsBinder
     {
         if (v is not ObjectInstance o)
         {
-            throw Wrong(name, "オブジェクト");
+            throw Wrong(name, Msg.T("オブジェクト", "an object"));
         }
 
         IDictionary dict = (IDictionary)Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(typeof(string), valueType), StringComparer.Ordinal)!;
@@ -831,7 +837,7 @@ internal sealed class JsBinder
     {
         if (v is not ObjectInstance o)
         {
-            throw Wrong(name, "オブジェクト");
+            throw Wrong(name, Msg.T("オブジェクト", "an object"));
         }
 
         object options = Activator.CreateInstance(type)!;
@@ -912,7 +918,7 @@ internal sealed class JsBinder
 
             if (v.IsCallable())
             {
-                throw new Sdk.ArgumentError("関数は値として渡せません。");
+                throw new Sdk.ArgumentError(Msg.T("関数は値として渡せません。", "A function cannot be passed as a value."));
             }
 
             var dict = new Dictionary<string, object?>(StringComparer.Ordinal);
@@ -954,11 +960,11 @@ internal sealed class JsBinder
             return new Func<byte[], long, byte[]>((data, offset) => _session.Invoke(() =>
             {
                 JsValue result = _engine.Call(fn, JsValue.Undefined, [_engine.Intrinsics.Uint8Array.Construct(data), new JsNumber(offset)]);
-                return BytesOf(result, name + " の戻り値");
+                return BytesOf(result, name + Msg.T(" の戻り値", " return value"));
             }));
         }
 
-        throw Wrong(name, "関数");
+        throw Wrong(name, Msg.T("関数", "a function"));
     }
 
     /// <summary>イベントのハンドラを呼ぶ。ハンドラの例外は出力パネルに出し、スクリプトは続ける。</summary>

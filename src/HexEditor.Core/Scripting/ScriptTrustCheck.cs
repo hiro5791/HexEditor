@@ -51,7 +51,7 @@ internal sealed class ScriptTrustCheck(ScriptHost host, IScriptEnvironment env)
         {
             if (env.IsElevated && !request.CommandLineTrust)
             {
-                return TrustDecision.Deny("管理者として実行中は --trust が必要です。");
+                return TrustDecision.Deny(Msg.T("管理者として実行中は --trust が必要です。", "--trust is required when running as administrator."));
             }
 
             if (request.CommandLineTrust)
@@ -61,7 +61,7 @@ internal sealed class ScriptTrustCheck(ScriptHost host, IScriptEnvironment env)
 
             return record is not null
                 ? TrustDecision.Allow(record.Permissions)
-                : TrustDecision.Deny("信頼されていないスクリプトです。--trust と --allow を指定するか、アプリで「常に許可する」を選んでください。");
+                : TrustDecision.Deny(Msg.T("信頼されていないスクリプトです。--trust と --allow を指定するか、アプリで「常に許可する」を選んでください。", "This script is not trusted. Specify --trust and --allow, or choose \"Always allow\" in the app."));
         }
 
         if (record is not null && !env.IsElevated)
@@ -76,7 +76,7 @@ internal sealed class ScriptTrustCheck(ScriptHost host, IScriptEnvironment env)
         switch (answer)
         {
             case TrustAnswer.Deny:
-                return TrustDecision.Deny("実行を許可しませんでした。");
+                return TrustDecision.Deny(Msg.T("実行を許可しませんでした。", "Running was not permitted."));
             case TrustAnswer.AlwaysAllow when request.Path is not null:
                 host.Trust.Add(TrustStore.ScriptKind, TrustStore.ScriptKey(request.Path), TrustStore.HashOf(code), TrustSource.UserAllowed, declared);
                 break;

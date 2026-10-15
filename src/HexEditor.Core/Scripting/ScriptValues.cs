@@ -23,7 +23,7 @@ public static class ScriptValues
         }
         catch (ExpressionException ex)
         {
-            throw new ArgumentError($"入力式を読めません: {text} ({ex.Error} {ex.Detail})".TrimEnd(), ex);
+            throw new ArgumentError(Msg.T($"入力式を読めません: {text} ({ex.Error} {ex.Detail})", $"Cannot parse the input expression: {text} ({ex.Error} {ex.Detail})").TrimEnd(), ex);
         }
     }
 
@@ -48,7 +48,7 @@ public static class ScriptValues
             long end = EvaluateNumber(t[(dots + 2)..], context, radix);
             if (end < start)
             {
-                throw new ArgumentError($"範囲の終了が開始より前です: {text}");
+                throw new ArgumentError(Msg.T($"範囲の終了が開始より前です: {text}", $"The end of the range is before its start: {text}"));
             }
 
             return new SdkRange(start, end - start);
@@ -61,13 +61,13 @@ public static class ScriptValues
             long length = EvaluateNumber(t[(colon + 1)..], context, radix);
             if (length < 0)
             {
-                throw new ArgumentError($"範囲の長さが負です: {text}");
+                throw new ArgumentError(Msg.T($"範囲の長さが負です: {text}", $"The length of the range is negative: {text}"));
             }
 
             return new SdkRange(start, length);
         }
 
-        throw new ArgumentError($"範囲を読めません: {text} (例: \"sel\"、\"0x100:0x20\"、\"0x100..0x120\")");
+        throw new ArgumentError(Msg.T($"範囲を読めません: {text} (例: \"sel\"、\"0x100:0x20\"、\"0x100..0x120\")", $"Cannot parse the range: {text} (e.g. \"sel\", \"0x100:0x20\", \"0x100..0x120\")"));
     }
 
     private static int TopLevelIndexOf(string text, string token)
@@ -95,11 +95,11 @@ public static class ScriptValues
 
     /// <summary>Hex バイト列 (00 の 6.3)。読めなければ <see cref="ArgumentError"/>。</summary>
     public static byte[] ParseHex(string text) =>
-        HexText.TryParse(text) ?? throw new ArgumentError($"Hex のバイト列を読めません: {text} (例: \"DE AD BE EF\"。奇数桁は使えません)");
+        HexText.TryParse(text) ?? throw new ArgumentError(Msg.T($"Hex のバイト列を読めません: {text} (例: \"DE AD BE EF\"。奇数桁は使えません)", $"Cannot parse the hex byte string: {text} (e.g. \"DE AD BE EF\"; an odd number of digits is not allowed)"));
 
     /// <summary>JavaScript の number に収まるか確かめる (AUTO-02 の仕様 7)。</summary>
     public static long CheckSafe(long value) =>
-        value is > MaxSafeInteger or < -MaxSafeInteger ? throw new Sdk.RangeError($"2^53 を超える値は number で扱えません: {value}") : value;
+        value is > MaxSafeInteger or < -MaxSafeInteger ? throw new Sdk.RangeError(Msg.T($"2^53 を超える値は number で扱えません: {value}", $"Values beyond 2^53 cannot be represented as a number: {value}")) : value;
 }
 
 /// <summary>入力式の名前の値 (ドキュメントがないときに使う)。</summary>

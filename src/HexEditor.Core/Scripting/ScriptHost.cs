@@ -80,7 +80,7 @@ public static class ScriptSettingKeys
     /// <summary>同時に実行できるスクリプトの数。</summary>
     public const string MaxConcurrent = "scripts.maxConcurrent";
 
-    /// <summary>組織向けの設定 (AUTO-34 の仕様 9): <c>""</c> (なし)、<c>disabled</c>、<c>signedPluginsOnly</c>。</summary>
+    /// <summary>組織向けの設定 (AUTO-34 の仕様 9): <c>none</c> (なし)、<c>disabled</c>、<c>signedPluginsOnly</c>。</summary>
     public const string Policy = "scripts.policy";
 
     public const string PolicyDisabled = "disabled";
@@ -236,17 +236,17 @@ public sealed class ScriptHost : IDisposable
         // 1. 言語と本文
         if (request.Language is null && request.Path is not null && LanguageOf(request.Path) is null)
         {
-            return Fail(run, ScriptFailure.Argument, $"スクリプトとして実行できない拡張子です: {Path.GetExtension(request.Path)} (.js、.mjs、.csx を使えます)", started);
+            return Fail(run, ScriptFailure.Argument, Msg.T($"スクリプトとして実行できない拡張子です: {Path.GetExtension(request.Path)} (.js、.mjs、.csx を使えます)", $"This extension cannot be run as a script: {Path.GetExtension(request.Path)} (.js, .mjs and .csx are supported)"), started);
         }
 
         string code;
         try
         {
-            code = request.Code ?? await File.ReadAllTextAsync(request.Path ?? throw new ArgumentError("スクリプトがありません。")).ConfigureAwait(false);
+            code = request.Code ?? await File.ReadAllTextAsync(request.Path ?? throw new ArgumentError(Msg.T("スクリプトがありません。", "There is no script."))).ConfigureAwait(false);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            return Fail(run, ScriptFailure.Io, $"スクリプトを読めません: {ex.Message}", started);
+            return Fail(run, ScriptFailure.Io, Msg.T($"スクリプトを読めません: {ex.Message}", $"Cannot read the script: {ex.Message}"), started);
         }
 
         // 2. メタデータ (誤りは警告として出し、実行は続ける。AUTO-26 の仕様 5)
@@ -254,20 +254,20 @@ public sealed class ScriptHost : IDisposable
         run.Name = meta.DisplayName(env.Language, run.Name);
         foreach (ScriptMetadataWarning w in meta.Warnings)
         {
-            env.Output.Write(run.Channel, ScriptOutputKind.Warning, $"メタデータ: {w.Message}", request.Path, w.Line);
+            env.Output.Write(run.Channel, ScriptOutputKind.Warning, Msg.T($"メタデータ: {w.Message}", $"Metadata: {w.Message}"), request.Path, w.Line);
         }
 
         // 3. API のバージョン (AUTO-04 の仕様 8。本文は実行しない)
         if (meta.Api is not null && ApiVersion.TryParse(meta.Api, out ApiVersion required) && !ApiVersion.Current.Satisfies(required))
         {
             return Fail(run, ScriptFailure.ScriptError,
-                $"このスクリプトは API {required} が必要ですが、アプリの API は {ApiVersion.Current} です (app.apiVersion)。", started);
+                Msg.T($"このスクリプトは API {required} が必要ですが、アプリの API は {ApiVersion.Current} です (app.apiVersion)。", $"This script requires API {required}, but the app API is {ApiVersion.Current} (app.apiVersion)."), started);
         }
 
         // 4. 組織の設定 (AUTO-34 の仕様 9)
         if (Policy() == ScriptSettingKeys.PolicyDisabled)
         {
-            return Fail(run, ScriptFailure.Permission, "組織の設定 (scripts.policy) でスクリプトは無効にされています。", started, status: ScriptRunStatus.NotRun);
+            return Fail(run, ScriptFailure.Permission, Msg.T("組織の設定 (scripts.policy) でスクリプトは無効にされています。", "Scripts are disabled by the organization setting (scripts.policy)."), started, status: ScriptRunStatus.NotRun);
         }
 
         // 5. 信頼の確認 (AUTO-34)
@@ -281,7 +281,7 @@ public sealed class ScriptHost : IDisposable
         IReadOnlyDictionary<string, object?>? args = await new ScriptParameters(this, env).CollectAsync(request, run, meta).ConfigureAwait(false);
         if (args is null)
         {
-            return Fail(run, ScriptFailure.Canceled, "パラメータの入力がキャンセルされました。", started, status: ScriptRunStatus.NotRun);
+            return Fail(run, ScriptFailure.Canceled, Msg.T("パラメータの入力がキャンセルされました。", "Parameter input was canceled."), started, status: ScriptRunStatus.NotRun);
         }
 
         string? folder = request.Path is not null ? Path.GetDirectoryName(Path.GetFullPath(request.Path)) : null;
@@ -300,7 +300,7 @@ public sealed class ScriptHost : IDisposable
         catch (OperationCanceledException)
         {
             await Task.Run(context.Finish).ConfigureAwait(false);
-            return new ScriptRunResult(ScriptRunStatus.Stopped, ScriptFailure.Canceled, "実行を待っている間に停止しました。", [], null,
+            return new ScriptRunResult(ScriptRunStatus.Stopped, ScriptFailure.Canceled, Msg.T("実行を待っている間に停止しました。", "Stopped while waiting to run."), [], null,
                 Stopwatch.GetElapsedTime(started), [], null);
         }
 
@@ -425,13 +425,13 @@ public sealed class ScriptHost : IDisposable
             }
         }
 
-        string modified = result.ModifiedDocuments.Count > 0 ? " / 変更: " + string.Join(", ", result.ModifiedDocuments) : "";
+        string modified = result.ModifiedDocuments.Count > 0 ? Msg.T(" / 変更: ", " / Modified: ") + string.Join(", ", result.ModifiedDocuments) : "";
         (ScriptOutputKind kind, string text) = result.Status switch
         {
-            ScriptRunStatus.Succeeded => (ScriptOutputKind.Info, $"成功 ({elapsed}){modified}"),
-            ScriptRunStatus.Stopped => (ScriptOutputKind.Info, $"停止しました ({elapsed}){modified}"),
-            ScriptRunStatus.NotRun => (ScriptOutputKind.Warning, $"実行しませんでした: {result.Message}"),
-            _ => (ScriptOutputKind.Error, $"失敗 ({elapsed}){modified}: {result.Message}"),
+            ScriptRunStatus.Succeeded => (ScriptOutputKind.Info, Msg.T($"成功 ({elapsed}){modified}", $"Succeeded ({elapsed}){modified}")),
+            ScriptRunStatus.Stopped => (ScriptOutputKind.Info, Msg.T($"停止しました ({elapsed}){modified}", $"Stopped ({elapsed}){modified}")),
+            ScriptRunStatus.NotRun => (ScriptOutputKind.Warning, Msg.T($"実行しませんでした: {result.Message}", $"Not run: {result.Message}")),
+            _ => (ScriptOutputKind.Error, Msg.T($"失敗 ({elapsed}){modified}: {result.Message}", $"Failed ({elapsed}){modified}: {result.Message}")),
         };
         env.Output.Write(run.Channel, kind, text);
     }
@@ -471,7 +471,7 @@ internal sealed record ScriptExecution(ScriptRunStatus Status, ScriptFailure Fai
 {
     public static ScriptExecution Success { get; } = new(ScriptRunStatus.Succeeded, ScriptFailure.None, null, [], null);
 
-    public static ScriptExecution Stopped(string? message = null) => new(ScriptRunStatus.Stopped, ScriptFailure.Canceled, message ?? "停止しました。", [], null);
+    public static ScriptExecution Stopped(string? message = null) => new(ScriptRunStatus.Stopped, ScriptFailure.Canceled, message ?? Msg.T("停止しました。", "Stopped."), [], null);
 
     public static ScriptExecution Error(ScriptFailure failure, string message, IReadOnlyList<ScriptDiagnostic> diagnostics, string? stack = null) =>
         new(ScriptRunStatus.Failed, failure, message, diagnostics, stack);

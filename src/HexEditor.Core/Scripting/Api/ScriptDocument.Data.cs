@@ -14,7 +14,7 @@ public sealed partial class ScriptDocument
     {
         if (length > SyncLimit)
         {
-            throw new LimitError($"同期 API で扱えるのは 1 回 16 MB までです ({length:N0} バイト)。大きな範囲は doc.chunks() や一括処理 API を使ってください。")
+            throw new LimitError(Msg.T($"同期 API で扱えるのは 1 回 16 MB までです ({length:N0} バイト)。大きな範囲は doc.chunks() や一括処理 API を使ってください。", $"The synchronous API handles at most 16 MB at a time ({length:N0} bytes). Use doc.chunks() or the bulk APIs for large ranges."))
             {
                 Limit = "size",
             };
@@ -28,7 +28,7 @@ public sealed partial class ScriptDocument
         long length = ResolveOffset(lengthArg);
         if (length < 0)
         {
-            throw new Sdk.ArgumentError("length は 0 以上にしてください。");
+            throw new Sdk.ArgumentError(Msg.T("length は 0 以上にしてください。", "length must be 0 or greater."));
         }
 
         CheckSyncLength(length);
@@ -62,15 +62,15 @@ public sealed partial class ScriptDocument
         "u32" => (4, false),
         "i64" => (8, true),
         "u64" => (8, false),
-        _ => throw new Sdk.ArgumentError($"整数の型が不明です: {type} (i8 u8 i16 u16 i24 u24 i32 u32 i64 u64)"),
+        _ => throw new Sdk.ArgumentError(Msg.T($"整数の型が不明です: {type} (i8 u8 i16 u16 i24 u24 i32 u32 i64 u64)", $"Unknown integer type: {type} (i8 u8 i16 u16 i24 u24 i32 u32 i64 u64)")),
     };
 
     private bool BigEndian(string? endian) => endian switch
     {
-        null => _ctx.Environment.Inspector.BigEndian,
+        null => Ui(() => Host.Editor.View.BigEndian),
         "le" => false,
         "be" => true,
-        _ => throw new Sdk.ArgumentError($"エンディアンは \"le\" か \"be\" です: {endian}"),
+        _ => throw new Sdk.ArgumentError(Msg.T($"エンディアンは \"le\" か \"be\" です: {endian}", $"endian must be \"le\" or \"be\": {endian}")),
     };
 
     private byte[] ReadFixed(OffsetArg offset, int size)
@@ -80,7 +80,7 @@ public sealed partial class ScriptDocument
         DocumentSnapshot snapshot = Snapshot;
         if (o < 0 || o > snapshot.Length - size)
         {
-            throw new Sdk.RangeError($"オフセット 0x{o:X} から {size} バイトはドキュメントの外です (長さ 0x{snapshot.Length:X})。");
+            throw new Sdk.RangeError(Msg.T($"オフセット 0x{o:X} から {size} バイトはドキュメントの外です (長さ 0x{snapshot.Length:X})。", $"{size} bytes from offset 0x{o:X} are outside the document (length 0x{snapshot.Length:X})."));
         }
 
         byte[] data = new byte[size];
@@ -120,7 +120,7 @@ public sealed partial class ScriptDocument
             }
 
             default:
-                throw new Sdk.ArgumentError($"浮動小数点の型が不明です: {type} (f16 f32 f64)");
+                throw new Sdk.ArgumentError(Msg.T($"浮動小数点の型が不明です: {type} (f16 f32 f64)", $"Unknown floating-point type: {type} (f16 f32 f64)"));
         }
     });
 
@@ -171,7 +171,7 @@ public sealed partial class ScriptDocument
             long length = d.Length;
             if (o + bytes.Length > length && !d.CanResize)
             {
-                throw new Sdk.RangeError($"長さを変えられないドキュメントの末尾を越えて書き込めません (オフセット 0x{o:X}、{bytes.Length} バイト、長さ 0x{length:X})。");
+                throw new Sdk.RangeError(Msg.T($"長さを変えられないドキュメントの末尾を越えて書き込めません (オフセット 0x{o:X}、{bytes.Length} バイト、長さ 0x{length:X})。", $"Cannot write past the end of a document whose length cannot be changed (offset 0x{o:X}, {bytes.Length} bytes, length 0x{length:X})."));
             }
 
             long inside = Math.Min(bytes.Length, length - o);
@@ -198,7 +198,7 @@ public sealed partial class ScriptDocument
         BigInteger max = signed ? (BigInteger.One << (size * 8 - 1)) - 1 : (BigInteger.One << (size * 8)) - 1;
         if (value < min || value > max)
         {
-            throw new Sdk.RangeError($"値 {value} は {type} の範囲 ({min}〜{max}) の外です。");
+            throw new Sdk.RangeError(Msg.T($"値 {value} は {type} の範囲 ({min}〜{max}) の外です。", $"The value {value} is outside the range of {type} ({min} to {max})."));
         }
 
         BigInteger raw = value < 0 ? (BigInteger.One << (size * 8)) + value : value;
@@ -256,7 +256,7 @@ public sealed partial class ScriptDocument
 
                 break;
             default:
-                throw new Sdk.ArgumentError($"浮動小数点の型が不明です: {type} (f16 f32 f64)");
+                throw new Sdk.ArgumentError(Msg.T($"浮動小数点の型が不明です: {type} (f16 f32 f64)", $"Unknown floating-point type: {type} (f16 f32 f64)"));
         }
 
         WriteAt(ResolveOffset(offset), bytes);
@@ -274,7 +274,7 @@ public sealed partial class ScriptDocument
     {
         if (!Ui(() => Document.CanResize))
         {
-            throw new ReadOnlyError($"ドキュメント「{Name}」は長さを変えられません。");
+            throw new ReadOnlyError(Msg.T($"ドキュメント「{Name}」は長さを変えられません。", $"The length of the document \"{Name}\" cannot be changed."));
         }
     }
 
@@ -309,7 +309,7 @@ public sealed partial class ScriptDocument
         byte[] bytes = random ? [] : PatternBytes(pattern, allowRandom: false);
         if (!random && (bytes.Length == 0 || bytes.Length > GeneratedData.MaxPatternLength))
         {
-            throw new Sdk.ArgumentError($"パターンは 1〜{GeneratedData.MaxPatternLength} バイトです。");
+            throw new Sdk.ArgumentError(Msg.T($"パターンは 1〜{GeneratedData.MaxPatternLength} バイトです。", $"The pattern must be 1 to {GeneratedData.MaxPatternLength} bytes."));
         }
 
         if (insert)
@@ -362,7 +362,7 @@ public sealed partial class ScriptDocument
         long target = ResolveOffset(newLength);
         if (target < 0)
         {
-            throw new Sdk.ArgumentError("長さは 0 以上にしてください。");
+            throw new Sdk.ArgumentError(Msg.T("長さは 0 以上にしてください。", "The length must be 0 or greater."));
         }
 
         byte[] pattern = fill is BytePattern p ? PatternBytes(p, allowRandom: false) : [0];

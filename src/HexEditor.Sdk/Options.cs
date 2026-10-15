@@ -89,8 +89,9 @@ public sealed class TransformOptions : AsyncOptions
 public sealed class FindOptions : AsyncOptions
 {
     /// <summary>
-    /// <c>"hex"</c> (default for bytes; wildcards allowed), <c>"text"</c> (default for strings), <c>"regex"</c>, <c>"int"</c> or <c>"float"</c>.
-    /// <ja><c>"hex"</c> (バイト列の既定。ワイルドカード可)、<c>"text"</c> (文字列の既定)、<c>"regex"</c>、<c>"int"</c>、<c>"float"</c>。</ja>
+    /// How a string pattern is read: <c>"hex"</c> (default; wildcards allowed), <c>"text"</c>, <c>"regex"</c>, <c>"int"</c> or <c>"float"</c>.
+    /// Byte patterns are searched as they are.
+    /// <ja>文字列のパターンの解釈: <c>"hex"</c> (既定。ワイルドカード可)、<c>"text"</c>、<c>"regex"</c>、<c>"int"</c>、<c>"float"</c>。バイト列のパターンはそのまま探す。</ja>
     /// </summary>
     public string? Type { get; init; }
 

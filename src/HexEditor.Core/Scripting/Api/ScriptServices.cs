@@ -15,7 +15,7 @@ internal sealed class ScriptSettings(ScriptContext ctx) : ISettings
     {
         if (!ctx.Environment.Settings.Exists(key))
         {
-            throw new Sdk.ArgumentError($"設定のキーが不明です: {key}");
+            throw new Sdk.ArgumentError(Msg.T($"設定のキーが不明です: {key}", $"Unknown setting key: {key}"));
         }
 
         return ScriptJson.ToPlain(ctx.Dispatcher.Invoke(() => ctx.Environment.Settings.Get(key)));
@@ -25,7 +25,7 @@ internal sealed class ScriptSettings(ScriptContext ctx) : ISettings
     {
         if (!ctx.Environment.Settings.Exists(key))
         {
-            throw new Sdk.ArgumentError($"設定のキーが不明です: {key}");
+            throw new Sdk.ArgumentError(Msg.T($"設定のキーが不明です: {key}", $"Unknown setting key: {key}"));
         }
 
         ctx.RequirePermission(ScriptPermissions.Settings, key);
@@ -84,13 +84,13 @@ internal static class ScriptJson
         int i => JsonValue.Create(i),
         long l => JsonValue.Create(l),
         double d when double.IsFinite(d) => Math.Floor(d) == d && Math.Abs(d) < 9e15 ? JsonValue.Create((long)d) : JsonValue.Create(d),
-        double => throw new Sdk.ArgumentError("NaN と無限大は保存できません。"),
+        double => throw new Sdk.ArgumentError(Msg.T("NaN と無限大は保存できません。", "NaN and infinity cannot be stored.")),
         BigInteger bi => bi >= long.MinValue && bi <= long.MaxValue ? JsonValue.Create((long)bi) : JsonValue.Create(bi.ToString(CultureInfo.InvariantCulture)),
         byte[] bytes => new JsonArray([.. bytes.Select(b => (JsonNode)JsonValue.Create(b))]),
         Sdk.ByteRange r => new JsonObject { ["start"] = r.Start, ["length"] = r.Length },
         IDictionary dict => DictToNode(dict),
         IEnumerable list => new JsonArray([.. list.Cast<object?>().Select(ToNode)]),
-        _ => throw new Sdk.ArgumentError($"JSON にできない値です: {value.GetType().Name}"),
+        _ => throw new Sdk.ArgumentError(Msg.T($"JSON にできない値です: {value.GetType().Name}", $"This value cannot be converted to JSON: {value.GetType().Name}")),
     };
 
     private static JsonObject DictToNode(IDictionary dict)
@@ -133,18 +133,18 @@ internal sealed class ScriptFileSystem(ScriptContext ctx) : IFileSystem
         ctx.RequireFileRead(full);
         if (length > ScriptDocument.SyncLimit)
         {
-            throw new LimitError("fs.readBytes は 1 回 16 MB までです。大きなファイルは app.open で開いて一括処理 API を使ってください。") { Limit = "size" };
+            throw new LimitError(Msg.T("fs.readBytes は 1 回 16 MB までです。大きなファイルは app.open で開いて一括処理 API を使ってください。", "fs.readBytes reads at most 16 MB at a time. Open large files with app.open and use the bulk APIs.")) { Limit = "size" };
         }
 
         if (offset < 0 || length < 0)
         {
-            throw new Sdk.RangeError("offset と length は 0 以上にしてください。");
+            throw new Sdk.RangeError(Msg.T("offset と length は 0 以上にしてください。", "offset and length must be 0 or greater."));
         }
 
         using var stream = new FileStream(full, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
         if (offset > stream.Length)
         {
-            throw new Sdk.RangeError($"オフセットがファイルの外です: {offset}");
+            throw new Sdk.RangeError(Msg.T($"オフセットがファイルの外です: {offset}", $"The offset is outside the file: {offset}"));
         }
 
         stream.Position = offset;
@@ -159,7 +159,7 @@ internal sealed class ScriptFileSystem(ScriptContext ctx) : IFileSystem
         ctx.RequireFileRead(full);
         if (new FileInfo(full).Length > ScriptDocument.SyncLimit)
         {
-            throw new LimitError("fs.readText は 16 MB までのファイルです。") { Limit = "size" };
+            throw new LimitError(Msg.T("fs.readText は 16 MB までのファイルです。", "fs.readText handles files up to 16 MB.")) { Limit = "size" };
         }
 
         return encoding is null ? File.ReadAllText(full) : File.ReadAllText(full, Enc(encoding));
@@ -205,7 +205,7 @@ internal sealed class ScriptFileSystem(ScriptContext ctx) : IFileSystem
         var info = new FileInfo(full);
         if (!info.Exists)
         {
-            throw new IoError($"ファイルが見つかりません: {full}");
+            throw new IoError(Msg.T($"ファイルが見つかりません: {full}", $"File not found: {full}"));
         }
 
         return new FileStat(info.Length, info.LastWriteTimeUtc.ToString("o", CultureInfo.InvariantCulture), false);
@@ -238,14 +238,14 @@ internal sealed class ScriptNet(ScriptContext ctx) : INet
     {
         if (!Uri.TryCreate(url, UriKind.Absolute, out Uri? uri) || uri.Scheme is not ("http" or "https"))
         {
-            throw new Sdk.ArgumentError($"HTTP か HTTPS の URL を指定してください: {url}");
+            throw new Sdk.ArgumentError(Msg.T($"HTTP か HTTPS の URL を指定してください: {url}", $"Specify an HTTP or HTTPS URL: {url}"));
         }
 
         ctx.RequirePermission(ScriptPermissions.Network, uri.Host);
         string method = (options?.Method ?? "GET").ToUpperInvariant();
         if (method is not ("GET" or "POST"))
         {
-            throw new Sdk.ArgumentError($"method は GET か POST です: {method}");
+            throw new Sdk.ArgumentError(Msg.T($"method は GET か POST です: {method}", $"method must be GET or POST: {method}"));
         }
 
         byte[]? body = options?.Body is BytePattern b ? ScriptDocument.PatternBytes(b, allowRandom: false)
@@ -257,7 +257,7 @@ internal sealed class ScriptNet(ScriptContext ctx) : INet
         {
             "bytes" => response,
             "text" => Encoding.UTF8.GetString(response),
-            string other => throw new Sdk.ArgumentError($"responseType は text か bytes です: {other}"),
+            string other => throw new Sdk.ArgumentError(Msg.T($"responseType は text か bytes です: {other}", $"responseType must be text or bytes: {other}")),
         };
         return new FetchResponse(status, headers, result);
     });
@@ -272,7 +272,7 @@ internal sealed class ScriptProcessRunner(ScriptContext ctx) : IProcessRunner
         double timeout = options?.Timeout ?? 60;
         if (timeout <= 0)
         {
-            throw new Sdk.ArgumentError("timeout は 0 より大きくしてください。");
+            throw new Sdk.ArgumentError(Msg.T("timeout は 0 より大きくしてください。", "timeout must be greater than 0."));
         }
 
         using CancellationTokenSource cts = ctx.LinkedToken(options?.Signal);
@@ -292,7 +292,7 @@ internal sealed class ScriptCommands(ScriptContext ctx) : ICommands
         IScriptCommandService commands = ctx.Environment.Commands;
         if (!commands.Exists(id))
         {
-            throw new Sdk.ArgumentError($"コマンドが見つかりません: {id} (app.commands.list() で一覧できます)");
+            throw new Sdk.ArgumentError(Msg.T($"コマンドが見つかりません: {id} (app.commands.list() で一覧できます)", $"Command not found: {id} (see app.commands.list() for the list)"));
         }
 
         using (ctx.Clock.Pause())

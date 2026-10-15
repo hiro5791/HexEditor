@@ -19,21 +19,21 @@ internal sealed class ScriptInspector(ScriptContext ctx) : IInspector
         [.. InspectorTypes.All.Select(t => new InspectorTypeInfo(t.Id, ctx.Environment.Localize("Inspector_Row_" + t.Id), t.Size))];
 
     private static InspectorType TypeOf(string typeId) =>
-        InspectorTypes.Find(typeId) ?? throw new Sdk.ArgumentError($"インスペクタの型が不明です: {typeId} (inspector.types で一覧できます)");
+        InspectorTypes.Find(typeId) ?? throw new Sdk.ArgumentError(Msg.T($"インスペクタの型が不明です: {typeId} (inspector.types で一覧できます)", $"Unknown inspector type: {typeId} (see inspector.types for the list)"));
 
     private Endianness EndianOf(SdkInspectorOptions? options) => options?.Endian switch
     {
         null => ctx.Environment.Inspector.BigEndian ? Endianness.Big : Endianness.Little,
         "le" => Endianness.Little,
         "be" => Endianness.Big,
-        string e => throw new Sdk.ArgumentError($"エンディアンは \"le\" か \"be\" です: {e}"),
+        string e => throw new Sdk.ArgumentError(Msg.T($"エンディアンは \"le\" か \"be\" です: {e}", $"endian must be \"le\" or \"be\": {e}")),
     };
 
     public SdkInspectorValue Decode(IDocument document, OffsetArg offset, string typeId, SdkInspectorOptions? options = null) => ScriptErrorMap.Guard(() =>
     {
         if (document is not ScriptDocument doc)
         {
-            throw new Sdk.ArgumentError("document にはドキュメントを指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("document にはドキュメントを指定してください。", "Specify a document for document."));
         }
 
         InspectorType type = TypeOf(typeId);
@@ -88,7 +88,7 @@ internal sealed class ScriptInspector(ScriptContext ctx) : IInspector
         _ = TypeOf(typeId);
         Core.Inspector.InspectorOptions panel = ctx.Dispatcher.Invoke(() => ctx.Environment.Inspector.Options);
         InspectorEncodeResult result = InspectorEncoder.Encode(typeId, valueText, EndianOf(options), panel, long.MaxValue);
-        return result.Bytes ?? throw new Sdk.ArgumentError($"値を変換できません: {valueText} ({result.Error})");
+        return result.Bytes ?? throw new Sdk.ArgumentError(Msg.T($"値を変換できません: {valueText} ({result.Error})", $"Cannot convert the value: {valueText} ({result.Error})"));
     });
 
     public void Show(string typeId)
@@ -120,7 +120,7 @@ public sealed class ScriptText : IText
             return Resolve(cp);
         }
 
-        string name = encoding.Name ?? throw new Sdk.ArgumentError("文字コードを指定してください。");
+        string name = encoding.Name ?? throw new Sdk.ArgumentError(Msg.T("文字コードを指定してください。", "Specify a character encoding."));
         Encoding? enc = Search.TextEncodings.FromCatalogId(name);
         if (enc is not null)
         {
@@ -140,7 +140,7 @@ public sealed class ScriptText : IText
         }
         catch (ArgumentException ex)
         {
-            throw new Sdk.ArgumentError($"文字コードが不明です: {name}", ex);
+            throw new Sdk.ArgumentError(Msg.T($"文字コードが不明です: {name}", $"Unknown character encoding: {name}"), ex);
         }
     }
 
@@ -160,7 +160,7 @@ public sealed class ScriptText : IText
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException)
         {
-            throw new Sdk.ArgumentError($"文字コードが不明です: {codePage}", ex);
+            throw new Sdk.ArgumentError(Msg.T($"文字コードが不明です: {codePage}", $"Unknown character encoding: {codePage}"), ex);
         }
     }
 
@@ -179,7 +179,7 @@ public sealed class ScriptText : IText
         byte[] data = bytes.Bytes ?? ScriptValues.ParseHex(bytes.Text ?? "");
         if (data.Length > ScriptDocument.SyncLimit)
         {
-            throw new LimitError("同期 API で扱えるのは 1 回 16 MB までです。") { Limit = "size" };
+            throw new LimitError(Msg.T("同期 API で扱えるのは 1 回 16 MB までです。", "The synchronous API handles at most 16 MB at a time.")) { Limit = "size" };
         }
 
         Encoding enc = Resolve(encoding);
@@ -194,11 +194,11 @@ public sealed class ScriptText : IText
                 }
                 catch (DecoderFallbackException ex)
                 {
-                    throw new Sdk.ArgumentError($"文字コード {encoding} として解読できないバイトがあります (位置 {ex.Index})。", ex);
+                    throw new Sdk.ArgumentError(Msg.T($"文字コード {encoding} として解読できないバイトがあります (位置 {ex.Index})。", $"Contains bytes that cannot be decoded as {encoding} (position {ex.Index})."), ex);
                 }
 
             default:
-                throw new Sdk.ArgumentError($"invalid は \"replace\" か \"error\" です: {options.Invalid}");
+                throw new Sdk.ArgumentError(Msg.T($"invalid は \"replace\" か \"error\" です: {options.Invalid}", $"invalid must be \"replace\" or \"error\": {options.Invalid}"));
         }
     }
 

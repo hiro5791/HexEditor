@@ -26,7 +26,7 @@ internal sealed class ScriptEvents(ScriptContext ctx)
     {
         if (!Names.Contains(eventName))
         {
-            throw new Sdk.ArgumentError($"イベントの名前が不明です: {eventName} ({string.Join(", ", Names)})");
+            throw new Sdk.ArgumentError(Msg.T($"イベントの名前が不明です: {eventName} ({string.Join(", ", Names)})", $"Unknown event name: {eventName} ({string.Join(", ", Names)})"));
         }
 
         var sub = new Subscription(this, eventName, handler);
@@ -170,7 +170,7 @@ internal sealed class ScriptEvents(ScriptContext ctx)
         {
             if (cancel is null)
             {
-                throw new Sdk.ArgumentError($"{name} は中止できません。");
+                throw new Sdk.ArgumentError(Msg.T($"{name} は中止できません。", $"{name} cannot be canceled."));
             }
 
             cancel(reason);

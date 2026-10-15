@@ -31,7 +31,7 @@ public sealed partial class ScriptDocument
         DataOperationError error = DataOperationRunner.Validate([new TargetRange(r.Start, r.Length)], spec);
         if (error != DataOperationError.None)
         {
-            throw new Sdk.ArgumentError($"データ演算の指定が正しくありません: {error}");
+            throw new Sdk.ArgumentError(Msg.T($"データ演算の指定が正しくありません: {error}", $"Invalid data operation: {error}"));
         }
 
         if (r.Length == 0)
@@ -63,20 +63,20 @@ public sealed partial class ScriptDocument
     {
         if (o.Unit is not (1 or 2 or 4 or 8))
         {
-            throw new Sdk.ArgumentError($"unit は 1・2・4・8 です: {o.Unit}");
+            throw new Sdk.ArgumentError(Msg.T($"unit は 1・2・4・8 です: {o.Unit}", $"unit must be 1, 2, 4 or 8: {o.Unit}"));
         }
 
         bool big = o.Endian switch
         {
             null or "le" => false,
             "be" => true,
-            _ => throw new Sdk.ArgumentError($"エンディアンは \"le\" か \"be\" です: {o.Endian}"),
+            _ => throw new Sdk.ArgumentError(Msg.T($"エンディアンは \"le\" か \"be\" です: {o.Endian}", $"endian must be \"le\" or \"be\": {o.Endian}")),
         };
         OverflowMode overflow = o.Overflow switch
         {
             null or "wrap" => OverflowMode.Wrap,
             "saturate" => OverflowMode.Saturate,
-            _ => throw new Sdk.ArgumentError($"overflow は \"wrap\" か \"saturate\" です: {o.Overflow}"),
+            _ => throw new Sdk.ArgumentError(Msg.T($"overflow は \"wrap\" か \"saturate\" です: {o.Overflow}", $"overflow must be \"wrap\" or \"saturate\": {o.Overflow}")),
         };
         var spec = new DataOperationSpec { Size = o.Unit, BigEndian = big, Overflow = overflow, Type = ElementType.Unsigned };
         DataOperationKind kind = op switch
@@ -99,10 +99,10 @@ public sealed partial class ScriptDocument
                 2 => DataOperationKind.ByteSwap16,
                 4 => DataOperationKind.ByteSwap32,
                 8 => DataOperationKind.ByteSwap64,
-                _ => throw new Sdk.ArgumentError("swap には unit (2・4・8) を指定してください。"),
+                _ => throw new Sdk.ArgumentError(Msg.T("swap には unit (2・4・8) を指定してください。", "Specify a unit (2, 4 or 8) for swap.")),
             },
             "reverse" => DataOperationKind.ReverseRange,
-            _ => throw new Sdk.ArgumentError($"演算が不明です: {op} (xor and or not add sub mul div shl shr rol ror neg swap reverse)"),
+            _ => throw new Sdk.ArgumentError(Msg.T($"演算が不明です: {op} (xor and or not add sub mul div shl shr rol ror neg swap reverse)", $"Unknown operation: {op} (xor and or not add sub mul div shl shr rol ror neg swap reverse)")),
         };
         spec = spec with { Kind = kind };
         if (kind is DataOperationKind.Negate)
@@ -124,14 +124,14 @@ public sealed partial class ScriptDocument
 
         if (operand is not TransformOperand value)
         {
-            throw new Sdk.ArgumentError($"{op} にはオペランドを指定してください。");
+            throw new Sdk.ArgumentError(Msg.T($"{op} にはオペランドを指定してください。", $"Specify an operand for {op}."));
         }
 
         if (value.HexKey is string key)
         {
             if (kind is not (DataOperationKind.Xor or DataOperationKind.And or DataOperationKind.Or))
             {
-                throw new Sdk.ArgumentError("Hex のキーを使えるのは xor・and・or だけです。");
+                throw new Sdk.ArgumentError(Msg.T("Hex のキーを使えるのは xor・and・or だけです。", "A hex key can be used only with xor, and, or."));
             }
 
             return spec with { OperandSource = OperandSource.KeyBytes, Key = ScriptValues.ParseHex(key), Size = 1 };
@@ -174,7 +174,7 @@ public sealed partial class ScriptDocument
                     Format = o.Size == 8 ? FloatFormat.Double : FloatFormat.Single,
                     Endian = o.Endian == "be" ? SearchEndian.Big : SearchEndian.Little,
                 }),
-                _ => throw new Sdk.ArgumentError($"検索の種類が不明です: {o.Type} (hex text regex int float)"),
+                _ => throw new Sdk.ArgumentError(Msg.T($"検索の種類が不明です: {o.Type} (hex text regex int float)", $"Unknown search type: {o.Type} (hex text regex int float)")),
             };
         }
 
@@ -205,7 +205,7 @@ public sealed partial class ScriptDocument
         FindOptions o = options ?? new FindOptions();
         if (o.Max <= 0)
         {
-            throw new Sdk.ArgumentError("max は 1 以上にしてください。");
+            throw new Sdk.ArgumentError(Msg.T("max は 1 以上にしてください。", "max must be 1 or greater."));
         }
 
         SearchPattern p = Pattern(pattern, o);
@@ -305,7 +305,7 @@ public sealed partial class ScriptDocument
     {
         if (destination is not ScriptDocument dest)
         {
-            throw new Sdk.ArgumentError("destination にはドキュメントを指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("destination にはドキュメントを指定してください。", "Specify a document for destination."));
         }
 
         dest.ThrowIfClosed();
@@ -338,7 +338,7 @@ public sealed partial class ScriptDocument
             {
                 if (at + r.Length > d.Length && !d.CanResize)
                 {
-                    throw new Sdk.RangeError("長さを変えられないドキュメントの末尾を越えてコピーできません。");
+                    throw new Sdk.RangeError(Msg.T("長さを変えられないドキュメントの末尾を越えてコピーできません。", "Cannot copy past the end of a document whose length cannot be changed."));
                 }
 
                 d.OverwriteFrom(at, snapshot, r.Start, r.Length, _ctx.Environment.Localize(ScriptTexts.UndoName, _ctx.Name));
@@ -353,7 +353,7 @@ public sealed partial class ScriptDocument
         SdkRange r = CheckedRange(range);
         if (File.Exists(full) && !(options?.Overwrite ?? false))
         {
-            throw new IoError($"ファイルがあります: {full} (上書きするには overwrite: true)");
+            throw new IoError(Msg.T($"ファイルがあります: {full} (上書きするには overwrite: true)", $"The file already exists: {full} (use overwrite: true to replace it)"));
         }
 
         DocumentSnapshot snapshot = Snapshot;
@@ -395,12 +395,12 @@ public sealed partial class ScriptDocument
         ThrowIfClosed();
         if (chunkSize <= 0)
         {
-            throw new Sdk.ArgumentError("chunkSize は 1 以上にしてください。");
+            throw new Sdk.ArgumentError(Msg.T("chunkSize は 1 以上にしてください。", "chunkSize must be 1 or greater."));
         }
 
         if (chunkSize > SyncLimit)
         {
-            throw new LimitError("chunkSize は最大 16 MB です。") { Limit = "size" };
+            throw new LimitError(Msg.T("chunkSize は最大 16 MB です。", "chunkSize can be at most 16 MB.")) { Limit = "size" };
         }
 
         SdkRange r = CheckedRange(range);
@@ -455,7 +455,7 @@ public sealed partial class ScriptDocument
             if (result.Length != data.Length)
             {
                 // それより前のチャンクの変更は残り、Undo できる (AUTO-09 の「エラー」)。
-                throw new Sdk.ArgumentError($"transformChunks の関数が長さの違うバイト列を返しました (オフセット 0x{at:X}: {data.Length} バイトに対して {result.Length} バイト)。");
+                throw new Sdk.ArgumentError(Msg.T($"transformChunks の関数が長さの違うバイト列を返しました (オフセット 0x{at:X}: {data.Length} バイトに対して {result.Length} バイト)。", $"The transformChunks function returned a byte array of a different length (offset 0x{at:X}: {result.Length} bytes for {data.Length} bytes)."));
             }
 
             _ctx.Dispatcher.Invoke(() => session.Apply(d =>
@@ -503,12 +503,12 @@ public sealed partial class ScriptDocument
         long block = options?.BlockSize ?? 0;
         if (block < 0)
         {
-            throw new Sdk.ArgumentError("blockSize は 0 以上にしてください。");
+            throw new Sdk.ArgumentError(Msg.T("blockSize は 0 以上にしてください。", "blockSize must be 0 or greater."));
         }
 
         if (block > 0 && r.Length / block > 10_000_000)
         {
-            throw new LimitError("ブロックの数が多すぎます (最大 10,000,000)。blockSize を大きくしてください。") { Limit = "count" };
+            throw new LimitError(Msg.T("ブロックの数が多すぎます (最大 10,000,000)。blockSize を大きくしてください。", "Too many blocks (at most 10,000,000). Increase blockSize.")) { Limit = "count" };
         }
 
         DocumentSnapshot snapshot = Snapshot;
@@ -556,7 +556,7 @@ public sealed partial class ScriptDocument
     {
         if (other is not ScriptDocument o)
         {
-            throw new Sdk.ArgumentError("other にはドキュメントを指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("other にはドキュメントを指定してください。", "Specify a document for other."));
         }
 
         o.ThrowIfClosed();
@@ -632,7 +632,7 @@ public sealed partial class ScriptDocument
         StringsOptions o = options ?? new StringsOptions();
         if (o.MinLength is < 1 or > StringExtractionOptions.MaxMinLength)
         {
-            throw new Sdk.ArgumentError($"minLength は 1〜{StringExtractionOptions.MaxMinLength} です。");
+            throw new Sdk.ArgumentError(Msg.T($"minLength は 1〜{StringExtractionOptions.MaxMinLength} です。", $"minLength must be 1 to {StringExtractionOptions.MaxMinLength}."));
         }
 
         IReadOnlyList<EncodingArg> encs = o.Encodings ?? ["ascii", "utf-16le"];

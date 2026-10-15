@@ -84,7 +84,9 @@
    - 実行中のスクリプトと同じフォルダ以下
    - スクリプトライブラリのフォルダ (`<設定フォルダ>/scripts/lib/`)
    - `hexeditor:` で始まる組み込みモジュール (例: `import { crc32 } from "hexeditor:hash"`)
-4. 実行の上限は次のとおり。いずれも設定で変更できる。スクリプトはメタデータ (AUTO-26) で上限の引き上げを要求でき、要求が設定の上限値を超える場合は設定の上限値を使う。
+4. 実行の上限は次のとおり。いずれも設定で変更できる。スクリプトはメタデータ (AUTO-26) で上限の引き上げを要求でき、要求が設定できる範囲の上限 (下表。実行時間は無制限、メモリは 4 GB) を超える場合はその上限値を使う。設定の値より小さい要求は無視する (上限を下げる意味はない)。
+   - 実装の注記: メモリは「実行を始めてからのマネージドヒープの増加」で数える (始める前にガベージコレクションをして基準を測り、上限を超えたら一度ガベージコレクションをしてから判定する)。JavaScript のオブジェクトの使用量の近似で、同時に動く他のスクリプトの使用量も含む。大きな配列の確保は、次の文の実行・API の呼び出し・イベントループの区切りのいずれかで判定する。
+   - 設定のキー: `scripts.js.timeoutSeconds` (0 は無制限)、`scripts.js.memoryMB`、`scripts.js.recursionDepth`。
 
    | 上限 | 既定値 | 設定できる範囲 | 数え方 |
    | --- | --- | --- | --- |
@@ -212,7 +214,7 @@
    └─ fs / net / process     ファイル・ネットワーク・外部プログラム (許可が必要、AUTO-18)
    ```
 
-2. 型定義の元は 1 つ (C# の SDK のインターフェイスと XML ドキュメントコメント) とし、ビルド時に次を生成する。
+2. 型定義の元は 1 つ (C# の SDK のインターフェイスと XML ドキュメントコメント。`<summary>` は英語、その中の `<ja>` は日本語) とし、次を生成する。成果物は `docs/api/` に置き、ビルドのたびに実行する単体テストが SDK から作り直した内容と比べる (違えば失敗。SDK を変えたら `HEXEDITOR_UPDATE_API=1` でテストを実行して作り直す)。日本語の説明の `hexeditor.ja.d.ts` も作る (AUTO-20 の仕様 3)。
    - `hexeditor.d.ts` (JavaScript の補完・エラー検出用)
    - JSON-RPC のメソッド一覧 (AUTO-45)
    - API リファレンス (英語と日本語)
@@ -433,7 +435,7 @@
    | メソッド | 内容 | 対応する機能 |
    | --- | --- | --- |
    | `transform(range, op, operand, options)` | データ演算。`op`: `xor` `and` `or` `not` `add` `sub` `mul` `div` `shl` `shr` `rol` `ror` `neg` `swap` (バイトスワップ) `reverse`。`operand` は数値・Hex 文字列 (繰り返しキー)。`options.unit` (1/2/4/8 バイト)、`options.endian`、`options.overflow` (`wrap` / `saturate`) | 03 のデータ演算 |
-   | `findAll(pattern, options)` | すべて検索。`options.type`: `hex` (ワイルドカード可) / `text` / `regex` / `int` / `float`、`encoding`、`caseSensitive`、`range`、`alignment`、`max` (既定 1,000,000 件)。結果は `{ start, length }` の配列 | 04 |
+   | `findAll(pattern, options)` | すべて検索。`pattern` がバイト列ならそのまま探し、文字列なら `options.type` で解釈する。`options.type`: `hex` (既定。ワイルドカード可) / `text` / `regex` / `int` / `float`、`encoding`、`caseSensitive`、`range`、`alignment`、`max` (既定 1,000,000 件)。結果は `{ start, length }` の配列 | 04 |
    | `find(pattern, options)` | 最初の 1 件 (`options.from`、`options.backward`)。見つからなければ `null` | 04 |
    | `replaceAll(pattern, replacement, options)` | すべて置換。置換した件数を返す | 04 |
    | `copyRange(src, destDoc, destOffset, options)` | 範囲のコピー (`options.insert`)。別のドキュメントへのコピーもできる。データエンジンの参照で行い、実データを複製しない | 03 |
@@ -515,7 +517,7 @@
 
 1. `doc.bookmarks` は配列のように列挙でき、各ブックマークは `name`、`start`、`length`、`color`、`comment`、`number` (番号付きブックマークの番号、なければ `null`) を持つ。
 2. メソッド: `add({ start, length, name, color, comment })`、`remove(bookmark)`、`clear()`、`find(name)`、`addFromResults(results, nameFormat)` (一括処理の結果からまとめて追加。`nameFormat` 例: `"hit {index}"`。`{index}` は結果の順に 1 から始まる番号)。
-3. 色は名前付きの色 (05 の色パレットの名前) で指定する。テーマごとの実際の色はアプリが決める。
+3. 色は名前付きの色 (05 の INSP-24 の仕様 4 の 8 色の一覧の順に `red`、`orange`、`yellow`、`green`、`teal`、`blue`、`purple`、`pink`) か `#RRGGBB` で指定する。テーマごとの実際の色はアプリが決める。`doc.highlights.add` の色も同じ名前を使う。
 4. スクリプトが追加したブックマークは、利用者が追加したものと同じく付随データとして保存される (00 の 10 章)。
 
 **画面**: ブックマーク一覧パネルに即座に反映する。
@@ -629,7 +631,7 @@
 
 1. `clipboard.setText(text)` / `clipboard.setBytes(data)`: 書き込む。`setBytes` は 03 のバイナリ形式と Hex 文字列の両方を置く。
 2. `clipboard.getText()` / `clipboard.getBytes()`: 読み込む。読み込みには許可 `clipboard-read` (AUTO-34) が必要。
-3. `clipboard.copyAs(doc, range, formatId, options)`: 03 の Copy As と同じ形式・同じ設定で書き出す。`formatId` 例: `hex`、`c-array`、`base64`。
+3. `clipboard.copyAs(doc, range, formatId, options)`: 03 の Copy As と同じ形式・同じ設定で書き出す。`formatId` 例: `hex`、`c-array`、`base64`。ID は Copy As の形式 (03 の EDIT-25 の仕様 6) ごとに `hex` (空白区切り)・`hex-plain`・`hex-comma`・`hex-escaped`・`hex-url`・`decimal`・`octal`・`binary`・`<言語>-array` (`c`・`cpp`・`csharp`・`java`・`javascript`・`python`・`rust`・`go`・`pascal`・`vb`・`purebasic`・`asm`)・`base64`・`base32`・`ascii85`・`uuencode`・`xxencode`・`quoted-printable`・`html`・`rtf`・`markdown`・`tex`・`screen`・`text`・`intel-hex`・`srecord`・`json`。
 4. `clipboard.formatAs(doc, range, formatId, options)`: 同じ形式の文字列を、クリップボードに置かずに返す。
 
 **画面**: 該当なし。
@@ -1039,7 +1041,7 @@
    | `@description` / `@description:<言語タグ>` | 説明 |
    | `@version` / `@author` | バージョン、作者 |
    | `@api` | 必要な API のバージョン (AUTO-04) |
-   | `@param 名前 型 既定値 ラベル` | パラメータ。型は `ui.prompt` / `ui.form` と同じ |
+   | `@param 名前 型 既定値 ラベル` | パラメータ。型は `ui.prompt` / `ui.form` と同じ。既定値は `"..."` で囲める。`choice` は既定値の欄に選択肢を `a\|b\|c` の形で書き、先頭を既定値にする |
    | `@permission` | 必要な許可 (AUTO-34)。複数行に書ける |
    | `@timeout` / `@memory` | 実行時間 (秒) とメモリ (MB) の上限の要求 (AUTO-02) |
    | `@on` | 自動実行の候補 (AUTO-25) |

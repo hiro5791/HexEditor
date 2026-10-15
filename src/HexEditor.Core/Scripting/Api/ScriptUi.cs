@@ -25,7 +25,7 @@ internal sealed class ScriptUi(ScriptContext ctx) : IUi
     private string HeadlessValue(string name) =>
         ctx.Request.CommandLineArgs.TryGetValue(name, out string? value)
             ? value
-            : throw new Sdk.ArgumentError($"ヘッドレスでは入力できません: {name}");
+            : throw new Sdk.ArgumentError(Msg.T($"ヘッドレスでは入力できません: {name}", $"Input is not available in headless runs: {name}"));
 
     private IExpressionContext Expressions() =>
         ctx.Dispatcher.Invoke(() => ctx.Environment.ActiveDocument is { } d ? (IExpressionContext)new View.EditorExpressionContext(d.Editor) : EmptyExpressionContext.Instance);
@@ -35,7 +35,7 @@ internal sealed class ScriptUi(ScriptContext ctx) : IUi
         string kind = options?.Kind ?? "info";
         if (kind is not ("info" or "warning" or "error"))
         {
-            throw new Sdk.ArgumentError($"kind は info・warning・error です: {kind}");
+            throw new Sdk.ArgumentError(Msg.T($"kind は info・warning・error です: {kind}", $"kind must be info, warning or error: {kind}"));
         }
 
         bool modal = options?.Modal ?? false;
@@ -50,14 +50,14 @@ internal sealed class ScriptUi(ScriptContext ctx) : IUi
     {
         if (buttons.Count == 0)
         {
-            throw new Sdk.ArgumentError("buttons を 1 つ以上指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("buttons を 1 つ以上指定してください。", "Specify at least one button in buttons."));
         }
 
         if (ctx.Headless)
         {
             string answer = HeadlessValue(text);
             int index = int.TryParse(answer, NumberStyles.Integer, CultureInfo.InvariantCulture, out int i) ? i : IndexOf(buttons, answer);
-            return index >= -1 && index < buttons.Count ? index : throw new Sdk.ArgumentError($"ボタンの番号か名前ではありません: {answer}");
+            return index >= -1 && index < buttons.Count ? index : throw new Sdk.ArgumentError(Msg.T($"ボタンの番号か名前ではありません: {answer}", $"Not a button index or name: {answer}"));
         }
 
         return await WaitUserAsync(() => Ui.ConfirmAsync(ctx.Name, text, buttons)).ConfigureAwait(false);
@@ -83,12 +83,12 @@ internal sealed class ScriptUi(ScriptContext ctx) : IUi
         string type = o?.Type ?? "text";
         if (!Types.Contains(type) || (type == "checkbox" && !form))
         {
-            throw new Sdk.ArgumentError($"入力欄の型が不明です: {type} (text number offset range hex choice{(form ? " checkbox" : "")})");
+            throw new Sdk.ArgumentError(Msg.T($"入力欄の型が不明です: {type} (text number offset range hex choice{(form ? " checkbox" : "")})", $"Unknown field type: {type} (text number offset range hex choice{(form ? " checkbox" : "")})"));
         }
 
         if (type == "choice" && (o?.Choices is null || o.Choices.Count == 0))
         {
-            throw new Sdk.ArgumentError("choice には choices を指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("choice には choices を指定してください。", "Specify choices for choice."));
         }
 
         return type;
@@ -123,7 +123,7 @@ internal sealed class ScriptUi(ScriptContext ctx) : IUi
     {
         if (fields.Count == 0)
         {
-            throw new Sdk.ArgumentError("fields を 1 つ以上指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("fields を 1 つ以上指定してください。", "Specify at least one entry in fields."));
         }
 
         var defs = new List<ScriptFormField>();
@@ -131,12 +131,12 @@ internal sealed class ScriptUi(ScriptContext ctx) : IUi
         {
             if (string.IsNullOrEmpty(f.Name))
             {
-                throw new Sdk.ArgumentError("フォームの項目には name を指定してください。");
+                throw new Sdk.ArgumentError(Msg.T("フォームの項目には name を指定してください。", "Specify name for each form field."));
             }
 
             if (defs.Any(d => d.Name == f.Name))
             {
-                throw new Sdk.ArgumentError($"フォームの項目の name が重複しています: {f.Name}");
+                throw new Sdk.ArgumentError(Msg.T($"フォームの項目の name が重複しています: {f.Name}", $"Duplicate form field name: {f.Name}"));
             }
 
             defs.Add(new ScriptFormField(f.Name, f.Label ?? f.Name, TypeOf(f, form: true), DefaultText(f.Default), f.Choices));
@@ -244,7 +244,7 @@ internal sealed class ScriptUi(ScriptContext ctx) : IUi
         null or "info" => ScriptOutputKind.Info,
         "warning" => ScriptOutputKind.Warning,
         "error" => ScriptOutputKind.Error,
-        _ => throw new Sdk.ArgumentError($"kind は info・warning・error です: {kind}"),
+        _ => throw new Sdk.ArgumentError(Msg.T($"kind は info・warning・error です: {kind}", $"kind must be info, warning or error: {kind}")),
     }, text);
 }
 
@@ -257,7 +257,7 @@ internal sealed class ScriptUiProgress(ScriptContext ctx) : IUiProgress
     {
         if (double.IsNaN(fraction) || fraction < 0 || fraction > 1)
         {
-            throw new Sdk.ArgumentError($"fraction は 0〜1 です: {fraction}");
+            throw new Sdk.ArgumentError(Msg.T($"fraction は 0〜1 です: {fraction}", $"fraction must be 0 to 1: {fraction}"));
         }
 
         if (ctx.RunOperation is LongRunningOperation op)

@@ -79,7 +79,7 @@ public sealed partial class ScriptDocument : IDocument
     {
         if (Host.IsClosed || Document.IsDisposed)
         {
-            throw new Sdk.ArgumentError($"ドキュメント「{Host.Name}」は閉じられています。");
+            throw new Sdk.ArgumentError(Msg.T($"ドキュメント「{Host.Name}」は閉じられています。", $"The document \"{Host.Name}\" has been closed."));
         }
     }
 
@@ -160,7 +160,7 @@ public sealed partial class ScriptDocument : IDocument
             {
                 "hex" => View.ActiveColumn.Hex,
                 "text" => View.ActiveColumn.Text,
-                _ => throw new Sdk.ArgumentError($"activeColumn は \"hex\" か \"text\" です: {value}"),
+                _ => throw new Sdk.ArgumentError(Msg.T($"activeColumn は \"hex\" か \"text\" です: {value}", $"activeColumn must be \"hex\" or \"text\": {value}")),
             };
             Ui(() =>
             {
@@ -191,7 +191,7 @@ public sealed partial class ScriptDocument : IDocument
             return v;
         }
 
-        string text = offset.Expression ?? throw new Sdk.ArgumentError("オフセットを指定してください。");
+        string text = offset.Expression ?? throw new Sdk.ArgumentError(Msg.T("オフセットを指定してください。", "Specify an offset."));
         return Ui(() => ScriptValues.EvaluateNumber(text, ExpressionContext(), ExpressionRadix()));
     }
 
@@ -202,7 +202,7 @@ public sealed partial class ScriptDocument : IDocument
             return r;
         }
 
-        string text = range.Expression ?? throw new Sdk.ArgumentError("範囲を指定してください。");
+        string text = range.Expression ?? throw new Sdk.ArgumentError(Msg.T("範囲を指定してください。", "Specify a range."));
         return Ui(() => ScriptValues.EvaluateRange(text, ExpressionContext(), ExpressionRadix()));
     }
 
@@ -213,7 +213,7 @@ public sealed partial class ScriptDocument : IDocument
         long length = Snapshot.Length;
         if (r.Start < 0 || r.Length < 0 || r.Start > length || r.Length > length - r.Start)
         {
-            throw new Sdk.RangeError($"範囲がドキュメントの外です: 0x{r.Start:X}+0x{r.Length:X} (長さ 0x{length:X})");
+            throw new Sdk.RangeError(Msg.T($"範囲がドキュメントの外です: 0x{r.Start:X}+0x{r.Length:X} (長さ 0x{length:X})", $"The range is outside the document: 0x{r.Start:X}+0x{r.Length:X} (length 0x{length:X})"));
         }
 
         return r;
@@ -224,7 +224,7 @@ public sealed partial class ScriptDocument : IDocument
         long length = Snapshot.Length;
         if (offset < 0 || offset > length || (!allowEnd && offset == length))
         {
-            throw new Sdk.RangeError($"オフセットがドキュメントの外です: 0x{offset:X} (長さ 0x{length:X})");
+            throw new Sdk.RangeError(Msg.T($"オフセットがドキュメントの外です: 0x{offset:X} (長さ 0x{length:X})", $"The offset is outside the document: 0x{offset:X} (length 0x{length:X})"));
         }
     }
 
@@ -235,7 +235,7 @@ public sealed partial class ScriptDocument : IDocument
         ThrowIfClosed();
         if (Ui(() => Document.IsReadOnly))
         {
-            throw new ReadOnlyError($"ドキュメント「{Name}」は読み取り専用です。");
+            throw new ReadOnlyError(Msg.T($"ドキュメント「{Name}」は読み取り専用です。", $"The document \"{Name}\" is read-only."));
         }
 
         using CancellationTokenSource cts = _ctx.LinkedToken(options?.Signal);
@@ -347,7 +347,7 @@ public sealed partial class ScriptDocument : IDocument
     public Task<ITemplateNode> ApplyTemplateAsync(string nameOrPath, ApplyTemplateOptions? options = null) => ScriptErrorMap.GuardAsync(async () =>
     {
         ThrowIfClosed();
-        IScriptTemplateEngine engine = _ctx.Environment.Templates ?? throw new Sdk.ArgumentError("テンプレートの機能が使えません。");
+        IScriptTemplateEngine engine = _ctx.Environment.Templates ?? throw new Sdk.ArgumentError(Msg.T("テンプレートの機能が使えません。", "The template feature is not available."));
         long offset = options?.Offset is OffsetArg o ? ResolveOffset(o) : 0;
         CheckOffset(offset, allowEnd: true);
         using CancellationTokenSource cts = _ctx.LinkedToken(options?.Signal);
@@ -410,7 +410,7 @@ public sealed partial class ScriptDocument : IDocument
         }
         catch (OperationCanceledException ex)
         {
-            throw new CanceledError("キャンセルされました。", ex);
+            throw new CanceledError(Msg.T("キャンセルされました。", "Canceled."), ex);
         }
     }
 
@@ -421,7 +421,7 @@ public sealed partial class ScriptDocument : IDocument
         if (!result.IsComplete)
         {
             UnreadableRange bad = result.Unreadable[0];
-            throw new IoError($"オフセット 0x{bad.Offset:X} を読み込めません ({bad.Reason})。") { Offset = bad.Offset };
+            throw new IoError(Msg.T($"オフセット 0x{bad.Offset:X} を読み込めません ({bad.Reason})。", $"Cannot read offset 0x{bad.Offset:X} ({bad.Reason}).")) { Offset = bad.Offset };
         }
     }
 

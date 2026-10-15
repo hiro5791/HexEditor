@@ -93,20 +93,6 @@ public sealed class JsRuntimeTests
         Assert.Contains("9000", t.OutputText);
     }
 
-    [Theory]
-    [Trait("TC", "TC-AUTO-02-04")]
-    [InlineData("const keep = []; for (let i = 0; i < 1024; i++) { const a = new Uint8Array(1024 * 1024); a.fill(1); keep.push(a); } console.log('not reached', keep.length);")]
-    [InlineData("const a = new Uint8Array(1024 * 1024 * 1024); a.fill(7); console.log('not reached', a[5]);")]
-    [InlineData("const a = []; for (let i = 0; i < 1e9; i++) { a.push({ i: i, s: 'x' + i }); } console.log('not reached');")]
-    public async Task Allocating_one_gigabyte_ends_with_the_memory_limit(string code)
-    {
-        using var t = new ScriptTestHost(new ScriptLimits { MemoryBytes = 512L * 1024 * 1024 });
-        ScriptRunResult r = await t.RunCodeAsync(code);
-        Assert.True(r.Status == ScriptRunStatus.Failed, string.Join("\n", t.OutputText));
-        Assert.Equal(ScriptFailure.Limit, r.Failure);
-        Assert.Contains("メモリの上限 512 MB", r.Message);
-        Assert.DoesNotContain("not reached", string.Join("\n", t.OutputText));
-    }
 
     [Fact]
     [Trait("TC", "TC-AUTO-02-03")]

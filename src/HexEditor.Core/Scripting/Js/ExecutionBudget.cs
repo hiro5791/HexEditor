@@ -167,7 +167,7 @@ internal sealed class ExecutionBudget : Constraint, IExecutionClock
         used = GC.GetTotalMemory(true) - _baseline;
         if (used > _memoryLimit)
         {
-            throw new ScriptLimitExceededException("memory", $"メモリの上限 {FormatBytes(_memoryLimit)} を超えました。");
+            throw new ScriptLimitExceededException("memory", Msg.T($"メモリの上限 {FormatBytes(_memoryLimit)} を超えました。", $"The memory limit of {FormatBytes(_memoryLimit)} was exceeded."));
         }
     }
 
@@ -190,7 +190,7 @@ internal sealed class ExecutionBudget : Constraint, IExecutionClock
 
         if (!resume)
         {
-            throw new ScriptLimitExceededException("time", $"実行時間の上限 {limit.TotalSeconds:0.#} 秒を超えました。");
+            throw new ScriptLimitExceededException("time", Msg.T($"実行時間の上限 {limit.TotalSeconds:0.#} 秒を超えました。", $"The execution time limit of {limit.TotalSeconds:0.#} seconds was exceeded."));
         }
 
         lock (_lock)

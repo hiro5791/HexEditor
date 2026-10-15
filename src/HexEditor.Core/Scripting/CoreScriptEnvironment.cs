@@ -147,14 +147,14 @@ public sealed class CoreDocumentHost : IScriptDocumentHost
         SaveRequested = true;
         if (Path is null)
         {
-            throw new IoError("新規ドキュメントは saveAs で保存してください。");
+            throw new IoError(Msg.T("新規ドキュメントは saveAs で保存してください。", "Save a new document with saveAs."));
         }
 
         string? reason = await _env.Events.RaiseBeforeSaveAsync(this, Api.ScriptEvents.BeforeSaveTimeout).ConfigureAwait(true);
         if (reason is not null)
         {
             _env.Notices.Add(reason);
-            throw new IoError("保存が中止されました: " + reason);
+            throw new IoError(Msg.T("保存が中止されました: ", "Save was aborted: ") + reason);
         }
 
         if (_env.DryRun)
@@ -310,14 +310,14 @@ public sealed class CoreScriptEnvironment : IScriptEnvironment, IDisposable
 
     public Task<IScriptDocumentHost> OpenDiskAsync(string id, bool readOnly, bool background)
     {
-        IByteSource source = DiskOpener?.Invoke(id) ?? throw new IoError($"ディスクを開けません: {id}");
+        IByteSource source = DiskOpener?.Invoke(id) ?? throw new IoError(Msg.T($"ディスクを開けません: {id}", $"Cannot open the disk: {id}"));
         var doc = new Document(source, DocumentOptions);
         doc.SetReadOnly(readOnly ? ReadOnlyReason.OpenedReadOnly : ReadOnlyReason.None);
         return Task.FromResult<IScriptDocumentHost>(Add(doc, null, id, "disk", !background));
     }
 
     public Task<IScriptDocumentHost> OpenProcessAsync(int pid, bool readOnly, bool background) =>
-        throw new IoError("ヘッドレス実行ではプロセスのメモリを開けません。");
+        throw new IoError(Msg.T("ヘッドレス実行ではプロセスのメモリを開けません。", "Process memory cannot be opened in headless runs."));
 
     public IScriptDocumentHost NewDocument(long length, byte[] fill)
     {
@@ -374,14 +374,14 @@ public sealed class CoreScriptEnvironment : IScriptEnvironment, IDisposable
         public bool Exists(string id) => false;
 
         public Task<object?> ExecuteAsync(string id, IReadOnlyDictionary<string, object?> args, IScriptDocumentHost? target, bool headless) =>
-            throw new Sdk.ArgumentError($"コマンドが見つかりません: {id}");
+            throw new Sdk.ArgumentError(Msg.T($"コマンドが見つかりません: {id}", $"Command not found: {id}"));
     }
 
     private sealed class NoHttp : IScriptHttp
     {
         public Task<(int Status, IReadOnlyDictionary<string, string> Headers, byte[] Body)> SendAsync(string method, Uri url,
             IReadOnlyDictionary<string, string> headers, byte[]? body, long maxResponseBytes, CancellationToken cancellationToken) =>
-            throw new IoError("この環境では通信できません。");
+            throw new IoError(Msg.T("この環境では通信できません。", "Network access is not available in this environment."));
     }
 
     /// <summary>設定 (メモリ上。ヘッドレス実行は App の設定ファイルを読む実装に差し替える)。</summary>
@@ -494,7 +494,7 @@ public sealed class ProcessLauncher : IScriptProcessLauncher
         }
         catch (System.ComponentModel.Win32Exception ex)
         {
-            throw new IoError($"プログラムを実行できません: {path} ({ex.Message})", ex);
+            throw new IoError(Msg.T($"プログラムを実行できません: {path} ({ex.Message})", $"Cannot run the program: {path} ({ex.Message})"), ex);
         }
 
         Task<string> stdout = process.StandardOutput.ReadToEndAsync(cancellationToken);
@@ -523,10 +523,10 @@ public sealed class ProcessLauncher : IScriptProcessLauncher
 
             if (cancellationToken.IsCancellationRequested)
             {
-                throw new CanceledError("キャンセルされました。");
+                throw new CanceledError(Msg.T("キャンセルされました。", "Canceled."));
             }
 
-            throw new LimitError($"外部プログラムが制限時間 {timeout.TotalSeconds:0.#} 秒を超えたため終了させました。") { Limit = "time" };
+            throw new LimitError(Msg.T($"外部プログラムが制限時間 {timeout.TotalSeconds:0.#} 秒を超えたため終了させました。", $"The external program was terminated because it exceeded the time limit of {timeout.TotalSeconds:0.#} seconds.")) { Limit = "time" };
         }
 
         string o = await stdout.ConfigureAwait(false);

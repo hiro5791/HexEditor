@@ -21,16 +21,16 @@ internal sealed class ScriptHash(ScriptContext ctx) : IHash
             IReadOnlyList<CustomCrcError> errors = def.ValidateParameters();
             if (errors.Count > 0)
             {
-                throw new Sdk.ArgumentError($"カスタム CRC のパラメータが正しくありません: {string.Join(", ", errors.Select(e => $"{e.Field} {e.Code}"))}");
+                throw new Sdk.ArgumentError(Msg.T($"カスタム CRC のパラメータが正しくありません: {string.Join(", ", errors.Select(e => $"{e.Field} {e.Code}"))}", $"Invalid custom CRC parameters: {string.Join(", ", errors.Select(e => $"{e.Field} {e.Code}"))}"));
             }
 
             return ("crc", def.ToAlgorithm());
         }
 
-        string id = spec.Id ?? throw new Sdk.ArgumentError("アルゴリズムを指定してください。");
+        string id = spec.Id ?? throw new Sdk.ArgumentError(Msg.T("アルゴリズムを指定してください。", "Specify an algorithm."));
         CoreHashInfo info = HashCatalog.Find(id) is { IsAvailable: true } a
             ? a
-            : throw new Sdk.ArgumentError($"ハッシュのアルゴリズムが不明です: {id} (hash.algorithms で一覧できます)");
+            : throw new Sdk.ArgumentError(Msg.T($"ハッシュのアルゴリズムが不明です: {id} (hash.algorithms で一覧できます)", $"Unknown hash algorithm: {id} (see hash.algorithms for the list)"));
         return (info.Id, info);
     }
 
@@ -41,12 +41,12 @@ internal sealed class ScriptHash(ScriptContext ctx) : IHash
     {
         if (document is not ScriptDocument doc)
         {
-            throw new Sdk.ArgumentError("document にはドキュメントを指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("document にはドキュメントを指定してください。", "Specify a document for document."));
         }
 
         if (algorithms.Count == 0)
         {
-            throw new Sdk.ArgumentError("アルゴリズムを 1 つ以上指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("アルゴリズムを 1 つ以上指定してください。", "Specify at least one algorithm."));
         }
 
         List<(string Id, CoreHashInfo Info)> resolved = [.. algorithms.Select(Resolve)];
@@ -73,7 +73,7 @@ internal sealed class ScriptHash(ScriptContext ctx) : IHash
         byte[] bytes = ScriptDocument.PatternBytes(data, allowRandom: false);
         if (bytes.Length > ScriptDocument.SyncLimit)
         {
-            throw new LimitError("同期 API で扱えるのは 1 回 16 MB までです。hash.compute を使ってください。") { Limit = "size" };
+            throw new LimitError(Msg.T("同期 API で扱えるのは 1 回 16 MB までです。hash.compute を使ってください。", "The synchronous API handles at most 16 MB at a time. Use hash.compute.")) { Limit = "size" };
         }
 
         (string id, CoreHashInfo info) = Resolve(algorithm);

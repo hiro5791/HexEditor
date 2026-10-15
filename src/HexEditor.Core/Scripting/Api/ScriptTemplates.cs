@@ -6,7 +6,7 @@ namespace HexEditor.Core.Scripting.Api;
 /// <summary><c>templates</c> (AUTO-13)。テンプレートエンジン (07) は <see cref="IScriptEnvironment.Templates"/> から使う。</summary>
 internal sealed class ScriptTemplates(ScriptContext ctx) : ITemplates
 {
-    private IScriptTemplateEngine Engine => ctx.Environment.Templates ?? throw new Sdk.ArgumentError("テンプレートの機能が使えません。");
+    private IScriptTemplateEngine Engine => ctx.Environment.Templates ?? throw new Sdk.ArgumentError(Msg.T("テンプレートの機能が使えません。", "The template feature is not available."));
 
     public IReadOnlyList<TemplateInfo> List() => ScriptErrorMap.Guard(() => Engine.List());
 
@@ -14,7 +14,7 @@ internal sealed class ScriptTemplates(ScriptContext ctx) : ITemplates
     {
         if (document is not ScriptDocument doc)
         {
-            throw new Sdk.ArgumentError("document にはドキュメントを指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("document にはドキュメントを指定してください。", "Specify a document for document."));
         }
 
         doc.ThrowIfClosed();

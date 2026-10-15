@@ -35,7 +35,7 @@ public sealed record CSharpComponentManifest
     private static readonly JsonSerializerOptions Json = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true };
 
     public static CSharpComponentManifest Parse(string json) =>
-        JsonSerializer.Deserialize<CSharpComponentManifest>(json, Json) ?? throw new JsonException("一覧が空です。");
+        JsonSerializer.Deserialize<CSharpComponentManifest>(json, Json) ?? throw new JsonException(Msg.T("一覧が空です。", "The manifest is empty."));
 
     public string ToJson() => JsonSerializer.Serialize(this, Json);
 
@@ -144,13 +144,13 @@ public sealed class CSharpComponentManager
     /// </summary>
     public async Task InstallAsync(IProgress<double>? progress, CancellationToken cancellationToken)
     {
-        CSharpComponentManifest manifest = Manifest ?? throw new CSharpComponentException("このアプリにはコンポーネントの検証用の一覧がありません。");
+        CSharpComponentManifest manifest = Manifest ?? throw new CSharpComponentException(Msg.T("このアプリにはコンポーネントの検証用の一覧がありません。", "This app has no manifest for verifying components."));
         if (!DownloadsAllowed())
         {
-            throw new CSharpComponentException("オフラインモード、またはダウンロードが無効のため、コンポーネントをダウンロードできません。手動で zip を展開してください。");
+            throw new CSharpComponentException(Msg.T("オフラインモード、またはダウンロードが無効のため、コンポーネントをダウンロードできません。手動で zip を展開してください。", "Cannot download the component because offline mode is on or downloads are disabled. Extract the zip manually."));
         }
 
-        ICSharpComponentFeed feed = Feed ?? throw new CSharpComponentException("コンポーネントの配布元が設定されていません。");
+        ICSharpComponentFeed feed = Feed ?? throw new CSharpComponentException(Msg.T("コンポーネントの配布元が設定されていません。", "No download source for the component is configured."));
         string temp = Path.Combine(Path.GetTempPath(), "HexEditor", "component-" + Guid.NewGuid().ToString("N") + ".zip");
         Directory.CreateDirectory(Path.GetDirectoryName(temp)!);
         try
@@ -163,7 +163,7 @@ public sealed class CSharpComponentManager
                 }
                 catch (Exception ex) when (ex is IOException or HttpRequestException or TaskCanceledException && !cancellationToken.IsCancellationRequested)
                 {
-                    throw new CSharpComponentException($"ダウンロードに失敗しました: {ex.Message}", true, ex);
+                    throw new CSharpComponentException(Msg.T($"ダウンロードに失敗しました: {ex.Message}", $"Download failed: {ex.Message}"), true, ex);
                 }
             }
 
@@ -181,11 +181,11 @@ public sealed class CSharpComponentManager
     /// </summary>
     public Task InstallFromZipAsync(string zipPath, CancellationToken cancellationToken) => Task.Run(() =>
     {
-        CSharpComponentManifest manifest = Manifest ?? throw new CSharpComponentException("このアプリにはコンポーネントの検証用の一覧がありません。");
+        CSharpComponentManifest manifest = Manifest ?? throw new CSharpComponentException(Msg.T("このアプリにはコンポーネントの検証用の一覧がありません。", "This app has no manifest for verifying components."));
         string hash = Sha256Of(zipPath);
         if (!string.Equals(hash, manifest.PackageSha256, StringComparison.OrdinalIgnoreCase))
         {
-            throw new CSharpComponentException($"コンポーネントの zip のハッシュが一致しません (改ざんされているか、別のバージョンです)。期待: {manifest.PackageSha256}、実際: {hash}");
+            throw new CSharpComponentException(Msg.T($"コンポーネントの zip のハッシュが一致しません (改ざんされているか、別のバージョンです)。期待: {manifest.PackageSha256}、実際: {hash}", $"The hash of the component zip does not match (it may have been tampered with, or it is a different version). Expected: {manifest.PackageSha256}, actual: {hash}"));
         }
 
         string staging = Path.Combine(Folder, ".staging-" + Guid.NewGuid().ToString("N"));
@@ -197,7 +197,7 @@ public sealed class CSharpComponentManager
             }
             catch (InvalidDataException ex)
             {
-                throw new CSharpComponentException($"コンポーネントの zip を展開できません: {ex.Message}", true, ex);
+                throw new CSharpComponentException(Msg.T($"コンポーネントの zip を展開できません: {ex.Message}", $"Cannot extract the component zip: {ex.Message}"), true, ex);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -241,13 +241,13 @@ public sealed class CSharpComponentManager
             string path = Path.Combine(folder, relative.Replace('/', Path.DirectorySeparatorChar));
             if (!File.Exists(path))
             {
-                throw new CSharpComponentException($"コンポーネントのファイルが足りません: {relative}");
+                throw new CSharpComponentException(Msg.T($"コンポーネントのファイルが足りません: {relative}", $"A component file is missing: {relative}"));
             }
 
             string actual = Sha256Of(path);
             if (!string.Equals(actual, expected, StringComparison.OrdinalIgnoreCase))
             {
-                throw new CSharpComponentException($"コンポーネントのファイルのハッシュが一致しません (改ざんの可能性): {relative}");
+                throw new CSharpComponentException(Msg.T($"コンポーネントのファイルのハッシュが一致しません (改ざんの可能性): {relative}", $"The hash of a component file does not match (possible tampering): {relative}"));
             }
         }
 
@@ -256,7 +256,7 @@ public sealed class CSharpComponentManager
             string path = Path.Combine(folder, relative.Replace('/', Path.DirectorySeparatorChar));
             if (!Verifier.IsMicrosoftSigned(path, out string? error))
             {
-                throw new CSharpComponentException($"コンポーネントのファイルの署名を確認できません: {relative} ({error})");
+                throw new CSharpComponentException(Msg.T($"コンポーネントのファイルの署名を確認できません: {relative} ({error})", $"Cannot verify the signature of a component file: {relative} ({error})"));
             }
         }
     }
@@ -268,7 +268,7 @@ public sealed class CSharpComponentManager
         {
             if (_backend is not null)
             {
-                throw new CSharpComponentException("コンポーネントは使用中です。アプリを再起動してから削除してください。", manualInstructions: false);
+                throw new CSharpComponentException(Msg.T("コンポーネントは使用中です。アプリを再起動してから削除してください。", "The component is in use. Restart the app and then delete it."), manualInstructions: false);
             }
 
             _verifiedFolder = null;
@@ -292,11 +292,11 @@ public sealed class CSharpComponentManager
                 return _backend;
             }
 
-            CSharpComponentManifest manifest = Manifest ?? throw new CSharpComponentException("このアプリにはコンポーネントの検証用の一覧がありません。");
+            CSharpComponentManifest manifest = Manifest ?? throw new CSharpComponentException(Msg.T("このアプリにはコンポーネントの検証用の一覧がありません。", "This app has no manifest for verifying components."));
             string folder = VersionFolder!;
             if (!IsInstalled)
             {
-                throw new CSharpComponentException("C# スクリプト コンポーネントがありません。");
+                throw new CSharpComponentException(Msg.T("C# スクリプト コンポーネントがありません。", "The C# script component is not installed."));
             }
 
             if (_verifiedFolder != folder)
@@ -308,7 +308,7 @@ public sealed class CSharpComponentManager
             var alc = new ComponentLoadContext(folder);
             Assembly entry = alc.LoadFromAssemblyPath(Path.Combine(folder, EntryAssembly));
             Type type = entry.GetExportedTypes().FirstOrDefault(t => typeof(ICSharpScriptBackend).IsAssignableFrom(t) && !t.IsAbstract)
-                ?? throw new CSharpComponentException("コンポーネントに入口がありません。");
+                ?? throw new CSharpComponentException(Msg.T("コンポーネントに入口がありません。", "The component has no entry point."));
             _backend = (ICSharpScriptBackend)Activator.CreateInstance(type)!;
             return _backend;
         }

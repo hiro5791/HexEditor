@@ -157,7 +157,7 @@ public sealed class ScriptMetadata
 
             if (body[0] != '@')
             {
-                meta.Warnings.Add(new(i + 1, $"メタデータの行が @ で始まっていません: {body}"));
+                meta.Warnings.Add(new(i + 1, Msg.T($"メタデータの行が @ で始まっていません: {body}", $"A metadata line does not start with @: {body}")));
                 continue;
             }
 
@@ -169,7 +169,7 @@ public sealed class ScriptMetadata
 
         if (!closed)
         {
-            meta.Warnings.Add(new(i, $"メタデータの終わり ({EndMarker}) がありません。"));
+            meta.Warnings.Add(new(i, Msg.T($"メタデータの終わり ({EndMarker}) がありません。", $"The end of the metadata ({EndMarker}) is missing.")));
         }
 
         return meta;
@@ -188,7 +188,7 @@ public sealed class ScriptMetadata
 
         if (lang is not null && baseKey is not ("name" or "description"))
         {
-            Warnings.Add(new(line, $"言語タグを付けられない項目です: @{key}"));
+            Warnings.Add(new(line, Msg.T($"言語タグを付けられない項目です: @{key}", $"A language tag cannot be added to this item: @{key}")));
             return;
         }
 
@@ -229,7 +229,7 @@ public sealed class ScriptMetadata
                 }
                 else
                 {
-                    Warnings.Add(new(line, $"@api のバージョンを読めません: {value}"));
+                    Warnings.Add(new(line, Msg.T($"@api のバージョンを読めません: {value}", $"Cannot parse the @api version: {value}")));
                 }
 
                 break;
@@ -245,7 +245,7 @@ public sealed class ScriptMetadata
                     }
                     else
                     {
-                        Warnings.Add(new(line, $"不明な許可です: {p}"));
+                        Warnings.Add(new(line, Msg.T($"不明な許可です: {p}", $"Unknown permission: {p}")));
                     }
                 }
 
@@ -257,7 +257,7 @@ public sealed class ScriptMetadata
                 }
                 else
                 {
-                    Warnings.Add(new(line, $"@timeout は秒数で書いてください: {value}"));
+                    Warnings.Add(new(line, Msg.T($"@timeout は秒数で書いてください: {value}", $"Write @timeout as a number of seconds: {value}")));
                 }
 
                 break;
@@ -268,7 +268,7 @@ public sealed class ScriptMetadata
                 }
                 else
                 {
-                    Warnings.Add(new(line, $"@memory は MB の数で書いてください: {value}"));
+                    Warnings.Add(new(line, Msg.T($"@memory は MB の数で書いてください: {value}", $"Write @memory as a number of MB: {value}")));
                 }
 
                 break;
@@ -285,12 +285,12 @@ public sealed class ScriptMetadata
                 }
                 else
                 {
-                    Warnings.Add(new(line, $"@context は selection か always です: {value}"));
+                    Warnings.Add(new(line, Msg.T($"@context は selection か always です: {value}", $"@context must be selection or always: {value}")));
                 }
 
                 break;
             default:
-                Warnings.Add(new(line, $"不明な項目です: @{key}"));
+                Warnings.Add(new(line, Msg.T($"不明な項目です: @{key}", $"Unknown item: @{key}")));
                 break;
         }
     }
@@ -312,7 +312,7 @@ public sealed class ScriptMetadata
 
         if (tokens.Count < 2)
         {
-            Warnings.Add(new(line, $"@param は「名前 型 既定値 ラベル」の形で書いてください: {value}"));
+            Warnings.Add(new(line, Msg.T($"@param は「名前 型 既定値 ラベル」の形で書いてください: {value}", $"Write @param as \"name type default label\": {value}")));
             return;
         }
 
@@ -320,7 +320,7 @@ public sealed class ScriptMetadata
         string type = tokens[1].Text;
         if (!ParameterTypes.Contains(type))
         {
-            Warnings.Add(new(line, $"@param の型が不明です: {type}"));
+            Warnings.Add(new(line, Msg.T($"@param の型が不明です: {type}", $"Unknown @param type: {type}")));
             return;
         }
 
@@ -346,7 +346,7 @@ public sealed class ScriptMetadata
                 }
                 else
                 {
-                    Warnings.Add(new(line, $"checkbox の既定値は true か false です: {defaultText}"));
+                    Warnings.Add(new(line, Msg.T($"checkbox の既定値は true か false です: {defaultText}", $"The default of a checkbox must be true or false: {defaultText}")));
                     def = false;
                 }
 
@@ -355,7 +355,7 @@ public sealed class ScriptMetadata
                 choices = (defaultText ?? "").Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 if (choices.Count == 0)
                 {
-                    Warnings.Add(new(line, $"choice の選択肢を既定値の欄に a|b|c の形で書いてください: {name}"));
+                    Warnings.Add(new(line, Msg.T($"choice の選択肢を既定値の欄に a|b|c の形で書いてください: {name}", $"Write the choices of a choice parameter in the default column as a|b|c: {name}")));
                 }
 
                 def = choices.Count > 0 ? choices[0] : null;
@@ -364,7 +364,7 @@ public sealed class ScriptMetadata
 
         if (Parameters.Any(p => p.Name == name))
         {
-            Warnings.Add(new(line, $"@param の名前が重複しています: {name}"));
+            Warnings.Add(new(line, Msg.T($"@param の名前が重複しています: {name}", $"Duplicate @param name: {name}")));
             return;
         }
 

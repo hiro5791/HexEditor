@@ -50,7 +50,7 @@ internal static class CSharpScriptRunner
 
             if (!installed)
             {
-                string message = "C# スクリプト コンポーネントがありません。メニュー「ツール > スクリプト > C# スクリプト コンポーネントを追加...」で追加してください。";
+                string message = Msg.T("C# スクリプト コンポーネントがありません。メニュー「ツール > スクリプト > C# スクリプト コンポーネントを追加...」で追加してください。", "The C# script component is not installed. Add it from the menu \"Tools > Script > Add C# Script Component...\".");
                 return ScriptExecution.Error(ScriptFailure.Io, message, [new ScriptDiagnostic(message, ctx.Path, 0, 0)]);
             }
         }
@@ -78,7 +78,7 @@ internal static class CSharpScriptRunner
 
         if (compiled.Diagnostics.Count > 0)
         {
-            return ScriptExecution.Error(ScriptFailure.ScriptError, "コンパイルエラー", compiled.Diagnostics);
+            return ScriptExecution.Error(ScriptFailure.ScriptError, Msg.T("コンパイルエラー", "Compilation error"), compiled.Diagnostics);
         }
 
         var thread = new CSharpScriptThread();
@@ -238,7 +238,7 @@ internal sealed class CSharpCompileCache(string folder)
             .Select(d => new ScriptDiagnostic(d.Message, d.Path ?? ctx.Path, d.Line, d.Column, d.Id))];
         if (result.Assembly is null || errors.Count > 0)
         {
-            return new CompiledScript(null, null, null, errors.Count > 0 ? errors : [new ScriptDiagnostic("コンパイルに失敗しました。", ctx.Path, 0, 0)]);
+            return new CompiledScript(null, null, null, errors.Count > 0 ? errors : [new ScriptDiagnostic(Msg.T("コンパイルに失敗しました。", "Compilation failed."), ctx.Path, 0, 0)]);
         }
 
         lock (_lock)

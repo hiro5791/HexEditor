@@ -4,6 +4,7 @@
     <Project Path="src/HexEditor.Core/HexEditor.Core.csproj" />
     <Project Path="src/HexEditor.Elevated/HexEditor.Elevated.csproj" />
     <Project Path="src/HexEditor.Platform/HexEditor.Platform.csproj" />
+    <Project Path="src/HexEditor.Scripting.CSharp/HexEditor.Scripting.CSharp.csproj" />
     <Project Path="src/HexEditor.Sdk/HexEditor.Sdk.csproj" />
     <Project Path="src/HexEditor.ShellExtension/HexEditor.ShellExtension.csproj" />
   </Folder>

@@ -493,6 +493,13 @@ public static class BuiltInCommands
         new("window.next", "window"),
         new("window.restoreSession", "window"),
 
+        // ---- ツール: スクリプト (08 の AUTO-01、AUTO-03) ----
+        // ID は scripting.* (script.<名前> は利用者のスクリプトのコマンドに使う。09 の UI-16 の仕様 3)。
+        new("scripting.run", "scripting") { DefaultBindings = [K("F5")] },
+        new("scripting.runFile", "scripting"),
+        new("scripting.stopAll", "scripting"),
+        new("scripting.addCSharpComponent", "scripting"),
+
         // ---- ツール・設定 ----
         new("settings.open", "settings") { Icon = IconSettings, DefaultBindings = [K("Ctrl+OemComma")] },
         new("settings.keyboard", "settings") { Icon = IconKeyboard },

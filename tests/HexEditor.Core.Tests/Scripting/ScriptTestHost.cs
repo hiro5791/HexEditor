@@ -12,7 +12,7 @@ namespace HexEditor.Core.Tests.Scripting;
 /// </summary>
 public sealed class ScriptTestHost : IDisposable
 {
-    public ScriptTestHost(ScriptLimits? limits = null, string policy = "", CSharpComponentManager? csharp = null, string language = "en")
+    public ScriptTestHost(ScriptLimits? limits = null, string policy = "", CSharpComponentManager? csharp = null, string language = "ja")
     {
         Root = Path.Combine(Path.GetTempPath(), "HexEditor", "script-tests", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(Root);

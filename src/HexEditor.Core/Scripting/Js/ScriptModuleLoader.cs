@@ -63,13 +63,13 @@ internal sealed class ScriptModuleLoader(string mainKey, string mainCode, string
 
             if (!IsAllowed(full))
             {
-                throw new ModuleResolutionException($"このモジュールは読み込めません: {full}", spec, referencingModuleLocation ?? "", full);
+                throw new ModuleResolutionException(Msg.T($"このモジュールは読み込めません: {full}", $"This module cannot be loaded: {full}"), spec, referencingModuleLocation ?? "", full);
             }
 
-            throw new ModuleResolutionException($"モジュールが見つかりません: {full}", spec, referencingModuleLocation ?? "", full);
+            throw new ModuleResolutionException(Msg.T($"モジュールが見つかりません: {full}", $"Module not found: {full}"), spec, referencingModuleLocation ?? "", full);
         }
 
-        throw new ModuleResolutionException($"このモジュールは読み込めません: {spec}", spec, referencingModuleLocation ?? "", spec);
+        throw new ModuleResolutionException(Msg.T($"このモジュールは読み込めません: {spec}", $"This module cannot be loaded: {spec}"), spec, referencingModuleLocation ?? "", spec);
     }
 
     public Module LoadModule(JintEngine engine, ResolvedSpecifier resolved)

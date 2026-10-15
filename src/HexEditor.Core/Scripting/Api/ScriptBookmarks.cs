@@ -38,7 +38,7 @@ internal sealed class ScriptBookmarks(ScriptDocument doc) : IBookmarks
         get
         {
             List<IBookmark> all = Snapshot();
-            return index >= 0 && index < all.Count ? all[index] : throw new Sdk.RangeError($"ブックマークの番号が範囲外です: {index}");
+            return index >= 0 && index < all.Count ? all[index] : throw new Sdk.RangeError(Msg.T($"ブックマークの番号が範囲外です: {index}", $"The bookmark index is out of range: {index}"));
         }
     }
 
@@ -69,7 +69,7 @@ internal sealed class ScriptBookmarks(ScriptDocument doc) : IBookmarks
         long docLength = doc.Snapshot.Length;
         if (start < 0 || length < 0 || start > docLength || length > docLength - start)
         {
-            throw new Sdk.RangeError($"ブックマークの範囲がドキュメントの外です: 0x{start:X}+0x{length:X}");
+            throw new Sdk.RangeError(Msg.T($"ブックマークの範囲がドキュメントの外です: 0x{start:X}+0x{length:X}", $"The bookmark range is outside the document: 0x{start:X}+0x{length:X}"));
         }
     }
 
@@ -79,7 +79,7 @@ internal sealed class ScriptBookmarks(ScriptDocument doc) : IBookmarks
     {
         if (bookmark is not ScriptBookmark sb)
         {
-            throw new Sdk.ArgumentError("bookmark には doc.bookmarks のブックマークを指定してください。");
+            throw new Sdk.ArgumentError(Msg.T("bookmark には doc.bookmarks のブックマークを指定してください。", "Specify a bookmark from doc.bookmarks for bookmark."));
         }
 
         Ui(c =>
@@ -99,13 +99,13 @@ internal sealed class ScriptBookmarks(ScriptDocument doc) : IBookmarks
         return true;
     });
 
-    public IBookmark? Find(string name) => Ui(c => c.FindByName(name) is { } b ? (IBookmark)Read(c, b, c.StartOf(b)) : null);
+    public IBookmark? Find(string name) => Ui(c => c.AllWithStart.FirstOrDefault(p => p.Bookmark.Name == name) is { Bookmark: { } b } p ? (IBookmark)Read(c, b, p.Start) : null);
 
     public long AddFromResults(IReadOnlyList<SdkRange> results, string nameFormat = "{index}")
     {
         if (results.Count > MaxResults)
         {
-            throw new LimitError($"一度に追加できるのは {MaxResults:N0} 件までです ({results.Count:N0} 件)。") { Limit = "count" };
+            throw new LimitError(Msg.T($"一度に追加できるのは {MaxResults:N0} 件までです ({results.Count:N0} 件)。", $"At most {MaxResults:N0} items can be added at once ({results.Count:N0} items).")) { Limit = "count" };
         }
 
         foreach (SdkRange r in results)
@@ -117,7 +117,7 @@ internal sealed class ScriptBookmarks(ScriptDocument doc) : IBookmarks
         {
             if (c.Count + results.Count > BookmarkCollection.MaxCount)
             {
-                throw new LimitError($"ブックマークの上限 {BookmarkCollection.MaxCount:N0} 件を超えます。") { Limit = "count" };
+                throw new LimitError(Msg.T($"ブックマークの上限 {BookmarkCollection.MaxCount:N0} 件を超えます。", $"This exceeds the bookmark limit of {BookmarkCollection.MaxCount:N0}.")) { Limit = "count" };
             }
 
             // 1 件ずつ通知すると一覧の更新が重いので、まとめて加えて 1 回だけ知らせる (1 万件を 1 秒以内。AUTO-11 の受け入れ基準 2)。

@@ -44,7 +44,7 @@ public sealed class ScriptApp : IApp
         {
             if (value is not ScriptDocument doc)
             {
-                throw new Sdk.ArgumentError("activeDocument にはドキュメントを指定してください。");
+                throw new Sdk.ArgumentError(Msg.T("activeDocument にはドキュメントを指定してください。", "Specify a document for activeDocument."));
             }
 
             doc.ThrowIfClosed();
@@ -78,7 +78,7 @@ public sealed class ScriptApp : IApp
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or NotSupportedException or ArgumentException)
             {
-                throw new IoError($"開けません: {ex.Message}", ex);
+                throw new IoError(Msg.T($"開けません: {ex.Message}", $"Cannot open: {ex.Message}"), ex);
             }
         }
 
@@ -105,7 +105,7 @@ public sealed class ScriptApp : IApp
         long length = options?.Length ?? 0;
         if (length < 0)
         {
-            throw new Sdk.ArgumentError("length は 0 以上にしてください。");
+            throw new Sdk.ArgumentError(Msg.T("length は 0 以上にしてください。", "length must be 0 or greater."));
         }
 
         byte[] fill = options?.Fill is BytePattern p ? ScriptDocument.PatternBytes(p, allowRandom: false) : [0];
@@ -154,7 +154,7 @@ public sealed class ScriptApp : IApp
     {
         if (code is < 0 or > 255)
         {
-            throw new Sdk.RangeError($"終了コードは 0〜255 です: {code}");
+            throw new Sdk.RangeError(Msg.T($"終了コードは 0〜255 です: {code}", $"The exit code must be 0 to 255: {code}"));
         }
 
         _ctx.ExitCode = code;
