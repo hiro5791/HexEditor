@@ -271,6 +271,9 @@ public sealed partial class MainWindow : ITemplateEditorHost
                 DocumentTemplates.Find(doc.Document)?.TemplateSaved(path);
             }
         }
+
+        // インスペクタ用テンプレート (TPL-29) として登録したファイルなら、ユーザー定義型の行を更新する
+        InspectorUserTypeService.Instance.ReloadIfChanged();
     }
 
     /// <summary>「複製して編集」: 利用者のフォルダに複製し (エディタの変更を引き継ぐ)、複製をエディタで開く (TPL-35 の仕様 5)。</summary>

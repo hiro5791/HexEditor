@@ -143,9 +143,6 @@ public sealed record TestHookSettings
     /// </summary>
     public bool? Elevated { get; init; }
 
-    /// <summary>起動時に Shift キーを押していた扱いにする (セーフモード。08 の AUTO-30 の仕様 8。実際のキーの状態は読まない)。</summary>
-    public bool ShiftHeld { get; init; }
-
     /// <summary>
     /// 管理者として実行中のドロップの案内 (UI-34 の仕様 7) をテスト用のビルドでも出す。既定では出さない (CI のランナーは管理者として動くため、
     /// ほかの通知を確かめるテストの邪魔になる)。TC-UI-34-06 で使う。
@@ -172,6 +169,9 @@ public sealed record TestHookSettings
 
     /// <summary>「名前を付けて保存」のダイアログの代わりに返すパス (空文字列はキャンセル)。null なら本物のダイアログを出す。</summary>
     public string? SavePicker { get; init; }
+
+    /// <summary>起動時に Shift キーが押されているとみなす (セーフモード。09 の UI-30 の仕様 4)。実際のキーの状態は読まない。</summary>
+    public bool? SafeModeShift { get; init; }
 
     /// <summary>ボリュームの空き容量の上書き (バイト数)。null なら OS の値。</summary>
     public long? FreeSpace { get; init; }
@@ -224,7 +224,6 @@ public sealed record TestHookSettings
             AnsiCodePage = root["ansiCodePage"] is { } cp ? (int)ReadLong(cp, 0) : null,
             Culture = root["culture"]?.GetValue<string>(),
             Elevated = root["elevated"]?.GetValue<bool>(),
-            ShiftHeld = root["shiftHeld"]?.GetValue<bool>() ?? false,
             AdminDropNotice = root["adminDropNotice"]?.GetValue<bool>() ?? false,
             PauseAfterVolumeLock = root["pauseAfterVolumeLock"]?.GetValue<string>(),
             TimeZone = root["timeZone"]?.GetValue<string>(),
@@ -232,6 +231,7 @@ public sealed record TestHookSettings
             FakeProcesses = root["fakeProcesses"]?.GetValue<string>(),
             OpenPicker = root["openPicker"]?.AsArray().Select(n => n!.GetValue<string>()).ToList(),
             SavePicker = root["savePicker"]?.GetValue<string>(),
+            SafeModeShift = root["safeModeShift"]?.GetValue<bool>(),
             FreeSpace = root["freeSpace"] is { } free ? ReadLong(free, 0) : null,
             WriteErrors = root["writeErrors"]?.AsArray().Select(n => new WriteErrorSpec(
                 n!["match"]?.GetValue<string>() ?? "*",

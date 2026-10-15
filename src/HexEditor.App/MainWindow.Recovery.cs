@@ -84,6 +84,8 @@ public sealed partial class MainWindow
         }
 
         ShowAdminDropNoticeOnce();
+        ShowSafeModeNotice();
+        UpdateCSharpComponentAfterAppUpdate();
         if (CrashReporter.FindUnseen() is { } crash)
         {
             CrashReporter.MarkSeen(crash);

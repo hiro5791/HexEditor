@@ -122,19 +122,25 @@ public sealed class TemplateToolingTests : IDisposable
 
     [Fact]
     [Trait(TC, "TC-TPL-29-01")]
-    public void InspectorTypesShowFollowAndWrite()
+    public async Task InspectorTypesShowFollowAndWrite()
     {
-        var types = new TemplateInspectorTypes();
-        types.Load([Fixture("inspector-rgb565.hxt")]);
-        TemplateInspectorType t = Assert.Single(types.Types);
+        // 登録したテンプレートの型は、インスペクタのユーザー定義型 (INSP-22) と同じ経路で読み込み・評価する。
+        using var types = new HexEditor.Core.Inspector.InspectorUserTypes(_dir);
+        types.SetRegisteredTemplates([Fixture("inspector-rgb565.hxt")]);
+        HexEditor.Core.Inspector.InspectorUserType t = Assert.Single(types.Types);
+        Assert.Equal(HexEditor.Core.Inspector.InspectorUserTypeSource.Registered, t.Source);
         Assert.Equal("RGB565 色", t.DisplayName);
         Assert.False(t.NotFixedSize);
         byte[] data = Hex("00 F8 E0 07 1F 00 FF FF");
-        Assert.Equal("#FF0000", types.Evaluate(t, TemplateDataSource.FromBytes(data), 0, out _).Display);
-        TemplateInspectorValue green = types.Evaluate(t, TemplateDataSource.FromBytes(data), 2, out _);
-        Assert.Equal("#00FF00", green.Display);
-        TemplateEditPlan plan = TemplateInspectorTypes.PlanEdit(green.Node!, "#0000FF");
-        Assert.Equal(2, plan.Offset);
+        Assert.Equal("#FF0000", (await types.EvaluateAsync(t, data, HexEditor.Core.Inspector.Endianness.Little)).Display);
+
+        // カーソルを 0x2 に動かす (起点からのデータで評価する)。
+        Assert.Equal("#00FF00", (await types.EvaluateAsync(t, data[2..], HexEditor.Core.Inspector.Endianness.Little)).Display);
+        using TemplateResult r = types.ApplyForEdit(t, data[2..], HexEditor.Core.Inspector.Endianness.Little)!;
+        TemplateNode node = r.Invoke(() => r.Root.Children[0]);
+        Assert.True(TemplateInspectorTypes.CanEdit(node));
+        TemplateEditPlan plan = TemplateInspectorTypes.PlanEdit(node, "#0000FF");
+        Assert.Equal(0, plan.Offset);
         Assert.Equal(Hex("1F 00"), plan.Bytes);
     }
 

@@ -165,14 +165,19 @@ public sealed class PluginGuard
         }
     }
 
-    /// <summary>呼ぶ。例外は記録してから <see cref="PluginCallException"/> にして投げる (計算・変換を失敗にする)。止めたプラグインでも投げる。</summary>
-    public T InvokeOrThrow<T>(string what, Func<T> call)
+    /// <summary>
+    /// 呼ぶ。例外は記録してから <see cref="PluginCallException"/> にして投げる (計算・変換を失敗にする)。止めたプラグインでも投げる。
+    /// <paramref name="timed"/> なら UI スレッドの呼び出しと同じ時間の決まり (遅い呼び出しの警告と停止) を当てる (インスペクタの型は別のスレッドで
+    /// 呼ぶが、UI スレッドの拡張ポイントとして扱う。AUTO-31 の仕様 5)。
+    /// </summary>
+    public T InvokeOrThrow<T>(string what, Func<T> call, bool timed = false)
     {
         if (IsStopped)
         {
             throw new PluginCallException(Stopped());
         }
 
+        long start = Stopwatch.GetTimestamp();
         try
         {
             return call();
@@ -186,6 +191,13 @@ public sealed class PluginGuard
             Fault(what, ex);
             throw new PluginCallException(Msg.T($"プラグイン「{_owner.NameFor(Msg.Default)}」でエラーが起きました: {ex.Message}",
                 $"Plugin \"{_owner.NameFor(Msg.Default)}\" failed: {ex.Message}"), ex);
+        }
+        finally
+        {
+            if (timed)
+            {
+                Timed(what, Stopwatch.GetElapsedTime(start));
+            }
         }
     }
 

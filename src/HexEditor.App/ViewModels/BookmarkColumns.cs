@@ -12,6 +12,9 @@ public enum BookmarkColumn
     Length,
     Group,
     Comment,
+
+    /// <summary>型付きブックマークの値 (INSP-29 の仕様 2)。既定は非表示 (型を付けると表示する)。</summary>
+    Value,
 }
 
 /// <summary>
@@ -29,6 +32,7 @@ public static class BookmarkColumns
         (BookmarkColumn.Name, true),
         (BookmarkColumn.Start, true),
         (BookmarkColumn.Length, true),
+        (BookmarkColumn.Value, false),
         (BookmarkColumn.Group, false),
         (BookmarkColumn.Comment, false),
     ];
@@ -53,8 +57,18 @@ public static class BookmarkColumns
         BookmarkColumn.Length => 56,
         BookmarkColumn.Group => 80,
         BookmarkColumn.Comment => 120,
+        BookmarkColumn.Value => 110,
         _ => double.NaN,
     };
+
+    /// <summary>列を表示する (表示していなければ)。</summary>
+    public static void Show(BookmarkColumn column)
+    {
+        if (!Visible.Contains(column))
+        {
+            Toggle(column);
+        }
+    }
 
     /// <summary>列の表示を切り替える (名前の列は切り替えない)。</summary>
     public static void Toggle(BookmarkColumn column)
@@ -130,11 +144,11 @@ public static class BookmarkColumns
 
 /// <summary>
 /// 一覧の行と見出しの列の配置 (<see cref="BookmarkColumns"/> と「すべてのドキュメント」のドキュメントの列から作る)。行のテンプレートは
-/// 列ごとに 8 つの欄を持ち、この配置で各欄の位置・表示と欄の幅を決める (x:Bind で変更を受ける)。
+/// 列ごとに 9 つの欄を持ち、この配置で各欄の位置・表示と欄の幅を決める (x:Bind で変更を受ける)。
 /// </summary>
 public sealed partial class BookmarkColumnLayout : CommunityToolkit.Mvvm.ComponentModel.ObservableObject, IDisposable
 {
-    public const int Slots = 8;
+    public const int Slots = 9;
 
     public BookmarkColumnLayout()
     {
@@ -182,6 +196,10 @@ public sealed partial class BookmarkColumnLayout : CommunityToolkit.Mvvm.Compone
 
     public int DocumentColumn { get; private set; }
 
+    public int ValueColumn { get; private set; }
+
+    public Microsoft.UI.Xaml.Visibility ValueVisibility { get; private set; }
+
     public Microsoft.UI.Xaml.Visibility NumberVisibility { get; private set; }
 
     public Microsoft.UI.Xaml.Visibility ColorVisibility { get; private set; }
@@ -218,6 +236,8 @@ public sealed partial class BookmarkColumnLayout : CommunityToolkit.Mvvm.Compone
 
     public Microsoft.UI.Xaml.GridLength Width7 { get; private set; }
 
+    public Microsoft.UI.Xaml.GridLength Width8 { get; private set; }
+
     private void Update()
     {
         List<BookmarkColumn?> order = [.. (ShowDocument ? [null] : Array.Empty<BookmarkColumn?>()), .. BookmarkColumns.Visible.Select(c => (BookmarkColumn?)c)];
@@ -249,6 +269,7 @@ public sealed partial class BookmarkColumnLayout : CommunityToolkit.Mvvm.Compone
         LengthColumn = SlotOf(BookmarkColumn.Length);
         GroupColumn = SlotOf(BookmarkColumn.Group);
         CommentColumn = SlotOf(BookmarkColumn.Comment);
+        ValueColumn = SlotOf(BookmarkColumn.Value);
         DocumentColumn = SlotOf(null);
         static Microsoft.UI.Xaml.Visibility V(bool on) => on ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
         NumberVisibility = V(order.Contains(BookmarkColumn.Number));
@@ -257,10 +278,12 @@ public sealed partial class BookmarkColumnLayout : CommunityToolkit.Mvvm.Compone
         LengthVisibility = V(order.Contains(BookmarkColumn.Length));
         GroupVisibility = V(order.Contains(BookmarkColumn.Group));
         CommentVisibility = V(order.Contains(BookmarkColumn.Comment));
+        ValueVisibility = V(order.Contains(BookmarkColumn.Value));
         DocumentVisibility = V(ShowDocument);
         CommentLineVisibility = V(!order.Contains(BookmarkColumn.Comment));
         DetailSpan = Math.Max(1, order.Count - NameColumn);
-        (Width0, Width1, Width2, Width3, Width4, Width5, Width6, Width7) = (widths[0], widths[1], widths[2], widths[3], widths[4], widths[5], widths[6], widths[7]);
+        (Width0, Width1, Width2, Width3, Width4, Width5, Width6, Width7, Width8) =
+            (widths[0], widths[1], widths[2], widths[3], widths[4], widths[5], widths[6], widths[7], widths[8]);
         OnPropertyChanged(string.Empty);
     }
 }

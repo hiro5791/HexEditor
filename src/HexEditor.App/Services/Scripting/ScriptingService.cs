@@ -97,7 +97,7 @@ internal static class ScriptingService
         }
 
         // 配布元と通信は追加するときに初めて使う (起動時に HttpClient を作らない)。
-        return new CSharpComponentManager(env.Locations.Components, manifest, new GitHubComponentFeed(() => AppUpdates.Network, () => UpdateSource.Product),
+        return new CSharpComponentManager(env.Locations.Components, manifest, new GitHubComponentFeed(() => AppUpdates.Network, () => UpdateSource.Resolve(AppUpdates.Preferences)),
             new PlatformVerifier(), () => AppUpdates.Policy.DownloadsAllowed);
     }
 

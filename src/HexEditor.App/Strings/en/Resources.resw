@@ -5709,7 +5709,7 @@ Details were written to:
   <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>Script list</value></data>
   <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>J</value></data>
   <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>Output</value></data>
-  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>T</value></data>
   <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>Console</value></data>
   <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>Z</value></data>
   <data name="Panel_Scripts_Title" xml:space="preserve"><value>Scripts</value></data>
@@ -6045,8 +6045,6 @@ Downloaded from: {2}</value></data>
   <data name="Plugin_DisableButton" xml:space="preserve"><value>Disable the plugin</value></data>
   <data name="Plugin_RetryButton" xml:space="preserve"><value>Try again at restart</value></data>
   <data name="Plugin_DisabledRestart" xml:space="preserve"><value>Plugin "{0}" will not be loaded after a restart.</value></data>
-  <data name="Plugin_SafeModeNotice" xml:space="preserve"><value>Started in safe mode. Plugins and automatic scripts are not loaded.</value></data>
-  <data name="Plugin_RestartNormally" xml:space="preserve"><value>Restart normally</value></data>
   <data name="Plugin_CrashTitle" xml:space="preserve"><value>Disable the plugin?</value></data>
   <data name="Plugin_CrashBody" xml:space="preserve"><value>HexEditor ended unexpectedly last time, possibly because of plugin "{0}". Disable it?</value></data>
   <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Keep enabled</value></data>
@@ -6063,7 +6061,6 @@ Downloaded from: {2}</value></data>
   <data name="Plugin_PanelTitle" xml:space="preserve"><value>Plugin panel</value></data>
   <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>The plugin could not create this panel.</value></data>
   <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Plugins</value></data>
-  <data name="Inspector_Group_Plugin" xml:space="preserve"><value>Plugins</value></data>
   <data name="Inspector_PluginStopped" xml:space="preserve"><value>(stopped)</value></data>
   <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>This plugin type cannot be edited with this value.</value></data>
   <data name="Panel_Templates_Title" xml:space="preserve"><value>Structure</value></data>
@@ -6446,4 +6443,92 @@ Type: {4}</value></data>
   <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Line number (1-{0})</value></data>
   <data name="CodeEditor_NoEditor" xml:space="preserve"><value>No code editor (template or script) is shown.</value></data>
   <data name="CodeEditor_NotSupported" xml:space="preserve"><value>This editor does not support this command.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Follow as pointer</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>pointer offset address jump inspector</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Follow as pointer</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Absolute (offset)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Absolute (address)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>Relative to the cursor</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Relative to the end of the value</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Relative to a base…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>Base (expression)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Go</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>The target {0} is outside the document (length {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>This row has no value to use as a position</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Enter the base as an expression, such as 0x400000 or bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Select an integer row in the data inspector</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Move as an array of this type</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Previous element</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Next element</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Exit array mode</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Element number</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Element size</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(not on an element boundary)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>Element {0} is outside the document</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Value</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Expr</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Circular reference between bookmarks</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>bm.name references are nested more than {0} levels</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>The position {0} is outside the document</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Position expression error: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Value</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Edit bookmark value</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(no type)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Type</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Endianness</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Document</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Position expression</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>e.g. u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>View: Image view panel</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>visualizer bitmap pixels picture image</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Image view</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Image view</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>1-bit black and white</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>2-bit gray</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>4-bit gray</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>8-bit gray</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8-bit (byte theme colors)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Follow the cursor</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>Start of the selection</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Fixed</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>Top to bottom</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>Bottom to top (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Auto</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Pixel format</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Width (pixels)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Bytes per row</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Auto</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Start position</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Fixed start position</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Row order</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Zoom</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>More options</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Image</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Scroll rows</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Save as image…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>The view range is too large; only the first 64 MB is drawn</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Enter the fixed start position as an expression</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>There is no image to save</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>Saved the image to {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>Could not save {0}: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>PNG image</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>Default</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Timed out</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>The type took longer than {0} ms; it runs again when the start position changes</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Error: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Inspector type file {0}, line {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Offline mode is on (or downloads are turned off), so the component is not downloaded. To add it by hand, get {0} from the release page of this version (on another PC if needed) and extract it into {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Started in safe mode. Plug-ins and automatically run scripts are not loaded.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Restart normally</value></data>
 </root>

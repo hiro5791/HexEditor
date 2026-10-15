@@ -229,7 +229,13 @@ public sealed partial class BookmarkCollection
         EditOp op = inserted > removed
             ? new EditOp(offset + common, 0, inserted - removed)
             : new EditOp(offset + common, removed - inserted, 0);
+        List<(Bookmark, long)>? fixedByExpression = _expressions.Count == 0 ? null : CaptureExpressionStarts();
         op.Saved = Forward(op);
+        if (fixedByExpression is not null)
+        {
+            // 位置の式を持つブックマークは編集で位置を調整しない (式の再評価で決める。INSP-29 の仕様 6)。
+            RestoreExpressionStarts(fixedByExpression, _document?.Length ?? long.MaxValue);
+        }
         ops?.Add(op);
         RaiseChanged(BookmarkChangeKind.Positions, []);
     }
@@ -487,6 +493,7 @@ public sealed partial class BookmarkCollection
         }
 
         _tree.Clear();
+        _expressions.Clear();
         _byName.Clear();
         Array.Clear(_numbers);
         _groups.Clear();
@@ -746,7 +753,12 @@ public sealed partial class BookmarkCollection
         {
             b.Scratch = n;
             buffer[n++] = new BookmarkRecord(start, b.Length, b.Name, b.Color, b.Comment, b.Number, b.Group, b.Created, b.Updated,
-                b.RangeDeleted, b.CreatedForNumber, b.EditedByUser, b.IsCustomized, b.ColorSet);
+                b.RangeDeleted, b.CreatedForNumber, b.EditedByUser, b.IsCustomized, b.ColorSet)
+            {
+                TypeId = b.TypeId,
+                TypeEndian = b.TypeEndian,
+                PositionExpression = b.PositionExpression,
+            };
         }
 
         if (_document is null || _savedIndex < 0 || _savedIndex == _appliedIndex || n == 0)

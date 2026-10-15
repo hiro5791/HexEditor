@@ -15,15 +15,15 @@ public static class AppRestart
 
     private static readonly HashSet<string> DropWithValue = ["--ui-lang", "--pseudo-locale", "--offset", "-g", "--select"];
 
+    /// <summary>次の再起動ではセーフモードを外す (「通常どおり再起動」。09 の UI-30 の仕様 4、08 の AUTO-30 の仕様 8)。</summary>
+    public static bool LeaveSafeMode { get; set; }
+
     /// <summary>このプロセスは「今すぐ再起動」で起動した (セッションを必ず復元する)。</summary>
     public static bool IsSessionRestart { get; } = Environment.GetCommandLineArgs().Skip(1).Contains(RestoreSessionFlag);
 
-    /// <summary>次の再起動で <c>--safe-mode</c> を外す (セーフモードの「通常どおり再起動」。08 の AUTO-30 の仕様 8)。</summary>
-    public static bool DropSafeMode { get; set; }
-
     /// <summary>セッションを復元する再起動の引数 (開いていたファイルは渡さない。セッションが戻す)。</summary>
     public static IReadOnlyList<string> SessionArguments(IReadOnlyList<string> original) =>
-        [.. Arguments(original, []).Where(a => a != RestoreSessionFlag && !(DropSafeMode && a == "--safe-mode")), RestoreSessionFlag];
+        [.. Arguments(original, []).Where(a => a != RestoreSessionFlag && !(LeaveSafeMode && a == "--safe-mode")), RestoreSessionFlag];
 
     /// <summary>再起動の引数を作る (テスト用の --test-hooks / --test-profile などはそのまま渡す)。</summary>
     public static IReadOnlyList<string> Arguments(IReadOnlyList<string> original, IReadOnlyList<string> files)

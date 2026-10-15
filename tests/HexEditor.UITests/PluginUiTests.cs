@@ -278,11 +278,11 @@ public sealed class PluginUiTests
     [Trait(UiTest.TC, "TC-UI-30-03")]
     public Task Safe_mode_loads_no_plugins_and_a_normal_start_loads_them_again() => UiTestContext.RunAsync(async ctx =>
     {
-        // Shift キーを押したままの起動は、テスト用のビルドの設定 shiftHeld で模擬する (システムのキーボードの入力は送らない)。
+        // Shift キーを押したままの起動は、テスト用のビルドのフック safeModeShift で模擬する (システムのキーボードの入力は送らない)。
         // --safe-mode の起動は Core のテスト (TC-AUTO-30-04) とコマンドラインのテストが確かめる。
         string profile = ctx.NewProfile();
         InstallTrusted(profile, TestPlugins.Sample);
-        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Hooks = new JsonObject { ["shiftHeld"] = true } });
+        AppSession app = await ctx.StartAsync(new AppOptions { Profile = profile, Hooks = new JsonObject { ["safeModeShift"] = true } });
         await PluginsAsync(app, "waitLoaded");
 
         // 1・3. 「(セーフモード)」の表示、InfoBar、プラグインは読み込まれない (候補なし、モジュールなし)。

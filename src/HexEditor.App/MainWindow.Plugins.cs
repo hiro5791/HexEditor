@@ -281,26 +281,6 @@ public sealed partial class MainWindow : IPluginManagerHost
         ]);
     }
 
-    /// <summary>起動の後の案内: セーフモードの InfoBar (09 の UI-30 の仕様 4) と、前回の異常終了の原因と考えられるプラグインの確認。</summary>
-    internal void ShowPluginStartupNotices()
-    {
-        if (PluginService.SafeMode)
-        {
-            ShowNotice(Loc.Get("Plugin_SafeModeNotice"), InfoBarSeverity.Informational, actions:
-            [
-                new Core.Notifications.NotificationAction(Loc.Get("Plugin_RestartNormally"), () => _ = RestartNormallyAsync()),
-            ]);
-        }
-    }
-
-    /// <summary>「通常どおり再起動」: <c>--safe-mode</c> を外して起動し直す。</summary>
-    private async Task RestartNormallyAsync()
-    {
-        AppRestart.DropSafeMode = true;
-        await RestartAsync();
-        AppRestart.DropSafeMode = false;
-    }
-
     /// <summary>前回の異常終了の呼び出し履歴にプラグインがあった: 無効にするか確認する (読み込みが終わってから)。</summary>
     internal async Task AskAboutCrashedPluginAsync()
     {

@@ -58,6 +58,11 @@ public interface IExpressionContext
 
     /// <summary><paramref name="offset"/> から <paramref name="destination"/> の長さ分を読む。読めなければ false。</summary>
     bool TryRead(long offset, Span<byte> destination);
+
+    /// <summary>
+    /// <c>align(x, n)</c> (x を n の倍数に切り上げる) を使えるか。ブックマークの位置の式 (INSP-29 の仕様 5) だけで使う。
+    /// </summary>
+    bool SupportsAlign => false;
 }
 
 /// <summary>接頭辞のない数値をどの基数で読むか (00-overview 6.1 の※)。</summary>
@@ -488,6 +493,11 @@ public sealed class ExpressionEvaluator
     private Int128 ParseFunction(string name, int at)
     {
         _pos++; // '('
+        if (_context.SupportsAlign && name.Equals("align", StringComparison.OrdinalIgnoreCase))
+        {
+            return ParseAlign(at);
+        }
+
         Int128 argument = ParseBinary(0);
         SkipSpaces();
         if (Peek() != ')')
@@ -543,6 +553,42 @@ public sealed class ExpressionEvaluator
 
         return (long)raw;
     }
+
+    /// <summary><c>align(x, n)</c>: x を n (1 以上) の倍数に切り上げる (INSP-29 の仕様 5)。</summary>
+    private Int128 ParseAlign(int at)
+    {
+        Int128 value = ParseBinary(0);
+        SkipSpaces();
+        if (Peek() != ',')
+        {
+            throw new ExpressionException(ExpressionError.Syntax, _pos, "align");
+        }
+
+        _pos++;
+        Int128 n = ParseBinary(0);
+        SkipSpaces();
+        if (Peek() != ')')
+        {
+            throw new ExpressionException(ExpressionError.UnclosedParenthesis, at);
+        }
+
+        _pos++;
+        if (n < 1)
+        {
+            throw new ExpressionException(ExpressionError.InvalidNumber, at, "align");
+        }
+
+        Int128 rem = value % n;
+        if (rem < 0)
+        {
+            rem += n;
+        }
+
+        return rem == 0 ? value : CheckRange(value + (n - rem), at);
+    }
+
+    private Int128 CheckRange(Int128 value, int at) =>
+        !_wide && (value > long.MaxValue || value < long.MinValue) ? throw new ExpressionException(ExpressionError.Overflow, at) : value;
 
     /// <summary>u8 / s8、u16le / s32be / f64le などの関数名を解釈する。</summary>
     private static (int Size, bool Signed, bool BigEndian, bool IsFloat) ParseFunctionName(string name, int at, string original)

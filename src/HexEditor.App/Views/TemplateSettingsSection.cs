@@ -197,11 +197,10 @@ public static class TemplateSettingsSection
 
             // ---- インスペクタ用テンプレート ----
             _inspector.Children.Clear();
-            TemplateInspectorTypes types = TemplateService.InspectorTypes;
             foreach (string path in InspectorPaths())
             {
                 var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-                string names = string.Join(", ", types.Types.Where(t => string.Equals(t.TemplatePath, path, StringComparison.OrdinalIgnoreCase))
+                string names = string.Join(", ", InspectorUserTypeService.RegisteredTypes(path)
                     .Select(t => t.DisplayName + (t.NotFixedSize ? " (" + Loc.Get("TplMgr_NotFixedSize") + ")" : string.Empty)));
                 row.Children.Add(new TextBlock { Text = Path.GetFileName(path) + (names.Length > 0 ? ": " + names : string.Empty), VerticalAlignment = VerticalAlignment.Center });
                 string p = path;
@@ -394,7 +393,7 @@ public static class TemplateSettingsSection
             }
 
             SetInspectorPaths([.. InspectorPaths(), file]);
-            if (TemplateService.InspectorTypes.Types.Any(t => string.Equals(t.TemplatePath, file, StringComparison.OrdinalIgnoreCase) && t.NotFixedSize))
+            if (InspectorUserTypeService.RegisteredTypes(file).Any(t => t.NotFixedSize))
             {
                 // 可変長の型・4 KB を超える型は登録時に警告する (TPL-29 の仕様 4)
                 _window.ShowSettingsNotice(Loc.Get("TplMgr_NotFixedSizeWarning"));

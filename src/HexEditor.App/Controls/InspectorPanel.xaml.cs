@@ -48,6 +48,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
     {
         Vm = vm;
         InitializeComponent();
+        InitializeNavigation();
         AutomationProperties.SetName(this, Loc.Get("Inspector_PanelName"));
         AutomationProperties.SetName(RowsList, Loc.Get("Inspector_PanelName"));
         AutomationProperties.SetName(EndianButton, Loc.Get("Inspector_Endian_Name"));
@@ -287,6 +288,7 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
         {
             VirtualKey.Enter => Activate(Vm.Selected, edit: true),
             VirtualKey.Space => Activate(Vm.Selected, edit: false),
+            VirtualKey.Escape => HandleArrayEscape(),
             _ => false,
         };
     }
@@ -615,6 +617,11 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
     internal bool InjectKey(VirtualKey key, bool shift)
     {
         object? focused = XamlRoot is null ? null : FocusManager.GetFocusedElement(XamlRoot);
+        if (InjectNavigationKey(focused, key))
+        {
+            return true;
+        }
+
         switch (focused)
         {
             case TextBox { DataContext: InspectorItemViewModel item } box when IsInside(box, RowsList):
@@ -645,6 +652,8 @@ public sealed partial class InspectorPanel : UserControl, Panels.IPanelContent
                 return FocusBit(row, row.BitCount - 1);
             case ListViewItem when key is VirtualKey.Enter or VirtualKey.Space:
                 return Activate(Vm.Selected, edit: key == VirtualKey.Enter);
+            case ListViewItem when key == VirtualKey.Escape:
+                return HandleArrayEscape();
             case ListViewItem when key is VirtualKey.Application || key == VirtualKey.F10 && shift:
                 _menuTarget = Vm.Selected;
                 RowMenu.ShowAt(RowsList.ContainerFromItem(Vm.Selected) as FrameworkElement ?? RowsList);

@@ -245,8 +245,7 @@ public partial class App : Application
         // 前回の異常終了の後始末: 復旧の提案と、クラッシュ情報の通知 (ENG-27 の仕様 6、PKG-30 の仕様 2)。
         window.ShowStartupNoticesWhenLoaded();
 
-        // プラグインの読み込み (AUTO-30 の仕様 4: 最初のウィンドウを表示した後にバックグラウンドで) とセーフモードの案内 (UI-30 の仕様 4)。
-        window.ShowPluginStartupNotices();
+        // プラグインの読み込み (AUTO-30 の仕様 4: 最初のウィンドウを表示した後にバックグラウンドで)。セーフモードの案内は MainWindow.SafeMode.cs。
         Services.Plugins.PluginService.StartLoading();
     }
 }

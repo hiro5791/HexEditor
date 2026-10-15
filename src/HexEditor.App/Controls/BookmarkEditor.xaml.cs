@@ -84,6 +84,7 @@ public sealed partial class BookmarkEditor : UserControl
         UpdateNameNote();
         UpdateRange(apply: false);
         UpdateRemaining();
+        LoadTyped();
         _loading = false;
     }
 

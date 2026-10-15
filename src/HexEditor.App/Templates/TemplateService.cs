@@ -37,8 +37,6 @@ public static class TemplateService
     private static TemplateCatalog? _catalog;
     private static string _foldersSignature = string.Empty;
     private static TemplatePreferences? _preferences;
-    private static TemplateInspectorTypes? _inspector;
-    private static string _inspectorSignature = "\0";
 
     /// <summary>テンプレートの一覧が変わった (利用者のフォルダのファイルの追加・削除、設定の変更)。どのスレッドからも呼ばれる。</summary>
     public static event EventHandler? CatalogChanged;
@@ -177,58 +175,6 @@ public static class TemplateService
     {
         List<string> list = [path, .. Recent.Where(p => !string.Equals(p, path, StringComparison.OrdinalIgnoreCase))];
         Commands.CommandService.State?.Set(RecentStateKey, new JsonArray([.. list.Take(RecentLimit).Select(p => (JsonNode?)p)]));
-    }
-
-    // ───────────── インスペクタ用の型 (TPL-29) ─────────────
-
-    /// <summary>設定「インスペクタ用テンプレート」のテンプレートの型 (設定が変われば読み直す)。</summary>
-    public static TemplateInspectorTypes InspectorTypes
-    {
-        get
-        {
-            List<string> paths = [];
-            if (App.Settings?.GetNode(InspectorKey) is JsonArray a)
-            {
-                foreach (JsonNode? n in a)
-                {
-                    if (n is JsonValue v && v.TryGetValue(out string? s) && s.Length > 0)
-                    {
-                        paths.Add(s);
-                    }
-                }
-            }
-
-            string signature = string.Join("|", paths.Select(p => p + "@" + Stamp(p)));
-            if (_inspector is null || signature != _inspectorSignature)
-            {
-                _inspectorSignature = signature;
-                var types = new TemplateInspectorTypes();
-                try
-                {
-                    types.Load(paths);
-                }
-                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-                {
-                    AppLog.Warning($"Inspector templates: {ex.Message}");
-                }
-
-                _inspector = types;
-            }
-
-            return _inspector;
-        }
-    }
-
-    private static string Stamp(string path)
-    {
-        try
-        {
-            return File.GetLastWriteTimeUtc(path).Ticks.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
-        {
-            return "0";
-        }
     }
 
     // ───────────── 監視 ─────────────

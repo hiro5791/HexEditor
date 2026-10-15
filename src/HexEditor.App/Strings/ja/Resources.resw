@@ -6045,8 +6045,6 @@
   <data name="Plugin_DisableButton" xml:space="preserve"><value>プラグインを無効にする</value></data>
   <data name="Plugin_RetryButton" xml:space="preserve"><value>再起動時にもう一度試す</value></data>
   <data name="Plugin_DisabledRestart" xml:space="preserve"><value>プラグイン「{0}」は再起動後に読み込まれません。</value></data>
-  <data name="Plugin_SafeModeNotice" xml:space="preserve"><value>セーフモードで起動しました。プラグインと自動実行のスクリプトは読み込まれていません。</value></data>
-  <data name="Plugin_RestartNormally" xml:space="preserve"><value>通常どおり再起動</value></data>
   <data name="Plugin_CrashTitle" xml:space="preserve"><value>プラグインを無効にしますか?</value></data>
   <data name="Plugin_CrashBody" xml:space="preserve"><value>前回、HexEditor が異常終了しました。プラグイン「{0}」が原因の可能性があります。無効にしますか?</value></data>
   <data name="Plugin_KeepEnabled" xml:space="preserve"><value>有効のままにする</value></data>
@@ -6063,7 +6061,6 @@
   <data name="Plugin_PanelTitle" xml:space="preserve"><value>プラグインのパネル</value></data>
   <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>プラグインがこのパネルを作れませんでした。</value></data>
   <data name="HexView_Menu_Plugins" xml:space="preserve"><value>プラグイン</value></data>
-  <data name="Inspector_Group_Plugin" xml:space="preserve"><value>プラグイン</value></data>
   <data name="Inspector_PluginStopped" xml:space="preserve"><value>(停止中)</value></data>
   <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>このプラグインの型はこの値に書き換えられません。</value></data>
   <data name="Panel_Templates_Title" xml:space="preserve"><value>構造体</value></data>
@@ -6446,4 +6443,92 @@
   <data name="TplEd_GoToLineRange" xml:space="preserve"><value>行番号 (1〜{0})</value></data>
   <data name="CodeEditor_NoEditor" xml:space="preserve"><value>コードエディタ (テンプレート・スクリプト) が表示されていません。</value></data>
   <data name="CodeEditor_NotSupported" xml:space="preserve"><value>このエディタでは使えないコマンドです。</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>ポインタとして移動</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>ぽいんたとしていどう いんすぺくた じゃんぷ</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>ポインタとして移動</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>絶対 (オフセット)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>絶対 (アドレス)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>カーソルからの相対</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>値の直後からの相対</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>基準を指定して相対…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>基準 (入力式)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>移動</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>移動先 {0} はドキュメントの範囲外です (長さ {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>この行には位置として使える値がありません</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>基準を 0x400000 や bm.header のような入力式で入力してください</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>データインスペクタで整数の行を選んでください</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>この型で配列として移動</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>前の要素</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>次の要素</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>配列モードを終了</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>要素番号</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>要素のサイズ</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(要素の境界ではありません)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>要素 {0} はドキュメントの範囲外です</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>値</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>式</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>ブックマークの参照が循環しています</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>bm.名前 の参照が {0} 段を超えています</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>位置 {0} はドキュメントの範囲外です</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>位置の式のエラー: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>値</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>ブックマークの値の書き換え</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(型なし)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>型</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>エンディアン</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>位置の式</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>例: u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>表示: 画像表示パネル</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>がぞうひょうじ びじゅあらいざ がそ</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>画像表示(M)</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>画像表示</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>1 bit 白黒</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>2 bit グレー</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>4 bit グレー</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>8 bit グレー</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 bit (バイトテーマの色)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>カーソルに追従</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>選択範囲の先頭</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>固定</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>上から下</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>下から上 (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>自動</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0} 倍</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>画素の形式</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>幅 (画素)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>1 行のバイト数</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>自動</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>開始位置</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>固定の開始位置</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>上下の向き</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>拡大率</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>その他の操作</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>画像</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>行のスクロール</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>画像として保存…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>表示範囲が大きすぎます (先頭から 64 MB までを描いています)</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>固定の開始位置を入力式で入力してください</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>保存する画像がありません</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>画像を {0} に保存しました</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>{0} を保存できませんでした: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>PNG 画像</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>既定</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>時間切れ</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>型の解釈が {0} ms を超えました。起点が変わると再実行します</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>エラー: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>インスペクタの型の定義ファイル {0} の {1} 行目: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>オフラインモードが有効 (またはダウンロードが無効) なため、コンポーネントはダウンロードしません。手動で入れるには、この版のリリースのページから {0} を (必要なら別の PC で) 入手し、{1} に展開してください。</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>セーフモードで起動しました。プラグインと自動実行のスクリプトは読み込まれていません。</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>通常どおり再起動</value></data>
 </root>

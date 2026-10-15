@@ -146,6 +146,10 @@ public sealed partial class InspectorItemViewModel : ObservableObject
 
     public bool HasError => Error.Length > 0;
 
+    /// <summary>配列モードで選んだ型の行 (強調する。INSP-21 の仕様 5)。</summary>
+    [ObservableProperty]
+    public partial bool IsArrayType { get; set; }
+
     /// <summary>読み上げ用の名前: 「int32, 12,345」(INSP-01 の受け入れ基準 5)。</summary>
     public string AutomationName => IsGroup ? Name : $"{Name}, {Value}";
 
@@ -366,6 +370,11 @@ public sealed partial class InspectorViewModel : ObservableObject
     public void Attach(DocumentViewModel? document, DocumentAnnotations? annotations)
     {
         CancelEdit();
+        if (document != _document)
+        {
+            ExitArrayMode();
+        }
+
         _document = document;
         _annotations = annotations;
         StoredText = string.Empty;
@@ -466,6 +475,7 @@ public sealed partial class InspectorViewModel : ObservableObject
                     row.UpdateBits(valid ? InspectorDecoder.ReadBits(_data.AsSpan(0, row.BitCount / 8), r.Endian) : 0, valid);
                 }
 
+                row.IsArrayType = r.TypeId == ArrayTypeId && !r.Opposite;
                 row.CanExpand = r.Value.Components is { Count: > 0 };
                 row.IsExpanded = _expanded.Contains(row.Key);
                 wanted.Add(row);
@@ -484,52 +494,12 @@ public sealed partial class InspectorViewModel : ObservableObject
             }
         }
 
-        AddPluginRows(wanted);
-        AppendTemplateRows(doc, wanted);
+        // ユーザー定義型 (INSP-22): テンプレートの型 (inspector/ と TPL-29 の登録) とプラグインの型 (AUTO-31) を 1 つのグループに。
+        AppendUserTypeRows(doc, wanted);
         Sync(wanted);
+        UpdateArrayState();
         HighlightChanged?.Invoke(this, EventArgs.Empty);
         Refreshed?.Invoke(this, EventArgs.Empty);
-    }
-
-    /// <summary>
-    /// プラグインの型 (08 の AUTO-31 の IInspectorType) の行: 本体の型と同じ一覧の最後のグループに出し、ツールチップにプラグイン名を出す。
-    /// 表示の文字列は UI スレッドで作る (10 ms の決まり。遅い・例外を投げ続けるプラグインは止めて、値の代わりに停止の表示にする)。
-    /// </summary>
-    private void AddPluginRows(List<InspectorItemViewModel> wanted)
-    {
-        IReadOnlyList<Core.Plugins.PluginIntegration.InspectorTypeEntry> types = Core.Plugins.PluginIntegration.InspectorTypes(Core.Plugins.PluginManager.Current);
-        if (types.Count == 0)
-        {
-            return;
-        }
-
-        InspectorItemViewModel header = Item(new InspectorItemViewModel(InspectorItemKind.Group, InspectorGroup.Plugin));
-        header.Name = Loc.Get("Inspector_Group_Plugin");
-        header.IsCollapsed = _collapsed.Contains(InspectorGroup.Plugin);
-        wanted.Add(header);
-        if (header.IsCollapsed)
-        {
-            return;
-        }
-
-        foreach (Core.Plugins.PluginIntegration.InspectorTypeEntry type in types)
-        {
-            InspectorItemViewModel row = Item(new InspectorItemViewModel(InspectorItemKind.Row, InspectorGroup.Plugin, type.Id));
-            row.Name = type.Name;
-            row.Endian = Endian;
-            row.ByteOffset = 0;
-            row.ByteCount = Math.Max(0, type.Size);
-            string? value = _data.Length >= Math.Max(1, row.ByteCount) ? type.Decode(_data, Endian == Endianness.Big, uiThread: true) : null;
-            row.Status = value is not null ? InspectorStatus.Ok : _data.Length < Math.Max(1, row.ByteCount) ? InspectorStatus.NotEnoughData : InspectorStatus.Invalid;
-            if (!row.IsEditing)
-            {
-                row.Value = value ?? (type.Registration.Guard.IsStopped ? Loc.Get("Inspector_PluginStopped") : "—");
-            }
-
-            row.ToolTip = Loc.Format("Plugin_ToolTip", type.PluginName);
-            row.FullText = value;
-            wanted.Add(row);
-        }
     }
 
     private InspectorItemViewModel Item(InspectorItemViewModel candidate)
@@ -687,13 +657,14 @@ public sealed partial class InspectorViewModel : ObservableObject
             return false;
         }
 
-        if (IsTemplateRow(item))
+        if (IsUserRow(item))
         {
-            return BeginTemplateEdit(item);
+            // ユーザー定義型 (INSP-22 の仕様 5): テンプレートの型は TPL-22 の規則、プラグインの型は変換があるものだけ。
+            return BeginUserEdit(item);
         }
 
         CancelEdit();
-        item.EditText = item.Group == InspectorGroup.Plugin ? item.FullText ?? string.Empty : InspectorDecoder.EditText(item.TypeId, _data, _states, item.Endian, Options);
+        item.EditText = InspectorDecoder.EditText(item.TypeId, _data, _states, item.Endian, Options);
         item.IsEditing = true;
         UpdateEdit(item, item.EditText);
         return true;
@@ -707,9 +678,9 @@ public sealed partial class InspectorViewModel : ObservableObject
             return;
         }
 
-        if (IsTemplateRow(item))
+        if (IsUserRow(item))
         {
-            UpdateTemplateEdit(item, text);
+            UpdateUserEdit(item, text);
             return;
         }
 
@@ -725,16 +696,6 @@ public sealed partial class InspectorViewModel : ObservableObject
     {
         DocumentViewModel doc = _document!;
         long available = doc.Document.Length - Origin;
-        if (item.Group == InspectorGroup.Plugin)
-        {
-            // プラグインの型 (08 の AUTO-31 の IInspectorType.Encode)。書き換えられない型・不正な値は理由を出す。
-            byte[]? bytes = Core.Plugins.PluginIntegration.InspectorTypes(Core.Plugins.PluginManager.Current).FirstOrDefault(t => t.Id == item.TypeId)?
-                .Encode(text, item.Endian == Endianness.Big);
-            return bytes is null ? InspectorEncodeResult.Fail(Loc.Get("Inspector_PluginNotWritable"))
-                : bytes.Length > available ? InspectorEncodeResult.Fail(Loc.Get("Inspector_NotEnough"))
-                : new InspectorEncodeResult(bytes, null);
-        }
-
         return InspectorEncoder.Encode(item.TypeId, text, item.Endian, Options, available, new EditorExpressionContext(doc.Editor), _data);
     }
 
@@ -749,9 +710,9 @@ public sealed partial class InspectorViewModel : ObservableObject
             return false;
         }
 
-        if (IsTemplateRow(item))
+        if (IsUserRow(item))
         {
-            return CommitTemplateEdit(item);
+            return CommitUserEdit(item);
         }
 
         InspectorEncodeResult result = Encode(item, item.EditText);
@@ -780,6 +741,7 @@ public sealed partial class InspectorViewModel : ObservableObject
         }
 
         _editBytes = null;
+        EndUserEdit();
         HighlightChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -835,7 +797,7 @@ public sealed partial class InspectorViewModel : ObservableObject
 
     public void HideRow(InspectorItemViewModel item)
     {
-        if (item.Kind == InspectorItemKind.Row && item.Group != InspectorGroup.Plugin)
+        if (item.Kind == InspectorItemKind.Row && !IsUserRow(item))
         {
             SetLayout(Layout.WithVisible(item.TypeId, false));
         }

@@ -122,6 +122,13 @@ public sealed class CSharpComponentManager
 
     public Func<bool> DownloadsAllowed { get; }
 
+    /// <summary>
+    /// 手動で入れる zip のファイル名 (<c>HexEditor-&lt;版&gt;-&lt;アーキテクチャ&gt;-csharp.zip</c>。リリースのページの名前。09 の UI-58 の受け入れ基準 3)。
+    /// 一覧があればその名前。
+    /// </summary>
+    public string PackageName(string appVersion, System.Runtime.InteropServices.Architecture architecture) =>
+        Manifest?.PackageName ?? $"HexEditor-{appVersion}-{architecture.ToString().ToLowerInvariant()}-csharp.zip";
+
     /// <summary>このアプリが使うバージョンのフォルダ。</summary>
     public string? VersionFolder => Manifest is null ? null : Path.Combine(Folder, Manifest.Version);
 

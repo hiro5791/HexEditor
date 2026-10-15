@@ -95,6 +95,22 @@ public static class PluginIntegration
             return Registration.Guard.Invoke("Decode", () => Type.Decode(copy, endian), null, uiThread);
         }
 
+        /// <summary>
+        /// インスペクタの行の値 (ユーザー定義型の評価。別のスレッドから呼ぶ)。止めたプラグインは null、例外は <see cref="PluginCallException"/>
+        /// (行に「エラー: メッセージ」を出す)。時間は UI スレッドの呼び出しと同じ決まりで見張る (AUTO-31 の仕様 5)。
+        /// </summary>
+        public string? DecodeOrThrow(ReadOnlySpan<byte> data, bool bigEndian)
+        {
+            if (Registration.Guard.IsStopped)
+            {
+                return null;
+            }
+
+            byte[] copy = data.ToArray();
+            bool endian = Registration.Guard.Invoke("HasEndian", () => Type.HasEndian, false) && bigEndian;
+            return Registration.Guard.InvokeOrThrow("Decode", () => Type.Decode(copy, endian), timed: true);
+        }
+
         /// <summary>値の文字列からバイト列を作る (書き換え)。書き換えられない型・不正な値・止めたプラグインは null。</summary>
         public byte[]? Encode(string text, bool bigEndian)
         {

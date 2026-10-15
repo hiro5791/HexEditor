@@ -57,7 +57,7 @@ public sealed partial class MainWindow
         {
             ["moved"] = InspectorView?.DragRowSetting(request["item"]!.GetValue<string>(), request["to"]!.GetValue<int>()) ?? false,
         },
-        _ => null,
+        _ => HandleInspectorPhase3TestCommand(cmd, request),
     };
 
     /// <summary>
@@ -116,6 +116,8 @@ public sealed partial class MainWindow
                 ["error"] = item.Error,
                 ["collapsed"] = item.IsCollapsed,
                 ["expanded"] = item.IsExpanded,
+                ["canExpand"] = item.CanExpand,
+                ["group"] = item.Group.ToString(),
                 ["bits"] = item.IsBinary ? string.Concat(item.Bits.Select(b => b.Text)) : null,
                 ["swatch"] = TestSwatch(item) is { } swatch ? Color(swatch.Background) : null,
                 ["swatchBorder"] = TestSwatch(item) is { } framed && framed.BorderBrush is not null && framed.BorderThickness.Left > 0,

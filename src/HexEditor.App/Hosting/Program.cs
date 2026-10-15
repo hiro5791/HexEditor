@@ -20,14 +20,6 @@ public static class Program
 
     private static AppEnvironment AppEnvironment { get; set; } = null!;
 
-    private const int VkShift = 0x10;
-
-    [System.Runtime.InteropServices.DllImport("user32.dll")]
-    private static extern short GetAsyncKeyState(int key);
-
-    /// <summary>Shift キーを押しているか (キーの状態を読むだけで、入力は送らない)。</summary>
-    private static bool IsShiftDown() => (GetAsyncKeyState(VkShift) & 0x8000) != 0;
-
     [STAThread]
     private static int Main(string[] args)
     {
@@ -66,12 +58,10 @@ public static class Program
             }
 
             // 5.5 セーフモード (08 の AUTO-30 の仕様 8、09 の UI-30 の仕様 4): 最初のウィンドウを出す前に Shift キーを押していれば。
-            // 既存のインスタンスに転送する起動では判定しない (転送はここより前に終わっている)。テスト用のビルドは実際のキーの状態を読まない。
+            // 既存のインスタンスに転送する起動では判定しない (転送はここより前に終わっている)。スクリプトのフックとプラグインの読み込みは
+            // どちらも CommandLine.SafeMode を見る。テスト用のビルドは実際のキーの状態を読まない (フック safeModeShift)。
             step = "safe-mode";
-            if (!CommandLine.SafeMode && (TestHooks.Active ? TestHooks.Settings.ShiftHeld : IsShiftDown()))
-            {
-                CommandLine = CommandLine with { SafeMode = true };
-            }
+            CommandLine = SafeModeStartup.Apply(CommandLine);
         }
         catch (Exception ex)
         {
