@@ -2127,7 +2127,7 @@
 
 **手順**:
 
-1. テンプレート `struct H { u8 n; u8 m; }; H h; u32 big @ 0x100; u8 tail; struct L { u8 x; }; L *lazy : u8 [[lazy]];` を、データ `01 02 03 04 FF` に適用する。
+1. テンプレート `struct H { u8 n; u8 m; }; H h; u32 big @ 0x100; u8 tail; struct L { u8 x; }; L *lazy : u8 [[lazy]];` を、データ `01 02 03 FF` に適用する (`lazy` の値が 0xFF で、データの範囲外を指す)。
 2. 結果ツリーの `lazy` を開く。
 
 **期待結果**:

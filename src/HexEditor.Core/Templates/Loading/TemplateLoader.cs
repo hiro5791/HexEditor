@@ -223,7 +223,14 @@ public static class TemplateLoader
             });
         }
 
-        program.DiagnosticsList.AddRange(diags.Items);
+        // 字句のエラーと構文のエラーを、ファイルの中の位置の順に並べる
+        program.DiagnosticsList.AddRange(diags.Items
+            .Select((d, i) => (d, i))
+            .OrderBy(x => x.d.Location is { } at ? Math.Max(0, program.FilesList.IndexOf(at.File)) : int.MaxValue)
+            .ThenBy(x => x.d.Location?.Line ?? int.MaxValue)
+            .ThenBy(x => x.d.Location?.Column ?? int.MaxValue)
+            .ThenBy(x => x.i)
+            .Select(x => x.d));
         if (diags.ErrorCount >= DiagnosticBag.MaxErrors)
         {
             program.DiagnosticsList.Add(new TemplateDiagnostic(TemplateSeverity.Info, TemplateMessages.TooManyErrors, ["100"]));
