@@ -58,6 +58,13 @@ internal static class KsyConverter
             diags.Error(TemplateMessages.KsyInvalid, new TemplateSourceLocation(path, ex.Line, ex.Column), ex.Message);
             return null;
         }
+        catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or FormatException or IndexOutOfRangeException
+            or KeyNotFoundException or NullReferenceException or InvalidCastException)
+        {
+            // 想定していない形の .ksy: 位置の分からない不正な .ksy として報告する (アプリを落とさない)
+            diags.Error(TemplateMessages.KsyInvalid, new TemplateSourceLocation(path, 1, 1), ex.Message);
+            return null;
+        }
     }
 
     private sealed class KsyError(string message, YamlNode? at) : Exception(message)
@@ -1007,7 +1014,7 @@ internal static class KsyConverter
                 return list;
             }
 
-            private (string Kind, string Text) Cur => _t[_p];
+            private (string Kind, string Text) Cur => _p < _t.Count ? _t[_p] : ("end", string.Empty);
 
             private bool IsOp(string op) => Cur.Kind == "op" && Cur.Text == op;
 
@@ -1034,7 +1041,26 @@ internal static class KsyConverter
                 return e;
             }
 
+            private int _depth;
+
             private string Ternary()
+            {
+                if (++_depth > 200)
+                {
+                    throw new FormatException("the expression is nested too deeply");
+                }
+
+                try
+                {
+                    return TernaryCore();
+                }
+                finally
+                {
+                    _depth--;
+                }
+            }
+
+            private string TernaryCore()
             {
                 string c = Or();
                 if (IsOp("?"))

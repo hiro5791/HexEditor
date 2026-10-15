@@ -970,11 +970,9 @@ internal sealed partial class Evaluator
         {
             switch (node.Children0)
             {
-                case LazyChildren lc:
-                    Materialize(node);
-                    return lc.Items?.Count ?? 0;
-                case ListChildren l:
-                    return l.Items.Count;
+                case LazyChildren:
+                case ListChildren:
+                    return DisplayChildren(node).Count;
                 case OnDemandChildren od:
                     return od.Count;
                 case SequenceChildren s:

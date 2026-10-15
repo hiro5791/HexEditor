@@ -859,7 +859,15 @@ internal sealed partial class Evaluator
             int colon = spec.IndexOf(':');
             string indexPart = colon < 0 ? spec : spec[..colon];
             string format = colon < 0 ? string.Empty : spec[(colon + 1)..];
-            int index = indexPart.Length > 0 ? int.Parse(indexPart, CultureInfo.InvariantCulture) : next++;
+            int index;
+            if (indexPart.Length == 0)
+            {
+                index = next++;
+            }
+            else if (!int.TryParse(indexPart, NumberStyles.None, CultureInfo.InvariantCulture, out index))
+            {
+                throw ErrorAt(at, TemplateMessages.InvalidArgument, "format", fmt);
+            }
             if (index < 0 || index >= args.Length)
             {
                 throw ErrorAt(at, TemplateMessages.InvalidArgument, "format", "missing argument " + index.ToString(CultureInfo.InvariantCulture));

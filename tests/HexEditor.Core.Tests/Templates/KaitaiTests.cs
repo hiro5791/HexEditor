@@ -196,11 +196,13 @@ public sealed class KaitaiTests
                 TemplateResult r = Run(p, TemplateDataSource.FromBytes(data),
                     new TemplateApplyOptions { LimitOverride = TemplateLimits.Default with { TimeSeconds = 5 } }, TimeSpan.FromSeconds(30));
                 r.EvaluateAll();
-                Assert.DoesNotContain(r.Diagnostics, d => d.Code == TemplateMessages.Internal);
+                TemplateDiagnostic? internalError = r.Diagnostics.FirstOrDefault(d => d.Code == TemplateMessages.Internal);
+                Assert.True(internalError is null, $"{internalError?.InternalDetail}\n---\n{sb}");
             }
             else
             {
-                Assert.DoesNotContain(p.Diagnostics, d => d.Code == TemplateMessages.Internal);
+                TemplateDiagnostic? internalError = p.Diagnostics.FirstOrDefault(d => d.Code == TemplateMessages.Internal);
+                Assert.True(internalError is null, $"{internalError?.InternalDetail}\n---\n{sb}");
             }
         }
     }

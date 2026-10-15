@@ -842,12 +842,12 @@ internal sealed class YamlParser
                     case '"': sb.Append('"'); break;
                     case '\\': sb.Append('\\'); break;
                     case '/': sb.Append('/'); break;
-                    case 'x' when pos + 2 <= s.Length:
-                        sb.Append((char)int.Parse(s.AsSpan(pos, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture));
+                    case 'x' when pos + 2 <= s.Length && int.TryParse(s.AsSpan(pos, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int x):
+                        sb.Append((char)x);
                         pos += 2;
                         break;
-                    case 'u' when pos + 4 <= s.Length:
-                        sb.Append((char)int.Parse(s.AsSpan(pos, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture));
+                    case 'u' when pos + 4 <= s.Length && int.TryParse(s.AsSpan(pos, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out int u):
+                        sb.Append((char)u);
                         pos += 4;
                         break;
                     default:
