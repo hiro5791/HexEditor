@@ -1,0 +1,136 @@
+// HexEditor 標準テンプレート (TPL-34): JPEG 画像 (JFIF、EXIF、セグメント)
+// ライセンス: MIT。EXIF の TIFF 構造は標準ライブラリ std.tiff (TPL-18) の型を使う。
+// SOS (スキャン) までのセグメントを順に読み、その後の圧縮データは中身を見ずに末尾の EOI までを 1 つの塊として扱う (全体を走査しない)。
+#pragma name "JPEG image"
+#pragma name.ja "JPEG 画像"
+#pragma description "JPEG image: marker segments (JFIF, EXIF with TIFF IFDs, quantization and Huffman tables, frame and scan headers) and the entropy-coded data."
+#pragma description.ja "JPEG 画像: マーカーセグメント (JFIF、TIFF の IFD を持つ EXIF、量子化テーブルとハフマンテーブル、フレームとスキャンのヘッダ) と圧縮データ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "FF D8 FF"
+#pragma mime "image/jpeg"
+#pragma extensions "jpg;jpeg;jpe;jfif"
+#pragma endian big
+
+import std.tiff;
+
+enum Marker : u8 {
+    Tem = 0x01,
+    Sof0 = 0xC0, Sof1 = 0xC1, Sof2 = 0xC2, Sof3 = 0xC3, Dht = 0xC4, Sof5 = 0xC5, Sof6 = 0xC6, Sof7 = 0xC7, Jpg = 0xC8,
+    Sof9 = 0xC9, Sof10 = 0xCA, Sof11 = 0xCB, Dac = 0xCC, Sof13 = 0xCD, Sof14 = 0xCE, Sof15 = 0xCF,
+    Rst = 0xD0 ... 0xD7,
+    Soi = 0xD8, Eoi = 0xD9, Sos = 0xDA, Dqt = 0xDB, Dnl = 0xDC, Dri = 0xDD, Dhp = 0xDE, Exp = 0xDF,
+    App0 = 0xE0, App1 = 0xE1, App2 = 0xE2, App3 = 0xE3, App4 = 0xE4, App5 = 0xE5, App6 = 0xE6, App7 = 0xE7,
+    App8 = 0xE8, App9 = 0xE9, App10 = 0xEA, App11 = 0xEB, App12 = 0xEC, App13 = 0xED, App14 = 0xEE, App15 = 0xEF,
+    Com = 0xFE,
+};
+
+enum DensityUnit : u8 { None = 0, DotsPerInch = 1, DotsPerCm = 2 };
+
+/// JFIF (APP0)。サムネイルの画素は読まない。
+struct Jfif {
+    char        identifier[5] [[expect(identifier == "JFIF", "JFIF ではありません")]];
+    u8          version_major;
+    u8          version_minor;
+    DensityUnit units;
+    u16         x_density;
+    u16         y_density;
+    u8          thumbnail_width;
+    u8          thumbnail_height;
+};
+
+/// EXIF (APP1)。TIFF のヘッダと IFD を置く。
+struct Exif {
+    char identifier[6] [[expect(identifier == "Exif", "Exif ではありません")]];
+    std::tiff::Header tiff;
+    local bool is_big = tiff.order == "MM";
+    if (is_big) std::core::set_endian(big);
+    else        std::core::set_endian(little);
+    std::tiff::Ifd(addressof(tiff), is_big, 0) ifd0 @ addressof(tiff) + tiff.ifd0_offset;
+};
+
+struct FrameComponent {
+    u8 id;
+    u8 sampling [[format("hex"), comment("上位 4 bit が水平、下位 4 bit が垂直のサンプリング係数")]];
+    u8 quantization_table;
+};
+
+/// フレームヘッダ (SOFn)
+struct Frame {
+    u8 precision;
+    u16 height;
+    u16 width;
+    u8 component_count;
+    FrameComponent components[component_count];
+};
+
+struct QuantizationTable {
+    u8 info [[format("hex"), comment("上位 4 bit が精度 (0: 8 bit、1: 16 bit)、下位 4 bit が番号")]];
+    u8 values[(info >> 4) == 0 ? 64 : 128] [[lazy]];
+};
+
+/// ハフマンテーブル。符号の数 (長さ 1〜16) の合計が、符号の値の数になる。
+struct HuffmanTable {
+    u8 info [[format("hex"), comment("上位 4 bit が種類 (0: DC、1: AC)、下位 4 bit が番号")]];
+    u8 code_counts[16];
+    local u32 total = 0;
+    for (local u32 i = 0; i < 16; i += 1) {
+        total += code_counts[i];
+    }
+    u8 symbols[total] [[lazy]];
+};
+
+struct ScanComponent {
+    u8 id;
+    u8 tables [[format("hex"), comment("上位 4 bit が DC、下位 4 bit が AC のテーブル番号")]];
+};
+
+/// スキャンヘッダ (SOS)
+struct Scan {
+    u8 component_count;
+    ScanComponent components[component_count];
+    u8 spectral_start;
+    u8 spectral_end;
+    u8 approximation [[format("hex")]];
+};
+
+/// セグメントの中身。大きさは長さの欄で決まる。
+struct Body(Marker marker, u16 size) {
+    local u64 end = addressof(this) + size;
+    switch (marker) {
+        case Marker::App0: Jfif jfif;
+        case Marker::App1: Exif exif;
+        case Marker::Sof0: Frame frame;
+        case Marker::Sof1: Frame frame;
+        case Marker::Sof2: Frame frame;
+        case Marker::Sof3: Frame frame;
+        case Marker::Dqt: QuantizationTable tables[while($ < end)];
+        case Marker::Dht: HuffmanTable tables[while($ < end)];
+        case Marker::Sos: Scan scan;
+        case Marker::Dri: u16 restart_interval;
+        case Marker::Com: char comment[size];
+        default: u8 data[size] [[lazy]];
+    }
+} [[size(size)]];
+
+/// マーカーのセグメント。SOI、EOI、RSTn、TEM は長さを持たない。
+struct Segment {
+    u8     prefix [[expect(prefix == 0xFF, "マーカーの先頭 FF がありません")]];
+    Marker marker [[color("accent1")]];
+    if (marker != Marker::Soi && marker != Marker::Eoi && marker != Marker::Tem && !(marker >= 0xD0 && marker <= 0xD7)) {
+        u16 length [[comment("長さの欄の 2 バイトを含む")]];
+        Body(marker, length - 2) body;
+    }
+};
+
+Segment segments[until(last.marker == Marker::Sos || last.marker == Marker::Eoi || std::eof())];
+
+// SOS の後は圧縮データが続き、末尾に EOI がある。圧縮データの中は見ずに、末尾までを 1 つの塊にする。
+if (std::len(segments) > 0 && segments[std::len(segments) - 1].marker == Marker::Sos) {
+    local u64 tail = (std::core::size() >= 2 && std::mem::compare(std::core::size() - 2, x"FF D9")) ? 2 : 0;
+    u8 entropy_coded_data[std::core::size() - $ - tail] [[lazy]];
+    if (tail == 2) {
+        Segment eoi;
+    }
+}

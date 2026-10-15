@@ -1,0 +1,41 @@
+// HexEditor 標準テンプレート (TPL-34): Mach-O (macOS / iOS の実行形式)
+// ライセンス: MIT。型は標準ライブラリ std.macho (TPL-18) にある。
+// 薄い Mach-O (32 / 64 bit、リトル / ビッグエンディアン) と、fat (ユニバーサル) バイナリの両方を扱う。
+// fat のときは、fat ヘッダの各項目が指すスライスの Mach-O ヘッダとロードコマンドを置く。
+#pragma name "Mach-O executable"
+#pragma name.ja "Mach-O 実行形式"
+#pragma description "Mach-O (32 / 64 bit, thin or fat / universal): Mach-O header and load commands (segments, sections, symbol table, dylibs, UUID, entry point, build version)."
+#pragma description.ja "Mach-O (32 / 64 bit、薄いファイルと fat / ユニバーサル): Mach-O ヘッダとロードコマンド (セグメント、セクション、シンボル表、dylib、UUID、エントリポイント、ビルドの版)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "CF FA ED FE"
+#pragma magic 0 "CE FA ED FE"
+#pragma magic 0 "FE ED FA CF"
+#pragma magic 0 "FE ED FA CE"
+#pragma magic 0 "CA FE BA BE 00 00 00 0?"
+#pragma magic 0 "CA FE BA BF"
+#pragma mime "application/x-mach-binary"
+#pragma extensions "dylib;bundle;o"
+#pragma endian little
+
+import std.macho;
+
+local u32 magic_be = std::mem::read_u32(0, big);
+
+if (magic_be == 0xCAFEBABE || magic_be == 0xCAFEBABF) {
+    std::macho::FatHeader fat;
+    if (magic_be == 0xCAFEBABE) {
+        std::macho::FatArch archs[fat.nfat_arch];
+        for (local u32 i = 0; i < fat.nfat_arch && i < 16; i += 1) {
+            std::macho::MachO(archs[i].offset) slices @ archs[i].offset;
+        }
+    } else {
+        std::macho::FatArch64 archs[fat.nfat_arch];
+        for (local u32 i = 0; i < fat.nfat_arch && i < 16; i += 1) {
+            std::macho::MachO(archs[i].offset) slices @ archs[i].offset;
+        }
+    }
+} else {
+    std::macho::MachO(0) macho;
+}

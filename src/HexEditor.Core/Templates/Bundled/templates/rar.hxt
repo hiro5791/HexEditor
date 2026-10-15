@@ -1,0 +1,90 @@
+// HexEditor 標準テンプレート (TPL-34): RAR 5 アーカイブ (ヘッダ)
+// ライセンス: MIT。
+// シグネチャと、ブロック (メイン、ファイル、サービス、暗号化、終端) のヘッダを順にたどる。ブロックの数値は可変長整数 (LEB128 と同じ 7 bit 単位)。
+// 圧縮データは中身を読まない。RAR 4 以前の形式 (シグネチャが異なる) は対象外である。
+#pragma name "RAR 5 archive"
+#pragma name.ja "RAR 5 アーカイブ"
+#pragma description "RAR 5 archive (header level): signature and block headers (main, file, service, encryption, end) with variable-length integers and header CRCs."
+#pragma description.ja "RAR 5 アーカイブ (ヘッダのみ): シグネチャと、ブロックのヘッダ (メイン、ファイル、サービス、暗号化、終端)。可変長整数とヘッダの CRC を持つ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "52 61 72 21 1A 07 01 00"
+#pragma mime "application/vnd.rar"
+#pragma extensions "rar"
+#pragma endian little
+
+enum BlockType : u8 { Main = 1, File = 2, Service = 3, Encryption = 4, End = 5 };
+
+bitfield CommonFlags : u8 {
+    has_extra_area      : 1;
+    has_data_area       : 1;
+    skip_if_unknown     : 1;
+    split_before        : 1;
+    split_after         : 1;
+    is_child            : 1;
+    preserve_child      : 1;
+    reserved            : 1;
+};
+
+struct FileBody {
+    uleb128 file_flags [[format("hex"), comment("1: ディレクトリ、2: 更新時刻あり、4: データの CRC32 あり、8: 展開後の大きさ不明")]];
+    uleb128 unpacked_size;
+    uleb128 attributes [[format("hex")]];
+    if ((file_flags & 2) != 0) {
+        time32_t modification_time;
+    }
+    if ((file_flags & 4) != 0) {
+        u32 data_crc32 [[format("hex")]];
+    }
+    uleb128 compression_info [[format("hex")]];
+    uleb128 host_os;
+    uleb128 name_length;
+    char    name[name_length] [[encoding("utf-8")]];
+};
+
+struct MainBody {
+    uleb128 archive_flags [[format("hex"), comment("1: 複数ボリューム、2: ボリューム番号あり、4: 固めた形式、8: リカバリ記録あり、16: ロック")]];
+    if ((archive_flags & 2) != 0) {
+        uleb128 volume_number;
+    }
+};
+
+struct EndBody {
+    uleb128 end_flags [[format("hex")]];
+};
+
+/// ブロック。ヘッダのサイズの欄から先がヘッダの CRC の対象で、データ領域はヘッダの後ろに続く。
+struct Block {
+    u32     header_crc [[format("hex")]];
+    uleb128 header_size [[expect(header_crc == std::hash::crc32(addressof(header_size), sizeof(header_size) + header_size), "ヘッダの CRC が一致しません")]];
+    local u64 header_end = $ + header_size;
+    uleb128 header_type;
+    uleb128 header_flags [[format("hex")]];
+    local u64 extra_size = 0;
+    local u64 data_size = 0;
+    if ((header_flags & 1) != 0) {
+        uleb128 extra_area_size;
+        extra_size = extra_area_size;
+    }
+    if ((header_flags & 2) != 0) {
+        uleb128 data_area_size;
+        data_size = data_area_size;
+    }
+    switch (header_type) {
+        case 1: MainBody main;
+        case 2: FileBody file;
+        case 3: FileBody service;
+        case 5: EndBody end;
+    }
+    // ヘッダの残り (追加領域など) を飛ばして、データ領域を置く
+    if (header_end > $) {
+        u8 header_rest[header_end - $] [[lazy]];
+    }
+    if (data_size > 0) {
+        u8 data[data_size] [[lazy]];
+    }
+} [[size(4 + sizeof(header_size) + header_size + data_size)]];
+
+u8    signature[8] [[expect(signature == x"52 61 72 21 1A 07 01 00", "RAR 5 のシグネチャではありません")]];
+Block blocks[until(last.header_type == 5 || std::eof())];

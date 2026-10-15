@@ -1,0 +1,49 @@
+// HexEditor 標準テンプレート (TPL-34): Ogg コンテナ (ページ)
+// ライセンス: MIT。
+// ページを順にたどる (ページの長さはヘッダのセグメントテーブルで決まる)。ページの中のパケットは読まず、先頭のページから符号化方式を見分ける。
+#pragma name "Ogg container"
+#pragma name.ja "Ogg コンテナ"
+#pragma description "Ogg container (Vorbis, Opus, FLAC, Theora, Speex): pages with segment tables, granule positions and the codec identification header."
+#pragma description.ja "Ogg コンテナ (Vorbis、Opus、FLAC、Theora、Speex): セグメントテーブル、グラニュール位置を持つページと、符号化方式を示すヘッダ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "4F 67 67 53"
+#pragma mime "application/ogg"
+#pragma mime "audio/ogg"
+#pragma mime "audio/opus"
+#pragma mime "video/ogg"
+#pragma mime "audio/speex"
+#pragma extensions "ogg;oga;ogv;ogx;opus;spx"
+#pragma endian little
+
+/// ヘッダ種別の欄 (下位ビットから)
+bitfield HeaderType : u8 {
+    continued    : 1;
+    begin_stream : 1;
+    end_stream   : 1;
+    reserved     : 5;
+};
+
+struct Page {
+    char       capture_pattern[4] [[expect(capture_pattern == "OggS", "OggS ではありません")]];
+    u8         version;
+    HeaderType header_type;
+    s64        granule_position;
+    u32        serial_number [[format("hex")]];
+    u32        sequence_number;
+    u32        checksum [[format("hex")]];
+    u8         page_segments;
+    u8         segment_table[page_segments];
+    local u32 payload_size = 0;
+    for (local u32 i = 0; i < page_segments; i += 1) {
+        payload_size += segment_table[i];
+    }
+    u8         payload[payload_size] [[lazy]];
+    // ストリームの最初のページ (BOS) のパケットの先頭で、符号化方式を見分ける
+    if (header_type.begin_stream == 1 && payload_size >= 8) {
+        local string codec_signature = std::mem::read_string(addressof(payload) + 1, 7, "latin1") [[show]];
+    }
+} [[size(27 + page_segments + payload_size)]];
+
+Page pages[until(std::eof())];

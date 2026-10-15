@@ -1,0 +1,38 @@
+// HexEditor 標準テンプレート (TPL-34): 7z アーカイブ (ヘッダ)
+// ライセンス: MIT。
+// シグネチャヘッダ (32 バイト) と、それが指す次のヘッダ (終端ヘッダ) の位置だけを読む。2 つの CRC を確かめる。
+// 圧縮されたデータ(パックストリーム)と、次のヘッダの中身は解釈しない。
+#pragma name "7z archive"
+#pragma name.ja "7z アーカイブ"
+#pragma description "7-Zip archive (header level): signature header with start header CRC, next header offset, size and CRC, and the pack streams and next header as raw data."
+#pragma description.ja "7-Zip アーカイブ (ヘッダのみ): 開始ヘッダの CRC、次のヘッダの位置・大きさ・CRC を持つシグネチャヘッダと、パックストリームおよび次のヘッダ (生のデータ)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "37 7A BC AF 27 1C"
+#pragma mime "application/x-7z-compressed"
+#pragma extensions "7z"
+#pragma endian little
+
+struct SignatureHeader {
+    u8  signature[6] [[expect(signature == x"37 7A BC AF 27 1C", "7z のシグネチャではありません")]];
+    u8  version_major;
+    u8  version_minor;
+    u32 start_header_crc [[format("hex"), expect(start_header_crc == std::hash::crc32(12, 20), "開始ヘッダの CRC が一致しません")]];
+    u64 next_header_offset [[comment("シグネチャヘッダの直後 (オフセット 32) からの相対位置")]];
+    u64 next_header_size;
+    u32 next_header_crc [[format("hex")]];
+};
+
+SignatureHeader header;
+
+// 圧縮されたデータ (パックストリーム) は、シグネチャヘッダと次のヘッダの間にある。
+if (header.next_header_offset > 0 && 32 + header.next_header_offset <= std::core::size()) {
+    u8 pack_streams[header.next_header_offset] @ 32 [[lazy]];
+}
+
+// 次のヘッダ (最初のバイトが 01 なら通常のヘッダ、17 なら符号化されたヘッダ)
+if (header.next_header_size > 0 && 32 + header.next_header_offset + header.next_header_size <= std::core::size()) {
+    u8 next_header[header.next_header_size] @ 32 + header.next_header_offset
+        [[expect(header.next_header_size > 268435456 || std::hash::crc32(32 + header.next_header_offset, header.next_header_size) == header.next_header_crc, "次のヘッダの CRC が一致しません")]];
+}

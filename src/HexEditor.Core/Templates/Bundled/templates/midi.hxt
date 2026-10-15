@@ -1,0 +1,50 @@
+// HexEditor 標準テンプレート (TPL-34): 標準 MIDI ファイル (SMF)
+// ライセンス: MIT。
+// ヘッダチャンク (MThd) とトラックチャンク (MTrk) を読む。トラックの中のイベントは、デルタタイム (可変長の数値) とステータスのバイトだけを
+// 先頭から数個読む (ランニングステータスは解釈しない)。
+#pragma name "MIDI file"
+#pragma name.ja "MIDI ファイル"
+#pragma description "Standard MIDI file: header chunk (format, tracks, division) and track chunks with their first events."
+#pragma description.ja "標準 MIDI ファイル: ヘッダチャンク (形式、トラック数、分解能) とトラックチャンク (先頭のイベント)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "4D 54 68 64"
+#pragma mime "audio/midi"
+#pragma extensions "mid;midi;kar;rmi"
+#pragma endian big
+
+enum Format : u16 { SingleTrack = 0, Simultaneous = 1, Independent = 2 };
+
+struct HeaderChunk {
+    char   id[4] [[expect(id == "MThd", "MThd ではありません")]];
+    u32    length;
+    Format format;
+    u16    tracks;
+    u16    division [[format("hex"), comment("最上位ビットが 0 なら 4 分音符あたりのティック数、1 なら SMPTE")]];
+    if (length > 6) {
+        u8 extra[length - 6] [[lazy]];
+    }
+};
+
+/// トラックの先頭のイベント。メタイベントは FF の後に種類、可変長の長さ、データが続く。
+struct MetaEvent {
+    u8  marker [[expect(marker == 0xFF, "メタイベントではありません")]];
+    u8  type [[format("hex")]];
+    vlq length;
+    u8  data[length] [[lazy]];
+};
+
+struct TrackChunk {
+    char id[4] [[color("accent1"), expect(id == "MTrk", "MTrk ではありません")]];
+    u32  length;
+    // 先頭のデルタタイムと、メタイベントなら 1 つ目のイベント
+    vlq  first_delta_time;
+    if (length > 2 && std::mem::read_u8($, big) == 0xFF) {
+        MetaEvent first_event;
+    }
+    u8   events[length - ($ - addressof(first_delta_time))] [[lazy]];
+} [[size(8 + length)]];
+
+HeaderChunk header;
+TrackChunk tracks[std::math::min(header.tracks, 65535)];

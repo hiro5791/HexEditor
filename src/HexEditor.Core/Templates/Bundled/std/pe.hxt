@@ -143,7 +143,7 @@ namespace std::pe {
         le u32 PointerToLinenumbers [[format("hex")]];
         le u16 NumberOfRelocations;
         le u16 NumberOfLinenumbers;
-        le u32 Characteristics [[format("hex")]];
+        le SectionFlags Characteristics;
     };
 
     /// NT ヘッダ (IMAGE_NT_HEADERS)
@@ -152,6 +152,268 @@ namespace std::pe {
         FileHeader     FileHeader;
         OptionalHeader OptionalHeader;
     };
+
+    /// リッチヘッダの 1 項目 (値は鍵で XOR されている)
+    struct RichEntry {
+        le u32 comp_id [[format("hex")]];
+        le u32 count;
+        local u32 key = rich_key();
+        local u32 product_id = ((comp_id ^ key) >> 16) & 0xFFFF [[show]];
+        local u32 build_number = (comp_id ^ key) & 0xFFFF [[show]];
+        local u32 use_count = count ^ key [[show]];
+    };
+
+    /// リッチヘッダ (DanS 〜 Rich + 鍵。DOS スタブと NT ヘッダの間にある)
+    struct RichHeader {
+        le u32 dans [[format("hex")]];
+        le u32 pad[3] [[format("hex")]];
+        RichEntry entries[(rich_end() - rich_start() - 16) / 8];
+        char   rich[4];
+        le u32 key [[format("hex")]];
+    };
+
+    flags SectionFlags : u32 {
+        NoPad = 0x00000008, Code = 0x00000020, InitializedData = 0x00000040, UninitializedData = 0x00000080,
+        LinkRemove = 0x00000800, LinkComdat = 0x00001000, NoDeferSpecExc = 0x00004000, Gprel = 0x00008000,
+        ExtendedRelocations = 0x01000000, Discardable = 0x02000000, NotCached = 0x04000000, NotPaged = 0x08000000,
+        Shared = 0x10000000, Execute = 0x20000000, Read = 0x40000000, Write = 0x80000000,
+    };
+
+    /// インポートされる関数名 (IMAGE_IMPORT_BY_NAME)
+    struct ImportByName {
+        le u16 Hint;
+        string Name;
+    };
+
+    /// インポートの参照 (IMAGE_THUNK_DATA32 / 64)。序数でなければ名前を指す。
+    struct ImportThunk(bool is64) {
+        if (is64) {
+            le u64 Value [[format("hex")]];
+        } else {
+            le u32 Value [[format("hex")]];
+        }
+        local bool by_ordinal = is64 ? (Value >> 63) != 0 : (Value >> 31) != 0 [[show]];
+        if (Value != 0 && !by_ordinal) {
+            ImportByName hint_name @ rva_to_offset(Value & 0x7FFFFFFF);
+        }
+    };
+
+    /// インポート記述子 (IMAGE_IMPORT_DESCRIPTOR)
+    struct ImportDescriptor(bool is64) {
+        le u32 OriginalFirstThunk [[format("hex")]];
+        le time32_t TimeDateStamp;
+        le u32 ForwarderChain;
+        le u32 Name [[format("hex")]];
+        le u32 FirstThunk [[format("hex")]];
+        if (Name != 0) {
+            local string dll_name = std::mem::read_string(rva_to_offset(Name), 256, "latin1") [[show]];
+        }
+        if (OriginalFirstThunk != 0) {
+            ImportThunk(is64) thunks[until(last.Value == 0)] @ rva_to_offset(OriginalFirstThunk);
+        }
+    };
+
+    /// エクスポートディレクトリ (IMAGE_EXPORT_DIRECTORY)
+    struct ExportDirectory {
+        le u32 Characteristics;
+        le time32_t TimeDateStamp;
+        le u16 MajorVersion;
+        le u16 MinorVersion;
+        le u32 Name [[format("hex")]];
+        le u32 Base;
+        le u32 NumberOfFunctions;
+        le u32 NumberOfNames;
+        le u32 AddressOfFunctions [[format("hex")]];
+        le u32 AddressOfNames [[format("hex")]];
+        le u32 AddressOfNameOrdinals [[format("hex")]];
+        if (Name != 0) {
+            local string dll_name = std::mem::read_string(rva_to_offset(Name), 256, "latin1") [[show]];
+        }
+        if (AddressOfFunctions != 0) {
+            le u32 Functions[NumberOfFunctions] @ rva_to_offset(AddressOfFunctions);
+        }
+        if (AddressOfNames != 0) {
+            string *Names[NumberOfNames] : u32 @ rva_to_offset(AddressOfNames) [[pointer_map(rva_to_offset)]];
+        }
+        if (AddressOfNameOrdinals != 0) {
+            le u16 NameOrdinals[NumberOfNames] @ rva_to_offset(AddressOfNameOrdinals);
+        }
+    };
+
+    /// リソースのデータ項目 (IMAGE_RESOURCE_DATA_ENTRY)
+    struct ResourceDataEntry {
+        le u32 OffsetToData [[format("hex")]];
+        le u32 Size;
+        le u32 CodePage;
+        le u32 Reserved;
+    };
+
+    /// リソースのディレクトリ項目。最上位ビットが立っていれば下の階層のディレクトリを指す。
+    struct ResourceEntry(u64 base, u32 depth) {
+        le u32 NameOrId [[format("hex")]];
+        le u32 Offset [[format("hex")]];
+        if ((Offset & 0x80000000) != 0) {
+            if (depth < 3) {
+                ResourceDirectory(base, depth + 1) directory @ base + (Offset & 0x7FFFFFFF);
+            }
+        } else {
+            ResourceDataEntry data @ base + Offset;
+        }
+    };
+
+    /// リソースのディレクトリ (IMAGE_RESOURCE_DIRECTORY。種類 → 名前 → 言語の 3 階層)
+    struct ResourceDirectory(u64 base, u32 depth) {
+        le u32 Characteristics;
+        le time32_t TimeDateStamp;
+        le u16 MajorVersion;
+        le u16 MinorVersion;
+        le u16 NumberOfNamedEntries;
+        le u16 NumberOfIdEntries;
+        ResourceEntry(base, depth) entries[NumberOfNamedEntries + NumberOfIdEntries];
+    };
+
+    bitfield RelocationEntry : u16 {
+        offset : 12;
+        type   : 4;
+    };
+
+    /// 再配置ブロック (IMAGE_BASE_RELOCATION)
+    struct BaseRelocationBlock {
+        le u32 PageRva [[format("hex")]];
+        le u32 BlockSize;
+        le RelocationEntry Entries[(std::math::max(BlockSize, 8) - 8) / 2];
+    };
+
+    enum DebugType : u32 {
+        Unknown = 0, Coff = 1, CodeView = 2, Fpo = 3, Misc = 4, Exception = 5, Fixup = 6, OmapToSrc = 7, OmapFromSrc = 8,
+        Borland = 9, Reserved10 = 10, Clsid = 11, VcFeature = 12, Pogo = 13, Iltcg = 14, Mpx = 15, Repro = 16,
+        ExDllCharacteristics = 20,
+    };
+
+    /// CodeView の PDB 7.0 情報 (RSDS)
+    struct CodeViewPdb70 {
+        char   Signature[4];
+        guid   Guid;
+        le u32 Age;
+        string PdbFileName;
+    };
+
+    /// デバッグディレクトリの項目 (IMAGE_DEBUG_DIRECTORY)
+    struct DebugDirectory {
+        le u32 Characteristics;
+        le time32_t TimeDateStamp;
+        le u16 MajorVersion;
+        le u16 MinorVersion;
+        le DebugType Type;
+        le u32 SizeOfData;
+        le u32 AddressOfRawData [[format("hex")]];
+        le u32 PointerToRawData [[format("hex")]];
+        if (Type == DebugType::CodeView && PointerToRawData != 0 && SizeOfData >= 24) {
+            CodeViewPdb70 codeview @ PointerToRawData;
+        }
+    };
+
+    flags ComImageFlags : u32 {
+        ILOnly = 0x1, Required32Bit = 0x2, ILLibrary = 0x4, StrongNameSigned = 0x8, NativeEntryPoint = 0x10, TrackDebugData = 0x10000,
+        Prefers32Bit = 0x20000,
+    };
+
+    /// .NET の CLI ヘッダ (IMAGE_COR20_HEADER)
+    struct Cor20Header {
+        le u32 cb;
+        le u16 MajorRuntimeVersion;
+        le u16 MinorRuntimeVersion;
+        DataDirectory MetaData;
+        le ComImageFlags Flags;
+        le u32 EntryPointToken [[format("hex")]];
+        DataDirectory Resources;
+        DataDirectory StrongNameSignature;
+        DataDirectory CodeManagerTable;
+        DataDirectory VTableFixups;
+        DataDirectory ExportAddressTableJumps;
+        DataDirectory ManagedNativeHeader;
+    };
+
+    /// メタデータのストリームのヘッダ (名前は 4 バイト境界まで 0 で埋める)
+    struct MetadataStreamHeader(u64 root) {
+        le u32 Offset [[format("hex")]];
+        le u32 Size;
+        string Name;
+        padding[(4 - (sizeof(Name) % 4)) % 4];
+        u8 Data[Size] @ root + Offset [[lazy]];
+    };
+
+    /// .NET のメタデータのルート (ECMA-335 の II.24.2.1)
+    struct MetadataRoot {
+        le u32 Signature [[format("hex"), expect(Signature == 0x424A5342, "BSJB ではありません")]];
+        le u16 MajorVersion;
+        le u16 MinorVersion;
+        le u32 Reserved;
+        le u32 Length;
+        char   Version[Length];
+        le u16 Flags;
+        le u16 Streams;
+        MetadataStreamHeader(addressof(this)) StreamHeaders[Streams];
+    };
+
+    /// データディレクトリの RVA (番号が範囲外なら 0)
+    fn dir_rva(u64 index) -> u64 {
+        local u64 nt = nt_offset();
+        local u64 dirs = nt + 24 + (std::mem::read_u16(nt + 24, little) == 0x10B ? 96 : 112);
+        if (index >= std::mem::read_u32(dirs - 4, little)) {
+            return 0;
+        }
+        return std::mem::read_u32(dirs + index * 8, little);
+    }
+
+    /// データディレクトリの大きさ (番号が範囲外なら 0)
+    fn dir_size(u64 index) -> u64 {
+        local u64 nt = nt_offset();
+        local u64 dirs = nt + 24 + (std::mem::read_u16(nt + 24, little) == 0x10B ? 96 : 112);
+        if (index >= std::mem::read_u32(dirs - 4, little)) {
+            return 0;
+        }
+        return std::mem::read_u32(dirs + index * 8 + 4, little);
+    }
+
+    /// データディレクトリの位置 (ファイル内)
+    fn dir_offset(u64 index) -> u64 {
+        return rva_to_offset(dir_rva(index));
+    }
+
+    /// PE32+ なら true
+    fn is_pe32_plus() -> bool {
+        return std::mem::read_u16(nt_offset() + 24, little) == 0x20B;
+    }
+
+    /// リッチヘッダの終わりの印 "Rich" の位置 (なければ -1。DOS ヘッダと NT ヘッダの間だけを探す)
+    fn rich_end() -> s64 {
+        local u64 lfanew = nt_offset();
+        if (lfanew <= 0x48 || lfanew > 0x10000) {
+            return -1;
+        }
+        return std::mem::find(x"52 69 63 68", 0x40, lfanew);
+    }
+
+    /// リッチヘッダの鍵 (Rich の後ろの 4 バイト)
+    fn rich_key() -> u32 {
+        return std::mem::read_u32(rich_end() + 4, little);
+    }
+
+    /// リッチヘッダの先頭 "DanS" の位置 (なければ -1)
+    fn rich_start() -> s64 {
+        local s64 end = rich_end();
+        if (end < 0) {
+            return -1;
+        }
+        local u32 key = rich_key();
+        for (local s64 p = end - 8; p >= 0x40; p -= 4) {
+            if ((std::mem::read_u32(p, little) ^ key) == 0x536E6144) {
+                return p;
+            }
+        }
+        return -1;
+    }
 
     /// e_lfanew の位置
     fn nt_offset() -> u64 {

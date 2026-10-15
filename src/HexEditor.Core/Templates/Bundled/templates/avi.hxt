@@ -1,0 +1,124 @@
+// HexEditor 標準テンプレート (TPL-34): AVI 動画 (RIFF)
+// ライセンス: MIT。
+// LIST (hdrl、strl、movi、INFO) を入れ子で読み、avih、strh、strf、idx1 を解釈する。movi の中のフレームは長さだけをたどり、中身は読まない。
+#pragma name "AVI video"
+#pragma name.ja "AVI 動画"
+#pragma description "AVI video (RIFF): nested LIST chunks, main header (avih), stream headers (strh / strf) and the old-style index (idx1)."
+#pragma description.ja "AVI 動画 (RIFF): 入れ子の LIST チャンク、メインヘッダ (avih)、ストリームヘッダ (strh / strf)、旧式の索引 (idx1)。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic_all 0 "52 49 46 46"
+#pragma magic_all 8 "41 56 49 20"
+#pragma mime "video/x-msvideo"
+#pragma extensions "avi"
+#pragma endian little
+
+flags AviFlags : u32 {
+    HasIndex = 0x10, MustUseIndex = 0x20, IsInterleaved = 0x100, TrustCkType = 0x800, WasCaptureFile = 0x10000, Copyrighted = 0x20000,
+};
+
+struct RiffHeader {
+    char riff[4] [[expect(riff == "RIFF", "RIFF ではありません")]];
+    u32  size [[comment("この欄の後ろの大きさ")]];
+    char form[4] [[expect(form == "AVI ", "AVI ではありません")]];
+};
+
+/// メインヘッダ (AVIMAINHEADER)
+struct MainHeader {
+    u32      micro_sec_per_frame;
+    u32      max_bytes_per_sec;
+    u32      padding_granularity;
+    AviFlags avi_flags;
+    u32      total_frames;
+    u32      initial_frames;
+    u32      streams;
+    u32      suggested_buffer_size;
+    u32      width;
+    u32      height;
+    u32      reserved[4];
+};
+
+/// ストリームヘッダ (AVISTREAMHEADER)
+struct StreamHeader {
+    char type[4] [[comment("vids: 映像、auds: 音声")]];
+    char handler[4];
+    u32  stream_flags [[format("hex")]];
+    u16  priority;
+    u16  language;
+    u32  initial_frames;
+    u32  scale;
+    u32  rate;
+    u32  start;
+    u32  length;
+    u32  suggested_buffer_size;
+    u32  quality;
+    u32  sample_size;
+    s16  frame_left;
+    s16  frame_top;
+    s16  frame_right;
+    s16  frame_bottom;
+};
+
+/// 映像のフォーマット (BITMAPINFOHEADER)
+struct BitmapInfoHeader {
+    u32  header_size;
+    s32  width;
+    s32  height;
+    u16  planes;
+    u16  bit_count;
+    char compression[4];
+    u32  size_image;
+    s32  x_pels_per_meter;
+    s32  y_pels_per_meter;
+    u32  colors_used;
+    u32  colors_important;
+};
+
+/// 音声のフォーマット (WAVEFORMATEX)
+struct WaveFormat {
+    u16 format_tag;
+    u16 channels;
+    u32 samples_per_second;
+    u32 average_bytes_per_second;
+    u16 block_align;
+    u16 bits_per_sample;
+};
+
+/// ストリームのフォーマット。先頭の 4 バイトが 40 なら映像 (BITMAPINFOHEADER)、そうでなければ音声 (WAVEFORMATEX) とみなす。
+struct StreamFormat(u32 size) {
+    if (size >= 40 && std::mem::read_u32(addressof(this), little) == 40) {
+        BitmapInfoHeader video_format;
+    } else if (size >= 16) {
+        WaveFormat audio_format;
+    }
+};
+
+/// 旧式の索引の項目 (AVIOLDINDEX)
+struct IndexEntry {
+    char chunk_id[4];
+    u32  flags [[format("hex")]];
+    u32  offset;
+    u32  size;
+};
+
+/// チャンク。LIST のときは種類と、入れ子のチャンクを置く。
+struct Chunk(u32 depth) {
+    char id[4] [[color("accent1")]];
+    u32  size;
+    if (id == "LIST" && depth < 4) {
+        char list_type[4];
+        Chunk(depth + 1) children[while($ < addressof(this) + 8 + size)];
+    } else {
+        switch (id) {
+            case "avih": MainHeader main_header;
+            case "strh": StreamHeader stream_header;
+            case "strf": StreamFormat(size) format;
+            case "idx1": IndexEntry entries[size / 16];
+            default:     u8 data[size] [[lazy]];
+        }
+    }
+} [[size(8 + size + (size & 1))]];
+
+RiffHeader header;
+Chunk(0) chunks[until(endof(last) >= 8 + header.size || std::eof())];

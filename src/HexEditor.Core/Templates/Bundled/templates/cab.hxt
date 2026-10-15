@@ -1,0 +1,91 @@
+// HexEditor 標準テンプレート (TPL-34): CAB (Microsoft Cabinet)
+// ライセンス: MIT。
+// CFHEADER、CFFOLDER、CFFILE と、各フォルダの最初の CFDATA ブロックのヘッダを読む。データの中身は読まない。
+#pragma name "Microsoft Cabinet"
+#pragma name.ja "Microsoft キャビネット (CAB)"
+#pragma description "Microsoft Cabinet file: CFHEADER, CFFOLDER entries, CFFILE entries and the first CFDATA block of each folder."
+#pragma description.ja "Microsoft キャビネットファイル: CFHEADER、CFFOLDER の各項目、CFFILE の各項目、各フォルダの最初の CFDATA ブロック。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "4D 53 43 46 00 00 00 00"
+#pragma mime "application/vnd.ms-cab-compressed"
+#pragma extensions "cab"
+#pragma endian little
+
+enum CompressionType : u16 { None = 0, MsZip = 1, Quantum = 2, Lzx = 3 };
+
+flags HeaderFlags : u16 { PrevCabinet = 0x1, NextCabinet = 0x2, ReservePresent = 0x4 };
+
+flags FileAttributes : u16 { ReadOnly = 0x1, Hidden = 0x2, System = 0x4, Archive = 0x20, Execute = 0x40, NameIsUtf = 0x80 };
+
+struct Header {
+    u8          signature[4] [[expect(signature == x"4D 53 43 46", "MSCF ではありません")]];
+    u32         reserved1;
+    u32         cabinet_size;
+    u32         reserved2;
+    u32         files_offset [[format("hex")]];
+    u32         reserved3;
+    u8          version_minor;
+    u8          version_major;
+    u16         folder_count;
+    u16         file_count;
+    HeaderFlags packed;
+    u16         set_id;
+    u16         cabinet_index;
+    if ((packed & HeaderFlags::ReservePresent) != 0) {
+        u16 header_reserve_size;
+        u8  folder_reserve_size;
+        u8  data_reserve_size;
+        u8  header_reserve[header_reserve_size] [[lazy]];
+    }
+    if ((packed & HeaderFlags::PrevCabinet) != 0) {
+        string previous_cabinet;
+        string previous_disk;
+    }
+    if ((packed & HeaderFlags::NextCabinet) != 0) {
+        string next_cabinet;
+        string next_disk;
+    }
+};
+
+struct Folder(u8 reserve_size) {
+    u32             data_offset [[format("hex")]];
+    u16             data_block_count;
+    CompressionType compression;
+    if (reserve_size > 0) {
+        u8 reserve[reserve_size] [[lazy]];
+    }
+};
+
+struct File {
+    u32            size;
+    u32            uncompressed_offset;
+    u16            folder_index [[comment("0xFFFD / 0xFFFE / 0xFFFF は前後のキャビネットにまたがる特別な値")]];
+    dosdate        date;
+    dostime        time;
+    FileAttributes attributes;
+    string         name [[encoding("utf-8")]];
+};
+
+/// データブロック (CFDATA)
+struct DataBlock(u8 reserve_size) {
+    u32 checksum [[format("hex")]];
+    u16 compressed_size;
+    u16 uncompressed_size;
+    if (reserve_size > 0) {
+        u8 reserve[reserve_size] [[lazy]];
+    }
+    u8  data[compressed_size] [[lazy]];
+};
+
+Header header;
+local u8 folder_reserve = (header.packed & HeaderFlags::ReservePresent) != 0 ? header.folder_reserve_size : 0;
+local u8 data_reserve = (header.packed & HeaderFlags::ReservePresent) != 0 ? header.data_reserve_size : 0;
+Folder(folder_reserve) folders[header.folder_count];
+File files[header.file_count] @ header.files_offset;
+for (local u32 i = 0; i < header.folder_count && i < 64; i += 1) {
+    if (folders[i].data_block_count > 0) {
+        DataBlock(data_reserve) first_data_block @ folders[i].data_offset;
+    }
+}

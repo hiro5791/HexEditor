@@ -1,0 +1,139 @@
+// HexEditor 標準ライブラリ (TPL-18): std.disk
+// ディスクの区画の型 (MBR、EBR、GPT)。標準テンプレート (TPL-34) の mbr と gpt で使う。
+// 100 GiB 以上のディスクイメージでも使えるよう、どの型も固定の位置を読むだけで、ディスク全体は走査しない。
+
+namespace std::disk {
+
+    enum MbrPartitionType : u8 {
+        Empty = 0x00, Fat12 = 0x01, Fat16Small = 0x04, Extended = 0x05, Fat16 = 0x06, NtfsExfat = 0x07, Fat32Chs = 0x0B, Fat32Lba = 0x0C,
+        Fat16Lba = 0x0E, ExtendedLba = 0x0F, HiddenFat12 = 0x11, HiddenFat16 = 0x16, HiddenNtfs = 0x17, WindowsRecovery = 0x27,
+        DynamicDisk = 0x42, LinuxSwapOld = 0x82, Linux = 0x83, LinuxExtended = 0x85, LinuxLvm = 0x8E, FreeBsd = 0xA5, OpenBsd = 0xA6,
+        MacOsX = 0xA8, NetBsd = 0xA9, Hfs = 0xAF, Solaris = 0xBF, GptProtective = 0xEE, EfiSystem = 0xEF, VmwareVmfs = 0xFB,
+        LinuxRaid = 0xFD,
+    };
+
+    /// CHS アドレス (3 バイト。シリンダの上位 2 bit はセクタの上位にある)
+    struct Chs {
+        u8 head;
+        u8 sector_and_cylinder_high;
+        u8 cylinder_low;
+        local u32 sector = sector_and_cylinder_high & 0x3F [[show]];
+        local u32 cylinder = ((sector_and_cylinder_high & 0xC0) << 2) | cylinder_low [[show]];
+    };
+
+    fn fmt_boot_status(ref u8 status) -> string {
+        if (status == 0x80) {
+            return "0x80 (active)";
+        }
+        return std::format("0x{:02X}", status);
+    }
+
+    /// パーティションテーブルの項目 (16 バイト)
+    struct MbrPartitionEntry {
+        u8               status [[format(fmt_boot_status)]];
+        Chs              chs_first;
+        MbrPartitionType type;
+        Chs              chs_last;
+        le u32           lba_first;
+        le u32           sectors;
+    };
+
+    /// マスターブートレコード (LBA 0 の 512 バイト)。拡張ブートレコード (EBR) も同じ形で、使うのは先頭の 2 項目。
+    struct Mbr {
+        u8                 boot_code[440] [[lazy]];
+        le u32             disk_signature [[format("hex")]];
+        le u16             reserved;
+        MbrPartitionEntry  partitions[4];
+        u8                 boot_signature[2] [[expect(boot_signature == x"55 AA", "ブートシグネチャ 55 AA がありません")]];
+    };
+
+    flags GptAttributes : u64 {
+        RequiredPartition = 0x1, NoBlockIoProtocol = 0x2, LegacyBiosBootable = 0x4,
+        ReadOnly = 0x1000000000000000, Shadow = 0x2000000000000000, Hidden = 0x4000000000000000, NoAutoMount = 0x8000000000000000,
+    };
+
+    /// オフセットの GUID (Microsoft の混在エンディアン) を、小文字のハイフン区切りの文字列にする
+    fn guid_text(u64 o) -> string {
+        return std::format("{:08x}-{:04x}-{:04x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
+            std::mem::read_u32(o, little), std::mem::read_u16(o + 4, little), std::mem::read_u16(o + 6, little),
+            std::mem::read_u8(o + 8, little), std::mem::read_u8(o + 9, little), std::mem::read_u8(o + 10, little), std::mem::read_u8(o + 11, little),
+            std::mem::read_u8(o + 12, little), std::mem::read_u8(o + 13, little), std::mem::read_u8(o + 14, little), std::mem::read_u8(o + 15, little));
+    }
+
+    /// オフセットにあるパーティションの種類の GUID の名前 (知っているものだけ。ほかは GUID のまま)
+    fn gpt_type_name(u64 offset) -> string {
+        local string guid = guid_text(offset);
+        switch (guid) {
+            case "00000000-0000-0000-0000-000000000000": return "Unused";
+            case "c12a7328-f81f-11d2-ba4b-00a0c93ec93b": return "EFI System";
+            case "21686148-6449-6e6f-744e-656564454649": return "BIOS Boot";
+            case "e3c9e316-0b5c-4db8-817d-f92df00215ae": return "Microsoft Reserved";
+            case "ebd0a0a2-b9e5-4433-87c0-68b6b72699c7": return "Microsoft Basic Data";
+            case "de94bba4-06d1-4d40-a16a-bfd50179d6ac": return "Windows Recovery";
+            case "5808c8aa-7e8f-42e0-85d2-e1e90434cfb3": return "LDM Metadata";
+            case "af9b60a0-1431-4f62-bc68-3311714a69ad": return "LDM Data";
+            case "0fc63daf-8483-4772-8e79-3d69d8477de4": return "Linux Filesystem";
+            case "0657fd6d-a4ab-43c4-84e5-0933c84b4f4f": return "Linux Swap";
+            case "933ac7e1-2eb4-4f13-b844-0e14e2aef915": return "Linux /home";
+            case "e6d6d379-f507-44c2-a23c-238f2a3df928": return "Linux LVM";
+            case "a19d880f-05fc-4d3b-a006-743f0f84911e": return "Linux RAID";
+            case "48465300-0000-11aa-aa11-00306543ecac": return "Apple HFS+";
+            case "7c3457ef-0000-11aa-aa11-00306543ecac": return "Apple APFS";
+            case "426f6f74-0000-11aa-aa11-00306543ecac": return "Apple Boot";
+            default: return guid;
+        }
+    }
+
+    /// GPT のパーティションエントリ (通常 128 バイト)
+    struct GptPartitionEntry(u32 entry_size) {
+        guid      type_guid;
+        guid      unique_guid;
+        le u64    first_lba;
+        le u64    last_lba;
+        le GptAttributes attributes;
+        char16    name[36] [[encoding("utf-16le")]];
+        local string type_name = gpt_type_name(addressof(type_guid)) [[show]];
+        if (entry_size > 128) {
+            padding[entry_size - 128];
+        }
+    };
+
+    /// パーティションエントリの配列の CRC32 を確かめる。配列が 16 MiB を超える、またはデータの外にあるときは確かめずに真とする。
+    fn entries_crc_ok(u64 lba, u64 count, u64 size, u64 crc) -> bool {
+        local u64 length = count * size;
+        local u64 at = lba * sector_size();
+        if (length == 0 || length > 16777216 || at + length > std::core::size()) {
+            return true;
+        }
+        return std::hash::crc32(at, length) == crc;
+    }
+
+    /// GPT のヘッダ (LBA 1)
+    struct GptHeader {
+        char   signature[8] [[expect(signature == "EFI PART", "GPT のシグネチャではありません")]];
+        le u32 revision [[format("hex")]];
+        le u32 header_size;
+        le u32 header_crc32 [[format("hex")]];
+        le u32 reserved;
+        le u64 my_lba;
+        le u64 alternate_lba;
+        le u64 first_usable_lba;
+        le u64 last_usable_lba;
+        guid   disk_guid;
+        le u64 partition_entry_lba;
+        le u32 num_partition_entries;
+        le u32 size_of_partition_entry;
+        le u32 partition_entries_crc32 [[format("hex"), expect(entries_crc_ok(partition_entry_lba, num_partition_entries, size_of_partition_entry, partition_entries_crc32), "パーティションエントリの CRC32 が一致しません")]];
+    };
+
+    /// セクタの大きさ (LBA 1 に GPT のシグネチャがある方。4096 バイトのセクタかどうかだけを見分ける)
+    fn sector_size() -> u64 {
+        if (std::mem::compare(512, x"45 46 49 20 50 41 52 54")) {
+            return 512;
+        }
+        if (std::mem::compare(4096, x"45 46 49 20 50 41 52 54")) {
+            return 4096;
+        }
+        return 512;
+    }
+};

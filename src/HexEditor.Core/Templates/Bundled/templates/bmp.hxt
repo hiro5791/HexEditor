@@ -1,0 +1,90 @@
+// HexEditor 標準テンプレート (TPL-34): BMP 画像 (DIB)
+// ライセンス: MIT。
+// BITMAPFILEHEADER、DIB ヘッダ (CORE / INFO / V4 / V5)、カラーテーブル、画素データ (中身は読まない) を置く。
+#pragma name "BMP image"
+#pragma name.ja "BMP 画像"
+#pragma description "Windows bitmap (BMP / DIB): file header, DIB header (CORE, INFO, V4, V5), color table and pixel data."
+#pragma description.ja "Windows のビットマップ (BMP / DIB): ファイルヘッダ、DIB ヘッダ (CORE、INFO、V4、V5)、カラーテーブル、画素データ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "42 4D"
+#pragma mime "image/bmp"
+#pragma extensions "bmp;dib"
+#pragma endian little
+
+enum Compression : u32 { Rgb = 0, Rle8 = 1, Rle4 = 2, Bitfields = 3, Jpeg = 4, Png = 5, AlphaBitfields = 6 };
+
+struct FileHeader {
+    char signature[2] [[expect(signature == "BM", "BM ではありません")]];
+    u32  file_size;
+    u16  reserved1;
+    u16  reserved2;
+    u32  pixel_data_offset [[format("hex")]];
+};
+
+/// BITMAPCOREHEADER (12 バイト)
+struct CoreHeader {
+    u32 header_size;
+    u16 width;
+    u16 height;
+    u16 planes;
+    u16 bits_per_pixel;
+};
+
+/// BITMAPINFOHEADER (40 バイト) と、V4 (108)、V5 (124) の追加の欄
+struct InfoHeader {
+    u32         header_size;
+    s32         width;
+    s32         height [[comment("正なら下から上、負なら上から下の順")]];
+    u16         planes;
+    u16         bits_per_pixel;
+    Compression compression;
+    u32         image_size;
+    s32         x_pixels_per_meter;
+    s32         y_pixels_per_meter;
+    u32         colors_used;
+    u32         colors_important;
+    if (header_size >= 108) {
+        u32  red_mask [[format("hex")]];
+        u32  green_mask [[format("hex")]];
+        u32  blue_mask [[format("hex")]];
+        u32  alpha_mask [[format("hex")]];
+        char color_space_type[4];
+        u8   endpoints[36] [[lazy]];
+        u32  gamma_red;
+        u32  gamma_green;
+        u32  gamma_blue;
+    }
+    if (header_size >= 124) {
+        u32  intent;
+        u32  profile_data;
+        u32  profile_size;
+        u32  reserved;
+    }
+};
+
+FileHeader file_header;
+local u32 dib_size = std::mem::read_u32(14, little);
+if (dib_size == 12) {
+    CoreHeader dib_header;
+} else {
+    InfoHeader dib_header;
+}
+
+// カラーテーブル (8 bit 以下のとき。項目は B、G、R、予約の 4 バイト。CORE では 3 バイト)
+local u32 bits = dib_size == 12 ? std::mem::read_u16(24, little) : std::mem::read_u16(28, little);
+if (bits <= 8) {
+    local u32 used = dib_size == 12 ? 0 : std::mem::read_u32(46, little);
+    local u32 colors = used != 0 ? used : (1 << bits);
+    if (dib_size == 12) {
+        u8 color_table[colors * 3] [[lazy]];
+    } else {
+        bgra8 color_table[colors];
+    }
+}
+
+// 画素データ (ヘッダが指す位置から、ファイルの末尾まで)
+if (file_header.pixel_data_offset < std::core::size()) {
+    u8 pixel_data[std::core::size() - file_header.pixel_data_offset] @ file_header.pixel_data_offset [[lazy]];
+}

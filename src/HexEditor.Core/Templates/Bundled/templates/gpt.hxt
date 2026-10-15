@@ -1,0 +1,29 @@
+// HexEditor 標準テンプレート (TPL-34): GPT (GUID パーティションテーブル)
+// ライセンス: MIT。型は標準ライブラリ std.disk (TPL-18) にある。
+// 100 GiB 以上のディスクイメージでも使える。読むのは LBA 0 (保護 MBR)、LBA 1 (ヘッダ)、パーティションエントリ、予備のヘッダだけである。
+// MBR のテンプレートと同じ 55 AA を持つため、priority を高くして GPT のディスクでは GPT を先に提案する。
+#pragma name "GPT partition table"
+#pragma name.ja "GPT パーティションテーブル"
+#pragma description "GUID partition table: protective MBR, GPT header at LBA 1, partition entries with UTF-16 names, and the backup header."
+#pragma description.ja "GUID パーティションテーブル: 保護 MBR、LBA 1 の GPT ヘッダ、UTF-16 の名前を持つパーティションエントリ、予備のヘッダ。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 512 "45 46 49 20 50 41 52 54"
+#pragma magic 4096 "45 46 49 20 50 41 52 54"
+#pragma mime "application/x-raw-disk-image"
+#pragma extensions "gpt;img;raw;dd"
+#pragma priority 20
+#pragma endian little
+
+import std.disk;
+
+std::disk::Mbr protective_mbr;
+local u64 sector = std::disk::sector_size();
+std::disk::GptHeader header @ sector;
+std::disk::GptPartitionEntry(header.size_of_partition_entry) entries[std::math::min(header.num_partition_entries, 65536)] @ header.partition_entry_lba * sector;
+
+// 予備のヘッダ (ディスクの最後のセクタ)
+if (header.alternate_lba != 0 && (header.alternate_lba + 1) * sector <= std::core::size()) {
+    std::disk::GptHeader backup_header @ header.alternate_lba * sector;
+}
