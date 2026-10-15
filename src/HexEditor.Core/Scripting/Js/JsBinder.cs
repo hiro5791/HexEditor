@@ -964,7 +964,76 @@ internal sealed class JsBinder
             }));
         }
 
+        if (type == typeof(Func<IReadOnlyList<object?>, object?>))
+        {
+            // テンプレート拡張 (AUTO-13 の仕様 6): 引数を JavaScript の値にし、戻り値をテンプレートの値にする。
+            return new Func<IReadOnlyList<object?>, object?>(args => _session.InvokeExtension(() =>
+            {
+                JsValue[] values = [.. args.Select(ExtensionArgument)];
+                return ExtensionResult(_engine.Call(fn, JsValue.Undefined, values), name);
+            }));
+        }
+
         throw Wrong(name, Msg.T("関数", "a function"));
+    }
+
+    /// <summary>テンプレート拡張の引数 (数値・文字列・バイト列・パターンの読み取り専用の参照)。</summary>
+    private JsValue ExtensionArgument(object? value) => value switch
+    {
+        long l when l is >= -ScriptValues.MaxSafeInteger and <= ScriptValues.MaxSafeInteger => new JsNumber(l),
+        long l => new JsBigInt(l),
+        ulong u => Wrap(u, typeof(ulong)),
+        Int128 i => new JsBigInt(BigInteger.Parse(i.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture)),
+        UInt128 u => new JsBigInt(BigInteger.Parse(u.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture)),
+        Templates.TemplateNode node => Wrap(new Dictionary<string, object?>
+        {
+            ["name"] = node.DisplayName,
+            ["path"] = node.Path,
+            ["type"] = node.TypeName,
+            ["start"] = node.Offset,
+            ["length"] = node.Size,
+            ["value"] = node.Value switch
+            {
+                long l when l is < -ScriptValues.MaxSafeInteger or > ScriptValues.MaxSafeInteger => new BigInteger(l),
+                Int128 i => BigInteger.Parse(i.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture),
+                var v => v,
+            },
+            ["displayValue"] = node.GetDisplay(Templates.TemplateDisplayContext.Current),
+        }, typeof(object)),
+        _ => Wrap(value, typeof(object)),
+    };
+
+    /// <summary>テンプレート拡張の戻り値 (整数は long / Int128、小数は double、ほかに文字列・真偽値・バイト列)。</summary>
+    private static object? ExtensionResult(JsValue v, string name)
+    {
+        if (v.IsNull() || v.IsUndefined())
+        {
+            return null;
+        }
+
+        if (v.IsBigInt())
+        {
+            BigInteger b = BigOf(v);
+            return b >= long.MinValue && b <= long.MaxValue ? (long)b : Int128.Parse(b.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+        }
+
+        if (v.IsNumber())
+        {
+            double d = v.AsNumber();
+            return Math.Floor(d) == d && Math.Abs(d) <= ScriptValues.MaxSafeInteger ? (object)(long)d : d;
+        }
+
+        if (v.IsString())
+        {
+            return v.AsString();
+        }
+
+        if (v.IsBoolean())
+        {
+            return v.AsBoolean();
+        }
+
+        return BytesOf(v, name + Msg.T(" の戻り値", " return value"));
     }
 
     /// <summary>イベントのハンドラを呼ぶ。ハンドラの例外は出力パネルに出し、スクリプトは続ける。</summary>

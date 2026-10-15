@@ -1,0 +1,19 @@
+// HexEditor 標準テンプレート (TPL-34): PE (Windows の実行形式)
+// ライセンス: MIT。型は標準ライブラリ std.pe (TPL-18) にある。
+#pragma name "PE executable"
+#pragma name.ja "PE 実行形式"
+#pragma description "Windows executable (PE32 / PE32+): DOS header, NT headers and section table."
+#pragma description.ja "Windows の実行形式 (PE32 / PE32+): DOS ヘッダ、NT ヘッダ、セクション表。"
+#pragma author "HexEditor"
+#pragma version "1.0.0"
+#pragma license "MIT"
+#pragma magic 0 "4D 5A"
+#pragma mime "application/vnd.microsoft.portable-executable"
+#pragma extensions "exe;dll;sys;ocx;scr;cpl;efi;mui"
+#pragma endian little
+
+import std.pe;
+
+std::pe::DosHeader     header;
+std::pe::NtHeaders     nt @ header.e_lfanew;
+std::pe::SectionHeader sections[nt.FileHeader.NumberOfSections] @ header.e_lfanew + 24 + nt.FileHeader.SizeOfOptionalHeader;

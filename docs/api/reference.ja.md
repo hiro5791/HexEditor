@@ -1036,6 +1036,12 @@ JSON にした内容 (コマンドラインの `template` の出力と同じ形)
 
 自動適用と同じ判定で、合うテンプレートの候補を返す。
 
+### Templates.registerExtension
+
+`registerExtension(name: string, fn: (...args: any[]) => any, options?: TemplateExtensionOptions): EventSubscription`
+
+テンプレートから呼べる関数 (テンプレート拡張。TPL-19) を登録する。登録している間スクリプトは常駐し、 `off` かスクリプトの終了で登録を外す。
+
 ## Text
 
 文字コードの変換 (AUTO-12)。
@@ -1467,6 +1473,18 @@ Hex を大文字にする (null は Copy As の設定)。
 `overwrite?: boolean`
 
 既存のファイルを上書きする (既定 false)。
+
+### ExportRangeOptions.format
+
+`format?: string | null`
+
+エクスポートの形式の ID。`hexed convert --to` と同じ (例: `ihex`、`srec`、`base64`、`hextext`、`c`。既定 `bin`)。
+
+### ExportRangeOptions.formatOptions
+
+`formatOptions?: Record<string, string> | null`
+
+形式の設定。エクスポートのダイアログの項目名で指定する (例: `recordLength`、`startAddress`、`lineLength`)。
 
 ### ExportRangeOptions.signal
 
@@ -2041,6 +2059,28 @@ InfoBar でなくダイアログで表示する。
 `progress?: (fraction: number, text?: string) => void | null`
 
 進捗を受け取る関数。終わった割合 (0〜1) と説明。
+
+## TemplateExtensionOptions
+
+`registerExtension` のオプション。
+
+### TemplateExtensionOptions.point
+
+`point?: string`
+
+拡張点: `"format"`、`"read"`、`"write"`、`"pointerMap"`、`"section"`、`"function"` (既定)。
+
+### TemplateExtensionOptions.params
+
+`params?: string[] | null`
+
+引数の型: `"integer"`、`"float"`、`"bool"`、`"string"`、`"bytes"`、`"pattern"`、`"any"`。
+
+### TemplateExtensionOptions.returns
+
+`returns?: string`
+
+戻り値の型 (`params` と同じ名前。既定 `"any"`)。
 
 ## TemplateInfo
 

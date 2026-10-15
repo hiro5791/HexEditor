@@ -135,6 +135,18 @@ public sealed class ExportRangeOptions : AsyncOptions
 {
     /// <summary>Overwrite an existing file (default false). <ja>既存のファイルを上書きする (既定 false)。</ja></summary>
     public bool Overwrite { get; init; }
+
+    /// <summary>
+    /// Export format ID, the same as <c>hexed convert --to</c> (for example <c>ihex</c>, <c>srec</c>, <c>base64</c>, <c>hextext</c>, <c>c</c>; default <c>bin</c>).
+    /// <ja>エクスポートの形式の ID。<c>hexed convert --to</c> と同じ (例: <c>ihex</c>、<c>srec</c>、<c>base64</c>、<c>hextext</c>、<c>c</c>。既定 <c>bin</c>)。</ja>
+    /// </summary>
+    public string? Format { get; init; }
+
+    /// <summary>
+    /// Options of the format, by the names of the export dialog (for example <c>recordLength</c>, <c>startAddress</c>, <c>lineLength</c>).
+    /// <ja>形式の設定。エクスポートのダイアログの項目名で指定する (例: <c>recordLength</c>、<c>startAddress</c>、<c>lineLength</c>)。</ja>
+    /// </summary>
+    public IReadOnlyDictionary<string, string>? FormatOptions { get; init; }
 }
 
 /// <summary>Options of <see cref="IDocument.EntropyAsync"/>. <ja><see cref="IDocument.EntropyAsync"/> のオプション。</ja></summary>
@@ -175,6 +187,25 @@ public sealed class ApplyTemplateOptions : AsyncOptions
 
     /// <summary>Show the result in the template panel (default true). <ja>テンプレートパネルに結果を表示する (既定 true)。</ja></summary>
     public bool Show { get; init; } = true;
+}
+
+/// <summary>Options of <see cref="ITemplates.RegisterExtension"/>. <ja><see cref="ITemplates.RegisterExtension"/> のオプション。</ja></summary>
+public sealed class TemplateExtensionOptions
+{
+    /// <summary>
+    /// Extension point: <c>"format"</c>, <c>"read"</c>, <c>"write"</c>, <c>"pointerMap"</c>, <c>"section"</c> or <c>"function"</c> (default).
+    /// <ja>拡張点: <c>"format"</c>、<c>"read"</c>、<c>"write"</c>、<c>"pointerMap"</c>、<c>"section"</c>、<c>"function"</c> (既定)。</ja>
+    /// </summary>
+    public string Point { get; init; } = "function";
+
+    /// <summary>
+    /// Parameter types: <c>"integer"</c>, <c>"float"</c>, <c>"bool"</c>, <c>"string"</c>, <c>"bytes"</c>, <c>"pattern"</c> or <c>"any"</c>.
+    /// <ja>引数の型: <c>"integer"</c>、<c>"float"</c>、<c>"bool"</c>、<c>"string"</c>、<c>"bytes"</c>、<c>"pattern"</c>、<c>"any"</c>。</ja>
+    /// </summary>
+    public IReadOnlyList<string>? Params { get; init; }
+
+    /// <summary>Return type (the same names as <see cref="Params"/>; default <c>"any"</c>). <ja>戻り値の型 (<see cref="Params"/> と同じ名前。既定 <c>"any"</c>)。</ja></summary>
+    public string Returns { get; init; } = "any";
 }
 
 /// <summary>Options of the inspector APIs. <ja>インスペクタの API のオプション。</ja></summary>

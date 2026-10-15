@@ -1433,6 +1433,28 @@
       "permission": null
     },
     {
+      "method": "templates.registerExtension",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "fn",
+          "type": "(...args: any[]) =\u003E any",
+          "optional": false
+        },
+        {
+          "name": "options",
+          "type": "TemplateExtensionOptions",
+          "optional": true
+        }
+      ],
+      "result": "EventSubscription",
+      "permission": null
+    },
+    {
       "method": "text.encode",
       "params": [
         {

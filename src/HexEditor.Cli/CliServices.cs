@@ -19,11 +19,12 @@ public sealed class CliServices
     /// <summary>GUI (HexEditor.exe) の起動 (AUTO-37)。</summary>
     public IGuiLauncher Gui { get; init; } = new GuiLauncher();
 
-    /// <summary>
-    /// 製品の既定。テンプレートエンジン・スクリプトのホストを持つ領域がマージされたら、ここで差し込む
-    /// (例: <c>Templates = new CoreTemplateService()</c>)。
-    /// </summary>
-    public static CliServices Default { get; } = new();
+    /// <summary>製品の既定: Core のテンプレートエンジン (07) とスクリプトのホスト (08)。</summary>
+    public static CliServices Default { get; } = new()
+    {
+        Templates = new Services.CoreTemplateService(),
+        Scripts = new Services.CoreScriptRunner(),
+    };
 }
 
 /// <summary>テンプレートを適用して結果を出力する (AUTO-42)。</summary>
@@ -48,7 +49,8 @@ public sealed record TemplateRequest(
     int? Depth,
     IReadOnlyList<string> Fields,
     TextWriter Output,
-    TextWriter Error);
+    TextWriter Error,
+    string Language = "en");
 
 /// <summary>スクリプトをヘッドレスで実行する (AUTO-41)。</summary>
 public interface IScriptRunner
@@ -73,7 +75,10 @@ public sealed record ScriptRunRequest(
     Func<Document, bool> SaveDocument,
     TextWriter Output,
     TextWriter Error,
-    Func<string, string?> Prompt);
+    Func<string, string?> Prompt,
+    IReadOnlyList<string>? DocumentPaths = null,
+    bool DryRun = false,
+    string Language = "en");
 
 /// <summary>GUI の起動 (AUTO-37)。</summary>
 public interface IGuiLauncher

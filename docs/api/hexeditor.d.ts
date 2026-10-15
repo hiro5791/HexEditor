@@ -384,6 +384,8 @@ declare namespace HexEditor {
         list(): TemplateInfo[];
         /** Templates that match the document by the same rules as automatic application. */
         detect(document: Document): TemplateInfo[];
+        /** Registers a function that templates can call (template extension, TPL-19). The script stays resident while it is registered; `off` or the end of the script removes it. */
+        registerExtension(name: string, fn: (...args: any[]) => any, options?: TemplateExtensionOptions): EventSubscription;
     }
     
     /** Text encoding conversion (AUTO-12). */
@@ -576,6 +578,10 @@ declare namespace HexEditor {
     interface ExportRangeOptions {
         /** Overwrite an existing file (default false). */
         overwrite?: boolean;
+        /** Export format ID, the same as `hexed convert --to` (for example `ihex`, `srec`, `base64`, `hextext`, `c`; default `bin`). */
+        format?: string | null;
+        /** Options of the format, by the names of the export dialog (for example `recordLength`, `startAddress`, `lineLength`). */
+        formatOptions?: Record<string, string> | null;
         /** Cancellation (JavaScript: an `AbortSignal` such as `script.signal` or `new AbortController().signal`). */
         signal?: AbortSignal | null;
         /** Receives the progress: the fraction done (0-1) and a description. */
@@ -825,6 +831,16 @@ declare namespace HexEditor {
         signal?: AbortSignal | null;
         /** Receives the progress: the fraction done (0-1) and a description. */
         progress?: (fraction: number, text?: string) => void | null;
+    }
+    
+    /** Options of `registerExtension`. */
+    interface TemplateExtensionOptions {
+        /** Extension point: `"format"`, `"read"`, `"write"`, `"pointerMap"`, `"section"` or `"function"` (default). */
+        point?: string;
+        /** Parameter types: `"integer"`, `"float"`, `"bool"`, `"string"`, `"bytes"`, `"pattern"` or `"any"`. */
+        params?: string[] | null;
+        /** Return type (the same names as `params`; default `"any"`). */
+        returns?: string;
     }
     
     /** A structure template. */

@@ -226,6 +226,7 @@ public sealed class ScriptHost : IDisposable
         }
 
         run.Context?.Dispose();
+        run.ExecutionFinished = true;
         WriteResultLine(run, result, env);
         run.Complete(result);
         RaiseRunningChanged(env);

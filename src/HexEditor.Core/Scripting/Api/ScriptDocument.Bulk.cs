@@ -346,6 +346,49 @@ public sealed partial class ScriptDocument
         });
     });
 
+    /// <summary>形式の設定 (欄の既定値に <paramref name="values"/> を重ねる。知らない欄・誤った値は <see cref="Sdk.ArgumentError"/>)。</summary>
+    private Formats.ExportOptions ExportOptionsFor(string format, IReadOnlyDictionary<string, string>? values)
+    {
+        if (!Formats.FormatIds.Exportable.Contains(format))
+        {
+            throw new Sdk.ArgumentError(Msg.T($"エクスポートの形式が不明です: {format} ({string.Join(", ", Formats.FormatIds.Exportable)})",
+                $"Unknown export format: {format} ({string.Join(", ", Formats.FormatIds.Exportable)})"));
+        }
+
+        IReadOnlyList<Formats.TransferField> fields = Formats.TransferOptions.ExportFields(format, null, Name);
+        Dictionary<string, string> v = Formats.TransferOptions.Load(null, fields);
+        foreach ((string key, string value) in values ?? new Dictionary<string, string>())
+        {
+            if (!v.ContainsKey(key))
+            {
+                throw new Sdk.ArgumentError(Msg.T($"形式 {format} の設定にない項目です: {key} ({string.Join(", ", v.Keys)})",
+                    $"Not an option of the format {format}: {key} ({string.Join(", ", v.Keys)})"));
+            }
+
+            v[key] = value;
+        }
+
+        long? Evaluate(string text)
+        {
+            try
+            {
+                return Ui(() => ScriptValues.EvaluateNumber(text, ExpressionContext(), ExpressionRadix()));
+            }
+            catch (Sdk.ScriptError)
+            {
+                return null;
+            }
+        }
+
+        IReadOnlyList<string> bad = Formats.TransferOptions.Validate(format, v, Evaluate);
+        if (bad.Count > 0)
+        {
+            throw new Sdk.ArgumentError(Msg.T($"形式の設定の値が正しくありません: {string.Join(", ", bad)}", $"Invalid format options: {string.Join(", ", bad)}"));
+        }
+
+        return Formats.TransferOptions.ToExportOptions(format, v, Evaluate, new Formats.DumpOptions());
+    }
+
     public Task ExportRangeAsync(RangeArg range, string path, ExportRangeOptions? options = null) => ScriptErrorMap.GuardAsync(async () =>
     {
         string full = System.IO.Path.GetFullPath(path);
@@ -357,6 +400,34 @@ public sealed partial class ScriptDocument
         }
 
         DocumentSnapshot snapshot = Snapshot;
+        if (options?.Format is { } format && format != Formats.FormatIds.Binary)
+        {
+            // 形式を指定した書き出し (TOOL-04。エクスポートのダイアログ・hexed convert と同じ設定の欄と変換を使う)。
+            Formats.ExportOptions exportOptions = ExportOptionsFor(format, options.FormatOptions);
+            var source = new Formats.ExportSource
+            {
+                Read = (offset, destination) => snapshot.Read(offset, destination),
+                Length = snapshot.Length,
+                BaseAddress = Document.Source.BaseAddress,
+                DataRanges = snapshot.DataRanges,
+                FileName = Name,
+            };
+            await RunBulkAsync("exportRange", r.Length, options, op =>
+            {
+                try
+                {
+                    Formats.Exporter.WriteFile(full, stream => Formats.Exporter.Write(source, [(r.Start, r.Length)], exportOptions, stream, op.CancellationToken, done => op.Report(done)));
+                }
+                catch (Formats.FormatLimitException ex)
+                {
+                    throw new Sdk.RangeError(Msg.T($"データが形式 {ex.Format} に収まりません (上限 0x{ex.Limit:X})。", $"The data does not fit the format {ex.Format} (limit 0x{ex.Limit:X})."));
+                }
+
+                return true;
+            }).ConfigureAwait(false);
+            return;
+        }
+
         await RunBulkAsync("exportRange", r.Length, options, op =>
         {
             string temp = full + ".tmp-" + Guid.NewGuid().ToString("N")[..8];

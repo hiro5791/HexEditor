@@ -384,6 +384,8 @@ declare namespace HexEditor {
         list(): TemplateInfo[];
         /** 自動適用と同じ判定で、合うテンプレートの候補を返す。 */
         detect(document: Document): TemplateInfo[];
+        /** テンプレートから呼べる関数 (テンプレート拡張。TPL-19) を登録する。登録している間スクリプトは常駐し、 `off` かスクリプトの終了で登録を外す。 */
+        registerExtension(name: string, fn: (...args: any[]) => any, options?: TemplateExtensionOptions): EventSubscription;
     }
     
     /** 文字コードの変換 (AUTO-12)。 */
@@ -576,6 +578,10 @@ declare namespace HexEditor {
     interface ExportRangeOptions {
         /** 既存のファイルを上書きする (既定 false)。 */
         overwrite?: boolean;
+        /** エクスポートの形式の ID。`hexed convert --to` と同じ (例: `ihex`、`srec`、`base64`、`hextext`、`c`。既定 `bin`)。 */
+        format?: string | null;
+        /** 形式の設定。エクスポートのダイアログの項目名で指定する (例: `recordLength`、`startAddress`、`lineLength`)。 */
+        formatOptions?: Record<string, string> | null;
         /** キャンセル (JavaScript では `script.signal` や `new AbortController().signal` などの `AbortSignal`)。 */
         signal?: AbortSignal | null;
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
@@ -825,6 +831,16 @@ declare namespace HexEditor {
         signal?: AbortSignal | null;
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
+    }
+    
+    /** `registerExtension` のオプション。 */
+    interface TemplateExtensionOptions {
+        /** 拡張点: `"format"`、`"read"`、`"write"`、`"pointerMap"`、`"section"`、`"function"` (既定)。 */
+        point?: string;
+        /** 引数の型: `"integer"`、`"float"`、`"bool"`、`"string"`、`"bytes"`、`"pattern"`、`"any"`。 */
+        params?: string[] | null;
+        /** 戻り値の型 (`params` と同じ名前。既定 `"any"`)。 */
+        returns?: string;
     }
     
     /** 構造体テンプレート。 */

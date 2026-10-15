@@ -23,6 +23,15 @@ public sealed record TemplateExportOptions
     public TemplateDisplayContext Display { get; init; } = TemplateDisplayContext.Invariant;
 
     public bool Indented { get; init; } = true;
+
+    /// <summary>出力するフィールドの絞り込み (コマンドラインの <c>--fields</c>。AUTO-42 の仕様 4)。null はすべて。</summary>
+    public TemplateFieldFilter? Fields { get; init; }
+
+    /// <summary>
+    /// 最上位のオブジェクトの先頭に加える文字列のプロパティ (コマンドラインの <c>schema</c>、適用したテンプレートの名前 <c>template</c>。
+    /// AUTO-13 の <c>toJSON()</c> と AUTO-42 の出力を同じ形にするため)。
+    /// </summary>
+    public IReadOnlyList<KeyValuePair<string, string>> RootProperties { get; init; } = [];
 }
 
 /// <summary>
@@ -48,7 +57,7 @@ public static class TemplateJsonExporter
                 Indented = options.Indented,
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             });
-            WriteNode(writer, node, options, 0, cancellationToken);
+            WriteNode(writer, node, options, 0, options.Fields is null ? FieldMatch.All : FieldMatch.Ancestor, cancellationToken);
             writer.Flush();
             return 0;
         });
@@ -63,10 +72,18 @@ public static class TemplateJsonExporter
 
     public static string ToJson(TemplateResult result, TemplateExportOptions? options = null) => ToJson(result.Root, options);
 
-    private static void WriteNode(Utf8JsonWriter w, TemplateNode node, TemplateExportOptions o, int depth, CancellationToken ct)
+    private static void WriteNode(Utf8JsonWriter w, TemplateNode node, TemplateExportOptions o, int depth, FieldMatch match, CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
         w.WriteStartObject();
+        if (depth == 0)
+        {
+            foreach (KeyValuePair<string, string> p in o.RootProperties)
+            {
+                w.WriteString(p.Key, p.Value);
+            }
+        }
+
         w.WriteString("name", node.DisplayName);
         if (node.Kind != TemplateNodeKind.Application)
         {
@@ -138,7 +155,13 @@ public static class TemplateJsonExporter
                     continue;
                 }
 
-                WriteNode(w, child, o, depth + 1, ct);
+                FieldMatch childMatch = match == FieldMatch.All ? FieldMatch.All : o.Fields!.Match(child.Path);
+                if (childMatch == FieldMatch.None)
+                {
+                    continue;
+                }
+
+                WriteNode(w, child, o, depth + 1, childMatch, ct);
             }
 
             w.WriteEndArray();

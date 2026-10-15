@@ -309,6 +309,9 @@ PowerShell では $ を含む値を単一引用符で囲んでください (例:
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>レコード {0} 件、変更されるバイト {1}、長さの変化 {2}、適用後の長さ {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>--template と --auto はどちらか 1 つだけを指定してください。</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>テンプレート「{0}」が見つかりません。標準テンプレートの名前 (pe、png など) か、.hxt・.ksy のファイルのパスを指定してください。</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>{0} に合うテンプレートがありません。</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>テンプレートのエラー: {0}</value></data>
 
   <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>使い方: hexed run &lt;スクリプト&gt; [ファイル...] [オプション]</value></data>
   <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>--save、--save-as、--dry-run は 1 つだけ指定できます。</value></data>

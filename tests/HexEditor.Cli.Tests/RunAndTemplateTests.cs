@@ -1,6 +1,10 @@
 using System.Security.Cryptography;
+using System.Text.Json.Nodes;
+using HexEditor.Cli.Services;
 using HexEditor.Cli.Tests.Support;
 using HexEditor.Core.Engine;
+using HexEditor.Core.Scripting;
+using HexEditor.Core.Templates;
 using HexEditor.TestData;
 
 namespace HexEditor.Cli.Tests;
@@ -189,21 +193,155 @@ public sealed class RunAndTemplateTests
         Assert.Contains("not available in this version", unavailable.Err);
     }
 
-    [Fact(Skip = "needs scripting-core merge: TD-AUTO-JS-XOR run by the real script host (TC-AUTO-41-01).")]
+    // ---- 本物のスクリプトのホスト (Core の ScriptHost + CoreScriptEnvironment) ----
+
+    /// <summary>本物のスクリプトのホスト・テンプレートエンジン。信頼の一覧・保存領域はテストの一時フォルダ (普段の設定を読まない・書かない)。</summary>
+    private static CliServices RealServices(TempDir dir) => new()
+    {
+        Scripts = new CoreScriptRunner(() => new ScriptFolders(dir.File("settings"), dir.File("data")), () => null),
+        Templates = new CoreTemplateService(() => TemplateCatalog.CreateDefault(dir.File("templates"))),
+    };
+
+    /// <summary>TD-AUTO-JS-XOR: パラメータ key (Hex) で全体を XOR する。</summary>
+    private const string XorScript = """
+        // @name XOR
+        // @param key string "Key (hex)"
+        await doc.transform("all", "xor", script.args.key);
+        """;
+
+    [Fact]
     [Trait("TC", "TC-AUTO-41-01")]
-    public void Real_script_host_xor_and_save() { }
+    public void Real_script_host_xor_and_save()
+    {
+        using var dir = new TempDir();
+        string a = dir.Copy("TD-SEQ-1M", "a.bin");
+        File.WriteAllText(dir.File("xor.js"), XorScript);
+        CliResult result = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "xor.js", "a.bin", "--arg", "key=5A", "--save", "--trust"]);
 
-    [Fact(Skip = "needs scripting-core merge: the real script host must report the trust error with exit code 5 (TC-AUTO-41-03).")]
+        Assert.True(result.ExitCode == 0, result.Err);
+        byte[] written = File.ReadAllBytes(a);
+        Assert.Equal(1024 * 1024, written.Length);
+        Assert.Equal(0x5A, written[0]);
+        Assert.Equal(0x5B, written[1]);
+        Assert.Equal((byte)(0x2A ^ 0x5A), written[0x2A]);
+    }
+
+    [Fact]
+    [Trait("TC", "TC-AUTO-41-02")]
+    public void Real_script_host_dry_run_changes_nothing_and_prints_the_summary()
+    {
+        using var dir = new TempDir();
+        string a = dir.Copy("TD-SEQ-1M", "a.bin");
+        string before = Sha256(a);
+        File.WriteAllText(dir.File("xor.js"), XorScript + "\nawait doc.save();\nconsole.log('saved');");
+        CliResult result = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "xor.js", "a.bin", "--arg", "key=FF", "--dry-run", "--trust", "--lang", "en"]);
+
+        Assert.True(result.ExitCode == 0, result.Err);
+        Assert.Equal(["saved"], result.OutLines);
+        Assert.Contains("a.bin: 1048576 byte(s) changed", result.Err);
+        Assert.Equal(before, Sha256(a));
+    }
+
+    [Fact]
     [Trait("TC", "TC-AUTO-41-03")]
-    public void Real_script_host_untrusted_script_exits_with_5() { }
+    public void Real_script_host_untrusted_script_exits_with_5()
+    {
+        using var dir = new TempDir();
+        string a = dir.Copy("TD-SEQ-1M", "a.bin");
+        string before = Sha256(a);
+        File.WriteAllText(dir.File("xor.js"), XorScript);
+        CliResult result = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "xor.js", "a.bin", "--arg", "key=5A", "--save", "--lang", "en"]);
 
-    [Fact(Skip = "needs scripting-core merge: file name, line number and message of script errors, exit code 4 (TC-AUTO-41-04).")]
+        Assert.Equal(5, result.ExitCode);
+        Assert.Contains("--trust", result.Err);
+        Assert.Equal(before, Sha256(a));
+    }
+
+    [Fact]
     [Trait("TC", "TC-AUTO-41-04")]
-    public void Real_script_host_errors_exit_with_4_and_the_line_number() { }
+    public void Real_script_host_errors_exit_with_4_and_the_line_number()
+    {
+        using var dir = new TempDir();
+        File.WriteAllText(dir.File("throws.js"), "const x = 1;\n\nfunction boom() {\n  throw new Error('boom here');\n}\nboom();\n");
+        CliResult result = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "throws.js", "--trust", "--lang", "en"]);
 
-    [Fact(Skip = "needs scripting-core merge: app.exit(70) (TC-AUTO-41-05).")]
+        Assert.Equal(4, result.ExitCode);
+        Assert.Contains("throws.js", result.Err);
+        Assert.Contains("(4,", result.Err);
+        Assert.Contains("boom here", result.Err);
+        Assert.Equal("", result.Out.Trim());
+    }
+
+    [Fact]
     [Trait("TC", "TC-AUTO-41-05")]
-    public void Real_script_host_app_exit_70() { }
+    public void Real_script_host_app_exit_70()
+    {
+        using var dir = new TempDir();
+        File.WriteAllText(dir.File("exit.js"), "console.log('before'); app.exit(70); console.log('after');");
+        CliResult result = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "exit.js", "--trust"]);
+
+        Assert.Equal(70, result.ExitCode);
+        Assert.Equal(["before"], result.OutLines);
+    }
+
+    [Fact]
+    [Trait("TC", "TC-AUTO-13-01")]
+    public void Script_applies_the_standard_pe_template_and_reads_e_lfanew()
+    {
+        using var dir = new TempDir();
+        dir.Copy("TD-PE-X64", "pe.exe");
+        File.WriteAllText(dir.File("petpl.js"), """
+            const r = await doc.applyTemplate("pe", { show: false });
+            console.log(r.get("header.e_lfanew").value, doc.readInt(0x3C, "u32", "le"));
+            """);
+        CliResult result = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "petpl.js", "pe.exe", "--trust"]);
+
+        Assert.True(result.ExitCode == 0, result.Err);
+        long expected = BitConverter.ToUInt32(TestDataCatalog.PeX64(), 0x3C);
+        Assert.Equal([$"{expected} {expected}"], result.OutLines);
+    }
+
+    [Theory]
+    [InlineData("TD-PE-X64", "pe.exe", "pe")]
+    [InlineData("TD-PNG", "image.png", "png")]
+    [Trait("TC", "TC-AUTO-13-02")]
+    public void Script_toJSON_equals_the_json_of_hexed_template_except_schema(string data, string name, string template)
+    {
+        using var dir = new TempDir();
+        dir.Copy(data, name);
+        File.WriteAllText(dir.File("tojson.js"), $$"""
+            const r = await doc.applyTemplate("{{template}}", { show: false });
+            console.log(JSON.stringify(r.toJSON()));
+            """);
+        CliServices services = RealServices(dir);
+        CliResult script = Hexed.RunInProcess(dir.Path, services, ["run", "tojson.js", name, "--trust"]);
+        CliResult cli = Hexed.RunInProcess(dir.Path, services, ["template", name, "--template", template, "--format", "json"]);
+
+        Assert.True(script.ExitCode == 0, script.Err);
+        Assert.True(cli.ExitCode == 0, cli.Err);
+        JsonObject fromCli = JsonNode.Parse(cli.Out)!.AsObject();
+        Assert.Equal("hexeditor.template/1", (string?)fromCli["schema"]);
+        fromCli.Remove("schema");
+        JsonNode fromScript = JsonNode.Parse(script.Out)!;
+        Assert.True(JsonNode.DeepEquals(fromCli, fromScript), $"script:\n{script.Out}\ncli:\n{cli.Out}");
+    }
+
+    [Fact]
+    [Trait("TC", "TC-TPL-19-04")]
+    public void Headless_script_applies_a_template_file_and_reads_a_path()
+    {
+        using var dir = new TempDir();
+        File.WriteAllBytes(dir.File("magic.bin"), [0x4D, 0x41, 0x47, 0x43, 0x02, 0x00, 0x01, 0x00]);
+        File.WriteAllText(dir.File("header.hxt"), "struct Header { u32 magic; u16 version; u16 count; };\nHeader hdr;\n");
+        File.WriteAllText(dir.File("apply.js"), """
+            const r = await doc.applyTemplate(script.args.template, { show: false });
+            console.log(r.get("hdr.version").value);
+            """);
+        CliResult result = Hexed.RunInProcess(dir.Path, RealServices(dir), ["run", "apply.js", "magic.bin", "--trust", "--arg", "template=" + dir.File("header.hxt")]);
+
+        Assert.True(result.ExitCode == 0, result.Err);
+        Assert.Equal(["2"], result.OutLines);
+    }
 
     // ---- テンプレート (AUTO-42) ----
 
@@ -251,15 +389,97 @@ public sealed class RunAndTemplateTests
         Assert.Equal(2, Hexed.RunInProcess(dir.Path, new CliServices(), ["template", pe, "--auto"]).ExitCode);
     }
 
-    [Fact(Skip = "needs templates-core merge: the JSON of 'hexed template' equals the template panel of the GUI (TC-AUTO-42-01, UI test).")]
+    [Fact(Skip = "needs the template panel (TPL-21, wave B): the JSON of 'hexed template' equals the template panel of the GUI (TC-AUTO-42-01, UI test).")]
     [Trait("TC", "TC-AUTO-42-01")]
     public void Real_engine_json_equals_the_template_panel() { }
 
-    [Fact(Skip = "needs templates-core merge: --fields filters the real template result (TC-AUTO-42-02).")]
-    [Trait("TC", "TC-AUTO-42-02")]
-    public void Real_engine_fields_filter() { }
+    /// <summary>JSON の葉 (子のないノード) のパス。</summary>
+    private static List<string> LeafPaths(JsonNode node)
+    {
+        var paths = new List<string>();
+        void Walk(JsonNode n)
+        {
+            if (n["children"] is JsonArray children && children.Count > 0)
+            {
+                foreach (JsonNode? c in children)
+                {
+                    Walk(c!);
+                }
+            }
+            else if (n["path"] is { } path)
+            {
+                paths.Add((string)path!);
+            }
+        }
 
-    [Fact(Skip = "needs templates-core merge: --auto picks the PNG template (TC-AUTO-42-03).")]
+        Walk(node);
+        return paths;
+    }
+
+    [Fact]
+    [Trait("TC", "TC-AUTO-42-02")]
+    public void Real_engine_fields_filter()
+    {
+        using var dir = new TempDir();
+        string pe = TestDataCatalog.Get("TD-PE-X64");
+        byte[] bytes = TestDataCatalog.PeX64();
+        int sections = BitConverter.ToUInt16(bytes, (int)BitConverter.ToUInt32(bytes, 0x3C) + 6);
+        string[] expected = ["header.e_lfanew", .. Enumerable.Range(0, sections).Select(i => $"sections[{i}].Name")];
+
+        CliResult json = Hexed.RunInProcess(dir.Path, RealServices(dir), ["template", pe, "--template", "pe", "--format", "json", "--fields", "header.e_lfanew,sections[*].name"]);
+        Assert.True(json.ExitCode == 0, json.Err);
+        Assert.Equal(expected, LeafPaths(JsonNode.Parse(json.Out)!));
+
+        CliResult csv = Hexed.RunInProcess(dir.Path, RealServices(dir), ["template", pe, "--template", "pe", "--format", "csv", "--fields", "header.e_lfanew,sections[*].name"]);
+        Assert.True(csv.ExitCode == 0, csv.Err);
+        Assert.Equal("path,type,offset,size,value", csv.OutLines[0]);
+        string[][] rows = [.. csv.OutLines.Skip(1).Select(l => l.Split(','))];
+        Assert.Equal(expected, rows.Select(r => r[0]));
+        Assert.All(rows, r => Assert.Equal(5, r.Length));
+        Assert.Equal(BitConverter.ToUInt32(bytes, 0x3C).ToString(System.Globalization.CultureInfo.InvariantCulture), rows[0][4]);
+        Assert.Equal("60", rows[0][2]);
+        Assert.Equal("4", rows[0][3]);
+    }
+
+    [Fact]
     [Trait("TC", "TC-AUTO-42-03")]
-    public void Real_engine_auto_selects_png() { }
+    public void Real_engine_auto_selects_png()
+    {
+        using var dir = new TempDir();
+        dir.Copy("TD-PNG", "image.png");
+        dir.Copy("TD-PNG", "image.dat");
+        dir.Copy("TD-RANDOM-16M", "random.bin");
+        foreach (string name in new[] { "image.png", "image.dat" })
+        {
+            CliResult result = Hexed.RunInProcess(dir.Path, RealServices(dir), ["template", name, "--auto", "--format", "json"]);
+            Assert.True(result.ExitCode == 0, result.Err);
+            JsonNode root = JsonNode.Parse(result.Out)!;
+            Assert.Equal("png", (string?)root["template"]);
+            JsonArray chunks = root["children"]!.AsArray().First(c => (string?)c!["name"] == "chunks")!["children"]!.AsArray();
+            Assert.Contains(chunks, c => c!["children"]!.AsArray().Any(f => (string?)f!["name"] == "type" && (string?)f["value"] == "IHDR"));
+        }
+
+        CliResult none = Hexed.RunInProcess(dir.Path, RealServices(dir), ["template", "random.bin", "--auto"]);
+        Assert.Equal(1, none.ExitCode);
+    }
+
+    [Fact]
+    public void Template_text_format_unknown_template_and_syntax_errors()
+    {
+        using var dir = new TempDir();
+        string pe = TestDataCatalog.Get("TD-PE-X64");
+        CliResult text = Hexed.RunInProcess(dir.Path, RealServices(dir), ["template", pe, "--template", "pe", "--format", "text", "--depth", "1"]);
+        Assert.True(text.ExitCode == 0, text.Err);
+        Assert.Contains(text.OutLines, l => l.StartsWith("header : ", StringComparison.Ordinal));
+        Assert.DoesNotContain(text.OutLines, l => l.TrimStart().StartsWith("e_lfanew", StringComparison.Ordinal));
+
+        CliResult unknown = Hexed.RunInProcess(dir.Path, RealServices(dir), ["template", pe, "--template", "no-such-template", "--lang", "en"]);
+        Assert.Equal(2, unknown.ExitCode);
+        Assert.Contains("no-such-template", unknown.Err);
+
+        File.WriteAllText(dir.File("bad.hxt"), "struct { u8 x; ");
+        CliResult bad = Hexed.RunInProcess(dir.Path, RealServices(dir), ["template", pe, "--template", dir.File("bad.hxt"), "--lang", "en"]);
+        Assert.Equal(4, bad.ExitCode);
+        Assert.Contains("bad.hxt(1,", bad.Err);
+    }
 }

@@ -129,7 +129,7 @@ internal sealed class RunCommand : ISubcommand
 
             var request = new ScriptRunRequest(script, documents, arguments, ctx.Args.Flag("trust"),
                 [.. ctx.Args.Values("allow").SelectMany(a => a.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))],
-                timeout, readOnly, SaveDocument, ctx.Out, ctx.Err, _ => null);
+                timeout, readOnly, SaveDocument, ctx.Out, ctx.Err, _ => null, files, dryRun, ctx.M.Language);
             int exit = runner.Run(request, ctx.Cancellation);
             if (exit != ExitCodes.Success)
             {

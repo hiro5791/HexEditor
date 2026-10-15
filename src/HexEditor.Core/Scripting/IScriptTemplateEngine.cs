@@ -22,6 +22,9 @@ public interface IScriptTemplateEngine
     /// テンプレートのエラーは <see cref="TemplateScriptException"/> (行・列を含む)。
     /// </summary>
     Task<ITemplateResultNode> ApplyAsync(IScriptDocumentHost document, string nameOrPath, long offset, bool show, CancellationToken cancellationToken);
+
+    /// <summary>テンプレート拡張の登録簿 (TPL-19。<c>templates.registerExtension</c> の登録先。適用のときにテンプレートに渡す)。</summary>
+    HexEditor.Core.Templates.Extensions.TemplateExtensionRegistry Extensions { get; }
 }
 
 /// <summary>解析結果のノード (AUTO-13 の仕様 3)。</summary>

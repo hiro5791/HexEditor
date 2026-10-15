@@ -29,7 +29,7 @@ public sealed partial class MainWindow
         Commands.Register("scripting.run", RunScriptAsync, ScriptCommandState);
         Commands.Register("scripting.runFile", RunScriptFileAsync, ScriptCommandState);
         Commands.Register("scripting.stopAll", ScriptingService.StopAll,
-            () => ScriptingService.Host.Running.Count > 0 ? CommandState.Available : CommandState.Unavailable(Loc.Get("Script_NoneRunning")));
+            () => ScriptingService.RunningCount > 0 ? CommandState.Available : CommandState.Unavailable(Loc.Get("Script_NoneRunning")));
         Commands.Register("scripting.addCSharpComponent", async () => await InstallCSharpComponentAsync(),
             () => ScriptingService.Components.IsInstalled ? CommandState.Unavailable(Loc.Get("Script_ComponentInstalled")) : CommandState.Available);
         HookScriptEvents();

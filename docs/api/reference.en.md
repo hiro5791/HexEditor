@@ -1036,6 +1036,12 @@ The available templates.
 
 Templates that match the document by the same rules as automatic application.
 
+### Templates.registerExtension
+
+`registerExtension(name: string, fn: (...args: any[]) => any, options?: TemplateExtensionOptions): EventSubscription`
+
+Registers a function that templates can call (template extension, TPL-19). The script stays resident while it is registered; `off` or the end of the script removes it.
+
 ## Text
 
 Text encoding conversion (AUTO-12).
@@ -1467,6 +1473,18 @@ Options of `exportRange`.
 `overwrite?: boolean`
 
 Overwrite an existing file (default false).
+
+### ExportRangeOptions.format
+
+`format?: string | null`
+
+Export format ID, the same as `hexed convert --to` (for example `ihex`, `srec`, `base64`, `hextext`, `c`; default `bin`).
+
+### ExportRangeOptions.formatOptions
+
+`formatOptions?: Record<string, string> | null`
+
+Options of the format, by the names of the export dialog (for example `recordLength`, `startAddress`, `lineLength`).
 
 ### ExportRangeOptions.signal
 
@@ -2041,6 +2059,28 @@ Cancellation (JavaScript: an `AbortSignal` such as `script.signal` or `new Abort
 `progress?: (fraction: number, text?: string) => void | null`
 
 Receives the progress: the fraction done (0-1) and a description.
+
+## TemplateExtensionOptions
+
+Options of `registerExtension`.
+
+### TemplateExtensionOptions.point
+
+`point?: string`
+
+Extension point: `"format"`, `"read"`, `"write"`, `"pointerMap"`, `"section"` or `"function"` (default).
+
+### TemplateExtensionOptions.params
+
+`params?: string[] | null`
+
+Parameter types: `"integer"`, `"float"`, `"bool"`, `"string"`, `"bytes"`, `"pattern"` or `"any"`.
+
+### TemplateExtensionOptions.returns
+
+`returns?: string`
+
+Return type (the same names as `params`; default `"any"`).
 
 ## TemplateInfo
 

@@ -93,6 +93,15 @@ public interface ITemplates
 
     /// <summary>Templates that match the document by the same rules as automatic application. <ja>自動適用と同じ判定で、合うテンプレートの候補を返す。</ja></summary>
     IReadOnlyList<TemplateInfo> Detect(IDocument document);
+
+    /// <summary>
+    /// Registers a function that templates can call (template extension, TPL-19). The script stays resident while it is registered;
+    /// <see cref="IEventSubscription.Off"/> or the end of the script removes it.
+    /// <ja>テンプレートから呼べる関数 (テンプレート拡張。TPL-19) を登録する。登録している間スクリプトは常駐し、
+    /// <see cref="IEventSubscription.Off"/> かスクリプトの終了で登録を外す。</ja>
+    /// </summary>
+    IEventSubscription RegisterExtension(string name, [TsType("(...args: any[]) => any")] Func<IReadOnlyList<object?>, object?> fn,
+        TemplateExtensionOptions? options = null);
 }
 
 /// <summary>One node of a template result tree (AUTO-13). <ja>テンプレートの解析結果のノード (AUTO-13)。</ja></summary>

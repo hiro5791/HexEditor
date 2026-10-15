@@ -205,6 +205,12 @@ public sealed class ScriptRun
     /// <summary>停止を求めた。</summary>
     public bool StopRequested => Context?.StopRequested ?? false;
 
+    /// <summary>
+    /// スクリプトの実行が終わり、結果の行 (エラーの位置・「成功」など) を書く段階に入った。ヘッドレス実行はこれ以降の情報の行を
+    /// 標準出力に出さない (AUTO-41 の仕様 6: 標準出力は <c>console.log</c> だけ)。
+    /// </summary>
+    public bool ExecutionFinished { get; internal set; }
+
     public Task<ScriptRunResult> Completion => _completion.Task;
 
     public ScriptRunResult? Result => _completion.Task.IsCompleted ? _completion.Task.Result : null;

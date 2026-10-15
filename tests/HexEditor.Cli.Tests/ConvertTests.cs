@@ -107,10 +107,43 @@ public sealed class ConvertTests
         }
     }
 
-    [Fact(Skip = "needs scripting-core merge: doc.exportRange (AUTO-09) of the script host must produce the same files (TC-TOOL-04-05 step 3).")]
+    /// <summary>TD-TOOL-JS-EXPORT: doc.exportRange を形式の ID と設定で呼ぶ。</summary>
+    private const string ExportScript = """
+        await doc.exportRange("all", script.args.out, { format: script.args.format, formatOptions: JSON.parse(script.args.options), overwrite: true });
+        """;
+
+    [Fact]
     [Trait("TC", "TC-TOOL-04-05")]
     public void Script_export_range_gives_the_same_files()
     {
+        using var dir = new TempDir();
+        string firmware = TestDataCatalog.Get("TD-TOOL-FW-128K");
+        File.WriteAllText(dir.File("export.js"), ExportScript);
+        var services = new CliServices
+        {
+            Scripts = new HexEditor.Cli.Services.CoreScriptRunner(
+                () => new HexEditor.Core.Scripting.ScriptFolders(dir.File("settings"), dir.File("data")), () => null),
+        };
+        (string Format, string[] Cli, string Options)[] cases =
+        [
+            ("ihex", ["--record-length", "32", "--start-address", "0x08000000"], """{"recordLength":"32","startAddress":"0x08000000"}"""),
+            ("srec", ["--record-length", "32", "--address-mode", "s3"], """{"recordLength":"32","srecMode":"s3"}"""),
+            ("base64", ["--line-length", "64"], """{"lineLength":"64"}"""),
+            ("hextext", ["--bytes-per-line", "32", "--separator", "commaSpace"], """{"bytesPerLine":"32","separator":"commaSpace"}"""),
+            ("c", ["--element-size", "4"], """{"elementSize":"4"}"""),
+        ];
+        foreach ((string format, string[] cliOptions, string json) in cases)
+        {
+            string cli = dir.File("cli." + format);
+            CliResult converted = Hexed.RunInProcess(dir.Path, new CliServices(), ["convert", firmware, cli, "--from", "bin", "--to", format, .. cliOptions]);
+            Assert.True(converted.ExitCode == 0, $"{format}: {converted.Err}");
+
+            string script = dir.File("script." + format);
+            CliResult run = Hexed.RunInProcess(dir.Path, services,
+                ["run", "export.js", firmware, "--trust", "--allow", "file-write", "--arg", "out=" + script, "--arg", "format=" + format, "--arg", "options=" + json]);
+            Assert.True(run.ExitCode == 0, $"{format}: {run.Err}");
+            Assert.Equal(File.ReadAllBytes(cli), File.ReadAllBytes(script));
+        }
     }
 
     [Fact]

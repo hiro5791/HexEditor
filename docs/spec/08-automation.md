@@ -441,7 +441,7 @@
    | `find(pattern, options)` | 最初の 1 件 (`options.from`、`options.backward`)。見つからなければ `null` | 04 |
    | `replaceAll(pattern, replacement, options)` | すべて置換。置換した件数を返す | 04 |
    | `copyRange(src, destDoc, destOffset, options)` | 範囲のコピー (`options.insert`)。別のドキュメントへのコピーもできる。データエンジンの参照で行い、実データを複製しない | 03 |
-   | `exportRange(range, path, options)` | 範囲をファイルに書き出す (許可 `file-write` または利用者が選んだパス) | 11 |
+   | `exportRange(range, path, options)` | 範囲をファイルに書き出す (許可 `file-write` または利用者が選んだパス)。`options.format` で形式 (11 の TOOL-04 の形式の ID。`hexed convert --to` と同じ。既定 `bin`)、`options.formatOptions` でその形式の設定 (エクスポートのダイアログの項目名と値) を指定できる | 11 |
    | `chunks(range, chunkSize)` | 範囲を `chunkSize` (既定 1 MB、最大 16 MB) ごとに読む非同期イテレータ。`for await (const { offset, data } of doc.chunks(...))` | — |
    | `transformChunks(range, fn, options)` | 範囲をチャンクごとに読み、スクリプトの関数 `fn(data, offset)` が返したバイト列で上書きする (長さは同じであること) | — |
    | `count(pattern, options)` | 一致の件数だけを数える | 04 |
@@ -579,6 +579,7 @@
 3. 解析結果のノード: `name`、`type`、`start`、`length`、`value` (数値・文字列など)、`displayValue` (テンプレートの書式を適用した文字列)、`children`、`get(path)` (例: `result.get("header.e_lfanew")`)、`toJSON()`。
 4. ノードの `value` に代入すると、テンプレートのツリーから編集した場合と同じくドキュメントを書き換える。
 5. `templates.detect(doc)`: 自動適用 (07) と同じ判定で、合うテンプレートの候補を返す。
+6. `templates.registerExtension(name, fn, options)`: テンプレート拡張 (07 の TPL-19) として関数を登録する。`options.point` は拡張点 (`format` / `read` / `write` / `pointerMap` / `section` / `function`。既定 `function`)、`options.params` と `options.returns` は引数と戻り値の型 (`integer` / `float` / `bool` / `string` / `bytes` / `pattern` / `any`)。テンプレートからの呼び出しはスクリプトのスレッドで実行し、1 回の呼び出しの時間の上限は TPL-19 の上限 (5 秒) に従う。登録している間スクリプトは常駐し (AUTO-06 の仕様 4 の購読と同じ)、戻り値の `off()` か、スクリプトの終了で登録を外す。登録できるのは信頼の確認 (AUTO-34) を通って実行中のスクリプトだけなので、登録された関数の呼び出しは許可されたものとして扱う。
 
 **画面**: `show` が `true` の場合はテンプレートパネルに結果を表示する。
 

@@ -807,6 +807,8 @@ public sealed class ScriptApiTests
 
         public IReadOnlyList<TemplateInfo> Detect(Document document, string? path) => List();
 
+        public HexEditor.Core.Templates.Extensions.TemplateExtensionRegistry Extensions { get; } = new();
+
         public Task<ITemplateResultNode> ApplyAsync(IScriptDocumentHost document, string nameOrPath, long offset, bool show, CancellationToken cancellationToken) =>
             nameOrPath == "pe"
                 ? Task.FromResult<ITemplateResultNode>(new Node("root", "struct", 0, 0x40, null, document,

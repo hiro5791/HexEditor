@@ -20,6 +20,11 @@ public interface IScriptThread
 
     /// <summary>スクリプトのスレッドで実行して結果を待つ (スクリプトのスレッドから呼んだ場合はその場で実行する)。</summary>
     T Invoke<T>(Func<T> func);
+
+    /// <summary>
+    /// スクリプトのスレッドから、ほかのスレッドの処理を同期で待つ (テンプレートの評価。待っている間もテンプレート拡張の呼び出しを処理する)。
+    /// </summary>
+    T RunPumping<T>(Func<T> work) => work();
 }
 
 /// <summary>実行時間の数え方の制御 (AUTO-02 の仕様 4: 一括処理の完了待ち・利用者の入力待ち・一時停止の時間を数えない)。</summary>
@@ -453,6 +458,7 @@ public sealed class ScriptContext : IDisposable
         try
         {
             App?.Events.UnsubscribeAll();
+            (App?.Templates as Api.ScriptTemplates)?.UnregisterAll();
             Dispatcher.Invoke(() => documents.ForEach(d => d.Detach()));
         }
         catch (Exception ex) when (ex is InvalidOperationException or ObjectDisposedException)

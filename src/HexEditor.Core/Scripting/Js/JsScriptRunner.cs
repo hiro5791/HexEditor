@@ -59,6 +59,12 @@ internal static class JsScriptRunner
 internal sealed class JsSession : IScriptThread, IDisposable
 {
     private readonly BlockingCollection<Action> _queue = [];
+
+    /// <summary>
+    /// テンプレート拡張の呼び出し (AUTO-13 の仕様 6)。スクリプトのスレッドがテンプレートの評価を同期で待っている間
+    /// (<see cref="RunPumping{T}"/>) もここだけは処理する (評価が拡張関数を呼んで止まらないように)。
+    /// </summary>
+    private readonly BlockingCollection<Action> _extensionQueue = [];
     private readonly ScriptLimits _limits;
     private readonly ExecutionBudget _budget;
     private Thread? _thread;
@@ -121,6 +127,73 @@ internal sealed class JsSession : IScriptThread, IDisposable
             }
         });
         return tcs.Task;
+    }
+
+    /// <summary>テンプレート拡張の関数をスクリプトのスレッドで実行して結果を待つ (評価のスレッドから呼ぶ)。</summary>
+    public T InvokeExtension<T>(Func<T> func)
+    {
+        if (IsCurrent)
+        {
+            return func();
+        }
+
+        var tcs = new TaskCompletionSource<T>(TaskCreationOptions.RunContinuationsAsynchronously);
+        try
+        {
+            _extensionQueue.Add(() =>
+            {
+                try
+                {
+                    tcs.TrySetResult(func());
+                }
+                catch (Exception ex) when (!ScriptErrorMap.IsControl(ex) && ex is not RecursionDepthOverflowException)
+                {
+                    tcs.TrySetException(ex);
+                }
+                catch
+                {
+                    tcs.TrySetCanceled();
+                    throw;
+                }
+            });
+        }
+        catch (InvalidOperationException)
+        {
+            throw new CanceledError(Msg.T("スクリプトは終了しました。", "The script has ended."));
+        }
+
+        try
+        {
+            tcs.Task.Wait(Context.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            throw new CanceledError(Msg.T("スクリプトは停止されました。", "The script was stopped."));
+        }
+
+        return tcs.Task.GetAwaiter().GetResult();
+    }
+
+    /// <summary>
+    /// スクリプトのスレッドから、ほかのスレッドの処理 (テンプレートの評価) を同期で待つ。待っている間もテンプレート拡張の呼び出しを処理する。
+    /// </summary>
+    public T RunPumping<T>(Func<T> work)
+    {
+        if (!IsCurrent)
+        {
+            return work();
+        }
+
+        Task<T> task = Task.Run(work);
+        while (!task.IsCompleted)
+        {
+            if (_extensionQueue.TryTake(out Action? call, 20))
+            {
+                call();
+            }
+        }
+
+        return task.GetAwaiter().GetResult();
     }
 
     public T Invoke<T>(Func<T> func)
@@ -216,9 +289,9 @@ internal sealed class JsSession : IScriptThread, IDisposable
                 }
 
                 _budget.Suspend();
-                Action next = _queue.Take();
+                BlockingCollection<Action>.TakeFromAny([_queue, _extensionQueue], out Action? next);
                 _budget.Resume();
-                next();
+                next!();
                 _engine.Advanced.ProcessTasks();
                 _budget.CheckMemory();
             }
@@ -461,7 +534,9 @@ internal sealed class JsSession : IScriptThread, IDisposable
     public void Dispose()
     {
         _queue.CompleteAdding();
+        _extensionQueue.CompleteAdding();
         _engine?.Dispose();
         _queue.Dispose();
+        _extensionQueue.Dispose();
     }
 }

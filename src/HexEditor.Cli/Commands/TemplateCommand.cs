@@ -69,7 +69,7 @@ internal sealed class TemplateCommand : ISubcommand
             throw CliException.Usage("Cli_Error_NotAvailable", Name);
         }
 
-        var request = new TemplateRequest(document, path, template, auto, offset, ctx.Format, depth, fields, ctx.Out, ctx.Err);
+        var request = new TemplateRequest(document, path, template, auto, offset, ctx.Format, depth, fields, ctx.Out, ctx.Err, ctx.M.Language);
         return service.Apply(request, ctx.Cancellation);
     }
 

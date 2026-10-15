@@ -23,6 +23,10 @@
   (the windows runners have the tools). Elsewhere the DLL is left out with a warning.
   -TestHooks makes a test build (-p:HexTestHooks=true: the test channel and the Test menu, test strategy 7.2)
   for the distribution tests in build/tests/. Never release a test build.
+  -CSharpComponentManifest is the csharp-component.json written by build/Build-CSharpComponent.ps1 (AUTO-03 spec 3).
+  The app embeds it so that it can verify and add the C# script component. Without it the script looks for
+  artifacts/CSharpComponent/csharp-component.json; when that is missing too, the app is built without the manifest
+  (C# scripts cannot be added) and a warning is printed.
 #>
 [CmdletBinding()]
 param(
@@ -33,7 +37,8 @@ param(
     [string]$Configuration = 'Release',
     [string]$PreviousReleaseDir,
     [switch]$TestHooks,
-    [switch]$RequireShellExtension
+    [switch]$RequireShellExtension,
+    [string]$CSharpComponentManifest
 )
 
 $ErrorActionPreference = 'Stop'
@@ -62,6 +67,17 @@ $common = @(
 )
 if ($Commit) { $common += "-p:HexCommit=$Commit" }
 if ($TestHooks) { $common += '-p:HexTestHooks=true' }
+# C# script component manifest (AUTO-03 spec 3): embedded into the app so that it can verify the component it adds.
+if (-not $CSharpComponentManifest) {
+    $defaultManifest = Join-Path (Split-Path -Parent $PSScriptRoot) 'artifacts/CSharpComponent/csharp-component.json'
+    if (Test-Path $defaultManifest) { $CSharpComponentManifest = $defaultManifest }
+}
+if ($CSharpComponentManifest) {
+    if (-not (Test-Path $CSharpComponentManifest)) { throw "The C# component manifest does not exist: $CSharpComponentManifest" }
+    $common += "-p:HexCSharpComponentManifest=$((Resolve-Path $CSharpComponentManifest).Path)"
+} else {
+    Write-Warning 'No C# script component manifest (run build/Build-CSharpComponent.ps1 or pass -CSharpComponentManifest). C# scripts cannot be added in this build.'
+}
 # Pseudo-locales (qps-ploc, qps-plocm) ship only in preview and local builds, not in stable releases (UI-46 spec 3).
 $isStable = $Version -notmatch '-'
 if ($isStable) { $common += '-p:HexPseudoLocales=false' }

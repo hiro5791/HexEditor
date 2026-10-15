@@ -313,6 +313,9 @@ In PowerShell, put values that contain $ in single quotes (for example '$1F00').
   <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} record(s), {1} byte(s) would change, length change {2}, new length {3}</value></data>
 
   <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Specify exactly one of --template and --auto.</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>The template "{0}" was not found. Use a name of a standard template (for example pe, png) or a path to a .hxt or .ksy file.</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>No template matches {0}.</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>Template error: {0}</value></data>
 
   <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>Usage: hexed run &lt;script&gt; [files...] [options]</value></data>
   <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>Use only one of --save, --save-as and --dry-run.</value></data>

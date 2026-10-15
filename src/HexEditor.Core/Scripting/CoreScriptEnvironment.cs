@@ -162,6 +162,17 @@ public sealed class CoreDocumentHost : IScriptDocumentHost
             return;
         }
 
+        if (_env.SaveOverride?.Invoke(this) is bool handled)
+        {
+            if (!handled)
+            {
+                throw new IoError(Msg.T($"保存できませんでした: {Path}", $"Could not save: {Path}"));
+            }
+
+            _env.Events.RaiseAfterSave(this);
+            return;
+        }
+
         DocumentSnapshot snapshot = Document.Current;
         string target = Path;
         FileByteSource saved = await Task.Run(() => DocumentSaver.Save(snapshot, target), cancellationToken).ConfigureAwait(true);
@@ -233,6 +244,12 @@ public sealed class CoreScriptEnvironment : IScriptEnvironment, IDisposable
 
     /// <summary>保存しない (<c>--dry-run</c>。AUTO-41 の仕様 4)。</summary>
     public bool DryRun { get; set; }
+
+    /// <summary>
+    /// 保存の差し替え (コマンドラインの保存の扱い。AUTO-41 の仕様 4)。true は保存した、false は保存できなかった、null は通常の保存を行う。
+    /// UI スレッドで呼ぶ。
+    /// </summary>
+    public Func<CoreDocumentHost, bool?>? SaveOverride { get; set; }
 
     public OperationCenter Operations { get; }
 
