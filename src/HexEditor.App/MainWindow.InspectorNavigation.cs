@@ -1,5 +1,6 @@
 using HexEditor.App.Commands;
 using HexEditor.App.Controls;
+using HexEditor.App.Hosting;
 using HexEditor.App.Services;
 using HexEditor.App.ViewModels;
 using HexEditor.Core.Inspector;
@@ -14,10 +15,68 @@ namespace HexEditor.App;
 /// </summary>
 public sealed partial class MainWindow
 {
+    /// <summary>ユーザー定義型の定義 (INSP-22。アプリ全体で 1 つ。最初のウィンドウで読み込み、ファイルの変更を監視する)。</summary>
+    private static InspectorUserTypes? s_userTypes;
+
+    private static InspectorUserTypes UserTypes
+    {
+        get
+        {
+            if (s_userTypes is null)
+            {
+                s_userTypes = new InspectorUserTypes(Program.Environment.Locations.Settings);
+                s_userTypes.Load();
+                s_userTypes.Watch();
+            }
+
+            return s_userTypes;
+        }
+    }
+
     /// <summary><see cref="InitializeAnnotations"/> から呼ぶ。</summary>
     private void InitializeInspectorNavigation()
     {
         _inspectorVm.NavigationFailed += (_, message) => ShowNotice(message, InfoBarSeverity.Warning, Vm.Selected);
+
+        // ユーザー定義型 (INSP-22): 定義ファイルを保存し直すと、再起動せずに行を更新する。読み込みのエラーは InfoBar に出す。
+        _inspectorVm.UserTypes = UserTypes;
+        EventHandler reloaded = (_, _) => DispatcherQueue.TryEnqueue(() =>
+        {
+            if (_closingConfirmed)
+            {
+                return;
+            }
+
+            _inspectorVm.UserTypesReloaded();
+            ShowUserTypeErrors();
+        });
+        UserTypes.Reloaded += reloaded;
+        Closed += (_, _) =>
+        {
+            if (_closingConfirmed)
+            {
+                UserTypes.Reloaded -= reloaded;
+            }
+        };
+        if (WindowManager.Windows.Count == 0)
+        {
+            DispatcherQueue.TryEnqueue(ShowUserTypeErrors);
+        }
+    }
+
+    /// <summary>定義ファイルの読み込みのエラーを InfoBar に出す (ファイル名・行番号・理由。INSP-22 の「エラー」)。作業中のウィンドウだけに出す。</summary>
+    private void ShowUserTypeErrors()
+    {
+        if (WindowManager.Windows.Count > 0 && WindowManager.Current != this)
+        {
+            return;
+        }
+
+        foreach (InspectorUserTypeError error in UserTypes.Errors.Take(3))
+        {
+            ShowNotice(Loc.Format("Inspector_UserTypeLoadError", error.File, error.Line, Templates.TemplateDiagnosticText.Message(error.Diagnostic)),
+                InfoBarSeverity.Error);
+        }
     }
 
     /// <summary>コマンド (INSP-20 の「呼び出し」のコマンドパレット「ポインタとして移動」)。</summary>

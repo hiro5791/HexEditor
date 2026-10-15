@@ -5746,4 +5746,8 @@ Downloaded from: {2}</value></data>
   <data name="Visualizer_SaveError" xml:space="preserve"><value>Could not save {0}: {1}</value></data>
   <data name="Visualizer_PngFiles" xml:space="preserve"><value>PNG image</value></data>
   <data name="Inspector_PointerDefault" xml:space="preserve"><value>Default</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Timed out</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>The type took longer than {0} ms; it runs again when the start position changes</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Error: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Inspector type file {0}, line {1}: {2}</value></data>
 </root>

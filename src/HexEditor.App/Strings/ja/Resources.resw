@@ -5746,4 +5746,8 @@
   <data name="Visualizer_SaveError" xml:space="preserve"><value>{0} を保存できませんでした: {1}</value></data>
   <data name="Visualizer_PngFiles" xml:space="preserve"><value>PNG 画像</value></data>
   <data name="Inspector_PointerDefault" xml:space="preserve"><value>既定</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>時間切れ</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>型の解釈が {0} ms を超えました。起点が変わると再実行します</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>エラー: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>インスペクタの型の定義ファイル {0} の {1} 行目: {2}</value></data>
 </root>

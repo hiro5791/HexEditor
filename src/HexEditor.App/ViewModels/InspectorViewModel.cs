@@ -494,6 +494,7 @@ public sealed partial class InspectorViewModel : ObservableObject
             }
         }
 
+        AppendUserTypeRows(doc, wanted);
         Sync(wanted);
         UpdateArrayState();
         HighlightChanged?.Invoke(this, EventArgs.Empty);
@@ -650,8 +651,9 @@ public sealed partial class InspectorViewModel : ObservableObject
     /// <summary>行の値の入力を始める。書き換えられない行・読み取り専用では始めない。</summary>
     public bool BeginEdit(InspectorItemViewModel item)
     {
-        if (item.Kind != InspectorItemKind.Row || ReadOnly || _document is null)
+        if (item.Kind != InspectorItemKind.Row || ReadOnly || _document is null || IsUserRow(item))
         {
+            // ユーザー定義型 (テンプレートの型) の書き換えは、テンプレートの書き換えの規則 (TPL-22) とともに加える (INSP-22 の仕様 5)。
             return false;
         }
 
@@ -777,7 +779,7 @@ public sealed partial class InspectorViewModel : ObservableObject
 
     public void HideRow(InspectorItemViewModel item)
     {
-        if (item.Kind == InspectorItemKind.Row)
+        if (item.Kind == InspectorItemKind.Row && !IsUserRow(item))
         {
             SetLayout(Layout.WithVisible(item.TypeId, false));
         }

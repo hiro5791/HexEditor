@@ -66,6 +66,12 @@ public sealed partial class InspectorPanel
             InspectorItemViewModel? target = _menuTarget ?? Vm.Selected;
             _pointerMenu.IsEnabled = InspectorViewModel.CanFollowPointer(target);
             _arrayMenu.IsEnabled = target is { Kind: InspectorItemKind.Row } && InspectorTypes.Find(target.TypeId) is not null;
+            if (target is not null && target.TypeId.StartsWith("user:", StringComparison.Ordinal))
+            {
+                // ユーザー定義型の行は書き換え・非表示にできない (INSP-22 の仕様 5)。
+                MenuEdit.IsEnabled = false;
+                MenuHide.IsEnabled = false;
+            }
             foreach (MenuFlyoutItem item in _pointerItems)
             {
                 // 最後に使った方法を既定にする (INSP-20 の仕様 2): 印を付け、コマンドパレットの「ポインタとして移動」もこの方法を使う。
