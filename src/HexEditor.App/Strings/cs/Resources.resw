@@ -5481,4 +5481,1072 @@ Podrobnosti byly zapsány do:
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static jen pro čtení</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Kódování textu (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Úplný dokument (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>Neočekávaný znak „{0}“</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>Očekává se „{0}“</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>Neočekávané „{0}“</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>Neplatné číslo „{0}“</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>Řetězcový literál není ukončen</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>Neplatná escape sekvence „{0}“</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>Komentář není ukončen</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>Příliš hluboké vnoření (limit {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>Neplatný bajtový řetězec „{0}“</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>Šablona není platné UTF-8</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>Šablona je příliš velká (limit 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>Příliš mnoho chyb; zobrazeno je jen prvních {0}</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>Neplatná hodnota „{1}“ pro pragmu „{0}“</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>Neznámá pragma „{0}“ byla ignorována</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>„{0}“ je již definováno v {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>„{0}“ nebylo nalezeno (hledáno v: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>Šablony tuto operaci provést nemohou: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>Tato šablona vyžaduje verzi aplikace {0} nebo novější</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>Neznámý atribut „{0}“ byl ignorován</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>{0} se nevejde do {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>Hodnota {0} má více názvů (použije se „{1}“)</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>{0} {1} překračuje maximum; použije se {2}</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>Šablony včetně importů jsou příliš velké (limit 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>„{0}“ není definováno</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>Dělení nulou</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>Nesoulad typů: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>Příliš hluboká rekurze (limit {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>Počet provedených příkazů dosáhl limitu ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>Počet vzorů dosáhl limitu ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>Paměť pro vyhodnocení dosáhla limitu ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>Doba vyhodnocení dosáhla limitu ({0} s)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>Umístění 0x{0} je mimo data</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>{0}(0x{1}) je mimo data</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>„{0}“ (0x{1}, {2} bajtů) je mimo data</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>Pozice nemůže být záporná ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>Pole nelze ukončit, protože velikost prvku je 0</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>Pole skončilo, protože bylo dosaženo konce dat</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>Pole bylo zkráceno na limit ({0} prvků)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>Neúplný poslední prvek ({0} bajtů) nebyl zahrnut</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>Ukončovací znak řetězce nebyl nalezen</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>LEB128 je delší než 10 bajtů (posun 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>Obsah struktury ({0} bajtů) přesahuje zadanou velikost ({1} bajtů)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>Typ ukazatele musí být celočíselný</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>Mimo rozsah (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>Vzory nelze deklarovat uvnitř funkcí</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>Aserce selhala: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>Rozšiřující funkce „{0}“ není zaregistrována</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>Rozšiřující funkce „{0}“ selhala: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>Rozšiřující funkci „{0}“ není povoleno spustit</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>Index {0} je mimo rozsah (0 až {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>sizeof({0}) nelze použít, protože velikost typu není pevná</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>Součet bitových polí ({0} bitů) překračuje {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>Bitové pole nemůže být širší než 64 bitů ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>Dekomprese {0} selhala: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>Dekomprese se zastavila, protože data dosáhla limitu ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>{0} není v této verzi podporováno</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>Délka ({0}) překračuje limit 256 MB na jedno volání</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>Do „{0}“ nelze přiřadit</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>Data na 0x{0} nelze přečíst</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>Vyhodnocení bylo zrušeno</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>{0} se nevejde do {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>„{0}“ není funkce</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>„{0}“ přijímá argumentů: {1}</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>Funkce Kaitai Struct „{0}“ není podporována</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>Obsah neodpovídá očekávaným bajtům</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>Ověření selhalo: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>Výstup byl zkrácen, protože je příliš dlouhý</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>Počet oddílů dosáhl celkového limitu ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>„{0}“ není vzor</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>„{0}“ nemá člen „{1}“</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>Neplatný argument pro „{0}“: {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>Data neodpovídají magic hodnotě {0}</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>Dočasný soubor se nepodařilo zapsat: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>Chyba syntaxe YAML: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>Značky YAML nejsou povoleny ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>Příliš mnoho rozbalení aliasů YAML</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>Duplicitní klíč „{0}“</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>Pro odsazení nelze použít tabulátory</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>Neplatný soubor .ksy: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>Příliš hluboké vnoření YAML</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>Vnitřní chyba vyhodnocovače šablon: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>měli jste na mysli „{0}“?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>Informace</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>Upozornění</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>Chyba</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>Skripty</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>Skript: spustit</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>spustit skript znovu opakovat run script again rerun f5</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>Skript: spustit soubor skriptu...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>spustit soubor skriptu run script file javascript csx</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>Skript: zastavit všechny skripty</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>zastavit zrušit skripty stop cancel scripts</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>Skript: přidat komponentu skriptů C#...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>komponenta nainstalovat přidat csharp roslyn component install</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>Skripty</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>Spustit skript...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>Spustit poslední skript</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>Zastavit všechny skripty</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>Přidat komponentu skriptů C#...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>Automatické spouštění (hooky)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>hook automatické spouštění start otevření uložení zavření skript hook automatic run startup open save close script</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>Složky skriptů</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>složka skriptů knihovna sdílená script folder library shared</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>Panel výstupu</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>Editor skriptů</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>Maximální počet řádků v panelu výstupu</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>Po překročení limitu se starší řádky odeberou (100–1000000).</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>Zobrazit panel výstupu, když skript zapisuje výstup</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>Zobrazí se bez převzetí fokusu klávesnice.</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>Přerušit při výjimkách při ladění</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>Vyberte, kdy se ladicí program JavaScriptu zastaví při výjimce.</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>Nikdy</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>Pouze neošetřené výjimky</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>Všechny výjimky</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>Další složky skriptů</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>Složky přidané do seznamu skriptů.</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>Zde zaregistrované skripty se spouštějí automaticky. Bez přidání sem se nespustí nic a skripty musí být důvěryhodné.</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>Nouzový režim je zapnutý, proto je automatické spouštění zakázáno.</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>časový limit {0} s</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>Nejsou zaregistrovány žádné skripty.</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>Přidat skript</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>Přidat</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>Vybrat soubor...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>Vyberte skript, který se má spouštět automaticky.</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>Přidejte „{0}“ tlačítkem Přidat.</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>Povolit {0}</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>Podmínka</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>Posunout nahoru</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>Posunout dolů</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>Odebrat</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>Spustit pouze pro odpovídající data. Ponechte prázdné pro všechna data.</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>Přípona (např. .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>Vzor cesty (např. C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>Úvodní bajty (hex, např. 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>Zdroj dat</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>Libovolný</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>Zde uvedené složky se zobrazí v seznamu skriptů navíc ke standardní složce skriptů.</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>Žádné další složky.</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>Přidat složku...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>Odebrat</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>Skript</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>Makro</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>Skript</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>Kurzor</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>Přepnout seznam skriptů</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>skripty makra seznam panel scripts macros list panel</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>Přepnout panel výstupu</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>výstup protokol zprávy panel output log messages panel</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>Přepnout panel konzoly</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>konzola repl panel console repl panel</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>Zobrazit seznam skriptů</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>skripty makra seznam panel scripts macros list panel</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>Zobrazit konzolu</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>konzola repl console repl</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>Nový skript</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>vytvořit nový skript javascript js create javascript js</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>Nový skript C#</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>vytvořit nový skript csharp csx create csharp csx</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>Otevřít ukázku</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>ukázky příklady examples samples</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>Otevřít složku skriptů</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>složka průzkumník folder explorer</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>Spustit s laděním</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>ladicí program zarážka krok debugger breakpoint step</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>Pozastavit</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>pauza přerušit ladicí program break debugger</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>Vymazat výstup</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>vymazat protokol výstup clear log output</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>Spustit nebo zastavit nahrávání</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>nahrát makro nahrávání record macro</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>Přehrát poslední makro</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>přehrát znovu poslední makro replay last macro</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>Přehrát opakovaně</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>opakovat makro smyčka repeat macro loop</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>Kurzor: doleva</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>kurzor přesunout doleva cursor move left</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>Kurzor: doprava</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>kurzor přesunout doprava cursor move right</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>Kurzor: nahoru</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>kurzor přesunout nahoru cursor move up</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>Kurzor: dolů</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>kurzor přesunout dolů cursor move down</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>Kurzor: stránka nahoru</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>kurzor stránka nahoru cursor move page up</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>Kurzor: stránka dolů</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>kurzor stránka dolů cursor move page down</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>Kurzor: začátek řádku</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>kurzor začátek řádku cursor move line start</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>Kurzor: konec řádku</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>kurzor konec řádku cursor move line end</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>Kurzor: začátek souboru</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>kurzor začátek souboru cursor move file start</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>Kurzor: konec souboru</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>kurzor konec souboru cursor move file end</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>Není zobrazen žádný editor skriptů.</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>Seznam skriptů</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>Konzola</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>Nový skript</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>Nový skript C#</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>Ukázky</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>Otevřít složku skriptů</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>Makro</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>Spustit nebo zastavit nahrávání</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>Přehrát poslední makro</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>Přehrát opakovaně...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>Seznam skriptů</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>Výstup</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>Konzola</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>Skripty</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>Výstup</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>Konzola</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>Vše</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>Skript: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>Plugin: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>Zdroj výstupu</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>Filtr</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>Vymazat</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>Kopírovat vše</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>Uložit do souboru</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>Zalamovat řádky</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>Výstup byl zkopírován.</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>Informace</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>Upozornění</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>Chyba</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>Seznam skriptů</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>Filtrovat skripty</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>Nový skript</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>Nový skript JavaScript</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>Nový skript C#</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>Otevřít složku skriptů</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>Spustit</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>Upravit</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>Otevřít kopii k úpravám</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>Přejmenovat...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>Nový název</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>Odstranit (do koše)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>Zobrazit ve složce</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>Přiřadit klávesovou zkratku...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>Spouštět automaticky...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>Skripty</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>Makra</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>Ukázky</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>new-script</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>Složka nebyla nalezena</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>rezidentní</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>Kandidát na automatické spouštění: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>„{0}“ byl přesunut do koše.</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>Ukázku nelze zkopírovat: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>Skript nelze vytvořit: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>Přejmenování se nezdařilo: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>Odstranění se nezdařilo: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>Složku nelze otevřít: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>Spustit</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>Ladit</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>Zastavit</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>Pozastavit</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>Překročit</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>Vstoupit do</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>Vystoupit</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>Cílový dokument</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(aktivní dokument)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>Editor skriptů: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>Problémy</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>Problémy ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>Ladění</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>Zásobník volání</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>Proměnné</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>Sledování</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>Přidat sledovaný výraz</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>Místní</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>Uzávěr</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>Globální</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>Skript</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>Výjimka: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>Řádek {0}, sloupec {1}</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>Změněno</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>Běží</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>Pozastaveno na řádku {0}</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>Úspěšně dokončeno ({0} s)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>Zastaveno</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>Nespuštěno</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>Selhalo</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>Soubor „{0}“ byl uložen.</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>Skript nelze uložit: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>Skript nelze přečíst: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>Soubor „{0}“ je větší než 10 MB. Upravte ho v externím editoru.</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>Skripty C# nelze v aplikaci krokovat</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>Zarážka</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>Zakázaná zarážka</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>Podmíněná zarážka</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>Soubor „{0}“ obsahuje neuložené změny. Uložit před zavřením?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>Uložit</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>Neukládat</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>Ladění skriptu C#</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Čeká se na připojení ladicího programu. ID procesu: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Skripty C# nelze v aplikaci krokovat. Připojte k tomuto procesu externí ladicí program (Visual Studio nebo Visual Studio Code) a pro zastavení zavolejte ve skriptu System.Diagnostics.Debugger.Break().</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Spustit bez připojení</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>Jazyk</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>Obnovit relaci</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>Vymazat</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>Zadejte výraz nebo příkaz (Enter: spustit, Shift+Enter: nový řádek)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>Historie konzoly</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>Byla zahájena nová relace.</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>Zastaveno.</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>Zadání selhalo.</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>Chcete-li v konzole používat C#, přidejte komponentu skriptů C#.</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>spuštění</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>otevření souboru</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>před uložením</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>po uložení</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>před zavřením</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>Skript automatického spouštění „{0}“ ({1}) selhal: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>Skript automatického spouštění „{0}“ ({1}) byl zastaven: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>Skript automatického spouštění „{0}“ ({1}) třikrát po sobě selhal a byl zakázán.</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>Otevřít nastavení</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>Skript „{0}“ zrušil uložení: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>Skript před uložením selhal</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>Skript „{0}“ selhal: {1}
+Přesto uložit?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>Uložit</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>Neukládat</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>Nahrát makro</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>Spustit</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>Vyberte, jak se mají zaznamenávat pozice vybrané myší.</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>Relativně ke kurzoru (výchozí)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>Absolutní posuny</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>Příště se neptat (použít tuto volbu)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>Nahrávání bylo zahájeno.</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>Nahrávání ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>Nahrává se makro, operací: {0}. Kliknutím nahrávání zastavíte.</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>Tuto operaci nelze zaznamenat: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>výběr klávesnicí</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>odstranění</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>zadávání ve více kurzorech</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>vyplnění tímto obsahem</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>Přejít na posun</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>Výběr rozsahu</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>Hledání</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>Nahradit vše</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>Nenalezeno: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>Nic nebylo zaznamenáno.</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>Zatím není zaznamenáno žádné makro.</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>Nejprve zastavte nahrávání.</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>Poslední makro</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>Makro nelze přečíst: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>Makro se zastavilo: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>Makro se zastavilo při opakování {0}, operace „{1}“: {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>Uložit makro ({0, plural, one {# operace} few {# operace} many {# operace} other {# operací}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>Složka</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>Klávesová zkratka (volitelné)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>například Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>Uložit</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>Neukládat</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>Zadejte název.</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>Klávesovou zkratku nelze přečíst: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>Zde nelze uložit: {0}. Vyberte jinou složku.</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>Makro „{0}“ bylo uloženo.</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>Opakované přehrání makra</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>Makro</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>Počet opakování</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>Počet (1 až 1 000 000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>Do konce souboru</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>Pro každý výsledek hledání</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>V rámci výběru</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>Přehrát</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>Zadejte číslo od 1 do {0}.</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>Časový limit provádění (sekundy)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>Doba, po kterou může skript JavaScript běžet, než bude pozastaven a zobrazí se dotaz, zda pokračovat. 0 znamená bez omezení. Čekání na hromadné operace a na váš vstup se nepočítá.</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>Limit paměti (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>Paměť, kterou může skript JavaScript využít (16–4096 MB).</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>Limit hloubky rekurze</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>Maximální hloubka volání funkcí (100–10000).</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>Souběžně spuštěné skripty</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>Další skripty čekají, dokud některý neskončí (1–16).</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>Zásady skriptů (organizace)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>Nastavuje vaše organizace v souboru nastavení. Zakáže skripty a pluginy nebo povolí pouze podepsané pluginy.</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>Bez omezení</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>Zakázat všechny skripty a pluginy</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>Pouze podepsané pluginy</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>Skript: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>Skript: {0} – {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>Skript: {0} (zápis)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>Skript: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>Neběží žádný skript.</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>Komponenta skriptů C# je již nainstalována.</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>Skripty jsou zakázány nastavením vaší organizace (scripts.policy).</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>Skript zrušil uložení: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>Skript „{0}“ běží.</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>Zastavit</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>Skript „{0}“ skončil s chybou.</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>Podrobnosti</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>Skript „{0}“ nebyl spuštěn: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>Skript: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, one {Běží # skript} few {Běží # skripty} many {Běží # skriptu} other {Běží # skriptů}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>Skript „{0}“ běží déle než {1} s.</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>Pokračovat (dalších {0} s)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>Spustit skript „{0}“?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>HexEditor běží jako správce. Tento skript poběží s právy správce a může provádět akce ovlivňující celý počítač.</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>Název: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>Autor: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>Tento kód může na vašem počítači provádět cokoli s vašimi právy (včetně čtení a zápisu souborů a síťové komunikace). Spouštějte pouze kód od autorů, kterým důvěřujete.</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>Tento skript může číst a zapisovat otevřené dokumenty. Žádá také tato oprávnění:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>Tento skript může číst a zapisovat otevřené dokumenty. Žádná další oprávnění nežádá.</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>Tento soubor pochází z internetu. Spouštějte ho, pouze pokud důvěřujete jeho původu.</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>Spustit</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>Nespouštět</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>Spustit jednou</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>Vždy povolit</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>Čtení libovolných souborů</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>Vytváření, zápis a odstraňování libovolných souborů</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>Komunikace po síti (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>Spouštění externích programů</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>Otevírání disků, svazků a paměti procesů</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>Čtení schránky</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>Změna nastavení aplikace</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>Skript žádá o oprávnění „{0}“ ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>Povolit</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>Nepovolit</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>Komponenta skriptů C#</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>Skripty C# vyžadují komponentu skriptů C# (Roslyn), která není nainstalována. Přidat ji nyní?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>Přidat</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>Stažení komponenty.
+Velikost: {0}
+Uloží se do: {1}
+Stahuje se z: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>Stáhnout</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>Stahovaná data jsou větší než očekávaných {0} bajtů, stahování bylo zastaveno.</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>Přidává se komponenta skriptů C#</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>Komponenta skriptů C# byla přidána.</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>Komponentu skriptů C# se nepodařilo přidat: {0} Můžete ji přidat ručně: stáhněte zip komponenty ze stránky vydání a rozbalte ho do složky components\csharp\&lt;verze&gt;\ v datové složce.</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>Komponentu skriptů C# se nepodařilo přidat: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>Neznámé kódování znaků „{0}“. Textový sloupec nebyl změněn.</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>{0} „{1}“ nelze použít (výraz nelze přečíst na pozici {2}).</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>{0} „{1}“ je mimo soubor (délka {2}).</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>{0} není v této verzi k dispozici.</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>Žádný disk neodpovídá „{0}“.</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>Žádný svazek neodpovídá „{0}“.</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>Žádný proces neodpovídá „{0}“.</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>„{0}“ odpovídá více procesům ({1}). Zadejte ID procesu pomocí --process.</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>Otevřít zdroj dat pluginu</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>Operace pluginů</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>Pluginy</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>Spravovat pluginy...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>Spravovat</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>správce pluginů rozšíření doplňky plugin manager extensions add-ins</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>Plugin</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>Načítat pouze podepsané pluginy</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>Pluginy bez platného podpisu se nenačtou. Projeví se po restartu.</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>Vývojářské složky pluginů</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>Výstupní složky sestavení načítané přímo jako pluginy (upravují se ve správci pluginů).</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>Pluginy</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>Pluginy</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>Pluginy</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>Pluginy přidávají typy inspektoru, hashe, formáty, příkazy a panely. Pluginy běží se stejnými právy jako vy; povolujte pouze pluginy od autorů, kterým důvěřujete. Změny se projeví po restartu.</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>Nouzový režim: žádné pluginy se nenačítají. Seznam a nastavení se nemění.</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>Přidat...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>Restartovat nyní</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>Otevřít složku pluginů</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>Odebrat</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>Nastavení pluginu...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>Povoleno</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>Povoleno</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>Zakázáno</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>Nejsou nainstalovány žádné pluginy. Přidejte soubor .hexplugin tlačítkem Přidat... nebo ho přetáhněte do seznamu.</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>Vývojářské složky</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>Pluginy se načítají přímo z těchto výstupních složek sestavení a zobrazují se jako Vývoj. Dotaz se zobrazí jednou pro každou složku.</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>Přidat vývojářskou složku...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>Vývojářská složka byla přidána. Načte se po restartu.</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>Důvěryhodní vydavatelé</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>Pluginy podepsané těmito vydavateli se povolí bez dotazu. Odebráním vydavatele se dotaz zobrazí znovu.</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>Nainstalované pluginy</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>Přetažením souboru .hexplugin sem ho přidáte.</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>Přidat plugin</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>neznámý vydavatel</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>Podepsal: {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>Podepsal: {0} (odvolání nebylo možné ověřit)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>Neplatný podpis</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>Podpis ještě nebyl ověřen</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>Nepodepsáno</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>Povoleno</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>Zakázáno</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>Nelze načíst ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>Zastaveno ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>Nenačteno ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>Načítání...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} – změny po restartu</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>Vývoj</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>Žádná rozšíření</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>Přidává: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (zakázáno: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>V nouzovém režimu nelze přidávat pluginy.</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>Plugin nebyl přidán: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>Odebrat plugin</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>Odebrat „{0}“? Načtené pluginy se odstraní po restartu.</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>Nastavení pluginu {0}</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>typ inspektoru</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>hash</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>formát importu</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>formát exportu</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>zdroj dat</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>zobrazení transformace</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>datová operace</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>příkaz</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>položka nabídky</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>panel</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>stránka nastavení</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>funkce šablony</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>rozpoznání typu souboru</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>disassembler</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>pravidla barvení</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>API skriptů</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>neznámé</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>Povolit plugin „{0}“?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (aktualizace)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>Vydavatel: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>Načteno z vývojářské složky.</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>Tento kód může na vašem počítači provádět cokoli s vašimi právy (včetně čtení a zápisu souborů a přístupu k síti). Povolujte pouze pluginy od autorů, kterým důvěřujete.</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>Plugin deklaruje: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>Tento plugin není podepsán. Jeho vydavatele nelze ověřit.</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>Vždy důvěřovat pluginům od {0}</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>Povolit</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>Nepovolovat</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>HexEditor běží jako správce. Tento plugin poběží s právy správce a může ovlivnit celý počítač.</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>Načíst pluginy jako správce?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>HexEditor běží jako správce. Tyto pluginy poběží s právy správce a mohou ovlivnit celý počítač:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>– zatím není důvěryhodný</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>Načíst</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>Nenačítat</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>Plugin „{0}“ byl zastaven, protože chyby pokračovaly.</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>Zakázat plugin</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>Zkusit znovu při restartu</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>Plugin „{0}“ se po restartu nenačte.</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>Zakázat plugin?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>HexEditor se minule neočekávaně ukončil, možná kvůli pluginu „{0}“. Zakázat ho?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Ponechat povoleno</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>Tento příkaz pluginu nelze nyní spustit.</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>Příkaz „{0}“ pluginu „{1}“ selhal. Viz panel výstupu.</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>Otevřít: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>{0} nelze otevřít: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>Kopírovat jako: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>Zkopírováno jako {0}.</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>Datová operace: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>Datová operace {0} selhala: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>Přidáno pluginem {0}</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>Panel pluginu</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>Plugin tento panel nemohl vytvořit.</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Pluginy</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(zastaveno)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>Tento typ pluginu nelze s touto hodnotou upravit.</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>Struktura</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>Výstup šablony</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>Šablony struktur</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>Použít šablonu...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>P</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>Použít šablonu odsud...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>Zobrazit typ na pozici kurzoru...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Použít Kaitai Struct...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>Najít odpovídající šablony</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>N</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>Spustit znovu</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>Odebrat použití</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>D</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>Exportovat výsledky...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>Nová šablona</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>Otevřít šablonu...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>Upravit šablonu</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>Převést .ksy na HXT...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>Spravovat šablony</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>Barvení struktury</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>Struktura</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>Výstup šablony</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>Výsledky struktury...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>Použít šablonu odsud...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>Přerušit při čtení zde</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>Šablona</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>Editor kódu</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>Šablona: použít</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>struktura;analýza;structure;parse</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>Šablona: použít odsud</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>kurzor;cursor</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>Šablona: zobrazit typ na pozici kurzoru</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>přejít na typ;follow</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Šablona: použít Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>Šablona: spustit znovu</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>znovu vyhodnotit;reevaluate</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>Šablona: odebrat použití</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>zrušit použití;unapply</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>Šablona: zastavit vyhodnocení</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>zrušit;cancel</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>Šablona: zobrazit strom výsledků</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>strom;tree</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>Šablona: zobrazit výstup</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>chyby;errors</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>Šablona: upravit hodnotu</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>změnit upravit change</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>Šablona: přejít na definici</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>deklarace declaration</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>Šablona: přejít na cíl ukazatele</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>ukazatel pointer</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>Šablona: kopírovat hodnotu</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>schránka clipboard</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>Šablona: přidat do záložek</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>záložka bookmark</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>Šablona: exportovat výsledky</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>Šablona: přepnout barvení</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>zvýraznění highlight</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>Šablona: najít odpovídající šablony</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>rozpoznat detect</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>Šablona: nová</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>vytvořit create</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>Šablona: otevřít</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>soubor file</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>Šablona: upravit</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>editor editor</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>Šablona: správa</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>knihovna library</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Šablona: převést .ksy na HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>Šablona: referenční příručka standardní knihovny</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>nápověda funkce help functions</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Šablona: zkušební spuštění</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>test;neuloženo;test;unsaved</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Šablona: přerušit při čtení zde</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>zarážka dat data breakpoint</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>Zobrazení: panel struktury</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>výsledky šablony template results</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>Zobrazení: panel výstupu šablony</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>chyby errors</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>Editor kódu: spustit ladění / pokračovat</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>spustit;ladění;run;debug</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>Editor kódu: zastavit ladění</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>ukončit end</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>Editor kódu: přepnout zarážku</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>zarážka break</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>Editor kódu: překročit</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>další next</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>Editor kódu: vstoupit do</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>vstoupit enter</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>Editor kódu: vystoupit</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>návrat return</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>Editor kódu: spustit ke kurzoru</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>kurzor cursor</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>Editor kódu: přidat sledovaný výraz</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>sledování watch</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>Editor kódu: přejít na definici</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>deklarace declaration</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>Editor kódu: najít odkazy</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>použití usages</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>Editor kódu: formátovat dokument</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>odsazení indent</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>Editor kódu: přepnout komentář</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>komentář comment</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Editor kódu: zobrazit návrhy dokončení</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>doplňování intellisense</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>Šablony</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Automatické použití</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>Co dělat, když šablona odpovídá otevíranému souboru (magic number, typ MIME nebo přípona).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Navrhnout</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Vždy použít</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>Nedělat nic</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Znovu vyhodnotit po úpravě</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Znovu vyhodnotit použité šablony 500 ms po poslední úpravě. Je-li vypnuto, použijte ve stromu výsledků příkaz Spustit znovu.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Barvení struktury</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>Barvit rozsahy vzorů šablony v zobrazení Hex.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Průhlednost barvení (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Průhlednost barvení struktury nad pozadím zobrazení Hex.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Složky šablon</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>Další složky prohledávané pro uživatelské šablony.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Šablony inspektoru</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Šablony, jejichž typy [[inspector]] se zobrazují v inspektoru dat.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Předvolby šablon</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Zakázané šablony, šablony vyloučené z automatického použití a potlačené návrhy.</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>Správa šablon</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Složky šablon</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>Šablony</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>Šablony inspektoru</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>Přidat složku...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>Odebrat</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>K této složce nelze získat přístup.</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>Filtrovat podle názvu</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>Importovat...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>Nová šablona</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>Povoleno</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>Automatické použití</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>Upravit</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>Exportovat...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>Skryto jinou šablonou se stejným názvem.</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>Návrhy vypnuty</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>Žádné</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>Zobrazit znovu</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>Přidat šablonu inspektoru...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>není pevná velikost</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>Tato šablona obsahuje typy inspektoru, které nemají pevnou velikost nebo jsou větší než 4 KB. Doporučují se typy s pevnou velikostí do 4 KB.</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>Importované soubory šablon: {0}.</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>Import se nezdařil: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>Exportované soubory: {0} do {1}.</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>Export se nezdařil: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>Standardní šablony jsou součástí aplikace. Kopii exportujete příkazem Duplikovat a upravit.</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>Použít šablonu</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>Použít šablonu</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>Spustit znovu</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>Spustit znovu</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>Zastavit vyhodnocení</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>Zastavit vyhodnocení</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>Export</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>Export</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>Sloupce</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Sloupce</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>Sledovat kurzor</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>Sledovat kurzor</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>Filtrovat podle názvu, hodnoty nebo typu</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Filtr</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>Strom výsledků</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>Cesta (např. chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>Cesta</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>Vyhodnotit vše a hledat</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>Shody: {0}</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>Cesta „{0}“ nebyla nalezena.</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>Hodnota</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>Posun</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>Velikost</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>Komentář</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>Pořadí bajtů</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>Konec</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>Barva</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>Pořadí sloupců</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>Posunout {0} doleva</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>Posunout {0} doprava</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>Obnovit sloupce</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>Vyhodnocování…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>Vyhodnoceno vzorů: {0}</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>Chyb: {0}, upozornění: {1}</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>Počet vzorů dosáhl limitu ({0}). Zobrazují se částečné výsledky.</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>Zvýšit limit a spustit znovu</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>Prvků: {0}</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} bitů</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>Bity {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / místní: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>Nedefinovaná hodnota</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>Nedefinováno</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>Sledovat</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>Ukazuje na {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>posun {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>velikost {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(neuloženo)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(soubor šablony nebyl nalezen)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>Není použita žádná šablona.</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>Neprobíhá žádné vyhodnocení.</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>Vyberte uzel ve stromu výsledků.</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>Vybraný uzel není ukazatel.</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>Cíl ukazatele je null nebo leží mimo data.</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>Šablona „{0}“ nebyla nalezena.</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>Dokument může mít nejvýše {0} použití šablon.</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>Soubor šablony „{0}“ nebyl nalezen.</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>Vyhodnocení šablony {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>JSON je větší než 64 MB. Uložte ho raději do souboru.</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>Uložit do souboru...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>Šablona: {0}
+Počáteční posun: {1}
+Druh: {2}
+Pořadí bajtů: {3}
+Typ: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>Standardní</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>Uživatelský</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>Poslední</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>Používá skripty</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>Podrobnosti</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>Přejít na data</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>Přejít na cíl ukazatele</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>Přejít na definici</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>Upravit hodnotu</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>Kopírovat hodnotu</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>Kopírovat název a hodnotu</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>Kopírovat cestu</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>Kopírovat bajty</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>Kopírovat posun</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>Kopírovat podstrom jako JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>Přidat do záložek</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>Přidat rozsahy do vícenásobného výběru</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>Otevřít oddíl na nové kartě</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>Použít šablonu odsud...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>Přerušit při čtení zde</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>Přepnout pevné / sledování</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>Převést na pevné</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>Nastavení použití</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>Exportovat...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>Spustit znovu</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>Odebrat použití</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>Hodnota</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>OK</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>Tento vzor má pouze převod při čtení, takže upravujete surovou hodnotu.</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>Zadejte číslo</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>Pravda</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>Zbytek vyplnit nulami</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>Místní čas</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>Časové pásmo</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>Zadejte hodnotu od 0 do {1} (bitů: {0}).</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>Hodnota je pro tento typ mimo rozsah.</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>Text je delší než pole ({0} bajtů).</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>Převod při zápisu selhal: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>Hodnotu nelze přečíst.</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>Vzory uvnitř oddílu nelze upravovat.</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>Tento vzor je jen pro čtení.</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>Vypočítané hodnoty nelze upravovat.</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>Uzly s chybou nelze upravovat.</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>Tento uzel nemá hodnotu k úpravě.</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>Úprava hodnoty šablony</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>Použít šablonu</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Použít Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>Hledat šablony</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>Název, popis, přípona nebo typ MIME</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>Šablony</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>Počáteční posun</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>Zadejte posun uvnitř dokumentu.</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>Výchozí pořadí bajtů</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>Nastavení dokumentu</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>Nastavení dokumentu (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>Nastavení dokumentu (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>Druh</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>Pevný</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>Sleduje kurzor</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>Typ (sledování)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>Použít</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>Verze {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>Licence: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>Odpovídající šablony</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} – {1} (skóre {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>magic</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>přípona</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>Tomuto dokumentu neodpovídá žádná šablona.</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>Tento soubor vypadá jako {0}. Použít šablonu „{0}“?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(používá skripty)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>Použít</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>Další kandidáti...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>Nezobrazovat pro tento formát</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>Při použití šablony „{0}“ došlo k chybě.</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>Export výsledků struktury</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>Formát</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>Cíl</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>Celé použití</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>Vybraný podstrom ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>Maximální počet prvků pole</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>Maximální hloubka</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>Neomezeně</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>Zahrnout skryté vzory</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>Zapisovat posuny jako hexadecimální řetězce</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>Uložit...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>Export výsledků struktury</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>Uzlů: {0}</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>Exportováno do {0}.</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>Export do {0} se nezdařil: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>Na disku není dostatek místa.</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>Vymazat</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>Vymazat</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>Výstup šablony</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>Přejít na zdroj</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>Přejít na data</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>Nápověda k {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>Uložit</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>Zkušební spuštění</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>Cílový dokument</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>Cílový dokument</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>Spustit ladění / pokračovat</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>Překročit</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>Vstoupit do</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>Vystoupit</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>Zastavit</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>Vyhodnocovat popořadě při ladění</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>Formátovat dokument</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>Přepnout komentář</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>Zdroj šablony</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>Návrhy dokončení</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>Proměnné</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>Sledování</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>Zásobník volání</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>Zarážky</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>Proměnné</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>Sledování</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>Zásobník volání</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>Zarážky</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>Přidat sledovaný výraz</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>Přidat</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>Výraz (např. c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>Problémy</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>Odkaz na řádku {0}, sloupec {1}</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>Nová šablona</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>Není otevřen žádný editor šablon.</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>Neprobíhá ladění.</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>Otevřete dokument, na kterém se má šablona spustit.</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>Šablonu {0} nelze otevřít: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>Šablonu nelze uložit: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>Standardní šablony nelze ukládat přímo. Pomocí Duplikovat a upravit uložte kopii do své složky šablon.</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>Duplikovat a upravit</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>Před laděním opravte chyby syntaxe.</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>Při ladění je vypnuto líné vyhodnocování. Velká pole mohou trvat dlouho.</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Zarážka dat</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>Ladicí program se zastaví při vytvoření vzoru obsahujícího {0}.</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>Soubor {0} nelze převést na HXT.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Vyhodnoceno vzorů: {0} (zastaveno na limitu: {1}; zobrazují se částečné výsledky)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>kroky</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>vzory</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>paměť</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>čas</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Přejít na řádek</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Číslo řádku (1–{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>Není zobrazen žádný editor kódu (šablony ani skriptu).</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>Tento editor tento příkaz nepodporuje.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Sledovat jako ukazatel</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>ukazatel posun adresa skok inspektor pointer offset address jump inspector</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Sledovat jako ukazatel</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Absolutní (posun)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Absolutní (adresa)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>Relativně ke kurzoru</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Relativně ke konci hodnoty</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Relativně k bázi…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>Báze (výraz)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Přejít</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>Cíl {0} je mimo dokument (délka {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>Tento řádek nemá hodnotu, kterou lze použít jako pozici</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Zadejte bázi jako výraz, například 0x400000 nebo bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Vyberte v inspektoru dat řádek s celým číslem</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Pohybovat se jako po poli tohoto typu</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Předchozí prvek</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Další prvek</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Ukončit režim pole</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Číslo prvku</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Velikost prvku</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(není na hranici prvku)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>Prvek {0} je mimo dokument</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Hodnota</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Výr.</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Kruhový odkaz mezi záložkami</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>Odkazy bm.name jsou vnořeny hlouběji než {0} úrovní</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>Pozice {0} je mimo dokument</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Chyba ve výrazu pozice: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Hodnota</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Úprava hodnoty záložky</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(bez typu)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Typ</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Pořadí bajtů</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Dokument</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Výraz pozice</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>např. u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>Zobrazení: panel zobrazení obrázku</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>vizualizér bitmapa pixely obrázek visualizer bitmap pixels picture image</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Zobrazení obrázku</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Zobrazení obrázku</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>1bitová černobílá</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>2bitová šedá</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>4bitová šedá</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>8bitová šedá</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 bitů (barvy motivu bajtů)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Sledovat kurzor</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>Začátek výběru</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Pevný</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>Shora dolů</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>Zdola nahoru (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Auto</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Formát pixelů</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Šířka (pixely)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Bajtů na řádek</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Auto</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Počáteční pozice</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Pevná počáteční pozice</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Pořadí řádků</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Zvětšení</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>Další možnosti</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Obrázek</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Posun řádků</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Uložit jako obrázek…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>Rozsah zobrazení je příliš velký; vykreslí se jen prvních 64 MB</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Zadejte pevnou počáteční pozici jako výraz</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>Není žádný obrázek k uložení</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>Obrázek byl uložen do {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>{0} nelze uložit: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>Obrázek PNG</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>Výchozí</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Vypršel časový limit</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>Typ trval déle než {0} ms; znovu se spustí po změně počáteční pozice</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Chyba: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Soubor typu inspektoru {0}, řádek {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Je zapnut režim offline (nebo jsou stahování vypnutá), proto se komponenta nestáhne. Chcete-li ji přidat ručně, získejte {0} ze stránky vydání této verze (v případě potřeby na jiném počítači) a rozbalte ho do {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Spuštěno v nouzovém režimu. Pluginy a automaticky spouštěné skripty se nenačítají.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Restartovat normálně</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>Šablona: hledat hodnoty polí</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>hledání;pole;hodnota;search;field;value</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>Není použita žádná šablona.</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>Chyba syntaxe na znaku {0}: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>podmínka je prázdná</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>chybí hodnota</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>neznámá podmínka (použijte name:, type: nebo value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>neznámé porovnání (použijte =, !=, &lt;, &lt;=, &gt;, &gt;= nebo ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>uvozovky nejsou uzavřeny</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>regulární výraz není platný</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>Hodnoty šablony</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Stisknutím klávesy Enter vyhledáte hodnoty polí. Výsledky se zobrazí ve Výsledcích hledání.</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Pole</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (uživatelský)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (šablona {1})</value></data>
 </root>

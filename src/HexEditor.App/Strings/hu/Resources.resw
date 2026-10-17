@@ -5481,4 +5481,1072 @@ A részletek helye:
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static, csak olvasható</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Szövegkódolás (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Teljes dokumentum (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>Váratlan karakter: „{0}”</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>Várt elem: „{0}”</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>Váratlan elem: „{0}”</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>Érvénytelen szám: „{0}”</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>A karakterlánc-literál nincs lezárva</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>Érvénytelen escape-szekvencia: „{0}”</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>A megjegyzés nincs lezárva</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>Túl mély a beágyazás (korlát: {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>Érvénytelen bájtsorozat: „{0}”</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>A sablon nem érvényes UTF-8</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>A sablon túl nagy (korlát: 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>Túl sok hiba; csak az első {0} látható</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>Érvénytelen érték („{1}”) a(z) „{0}” pragmához</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>Az ismeretlen „{0}” pragma figyelmen kívül maradt</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>A(z) „{0}” már definiálva van itt: {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>A(z) „{0}” nem található (keresve itt: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>A sablonok nem végezhetik el ezt a műveletet: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>Ehhez a sablonhoz az alkalmazás {0} vagy újabb verziója szükséges</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>Az ismeretlen „{0}” attribútum figyelmen kívül maradt</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>A(z) {0} nem fér el itt: {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>A(z) {0} értéknek több neve is van (a használt név: „{1}”)</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>A(z) {0} {1} meghaladja a maximumot; a használt érték: {2}</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>A sablonok az importokkal együtt túl nagyok (korlát: 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>A(z) „{0}” nincs definiálva</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>Nullával való osztás</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>Típuseltérés: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>Túl mély a rekurzió (korlát: {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>A végrehajtott utasítások száma elérte a korlátot ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>A minták száma elérte a korlátot ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>A kiértékelés memóriája elérte a korlátot ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>A kiértékelés ideje elérte a korlátot ({0} s)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>A(z) 0x{0} elhelyezés az adatokon kívül esik</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>A(z) {0}(0x{1}) az adatokon kívül esik</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>A(z) „{0}” (0x{1}, {2} bájt) az adatokon kívül esik</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>A pozíció nem lehet negatív ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>A tömb nem érhet véget, mert az elemméret 0</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>A tömb véget ért, mert elérte az adatok végét</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>A tömb a korlátnál le lett vágva ({0} elem)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>A hiányos utolsó elem ({0} bájt) nem lett belevéve</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>A karakterlánc lezárója nem található</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>A LEB128 hosszabb 10 bájtnál (eltolás: 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>A struktúra tartalma ({0} bájt) meghaladja a megadott méretet ({1} bájt)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>A mutató típusának egész típusnak kell lennie</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>Tartományon kívül (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>Mintákat nem lehet függvényeken belül deklarálni</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>Az állítás nem teljesült: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>A(z) „{0}” bővítményfüggvény nincs regisztrálva</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>A(z) „{0}” bővítményfüggvény meghiúsult: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>A(z) „{0}” bővítményfüggvény futtatása nem engedélyezett</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>A(z) {0} index kívül esik a tartományon (0–{1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>A sizeof({0}) nem használható, mert a típus mérete nem rögzített</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>A bitmezők összege ({0} bit) meghaladja ezt: {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>A bitmező nem lehet szélesebb 64 bitnél ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>A(z) {0} kicsomagolása meghiúsult: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>A kicsomagolás leállt, mert az adatok elérték a korlátot ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>A(z) {0} ebben a verzióban nem támogatott</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>A hossz ({0}) meghaladja a hívásonkénti 256 MB-os korlátot</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>A(z) „{0}” nem kaphat értéket</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>A(z) 0x{0} címen lévő adatok nem olvashatók</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>A kiértékelés megszakadt</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>A(z) {0} nem fér el itt: {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>A(z) „{0}” nem függvény</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>A(z) „{0}” {1} argumentumot fogad</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>A(z) „{0}” Kaitai Struct funkció nem támogatott</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>A tartalom nem egyezik a várt bájtokkal</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>Az ellenőrzés sikertelen: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>A kimenet le lett vágva, mert túl hosszú</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>A szakaszok száma elérte az összesített korlátot ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>A(z) „{0}” nem minta</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>A(z) „{0}” nem rendelkezik „{1}” taggal</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>Érvénytelen argumentum a(z) „{0}” függvényhez: {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>Az adatok nem egyeznek a(z) {0} magic értékkel</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>Az ideiglenes fájl nem írható: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>YAML-szintaxishiba: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>A YAML-címkék nem engedélyezettek ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>Túl sok YAML-alias bontás</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>Ismétlődő kulcs: „{0}”</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>Behúzáshoz nem használhatók tabulátorkarakterek</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>Érvénytelen .ksy: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>Túl mély a YAML beágyazása</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>Belső hiba a sablonkiértékelőben: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>erre gondolt: „{0}”?</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>Információ</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>Figyelmeztetés</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>Hiba</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>Szkriptek</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>Szkript: futtatás</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>szkript futtatás újra ismét run script again rerun f5</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>Szkript: szkriptfájl futtatása...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>szkriptfájl futtatás run script file javascript csx</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>Szkript: összes szkript leállítása</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>leállítás megszakítás szkriptek stop cancel scripts</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>Szkript: C# szkriptkomponens hozzáadása...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>komponens telepítés hozzáadás csharp roslyn component install</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>Szkriptek</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>Szkript futtatása...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>Utolsó szkript futtatása</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>Összes szkript leállítása</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>C# szkriptkomponens hozzáadása...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>Automatikus futtatás (hookok)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>hook automatikus futtatás indítás megnyitás mentés bezárás szkript hook automatic run startup open save close script</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>Szkriptmappák</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>szkriptmappa könyvtár megosztott script folder library shared</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>Kimenet panel</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>Szkriptszerkesztő</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>A kimenet panelen megőrzött sorok maximális száma</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>A korlát túllépésekor a régebbi sorok törlődnek (100–1000000).</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>Kimenet panel megjelenítése, ha egy szkript kimenetet ír</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>A billentyűzetfókusz átvétele nélkül jelenik meg.</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>Megszakítás kivételeknél hibakeresés közben</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>Válassza ki, mikor álljon meg a JavaScript-hibakereső kivételnél.</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>Soha</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>Csak a nem kezelt kivételek</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>Minden kivétel</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>További szkriptmappák</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>A szkriptlistához hozzáadott mappák.</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>Az itt regisztrált szkriptek automatikusan futnak. Semmi sem fut, amíg nem adja hozzá ide, és a szkripteknek megbízhatónak kell lenniük.</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>A csökkentett mód be van kapcsolva, ezért az automatikus futtatás le van tiltva.</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>időkorlát: {0} s</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>Nincs regisztrált szkript.</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>Szkript hozzáadása</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>Hozzáadás</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>Fájl kiválasztása...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>Válassza ki az automatikusan futtatandó szkriptet.</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>Adja hozzá a(z) „{0}” szkriptet a Hozzáadás gombbal.</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>{0} engedélyezése</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>Feltétel</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>Feljebb</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>Lejjebb</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>Eltávolítás</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>Csak a megfelelő adatoknál fut. Hagyja üresen, ha mindenre vonatkozzon.</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>Kiterjesztés (pl. .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>Útvonalminta (pl. C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>Kezdő bájtok (hex, pl. 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>Adatforrás</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>Bármelyik</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>Az itt felsorolt mappák a szabványos szkriptmappa mellett megjelennek a szkriptlistában.</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>Nincsenek további mappák.</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>Mappa hozzáadása...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>Eltávolítás</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>Szkript</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>Makró</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>Szkript</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>Kurzor</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>Szkriptlista be/ki</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>szkriptek makrók lista panel scripts macros list panel</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>Kimenet panel be/ki</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>kimenet napló üzenetek panel output log messages panel</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>Konzol panel be/ki</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>konzol repl panel console repl panel</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>Szkriptlista megjelenítése</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>szkriptek makrók lista panel scripts macros list panel</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>Konzol megjelenítése</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>konzol repl console repl</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>Új szkript</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>létrehozás új szkript javascript js create javascript js</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>Új C# szkript</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>létrehozás új szkript csharp csx create csharp csx</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>Minta megnyitása</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>minták példák examples samples</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>Szkriptmappa megnyitása</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>mappa intéző folder explorer</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>Futtatás hibakereséssel</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>hibakereső töréspont lépés debugger breakpoint step</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>Szüneteltetés</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>szünet megszakítás hibakereső break debugger</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>Kimenet törlése</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>törlés napló kimenet clear log output</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>Rögzítés indítása / leállítása</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>makró rögzítése felvétel record macro</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>Utolsó makró lejátszása</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>utolsó makró újrajátszás replay last macro</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>Lejátszás ismétlődően</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>makró ismétlése ciklus repeat macro loop</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>Kurzor: balra</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>kurzor mozgatás balra cursor move left</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>Kurzor: jobbra</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>kurzor mozgatás jobbra cursor move right</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>Kurzor: fel</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>kurzor mozgatás fel cursor move up</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>Kurzor: le</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>kurzor mozgatás le cursor move down</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>Kurzor: egy oldallal fel</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>kurzor oldal fel cursor move page up</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>Kurzor: egy oldallal le</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>kurzor oldal le cursor move page down</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>Kurzor: sor eleje</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>kurzor sor eleje cursor move line start</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>Kurzor: sor vége</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>kurzor sor vége cursor move line end</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>Kurzor: fájl eleje</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>kurzor fájl eleje cursor move file start</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>Kurzor: fájl vége</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>kurzor fájl vége cursor move file end</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>Nincs megjelenített szkriptszerkesztő.</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>Szkriptlista</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>Konzol</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>Új szkript</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>Új C# szkript</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>Minták</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>Szkriptmappa megnyitása</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>I</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>Makró</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>Rögzítés indítása / leállítása</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>Utolsó makró lejátszása</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>Lejátszás ismétlődően...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>Szkriptlista</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>Z</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>Kimenet</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>Konzol</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>G</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>Szkriptek</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>Kimenet</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>Konzol</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>Mind</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>Szkript: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>Bővítmény: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>Kimenet forrása</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>Szűrő</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>Törlés</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>Összes másolása</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>Mentés fájlba</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>Sortörés</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>A kimenet átmásolva.</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>Információ</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>Figyelmeztetés</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>Hiba</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>Szkriptlista</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>Szkriptek szűrése</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>Új szkript</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>Új JavaScript-szkript</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>Új C# szkript</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>Szkriptmappa megnyitása</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>Futtatás</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>Szerkesztés</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>Másolat megnyitása szerkesztésre</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>Átnevezés...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>Új név</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>Törlés (a Lomtárba)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>Megjelenítés mappában</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>Gyorsbillentyű hozzárendelése...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>Futtatás automatikusan...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>Szkriptek</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>Makrók</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>Minták</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>new-script</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>A mappa nem található</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>rezidens</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>Automatikus futtatásra jelölt: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>A(z) „{0}” a Lomtárba került.</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>A minta nem másolható: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>A szkript nem hozható létre: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>Az átnevezés nem sikerült: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>A törlés nem sikerült: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>A mappa nem nyitható meg: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>Futtatás</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>Hibakeresés</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>Leállítás</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>Szüneteltetés</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>Átlépés</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>Belépés</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>Kilépés</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>Célkocument</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(aktív dokumentum)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>Szkriptszerkesztő: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>Problémák</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>Problémák ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>Hibakeresés</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>Hívásverem</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>Változók</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>Figyelés</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>Figyelt kifejezés hozzáadása</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>Helyi</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>Closure</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>Globális</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>Szkript</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>Kivétel: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>{0}. sor, {1}. oszlop</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>Módosítva</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>Fut</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>Szüneteltetve a(z) {0}. sornál</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>Sikeres ({0} s)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>Leállítva</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>Nem futott</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>Sikertelen</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>A(z) „{0}” mentve.</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>A szkript nem menthető: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>A szkript nem olvasható: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>A(z) „{0}” nagyobb 10 MB-nál. Szerkessze külső szerkesztővel.</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>A C# szkriptek az alkalmazásban nem léptethetők</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>Töréspont</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>Letiltott töréspont</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>Feltételes töréspont</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>A(z) „{0}” nem mentett módosításokat tartalmaz. Menti bezárás előtt?</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>Mentés</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>Ne mentse</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>C# szkript hibakeresése</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Várakozás a hibakereső csatlakozására. Folyamatazonosító: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>A C# szkriptek az alkalmazásban nem léptethetők. Csatlakoztasson külső hibakeresőt (Visual Studio vagy Visual Studio Code) ehhez a folyamathoz, és a szkriptben hívja meg a System.Diagnostics.Debugger.Break() metódust a megállításhoz.</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Futtatás csatlakozás nélkül</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>Nyelv</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>Munkamenet visszaállítása</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>Törlés</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>Írjon be egy kifejezést vagy utasítást (Enter: futtatás, Shift+Enter: új sor)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>Konzolelőzmények</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>Új munkamenet indult.</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>Leállítva.</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>A bevitel sikertelen volt.</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>A C# konzolban való használatához adja hozzá a C# szkriptkomponenst.</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>indítás</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>fájl megnyitása</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>mentés előtt</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>mentés után</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>bezárás előtt</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>A(z) „{0}” automatikus futtatású szkript ({1}) meghiúsult: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>A(z) „{0}” automatikus futtatású szkript ({1}) le lett állítva: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>A(z) „{0}” automatikus futtatású szkript ({1}) háromszor egymás után meghiúsult, ezért le lett tiltva.</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>Beállítások megnyitása</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>A(z) „{0}” szkript megszakította a mentést: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>A mentés előtti szkript meghiúsult</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>A(z) „{0}” szkript meghiúsult: {1}
+Menti mégis?</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>Mentés</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>Ne mentse</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>Makró rögzítése</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>Indítás</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>Válassza ki, hogyan rögzítse a program az egérrel kijelölt pozíciókat.</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>A kurzorhoz képest (alapértelmezett)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>Abszolút eltolások</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>Ne kérdezze többet (ennek a választásnak a használata)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>A rögzítés elindult.</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>Rögzítés ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>Makró rögzítése, {0} művelet. Kattintson a leállításhoz.</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>Ez a művelet nem rögzíthető: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>kijelölés billentyűzettel</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>törlés</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>bevitel több kurzornál</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>kitöltés ezzel a tartalommal</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>Ugrás eltolásra</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>Tartomány kijelölése</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>Keresés</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>Összes cseréje</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>Nem található: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>Semmi sem lett rögzítve.</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>Még nincs rögzített makró.</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>Előbb állítsa le a rögzítést.</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>Utolsó makró</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>A makró nem olvasható: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>A makró leállt: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>A makró a(z) {0}. ismétlésnél, a(z) „{1}” műveletnél leállt: {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>Makró mentése ({0, plural, one {# művelet} other {# művelet}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>Név</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>Mappa</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>Gyorsbillentyű (nem kötelező)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>például Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>Mentés</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>Ne mentse</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>Adjon meg egy nevet.</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>A gyorsbillentyű nem értelmezhető: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>Itt nem menthető: {0}. Válasszon másik mappát.</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>A(z) „{0}” makró mentve.</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>Makró ismétlődő lejátszása</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>Makró</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>Ismétlések száma</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>Alkalom (1–1 000 000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>A fájl végéig</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>Minden keresési találatra</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>A kijelölésen belül</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>Lejátszás</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>Adjon meg egy számot 1 és {0} között.</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>Végrehajtási időkorlát (másodperc)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>Az az idő, ameddig egy JavaScript-szkript futhat, mielőtt szüneteltetve lenne, és rákérdezne a folytatásra. A 0 korlátlant jelent. A tömeges műveletekre és a felhasználói bevitelre való várakozás nem számít bele.</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>Memóriakorlát (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>A JavaScript-szkript által használható memória (16–4096 MB).</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>Rekurziómélység-korlát</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>A függvényhívások maximális mélysége (100–10000).</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>Egyidejűleg futó szkriptek</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>A további szkriptek megvárják, amíg az egyik befejeződik (1–16).</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>Szkriptszabályzat (szervezet)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>A szervezete állítja be a beállításfájlban. Letiltja a szkripteket és a bővítményeket, vagy csak az aláírt bővítményeket engedélyezi.</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>Nincs korlátozás</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>Minden szkript és bővítmény letiltása</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>Csak aláírt bővítmények</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>Szkript: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>Szkript: {0} – {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>Szkript: {0} (írás)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>Szkript: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>Nem fut szkript.</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>A C# szkriptkomponens már telepítve van.</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>A szkriptek le vannak tiltva a szervezete beállításával (scripts.policy).</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>Egy szkript megszakította a mentést: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>A(z) „{0}” szkript fut.</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>Leállítás</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>A(z) „{0}” szkript hibával fejeződött be.</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>Részletek</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>A(z) „{0}” szkript nem futott le: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>Szkript: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, one {# szkript fut} other {# szkript fut}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>A(z) „{0}” szkript {1} másodpercnél tovább fut.</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>Folytatás (további {0} mp)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>Futtatja a(z) „{0}” szkriptet?</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>A HexEditor rendszergazdaként fut. Ez a szkript rendszergazdai jogosultsággal fut, és az egész számítógépet érintő műveleteket végezhet.</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>Név: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>Szerző: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>Ez a kód a jogosultságaival bármit megtehet a számítógépén (beleértve a fájlok olvasását és írását, valamint a hálózati kommunikációt). Csak olyan szerzők kódját futtassa, akikben megbízik.</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>Ez a szkript olvashatja és írhatja a megnyitott dokumentumokat. Emellett a következő engedélyeket is kéri:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>Ez a szkript olvashatja és írhatja a megnyitott dokumentumokat. Más engedélyt nem kér.</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>Ez a fájl az internetről származik. Csak akkor futtassa, ha megbízik a forrásában.</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>Futtatás</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>Ne futtassa</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>Futtatás egyszer</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>Mindig engedélyez</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>Bármely fájl olvasása</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>Bármely fájl létrehozása, írása és törlése</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>Hálózati kommunikáció (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>Külső programok futtatása</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>Lemezek, kötetek és folyamatmemória megnyitása</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>A vágólap olvasása</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>Az alkalmazás beállításainak módosítása</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>A szkript a(z) „{0}” engedélyt kéri ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>Engedélyezés</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>Tiltás</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>C# szkriptkomponens</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>A C# szkriptekhez szükség van a C# szkriptkomponensre (Roslyn), amely nincs telepítve. Hozzáadja most?</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>Hozzáadás</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>A komponens letöltése.
+Méret: {0}
+Mentés helye: {1}
+Letöltés innen: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>Letöltés</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>A letöltés nagyobb a várt {0} bájtnál, ezért leállt.</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>C# szkriptkomponens hozzáadása</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>A C# szkriptkomponens hozzáadva.</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>A C# szkriptkomponenst nem sikerült hozzáadni: {0} Kézzel is hozzáadhatja: töltse le a komponens zip-fájlját a kiadási oldalról, és bontsa ki az adatmappa components\csharp\&lt;verzió&gt;\ mappájába.</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>A C# szkriptkomponenst nem sikerült hozzáadni: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>Ismeretlen karakterkódolás: „{0}”. A szövegoszlop nem változott.</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>A(z) {0} „{1}” nem használható (a kifejezés nem értelmezhető a(z) {2}. pozíciónál).</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>A(z) {0} „{1}” a fájlon kívül esik (hossz: {2}).</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>A(z) {0} ebben a verzióban nem érhető el.</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>Nincs „{0}” kifejezésnek megfelelő lemez.</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>Nincs „{0}” kifejezésnek megfelelő kötet.</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>Nincs „{0}” kifejezésnek megfelelő folyamat.</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>A(z) „{0}” {1} folyamatra illik. Adja meg a folyamatazonosítót a --process kapcsolóval.</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>Bővítmény adatforrásának megnyitása</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>Bővítményműveletek</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>Bővítmények</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>V</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>Bővítmények kezelése...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>Kezelés</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>bővítménykezelő kiegészítők plugin manager extensions add-ins</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>Bővítmény</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>Csak aláírt bővítmények betöltése</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>Az érvényes aláírás nélküli bővítmények nem töltődnek be. Újraindítás után lép érvénybe.</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>Bővítményfejlesztési mappák</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>Közvetlenül bővítményként betöltött build-kimeneti mappák (a bővítménykezelőben szerkeszthetők).</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>Bővítmények</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>Bővítmények</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>Bővítmények</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>A bővítmények vizsgálótípusokat, kivonatokat, formátumokat, parancsokat és paneleket adnak hozzá. A bővítmények ugyanazokkal a jogokkal futnak, mint Ön; csak olyan szerzők bővítményeit engedélyezze, akikben megbízik. A módosítások újraindítás után lépnek érvénybe.</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>Csökkentett mód: egyetlen bővítmény sem töltődik be. A lista és a beállítások nem változnak.</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>Hozzáadás...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>Újraindítás most</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>Bővítménymappa megnyitása</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>Eltávolítás</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>Bővítménybeállítások...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>Engedélyezve</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>Engedélyezve</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>Letiltva</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>Nincs telepített bővítmény. Adjon hozzá egy .hexplugin fájlt a Hozzáadás... gombbal, vagy húzza a listára.</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>Fejlesztési mappák</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>A bővítmények közvetlenül ezekből a build-kimeneti mappákból töltődnek be, és Fejlesztés címkével jelennek meg. Mappánként egyszer kérdez rá a program.</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>Fejlesztési mappa hozzáadása...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>A fejlesztési mappa hozzáadva. A betöltéshez indítsa újra.</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>Megbízható közzétevők</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>Az ezek által a közzétevők által aláírt bővítmények kérdés nélkül engedélyezve lesznek. A közzétevő eltávolítása után újra rákérdez a program.</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>Telepített bővítmények</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>Húzzon ide egy .hexplugin fájlt a hozzáadásához.</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>Bővítmény hozzáadása</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>ismeretlen közzétevő</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>Aláírta: {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>Aláírta: {0} (a visszavonás nem ellenőrizhető)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>Érvénytelen aláírás</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>Az aláírás még nincs ellenőrizve</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>Nincs aláírva</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>Engedélyezve</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>Letiltva</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>Nem tölthető be ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>Leállítva ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>Nincs betöltve ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>Betöltés...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} – a módosítások újraindítás után lépnek érvénybe</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>Fejlesztés</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>Nincsenek bővítmények</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>Hozzáad: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (letiltva: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>Csökkentett módban nem adhatók hozzá bővítmények.</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>A bővítmény nem lett hozzáadva: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>Bővítmény eltávolítása</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>Eltávolítja a(z) „{0}” bővítményt? A betöltött bővítmények újraindítás után törlődnek.</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>{0} beállításai</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>vizsgálótípus</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>kivonat</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>importformátum</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>exportformátum</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>adatforrás</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>átalakítási nézet</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>adatművelet</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>parancs</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>menüelem</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>panel</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>beállítási oldal</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>sablonfüggvény</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>fájltípus-felismerés</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>diszasszembler</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>színezési szabályok</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>szkript-API</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>ismeretlen</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>Engedélyezi a(z) „{0}” bővítményt?</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (frissítés)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>Közzétevő: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>Fejlesztési mappából betöltve.</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>Ez a kód a jogosultságaival bármit megtehet a számítógépén (beleértve a fájlok olvasását és írását, valamint a hálózati hozzáférést). Csak olyan szerzők bővítményeit engedélyezze, akikben megbízik.</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>A bővítmény deklarálja: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>Ez a bővítmény nincs aláírva. A közzétevője nem ellenőrizhető.</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>Mindig megbízik a(z) {0} bővítményeiben</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>Engedélyezés</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>Ne engedélyezze</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>A HexEditor rendszergazdaként fut. Ez a bővítmény rendszergazdai jogosultsággal fut, és az egész számítógépet érintheti.</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>Betölti a bővítményeket rendszergazdaként?</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>A HexEditor rendszergazdaként fut. Ezek a bővítmények rendszergazdai jogosultsággal futnak, és az egész számítógépet érinthetik:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>– még nem megbízható</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>Betöltés</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>Ne töltse be</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>A(z) „{0}” bővítmény le lett állítva a folyamatos hibák miatt.</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>Bővítmény letiltása</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>Újrapróbálás újraindításkor</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>A(z) „{0}” bővítmény újraindítás után nem töltődik be.</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>Letiltja a bővítményt?</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>A HexEditor legutóbb váratlanul leállt, valószínűleg a(z) „{0}” bővítmény miatt. Letiltja?</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Maradjon engedélyezve</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>Ez a bővítményparancs jelenleg nem futtatható.</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>A(z) „{1}” bővítmény „{0}” parancsa meghiúsult. Lásd a kimenet panelt.</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>Megnyitás: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>A(z) {0} nem nyitható meg: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>Másolás másként: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>Átmásolva mint {0}.</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>Adatművelet: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>A(z) {0} adatművelet meghiúsult: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>Hozzáadta: {0} bővítmény</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>Bővítmény panelje</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>A bővítmény nem tudta létrehozni ezt a panelt.</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Bővítmények</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(leállítva)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>Ez a bővítménytípus ezzel az értékkel nem szerkeszthető.</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>Struktúra</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>Sablon kimenete</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>Struktúrasablonok</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>Sablon alkalmazása...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>Sablon alkalmazása innen...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>Típus megjelenítése a kurzornál...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>T</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Kaitai Struct alkalmazása...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>Egyező sablonok keresése</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>E</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>Futtatás újra</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>F</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>Alkalmazás eltávolítása</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>L</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>Eredmények exportálása...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>R</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>Új sablon</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>J</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>Sablon megnyitása...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>M</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>Sablon szerkesztése</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>B</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>.ksy konvertálása HXT-vé...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>Sablonok kezelése</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>O</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>Struktúraszínezés</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>Struktúra</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>U</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>Sablon kimenete</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>H</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>Struktúra eredményei...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>S</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>Sablon alkalmazása innen...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>Megszakítás itt olvasáskor</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>Sablon</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>Kódszerkesztő</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>Sablon: alkalmazás</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>struktúra;elemzés;structure;parse</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>Sablon: alkalmazás innen</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>kurzor;cursor</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>Sablon: típus megjelenítése a kurzornál</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>követés;follow</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Sablon: Kaitai Struct alkalmazása</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>Sablon: futtatás újra</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>újraértékelés;reevaluate</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>Sablon: alkalmazás eltávolítása</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>alkalmazás visszavonása;unapply</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>Sablon: kiértékelés leállítása</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>megszakítás;cancel</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>Sablon: eredményfa megjelenítése</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>fa;tree</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>Sablon: kimenet megjelenítése</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>hibák;errors</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>Sablon: érték szerkesztése</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>módosítás szerkesztés change</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>Sablon: ugrás a definícióra</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>deklaráció declaration</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>Sablon: ugrás a mutató céljára</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>mutató pointer</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>Sablon: érték másolása</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>vágólap clipboard</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>Sablon: hozzáadás a könyvjelzőkhöz</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>könyvjelző bookmark</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>Sablon: eredmények exportálása</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>json;csv</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>Sablon: színezés be/ki</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>kiemelés highlight</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>Sablon: egyező sablonok keresése</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>felismerés detect</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>Sablon: új</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>létrehozás create</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>Sablon: megnyitás</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>fájl file</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>Sablon: szerkesztés</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>szerkesztő editor</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>Sablon: kezelés</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>könyvtár library</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Sablon: .ksy konvertálása HXT-vé</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>Sablon: szabványos függvénytár referenciája</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>súgó függvények help functions</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Sablon: próbafuttatás</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>teszt;nem mentett;test;unsaved</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Sablon: megszakítás itt olvasáskor</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>adattöréspont data breakpoint</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>Nézet: struktúra panel</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>sablon eredményei template results</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>Nézet: sablonkimenet panel</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>hibák errors</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>Kódszerkesztő: hibakeresés indítása / folytatás</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>futtatás;hibakeresés;run;debug</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>Kódszerkesztő: hibakeresés leállítása</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>befejezés end</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>Kódszerkesztő: töréspont be/ki</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>töréspont break</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>Kódszerkesztő: átlépés</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>következő next</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>Kódszerkesztő: belépés</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>belépés enter</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>Kódszerkesztő: kilépés</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>visszatérés return</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>Kódszerkesztő: futtatás a kurzorig</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>kurzor cursor</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>Kódszerkesztő: figyelt kifejezés hozzáadása</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>figyelés watch</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>Kódszerkesztő: ugrás a definícióra</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>deklaráció declaration</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>Kódszerkesztő: hivatkozások keresése</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>használatok usages</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>Kódszerkesztő: dokumentum formázása</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>behúzás indent</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>Kódszerkesztő: megjegyzés be/ki</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>megjegyzés comment</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Kódszerkesztő: kiegészítések megjelenítése</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>automatikus kiegészítés intellisense</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>Sablonok</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Automatikus alkalmazás</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>Mi történjen, ha egy sablon illeszkedik a megnyitott fájlra (magic number, MIME-típus vagy kiterjesztés).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Javaslat</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Mindig alkalmaz</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>Ne tegyen semmit</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Újraértékelés szerkesztés után</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Az alkalmazott sablonok újraértékelése az utolsó szerkesztés után 500 ms-mal. Kikapcsolva használja az eredményfában a Futtatás újra parancsot.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Struktúraszínezés</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>A sablonminták tartományainak színezése a Hex nézetben.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Színezés átlátszatlansága (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>A struktúraszínezés átlátszatlansága a Hex nézet hátterén.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Sablonmappák</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>További mappák a felhasználói sablonok kereséséhez.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Vizsgálósablonok</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Sablonok, amelyek [[inspector]] típusai megjelennek az adatvizsgálóban.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Sablonbeállítások</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Letiltott sablonok, az automatikus alkalmazásból kizárt sablonok és elnémított javaslatok.</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>Sablonok kezelése</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Sablonmappák</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>Sablonok</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>Vizsgálósablonok</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>Mappa hozzáadása...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>Eltávolítás</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>A mappához nem lehet hozzáférni.</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>Szűrés név szerint</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>Importálás...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>Új sablon</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>Engedélyezve</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>Automatikus alkalmazás</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>Szerkesztés</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>Exportálás...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>Egy azonos nevű másik sablon elrejti.</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>Javaslatok kikapcsolva</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>Nincs</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>Megjelenítés újra</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>Vizsgálósablon hozzáadása...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>nem rögzített méret</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>Ez a sablon olyan vizsgálótípusokat tartalmaz, amelyek mérete nem rögzített, vagy nagyobb 4 KB-nál. Az legfeljebb 4 KB méretű, rögzített méretű típusok ajánlottak.</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>Importált sablonfájlok: {0}.</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>Az importálás nem sikerült: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>Exportált fájlok: {0}, ide: {1}.</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>Az exportálás nem sikerült: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>A szabványos sablonok az alkalmazás részei. Másolat exportálásához használja a Duplikálás és szerkesztés parancsot.</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>Sablon alkalmazása</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>Sablon alkalmazása</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>Futtatás újra</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>Futtatás újra</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>Kiértékelés leállítása</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>Kiértékelés leállítása</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>Exportálás</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>Exportálás</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>Oszlopok</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Oszlopok</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>Kurzor követése</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>Kurzor követése</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>Szűrés név, érték vagy típus szerint</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Szűrő</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>Eredményfa</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>Útvonal (pl. chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>Útvonal</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>Összes kiértékelése és keresés</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>{0} találat</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>A(z) „{0}” útvonal nem található.</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>Név</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>Érték</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>Típus</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>Eltolás</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>Méret</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>Megjegyzés</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>Bájtsorrend</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>Vég</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>Szín</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>Oszlopsorrend</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>{0} mozgatása balra</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>{0} mozgatása jobbra</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>Oszlopok visszaállítása</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>Kiértékelés…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>Kiértékelt minták: {0}</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>Hibák: {0}, figyelmeztetések: {1}</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>A minták száma elérte a korlátot ({0}). Részleges eredmények láthatók.</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>Korlát emelése és újrafuttatás</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} elem</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} bit</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>{0}–{1}. bit</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / helyi: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>Nem definiált érték</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>Nem definiált</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>Követés</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>Erre mutat: {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>eltolás: {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>méret: {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(nincs mentve)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(a sablonfájl nem található)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>Nincs alkalmazott sablon.</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>Nincs folyamatban kiértékelés.</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>Válasszon egy csomópontot az eredményfában.</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>A kijelölt csomópont nem mutató.</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>A mutató célja null, vagy az adatokon kívül esik.</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>A(z) „{0}” sablon nem található.</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>Egy dokumentumon legfeljebb {0} sablonalkalmazás lehet.</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>A(z) „{0}” sablonfájl nem található.</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>A(z) {0} sablon kiértékelése</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>A JSON nagyobb 64 MB-nál. Mentse inkább fájlba.</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>Mentés fájlba...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>Sablon: {0}
+Kezdő eltolás: {1}
+Fajta: {2}
+Bájtsorrend: {3}
+Típus: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>Szabványos</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>Felhasználói</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>Legutóbbiak</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>Szkripteket használ</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>Részletek</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>Ugrás az adatokra</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>Ugrás a mutató céljára</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>Ugrás a definícióra</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>Érték szerkesztése</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>Érték másolása</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>Név és érték másolása</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>Útvonal másolása</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>Bájtok másolása</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>Eltolás másolása</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>Részfa másolása JSON-ként</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>Hozzáadás a könyvjelzőkhöz</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>Tartományok hozzáadása a többszörös kijelöléshez</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>Szakasz megnyitása új lapon</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>Sablon alkalmazása innen...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>Megszakítás itt olvasáskor</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>Váltás: rögzített / követő</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>Átalakítás rögzítetté</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>Alkalmazás beállításai</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>Exportálás...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>Futtatás újra</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>Alkalmazás eltávolítása</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>Érték</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>OK</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>Ennek a mintának csak olvasási átalakítása van, ezért a nyers értéket szerkeszti.</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>Adjon meg egy számot</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>Igaz</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>A maradék kitöltése nullákkal</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>Helyi idő</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>Időzóna</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>Adjon meg egy értéket 0 és {1} között ({0} bit).</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>Az érték kívül esik a típus tartományán.</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>A szöveg hosszabb a mezőnél ({0} bájt).</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>Az írási átalakítás meghiúsult: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>Az érték nem értelmezhető.</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>A szakaszon belüli minták nem szerkeszthetők.</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>Ez a minta csak olvasható.</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>A számított értékek nem szerkeszthetők.</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>A hibás csomópontok nem szerkeszthetők.</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>Ennek a csomópontnak nincs szerkeszthető értéke.</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>Sablonérték szerkesztése</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>Sablon alkalmazása</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Kaitai Struct alkalmazása</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>Sablonok keresése</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>Név, leírás, kiterjesztés vagy MIME-típus</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>Sablonok</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>Kezdő eltolás</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>Adjon meg a dokumentumon belüli eltolást.</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>Alapértelmezett bájtsorrend</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>A dokumentum beállítása</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>A dokumentum beállítása (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>A dokumentum beállítása (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>Fajta</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>Rögzített</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>Követi a kurzort</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>Típus (követés)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>Alkalmaz</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>{0} verzió</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>Licenc: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>Egyező sablonok</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} – {1} (pontszám: {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>magic</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>kiterjesztés</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>Egyetlen sablon sem illeszkedik ehhez a dokumentumhoz.</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>Ez a fájl {0} típusúnak tűnik. Alkalmazza a(z) „{0}” sablont?</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(szkripteket használ)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>Alkalmaz</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>További jelöltek...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>Ne jelenjen meg ennél a formátumnál</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>Hiba történt a(z) „{0}” sablon alkalmazásakor.</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>Struktúra eredményeinek exportálása</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>Formátum</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>Cél</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>A teljes alkalmazás</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>A kijelölt részfa ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>Tömbelemek maximális száma</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>Maximális mélység</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>Korlátlan</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>Rejtett minták belefoglalása</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>Eltolások írása hexadecimális karakterláncként</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>Mentés...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>Struktúra eredményeinek exportálása</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>{0} csomópont</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>Exportálva ide: {0}.</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>Az exportálás nem sikerült ide: {0}: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>Nincs elég hely a lemezen.</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>Törlés</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>Törlés</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>Sablon kimenete</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>Ugrás a forrásra</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>Ugrás az adatokra</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>Súgó: {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>Mentés</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>Próbafuttatás</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>Célkocument</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>Célkocument</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>Hibakeresés indítása / folytatás</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>Átlépés</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>Belépés</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>Kilépés</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>Leállítás</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>Sorrendben kiértékelni hibakeresés közben</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>Dokumentum formázása</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>Megjegyzés be/ki</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>Sablon forrása</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>Kiegészítések</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>Változók</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>Figyelés</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>Hívásverem</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>Töréspontok</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>Változók</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>Figyelés</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>Hívásverem</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>Töréspontok</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>Figyelt kifejezés hozzáadása</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>Hozzáadás</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>Kifejezés (pl. c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>Problémák</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>Hivatkozás a(z) {0}. sorban, {1}. oszlopban</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>Új sablon</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>Nincs megnyitott sablonszerkesztő.</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>Nincs folyamatban hibakeresés.</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>Nyisson meg egy dokumentumot, amelyen a sablont futtatni szeretné.</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>A(z) {0} sablon nem nyitható meg: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>A sablon nem menthető: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>A szabványos sablonok nem menthetők közvetlenül. A Duplikálás és szerkesztés paranccsal mentsen másolatot a saját sablonmappájába.</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>Duplikálás és szerkesztés</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>Hibakeresés előtt javítsa a szintaktikai hibákat.</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>Hibakeresés közben a lusta kiértékelés ki van kapcsolva. A nagy tömbök sokáig tarthatnak.</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Adattöréspont</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>A hibakereső megáll, amikor létrejön egy minta, amely tartalmazza ezt: {0}.</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>A(z) {0} nem konvertálható HXT-vé.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Kiértékelt minták: {0} (leállt a korlátnál: {1}; részleges eredmények láthatók)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>lépések</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>minták</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>memória</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>idő</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Ugrás sorra</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Sorszám (1–{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>Nincs megjelenített kódszerkesztő (sablon vagy szkript).</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>Ez a szerkesztő nem támogatja ezt a parancsot.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Követés mutatóként</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>mutató eltolás cím ugrás vizsgáló pointer offset address jump inspector</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Követés mutatóként</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Abszolút (eltolás)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Abszolút (cím)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>A kurzorhoz képest</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Az érték végéhez képest</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Egy bázishoz képest…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>Bázis (kifejezés)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Ugrás</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>A(z) {0} cél a dokumentumon kívül esik (hossz: {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>Ennek a sornak nincs pozícióként használható értéke</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Adja meg a bázist kifejezésként, például 0x400000 vagy bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Válasszon egy egész típusú sort az adatvizsgálóban</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Mozgás az ilyen típusú tömbként</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Előző elem</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Következő elem</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Kilépés a tömb módból</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Elem sorszáma</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Elemméret</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(nem elemhatáron van)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>A(z) {0}. elem a dokumentumon kívül esik</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Érték</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Kif.</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Körkörös hivatkozás a könyvjelzők között</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>A bm.name hivatkozások {0} szintnél mélyebben vannak egymásba ágyazva</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>A(z) {0} pozíció a dokumentumon kívül esik</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Hiba a pozíciókifejezésben: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Érték</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Könyvjelző értékének szerkesztése</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(nincs típus)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Típus</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Bájtsorrend</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Dokumentum</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Pozíciókifejezés</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>pl. u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>Nézet: képnézet panel</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>megjelenítő bitmap pixelek kép visualizer bitmap pixels picture image</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Képnézet</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>Q</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Képnézet</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>1 bites fekete-fehér</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>2 bites szürke</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>4 bites szürke</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>8 bites szürke</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 bit (a bájttéma színei)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Kurzor követése</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>A kijelölés eleje</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Rögzített</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>Fentről lefelé</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>Alulról felfelé (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Automatikus</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Pixelformátum</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Szélesség (pixel)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Bájtok soronként</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Automatikus</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Kezdőpozíció</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Rögzített kezdőpozíció</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Sorrend</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Nagyítás</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>További beállítások</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Kép</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Sorok görgetése</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Mentés képként…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>A nézet tartománya túl nagy; csak az első 64 MB jelenik meg</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Adja meg a rögzített kezdőpozíciót kifejezésként</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>Nincs menthető kép</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>A kép mentve ide: {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>A(z) {0} nem menthető: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>PNG-kép</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>Alapértelmezett</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Időtúllépés</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>A típus {0} ms-nál tovább futott; a kezdőpozíció változásakor újra lefut</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Hiba: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Vizsgálótípus-fájl: {0}, {1}. sor: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Az offline mód be van kapcsolva (vagy a letöltések ki vannak kapcsolva), ezért a komponens nem töltődik le. Kézi hozzáadáshoz szerezze be a(z) {0} fájlt a verzió kiadási oldaláról (szükség esetén másik számítógépen), és bontsa ki ide: {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Csökkentett módban indult. A bővítmények és az automatikusan futó szkriptek nem töltődnek be.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Normál újraindítás</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>Sablon: mezőértékek keresése</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>keresés;mező;érték;search;field;value</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>Nincs alkalmazott sablon.</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>Szintaktikai hiba a(z) {0}. karakternél: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>a feltétel üres</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>hiányzik egy érték</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>ismeretlen feltétel (használja a name:, type: vagy value elemet)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>ismeretlen összehasonlítás (használja a =, !=, &lt;, &lt;=, &gt;, &gt;= vagy ~ jelet)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>az idézőjel nincs lezárva</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>a reguláris kifejezés érvénytelen</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>Sablonértékek</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Nyomja meg az Enter billentyűt a mezőértékek kereséséhez. Az eredmények a Keresési eredmények között jelennek meg.</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Mező</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (felhasználói)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} ({1} sablon)</value></data>
 </root>

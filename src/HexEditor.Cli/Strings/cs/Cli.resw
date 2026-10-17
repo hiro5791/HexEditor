@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>Zrušeno.</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>Nápovědu zobrazíte příkazem 'hexed --help' (nebo 'hexed &lt;command&gt; --help').</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: Neočekávaná chyba ({0}). Podrobnosti byly zapsány do {1}.</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>Použití: hexed &lt;command&gt; [arguments] [options]
+         hexed &lt;file&gt; [options]          (stejné jako: hexed open &lt;file&gt;)
+
+Příkazy:
+  open      Otevřít soubory, disky nebo procesy v okně HexEditoru
+  hash      Vypočítat a ověřit hashe a kontrolní součty
+  dump      Vypsat Hex výpis
+  compare   Porovnat dva soubory
+  run       Spustit skript bez okna
+  template  Použít šablonu struktury a vypsat výsledek
+  patch     Použít na soubor záplatu IPS
+  convert   Převést formáty (Intel HEX, S-record, Base64, zdrojový kód, ...)
+  find      Hledat v souborech a vypsat shody
+
+Společné volby (všechny příkazy):
+  -h, --help           Zobrazit nápovědu (také: hexed &lt;command&gt; --help)
+      --version        Zobrazit verzi
+  -q, --quiet          Vypsat pouze výsledek
+      --format &lt;f&gt;     Formát výstupu: text (výchozí) nebo json
+  -o, --output &lt;path&gt;  Zapsat výsledek do souboru místo na obrazovku
+      --lang &lt;tag&gt;     Jazyk zpráv (například en, ja)
+      --no-color       Nepoužívat barvy
+      --unregister     Odebrat registrace provedené na tomto počítači (kontextová nabídka,
+                       přidružení souborů, seznam odkazů, PATH, dočasná složka)
+
+Návratové kódy: 0 úspěch, 1 záporný výsledek (rozdíly, žádná shoda, nesouhlas), 2 chyba použití,
+3 chyba vstupu/výstupu, 4 chyba skriptu nebo šablony, 5 nepovoleno, 6 zrušeno, 7 překročen limit,
+8 chyba formátu, 10 vnitřní chyba.
+
+Posuny, délky a rozsahy přijímají výrazy. Číslo bez předpony je desítkové; pro šestnáctkové
+použijte 0x. Rozsah je start:length nebo start..end (end se nezahrnuje); 'end' je délka souboru
+(například end-16:16). V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek
+(například '$1F00').</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>Použití: hexed open [paths...] [options]
+
+Otevře soubory v okně HexEditoru. Pokud HexEditor již běží, soubory se v něm otevřou jako karty.
+Relativní cesty se vyhodnocují od aktuální složky.
+
+Volby:
+  -g, --offset &lt;expr&gt;      Umístit kurzor na tuto pozici (například 0x1000 nebo end-16)
+      --select &lt;range&gt;     Vybrat tento rozsah (start:length nebo start..end)
+  -r, --readonly           Otevřít pouze pro čtení
+      --disk &lt;n|path&gt;      Otevřít fyzický disk (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     Otevřít svazek (--volume C:)
+      --process &lt;pid|name&gt; Otevřít paměť procesu
+      --encoding &lt;name&gt;    Kódování znaků textového sloupce
+      --template &lt;name|path&gt;  Po otevření použít šablonu struktury
+      --compare &lt;a&gt; &lt;b&gt;    Otevřít dva soubory v zobrazení porovnání
+      --run &lt;script&gt;       Po otevření spustit skript
+      --new-window         Otevřít v novém okně
+      --new-document       Otevřít nový prázdný dokument
+      --open-disk          Zobrazit dialog Otevřít disk
+      --new-instance       Spustit samostatný proces místo použití běžícího
+  -w, --wait               Nevracet se, dokud nejsou otevřené dokumenty zavřeny
+      --safe-mode          Spustit v nouzovém režimu (pouze nový proces)
+      --write-block        Spustit s ochranou proti zápisu pro celou aplikaci
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   Zobrazit pseudopřeložený text (náhledová sestavení)
+      --plugin-dev &lt;folder&gt; Načíst plugin ve vývoji (pouze nový proces)
+      --ui-lang &lt;tag&gt;      Jazyk zobrazení okna (pouze nový proces)
+      --test-hooks &lt;file&gt;  Povolit vkládání chyb (pouze testovací sestavení)
+
+V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (například '$1F00').</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>Použití: hexed hash [paths...] [options]
+         hexed hash --check &lt;checksum file&gt; [options]
+
+Vypočítá hashe a kontrolní součty. Cesty mohou obsahovat zástupné znaky (*.bin) nebo být
+složkami; - znamená čtení standardního vstupu. Více algoritmů se počítá jedním průchodem.
+
+Volby:
+  -a, --algorithm &lt;id,...&gt;   ID algoritmů oddělená čárkami (výchozí sha256).
+                             '--algorithm list' vypíše dostupná ID
+      --range &lt;range&gt;        Hashovat pouze tento rozsah (start:length nebo start..end)
+      --format &lt;f&gt;           text (výchozí): algorithm  value  path
+                             gnu: value  path (stejné jako sha256sum)
+                             bsd: SHA256 (path) = value
+                             json: jeden objekt na soubor
+      --check &lt;file&gt;         Ověřit soubory uvedené v souboru kontrolních součtů (.sha256, .md5,
+                             SHA256SUMS, .sfv, ...) a vypsat OK, FAILED nebo MISSING
+  -r, --recurse              Zahrnout podsložky, je-li zadána složka
+
+Návratové kódy: 0 úspěch, 1 neshoda při --check, 3 soubor nelze přečíst.
+V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (například '$1F00').</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>Použití: hexed dump &lt;path&gt; [options]
+
+Vypíše Hex výpis souboru (nebo rozsahu) na standardní výstup. Využití paměti nezávisí na velikosti.
+
+Volby:
+      --range &lt;range&gt;        Rozsah k výpisu (start:length nebo start..end; výchozí: celý soubor)
+      --width &lt;n&gt;            Bajtů na řádek (výchozí 16)
+      --group &lt;n&gt;            Bajtů ve skupině (výchozí závisí na stylu; 0 pro žádné)
+      --encoding &lt;name&gt;      Kódování znaků textového sloupce (výchozí ascii)
+      --base-address &lt;expr&gt;  Adresa zobrazená u prvního bajtu (výchozí 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              Vypsat * místo řádků, které opakují předchozí řádek (jako hexdump -C)
+
+Návratové kódy: 2, pokud je rozsah mimo soubor.
+V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (například '$1F00').</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>Použití: hexed compare &lt;path1&gt; &lt;path2&gt; [options]
+
+Porovná dva soubory a vypíše rozdíly.
+
+Volby:
+      --mode &lt;byte|resync&gt;   byte (výchozí): porovnávat bajty na stejných posunech
+                             resync: povolit vložení a odstranění
+      --range1 &lt;range&gt;       Rozsah prvního souboru (výchozí: vše)
+      --range2 &lt;range&gt;       Rozsah druhého souboru (výchozí: vše)
+      --max &lt;n&gt;              Maximální počet vypsaných rozdílů (výchozí 1000);
+                             zbytek se jen spočítá
+      --format &lt;text|json&gt;   Formát výstupu
+      --brief                Vypsat jeden řádek (stejné nebo odlišné) a zastavit se u prvního rozdílu
+
+Návratové kódy: 0 stejné, 1 odlišné, 3 soubor nelze přečíst.
+V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (například '$1F00').</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>Použití: hexed run &lt;script&gt; [files...] [options]
+
+Spustí skript bez otevření okna. Soubory se otevírají popořadě (app.documents); první z nich je
+app.activeDocument.
+
+Volby:
+      --arg &lt;name=value&gt;   Parametr skriptu (lze opakovat); dostupný také v script.args
+      --trust              Spustit nedůvěryhodný skript bez dotazu
+      --allow &lt;perm,...&gt;   Oprávnění k udělení (například file-read)
+      --save               Po skončení skriptu uložit každý změněný dokument
+      --save-as &lt;path&gt;     Uložit první dokument na tuto cestu (originál se nemění)
+      --dry-run            Nic neukládat; vypsat souhrn změn
+      --timeout &lt;seconds&gt;  Maximální doba běhu celého skriptu
+  -r, --readonly           Otevřít soubory pouze pro čtení
+
+Ve výchozím stavu se ukládají jen dokumenty, u nichž skript volá doc.save().
+Návratový kód skriptu lze nastavit pomocí app.exit(code). Kódy 2 až 10 mají významy uvedené
+v 'hexed --help'; pro vlastní významy použijte 64 a více.</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>Použití: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [options]
+
+Použije na soubor šablonu struktury a vypíše výsledek.
+
+Volby:
+      --template &lt;name|path&gt;  Šablona k použití
+      --auto                  Vybrat šablonu automaticky (návratový kód 1, pokud žádná nevyhovuje)
+  -g, --offset &lt;expr&gt;         Počáteční posun struktury (výchozí 0)
+      --format &lt;f&gt;            json, csv nebo text (strom s odsazením; výchozí text)
+      --depth &lt;n&gt;             Maximální hloubka stromu
+      --fields &lt;path,...&gt;     Vypsat jen tato pole (například header.e_lfanew,sections[*].name)
+
+Návratové kódy: 4 při chybě šablony.
+V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (například '$1F00').</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>Použití: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [options]
+
+Použije soubor záplaty na soubor. Je vyžadována jedna z voleb -o a --in-place. Tato verze
+používá záplaty IPS a IPS32.
+
+Volby:
+  -o, --output &lt;path&gt;       Zapsat opravený soubor sem (cílový soubor se nemění)
+      --in-place            Bezpečně nahradit cílový soubor (nejprve se zapíše dočasný soubor)
+      --format &lt;f&gt;          auto (výchozí), ips nebo ips32
+      --verify-before &lt;a:v&gt; Nejprve zkontrolovat hash cílového souboru (například sha256:ab12...);
+                            při rozdílu návratový kód 1 a nic se nezapíše
+      --verify-after &lt;a:v&gt;  Zkontrolovat hash výsledku před zápisem
+      --dry-run             Vypsat počet záznamů a změněných bajtů; nic nepoužít
+
+Návratové kódy: 1 ověření selhalo, 8 záplata je poškozená.</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>Použití: hexed convert &lt;input&gt; &lt;output&gt; [options]
+
+Převede soubor mezi formáty importu a exportu HexEditoru.
+
+Volby:
+      --from &lt;format&gt;       Vstupní formát (výchozí: rozpozná se z obsahu a přípony)
+      --to &lt;format&gt;         Výstupní formát (výchozí: podle přípony výstupu; bin, pokud je neznámá)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     Číst soubory Intel HEX / S-record, i když je kontrolní součet chybný
+      --fill &lt;hex&gt;          Bajt použitý pro mezery (výchozí FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32; S-record: auto, s1, s2, s3
+
+Volby formátu mají názvy polí dialogů importu a exportu, psané malými písmeny
+s pomlčkami, například --record-length 32, --start-address 0x08000000,
+--bytes-per-line 16, --line-length 64, --url-safe, --no-upper-case, --new-line lf,
+--encoding utf8.
+
+Návratové kódy: 8 při chybě kontrolního součtu nebo formátu ve vstupu.</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>Použití: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [options]
+
+Prohledá soubory a pro každou shodu vypíše „path  offset  length“.
+
+Volby:
+      --hex &lt;pattern&gt;      Bajty, například "DE AD ?? EF" (?? je libovolný bajt, ? libovolný nibble)
+      --text &lt;string&gt;      Text
+      --regex &lt;expr&gt;       Regulární výraz (pro text)
+      --encoding &lt;name&gt;    Kódování znaků pro --text a --regex (výchozí utf-8)
+      --case-sensitive     Rozlišovat velká a malá písmena
+      --range &lt;range&gt;      Hledat jen v tomto rozsahu každého souboru
+      --max &lt;n&gt;            Zastavit po n shodách
+      --format &lt;text|json&gt; Formát výstupu
+  -r, --recurse            Zahrnout podsložky, je-li zadána složka
+
+Návratové kódy: 0 nalezeno, 1 nenalezeno, 3 soubor nelze přečíst.
+V PowerShellu dávejte hodnoty obsahující $ do jednoduchých uvozovek (například '$1F00').</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>Neznámý příkaz nebo soubor: {0}. Příkazy: open, hash, dump, compare, run, template, patch, convert, find.</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>Neznámý jazyk: {0}. Použijte jednu z 23 značek jazyků zobrazení (například en, ja, zh-Hans).</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>Neznámá volba {0} pro '{1}'.</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>Volba {0} nepřijímá hodnotu ('{1}').</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>Volba {0} vyžaduje hodnotu ('{1}').</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>Cesta neexistuje: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>Přístup byl odepřen: {0}. Zkontrolujte oprávnění k souboru nebo spusťte z účtu, který k němu smí přistupovat.</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>Soubor {0} nelze přečíst: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>Do {0} nelze zapsat: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>{0} je složka, nikoli soubor.</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>Žádný soubor neodpovídá {0}.</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>Soubor {0} nelze přečíst na pozici {1}.</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>Na {0} není dost volného místa (potřeba bajtů: {1}, k dispozici: {2}).</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>Soubor je příliš velký pro systém souborů {0} ({1}).</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>Výstupní cesta {0} je zároveň vstupem. Zvolte jinou výstupní cestu.</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: výraz „{1}“ nelze přečíst na pozici {2}: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: „{1}“ je mimo soubor (délka {2}).</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: „{1}“ musí být číslo od {2} do {3}.</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>--format {0} není příkazem '{1}' podporován. Použijte: {2}.</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>'{0}' vyžaduje alespoň jednu vstupní cestu.</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>'{0}' přijímá právě jednu vstupní cestu.</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>'{0}' není v této verzi k dispozici.</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>{0} není v této verzi k dispozici.</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>Data se nevejdou do formátu {0} (limit {1}).</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>Neznámé kódování znaků: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>výraz je prázdný</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>chyba syntaxe</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>závorka není uzavřena</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>neznámý název (pro délku souboru použijte end)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>záložky nejsou v příkazovém řádku k dispozici</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>neznámá funkce</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>dělení nulou</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>hodnota je příliš velká</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>není platné číslo</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>data zde nelze přečíst</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>není v příkazovém řádku k dispozici</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>--format gnu vyžaduje právě jeden algoritmus. Pro více použijte --format bsd nebo text.</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>--range nelze použít se standardním vstupem.</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>Neznámý algoritmus: {0}. ID zobrazíte příkazem 'hexed hash --algorithm list'.</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>Algoritmus {0} není na tomto počítači k dispozici.</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>{0} neobsahuje žádné čitelné řádky s kontrolními součty.</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>Algoritmus pro {0} nelze určit. Zadejte ho pomocí --algorithm.</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>Počet vypočtených kontrolních součtů, které NESEDÍ: {0}.</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>Počet chybějících uvedených souborů: {0}.</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>Neznámý styl: {0}. Viz 'hexed dump --help'.</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>'compare' vyžaduje právě dvě cesty.</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>Neznámý režim: {0}. Použijte byte nebo resync.</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>změněno</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>vloženo</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>odstraněno</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>nečitelné</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... nezobrazených dalších rozdílů: {0} (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>Rozdílů: {0}, bajtů celkem: {1}</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>Soubory jsou stejné.</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>Soubory se liší (první rozdíl na {0}).</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>Počet rozsahů, které nebylo možné přečíst: {0}.</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>Zadejte právě jednu z voleb --hex, --text a --regex.</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>Hledaný vzor není platný ({0}).</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: přeskočené nečitelné rozsahy: {1}.</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>Použití: hexed convert &lt;input&gt; &lt;output&gt; [options]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>Záplaty IPS se používají příkazem 'hexed patch', nikoli 'hexed convert'.</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>Neplatná hodnota pro: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>Neznámý formát: {0}. Formáty: {1}.</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: „{1}“ není platné. Použijte: {2}.</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>{0} se nepoužije při převodu z {1} do {2}.</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  řádek {0}, sloupec {1}: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: chyba kontrolního součtu na řádku {1}, sloupci {2}. Chcete-li soubor přesto přečíst, použijte --ignore-checksum.
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: chyba formátu na řádku {1}, sloupci {2} ({3}).
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>Ignorované chyby kontrolního součtu: {0}.</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>Použití: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Zadejte -o &lt;output&gt; nebo --in-place (aby se původní soubor omylem nezměnil).</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>-o a --in-place nelze použít společně.</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Výstupní cesta {0} je cílový soubor nebo záplata. Chcete-li cíl nahradit, použijte --in-place.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>--format {0} není formát záplaty. Použijte auto, ips nebo ips32.</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: záplaty UPS, BPS a .hexpatch tato verze nepodporuje. IPS a IPS32 ano.</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>{0} není rozpoznatelný soubor záplaty.</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: záplata je poškozená u záznamu {1} (posun v souboru {2}).</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>{0} není záplata {1}.</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: „{1}“ musí mít tvar algorithm:value (například sha256:ab12...).</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>{0} nemá očekávaný hash (--verify-before). Nic nebylo zapsáno.</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>Opravený {0} nemá očekávaný hash (--verify-after). Nic nebylo zapsáno.</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>Použito záznamů: {0}, změněno bajtů: {1}, změna délky: {2}. Zapsáno: {3}.</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>formát</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>záznamů: {0}, bajtů ke změně: {1}, změna délky: {2}, nová délka: {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Zadejte právě jednu z voleb --template a --auto.</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>Šablona „{0}“ nebyla nalezena. Použijte název standardní šablony (například pe, png) nebo cestu k souboru .hxt či .ksy.</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>Žádná šablona neodpovídá {0}.</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>Chyba šablony: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>Použití: hexed run &lt;script&gt; [files...] [options]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>Použijte jen jednu z voleb --save, --save-as a --dry-run.</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>--readonly nelze kombinovat s --save nebo --save-as.</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>--arg „{0}“ musí mít tvar name=value.</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>--timeout „{0}“ musí být počet sekund větší než 0.</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>--save-as vyžaduje soubor k otevření (první soubor se uloží na novou cestu).</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>--save-as {0} je otevřený soubor. Chcete-li ho přepsat, použijte --save.</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: změněno bajtů: {1} (neuloženo: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>{0} má neuložené změny. Nebyly uloženy (použijte --save nebo doc.save()).</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>Neznámý jazyk zobrazení: {0}. Použijte jednu z 23 značek jazyků zobrazení (například ar, ja).</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>Neznámá pseudolokalizace: {0}. Použijte qps-ploc nebo qps-plocm.</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>HexEditor.exe nebyl nalezen vedle hexed.exe.</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>{0} nelze spustit: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>HexEditor skončil s kódem {0} dříve, než byly dokumenty zavřeny.</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>Všechny registrace byly odebrány.</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>Odebráno: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>Nelze odebrat: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>kontextová nabídka Průzkumníka</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>přidružení souborů</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>položka App Paths</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>položka PATH pro hexed</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>seznam odkazů na hlavním panelu</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>registrace oznámení</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>dočasná složka</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>položky registru</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>Registrace této verze spravuje Windows. Nic nebylo odebráno.</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>Tato kopie nic neregistruje. Nic nebylo odebráno.</value></data>
+</root>
