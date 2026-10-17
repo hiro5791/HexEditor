@@ -6593,4 +6593,9 @@ Typ: {4}</value></data>
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>Ń</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ś</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ę</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Edytor podstawowy</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>Środowisko WebView2 Runtime nie jest zainstalowane, dlatego używany jest edytor podstawowy z mniejszą liczbą funkcji (na przykład bez zwijania i bez uzupełniania w skryptach). Zainstaluj Microsoft Edge WebView2 Runtime, a następnie otwórz edytor ponownie.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Nie udało się uruchomić edytora kodu (WebView2), dlatego używany jest edytor podstawowy z mniejszą liczbą funkcji. Problem może rozwiązać ponowna instalacja Microsoft Edge WebView2 Runtime.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Pobierz WebView2 Runtime</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Aby korzystać z uzupełniania, dodaj składnik skryptów C#.</value></data>
 </root>

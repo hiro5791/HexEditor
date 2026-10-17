@@ -6593,4 +6593,9 @@ Tipo: {4}</value></data>
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>Q</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Editor di base</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>Il runtime WebView2 non è installato, quindi viene usato un editor di base con meno funzioni (ad esempio, senza riduzione e senza completamento per gli script). Installa il runtime Microsoft Edge WebView2, quindi riapri l'editor.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Impossibile avviare l'editor di codice (WebView2), quindi viene usato un editor di base con meno funzioni. Reinstallare il runtime Microsoft Edge WebView2 potrebbe risolvere il problema.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Scarica il runtime WebView2</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Per usare il completamento, aggiungi il componente script C#.</value></data>
 </root>

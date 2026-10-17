@@ -6593,4 +6593,9 @@
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>J</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>ตัวแก้ไขพื้นฐาน</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>ยังไม่ได้ติดตั้ง WebView2 Runtime จึงใช้ตัวแก้ไขพื้นฐานที่มีฟีเจอร์น้อยกว่า (เช่น ไม่มีการพับโค้ดและไม่มีการเติมข้อความอัตโนมัติสำหรับสคริปต์) ติดตั้ง Microsoft Edge WebView2 Runtime แล้วเปิดตัวแก้ไขอีกครั้ง</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>เริ่มตัวแก้ไขโค้ด (WebView2) ไม่ได้ จึงใช้ตัวแก้ไขพื้นฐานที่มีฟีเจอร์น้อยกว่า การติดตั้ง Microsoft Edge WebView2 Runtime ใหม่อาจแก้ปัญหานี้ได้</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>รับ WebView2 Runtime</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>หากต้องการใช้การเติมข้อความอัตโนมัติ ให้เพิ่มคอมโพเนนต์สคริปต์ C# ก่อน</value></data>
 </root>

@@ -6593,4 +6593,9 @@
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>ح</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>ق</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>ویرایشگر ساده</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>زمان‌اجرای WebView2 نصب نشده است، بنابراین از یک ویرایشگر ساده با امکانات کمتر استفاده می‌شود (مثلاً بدون تاشدن و بدون تکمیل خودکار اسکریپت‌ها). زمان‌اجرای Microsoft Edge WebView2 را نصب کنید و سپس ویرایشگر را دوباره باز کنید.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>ویرایشگر کد (WebView2) شروع نشد، بنابراین از یک ویرایشگر ساده با امکانات کمتر استفاده می‌شود. نصب مجدد زمان‌اجرای Microsoft Edge WebView2 ممکن است مشکل را برطرف کند.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>دریافت زمان‌اجرای WebView2</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>برای استفاده از تکمیل خودکار، مؤلفهٔ اسکریپت C# را اضافه کنید.</value></data>
 </root>

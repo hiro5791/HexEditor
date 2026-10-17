@@ -6593,4 +6593,9 @@ Típus: {4}</value></data>
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>P</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Z</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ó</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Alapszerkesztő</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>A WebView2 Runtime nincs telepítve, ezért kevesebb funkciót kínáló alapszerkesztő működik (például nincs összecsukás és nincs kódkiegészítés a szkriptekhez). Telepítse a Microsoft Edge WebView2 Runtime-ot, majd nyissa meg újra a szerkesztőt.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>A kódszerkesztő (WebView2) nem indult el, ezért kevesebb funkciót kínáló alapszerkesztő működik. A Microsoft Edge WebView2 Runtime újratelepítése megoldhatja a problémát.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>WebView2 Runtime letöltése</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>A kódkiegészítés használatához adja hozzá a C# szkriptkomponenst.</value></data>
 </root>

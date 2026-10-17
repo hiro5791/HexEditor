@@ -6593,4 +6593,9 @@
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>ذ</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>ي</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>ذ</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>محرر أساسي</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>بيئة تشغيل WebView2 غير مثبتة، لذلك يُستخدم محرر أساسي بميزات أقل (مثل عدم توفر الطي وإكمال البرامج النصية). ثبّت بيئة تشغيل Microsoft Edge WebView2 ثم أعد فتح المحرر.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>تعذّر بدء محرر التعليمات البرمجية (WebView2)، لذلك يُستخدم محرر أساسي بميزات أقل. قد تؤدي إعادة تثبيت بيئة تشغيل Microsoft Edge WebView2 إلى حل المشكلة.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>الحصول على بيئة تشغيل WebView2</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>لاستخدام الإكمال، أضف مكوّن برنامج C# النصي.</value></data>
 </root>

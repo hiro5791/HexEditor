@@ -6593,4 +6593,9 @@ Tip: {4}</value></data>
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>H</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ț</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ă</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Editor de bază</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>WebView2 Runtime nu este instalat, așa că se folosește un editor de bază cu mai puține funcții (de exemplu, fără restrângere și fără completare pentru scripturi). Instalați Microsoft Edge WebView2 Runtime, apoi redeschideți editorul.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Editorul de cod (WebView2) nu a putut porni, așa că se folosește un editor de bază cu mai puține funcții. Reinstalarea Microsoft Edge WebView2 Runtime poate rezolva problema.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Obțineți WebView2 Runtime</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Pentru a folosi completarea, adăugați componenta de script C#.</value></data>
 </root>

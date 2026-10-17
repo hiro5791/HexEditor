@@ -6593,4 +6593,9 @@ Tür: {4}</value></data>
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>H</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ç</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Temel düzenleyici</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>WebView2 Runtime yüklü olmadığı için daha az özelliği olan bir temel düzenleyici kullanılıyor (örneğin katlama ve betikler için tamamlama yok). Microsoft Edge WebView2 Runtime'ı yükleyip düzenleyiciyi yeniden açın.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Kod düzenleyici (WebView2) başlatılamadığı için daha az özelliği olan bir temel düzenleyici kullanılıyor. Microsoft Edge WebView2 Runtime'ı yeniden yüklemek sorunu çözebilir.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>WebView2 Runtime'ı edinin</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Tamamlamayı kullanmak için C# betik bileşenini ekleyin.</value></data>
 </root>

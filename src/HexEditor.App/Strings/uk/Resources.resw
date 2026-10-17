@@ -6593,4 +6593,9 @@
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>A</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>B</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>A</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Базовий редактор</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>WebView2 Runtime не встановлено, тому використовується базовий редактор з меншою кількістю функцій (наприклад, без згортання та без автодоповнення для скриптів). Установіть Microsoft Edge WebView2 Runtime і знову відкрийте редактор.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Не вдалося запустити редактор коду (WebView2), тому використовується базовий редактор з меншою кількістю функцій. Можливо, допоможе перевстановлення Microsoft Edge WebView2 Runtime.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Отримати WebView2 Runtime</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Щоб використовувати автодоповнення, додайте компонент скриптів C#.</value></data>
 </root>

@@ -6593,4 +6593,9 @@
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>J</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>基本編輯器</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>未安裝 WebView2 執行階段，因此使用功能較少的基本編輯器(例如沒有摺疊，也沒有指令碼自動完成)。請安裝 Microsoft Edge WebView2 執行階段，然後重新開啟編輯器。</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>無法啟動程式碼編輯器 (WebView2)，因此使用功能較少的基本編輯器。重新安裝 Microsoft Edge WebView2 執行階段可能可以解決此問題。</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>取得 WebView2 執行階段</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>若要使用自動完成，請先新增 C# 指令碼元件。</value></data>
 </root>

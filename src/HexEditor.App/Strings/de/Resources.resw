@@ -6593,4 +6593,9 @@ Typ: {4}</value></data>
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>Ö</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>G</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>W</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Einfacher Editor</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>Die WebView2-Runtime ist nicht installiert, daher wird ein einfacher Editor mit weniger Funktionen verwendet (z. B. ohne Einklappen und ohne Vervollständigung für Skripte). Installieren Sie die Microsoft Edge WebView2-Runtime und öffnen Sie den Editor dann erneut.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Der Code-Editor (WebView2) konnte nicht gestartet werden, daher wird ein einfacher Editor mit weniger Funktionen verwendet. Eine Neuinstallation der Microsoft Edge WebView2-Runtime kann das Problem beheben.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>WebView2-Runtime herunterladen</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Fügen Sie die C#-Skriptkomponente hinzu, um die Vervollständigung zu verwenden.</value></data>
 </root>

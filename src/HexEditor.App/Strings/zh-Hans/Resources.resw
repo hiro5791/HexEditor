@@ -6593,4 +6593,9 @@
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>J</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>基本编辑器</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>未安装 WebView2 运行时，因此使用功能较少的基本编辑器(例如没有折叠，也没有脚本补全)。请安装 Microsoft Edge WebView2 运行时，然后重新打开编辑器。</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>无法启动代码编辑器 (WebView2)，因此使用功能较少的基本编辑器。重新安装 Microsoft Edge WebView2 运行时可能会解决此问题。</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>获取 WebView2 运行时</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>要使用补全，请添加 C# 脚本组件。</value></data>
 </root>

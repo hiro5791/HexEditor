@@ -6593,4 +6593,9 @@ Tipe: {4}</value></data>
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>Q</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>V</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Editor dasar</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>WebView2 Runtime belum terpasang, jadi editor dasar dengan fitur lebih sedikit digunakan (misalnya, tanpa pelipatan dan tanpa pelengkapan otomatis untuk skrip). Pasang Microsoft Edge WebView2 Runtime, lalu buka kembali editor.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Editor kode (WebView2) tidak dapat dimulai, jadi editor dasar dengan fitur lebih sedikit digunakan. Memasang ulang Microsoft Edge WebView2 Runtime mungkin dapat memperbaikinya.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Dapatkan WebView2 Runtime</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Untuk menggunakan pelengkapan otomatis, tambahkan komponen skrip C#.</value></data>
 </root>

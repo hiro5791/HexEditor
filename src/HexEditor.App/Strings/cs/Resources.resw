@@ -6593,4 +6593,9 @@ Typ: {4}</value></data>
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>G</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Š</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ě</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Základní editor</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>Modul runtime WebView2 není nainstalován, proto se používá základní editor s menším počtem funkcí (například bez sbalování a bez doplňování ve skriptech). Nainstalujte Microsoft Edge WebView2 Runtime a poté editor znovu otevřete.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Editor kódu (WebView2) se nepodařilo spustit, proto se používá základní editor s menším počtem funkcí. Může pomoci přeinstalace Microsoft Edge WebView2 Runtime.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Získat WebView2 Runtime</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Chcete-li použít doplňování, přidejte komponentu skriptů C#.</value></data>
 </root>

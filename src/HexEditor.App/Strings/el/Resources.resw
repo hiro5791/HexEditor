@@ -6593,4 +6593,9 @@
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>Φ</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ή</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ά</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Βασικός επεξεργαστής</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>Το WebView2 Runtime δεν είναι εγκατεστημένο, γι' αυτό χρησιμοποιείται ένας βασικός επεξεργαστής με λιγότερες δυνατότητες (για παράδειγμα, χωρίς σύμπτυξη και χωρίς συμπλήρωση για σενάρια). Εγκαταστήστε το Microsoft Edge WebView2 Runtime και ανοίξτε ξανά τον επεξεργαστή.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Δεν ήταν δυνατή η εκκίνηση του επεξεργαστή κώδικα (WebView2), γι' αυτό χρησιμοποιείται ένας βασικός επεξεργαστής με λιγότερες δυνατότητες. Η επανεγκατάσταση του Microsoft Edge WebView2 Runtime ίσως λύσει το πρόβλημα.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Λήψη του WebView2 Runtime</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Για να χρησιμοποιήσετε τη συμπλήρωση, προσθέστε το στοιχείο σεναρίων C#.</value></data>
 </root>

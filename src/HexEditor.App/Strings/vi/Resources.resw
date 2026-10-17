@@ -6593,4 +6593,9 @@ Kiểu: {4}</value></data>
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>Ỏ</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>Ả</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>Trình soạn thảo cơ bản</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>WebView2 Runtime chưa được cài đặt nên một trình soạn thảo cơ bản với ít tính năng hơn đang được dùng (ví dụ: không có thu gọn mã và không có gợi ý hoàn thành cho tập lệnh). Hãy cài đặt Microsoft Edge WebView2 Runtime, rồi mở lại trình soạn thảo.</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>Không thể khởi động trình soạn thảo mã (WebView2) nên một trình soạn thảo cơ bản với ít tính năng hơn đang được dùng. Cài đặt lại Microsoft Edge WebView2 Runtime có thể khắc phục được.</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>Tải WebView2 Runtime</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>Để dùng tính năng gợi ý hoàn thành, hãy thêm thành phần tập lệnh C#.</value></data>
 </root>
