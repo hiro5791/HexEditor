@@ -152,10 +152,29 @@ public sealed class InspectorUserTypeTests
 
         // 3・4: #0000FF に書き換えると 0x2〜0x3 が 1F 00 になり、Ctrl+Z で E0 07 に戻る。
         string type = row["id"]!.GetValue<string>()["Inspector_Row_".Length..];
-        await InspectorTests.WriteAsync(app, type, "#0000FF");
-        // テンプレートの型の書き込みは評価のあとに反映されるため、書き換わるのを待つ。
-        await app.WaitUntilAsync(async () => (await app.BytesAsync(2, 2)).SequenceEqual(new byte[] { 0x1F, 0x00 }),
-            TimeSpan.FromSeconds(15), "the written bytes at 0x2");
+        await InspectorTests.BeginEditAsync(app, type, "#0000FF");
+        JsonObject enter = await InspectorTests.PanelKeyAsync(app, "Enter");
+        await app.IdleAsync();
+        JsonObject edited = await InspectorTests.RowAsync(app, type);
+        if (edited["editing"]!.GetValue<bool>() && enter["handledBy"]?.GetValue<string>() != "inspector")
+        {
+            // Enter が入力欄に届かなかった (フォーカスの移動の途中など) ときだけ、もう一度押す。確定を拒んだ (誤り) ときは押し直さない
+            enter = await InspectorTests.PanelKeyAsync(app, "Enter");
+            await app.IdleAsync();
+        }
+
+        // テンプレートの型の書き込みは評価のあとに反映されるため、書き換わるのを待つ。失敗したら行の状態を出す (原因を調べるため)
+        try
+        {
+            await app.WaitUntilAsync(async () => (await app.BytesAsync(2, 2)).SequenceEqual(new byte[] { 0x1F, 0x00 }),
+                TimeSpan.FromSeconds(15), "the written bytes at 0x2");
+        }
+        catch (TimeoutException ex)
+        {
+            JsonObject now = await InspectorTests.RowAsync(app, type);
+            throw new TimeoutException($"{ex.Message} Enter: {enter.ToJsonString()}; row: editing={now["editing"]}, editText={now["editText"]}, " +
+                $"preview={now["preview"]}, error={now["error"]}, status={now["status"]}, value={now["value"]}", ex);
+        }
         await app.FocusAsync("editor");
         await app.KeyAsync("Z", ctrl: true);
         await app.IdleAsync();

@@ -178,7 +178,17 @@ public sealed class CodeEditorMonacoTests
         await OpenScriptAsync(ctx, app, "offline.js", string.Empty);
         await EditorAsync(app, "type", new JsonObject { ["text"] = "doc." });
         await WaitForJsServiceAsync(app);
-        JsonObject suggest = (await EditorAsync(app, "suggest"))["result"]!.AsObject();
+
+        // 一覧は候補を集めてから表示するので、読んだ時点では候補があってもまだ表示されていないことがある。表示されるまで待つ
+        // (「.」での自動起動が言語サービスの準備前で出なかったときのため、一度だけ明示的にも起動する。他の補完のテストと同じ)
+        JsonObject suggest = [];
+        bool triggered = false;
+        await app.WaitUntilAsync(async () =>
+        {
+            suggest = (await EditorAsync(app, "suggest", new JsonObject { ["trigger"] = !triggered }))["result"]!.AsObject();
+            triggered = true;
+            return suggest["visible"]!.GetValue<bool>() && suggest["rows"]!.AsArray().Count > 0;
+        }, Wait, "the visible completion list");
         Assert.True(suggest["visible"]!.GetValue<bool>(), suggest.ToJsonString());
         Assert.NotEmpty(suggest["rows"]!.AsArray());
 
