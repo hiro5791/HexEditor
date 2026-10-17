@@ -449,7 +449,8 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Build
         run: |
-          dotnet build tests/HexEditor.Core.Tests -c Release
+          # テスト用のフック (偽のデバイスなど) を使うテストもあるので、test-x64 と同じく HexTestHooks を付ける
+          dotnet build tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true
           if ($LASTEXITCODE -ne 0) { exit 1 }
           dotnet build tools/TestDataGen -c Release
       - name: Sample data (TestDataGen)
@@ -463,7 +464,7 @@ jobs:
       - name: Reference dumps (official compiler and JavaScript runtime)
         run: node tools/KaitaiReference/dump.js "$env:HEXEDITOR_KAITAI_REF\formats" "$env:HEXEDITOR_KAITAI_REF\data" "$env:HEXEDITOR_KAITAI_REF\ref" $env:KSF_COMMIT
       - name: Compare (TC-TPL-33-01)
-        run: dotnet test tests/HexEditor.Core.Tests -c Release --no-build --filter "FullyQualifiedName~HexEditor.Core.Tests.Templates.KaitaiTests" --logger "trx;LogFileName=kaitai.trx" --logger "console;verbosity=normal" --results-directory TestResults
+        run: dotnet test tests/HexEditor.Core.Tests -c Release -p:HexTestHooks=true --no-build --filter "FullyQualifiedName~HexEditor.Core.Tests.Templates.KaitaiTests" --logger "trx;LogFileName=kaitai.trx" --logger "console;verbosity=normal" --results-directory TestResults
       - name: Report
         if: always()
         shell: pwsh
@@ -476,6 +477,18 @@ jobs:
           }
           $ref = Join-Path $env:HEXEDITOR_KAITAI_REF ref
           if (Test-Path $ref) { Copy-Item $ref TestResults/kaitai-ref -Recurse }
+          # 不一致を開発者の PC で調べられるよう、使った .ksy (フォーマット集の .ksy だけ。フォルダの構成のまま) とサンプルも入れる
+          $formats = Join-Path $env:HEXEDITOR_KAITAI_REF formats
+          if (Test-Path $formats) {
+            $root = (Resolve-Path $formats).Path
+            Get-ChildItem $root -Recurse -File -Filter *.ksy | ForEach-Object {
+              $dest = Join-Path TestResults/kaitai-formats $_.FullName.Substring($root.Length).TrimStart([char]92, [char]47)
+              New-Item -ItemType Directory -Force (Split-Path $dest) | Out-Null
+              Copy-Item $_.FullName $dest
+            }
+          }
+          $data = Join-Path $env:HEXEDITOR_KAITAI_REF data
+          if (Test-Path $data) { Copy-Item $data TestResults/kaitai-data -Recurse }
       - name: Upload
         if: always()
         uses: actions/upload-artifact@v4

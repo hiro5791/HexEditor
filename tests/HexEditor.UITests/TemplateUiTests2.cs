@@ -428,9 +428,16 @@ public sealed class TemplateEditingUiTests
         await app.WaitUntilAsync(async () => (await FollowNameAsync()).Contains(Name(s1), StringComparison.Ordinal), Wait, "the second section name");
         Assert.Equal(fixedName, await PeekAsync("sections[0].Name", 0));
 
+        // 追従の適用は、カーソルの移動の後に評価し直す。その間は行の状態が空になるので、評価が終わって「追従」になるのを待つ
         await TemplateAsync(app, "reveal", new JsonObject { ["path"] = "@app", ["app"] = 1, ["select"] = false });
-        JsonObject s = await TemplateAsync(app, "state", new JsonObject { ["rows"] = 3000 });
-        Assert.Equal("Follow", s["rows"]!.AsArray().Where(r => r!["kind"]!.GetValue<string>() == "Application").ElementAt(1)!["status"]!.GetValue<string>());
+        string followStatus = string.Empty;
+        await app.WaitUntilAsync(async () =>
+        {
+            JsonObject s = await TemplateAsync(app, "state", new JsonObject { ["rows"] = 3000 });
+            followStatus = s["rows"]!.AsArray().Where(r => r!["kind"]!.GetValue<string>() == "Application").ElementAt(1)!["status"]!.GetValue<string>();
+            return followStatus == "Follow";
+        }, Wait, "the follow application status");
+        Assert.Equal("Follow", followStatus);
         JsonArray focus = (await app.SendAsync("highlights"))["segments"]!.AsArray();
         Assert.Contains(focus, h => h!["tag"]!.GetValue<string>() == "templateFollow" && h["background"] is null);
 

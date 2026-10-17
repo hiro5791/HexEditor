@@ -88,6 +88,11 @@ public sealed class InspectorTests
         await app.UiaSetValueAsync("Inspector_Edit", text);
         await app.WaitUntilAsync(async () => (await app.ElementAsync("Inspector_Edit"))["text"]?.GetValue<string>() == text, TimeSpan.FromSeconds(5),
             "the typed value in the input box");
+
+        // TextBox.TextChanged は後から (非同期に) 届き、そこで行の入力の値 (editText) が変わる。その前に Enter を押すと前の値で確定するので、
+        // ビューモデルに届くのを待つ。
+        await app.WaitUntilAsync(async () => (await RowAsync(app, type))["editText"]?.GetValue<string>() == text, TimeSpan.FromSeconds(5),
+            "the typed value in the inspector row");
     }
 
     /// <summary>値を書き込む (入力して Enter)。</summary>

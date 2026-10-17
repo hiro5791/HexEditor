@@ -274,7 +274,13 @@ async function main() {
   };
   fs.mkdirSync(outDir, { recursive: true });
   for (const format of formats) {
-    const r = await dumpOne(format, toolchain);
+    let r;
+    try {
+      r = await dumpOne(format, toolchain);
+    } catch (e) {
+      // dump.js 自身の誤り (データがないなど) も、その形式の JSON に書いて次の形式に進む (判定はテスト側)
+      r = { key: format.key, ksy: format.ksy, data: format.data, toolchain, compileError: 'dump.js: ' + errorText(e), error: null, root: null };
+    }
     fs.writeFileSync(path.join(outDir, format.key + '.json'), JSON.stringify(r, null, 1));
     const state = r.compileError ? 'compile error: ' + r.compileError : r.error ? 'parse error: ' + r.error : 'ok';
     console.log(`${format.key}: ${state}`);

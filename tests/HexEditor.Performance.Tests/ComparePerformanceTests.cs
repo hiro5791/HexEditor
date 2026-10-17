@@ -90,7 +90,16 @@ public sealed class ComparePerformanceTests(ITestOutputHelper output)
     [Trait(TC, "TC-ANA-03-05")]
     public async Task AWindowOfSixteenMegabytesKeepsMemoryBounded()
     {
+        // 同じプロセスで先に動いた性能テストが残したメモリ (GC の後も OS に返らない分) は、アプリのプロセスでは起きないため除く
+        // (SearchPerformanceTests と同じ)。
         GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, blocking: true, compacting: true);
+        GC.WaitForPendingFinalizers();
+        long leftover;
+        using (var process = Process.GetCurrentProcess())
+        {
+            leftover = Math.Max(0, process.PrivateMemorySize64 - StartupPrivateBytes);
+        }
+
         var left = new RandomData(GiB, 0xA0A0_1001);
         var right = new RandomData(GiB, 0xA0A0_3003);
         using var result = new CompareResult(CompareMethod.InsertDelete, CompareRange.Whole(left), CompareRange.Whole(right));
@@ -100,8 +109,9 @@ public sealed class ComparePerformanceTests(ITestOutputHelper output)
 
         Assert.Equal(CompareState.Completed, result.State);
         output.WriteLine($"プライベートバイトの最大: {max / MiB} MiB、{watch.Elapsed.TotalSeconds:F1} 秒、差分 {result.Diffs.Count} 件、" +
-            $"打ち切ったウィンドウ {result.AbortedWindows} 個");
-        Assert.True(max <= 1024 * MiB + StartupPrivateBytes, $"プライベートバイトの最大: {max / MiB} MiB");
+            $"打ち切ったウィンドウ {result.AbortedWindows} 個、先に動いたテストの残り {leftover / MiB} MiB");
+        Assert.True(max - leftover <= 1024 * MiB + StartupPrivateBytes,
+            $"プライベートバイトの最大: {max / MiB} MiB (先に動いたテストの残り {leftover / MiB} MiB を除いて {(max - leftover) / MiB} MiB)");
     }
 
     /// <summary>

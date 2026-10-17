@@ -211,7 +211,7 @@ public sealed class TemplateRobustnessTests
         string template = kind switch
         {
             "HEAVY" => File.ReadAllText(Data("heavy.hxt")) + "\nHeavy h[eof];",
-            "FIND" => "for (local u32 i = 0; i < 1000; i += 1) { local u64 n = std::mem::find(x\"DE AD BE EF 01 02 03 04\", 0, std::core::size()); }",
+            "FIND" => "for (local u32 i = 0; i < 1000000; i += 1) { local u64 n = std::mem::find(x\"DE AD BE EF 01 02 03 04\", 0, std::core::size()); }",
             _ => kind,
         };
         TemplateDataSource source = slow ? new Slow(data) : TemplateDataSource.FromBytes(data);

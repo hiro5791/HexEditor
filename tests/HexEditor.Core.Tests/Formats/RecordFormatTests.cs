@@ -273,7 +273,8 @@ public sealed class RecordFormatTests
     [Trait(TC, "TC-TOOL-06-03")]
     public Property Random_s_records_round_trip() => Prop.ForAll(Data(), Gen.Choose(0, 0x7FFF).ToArbitrary(), (data, page) =>
     {
-        long start = (long)page << 17;
+        // S-record (S3) で表せるのは 0xFFFFFFFF まで。データの末尾がそれを超えない位置にする
+        long start = Math.Min((long)page << 17, 0x1_0000_0000L - data.Length);
         var options = new ExportOptions { Format = FormatIds.SRecord, StartAddress = start };
         using ImportResult result = Import(FormatIds.SRecord, Export(data, options));
         return result.Issues.Count == 0 && Bytes(result).AsSpan().SequenceEqual(data) && (data.Length == 0 || result.BaseAddress == start);
