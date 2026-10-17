@@ -211,11 +211,12 @@ public sealed class TemplateRobustnessTests
         string template = kind switch
         {
             "HEAVY" => File.ReadAllText(Data("heavy.hxt")) + "\nHeavy h[eof];",
-            "FIND" => "for (local u32 i = 0; i < 1000; i += 1) { local u64 n = std::mem::find(x\"DE AD BE EF 01 02 03 04\", 0, std::core::size()); }",
+            "FIND" => "for (local u32 i = 0; i < 1000000; i += 1) { local u64 n = std::mem::find(x\"DE AD BE EF 01 02 03 04\", 0, std::core::size()); }",
             _ => kind,
         };
         TemplateDataSource source = slow ? new Slow(data) : TemplateDataSource.FromBytes(data);
-        // 空ループは速い CPU だと既定の steps 上限 (1 億) を 1 秒未満で使い切るので、キャンセル以外で終わらないよう上限を外す
+        // 空ループは速い CPU だと既定の steps 上限 (1 億) を 1 秒未満で使い切るので、キャンセル以外で終わらないよう上限を外す。
+        // FIND も速い CPU では 1000 回の検索が 1 秒未満で終わるので、回数をキャンセルまでに終わらない数にしてある
         var options = new TemplateApplyOptions { LimitOverride = TemplateLimits.Default with { Steps = long.MaxValue } };
         TemplateResult r = TemplateEngine.Apply(Load(template), source, options);
         Assert.False(Wait(r.Completion, TimeSpan.FromSeconds(1)));
