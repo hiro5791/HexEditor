@@ -98,7 +98,8 @@ public sealed class RecordFormatTests
     public Property Random_intel_hex_round_trips() => Prop.ForAll(Data(), Gen.Choose(0, 0x7FFF).ToArbitrary(), Gen.Elements(1, 16, 32, 255).ToArbitrary(),
         (data, page, length) =>
         {
-            long start = (long)page << 17; // 0〜0xFFFE0000
+            // Intel HEX も 0xFFFFFFFF までしか表せないので、データの末尾がそこを超えない位置に置く
+            long start = Math.Min((long)page << 17, 0x1_0000_0000L - data.Length);
             string text = Export(data, Ihex(length, IntelHexAddressMode.Auto, start));
             using ImportResult result = Import(FormatIds.IntelHex, text);
             return result.Issues.ErrorCount == 0 && Bytes(result).AsSpan().SequenceEqual(data)
@@ -273,7 +274,8 @@ public sealed class RecordFormatTests
     [Trait(TC, "TC-TOOL-06-03")]
     public Property Random_s_records_round_trip() => Prop.ForAll(Data(), Gen.Choose(0, 0x7FFF).ToArbitrary(), (data, page) =>
     {
-        long start = (long)page << 17;
+        // S-record は 0xFFFFFFFF までしか表せないので、データの末尾がそこを超えない位置に置く
+        long start = Math.Min((long)page << 17, 0x1_0000_0000L - data.Length);
         var options = new ExportOptions { Format = FormatIds.SRecord, StartAddress = start };
         using ImportResult result = Import(FormatIds.SRecord, Export(data, options));
         return result.Issues.Count == 0 && Bytes(result).AsSpan().SequenceEqual(data) && (data.Length == 0 || result.BaseAddress == start);
