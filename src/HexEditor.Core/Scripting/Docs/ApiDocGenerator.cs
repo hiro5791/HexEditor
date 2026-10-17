@@ -105,7 +105,9 @@ public sealed class ApiDocGenerator
 
         foreach (string line in inner.ToString().TrimEnd().Split('\n'))
         {
-            sb.AppendLine(line.Length == 0 ? "" : "    " + line.TrimEnd('\r'));
+            // 空行に空白を残さない (改行が CRLF のときの "\r" だけの行も空行として扱う)
+            string trimmed = line.TrimEnd('\r');
+            sb.AppendLine(trimmed.Length == 0 ? "" : "    " + trimmed);
         }
 
         sb.AppendLine("}");

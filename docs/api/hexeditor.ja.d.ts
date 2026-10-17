@@ -58,7 +58,7 @@ declare namespace HexEditor {
         /** スクリプトを終え、ヘッドレス実行の終了コードを決める (0〜255。スクリプト独自の意味には 64 以上を使う)。 */
         exit(code: number): void;
     }
-    
+
     /** 1 つのブックマーク。 */
     interface Bookmark {
         /** 名前。 */
@@ -74,7 +74,7 @@ declare namespace HexEditor {
         /** 番号付きブックマークの番号 (1〜9)。なければ null。 */
         readonly number: number | null;
     }
-    
+
     /** ドキュメントのブックマーク (AUTO-11)。配列のように列挙できる。スクリプトが追加したものも利用者のものと同じく保存される。 */
     interface Bookmarks extends Iterable<Bookmark> {
         readonly length: number;
@@ -91,7 +91,7 @@ declare namespace HexEditor {
         /** 結果ごとにブックマークを追加する (100 万件まで)。`nameFormat` の `{index}` は 1 から始まる連番。 */
         addFromResults(results: ByteRange[], nameFormat?: string): number;
     }
-    
+
     /** クリップボード (AUTO-15)。 */
     interface Clipboard {
         /** 文字列を置く。 */
@@ -107,7 +107,7 @@ declare namespace HexEditor {
         /** Copy As と同じ形式の文字列を、クリップボードに置かずに返す。 */
         formatAs(document: Document, range: RangeArg, formatId: string, options?: CopyAsOptions): string;
     }
-    
+
     /** アプリのコマンドを ID で実行する (AUTO-06)。 */
     interface Commands {
         /** コマンド `id` を実行する。確認を求めるコマンドは `args.confirm` で答えを渡せる。渡さない場合、対話的な実行ではダイアログを出し、ヘッドレス実行では安全側 (キャンセル) を選ぶ。 */
@@ -115,7 +115,7 @@ declare namespace HexEditor {
         /** コマンドの一覧 (ID・表示名・引数)。 */
         list(): CommandInfo[];
     }
-    
+
     /** 開いている 1 つのドキュメント (AUTO-07)。同期の読み書きは 1 回 16 MB まで (AUTO-05)。それより大きい量は `chunks` と一括処理 API (AUTO-09) を使う。 */
     interface Document {
         /** セッション中で一意な識別子。 */
@@ -225,13 +225,13 @@ declare namespace HexEditor {
         /** 構造体テンプレートを適用し (AUTO-13)、解析結果のツリーの根を返す。 */
         applyTemplate(nameOrPath: string, options?: ApplyTemplateOptions): Promise<TemplateNode>;
     }
-    
+
     /** `on` が返す購読。 */
     interface EventSubscription {
         /** イベントの受け取りをやめる。 */
         off(): void;
     }
-    
+
     /** ファイル (AUTO-18)。許可 `file-read` / `file-write` が必要。利用者が選んだパスと、スクリプトのフォルダ以下の読み取りは許可なしで使える。 */
     interface FileSystem {
         /** ファイルを読む (1 回 16 MB まで)。 */
@@ -253,7 +253,7 @@ declare namespace HexEditor {
         /** フォルダを作る。 */
         createFolder(path: string): void;
     }
-    
+
     /** ハッシュとチェックサム (AUTO-14)。 */
     interface Hash {
         /** 使えるアルゴリズムの一覧。 */
@@ -265,7 +265,7 @@ declare namespace HexEditor {
         /** ファイルを開かずに計算する (許可 `file-read` または利用者が選んだパス)。 */
         computeFile(path: string, algorithms: HashAlgorithmSpec[], options?: AsyncOptions): Promise<HashResult[]>;
     }
-    
+
     /** 一時的な強調表示 (AUTO-07)。 */
     interface Highlights {
         /** 範囲を名前付きの色で強調表示する。 */
@@ -273,7 +273,7 @@ declare namespace HexEditor {
         /** このスクリプトの強調表示をすべて消す。 */
         clear(): void;
     }
-    
+
     /** データインスペクタの型と値の変換 (AUTO-12)。 */
     interface Inspector {
         /** 使える型の一覧 (プラグインの型を含む)。 */
@@ -287,13 +287,13 @@ declare namespace HexEditor {
         /** インスペクタパネルの型を隠す。 */
         hide(typeId: string): void;
     }
-    
+
     /** スクリプトの通信 (AUTO-18、許可 `network`)。 */
     interface Net {
         /** HTTPS / HTTP の GET・POST。応答の本文は 100 MB まで。 */
         fetch(url: string, options?: FetchOptions): Promise<FetchResponse>;
     }
-    
+
     /** スクリプトから見たプラグイン 1 つ。 */
     interface PluginHandle {
         /** プラグイン ID。 */
@@ -307,7 +307,7 @@ declare namespace HexEditor {
         /** プラグインがスクリプトに提供するオブジェクト (`IScriptApiProvider`)。なければ null。 */
         readonly api: any | null;
     }
-    
+
     /** 入っているプラグイン (AUTO-31、AUTO-32)。 */
     interface Plugins {
         /** すべてのプラグインと状態。 */
@@ -315,13 +315,13 @@ declare namespace HexEditor {
         /** ID でプラグインを取得する。入っていなければ null。 */
         get(id: string): PluginHandle | null;
     }
-    
+
     /** 外部プログラム (AUTO-18、許可 `process`)。 */
     interface ProcessRunner {
         /** シェルを経由せずにプログラムを実行する。`args` の各要素がそのまま 1 つの引数になる。 */
         run(path: string, args: string[], options?: ProcessOptions): Promise<ProcessResult>;
     }
-    
+
     /** 実行中のスクリプト (AUTO-17)。 */
     interface Script {
         /** 表示名。 */
@@ -335,7 +335,7 @@ declare namespace HexEditor {
         /** このスクリプトの永続的な保存領域 (1 MB)。 */
         readonly storage: ScriptStorage;
     }
-    
+
     /** スクリプトごとの永続的な保存領域 (AUTO-17)。 */
     interface ScriptStorage {
         /** 値を読む。なければ null。 */
@@ -345,7 +345,7 @@ declare namespace HexEditor {
         /** 値を削除する。 */
         remove(key: string): void;
     }
-    
+
     /** 選択範囲 (マルチ選択・矩形選択を含む。AUTO-10)。 */
     interface Selection {
         /** 主選択範囲の開始。 */
@@ -371,7 +371,7 @@ declare namespace HexEditor {
         /** 一括処理の結果をマルチ選択にする (100 万件まで)。 */
         fromResults(results: ByteRange[]): void;
     }
-    
+
     /** アプリの設定 (AUTO-17)。 */
     interface Settings {
         /** 設定値を読む (キーは設定のキー)。 */
@@ -379,7 +379,7 @@ declare namespace HexEditor {
         /** 設定を変える。その場で反映する。 */
         set(key: string, value?: unknown): void;
     }
-    
+
     /** テンプレートの解析結果のノード (AUTO-13)。 */
     interface TemplateNode {
         /** 名前。 */
@@ -401,7 +401,7 @@ declare namespace HexEditor {
         /** JSON にした内容 (コマンドラインの `template` の出力と同じ形)。 */
         toJSON(): unknown;
     }
-    
+
     /** 構造体テンプレート (AUTO-13)。 */
     interface Templates {
         /** 使えるテンプレートの一覧。 */
@@ -411,7 +411,7 @@ declare namespace HexEditor {
         /** テンプレートから呼べる関数 (テンプレート拡張。TPL-19) を登録する。登録している間スクリプトは常駐し、 `off` かスクリプトの終了で登録を外す。 */
         registerExtension(name: string, fn: (...args: any[]) => any, options?: TemplateExtensionOptions): EventSubscription;
     }
-    
+
     /** 文字コードの変換 (AUTO-12)。 */
     interface Text {
         /** 使える文字コードの一覧。 */
@@ -421,7 +421,7 @@ declare namespace HexEditor {
         /** バイト列を文字列にする。 */
         decode(bytes: BytePattern, encoding: EncodingArg, options?: DecodeOptions): string;
     }
-    
+
     /** ダイアログ・進捗・出力 (AUTO-16)。 */
     interface Ui {
         /** 処理センターの進捗。 */
@@ -449,13 +449,13 @@ declare namespace HexEditor {
         /** 出力パネルに 1 行書く。`kind`: `info`・`warning`・`error`。 */
         output(text: string, kind?: string): void;
     }
-    
+
     /** 実行中のスクリプトの処理センターの進捗。 */
     interface UiProgress {
         /** 終わった割合 (0〜1) と説明を報告する。 */
         report(fraction: number, text?: string): void;
     }
-    
+
     /** イベントのハンドラに渡す引数 (`on`)。 */
     interface ScriptEventArgs {
         /** イベントの名前 (例: `beforeSave`)。 */
@@ -465,7 +465,7 @@ declare namespace HexEditor {
         /** 操作を中止する (`beforeSave` のみ)。理由は利用者に表示する。 */
         cancel(reason: string): void;
     }
-    
+
     /** `applyTemplate` のオプション。 */
     interface ApplyTemplateOptions {
         /** テンプレートを適用するオフセット (既定 0)。 */
@@ -477,7 +477,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** 非同期 API が共通で受け取るオプション (AUTO-05)。省略した場合はスクリプト全体のキャンセルに従い、進捗を処理センターに出す。 */
     interface AsyncOptions {
         /** キャンセル (JavaScript では `script.signal` や `new AbortController().signal` などの `AbortSignal`)。 */
@@ -485,7 +485,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** `add` に渡す新しいブックマーク。 */
     interface BookmarkSpec {
         /** 開始オフセット。 */
@@ -499,13 +499,13 @@ declare namespace HexEditor {
         /** コメント。 */
         comment?: string | null;
     }
-    
+
     /** `close` のオプション。 */
     interface CloseOptions {
         /** 未保存の変更を確認なしで破棄する。 */
         discard?: boolean;
     }
-    
+
     /** アプリのコマンド。 */
     interface CommandInfo {
         /** 固定の英語の識別子 (例: `edit.fill`)。 */
@@ -517,7 +517,7 @@ declare namespace HexEditor {
         /** 受け付ける引数の名前。 */
         readonly arguments: string[];
     }
-    
+
     /** `compare` のオプション。 */
     interface CompareOptions {
         /** 差分の範囲の最大件数 (既定 1,000,000)。 */
@@ -527,7 +527,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** Copy As のオプション。 */
     interface CopyAsOptions {
         /** 1 行のバイト数 (0 は Copy As の設定)。 */
@@ -535,7 +535,7 @@ declare namespace HexEditor {
         /** Hex を大文字にする (null は Copy As の設定)。 */
         uppercase?: boolean | null;
     }
-    
+
     /** `copyRange` のオプション。 */
     interface CopyRangeOptions {
         /** 上書きでなく挿入する。 */
@@ -545,7 +545,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** カスタム CRC のパラメータ (Rocksoft のモデル)。`id` は常に `"crc"`。 */
     interface CustomCrc {
         /** 常に `"crc"`。 */
@@ -563,7 +563,7 @@ declare namespace HexEditor {
         /** 出力に XOR する値。 */
         xorOut?: number;
     }
-    
+
     /** `chunks` が読んだ 1 つのチャンク。 */
     interface DataChunk {
         /** 先頭のバイトのオフセット。 */
@@ -571,13 +571,13 @@ declare namespace HexEditor {
         /** バイト列。 */
         readonly data: Uint8Array;
     }
-    
+
     /** `decode` のオプション。 */
     interface DecodeOptions {
         /** `"replace"` (既定。不正なバイトを置換文字にする) か `"error"` (`ArgumentError` を投げる)。 */
         invalid?: string | null;
     }
-    
+
     /** アプリが対応する文字コード。 */
     interface EncodingInfo {
         /** コードページ番号。 */
@@ -587,7 +587,7 @@ declare namespace HexEditor {
         /** 表示名。 */
         readonly displayName: string;
     }
-    
+
     /** `entropy` のオプション。 */
     interface EntropyOptions {
         /** 指定するとこの大きさのブロックごとの値の配列を返す。 */
@@ -597,7 +597,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** `exportRange` のオプション。 */
     interface ExportRangeOptions {
         /** 既存のファイルを上書きする (既定 false)。 */
@@ -611,7 +611,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** `fetch` のオプション。 */
     interface FetchOptions {
         /** `"GET"` (既定) か `"POST"`。 */
@@ -629,7 +629,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** `fetch` の応答。 */
     interface FetchResponse {
         /** HTTP の状態コード。 */
@@ -639,7 +639,7 @@ declare namespace HexEditor {
         /** 本文 (`responseType` により `Uint8Array` か文字列)。 */
         readonly body: Uint8Array | string;
     }
-    
+
     /** ファイルの情報。 */
     interface FileStat {
         /** サイズ (バイト。フォルダは 0)。 */
@@ -649,13 +649,13 @@ declare namespace HexEditor {
         /** フォルダか。 */
         readonly isFolder: boolean;
     }
-    
+
     /** `fill` のオプション。 */
     interface FillOptions {
         /** 上書きでなく挿入する。 */
         insert?: boolean;
     }
-    
+
     /** 検索の API のオプション。 */
     interface FindOptions {
         /** 文字列のパターンの解釈: `"hex"` (既定。ワイルドカード可)、`"text"`、`"regex"`、`"int"`、`"float"`。バイト列のパターンはそのまま探す。 */
@@ -683,7 +683,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** `form` の 1 つの項目。 */
     interface FormField {
         /** 結果のオブジェクトでの値のキー。 */
@@ -697,7 +697,7 @@ declare namespace HexEditor {
         /** `choice` の選択肢。 */
         choices?: string[] | null;
     }
-    
+
     /** `strings` が見つけた文字列。 */
     interface FoundString {
         /** 開始オフセット。 */
@@ -709,7 +709,7 @@ declare namespace HexEditor {
         /** 文字コードの名前。 */
         readonly encoding: string;
     }
-    
+
     /** ハッシュのアルゴリズム。 */
     interface HashAlgorithmInfo {
         /** アルゴリズムの ID (例: `sha256`)。 */
@@ -719,7 +719,7 @@ declare namespace HexEditor {
         /** 出力のビット数。 */
         readonly bits: number;
     }
-    
+
     /** ハッシュの結果。 */
     interface HashResult {
         /** アルゴリズムの ID。 */
@@ -729,13 +729,13 @@ declare namespace HexEditor {
         /** 値 (バイト列)。 */
         readonly bytes: Uint8Array;
     }
-    
+
     /** インスペクタの API のオプション。 */
     interface InspectorOptions {
         /** `"le"` か `"be"` (既定はインスペクタの設定)。 */
         endian?: string | null;
     }
-    
+
     /** データインスペクタの型。 */
     interface InspectorTypeInfo {
         /** 型の ID。 */
@@ -745,7 +745,7 @@ declare namespace HexEditor {
         /** サイズ (バイト。可変長は 0)。 */
         readonly size: number;
     }
-    
+
     /** インスペクタで解釈した値。 */
     interface InspectorValue {
         /** インスペクタパネルに表示する文字列。 */
@@ -753,7 +753,7 @@ declare namespace HexEditor {
         /** 生の値 (数値・bigint・文字列・真偽値。解釈できなければ null)。 */
         readonly value: number | bigint | string | boolean | null | null;
     }
-    
+
     /** `message` のオプション。 */
     interface MessageOptions {
         /** `"info"` (既定)・`"warning"`・`"error"`。 */
@@ -761,7 +761,7 @@ declare namespace HexEditor {
         /** InfoBar でなくダイアログで表示する。 */
         modal?: boolean;
     }
-    
+
     /** `newDocument` のオプション。 */
     interface NewDocumentOptions {
         /** 初期の長さ (バイト)。 */
@@ -769,7 +769,7 @@ declare namespace HexEditor {
         /** 初期内容のパターン (既定は 0)。 */
         fill?: BytePattern | null;
     }
-    
+
     /** `open` のオプション。 */
     interface OpenOptions {
         /** 読み取り専用で開く。 */
@@ -783,7 +783,7 @@ declare namespace HexEditor {
         /** タブをアクティブにしない。 */
         background?: boolean;
     }
-    
+
     /** ファイル選択のオプション。 */
     interface PickOptions {
         /** `"*.bin"` などの種類の絞り込み。 */
@@ -793,7 +793,7 @@ declare namespace HexEditor {
         /** ダイアログのタイトル。 */
         title?: string | null;
     }
-    
+
     /** プラグインと状態。 */
     interface PluginInfo {
         /** プラグイン ID。 */
@@ -807,7 +807,7 @@ declare namespace HexEditor {
         /** 有効でない理由。なければ null。 */
         readonly reason: string | null;
     }
-    
+
     /** `run` のオプション。 */
     interface ProcessOptions {
         /** 制限時間 (秒、既定 60)。 */
@@ -821,7 +821,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** `run` の結果。 */
     interface ProcessResult {
         /** 終了コード。 */
@@ -831,7 +831,7 @@ declare namespace HexEditor {
         /** 標準エラー出力。 */
         readonly stderr: string;
     }
-    
+
     /** 入力欄の定義。 */
     interface PromptOptions {
         /** `"text"` (既定)、`"number"` (入力式)、`"offset"`、`"range"`、`"hex"`、`"choice"`。フォームでは `"checkbox"` も使える。 */
@@ -841,20 +841,20 @@ declare namespace HexEditor {
         /** `choice` の選択肢。 */
         choices?: string[] | null;
     }
-    
+
     /** `readString` のオプション。 */
     interface ReadStringOptions {
         /** 最初の NUL 文字で止める (既定 true)。 */
         stopAtNull?: boolean;
     }
-    
+
     /** 一括の検索の結果 (一致した範囲の並び)。上限の件数で打ち切った場合は `truncated` が true。 */
     interface SearchResults {
         readonly truncated: boolean;
         readonly length: number;
         [index: number]: ByteRange;
     }
-    
+
     /** `strings` のオプション。 */
     interface StringsOptions {
         /** 最小の文字数 (既定 4)。 */
@@ -870,7 +870,7 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** `registerExtension` のオプション。 */
     interface TemplateExtensionOptions {
         /** 拡張点: `"format"`、`"read"`、`"write"`、`"pointerMap"`、`"section"`、`"function"` (既定)。 */
@@ -880,7 +880,7 @@ declare namespace HexEditor {
         /** 戻り値の型 (`params` と同じ名前。既定 `"any"`)。 */
         returns?: string;
     }
-    
+
     /** 構造体テンプレート。 */
     interface TemplateInfo {
         /** テンプレートの名前。 */
@@ -890,7 +890,7 @@ declare namespace HexEditor {
         /** 対応する拡張子。 */
         readonly extensions: string[];
     }
-    
+
     /** `transform` のオプション。 */
     interface TransformOptions {
         /** 要素のサイズ: 1・2・4・8 バイト (既定 1)。 */
@@ -904,10 +904,10 @@ declare namespace HexEditor {
         /** 進捗を受け取る関数。終わった割合 (0〜1) と説明。 */
         progress?: (fraction: number, text?: string) => void | null;
     }
-    
+
     /** バイト列の引数。バイト列 (JavaScript では `Uint8Array` か数値の配列) か Hex 文字列 (例: `"DE AD"`)。一部の引数は `"random"` も受け付ける。 */
     type BytePattern = Uint8Array | number[] | string;
-    
+
     /** バイトの範囲 (開始と長さ)。終了 (`end`) は含まない。 */
     interface ByteRange {
         /** 開始オフセット。 */
@@ -917,19 +917,19 @@ declare namespace HexEditor {
         /** 範囲の直後のオフセット。 */
         readonly end: number;
     }
-    
+
     /** 文字コードの引数。コードページ番号 (例: `932`) か名前 (例: `"shift_jis"`、`"utf-16le"`)。 */
     type EncodingArg = number | string;
-    
+
     /** ハッシュのアルゴリズム。ID (例: `"sha256"`) かカスタム CRC (`CustomCrc`)。 */
     type HashAlgorithmSpec = string | CustomCrc;
-    
+
     /** 数値の引数 (オフセット・長さ)。数値か入力式の文字列 (例: `"end-0x10"`)。 */
     type OffsetArg = number | string;
-    
+
     /** 範囲の引数。`ByteRange` か入力式の文字列 (例: `"sel"`、`"0x100:0x20"` (開始:長さ)、`"0x100..0x120"` (開始..終了。終了は含まない))。 */
     type RangeArg = ByteRange | string;
-    
+
     /** データ演算のオペランド。数値 (JavaScript では `number` か `bigint`) か、繰り返しのキー (Hex 文字列。JavaScript では `hex` のパラメータの値などの `Uint8Array` も同じキーとして使える)。 */
     type TransformOperand = number | bigint | string | Uint8Array;
 }

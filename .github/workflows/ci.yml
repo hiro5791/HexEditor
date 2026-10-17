@@ -292,7 +292,7 @@ jobs:
         run: dotnet build src/HexEditor.App -c Debug -p:Platform=x64
 
       - name: Build UI tests
-        run: dotnet build tests/HexEditor.UITests -c Release
+        run: dotnet build tests/HexEditor.UITests -c Release -p:HexTestHooks=true
 
       - name: UI tests
         env:
@@ -313,7 +313,7 @@ jobs:
   ui-nightly:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: windows-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -325,7 +325,7 @@ jobs:
         run: dotnet build src/HexEditor.App -c Debug -p:Platform=x64
 
       - name: Build UI tests
-        run: dotnet build tests/HexEditor.UITests -c Release
+        run: dotnet build tests/HexEditor.UITests -c Release -p:HexTestHooks=true
 
       - name: Nightly UI tests
         env:
@@ -373,7 +373,7 @@ jobs:
         run: dotnet build src/HexEditor.App -c Debug -p:Platform=x64
 
       - name: Build UI tests
-        run: dotnet build tests/HexEditor.UITests -c Release
+        run: dotnet build tests/HexEditor.UITests -c Release -p:HexTestHooks=true
 
       # 前回の毎晩の実行 (このブランチ) の同じ組のスクリーンショットを基準にする。なければ比べない (初回)。
       - name: Previous screenshots (baseline)
