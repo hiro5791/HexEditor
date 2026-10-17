@@ -217,15 +217,21 @@ public sealed class CodeEditorMonacoTests
         AppSession app = await ctx.StartAsync();
         await TemplateEditorAsync(app, "new");
         Assert.True((await EditorAsync(app, "wait"))["ready"]!.GetValue<bool>());
-        await TemplateEditorAsync(app, "setText", new JsonObject { ["text"] = "struct Header { u32 magic; u16 version; u16 count; };\nHeader hdr;\n" });
+        const string source = "struct Header { u32 magic; u16 version; u16 count; };\nHeader hdr;\n";
+        await TemplateEditorAsync(app, "setText", new JsonObject { ["text"] = source });
+        // アプリからの本文の反映は非同期。反映前に位置を決めて入力すると 3 行目が存在せず補完が出ない
+        await WaitForModelTextAsync(app, source);
 
         // 1. 3 行目に u8 x[hdr. を入力する (. で補完の一覧)、2. 候補を読む
         await EditorAsync(app, "position", new JsonObject { ["line"] = 3, ["column"] = 1 });
         await EditorAsync(app, "type", new JsonObject { ["text"] = "u8 x[hdr." });
         JsonObject suggest = [];
+        bool triggered = false;
         await app.WaitUntilAsync(async () =>
         {
-            suggest = (await EditorAsync(app, "suggest", new JsonObject { ["trigger"] = false }))["result"]!.AsObject();
+            // 「.」での自動起動は言語サービスの準備前だと出ないので、一度だけ明示的にも起動する (出ている一覧は作り直さない)
+            suggest = (await EditorAsync(app, "suggest", new JsonObject { ["trigger"] = !triggered }))["result"]!.AsObject();
+            triggered = true;
             return suggest["rows"]!.AsArray().Count >= 3;
         }, Wait, "the member completion list");
         Dictionary<string, string> rows = suggest!["rows"]!.AsArray().ToDictionary(r => r!["label"]!.GetValue<string>(), r => r!["detail"]!.GetValue<string>());

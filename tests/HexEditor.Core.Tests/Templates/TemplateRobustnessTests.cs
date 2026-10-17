@@ -215,7 +215,9 @@ public sealed class TemplateRobustnessTests
             _ => kind,
         };
         TemplateDataSource source = slow ? new Slow(data) : TemplateDataSource.FromBytes(data);
-        TemplateResult r = TemplateEngine.Apply(Load(template), source);
+        // 空ループは速い CPU だと既定の steps 上限 (1 億) を 1 秒未満で使い切るので、キャンセル以外で終わらないよう上限を外す
+        var options = new TemplateApplyOptions { LimitOverride = TemplateLimits.Default with { Steps = long.MaxValue } };
+        TemplateResult r = TemplateEngine.Apply(Load(template), source, options);
         Assert.False(Wait(r.Completion, TimeSpan.FromSeconds(1)));
         var sw = Stopwatch.StartNew();
         r.Cancel();
