@@ -1,5 +1,5 @@
 {
-  "Exclude": ["\\.png$", "\\.ico$", "\\.pfx$", "\\.vhdx$", "\\.resw$", "^artifacts/", "/bin/", "/obj/", "^tests/fixtures/templates/data/ksy/bad/tab\\.ksy$"],
+  "Exclude": ["\\.png$", "\\.ico$", "\\.pfx$", "\\.vhdx$", "\\.resw$", "^artifacts/", "/bin/", "/obj/", "^src/HexEditor\\.App/Assets/Monaco/vs/", "^tests/fixtures/templates/data/ksy/bad/tab\\.ksy$"],
   "Disable": {
     "IndentSize": true,
     "MaxLineLength": true

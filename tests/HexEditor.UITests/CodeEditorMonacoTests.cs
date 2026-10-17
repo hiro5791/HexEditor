@@ -64,6 +64,10 @@ public sealed class CodeEditorMonacoTests
     private static Task WaitForJsServiceAsync(AppSession app) =>
         app.WaitUntilAsync(async () => (await EditorAsync(app, "jsCompletions"))["result"]?["names"]?.AsArray().Count > 0, Wait, "the JavaScript language service");
 
+    /// <summary>ページ側のモデルの本文が指定のものになるまで待つ (アプリからの本文の反映は非同期)。</summary>
+    private static Task WaitForModelTextAsync(AppSession app, string text) =>
+        app.WaitUntilAsync(async () => (await EditorAsync(app, "eval", new JsonObject { ["script"] = "hexEditor.model.getValue()" }))["result"]?.GetValue<string>() == text, Wait, "the editor text");
+
     private static async Task<JsonArray> MarkersAsync(AppSession app) => (await EditorAsync(app, "markers"))["result"]!.AsArray();
 
     // ───────────── AUTO-20 ─────────────
@@ -218,8 +222,12 @@ public sealed class CodeEditorMonacoTests
         // 1. 3 行目に u8 x[hdr. を入力する (. で補完の一覧)、2. 候補を読む
         await EditorAsync(app, "position", new JsonObject { ["line"] = 3, ["column"] = 1 });
         await EditorAsync(app, "type", new JsonObject { ["text"] = "u8 x[hdr." });
-        JsonObject suggest = (await EditorAsync(app, "suggest", new JsonObject { ["trigger"] = false }))["result"]!.AsObject();
-        Assert.True(suggest["rows"]!.AsArray().Count >= 3, suggest.ToJsonString() + " " + (await EditorAsync(app, "state")).ToJsonString());
+        JsonObject suggest = [];
+        await app.WaitUntilAsync(async () =>
+        {
+            suggest = (await EditorAsync(app, "suggest", new JsonObject { ["trigger"] = false }))["result"]!.AsObject();
+            return suggest["rows"]!.AsArray().Count >= 3;
+        }, Wait, "the member completion list");
         Dictionary<string, string> rows = suggest!["rows"]!.AsArray().ToDictionary(r => r!["label"]!.GetValue<string>(), r => r!["detail"]!.GetValue<string>());
         Assert.Contains("u32", rows["magic"], StringComparison.Ordinal);
         Assert.Contains("u16", rows["version"], StringComparison.Ordinal);
@@ -236,6 +244,7 @@ public sealed class CodeEditorMonacoTests
 
         // 1. 1 行目に u8 a (; なし)、2 行目に u8 b;
         await TemplateEditorAsync(app, "setText", new JsonObject { ["text"] = string.Empty });
+        await WaitForModelTextAsync(app, string.Empty);
         await EditorAsync(app, "type", new JsonObject { ["text"] = "u8 a\nu8 b;" });
 
         // 2. 波線 (Monaco の印) と行の印。印の文 (ホバーのツールチップ) に ; がないことの理由
@@ -328,12 +337,17 @@ public sealed class CodeEditorMonacoTests
         // AUTO-20 の仕様 2・3: C# は色分けし、C# スクリプト コンポーネントがなければ補完の代わりに案内を出す
         AppSession app = await ctx.StartAsync();
         await OpenScriptAsync(ctx, app, "colors.csx", "// comment\nvar text = \"text\";\nConsole.WriteLine(0x10);\n");
-        JsonObject page = (await EditorAsync(app, "eval", new JsonObject
+        // 色分けは非同期に行われるので、キーワードに色の印が付くまで待つ
+        JsonObject page = [];
+        await app.WaitUntilAsync(async () =>
         {
-            ["script"] = "({ language: hexEditor.model.getLanguageId(), keyword: [...document.querySelectorAll('.view-line span span')].some((s) => s.textContent === 'var' && /mtk\\d+/.test(s.className)) })",
-        }))["result"]!.AsObject();
+            page = (await EditorAsync(app, "eval", new JsonObject
+            {
+                ["script"] = "({ language: hexEditor.model.getLanguageId(), keyword: [...document.querySelectorAll('.view-line span span')].some((s) => s.textContent === 'var' && /mtk\\d+/.test(s.className)) })",
+            }))["result"]!.AsObject();
+            return page["keyword"]!.GetValue<bool>();
+        }, Wait, "the colored keyword");
         Assert.Equal("csharp", page["language"]!.GetValue<string>());
-        Assert.True(page["keyword"]!.GetValue<bool>(), page.ToJsonString());
         await app.WaitForAsync("ScriptEditor_CompletionNotice");
     });
 
