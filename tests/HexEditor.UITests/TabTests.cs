@@ -190,14 +190,16 @@ public sealed partial class TabTests
         JsonObject palette = await app.SendAsync("palette", new JsonObject { ["text"] = ">タブ: 右へ移動" });
         Assert.Equal("command:tab.moveRight", palette["entries"]![0]!["key"]!.GetValue<string>());
         Assert.True((await app.SendAsync("paletteEnter"))["invoked"]!.GetValue<bool>());
-        Assert.Equal(["file02.bin", "file01.bin", "file03.bin"], await NamesAsync(app));
+        await app.WaitUntilAsync(async () => (await NamesAsync(app)).SequenceEqual(["file02.bin", "file01.bin", "file03.bin"]), TimeSpan.FromSeconds(5), "the tab to move right");
+        await app.WaitUntilAsync(async () => await ActiveAsync(app) == "file01.bin", TimeSpan.FromSeconds(5), "file01 to stay selected");
 
         // 3〜4. 「タブ: 左へ移動」で戻る。
         await app.KeyAsync("P", ctrl: true, shift: true);
         palette = await app.SendAsync("palette", new JsonObject { ["text"] = ">タブ: 左へ移動" });
         Assert.Equal("command:tab.moveLeft", palette["entries"]![0]!["key"]!.GetValue<string>());
         Assert.True((await app.SendAsync("paletteEnter"))["invoked"]!.GetValue<bool>());
-        Assert.Equal(["file01.bin", "file02.bin", "file03.bin"], await NamesAsync(app));
+        await app.WaitUntilAsync(async () => (await NamesAsync(app)).SequenceEqual(["file01.bin", "file02.bin", "file03.bin"]), TimeSpan.FromSeconds(5), "the tab to move left");
+        Assert.Equal("file01.bin", await ActiveAsync(app));
     });
 
     [Fact]

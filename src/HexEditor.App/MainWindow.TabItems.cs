@@ -39,6 +39,7 @@ public sealed partial class MainWindow
     private readonly ObservableCollection<object> _tabItems = [];
     private readonly List<ToolPageTab> _toolTabs = [];
     private bool _syncingTabSelection;
+    private int _tabMovesPending;
 
     private void InitializeTabItems()
     {
@@ -92,6 +93,15 @@ public sealed partial class MainWindow
                     break;
                 case NotifyCollectionChangedAction.Move:
                     _tabItems.Move(e.OldStartingIndex, e.NewStartingIndex);
+
+                    // TabView は項目を動かすと、少し遅れて選択を隣のタブに変えることがある。動かしたタブを選んだままにするため、
+                    // その間の選択の変化は利用者の操作とみなさず、落ち着いてから選択を文書の側に合わせ直す。
+                    _tabMovesPending++;
+                    if (!DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, SettleTabMove))
+                    {
+                        _tabMovesPending--;
+                    }
+
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     _tabItems[e.NewStartingIndex] = e.NewItems![0]!;
@@ -119,6 +129,14 @@ public sealed partial class MainWindow
         SyncTabSelection();
     }
 
+    private void SettleTabMove()
+    {
+        if (_tabMovesPending > 0 && --_tabMovesPending == 0)
+        {
+            SyncTabSelection();
+        }
+    }
+
     /// <summary>タブ列の選択を、表示中のページか選んでいる文書に合わせる。</summary>
     private void SyncTabSelection()
     {
@@ -142,7 +160,7 @@ public sealed partial class MainWindow
     /// <summary>利用者がタブを選んだ: 文書なら選び、ページを隠す。ページのタブならページを出す。</summary>
     private void Tabs_SelectionChangedSync(object sender, SelectionChangedEventArgs e)
     {
-        if (_syncingTabSelection)
+        if (_syncingTabSelection || _tabMovesPending > 0 || Vm.IsRearranging)
         {
             return;
         }
