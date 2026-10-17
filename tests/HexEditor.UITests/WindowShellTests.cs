@@ -263,15 +263,19 @@ public sealed class WindowShellTests
         // 上端に置いて 400 ms: タイトルバー (メニュー)、ツールバー、タブ列が上から順に重なって出る。エディタは動かない。
         await app.SendAsync("fullScreenPointer", new JsonObject { ["y"] = 2 });
         await Task.Delay(400);
-        JsonObject shown = null!;
-        await app.EventuallyAsync(async () => Assert.True((shown = await app.SendAsync("shellState"))["titleBarVisible"]!.GetValue<bool>(), "the title bar"));
-        Assert.True(shown["toolbarVisible"]!.GetValue<bool>(), "the toolbar");
-        Assert.True(shown["tabStripVisible"]!.GetValue<bool>(), "the tab strip");
-        Assert.Equal(editorTop, shown["editorTop"]!.GetValue<double>(), 1);
-        Assert.Equal(0, shown["titleBarTop"]!.GetValue<double>(), 1);
-        Assert.True(shown["menuBottom"]!.GetValue<double>() > shown["menuTop"]!.GetValue<double>(), "the menu has a height");
-        Assert.Equal(shown["titleBarBottom"]!.GetValue<double>(), shown["toolbarTop"]!.GetValue<double>(), 1);
-        Assert.Equal(shown["toolbarBottom"]!.GetValue<double>(), shown["tabStripTop"]!.GetValue<double>(), 1);
+        // 表示が切り替わってから重ねる位置が決まるまで、配置が 1〜2 回かかるので、位置もまとめて待つ。
+        await app.EventuallyAsync(async () =>
+        {
+            JsonObject shown = await app.SendAsync("shellState");
+            Assert.True(shown["titleBarVisible"]!.GetValue<bool>(), "the title bar");
+            Assert.True(shown["toolbarVisible"]!.GetValue<bool>(), "the toolbar");
+            Assert.True(shown["tabStripVisible"]!.GetValue<bool>(), "the tab strip");
+            Assert.Equal(editorTop, shown["editorTop"]!.GetValue<double>(), 1);
+            Assert.Equal(0, shown["titleBarTop"]!.GetValue<double>(), 1);
+            Assert.True(shown["menuBottom"]!.GetValue<double>() > shown["menuTop"]!.GetValue<double>(), "the menu has a height");
+            Assert.Equal(shown["titleBarBottom"]!.GetValue<double>(), shown["toolbarTop"]!.GetValue<double>(), 1);
+            Assert.Equal(shown["toolbarBottom"]!.GetValue<double>(), shown["tabStripTop"]!.GetValue<double>(), 1);
+        });
 
         // 下へ離れると、また隠れる。
         await app.SendAsync("fullScreenPointer", new JsonObject { ["y"] = 600 });
