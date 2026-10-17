@@ -90,9 +90,15 @@ public sealed class InspectorTests
             "the typed value in the input box");
 
         // TextBox.TextChanged は後から (非同期に) 届き、そこで行の入力の値 (editText) が変わる。その前に Enter を押すと前の値で確定するので、
-        // ビューモデルに届くのを待つ。
-        await app.WaitUntilAsync(async () => (await RowAsync(app, type))["editText"]?.GetValue<string>() == text, TimeSpan.FromSeconds(5),
-            "the typed value in the inspector row");
+        // ビューモデルに届くのを少し待つ。行の一覧が作り直されると、状態の行と入力欄の行が別のものになり editText が変わらないことがあるので、
+        // 届かなくても失敗にはしない (確定の結果は呼び出し側が確かめる)。
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        while (watch.Elapsed < TimeSpan.FromSeconds(3) && (await RowAsync(app, type))["editText"]?.GetValue<string>() != text)
+        {
+            await Task.Delay(50);
+        }
+
+        await app.IdleAsync();
     }
 
     /// <summary>値を書き込む (入力して Enter)。</summary>
