@@ -5481,4 +5481,1072 @@
   <data name="Transfer_Choice_staticConst" xml:space="preserve"><value>static const / static μόνο για ανάγνωση</value></data>
   <data name="Transfer_textEncoding" xml:space="preserve"><value>Κωδικοποίηση κειμένου (ascii, utf-8, cp932, ...)</value></data>
   <data name="Transfer_texDocument" xml:space="preserve"><value>Πλήρες έγγραφο (\documentclass ... \end{document})</value></data>
+  <data name="TplDiag_HXT1001" xml:space="preserve"><value>Μη αναμενόμενος χαρακτήρας '{0}'</value></data>
+  <data name="TplDiag_HXT1002" xml:space="preserve"><value>Αναμένεται '{0}'</value></data>
+  <data name="TplDiag_HXT1003" xml:space="preserve"><value>Μη αναμενόμενο '{0}'</value></data>
+  <data name="TplDiag_HXT1004" xml:space="preserve"><value>Μη έγκυρος αριθμός '{0}'</value></data>
+  <data name="TplDiag_HXT1005" xml:space="preserve"><value>Η σταθερά συμβολοσειράς δεν τερματίζεται</value></data>
+  <data name="TplDiag_HXT1006" xml:space="preserve"><value>Μη έγκυρη ακολουθία διαφυγής '{0}'</value></data>
+  <data name="TplDiag_HXT1007" xml:space="preserve"><value>Το σχόλιο δεν τερματίζεται</value></data>
+  <data name="TplDiag_HXT1008" xml:space="preserve"><value>Η εμφώλευση είναι πολύ βαθιά (όριο {0})</value></data>
+  <data name="TplDiag_HXT1009" xml:space="preserve"><value>Μη έγκυρη συμβολοσειρά byte '{0}'</value></data>
+  <data name="TplDiag_HXT1010" xml:space="preserve"><value>Το πρότυπο δεν είναι έγκυρο UTF-8</value></data>
+  <data name="TplDiag_HXT1011" xml:space="preserve"><value>Το πρότυπο είναι πολύ μεγάλο (όριο 4 MB)</value></data>
+  <data name="TplDiag_HXT1012" xml:space="preserve"><value>Πάρα πολλά σφάλματα· εμφανίζονται μόνο τα πρώτα {0}</value></data>
+  <data name="TplDiag_HXT1013" xml:space="preserve"><value>Μη έγκυρη τιμή '{1}' για το pragma '{0}'</value></data>
+  <data name="TplDiag_HXT1014" xml:space="preserve"><value>Το άγνωστο pragma '{0}' αγνοήθηκε</value></data>
+  <data name="TplDiag_HXT1015" xml:space="preserve"><value>Το '{0}' έχει ήδη οριστεί στο {1}</value></data>
+  <data name="TplDiag_HXT1016" xml:space="preserve"><value>Δεν βρέθηκε το '{0}' (αναζήτηση σε: {1})</value></data>
+  <data name="TplDiag_HXT1017" xml:space="preserve"><value>Τα πρότυπα δεν μπορούν να εκτελέσουν αυτήν τη λειτουργία: {0}</value></data>
+  <data name="TplDiag_HXT1018" xml:space="preserve"><value>Αυτό το πρότυπο απαιτεί έκδοση εφαρμογής {0} ή νεότερη</value></data>
+  <data name="TplDiag_HXT1019" xml:space="preserve"><value>Το άγνωστο χαρακτηριστικό '{0}' αγνοήθηκε</value></data>
+  <data name="TplDiag_HXT1020" xml:space="preserve"><value>Το {0} δεν χωράει στο {1}</value></data>
+  <data name="TplDiag_HXT1021" xml:space="preserve"><value>Η τιμή {0} έχει περισσότερα από ένα ονόματα (χρησιμοποιείται το '{1}')</value></data>
+  <data name="TplDiag_HXT1022" xml:space="preserve"><value>Το {0} {1} υπερβαίνει το μέγιστο· χρησιμοποιείται το {2}</value></data>
+  <data name="TplDiag_HXT1023" xml:space="preserve"><value>Τα πρότυπα μαζί με τις εισαγωγές είναι πολύ μεγάλα (όριο 32 MB)</value></data>
+  <data name="TplDiag_HXT2001" xml:space="preserve"><value>Το '{0}' δεν έχει οριστεί</value></data>
+  <data name="TplDiag_HXT2002" xml:space="preserve"><value>Διαίρεση με το μηδέν</value></data>
+  <data name="TplDiag_HXT2003" xml:space="preserve"><value>Ασυμφωνία τύπων: {0}</value></data>
+  <data name="TplDiag_HXT2004" xml:space="preserve"><value>Η αναδρομή είναι πολύ βαθιά (όριο {0})</value></data>
+  <data name="TplDiag_HXT2005" xml:space="preserve"><value>Ο αριθμός των εντολών που εκτελέστηκαν έφτασε το όριο ({0})</value></data>
+  <data name="TplDiag_HXT2006" xml:space="preserve"><value>Ο αριθμός των μοτίβων έφτασε το όριο ({0})</value></data>
+  <data name="TplDiag_HXT2007" xml:space="preserve"><value>Η μνήμη αξιολόγησης έφτασε το όριο ({0})</value></data>
+  <data name="TplDiag_HXT2008" xml:space="preserve"><value>Ο χρόνος αξιολόγησης έφτασε το όριο ({0} δευτ.)</value></data>
+  <data name="TplDiag_HXT2009" xml:space="preserve"><value>Η τοποθέτηση 0x{0} βρίσκεται εκτός των δεδομένων</value></data>
+  <data name="TplDiag_HXT2010" xml:space="preserve"><value>Το {0}(0x{1}) βρίσκεται εκτός των δεδομένων</value></data>
+  <data name="TplDiag_HXT2011" xml:space="preserve"><value>Το '{0}' (0x{1}, {2} byte) βρίσκεται εκτός των δεδομένων</value></data>
+  <data name="TplDiag_HXT2012" xml:space="preserve"><value>Η θέση δεν μπορεί να είναι αρνητική ({0})</value></data>
+  <data name="TplDiag_HXT2013" xml:space="preserve"><value>Ο πίνακας δεν μπορεί να τερματιστεί επειδή το μέγεθος του στοιχείου είναι 0</value></data>
+  <data name="TplDiag_HXT2014" xml:space="preserve"><value>Ο πίνακας τερματίστηκε επειδή επιτεύχθηκε το τέλος των δεδομένων</value></data>
+  <data name="TplDiag_HXT2015" xml:space="preserve"><value>Ο πίνακας περικόπηκε στο όριο ({0} στοιχεία)</value></data>
+  <data name="TplDiag_HXT2016" xml:space="preserve"><value>Το ελλιπές τελευταίο στοιχείο ({0} byte) δεν συμπεριλήφθηκε</value></data>
+  <data name="TplDiag_HXT2017" xml:space="preserve"><value>Δεν βρέθηκε ο τερματικός χαρακτήρας της συμβολοσειράς</value></data>
+  <data name="TplDiag_HXT2018" xml:space="preserve"><value>Το LEB128 είναι μεγαλύτερο από 10 byte (μετατόπιση 0x{0})</value></data>
+  <data name="TplDiag_HXT2019" xml:space="preserve"><value>Το περιεχόμενο της δομής ({0} byte) υπερβαίνει το καθορισμένο μέγεθος ({1} byte)</value></data>
+  <data name="TplDiag_HXT2020" xml:space="preserve"><value>Ο τύπος του δείκτη πρέπει να είναι ακέραιος τύπος</value></data>
+  <data name="TplDiag_HXT2021" xml:space="preserve"><value>Εκτός εύρους (0x{0})</value></data>
+  <data name="TplDiag_HXT2022" xml:space="preserve"><value>Τα μοτίβα δεν μπορούν να δηλωθούν μέσα σε συναρτήσεις</value></data>
+  <data name="TplDiag_HXT2023" xml:space="preserve"><value>Αποτυχία βεβαίωσης: {0}</value></data>
+  <data name="TplDiag_HXT2024" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2025" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2026" xml:space="preserve"><value>Η συνάρτηση επέκτασης '{0}' δεν είναι καταχωρισμένη</value></data>
+  <data name="TplDiag_HXT2027" xml:space="preserve"><value>Η συνάρτηση επέκτασης '{0}' απέτυχε: {1}</value></data>
+  <data name="TplDiag_HXT2028" xml:space="preserve"><value>Η συνάρτηση επέκτασης '{0}' δεν επιτρέπεται να εκτελεστεί</value></data>
+  <data name="TplDiag_HXT2029" xml:space="preserve"><value>Ο δείκτης {0} είναι εκτός εύρους (0 έως {1})</value></data>
+  <data name="TplDiag_HXT2030" xml:space="preserve"><value>Δεν είναι δυνατή η χρήση του sizeof({0}) επειδή το μέγεθος του τύπου δεν είναι σταθερό</value></data>
+  <data name="TplDiag_HXT2031" xml:space="preserve"><value>Το σύνολο των πεδίων bit ({0} bit) υπερβαίνει το {1}</value></data>
+  <data name="TplDiag_HXT2032" xml:space="preserve"><value>Ένα πεδίο bit δεν μπορεί να είναι πλατύτερο από 64 bit ({0})</value></data>
+  <data name="TplDiag_HXT2033" xml:space="preserve"><value>Η αποσυμπίεση {0} απέτυχε: {1}</value></data>
+  <data name="TplDiag_HXT2034" xml:space="preserve"><value>Η αποσυμπίεση διακόπηκε επειδή τα δεδομένα έφτασαν το όριο ({0})</value></data>
+  <data name="TplDiag_HXT2035" xml:space="preserve"><value>Το {0} δεν υποστηρίζεται σε αυτήν την έκδοση</value></data>
+  <data name="TplDiag_HXT2036" xml:space="preserve"><value>Το μήκος ({0}) υπερβαίνει το όριο των 256 MB ανά κλήση</value></data>
+  <data name="TplDiag_HXT2037" xml:space="preserve"><value>Δεν είναι δυνατή η εκχώρηση στο '{0}'</value></data>
+  <data name="TplDiag_HXT2038" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2039" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση των δεδομένων στο 0x{0}</value></data>
+  <data name="TplDiag_HXT2040" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2041" xml:space="preserve"><value>Η αξιολόγηση ακυρώθηκε</value></data>
+  <data name="TplDiag_HXT2042" xml:space="preserve"><value>Το {0} δεν χωράει στο {1}</value></data>
+  <data name="TplDiag_HXT2043" xml:space="preserve"><value>Το '{0}' δεν είναι συνάρτηση</value></data>
+  <data name="TplDiag_HXT2044" xml:space="preserve"><value>Το '{0}' δέχεται {1} όρισμα(τα)</value></data>
+  <data name="TplDiag_HXT2046" xml:space="preserve"><value>Η δυνατότητα Kaitai Struct '{0}' δεν υποστηρίζεται</value></data>
+  <data name="TplDiag_HXT2047" xml:space="preserve"><value>Το περιεχόμενο δεν ταιριάζει με τα αναμενόμενα byte</value></data>
+  <data name="TplDiag_HXT2048" xml:space="preserve"><value>Η επικύρωση απέτυχε: {0}</value></data>
+  <data name="TplDiag_HXT2049" xml:space="preserve"><value>Η έξοδος περικόπηκε επειδή είναι πολύ μεγάλη</value></data>
+  <data name="TplDiag_HXT2050" xml:space="preserve"><value>Οι ενότητες έφτασαν το συνολικό όριο ({0})</value></data>
+  <data name="TplDiag_HXT2051" xml:space="preserve"><value>Το '{0}' δεν είναι μοτίβο</value></data>
+  <data name="TplDiag_HXT2052" xml:space="preserve"><value>Το '{0}' δεν έχει μέλος '{1}'</value></data>
+  <data name="TplDiag_HXT2053" xml:space="preserve"><value>Μη έγκυρο όρισμα για το '{0}': {1}</value></data>
+  <data name="TplDiag_HXT2054" xml:space="preserve"><value>Τα δεδομένα δεν ταιριάζουν με το magic {0}</value></data>
+  <data name="TplDiag_HXT2055" xml:space="preserve"><value>{0}</value></data>
+  <data name="TplDiag_HXT2056" xml:space="preserve"><value>Δεν ήταν δυνατή η εγγραφή του προσωρινού αρχείου: {0}</value></data>
+  <data name="TplDiag_HXT3001" xml:space="preserve"><value>Συντακτικό σφάλμα YAML: {0}</value></data>
+  <data name="TplDiag_HXT3002" xml:space="preserve"><value>Οι ετικέτες YAML δεν επιτρέπονται ({0})</value></data>
+  <data name="TplDiag_HXT3003" xml:space="preserve"><value>Πάρα πολλές επεκτάσεις ψευδωνύμων YAML</value></data>
+  <data name="TplDiag_HXT3004" xml:space="preserve"><value>Διπλό κλειδί '{0}'</value></data>
+  <data name="TplDiag_HXT3005" xml:space="preserve"><value>Οι χαρακτήρες tab δεν μπορούν να χρησιμοποιηθούν για εσοχή</value></data>
+  <data name="TplDiag_HXT3006" xml:space="preserve"><value>Μη έγκυρο .ksy: {0}</value></data>
+  <data name="TplDiag_HXT3007" xml:space="preserve"><value>Η εμφώλευση YAML είναι πολύ βαθιά</value></data>
+  <data name="TplDiag_HXT9001" xml:space="preserve"><value>Εσωτερικό σφάλμα στον αξιολογητή προτύπων: {0}</value></data>
+  <data name="TplDiag_HXT2001_Suggestion" xml:space="preserve"><value>μήπως εννοείτε '{0}';</value></data>
+  <data name="TplSeverity_Info" xml:space="preserve"><value>Πληροφορίες</value></data>
+  <data name="TplSeverity_Warning" xml:space="preserve"><value>Προειδοποίηση</value></data>
+  <data name="TplSeverity_Error" xml:space="preserve"><value>Σφάλμα</value></data>
+  <data name="CmdCategory_scripting" xml:space="preserve"><value>Σενάρια</value></data>
+  <data name="Cmd_scripting_run" xml:space="preserve"><value>Σενάριο: Εκτέλεση</value></data>
+  <data name="CmdAlias_scripting_run" xml:space="preserve"><value>σενάριο εκτέλεση ξανά επανεκτέλεση run script again rerun f5</value></data>
+  <data name="Cmd_scripting_runFile" xml:space="preserve"><value>Σενάριο: Εκτέλεση αρχείου σεναρίου...</value></data>
+  <data name="CmdAlias_scripting_runFile" xml:space="preserve"><value>αρχείο σεναρίου εκτέλεση run script file javascript csx</value></data>
+  <data name="Cmd_scripting_stopAll" xml:space="preserve"><value>Σενάριο: Διακοπή όλων των σεναρίων</value></data>
+  <data name="CmdAlias_scripting_stopAll" xml:space="preserve"><value>διακοπή ακύρωση σενάρια stop cancel scripts</value></data>
+  <data name="Cmd_scripting_addCSharpComponent" xml:space="preserve"><value>Σενάριο: Προσθήκη στοιχείου σεναρίου C#...</value></data>
+  <data name="CmdAlias_scripting_addCSharpComponent" xml:space="preserve"><value>στοιχείο σεναρίου c# εγκατάσταση csharp roslyn component install</value></data>
+  <data name="Menu_Tools_Scripts.Text" xml:space="preserve"><value>Σενάρια</value></data>
+  <data name="Menu_Tools_Scripts.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.Text" xml:space="preserve"><value>Εκτέλεση σεναρίου...</value></data>
+  <data name="Menu_Tools_Scripts_RunFile.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Tools_Scripts_Run.Text" xml:space="preserve"><value>Επανεκτέλεση τελευταίου σεναρίου</value></data>
+  <data name="Menu_Tools_Scripts_Run.AccessKey" xml:space="preserve"><value>Λ</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.Text" xml:space="preserve"><value>Διακοπή όλων των σεναρίων</value></data>
+  <data name="Menu_Tools_Scripts_StopAll.AccessKey" xml:space="preserve"><value>Δ</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.Text" xml:space="preserve"><value>Προσθήκη στοιχείου σεναρίου C#...</value></data>
+  <data name="Menu_Tools_Scripts_AddCSharp.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="SetSection_ScriptHooks" xml:space="preserve"><value>Αυτόματη εκτέλεση (άγκιστρα)</value></data>
+  <data name="SetSearch_ScriptHooks" xml:space="preserve"><value>άγκιστρο αυτόματη εκτέλεση εκκίνηση άνοιγμα αποθήκευση κλείσιμο σενάριο hook automatic run startup open save close script</value></data>
+  <data name="SetSection_ScriptFolders" xml:space="preserve"><value>Φάκελοι σεναρίων</value></data>
+  <data name="SetSearch_ScriptFolders" xml:space="preserve"><value>φάκελος σενάρια βιβλιοθήκη κοινόχρηστο script folder library shared</value></data>
+  <data name="SetGroup_scriptsOutput" xml:space="preserve"><value>Πλαίσιο εξόδου</value></data>
+  <data name="SetGroup_scriptsEditor" xml:space="preserve"><value>Επεξεργαστής σεναρίων</value></data>
+  <data name="Set_scripts_output_maxLines" xml:space="preserve"><value>Μέγιστος αριθμός γραμμών που διατηρούνται στο πλαίσιο εξόδου</value></data>
+  <data name="SetDesc_scripts_output_maxLines" xml:space="preserve"><value>Οι παλαιότερες γραμμές αφαιρούνται όταν γίνεται υπέρβαση του ορίου (100-1000000).</value></data>
+  <data name="Set_scripts_output_autoShow" xml:space="preserve"><value>Εμφάνιση του πλαισίου εξόδου όταν ένα σενάριο γράφει έξοδο</value></data>
+  <data name="SetDesc_scripts_output_autoShow" xml:space="preserve"><value>Εμφανίζεται χωρίς να πάρει την εστίαση του πληκτρολογίου.</value></data>
+  <data name="Set_scripts_debug_exceptions" xml:space="preserve"><value>Διακοπή σε εξαιρέσεις κατά τον εντοπισμό σφαλμάτων</value></data>
+  <data name="SetDesc_scripts_debug_exceptions" xml:space="preserve"><value>Επιλέξτε πότε ο εντοπισμός σφαλμάτων JavaScript διακόπτεται σε μια εξαίρεση.</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_none" xml:space="preserve"><value>Ποτέ</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_uncaught" xml:space="preserve"><value>Μόνο μη χειριζόμενες εξαιρέσεις</value></data>
+  <data name="SetOpt_scripts_debug_exceptions_all" xml:space="preserve"><value>Όλες οι εξαιρέσεις</value></data>
+  <data name="Set_scripts_folders" xml:space="preserve"><value>Πρόσθετοι φάκελοι σεναρίων</value></data>
+  <data name="SetDesc_scripts_folders" xml:space="preserve"><value>Φάκελοι που προστίθενται στη λίστα σεναρίων.</value></data>
+  <data name="Hooks_Intro" xml:space="preserve"><value>Τα σενάρια που καταχωρίζονται εδώ εκτελούνται αυτόματα. Τίποτα δεν εκτελείται αν δεν το προσθέσετε εδώ και τα σενάρια πρέπει να είναι αξιόπιστα.</value></data>
+  <data name="Hooks_SafeMode" xml:space="preserve"><value>Η ασφαλής λειτουργία είναι ενεργή, επομένως η αυτόματη εκτέλεση είναι απενεργοποιημένη.</value></data>
+  <data name="Hooks_Timeout" xml:space="preserve"><value>χρονικό όριο {0} δευτ.</value></data>
+  <data name="Hooks_None" xml:space="preserve"><value>Δεν υπάρχουν καταχωρισμένα σενάρια.</value></data>
+  <data name="Hooks_Add" xml:space="preserve"><value>Προσθήκη σεναρίου</value></data>
+  <data name="Hooks_AddButton" xml:space="preserve"><value>Προσθήκη</value></data>
+  <data name="Hooks_Browse" xml:space="preserve"><value>Επιλογή αρχείου...</value></data>
+  <data name="Hooks_PickScript" xml:space="preserve"><value>Επιλέξτε το σενάριο που θα εκτελείται αυτόματα.</value></data>
+  <data name="Hooks_PendingScript" xml:space="preserve"><value>Προσθέστε το "{0}" με το κουμπί Προσθήκη.</value></data>
+  <data name="Hooks_EnabledName" xml:space="preserve"><value>Ενεργοποίηση του {0}</value></data>
+  <data name="Hooks_Condition" xml:space="preserve"><value>Συνθήκη</value></data>
+  <data name="Hooks_MoveUp" xml:space="preserve"><value>Μετακίνηση πάνω</value></data>
+  <data name="Hooks_MoveDown" xml:space="preserve"><value>Μετακίνηση κάτω</value></data>
+  <data name="Hooks_Remove" xml:space="preserve"><value>Αφαίρεση</value></data>
+  <data name="Hooks_CondIntro" xml:space="preserve"><value>Εκτελείται μόνο για δεδομένα που ταιριάζουν. Αφήστε κενό για να ταιριάζουν όλα.</value></data>
+  <data name="Hooks_CondExtension" xml:space="preserve"><value>Επέκταση (π.χ. .exe)</value></data>
+  <data name="Hooks_CondPath" xml:space="preserve"><value>Μοτίβο διαδρομής (π.χ. C:\Logs\*)</value></data>
+  <data name="Hooks_CondMagic" xml:space="preserve"><value>Αρχικά byte (Hex, π.χ. 4D 5A)</value></data>
+  <data name="Hooks_CondSource" xml:space="preserve"><value>Πηγή δεδομένων</value></data>
+  <data name="Hooks_SourceAny" xml:space="preserve"><value>Οποιαδήποτε</value></data>
+  <data name="ScriptFolders_Intro" xml:space="preserve"><value>Οι φάκελοι που αναφέρονται εδώ εμφανίζονται στη λίστα σεναρίων επιπλέον του τυπικού φακέλου σεναρίων.</value></data>
+  <data name="ScriptFolders_None" xml:space="preserve"><value>Δεν υπάρχουν πρόσθετοι φάκελοι.</value></data>
+  <data name="ScriptFolders_Add" xml:space="preserve"><value>Προσθήκη φακέλου...</value></data>
+  <data name="ScriptFolders_Remove" xml:space="preserve"><value>Αφαίρεση</value></data>
+  <data name="ScriptContext_Menu" xml:space="preserve"><value>Σενάριο</value></data>
+  <data name="CmdCategory_macro" xml:space="preserve"><value>Μακροεντολή</value></data>
+  <data name="CmdCategory_script" xml:space="preserve"><value>Σενάριο</value></data>
+  <data name="CmdCategory_cursor" xml:space="preserve"><value>Δρομέας</value></data>
+  <data name="Cmd_view_panel_scripts" xml:space="preserve"><value>Εναλλαγή πλαισίου λίστας σεναρίων</value></data>
+  <data name="CmdAlias_view_panel_scripts" xml:space="preserve"><value>σενάρια μακροεντολές λίστα πλαίσιο scripts macros list panel</value></data>
+  <data name="Cmd_view_panel_output" xml:space="preserve"><value>Εναλλαγή πλαισίου εξόδου</value></data>
+  <data name="CmdAlias_view_panel_output" xml:space="preserve"><value>έξοδος αρχείο καταγραφής μηνύματα πλαίσιο output log messages panel</value></data>
+  <data name="Cmd_view_panel_console" xml:space="preserve"><value>Εναλλαγή πλαισίου κονσόλας</value></data>
+  <data name="CmdAlias_view_panel_console" xml:space="preserve"><value>κονσόλα repl πλαίσιο console repl panel</value></data>
+  <data name="Cmd_scripting_showList" xml:space="preserve"><value>Εμφάνιση λίστας σεναρίων</value></data>
+  <data name="CmdAlias_scripting_showList" xml:space="preserve"><value>σενάρια μακροεντολές λίστα πλαίσιο scripts macros list panel</value></data>
+  <data name="Cmd_scripting_showConsole" xml:space="preserve"><value>Εμφάνιση κονσόλας</value></data>
+  <data name="CmdAlias_scripting_showConsole" xml:space="preserve"><value>κονσόλα repl console repl</value></data>
+  <data name="Cmd_scripting_new" xml:space="preserve"><value>Νέο σενάριο</value></data>
+  <data name="CmdAlias_scripting_new" xml:space="preserve"><value>δημιουργία νέο javascript js create</value></data>
+  <data name="Cmd_scripting_newCSharp" xml:space="preserve"><value>Νέο σενάριο C#</value></data>
+  <data name="CmdAlias_scripting_newCSharp" xml:space="preserve"><value>δημιουργία νέο csharp csx create</value></data>
+  <data name="Cmd_scripting_openSample" xml:space="preserve"><value>Άνοιγμα δείγματος</value></data>
+  <data name="CmdAlias_scripting_openSample" xml:space="preserve"><value>δείγματα παραδείγματα examples samples</value></data>
+  <data name="Cmd_scripting_openFolder" xml:space="preserve"><value>Άνοιγμα φακέλου σεναρίων</value></data>
+  <data name="CmdAlias_scripting_openFolder" xml:space="preserve"><value>φάκελος εξερευνητής folder explorer</value></data>
+  <data name="Cmd_scripting_debug" xml:space="preserve"><value>Εκτέλεση με εντοπισμό σφαλμάτων</value></data>
+  <data name="CmdAlias_scripting_debug" xml:space="preserve"><value>εντοπισμός σφαλμάτων σημείο διακοπής βήμα debugger breakpoint step</value></data>
+  <data name="Cmd_scripting_pause" xml:space="preserve"><value>Παύση</value></data>
+  <data name="CmdAlias_scripting_pause" xml:space="preserve"><value>παύση διακοπή break debugger</value></data>
+  <data name="Cmd_scripting_clearOutput" xml:space="preserve"><value>Εκκαθάριση εξόδου</value></data>
+  <data name="CmdAlias_scripting_clearOutput" xml:space="preserve"><value>εκκαθάριση καταγραφή έξοδος clear log output</value></data>
+  <data name="Cmd_macro_record" xml:space="preserve"><value>Έναρξη / διακοπή εγγραφής</value></data>
+  <data name="CmdAlias_macro_record" xml:space="preserve"><value>εγγραφή μακροεντολή record macro</value></data>
+  <data name="Cmd_macro_playLast" xml:space="preserve"><value>Αναπαραγωγή τελευταίας μακροεντολής</value></data>
+  <data name="CmdAlias_macro_playLast" xml:space="preserve"><value>επανάληψη αναπαραγωγής τελευταία μακροεντολή replay last macro</value></data>
+  <data name="Cmd_macro_repeat" xml:space="preserve"><value>Επαναλαμβανόμενη αναπαραγωγή</value></data>
+  <data name="CmdAlias_macro_repeat" xml:space="preserve"><value>επανάληψη μακροεντολή βρόχος repeat macro loop</value></data>
+  <data name="Cmd_cursor_left" xml:space="preserve"><value>Δρομέας: Αριστερά</value></data>
+  <data name="CmdAlias_cursor_left" xml:space="preserve"><value>δρομέας μετακίνηση αριστερά cursor move left</value></data>
+  <data name="Cmd_cursor_right" xml:space="preserve"><value>Δρομέας: Δεξιά</value></data>
+  <data name="CmdAlias_cursor_right" xml:space="preserve"><value>δρομέας μετακίνηση δεξιά cursor move right</value></data>
+  <data name="Cmd_cursor_up" xml:space="preserve"><value>Δρομέας: Πάνω</value></data>
+  <data name="CmdAlias_cursor_up" xml:space="preserve"><value>δρομέας μετακίνηση πάνω cursor move up</value></data>
+  <data name="Cmd_cursor_down" xml:space="preserve"><value>Δρομέας: Κάτω</value></data>
+  <data name="CmdAlias_cursor_down" xml:space="preserve"><value>δρομέας μετακίνηση κάτω cursor move down</value></data>
+  <data name="Cmd_cursor_pageUp" xml:space="preserve"><value>Δρομέας: Σελίδα επάνω</value></data>
+  <data name="CmdAlias_cursor_pageUp" xml:space="preserve"><value>δρομέας μετακίνηση σελίδα επάνω cursor move page up</value></data>
+  <data name="Cmd_cursor_pageDown" xml:space="preserve"><value>Δρομέας: Σελίδα κάτω</value></data>
+  <data name="CmdAlias_cursor_pageDown" xml:space="preserve"><value>δρομέας μετακίνηση σελίδα κάτω cursor move page down</value></data>
+  <data name="Cmd_cursor_lineStart" xml:space="preserve"><value>Δρομέας: Αρχή γραμμής</value></data>
+  <data name="CmdAlias_cursor_lineStart" xml:space="preserve"><value>δρομέας μετακίνηση αρχή γραμμής cursor move line start</value></data>
+  <data name="Cmd_cursor_lineEnd" xml:space="preserve"><value>Δρομέας: Τέλος γραμμής</value></data>
+  <data name="CmdAlias_cursor_lineEnd" xml:space="preserve"><value>δρομέας μετακίνηση τέλος γραμμής cursor move line end</value></data>
+  <data name="Cmd_cursor_fileStart" xml:space="preserve"><value>Δρομέας: Αρχή αρχείου</value></data>
+  <data name="CmdAlias_cursor_fileStart" xml:space="preserve"><value>δρομέας μετακίνηση αρχή αρχείου cursor move file start</value></data>
+  <data name="Cmd_cursor_fileEnd" xml:space="preserve"><value>Δρομέας: Τέλος αρχείου</value></data>
+  <data name="CmdAlias_cursor_fileEnd" xml:space="preserve"><value>δρομέας μετακίνηση τέλος αρχείου cursor move file end</value></data>
+  <data name="Command_NoScriptEditor" xml:space="preserve"><value>Δεν εμφανίζεται επεξεργαστής σεναρίων.</value></data>
+  <data name="Menu_Tools_Scripts_List.Text" xml:space="preserve"><value>Λίστα σεναρίων</value></data>
+  <data name="Menu_Tools_Scripts_List.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Menu_Tools_Scripts_Console.Text" xml:space="preserve"><value>Κονσόλα</value></data>
+  <data name="Menu_Tools_Scripts_Console.AccessKey" xml:space="preserve"><value>Κ</value></data>
+  <data name="Menu_Tools_Scripts_New.Text" xml:space="preserve"><value>Νέο σενάριο</value></data>
+  <data name="Menu_Tools_Scripts_New.AccessKey" xml:space="preserve"><value>Ν</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.Text" xml:space="preserve"><value>Νέο σενάριο C#</value></data>
+  <data name="Menu_Tools_Scripts_NewCSharp.AccessKey" xml:space="preserve"><value>C</value></data>
+  <data name="Menu_Tools_Scripts_Samples.Text" xml:space="preserve"><value>Δείγματα</value></data>
+  <data name="Menu_Tools_Scripts_Samples.AccessKey" xml:space="preserve"><value>Ι</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.Text" xml:space="preserve"><value>Άνοιγμα φακέλου σεναρίων</value></data>
+  <data name="Menu_Tools_Scripts_OpenFolder.AccessKey" xml:space="preserve"><value>Φ</value></data>
+  <data name="Menu_Tools_Macro.Text" xml:space="preserve"><value>Μακροεντολή</value></data>
+  <data name="Menu_Tools_Macro.AccessKey" xml:space="preserve"><value>Μ</value></data>
+  <data name="Menu_Tools_Macro_Record.Text" xml:space="preserve"><value>Έναρξη / διακοπή εγγραφής</value></data>
+  <data name="Menu_Tools_Macro_Record.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.Text" xml:space="preserve"><value>Αναπαραγωγή τελευταίας μακροεντολής</value></data>
+  <data name="Menu_Tools_Macro_PlayLast.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Tools_Macro_Repeat.Text" xml:space="preserve"><value>Επαναλαμβανόμενη αναπαραγωγή...</value></data>
+  <data name="Menu_Tools_Macro_Repeat.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_View_ScriptsPanel.Text" xml:space="preserve"><value>Λίστα σεναρίων</value></data>
+  <data name="Menu_View_ScriptsPanel.AccessKey" xml:space="preserve"><value>Ω</value></data>
+  <data name="Menu_View_OutputPanel.Text" xml:space="preserve"><value>Έξοδος</value></data>
+  <data name="Menu_View_OutputPanel.AccessKey" xml:space="preserve"><value>Ξ</value></data>
+  <data name="Menu_View_ConsolePanel.Text" xml:space="preserve"><value>Κονσόλα</value></data>
+  <data name="Menu_View_ConsolePanel.AccessKey" xml:space="preserve"><value>Ζ</value></data>
+  <data name="Panel_Scripts_Title" xml:space="preserve"><value>Σενάρια</value></data>
+  <data name="Panel_Output_Title" xml:space="preserve"><value>Έξοδος</value></data>
+  <data name="Panel_Console_Title" xml:space="preserve"><value>Κονσόλα</value></data>
+  <data name="Output_AllChannels" xml:space="preserve"><value>Όλα</value></data>
+  <data name="Output_ChannelScript" xml:space="preserve"><value>Σενάριο: {0}</value></data>
+  <data name="Output_ChannelPlugin" xml:space="preserve"><value>Πρόσθετο: {0}</value></data>
+  <data name="Output_ChannelLabel" xml:space="preserve"><value>Πηγή εξόδου</value></data>
+  <data name="Output_FilterLabel" xml:space="preserve"><value>Φίλτρο</value></data>
+  <data name="Output_Clear" xml:space="preserve"><value>Εκκαθάριση</value></data>
+  <data name="Output_CopyAll" xml:space="preserve"><value>Αντιγραφή όλων</value></data>
+  <data name="Output_Save" xml:space="preserve"><value>Αποθήκευση σε αρχείο</value></data>
+  <data name="Output_Wrap" xml:space="preserve"><value>Αναδίπλωση γραμμών</value></data>
+  <data name="Output_Copied" xml:space="preserve"><value>Η έξοδος αντιγράφηκε.</value></data>
+  <data name="Output_KindInfo" xml:space="preserve"><value>Πληροφορίες</value></data>
+  <data name="Output_KindWarning" xml:space="preserve"><value>Προειδοποίηση</value></data>
+  <data name="Output_KindError" xml:space="preserve"><value>Σφάλμα</value></data>
+  <data name="ScriptList_Title" xml:space="preserve"><value>Λίστα σεναρίων</value></data>
+  <data name="ScriptList_Filter" xml:space="preserve"><value>Φιλτράρισμα σεναρίων</value></data>
+  <data name="ScriptList_New" xml:space="preserve"><value>Νέο σενάριο</value></data>
+  <data name="ScriptList_NewJs" xml:space="preserve"><value>Νέο σενάριο JavaScript</value></data>
+  <data name="ScriptList_NewCSharp" xml:space="preserve"><value>Νέο σενάριο C#</value></data>
+  <data name="ScriptList_OpenFolder" xml:space="preserve"><value>Άνοιγμα φακέλου σεναρίων</value></data>
+  <data name="ScriptList_Run" xml:space="preserve"><value>Εκτέλεση</value></data>
+  <data name="ScriptList_Edit" xml:space="preserve"><value>Επεξεργασία</value></data>
+  <data name="ScriptList_OpenSample" xml:space="preserve"><value>Άνοιγμα αντιγράφου για επεξεργασία</value></data>
+  <data name="ScriptList_Rename" xml:space="preserve"><value>Μετονομασία...</value></data>
+  <data name="ScriptList_RenameLabel" xml:space="preserve"><value>Νέο όνομα</value></data>
+  <data name="ScriptList_Delete" xml:space="preserve"><value>Διαγραφή (μετακίνηση στον Κάδο ανακύκλωσης)</value></data>
+  <data name="ScriptList_ShowInFolder" xml:space="preserve"><value>Εμφάνιση στον φάκελο</value></data>
+  <data name="ScriptList_AssignShortcut" xml:space="preserve"><value>Ανάθεση συντόμευσης...</value></data>
+  <data name="ScriptList_HookSettings" xml:space="preserve"><value>Αυτόματη εκτέλεση...</value></data>
+  <data name="ScriptList_Scripts" xml:space="preserve"><value>Σενάρια</value></data>
+  <data name="ScriptList_Macros" xml:space="preserve"><value>Μακροεντολές</value></data>
+  <data name="ScriptList_Samples" xml:space="preserve"><value>Δείγματα</value></data>
+  <data name="ScriptList_NewName" xml:space="preserve"><value>νέο-σενάριο</value></data>
+  <data name="ScriptList_FolderMissing" xml:space="preserve"><value>Ο φάκελος δεν βρέθηκε</value></data>
+  <data name="ScriptList_Resident" xml:space="preserve"><value>μόνιμο</value></data>
+  <data name="ScriptList_HookCandidate" xml:space="preserve"><value>Υποψήφιο για αυτόματη εκτέλεση: {0}</value></data>
+  <data name="ScriptList_Deleted" xml:space="preserve"><value>Το "{0}" μετακινήθηκε στον Κάδο ανακύκλωσης.</value></data>
+  <data name="ScriptList_CopyFailed" xml:space="preserve"><value>Δεν είναι δυνατή η αντιγραφή του δείγματος: {0}</value></data>
+  <data name="ScriptList_CreateFailed" xml:space="preserve"><value>Δεν είναι δυνατή η δημιουργία του σεναρίου: {0}</value></data>
+  <data name="ScriptList_RenameFailed" xml:space="preserve"><value>Δεν είναι δυνατή η μετονομασία: {0}</value></data>
+  <data name="ScriptList_DeleteFailed" xml:space="preserve"><value>Δεν είναι δυνατή η διαγραφή: {0}</value></data>
+  <data name="ScriptList_ShowInFolderFailed" xml:space="preserve"><value>Δεν είναι δυνατό το άνοιγμα του φακέλου: {0}</value></data>
+  <data name="ScriptEditor_Run" xml:space="preserve"><value>Εκτέλεση</value></data>
+  <data name="ScriptEditor_Debug" xml:space="preserve"><value>Εντοπισμός σφαλμάτων</value></data>
+  <data name="ScriptEditor_Stop" xml:space="preserve"><value>Διακοπή</value></data>
+  <data name="ScriptEditor_Pause" xml:space="preserve"><value>Παύση</value></data>
+  <data name="ScriptEditor_StepOver" xml:space="preserve"><value>Βήμα πάνω από</value></data>
+  <data name="ScriptEditor_StepIn" xml:space="preserve"><value>Βήμα μέσα</value></data>
+  <data name="ScriptEditor_StepOut" xml:space="preserve"><value>Βήμα έξω</value></data>
+  <data name="ScriptEditor_Target" xml:space="preserve"><value>Έγγραφο-στόχος</value></data>
+  <data name="ScriptEditor_TargetActive" xml:space="preserve"><value>(ενεργό έγγραφο)</value></data>
+  <data name="ScriptEditor_Name" xml:space="preserve"><value>Επεξεργαστής σεναρίων: {0}</value></data>
+  <data name="ScriptEditor_Problems" xml:space="preserve"><value>Προβλήματα</value></data>
+  <data name="ScriptEditor_ProblemsCount" xml:space="preserve"><value>Προβλήματα ({0})</value></data>
+  <data name="ScriptEditor_DebugTab" xml:space="preserve"><value>Εντοπισμός σφαλμάτων</value></data>
+  <data name="ScriptEditor_CallStack" xml:space="preserve"><value>Στοίβα κλήσεων</value></data>
+  <data name="ScriptEditor_Variables" xml:space="preserve"><value>Μεταβλητές</value></data>
+  <data name="ScriptEditor_Watches" xml:space="preserve"><value>Παρακολούθηση</value></data>
+  <data name="ScriptEditor_WatchAdd" xml:space="preserve"><value>Προσθήκη έκφρασης παρακολούθησης</value></data>
+  <data name="ScriptEditor_ScopeLocal" xml:space="preserve"><value>Τοπικό</value></data>
+  <data name="ScriptEditor_ScopeClosure" xml:space="preserve"><value>Κλείσιμο (closure)</value></data>
+  <data name="ScriptEditor_ScopeGlobal" xml:space="preserve"><value>Καθολικό</value></data>
+  <data name="ScriptEditor_ScopeScript" xml:space="preserve"><value>Σενάριο</value></data>
+  <data name="ScriptEditor_Exception" xml:space="preserve"><value>Εξαίρεση: {0}</value></data>
+  <data name="ScriptEditor_Position" xml:space="preserve"><value>Γραμμή {0}, στήλη {1}</value></data>
+  <data name="ScriptEditor_Modified" xml:space="preserve"><value>Τροποποιήθηκε</value></data>
+  <data name="ScriptEditor_StateRunning" xml:space="preserve"><value>Σε εκτέλεση</value></data>
+  <data name="ScriptEditor_StatePaused" xml:space="preserve"><value>Σε παύση στη γραμμή {0}</value></data>
+  <data name="ScriptEditor_Succeeded" xml:space="preserve"><value>Επιτυχία ({0} δευτ.)</value></data>
+  <data name="ScriptEditor_Stopped" xml:space="preserve"><value>Διακόπηκε</value></data>
+  <data name="ScriptEditor_NotRun" xml:space="preserve"><value>Δεν εκτελέστηκε</value></data>
+  <data name="ScriptEditor_Failed" xml:space="preserve"><value>Απέτυχε</value></data>
+  <data name="ScriptEditor_Saved" xml:space="preserve"><value>Το "{0}" αποθηκεύτηκε.</value></data>
+  <data name="ScriptEditor_SaveFailed" xml:space="preserve"><value>Δεν είναι δυνατή η αποθήκευση του σεναρίου: {0}</value></data>
+  <data name="ScriptEditor_ReadFailed" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση του σεναρίου: {0}</value></data>
+  <data name="ScriptEditor_TooLarge" xml:space="preserve"><value>Το "{0}" είναι μεγαλύτερο από 10 MB. Επεξεργαστείτε το με εξωτερικό πρόγραμμα επεξεργασίας.</value></data>
+  <data name="ScriptEditor_CSharpNoStep" xml:space="preserve"><value>Τα σενάρια C# δεν μπορούν να εκτελεστούν βήμα προς βήμα στην εφαρμογή</value></data>
+  <data name="ScriptEditor_Breakpoint" xml:space="preserve"><value>Σημείο διακοπής</value></data>
+  <data name="ScriptEditor_BreakpointDisabled" xml:space="preserve"><value>Απενεργοποιημένο σημείο διακοπής</value></data>
+  <data name="ScriptEditor_BreakpointConditional" xml:space="preserve"><value>Υπό συνθήκη σημείο διακοπής</value></data>
+  <data name="ScriptEditor_UnsavedBody" xml:space="preserve"><value>Το "{0}" έχει μη αποθηκευμένες αλλαγές. Να αποθηκευτεί πριν από το κλείσιμο;</value></data>
+  <data name="ScriptEditor_UnsavedSave" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="ScriptEditor_UnsavedDiscard" xml:space="preserve"><value>Να μην αποθηκευτεί</value></data>
+  <data name="CSharpDebug_Title" xml:space="preserve"><value>Εντοπισμός σφαλμάτων σεναρίου C#</value></data>
+  <data name="CSharpDebug_Waiting" xml:space="preserve"><value>Αναμονή για σύνδεση προγράμματος εντοπισμού σφαλμάτων. Αναγνωριστικό διεργασίας: {0}</value></data>
+  <data name="CSharpDebug_Limitation" xml:space="preserve"><value>Τα σενάρια C# δεν μπορούν να εκτελεστούν βήμα προς βήμα στην εφαρμογή. Συνδέστε ένα εξωτερικό πρόγραμμα εντοπισμού σφαλμάτων (Visual Studio ή Visual Studio Code) σε αυτήν τη διεργασία και καλέστε το System.Diagnostics.Debugger.Break() στο σενάριο για να σταματήσει.</value></data>
+  <data name="CSharpDebug_RunWithout" xml:space="preserve"><value>Εκτέλεση χωρίς σύνδεση</value></data>
+  <data name="Console_LanguageLabel" xml:space="preserve"><value>Γλώσσα</value></data>
+  <data name="Console_Reset" xml:space="preserve"><value>Επαναφορά συνεδρίας</value></data>
+  <data name="Console_Clear" xml:space="preserve"><value>Εκκαθάριση</value></data>
+  <data name="Console_InputLabel" xml:space="preserve"><value>Πληκτρολογήστε μια έκφραση ή εντολή (Enter: εκτέλεση, Shift+Enter: νέα γραμμή)</value></data>
+  <data name="Console_ResultsLabel" xml:space="preserve"><value>Ιστορικό κονσόλας</value></data>
+  <data name="Console_ResetDone" xml:space="preserve"><value>Ξεκίνησε νέα συνεδρία.</value></data>
+  <data name="Console_Stopped" xml:space="preserve"><value>Διακόπηκε.</value></data>
+  <data name="Console_Failed" xml:space="preserve"><value>Η εισαγωγή απέτυχε.</value></data>
+  <data name="Console_NeedComponent" xml:space="preserve"><value>Προσθέστε το στοιχείο σεναρίων C# για να χρησιμοποιήσετε C# στην κονσόλα.</value></data>
+  <data name="Hook_Kind_startup" xml:space="preserve"><value>κατά την εκκίνηση</value></data>
+  <data name="Hook_Kind_open" xml:space="preserve"><value>όταν ανοίγει αρχείο</value></data>
+  <data name="Hook_Kind_beforeSave" xml:space="preserve"><value>πριν από την αποθήκευση</value></data>
+  <data name="Hook_Kind_afterSave" xml:space="preserve"><value>μετά την αποθήκευση</value></data>
+  <data name="Hook_Kind_beforeClose" xml:space="preserve"><value>πριν από το κλείσιμο</value></data>
+  <data name="Hook_Failed" xml:space="preserve"><value>Το σενάριο αυτόματης εκτέλεσης "{0}" ({1}) απέτυχε: {2}</value></data>
+  <data name="Hook_TimedOut" xml:space="preserve"><value>Το σενάριο αυτόματης εκτέλεσης "{0}" ({1}) διακόπηκε: {2}</value></data>
+  <data name="Hook_AutoDisabled" xml:space="preserve"><value>Το σενάριο αυτόματης εκτέλεσης "{0}" ({1}) απέτυχε 3 φορές στη σειρά και απενεργοποιήθηκε.</value></data>
+  <data name="Hook_OpenSettings" xml:space="preserve"><value>Άνοιγμα ρυθμίσεων</value></data>
+  <data name="Hook_SaveCanceled" xml:space="preserve"><value>Το σενάριο "{0}" ακύρωσε την αποθήκευση: {1}</value></data>
+  <data name="Hook_SaveFailedTitle" xml:space="preserve"><value>Το σενάριο πριν από την αποθήκευση απέτυχε</value></data>
+  <data name="Hook_SaveFailedBody" xml:space="preserve"><value>Το σενάριο "{0}" απέτυχε: {1}
+Να γίνει αποθήκευση ούτως ή άλλως;</value></data>
+  <data name="Hook_SaveAnyway" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="Hook_DontSave" xml:space="preserve"><value>Να μην αποθηκευτεί</value></data>
+  <data name="Macro_StartTitle" xml:space="preserve"><value>Εγγραφή μακροεντολής</value></data>
+  <data name="Macro_Start" xml:space="preserve"><value>Έναρξη</value></data>
+  <data name="Macro_ModeIntro" xml:space="preserve"><value>Επιλέξτε πώς καταγράφονται οι θέσεις που επιλέγονται με το ποντίκι.</value></data>
+  <data name="Macro_ModeRelative" xml:space="preserve"><value>Ως προς τον δρομέα (προεπιλογή)</value></data>
+  <data name="Macro_ModeAbsolute" xml:space="preserve"><value>Απόλυτες μετατοπίσεις</value></data>
+  <data name="Macro_DontAsk" xml:space="preserve"><value>Να μην ερωτηθώ ξανά (χρήση αυτής της επιλογής)</value></data>
+  <data name="Macro_Started" xml:space="preserve"><value>Η εγγραφή ξεκίνησε.</value></data>
+  <data name="Macro_StatusRecording" xml:space="preserve"><value>Εγγραφή ({0})</value></data>
+  <data name="Macro_StatusRecordingName" xml:space="preserve"><value>Εγγραφή μακροεντολής, {0} ενέργειες. Κάντε κλικ για διακοπή.</value></data>
+  <data name="Macro_UnrecordableStatus" xml:space="preserve"><value>Δεν είναι δυνατή η εγγραφή αυτής της ενέργειας: {0}</value></data>
+  <data name="Macro_Unrecordable_Selection" xml:space="preserve"><value>επιλογή με το πληκτρολόγιο</value></data>
+  <data name="Macro_Unrecordable_Delete" xml:space="preserve"><value>διαγραφή</value></data>
+  <data name="Macro_Unrecordable_MultiCursor" xml:space="preserve"><value>εισαγωγή σε πολλούς δρομείς</value></data>
+  <data name="Macro_Unrecordable_Fill" xml:space="preserve"><value>γέμισμα με αυτό το περιεχόμενο</value></data>
+  <data name="Macro_Op_GoTo" xml:space="preserve"><value>Μετάβαση σε μετατόπιση</value></data>
+  <data name="Macro_Op_SelectRange" xml:space="preserve"><value>Επιλογή περιοχής</value></data>
+  <data name="Macro_Op_Find" xml:space="preserve"><value>Εύρεση</value></data>
+  <data name="Macro_Op_ReplaceAll" xml:space="preserve"><value>Αντικατάσταση όλων</value></data>
+  <data name="Macro_NotFound" xml:space="preserve"><value>Δεν βρέθηκε: {0}</value></data>
+  <data name="Macro_NothingRecorded" xml:space="preserve"><value>Δεν καταγράφηκε τίποτα.</value></data>
+  <data name="Macro_NoLast" xml:space="preserve"><value>Δεν υπάρχει ακόμη καταγεγραμμένη μακροεντολή.</value></data>
+  <data name="Macro_WhileRecording" xml:space="preserve"><value>Σταματήστε πρώτα την εγγραφή.</value></data>
+  <data name="Macro_LastName" xml:space="preserve"><value>Τελευταία μακροεντολή</value></data>
+  <data name="Macro_ReadFailed" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση της μακροεντολής: {0}</value></data>
+  <data name="Macro_Failed" xml:space="preserve"><value>Η μακροεντολή σταμάτησε: {0}</value></data>
+  <data name="Macro_FailedAt" xml:space="preserve"><value>Η μακροεντολή σταμάτησε στην επανάληψη {0}, ενέργεια "{1}": {2}</value></data>
+  <data name="MacroSave_Title" xml:space="preserve"><value>Αποθήκευση μακροεντολής ({0, plural, one {# ενέργεια} other {# ενέργειες}})</value></data>
+  <data name="MacroSave_Name" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="MacroSave_Folder" xml:space="preserve"><value>Φάκελος</value></data>
+  <data name="MacroSave_Shortcut" xml:space="preserve"><value>Συντόμευση (προαιρετικά)</value></data>
+  <data name="MacroSave_ShortcutHint" xml:space="preserve"><value>για παράδειγμα Ctrl+Alt+F9</value></data>
+  <data name="MacroSave_Save" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="MacroSave_DontSave" xml:space="preserve"><value>Να μην αποθηκευτεί</value></data>
+  <data name="MacroSave_NameRequired" xml:space="preserve"><value>Εισαγάγετε ένα όνομα.</value></data>
+  <data name="MacroSave_ShortcutInvalid" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση της συντόμευσης: {0}</value></data>
+  <data name="MacroSave_Failed" xml:space="preserve"><value>Δεν είναι δυνατή η αποθήκευση εδώ: {0}. Επιλέξτε άλλον φάκελο.</value></data>
+  <data name="MacroSave_Saved" xml:space="preserve"><value>Η μακροεντολή "{0}" αποθηκεύτηκε.</value></data>
+  <data name="MacroRepeat_Title" xml:space="preserve"><value>Επαναλαμβανόμενη αναπαραγωγή μακροεντολής</value></data>
+  <data name="MacroRepeat_Macro" xml:space="preserve"><value>Μακροεντολή</value></data>
+  <data name="MacroRepeat_Count" xml:space="preserve"><value>Αριθμός επαναλήψεων</value></data>
+  <data name="MacroRepeat_Times" xml:space="preserve"><value>Φορές (1 έως 1.000.000)</value></data>
+  <data name="MacroRepeat_UntilEnd" xml:space="preserve"><value>Μέχρι το τέλος του αρχείου</value></data>
+  <data name="MacroRepeat_PerResult" xml:space="preserve"><value>Για κάθε αποτέλεσμα αναζήτησης</value></data>
+  <data name="MacroRepeat_InSelection" xml:space="preserve"><value>Μέσα στην επιλογή</value></data>
+  <data name="MacroRepeat_Play" xml:space="preserve"><value>Αναπαραγωγή</value></data>
+  <data name="MacroRepeat_CountInvalid" xml:space="preserve"><value>Εισαγάγετε έναν αριθμό από 1 έως {0}.</value></data>
+  <data name="SetGroup_scriptsJs" xml:space="preserve"><value>JavaScript</value></data>
+  <data name="Set_scripts_js_timeoutSeconds" xml:space="preserve"><value>Όριο χρόνου εκτέλεσης (δευτερόλεπτα)</value></data>
+  <data name="SetDesc_scripts_js_timeoutSeconds" xml:space="preserve"><value>Ο χρόνος που μπορεί να εκτελείται ένα σενάριο JavaScript πριν τεθεί σε παύση και σας ρωτήσει αν θα συνεχίσει. Το 0 σημαίνει χωρίς όριο. Η αναμονή για μαζικές λειτουργίες και για δική σας είσοδο δεν υπολογίζεται.</value></data>
+  <data name="Set_scripts_js_memoryMB" xml:space="preserve"><value>Όριο μνήμης (MB)</value></data>
+  <data name="SetDesc_scripts_js_memoryMB" xml:space="preserve"><value>Η μνήμη που μπορεί να χρησιμοποιεί ένα σενάριο JavaScript (16-4096 MB).</value></data>
+  <data name="Set_scripts_js_recursionDepth" xml:space="preserve"><value>Όριο βάθους αναδρομής</value></data>
+  <data name="SetDesc_scripts_js_recursionDepth" xml:space="preserve"><value>Μέγιστο βάθος κλήσεων συναρτήσεων (100-10000).</value></data>
+  <data name="Set_scripts_maxConcurrent" xml:space="preserve"><value>Σενάρια που εκτελούνται ταυτόχρονα</value></data>
+  <data name="SetDesc_scripts_maxConcurrent" xml:space="preserve"><value>Τα υπόλοιπα σενάρια περιμένουν μέχρι να τελειώσει κάποιο (1-16).</value></data>
+  <data name="Set_scripts_policy" xml:space="preserve"><value>Πολιτική σεναρίων (οργανισμός)</value></data>
+  <data name="SetDesc_scripts_policy" xml:space="preserve"><value>Ορίζεται στο αρχείο ρυθμίσεων από τον οργανισμό σας. Απενεργοποιεί σενάρια και πρόσθετα ή επιτρέπει μόνο υπογεγραμμένα πρόσθετα.</value></data>
+  <data name="SetOpt_scripts_policy_none" xml:space="preserve"><value>Χωρίς περιορισμούς</value></data>
+  <data name="SetOpt_scripts_policy_disabled" xml:space="preserve"><value>Απενεργοποίηση όλων των σεναρίων και πρόσθετων</value></data>
+  <data name="SetOpt_scripts_policy_signedPluginsOnly" xml:space="preserve"><value>Μόνο υπογεγραμμένα πρόσθετα</value></data>
+  <data name="Script_Operation" xml:space="preserve"><value>Σενάριο: {0}</value></data>
+  <data name="Script_BulkOperation" xml:space="preserve"><value>Σενάριο: {0} - {1}</value></data>
+  <data name="Script_WriteOperation" xml:space="preserve"><value>Σενάριο: {0} (εγγραφή)</value></data>
+  <data name="Script_UndoName" xml:space="preserve"><value>Σενάριο: {0}</value></data>
+  <data name="Script_NoneRunning" xml:space="preserve"><value>Δεν εκτελείται κανένα σενάριο.</value></data>
+  <data name="Script_ComponentInstalled" xml:space="preserve"><value>Το στοιχείο σεναρίων C# είναι ήδη εγκατεστημένο.</value></data>
+  <data name="Script_DisabledByPolicy" xml:space="preserve"><value>Τα σενάρια είναι απενεργοποιημένα από τη ρύθμιση του οργανισμού σας (scripts.policy).</value></data>
+  <data name="Script_SaveCanceled" xml:space="preserve"><value>Ένα σενάριο ακύρωσε την αποθήκευση: {0}</value></data>
+  <data name="Script_Writing" xml:space="preserve"><value>Το σενάριο "{0}" εκτελείται.</value></data>
+  <data name="Script_Stop" xml:space="preserve"><value>Διακοπή</value></data>
+  <data name="Script_Failed" xml:space="preserve"><value>Το σενάριο "{0}" τερματίστηκε με σφάλμα.</value></data>
+  <data name="Script_Details" xml:space="preserve"><value>Λεπτομέρειες</value></data>
+  <data name="Script_NotRun" xml:space="preserve"><value>Το σενάριο "{0}" δεν εκτελέστηκε: {1}</value></data>
+  <data name="Script_DialogTitle" xml:space="preserve"><value>Σενάριο: {0}</value></data>
+  <data name="Script_RunningCount" xml:space="preserve"><value>{0, plural, one {# σενάριο εκτελείται} other {# σενάρια εκτελούνται}}</value></data>
+  <data name="Script_Message" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Script_TimeLimit" xml:space="preserve"><value>Το σενάριο "{0}" εκτελείται για περισσότερα από {1} δευτερόλεπτα.</value></data>
+  <data name="Script_Continue" xml:space="preserve"><value>Συνέχεια (άλλα {0} δευτερόλεπτα)</value></data>
+  <data name="ScriptTrust_Title" xml:space="preserve"><value>Να εκτελεστεί το σενάριο "{0}";</value></data>
+  <data name="ScriptTrust_Elevated" xml:space="preserve"><value>Το HexEditor εκτελείται ως διαχειριστής. Αυτό το σενάριο εκτελείται με δικαιώματα διαχειριστή και μπορεί να κάνει ενέργειες που επηρεάζουν ολόκληρο τον υπολογιστή.</value></data>
+  <data name="ScriptTrust_Name" xml:space="preserve"><value>Όνομα: {0}</value></data>
+  <data name="ScriptTrust_Author" xml:space="preserve"><value>Δημιουργός: {0}</value></data>
+  <data name="ScriptTrust_FullTrust" xml:space="preserve"><value>Αυτός ο κώδικας μπορεί να κάνει οτιδήποτε στον υπολογιστή σας με τα δικαιώματά σας (συμπεριλαμβανομένης της ανάγνωσης και εγγραφής αρχείων και της επικοινωνίας δικτύου). Εκτελείτε μόνο κώδικα από δημιουργούς που εμπιστεύεστε.</value></data>
+  <data name="ScriptTrust_JavaScript" xml:space="preserve"><value>Αυτό το σενάριο μπορεί να διαβάζει και να γράφει τα ανοιχτά έγγραφα. Ζητά επίσης αυτά τα δικαιώματα:</value></data>
+  <data name="ScriptTrust_JavaScriptNoPermissions" xml:space="preserve"><value>Αυτό το σενάριο μπορεί να διαβάζει και να γράφει τα ανοιχτά έγγραφα. Δεν ζητά άλλα δικαιώματα.</value></data>
+  <data name="ScriptTrust_FromInternet" xml:space="preserve"><value>Αυτό το αρχείο προέρχεται από το internet. Εκτελέστε το μόνο αν εμπιστεύεστε την πηγή του.</value></data>
+  <data name="ScriptTrust_Run" xml:space="preserve"><value>Εκτέλεση</value></data>
+  <data name="ScriptTrust_DontRun" xml:space="preserve"><value>Να μην εκτελεστεί</value></data>
+  <data name="ScriptTrust_RunOnce" xml:space="preserve"><value>Εκτέλεση μία φορά</value></data>
+  <data name="ScriptTrust_AlwaysAllow" xml:space="preserve"><value>Να επιτρέπεται πάντα</value></data>
+  <data name="Script_Permission_file_read" xml:space="preserve"><value>Ανάγνωση οποιουδήποτε αρχείου</value></data>
+  <data name="Script_Permission_file_write" xml:space="preserve"><value>Δημιουργία, εγγραφή και διαγραφή οποιουδήποτε αρχείου</value></data>
+  <data name="Script_Permission_network" xml:space="preserve"><value>Επικοινωνία μέσω δικτύου (net.fetch)</value></data>
+  <data name="Script_Permission_process" xml:space="preserve"><value>Εκτέλεση εξωτερικών προγραμμάτων</value></data>
+  <data name="Script_Permission_disk" xml:space="preserve"><value>Άνοιγμα δίσκων, τόμων και μνήμης διεργασιών</value></data>
+  <data name="Script_Permission_clipboard_read" xml:space="preserve"><value>Ανάγνωση του Προχείρου</value></data>
+  <data name="Script_Permission_settings" xml:space="preserve"><value>Αλλαγή ρυθμίσεων της εφαρμογής</value></data>
+  <data name="ScriptPermission_Body" xml:space="preserve"><value>Το σενάριο ζητά το δικαίωμα "{0}" ({1}): {2}</value></data>
+  <data name="ScriptPermission_Allow" xml:space="preserve"><value>Να επιτραπεί</value></data>
+  <data name="ScriptPermission_Deny" xml:space="preserve"><value>Να μην επιτραπεί</value></data>
+  <data name="CSharpComponent_Title" xml:space="preserve"><value>Στοιχείο σεναρίων C#</value></data>
+  <data name="CSharpComponent_Offer" xml:space="preserve"><value>Τα σενάρια C# χρειάζονται το στοιχείο σεναρίων C# (Roslyn), το οποίο δεν είναι εγκατεστημένο. Να προστεθεί τώρα;</value></data>
+  <data name="CSharpComponent_Add" xml:space="preserve"><value>Προσθήκη</value></data>
+  <data name="CSharpComponent_Confirm" xml:space="preserve"><value>Λήψη του στοιχείου.
+Μέγεθος: {0}
+Αποθήκευση σε: {1}
+Λήψη από: {2}</value></data>
+  <data name="CSharpComponent_Download" xml:space="preserve"><value>Λήψη</value></data>
+  <data name="CSharpComponent_DownloadTooLarge" xml:space="preserve"><value>Η λήψη είναι μεγαλύτερη από τα αναμενόμενα {0} byte και διακόπηκε.</value></data>
+  <data name="CSharpComponent_Operation" xml:space="preserve"><value>Προσθήκη του στοιχείου σεναρίων C#</value></data>
+  <data name="CSharpComponent_Installed" xml:space="preserve"><value>Το στοιχείο σεναρίων C# προστέθηκε.</value></data>
+  <data name="CSharpComponent_FailedManual" xml:space="preserve"><value>Δεν ήταν δυνατή η προσθήκη του στοιχείου σεναρίων C#: {0} Μπορείτε να το προσθέσετε χειροκίνητα: κάντε λήψη του zip του στοιχείου από τη σελίδα των εκδόσεων και εξαγάγετέ το στον φάκελο components\csharp\&lt;έκδοση&gt;\ του φακέλου δεδομένων.</value></data>
+  <data name="CSharpComponent_Failed" xml:space="preserve"><value>Δεν ήταν δυνατή η προσθήκη του στοιχείου σεναρίων C#: {0}</value></data>
+  <data name="CmdLine_UnknownEncoding" xml:space="preserve"><value>Άγνωστη κωδικοποίηση χαρακτήρων "{0}". Η στήλη κειμένου δεν άλλαξε.</value></data>
+  <data name="CmdLine_BadValue" xml:space="preserve"><value>Δεν είναι δυνατή η χρήση του {0} "{1}" (η έκφραση δεν διαβάζεται στη θέση {2}).</value></data>
+  <data name="CmdLine_OutsideFile" xml:space="preserve"><value>Το {0} "{1}" βρίσκεται εκτός του αρχείου (μήκος {2}).</value></data>
+  <data name="CmdLine_NotAvailable" xml:space="preserve"><value>Το {0} δεν είναι διαθέσιμο σε αυτήν την έκδοση.</value></data>
+  <data name="CmdLine_DiskNotFound" xml:space="preserve"><value>Κανένας δίσκος δεν ταιριάζει με το "{0}".</value></data>
+  <data name="CmdLine_VolumeNotFound" xml:space="preserve"><value>Κανένας τόμος δεν ταιριάζει με το "{0}".</value></data>
+  <data name="CmdLine_ProcessNotFound" xml:space="preserve"><value>Καμία διεργασία δεν ταιριάζει με το "{0}".</value></data>
+  <data name="CmdLine_ProcessAmbiguous" xml:space="preserve"><value>Το "{0}" ταιριάζει με {1} διεργασίες. Καθορίστε το αναγνωριστικό διεργασίας με --process.</value></data>
+  <data name="Menu_File_OpenPluginSource.Text" xml:space="preserve"><value>Άνοιγμα πηγής δεδομένων πρόσθετου</value></data>
+  <data name="Menu_File_OpenPluginSource.AccessKey" xml:space="preserve"><value>Φ</value></data>
+  <data name="Menu_Data_Plugins.Text" xml:space="preserve"><value>Λειτουργίες πρόσθετων</value></data>
+  <data name="Menu_Data_Plugins.AccessKey" xml:space="preserve"><value>Ι</value></data>
+  <data name="Menu_Tools_Plugins.Text" xml:space="preserve"><value>Πρόσθετα</value></data>
+  <data name="Menu_Tools_Plugins.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Tools_Plugins_Manage.Text" xml:space="preserve"><value>Διαχείριση πρόσθετων...</value></data>
+  <data name="Menu_Tools_Plugins_Manage.AccessKey" xml:space="preserve"><value>Δ</value></data>
+  <data name="Cmd_plugins_manage" xml:space="preserve"><value>Διαχείριση</value></data>
+  <data name="CmdAlias_plugins_manage" xml:space="preserve"><value>διαχειριστής πρόσθετων επεκτάσεις πρόσθετο plugin manager extensions add-ins</value></data>
+  <data name="CmdCategory_plugins" xml:space="preserve"><value>Πρόσθετο</value></data>
+  <data name="Set_plugins_signedOnly" xml:space="preserve"><value>Φόρτωση μόνο υπογεγραμμένων πρόσθετων</value></data>
+  <data name="SetDesc_plugins_signedOnly" xml:space="preserve"><value>Τα πρόσθετα χωρίς έγκυρη υπογραφή δεν φορτώνονται. Ισχύει μετά από επανεκκίνηση.</value></data>
+  <data name="Set_plugins_devFolders" xml:space="preserve"><value>Φάκελοι ανάπτυξης πρόσθετων</value></data>
+  <data name="SetDesc_plugins_devFolders" xml:space="preserve"><value>Φάκελοι εξόδου κατασκευής που φορτώνονται απευθείας ως πρόσθετα (επεξεργασία στη διαχείριση πρόσθετων).</value></data>
+  <data name="SetGroup_plugins" xml:space="preserve"><value>Πρόσθετα</value></data>
+  <data name="ToolPage_Plugins" xml:space="preserve"><value>Πρόσθετα</value></data>
+  <data name="PluginManager_Title" xml:space="preserve"><value>Πρόσθετα</value></data>
+  <data name="PluginManager_Intro" xml:space="preserve"><value>Τα πρόσθετα προσθέτουν τύπους επιθεωρητή, κατακερματισμούς, μορφές, εντολές και πλαίσια. Τα πρόσθετα εκτελούνται με τα ίδια δικαιώματα με εσάς· ενεργοποιείτε μόνο πρόσθετα από δημιουργούς που εμπιστεύεστε. Οι αλλαγές ισχύουν μετά από επανεκκίνηση.</value></data>
+  <data name="PluginManager_SafeMode" xml:space="preserve"><value>Ασφαλής λειτουργία: δεν φορτώνεται κανένα πρόσθετο. Η λίστα και οι ρυθμίσεις δεν αλλάζουν.</value></data>
+  <data name="PluginManager_Add" xml:space="preserve"><value>Προσθήκη...</value></data>
+  <data name="PluginManager_Restart" xml:space="preserve"><value>Επανεκκίνηση τώρα</value></data>
+  <data name="PluginManager_OpenFolder" xml:space="preserve"><value>Άνοιγμα φακέλου πρόσθετων</value></data>
+  <data name="PluginManager_Remove" xml:space="preserve"><value>Αφαίρεση</value></data>
+  <data name="PluginManager_Settings" xml:space="preserve"><value>Ρυθμίσεις πρόσθετου...</value></data>
+  <data name="PluginManager_Enabled" xml:space="preserve"><value>Ενεργό</value></data>
+  <data name="PluginManager_EnabledOn" xml:space="preserve"><value>Ενεργό</value></data>
+  <data name="PluginManager_EnabledOff" xml:space="preserve"><value>Ανενεργό</value></data>
+  <data name="PluginManager_Empty" xml:space="preserve"><value>Δεν έχουν εγκατασταθεί πρόσθετα. Προσθέστε ένα αρχείο .hexplugin με το Προσθήκη... ή αποθέστε το στη λίστα.</value></data>
+  <data name="PluginManager_DevFolders" xml:space="preserve"><value>Φάκελοι ανάπτυξης</value></data>
+  <data name="PluginManager_DevFoldersIntro" xml:space="preserve"><value>Τα πρόσθετα φορτώνονται απευθείας από αυτούς τους φακέλους εξόδου κατασκευής και εμφανίζονται ως Ανάπτυξη. Ερωτάστε μία φορά για κάθε φάκελο.</value></data>
+  <data name="PluginManager_AddDevFolder" xml:space="preserve"><value>Προσθήκη φακέλου ανάπτυξης...</value></data>
+  <data name="PluginManager_DevFolderAdded" xml:space="preserve"><value>Ο φάκελος ανάπτυξης προστέθηκε. Κάντε επανεκκίνηση για να φορτωθεί.</value></data>
+  <data name="PluginManager_Publishers" xml:space="preserve"><value>Αξιόπιστοι εκδότες</value></data>
+  <data name="PluginManager_PublishersIntro" xml:space="preserve"><value>Τα πρόσθετα που έχουν υπογραφεί από αυτούς τους εκδότες ενεργοποιούνται χωρίς ερώτηση. Αφαιρέστε έναν εκδότη για να ερωτηθείτε ξανά.</value></data>
+  <data name="PluginManager_ListName" xml:space="preserve"><value>Εγκατεστημένα πρόσθετα</value></data>
+  <data name="PluginManager_DropHint" xml:space="preserve"><value>Αποθέστε εδώ ένα αρχείο .hexplugin για να το προσθέσετε.</value></data>
+  <data name="PluginManager_DropCaption" xml:space="preserve"><value>Προσθήκη πρόσθετου</value></data>
+  <data name="PluginManager_NoPublisher" xml:space="preserve"><value>άγνωστος εκδότης</value></data>
+  <data name="PluginManager_VersionPublisher" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="PluginManager_Signed" xml:space="preserve"><value>Υπογράφηκε από {0}</value></data>
+  <data name="PluginManager_SignedRevocationUnchecked" xml:space="preserve"><value>Υπογράφηκε από {0} (δεν ήταν δυνατός ο έλεγχος ανάκλησης)</value></data>
+  <data name="PluginManager_SignatureInvalid" xml:space="preserve"><value>Μη έγκυρη υπογραφή</value></data>
+  <data name="PluginManager_SignatureUnchecked" xml:space="preserve"><value>Η υπογραφή δεν έχει ελεγχθεί ακόμη</value></data>
+  <data name="PluginManager_Unsigned" xml:space="preserve"><value>Χωρίς υπογραφή</value></data>
+  <data name="PluginManager_StateEnabled" xml:space="preserve"><value>Ενεργό</value></data>
+  <data name="PluginManager_StateDisabled" xml:space="preserve"><value>Ανενεργό</value></data>
+  <data name="PluginManager_StateFailed" xml:space="preserve"><value>Δεν είναι δυνατή η φόρτωση ({0})</value></data>
+  <data name="PluginManager_StateSuspended" xml:space="preserve"><value>Σταματημένο ({0})</value></data>
+  <data name="PluginManager_StateNotLoaded" xml:space="preserve"><value>Δεν έχει φορτωθεί ({0})</value></data>
+  <data name="PluginManager_StateLoading" xml:space="preserve"><value>Φόρτωση...</value></data>
+  <data name="PluginManager_PendingRestart" xml:space="preserve"><value>{0} — αλλαγές μετά από επανεκκίνηση</value></data>
+  <data name="PluginManager_Development" xml:space="preserve"><value>Ανάπτυξη</value></data>
+  <data name="PluginManager_NoExtensions" xml:space="preserve"><value>Χωρίς επεκτάσεις</value></data>
+  <data name="PluginManager_Extensions" xml:space="preserve"><value>Προσθέτει: {0}</value></data>
+  <data name="PluginManager_ExtensionDisabled" xml:space="preserve"><value>{0} (ανενεργό: {1})</value></data>
+  <data name="PluginManager_SafeModeInstall" xml:space="preserve"><value>Δεν είναι δυνατή η προσθήκη πρόσθετων σε ασφαλή λειτουργία.</value></data>
+  <data name="PluginManager_InstallFailed" xml:space="preserve"><value>Το πρόσθετο δεν προστέθηκε: {0}</value></data>
+  <data name="PluginManager_RemoveTitle" xml:space="preserve"><value>Αφαίρεση πρόσθετου</value></data>
+  <data name="PluginManager_RemoveBody" xml:space="preserve"><value>Να αφαιρεθεί το "{0}"; Τα φορτωμένα πρόσθετα διαγράφονται μετά από επανεκκίνηση.</value></data>
+  <data name="PluginManager_SettingsTitle" xml:space="preserve"><value>Ρυθμίσεις του {0}</value></data>
+  <data name="PluginKind_inspectorType" xml:space="preserve"><value>τύπος επιθεωρητή</value></data>
+  <data name="PluginKind_hash" xml:space="preserve"><value>κατακερματισμός</value></data>
+  <data name="PluginKind_importFormat" xml:space="preserve"><value>μορφή εισαγωγής</value></data>
+  <data name="PluginKind_exportFormat" xml:space="preserve"><value>μορφή εξαγωγής</value></data>
+  <data name="PluginKind_byteSource" xml:space="preserve"><value>πηγή δεδομένων</value></data>
+  <data name="PluginKind_transformView" xml:space="preserve"><value>προβολή μετασχηματισμού</value></data>
+  <data name="PluginKind_dataTransform" xml:space="preserve"><value>λειτουργία δεδομένων</value></data>
+  <data name="PluginKind_command" xml:space="preserve"><value>εντολή</value></data>
+  <data name="PluginKind_menu" xml:space="preserve"><value>στοιχείο μενού</value></data>
+  <data name="PluginKind_panel" xml:space="preserve"><value>πλαίσιο</value></data>
+  <data name="PluginKind_settings" xml:space="preserve"><value>σελίδα ρυθμίσεων</value></data>
+  <data name="PluginKind_templateFunction" xml:space="preserve"><value>συνάρτηση προτύπου</value></data>
+  <data name="PluginKind_fileTypeDetector" xml:space="preserve"><value>ανίχνευση τύπου αρχείου</value></data>
+  <data name="PluginKind_disassembler" xml:space="preserve"><value>disassembler</value></data>
+  <data name="PluginKind_colorRules" xml:space="preserve"><value>κανόνες χρωματισμού</value></data>
+  <data name="PluginKind_scriptApi" xml:space="preserve"><value>API σεναρίων</value></data>
+  <data name="PluginKind_unknown" xml:space="preserve"><value>άγνωστο</value></data>
+  <data name="PluginTrust_Title" xml:space="preserve"><value>Να ενεργοποιηθεί το πρόσθετο "{0}";</value></data>
+  <data name="PluginTrust_Name" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="PluginTrust_NameUpdate" xml:space="preserve"><value>{0} {1} (ενημέρωση)</value></data>
+  <data name="PluginTrust_Publisher" xml:space="preserve"><value>Εκδότης: {0}</value></data>
+  <data name="PluginTrust_Development" xml:space="preserve"><value>Φορτώνεται από φάκελο ανάπτυξης.</value></data>
+  <data name="PluginTrust_FullTrust" xml:space="preserve"><value>Αυτός ο κώδικας μπορεί να κάνει οτιδήποτε στον υπολογιστή σας με τα δικαιώματά σας (συμπεριλαμβανομένης της ανάγνωσης και εγγραφής αρχείων και της πρόσβασης στο δίκτυο). Ενεργοποιείτε μόνο πρόσθετα από δημιουργούς που εμπιστεύεστε.</value></data>
+  <data name="PluginTrust_Permissions" xml:space="preserve"><value>Το πρόσθετο δηλώνει: {0}</value></data>
+  <data name="PluginTrust_UnsignedWarning" xml:space="preserve"><value>Αυτό το πρόσθετο δεν είναι υπογεγραμμένο. Ο εκδότης του δεν μπορεί να επαληθευτεί.</value></data>
+  <data name="PluginTrust_AlwaysTrustPublisher" xml:space="preserve"><value>Να εμπιστεύομαι πάντα τα πρόσθετα του εκδότη {0}</value></data>
+  <data name="PluginTrust_Enable" xml:space="preserve"><value>Ενεργοποίηση</value></data>
+  <data name="PluginTrust_DontEnable" xml:space="preserve"><value>Να μην ενεργοποιηθεί</value></data>
+  <data name="PluginTrust_Elevated" xml:space="preserve"><value>Το HexEditor εκτελείται ως διαχειριστής. Αυτό το πρόσθετο εκτελείται με δικαιώματα διαχειριστή και μπορεί να επηρεάσει ολόκληρο τον υπολογιστή.</value></data>
+  <data name="PluginTrust_ElevatedTitle" xml:space="preserve"><value>Να φορτωθούν τα πρόσθετα ως διαχειριστής;</value></data>
+  <data name="PluginTrust_ElevatedBatch" xml:space="preserve"><value>Το HexEditor εκτελείται ως διαχειριστής. Αυτά τα πρόσθετα εκτελούνται με δικαιώματα διαχειριστή και μπορούν να επηρεάσουν ολόκληρο τον υπολογιστή:</value></data>
+  <data name="PluginTrust_ElevatedItem" xml:space="preserve"><value>{0} {1} ({2})</value></data>
+  <data name="PluginTrust_ElevatedUntrusted" xml:space="preserve"><value>— δεν είναι ακόμη αξιόπιστο</value></data>
+  <data name="PluginTrust_Load" xml:space="preserve"><value>Φόρτωση</value></data>
+  <data name="PluginTrust_DontLoad" xml:space="preserve"><value>Να μην φορτωθούν</value></data>
+  <data name="Plugin_Suspended" xml:space="preserve"><value>Το πρόσθετο "{0}" σταμάτησε επειδή τα σφάλματα συνεχίστηκαν.</value></data>
+  <data name="Plugin_DisableButton" xml:space="preserve"><value>Απενεργοποίηση του πρόσθετου</value></data>
+  <data name="Plugin_RetryButton" xml:space="preserve"><value>Νέα προσπάθεια κατά την επανεκκίνηση</value></data>
+  <data name="Plugin_DisabledRestart" xml:space="preserve"><value>Το πρόσθετο "{0}" δεν θα φορτωθεί μετά από επανεκκίνηση.</value></data>
+  <data name="Plugin_CrashTitle" xml:space="preserve"><value>Να απενεργοποιηθεί το πρόσθετο;</value></data>
+  <data name="Plugin_CrashBody" xml:space="preserve"><value>Την προηγούμενη φορά το HexEditor τερματίστηκε απροσδόκητα, πιθανώς λόγω του πρόσθετου "{0}". Να απενεργοποιηθεί;</value></data>
+  <data name="Plugin_KeepEnabled" xml:space="preserve"><value>Να παραμείνει ενεργό</value></data>
+  <data name="Plugin_CommandUnavailable" xml:space="preserve"><value>Αυτή η εντολή πρόσθετου δεν μπορεί να εκτελεστεί τώρα.</value></data>
+  <data name="Plugin_CommandFailed" xml:space="preserve"><value>Η εντολή "{0}" του πρόσθετου "{1}" απέτυχε. Δείτε το πλαίσιο εξόδου.</value></data>
+  <data name="Plugin_OpenSourceCommand" xml:space="preserve"><value>Άνοιγμα: {0}</value></data>
+  <data name="Plugin_OpenSourceFailed" xml:space="preserve"><value>Δεν είναι δυνατό το άνοιγμα του {0}: {1}</value></data>
+  <data name="Plugin_CopyAsCommand" xml:space="preserve"><value>Αντιγραφή ως: {0}</value></data>
+  <data name="Plugin_Copied" xml:space="preserve"><value>Αντιγράφηκε ως {0}.</value></data>
+  <data name="Plugin_DataTransformCommand" xml:space="preserve"><value>Λειτουργία δεδομένων: {0}</value></data>
+  <data name="Plugin_DataTransformFailed" xml:space="preserve"><value>Η λειτουργία δεδομένων {0} απέτυχε: {1}</value></data>
+  <data name="Plugin_ToolTip" xml:space="preserve"><value>Προστέθηκε από το πρόσθετο {0}</value></data>
+  <data name="Plugin_FormatName" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Plugin_PanelTitle" xml:space="preserve"><value>Πλαίσιο πρόσθετου</value></data>
+  <data name="Plugin_PanelUnavailable" xml:space="preserve"><value>Το πρόσθετο δεν μπόρεσε να δημιουργήσει αυτό το πλαίσιο.</value></data>
+  <data name="HexView_Menu_Plugins" xml:space="preserve"><value>Πρόσθετα</value></data>
+  <data name="Inspector_PluginStopped" xml:space="preserve"><value>(σταματημένο)</value></data>
+  <data name="Inspector_PluginNotWritable" xml:space="preserve"><value>Αυτός ο τύπος πρόσθετου δεν μπορεί να επεξεργαστεί με αυτήν την τιμή.</value></data>
+  <data name="Panel_Templates_Title" xml:space="preserve"><value>Δομή</value></data>
+  <data name="Panel_TemplateOutput_Title" xml:space="preserve"><value>Έξοδος προτύπου</value></data>
+  <data name="Menu_Analysis_Templates.Text" xml:space="preserve"><value>Πρότυπα δομής</value></data>
+  <data name="Menu_Analysis_Templates.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_Templates_Apply.Text" xml:space="preserve"><value>Εφαρμογή προτύπου...</value></data>
+  <data name="Menu_Templates_Apply.AccessKey" xml:space="preserve"><value>Ε</value></data>
+  <data name="Menu_Templates_ApplyHere.Text" xml:space="preserve"><value>Εφαρμογή προτύπου από εδώ...</value></data>
+  <data name="Menu_Templates_ApplyHere.AccessKey" xml:space="preserve"><value>Δ</value></data>
+  <data name="Menu_Templates_FollowType.Text" xml:space="preserve"><value>Εμφάνιση τύπου στον δρομέα...</value></data>
+  <data name="Menu_Templates_FollowType.AccessKey" xml:space="preserve"><value>Τ</value></data>
+  <data name="Menu_Templates_ApplyKaitai.Text" xml:space="preserve"><value>Εφαρμογή Kaitai Struct...</value></data>
+  <data name="Menu_Templates_ApplyKaitai.AccessKey" xml:space="preserve"><value>K</value></data>
+  <data name="Menu_Templates_FindCandidates.Text" xml:space="preserve"><value>Εύρεση προτύπων που ταιριάζουν</value></data>
+  <data name="Menu_Templates_FindCandidates.AccessKey" xml:space="preserve"><value>Υ</value></data>
+  <data name="Menu_Templates_Rerun.Text" xml:space="preserve"><value>Επανεκτέλεση</value></data>
+  <data name="Menu_Templates_Rerun.AccessKey" xml:space="preserve"><value>Ν</value></data>
+  <data name="Menu_Templates_Remove.Text" xml:space="preserve"><value>Κατάργηση εφαρμογής</value></data>
+  <data name="Menu_Templates_Remove.AccessKey" xml:space="preserve"><value>Α</value></data>
+  <data name="Menu_Templates_Export.Text" xml:space="preserve"><value>Εξαγωγή αποτελεσμάτων...</value></data>
+  <data name="Menu_Templates_Export.AccessKey" xml:space="preserve"><value>Ξ</value></data>
+  <data name="Menu_Templates_New.Text" xml:space="preserve"><value>Νέο πρότυπο</value></data>
+  <data name="Menu_Templates_New.AccessKey" xml:space="preserve"><value>Ο</value></data>
+  <data name="Menu_Templates_Open.Text" xml:space="preserve"><value>Άνοιγμα προτύπου...</value></data>
+  <data name="Menu_Templates_Open.AccessKey" xml:space="preserve"><value>Γ</value></data>
+  <data name="Menu_Templates_Edit.Text" xml:space="preserve"><value>Επεξεργασία προτύπου</value></data>
+  <data name="Menu_Templates_Edit.AccessKey" xml:space="preserve"><value>Σ</value></data>
+  <data name="Menu_Templates_ConvertKsy.Text" xml:space="preserve"><value>Μετατροπή .ksy σε HXT...</value></data>
+  <data name="Menu_Templates_ConvertKsy.AccessKey" xml:space="preserve"><value>Μ</value></data>
+  <data name="Menu_Templates_Manage.Text" xml:space="preserve"><value>Διαχείριση προτύπων</value></data>
+  <data name="Menu_Templates_Manage.AccessKey" xml:space="preserve"><value>Χ</value></data>
+  <data name="Menu_View_TemplateColoring.Text" xml:space="preserve"><value>Χρωματισμός δομής</value></data>
+  <data name="Menu_View_TemplateColoring.AccessKey" xml:space="preserve"><value>Ω</value></data>
+  <data name="Menu_View_TemplatesPanel.Text" xml:space="preserve"><value>Δομή</value></data>
+  <data name="Menu_View_TemplatesPanel.AccessKey" xml:space="preserve"><value>Η</value></data>
+  <data name="Menu_View_TemplateOutputPanel.Text" xml:space="preserve"><value>Έξοδος προτύπου</value></data>
+  <data name="Menu_View_TemplateOutputPanel.AccessKey" xml:space="preserve"><value>Π</value></data>
+  <data name="Menu_File_ExportTemplate.Text" xml:space="preserve"><value>Αποτελέσματα δομής...</value></data>
+  <data name="Menu_File_ExportTemplate.AccessKey" xml:space="preserve"><value>Λ</value></data>
+  <data name="HexView_Menu_TemplateApplyHere" xml:space="preserve"><value>Εφαρμογή προτύπου από εδώ...</value></data>
+  <data name="HexView_Menu_TemplateBreakOnRead" xml:space="preserve"><value>Διακοπή κατά την ανάγνωση εδώ</value></data>
+  <data name="CmdCategory_templates" xml:space="preserve"><value>Πρότυπο</value></data>
+  <data name="CmdCategory_codeEditor" xml:space="preserve"><value>Επεξεργαστής κώδικα</value></data>
+  <data name="Cmd_templates_apply" xml:space="preserve"><value>Πρότυπο: Εφαρμογή</value></data>
+  <data name="CmdAlias_templates_apply" xml:space="preserve"><value>δομή;ανάλυση;εφαρμογή;structure;parse</value></data>
+  <data name="Cmd_templates_applyHere" xml:space="preserve"><value>Πρότυπο: Εφαρμογή από εδώ</value></data>
+  <data name="CmdAlias_templates_applyHere" xml:space="preserve"><value>δρομέας;cursor</value></data>
+  <data name="Cmd_templates_followType" xml:space="preserve"><value>Πρότυπο: Εμφάνιση τύπου στον δρομέα</value></data>
+  <data name="CmdAlias_templates_followType" xml:space="preserve"><value>ακολούθηση;τύπος;follow</value></data>
+  <data name="Cmd_templates_applyKaitai" xml:space="preserve"><value>Πρότυπο: Εφαρμογή Kaitai Struct</value></data>
+  <data name="CmdAlias_templates_applyKaitai" xml:space="preserve"><value>ksy;kaitai</value></data>
+  <data name="Cmd_templates_rerun" xml:space="preserve"><value>Πρότυπο: Επανεκτέλεση</value></data>
+  <data name="CmdAlias_templates_rerun" xml:space="preserve"><value>επαναξιολόγηση;reevaluate</value></data>
+  <data name="Cmd_templates_remove" xml:space="preserve"><value>Πρότυπο: Κατάργηση εφαρμογής</value></data>
+  <data name="CmdAlias_templates_remove" xml:space="preserve"><value>αναίρεση εφαρμογής;unapply</value></data>
+  <data name="Cmd_templates_stop" xml:space="preserve"><value>Πρότυπο: Διακοπή αξιολόγησης</value></data>
+  <data name="CmdAlias_templates_stop" xml:space="preserve"><value>ακύρωση;διακοπή;cancel</value></data>
+  <data name="Cmd_templates_showResults" xml:space="preserve"><value>Πρότυπο: Εμφάνιση δέντρου αποτελεσμάτων</value></data>
+  <data name="CmdAlias_templates_showResults" xml:space="preserve"><value>δέντρο;αποτελέσματα;tree</value></data>
+  <data name="Cmd_templates_showOutput" xml:space="preserve"><value>Πρότυπο: Εμφάνιση εξόδου</value></data>
+  <data name="CmdAlias_templates_showOutput" xml:space="preserve"><value>σφάλματα;errors</value></data>
+  <data name="Cmd_templates_editValue" xml:space="preserve"><value>Πρότυπο: Επεξεργασία τιμής</value></data>
+  <data name="CmdAlias_templates_editValue" xml:space="preserve"><value>αλλαγή;change</value></data>
+  <data name="Cmd_templates_goToDefinition" xml:space="preserve"><value>Πρότυπο: Μετάβαση στον ορισμό</value></data>
+  <data name="CmdAlias_templates_goToDefinition" xml:space="preserve"><value>δήλωση;declaration</value></data>
+  <data name="Cmd_templates_goToTarget" xml:space="preserve"><value>Πρότυπο: Μετάβαση στον στόχο του δείκτη</value></data>
+  <data name="CmdAlias_templates_goToTarget" xml:space="preserve"><value>δείκτης;pointer</value></data>
+  <data name="Cmd_templates_copyValue" xml:space="preserve"><value>Πρότυπο: Αντιγραφή τιμής</value></data>
+  <data name="CmdAlias_templates_copyValue" xml:space="preserve"><value>πρόχειρο;clipboard</value></data>
+  <data name="Cmd_templates_addBookmark" xml:space="preserve"><value>Πρότυπο: Προσθήκη στους σελιδοδείκτες</value></data>
+  <data name="CmdAlias_templates_addBookmark" xml:space="preserve"><value>σελιδοδείκτης;bookmark</value></data>
+  <data name="Cmd_templates_export" xml:space="preserve"><value>Πρότυπο: Εξαγωγή αποτελεσμάτων</value></data>
+  <data name="CmdAlias_templates_export" xml:space="preserve"><value>εξαγωγή;json;csv</value></data>
+  <data name="Cmd_templates_toggleColoring" xml:space="preserve"><value>Πρότυπο: Εναλλαγή χρωματισμού</value></data>
+  <data name="CmdAlias_templates_toggleColoring" xml:space="preserve"><value>επισήμανση;highlight</value></data>
+  <data name="Cmd_templates_findCandidates" xml:space="preserve"><value>Πρότυπο: Εύρεση προτύπων που ταιριάζουν</value></data>
+  <data name="CmdAlias_templates_findCandidates" xml:space="preserve"><value>ανίχνευση;detect</value></data>
+  <data name="Cmd_templates_new" xml:space="preserve"><value>Πρότυπο: Νέο</value></data>
+  <data name="CmdAlias_templates_new" xml:space="preserve"><value>δημιουργία;create</value></data>
+  <data name="Cmd_templates_open" xml:space="preserve"><value>Πρότυπο: Άνοιγμα</value></data>
+  <data name="CmdAlias_templates_open" xml:space="preserve"><value>αρχείο;file</value></data>
+  <data name="Cmd_templates_edit" xml:space="preserve"><value>Πρότυπο: Επεξεργασία</value></data>
+  <data name="CmdAlias_templates_edit" xml:space="preserve"><value>επεξεργαστής;editor</value></data>
+  <data name="Cmd_templates_manage" xml:space="preserve"><value>Πρότυπο: Διαχείριση</value></data>
+  <data name="CmdAlias_templates_manage" xml:space="preserve"><value>βιβλιοθήκη;library</value></data>
+  <data name="Cmd_templates_convertKsy" xml:space="preserve"><value>Πρότυπο: Μετατροπή .ksy σε HXT</value></data>
+  <data name="CmdAlias_templates_convertKsy" xml:space="preserve"><value>kaitai;μετατροπή</value></data>
+  <data name="Cmd_templates_libraryReference" xml:space="preserve"><value>Πρότυπο: Τεκμηρίωση τυπικής βιβλιοθήκης</value></data>
+  <data name="CmdAlias_templates_libraryReference" xml:space="preserve"><value>βοήθεια;συναρτήσεις;help functions</value></data>
+  <data name="Cmd_templates_tryRun" xml:space="preserve"><value>Πρότυπο: Δοκιμαστική εκτέλεση</value></data>
+  <data name="CmdAlias_templates_tryRun" xml:space="preserve"><value>δοκιμή;μη αποθηκευμένο;test;unsaved</value></data>
+  <data name="Cmd_templates_breakOnRead" xml:space="preserve"><value>Πρότυπο: Διακοπή κατά την ανάγνωση εδώ</value></data>
+  <data name="CmdAlias_templates_breakOnRead" xml:space="preserve"><value>σημείο διακοπής δεδομένων;data breakpoint</value></data>
+  <data name="Cmd_view_panel_templates" xml:space="preserve"><value>Προβολή: Πλαίσιο δομής</value></data>
+  <data name="CmdAlias_view_panel_templates" xml:space="preserve"><value>αποτελέσματα προτύπου;template results</value></data>
+  <data name="Cmd_view_panel_templateOutput" xml:space="preserve"><value>Προβολή: Πλαίσιο εξόδου προτύπου</value></data>
+  <data name="CmdAlias_view_panel_templateOutput" xml:space="preserve"><value>σφάλματα;errors</value></data>
+  <data name="Cmd_codeEditor_run" xml:space="preserve"><value>Επεξεργαστής κώδικα: Έναρξη εντοπισμού σφαλμάτων / συνέχεια</value></data>
+  <data name="CmdAlias_codeEditor_run" xml:space="preserve"><value>εκτέλεση;εντοπισμός σφαλμάτων;run;debug</value></data>
+  <data name="Cmd_codeEditor_stop" xml:space="preserve"><value>Επεξεργαστής κώδικα: Διακοπή εντοπισμού σφαλμάτων</value></data>
+  <data name="CmdAlias_codeEditor_stop" xml:space="preserve"><value>τέλος;end</value></data>
+  <data name="Cmd_codeEditor_toggleBreakpoint" xml:space="preserve"><value>Επεξεργαστής κώδικα: Εναλλαγή σημείου διακοπής</value></data>
+  <data name="CmdAlias_codeEditor_toggleBreakpoint" xml:space="preserve"><value>σημείο διακοπής;break</value></data>
+  <data name="Cmd_codeEditor_stepOver" xml:space="preserve"><value>Επεξεργαστής κώδικα: Βήμα πάνω από</value></data>
+  <data name="CmdAlias_codeEditor_stepOver" xml:space="preserve"><value>επόμενο;next</value></data>
+  <data name="Cmd_codeEditor_stepInto" xml:space="preserve"><value>Επεξεργαστής κώδικα: Βήμα μέσα</value></data>
+  <data name="CmdAlias_codeEditor_stepInto" xml:space="preserve"><value>είσοδος;enter</value></data>
+  <data name="Cmd_codeEditor_stepOut" xml:space="preserve"><value>Επεξεργαστής κώδικα: Βήμα έξω</value></data>
+  <data name="CmdAlias_codeEditor_stepOut" xml:space="preserve"><value>έξοδος;return</value></data>
+  <data name="Cmd_codeEditor_runToCursor" xml:space="preserve"><value>Επεξεργαστής κώδικα: Εκτέλεση μέχρι τον δρομέα</value></data>
+  <data name="CmdAlias_codeEditor_runToCursor" xml:space="preserve"><value>δρομέας;cursor</value></data>
+  <data name="Cmd_codeEditor_addWatch" xml:space="preserve"><value>Επεξεργαστής κώδικα: Προσθήκη έκφρασης παρακολούθησης</value></data>
+  <data name="CmdAlias_codeEditor_addWatch" xml:space="preserve"><value>παρακολούθηση;watch</value></data>
+  <data name="Cmd_codeEditor_goToDefinition" xml:space="preserve"><value>Επεξεργαστής κώδικα: Μετάβαση στον ορισμό</value></data>
+  <data name="CmdAlias_codeEditor_goToDefinition" xml:space="preserve"><value>δήλωση;declaration</value></data>
+  <data name="Cmd_codeEditor_findReferences" xml:space="preserve"><value>Επεξεργαστής κώδικα: Εύρεση αναφορών</value></data>
+  <data name="CmdAlias_codeEditor_findReferences" xml:space="preserve"><value>χρήσεις;usages</value></data>
+  <data name="Cmd_codeEditor_format" xml:space="preserve"><value>Επεξεργαστής κώδικα: Μορφοποίηση εγγράφου</value></data>
+  <data name="CmdAlias_codeEditor_format" xml:space="preserve"><value>εσοχή;indent</value></data>
+  <data name="Cmd_codeEditor_toggleComment" xml:space="preserve"><value>Επεξεργαστής κώδικα: Εναλλαγή σχολίου</value></data>
+  <data name="CmdAlias_codeEditor_toggleComment" xml:space="preserve"><value>σχόλιο;comment</value></data>
+  <data name="Cmd_codeEditor_complete" xml:space="preserve"><value>Επεξεργαστής κώδικα: Εμφάνιση συμπληρώσεων</value></data>
+  <data name="CmdAlias_codeEditor_complete" xml:space="preserve"><value>συμπλήρωση;intellisense</value></data>
+  <data name="SetCategory_templates" xml:space="preserve"><value>Πρότυπα</value></data>
+  <data name="Set_templates_autoApply" xml:space="preserve"><value>Αυτόματη εφαρμογή</value></data>
+  <data name="SetDesc_templates_autoApply" xml:space="preserve"><value>Τι θα γίνεται όταν ένα πρότυπο ταιριάζει με ένα αρχείο που ανοίγετε (magic number, τύπος MIME ή επέκταση).</value></data>
+  <data name="SetOpt_templates_autoApply_suggest" xml:space="preserve"><value>Πρόταση</value></data>
+  <data name="SetOpt_templates_autoApply_always" xml:space="preserve"><value>Πάντα εφαρμογή</value></data>
+  <data name="SetOpt_templates_autoApply_none" xml:space="preserve"><value>Καμία ενέργεια</value></data>
+  <data name="Set_templates_autoReevaluate" xml:space="preserve"><value>Επαναξιολόγηση μετά την επεξεργασία</value></data>
+  <data name="SetDesc_templates_autoReevaluate" xml:space="preserve"><value>Επαναξιολογεί τα εφαρμοσμένα πρότυπα 500 ms μετά την τελευταία επεξεργασία. Όταν είναι απενεργοποιημένο, χρησιμοποιήστε την Επανεκτέλεση στο δέντρο αποτελεσμάτων.</value></data>
+  <data name="Set_templates_coloring" xml:space="preserve"><value>Χρωματισμός δομής</value></data>
+  <data name="SetDesc_templates_coloring" xml:space="preserve"><value>Χρωματίζει τις περιοχές των μοτίβων προτύπου στην προβολή Hex.</value></data>
+  <data name="Set_templates_coloringOpacity" xml:space="preserve"><value>Αδιαφάνεια χρωματισμού (%)</value></data>
+  <data name="SetDesc_templates_coloringOpacity" xml:space="preserve"><value>Αδιαφάνεια του χρωματισμού δομής πάνω από το φόντο της προβολής Hex.</value></data>
+  <data name="Set_templates_folders" xml:space="preserve"><value>Φάκελοι προτύπων</value></data>
+  <data name="SetDesc_templates_folders" xml:space="preserve"><value>Πρόσθετοι φάκελοι στους οποίους αναζητούνται πρότυπα χρήστη.</value></data>
+  <data name="Set_templates_inspector" xml:space="preserve"><value>Πρότυπα επιθεωρητή</value></data>
+  <data name="SetDesc_templates_inspector" xml:space="preserve"><value>Πρότυπα των οποίων οι τύποι [[inspector]] εμφανίζονται στον επιθεωρητή δεδομένων.</value></data>
+  <data name="Set_templates_preferences" xml:space="preserve"><value>Προτιμήσεις προτύπων</value></data>
+  <data name="SetDesc_templates_preferences" xml:space="preserve"><value>Απενεργοποιημένα πρότυπα, πρότυπα που εξαιρούνται από την αυτόματη εφαρμογή και κρυφές προτάσεις.</value></data>
+  <data name="SetSection_TemplateManager" xml:space="preserve"><value>Διαχείριση προτύπων</value></data>
+  <data name="SetSection_TemplateFolders" xml:space="preserve"><value>Φάκελοι προτύπων</value></data>
+  <data name="SetSection_TemplateList" xml:space="preserve"><value>Πρότυπα</value></data>
+  <data name="SetSection_TemplateInspector" xml:space="preserve"><value>Πρότυπα επιθεωρητή</value></data>
+  <data name="TplMgr_AddFolder" xml:space="preserve"><value>Προσθήκη φακέλου...</value></data>
+  <data name="TplMgr_RemoveFolder" xml:space="preserve"><value>Αφαίρεση</value></data>
+  <data name="TplMgr_FolderInaccessible" xml:space="preserve"><value>Δεν είναι δυνατή η πρόσβαση σε αυτόν τον φάκελο.</value></data>
+  <data name="TplMgr_Filter" xml:space="preserve"><value>Φιλτράρισμα κατά όνομα</value></data>
+  <data name="TplMgr_Import" xml:space="preserve"><value>Εισαγωγή...</value></data>
+  <data name="TplMgr_New" xml:space="preserve"><value>Νέο πρότυπο</value></data>
+  <data name="TplMgr_Enabled" xml:space="preserve"><value>Ενεργό</value></data>
+  <data name="TplMgr_AutoApply" xml:space="preserve"><value>Αυτόματη εφαρμογή</value></data>
+  <data name="TplMgr_Edit" xml:space="preserve"><value>Επεξεργασία</value></data>
+  <data name="TplMgr_Export" xml:space="preserve"><value>Εξαγωγή...</value></data>
+  <data name="TplMgr_Shadowed" xml:space="preserve"><value>Κρύβεται από άλλο πρότυπο με το ίδιο όνομα.</value></data>
+  <data name="TplMgr_Suppressed" xml:space="preserve"><value>Απενεργοποιημένες προτάσεις</value></data>
+  <data name="TplMgr_NoSuppressed" xml:space="preserve"><value>Καμία</value></data>
+  <data name="TplMgr_Unsuppress" xml:space="preserve"><value>Εμφάνιση ξανά</value></data>
+  <data name="TplMgr_AddInspector" xml:space="preserve"><value>Προσθήκη προτύπου επιθεωρητή...</value></data>
+  <data name="TplMgr_NotFixedSize" xml:space="preserve"><value>μη σταθερό μέγεθος</value></data>
+  <data name="TplMgr_NotFixedSizeWarning" xml:space="preserve"><value>Αυτό το πρότυπο έχει τύπους επιθεωρητή που δεν είναι σταθερού μεγέθους ή είναι μεγαλύτεροι από 4 KB. Συνιστώνται τύποι σταθερού μεγέθους έως 4 KB.</value></data>
+  <data name="TplMgr_Imported" xml:space="preserve"><value>Εισήχθησαν {0} αρχεία προτύπων.</value></data>
+  <data name="TplMgr_ImportError" xml:space="preserve"><value>Δεν ήταν δυνατή η εισαγωγή: {0}</value></data>
+  <data name="TplMgr_Exported" xml:space="preserve"><value>Εξήχθησαν {0} αρχεία στο {1}.</value></data>
+  <data name="TplMgr_ExportError" xml:space="preserve"><value>Δεν ήταν δυνατή η εξαγωγή: {0}</value></data>
+  <data name="TplMgr_ExportStandard" xml:space="preserve"><value>Τα τυπικά πρότυπα αποτελούν μέρος της εφαρμογής. Χρησιμοποιήστε το Αντιγραφή και επεξεργασία για να εξαγάγετε ένα αντίγραφο.</value></data>
+  <data name="Tpl_ApplyButton.AutomationProperties.Name" xml:space="preserve"><value>Εφαρμογή προτύπου</value></data>
+  <data name="Tpl_ApplyButton.ToolTipService.ToolTip" xml:space="preserve"><value>Εφαρμογή προτύπου</value></data>
+  <data name="Tpl_RerunButton.AutomationProperties.Name" xml:space="preserve"><value>Επανεκτέλεση</value></data>
+  <data name="Tpl_RerunButton.ToolTipService.ToolTip" xml:space="preserve"><value>Επανεκτέλεση</value></data>
+  <data name="Tpl_StopButton.AutomationProperties.Name" xml:space="preserve"><value>Διακοπή αξιολόγησης</value></data>
+  <data name="Tpl_StopButton.ToolTipService.ToolTip" xml:space="preserve"><value>Διακοπή αξιολόγησης</value></data>
+  <data name="Tpl_ExportButton.AutomationProperties.Name" xml:space="preserve"><value>Εξαγωγή</value></data>
+  <data name="Tpl_ExportButton.ToolTipService.ToolTip" xml:space="preserve"><value>Εξαγωγή</value></data>
+  <data name="Tpl_ColumnsButton.AutomationProperties.Name" xml:space="preserve"><value>Στήλες</value></data>
+  <data name="Tpl_ColumnsButton.ToolTipService.ToolTip" xml:space="preserve"><value>Στήλες</value></data>
+  <data name="Tpl_FollowToggle.AutomationProperties.Name" xml:space="preserve"><value>Ακολούθηση δρομέα</value></data>
+  <data name="Tpl_FollowToggle.ToolTipService.ToolTip" xml:space="preserve"><value>Ακολούθηση δρομέα</value></data>
+  <data name="Tpl_FilterBox.PlaceholderText" xml:space="preserve"><value>Φιλτράρισμα κατά όνομα, τιμή ή τύπο</value></data>
+  <data name="Tpl_FilterBox.AutomationProperties.Name" xml:space="preserve"><value>Φίλτρο</value></data>
+  <data name="Tpl_Tree.AutomationProperties.Name" xml:space="preserve"><value>Δέντρο αποτελεσμάτων</value></data>
+  <data name="Tpl_PathBox.PlaceholderText" xml:space="preserve"><value>Διαδρομή (π.χ. chunks[3].header.width)</value></data>
+  <data name="Tpl_PathBox.AutomationProperties.Name" xml:space="preserve"><value>Διαδρομή</value></data>
+  <data name="Tpl_SearchAll" xml:space="preserve"><value>Αξιολόγηση όλων και αναζήτηση</value></data>
+  <data name="Tpl_FilterCount" xml:space="preserve"><value>{0} αποτελέσματα</value></data>
+  <data name="Tpl_PathNotFound" xml:space="preserve"><value>Η διαδρομή '{0}' δεν βρέθηκε.</value></data>
+  <data name="Tpl_Column_Name" xml:space="preserve"><value>Όνομα</value></data>
+  <data name="Tpl_Column_Value" xml:space="preserve"><value>Τιμή</value></data>
+  <data name="Tpl_Column_Type" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Tpl_Column_Offset" xml:space="preserve"><value>Μετατόπιση</value></data>
+  <data name="Tpl_Column_Size" xml:space="preserve"><value>Μέγεθος</value></data>
+  <data name="Tpl_Column_Comment" xml:space="preserve"><value>Σχόλιο</value></data>
+  <data name="Tpl_Column_Endian" xml:space="preserve"><value>Σειρά byte</value></data>
+  <data name="Tpl_Column_End" xml:space="preserve"><value>Τέλος</value></data>
+  <data name="Tpl_Column_Color" xml:space="preserve"><value>Χρώμα</value></data>
+  <data name="Tpl_ColumnOrder" xml:space="preserve"><value>Σειρά στηλών</value></data>
+  <data name="Tpl_MoveColumnLeft" xml:space="preserve"><value>Μετακίνηση της στήλης {0} αριστερά</value></data>
+  <data name="Tpl_MoveColumnRight" xml:space="preserve"><value>Μετακίνηση της στήλης {0} δεξιά</value></data>
+  <data name="Tpl_ResetColumns" xml:space="preserve"><value>Επαναφορά στηλών</value></data>
+  <data name="Tpl_Evaluating" xml:space="preserve"><value>Αξιολόγηση…</value></data>
+  <data name="Tpl_Evaluated" xml:space="preserve"><value>Αξιολογήθηκαν: {0} μοτίβα</value></data>
+  <data name="Tpl_Counts" xml:space="preserve"><value>{0} σφάλματα, {1} προειδοποιήσεις</value></data>
+  <data name="Tpl_PatternLimit" xml:space="preserve"><value>Ο αριθμός των μοτίβων έφτασε το όριο ({0}). Εμφανίζονται μερικά αποτελέσματα.</value></data>
+  <data name="Tpl_RaiseLimit" xml:space="preserve"><value>Αύξηση του ορίου και επανεκτέλεση</value></data>
+  <data name="Tpl_GroupCount" xml:space="preserve"><value>{0} στοιχεία</value></data>
+  <data name="Tpl_BitSize" xml:space="preserve"><value>{0} bit</value></data>
+  <data name="Tpl_Bits" xml:space="preserve"><value>Bit {0}–{1}</value></data>
+  <data name="Tpl_DateTimeTip" xml:space="preserve"><value>UTC: {0} / Τοπική: {1}</value></data>
+  <data name="Tpl_UndefinedValue" xml:space="preserve"><value>Απροσδιόριστη τιμή</value></data>
+  <data name="Tpl_UndefinedValueShort" xml:space="preserve"><value>Απροσδιόριστο</value></data>
+  <data name="Tpl_FollowLabel" xml:space="preserve"><value>Ακολούθηση</value></data>
+  <data name="Tpl_PointsTo" xml:space="preserve"><value>Δείχνει στο {0}</value></data>
+  <data name="Tpl_A11yOffset" xml:space="preserve"><value>μετατόπιση {0}</value></data>
+  <data name="Tpl_A11ySize" xml:space="preserve"><value>μέγεθος {0}</value></data>
+  <data name="Tpl_Unsaved" xml:space="preserve"><value>(μη αποθηκευμένο)</value></data>
+  <data name="Tpl_TemplateMissing" xml:space="preserve"><value>(το αρχείο προτύπου δεν βρέθηκε)</value></data>
+  <data name="Tpl_NoApplications" xml:space="preserve"><value>Δεν έχει εφαρμοστεί κανένα πρότυπο.</value></data>
+  <data name="Tpl_NotEvaluating" xml:space="preserve"><value>Δεν εκτελείται καμία αξιολόγηση.</value></data>
+  <data name="Tpl_NoNode" xml:space="preserve"><value>Επιλέξτε έναν κόμβο στο δέντρο αποτελεσμάτων.</value></data>
+  <data name="Tpl_NotAPointer" xml:space="preserve"><value>Ο επιλεγμένος κόμβος δεν είναι δείκτης.</value></data>
+  <data name="Tpl_NoTarget" xml:space="preserve"><value>Ο στόχος του δείκτη είναι null ή εκτός των δεδομένων.</value></data>
+  <data name="Tpl_NotFound" xml:space="preserve"><value>Το πρότυπο '{0}' δεν βρέθηκε.</value></data>
+  <data name="Tpl_TooManyApplications" xml:space="preserve"><value>Ένα έγγραφο μπορεί να έχει έως {0} εφαρμογές προτύπων.</value></data>
+  <data name="Tpl_DefinitionMissing" xml:space="preserve"><value>Το αρχείο προτύπου '{0}' δεν βρέθηκε.</value></data>
+  <data name="Tpl_OperationName" xml:space="preserve"><value>Αξιολόγηση του προτύπου {0}</value></data>
+  <data name="Tpl_BookmarkComment" xml:space="preserve"><value>{0} ({1})</value></data>
+  <data name="Tpl_JsonTooLarge" xml:space="preserve"><value>Το JSON είναι μεγαλύτερο από 64 MB. Αποθηκεύστε το σε αρχείο.</value></data>
+  <data name="Tpl_SaveToFile" xml:space="preserve"><value>Αποθήκευση σε αρχείο...</value></data>
+  <data name="Tpl_ApplicationSettings" xml:space="preserve"><value>Πρότυπο: {0}
+Αρχική μετατόπιση: {1}
+Είδος: {2}
+Σειρά byte: {3}
+Τύπος: {4}</value></data>
+  <data name="Tpl_OriginStandard" xml:space="preserve"><value>Τυπικό</value></data>
+  <data name="Tpl_OriginUser" xml:space="preserve"><value>Χρήστη</value></data>
+  <data name="Tpl_Recent" xml:space="preserve"><value>Πρόσφατα</value></data>
+  <data name="Tpl_UsesScript" xml:space="preserve"><value>Χρησιμοποιεί σενάρια</value></data>
+  <data name="Tpl_Details" xml:space="preserve"><value>Λεπτομέρειες</value></data>
+  <data name="TplMenu_GoToData" xml:space="preserve"><value>Μετάβαση στα δεδομένα</value></data>
+  <data name="TplMenu_GoToTarget" xml:space="preserve"><value>Μετάβαση στον στόχο του δείκτη</value></data>
+  <data name="TplMenu_GoToDefinition" xml:space="preserve"><value>Μετάβαση στον ορισμό</value></data>
+  <data name="TplMenu_EditValue" xml:space="preserve"><value>Επεξεργασία τιμής</value></data>
+  <data name="TplMenu_CopyValue" xml:space="preserve"><value>Αντιγραφή τιμής</value></data>
+  <data name="TplMenu_CopyNameValue" xml:space="preserve"><value>Αντιγραφή ονόματος και τιμής</value></data>
+  <data name="TplMenu_CopyPath" xml:space="preserve"><value>Αντιγραφή διαδρομής</value></data>
+  <data name="TplMenu_CopyBytes" xml:space="preserve"><value>Αντιγραφή byte</value></data>
+  <data name="TplMenu_CopyOffset" xml:space="preserve"><value>Αντιγραφή μετατόπισης</value></data>
+  <data name="TplMenu_CopyJson" xml:space="preserve"><value>Αντιγραφή υποδέντρου ως JSON</value></data>
+  <data name="TplMenu_AddBookmark" xml:space="preserve"><value>Προσθήκη στους σελιδοδείκτες</value></data>
+  <data name="TplMenu_AddToSelection" xml:space="preserve"><value>Προσθήκη περιοχών στην πολλαπλή επιλογή</value></data>
+  <data name="TplMenu_OpenSection" xml:space="preserve"><value>Άνοιγμα ενότητας σε νέα καρτέλα</value></data>
+  <data name="TplMenu_ApplyHere" xml:space="preserve"><value>Εφαρμογή προτύπου από εδώ...</value></data>
+  <data name="TplMenu_BreakOnRead" xml:space="preserve"><value>Διακοπή κατά την ανάγνωση εδώ</value></data>
+  <data name="TplMenu_ToggleKind" xml:space="preserve"><value>Εναλλαγή σταθερού / ακολούθησης</value></data>
+  <data name="TplMenu_ToFixed" xml:space="preserve"><value>Μετατροπή σε σταθερό</value></data>
+  <data name="TplMenu_Settings" xml:space="preserve"><value>Ρυθμίσεις εφαρμογής</value></data>
+  <data name="TplMenu_Export" xml:space="preserve"><value>Εξαγωγή...</value></data>
+  <data name="TplMenu_Rerun" xml:space="preserve"><value>Επανεκτέλεση</value></data>
+  <data name="TplMenu_Remove" xml:space="preserve"><value>Κατάργηση εφαρμογής</value></data>
+  <data name="Tpl_EditValue" xml:space="preserve"><value>Τιμή</value></data>
+  <data name="Tpl_EditOk" xml:space="preserve"><value>OK</value></data>
+  <data name="Tpl_EditRawNote" xml:space="preserve"><value>Αυτό το μοτίβο έχει μόνο μετατροπή ανάγνωσης, επομένως επεξεργάζεστε την ακατέργαστη τιμή.</value></data>
+  <data name="Tpl_EditEnumNumber" xml:space="preserve"><value>Εισαγάγετε έναν αριθμό</value></data>
+  <data name="Tpl_EditBool" xml:space="preserve"><value>Αληθές</value></data>
+  <data name="Tpl_EditPadZero" xml:space="preserve"><value>Συμπλήρωση του υπόλοιπου με μηδενικά</value></data>
+  <data name="Tpl_EditUtc" xml:space="preserve"><value>UTC</value></data>
+  <data name="Tpl_EditLocal" xml:space="preserve"><value>Τοπική ώρα</value></data>
+  <data name="Tpl_EditTimeZoneName" xml:space="preserve"><value>Ζώνη ώρας</value></data>
+  <data name="Tpl_EditBitRange" xml:space="preserve"><value>Εισαγάγετε μια τιμή από 0 έως {1} ({0} bit).</value></data>
+  <data name="Tpl_EditOutOfRange" xml:space="preserve"><value>Η τιμή είναι εκτός εύρους για τον τύπο.</value></data>
+  <data name="Tpl_EditTooLong" xml:space="preserve"><value>Το κείμενο είναι μεγαλύτερο από το πεδίο ({0} byte).</value></data>
+  <data name="Tpl_EditWriteFailed" xml:space="preserve"><value>Η μετατροπή εγγραφής απέτυχε: {0}</value></data>
+  <data name="Tpl_EditInvalid" xml:space="preserve"><value>Η τιμή δεν μπορεί να αναγνωστεί.</value></data>
+  <data name="Tpl_EditBlock_InSection" xml:space="preserve"><value>Τα μοτίβα μέσα σε ενότητα δεν μπορούν να επεξεργαστούν.</value></data>
+  <data name="Tpl_EditBlock_ReadOnly" xml:space="preserve"><value>Αυτό το μοτίβο είναι μόνο για ανάγνωση.</value></data>
+  <data name="Tpl_EditBlock_Computed" xml:space="preserve"><value>Οι υπολογισμένες τιμές δεν μπορούν να επεξεργαστούν.</value></data>
+  <data name="Tpl_EditBlock_Error" xml:space="preserve"><value>Οι κόμβοι σφάλματος δεν μπορούν να επεξεργαστούν.</value></data>
+  <data name="Tpl_EditBlock_NotAValue" xml:space="preserve"><value>Αυτός ο κόμβος δεν έχει τιμή προς επεξεργασία.</value></data>
+  <data name="Tpl_UndoEdit" xml:space="preserve"><value>Επεξεργασία τιμής προτύπου</value></data>
+  <data name="TplApply_Title" xml:space="preserve"><value>Εφαρμογή προτύπου</value></data>
+  <data name="TplApply_TitleKaitai" xml:space="preserve"><value>Εφαρμογή Kaitai Struct</value></data>
+  <data name="TplApply_Search" xml:space="preserve"><value>Αναζήτηση προτύπων</value></data>
+  <data name="TplApply_SearchPlaceholder" xml:space="preserve"><value>Όνομα, περιγραφή, επέκταση ή τύπος MIME</value></data>
+  <data name="TplApply_List" xml:space="preserve"><value>Πρότυπα</value></data>
+  <data name="TplApply_Offset" xml:space="preserve"><value>Αρχική μετατόπιση</value></data>
+  <data name="TplApply_BadOffset" xml:space="preserve"><value>Εισαγάγετε μια μετατόπιση μέσα στο έγγραφο.</value></data>
+  <data name="TplApply_Endian" xml:space="preserve"><value>Προεπιλεγμένη σειρά byte</value></data>
+  <data name="TplApply_EndianDocument" xml:space="preserve"><value>Ρύθμιση εγγράφου</value></data>
+  <data name="TplApply_EndianDocumentLittle" xml:space="preserve"><value>Ρύθμιση εγγράφου (little)</value></data>
+  <data name="TplApply_EndianDocumentBig" xml:space="preserve"><value>Ρύθμιση εγγράφου (big)</value></data>
+  <data name="TplApply_EndianLittle" xml:space="preserve"><value>Little-endian</value></data>
+  <data name="TplApply_EndianBig" xml:space="preserve"><value>Big-endian</value></data>
+  <data name="TplApply_Kind" xml:space="preserve"><value>Είδος</value></data>
+  <data name="TplApply_KindFixed" xml:space="preserve"><value>Σταθερό</value></data>
+  <data name="TplApply_KindFollow" xml:space="preserve"><value>Ακολούθηση δρομέα</value></data>
+  <data name="TplApply_Type" xml:space="preserve"><value>Τύπος (ακολούθηση)</value></data>
+  <data name="TplApply_Apply" xml:space="preserve"><value>Εφαρμογή</value></data>
+  <data name="TplApply_Version" xml:space="preserve"><value>Έκδοση {0}</value></data>
+  <data name="TplApply_License" xml:space="preserve"><value>Άδεια χρήσης: {0}</value></data>
+  <data name="TplCandidates_Title" xml:space="preserve"><value>Πρότυπα που ταιριάζουν</value></data>
+  <data name="Tpl_CandidateLine" xml:space="preserve"><value>{0} — {1} (βαθμολογία {2})</value></data>
+  <data name="Tpl_MatchMagic" xml:space="preserve"><value>magic</value></data>
+  <data name="Tpl_MatchMime" xml:space="preserve"><value>MIME</value></data>
+  <data name="Tpl_MatchExtension" xml:space="preserve"><value>επέκταση</value></data>
+  <data name="Tpl_NoCandidates" xml:space="preserve"><value>Κανένα πρότυπο δεν ταιριάζει με αυτό το έγγραφο.</value></data>
+  <data name="Tpl_Suggest" xml:space="preserve"><value>Αυτό το αρχείο μοιάζει με {0}. Να εφαρμοστεί το πρότυπο "{0}";</value></data>
+  <data name="Tpl_UsesScriptNote" xml:space="preserve"><value>(χρησιμοποιεί σενάρια)</value></data>
+  <data name="Tpl_SuggestApply" xml:space="preserve"><value>Εφαρμογή</value></data>
+  <data name="Tpl_SuggestOthers" xml:space="preserve"><value>Άλλοι υποψήφιοι...</value></data>
+  <data name="Tpl_SuggestNever" xml:space="preserve"><value>Να μην εμφανίζεται για αυτήν τη μορφή</value></data>
+  <data name="Tpl_AutoApplyError" xml:space="preserve"><value>Παρουσιάστηκε σφάλμα κατά την εφαρμογή του προτύπου "{0}".</value></data>
+  <data name="TplExport_Title" xml:space="preserve"><value>Εξαγωγή αποτελεσμάτων δομής</value></data>
+  <data name="TplExport_Format" xml:space="preserve"><value>Μορφή</value></data>
+  <data name="TplExport_Target" xml:space="preserve"><value>Στόχος</value></data>
+  <data name="TplExport_TargetAll" xml:space="preserve"><value>Ολόκληρη η εφαρμογή</value></data>
+  <data name="TplExport_TargetSubtree" xml:space="preserve"><value>Το επιλεγμένο υποδέντρο ({0})</value></data>
+  <data name="TplExport_MaxElements" xml:space="preserve"><value>Μέγιστος αριθμός στοιχείων πίνακα</value></data>
+  <data name="TplExport_MaxDepth" xml:space="preserve"><value>Μέγιστο βάθος</value></data>
+  <data name="TplExport_Unlimited" xml:space="preserve"><value>Χωρίς όριο</value></data>
+  <data name="TplExport_IncludeHidden" xml:space="preserve"><value>Συμπερίληψη κρυφών μοτίβων (hidden)</value></data>
+  <data name="TplExport_HexOffsets" xml:space="preserve"><value>Εγγραφή μετατοπίσεων ως δεκαεξαδικών συμβολοσειρών</value></data>
+  <data name="TplExport_Save" xml:space="preserve"><value>Αποθήκευση...</value></data>
+  <data name="Tpl_ExportOperation" xml:space="preserve"><value>Εξαγωγή αποτελεσμάτων δομής</value></data>
+  <data name="Tpl_ExportProgress" xml:space="preserve"><value>{0} κόμβοι</value></data>
+  <data name="Tpl_Exported" xml:space="preserve"><value>Εξήχθη στο {0}.</value></data>
+  <data name="Tpl_ExportError" xml:space="preserve"><value>Δεν ήταν δυνατή η εξαγωγή στο {0}: {1}</value></data>
+  <data name="Tpl_DiskFull" xml:space="preserve"><value>Δεν υπάρχει αρκετός χώρος στον δίσκο.</value></data>
+  <data name="TplOut_ClearButton.AutomationProperties.Name" xml:space="preserve"><value>Εκκαθάριση</value></data>
+  <data name="TplOut_ClearButton.ToolTipService.ToolTip" xml:space="preserve"><value>Εκκαθάριση</value></data>
+  <data name="TplOut_List.AutomationProperties.Name" xml:space="preserve"><value>Έξοδος προτύπου</value></data>
+  <data name="TplOut_ToSource" xml:space="preserve"><value>Μετάβαση στην πηγή</value></data>
+  <data name="TplOut_ToData" xml:space="preserve"><value>Μετάβαση στα δεδομένα</value></data>
+  <data name="TplOut_Help" xml:space="preserve"><value>Βοήθεια για το {0}</value></data>
+  <data name="TplEd_Save" xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="TplEd_TryRun" xml:space="preserve"><value>Δοκιμαστική εκτέλεση</value></data>
+  <data name="TplEd_Target" xml:space="preserve"><value>Έγγραφο-στόχος</value></data>
+  <data name="TplEd_TargetPlaceholder" xml:space="preserve"><value>Έγγραφο-στόχος</value></data>
+  <data name="TplEd_Debug" xml:space="preserve"><value>Έναρξη εντοπισμού σφαλμάτων / συνέχεια</value></data>
+  <data name="TplEd_StepOver" xml:space="preserve"><value>Βήμα πάνω από</value></data>
+  <data name="TplEd_StepInto" xml:space="preserve"><value>Βήμα μέσα</value></data>
+  <data name="TplEd_StepOut" xml:space="preserve"><value>Βήμα έξω</value></data>
+  <data name="TplEd_Stop" xml:space="preserve"><value>Διακοπή</value></data>
+  <data name="TplEd_Eager" xml:space="preserve"><value>Αξιολόγηση με σειρά κατά τον εντοπισμό σφαλμάτων</value></data>
+  <data name="TplEd_Format" xml:space="preserve"><value>Μορφοποίηση εγγράφου</value></data>
+  <data name="TplEd_ToggleComment" xml:space="preserve"><value>Εναλλαγή σχολίου</value></data>
+  <data name="TplEd_TextName" xml:space="preserve"><value>Πηγή προτύπου</value></data>
+  <data name="TplEd_CompletionName" xml:space="preserve"><value>Συμπληρώσεις</value></data>
+  <data name="TplEd_Variables" xml:space="preserve"><value>Μεταβλητές</value></data>
+  <data name="TplEd_Watches" xml:space="preserve"><value>Παρακολούθηση</value></data>
+  <data name="TplEd_CallStack" xml:space="preserve"><value>Στοίβα κλήσεων</value></data>
+  <data name="TplEd_Breakpoints" xml:space="preserve"><value>Σημεία διακοπής</value></data>
+  <data name="TplEd_VariablesHeader" xml:space="preserve"><value>Μεταβλητές</value></data>
+  <data name="TplEd_WatchesHeader" xml:space="preserve"><value>Παρακολούθηση</value></data>
+  <data name="TplEd_CallStackHeader" xml:space="preserve"><value>Στοίβα κλήσεων</value></data>
+  <data name="TplEd_BreakpointsHeader" xml:space="preserve"><value>Σημεία διακοπής</value></data>
+  <data name="TplEd_AddWatch" xml:space="preserve"><value>Προσθήκη έκφρασης παρακολούθησης</value></data>
+  <data name="TplEd_AddWatchOk" xml:space="preserve"><value>Προσθήκη</value></data>
+  <data name="TplEd_AddWatchPlaceholder" xml:space="preserve"><value>Έκφραση (π.χ. c * 3)</value></data>
+  <data name="TplEd_Problems" xml:space="preserve"><value>Προβλήματα</value></data>
+  <data name="TplEd_Reference" xml:space="preserve"><value>Αναφορά στη γραμμή {0}, στήλη {1}</value></data>
+  <data name="TplEd_NewName" xml:space="preserve"><value>Νέο πρότυπο</value></data>
+  <data name="TplEd_NoEditor" xml:space="preserve"><value>Δεν είναι ανοιχτός κανένας επεξεργαστής προτύπων.</value></data>
+  <data name="TplEd_NotDebugging" xml:space="preserve"><value>Δεν γίνεται εντοπισμός σφαλμάτων.</value></data>
+  <data name="TplEd_NoTarget" xml:space="preserve"><value>Ανοίξτε ένα έγγραφο για να εκτελέσετε το πρότυπο.</value></data>
+  <data name="TplEd_OpenError" xml:space="preserve"><value>Δεν ήταν δυνατό το άνοιγμα του προτύπου {0}: {1}</value></data>
+  <data name="TplEd_SaveError" xml:space="preserve"><value>Δεν ήταν δυνατή η αποθήκευση του προτύπου: {0}</value></data>
+  <data name="TplEd_StandardReadOnly" xml:space="preserve"><value>Τα τυπικά πρότυπα δεν μπορούν να αποθηκευτούν απευθείας. Χρησιμοποιήστε το Αντιγραφή και επεξεργασία για να αποθηκεύσετε ένα αντίγραφο στον φάκελο προτύπων σας.</value></data>
+  <data name="TplEd_Duplicate" xml:space="preserve"><value>Αντιγραφή και επεξεργασία</value></data>
+  <data name="TplEd_SyntaxErrors" xml:space="preserve"><value>Διορθώστε τα συντακτικά σφάλματα πριν από τον εντοπισμό σφαλμάτων.</value></data>
+  <data name="TplEd_EagerNote" xml:space="preserve"><value>Η αργοπορημένη αξιολόγηση είναι απενεργοποιημένη κατά τον εντοπισμό σφαλμάτων. Οι μεγάλοι πίνακες μπορεί να αργήσουν.</value></data>
+  <data name="TplEd_DataBreakpoint" xml:space="preserve"><value>Σημείο διακοπής δεδομένων</value></data>
+  <data name="TplEd_DataBreakpointSet" xml:space="preserve"><value>Ο εντοπισμός σφαλμάτων σταματά όταν δημιουργείται μοτίβο που περιέχει το {0}.</value></data>
+  <data name="TplEd_ConvertError" xml:space="preserve"><value>Δεν ήταν δυνατή η μετατροπή του {0} σε HXT.</value></data>
+  <data name="Tpl_EvaluatedPartial" xml:space="preserve"><value>Αξιολογήθηκαν: {0} μοτίβα (σταμάτησε στο όριο {1}· εμφανίζονται μερικά αποτελέσματα)</value></data>
+  <data name="Tpl_LimitKind_Steps" xml:space="preserve"><value>βημάτων</value></data>
+  <data name="Tpl_LimitKind_Patterns" xml:space="preserve"><value>μοτίβων</value></data>
+  <data name="Tpl_LimitKind_Memory" xml:space="preserve"><value>μνήμης</value></data>
+  <data name="Tpl_LimitKind_Time" xml:space="preserve"><value>χρόνου</value></data>
+  <data name="TplEd_GoToLine" xml:space="preserve"><value>Μετάβαση σε γραμμή</value></data>
+  <data name="TplEd_GoToLineRange" xml:space="preserve"><value>Αριθμός γραμμής (1-{0})</value></data>
+  <data name="CodeEditor_NoEditor" xml:space="preserve"><value>Δεν εμφανίζεται επεξεργαστής κώδικα (προτύπου ή σεναρίου).</value></data>
+  <data name="CodeEditor_NotSupported" xml:space="preserve"><value>Αυτός ο επεξεργαστής δεν υποστηρίζει αυτήν την εντολή.</value></data>
+  <data name="Cmd_inspector_followPointer" xml:space="preserve"><value>Ακολούθηση ως δείκτη</value></data>
+  <data name="CmdAlias_inspector_followPointer" xml:space="preserve"><value>δείκτης μετατόπιση διεύθυνση μετάβαση επιθεωρητής pointer offset address jump inspector</value></data>
+  <data name="Inspector_MenuPointer" xml:space="preserve"><value>Ακολούθηση ως δείκτη</value></data>
+  <data name="Inspector_Pointer_AbsoluteOffset" xml:space="preserve"><value>Απόλυτη (μετατόπιση)</value></data>
+  <data name="Inspector_Pointer_AbsoluteAddress" xml:space="preserve"><value>Απόλυτη (διεύθυνση)</value></data>
+  <data name="Inspector_Pointer_RelativeToCursor" xml:space="preserve"><value>Ως προς τον δρομέα</value></data>
+  <data name="Inspector_Pointer_RelativeToNext" xml:space="preserve"><value>Ως προς το τέλος της τιμής</value></data>
+  <data name="Inspector_Pointer_RelativeToBase" xml:space="preserve"><value>Ως προς μια βάση…</value></data>
+  <data name="Inspector_PointerBase" xml:space="preserve"><value>Βάση (έκφραση)</value></data>
+  <data name="Inspector_PointerGo" xml:space="preserve"><value>Μετάβαση</value></data>
+  <data name="Inspector_PointerOutOfRange" xml:space="preserve"><value>Ο στόχος {0} βρίσκεται εκτός του εγγράφου (μήκος {1})</value></data>
+  <data name="Inspector_PointerNoValue" xml:space="preserve"><value>Αυτή η γραμμή δεν έχει τιμή που να μπορεί να χρησιμοποιηθεί ως θέση</value></data>
+  <data name="Inspector_PointerBadBase" xml:space="preserve"><value>Εισαγάγετε τη βάση ως έκφραση, όπως 0x400000 ή bm.header</value></data>
+  <data name="Inspector_PointerNoRow" xml:space="preserve"><value>Επιλέξτε μια γραμμή ακεραίου στον επιθεωρητή δεδομένων</value></data>
+  <data name="Inspector_MenuArray" xml:space="preserve"><value>Μετακίνηση ως πίνακας αυτού του τύπου</value></data>
+  <data name="Inspector_ArrayPrevious" xml:space="preserve"><value>Προηγούμενο στοιχείο</value></data>
+  <data name="Inspector_ArrayNext" xml:space="preserve"><value>Επόμενο στοιχείο</value></data>
+  <data name="Inspector_ArrayExit" xml:space="preserve"><value>Έξοδος από τη λειτουργία πίνακα</value></data>
+  <data name="Inspector_ArrayIndex" xml:space="preserve"><value>Αριθμός στοιχείου</value></data>
+  <data name="Inspector_ArrayStride" xml:space="preserve"><value>Μέγεθος στοιχείου</value></data>
+  <data name="Inspector_ArrayNotBoundary" xml:space="preserve"><value>(όχι σε όριο στοιχείου)</value></data>
+  <data name="Inspector_ArrayOutOfRange" xml:space="preserve"><value>Το στοιχείο {0} βρίσκεται εκτός του εγγράφου</value></data>
+  <data name="Bookmarks_ColumnValue" xml:space="preserve"><value>Τιμή</value></data>
+  <data name="Bookmarks_ValueToolTip" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Bookmarks_ExpressionMark" xml:space="preserve"><value>Έκφρ.</value></data>
+  <data name="Bookmarks_ExprCycle" xml:space="preserve"><value>Κυκλική αναφορά μεταξύ σελιδοδεικτών</value></data>
+  <data name="Bookmarks_ExprTooDeep" xml:space="preserve"><value>Οι αναφορές bm.όνομα είναι εμφωλευμένες σε περισσότερα από {0} επίπεδα</value></data>
+  <data name="Bookmarks_ExprOutOfRange" xml:space="preserve"><value>Η θέση {0} βρίσκεται εκτός του εγγράφου</value></data>
+  <data name="Bookmarks_ExprInvalid" xml:space="preserve"><value>Σφάλμα έκφρασης θέσης: {0}</value></data>
+  <data name="Bookmarks_ValueEdit" xml:space="preserve"><value>Τιμή</value></data>
+  <data name="Bookmarks_ValueUndo" xml:space="preserve"><value>Επεξεργασία τιμής σελιδοδείκτη</value></data>
+  <data name="Bookmark_TypeNone" xml:space="preserve"><value>(χωρίς τύπο)</value></data>
+  <data name="Bookmark_TypeHeader" xml:space="preserve"><value>Τύπος</value></data>
+  <data name="Bookmark_EndianHeader" xml:space="preserve"><value>Σειρά byte</value></data>
+  <data name="Bookmark_EndianDocument" xml:space="preserve"><value>Έγγραφο</value></data>
+  <data name="Bookmark_ExpressionHeader" xml:space="preserve"><value>Έκφραση θέσης</value></data>
+  <data name="Bookmark_ExpressionPlaceholder" xml:space="preserve"><value>π.χ. u32le(0x3C)</value></data>
+  <data name="Cmd_view_panel_visualizer" xml:space="preserve"><value>Προβολή: Πλαίσιο προβολής εικόνας</value></data>
+  <data name="CmdAlias_view_panel_visualizer" xml:space="preserve"><value>οπτικοποιητής bitmap εικονοστοιχεία εικόνα visualizer bitmap pixels picture image</value></data>
+  <data name="Menu_View_VisualizerPanel.Text" xml:space="preserve"><value>Προβολή εικόνας</value></data>
+  <data name="Menu_View_VisualizerPanel.AccessKey" xml:space="preserve"><value>Ψ</value></data>
+  <data name="Visualizer_PanelName" xml:space="preserve"><value>Προβολή εικόνας</value></data>
+  <data name="Visualizer_Format_Mono1" xml:space="preserve"><value>Ασπρόμαυρο 1 bit</value></data>
+  <data name="Visualizer_Format_Gray2" xml:space="preserve"><value>Γκρι 2 bit</value></data>
+  <data name="Visualizer_Format_Gray4" xml:space="preserve"><value>Γκρι 4 bit</value></data>
+  <data name="Visualizer_Format_Gray8" xml:space="preserve"><value>Γκρι 8 bit</value></data>
+  <data name="Visualizer_Format_Theme8" xml:space="preserve"><value>8 bit (χρώματα θέματος byte)</value></data>
+  <data name="Visualizer_Format_Rgb565Le" xml:space="preserve"><value>RGB565 (LE)</value></data>
+  <data name="Visualizer_Format_Rgb565Be" xml:space="preserve"><value>RGB565 (BE)</value></data>
+  <data name="Visualizer_Format_Rgb555" xml:space="preserve"><value>RGB555</value></data>
+  <data name="Visualizer_Format_Rgb888" xml:space="preserve"><value>RGB888</value></data>
+  <data name="Visualizer_Format_Bgr888" xml:space="preserve"><value>BGR888</value></data>
+  <data name="Visualizer_Format_Rgba8888" xml:space="preserve"><value>RGBA8888</value></data>
+  <data name="Visualizer_Format_Bgra8888" xml:space="preserve"><value>BGRA8888</value></data>
+  <data name="Visualizer_Format_Argb8888" xml:space="preserve"><value>ARGB8888</value></data>
+  <data name="Visualizer_StartFollow" xml:space="preserve"><value>Ακολούθηση δρομέα</value></data>
+  <data name="Visualizer_StartSelection" xml:space="preserve"><value>Αρχή της επιλογής</value></data>
+  <data name="Visualizer_StartFixed" xml:space="preserve"><value>Σταθερό</value></data>
+  <data name="Visualizer_TopDown" xml:space="preserve"><value>Από πάνω προς τα κάτω</value></data>
+  <data name="Visualizer_BottomUp" xml:space="preserve"><value>Από κάτω προς τα πάνω (BMP)</value></data>
+  <data name="Visualizer_ZoomAuto" xml:space="preserve"><value>Αυτόματο</value></data>
+  <data name="Visualizer_ZoomTimes" xml:space="preserve"><value>{0}×</value></data>
+  <data name="Visualizer_FormatName" xml:space="preserve"><value>Μορφή εικονοστοιχείων</value></data>
+  <data name="Visualizer_WidthName" xml:space="preserve"><value>Πλάτος (εικονοστοιχεία)</value></data>
+  <data name="Visualizer_StrideName" xml:space="preserve"><value>Byte ανά γραμμή</value></data>
+  <data name="Visualizer_StrideAuto" xml:space="preserve"><value>Αυτόματο</value></data>
+  <data name="Visualizer_StartName" xml:space="preserve"><value>Θέση έναρξης</value></data>
+  <data name="Visualizer_StartOffsetName" xml:space="preserve"><value>Σταθερή θέση έναρξης</value></data>
+  <data name="Visualizer_OrientationName" xml:space="preserve"><value>Σειρά γραμμών</value></data>
+  <data name="Visualizer_ZoomName" xml:space="preserve"><value>Ζουμ</value></data>
+  <data name="Visualizer_MenuName" xml:space="preserve"><value>Περισσότερες επιλογές</value></data>
+  <data name="Visualizer_ImageName" xml:space="preserve"><value>Εικόνα</value></data>
+  <data name="Visualizer_ScrollName" xml:space="preserve"><value>Κύλιση γραμμών</value></data>
+  <data name="Visualizer_SaveImage" xml:space="preserve"><value>Αποθήκευση ως εικόνα…</value></data>
+  <data name="Visualizer_TooLarge" xml:space="preserve"><value>Η περιοχή προβολής είναι πολύ μεγάλη· σχεδιάζονται μόνο τα πρώτα 64 MB</value></data>
+  <data name="Visualizer_BadStart" xml:space="preserve"><value>Εισαγάγετε τη σταθερή θέση έναρξης ως έκφραση</value></data>
+  <data name="Visualizer_NothingToSave" xml:space="preserve"><value>Δεν υπάρχει εικόνα για αποθήκευση</value></data>
+  <data name="Visualizer_Saved" xml:space="preserve"><value>Η εικόνα αποθηκεύτηκε στο {0}</value></data>
+  <data name="Visualizer_SaveError" xml:space="preserve"><value>Δεν ήταν δυνατή η αποθήκευση του {0}: {1}</value></data>
+  <data name="Visualizer_PngFiles" xml:space="preserve"><value>Εικόνα PNG</value></data>
+  <data name="Inspector_PointerDefault" xml:space="preserve"><value>Προεπιλογή</value></data>
+  <data name="Inspector_UserTimedOut" xml:space="preserve"><value>Λήξη χρόνου</value></data>
+  <data name="Inspector_UserTimedOutTip" xml:space="preserve"><value>Ο τύπος χρειάστηκε περισσότερο από {0} ms· εκτελείται ξανά όταν αλλάξει η θέση έναρξης</value></data>
+  <data name="Inspector_UserError" xml:space="preserve"><value>Σφάλμα: {0}</value></data>
+  <data name="Inspector_UserTypeLoadError" xml:space="preserve"><value>Αρχείο τύπου επιθεωρητή {0}, γραμμή {1}: {2}</value></data>
+  <data name="CSharpComponent_OfflineInstructions" xml:space="preserve"><value>Η λειτουργία εκτός σύνδεσης είναι ενεργή (ή οι λήψεις είναι απενεργοποιημένες), επομένως το στοιχείο δεν λαμβάνεται. Για να το προσθέσετε χειροκίνητα, πάρτε το {0} από τη σελίδα εκδόσεων αυτής της έκδοσης (αν χρειάζεται, από άλλον υπολογιστή) και εξαγάγετέ το στο {1}.</value></data>
+  <data name="SafeMode_Notice" xml:space="preserve"><value>Ξεκίνησε σε ασφαλή λειτουργία. Τα πρόσθετα και τα σενάρια αυτόματης εκτέλεσης δεν φορτώνονται.</value></data>
+  <data name="SafeMode_RestartNormally" xml:space="preserve"><value>Κανονική επανεκκίνηση</value></data>
+  <data name="Cmd_templates_findValues" xml:space="preserve"><value>Πρότυπο: Εύρεση τιμών πεδίων</value></data>
+  <data name="CmdAlias_templates_findValues" xml:space="preserve"><value>αναζήτηση;πεδίο;τιμή;search;field;value</value></data>
+  <data name="Tpl_ValueSearchNoTemplate" xml:space="preserve"><value>Δεν έχει εφαρμοστεί κανένα πρότυπο.</value></data>
+  <data name="Tpl_ValueSearchSyntax" xml:space="preserve"><value>Συντακτικό σφάλμα στον χαρακτήρα {0}: {1}</value></data>
+  <data name="Tpl_ValueSearchError_Empty" xml:space="preserve"><value>η συνθήκη είναι κενή</value></data>
+  <data name="Tpl_ValueSearchError_MissingValue" xml:space="preserve"><value>λείπει μια τιμή</value></data>
+  <data name="Tpl_ValueSearchError_UnknownKey" xml:space="preserve"><value>άγνωστη συνθήκη (χρησιμοποιήστε name:, type: ή value)</value></data>
+  <data name="Tpl_ValueSearchError_BadOperator" xml:space="preserve"><value>άγνωστη σύγκριση (χρησιμοποιήστε =, !=, &lt;, &lt;=, &gt;, &gt;= ή ~)</value></data>
+  <data name="Tpl_ValueSearchError_UnclosedQuote" xml:space="preserve"><value>τα εισαγωγικά δεν έχουν κλείσει</value></data>
+  <data name="Tpl_ValueSearchError_BadRegex" xml:space="preserve"><value>η κανονική έκφραση δεν είναι έγκυρη</value></data>
+  <data name="Tpl_ValueSearchKind" xml:space="preserve"><value>Τιμές προτύπου</value></data>
+  <data name="Tpl_ValueSearchHint" xml:space="preserve"><value>Πατήστε Enter για αναζήτηση στις τιμές πεδίων. Τα αποτελέσματα εμφανίζονται στα Αποτελέσματα αναζήτησης.</value></data>
+  <data name="SearchResults_Column_TemplateField" xml:space="preserve"><value>Πεδίο</value></data>
+  <data name="Bookmark_TypeUser" xml:space="preserve"><value>{0} (ορισμένο από τον χρήστη)</value></data>
+  <data name="Bookmark_TypeTemplate" xml:space="preserve"><value>{0} (πρότυπο {1})</value></data>
 </root>

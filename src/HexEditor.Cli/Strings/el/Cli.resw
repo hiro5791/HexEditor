@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  hexed (command line, AUTO-36 to AUTO-44) messages. Keys start with Cli_. Result formats and JSON keys are not translated.
+  {0}, {1}, ... are replaced by values. Add a language by adding Strings\<language>\Cli.resw (same keys).
+-->
+<root>
+  <data name="Cli_Version" xml:space="preserve"><value>hexed {0}</value></data>
+  <data name="Cli_Cancelled" xml:space="preserve"><value>Ακυρώθηκε.</value></data>
+  <data name="Cli_Hint_Help" xml:space="preserve"><value>Εκτελέστε 'hexed --help' (ή 'hexed &lt;command&gt; --help') για οδηγίες χρήσης.</value></data>
+  <data name="Cli_Error_Prefix" xml:space="preserve"><value>hexed: {0}</value></data>
+  <data name="Cli_Error_Internal" xml:space="preserve"><value>hexed: Μη αναμενόμενο σφάλμα ({0}). Οι λεπτομέρειες γράφτηκαν στο {1}.</value></data>
+
+  <data name="Cli_Help_Main" xml:space="preserve"><value>Χρήση: hexed &lt;command&gt; [ορίσματα] [επιλογές]
+       hexed &lt;file&gt; [επιλογές]          (όπως: hexed open &lt;file&gt;)
+
+Εντολές:
+  open      Ανοίγει αρχεία, δίσκους ή διεργασίες στο παράθυρο του HexEditor
+  hash      Υπολογίζει και επαληθεύει κατακερματισμούς και αθροίσματα ελέγχου
+  dump      Εκτυπώνει ένα hex dump
+  compare   Συγκρίνει δύο αρχεία
+  run       Εκτελεί ένα σενάριο χωρίς παράθυρο
+  template  Εφαρμόζει ένα πρότυπο δομής και εκτυπώνει το αποτέλεσμα
+  patch     Εφαρμόζει μια επιδιόρθωση IPS σε ένα αρχείο
+  convert   Μετατρέπει μεταξύ μορφών (Intel HEX, S-record, Base64, πηγαίος κώδικας, ...)
+  find      Αναζητά σε αρχεία και εκτυπώνει τις αντιστοιχίες
+
+Κοινές επιλογές (όλες οι εντολές):
+  -h, --help           Εμφανίζει τις οδηγίες χρήσης (επίσης: hexed &lt;command&gt; --help)
+      --version        Εμφανίζει την έκδοση
+  -q, --quiet          Δεν εκτυπώνει τίποτα εκτός από το αποτέλεσμα
+      --format &lt;f&gt;     Μορφή εξόδου: text (προεπιλογή) ή json
+  -o, --output &lt;path&gt;  Γράφει το αποτέλεσμα σε αρχείο αντί για την οθόνη
+      --lang &lt;tag&gt;     Γλώσσα των μηνυμάτων (για παράδειγμα en, ja)
+      --no-color       Δεν χρησιμοποιεί χρώματα
+      --unregister     Αφαιρεί τις καταχωρίσεις που έγιναν σε αυτόν τον υπολογιστή (μενού
+                       δεξιού κλικ, συσχετίσεις αρχείων, λίστα μετάβασης, PATH, προσωρινός φάκελος)
+
+Κωδικοί εξόδου: 0 επιτυχία, 1 αρνητικό αποτέλεσμα (διαφορές, καμία αντιστοιχία, ασυμφωνία), 2 σφάλμα χρήσης,
+3 σφάλμα I/O, 4 σφάλμα σεναρίου ή προτύπου, 5 δεν επιτρέπεται, 6 ακυρώθηκε, 7 υπέρβαση ορίου,
+8 σφάλμα μορφής, 10 εσωτερικό σφάλμα.
+
+Οι μετατοπίσεις, τα μήκη και οι περιοχές δέχονται εκφράσεις. Ένας αριθμός χωρίς πρόθεμα είναι δεκαδικός· χρησιμοποιήστε
+0x για δεκαεξαδικό. Μια περιοχή είναι start:length ή start..end (το end δεν περιλαμβάνεται)· το 'end' είναι
+το μήκος του αρχείου (για παράδειγμα end-16:16). Στο PowerShell, βάζετε τις τιμές που περιέχουν $ σε μονά
+εισαγωγικά (για παράδειγμα '$1F00').</value></data>
+
+  <data name="Cli_Help_open" xml:space="preserve"><value>Χρήση: hexed open [paths...] [επιλογές]
+
+Ανοίγει αρχεία στο παράθυρο του HexEditor. Αν το HexEditor εκτελείται ήδη, τα αρχεία ανοίγουν ως καρτέλες
+εκεί. Οι σχετικές διαδρομές επιλύονται από τον τρέχοντα φάκελο.
+
+Επιλογές:
+  -g, --offset &lt;expr&gt;      Τοποθετεί τον δρομέα σε αυτή τη θέση (για παράδειγμα 0x1000 ή end-16)
+      --select &lt;range&gt;     Επιλέγει αυτή την περιοχή (start:length ή start..end)
+  -r, --readonly           Ανοίγει μόνο για ανάγνωση
+      --disk &lt;n|path&gt;      Ανοίγει έναν φυσικό δίσκο (--disk 0, --disk \\.\PhysicalDrive1)
+      --volume &lt;drive&gt;     Ανοίγει έναν τόμο (--volume C:)
+      --process &lt;pid|name&gt; Ανοίγει τη μνήμη μιας διεργασίας
+      --encoding &lt;name&gt;    Κωδικοποίηση χαρακτήρων της στήλης κειμένου
+      --template &lt;name|path&gt;  Εφαρμόζει ένα πρότυπο δομής μετά το άνοιγμα
+      --compare &lt;a&gt; &lt;b&gt;    Ανοίγει δύο αρχεία στην προβολή σύγκρισης
+      --run &lt;script&gt;       Εκτελεί ένα σενάριο μετά το άνοιγμα
+      --new-window         Ανοίγει σε νέο παράθυρο
+      --new-document       Ανοίγει ένα νέο κενό έγγραφο
+      --open-disk          Εμφανίζει το παράθυρο διαλόγου Άνοιγμα δίσκου
+      --new-instance       Ξεκινά ξεχωριστή διεργασία αντί να χρησιμοποιήσει αυτή που εκτελείται
+  -w, --wait               Δεν επιστρέφει μέχρι να κλείσουν τα έγγραφα που άνοιξαν
+      --safe-mode          Ξεκινά σε ασφαλή λειτουργία (μόνο νέα διεργασία)
+      --write-block        Ξεκινά με προστασία εγγραφής για ολόκληρη την εφαρμογή
+      --pseudo-locale &lt;qps-ploc|qps-plocm&gt;   Εμφανίζει ψευδομεταφρασμένο κείμενο (εκδόσεις προεπισκόπησης)
+      --plugin-dev &lt;folder&gt; Φορτώνει ένα πρόσθετο υπό ανάπτυξη (μόνο νέα διεργασία)
+      --ui-lang &lt;tag&gt;      Γλώσσα εμφάνισης του παραθύρου (μόνο νέα διεργασία)
+      --test-hooks &lt;file&gt;  Ενεργοποιεί την έγχυση σφαλμάτων (μόνο εκδόσεις δοκιμών)
+
+Στο PowerShell, βάζετε τις τιμές που περιέχουν $ σε μονά εισαγωγικά (για παράδειγμα '$1F00').</value></data>
+
+  <data name="Cli_Help_hash" xml:space="preserve"><value>Χρήση: hexed hash [paths...] [επιλογές]
+       hexed hash --check &lt;checksum file&gt; [επιλογές]
+
+Υπολογίζει κατακερματισμούς και αθροίσματα ελέγχου. Οι διαδρομές μπορούν να περιέχουν χαρακτήρες μπαλαντέρ (*.bin) ή να είναι φάκελοι· χρησιμοποιήστε - για ανάγνωση
+της τυπικής εισόδου. Πολλοί αλγόριθμοι υπολογίζονται σε μία διέλευση.
+
+Επιλογές:
+  -a, --algorithm &lt;id,...&gt;   Αναγνωριστικά αλγορίθμων, χωρισμένα με κόμμα (προεπιλογή sha256).
+                             Το '--algorithm list' εκτυπώνει τα διαθέσιμα αναγνωριστικά
+      --range &lt;range&gt;        Κατακερματισμός μόνο αυτής της περιοχής (start:length ή start..end)
+      --format &lt;f&gt;           text (προεπιλογή): algorithm  value  path
+                             gnu: value  path (όπως το sha256sum)
+                             bsd: SHA256 (path) = value
+                             json: ένα αντικείμενο ανά αρχείο
+      --check &lt;file&gt;         Επαληθεύει τα αρχεία που αναφέρονται σε ένα αρχείο αθροισμάτων ελέγχου (.sha256, .md5,
+                             SHA256SUMS, .sfv, ...) και εκτυπώνει OK, FAILED ή MISSING
+  -r, --recurse              Συμπεριλαμβάνει υποφακέλους όταν δίνεται φάκελος
+
+Κωδικοί εξόδου: 0 επιτυχία, 1 ασυμφωνία με το --check, 3 δεν ήταν δυνατή η ανάγνωση ενός αρχείου.
+Στο PowerShell, βάζετε τις τιμές που περιέχουν $ σε μονά εισαγωγικά (για παράδειγμα '$1F00').</value></data>
+
+  <data name="Cli_Help_dump" xml:space="preserve"><value>Χρήση: hexed dump &lt;path&gt; [επιλογές]
+
+Εκτυπώνει ένα hex dump ενός αρχείου (ή μιας περιοχής) στην τυπική έξοδο. Η χρήση μνήμης δεν εξαρτάται από το μέγεθος.
+
+Επιλογές:
+      --range &lt;range&gt;        Περιοχή προς εκτύπωση (start:length ή start..end· προεπιλογή: ολόκληρο το αρχείο)
+      --width &lt;n&gt;            Byte ανά γραμμή (προεπιλογή 16)
+      --group &lt;n&gt;            Byte ανά ομάδα (η προεπιλογή εξαρτάται από το στυλ· 0 χωρίς ομάδες)
+      --encoding &lt;name&gt;      Κωδικοποίηση χαρακτήρων της στήλης κειμένου (προεπιλογή ascii)
+      --base-address &lt;expr&gt;  Διεύθυνση που εμφανίζεται για το πρώτο byte (προεπιλογή 0)
+      --style &lt;style&gt;        default (offset, hex, |text|), xxd, hexdump-c, plain,
+                             c, cpp, csharp, java, js, python, rust, go, pascal, vbnet,
+                             base64, base32, ascii85, uu, qp, hextext, dectext
+      --squeeze              Εκτυπώνει * για γραμμές που επαναλαμβάνουν την προηγούμενη γραμμή (όπως το hexdump -C)
+
+Κωδικοί εξόδου: 2 αν η περιοχή βρίσκεται εκτός του αρχείου.
+Στο PowerShell, βάζετε τις τιμές που περιέχουν $ σε μονά εισαγωγικά (για παράδειγμα '$1F00').</value></data>
+
+  <data name="Cli_Help_compare" xml:space="preserve"><value>Χρήση: hexed compare &lt;path1&gt; &lt;path2&gt; [επιλογές]
+
+Συγκρίνει δύο αρχεία και εκτυπώνει τις διαφορές.
+
+Επιλογές:
+      --mode &lt;byte|resync&gt;   byte (προεπιλογή): συγκρίνει byte στις ίδιες μετατοπίσεις
+                             resync: επιτρέπει εισαγωγές και διαγραφές
+      --range1 &lt;range&gt;       Περιοχή του πρώτου αρχείου (προεπιλογή: όλο)
+      --range2 &lt;range&gt;       Περιοχή του δεύτερου αρχείου (προεπιλογή: όλο)
+      --max &lt;n&gt;              Μέγιστος αριθμός διαφορών προς εκτύπωση (προεπιλογή 1000)·
+                             οι υπόλοιπες απλώς μετρώνται
+      --format &lt;text|json&gt;   Μορφή εξόδου
+      --brief                Εκτυπώνει μία γραμμή (ίδια ή διαφορετικά) και σταματά στην πρώτη διαφορά
+
+Κωδικοί εξόδου: 0 ίδια, 1 διαφορετικά, 3 δεν ήταν δυνατή η ανάγνωση ενός αρχείου.
+Στο PowerShell, βάζετε τις τιμές που περιέχουν $ σε μονά εισαγωγικά (για παράδειγμα '$1F00').</value></data>
+
+  <data name="Cli_Help_run" xml:space="preserve"><value>Χρήση: hexed run &lt;script&gt; [files...] [επιλογές]
+
+Εκτελεί ένα σενάριο χωρίς να ανοίξει παράθυρο. Τα αρχεία ανοίγουν με τη σειρά (app.documents)· το πρώτο
+είναι το app.activeDocument.
+
+Επιλογές:
+      --arg &lt;name=value&gt;   Παράμετρος σεναρίου (επαναλαμβανόμενη)· διαθέσιμη και στο script.args
+      --trust              Εκτελεί ένα μη αξιόπιστο σενάριο χωρίς ερώτηση
+      --allow &lt;perm,...&gt;   Δικαιώματα που θα χορηγηθούν (για παράδειγμα file-read)
+      --save               Αποθηκεύει κάθε έγγραφο που άλλαξε όταν τελειώσει το σενάριο
+      --save-as &lt;path&gt;     Αποθηκεύει το πρώτο έγγραφο σε αυτή τη διαδρομή (το πρωτότυπο δεν αλλάζει)
+      --dry-run            Δεν αποθηκεύει τίποτα· εκτυπώνει μια σύνοψη των αλλαγών
+      --timeout &lt;seconds&gt;  Μέγιστος χρόνος εκτέλεσης ολόκληρου του σεναρίου
+  -r, --readonly           Ανοίγει τα αρχεία μόνο για ανάγνωση
+
+Από προεπιλογή αποθηκεύονται μόνο τα έγγραφα για τα οποία το σενάριο καλεί doc.save().
+Ο κωδικός εξόδου ενός σεναρίου μπορεί να οριστεί με app.exit(code). Οι κωδικοί 2 έως 10 έχουν τις σημασίες που
+αναφέρονται στο 'hexed --help'· χρησιμοποιήστε 64 ή περισσότερο για δικές σας σημασίες.</value></data>
+
+  <data name="Cli_Help_template" xml:space="preserve"><value>Χρήση: hexed template &lt;path&gt; (--template &lt;name|path&gt; | --auto) [επιλογές]
+
+Εφαρμόζει ένα πρότυπο δομής σε ένα αρχείο και εκτυπώνει το αποτέλεσμα.
+
+Επιλογές:
+      --template &lt;name|path&gt;  Πρότυπο προς εφαρμογή
+      --auto                  Επιλέγει αυτόματα το πρότυπο (κωδικός εξόδου 1 αν δεν ταιριάζει κανένα)
+  -g, --offset &lt;expr&gt;         Αρχική μετατόπιση της δομής (προεπιλογή 0)
+      --format &lt;f&gt;            json, csv ή text (δέντρο με εσοχές· προεπιλογή text)
+      --depth &lt;n&gt;             Μέγιστο βάθος του δέντρου
+      --fields &lt;path,...&gt;     Εκτυπώνει μόνο αυτά τα πεδία (για παράδειγμα header.e_lfanew,sections[*].name)
+
+Κωδικοί εξόδου: 4 για σφάλμα προτύπου.
+Στο PowerShell, βάζετε τις τιμές που περιέχουν $ σε μονά εισαγωγικά (για παράδειγμα '$1F00').</value></data>
+
+  <data name="Cli_Help_patch" xml:space="preserve"><value>Χρήση: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place) [επιλογές]
+
+Εφαρμόζει ένα αρχείο επιδιόρθωσης σε ένα αρχείο. Απαιτείται ένα από τα -o και --in-place. Αυτή η έκδοση εφαρμόζει επιδιορθώσεις IPS
+και IPS32.
+
+Επιλογές:
+  -o, --output &lt;path&gt;       Γράφει εδώ το αρχείο μετά την επιδιόρθωση (ο στόχος δεν αλλάζει)
+      --in-place            Αντικαθιστά τον στόχο με ασφάλεια (γράφεται πρώτα προσωρινό αρχείο)
+      --format &lt;f&gt;          auto (προεπιλογή), ips ή ips32
+      --verify-before &lt;a:v&gt; Ελέγχει πρώτα τον κατακερματισμό του στόχου (για παράδειγμα sha256:ab12...)·
+                            αν διαφέρει, κωδικός εξόδου 1 και δεν γράφεται τίποτα
+      --verify-after &lt;a:v&gt;  Ελέγχει τον κατακερματισμό του αποτελέσματος πριν από την εγγραφή
+      --dry-run             Εκτυπώνει τον αριθμό των εγγραφών και των byte που αλλάζουν· δεν εφαρμόζει τίποτα
+
+Κωδικοί εξόδου: 1 η επαλήθευση απέτυχε, 8 η επιδιόρθωση είναι κατεστραμμένη.</value></data>
+
+  <data name="Cli_Help_convert" xml:space="preserve"><value>Χρήση: hexed convert &lt;input&gt; &lt;output&gt; [επιλογές]
+
+Μετατρέπει ένα αρχείο μεταξύ των μορφών εισαγωγής/εξαγωγής του HexEditor.
+
+Επιλογές:
+      --from &lt;format&gt;       Μορφή εισόδου (προεπιλογή: ανίχνευση από το περιεχόμενο και την επέκταση)
+      --to &lt;format&gt;         Μορφή εξόδου (προεπιλογή: από την επέκταση εξόδου· bin αν είναι άγνωστη)
+                            bin, ihex, srec, base64, base32, ascii85, uu, qp, url, hextext,
+                            dectext, c, cpp, csharp, java, js, python, rust, go, pascal, vbnet
+      --ignore-checksum     Διαβάζει αρχεία Intel HEX / S-record ακόμη κι αν το άθροισμα ελέγχου είναι λάθος
+      --fill &lt;hex&gt;          Byte που χρησιμοποιείται για τα κενά (προεπιλογή FF)
+      --address-mode &lt;m&gt;    Intel HEX: auto, linear, segment, i8, i16, i32· S-record: auto, s1, s2, s3
+
+Οι επιλογές μορφής έχουν τα ονόματα των πεδίων των παραθύρων εισαγωγής/εξαγωγής, γραμμένα με
+πεζά γράμματα και παύλες, για παράδειγμα --record-length 32, --start-address 0x08000000,
+--bytes-per-line 16, --line-length 64, --url-safe, --no-upper-case, --new-line lf,
+--encoding utf8.
+
+Κωδικοί εξόδου: 8 για σφάλμα αθροίσματος ελέγχου ή μορφής στην είσοδο.</value></data>
+
+  <data name="Cli_Help_find" xml:space="preserve"><value>Χρήση: hexed find &lt;paths...&gt; (--hex &lt;pattern&gt; | --text &lt;string&gt; | --regex &lt;expr&gt;) [επιλογές]
+
+Αναζητά σε αρχεία και εκτυπώνει "path  offset  length" για κάθε αντιστοιχία.
+
+Επιλογές:
+      --hex &lt;pattern&gt;      Byte, για παράδειγμα "DE AD ?? EF" (?? οποιοδήποτε byte, ? οποιοδήποτε nibble)
+      --text &lt;string&gt;      Κείμενο
+      --regex &lt;expr&gt;       Κανονική έκφραση (σε κείμενο)
+      --encoding &lt;name&gt;    Κωδικοποίηση χαρακτήρων των --text και --regex (προεπιλογή utf-8)
+      --case-sensitive     Ξεχωρίζει κεφαλαία και πεζά
+      --range &lt;range&gt;      Αναζητά μόνο σε αυτή την περιοχή κάθε αρχείου
+      --max &lt;n&gt;            Σταματά μετά από n αντιστοιχίες
+      --format &lt;text|json&gt; Μορφή εξόδου
+  -r, --recurse            Συμπεριλαμβάνει υποφακέλους όταν δίνεται φάκελος
+
+Κωδικοί εξόδου: 0 βρέθηκε, 1 δεν βρέθηκε, 3 δεν ήταν δυνατή η ανάγνωση ενός αρχείου.
+Στο PowerShell, βάζετε τις τιμές που περιέχουν $ σε μονά εισαγωγικά (για παράδειγμα '$1F00').</value></data>
+
+  <data name="Cli_Error_UnknownCommand" xml:space="preserve"><value>Άγνωστη εντολή ή αρχείο: {0}. Εντολές: open, hash, dump, compare, run, template, patch, convert, find.</value></data>
+  <data name="Cli_Error_UnknownLang" xml:space="preserve"><value>Άγνωστη γλώσσα: {0}. Χρησιμοποιήστε μία από τις 23 ετικέτες γλώσσας εμφάνισης (για παράδειγμα en, ja, zh-Hans).</value></data>
+  <data name="Cli_Error_UnknownOption" xml:space="preserve"><value>Άγνωστη επιλογή {0} για το '{1}'.</value></data>
+  <data name="Cli_Error_OptionTakesNoValue" xml:space="preserve"><value>Η επιλογή {0} δεν δέχεται τιμή ('{1}').</value></data>
+  <data name="Cli_Error_MissingValue" xml:space="preserve"><value>Η επιλογή {0} χρειάζεται τιμή ('{1}').</value></data>
+  <data name="Cli_Error_FileNotFound" xml:space="preserve"><value>Η διαδρομή δεν υπάρχει: {0}</value></data>
+  <data name="Cli_Error_AccessDenied" xml:space="preserve"><value>Δεν επιτρέπεται η πρόσβαση: {0}. Ελέγξτε τα δικαιώματα του αρχείου ή εκτελέστε από λογαριασμό που έχει πρόσβαση.</value></data>
+  <data name="Cli_Error_CannotRead" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση του {0}: {1}</value></data>
+  <data name="Cli_Error_CannotWrite" xml:space="preserve"><value>Δεν είναι δυνατή η εγγραφή του {0}: {1}</value></data>
+  <data name="Cli_Error_IsDirectory" xml:space="preserve"><value>Το {0} είναι φάκελος, όχι αρχείο.</value></data>
+  <data name="Cli_Error_NoMatch" xml:space="preserve"><value>Κανένα αρχείο δεν ταιριάζει με το {0}.</value></data>
+  <data name="Cli_Error_ReadAt" xml:space="preserve"><value>Δεν είναι δυνατή η ανάγνωση του {0} στη θέση {1}.</value></data>
+  <data name="Cli_Error_NoSpace" xml:space="preserve"><value>Δεν υπάρχει αρκετός ελεύθερος χώρος στο {0} (απαιτούνται {1} byte, διαθέσιμα {2}).</value></data>
+  <data name="Cli_Error_FileSizeLimit" xml:space="preserve"><value>Το αρχείο είναι πολύ μεγάλο για το σύστημα αρχείων του {0} ({1}).</value></data>
+  <data name="Cli_Error_OutputIsInput" xml:space="preserve"><value>Η διαδρομή εξόδου {0} είναι και είσοδος. Επιλέξτε άλλη διαδρομή εξόδου.</value></data>
+  <data name="Cli_Error_Expression" xml:space="preserve"><value>{0}: δεν είναι δυνατή η ανάγνωση της έκφρασης "{1}" στη θέση {2}: {3}</value></data>
+  <data name="Cli_Error_RangeOutside" xml:space="preserve"><value>{0}: το "{1}" βρίσκεται εκτός του αρχείου (μήκος {2}).</value></data>
+  <data name="Cli_Error_NumberRange" xml:space="preserve"><value>{0}: το "{1}" πρέπει να είναι αριθμός από {2} έως {3}.</value></data>
+  <data name="Cli_Error_FormatNotSupported" xml:space="preserve"><value>Το --format {0} δεν υποστηρίζεται από το '{1}'. Χρησιμοποιήστε: {2}.</value></data>
+  <data name="Cli_Error_NoInput" xml:space="preserve"><value>Το '{0}' χρειάζεται τουλάχιστον μία διαδρομή εισόδου.</value></data>
+  <data name="Cli_Error_TooManyInputs" xml:space="preserve"><value>Το '{0}' δέχεται ακριβώς μία διαδρομή εισόδου.</value></data>
+  <data name="Cli_Error_NotAvailable" xml:space="preserve"><value>Το '{0}' δεν είναι διαθέσιμο σε αυτήν την έκδοση.</value></data>
+  <data name="Cli_Error_NotInThisVersion" xml:space="preserve"><value>Το {0} δεν είναι διαθέσιμο σε αυτήν την έκδοση.</value></data>
+  <data name="Cli_Error_FormatLimit" xml:space="preserve"><value>Τα δεδομένα δεν χωρούν στη μορφή {0} (όριο {1}).</value></data>
+  <data name="Cli_Error_UnknownEncoding" xml:space="preserve"><value>Άγνωστη κωδικοποίηση χαρακτήρων: {0}</value></data>
+
+  <data name="Cli_Expression_Empty" xml:space="preserve"><value>η έκφραση είναι κενή</value></data>
+  <data name="Cli_Expression_Syntax" xml:space="preserve"><value>συντακτικό σφάλμα</value></data>
+  <data name="Cli_Expression_UnclosedParenthesis" xml:space="preserve"><value>μια παρένθεση δεν έχει κλείσει</value></data>
+  <data name="Cli_Expression_UnknownName" xml:space="preserve"><value>άγνωστο όνομα (χρησιμοποιήστε end για το μήκος του αρχείου)</value></data>
+  <data name="Cli_Expression_UnknownBookmark" xml:space="preserve"><value>οι σελιδοδείκτες δεν είναι διαθέσιμοι στη γραμμή εντολών</value></data>
+  <data name="Cli_Expression_UnknownFunction" xml:space="preserve"><value>άγνωστη συνάρτηση</value></data>
+  <data name="Cli_Expression_DivideByZero" xml:space="preserve"><value>διαίρεση με το μηδέν</value></data>
+  <data name="Cli_Expression_Overflow" xml:space="preserve"><value>η τιμή είναι πολύ μεγάλη</value></data>
+  <data name="Cli_Expression_InvalidNumber" xml:space="preserve"><value>δεν είναι έγκυρος αριθμός</value></data>
+  <data name="Cli_Expression_Unreadable" xml:space="preserve"><value>τα δεδομένα δεν μπορούν να διαβαστούν εδώ</value></data>
+  <data name="Cli_Expression_NotAvailable" xml:space="preserve"><value>δεν είναι διαθέσιμο στη γραμμή εντολών</value></data>
+
+  <data name="Cli_Error_GnuOneAlgorithm" xml:space="preserve"><value>Το --format gnu χρειάζεται ακριβώς έναν αλγόριθμο. Χρησιμοποιήστε --format bsd ή text για περισσότερους.</value></data>
+  <data name="Cli_Error_RangeStdin" xml:space="preserve"><value>Το --range δεν μπορεί να χρησιμοποιηθεί με την τυπική είσοδο.</value></data>
+  <data name="Cli_Error_UnknownAlgorithm" xml:space="preserve"><value>Άγνωστος αλγόριθμος: {0}. Εκτελέστε 'hexed hash --algorithm list' για τα αναγνωριστικά.</value></data>
+  <data name="Cli_Error_AlgorithmUnavailable" xml:space="preserve"><value>Ο αλγόριθμος {0} δεν είναι διαθέσιμος σε αυτόν τον υπολογιστή.</value></data>
+  <data name="Cli_Error_NoChecksums" xml:space="preserve"><value>Το {0} δεν περιέχει γραμμές αθροισμάτων ελέγχου που μπορούν να διαβαστούν.</value></data>
+  <data name="Cli_Error_UnknownChecksumAlgorithm" xml:space="preserve"><value>Δεν είναι δυνατός ο προσδιορισμός του αλγορίθμου για το {0}. Καθορίστε τον με --algorithm.</value></data>
+  <data name="Cli_Check_Failed" xml:space="preserve"><value>{0} υπολογισμένα αθροίσματα ελέγχου ΔΕΝ ταίριαξαν.</value></data>
+  <data name="Cli_Check_Missing" xml:space="preserve"><value>{0} αρχεία της λίστας λείπουν.</value></data>
+
+  <data name="Cli_Error_UnknownStyle" xml:space="preserve"><value>Άγνωστο στυλ: {0}. Δείτε 'hexed dump --help'.</value></data>
+
+  <data name="Cli_Error_CompareTwoFiles" xml:space="preserve"><value>Το 'compare' χρειάζεται ακριβώς δύο διαδρομές.</value></data>
+  <data name="Cli_Error_UnknownMode" xml:space="preserve"><value>Άγνωστη λειτουργία: {0}. Χρησιμοποιήστε byte ή resync.</value></data>
+  <data name="Cli_Compare_Kind_changed" xml:space="preserve"><value>άλλαξε</value></data>
+  <data name="Cli_Compare_Kind_inserted" xml:space="preserve"><value>εισήχθη</value></data>
+  <data name="Cli_Compare_Kind_deleted" xml:space="preserve"><value>διαγράφηκε</value></data>
+  <data name="Cli_Compare_Kind_unreadable" xml:space="preserve"><value>δεν διαβάζεται</value></data>
+  <data name="Cli_Compare_More" xml:space="preserve"><value>... {0} ακόμη διαφορές δεν εμφανίζονται (--max)</value></data>
+  <data name="Cli_Compare_Summary" xml:space="preserve"><value>{0} διαφορές, {1} byte συνολικά</value></data>
+  <data name="Cli_Compare_BriefSame" xml:space="preserve"><value>Τα αρχεία είναι ίδια.</value></data>
+  <data name="Cli_Compare_BriefDiffer" xml:space="preserve"><value>Τα αρχεία διαφέρουν (πρώτη διαφορά στο {0}).</value></data>
+  <data name="Cli_Compare_Unreadable" xml:space="preserve"><value>{0} περιοχές δεν μπόρεσαν να διαβαστούν.</value></data>
+
+  <data name="Cli_Error_FindOnePattern" xml:space="preserve"><value>Καθορίστε ακριβώς ένα από τα --hex, --text και --regex.</value></data>
+  <data name="Cli_Error_Pattern" xml:space="preserve"><value>Το μοτίβο αναζήτησης δεν είναι έγκυρο ({0}).</value></data>
+  <data name="Cli_Find_Skipped" xml:space="preserve"><value>{0}: παραλείφθηκαν {1} περιοχές που δεν διαβάζονται.</value></data>
+
+  <data name="Cli_Error_ConvertUsage" xml:space="preserve"><value>Χρήση: hexed convert &lt;input&gt; &lt;output&gt; [επιλογές]</value></data>
+  <data name="Cli_Error_ConvertPatch" xml:space="preserve"><value>Οι επιδιορθώσεις IPS εφαρμόζονται με το 'hexed patch', όχι με το 'hexed convert'.</value></data>
+  <data name="Cli_Error_BadOptions" xml:space="preserve"><value>Μη έγκυρη τιμή για: {0}</value></data>
+  <data name="Cli_Error_UnknownFormat" xml:space="preserve"><value>Άγνωστη μορφή: {0}. Μορφές: {1}.</value></data>
+  <data name="Cli_Error_BadChoice" xml:space="preserve"><value>{0}: το "{1}" δεν είναι έγκυρο. Χρησιμοποιήστε: {2}.</value></data>
+  <data name="Cli_Error_OptionNotForFormat" xml:space="preserve"><value>Το {0} δεν ισχύει για τη μετατροπή από {1} σε {2}.</value></data>
+  <data name="Cli_Convert_Issue" xml:space="preserve"><value>  γραμμή {0}, στήλη {1}: {2}</value></data>
+  <data name="Cli_Error_ImportChecksum" xml:space="preserve"><value>{0}: σφάλμα αθροίσματος ελέγχου στη γραμμή {1}, στήλη {2}. Χρησιμοποιήστε --ignore-checksum για να διαβαστεί το αρχείο ούτως ή άλλως.
+{4}</value></data>
+  <data name="Cli_Error_ImportFormat" xml:space="preserve"><value>{0}: σφάλμα μορφής στη γραμμή {1}, στήλη {2} ({3}).
+{4}</value></data>
+  <data name="Cli_Convert_ChecksumIgnored" xml:space="preserve"><value>{0} σφάλματα αθροίσματος ελέγχου αγνοήθηκαν.</value></data>
+
+  <data name="Cli_Error_PatchUsage" xml:space="preserve"><value>Χρήση: hexed patch &lt;target&gt; &lt;patch&gt; (-o &lt;output&gt; | --in-place)</value></data>
+  <data name="Cli_Error_PatchNeedsOutput" xml:space="preserve"><value>Καθορίστε -o &lt;output&gt; ή --in-place (ώστε το αρχικό αρχείο να μην αλλάξει κατά λάθος).</value></data>
+  <data name="Cli_Error_PatchOutputAndInPlace" xml:space="preserve"><value>Τα -o και --in-place δεν μπορούν να χρησιμοποιηθούν μαζί.</value></data>
+  <data name="Cli_Error_PatchOutputIsInput" xml:space="preserve"><value>Η διαδρομή εξόδου {0} είναι ο στόχος ή η επιδιόρθωση. Χρησιμοποιήστε --in-place για να αντικαταστήσετε τον στόχο.</value></data>
+  <data name="Cli_Error_PatchFormat" xml:space="preserve"><value>Το --format {0} δεν είναι μορφή επιδιόρθωσης. Χρησιμοποιήστε auto, ips ή ips32.</value></data>
+  <data name="Cli_Error_PatchFormatLater" xml:space="preserve"><value>{0}: οι επιδιορθώσεις UPS, BPS και .hexpatch δεν υποστηρίζονται σε αυτήν την έκδοση. Οι IPS και IPS32 υποστηρίζονται.</value></data>
+  <data name="Cli_Error_PatchUnknown" xml:space="preserve"><value>Το {0} δεν είναι αρχείο επιδιόρθωσης που να αναγνωρίζεται.</value></data>
+  <data name="Cli_Error_PatchBroken" xml:space="preserve"><value>{0}: η επιδιόρθωση είναι κατεστραμμένη στην εγγραφή {1} (μετατόπιση αρχείου {2}).</value></data>
+  <data name="Cli_Error_PatchFormatMismatch" xml:space="preserve"><value>Το {0} δεν είναι επιδιόρθωση {1}.</value></data>
+  <data name="Cli_Error_VerifySyntax" xml:space="preserve"><value>{0}: το "{1}" πρέπει να έχει τη μορφή αλγόριθμος:τιμή (για παράδειγμα sha256:ab12...).</value></data>
+  <data name="Cli_Patch_VerifyBeforeFailed" xml:space="preserve"><value>Το {0} δεν έχει τον αναμενόμενο κατακερματισμό (--verify-before). Δεν γράφτηκε τίποτα.</value></data>
+  <data name="Cli_Patch_VerifyAfterFailed" xml:space="preserve"><value>Το {0} μετά την επιδιόρθωση δεν έχει τον αναμενόμενο κατακερματισμό (--verify-after). Δεν γράφτηκε τίποτα.</value></data>
+  <data name="Cli_Patch_Applied" xml:space="preserve"><value>Εφαρμόστηκαν {0} εγγραφές, άλλαξαν {1} byte, αλλαγή μήκους {2}. Γράφτηκε το {3}.</value></data>
+  <data name="Cli_Patch_Format" xml:space="preserve"><value>μορφή</value></data>
+  <data name="Cli_Patch_DryRun" xml:space="preserve"><value>{0} εγγραφές, {1} byte θα αλλάξουν, αλλαγή μήκους {2}, νέο μήκος {3}</value></data>
+
+  <data name="Cli_Error_TemplateChoice" xml:space="preserve"><value>Καθορίστε ακριβώς ένα από τα --template και --auto.</value></data>
+  <data name="Cli_Error_TemplateNotFound" xml:space="preserve"><value>Το πρότυπο "{0}" δεν βρέθηκε. Χρησιμοποιήστε το όνομα ενός τυπικού προτύπου (για παράδειγμα pe, png) ή τη διαδρομή ενός αρχείου .hxt ή .ksy.</value></data>
+  <data name="Cli_Template_NoMatch" xml:space="preserve"><value>Κανένα πρότυπο δεν ταιριάζει με το {0}.</value></data>
+  <data name="Cli_Error_Template" xml:space="preserve"><value>Σφάλμα προτύπου: {0}</value></data>
+
+  <data name="Cli_Error_RunNeedsScript" xml:space="preserve"><value>Χρήση: hexed run &lt;script&gt; [files...] [επιλογές]</value></data>
+  <data name="Cli_Error_RunSaveModes" xml:space="preserve"><value>Χρησιμοποιήστε μόνο ένα από τα --save, --save-as και --dry-run.</value></data>
+  <data name="Cli_Error_RunReadonlySave" xml:space="preserve"><value>Το --readonly δεν μπορεί να συνδυαστεί με το --save ή το --save-as.</value></data>
+  <data name="Cli_Error_ArgSyntax" xml:space="preserve"><value>Το --arg "{0}" πρέπει να έχει τη μορφή name=value.</value></data>
+  <data name="Cli_Error_Timeout" xml:space="preserve"><value>Το --timeout "{0}" πρέπει να είναι αριθμός δευτερολέπτων μεγαλύτερος από 0.</value></data>
+  <data name="Cli_Error_RunSaveAsNeedsFile" xml:space="preserve"><value>Το --save-as χρειάζεται ένα αρχείο προς άνοιγμα (το πρώτο αρχείο αποθηκεύεται στη νέα διαδρομή).</value></data>
+  <data name="Cli_Error_RunSaveAsSame" xml:space="preserve"><value>Το --save-as {0} είναι το αρχείο που είναι ανοιχτό. Χρησιμοποιήστε --save για αντικατάσταση.</value></data>
+  <data name="Cli_Run_DryRunSummary" xml:space="preserve"><value>{0}: άλλαξαν {1} byte (δεν αποθηκεύτηκε: --dry-run)</value></data>
+  <data name="Cli_Run_UnsavedWarning" xml:space="preserve"><value>Το {0} έχει μη αποθηκευμένες αλλαγές. Δεν αποθηκεύτηκαν (χρησιμοποιήστε --save ή doc.save()).</value></data>
+
+  <data name="Cli_Error_UnknownUiLang" xml:space="preserve"><value>Άγνωστη γλώσσα εμφάνισης: {0}. Χρησιμοποιήστε μία από τις 23 ετικέτες γλώσσας εμφάνισης (για παράδειγμα ar, ja).</value></data>
+  <data name="Cli_Error_UnknownPseudoLocale" xml:space="preserve"><value>Άγνωστο ψευδο-locale: {0}. Χρησιμοποιήστε qps-ploc ή qps-plocm.</value></data>
+  <data name="Cli_Error_GuiNotFound" xml:space="preserve"><value>Το HexEditor.exe δεν βρέθηκε δίπλα στο hexed.exe.</value></data>
+  <data name="Cli_Error_GuiStart" xml:space="preserve"><value>Δεν είναι δυνατή η εκκίνηση του {0}: {1}</value></data>
+  <data name="Cli_Error_GuiExited" xml:space="preserve"><value>Το HexEditor τερμάτισε με κωδικό {0} πριν κλείσουν τα έγγραφα.</value></data>
+
+  <data name="Cli_Unregister_Done" xml:space="preserve"><value>Όλες οι καταχωρίσεις αφαιρέθηκαν.</value></data>
+  <data name="Cli_Unregister_Removed" xml:space="preserve"><value>Αφαιρέθηκε: {0}</value></data>
+  <data name="Cli_Unregister_Failed" xml:space="preserve"><value>Δεν ήταν δυνατή η αφαίρεση: {0} ({1})</value></data>
+  <data name="Cli_Unregister_Item_contextMenu" xml:space="preserve"><value>μενού δεξιού κλικ της Εξερεύνησης</value></data>
+  <data name="Cli_Unregister_Item_fileAssociations" xml:space="preserve"><value>συσχετίσεις αρχείων</value></data>
+  <data name="Cli_Unregister_Item_appPaths" xml:space="preserve"><value>εγγραφή App Paths</value></data>
+  <data name="Cli_Unregister_Item_commandLine" xml:space="preserve"><value>εγγραφή PATH για το hexed</value></data>
+  <data name="Cli_Unregister_Item_jumpList" xml:space="preserve"><value>λίστα μετάβασης της γραμμής εργασιών</value></data>
+  <data name="Cli_Unregister_Item_toast" xml:space="preserve"><value>καταχώριση ειδοποιήσεων</value></data>
+  <data name="Cli_Unregister_Item_temp" xml:space="preserve"><value>προσωρινός φάκελος</value></data>
+  <data name="Cli_Unregister_Item_registry" xml:space="preserve"><value>εγγραφές μητρώου</value></data>
+  <data name="Cli_Unregister_managed" xml:space="preserve"><value>Οι καταχωρίσεις αυτής της έκδοσης διαχειρίζονται από τα Windows. Δεν αφαιρέθηκε τίποτα.</value></data>
+  <data name="Cli_Unregister_nothing" xml:space="preserve"><value>Αυτό το αντίγραφο δεν έχει καταχωρίσει τίποτα. Δεν αφαιρέθηκε τίποτα.</value></data>
+</root>
