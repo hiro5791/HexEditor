@@ -280,6 +280,11 @@ public sealed partial class MainWindow
         }
 
         DependencyObject? focused = Root.XamlRoot is null ? null : FocusManager.GetFocusedElement(Root.XamlRoot) as DependencyObject;
+        if (FocusInMonaco(focused))
+        {
+            return; // Monaco の中のキーはページから受け取る (CodeEditor_KeyForwarded)
+        }
+
         if (RouteKey(focused, (int)e.Key, CurrentModifiers(), CurrentKeyContext()).Handled)
         {
             e.Handled = true;

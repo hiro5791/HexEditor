@@ -427,28 +427,6 @@ public sealed class ScriptUiTests
         Assert.True(scriptMedian <= menuMedian * 1.1, $"menu {menuMedian:F1} s, sample {scriptMedian:F1} s");
     }, TimeSpan.FromHours(2));
 
-    // ---- Monaco エディタが要るテスト ----
-    // スクリプトエディタは Monaco (WebView2) を同梱できていない (ダウンロードが禁止の環境で作ったため)。仕様の代替 (簡易エディタ) で動いており、
-    // 補完・波線・色分けはない。Monaco を同梱したら外す。
-
-    private const string MonacoSkip = "Monaco is not bundled yet; the plain-text fallback editor has no completion, squiggles or syntax colors (AUTO-20 spec 9).";
-
-    [Fact(Skip = MonacoSkip)]
-    [Trait(UiTest.TC, "TC-AUTO-20-01")]
-    public void Completion_for_doc_shows_candidates_with_descriptions() { }
-
-    [Fact(Skip = MonacoSkip)]
-    [Trait(UiTest.TC, "TC-AUTO-20-02")]
-    public void An_unknown_method_gets_a_squiggle_within_500_ms() { }
-
-    [Fact(Skip = MonacoSkip)]
-    [Trait(UiTest.TC, "TC-AUTO-20-04")]
-    public void Code_stays_left_to_right_in_arabic() { }
-
-    [Fact(Skip = MonacoSkip)]
-    [Trait(UiTest.TC, "TC-AUTO-20-05")]
-    public void The_editor_works_offline() { }
-
     [Fact(Skip = "Needs an external debugger (Visual Studio or vsdbg) to attach to the app process; verified manually.")]
     [Trait(UiTest.TC, "TC-AUTO-22-01")]
     public void An_external_debugger_attaches_and_stops_on_a_csx_line() { }

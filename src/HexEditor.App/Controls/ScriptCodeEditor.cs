@@ -19,15 +19,47 @@ public sealed record CodeMarker(int Line, int Column, int Length, bool IsError, 
 /// <summary>構文の色分けの 1 区間 (文字の位置は 0 から、行の区切りの <c>\n</c> は 1 文字)。<see cref="Class"/> は色の分類の名前。</summary>
 public readonly record struct CodeSpan(int Start, int Length, string Class);
 
+/// <summary>コードの言語 (色分け・補完・チェックの種類)。</summary>
+public enum CodeLanguage
+{
+    JavaScript,
+    CSharp,
+
+    /// <summary>構造体テンプレートの言語 (07)。</summary>
+    Template,
+}
+
+/// <summary>補完の候補 1 つ。<see cref="Kind"/> は種類の名前 (keyword・type・function・member など)。</summary>
+public sealed record CodeCompletionItem(string Label, string Kind, string Detail, string? Documentation = null, string? InsertText = null);
+
+/// <summary>補完の結果: 置き換える範囲 (入力中の語。文字の位置) と候補。</summary>
+public sealed record CodeCompletionList(int ReplaceStart, int ReplaceLength, IReadOnlyList<CodeCompletionItem> Items);
+
+/// <summary>エディタの部品自身の編集の操作 (Monaco の操作。代替の部品は持たない)。</summary>
+public enum CodeEditorAction
+{
+    Format,
+    ToggleComment,
+    GoToLine,
+    Complete,
+    Find,
+    Replace,
+    GoToDefinition,
+    FindReferences,
+}
+
 /// <summary>
 /// コードエディタの部品 (08 の AUTO-20、07 の TPL-31)。スクリプトエディタ (<c>ScriptEditorPage</c>) とテンプレートエディタ
-/// (<c>TemplateEditorPage</c>) は、どちらもこの口だけを使い、部品は <see cref="CodeEditorFactory"/> が作る。Monaco Editor (WebView2) を
-/// 同梱するときは、この口の実装を差し替えれば両方のエディタが変わる。今の実装は WebView2 がないときの代替 (AUTO-20 の仕様 9) と同じ
-/// 標準のリッチテキストの入力欄 (<see cref="CodeEditor"/>)。
+/// (<c>TemplateEditorPage</c>) は、どちらもこの口だけを使い、部品は <see cref="CodeEditorFactory"/> が作る。部品は Monaco Editor
+/// (WebView2 の中。<see cref="MonacoCodeEditor"/>) で、WebView2 ランタイムがない・初期化に失敗したときは標準のリッチテキストの入力欄
+/// (<see cref="CodeEditor"/>。AUTO-20 の仕様 9 の代替) に切り替わる。
 /// </summary>
-public interface IScriptCodeEditor
+public interface IScriptCodeEditor : IDisposable
 {
     FrameworkElement View { get; }
+
+    /// <summary>Monaco で動いているか (false なら代替の入力欄。色分け・補完などは画面の側で補う)。</summary>
+    bool IsMonaco { get; }
 
     /// <summary>本文。行の区切りは <c>\n</c>。</summary>
     string Text { get; set; }
@@ -53,14 +85,23 @@ public interface IScriptCodeEditor
     /// <summary>左の余白 (行番号とブレークポイント) がクリックされた (行は 1 から)。</summary>
     event EventHandler<int>? GutterClicked;
 
-    /// <summary>文字が入力された (補完の候補を出すきっかけ)。</summary>
+    /// <summary>文字が入力された (補完の候補を出すきっかけ。代替の入力欄だけ)。</summary>
     event EventHandler<char>? CharacterTyped;
 
-    /// <summary>入力欄より先に見るキー (補完の一覧の ↑ ↓ Enter など)。処理したら true。</summary>
+    /// <summary>部品自身の言語サービスが見つけたエラー・警告 (Monaco の JavaScript の型のチェック)。問題の一覧に足す。</summary>
+    event EventHandler<IReadOnlyList<CodeMarker>>? EditorMarkersChanged;
+
+    /// <summary>入力欄より先に見るキー (代替の入力欄の補完の一覧の ↑ ↓ Enter など)。処理したら true。</summary>
     Func<VirtualKey, bool>? PreviewKey { get; set; }
 
-    /// <summary>色の分類の名前とテーマ (Light / Dark / HighContrast) から色を引く (null なら既定の文字色)。</summary>
+    /// <summary>色の分類の名前とテーマ (Light / Dark / HighContrast) から色を引く (null なら既定の文字色。代替の入力欄だけ)。</summary>
     Func<string, string, Color?>? ClassColor { get; set; }
+
+    /// <summary>補完の候補を返す (文字の位置、きっかけの文字)。Monaco の補完の一覧に出す。表示する前 (最初の表示の前) に設定する。</summary>
+    Func<int, string, Task<CodeCompletionList?>>? CompletionProvider { get; set; }
+
+    /// <summary>本文を整形した結果を返す (Monaco の整形の操作から呼ぶ)。表示する前に設定する。</summary>
+    Func<string, string?>? Formatter { get; set; }
 
     /// <summary>行・列 (1 から) にカーソルを置いて見える位置へ動かす。</summary>
     void GoTo(int line, int column);
@@ -80,22 +121,28 @@ public interface IScriptCodeEditor
     /// <summary>エラー・警告の波線と行の印。</summary>
     void SetMarkers(IReadOnlyList<CodeMarker> markers);
 
-    /// <summary>構文の色分け (大きな本文では色分けしない)。</summary>
+    /// <summary>構文の色分け (代替の入力欄だけ。Monaco は自分の字句解析で色分けする。大きな本文では色分けしない)。</summary>
     void SetClassification(IReadOnlyList<CodeSpan> spans);
+
+    /// <summary>部品自身の編集の操作を実行する。できなければ false (画面の側の実装を使う)。</summary>
+    bool TryExecute(CodeEditorAction action);
 
     bool FocusEditor();
 }
 
-/// <summary>コードエディタの部品を作る (Monaco を同梱するときはここで切り替える)。</summary>
+/// <summary>コードエディタの部品を作る (Monaco。使えなければ部品の中で代替に切り替わる)。</summary>
 public static class CodeEditorFactory
 {
     /// <param name="automationId">入力欄の AutomationId。</param>
     /// <param name="accessibleName">入力欄のアクセシブルな名前。</param>
-    public static IScriptCodeEditor Create(string automationId, string accessibleName) => new CodeEditor(automationId, accessibleName);
+    /// <param name="language">コードの言語。</param>
+    /// <param name="fileName">ファイルの名前 (Monaco のモデルの名前)。</param>
+    public static IScriptCodeEditor Create(string automationId, string accessibleName, CodeLanguage language, string fileName) =>
+        new MonacoCodeEditor(automationId, accessibleName, language, fileName);
 }
 
 /// <summary>
-/// 標準のリッチテキストの入力欄でできたコードエディタ (Monaco の代替。AUTO-20 の仕様 9、TPL-31 の仕様 2 の「現在の実装」)。左の余白に行番号・
+/// 標準のリッチテキストの入力欄でできたコードエディタ (Monaco の代替。AUTO-20 の仕様 9。WebView2 ランタイムがないときに <see cref="MonacoCodeEditor"/> が使う)。左の余白に行番号・
 /// ブレークポイント・エラーの印・現在の行の矢印を描き、波線と現在の行の強調は上に重ねて描く (文書の書式は色分けだけに使い、元に戻す操作の
 /// 履歴を汚さない)。コードの表示は常に左から右 (00 の 5.4)。描くのは見えている行だけ。
 /// </summary>
@@ -185,6 +232,8 @@ public sealed partial class CodeEditor : Grid, IScriptCodeEditor
 
     public FrameworkElement View => this;
 
+    public bool IsMonaco => false;
+
     /// <summary>内部の入力欄 (フライアウトの位置・テスト用)。</summary>
     internal RichEditBox Box => _box;
 
@@ -256,6 +305,22 @@ public sealed partial class CodeEditor : Grid, IScriptCodeEditor
     public Func<VirtualKey, bool>? PreviewKey { get; set; }
 
     public Func<string, string, Color?>? ClassColor { get; set; }
+
+    public event EventHandler<IReadOnlyList<CodeMarker>>? EditorMarkersChanged
+    {
+        add { }
+        remove { }
+    }
+
+    public Func<int, string, Task<CodeCompletionList?>>? CompletionProvider { get; set; }
+
+    public Func<string, string?>? Formatter { get; set; }
+
+    public bool TryExecute(CodeEditorAction action) => false;
+
+    public void Dispose()
+    {
+    }
 
     public bool FocusEditor() => _box.Focus(FocusState.Keyboard);
 

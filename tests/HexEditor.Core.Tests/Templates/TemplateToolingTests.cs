@@ -520,6 +520,30 @@ public sealed class TemplateToolingTests : IDisposable
         Assert.Contains(std.Items, i => i.Label == "read_u32");
     }
 
+    /// <summary>エディタの部品 (Monaco の字句解析) に渡す一覧が、色分け (<see cref="TemplateLanguageService.Classify"/>) と同じ分類になる。</summary>
+    [Fact]
+    public void SyntaxListsMatchTheClassification()
+    {
+        TemplateSyntaxLists lists = TemplateLanguageService.SyntaxLists();
+        Assert.Contains("struct", lists.Keywords);
+        Assert.Contains("import", lists.Keywords);
+        Assert.Contains("u32", lists.Types);
+        Assert.Contains("std::type::magic", lists.Types);
+        Assert.Contains("color", lists.Attributes);
+        const string text = "struct A { u32 x [[color(\"red\")]]; };";
+        IReadOnlyList<TemplateClassifiedSpan> spans = TemplateLanguageService.Classify(text);
+        foreach (TemplateClassifiedSpan s in spans)
+        {
+            string word = text.Substring(s.Start, s.Length);
+            switch (s.Class)
+            {
+                case TemplateTokenClass.Keyword: Assert.Contains(word, lists.Keywords); break;
+                case TemplateTokenClass.Type: Assert.Contains(word, lists.Types); break;
+                case TemplateTokenClass.Attribute: Assert.Contains(word, lists.Attributes); break;
+            }
+        }
+    }
+
     [Fact]
     [Trait(TC, "TC-TPL-31-02")]
     public void MissingSemicolonIsMarkedAtTheEndOfTheLine()

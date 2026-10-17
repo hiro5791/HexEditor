@@ -6,6 +6,7 @@ using HexEditor.Sdk.Hosting;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.CodeAnalysis.Text;
@@ -17,11 +18,139 @@ namespace HexEditor.Scripting.CSharp;
 /// スクリプトライブラリのフォルダだけ、<c>#r</c> はアプリが許可したアセンブリだけ。NuGet の参照 (<c>#r "nuget:..."</c>) は使えない。
 /// コンパイルしたアセンブリにはポータブル PDB を埋め込み、例外のスタックトレースに .csx の行番号を出す (AUTO-22 の仕様 3)。
 /// </summary>
-public sealed class CSharpScriptBackend : ICSharpScriptBackend
+public sealed class CSharpScriptBackend : ICSharpScriptBackend, ICSharpCompletionBackend
 {
+    /// <summary>補完の候補の数の上限。</summary>
+    private const int MaxCompletionItems = 400;
+
     public string Version => typeof(CSharpScriptBackend).Assembly.GetName().Version?.ToString() ?? "0.0.0";
 
     public CSharpCompileResult Compile(CSharpCompileRequest request, CancellationToken cancellationToken)
+    {
+        (ScriptOptions options, RestrictedSourceResolver sources) = Options(request);
+        Script<object> script = CSharpScript.Create(request.Code, options, globalsType: typeof(ScriptGlobals));
+        Compilation compilation = script.GetCompilation();
+        var diagnostics = new List<CSharpDiagnostic>();
+        foreach (Diagnostic d in compilation.GetDiagnostics(cancellationToken))
+        {
+            if (d.Severity is DiagnosticSeverity.Error or DiagnosticSeverity.Warning)
+            {
+                diagnostics.Add(ToDiagnostic(d));
+            }
+        }
+
+        return Emit(sources, compilation, diagnostics, cancellationToken);
+    }
+
+    /// <summary>
+    /// スクリプトエディタの補完 (08 の AUTO-20 の仕様 3)。位置の直前が <c>式.</c> ならその型 (または名前空間・型) のメンバー、そうでなければ
+    /// その位置で見える名前 (グローバルの <c>App</c>・<c>Doc</c> など、ローカル変数、型、名前空間)。
+    /// </summary>
+    public IReadOnlyList<CSharpCompletionItem> Complete(CSharpCompileRequest request, int position, CancellationToken cancellationToken)
+    {
+        (ScriptOptions options, _) = Options(request);
+        Script<object> script = CSharpScript.Create(request.Code, options, globalsType: typeof(ScriptGlobals));
+        Compilation compilation = script.GetCompilation();
+        SyntaxTree? tree = compilation.SyntaxTrees.LastOrDefault();
+        if (tree is null)
+        {
+            return [];
+        }
+
+        SemanticModel model = compilation.GetSemanticModel(tree);
+        position = Math.Clamp(position, 0, tree.Length);
+        SyntaxToken token = position > 0 ? tree.GetRoot(cancellationToken).FindToken(position - 1) : default;
+        ExpressionSyntax? receiver = token.IsKind(SyntaxKind.DotToken) && token.Parent is MemberAccessExpressionSyntax access ? access.Expression
+            : token.Parent is SimpleNameSyntax { Parent: MemberAccessExpressionSyntax outer } name && outer.Name == name ? outer.Expression
+            : null;
+        IEnumerable<ISymbol> symbols;
+        if (receiver is not null)
+        {
+            ISymbol? target = model.GetSymbolInfo(receiver, cancellationToken).Symbol;
+            ITypeSymbol? type = model.GetTypeInfo(receiver, cancellationToken).Type;
+            if (target is INamespaceOrTypeSymbol container && (target is INamespaceSymbol || type is null || SymbolEqualityComparer.Default.Equals(target, type)))
+            {
+                // 名前空間・型の名前の後: 入れ子の型と静的なメンバー
+                symbols = model.LookupStaticMembers(position, container).Concat(container is INamespaceSymbol ns ? ns.GetMembers() : []);
+            }
+            else if (type is not null)
+            {
+                symbols = model.LookupSymbols(position, type, includeReducedExtensionMethods: true).Where(s => !s.IsStatic || s is IMethodSymbol { MethodKind: MethodKind.ReducedExtension });
+            }
+            else
+            {
+                return [];
+            }
+        }
+        else
+        {
+            symbols = model.LookupSymbols(position);
+        }
+
+        // 入力中の名前 (位置の直前の識別子) で絞り、ローカル・グローバル・メンバーを型・名前空間より先にして上限まで返す
+        int start = position;
+        while (start > 0 && (char.IsLetterOrDigit(request.Code[start - 1]) || request.Code[start - 1] == '_'))
+        {
+            start--;
+        }
+
+        string prefix = request.Code[start..position];
+        var chosen = new List<ISymbol>();
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (ISymbol symbol in symbols)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!symbol.CanBeReferencedByName || symbol.IsImplicitlyDeclared && symbol is not IParameterSymbol || symbol.Name.StartsWith('<')
+                || symbol is IMethodSymbol { MethodKind: not (MethodKind.Ordinary or MethodKind.ReducedExtension or MethodKind.LocalFunction) }
+                || !symbol.Name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+                || !seen.Add(symbol.Name))
+            {
+                continue;
+            }
+
+            chosen.Add(symbol);
+        }
+
+        return [.. chosen
+            .OrderBy(s => s is INamespaceOrTypeSymbol ? 1 : 0)
+            .ThenBy(s => s.Name, StringComparer.OrdinalIgnoreCase)
+            .Take(MaxCompletionItems)
+            .Select(s => new CSharpCompletionItem(s.Name, KindOf(s), s.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), Summary(s)))];
+    }
+
+    private static string KindOf(ISymbol symbol) => symbol switch
+    {
+        IMethodSymbol => "method",
+        IPropertySymbol => "property",
+        IFieldSymbol { IsConst: true } => "constant",
+        IFieldSymbol => "field",
+        IEventSymbol => "event",
+        INamedTypeSymbol => "type",
+        INamespaceSymbol => "namespace",
+        _ => "variable",
+    };
+
+    /// <summary>XML ドキュメントの summary (参照のアセンブリに XML があるとき)。</summary>
+    private static string? Summary(ISymbol symbol)
+    {
+        string? xml = symbol.GetDocumentationCommentXml();
+        if (string.IsNullOrEmpty(xml))
+        {
+            return null;
+        }
+
+        int start = xml.IndexOf("<summary>", StringComparison.Ordinal);
+        int end = xml.IndexOf("</summary>", StringComparison.Ordinal);
+        if (start < 0 || end <= start)
+        {
+            return null;
+        }
+
+        string text = System.Text.RegularExpressions.Regex.Replace(xml[(start + 9)..end], "<[^>]+>", string.Empty);
+        return System.Text.RegularExpressions.Regex.Replace(text, @"\s+", " ").Trim();
+    }
+
+    private static (ScriptOptions Options, RestrictedSourceResolver Sources) Options(CSharpCompileRequest request)
     {
         var references = new List<MetadataReference>();
         foreach (string name in request.AllowedReferences)
@@ -50,17 +179,12 @@ public sealed class CSharpScriptBackend : ICSharpScriptBackend
             options = options.WithFilePath(request.Path);
         }
 
-        Script<object> script = CSharpScript.Create(request.Code, options, globalsType: typeof(ScriptGlobals));
-        Compilation compilation = script.GetCompilation();
-        var diagnostics = new List<CSharpDiagnostic>();
-        foreach (Diagnostic d in compilation.GetDiagnostics(cancellationToken))
-        {
-            if (d.Severity is DiagnosticSeverity.Error or DiagnosticSeverity.Warning)
-            {
-                diagnostics.Add(ToDiagnostic(d));
-            }
-        }
+        return (options, sources);
+    }
 
+    private static CSharpCompileResult Emit(RestrictedSourceResolver sources, Compilation compilation, List<CSharpDiagnostic> diagnostics,
+        CancellationToken cancellationToken)
+    {
         if (diagnostics.Any(d => d.IsError))
         {
             return new CSharpCompileResult { Diagnostics = diagnostics, LoadedFiles = sources.Loaded };

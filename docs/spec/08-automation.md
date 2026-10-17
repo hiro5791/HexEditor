@@ -828,7 +828,7 @@
 - [ ] インターネットに接続していない状態でエディタが動く。
 - [ ] ナレーターで現在の行を読み上げられる。
 
-実装の注記 (AUTO-19、20): スクリプトエディタは仕様 9 の代替 (標準のリッチテキストの入力欄と行番号・ブレークポイント・エラーの印の余白、波線) で作った。この部品 (`IScriptCodeEditor`、`CodeEditorFactory`) はテンプレートエディタ (07 の TPL-31) と共通で、Monaco に差し替えると両方のエディタが変わる。Monaco (WebView2) は、ダウンロードが使えない環境で作ったため同梱できていない。補完・色分けは Monaco を同梱するときに加える (テンプレートエディタは、色分け・補完をテンプレート言語の部品から部品の口に渡している)。受け入れ基準の 20-01、20-02、20-04、20-05 はそれまで自動テストをスキップする。
+実装の注記 (AUTO-19、20): エディタの部品 (`IScriptCodeEditor`、`CodeEditorFactory`、`MonacoCodeEditor`) はテンプレートエディタ (07 の TPL-31) と共通。Monaco は npm の `monaco-editor` の `min/vs` から使う部分 (JavaScript・TypeScript・C# の言語と TypeScript の worker) だけを同梱し (版と確認の値は `src/HexEditor.App/Assets/Monaco/README.md`)、ページはアプリ内の仮想ホスト (`https://monaco.hexeditor.invalid/`) から読み込む。ほかの場所への移動・要求は止め、ページの Content-Security-Policy で自分の場所と worker (`blob:`) だけを許す。WebView2 の開発者ツールとブラウザの右クリックのメニューは製品版で無効にする。キーは、仕様 5 の 1 と 4 のキー (アプリの割り当ての 1 打鍵目のうち、Monaco の編集のキーでないもの) をページの中で受け取ってアプリに渡す。JavaScript の構文のエラーはアプリのチェック (スクリプトの実行と同じ解析) が、型のエラー (存在しないメソッドなど) は Monaco の TypeScript の言語サービスが出し、どちらも問題の一覧に出す。C# の補完は C# スクリプト コンポーネントの `ICSharpCompletionBackend` (Roslyn の意味モデル) で作る。仕様 9 の代替は、WebView2 ランタイムがない・初期化に失敗した・ページの処理が落ちた場合に、標準のリッチテキストの入力欄 (行番号・ブレークポイント・エラーの印の余白と波線) に切り替え、InfoBar で理由とランタイムの入手先を出す。
 
 ### AUTO-21 JavaScript のデバッガ
 

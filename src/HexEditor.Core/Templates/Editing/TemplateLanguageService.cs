@@ -43,6 +43,9 @@ public sealed record TemplateCompletion(string Label, TemplateCompletionKind Kin
 /// <summary>補完の結果: 置き換える範囲 (入力中の語) と候補。</summary>
 public sealed record TemplateCompletionResult(int ReplaceStart, int ReplaceLength, IReadOnlyList<TemplateCompletion> Items);
 
+/// <summary>字句の一覧 (エディタの部品の色分けに渡す: 予約語・組み込みの型・属性。TPL-31 の仕様 3)。</summary>
+public sealed record TemplateSyntaxLists(IReadOnlyList<string> Keywords, IReadOnlyList<string> Types, IReadOnlyList<string> Attributes);
+
 /// <summary>エディタに出すエラー・警告 (波線と行の印。TPL-31 の仕様 3)。行・列は 1 から。<see cref="Length"/> は波線の長さ。</summary>
 public sealed record TemplateEditorDiagnostic(TemplateDiagnostic Diagnostic, int Line, int Column, int Length);
 
@@ -79,6 +82,13 @@ public static class TemplateLanguageService
     ];
 
     private static readonly HashSet<string> Keywords = [.. Parser.Reserved];
+
+    /// <summary>色分けに使う字句の一覧 (<see cref="Classify"/> と同じ分類。Monaco の字句解析 (Monarch) に渡す)。</summary>
+    public static TemplateSyntaxLists SyntaxLists() => new(
+        [.. Keywords.Order(StringComparer.Ordinal)],
+        [.. BuiltinTypes.Names.Concat(["pstring", "fixed", "ufixed", "bits", "std::type::magic", "magic", "std::type::Size", "std::type::Bitmask"])
+            .Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal)],
+        [.. Evaluator.KnownAttributes.Order(StringComparer.Ordinal)]);
 
     // ───────────── 色分け ─────────────
 

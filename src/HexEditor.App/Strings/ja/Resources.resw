@@ -6593,4 +6593,9 @@
   <data name="Menu_Edit_Delete.AccessKey" xml:space="preserve"><value>X</value></data>
   <data name="Menu_Edit_ClearSelection.AccessKey" xml:space="preserve"><value>J</value></data>
   <data name="Menu_View_MemoryMapPanel.AccessKey" xml:space="preserve"><value>X</value></data>
+  <data name="CodeEditor_FallbackTitle" xml:space="preserve"><value>簡易エディタ</value></data>
+  <data name="CodeEditor_WebView2Missing" xml:space="preserve"><value>WebView2 ランタイムが入っていないため、機能の少ない簡易エディタを使っています (折りたたみ、スクリプトの補完などはありません)。Microsoft Edge WebView2 ランタイムを入れてから、エディタを開き直してください。</value></data>
+  <data name="CodeEditor_WebView2Failed" xml:space="preserve"><value>コードエディタ (WebView2) を起動できなかったため、機能の少ない簡易エディタを使っています。Microsoft Edge WebView2 ランタイムを入れ直すと直ることがあります。</value></data>
+  <data name="CodeEditor_GetWebView2" xml:space="preserve"><value>WebView2 ランタイムを入手する</value></data>
+  <data name="ScriptEditor_CSharpCompletionNeedsComponent" xml:space="preserve"><value>補完を使うには C# スクリプト コンポーネントを追加してください。</value></data>
 </root>

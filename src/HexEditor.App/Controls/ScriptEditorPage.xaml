@@ -76,11 +76,25 @@
                 </StackPanel>
             </CommandBar.Content>
         </CommandBar>
-        <ContentPresenter
-            x:Name="EditorHost"
-            Grid.Row="1"
-            HorizontalContentAlignment="Stretch"
-            VerticalContentAlignment="Stretch" />
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!-- C# の補完に C# スクリプト コンポーネントが要るときの案内 (AUTO-20 の仕様 3) -->
+            <InfoBar
+                x:Name="CompletionNotice"
+                Margin="8,0,8,4"
+                AutomationProperties.AutomationId="ScriptEditor_CompletionNotice"
+                IsClosable="True"
+                IsOpen="False"
+                Severity="Informational" />
+            <ContentPresenter
+                x:Name="EditorHost"
+                Grid.Row="1"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch" />
+        </Grid>
         <Border
             Grid.Row="2"
             Height="1"

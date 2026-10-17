@@ -11,3 +11,7 @@
 *.ico binary
 *.pfx binary
 *.vhdx binary
+
+# 同梱の Monaco Editor (第三者のファイル) はそのままの内容で持つ (改行を変換しない)
+src/HexEditor.App/Assets/Monaco/vs/** -text
+src/HexEditor.App/Assets/Monaco/*.txt -text

@@ -63,3 +63,20 @@ public sealed class CSharpCompileResult
 /// <param name="Line">1-based line. <ja>行 (1 から)。</ja></param>
 /// <param name="Column">1-based column. <ja>列 (1 から)。</ja></param>
 public sealed record CSharpDiagnostic(string Id, bool IsError, string Message, string? Path, int Line, int Column);
+
+/// <summary>
+/// Completion for the script editor (AUTO-20 spec 3), implemented by components that support it. The request is the same as for compiling.
+/// <ja>スクリプトエディタの補完 (AUTO-20 の仕様 3)。対応するコンポーネントが実装する。要求はコンパイルと同じ。</ja>
+/// </summary>
+public interface ICSharpCompletionBackend
+{
+    /// <summary>Returns the completion items at a position (0-based character offset in the code). <ja>位置 (本文の文字の位置。0 から) の補完の候補を返す。</ja></summary>
+    IReadOnlyList<CSharpCompletionItem> Complete(CSharpCompileRequest request, int position, CancellationToken cancellationToken);
+}
+
+/// <summary>A completion item. <ja>補完の候補。</ja></summary>
+/// <param name="Label">The text to insert. <ja>入れる文字列。</ja></param>
+/// <param name="Kind">The kind: <c>method</c>, <c>property</c>, <c>field</c>, <c>event</c>, <c>type</c>, <c>namespace</c>, <c>variable</c> or <c>keyword</c>. <ja>種類。</ja></param>
+/// <param name="Detail">The signature or type. <ja>シグネチャ・型。</ja></param>
+/// <param name="Documentation">The summary from the XML documentation, or null. <ja>XML ドキュメントの説明 (なければ null)。</ja></param>
+public sealed record CSharpCompletionItem(string Label, string Kind, string Detail, string? Documentation = null);

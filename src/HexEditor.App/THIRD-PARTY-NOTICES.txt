@@ -43,6 +43,21 @@ Acornima is a port of acorn (https://github.com/acornjs/acorn), MIT License,
 Copyright (c) Marijn Haverbeke and others.
 
 -------------------------------------------------------------------------------
+Monaco Editor 0.57.0 (code editor of the script and template editors)
+https://github.com/microsoft/monaco-editor
+License: MIT License. Copyright (c) 2016 - present Microsoft Corporation.
+npm package monaco-editor 0.57.0, dist.integrity
+sha512-5BkI9KGoqrNvBGUe15/QlZq3OooZ8WLg1AxTpaqHRCP3HNpzPPZKE2EDz8M7c+VRmCeUw1Brp4cx/PWm3kI/5A==
+The license and the notices of the components that Monaco contains are in
+Assets\Monaco\LICENSE.txt and Assets\Monaco\ThirdPartyNotices.txt.
+
+-------------------------------------------------------------------------------
+Microsoft Edge WebView2 (Microsoft.Web.WebView2; part of the Windows App SDK)
+https://learn.microsoft.com/microsoft-edge/webview2/
+License: Microsoft Software License Terms (BSD-style license for the SDK).
+The WebView2 Runtime is installed with Windows and is not redistributed.
+
+-------------------------------------------------------------------------------
 Roslyn (Microsoft.CodeAnalysis; C# script component only - not included in
 the application, downloaded separately when C# scripts are first used)
 https://github.com/dotnet/roslyn

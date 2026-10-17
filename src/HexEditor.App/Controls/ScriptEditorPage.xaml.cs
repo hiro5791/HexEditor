@@ -57,6 +57,8 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
     private readonly Microsoft.UI.Dispatching.DispatcherQueueTimer _checkTimer;
     private readonly Dictionary<Microsoft.UI.Xaml.Controls.TreeViewNode, ReplValue> _variableValues = [];
     private readonly List<ScriptDiagnostic> _runDiagnostics = [];
+    private IReadOnlyList<ScriptDiagnostic> _checkDiagnostics = [];
+    private IReadOnlyList<ScriptDiagnostic> _editorDiagnostics = [];
     private byte[] _preamble = [];
     private string _newline = "\r\n";
     private string _savedText = string.Empty;
@@ -99,7 +101,15 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
         }
 
         // コードエディタの部品はテンプレートエディタ (07 の TPL-31) と共通 (CodeEditorFactory)。
-        _editor = CodeEditorFactory.Create("ScriptEditor_Text", Loc.Format("ScriptEditor_Name", System.IO.Path.GetFileName(Path)));
+        _editor = CodeEditorFactory.Create("ScriptEditor_Text", Loc.Format("ScriptEditor_Name", System.IO.Path.GetFileName(Path)),
+            Language == ScriptLanguage.CSharp ? CodeLanguage.CSharp : CodeLanguage.JavaScript, System.IO.Path.GetFileName(Path));
+        if (Language == ScriptLanguage.CSharp)
+        {
+            // C# の補完は C# スクリプト コンポーネント (Roslyn) があるときだけ (AUTO-20 の仕様 3)
+            _editor.CompletionProvider = CSharpCompletionAsync;
+        }
+
+        _editor.EditorMarkersChanged += Editor_MarkersChanged;
         EditorHost.Content = _editor.View;
         AutomationProperties.SetName(_editor.View, Loc.Format("ScriptEditor_Name", System.IO.Path.GetFileName(Path)));
         Load();
@@ -113,6 +123,7 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
         PopulateTargets();
         RefreshBreakpoints();
         RefreshToolbar();
+        UpdateCSharpCompletionNotice();
         RunCheck();
     }
 
@@ -144,6 +155,12 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
 
     /// <summary>問題の一覧の行数 (テスト用)。</summary>
     public int ProblemCount => ProblemsList.Items.Count;
+
+    /// <summary>問題の一覧の行 (テスト用)。</summary>
+    internal IReadOnlyList<ProblemRow> ProblemRows => [.. ProblemsList.Items.OfType<ProblemRow>()];
+
+    /// <summary>問題の一覧の行を選ぶ (クリック・Enter と同じ。テスト用)。</summary>
+    internal void SelectProblem(int index) => ProblemsList.SelectedIndex = index;
 
     bool Panels.IPanelContent.FocusContent() => _editor?.FocusEditor() ?? false;
 
@@ -302,15 +319,26 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
         {
             if (task.IsCompletedSuccessfully && _editor.Text == text)
             {
-                ShowProblems([.. task.Result, .. _runDiagnostics]);
+                _checkDiagnostics = task.Result;
+                ShowProblems();
             }
         }), TaskScheduler.Default);
     }
 
-    private void ShowProblems(IReadOnlyList<ScriptDiagnostic> diagnostics)
+    /// <summary>エディタの部品 (Monaco の JavaScript の型のチェック) が見つけたエラー・警告。問題の一覧に足す (波線は部品が引く)。</summary>
+    private void Editor_MarkersChanged(object? sender, IReadOnlyList<CodeMarker> markers)
     {
+        _editorDiagnostics = [.. markers.Select(m => new ScriptDiagnostic(m.Message, Path, m.Line, m.Column, null, m.IsError))];
+        ShowProblems();
+    }
+
+    /// <summary>問題の一覧と波線: 構文のチェック・実行のエラー (波線はこちらから付ける) と、部品の言語サービスの診断。</summary>
+    private void ShowProblems()
+    {
+        IReadOnlyList<ScriptDiagnostic> own = [.. _checkDiagnostics, .. _runDiagnostics];
+        IReadOnlyList<ScriptDiagnostic> diagnostics = [.. own, .. _editorDiagnostics];
         ProblemsList.ItemsSource = diagnostics.Select(d => new ProblemRow(d)).ToList();
-        _editor?.SetMarkers([.. diagnostics.Where(d => d.Line > 0).Select(d => new CodeMarker(d.Line, Math.Max(1, d.Column), 1, d.IsError, d.Message))]);
+        _editor?.SetMarkers([.. own.Where(d => d.Line > 0).Select(d => new CodeMarker(d.Line, Math.Max(1, d.Column), 1, d.IsError, d.Message))]);
         ProblemsTab.Content = diagnostics.Count > 0
             ? Loc.Format("ScriptEditor_ProblemsCount", diagnostics.Count)
             : Loc.Get("ScriptEditor_Problems");
@@ -515,7 +543,12 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
     {
         CodeEditorCommands.Run or CodeEditorCommands.Stop or CodeEditorCommands.ToggleBreakpoint or CodeEditorCommands.StepOver
             or CodeEditorCommands.StepInto or CodeEditorCommands.StepOut or CodeEditorCommands.AddWatch => CommandState.Available,
-        _ => CodeEditorCommands.NotSupported, // 定義へ移動・補完などは Monaco を同梱するときに加える (AUTO-20 の実装の注記)
+
+        // 編集の操作は Monaco の言語サービス (JavaScript は TypeScript の言語サービス。C# は整形・定義へ移動がない)
+        CodeEditorCommands.ToggleComment or CodeEditorCommands.Complete when _editor is { IsMonaco: true } => CommandState.Available,
+        CodeEditorCommands.Format or CodeEditorCommands.GoToDefinition or CodeEditorCommands.FindReferences
+            when _editor is { IsMonaco: true } && Language == ScriptLanguage.JavaScript => CommandState.Available,
+        _ => CodeEditorCommands.NotSupported,
     };
 
     public Task ExecuteCodeEditorCommandAsync(string commandId)
@@ -528,9 +561,31 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
             case CodeEditorCommands.StepOver: StepOver(); break;
             case CodeEditorCommands.StepInto: StepIn(); break;
             case CodeEditorCommands.StepOut: StepOut(); break;
+            case CodeEditorCommands.ToggleComment: _editor?.TryExecute(CodeEditorAction.ToggleComment); break;
+            case CodeEditorCommands.Complete: _editor?.TryExecute(CodeEditorAction.Complete); break;
+            case CodeEditorCommands.Format: _editor?.TryExecute(CodeEditorAction.Format); break;
+            case CodeEditorCommands.GoToDefinition: _editor?.TryExecute(CodeEditorAction.GoToDefinition); break;
+            case CodeEditorCommands.FindReferences: _editor?.TryExecute(CodeEditorAction.FindReferences); break;
         }
 
         return Task.CompletedTask;
+    }
+
+    // ---- C# の補完 (AUTO-20 の仕様 3: C# スクリプト コンポーネントの Roslyn) ----
+
+    /// <summary>コンポーネントがなければ「補完を使うには C# スクリプト コンポーネントを追加してください」を出す。</summary>
+    private void UpdateCSharpCompletionNotice()
+    {
+        bool missing = Language == ScriptLanguage.CSharp && _editor is { IsMonaco: true } && !CSharpCompletion.IsAvailable;
+        CompletionNotice.Message = Loc.Get("ScriptEditor_CSharpCompletionNeedsComponent");
+        CompletionNotice.IsOpen = missing;
+    }
+
+    private async Task<CodeCompletionList?> CSharpCompletionAsync(int offset, string trigger)
+    {
+        string code = _editor?.Text ?? string.Empty;
+        UpdateCSharpCompletionNotice();
+        return await CSharpCompletion.CompleteAsync(code, offset, Path);
     }
 
     private void Run_Click(object sender, RoutedEventArgs e) => RunOrContinue();
@@ -805,6 +860,7 @@ public sealed partial class ScriptEditorPage : UserControl, Panels.IPanelContent
         _checkTimer.Stop();
         ScriptWorkspace.Breakpoints.Changed -= Breakpoints_Changed;
         _session.Dispose();
+        _editor?.Dispose();
     }
 
     /// <summary>閉じる前の後始末 (実行中なら止める)。</summary>

@@ -1,0 +1,19 @@
+<!doctype html>
+<!--
+  コードエディタ (08 の AUTO-20、07 の TPL-31) の WebView2 の中のページ。Monaco Editor (vs/、同梱) をアプリ内の仮想ホストから読み込む。
+  インターネットからは何も読まない (Content-Security-Policy で自分の場所と blob: の worker だけを許す)。
+-->
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; worker-src 'self' blob:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>Code editor</title>
+  <link rel="stylesheet" href="host.css">
+</head>
+<body>
+  <div id="container" dir="ltr"></div>
+  <script src="../vs/loader.js"></script>
+  <script src="host.js"></script>
+</body>
+</html>
