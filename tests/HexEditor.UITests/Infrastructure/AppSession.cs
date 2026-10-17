@@ -388,8 +388,11 @@ public sealed class AppSession : IAsyncDisposable
         {
             return Window.FindFirstDescendant(cf => cf.ByAutomationId(automationId));
         }
-        catch (System.Runtime.InteropServices.COMException)
+        catch (Exception e) when (e is System.Runtime.InteropServices.COMException
+                                  || (e is TimeoutException && e.InnerException is System.Runtime.InteropServices.COMException))
         {
+            // FlaUI は UIA の呼び出しが時間切れ (0x80131505) になると TimeoutException に包んで投げる。遅い CI のランナーで
+            // ウィンドウを開いた直後に起きるため、これも「まだ見つからない」として待ち直す。
             // ダイアログを開いている・閉じている途中は UI オートメーションの木が変わり、E_UNEXPECTED などで失敗することがある
             // (遅い CI のランナー)。まだ見つからないとして、呼び出し側が待ち直す。
             return null;
